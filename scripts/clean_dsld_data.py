@@ -39,7 +39,6 @@ sys.path.append(str(Path(__file__).parent))
 
 from batch_processor import BatchProcessor
 from enhanced_normalizer import EnhancedDSLDNormalizer
-from dsld_validator import DSLDValidator
 from constants import LOG_FORMAT, LOG_DATE_FORMAT
 
 

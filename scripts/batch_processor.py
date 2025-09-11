@@ -13,7 +13,7 @@ from collections import Counter
 from dataclasses import dataclass, asdict
 
 from enhanced_normalizer import EnhancedDSLDNormalizer
-from dsld_validator import DSLDValidator, check_completeness
+from dsld_validator import DSLDValidator
 from constants import (
     STATUS_SUCCESS,
     STATUS_NEEDS_REVIEW,

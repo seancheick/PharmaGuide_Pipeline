@@ -46,6 +46,7 @@ from constants import (
     STANDARDIZATION_PATTERNS,
     PROPRIETARY_BLEND_INDICATORS,
     DELIVERY_ENHANCEMENT_PATTERNS,
+    CLINICAL_EVIDENCE_PATTERNS,
     DEFAULT_STATUS,
     DOSE_PATTERN,
     FORM_QUALIFIERS,
@@ -753,7 +754,7 @@ class EnhancedDSLDNormalizer:
             banned_ingredients = self.banned_recalled.get("banned_ingredients", [])
             for banned in banned_ingredients:
                 all_banned_terms.append(banned.get("standard_name", "").lower())
-                all_banned_terms.extend([alias.lower() for alias in banned.get("aliases", [])])
+                all_banned_terms.extend([alias.lower() for alias in banned.get("aliases", []) or []])
             self._banned_variations_cache = [term for term in all_banned_terms if term]
         return self._banned_variations_cache
 
@@ -765,7 +766,7 @@ class EnhancedDSLDNormalizer:
             inactive_ingredients = self.passive_inactive_ingredients.get("passive_inactive_ingredients", [])
             for inactive in inactive_ingredients:
                 all_inactive_terms.append(inactive.get("standard_name", "").lower())
-                all_inactive_terms.extend([alias.lower() for alias in inactive.get("aliases", [])])
+                all_inactive_terms.extend([alias.lower() for alias in inactive.get("aliases", []) or []])
             self._inactive_variations_cache = [term for term in all_inactive_terms if term]
         return self._inactive_variations_cache
 
@@ -777,7 +778,7 @@ class EnhancedDSLDNormalizer:
             botanical_ingredients = self.botanical_ingredients.get("botanical_ingredients", [])
             for botanical in botanical_ingredients:
                 all_botanical_terms.append(botanical.get("standard_name", "").lower())
-                all_botanical_terms.extend([alias.lower() for alias in botanical.get("aliases", [])])
+                all_botanical_terms.extend([alias.lower() for alias in botanical.get("aliases", []) or []])
             self._botanical_variations_cache = [term for term in all_botanical_terms if term]
         return self._botanical_variations_cache
 
@@ -834,7 +835,7 @@ class EnhancedDSLDNormalizer:
                 self.ingredient_alias_lookup[variation] = standard_name
             
             # Add all form aliases and their variations
-            for form_name, form_data in vitamin_data.get("forms", {}).items():
+            for form_name, form_data in (vitamin_data.get("forms", {}) or {}).items():
                 form_variations = self.matcher.generate_variations(
                     self.matcher.preprocess_text(form_name)
                 )
@@ -849,7 +850,7 @@ class EnhancedDSLDNormalizer:
                     self.ingredient_forms_lookup[variation] = form_name
                 
                 # Add aliases for this form
-                for alias in form_data.get("aliases", []):
+                for alias in form_data.get("aliases", []) or []:
                     alias_variations = self.matcher.generate_variations(
                         self.matcher.preprocess_text(alias)
                     )
@@ -879,7 +880,7 @@ class EnhancedDSLDNormalizer:
         # Build enhanced allergen lookup
         self.allergen_lookup = {}
 
-        for allergen in self.allergens_db.get("common_allergens", []):
+        for allergen in self.allergens_db.get("common_allergens", []) or []:
             standard_name = allergen["standard_name"]
 
             # Add standard name variations
@@ -890,7 +891,7 @@ class EnhancedDSLDNormalizer:
                 self.allergen_lookup[variation] = allergen
 
             # Add alias variations
-            for alias in allergen.get("aliases", []):
+            for alias in allergen.get("aliases", []) or []:
                 alias_variations = self.matcher.generate_variations(
                     self.matcher.preprocess_text(alias)
                 )
@@ -900,7 +901,7 @@ class EnhancedDSLDNormalizer:
         # Build enhanced harmful additive lookup
         self.harmful_lookup = {}
 
-        for additive in self.harmful_additives.get("harmful_additives", []):
+        for additive in self.harmful_additives.get("harmful_additives", []) or []:
             standard_name = additive["standard_name"]
 
             # Add standard name variations
@@ -911,7 +912,7 @@ class EnhancedDSLDNormalizer:
                 self.harmful_lookup[variation] = additive
 
             # Add alias variations
-            for alias in additive.get("aliases", []):
+            for alias in additive.get("aliases", []) or []:
                 alias_variations = self.matcher.generate_variations(
                     self.matcher.preprocess_text(alias)
                 )
@@ -926,7 +927,7 @@ class EnhancedDSLDNormalizer:
         
         # Build enhanced non-harmful additives lookup
         self.non_harmful_lookup = {}
-        for additive in self.non_harmful_additives.get("non_harmful_additives", []):
+        for additive in self.non_harmful_additives.get("non_harmful_additives", []) or []:
             standard_name = additive["standard_name"]
             # Add standard name variations
             name_variations = self.matcher.generate_variations(
@@ -936,7 +937,7 @@ class EnhancedDSLDNormalizer:
                 self.non_harmful_lookup[variation] = additive
 
             # Add alias variations
-            for alias in additive.get("aliases", []):
+            for alias in additive.get("aliases", []) or []:
                 alias_variations = self.matcher.generate_variations(
                     self.matcher.preprocess_text(alias)
                 )
@@ -949,14 +950,14 @@ class EnhancedDSLDNormalizer:
                     self.ingredient_alias_lookup[processed_alias] = alias
         
         # CRITICAL FIX: Add passive inactive ingredients to main lookup to prevent fuzzy conflicts
-        for ingredient in self.passive_inactive_ingredients.get("passive_inactive_ingredients", []):
+        for ingredient in self.passive_inactive_ingredients.get("passive_inactive_ingredients", []) or []:
             standard_name = ingredient.get("standard_name", "")
             if standard_name:
                 processed_standard = self.matcher.preprocess_text(standard_name)
                 if processed_standard not in self.ingredient_alias_lookup:
                     self.ingredient_alias_lookup[processed_standard] = standard_name
                     
-            for alias in ingredient.get("aliases", []):
+            for alias in ingredient.get("aliases", []) or []:
                 processed_alias = self.matcher.preprocess_text(alias)
                 if processed_alias not in self.ingredient_alias_lookup:
                     self.ingredient_alias_lookup[processed_alias] = alias
@@ -1311,7 +1312,7 @@ class EnhancedDSLDNormalizer:
         processed_name = self.matcher.preprocess_text(name)
         
         # Check all red flag terms in all blend categories
-        for concern in self.proprietary_blends.get("proprietary_blend_concerns", []):
+        for concern in self.proprietary_blends.get("proprietary_blend_concerns", []) or []:
             # Check standard_name field
             standard_name = concern.get("standard_name", "")
             if processed_name == self.matcher.preprocess_text(standard_name):
@@ -1359,7 +1360,7 @@ class EnhancedDSLDNormalizer:
 
             # Check if any alias is present
             if not botanical_found:
-                for alias in item.get("aliases", []):
+                for alias in item.get("aliases", []) or []:
                     processed_alias = self.matcher.preprocess_text(alias)
                     if processed_alias and processed_alias in processed_name:
                         botanical_found = True
@@ -1417,7 +1418,7 @@ class EnhancedDSLDNormalizer:
                     return True
 
                 # Check aliases
-                for alias in item.get("aliases", []):
+                for alias in item.get("aliases", []) or []:
                     processed_alias = self.matcher.preprocess_text(alias)
                     if processed_name == processed_alias:
                         return True
@@ -1446,7 +1447,7 @@ class EnhancedDSLDNormalizer:
                 return True
 
             # Check aliases
-            for alias in item.get("aliases", []):
+            for alias in item.get("aliases", []) or []:
                 processed_alias = self.matcher.preprocess_text(alias)
                 if processed_name == processed_alias:
                     return True
@@ -1565,7 +1566,7 @@ class EnhancedDSLDNormalizer:
                 return True
 
             # Check aliases
-            for alias in item.get("aliases", []):
+            for alias in item.get("aliases", []) or []:
                 processed_alias = self.matcher.preprocess_text(alias)
                 if processed_name == processed_alias:
                     return True
@@ -1580,16 +1581,19 @@ class EnhancedDSLDNormalizer:
         return False
     
     def _flatten_nested_ingredients(self, ingredient_rows: List[Dict]) -> List[Dict]:
-        """Flatten nested ingredients from blends for better scoring"""
+        """Flatten nested ingredients from blends for better scoring, preserving blend structure"""
         flattened = []
         
         for ing in ingredient_rows:
             # Add the main ingredient
             flattened.append(ing)
             
-            # Process nested ingredients
+            # For proprietary blends, nested ingredients are already processed in the main ingredient
+            # Only add nested ingredients to flattened list if they're not part of a proprietary blend
             nested = ing.get("nestedRows", [])
-            if nested:
+            is_proprietary_blend = self._is_proprietary_blend_name(ing.get("name", ""))
+            
+            if nested and not is_proprietary_blend:
                 for nested_ing in nested:
                     # Mark as part of a blend
                     nested_ing["parentBlend"] = ing.get("name", "Unknown Blend")
@@ -1615,39 +1619,42 @@ class EnhancedDSLDNormalizer:
             # Process status and dates
             off_market = raw_data.get("offMarket", 0)
             status = "discontinued" if off_market == 1 else "active"
-            discontinued_date = self._extract_discontinued_date(raw_data.get("events", []))
+            discontinued_date = self._extract_discontinued_date(raw_data.get("events", []) or [])
             
             # Generate image URL
             image_url = self._generate_image_url(raw_data.get("thumbnail", ""), product_id)
             
             # Process contacts
-            contacts = self._process_contacts(raw_data.get("contacts", []))
+            contacts = self._process_contacts(raw_data.get("contacts", []) or [])
             
             # Flatten and process ingredients with enhanced mapping
-            raw_ingredients = raw_data.get("ingredientRows", [])
+            raw_ingredients = raw_data.get("ingredientRows", []) or []
             flattened_ingredients = self._flatten_nested_ingredients(raw_ingredients)
             
             # Extract nutritional warnings before filtering out nutrition facts
             # Need to check both active ingredients and other ingredients for nutritional facts
-            other_ingredients_raw = raw_data.get("otheringredients", {}).get("ingredients", [])
+            # Handle both "otherIngredients" and "otheringredients" keys
+            other_ing_data = raw_data.get("otherIngredients", raw_data.get("otheringredients", {})) or {}
+            other_ingredients_raw = other_ing_data.get("ingredients", [])
+            # Handle None values from DSLD data
+            if other_ingredients_raw is None:
+                other_ingredients_raw = []
             all_ingredients_for_warnings = flattened_ingredients + other_ingredients_raw
             nutritional_warnings = self._extract_nutritional_warnings(all_ingredients_for_warnings)
             
             active_ingredients = self._process_ingredients_enhanced(flattened_ingredients, is_active=True)
             
-            # Process other ingredients
-            inactive_ingredients = self._process_other_ingredients_enhanced(
-                raw_data.get("otheringredients", {})
-            )
+            # Process other ingredients - handle both key formats
+            inactive_ingredients = self._process_other_ingredients_enhanced(other_ing_data)
             
             # Process statements
-            statements = self._process_statements(raw_data.get("statements", []))
+            statements = self._process_statements(raw_data.get("statements", []) or [])
             
             # Process claims
-            claims = self._process_claims(raw_data.get("claims", []))
+            claims = self._process_claims(raw_data.get("claims", []) or [])
             
             # Process serving sizes
-            serving_sizes = self._process_serving_sizes(raw_data.get("servingSizes", []))
+            serving_sizes = self._process_serving_sizes(raw_data.get("servingSizes", []) or [])
             
             # Extract quality flags
             quality_flags = self._extract_quality_flags(
@@ -1656,12 +1663,34 @@ class EnhancedDSLDNormalizer:
                 statements
             )
             
+            # CRITICAL FIX: Aggregate GMP certifications from statements to contacts
+            # Check if any statement has GMP certification
+            has_gmp_from_statements = any(stmt.get("gmpCertified", False) for stmt in statements)
+            if has_gmp_from_statements and contacts:
+                # contacts is a list, update all contact entries
+                for contact in contacts:
+                    contact["isGMP"] = True
+                
+            # Extract clinical evidence from statements
+            clinical_evidence_mentions = []
+            for stmt in statements:
+                notes = stmt.get("notes", "")
+                for pattern in CLINICAL_EVIDENCE_PATTERNS:
+                    if re.search(pattern, notes, re.IGNORECASE):
+                        match = re.search(pattern, notes, re.IGNORECASE)
+                        clinical_evidence_mentions.append(match.group(0))
+            
             # Calculate mapping statistics
             total_ingredients = len(active_ingredients) + len(inactive_ingredients)
             mapped_ingredients = sum(1 for ing in active_ingredients + inactive_ingredients if ing.get("mapped"))
             
             # Calculate proprietary blend disclosure statistics
             blend_stats = self._calculate_blend_disclosure_stats(active_ingredients + inactive_ingredients)
+            
+            # Extract all certifications for product-level aggregation
+            all_certifications = []
+            for stmt in statements:
+                all_certifications.extend(stmt.get("certifications", []) or [])
             
             # Build cleaned product
             cleaned = {
@@ -1670,6 +1699,7 @@ class EnhancedDSLDNormalizer:
                 "fullName": raw_data.get("fullName", ""),
                 "brandName": raw_data.get("brandName", ""),
                 "upcSku": raw_data.get("upcSku", ""),
+                "hasOuterCarton": raw_data.get("hasOuterCarton", None),
                 "upcValid": self._validate_upc(raw_data.get("upcSku", "")),
                 
                 # Status
@@ -1680,19 +1710,19 @@ class EnhancedDSLDNormalizer:
                 # Product details
                 "servingsPerContainer": self._safe_int(raw_data.get("servingsPerContainer", 0)),
                 "netContents": self._extract_net_contents(raw_data.get("netContents", [])),
-                "targetGroups": raw_data.get("targetGroups", []),
-                "productType": raw_data.get("productType", {}).get("langualCodeDescription", ""),
-                "physicalState": raw_data.get("physicalState", {}).get("langualCodeDescription", ""),
+                "targetGroups": raw_data.get("targetGroups", []) or [],
+                "productType": self._extract_field_value(raw_data.get("productType", "")),
+                "physicalState": self._extract_field_value(raw_data.get("physicalState", "")),
                 
                 # Images
                 "imageUrl": image_url,
-                "images": raw_data.get("images", []),
+                "images": raw_data.get("images", []) or [],
                 
                 # Manufacturer info
                 "contacts": contacts,
                 
                 # Events
-                "events": raw_data.get("events", []),
+                "events": raw_data.get("events", []) or [],
                 
                 # Ingredients
                 "activeIngredients": active_ingredients,
@@ -1706,7 +1736,7 @@ class EnhancedDSLDNormalizer:
                 "servingSizes": serving_sizes,
                 
                 # Label relationships
-                "labelRelationships": raw_data.get("labelRelationships", []),
+                "labelRelationships": raw_data.get("labelRelationships", []) or [],
                 
                 # Combined label text for search
                 "labelText": self._generate_label_text(
@@ -1720,6 +1750,10 @@ class EnhancedDSLDNormalizer:
                 
                 # Nutritional warnings for UI display
                 "nutritionalWarnings": nutritional_warnings,
+                
+                # Certifications (product-level aggregation)
+                "hasCertifications": len(all_certifications) > 0,
+                "certificationTypes": list(set(all_certifications)),
                 
                 # Enhanced metadata
                 "metadata": {
@@ -1768,7 +1802,13 @@ class EnhancedDSLDNormalizer:
         """Process a single ingredient with enhanced mapping"""
         name = ing.get("name", "")
         notes = ing.get("notes", "")
-        forms = [f.get("name", "") for f in ing.get("forms", [])]
+        forms = [f.get("name", "") for f in ing.get("forms", []) or []]
+        
+        # Extract form information from ingredient name if no explicit forms provided
+        if not forms and name:
+            extracted_forms = self._extract_forms_from_ingredient_name(name)
+            if extracted_forms:
+                forms = extracted_forms
         
         # Skip nutritional facts - these are not supplement ingredients
         if self._is_nutrition_fact(name):
@@ -1796,18 +1836,38 @@ class EnhancedDSLDNormalizer:
         # Extract features from notes
         extracted_features = self._extract_ingredient_features(notes)
 
-        # Process quantity
-        quantity, unit, daily_value = self._process_quantity(ing.get("quantity", []))
+        # Process quantity - handle both nested and flat formats
+        quantity_data = ing.get("quantity", [])
+        
+        # If unit is at ingredient level, merge it with quantity data
+        if ing.get("unit") and not isinstance(quantity_data, (list, dict)):
+            # Convert flat format to nested format for consistent processing
+            quantity_data = {"quantity": quantity_data, "unit": ing.get("unit")}
+        elif ing.get("unit") and isinstance(quantity_data, dict) and "unit" not in quantity_data:
+            # Add unit to existing dict format
+            quantity_data["unit"] = ing.get("unit")
+            
+        quantity, unit, daily_value = self._process_quantity(quantity_data)
 
         # Check if proprietary - based on quantity OR if name contains blend indicators
         is_proprietary = quantity == 0 or unit == "NP" or self._is_proprietary_blend_name(name)
         
-        # Determine disclosure level for proprietary blends
+        # Determine disclosure level for proprietary blends and process nested ingredients
         disclosure_level = None
+        nested_ingredients_processed = []
+        nested_rows = ing.get("nestedRows", [])
+        
         if is_proprietary or self._is_proprietary_blend_name(name):
-            # For parent blends, check original nested structure
-            nested_rows = ing.get("nestedRows", [])
             disclosure_level = self._determine_disclosure_level(name, quantity, unit, nested_rows)
+            
+            # Process nested ingredients for blends
+            if nested_rows:
+                for nested_ing in nested_rows:
+                    nested_processed = self._process_single_ingredient_enhanced(nested_ing, is_active)
+                    if nested_processed:
+                        nested_processed["parentBlend"] = name
+                        nested_processed["isNestedIngredient"] = True
+                        nested_ingredients_processed.append(nested_processed)
 
         # An ingredient is considered "mapped" if it's found in ANY reference database
         # This includes ingredient databases, harmful additives, non-harmful additives, allergens, banned, or passive databases
@@ -1880,8 +1940,8 @@ class EnhancedDSLDNormalizer:
             "parentBlend": ing.get("parentBlend", None),
             "isNestedIngredient": ing.get("isNestedIngredient", False),
             
-            # Nested ingredients (empty for flattened structure)
-            "nestedIngredients": [],
+            # Nested ingredients (preserved for blend structure)
+            "nestedIngredients": nested_ingredients_processed,
             
             # Enrichment placeholders (to be populated during enrichment phase)
             "clinicalEvidence": None,
@@ -1893,14 +1953,31 @@ class EnhancedDSLDNormalizer:
     def _process_other_ingredients_enhanced(self, other_ing_data: Dict) -> List[Dict]:
         """Process inactive/other ingredients with enhanced mapping and parallel processing"""
         ingredients = other_ing_data.get("ingredients", [])
+        
+        # Handle None values from DSLD data
+        if ingredients is None:
+            return []
 
         if not ingredients:
             return []
 
+        # Normalize ingredients - convert strings to dict format if needed
+        normalized_ingredients = []
+        for ing in ingredients:
+            if isinstance(ing, str):
+                # Convert string to dict format
+                normalized_ingredients.append({"name": ing})
+            elif isinstance(ing, dict):
+                # Already in correct format
+                normalized_ingredients.append(ing)
+            else:
+                # Skip invalid entries
+                continue
+
         # OPTIMIZATION: Use parallel processing for large ingredient lists
         # Parallel processing disabled due to thread safety issues with self references
         # TODO: Implement proper parallel processing with thread-safe methods
-        return self._process_ingredients_sequential(ingredients)
+        return self._process_ingredients_sequential(normalized_ingredients)
 
     def _process_ingredients_parallel(self, ingredients: List[Dict]) -> List[Dict]:
         """Process ingredients using parallel execution"""
@@ -2006,6 +2083,69 @@ class EnhancedDSLDNormalizer:
         except (ValueError, TypeError):
             return 0.0
     
+    def _extract_field_value(self, field_data: Any) -> str:
+        """Extract string value from field that can be either string or dict with langualCodeDescription"""
+        if isinstance(field_data, str):
+            return field_data
+        elif isinstance(field_data, dict) and "langualCodeDescription" in field_data:
+            return field_data["langualCodeDescription"]
+        else:
+            return str(field_data) if field_data else ""
+
+    def _extract_forms_from_ingredient_name(self, ingredient_name: str) -> List[str]:
+        """Extract form information from ingredient name for precise scoring"""
+        name = ingredient_name.lower()
+        extracted_forms = []
+        
+        # Extract from parentheses first (e.g., "Vitamin D3 (Cholecalciferol)")
+        import re
+        paren_matches = re.findall(r'\(([^)]+)\)', name)
+        for match in paren_matches:
+            # Clean up the parenthetical content
+            clean_match = match.strip().lower()
+            # Add common parenthetical forms
+            if clean_match in ['cholecalciferol', 'ergocalciferol', 'ascorbic acid', 'calcium ascorbate']:
+                extracted_forms.append(clean_match)
+        
+        # Extract form identifiers from the main name
+        form_identifiers = []
+        
+        # Vitamin D forms
+        if re.search(r'\b(?:vitamin\s*)?d3\b', name) or re.search(r'\bcholecalciferol\b', name):
+            form_identifiers.append('D3')
+            if 'cholecalciferol' not in extracted_forms:
+                form_identifiers.append('cholecalciferol')
+        elif re.search(r'\b(?:vitamin\s*)?d2\b', name) or re.search(r'\bergocalciferol\b', name):
+            form_identifiers.append('D2')
+            if 'ergocalciferol' not in extracted_forms:
+                form_identifiers.append('ergocalciferol')
+        
+        # Vitamin C forms
+        if re.search(r'\bascorbic\s*acid\b', name):
+            form_identifiers.append('ascorbic acid')
+        elif re.search(r'\bcalcium\s*ascorbate\b', name):
+            form_identifiers.append('calcium ascorbate')
+        elif re.search(r'\bmagnesium\s*ascorbate\b', name):
+            form_identifiers.append('magnesium ascorbate')
+        
+        # Common mineral forms
+        for mineral_form in ['bisglycinate', 'picolinate', 'citrate', 'glycinate', 'malate', 'taurate', 'carbonate', 'oxide']:
+            if re.search(rf'\b{mineral_form}\b', name):
+                form_identifiers.append(mineral_form)
+        
+        # Combine all extracted forms
+        all_forms = extracted_forms + form_identifiers
+        
+        # Remove duplicates while preserving order
+        seen = set()
+        unique_forms = []
+        for form in all_forms:
+            if form not in seen:
+                seen.add(form)
+                unique_forms.append(form)
+                
+        return unique_forms
+    
     def _validate_upc(self, upc: str) -> bool:
         """Validate UPC or SKU format based on retail standards"""
         from dsld_validator import DSLDValidator
@@ -2032,73 +2172,122 @@ class EnhancedDSLDNormalizer:
             return net_contents[0].get("display", "")
         return "[]"
     
-    def _process_contacts(self, contacts: List[Dict]) -> Dict[str, Any]:
+    def _process_contacts(self, contacts: List[Dict]) -> List[Dict]:
         """Process manufacturer contact information"""
         if not contacts:
-            return {
-                "name": "",
-                "webAddress": "",
-                "city": "",
-                "state": "",
-                "country": "",
-                "phoneNumber": "",
-                "isGMP": False,
-                "manufacturerScore": None
-            }
+            return []
         
-        # Take first contact
-        contact = contacts[0]
-        details = contact.get("contactDetails", {})
-        name = details.get("name", "")
+        processed_contacts = []
         
-        # Look up manufacturer score
-        manufacturer_score = None
-        if name:
-            # Search in top manufacturers database
-            # Handle both array and object formats
-            manufacturers = self.manufacturers_db
-            if isinstance(self.manufacturers_db, dict):
-                manufacturers = self.manufacturers_db.get("manufacturers", [])
+        # Process all contacts (not just first one)
+        for contact in contacts:
+            # Handle both nested contactDetails and flat structure
+            if "contactDetails" in contact:
+                details = contact["contactDetails"]
+                name = details.get("name", "")
+                city = details.get("city", "")
+                state = details.get("state", "")
+                country = details.get("country", "")
+                phone = details.get("phoneNumber", "")
+                web = details.get("webAddress", "")
+            else:
+                # Flat structure (like our test data)
+                name = contact.get("name", "")
+                city = contact.get("city", "")
+                state = contact.get("state", "")
+                country = contact.get("country", "")
+                phone = contact.get("phoneNumber", "")
+                web = contact.get("webAddress", "")
+                
+            # Also preserve the type from flat structure if available
+            contact_type = contact.get("type", "")
             
-            for mfr in manufacturers:
-                mfr_name = mfr.get("standard_name", "") or mfr.get("name", "")
-                if name.lower() in mfr_name.lower():
-                    manufacturer_score = mfr.get("score_contribution", None) or mfr.get("reputation_score", None)
-                    break
+            # Look up manufacturer score
+            manufacturer_score = None
+            if name:
+                # Search in top manufacturers database
+                # Handle both array and object formats
+                manufacturers = self.manufacturers_db
+                if isinstance(self.manufacturers_db, dict):
+                    manufacturers = self.manufacturers_db.get("manufacturers", [])
+                
+                for mfr in manufacturers:
+                    mfr_name = mfr.get("standard_name", "") or mfr.get("name", "")
+                    if name.lower() in mfr_name.lower():
+                        manufacturer_score = mfr.get("score_contribution", None) or mfr.get("reputation_score", None)
+                        break
+            
+            # Build processed contact
+            processed_contact = {
+                "name": name,
+                "type": contact_type,
+                "webAddress": web,
+                "city": city,
+                "state": state,
+                "country": country,
+                "phoneNumber": phone,
+                "isGMP": False,  # Will be set from statements
+                "manufacturerScore": manufacturer_score
+            }
+            
+            processed_contacts.append(processed_contact)
         
-        return {
-            "name": name,
-            "webAddress": details.get("webAddress", ""),
-            "city": details.get("city", ""),
-            "state": details.get("state", ""),
-            "country": details.get("country", ""),
-            "phoneNumber": details.get("phoneNumber", ""),
-            "isGMP": False,  # Will be set from statements
-            "manufacturerScore": manufacturer_score
-        }
+        return processed_contacts
     
-    def _process_quantity(self, quantities: List[Dict]) -> Tuple[float, str, Optional[float]]:
-        """Extract quantity, unit, and daily value from quantity array"""
+    def _process_quantity(self, quantities) -> Tuple[float, str, Optional[float]]:
+        """Extract quantity, unit, and daily value from various quantity formats"""
+        # Handle different input formats robustly
         if not quantities:
             return 0.0, "unspecified", None
         
-        # Take first quantity (usually for standard serving)
-        q = quantities[0]
-        quantity = self._safe_float(q.get("quantity", 0))
-        unit = q.get("unit", "unspecified")
+        # Case 1: Direct numeric value (int/float)
+        if isinstance(quantities, (int, float)):
+            return float(quantities), "unspecified", None
         
-        # Get daily value if available
-        daily_value = None
-        dv_groups = q.get("dailyValueTargetGroup", [])
-        if dv_groups:
-            daily_value = self._safe_float(dv_groups[0].get("percent", 0))
+        # Case 2: String value
+        if isinstance(quantities, str):
+            return self._safe_float(quantities), "unspecified", None
         
-        # Convert units if needed (e.g., IU to mcg for Vitamin D)
-        if unit == "IU" and "vitamin d" in unit.lower():
-            quantity = quantity * 0.025  # Convert to mcg
-            unit = "mcg"
+        # Case 3: Single dict object
+        if isinstance(quantities, dict):
+            quantity = self._safe_float(quantities.get("quantity", quantities.get("value", 0)))
+            unit = quantities.get("unit", "unspecified")
+            
+            # Get daily value if available
+            daily_value = None
+            dv_groups = quantities.get("dailyValueTargetGroup", [])
+            if dv_groups and isinstance(dv_groups, list):
+                daily_value = self._safe_float(dv_groups[0].get("percent", 0))
+            
+            return quantity, unit, daily_value
         
-        return quantity, unit, daily_value
+        # Case 4: List of quantity objects (original expected format)
+        if isinstance(quantities, list):
+            # Take first quantity (usually for standard serving)
+            q = quantities[0] if quantities else {}
+            if isinstance(q, dict):
+                quantity = self._safe_float(q.get("quantity", q.get("value", 0)))
+                unit = q.get("unit", "unspecified")
+                
+                # Get daily value if available
+                daily_value = None
+                dv_groups = q.get("dailyValueTargetGroup", [])
+                if dv_groups and isinstance(dv_groups, list):
+                    daily_value = self._safe_float(dv_groups[0].get("percent", 0))
+                
+                # Convert units if needed (e.g., IU to mcg for Vitamin D)
+                if unit == "IU" and "vitamin d" in unit.lower():
+                    quantity = quantity * 0.025  # Convert to mcg
+                    unit = "mcg"
+                
+                return quantity, unit, daily_value
+            else:
+                # List contains non-dict values, treat as direct numeric
+                return self._safe_float(quantities[0]), "unspecified", None
+        
+        # Fallback for unexpected types
+        logger.warning(f"Unexpected quantity format: {type(quantities)} - {quantities}")
+        return 0.0, "unspecified", None
     
     def _get_ingredient_quality_info(self, standard_name: str, forms: List[str]) -> Dict[str, Any]:
         """Get quality information for ingredient"""
@@ -2110,8 +2299,8 @@ class EnhancedDSLDNormalizer:
                 # Check each form
                 for form in forms:
                     form_lower = form.lower()
-                    for form_name, form_data in vitamin_data.get("forms", {}).items():
-                        if form_lower == form_name.lower() or form_lower in [a.lower() for a in form_data.get("aliases", [])]:
+                    for form_name, form_data in (vitamin_data.get("forms", {}) or {}).items():
+                        if form_lower == form_name.lower() or form_lower in [a.lower() for a in form_data.get("aliases", []) or []]:
                             info["natural"] = form_data.get("natural", False)
                             info["bio_score"] = form_data.get("bio_score", 0)
                             return info
@@ -2180,13 +2369,13 @@ class EnhancedDSLDNormalizer:
                     allergen_free.append(allergen)
             
             # Check for GMP
-            gmp_certified = bool(re.search(CERTIFICATION_PATTERNS["GMP"], notes, re.IGNORECASE))
+            gmp_certified = bool(re.search(CERTIFICATION_PATTERNS["GMP-General"], notes, re.IGNORECASE))
             
             # Extract allergens mentioned
             allergens = []
             if "allergi" in stmt_type.lower():
                 # Extract specific allergens mentioned
-                for allergen_data in self.allergens_db.get("common_allergens", []):
+                for allergen_data in self.allergens_db.get("common_allergens", []) or []:
                     if allergen_data["standard_name"].lower() in notes.lower():
                         allergens.append(allergen_data["standard_name"].lower())
             
@@ -2197,7 +2386,7 @@ class EnhancedDSLDNormalizer:
                 "allergenFree": allergen_free,
                 "allergens": allergens,
                 "gmpCertified": gmp_certified,
-                "thirdPartyTested": "Third-Party" in certifications
+                "thirdPartyTested": any(cert.startswith("Third-Party") for cert in certifications)
             })
         
         return processed
@@ -2271,7 +2460,7 @@ class EnhancedDSLDNormalizer:
         
         # Add facility cross-contamination allergens from statements
         for stmt in statements:
-            facility_allergens = stmt.get("allergens", [])
+            facility_allergens = stmt.get("allergens", []) or []
             allergen_types.extend(facility_allergens)
         
         # Check for standardized ingredients
@@ -2283,7 +2472,7 @@ class EnhancedDSLDNormalizer:
         # Get certifications
         all_certifications = []
         for stmt in statements:
-            all_certifications.extend(stmt.get("certifications", []))
+            all_certifications.extend(stmt.get("certifications", []) or [])
         
         # Check for unsubstantiated claims
         has_unsubstantiated = False  # Would be set from claims processing
@@ -2480,7 +2669,7 @@ class EnhancedDSLDNormalizer:
             if isinstance(quantity_list, list) and quantity_list:
                 # Get first quantity entry
                 qty_entry = quantity_list[0] if quantity_list else {}
-                nested_qty = qty_entry.get("value", 0) if isinstance(qty_entry.get("value"), (int, float)) else 0
+                nested_qty = qty_entry.get("quantity", 0) if isinstance(qty_entry.get("quantity"), (int, float)) else 0
                 nested_unit = qty_entry.get("unit", "")
             elif isinstance(quantity_list, (int, float)):
                 nested_qty = quantity_list
@@ -2699,12 +2888,20 @@ class EnhancedDSLDNormalizer:
         }
         
         for ing in ingredient_rows:
-            name = ing.get("name", "").lower().strip()
+            # Normalize ingredient format (handle both string and dict)
+            if isinstance(ing, str):
+                name = ing.lower().strip()
+                ing_dict = {"name": ing}  # Convert to dict for consistent processing
+            elif isinstance(ing, dict):
+                name = ing.get("name", "").lower().strip()
+                ing_dict = ing
+            else:
+                continue  # Skip invalid entries
             
             # Check sugar content
             for keyword in nutritional_checks["sugar"]["keywords"]:
                 if keyword in name:
-                    amount_info = self._extract_nutritional_amount(ing)
+                    amount_info = self._extract_nutritional_amount(ing_dict)
                     if amount_info:
                         amount_in_g = self._convert_to_standard_unit(
                             amount_info["amount"], 
@@ -2718,7 +2915,7 @@ class EnhancedDSLDNormalizer:
             # Check sodium content
             for keyword in nutritional_checks["sodium"]["keywords"]:
                 if keyword in name:
-                    amount_info = self._extract_nutritional_amount(ing)
+                    amount_info = self._extract_nutritional_amount(ing_dict)
                     if amount_info:
                         amount_in_mg = self._convert_to_standard_unit(
                             amount_info["amount"], 
@@ -2732,7 +2929,7 @@ class EnhancedDSLDNormalizer:
             # Check saturated fat content
             for keyword in nutritional_checks["saturated_fat"]["keywords"]:
                 if keyword in name:
-                    amount_info = self._extract_nutritional_amount(ing)
+                    amount_info = self._extract_nutritional_amount(ing_dict)
                     if amount_info:
                         amount_in_g = self._convert_to_standard_unit(
                             amount_info["amount"], 

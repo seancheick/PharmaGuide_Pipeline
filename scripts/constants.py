@@ -160,21 +160,60 @@ STATEMENT_TYPES_OF_INTEREST = [
     "Storage"
 ]
 
-# Certification patterns
+# Certification patterns - Comprehensive list based on industry research
 CERTIFICATION_PATTERNS = {
-    "NSF": r"NSF\s*(Certified|Gluten-Free|Sport|Contents\s*Certified|/ANSI\s*173)",
-    "USP": r"USP\s*(Verified|Grade)",
-    "GMP": r"GMP\s*(Certified|facility|manufactured)",
-    "Organic": r"(Certified\s*Organic|USDA\s*Organic)",
-    "Non-GMO": r"Non[\s-]*GMO\s*(Project\s*Verified)?",
-    "Kosher": r"(Kosher|OU\s*\(Kosher\))",
-    "Vegan": r"(Vegan|Certified\s*Vegan)",
-    "Third-Party": r"(Third[\s-]*Party|3rd[\s-]*Party)\s*(Tested|Verified)",
-    "Informed-Sport": r"Informed[\s-]*Sport",
+    # Core Quality Certifications (Highest Priority)
+    "NSF-Contents-Certified": r"NSF\s*(Contents\s*Certified|/ANSI\s*173)",
+    "NSF-Certified-Sport": r"NSF\s*(Certified\s*for\s*Sport|Sport)",
+    "NSF-General": r"NSF\s*(Certified|International)",
+    "USP-Verified": r"USP\s*(Verified|Grade|<\d+>|\s+standards)",
+    "ConsumerLab-Approved": r"ConsumerLab\s*(Tested|Approved|CL\s*Approved)",
     "Informed-Choice": r"Informed[\s-]*Choice",
-    "ConsumerLab": r"ConsumerLab\s*(Tested|Approved)",
-    "BSCG": r"BSCG\s*(Certified\s*Drug\s*Free)?",
-    "IFOS": r"IFOS\s*(Certified|5[\s-]*Star)?"
+    "Informed-Sport": r"Informed[\s-]*Sport",
+    "BSCG-Drug-Free": r"BSCG\s*(Certified\s*Drug\s*Free|Banned\s*Substances\s*Control\s*Group)",
+    
+    # Manufacturing and GMP Audits
+    "GMP-General": r"(GMP|Good\s*Manufacturing\s*Practices)\s*(Certified|facility|manufactured|compliant|registered)?|produced\s+in\s+(a\s+)?GMP\s+facility",
+    "NSF-GMP": r"NSF\s*GMP\s*(Registration|Registered|Certified)",
+    "NPA-GMP": r"(NPA|Natural\s*Products\s*Association)\s*GMP",
+    "UL-GMP": r"UL\s*(Solutions\s*)?GMP",
+    "cGMP": r"cGMP\s*(Certified|Compliant|21\s*CFR|Part\s*210|Part\s*211)",
+    
+    # Specialty and Category Certifications
+    "AOAC-Validated": r"AOAC[\s-]*(validated|method)",
+    "Non-GMO-Project": r"Non[\s-]*GMO\s*Project\s*Verified",
+    "Non-GMO-General": r"Non[\s-]*GMO(?!\s*Project)",
+    "Gluten-Free-GFCO": r"(GFCO|Gluten[\s-]*Free\s*Certification\s*Organization)",
+    "Gluten-Free-General": r"(Certified\s*Gluten[\s-]*Free|Gluten[\s-]*Free\s*Certified)(?!\s*(GFCO|Certification\s*Organization))",
+    "Certified-Vegan": r"Certified\s*Vegan|Vegan\s*Action|VegeCert",
+    "Certified-Vegetarian": r"Certified\s*Vegetarian",
+    "Kosher-OU": r"OU\s*Kosher|\bOU\b",
+    "Kosher-OK": r"OK\s*Kosher|\bOK\b(?=.*kosher)",
+    "Kosher-Star-K": r"Star[\s-]*K",
+    "Kosher-General": r"Kosher(?!\s*(OU|OK|Star))",
+    "Halal-IFANCA": r"IFANCA|Islamic\s*Food\s*and\s*Nutrition\s*Council",
+    "Halal-General": r"Halal\s*Certified|Certified\s*Halal",
+    "Organic-USDA": r"(USDA\s*Organic|Certified\s*Organic)",
+    "Marine-Sustainability": r"(Friends\s*of\s*the\s*Sea|MarinTrust|MSC\s*Chain[\s-]*of[\s-]*Custody)",
+    "IFOS": r"IFOS\s*(Certified|5[\s-]*Star|International\s*Fish\s*Oil\s*Standards)?",
+    "IGEN": r"IGEN\s*(Non[\s-]*GMO)?",
+    
+    # Emerging/Regional Programs
+    "TGA-Listed": r"TGA[\s-]*Listed|ARTG|Therapeutic\s*Goods\s*Administration",
+    "Health-Canada-NNHP": r"(Health\s*Canada|NNHP|NPN|Natural\s*Product\s*Number)",
+    "Eurofins-Certified": r"Eurofins\s*Certified",
+    "Labdoor": r"Labdoor\s*(Grade|Tested|Ranked)",
+    
+    # Additional Quality Markers
+    "Third-Party-Tested": r"(Third[\s-]*Party|3rd[\s-]*Party)[\s-]*(Tested|Verified|inspected)",
+    "FDA-Inspected": r"FDA[\s-]*(regulated|inspected|registered)[\s-]*(facility|supplement|dietary)",
+    "ISO-Certified": r"ISO\s*\d+\s*Certified",
+    "Pharmaceutical-Grade": r"Pharmaceutical\s*Grade",
+    
+    # B-Corporation and Sustainability
+    "B-Corporation": r"(Certified\s*)?B[\s-]*Corporation|B[\s-]*Corp",
+    "Sustainable": r"Sustainably\s*(Sourced|Harvested)",
+    "Fair-Trade": r"Fair\s*Trade\s*Certified"
 }
 
 # Enhanced proprietary blend parsing patterns
@@ -189,14 +228,14 @@ COMMA_SPLIT_PATTERN = r',(?![^()]*\))'
 
 # Allergen-free patterns
 ALLERGEN_FREE_PATTERNS = {
-    "gluten": r"gluten[\s-]*free",
-    "dairy": r"dairy[\s-]*free", 
-    "soy": r"soy[\s-]*free",
-    "nut": r"(nut|tree[\s-]*nut)[\s-]*free",
-    "egg": r"egg[\s-]*free",
-    "shellfish": r"shellfish[\s-]*free",
-    "peanut": r"peanut[\s-]*free",
-    "yeast": r"yeast[\s-]*free"
+    "gluten": r"(gluten[\s-]*free|contains?\s+no\s+.*?gluten|does\s+not\s+contain\s+.*?gluten|wheat[\s-]*free)",
+    "dairy": r"(dairy[\s-]*free|contains?\s+no\s+.*?(dairy|milk)|does\s+not\s+contain\s+.*?(dairy|milk))", 
+    "soy": r"(soy[\s-]*free|contains?\s+no\s+.*?soy|does\s+not\s+contain\s+.*?soy)",
+    "nut": r"((nut|tree[\s-]*nut)[\s-]*free|contains?\s+no\s+.*?nut|does\s+not\s+contain\s+.*?nut)",
+    "egg": r"(egg[\s-]*free|contains?\s+no\s+.*?egg|does\s+not\s+contain\s+.*?egg)",
+    "shellfish": r"(shellfish[\s-]*free|contains?\s+no\s+.*?shellfish|does\s+not\s+contain\s+.*?shellfish)",
+    "peanut": r"(peanut[\s-]*free|contains?\s+no\s+.*?peanut|does\s+not\s+contain\s+.*?peanut)",
+    "yeast": r"(yeast[\s-]*free|contains?\s+no\s+.*?yeast|does\s+not\s+contain\s+.*?yeast)"
 }
 
 # Unsubstantiated claim patterns
@@ -224,7 +263,15 @@ NATURAL_SOURCE_PATTERNS = [
 STANDARDIZATION_PATTERNS = [
     r"standardized\s+to\s+(\d+)%\s*([a-zA-Z\s]+)",
     r"(\d+)%\s+([a-zA-Z\s]+)\s+extract",
-    r"containing\s+(\d+)%\s+([a-zA-Z\s]+)"
+    r"containing\s+(\d+)%\s+([a-zA-Z\s]+)",
+    r"extract\s+(\d+):\s*(\d+)",  # Extract ratios like "extract 4:1"
+    r"(\d+):\s*(\d+)\s+extract",  # Ratios like "4:1 extract"
+    r"concentrated\s+(\d+)x",     # Concentrated forms like "concentrated 10x"
+    r"potency\s+guaranteed",      # Guaranteed potency
+    r"standardized\s+extract",    # General standardized extract
+    r"minimum\s+(\d+)%",          # Minimum percentages
+    r"(\d+)\s*mg/g",             # Milligrams per gram ratios
+    r"active\s+compounds?\s+(\d+)%", # Active compounds percentages
 ]
 
 # Proprietary blend indicators
@@ -276,6 +323,22 @@ DELIVERY_ENHANCEMENT_PATTERNS = [
     r"extended[\s-]*release",
     r"enhanced\s+absorption",
     r"bioenhanced"
+]
+
+# Clinical evidence patterns
+CLINICAL_EVIDENCE_PATTERNS = [
+    r"randomized.*controlled.*study",
+    r"double[\s-]*blind.*study",
+    r"placebo[\s-]*controlled.*study",
+    r"clinical.*trial",
+    r"clinical.*study",
+    r"clinically.*studied",
+    r"peer[\s-]*reviewed.*research",
+    r"published.*research",
+    r"scientific.*study",
+    r"research.*study",
+    r"university.*study",
+    r"clinical.*research"
 ]
 
 # Processing status codes
