@@ -1,10 +1,8 @@
 {
-  "high_priority": [],
-  "medium_priority": [],
-  "low_priority": [],
   "metadata": {
-    "total_count": 0,
-    "last_updated": "2025-08-22 18:18:02",
-    "notes": "Active ingredients that affect quality/bioavailability scoring"
-  }
+    "generated_at": "2025-09-11T19:51:55.510383Z",
+    "total_unmapped": 0,
+    "total_occurrences": 0
+  },
+  "unmapped_ingredients": {}
 }

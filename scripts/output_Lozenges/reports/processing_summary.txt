@@ -1,36 +1,36 @@
 DSLD Data Cleaning Processing Report
 ==================================================
 
-Generated: 2025-08-22 17:16:24
-Total Files Processed: 962
-Processing Time: 5.00 minutes
+Generated: 2025-09-11 13:43:41
+Total Files Processed: 978
+Processing Time: 4.95 minutes
 
 Results Summary:
-  - Successfully cleaned: 958
+  - Successfully cleaned: 975
   - Needs review: 0
   - Incomplete: 0
-  - Errors: 4
-  - Success rate: 99.6%
+  - Errors: 3
+  - Success rate: 99.7%
 
-Mapped ingredients found: 780
-Unmapped ingredients found: 103
+Mapped ingredients found: 705
+Unmapped ingredients found: 106
 
 Top 15 Mapped Ingredients (data insights):
-  545x Stearic Acid
-  505x Magnesium Stearate
-  453x Sorbitol
-  348x Vitamin B12
-  331x Silica
-  305x Mannitol
-  300x Citric Acid
-  261x Fructose
-  251x Zinc
-  228x Xylitol
-  223x Cellulose
-  193x Vitamin C
+  548x Stearic Acid
+  506x Magnesium Stearate
+  456x Sorbitol
+  356x Vitamin B12
+  332x Silica
+  309x Mannitol
+  304x Citric Acid
+  263x Fructose
+  258x Zinc
+  232x Xylitol
+  225x Cellulose
+  202x Vitamin C
+  145x Microcrystalline Cellulose
   144x Silicon Dioxide
-  142x Microcrystalline Cellulose
-  124x natural Cherry flavor
+  134x Natural Flavors
 
 📊 These are the most frequently appearing mapped ingredients
 
@@ -49,5 +49,5 @@ Top 10 Unmapped Ingredients (for enrichment planning):
 💡 These ingredients should be prioritized for database enrichment
 
 Batch Details:
-  Batch 1: 497 cleaned, 0 review, 0 incomplete, 3 errors (151.1s)
-  Batch 2: 461 cleaned, 0 review, 0 incomplete, 1 errors (148.5s)
+  Batch 1: 497 cleaned, 0 review, 0 incomplete, 3 errors (151.4s)
+  Batch 2: 478 cleaned, 0 review, 0 incomplete, 0 errors (145.8s)

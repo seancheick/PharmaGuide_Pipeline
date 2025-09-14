@@ -1,0 +1,2921 @@
+{
+  "overall_processing": {
+    "total_files_processed": 1,
+    "total_processing_time_seconds": 69.66,
+    "processing_timestamp": "2025-09-12T18:27:53.975285",
+    "enrichment_version": "1.0.0"
+  },
+  "aggregate_stats": {
+    "total_products_processed": 497,
+    "successful_enrichments": 20,
+    "failed_enrichments": 477,
+    "overall_success_rate": 4.02
+  },
+  "database_info": {
+    "databases_loaded": 18,
+    "database_list": [
+      "absorption_enhancers",
+      "allergens",
+      "backed_clinical_studies",
+      "banned_recalled_ingredients",
+      "botanical_ingredients",
+      "enhanced_delivery",
+      "harmful_additives",
+      "ingredient_quality_map",
+      "ingredient_weights",
+      "non_harmful_additives",
+      "passive_inactive_ingredients",
+      "proprietary_blends_penalty",
+      "rda_optimal_uls",
+      "rda_therapeutic_dosing",
+      "standardized_botanicals",
+      "synergy_cluster",
+      "top_manufacturers_data",
+      "user_goals_to_clusters"
+    ]
+  },
+  "batch_summaries": [
+    {
+      "batch_info": {
+        "input_file": "output_Lozenges/cleaned/cleaned_batch_1.json",
+        "output_file": "output_Lozenges/enriched/enriched_cleaned_batch_1.json",
+        "processing_timestamp": "2025-09-12T18:27:53.967456",
+        "processing_time_seconds": 69.65
+      },
+      "processing_stats": {
+        "total_products": 497,
+        "successful_enrichments": 20,
+        "failed_enrichments": 477,
+        "success_rate": 4.02
+      },
+      "enrichment_summary": {
+        "databases_used": 18,
+        "average_processing_time": 0.14
+      },
+      "errors": [
+        {
+          "product_id": "10072",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "10040",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "10042",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "10628",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "11042",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "10997",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "1125",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "11427",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "11459",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "12465",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "11786",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "12617",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "12479",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "11617",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "12831",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "13048",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "12620",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "13331",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "13262",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "13678",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "13946",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "13493",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "14036",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "12821",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "14054",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "13754",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "14062",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "14119",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "14075",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "14078",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "14130",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "14262",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "14280",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "14193",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "14197",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "14287",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "14200",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "14376",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "14637",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "14638",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "14378",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "14382",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "14643",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "14811",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "14814",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "14885",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "14912",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "14996",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "14997",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "15258",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "14999",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "15446",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "15452",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "1613",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "15351",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "174299",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "174112",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "174307",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "174309",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "174313",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "174310",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "174228",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "174318",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "174442",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "17215",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "174457",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "174459",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "174482",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "174468",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "174529",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "174771",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "174550",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "174540",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "174782",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "175761",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "176846",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "175101",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "178160",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "175240",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "178477",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "178741",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "179266",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "179269",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "179247",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "179752",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "179402",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "179756",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "179859",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "180036",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "180083",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "180090",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "180038",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "180330",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "181143",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "180657",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "181590",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "181188",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "18234",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "182018",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "182020",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "183959",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "183961",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "180635",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "184301",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "184312",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "184215",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "184074",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "18254",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "184417",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "18464",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "184447",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "184423",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "187501",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "18693",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "191016",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "19530",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "199423",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "199595",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "199594",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "199845",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "199858",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "199949",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "200017",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "199765",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "200853",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "200683",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "200761",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "201241",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "201461",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "19981",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "201512",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "201483",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "201871",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "202683",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "201971",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "201697",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "202173",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "203780",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "203683",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "203807",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "203788",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "204153",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "203749",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "204841",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "204843",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "204894",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "204870",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "205775",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "204846",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "205749",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "206774",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "207096",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "207098",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "206950",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "206966",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "20742",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "20767",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "20788",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "20775",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "20787",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "208523",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "20840",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "209013",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "209015",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "208445",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "209073",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "209076",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "210390",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "208832",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "210757",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "210392",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "209058",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "210765",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "209079",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "210768",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "210770",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "210776",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "210806",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "210838",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "210827",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "210839",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "210850",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "210843",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "210873",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "211604",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "211690",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "211871",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "211884",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "211889",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "211776",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "211952",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "212397",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "212400",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "212352",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "213406",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "213411",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "213363",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "213478",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "213340",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "212552",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "213611",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "213788",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "213666",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "213669",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "213982",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "213433",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "213930",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "21424",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "214134",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "214039",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "214375",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "214639",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "214378",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "214440",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "214696",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "214700",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "214681",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "214689",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "214815",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "214733",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "214896",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "215102",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "216411",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "216422",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "215489",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "215096",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "216899",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "214771",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "216907",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "216909",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "216966",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "216970",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "217068",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "217345",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "217296",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "217080",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "217530",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "218085",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "217055",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "219247",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "219032",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "217543",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "224743",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "223521",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "224755",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "223567",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "223121",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "22674",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "228026",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "225809",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "228490",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "228063",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "229672",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "228610",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "230013",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "228713",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "231319",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "228268",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "231610",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "230474",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "231659",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "231605",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "231660",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "231665",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "231398",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "231889",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "231630",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "231892",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "231901",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "231976",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "232003",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "231988",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "232147",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "232155",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "232097",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "232219",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "232190",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "232612",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "232613",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "233069",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "232815",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "233115",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "233122",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "233298",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "233463",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "232973",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "232325",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "235544",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "235543",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "237009",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "23618",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "23716",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "237977",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "240993",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "239500",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "240619",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "241007",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "241882",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "242271",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "242275",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "241012",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "242277",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "240949",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "241603",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "242939",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "243012",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "242943",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "242958",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "244387",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "243019",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "244443",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "244465",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "245611",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "244799",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "245223",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "245603",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "245727",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "245728",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "245833",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "245836",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "246424",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "245938",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "245667",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "246993",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "247154",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "246998",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "247288",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "248828",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "247198",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "247937",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "247510",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "249160",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "249039",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "249478",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "250022",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "250093",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "251662",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "249707",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "249699",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "251788",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "251789",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "252014",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "252372",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "252018",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "252343",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "253082",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "252377",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "253086",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "254677",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "254936",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "254580",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "2542",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "254934",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "255522",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "254938",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "255495",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "255561",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "256299",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "256339",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "256802",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "257979",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "257789",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "257980",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "255424",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "258117",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "258176",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "257790",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "258192",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "258193",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "258407",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "258116",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "258468",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "258504",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "259047",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "259142",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "258579",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "259227",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "259964",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "259967",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "259228",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "260128",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "260448",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "261057",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "259145",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "260775",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "261691",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "262756",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "25845",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "262757",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "262759",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "262758",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "263005",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "263092",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "263095",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "263844",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "261994",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "264021",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "265280",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "264029",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "263403",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "263404",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "266396",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "266397",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "266414",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "265490",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "266415",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "266416",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "268070",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "266417",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "271141",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "271224",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "267404",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "271523",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "270393",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "268440",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "271799",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "27163",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "272191",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "271800",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "271802",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "272192",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "272193",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "272194",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "272581",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "272195",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "272587",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "272196",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "272197",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "272867",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "272734",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "272871",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "273107",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "273030",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "273112",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "272706",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "273195",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "274529",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "274538",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "274103",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "273035",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "274540",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "274543",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "274612",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "275178",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "275052",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "275222",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "275006",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "275395",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "275446",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "275453",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "275239",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "275457",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "275628",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "273308",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "275629",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "275466",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "276060",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "275976",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "276373",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "276550",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "276573",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "276575",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "278407",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "276554",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "283142",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "278931",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "283174",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "283275",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "283238",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "283239",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "283286",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "283143",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "283293",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "283361",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "285561",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "285560",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        },
+        {
+          "product_id": "285562",
+          "errors": [
+            "'list' object has no attribute 'get'"
+          ]
+        }
+      ]
+    }
+  ]
+}

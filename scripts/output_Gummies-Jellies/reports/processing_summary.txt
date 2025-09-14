@@ -1,36 +1,36 @@
 DSLD Data Cleaning Processing Report
 ==================================================
 
-Generated: 2025-08-22 18:18:02
-Total Files Processed: 4294
-Processing Time: 48.49 minutes
+Generated: 2025-09-11 15:51:55
+Total Files Processed: 4586
+Processing Time: 123.83 minutes
 
 Results Summary:
-  - Successfully cleaned: 4284
+  - Successfully cleaned: 4586
   - Needs review: 0
   - Incomplete: 0
-  - Errors: 10
-  - Success rate: 99.8%
+  - Errors: 0
+  - Success rate: 100.0%
 
-Mapped ingredients found: 2181
-Unmapped ingredients found: 481
+Mapped ingredients found: 1969
+Unmapped ingredients found: 521
 
 Top 15 Mapped Ingredients (data insights):
-  3169x Citric Acid
-  2612x Pectin
-  2276x Vitamin C
-  1995x Sugar
-  1949x Sodium Citrate
-  1923x Water
-  1847x Gelatin
-  1809x Glucose Syrup
-  1801x Zinc
-  1773x Vitamin B12
-  1679x Vitamin E
-  1660x Natural Flavors
-  1619x Biotin
-  1589x Vitamin A
-  1559x Vitamin D
+  3441x Citric Acid
+  2879x Pectin
+  2386x Vitamin C
+  2149x Sugar
+  2086x Sodium Citrate
+  2041x Water
+  1974x Glucose Syrup
+  1930x Vitamin B12
+  1893x Zinc
+  1867x Gelatin
+  1822x Natural Flavors
+  1754x Vitamin E
+  1694x Biotin
+  1659x Vitamin A
+  1593x Vitamin D
 
 📊 These are the most frequently appearing mapped ingredients
 
@@ -39,22 +39,23 @@ Top 10 Unmapped Ingredients (for enrichment planning):
   127x Contains <2% of:
   117x Contains <2% of
   111x Less than 2% of:
-   63x Fruit juice
-   46x Adipic Acid
-   45x organic Lemon juice concentrate
+   92x Pomegranate Juice, Powder
+   64x Fruit juice
+   51x Fruit Juice
+   47x Adipic Acid
+   46x organic Lemon juice concentrate
    44x Contains less than 2% of
-   41x Orange juice concentrate
-   41x Pomegranate Juice, Powder
 
 💡 These ingredients should be prioritized for database enrichment
 
 Batch Details:
-  Batch 1: 500 cleaned, 0 review, 0 incomplete, 0 errors (313.0s)
-  Batch 2: 497 cleaned, 0 review, 0 incomplete, 3 errors (295.0s)
-  Batch 3: 499 cleaned, 0 review, 0 incomplete, 1 errors (324.2s)
-  Batch 4: 500 cleaned, 0 review, 0 incomplete, 0 errors (313.2s)
-  Batch 5: 499 cleaned, 0 review, 0 incomplete, 1 errors (339.6s)
-  Batch 6: 499 cleaned, 0 review, 0 incomplete, 1 errors (342.2s)
-  Batch 7: 498 cleaned, 0 review, 0 incomplete, 2 errors (431.0s)
-  Batch 8: 499 cleaned, 0 review, 0 incomplete, 1 errors (355.3s)
-  Batch 9: 293 cleaned, 0 review, 0 incomplete, 1 errors (195.7s)
+  Batch 1: 500 cleaned, 0 review, 0 incomplete, 0 errors (314.1s)
+  Batch 2: 500 cleaned, 0 review, 0 incomplete, 0 errors (291.4s)
+  Batch 3: 500 cleaned, 0 review, 0 incomplete, 0 errors (4564.3s)
+  Batch 4: 500 cleaned, 0 review, 0 incomplete, 0 errors (319.9s)
+  Batch 5: 500 cleaned, 0 review, 0 incomplete, 0 errors (334.7s)
+  Batch 6: 500 cleaned, 0 review, 0 incomplete, 0 errors (346.1s)
+  Batch 7: 500 cleaned, 0 review, 0 incomplete, 0 errors (427.7s)
+  Batch 8: 500 cleaned, 0 review, 0 incomplete, 0 errors (455.6s)
+  Batch 9: 500 cleaned, 0 review, 0 incomplete, 0 errors (288.5s)
+  Batch 10: 86 cleaned, 0 review, 0 incomplete, 0 errors (87.8s)

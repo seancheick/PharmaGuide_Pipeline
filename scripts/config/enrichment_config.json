@@ -1,0 +1,226 @@
+{
+  "_comments": {
+    "USAGE": "HOW TO RUN THE DSLD ENRICHMENT SCRIPT",
+    "method_1_config_based": {
+      "description": "Use this config file for paths and settings",
+      "command": "python enrich_supplements_v2.py",
+      "note": "Reads input_directory and output_directory from this config file"
+    },
+    "method_2_command_line": {
+      "description": "Override config with command line arguments",
+      "examples": [
+        "python enrich_supplements_v2.py --input-dir /path/to/cleaned/files --output-dir /path/to/output",
+        "python enrich_supplements_v2.py --input-dir cleaned_data --output-dir enriched_output --batch-size 50",
+        "python enrich_supplements_v2.py single_file.json output_folder"
+      ]
+    },
+    "method_3_testing": {
+      "dry_run": "python enrich_supplements_v2.py --dry-run (test without writing files)",
+      "help": "python enrich_supplements_v2.py --help (see all options)"
+    },
+    "CONFIGURATION_GUIDE": {
+      "paths_section": "Edit 'input_directory' to point to your cleaned DSLD files",
+      "batch_size": "Increase batch_size for faster processing on powerful machines",
+      "workers": "Increase max_workers if you have many CPU cores",
+      "output_naming": "Change 'output_directory' to customize output folder name"
+    },
+    "workflow": "1. CLEANING → 2. ENRICHMENT (this phase) → 3. SCORING → 4. DEPLOYMENT"
+  },
+  "enrichment_info": {
+    "version": "2.0.0",
+    "description": "Comprehensive enrichment configuration for DSLD supplement data processing",
+    "created": "2025-09-13",
+    "author": "Claude Code",
+    "pipeline_stage": "enrichment"
+  },
+
+  "paths": {
+    "_comment": "EDIT THESE PATHS TO POINT TO YOUR DATA",
+    "input_directory": "/Users/seancheick/Downloads/dsld_clean/scripts/output_Lozenges/cleaned",
+    "_input_help": "Directory containing cleaned DSLD JSON files (output from cleaning script)",
+    "output_directory": "output_Gummies-Jellies_enriched",
+    "_output_help": "Where to save enriched files (will be created if doesn't exist)",
+    "reference_data": "data",
+    "_reference_help": "Directory containing reference databases (don't change unless you moved data folder)",
+    "log_directory": "logs",
+    "_log_help": "Where to save processing logs",
+    "input_file_pattern": "*.json",
+    "_pattern_help": "File pattern to match (*.json = all JSON files, cleaned_batch_*.json = specific pattern)"
+  },
+
+  "database_paths": {
+    "absorption_enhancers": "data/absorption_enhancers.json",
+    "allergens": "data/allergens.json",
+    "backed_clinical_studies": "data/backed_clinical_studies.json",
+    "banned_recalled_ingredients": "data/banned_recalled_ingredients.json",
+    "botanical_ingredients": "data/botanical_ingredients.json",
+    "enhanced_delivery": "data/enhanced_delivery.json",
+    "harmful_additives": "data/harmful_additives.json",
+    "ingredient_quality_map": "data/ingredient_quality_map.json",
+    "ingredient_weights": "data/ingredient_weights.json",
+    "non_harmful_additives": "data/non_harmful_additives.json",
+    "passive_inactive_ingredients": "data/passive_inactive_ingredients.json",
+    "proprietary_blends_penalty": "data/proprietary_blends_penalty.json",
+    "rda_optimal_uls": "data/rda_optimal_uls.json",
+    "rda_therapeutic_dosing": "data/rda_therapeutic_dosing.json",
+    "standardized_botanicals": "data/standardized_botanicals.json",
+    "synergy_cluster": "data/synergy_cluster.json",
+    "top_manufacturers_data": "data/top_manufacturers_data.json",
+    "user_goals_to_clusters": "data/user_goals_to_clusters.json"
+  },
+
+  "processing_config": {
+    "_comment": "PERFORMANCE SETTINGS - ADJUST FOR YOUR SYSTEM",
+    "batch_size": 100,
+    "_batch_help": "Products processed per batch (50-500, higher = faster but more memory)",
+    "max_workers": 4,
+    "_workers_help": "Parallel processing threads (match your CPU cores, 4-8 typical)",
+    "enable_fuzzy_matching": true,
+    "_fuzzy_help": "Enable fuzzy text matching (recommended: true)",
+    "fuzzy_threshold": 85,
+    "_threshold_help": "Fuzzy match threshold 0-100 (85 = good balance)",
+    "case_sensitive": false,
+    "_case_help": "Case sensitive matching (recommended: false)",
+    "enable_logging": true,
+    "_logging_help": "Enable detailed logging (recommended: true)",
+    "log_level": "INFO",
+    "_level_help": "Logging level: DEBUG, INFO, WARNING, ERROR"
+  },
+
+  "output_structure": {
+    "_comment": "OUTPUT FILE NAMING - CUSTOMIZE AS NEEDED",
+    "enriched_folder": "enriched",
+    "_enriched_help": "Subfolder for enriched data files",
+    "reports_folder": "reports",
+    "_reports_help": "Subfolder for processing reports and summaries",
+    "batch_prefix": "enriched_batch_",
+    "_prefix_help": "Prefix for output files (enriched_batch_1.json, enriched_batch_2.json, etc.)",
+    "report_prefix": "enrichment_summary",
+    "_report_prefix_help": "Prefix for summary reports",
+    "file_extension": ".json",
+    "_extension_help": "File extension for output files"
+  },
+
+  "matching_rules": {
+    "ingredient_matching": {
+      "check_standard_name": true,
+      "check_aliases": true,
+      "normalize_text": true,
+      "remove_special_chars": true,
+      "match_partial": true
+    },
+    "text_analysis": {
+      "check_statements": true,
+      "check_claims": true,
+      "check_label_text": true,
+      "check_ingredient_notes": true
+    },
+    "dosage_validation": {
+      "extract_percentages": true,
+      "extract_amounts": true,
+      "validate_units": true,
+      "check_minimum_doses": true
+    }
+  },
+
+  "scoring_weights": {
+    "absorption_enhancers": {
+      "presence_bonus": 2,
+      "per_enhancer_bonus": 3
+    },
+    "allergens": {
+      "low_penalty": -1,
+      "moderate_penalty": -1.5,
+      "high_penalty": -2
+    },
+    "clinical_evidence": {
+      "tier_1_bonus": 3,
+      "tier_2_bonus": 2,
+      "tier_3_bonus": 1
+    },
+    "banned_substances": {
+      "critical_disqualification": -100,
+      "high_penalty": -10,
+      "moderate_penalty": -5
+    },
+    "enhanced_delivery": {
+      "premium_bonus": 6,
+      "good_bonus": 4,
+      "basic_bonus": 2
+    },
+    "harmful_additives": {
+      "high_risk_penalty": -3,
+      "moderate_risk_penalty": -2,
+      "low_risk_penalty": -1
+    },
+    "proprietary_blends": {
+      "critical_penalty": -10,
+      "high_penalty": -5,
+      "moderate_penalty": -3
+    }
+  },
+
+  "quality_thresholds": {
+    "ingredient_bio_score": {
+      "excellent": 90,
+      "good": 70,
+      "acceptable": 50,
+      "poor": 30
+    },
+    "standardization_requirements": {
+      "require_percentage": true,
+      "minimum_standardization": 1.0,
+      "preferred_standardization": 5.0
+    },
+    "dosage_adequacy": {
+      "therapeutic_multiplier": 1.2,
+      "optimal_multiplier": 1.0,
+      "maintenance_multiplier": 0.8,
+      "trace_multiplier": 0.3
+    }
+  },
+
+  "safety_flags": {
+    "auto_disqualify": [
+      "permanently_banned",
+      "critical_severity",
+      "fda_warning_active"
+    ],
+    "high_priority_warnings": [
+      "high_risk_additives",
+      "undisclosed_allergens",
+      "proprietary_stimulants"
+    ],
+    "population_warnings": [
+      "pregnant_women",
+      "children_under_18",
+      "elderly",
+      "immunocompromised"
+    ]
+  },
+
+  "enrichment_features": {
+    "comprehensive_text_analysis": true,
+    "cross_database_validation": true,
+    "dosage_category_assignment": true,
+    "synergy_cluster_validation": true,
+    "manufacturer_reputation_check": true,
+    "regulatory_compliance_check": true,
+    "mobile_app_data_preparation": true,
+    "scoring_system_preparation": true
+  },
+
+  "options": {
+    "_comment": "PROCESSING OPTIONS - CONTROLS OVERWRITE BEHAVIOR",
+    "overwrite_existing": true,
+    "_overwrite_help": "If true: overwrites existing output files. If false: creates new timestamped folders",
+    "create_backups": false,
+    "_backup_help": "Create backup of existing output before overwriting (requires overwrite_existing=true)",
+    "skip_processed_files": false,
+    "_skip_help": "Skip files that already exist in output directory (useful for resuming interrupted runs)",
+    "generate_reports": true,
+    "_reports_help": "Generate processing summary reports",
+    "dry_run": false,
+    "_dry_run_help": "Test mode - shows what would be processed without writing files"
+  }
+}

@@ -2097,15 +2097,31 @@ class EnhancedDSLDNormalizer:
         name = ingredient_name.lower()
         extracted_forms = []
         
-        # Extract from parentheses first (e.g., "Vitamin D3 (Cholecalciferol)")
+        # Enhanced parenthetical extraction for complex DSLD formats
         import re
         paren_matches = re.findall(r'\(([^)]+)\)', name)
         for match in paren_matches:
-            # Clean up the parenthetical content
             clean_match = match.strip().lower()
-            # Add common parenthetical forms
-            if clean_match in ['cholecalciferol', 'ergocalciferol', 'ascorbic acid', 'calcium ascorbate']:
-                extracted_forms.append(clean_match)
+            
+            # Handle complex DSLD parenthetical formats like "Form: as D3 (Alt. Name: Cholecalciferol)"
+            if "form:" in clean_match or "as " in clean_match:
+                # Extract after "as " or "form: as "
+                if "as " in clean_match:
+                    form_part = clean_match.split("as ", 1)[1]
+                    # Handle nested parentheses like "as D3 (Alt. Name: Cholecalciferol)"
+                    if "(" in form_part:
+                        form_part = form_part.split("(")[0].strip()
+                    extracted_forms.append(form_part.strip())
+            else:
+                # Direct parenthetical forms - expanded list
+                common_paren_forms = [
+                    'cholecalciferol', 'ergocalciferol', 'ascorbic acid', 'calcium ascorbate',
+                    'retinyl palmitate', 'retinyl acetate', 'beta-carotene', 
+                    'd-alpha tocopherol', 'd-alpha tocopheryl acetate', 'dl-alpha tocopheryl acetate',
+                    'methylcobalamin', 'cyanocobalamin', 'dibencozide', 'coenzyme b12'
+                ]
+                if clean_match in common_paren_forms:
+                    extracted_forms.append(clean_match)
         
         # Extract form identifiers from the main name
         form_identifiers = []
@@ -2128,10 +2144,64 @@ class EnhancedDSLDNormalizer:
         elif re.search(r'\bmagnesium\s*ascorbate\b', name):
             form_identifiers.append('magnesium ascorbate')
         
-        # Common mineral forms
-        for mineral_form in ['bisglycinate', 'picolinate', 'citrate', 'glycinate', 'malate', 'taurate', 'carbonate', 'oxide']:
+        # Enhanced vitamin forms
+        if re.search(r'\bretinyl\s*palmitate\b', name):
+            form_identifiers.append('retinyl palmitate')
+        if re.search(r'\bretinyl\s*acetate\b', name):
+            form_identifiers.append('retinyl acetate')
+        if re.search(r'\bbeta[\s-]*carotene\b', name):
+            form_identifiers.append('beta-carotene')
+        
+        # Vitamin E forms
+        if re.search(r'\bd[\s-]*alpha[\s-]*tocopherol\b', name):
+            form_identifiers.append('d-alpha tocopherol')
+        elif re.search(r'\bd[\s-]*alpha[\s-]*tocopheryl[\s-]*acetate\b', name):
+            form_identifiers.append('d-alpha tocopheryl acetate')
+        elif re.search(r'\bdl[\s-]*alpha[\s-]*tocopheryl[\s-]*acetate\b', name):
+            form_identifiers.append('dl-alpha tocopheryl acetate')
+        
+        # B12 forms
+        if re.search(r'\bmethylcobalamin\b', name):
+            form_identifiers.append('methylcobalamin')
+        elif re.search(r'\bcyanocobalamin\b', name):
+            form_identifiers.append('cyanocobalamin')
+        elif re.search(r'\bdibencozide\b', name) or re.search(r'\bcoenzyme\s*b12\b', name):
+            form_identifiers.append('dibencozide')
+        
+        # Common mineral forms (existing)
+        mineral_forms = ['bisglycinate', 'picolinate', 'citrate', 'glycinate', 'malate', 'taurate', 'carbonate', 'oxide']
+        for mineral_form in mineral_forms:
             if re.search(rf'\b{mineral_form}\b', name):
                 form_identifiers.append(mineral_form)
+        
+        # FIXED ISSUE #1: Sulfate forms detection
+        sulfate_forms = ['sulfate', 'sulphate']  # Handle both spellings
+        for sulfate_form in sulfate_forms:
+            if re.search(rf'\b{sulfate_form}\b', name):
+                form_identifiers.append('sulfate')
+                break  # Only add sulfate once
+        
+        # FIXED ISSUE #2: HCl/Hydrochloride forms detection
+        if re.search(r'\bhcl\b', name) or re.search(r'\bhydrochloride\b', name):
+            form_identifiers.append('hydrochloride')
+        
+        # FIXED ISSUE #3: Extract forms detection
+        if re.search(r'\bextract\b', name):
+            form_identifiers.append('extract')
+        
+        # FIXED ISSUE #4: Standardized forms detection
+        if re.search(r'\bstandardized\b', name) or re.search(r'\bstandardised\b', name):
+            form_identifiers.append('standardized')
+        
+        # Chelated forms
+        if re.search(r'\bchelate\b', name) or re.search(r'\bchelated\b', name):
+            form_identifiers.append('chelated')
+        
+        # Organic/natural indicators
+        if re.search(r'\borganic\b', name):
+            form_identifiers.append('organic')
+        if re.search(r'\bnatural\b', name) and not re.search(r'\bnatural\s+flavor', name):
+            form_identifiers.append('natural')
         
         # Combine all extracted forms
         all_forms = extracted_forms + form_identifiers

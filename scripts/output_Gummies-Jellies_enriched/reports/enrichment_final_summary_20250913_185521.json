@@ -1,0 +1,14 @@
+{
+  "overall_processing": {
+    "total_files_processed": 2,
+    "total_processing_time_seconds": 10.84,
+    "processing_timestamp": "2025-09-13T18:55:21.115056Z",
+    "enrichment_version": "2.0.0"
+  },
+  "aggregate_stats": {
+    "total_products_processed": 975,
+    "successful_enrichments": 975,
+    "failed_enrichments": 0,
+    "overall_success_rate": 100.0
+  }
+}

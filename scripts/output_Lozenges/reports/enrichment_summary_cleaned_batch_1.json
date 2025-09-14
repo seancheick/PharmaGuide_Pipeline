@@ -1,0 +1,19 @@
+{
+  "batch_info": {
+    "input_file": "output_Lozenges/cleaned/cleaned_batch_1.json",
+    "output_file": "output_Lozenges/enriched/enriched_cleaned_batch_1.json",
+    "processing_timestamp": "2025-09-12T18:31:06.915758",
+    "processing_time_seconds": 71.02
+  },
+  "processing_stats": {
+    "total_products": 497,
+    "successful_enrichments": 497,
+    "failed_enrichments": 0,
+    "success_rate": 100.0
+  },
+  "enrichment_summary": {
+    "databases_used": 18,
+    "average_processing_time": 0.143
+  },
+  "errors": []
+}

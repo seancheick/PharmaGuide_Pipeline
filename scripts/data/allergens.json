@@ -1,8 +1,8 @@
 {
   "database_info": {
-    "version": "2.1.0",
-    "last_updated": "2025-08-15",
-    "total_allergens": 29,
+    "version": "2.3.0",
+    "last_updated": "2025-09-11",
+    "total_allergens": 48,
     "scoring_system": {
       "allergen_free_bonus": 2,
       "severity_penalties": {
@@ -11,7 +11,7 @@
         "high": -2
       }
     },
-    "regulatory_note": "Based on FDA major allergens (9) plus common supplement allergens and EU additional allergens"
+    "regulatory_note": "Based on FDA major allergens (9), EU additional allergens (14 total), plus common supplement allergens, artificial sweeteners, and preservatives with documented allergic reactions"
   },
 
   "common_allergens": [
@@ -125,14 +125,19 @@
       "last_updated": "2025-07-16"
     },
     {
-      "id": "ALLERGEN_SHELLFISH",
-      "standard_name": "Shellfish",
+      "id": "ALLERGEN_CRUSTACEANS",
+      "standard_name": "Crustacean Shellfish",
       "aliases": [
         "glucosamine from shellfish",
         "chitosan",
         "crab shell",
         "shrimp shell",
-        "lobster shell"
+        "lobster shell",
+        "crayfish",
+        "prawn",
+        "krill oil",
+        "crustacean shell",
+        "decapod crustaceans"
       ],
       "prevalence": "moderate",
       "severity_level": "high",
@@ -232,21 +237,35 @@
       "id": "ALLERGEN_FD_C_DYES",
       "standard_name": "FD&C Dyes",
       "aliases": [
-        "artificial colors",
-        "food dyes",
-        "red dye",
-        "yellow dye",
-        "blue dye",
-        "tartrazine",
-        "sunset yellow"
+        "FD&C Red No. 40",
+        "Allura Red AC",
+        "E129",
+        "FD&C Blue No. 1",
+        "Brilliant Blue FCF",
+        "E133",
+        "FD&C Yellow No. 5",
+        "Tartrazine",
+        "E102",
+        "FD&C Yellow No. 6",
+        "Sunset Yellow FCF",
+        "E110",
+        "FD&C Blue No. 2",
+        "Indigotine",
+        "E132",
+        "D&C Red No. 33",
+        "D&C Red No. 28",
+        "D&C Yellow No. 10",
+        "D&C Green No. 5",
+        "lake colors",
+        "aluminum lake"
       ],
-      "prevalence": "moderate",
-      "severity_level": "low",
+      "prevalence": "high",
+      "severity_level": "moderate",
       "regulatory_status": "artificial_color",
-      "supplement_context": "Artificial colors that can cause hyperactivity and allergic reactions",
-      "notes": "Artificial colors linked to hyperactivity in children and allergic reactions.",
+      "supplement_context": "Very common in supplements and medications for color coding and brand identification. D&C colors are specifically approved for drugs and cosmetics.",
+      "notes": "Can cause severe allergic reactions, particularly Yellow 5 (Tartrazine) and Red 40. Lake versions (aluminum-based) are common in tablets.",
       "category": "allergen",
-      "last_updated": "2025-07-16"
+      "last_updated": "2025-09-11"
     },
     {
       "id": "ALLERGEN_YEAST",
@@ -328,7 +347,12 @@
         "chondrus crispus",
         "E407",
         "kappa carrageenan",
-        "iota carrageenan"
+        "iota carrageenan",
+        "lambda carrageenan",
+        "red seaweed extract",
+        "processed eucheuma seaweed",
+        "PES",
+        "E407a"
       ],
       "prevalence": "high",
       "severity_level": "moderate",
@@ -346,7 +370,13 @@
         "natural flavor",
         "natural flavoring",
         "botanical flavoring",
-        "fruit flavoring"
+        "fruit flavoring",
+        "spice extract",
+        "natural vanilla flavor",
+        "natural citrus flavor",
+        "natural berry flavor",
+        "natural mint flavor",
+        "botanical extract blend"
       ],
       "prevalence": "high",
       "severity_level": "moderate",
@@ -517,6 +547,237 @@
       "notes": "Plant-derived capsule material. Some formulations may contain carrageenan.",
       "category": "excipient_allergen",
       "last_updated": "2025-08-15"
+    },
+    {
+      "id": "ALLERGEN_GUAR_GUM",
+      "standard_name": "Guar Gum",
+      "aliases": [
+        "guar gum powder",
+        "cyamopsis tetragonoloba",
+        "E412",
+        "guaran",
+        "jaguar gum",
+        "guar flour"
+      ],
+      "prevalence": "high",
+      "severity_level": "moderate",
+      "regulatory_status": "generally_recognized_as_safe",
+      "supplement_context": "Common thickener in protein powders and meal replacements",
+      "notes": "Can cause severe allergic reactions, particularly in people with legume allergies.",
+      "category": "excipient_allergen",
+      "last_updated": "2025-09-11"
+    },
+    {
+      "id": "ALLERGEN_XANTHAN_GUM",
+      "standard_name": "Xanthan Gum",
+      "aliases": [
+        "xanthan",
+        "E415",
+        "corn sugar gum",
+        "bacterial polysaccharide",
+        "xanthomonas campestris"
+      ],
+      "prevalence": "high",
+      "severity_level": "low",
+      "regulatory_status": "generally_recognized_as_safe",
+      "supplement_context": "Stabilizer in liquid supplements and protein shakes",
+      "notes": "May trigger reactions in corn-sensitive individuals. Can cause digestive issues.",
+      "category": "excipient_allergen",
+      "last_updated": "2025-09-11"
+    },
+    {
+      "id": "ALLERGEN_STEVIA",
+      "standard_name": "Stevia",
+      "aliases": [
+        "stevia leaf extract",
+        "steviol glycosides",
+        "rebaudioside A",
+        "stevia rebaudiana",
+        "reb A",
+        "E960"
+      ],
+      "prevalence": "high",
+      "severity_level": "moderate",
+      "regulatory_status": "generally_recognized_as_safe",
+      "supplement_context": "Natural sweetener in flavored supplements",
+      "notes": "Can cause allergic reactions in people sensitive to plants in the Asteraceae/Compositae family.",
+      "category": "natural_sweetener",
+      "last_updated": "2025-09-11"
+    },
+    {
+      "id": "ALLERGEN_MALTODEXTRIN",
+      "standard_name": "Maltodextrin",
+      "aliases": [
+        "maltodextrin",
+        "corn maltodextrin",
+        "tapioca maltodextrin",
+        "wheat maltodextrin",
+        "E1400"
+      ],
+      "prevalence": "high",
+      "severity_level": "moderate",
+      "regulatory_status": "generally_recognized_as_safe",
+      "supplement_context": "Common filler and bulking agent",
+      "notes": "Source (corn, wheat, tapioca) not always declared. Can trigger grain allergies.",
+      "category": "excipient_allergen",
+      "last_updated": "2025-09-11"
+    },
+    {
+      "id": "ALLERGEN_ACACIA_GUM",
+      "standard_name": "Acacia Gum",
+      "aliases": [
+        "gum arabic",
+        "E414",
+        "acacia seyal gum",
+        "acacia senegal gum",
+        "arabic gum"
+      ],
+      "prevalence": "moderate",
+      "severity_level": "moderate",
+      "regulatory_status": "generally_recognized_as_safe",
+      "supplement_context": "Used in prebiotics and fiber supplements",
+      "notes": "Can cause respiratory allergies and asthma in sensitive individuals.",
+      "category": "excipient_allergen",
+      "last_updated": "2025-09-11"
+    },
+    {
+      "id": "ALLERGEN_RICE_PROTEIN",
+      "standard_name": "Rice Protein",
+      "aliases": [
+        "hydrolyzed rice protein",
+        "oryza sativa protein",
+        "rice protein concentrate",
+        "rice protein isolate"
+      ],
+      "prevalence": "moderate",
+      "severity_level": "moderate",
+      "regulatory_status": "generally_recognized_as_safe",
+      "supplement_context": "Common in hypoallergenic protein supplements",
+      "notes": "Can contain arsenic. May cause reactions in grain-sensitive individuals.",
+      "category": "protein_allergen",
+      "last_updated": "2025-09-11"
+    },
+    {
+      "id": "ALLERGEN_MOLLUSCS",
+      "standard_name": "Molluscs",
+      "aliases": [
+        "clams",
+        "oysters",
+        "mussels",
+        "scallops",
+        "squid",
+        "octopus",
+        "snails",
+        "abalone",
+        "whelk",
+        "cuttlefish"
+      ],
+      "prevalence": "moderate",
+      "severity_level": "high",
+      "regulatory_status": "eu_major",
+      "supplement_context": "Less common in supplements, but found in some marine-based supplements",
+      "notes": "EU major allergen separate from crustacean shellfish. Tropomyosin protein can cause severe reactions.",
+      "category": "allergen",
+      "last_updated": "2025-09-11"
+    },
+    {
+      "id": "ALLERGEN_SUCRALOSE",
+      "standard_name": "Sucralose",
+      "aliases": ["splenda", "trichlorogalactosucrose", "E955"],
+      "prevalence": "high",
+      "severity_level": "moderate",
+      "regulatory_status": "fda_approved",
+      "supplement_context": "Common artificial sweetener in flavored supplements and protein powders",
+      "notes": "Can cause skin irritations, GI symptoms, and allergic reactions in sensitive individuals.",
+      "category": "artificial_sweetener",
+      "last_updated": "2025-09-11"
+    },
+    {
+      "id": "ALLERGEN_ACESULFAME_POTASSIUM",
+      "standard_name": "Acesulfame Potassium",
+      "aliases": ["ace-k", "acesulfame k", "E950", "sunett", "sweet one"],
+      "prevalence": "high",
+      "severity_level": "moderate",
+      "regulatory_status": "fda_approved",
+      "supplement_context": "Common artificial sweetener in sugar-free supplements",
+      "notes": "Documented cases of contact dermatitis and allergic reactions, especially in sulfur-sensitive individuals.",
+      "category": "artificial_sweetener",
+      "last_updated": "2025-09-11"
+    },
+    {
+      "id": "ALLERGEN_ASPARTAME",
+      "standard_name": "Aspartame",
+      "aliases": [
+        "nutrasweet",
+        "equal",
+        "E951",
+        "APM",
+        "aspartyl-phenylalanine-1-methyl ester"
+      ],
+      "prevalence": "high",
+      "severity_level": "moderate",
+      "regulatory_status": "fda_approved",
+      "supplement_context": "Very common in sugar-free supplements, especially chewables and effervescent tablets",
+      "notes": "Contains phenylalanine - dangerous for PKU patients. Can cause headaches and allergic reactions.",
+      "category": "artificial_sweetener",
+      "last_updated": "2025-09-11"
+    },
+    {
+      "id": "ALLERGEN_NEOTAME",
+      "standard_name": "Neotame",
+      "aliases": [
+        "E961",
+        "neotame powder",
+        "N-[N-(3,3-dimethylbutyl)-L-α-aspartyl]-L-phenylalanine 1-methyl ester"
+      ],
+      "prevalence": "moderate",
+      "severity_level": "moderate",
+      "regulatory_status": "fda_approved",
+      "supplement_context": "Newer sweetener used in supplements, more potent than aspartame",
+      "notes": "Related to aspartame but safer for PKU patients. Can cause allergic reactions in aspartame-sensitive individuals.",
+      "category": "artificial_sweetener",
+      "last_updated": "2025-09-11"
+    },
+    {
+      "id": "ALLERGEN_ADVANTAME",
+      "standard_name": "Advantame",
+      "aliases": [
+        "E969",
+        "advantame powder",
+        "N-[N-[3-(3-hydroxy-4-methoxyphenyl)propyl]-α-aspartyl]-L-phenylalanine 1-methyl ester"
+      ],
+      "prevalence": "low",
+      "severity_level": "moderate",
+      "regulatory_status": "fda_approved",
+      "supplement_context": "Newest FDA-approved sweetener, starting to appear in supplements",
+      "notes": "20,000 times sweeter than sugar. Related to aspartame but much lower phenylalanine content.",
+      "category": "artificial_sweetener",
+      "last_updated": "2025-09-11"
+    },
+    {
+      "id": "ALLERGEN_SUGAR_ALCOHOLS",
+      "standard_name": "Sugar Alcohols",
+      "aliases": [
+        "xylitol",
+        "sorbitol",
+        "mannitol",
+        "maltitol",
+        "erythritol",
+        "isomalt",
+        "E967",
+        "E965",
+        "E421",
+        "E420",
+        "E968",
+        "E953"
+      ],
+      "prevalence": "high",
+      "severity_level": "low",
+      "regulatory_status": "generally_recognized_as_safe",
+      "supplement_context": "Common in sugar-free supplements, especially chewables and lozenges",
+      "notes": "Can cause digestive issues in sensitive individuals. Xylitol most commonly reported for reactions.",
+      "category": "sweetener",
+      "last_updated": "2025-09-11"
     }
   ]
 }

@@ -675,201 +675,6 @@
       "last_updated": "2025-08-04"
     },
     {
-      "id": "ADD_STEVIA",
-      "standard_name": "Stevia & Stevia Extracts",
-      "aliases": [
-        "stevia",
-        "stevia rebaudiana leaf",
-        "organic stevia",
-        "stevia leaf powder",
-        "stevia extract",
-        "steviol glycosides",
-        "rebaudioside A",
-        "Reb A",
-        "Reb M",
-        "stevioside",
-        "truvia",
-        "purevia"
-      ],
-      "risk_level": "none",
-      "category": "sweetener_natural",
-      "notes": "Natural, calorie-free sweetener from the Stevia plant. Highly processed extracts are common. Generally recognized as safe (GRAS), but some people report a bitter aftertaste.",
-      "last_updated": "2025-08-04"
-    },
-    {
-      "id": "ADD_MONK_FRUIT",
-      "standard_name": "Monk Fruit Extract",
-      "aliases": [
-        "monk fruit",
-        "luo han guo",
-        "siraitia grosvenorii",
-        "mogrosides",
-        "monk fruit sweetener"
-      ],
-      "risk_level": "none",
-      "category": "sweetener_natural",
-      "notes": "Natural, calorie-free sweetener derived from a small melon. Its sweetness comes from antioxidants called mogrosides. Generally recognized as safe (GRAS).",
-      "last_updated": "2025-08-04"
-    },
-    {
-      "id": "ADD_VEGETABLE_GLYCERIN",
-      "standard_name": "Vegetable Glycerin",
-      "aliases": [
-        "glycerin",
-        "glycerol",
-        "E422",
-        "vegetable glycerine",
-        "1,2,3-propanetriol"
-      ],
-      "risk_level": "none",
-      "category": "humectant_solvent",
-      "notes": "A sugar alcohol used as a humectant (retains moisture), solvent, and sweetener. Generally recognized as safe (GRAS). Can be contaminated with diethylene glycol if not properly sourced.",
-      "last_updated": "2025-08-04"
-    },
-    {
-      "id": "ADD_CITRIC_ACID",
-      "standard_name": "Citric Acid",
-      "aliases": [
-        "E330",
-        "citric acid anhydrous",
-        "citric acid monohydrate",
-        "sour salt"
-      ],
-      "risk_level": "none",
-      "category": "preservative_acidity_regulator",
-      "notes": "Used as a preservative and pH adjuster. While naturally found in citrus, the commercial form is typically derived from fermented mold (Aspergillus niger), which can cause inflammatory reactions in sensitive individuals.",
-      "last_updated": "2025-08-04"
-    },
-    {
-      "id": "ADD_NATURAL_PRESERVATIVES",
-      "standard_name": "Natural Preservatives",
-      "aliases": [
-        "ascorbyl palmitate",
-        "vitamin C ester",
-        "E304",
-        "mixed tocopherols",
-        "natural vitamin E",
-        "E306",
-        "rosemary extract"
-      ],
-      "risk_level": "none",
-      "category": "preservative_natural",
-      "notes": "Antioxidants used to prevent spoilage, such as fat-soluble Vitamin C (ascorbyl palmitate) or Vitamin E (tocopherols). Generally recognized as safe (GRAS) and beneficial.",
-      "last_updated": "2025-08-04"
-    },
-    {
-      "id": "ADD_NATURAL_GUMS",
-      "standard_name": "Natural Gums",
-      "aliases": [
-        "gum acacia",
-        "acacia gum",
-        "gum arabic",
-        "E414",
-        "xanthan gum",
-        "E415",
-        "guar gum",
-        "E412",
-        "locust bean gum",
-        "E410",
-        "gellan gum",
-        "E418"
-      ],
-      "risk_level": "none",
-      "category": "thickener_stabilizer",
-      "notes": "Natural gums used as thickeners, binders, and stabilizers. Generally safe and can be a source of dietary fiber, but may cause bloating or gas in some individuals.",
-      "last_updated": "2025-08-04"
-    },
-    {
-      "id": "ADD_AGAR",
-      "standard_name": "Agar",
-      "aliases": [
-        "agar",
-        "agar agar",
-        "E406",
-        "Japanese gelatin",
-        "kanten",
-        "vegetable gelatin",
-        "Ceylon moss",
-        "Japanese isinglass",
-        "Gelidium jelly"
-      ],
-      "risk_level": "none",
-      "category": "thickener_stabilizer",
-      "notes": "A natural thickening and gelling agent derived from red algae. Generally recognized as safe (GRAS) and commonly used as a vegan alternative to gelatin. May provide beneficial dietary fiber but can cause bloating in sensitive individuals.",
-      "last_updated": "2025-08-13"
-    },
-    {
-      "id": "ADD_FRUIT_VEG_POWDERS",
-      "standard_name": "Fruit & Vegetable Powders",
-      "aliases": [
-        "cherry powder",
-        "berry powder",
-        "beet juice powder",
-        "beet powder",
-        "carrot powder",
-        "spinach powder",
-        "annatto",
-        "turmeric",
-        "paprika",
-        "spirulina",
-        "black carrot extract",
-        "natural color",
-        "Beta-Carotene"
-      ],
-      "risk_level": "none",
-      "category": "colorant_flavoring_natural",
-      "notes": "Dehydrated and powdered plants used for natural color and flavor. Generally safe and may provide some antioxidant benefits. A clean-label alternative to artificial dyes.",
-      "last_updated": "2025-08-04"
-    },
-    {
-      "id": "ADD_VANILLIN",
-      "standard_name": "Vanillin",
-      "aliases": [
-        "vanillin",
-        "synthetic vanilla",
-        "artificial vanilla flavor",
-        "methyl vanillin",
-        "E905",
-        "4-hydroxy-3-methoxybenzaldehyde"
-      ],
-      "risk_level": "none",
-      "category": "flavoring",
-      "notes": "A synthetic form of vanilla flavoring. While generally recognized as safe, it's important to distinguish it from natural vanilla extract.",
-      "last_updated": "2025-08-13"
-    },
-    {
-      "id": "ADD_SODIUM_BICARBONATE",
-      "standard_name": "Sodium Bicarbonate",
-      "aliases": [
-        "baking soda",
-        "sodium hydrogen carbonate",
-        "bicarbonate of soda",
-        "E500(ii)",
-        "sodium acid carbonate",
-        "NaHCO3"
-      ],
-      "risk_level": "none",
-      "category": "buffer_acidity_regulator",
-      "notes": "A pH regulator and buffer commonly used in food and supplements. Generally recognized as safe (GRAS) with a long history of use.",
-      "last_updated": "2025-08-13"
-    },
-    {
-      "id": "ADD_SODIUM_CARBONATE",
-      "standard_name": "Sodium Carbonate",
-      "aliases": [
-        "soda ash",
-        "washing soda",
-        "E500",
-        "Na2CO3",
-        "disodium carbonate",
-        "carbonic acid disodium salt"
-      ],
-      "risk_level": "none",
-      "category": "buffer_acidity_regulator",
-      "notes": "An alkalizing agent and pH regulator. Generally recognized as safe (GRAS) when used as a food additive.",
-      "last_updated": "2025-08-13"
-    },
-    {
       "id": "ADD_NICKEL",
       "standard_name": "Nickel & Nickel Compounds",
       "aliases": [
@@ -1006,7 +811,7 @@
         "lauryl sodium sulfate",
         "sodium dodecyl sulphate"
       ],
-      "risk_level": "moderate_high",
+      "risk_level": "high",
       "category": "emulsifier_surfactant",
       "notes": "A synthetic emulsifier and surfactant that can cause skin and gastrointestinal irritation. May disrupt the gut microbiome and cause digestive issues in sensitive individuals.",
       "last_updated": "2025-08-15"
@@ -1026,6 +831,708 @@
       "category": "mineral_synthetic",
       "notes": "While copper is an essential mineral, cupric sulfate is a synthetic form that can be toxic in high doses. Often used as a copper source but can be problematic for some individuals.",
       "last_updated": "2025-08-15"
+    },
+    {
+      "id": "ADD_SYNTHETIC_ESTROGENS",
+      "standard_name": "Synthetic Estrogens",
+      "aliases": [
+        "synthetic estrogen",
+        "ethinyl estradiol",
+        "diethylstilbestrol",
+        "DES",
+        "xenoestrogens",
+        "synthetic hormone",
+        "artificial estrogen",
+        "hormone mimics"
+      ],
+      "risk_level": "high",
+      "category": "synthetic_hormone",
+      "mechanism_of_harm": "Disrupts natural hormone signaling, potentially leading to reproductive issues, developmental problems, and increased cancer risk. Can interfere with natural estrogen receptors and endocrine system function.",
+      "regulatory_status": {
+        "US": "Restricted - Requires prescription for hormone-based products",
+        "EU": "Banned in food supplements",
+        "WHO": "Classified as endocrine disrupting chemicals (EDCs)"
+      },
+      "population_warnings": [
+        "Pregnant women - High risk of developmental effects",
+        "Children - May affect natural hormone development",
+        "Women with hormone-sensitive conditions - May exacerbate symptoms"
+      ],
+      "notes": "Synthetic hormones that can disrupt the endocrine system. Associated with increased risk of certain cancers, reproductive issues, and developmental problems. Can accumulate in body tissues.",
+      "scientific_references": [
+        "DOI: 10.1016/j.envint.2019.105267 - EDC effects on human health",
+        "DOI: 10.1210/er.2015-1010 - Endocrine disrupting chemicals review"
+      ],
+      "last_updated": "2025-09-11"
+    },
+    {
+      "id": "ADD_BISPHENOLS",
+      "standard_name": "Bisphenol S & F",
+      "aliases": [
+        "BPS",
+        "BPF",
+        "bisphenol S",
+        "bisphenol F",
+        "4,4'-sulfonyldiphenol",
+        "bis(4-hydroxyphenyl)sulfone",
+        "4,4'-dihydroxydiphenylmethane",
+        "bis(4-hydroxyphenyl)methane",
+        "BPA substitute",
+        "BPA-free plastic component"
+      ],
+      "risk_level": "high",
+      "category": "endocrine_disruptor",
+      "mechanism_of_harm": "Acts as endocrine disruptors by mimicking estrogen, potentially interfering with hormone signaling pathways. Can leach from plastic packaging into supplements. May have similar or worse effects than BPA.",
+      "regulatory_status": {
+        "US": "Under review by FDA",
+        "EU": "Under evaluation by ECHA",
+        "Canada": "Listed as toxic substance"
+      },
+      "population_warnings": [
+        "Pregnant women - May affect fetal development",
+        "Children - Potential developmental effects",
+        "People with hormone-sensitive conditions"
+      ],
+      "notes": "Common BPA substitutes found in 'BPA-free' plastic packaging. Research suggests they may be as harmful as or worse than BPA, with similar endocrine-disrupting properties.",
+      "scientific_references": [
+        "DOI: 10.1016/j.envint.2020.105914 - BPS and BPF toxicity",
+        "DOI: 10.1289/EHP2716 - Comparative analysis of BPA alternatives"
+      ],
+      "last_updated": "2025-09-11"
+    },
+    {
+      "id": "ADD_SYNTHETIC_AMINO_ACIDS",
+      "standard_name": "Synthetic Amino Acids",
+      "aliases": [
+        "DL-Phenylalanine",
+        "synthetic L-Cysteine",
+        "synthetic L-Carnitine",
+        "DLPA",
+        "synthetic amino acids",
+        "artificial amino acids",
+        "racemic amino acids",
+        "DL-amino acids",
+        "manufactured amino acids"
+      ],
+      "risk_level": "high",
+      "category": "synthetic_nutrient",
+      "mechanism_of_harm": "Synthetic forms may have different bioavailability and metabolism compared to natural forms. DL-forms contain D-isomers that may interfere with natural L-amino acid metabolism. Can accumulate in tissues and may cause imbalances in amino acid pools.",
+      "regulatory_status": {
+        "US": "GRAS status for specific applications",
+        "EU": "Regulated as food additives",
+        "Japan": "Restricted use in certain supplements"
+      },
+      "population_warnings": [
+        "People with PKU - Must avoid DL-Phenylalanine",
+        "Pregnant women - Should prefer natural sources",
+        "People with kidney disease - May affect amino acid metabolism"
+      ],
+      "notes": "Synthetic amino acids may not be processed by the body in the same way as natural forms. DL-forms contain unnatural D-isomers that may have unexpected biological effects. Higher risk of side effects compared to food-derived amino acids.",
+      "scientific_references": [
+        "DOI: 10.1021/jf5019934 - Synthetic vs. natural amino acids",
+        "DOI: 10.3390/nu12030725 - Safety of amino acid supplements"
+      ],
+      "last_updated": "2025-09-11"
+    },
+    {
+      "id": "ADD_SYNTHETIC_VITAMINS",
+      "standard_name": "Synthetic Vitamins",
+      "aliases": [
+        "synthetic folic acid",
+        "dl-alpha tocopherol",
+        "synthetic vitamin E",
+        "pteroylmonoglutamic acid",
+        "all-rac-α-tocopherol",
+        "artificial vitamins",
+        "synthetic folate",
+        "synthetic vitamin supplements"
+      ],
+      "risk_level": "moderate",
+      "category": "synthetic_nutrient",
+      "mechanism_of_harm": "Synthetic forms may have different bioavailability and metabolism. Synthetic folic acid requires conversion to active form, which can be inefficient in some people. Synthetic vitamin E (dl-alpha) has lower biological activity and may interfere with natural form absorption.",
+      "regulatory_status": {
+        "US": "FDA approved for fortification",
+        "EU": "Regulated under food supplement directive",
+        "Australia": "TGA regulated with specific limits"
+      },
+      "population_warnings": [
+        "People with MTHFR mutations - May have difficulty processing synthetic folic acid",
+        "Pregnant women - Should prefer natural folate forms",
+        "People with cardiovascular conditions - Caution with synthetic vitamin E"
+      ],
+      "notes": "Synthetic vitamins often have lower bioavailability and may not provide the same benefits as natural forms. Some may accumulate in tissues or interfere with natural vitamin metabolism.",
+      "scientific_references": [
+        "DOI: 10.3945/ajcn.114.089284 - Synthetic vs natural folate",
+        "DOI: 10.1093/ajcn/84.1.18 - Vitamin E forms comparison"
+      ],
+      "last_updated": "2025-09-11"
+    },
+    {
+      "id": "ADD_LEAD",
+      "standard_name": "Lead & Lead Compounds",
+      "aliases": [
+        "lead",
+        "Pb",
+        "lead oxide",
+        "PbO",
+        "lead acetate",
+        "Pb(CH3COO)2",
+        "lead chloride",
+        "PbCl2",
+        "lead contamination",
+        "lead salts",
+        "lead(II) compounds"
+      ],
+      "risk_level": "high",
+      "category": "heavy_metal_contaminant",
+      "mechanism_of_harm": "Accumulates in bones and soft tissues. Crosses blood-brain barrier. Interferes with enzyme function and cellular processes. Particularly dangerous to neural development. Can replace calcium in bones and disrupt multiple body systems.",
+      "regulatory_status": {
+        "US": "FDA action level of 5 mcg/day from supplements",
+        "EU": "Strict limits under EC 1881/2006",
+        "Canada": "Listed as toxic substance",
+        "WHO": "No safe level established"
+      },
+      "population_warnings": [
+        "Children - Severe developmental risks",
+        "Pregnant women - Can cross placental barrier",
+        "Everyone - Cumulative toxin with no safe level"
+      ],
+      "notes": "One of the most dangerous heavy metal contaminants. No safe level of exposure. Common in supplements from contaminated soil or poor manufacturing practices. Causes irreversible neurological damage.",
+      "scientific_references": [
+        "DOI: 10.1016/j.envres.2020.109800 - Lead toxicity review",
+        "DOI: 10.1016/j.toxlet.2019.06.007 - Lead in supplements"
+      ],
+      "last_updated": "2025-09-11"
+    },
+    {
+      "id": "ADD_PHOSPHATES",
+      "standard_name": "Synthetic Phosphate Compounds",
+      "aliases": [
+        "potassium phosphate",
+        "sodium phosphate",
+        "calcium phosphate",
+        "phosphoric acid salts",
+        "E339",
+        "E340",
+        "E341",
+        "disodium phosphate",
+        "trisodium phosphate",
+        "monocalcium phosphate",
+        "dicalcium phosphate"
+      ],
+      "risk_level": "moderate",
+      "category": "stabilizer_buffer",
+      "mechanism_of_harm": "Can interfere with calcium absorption and mineral balance. High phosphate intake may contribute to kidney strain and cardiovascular calcification. May disrupt hormone signaling related to bone metabolism.",
+      "regulatory_status": {
+        "US": "GRAS status but with recommended limits",
+        "EU": "Regulated under E339-341 with specific limits",
+        "WHO": "Recommends limiting phosphate additives"
+      },
+      "population_warnings": [
+        "People with kidney disease - Should strictly limit phosphate intake",
+        "Elderly - May affect bone health",
+        "People with cardiovascular conditions - May contribute to calcification"
+      ],
+      "notes": "While phosphates are essential nutrients, synthetic forms are more readily absorbed and can lead to excessive intake. Associated with increased cardiovascular risk and bone metabolism disruption.",
+      "scientific_references": [
+        "DOI: 10.1053/j.jrn.2018.04.008 - Phosphate additives in food",
+        "DOI: 10.2215/CJN.13601118 - Cardiovascular effects"
+      ],
+      "last_updated": "2025-09-11"
+    },
+    {
+      "id": "ADD_NITRITES",
+      "standard_name": "Sodium Nitrite/Nitrate",
+      "aliases": [
+        "sodium nitrite",
+        "sodium nitrate",
+        "E250",
+        "E251",
+        "potassium nitrite",
+        "potassium nitrate",
+        "E249",
+        "E252",
+        "cure salt",
+        "prague powder",
+        "nitrate preservative"
+      ],
+      "risk_level": "high",
+      "category": "preservative_artificial",
+      "mechanism_of_harm": "Converts to nitrosamines (carcinogenic compounds) under acidic conditions or high heat. Can interfere with oxygen transport in blood by converting hemoglobin to methemoglobin.",
+      "regulatory_status": {
+        "US": "FDA regulated with strict limits",
+        "EU": "Limited to specific applications",
+        "IARC": "Class 2A - Probable human carcinogen"
+      },
+      "population_warnings": [
+        "Infants - High risk of methemoglobinemia",
+        "Pregnant women - Potential developmental risks",
+        "People with anemia - May worsen condition"
+      ],
+      "notes": "While effective preservatives, nitrites can form carcinogenic compounds. Particular concern when combined with amino acids or under acidic conditions. Associated with increased cancer risk.",
+      "scientific_references": [
+        "DOI: 10.1093/jnci/djq516 - Nitrite cancer risk",
+        "DOI: 10.1016/j.meatsci.2018.05.032 - Nitrosamine formation"
+      ],
+      "last_updated": "2025-09-11"
+    },
+    {
+      "id": "ADD_POTASSIUM_SORBATE",
+      "standard_name": "Potassium Sorbate",
+      "aliases": [
+        "E202",
+        "potassium salt of sorbic acid",
+        "2,4-hexadienoic acid potassium salt",
+        "sorbic acid potassium salt",
+        "food preservative 202"
+      ],
+      "risk_level": "moderate",
+      "category": "preservative_artificial",
+      "mechanism_of_harm": "May cause DNA damage in human lymphocytes. Can trigger allergic reactions and skin sensitivity. May contribute to gut microbiome disruption.",
+      "regulatory_status": {
+        "US": "GRAS status with limits",
+        "EU": "E202 with specific restrictions",
+        "Australia": "Permitted with restrictions"
+      },
+      "population_warnings": [
+        "People with sensitivities - May cause reactions",
+        "Children - Limited exposure recommended",
+        "People with gut issues - May affect microbiome"
+      ],
+      "notes": "Common preservative that may have genotoxic effects at high concentrations. Can cause allergic reactions in sensitive individuals. May interact with other additives synergistically.",
+      "scientific_references": [
+        "DOI: 10.1016/j.toxlet.2017.07.001 - Genotoxicity study",
+        "DOI: 10.3390/foods9091317 - Preservative interactions"
+      ],
+      "last_updated": "2025-09-11"
+    },
+    {
+      "id": "ADD_SYNTHETIC_GUMS",
+      "standard_name": "Synthetic & Modified Gums",
+      "aliases": [
+        "cellulose gum",
+        "carboxymethylcellulose",
+        "CMC",
+        "E466",
+        "xanthan gum",
+        "E415",
+        "modified cellulose",
+        "synthetic thickener",
+        "modified food gum"
+      ],
+      "risk_level": "moderate",
+      "category": "thickener_stabilizer",
+      "mechanism_of_harm": "Can alter gut microbiota composition. May increase intestinal permeability. High doses can interfere with nutrient absorption. Some forms may contain harmful residual processing chemicals.",
+      "regulatory_status": {
+        "US": "GRAS status with monitoring",
+        "EU": "Regulated under specific E-numbers",
+        "Canada": "Permitted food additive with limits"
+      },
+      "population_warnings": [
+        "People with IBS - May trigger symptoms",
+        "People with IBD - Could worsen inflammation",
+        "Children - Limited exposure recommended"
+      ],
+      "notes": "While generally considered safe in small amounts, excessive intake can cause digestive issues and may affect nutrient absorption. Some individuals may be particularly sensitive to synthetic gums.",
+      "scientific_references": [
+        "DOI: 10.3390/nu12061731 - Gut microbiota effects",
+        "DOI: 10.1016/j.fct.2019.110979 - Safety assessment"
+      ],
+      "last_updated": "2025-09-11"
+    },
+    {
+      "id": "ADD_CARBOXYMETHYLCELLULOSE",
+      "standard_name": "Carboxymethylcellulose (CMC)",
+      "aliases": [
+        "cellulose gum",
+        "CMC",
+        "E466",
+        "sodium carboxymethyl cellulose",
+        "NaCMC",
+        "cellulose glycolate",
+        "modified cellulose"
+      ],
+      "risk_level": "moderate",
+      "category": "thickener_stabilizer",
+      "mechanism_of_harm": "Alters gut microbiota composition and promotes intestinal inflammation. Can increase gut permeability. May interfere with nutrient absorption.",
+      "regulatory_status": {
+        "US": "FDA GRAS status",
+        "EU": "E466 with restrictions",
+        "WHO": "ADI not specified but monitoring"
+      },
+      "population_warnings": [
+        "People with IBD - May trigger flares",
+        "People with celiac disease - Possible cross-reaction",
+        "Children - Developing gut sensitivity"
+      ],
+      "notes": "Synthetic fiber that can alter gut bacteria and promote inflammation. Often used in high quantities in processed foods and supplements.",
+      "scientific_references": [
+        "DOI: 10.1038/nature21423 - Microbiome effects",
+        "DOI: 10.1016/j.cell.2018.07.008 - Inflammatory response"
+      ],
+      "last_updated": "2025-09-11"
+    },
+    {
+      "id": "ADD_XANTHAN_GUM",
+      "standard_name": "Xanthan Gum",
+      "aliases": [
+        "E415",
+        "corn sugar gum",
+        "bacterial polysaccharide",
+        "Xanthomonas campestris gum",
+        "polysaccharide B-1459"
+      ],
+      "risk_level": "moderate",
+      "category": "thickener_stabilizer",
+      "mechanism_of_harm": "Can cause digestive distress in high doses. May affect nutrient absorption. Possible allergenic potential from corn-based production.",
+      "regulatory_status": {
+        "US": "FDA GRAS status",
+        "EU": "E415 permitted",
+        "Australia": "Permitted additive"
+      },
+      "population_warnings": [
+        "Infants - Not recommended",
+        "People with corn allergies - Cross-reactivity risk",
+        "People with digestive disorders - May cause bloating"
+      ],
+      "notes": "While generally considered safe, high intake can cause digestive issues. Production process may introduce contamination risks.",
+      "scientific_references": [
+        "DOI: 10.3390/foods9010044 - Safety assessment",
+        "DOI: 10.1016/j.fct.2017.08.038 - Digestive effects"
+      ],
+      "last_updated": "2025-09-11"
+    },
+    {
+      "id": "ADD_MODIFIED_CELLULOSE",
+      "standard_name": "Modified Cellulose Compounds",
+      "aliases": [
+        "hydroxypropyl methylcellulose",
+        "HPMC",
+        "E464",
+        "methylcellulose",
+        "E461",
+        "hydroxypropyl cellulose",
+        "E463",
+        "modified cellulose derivatives",
+        "cellulose ethers"
+      ],
+      "risk_level": "moderate",
+      "category": "thickener_stabilizer",
+      "mechanism_of_harm": "Can affect gut transit time and nutrient absorption. May interfere with beneficial gut bacteria. Synthetic processing may introduce contaminants.",
+      "regulatory_status": {
+        "US": "FDA GRAS with specific uses",
+        "EU": "Various E-numbers with limits",
+        "Japan": "Restricted in certain applications"
+      },
+      "population_warnings": [
+        "People with IBS - May worsen symptoms",
+        "Elderly - Can affect medication absorption",
+        "Children - Limited exposure recommended"
+      ],
+      "notes": "Synthetic modifications of cellulose may have unintended effects on digestion and nutrient absorption. Long-term effects of regular consumption not fully studied.",
+      "scientific_references": [
+        "DOI: 10.1016/j.foodhyd.2019.105377 - Modified cellulose safety",
+        "DOI: 10.3390/molecules24193427 - Absorption effects"
+      ],
+      "last_updated": "2025-09-11"
+    },
+    {
+      "id": "ADD_POLYVINYLPYRROLIDONE",
+      "standard_name": "Polyvinylpyrrolidone (PVP)",
+      "aliases": [
+        "PVP",
+        "povidone",
+        "E1201",
+        "polyvidone",
+        "1-vinyl-2-pyrrolidone polymer",
+        "crospovidone",
+        "copovidone",
+        "synthetic binding agent"
+      ],
+      "risk_level": "moderate",
+      "category": "binder_stabilizer",
+      "mechanism_of_harm": "Can accumulate in body tissues. May form complexes with other compounds affecting their absorption. Potential to cross biological barriers due to small particle size.",
+      "regulatory_status": {
+        "US": "FDA GRAS with limitations",
+        "EU": "E1201 with restrictions",
+        "Japan": "Limited use permitted"
+      },
+      "population_warnings": [
+        "People with kidney disease - May accumulate",
+        "Pregnant women - Limited studies on safety",
+        "Children - Avoid unnecessary exposure"
+      ],
+      "notes": "Synthetic polymer used as binding agent and stabilizer. Can accumulate in tissues with long-term use. May interfere with nutrient absorption.",
+      "scientific_references": [
+        "DOI: 10.1016/j.toxlet.2020.12.019 - Tissue accumulation",
+        "DOI: 10.1002/jps.24274 - Absorption effects"
+      ],
+      "last_updated": "2025-09-11"
+    },
+    {
+      "id": "ADD_POLYDEXTROSE",
+      "standard_name": "Polydextrose",
+      "aliases": [
+        "E1200",
+        "modified polydextrose",
+        "PDX",
+        "synthetic fiber",
+        "glucose polymer",
+        "modified glucose polymer"
+      ],
+      "risk_level": "moderate",
+      "category": "bulking_agent",
+      "mechanism_of_harm": "Can cause significant gastrointestinal distress. May alter gut microbiota composition. High doses can lead to mineral absorption issues.",
+      "regulatory_status": {
+        "US": "FDA GRAS status",
+        "EU": "E1200 with limits",
+        "Canada": "Permitted food additive"
+      },
+      "population_warnings": [
+        "People with IBS - May trigger symptoms",
+        "Children - Can cause diarrhea",
+        "People with mineral deficiencies - May affect absorption"
+      ],
+      "notes": "Synthetic fiber used as bulking agent. Can cause significant digestive issues in sensitive individuals. May interfere with mineral absorption at high doses.",
+      "scientific_references": [
+        "DOI: 10.3390/nu12051453 - Digestive effects",
+        "DOI: 10.1016/j.jff.2019.103643 - Mineral interactions"
+      ],
+      "last_updated": "2025-09-11"
+    },
+    {
+      "id": "ADD_SYNTHETIC_SILICA",
+      "standard_name": "Synthetic Amorphous Silica",
+      "aliases": [
+        "silicon dioxide nanoparticles",
+        "nano-silica",
+        "synthetic SiO2",
+        "silica nanoparticles",
+        "E551",
+        "colloidal silicon dioxide",
+        "synthetic silicon dioxide"
+      ],
+      "risk_level": "moderate",
+      "category": "anticaking_agent",
+      "mechanism_of_harm": "Nanoparticles can cross biological barriers. May accumulate in organs and tissues. Potential to generate reactive oxygen species. Can interact with cellular components.",
+      "regulatory_status": {
+        "US": "FDA reviewing nanoform safety",
+        "EU": "Specific particle size restrictions",
+        "EFSA": "Under ongoing safety assessment"
+      },
+      "population_warnings": [
+        "People with respiratory conditions - Inhalation risk",
+        "Pregnant women - Nanoparticles may cross placenta",
+        "People with autoimmune conditions - May trigger inflammation"
+      ],
+      "notes": "Nanoform differs from natural silica in biological activity. Can penetrate cells and potentially cause oxidative stress. Long-term effects of nanoparticle accumulation unknown.",
+      "scientific_references": [
+        "DOI: 10.1016/j.impact.2020.100284 - Nanosilica toxicity",
+        "DOI: 10.1039/C9EN01348B - Cellular interactions"
+      ],
+      "last_updated": "2025-09-11"
+    },
+    {
+      "id": "ADD_SYNTHETIC_IRON_OXIDES",
+      "standard_name": "Synthetic Iron Oxides",
+      "aliases": [
+        "iron oxide",
+        "E172",
+        "synthetic red iron oxide",
+        "synthetic yellow iron oxide",
+        "synthetic black iron oxide",
+        "iron oxide nanoparticles",
+        "Fe2O3",
+        "Fe3O4",
+        "artificial iron oxide colors"
+      ],
+      "risk_level": "moderate",
+      "category": "colorant_synthetic",
+      "mechanism_of_harm": "Nanoparticle forms can cross biological barriers. May generate reactive oxygen species. Can accumulate in tissues and organs. Potential for DNA damage through oxidative stress.",
+      "regulatory_status": {
+        "US": "FDA approved with limits",
+        "EU": "E172 with restrictions",
+        "Australia": "Permitted with conditions"
+      },
+      "population_warnings": [
+        "People with iron disorders - May affect iron metabolism",
+        "People with inflammatory conditions - May increase oxidative stress",
+        "Children - Limited exposure recommended"
+      ],
+      "notes": "While iron is essential, synthetic forms and nanoparticles may have unintended effects. Can contribute to oxidative stress and inflammation. Long-term accumulation effects unknown.",
+      "scientific_references": [
+        "DOI: 10.1016/j.impact.2021.100308 - Nanoparticle effects",
+        "DOI: 10.1002/smll.202000527 - Biological interactions"
+      ],
+      "last_updated": "2025-09-11"
+    },
+    {
+      "id": "ADD_QUATERNARY_AMMONIUM_COMPOUNDS",
+      "standard_name": "Quaternary Ammonium Compounds",
+      "aliases": [
+        "quats",
+        "benzalkonium chloride",
+        "cetrimide",
+        "cetylpyridinium chloride",
+        "quaternary sanitizers",
+        "QACs",
+        "benzethonium chloride",
+        "quaternary surfactants"
+      ],
+      "risk_level": "high",
+      "category": "antimicrobial_preservative",
+      "mechanism_of_harm": "Disrupts cell membranes including beneficial bacteria. Can promote antibiotic resistance. May cause respiratory irritation. Known endocrine disruptors.",
+      "regulatory_status": {
+        "US": "FDA restricted use",
+        "EU": "Limited in food contact",
+        "Canada": "Restricted in supplements"
+      },
+      "population_warnings": [
+        "People with respiratory conditions - Can trigger symptoms",
+        "People with gut issues - Disrupts microbiome",
+        "Children - Avoid exposure"
+      ],
+      "notes": "Common antimicrobial agents that can disrupt beneficial bacteria and promote resistance. May have long-term effects on gut health and immune function.",
+      "scientific_references": [
+        "DOI: 10.1021/acs.est.0c04452 - Antimicrobial resistance",
+        "DOI: 10.1016/j.envint.2020.105881 - Endocrine disruption"
+      ],
+      "last_updated": "2025-09-11"
+    },
+    {
+      "id": "ADD_SYNTHETIC_B_VITAMINS",
+      "standard_name": "Synthetic B Vitamins",
+      "aliases": [
+        "synthetic thiamine",
+        "synthetic riboflavin",
+        "synthetic niacin",
+        "synthetic B12",
+        "cyanocobalamin",
+        "synthetic B6",
+        "pyridoxine hydrochloride",
+        "synthetic folate",
+        "pteroylmonoglutamic acid"
+      ],
+      "risk_level": "moderate",
+      "category": "synthetic_nutrient",
+      "mechanism_of_harm": "May have different biological activity than natural forms. Some forms require additional conversion steps. Can accumulate in unusual ways. May interfere with natural vitamin metabolism.",
+      "regulatory_status": {
+        "US": "FDA approved for fortification",
+        "EU": "Regulated under supplement directive",
+        "Australia": "TGA regulated forms"
+      },
+      "population_warnings": [
+        "People with MTHFR mutations - May have conversion issues",
+        "People with kidney disease - Modified clearance",
+        "Pregnant women - Natural forms preferred"
+      ],
+      "notes": "While essential nutrients, synthetic forms may not provide the same benefits as natural forms. Some may accumulate or require specific enzymes for conversion.",
+      "scientific_references": [
+        "DOI: 10.3390/nu12020523 - Synthetic vs natural forms",
+        "DOI: 10.1016/j.jnutbio.2019.108365 - Bioavailability comparison"
+      ],
+      "last_updated": "2025-09-11"
+    },
+    {
+      "id": "ADD_SYNTHETIC_ANTIOXIDANTS",
+      "standard_name": "Synthetic Antioxidants",
+      "aliases": [
+        "ethoxyquin",
+        "E324",
+        "propyl gallate",
+        "E310",
+        "octyl gallate",
+        "E311",
+        "dodecyl gallate",
+        "E312",
+        "synthetic preservatives",
+        "artificial antioxidants"
+      ],
+      "risk_level": "high",
+      "category": "preservative_artificial",
+      "mechanism_of_harm": "Can form harmful compounds during metabolism. May act as pro-oxidants in certain conditions. Can accumulate in liver and fatty tissues. Potential endocrine disrupting effects.",
+      "regulatory_status": {
+        "US": "FDA restricted use",
+        "EU": "Some forms banned",
+        "Japan": "Limited permitted uses"
+      },
+      "population_warnings": [
+        "Pregnant women - Potential developmental effects",
+        "People with liver conditions - May accumulate",
+        "Children - Avoid exposure"
+      ],
+      "notes": "Used to prevent oxidation but may have unintended biological effects. Some forms banned in certain countries due to safety concerns.",
+      "scientific_references": [
+        "DOI: 10.1016/j.fct.2020.111535 - Toxicity mechanisms",
+        "DOI: 10.1002/tcp.10162 - Accumulation studies"
+      ],
+      "last_updated": "2025-09-11"
+    },
+    {
+      "id": "ADD_CALCIUM_SILICATE",
+      "standard_name": "Calcium Silicate",
+      "aliases": [
+        "E552",
+        "synthetic calcium silicate",
+        "calcium metasilicate",
+        "CaSiO3",
+        "anticaking agent E552",
+        "calcium salt of silicic acid",
+        "synthetic mineral additive"
+      ],
+      "risk_level": "moderate",
+      "category": "anticaking_agent",
+      "mechanism_of_harm": "Can interfere with mineral absorption. May contain nanoparticles that cross biological barriers. Potential for tissue accumulation. Can affect silica metabolism.",
+      "regulatory_status": {
+        "US": "FDA GRAS with limits",
+        "EU": "E552 restricted use",
+        "EFSA": "Under review for nanoforms"
+      },
+      "population_warnings": [
+        "People with kidney stones - May contribute to formation",
+        "People with silica sensitivity - May react",
+        "People with mineral deficiencies - May interfere with absorption"
+      ],
+      "notes": "Synthetic form different from natural calcium and silica sources. May affect mineral balance and accumulate in tissues.",
+      "scientific_references": [
+        "DOI: 10.1016/j.fct.2019.110985 - Safety assessment",
+        "DOI: 10.3390/molecules24163012 - Biological interactions"
+      ],
+      "last_updated": "2025-09-11"
+    },
+    {
+      "id": "ADD_SYNTHETIC_FOOD_ACIDS",
+      "standard_name": "Synthetic Food Acids",
+      "aliases": [
+        "fumaric acid",
+        "E297",
+        "adipic acid",
+        "E355",
+        "succinic acid",
+        "E363",
+        "synthetic citric acid",
+        "artificial food acids",
+        "manufactured acids"
+      ],
+      "risk_level": "moderate",
+      "category": "acidity_regulator",
+      "mechanism_of_harm": "Can erode tooth enamel. May disrupt mineral absorption. Some forms can affect metabolism. Potential gut irritant in sensitive individuals.",
+      "regulatory_status": {
+        "US": "FDA GRAS with limitations",
+        "EU": "Various E-numbers with restrictions",
+        "Australia": "Permitted with conditions"
+      },
+      "population_warnings": [
+        "People with acid reflux - May worsen symptoms",
+        "People with sensitive digestion - Can cause irritation",
+        "People with dental issues - May affect enamel"
+      ],
+      "notes": "Synthetic acids may have different effects than natural food acids. Can contribute to dental erosion and digestive issues.",
+      "scientific_references": [
+        "DOI: 10.1016/j.foodchem.2020.127556 - Synthetic acids",
+        "DOI: 10.3390/foods9020178 - Health effects"
+      ],
+      "last_updated": "2025-09-11"
     }
   ]
 }

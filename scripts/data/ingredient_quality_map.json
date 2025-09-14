@@ -213,9 +213,9 @@
         "dosage_importance": 1.5
       },
       "vitamin A from cod liver oil": {
-        "bio_score": 13,
+        "bio_score": 12,
         "natural": true,
-        "score": 16,
+        "score": 15,
         "absorption": "70-90%",
         "notes": "Natural source, includes Vitamin D and Omega-3s. Excellent bioavailability.",
         "aliases": [
@@ -461,9 +461,9 @@
         "dosage_importance": 1.5
       },
       "thiamine pyrophosphate (TPP)": {
-        "bio_score": 14,
+        "bio_score": 12,
         "natural": true,
-        "score": 17,
+        "score": 15,
         "absorption": "very high",
         "notes": "Active coenzyme form, readily used by the body in metabolic pathways.",
         "aliases": [
@@ -483,9 +483,9 @@
         "dosage_importance": 1.5
       },
       "thiamine diphosphate (TDP)": {
-        "bio_score": 14,
+        "bio_score": 12,
         "natural": true,
-        "score": 17,
+        "score": 15,
         "absorption": "very high",
         "notes": "Metabolically active form, crucial for enzyme function and energy production.",
         "aliases": [
@@ -1190,9 +1190,9 @@
         "dosage_importance": 1.5
       },
       "pyridoxal 5'-phosphate (P-5-P)": {
-        "bio_score": 18,
+        "bio_score": 15,
         "natural": false,
-        "score": 18,
+        "score": 15,
         "absorption": "95%+",
         "notes": "Active coenzyme form, bypasses conversion step. Superior for those with genetic polymorphisms.",
         "aliases": [
@@ -1216,9 +1216,9 @@
     "rxcui": "1596",
     "forms": {
       "d-biotin": {
-        "bio_score": 14,
+        "bio_score": 12,
         "natural": true,
-        "score": 17,
+        "score": 15,
         "absorption": "excellent",
         "notes": "Natural form, optimal bioavailability. Essential for metabolism of fats, carbs, and proteins.",
         "aliases": [
@@ -1262,9 +1262,9 @@
         "dosage_importance": 1.5
       },
       "biotin from yeast": {
-        "bio_score": 13,
+        "bio_score": 12,
         "natural": true,
-        "score": 16,
+        "score": 15,
         "absorption": "very good",
         "notes": "Food-based source, includes cofactors and other nutrients for enhanced synergy.",
         "aliases": [
@@ -1533,11 +1533,20 @@
     "rxcui": "2626",
     "forms": {
       "methylcobalamin": {
-        "bio_score": 14,
+        "bio_score": 12,
         "natural": true,
-        "score": 17,
+        "score": 15,
         "absorption": "excellent",
         "notes": "Active coenzyme form, readily utilized for neurological health, methylation, and energy production. Well retained in tissues.",
+        "context_include": [
+          "vitamin",
+          "b12",
+          "cobalamin",
+          "methyl",
+          "methylated",
+          "active"
+        ],
+        "context_exclude": ["cyano", "hydroxo", "adenosyl"],
         "aliases": [
           "methylcobalamin",
           "methyl-b12",
@@ -1576,7 +1585,7 @@
         "bio_score": 12,
         "natural": false,
         "score": 12,
-        "absorption": "very good (~80–90%)",
+        "absorption": "very good (~80\u201390%)",
         "notes": "Supports mitochondrial energy production; synthetically produced for supplements",
         "aliases": [
           "adenosylcobalamin",
@@ -1606,7 +1615,7 @@
         "bio_score": 12,
         "natural": false,
         "score": 12,
-        "absorption": "good (~70–80%)",
+        "absorption": "good (~70\u201380%)",
         "notes": "Detox-supporting B12; used in injections and cyanide poisoning; synthetically produced",
         "aliases": [
           "hydroxocobalamin",
@@ -1636,7 +1645,7 @@
         "bio_score": 9,
         "natural": false,
         "score": 9,
-        "absorption": "moderate (~50–60%)",
+        "absorption": "moderate (~50\u201360%)",
         "notes": "Synthetic form; requires conversion to active forms; lower biological activity",
         "aliases": [
           "cyanocobalamin",
@@ -1704,9 +1713,9 @@
         "dosage_importance": 1.5
       },
       "b12 from yeast": {
-        "bio_score": 11,
+        "bio_score": 10,
         "natural": true,
-        "score": 14,
+        "score": 13,
         "absorption": "good",
         "notes": "Food-based source, includes cofactors and other B vitamins for a more complete nutritional profile.",
         "aliases": [
@@ -1768,11 +1777,11 @@
     "rxcui": "1151",
     "forms": {
       "liposomal vitamin C": {
-        "bio_score": 18,
+        "bio_score": 15,
         "natural": false,
-        "score": 18,
-        "absorption": "90%+",
-        "notes": "Encapsulated in liposomes for superior cellular delivery",
+        "score": 15,
+        "absorption": "90-95%",
+        "notes": "Most bioavailable form of vitamin C, using phospholipid encapsulation for enhanced cellular uptake. Clinical studies show 1.5-2x higher absorption versus standard forms.",
         "aliases": [
           "liposomal vitamin c",
           "liposomal ascorbic acid",
@@ -1791,9 +1800,9 @@
         "dosage_importance": 1.5
       },
       "ester-C (calcium ascorbate)": {
-        "bio_score": 16,
+        "bio_score": 14,
         "natural": false,
-        "score": 16,
+        "score": 14,
         "absorption": "80%",
         "notes": "Patented form with calcium threonate and metabolites",
         "aliases": [
@@ -1871,7 +1880,8 @@
         "natural": false,
         "score": 15,
         "absorption": "78%",
-        "notes": "Buffered form with added magnesium benefit",
+        "notes": "Combined form of magnesium and vitamin C - see magnesium category for full details",
+        "redirect": "magnesium.forms.magnesium_ascorbate",
         "aliases": [
           "magnesium ascorbate",
           "magnesium vitamin c",
@@ -1952,9 +1962,9 @@
         "dosage_importance": 1.5
       },
       "vitamin C with bioflavonoids": {
-        "bio_score": 14,
+        "bio_score": 12,
         "natural": true,
-        "score": 17,
+        "score": 15,
         "absorption": "75%",
         "notes": "Enhanced by natural flavonoids like hesperidin and rutin",
         "aliases": [
@@ -1976,9 +1986,9 @@
         "dosage_importance": 1.5
       },
       "camu camu extract": {
-        "bio_score": 16,
+        "bio_score": 12,
         "natural": true,
-        "score": 19,
+        "score": 15,
         "absorption": "excellent",
         "notes": "Amazonian fruit, rich in natural vitamin C and cofactors",
         "aliases": [
@@ -1998,9 +2008,9 @@
         "dosage_importance": 1.5
       },
       "acerola cherry extract": {
-        "bio_score": 15,
+        "bio_score": 12,
         "natural": true,
-        "score": 18,
+        "score": 15,
         "absorption": "very good",
         "notes": "Natural source with bioflavonoids and synergistic compounds",
         "aliases": [
@@ -2040,7 +2050,8 @@
         "natural": false,
         "score": 14,
         "absorption": "good",
-        "notes": "Combined with zinc for immune support",
+        "notes": "Combined form of zinc and vitamin C - see zinc category for full details",
+        "redirect": "zinc.forms.zinc_ascorbate",
         "aliases": [
           "zinc ascorbate",
           "zinc vitamin c",
@@ -2122,11 +2133,20 @@
     "rxcui": "11148",
     "forms": {
       "cholecalciferol (D3)": {
-        "bio_score": 14,
+        "bio_score": 12,
         "natural": true,
-        "score": 17,
+        "score": 15,
         "absorption": "excellent",
         "notes": "Preferred form, identical to the vitamin D produced by skin exposure to sunlight. Highly bioavailable and well retained.",
+        "context_include": [
+          "vitamin",
+          "d3",
+          "cholecalciferol",
+          "calciferol",
+          "vit",
+          "supplement"
+        ],
+        "context_exclude": ["d2", "ergocalciferol", "1,25", "calcitriol"],
         "aliases": [
           "vitamin d3",
           "Vitamin D3",
@@ -2245,9 +2265,9 @@
         "dosage_importance": 1.5
       },
       "vitamin D3 from lichen": {
-        "bio_score": 13,
+        "bio_score": 12,
         "natural": true,
-        "score": 16,
+        "score": 15,
         "absorption": "excellent",
         "notes": "Vegan source of D3, bioequivalent to animal-derived cholecalciferol, making it suitable for plant-based diets.",
         "aliases": [
@@ -2296,7 +2316,15 @@
         "natural": true,
         "score": 9,
         "absorption": "poor",
-        "notes": "Variable potency, often from irradiated yeast or mushrooms. Less reliable than specified sources.",
+        "notes": "Variable potency, often from irradiated yeast or mushrooms. Less reliable than specified sources. Takes longer to raise blood levels compared to D3.",
+        "context_include": [
+          "vitamin",
+          "d2",
+          "ergocalciferol",
+          "unspecified",
+          "supplement"
+        ],
+        "context_exclude": ["d3", "cholecalciferol", "specified", "lichen"],
         "aliases": [
           "vitamin d2",
           "ergocalciferol unspecified",
@@ -2390,9 +2418,9 @@
     "rxcui": "11150",
     "forms": {
       "mixed tocopherols": {
-        "bio_score": 14,
+        "bio_score": 12,
         "natural": true,
-        "score": 17,
+        "score": 15,
         "absorption": "excellent",
         "notes": "Full spectrum natural form including alpha, beta, gamma, and delta tocopherols. Offers broader antioxidant benefits than alpha-tocopherol alone.",
         "aliases": [
@@ -2438,9 +2466,9 @@
         "dosage_importance": 1.5
       },
       "tocotrienols": {
-        "bio_score": 13,
+        "bio_score": 12,
         "natural": true,
-        "score": 16,
+        "score": 15,
         "absorption": "excellent",
         "notes": "A distinct class of Vitamin E compounds found in palm and rice bran, with superior antioxidant properties, especially delta and gamma forms.",
         "aliases": [
@@ -2512,13 +2540,13 @@
         "notes": "Synthetic all-racemic form, only about half as biologically effective as natural d-alpha-tocopherol.",
         "aliases": [
           "dl-alpha-tocopherol",
-          "dl-α-tocopherol",
+          "dl-\u03b1-tocopherol",
           "synthetic vitamin e",
           "dl-alpha tocopherol",
           "all-rac-alpha-tocopherol",
           "racemic vitamin e",
           "dl-alpha-tocopherol supplement",
-          "dl-α-tocopherol supplement",
+          "dl-\u03b1-tocopherol supplement",
           "synthetic vitamin e supplement",
           "synthetic vit e",
           "dl-alpha tocopherol supplement",
@@ -2639,9 +2667,9 @@
     "rxcui": "11151",
     "forms": {
       "menaquinone-7 (MK-7)": {
-        "bio_score": 14,
+        "bio_score": 12,
         "natural": true,
-        "score": 17,
+        "score": 15,
         "absorption": "excellent",
         "notes": "Long-chain form of K2, known for its long half-life and superior bioavailability, particularly beneficial for bone and cardiovascular health.",
         "aliases": [
@@ -2668,9 +2696,9 @@
         "dosage_importance": 1.5
       },
       "menaquinone-7 all-trans": {
-        "bio_score": 14,
+        "bio_score": 12,
         "natural": true,
-        "score": 17,
+        "score": 15,
         "absorption": "excellent",
         "notes": "Only the active trans-isomer, offering optimal biological activity and superior to mixed cis/trans forms.",
         "aliases": [
@@ -2714,9 +2742,9 @@
         "dosage_importance": 1.5
       },
       "vitamin K2 (trans form)": {
-        "bio_score": 13,
+        "bio_score": 12,
         "natural": true,
-        "score": 16,
+        "score": 15,
         "absorption": "excellent",
         "notes": "Refers to the biologically active configuration of K2 forms, crucial for proper function.",
         "aliases": [
@@ -2800,9 +2828,9 @@
         "dosage_importance": 1.5
       },
       "vitamin K2 from natto": {
-        "bio_score": 14,
+        "bio_score": 12,
         "natural": true,
-        "score": 17,
+        "score": 15,
         "absorption": "excellent",
         "notes": "Fermented soy source, naturally rich in highly bioavailable MK-7. A traditional food source.",
         "aliases": [
@@ -2935,6 +2963,19 @@
         "score": 14,
         "absorption": "42%",
         "notes": "Highly bioavailable form that does not require stomach acid for absorption, making it ideal for those with low stomach acid.",
+        "context_include": [
+          "calcium",
+          "citrate",
+          "mineral",
+          "supplement",
+          "absorption"
+        ],
+        "context_exclude": [
+          "carbonate",
+          "oxide",
+          "phosphate",
+          "hydroxyapatite"
+        ],
         "aliases": [
           "calcium citrate",
           "cal citrate",
@@ -2992,9 +3033,9 @@
         "dosage_importance": 1.5
       },
       "calcium hydroxyapatite": {
-        "bio_score": 12,
+        "bio_score": 11,
         "natural": true,
-        "score": 15,
+        "score": 14,
         "absorption": "38%",
         "notes": "Bone-identical structure, derived from bovine bone. Contains other bone-building minerals like phosphorus.",
         "aliases": [
@@ -3253,7 +3294,7 @@
         "bio_score": 10,
         "natural": true,
         "score": 13,
-        "absorption": "good (depends on salt, ~40–60%)",
+        "absorption": "good (depends on salt, ~40\u201360%)",
         "notes": "Found as monocalcium phosphate, disodium phosphate, potassium phosphate, etc. Essential for bones, energy, and DNA.",
         "aliases": [
           "phosphorus",
@@ -3284,8 +3325,16 @@
         "bio_score": 14,
         "natural": false,
         "score": 14,
-        "absorption": "80–88%",
+        "absorption": "80\u201388%",
         "notes": "Chelated with glycine; highly bioavailable, gentle on the stomach, and less likely to cause laxative effects.",
+        "context_include": [
+          "magnesium",
+          "glycinate",
+          "chelated",
+          "gentle",
+          "bisglycinate"
+        ],
+        "context_exclude": ["oxide", "sulfate", "chloride", "citrate"],
         "aliases": [
           "magnesium glycinate",
           "magnesium bisglycinate",
@@ -3536,12 +3585,12 @@
           "magnesium sulfate",
           "epsom salt",
           "mag sulfate",
-          "MgSO₄",
+          "MgSO\u2084",
           "Magnesium Sulphate",
           "magnesium sulfate supplement",
           "epsom salt supplement",
           "mag sulfate supplement",
-          "MgSO₄ supplement",
+          "MgSO\u2084 supplement",
           "Magnesium Sulphate supplement"
         ],
         "dosage_importance": 1.5
@@ -3550,7 +3599,7 @@
         "bio_score": 2,
         "natural": false,
         "score": 2,
-        "absorption": "4–23%",
+        "absorption": "4\u201323%",
         "notes": "High elemental content but poorly absorbed; commonly used as a laxative or antacid due to its low solubility.",
         "aliases": [
           "magnesium oxide",
@@ -3593,11 +3642,11 @@
         "aliases": [
           "magnesium carbonate",
           "mag carbonate",
-          "MgCO₃",
+          "MgCO\u2083",
           "Magnesium Carbonate",
           "magnesium carbonate supplement",
           "mag carbonate supplement",
-          "MgCO₃ supplement",
+          "MgCO\u2083 supplement",
           "Magnesium Carbonate supplement"
         ],
         "dosage_importance": 1.5
@@ -3639,9 +3688,9 @@
         "dosage_importance": 1.5
       },
       "magnesium bisglycinate": {
-        "bio_score": 16,
+        "bio_score": 15,
         "natural": false,
-        "score": 16,
+        "score": 15,
         "absorption": "28-45%",
         "notes": "Chelated form with superior absorption compared to oxide. Less GI upset.",
         "aliases": [
@@ -3670,7 +3719,15 @@
         "natural": false,
         "score": 14,
         "absorption": "45%",
-        "notes": "Chelated form, gentle on the stomach and highly bioavailable. Minimizes GI side effects common with other iron forms.",
+        "notes": "Chelated form, gentle on the stomach and highly bioavailable. Minimizes GI side effects common with other iron forms. Take with vitamin C for enhanced absorption. Avoid taking with calcium, tea, or coffee.",
+        "context_include": [
+          "iron",
+          "bisglycinate",
+          "chelated",
+          "gentle",
+          "mineral"
+        ],
+        "context_exclude": ["sulfate", "gluconate", "ferric", "carbonyl"],
         "aliases": [
           "iron bisglycinate",
           "chelated iron",
@@ -3737,7 +3794,7 @@
         "bio_score": 11,
         "natural": true,
         "score": 14,
-        "absorption": "28–35%",
+        "absorption": "28\u201335%",
         "notes": "Food-based iron storage protein, offering a slow-release, gentle form of iron. Typically derived from legumes.",
         "aliases": [
           "ferritin",
@@ -3818,19 +3875,27 @@
         "natural": false,
         "score": 8,
         "absorption": "25%",
-        "notes": "Most common and inexpensive form, but frequently causes GI side effects such as constipation and nausea.",
+        "notes": "Most common and inexpensive form, but frequently causes GI side effects such as constipation and nausea. Take with vitamin C for enhanced absorption. Avoid calcium, tea, coffee, whole grains (phytates), and high-fiber foods within 2 hours.",
+        "context_include": [
+          "iron",
+          "ferrous",
+          "sulfate",
+          "mineral",
+          "supplement"
+        ],
+        "context_exclude": ["bisglycinate", "chelated", "carbonyl", "ferric"],
         "aliases": [
           "ferrous sulfate",
           "iron sulfate",
           "iron sulphate",
           "green vitriol",
-          "FeSO₄",
+          "FeSO\u2084",
           "Ferrous Sulfate",
           "ferrous sulfate supplement",
           "iron sulfate supplement",
           "iron sulphate supplement",
           "green vitriol supplement",
-          "FeSO₄ supplement",
+          "FeSO\u2084 supplement",
           "Ferrous Sulfate supplement"
         ],
         "dosage_importance": 1.5
@@ -3937,14 +4002,14 @@
           "ferric oxide",
           "iron oxide",
           "rust",
-          "Fe₂O₃",
+          "Fe\u2082O\u2083",
           "red iron oxide",
           "yellow iron oxide",
           "brown iron oxide",
           "ferric oxide supplement",
           "iron oxide supplement",
           "rust supplement",
-          "Fe₂O₃ supplement",
+          "Fe\u2082O\u2083 supplement",
           "red iron oxide supplement",
           "yellow iron oxide supplement",
           "brown iron oxide supplement"
@@ -3996,8 +4061,16 @@
         "bio_score": 14,
         "natural": false,
         "score": 14,
-        "absorption": "excellent (~60–70%)",
+        "absorption": "excellent (~60\u201370%)",
         "notes": "Chelated with picolinic acid; highly bioavailable, well studied, and effectively utilized by the body.",
+        "context_include": [
+          "zinc",
+          "picolinate",
+          "picolinic",
+          "chelated",
+          "mineral"
+        ],
+        "context_exclude": ["oxide", "sulfate", "gluconate", "citrate"],
         "aliases": [
           "zinc picolinate",
           "picolinic acid zinc",
@@ -4016,7 +4089,7 @@
         "bio_score": 12,
         "natural": false,
         "score": 12,
-        "absorption": "58–65%",
+        "absorption": "58\u201365%",
         "notes": "Gentle chelated form, bound to glycine for enhanced absorption and minimal GI upset. Well tolerated and effective.",
         "aliases": [
           "zinc glycinate",
@@ -4221,9 +4294,9 @@
         "dosage_importance": 1.5
       },
       "zinc bisglycinate": {
-        "bio_score": 16,
+        "bio_score": 14,
         "natural": false,
-        "score": 16,
+        "score": 14,
         "absorption": "43-61%",
         "notes": "Chelated form with excellent absorption and reduced GI side effects.",
         "aliases": [
@@ -4332,9 +4405,9 @@
     "rda_ul_ref": "Selenium",
     "forms": {
       "selenomethionine": {
-        "bio_score": 14,
+        "bio_score": 12,
         "natural": true,
-        "score": 17,
+        "score": 15,
         "absorption": "90%+",
         "notes": "Organic form, best absorbed and retained by the body, as it's incorporated into proteins similar to dietary selenium.",
         "aliases": [
@@ -4394,9 +4467,9 @@
         "dosage_importance": 0.5
       },
       "selenocysteine": {
-        "bio_score": 13,
+        "bio_score": 12,
         "natural": true,
-        "score": 16,
+        "score": 15,
         "absorption": "excellent",
         "notes": "Active form used in selenoproteins, directly contributing to vital enzyme functions. Rare in supplements.",
         "aliases": [
@@ -4421,12 +4494,12 @@
           "sodium selenite",
           "selenious acid sodium",
           "selenite",
-          "Na₂SeO₃",
+          "Na\u2082SeO\u2083",
           "Sodium Selenite",
           "sodium selenite supplement",
           "selenious acid sodium supplement",
           "selenite supplement",
-          "Na₂SeO₃ supplement",
+          "Na\u2082SeO\u2083 supplement",
           "Sodium Selenite supplement"
         ],
         "dosage_importance": 0.5
@@ -4441,11 +4514,11 @@
           "sodium selenate",
           "selenic acid sodium",
           "selenate",
-          "Na₂SeO₄",
+          "Na\u2082SeO\u2084",
           "sodium selenate supplement",
           "selenic acid sodium supplement",
           "selenate supplement",
-          "Na₂SeO₄ supplement"
+          "Na\u2082SeO\u2084 supplement"
         ],
         "dosage_importance": 0.5
       },
@@ -4594,9 +4667,9 @@
     "rxcui": "1165380",
     "forms": {
       "natural astaxanthin (haematococcus pluvialis)": {
-        "bio_score": 15,
+        "bio_score": 12,
         "natural": true,
-        "score": 18,
+        "score": 15,
         "absorption": "High (fat-soluble; best absorbed with fats or oils)",
         "notes": "Microalgae-derived antioxidant carotenoid used for skin, eye, cognition, and recovery. Clinically preferred form.",
         "aliases": [
@@ -4910,7 +4983,7 @@
         "bio_score": 12,
         "natural": true,
         "score": 15,
-        "absorption": "superior (~2–3x conventional extracts)",
+        "absorption": "superior (~2\u20133x conventional extracts)",
         "technology": "Phospholipid encapsulation technology",
         "notes": "Liposomal delivery enhances cellular uptake and protects active compounds from degradation. Clinically shown to have 2-3x greater bioavailability than standard extracts. Ideal for maximum therapeutic effects.",
         "aliases": [
@@ -4953,11 +5026,11 @@
         ],
         "dosage_importance": 1.0
       },
-      "supercritical CO₂ saw palmetto extract": {
+      "supercritical CO\u2082 saw palmetto extract": {
         "bio_score": 10,
         "natural": true,
         "score": 13,
-        "absorption": "excellent (~85–90% bioavailability)",
+        "absorption": "excellent (~85\u201390% bioavailability)",
         "extraction_method": "Supercritical carbon dioxide extraction",
         "notes": "Solvent-free extraction preserves the full spectrum of fatty acids (lauric, oleic, myristic) and phytosterols. Considered the gold standard for purity and potency. Free from hexane residues.",
         "aliases": [
@@ -5000,11 +5073,11 @@
         ],
         "dosage_importance": 1.0
       },
-      "liposterolic extract (85–95% fatty acids)": {
+      "liposterolic extract (85\u201395% fatty acids)": {
         "bio_score": 9,
         "natural": true,
         "score": 12,
-        "absorption": "very good (~70–85% bioavailability)",
+        "absorption": "very good (~70\u201385% bioavailability)",
         "standardization": "85-95% fatty acids + sterols",
         "notes": "The most clinically researched form. Standardized to contain the active liposterolic compounds shown to support prostate and urinary health. May use ethanol or hexane extraction.",
         "aliases": [
@@ -5053,7 +5126,7 @@
         "bio_score": 6,
         "natural": true,
         "score": 9,
-        "absorption": "poor (~20–30% bioavailability)",
+        "absorption": "poor (~20\u201330% bioavailability)",
         "processing": "Dried and milled whole berries",
         "notes": "Contains the full spectrum of compounds but in much lower concentrations. Requires higher doses for therapeutic effect. Preferred by some for 'whole food' supplementation approaches.",
         "aliases": [
@@ -5147,7 +5220,7 @@
         "bio_score": 12,
         "natural": false,
         "score": 12,
-        "absorption": "moderate (~1–5%)",
+        "absorption": "moderate (~1\u20135%)",
         "notes": "Most common vanadium supplement; exhibits insulin-mimetic effects but has low oral bioavailability.",
         "aliases": [
           "vanadyl sulfate",
@@ -5165,7 +5238,7 @@
         "bio_score": 14,
         "natural": false,
         "score": 14,
-        "absorption": "high (~10–15%)",
+        "absorption": "high (~10\u201315%)",
         "notes": "Chelated form with superior bioavailability and lower toxicity compared to vanadyl sulfate. More effective.",
         "aliases": [
           "BMOV",
@@ -5223,7 +5296,7 @@
         "bio_score": 10,
         "natural": true,
         "score": 13,
-        "absorption": "good (~70–90%)",
+        "absorption": "good (~70\u201390%)",
         "notes": "Most abundant and biologically active form; supports cellular signaling, ovarian function, and mood.",
         "aliases": [
           "myo-inositol",
@@ -5326,7 +5399,7 @@
         "bio_score": 14,
         "natural": false,
         "score": 14,
-        "absorption": "excellent (~75–90%)",
+        "absorption": "excellent (~75\u201390%)",
         "notes": "Chelated form; gentle on stomach and highly bioavailable. Minimizes potential for GI upset.",
         "aliases": [
           "copper bisglycinate",
@@ -5348,7 +5421,7 @@
         "bio_score": 10,
         "natural": false,
         "score": 10,
-        "absorption": "moderate (~30–40%)",
+        "absorption": "moderate (~30\u201340%)",
         "notes": "Common form in multivitamins; moderate bioavailability and generally well-tolerated.",
         "aliases": [
           "copper gluconate",
@@ -5366,7 +5439,7 @@
         "bio_score": 8,
         "natural": false,
         "score": 8,
-        "absorption": "variable (~20–35%)",
+        "absorption": "variable (~20\u201335%)",
         "notes": "Inexpensive; may cause GI upset or nausea. Less preferred due to potential for irritation.",
         "aliases": [
           "copper sulfate",
@@ -5559,7 +5632,7 @@
         "bio_score": 6,
         "natural": false,
         "score": 6,
-        "absorption": "0.4–0.5%",
+        "absorption": "0.4\u20130.5%",
         "notes": "Inorganic form; poorly absorbed and generally less effective for supplementation.",
         "aliases": [
           "chromium chloride",
@@ -5638,7 +5711,8 @@
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
-    "dosage_importance": 0.1
+    "dosage_importance": 0.1,
+    "cui": "C0021968"
   },
   "manganese": {
     "standard_name": "Manganese",
@@ -5696,11 +5770,11 @@
         "aliases": [
           "manganese sulfate",
           "manganese sulphate",
-          "MnSO₄",
+          "MnSO\u2084",
           "Manganese Sulfate",
           "manganese sulfate supplement",
           "manganese sulphate supplement",
-          "MnSO₄ supplement",
+          "MnSO\u2084 supplement",
           "Manganese Sulfate supplement"
         ],
         "dosage_importance": 0.5
@@ -5731,11 +5805,11 @@
         "notes": "An inorganic form of Manganese, but typically better absorbed than sulfate. Still generally less bioavailable than organic or chelated forms.",
         "aliases": [
           "manganese chloride",
-          "MnCl₂",
+          "MnCl\u2082",
           "manganese dichloride",
           "chloride of manganese",
           "manganese chloride supplement",
-          "MnCl₂ supplement",
+          "MnCl\u2082 supplement",
           "manganese dichloride supplement",
           "chloride of manganese supplement"
         ],
@@ -5826,9 +5900,9 @@
         "notes": "Used in some supplements; generally better absorbed than sulfate forms, but still less than chelates.",
         "aliases": [
           "manganese carbonate",
-          "MnCO₃",
+          "MnCO\u2083",
           "manganese carbonate supplement",
-          "MnCO₃ supplement"
+          "MnCO\u2083 supplement"
         ],
         "dosage_importance": 0.5
       },
@@ -5930,7 +6004,7 @@
         "bio_score": 14,
         "natural": false,
         "score": 14,
-        "absorption": "excellent (~85–95%)",
+        "absorption": "excellent (~85\u201395%)",
         "notes": "A chelated form of Molybdenum, bound to glycine. It is gentle on the stomach and highly bioavailable, making it a preferred form for optimal absorption.",
         "aliases": [
           "molybdenum glycinate",
@@ -5950,17 +6024,17 @@
         "bio_score": 10,
         "natural": false,
         "score": 10,
-        "absorption": "good (~60–88%)",
+        "absorption": "good (~60\u201388%)",
         "notes": "The standard inorganic form of Molybdenum; widely used in supplements and offers good absorption, although slightly less than chelated forms.",
         "aliases": [
           "sodium molybdate",
           "molybdenum",
-          "Na₂MoO₄",
+          "Na\u2082MoO\u2084",
           "molybdate salt",
           "Sodium Molybdate Dihydrate",
           "sodium molybdate supplement",
           "molybdenum supplement",
-          "Na₂MoO₄ supplement",
+          "Na\u2082MoO\u2084 supplement",
           "molybdate salt supplement",
           "Sodium Molybdate Dihydrate supplement"
         ],
@@ -5990,10 +6064,10 @@
         "notes": "Used in some supplements; while better absorbed than some oxides, it is less common and generally less bioavailable than organic forms.",
         "aliases": [
           "molybdenum chloride",
-          "MoCl₅",
+          "MoCl\u2085",
           "chloride-bound molybdenum",
           "molybdenum chloride supplement",
-          "MoCl₅ supplement",
+          "MoCl\u2085 supplement",
           "chloride-bound molybdenum supplement"
         ],
         "dosage_importance": 0.5
@@ -6045,7 +6119,7 @@
         "bio_score": 14,
         "natural": false,
         "score": 14,
-        "absorption": "excellent (~85–90%)",
+        "absorption": "excellent (~85\u201390%)",
         "notes": "A chelated form of Boron, bound to glycine. Offers superior absorption and better gastrointestinal tolerance, making it a highly preferred form.",
         "aliases": [
           "boron glycinate",
@@ -6080,9 +6154,9 @@
         "dosage_importance": 0.5
       },
       "calcium fructoborate": {
-        "bio_score": 13,
+        "bio_score": 12,
         "natural": true,
-        "score": 16,
+        "score": 15,
         "absorption": "excellent",
         "notes": "A plant-based boron complex found naturally in fruits and vegetables. Highly bioavailable and stable, considered a premium form.",
         "aliases": [
@@ -6103,17 +6177,17 @@
         "bio_score": 9,
         "natural": false,
         "score": 9,
-        "absorption": "moderate (~40–60%)",
+        "absorption": "moderate (~40\u201360%)",
         "notes": "An inorganic form of Boron; while used, it may cause GI irritation in some individuals and offers moderate absorption.",
         "aliases": [
           "sodium borate",
           "borax",
-          "Na₂B₄O₇",
+          "Na\u2082B\u2084O\u2087",
           "borate salt",
           "Sodium Borate",
           "sodium borate supplement",
           "borax supplement",
-          "Na₂B₄O₇ supplement",
+          "Na\u2082B\u2084O\u2087 supplement",
           "borate salt supplement",
           "Sodium Borate supplement"
         ],
@@ -6182,7 +6256,7 @@
         "bio_score": 14,
         "natural": false,
         "score": 14,
-        "absorption": "excellent (~10–15%)",
+        "absorption": "excellent (~10\u201315%)",
         "notes": "A chelated form of Vanadium with superior bioavailability and lower toxicity compared to simple inorganic forms. Considered a more effective and safer option for supplementation.",
         "aliases": [
           "BMOV",
@@ -6200,16 +6274,16 @@
         "bio_score": 12,
         "natural": false,
         "score": 12,
-        "absorption": "good (~1–5%)",
+        "absorption": "good (~1\u20135%)",
         "notes": "The most studied form of Vanadium in supplements. Exhibits insulin-mimetic effects but has relatively low oral bioavailability, which can limit its effectiveness.",
         "aliases": [
           "vanadyl sulfate",
-          "VOSO₄",
+          "VOSO\u2084",
           "vanadium sulfate",
           "vanadyl",
           "Vanadyl Sulfate",
           "vanadyl sulfate supplement",
-          "VOSO₄ supplement",
+          "VOSO\u2084 supplement",
           "vanadium sulfate supplement",
           "vanadyl supplement",
           "Vanadyl Sulfate supplement"
@@ -6241,11 +6315,11 @@
         "aliases": [
           "sodium vanadate",
           "sodium metavanadate",
-          "NaVO₃",
+          "NaVO\u2083",
           "vanadate salt",
           "sodium vanadate supplement",
           "sodium metavanadate supplement",
-          "NaVO₃ supplement",
+          "NaVO\u2083 supplement",
           "vanadate salt supplement"
         ],
         "dosage_importance": 0.5
@@ -6362,10 +6436,10 @@
         "aliases": [
           "potassium bicarbonate",
           "potassium hydrogen carbonate",
-          "KHCO₃",
+          "KHCO\u2083",
           "potassium bicarbonate supplement",
           "potassium hydrogen carbonate supplement",
-          "KHCO₃ supplement"
+          "KHCO\u2083 supplement"
         ],
         "dosage_importance": 1.5
       },
@@ -6446,10 +6520,10 @@
     "rxcui": "1004383",
     "forms": {
       "triglyceride form": {
-        "bio_score": 14,
+        "bio_score": 12,
         "natural": true,
-        "score": 17,
-        "absorption": "excellent (~90–95%)",
+        "score": 15,
+        "absorption": "excellent (~90\u201395%)",
         "notes": "The natural form of Omega-3s found in fish oil. It is best absorbed and retained by the body, mimicking how fatty acids are consumed in food.",
         "aliases": [
           "triglyceride omega-3",
@@ -6470,9 +6544,9 @@
         "dosage_importance": 1.0
       },
       "epa (eicosapentaenoic acid)": {
-        "bio_score": 14,
+        "bio_score": 12,
         "natural": true,
-        "score": 17,
+        "score": 15,
         "absorption": "excellent (when in triglyceride or phospholipid form, >90%)",
         "notes": "EPA is a main omega-3 fatty acid found in fish and marine oils, known for its cardiovascular, anti-inflammatory, and mood benefits.",
         "aliases": [
@@ -6521,7 +6595,7 @@
         "natural": true,
         "score": 17,
         "absorption": "excellent (when in triglyceride or phospholipid form, >90%)",
-        "notes": "DHA is a major structural component in brain, eye, and nerve tissue—essential for neurodevelopment, visual health, and cell function.",
+        "notes": "DHA is a major structural component in brain, eye, and nerve tissue\u2014essential for neurodevelopment, visual health, and cell function.",
         "aliases": [
           "dha",
           "docosahexaenoic acid",
@@ -6613,7 +6687,7 @@
         "bio_score": 12,
         "natural": false,
         "score": 12,
-        "absorption": "very good (~80–90%)",
+        "absorption": "very good (~80\u201390%)",
         "notes": "A processed form of Omega-3s where ethyl esters are converted back into a triglyceride structure. Offers concentrated EPA/DHA with very good absorption.",
         "aliases": [
           "re-esterified triglyceride",
@@ -6633,7 +6707,7 @@
         "bio_score": 11,
         "natural": true,
         "score": 14,
-        "absorption": "good (~70–80%)",
+        "absorption": "good (~70\u201380%)",
         "notes": "A plant-based source of Omega-3s, specifically DHA (and sometimes EPA). It is an excellent vegan alternative to fish oil, derived from marine algae.",
         "aliases": [
           "algae oil",
@@ -6655,7 +6729,7 @@
         "bio_score": 9,
         "natural": false,
         "score": 9,
-        "absorption": "moderate (~50–60%)",
+        "absorption": "moderate (~50\u201360%)",
         "notes": "A concentrated form of Omega-3s used in many supplements, including pharmaceutical-grade fish oils. It requires fat for optimal absorption and some individuals find it less bioavailable than triglyceride forms.",
         "aliases": [
           "ethyl ester omega-3",
@@ -6697,7 +6771,7 @@
         "bio_score": 11,
         "natural": false,
         "score": 11,
-        "absorption": "enhanced (~2–4x)",
+        "absorption": "enhanced (~2\u20134x)",
         "notes": "Processed to have a smaller particle size, which improves its solubility and uptake, leading to higher bioavailability and reduced fishy burps.",
         "aliases": [
           "micronized omega-3",
@@ -6713,7 +6787,7 @@
         "bio_score": 13,
         "natural": false,
         "score": 13,
-        "absorption": "superior (~5–10x)",
+        "absorption": "superior (~5\u201310x)",
         "notes": "Encapsulated in liposomes for significantly enhanced delivery and stability. Protects the Omega-3s from oxidation and degradation, ensuring maximum bioavailability.",
         "aliases": [
           "liposomal omega-3",
@@ -6877,7 +6951,7 @@
         "bio_score": 8,
         "natural": false,
         "score": 8,
-        "absorption": "baseline (~2–3%)",
+        "absorption": "baseline (~2\u20133%)",
         "notes": "The oxidized form of CoQ10. It requires conversion to ubiquinol in the body, which can be inefficient, especially in older individuals or those with certain health conditions.",
         "aliases": [
           "ubiquinone",
@@ -6969,14 +7043,14 @@
         "bio_score": 12,
         "natural": false,
         "score": 12,
-        "absorption": "very good (~85–90%)",
+        "absorption": "very good (~85\u201390%)",
         "notes": "A stable, water-soluble form of PQQ that is most studied for its role in mitochondrial biogenesis (new mitochondrial growth) and neurological support. Highly bioavailable.",
         "aliases": [
           "disodium pqq",
           "pqq disodium salt",
           "pqq na2",
           "sodium pqq",
-          "pqq·Na₂",
+          "pqq\u00b7Na\u2082",
           "PQQ Disodium Salt",
           "pqq sodium salt",
           "pyrroloquinoline quinone disodium",
@@ -6984,7 +7058,7 @@
           "pqq disodium salt supplement",
           "pqq na2 supplement",
           "sodium pqq supplement",
-          "pqq·Na₂ supplement",
+          "pqq\u00b7Na\u2082 supplement",
           "PQQ Disodium Salt supplement",
           "pqq sodium salt supplement",
           "pyrroloquinoline quinone disodium supplement"
@@ -7013,7 +7087,7 @@
         "bio_score": 9,
         "natural": false,
         "score": 9,
-        "absorption": "moderate (~50–60%)",
+        "absorption": "moderate (~50\u201360%)",
         "notes": "The free acid form of PQQ; it is generally less stable and less bioavailable than the disodium salt, making it a less preferred option for supplementation.",
         "aliases": [
           "pqq acid",
@@ -7126,7 +7200,7 @@
         "bio_score": 14,
         "natural": true,
         "score": 17,
-        "absorption": "excellent (~90–100%)",
+        "absorption": "excellent (~90\u2013100%)",
         "notes": "Encapsulated in liposomes; effectively bypasses digestive breakdown and significantly enhances cellular delivery and absorption, making it highly bioavailable and effective as a systemic antioxidant.",
         "aliases": [
           "liposomal glutathione",
@@ -7146,7 +7220,7 @@
         "bio_score": 12,
         "natural": false,
         "score": 12,
-        "absorption": "very good (~80–90%)",
+        "absorption": "very good (~80\u201390%)",
         "notes": "A stable, acetylated form of Glutathione; it is absorbed intact and then converted intracellularly, offering superior bioavailability compared to standard reduced glutathione.",
         "aliases": [
           "s-acetyl glutathione",
@@ -7164,7 +7238,7 @@
         "bio_score": 9,
         "natural": true,
         "score": 12,
-        "absorption": "moderate (~30–50%)",
+        "absorption": "moderate (~30\u201350%)",
         "notes": "Formulated with Vitamin C, which helps protect Glutathione (GSH) from oxidation and supports its recycling in the body, potentially enhancing its effectiveness over GSH alone.",
         "aliases": [
           "reduced glutathione with vitamin c",
@@ -7217,23 +7291,43 @@
         ],
         "dosage_importance": 1.0
       },
-      "NAC (precursor)": {
-        "bio_score": 10,
+      "N-Acetyl-L-Cysteine (NAC)": {
+        "bio_score": 15,
         "natural": false,
-        "score": 10,
-        "absorption": "good (~80%)",
-        "notes": "N-acetylcysteine (NAC) is a highly effective precursor that boosts the body's endogenous production of glutathione. It is a more efficient way to increase intracellular GSH levels than oral GSH itself.",
+        "score": 15,
+        "absorption": "excellent (~85-90%)",
+        "notes": "Highly stable and bioavailable form of cysteine, serving as a direct precursor to glutathione. Superior to other forms for both glutathione production and therapeutic applications. Well-studied for respiratory, liver, and neurological benefits.",
         "aliases": [
-          "n-acetylcysteine",
+          "N-Acetyl-L-Cysteine",
           "NAC",
-          "n-acetyl-l-cysteine",
+          "n-acetylcysteine",
           "acetylcysteine",
+          "N-acetylcysteine",
+          "n-acetyl cysteine",
           "N-Acetyl Cysteine",
-          "n-acetylcysteine supplement",
+          "acetyl cysteine",
+          "N-acetyl-L-cysteine",
           "NAC supplement",
-          "n-acetyl-l-cysteine supplement",
           "acetylcysteine supplement",
-          "N-Acetyl Cysteine supplement"
+          "acetylcysteine powder",
+          "pure NAC",
+          "pharmaceutical grade NAC",
+          "USP NAC",
+          "N-Acetyl Cysteine USP"
+        ],
+        "context_include": [
+          "antioxidant",
+          "glutathione",
+          "mucolytic",
+          "liver",
+          "detox",
+          "respiratory"
+        ],
+        "context_exclude": [
+          "acetyl-l-carnitine",
+          "ALCAR",
+          "n-acetyl glucosamine",
+          "NAG"
         ],
         "dosage_importance": 1.0
       }
@@ -7445,7 +7539,7 @@
         "bio_score": 6,
         "natural": true,
         "score": 9,
-        "absorption": "<10–20% survival",
+        "absorption": "<10\u201320% survival",
         "notes": "Standard probiotic capsules without acid protection. Most sensitive strains may die in stomach acid, resulting in low delivery of live organisms to the intestines and reduced effectiveness.",
         "aliases": [
           "standard probiotics",
@@ -8029,12 +8123,12 @@
         "notes": "Soluble fiber from oats, barley, and mushrooms that supports beneficial bacteria and provides immune benefits.",
         "aliases": [
           "beta-glucan",
-          "β-glucan",
+          "\u03b2-glucan",
           "oat beta-glucan",
           "barley beta-glucan",
           "mushroom beta-glucan",
           "beta-glucan supplement",
-          "β-glucan supplement",
+          "\u03b2-glucan supplement",
           "oat beta-glucan supplement",
           "barley beta-glucan supplement",
           "mushroom beta-glucan supplement"
@@ -8340,7 +8434,7 @@
         "bio_score": 12,
         "natural": true,
         "score": 15,
-        "absorption": "very good (~80–90%)",
+        "absorption": "very good (~80\u201390%)",
         "notes": "A well-studied form of Phosphatidylserine derived from soy lecithin. Supports cognition and cortisol regulation, but consider potential soy allergens or GMO concerns.",
         "aliases": [
           "soy phosphatidylserine",
@@ -8358,7 +8452,7 @@
         "bio_score": 11,
         "natural": true,
         "score": 14,
-        "absorption": "good (~70–85%)",
+        "absorption": "good (~70\u201385%)",
         "notes": "An animal-derived form of Phosphatidylserine (from bovine brain). While effective, it carries regulatory concerns in some regions due to potential prion risk and is less commonly used now.",
         "aliases": [
           "bovine phosphatidylserine",
@@ -8438,7 +8532,7 @@
         "bio_score": 14,
         "natural": true,
         "score": 17,
-        "absorption": "excellent (~95–100%)",
+        "absorption": "excellent (~95\u2013100%)",
         "notes": "A fundamental amino acid, highly absorbed via active transport. Supports cardiovascular, neurological, and metabolic health. Synthetic form is chemically identical to natural form.",
         "aliases": [
           "taurine",
@@ -8613,10 +8707,11 @@
         "dosage_importance": 0.5
       },
       "acetyl-l-carnitine (alcar)": {
-        "score": 0,
+        "bio_score": 14,
         "natural": false,
-        "absorption": "excellent (~70-85%)",
-        "notes": "An ester form that effectively crosses the blood-brain barrier. It supports cognitive function, memory, and mitochondrial health, making it the preferred choice for brain support.",
+        "score": 14,
+        "absorption": "excellent (75-85%)",
+        "notes": "Superior form for cognitive benefits due to enhanced blood-brain barrier penetration. Clinical studies show significant improvements in mental energy, memory, and neuroprotection. More effective than standard L-carnitine for brain health.",
         "aliases": [
           "acetyl-l-carnitine",
           "ALCAR",
@@ -8773,7 +8868,7 @@
       "betaine anhydrous": {
         "score": 3,
         "natural": true,
-        "absorption": "excellent (~90–95%)",
+        "absorption": "excellent (~90\u201395%)",
         "notes": "The primary methyl donor form of Betaine. Highly bioavailable and effective for homocysteine reduction, liver function, and athletic performance.",
         "aliases": [
           "betaine anhydrous",
@@ -8862,7 +8957,7 @@
       "betaine hydrochloride": {
         "score": 3,
         "natural": true,
-        "absorption": "good (~70–80%)",
+        "absorption": "good (~70\u201380%)",
         "notes": "A form used as a stomach acid supplement to aid digestion. It is NOT the same as Betaine Anhydrous and does not serve a methylation or liver support role in the same way.",
         "aliases": [
           "betaine HCl",
@@ -9256,27 +9351,6 @@
     "cui": "C0010692",
     "rxcui": "4105",
     "forms": {
-      "n-acetyl cysteine (nac)": {
-        "bio_score": 15,
-        "natural": false,
-        "score": 15,
-        "absorption": "excellent",
-        "notes": "A highly stable and bioavailable precursor to L-Cysteine and the master antioxidant, Glutathione. It is the most common and effective supplemental form.",
-        "aliases": [
-          "n-acetyl cysteine",
-          "nac",
-          "acetylcysteine",
-          "n-acetyl-l-cysteine",
-          "NAC supplement",
-          "acetylcysteine powder",
-          "n-acetyl cysteine supplement",
-          "nac supplement",
-          "acetylcysteine supplement",
-          "n-acetyl-l-cysteine supplement",
-          "acetylcysteine powder supplement"
-        ],
-        "dosage_importance": 1.0
-      },
       "l-cysteine base": {
         "bio_score": 12,
         "natural": false,
@@ -9712,7 +9786,7 @@
         "bio_score": 14,
         "natural": true,
         "score": 17,
-        "absorption": "excellent (~70–90%)",
+        "absorption": "excellent (~70\u201390%)",
         "notes": "A direct, stable form of Sulforaphane; it bypasses the need for enzymatic conversion, ensuring high bioavailability and consistent delivery of its benefits.",
         "aliases": [
           "stabilized sulforaphane",
@@ -9730,7 +9804,7 @@
         "bio_score": 12,
         "natural": true,
         "score": 15,
-        "absorption": "good (~50–70%)",
+        "absorption": "good (~50\u201370%)",
         "notes": "A natural source containing glucoraphanin and active myrosinase enzyme. Supports effective conversion to sulforaphane upon ingestion, offering significant health benefits.",
         "aliases": [
           "broccoli sprout extract",
@@ -9752,7 +9826,7 @@
         "bio_score": 10,
         "natural": true,
         "score": 13,
-        "absorption": "moderate (~5–10%)",
+        "absorption": "moderate (~5\u201310%)",
         "notes": "A precursor to Sulforaphane. It requires enzymatic conversion via myrosinase or gut microbiota to become active, which can limit its overall effectiveness if myrosinase is insufficient.",
         "aliases": [
           "glucoraphanin",
@@ -9772,7 +9846,7 @@
         "bio_score": 13,
         "natural": true,
         "score": 16,
-        "absorption": "very good (~60–80%)",
+        "absorption": "very good (~60\u201380%)",
         "notes": "An optimized formulation that combines glucoraphanin with active myrosinase enzyme. This ensures efficient conversion to sulforaphane upon ingestion, mimicking natural enzymatic hydrolysis for superior bioavailability.",
         "aliases": [
           "glucoraphanin with myrosinase",
@@ -9790,7 +9864,7 @@
         "bio_score": 14,
         "natural": false,
         "score": 14,
-        "absorption": "superior (~2–3x)",
+        "absorption": "superior (~2\u20133x)",
         "notes": "Encapsulated in liposomes for enhanced delivery and stability. Protects Sulforaphane from degradation and significantly improves its cellular uptake and bioavailability.",
         "aliases": [
           "liposomal sulforaphane",
@@ -9836,7 +9910,7 @@
         "bio_score": 13,
         "natural": true,
         "score": 16,
-        "absorption": "superior (~95–100%)",
+        "absorption": "superior (~95\u2013100%)",
         "notes": "Unprocessed, enzymatically active; highest nutrient integrity",
         "aliases": [
           "fresh spirulina",
@@ -9866,7 +9940,7 @@
         "bio_score": 12,
         "natural": true,
         "score": 15,
-        "absorption": "excellent (~90–95%)",
+        "absorption": "excellent (~90\u201395%)",
         "notes": "Certified organic; free of contaminants and additives",
         "aliases": [
           "organic spirulina",
@@ -9895,7 +9969,7 @@
         "bio_score": 12,
         "natural": true,
         "score": 15,
-        "absorption": "80–90%",
+        "absorption": "80\u201390%",
         "notes": "Highly digestible; no cellulose wall; rich in protein and phycocyanin",
         "aliases": [
           "spirulina powder",
@@ -9929,7 +10003,7 @@
         "bio_score": 11,
         "natural": true,
         "score": 14,
-        "absorption": "good (~70–85%)",
+        "absorption": "good (~70\u201385%)",
         "notes": "Compressed form; slower digestion than powder",
         "aliases": [
           "spirulina tablets",
@@ -9994,7 +10068,7 @@
         "bio_score": 12,
         "natural": true,
         "score": 15,
-        "absorption": "excellent (~85–95%)",
+        "absorption": "excellent (~85\u201395%)",
         "notes": "Pre-digested via enzymatic fermentation; enhanced nutrient release",
         "aliases": [
           "fermented chlorella",
@@ -10023,7 +10097,7 @@
         "bio_score": 12,
         "natural": true,
         "score": 15,
-        "absorption": "70–80%",
+        "absorption": "70\u201380%",
         "notes": "Mechanically disrupted wall; improves digestibility and detox potential",
         "aliases": [
           "cracked cell chlorella",
@@ -10053,7 +10127,7 @@
         "bio_score": 10,
         "natural": true,
         "score": 13,
-        "absorption": "moderate (~40–60%)",
+        "absorption": "moderate (~40\u201360%)",
         "notes": "Whole-cell form; limited absorption due to intact cellulose wall",
         "aliases": [
           "chlorella powder",
@@ -10152,7 +10226,7 @@
         "bio_score": 13,
         "natural": false,
         "score": 13,
-        "absorption": "excellent (~75–80%)",
+        "absorption": "excellent (~75\u201380%)",
         "notes": "Ultra-low molecular weight; penetrates intestinal epithelium and skin layers",
         "aliases": [
           "oligosaccharide hyaluronic acid",
@@ -10181,7 +10255,7 @@
         "bio_score": 13,
         "natural": false,
         "score": 13,
-        "absorption": "superior (~2–3x)",
+        "absorption": "superior (~2\u20133x)",
         "notes": "Encapsulated for enhanced delivery and skin penetration",
         "aliases": [
           "liposomal hyaluronic acid",
@@ -10239,7 +10313,7 @@
         "bio_score": 12,
         "natural": false,
         "score": 12,
-        "absorption": "good (~50–70%)",
+        "absorption": "good (~50\u201370%)",
         "notes": "Absorbed in cecum; supports systemic hydration and skin elasticity",
         "aliases": [
           "low molecular weight hyaluronic acid",
@@ -10268,7 +10342,7 @@
         "bio_score": 9,
         "natural": false,
         "score": 9,
-        "absorption": "moderate (~30–50%)",
+        "absorption": "moderate (~30\u201350%)",
         "notes": "Large molecules; systemic distribution but limited absorption",
         "aliases": [
           "high molecular weight hyaluronic acid",
@@ -10333,7 +10407,7 @@
         "bio_score": 13,
         "natural": true,
         "score": 16,
-        "absorption": "excellent (~30–40% bioavailability)",
+        "absorption": "excellent (~30\u201340% bioavailability)",
         "notes": "Biologically active enantiomer; superior mitochondrial uptake and antioxidant potency",
         "aliases": [
           "R-alpha-lipoic acid",
@@ -10382,7 +10456,7 @@
         "bio_score": 12,
         "natural": false,
         "score": 12,
-        "absorption": "superior (~2–3x higher)",
+        "absorption": "superior (~2\u20133x higher)",
         "notes": "Encapsulated for enhanced stability, solubility, and cellular delivery",
         "aliases": [
           "liposomal alpha-lipoic acid",
@@ -10466,7 +10540,7 @@
         "bio_score": 9,
         "natural": false,
         "score": 9,
-        "absorption": "moderate (~20–30%)",
+        "absorption": "moderate (~20\u201330%)",
         "notes": "50:50 mix of R and S enantiomers; lower efficacy and stability",
         "aliases": [
           "alpha-lipoic acid",
@@ -10550,7 +10624,7 @@
         "bio_score": 13,
         "natural": false,
         "score": 13,
-        "absorption": "superior (~2–3x)",
+        "absorption": "superior (~2\u20133x)",
         "notes": "Encapsulated for enhanced delivery and cellular uptake",
         "aliases": [
           "liposomal MSM",
@@ -10578,7 +10652,7 @@
         "bio_score": 12,
         "natural": false,
         "score": 12,
-        "absorption": "improved (~90–95%)",
+        "absorption": "improved (~90\u201395%)",
         "notes": "Vitamin C enhances MSM uptake and synergizes antioxidant effects",
         "aliases": [
           "MSM with vitamin C",
@@ -10614,7 +10688,7 @@
         "bio_score": 12,
         "natural": false,
         "score": 12,
-        "absorption": "good (~80–90%)",
+        "absorption": "good (~80\u201390%)",
         "notes": "Highly bioavailable sulfur donor; supports joints, detox, and antioxidant synthesis",
         "aliases": [
           "MSM",
@@ -10690,7 +10764,7 @@
         "bio_score": 13,
         "natural": true,
         "score": 16,
-        "absorption": "excellent (~90–95%)",
+        "absorption": "excellent (~90\u201395%)",
         "notes": "Full-spectrum root extract; high withanolide content; clinically validated for stress, testosterone, and cognition",
         "aliases": [
           "KSM-66",
@@ -10729,7 +10803,7 @@
         "bio_score": 12,
         "natural": false,
         "score": 12,
-        "absorption": "superior (~2–3x)",
+        "absorption": "superior (~2\u20133x)",
         "notes": "Encapsulated for enhanced delivery and stability",
         "aliases": [
           "liposomal ashwagandha",
@@ -10757,7 +10831,7 @@
         "bio_score": 12,
         "natural": true,
         "score": 15,
-        "absorption": "very good (~80–90%)",
+        "absorption": "very good (~80\u201390%)",
         "notes": "Patented leaf + root extract; higher withanolide concentration; focused on stress and cortisol reduction",
         "aliases": [
           "Sensoril",
@@ -10819,7 +10893,7 @@
         "bio_score": 9,
         "natural": true,
         "score": 12,
-        "absorption": "moderate (~50–70%)",
+        "absorption": "moderate (~50\u201370%)",
         "notes": "Generic extract; variable potency and withanolide content",
         "aliases": [
           "ashwagandha extract",
@@ -10852,7 +10926,7 @@
         "bio_score": 7,
         "natural": true,
         "score": 10,
-        "absorption": "low (~30–50%)",
+        "absorption": "low (~30\u201350%)",
         "notes": "Whole root powder; traditional use; low standardization",
         "aliases": [
           "ashwagandha powder",
@@ -10918,7 +10992,7 @@
         "bio_score": 12,
         "natural": true,
         "score": 15,
-        "absorption": "very good (~70–85%)",
+        "absorption": "very good (~70\u201385%)",
         "notes": "Standardized extract; adaptogenic effects on stress, fatigue, and cognition",
         "aliases": [
           "rhodiola rosea extract",
@@ -10951,7 +11025,7 @@
         "bio_score": 12,
         "natural": false,
         "score": 12,
-        "absorption": "superior (~2–3x)",
+        "absorption": "superior (~2\u20133x)",
         "notes": "Encapsulated for enhanced delivery and stability",
         "aliases": [
           "liposomal rhodiola",
@@ -11008,7 +11082,7 @@
         "bio_score": 7,
         "natural": true,
         "score": 10,
-        "absorption": "moderate (~40–60%)",
+        "absorption": "moderate (~40\u201360%)",
         "notes": "Whole root powder; variable potency and bioactive content",
         "aliases": [
           "rhodiola root powder",
@@ -11129,7 +11203,7 @@
         "bio_score": 11,
         "natural": true,
         "score": 14,
-        "absorption": "good (~60–70%)",
+        "absorption": "good (~60\u201370%)",
         "notes": "Standardized to 24% flavone glycosides and 6% terpene lactones; supports circulation, cognition, and antioxidant defense",
         "aliases": [
           "ginkgo biloba extract",
@@ -11162,7 +11236,7 @@
         "bio_score": 7,
         "natural": true,
         "score": 10,
-        "absorption": "poor (~20–30%)",
+        "absorption": "poor (~20\u201330%)",
         "notes": "Unstandardized; low terpene and flavone content",
         "aliases": [
           "ginkgo leaf powder",
@@ -11228,7 +11302,7 @@
         "bio_score": 13,
         "natural": true,
         "score": 16,
-        "absorption": "10x better (~400–500% increase)",
+        "absorption": "10x better (~400\u2013500% increase)",
         "notes": "Silybin-phosphatidylcholine complex; dramatically improves liver delivery and antioxidant potency",
         "aliases": [
           "silymarin phytosome",
@@ -11259,7 +11333,7 @@
         "bio_score": 12,
         "natural": false,
         "score": 12,
-        "absorption": "8–12x better",
+        "absorption": "8\u201312x better",
         "notes": "Micelle-encapsulated silybin; rapid uptake and liver targeting",
         "aliases": [
           "micellar silymarin",
@@ -11288,7 +11362,7 @@
         "bio_score": 9,
         "natural": true,
         "score": 12,
-        "absorption": "moderate (~20–30%)",
+        "absorption": "moderate (~20\u201330%)",
         "notes": "Standard extract from Silybum marianum; contains silybin, silydianin, silychristin",
         "aliases": [
           "silymarin",
@@ -11382,7 +11456,8 @@
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
-    "dosage_importance": 0.1
+    "dosage_importance": 0.1,
+    "cui": "C0076979"
   },
   "collagen": {
     "standard_name": "Collagen",
@@ -11423,7 +11498,7 @@
         "natural": true,
         "score": 15,
         "absorption": "90%",
-        "notes": "Small peptides (2–5 kDa); rapidly absorbed and distributed to skin, joints, and connective tissue",
+        "notes": "Small peptides (2\u20135 kDa); rapidly absorbed and distributed to skin, joints, and connective tissue",
         "aliases": [
           "collagen peptides",
           "hydrolyzed collagen",
@@ -11454,7 +11529,7 @@
         "bio_score": 12,
         "natural": false,
         "score": 12,
-        "absorption": "superior (~2–3x)",
+        "absorption": "superior (~2\u20133x)",
         "notes": "Encapsulated for enhanced delivery and stability",
         "aliases": [
           "liposomal collagen",
@@ -11482,7 +11557,7 @@
         "bio_score": 9,
         "natural": true,
         "score": 12,
-        "absorption": "moderate (~30–50%)",
+        "absorption": "moderate (~30\u201350%)",
         "notes": "Type II collagen; immune-modulating effects for joint health",
         "aliases": [
           "undenatured collagen",
@@ -11510,7 +11585,7 @@
         "bio_score": 7,
         "natural": true,
         "score": 10,
-        "absorption": "moderate (~40–60%)",
+        "absorption": "moderate (~40\u201360%)",
         "notes": "Partially hydrolyzed; less soluble and slower uptake than peptides",
         "aliases": [
           "gelatin",
@@ -11575,7 +11650,7 @@
         "bio_score": 13,
         "natural": false,
         "score": 13,
-        "absorption": "excellent (~90–95%)",
+        "absorption": "excellent (~90\u201395%)",
         "notes": "Encapsulated for enhanced delivery and bypass of first-pass metabolism",
         "aliases": [
           "liposomal melatonin",
@@ -11603,7 +11678,7 @@
         "bio_score": 12,
         "natural": false,
         "score": 12,
-        "absorption": "excellent (~85–90%)",
+        "absorption": "excellent (~85\u201390%)",
         "notes": "Transmucosal absorption; rapid onset and bypass of liver metabolism",
         "aliases": [
           "melatonin oral spray",
@@ -11632,7 +11707,7 @@
         "bio_score": 12,
         "natural": false,
         "score": 12,
-        "absorption": "very good (~70–85%)",
+        "absorption": "very good (~70\u201385%)",
         "notes": "Rapid onset; ideal for sleep initiation",
         "aliases": [
           "immediate-release melatonin",
@@ -11661,7 +11736,7 @@
         "bio_score": 11,
         "natural": false,
         "score": 11,
-        "absorption": "timed (~3–5 hour peak)",
+        "absorption": "timed (~3\u20135 hour peak)",
         "notes": "Designed for late-night release; supports sleep maintenance",
         "aliases": [
           "delayed-release melatonin",
@@ -11688,8 +11763,8 @@
         "bio_score": 10,
         "natural": false,
         "score": 10,
-        "absorption": "good (~60–70%)",
-        "notes": "Sustained release; mimics natural secretion over 6–8 hours",
+        "absorption": "good (~60\u201370%)",
+        "notes": "Sustained release; mimics natural secretion over 6\u20138 hours",
         "aliases": [
           "extended-release melatonin",
           "time-release melatonin",
@@ -11753,7 +11828,7 @@
         "bio_score": 13,
         "natural": false,
         "score": 13,
-        "absorption": "excellent (~90–95%)",
+        "absorption": "excellent (~90\u201395%)",
         "notes": "Stable salt form; high concentration of active glucosamine; shellfish-free options available",
         "aliases": [
           "glucosamine HCl",
@@ -11782,7 +11857,7 @@
         "bio_score": 12,
         "natural": false,
         "score": 12,
-        "absorption": "superior (~2–3x)",
+        "absorption": "superior (~2\u20133x)",
         "notes": "Encapsulated for enhanced delivery and stability",
         "aliases": [
           "liposomal glucosamine",
@@ -11810,7 +11885,7 @@
         "bio_score": 12,
         "natural": false,
         "score": 12,
-        "absorption": "very good (~80–90%)",
+        "absorption": "very good (~80\u201390%)",
         "notes": "Most clinically studied form; stabilized with potassium or sodium salt",
         "aliases": [
           "glucosamine sulfate",
@@ -11839,7 +11914,7 @@
         "bio_score": 11,
         "natural": false,
         "score": 11,
-        "absorption": "good (~70–80%)",
+        "absorption": "good (~70\u201380%)",
         "notes": "Acetylated form; supports gut lining and mucosal health more than joint cartilage",
         "aliases": [
           "n-acetyl glucosamine",
@@ -11867,7 +11942,7 @@
         "bio_score": 9,
         "natural": false,
         "score": 9,
-        "absorption": "moderate (~60–70%)",
+        "absorption": "moderate (~60\u201370%)",
         "notes": "Less stable; variable absorption and potency",
         "aliases": [
           "non-crystalline glucosamine sulfate",
@@ -11930,7 +12005,7 @@
         "bio_score": 12,
         "natural": false,
         "score": 12,
-        "absorption": "2–3x better",
+        "absorption": "2\u20133x better",
         "notes": "Phospholipid-bound form; enhanced solubility and intestinal uptake",
         "aliases": [
           "chondroitin phytosome",
@@ -11959,7 +12034,7 @@
         "bio_score": 12,
         "natural": false,
         "score": 12,
-        "absorption": "better (~20–30%)",
+        "absorption": "better (~20\u201330%)",
         "notes": "Depolymerized form; improved uptake and tissue targeting",
         "aliases": [
           "low molecular weight chondroitin",
@@ -11988,7 +12063,7 @@
         "bio_score": 10,
         "natural": true,
         "score": 13,
-        "absorption": "13–15%",
+        "absorption": "13\u201315%",
         "notes": "Standard form; large molecule with limited absorption; often derived from shark or bovine cartilage",
         "aliases": [
           "chondroitin sulfate",
@@ -12055,7 +12130,7 @@
         "bio_score": 13,
         "natural": true,
         "score": 16,
-        "absorption": "excellent (~80–90%)",
+        "absorption": "excellent (~80\u201390%)",
         "notes": "Most potent catechin; supports antioxidant, metabolic, and neuroprotective effects",
         "aliases": [
           "EGCG",
@@ -12084,7 +12159,7 @@
         "bio_score": 13,
         "natural": false,
         "score": 13,
-        "absorption": "superior (~2–3x)",
+        "absorption": "superior (~2\u20133x)",
         "notes": "Encapsulated EGCG and catechins; bypasses degradation and improves cellular delivery",
         "aliases": [
           "liposomal green tea",
@@ -12112,7 +12187,7 @@
         "bio_score": 12,
         "natural": false,
         "score": 12,
-        "absorption": "2–3x better",
+        "absorption": "2\u20133x better",
         "notes": "Phospholipid-bound catechins; enhanced solubility and intestinal uptake",
         "aliases": [
           "green tea phytosome",
@@ -12141,7 +12216,7 @@
         "bio_score": 11,
         "natural": true,
         "score": 14,
-        "absorption": "good (~60–70%)",
+        "absorption": "good (~60\u201370%)",
         "notes": "Standardized extract; contains multiple catechins and polyphenols",
         "aliases": [
           "green tea extract",
@@ -12170,7 +12245,7 @@
         "bio_score": 9,
         "natural": true,
         "score": 12,
-        "absorption": "moderate (~40–60%)",
+        "absorption": "moderate (~40\u201360%)",
         "notes": "Whole leaf powder; contains caffeine, fiber, and full-spectrum antioxidants",
         "aliases": [
           "matcha",
@@ -12235,7 +12310,7 @@
         "bio_score": 13,
         "natural": false,
         "score": 13,
-        "absorption": "superior (~2–3x)",
+        "absorption": "superior (~2\u20133x)",
         "notes": "Encapsulated OPCs and catechins; bypasses degradation and improves cellular delivery",
         "aliases": [
           "liposomal grape seed",
@@ -12263,7 +12338,7 @@
         "bio_score": 13,
         "natural": false,
         "score": 13,
-        "absorption": "2–3x better",
+        "absorption": "2\u20133x better",
         "notes": "Phospholipid-bound OPCs; enhanced solubility and intestinal uptake",
         "aliases": [
           "grape seed phytosome",
@@ -12292,7 +12367,7 @@
         "bio_score": 12,
         "natural": true,
         "score": 15,
-        "absorption": "very good (~60–70%)",
+        "absorption": "very good (~60\u201370%)",
         "notes": "High OPC content; potent antioxidant and vascular support",
         "aliases": [
           "grape seed extract",
@@ -12323,7 +12398,7 @@
         "bio_score": 9,
         "natural": true,
         "score": 12,
-        "absorption": "moderate (~40–50%)",
+        "absorption": "moderate (~40\u201350%)",
         "notes": "Includes skin, pulp, and seed; broader polyphenol spectrum but lower OPC concentration",
         "aliases": [
           "whole grape extract",
@@ -12388,8 +12463,8 @@
         "bio_score": 13,
         "natural": true,
         "score": 16,
-        "absorption": "excellent (~70–90%)",
-        "notes": "Patented French maritime pine extract; standardized to 65–75% procyanidins; supports circulation, inflammation, and antioxidant defense",
+        "absorption": "excellent (~70\u201390%)",
+        "notes": "Patented French maritime pine extract; standardized to 65\u201375% procyanidins; supports circulation, inflammation, and antioxidant defense",
         "aliases": [
           "pycnogenol",
           "french maritime pine",
@@ -12417,7 +12492,7 @@
         "bio_score": 13,
         "natural": false,
         "score": 13,
-        "absorption": "superior (~2–3x)",
+        "absorption": "superior (~2\u20133x)",
         "notes": "Encapsulated for enhanced delivery and cellular uptake",
         "aliases": [
           "liposomal pine bark",
@@ -12445,7 +12520,7 @@
         "bio_score": 12,
         "natural": false,
         "score": 12,
-        "absorption": "2–3x better",
+        "absorption": "2\u20133x better",
         "notes": "Phospholipid-bound procyanidins; enhanced solubility and intestinal uptake",
         "aliases": [
           "pine bark phytosome",
@@ -12474,7 +12549,7 @@
         "bio_score": 10,
         "natural": true,
         "score": 13,
-        "absorption": "good (~50–70%)",
+        "absorption": "good (~50\u201370%)",
         "notes": "Variable source and potency; may lack standardization and consistent OPC content",
         "aliases": [
           "pine bark extract",
@@ -12537,7 +12612,7 @@
         "bio_score": 13,
         "natural": true,
         "score": 16,
-        "absorption": "excellent (~80–90%)",
+        "absorption": "excellent (~80\u201390%)",
         "notes": "Enhanced bioavailability via microbial fermentation; higher levels of Rg3, Rg5, Rk1, and compound K",
         "aliases": [
           "fermented red ginseng",
@@ -12566,7 +12641,7 @@
         "bio_score": 12,
         "natural": true,
         "score": 15,
-        "absorption": "very good (~70–85%)",
+        "absorption": "very good (~70\u201385%)",
         "notes": "Nine-cycle steamed ginseng; enriched in low-MW ginsenosides; potent antioxidant and immune effects",
         "aliases": [
           "black ginseng",
@@ -12595,7 +12670,7 @@
         "bio_score": 13,
         "natural": false,
         "score": 13,
-        "absorption": "superior (~2–3x)",
+        "absorption": "superior (~2\u20133x)",
         "notes": "Encapsulated for enhanced delivery and cellular uptake",
         "aliases": [
           "liposomal ginseng",
@@ -12619,18 +12694,18 @@
         ],
         "dosage_importance": 1.0
       },
-      "panax ginseng extract (4–7% ginsenosides)": {
+      "panax ginseng extract (4\u20137% ginsenosides)": {
         "bio_score": 12,
         "natural": true,
         "score": 15,
-        "absorption": "very good (~60–75%)",
+        "absorption": "very good (~60\u201375%)",
         "notes": "Asian ginseng; adaptogenic effects on energy, stress, and cognition; standardized to ginsenosides Rg1, Rb1, and Re",
         "aliases": [
           "panax ginseng",
           "asian ginseng",
           "korean ginseng",
           "red ginseng",
-          "4–7% ginsenosides",
+          "4\u20137% ginsenosides",
           "panax ginseng extract",
           "standardized panax ginseng",
           "ginseng extract",
@@ -12641,7 +12716,7 @@
           "asian ginseng supplement",
           "korean ginseng supplement",
           "red ginseng supplement",
-          "4–7% ginsenosides supplement",
+          "4\u20137% ginsenosides supplement",
           "panax ginseng extract supplement",
           "standardized panax ginseng supplement",
           "ginseng extract supplement",
@@ -12654,7 +12729,7 @@
         "bio_score": 11,
         "natural": true,
         "score": 14,
-        "absorption": "good (~50–65%)",
+        "absorption": "good (~50\u201365%)",
         "notes": "Cooling adaptogen; higher Rb1 and Re; supports immunity and blood sugar regulation",
         "aliases": [
           "american ginseng",
@@ -12682,7 +12757,7 @@
         "bio_score": 9,
         "natural": true,
         "score": 12,
-        "absorption": "moderate (~40–55%)",
+        "absorption": "moderate (~40\u201355%)",
         "notes": "Not true ginseng; contains eleutherosides; supports endurance and stress resilience",
         "aliases": [
           "siberian ginseng",
@@ -12747,7 +12822,7 @@
         "bio_score": 11,
         "natural": true,
         "score": 14,
-        "absorption": "good (~60–70%)",
+        "absorption": "good (~60\u201370%)",
         "notes": "Most studied species; supports innate immunity via alkylamides and caffeic acid derivatives",
         "aliases": [
           "echinacea purpurea",
@@ -12777,7 +12852,7 @@
         "bio_score": 10,
         "natural": true,
         "score": 13,
-        "absorption": "good (~50–65%)",
+        "absorption": "good (~50\u201365%)",
         "notes": "Traditional root extract; higher alkylamide content; immune and anti-inflammatory effects",
         "aliases": [
           "echinacea angustifolia",
@@ -12807,7 +12882,7 @@
         "bio_score": 12,
         "natural": false,
         "score": 12,
-        "absorption": "2–3x better",
+        "absorption": "2\u20133x better",
         "notes": "Phospholipid-bound alkylamides; enhanced solubility and intestinal uptake",
         "aliases": [
           "echinacea phytosome",
@@ -12836,7 +12911,7 @@
         "bio_score": 13,
         "natural": false,
         "score": 13,
-        "absorption": "superior (~2–3x)",
+        "absorption": "superior (~2\u20133x)",
         "notes": "Encapsulated for enhanced delivery and cellular uptake",
         "aliases": [
           "liposomal echinacea",
@@ -12864,7 +12939,7 @@
         "bio_score": 7,
         "natural": true,
         "score": 10,
-        "absorption": "variable (~30–50%)",
+        "absorption": "variable (~30\u201350%)",
         "notes": "Non-standardized; variable alkylamide and phenolic content",
         "aliases": [
           "whole echinacea",
@@ -12930,7 +13005,7 @@
         "bio_score": 10,
         "natural": true,
         "score": 13,
-        "absorption": "moderate (~20–30%)",
+        "absorption": "moderate (~20\u201330%)",
         "notes": "Standardized for curcumin; absorption enhanced with piperine or lipids",
         "aliases": [
           "turmeric extract",
@@ -12978,7 +13053,7 @@
         "bio_score": 6,
         "natural": true,
         "score": 9,
-        "absorption": "poor (~10–20%)",
+        "absorption": "poor (~10\u201320%)",
         "notes": "Low curcumin content; poorly absorbed without enhancers",
         "aliases": [
           "turmeric powder",
@@ -13113,7 +13188,7 @@
         "bio_score": 12,
         "natural": true,
         "score": 15,
-        "absorption": "very good (~70–80%)",
+        "absorption": "very good (~70\u201380%)",
         "notes": "Stable water-soluble compounds like SAC and SAMC; supports cardiovascular and immune health",
         "aliases": [
           "aged garlic extract",
@@ -13142,7 +13217,7 @@
         "bio_score": 11,
         "natural": true,
         "score": 14,
-        "absorption": "good (~50–60%)",
+        "absorption": "good (~50\u201360%)",
         "notes": "Unstable; rapidly metabolized; potent antimicrobial",
         "aliases": [
           "allicin",
@@ -13171,7 +13246,7 @@
         "bio_score": 7,
         "natural": true,
         "score": 10,
-        "absorption": "variable (~30–50%)",
+        "absorption": "variable (~30\u201350%)",
         "notes": "Depends on processing; may lack active sulfur compounds",
         "aliases": [
           "garlic powder",
@@ -13200,7 +13275,7 @@
         "bio_score": 10,
         "natural": true,
         "score": 13,
-        "absorption": "good (~50–65%)",
+        "absorption": "good (~50\u201365%)",
         "notes": "Fermented garlic; higher antioxidant activity",
         "aliases": [
           "black garlic",
@@ -13265,7 +13340,7 @@
         "bio_score": 12,
         "natural": true,
         "score": 15,
-        "absorption": "very good (~60–70%)",
+        "absorption": "very good (~60\u201370%)",
         "notes": "Standardized PACs; supports urinary tract health",
         "aliases": [
           "cranberry extract",
@@ -13294,7 +13369,7 @@
         "bio_score": 9,
         "natural": true,
         "score": 12,
-        "absorption": "moderate (~40–50%)",
+        "absorption": "moderate (~40\u201350%)",
         "notes": "Contains fiber, sugars, and non-standardized PACs",
         "aliases": [
           "cranberry powder",
@@ -13323,7 +13398,7 @@
         "bio_score": 7,
         "natural": true,
         "score": 10,
-        "absorption": "variable (~30–50%)",
+        "absorption": "variable (~30\u201350%)",
         "notes": "High sugar content; PACs may be degraded",
         "aliases": [
           "cranberry juice",
@@ -13388,7 +13463,7 @@
         "bio_score": 12,
         "natural": true,
         "score": 15,
-        "absorption": "very good (~60–70%)",
+        "absorption": "very good (~60\u201370%)",
         "notes": "Supports retinal health; rich in anthocyanosides",
         "aliases": [
           "bilberry extract",
@@ -13417,7 +13492,7 @@
         "bio_score": 9,
         "natural": true,
         "score": 12,
-        "absorption": "moderate (~40–50%)",
+        "absorption": "moderate (~40\u201350%)",
         "notes": "Lower anthocyanin content; includes fiber and sugars",
         "aliases": [
           "bilberry powder",
@@ -13446,7 +13521,7 @@
         "bio_score": 7,
         "natural": true,
         "score": 10,
-        "absorption": "variable (~30–50%)",
+        "absorption": "variable (~30\u201350%)",
         "notes": "Anthocyanins may degrade; sugar content varies",
         "aliases": [
           "bilberry juice",
@@ -13511,7 +13586,7 @@
         "bio_score": 12,
         "natural": true,
         "score": 15,
-        "absorption": "very good (~60–70%)",
+        "absorption": "very good (~60\u201370%)",
         "notes": "Standardized anthocyanins; immune support",
         "aliases": [
           "sambucol",
@@ -13540,7 +13615,7 @@
         "bio_score": 9,
         "natural": true,
         "score": 12,
-        "absorption": "moderate (~40–50%)",
+        "absorption": "moderate (~40\u201350%)",
         "notes": "Contains fiber and sugars; lower anthocyanin content",
         "aliases": [
           "elderberry powder",
@@ -13569,7 +13644,7 @@
         "bio_score": 7,
         "natural": true,
         "score": 10,
-        "absorption": "variable (~30–50%)",
+        "absorption": "variable (~30\u201350%)",
         "notes": "Traditional form; sugar content may affect absorption",
         "aliases": [
           "elderberry syrup",
@@ -13634,7 +13709,7 @@
         "bio_score": 12,
         "natural": true,
         "score": 15,
-        "absorption": "very good (~70–80%)",
+        "absorption": "very good (~70\u201380%)",
         "notes": "A broad-spectrum blend of enzymes sourced from fungal or botanical sources. Effectively breaks down a variety of foods.",
         "aliases": [
           "plant enzymes",
@@ -13663,7 +13738,7 @@
         "bio_score": 11,
         "natural": true,
         "score": 14,
-        "absorption": "good (~60–70%)",
+        "absorption": "good (~60\u201370%)",
         "notes": "Enzymes sourced from animal pancreases. Requires enteric coating to survive stomach acid and function in the small intestine. Typically includes a mix of amylase, lipase, and protease.",
         "aliases": [
           "pancreatic enzymes",
@@ -13691,7 +13766,7 @@
         "bio_score": 13,
         "natural": true,
         "score": 16,
-        "absorption": "excellent (~80–90%)",
+        "absorption": "excellent (~80\u201390%)",
         "notes": "Targeted, individual enzymes designed to break down specific types of food or to perform a specific function.",
         "aliases": [
           "protease",
@@ -13743,7 +13818,7 @@
         "bio_score": 12,
         "natural": false,
         "score": 12,
-        "absorption": "good (~60–70%)",
+        "absorption": "good (~60\u201370%)",
         "notes": "Encapsulation technology that protects enzymes from stomach acid, ensuring they are released in the small intestine where they are most effective. Essential for pancreatic enzymes.",
         "aliases": [
           "enteric-coated enzymes",
@@ -13798,7 +13873,7 @@
         "bio_score": 13,
         "natural": false,
         "score": 13,
-        "absorption": "excellent (~80–90%)",
+        "absorption": "excellent (~80\u201390%)",
         "notes": "A patented NAD+ precursor that efficiently raises NAD+ levels. It is known for its good oral bioavailability and supports cellular energy and repair.",
         "aliases": [
           "nicotinamide riboside",
@@ -13827,12 +13902,12 @@
         "bio_score": 13,
         "natural": false,
         "score": 13,
-        "absorption": "excellent (~80–90%)",
+        "absorption": "excellent (~80\u201390%)",
         "notes": "A direct NAD+ precursor that is quickly converted to NAD+ in the body. Newer data supports its oral uptake for cellular energy and anti-aging benefits.",
         "aliases": [
           "NMN",
           "nicotinamide mononucleotide",
-          "β-NMN",
+          "\u03b2-NMN",
           "beta-nicotinamide mononucleotide",
           "NAD+ precursor",
           "NMN supplement",
@@ -13842,7 +13917,7 @@
           "NMN NAD precursor",
           "NMN supplement",
           "nicotinamide mononucleotide supplement",
-          "β-NMN supplement",
+          "\u03b2-NMN supplement",
           "beta-nicotinamide mononucleotide supplement",
           "NAD+ precursor supplement",
           "NAD booster NMN supplement",
@@ -13882,7 +13957,7 @@
         "bio_score": 10,
         "natural": true,
         "score": 13,
-        "absorption": "good (~60–70%)",
+        "absorption": "good (~60\u201370%)",
         "notes": "A non-flushing form of Vitamin B3. While it is an NAD+ precursor, its conversion efficiency is lower compared to NR and NMN.",
         "aliases": [
           "niacinamide",
@@ -13911,7 +13986,7 @@
         "bio_score": 9,
         "natural": true,
         "score": 12,
-        "absorption": "good (~60–70%)",
+        "absorption": "good (~60\u201370%)",
         "notes": "The flushing form of Vitamin B3. It converts to NAD+ but is often less tolerable for users due to the 'niacin flush' side effect.",
         "aliases": [
           "niacin",
@@ -13978,7 +14053,7 @@
         "bio_score": 13,
         "natural": false,
         "score": 13,
-        "absorption": "excellent (~90–95%)",
+        "absorption": "excellent (~90\u201395%)",
         "notes": "Active folate; bypasses MTHFR genetic issues",
         "aliases": [
           "5-MTHF",
@@ -14007,7 +14082,7 @@
         "bio_score": 9,
         "natural": false,
         "score": 9,
-        "absorption": "moderate (~50–60%)",
+        "absorption": "moderate (~50\u201360%)",
         "notes": "Synthetic form; requires conversion via DHFR; not suitable for MTHFR mutations",
         "aliases": [
           "folic acid",
@@ -14037,7 +14112,7 @@
         "bio_score": 12,
         "natural": false,
         "score": 12,
-        "absorption": "very good (~70–80%)",
+        "absorption": "very good (~70\u201380%)",
         "notes": "Bypasses initial conversion steps; helpful in methylation disorders",
         "aliases": [
           "folinic acid",
@@ -14062,7 +14137,8 @@
         ],
         "dosage_importance": 1.5
       }
-    }
+    },
+    "cui": "C0016410"
   },
   "lycopene": {
     "standard_name": "Lycopene",
@@ -14577,11 +14653,11 @@
         "aliases": [
           "cryptoxanthin",
           "beta-cryptoxanthin",
-          "β-cryptoxanthin",
+          "\u03b2-cryptoxanthin",
           "carotenoid cryptoxanthin",
           "cryptoxanthin supplement",
           "beta-cryptoxanthin supplement",
-          "β-cryptoxanthin supplement",
+          "\u03b2-cryptoxanthin supplement",
           "carotenoid cryptoxanthin supplement"
         ],
         "dosage_importance": 1.0
@@ -14617,7 +14693,7 @@
   "flavonols": {
     "standard_name": "Flavonols",
     "category": "antioxidants",
-    "cui": "C0016131",
+    "cui": "C0596577",
     "rxcui": "none",
     "forms": {
       "mixed flavonols": {
@@ -15046,7 +15122,7 @@
     "dosage_importance": 0.1
   },
   "astaxanthin_geq_3percent": {
-    "standard_name": "Astaxanthin ≥ 3%",
+    "standard_name": "Astaxanthin \u2265 3%",
     "risk_level": "none",
     "category": "standardization_marker",
     "source": "botanical_extract",
@@ -15276,7 +15352,8 @@
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
-    "dosage_importance": 0.1
+    "dosage_importance": 0.1,
+    "cui": "C0056077"
   },
   "cordycepin": {
     "standard_name": "Cordycepin",
@@ -16702,11 +16779,11 @@
     "rxcui": "none",
     "forms": {
       "niagen (nicotinamide riboside chloride)": {
-        "bio_score": 17,
+        "bio_score": 15,
         "natural": false,
-        "score": 17,
-        "absorption": "High",
-        "notes": "NAD+ precursor with superior bioavailability compared to niacin.",
+        "score": 15,
+        "absorption": "excellent (85-90%)",
+        "notes": "Patented, highly pure form of nicotinamide riboside. Most efficient NAD+ precursor with validated clinical studies showing superior bioavailability and cellular uptake compared to niacin and NMN.",
         "aliases": [
           "nr",
           "niagen",
@@ -16729,17 +16806,17 @@
     "rxcui": "none",
     "forms": {
       "beta-nicotinamide mononucleotide": {
-        "bio_score": 16,
+        "bio_score": 15,
         "natural": false,
-        "score": 16,
+        "score": 15,
         "absorption": "Variable",
         "notes": "Direct NAD+ precursor, may have bioavailability challenges.",
         "aliases": [
           "nmn",
-          "β-nmn",
+          "\u03b2-nmn",
           "nad+ precursor",
           "nmn supplement",
-          "β-nmn supplement",
+          "\u03b2-nmn supplement",
           "nad+ precursor supplement"
         ],
         "dosage_importance": 1.0
@@ -16753,9 +16830,9 @@
     "rxcui": "none",
     "forms": {
       "trans-pterostilbene": {
-        "bio_score": 16,
+        "bio_score": 15,
         "natural": true,
-        "score": 19,
+        "score": 18,
         "absorption": "80-95%",
         "notes": "Methylated resveratrol with superior bioavailability and longer half-life.",
         "aliases": [
@@ -16951,12 +17028,12 @@
         "absorption": "good",
         "notes": "Microencapsulated NADH for enhanced stability. Alternative stabilized form to Enada.",
         "aliases": [
-          "panmol nadhμicro",
+          "panmol nadh\u03bcicro",
           "panmol nadh micro",
           "microencapsulated nadh",
           "nadh micro",
           "panmol",
-          "panmol nadhμicro supplement",
+          "panmol nadh\u03bcicro supplement",
           "panmol nadh micro supplement",
           "microencapsulated nadh supplement",
           "nadh micro supplement",
@@ -17164,12 +17241,12 @@
         "notes": "Neurosteroid precursor. Supports cognitive function and hormone balance.",
         "aliases": [
           "pregnenolone",
-          "pregn-5-en-3β-ol-20-one",
-          "3β-hydroxypregn-5-en-20-one",
+          "pregn-5-en-3\u03b2-ol-20-one",
+          "3\u03b2-hydroxypregn-5-en-20-one",
           "pregnenolone supplement",
           "pregnenolone supplement",
-          "pregn-5-en-3β-ol-20-one supplement",
-          "3β-hydroxypregn-5-en-20-one supplement"
+          "pregn-5-en-3\u03b2-ol-20-one supplement",
+          "3\u03b2-hydroxypregn-5-en-20-one supplement"
         ],
         "dosage_importance": 1.0
       },
