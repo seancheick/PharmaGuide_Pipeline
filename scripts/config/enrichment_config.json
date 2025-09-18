@@ -27,13 +27,13 @@
     "workflow": "1. CLEANING → 2. ENRICHMENT (this phase) → 3. SCORING → 4. DEPLOYMENT"
   },
   "enrichment_info": {
-    "version": "2.0.0",
-    "description": "Comprehensive enrichment configuration for DSLD supplement data processing",
+    "version": "2.1.0",
+    "description": "Comprehensive enrichment configuration for DSLD supplement data processing with enhanced reporting",
     "created": "2025-09-13",
+    "updated": "2025-09-16",
     "author": "Claude Code",
     "pipeline_stage": "enrichment"
   },
-
   "paths": {
     "_comment": "EDIT THESE PATHS TO POINT TO YOUR DATA",
     "input_directory": "/Users/seancheick/Downloads/dsld_clean/scripts/output_Lozenges/cleaned",
@@ -47,7 +47,6 @@
     "input_file_pattern": "*.json",
     "_pattern_help": "File pattern to match (*.json = all JSON files, cleaned_batch_*.json = specific pattern)"
   },
-
   "database_paths": {
     "absorption_enhancers": "data/absorption_enhancers.json",
     "allergens": "data/allergens.json",
@@ -68,7 +67,6 @@
     "top_manufacturers_data": "data/top_manufacturers_data.json",
     "user_goals_to_clusters": "data/user_goals_to_clusters.json"
   },
-
   "processing_config": {
     "_comment": "PERFORMANCE SETTINGS - ADJUST FOR YOUR SYSTEM",
     "batch_size": 100,
@@ -86,7 +84,6 @@
     "log_level": "INFO",
     "_level_help": "Logging level: DEBUG, INFO, WARNING, ERROR"
   },
-
   "output_structure": {
     "_comment": "OUTPUT FILE NAMING - CUSTOMIZE AS NEEDED",
     "enriched_folder": "enriched",
@@ -100,7 +97,6 @@
     "file_extension": ".json",
     "_extension_help": "File extension for output files"
   },
-
   "matching_rules": {
     "ingredient_matching": {
       "check_standard_name": true,
@@ -122,7 +118,6 @@
       "check_minimum_doses": true
     }
   },
-
   "scoring_weights": {
     "absorption_enhancers": {
       "presence_bonus": 2,
@@ -139,7 +134,7 @@
       "tier_3_bonus": 1
     },
     "banned_substances": {
-      "critical_disqualification": -100,
+      "critical_disqualification": -25,
       "high_penalty": -10,
       "moderate_penalty": -5
     },
@@ -159,7 +154,6 @@
       "moderate_penalty": -3
     }
   },
-
   "quality_thresholds": {
     "ingredient_bio_score": {
       "excellent": 90,
@@ -179,7 +173,6 @@
       "trace_multiplier": 0.3
     }
   },
-
   "safety_flags": {
     "auto_disqualify": [
       "permanently_banned",
@@ -198,7 +191,17 @@
       "immunocompromised"
     ]
   },
-
+  "reporting_config": {
+    "_comment": "ENHANCED REPORTING SETTINGS (Optional - requires enhanced_enrichment_reporter.py)",
+    "generate_detailed_reports": true,
+    "_detailed_help": "Generate comprehensive failure analysis reports (set to true to enable)",
+    "generate_human_readable": true,
+    "_human_help": "Generate markdown reports for manual review",
+    "generate_summary_reports": true,
+    "_summary_help": "Generate executive summary reports",
+    "failure_analysis_depth": "comprehensive",
+    "_depth_help": "Analysis depth: basic, standard, comprehensive"
+  },
   "enrichment_features": {
     "comprehensive_text_analysis": true,
     "cross_database_validation": true,
@@ -207,9 +210,9 @@
     "manufacturer_reputation_check": true,
     "regulatory_compliance_check": true,
     "mobile_app_data_preparation": true,
-    "scoring_system_preparation": true
+    "scoring_system_preparation": true,
+    "enhanced_reporting": true
   },
-
   "options": {
     "_comment": "PROCESSING OPTIONS - CONTROLS OVERWRITE BEHAVIOR",
     "overwrite_existing": true,

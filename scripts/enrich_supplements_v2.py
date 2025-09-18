@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-DSLD Supplement Enrichment System v2.0.0
-Streamlined enrichment focused on scoring preparation
+DSLD Supplement Enrichment System v2.1.0
+Streamlined enrichment focused on scoring preparation with enhanced reporting
 """
 
 import json
@@ -16,6 +16,13 @@ from pathlib import Path
 import traceback
 from fuzzywuzzy import fuzz
 
+# Import enhanced reporter (optional - will work without it)
+try:
+    from enhanced_enrichment_reporter import EnrichmentReporter
+    ENHANCED_REPORTING_AVAILABLE = True
+except ImportError:
+    ENHANCED_REPORTING_AVAILABLE = False
+
 class SupplementEnricherV2:
     def __init__(self, config_path: str = "config/enrichment_config.json"):
         """Initialize enrichment system with configuration"""
@@ -25,6 +32,10 @@ class SupplementEnricherV2:
         self.config = self._load_config(config_path)
         self._compile_patterns()
         self._load_all_databases()
+        
+        # Initialize enhanced reporter if available
+        self.reporter = None
+        self.enhanced_reporting = ENHANCED_REPORTING_AVAILABLE and self.config.get('reporting_config', {}).get('generate_detailed_reports', False)
         
     def _setup_logging(self):
         """Setup logging configuration"""
@@ -197,7 +208,7 @@ class SupplementEnricherV2:
             # Initialize enriched structure
             enriched = {
                 "id": product_data.get("id", ""),
-                "enrichment_version": "2.0.0",
+                "enrichment_version": "2.1.0",
                 "compatible_scoring_versions": ["2.1.0", "2.1.1"],
                 "enriched_date": datetime.utcnow().isoformat() + "Z",
                 "form_quality_mapping": [],
@@ -423,15 +434,62 @@ class SupplementEnricherV2:
         return quality_mapping
 
     def _get_category_weight(self, category: str) -> float:
-        """Get category weight for ingredient"""
+        """Get category weight for ingredient based on scoring system"""
         weights = {
+            # Primary therapeutic value (1.0)
             'vitamin': 1.0,
+            'vitamins': 1.0,
             'mineral': 1.0,
+            'minerals': 1.0,
+            'fatty_acids': 1.0,
+            'fatty_acid': 1.0,
+            'fat': 1.0,
+            'fats': 1.0,
+            
+            # Secondary therapeutic value (0.8)
+            'botanicals': 0.8,
+            'botanical': 0.8,
+            'botanical_ingredients': 0.8,
             'herb': 0.8,
-            'amino_acid': 0.9,
-            'other': 0.7
+            'herbs': 0.8,
+            
+            # Amino acids and derivatives (0.7)
+            'amino_acids': 0.7,
+            'amino_acid': 0.7,
+            
+            # Antioxidants (0.7)
+            'antioxidants': 0.7,
+            'antioxidant': 0.7,
+            
+            # Probiotics (0.9)
+            'probiotics': 0.9,
+            'probiotic': 0.9,
+            'bacteria': 0.9,  # From cleaned data
+            
+            # Enzymes (0.6)
+            'enzymes': 0.6,
+            'enzyme': 0.6,
+            
+            # Specialized categories
+            'nutraceuticals': 0.8,
+            'metabolic_support': 0.7,
+            'fibers': 0.6,
+            'standardization_marker': 0.5,
+            
+            # Mixed/blend categories
+            'blend': 0.6,
+            
+            # No therapeutic value (0.0)
+            'excipients': 0.0,
+            'excipient': 0.0,
+            'nutritional_info': 0.0,
+            'non-nutrient/non-botanical': 0.0,
+            
+            # Default categories
+            'other': 0.7,
+            'unmapped': 0.5
         }
-        return weights.get(category.lower(), 1.0)
+        return weights.get(category.lower(), 0.7)
 
     def _calculate_quality_analysis(self, quality_mapping: List[Dict]) -> Dict:
         """Calculate ingredient quality analysis summary"""
@@ -651,7 +709,7 @@ class SupplementEnricherV2:
                 
                 detected_clusters.append({
                     "cluster_name": cluster.get('name', ''),
-                    "cluster_id": cluster.get('id', ''),
+                    "cluster_id": cluster.get('id', cluster.get('name', '').lower().replace(' ', '_')),
                     "matched_ingredients": matched_ingredients,
                     "synergy_points": points,
                     "all_doses_adequate": all_meet_dose
@@ -693,7 +751,7 @@ class SupplementEnricherV2:
                     
                     standardized_botanicals.append({
                         "ingredient": ingredient_name,
-                        "botanical_id": botanical.get('id', ''),
+                        "botanical_id": botanical.get('id', botanical.get('standard_name', '').lower().replace(' ', '_')),
                         "standardization_percentage": percentage,
                         "marker_compounds": botanical.get('markers', []),
                         "points": points
@@ -968,9 +1026,13 @@ class SupplementEnricherV2:
         }
 
     def _analyze_rda_ul(self, ingredients: List[Dict]) -> Dict:
-        """Analyze RDA/UL references for ingredients"""
+        """Analyze UL (Upper Limit) references for safety checking - no RDA calculations"""
         rda_data = self.databases.get('rda_optimal_uls', {})
+        therapeutic_data = self.databases.get('rda_therapeutic_dosing', {})
+        
         recommendations = rda_data.get('nutrient_recommendations', [])
+        therapeutic_dosing = therapeutic_data.get('therapeutic_dosing', [])
+        
         references = {}
         
         for ingredient in ingredients:
@@ -978,36 +1040,84 @@ class SupplementEnricherV2:
             quantity = ingredient.get('quantity', 0)
             unit = ingredient.get('unit', '')
             
+            # Ensure quantity is numeric
+            try:
+                quantity_num = float(quantity) if quantity else 0
+            except (ValueError, TypeError):
+                quantity_num = 0
+            
+            found_reference = False
+            
+            # First, try to find in main RDA/UL database
             for rda_item in recommendations:
                 if self._exact_ingredient_match(standard_name, rda_item.get('standard_name', ''), rda_item.get('aliases', [])):
-                    # Get adult male/female RDA values (19-30 age group)
-                    data = rda_item.get('data', [])
-                    rda_adult_male = 0
-                    rda_adult_female = 0
-                    ul_value = None
+                    # Get UL value from highest_ul field
+                    highest_ul = rda_item.get('highest_ul', None)
                     
-                    for data_point in data:
-                        if data_point.get('group') == 'Male' and data_point.get('age_range') == '19-30':
-                            rda_adult_male = data_point.get('rda_ai', 0)
-                            ul_value = data_point.get('ul')
-                        elif data_point.get('group') == 'Female' and data_point.get('age_range') == '19-30':
-                            rda_adult_female = data_point.get('rda_ai', 0)
+                    # Handle "none" string values (some nutrients have no established UL)
+                    if highest_ul == "none":
+                        highest_ul = None
+                    elif isinstance(highest_ul, str):
+                        try:
+                            highest_ul = float(highest_ul)
+                        except (ValueError, TypeError):
+                            highest_ul = None
                     
-                    # Calculate percentage RDA (using higher of male/female)
-                    rda_reference = max(rda_adult_male, rda_adult_female)
-                    percent_rda = (quantity / rda_reference * 100) if rda_reference > 0 else 0
+                    # Check if amount exceeds UL (for safety penalty)
+                    exceeds_ul = False
+                    if highest_ul is not None and quantity_num > 0:
+                        exceeds_ul = quantity_num > highest_ul
                     
                     references[standard_name.replace(' ', '_').lower()] = {
-                        "rda_adult_male": rda_adult_male,
-                        "rda_adult_female": rda_adult_female,
-                        "ul": ul_value,
+                        "standard_name": standard_name,
+                        "product_amount": quantity_num,
+                        "product_unit": unit,
+                        "reference_unit": rda_item.get('unit', ''),
+                        "ul_value": highest_ul,
+                        "exceeds_ul": exceeds_ul,
                         "optimal_range": rda_item.get('optimal_range', ''),
                         "therapeutic_range": rda_item.get('therapeutic_range', ''),
-                        "unit": unit,
-                        "product_amount": quantity,
-                        "percent_rda": round(percent_rda) if percent_rda else 0
+                        "warnings": rda_item.get('warnings', []),
+                        "toxicity_symptoms": rda_item.get('toxicity_symptoms', []),
+                        "data_source": "rda_optimal_uls"
                     }
+                    found_reference = True
                     break
+            
+            # If not found in main RDA database, check therapeutic dosing database
+            if not found_reference:
+                for therapeutic_item in therapeutic_dosing:
+                    if self._exact_ingredient_match(standard_name, therapeutic_item.get('standard_name', ''), therapeutic_item.get('aliases', [])):
+                        # Get upper_limit from therapeutic dosing
+                        upper_limit_str = therapeutic_item.get('upper_limit', '')
+                        upper_limit = None
+                        
+                        try:
+                            upper_limit = float(upper_limit_str) if upper_limit_str else None
+                        except (ValueError, TypeError):
+                            upper_limit = None
+                        
+                        # Check if amount exceeds therapeutic upper limit
+                        exceeds_ul = False
+                        if upper_limit is not None and quantity_num > 0:
+                            exceeds_ul = quantity_num > upper_limit
+                        
+                        references[standard_name.replace(' ', '_').lower()] = {
+                            "standard_name": standard_name,
+                            "product_amount": quantity_num,
+                            "product_unit": unit,
+                            "reference_unit": therapeutic_item.get('unit', ''),
+                            "ul_value": upper_limit,
+                            "exceeds_ul": exceeds_ul,
+                            "typical_dosing_range": therapeutic_item.get('typical_dosing_range', ''),
+                            "common_serving_size": therapeutic_item.get('common_serving_size', ''),
+                            "upper_limit_notes": therapeutic_item.get('upper_limit_notes', ''),
+                            "common_use": therapeutic_item.get('common_use', ''),
+                            "evidence_tier": therapeutic_item.get('evidence_tier', ''),
+                            "data_source": "rda_therapeutic_dosing"
+                        }
+                        found_reference = True
+                        break
         
         return references
 
@@ -1074,7 +1184,7 @@ class SupplementEnricherV2:
         
         # Check allergens with negation detection
         allergen_db = self.databases.get('allergens', {})
-        allergen_items = allergen_db.get('allergens', [])
+        allergen_items = allergen_db.get('allergens', allergen_db.get('common_allergens', []))
         
         for ingredient in all_ingredients:
             ingredient_name = ingredient.get('name', '')
@@ -1393,7 +1503,7 @@ class SupplementEnricherV2:
                 "a3_enhanced_delivery": a3_enhanced_delivery,
                 "a3_synergy": a3_synergy,
                 "a3_subtotal": a3_subtotal,
-                "total": round(section_a_total, 2),
+                "total": round(section_a_capped, 2),  # Use capped value for consistency
                 "capped": round(section_a_capped, 2)
             },
             "section_b": {
@@ -1429,8 +1539,13 @@ class SupplementEnricherV2:
         }
 
     def process_batch(self, input_file: str, output_dir: str) -> Dict:
-        """Process a batch of products"""
+        """Process a batch of products with optional enhanced reporting"""
         try:
+            # Initialize enhanced reporter if enabled
+            if self.enhanced_reporting and not self.reporter:
+                self.reporter = EnrichmentReporter(output_dir)
+                self.reporter.start_processing()
+            
             # Load input data
             with open(input_file, 'r', encoding='utf-8') as f:
                 products = json.load(f)
@@ -1443,6 +1558,10 @@ class SupplementEnricherV2:
             enriched_products = []
             review_products = []
             
+            # Update total processed count for enhanced reporting
+            if self.reporter:
+                self.reporter.update_total_processed(len(products))
+            
             for product in products:
                 product_id = product.get('id', 'unknown')
                 product_name = product.get('fullName', 'Unknown Product')
@@ -1453,7 +1572,20 @@ class SupplementEnricherV2:
                 
                 if enriched and not issues:
                     enriched_products.append(enriched)
+                    # Record success for enhanced reporting
+                    if self.reporter:
+                        self.reporter.record_success(product, enriched)
                 else:
+                    # Enhanced failure recording if available
+                    if self.reporter:
+                        error_message = "; ".join(issues) if issues else "Unknown enrichment failure"
+                        self.reporter.record_failure(
+                            product_data=product,
+                            error_message=error_message,
+                            enriched_data=enriched,
+                            source_file=os.path.basename(input_file)
+                        )
+                    
                     review_products.append({
                         "product": enriched or product,
                         "issues": issues,
@@ -1590,6 +1722,12 @@ def main():
             "products_needing_review": 0
         }
         
+        # Initialize global enhanced reporter if enabled
+        if enricher.enhanced_reporting:
+            global_reporter = EnrichmentReporter(output_base)
+            global_reporter.start_processing()
+            enricher.reporter = global_reporter
+        
         for input_file in input_files:
             enricher.logger.info(f"Processing file: {os.path.basename(input_file)}")
             batch_stats = enricher.process_batch(input_file, output_base)
@@ -1597,6 +1735,12 @@ def main():
             # Accumulate stats
             for key in total_stats:
                 total_stats[key] += batch_stats.get(key, 0)
+        
+        # Generate enhanced reports if enabled
+        report_files = {}
+        if enricher.enhanced_reporting and enricher.reporter:
+            enricher.logger.info("Generating enhanced reports...")
+            report_files = enricher.reporter.generate_all_reports()
         
         # Final summary
         end_time = datetime.utcnow()
@@ -1609,20 +1753,27 @@ def main():
         enricher.logger.info(f"Success rate: {overall_success_rate:.1f}%")
         enricher.logger.info(f"Total processing time: {processing_time:.2f} seconds")
         
+        # Log enhanced report locations if generated
+        if report_files:
+            enricher.logger.info("\nGenerated Enhanced Reports:")
+            for report_type, file_path in report_files.items():
+                enricher.logger.info(f"- {report_type.replace('_', ' ').title()}: {file_path}")
+        
         # Save final summary
         summary = {
             "overall_processing": {
                 "total_files_processed": len(input_files),
                 "total_processing_time_seconds": round(processing_time, 2),
                 "processing_timestamp": end_time.isoformat() + "Z",
-                "enrichment_version": "2.0.0"
+                "enrichment_version": "2.1.0"
             },
             "aggregate_stats": {
                 "total_products_processed": total_stats["total_products"],
                 "successful_enrichments": total_stats["successful_enrichments"],
                 "failed_enrichments": total_stats["products_needing_review"],
                 "overall_success_rate": round(overall_success_rate, 1)
-            }
+            },
+            "enhanced_reports": report_files if report_files else None
         }
         
         summary_file = os.path.join(output_base, "reports", f"enrichment_final_summary_{datetime.utcnow().strftime('%Y%m%d_%H%M%S')}.json")

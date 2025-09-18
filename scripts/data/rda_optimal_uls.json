@@ -5,7 +5,13 @@
     "total_nutrients": 28,
     "data_source": "Institute of Medicine (IOM) Dietary Reference Intakes, FDA, USDA, Clinical Research",
     "country": "USA",
-    "age_brackets": ["14-18", "19-30", "31-50", "51-70", "71+"],
+    "age_brackets": [
+      "14-18",
+      "19-30",
+      "31-50",
+      "51-70",
+      "71+"
+    ],
     "units_verified": true,
     "notes": "All values are US RDA/AI and UL. Optimal ranges based on clinical research for therapeutic supplementation. Conditionally essential nutrients flagged for special populations."
   },
@@ -26,18 +32,72 @@
         "Dry skin",
         "Frequent infections"
       ],
-      "toxicity_symptoms": ["Liver damage", "Bone pain", "Birth defects"],
+      "toxicity_symptoms": [
+        "Liver damage",
+        "Bone pain",
+        "Birth defects"
+      ],
       "data": [
-        { "group": "Male", "age_range": "14-18", "rda_ai": 900, "ul": 2800 },
-        { "group": "Male", "age_range": "19-30", "rda_ai": 900, "ul": 3000 },
-        { "group": "Male", "age_range": "31-50", "rda_ai": 900, "ul": 3000 },
-        { "group": "Male", "age_range": "51-70", "rda_ai": 900, "ul": 3000 },
-        { "group": "Male", "age_range": "71+", "rda_ai": 900, "ul": 3000 },
-        { "group": "Female", "age_range": "14-18", "rda_ai": 700, "ul": 2800 },
-        { "group": "Female", "age_range": "19-30", "rda_ai": 700, "ul": 3000 },
-        { "group": "Female", "age_range": "31-50", "rda_ai": 700, "ul": 3000 },
-        { "group": "Female", "age_range": "51-70", "rda_ai": 700, "ul": 3000 },
-        { "group": "Female", "age_range": "71+", "rda_ai": 700, "ul": 3000 },
+        {
+          "group": "Male",
+          "age_range": "14-18",
+          "rda_ai": 900,
+          "ul": 2800
+        },
+        {
+          "group": "Male",
+          "age_range": "19-30",
+          "rda_ai": 900,
+          "ul": 3000
+        },
+        {
+          "group": "Male",
+          "age_range": "31-50",
+          "rda_ai": 900,
+          "ul": 3000
+        },
+        {
+          "group": "Male",
+          "age_range": "51-70",
+          "rda_ai": 900,
+          "ul": 3000
+        },
+        {
+          "group": "Male",
+          "age_range": "71+",
+          "rda_ai": 900,
+          "ul": 3000
+        },
+        {
+          "group": "Female",
+          "age_range": "14-18",
+          "rda_ai": 700,
+          "ul": 2800
+        },
+        {
+          "group": "Female",
+          "age_range": "19-30",
+          "rda_ai": 700,
+          "ul": 3000
+        },
+        {
+          "group": "Female",
+          "age_range": "31-50",
+          "rda_ai": 700,
+          "ul": 3000
+        },
+        {
+          "group": "Female",
+          "age_range": "51-70",
+          "rda_ai": 700,
+          "ul": 3000
+        },
+        {
+          "group": "Female",
+          "age_range": "71+",
+          "rda_ai": 700,
+          "ul": 3000
+        },
         {
           "group": "Pregnancy",
           "age_range": "14-18",
@@ -94,22 +154,76 @@
         "Poor wound healing",
         "Scurvy"
       ],
-      "toxicity_symptoms": ["Diarrhea", "Nausea", "Kidney stones"],
+      "toxicity_symptoms": [
+        "Diarrhea",
+        "Nausea",
+        "Kidney stones"
+      ],
       "interaction_warnings": [
         "Enhances iron absorption",
         "May interfere with copper absorption at high doses"
       ],
       "data": [
-        { "group": "Male", "age_range": "14-18", "rda_ai": 75, "ul": 1800 },
-        { "group": "Male", "age_range": "19-30", "rda_ai": 90, "ul": 2000 },
-        { "group": "Male", "age_range": "31-50", "rda_ai": 90, "ul": 2000 },
-        { "group": "Male", "age_range": "51-70", "rda_ai": 90, "ul": 2000 },
-        { "group": "Male", "age_range": "71+", "rda_ai": 90, "ul": 2000 },
-        { "group": "Female", "age_range": "14-18", "rda_ai": 65, "ul": 1800 },
-        { "group": "Female", "age_range": "19-30", "rda_ai": 75, "ul": 2000 },
-        { "group": "Female", "age_range": "31-50", "rda_ai": 75, "ul": 2000 },
-        { "group": "Female", "age_range": "51-70", "rda_ai": 75, "ul": 2000 },
-        { "group": "Female", "age_range": "71+", "rda_ai": 75, "ul": 2000 },
+        {
+          "group": "Male",
+          "age_range": "14-18",
+          "rda_ai": 75,
+          "ul": 1800
+        },
+        {
+          "group": "Male",
+          "age_range": "19-30",
+          "rda_ai": 90,
+          "ul": 2000
+        },
+        {
+          "group": "Male",
+          "age_range": "31-50",
+          "rda_ai": 90,
+          "ul": 2000
+        },
+        {
+          "group": "Male",
+          "age_range": "51-70",
+          "rda_ai": 90,
+          "ul": 2000
+        },
+        {
+          "group": "Male",
+          "age_range": "71+",
+          "rda_ai": 90,
+          "ul": 2000
+        },
+        {
+          "group": "Female",
+          "age_range": "14-18",
+          "rda_ai": 65,
+          "ul": 1800
+        },
+        {
+          "group": "Female",
+          "age_range": "19-30",
+          "rda_ai": 75,
+          "ul": 2000
+        },
+        {
+          "group": "Female",
+          "age_range": "31-50",
+          "rda_ai": 75,
+          "ul": 2000
+        },
+        {
+          "group": "Female",
+          "age_range": "51-70",
+          "rda_ai": 75,
+          "ul": 2000
+        },
+        {
+          "group": "Female",
+          "age_range": "71+",
+          "rda_ai": 75,
+          "ul": 2000
+        },
         {
           "group": "Pregnancy",
           "age_range": "14-18",
@@ -164,28 +278,112 @@
         "Muscle weakness",
         "Increased infection risk"
       ],
-      "toxicity_symptoms": ["Hypercalcemia", "Kidney stones", "Nausea"],
+      "toxicity_symptoms": [
+        "Hypercalcemia",
+        "Kidney stones",
+        "Nausea"
+      ],
       "interaction_warnings": [
         "Increases calcium absorption",
         "May interact with thiazide diuretics"
       ],
       "data": [
-        { "group": "Male", "age_range": "14-18", "rda_ai": 15, "ul": 100 },
-        { "group": "Male", "age_range": "19-30", "rda_ai": 15, "ul": 100 },
-        { "group": "Male", "age_range": "31-50", "rda_ai": 15, "ul": 100 },
-        { "group": "Male", "age_range": "51-70", "rda_ai": 15, "ul": 100 },
-        { "group": "Male", "age_range": "71+", "rda_ai": 20, "ul": 100 },
-        { "group": "Female", "age_range": "14-18", "rda_ai": 15, "ul": 100 },
-        { "group": "Female", "age_range": "19-30", "rda_ai": 15, "ul": 100 },
-        { "group": "Female", "age_range": "31-50", "rda_ai": 15, "ul": 100 },
-        { "group": "Female", "age_range": "51-70", "rda_ai": 15, "ul": 100 },
-        { "group": "Female", "age_range": "71+", "rda_ai": 20, "ul": 100 },
-        { "group": "Pregnancy", "age_range": "14-18", "rda_ai": 15, "ul": 100 },
-        { "group": "Pregnancy", "age_range": "19-30", "rda_ai": 15, "ul": 100 },
-        { "group": "Pregnancy", "age_range": "31-50", "rda_ai": 15, "ul": 100 },
-        { "group": "Lactation", "age_range": "14-18", "rda_ai": 15, "ul": 100 },
-        { "group": "Lactation", "age_range": "19-30", "rda_ai": 15, "ul": 100 },
-        { "group": "Lactation", "age_range": "31-50", "rda_ai": 15, "ul": 100 }
+        {
+          "group": "Male",
+          "age_range": "14-18",
+          "rda_ai": 15,
+          "ul": 100
+        },
+        {
+          "group": "Male",
+          "age_range": "19-30",
+          "rda_ai": 15,
+          "ul": 100
+        },
+        {
+          "group": "Male",
+          "age_range": "31-50",
+          "rda_ai": 15,
+          "ul": 100
+        },
+        {
+          "group": "Male",
+          "age_range": "51-70",
+          "rda_ai": 15,
+          "ul": 100
+        },
+        {
+          "group": "Male",
+          "age_range": "71+",
+          "rda_ai": 20,
+          "ul": 100
+        },
+        {
+          "group": "Female",
+          "age_range": "14-18",
+          "rda_ai": 15,
+          "ul": 100
+        },
+        {
+          "group": "Female",
+          "age_range": "19-30",
+          "rda_ai": 15,
+          "ul": 100
+        },
+        {
+          "group": "Female",
+          "age_range": "31-50",
+          "rda_ai": 15,
+          "ul": 100
+        },
+        {
+          "group": "Female",
+          "age_range": "51-70",
+          "rda_ai": 15,
+          "ul": 100
+        },
+        {
+          "group": "Female",
+          "age_range": "71+",
+          "rda_ai": 20,
+          "ul": 100
+        },
+        {
+          "group": "Pregnancy",
+          "age_range": "14-18",
+          "rda_ai": 15,
+          "ul": 100
+        },
+        {
+          "group": "Pregnancy",
+          "age_range": "19-30",
+          "rda_ai": 15,
+          "ul": 100
+        },
+        {
+          "group": "Pregnancy",
+          "age_range": "31-50",
+          "rda_ai": 15,
+          "ul": 100
+        },
+        {
+          "group": "Lactation",
+          "age_range": "14-18",
+          "rda_ai": 15,
+          "ul": 100
+        },
+        {
+          "group": "Lactation",
+          "age_range": "19-30",
+          "rda_ai": 15,
+          "ul": 100
+        },
+        {
+          "group": "Lactation",
+          "age_range": "31-50",
+          "rda_ai": 15,
+          "ul": 100
+        }
       ]
     },
     {
@@ -204,23 +402,82 @@
         "Vision problems",
         "Immune dysfunction"
       ],
-      "toxicity_symptoms": ["Increased bleeding", "Muscle weakness", "Fatigue"],
+      "toxicity_symptoms": [
+        "Increased bleeding",
+        "Muscle weakness",
+        "Fatigue"
+      ],
       "interaction_warnings": [
         "May enhance warfarin effects",
         "Can reduce vitamin K absorption"
       ],
       "data": [
-        { "group": "Male", "age_range": "14-18", "rda_ai": 15, "ul": 800 },
-        { "group": "Male", "age_range": "19-30", "rda_ai": 15, "ul": 1000 },
-        { "group": "Male", "age_range": "31-50", "rda_ai": 15, "ul": 1000 },
-        { "group": "Male", "age_range": "51-70", "rda_ai": 15, "ul": 1000 },
-        { "group": "Male", "age_range": "71+", "rda_ai": 15, "ul": 1000 },
-        { "group": "Female", "age_range": "14-18", "rda_ai": 15, "ul": 800 },
-        { "group": "Female", "age_range": "19-30", "rda_ai": 15, "ul": 1000 },
-        { "group": "Female", "age_range": "31-50", "rda_ai": 15, "ul": 1000 },
-        { "group": "Female", "age_range": "51-70", "rda_ai": 15, "ul": 1000 },
-        { "group": "Female", "age_range": "71+", "rda_ai": 15, "ul": 1000 },
-        { "group": "Pregnancy", "age_range": "14-18", "rda_ai": 15, "ul": 800 },
+        {
+          "group": "Male",
+          "age_range": "14-18",
+          "rda_ai": 15,
+          "ul": 800
+        },
+        {
+          "group": "Male",
+          "age_range": "19-30",
+          "rda_ai": 15,
+          "ul": 1000
+        },
+        {
+          "group": "Male",
+          "age_range": "31-50",
+          "rda_ai": 15,
+          "ul": 1000
+        },
+        {
+          "group": "Male",
+          "age_range": "51-70",
+          "rda_ai": 15,
+          "ul": 1000
+        },
+        {
+          "group": "Male",
+          "age_range": "71+",
+          "rda_ai": 15,
+          "ul": 1000
+        },
+        {
+          "group": "Female",
+          "age_range": "14-18",
+          "rda_ai": 15,
+          "ul": 800
+        },
+        {
+          "group": "Female",
+          "age_range": "19-30",
+          "rda_ai": 15,
+          "ul": 1000
+        },
+        {
+          "group": "Female",
+          "age_range": "31-50",
+          "rda_ai": 15,
+          "ul": 1000
+        },
+        {
+          "group": "Female",
+          "age_range": "51-70",
+          "rda_ai": 15,
+          "ul": 1000
+        },
+        {
+          "group": "Female",
+          "age_range": "71+",
+          "rda_ai": 15,
+          "ul": 1000
+        },
+        {
+          "group": "Pregnancy",
+          "age_range": "14-18",
+          "rda_ai": 15,
+          "ul": 800
+        },
         {
           "group": "Pregnancy",
           "age_range": "19-30",
@@ -233,14 +490,24 @@
           "rda_ai": 15,
           "ul": 1000
         },
-        { "group": "Lactation", "age_range": "14-18", "rda_ai": 19, "ul": 800 },
+        {
+          "group": "Lactation",
+          "age_range": "14-18",
+          "rda_ai": 19,
+          "ul": 800
+        },
         {
           "group": "Lactation",
           "age_range": "19-30",
           "rda_ai": 19,
           "ul": 1000
         },
-        { "group": "Lactation", "age_range": "31-50", "rda_ai": 19, "ul": 1000 }
+        {
+          "group": "Lactation",
+          "age_range": "31-50",
+          "rda_ai": 19,
+          "ul": 1000
+        }
       ]
     },
     {
@@ -260,22 +527,74 @@
         "Excessive bleeding",
         "Weak bones"
       ],
-      "toxicity_symptoms": ["No known toxicity from natural forms"],
+      "toxicity_symptoms": [
+        "No known toxicity from natural forms"
+      ],
       "interaction_warnings": [
         "Antagonizes warfarin effects",
         "High-dose vitamin E may interfere"
       ],
       "data": [
-        { "group": "Male", "age_range": "14-18", "rda_ai": 75, "ul": "ND" },
-        { "group": "Male", "age_range": "19-30", "rda_ai": 120, "ul": "ND" },
-        { "group": "Male", "age_range": "31-50", "rda_ai": 120, "ul": "ND" },
-        { "group": "Male", "age_range": "51-70", "rda_ai": 120, "ul": "ND" },
-        { "group": "Male", "age_range": "71+", "rda_ai": 120, "ul": "ND" },
-        { "group": "Female", "age_range": "14-18", "rda_ai": 75, "ul": "ND" },
-        { "group": "Female", "age_range": "19-30", "rda_ai": 90, "ul": "ND" },
-        { "group": "Female", "age_range": "31-50", "rda_ai": 90, "ul": "ND" },
-        { "group": "Female", "age_range": "51-70", "rda_ai": 90, "ul": "ND" },
-        { "group": "Female", "age_range": "71+", "rda_ai": 90, "ul": "ND" },
+        {
+          "group": "Male",
+          "age_range": "14-18",
+          "rda_ai": 75,
+          "ul": "ND"
+        },
+        {
+          "group": "Male",
+          "age_range": "19-30",
+          "rda_ai": 120,
+          "ul": "ND"
+        },
+        {
+          "group": "Male",
+          "age_range": "31-50",
+          "rda_ai": 120,
+          "ul": "ND"
+        },
+        {
+          "group": "Male",
+          "age_range": "51-70",
+          "rda_ai": 120,
+          "ul": "ND"
+        },
+        {
+          "group": "Male",
+          "age_range": "71+",
+          "rda_ai": 120,
+          "ul": "ND"
+        },
+        {
+          "group": "Female",
+          "age_range": "14-18",
+          "rda_ai": 75,
+          "ul": "ND"
+        },
+        {
+          "group": "Female",
+          "age_range": "19-30",
+          "rda_ai": 90,
+          "ul": "ND"
+        },
+        {
+          "group": "Female",
+          "age_range": "31-50",
+          "rda_ai": 90,
+          "ul": "ND"
+        },
+        {
+          "group": "Female",
+          "age_range": "51-70",
+          "rda_ai": 90,
+          "ul": "ND"
+        },
+        {
+          "group": "Female",
+          "age_range": "71+",
+          "rda_ai": 90,
+          "ul": "ND"
+        },
         {
           "group": "Pregnancy",
           "age_range": "14-18",
@@ -306,7 +625,12 @@
           "rda_ai": 90,
           "ul": "ND"
         },
-        { "group": "Lactation", "age_range": "31-50", "rda_ai": 90, "ul": "ND" }
+        {
+          "group": "Lactation",
+          "age_range": "31-50",
+          "rda_ai": 90,
+          "ul": "ND"
+        }
       ]
     },
     {
@@ -316,7 +640,9 @@
       "ul_note": "No UL established due to lack of observed adverse effects",
       "optimal_range": "1.2-100",
       "highest_ul": "none",
-      "warnings": ["Large doses may cause fatigue or irritability"],
+      "warnings": [
+        "Large doses may cause fatigue or irritability"
+      ],
       "special_considerations": "Alcoholics and elderly may need higher doses",
       "deficiency_symptoms": [
         "Fatigue",
@@ -324,18 +650,70 @@
         "Confusion",
         "Beriberi"
       ],
-      "toxicity_symptoms": ["No known toxicity from oral supplements"],
+      "toxicity_symptoms": [
+        "No known toxicity from oral supplements"
+      ],
       "data": [
-        { "group": "Male", "age_range": "14-18", "rda_ai": 1.2, "ul": "ND" },
-        { "group": "Male", "age_range": "19-30", "rda_ai": 1.2, "ul": "ND" },
-        { "group": "Male", "age_range": "31-50", "rda_ai": 1.2, "ul": "ND" },
-        { "group": "Male", "age_range": "51-70", "rda_ai": 1.2, "ul": "ND" },
-        { "group": "Male", "age_range": "71+", "rda_ai": 1.2, "ul": "ND" },
-        { "group": "Female", "age_range": "14-18", "rda_ai": 1.0, "ul": "ND" },
-        { "group": "Female", "age_range": "19-30", "rda_ai": 1.1, "ul": "ND" },
-        { "group": "Female", "age_range": "31-50", "rda_ai": 1.1, "ul": "ND" },
-        { "group": "Female", "age_range": "51-70", "rda_ai": 1.1, "ul": "ND" },
-        { "group": "Female", "age_range": "71+", "rda_ai": 1.1, "ul": "ND" },
+        {
+          "group": "Male",
+          "age_range": "14-18",
+          "rda_ai": 1.2,
+          "ul": "ND"
+        },
+        {
+          "group": "Male",
+          "age_range": "19-30",
+          "rda_ai": 1.2,
+          "ul": "ND"
+        },
+        {
+          "group": "Male",
+          "age_range": "31-50",
+          "rda_ai": 1.2,
+          "ul": "ND"
+        },
+        {
+          "group": "Male",
+          "age_range": "51-70",
+          "rda_ai": 1.2,
+          "ul": "ND"
+        },
+        {
+          "group": "Male",
+          "age_range": "71+",
+          "rda_ai": 1.2,
+          "ul": "ND"
+        },
+        {
+          "group": "Female",
+          "age_range": "14-18",
+          "rda_ai": 1.0,
+          "ul": "ND"
+        },
+        {
+          "group": "Female",
+          "age_range": "19-30",
+          "rda_ai": 1.1,
+          "ul": "ND"
+        },
+        {
+          "group": "Female",
+          "age_range": "31-50",
+          "rda_ai": 1.1,
+          "ul": "ND"
+        },
+        {
+          "group": "Female",
+          "age_range": "51-70",
+          "rda_ai": 1.1,
+          "ul": "ND"
+        },
+        {
+          "group": "Female",
+          "age_range": "71+",
+          "rda_ai": 1.1,
+          "ul": "ND"
+        },
         {
           "group": "Pregnancy",
           "age_range": "14-18",
@@ -381,21 +759,79 @@
       "ul_note": "No UL established due to lack of observed adverse effects",
       "optimal_range": "1.3-400",
       "highest_ul": "none",
-      "warnings": ["High doses may cause bright yellow urine (harmless)"],
+      "warnings": [
+        "High doses may cause bright yellow urine (harmless)"
+      ],
       "special_considerations": "Athletes and elderly may need higher doses",
-      "deficiency_symptoms": ["Sore throat", "Skin disorders", "Fatigue"],
-      "toxicity_symptoms": ["No known toxicity from oral supplements"],
+      "deficiency_symptoms": [
+        "Sore throat",
+        "Skin disorders",
+        "Fatigue"
+      ],
+      "toxicity_symptoms": [
+        "No known toxicity from oral supplements"
+      ],
       "data": [
-        { "group": "Male", "age_range": "14-18", "rda_ai": 1.3, "ul": "ND" },
-        { "group": "Male", "age_range": "19-30", "rda_ai": 1.3, "ul": "ND" },
-        { "group": "Male", "age_range": "31-50", "rda_ai": 1.3, "ul": "ND" },
-        { "group": "Male", "age_range": "51-70", "rda_ai": 1.3, "ul": "ND" },
-        { "group": "Male", "age_range": "71+", "rda_ai": 1.3, "ul": "ND" },
-        { "group": "Female", "age_range": "14-18", "rda_ai": 1.0, "ul": "ND" },
-        { "group": "Female", "age_range": "19-30", "rda_ai": 1.1, "ul": "ND" },
-        { "group": "Female", "age_range": "31-50", "rda_ai": 1.1, "ul": "ND" },
-        { "group": "Female", "age_range": "51-70", "rda_ai": 1.1, "ul": "ND" },
-        { "group": "Female", "age_range": "71+", "rda_ai": 1.1, "ul": "ND" },
+        {
+          "group": "Male",
+          "age_range": "14-18",
+          "rda_ai": 1.3,
+          "ul": "ND"
+        },
+        {
+          "group": "Male",
+          "age_range": "19-30",
+          "rda_ai": 1.3,
+          "ul": "ND"
+        },
+        {
+          "group": "Male",
+          "age_range": "31-50",
+          "rda_ai": 1.3,
+          "ul": "ND"
+        },
+        {
+          "group": "Male",
+          "age_range": "51-70",
+          "rda_ai": 1.3,
+          "ul": "ND"
+        },
+        {
+          "group": "Male",
+          "age_range": "71+",
+          "rda_ai": 1.3,
+          "ul": "ND"
+        },
+        {
+          "group": "Female",
+          "age_range": "14-18",
+          "rda_ai": 1.0,
+          "ul": "ND"
+        },
+        {
+          "group": "Female",
+          "age_range": "19-30",
+          "rda_ai": 1.1,
+          "ul": "ND"
+        },
+        {
+          "group": "Female",
+          "age_range": "31-50",
+          "rda_ai": 1.1,
+          "ul": "ND"
+        },
+        {
+          "group": "Female",
+          "age_range": "51-70",
+          "rda_ai": 1.1,
+          "ul": "ND"
+        },
+        {
+          "group": "Female",
+          "age_range": "71+",
+          "rda_ai": 1.1,
+          "ul": "ND"
+        },
         {
           "group": "Pregnancy",
           "age_range": "14-18",
@@ -451,28 +887,112 @@
         "Digestive issues",
         "Pellagra"
       ],
-      "toxicity_symptoms": ["Flushing", "Liver damage", "Glucose intolerance"],
+      "toxicity_symptoms": [
+        "Flushing",
+        "Liver damage",
+        "Glucose intolerance"
+      ],
       "interaction_warnings": [
         "May interact with diabetes medications",
         "Can affect cholesterol medications"
       ],
       "data": [
-        { "group": "Male", "age_range": "14-18", "rda_ai": 16, "ul": 30 },
-        { "group": "Male", "age_range": "19-30", "rda_ai": 16, "ul": 35 },
-        { "group": "Male", "age_range": "31-50", "rda_ai": 16, "ul": 35 },
-        { "group": "Male", "age_range": "51-70", "rda_ai": 16, "ul": 35 },
-        { "group": "Male", "age_range": "71+", "rda_ai": 16, "ul": 35 },
-        { "group": "Female", "age_range": "14-18", "rda_ai": 14, "ul": 30 },
-        { "group": "Female", "age_range": "19-30", "rda_ai": 14, "ul": 35 },
-        { "group": "Female", "age_range": "31-50", "rda_ai": 14, "ul": 35 },
-        { "group": "Female", "age_range": "51-70", "rda_ai": 14, "ul": 35 },
-        { "group": "Female", "age_range": "71+", "rda_ai": 14, "ul": 35 },
-        { "group": "Pregnancy", "age_range": "14-18", "rda_ai": 18, "ul": 30 },
-        { "group": "Pregnancy", "age_range": "19-30", "rda_ai": 18, "ul": 35 },
-        { "group": "Pregnancy", "age_range": "31-50", "rda_ai": 18, "ul": 35 },
-        { "group": "Lactation", "age_range": "14-18", "rda_ai": 17, "ul": 30 },
-        { "group": "Lactation", "age_range": "19-30", "rda_ai": 17, "ul": 35 },
-        { "group": "Lactation", "age_range": "31-50", "rda_ai": 17, "ul": 35 }
+        {
+          "group": "Male",
+          "age_range": "14-18",
+          "rda_ai": 16,
+          "ul": 30
+        },
+        {
+          "group": "Male",
+          "age_range": "19-30",
+          "rda_ai": 16,
+          "ul": 35
+        },
+        {
+          "group": "Male",
+          "age_range": "31-50",
+          "rda_ai": 16,
+          "ul": 35
+        },
+        {
+          "group": "Male",
+          "age_range": "51-70",
+          "rda_ai": 16,
+          "ul": 35
+        },
+        {
+          "group": "Male",
+          "age_range": "71+",
+          "rda_ai": 16,
+          "ul": 35
+        },
+        {
+          "group": "Female",
+          "age_range": "14-18",
+          "rda_ai": 14,
+          "ul": 30
+        },
+        {
+          "group": "Female",
+          "age_range": "19-30",
+          "rda_ai": 14,
+          "ul": 35
+        },
+        {
+          "group": "Female",
+          "age_range": "31-50",
+          "rda_ai": 14,
+          "ul": 35
+        },
+        {
+          "group": "Female",
+          "age_range": "51-70",
+          "rda_ai": 14,
+          "ul": 35
+        },
+        {
+          "group": "Female",
+          "age_range": "71+",
+          "rda_ai": 14,
+          "ul": 35
+        },
+        {
+          "group": "Pregnancy",
+          "age_range": "14-18",
+          "rda_ai": 18,
+          "ul": 30
+        },
+        {
+          "group": "Pregnancy",
+          "age_range": "19-30",
+          "rda_ai": 18,
+          "ul": 35
+        },
+        {
+          "group": "Pregnancy",
+          "age_range": "31-50",
+          "rda_ai": 18,
+          "ul": 35
+        },
+        {
+          "group": "Lactation",
+          "age_range": "14-18",
+          "rda_ai": 17,
+          "ul": 30
+        },
+        {
+          "group": "Lactation",
+          "age_range": "19-30",
+          "rda_ai": 17,
+          "ul": 35
+        },
+        {
+          "group": "Lactation",
+          "age_range": "31-50",
+          "rda_ai": 17,
+          "ul": 35
+        }
       ]
     },
     {
@@ -486,24 +1006,88 @@
         "Can interfere with levodopa"
       ],
       "special_considerations": "Elderly may need higher doses for optimal health",
-      "deficiency_symptoms": ["Fatigue", "Depression", "Confusion", "Anemia"],
-      "toxicity_symptoms": ["Nerve damage", "Skin lesions", "Photosensitivity"],
+      "deficiency_symptoms": [
+        "Fatigue",
+        "Depression",
+        "Confusion",
+        "Anemia"
+      ],
+      "toxicity_symptoms": [
+        "Nerve damage",
+        "Skin lesions",
+        "Photosensitivity"
+      ],
       "interaction_warnings": [
         "May interfere with levodopa",
         "Can affect seizure medications"
       ],
       "data": [
-        { "group": "Male", "age_range": "14-18", "rda_ai": 1.3, "ul": 80 },
-        { "group": "Male", "age_range": "19-30", "rda_ai": 1.3, "ul": 100 },
-        { "group": "Male", "age_range": "31-50", "rda_ai": 1.3, "ul": 100 },
-        { "group": "Male", "age_range": "51-70", "rda_ai": 1.7, "ul": 100 },
-        { "group": "Male", "age_range": "71+", "rda_ai": 1.7, "ul": 100 },
-        { "group": "Female", "age_range": "14-18", "rda_ai": 1.2, "ul": 80 },
-        { "group": "Female", "age_range": "19-30", "rda_ai": 1.3, "ul": 100 },
-        { "group": "Female", "age_range": "31-50", "rda_ai": 1.3, "ul": 100 },
-        { "group": "Female", "age_range": "51-70", "rda_ai": 1.5, "ul": 100 },
-        { "group": "Female", "age_range": "71+", "rda_ai": 1.5, "ul": 100 },
-        { "group": "Pregnancy", "age_range": "14-18", "rda_ai": 1.9, "ul": 80 },
+        {
+          "group": "Male",
+          "age_range": "14-18",
+          "rda_ai": 1.3,
+          "ul": 80
+        },
+        {
+          "group": "Male",
+          "age_range": "19-30",
+          "rda_ai": 1.3,
+          "ul": 100
+        },
+        {
+          "group": "Male",
+          "age_range": "31-50",
+          "rda_ai": 1.3,
+          "ul": 100
+        },
+        {
+          "group": "Male",
+          "age_range": "51-70",
+          "rda_ai": 1.7,
+          "ul": 100
+        },
+        {
+          "group": "Male",
+          "age_range": "71+",
+          "rda_ai": 1.7,
+          "ul": 100
+        },
+        {
+          "group": "Female",
+          "age_range": "14-18",
+          "rda_ai": 1.2,
+          "ul": 80
+        },
+        {
+          "group": "Female",
+          "age_range": "19-30",
+          "rda_ai": 1.3,
+          "ul": 100
+        },
+        {
+          "group": "Female",
+          "age_range": "31-50",
+          "rda_ai": 1.3,
+          "ul": 100
+        },
+        {
+          "group": "Female",
+          "age_range": "51-70",
+          "rda_ai": 1.5,
+          "ul": 100
+        },
+        {
+          "group": "Female",
+          "age_range": "71+",
+          "rda_ai": 1.5,
+          "ul": 100
+        },
+        {
+          "group": "Pregnancy",
+          "age_range": "14-18",
+          "rda_ai": 1.9,
+          "ul": 80
+        },
         {
           "group": "Pregnancy",
           "age_range": "19-30",
@@ -516,14 +1100,24 @@
           "rda_ai": 1.9,
           "ul": 100
         },
-        { "group": "Lactation", "age_range": "14-18", "rda_ai": 2.0, "ul": 80 },
+        {
+          "group": "Lactation",
+          "age_range": "14-18",
+          "rda_ai": 2.0,
+          "ul": 80
+        },
         {
           "group": "Lactation",
           "age_range": "19-30",
           "rda_ai": 2.0,
           "ul": 100
         },
-        { "group": "Lactation", "age_range": "31-50", "rda_ai": 2.0, "ul": 100 }
+        {
+          "group": "Lactation",
+          "age_range": "31-50",
+          "rda_ai": 2.0,
+          "ul": 100
+        }
       ]
     },
     {
@@ -554,16 +1148,66 @@
       ],
       "notes": "For women of reproductive age who could become pregnant, 400 mcg of synthetic folic acid daily from fortified foods or supplements is recommended in addition to dietary folate.",
       "data": [
-        { "group": "Male", "age_range": "14-18", "rda_ai": 400, "ul": 800 },
-        { "group": "Male", "age_range": "19-30", "rda_ai": 400, "ul": 1000 },
-        { "group": "Male", "age_range": "31-50", "rda_ai": 400, "ul": 1000 },
-        { "group": "Male", "age_range": "51-70", "rda_ai": 400, "ul": 1000 },
-        { "group": "Male", "age_range": "71+", "rda_ai": 400, "ul": 1000 },
-        { "group": "Female", "age_range": "14-18", "rda_ai": 400, "ul": 800 },
-        { "group": "Female", "age_range": "19-30", "rda_ai": 400, "ul": 1000 },
-        { "group": "Female", "age_range": "31-50", "rda_ai": 400, "ul": 1000 },
-        { "group": "Female", "age_range": "51-70", "rda_ai": 400, "ul": 1000 },
-        { "group": "Female", "age_range": "71+", "rda_ai": 400, "ul": 1000 },
+        {
+          "group": "Male",
+          "age_range": "14-18",
+          "rda_ai": 400,
+          "ul": 800
+        },
+        {
+          "group": "Male",
+          "age_range": "19-30",
+          "rda_ai": 400,
+          "ul": 1000
+        },
+        {
+          "group": "Male",
+          "age_range": "31-50",
+          "rda_ai": 400,
+          "ul": 1000
+        },
+        {
+          "group": "Male",
+          "age_range": "51-70",
+          "rda_ai": 400,
+          "ul": 1000
+        },
+        {
+          "group": "Male",
+          "age_range": "71+",
+          "rda_ai": 400,
+          "ul": 1000
+        },
+        {
+          "group": "Female",
+          "age_range": "14-18",
+          "rda_ai": 400,
+          "ul": 800
+        },
+        {
+          "group": "Female",
+          "age_range": "19-30",
+          "rda_ai": 400,
+          "ul": 1000
+        },
+        {
+          "group": "Female",
+          "age_range": "31-50",
+          "rda_ai": 400,
+          "ul": 1000
+        },
+        {
+          "group": "Female",
+          "age_range": "51-70",
+          "rda_ai": 400,
+          "ul": 1000
+        },
+        {
+          "group": "Female",
+          "age_range": "71+",
+          "rda_ai": 400,
+          "ul": 1000
+        },
         {
           "group": "Pregnancy",
           "age_range": "14-18",
@@ -620,22 +1264,74 @@
         "Nerve damage",
         "Memory problems"
       ],
-      "toxicity_symptoms": ["No known toxicity from oral supplements"],
+      "toxicity_symptoms": [
+        "No known toxicity from oral supplements"
+      ],
       "interaction_warnings": [
         "May interfere with metformin",
         "Can affect proton pump inhibitors"
       ],
       "data": [
-        { "group": "Male", "age_range": "14-18", "rda_ai": 2.4, "ul": "ND" },
-        { "group": "Male", "age_range": "19-30", "rda_ai": 2.4, "ul": "ND" },
-        { "group": "Male", "age_range": "31-50", "rda_ai": 2.4, "ul": "ND" },
-        { "group": "Male", "age_range": "51-70", "rda_ai": 2.4, "ul": "ND" },
-        { "group": "Male", "age_range": "71+", "rda_ai": 2.4, "ul": "ND" },
-        { "group": "Female", "age_range": "14-18", "rda_ai": 2.4, "ul": "ND" },
-        { "group": "Female", "age_range": "19-30", "rda_ai": 2.4, "ul": "ND" },
-        { "group": "Female", "age_range": "31-50", "rda_ai": 2.4, "ul": "ND" },
-        { "group": "Female", "age_range": "51-70", "rda_ai": 2.4, "ul": "ND" },
-        { "group": "Female", "age_range": "71+", "rda_ai": 2.4, "ul": "ND" },
+        {
+          "group": "Male",
+          "age_range": "14-18",
+          "rda_ai": 2.4,
+          "ul": "ND"
+        },
+        {
+          "group": "Male",
+          "age_range": "19-30",
+          "rda_ai": 2.4,
+          "ul": "ND"
+        },
+        {
+          "group": "Male",
+          "age_range": "31-50",
+          "rda_ai": 2.4,
+          "ul": "ND"
+        },
+        {
+          "group": "Male",
+          "age_range": "51-70",
+          "rda_ai": 2.4,
+          "ul": "ND"
+        },
+        {
+          "group": "Male",
+          "age_range": "71+",
+          "rda_ai": 2.4,
+          "ul": "ND"
+        },
+        {
+          "group": "Female",
+          "age_range": "14-18",
+          "rda_ai": 2.4,
+          "ul": "ND"
+        },
+        {
+          "group": "Female",
+          "age_range": "19-30",
+          "rda_ai": 2.4,
+          "ul": "ND"
+        },
+        {
+          "group": "Female",
+          "age_range": "31-50",
+          "rda_ai": 2.4,
+          "ul": "ND"
+        },
+        {
+          "group": "Female",
+          "age_range": "51-70",
+          "rda_ai": 2.4,
+          "ul": "ND"
+        },
+        {
+          "group": "Female",
+          "age_range": "71+",
+          "rda_ai": 2.4,
+          "ul": "ND"
+        },
         {
           "group": "Pregnancy",
           "age_range": "14-18",
@@ -692,22 +1388,74 @@
         "Fatigue",
         "Depression"
       ],
-      "toxicity_symptoms": ["No known toxicity from oral supplements"],
+      "toxicity_symptoms": [
+        "No known toxicity from oral supplements"
+      ],
       "interaction_warnings": [
         "May interfere with laboratory tests",
         "Can affect biotin-dependent assays"
       ],
       "data": [
-        { "group": "Male", "age_range": "14-18", "rda_ai": 25, "ul": "ND" },
-        { "group": "Male", "age_range": "19-30", "rda_ai": 30, "ul": "ND" },
-        { "group": "Male", "age_range": "31-50", "rda_ai": 30, "ul": "ND" },
-        { "group": "Male", "age_range": "51-70", "rda_ai": 30, "ul": "ND" },
-        { "group": "Male", "age_range": "71+", "rda_ai": 30, "ul": "ND" },
-        { "group": "Female", "age_range": "14-18", "rda_ai": 25, "ul": "ND" },
-        { "group": "Female", "age_range": "19-30", "rda_ai": 30, "ul": "ND" },
-        { "group": "Female", "age_range": "31-50", "rda_ai": 30, "ul": "ND" },
-        { "group": "Female", "age_range": "51-70", "rda_ai": 30, "ul": "ND" },
-        { "group": "Female", "age_range": "71+", "rda_ai": 30, "ul": "ND" },
+        {
+          "group": "Male",
+          "age_range": "14-18",
+          "rda_ai": 25,
+          "ul": "ND"
+        },
+        {
+          "group": "Male",
+          "age_range": "19-30",
+          "rda_ai": 30,
+          "ul": "ND"
+        },
+        {
+          "group": "Male",
+          "age_range": "31-50",
+          "rda_ai": 30,
+          "ul": "ND"
+        },
+        {
+          "group": "Male",
+          "age_range": "51-70",
+          "rda_ai": 30,
+          "ul": "ND"
+        },
+        {
+          "group": "Male",
+          "age_range": "71+",
+          "rda_ai": 30,
+          "ul": "ND"
+        },
+        {
+          "group": "Female",
+          "age_range": "14-18",
+          "rda_ai": 25,
+          "ul": "ND"
+        },
+        {
+          "group": "Female",
+          "age_range": "19-30",
+          "rda_ai": 30,
+          "ul": "ND"
+        },
+        {
+          "group": "Female",
+          "age_range": "31-50",
+          "rda_ai": 30,
+          "ul": "ND"
+        },
+        {
+          "group": "Female",
+          "age_range": "51-70",
+          "rda_ai": 30,
+          "ul": "ND"
+        },
+        {
+          "group": "Female",
+          "age_range": "71+",
+          "rda_ai": 30,
+          "ul": "ND"
+        },
         {
           "group": "Pregnancy",
           "age_range": "14-18",
@@ -738,7 +1486,12 @@
           "rda_ai": 35,
           "ul": "ND"
         },
-        { "group": "Lactation", "age_range": "31-50", "rda_ai": 35, "ul": "ND" }
+        {
+          "group": "Lactation",
+          "age_range": "31-50",
+          "rda_ai": 35,
+          "ul": "ND"
+        }
       ]
     },
     {
@@ -748,7 +1501,9 @@
       "ul_note": "No UL established due to lack of observed adverse effects",
       "optimal_range": "5-100",
       "highest_ul": "none",
-      "warnings": ["Very high doses may cause diarrhea"],
+      "warnings": [
+        "Very high doses may cause diarrhea"
+      ],
       "special_considerations": "Often used in higher doses for stress and adrenal support",
       "deficiency_symptoms": [
         "Fatigue",
@@ -756,24 +1511,106 @@
         "Muscle cramps",
         "Digestive issues"
       ],
-      "toxicity_symptoms": ["Diarrhea at very high doses (>10g)"],
+      "toxicity_symptoms": [
+        "Diarrhea at very high doses (>10g)"
+      ],
       "data": [
-        { "group": "Male", "age_range": "14-18", "rda_ai": 5, "ul": "ND" },
-        { "group": "Male", "age_range": "19-30", "rda_ai": 5, "ul": "ND" },
-        { "group": "Male", "age_range": "31-50", "rda_ai": 5, "ul": "ND" },
-        { "group": "Male", "age_range": "51-70", "rda_ai": 5, "ul": "ND" },
-        { "group": "Male", "age_range": "71+", "rda_ai": 5, "ul": "ND" },
-        { "group": "Female", "age_range": "14-18", "rda_ai": 5, "ul": "ND" },
-        { "group": "Female", "age_range": "19-30", "rda_ai": 5, "ul": "ND" },
-        { "group": "Female", "age_range": "31-50", "rda_ai": 5, "ul": "ND" },
-        { "group": "Female", "age_range": "51-70", "rda_ai": 5, "ul": "ND" },
-        { "group": "Female", "age_range": "71+", "rda_ai": 5, "ul": "ND" },
-        { "group": "Pregnancy", "age_range": "14-18", "rda_ai": 6, "ul": "ND" },
-        { "group": "Pregnancy", "age_range": "19-30", "rda_ai": 6, "ul": "ND" },
-        { "group": "Pregnancy", "age_range": "31-50", "rda_ai": 6, "ul": "ND" },
-        { "group": "Lactation", "age_range": "14-18", "rda_ai": 7, "ul": "ND" },
-        { "group": "Lactation", "age_range": "19-30", "rda_ai": 7, "ul": "ND" },
-        { "group": "Lactation", "age_range": "31-50", "rda_ai": 7, "ul": "ND" }
+        {
+          "group": "Male",
+          "age_range": "14-18",
+          "rda_ai": 5,
+          "ul": "ND"
+        },
+        {
+          "group": "Male",
+          "age_range": "19-30",
+          "rda_ai": 5,
+          "ul": "ND"
+        },
+        {
+          "group": "Male",
+          "age_range": "31-50",
+          "rda_ai": 5,
+          "ul": "ND"
+        },
+        {
+          "group": "Male",
+          "age_range": "51-70",
+          "rda_ai": 5,
+          "ul": "ND"
+        },
+        {
+          "group": "Male",
+          "age_range": "71+",
+          "rda_ai": 5,
+          "ul": "ND"
+        },
+        {
+          "group": "Female",
+          "age_range": "14-18",
+          "rda_ai": 5,
+          "ul": "ND"
+        },
+        {
+          "group": "Female",
+          "age_range": "19-30",
+          "rda_ai": 5,
+          "ul": "ND"
+        },
+        {
+          "group": "Female",
+          "age_range": "31-50",
+          "rda_ai": 5,
+          "ul": "ND"
+        },
+        {
+          "group": "Female",
+          "age_range": "51-70",
+          "rda_ai": 5,
+          "ul": "ND"
+        },
+        {
+          "group": "Female",
+          "age_range": "71+",
+          "rda_ai": 5,
+          "ul": "ND"
+        },
+        {
+          "group": "Pregnancy",
+          "age_range": "14-18",
+          "rda_ai": 6,
+          "ul": "ND"
+        },
+        {
+          "group": "Pregnancy",
+          "age_range": "19-30",
+          "rda_ai": 6,
+          "ul": "ND"
+        },
+        {
+          "group": "Pregnancy",
+          "age_range": "31-50",
+          "rda_ai": 6,
+          "ul": "ND"
+        },
+        {
+          "group": "Lactation",
+          "age_range": "14-18",
+          "rda_ai": 7,
+          "ul": "ND"
+        },
+        {
+          "group": "Lactation",
+          "age_range": "19-30",
+          "rda_ai": 7,
+          "ul": "ND"
+        },
+        {
+          "group": "Lactation",
+          "age_range": "31-50",
+          "rda_ai": 7,
+          "ul": "ND"
+        }
       ]
     },
     {
@@ -788,7 +1625,11 @@
         "Pregnant women",
         "Vegans/Vegetarians"
       ],
-      "synthesis_precursors": ["Methionine", "Folate", "Vitamin B12"],
+      "synthesis_precursors": [
+        "Methionine",
+        "Folate",
+        "Vitamin B12"
+      ],
       "warnings": [
         "High doses may cause fishy body odor",
         "May lower blood pressure"
@@ -799,18 +1640,72 @@
         "Muscle damage",
         "Memory problems"
       ],
-      "toxicity_symptoms": ["Fishy body odor", "Sweating", "Hypotension"],
+      "toxicity_symptoms": [
+        "Fishy body odor",
+        "Sweating",
+        "Hypotension"
+      ],
       "data": [
-        { "group": "Male", "age_range": "14-18", "rda_ai": 550, "ul": 3000 },
-        { "group": "Male", "age_range": "19-30", "rda_ai": 550, "ul": 3500 },
-        { "group": "Male", "age_range": "31-50", "rda_ai": 550, "ul": 3500 },
-        { "group": "Male", "age_range": "51-70", "rda_ai": 550, "ul": 3500 },
-        { "group": "Male", "age_range": "71+", "rda_ai": 550, "ul": 3500 },
-        { "group": "Female", "age_range": "14-18", "rda_ai": 400, "ul": 3000 },
-        { "group": "Female", "age_range": "19-30", "rda_ai": 425, "ul": 3500 },
-        { "group": "Female", "age_range": "31-50", "rda_ai": 425, "ul": 3500 },
-        { "group": "Female", "age_range": "51-70", "rda_ai": 425, "ul": 3500 },
-        { "group": "Female", "age_range": "71+", "rda_ai": 425, "ul": 3500 },
+        {
+          "group": "Male",
+          "age_range": "14-18",
+          "rda_ai": 550,
+          "ul": 3000
+        },
+        {
+          "group": "Male",
+          "age_range": "19-30",
+          "rda_ai": 550,
+          "ul": 3500
+        },
+        {
+          "group": "Male",
+          "age_range": "31-50",
+          "rda_ai": 550,
+          "ul": 3500
+        },
+        {
+          "group": "Male",
+          "age_range": "51-70",
+          "rda_ai": 550,
+          "ul": 3500
+        },
+        {
+          "group": "Male",
+          "age_range": "71+",
+          "rda_ai": 550,
+          "ul": 3500
+        },
+        {
+          "group": "Female",
+          "age_range": "14-18",
+          "rda_ai": 400,
+          "ul": 3000
+        },
+        {
+          "group": "Female",
+          "age_range": "19-30",
+          "rda_ai": 425,
+          "ul": 3500
+        },
+        {
+          "group": "Female",
+          "age_range": "31-50",
+          "rda_ai": 425,
+          "ul": 3500
+        },
+        {
+          "group": "Female",
+          "age_range": "51-70",
+          "rda_ai": 425,
+          "ul": 3500
+        },
+        {
+          "group": "Female",
+          "age_range": "71+",
+          "rda_ai": 425,
+          "ul": 3500
+        },
         {
           "group": "Pregnancy",
           "age_range": "14-18",
@@ -862,21 +1757,81 @@
         "Those with anxiety/OCD",
         "Metabolic syndrome"
       ],
-      "warnings": ["High doses may cause nausea or diarrhea"],
+      "warnings": [
+        "High doses may cause nausea or diarrhea"
+      ],
       "special_considerations": "Often used in higher doses for PCOS and mental health",
-      "deficiency_symptoms": ["Hair loss", "Skin problems", "Mood changes"],
-      "toxicity_symptoms": ["Nausea", "Diarrhea", "Headache"],
+      "deficiency_symptoms": [
+        "Hair loss",
+        "Skin problems",
+        "Mood changes"
+      ],
+      "toxicity_symptoms": [
+        "Nausea",
+        "Diarrhea",
+        "Headache"
+      ],
       "data": [
-        { "group": "Male", "age_range": "14-18", "rda_ai": 500, "ul": "ND" },
-        { "group": "Male", "age_range": "19-30", "rda_ai": 500, "ul": "ND" },
-        { "group": "Male", "age_range": "31-50", "rda_ai": 500, "ul": "ND" },
-        { "group": "Male", "age_range": "51-70", "rda_ai": 500, "ul": "ND" },
-        { "group": "Male", "age_range": "71+", "rda_ai": 500, "ul": "ND" },
-        { "group": "Female", "age_range": "14-18", "rda_ai": 500, "ul": "ND" },
-        { "group": "Female", "age_range": "19-30", "rda_ai": 500, "ul": "ND" },
-        { "group": "Female", "age_range": "31-50", "rda_ai": 500, "ul": "ND" },
-        { "group": "Female", "age_range": "51-70", "rda_ai": 500, "ul": "ND" },
-        { "group": "Female", "age_range": "71+", "rda_ai": 500, "ul": "ND" },
+        {
+          "group": "Male",
+          "age_range": "14-18",
+          "rda_ai": 500,
+          "ul": "ND"
+        },
+        {
+          "group": "Male",
+          "age_range": "19-30",
+          "rda_ai": 500,
+          "ul": "ND"
+        },
+        {
+          "group": "Male",
+          "age_range": "31-50",
+          "rda_ai": 500,
+          "ul": "ND"
+        },
+        {
+          "group": "Male",
+          "age_range": "51-70",
+          "rda_ai": 500,
+          "ul": "ND"
+        },
+        {
+          "group": "Male",
+          "age_range": "71+",
+          "rda_ai": 500,
+          "ul": "ND"
+        },
+        {
+          "group": "Female",
+          "age_range": "14-18",
+          "rda_ai": 500,
+          "ul": "ND"
+        },
+        {
+          "group": "Female",
+          "age_range": "19-30",
+          "rda_ai": 500,
+          "ul": "ND"
+        },
+        {
+          "group": "Female",
+          "age_range": "31-50",
+          "rda_ai": 500,
+          "ul": "ND"
+        },
+        {
+          "group": "Female",
+          "age_range": "51-70",
+          "rda_ai": 500,
+          "ul": "ND"
+        },
+        {
+          "group": "Female",
+          "age_range": "71+",
+          "rda_ai": 500,
+          "ul": "ND"
+        },
         {
           "group": "Pregnancy",
           "age_range": "14-18",
@@ -926,7 +1881,11 @@
         "May interfere with iron absorption"
       ],
       "special_considerations": "Take with vitamin D and K2 for optimal absorption and bone health",
-      "deficiency_symptoms": ["Weak bones", "Muscle cramps", "Numbness"],
+      "deficiency_symptoms": [
+        "Weak bones",
+        "Muscle cramps",
+        "Numbness"
+      ],
       "toxicity_symptoms": [
         "Kidney stones",
         "Constipation",
@@ -937,16 +1896,66 @@
         "Can affect thyroid medications"
       ],
       "data": [
-        { "group": "Male", "age_range": "14-18", "rda_ai": 1300, "ul": 3000 },
-        { "group": "Male", "age_range": "19-30", "rda_ai": 1000, "ul": 2500 },
-        { "group": "Male", "age_range": "31-50", "rda_ai": 1000, "ul": 2500 },
-        { "group": "Male", "age_range": "51-70", "rda_ai": 1000, "ul": 2000 },
-        { "group": "Male", "age_range": "71+", "rda_ai": 1200, "ul": 2000 },
-        { "group": "Female", "age_range": "14-18", "rda_ai": 1300, "ul": 3000 },
-        { "group": "Female", "age_range": "19-30", "rda_ai": 1000, "ul": 2500 },
-        { "group": "Female", "age_range": "31-50", "rda_ai": 1000, "ul": 2500 },
-        { "group": "Female", "age_range": "51-70", "rda_ai": 1200, "ul": 2000 },
-        { "group": "Female", "age_range": "71+", "rda_ai": 1200, "ul": 2000 },
+        {
+          "group": "Male",
+          "age_range": "14-18",
+          "rda_ai": 1300,
+          "ul": 3000
+        },
+        {
+          "group": "Male",
+          "age_range": "19-30",
+          "rda_ai": 1000,
+          "ul": 2500
+        },
+        {
+          "group": "Male",
+          "age_range": "31-50",
+          "rda_ai": 1000,
+          "ul": 2500
+        },
+        {
+          "group": "Male",
+          "age_range": "51-70",
+          "rda_ai": 1000,
+          "ul": 2000
+        },
+        {
+          "group": "Male",
+          "age_range": "71+",
+          "rda_ai": 1200,
+          "ul": 2000
+        },
+        {
+          "group": "Female",
+          "age_range": "14-18",
+          "rda_ai": 1300,
+          "ul": 3000
+        },
+        {
+          "group": "Female",
+          "age_range": "19-30",
+          "rda_ai": 1000,
+          "ul": 2500
+        },
+        {
+          "group": "Female",
+          "age_range": "31-50",
+          "rda_ai": 1000,
+          "ul": 2500
+        },
+        {
+          "group": "Female",
+          "age_range": "51-70",
+          "rda_ai": 1200,
+          "ul": 2000
+        },
+        {
+          "group": "Female",
+          "age_range": "71+",
+          "rda_ai": 1200,
+          "ul": 2000
+        },
         {
           "group": "Pregnancy",
           "age_range": "14-18",
@@ -991,29 +2000,86 @@
       "ul_note": "UL applies to supplemental magnesium only, not food sources",
       "optimal_range": "400-800",
       "highest_ul": 350,
-      "warnings": ["High doses may cause diarrhea", "May lower blood pressure"],
+      "warnings": [
+        "High doses may cause diarrhea",
+        "May lower blood pressure"
+      ],
       "special_considerations": "Most Americans don't get adequate magnesium from diet",
       "deficiency_symptoms": [
         "Muscle cramps",
         "Fatigue",
         "Irregular heartbeat"
       ],
-      "toxicity_symptoms": ["Diarrhea", "Nausea", "Muscle weakness"],
+      "toxicity_symptoms": [
+        "Diarrhea",
+        "Nausea",
+        "Muscle weakness"
+      ],
       "interaction_warnings": [
         "May affect absorption of some antibiotics",
         "Can enhance blood pressure medications"
       ],
       "data": [
-        { "group": "Male", "age_range": "14-18", "rda_ai": 410, "ul": 350 },
-        { "group": "Male", "age_range": "19-30", "rda_ai": 400, "ul": 350 },
-        { "group": "Male", "age_range": "31-50", "rda_ai": 420, "ul": 350 },
-        { "group": "Male", "age_range": "51-70", "rda_ai": 420, "ul": 350 },
-        { "group": "Male", "age_range": "71+", "rda_ai": 420, "ul": 350 },
-        { "group": "Female", "age_range": "14-18", "rda_ai": 360, "ul": 350 },
-        { "group": "Female", "age_range": "19-30", "rda_ai": 310, "ul": 350 },
-        { "group": "Female", "age_range": "31-50", "rda_ai": 320, "ul": 350 },
-        { "group": "Female", "age_range": "51-70", "rda_ai": 320, "ul": 350 },
-        { "group": "Female", "age_range": "71+", "rda_ai": 320, "ul": 350 },
+        {
+          "group": "Male",
+          "age_range": "14-18",
+          "rda_ai": 410,
+          "ul": 350
+        },
+        {
+          "group": "Male",
+          "age_range": "19-30",
+          "rda_ai": 400,
+          "ul": 350
+        },
+        {
+          "group": "Male",
+          "age_range": "31-50",
+          "rda_ai": 420,
+          "ul": 350
+        },
+        {
+          "group": "Male",
+          "age_range": "51-70",
+          "rda_ai": 420,
+          "ul": 350
+        },
+        {
+          "group": "Male",
+          "age_range": "71+",
+          "rda_ai": 420,
+          "ul": 350
+        },
+        {
+          "group": "Female",
+          "age_range": "14-18",
+          "rda_ai": 360,
+          "ul": 350
+        },
+        {
+          "group": "Female",
+          "age_range": "19-30",
+          "rda_ai": 310,
+          "ul": 350
+        },
+        {
+          "group": "Female",
+          "age_range": "31-50",
+          "rda_ai": 320,
+          "ul": 350
+        },
+        {
+          "group": "Female",
+          "age_range": "51-70",
+          "rda_ai": 320,
+          "ul": 350
+        },
+        {
+          "group": "Female",
+          "age_range": "71+",
+          "rda_ai": 320,
+          "ul": 350
+        },
         {
           "group": "Pregnancy",
           "age_range": "14-18",
@@ -1044,7 +2110,12 @@
           "rda_ai": 310,
           "ul": 350
         },
-        { "group": "Lactation", "age_range": "31-50", "rda_ai": 320, "ul": 350 }
+        {
+          "group": "Lactation",
+          "age_range": "31-50",
+          "rda_ai": 320,
+          "ul": 350
+        }
       ]
     },
     {
@@ -1065,28 +2136,112 @@
         "Pale skin",
         "Restless legs"
       ],
-      "toxicity_symptoms": ["Constipation", "Nausea", "Organ damage"],
+      "toxicity_symptoms": [
+        "Constipation",
+        "Nausea",
+        "Organ damage"
+      ],
       "interaction_warnings": [
         "May interfere with zinc absorption",
         "Can affect thyroid medications"
       ],
       "data": [
-        { "group": "Male", "age_range": "14-18", "rda_ai": 11, "ul": 45 },
-        { "group": "Male", "age_range": "19-30", "rda_ai": 8, "ul": 45 },
-        { "group": "Male", "age_range": "31-50", "rda_ai": 8, "ul": 45 },
-        { "group": "Male", "age_range": "51-70", "rda_ai": 8, "ul": 45 },
-        { "group": "Male", "age_range": "71+", "rda_ai": 8, "ul": 45 },
-        { "group": "Female", "age_range": "14-18", "rda_ai": 15, "ul": 45 },
-        { "group": "Female", "age_range": "19-30", "rda_ai": 18, "ul": 45 },
-        { "group": "Female", "age_range": "31-50", "rda_ai": 18, "ul": 45 },
-        { "group": "Female", "age_range": "51-70", "rda_ai": 8, "ul": 45 },
-        { "group": "Female", "age_range": "71+", "rda_ai": 8, "ul": 45 },
-        { "group": "Pregnancy", "age_range": "14-18", "rda_ai": 27, "ul": 45 },
-        { "group": "Pregnancy", "age_range": "19-30", "rda_ai": 27, "ul": 45 },
-        { "group": "Pregnancy", "age_range": "31-50", "rda_ai": 27, "ul": 45 },
-        { "group": "Lactation", "age_range": "14-18", "rda_ai": 10, "ul": 45 },
-        { "group": "Lactation", "age_range": "19-30", "rda_ai": 9, "ul": 45 },
-        { "group": "Lactation", "age_range": "31-50", "rda_ai": 9, "ul": 45 }
+        {
+          "group": "Male",
+          "age_range": "14-18",
+          "rda_ai": 11,
+          "ul": 45
+        },
+        {
+          "group": "Male",
+          "age_range": "19-30",
+          "rda_ai": 8,
+          "ul": 45
+        },
+        {
+          "group": "Male",
+          "age_range": "31-50",
+          "rda_ai": 8,
+          "ul": 45
+        },
+        {
+          "group": "Male",
+          "age_range": "51-70",
+          "rda_ai": 8,
+          "ul": 45
+        },
+        {
+          "group": "Male",
+          "age_range": "71+",
+          "rda_ai": 8,
+          "ul": 45
+        },
+        {
+          "group": "Female",
+          "age_range": "14-18",
+          "rda_ai": 15,
+          "ul": 45
+        },
+        {
+          "group": "Female",
+          "age_range": "19-30",
+          "rda_ai": 18,
+          "ul": 45
+        },
+        {
+          "group": "Female",
+          "age_range": "31-50",
+          "rda_ai": 18,
+          "ul": 45
+        },
+        {
+          "group": "Female",
+          "age_range": "51-70",
+          "rda_ai": 8,
+          "ul": 45
+        },
+        {
+          "group": "Female",
+          "age_range": "71+",
+          "rda_ai": 8,
+          "ul": 45
+        },
+        {
+          "group": "Pregnancy",
+          "age_range": "14-18",
+          "rda_ai": 27,
+          "ul": 45
+        },
+        {
+          "group": "Pregnancy",
+          "age_range": "19-30",
+          "rda_ai": 27,
+          "ul": 45
+        },
+        {
+          "group": "Pregnancy",
+          "age_range": "31-50",
+          "rda_ai": 27,
+          "ul": 45
+        },
+        {
+          "group": "Lactation",
+          "age_range": "14-18",
+          "rda_ai": 10,
+          "ul": 45
+        },
+        {
+          "group": "Lactation",
+          "age_range": "19-30",
+          "rda_ai": 9,
+          "ul": 45
+        },
+        {
+          "group": "Lactation",
+          "age_range": "31-50",
+          "rda_ai": 9,
+          "ul": 45
+        }
       ]
     },
     {
@@ -1115,22 +2270,102 @@
         "Can affect some antibiotics"
       ],
       "data": [
-        { "group": "Male", "age_range": "14-18", "rda_ai": 11, "ul": 34 },
-        { "group": "Male", "age_range": "19-30", "rda_ai": 11, "ul": 40 },
-        { "group": "Male", "age_range": "31-50", "rda_ai": 11, "ul": 40 },
-        { "group": "Male", "age_range": "51-70", "rda_ai": 11, "ul": 40 },
-        { "group": "Male", "age_range": "71+", "rda_ai": 11, "ul": 40 },
-        { "group": "Female", "age_range": "14-18", "rda_ai": 9, "ul": 34 },
-        { "group": "Female", "age_range": "19-30", "rda_ai": 8, "ul": 40 },
-        { "group": "Female", "age_range": "31-50", "rda_ai": 8, "ul": 40 },
-        { "group": "Female", "age_range": "51-70", "rda_ai": 8, "ul": 40 },
-        { "group": "Female", "age_range": "71+", "rda_ai": 8, "ul": 40 },
-        { "group": "Pregnancy", "age_range": "14-18", "rda_ai": 12, "ul": 34 },
-        { "group": "Pregnancy", "age_range": "19-30", "rda_ai": 11, "ul": 40 },
-        { "group": "Pregnancy", "age_range": "31-50", "rda_ai": 11, "ul": 40 },
-        { "group": "Lactation", "age_range": "14-18", "rda_ai": 13, "ul": 34 },
-        { "group": "Lactation", "age_range": "19-30", "rda_ai": 12, "ul": 40 },
-        { "group": "Lactation", "age_range": "31-50", "rda_ai": 12, "ul": 40 }
+        {
+          "group": "Male",
+          "age_range": "14-18",
+          "rda_ai": 11,
+          "ul": 34
+        },
+        {
+          "group": "Male",
+          "age_range": "19-30",
+          "rda_ai": 11,
+          "ul": 40
+        },
+        {
+          "group": "Male",
+          "age_range": "31-50",
+          "rda_ai": 11,
+          "ul": 40
+        },
+        {
+          "group": "Male",
+          "age_range": "51-70",
+          "rda_ai": 11,
+          "ul": 40
+        },
+        {
+          "group": "Male",
+          "age_range": "71+",
+          "rda_ai": 11,
+          "ul": 40
+        },
+        {
+          "group": "Female",
+          "age_range": "14-18",
+          "rda_ai": 9,
+          "ul": 34
+        },
+        {
+          "group": "Female",
+          "age_range": "19-30",
+          "rda_ai": 8,
+          "ul": 40
+        },
+        {
+          "group": "Female",
+          "age_range": "31-50",
+          "rda_ai": 8,
+          "ul": 40
+        },
+        {
+          "group": "Female",
+          "age_range": "51-70",
+          "rda_ai": 8,
+          "ul": 40
+        },
+        {
+          "group": "Female",
+          "age_range": "71+",
+          "rda_ai": 8,
+          "ul": 40
+        },
+        {
+          "group": "Pregnancy",
+          "age_range": "14-18",
+          "rda_ai": 12,
+          "ul": 34
+        },
+        {
+          "group": "Pregnancy",
+          "age_range": "19-30",
+          "rda_ai": 11,
+          "ul": 40
+        },
+        {
+          "group": "Pregnancy",
+          "age_range": "31-50",
+          "rda_ai": 11,
+          "ul": 40
+        },
+        {
+          "group": "Lactation",
+          "age_range": "14-18",
+          "rda_ai": 13,
+          "ul": 34
+        },
+        {
+          "group": "Lactation",
+          "age_range": "19-30",
+          "rda_ai": 12,
+          "ul": 40
+        },
+        {
+          "group": "Lactation",
+          "age_range": "31-50",
+          "rda_ai": 12,
+          "ul": 40
+        }
       ]
     },
     {
@@ -1159,16 +2394,66 @@
         "May be affected by vitamin C"
       ],
       "data": [
-        { "group": "Male", "age_range": "14-18", "rda_ai": 890, "ul": 8000 },
-        { "group": "Male", "age_range": "19-30", "rda_ai": 900, "ul": 10000 },
-        { "group": "Male", "age_range": "31-50", "rda_ai": 900, "ul": 10000 },
-        { "group": "Male", "age_range": "51-70", "rda_ai": 900, "ul": 10000 },
-        { "group": "Male", "age_range": "71+", "rda_ai": 900, "ul": 10000 },
-        { "group": "Female", "age_range": "14-18", "rda_ai": 890, "ul": 8000 },
-        { "group": "Female", "age_range": "19-30", "rda_ai": 900, "ul": 10000 },
-        { "group": "Female", "age_range": "31-50", "rda_ai": 900, "ul": 10000 },
-        { "group": "Female", "age_range": "51-70", "rda_ai": 900, "ul": 10000 },
-        { "group": "Female", "age_range": "71+", "rda_ai": 900, "ul": 10000 },
+        {
+          "group": "Male",
+          "age_range": "14-18",
+          "rda_ai": 890,
+          "ul": 8000
+        },
+        {
+          "group": "Male",
+          "age_range": "19-30",
+          "rda_ai": 900,
+          "ul": 10000
+        },
+        {
+          "group": "Male",
+          "age_range": "31-50",
+          "rda_ai": 900,
+          "ul": 10000
+        },
+        {
+          "group": "Male",
+          "age_range": "51-70",
+          "rda_ai": 900,
+          "ul": 10000
+        },
+        {
+          "group": "Male",
+          "age_range": "71+",
+          "rda_ai": 900,
+          "ul": 10000
+        },
+        {
+          "group": "Female",
+          "age_range": "14-18",
+          "rda_ai": 890,
+          "ul": 8000
+        },
+        {
+          "group": "Female",
+          "age_range": "19-30",
+          "rda_ai": 900,
+          "ul": 10000
+        },
+        {
+          "group": "Female",
+          "age_range": "31-50",
+          "rda_ai": 900,
+          "ul": 10000
+        },
+        {
+          "group": "Female",
+          "age_range": "51-70",
+          "rda_ai": 900,
+          "ul": 10000
+        },
+        {
+          "group": "Female",
+          "age_range": "71+",
+          "rda_ai": 900,
+          "ul": 10000
+        },
         {
           "group": "Pregnancy",
           "age_range": "14-18",
@@ -1223,28 +2508,112 @@
         "Heart problems",
         "Immune dysfunction"
       ],
-      "toxicity_symptoms": ["Hair loss", "Nail brittleness", "Garlic breath"],
+      "toxicity_symptoms": [
+        "Hair loss",
+        "Nail brittleness",
+        "Garlic breath"
+      ],
       "interaction_warnings": [
         "May enhance vitamin E effects",
         "Can affect thyroid medications"
       ],
       "data": [
-        { "group": "Male", "age_range": "14-18", "rda_ai": 55, "ul": 400 },
-        { "group": "Male", "age_range": "19-30", "rda_ai": 55, "ul": 400 },
-        { "group": "Male", "age_range": "31-50", "rda_ai": 55, "ul": 400 },
-        { "group": "Male", "age_range": "51-70", "rda_ai": 55, "ul": 400 },
-        { "group": "Male", "age_range": "71+", "rda_ai": 55, "ul": 400 },
-        { "group": "Female", "age_range": "14-18", "rda_ai": 55, "ul": 400 },
-        { "group": "Female", "age_range": "19-30", "rda_ai": 55, "ul": 400 },
-        { "group": "Female", "age_range": "31-50", "rda_ai": 55, "ul": 400 },
-        { "group": "Female", "age_range": "51-70", "rda_ai": 55, "ul": 400 },
-        { "group": "Female", "age_range": "71+", "rda_ai": 55, "ul": 400 },
-        { "group": "Pregnancy", "age_range": "14-18", "rda_ai": 60, "ul": 400 },
-        { "group": "Pregnancy", "age_range": "19-30", "rda_ai": 60, "ul": 400 },
-        { "group": "Pregnancy", "age_range": "31-50", "rda_ai": 60, "ul": 400 },
-        { "group": "Lactation", "age_range": "14-18", "rda_ai": 70, "ul": 400 },
-        { "group": "Lactation", "age_range": "19-30", "rda_ai": 70, "ul": 400 },
-        { "group": "Lactation", "age_range": "31-50", "rda_ai": 70, "ul": 400 }
+        {
+          "group": "Male",
+          "age_range": "14-18",
+          "rda_ai": 55,
+          "ul": 400
+        },
+        {
+          "group": "Male",
+          "age_range": "19-30",
+          "rda_ai": 55,
+          "ul": 400
+        },
+        {
+          "group": "Male",
+          "age_range": "31-50",
+          "rda_ai": 55,
+          "ul": 400
+        },
+        {
+          "group": "Male",
+          "age_range": "51-70",
+          "rda_ai": 55,
+          "ul": 400
+        },
+        {
+          "group": "Male",
+          "age_range": "71+",
+          "rda_ai": 55,
+          "ul": 400
+        },
+        {
+          "group": "Female",
+          "age_range": "14-18",
+          "rda_ai": 55,
+          "ul": 400
+        },
+        {
+          "group": "Female",
+          "age_range": "19-30",
+          "rda_ai": 55,
+          "ul": 400
+        },
+        {
+          "group": "Female",
+          "age_range": "31-50",
+          "rda_ai": 55,
+          "ul": 400
+        },
+        {
+          "group": "Female",
+          "age_range": "51-70",
+          "rda_ai": 55,
+          "ul": 400
+        },
+        {
+          "group": "Female",
+          "age_range": "71+",
+          "rda_ai": 55,
+          "ul": 400
+        },
+        {
+          "group": "Pregnancy",
+          "age_range": "14-18",
+          "rda_ai": 60,
+          "ul": 400
+        },
+        {
+          "group": "Pregnancy",
+          "age_range": "19-30",
+          "rda_ai": 60,
+          "ul": 400
+        },
+        {
+          "group": "Pregnancy",
+          "age_range": "31-50",
+          "rda_ai": 60,
+          "ul": 400
+        },
+        {
+          "group": "Lactation",
+          "age_range": "14-18",
+          "rda_ai": 70,
+          "ul": 400
+        },
+        {
+          "group": "Lactation",
+          "age_range": "19-30",
+          "rda_ai": 70,
+          "ul": 400
+        },
+        {
+          "group": "Lactation",
+          "age_range": "31-50",
+          "rda_ai": 70,
+          "ul": 400
+        }
       ]
     },
     {
@@ -1274,16 +2643,66 @@
         "Can affect lithium"
       ],
       "data": [
-        { "group": "Male", "age_range": "14-18", "rda_ai": 150, "ul": 900 },
-        { "group": "Male", "age_range": "19-30", "rda_ai": 150, "ul": 1100 },
-        { "group": "Male", "age_range": "31-50", "rda_ai": 150, "ul": 1100 },
-        { "group": "Male", "age_range": "51-70", "rda_ai": 150, "ul": 1100 },
-        { "group": "Male", "age_range": "71+", "rda_ai": 150, "ul": 1100 },
-        { "group": "Female", "age_range": "14-18", "rda_ai": 150, "ul": 900 },
-        { "group": "Female", "age_range": "19-30", "rda_ai": 150, "ul": 1100 },
-        { "group": "Female", "age_range": "31-50", "rda_ai": 150, "ul": 1100 },
-        { "group": "Female", "age_range": "51-70", "rda_ai": 150, "ul": 1100 },
-        { "group": "Female", "age_range": "71+", "rda_ai": 150, "ul": 1100 },
+        {
+          "group": "Male",
+          "age_range": "14-18",
+          "rda_ai": 150,
+          "ul": 900
+        },
+        {
+          "group": "Male",
+          "age_range": "19-30",
+          "rda_ai": 150,
+          "ul": 1100
+        },
+        {
+          "group": "Male",
+          "age_range": "31-50",
+          "rda_ai": 150,
+          "ul": 1100
+        },
+        {
+          "group": "Male",
+          "age_range": "51-70",
+          "rda_ai": 150,
+          "ul": 1100
+        },
+        {
+          "group": "Male",
+          "age_range": "71+",
+          "rda_ai": 150,
+          "ul": 1100
+        },
+        {
+          "group": "Female",
+          "age_range": "14-18",
+          "rda_ai": 150,
+          "ul": 900
+        },
+        {
+          "group": "Female",
+          "age_range": "19-30",
+          "rda_ai": 150,
+          "ul": 1100
+        },
+        {
+          "group": "Female",
+          "age_range": "31-50",
+          "rda_ai": 150,
+          "ul": 1100
+        },
+        {
+          "group": "Female",
+          "age_range": "51-70",
+          "rda_ai": 150,
+          "ul": 1100
+        },
+        {
+          "group": "Female",
+          "age_range": "71+",
+          "rda_ai": 150,
+          "ul": 1100
+        },
         {
           "group": "Pregnancy",
           "age_range": "14-18",
@@ -1339,22 +2758,76 @@
         "Weight loss",
         "Peripheral neuropathy"
       ],
-      "toxicity_symptoms": ["Liver damage", "Kidney damage", "Skin irritation"],
+      "toxicity_symptoms": [
+        "Liver damage",
+        "Kidney damage",
+        "Skin irritation"
+      ],
       "interaction_warnings": [
         "May affect diabetes medications",
         "Can interfere with iron absorption"
       ],
       "data": [
-        { "group": "Male", "age_range": "14-18", "rda_ai": 35, "ul": "ND" },
-        { "group": "Male", "age_range": "19-30", "rda_ai": 35, "ul": "ND" },
-        { "group": "Male", "age_range": "31-50", "rda_ai": 35, "ul": "ND" },
-        { "group": "Male", "age_range": "51-70", "rda_ai": 30, "ul": "ND" },
-        { "group": "Male", "age_range": "71+", "rda_ai": 30, "ul": "ND" },
-        { "group": "Female", "age_range": "14-18", "rda_ai": 24, "ul": "ND" },
-        { "group": "Female", "age_range": "19-30", "rda_ai": 25, "ul": "ND" },
-        { "group": "Female", "age_range": "31-50", "rda_ai": 25, "ul": "ND" },
-        { "group": "Female", "age_range": "51-70", "rda_ai": 20, "ul": "ND" },
-        { "group": "Female", "age_range": "71+", "rda_ai": 20, "ul": "ND" },
+        {
+          "group": "Male",
+          "age_range": "14-18",
+          "rda_ai": 35,
+          "ul": "ND"
+        },
+        {
+          "group": "Male",
+          "age_range": "19-30",
+          "rda_ai": 35,
+          "ul": "ND"
+        },
+        {
+          "group": "Male",
+          "age_range": "31-50",
+          "rda_ai": 35,
+          "ul": "ND"
+        },
+        {
+          "group": "Male",
+          "age_range": "51-70",
+          "rda_ai": 30,
+          "ul": "ND"
+        },
+        {
+          "group": "Male",
+          "age_range": "71+",
+          "rda_ai": 30,
+          "ul": "ND"
+        },
+        {
+          "group": "Female",
+          "age_range": "14-18",
+          "rda_ai": 24,
+          "ul": "ND"
+        },
+        {
+          "group": "Female",
+          "age_range": "19-30",
+          "rda_ai": 25,
+          "ul": "ND"
+        },
+        {
+          "group": "Female",
+          "age_range": "31-50",
+          "rda_ai": 25,
+          "ul": "ND"
+        },
+        {
+          "group": "Female",
+          "age_range": "51-70",
+          "rda_ai": 20,
+          "ul": "ND"
+        },
+        {
+          "group": "Female",
+          "age_range": "71+",
+          "rda_ai": 20,
+          "ul": "ND"
+        },
         {
           "group": "Pregnancy",
           "age_range": "14-18",
@@ -1385,7 +2858,12 @@
           "rda_ai": 45,
           "ul": "ND"
         },
-        { "group": "Lactation", "age_range": "31-50", "rda_ai": 45, "ul": "ND" }
+        {
+          "group": "Lactation",
+          "age_range": "31-50",
+          "rda_ai": 45,
+          "ul": "ND"
+        }
       ]
     },
     {
@@ -1414,22 +2892,102 @@
         "Can affect magnesium"
       ],
       "data": [
-        { "group": "Male", "age_range": "14-18", "rda_ai": 2.2, "ul": 9 },
-        { "group": "Male", "age_range": "19-30", "rda_ai": 2.3, "ul": 11 },
-        { "group": "Male", "age_range": "31-50", "rda_ai": 2.3, "ul": 11 },
-        { "group": "Male", "age_range": "51-70", "rda_ai": 2.3, "ul": 11 },
-        { "group": "Male", "age_range": "71+", "rda_ai": 2.3, "ul": 11 },
-        { "group": "Female", "age_range": "14-18", "rda_ai": 1.6, "ul": 9 },
-        { "group": "Female", "age_range": "19-30", "rda_ai": 1.8, "ul": 11 },
-        { "group": "Female", "age_range": "31-50", "rda_ai": 1.8, "ul": 11 },
-        { "group": "Female", "age_range": "51-70", "rda_ai": 1.8, "ul": 11 },
-        { "group": "Female", "age_range": "71+", "rda_ai": 1.8, "ul": 11 },
-        { "group": "Pregnancy", "age_range": "14-18", "rda_ai": 2.0, "ul": 9 },
-        { "group": "Pregnancy", "age_range": "19-30", "rda_ai": 2.0, "ul": 11 },
-        { "group": "Pregnancy", "age_range": "31-50", "rda_ai": 2.0, "ul": 11 },
-        { "group": "Lactation", "age_range": "14-18", "rda_ai": 2.6, "ul": 9 },
-        { "group": "Lactation", "age_range": "19-30", "rda_ai": 2.6, "ul": 11 },
-        { "group": "Lactation", "age_range": "31-50", "rda_ai": 2.6, "ul": 11 }
+        {
+          "group": "Male",
+          "age_range": "14-18",
+          "rda_ai": 2.2,
+          "ul": 9
+        },
+        {
+          "group": "Male",
+          "age_range": "19-30",
+          "rda_ai": 2.3,
+          "ul": 11
+        },
+        {
+          "group": "Male",
+          "age_range": "31-50",
+          "rda_ai": 2.3,
+          "ul": 11
+        },
+        {
+          "group": "Male",
+          "age_range": "51-70",
+          "rda_ai": 2.3,
+          "ul": 11
+        },
+        {
+          "group": "Male",
+          "age_range": "71+",
+          "rda_ai": 2.3,
+          "ul": 11
+        },
+        {
+          "group": "Female",
+          "age_range": "14-18",
+          "rda_ai": 1.6,
+          "ul": 9
+        },
+        {
+          "group": "Female",
+          "age_range": "19-30",
+          "rda_ai": 1.8,
+          "ul": 11
+        },
+        {
+          "group": "Female",
+          "age_range": "31-50",
+          "rda_ai": 1.8,
+          "ul": 11
+        },
+        {
+          "group": "Female",
+          "age_range": "51-70",
+          "rda_ai": 1.8,
+          "ul": 11
+        },
+        {
+          "group": "Female",
+          "age_range": "71+",
+          "rda_ai": 1.8,
+          "ul": 11
+        },
+        {
+          "group": "Pregnancy",
+          "age_range": "14-18",
+          "rda_ai": 2.0,
+          "ul": 9
+        },
+        {
+          "group": "Pregnancy",
+          "age_range": "19-30",
+          "rda_ai": 2.0,
+          "ul": 11
+        },
+        {
+          "group": "Pregnancy",
+          "age_range": "31-50",
+          "rda_ai": 2.0,
+          "ul": 11
+        },
+        {
+          "group": "Lactation",
+          "age_range": "14-18",
+          "rda_ai": 2.6,
+          "ul": 9
+        },
+        {
+          "group": "Lactation",
+          "age_range": "19-30",
+          "rda_ai": 2.6,
+          "ul": 11
+        },
+        {
+          "group": "Lactation",
+          "age_range": "31-50",
+          "rda_ai": 2.6,
+          "ul": 11
+        }
       ]
     },
     {
@@ -1443,23 +3001,78 @@
         "May interfere with copper absorption"
       ],
       "special_considerations": "Usually adequate in diet, rarely deficient",
-      "deficiency_symptoms": ["Rarely occurs, may cause metabolic issues"],
-      "toxicity_symptoms": ["Gout-like symptoms", "Copper deficiency"],
+      "deficiency_symptoms": [
+        "Rarely occurs, may cause metabolic issues"
+      ],
+      "toxicity_symptoms": [
+        "Gout-like symptoms",
+        "Copper deficiency"
+      ],
       "interaction_warnings": [
         "May interfere with copper absorption",
         "Can affect sulfur metabolism"
       ],
       "data": [
-        { "group": "Male", "age_range": "14-18", "rda_ai": 43, "ul": 1700 },
-        { "group": "Male", "age_range": "19-30", "rda_ai": 45, "ul": 2000 },
-        { "group": "Male", "age_range": "31-50", "rda_ai": 45, "ul": 2000 },
-        { "group": "Male", "age_range": "51-70", "rda_ai": 45, "ul": 2000 },
-        { "group": "Male", "age_range": "71+", "rda_ai": 45, "ul": 2000 },
-        { "group": "Female", "age_range": "14-18", "rda_ai": 43, "ul": 1700 },
-        { "group": "Female", "age_range": "19-30", "rda_ai": 45, "ul": 2000 },
-        { "group": "Female", "age_range": "31-50", "rda_ai": 45, "ul": 2000 },
-        { "group": "Female", "age_range": "51-70", "rda_ai": 45, "ul": 2000 },
-        { "group": "Female", "age_range": "71+", "rda_ai": 45, "ul": 2000 },
+        {
+          "group": "Male",
+          "age_range": "14-18",
+          "rda_ai": 43,
+          "ul": 1700
+        },
+        {
+          "group": "Male",
+          "age_range": "19-30",
+          "rda_ai": 45,
+          "ul": 2000
+        },
+        {
+          "group": "Male",
+          "age_range": "31-50",
+          "rda_ai": 45,
+          "ul": 2000
+        },
+        {
+          "group": "Male",
+          "age_range": "51-70",
+          "rda_ai": 45,
+          "ul": 2000
+        },
+        {
+          "group": "Male",
+          "age_range": "71+",
+          "rda_ai": 45,
+          "ul": 2000
+        },
+        {
+          "group": "Female",
+          "age_range": "14-18",
+          "rda_ai": 43,
+          "ul": 1700
+        },
+        {
+          "group": "Female",
+          "age_range": "19-30",
+          "rda_ai": 45,
+          "ul": 2000
+        },
+        {
+          "group": "Female",
+          "age_range": "31-50",
+          "rda_ai": 45,
+          "ul": 2000
+        },
+        {
+          "group": "Female",
+          "age_range": "51-70",
+          "rda_ai": 45,
+          "ul": 2000
+        },
+        {
+          "group": "Female",
+          "age_range": "71+",
+          "rda_ai": 45,
+          "ul": 2000
+        },
         {
           "group": "Pregnancy",
           "age_range": "14-18",
@@ -1490,7 +3103,12 @@
           "rda_ai": 50,
           "ul": 2000
         },
-        { "group": "Lactation", "age_range": "31-50", "rda_ai": 50, "ul": 2000 }
+        {
+          "group": "Lactation",
+          "age_range": "31-50",
+          "rda_ai": 50,
+          "ul": 2000
+        }
       ]
     },
     {
@@ -1504,7 +3122,11 @@
         "May cause kidney problems"
       ],
       "special_considerations": "Usually adequate in diet, rarely supplemented",
-      "deficiency_symptoms": ["Weakness", "Bone pain", "Loss of appetite"],
+      "deficiency_symptoms": [
+        "Weakness",
+        "Bone pain",
+        "Loss of appetite"
+      ],
       "toxicity_symptoms": [
         "Kidney problems",
         "Calcium deficiency",
@@ -1515,16 +3137,66 @@
         "Can affect magnesium"
       ],
       "data": [
-        { "group": "Male", "age_range": "14-18", "rda_ai": 1250, "ul": 4000 },
-        { "group": "Male", "age_range": "19-30", "rda_ai": 700, "ul": 4000 },
-        { "group": "Male", "age_range": "31-50", "rda_ai": 700, "ul": 4000 },
-        { "group": "Male", "age_range": "51-70", "rda_ai": 700, "ul": 4000 },
-        { "group": "Male", "age_range": "71+", "rda_ai": 700, "ul": 4000 },
-        { "group": "Female", "age_range": "14-18", "rda_ai": 1250, "ul": 4000 },
-        { "group": "Female", "age_range": "19-30", "rda_ai": 700, "ul": 4000 },
-        { "group": "Female", "age_range": "31-50", "rda_ai": 700, "ul": 4000 },
-        { "group": "Female", "age_range": "51-70", "rda_ai": 700, "ul": 4000 },
-        { "group": "Female", "age_range": "71+", "rda_ai": 700, "ul": 4000 },
+        {
+          "group": "Male",
+          "age_range": "14-18",
+          "rda_ai": 1250,
+          "ul": 4000
+        },
+        {
+          "group": "Male",
+          "age_range": "19-30",
+          "rda_ai": 700,
+          "ul": 4000
+        },
+        {
+          "group": "Male",
+          "age_range": "31-50",
+          "rda_ai": 700,
+          "ul": 4000
+        },
+        {
+          "group": "Male",
+          "age_range": "51-70",
+          "rda_ai": 700,
+          "ul": 4000
+        },
+        {
+          "group": "Male",
+          "age_range": "71+",
+          "rda_ai": 700,
+          "ul": 4000
+        },
+        {
+          "group": "Female",
+          "age_range": "14-18",
+          "rda_ai": 1250,
+          "ul": 4000
+        },
+        {
+          "group": "Female",
+          "age_range": "19-30",
+          "rda_ai": 700,
+          "ul": 4000
+        },
+        {
+          "group": "Female",
+          "age_range": "31-50",
+          "rda_ai": 700,
+          "ul": 4000
+        },
+        {
+          "group": "Female",
+          "age_range": "51-70",
+          "rda_ai": 700,
+          "ul": 4000
+        },
+        {
+          "group": "Female",
+          "age_range": "71+",
+          "rda_ai": 700,
+          "ul": 4000
+        },
         {
           "group": "Pregnancy",
           "age_range": "14-18",
@@ -1580,22 +3252,75 @@
         "Weakness",
         "High blood pressure"
       ],
-      "toxicity_symptoms": ["Hyperkalemia", "Heart rhythm abnormalities"],
+      "toxicity_symptoms": [
+        "Hyperkalemia",
+        "Heart rhythm abnormalities"
+      ],
       "interaction_warnings": [
         "May interact with ACE inhibitors",
         "Can affect diuretics"
       ],
       "data": [
-        { "group": "Male", "age_range": "14-18", "rda_ai": 3000, "ul": "ND" },
-        { "group": "Male", "age_range": "19-30", "rda_ai": 3400, "ul": "ND" },
-        { "group": "Male", "age_range": "31-50", "rda_ai": 3400, "ul": "ND" },
-        { "group": "Male", "age_range": "51-70", "rda_ai": 3400, "ul": "ND" },
-        { "group": "Male", "age_range": "71+", "rda_ai": 3400, "ul": "ND" },
-        { "group": "Female", "age_range": "14-18", "rda_ai": 2300, "ul": "ND" },
-        { "group": "Female", "age_range": "19-30", "rda_ai": 2600, "ul": "ND" },
-        { "group": "Female", "age_range": "31-50", "rda_ai": 2600, "ul": "ND" },
-        { "group": "Female", "age_range": "51-70", "rda_ai": 2600, "ul": "ND" },
-        { "group": "Female", "age_range": "71+", "rda_ai": 2600, "ul": "ND" },
+        {
+          "group": "Male",
+          "age_range": "14-18",
+          "rda_ai": 3000,
+          "ul": "ND"
+        },
+        {
+          "group": "Male",
+          "age_range": "19-30",
+          "rda_ai": 3400,
+          "ul": "ND"
+        },
+        {
+          "group": "Male",
+          "age_range": "31-50",
+          "rda_ai": 3400,
+          "ul": "ND"
+        },
+        {
+          "group": "Male",
+          "age_range": "51-70",
+          "rda_ai": 3400,
+          "ul": "ND"
+        },
+        {
+          "group": "Male",
+          "age_range": "71+",
+          "rda_ai": 3400,
+          "ul": "ND"
+        },
+        {
+          "group": "Female",
+          "age_range": "14-18",
+          "rda_ai": 2300,
+          "ul": "ND"
+        },
+        {
+          "group": "Female",
+          "age_range": "19-30",
+          "rda_ai": 2600,
+          "ul": "ND"
+        },
+        {
+          "group": "Female",
+          "age_range": "31-50",
+          "rda_ai": 2600,
+          "ul": "ND"
+        },
+        {
+          "group": "Female",
+          "age_range": "51-70",
+          "rda_ai": 2600,
+          "ul": "ND"
+        },
+        {
+          "group": "Female",
+          "age_range": "71+",
+          "rda_ai": 2600,
+          "ul": "ND"
+        },
         {
           "group": "Pregnancy",
           "age_range": "14-18",
@@ -1646,7 +3371,11 @@
         "May affect heart health"
       ],
       "special_considerations": "Most Americans consume too much sodium",
-      "deficiency_symptoms": ["Muscle cramps", "Fatigue", "Headache"],
+      "deficiency_symptoms": [
+        "Muscle cramps",
+        "Fatigue",
+        "Headache"
+      ],
       "toxicity_symptoms": [
         "High blood pressure",
         "Fluid retention",
@@ -1657,16 +3386,66 @@
         "Can affect lithium"
       ],
       "data": [
-        { "group": "Male", "age_range": "14-18", "rda_ai": 1500, "ul": "ND" },
-        { "group": "Male", "age_range": "19-30", "rda_ai": 1500, "ul": "ND" },
-        { "group": "Male", "age_range": "31-50", "rda_ai": 1500, "ul": "ND" },
-        { "group": "Male", "age_range": "51-70", "rda_ai": 1300, "ul": "ND" },
-        { "group": "Male", "age_range": "71+", "rda_ai": 1200, "ul": "ND" },
-        { "group": "Female", "age_range": "14-18", "rda_ai": 1500, "ul": "ND" },
-        { "group": "Female", "age_range": "19-30", "rda_ai": 1500, "ul": "ND" },
-        { "group": "Female", "age_range": "31-50", "rda_ai": 1500, "ul": "ND" },
-        { "group": "Female", "age_range": "51-70", "rda_ai": 1300, "ul": "ND" },
-        { "group": "Female", "age_range": "71+", "rda_ai": 1200, "ul": "ND" },
+        {
+          "group": "Male",
+          "age_range": "14-18",
+          "rda_ai": 1500,
+          "ul": "ND"
+        },
+        {
+          "group": "Male",
+          "age_range": "19-30",
+          "rda_ai": 1500,
+          "ul": "ND"
+        },
+        {
+          "group": "Male",
+          "age_range": "31-50",
+          "rda_ai": 1500,
+          "ul": "ND"
+        },
+        {
+          "group": "Male",
+          "age_range": "51-70",
+          "rda_ai": 1300,
+          "ul": "ND"
+        },
+        {
+          "group": "Male",
+          "age_range": "71+",
+          "rda_ai": 1200,
+          "ul": "ND"
+        },
+        {
+          "group": "Female",
+          "age_range": "14-18",
+          "rda_ai": 1500,
+          "ul": "ND"
+        },
+        {
+          "group": "Female",
+          "age_range": "19-30",
+          "rda_ai": 1500,
+          "ul": "ND"
+        },
+        {
+          "group": "Female",
+          "age_range": "31-50",
+          "rda_ai": 1500,
+          "ul": "ND"
+        },
+        {
+          "group": "Female",
+          "age_range": "51-70",
+          "rda_ai": 1300,
+          "ul": "ND"
+        },
+        {
+          "group": "Female",
+          "age_range": "71+",
+          "rda_ai": 1200,
+          "ul": "ND"
+        },
         {
           "group": "Pregnancy",
           "age_range": "14-18",
@@ -1721,22 +3500,75 @@
         "Alkalosis",
         "Growth retardation"
       ],
-      "toxicity_symptoms": ["High blood pressure", "Kidney problems"],
+      "toxicity_symptoms": [
+        "High blood pressure",
+        "Kidney problems"
+      ],
       "interaction_warnings": [
         "May interact with blood pressure medications",
         "Can affect lithium"
       ],
       "data": [
-        { "group": "Male", "age_range": "14-18", "rda_ai": 2300, "ul": 3600 },
-        { "group": "Male", "age_range": "19-30", "rda_ai": 2300, "ul": 3600 },
-        { "group": "Male", "age_range": "31-50", "rda_ai": 2300, "ul": 3600 },
-        { "group": "Male", "age_range": "51-70", "rda_ai": 2000, "ul": 3600 },
-        { "group": "Male", "age_range": "71+", "rda_ai": 1800, "ul": 3600 },
-        { "group": "Female", "age_range": "14-18", "rda_ai": 2300, "ul": 3600 },
-        { "group": "Female", "age_range": "19-30", "rda_ai": 2300, "ul": 3600 },
-        { "group": "Female", "age_range": "31-50", "rda_ai": 2300, "ul": 3600 },
-        { "group": "Female", "age_range": "51-70", "rda_ai": 2000, "ul": 3600 },
-        { "group": "Female", "age_range": "71+", "rda_ai": 1800, "ul": 3600 },
+        {
+          "group": "Male",
+          "age_range": "14-18",
+          "rda_ai": 2300,
+          "ul": 3600
+        },
+        {
+          "group": "Male",
+          "age_range": "19-30",
+          "rda_ai": 2300,
+          "ul": 3600
+        },
+        {
+          "group": "Male",
+          "age_range": "31-50",
+          "rda_ai": 2300,
+          "ul": 3600
+        },
+        {
+          "group": "Male",
+          "age_range": "51-70",
+          "rda_ai": 2000,
+          "ul": 3600
+        },
+        {
+          "group": "Male",
+          "age_range": "71+",
+          "rda_ai": 1800,
+          "ul": 3600
+        },
+        {
+          "group": "Female",
+          "age_range": "14-18",
+          "rda_ai": 2300,
+          "ul": 3600
+        },
+        {
+          "group": "Female",
+          "age_range": "19-30",
+          "rda_ai": 2300,
+          "ul": 3600
+        },
+        {
+          "group": "Female",
+          "age_range": "31-50",
+          "rda_ai": 2300,
+          "ul": 3600
+        },
+        {
+          "group": "Female",
+          "age_range": "51-70",
+          "rda_ai": 2000,
+          "ul": 3600
+        },
+        {
+          "group": "Female",
+          "age_range": "71+",
+          "rda_ai": 1800,
+          "ul": 3600
+        },
         {
           "group": "Pregnancy",
           "age_range": "14-18",
@@ -1786,25 +3618,110 @@
         "May affect bone health"
       ],
       "special_considerations": "Usually obtained from water and toothpaste",
-      "deficiency_symptoms": ["Increased dental caries"],
-      "toxicity_symptoms": ["Dental fluorosis", "Skeletal fluorosis"],
+      "deficiency_symptoms": [
+        "Increased dental caries"
+      ],
+      "toxicity_symptoms": [
+        "Dental fluorosis",
+        "Skeletal fluorosis"
+      ],
       "data": [
-        { "group": "Male", "age_range": "14-18", "rda_ai": 3, "ul": 10 },
-        { "group": "Male", "age_range": "19-30", "rda_ai": 4, "ul": 10 },
-        { "group": "Male", "age_range": "31-50", "rda_ai": 4, "ul": 10 },
-        { "group": "Male", "age_range": "51-70", "rda_ai": 4, "ul": 10 },
-        { "group": "Male", "age_range": "71+", "rda_ai": 4, "ul": 10 },
-        { "group": "Female", "age_range": "14-18", "rda_ai": 3, "ul": 10 },
-        { "group": "Female", "age_range": "19-30", "rda_ai": 3, "ul": 10 },
-        { "group": "Female", "age_range": "31-50", "rda_ai": 3, "ul": 10 },
-        { "group": "Female", "age_range": "51-70", "rda_ai": 3, "ul": 10 },
-        { "group": "Female", "age_range": "71+", "rda_ai": 3, "ul": 10 },
-        { "group": "Pregnancy", "age_range": "14-18", "rda_ai": 3, "ul": 10 },
-        { "group": "Pregnancy", "age_range": "19-30", "rda_ai": 3, "ul": 10 },
-        { "group": "Pregnancy", "age_range": "31-50", "rda_ai": 3, "ul": 10 },
-        { "group": "Lactation", "age_range": "14-18", "rda_ai": 3, "ul": 10 },
-        { "group": "Lactation", "age_range": "19-30", "rda_ai": 3, "ul": 10 },
-        { "group": "Lactation", "age_range": "31-50", "rda_ai": 3, "ul": 10 }
+        {
+          "group": "Male",
+          "age_range": "14-18",
+          "rda_ai": 3,
+          "ul": 10
+        },
+        {
+          "group": "Male",
+          "age_range": "19-30",
+          "rda_ai": 4,
+          "ul": 10
+        },
+        {
+          "group": "Male",
+          "age_range": "31-50",
+          "rda_ai": 4,
+          "ul": 10
+        },
+        {
+          "group": "Male",
+          "age_range": "51-70",
+          "rda_ai": 4,
+          "ul": 10
+        },
+        {
+          "group": "Male",
+          "age_range": "71+",
+          "rda_ai": 4,
+          "ul": 10
+        },
+        {
+          "group": "Female",
+          "age_range": "14-18",
+          "rda_ai": 3,
+          "ul": 10
+        },
+        {
+          "group": "Female",
+          "age_range": "19-30",
+          "rda_ai": 3,
+          "ul": 10
+        },
+        {
+          "group": "Female",
+          "age_range": "31-50",
+          "rda_ai": 3,
+          "ul": 10
+        },
+        {
+          "group": "Female",
+          "age_range": "51-70",
+          "rda_ai": 3,
+          "ul": 10
+        },
+        {
+          "group": "Female",
+          "age_range": "71+",
+          "rda_ai": 3,
+          "ul": 10
+        },
+        {
+          "group": "Pregnancy",
+          "age_range": "14-18",
+          "rda_ai": 3,
+          "ul": 10
+        },
+        {
+          "group": "Pregnancy",
+          "age_range": "19-30",
+          "rda_ai": 3,
+          "ul": 10
+        },
+        {
+          "group": "Pregnancy",
+          "age_range": "31-50",
+          "rda_ai": 3,
+          "ul": 10
+        },
+        {
+          "group": "Lactation",
+          "age_range": "14-18",
+          "rda_ai": 3,
+          "ul": 10
+        },
+        {
+          "group": "Lactation",
+          "age_range": "19-30",
+          "rda_ai": 3,
+          "ul": 10
+        },
+        {
+          "group": "Lactation",
+          "age_range": "31-50",
+          "rda_ai": 3,
+          "ul": 10
+        }
       ]
     },
     {
@@ -1823,19 +3740,72 @@
         "Impaired brain function",
         "Decreased bone strength"
       ],
-      "toxicity_symptoms": ["Reproductive effects", "Kidney damage"],
+      "toxicity_symptoms": [
+        "Reproductive effects",
+        "Kidney damage"
+      ],
       "unofficial_ul": 20,
       "data": [
-        { "group": "Male", "age_range": "14-18", "rda_ai": "ND", "ul": 20 },
-        { "group": "Male", "age_range": "19-30", "rda_ai": "ND", "ul": 20 },
-        { "group": "Male", "age_range": "31-50", "rda_ai": "ND", "ul": 20 },
-        { "group": "Male", "age_range": "51-70", "rda_ai": "ND", "ul": 20 },
-        { "group": "Male", "age_range": "71+", "rda_ai": "ND", "ul": 20 },
-        { "group": "Female", "age_range": "14-18", "rda_ai": "ND", "ul": 20 },
-        { "group": "Female", "age_range": "19-30", "rda_ai": "ND", "ul": 20 },
-        { "group": "Female", "age_range": "31-50", "rda_ai": "ND", "ul": 20 },
-        { "group": "Female", "age_range": "51-70", "rda_ai": "ND", "ul": 20 },
-        { "group": "Female", "age_range": "71+", "rda_ai": "ND", "ul": 20 },
+        {
+          "group": "Male",
+          "age_range": "14-18",
+          "rda_ai": "ND",
+          "ul": 20
+        },
+        {
+          "group": "Male",
+          "age_range": "19-30",
+          "rda_ai": "ND",
+          "ul": 20
+        },
+        {
+          "group": "Male",
+          "age_range": "31-50",
+          "rda_ai": "ND",
+          "ul": 20
+        },
+        {
+          "group": "Male",
+          "age_range": "51-70",
+          "rda_ai": "ND",
+          "ul": 20
+        },
+        {
+          "group": "Male",
+          "age_range": "71+",
+          "rda_ai": "ND",
+          "ul": 20
+        },
+        {
+          "group": "Female",
+          "age_range": "14-18",
+          "rda_ai": "ND",
+          "ul": 20
+        },
+        {
+          "group": "Female",
+          "age_range": "19-30",
+          "rda_ai": "ND",
+          "ul": 20
+        },
+        {
+          "group": "Female",
+          "age_range": "31-50",
+          "rda_ai": "ND",
+          "ul": 20
+        },
+        {
+          "group": "Female",
+          "age_range": "51-70",
+          "rda_ai": "ND",
+          "ul": 20
+        },
+        {
+          "group": "Female",
+          "age_range": "71+",
+          "rda_ai": "ND",
+          "ul": 20
+        },
         {
           "group": "Pregnancy",
           "age_range": "14-18",
@@ -1866,7 +3836,12 @@
           "rda_ai": "ND",
           "ul": 20
         },
-        { "group": "Lactation", "age_range": "31-50", "rda_ai": "ND", "ul": 20 }
+        {
+          "group": "Lactation",
+          "age_range": "31-50",
+          "rda_ai": "ND",
+          "ul": 20
+        }
       ]
     },
     {
@@ -1876,9 +3851,14 @@
       "ul_note": "No official RDA established, UL based on toxicity studies",
       "optimal_range": "10-100",
       "highest_ul": "none",
-      "warnings": ["High doses may cause GI upset", "May affect blood sugar"],
+      "warnings": [
+        "High doses may cause GI upset",
+        "May affect blood sugar"
+      ],
       "special_considerations": "Often used for blood sugar support",
-      "deficiency_symptoms": ["Rarely documented in humans"],
+      "deficiency_symptoms": [
+        "Rarely documented in humans"
+      ],
       "toxicity_symptoms": [
         "GI upset",
         "Kidney damage",
@@ -1886,16 +3866,66 @@
       ],
       "unofficial_ul": 1800,
       "data": [
-        { "group": "Male", "age_range": "14-18", "rda_ai": "ND", "ul": 1800 },
-        { "group": "Male", "age_range": "19-30", "rda_ai": "ND", "ul": 1800 },
-        { "group": "Male", "age_range": "31-50", "rda_ai": "ND", "ul": 1800 },
-        { "group": "Male", "age_range": "51-70", "rda_ai": "ND", "ul": 1800 },
-        { "group": "Male", "age_range": "71+", "rda_ai": "ND", "ul": 1800 },
-        { "group": "Female", "age_range": "14-18", "rda_ai": "ND", "ul": 1800 },
-        { "group": "Female", "age_range": "19-30", "rda_ai": "ND", "ul": 1800 },
-        { "group": "Female", "age_range": "31-50", "rda_ai": "ND", "ul": 1800 },
-        { "group": "Female", "age_range": "51-70", "rda_ai": "ND", "ul": 1800 },
-        { "group": "Female", "age_range": "71+", "rda_ai": "ND", "ul": 1800 },
+        {
+          "group": "Male",
+          "age_range": "14-18",
+          "rda_ai": "ND",
+          "ul": 1800
+        },
+        {
+          "group": "Male",
+          "age_range": "19-30",
+          "rda_ai": "ND",
+          "ul": 1800
+        },
+        {
+          "group": "Male",
+          "age_range": "31-50",
+          "rda_ai": "ND",
+          "ul": 1800
+        },
+        {
+          "group": "Male",
+          "age_range": "51-70",
+          "rda_ai": "ND",
+          "ul": 1800
+        },
+        {
+          "group": "Male",
+          "age_range": "71+",
+          "rda_ai": "ND",
+          "ul": 1800
+        },
+        {
+          "group": "Female",
+          "age_range": "14-18",
+          "rda_ai": "ND",
+          "ul": 1800
+        },
+        {
+          "group": "Female",
+          "age_range": "19-30",
+          "rda_ai": "ND",
+          "ul": 1800
+        },
+        {
+          "group": "Female",
+          "age_range": "31-50",
+          "rda_ai": "ND",
+          "ul": 1800
+        },
+        {
+          "group": "Female",
+          "age_range": "51-70",
+          "rda_ai": "ND",
+          "ul": 1800
+        },
+        {
+          "group": "Female",
+          "age_range": "71+",
+          "rda_ai": "ND",
+          "ul": 1800
+        },
         {
           "group": "Pregnancy",
           "age_range": "14-18",
@@ -1962,16 +3992,66 @@
         "Can affect immune response"
       ],
       "data": [
-        { "group": "Male", "age_range": "14-18", "rda_ai": 1.6, "ul": "ND" },
-        { "group": "Male", "age_range": "19-30", "rda_ai": 1.6, "ul": "ND" },
-        { "group": "Male", "age_range": "31-50", "rda_ai": 1.6, "ul": "ND" },
-        { "group": "Male", "age_range": "51-70", "rda_ai": 1.6, "ul": "ND" },
-        { "group": "Male", "age_range": "71+", "rda_ai": 1.6, "ul": "ND" },
-        { "group": "Female", "age_range": "14-18", "rda_ai": 1.1, "ul": "ND" },
-        { "group": "Female", "age_range": "19-30", "rda_ai": 1.1, "ul": "ND" },
-        { "group": "Female", "age_range": "31-50", "rda_ai": 1.1, "ul": "ND" },
-        { "group": "Female", "age_range": "51-70", "rda_ai": 1.1, "ul": "ND" },
-        { "group": "Female", "age_range": "71+", "rda_ai": 1.1, "ul": "ND" },
+        {
+          "group": "Male",
+          "age_range": "14-18",
+          "rda_ai": 1.6,
+          "ul": "ND"
+        },
+        {
+          "group": "Male",
+          "age_range": "19-30",
+          "rda_ai": 1.6,
+          "ul": "ND"
+        },
+        {
+          "group": "Male",
+          "age_range": "31-50",
+          "rda_ai": 1.6,
+          "ul": "ND"
+        },
+        {
+          "group": "Male",
+          "age_range": "51-70",
+          "rda_ai": 1.6,
+          "ul": "ND"
+        },
+        {
+          "group": "Male",
+          "age_range": "71+",
+          "rda_ai": 1.6,
+          "ul": "ND"
+        },
+        {
+          "group": "Female",
+          "age_range": "14-18",
+          "rda_ai": 1.1,
+          "ul": "ND"
+        },
+        {
+          "group": "Female",
+          "age_range": "19-30",
+          "rda_ai": 1.1,
+          "ul": "ND"
+        },
+        {
+          "group": "Female",
+          "age_range": "31-50",
+          "rda_ai": 1.1,
+          "ul": "ND"
+        },
+        {
+          "group": "Female",
+          "age_range": "51-70",
+          "rda_ai": 1.1,
+          "ul": "ND"
+        },
+        {
+          "group": "Female",
+          "age_range": "71+",
+          "rda_ai": 1.1,
+          "ul": "ND"
+        },
         {
           "group": "Pregnancy",
           "age_range": "14-18",
@@ -2023,29 +4103,90 @@
         "Those on statin medications",
         "People with heart conditions"
       ],
-      "synthesis_precursors": ["Acetyl-CoA", "Mevalonate", "Tyrosine"],
+      "synthesis_precursors": [
+        "Acetyl-CoA",
+        "Mevalonate",
+        "Tyrosine"
+      ],
       "warnings": [
         "May interact with blood thinners",
         "May affect blood pressure"
       ],
       "special_considerations": "Production decreases with age, ubiquinol form preferred for >40 years",
-      "deficiency_symptoms": ["Fatigue", "Muscle weakness", "Heart problems"],
-      "toxicity_symptoms": ["Generally well tolerated", "Occasional GI upset"],
+      "deficiency_symptoms": [
+        "Fatigue",
+        "Muscle weakness",
+        "Heart problems"
+      ],
+      "toxicity_symptoms": [
+        "Generally well tolerated",
+        "Occasional GI upset"
+      ],
       "interaction_warnings": [
         "May interact with warfarin",
         "Can affect blood pressure medications"
       ],
       "data": [
-        { "group": "Male", "age_range": "14-18", "rda_ai": 30, "ul": "ND" },
-        { "group": "Male", "age_range": "19-30", "rda_ai": 30, "ul": "ND" },
-        { "group": "Male", "age_range": "31-50", "rda_ai": 100, "ul": "ND" },
-        { "group": "Male", "age_range": "51-70", "rda_ai": 100, "ul": "ND" },
-        { "group": "Male", "age_range": "71+", "rda_ai": 100, "ul": "ND" },
-        { "group": "Female", "age_range": "14-18", "rda_ai": 30, "ul": "ND" },
-        { "group": "Female", "age_range": "19-30", "rda_ai": 30, "ul": "ND" },
-        { "group": "Female", "age_range": "31-50", "rda_ai": 100, "ul": "ND" },
-        { "group": "Female", "age_range": "51-70", "rda_ai": 100, "ul": "ND" },
-        { "group": "Female", "age_range": "71+", "rda_ai": 100, "ul": "ND" },
+        {
+          "group": "Male",
+          "age_range": "14-18",
+          "rda_ai": 30,
+          "ul": "ND"
+        },
+        {
+          "group": "Male",
+          "age_range": "19-30",
+          "rda_ai": 30,
+          "ul": "ND"
+        },
+        {
+          "group": "Male",
+          "age_range": "31-50",
+          "rda_ai": 100,
+          "ul": "ND"
+        },
+        {
+          "group": "Male",
+          "age_range": "51-70",
+          "rda_ai": 100,
+          "ul": "ND"
+        },
+        {
+          "group": "Male",
+          "age_range": "71+",
+          "rda_ai": 100,
+          "ul": "ND"
+        },
+        {
+          "group": "Female",
+          "age_range": "14-18",
+          "rda_ai": 30,
+          "ul": "ND"
+        },
+        {
+          "group": "Female",
+          "age_range": "19-30",
+          "rda_ai": 30,
+          "ul": "ND"
+        },
+        {
+          "group": "Female",
+          "age_range": "31-50",
+          "rda_ai": 100,
+          "ul": "ND"
+        },
+        {
+          "group": "Female",
+          "age_range": "51-70",
+          "rda_ai": 100,
+          "ul": "ND"
+        },
+        {
+          "group": "Female",
+          "age_range": "71+",
+          "rda_ai": 100,
+          "ul": "ND"
+        },
         {
           "group": "Pregnancy",
           "age_range": "14-18",
@@ -2076,7 +4217,12 @@
           "rda_ai": 30,
           "ul": "ND"
         },
-        { "group": "Lactation", "age_range": "31-50", "rda_ai": 30, "ul": "ND" }
+        {
+          "group": "Lactation",
+          "age_range": "31-50",
+          "rda_ai": 30,
+          "ul": "ND"
+        }
       ]
     },
     {
@@ -2092,29 +4238,88 @@
         "Those with cognitive decline",
         "Neuropathy patients"
       ],
-      "synthesis_precursors": ["L-Carnitine", "Acetyl-CoA"],
+      "synthesis_precursors": [
+        "L-Carnitine",
+        "Acetyl-CoA"
+      ],
       "warnings": [
         "May lower blood sugar",
         "May interact with thyroid medications"
       ],
       "special_considerations": "R-form is more bioavailable than synthetic racemic form",
-      "deficiency_symptoms": ["Not essential nutrient, no deficiency symptoms"],
-      "toxicity_symptoms": ["Nausea", "Skin rash", "Hypoglycemia"],
+      "deficiency_symptoms": [
+        "Not essential nutrient, no deficiency symptoms"
+      ],
+      "toxicity_symptoms": [
+        "Nausea",
+        "Skin rash",
+        "Hypoglycemia"
+      ],
       "interaction_warnings": [
         "May interact with diabetes medications",
         "Can affect thyroid function"
       ],
       "data": [
-        { "group": "Male", "age_range": "14-18", "rda_ai": 100, "ul": "ND" },
-        { "group": "Male", "age_range": "19-30", "rda_ai": 100, "ul": "ND" },
-        { "group": "Male", "age_range": "31-50", "rda_ai": 100, "ul": "ND" },
-        { "group": "Male", "age_range": "51-70", "rda_ai": 100, "ul": "ND" },
-        { "group": "Male", "age_range": "71+", "rda_ai": 100, "ul": "ND" },
-        { "group": "Female", "age_range": "14-18", "rda_ai": 100, "ul": "ND" },
-        { "group": "Female", "age_range": "19-30", "rda_ai": 100, "ul": "ND" },
-        { "group": "Female", "age_range": "31-50", "rda_ai": 100, "ul": "ND" },
-        { "group": "Female", "age_range": "51-70", "rda_ai": 100, "ul": "ND" },
-        { "group": "Female", "age_range": "71+", "rda_ai": 100, "ul": "ND" },
+        {
+          "group": "Male",
+          "age_range": "14-18",
+          "rda_ai": 100,
+          "ul": "ND"
+        },
+        {
+          "group": "Male",
+          "age_range": "19-30",
+          "rda_ai": 100,
+          "ul": "ND"
+        },
+        {
+          "group": "Male",
+          "age_range": "31-50",
+          "rda_ai": 100,
+          "ul": "ND"
+        },
+        {
+          "group": "Male",
+          "age_range": "51-70",
+          "rda_ai": 100,
+          "ul": "ND"
+        },
+        {
+          "group": "Male",
+          "age_range": "71+",
+          "rda_ai": 100,
+          "ul": "ND"
+        },
+        {
+          "group": "Female",
+          "age_range": "14-18",
+          "rda_ai": 100,
+          "ul": "ND"
+        },
+        {
+          "group": "Female",
+          "age_range": "19-30",
+          "rda_ai": 100,
+          "ul": "ND"
+        },
+        {
+          "group": "Female",
+          "age_range": "31-50",
+          "rda_ai": 100,
+          "ul": "ND"
+        },
+        {
+          "group": "Female",
+          "age_range": "51-70",
+          "rda_ai": 100,
+          "ul": "ND"
+        },
+        {
+          "group": "Female",
+          "age_range": "71+",
+          "rda_ai": 100,
+          "ul": "ND"
+        },
         {
           "group": "Pregnancy",
           "age_range": "14-18",
@@ -2167,22 +4372,83 @@
         "Premature infants",
         "Those with heart or metabolic conditions"
       ],
-      "synthesis_precursors": ["Cysteine", "Vitamin B6"],
-      "warnings": ["Generally well tolerated", "May interact with lithium"],
+      "synthesis_precursors": [
+        "Cysteine",
+        "Vitamin B6"
+      ],
+      "warnings": [
+        "Generally well tolerated",
+        "May interact with lithium"
+      ],
       "special_considerations": "Semi-essential amino acid, may become essential during stress",
-      "deficiency_symptoms": ["Rarely occurs in healthy adults"],
-      "toxicity_symptoms": ["Generally well tolerated", "Occasional GI upset"],
+      "deficiency_symptoms": [
+        "Rarely occurs in healthy adults"
+      ],
+      "toxicity_symptoms": [
+        "Generally well tolerated",
+        "Occasional GI upset"
+      ],
       "data": [
-        { "group": "Male", "age_range": "14-18", "rda_ai": 0.5, "ul": "ND" },
-        { "group": "Male", "age_range": "19-30", "rda_ai": 0.5, "ul": "ND" },
-        { "group": "Male", "age_range": "31-50", "rda_ai": 0.5, "ul": "ND" },
-        { "group": "Male", "age_range": "51-70", "rda_ai": 0.5, "ul": "ND" },
-        { "group": "Male", "age_range": "71+", "rda_ai": 0.5, "ul": "ND" },
-        { "group": "Female", "age_range": "14-18", "rda_ai": 0.5, "ul": "ND" },
-        { "group": "Female", "age_range": "19-30", "rda_ai": 0.5, "ul": "ND" },
-        { "group": "Female", "age_range": "31-50", "rda_ai": 0.5, "ul": "ND" },
-        { "group": "Female", "age_range": "51-70", "rda_ai": 0.5, "ul": "ND" },
-        { "group": "Female", "age_range": "71+", "rda_ai": 0.5, "ul": "ND" },
+        {
+          "group": "Male",
+          "age_range": "14-18",
+          "rda_ai": 0.5,
+          "ul": "ND"
+        },
+        {
+          "group": "Male",
+          "age_range": "19-30",
+          "rda_ai": 0.5,
+          "ul": "ND"
+        },
+        {
+          "group": "Male",
+          "age_range": "31-50",
+          "rda_ai": 0.5,
+          "ul": "ND"
+        },
+        {
+          "group": "Male",
+          "age_range": "51-70",
+          "rda_ai": 0.5,
+          "ul": "ND"
+        },
+        {
+          "group": "Male",
+          "age_range": "71+",
+          "rda_ai": 0.5,
+          "ul": "ND"
+        },
+        {
+          "group": "Female",
+          "age_range": "14-18",
+          "rda_ai": 0.5,
+          "ul": "ND"
+        },
+        {
+          "group": "Female",
+          "age_range": "19-30",
+          "rda_ai": 0.5,
+          "ul": "ND"
+        },
+        {
+          "group": "Female",
+          "age_range": "31-50",
+          "rda_ai": 0.5,
+          "ul": "ND"
+        },
+        {
+          "group": "Female",
+          "age_range": "51-70",
+          "rda_ai": 0.5,
+          "ul": "ND"
+        },
+        {
+          "group": "Female",
+          "age_range": "71+",
+          "rda_ai": 0.5,
+          "ul": "ND"
+        },
         {
           "group": "Pregnancy",
           "age_range": "14-18",
@@ -2241,24 +4507,106 @@
         "Carotenodermia (yellowing of skin)",
         "Generally well tolerated"
       ],
-      "interaction_warnings": ["May enhance effects of other carotenoids"],
+      "interaction_warnings": [
+        "May enhance effects of other carotenoids"
+      ],
       "data": [
-        { "group": "Male", "age_range": "14-18", "rda_ai": 6, "ul": "ND" },
-        { "group": "Male", "age_range": "19-30", "rda_ai": 6, "ul": "ND" },
-        { "group": "Male", "age_range": "31-50", "rda_ai": 6, "ul": "ND" },
-        { "group": "Male", "age_range": "51-70", "rda_ai": 10, "ul": "ND" },
-        { "group": "Male", "age_range": "71+", "rda_ai": 10, "ul": "ND" },
-        { "group": "Female", "age_range": "14-18", "rda_ai": 6, "ul": "ND" },
-        { "group": "Female", "age_range": "19-30", "rda_ai": 6, "ul": "ND" },
-        { "group": "Female", "age_range": "31-50", "rda_ai": 6, "ul": "ND" },
-        { "group": "Female", "age_range": "51-70", "rda_ai": 10, "ul": "ND" },
-        { "group": "Female", "age_range": "71+", "rda_ai": 10, "ul": "ND" },
-        { "group": "Pregnancy", "age_range": "14-18", "rda_ai": 6, "ul": "ND" },
-        { "group": "Pregnancy", "age_range": "19-30", "rda_ai": 6, "ul": "ND" },
-        { "group": "Pregnancy", "age_range": "31-50", "rda_ai": 6, "ul": "ND" },
-        { "group": "Lactation", "age_range": "14-18", "rda_ai": 6, "ul": "ND" },
-        { "group": "Lactation", "age_range": "19-30", "rda_ai": 6, "ul": "ND" },
-        { "group": "Lactation", "age_range": "31-50", "rda_ai": 6, "ul": "ND" }
+        {
+          "group": "Male",
+          "age_range": "14-18",
+          "rda_ai": 6,
+          "ul": "ND"
+        },
+        {
+          "group": "Male",
+          "age_range": "19-30",
+          "rda_ai": 6,
+          "ul": "ND"
+        },
+        {
+          "group": "Male",
+          "age_range": "31-50",
+          "rda_ai": 6,
+          "ul": "ND"
+        },
+        {
+          "group": "Male",
+          "age_range": "51-70",
+          "rda_ai": 10,
+          "ul": "ND"
+        },
+        {
+          "group": "Male",
+          "age_range": "71+",
+          "rda_ai": 10,
+          "ul": "ND"
+        },
+        {
+          "group": "Female",
+          "age_range": "14-18",
+          "rda_ai": 6,
+          "ul": "ND"
+        },
+        {
+          "group": "Female",
+          "age_range": "19-30",
+          "rda_ai": 6,
+          "ul": "ND"
+        },
+        {
+          "group": "Female",
+          "age_range": "31-50",
+          "rda_ai": 6,
+          "ul": "ND"
+        },
+        {
+          "group": "Female",
+          "age_range": "51-70",
+          "rda_ai": 10,
+          "ul": "ND"
+        },
+        {
+          "group": "Female",
+          "age_range": "71+",
+          "rda_ai": 10,
+          "ul": "ND"
+        },
+        {
+          "group": "Pregnancy",
+          "age_range": "14-18",
+          "rda_ai": 6,
+          "ul": "ND"
+        },
+        {
+          "group": "Pregnancy",
+          "age_range": "19-30",
+          "rda_ai": 6,
+          "ul": "ND"
+        },
+        {
+          "group": "Pregnancy",
+          "age_range": "31-50",
+          "rda_ai": 6,
+          "ul": "ND"
+        },
+        {
+          "group": "Lactation",
+          "age_range": "14-18",
+          "rda_ai": 6,
+          "ul": "ND"
+        },
+        {
+          "group": "Lactation",
+          "age_range": "19-30",
+          "rda_ai": 6,
+          "ul": "ND"
+        },
+        {
+          "group": "Lactation",
+          "age_range": "31-50",
+          "rda_ai": 6,
+          "ul": "ND"
+        }
       ]
     },
     {
@@ -2268,34 +4616,120 @@
       "ul_note": "No official RDA or UL established, often combined with lutein",
       "optimal_range": "2-10",
       "highest_ul": "none",
-      "warnings": ["Generally well tolerated", "Usually taken with lutein"],
+      "warnings": [
+        "Generally well tolerated",
+        "Usually taken with lutein"
+      ],
       "special_considerations": "Critical for macular health, concentrated in eye tissues",
       "deficiency_symptoms": [
         "No official deficiency syndrome",
         "May contribute to macular degeneration"
       ],
-      "toxicity_symptoms": ["Generally well tolerated", "Very safe profile"],
+      "toxicity_symptoms": [
+        "Generally well tolerated",
+        "Very safe profile"
+      ],
       "interaction_warnings": [
         "Synergistic with lutein",
         "Enhanced by dietary fat"
       ],
       "data": [
-        { "group": "Male", "age_range": "14-18", "rda_ai": 2, "ul": "ND" },
-        { "group": "Male", "age_range": "19-30", "rda_ai": 2, "ul": "ND" },
-        { "group": "Male", "age_range": "31-50", "rda_ai": 2, "ul": "ND" },
-        { "group": "Male", "age_range": "51-70", "rda_ai": 4, "ul": "ND" },
-        { "group": "Male", "age_range": "71+", "rda_ai": 4, "ul": "ND" },
-        { "group": "Female", "age_range": "14-18", "rda_ai": 2, "ul": "ND" },
-        { "group": "Female", "age_range": "19-30", "rda_ai": 2, "ul": "ND" },
-        { "group": "Female", "age_range": "31-50", "rda_ai": 2, "ul": "ND" },
-        { "group": "Female", "age_range": "51-70", "rda_ai": 4, "ul": "ND" },
-        { "group": "Female", "age_range": "71+", "rda_ai": 4, "ul": "ND" },
-        { "group": "Pregnancy", "age_range": "14-18", "rda_ai": 2, "ul": "ND" },
-        { "group": "Pregnancy", "age_range": "19-30", "rda_ai": 2, "ul": "ND" },
-        { "group": "Pregnancy", "age_range": "31-50", "rda_ai": 2, "ul": "ND" },
-        { "group": "Lactation", "age_range": "14-18", "rda_ai": 2, "ul": "ND" },
-        { "group": "Lactation", "age_range": "19-30", "rda_ai": 2, "ul": "ND" },
-        { "group": "Lactation", "age_range": "31-50", "rda_ai": 2, "ul": "ND" }
+        {
+          "group": "Male",
+          "age_range": "14-18",
+          "rda_ai": 2,
+          "ul": "ND"
+        },
+        {
+          "group": "Male",
+          "age_range": "19-30",
+          "rda_ai": 2,
+          "ul": "ND"
+        },
+        {
+          "group": "Male",
+          "age_range": "31-50",
+          "rda_ai": 2,
+          "ul": "ND"
+        },
+        {
+          "group": "Male",
+          "age_range": "51-70",
+          "rda_ai": 4,
+          "ul": "ND"
+        },
+        {
+          "group": "Male",
+          "age_range": "71+",
+          "rda_ai": 4,
+          "ul": "ND"
+        },
+        {
+          "group": "Female",
+          "age_range": "14-18",
+          "rda_ai": 2,
+          "ul": "ND"
+        },
+        {
+          "group": "Female",
+          "age_range": "19-30",
+          "rda_ai": 2,
+          "ul": "ND"
+        },
+        {
+          "group": "Female",
+          "age_range": "31-50",
+          "rda_ai": 2,
+          "ul": "ND"
+        },
+        {
+          "group": "Female",
+          "age_range": "51-70",
+          "rda_ai": 4,
+          "ul": "ND"
+        },
+        {
+          "group": "Female",
+          "age_range": "71+",
+          "rda_ai": 4,
+          "ul": "ND"
+        },
+        {
+          "group": "Pregnancy",
+          "age_range": "14-18",
+          "rda_ai": 2,
+          "ul": "ND"
+        },
+        {
+          "group": "Pregnancy",
+          "age_range": "19-30",
+          "rda_ai": 2,
+          "ul": "ND"
+        },
+        {
+          "group": "Pregnancy",
+          "age_range": "31-50",
+          "rda_ai": 2,
+          "ul": "ND"
+        },
+        {
+          "group": "Lactation",
+          "age_range": "14-18",
+          "rda_ai": 2,
+          "ul": "ND"
+        },
+        {
+          "group": "Lactation",
+          "age_range": "19-30",
+          "rda_ai": 2,
+          "ul": "ND"
+        },
+        {
+          "group": "Lactation",
+          "age_range": "31-50",
+          "rda_ai": 2,
+          "ul": "ND"
+        }
       ]
     },
     {
@@ -2323,22 +4757,102 @@
         "Fat enhances absorption"
       ],
       "data": [
-        { "group": "Male", "age_range": "14-18", "rda_ai": 5, "ul": "ND" },
-        { "group": "Male", "age_range": "19-30", "rda_ai": 10, "ul": "ND" },
-        { "group": "Male", "age_range": "31-50", "rda_ai": 10, "ul": "ND" },
-        { "group": "Male", "age_range": "51-70", "rda_ai": 15, "ul": "ND" },
-        { "group": "Male", "age_range": "71+", "rda_ai": 15, "ul": "ND" },
-        { "group": "Female", "age_range": "14-18", "rda_ai": 5, "ul": "ND" },
-        { "group": "Female", "age_range": "19-30", "rda_ai": 7, "ul": "ND" },
-        { "group": "Female", "age_range": "31-50", "rda_ai": 7, "ul": "ND" },
-        { "group": "Female", "age_range": "51-70", "rda_ai": 7, "ul": "ND" },
-        { "group": "Female", "age_range": "71+", "rda_ai": 7, "ul": "ND" },
-        { "group": "Pregnancy", "age_range": "14-18", "rda_ai": 7, "ul": "ND" },
-        { "group": "Pregnancy", "age_range": "19-30", "rda_ai": 7, "ul": "ND" },
-        { "group": "Pregnancy", "age_range": "31-50", "rda_ai": 7, "ul": "ND" },
-        { "group": "Lactation", "age_range": "14-18", "rda_ai": 7, "ul": "ND" },
-        { "group": "Lactation", "age_range": "19-30", "rda_ai": 7, "ul": "ND" },
-        { "group": "Lactation", "age_range": "31-50", "rda_ai": 7, "ul": "ND" }
+        {
+          "group": "Male",
+          "age_range": "14-18",
+          "rda_ai": 5,
+          "ul": "ND"
+        },
+        {
+          "group": "Male",
+          "age_range": "19-30",
+          "rda_ai": 10,
+          "ul": "ND"
+        },
+        {
+          "group": "Male",
+          "age_range": "31-50",
+          "rda_ai": 10,
+          "ul": "ND"
+        },
+        {
+          "group": "Male",
+          "age_range": "51-70",
+          "rda_ai": 15,
+          "ul": "ND"
+        },
+        {
+          "group": "Male",
+          "age_range": "71+",
+          "rda_ai": 15,
+          "ul": "ND"
+        },
+        {
+          "group": "Female",
+          "age_range": "14-18",
+          "rda_ai": 5,
+          "ul": "ND"
+        },
+        {
+          "group": "Female",
+          "age_range": "19-30",
+          "rda_ai": 7,
+          "ul": "ND"
+        },
+        {
+          "group": "Female",
+          "age_range": "31-50",
+          "rda_ai": 7,
+          "ul": "ND"
+        },
+        {
+          "group": "Female",
+          "age_range": "51-70",
+          "rda_ai": 7,
+          "ul": "ND"
+        },
+        {
+          "group": "Female",
+          "age_range": "71+",
+          "rda_ai": 7,
+          "ul": "ND"
+        },
+        {
+          "group": "Pregnancy",
+          "age_range": "14-18",
+          "rda_ai": 7,
+          "ul": "ND"
+        },
+        {
+          "group": "Pregnancy",
+          "age_range": "19-30",
+          "rda_ai": 7,
+          "ul": "ND"
+        },
+        {
+          "group": "Pregnancy",
+          "age_range": "31-50",
+          "rda_ai": 7,
+          "ul": "ND"
+        },
+        {
+          "group": "Lactation",
+          "age_range": "14-18",
+          "rda_ai": 7,
+          "ul": "ND"
+        },
+        {
+          "group": "Lactation",
+          "age_range": "19-30",
+          "rda_ai": 7,
+          "ul": "ND"
+        },
+        {
+          "group": "Lactation",
+          "age_range": "31-50",
+          "rda_ai": 7,
+          "ul": "ND"
+        }
       ]
     },
     {
@@ -2355,7 +4869,11 @@
         "Elderly",
         "Athletes"
       ],
-      "synthesis_precursors": ["Glycine", "Arginine", "Methionine"],
+      "synthesis_precursors": [
+        "Glycine",
+        "Arginine",
+        "Methionine"
+      ],
       "warnings": [
         "May cause initial water retention",
         "Kidney function should be monitored at high doses"
@@ -2376,16 +4894,66 @@
         "Adequate hydration important"
       ],
       "data": [
-        { "group": "Male", "age_range": "14-18", "rda_ai": 1.5, "ul": "ND" },
-        { "group": "Male", "age_range": "19-30", "rda_ai": 2, "ul": "ND" },
-        { "group": "Male", "age_range": "31-50", "rda_ai": 2, "ul": "ND" },
-        { "group": "Male", "age_range": "51-70", "rda_ai": 2, "ul": "ND" },
-        { "group": "Male", "age_range": "71+", "rda_ai": 2, "ul": "ND" },
-        { "group": "Female", "age_range": "14-18", "rda_ai": 1.2, "ul": "ND" },
-        { "group": "Female", "age_range": "19-30", "rda_ai": 1.5, "ul": "ND" },
-        { "group": "Female", "age_range": "31-50", "rda_ai": 1.5, "ul": "ND" },
-        { "group": "Female", "age_range": "51-70", "rda_ai": 1.5, "ul": "ND" },
-        { "group": "Female", "age_range": "71+", "rda_ai": 1.5, "ul": "ND" },
+        {
+          "group": "Male",
+          "age_range": "14-18",
+          "rda_ai": 1.5,
+          "ul": "ND"
+        },
+        {
+          "group": "Male",
+          "age_range": "19-30",
+          "rda_ai": 2,
+          "ul": "ND"
+        },
+        {
+          "group": "Male",
+          "age_range": "31-50",
+          "rda_ai": 2,
+          "ul": "ND"
+        },
+        {
+          "group": "Male",
+          "age_range": "51-70",
+          "rda_ai": 2,
+          "ul": "ND"
+        },
+        {
+          "group": "Male",
+          "age_range": "71+",
+          "rda_ai": 2,
+          "ul": "ND"
+        },
+        {
+          "group": "Female",
+          "age_range": "14-18",
+          "rda_ai": 1.2,
+          "ul": "ND"
+        },
+        {
+          "group": "Female",
+          "age_range": "19-30",
+          "rda_ai": 1.5,
+          "ul": "ND"
+        },
+        {
+          "group": "Female",
+          "age_range": "31-50",
+          "rda_ai": 1.5,
+          "ul": "ND"
+        },
+        {
+          "group": "Female",
+          "age_range": "51-70",
+          "rda_ai": 1.5,
+          "ul": "ND"
+        },
+        {
+          "group": "Female",
+          "age_range": "71+",
+          "rda_ai": 1.5,
+          "ul": "ND"
+        },
         {
           "group": "Pregnancy",
           "age_range": "14-18",
@@ -2450,23 +5018,81 @@
         "GI upset possible"
       ],
       "special_considerations": "Essential for vegans/vegetarians, synthesized from lysine and methionine",
-      "deficiency_symptoms": ["Muscle weakness", "Fatigue", "Hypoglycemia"],
-      "toxicity_symptoms": ["Fishy body odor", "Nausea", "Diarrhea"],
+      "deficiency_symptoms": [
+        "Muscle weakness",
+        "Fatigue",
+        "Hypoglycemia"
+      ],
+      "toxicity_symptoms": [
+        "Fishy body odor",
+        "Nausea",
+        "Diarrhea"
+      ],
       "interaction_warnings": [
         "May interact with warfarin",
         "Thyroid hormone synthesis"
       ],
       "data": [
-        { "group": "Male", "age_range": "14-18", "rda_ai": 0.5, "ul": "ND" },
-        { "group": "Male", "age_range": "19-30", "rda_ai": 0.5, "ul": "ND" },
-        { "group": "Male", "age_range": "31-50", "rda_ai": 0.5, "ul": "ND" },
-        { "group": "Male", "age_range": "51-70", "rda_ai": 1, "ul": "ND" },
-        { "group": "Male", "age_range": "71+", "rda_ai": 1, "ul": "ND" },
-        { "group": "Female", "age_range": "14-18", "rda_ai": 0.5, "ul": "ND" },
-        { "group": "Female", "age_range": "19-30", "rda_ai": 0.5, "ul": "ND" },
-        { "group": "Female", "age_range": "31-50", "rda_ai": 0.5, "ul": "ND" },
-        { "group": "Female", "age_range": "51-70", "rda_ai": 0.8, "ul": "ND" },
-        { "group": "Female", "age_range": "71+", "rda_ai": 0.8, "ul": "ND" },
+        {
+          "group": "Male",
+          "age_range": "14-18",
+          "rda_ai": 0.5,
+          "ul": "ND"
+        },
+        {
+          "group": "Male",
+          "age_range": "19-30",
+          "rda_ai": 0.5,
+          "ul": "ND"
+        },
+        {
+          "group": "Male",
+          "age_range": "31-50",
+          "rda_ai": 0.5,
+          "ul": "ND"
+        },
+        {
+          "group": "Male",
+          "age_range": "51-70",
+          "rda_ai": 1,
+          "ul": "ND"
+        },
+        {
+          "group": "Male",
+          "age_range": "71+",
+          "rda_ai": 1,
+          "ul": "ND"
+        },
+        {
+          "group": "Female",
+          "age_range": "14-18",
+          "rda_ai": 0.5,
+          "ul": "ND"
+        },
+        {
+          "group": "Female",
+          "age_range": "19-30",
+          "rda_ai": 0.5,
+          "ul": "ND"
+        },
+        {
+          "group": "Female",
+          "age_range": "31-50",
+          "rda_ai": 0.5,
+          "ul": "ND"
+        },
+        {
+          "group": "Female",
+          "age_range": "51-70",
+          "rda_ai": 0.8,
+          "ul": "ND"
+        },
+        {
+          "group": "Female",
+          "age_range": "71+",
+          "rda_ai": 0.8,
+          "ul": "ND"
+        },
         {
           "group": "Pregnancy",
           "age_range": "14-18",
@@ -2518,22 +5144,85 @@
         "Those with cognitive decline",
         "Neuropathy patients"
       ],
-      "synthesis_precursors": ["L-Carnitine", "Acetyl-CoA"],
-      "warnings": ["May cause nausea or agitation in some individuals"],
+      "synthesis_precursors": [
+        "L-Carnitine",
+        "Acetyl-CoA"
+      ],
+      "warnings": [
+        "May cause nausea or agitation in some individuals"
+      ],
       "special_considerations": "More bioavailable form of carnitine that crosses blood-brain barrier",
-      "deficiency_symptoms": ["Brain fog", "Fatigue", "Memory issues"],
-      "toxicity_symptoms": ["Nausea", "Agitation", "Headache"],
+      "deficiency_symptoms": [
+        "Brain fog",
+        "Fatigue",
+        "Memory issues"
+      ],
+      "toxicity_symptoms": [
+        "Nausea",
+        "Agitation",
+        "Headache"
+      ],
       "data": [
-        { "group": "Male", "age_range": "14-18", "rda_ai": 0.5, "ul": "ND" },
-        { "group": "Male", "age_range": "19-30", "rda_ai": 0.5, "ul": "ND" },
-        { "group": "Male", "age_range": "31-50", "rda_ai": 0.5, "ul": "ND" },
-        { "group": "Male", "age_range": "51-70", "rda_ai": 0.5, "ul": "ND" },
-        { "group": "Male", "age_range": "71+", "rda_ai": 0.5, "ul": "ND" },
-        { "group": "Female", "age_range": "14-18", "rda_ai": 0.5, "ul": "ND" },
-        { "group": "Female", "age_range": "19-30", "rda_ai": 0.5, "ul": "ND" },
-        { "group": "Female", "age_range": "31-50", "rda_ai": 0.5, "ul": "ND" },
-        { "group": "Female", "age_range": "51-70", "rda_ai": 0.5, "ul": "ND" },
-        { "group": "Female", "age_range": "71+", "rda_ai": 0.5, "ul": "ND" },
+        {
+          "group": "Male",
+          "age_range": "14-18",
+          "rda_ai": 0.5,
+          "ul": "ND"
+        },
+        {
+          "group": "Male",
+          "age_range": "19-30",
+          "rda_ai": 0.5,
+          "ul": "ND"
+        },
+        {
+          "group": "Male",
+          "age_range": "31-50",
+          "rda_ai": 0.5,
+          "ul": "ND"
+        },
+        {
+          "group": "Male",
+          "age_range": "51-70",
+          "rda_ai": 0.5,
+          "ul": "ND"
+        },
+        {
+          "group": "Male",
+          "age_range": "71+",
+          "rda_ai": 0.5,
+          "ul": "ND"
+        },
+        {
+          "group": "Female",
+          "age_range": "14-18",
+          "rda_ai": 0.5,
+          "ul": "ND"
+        },
+        {
+          "group": "Female",
+          "age_range": "19-30",
+          "rda_ai": 0.5,
+          "ul": "ND"
+        },
+        {
+          "group": "Female",
+          "age_range": "31-50",
+          "rda_ai": 0.5,
+          "ul": "ND"
+        },
+        {
+          "group": "Female",
+          "age_range": "51-70",
+          "rda_ai": 0.5,
+          "ul": "ND"
+        },
+        {
+          "group": "Female",
+          "age_range": "71+",
+          "rda_ai": 0.5,
+          "ul": "ND"
+        },
         {
           "group": "Pregnancy",
           "age_range": "14-18",
@@ -2585,26 +5274,84 @@
         "Those with cognitive decline",
         "Athletes"
       ],
-      "synthesis_precursors": ["Choline"],
-      "warnings": ["May cause headaches in sensitive individuals"],
+      "synthesis_precursors": [
+        "Choline"
+      ],
+      "warnings": [
+        "May cause headaches in sensitive individuals"
+      ],
       "special_considerations": "Highly bioavailable source of choline that crosses blood-brain barrier",
       "deficiency_symptoms": [
         "Brain fog",
         "Memory issues",
         "Reduced physical performance"
       ],
-      "toxicity_symptoms": ["Headaches", "Nausea", "Dizziness"],
+      "toxicity_symptoms": [
+        "Headaches",
+        "Nausea",
+        "Dizziness"
+      ],
       "data": [
-        { "group": "Male", "age_range": "14-18", "rda_ai": 300, "ul": "ND" },
-        { "group": "Male", "age_range": "19-30", "rda_ai": 300, "ul": "ND" },
-        { "group": "Male", "age_range": "31-50", "rda_ai": 300, "ul": "ND" },
-        { "group": "Male", "age_range": "51-70", "rda_ai": 300, "ul": "ND" },
-        { "group": "Male", "age_range": "71+", "rda_ai": 300, "ul": "ND" },
-        { "group": "Female", "age_range": "14-18", "rda_ai": 300, "ul": "ND" },
-        { "group": "Female", "age_range": "19-30", "rda_ai": 300, "ul": "ND" },
-        { "group": "Female", "age_range": "31-50", "rda_ai": 300, "ul": "ND" },
-        { "group": "Female", "age_range": "51-70", "rda_ai": 300, "ul": "ND" },
-        { "group": "Female", "age_range": "71+", "rda_ai": 300, "ul": "ND" },
+        {
+          "group": "Male",
+          "age_range": "14-18",
+          "rda_ai": 300,
+          "ul": "ND"
+        },
+        {
+          "group": "Male",
+          "age_range": "19-30",
+          "rda_ai": 300,
+          "ul": "ND"
+        },
+        {
+          "group": "Male",
+          "age_range": "31-50",
+          "rda_ai": 300,
+          "ul": "ND"
+        },
+        {
+          "group": "Male",
+          "age_range": "51-70",
+          "rda_ai": 300,
+          "ul": "ND"
+        },
+        {
+          "group": "Male",
+          "age_range": "71+",
+          "rda_ai": 300,
+          "ul": "ND"
+        },
+        {
+          "group": "Female",
+          "age_range": "14-18",
+          "rda_ai": 300,
+          "ul": "ND"
+        },
+        {
+          "group": "Female",
+          "age_range": "19-30",
+          "rda_ai": 300,
+          "ul": "ND"
+        },
+        {
+          "group": "Female",
+          "age_range": "31-50",
+          "rda_ai": 300,
+          "ul": "ND"
+        },
+        {
+          "group": "Female",
+          "age_range": "51-70",
+          "rda_ai": 300,
+          "ul": "ND"
+        },
+        {
+          "group": "Female",
+          "age_range": "71+",
+          "rda_ai": 300,
+          "ul": "ND"
+        },
         {
           "group": "Pregnancy",
           "age_range": "14-18",
@@ -2657,7 +5404,11 @@
         "Elderly",
         "Chronic illness"
       ],
-      "synthesis_precursors": ["Cysteine", "Glutamate", "Glycine"],
+      "synthesis_precursors": [
+        "Cysteine",
+        "Glutamate",
+        "Glycine"
+      ],
       "warnings": [
         "Oral absorption is poor; liposomal or sublingual forms preferred"
       ],
@@ -2667,18 +5418,70 @@
         "Fatigue",
         "Weakened immunity"
       ],
-      "toxicity_symptoms": ["Generally well tolerated"],
+      "toxicity_symptoms": [
+        "Generally well tolerated"
+      ],
       "data": [
-        { "group": "Male", "age_range": "14-18", "rda_ai": 250, "ul": "ND" },
-        { "group": "Male", "age_range": "19-30", "rda_ai": 250, "ul": "ND" },
-        { "group": "Male", "age_range": "31-50", "rda_ai": 250, "ul": "ND" },
-        { "group": "Male", "age_range": "51-70", "rda_ai": 250, "ul": "ND" },
-        { "group": "Male", "age_range": "71+", "rda_ai": 250, "ul": "ND" },
-        { "group": "Female", "age_range": "14-18", "rda_ai": 250, "ul": "ND" },
-        { "group": "Female", "age_range": "19-30", "rda_ai": 250, "ul": "ND" },
-        { "group": "Female", "age_range": "31-50", "rda_ai": 250, "ul": "ND" },
-        { "group": "Female", "age_range": "51-70", "rda_ai": 250, "ul": "ND" },
-        { "group": "Female", "age_range": "71+", "rda_ai": 250, "ul": "ND" },
+        {
+          "group": "Male",
+          "age_range": "14-18",
+          "rda_ai": 250,
+          "ul": "ND"
+        },
+        {
+          "group": "Male",
+          "age_range": "19-30",
+          "rda_ai": 250,
+          "ul": "ND"
+        },
+        {
+          "group": "Male",
+          "age_range": "31-50",
+          "rda_ai": 250,
+          "ul": "ND"
+        },
+        {
+          "group": "Male",
+          "age_range": "51-70",
+          "rda_ai": 250,
+          "ul": "ND"
+        },
+        {
+          "group": "Male",
+          "age_range": "71+",
+          "rda_ai": 250,
+          "ul": "ND"
+        },
+        {
+          "group": "Female",
+          "age_range": "14-18",
+          "rda_ai": 250,
+          "ul": "ND"
+        },
+        {
+          "group": "Female",
+          "age_range": "19-30",
+          "rda_ai": 250,
+          "ul": "ND"
+        },
+        {
+          "group": "Female",
+          "age_range": "31-50",
+          "rda_ai": 250,
+          "ul": "ND"
+        },
+        {
+          "group": "Female",
+          "age_range": "51-70",
+          "rda_ai": 250,
+          "ul": "ND"
+        },
+        {
+          "group": "Female",
+          "age_range": "71+",
+          "rda_ai": 250,
+          "ul": "ND"
+        },
         {
           "group": "Pregnancy",
           "age_range": "14-18",
@@ -2737,16 +5540,66 @@
         "Dermatitis in sensitive individuals"
       ],
       "data": [
-        { "group": "Male", "age_range": "14-18", "rda_ai": "ND", "ul": "ND" },
-        { "group": "Male", "age_range": "19-30", "rda_ai": "ND", "ul": "ND" },
-        { "group": "Male", "age_range": "31-50", "rda_ai": "ND", "ul": "ND" },
-        { "group": "Male", "age_range": "51-70", "rda_ai": "ND", "ul": "ND" },
-        { "group": "Male", "age_range": "71+", "rda_ai": "ND", "ul": "ND" },
-        { "group": "Female", "age_range": "14-18", "rda_ai": "ND", "ul": "ND" },
-        { "group": "Female", "age_range": "19-30", "rda_ai": "ND", "ul": "ND" },
-        { "group": "Female", "age_range": "31-50", "rda_ai": "ND", "ul": "ND" },
-        { "group": "Female", "age_range": "51-70", "rda_ai": "ND", "ul": "ND" },
-        { "group": "Female", "age_range": "71+", "rda_ai": "ND", "ul": "ND" },
+        {
+          "group": "Male",
+          "age_range": "14-18",
+          "rda_ai": "ND",
+          "ul": "ND"
+        },
+        {
+          "group": "Male",
+          "age_range": "19-30",
+          "rda_ai": "ND",
+          "ul": "ND"
+        },
+        {
+          "group": "Male",
+          "age_range": "31-50",
+          "rda_ai": "ND",
+          "ul": "ND"
+        },
+        {
+          "group": "Male",
+          "age_range": "51-70",
+          "rda_ai": "ND",
+          "ul": "ND"
+        },
+        {
+          "group": "Male",
+          "age_range": "71+",
+          "rda_ai": "ND",
+          "ul": "ND"
+        },
+        {
+          "group": "Female",
+          "age_range": "14-18",
+          "rda_ai": "ND",
+          "ul": "ND"
+        },
+        {
+          "group": "Female",
+          "age_range": "19-30",
+          "rda_ai": "ND",
+          "ul": "ND"
+        },
+        {
+          "group": "Female",
+          "age_range": "31-50",
+          "rda_ai": "ND",
+          "ul": "ND"
+        },
+        {
+          "group": "Female",
+          "age_range": "51-70",
+          "rda_ai": "ND",
+          "ul": "ND"
+        },
+        {
+          "group": "Female",
+          "age_range": "71+",
+          "rda_ai": "ND",
+          "ul": "ND"
+        },
         {
           "group": "Pregnancy",
           "age_range": "14-18",
@@ -2806,16 +5659,66 @@
         "Inhalation is highly toxic."
       ],
       "data": [
-        { "group": "Male", "age_range": "14-18", "rda_ai": "ND", "ul": "ND" },
-        { "group": "Male", "age_range": "19-30", "rda_ai": "ND", "ul": "ND" },
-        { "group": "Male", "age_range": "31-50", "rda_ai": "ND", "ul": "ND" },
-        { "group": "Male", "age_range": "51-70", "rda_ai": "ND", "ul": "ND" },
-        { "group": "Male", "age_range": "71+", "rda_ai": "ND", "ul": "ND" },
-        { "group": "Female", "age_range": "14-18", "rda_ai": "ND", "ul": "ND" },
-        { "group": "Female", "age_range": "19-30", "rda_ai": "ND", "ul": "ND" },
-        { "group": "Female", "age_range": "31-50", "rda_ai": "ND", "ul": "ND" },
-        { "group": "Female", "age_range": "51-70", "rda_ai": "ND", "ul": "ND" },
-        { "group": "Female", "age_range": "71+", "rda_ai": "ND", "ul": "ND" },
+        {
+          "group": "Male",
+          "age_range": "14-18",
+          "rda_ai": "ND",
+          "ul": "ND"
+        },
+        {
+          "group": "Male",
+          "age_range": "19-30",
+          "rda_ai": "ND",
+          "ul": "ND"
+        },
+        {
+          "group": "Male",
+          "age_range": "31-50",
+          "rda_ai": "ND",
+          "ul": "ND"
+        },
+        {
+          "group": "Male",
+          "age_range": "51-70",
+          "rda_ai": "ND",
+          "ul": "ND"
+        },
+        {
+          "group": "Male",
+          "age_range": "71+",
+          "rda_ai": "ND",
+          "ul": "ND"
+        },
+        {
+          "group": "Female",
+          "age_range": "14-18",
+          "rda_ai": "ND",
+          "ul": "ND"
+        },
+        {
+          "group": "Female",
+          "age_range": "19-30",
+          "rda_ai": "ND",
+          "ul": "ND"
+        },
+        {
+          "group": "Female",
+          "age_range": "31-50",
+          "rda_ai": "ND",
+          "ul": "ND"
+        },
+        {
+          "group": "Female",
+          "age_range": "51-70",
+          "rda_ai": "ND",
+          "ul": "ND"
+        },
+        {
+          "group": "Female",
+          "age_range": "71+",
+          "rda_ai": "ND",
+          "ul": "ND"
+        },
         {
           "group": "Pregnancy",
           "age_range": "14-18",
@@ -2861,23 +5764,77 @@
       "ul_note": "No UL established due to lack of adverse effects from food or water sources.",
       "optimal_range": "200-500",
       "highest_ul": "none",
-      "warnings": ["In concentrated form, can cause diarrhea in high doses."],
+      "warnings": [
+        "In concentrated form, can cause diarrhea in high doses."
+      ],
       "special_considerations": "Essential for many biological processes, including cartilage formation. Usually found in food and water and not a common deficiency concern.",
-      "deficiency_symptoms": ["Rarely documented in humans."],
+      "deficiency_symptoms": [
+        "Rarely documented in humans."
+      ],
       "toxicity_symptoms": [
         "Diarrhea and gastrointestinal distress from high concentrations in drinking water."
       ],
       "data": [
-        { "group": "Male", "age_range": "14-18", "rda_ai": "ND", "ul": "ND" },
-        { "group": "Male", "age_range": "19-30", "rda_ai": "ND", "ul": "ND" },
-        { "group": "Male", "age_range": "31-50", "rda_ai": "ND", "ul": "ND" },
-        { "group": "Male", "age_range": "51-70", "rda_ai": "ND", "ul": "ND" },
-        { "group": "Male", "age_range": "71+", "rda_ai": "ND", "ul": "ND" },
-        { "group": "Female", "age_range": "14-18", "rda_ai": "ND", "ul": "ND" },
-        { "group": "Female", "age_range": "19-30", "rda_ai": "ND", "ul": "ND" },
-        { "group": "Female", "age_range": "31-50", "rda_ai": "ND", "ul": "ND" },
-        { "group": "Female", "age_range": "51-70", "rda_ai": "ND", "ul": "ND" },
-        { "group": "Female", "age_range": "71+", "rda_ai": "ND", "ul": "ND" },
+        {
+          "group": "Male",
+          "age_range": "14-18",
+          "rda_ai": "ND",
+          "ul": "ND"
+        },
+        {
+          "group": "Male",
+          "age_range": "19-30",
+          "rda_ai": "ND",
+          "ul": "ND"
+        },
+        {
+          "group": "Male",
+          "age_range": "31-50",
+          "rda_ai": "ND",
+          "ul": "ND"
+        },
+        {
+          "group": "Male",
+          "age_range": "51-70",
+          "rda_ai": "ND",
+          "ul": "ND"
+        },
+        {
+          "group": "Male",
+          "age_range": "71+",
+          "rda_ai": "ND",
+          "ul": "ND"
+        },
+        {
+          "group": "Female",
+          "age_range": "14-18",
+          "rda_ai": "ND",
+          "ul": "ND"
+        },
+        {
+          "group": "Female",
+          "age_range": "19-30",
+          "rda_ai": "ND",
+          "ul": "ND"
+        },
+        {
+          "group": "Female",
+          "age_range": "31-50",
+          "rda_ai": "ND",
+          "ul": "ND"
+        },
+        {
+          "group": "Female",
+          "age_range": "51-70",
+          "rda_ai": "ND",
+          "ul": "ND"
+        },
+        {
+          "group": "Female",
+          "age_range": "71+",
+          "rda_ai": "ND",
+          "ul": "ND"
+        },
         {
           "group": "Pregnancy",
           "age_range": "14-18",
