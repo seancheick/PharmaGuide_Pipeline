@@ -252,7 +252,11 @@
     {
       "id": "PII_LECITHIN_SOY",
       "standard_name": "Soy Lecithin",
-      "aliases": ["lecithin (soy)", "soybean lecithin", "E322"],
+      "aliases": [
+        "lecithin (soy)",
+        "soybean lecithin",
+        "E322"
+      ],
       "category": "emulsifier",
       "notes": "A very common emulsifier derived from soybeans. It is considered safe, but is a major allergen and often derived from genetically modified sources unless specified otherwise.",
       "last_updated": "2025-08-04"
@@ -268,14 +272,6 @@
       ],
       "category": "binder_coating_thickener",
       "notes": "A semi-synthetic cellulose derivative used as a binder, thickener, and coating agent in capsules and tablets. Generally considered safe.",
-      "last_updated": "2025-08-04"
-    },
-    {
-      "id": "PII_CALCIUM_SILICATE",
-      "standard_name": "Calcium Silicate",
-      "aliases": ["E552", "calcium metasilicate", "wollastonite"],
-      "category": "anticaking_agent",
-      "notes": "A mineral-derived anti-caking agent used to prevent powder clumping. Generally considered safe in food-grade applications.",
       "last_updated": "2025-08-04"
     },
     {
@@ -310,7 +306,12 @@
     {
       "id": "PII_BEESWAX",
       "standard_name": "Beeswax",
-      "aliases": ["cera alba", "E901", "yellow beeswax", "white beeswax"],
+      "aliases": [
+        "cera alba",
+        "E901",
+        "yellow beeswax",
+        "white beeswax"
+      ],
       "category": "glazing_agent_coating",
       "notes": "A natural wax produced by honey bees. Used as a coating or glazing agent for tablets and softgels to improve appearance and swallowing. Considered safe.",
       "last_updated": "2025-08-04"
@@ -381,7 +382,12 @@
     {
       "id": "PII_POLYVINYL_ALCOHOL",
       "standard_name": "Polyvinyl Alcohol",
-      "aliases": ["PVA", "PVOH", "polyvinyl alcohol", "vinyl alcohol polymer"],
+      "aliases": [
+        "PVA",
+        "PVOH",
+        "polyvinyl alcohol",
+        "vinyl alcohol polymer"
+      ],
       "category": "coating_film_former",
       "notes": "A common polymer used in tablet coatings to form protective films. Water-soluble and generally considered safe for pharmaceutical use.",
       "last_updated": "2025-08-12"
@@ -413,7 +419,11 @@
     {
       "id": "PII_TRIETHYL_CITRATE",
       "standard_name": "Triethyl Citrate",
-      "aliases": ["TEC", "citric acid triethyl ester", "E1505"],
+      "aliases": [
+        "TEC",
+        "citric acid triethyl ester",
+        "E1505"
+      ],
       "category": "plasticizer",
       "notes": "A plasticizer for tablet coatings that provides flexibility and prevents film cracking. Generally recognized as safe (GRAS).",
       "last_updated": "2025-08-12"
@@ -501,7 +511,12 @@
     {
       "id": "PII_VEGETABLE_GUM_GENERAL",
       "standard_name": "Vegetable Gum (General)",
-      "aliases": ["vegetable gum", "plant gum", "natural gum", "botanical gum"],
+      "aliases": [
+        "vegetable gum",
+        "plant gum",
+        "natural gum",
+        "botanical gum"
+      ],
       "category": "thickener_stabilizer_general",
       "notes": "A generic term that could refer to various plant-based gums like Gum Arabic, Xanthan Gum, or other natural gums. Specific identification recommended for accurate assessment. Generally considered safe.",
       "last_updated": "2025-08-12"
@@ -594,7 +609,11 @@
     {
       "id": "PII_PEPSIN",
       "standard_name": "Pepsin",
-      "aliases": ["pepsin enzyme", "pepsin powder", "digestive pepsin"],
+      "aliases": [
+        "pepsin enzyme",
+        "pepsin powder",
+        "digestive pepsin"
+      ],
       "category": "enzyme",
       "notes": "A digestive enzyme that breaks down proteins. Generally considered safe and beneficial for digestion when used appropriately.",
       "last_updated": "2025-08-15"
@@ -602,7 +621,11 @@
     {
       "id": "PII_DIASTASE",
       "standard_name": "Diastase",
-      "aliases": ["diastase enzyme", "amylase", "starch-digesting enzyme"],
+      "aliases": [
+        "diastase enzyme",
+        "amylase",
+        "starch-digesting enzyme"
+      ],
       "category": "enzyme",
       "notes": "An enzyme that breaks down starch into sugars. Generally considered safe and beneficial for digestion.",
       "last_updated": "2025-08-15"
@@ -610,7 +633,10 @@
     {
       "id": "PII_CATALASE",
       "standard_name": "Catalase",
-      "aliases": ["catalase enzyme", "hydrogen peroxide catalase"],
+      "aliases": [
+        "catalase enzyme",
+        "hydrogen peroxide catalase"
+      ],
       "category": "enzyme",
       "notes": "An enzyme that breaks down hydrogen peroxide. Generally considered safe and beneficial for cellular protection.",
       "last_updated": "2025-08-15"
@@ -618,7 +644,10 @@
     {
       "id": "PII_XYLANASE",
       "standard_name": "Xylanase",
-      "aliases": ["xylanase enzyme", "fiber-digesting enzyme"],
+      "aliases": [
+        "xylanase enzyme",
+        "fiber-digesting enzyme"
+      ],
       "category": "enzyme",
       "notes": "An enzyme that breaks down xylan, a component of plant fiber. Generally considered safe and beneficial for digestion.",
       "last_updated": "2025-08-15"
@@ -626,7 +655,9 @@
     {
       "id": "PII_MICOSOLLE",
       "standard_name": "Micosolle",
-      "aliases": ["micosolle excipient"],
+      "aliases": [
+        "micosolle excipient"
+      ],
       "category": "excipient",
       "notes": "A branded excipient ingredient. Appears to be a proprietary name for a common pharmaceutical excipient substance.",
       "last_updated": "2025-08-15"

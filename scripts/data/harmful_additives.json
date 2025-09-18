@@ -261,39 +261,6 @@
       "last_updated": "2025-08-04"
     },
     {
-      "id": "ADD_COMMON_SUGARS",
-      "standard_name": "Common Sugars",
-      "aliases": [
-        "sugar",
-        "sucrose",
-        "dextrose",
-        "glucose",
-        "cane sugar",
-        "Cane Syrup",
-        "glucose syrup",
-        "organic Cane syrup",
-        "evaporated Cane syrup",
-        "organic dried Cane syrup",
-        "organic, whole Cane",
-        "honey",
-        "beet sugar",
-        "raw sugar",
-        "brown sugar",
-        "turbinado sugar",
-        "demerara sugar",
-        "coconut sugar",
-        "date sugar",
-        "table sugar",
-        "white sugar",
-        "organic sugar",
-        "evaporated cane juice"
-      ],
-      "risk_level": "moderate",
-      "category": "sweetener",
-      "notes": "All forms of added sugar contribute to blood sugar spikes, inflammation, dental issues, and potential weight gain when consumed in excess.",
-      "last_updated": "2025-08-04"
-    },
-    {
       "id": "ADD_SYRUPS",
       "standard_name": "Sugar Syrups",
       "aliases": [
@@ -377,22 +344,6 @@
       "risk_level": "moderate",
       "category": "colorant_artificial",
       "notes": "Some types (Class III and IV) are produced with ammonia and may contain 4-methylimidazole (4-MEI), a potential carcinogen.",
-      "last_updated": "2025-08-04"
-    },
-    {
-      "id": "ADD_MALTODEXTRIN",
-      "standard_name": "Maltodextrin",
-      "aliases": [
-        "maltodextrin",
-        "Corn Syrup Solids",
-        "tapioca maltodextrin",
-        "potato maltodextrin",
-        "rice maltodextrin",
-        "wheat maltodextrin"
-      ],
-      "risk_level": "moderate",
-      "category": "filler_sweetener",
-      "notes": "A highly processed powder used as a filler or carrier. It has a very high glycemic index, spiking blood sugar rapidly, and may negatively impact gut bacteria. Often derived from GMO corn.",
       "last_updated": "2025-08-04"
     },
     {
@@ -503,85 +454,6 @@
       "last_updated": "2025-08-04"
     },
     {
-      "id": "ADD_PROPRIETARY_FLAVORS",
-      "standard_name": "Proprietary Flavors",
-      "aliases": [
-        "natural flavors",
-        "natural flavor",
-        "artificial flavors",
-        "natural and artificial flavors",
-        "Artificial flavor agent",
-        "flavoring",
-        "spice extracts",
-        "natural essence",
-        "botanical extracts",
-        "french vanilla flavor",
-        "masking flavor"
-      ],
-      "risk_level": "low",
-      "category": "flavoring",
-      "notes": "A proprietary mixture of chemicals. The term 'natural flavor' can hide hundreds of ingredients, including solvents like propylene glycol or allergens, without specific disclosure.",
-      "last_updated": "2025-08-04"
-    },
-    {
-      "id": "ADD_CELLULOSE_DERIVATIVES",
-      "standard_name": "Cellulose & Derivatives",
-      "aliases": [
-        "cellulose",
-        "microcrystalline cellulose",
-        "plant cellulose",
-        "vegetable cellulose",
-        "MCC",
-        "powdered cellulose",
-        "cellulose gel",
-        "E460",
-        "Wood Pulp",
-        "avicel"
-      ],
-      "risk_level": "low",
-      "category": "filler_binder",
-      "notes": "An indigestible fiber, often from refined wood pulp, used as a cheap bulking agent. It has no nutritional value and may cause digestive discomfort or interfere with nutrient absorption.",
-      "last_updated": "2025-08-04"
-    },
-    {
-      "id": "ADD_MAGNESIUM_STEARATE",
-      "standard_name": "Magnesium Stearate",
-      "aliases": [
-        "magnesium stearate",
-        "vegetable magnesium stearate",
-        "magnesium stearate (vegetable)",
-        "mg stearate",
-        "E470b",
-        "E572",
-        "octadecanoic acid, magnesium salt",
-        "vegetable stearate",
-        "plant-based magnesium stearate"
-      ],
-      "risk_level": "low",
-      "category": "lubricant_flow_agent",
-      "notes": "A common manufacturing lubricant. Some concerns exist that it may form a biofilm in the gut or suppress T-cell function, though evidence is debated. Often derived from palm oil.",
-      "last_updated": "2025-08-04"
-    },
-    {
-      "id": "ADD_SILICON_DIOXIDE",
-      "standard_name": "Silicon Dioxide (Silica)",
-      "aliases": [
-        "silica",
-        "silicon dioxide",
-        "colloidal silica",
-        "E551",
-        "fumed silica",
-        "precipitated silica",
-        "silica gel",
-        "SiO2",
-        "synthetic amorphous silica"
-      ],
-      "risk_level": "low",
-      "category": "anticaking_agent",
-      "notes": "Used as an anti-caking agent. While generally safe, concerns exist regarding nanoparticle forms, which may cross biological barriers. Distinct from harmful crystalline silica.",
-      "last_updated": "2025-08-04"
-    },
-    {
       "id": "ADD_LECITHIN",
       "standard_name": "Lecithin (Soy)",
       "aliases": [
@@ -611,22 +483,6 @@
       "risk_level": "low",
       "category": "filler_thickener",
       "notes": "Starches that have been chemically or physically altered to improve function. The processing can introduce unknown contaminants and may involve chemicals.",
-      "last_updated": "2025-08-04"
-    },
-    {
-      "id": "ADD_HONEY",
-      "standard_name": "Honey",
-      "aliases": [
-        "honey",
-        "raw honey",
-        "organic honey",
-        "manuka honey",
-        "honey powder",
-        "dehydrated honey"
-      ],
-      "risk_level": "low",
-      "category": "sweetener_natural",
-      "notes": "A natural sweetener, but it is still a form of sugar with a high fructose content that impacts blood sugar. Not suitable for infants under one year old.",
       "last_updated": "2025-08-04"
     },
     {
@@ -1005,42 +861,6 @@
       "last_updated": "2025-09-11"
     },
     {
-      "id": "ADD_PHOSPHATES",
-      "standard_name": "Synthetic Phosphate Compounds",
-      "aliases": [
-        "potassium phosphate",
-        "sodium phosphate",
-        "calcium phosphate",
-        "phosphoric acid salts",
-        "E339",
-        "E340",
-        "E341",
-        "disodium phosphate",
-        "trisodium phosphate",
-        "monocalcium phosphate",
-        "dicalcium phosphate"
-      ],
-      "risk_level": "moderate",
-      "category": "stabilizer_buffer",
-      "mechanism_of_harm": "Can interfere with calcium absorption and mineral balance. High phosphate intake may contribute to kidney strain and cardiovascular calcification. May disrupt hormone signaling related to bone metabolism.",
-      "regulatory_status": {
-        "US": "GRAS status but with recommended limits",
-        "EU": "Regulated under E339-341 with specific limits",
-        "WHO": "Recommends limiting phosphate additives"
-      },
-      "population_warnings": [
-        "People with kidney disease - Should strictly limit phosphate intake",
-        "Elderly - May affect bone health",
-        "People with cardiovascular conditions - May contribute to calcification"
-      ],
-      "notes": "While phosphates are essential nutrients, synthetic forms are more readily absorbed and can lead to excessive intake. Associated with increased cardiovascular risk and bone metabolism disruption.",
-      "scientific_references": [
-        "DOI: 10.1053/j.jrn.2018.04.008 - Phosphate additives in food",
-        "DOI: 10.2215/CJN.13601118 - Cardiovascular effects"
-      ],
-      "last_updated": "2025-09-11"
-    },
-    {
       "id": "ADD_NITRITES",
       "standard_name": "Sodium Nitrite/Nitrate",
       "aliases": [
@@ -1107,40 +927,6 @@
       "last_updated": "2025-09-11"
     },
     {
-      "id": "ADD_SYNTHETIC_GUMS",
-      "standard_name": "Synthetic & Modified Gums",
-      "aliases": [
-        "cellulose gum",
-        "carboxymethylcellulose",
-        "CMC",
-        "E466",
-        "xanthan gum",
-        "E415",
-        "modified cellulose",
-        "synthetic thickener",
-        "modified food gum"
-      ],
-      "risk_level": "moderate",
-      "category": "thickener_stabilizer",
-      "mechanism_of_harm": "Can alter gut microbiota composition. May increase intestinal permeability. High doses can interfere with nutrient absorption. Some forms may contain harmful residual processing chemicals.",
-      "regulatory_status": {
-        "US": "GRAS status with monitoring",
-        "EU": "Regulated under specific E-numbers",
-        "Canada": "Permitted food additive with limits"
-      },
-      "population_warnings": [
-        "People with IBS - May trigger symptoms",
-        "People with IBD - Could worsen inflammation",
-        "Children - Limited exposure recommended"
-      ],
-      "notes": "While generally considered safe in small amounts, excessive intake can cause digestive issues and may affect nutrient absorption. Some individuals may be particularly sensitive to synthetic gums.",
-      "scientific_references": [
-        "DOI: 10.3390/nu12061731 - Gut microbiota effects",
-        "DOI: 10.1016/j.fct.2019.110979 - Safety assessment"
-      ],
-      "last_updated": "2025-09-11"
-    },
-    {
       "id": "ADD_CARBOXYMETHYLCELLULOSE",
       "standard_name": "Carboxymethylcellulose (CMC)",
       "aliases": [
@@ -1169,70 +955,6 @@
       "scientific_references": [
         "DOI: 10.1038/nature21423 - Microbiome effects",
         "DOI: 10.1016/j.cell.2018.07.008 - Inflammatory response"
-      ],
-      "last_updated": "2025-09-11"
-    },
-    {
-      "id": "ADD_XANTHAN_GUM",
-      "standard_name": "Xanthan Gum",
-      "aliases": [
-        "E415",
-        "corn sugar gum",
-        "bacterial polysaccharide",
-        "Xanthomonas campestris gum",
-        "polysaccharide B-1459"
-      ],
-      "risk_level": "moderate",
-      "category": "thickener_stabilizer",
-      "mechanism_of_harm": "Can cause digestive distress in high doses. May affect nutrient absorption. Possible allergenic potential from corn-based production.",
-      "regulatory_status": {
-        "US": "FDA GRAS status",
-        "EU": "E415 permitted",
-        "Australia": "Permitted additive"
-      },
-      "population_warnings": [
-        "Infants - Not recommended",
-        "People with corn allergies - Cross-reactivity risk",
-        "People with digestive disorders - May cause bloating"
-      ],
-      "notes": "While generally considered safe, high intake can cause digestive issues. Production process may introduce contamination risks.",
-      "scientific_references": [
-        "DOI: 10.3390/foods9010044 - Safety assessment",
-        "DOI: 10.1016/j.fct.2017.08.038 - Digestive effects"
-      ],
-      "last_updated": "2025-09-11"
-    },
-    {
-      "id": "ADD_MODIFIED_CELLULOSE",
-      "standard_name": "Modified Cellulose Compounds",
-      "aliases": [
-        "hydroxypropyl methylcellulose",
-        "HPMC",
-        "E464",
-        "methylcellulose",
-        "E461",
-        "hydroxypropyl cellulose",
-        "E463",
-        "modified cellulose derivatives",
-        "cellulose ethers"
-      ],
-      "risk_level": "moderate",
-      "category": "thickener_stabilizer",
-      "mechanism_of_harm": "Can affect gut transit time and nutrient absorption. May interfere with beneficial gut bacteria. Synthetic processing may introduce contaminants.",
-      "regulatory_status": {
-        "US": "FDA GRAS with specific uses",
-        "EU": "Various E-numbers with limits",
-        "Japan": "Restricted in certain applications"
-      },
-      "population_warnings": [
-        "People with IBS - May worsen symptoms",
-        "Elderly - Can affect medication absorption",
-        "Children - Limited exposure recommended"
-      ],
-      "notes": "Synthetic modifications of cellulose may have unintended effects on digestion and nutrient absorption. Long-term effects of regular consumption not fully studied.",
-      "scientific_references": [
-        "DOI: 10.1016/j.foodhyd.2019.105377 - Modified cellulose safety",
-        "DOI: 10.3390/molecules24193427 - Absorption effects"
       ],
       "last_updated": "2025-09-11"
     },
@@ -1297,38 +1019,6 @@
       "scientific_references": [
         "DOI: 10.3390/nu12051453 - Digestive effects",
         "DOI: 10.1016/j.jff.2019.103643 - Mineral interactions"
-      ],
-      "last_updated": "2025-09-11"
-    },
-    {
-      "id": "ADD_SYNTHETIC_SILICA",
-      "standard_name": "Synthetic Amorphous Silica",
-      "aliases": [
-        "silicon dioxide nanoparticles",
-        "nano-silica",
-        "synthetic SiO2",
-        "silica nanoparticles",
-        "E551",
-        "colloidal silicon dioxide",
-        "synthetic silicon dioxide"
-      ],
-      "risk_level": "moderate",
-      "category": "anticaking_agent",
-      "mechanism_of_harm": "Nanoparticles can cross biological barriers. May accumulate in organs and tissues. Potential to generate reactive oxygen species. Can interact with cellular components.",
-      "regulatory_status": {
-        "US": "FDA reviewing nanoform safety",
-        "EU": "Specific particle size restrictions",
-        "EFSA": "Under ongoing safety assessment"
-      },
-      "population_warnings": [
-        "People with respiratory conditions - Inhalation risk",
-        "Pregnant women - Nanoparticles may cross placenta",
-        "People with autoimmune conditions - May trigger inflammation"
-      ],
-      "notes": "Nanoform differs from natural silica in biological activity. Can penetrate cells and potentially cause oxidative stress. Long-term effects of nanoparticle accumulation unknown.",
-      "scientific_references": [
-        "DOI: 10.1016/j.impact.2020.100284 - Nanosilica toxicity",
-        "DOI: 10.1039/C9EN01348B - Cellular interactions"
       ],
       "last_updated": "2025-09-11"
     },
@@ -1533,6 +1223,76 @@
         "DOI: 10.3390/foods9020178 - Health effects"
       ],
       "last_updated": "2025-09-11"
+    },
+    {
+      "id": "ADD_POTASSIUM_BROMATE",
+      "standard_name": "Potassium Bromate",
+      "aliases": [
+        "KBrO3",
+        "E924a",
+        "flour improver",
+        "dough conditioner",
+        "potassium salt of bromic acid"
+      ],
+      "risk_level": "high",
+      "category": "flour_treatment_agent",
+      "notes": "Carcinogenic flour treatment agent. Banned in EU, Canada, Brazil, and many other countries but still legal in US. Linked to kidney and thyroid tumors in animal studies.",
+      "last_updated": "2025-09-16"
+    },
+    {
+      "id": "ADD_CALCIUM_DISODIUM_EDTA",
+      "standard_name": "Calcium Disodium EDTA",
+      "aliases": [
+        "EDTA",
+        "E385",
+        "calcium disodium ethylenediaminetetraacetate",
+        "edetate calcium disodium",
+        "calcium EDTA"
+      ],
+      "risk_level": "moderate",
+      "category": "preservative_chelating_agent",
+      "notes": "Chelating agent that can deplete essential minerals (zinc, iron, copper) from the body. May contain heavy metal contaminants. Can interfere with mineral absorption when consumed regularly.",
+      "last_updated": "2025-09-16"
+    },
+    {
+      "id": "ADD_POLYSORBATE_65",
+      "standard_name": "Polysorbate 65",
+      "aliases": [
+        "E436",
+        "sorbitan tristearate ethoxylated",
+        "polyoxyethylene sorbitan tristearate"
+      ],
+      "risk_level": "moderate",
+      "category": "emulsifier",
+      "notes": "Synthetic emulsifier that may be contaminated with 1,4-dioxane (carcinogen). Studies show it can disrupt gut microbiome and compromise intestinal barrier function.",
+      "last_updated": "2025-09-16"
+    },
+    {
+      "id": "ADD_SODIUM_ALUMINUM_PHOSPHATE",
+      "standard_name": "Sodium Aluminum Phosphate",
+      "aliases": [
+        "E541",
+        "SALP",
+        "sodium aluminophosphate",
+        "aluminum sodium phosphate"
+      ],
+      "risk_level": "moderate",
+      "category": "leavening_agent",
+      "notes": "Leavening agent containing aluminum. Research links aluminum accumulation to neurotoxicity and potential Alzheimer's risk. Particularly concerning in products for children and pregnant women.",
+      "last_updated": "2025-09-16"
+    },
+    {
+      "id": "ADD_CALCIUM_ALUMINUM_PHOSPHATE",
+      "standard_name": "Calcium Aluminum Phosphate",
+      "aliases": [
+        "E544",
+        "calcium aluminophosphate",
+        "aluminum calcium phosphate"
+      ],
+      "risk_level": "moderate",
+      "category": "leavening_agent",
+      "notes": "Leavening agent containing aluminum. May contribute to aluminum body burden. Studies suggest potential neurotoxicity concerns, especially with chronic exposure.",
+      "last_updated": "2025-09-16"
     }
   ]
 }

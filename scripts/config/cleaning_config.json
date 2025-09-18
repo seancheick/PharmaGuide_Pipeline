@@ -11,8 +11,8 @@
     "workflow": "1. CLEANING (this phase) → 2. ENRICHMENT → 3. SCORING → 4. DEPLOYMENT"
   },
   "paths": {
-    "input_directory": "/Users/seancheick/Documents/DataSetDsld/Gummies-Jellies-4562-labels-11-11-25",
-    "output_directory": "output_Gummies-Jellies",
+    "input_directory": "/Users/seancheick/Documents/DataSetDsld/Lozenges-978labels-11-11-25",
+    "output_directory": "output_Lozenges",
     "reference_data": "data",
     "log_directory": "logs"
   },

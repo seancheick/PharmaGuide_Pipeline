@@ -1,11 +1,15 @@
 {
-  "started": "2025-09-16T17:07:04.744524Z",
-  "last_updated": "2025-09-16T17:43:25.400985Z",
-  "last_completed_batch": 6,
-  "total_batches": 10,
-  "processed_files": 3500,
-  "total_files": 4586,
-  "errors": [],
+  "started": "2025-09-18T11:06:16.868142Z",
+  "last_updated": "2025-09-18T11:11:21.353249Z",
+  "last_completed_batch": 1,
+  "total_batches": 2,
+  "processed_files": 978,
+  "total_files": 978,
+  "errors": [
+    "/Users/seancheick/Documents/DataSetDsld/Lozenges-978labels-11-11-25/185299.json: no such group",
+    "/Users/seancheick/Documents/DataSetDsld/Lozenges-978labels-11-11-25/213892.json: no such group",
+    "/Users/seancheick/Documents/DataSetDsld/Lozenges-978labels-11-11-25/213903.json: no such group"
+  ],
   "can_resume": true,
-  "config_checksum": "144c8931fed4e80aa8e95e41fd657ee3"
+  "config_checksum": "d2ee80849a0d21c3f53902fe1930303b"
 }

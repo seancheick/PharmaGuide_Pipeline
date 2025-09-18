@@ -1,7 +1,7 @@
 {
   "database_info": {
     "version": "2.3.0",
-    "last_updated": "2025-09-11",
+    "last_updated": "2025-09-16",
     "total_allergens": 48,
     "scoring_system": {
       "allergen_free_bonus": 2,
@@ -13,7 +13,6 @@
     },
     "regulatory_note": "Based on FDA major allergens (9), EU additional allergens (14 total), plus common supplement allergens, artificial sweeteners, and preservatives with documented allergic reactions"
   },
-
   "common_allergens": [
     {
       "id": "ALLERGEN_SOY",
@@ -97,7 +96,12 @@
     {
       "id": "ALLERGEN_PEANUTS",
       "standard_name": "Peanuts",
-      "aliases": ["peanut oil", "arachis oil", "groundnut", "peanut protein"],
+      "aliases": [
+        "peanut oil",
+        "arachis oil",
+        "groundnut",
+        "peanut protein"
+      ],
       "prevalence": "moderate",
       "severity_level": "high",
       "regulatory_status": "fda_major",
@@ -168,7 +172,12 @@
     {
       "id": "ALLERGEN_SESAME",
       "standard_name": "Sesame",
-      "aliases": ["sesame oil", "tahini", "sesamum indicum", "sesame seed"],
+      "aliases": [
+        "sesame oil",
+        "tahini",
+        "sesamum indicum",
+        "sesame seed"
+      ],
       "prevalence": "low",
       "severity_level": "moderate",
       "regulatory_status": "fda_major",
@@ -206,7 +215,13 @@
     {
       "id": "ALLERGEN_ANNATTO",
       "standard_name": "Annatto",
-      "aliases": ["annatto dye", "160b", "bixin", "norbixin", "bixa orellana"],
+      "aliases": [
+        "annatto dye",
+        "160b",
+        "bixin",
+        "norbixin",
+        "bixa orellana"
+      ],
       "prevalence": "moderate",
       "severity_level": "moderate",
       "regulatory_status": "natural_color",
@@ -305,7 +320,11 @@
     {
       "id": "ALLERGEN_CELERY",
       "standard_name": "Celery",
-      "aliases": ["celery seed", "apium graveolens", "celery extract"],
+      "aliases": [
+        "celery seed",
+        "apium graveolens",
+        "celery extract"
+      ],
       "prevalence": "low",
       "severity_level": "moderate",
       "regulatory_status": "eu_allergen",
@@ -317,7 +336,11 @@
     {
       "id": "ALLERGEN_MUSTARD",
       "standard_name": "Mustard",
-      "aliases": ["mustard seed", "sinapis alba", "brassica nigra"],
+      "aliases": [
+        "mustard seed",
+        "sinapis alba",
+        "brassica nigra"
+      ],
       "prevalence": "low",
       "severity_level": "moderate",
       "regulatory_status": "eu_allergen",
@@ -329,7 +352,11 @@
     {
       "id": "ALLERGEN_LUPIN",
       "standard_name": "Lupin",
-      "aliases": ["lupin bean", "lupinus", "lupin flour"],
+      "aliases": [
+        "lupin bean",
+        "lupinus",
+        "lupin flour"
+      ],
       "prevalence": "low",
       "severity_level": "moderate",
       "regulatory_status": "eu_allergen",
@@ -337,30 +364,6 @@
       "notes": "EU major allergen. Can cause severe reactions, especially in peanut-allergic individuals.",
       "category": "allergen",
       "last_updated": "2025-07-16"
-    },
-    {
-      "id": "ALLERGEN_CARRAGEENAN",
-      "standard_name": "Carrageenan",
-      "aliases": [
-        "carrageenan",
-        "irish moss extract",
-        "chondrus crispus",
-        "E407",
-        "kappa carrageenan",
-        "iota carrageenan",
-        "lambda carrageenan",
-        "red seaweed extract",
-        "processed eucheuma seaweed",
-        "PES",
-        "E407a"
-      ],
-      "prevalence": "high",
-      "severity_level": "moderate",
-      "regulatory_status": "food_additive",
-      "supplement_context": "Common thickener in liquid supplements and capsules, derived from seaweed",
-      "notes": "Seaweed-derived thickener linked to digestive inflammation. May trigger seaweed allergies.",
-      "category": "excipient_allergen",
-      "last_updated": "2025-08-15"
     },
     {
       "id": "ALLERGEN_NATURAL_FLAVORS",
@@ -401,24 +404,6 @@
       "regulatory_status": "fda_approved",
       "supplement_context": "Common whitening agent in pills and capsules, banned in EU food",
       "notes": "Generally safe but banned as food additive in EU due to potential health concerns.",
-      "category": "excipient_allergen",
-      "last_updated": "2025-08-15"
-    },
-    {
-      "id": "ALLERGEN_SILICON_DIOXIDE",
-      "standard_name": "Silicon Dioxide",
-      "aliases": [
-        "silicon dioxide",
-        "silica",
-        "E551",
-        "precipitated silica",
-        "colloidal silicon dioxide"
-      ],
-      "prevalence": "high",
-      "severity_level": "low",
-      "regulatory_status": "generally_recognized_as_safe",
-      "supplement_context": "Anti-caking agent in powders and tablets",
-      "notes": "Generally safe but may cause respiratory irritation in sensitive individuals.",
       "category": "excipient_allergen",
       "last_updated": "2025-08-15"
     },
@@ -495,24 +480,6 @@
       "last_updated": "2025-08-15"
     },
     {
-      "id": "ALLERGEN_MICROCRYSTALLINE_CELLULOSE",
-      "standard_name": "Microcrystalline Cellulose",
-      "aliases": [
-        "microcrystalline cellulose",
-        "MCC",
-        "E460",
-        "cellulose gel",
-        "avicel"
-      ],
-      "prevalence": "high",
-      "severity_level": "low",
-      "regulatory_status": "generally_recognized_as_safe",
-      "supplement_context": "Filler and binder, may be corn-derived causing corn allergies",
-      "notes": "Plant cellulose filler. Source plant may trigger allergies (corn, wood, cotton).",
-      "category": "excipient_allergen",
-      "last_updated": "2025-08-15"
-    },
-    {
       "id": "ALLERGEN_STEARIC_ACID",
       "standard_name": "Stearic Acid",
       "aliases": [
@@ -527,24 +494,6 @@
       "regulatory_status": "generally_recognized_as_safe",
       "supplement_context": "Lubricant and emulsifier, can be animal or plant-derived",
       "notes": "Generally safe but source (animal vs plant) affects vegetarian/vegan suitability.",
-      "category": "excipient_allergen",
-      "last_updated": "2025-08-15"
-    },
-    {
-      "id": "ALLERGEN_HYDROXYPROPYL_METHYLCELLULOSE",
-      "standard_name": "Hydroxypropyl Methylcellulose",
-      "aliases": [
-        "HPMC",
-        "hydroxypropyl methylcellulose",
-        "E464",
-        "hypromellose",
-        "vegetable capsules"
-      ],
-      "prevalence": "high",
-      "severity_level": "low",
-      "regulatory_status": "generally_recognized_as_safe",
-      "supplement_context": "Vegetarian capsule shells, may contain carrageenan traces",
-      "notes": "Plant-derived capsule material. Some formulations may contain carrageenan.",
       "category": "excipient_allergen",
       "last_updated": "2025-08-15"
     },
@@ -683,7 +632,11 @@
     {
       "id": "ALLERGEN_SUCRALOSE",
       "standard_name": "Sucralose",
-      "aliases": ["splenda", "trichlorogalactosucrose", "E955"],
+      "aliases": [
+        "splenda",
+        "trichlorogalactosucrose",
+        "E955"
+      ],
       "prevalence": "high",
       "severity_level": "moderate",
       "regulatory_status": "fda_approved",
@@ -695,7 +648,13 @@
     {
       "id": "ALLERGEN_ACESULFAME_POTASSIUM",
       "standard_name": "Acesulfame Potassium",
-      "aliases": ["ace-k", "acesulfame k", "E950", "sunett", "sweet one"],
+      "aliases": [
+        "ace-k",
+        "acesulfame k",
+        "E950",
+        "sunett",
+        "sweet one"
+      ],
       "prevalence": "high",
       "severity_level": "moderate",
       "regulatory_status": "fda_approved",
