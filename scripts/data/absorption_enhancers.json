@@ -275,11 +275,28 @@
   {
     "id": "ENHANCER_ASTRAGIN",
     "name": "AstraGin",
-    "aliases": ["astragalus membranaceus extract", "panax notoginseng extract"],
-    "enhances": ["Amino Acids", "Vitamins", "Minerals", "Omega-3", "Creatine"],
-    "mechanism": "Increases nutrient transporters in the gut",
+    "aliases": [
+      "astragin",
+      "astra gin",
+      "astragalus membranaceus extract",
+      "panax notoginseng extract",
+      "astragalus panax blend",
+      "absorption enhancer blend",
+      "nutrient uptake enhancer",
+      "bioavailability enhancer",
+      "astragin patented extract"
+    ],
+    "enhances": [
+      "Amino Acids",
+      "Vitamins",
+      "Minerals",
+      "Omega-3",
+      "Creatine",
+      "Botanicals"
+    ],
+    "mechanism": "Increases nutrient transporters in the gut by up to 62%",
     "typical_dose": "50mg",
-    "boost_factor": "20-50%",
+    "boost_factor": "20-62%",
     "score_contribution": 5,
     "category": "absorption enhancer"
   },

@@ -15,20 +15,29 @@
         "Reb M",
         "stevioside",
         "truvia",
-        "purevia"
+        "purevia",
+        "betterstevia",
+        "better stevia",
+        "stevia extract blend",
+        "now betterstevia",
+        "stevia extract powder",
+        "steviol glycoside",
+        "rebiana",
+        "stevia leaf extract"
       ],
       "risk_level": "none",
       "category": "sweetener_natural",
       "additive_type": "natural_sweetener",
-      "clean_label_score": 8,
-      "notes": "Natural, calorie-free sweetener from the Stevia plant. Highly processed extracts are common. Generally recognized as safe (GRAS), but some people report a bitter aftertaste. Clean label alternative to artificial sweeteners.",
+      "clean_label_score": 9,
+      "notes": "Natural, calorie-free sweetener from the Stevia plant. Includes high-purity extracts (≥95% steviol glycosides), branded forms like BetterStevia, and various extract powders. FDA GRAS approved. Clean label alternative to artificial sweeteners.",
       "regulatory_status": "GRAS",
       "common_uses": [
         "flavor enhancement",
         "sugar replacement",
-        "calorie reduction"
+        "calorie reduction",
+        "natural sweetening"
       ],
-      "last_updated": "2025-08-14"
+      "last_updated": "2025-09-20"
     },
     {
       "id": "NHA_MONK_FRUIT",
@@ -38,7 +47,9 @@
         "luo han guo",
         "siraitia grosvenorii",
         "mogrosides",
-        "monk fruit sweetener"
+        "monk fruit sweetener",
+        "luo han guo fruit extract",
+        "lo han guo"
       ],
       "risk_level": "none",
       "category": "sweetener_natural",
@@ -70,11 +81,7 @@
       "clean_label_score": 7,
       "notes": "Plant-derived humectant and solvent. Used to retain moisture and as a carrier for flavors. Generally recognized as safe (GRAS). Ensure proper sourcing to avoid contamination.",
       "regulatory_status": "GRAS",
-      "common_uses": [
-        "moisture retention",
-        "solvent",
-        "texture improvement"
-      ],
+      "common_uses": ["moisture retention", "solvent", "texture improvement"],
       "last_updated": "2025-08-14"
     },
     {
@@ -92,11 +99,7 @@
       "clean_label_score": 8,
       "notes": "Natural preservative and pH adjuster. While naturally found in citrus, commercial form is typically derived from fermented sources. Generally recognized as safe (GRAS). Clean label preservative option.",
       "regulatory_status": "GRAS",
-      "common_uses": [
-        "preservation",
-        "pH adjustment",
-        "flavor enhancement"
-      ],
+      "common_uses": ["preservation", "pH adjustment", "flavor enhancement"],
       "last_updated": "2025-08-14"
     },
     {
@@ -177,11 +180,7 @@
       "clean_label_score": 9,
       "notes": "Natural thickening and gelling agent derived from red algae. Generally recognized as safe (GRAS) and commonly used as a vegan alternative to gelatin. May provide beneficial dietary fiber. Excellent clean label choice.",
       "regulatory_status": "GRAS",
-      "common_uses": [
-        "gelling",
-        "thickening",
-        "vegan gelatin replacement"
-      ],
+      "common_uses": ["gelling", "thickening", "vegan gelatin replacement"],
       "last_updated": "2025-08-14"
     },
     {
@@ -216,28 +215,37 @@
       "last_updated": "2025-08-14"
     },
     {
-      "id": "NHA_VANILLIN_NATURAL",
-      "standard_name": "Natural Vanillin",
+      "id": "NHA_NATURAL_VANILLA",
+      "standard_name": "Natural Vanilla & Vanilla Extract",
       "aliases": [
         "natural vanillin",
         "vanilla extract",
         "natural vanilla flavor",
         "vanilla bean extract",
         "vanilla oleoresin",
-        "4-hydroxy-3-methoxybenzaldehyde (natural)"
+        "4-hydroxy-3-methoxybenzaldehyde (natural)",
+        "natural vanilla",
+        "vanilla powder",
+        "vanilla flavor natural",
+        "organic vanilla extract",
+        "pure vanilla extract",
+        "french vanilla flavor",
+        "natural french vanilla flavor",
+        "vegan creamy flavor natural"
       ],
       "risk_level": "none",
       "category": "flavoring_natural",
       "additive_type": "natural_flavor",
-      "clean_label_score": 9,
-      "notes": "Natural vanilla flavoring extracted from vanilla beans. Generally recognized as safe (GRAS). Premium clean label flavoring choice compared to synthetic vanillin.",
+      "clean_label_score": 10,
+      "notes": "Premium natural flavoring from vanilla beans. Includes both natural vanillin compounds and full vanilla extracts. Generally recognized as safe (GRAS). Highly desirable clean label ingredient with excellent consumer perception.",
       "regulatory_status": "GRAS",
       "common_uses": [
         "flavor enhancement",
         "taste masking",
-        "aroma improvement"
+        "aroma improvement",
+        "premium positioning"
       ],
-      "last_updated": "2025-08-14"
+      "last_updated": "2025-09-20"
     },
     {
       "id": "NHA_SODIUM_BICARBONATE",
@@ -280,11 +288,7 @@
       "clean_label_score": 7,
       "notes": "Alkalizing agent and pH regulator. Generally recognized as safe (GRAS) when used as a food additive. Common processing aid.",
       "regulatory_status": "GRAS",
-      "common_uses": [
-        "pH adjustment",
-        "alkalizing",
-        "processing aid"
-      ],
+      "common_uses": ["pH adjustment", "alkalizing", "processing aid"],
       "last_updated": "2025-08-14"
     },
     {
@@ -294,14 +298,86 @@
         "natural flavors",
         "natural flavor",
         "natural flavoring",
+        "natural flavorings",
+        "other natural flavors",
+        "other natural flavor",
         "spice extracts",
         "natural essence",
         "botanical extracts for flavor",
         "fruit flavors",
         "natural strawberry flavor",
         "natural cherry flavor",
+        "cherry flavors",
         "natural orange flavor",
-        "natural lemon flavor"
+        "orange cream flavor",
+        "natural lemon flavor",
+        "lemon ginger flavor",
+        "cherry ginger flavor",
+        "natural peppermint flavor",
+        "peppermint flavor natural",
+        "natural raspberry flavor",
+        "raspberry flavor natural",
+        "raspberry flavoring",
+        "natural berry flavor",
+        "natural fruit flavor",
+        "natural and organic fruit flavors",
+        "natural mint flavor",
+        "natural and artificial mint flavors",
+        "natural and artificial lemon flavor",
+        "natural and artificial orange flavor",
+        "natural chocolate flavor",
+        "chocolate flavor natural",
+        "natural tropical flavor",
+        "tropical flavor natural",
+        "natural acai flavor",
+        "acai flavor natural",
+        "natural licorice flavor",
+        "licorice flavor natural",
+        "strawberry flavor natural",
+        "strawberry flavor, natural",
+        "raspberry flavor, natural",
+        "mango flavor natural",
+        "mango flavor, natural",
+        "natural mango flavor",
+        "ginger flavor natural",
+        "ginger flavor, natural",
+        "vanilla flavor natural",
+        "vanilla flavor, natural",
+        "orange tangerine flavor natural",
+        "orange tangerine flavor, natural",
+        "peppermint flavor, natural",
+        "peach flavor, natural",
+        "lychee flavor, natural",
+        "vegan creamy flavor, natural",
+        "natural pomegranate flavor",
+        "lime flavoring",
+        "passion fruit flavor",
+        "banana flavor",
+        "blackcurrant flavor",
+        "peach natural",
+        "peach flavor natural",
+        "natural cherry flavor",
+        "cherry flavor natural",
+        "red raspberry natural flavor",
+        "blueberry natural flavor",
+        "natural elderberry flavor",
+        "natural sour cherry flavor",
+        "natural berry flavor",
+        "organic natural berry flavor",
+        "natural mango and peach flavors",
+        "artificial lemon flavor",
+        "organic mint flavoring",
+        "natural pear flavor",
+        "yumberry flavor, natural",
+        "peach, natural",
+        "{natural} cherry flavor",
+        "flavor, natural",
+        "sd lemon flavor",
+        "sd honey flavor",
+        "butterscotch",
+        "butterscotch flavor",
+        "natural and artificial flavor",
+        "natural and artificial flavors"
       ],
       "risk_level": "none",
       "category": "flavoring_natural",
@@ -314,7 +390,7 @@
         "taste masking",
         "aroma improvement"
       ],
-      "last_updated": "2025-08-14"
+      "last_updated": "2025-09-20"
     },
     {
       "id": "NHA_LECITHIN_SUNFLOWER",
@@ -359,11 +435,7 @@
       "clean_label_score": 10,
       "notes": "Natural, hypoallergenic ingredient used as a flow agent or lubricant. Serving as a clean-label alternative to magnesium stearate. Excellent premium clean label choice.",
       "regulatory_status": "GRAS",
-      "common_uses": [
-        "flow improvement",
-        "anti-caking",
-        "natural lubricant"
-      ],
+      "common_uses": ["flow improvement", "anti-caking", "natural lubricant"],
       "last_updated": "2025-08-14"
     },
     {
@@ -383,11 +455,7 @@
       "clean_label_score": 9,
       "notes": "Natural plant fiber used as a bulking agent and source of dietary fiber. Generally recognized as safe (GRAS). Excellent clean label choice for adding fiber content.",
       "regulatory_status": "GRAS",
-      "common_uses": [
-        "bulking",
-        "fiber addition",
-        "texture improvement"
-      ],
+      "common_uses": ["bulking", "fiber addition", "texture improvement"],
       "last_updated": "2025-08-14"
     },
     {
@@ -398,20 +466,28 @@
         "plant-based stearic acid",
         "palm stearic acid",
         "coconut stearic acid",
-        "vegetable fatty acids"
+        "vegetable fatty acids",
+        "vegetable stearate",
+        "plant stearate",
+        "vegetable-derived stearate",
+        "vegetable magnesium stearate",
+        "plant-based stearate",
+        "calcium stearate",
+        "vegetable calcium stearate"
       ],
       "risk_level": "none",
       "category": "lubricant_plant_based",
-      "additive_type": "lubricant",
+      "additive_type": "vegetable_lubricant",
       "clean_label_score": 8,
-      "notes": "Plant-derived fatty acids used as natural lubricants in manufacturing. Better clean label perception than synthetic alternatives. Generally recognized as safe (GRAS).",
+      "notes": "Plant-derived fatty acids and stearates used as natural lubricants and flow agents in manufacturing. Cleaner alternative to mineral-derived stearates. Generally recognized as safe (GRAS).",
       "regulatory_status": "GRAS",
       "common_uses": [
         "lubrication",
         "flow improvement",
-        "manufacturing aid"
+        "manufacturing aid",
+        "anti-caking"
       ],
-      "last_updated": "2025-08-14"
+      "last_updated": "2025-09-20"
     },
     {
       "id": "NHA_NATURAL_WAXES",
@@ -460,56 +536,6 @@
         "fat-soluble carrier",
         "texture improvement",
         "flavor enhancement"
-      ],
-      "last_updated": "2025-08-14"
-    },
-    {
-      "id": "NHA_MALTODEXTRIN_ORGANIC",
-      "standard_name": "Organic Maltodextrin",
-      "aliases": [
-        "organic maltodextrin",
-        "non-GMO maltodextrin",
-        "tapioca maltodextrin",
-        "rice maltodextrin",
-        "potato maltodextrin",
-        "corn maltodextrin (organic)"
-      ],
-      "risk_level": "none",
-      "category": "carrier_natural",
-      "additive_type": "bulking_agent",
-      "clean_label_score": 7,
-      "notes": "When sourced organically, maltodextrin serves as a safe carrier and bulking agent. Tapioca and rice sources are often preferred over corn.",
-      "regulatory_status": "GRAS",
-      "common_uses": [
-        "powder carrier",
-        "bulking agent",
-        "texture improvement",
-        "encapsulation"
-      ],
-      "last_updated": "2025-08-14"
-    },
-    {
-      "id": "NHA_NATURAL_VANILLA",
-      "standard_name": "Natural Vanilla & Vanilla Extract",
-      "aliases": [
-        "vanilla extract",
-        "natural vanilla",
-        "vanilla bean extract",
-        "vanilla powder",
-        "vanilla flavor natural",
-        "organic vanilla extract",
-        "pure vanilla extract"
-      ],
-      "risk_level": "none",
-      "category": "flavoring_natural",
-      "additive_type": "natural_flavor",
-      "clean_label_score": 10,
-      "notes": "Premium natural flavoring from vanilla beans. Highly desirable clean label ingredient with excellent consumer perception.",
-      "regulatory_status": "GRAS",
-      "common_uses": [
-        "flavor enhancement",
-        "taste masking",
-        "premium positioning"
       ],
       "last_updated": "2025-08-14"
     },
@@ -601,11 +627,7 @@
       "clean_label_score": 9,
       "notes": "Natural fruit acid found in apples and other fruits. Used for tartness and as a natural preservative. Well-tolerated and beneficial for energy metabolism.",
       "regulatory_status": "GRAS",
-      "common_uses": [
-        "natural sourness",
-        "preservation",
-        "flavor enhancement"
-      ],
+      "common_uses": ["natural sourness", "preservation", "flavor enhancement"],
       "last_updated": "2025-08-14"
     },
     {
@@ -626,12 +648,7 @@
       "clean_label_score": 10,
       "notes": "Natural fiber from fruits, excellent for gelling and thickening. Provides additional health benefits including cholesterol support.",
       "regulatory_status": "GRAS",
-      "common_uses": [
-        "gelling",
-        "thickening",
-        "fiber addition",
-        "gut health"
-      ],
+      "common_uses": ["gelling", "thickening", "fiber addition", "gut health"],
       "last_updated": "2025-08-14"
     },
     {
@@ -728,14 +745,898 @@
         "stability enhancement"
       ],
       "last_updated": "2025-08-15"
+    },
+    {
+      "id": "NHA_SUGAR_SWEETENERS",
+      "standard_name": "Sugar & Natural Sweeteners",
+      "aliases": [
+        "sucrose",
+        "sugar",
+        "sugars",
+        "cane sugar",
+        "beet sugar",
+        "organic sugar",
+        "organic cane sugar",
+        "evaporated cane",
+        "organic evaporated cane",
+        "organic, whole cane",
+        "raw sugar",
+        "turbinado sugar",
+        "demerara sugar",
+        "coconut sugar",
+        "date sugar",
+        "organic coconut sugar",
+        "natural sweeteners",
+        "sugarcane"
+      ],
+      "risk_level": "none",
+      "category": "sweetener_natural",
+      "additive_type": "natural_sweetener",
+      "clean_label_score": 6,
+      "notes": "Natural sugars used for sweetening and palatability. Generally recognized as safe but should be consumed in moderation.",
+      "regulatory_status": "GRAS",
+      "common_uses": [
+        "sweetening",
+        "flavor enhancement",
+        "palatability improvement",
+        "masking bitter tastes"
+      ],
+      "last_updated": "2025-09-19"
+    },
+    {
+      "id": "NHA_CHERRY_FLAVOR",
+      "standard_name": "Cherry Flavor (Natural & Artificial)",
+      "aliases": [
+        "natural and artificial cherry flavor",
+        "cherry flavor natural",
+        "cherry flavor, natural",
+        "artificial cherry flavor",
+        "cherry flavoring",
+        "natural cherry flavor",
+        "cherry extract",
+        "cherry flavor powder"
+      ],
+      "risk_level": "none",
+      "category": "flavoring_agent",
+      "additive_type": "flavor_enhancer",
+      "clean_label_score": 6,
+      "notes": "Combination of natural cherry extracts and artificial cherry compounds to provide cherry taste. Natural extracts from real cherries combined with synthetic compounds that replicate cherry flavor.",
+      "regulatory_status": "GRAS",
+      "common_uses": [
+        "flavor enhancement",
+        "taste masking",
+        "palatability improvement",
+        "product appeal"
+      ],
+      "last_updated": "2025-09-19"
+    },
+    {
+      "id": "NHA_BLACK_CHERRY_NATURAL",
+      "standard_name": "Natural Black Cherry Flavor",
+      "aliases": [
+        "natural black cherry flavor",
+        "black cherry flavor natural",
+        "natural black cherry flavoring",
+        "black cherry extract flavor"
+      ],
+      "risk_level": "none",
+      "category": "flavor_natural",
+      "additive_type": "natural_flavor",
+      "clean_label_score": 8,
+      "notes": "Natural flavoring derived from black cherry extracts and compounds. Provides authentic black cherry taste to supplement formulations.",
+      "regulatory_status": "GRAS",
+      "common_uses": [
+        "flavor enhancement",
+        "taste masking",
+        "palatability improvement"
+      ],
+      "last_updated": "2025-09-19"
+    },
+    {
+      "id": "NHA_PEACH_NATURAL",
+      "standard_name": "Natural Peach Flavor",
+      "aliases": [
+        "natural peach flavor",
+        "peach flavor natural",
+        "natural peach flavoring"
+      ],
+      "risk_level": "none",
+      "category": "flavor_natural",
+      "additive_type": "natural_flavor",
+      "clean_label_score": 8,
+      "notes": "Natural flavoring derived from peach extracts and compounds. Provides authentic peach taste to supplement formulations.",
+      "regulatory_status": "GRAS",
+      "common_uses": [
+        "flavor enhancement",
+        "taste masking",
+        "palatability improvement"
+      ],
+      "last_updated": "2025-09-19"
+    },
+    {
+      "id": "NHA_RASPBERRY_NATURAL",
+      "standard_name": "Natural Raspberry Powder",
+      "aliases": [
+        "natural raspberry powder",
+        "raspberry powder natural",
+        "raspberry fruit powder"
+      ],
+      "risk_level": "none",
+      "category": "flavor_natural",
+      "additive_type": "natural_flavor",
+      "clean_label_score": 9,
+      "notes": "Natural raspberry fruit powder providing flavor and nutrients. Clean label ingredient from real fruit.",
+      "regulatory_status": "GRAS",
+      "common_uses": [
+        "flavor enhancement",
+        "nutritional content",
+        "natural coloring"
+      ],
+      "last_updated": "2025-09-19"
+    },
+    {
+      "id": "NHA_LEMON_NATURAL",
+      "standard_name": "Natural Lemon Flavor",
+      "aliases": [
+        "lemon flavor, natural",
+        "natural lemon flavor",
+        "lemon flavoring natural"
+      ],
+      "risk_level": "none",
+      "category": "flavor_natural",
+      "additive_type": "natural_flavor",
+      "clean_label_score": 8,
+      "notes": "Natural flavoring derived from lemon extracts and compounds. Provides authentic lemon taste to supplement formulations.",
+      "regulatory_status": "GRAS",
+      "common_uses": [
+        "flavor enhancement",
+        "taste masking",
+        "palatability improvement"
+      ],
+      "last_updated": "2025-09-19"
+    },
+    {
+      "id": "NHA_ORANGE_NATURAL",
+      "standard_name": "Natural Orange Flavor",
+      "aliases": [
+        "orange flavor, natural",
+        "natural orange flavor",
+        "orange flavoring natural"
+      ],
+      "risk_level": "none",
+      "category": "flavor_natural",
+      "additive_type": "natural_flavor",
+      "clean_label_score": 8,
+      "notes": "Natural flavoring derived from orange extracts and compounds. Provides authentic orange taste to supplement formulations.",
+      "regulatory_status": "GRAS",
+      "common_uses": [
+        "flavor enhancement",
+        "taste masking",
+        "palatability improvement"
+      ],
+      "last_updated": "2025-09-19"
+    },
+    {
+      "id": "NHA_SPEARMINT_NATURAL",
+      "standard_name": "Natural Spearmint Flavor",
+      "aliases": [
+        "natural spearmint flavor",
+        "spearmint flavor natural",
+        "spearmint flavoring natural"
+      ],
+      "risk_level": "none",
+      "category": "flavor_natural",
+      "additive_type": "natural_flavor",
+      "clean_label_score": 8,
+      "notes": "Natural flavoring derived from spearmint extracts and compounds. Provides authentic spearmint taste to supplement formulations.",
+      "regulatory_status": "GRAS",
+      "common_uses": [
+        "flavor enhancement",
+        "taste masking",
+        "breath freshening"
+      ],
+      "last_updated": "2025-09-19"
+    },
+    {
+      "id": "NHA_PINEAPPLE_NATURAL",
+      "standard_name": "Natural Pineapple Flavor",
+      "aliases": [
+        "natural pineapple flavor",
+        "pineapple flavor natural",
+        "pineapple flavoring natural"
+      ],
+      "risk_level": "none",
+      "category": "flavor_natural",
+      "additive_type": "natural_flavor",
+      "clean_label_score": 8,
+      "notes": "Natural flavoring derived from pineapple extracts and compounds. Provides authentic pineapple taste to supplement formulations.",
+      "regulatory_status": "GRAS",
+      "common_uses": [
+        "flavor enhancement",
+        "taste masking",
+        "palatability improvement"
+      ],
+      "last_updated": "2025-09-19"
+    },
+    {
+      "id": "NHA_NATURAL_COLOR",
+      "standard_name": "Natural Color",
+      "aliases": [
+        "natural color",
+        "natural coloring",
+        "natural color additive",
+        "natural pigments"
+      ],
+      "risk_level": "none",
+      "category": "color_natural",
+      "additive_type": "natural_color",
+      "clean_label_score": 8,
+      "notes": "Natural coloring agents derived from plant, mineral, or other natural sources. Provides color without synthetic dyes.",
+      "regulatory_status": "GRAS",
+      "common_uses": [
+        "visual appeal",
+        "product identification",
+        "natural coloring"
+      ],
+      "last_updated": "2025-09-19"
+    },
+    {
+      "id": "NHA_GLUCOSE_LIQUID",
+      "standard_name": "Glucose (Liquid)",
+      "aliases": [
+        "glucose, liquid",
+        "liquid glucose",
+        "glucose syrup",
+        "dextrose syrup"
+      ],
+      "risk_level": "none",
+      "category": "sweetener_natural",
+      "additive_type": "natural_sugar",
+      "clean_label_score": 7,
+      "notes": "Natural sugar derived from corn or wheat starch. Provides quick energy and acts as a binding agent. GRAS approved by FDA.",
+      "regulatory_status": "GRAS",
+      "common_uses": ["binding agent", "sweetening", "texture enhancement"],
+      "last_updated": "2025-09-19"
+    },
+    {
+      "id": "NHA_SUCANAT",
+      "standard_name": "Sucanat (Natural Cane Sugar)",
+      "aliases": [
+        "sucanat",
+        "sugar cane natural",
+        "unrefined cane sugar",
+        "whole cane sugar",
+        "succanat honey"
+      ],
+      "risk_level": "none",
+      "category": "sweetener_natural",
+      "additive_type": "natural_sugar",
+      "clean_label_score": 8,
+      "notes": "Unrefined whole cane sugar retaining natural molasses and minerals. Less processed than white sugar. GRAS approved.",
+      "regulatory_status": "GRAS",
+      "common_uses": [
+        "natural sweetening",
+        "clean label sweetener",
+        "mineral content retention"
+      ],
+      "last_updated": "2025-09-19"
+    },
+    {
+      "id": "NHA_EARTHSWEET",
+      "standard_name": "EarthSweet (Natural Sweetener Blend)",
+      "aliases": ["earthsweet", "earth sweet", "natural sweetener blend"],
+      "risk_level": "none",
+      "category": "sweetener_natural",
+      "additive_type": "natural_sweetener_blend",
+      "clean_label_score": 8,
+      "notes": "Proprietary blend of natural sweeteners typically including stevia, monk fruit, and other natural sources. Clean label alternative to artificial sweeteners.",
+      "regulatory_status": "GRAS",
+      "common_uses": [
+        "natural sweetening",
+        "sugar replacement",
+        "clean label formulation"
+      ],
+      "last_updated": "2025-09-19"
+    },
+    {
+      "id": "NHA_NATURAL_ORANGE_TANGERINE_FLAVOR",
+      "standard_name": "Natural Orange Tangerine Flavor",
+      "aliases": [
+        "natural orange tangerine flavor",
+        "orange tangerine flavor",
+        "natural citrus flavor",
+        "natural orange flavor",
+        "natural tangerine flavor"
+      ],
+      "risk_level": "none",
+      "category": "flavor_natural",
+      "additive_type": "natural_flavor",
+      "clean_label_score": 7,
+      "notes": "Natural flavoring derived from citrus sources. GRAS approved for food use.",
+      "regulatory_status": "GRAS",
+      "common_uses": [
+        "flavor enhancement",
+        "taste masking",
+        "product palatability"
+      ],
+      "last_updated": "2025-09-20"
+    },
+    {
+      "id": "NHA_NATURAL_CINNAMON_FLAVOR",
+      "standard_name": "Natural Cinnamon Flavor",
+      "aliases": [
+        "natural cinnamon flavor",
+        "cinnamon flavor natural",
+        "organic cinnamon flavor"
+      ],
+      "risk_level": "none",
+      "category": "flavor_natural",
+      "additive_type": "natural_flavor",
+      "clean_label_score": 7,
+      "notes": "Natural flavoring derived from cinnamon bark. GRAS approved.",
+      "regulatory_status": "GRAS",
+      "common_uses": [
+        "flavor enhancement",
+        "natural taste profile",
+        "palatability"
+      ],
+      "last_updated": "2025-09-20"
+    },
+    {
+      "id": "NHA_ORGANIC_CANE_SYRUP",
+      "standard_name": "Organic Cane Syrup",
+      "aliases": [
+        "organic cane syrup",
+        "cane syrup",
+        "organic evaporated cane syrup",
+        "evaporated cane syrup",
+        "organic dried cane syrup"
+      ],
+      "risk_level": "none",
+      "category": "sweetener_natural",
+      "additive_type": "natural_sugar",
+      "clean_label_score": 8,
+      "notes": "Organic sweetener from sugar cane. Less processed than refined sugar, retains some minerals.",
+      "regulatory_status": "GRAS",
+      "common_uses": [
+        "natural sweetening",
+        "clean label sweetener",
+        "organic formulation"
+      ],
+      "last_updated": "2025-09-20"
+    },
+    {
+      "id": "NHA_MALTOSE",
+      "standard_name": "Maltose",
+      "aliases": ["maltose", "malt sugar", "maltose syrup", "organic maltose"],
+      "risk_level": "none",
+      "category": "sweetener_natural",
+      "additive_type": "natural_sugar",
+      "clean_label_score": 8,
+      "notes": "Natural disaccharide sugar derived from malted grains. Less sweet than sucrose, commonly used in food products. GRAS approved.",
+      "regulatory_status": "GRAS",
+      "common_uses": ["natural sweetening", "binding agent", "food processing"],
+      "last_updated": "2025-09-20"
+    },
+    {
+      "id": "NHA_NATURAL_ORANGE_FLAVOR",
+      "standard_name": "Natural Orange Flavor",
+      "aliases": [
+        "natural orange flavor",
+        "natural orange flavoring",
+        "orange flavor natural",
+        "natural citrus orange flavor",
+        "natural citrus-orange flavors",
+        "natural blood orange flavor"
+      ],
+      "risk_level": "none",
+      "category": "natural_flavor",
+      "additive_type": "natural_flavoring",
+      "clean_label_score": 8,
+      "notes": "Natural flavoring derived from orange essential oils and extracts. GRAS approved.",
+      "regulatory_status": "GRAS",
+      "common_uses": [
+        "taste enhancement",
+        "masking supplement flavors",
+        "consumer acceptance"
+      ],
+      "last_updated": "2025-09-20"
+    },
+    {
+      "id": "NHA_NATURAL_BERRY_FLAVORS",
+      "standard_name": "Natural Berry Flavors",
+      "aliases": [
+        "natural berry flavor",
+        "natural berry flavoring",
+        "natural blueberry flavor",
+        "natural strawberry flavor",
+        "strawberry flavor natural",
+        "natural blackberry flavor",
+        "natural fruit punch flavor",
+        "mixed berry flavor",
+        "wildberry flavor"
+      ],
+      "risk_level": "none",
+      "category": "natural_flavor",
+      "additive_type": "natural_flavoring",
+      "clean_label_score": 8,
+      "notes": "Natural flavoring derived from berry extracts and essential oils. GRAS approved.",
+      "regulatory_status": "GRAS",
+      "common_uses": [
+        "taste enhancement",
+        "masking supplement flavors",
+        "consumer acceptance"
+      ],
+      "last_updated": "2025-09-20"
+    },
+    {
+      "id": "NHA_BEET_JUICE_COLOR",
+      "standard_name": "Beet Juice Color",
+      "aliases": [
+        "beet juice color",
+        "beet juice powder",
+        "red beet color",
+        "natural red beet color",
+        "beet root juice color",
+        "beetroot powder",
+        "red beet powder"
+      ],
+      "risk_level": "none",
+      "category": "natural_coloring",
+      "additive_type": "natural_color",
+      "clean_label_score": 9,
+      "notes": "Natural red/pink coloring from beetroot juice. Rich in betalains, provides antioxidant benefits. GRAS approved.",
+      "regulatory_status": "GRAS",
+      "common_uses": [
+        "natural coloring",
+        "visual appeal",
+        "clean label alternative to artificial colors"
+      ],
+      "last_updated": "2025-09-20"
+    },
+    {
+      "id": "NHA_NATURAL_MINT_FLAVORS",
+      "standard_name": "Natural Mint Flavors",
+      "aliases": [
+        "natural mint flavor",
+        "mint natural flavor",
+        "natural menthol flavor",
+        "natural peppermint flavor",
+        "peppermint flavor natural",
+        "natural peppermint flavoring"
+      ],
+      "risk_level": "none",
+      "category": "natural_flavor",
+      "additive_type": "natural_flavoring",
+      "clean_label_score": 8,
+      "notes": "Natural flavoring derived from mint essential oils. GRAS approved.",
+      "regulatory_status": "GRAS",
+      "common_uses": [
+        "taste enhancement",
+        "breath freshening",
+        "masking supplement flavors"
+      ],
+      "last_updated": "2025-09-20"
+    },
+    {
+      "id": "NHA_TREHALOSE",
+      "standard_name": "Trehalose",
+      "aliases": ["trehalose", "trehalose dihydrate", "mycose", "tremalose"],
+      "risk_level": "none",
+      "category": "natural_sweetener",
+      "additive_type": "natural_sugar",
+      "clean_label_score": 9,
+      "notes": "Natural disaccharide sugar found in plants, fungi, and insects. Less sweet than sucrose, used for stability and moisture retention. GRAS approved.",
+      "regulatory_status": "GRAS",
+      "common_uses": [
+        "natural sweetening",
+        "moisture retention",
+        "stability enhancement"
+      ],
+      "last_updated": "2025-09-20"
+    },
+    {
+      "id": "NHA_LACITOL",
+      "standard_name": "Lacitol",
+      "aliases": ["lacitol", "lactitol", "lacitol monohydrate"],
+      "risk_level": "none",
+      "category": "sugar_alcohol",
+      "additive_type": "sugar_alcohol_sweetener",
+      "clean_label_score": 8,
+      "notes": "Sugar alcohol derived from lactose. Lower glycemic impact than sugar, commonly used in diabetic foods. GRAS approved.",
+      "regulatory_status": "GRAS",
+      "common_uses": [
+        "low-calorie sweetening",
+        "diabetic-friendly sweetener",
+        "bulking agent"
+      ],
+      "last_updated": "2025-09-20"
+    },
+    {
+      "id": "NHA_XYLO_OLIGOSACCHARIDE",
+      "standard_name": "Xylo-Oligosaccharide",
+      "aliases": [
+        "xylo-oligosaccharide",
+        "xos",
+        "xylo oligosaccharide",
+        "xylooligosaccharide"
+      ],
+      "risk_level": "none",
+      "category": "prebiotic_sweetener",
+      "additive_type": "prebiotic_fiber",
+      "clean_label_score": 9,
+      "notes": "Prebiotic oligosaccharide that feeds beneficial gut bacteria. Provides mild sweetness while supporting digestive health. GRAS approved.",
+      "regulatory_status": "GRAS",
+      "common_uses": [
+        "prebiotic fiber",
+        "mild sweetening",
+        "gut health support"
+      ],
+      "last_updated": "2025-09-20"
+    },
+    {
+      "id": "NHA_CALCIUM_PALMITATE",
+      "standard_name": "Calcium Palmitate",
+      "aliases": [
+        "calcium palmitate",
+        "calcium hexadecanoate",
+        "palmitic acid calcium salt",
+        "calcium salt of palmitic acid"
+      ],
+      "risk_level": "none",
+      "category": "anticaking_agent",
+      "additive_type": "processing_aid",
+      "clean_label_score": 7,
+      "notes": "FDA GRAS-approved anticaking agent, emulsifier, and lubricant. Listed in FDA regulations 21 CFR 172.863 and 175.300. CAS Registry Number: 542-42-7.",
+      "regulatory_status": "GRAS",
+      "common_uses": [
+        "anticaking agent",
+        "emulsifier",
+        "lubricant or release agent",
+        "free-flow agent"
+      ],
+      "last_updated": "2025-09-20"
+    },
+    {
+      "id": "NHA_COLLOIDAL_SILICON_DIOXIDE",
+      "standard_name": "Colloidal Silicon Dioxide",
+      "aliases": [
+        "colloidal silicon dioxide",
+        "silicon dioxide",
+        "silica",
+        "colloidal silica",
+        "synthetic amorphous silica"
+      ],
+      "risk_level": "none",
+      "category": "anticaking_agent",
+      "additive_type": "processing_aid",
+      "clean_label_score": 7,
+      "notes": "FDA-approved food additive under 21 CFR 172.480. Used as anticaking agent with maximum 2% of total weight. Considered safe for consumption and commonly used in supplements for flow properties.",
+      "regulatory_status": "FDA_APPROVED",
+      "common_uses": [
+        "anticaking agent",
+        "flow agent",
+        "tablet disintegrant",
+        "adsorbent"
+      ],
+      "last_updated": "2025-09-20"
+    },
+    {
+      "id": "NHA_SODIUM_CITRATE",
+      "standard_name": "Sodium Citrate (Trisodium Citrate)",
+      "aliases": [
+        "sodium citrate",
+        "trisodium citrate",
+        "citric acid sodium salt",
+        "E331",
+        "E331(iii)",
+        "sodium citrate dihydrate",
+        "trisodium citrate dihydrate"
+      ],
+      "risk_level": "none",
+      "category": "buffer_acidity_regulator",
+      "additive_type": "ph_adjuster",
+      "clean_label_score": 8,
+      "notes": "FDA GRAS-approved buffer and acidity regulator widely used safely in foods and supplements. Helps stabilize pH and acts as natural preservative. Consolidates two previous duplicate entries (Sodium Citrate and Trisodium Citrate - they are the same compound). Only consideration is moderate sodium content for sodium-restricted diets.",
+      "regulatory_status": "GRAS",
+      "common_uses": [
+        "pH buffering",
+        "acidity regulation",
+        "stabilizer",
+        "emulsifier"
+      ],
+      "last_updated": "2025-09-20"
+    },
+    {
+      "id": "NHA_ORANGE_CRYSTALS",
+      "standard_name": "Orange Crystals",
+      "aliases": [
+        "orange crystals",
+        "crystallized orange",
+        "orange crystal flavor",
+        "natural orange crystals"
+      ],
+      "risk_level": "none",
+      "category": "flavor_natural",
+      "additive_type": "natural_flavor",
+      "clean_label_score": 8,
+      "notes": "Crystallized orange flavoring, typically made from concentrated natural orange extracts or oils. Used for flavor enhancement in lozenges and chewables.",
+      "regulatory_status": "GRAS",
+      "common_uses": [
+        "flavor enhancement",
+        "taste masking",
+        "palatability improvement"
+      ],
+      "last_updated": "2025-09-21"
+    },
+    {
+      "id": "NHA_ORGANIC_EVAPORATED_CANE_JUICE",
+      "standard_name": "Organic Evaporated Cane Juice",
+      "aliases": [
+        "organic evaporated cane juice",
+        "evaporated organic cane juice",
+        "organic cane juice",
+        "dehydrated organic cane juice"
+      ],
+      "risk_level": "none",
+      "category": "sweetener_natural",
+      "additive_type": "natural_sweetener",
+      "clean_label_score": 7,
+      "notes": "Organic form of evaporated cane juice. Less processed than refined sugar, retains some minerals. Clean label natural sweetener option.",
+      "regulatory_status": "GRAS",
+      "common_uses": [
+        "natural sweetening",
+        "flavor enhancement",
+        "texture improvement"
+      ],
+      "last_updated": "2025-09-21"
+    },
+    {
+      "id": "NHA_NATURAL_COLOURS",
+      "standard_name": "Natural Colours",
+      "aliases": [
+        "natural colours",
+        "natural colors",
+        "natural colour",
+        "natural color",
+        "plant-based colors",
+        "vegetable colors",
+        "color added",
+        "natural orange color",
+        "natural yellow orange coloring",
+        "natural carotene coloring"
+      ],
+      "risk_level": "none",
+      "category": "colorant_natural",
+      "additive_type": "natural_colorant",
+      "clean_label_score": 9,
+      "notes": "Generic term for natural colorants derived from plant, mineral, or animal sources. Generally safe and preferred over artificial dyes. Includes various fruit and vegetable extracts used for coloring.",
+      "regulatory_status": "GRAS",
+      "common_uses": [
+        "visual appeal",
+        "product differentiation",
+        "clean label alternative to artificial colors"
+      ],
+      "last_updated": "2025-11-11"
+    },
+    {
+      "id": "NHA_MODIFIED_FOOD_STARCH",
+      "standard_name": "Modified Food Starch",
+      "aliases": [
+        "modified food starch",
+        "food starch modified",
+        "food starch, modified",
+        "modified starch",
+        "modified corn starch"
+      ],
+      "risk_level": "none",
+      "category": "thickener_stabilizer",
+      "additive_type": "texture_modifier",
+      "clean_label_score": 6,
+      "notes": "Chemically or physically modified starch used as thickener and stabilizer. Generally recognized as safe (GRAS). Common in food and supplements.",
+      "regulatory_status": "GRAS",
+      "common_uses": [
+        "thickening",
+        "stabilizing",
+        "texture improvement"
+      ],
+      "last_updated": "2025-11-11"
+    },
+    {
+      "id": "NHA_CITRUS_FIBER",
+      "standard_name": "Citrus Fiber",
+      "aliases": [
+        "citrus fiber",
+        "citrus fibre",
+        "orange fiber",
+        "lemon fiber"
+      ],
+      "risk_level": "none",
+      "category": "fiber_prebiotic",
+      "additive_type": "dietary_fiber",
+      "clean_label_score": 9,
+      "notes": "Natural fiber from citrus fruits used as bulking agent and prebiotic. Clean label alternative to synthetic fibers.",
+      "regulatory_status": "GRAS",
+      "common_uses": [
+        "dietary fiber",
+        "texture improvement",
+        "prebiotic support"
+      ],
+      "last_updated": "2025-11-11"
+    },
+    {
+      "id": "NHA_RICE_EXTRACT",
+      "standard_name": "Rice Extract Blend",
+      "aliases": [
+        "rice extract blend",
+        "rice extract",
+        "rice bran extract",
+        "organic rice extract"
+      ],
+      "risk_level": "none",
+      "category": "anticaking_flow_agent",
+      "additive_type": "natural_flow_agent",
+      "clean_label_score": 8,
+      "notes": "Natural rice-derived extract used as anticaking and flow agent. Clean label alternative to synthetic flow agents.",
+      "regulatory_status": "GRAS",
+      "common_uses": [
+        "anticaking",
+        "flow improvement",
+        "natural processing aid"
+      ],
+      "last_updated": "2025-11-11"
+    },
+    {
+      "id": "NHA_FRUIT_VEGETABLE_JUICE",
+      "standard_name": "Fruit & Vegetable Juice",
+      "aliases": [
+        "fruit juice",
+        "vegetable juice",
+        "vegetable and fruit juice",
+        "fruit and vegetable juice",
+        "organic fruit juice",
+        "fruit juice sweetener",
+        "orange juice",
+        "lemon juice",
+        "radish juice concentrate",
+        "organic apple juice concentrate",
+        "black currant juice concentrate",
+        "cherry juice crystals",
+        "powdered pomegranate juice concentrate",
+        "orange juice powder",
+        "orange juice, powder",
+        "lemon juice powder"
+      ],
+      "risk_level": "none",
+      "category": "natural_sweetener_colorant",
+      "additive_type": "natural_ingredient",
+      "clean_label_score": 9,
+      "notes": "Natural fruit and vegetable juices used for flavor, color, and sweetness. Clean label ingredient.",
+      "regulatory_status": "GRAS",
+      "common_uses": [
+        "natural sweetening",
+        "natural coloring",
+        "flavor enhancement"
+      ],
+      "last_updated": "2025-11-11"
+    },
+    {
+      "id": "NHA_ACACIA_GUM",
+      "standard_name": "Acacia Gum",
+      "aliases": [
+        "acacia",
+        "acacia gum",
+        "gum arabic",
+        "arabic gum"
+      ],
+      "risk_level": "none",
+      "category": "fiber_prebiotic",
+      "additive_type": "natural_fiber",
+      "clean_label_score": 9,
+      "notes": "Natural soluble fiber from acacia trees. Prebiotic properties and excellent safety profile.",
+      "regulatory_status": "GRAS",
+      "common_uses": [
+        "dietary fiber",
+        "prebiotic support",
+        "texture improvement"
+      ],
+      "last_updated": "2025-11-11"
+    },
+    {
+      "id": "NHA_MICROCRYSTALLINE_CELLULOSE",
+      "standard_name": "Microcrystalline Cellulose",
+      "aliases": [
+        "microcrystalline cellulose",
+        "microcrystaline cellulose",
+        "microcrystallline cellulose",
+        "mcc",
+        "cellulose gel"
+      ],
+      "risk_level": "none",
+      "category": "bulking_agent",
+      "additive_type": "fiber_bulking",
+      "clean_label_score": 7,
+      "notes": "Plant-derived cellulose used as bulking agent and anticaking agent. Insoluble fiber. GRAS approved.",
+      "regulatory_status": "GRAS",
+      "common_uses": [
+        "bulking agent",
+        "anticaking",
+        "tablet binding"
+      ],
+      "last_updated": "2025-11-11"
+    },
+    {
+      "id": "NHA_SORBITOL",
+      "standard_name": "Sorbitol",
+      "aliases": [
+        "sorbitol",
+        "sorbitol granular",
+        "d-sorbitol"
+      ],
+      "risk_level": "none",
+      "category": "sweetener_sugar_alcohol",
+      "additive_type": "sugar_alcohol",
+      "clean_label_score": 6,
+      "notes": "Sugar alcohol used as sweetener and humectant. Generally safe but may cause digestive issues in large amounts.",
+      "regulatory_status": "GRAS",
+      "common_uses": [
+        "sweetening",
+        "moisture retention",
+        "sugar-free formulations"
+      ],
+      "last_updated": "2025-11-11"
+    },
+    {
+      "id": "NHA_MAPLE_MOLASSES",
+      "standard_name": "Maple Syrup & Molasses",
+      "aliases": [
+        "maple syrup",
+        "maple syrup crystals",
+        "molasses",
+        "blackstrap molasses"
+      ],
+      "risk_level": "none",
+      "category": "sweetener_natural",
+      "additive_type": "natural_sweetener",
+      "clean_label_score": 8,
+      "notes": "Natural sweeteners derived from maple sap or sugar cane. Contain minerals and trace nutrients.",
+      "regulatory_status": "GRAS",
+      "common_uses": [
+        "natural sweetening",
+        "flavor enhancement",
+        "mineral content"
+      ],
+      "last_updated": "2025-11-11"
+    },
+    {
+      "id": "NHA_GLYCERIN_FATTY_ACID_ESTER",
+      "standard_name": "Glycerin Fatty Acid Ester",
+      "aliases": [
+        "glycerin fatty acid ester",
+        "glycerol fatty acid ester",
+        "mono and diglycerides"
+      ],
+      "risk_level": "none",
+      "category": "emulsifier",
+      "additive_type": "emulsifier",
+      "clean_label_score": 6,
+      "notes": "Emulsifier derived from glycerin and fatty acids. Generally recognized as safe.",
+      "regulatory_status": "GRAS",
+      "common_uses": [
+        "emulsification",
+        "texture improvement",
+        "stability"
+      ],
+      "last_updated": "2025-11-11"
     }
   ],
   "metadata": {
-    "version": "1.1.0",
-    "total_count": 28,
-    "last_updated": "2025-09-16",
+    "version": "1.5.1",
+    "total_count": 55,
+    "last_updated": "2025-09-20",
     "description": "Non-harmful additives database for clean label supplement classification",
     "scoring_notes": "clean_label_score: 10=premium, 9=excellent, 8=good, 7=acceptable clean label perception",
-    "usage_priority": "Check this database before harmful_additives to flag as additive but safe"
+    "usage_priority": "Check this database before harmful_additives to flag as additive but safe",
+    "consolidation_notes": "Duplicates consolidated: Stevia family (3→1), Vanilla family (3→1), Natural Flavors (2→1), Vegetable Stearates (2→1). Safety reclassifications: Organic Maltodextrin and Sodium Copper Chlorophyllin moved to harmful_additives.json. Sodium Citrate/Trisodium Citrate moved from harmful (GRAS-approved, safe for general use). Current count: 54 entries."
   }
 }

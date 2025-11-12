@@ -59,18 +59,16 @@
       "aliases": [
         "palm kernel oil",
         "palm fruit oil",
-        "palmitate",
-        "vitamin A palmitate",
-        "vitamin E palmitate",
-        "sodium lauryl sulfate (palm)",
+        "sodium lauryl sulfate (palm-derived)",
         "sodium palm kernelate",
-        "stearic acid (palm)",
-        "glyceryl stearate (palm)",
         "Elaeis guineensis oil",
         "vegetable oil (palm)",
+        "vegetable oil from palm",
         "palmolein",
         "hydrogenated palm oil",
+        "hydrogenated palm kernel oil",
         "fractionated palm oil",
+        "fractionated palm kernel oil",
         "red palm oil"
       ],
       "risk_level": "moderate",
@@ -91,9 +89,8 @@
         "FD&C Green #3",
         "FD&C Blue",
         "Blue 2 Lake",
-        "FD&C",
         "certified colors",
-        "color added"
+        "certified color added"
       ],
       "risk_level": "high",
       "category": "colorant_artificial",
@@ -288,8 +285,8 @@
         "kappa-carrageenan",
         "iota-carrageenan",
         "lambda-carrageenan",
-        "seaweed extract",
-        "chondrus crispus extract"
+        "chondrus crispus extract",
+        "carrageenan extract"
       ],
       "risk_level": "moderate",
       "category": "thickener_emulsifier",
@@ -385,9 +382,9 @@
       "aliases": [
         "MSG",
         "E621",
-        "Glutamic Acid",
         "sodium glutamate",
         "monosodium L-glutamate",
+        "monosodium glutamate",
         "accent",
         "vetsin",
         "disodium guanylate",
@@ -454,21 +451,6 @@
       "last_updated": "2025-08-04"
     },
     {
-      "id": "ADD_LECITHIN",
-      "standard_name": "Lecithin (Soy)",
-      "aliases": [
-        "soy lecithin",
-        "lecithin",
-        "E322",
-        "phosphatidylcholine",
-        "phospholipids"
-      ],
-      "risk_level": "low",
-      "category": "emulsifier",
-      "notes": "An emulsifier typically extracted from soybeans. It is a major allergen and is often derived from genetically modified (GMO) soy unless specified otherwise.",
-      "last_updated": "2025-08-04"
-    },
-    {
       "id": "ADD_MODIFIED_STARCH",
       "standard_name": "Modified Food Starch",
       "aliases": [
@@ -484,37 +466,6 @@
       "category": "filler_thickener",
       "notes": "Starches that have been chemically or physically altered to improve function. The processing can introduce unknown contaminants and may involve chemicals.",
       "last_updated": "2025-08-04"
-    },
-    {
-      "id": "ADD_SODIUM_CITRATE",
-      "standard_name": "Sodium Citrate",
-      "aliases": [
-        "sodium citrate",
-        "trisodium citrate",
-        "citric acid sodium salt",
-        "E331",
-        "E331(iii)",
-        "sodium citrate dihydrate"
-      ],
-      "risk_level": "low",
-      "category": "buffer_acidity_regulator",
-      "notes": "Common food additive used to regulate acidity (buffer), stabilize, and sometimes emulsify. Generally recognized as safe (GRAS) at typical doses. High intake can add to sodium load—consider for those with hypertension or kidney disease.",
-      "last_updated": "2025-08-06"
-    },
-    {
-      "id": "ADD_TRISODIUM_CITRATE",
-      "standard_name": "Trisodium Citrate",
-      "aliases": [
-        "trisodium citrate",
-        "sodium citrate",
-        "E331",
-        "E331(iii)",
-        "trisodium citrate dihydrate"
-      ],
-      "risk_level": "low",
-      "category": "buffer_acidity_regulator",
-      "notes": "Buffer and acidity regulator commonly used in food and supplement formulations. Functionally equivalent to sodium citrate. Generally recognized as safe (GRAS) at normal doses, but adds to total sodium load.",
-      "last_updated": "2025-08-06"
     },
     {
       "id": "ADD_ERYTHRITOL",
@@ -1293,6 +1244,208 @@
       "category": "leavening_agent",
       "notes": "Leavening agent containing aluminum. May contribute to aluminum body burden. Studies suggest potential neurotoxicity concerns, especially with chronic exposure.",
       "last_updated": "2025-09-16"
+    },
+    {
+      "id": "ADD_COLLOIDAL_SILVER",
+      "standard_name": "Colloidal Silver",
+      "aliases": [
+        "colloidal silver",
+        "nano silver",
+        "silver nanoparticles",
+        "patented nano-silver solution",
+        "ionic silver",
+        "silver particles"
+      ],
+      "risk_level": "critical",
+      "category": "metal_supplement",
+      "notes": "CRITICAL SAFETY WARNING: FDA has ruled colloidal silver products are not generally recognized as safe. Can cause permanent argyria (irreversible blue-gray skin discoloration), kidney damage, liver damage, neurological problems, and seizures. NO proven health benefits. AVOID internal use.",
+      "last_updated": "2025-09-19"
+    },
+    {
+      "id": "ADD_METHYLPARABEN",
+      "standard_name": "Methylparaben",
+      "aliases": [
+        "methylparaben",
+        "methyl paraben",
+        "4-hydroxybenzoic acid methyl ester",
+        "methyl parahydroxybenzoate"
+      ],
+      "risk_level": "moderate",
+      "category": "preservative",
+      "notes": "Preservative with potential endocrine disruption concerns. Has weak estrogenic activity. While FDA considers it GRAS at low levels (0.1%), some individuals may experience allergic reactions. Banned in some organic certifications.",
+      "last_updated": "2025-09-19"
+    },
+    {
+      "id": "ADD_BLUE_1",
+      "standard_name": "Blue 1 (Brilliant Blue FCF)",
+      "aliases": [
+        "blue 1",
+        "brilliant blue fcf",
+        "fd&c blue no. 1",
+        "e133",
+        "brilliant blue",
+        "erioglaucine"
+      ],
+      "risk_level": "moderate",
+      "category": "artificial_colorant",
+      "notes": "Synthetic food dye derived from petroleum. Some studies suggest potential hyperactivity in children and allergic reactions. Banned in some countries. FDA approved but controversial.",
+      "last_updated": "2025-09-19"
+    },
+    {
+      "id": "ADD_CARMINE_RED",
+      "standard_name": "Carmine Red (Cochineal Extract)",
+      "aliases": [
+        "carmine",
+        "carmine red",
+        "cochineal extract",
+        "natural red 4",
+        "e120",
+        "crimson lake",
+        "carmine lake"
+      ],
+      "risk_level": "moderate",
+      "category": "natural_colorant",
+      "notes": "Natural red colorant derived from cochineal insects. While FDA approved, poses contamination risks from insect-derived proteins. Processing quality varies significantly. Can contain undeclared allergens and contaminants.",
+      "last_updated": "2025-09-19"
+    },
+    {
+      "id": "ADD_POTASSIUM_HYDROXIDE",
+      "standard_name": "Potassium Hydroxide",
+      "aliases": [
+        "potassium hydroxide",
+        "caustic potash",
+        "koh",
+        "potash lye"
+      ],
+      "risk_level": "high",
+      "category": "chemical_processing_agent",
+      "notes": "CRITICAL: Strong caustic alkali (lye) with corrosive properties. Not GRAS for dietary supplements. May cause severe burns, digestive damage. Should only be used in controlled food processing, not as supplement ingredient.",
+      "last_updated": "2025-09-19"
+    },
+    {
+      "id": "ADD_DISODIUM_EDTA",
+      "standard_name": "Disodium EDTA",
+      "aliases": [
+        "disodium edta",
+        "edta disodium salt",
+        "ethylenediaminetetraacetic acid disodium salt",
+        "disodium ethylenediaminetetraacetate"
+      ],
+      "risk_level": "moderate",
+      "category": "synthetic_preservative",
+      "notes": "Synthetic chelating agent and preservative. While FDA approved for food use, concerns about mineral depletion, potential heavy metal mobilization, and cellular membrane disruption. May interfere with nutrient absorption.",
+      "last_updated": "2025-09-19"
+    },
+    {
+      "id": "ADD_ANATABINE",
+      "standard_name": "Anatabine",
+      "aliases": [
+        "anatabine",
+        "anatabine citrate",
+        "anatabine supplement",
+        "tobacco alkaloid anatabine"
+      ],
+      "risk_level": "high",
+      "category": "alkaloid_tobacco_derived",
+      "notes": "REGULATORY WARNING: Tobacco alkaloid with controversial regulatory status. Voluntarily withdrawn from market after FDA concerns about drug claims and tobacco-derived ingredient classification. While found naturally in Solanaceae plants, regulatory status uncertain for dietary supplements.",
+      "last_updated": "2025-09-20"
+    },
+    {
+      "id": "ADD_D_MANNOSE",
+      "standard_name": "D-Mannose",
+      "aliases": [
+        "d-mannose",
+        "d mannose",
+        "mannose",
+        "d-mannose powder",
+        "mannose powder",
+        "pure d-mannose",
+        "cranberry sugar",
+        "urinary tract sugar"
+      ],
+      "risk_level": "moderate",
+      "category": "unapproved_sweetener",
+      "notes": "REGULATORY WARNING: Simple sugar lacking FDA approval as food additive and not granted GRAS (Generally Recognized as Safe) status for food use. While naturally occurring and used in dietary supplements, it lacks proper regulatory approval for food additive applications. May be used as unauthorized sweetener without proper food safety evaluation.",
+      "last_updated": "2025-09-20"
+    },
+    {
+      "id": "ADD_MALTODEXTRIN",
+      "standard_name": "Maltodextrin",
+      "aliases": [
+        "maltodextrin",
+        "corn maltodextrin",
+        "wheat maltodextrin",
+        "potato maltodextrin",
+        "rice maltodextrin",
+        "tapioca maltodextrin",
+        "non-GMO maltodextrin",
+        "organic maltodextrin"
+      ],
+      "risk_level": "medium",
+      "category": "high_glycemic_carrier",
+      "notes": "HEALTH CONCERN: High glycemic index (GI 85-105) similar to pure glucose. Can cause rapid blood sugar spikes, potentially problematic for diabetics and those with metabolic disorders. Often derived from genetically modified corn. May disrupt gut bacteria balance and contribute to inflammation. While FDA GRAS-approved, growing evidence suggests potential negative metabolic effects.",
+      "last_updated": "2025-09-20"
+    },
+    {
+      "id": "ADD_SODIUM_COPPER_CHLOROPHYLLIN",
+      "standard_name": "Sodium Copper Chlorophyllin",
+      "aliases": [
+        "sodium copper chlorophyllin",
+        "chlorophyllin copper complex",
+        "chlorophyll copper sodium",
+        "sodium chlorophyllin",
+        "copper chlorophyllin",
+        "SCC",
+        "chlorophyllin",
+        "chlorophyll derivative"
+      ],
+      "risk_level": "medium",
+      "category": "synthetic_colorant_copper",
+      "notes": "SAFETY CONCERN: Semi-synthetic derivative of chlorophyll with copper substituted for magnesium. Limited long-term safety data for regular consumption. Potential copper accumulation concerns with chronic use. While over 50 years of use and FDA GRAS status, recent studies question safety of regular copper chlorophyllin consumption. May cause gastrointestinal upset in sensitive individuals.",
+      "last_updated": "2025-09-20"
+    },
+    {
+      "id": "ADD_HYDROGENATED_COCONUT_OIL",
+      "standard_name": "Hydrogenated Coconut Oil",
+      "aliases": [
+        "hydrogenated coconut oil",
+        "partially hydrogenated coconut oil",
+        "hardened coconut oil",
+        "trans fat coconut oil"
+      ],
+      "risk_level": "moderate",
+      "category": "trans_fat_oil",
+      "notes": "MODERATE RISK: Hydrogenation process creates trans fats in coconut oil. Unlike natural coconut oil, hydrogenated form contains harmful trans fatty acids that increase cardiovascular disease risk and inflammation. FDA has banned partially hydrogenated oils in foods.",
+      "last_updated": "2025-09-21"
+    },
+    {
+      "id": "ADD_MALTITOL_MALITOL",
+      "standard_name": "Maltitol/Malitol",
+      "aliases": [
+        "maltitol",
+        "malitol",
+        "e965",
+        "maltitol syrup",
+        "maltitol powder"
+      ],
+      "risk_level": "low",
+      "category": "sugar_alcohol_digestive",
+      "notes": "LOW RISK: Sugar alcohol that can cause digestive distress including bloating, gas, and diarrhea when consumed in moderate amounts (>10g). Has laxative effects. Generally safe but may cause gastrointestinal discomfort in sensitive individuals.",
+      "last_updated": "2025-09-21"
+    },
+    {
+      "id": "ADD_HYDROGENATED_STARCH_HYDROLYSATE",
+      "standard_name": "Hydrogenated Starch Hydrolysate",
+      "aliases": [
+        "hydrogenated starch hydrolysate",
+        "hsh",
+        "maltitol syrup",
+        "hydrogenated glucose syrup"
+      ],
+      "risk_level": "low",
+      "category": "sugar_alcohol_digestive",
+      "notes": "LOW RISK: Sugar alcohol mixture that can cause digestive issues similar to other sugar alcohols. May cause bloating, gas, and diarrhea when consumed in larger amounts. Generally recognized as safe but may cause gastrointestinal discomfort.",
+      "last_updated": "2025-09-21"
     }
   ]
 }

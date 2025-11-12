@@ -128,5 +128,10 @@
     "points": 6,
     "description": "Colloidal droplet system that dramatically increases absorption of poorly bioavailable nutrients.",
     "category": "delivery"
+  },
+  "directline technology": {
+    "points": 5,
+    "description": "Proprietary delivery technology for enhanced nutrient absorption and bioavailability.",
+    "category": "delivery"
   }
 }

@@ -4,7 +4,7 @@
     "last_updated": "2025-09-05",
     "data_source": "Clinical research, meta-analyses, standard therapeutic guidelines",
     "purpose": "Provide therapeutic dosing ranges for dietary supplement ingredients not covered by traditional RDA/UL standards.",
-    "total_entries": 30
+    "total_entries": 32
   },
   "therapeutic_dosing": [
     {
@@ -449,6 +449,37 @@
       "upper_limit": "1000",
       "upper_limit_notes": "Relatively new supplement. Short-term human trials suggest good tolerability. Long-term effects are still under investigation.",
       "evidence_tier": 2
+    },
+    {
+      "standard_name": "Lion's Mane Mushroom Extract",
+      "aliases": [
+        "lion's mane",
+        "lions mane",
+        "hericium erinaceus",
+        "yamabushitake"
+      ],
+      "unit": "mg",
+      "common_use": "Cognitive function, neuroplasticity, nerve growth factor",
+      "typical_dosing_range": "1000-3000",
+      "common_serving_size": "2000",
+      "upper_limit": "5000",
+      "upper_limit_notes": "Generally well-tolerated. Extract concentration varies significantly between products.",
+      "evidence_tier": 2
+    },
+    {
+      "standard_name": "L-Citrulline",
+      "aliases": [
+        "l-citrulline",
+        "citrulline",
+        "pure citrulline"
+      ],
+      "unit": "mg",
+      "common_use": "Nitric oxide production, exercise performance, blood flow",
+      "typical_dosing_range": "3000-6000",
+      "common_serving_size": "4000",
+      "upper_limit": "10000",
+      "upper_limit_notes": "Pure L-citrulline form, more concentrated than citrulline malate. May cause mild GI upset at higher doses.",
+      "evidence_tier": 1
     }
   ]
 }

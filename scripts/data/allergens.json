@@ -1,8 +1,8 @@
 {
   "database_info": {
-    "version": "2.3.0",
-    "last_updated": "2025-09-16",
-    "total_allergens": 48,
+    "version": "2.4.0",
+    "last_updated": "2025-09-20",
+    "total_allergens": 49,
     "scoring_system": {
       "allergen_free_bonus": 2,
       "severity_penalties": {
@@ -16,23 +16,28 @@
   "common_allergens": [
     {
       "id": "ALLERGEN_SOY",
-      "standard_name": "Soy",
+      "standard_name": "Soy & Soy Lecithin",
       "aliases": [
         "soy lecithin",
+        "Soya Lecithin",
         "soybean oil",
         "soy protein",
         "glycine max",
         "soybean",
         "soy flour",
-        "lecithin"
+        "lecithin (soy)",
+        "lecithin (from soy)",
+        "E322",
+        "phosphatidylcholine (soy)",
+        "phospholipids (soy)"
       ],
       "prevalence": "high",
       "severity_level": "low",
       "regulatory_status": "fda_major",
-      "supplement_context": "Very common in protein powders and as lecithin emulsifier",
-      "notes": "One of the 9 major allergens. Must be declared on labels.",
-      "category": "allergen",
-      "last_updated": "2025-07-16"
+      "supplement_context": "Extremely common as lecithin emulsifier in supplements, protein powders, and capsules. Often derived from GMO soybeans unless specified otherwise.",
+      "notes": "One of the 9 major FDA allergens requiring label declaration. Soy lecithin moved from harmful_additives.json - primary concern is allergenicity rather than general toxicity. Most soy-allergic individuals can tolerate highly refined soy lecithin, but sensitive individuals may still react.",
+      "category": "major_allergen_emulsifier",
+      "last_updated": "2025-09-20"
     },
     {
       "id": "ALLERGEN_MILK",
@@ -96,12 +101,7 @@
     {
       "id": "ALLERGEN_PEANUTS",
       "standard_name": "Peanuts",
-      "aliases": [
-        "peanut oil",
-        "arachis oil",
-        "groundnut",
-        "peanut protein"
-      ],
+      "aliases": ["peanut oil", "arachis oil", "groundnut", "peanut protein"],
       "prevalence": "moderate",
       "severity_level": "high",
       "regulatory_status": "fda_major",
@@ -172,12 +172,7 @@
     {
       "id": "ALLERGEN_SESAME",
       "standard_name": "Sesame",
-      "aliases": [
-        "sesame oil",
-        "tahini",
-        "sesamum indicum",
-        "sesame seed"
-      ],
+      "aliases": ["sesame oil", "tahini", "sesamum indicum", "sesame seed"],
       "prevalence": "low",
       "severity_level": "moderate",
       "regulatory_status": "fda_major",
@@ -215,13 +210,7 @@
     {
       "id": "ALLERGEN_ANNATTO",
       "standard_name": "Annatto",
-      "aliases": [
-        "annatto dye",
-        "160b",
-        "bixin",
-        "norbixin",
-        "bixa orellana"
-      ],
+      "aliases": ["annatto dye", "160b", "bixin", "norbixin", "bixa orellana"],
       "prevalence": "moderate",
       "severity_level": "moderate",
       "regulatory_status": "natural_color",
@@ -320,11 +309,7 @@
     {
       "id": "ALLERGEN_CELERY",
       "standard_name": "Celery",
-      "aliases": [
-        "celery seed",
-        "apium graveolens",
-        "celery extract"
-      ],
+      "aliases": ["celery seed", "apium graveolens", "celery extract"],
       "prevalence": "low",
       "severity_level": "moderate",
       "regulatory_status": "eu_allergen",
@@ -336,11 +321,7 @@
     {
       "id": "ALLERGEN_MUSTARD",
       "standard_name": "Mustard",
-      "aliases": [
-        "mustard seed",
-        "sinapis alba",
-        "brassica nigra"
-      ],
+      "aliases": ["mustard seed", "sinapis alba", "brassica nigra"],
       "prevalence": "low",
       "severity_level": "moderate",
       "regulatory_status": "eu_allergen",
@@ -352,11 +333,7 @@
     {
       "id": "ALLERGEN_LUPIN",
       "standard_name": "Lupin",
-      "aliases": [
-        "lupin bean",
-        "lupinus",
-        "lupin flour"
-      ],
+      "aliases": ["lupin bean", "lupinus", "lupin flour"],
       "prevalence": "low",
       "severity_level": "moderate",
       "regulatory_status": "eu_allergen",
@@ -632,11 +609,7 @@
     {
       "id": "ALLERGEN_SUCRALOSE",
       "standard_name": "Sucralose",
-      "aliases": [
-        "splenda",
-        "trichlorogalactosucrose",
-        "E955"
-      ],
+      "aliases": ["splenda", "trichlorogalactosucrose", "E955"],
       "prevalence": "high",
       "severity_level": "moderate",
       "regulatory_status": "fda_approved",
@@ -648,13 +621,7 @@
     {
       "id": "ALLERGEN_ACESULFAME_POTASSIUM",
       "standard_name": "Acesulfame Potassium",
-      "aliases": [
-        "ace-k",
-        "acesulfame k",
-        "E950",
-        "sunett",
-        "sweet one"
-      ],
+      "aliases": ["ace-k", "acesulfame k", "E950", "sunett", "sweet one"],
       "prevalence": "high",
       "severity_level": "moderate",
       "regulatory_status": "fda_approved",
@@ -737,6 +704,82 @@
       "notes": "Can cause digestive issues in sensitive individuals. Xylitol most commonly reported for reactions.",
       "category": "sweetener",
       "last_updated": "2025-09-11"
+    },
+    {
+      "id": "ALL_CARMINE_RED",
+      "standard_name": "Carmine Red (Cochineal Extract)",
+      "aliases": [
+        "carmine",
+        "carmine red",
+        "cochineal extract",
+        "natural red 4",
+        "e120",
+        "crimson lake",
+        "carmine lake"
+      ],
+      "prevalence": "moderate",
+      "severity_level": "high",
+      "regulatory_status": "approved_with_labeling_requirements",
+      "supplement_context": "Used as natural red colorant in supplements, especially chewables",
+      "notes": "CRITICAL: Can trigger severe allergic reactions including anaphylaxis. FDA requires specific labeling due to allergen potential. Derived from cochineal insects. Reactions can occur at doses as low as 1mg.",
+      "category": "colorant",
+      "last_updated": "2025-09-19"
+    },
+    {
+      "id": "ALL_ARTIFICIAL_FLAVORS",
+      "standard_name": "Artificial Flavors (unspecified)",
+      "aliases": [
+        "artificial flavor",
+        "artificial flavors",
+        "artificial flavoring",
+        "natural and artificial flavors",
+        "artificial and natural flavorings"
+      ],
+      "prevalence": "moderate",
+      "severity_level": "moderate",
+      "regulatory_status": "generally_recognized_as_safe",
+      "supplement_context": "Common in flavored supplements, lozenges, and chewables",
+      "notes": "May contain multiple synthetic compounds. Potential for allergic reactions varies by specific flavor compounds. Cross-reactivity possible with food allergies.",
+      "category": "flavoring",
+      "last_updated": "2025-09-19"
+    },
+    {
+      "id": "ALL_BLUE_1",
+      "standard_name": "Blue 1 (Brilliant Blue FCF)",
+      "aliases": [
+        "blue 1",
+        "brilliant blue fcf",
+        "fd&c blue no. 1",
+        "e133",
+        "brilliant blue",
+        "erioglaucine"
+      ],
+      "prevalence": "low",
+      "severity_level": "moderate",
+      "regulatory_status": "approved_with_warnings",
+      "supplement_context": "Used in colored supplements, vitamins, and medications",
+      "notes": "FDA approved but documented allergic reactions including rashes, hives, nasal congestion. FDA issued 2003 warning about toxicity in medical feeding solutions. Affects small percentage of sensitive individuals.",
+      "category": "artificial_colorant",
+      "last_updated": "2025-09-19"
+    },
+    {
+      "id": "ALL_SUNFLOWER_LECITHIN",
+      "standard_name": "Sunflower Lecithin",
+      "aliases": [
+        "sunflower lecithin",
+        "lecithin (sunflower-derived)",
+        "non-GMO lecithin",
+        "organic sunflower lecithin",
+        "phosphatidylcholine",
+        "sunflower-derived lecithin"
+      ],
+      "prevalence": "low",
+      "severity_level": "low",
+      "regulatory_status": "gras_approved",
+      "supplement_context": "Common emulsifier in supplements, preferred over soy lecithin for allergen-sensitive formulations",
+      "notes": "Though less allergenic than soy lecithin, can still cause reactions in sensitive individuals. Most allergists consider it low-risk, but some highly sensitive people may react. Generally well-tolerated alternative to soy lecithin for those with soy allergies.",
+      "category": "plant_derived_emulsifier",
+      "last_updated": "2025-09-20"
     }
   ]
 }

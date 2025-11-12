@@ -1,0 +1,27 @@
+{
+  "report_metadata": {
+    "report_type": "enrichment_summary",
+    "generated_timestamp": "2025-11-11T20:57:36.758925Z",
+    "enrichment_version": "2.0.0"
+  },
+  "processing_summary": {
+    "total_products_processed": 978,
+    "successful_enrichments": 978,
+    "failed_enrichments": 0,
+    "success_rate_percentage": 100.0,
+    "processing_start_time": "2025-11-11T20:57:01.867929Z",
+    "processing_end_time": "2025-11-11T20:57:36.758893Z",
+    "total_processing_time_seconds": 34.89
+  },
+  "failure_breakdown": {
+    "failure_categories": {},
+    "top_failure_reasons": [],
+    "data_quality_issues_count": 0,
+    "actionable_items_count": 0
+  },
+  "recommendations": {
+    "immediate_actions": [],
+    "data_improvement_priorities": [],
+    "system_improvements": []
+  }
+}

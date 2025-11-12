@@ -1,6 +1,0 @@
-2025-09-16 13:16:03,879 - INFO - === Batch 3 Processing Log ===
-2025-09-16 13:16:03,879 - INFO - Started: 2025-09-16 13:16:03
-2025-09-16 13:16:03,879 - INFO - Files: 240591.json to 255449.json
-2025-09-16 13:21:13,671 - INFO - Ended: 2025-09-16 13:21:13
-2025-09-16 13:21:13,671 - INFO - Summary: {'batch_num': 3, 'processed': 500, 'cleaned': 500, 'needs_review': 0, 'incomplete': 0, 'errors': 0, 'processing_time': 309.79223799705505, 'avg_time_per_file': 0.6195844759941102}
-2025-09-16 13:21:13,671 - INFO - Unmapped ingredients: 61

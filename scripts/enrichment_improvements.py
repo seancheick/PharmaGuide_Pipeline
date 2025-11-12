@@ -11,11 +11,13 @@ from typing import Dict, List, Any, Optional, Tuple
 from fuzzywuzzy import fuzz
 import logging
 
+from constants import FUZZY_MATCHING_THRESHOLDS, VALIDATION_THRESHOLDS
+
 class ImprovedIngredientMatcher:
     """Enhanced ingredient matching with fuzzy logic and better error handling"""
     
-    def __init__(self, fuzzy_threshold: int = 80):
-        self.fuzzy_threshold = fuzzy_threshold
+    def __init__(self, fuzzy_threshold: int = None):
+        self.fuzzy_threshold = fuzzy_threshold or FUZZY_MATCHING_THRESHOLDS["fuzzy_threshold"]
         self.cache = {}  # Cache for repeated lookups
         
     def enhanced_ingredient_match(self, ingredient_name: str, target_name: str, 
@@ -46,7 +48,7 @@ class ImprovedIngredientMatcher:
         for alias in aliases:
             alias_clean = self._normalize_text(alias)
             if ingredient_clean == alias_clean:
-                result = (True, 95)
+                result = (True, VALIDATION_THRESHOLDS["excellent_success_rate"])
                 self.cache[cache_key] = result
                 return result
         
@@ -54,7 +56,7 @@ class ImprovedIngredientMatcher:
         ingredient_words = set(ingredient_clean.split())
         target_words = set(target_clean.split())
         if ingredient_words == target_words:
-            result = (True, 90)
+            result = (True, VALIDATION_THRESHOLDS["excellent_completeness"])
             self.cache[cache_key] = result
             return result
         
@@ -265,7 +267,7 @@ def _load_all_databases_enhanced(self):
     
     # Initialize enhanced matcher
     fuzzy_enabled = self.config.get('processing_config', {}).get('enable_fuzzy_matching', True)
-    fuzzy_threshold = self.config.get('processing_config', {}).get('fuzzy_threshold', 80)
+    fuzzy_threshold = self.config.get('processing_config', {}).get('fuzzy_threshold', FUZZY_MATCHING_THRESHOLDS["fuzzy_threshold"])
     
     self.ingredient_matcher = ImprovedIngredientMatcher(fuzzy_threshold)
     self.error_handler = EnrichmentErrorHandler(self.logger)

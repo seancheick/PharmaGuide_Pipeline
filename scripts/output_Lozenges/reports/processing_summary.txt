@@ -1,29 +1,29 @@
 DSLD Data Cleaning Processing Report
 ==================================================
 
-Generated: 2025-09-18 13:11:21
+Generated: 2025-11-11 22:56:14
 Total Files Processed: 978
-Processing Time: 5.07 minutes
+Processing Time: 0.11 minutes
 
 Results Summary:
-  - Successfully cleaned: 975
+  - Successfully cleaned: 978
   - Needs review: 0
   - Incomplete: 0
-  - Errors: 3
-  - Success rate: 99.7%
+  - Errors: 0
+  - Success rate: 100.0%
 
-Mapped ingredients found: 695
-Unmapped ingredients found: 114
+Mapped ingredients found: 781
+Unmapped ingredients found: 12
 
 Top 15 Mapped Ingredients (data insights):
-  548x Stearic Acid
-  506x Magnesium Stearate
-  456x Sorbitol
+  550x Stearic Acid
+  509x Magnesium Stearate
+  458x Sorbitol
   356x Vitamin B12
-  332x Silica
-  309x Mannitol
+  334x Silica
+  311x Mannitol
   304x Citric Acid
-  263x Fructose
+  264x Fructose
   258x Zinc
   232x Xylitol
   225x Cellulose
@@ -35,19 +35,19 @@ Top 15 Mapped Ingredients (data insights):
 📊 These are the most frequently appearing mapped ingredients
 
 Top 10 Unmapped Ingredients (for enrichment planning):
-   41x Cane Sugar
-   39x Sugar
-   28x Contains <2% of:
-   15x Contains <2% of
-    4x Acid Comfort
-    4x organic Cane syrup
-    4x Organic sugar
-    4x Enzymax
-    3x Orange crystals
-    3x patented nano-Silver solution
+  121x May contain one or more of the following
+  107x None
+   95x Contains < 2% of
+   93x Natural yellow/orange coloring
+   74x Natural & Organic Fruit Flavors
+   62x Passion flower (Passiflora incamata) herbs dry extract
+   57x Contains 2% or less of the following
+   52x May contain one or more of the following:
+   50x Proprietary Elderberry Extract
+   43x Naturally Sweet
 
 💡 These ingredients should be prioritized for database enrichment
 
 Batch Details:
-  Batch 1: 497 cleaned, 0 review, 0 incomplete, 3 errors (154.5s)
-  Batch 2: 478 cleaned, 0 review, 0 incomplete, 0 errors (149.8s)
+  Batch 1: 500 cleaned, 0 review, 0 incomplete, 0 errors (3.3s)
+  Batch 2: 478 cleaned, 0 review, 0 incomplete, 0 errors (3.3s)

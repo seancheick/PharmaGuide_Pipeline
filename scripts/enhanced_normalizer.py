@@ -7,10 +7,11 @@ import json
 import logging
 import string
 import os
-from typing import Dict, List, Tuple, Optional, Any, Set
+import functools
+from typing import Dict, List, Tuple, Optional, Any
 from datetime import datetime
 from pathlib import Path
-from collections import Counter, defaultdict
+from collections import Counter
 from concurrent.futures import ThreadPoolExecutor, as_completed
 import threading
 
@@ -36,8 +37,16 @@ from constants import (
     BANNED_RECALLED,
     PASSIVE_INACTIVE_INGREDIENTS,
     BOTANICAL_INGREDIENTS,
+    ABSORPTION_ENHANCERS,
     ENHANCED_DELIVERY,
+    RDA_OPTIMAL_ULS,
+    RDA_THERAPEUTIC_DOSING,
     UNIT_CONVERSIONS,
+    FUZZY_MATCHING_THRESHOLDS,
+    SCORING_CONSTANTS,
+    EVIDENCE_SCORING,
+    UNIT_ALIASES,
+    ENHANCED_EXCLUSION_PATTERNS,
     DSLD_IMAGE_URL_TEMPLATE,
     CERTIFICATION_PATTERNS,
     ALLERGEN_FREE_PATTERNS,
@@ -47,14 +56,10 @@ from constants import (
     PROPRIETARY_BLEND_INDICATORS,
     DELIVERY_ENHANCEMENT_PATTERNS,
     CLINICAL_EVIDENCE_PATTERNS,
-    DEFAULT_STATUS,
-    DOSE_PATTERN,
     FORM_QUALIFIERS,
-    COMMA_SPLIT_PATTERN,
     DEFAULT_SERVING_SIZE,
     DEFAULT_DAILY_SERVINGS,
-    EXCLUDED_NUTRITION_FACTS,
-    NUTRITIONAL_WARNING_FIELDS
+    EXCLUDED_NUTRITION_FACTS
 )
 
 # Import the UnmappedIngredientTracker
@@ -70,15 +75,21 @@ class EnhancedIngredientMatcher:
     """Enhanced ingredient matching with fuzzy logic and comprehensive preprocessing"""
 
     def __init__(self):
-        self.fuzzy_threshold = 85  # Minimum fuzzy match score
-        self.partial_threshold = 90  # Minimum partial match score
+        # SAFETY FIRST: Increased thresholds for critical ingredient matching
+        self.fuzzy_threshold = FUZZY_MATCHING_THRESHOLDS["fuzzy_threshold"]
+        self.partial_threshold = FUZZY_MATCHING_THRESHOLDS["partial_threshold"]
+        self.minimum_fuzzy_length = FUZZY_MATCHING_THRESHOLDS["minimum_fuzzy_length"]
 
-        # OPTIMIZATION: Pre-compiled fuzzy patterns for common ingredients
-        self._fuzzy_cache = {}  # Cache for fuzzy match results
-        self._common_patterns = {}  # Pre-compiled patterns for common ingredients
-        self._exact_match_cache = {}  # Cache for exact matches
-        
-        # Fuzzy matching blacklist - pairs that should NEVER be matched
+        # SAFETY: Whitelist of categories where fuzzy matching is safe
+        self.safe_fuzzy_categories = {
+            "botanical",  # Herb names often have spelling variations
+            "flavor",     # Natural flavors, artificial flavors
+            "color",      # Natural colors, artificial colors
+            "inactive",   # Non-critical inactive ingredients
+            "excipient"   # Manufacturing aids, generally safe to fuzzy match
+        }
+
+        # CRITICAL SAFETY: Comprehensive blacklist - pairs that should NEVER be matched
         self.fuzzy_blacklist = {
             # (query_pattern, target_pattern) - if query matches first and target matches second, reject
             
@@ -189,13 +200,38 @@ class EnhancedIngredientMatcher:
             ("creatine", "carnitine"),      # Different energy compounds
             ("pyruvate", "citrate"),        # Different metabolic compounds
             ("ribose", "glucose"),          # Different sugars
+
+            # === ULTRA CRITICAL: Vitamin/Mineral Number Protection ===
+            # Prevent ANY cross-matching between numbered vitamins/minerals
+            ("b1", "b2"), ("b1", "b3"), ("b1", "b5"), ("b1", "b6"), ("b1", "b7"), ("b1", "b8"), ("b1", "b9"), ("b1", "b12"),
+            ("b2", "b1"), ("b2", "b3"), ("b2", "b5"), ("b2", "b6"), ("b2", "b7"), ("b2", "b8"), ("b2", "b9"), ("b2", "b12"),
+            ("b3", "b1"), ("b3", "b2"), ("b3", "b5"), ("b3", "b6"), ("b3", "b7"), ("b3", "b8"), ("b3", "b9"), ("b3", "b12"),
+            ("b5", "b1"), ("b5", "b2"), ("b5", "b3"), ("b5", "b6"), ("b5", "b7"), ("b5", "b8"), ("b5", "b9"), ("b5", "b12"),
+            ("b6", "b1"), ("b6", "b2"), ("b6", "b3"), ("b6", "b5"), ("b6", "b7"), ("b6", "b8"), ("b6", "b9"), ("b6", "b12"),
+            ("b7", "b1"), ("b7", "b2"), ("b7", "b3"), ("b7", "b5"), ("b7", "b6"), ("b7", "b8"), ("b7", "b9"), ("b7", "b12"),
+            ("b8", "b1"), ("b8", "b2"), ("b8", "b3"), ("b8", "b5"), ("b8", "b6"), ("b8", "b7"), ("b8", "b9"), ("b8", "b12"),
+            ("b9", "b1"), ("b9", "b2"), ("b9", "b3"), ("b9", "b5"), ("b9", "b6"), ("b9", "b7"), ("b9", "b8"), ("b9", "b12"),
+            ("b12", "b1"), ("b12", "b2"), ("b12", "b3"), ("b12", "b5"), ("b12", "b6"), ("b12", "b7"), ("b12", "b8"), ("b12", "b9"),
+
+            # Vitamin D protection (D2 vs D3 are VERY different)
+            ("d2", "d3"), ("d3", "d2"),
+            ("vitamin d2", "vitamin d3"), ("vitamin d3", "vitamin d2"),
+
+            # Vitamin K protection (K1 vs K2 have different functions)
+            ("k1", "k2"), ("k2", "k1"),
+            ("vitamin k1", "vitamin k2"), ("vitamin k2", "vitamin k1"),
+
+            # Additional mineral protection
             ("chromium", "vanadium"),       # Different trace minerals
         }
         
+    @functools.lru_cache(maxsize=10000)
     def preprocess_text(self, text: str) -> str:
         """
-        Comprehensive text preprocessing for better matching
+        Comprehensive text preprocessing with enhanced validation
         """
+        # SAFETY: Comprehensive input validation
+        text = self.validate_input(text, "ingredient_name")
         if not text:
             return ""
         
@@ -204,10 +240,13 @@ class EnhancedIngredientMatcher:
         
         # Remove common parenthetical information
         text = re.sub(r'\([^)]*\)', '', text)
-        
+
         # Remove brackets and their contents
         text = re.sub(r'\[[^\]]*\]', '', text)
-        
+
+        # Remove curly braces but keep their contents
+        text = re.sub(r'[{}]', '', text)
+
         # Remove trademark symbols
         text = re.sub(r'[™®©]', '', text)
         
@@ -222,12 +261,24 @@ class EnhancedIngredientMatcher:
         for prefix in prefixes_to_remove:
             if text.startswith(prefix):
                 text = text[len(prefix):]
-        
+                break
+
+        # Loop suffix removal to handle multiple suffixes like "Extract, Powder"
         suffixes_to_remove = [' extract', ' powder', ' oil', ' concentrate']
-        for suffix in suffixes_to_remove:
-            if text.endswith(suffix):
-                text = text[:-len(suffix)]
-        
+        changed = True
+        while changed:
+            changed = False
+            # Strip punctuation first to handle cases like "juice, powder" → "juice powder"
+            text = text.strip(string.punctuation + string.whitespace)
+            for suffix in suffixes_to_remove:
+                if text.endswith(suffix):
+                    text = text[:-len(suffix)]
+                    changed = True
+                    break
+
+        # Final cleanup
+        text = text.strip(string.punctuation + string.whitespace)
+
         return text.strip()
     
     def generate_variations(self, text: str) -> List[str]:
@@ -281,61 +332,173 @@ class EnhancedIngredientMatcher:
             variations.append(unspaced_num)
         
         return list(set(variations))  # Remove duplicates
-    
-    def fuzzy_match(self, query: str, targets: List[str]) -> Tuple[Optional[str], int]:
+
+    def is_safe_for_fuzzy_matching(self, query: str, category: str = None) -> bool:
         """
-        Enhanced fuzzy matching with caching and optimization
+        Determine if an ingredient is safe for fuzzy matching based on category and content
+        """
+        # Always allow exact matches
+        if not query:
+            return False
+
+        query_lower = query.lower()
+
+        # SAFETY: Block fuzzy matching for critical vitamins/minerals by content analysis
+        critical_patterns = [
+            r'\bb[1-9][\d]*\b',      # B1, B2, B3, etc.
+            r'\bvitamin\s*[a-z]\d+\b',  # vitamin D3, vitamin K2, etc.
+            r'\bd[23]\b',            # D2, D3
+            r'\bk[12]\b',            # K1, K2
+            r'\bomega\s*[369]\b',    # omega-3, omega-6, omega-9
+        ]
+
+        for pattern in critical_patterns:
+            if re.search(pattern, query_lower):
+                return False  # Never fuzzy match critical vitamins/minerals
+
+        # SAFETY: Check if category is in safe list
+        if category and category.lower() in self.safe_fuzzy_categories:
+            return True
+
+        # SAFETY: Default to EXACT MATCH ONLY for safety
+        return False
+
+    def exact_match_critical_aliases(self, query: str, targets: List[str]) -> Optional[str]:
+        """
+        SAFE exact matching for critical short aliases (B1, D3, K2, etc.)
+        This ensures short critical vitamins/minerals get proper exact matches
+        """
+        if not query or not targets:
+            return None
+
+        query_lower = query.lower().strip()
+
+        # Critical short patterns that must be matched exactly
+        critical_short_patterns = [
+            r'^b[1-9][\d]*$',      # B1, B2, B3, B12, etc.
+            r'^d[23]$',            # D2, D3
+            r'^k[12]$',            # K1, K2
+            r'^vitamin\s*[a-z]\d*$', # vitamin D3, vitamin K2, etc.
+        ]
+
+        # Check if query is a critical short pattern
+        is_critical = any(re.match(pattern, query_lower) for pattern in critical_short_patterns)
+
+        if is_critical:
+            # For critical patterns, only allow exact matches
+            for target in targets:
+                if query_lower == target.lower().strip():
+                    logger.info(f"CRITICAL exact match: '{query}' -> '{target}'")
+                    return target
+
+        return None
+
+    def validate_input(self, text: str, field_name: str = "input") -> str:
+        """
+        Comprehensive input validation with standardized empty handling
+        """
+        # Handle None
+        if text is None:
+            logger.debug(f"NULL {field_name} converted to empty string")
+            return ""
+
+        # Handle non-string types
+        if not isinstance(text, str):
+            try:
+                text = str(text)
+                logger.debug(f"Non-string {field_name} converted: {type(text)} -> str")
+            except Exception:
+                logger.warning(f"Failed to convert {field_name} to string, using empty")
+                return ""
+
+        # Handle whitespace-only strings
+        stripped = text.strip()
+        if not stripped:
+            if text != "":  # Was whitespace-only
+                logger.debug(f"Whitespace-only {field_name} converted to empty string")
+            return ""
+
+        # Handle common placeholder values
+        placeholder_values = {
+            "none", "null", "n/a", "na", "not applicable", "unknown",
+            "unspecified", "not specified", "nil", "empty", "-", "--", "___"
+        }
+
+        if stripped.lower() in placeholder_values:
+            logger.debug(f"Placeholder {field_name} '{stripped}' converted to empty string")
+            return ""
+
+        return stripped
+
+    def fuzzy_match(self, query: str, targets: List[str], category: str = None) -> Tuple[Optional[str], int]:
+        """
+        SAFETY-FIRST fuzzy matching with whitelist approach and thread-safe caching
         """
         if not targets or not query:
             return None, 0
 
-        # OPTIMIZATION: Check cache first
-        cache_key = f"{query}:{len(targets)}"
-        if cache_key in self._fuzzy_cache:
-            return self._fuzzy_cache[cache_key]
+        # SAFETY FIRST: Check if fuzzy matching is safe for this ingredient
+        if not self.is_safe_for_fuzzy_matching(query, category):
+            return None, 0  # Block fuzzy matching for critical ingredients
 
-        result = self._perform_fuzzy_match(query, targets)
+        # Use thread-safe @lru_cache - convert list to tuple for hashability
+        targets_tuple = tuple(targets)
+        return self._safe_fuzzy_match_cached(query, targets_tuple, category)
 
-        # Cache the result (limit cache size to prevent memory bloat)
-        if len(self._fuzzy_cache) < 10000:
-            self._fuzzy_cache[cache_key] = result
+    @functools.lru_cache(maxsize=5000)
+    def _safe_fuzzy_match_cached(self, query: str, targets_tuple: tuple, category: str = None) -> Tuple[Optional[str], int]:
+        """Thread-safe cached version of fuzzy matching"""
+        # Convert tuple back to list for processing
+        targets = list(targets_tuple)
+        return self._perform_safe_fuzzy_match(query, targets, category)
 
-        return result
+    def _perform_safe_fuzzy_match(self, query: str, targets: List[str], category: str = None) -> Tuple[Optional[str], int]:
+        """
+        SAFETY-ENHANCED fuzzy matching with comprehensive protection
+        """
+        # SAFETY: Enhanced minimum length check to prevent false positives
+        if len(query) < self.minimum_fuzzy_length:
+            return None, 0
 
-    def _perform_fuzzy_match(self, query: str, targets: List[str]) -> Tuple[Optional[str], int]:
-        """Perform the actual fuzzy matching logic"""
         if FUZZY_AVAILABLE:
-            # Filter out very short targets that can cause false positives in fuzzy matching
-            # Short aliases like "mi", "b1", "d3" can match almost anything with partial_ratio
-            filtered_targets = [t for t in targets if len(t) >= 4]
+            # SAFETY: More aggressive filtering - prevent short critical aliases from matching
+            # Restore critical vitamins (B1, D3, K2) but only for EXACT matching in other methods
+            filtered_targets = [t for t in targets if len(t) >= self.minimum_fuzzy_length]
 
-            # Use fuzzywuzzy for better performance
+            # SAFETY: First try exact ratio matching with higher threshold
             match = process.extractOne(query, filtered_targets, scorer=fuzz.ratio)
             if match and match[1] >= self.fuzzy_threshold:
-                # Check blacklist before accepting the match
+                # SAFETY: Enhanced blacklist checking
                 if not self._is_blacklisted_match(query, match[0]):
+                    logger.info(f"SAFE fuzzy match: '{query}' -> '{match[0]}' (score: {match[1]}, category: {category})")
                     return match[0], match[1]
                 else:
-                    logger.warning(f"Rejected blacklisted fuzzy match: '{query}' -> '{match[0]}' (score: {match[1]})")
+                    logger.warning(f"BLOCKED dangerous fuzzy match: '{query}' -> '{match[0]}' (score: {match[1]})")
                     return None, 0
 
-            # Try partial matching with filtered targets to avoid false positives
-            if len(query) >= 6:  # Only use partial matching for longer queries
+            # SAFETY: Conservative partial matching only for longer queries and safe categories
+            if len(query) >= 8 and category in self.safe_fuzzy_categories:
                 match = process.extractOne(query, filtered_targets, scorer=fuzz.partial_ratio)
                 if match and match[1] >= self.partial_threshold:
-                    return match[0], match[1]
+                    if not self._is_blacklisted_match(query, match[0]):
+                        logger.info(f"SAFE partial match: '{query}' -> '{match[0]}' (score: {match[1]}, category: {category})")
+                        return match[0], match[1]
         else:
-            # Fallback to difflib
+            # Fallback to difflib with same safety checks
             best_match = None
             best_score = 0
 
-            for target in targets:
-                ratio = SequenceMatcher(None, query, target).ratio() * 100
-                if ratio > best_score:
-                    best_score = ratio
-                    best_match = target
+            filtered_targets = [t for t in targets if len(t) >= self.minimum_fuzzy_length]
 
-            if best_score >= self.fuzzy_threshold:
+            for target in filtered_targets:
+                ratio = SequenceMatcher(None, query, target).ratio() * 100
+                if ratio > best_score and ratio >= self.fuzzy_threshold:
+                    if not self._is_blacklisted_match(query, target):
+                        best_score = ratio
+                        best_match = target
+
+            if best_match:
+                logger.info(f"SAFE difflib match: '{query}' -> '{best_match}' (score: {int(best_score)}, category: {category})")
                 return best_match, int(best_score)
 
         return None, 0
@@ -443,12 +606,6 @@ class EnhancedIngredientMatcher:
         
         return False
 
-    def get_context_window(self, text: str, match_start: int, match_end: int, window_size: int = 20) -> str:
-        """Extract context window around a match for disambiguation"""
-        start = max(0, match_start - window_size)
-        end = min(len(text), match_end + window_size)
-        return text[start:end].lower()
-
     def disambiguate_ingredient_match(self, context_text: str, ingredient_data: Dict[str, Any]) -> bool:
         """
         Determine if an ingredient match is valid based on context disambiguation
@@ -496,9 +653,12 @@ class EnhancedIngredientMatcher:
         return True  # Default to accepting
 
     def clear_cache(self):
-        """Clear fuzzy matching cache to free memory"""
-        self._fuzzy_cache.clear()
-        self._exact_match_cache.clear()
+        """Clear fuzzy matching cache to free memory - now using @lru_cache"""
+        # Clear the lru_cache decorators
+        if hasattr(self.preprocess_text, 'cache_clear'):
+            self.preprocess_text.cache_clear()
+        if hasattr(self._safe_fuzzy_match_cached, 'cache_clear'):
+            self._safe_fuzzy_match_cached.cache_clear()
 
 
 class EnhancedDSLDNormalizer:
@@ -516,11 +676,24 @@ class EnhancedDSLDNormalizer:
         self.non_harmful_additives = self._load_json(NON_HARMFUL_ADDITIVES)
         self.passive_inactive_ingredients = self._load_json(PASSIVE_INACTIVE_INGREDIENTS)
         self.botanical_ingredients = self._load_json(BOTANICAL_INGREDIENTS)
+        self.absorption_enhancers = self._load_json(ABSORPTION_ENHANCERS)
+
+        # Load RDA databases for clinical dosing validation
+        self.rda_optimal = self._load_json(RDA_OPTIMAL_ULS)
+        self.rda_therapeutic = self._load_json(RDA_THERAPEUTIC_DOSING)
         self.enhanced_delivery = self._load_json(ENHANCED_DELIVERY)
         
         # Initialize enhanced matcher
         self.matcher = EnhancedIngredientMatcher()
-        
+
+        # Preprocess excluded phrases for fast matching
+        self._preprocessed_excluded_labels = {
+            self.matcher.preprocess_text(phrase) for phrase in EXCLUDED_LABEL_PHRASES
+        }
+        self._preprocessed_excluded_nutrition = {
+            self.matcher.preprocess_text(fact) for fact in EXCLUDED_NUTRITION_FACTS
+        }
+
         # Build enhanced lookup indices
         self._build_enhanced_indices()
 
@@ -542,26 +715,18 @@ class EnhancedDSLDNormalizer:
         # Initialize the enhanced unmapped ingredient tracker for separate active/inactive files
         self.unmapped_tracker = None  # Will be initialized when output_dir is set
 
-        # OPTIMIZATION: Multi-level caching system
-        self._ingredient_cache = {}  # Cache for ingredient processing results
-        self._harmful_cache = {}     # Cache for harmful additive checks
-        self._non_harmful_cache = {}  # Cache for non-harmful additive checks
-        self._allergen_cache = {}    # Cache for allergen checks
-        self._fuzzy_match_cache = {}  # Cache for fuzzy matching results
-        self._preprocessing_cache = {}  # Cache for text preprocessing
-        
-        # OPTIMIZATION: Performance statistics tracking
-        self._cache_hits = {"ingredient": 0, "harmful": 0, "non_harmful": 0, "allergen": 0, "fuzzy": 0, "preprocess": 0}
-        self._cache_misses = {"ingredient": 0, "harmful": 0, "non_harmful": 0, "allergen": 0, "fuzzy": 0, "preprocess": 0}
-        
-        # OPTIMIZATION: Memory management
-        self._max_cache_size = 50000  # Maximum entries per cache
-        self._cache_cleanup_threshold = 45000  # When to start cleanup
+        # THREAD-SAFE OPTIMIZATION: Using @lru_cache decorators for thread safety
+        # No more manual cache management - Python's lru_cache handles thread safety
+
+        # OPTIMIZATION: Performance tracking for monitoring
+        self._cache_stats = {
+            "ingredient_calls": 0, "allergen_calls": 0, "harmful_calls": 0,
+            "non_harmful_calls": 0, "accuracy_stats": {}
+        }
 
         # OPTIMIZATION: Parallel processing configuration
         self._max_workers = min(8, (os.cpu_count() or 4))  # Adaptive worker count
-        self._parallel_threshold = 10  # Minimum ingredients to use parallel processing
-        self._cache_lock = threading.Lock()  # Thread-safe cache access
+        self._parallel_threshold = FUZZY_MATCHING_THRESHOLDS["parallel_threshold"]
 
         # OPTIMIZATION: Fast lookup indices for common operations
         self._fast_exact_lookup = {}  # Combined exact match lookup
@@ -573,48 +738,208 @@ class EnhancedDSLDNormalizer:
         self.unmapped_tracker = UnmappedIngredientTracker(output_dir / "unmapped")
         
     def clear_caches(self):
-        """Clear all caches to free memory"""
-        with self._cache_lock:
-            self._ingredient_cache.clear()
-            self._harmful_cache.clear()
-            self._non_harmful_cache.clear()
-            self._allergen_cache.clear()
-            self._fuzzy_match_cache.clear()
-            self._preprocessing_cache.clear()
+        """Clear all thread-safe @lru_cache caches"""
+        # Clear all @lru_cache decorated methods
+        cache_methods = [
+            '_enhanced_ingredient_mapping_cached',
+            '_enhanced_allergen_check_cached',
+            '_enhanced_harmful_check_cached',
+            '_enhanced_non_harmful_check_cached'
+        ]
+
+        for method_name in cache_methods:
+            if hasattr(self, method_name):
+                method = getattr(self, method_name)
+                if hasattr(method, 'cache_clear'):
+                    method.cache_clear()
+
+        # Clear matcher caches
         self.matcher.clear_cache()
+
+        # Clear simple lookup caches
         self._fast_exact_lookup.clear()
         self._common_ingredients_cache.clear()
-        logger.info("Cleared all ingredient processing caches")
-        
-    def _manage_cache_size(self, cache_dict: Dict, cache_name: str):
-        """Manage cache size to prevent memory overflow"""
-        if len(cache_dict) > self._max_cache_size:
-            # Remove oldest 10% of entries (simple FIFO approach)
-            remove_count = len(cache_dict) - self._cache_cleanup_threshold
-            keys_to_remove = list(cache_dict.keys())[:remove_count]
-            for key in keys_to_remove:
-                cache_dict.pop(key, None)
-            logger.info(f"Cache cleanup: removed {remove_count} entries from {cache_name} cache")
-    
-    def get_cache_stats(self) -> Dict[str, Dict[str, int]]:
-        """Get performance statistics for caching system"""
+
+        logger.info("Cleared all thread-safe LRU caches")
+
+    def validate_database_integrity(self) -> Dict[str, any]:
+        """
+        Comprehensive database integrity validation
+        Returns detailed report of any issues found
+        """
+        integrity_report = {
+            "timestamp": datetime.now().isoformat(),
+            "status": "validating",
+            "errors": [],
+            "warnings": [],
+            "statistics": {}
+        }
+
+        logger.info("🔍 Starting comprehensive database integrity validation...")
+
+        try:
+            # 1. Validate database cross-references
+            self._validate_cross_references(integrity_report)
+
+            # 2. Check for orphaned data
+            self._check_orphaned_data(integrity_report)
+
+            # 3. Validate required fields
+            self._validate_required_fields(integrity_report)
+
+            # 4. Check for data consistency
+            self._validate_data_consistency(integrity_report)
+
+            # 5. Generate summary statistics
+            self._generate_integrity_statistics(integrity_report)
+
+            # Determine overall status
+            if integrity_report["errors"]:
+                integrity_report["status"] = "failed"
+                logger.error(f"❌ Database integrity validation FAILED with {len(integrity_report['errors'])} errors")
+            elif integrity_report["warnings"]:
+                integrity_report["status"] = "passed_with_warnings"
+                logger.warning(f"⚠️ Database integrity validation PASSED with {len(integrity_report['warnings'])} warnings")
+            else:
+                integrity_report["status"] = "passed"
+                logger.info("✅ Database integrity validation PASSED - all checks successful")
+
+        except Exception as e:
+            integrity_report["status"] = "error"
+            integrity_report["errors"].append(f"Validation process failed: {str(e)}")
+            logger.error(f"💥 Database integrity validation crashed: {e}")
+
+        return integrity_report
+
+    def _validate_cross_references(self, report: Dict):
+        """Validate cross-references between databases"""
+        logger.info("🔗 Validating database cross-references...")
+
+        # Check if all ingredients in quality map have safety data
+        quality_ingredients = set(self.ingredient_alias_lookup.keys())
+        allergen_ingredients = set(self.allergen_lookup.keys())
+        harmful_ingredients = set(self.harmful_lookup.keys())
+        non_harmful_ingredients = set(self.non_harmful_lookup.keys())
+
+        # Find ingredients with no safety classification
+        no_safety_data = quality_ingredients - (allergen_ingredients | harmful_ingredients | non_harmful_ingredients)
+
+        if no_safety_data:
+            if len(no_safety_data) > 50:  # If too many, this might be expected
+                report["warnings"].append(f"{len(no_safety_data)} ingredients in quality database lack safety classification")
+            else:
+                for ingredient in list(no_safety_data)[:10]:  # Show first 10
+                    report["warnings"].append(f"Ingredient '{ingredient}' has no safety classification")
+
+    def _check_orphaned_data(self, report: Dict):
+        """Check for orphaned data entries"""
+        logger.info("🔍 Checking for orphaned data...")
+
+        # Check for safety entries not in quality database
+        quality_ingredients = set(self.ingredient_alias_lookup.keys())
+
+        # Find orphaned allergen entries
+        orphaned_allergens = set(self.allergen_lookup.keys()) - quality_ingredients
+        if orphaned_allergens:
+            report["warnings"].append(f"{len(orphaned_allergens)} allergen entries not found in quality database")
+
+        # Find orphaned harmful entries
+        orphaned_harmful = set(self.harmful_lookup.keys()) - quality_ingredients
+        if orphaned_harmful:
+            report["warnings"].append(f"{len(orphaned_harmful)} harmful additive entries not found in quality database")
+
+    def _validate_required_fields(self, report: Dict):
+        """Validate that all database entries have required fields"""
+        logger.info("📋 Validating required fields...")
+
+        # Check quality database entries
+        for ingredient_name, standard_name in self.ingredient_alias_lookup.items():
+            if not standard_name or not standard_name.strip():
+                report["errors"].append(f"Quality ingredient '{ingredient_name}' missing standard_name")
+
+        # Check allergen database entries
+        for allergen_key, allergen_data in self.allergen_lookup.items():
+            if not allergen_data.get("standard_name"):
+                report["errors"].append(f"Allergen '{allergen_key}' missing standard_name")
+            if not allergen_data.get("severity_level"):
+                report["warnings"].append(f"Allergen '{allergen_key}' missing severity_level")
+
+        # Check harmful additive entries
+        for harmful_key, harmful_data in self.harmful_lookup.items():
+            if not harmful_data.get("category"):
+                report["errors"].append(f"Harmful additive '{harmful_key}' missing category")
+
+    def _validate_data_consistency(self, report: Dict):
+        """Validate data consistency across databases"""
+        logger.info("🔄 Validating data consistency...")
+
+        # Check for duplicate standard names in quality database
+        standard_names = {}
+        for alias, standard_name in self.ingredient_alias_lookup.items():
+            if standard_name in standard_names:
+                standard_names[standard_name].append(alias)
+            else:
+                standard_names[standard_name] = [alias]
+
+        # Report standard names with many aliases (might be okay, but worth checking)
+        for standard_name, aliases in standard_names.items():
+            if len(aliases) > 20:  # Threshold for review
+                report["warnings"].append(f"Standard name '{standard_name}' has {len(aliases)} aliases - verify correctness")
+
+    def _generate_integrity_statistics(self, report: Dict):
+        """Generate comprehensive statistics"""
+        report["statistics"] = {
+            "quality_database": len(self.ingredient_alias_lookup),
+            "allergen_database": len(self.allergen_lookup),
+            "harmful_database": len(self.harmful_lookup),
+            "non_harmful_database": len(self.non_harmful_lookup),
+            "botanical_database": len(getattr(self, 'botanical_lookup', {})),
+            "total_errors": len(report["errors"]),
+            "total_warnings": len(report["warnings"])
+        }
+
+    def get_cache_stats(self) -> Dict[str, any]:
+        """Get performance statistics for thread-safe caching system"""
+        cache_info = {}
+
+        # Get cache info from @lru_cache decorated methods
+        cache_methods = [
+            ('ingredient_mapping', '_enhanced_ingredient_mapping_cached'),
+            ('allergen_check', '_enhanced_allergen_check_cached'),
+            ('harmful_check', '_enhanced_harmful_check_cached'),
+            ('non_harmful_check', '_enhanced_non_harmful_check_cached'),
+            ('fuzzy_matching', 'matcher._safe_fuzzy_match_cached'),
+            ('text_preprocessing', 'matcher.preprocess_text')
+        ]
+
+        for name, method_path in cache_methods:
+            try:
+                if '.' in method_path:
+                    obj, method_name = method_path.split('.', 1)
+                    method = getattr(getattr(self, obj), method_name)
+                else:
+                    method = getattr(self, method_path)
+
+                if hasattr(method, 'cache_info'):
+                    info = method.cache_info()
+                    cache_info[name] = {
+                        "hits": info.hits,
+                        "misses": info.misses,
+                        "current_size": info.currsize,
+                        "max_size": info.maxsize
+                    }
+            except AttributeError:
+                cache_info[name] = {"status": "not_cached"}
+
         return {
-            "cache_hits": self._cache_hits.copy(),
-            "cache_misses": self._cache_misses.copy(),
-            "cache_sizes": {
-                "ingredient": len(self._ingredient_cache),
-                "harmful": len(self._harmful_cache),
-                "non_harmful": len(self._non_harmful_cache),
-                "allergen": len(self._allergen_cache),
-                "fuzzy": len(self._fuzzy_match_cache),
-                "preprocess": len(self._preprocessing_cache)
-            }
+            "cache_performance": cache_info,
+            "processing_stats": self._cache_stats.copy()
         }
 
     def _build_fast_lookups(self):
         """Build optimized lookup indices for common operations"""
         # This will be called after the main indices are built
-        pass  # Implementation will be added after indices are built
+        self._build_fast_lookups_impl()
 
     def _build_fast_lookups_impl(self):
         """Build optimized fast lookup indices"""
@@ -623,33 +948,247 @@ class EnhancedDSLDNormalizer:
         # Build combined exact match lookup for all databases
         self._fast_exact_lookup = {}
 
-        # Add ingredient lookups
-        for key, value in self.ingredient_alias_lookup.items():
-            self._fast_exact_lookup[key] = {
-                "type": "ingredient",
-                "standard_name": value,
-                "mapped": True
-            }
+        # PRIORITY 1: Add BANNED/RECALLED lookups (HIGHEST PRIORITY - safety first)
+        # Iterate through ALL sections in banned_recalled database dynamically
+        for key, value in self.banned_recalled.items():
+            if isinstance(value, list) and len(value) > 0:
+                # Check if items have the expected structure for banned substances
+                if any(isinstance(item, dict) and 'standard_name' in item for item in value):
+                    banned_ingredients = value
+                    for banned in banned_ingredients:
+                        standard_name = banned.get("standard_name", "")
+                        if standard_name:
+                            processed_standard = self.matcher.preprocess_text(standard_name)
+                            self._fast_exact_lookup[processed_standard] = {
+                                "type": "banned",
+                                "standard_name": standard_name,
+                                "severity": banned.get("severity_level", "critical"),
+                                "reason": banned.get("reason", banned.get("recall_reason", "banned")),
+                                "mapped": True,
+                                "priority": 1
+                            }
 
-        # Add harmful additive lookups
-        for key, value in self.harmful_lookup.items():
-            self._fast_exact_lookup[key] = {
-                "type": "harmful",
-                "category": value.get("category", "other"),
-                "risk_level": value.get("risk_level", "low"),
-                "mapped": True
-            }
+                            # Add aliases
+                            for alias in banned.get("aliases", []) or []:
+                                processed_alias = self.matcher.preprocess_text(alias)
+                                self._fast_exact_lookup[processed_alias] = {
+                                    "type": "banned",
+                                    "standard_name": standard_name,
+                                    "severity": banned.get("severity_level", "critical"),
+                                    "reason": banned.get("reason", banned.get("recall_reason", "banned")),
+                                    "mapped": True,
+                                    "priority": 1
+                                }
 
-        # Add allergen lookups
+        # PRIORITY 2: Add allergen lookups (safety-critical)
         for key, value in self.allergen_lookup.items():
-            self._fast_exact_lookup[key] = {
-                "type": "allergen",
-                "allergen_type": value["standard_name"].lower(),
-                "severity": value.get("severity_level", "low"),
-                "mapped": True
-            }
+            # Only add if not already present (banned takes priority)
+            if key not in self._fast_exact_lookup:
+                self._fast_exact_lookup[key] = {
+                    "type": "allergen",
+                    "allergen_type": value["standard_name"].lower(),
+                    "severity": value.get("severity_level", "low"),
+                    "mapped": True,
+                    "priority": 2
+                }
 
-        logger.info(f"Built fast lookup index with {len(self._fast_exact_lookup)} entries")
+        # PRIORITY 3: Add harmful additive lookups (safety-critical)
+        for key, value in self.harmful_lookup.items():
+            # Only add if not already present (higher priorities take precedence)
+            if key not in self._fast_exact_lookup:
+                self._fast_exact_lookup[key] = {
+                    "type": "harmful",
+                    "category": value.get("category", "other"),
+                    "risk_level": value.get("risk_level", "low"),
+                    "mapped": True,
+                    "priority": 3
+                }
+
+        # PRIORITY 4: Add ingredient lookups (active ingredients)
+        for key, value in self.ingredient_alias_lookup.items():
+            if key not in self._fast_exact_lookup:
+                self._fast_exact_lookup[key] = {
+                    "type": "ingredient",
+                    "standard_name": value,
+                    "mapped": True,
+                    "priority": 4
+                }
+
+        # PRIORITY 5: Add STANDARDIZED BOTANICALS lookups
+        standardized_botanicals = self.standardized_botanicals.get("standardized_botanicals", [])
+        for std_botanical in standardized_botanicals:
+            standard_name = std_botanical.get("standard_name", "")
+            if standard_name:
+                processed_standard = self.matcher.preprocess_text(standard_name)
+                if processed_standard not in self._fast_exact_lookup:
+                    self._fast_exact_lookup[processed_standard] = {
+                        "type": "standardized_botanical",
+                        "standard_name": standard_name,
+                        "category": std_botanical.get("category", "botanical"),
+                        "standardization": std_botanical.get("standardization", ""),
+                        "mapped": True,
+                        "priority": 5
+                    }
+
+                # Add aliases
+                for alias in std_botanical.get("aliases", []) or []:
+                    processed_alias = self.matcher.preprocess_text(alias)
+                    if processed_alias not in self._fast_exact_lookup:
+                        self._fast_exact_lookup[processed_alias] = {
+                            "type": "standardized_botanical",
+                            "standard_name": standard_name,
+                            "category": std_botanical.get("category", "botanical"),
+                            "standardization": std_botanical.get("standardization", ""),
+                            "mapped": True,
+                            "priority": 5
+                        }
+
+        # PRIORITY 6: Add BOTANICAL INGREDIENTS lookups
+        botanical_ingredients = self.botanical_ingredients.get("botanical_ingredients", [])
+        for botanical in botanical_ingredients:
+            standard_name = botanical.get("standard_name", "")
+            if standard_name:
+                processed_standard = self.matcher.preprocess_text(standard_name)
+                # Only add if not already present (standardized botanicals have higher priority)
+                if processed_standard not in self._fast_exact_lookup:
+                    self._fast_exact_lookup[processed_standard] = {
+                        "type": "botanical",
+                        "standard_name": standard_name,
+                        "category": botanical.get("category", "botanical"),
+                        "mapped": True,
+                        "priority": 6
+                    }
+
+                # Add aliases
+                for alias in botanical.get("aliases", []) or []:
+                    processed_alias = self.matcher.preprocess_text(alias)
+                    if processed_alias not in self._fast_exact_lookup:
+                        self._fast_exact_lookup[processed_alias] = {
+                            "type": "botanical",
+                            "standard_name": standard_name,
+                            "category": botanical.get("category", "botanical"),
+                            "mapped": True,
+                            "priority": 6
+                        }
+
+        # PRIORITY 7: Add NON-HARMFUL ADDITIVES lookups
+        for key, value in self.non_harmful_lookup.items():
+            # Only add if not already present (higher priorities take precedence)
+            if key not in self._fast_exact_lookup:
+                self._fast_exact_lookup[key] = {
+                    "type": "non_harmful",
+                    "standard_name": value.get("standard_name", key),
+                    "category": value.get("category", "other"),
+                    "additive_type": value.get("additive_type", "unknown"),
+                    "clean_label_score": value.get("clean_label_score", 7),
+                    "mapped": True,
+                    "priority": 7
+                }
+
+        # PRIORITY 8: Add PROPRIETARY BLENDS lookups
+        proprietary_blend_concerns = self.proprietary_blends.get("proprietary_blend_concerns", [])
+        for concern in proprietary_blend_concerns:
+            standard_name = concern.get("standard_name", "")
+            if standard_name:
+                processed_standard = self.matcher.preprocess_text(standard_name)
+                if processed_standard not in self._fast_exact_lookup:
+                    self._fast_exact_lookup[processed_standard] = {
+                        "type": "proprietary_blend",
+                        "standard_name": standard_name,
+                        "category": concern.get("category", "blend"),
+                        "mapped": True,
+                        "priority": 8
+                    }
+
+                # Add red flag terms as aliases
+                for red_flag_term in concern.get("red_flag_terms", []) or []:
+                    processed_term = self.matcher.preprocess_text(red_flag_term)
+                    if processed_term not in self._fast_exact_lookup:
+                        self._fast_exact_lookup[processed_term] = {
+                            "type": "proprietary_blend",
+                            "standard_name": standard_name,
+                            "category": concern.get("category", "blend"),
+                            "mapped": True,
+                            "priority": 8
+                        }
+
+        # PRIORITY 9: Add PASSIVE INACTIVE INGREDIENTS lookups (lowest priority - catch-all)
+        passive_ingredients = self.passive_inactive_ingredients.get("passive_inactive_ingredients", [])
+        for passive in passive_ingredients:
+            standard_name = passive.get("standard_name", "")
+            if standard_name:
+                processed_standard = self.matcher.preprocess_text(standard_name)
+                # Only add if not already present (all higher priorities take precedence)
+                if processed_standard not in self._fast_exact_lookup:
+                    self._fast_exact_lookup[processed_standard] = {
+                        "type": "passive",
+                        "standard_name": standard_name,
+                        "category": passive.get("category", "inactive"),
+                        "mapped": True,
+                        "priority": 9
+                    }
+
+                # Add aliases
+                for alias in passive.get("aliases", []) or []:
+                    processed_alias = self.matcher.preprocess_text(alias)
+                    if processed_alias not in self._fast_exact_lookup:
+                        self._fast_exact_lookup[processed_alias] = {
+                            "type": "passive",
+                            "standard_name": standard_name,
+                            "category": passive.get("category", "inactive"),
+                            "mapped": True,
+                            "priority": 9
+                        }
+
+        # PRIORITY 10: Add ABSORPTION ENHANCERS lookups
+        for enhancer in self.absorption_enhancers:
+            enhancer_name = enhancer.get("name", "")  # Note: uses 'name' not 'standard_name'
+            if enhancer_name:
+                processed_name = self.matcher.preprocess_text(enhancer_name)
+                if processed_name not in self._fast_exact_lookup:
+                    self._fast_exact_lookup[processed_name] = {
+                        "type": "absorption_enhancer",
+                        "standard_name": enhancer_name,
+                        "category": "absorption",
+                        "mapped": True,
+                        "priority": 10
+                    }
+                # Add aliases
+                for alias in enhancer.get("aliases", []) or []:
+                    processed_alias = self.matcher.preprocess_text(alias)
+                    if processed_alias not in self._fast_exact_lookup:
+                        self._fast_exact_lookup[processed_alias] = {
+                            "type": "absorption_enhancer",
+                            "standard_name": enhancer_name,
+                            "category": "absorption",
+                            "mapped": True,
+                            "priority": 10
+                        }
+
+        # PRIORITY 11: Add ENHANCED DELIVERY lookups
+        for delivery_key, delivery_data in self.enhanced_delivery.items():
+            delivery_name = delivery_key.replace("_", " ").title()  # Convert key to readable name
+            processed_name = self.matcher.preprocess_text(delivery_key)
+            if processed_name not in self._fast_exact_lookup:
+                self._fast_exact_lookup[processed_name] = {
+                    "type": "enhanced_delivery",
+                    "standard_name": delivery_name,
+                    "category": delivery_data.get("category", "delivery"),
+                    "points": delivery_data.get("points", 0),
+                    "mapped": True,
+                    "priority": 11
+                }
+
+        logger.info(f"Built comprehensive fast lookup index with {len(self._fast_exact_lookup)} entries")
+
+        # Log breakdown by type for debugging
+        type_counts = {}
+        for entry in self._fast_exact_lookup.values():
+            entry_type = entry.get("type", "unknown")
+            type_counts[entry_type] = type_counts.get(entry_type, 0) + 1
+
+        for entry_type, count in sorted(type_counts.items()):
+            logger.info(f"  - {entry_type}: {count} entries")
 
     def _fast_ingredient_lookup(self, name: str) -> Dict[str, Any]:
         """Fast combined lookup for ingredient, harmful, and allergen data"""
@@ -668,7 +1207,16 @@ class EnhancedDSLDNormalizer:
     def _process_ingredient_parallel(self, ingredient_data: Dict[str, Any]) -> Dict[str, Any]:
         """Process a single ingredient for parallel execution"""
         name = ingredient_data.get("name", "")
-        forms = ingredient_data.get("forms", [])
+
+        # Extract form names from forms array - each form is a dict with "name" field
+        forms_data = ingredient_data.get("forms", [])
+        forms = []
+        if forms_data and isinstance(forms_data, list):
+            for form_dict in forms_data:
+                if isinstance(form_dict, dict) and "name" in form_dict:
+                    form_name = form_dict.get("name", "")
+                    if form_name:
+                        forms.append(form_name)
 
         # Enhanced mapping
         standard_name, mapped, _ = self._enhanced_ingredient_mapping(name, forms)
@@ -677,22 +1225,26 @@ class EnhancedDSLDNormalizer:
         allergen_info = self._enhanced_allergen_check(name, forms)
         harmful_info = self._enhanced_harmful_check(name)
 
+        # Check if proprietary blend
+        is_proprietary = self._is_proprietary_blend_name(name)
+
         # Calculate final mapping status
         is_mapped = (mapped or
                     harmful_info["category"] != "none" or
-                    allergen_info["is_allergen"])
+                    allergen_info["is_allergen"] or
+                    is_proprietary)
 
         # Track unmapped ingredients only if not found in any database
         if not is_mapped:
             processed_name = self.matcher.preprocess_text(name)
-            with self._cache_lock:
-                self.unmapped_ingredients[name] += 1
-                self.unmapped_details[name] = {
-                    "processed_name": processed_name,
-                    "forms": forms,
-                    "variations_tried": self.matcher.generate_variations(processed_name),
-                    "is_active": True  # This method is for active ingredients from the context
-                }
+            # Thread-safe tracking (Counter is thread-safe for basic operations)
+            self.unmapped_ingredients[name] += 1
+            self.unmapped_details[name] = {
+                "processed_name": processed_name,
+                "forms": forms,
+                "variations_tried": self.matcher.generate_variations(processed_name),
+                "is_active": True  # This method is for active ingredients from the context
+            }
 
         return {
             "order": ingredient_data.get("order", 0),
@@ -751,10 +1303,12 @@ class EnhancedDSLDNormalizer:
         """Cached banned variations list for fuzzy matching"""
         if self._banned_variations_cache is None:
             all_banned_terms = []
-            banned_ingredients = self.banned_recalled.get("banned_ingredients", [])
-            for banned in banned_ingredients:
-                all_banned_terms.append(banned.get("standard_name", "").lower())
-                all_banned_terms.extend([alias.lower() for alias in banned.get("aliases", []) or []])
+            # Get all banned substances from all categories
+            for category, items in self.banned_recalled.items():
+                if isinstance(items, list):
+                    for banned in items:
+                        all_banned_terms.append(banned.get("standard_name", "").lower())
+                        all_banned_terms.extend([alias.lower() for alias in banned.get("aliases", []) or []])
             self._banned_variations_cache = [term for term in all_banned_terms if term]
         return self._banned_variations_cache
 
@@ -871,10 +1425,10 @@ class EnhancedDSLDNormalizer:
                             'form_data': form_data
                         }
         
-        # Log conflicts for debugging
+        # Log conflicts for debugging (reduced verbosity)
         if conflicts:
-            logger.warning(f"Found {len(conflicts)} mapping conflicts - keeping first mappings")
-            for variation, conflict in list(conflicts.items())[:10]:  # Show first 10
+            logger.debug(f"Found {len(conflicts)} mapping conflicts - keeping first mappings")
+            for variation, conflict in list(conflicts.items())[:5]:  # Show first 5
                 logger.debug(f"Conflict: '{variation}' {conflict}")
         
         # Build enhanced allergen lookup
@@ -972,26 +1526,51 @@ class EnhancedDSLDNormalizer:
     
     def _enhanced_ingredient_mapping(self, name: str, forms: List[str] = None) -> Tuple[str, bool, List[str]]:
         """
-        Enhanced ingredient mapping with fuzzy matching and comprehensive preprocessing
+        Enhanced ingredient mapping with comprehensive validation and thread-safe caching
         """
-        if not name:
-            return name, False, []
+        # SAFETY: Comprehensive input validation
+        validated_name = self.matcher.validate_input(name, "ingredient_name")
+        if not validated_name:
+            return "", False, []
 
-        forms = forms or []
+        # SAFETY: Validate and clean forms list
+        validated_forms = []
+        if forms:
+            # Handle case where forms might be a dict instead of list
+            if isinstance(forms, dict):
+                # Extract values from dict or convert to list based on content
+                if 'forms' in forms:
+                    forms = forms['forms']
+                else:
+                    forms = list(forms.values()) if forms.values() else []
 
-        # OPTIMIZATION: Check cache first
-        cache_key = f"{name}:{':'.join(sorted(forms))}"
-        if cache_key in self._ingredient_cache:
-            return self._ingredient_cache[cache_key]
+            # Ensure forms is iterable
+            if not hasattr(forms, '__iter__') or isinstance(forms, str):
+                forms = [forms] if forms else []
 
-        # Perform the actual mapping
-        result = self._perform_ingredient_mapping(name, forms)
+            for form in forms:
+                if isinstance(form, dict):
+                    # If form is a dict, try to extract a name or convert to string
+                    form_str = form.get('name', '') or str(form)
+                    validated_form = self.matcher.validate_input(form_str, "ingredient_form")
+                    if validated_form:
+                        validated_forms.append(validated_form)
+                elif isinstance(form, (str, int, float)):  # Only process string-like values
+                    validated_form = self.matcher.validate_input(str(form), "ingredient_form")
+                    if validated_form:  # Only add non-empty forms
+                        validated_forms.append(validated_form)
 
-        # Cache the result (limit cache size to prevent memory bloat)
-        if len(self._ingredient_cache) < 50000:
-            self._ingredient_cache[cache_key] = result
+        self._cache_stats["ingredient_calls"] += 1
 
-        return result
+        # Use thread-safe @lru_cache - convert list to tuple for hashability
+        forms_tuple = tuple(sorted(validated_forms)) if validated_forms else ()
+        return self._enhanced_ingredient_mapping_cached(validated_name, forms_tuple)
+
+    @functools.lru_cache(maxsize=10000)
+    def _enhanced_ingredient_mapping_cached(self, name: str, forms_tuple: tuple) -> Tuple[str, bool, List[str]]:
+        """Thread-safe cached ingredient mapping"""
+        forms = list(forms_tuple) if forms_tuple else []
+        return self._perform_ingredient_mapping(name, forms)
 
     def _perform_ingredient_mapping(self, name: str, forms: List[str] = None) -> Tuple[str, bool, List[str]]:
         """Perform the actual ingredient mapping logic"""
@@ -999,13 +1578,20 @@ class EnhancedDSLDNormalizer:
 
         # Preprocess the input name
         processed_name = self.matcher.preprocess_text(name)
-        
+
+        # SAFETY FIRST: Try critical exact matching for short aliases (B1, D3, K2, etc.)
+        critical_match = self.matcher.exact_match_critical_aliases(name, list(self.ingredient_alias_lookup.keys()))
+        if critical_match:
+            mapped_name = self.ingredient_alias_lookup[critical_match]
+            logger.info(f"CRITICAL vitamin/mineral exact match: '{name}' -> '{mapped_name}'")
+            return mapped_name, True, forms or []
+
         # Debug logging for specific ingredients
         if name in ["Molybdenum", "Choline", "Alpha-Lipoic Acid"]:
             logger.debug(f"Mapping '{name}' -> processed: '{processed_name}'")
             logger.debug(f"Is '{processed_name}' in lookup? {processed_name in self.ingredient_alias_lookup}")
-        
-        # Try exact match first
+
+        # Try exact match
         if processed_name in self.ingredient_alias_lookup:
             # Check for disambiguation if needed
             if processed_name in self.ingredient_context_lookup:
@@ -1056,7 +1642,8 @@ class EnhancedDSLDNormalizer:
                 return mapped_name, True, mapped_forms or forms
         
         # Try fuzzy matching against all ingredient variations (using cached list)
-        fuzzy_match, score = self.matcher.fuzzy_match(processed_name, self.ingredient_variations)
+        # SAFETY: Pass 'active' category for ingredient matching - this will be BLOCKED for critical vitamins/minerals
+        fuzzy_match, score = self.matcher.fuzzy_match(processed_name, self.ingredient_variations, "active")
         
         if fuzzy_match:
             # Check for disambiguation on fuzzy matches too
@@ -1083,7 +1670,8 @@ class EnhancedDSLDNormalizer:
                                 mapped_forms.append(self.ingredient_forms_lookup[processed_form])
                             else:
                                 # Try fuzzy matching for forms (using cached list)
-                                fuzzy_form, form_score = self.matcher.fuzzy_match(processed_form, self.form_variations)
+                                # SAFETY: Forms are generally safe for fuzzy matching
+                                fuzzy_form, form_score = self.matcher.fuzzy_match(processed_form, self.form_variations, "inactive")
                                 if fuzzy_form:
                                     mapped_forms.append(self.ingredient_forms_lookup[fuzzy_form])
                                     logger.debug(f"Fuzzy matched form '{form}' -> '{fuzzy_form}' (score: {form_score})")
@@ -1102,7 +1690,8 @@ class EnhancedDSLDNormalizer:
                             mapped_forms.append(self.ingredient_forms_lookup[processed_form])
                         else:
                             # Try fuzzy matching for forms (using cached list)
-                            fuzzy_form, form_score = self.matcher.fuzzy_match(processed_form, self.form_variations)
+                            # SAFETY: Forms are generally safe for fuzzy matching
+                            fuzzy_form, form_score = self.matcher.fuzzy_match(processed_form, self.form_variations, "inactive")
                             if fuzzy_form:
                                 mapped_forms.append(self.ingredient_forms_lookup[fuzzy_form])
                                 logger.debug(f"Fuzzy matched form '{form}' -> '{fuzzy_form}' (score: {form_score})")
@@ -1121,7 +1710,8 @@ class EnhancedDSLDNormalizer:
                         mapped_forms.append(self.ingredient_forms_lookup[processed_form])
                     else:
                         # Try fuzzy matching for forms (using cached list)
-                        fuzzy_form, form_score = self.matcher.fuzzy_match(processed_form, self.form_variations)
+                        # SAFETY: Forms are generally safe for fuzzy matching
+                        fuzzy_form, form_score = self.matcher.fuzzy_match(processed_form, self.form_variations, "inactive")
                         if fuzzy_form:
                             mapped_forms.append(self.ingredient_forms_lookup[fuzzy_form])
                             logger.debug(f"Fuzzy matched form '{form}' -> '{fuzzy_form}' (score: {form_score})")
@@ -1140,43 +1730,31 @@ class EnhancedDSLDNormalizer:
             logger.debug(f"Found '{name}' in allergens database -> '{allergen_info['type']}'")
             return name, True, forms
         
-        # Check if ingredient exists in proprietary blends database
-        if self._check_proprietary_blends(name):
-            logger.debug(f"Found '{name}' in proprietary blends database")
-            return name, True, forms
-        
-        # Check if ingredient exists in standardized botanicals database
-        if self._check_standardized_botanicals(name):
-            logger.debug(f"Found '{name}' in standardized botanicals database")
-            return name, True, forms
-        
-        # Check if ingredient exists in banned/recalled ingredients database
-        if self._check_banned_recalled(name):
-            logger.debug(f"Found '{name}' in banned/recalled ingredients database")
-            return name, True, forms
-        
-        # Check if ingredient exists in passive inactive ingredients database
-        if self._check_passive_inactive_ingredients(name):
-            logger.debug(f"Found '{name}' in passive inactive ingredients database")
-            return name, True, forms
-        
-        # Check if ingredient exists in botanical ingredients database
-        if self._check_botanical_ingredients(name):
-            logger.debug(f"Found '{name}' in botanical ingredients database")
-            return name, True, forms
+        # Use unified fast lookup for all remaining databases
+        fast_result = self._fast_ingredient_lookup(name)
+        if fast_result.get("mapped", False):
+            result_type = fast_result.get("type", "unknown")
+            standard_name = fast_result.get("standard_name", name)
+            logger.debug(f"Found '{name}' in {result_type} database -> '{standard_name}' (priority: {fast_result.get('priority', 'N/A')})")
+            return standard_name, True, forms
         
         # Don't track as unmapped here - will be handled at higher level
         # after all database checks (harmful, allergen, etc.) are complete
         return name, False, forms
     
     def _enhanced_allergen_check(self, name: str, forms: List[str] = None) -> Dict[str, Any]:
-        """Enhanced allergen checking with fuzzy matching and caching"""
+        """Enhanced allergen checking with thread-safe caching"""
         forms = forms or []
+        self._cache_stats["allergen_calls"] += 1
 
-        # OPTIMIZATION: Check cache first
-        cache_key = f"{name}:{':'.join(sorted(forms))}"
-        if cache_key in self._allergen_cache:
-            return self._allergen_cache[cache_key]
+        # Use thread-safe @lru_cache - convert list to tuple for hashability
+        forms_tuple = tuple(sorted(forms)) if forms else ()
+        return self._enhanced_allergen_check_cached(name, forms_tuple)
+
+    @functools.lru_cache(maxsize=5000)
+    def _enhanced_allergen_check_cached(self, name: str, forms_tuple: tuple) -> Dict[str, Any]:
+        """Thread-safe cached allergen checking"""
+        forms = list(forms_tuple) if forms_tuple else []
 
         result = {
             "is_allergen": False,
@@ -1197,8 +1775,9 @@ class EnhancedDSLDNormalizer:
                 result["severity"] = allergen.get("severity_level", "low")
                 break
 
-            # Try fuzzy match
-            fuzzy_match, score = self.matcher.fuzzy_match(processed_term, self.allergen_variations)
+            # Try fuzzy match - SAFETY: Allergens should NOT use fuzzy matching for safety
+            # This will be BLOCKED by the safety check but we'll try anyway to log the attempt
+            fuzzy_match, score = self.matcher.fuzzy_match(processed_term, self.allergen_variations, "allergen")
             if fuzzy_match:
                 allergen = self.allergen_lookup[fuzzy_match]
                 result["is_allergen"] = True
@@ -1207,18 +1786,16 @@ class EnhancedDSLDNormalizer:
                 logger.debug(f"Fuzzy allergen match '{term}' -> '{fuzzy_match}' (score: {score})")
                 break
 
-        # Cache the result (limit cache size)
-        if len(self._allergen_cache) < 20000:
-            self._allergen_cache[cache_key] = result
-
         return result
     
     def _enhanced_harmful_check(self, name: str) -> Dict[str, Any]:
-        """Enhanced harmful additive checking with fuzzy matching and caching"""
-        # OPTIMIZATION: Check cache first
-        if name in self._harmful_cache:
-            return self._harmful_cache[name]
+        """Enhanced harmful additive checking with thread-safe caching"""
+        self._cache_stats["harmful_calls"] += 1
+        return self._enhanced_harmful_check_cached(name)
 
+    @functools.lru_cache(maxsize=5000)
+    def _enhanced_harmful_check_cached(self, name: str) -> Dict[str, Any]:
+        """Thread-safe cached harmful checking"""
         result = {
             "category": "none",
             "risk_level": None
@@ -1232,29 +1809,24 @@ class EnhancedDSLDNormalizer:
             result["category"] = harmful.get("category", "other")
             result["risk_level"] = harmful.get("risk_level", "low")
         else:
-            # Try fuzzy match (using cached list)
-            fuzzy_match, score = self.matcher.fuzzy_match(processed_name, self.harmful_variations)
+            # Try fuzzy match (using cached list) - SAFETY: Harmful additives should NOT use fuzzy matching
+            fuzzy_match, score = self.matcher.fuzzy_match(processed_name, self.harmful_variations, "harmful")
             if fuzzy_match:
                 harmful = self.harmful_lookup[fuzzy_match]
                 result["category"] = harmful.get("category", "other")
                 result["risk_level"] = harmful.get("risk_level", "low")
                 logger.debug(f"Fuzzy harmful match '{name}' -> '{fuzzy_match}' (score: {score})")
 
-        # Cache the result (limit cache size)
-        if len(self._harmful_cache) < 20000:
-            self._harmful_cache[name] = result
-
         return result
 
     def _enhanced_non_harmful_check(self, name: str) -> Dict[str, Any]:
-        """Enhanced non-harmful additive checking with fuzzy matching and caching"""
-        # OPTIMIZATION: Check cache first
-        if name in self._non_harmful_cache:
-            self._cache_hits["non_harmful"] += 1
-            return self._non_harmful_cache[name]
-        
-        self._cache_misses["non_harmful"] += 1
-        
+        """Enhanced non-harmful additive checking with thread-safe caching"""
+        self._cache_stats["non_harmful_calls"] += 1
+        return self._enhanced_non_harmful_check_cached(name)
+
+    @functools.lru_cache(maxsize=5000)
+    def _enhanced_non_harmful_check_cached(self, name: str) -> Dict[str, Any]:
+        """Thread-safe cached non-harmful checking"""
         result = {
             "category": "none",
             "additive_type": None,
@@ -1270,8 +1842,8 @@ class EnhancedDSLDNormalizer:
             result["additive_type"] = non_harmful.get("additive_type", "unknown")
             result["clean_label_score"] = non_harmful.get("clean_label_score", 7)
         else:
-            # Try fuzzy match (using cached list)
-            fuzzy_match, score = self.matcher.fuzzy_match(processed_name, self.non_harmful_variations)
+            # Try fuzzy match (using cached list) - SAFETY: Non-harmful additives are safer for fuzzy matching
+            fuzzy_match, score = self.matcher.fuzzy_match(processed_name, self.non_harmful_variations, "inactive")
             if fuzzy_match:
                 non_harmful = self.non_harmful_lookup[fuzzy_match]
                 result["category"] = non_harmful.get("category", "other")
@@ -1279,132 +1851,24 @@ class EnhancedDSLDNormalizer:
                 result["clean_label_score"] = non_harmful.get("clean_label_score", 7)
                 logger.debug(f"Fuzzy non-harmful match '{name}' -> '{fuzzy_match}' (score: {score})")
 
-        # Cache the result with size management
-        if len(self._non_harmful_cache) < self._max_cache_size:
-            self._non_harmful_cache[name] = result
-        else:
-            self._manage_cache_size(self._non_harmful_cache, "non_harmful")
-            self._non_harmful_cache[name] = result
-
         return result
-    
-    def log_performance_summary(self):
-        """Log performance statistics for the current session"""
-        stats = self.get_cache_stats()
-        
-        # Calculate cache hit ratios
-        total_hits = sum(stats["cache_hits"].values())
-        total_misses = sum(stats["cache_misses"].values())
-        total_requests = total_hits + total_misses
-        
-        if total_requests > 0:
-            hit_ratio = (total_hits / total_requests) * 100
-            logger.info(f"🚀 Performance Summary:")
-            logger.info(f"   Cache Hit Ratio: {hit_ratio:.1f}% ({total_hits}/{total_requests})")
-            logger.info(f"   Cache Hits: {stats['cache_hits']}")
-            logger.info(f"   Cache Sizes: {stats['cache_sizes']}")
-            logger.info(f"   Workers Used: {self._max_workers}")
-        else:
-            logger.info("No cache statistics available for this session")
-    
-    def _check_proprietary_blends(self, name: str) -> bool:
-        """Check if ingredient exists in proprietary blends penalty database"""
-        processed_name = self.matcher.preprocess_text(name)
-        
-        # Check all red flag terms in all blend categories
-        for concern in self.proprietary_blends.get("proprietary_blend_concerns", []) or []:
-            # Check standard_name field
-            standard_name = concern.get("standard_name", "")
-            if processed_name == self.matcher.preprocess_text(standard_name):
-                return True
-                
-            # Check red_flag_terms array
-            red_flag_terms = concern.get("red_flag_terms", [])
-            
-            # Check exact matches
-            for term in red_flag_terms:
-                processed_term = self.matcher.preprocess_text(term)
-                if processed_name == processed_term:
-                    return True
-            
-            # Check fuzzy matches
-            fuzzy_match, score = self.matcher.fuzzy_match(processed_name, 
-                [self.matcher.preprocess_text(term) for term in red_flag_terms])
-            if fuzzy_match and score >= self.matcher.fuzzy_threshold:
-                logger.debug(f"Fuzzy proprietary blend match '{name}' -> '{fuzzy_match}' (score: {score})")
-                return True
-        
-        return False
-    
-    def _check_standardized_botanicals(self, name: str) -> bool:
-        """Check if ingredient exists in standardized botanicals database
-        
-        Requires BOTH botanical name/alias AND standardization marker to be present
-        Example: 'Ginger Extract standardized to 5% gingerols' = TRUE
-                 'Ginger Extract' alone = FALSE
-        """
-        processed_name = self.matcher.preprocess_text(name)
-        original_name = name.lower()  # Keep original for marker detection
-        
-        # Check standardized botanicals entries (now array structure)
-        botanicals_data = self.standardized_botanicals.get("standardized_botanicals", [])
-
-        # Check each botanical entry in the array
-        for item in botanicals_data:
-            botanical_found = False
-            
-            # Check if botanical name (standard_name) is present
-            standard_name = self.matcher.preprocess_text(item.get("standard_name", ""))
-            if standard_name and standard_name in processed_name:
-                botanical_found = True
-
-            # Check if any alias is present
-            if not botanical_found:
-                for alias in item.get("aliases", []) or []:
-                    processed_alias = self.matcher.preprocess_text(alias)
-                    if processed_alias and processed_alias in processed_name:
-                        botanical_found = True
-                        break
-            
-            # If botanical is found, check for standardization markers
-            if botanical_found:
-                markers = item.get("markers", [])
-                for marker in markers:
-                    marker_lower = marker.lower()
-                    # Check if marker is present in original ingredient name
-                    if marker_lower in original_name:
-                        logger.debug(f"Standardized botanical match: '{name}' contains '{item.get('standard_name')}' + marker '{marker}'")
-                        return True
-        
-        # Fallback: Check for general standardization patterns (e.g., "standardized to 5% extract")
-        for pattern in STANDARDIZATION_PATTERNS:
-            match = re.search(pattern, original_name, re.IGNORECASE)
-            if match:
-                # Found a standardization pattern - this qualifies as standardized
-                percentage = match.group(1) if len(match.groups()) >= 1 else "unknown"
-                compound = match.group(2).strip() if len(match.groups()) >= 2 else "compound"
-                logger.debug(f"Fallback standardized pattern match: '{name}' contains '{percentage}% {compound}'")
-                return True
-        
-        # No valid standardized botanical match found (need both botanical + marker OR standardization pattern)
-        return False
     
     def _check_banned_recalled(self, name: str) -> bool:
         """Check if ingredient exists in banned/recalled ingredients database"""
         processed_name = self.matcher.preprocess_text(name)
         
-        # List of all arrays to check in the banned/recalled database
-        arrays_to_check = [
-            "permanently_banned",
-            "sarms_prohibited", 
-            "high_risk_ingredients",
-            "illegal_spiking_agents",
-            "wada_prohibited_2024",
-            "state_regional_bans",
-            "manufacturing_violations",
-            # Also check legacy names in case they exist
-            "banned_ingredients",
-            "recalled_ingredients"
+        # Get ALL arrays from the banned/recalled database dynamically
+        arrays_to_check = []
+        for key, value in self.banned_recalled.items():
+            if isinstance(value, list) and len(value) > 0:
+                # Check if items in the list have the expected structure for banned substances
+                if any(isinstance(item, dict) and 'standard_name' in item for item in value):
+                    arrays_to_check.append(key)
+
+        # Define critical sections for prioritized checking (substring/fuzzy matching)
+        critical_sections = [
+            "permanently_banned", "nootropic_banned", "sarms_prohibited",
+            "illegal_spiking_agents", "new_emerging_threats", "pharmaceutical_adulterants"
         ]
         
         # Check all arrays in the database for exact matches first
@@ -1412,51 +1876,55 @@ class EnhancedDSLDNormalizer:
             items = self.banned_recalled.get(array_name, [])
 
             for item in items:
-                # Check standard_name
+                # Check standard_name - exact match
                 standard_name = self.matcher.preprocess_text(item.get("standard_name", ""))
                 if standard_name and processed_name == standard_name:
                     return True
 
-                # Check aliases
+                # Check aliases - exact match
                 for alias in item.get("aliases", []) or []:
                     processed_alias = self.matcher.preprocess_text(alias)
                     if processed_name == processed_alias:
                         return True
-        
-        # Try fuzzy matching with cached banned variations
-        if self.banned_variations:
-            fuzzy_match, score = self.matcher.fuzzy_match(processed_name, self.banned_variations)
-            if fuzzy_match and score >= self.matcher.fuzzy_threshold:
-                logger.debug(f"Fuzzy banned/recalled match '{name}' -> '{fuzzy_match}' (score: {score})")
-                return True
-        
-        return False
-    
-    def _check_passive_inactive_ingredients(self, name: str) -> bool:
-        """Check if ingredient exists in passive inactive ingredients database"""
-        processed_name = self.matcher.preprocess_text(name)
-        
-        # Check passive inactive ingredients entries
-        inactive_ingredients = self.passive_inactive_ingredients.get("passive_inactive_ingredients", [])
-        
-        # Check each inactive ingredient for exact matches first
-        for item in inactive_ingredients:
-            # Check standard_name
-            standard_name = self.matcher.preprocess_text(item.get("standard_name", ""))
-            if standard_name and processed_name == standard_name:
-                return True
 
-            # Check aliases
-            for alias in item.get("aliases", []) or []:
-                processed_alias = self.matcher.preprocess_text(alias)
-                if processed_name == processed_alias:
-                    return True
+        # Check for substring matches (bidirectional) for critical banned substances
+        critical_sections = ["permanently_banned", "sarms_prohibited", "nootropic_banned",
+                           "illegal_spiking_agents", "new_emerging_threats", "pharmaceutical_adulterants"]
+
+        for array_name in critical_sections:
+            items = self.banned_recalled.get(array_name, [])
+            for item in items:
+                # Check if banned substance name is contained in ingredient name
+                standard_name = self.matcher.preprocess_text(item.get("standard_name", ""))
+                if standard_name and len(standard_name) >= 4:  # Avoid short false positives
+                    if standard_name in processed_name or processed_name in standard_name:
+                        logger.warning(f"Substring banned match: '{name}' contains banned substance '{item.get('standard_name', '')}'")
+                        return True
+
+                # Check aliases for substring matches
+                for alias in item.get("aliases", []) or []:
+                    processed_alias = self.matcher.preprocess_text(alias)
+                    if processed_alias and len(processed_alias) >= 4:  # Avoid short false positives
+                        if processed_alias in processed_name or processed_name in processed_alias:
+                            logger.warning(f"Substring banned match: '{name}' contains banned substance '{alias}'")
+                            return True
         
-        # Try fuzzy matching with cached inactive variations
-        if self.inactive_variations:
-            fuzzy_match, score = self.matcher.fuzzy_match(processed_name, self.inactive_variations)
-            if fuzzy_match and score >= self.matcher.fuzzy_threshold:
-                logger.debug(f"Fuzzy passive inactive match '{name}' -> '{fuzzy_match}' (score: {score})")
+        # Try fuzzy matching for critical banned substances only (high threshold for safety)
+        critical_banned_terms = []
+        for array_name in critical_sections:
+            items = self.banned_recalled.get(array_name, [])
+            for item in items:
+                if item.get("severity_level") == "critical":  # Only critical severity for fuzzy matching
+                    critical_banned_terms.append(item.get("standard_name", "").lower())
+                    critical_banned_terms.extend([alias.lower() for alias in item.get("aliases", []) or []])
+
+        critical_banned_terms = [term for term in critical_banned_terms if term and len(term) >= 5]  # Minimum length 5
+
+        if critical_banned_terms:
+            fuzzy_match, score = self.matcher.fuzzy_match(processed_name, critical_banned_terms, "banned")
+            # Use higher threshold (0.9) for banned substances to reduce false positives
+            if fuzzy_match and score >= 0.9:
+                logger.warning(f"CRITICAL: Fuzzy banned match '{name}' -> '{fuzzy_match}' (score: {score})")
                 return True
         
         return False
@@ -1483,12 +1951,16 @@ class EnhancedDSLDNormalizer:
         allergen_info = {"is_allergen": False, "type": None, "severity": None}
         passive_info = {"is_passive": False, "category": None}
         
-        # Check all databases
-        is_banned = self._check_banned_recalled(name)
-        is_harmful = self._enhanced_harmful_check(name)
-        is_non_harmful = self._enhanced_non_harmful_check(name)
-        is_allergen = self._enhanced_allergen_check(name, forms)
-        is_passive = self._check_passive_inactive_ingredients(name)
+        # Use unified fast lookup for all databases
+        fast_result = self._fast_ingredient_lookup(name)
+        result_type = fast_result.get("type", "none") if fast_result.get("mapped", False) else "none"
+
+        # Map fast lookup results to expected boolean/dict formats
+        is_banned = result_type == "banned"
+        is_harmful = self._enhanced_harmful_check(name)  # Keep existing for complex logic
+        is_non_harmful = self._enhanced_non_harmful_check(name)  # Keep existing for complex logic
+        is_allergen = self._enhanced_allergen_check(name, forms)  # Keep existing for complex logic
+        is_passive = result_type == "passive"
         
         # Apply priority rules
         if is_banned:
@@ -1550,35 +2022,6 @@ class EnhancedDSLDNormalizer:
                 "passive": is_passive
             }
         }
-    
-    def _check_botanical_ingredients(self, name: str) -> bool:
-        """Check if ingredient exists in botanical ingredients database"""
-        processed_name = self.matcher.preprocess_text(name)
-        
-        # Check botanical ingredients entries
-        botanical_ingredients = self.botanical_ingredients.get("botanical_ingredients", [])
-        
-        # Check each botanical ingredient for exact matches first
-        for item in botanical_ingredients:
-            # Check standard_name
-            standard_name = self.matcher.preprocess_text(item.get("standard_name", ""))
-            if standard_name and processed_name == standard_name:
-                return True
-
-            # Check aliases
-            for alias in item.get("aliases", []) or []:
-                processed_alias = self.matcher.preprocess_text(alias)
-                if processed_name == processed_alias:
-                    return True
-        
-        # Try fuzzy matching with cached botanical variations
-        if self.botanical_variations:
-            fuzzy_match, score = self.matcher.fuzzy_match(processed_name, self.botanical_variations)
-            if fuzzy_match and score >= self.matcher.fuzzy_threshold:
-                logger.debug(f"Fuzzy botanical ingredients match '{name}' -> '{fuzzy_match}' (score: {score})")
-                return True
-        
-        return False
     
     def _flatten_nested_ingredients(self, ingredient_rows: List[Dict]) -> List[Dict]:
         """Flatten nested ingredients from blends for better scoring, preserving blend structure"""
@@ -1676,9 +2119,13 @@ class EnhancedDSLDNormalizer:
             for stmt in statements:
                 notes = stmt.get("notes", "")
                 for pattern in CLINICAL_EVIDENCE_PATTERNS:
-                    if re.search(pattern, notes, re.IGNORECASE):
-                        match = re.search(pattern, notes, re.IGNORECASE)
-                        clinical_evidence_mentions.append(match.group(0))
+                    match = re.search(pattern, notes, re.IGNORECASE)
+                    if match:
+                        try:
+                            clinical_evidence_mentions.append(match.group(0))
+                        except IndexError:
+                            # Skip if group access fails
+                            pass
             
             # Calculate mapping statistics
             total_ingredients = len(active_ingredients) + len(inactive_ingredients)
@@ -1686,12 +2133,23 @@ class EnhancedDSLDNormalizer:
             
             # Calculate proprietary blend disclosure statistics
             blend_stats = self._calculate_blend_disclosure_stats(active_ingredients + inactive_ingredients)
+
+            # Industry benchmarking against transparency leaders
+            industry_benchmark = self._benchmark_against_industry_leaders(blend_stats)
+
+            # Enhanced penalty weighting based on ingredient category risk
+            penalty_weighting = self._calculate_enhanced_penalty_weighting(
+                active_ingredients + inactive_ingredients, blend_stats
+            )
             
             # Extract all certifications for product-level aggregation
             all_certifications = []
             for stmt in statements:
                 all_certifications.extend(stmt.get("certifications", []) or [])
             
+            # Calculate full ingredient disclosure flag for transparency
+            has_full_disclosure = self._has_full_ingredient_disclosure(blend_stats)
+
             # Build cleaned product
             cleaned = {
                 # Core identifiers
@@ -1701,7 +2159,7 @@ class EnhancedDSLDNormalizer:
                 "upcSku": raw_data.get("upcSku", ""),
                 "hasOuterCarton": raw_data.get("hasOuterCarton", None),
                 "upcValid": self._validate_upc(raw_data.get("upcSku", "")),
-                
+
                 # Status
                 "status": status,
                 "discontinuedDate": discontinued_date,
@@ -1728,9 +2186,10 @@ class EnhancedDSLDNormalizer:
                 "activeIngredients": active_ingredients,
                 "inactiveIngredients": inactive_ingredients,
                 
-                # Statements and claims
+                # Statements and claims (with original preserved)
                 "statements": statements,
                 "claims": claims,
+                "original_statements": raw_data.get("statements", []) or [],  # Preserve raw statements for claim extraction
                 
                 # Serving info
                 "servingSizes": serving_sizes,
@@ -1738,12 +2197,13 @@ class EnhancedDSLDNormalizer:
                 # Label relationships
                 "labelRelationships": raw_data.get("labelRelationships", []) or [],
                 
-                # Combined label text for search
+                # Combined label text for search (with original preserved)
                 "labelText": self._generate_label_text(
-                    active_ingredients, 
-                    inactive_ingredients, 
+                    active_ingredients,
+                    inactive_ingredients,
                     statements
                 ),
+                "original_label_text": self._extract_original_label_text(raw_data),  # Preserve raw text for enrichment parsing
                 
                 # RDA compliance (empty for future use)
                 "rdaCompliance": [],
@@ -1754,6 +2214,9 @@ class EnhancedDSLDNormalizer:
                 # Certifications (product-level aggregation)
                 "hasCertifications": len(all_certifications) > 0,
                 "certificationTypes": list(set(all_certifications)),
+
+                # Transparency flag for data preservation
+                "has_full_ingredient_disclosure": has_full_disclosure,
                 
                 # Enhanced metadata
                 "metadata": {
@@ -1776,7 +2239,9 @@ class EnhancedDSLDNormalizer:
                         "nestedIngredientsFlattened": len(flattened_ingredients) > len(raw_ingredients),
                         "preprocessingApplied": True
                     },
-                    "proprietaryBlendStats": blend_stats
+                    "proprietaryBlendStats": blend_stats,
+                    "industryBenchmark": industry_benchmark,
+                    "penaltyWeighting": penalty_weighting
                 }
             }
             
@@ -1859,7 +2324,7 @@ class EnhancedDSLDNormalizer:
         
         if is_proprietary or self._is_proprietary_blend_name(name):
             disclosure_level = self._determine_disclosure_level(name, quantity, unit, nested_rows)
-            
+
             # Process nested ingredients for blends
             if nested_rows:
                 for nested_ing in nested_rows:
@@ -1870,13 +2335,14 @@ class EnhancedDSLDNormalizer:
                         nested_ingredients_processed.append(nested_processed)
 
         # An ingredient is considered "mapped" if it's found in ANY reference database
-        # This includes ingredient databases, harmful additives, non-harmful additives, allergens, banned, or passive databases
+        # This includes ingredient databases, harmful additives, non-harmful additives, allergens, banned, passive databases, or proprietary blends
         is_mapped = (mapped or
                     harmful_info["category"] != "none" or
                     non_harmful_info["category"] != "none" or
                     allergen_info["is_allergen"] or
                     banned_info["is_banned"] or
-                    passive_info["is_passive"])
+                    passive_info["is_passive"] or
+                    is_proprietary)
 
         # Track unmapped ingredients only if not found in any database
         # AND not a nutrition fact/label phrase
@@ -1934,6 +2400,7 @@ class EnhancedDSLDNormalizer:
             "proprietaryBlend": is_proprietary,
             "isProprietaryBlend": is_proprietary,
             "disclosureLevel": disclosure_level,  # 'full', 'partial', 'none', or None for non-blends
+            "transparencyPercentage": self._calculate_transparency_percentage(nested_rows) if is_proprietary and nested_rows else None,
             "mapped": is_mapped,
             
             # Blend information (if applicable)
@@ -1943,6 +2410,9 @@ class EnhancedDSLDNormalizer:
             # Nested ingredients (preserved for blend structure)
             "nestedIngredients": nested_ingredients_processed,
             
+            # Clinical dosing validation (evidence-based effectiveness assessment)
+            "clinicalDosing": self._validate_clinical_dosing(name, quantity, unit, standard_name),
+
             # Enrichment placeholders (to be populated during enrichment phase)
             "clinicalEvidence": None,
             "synergyClusters": [],
@@ -1975,9 +2445,12 @@ class EnhancedDSLDNormalizer:
                 continue
 
         # OPTIMIZATION: Use parallel processing for large ingredient lists
-        # Parallel processing disabled due to thread safety issues with self references
-        # TODO: Implement proper parallel processing with thread-safe methods
-        return self._process_ingredients_sequential(normalized_ingredients)
+        # ✅ THREAD-SAFE: Now using @lru_cache decorators for all caching - safe for parallel processing
+        if len(normalized_ingredients) >= self._parallel_threshold:
+            logger.info(f"🚀 Using parallel processing for {len(normalized_ingredients)} ingredients")
+            return self._process_ingredients_parallel(normalized_ingredients)
+        else:
+            return self._process_ingredients_sequential(normalized_ingredients)
 
     def _process_ingredients_parallel(self, ingredients: List[Dict]) -> List[Dict]:
         """Process ingredients using parallel execution"""
@@ -2014,8 +2487,16 @@ class EnhancedDSLDNormalizer:
                         "mapped": False
                     })
 
-        # Sort by original order
-        processed.sort(key=lambda x: x.get("order", 0))
+        # Sort by original order (with safe comparison)
+        def safe_order_key(x):
+            order = x.get("order", 0)
+            # Ensure order is always a number
+            try:
+                return float(order) if order is not None else 0.0
+            except (ValueError, TypeError):
+                return 0.0
+
+        processed.sort(key=safe_order_key)
         return processed
 
     def _process_ingredients_sequential(self, ingredients: List[Dict]) -> List[Dict]:
@@ -2032,11 +2513,15 @@ class EnhancedDSLDNormalizer:
             allergen_info = self._enhanced_allergen_check(name)
             harmful_info = self._enhanced_harmful_check(name)
 
+            # Check if proprietary blend
+            is_proprietary = self._is_proprietary_blend_name(name)
+
             # An ingredient is considered "mapped" if it's found in ANY reference database
-            # This includes ingredient databases, harmful additives, or allergen databases
+            # This includes ingredient databases, harmful additives, allergen databases, or proprietary blends
             is_mapped = (mapped or
                         harmful_info["category"] != "none" or
-                        allergen_info["is_allergen"])
+                        allergen_info["is_allergen"] or
+                        is_proprietary)
 
             # Track unmapped ingredients only if not found in any database
             if not is_mapped:
@@ -2069,19 +2554,51 @@ class EnhancedDSLDNormalizer:
     # Include all other methods from the original normalizer
     # (I'll keep the existing methods for compatibility)
     
-    def _safe_int(self, value: Any) -> int:
-        """Safely convert value to integer"""
+    def _safe_int(self, value: Any, field_name: str = "value", default: int = 0) -> int:
+        """
+        Safely convert value to integer with comprehensive error handling
+        """
+        # Handle None explicitly
+        if value is None:
+            logger.debug(f"NULL {field_name} converted to {default}")
+            return default
+
+        # Handle empty strings and "none"
+        if isinstance(value, str):
+            value = value.strip().lower()
+            if not value or value == "none":
+                logger.debug(f"Empty/none {field_name} converted to {default}")
+                return default
+
         try:
-            return int(value)
-        except (ValueError, TypeError):
-            return 0
-    
-    def _safe_float(self, value: Any) -> float:
-        """Safely convert value to float"""
+            result = int(float(value))  # Handle "1.0" -> 1
+            return result
+        except (ValueError, TypeError) as e:
+            logger.warning(f"Failed to convert {field_name} '{value}' to int: {e}. Using {default}")
+            return default
+
+    def _safe_float(self, value: Any, field_name: str = "value", default: float = 0.0) -> float:
+        """
+        Safely convert value to float with comprehensive error handling
+        """
+        # Handle None explicitly
+        if value is None:
+            logger.debug(f"NULL {field_name} converted to {default}")
+            return default
+
+        # Handle empty strings and "none"
+        if isinstance(value, str):
+            value = value.strip().lower()
+            if not value or value == "none":
+                logger.debug(f"Empty/none {field_name} converted to {default}")
+                return default
+
         try:
-            return float(value)
-        except (ValueError, TypeError):
-            return 0.0
+            result = float(value)
+            return result
+        except (ValueError, TypeError) as e:
+            logger.warning(f"Failed to convert {field_name} '{value}' to float: {e}. Using {default}")
+            return default
     
     def _extract_field_value(self, field_data: Any) -> str:
         """Extract string value from field that can be either string or dict with langualCodeDescription"""
@@ -2282,9 +2799,9 @@ class EnhancedDSLDNormalizer:
                     manufacturers = self.manufacturers_db.get("manufacturers", [])
                 
                 for mfr in manufacturers:
-                    mfr_name = mfr.get("standard_name", "") or mfr.get("name", "")
+                    mfr_name = mfr.get("standard_name", "")
                     if name.lower() in mfr_name.lower():
-                        manufacturer_score = mfr.get("score_contribution", None) or mfr.get("reputation_score", None)
+                        manufacturer_score = mfr.get("score_contribution", None)
                         break
             
             # Build processed contact
@@ -2394,16 +2911,23 @@ class EnhancedDSLDNormalizer:
             match = re.search(pattern, notes, re.IGNORECASE)
             if match:
                 features["standardized"] = True
-                features["standardization_percent"] = self._safe_float(match.group(1))
-                features["phrases"].append(match.group(0))
+                try:
+                    features["standardization_percent"] = self._safe_float(match.group(1)) if len(match.groups()) >= 1 else 0.0
+                    features["phrases"].append(match.group(0))
+                except IndexError:
+                    features["standardization_percent"] = 0.0
+                    features["phrases"].append(match.group(0) if match else "")
                 break
         
         # Extract natural source
         for pattern in NATURAL_SOURCE_PATTERNS:
             match = re.search(pattern, notes, re.IGNORECASE)
             if match:
-                features["natural_source"] = match.group(0)
-                features["phrases"].append(match.group(0))
+                try:
+                    features["natural_source"] = match.group(0)
+                    features["phrases"].append(match.group(0))
+                except IndexError:
+                    features["natural_source"] = ""
                 break
         
         # Check for proprietary blend
@@ -2568,7 +3092,14 @@ class EnhancedDSLDNormalizer:
         # Add ingredient names
         for ing in active_ingredients:
             text_parts.append(ing.get("name", ""))
-            text_parts.extend(ing.get("forms", []))
+            # Extract form names from forms array
+            forms_data = ing.get("forms", [])
+            if forms_data and isinstance(forms_data, list):
+                for form_dict in forms_data:
+                    if isinstance(form_dict, dict) and "name" in form_dict:
+                        form_name = form_dict.get("name", "")
+                        if form_name:
+                            text_parts.append(form_name)
             text_parts.append(ing.get("notes", ""))
         
         for ing in inactive_ingredients:
@@ -2581,7 +3112,44 @@ class EnhancedDSLDNormalizer:
         # Clean and join
         cleaned_parts = [p.strip() for p in text_parts if p]
         return " ".join(cleaned_parts)
-    
+
+    def _extract_original_label_text(self, raw_data: Dict[str, Any]) -> str:
+        """
+        Extract original raw text from statements for enrichment text parsing.
+        Preserves unprocessed text for downstream analysis.
+        """
+        text_parts = []
+
+        # Extract all statement notes from raw data
+        raw_statements = raw_data.get("statements", []) or []
+        for stmt in raw_statements:
+            if isinstance(stmt, dict):
+                notes = stmt.get("notes", "")
+                if notes:
+                    text_parts.append(notes)
+
+        # Join all text
+        return " ".join(text_parts).strip()
+
+    def _has_full_ingredient_disclosure(self, blend_stats: Dict[str, Any]) -> bool:
+        """
+        Determine if product has full ingredient disclosure (transparency flag).
+
+        Returns:
+            True if no proprietary blends OR all blends have full disclosure
+            False if any blend has partial or no disclosure
+        """
+        # If no proprietary blends, full disclosure is achieved
+        if not blend_stats.get("hasProprietaryBlends", False):
+            return True
+
+        # If there are proprietary blends, check disclosure levels
+        total_blends = blend_stats.get("totalBlends", 0)
+        full_disclosure_count = blend_stats.get("fullDisclosure", 0)
+
+        # All blends must have full disclosure
+        return total_blends > 0 and full_disclosure_count == total_blends
+
     def get_enhanced_unmapped_summary(self) -> Dict[str, Any]:
         """Get detailed summary of unmapped ingredients with context"""
         unmapped_with_details = []
@@ -2647,47 +3215,29 @@ class EnhancedDSLDNormalizer:
         """Check if ingredient name is a label phrase or nutrition fact to exclude"""
         if not name:
             return False
-        
+
         # Preprocess the name for comparison
         processed_name = self.matcher.preprocess_text(name)
-        
-        # Check against excluded nutrition facts
-        if processed_name in EXCLUDED_NUTRITION_FACTS:
+
+        # Check against preprocessed excluded nutrition facts
+        if processed_name in self._preprocessed_excluded_nutrition:
             return True
-            
-        # Check against label phrases
-        if processed_name in EXCLUDED_LABEL_PHRASES:
+
+        # Check against preprocessed label phrases
+        if processed_name in self._preprocessed_excluded_labels:
             logger.debug(f"Excluding label phrase: {name}")
             return True
             
-        # More aggressive pattern matching for percentage headers
-        # This catches variations like "Less Than 2% Of:", "Contains Less Than 2% of", etc.
+        # Enhanced pattern matching using ENHANCED_EXCLUSION_PATTERNS from constants
         name_lower = name.lower()
-        percentage_patterns = [
-            r"less\s+than\s+\d+%",
-            r"contains?\s+less\s+than\s+\d+%",
-            r"contains?\s+<?\s*\d+%\s+of",
-            r"<\s*\d+%\s+of",
-            r"other\s+carbohydrate"
-        ]
-        
-        for pattern in percentage_patterns:
+
+        # Use the enhanced patterns from constants for comprehensive exclusion
+        for pattern in ENHANCED_EXCLUSION_PATTERNS:
             if re.search(pattern, name_lower):
-                logger.debug(f"Excluding percentage/label phrase via pattern: {name}")
+                logger.debug(f"Excluding via enhanced pattern: {name}")
                 return True
             
-        # Additional specific checks for variations not caught by exact match
-        # Check for standalone percentage indicators (preprocessing strips % symbol)
-        if processed_name in ["less than 2%", "less than 2", "<2% of", "< 2% of", "<2 of", "< 2 of"]:
-            logger.debug("Excluding percentage indicator: %s", name)
-            return True
-            
-        # Check for pattern-based exclusions
-        # Matches things like "Contains 3% or less of" with any percentage
-        percentage_pattern = r"contains?\s*<?(\d+%|\d+\s*%)\s*(or\s*less\s*)?of"
-        if re.search(percentage_pattern, processed_name):
-            logger.debug(f"Excluding percentage header: {name}")
-            return True
+        # All pattern-based exclusions are now handled by ENHANCED_EXCLUSION_PATTERNS
             
         return False
     
@@ -2721,12 +3271,14 @@ class EnhancedDSLDNormalizer:
             # Also check if it has nested ingredients (could be a blend even without keyword)
             if not nested_ingredients:
                 return None
-        
-        # If no nested ingredients, it's either a single proprietary ingredient or blend with no disclosure
+
+        # If no nested ingredients, it's a proprietary blend with no disclosure
+        # This includes:
+        # 1. Ingredients with proprietary keywords in name
+        # 2. Ingredients marked proprietary by unit="NP" or quantity=0
+        # In both cases, if there are no nested ingredients, disclosure is "none"
         if not nested_ingredients:
-            if self._is_proprietary_blend_name(name):
-                return "none"  # Blend with no ingredient breakdown at all
-            return None  # Single ingredient, not a blend
+            return "none"  # No ingredient breakdown = no disclosure
         
         # Check disclosure level based on nested ingredients
         has_quantities = []
@@ -2758,30 +3310,849 @@ class EnhancedDSLDNormalizer:
             return "partial"  # Some have quantities, some don't
         else:
             return "none"  # No individual quantities provided
-    
+
+    def _calculate_transparency_percentage(self, nested_ingredients: List[Dict]) -> float:
+        """
+        Calculate transparency percentage for partial disclosure blends
+        Returns 0-100 percentage of ingredients with disclosed quantities
+        """
+        if not nested_ingredients:
+            return 0.0
+
+        disclosed_count = 0
+        total_count = len(nested_ingredients)
+
+        for nested_ing in nested_ingredients:
+            # Extract quantity using same logic as disclosure determination
+            quantity_list = nested_ing.get("quantity", [])
+            nested_qty = 0
+            nested_unit = ""
+
+            if isinstance(quantity_list, list) and quantity_list:
+                qty_entry = quantity_list[0] if quantity_list else {}
+                nested_qty = qty_entry.get("quantity", 0) if isinstance(qty_entry.get("quantity"), (int, float)) else 0
+                nested_unit = qty_entry.get("unit", "")
+            elif isinstance(quantity_list, (int, float)):
+                nested_qty = quantity_list
+                nested_unit = nested_ing.get("unit", "")
+
+            # Count as disclosed if has real quantity
+            if nested_qty > 0 and nested_unit not in ["NP", "", None]:
+                disclosed_count += 1
+
+        transparency_percentage = (disclosed_count / total_count) * 100
+        logger.debug(f"Transparency: {disclosed_count}/{total_count} = {transparency_percentage:.1f}%")
+
+        return round(transparency_percentage, 1)
+
+    def _validate_clinical_dosing(self, ingredient_name: str, quantity: float, unit: str, standard_name: str = None) -> Dict[str, any]:
+        """
+        Validate if disclosed quantity meets clinical effectiveness thresholds
+        Returns clinical adequacy assessment with evidence-based scoring
+        """
+        # Ensure quantity is a number
+        try:
+            quantity = float(quantity) if quantity is not None else 0.0
+        except (ValueError, TypeError):
+            logger.warning(f"Invalid quantity for {ingredient_name}: {quantity}, defaulting to 0")
+            quantity = 0.0
+
+        # Initialize result
+        validation_result = {
+            "has_clinical_data": False,
+            "adequacy_level": "unknown",
+            "adequacy_percentage": 0.0,
+            "clinical_min": 0,
+            "clinical_max": 0,
+            "optimal_dose": 0,
+            "dose_unit": unit,
+            "evidence_level": "none",
+            "dosing_note": "No clinical data available",
+            "clinical_score_modifier": 0
+        }
+
+        if quantity <= 0 or not unit:
+            return validation_result
+
+        # Normalize ingredient name for lookup
+        lookup_names = [
+            self.matcher.preprocess_text(ingredient_name),
+            self.matcher.preprocess_text(standard_name) if standard_name else "",
+            ingredient_name.lower().replace(" ", "-"),
+            ingredient_name.lower().replace("-", "_")
+        ]
+
+        # First try RDA optimal database (vitamins/minerals), then therapeutic database (herbs/supplements)
+        ingredient_data = self._search_rda_optimal(lookup_names)
+        source_db = "rda_optimal"
+
+        if not ingredient_data:
+            ingredient_data = self._search_therapeutic_dosing(lookup_names)
+            source_db = "rda_therapeutic"
+
+        if not ingredient_data:
+            return validation_result
+
+        # Process the data based on source database
+        if source_db == "rda_optimal":
+            return self._process_rda_optimal_data(ingredient_data, quantity, unit, validation_result)
+        else:
+            return self._process_therapeutic_data(ingredient_data, quantity, unit, validation_result)
+
+    def _search_rda_optimal(self, lookup_names: list) -> Dict:
+        """Search RDA optimal database for vitamins/minerals"""
+        for nutrient in self.rda_optimal.get("nutrient_recommendations", []):
+            nutrient_name = nutrient.get("standard_name", "").lower()
+
+            # Check if any lookup name matches the nutrient name or common variations
+            for lookup_name in lookup_names:
+                if (lookup_name in nutrient_name or nutrient_name in lookup_name or
+                    self._check_vitamin_aliases(lookup_name, nutrient_name)):
+                    return nutrient
+        return None
+
+    def _search_therapeutic_dosing(self, lookup_names: list) -> Dict:
+        """Search therapeutic dosing database for herbs/supplements"""
+        for ingredient in self.rda_therapeutic.get("therapeutic_dosing", []):
+            ingredient_name = ingredient.get("standard_name", "").lower()
+            aliases = [alias.lower() for alias in ingredient.get("aliases", [])]
+
+            # Check if any lookup name matches the ingredient name or aliases
+            for lookup_name in lookup_names:
+                if (lookup_name in ingredient_name or ingredient_name in lookup_name or
+                    any(lookup_name in alias or alias in lookup_name for alias in aliases)):
+                    return ingredient
+        return None
+
+    def _check_vitamin_aliases(self, search_term: str, nutrient_name: str) -> bool:
+        """Check common vitamin aliases and variations"""
+        vitamin_aliases = {
+            "vitamin d": ["vitamin d", "vitamin d3", "cholecalciferol"],
+            "vitamin c": ["vitamin c", "ascorbic acid", "ascorbate"],
+            "vitamin b12": ["vitamin b12", "b12", "cobalamin", "cyanocobalamin"],
+            "vitamin b6": ["vitamin b6", "b6", "pyridoxine"],
+            "vitamin b1": ["vitamin b1", "b1", "thiamin", "thiamine"],
+            "vitamin b2": ["vitamin b2", "b2", "riboflavin"],
+            "vitamin b3": ["vitamin b3", "b3", "niacin", "nicotinic acid"],
+            "folate": ["folate", "folic acid", "vitamin b9", "b9"]
+        }
+
+        for vitamin, aliases in vitamin_aliases.items():
+            if vitamin in nutrient_name:
+                return any(alias in search_term for alias in aliases)
+        return False
+
+    def _process_rda_optimal_data(self, ingredient_data: Dict, quantity: float, unit: str, validation_result: Dict) -> Dict:
+        """Process RDA optimal database results"""
+        validation_result["has_clinical_data"] = True
+        validation_result["evidence_level"] = "very_high"  # RDA data is highly evidence-based
+
+        # Parse optimal range (e.g., "700-1500" or "25-100")
+        optimal_range = ingredient_data.get("optimal_range", "")
+        if "-" in optimal_range:
+            try:
+                range_parts = optimal_range.split("-")
+                clinical_min = self._safe_float(range_parts[0].strip(), "clinical_min")
+                clinical_max = self._safe_float(range_parts[1].strip(), "clinical_max")
+                optimal_dose = (clinical_min + clinical_max) / 2  # Use middle of range as optimal
+
+                # Get unit from ingredient data
+                clinical_unit = ingredient_data.get("unit", "")
+
+                # Convert units if necessary
+                ingredient_name = ingredient_data.get("standard_name", "")
+                converted_quantity = self._convert_dosing_units(quantity, unit, clinical_unit, ingredient_name)
+
+                # Ensure converted_quantity is a number, not dict
+                if not isinstance(converted_quantity, (int, float)):
+                    logger.warning(f"Unit conversion returned non-numeric value for {ingredient_name}: {converted_quantity}")
+                    validation_result["dosing_note"] = f"Unit conversion failed: {unit} to {clinical_unit}"
+                    return validation_result
+
+                if converted_quantity <= 0:
+                    validation_result["dosing_note"] = f"Unit conversion failed: {unit} to {clinical_unit}"
+                    return validation_result
+
+                # Ensure all values are numbers before comparisons
+                if not isinstance(optimal_dose, (int, float)):
+                    logger.warning(f"optimal_dose is not numeric for {ingredient_name}: {optimal_dose}")
+                    optimal_dose = 0
+                if not isinstance(clinical_min, (int, float)):
+                    logger.warning(f"clinical_min is not numeric for {ingredient_name}: {clinical_min}")
+                    clinical_min = 0
+                if not isinstance(clinical_max, (int, float)):
+                    logger.warning(f"clinical_max is not numeric for {ingredient_name}: {clinical_max}")
+                    clinical_max = 0
+
+                # Calculate adequacy percentage
+                adequacy_percentage = (converted_quantity / optimal_dose) * 100 if optimal_dose > 0 else 0
+
+                # Determine adequacy level and score modifier
+                if converted_quantity < clinical_min * 0.5:
+                    adequacy_level = "severely_under_dosed"
+                    score_modifier = -2
+                elif converted_quantity < clinical_min:
+                    adequacy_level = "under_dosed"
+                    score_modifier = -1
+                elif converted_quantity <= clinical_max:
+                    adequacy_level = "optimal"
+                    score_modifier = 2
+                elif converted_quantity <= self._safe_float(ingredient_data.get("highest_ul"), "highest_ul", float('inf')):
+                    adequacy_level = "high_dose"
+                    score_modifier = 1
+                else:
+                    adequacy_level = "excessive"
+                    score_modifier = -1
+
+                validation_result.update({
+                    "adequacy_level": adequacy_level,
+                    "adequacy_percentage": round(adequacy_percentage, 1),
+                    "clinical_min": clinical_min,
+                    "clinical_max": clinical_max,
+                    "optimal_dose": optimal_dose,
+                    "dose_unit": clinical_unit,
+                    "dosing_note": f"RDA-based: {converted_quantity} {clinical_unit} (optimal: {optimal_range} {clinical_unit})",
+                    "clinical_score_modifier": score_modifier,
+                    "converted_dose": converted_quantity
+                })
+
+            except (ValueError, IndexError):
+                validation_result["dosing_note"] = f"Could not parse optimal range: {optimal_range}"
+
+        return validation_result
+
+    def _process_therapeutic_data(self, ingredient_data: Dict, quantity: float, unit: str, validation_result: Dict) -> Dict:
+        """Process therapeutic dosing database results"""
+        validation_result["has_clinical_data"] = True
+
+        # Map evidence tier to level
+        evidence_tier = ingredient_data.get("evidence_tier", 3)
+        evidence_mapping = {1: "very_high", 2: "high", 3: "moderate"}
+        validation_result["evidence_level"] = evidence_mapping.get(evidence_tier, "moderate")
+
+        # Parse typical dosing range (e.g., "250-600" or "3-5")
+        dosing_range = ingredient_data.get("typical_dosing_range", "")
+        if "-" in dosing_range:
+            try:
+                range_parts = dosing_range.split("-")
+                clinical_min = float(range_parts[0])
+                clinical_max = float(range_parts[1])
+                optimal_dose = ingredient_data.get("common_serving_size", (clinical_min + clinical_max) / 2)
+                optimal_dose = float(optimal_dose) if isinstance(optimal_dose, str) else optimal_dose
+
+                # Get unit from ingredient data
+                clinical_unit = ingredient_data.get("unit", "")
+
+                # Convert units if necessary
+                ingredient_name = ingredient_data.get("standard_name", "")
+                converted_quantity = self._convert_dosing_units(quantity, unit, clinical_unit, ingredient_name)
+
+                # Ensure converted_quantity is a number, not dict
+                if not isinstance(converted_quantity, (int, float)):
+                    logger.warning(f"Unit conversion returned non-numeric value for {ingredient_name}: {converted_quantity}")
+                    validation_result["dosing_note"] = f"Unit conversion failed: {unit} to {clinical_unit}"
+                    return validation_result
+
+                if converted_quantity <= 0:
+                    validation_result["dosing_note"] = f"Unit conversion failed: {unit} to {clinical_unit}"
+                    return validation_result
+
+                # Ensure all values are numbers before comparisons
+                if not isinstance(optimal_dose, (int, float)):
+                    logger.warning(f"optimal_dose is not numeric for {ingredient_name}: {optimal_dose}")
+                    optimal_dose = 0
+                if not isinstance(clinical_min, (int, float)):
+                    logger.warning(f"clinical_min is not numeric for {ingredient_name}: {clinical_min}")
+                    clinical_min = 0
+                if not isinstance(clinical_max, (int, float)):
+                    logger.warning(f"clinical_max is not numeric for {ingredient_name}: {clinical_max}")
+                    clinical_max = 0
+
+                # Calculate adequacy percentage
+                adequacy_percentage = (converted_quantity / optimal_dose) * 100 if optimal_dose > 0 else 0
+
+                # Determine adequacy level and score modifier
+                if converted_quantity < clinical_min * 0.5:
+                    adequacy_level = "severely_under_dosed"
+                    score_modifier = -2
+                elif converted_quantity < clinical_min:
+                    adequacy_level = "under_dosed"
+                    score_modifier = -1
+                elif converted_quantity <= clinical_max:
+                    adequacy_level = "optimal"
+                    score_modifier = 2
+                elif converted_quantity <= self._safe_float(ingredient_data.get("upper_limit"), "upper_limit", float('inf')):
+                    adequacy_level = "high_dose"
+                    score_modifier = 1
+                else:
+                    adequacy_level = "excessive"
+                    score_modifier = -1
+
+                validation_result.update({
+                    "adequacy_level": adequacy_level,
+                    "adequacy_percentage": round(adequacy_percentage, 1),
+                    "clinical_min": clinical_min,
+                    "clinical_max": clinical_max,
+                    "optimal_dose": optimal_dose,
+                    "dose_unit": clinical_unit,
+                    "dosing_note": f"Therapeutic: {converted_quantity} {clinical_unit} (range: {dosing_range} {clinical_unit})",
+                    "clinical_score_modifier": score_modifier,
+                    "converted_dose": converted_quantity
+                })
+
+                logger.info(f"🧬 Clinical dosing: {ingredient_data.get('standard_name', 'unknown')} {converted_quantity}{clinical_unit} = {adequacy_percentage:.1f}% of optimal ({adequacy_level})")
+
+            except (ValueError, IndexError):
+                validation_result["dosing_note"] = f"Could not parse dosing range: {dosing_range}"
+
+        return validation_result
+
+    def _convert_dosing_units(self, quantity: float, from_unit: str, to_unit: str, ingredient_context: str = None) -> float:
+        """
+        Convert between dosing units using sophisticated UNIT_CONVERSIONS system
+        Supports context-aware conversions (e.g., vitamin-specific IU conversions)
+        """
+        if from_unit == to_unit:
+            return quantity
+
+        # Normalize units
+        from_unit = from_unit.lower().strip()
+        to_unit = to_unit.lower().strip()
+
+        # Handle unit aliases
+        unit_aliases = UNIT_ALIASES
+
+        # Map to full unit names for lookup
+        from_unit_full = unit_aliases.get(from_unit, from_unit)
+        to_unit_full = unit_aliases.get(to_unit, to_unit)
+
+        # Try context-aware conversion first (e.g., vitamin D specific)
+        if ingredient_context and from_unit_full in UNIT_CONVERSIONS:
+            context_conversions = UNIT_CONVERSIONS[from_unit_full]
+            ingredient_lower = ingredient_context.lower()
+
+            # Check for ingredient-specific conversions
+            for ingredient_key, conversion_factor in context_conversions.items():
+                if ingredient_key in ingredient_lower:
+                    # Determine target unit based on vitamin type
+                    if "vitamin a" in ingredient_key and to_unit in ["mcg", "microgram"]:
+                        result = quantity * conversion_factor
+                        logger.info(f"🔄 Context-aware conversion: {ingredient_context} {quantity} {from_unit} → {result} mcg RAE")
+                        return result
+                    elif "vitamin d" in ingredient_key and to_unit in ["mcg", "microgram"]:
+                        result = quantity * conversion_factor
+                        logger.info(f"🔄 Context-aware conversion: {ingredient_context} {quantity} {from_unit} → {result} mcg")
+                        return result
+                    elif "vitamin e" in ingredient_key and to_unit in ["mg", "milligram"]:
+                        result = quantity * conversion_factor
+                        logger.info(f"🔄 Context-aware conversion: {ingredient_context} {quantity} {from_unit} → {result} mg")
+                        return result
+
+        # Try direct unit conversions from UNIT_CONVERSIONS
+        if from_unit_full in UNIT_CONVERSIONS:
+            target_conversions = UNIT_CONVERSIONS[from_unit_full]
+            if to_unit in target_conversions:
+                conversion_factor = target_conversions[to_unit]
+                return quantity * conversion_factor
+
+        # Try reverse conversion
+        if to_unit_full in UNIT_CONVERSIONS:
+            source_conversions = UNIT_CONVERSIONS[to_unit_full]
+            if from_unit in source_conversions:
+                # Reverse the conversion factor
+                conversion_factor = 1 / source_conversions[from_unit]
+                return quantity * conversion_factor
+
+        # Handle special nutrient equivalents conversions
+        if "folate" in (ingredient_context or "").lower():
+            # For folate, mcg and mcg DFE are equivalent for natural folate
+            if (from_unit in ["mcg", "μg"] and "dfe" in to_unit.lower()) or \
+               ("dfe" in from_unit.lower() and to_unit in ["mcg", "μg"]):
+                logger.info(f"🔄 Folate DFE conversion: {quantity} {from_unit} → {quantity} {to_unit}")
+                return quantity
+
+        # Handle Niacin Equivalents (NE) conversions
+        if "niacin" in (ingredient_context or "").lower():
+            # For niacin, mg and mg NE are typically equivalent for direct niacin
+            if (from_unit in ["mg"] and "ne" in to_unit.lower()) or \
+               ("ne" in from_unit.lower() and to_unit in ["mg"]):
+                logger.info(f"🔄 Niacin NE conversion: {quantity} {from_unit} → {quantity} {to_unit}")
+                return quantity
+
+        # Handle Vitamin A RAE (Retinol Activity Equivalents) conversions
+        if "vitamin a" in (ingredient_context or "").lower():
+            # IU to mcg RAE: 1 IU = 0.3 mcg RAE for retinol
+            if from_unit in ["iu"] and "rae" in to_unit.lower():
+                result = quantity * 0.3
+                logger.info(f"🔄 Vitamin A RAE conversion: {quantity} {from_unit} → {result} {to_unit}")
+                return result
+            # mcg to mcg RAE: 1:1 for retinol equivalents
+            elif from_unit in ["mcg", "μg"] and "rae" in to_unit.lower():
+                logger.info(f"🔄 Vitamin A RAE conversion: {quantity} {from_unit} → {quantity} {to_unit}")
+                return quantity
+            # mcg RAE to IU: 1 mcg RAE = 3.33 IU
+            elif "rae" in from_unit.lower() and to_unit in ["iu"]:
+                result = quantity * 3.33
+                logger.info(f"🔄 Vitamin A RAE conversion: {quantity} {from_unit} → {result} {to_unit}")
+                return result
+
+        # Handle Vitamin E alpha-tocopherol conversions
+        if "vitamin e" in (ingredient_context or "").lower():
+            # IU to mg alpha-tocopherol: 1 IU = 0.67 mg
+            if from_unit in ["iu"] and "alpha-tocopherol" in to_unit.lower():
+                result = quantity * 0.67
+                logger.info(f"🔄 Vitamin E alpha-tocopherol conversion: {quantity} {from_unit} → {result} {to_unit}")
+                return result
+
+        # Handle gram(s) variant (with parentheses)
+        from_unit_clean = from_unit.replace("(s)", "").replace("s)", "")
+        to_unit_clean = to_unit.replace("(s)", "").replace("s)", "")
+
+        # Standard metric conversions fallback
+        standard_conversions = {
+            ("gram", "mg"): 1000,
+            ("gram", "mcg"): 1000000,
+            ("g", "mg"): 1000,
+            ("g", "mcg"): 1000000,
+            ("milligram", "mcg"): 1000,
+            ("mcg", "mg"): 0.001,
+            ("mg", "g"): 0.001,
+            ("mcg", "g"): 0.000001,
+            ("μg", "mcg"): 1,
+            ("mcg", "μg"): 1,
+            # Folate DFE conversions
+            ("mcg", "mcg dfe"): 1,
+            ("mcg dfe", "mcg"): 1,
+            ("μg", "mcg dfe"): 1,
+            ("mcg dfe", "μg"): 1,
+            # Niacin NE conversions
+            ("mg", "mg ne"): 1,
+            ("mg ne", "mg"): 1,
+            # Vitamin A RAE conversions
+            ("iu", "mcg rae"): 0.3,
+            ("mcg rae", "iu"): 3.33,
+            ("mcg", "mcg rae"): 1,
+            ("mcg rae", "mcg"): 1,
+            # Vitamin E alpha-tocopherol conversions
+            ("iu", "mg alpha-tocopherol"): 0.67,
+            ("mg alpha-tocopherol", "iu"): 1.49,
+            # Standard mg to alpha-tocopherol (assumes natural form unless specified)
+            ("mg", "mg alpha-tocopherol"): 1.0,
+            ("mg alpha-tocopherol", "mg"): 1.0
+        }
+
+        # Try conversion with cleaned units first
+        conversion_factor = standard_conversions.get((from_unit_clean, to_unit_clean))
+        if conversion_factor:
+            return quantity * conversion_factor
+
+        conversion_factor = standard_conversions.get((from_unit_full, to_unit_full))
+        if conversion_factor:
+            return quantity * conversion_factor
+
+        # Check for suspicious unit combinations that might be data entry errors
+        if from_unit == "ng" and to_unit in ["mg", "mcg"]:
+            logger.warning(f"Suspicious unit conversion: {from_unit} to {to_unit} for {ingredient_context}. "
+                         f"'ng' (nanogram) might be a typo for 'mg' - flagging for manual review")
+            return 0.0  # Return 0 to trigger manual review
+
+        # No conversion available
+        logger.warning(f"Cannot convert {from_unit} to {to_unit} for dosing validation{f' (ingredient: {ingredient_context})' if ingredient_context else ''}")
+        return 0.0
+
+    def _benchmark_against_industry_leaders(self, disclosure_stats: Dict, clinical_validation_stats: Dict = None) -> Dict[str, any]:
+        """
+        Benchmark transparency and clinical dosing against industry leaders (2025 standards)
+        """
+        benchmark_result = {
+            "transparency_benchmark": {},
+            "clinical_benchmark": {},
+            "overall_grade": "C",
+            "industry_percentile": 50,
+            "leader_comparison": {},
+            "improvement_recommendations": []
+        }
+
+        # Industry leader standards (based on 2025 research)
+        industry_leaders = {
+            "nutrabio": {
+                "full_disclosure_rate": 100,  # 100% full disclosure, never uses proprietary blends
+                "transparency_standard": 100,
+                "clinical_dosing_adherence": 90,  # Uses clinically effective doses
+                "grade": "A+",
+                "percentile": 95
+            },
+            "transparent_labs": {
+                "full_disclosure_rate": 100,
+                "transparency_standard": 100,
+                "clinical_dosing_adherence": 85,
+                "grade": "A",
+                "percentile": 90
+            },
+            "industry_average": {
+                "full_disclosure_rate": 30,  # Most companies use proprietary blends
+                "transparency_standard": 45,
+                "clinical_dosing_adherence": 40,  # Often underdosed
+                "grade": "C",
+                "percentile": 50
+            }
+        }
+
+        # Calculate transparency metrics
+        total_blends = disclosure_stats.get("totalBlends", 0)
+        full_disclosure = disclosure_stats.get("fullDisclosure", 0)
+        no_disclosure = disclosure_stats.get("noDisclosure", 0)
+        avg_transparency = disclosure_stats.get("averageTransparencyPercentage", 0)
+
+        if total_blends > 0:
+            full_disclosure_rate = (full_disclosure / total_blends) * 100
+            no_disclosure_rate = (no_disclosure / total_blends) * 100
+        else:
+            full_disclosure_rate = 100 if not disclosure_stats.get("hasProprietaryBlends") else 0
+            no_disclosure_rate = 0
+
+        # Transparency benchmarking
+        transparency_score = full_disclosure_rate
+        if total_blends == 0:  # No proprietary blends at all
+            transparency_score = 100
+
+        benchmark_result["transparency_benchmark"] = {
+            "full_disclosure_rate": full_disclosure_rate,
+            "transparency_score": transparency_score,
+            "industry_leader_comparison": {
+                "nutrabio_gap": 100 - transparency_score,
+                "industry_avg_difference": transparency_score - industry_leaders["industry_average"]["full_disclosure_rate"]
+            }
+        }
+
+        # Clinical dosing benchmarking (if clinical validation stats provided)
+        clinical_score = 70  # Default moderate score
+        if clinical_validation_stats:
+            # This would be populated with actual clinical validation data
+            clinical_score = clinical_validation_stats.get("average_adequacy_percentage", 70)
+            # Ensure clinical_score is not None
+            clinical_score = clinical_score if clinical_score is not None else 70
+
+        # Ensure transparency_score is not None
+        transparency_score = transparency_score if transparency_score is not None else 100
+
+        benchmark_result["clinical_benchmark"] = {
+            "clinical_adequacy_score": clinical_score,
+            "industry_leader_comparison": {
+                "nutrabio_gap": industry_leaders["nutrabio"]["clinical_dosing_adherence"] - clinical_score,
+                "industry_avg_difference": clinical_score - industry_leaders["industry_average"]["clinical_dosing_adherence"]
+            }
+        }
+
+        # Overall grading (weighted: 60% transparency, 40% clinical)
+        # Ensure both scores are numbers, not None
+        transparency_score = transparency_score if transparency_score is not None else 100
+        clinical_score = clinical_score if clinical_score is not None else 70
+        overall_score = (transparency_score * 0.6) + (clinical_score * 0.4)
+
+        # Grade assignment
+        if overall_score >= 95:
+            grade = "A+"
+            percentile = 95
+        elif overall_score >= 90:
+            grade = "A"
+            percentile = 90
+        elif overall_score >= 80:
+            grade = "B+"
+            percentile = 80
+        elif overall_score >= 70:
+            grade = "B"
+            percentile = 70
+        elif overall_score >= 60:
+            grade = "C+"
+            percentile = 60
+        elif overall_score >= 50:
+            grade = "C"
+            percentile = 50
+        else:
+            grade = "D"
+            percentile = 25
+
+        benchmark_result.update({
+            "overall_grade": grade,
+            "industry_percentile": percentile,
+            "overall_score": round(overall_score, 1)
+        })
+
+        # Leader comparison
+        for leader_name, leader_data in industry_leaders.items():
+            if leader_name != "industry_average":
+                benchmark_result["leader_comparison"][leader_name] = {
+                    "transparency_gap": leader_data["full_disclosure_rate"] - transparency_score,
+                    "clinical_gap": leader_data["clinical_dosing_adherence"] - clinical_score,
+                    "overall_gap": leader_data["percentile"] - percentile
+                }
+
+        # Generate improvement recommendations
+        recommendations = []
+        if no_disclosure_rate > 0:
+            recommendations.append("Eliminate proprietary blends with no ingredient disclosure")
+        if transparency_score < 80:
+            recommendations.append("Increase transparency by providing exact quantities for all ingredients")
+        if clinical_score < 70:
+            recommendations.append("Ensure ingredient doses meet clinically effective thresholds")
+        if overall_score < 90:
+            recommendations.append("Follow industry leaders like NutraBio for full transparency standards")
+
+        benchmark_result["improvement_recommendations"] = recommendations
+
+        logger.info(f"🏆 Industry Benchmark: Grade {grade} ({percentile}th percentile) - Transparency: {transparency_score:.1f}%, Clinical: {clinical_score:.1f}%")
+
+        return benchmark_result
+
+    def _calculate_enhanced_penalty_weighting(self, ingredients: List[Dict], blend_stats: Dict) -> Dict[str, any]:
+        """
+        Calculate risk-based penalty weighting for proprietary blends based on ingredient category
+        Higher penalties for higher-risk categories (stimulants, hormones, etc.)
+        """
+        penalty_result = {
+            "total_penalty_score": 0,
+            "category_penalties": {},
+            "risk_assessment": "low",
+            "penalty_breakdown": []
+        }
+
+        # Risk-based penalty multipliers by ingredient category
+        category_risk_multipliers = {
+            "stimulant": 3.0,           # Highest risk - cardiovascular effects
+            "hormone": 2.8,             # Very high risk - endocrine disruption
+            "thermogenic": 2.5,         # High risk - metabolic effects
+            "nootropic": 2.2,           # High risk - neurological effects
+            "pre_workout": 2.0,         # Moderate-high risk - combination effects
+            "fat_burner": 2.0,          # Moderate-high risk - metabolic stress
+            "testosterone_booster": 2.8, # Very high risk - hormonal effects
+            "sleep_aid": 1.8,           # Moderate risk - sedative effects
+            "adaptogens": 1.5,          # Lower risk - generally safer
+            "digestive": 1.3,           # Low risk - digestive enzymes, probiotics
+            "immune": 1.2,              # Low risk - immune support
+            "antioxidant": 1.1,         # Lowest risk - antioxidants
+            "vitamin": 1.0,             # Baseline - essential nutrients
+            "mineral": 1.0              # Baseline - essential nutrients
+        }
+
+        # Base penalties by disclosure level
+        base_penalties = {
+            "none": -10,      # Complete lack of disclosure
+            "partial": -5,    # Some disclosure
+            "full": 0         # Full disclosure, no penalty
+        }
+
+        total_penalty = 0
+        category_penalties = {}
+
+        for ingredient in ingredients:
+            if not ingredient.get("isProprietaryBlend"):
+                continue
+
+            disclosure_level = ingredient.get("disclosureLevel", "none")
+            transparency_percentage = ingredient.get("transparencyPercentage", 0)
+            ingredient_name = ingredient.get("name", "Unknown")
+
+            # Determine ingredient category risk level
+            ingredient_category = self._determine_ingredient_category_risk(ingredient_name, ingredient)
+            risk_multiplier = category_risk_multipliers.get(ingredient_category, 1.5)  # Default moderate risk
+
+            # Calculate base penalty
+            base_penalty = base_penalties.get(disclosure_level, -10)
+
+            # Ensure values are not None
+            risk_multiplier = risk_multiplier if risk_multiplier is not None else 1.5
+            base_penalty = base_penalty if base_penalty is not None else -10
+
+            # Apply risk multiplier
+            weighted_penalty = base_penalty * risk_multiplier
+
+            # Adjust for partial transparency
+            if disclosure_level == "partial" and transparency_percentage > 0:
+                # Reduce penalty based on transparency percentage
+                transparency_bonus = (transparency_percentage / 100) * 2  # Up to 2 point bonus
+                weighted_penalty += transparency_bonus
+
+            # Clinical dosing adjustment
+            clinical_data = ingredient.get("clinicalDosing", {})
+            if clinical_data.get("has_clinical_data"):
+                clinical_modifier = clinical_data.get("clinical_score_modifier", 0)
+                clinical_modifier = clinical_modifier if clinical_modifier is not None else 0
+                weighted_penalty += clinical_modifier
+
+            # Track category penalties
+            if ingredient_category not in category_penalties:
+                category_penalties[ingredient_category] = {
+                    "total_penalty": 0,
+                    "ingredient_count": 0,
+                    "risk_multiplier": risk_multiplier
+                }
+
+            category_penalties[ingredient_category]["total_penalty"] += weighted_penalty
+            category_penalties[ingredient_category]["ingredient_count"] += 1
+
+            penalty_result["penalty_breakdown"].append({
+                "ingredient": ingredient_name,
+                "category": ingredient_category,
+                "disclosure_level": disclosure_level,
+                "transparency_percentage": transparency_percentage,
+                "base_penalty": base_penalty,
+                "risk_multiplier": risk_multiplier,
+                "final_penalty": round(weighted_penalty, 2)
+            })
+
+            total_penalty += weighted_penalty
+
+        # Determine overall risk assessment
+        if total_penalty <= -20:
+            risk_assessment = "very_high"
+        elif total_penalty <= -10:
+            risk_assessment = "high"
+        elif total_penalty <= -5:
+            risk_assessment = "moderate"
+        elif total_penalty <= -2:
+            risk_assessment = "low"
+        else:
+            risk_assessment = "minimal"
+
+        penalty_result.update({
+            "total_penalty_score": round(total_penalty, 2),
+            "category_penalties": category_penalties,
+            "risk_assessment": risk_assessment
+        })
+
+        logger.info(f"⚖️ Enhanced Penalty Weighting: {total_penalty:.2f} points ({risk_assessment} risk)")
+
+        return penalty_result
+
+    def _determine_ingredient_category_risk(self, ingredient_name: str, ingredient_data: Dict) -> str:
+        """
+        Determine the risk category of an ingredient based on name and properties
+        """
+        name_lower = ingredient_name.lower()
+
+        # High-risk stimulant indicators
+        stimulant_indicators = [
+            "caffeine", "guarana", "yerba mate", "green tea extract", "kola nut",
+            "synephrine", "ephedra", "bitter orange", "dmaa", "dmha",
+            "phenylethylamine", "hordenine", "tyramine"
+        ]
+
+        # Hormone/testosterone indicators
+        hormone_indicators = [
+            "dhea", "pregnenolone", "androstenedione", "tribulus",
+            "tongkat ali", "fenugreek", "d-aspartic acid", "zinc aspartate",
+            "boron", "ashwagandha"  # Can affect hormones
+        ]
+
+        # Thermogenic indicators
+        thermogenic_indicators = [
+            "capsaicin", "cayenne", "black pepper extract", "piperine",
+            "forskolin", "yohimbine", "rauwolscine", "green coffee bean"
+        ]
+
+        # Nootropic indicators
+        nootropic_indicators = [
+            "noopept", "piracetam", "alpha gpc", "cdp choline", "huperzine a",
+            "bacopa monnieri", "lion's mane", "rhodiola rosea", "ginkgo biloba"
+        ]
+
+        # Check against patterns
+        for indicator in stimulant_indicators:
+            if indicator in name_lower:
+                return "stimulant"
+
+        for indicator in hormone_indicators:
+            if indicator in name_lower:
+                return "hormone"
+
+        for indicator in thermogenic_indicators:
+            if indicator in name_lower:
+                return "thermogenic"
+
+        for indicator in nootropic_indicators:
+            if indicator in name_lower:
+                return "nootropic"
+
+        # Check blend type indicators
+        if any(term in name_lower for term in ["pre-workout", "pre workout", "energy blend"]):
+            return "pre_workout"
+
+        if any(term in name_lower for term in ["fat burn", "weight loss", "metabolism"]):
+            return "fat_burner"
+
+        if any(term in name_lower for term in ["sleep", "night", "pm formula", "melatonin"]):
+            return "sleep_aid"
+
+        if any(term in name_lower for term in ["digest", "enzyme", "probiotic"]):
+            return "digestive"
+
+        if any(term in name_lower for term in ["immune", "defense", "vitamin c"]):
+            return "immune"
+
+        if any(term in name_lower for term in ["antioxidant", "polyphenol", "flavonoid"]):
+            return "antioxidant"
+
+        if any(term in name_lower for term in ["vitamin", "b-complex", "multivitamin"]):
+            return "vitamin"
+
+        if any(term in name_lower for term in ["mineral", "calcium", "magnesium", "iron", "zinc"]):
+            return "mineral"
+
+        # Default to moderate risk adaptogen category
+        return "adaptogens"
+
     def _calculate_blend_disclosure_stats(self, ingredients: List[Dict]) -> Dict[str, Any]:
-        """Calculate statistics about proprietary blend disclosure levels"""
+        """Calculate statistics about proprietary blend disclosure levels with transparency metrics"""
         stats = {
             "totalBlends": 0,
             "fullDisclosure": 0,
-            "partialDisclosure": 0, 
+            "partialDisclosure": 0,
             "noDisclosure": 0,
-            "hasProprietaryBlends": False
+            "hasProprietaryBlends": False,
+            "averageTransparencyPercentage": 0.0,
+            "transparencyBreakdown": []
         }
         
-        # Count blends by disclosure level
+        # Count blends by disclosure level and calculate transparency metrics
+        transparency_percentages = []
+
         for ing in ingredients:
             if ing.get("isProprietaryBlend"):
                 stats["hasProprietaryBlends"] = True
                 stats["totalBlends"] += 1
-                
+
                 disclosure_level = ing.get("disclosureLevel")
+                transparency_percentage = ing.get("transparencyPercentage", 0)
+                # Ensure transparency_percentage is a number, not None
+                if transparency_percentage is None:
+                    transparency_percentage = 0
+
+                # Track transparency metrics
+                transparency_percentages.append(transparency_percentage)
+                stats["transparencyBreakdown"].append({
+                    "ingredientName": ing.get("name", "Unknown"),
+                    "disclosureLevel": disclosure_level,
+                    "transparencyPercentage": transparency_percentage
+                })
+
                 if disclosure_level == "full":
                     stats["fullDisclosure"] += 1
                 elif disclosure_level == "partial":
                     stats["partialDisclosure"] += 1
                 elif disclosure_level == "none":
                     stats["noDisclosure"] += 1
+
+        # Calculate average transparency percentage
+        if transparency_percentages:
+            # Filter out None values and ensure all are numbers
+            valid_percentages = [p for p in transparency_percentages if p is not None and isinstance(p, (int, float))]
+            if valid_percentages:
+                stats["averageTransparencyPercentage"] = round(
+                    sum(valid_percentages) / len(valid_percentages), 1
+                )
+            else:
+                stats["averageTransparencyPercentage"] = 0.0
         
         # Determine overall disclosure level
         if not stats["hasProprietaryBlends"]:
@@ -2856,18 +4227,25 @@ class EnhancedDSLDNormalizer:
         for pattern in patterns:
             match = re.search(pattern, text, re.IGNORECASE)
             if match:
-                ingredient_name = match.group(1).strip()
-                # Remove trailing commas, colons, etc.
-                ingredient_name = re.sub(r'[,:;]\s*$', '', ingredient_name)
-                dose_value = float(match.group(2))
-                dose_unit = match.group(3)
-                
-                return {
-                    "ingredient": ingredient_name,
-                    "value": dose_value,
-                    "unit": dose_unit,
-                    "original_text": text
-                }
+                try:
+                    # Ensure we have all required groups
+                    if len(match.groups()) >= 3:
+                        ingredient_name = match.group(1).strip()
+                        # Remove trailing commas, colons, etc.
+                        ingredient_name = re.sub(r'[,:;]\s*$', '', ingredient_name)
+                        dose_value = float(match.group(2))
+                        dose_unit = match.group(3)
+
+                        return {
+                            "ingredient": ingredient_name,
+                            "value": dose_value,
+                            "unit": dose_unit,
+                            "original_text": text
+                        }
+                except (IndexError, ValueError) as e:
+                    # Skip this pattern if groups are malformed
+                    logger.debug(f"Pattern failed for '{text}': {e}")
+                    continue
         
         # If no dose pattern found, return original text as ingredient
         return {"ingredient": text.strip(), "value": None, "unit": None}
@@ -2878,53 +4256,35 @@ class EnhancedDSLDNormalizer:
         """
         if not name or not isinstance(name, str):
             return name
-        
+
+        # Filter out regulatory text patterns that aren't ingredients
+        regulatory_patterns = [
+            r'contains\s*<?\s*\d+%\s*of:?',    # "Contains <2% of:", etc.
+            r'contains\s*less\s*than\s*\d+%',   # "Contains less than 2%"
+            r'one\s*or\s*more\s*of\s*the\s*following',  # "One or more of the following"
+            r'may\s*contain\s*one\s*or\s*more',  # "May contain one or more"
+            r'and\/or',                         # "and/or" connectors
+            r'other\s*ingredients',             # "Other ingredients"
+            r'inactive\s*ingredients',          # "Inactive ingredients"
+            r'allergen\s*information',          # "Allergen information"
+        ]
+
+        # Check if this is a regulatory pattern rather than an ingredient
+        name_lower = name.lower().strip()
+        for pattern in regulatory_patterns:
+            if re.match(pattern, name_lower, re.IGNORECASE):
+                return ""  # Return empty string for non-ingredients
+
         # First apply existing preprocessing
         normalized = self.matcher.preprocess_text(name)
-        
+
         # Remove form qualifiers more explicitly
         normalized = re.sub(FORM_QUALIFIERS, '', normalized, flags=re.IGNORECASE)
-        
+
         # Clean up any extra whitespace
         normalized = re.sub(r'\s+', ' ', normalized).strip()
-        
+
         return normalized
-    
-    def parse_blend_ingredients_from_text(self, blend_text: str) -> List[Dict[str, Any]]:
-        """
-        Parse individual ingredients from a blend text description
-        Combines smart splitting with dose extraction for unstructured data
-        """
-        if not blend_text or not isinstance(blend_text, str):
-            return []
-        
-        # Split ingredients using smart comma splitting
-        ingredient_parts = self.smart_split_ingredients(blend_text)
-        
-        parsed_ingredients = []
-        for part in ingredient_parts:
-            # Extract dose information
-            dose_info = self.extract_dose_from_text(part)
-            
-            # Normalize the ingredient name
-            normalized_name = self.normalize_ingredient_name(dose_info["ingredient"])
-            
-            # Try to map the ingredient
-            mapped_name, is_mapped, forms = self._perform_ingredient_mapping(normalized_name)
-            
-            ingredient_data = {
-                "name": mapped_name if is_mapped else dose_info["ingredient"],
-                "original_name": dose_info["ingredient"],
-                "normalized_name": normalized_name,
-                "is_mapped": is_mapped,
-                "quantity": [{"value": dose_info["value"], "unit": dose_info["unit"]}] if dose_info["value"] else [],
-                "forms": forms,
-                "original_text": part
-            }
-            
-            parsed_ingredients.append(ingredient_data)
-        
-        return parsed_ingredients
     
     def _extract_nutritional_warnings(self, ingredient_rows: List[Dict]) -> Dict[str, Any]:
         """
@@ -3046,16 +4406,3 @@ class EnhancedDSLDNormalizer:
         # If no conversion found, assume it's already in the standard unit
         return amount
     
-    def _extract_quantity_from_forms(self, forms: List[Dict]) -> Optional[Dict]:
-        """Extract quantity information from forms"""
-        for form in forms:
-            amount = form.get("amount")
-            unit = form.get("unit", "")
-            
-            if amount is not None:
-                return {
-                    "amount": amount,
-                    "unit": unit
-                }
-        
-        return None

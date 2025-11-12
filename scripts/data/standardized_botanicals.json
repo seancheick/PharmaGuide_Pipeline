@@ -285,7 +285,8 @@
       "aliases": [
         "actaea racemosa",
         "cimicifuga racemosa",
-        "black cohosh root extract"
+        "black cohosh root extract",
+        "black cohosh root standardized extract"
       ],
       "markers": [
         "triterpene glycosides",
@@ -850,18 +851,25 @@
       "last_updated": "2025-08-09"
     },
     {
-      "standard_name": "Ginger",
+      "standard_name": "Ginger Extract",
       "aliases": [
         "zingiber officinale",
         "ginger root extract",
-        "ginger extract"
+        "ginger extract",
+        "total gingerols and shogaols",
+        "standardized ginger gingerols",
+        "ginger gingerol complex",
+        "ginger standardized extract"
       ],
       "markers": [
         "gingerols",
         "shogaols"
       ],
-      "priority": "medium",
-      "last_updated": "2025-08-09"
+      "priority": "high",
+      "standardization": "5% total gingerols",
+      "category": "root",
+      "min_threshold": 2,
+      "last_updated": "2025-09-20"
     },
     {
       "standard_name": "Ginkgo Biloba",
@@ -1535,7 +1543,8 @@
       "standard_name": "Passionflower",
       "aliases": [
         "passiflora incarnata",
-        "passion flower extract"
+        "passion flower extract",
+        "passion flower 4:1 extract"
       ],
       "markers": [
         "flavonoids",
@@ -1601,7 +1610,10 @@
       "aliases": [
         "bee propolis",
         "propoli",
-        "propolis extract"
+        "propolis extract",
+        "propolis pure",
+        "bee propolis extract",
+        "bee propolis powder"
       ],
       "markers": [
         "polyphenols",
@@ -2529,6 +2541,161 @@
       ],
       "priority": "medium",
       "last_updated": "2025-08-15"
+    },
+    {
+      "standard_name": "Olive Leaf Extract",
+      "aliases": [
+        "olive leaf standardized extract",
+        "olive leaf extract standardized",
+        "olea europaea standardized extract"
+      ],
+      "markers": [
+        "oleuropein"
+      ],
+      "priority": "high",
+      "standardization": "20% oleuropein",
+      "category": "leaf",
+      "last_updated": "2025-09-19"
+    },
+    {
+      "standard_name": "Elderberry Extract",
+      "aliases": [
+        "elderberry standardized extract",
+        "sambucus standardized extract",
+        "black elderberry standardized extract"
+      ],
+      "markers": [
+        "anthocyanins"
+      ],
+      "priority": "high",
+      "standardization": "10% anthocyanins",
+      "category": "fruit",
+      "last_updated": "2025-09-19"
+    },
+    {
+      "standard_name": "Echinacea Extract",
+      "aliases": [
+        "echinacea standardized extract",
+        "echinacea purpurea standardized extract",
+        "standardized echinacea extract"
+      ],
+      "markers": [
+        "phenolic_compounds",
+        "echinacoside"
+      ],
+      "priority": "high",
+      "standardization": "4% phenolic compounds",
+      "category": "herb",
+      "last_updated": "2025-09-19"
+    },
+    {
+      "standard_name": "Astragalus Extract",
+      "aliases": [
+        "astragalus standardized extract",
+        "astragalus membranaceus standardized extract",
+        "standardized astragalus extract"
+      ],
+      "markers": [
+        "polysaccharides",
+        "astragalosides"
+      ],
+      "priority": "high",
+      "standardization": "70% polysaccharides",
+      "category": "root",
+      "last_updated": "2025-09-19"
+    },
+    {
+      "standard_name": "Cinnamon Bark Essential Oil",
+      "aliases": [
+        "cinnamon bark essential oil",
+        "cinnamon essential oil",
+        "cinnamomum verum oil",
+        "cinnamon oil",
+        "cinnamomum cassia oil"
+      ],
+      "markers": [
+        "cinnamaldehyde",
+        "eugenol"
+      ],
+      "priority": "medium",
+      "standardization": "70%+ cinnamaldehyde",
+      "category": "bark",
+      "last_updated": "2025-09-20"
+    },
+    {
+      "standard_name": "Peppermint Essential Oil",
+      "aliases": [
+        "peppermint essential oil",
+        "peppermint aerial parts essential oil",
+        "peppermint leaf essential oil",
+        "mentha piperita oil",
+        "peppermint oil"
+      ],
+      "markers": [
+        "menthol",
+        "menthone"
+      ],
+      "priority": "medium",
+      "standardization": "30%+ menthol",
+      "category": "leaf",
+      "last_updated": "2025-09-20"
+    },
+    {
+      "standard_name": "Gingerols",
+      "aliases": [
+        "gingerols",
+        "gingerol complex",
+        "standardized gingerols",
+        "total gingerols",
+        "ginger gingerols"
+      ],
+      "markers": [
+        "6-gingerol",
+        "8-gingerol",
+        "10-gingerol"
+      ],
+      "priority": "high",
+      "standardization": "5% total gingerols",
+      "category": "active_compound",
+      "last_updated": "2025-09-20"
+    },
+    {
+      "standard_name": "Shogaols",
+      "aliases": [
+        "shogaols",
+        "shogaol complex",
+        "standardized shogaols",
+        "total shogaols",
+        "ginger shogaols"
+      ],
+      "markers": [
+        "6-shogaol",
+        "8-shogaol",
+        "10-shogaol"
+      ],
+      "priority": "high",
+      "standardization": "dehydrated gingerols",
+      "category": "active_compound",
+      "last_updated": "2025-09-20"
+    },
+    {
+      "standard_name": "Ginkgolides",
+      "aliases": [
+        "ginkgolides",
+        "ginkgo terpene lactones",
+        "terpene trilactones",
+        "ginkgolide complex"
+      ],
+      "markers": [
+        "ginkgolide A",
+        "ginkgolide B",
+        "ginkgolide C",
+        "ginkgolide J"
+      ],
+      "priority": "high",
+      "standardization": "6% terpene lactones",
+      "category": "active_compound",
+      "last_updated": "2025-09-20"
     }
   ]
 }

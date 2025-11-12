@@ -399,6 +399,8 @@
           "hydrochloride thiamine",
           "thiamine",
           "Thiamine",
+          "thiamin",
+          "Thiamin",
           "vitamin b1",
           "b1",
           "thiaminum hydrochloridum",
@@ -473,6 +475,7 @@
           "coenzyme b1",
           "thiamine diphosphate",
           "cococarboxylase",
+          "cocarboxylase",
           "thiamine pyrophosphate supplement",
           "TPP supplement",
           "active thiamine supplement",
@@ -1088,7 +1091,13 @@
           "coenzyme b6 supplement",
           "PLP supplement",
           "b6 phosphate supplement",
-          "Pyridoxal-5-Phosphate supplement"
+          "Pyridoxal-5-Phosphate supplement",
+          "coenzymated vitamin b6",
+          "coenzymated vitamin b-6",
+          "coenzymated b6",
+          "coenzymated vitamin b6 supplement",
+          "coenzymated vitamin b-6 supplement",
+          "coenzymated b6 supplement"
         ],
         "dosage_importance": 1.5
       },
@@ -1127,6 +1136,7 @@
           "standard b6",
           "pyridoxine",
           "vitamin b6",
+          "vitamin b-6",
           "pyridoxine hcl supplement",
           "pyridoxine hydrochloride supplement",
           "vitamin b6 hcl supplement",
@@ -1135,6 +1145,7 @@
           "standard b6 supplement",
           "pyridoxine supplement",
           "vitamin b6 supplement",
+          "vitamin b-6 supplement",
           "vit b6"
         ],
         "dosage_importance": 1.5
@@ -1555,6 +1566,7 @@
           "MeCbl",
           "methylcobalamin supplement",
           "vitamin B12 methyl",
+          "vitamin b-12",
           "bioactive B12",
           "methyl B12 powder",
           "neurological B12",
@@ -1577,7 +1589,15 @@
           "methyl cobalamin supplement",
           "b12 methylated supplement",
           "Methyl B12 supplement",
-          "methyl b12 supplement"
+          "methyl b12 supplement",
+          "coenzymated vitamin b-12",
+          "coenzymated vitamin b12",
+          "coenzymated b12",
+          "mecobalactive",
+          "coenzymated vitamin b-12 supplement",
+          "coenzymated vitamin b12 supplement",
+          "coenzymated b12 supplement",
+          "mecobalactive supplement"
         ],
         "dosage_importance": 1.5
       },
@@ -1592,6 +1612,7 @@
           "adenosyl B12",
           "AdCbl",
           "dibencozide",
+          "coenzyme b12",
           "adenosylcobalamin supplement",
           "vitamin B12 adenosyl",
           "mitochondrial B12",
@@ -4961,6 +4982,244 @@
       }
     }
   },
+  "hmb": {
+    "standard_name": "β-Hydroxy β-Methylbutyrate",
+    "category": "amino_acid_metabolites",
+    "cui": null,
+    "rxcui": null,
+    "forms": {
+      "hmb calcium salt (hmb-ca)": {
+        "bio_score": 13,
+        "natural": false,
+        "score": 13,
+        "absorption": "excellent (~70-85%)",
+        "notes": "Leucine metabolite that reduces muscle breakdown and supports muscle growth. Calcium salt form has superior bioavailability and stability. Most clinically studied form for athletic performance and muscle preservation.",
+        "aliases": [
+          "hmb",
+          "hmb-ca",
+          "hmb calcium",
+          "beta-hydroxy beta-methylbutyrate",
+          "β-hydroxy β-methylbutyrate",
+          "hmb monohydrate",
+          "calcium hmb",
+          "hmb calcium salt",
+          "3-hydroxy-3-methylbutyrate calcium",
+          "hmb supplement",
+          "hmb powder",
+          "hmb capsules",
+          "hmb tablets",
+          "calcium beta-hydroxy beta-methylbutyrate",
+          "calcium β-hydroxy β-methylbutyrate",
+          "beta hydroxy beta methylbutyrate",
+          "β hydroxy β methylbutyrate",
+          "hmb ca",
+          "hmb calcium monohydrate",
+          "calcium 3-hydroxy-3-methylbutyrate",
+          "hmb calcium supplement",
+          "hmb powder supplement",
+          "hmb capsules supplement",
+          "hmb tablets supplement",
+          "calcium beta-hydroxy beta-methylbutyrate supplement",
+          "calcium β-hydroxy β-methylbutyrate supplement",
+          "beta hydroxy beta methylbutyrate supplement",
+          "β hydroxy β methylbutyrate supplement",
+          "hmb ca supplement",
+          "hmb calcium monohydrate supplement",
+          "calcium 3-hydroxy-3-methylbutyrate supplement"
+        ],
+        "dosage_importance": 1.0
+      },
+      "hmb free acid (hmb-fa)": {
+        "bio_score": 15,
+        "natural": false,
+        "score": 15,
+        "absorption": "excellent (~90-95%)",
+        "notes": "Free acid form of HMB with faster absorption and higher bioavailability than calcium salt. Reaches peak plasma levels in 30-60 minutes vs 2-3 hours for HMB-Ca. Preferred for pre-workout timing.",
+        "aliases": [
+          "hmb free acid",
+          "hmb-fa",
+          "free acid hmb",
+          "hmb gel caps",
+          "myhmb clear",
+          "hmb liquid",
+          "beta-hydroxy beta-methylbutyrate free acid",
+          "β-hydroxy β-methylbutyrate free acid",
+          "hmb fa",
+          "hmb free form",
+          "liquid hmb",
+          "hmb gel",
+          "hmb softgels",
+          "hmb clear",
+          "free form hmb",
+          "3-hydroxy-3-methylbutyrate free acid",
+          "beta hydroxy beta methylbutyrate free acid",
+          "β hydroxy β methylbutyrate free acid",
+          "hmb free acid supplement",
+          "hmb-fa supplement",
+          "free acid hmb supplement",
+          "hmb gel caps supplement",
+          "myhmb clear supplement",
+          "hmb liquid supplement",
+          "beta-hydroxy beta-methylbutyrate free acid supplement",
+          "β-hydroxy β-methylbutyrate free acid supplement",
+          "hmb fa supplement",
+          "hmb free form supplement",
+          "liquid hmb supplement",
+          "hmb gel supplement",
+          "hmb softgels supplement",
+          "hmb clear supplement",
+          "free form hmb supplement",
+          "3-hydroxy-3-methylbutyrate free acid supplement",
+          "beta hydroxy beta methylbutyrate free acid supplement",
+          "β hydroxy β methylbutyrate free acid supplement"
+        ],
+        "dosage_importance": 1.0
+      }
+    }
+  },
+  "d_ribose": {
+    "standard_name": "D-Ribose",
+    "category": "energy_substrates",
+    "cui": "C0035687",
+    "rxcui": null,
+    "forms": {
+      "d-ribose powder": {
+        "bio_score": 14,
+        "natural": true,
+        "score": 17,
+        "absorption": "excellent (~95%+)",
+        "notes": "Essential pentose sugar for ATP synthesis and cellular energy production. Clinically proven to enhance cardiac function, reduce fatigue, and improve exercise recovery. Particularly beneficial for heart health and chronic fatigue conditions.",
+        "aliases": [
+          "d-ribose",
+          "ribose",
+          "d ribose",
+          "ribose sugar",
+          "pentose ribose",
+          "d-ribose powder",
+          "ribose powder",
+          "pure ribose",
+          "crystalline ribose",
+          "bioenergy ribose",
+          "d-ribose crystals",
+          "ribose energy",
+          "atp ribose",
+          "cardiac ribose",
+          "d-ribose supplement",
+          "ribose supplement",
+          "d ribose supplement",
+          "ribose sugar supplement",
+          "pentose ribose supplement",
+          "d-ribose powder supplement",
+          "ribose powder supplement",
+          "pure ribose supplement",
+          "crystalline ribose supplement",
+          "bioenergy ribose supplement",
+          "d-ribose crystals supplement",
+          "ribose energy supplement",
+          "atp ribose supplement",
+          "cardiac ribose supplement"
+        ],
+        "dosage_importance": 1.0
+      }
+    }
+  },
+  "atp": {
+    "standard_name": "ATP (Adenosine Triphosphate)",
+    "category": "nucleotides",
+    "cui": "C0001480",
+    "rxcui": null,
+    "forms": {
+      "atp disodium salt": {
+        "bio_score": 11,
+        "natural": true,
+        "score": 14,
+        "absorption": "moderate (~40-60%)",
+        "notes": "The cellular energy currency. While ATP supplements have limited oral bioavailability, some may support cellular energy metabolism and athletic performance when combined with ribose.",
+        "aliases": [
+          "atp",
+          "adenosine triphosphate",
+          "adenosine 5'-triphosphate",
+          "atp disodium",
+          "atp disodium salt",
+          "cellular energy",
+          "energy currency",
+          "atp supplement",
+          "adenosine triphosphate supplement",
+          "adenosine 5'-triphosphate supplement",
+          "atp disodium supplement",
+          "atp disodium salt supplement",
+          "cellular energy supplement",
+          "energy currency supplement"
+        ],
+        "dosage_importance": 1.0
+      }
+    }
+  },
+  "lysozyme": {
+    "standard_name": "Lysozyme",
+    "category": "enzymes",
+    "cui": "C0024245",
+    "rxcui": null,
+    "forms": {
+      "lysozyme enzyme": {
+        "bio_score": 10,
+        "natural": true,
+        "score": 13,
+        "absorption": "limited (oral)",
+        "notes": "A naturally occurring antimicrobial enzyme found in many secretions including tears, saliva, and egg whites. Supports immune function and has broad-spectrum antimicrobial activity.",
+        "aliases": [
+          "lysozyme",
+          "lysozyme enzyme",
+          "muramidase",
+          "lysozyme chloride",
+          "egg white lysozyme",
+          "antimicrobial enzyme",
+          "immune enzyme",
+          "lysozyme supplement",
+          "lysozyme enzyme supplement",
+          "muramidase supplement",
+          "lysozyme chloride supplement",
+          "egg white lysozyme supplement",
+          "antimicrobial enzyme supplement",
+          "immune enzyme supplement"
+        ],
+        "dosage_importance": 1.0
+      }
+    }
+  },
+  "diindolylmethane": {
+    "standard_name": "Diindolylmethane",
+    "category": "phytonutrients",
+    "cui": "C0057317",
+    "rxcui": null,
+    "forms": {
+      "dim crystalline": {
+        "bio_score": 11,
+        "natural": true,
+        "score": 14,
+        "absorption": "good (~60-70%)",
+        "notes": "A compound from cruciferous vegetables that supports healthy estrogen metabolism. Helps convert harmful estrogen metabolites to beneficial ones, supporting hormone balance in both men and women.",
+        "aliases": [
+          "dim",
+          "diindolylmethane",
+          "3,3'-diindolylmethane",
+          "dim supplement",
+          "dim crystalline",
+          "cruciferous extract dim",
+          "estrogen metabolism support",
+          "hormone balance dim",
+          "dim supplement",
+          "diindolylmethane supplement",
+          "3,3'-diindolylmethane supplement",
+          "dim crystalline supplement",
+          "cruciferous extract dim supplement",
+          "estrogen metabolism support supplement",
+          "hormone balance dim supplement"
+        ],
+        "dosage_importance": 1.0
+      }
+    }
+  },
   "resveratrol": {
     "standard_name": "Resveratrol",
     "risk_level": "none",
@@ -6961,6 +7220,7 @@
           "coq-10",
           "standard coq10",
           "coenzyme q10",
+          "coenzyme q-10",
           "standard coq10",
           "oxidized coq10",
           "Ubiquinone USP",
@@ -7061,7 +7321,9 @@
           "pqq\u00b7Na\u2082 supplement",
           "PQQ Disodium Salt supplement",
           "pqq sodium salt supplement",
-          "pyrroloquinoline quinone disodium supplement"
+          "pyrroloquinoline quinone disodium supplement",
+          "biopqq",
+          "biopqq pyrroloquinoline quinone disodium salt"
         ],
         "dosage_importance": 1.0
       },
@@ -7267,6 +7529,7 @@
           "reduced glutathione",
           "l-glutathione",
           "Reduced L-Glutathione",
+          "L-Glutathione, Reduced",
           "glutathione supplement",
           "GSH supplement",
           "reduced glutathione supplement",
@@ -7333,6 +7596,40 @@
       }
     }
   },
+  "glutathione_peroxidase": {
+    "standard_name": "Glutathione Peroxidase",
+    "category": "enzymes",
+    "cui": "C0017822",
+    "rxcui": null,
+    "forms": {
+      "glutathione peroxidase enzyme": {
+        "bio_score": 12,
+        "natural": true,
+        "score": 15,
+        "absorption": "moderate (~60-70%)",
+        "notes": "A rare enzyme supplement that works synergistically with glutathione to neutralize peroxides and protect cells from oxidative damage. More bioactive than standard antioxidants as it's a complete enzymatic system.",
+        "aliases": [
+          "glutathione peroxidase",
+          "gpx enzyme",
+          "glutathione peroxidase enzyme",
+          "cellular peroxidase",
+          "antioxidant enzyme gpx",
+          "selenium glutathione peroxidase",
+          "glutathione peroxidase complex",
+          "gpx antioxidant enzyme",
+          "glutathione peroxidase supplement",
+          "gpx enzyme supplement",
+          "glutathione peroxidase enzyme supplement",
+          "cellular peroxidase supplement",
+          "antioxidant enzyme gpx supplement",
+          "selenium glutathione peroxidase supplement",
+          "glutathione peroxidase complex supplement",
+          "gpx antioxidant enzyme supplement"
+        ],
+        "dosage_importance": 1.0
+      }
+    }
+  },
   "probiotics": {
     "standard_name": "Probiotics",
     "category": "probiotics",
@@ -7347,12 +7644,17 @@
         "notes": "A specific probiotic strain clinically studied for oral and upper respiratory tract health. Produces antimicrobial peptides (bacteriocins) called BLIS that help maintain healthy oral microflora.",
         "aliases": [
           "S. salivarius K12",
+          "S. salivarius K-12",
           "BLIS K12",
           "K12",
           "Streptococcus salivarius BLIS K12",
+          "Streptococcus salivarius BLIS K-12",
           "BLIS-K12",
           "S. salivarius BLIS-K12",
+          "S. salivarius BLIS K12",
           "BLIS K12 Streptococcus salivarius",
+          "BLIS K12 Streptococcus salivarius K12",
+          "BLIS K12 S. salivarius K12",
           "S. salivarius K12 supplement",
           "BLIS K12 supplement",
           "K12 supplement",
@@ -7371,11 +7673,13 @@
         "notes": "A specialized probiotic strain researched for dental health benefits. Produces specific bacteriocins that target cavity-causing bacteria and supports healthy gum tissue.",
         "aliases": [
           "S. salivarius M18",
+          "S. salivarius M-18",
           "BLIS M18",
           "M18",
           "Streptococcus salivarius BLIS M18",
           "S. salivarius BLIS M18",
           "BLIS-M18",
+          "BLIS M18 S. salivarius M18",
           "S. salivarius M18 supplement",
           "BLIS M18 supplement",
           "M18 supplement",
@@ -7603,7 +7907,11 @@
           "ATCC 4356 supplement",
           "CUL60 supplement",
           "CUL21 supplement",
-          "LB-G80 supplement"
+          "LB-G80 supplement",
+          "HA-122",
+          "lactobacillus acidophilus HA-122",
+          "HA-122 supplement",
+          "lactobacillus acidophilus HA-122 supplement"
         ],
         "dosage_importance": 1.0
       },
@@ -7645,7 +7953,11 @@
           "lactobacillus rhamnosus supplement",
           "ATCC 7469 supplement",
           "DSM 20021 supplement",
-          "Lacticaseibacillus rhamnosus supplement"
+          "Lacticaseibacillus rhamnosus supplement",
+          "HA-111",
+          "lactobacillus rhamnosus HA-111",
+          "HA-111 supplement",
+          "lactobacillus rhamnosus HA-111 supplement"
         ],
         "dosage_importance": 1.0
       },
@@ -7744,11 +8056,13 @@
         "aliases": [
           "L. casei",
           "lactobacillus casei",
+          "lactobacillus casei HA-108",
           "W56",
           "SD5218",
           "Lacticaseibacillus casei",
           "L. casei supplement",
           "lactobacillus casei supplement",
+          "lactobacillus casei HA-108 supplement",
           "W56 supplement",
           "SD5218 supplement",
           "Lacticaseibacillus casei supplement"
@@ -7855,7 +8169,11 @@
           "KCTC 3202 supplement",
           "CUL20 supplement",
           "Bb-02 supplement",
-          "R0071 supplement"
+          "R0071 supplement",
+          "HA-132",
+          "bifidobacterium bifidum HA-132",
+          "HA-132 supplement",
+          "bifidobacterium bifidum HA-132 supplement"
         ],
         "dosage_importance": 1.0
       },
@@ -8004,6 +8322,46 @@
           "lactobacillus bulgaricus supplement",
           "Lactobacillus delbrueckii subsp. bulgaricus supplement",
           "SD5210 supplement"
+        ],
+        "dosage_importance": 1.0
+      },
+      "limosilactobacillus reuteri ATCC PTA 5289": {
+        "bio_score": 14,
+        "natural": true,
+        "score": 17,
+        "absorption": "excellent",
+        "notes": "A clinically studied L. reuteri strain that colonizes the upper GI tract and produces reuterin, a broad-spectrum antimicrobial compound. Benefits oral health and may support cardiovascular health.",
+        "aliases": [
+          "L. reuteri ATCC PTA 5289",
+          "limosilactobacillus reuteri ATCC PTA 5289",
+          "lactobacillus reuteri ATCC PTA 5289",
+          "L. reuteri PTA 5289",
+          "reuteri ATCC PTA 5289",
+          "L. reuteri ATCC PTA 5289 supplement",
+          "limosilactobacillus reuteri ATCC PTA 5289 supplement",
+          "lactobacillus reuteri ATCC PTA 5289 supplement",
+          "L. reuteri PTA 5289 supplement",
+          "reuteri ATCC PTA 5289 supplement"
+        ],
+        "dosage_importance": 1.0
+      },
+      "limosilactobacillus reuteri DSM 17938": {
+        "bio_score": 14,
+        "natural": true,
+        "score": 17,
+        "absorption": "excellent",
+        "notes": "A well-researched L. reuteri strain that colonizes the lower GI tract. Clinically proven for digestive health, colic in infants, and gut barrier function. Often combined with ATCC PTA 5289 in Prodentis blends.",
+        "aliases": [
+          "L. reuteri DSM 17938",
+          "limosilactobacillus reuteri DSM 17938",
+          "lactobacillus reuteri DSM 17938",
+          "L. reuteri 17938",
+          "reuteri DSM 17938",
+          "L. reuteri DSM 17938 supplement",
+          "limosilactobacillus reuteri DSM 17938 supplement",
+          "lactobacillus reuteri DSM 17938 supplement",
+          "L. reuteri 17938 supplement",
+          "reuteri DSM 17938 supplement"
         ],
         "dosage_importance": 1.0
       }
@@ -8670,6 +9028,50 @@
           "damaged taurine supplement",
           "inactivated taurine supplement",
           "expired taurine supplement"
+        ],
+        "dosage_importance": 1.0
+      }
+    }
+  },
+  "ergothioneine": {
+    "standard_name": "Ergothioneine",
+    "category": "amino_acid_antioxidants",
+    "cui": "C0014700",
+    "rxcui": null,
+    "forms": {
+      "l-ergothioneine": {
+        "bio_score": 15,
+        "natural": true,
+        "score": 18,
+        "absorption": "excellent (~95%+)",
+        "notes": "A unique amino acid antioxidant called the 'longevity vitamin' by researchers. Concentrated in mitochondria and provides superior cellular protection. May slow aging processes and support cardiovascular and cognitive health.",
+        "aliases": [
+          "ergothioneine",
+          "l-ergothioneine",
+          "ergothionine",
+          "longevity vitamin",
+          "mitochondrial antioxidant",
+          "cellular protector",
+          "ergothioneine sulfur amino acid",
+          "thiol antioxidant",
+          "ergothioneine powder",
+          "pure ergothioneine",
+          "ergothioneine crystals",
+          "mushroom ergothioneine",
+          "dietary ergothioneine",
+          "ergothioneine supplement",
+          "l-ergothioneine supplement",
+          "ergothionine supplement",
+          "longevity vitamin supplement",
+          "mitochondrial antioxidant supplement",
+          "cellular protector supplement",
+          "ergothioneine sulfur amino acid supplement",
+          "thiol antioxidant supplement",
+          "ergothioneine powder supplement",
+          "pure ergothioneine supplement",
+          "ergothioneine crystals supplement",
+          "mushroom ergothioneine supplement",
+          "dietary ergothioneine supplement"
         ],
         "dosage_importance": 1.0
       }
@@ -9484,6 +9886,34 @@
       }
     }
   },
+  "d_aspartic_acid": {
+    "standard_name": "D-Aspartic Acid",
+    "category": "amino_acids",
+    "cui": "C0085845",
+    "rxcui": "none",
+    "forms": {
+      "d-aspartic acid powder": {
+        "bio_score": 11,
+        "natural": false,
+        "score": 12,
+        "absorption": "good (~80-90%)",
+        "notes": "An amino acid that may support testosterone production and male reproductive health. Research shows potential benefits for testosterone levels in men with low baseline levels.",
+        "aliases": [
+          "d-aspartic acid",
+          "d aspartic acid",
+          "daa",
+          "d-asp",
+          "aspartic acid d-form",
+          "d-aspartic acid powder",
+          "d-aspartic acid supplement",
+          "d aspartic acid supplement",
+          "daa supplement",
+          "d-asp supplement"
+        ],
+        "dosage_importance": 1.0
+      }
+    }
+  },
   "branched-chain amino acids": {
     "standard_name": "Branched-Chain Amino Acids (BCAAs)",
     "category": "amino_acids",
@@ -9654,9 +10084,10 @@
         "aliases": [
           "gaba",
           "gamma-aminobutyric acid",
+          "gamma aminobutyric acid",
+          "gamma amino butyric acid",
           "gaba powder",
           "pure gaba",
-          "gaba supplement",
           "gaba supplement",
           "gamma-aminobutyric acid supplement",
           "gaba powder supplement",
@@ -10213,6 +10644,27 @@
           "degraded green algae supplement"
         ],
         "dosage_importance": 1.0
+      },
+      "lactobacillus plantarum l-137": {
+        "bio_score": 13,
+        "natural": false,
+        "score": 16,
+        "absorption": "excellent",
+        "notes": "Heat-killed Lactobacillus plantarum L-137 (Immuno-LP20). FDA GRAS-affirmed and NDI-notified postbiotic with immune support properties. 20% active L-137 with 80% dextrin carrier. Effective at low dose of 50mg/day.",
+        "aliases": [
+          "immuno-lp20",
+          "immuno lp20",
+          "hk l-137",
+          "heat-killed lactobacillus plantarum l-137",
+          "lactobacillus plantarum l-137",
+          "lp20",
+          "postbiotic lp20",
+          "heat-killed l. plantarum",
+          "immuno-lp20 supplement",
+          "hk l-137 supplement",
+          "lactobacillus plantarum l-137 supplement"
+        ],
+        "dosage_importance": 1.5
       }
     }
   },
@@ -11728,7 +12180,13 @@
           "instant melatonin supplement",
           "melatonin immediate release supplement",
           "fast-dissolve melatonin supplement",
-          "pure melatonin supplement"
+          "pure melatonin supplement",
+          "n-acetyl-5-methoxytryptamine",
+          "n-acetyl-5-methotryptamine",
+          "melatonin chemical name",
+          "n-acetyl-5-methoxytryptamine supplement",
+          "n-acetyl-5-methotryptamine supplement",
+          "melatonin chemical name supplement"
         ],
         "dosage_importance": 1.0
       },
@@ -12448,6 +12906,44 @@
           "denatured grape seed supplement",
           "heat-damaged grape seed supplement",
           "degraded grape seed powder supplement"
+        ],
+        "dosage_importance": 1.0
+      }
+    }
+  },
+  "red_wine_extract": {
+    "standard_name": "Red Wine Extract",
+    "category": "polyphenol_antioxidants",
+    "cui": null,
+    "rxcui": null,
+    "forms": {
+      "standardized red wine extract": {
+        "bio_score": 13,
+        "natural": true,
+        "score": 16,
+        "absorption": "good (~65-75%)",
+        "notes": "Contains a synergistic blend of resveratrol, anthocyanins, and proanthocyanidins from red wine. Provides cardiovascular protection and antioxidant benefits with better bioavailability than isolated resveratrol.",
+        "aliases": [
+          "red wine extract",
+          "red wine polyphenols",
+          "wine extract standardized",
+          "red wine antioxidants",
+          "red wine phytonutrients",
+          "red wine grape extract",
+          "red wine concentrate",
+          "wine polyphenol extract",
+          "red wine phenolics",
+          "grape wine extract",
+          "red wine supplement",
+          "red wine polyphenols supplement",
+          "wine extract standardized supplement",
+          "red wine antioxidants supplement",
+          "red wine phytonutrients supplement",
+          "red wine grape extract supplement",
+          "red wine concentrate supplement",
+          "wine polyphenol extract supplement",
+          "red wine phenolics supplement",
+          "grape wine extract supplement"
         ],
         "dosage_importance": 1.0
       }
@@ -14074,7 +14570,13 @@
           "active folate supplement",
           "L-5-methyltetrahydrofolate supplement",
           "5-MTHF calcium supplement",
-          "bioavailable folate supplement"
+          "bioavailable folate supplement",
+          "magnafolate c",
+          "(6s)-5-methylfolate",
+          "6s-5-methylfolate",
+          "magnafolate c supplement",
+          "(6s)-5-methylfolate supplement",
+          "6s-5-methylfolate supplement"
         ],
         "dosage_importance": 1.5
       },
@@ -14748,6 +15250,7 @@
             "pyrroloquinoline quinone disodium salt",
             "PQQ disodium",
             "BioPQQ",
+            "biopqq pyrroloquinoline quinone disodium salt",
             "PQQ Na2",
             "disodium pyrroloquinoline quinone"
           ],
@@ -17017,7 +17520,10 @@
           "nadh lozenges supplement",
           "enada supplement",
           "nadh sublingual supplement",
-          "stabilized nadh supplement"
+          "stabilized nadh supplement",
+          "panmol nadhmicro",
+          "panmol nadh",
+          "microencapsulated nadh"
         ],
         "dosage_importance": 1.0
       },
@@ -17173,6 +17679,9 @@
           "standardized deer antler",
           "deer antler igf-1 extract",
           "potent deer antler extract",
+          "igf-1",
+          "igf1",
+          "insulin-like growth factor 1",
           "standardized deer antler supplement",
           "deer antler igf-1 extract supplement",
           "potent deer antler extract supplement"
@@ -17302,6 +17811,195 @@
           "high-absorption berberine"
         ],
         "dosage_importance": 1.0
+      }
+    }
+  },
+  "alpha_amylase": {
+    "standard_name": "Alpha-Amylase",
+    "cui": "C0002712",
+    "rxcui": null,
+    "forms": {
+      "alpha-amylase enzyme": {
+        "bio_score": 12,
+        "natural": true,
+        "score": 15,
+        "absorption": "excellent",
+        "notes": "Digestive enzyme that breaks down starch and carbohydrates into sugars. Essential for carbohydrate digestion. Bioactive functional ingredient that supports digestive health.",
+        "aliases": [
+          "alpha-amylase",
+          "alpha amylase",
+          "amylase",
+          "starch-digesting enzyme",
+          "α-amylase"
+        ],
+        "dosage_importance": 1.0
+      }
+    }
+  },
+  "dicalcium_phosphate": {
+    "standard_name": "Di-Calcium Phosphate",
+    "cui": "C0006710",
+    "rxcui": null,
+    "forms": {
+      "dicalcium phosphate dihydrate": {
+        "bio_score": 8,
+        "natural": true,
+        "score": 11,
+        "absorption": "good",
+        "notes": "Calcium and phosphorus supplement providing both essential minerals. Good bioavailability and well-tolerated. Used as both nutritional supplement and tablet excipient.",
+        "aliases": [
+          "di-calcium phosphate",
+          "dicalcium phosphate",
+          "calcium hydrogen phosphate",
+          "calcium phosphate dibasic",
+          "dcp",
+          "e341ii"
+        ],
+        "dosage_importance": 1.0
+      }
+    }
+  },
+  "methionine": {
+    "standard_name": "L-Methionine",
+    "cui": "C0025646",
+    "rxcui": null,
+    "forms": {
+      "l-methionine": {
+        "bio_score": 11,
+        "natural": true,
+        "score": 14,
+        "absorption": "excellent",
+        "notes": "Essential amino acid required for protein synthesis and methylation processes. Important for liver health, detoxification, and S-adenosylmethionine (SAMe) production.",
+        "aliases": [
+          "methionine",
+          "l-methionine",
+          "methionine amino acid",
+          "l-methionine supplement"
+        ],
+        "dosage_importance": 1.0
+      }
+    }
+  },
+  "cordycepsprime": {
+    "standard_name": "CordycepsPrime",
+    "category": "adaptogen",
+    "forms": {
+      "cordycepsprime": {
+        "bio_score": 12,
+        "natural": true,
+        "score": 15,
+        "absorption": "enhanced",
+        "notes": "Enhanced cordyceps bioavailability formula with improved absorption technology. Branded cordyceps extract with superior cellular uptake.",
+        "aliases": [
+          "cordycepsprime",
+          "cordyceps prime",
+          "enhanced cordyceps",
+          "cordyceps enhanced bioavailability"
+        ],
+        "dosage_importance": 1.3
+      }
+    }
+  },
+  "testosurge": {
+    "standard_name": "TestoSurge",
+    "category": "adaptogen",
+    "forms": {
+      "testosurge": {
+        "bio_score": 12,
+        "natural": true,
+        "score": 15,
+        "absorption": "enhanced",
+        "notes": "Branded fenugreek extract with enhanced saponins standardization. Clinically studied for testosterone support and male health.",
+        "aliases": [
+          "testosurge",
+          "testo surge",
+          "enhanced fenugreek",
+          "branded fenugreek extract"
+        ],
+        "dosage_importance": 1.4
+      }
+    }
+  },
+  "lifepqq": {
+    "standard_name": "LifePQQ",
+    "category": "mitochondrial_support",
+    "forms": {
+      "lifepqq": {
+        "bio_score": 13,
+        "natural": true,
+        "score": 16,
+        "absorption": "stabilized",
+        "notes": "Stabilized PQQ form with enhanced stability and bioavailability. Premium branded pyrroloquinoline quinone for mitochondrial support.",
+        "aliases": [
+          "lifepqq",
+          "life pqq",
+          "stabilized pqq",
+          "branded pqq"
+        ],
+        "dosage_importance": 1.5
+      }
+    }
+  },
+  "nattokinase_nsk_sd": {
+    "standard_name": "Nattokinase NSK-SD",
+    "category": "cardiovascular_support",
+    "forms": {
+      "nsk-sd": {
+        "bio_score": 13,
+        "natural": true,
+        "score": 16,
+        "absorption": "standardized",
+        "notes": "Standardized nattokinase with guaranteed fibrinolytic activity. NSK-SD is a clinically studied, purified nattokinase extract.",
+        "aliases": [
+          "nattokinase nsk-sd",
+          "nsk-sd",
+          "nsk sd",
+          "standardized nattokinase",
+          "branded nattokinase"
+        ],
+        "dosage_importance": 1.4
+      }
+    }
+  },
+  "ganeden_bc30": {
+    "standard_name": "GanedenBC30",
+    "category": "probiotics",
+    "forms": {
+      "ganendenbc30": {
+        "bio_score": 14,
+        "natural": true,
+        "score": 17,
+        "absorption": "superior_survival",
+        "notes": "Spore-forming probiotic with superior survival through digestive tract. Bacillus coagulans with enhanced stability and efficacy.",
+        "aliases": [
+          "ganendenbc30",
+          "ganeden bc30",
+          "bc30",
+          "spore forming probiotic",
+          "bacillus coagulans bc30"
+        ],
+        "dosage_importance": 1.3
+      }
+    }
+  },
+  "coenzymated_complex": {
+    "standard_name": "Coenzymated Complex",
+    "category": "vitamins",
+    "forms": {
+      "coenzymated": {
+        "bio_score": 14,
+        "natural": true,
+        "score": 17,
+        "absorption": "active_forms",
+        "notes": "Active coenzyme forms of B-vitamins for enhanced bioavailability and cellular utilization. Pre-converted forms ready for immediate use.",
+        "aliases": [
+          "coenzymated",
+          "coenzyme forms",
+          "active b vitamins",
+          "coenzymated b complex",
+          "active coenzyme forms"
+        ],
+        "dosage_importance": 1.4
       }
     }
   }

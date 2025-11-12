@@ -11,6 +11,7 @@ from datetime import datetime
 from concurrent.futures import ProcessPoolExecutor, as_completed
 from collections import Counter
 from dataclasses import dataclass, asdict
+from tqdm import tqdm
 
 from enhanced_normalizer import EnhancedDSLDNormalizer
 from dsld_validator import DSLDValidator
@@ -20,7 +21,8 @@ from constants import (
     STATUS_INCOMPLETE,
     STATUS_ERROR,
     OUTPUT_EXTENSION,
-    VALID_INPUT_EXTENSIONS
+    VALID_INPUT_EXTENSIONS,
+    VALIDATION_THRESHOLDS
 )
 
 logger = logging.getLogger(__name__)
@@ -234,6 +236,8 @@ class BatchProcessor:
         # Process files
         if self.max_workers == 1:
             # Single-threaded processing
+            # PERFORMANCE FIX: Initialize worker once before processing files
+            init_worker(str(self.output_dir))
             for file_path in files:
                 result = process_single_file(str(file_path), str(self.output_dir))
                 self._categorize_result(
@@ -246,16 +250,34 @@ class BatchProcessor:
                     batch_mapped
                 )
         else:
-            # Multi-threaded processing
-            with ProcessPoolExecutor(max_workers=self.max_workers) as executor:
+            # Multi-threaded processing with worker initialization
+            # PERFORMANCE FIX: Initialize normalizer once per worker, not per file
+            with ProcessPoolExecutor(
+                max_workers=self.max_workers,
+                initializer=init_worker,
+                initargs=(str(self.output_dir),)
+            ) as executor:
                 # Submit all jobs
                 future_to_file = {
-                    executor.submit(process_single_file, str(f), str(self.output_dir)): f 
+                    executor.submit(process_single_file, str(f), str(self.output_dir)): f
                     for f in files
                 }
-                
+
+                # Check if progress bar should be shown
+                show_progress = self.config.get("ui", {}).get("show_progress_bar", False)
+
+                # Wrap iterator with tqdm if progress bar is enabled
+                futures_iterator = as_completed(future_to_file)
+                if show_progress:
+                    futures_iterator = tqdm(
+                        futures_iterator,
+                        total=len(files),
+                        desc=f"Processing Batch {batch_num + 1}",
+                        unit="file"
+                    )
+
                 # Collect results
-                for future in as_completed(future_to_file):
+                for future in futures_iterator:
                     file_path = future_to_file[future]
                     try:
                         result = future.result()
@@ -392,10 +414,6 @@ class BatchProcessor:
             logger.debug(f"Wrote {len(data)} items to {file_path}")
         except Exception as e:
             logger.error(f"Failed to write {file_path}: {str(e)}")
-    
-    def _write_jsonl(self, file_path: Path, data: List[Dict]):
-        """Legacy method for backward compatibility"""
-        self._write_json_output(file_path, data, use_jsonl=True)
     
     def _save_unmapped_ingredients(self):
         """Save cumulative unmapped ingredients using enhanced tracking"""
@@ -623,7 +641,7 @@ class BatchProcessor:
         
         f.write("### Why It Needs Review:\n")
         f.write(f"- **Completeness score:** {completeness.get('score', 0):.1f}%")
-        if completeness.get('score', 0) >= 90:
+        if completeness.get('score', 0) >= VALIDATION_THRESHOLDS["excellent_completeness"]:
             f.write(" ✅\n")
         else:
             f.write(" ⚠️\n")
@@ -829,24 +847,48 @@ class BatchProcessor:
         return batch_logger
 
 
+# Global variables for worker processes (initialized once per worker)
+_worker_normalizer = None
+_worker_validator = None
+_worker_output_dir = None
+
+
+def init_worker(output_dir: str = None):
+    """
+    Initialize worker process with shared normalizer and validator instances.
+    This is called ONCE per worker process, not per file.
+    PERFORMANCE FIX: Avoids reloading databases for every single file.
+    """
+    global _worker_normalizer, _worker_validator, _worker_output_dir
+
+    # Initialize normalizer ONCE per worker (loads all databases once)
+    _worker_normalizer = EnhancedDSLDNormalizer()
+    if output_dir:
+        _worker_normalizer.set_output_directory(Path(output_dir))
+        _worker_output_dir = output_dir
+
+    # Initialize validator ONCE per worker
+    _worker_validator = DSLDValidator()
+
+
 def process_single_file(file_path: str, output_dir: str = None) -> ProcessingResult:
     """
-    Process a single DSLD file
-    This function is designed to be used with multiprocessing
+    Process a single DSLD file using pre-initialized worker instances.
+    This function is designed to be used with multiprocessing.
+    PERFORMANCE: Now uses global worker instances instead of creating new ones each time.
     """
+    global _worker_normalizer, _worker_validator
+
     start_time = time.time()
-    
+
     try:
         # Load JSON data
         with open(file_path, 'r', encoding='utf-8') as f:
             raw_data = json.load(f)
-        
-        # Initialize enhanced normalizer and validator (create new instances for each process)
-        normalizer = EnhancedDSLDNormalizer()
-        # Set output directory for enhanced unmapped tracking
-        if output_dir:
-            normalizer.set_output_directory(Path(output_dir))
-        validator = DSLDValidator()
+
+        # Use pre-initialized worker instances (MUCH faster than creating new ones)
+        normalizer = _worker_normalizer
+        validator = _worker_validator
 
         # Normalize the data
         cleaned_data = normalizer.normalize_product(raw_data)
@@ -880,7 +922,7 @@ def process_single_file(file_path: str, output_dir: str = None) -> ProcessingRes
         # IMPROVED: Adjust status based on actual mapping performance
         if status == STATUS_NEEDS_REVIEW:
             # If product has excellent mapping (90%+) and only missing UPC, promote to success
-            if (mapping_rate >= 90.0 and 
+            if (mapping_rate >= VALIDATION_THRESHOLDS["excellent_mapping"] and 
                 len(missing_fields) == 1 and 
                 missing_fields[0] == "upcSku" and
                 validation_details.get("critical_fields_complete", False)):

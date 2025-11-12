@@ -8,6 +8,8 @@ import json
 import os
 from typing import Dict, List, Any
 
+from constants import VALIDATION_THRESHOLDS
+
 class EnrichmentDataValidator:
     def __init__(self):
         self.validation_results = {}
@@ -72,9 +74,9 @@ class EnrichmentDataValidator:
                     
                     print(f"\n📊 Category Accuracy: {accuracy_rate:.1f}% ({accurate_count}/{len(category_accuracy)})")
                     
-                    if accuracy_rate >= 95:
+                    if accuracy_rate >= VALIDATION_THRESHOLDS["high_accuracy"]:
                         print("✅ Excellent category accuracy")
-                    elif accuracy_rate >= 85:
+                    elif accuracy_rate >= VALIDATION_THRESHOLDS["good_accuracy"]:
                         print("⚠️  Good category accuracy, minor improvements needed")
                     else:
                         print("❌ Poor category accuracy, requires investigation")
@@ -220,7 +222,7 @@ class EnrichmentDataValidator:
                         
                         # Check base score calculation
                         base_score = precalc.get('base_score_total', 0)
-                        max_score = precalc.get('base_score_max', 80)
+                        max_score = precalc.get('base_score_max', VALIDATION_THRESHOLDS["base_score_max"])
                         
                         if 0 <= base_score <= max_score:
                             print(f"   ✅ Base score valid: {base_score}/{max_score}")
@@ -348,7 +350,7 @@ class EnrichmentDataValidator:
         print("=" * 30)
         
         for metric, value in self.validation_results.items():
-            status = "✅" if value >= 95 else "⚠️" if value >= 85 else "❌"
+            status = "✅" if value >= VALIDATION_THRESHOLDS["high_accuracy"] else "⚠️" if value >= VALIDATION_THRESHOLDS["good_accuracy"] else "❌"
             print(f"{status} {metric.replace('_', ' ').title()}: {value:.1f}%")
         
         # Overall assessment
@@ -357,9 +359,9 @@ class EnrichmentDataValidator:
             
             print(f"\n🎯 Overall Data Quality: {avg_score:.1f}%")
             
-            if avg_score >= 95:
+            if avg_score >= VALIDATION_THRESHOLDS["high_accuracy"]:
                 print("🎉 EXCELLENT: Data integrity meets healthcare standards")
-            elif avg_score >= 85:
+            elif avg_score >= VALIDATION_THRESHOLDS["good_accuracy"]:
                 print("✅ GOOD: Minor improvements recommended")
             else:
                 print("⚠️  NEEDS IMPROVEMENT: Address data quality issues")

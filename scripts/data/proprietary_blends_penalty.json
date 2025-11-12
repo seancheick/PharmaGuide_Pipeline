@@ -288,6 +288,9 @@
         "Prostate Support Matrix",
         "Proprietary Enterolactone Precursors Blend",
         "CLA Blend",
+        "Oral & Sinus Probiotic Blend",
+        "Oral Prebiotic Blend",
+        "Oral Probiotic Blend",
         "Bioactive Liver Compound Complex",
         "PrimaVie Shilajit Fulvic Acid Complex",
         "Prostate Support Formula"
@@ -362,6 +365,9 @@
         "Fruit Powder Blend",
         "phytonutrient complex",
         "Proprietary Herbal Blend",
+        "Trikatu Herbal Blend",
+        "organic Brown Rice Syrup Blend",
+        "Trikatu Herbal Blend",
         "Ear, Nose & Throat Support Herbal Blend",
         "orchard fruits & garden veggies powder blend",
         "Proprietary Full-Spectrum Premium Herbal Blend",
@@ -371,6 +377,7 @@
         "fruit phenolic blend",
         "Herbal Immune Blend",
         "mushroom mycelial & primordia biomass defense blend",
+        "Natural Defense Blend",
         "green superfood blend",
         "organic greens blend",
         "Soothing Herbal Blend",
@@ -416,6 +423,9 @@
       "red_flag_terms": [
         "probiotic blend",
         "multi-strain complex",
+        "Oral Probiotic Blend",
+        "Super 5 Probiotic Blend",
+        "Proprietary Premium Herbal Blend",
         "microflora matrix",
         "gut health blend",
         "digestive complex",
@@ -423,8 +433,10 @@
         "bacterial support complex",
         "microbiome support blend",
         "gut flora complex",
+        "Mycrobiome Mouth & Throat Blend",
         "intestinal health blend",
         "gut microbiome blend",
+        "L. reuteri Prodentis Blend",
         "intestinal flora complex",
         "gut microbial blend",
         "intestinal microbial blend",
@@ -628,6 +640,67 @@
       ],
       "notes": "Enzyme formulas should disclose specific enzymes and their activity levels for proper digestive support evaluation.",
       "last_updated": "2025-08-15"
+    },
+    {
+      "id": "BLEND_ENZYMAX",
+      "standard_name": "Enzymax",
+      "red_flag_terms": [
+        "enzymax",
+        "digestive enzyme blend",
+        "enzyme complex",
+        "digestive support blend"
+      ],
+      "risk_factors": [
+        "Proprietary enzyme blend with undisclosed ratios",
+        "Unknown enzyme activity levels",
+        "Lack of transparency in digestive enzyme composition"
+      ],
+      "severity_level": "moderate",
+      "penalties": [
+        {
+          "type": "no_disclosure",
+          "penalty": -10,
+          "penalty_reason": "Enzymax proprietary blend provides no disclosure of individual enzyme amounts or activity levels, preventing proper digestive support assessment."
+        },
+        {
+          "type": "partial_disclosure",
+          "penalty": -5,
+          "penalty_reason": "Partial enzyme disclosure in Enzymax blend; some enzyme types or activities remain unspecified."
+        }
+      ],
+      "notes": "Enzymax is a proprietary digestive enzyme blend that lacks transparency in enzyme composition and activity levels, making it difficult to assess digestive support effectiveness.",
+      "last_updated": "2025-09-20"
+    },
+    {
+      "id": "BLEND_ACID_COMFORT",
+      "standard_name": "Acid Comfort",
+      "red_flag_terms": [
+        "acid comfort",
+        "acid comfort blend",
+        "digestive comfort blend",
+        "acid relief complex",
+        "digestive comfort complex"
+      ],
+      "risk_factors": [
+        "Proprietary digestive blend with undisclosed ratios",
+        "Unknown individual ingredient amounts",
+        "Lack of transparency in acid relief formulation"
+      ],
+      "severity_level": "moderate",
+      "penalties": [
+        {
+          "type": "no_disclosure",
+          "penalty": -10,
+          "penalty_reason": "Acid Comfort proprietary blend provides no disclosure of individual ingredient amounts, preventing proper digestive support assessment."
+        },
+        {
+          "type": "partial_disclosure",
+          "penalty": -5,
+          "penalty_reason": "Partial ingredient disclosure in Acid Comfort blend; some ingredients or amounts remain unspecified."
+        }
+      ],
+      "notes": "Acid Comfort is a proprietary digestive blend typically containing herbal extracts for acid relief and digestive comfort, but lacks transparency in ingredient composition and dosing.",
+      "last_updated": "2025-09-21"
     }
   ]
 }

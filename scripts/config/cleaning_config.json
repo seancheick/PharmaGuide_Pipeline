@@ -22,6 +22,11 @@
     "max_workers": 4,
     "chunk_size": 50
   },
+  "output_format": {
+    "_comment": "JSON formatting - pretty_print=true for development, false for production",
+    "pretty_print": true,
+    "_help": "true = human-readable indented JSON (2x size), false = minified single-line (50% smaller)"
+  },
   "logging": {
     "level": "INFO",
     "log_to_console": true,
@@ -65,5 +70,10 @@
     "dry_run": false,
     "generate_reports": true,
     "create_backups": true
+  },
+  "ui": {
+    "_comment": "User interface settings for interactive processing",
+    "show_progress_bar": true,
+    "_help": "true = show tqdm progress bar for large datasets, false = standard logging only"
   }
 }

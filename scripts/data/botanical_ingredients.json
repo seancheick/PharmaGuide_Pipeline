@@ -9,7 +9,13 @@
     },
     {
       "standard_name": "Acerola Cherry",
-      "aliases": ["malpighia emarginata", "acerola fruit", "barbados cherry"],
+      "aliases": [
+        "malpighia emarginata",
+        "acerola fruit",
+        "barbados cherry",
+        "acerola berry extract",
+        "acerola extract"
+      ],
       "category": "fruit",
       "notes": "Whole fruit powder or simple extract, naturally rich in Vitamin C, but not standardized to a specific vitamin C percentage.",
       "last_updated": "2025-07-28"
@@ -108,7 +114,8 @@
         "prunus serotina",
         "wild cherry",
         "black cherry fruit",
-        "prunus serotina fruit"
+        "prunus serotina fruit",
+        "dark sweet cherry fruit powder"
       ],
       "category": "fruit",
       "notes": "Whole fruit or simple extract, used for antioxidant properties. Not standardized to anthocyanins.",
@@ -119,7 +126,10 @@
       "aliases": [
         "sambucus nigra fruit",
         "elderberry fruit powder",
-        "sambucus fruit"
+        "sambucus fruit",
+        "premium cultivar elderberries",
+        "organic black elder (sambucus nigra l.) extract",
+        "elderberry, powder"
       ],
       "category": "fruit",
       "notes": "Whole fruit powder or simple extract, not standardized to specific anthocyanin content (unless specified as standardized).",
@@ -242,7 +252,7 @@
     },
     {
       "standard_name": "Echinacea Purpurea Herb",
-      "aliases": ["echinacea purpurea", "purple coneflower"],
+      "aliases": ["echinacea purpurea", "echinacea pupurea", "purple coneflower"],
       "category": "herb",
       "notes": "Whole herb powder or simple extract, used for immune support; not standardized to alkamides or chicoric acid.",
       "last_updated": "2025-07-28"
@@ -274,9 +284,14 @@
         "zingiber officinale root",
         "ginger powder",
         "ginger rhizome",
+        "ginger rhizome extract dried",
         "organic ginger (rhizome) supercritical extract",
         "ginger supercritical extract",
-        "organic ginger rhizome"
+        "organic ginger rhizome",
+        "Gingerols & Shogaols",
+        "Gingerols/Shogaols",
+        "Total Gingerols & Shogaols",
+        "Gingerols and Shogaols"
       ],
       "category": "root",
       "notes": "Whole root powder, not standardized to gingerols or shogaols (unless specified as standardized).",
@@ -564,7 +579,7 @@
     },
     {
       "standard_name": "White Willow Bark",
-      "aliases": ["salix alba bark", "willow bark"],
+      "aliases": ["salix alba bark", "willow bark", "white willow bark ext."],
       "category": "bark",
       "notes": "Whole bark powder or simple extract, used for pain relief; not standardized to salicin (unless specified as standardized).",
       "last_updated": "2025-07-28"
@@ -1049,6 +1064,20 @@
       "last_updated": "2025-08-13"
     },
     {
+      "standard_name": "Myrrh Resin",
+      "aliases": [
+        "commiphora myrrha",
+        "myrrh resin",
+        "myrrh resin extract",
+        "myrrh resin freeze-dried extract",
+        "myrrh gum",
+        "true myrrh"
+      ],
+      "category": "resin",
+      "notes": "Traditional antimicrobial and anti-inflammatory resin from Commiphora myrrha tree. Used historically for oral health and wound healing. Not standardized to specific compounds.",
+      "last_updated": "2025-09-20"
+    },
+    {
       "standard_name": "Schizonepeta",
       "aliases": [
         "schizonepeta tenuifolia",
@@ -1264,11 +1293,364 @@
         "citrus limon oil",
         "organic lemon oil",
         "lemon essential oil",
-        "lemon peel oil"
+        "lemon peel oil",
+        "lemon peel essential oil"
       ],
       "category": "essential_oil",
       "notes": "Essential oil from lemon peel (Citrus limon). Used for flavoring and aromatherapy. Contains limonene.",
       "last_updated": "2025-08-15"
+    },
+    {
+      "standard_name": "Papaya Fruit Powder",
+      "aliases": [
+        "papaya fruit powder",
+        "carica papaya powder",
+        "papaya powder",
+        "dried papaya fruit"
+      ],
+      "category": "fruit",
+      "notes": "Dried and powdered papaya fruit (Carica papaya). Natural source of digestive enzymes like papain, vitamins, and antioxidants.",
+      "last_updated": "2025-09-19"
+    },
+    {
+      "standard_name": "Lemon Bioflavonoids",
+      "aliases": [
+        "lemon bioflavonoids",
+        "citrus bioflavonoids",
+        "lemon flavonoids",
+        "citrus limon bioflavonoids"
+      ],
+      "category": "bioflavonoid",
+      "notes": "Bioflavonoids extracted from lemon (Citrus limon). Contains hesperidin, diosmin, and other flavonoids that support vitamin C absorption.",
+      "last_updated": "2025-09-19"
+    },
+    {
+      "standard_name": "Honey Powder",
+      "aliases": [
+        "honey, powder",
+        "dried honey",
+        "honey powder",
+        "dehydrated honey"
+      ],
+      "category": "sweetener",
+      "notes": "Dehydrated honey in powder form. Natural sweetener containing trace amounts of enzymes, minerals, and antioxidants.",
+      "last_updated": "2025-09-19"
+    },
+    {
+      "standard_name": "Brown Rice Syrup Solids",
+      "aliases": [
+        "brown rice syrup solids",
+        "rice syrup powder",
+        "brown rice syrup powder",
+        "dried brown rice syrup"
+      ],
+      "category": "sweetener",
+      "notes": "Dehydrated brown rice syrup used as a natural sweetener and binding agent. Contains complex carbohydrates from rice.",
+      "last_updated": "2025-09-19"
+    },
+    {
+      "standard_name": "Manuka Honey",
+      "aliases": [
+        "manuka honey",
+        "organic manuka honey",
+        "new zealand manuka honey"
+      ],
+      "category": "honey",
+      "notes": "Premium honey from New Zealand manuka tree (Leptospermum scoparium). Contains unique methylglyoxal (MGO) compounds with antimicrobial properties.",
+      "last_updated": "2025-09-19"
+    },
+    {
+      "standard_name": "Echinacea Purpurea Root Extract",
+      "aliases": [
+        "echinacea purpurea root extract",
+        "echinacea purpurea root dry extract",
+        "standardized echinacea root extract",
+        "standardized echinacea purpurea extract",
+        "echinacea purpurea root",
+        "purple coneflower root extract"
+      ],
+      "category": "root",
+      "notes": "Root extract from purple coneflower, traditionally used for immune support. May contain various alkamides and polyphenols but not necessarily standardized.",
+      "last_updated": "2025-09-20"
+    },
+    {
+      "standard_name": "Elderberry Extract",
+      "aliases": [
+        "elderberry extract",
+        "elderberry powdered extract",
+        "sambucus nigra extract",
+        "black elderberry extract",
+        "european elder extract",
+        "elderberry 10:1 concentrate",
+        "elderberry bioactives extract"
+      ],
+      "category": "fruit",
+      "notes": "Extract from elderberry fruit, rich in anthocyanins and flavonoids. Popular for immune support, often concentrated but not necessarily standardized to specific compounds.",
+      "last_updated": "2025-09-20"
+    },
+    {
+      "standard_name": "Sage Leaf Extract",
+      "aliases": [
+        "sage leaf extract",
+        "sage leaf freeze dried extract",
+        "salvia officinalis extract",
+        "organic sage extract",
+        "sage freeze-dried extract"
+      ],
+      "category": "leaf",
+      "notes": "Extract from sage leaves, traditionally used for cognitive and digestive support. Contains various phenolic compounds but typically not standardized.",
+      "last_updated": "2025-09-20"
+    },
+    {
+      "standard_name": "Honey Extract",
+      "aliases": [
+        "honey extract",
+        "honey freeze dried extract",
+        "honey freeze-dried extract",
+        "dried honey extract",
+        "concentrated honey"
+      ],
+      "category": "honey",
+      "notes": "Concentrated or freeze-dried honey extract retaining natural enzymes and compounds. Used for flavor and traditional health benefits.",
+      "last_updated": "2025-09-20"
+    },
+    {
+      "standard_name": "Elderberries",
+      "aliases": ["elderberries", "elderberry", "sambucus nigra", "black elderberry", "european elder", "elderberry bioactives extract", "elderberry european elder fruit 10:1 extract"],
+      "category": "fruit",
+      "notes": "Whole elderberries used for immune support. Rich in anthocyanins and flavonoids.",
+      "last_updated": "2025-11-11"
+    },
+    {
+      "standard_name": "Eucalyptus",
+      "aliases": ["eucalyptus", "eucalyptus leaf", "eucalyptus globulus"],
+      "category": "leaf",
+      "notes": "Eucalyptus leaves or oil used for respiratory support. Contains eucalyptol.",
+      "last_updated": "2025-11-11"
+    },
+    {
+      "standard_name": "Chicory Root",
+      "aliases": ["chicory", "chicory root", "cichorium intybus"],
+      "category": "root",
+      "notes": "Chicory root used as prebiotic fiber source. Contains inulin.",
+      "last_updated": "2025-11-11"
+    },
+    {
+      "standard_name": "Myrrh",
+      "aliases": ["myrrh", "myrrh resin", "commiphora myrrha"],
+      "category": "resin",
+      "notes": "Myrrh resin extract used for oral health and traditional medicine.",
+      "last_updated": "2025-11-11"
+    },
+    {
+      "standard_name": "Peppermint",
+      "aliases": ["mint", "peppermint", "mentha piperita", "peppermint leaf"],
+      "category": "leaf",
+      "notes": "Peppermint leaves or oil used for digestive support and flavor. Contains menthol.",
+      "last_updated": "2025-11-11"
+    },
+    {
+      "standard_name": "Broccoli",
+      "aliases": ["broccoli", "broccoli powder", "brassica oleracea"],
+      "category": "vegetable",
+      "notes": "Whole broccoli powder rich in sulforaphane and other phytonutrients.",
+      "last_updated": "2025-11-11"
+    },
+    {
+      "standard_name": "Fig",
+      "aliases": ["fig", "fig concentrate", "ficus carica"],
+      "category": "fruit",
+      "notes": "Fig fruit concentrate used as natural sweetener and fiber source.",
+      "last_updated": "2025-11-11"
+    },
+    {
+      "standard_name": "Date",
+      "aliases": ["date", "date concentrate", "phoenix dactylifera", "date fruit"],
+      "category": "fruit",
+      "notes": "Date fruit concentrate used as natural sweetener and energy source.",
+      "last_updated": "2025-11-11"
+    },
+    {
+      "standard_name": "DGL (Deglycyrrhizinated Licorice)",
+      "aliases": ["dgl", "deglycyrrhizinated licorice", "dgl licorice", "de-glycyrrhizinated licorice"],
+      "category": "root",
+      "notes": "Licorice root with glycyrrhizin removed to avoid side effects. Used for digestive and GI support.",
+      "last_updated": "2025-11-11"
+    },
+    {
+      "standard_name": "Echinacea Angustifolia",
+      "aliases": ["echinacea angustifolia", "narrow-leaf coneflower", "echinacea angustifolia root"],
+      "category": "root",
+      "notes": "Echinacea angustifolia root used for immune support. Different species from E. purpurea.",
+      "last_updated": "2025-11-11"
+    },
+    {
+      "standard_name": "Wild Blueberry",
+      "aliases": ["wild blueberry", "wild bilberry", "vaccinium myrtillus"],
+      "category": "fruit",
+      "notes": "Wild blueberries or bilberries rich in anthocyanins for eye and cardiovascular health.",
+      "last_updated": "2025-11-11"
+    },
+    {
+      "standard_name": "White Grape",
+      "aliases": ["white grape", "vitis vinifera white", "white grape juice"],
+      "category": "fruit",
+      "notes": "White grape juice or concentrate used as natural sweetener and antioxidant source.",
+      "last_updated": "2025-11-11"
+    },
+    {
+      "standard_name": "Concord Grape",
+      "aliases": ["concord grape", "vitis labrusca", "concord grape juice"],
+      "category": "fruit",
+      "notes": "Concord grape juice or concentrate rich in polyphenols and resveratrol.",
+      "last_updated": "2025-11-11"
+    },
+    {
+      "standard_name": "Dark Sweet Cherry",
+      "aliases": ["dark sweet cherry", "cherry", "prunus avium", "sweet cherry", "cherry crystals"],
+      "category": "fruit",
+      "notes": "Dark sweet cherry powder or concentrate rich in anthocyanins and melatonin.",
+      "last_updated": "2025-11-11"
+    },
+    {
+      "standard_name": "Aloe Vera Concentrated Gel",
+      "aliases": ["aloe vera leaves concentrated dried gel", "aloe vera concentrated dried gel", "organic aloe vera concentrated dried gel", "activaloe"],
+      "category": "plant extract",
+      "notes": "Concentrated dried gel from aloe vera leaves. Used for digestive support and anti-inflammatory properties.",
+      "last_updated": "2025-11-11"
+    },
+    {
+      "standard_name": "Myrrh Resin Extract",
+      "aliases": ["myrrh resin freeze-dried", "myrrh resin freeze-dried extract"],
+      "category": "resin",
+      "notes": "Freeze-dried myrrh resin extract for oral health and immune support.",
+      "last_updated": "2025-11-11"
+    },
+    {
+      "standard_name": "Black Elderberry",
+      "aliases": ["black elder berry", "black elderberry", "elderberry bioactives"],
+      "category": "fruit",
+      "notes": "Black elderberry fruit extract rich in anthocyanins for immune support.",
+      "last_updated": "2025-11-11"
+    },
+    {
+      "standard_name": "Elder Blossom",
+      "aliases": ["elder sambucus nigra blossom", "elder blossom", "elderflower"],
+      "category": "flower",
+      "notes": "Elder blossom (Sambucus nigra) used for respiratory and immune support.",
+      "last_updated": "2025-11-11"
+    },
+    {
+      "standard_name": "Ginger Extract",
+      "aliases": ["ginger g321", "ginger g321 extract"],
+      "category": "root",
+      "notes": "Ginger extract with specific extraction process for digestive support.",
+      "last_updated": "2025-11-11"
+    },
+    {
+      "standard_name": "Echinacea Purpurea Aerial",
+      "aliases": ["echinacea purpurea aerial part", "echinacea purpurea aerial part extract"],
+      "category": "herb",
+      "notes": "Aerial parts (leaves/stems) of Echinacea purpurea for immune support.",
+      "last_updated": "2025-11-11"
+    },
+    {
+      "standard_name": "Reishi Mushroom",
+      "aliases": ["reishi fruiting body mushroom", "reishi mushroom", "ganoderma lucidum"],
+      "category": "mushroom",
+      "notes": "Reishi mushroom fruiting body extract for immune and stress support.",
+      "last_updated": "2025-11-11"
+    },
+    {
+      "standard_name": "Passion Flower",
+      "aliases": ["passion flower passiflora incamata herbs dry", "passion flower passiflora incamata herbs dry extract", "passion flower", "passiflora incarnata", "passiflora incamata"],
+      "category": "herb",
+      "notes": "Passion flower herb extract used for relaxation and sleep support.",
+      "last_updated": "2025-11-11"
+    },
+    {
+      "standard_name": "Cutch Tree",
+      "aliases": ["cutch tree", "acacia catechu"],
+      "category": "bark",
+      "notes": "Cutch tree bark extract used in traditional medicine.",
+      "last_updated": "2025-11-11"
+    },
+    {
+      "standard_name": "Essential Oil Blend",
+      "aliases": ["essential oil blend", "oils of angelica", "oils of star anise", "oils of ginger", "oils of lemon grass", "oils of sage", "oils of white thyme"],
+      "category": "essential_oil",
+      "notes": "Blend of essential oils used for flavor and aromatherapy.",
+      "last_updated": "2025-11-11"
+    },
+    {
+      "standard_name": "Eucalyptus Leaf Oil",
+      "aliases": ["eucalyptus leaf essential"],
+      "category": "essential_oil",
+      "notes": "Essential oil from eucalyptus leaves for respiratory support.",
+      "last_updated": "2025-11-11"
+    },
+    {
+      "standard_name": "Orange Essential Oil",
+      "aliases": ["orange oil"],
+      "category": "essential_oil",
+      "notes": "Essential oil from orange peel for flavor and aromatherapy.",
+      "last_updated": "2025-11-11"
+    },
+    {
+      "standard_name": "Barley Juice",
+      "aliases": ["organic barley juice"],
+      "category": "grass",
+      "notes": "Organic barley grass juice powder rich in nutrients and chlorophyll.",
+      "last_updated": "2025-11-11"
+    },
+    {
+      "standard_name": "Raspberry Seed",
+      "aliases": ["raspberry seed concentrate"],
+      "category": "seed",
+      "notes": "Raspberry seed concentrate rich in antioxidants and essential fatty acids.",
+      "last_updated": "2025-11-11"
+    },
+    {
+      "standard_name": "Strawberry",
+      "aliases": ["strawberry"],
+      "category": "fruit",
+      "notes": "Strawberry fruit powder used for flavor and antioxidants.",
+      "last_updated": "2025-11-11"
+    },
+    {
+      "standard_name": "Hesperidin",
+      "aliases": ["hesperidin complex"],
+      "category": "bioflavonoid",
+      "notes": "Citrus bioflavonoid complex with hesperidin for vascular support.",
+      "last_updated": "2025-11-11"
+    },
+    {
+      "standard_name": "Black Pepper",
+      "aliases": ["pepper", "black pepper", "piper nigrum"],
+      "category": "spice",
+      "notes": "Black pepper used for bioavailability enhancement (piperine) and flavor.",
+      "last_updated": "2025-11-11"
+    },
+    {
+      "standard_name": "Forsythia suspensa",
+      "aliases": ["forsythia suspensa", "forsythia fruit", "lian qiao"],
+      "category": "herb",
+      "notes": "Traditional Chinese medicine herb (Forsythia fruit) used for immune and respiratory support.",
+      "last_updated": "2025-11-11"
+    },
+    {
+      "standard_name": "Tongkat Ali",
+      "aliases": ["tongkat ali", "tongkat ali root", "tongkat ali root powder", "eurycoma longifolia", "longjack"],
+      "category": "root",
+      "notes": "Southeast Asian herb traditionally used for vitality and testosterone support.",
+      "last_updated": "2025-11-11"
+    },
+    {
+      "standard_name": "Citrus Fruit Extract",
+      "aliases": ["citrus fruit extract", "citrus extract", "citrus bioflavonoids"],
+      "category": "fruit_extract",
+      "notes": "Extract from citrus fruits providing bioflavonoids and vitamin C support.",
+      "last_updated": "2025-11-11"
     }
   ]
 }

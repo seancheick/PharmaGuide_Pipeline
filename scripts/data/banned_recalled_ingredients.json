@@ -3,11 +3,7 @@
     {
       "id": "BANNED_EPHEDRA",
       "standard_name": "Ephedra",
-      "aliases": [
-        "ma huang",
-        "ephedra sinica",
-        "mormon tea"
-      ],
+      "aliases": ["ma huang", "ephedra sinica", "mormon tea"],
       "banned_date": "2004-04-12",
       "banned_by": "FDA",
       "reason": "Cardiovascular risks including heart attack and stroke",
@@ -91,10 +87,7 @@
     {
       "id": "BANNED_BMPEA",
       "standard_name": "BMPEA",
-      "aliases": [
-        "β-methylphenylethylamine",
-        "R-beta-methylphenylethylamine"
-      ],
+      "aliases": ["β-methylphenylethylamine", "R-beta-methylphenylethylamine"],
       "banned_date": "2015-04-01",
       "banned_by": "FDA",
       "reason": "Amphetamine-like stimulant, not naturally occurring",
@@ -107,11 +100,7 @@
     {
       "id": "BANNED_PICAMILON",
       "standard_name": "Picamilon",
-      "aliases": [
-        "nicotinoyl-GABA",
-        "pycamilon",
-        "N-nicotinoyl-GABA"
-      ],
+      "aliases": ["nicotinoyl-GABA", "pycamilon", "N-nicotinoyl-GABA"],
       "banned_date": "2015-11-30",
       "banned_by": "FDA",
       "reason": "Unapproved drug, does not meet supplement definition",
@@ -124,12 +113,7 @@
     {
       "id": "BANNED_7_HYDROXYMITRAGYNINE",
       "standard_name": "7-Hydroxymitragynine",
-      "aliases": [
-        "7-OH",
-        "7-OHMG",
-        "7-HMG",
-        "7-OH-mitragynine"
-      ],
+      "aliases": ["7-OH", "7-OHMG", "7-HMG", "7-OH-mitragynine"],
       "banned_date": "2025-07-15",
       "banned_by": "FDA",
       "reason": "Potent opioid activity, addiction potential",
@@ -142,11 +126,7 @@
     {
       "id": "BANNED_SIBUTRAMINE",
       "standard_name": "Sibutramine",
-      "aliases": [
-        "meridia",
-        "reductil",
-        "sibutral"
-      ],
+      "aliases": ["meridia", "reductil", "sibutral"],
       "banned_date": "2010-10-08",
       "banned_by": "FDA",
       "reason": "Increased risk of heart attack and stroke",
@@ -159,11 +139,7 @@
     {
       "id": "BANNED_RED_NO_3",
       "standard_name": "FD&C Red No. 3",
-      "aliases": [
-        "erythrosine",
-        "red 3",
-        "red dye 3"
-      ],
+      "aliases": ["erythrosine", "red 3", "red dye 3"],
       "banned_date": "2025-01-15",
       "banned_by": "FDA",
       "reason": "Thyroid cancer in animal studies (Delaney Clause)",
@@ -199,15 +175,17 @@
         "insulin-like growth factor 1",
         "insulin like growth factor",
         "somatomedin c",
-        "growth factor"
+        "growth factor",
+        "synthetic igf-1",
+        "exogenous igf-1"
       ],
       "banned_date": "1997-01-01",
       "banned_by": "FDA",
-      "reason": "Unapproved drug ingredient, growth hormone-related compound, safety concerns",
+      "reason": "Unapproved SYNTHETIC drug ingredient, growth hormone-related compound, safety concerns",
       "category": "hormone",
       "severity_level": "critical",
       "fda_warning": true,
-      "notes": "Growth hormone-related compound banned in dietary supplements. Regulated as a drug.",
+      "notes": "SYNTHETIC growth hormone-related compounds banned in dietary supplements. Natural IGF-1 from deer antler velvet remains legal. Check source and synthetic vs natural distinction.",
       "last_updated": "2025-08-15"
     },
     {
@@ -276,10 +254,7 @@
     {
       "id": "NOOTROPIC_PIRACETAM",
       "standard_name": "Piracetam",
-      "aliases": [
-        "2-oxo-1-pyrrolidine acetamide",
-        "nootropil"
-      ],
+      "aliases": ["2-oxo-1-pyrrolidine acetamide", "nootropil"],
       "banned_date": "2019-ongoing",
       "banned_by": "FDA",
       "reason": "Unapproved drug, not dietary ingredient",
@@ -292,10 +267,7 @@
     {
       "id": "NOOTROPIC_PHENYLPIRACETAM",
       "standard_name": "Phenylpiracetam",
-      "aliases": [
-        "phenotropil",
-        "4-phenyl-2-oxo-pyrrolidine-1-acetamide"
-      ],
+      "aliases": ["phenotropil", "4-phenyl-2-oxo-pyrrolidine-1-acetamide"],
       "banned_date": "2017-ongoing",
       "banned_by": "FDA/WADA",
       "reason": "Unapproved drug, WADA prohibited stimulant",
@@ -309,11 +281,7 @@
     {
       "id": "NOOTROPIC_ADRAFINIL",
       "standard_name": "Adrafinil",
-      "aliases": [
-        "olmifon",
-        "noofon",
-        "CRL-40028"
-      ],
+      "aliases": ["olmifon", "noofon", "CRL-40028"],
       "banned_date": "2017-ongoing",
       "banned_by": "FDA",
       "reason": "Unapproved drug, WADA prohibited",
@@ -327,11 +295,7 @@
     {
       "id": "NOOTROPIC_MODAFINIL",
       "standard_name": "Modafinil",
-      "aliases": [
-        "provigil",
-        "modalert",
-        "modvigil"
-      ],
+      "aliases": ["provigil", "modalert", "modvigil"],
       "banned_date": "ongoing",
       "banned_by": "FDA",
       "reason": "Prescription drug, WADA prohibited",
@@ -345,10 +309,7 @@
     {
       "id": "NOOTROPIC_SULBUTIAMINE",
       "standard_name": "Sulbutiamine",
-      "aliases": [
-        "arcalion",
-        "bisibuthiamine"
-      ],
+      "aliases": ["arcalion", "bisibuthiamine"],
       "banned_date": "2025-04-15",
       "banned_by": "FDA",
       "reason": "Not dietary ingredient, unapproved drug",
@@ -361,10 +322,7 @@
     {
       "id": "NOOTROPIC_OMBERACETAM",
       "standard_name": "Omberacetam",
-      "aliases": [
-        "noopept",
-        "GVS-111"
-      ],
+      "aliases": ["noopept", "GVS-111"],
       "banned_date": "ongoing",
       "banned_by": "FDA",
       "reason": "Unapproved drug",
@@ -377,10 +335,7 @@
     {
       "id": "NOOTROPIC_ANIRACETAM",
       "standard_name": "Aniracetam",
-      "aliases": [
-        "1-anisoyl-2-pyrrolidinone",
-        "draganon"
-      ],
+      "aliases": ["1-anisoyl-2-pyrrolidinone", "draganon"],
       "banned_date": "ongoing",
       "banned_by": "FDA",
       "reason": "Unapproved drug",
@@ -393,10 +348,7 @@
     {
       "id": "NOOTROPIC_VINPOCETINE",
       "standard_name": "Vinpocetine",
-      "aliases": [
-        "cavinton",
-        "intelectol"
-      ],
+      "aliases": ["cavinton", "intelectol"],
       "banned_date": "ongoing",
       "banned_by": "FDA",
       "reason": "Unapproved drug, birth defect risk",
@@ -409,11 +361,7 @@
     {
       "id": "NOOTROPIC_BROMANTANE",
       "standard_name": "Bromantane",
-      "aliases": [
-        "ladasten",
-        "adamantylbromphenylamine",
-        "ADK-709"
-      ],
+      "aliases": ["ladasten", "adamantylbromphenylamine", "ADK-709"],
       "banned_date": "2025-06-15",
       "banned_by": "FDA",
       "reason": "Unapproved drug, stimulant properties",
@@ -426,10 +374,7 @@
     {
       "id": "NOOTROPIC_9MEBC",
       "standard_name": "9-Methyl-β-carboline",
-      "aliases": [
-        "9-MBC",
-        "9-methyl-beta-carboline"
-      ],
+      "aliases": ["9-MBC", "9-methyl-beta-carboline"],
       "banned_date": "2025-07-01",
       "banned_by": "FDA",
       "reason": "Unapproved research chemical, neurotoxicity concerns",
@@ -463,11 +408,7 @@
     {
       "id": "SARM_OSTARINE",
       "standard_name": "Ostarine",
-      "aliases": [
-        "MK-2866",
-        "enobosarm",
-        "GTx-024"
-      ],
+      "aliases": ["MK-2866", "enobosarm", "GTx-024"],
       "banned_date": "2017-10-31",
       "banned_by": "FDA",
       "reason": "Unapproved drug, serious safety concerns",
@@ -481,10 +422,7 @@
     {
       "id": "SARM_LIGANDROL",
       "standard_name": "Ligandrol",
-      "aliases": [
-        "LGD-4033",
-        "VK5211"
-      ],
+      "aliases": ["LGD-4033", "VK5211"],
       "banned_date": "2017-10-31",
       "banned_by": "FDA",
       "reason": "Unapproved drug, cardiovascular risks",
@@ -498,11 +436,7 @@
     {
       "id": "SARM_CARDARINE",
       "standard_name": "Cardarine",
-      "aliases": [
-        "GW501516",
-        "GW-501516",
-        "endurobol"
-      ],
+      "aliases": ["GW501516", "GW-501516", "endurobol"],
       "banned_date": "2017-10-31",
       "banned_by": "FDA",
       "reason": "Cancer risk in animal studies",
@@ -516,10 +450,7 @@
     {
       "id": "SARM_ANDARINE",
       "standard_name": "Andarine",
-      "aliases": [
-        "S4",
-        "GTx-007"
-      ],
+      "aliases": ["S4", "GTx-007"],
       "banned_date": "2017-10-31",
       "banned_by": "FDA",
       "reason": "Unapproved drug, vision problems",
@@ -533,10 +464,7 @@
     {
       "id": "SARM_RAD140",
       "standard_name": "RAD140",
-      "aliases": [
-        "testolone",
-        "RAD-140"
-      ],
+      "aliases": ["testolone", "RAD-140"],
       "banned_date": "2017-10-31",
       "banned_by": "FDA",
       "reason": "Unapproved drug, liver toxicity",
@@ -578,11 +506,7 @@
     {
       "id": "RISK_BITTER_ORANGE",
       "standard_name": "Bitter Orange",
-      "aliases": [
-        "synephrine",
-        "citrus aurantium",
-        "p-synephrine"
-      ],
+      "aliases": ["synephrine", "citrus aurantium", "p-synephrine"],
       "risk_level": "high",
       "reason": "Ephedra-like cardiovascular effects",
       "category": "stimulant",
@@ -594,33 +518,20 @@
     {
       "id": "RISK_KAVA",
       "standard_name": "Kava",
-      "aliases": [
-        "piper methysticum",
-        "kava kava",
-        "awa"
-      ],
+      "aliases": ["piper methysticum", "kava kava", "awa"],
       "risk_level": "high",
       "reason": "Severe liver damage, banned in multiple countries",
       "category": "anxiolytic",
       "severity_level": "high",
       "fda_warning": true,
-      "banned_countries": [
-        "Germany",
-        "France",
-        "Canada",
-        "UK"
-      ],
+      "banned_countries": ["Germany", "France", "Canada", "UK"],
       "notes": "Over 100 cases of severe liver toxicity reported. Banned in many countries.",
       "last_updated": "2025-07-16"
     },
     {
       "id": "RISK_COMFREY",
       "standard_name": "Comfrey",
-      "aliases": [
-        "symphytum",
-        "blackwort",
-        "bruisewort"
-      ],
+      "aliases": ["symphytum", "blackwort", "bruisewort"],
       "risk_level": "high",
       "reason": "Liver damage, cancer risk from pyrrolizidine alkaloids",
       "category": "herbal",
@@ -632,33 +543,20 @@
     {
       "id": "RISK_ARISTOLOCHIC_ACID",
       "standard_name": "Aristolochic Acid",
-      "aliases": [
-        "aristolochia",
-        "birthwort",
-        "wild ginger",
-        "snakeroot"
-      ],
+      "aliases": ["aristolochia", "birthwort", "wild ginger", "snakeroot"],
       "risk_level": "critical",
       "reason": "Kidney failure, cancer, DNA damage",
       "category": "herbal",
       "severity_level": "critical",
       "fda_warning": true,
-      "banned_countries": [
-        "USA",
-        "Canada",
-        "EU",
-        "Australia"
-      ],
+      "banned_countries": ["USA", "Canada", "EU", "Australia"],
       "notes": "Class 1 carcinogen. Causes irreversible kidney damage and cancer.",
       "last_updated": "2025-07-16"
     },
     {
       "id": "RISK_GREEN_TEA_EXTRACT_HIGH",
       "standard_name": "Green Tea Extract (High Dose)",
-      "aliases": [
-        "EGCG >800mg",
-        "camellia sinensis extract"
-      ],
+      "aliases": ["EGCG >800mg", "camellia sinensis extract"],
       "risk_level": "moderate",
       "reason": "Liver damage at doses >800mg EGCG daily",
       "category": "antioxidant",
@@ -671,10 +569,7 @@
     {
       "id": "RISK_GERMANIUM",
       "standard_name": "Germanium (Inorganic)",
-      "aliases": [
-        "germanium dioxide",
-        "germanium sesquioxide"
-      ],
+      "aliases": ["germanium dioxide", "germanium sesquioxide"],
       "risk_level": "high",
       "reason": "Kidney damage, neurologic effects",
       "category": "mineral",
@@ -686,11 +581,7 @@
     {
       "id": "RISK_KRATOM_NATURAL",
       "standard_name": "Kratom (Natural Leaf)",
-      "aliases": [
-        "mitragyna speciosa",
-        "biak",
-        "thom"
-      ],
+      "aliases": ["mitragyna speciosa", "biak", "thom"],
       "risk_level": "high",
       "reason": "Addiction potential, liver toxicity, seizures",
       "category": "botanical",
@@ -698,108 +589,131 @@
       "fda_warning": true,
       "notes": "Not lawfully marketed as supplement. FDA warnings ongoing. Deaths reported with combination use.",
       "last_updated": "2025-07-29"
+    },
+    {
+      "id": "BANNED_METAL_FIBERS",
+      "standard_name": "Metal Fiber Contamination",
+      "aliases": [
+        "metal fibers",
+        "metal shavings",
+        "metallic fibers",
+        "metal particles",
+        "metal debris",
+        "metal contamination",
+        "metallic particles",
+        "steel fibers",
+        "iron fibers"
+      ],
+      "banned_date": "2024-07-25",
+      "banned_by": "Health Canada/FDA",
+      "reason": "Metal fibers can cause serious injury to digestive system, including perforation",
+      "category": "manufacturing_contaminant",
+      "severity_level": "critical",
+      "fda_warning": true,
+      "notes": "Major recalls in Canada affecting 22+ supplement brands including multivitamins, prenatal vitamins, and specialized supplements. Metal fibers originated from manufacturing equipment malfunction.",
+      "last_updated": "2024-07-25"
+    },
+    {
+      "id": "BANNED_CONTAMINATED_GLP1",
+      "standard_name": "Contaminated GLP-1 Compounds",
+      "aliases": [
+        "contaminated semaglutide",
+        "contaminated tirzepatide",
+        "non-sterile semaglutide",
+        "non-sterile tirzepatide",
+        "compounded semaglutide contamination",
+        "compounded tirzepatide contamination",
+        "GLP-1 receptor agonist contamination",
+        "ozempic contamination",
+        "wegovy contamination",
+        "mounjaro contamination"
+      ],
+      "banned_date": "2025-ongoing",
+      "banned_by": "FDA",
+      "reason": "Lack of sterility assurance, potential bacterial contamination in compounded formulations",
+      "category": "pharmaceutical_contamination",
+      "severity_level": "high",
+      "fda_warning": true,
+      "notes": "Multiple Class II recalls for contaminated compounding pharmacy GLP-1 products. Risk of serious infections from non-sterile preparations. FDA warning against non-FDA approved compounded versions.",
+      "last_updated": "2025-09-18"
+    },
+    {
+      "id": "BANNED_PEDIATRIC_FLUORIDE",
+      "standard_name": "Fluoride Supplements (Children)",
+      "aliases": [
+        "sodium fluoride supplements",
+        "fluoride tablets for children",
+        "fluoride drops for children",
+        "pediatric fluoride supplements",
+        "children's fluoride vitamins",
+        "fluoride chewables",
+        "NaF supplements",
+        "luride",
+        "flura-drops"
+      ],
+      "banned_date": "2025-05-14",
+      "banned_by": "FDA",
+      "reason": "Potential harm to children's health, reassessment of risk-benefit profile",
+      "category": "pediatric_supplement",
+      "severity_level": "moderate",
+      "fda_warning": true,
+      "notes": "FDA announced plans to remove fluoride supplements for children from market following safety review. Concerns about fluorosis and other developmental effects. Still under regulatory review.",
+      "last_updated": "2025-05-14"
     }
   ],
   "illegal_spiking_agents": [
     {
       "id": "SPIKE_SILDENAFIL",
       "standard_name": "Sildenafil",
-      "aliases": [
-        "viagra",
-        "revatio",
-        "PDE5 inhibitor"
-      ],
-      "found_in_categories": [
-        "male enhancement",
-        "sexual enhancement"
-      ],
+      "aliases": ["viagra", "revatio", "PDE5 inhibitor"],
+      "found_in_categories": ["male enhancement", "sexual enhancement"],
       "reason": "Hidden pharmaceutical drug (PDE5 inhibitor)",
       "severity_level": "critical",
-      "health_risks": [
-        "dangerous blood pressure drops",
-        "heart interactions"
-      ],
+      "health_risks": ["dangerous blood pressure drops", "heart interactions"],
       "notes": "Most common adulterant in male enhancement supplements. Can be fatal with heart medications.",
       "last_updated": "2025-07-16"
     },
     {
       "id": "SPIKE_TADALAFIL",
       "standard_name": "Tadalafil",
-      "aliases": [
-        "cialis",
-        "adcirca"
-      ],
-      "found_in_categories": [
-        "male enhancement",
-        "sexual enhancement"
-      ],
+      "aliases": ["cialis", "adcirca"],
+      "found_in_categories": ["male enhancement", "sexual enhancement"],
       "reason": "Hidden pharmaceutical drug (PDE5 inhibitor)",
       "severity_level": "critical",
-      "health_risks": [
-        "prolonged erections",
-        "cardiovascular events"
-      ],
+      "health_risks": ["prolonged erections", "cardiovascular events"],
       "notes": "Second most common adulterant in sexual enhancement products.",
       "last_updated": "2025-07-16"
     },
     {
       "id": "SPIKE_SIBUTRAMINE",
       "standard_name": "Sibutramine",
-      "aliases": [
-        "meridia",
-        "reductil"
-      ],
-      "found_in_categories": [
-        "weight loss",
-        "fat burners"
-      ],
+      "aliases": ["meridia", "reductil"],
+      "found_in_categories": ["weight loss", "fat burners"],
       "reason": "Banned weight loss drug with cardiovascular risks",
       "severity_level": "critical",
-      "health_risks": [
-        "heart attack",
-        "stroke",
-        "high blood pressure"
-      ],
+      "health_risks": ["heart attack", "stroke", "high blood pressure"],
       "notes": "Found in 28% of tested weight loss supplements. Banned since 2010.",
       "last_updated": "2025-07-16"
     },
     {
       "id": "SPIKE_PHENOLPHTHALEIN",
       "standard_name": "Phenolphthalein",
-      "aliases": [
-        "laxative compound"
-      ],
-      "found_in_categories": [
-        "weight loss",
-        "cleanse products"
-      ],
+      "aliases": ["laxative compound"],
+      "found_in_categories": ["weight loss", "cleanse products"],
       "reason": "Carcinogenic compound, banned laxative",
       "severity_level": "critical",
-      "health_risks": [
-        "cancer risk",
-        "DNA damage"
-      ],
+      "health_risks": ["cancer risk", "DNA damage"],
       "notes": "Removed from OTC laxatives in 1999 due to cancer risk. Still found in weight loss products.",
       "last_updated": "2025-07-16"
     },
     {
       "id": "SPIKE_FLUOXETINE",
       "standard_name": "Fluoxetine",
-      "aliases": [
-        "prozac",
-        "SSRI antidepressant"
-      ],
-      "found_in_categories": [
-        "mood supplements",
-        "weight loss"
-      ],
+      "aliases": ["prozac", "SSRI antidepressant"],
+      "found_in_categories": ["mood supplements", "weight loss"],
       "reason": "Hidden prescription antidepressant",
       "severity_level": "critical",
-      "health_risks": [
-        "serotonin syndrome",
-        "withdrawal",
-        "drug interactions"
-      ],
+      "health_risks": ["serotonin syndrome", "withdrawal", "drug interactions"],
       "notes": "Found in 21% of tested weight loss supplements. Can cause dangerous interactions.",
       "last_updated": "2025-07-16"
     },
@@ -812,10 +726,7 @@
         "dimethazine",
         "designer steroids"
       ],
-      "found_in_categories": [
-        "muscle building",
-        "bodybuilding"
-      ],
+      "found_in_categories": ["muscle building", "bodybuilding"],
       "reason": "Illegal anabolic agents",
       "severity_level": "critical",
       "health_risks": [
@@ -829,14 +740,8 @@
     {
       "id": "SPIKE_DEXAMETHASONE",
       "standard_name": "Dexamethasone",
-      "aliases": [
-        "decadron",
-        "dexasone"
-      ],
-      "found_in_categories": [
-        "anti-inflammatory",
-        "joint health"
-      ],
+      "aliases": ["decadron", "dexasone"],
+      "found_in_categories": ["anti-inflammatory", "joint health"],
       "reason": "Hidden prescription corticosteroid",
       "severity_level": "critical",
       "health_risks": [
@@ -850,37 +755,19 @@
     {
       "id": "SPIKE_DICLOFENAC",
       "standard_name": "Diclofenac",
-      "aliases": [
-        "voltaren",
-        "pennsaid"
-      ],
-      "found_in_categories": [
-        "pain relief",
-        "anti-inflammatory"
-      ],
+      "aliases": ["voltaren", "pennsaid"],
+      "found_in_categories": ["pain relief", "anti-inflammatory"],
       "reason": "Hidden prescription NSAID",
       "severity_level": "critical",
-      "health_risks": [
-        "cardiovascular events",
-        "GI bleeding",
-        "kidney damage"
-      ],
+      "health_risks": ["cardiovascular events", "GI bleeding", "kidney damage"],
       "notes": "Found in multiple recalled supplements 2024-2025.",
       "last_updated": "2024-12-16"
     },
     {
       "id": "SPIKE_PHENETHYLAMINE_PEA",
       "standard_name": "Phenethylamine (PEA)",
-      "aliases": [
-        "β-phenylethylamine",
-        "beta-phenethylamine",
-        "B-PEA"
-      ],
-      "found_in_categories": [
-        "pre-workout",
-        "weight loss",
-        "nootropics"
-      ],
+      "aliases": ["β-phenylethylamine", "beta-phenethylamine", "B-PEA"],
+      "found_in_categories": ["pre-workout", "weight loss", "nootropics"],
       "reason": "Amphetamine-like stimulant, WADA prohibited",
       "severity_level": "high",
       "health_risks": [
@@ -894,15 +781,8 @@
     {
       "id": "SPIKE_METHYL7K",
       "standard_name": "7-Methylkratom",
-      "aliases": [
-        "7-MK",
-        "methylated kratom extract",
-        "enhanced kratom"
-      ],
-      "found_in_categories": [
-        "kratom products",
-        "pain relief supplements"
-      ],
+      "aliases": ["7-MK", "methylated kratom extract", "enhanced kratom"],
+      "found_in_categories": ["kratom products", "pain relief supplements"],
       "reason": "Semi-synthetic opioid, dangerous potency",
       "severity_level": "critical",
       "health_risks": [
@@ -984,11 +864,7 @@
       "fda_limit_mcg_day": 5,
       "usp_limit_mcg_day": 5,
       "ca_prop65_limit_mcg_day": 4.1,
-      "high_risk_sources": [
-        "zinc supplements",
-        "cacao",
-        "herbal supplements"
-      ],
+      "high_risk_sources": ["zinc supplements", "cacao", "herbal supplements"],
       "health_effects": "Kidney damage, bone disease, lung damage",
       "severity_level": "high",
       "notes": "Accumulates in kidneys. Higher levels in chocolate and zinc supplements.",
@@ -1017,11 +893,7 @@
     {
       "id": "WADA_TRAMADOL",
       "standard_name": "Tramadol",
-      "aliases": [
-        "ultram",
-        "tramal",
-        "zydol"
-      ],
+      "aliases": ["ultram", "tramal", "zydol"],
       "prohibition_status": "in_competition_only",
       "category": "narcotic",
       "effective_date": "2024-01-01",
@@ -1032,11 +904,7 @@
     {
       "id": "WADA_CANNABIS",
       "standard_name": "Cannabis/THC",
-      "aliases": [
-        "marijuana",
-        "THC",
-        "delta-9-THC"
-      ],
+      "aliases": ["marijuana", "THC", "delta-9-THC"],
       "prohibition_status": "in_competition_only",
       "category": "cannabinoid",
       "threshold": "150 ng/mL urine",
@@ -1071,10 +939,7 @@
     {
       "id": "STATE_PHENIBUT_ALABAMA",
       "standard_name": "Phenibut",
-      "banned_locations": [
-        "Alabama",
-        "Utah"
-      ],
+      "banned_locations": ["Alabama", "Utah"],
       "schedule_level": "Schedule II (AL), Schedule I (UT)",
       "effective_dates": {
         "Alabama": "2021-11-01",
@@ -1108,11 +973,7 @@
     {
       "id": "STATE_DMAA_CALIFORNIA",
       "standard_name": "DMAA/DMHA Combined Ban",
-      "banned_locations": [
-        "California",
-        "New York",
-        "Massachusetts"
-      ],
+      "banned_locations": ["California", "New York", "Massachusetts"],
       "schedule_level": "State Prohibited",
       "effective_dates": {
         "California": "2025-08-01",
@@ -1168,32 +1029,37 @@
       "severity_level": "critical",
       "notes": "Import Alert 54-14 for cGMP violations. Higher contamination risk from certain countries.",
       "last_updated": "2025-01-01"
-    }
-  ],
-  "new_emerging_threats": [
+    },
     {
-      "id": "THREAT_NITROSAMINES",
+      "id": "BANNED_NITROSAMINES",
       "standard_name": "Nitrosamine Impurities",
       "aliases": [
         "NDMA",
         "NDEA",
-        "NTTP"
+        "NTTP",
+        "N-nitrosodimethylamine",
+        "N-nitrosodiethylamine",
+        "nitrosamine contaminants",
+        "N-nitroso compounds",
+        "nitrosamine impurities",
+        "probable human carcinogens",
+        "genotoxic impurities"
       ],
-      "risk_level": "high",
-      "reason": "Carcinogenic impurities in manufacturing",
+      "banned_date": "2024-ongoing",
+      "banned_by": "FDA/ICH",
+      "reason": "Carcinogenic impurities from manufacturing processes, DNA-damaging compounds",
       "category": "manufacturing_contaminant",
       "severity_level": "high",
       "fda_warning": true,
-      "notes": "Found in pharmaceuticals, potential supplement issue. Requires comprehensive testing.",
+      "notes": "Carcinogenic manufacturing impurities found in supplements similar to pharmaceutical contamination. NDMA and NDEA are probable human carcinogens. Requires comprehensive testing and manufacturing controls.",
       "last_updated": "2024-09-04"
-    },
+    }
+  ],
+  "new_emerging_threats": [
     {
       "id": "THREAT_AI_SYNTHETIC_COMPOUNDS",
       "standard_name": "AI-Generated Synthetic Compounds",
-      "aliases": [
-        "designer nootropics",
-        "novel psychoactive substances"
-      ],
+      "aliases": ["designer nootropics", "novel psychoactive substances"],
       "risk_level": "critical",
       "reason": "Unknown toxicity profile, unregulated",
       "category": "synthetic",
@@ -1205,10 +1071,7 @@
     {
       "id": "THREAT_CONTAMINATED_BOTANICAL_SUBSTITUTION",
       "standard_name": "Toxic Plant Substitution",
-      "aliases": [
-        "yellow oleander substitution",
-        "plant misidentification"
-      ],
+      "aliases": ["yellow oleander substitution", "plant misidentification"],
       "risk_level": "critical",
       "reason": "Deliberate/accidental substitution with toxic plants",
       "category": "botanical_fraud",
@@ -1220,10 +1083,7 @@
     {
       "id": "THREAT_NOVEL_PEPTIDES",
       "standard_name": "Novel Research Peptides",
-      "aliases": [
-        "designer peptides",
-        "synthetic growth factors"
-      ],
+      "aliases": ["designer peptides", "synthetic growth factors"],
       "risk_level": "critical",
       "reason": "Unknown safety profile, potential endocrine disruption",
       "category": "synthetic_peptides",
@@ -1235,10 +1095,7 @@
     {
       "id": "THREAT_MISLABELED_MUSHROOMS",
       "standard_name": "Misidentified Mushroom Extracts",
-      "aliases": [
-        "medicinal mushrooms",
-        "mycelium products"
-      ],
+      "aliases": ["medicinal mushrooms", "mycelium products"],
       "risk_level": "high",
       "reason": "Species misidentification, toxic mushroom contamination",
       "category": "botanical_fraud",
@@ -1268,11 +1125,7 @@
     {
       "id": "PHARMA_DAPOXETINE",
       "standard_name": "Dapoxetine",
-      "aliases": [
-        "priligy",
-        "westoxetin",
-        "SSRIs in supplements"
-      ],
+      "aliases": ["priligy", "westoxetin", "SSRIs in supplements"],
       "found_in_categories": [
         "male enhancement",
         "sexual performance",
@@ -1291,11 +1144,7 @@
     {
       "id": "PHARMA_LORCASERIN",
       "standard_name": "Lorcaserin",
-      "aliases": [
-        "belviq",
-        "lorqess",
-        "hidden weight loss drug"
-      ],
+      "aliases": ["belviq", "lorqess", "hidden weight loss drug"],
       "found_in_categories": [
         "weight loss",
         "appetite control",
@@ -1353,11 +1202,7 @@
       ],
       "reason": "Designer stimulant derivatives",
       "severity_level": "critical",
-      "health_risks": [
-        "heart attacks",
-        "strokes",
-        "unknown long-term effects"
-      ],
+      "health_risks": ["heart attacks", "strokes", "unknown long-term effects"],
       "notes": "New analogs designed to evade DMAA/DMHA bans.",
       "last_updated": "2025-09-11"
     }
@@ -1366,11 +1211,7 @@
     {
       "id": "SYNTH_CUMYL_PICA",
       "standard_name": "CUMYL-PICA",
-      "aliases": [
-        "SGT-263",
-        "cumyl-pica",
-        "synthetic cannabinoid"
-      ],
+      "aliases": ["SGT-263", "cumyl-pica", "synthetic cannabinoid"],
       "found_in_categories": [
         "hemp products",
         "CBD alternatives",
@@ -1378,11 +1219,7 @@
       ],
       "reason": "Dangerous synthetic cannabinoid",
       "severity_level": "critical",
-      "health_risks": [
-        "seizures",
-        "psychosis",
-        "death"
-      ],
+      "health_risks": ["seizures", "psychosis", "death"],
       "notes": "Found in products marketed as legal CBD alternatives.",
       "last_updated": "2025-09-11"
     }
@@ -1391,11 +1228,7 @@
     {
       "id": "PEPTIDE_TB500",
       "standard_name": "TB-500 (Thymosin Beta-4)",
-      "aliases": [
-        "thymosin β4",
-        "tb500",
-        "repair peptide"
-      ],
+      "aliases": ["thymosin β4", "tb500", "repair peptide"],
       "found_in_categories": [
         "recovery supplements",
         "healing supplements",
@@ -1439,11 +1272,7 @@
     {
       "id": "RC_CARDARINE_ANALOGS",
       "standard_name": "Cardarine Derivatives",
-      "aliases": [
-        "GW501516 analogs",
-        "modified cardarine",
-        "PPARδ agonists"
-      ],
+      "aliases": ["GW501516 analogs", "modified cardarine", "PPARδ agonists"],
       "found_in_categories": [
         "endurance supplements",
         "fat burners",
@@ -1451,11 +1280,7 @@
       ],
       "reason": "Designer variants of banned substance",
       "severity_level": "critical",
-      "health_risks": [
-        "cancer risk",
-        "organ toxicity",
-        "unknown effects"
-      ],
+      "health_risks": ["cancer risk", "organ toxicity", "unknown effects"],
       "notes": "New derivatives emerging to evade WADA/FDA bans.",
       "last_updated": "2025-09-11"
     }

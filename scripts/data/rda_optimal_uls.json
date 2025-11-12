@@ -516,7 +516,7 @@
       "ul": "ND",
       "ul_note": "No UL established due to lack of observed adverse effects",
       "optimal_range": "90-200",
-      "highest_ul": "none",
+      "highest_ul": null,
       "warnings": [
         "May interfere with warfarin",
         "Consult doctor if on blood thinners"
@@ -639,7 +639,7 @@
       "ul": "ND",
       "ul_note": "No UL established due to lack of observed adverse effects",
       "optimal_range": "1.2-100",
-      "highest_ul": "none",
+      "highest_ul": null,
       "warnings": [
         "Large doses may cause fatigue or irritability"
       ],
@@ -758,7 +758,7 @@
       "ul": "ND",
       "ul_note": "No UL established due to lack of observed adverse effects",
       "optimal_range": "1.3-400",
-      "highest_ul": "none",
+      "highest_ul": null,
       "warnings": [
         "High doses may cause bright yellow urine (harmless)"
       ],
@@ -1252,7 +1252,7 @@
       "ul": "ND",
       "ul_note": "No UL established due to lack of observed adverse effects",
       "optimal_range": "2.4-1000",
-      "highest_ul": "none",
+      "highest_ul": null,
       "warnings": [
         "May interact with certain medications",
         "High doses may cause acne in some individuals"
@@ -1376,7 +1376,7 @@
       "ul": "ND",
       "ul_note": "No UL established due to lack of observed adverse effects",
       "optimal_range": "30-10000",
-      "highest_ul": "none",
+      "highest_ul": null,
       "warnings": [
         "High doses may interfere with lab tests",
         "May affect thyroid function tests"
@@ -1500,7 +1500,7 @@
       "ul": "ND",
       "ul_note": "No UL established due to lack of observed adverse effects",
       "optimal_range": "5-100",
-      "highest_ul": "none",
+      "highest_ul": null,
       "warnings": [
         "Very high doses may cause diarrhea"
       ],
@@ -1750,7 +1750,7 @@
       "ul": "ND",
       "ul_note": "No official RDA or UL established",
       "optimal_range": "500-2000",
-      "highest_ul": "none",
+      "highest_ul": null,
       "is_conditionally_essential": true,
       "conditionally_essential_for": [
         "Individuals with PCOS",
@@ -2747,7 +2747,7 @@
       "ul": "ND",
       "ul_note": "No UL established due to lack of observed adverse effects",
       "optimal_range": "25-200",
-      "highest_ul": "none",
+      "highest_ul": null,
       "warnings": [
         "High doses may cause liver damage",
         "May affect blood sugar"
@@ -3241,7 +3241,7 @@
       "ul": "ND",
       "ul_note": "No UL established due to lack of observed adverse effects from food sources",
       "optimal_range": "3000-4700",
-      "highest_ul": "none",
+      "highest_ul": null,
       "warnings": [
         "High doses may cause hyperkalemia",
         "May interact with heart medications"
@@ -3365,7 +3365,7 @@
       "ul": "ND",
       "ul_note": "No UL established but <2300mg recommended for health",
       "optimal_range": "1500-2300",
-      "highest_ul": "none",
+      "highest_ul": null,
       "warnings": [
         "High intake linked to high blood pressure",
         "May affect heart health"
@@ -3850,7 +3850,7 @@
       "ul": "ND",
       "ul_note": "No official RDA established, UL based on toxicity studies",
       "optimal_range": "10-100",
-      "highest_ul": "none",
+      "highest_ul": null,
       "warnings": [
         "High doses may cause GI upset",
         "May affect blood sugar"
@@ -3970,7 +3970,7 @@
       "ul": "ND",
       "ul_note": "No official RDA established, AI based on cardiovascular benefits",
       "optimal_range": "1-3",
-      "highest_ul": "none",
+      "highest_ul": null,
       "warnings": [
         "High doses may increase bleeding risk",
         "May affect immune function"
@@ -4096,7 +4096,7 @@
       "ul": "ND",
       "ul_note": "No official RDA established, generally considered safe",
       "optimal_range": "100-300",
-      "highest_ul": "none",
+      "highest_ul": null,
       "is_conditionally_essential": true,
       "conditionally_essential_for": [
         "Individuals over 40",
@@ -4231,7 +4231,7 @@
       "ul": "ND",
       "ul_note": "No official RDA established, generally considered safe",
       "optimal_range": "100-600",
-      "highest_ul": "none",
+      "highest_ul": null,
       "is_conditionally_essential": true,
       "conditionally_essential_for": [
         "Elderly",
@@ -4364,7 +4364,7 @@
       "ul": "ND",
       "ul_note": "No official RDA established, generally considered safe",
       "optimal_range": "1-3",
-      "highest_ul": "none",
+      "highest_ul": null,
       "is_conditionally_essential": true,
       "conditionally_essential_for": [
         "Vegans",
@@ -4493,7 +4493,7 @@
       "ul": "ND",
       "ul_note": "No official RDA or UL established, GRAS status up to 20mg/day",
       "optimal_range": "6-20",
-      "highest_ul": "none",
+      "highest_ul": null,
       "warnings": [
         "Generally well tolerated",
         "May cause yellowing of skin at very high doses"
@@ -4615,7 +4615,7 @@
       "ul": "ND",
       "ul_note": "No official RDA or UL established, often combined with lutein",
       "optimal_range": "2-10",
-      "highest_ul": "none",
+      "highest_ul": null,
       "warnings": [
         "Generally well tolerated",
         "Usually taken with lutein"
@@ -4738,7 +4738,7 @@
       "ul": "ND",
       "ul_note": "No official RDA or UL established, GRAS status",
       "optimal_range": "5-30",
-      "highest_ul": "none",
+      "highest_ul": null,
       "warnings": [
         "Generally well tolerated",
         "May cause orange skin discoloration at very high doses"
@@ -4861,7 +4861,7 @@
       "ul": "ND",
       "ul_note": "Conditionally essential nutrient, no official UL established",
       "optimal_range": "3-5",
-      "highest_ul": "none",
+      "highest_ul": null,
       "is_conditionally_essential": true,
       "conditionally_essential_for": [
         "Vegans",
@@ -4998,7 +4998,7 @@
       "ul": "ND",
       "ul_note": "Conditionally essential nutrient, no official UL established",
       "optimal_range": "0.5-2",
-      "highest_ul": "none",
+      "highest_ul": null,
       "is_conditionally_essential": true,
       "conditionally_essential_for": [
         "Vegans",
@@ -5137,7 +5137,7 @@
       "ul": "ND",
       "ul_note": "No official UL established",
       "optimal_range": "0.5-1.5",
-      "highest_ul": "none",
+      "highest_ul": null,
       "is_conditionally_essential": true,
       "conditionally_essential_for": [
         "Elderly",
@@ -5267,7 +5267,7 @@
       "ul": "ND",
       "ul_note": "No official UL established",
       "optimal_range": "300-600",
-      "highest_ul": "none",
+      "highest_ul": null,
       "is_conditionally_essential": true,
       "conditionally_essential_for": [
         "Elderly",
@@ -5396,7 +5396,7 @@
       "ul": "ND",
       "ul_note": "No official UL established",
       "optimal_range": "250-500",
-      "highest_ul": "none",
+      "highest_ul": null,
       "is_conditionally_essential": true,
       "conditionally_essential_for": [
         "Those with high oxidative stress",
@@ -5526,7 +5526,7 @@
       "ul": "ND",
       "ul_note": "No UL established due to lack of observed adverse effects from food or water sources.",
       "optimal_range": "0.1-1",
-      "highest_ul": "none",
+      "highest_ul": null,
       "warnings": [
         "Inhalation is highly toxic; UL is not applicable to inhalation exposure.",
         "Dermatitis can be caused by exposure."
@@ -5644,7 +5644,7 @@
       "ul": "ND",
       "ul_note": "No UL established due to lack of observed adverse effects.",
       "optimal_range": "5-50",
-      "highest_ul": "none",
+      "highest_ul": null,
       "warnings": [
         "Inhalation of crystalline silica can cause silicosis.",
         "Supplements should be amorphous silica forms."
@@ -5763,7 +5763,7 @@
       "ul": "ND",
       "ul_note": "No UL established due to lack of adverse effects from food or water sources.",
       "optimal_range": "200-500",
-      "highest_ul": "none",
+      "highest_ul": null,
       "warnings": [
         "In concentrated form, can cause diarrhea in high doses."
       ],
