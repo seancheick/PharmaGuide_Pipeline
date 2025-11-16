@@ -1,6 +1,23 @@
 {
   "harmful_additives": [
     {
+      "id": "ADD_POLYETHYLENE_GLYCOL",
+      "standard_name": "Polyethylene Glycol (PEG)",
+      "aliases": [
+        "PEG",
+        "polyethylene glycol",
+        "macrogol",
+        "PEG-8",
+        "PEG-20",
+        "PEG-40",
+        "PEG-3350"
+      ],
+      "risk_level": "moderate",
+      "category": "solvent_excipient",
+      "notes": "Synthetic polymer used as solvent/carrier and excipient in liquids and softgels. Rare but documented IgE-mediated allergic reactions and anaphylaxis, with potential cross-reactivity to polysorbates. Generally poorly absorbed orally but can cause hypersensitivity and intolerance in sensitive individuals.",
+      "last_updated": "2025-11-12"
+    },
+    {
       "id": "ADD_TITANIUM_DIOXIDE",
       "standard_name": "Titanium Dioxide",
       "aliases": [
@@ -918,7 +935,6 @@
         "E1201",
         "polyvidone",
         "1-vinyl-2-pyrrolidone polymer",
-        "crospovidone",
         "copovidone",
         "synthetic binding agent"
       ],
@@ -1050,9 +1066,7 @@
         "synthetic B12",
         "cyanocobalamin",
         "synthetic B6",
-        "pyridoxine hydrochloride",
-        "synthetic folate",
-        "pteroylmonoglutamic acid"
+        "pyridoxine hydrochloride"
       ],
       "risk_level": "moderate",
       "category": "synthetic_nutrient",
@@ -1211,7 +1225,9 @@
       "aliases": [
         "E436",
         "sorbitan tristearate ethoxylated",
-        "polyoxyethylene sorbitan tristearate"
+        "polyoxyethylene sorbitan tristearate",
+        "tween 65",
+        "E number E495"
       ],
       "risk_level": "moderate",
       "category": "emulsifier",
@@ -1238,7 +1254,8 @@
       "aliases": [
         "E544",
         "calcium aluminophosphate",
-        "aluminum calcium phosphate"
+        "aluminum calcium phosphate",
+        "E541"
       ],
       "risk_level": "moderate",
       "category": "leavening_agent",
@@ -1381,7 +1398,7 @@
         "non-GMO maltodextrin",
         "organic maltodextrin"
       ],
-      "risk_level": "medium",
+      "risk_level": "moderate",
       "category": "high_glycemic_carrier",
       "notes": "HEALTH CONCERN: High glycemic index (GI 85-105) similar to pure glucose. Can cause rapid blood sugar spikes, potentially problematic for diabetics and those with metabolic disorders. Often derived from genetically modified corn. May disrupt gut bacteria balance and contribute to inflammation. While FDA GRAS-approved, growing evidence suggests potential negative metabolic effects.",
       "last_updated": "2025-09-20"
@@ -1399,7 +1416,7 @@
         "chlorophyllin",
         "chlorophyll derivative"
       ],
-      "risk_level": "medium",
+      "risk_level": "moderate",
       "category": "synthetic_colorant_copper",
       "notes": "SAFETY CONCERN: Semi-synthetic derivative of chlorophyll with copper substituted for magnesium. Limited long-term safety data for regular consumption. Potential copper accumulation concerns with chronic use. While over 50 years of use and FDA GRAS status, recent studies question safety of regular copper chlorophyllin consumption. May cause gastrointestinal upset in sensitive individuals.",
       "last_updated": "2025-09-20"
@@ -1446,6 +1463,269 @@
       "category": "sugar_alcohol_digestive",
       "notes": "LOW RISK: Sugar alcohol mixture that can cause digestive issues similar to other sugar alcohols. May cause bloating, gas, and diarrhea when consumed in larger amounts. Generally recognized as safe but may cause gastrointestinal discomfort.",
       "last_updated": "2025-09-21"
+    },
+    {
+      "id": "ADD_ACESULFAME_K",
+      "standard_name": "Acesulfame K",
+      "aliases": [
+        "acesulfame potassium",
+        "ace-K",
+        "E950",
+        "Sunett",
+        "Sweet One",
+        "acesulfame k",
+        "acesulfame-K"
+      ],
+      "risk_level": "moderate",
+      "category": "sweetener_artificial",
+      "notes": "Artificial sweetener ~200x sweeter than sugar. Some studies suggest potential effects on gut microbiome and insulin response. FDA-approved but concerns remain about long-term effects.",
+      "last_updated": "2025-11-14"
+    },
+    {
+      "id": "ADD_SACCHARIN",
+      "standard_name": "Saccharin",
+      "aliases": [
+        "E954",
+        "Sweet'N Low",
+        "saccharin sodium",
+        "sodium saccharin",
+        "benzoic sulfimide",
+        "saccharine"
+      ],
+      "risk_level": "moderate",
+      "category": "sweetener_artificial",
+      "notes": "Oldest artificial sweetener (~300-400x sweeter than sugar). Previously linked to bladder cancer in animal studies, though delisted as carcinogen. May have metallic aftertaste and potential effects on gut bacteria.",
+      "last_updated": "2025-11-14"
+    },
+    {
+      "id": "ADD_NEOTAME",
+      "standard_name": "Neotame",
+      "aliases": [
+        "E961",
+        "neotame sweetener",
+        "n-[n-(3,3-dimethylbutyl)-l-α-aspartyl]-l-phenylalanine 1-methyl ester"
+      ],
+      "risk_level": "moderate",
+      "category": "sweetener_artificial",
+      "notes": "Chemically similar to aspartame but 7,000-13,000x sweeter. Newer sweetener with less long-term safety data. Not widely used in supplements yet.",
+      "last_updated": "2025-11-14"
+    },
+    {
+      "id": "ADD_ADVANTAME",
+      "standard_name": "Advantame",
+      "aliases": [
+        "E969",
+        "advantame sweetener"
+      ],
+      "risk_level": "moderate",
+      "category": "sweetener_artificial",
+      "notes": "Newest FDA-approved intense sweetener (2014), 20,000x sweeter than sugar. Limited long-term safety data. Chemically similar to aspartame and neotame.",
+      "last_updated": "2025-11-14"
+    },
+    {
+      "id": "ADD_SODIUM_SULFITE",
+      "standard_name": "Sodium Sulfite",
+      "aliases": [
+        "E221",
+        "sulfurous acid sodium salt",
+        "sodium sulphite",
+        "disodium sulfite"
+      ],
+      "risk_level": "high",
+      "category": "preservative_artificial",
+      "notes": "Preservative and antioxidant. Can cause severe allergic reactions, especially in asthmatics (estimated 5-10% of asthmatics sensitive). May cause headaches, hives, and respiratory issues.",
+      "last_updated": "2025-11-14"
+    },
+    {
+      "id": "ADD_SODIUM_METABISULFITE",
+      "standard_name": "Sodium Metabisulfite",
+      "aliases": [
+        "E223",
+        "sodium metabisulphite",
+        "sodium pyrosulfite",
+        "disodium metabisulfite",
+        "SMBS"
+      ],
+      "risk_level": "high",
+      "category": "preservative_artificial",
+      "notes": "Powerful preservative that releases sulfur dioxide. Major allergen and asthma trigger. Required to be labeled. Can cause severe reactions including anaphylaxis in sensitive individuals.",
+      "last_updated": "2025-11-14"
+    },
+    {
+      "id": "ADD_SULFUR_DIOXIDE",
+      "standard_name": "Sulfur Dioxide",
+      "aliases": [
+        "E220",
+        "SO2",
+        "sulfurous anhydride",
+        "sulphur dioxide"
+      ],
+      "risk_level": "high",
+      "category": "preservative_artificial",
+      "notes": "Preservative gas used in dried fruits and some supplements. Potent respiratory irritant. Can trigger asthma attacks and allergic reactions. Must be declared on labels.",
+      "last_updated": "2025-11-14"
+    },
+    {
+      "id": "ADD_GREEN_3",
+      "standard_name": "Green 3 (Fast Green FCF)",
+      "aliases": [
+        "E143",
+        "Fast Green",
+        "FCF",
+        "C.I. 42053",
+        "food green 3"
+      ],
+      "risk_level": "moderate",
+      "category": "colorant_artificial",
+      "notes": "Synthetic green dye. Rarely used in supplements. Some concerns about potential carcinogenicity and allergic reactions. Banned in EU.",
+      "last_updated": "2025-11-14"
+    },
+    {
+      "id": "ADD_ORANGE_B",
+      "standard_name": "Orange B",
+      "aliases": [
+        "orange b dye",
+        "disodium salt"
+      ],
+      "risk_level": "high",
+      "category": "colorant_artificial",
+      "notes": "Synthetic orange dye. Restricted to use in hot dog and sausage casings only in the US. Not approved for general food use. Potential carcinogen.",
+      "last_updated": "2025-11-14"
+    },
+    {
+      "id": "ADD_CITRUS_RED_2",
+      "standard_name": "Citrus Red 2",
+      "aliases": [
+        "citrus red no. 2",
+        "solvent red 80",
+        "C.I. 12156"
+      ],
+      "risk_level": "high",
+      "category": "colorant_artificial",
+      "notes": "Synthetic orange-red dye. Restricted to coloring orange peels only. Classified as possible human carcinogen. Should not be in supplements.",
+      "last_updated": "2025-11-14"
+    },
+    {
+      "id": "ADD_POLYSORBATE_40",
+      "standard_name": "Polysorbate 40",
+      "aliases": [
+        "E434",
+        "tween 40",
+        "polyoxyethylene sorbitan monopalmitate"
+      ],
+      "risk_level": "moderate",
+      "category": "emulsifier",
+      "notes": "Synthetic emulsifier from sorbitol and palmitic acid. May affect gut microbiome. Less common than polysorbate 80 but similar concerns about potential inflammation and metabolic effects.",
+      "last_updated": "2025-11-14"
+    },
+    {
+      "id": "ADD_SORBITAN_MONOSTEARATE",
+      "standard_name": "Sorbitan Monostearate",
+      "aliases": [
+        "E491",
+        "span 60",
+        "sorbitan stearate",
+        "SMS"
+      ],
+      "risk_level": "moderate",
+      "category": "emulsifier",
+      "notes": "Synthetic emulsifier. Generally considered safe but may affect gut barrier function and microbiome in high doses. Commonly used in softgels.",
+      "last_updated": "2025-11-14"
+    },
+    {
+      "id": "ADD_PHTHALATES",
+      "standard_name": "Phthalates",
+      "aliases": [
+        "phthalate esters",
+        "DBP",
+        "DEHP",
+        "DEP",
+        "di(2-ethylhexyl) phthalate",
+        "dibutyl phthalate",
+        "diethyl phthalate"
+      ],
+      "risk_level": "high",
+      "category": "endocrine_disruptor",
+      "notes": "Plasticizers that can leach from packaging or coating. Endocrine disruptors linked to reproductive issues, hormone disruption, and developmental problems. Should not be intentionally added but may contaminate from packaging.",
+      "last_updated": "2025-11-14"
+    },
+    {
+      "id": "ADD_FORMALDEHYDE",
+      "standard_name": "Formaldehyde",
+      "aliases": [
+        "E240",
+        "methanal",
+        "methylene oxide",
+        "formalin",
+        "paraformaldehyde"
+      ],
+      "risk_level": "critical",
+      "category": "preservative_artificial",
+      "notes": "Toxic preservative and contaminant. Known human carcinogen (IARC Group 1). Banned as food additive in most countries. May form from breakdown of other preservatives. Should never be intentionally added to supplements.",
+      "last_updated": "2025-11-14"
+    },
+    {
+      "id": "ADD_ACRYLAMIDE",
+      "standard_name": "Acrylamide",
+      "aliases": [
+        "2-propenamide",
+        "acrylic amide",
+        "vinyl amide"
+      ],
+      "risk_level": "high",
+      "category": "processing_contaminant",
+      "notes": "Forms during high-temperature processing (>120°C) of carbohydrate-rich foods. Probable human carcinogen (IARC Group 2A). Not intentionally added but may contaminate processed supplement ingredients.",
+      "last_updated": "2025-11-14"
+    },
+    {
+      "id": "ADD_CHROMIUM_HEXAVALENT",
+      "standard_name": "Chromium (VI)",
+      "aliases": [
+        "hexavalent chromium",
+        "chromium 6",
+        "Cr(VI)",
+        "chromium(6+)",
+        "chromate"
+      ],
+      "risk_level": "high",
+      "category": "heavy_metal_contaminant",
+      "notes": "Toxic, carcinogenic form of chromium (unlike beneficial Cr(III) used in supplements). Known human carcinogen. May contaminate from industrial processes. Should be tested for and absent from supplements.",
+      "last_updated": "2025-11-14"
+    },
+    {
+      "id": "ADD_CANOLA_OIL",
+      "standard_name": "Canola Oil (Refined)",
+      "aliases": [
+        "rapeseed oil",
+        "refined canola oil",
+        "canola oil refined",
+        "low erucic acid rapeseed oil",
+        "LEAR oil"
+      ],
+      "risk_level": "moderate",
+      "category": "processed_fat",
+      "notes": "Highly processed oil prone to oxidation. Often from GMO sources. High-heat processing may create trans fats and lipid oxidation products. Omega-6 heavy. Prefer cold-pressed or avoid.",
+      "last_updated": "2025-11-14"
+    },
+    {
+      "id": "ADD_CORN_OIL",
+      "standard_name": "Corn Oil (Refined)",
+      "aliases": [
+        "refined corn oil",
+        "maize oil",
+        "corn oil refined"
+      ],
+      "risk_level": "moderate",
+      "category": "processed_fat",
+      "notes": "Highly refined oil with high omega-6 content. Often from GMO corn. Prone to oxidation. May contain pesticide residues. Prefer unrefined oils or avoid in supplements.",
+      "last_updated": "2025-11-14"
     }
-  ]
+  ],
+  "_metadata": {
+    "description": "Harmful additives database with risk levels and scoring penalties",
+    "purpose": "quality_penalties",
+    "total_entries": 89,
+    "schema_version": "1.0",
+    "last_updated": "2025-11-14"
+  }
 }

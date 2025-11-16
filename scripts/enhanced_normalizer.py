@@ -27,7 +27,7 @@ except ImportError:
 from constants import (
     INGREDIENT_QUALITY_MAP,
     HARMFUL_ADDITIVES,
-    NON_HARMFUL_ADDITIVES,
+    OTHER_INGREDIENTS,  # Merged: non_harmful + passive_inactive
     ALLERGENS,
     TOP_MANUFACTURERS,
     PROPRIETARY_BLENDS,
@@ -35,7 +35,6 @@ from constants import (
     EXCLUDED_LABEL_PHRASES,
     STANDARDIZED_BOTANICALS,
     BANNED_RECALLED,
-    PASSIVE_INACTIVE_INGREDIENTS,
     BOTANICAL_INGREDIENTS,
     ABSORPTION_ENHANCERS,
     ENHANCED_DELIVERY,
@@ -67,6 +66,7 @@ import sys
 import os
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from unmapped_ingredient_tracker import UnmappedIngredientTracker
+from functional_grouping_handler import FunctionalGroupingHandler
 
 logger = logging.getLogger(__name__)
 
@@ -148,6 +148,8 @@ class EnhancedIngredientMatcher:
             # === CRITICAL SAFETY: Minerals vs Compounds ===
             ("calcium", "calcium carbonate"), # Element vs Specific form
             ("magnesium", "magnesium oxide"), # Element vs Specific form
+            ("magnesium", "magnesium stearate"), # Element vs Flow agent/lubricant
+            ("magnesium stearate", "magnesium"), # Flow agent vs Element (reverse)
             ("iron", "iron sulfate"),       # Element vs Specific form
             ("zinc", "zinc oxide"),         # Element vs Specific form
             ("chromium", "chromium picolinate"), # Element vs Specific form
@@ -225,7 +227,7 @@ class EnhancedIngredientMatcher:
             ("chromium", "vanadium"),       # Different trace minerals
         }
         
-    @functools.lru_cache(maxsize=10000)
+    @functools.lru_cache(maxsize=2000)  # PERFORMANCE: Reduced from 10000 to prevent memory bloat
     def preprocess_text(self, text: str) -> str:
         """
         Comprehensive text preprocessing with enhanced validation
@@ -445,7 +447,7 @@ class EnhancedIngredientMatcher:
         targets_tuple = tuple(targets)
         return self._safe_fuzzy_match_cached(query, targets_tuple, category)
 
-    @functools.lru_cache(maxsize=5000)
+    @functools.lru_cache(maxsize=1000)  # PERFORMANCE: Reduced from 5000 to prevent memory bloat
     def _safe_fuzzy_match_cached(self, query: str, targets_tuple: tuple, category: str = None) -> Tuple[Optional[str], int]:
         """Thread-safe cached version of fuzzy matching"""
         # Convert tuple back to list for processing
@@ -673,8 +675,7 @@ class EnhancedDSLDNormalizer:
         self.proprietary_blends = self._load_json(PROPRIETARY_BLENDS)
         self.standardized_botanicals = self._load_json(STANDARDIZED_BOTANICALS)
         self.banned_recalled = self._load_json(BANNED_RECALLED)
-        self.non_harmful_additives = self._load_json(NON_HARMFUL_ADDITIVES)
-        self.passive_inactive_ingredients = self._load_json(PASSIVE_INACTIVE_INGREDIENTS)
+        self.other_ingredients = self._load_json(OTHER_INGREDIENTS)  # Merged: non_harmful + passive_inactive
         self.botanical_ingredients = self._load_json(BOTANICAL_INGREDIENTS)
         self.absorption_enhancers = self._load_json(ABSORPTION_ENHANCERS)
 
@@ -685,6 +686,9 @@ class EnhancedDSLDNormalizer:
         
         # Initialize enhanced matcher
         self.matcher = EnhancedIngredientMatcher()
+
+        # Initialize functional grouping handler for transparency scoring
+        self.grouping_handler = FunctionalGroupingHandler()
 
         # Preprocess excluded phrases for fast matching
         self._preprocessed_excluded_labels = {
@@ -711,7 +715,7 @@ class EnhancedDSLDNormalizer:
         # Track unmapped ingredients with more detail
         self.unmapped_ingredients = Counter()
         self.unmapped_details = {}  # Store more context about unmapped ingredients
-        
+
         # Initialize the enhanced unmapped ingredient tracker for separate active/inactive files
         self.unmapped_tracker = None  # Will be initialized when output_dir is set
 
@@ -819,10 +823,10 @@ class EnhancedDSLDNormalizer:
         quality_ingredients = set(self.ingredient_alias_lookup.keys())
         allergen_ingredients = set(self.allergen_lookup.keys())
         harmful_ingredients = set(self.harmful_lookup.keys())
-        non_harmful_ingredients = set(self.non_harmful_lookup.keys())
+        other_ingredients_set = set(self.other_ingredients_lookup.keys())
 
         # Find ingredients with no safety classification
-        no_safety_data = quality_ingredients - (allergen_ingredients | harmful_ingredients | non_harmful_ingredients)
+        no_safety_data = quality_ingredients - (allergen_ingredients | harmful_ingredients | other_ingredients_set)
 
         if no_safety_data:
             if len(no_safety_data) > 50:  # If too many, this might be expected
@@ -892,7 +896,7 @@ class EnhancedDSLDNormalizer:
             "quality_database": len(self.ingredient_alias_lookup),
             "allergen_database": len(self.allergen_lookup),
             "harmful_database": len(self.harmful_lookup),
-            "non_harmful_database": len(self.non_harmful_lookup),
+            "other_ingredients_database": len(self.other_ingredients_lookup),
             "botanical_database": len(getattr(self, 'botanical_lookup', {})),
             "total_errors": len(report["errors"]),
             "total_warnings": len(report["warnings"])
@@ -984,9 +988,14 @@ class EnhancedDSLDNormalizer:
         for key, value in self.allergen_lookup.items():
             # Only add if not already present (banned takes priority)
             if key not in self._fast_exact_lookup:
+                # SAFETY: Ensure standard_name exists before accessing
+                standard_name = value.get("standard_name", "")
+                if not standard_name:
+                    logger.warning(f"Allergen missing standard_name: {key}")
+                    continue
                 self._fast_exact_lookup[key] = {
                     "type": "allergen",
-                    "allergen_type": value["standard_name"].lower(),
+                    "allergen_type": standard_name.lower(),
                     "severity": value.get("severity_level", "low"),
                     "mapped": True,
                     "priority": 2
@@ -1071,12 +1080,12 @@ class EnhancedDSLDNormalizer:
                             "priority": 6
                         }
 
-        # PRIORITY 7: Add NON-HARMFUL ADDITIVES lookups
-        for key, value in self.non_harmful_lookup.items():
+        # PRIORITY 7: Add OTHER INGREDIENTS lookups (safe additives/excipients)
+        for key, value in self.other_ingredients_lookup.items():
             # Only add if not already present (higher priorities take precedence)
             if key not in self._fast_exact_lookup:
                 self._fast_exact_lookup[key] = {
-                    "type": "non_harmful",
+                    "type": "other_ingredient",
                     "standard_name": value.get("standard_name", key),
                     "category": value.get("category", "other"),
                     "additive_type": value.get("additive_type", "unknown"),
@@ -1112,36 +1121,39 @@ class EnhancedDSLDNormalizer:
                             "priority": 8
                         }
 
-        # PRIORITY 9: Add PASSIVE INACTIVE INGREDIENTS lookups (lowest priority - catch-all)
-        passive_ingredients = self.passive_inactive_ingredients.get("passive_inactive_ingredients", [])
-        for passive in passive_ingredients:
-            standard_name = passive.get("standard_name", "")
+        # PRIORITY 9: Add OTHER INGREDIENTS (FDA terminology) lookups (lowest priority - catch-all)
+        other_ingredients_list = self.other_ingredients.get("other_ingredients", [])
+        for other_ing in other_ingredients_list:
+            standard_name = other_ing.get("standard_name", "")
             if standard_name:
                 processed_standard = self.matcher.preprocess_text(standard_name)
                 # Only add if not already present (all higher priorities take precedence)
                 if processed_standard not in self._fast_exact_lookup:
                     self._fast_exact_lookup[processed_standard] = {
-                        "type": "passive",
+                        "type": "other_ingredient",
                         "standard_name": standard_name,
-                        "category": passive.get("category", "inactive"),
+                        "category": other_ing.get("category", "other"),
+                        "is_additive": other_ing.get("is_additive", False),
                         "mapped": True,
                         "priority": 9
                     }
 
                 # Add aliases
-                for alias in passive.get("aliases", []) or []:
+                for alias in other_ing.get("aliases", []) or []:
                     processed_alias = self.matcher.preprocess_text(alias)
                     if processed_alias not in self._fast_exact_lookup:
                         self._fast_exact_lookup[processed_alias] = {
-                            "type": "passive",
+                            "type": "other_ingredient",
                             "standard_name": standard_name,
-                            "category": passive.get("category", "inactive"),
+                            "category": other_ing.get("category", "other"),
+                            "is_additive": other_ing.get("is_additive", False),
                             "mapped": True,
                             "priority": 9
                         }
 
         # PRIORITY 10: Add ABSORPTION ENHANCERS lookups
-        for enhancer in self.absorption_enhancers:
+        absorption_enhancers_list = self.absorption_enhancers.get("absorption_enhancers", [])
+        for enhancer in absorption_enhancers_list:
             enhancer_name = enhancer.get("name", "")  # Note: uses 'name' not 'standard_name'
             if enhancer_name:
                 processed_name = self.matcher.preprocess_text(enhancer_name)
@@ -1235,7 +1247,9 @@ class EnhancedDSLDNormalizer:
                     is_proprietary)
 
         # Track unmapped ingredients only if not found in any database
-        if not is_mapped:
+        # DATA INTEGRITY FIX: Filter out label phrases and nutrition facts
+        # This prevents "None", "Contains < 2% of", etc. from appearing in unmapped list
+        if not is_mapped and not self._is_nutrition_fact(name):
             processed_name = self.matcher.preprocess_text(name)
             # Thread-safe tracking (Counter is thread-safe for basic operations)
             self.unmapped_ingredients[name] += 1
@@ -1286,7 +1300,7 @@ class EnhancedDSLDNormalizer:
     def non_harmful_variations(self) -> List[str]:
         """Cached non-harmful additive variations list for fuzzy matching"""
         if self._non_harmful_variations_cache is None:
-            self._non_harmful_variations_cache = list(self.non_harmful_lookup.keys())
+            self._non_harmful_variations_cache = list(self.other_ingredients_lookup.keys())
         return self._non_harmful_variations_cache
 
     @property
@@ -1317,7 +1331,7 @@ class EnhancedDSLDNormalizer:
         """Cached inactive variations list for fuzzy matching"""
         if self._inactive_variations_cache is None:
             all_inactive_terms = []
-            inactive_ingredients = self.passive_inactive_ingredients.get("passive_inactive_ingredients", [])
+            inactive_ingredients = self.other_ingredients.get("other_ingredients", [])
             for inactive in inactive_ingredients:
                 all_inactive_terms.append(inactive.get("standard_name", "").lower())
                 all_inactive_terms.extend([alias.lower() for alias in inactive.get("aliases", []) or []])
@@ -1479,32 +1493,32 @@ class EnhancedDSLDNormalizer:
                 if processed_alias not in self.ingredient_alias_lookup:
                     self.ingredient_alias_lookup[processed_alias] = alias  # Use the alias as standard name
         
-        # Build enhanced non-harmful additives lookup
-        self.non_harmful_lookup = {}
-        for additive in self.non_harmful_additives.get("non_harmful_additives", []) or []:
-            standard_name = additive["standard_name"]
+        # Build enhanced other ingredients lookup (safe additives/excipients - FDA "Other Ingredients")
+        self.other_ingredients_lookup = {}
+        for other_ing in self.other_ingredients.get("other_ingredients", []) or []:
+            standard_name = other_ing["standard_name"]
             # Add standard name variations
             name_variations = self.matcher.generate_variations(
                 self.matcher.preprocess_text(standard_name)
             )
             for variation in name_variations:
-                self.non_harmful_lookup[variation] = additive
+                self.other_ingredients_lookup[variation] = other_ing
 
             # Add alias variations
-            for alias in additive.get("aliases", []) or []:
+            for alias in other_ing.get("aliases", []) or []:
                 alias_variations = self.matcher.generate_variations(
                     self.matcher.preprocess_text(alias)
                 )
                 for variation in alias_variations:
-                    self.non_harmful_lookup[variation] = additive
-                    
+                    self.other_ingredients_lookup[variation] = other_ing
+
                 # Add to main ingredient lookup to prevent fuzzy conflicts
                 processed_alias = self.matcher.preprocess_text(alias)
                 if processed_alias not in self.ingredient_alias_lookup:
                     self.ingredient_alias_lookup[processed_alias] = alias
-        
-        # CRITICAL FIX: Add passive inactive ingredients to main lookup to prevent fuzzy conflicts
-        for ingredient in self.passive_inactive_ingredients.get("passive_inactive_ingredients", []) or []:
+
+        # CRITICAL FIX: Add other ingredients to main lookup to prevent fuzzy conflicts
+        for ingredient in self.other_ingredients.get("other_ingredients", []) or []:
             standard_name = ingredient.get("standard_name", "")
             if standard_name:
                 processed_standard = self.matcher.preprocess_text(standard_name)
@@ -1519,7 +1533,7 @@ class EnhancedDSLDNormalizer:
         logger.info(f"Built lookup indices with {len(self.ingredient_alias_lookup)} ingredient variations")
         logger.info(f"Built allergen index with {len(self.allergen_lookup)} variations")
         logger.info(f"Built harmful additive index with {len(self.harmful_lookup)} variations")
-        logger.info(f"Built non-harmful additive index with {len(self.non_harmful_lookup)} variations")
+        logger.info(f"Built other ingredients index with {len(self.other_ingredients_lookup)} variations")
 
         # Build optimized fast lookups
         self._build_fast_lookups_impl()
@@ -1566,7 +1580,7 @@ class EnhancedDSLDNormalizer:
         forms_tuple = tuple(sorted(validated_forms)) if validated_forms else ()
         return self._enhanced_ingredient_mapping_cached(validated_name, forms_tuple)
 
-    @functools.lru_cache(maxsize=10000)
+    @functools.lru_cache(maxsize=2000)  # PERFORMANCE: Reduced from 10000 to prevent memory bloat
     def _enhanced_ingredient_mapping_cached(self, name: str, forms_tuple: tuple) -> Tuple[str, bool, List[str]]:
         """Thread-safe cached ingredient mapping"""
         forms = list(forms_tuple) if forms_tuple else []
@@ -1721,14 +1735,34 @@ class EnhancedDSLDNormalizer:
         # Check if ingredient exists in harmful additives database
         harmful_info = self._enhanced_harmful_check(name)
         if harmful_info["category"] != "none":
-            logger.debug(f"Found '{name}' in harmful additives database -> '{harmful_info['category']}'")
-            return name, True, forms
-        
+            # DATA INTEGRITY FIX: Return canonical name from database, not input name
+            # This ensures fuzzy-matched ingredients use standardized names
+            processed_name = self.matcher.preprocess_text(name)
+            if processed_name in self.harmful_lookup:
+                canonical_name = self.harmful_lookup[processed_name].get("standard_name", name)
+            else:
+                # Must be a fuzzy match - find the canonical name
+                fuzzy_match, _ = self.matcher.fuzzy_match(processed_name, self.harmful_variations, "harmful")
+                canonical_name = self.harmful_lookup.get(fuzzy_match, {}).get("standard_name", name) if fuzzy_match else name
+
+            logger.debug(f"Found '{name}' in harmful additives database -> '{canonical_name}' (category: {harmful_info['category']})")
+            return canonical_name, True, forms
+
         # Check if ingredient exists in allergens database
         allergen_info = self._enhanced_allergen_check(name, forms)
         if allergen_info["is_allergen"]:
-            logger.debug(f"Found '{name}' in allergens database -> '{allergen_info['type']}'")
-            return name, True, forms
+            # DATA INTEGRITY FIX: Return canonical name from database, not input name
+            # This ensures fuzzy-matched allergens use standardized names
+            processed_name = self.matcher.preprocess_text(name)
+            if processed_name in self.allergen_lookup:
+                canonical_name = self.allergen_lookup[processed_name].get("standard_name", name)
+            else:
+                # Must be a fuzzy match - find the canonical name
+                fuzzy_match, _ = self.matcher.fuzzy_match(processed_name, self.allergen_variations, "allergen")
+                canonical_name = self.allergen_lookup.get(fuzzy_match, {}).get("standard_name", name) if fuzzy_match else name
+
+            logger.debug(f"Found '{name}' in allergens database -> '{canonical_name}' (type: {allergen_info['type']})")
+            return canonical_name, True, forms
         
         # Use unified fast lookup for all remaining databases
         fast_result = self._fast_ingredient_lookup(name)
@@ -1751,7 +1785,7 @@ class EnhancedDSLDNormalizer:
         forms_tuple = tuple(sorted(forms)) if forms else ()
         return self._enhanced_allergen_check_cached(name, forms_tuple)
 
-    @functools.lru_cache(maxsize=5000)
+    @functools.lru_cache(maxsize=1000)  # PERFORMANCE: Reduced from 5000 to prevent memory bloat
     def _enhanced_allergen_check_cached(self, name: str, forms_tuple: tuple) -> Dict[str, Any]:
         """Thread-safe cached allergen checking"""
         forms = list(forms_tuple) if forms_tuple else []
@@ -1770,21 +1804,27 @@ class EnhancedDSLDNormalizer:
             # Try exact match
             if processed_term in self.allergen_lookup:
                 allergen = self.allergen_lookup[processed_term]
-                result["is_allergen"] = True
-                result["type"] = allergen["standard_name"].lower()
-                result["severity"] = allergen.get("severity_level", "low")
-                break
+                # SAFETY: Ensure standard_name exists
+                standard_name = allergen.get("standard_name", "")
+                if standard_name:
+                    result["is_allergen"] = True
+                    result["type"] = standard_name.lower()
+                    result["severity"] = allergen.get("severity_level", "low")
+                    break
 
             # Try fuzzy match - SAFETY: Allergens should NOT use fuzzy matching for safety
             # This will be BLOCKED by the safety check but we'll try anyway to log the attempt
             fuzzy_match, score = self.matcher.fuzzy_match(processed_term, self.allergen_variations, "allergen")
             if fuzzy_match:
                 allergen = self.allergen_lookup[fuzzy_match]
-                result["is_allergen"] = True
-                result["type"] = allergen["standard_name"].lower()
-                result["severity"] = allergen.get("severity_level", "low")
-                logger.debug(f"Fuzzy allergen match '{term}' -> '{fuzzy_match}' (score: {score})")
-                break
+                # SAFETY: Ensure standard_name exists
+                standard_name = allergen.get("standard_name", "")
+                if standard_name:
+                    result["is_allergen"] = True
+                    result["type"] = standard_name.lower()
+                    result["severity"] = allergen.get("severity_level", "low")
+                    logger.debug(f"Fuzzy allergen match '{term}' -> '{fuzzy_match}' (score: {score})")
+                    break
 
         return result
     
@@ -1793,7 +1833,7 @@ class EnhancedDSLDNormalizer:
         self._cache_stats["harmful_calls"] += 1
         return self._enhanced_harmful_check_cached(name)
 
-    @functools.lru_cache(maxsize=5000)
+    @functools.lru_cache(maxsize=1000)  # PERFORMANCE: Reduced from 5000 to prevent memory bloat
     def _enhanced_harmful_check_cached(self, name: str) -> Dict[str, Any]:
         """Thread-safe cached harmful checking"""
         result = {
@@ -1824,32 +1864,35 @@ class EnhancedDSLDNormalizer:
         self._cache_stats["non_harmful_calls"] += 1
         return self._enhanced_non_harmful_check_cached(name)
 
-    @functools.lru_cache(maxsize=5000)
+    @functools.lru_cache(maxsize=1000)  # PERFORMANCE: Reduced from 5000 to prevent memory bloat
     def _enhanced_non_harmful_check_cached(self, name: str) -> Dict[str, Any]:
         """Thread-safe cached non-harmful checking"""
         result = {
             "category": "none",
             "additive_type": None,
-            "clean_label_score": None
+            "clean_label_score": None,
+            "is_additive": None
         }
 
         processed_name = self.matcher.preprocess_text(name)
 
         # Try exact match
-        if processed_name in self.non_harmful_lookup:
-            non_harmful = self.non_harmful_lookup[processed_name]
-            result["category"] = non_harmful.get("category", "other")
-            result["additive_type"] = non_harmful.get("additive_type", "unknown")
-            result["clean_label_score"] = non_harmful.get("clean_label_score", 7)
+        if processed_name in self.other_ingredients_lookup:
+            other_ing = self.other_ingredients_lookup[processed_name]
+            result["category"] = other_ing.get("category", "other")
+            result["additive_type"] = other_ing.get("additive_type", "unknown")
+            result["clean_label_score"] = other_ing.get("clean_label_score", 7)
+            result["is_additive"] = other_ing.get("is_additive", False)
         else:
-            # Try fuzzy match (using cached list) - SAFETY: Non-harmful additives are safer for fuzzy matching
+            # Try fuzzy match (using cached list) - SAFETY: Other ingredients are safe for fuzzy matching
             fuzzy_match, score = self.matcher.fuzzy_match(processed_name, self.non_harmful_variations, "inactive")
             if fuzzy_match:
-                non_harmful = self.non_harmful_lookup[fuzzy_match]
-                result["category"] = non_harmful.get("category", "other")
-                result["additive_type"] = non_harmful.get("additive_type", "unknown")
-                result["clean_label_score"] = non_harmful.get("clean_label_score", 7)
-                logger.debug(f"Fuzzy non-harmful match '{name}' -> '{fuzzy_match}' (score: {score})")
+                other_ing = self.other_ingredients_lookup[fuzzy_match]
+                result["category"] = other_ing.get("category", "other")
+                result["additive_type"] = other_ing.get("additive_type", "unknown")
+                result["clean_label_score"] = other_ing.get("clean_label_score", 7)
+                result["is_additive"] = other_ing.get("is_additive", False)
+                logger.debug(f"Fuzzy other ingredient match '{name}' -> '{fuzzy_match}' (score: {score})")
 
         return result
     
@@ -2268,14 +2311,16 @@ class EnhancedDSLDNormalizer:
         name = ing.get("name", "")
         notes = ing.get("notes", "")
         forms = [f.get("name", "") for f in ing.get("forms", []) or []]
-        
+
         # Extract form information from ingredient name if no explicit forms provided
         if not forms and name:
             extracted_forms = self._extract_forms_from_ingredient_name(name)
             if extracted_forms:
                 forms = extracted_forms
-        
+
         # Skip nutritional facts - these are not supplement ingredients
+        # Note: Harmful nutrition facts (trans fat, sugar, sodium) are captured by
+        # _extract_nutritional_warnings() which runs before ingredient processing
         if self._is_nutrition_fact(name):
             logger.debug(f"Skipping nutrition fact: {name}")
             return None
@@ -2423,7 +2468,7 @@ class EnhancedDSLDNormalizer:
     def _process_other_ingredients_enhanced(self, other_ing_data: Dict) -> List[Dict]:
         """Process inactive/other ingredients with enhanced mapping and parallel processing"""
         ingredients = other_ing_data.get("ingredients", [])
-        
+
         # Handle None values from DSLD data
         if ingredients is None:
             return []
@@ -2432,13 +2477,14 @@ class EnhancedDSLDNormalizer:
             return []
 
         # Normalize ingredients - convert strings to dict format if needed
+        # PRESERVE forms exactly as they appear - do NOT expand
         normalized_ingredients = []
         for ing in ingredients:
             if isinstance(ing, str):
                 # Convert string to dict format
                 normalized_ingredients.append({"name": ing})
             elif isinstance(ing, dict):
-                # Already in correct format
+                # Keep ingredient as-is, preserving all fields including forms
                 normalized_ingredients.append(ing)
             else:
                 # Skip invalid entries
@@ -2453,14 +2499,48 @@ class EnhancedDSLDNormalizer:
             return self._process_ingredients_sequential(normalized_ingredients)
 
     def _process_ingredients_parallel(self, ingredients: List[Dict]) -> List[Dict]:
-        """Process ingredients using parallel execution"""
+        """Process ingredients using parallel execution with functional grouping support"""
+        # First, expand any functional groupings (must be done sequentially to preserve order)
+        expanded_ingredients = []
+        for ing in ingredients:
+            name = ing.get("name", "")
+
+            # TRANSPARENCY SCORING: Check for functional grouping
+            grouping_data = self.grouping_handler.process_ingredient_for_cleaning(name)
+
+            if grouping_data['type'] == 'functional_group_with_details':
+                # Expand into multiple ingredients with functional context
+                for specific_ing in grouping_data['ingredients']:
+                    expanded_ingredients.append({
+                        **ing,  # Copy order and other fields
+                        "name": specific_ing,
+                        "_functional_context": grouping_data['functional_type'],
+                        "_functional_prefix": grouping_data['prefix'],
+                        "_transparency": "good"
+                    })
+            elif grouping_data['type'] in ['functional_group_vague', 'vague_declaration']:
+                # Keep as-is but add transparency flags
+                expanded_ingredients.append({
+                    **ing,
+                    "_transparency": "poor",
+                    "_vague_disclosure": True,
+                    "_vague_flags": grouping_data.get('vague_flags', [])
+                })
+            else:
+                # Regular ingredient
+                expanded_ingredients.append({
+                    **ing,
+                    "_transparency": "standard"
+                })
+
+        # Now process expanded ingredients in parallel
         processed = []
 
         with ThreadPoolExecutor(max_workers=self._max_workers) as executor:
             # Submit all ingredient processing tasks
             future_to_ingredient = {
-                executor.submit(self._process_ingredient_parallel, ing): ing
-                for ing in ingredients
+                executor.submit(self._process_ingredient_for_other_parallel, ing): ing
+                for ing in expanded_ingredients
             }
 
             # Collect results as they complete
@@ -2484,7 +2564,8 @@ class EnhancedDSLDNormalizer:
                         "allergen": False,
                         "allergenType": None,
                         "allergenSeverity": None,
-                        "mapped": False
+                        "mapped": False,
+                        "transparency": "standard"
                     })
 
         # Sort by original order (with safe comparison)
@@ -2499,6 +2580,122 @@ class EnhancedDSLDNormalizer:
         processed.sort(key=safe_order_key)
         return processed
 
+    def _process_ingredient_for_other_parallel(self, ingredient_data: Dict[str, Any]) -> Dict[str, Any]:
+        """Process a single other/inactive ingredient for parallel execution"""
+        name = ingredient_data.get("name", "")
+
+        # Enhanced mapping
+        standard_name, mapped, _ = self._enhanced_ingredient_mapping(name)
+
+        # Enhanced checks
+        allergen_info = self._enhanced_allergen_check(name)
+        harmful_info = self._enhanced_harmful_check(name)
+
+        # Check if proprietary blend
+        is_proprietary = self._is_proprietary_blend_name(name)
+
+        # Calculate final mapping status
+        is_mapped = (mapped or
+                    harmful_info["category"] != "none" or
+                    allergen_info["is_allergen"] or
+                    is_proprietary)
+
+        # Track unmapped ingredients only if not found in any database
+        if not is_mapped and not self._is_nutrition_fact(name):
+            processed_name = self.matcher.preprocess_text(name)
+            # Thread-safe tracking (Counter is thread-safe for basic operations)
+            self.unmapped_ingredients[name] += 1
+            self.unmapped_details[name] = {
+                "processed_name": processed_name,
+                "forms": [],
+                "variations_tried": self.matcher.generate_variations(processed_name),
+                "is_active": False  # Other ingredients
+            }
+
+        # Get non-harmful additive info for correct category
+        non_harmful_info = self._enhanced_non_harmful_check(name)
+
+        # Use category from our database if available, otherwise use DSLD category
+        db_category = non_harmful_info.get("category", "none")
+        if db_category != "none":
+            # Use our database category (correct)
+            category = db_category
+            ingredient_group = non_harmful_info.get("additive_type", ingredient_data.get("ingredientGroup", ""))
+        else:
+            # Fall back to DSLD category (may be incorrect but better than nothing)
+            category = ingredient_data.get("category", "")
+            ingredient_group = ingredient_data.get("ingredientGroup", "")
+
+        # Build result with transparency data
+        result = {
+            "order": ingredient_data.get("order", 0),
+            "name": name,
+            "standardName": standard_name,
+            "category": category,
+            "ingredientGroup": ingredient_group,
+            "isHarmful": harmful_info["category"] != "none",
+            "harmfulCategory": harmful_info["category"],
+            "riskLevel": harmful_info["risk_level"],
+            "allergen": allergen_info["is_allergen"],
+            "allergenType": allergen_info["type"],
+            "allergenSeverity": allergen_info["severity"],
+            "mapped": is_mapped,
+            "transparency": ingredient_data.get("_transparency", "standard")
+        }
+
+        # FORMS DISCLOSURE: Check if ingredient has forms array
+        # If forms exist, preserve them and mark as disclosed
+        # If no forms but it's a functional grouping, mark as undisclosed
+        ing_forms = ingredient_data.get("forms", [])
+
+        # List of functional grouping terms
+        functional_terms = [
+            "natural color", "natural colors",
+            "natural flavor", "natural flavors",
+            "artificial color", "artificial colors",
+            "artificial flavor", "artificial flavors",
+            "preservatives", "sweeteners", "enzymes"
+        ]
+
+        is_functional_grouping = any(
+            term in name.lower()
+            for term in functional_terms
+        )
+
+        if ing_forms and isinstance(ing_forms, list) and len(ing_forms) > 0:
+            # Forms are disclosed - preserve them exactly as they appear
+            forms_list = []
+            for form_item in ing_forms:
+                if isinstance(form_item, dict):
+                    form_name = form_item.get("name", "")
+                    if form_name:
+                        forms_list.append(form_name)
+                elif isinstance(form_item, str):
+                    forms_list.append(form_item)
+
+            if forms_list:
+                result["forms"] = forms_list
+                result["forms_disclosed"] = True
+                # Good transparency because forms are disclosed
+                result["transparency"] = "good"
+        elif is_functional_grouping:
+            # This is a functional grouping but no forms provided
+            result["forms"] = "undisclosed"
+            result["forms_disclosed"] = False
+            # Keep existing transparency (usually "poor" for vague disclosures)
+
+        # Add functional context if present (from colon-style groupings)
+        if "_functional_context" in ingredient_data:
+            result["functional_context"] = ingredient_data["_functional_context"]
+            result["functional_prefix"] = ingredient_data["_functional_prefix"]
+
+        # Add vague disclosure flags if present
+        if ingredient_data.get("_vague_disclosure"):
+            result["vague_disclosure"] = True
+            result["vague_flags"] = ingredient_data.get("_vague_flags", [])
+
+        return result
+
     def _process_ingredients_sequential(self, ingredients: List[Dict]) -> List[Dict]:
         """Process ingredients sequentially (for small lists)"""
         processed = []
@@ -2506,48 +2703,196 @@ class EnhancedDSLDNormalizer:
         for ing in ingredients:
             name = ing.get("name", "")
 
-            # Enhanced mapping
-            standard_name, mapped, _ = self._enhanced_ingredient_mapping(name)
+            # TRANSPARENCY SCORING: Check for functional grouping first
+            grouping_data = self.grouping_handler.process_ingredient_for_cleaning(name)
 
-            # Enhanced checks
-            allergen_info = self._enhanced_allergen_check(name)
-            harmful_info = self._enhanced_harmful_check(name)
+            if grouping_data['type'] == 'functional_group_with_details':
+                # Good transparency - preserve with context (e.g., "Natural Colors: Beet Root Powder")
+                for specific_ing in grouping_data['ingredients']:
+                    # Process each specific ingredient
+                    standard_name, mapped, _ = self._enhanced_ingredient_mapping(specific_ing)
+                    allergen_info = self._enhanced_allergen_check(specific_ing)
+                    harmful_info = self._enhanced_harmful_check(specific_ing)
+                    is_proprietary = self._is_proprietary_blend_name(specific_ing)
 
-            # Check if proprietary blend
-            is_proprietary = self._is_proprietary_blend_name(name)
+                    is_mapped = (mapped or
+                                harmful_info["category"] != "none" or
+                                allergen_info["is_allergen"] or
+                                is_proprietary)
 
-            # An ingredient is considered "mapped" if it's found in ANY reference database
-            # This includes ingredient databases, harmful additives, allergen databases, or proprietary blends
-            is_mapped = (mapped or
-                        harmful_info["category"] != "none" or
-                        allergen_info["is_allergen"] or
-                        is_proprietary)
+                    # Track unmapped if needed
+                    if not is_mapped and not self._is_nutrition_fact(specific_ing):
+                        processed_name = self.matcher.preprocess_text(specific_ing)
+                        self.unmapped_ingredients[specific_ing] += 1
+                        self.unmapped_details[specific_ing] = {
+                            "processed_name": processed_name,
+                            "forms": [],
+                            "variations_tried": self.matcher.generate_variations(processed_name),
+                            "is_active": False
+                        }
 
-            # Track unmapped ingredients only if not found in any database
-            if not is_mapped:
-                processed_name = self.matcher.preprocess_text(name)
-                self.unmapped_ingredients[name] += 1
-                self.unmapped_details[name] = {
-                    "processed_name": processed_name,
-                    "forms": [],
-                    "variations_tried": self.matcher.generate_variations(processed_name),
-                    "is_active": False  # Inactive ingredients
+                    processed.append({
+                        "order": ing.get("order", 0),
+                        "name": specific_ing,
+                        "standardName": standard_name,
+                        "category": ing.get("category", ""),
+                        "ingredientGroup": ing.get("ingredientGroup", ""),
+                        "isHarmful": harmful_info["category"] != "none",
+                        "harmfulCategory": harmful_info["category"],
+                        "riskLevel": harmful_info["risk_level"],
+                        "allergen": allergen_info["is_allergen"],
+                        "allergenType": allergen_info["type"],
+                        "allergenSeverity": allergen_info["severity"],
+                        "mapped": is_mapped,
+                        # TRANSPARENCY SCORING: Add functional context
+                        "functional_context": grouping_data['functional_type'],
+                        "functional_prefix": grouping_data['prefix'],
+                        "transparency": "good"
+                    })
+
+            elif grouping_data['type'] in ['functional_group_vague', 'vague_declaration']:
+                # Poor transparency - flag vague disclosure (e.g., just "Natural Flavors")
+                # Still process the ingredient but flag it
+                standard_name, mapped, _ = self._enhanced_ingredient_mapping(name)
+                allergen_info = self._enhanced_allergen_check(name)
+                harmful_info = self._enhanced_harmful_check(name)
+                is_proprietary = self._is_proprietary_blend_name(name)
+
+                is_mapped = (mapped or
+                            harmful_info["category"] != "none" or
+                            allergen_info["is_allergen"] or
+                            is_proprietary)
+
+                # Track unmapped if needed
+                if not is_mapped and not self._is_nutrition_fact(name):
+                    processed_name = self.matcher.preprocess_text(name)
+                    self.unmapped_ingredients[name] += 1
+                    self.unmapped_details[name] = {
+                        "processed_name": processed_name,
+                        "forms": [],
+                        "variations_tried": self.matcher.generate_variations(processed_name),
+                        "is_active": False
+                    }
+
+                processed.append({
+                    "order": ing.get("order", 0),
+                    "name": name,
+                    "standardName": standard_name,
+                    "category": ing.get("category", ""),
+                    "ingredientGroup": ing.get("ingredientGroup", ""),
+                    "isHarmful": harmful_info["category"] != "none",
+                    "harmfulCategory": harmful_info["category"],
+                    "riskLevel": harmful_info["risk_level"],
+                    "allergen": allergen_info["is_allergen"],
+                    "allergenType": allergen_info["type"],
+                    "allergenSeverity": allergen_info["severity"],
+                    "mapped": is_mapped,
+                    # TRANSPARENCY SCORING: Add vague flags
+                    "transparency": "poor",
+                    "vague_disclosure": True,
+                    "vague_flags": grouping_data.get('vague_flags', [])
+                })
+
+            else:
+                # Regular ingredient - process normally
+                # Enhanced mapping
+                standard_name, mapped, _ = self._enhanced_ingredient_mapping(name)
+
+                # Enhanced checks
+                allergen_info = self._enhanced_allergen_check(name)
+                harmful_info = self._enhanced_harmful_check(name)
+                non_harmful_info = self._enhanced_non_harmful_check(name)
+
+                # Check if proprietary blend
+                is_proprietary = self._is_proprietary_blend_name(name)
+
+                # An ingredient is considered "mapped" if it's found in ANY reference database
+                # This includes ingredient databases, harmful additives, allergen databases, or proprietary blends
+                is_mapped = (mapped or
+                            harmful_info["category"] != "none" or
+                            allergen_info["is_allergen"] or
+                            is_proprietary)
+
+                # Track unmapped ingredients only if not found in any database
+                # DATA INTEGRITY FIX: Filter out label phrases and nutrition facts
+                # This prevents "None", "Contains < 2% of", etc. from appearing in unmapped list
+                if not is_mapped and not self._is_nutrition_fact(name):
+                    processed_name = self.matcher.preprocess_text(name)
+                    self.unmapped_ingredients[name] += 1
+                    self.unmapped_details[name] = {
+                        "processed_name": processed_name,
+                        "forms": [],
+                        "variations_tried": self.matcher.generate_variations(processed_name),
+                        "is_active": False  # Inactive ingredients
+                    }
+
+                # Use category from our database if available, otherwise use DSLD category
+                db_category = non_harmful_info.get("category", "none")
+                if db_category != "none":
+                    # Use our database category (correct)
+                    category = db_category
+                    ingredient_group = non_harmful_info.get("additive_type", ing.get("ingredientGroup", ""))
+                else:
+                    # Fall back to DSLD category (may be incorrect but better than nothing)
+                    category = ing.get("category", "")
+                    ingredient_group = ing.get("ingredientGroup", "")
+
+                result = {
+                    "order": ing.get("order", 0),
+                    "name": name,
+                    "standardName": standard_name,
+                    "category": category,
+                    "ingredientGroup": ingredient_group,
+                    "isHarmful": harmful_info["category"] != "none",
+                    "harmfulCategory": harmful_info["category"],
+                    "riskLevel": harmful_info["risk_level"],
+                    "allergen": allergen_info["is_allergen"],
+                    "allergenType": allergen_info["type"],
+                    "allergenSeverity": allergen_info["severity"],
+                    "mapped": is_mapped,
+                    "transparency": "standard"
                 }
 
-            processed.append({
-                "order": ing.get("order", 0),
-                "name": name,
-                "standardName": standard_name,
-                "category": ing.get("category", ""),
-                "ingredientGroup": ing.get("ingredientGroup", ""),
-                "isHarmful": harmful_info["category"] != "none",
-                "harmfulCategory": harmful_info["category"],
-                "riskLevel": harmful_info["risk_level"],
-                "allergen": allergen_info["is_allergen"],
-                "allergenType": allergen_info["type"],
-                "allergenSeverity": allergen_info["severity"],
-                "mapped": is_mapped
-            })
+                # FORMS DISCLOSURE: Check if ingredient has forms array
+                ing_forms = ing.get("forms", [])
+
+                # List of functional grouping terms
+                functional_terms = [
+                    "natural color", "natural colors",
+                    "natural flavor", "natural flavors",
+                    "artificial color", "artificial colors",
+                    "artificial flavor", "artificial flavors",
+                    "preservatives", "sweeteners", "enzymes"
+                ]
+
+                is_functional_grouping = any(
+                    term in name.lower()
+                    for term in functional_terms
+                )
+
+                if ing_forms and isinstance(ing_forms, list) and len(ing_forms) > 0:
+                    # Forms are disclosed - preserve them exactly as they appear
+                    forms_list = []
+                    for form_item in ing_forms:
+                        if isinstance(form_item, dict):
+                            form_name = form_item.get("name", "")
+                            if form_name:
+                                forms_list.append(form_name)
+                        elif isinstance(form_item, str):
+                            forms_list.append(form_item)
+
+                    if forms_list:
+                        result["forms"] = forms_list
+                        result["forms_disclosed"] = True
+                        # Good transparency because forms are disclosed
+                        result["transparency"] = "good"
+                elif is_functional_grouping:
+                    # This is a functional grouping but no forms provided
+                    result["forms"] = "undisclosed"
+                    result["forms_disclosed"] = False
+                    # Keep transparency as "standard" or "poor" depending on other checks
+
+                processed.append(result)
 
         return processed
     
@@ -2970,8 +3315,10 @@ class EnhancedDSLDNormalizer:
             if "allergi" in stmt_type.lower():
                 # Extract specific allergens mentioned
                 for allergen_data in self.allergens_db.get("common_allergens", []) or []:
-                    if allergen_data["standard_name"].lower() in notes.lower():
-                        allergens.append(allergen_data["standard_name"].lower())
+                    # SAFETY: Ensure standard_name exists
+                    standard_name = allergen_data.get("standard_name", "")
+                    if standard_name and standard_name.lower() in notes.lower():
+                        allergens.append(standard_name.lower())
             
             processed.append({
                 "type": stmt_type,
@@ -3150,10 +3497,57 @@ class EnhancedDSLDNormalizer:
         # All blends must have full disclosure
         return total_blends > 0 and full_disclosure_count == total_blends
 
+    def get_unmapped_snapshot(self) -> set:
+        """Get a snapshot of current unmapped ingredient names for delta tracking.
+
+        Returns:
+            Set of unmapped ingredient names currently tracked
+        """
+        return set(self.unmapped_ingredients.keys())
+
+    def get_unmapped_delta(self, previous_snapshot: set) -> Dict[str, Any]:
+        """Get unmapped ingredients added since the previous snapshot.
+
+        Args:
+            previous_snapshot: Set of ingredient names from previous snapshot
+
+        Returns:
+            Dict with newly unmapped ingredients and their details
+        """
+        current_snapshot = set(self.unmapped_ingredients.keys())
+        new_unmapped = current_snapshot - previous_snapshot
+
+        unmapped_with_details = []
+        for name in new_unmapped:
+            details = self.unmapped_details.get(name, {})
+            unmapped_with_details.append({
+                "name": name,
+                "occurrences": self.unmapped_ingredients[name],
+                "processedName": details.get("processed_name", ""),
+                "forms": details.get("forms", []),
+                "variationsTried": details.get("variations_tried", []),
+                "isActive": details.get("is_active", False),
+                "suggestedMapping": {
+                    "needsReview": True,
+                    "category": "unknown",
+                    "confidence": "low"
+                }
+            })
+
+        return {
+            "unmapped": unmapped_with_details,
+            "stats": {
+                "totalUnmapped": len(new_unmapped),
+                "totalOccurrences": sum(self.unmapped_ingredients[name] for name in new_unmapped),
+                "enhancedProcessing": True,
+                "fuzzyMatchingEnabled": FUZZY_AVAILABLE
+            }
+        }
+
     def get_enhanced_unmapped_summary(self) -> Dict[str, Any]:
         """Get detailed summary of unmapped ingredients with context"""
         unmapped_with_details = []
-        
+
         for name, count in self.unmapped_ingredients.most_common():
             details = self.unmapped_details.get(name, {})
             unmapped_with_details.append({
@@ -3169,7 +3563,7 @@ class EnhancedDSLDNormalizer:
                     "confidence": "low"
                 }
             })
-        
+
         return {
             "unmapped": unmapped_with_details,
             "stats": {
@@ -3227,7 +3621,7 @@ class EnhancedDSLDNormalizer:
         if processed_name in self._preprocessed_excluded_labels:
             logger.debug(f"Excluding label phrase: {name}")
             return True
-            
+
         # Enhanced pattern matching using ENHANCED_EXCLUSION_PATTERNS from constants
         name_lower = name.lower()
 
@@ -3236,9 +3630,9 @@ class EnhancedDSLDNormalizer:
             if re.search(pattern, name_lower):
                 logger.debug(f"Excluding via enhanced pattern: {name}")
                 return True
-            
+
         # All pattern-based exclusions are now handled by ENHANCED_EXCLUSION_PATTERNS
-            
+
         return False
     
     def _is_proprietary_blend_name(self, name: str) -> bool:
@@ -4290,14 +4684,16 @@ class EnhancedDSLDNormalizer:
         """
         Extract nutritional warning information for UI display
         Only flag if above thresholds: sugar >1g, sodium >150mg, saturated fat >2g
+        Trans fat is flagged at ANY amount (>0g)
         """
         warnings = {
             "excessiveDoses": [],  # Initialize but do not populate during cleaning
             "sugarContent": None,
             "sodiumContent": None,
-            "fatContent": None
+            "fatContent": None,
+            "transFat": None  # Added for trans fat warnings
         }
-        
+
         # Define nutritional component patterns and thresholds
         nutritional_checks = {
             "sugar": {
@@ -4313,6 +4709,11 @@ class EnhancedDSLDNormalizer:
             "saturated_fat": {
                 "keywords": ["saturated fat", "saturated fats", "sat fat"],
                 "threshold": 2,  # grams
+                "unit_conversions": {"g": 1, "gram": 1, "grams": 1, "mg": 0.001}
+            },
+            "trans_fat": {
+                "keywords": ["trans fat", "trans fats", "trans fatty acid"],
+                "threshold": 0,  # ANY amount of trans fat is flagged
                 "unit_conversions": {"g": 1, "gram": 1, "grams": 1, "mg": 0.001}
             }
         }
@@ -4362,14 +4763,28 @@ class EnhancedDSLDNormalizer:
                     amount_info = self._extract_nutritional_amount(ing_dict)
                     if amount_info:
                         amount_in_g = self._convert_to_standard_unit(
-                            amount_info["amount"], 
-                            amount_info["unit"], 
+                            amount_info["amount"],
+                            amount_info["unit"],
                             nutritional_checks["saturated_fat"]["unit_conversions"]
                         )
                         if amount_in_g > nutritional_checks["saturated_fat"]["threshold"]:
                             warnings["fatContent"] = f"{amount_in_g}g saturated fat per serving"
                     break
-        
+
+            # Check trans fat content (ANY amount is flagged)
+            for keyword in nutritional_checks["trans_fat"]["keywords"]:
+                if keyword in name:
+                    amount_info = self._extract_nutritional_amount(ing_dict)
+                    if amount_info:
+                        amount_in_g = self._convert_to_standard_unit(
+                            amount_info["amount"],
+                            amount_info["unit"],
+                            nutritional_checks["trans_fat"]["unit_conversions"]
+                        )
+                        if amount_in_g > nutritional_checks["trans_fat"]["threshold"]:
+                            warnings["transFat"] = f"{amount_in_g}g trans fat per serving"
+                    break
+
         return warnings
     
     def _extract_nutritional_amount(self, ingredient: Dict) -> Optional[Dict]:

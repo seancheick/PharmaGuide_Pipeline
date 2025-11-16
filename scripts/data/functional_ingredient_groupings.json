@@ -1,0 +1,164 @@
+{
+  "functional_groupings": [
+    {
+      "id": "FG_NATURAL_COLORS",
+      "pattern": "natural colors?:",
+      "type": "color_disclosure",
+      "transparency_score_with_details": 8,
+      "transparency_score_without_details": 3,
+      "vague_declaration": "Natural Colors",
+      "best_practice": "List specific color sources (e.g., Beet Root Powder, Turmeric Extract)",
+      "notes": "FDA allows generic 'Natural Colors' but best practice is specific disclosure"
+    },
+    {
+      "id": "FG_NATURAL_FLAVORS",
+      "pattern": "natural flavors?:",
+      "type": "flavor_disclosure",
+      "transparency_score_with_details": 8,
+      "transparency_score_without_details": 2,
+      "vague_declaration": "Natural Flavors",
+      "best_practice": "List specific flavor sources (e.g., Vanilla Extract, Lemon Oil)",
+      "notes": "FDA allows generic 'Natural Flavors' but this hides potential allergens and is poor transparency"
+    },
+    {
+      "id": "FG_ARTIFICIAL_COLORS",
+      "pattern": "artificial colors?:",
+      "type": "color_disclosure",
+      "transparency_score_with_details": 5,
+      "transparency_score_without_details": 1,
+      "vague_declaration": "Artificial Colors",
+      "penalty_without_details": -2,
+      "best_practice": "Must list by specific name (e.g., FD&C Red No. 40)",
+      "notes": "FDA requires certified colors to be listed by name. Generic declaration is non-compliant."
+    },
+    {
+      "id": "FG_ARTIFICIAL_FLAVORS",
+      "pattern": "artificial flavors?:",
+      "type": "flavor_disclosure",
+      "transparency_score_with_details": 4,
+      "transparency_score_without_details": 1,
+      "vague_declaration": "Artificial Flavors",
+      "penalty_without_details": -1.5,
+      "best_practice": "List specific artificial flavors used",
+      "notes": "Generic 'Artificial Flavors' is legal but poor transparency"
+    },
+    {
+      "id": "FG_PRESERVATIVES",
+      "pattern": "preservatives?:",
+      "type": "preservative_disclosure",
+      "transparency_score_with_details": 7,
+      "transparency_score_without_details": 2,
+      "vague_declaration": "Preservatives",
+      "best_practice": "List specific preservatives (e.g., Ascorbic Acid, Tocopherols)",
+      "notes": "Generic 'Preservatives' is poor transparency"
+    },
+    {
+      "id": "FG_SWEETENERS",
+      "pattern": "sweeteners?:",
+      "type": "sweetener_disclosure",
+      "transparency_score_with_details": 7,
+      "transparency_score_without_details": 2,
+      "vague_declaration": "Sweeteners",
+      "best_practice": "List specific sweeteners (e.g., Stevia, Monk Fruit)",
+      "notes": "Generic 'Sweeteners' is poor transparency"
+    },
+    {
+      "id": "FG_ENZYMES",
+      "pattern": "enzymes?:",
+      "type": "enzyme_disclosure",
+      "transparency_score_with_details": 7,
+      "transparency_score_without_details": 3,
+      "vague_declaration": "Enzymes",
+      "best_practice": "List specific enzymes (e.g., Protease, Lipase, Amylase)",
+      "notes": "Specific enzyme disclosure is important for effectiveness claims"
+    },
+    {
+      "id": "FG_PROBIOTICS",
+      "pattern": "probiotics?:",
+      "type": "probiotic_disclosure",
+      "transparency_score_with_details": 9,
+      "transparency_score_without_details": 2,
+      "vague_declaration": "Probiotic Blend",
+      "best_practice": "List specific strains with CFU counts (e.g., Lactobacillus acidophilus 5 billion CFU)",
+      "notes": "Strain specificity is critical for probiotic efficacy"
+    }
+  ],
+  "vague_terms_to_flag": [
+    {
+      "term": "Natural Flavors",
+      "severity": "moderate",
+      "penalty": -2.0,
+      "flag": "vague_flavor_disclosure",
+      "message": "Uses generic 'Natural Flavors' without listing specific sources. FDA allows this but it's poor transparency and may hide allergens."
+    },
+    {
+      "term": "Natural Colors",
+      "severity": "moderate",
+      "penalty": -1.5,
+      "flag": "vague_color_disclosure",
+      "message": "Uses generic 'Natural Colors' without listing specific sources. Best practice is to declare specific color ingredients."
+    },
+    {
+      "term": "Artificial Flavors",
+      "severity": "high",
+      "penalty": -2.5,
+      "flag": "artificial_flavor_undisclosed",
+      "message": "Uses generic 'Artificial Flavors' without specification. Poor transparency."
+    },
+    {
+      "term": "Artificial Colors",
+      "severity": "critical",
+      "penalty": -3.0,
+      "flag": "artificial_color_undisclosed",
+      "message": "Uses generic 'Artificial Colors' - FDA requires certified colors to be listed by specific name (e.g., Red 40)."
+    },
+    {
+      "term": "Preservatives",
+      "severity": "moderate",
+      "penalty": -1.5,
+      "flag": "vague_preservative_disclosure",
+      "message": "Uses generic 'Preservatives' without listing specific compounds. Poor transparency."
+    },
+    {
+      "term": "Natural Flavoring",
+      "severity": "moderate",
+      "penalty": -2.0,
+      "flag": "vague_flavor_disclosure",
+      "message": "Generic flavor declaration without specifics."
+    },
+    {
+      "term": "Color Added",
+      "severity": "moderate",
+      "penalty": -1.5,
+      "flag": "vague_color_disclosure",
+      "message": "Generic color declaration without specifics."
+    }
+  ],
+  "transparency_bonuses": [
+    {
+      "pattern": "specific_color_source",
+      "bonus": 1.0,
+      "description": "Lists specific natural color sources (e.g., 'Natural Colors: Beet Root Powder')",
+      "examples": ["Beet Root Powder", "Turmeric Extract", "Spirulina", "Annatto"]
+    },
+    {
+      "pattern": "specific_flavor_source",
+      "bonus": 1.0,
+      "description": "Lists specific natural flavor sources (e.g., 'Natural Flavors: Vanilla Extract')",
+      "examples": ["Vanilla Extract", "Lemon Oil", "Peppermint Oil", "Stevia Leaf Extract"]
+    },
+    {
+      "pattern": "specific_preservative",
+      "bonus": 0.5,
+      "description": "Lists specific preservatives instead of generic term",
+      "examples": ["Ascorbic Acid", "Tocopherols", "Rosemary Extract"]
+    }
+  ],
+  "_metadata": {
+    "description": "Functional ingredient grouping patterns and transparency scoring for supplement labeling",
+    "purpose": "Preserve functional context while penalizing vague disclosures",
+    "regulatory_basis": "FDA 21 CFR 101.22 - Allows generic declarations but best practice is specific disclosure",
+    "schema_version": "1.0",
+    "last_updated": "2025-11-15"
+  }
+}

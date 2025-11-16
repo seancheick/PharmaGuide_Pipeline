@@ -2,12 +2,16 @@
   "user_goal_mappings": [
     {
       "user_facing_goal": "Sleep Quality",
-      "primary_clusters": ["Sleep Stack", "Magnesium Nervous System"],
+      "primary_clusters": [
+        "Sleep Stack",
+        "Magnesium Nervous System"
+      ],
       "secondary_clusters": [
         "Stress Resilience",
         "Mood Balance",
         "Adrenal Support"
-      ]
+      ],
+      "id": ""
     },
     {
       "user_facing_goal": "Reduce Stress/Anxiety",
@@ -21,7 +25,8 @@
         "Magnesium Nervous System",
         "Probiotic and Gut Health",
         "Mood-Gut Axis Probiotic Blend"
-      ]
+      ],
+      "id": ""
     },
     {
       "user_facing_goal": "Increase Energy",
@@ -35,7 +40,8 @@
         "Cognitive Amino Acids",
         "Comprehensive Blood Sugar Support",
         "Nitric Oxide & Blood Flow"
-      ]
+      ],
+      "id": ""
     },
     {
       "user_facing_goal": "Digestive Health",
@@ -50,7 +56,8 @@
         "Mood-Gut Axis Probiotic Blend",
         "Detox Pathway",
         "Liver Support"
-      ]
+      ],
+      "id": ""
     },
     {
       "user_facing_goal": "Weight Management",
@@ -64,7 +71,8 @@
         "Recovery Support",
         "Thyroid Support",
         "Energy + Mitochondria"
-      ]
+      ],
+      "id": ""
     },
     {
       "user_facing_goal": "Cardiovascular/Heart Health",
@@ -78,7 +86,8 @@
         "Magnesium (from Multiple Clusters)",
         "CoQ10 (from Energy + Mitochondria)",
         "Antioxidant Defense"
-      ]
+      ],
+      "id": ""
     },
     {
       "user_facing_goal": "Healthy Aging/Longevity",
@@ -92,7 +101,8 @@
         "Bone Health",
         "Joint & Inflammation",
         "Cardiovascular Support"
-      ]
+      ],
+      "id": ""
     },
     {
       "user_facing_goal": "Blood Sugar Support",
@@ -106,7 +116,8 @@
         "Weight Management (Goal)",
         "Detox Pathway",
         "Liver Support"
-      ]
+      ],
+      "id": ""
     },
     {
       "user_facing_goal": "Immune Support",
@@ -120,7 +131,8 @@
         "Zinc (from Multiple Clusters)",
         "Vitamin D (from Multiple Clusters)",
         "Liver Support"
-      ]
+      ],
+      "id": ""
     },
     {
       "user_facing_goal": "Focus & Mental Clarity",
@@ -134,7 +146,8 @@
         "Nitric Oxide & Blood Flow",
         "Mood Balance",
         "Stress Resilience"
-      ]
+      ],
+      "id": ""
     },
     {
       "user_facing_goal": "Muscle Growth & Recovery",
@@ -147,17 +160,22 @@
         "Testosterone (from Hormone Balance (Men))",
         "Electrolyte Balance",
         "Protein (from Muscle Building/Recovery)"
-      ]
+      ],
+      "id": ""
     },
     {
       "user_facing_goal": "Joint & Bone Health",
-      "primary_clusters": ["Joint & Inflammation", "Bone Health"],
+      "primary_clusters": [
+        "Joint & Inflammation",
+        "Bone Health"
+      ],
       "secondary_clusters": [
         "Calcium (from Bone Health)",
         "Vitamin D (from Multiple Clusters)",
         "Omega-3 (from Inflammation Control)",
         "Detox Pathway"
-      ]
+      ],
+      "id": ""
     },
     {
       "user_facing_goal": "Hormone Balance",
@@ -172,36 +190,55 @@
         "Sleep Stack",
         "Detox Pathway",
         "Liver Support"
-      ]
+      ],
+      "id": ""
     },
     {
       "user_facing_goal": "Skin, Hair & Nails",
-      "primary_clusters": ["Hair & Skin Nutrition", "Skin Health Complex"],
+      "primary_clusters": [
+        "Hair & Skin Nutrition",
+        "Skin Health Complex"
+      ],
       "secondary_clusters": [
         "Collagen (from Multiple Clusters)",
         "Biotin (from Hair & Skin Nutrition)",
         "Antioxidant Defense",
         "Detox Pathway"
-      ]
+      ],
+      "id": ""
     },
     {
       "user_facing_goal": "Liver & Detox",
-      "primary_clusters": ["Liver Support", "Detox Pathway"],
+      "primary_clusters": [
+        "Liver Support",
+        "Detox Pathway"
+      ],
       "secondary_clusters": [
         "Gut Barrier",
         "Probiotic and Gut Health",
         "Antioxidant Defense",
         "Glutathione (from Detox Pathway)"
-      ]
+      ],
+      "id": ""
     },
     {
       "user_facing_goal": "Eye & Vision",
-      "primary_clusters": ["Eye Health"],
+      "primary_clusters": [
+        "Eye Health"
+      ],
       "secondary_clusters": [
         "Antioxidant Defense",
         "Nitric Oxide & Blood Flow",
         "Omega-3 (from Inflammation Control)"
-      ]
+      ],
+      "id": ""
     }
-  ]
+  ],
+  "_metadata": {
+    "description": "Mapping of user health goals to ingredient synergy clusters for personalized recommendations",
+    "purpose": "goal_mapping",
+    "total_entries": 16,
+    "schema_version": "1.0",
+    "last_updated": "2025-11-14"
+  }
 }

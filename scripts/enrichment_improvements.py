@@ -200,7 +200,7 @@ class EnhancedDatabaseLoader:
         list_databases = [
             'absorption_enhancers', 'allergens', 'backed_clinical_studies',
             'banned_recalled_ingredients', 'botanical_ingredients',
-            'harmful_additives', 'non_harmful_additives', 'passive_inactive_ingredients'
+            'harmful_additives', 'other_ingredients'  # Merged: non_harmful + passive_inactive
         ]
         
         if db_name in list_databases:

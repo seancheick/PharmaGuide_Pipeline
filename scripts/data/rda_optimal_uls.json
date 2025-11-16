@@ -134,7 +134,8 @@
           "rda_ai": 1300,
           "ul": 3000
         }
-      ]
+      ],
+      "id": "vitamin_a"
     },
     {
       "standard_name": "Vitamin C",
@@ -260,7 +261,8 @@
           "rda_ai": 120,
           "ul": 2000
         }
-      ]
+      ],
+      "id": "vitamin_c"
     },
     {
       "standard_name": "Vitamin D",
@@ -384,7 +386,8 @@
           "rda_ai": 15,
           "ul": 100
         }
-      ]
+      ],
+      "id": "vitamin_d"
     },
     {
       "standard_name": "Vitamin E",
@@ -508,7 +511,8 @@
           "rda_ai": 19,
           "ul": 1000
         }
-      ]
+      ],
+      "id": "vitamin_e"
     },
     {
       "standard_name": "Vitamin K",
@@ -631,7 +635,8 @@
           "rda_ai": 90,
           "ul": "ND"
         }
-      ]
+      ],
+      "id": "vitamin_k"
     },
     {
       "standard_name": "Thiamin",
@@ -750,7 +755,8 @@
           "rda_ai": 1.4,
           "ul": "ND"
         }
-      ]
+      ],
+      "id": "thiamin"
     },
     {
       "standard_name": "Riboflavin",
@@ -868,7 +874,8 @@
           "rda_ai": 1.6,
           "ul": "ND"
         }
-      ]
+      ],
+      "id": "riboflavin"
     },
     {
       "standard_name": "Niacin",
@@ -993,7 +1000,8 @@
           "rda_ai": 17,
           "ul": 35
         }
-      ]
+      ],
+      "id": "niacin"
     },
     {
       "standard_name": "Vitamin B6",
@@ -1118,7 +1126,8 @@
           "rda_ai": 2.0,
           "ul": 100
         }
-      ]
+      ],
+      "id": "vitamin_b6"
     },
     {
       "standard_name": "Folate",
@@ -1244,7 +1253,8 @@
           "rda_ai": 500,
           "ul": 1000
         }
-      ]
+      ],
+      "id": "folate"
     },
     {
       "standard_name": "Vitamin B12",
@@ -1368,7 +1378,8 @@
           "rda_ai": 2.8,
           "ul": "ND"
         }
-      ]
+      ],
+      "id": "vitamin_b12"
     },
     {
       "standard_name": "Biotin",
@@ -1492,7 +1503,8 @@
           "rda_ai": 35,
           "ul": "ND"
         }
-      ]
+      ],
+      "id": "biotin"
     },
     {
       "standard_name": "Pantothenic Acid",
@@ -1611,7 +1623,8 @@
           "rda_ai": 7,
           "ul": "ND"
         }
-      ]
+      ],
+      "id": "pantothenic_acid"
     },
     {
       "standard_name": "Choline",
@@ -1742,7 +1755,8 @@
           "rda_ai": 550,
           "ul": 3500
         }
-      ]
+      ],
+      "id": "choline"
     },
     {
       "standard_name": "Inositol",
@@ -1868,7 +1882,8 @@
           "rda_ai": 500,
           "ul": "ND"
         }
-      ]
+      ],
+      "id": "inositol"
     },
     {
       "standard_name": "Calcium",
@@ -1992,7 +2007,8 @@
           "rda_ai": 1000,
           "ul": 2500
         }
-      ]
+      ],
+      "id": "calcium"
     },
     {
       "standard_name": "Magnesium",
@@ -2116,7 +2132,8 @@
           "rda_ai": 320,
           "ul": 350
         }
-      ]
+      ],
+      "id": "magnesium"
     },
     {
       "standard_name": "Iron",
@@ -2242,7 +2259,8 @@
           "rda_ai": 9,
           "ul": 45
         }
-      ]
+      ],
+      "id": "iron"
     },
     {
       "standard_name": "Zinc",
@@ -2366,7 +2384,8 @@
           "rda_ai": 12,
           "ul": 40
         }
-      ]
+      ],
+      "id": "zinc"
     },
     {
       "standard_name": "Copper",
@@ -2490,7 +2509,8 @@
           "rda_ai": 1300,
           "ul": 10000
         }
-      ]
+      ],
+      "id": "copper"
     },
     {
       "standard_name": "Selenium",
@@ -2614,7 +2634,8 @@
           "rda_ai": 70,
           "ul": 400
         }
-      ]
+      ],
+      "id": "selenium"
     },
     {
       "standard_name": "Iodine",
@@ -2739,7 +2760,8 @@
           "rda_ai": 290,
           "ul": 1100
         }
-      ]
+      ],
+      "id": "iodine"
     },
     {
       "standard_name": "Chromium",
@@ -2864,7 +2886,8 @@
           "rda_ai": 45,
           "ul": "ND"
         }
-      ]
+      ],
+      "id": "chromium"
     },
     {
       "standard_name": "Manganese",
@@ -2988,7 +3011,8 @@
           "rda_ai": 2.6,
           "ul": 11
         }
-      ]
+      ],
+      "id": "manganese"
     },
     {
       "standard_name": "Molybdenum",
@@ -3109,7 +3133,8 @@
           "rda_ai": 50,
           "ul": 2000
         }
-      ]
+      ],
+      "id": "molybdenum"
     },
     {
       "standard_name": "Phosphorus",
@@ -3233,7 +3258,8 @@
           "rda_ai": 700,
           "ul": 4000
         }
-      ]
+      ],
+      "id": "phosphorus"
     },
     {
       "standard_name": "Potassium",
@@ -3357,7 +3383,8 @@
           "rda_ai": 2800,
           "ul": "ND"
         }
-      ]
+      ],
+      "id": "potassium"
     },
     {
       "standard_name": "Sodium",
@@ -3482,7 +3509,8 @@
           "rda_ai": 1500,
           "ul": "ND"
         }
-      ]
+      ],
+      "id": "sodium"
     },
     {
       "standard_name": "Chloride",
@@ -3605,7 +3633,8 @@
           "rda_ai": 2300,
           "ul": 3600
         }
-      ]
+      ],
+      "id": "chloride"
     },
     {
       "standard_name": "Fluoride",
@@ -3722,7 +3751,8 @@
           "rda_ai": 3,
           "ul": 10
         }
-      ]
+      ],
+      "id": "fluoride"
     },
     {
       "standard_name": "Boron",
@@ -3842,7 +3872,8 @@
           "rda_ai": "ND",
           "ul": 20
         }
-      ]
+      ],
+      "id": "boron"
     },
     {
       "standard_name": "Vanadium",
@@ -3962,7 +3993,8 @@
           "rda_ai": "ND",
           "ul": 1800
         }
-      ]
+      ],
+      "id": "vanadium"
     },
     {
       "standard_name": "Omega-3 Fatty Acids",
@@ -4088,7 +4120,8 @@
           "rda_ai": 1.3,
           "ul": "ND"
         }
-      ]
+      ],
+      "id": "omega_3_fatty_acids"
     },
     {
       "standard_name": "Coenzyme Q10",
@@ -4223,7 +4256,8 @@
           "rda_ai": 30,
           "ul": "ND"
         }
-      ]
+      ],
+      "id": "coenzyme_q10"
     },
     {
       "standard_name": "Alpha-Lipoic Acid",
@@ -4356,7 +4390,8 @@
           "rda_ai": 100,
           "ul": "ND"
         }
-      ]
+      ],
+      "id": "alpha_lipoic_acid"
     },
     {
       "standard_name": "Taurine",
@@ -4485,7 +4520,8 @@
           "rda_ai": 0.5,
           "ul": "ND"
         }
-      ]
+      ],
+      "id": "taurine"
     },
     {
       "standard_name": "Lutein",
@@ -4607,7 +4643,8 @@
           "rda_ai": 6,
           "ul": "ND"
         }
-      ]
+      ],
+      "id": "lutein"
     },
     {
       "standard_name": "Zeaxanthin",
@@ -4730,7 +4767,8 @@
           "rda_ai": 2,
           "ul": "ND"
         }
-      ]
+      ],
+      "id": "zeaxanthin"
     },
     {
       "standard_name": "Lycopene",
@@ -4853,7 +4891,8 @@
           "rda_ai": 7,
           "ul": "ND"
         }
-      ]
+      ],
+      "id": "lycopene"
     },
     {
       "standard_name": "Creatine",
@@ -4990,7 +5029,8 @@
           "rda_ai": 1.5,
           "ul": "ND"
         }
-      ]
+      ],
+      "id": "creatine"
     },
     {
       "standard_name": "L-Carnitine",
@@ -5129,7 +5169,8 @@
           "rda_ai": 0.8,
           "ul": "ND"
         }
-      ]
+      ],
+      "id": "l_carnitine"
     },
     {
       "standard_name": "Acetyl-L-Carnitine",
@@ -5259,7 +5300,8 @@
           "rda_ai": 0.5,
           "ul": "ND"
         }
-      ]
+      ],
+      "id": "acetyl_l_carnitine"
     },
     {
       "standard_name": "Alpha-GPC",
@@ -5388,7 +5430,8 @@
           "rda_ai": 300,
           "ul": "ND"
         }
-      ]
+      ],
+      "id": "alpha_gpc"
     },
     {
       "standard_name": "Glutathione",
@@ -5518,7 +5561,8 @@
           "rda_ai": 250,
           "ul": "ND"
         }
-      ]
+      ],
+      "id": "glutathione"
     },
     {
       "standard_name": "Nickel",
@@ -5636,7 +5680,8 @@
           "rda_ai": "ND",
           "ul": "ND"
         }
-      ]
+      ],
+      "id": "nickel"
     },
     {
       "standard_name": "Silicon",
@@ -5755,7 +5800,8 @@
           "rda_ai": "ND",
           "ul": "ND"
         }
-      ]
+      ],
+      "id": "silicon"
     },
     {
       "standard_name": "Sulfate",
@@ -5871,7 +5917,15 @@
           "rda_ai": "ND",
           "ul": "ND"
         }
-      ]
+      ],
+      "id": "sulfate"
     }
-  ]
+  ],
+  "_metadata": {
+    "description": "RDA (Recommended Dietary Allowance), optimal dosing, and UL (Upper Limit) reference values for nutrient dosing validation",
+    "purpose": "dosing_validation",
+    "total_entries": 0,
+    "schema_version": "1.0",
+    "last_updated": "2025-11-14"
+  }
 }

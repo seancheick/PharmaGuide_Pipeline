@@ -890,31 +890,38 @@ def process_single_file(file_path: str, output_dir: str = None) -> ProcessingRes
         normalizer = _worker_normalizer
         validator = _worker_validator
 
+        # DELTA TRACKING: Snapshot unmapped ingredients BEFORE processing this file
+        # This prevents shared state accumulation from affecting per-file stats
+        unmapped_before = normalizer.get_unmapped_snapshot()
+
         # Normalize the data
         cleaned_data = normalizer.normalize_product(raw_data)
-        
+
         # Validate the result
         status, missing_fields, validation_details = validator.validate_product(raw_data)
-        
-        # Get enhanced unmapped ingredients summary
-        unmapped = normalizer.get_enhanced_unmapped_summary()
-        unmapped_list = [item["name"] for item in unmapped["unmapped"]]
-        
+
+        # DELTA TRACKING: Get only NEW unmapped ingredients for THIS file
+        unmapped_delta = normalizer.get_unmapped_delta(unmapped_before)
+        unmapped_list = [item["name"] for item in unmapped_delta["unmapped"]]
+
         # Calculate mapping statistics for final status decision
         total_ingredients = len(cleaned_data.get("activeIngredients", [])) + len(cleaned_data.get("inactiveIngredients", []))
         unmapped_count = len(unmapped_list)
-        mapping_rate = ((total_ingredients - unmapped_count) / total_ingredients * 100) if total_ingredients > 0 else 100
-        
+
+        # CLAMP VALUES: Prevent negative mappedIngredients (can happen if ingredients filtered but counted as unmapped)
+        mapped_count = max(0, total_ingredients - unmapped_count)
+        mapping_rate = (mapped_count / total_ingredients * 100) if total_ingredients > 0 else 100
+
         # Update metadata with validation results AND mapping stats
         cleaned_data["metadata"]["completeness"] = {
             "score": validation_details.get("completeness_score", 0),
             "missingFields": missing_fields,
             "criticalFieldsComplete": validation_details.get("critical_fields_complete", False)
         }
-        
+
         cleaned_data["metadata"]["mappingStats"] = {
             "totalIngredients": total_ingredients,
-            "mappedIngredients": total_ingredients - unmapped_count,
+            "mappedIngredients": mapped_count,  # Now guaranteed non-negative
             "unmappedIngredients": unmapped_count,
             "mappingRate": mapping_rate
         }

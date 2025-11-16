@@ -243,11 +243,73 @@ class SupplementEnricherV2:
                 
         return False
 
+    def _prepare_transparency_data(self, product_data: Dict) -> Dict:
+        """Prepare transparency data for scoring script (no scoring calculations)"""
+
+        vague_disclosures = []
+        specific_disclosures = []
+
+        # Check other/inactive ingredients for transparency flags from cleaning
+        other_ing_data = product_data.get("otherIngredients", {})
+        if not isinstance(other_ing_data, dict):
+            other_ing_data = {}
+
+        other_ingredients = other_ing_data.get("ingredients", [])
+        if not other_ingredients:
+            other_ingredients = []
+
+        for ingredient in other_ingredients:
+            if not isinstance(ingredient, dict):
+                continue
+
+            name = ingredient.get("name", "")
+
+            # Collect vague disclosure flags (for scoring script to penalize)
+            if ingredient.get("vague_disclosure", False):
+                for flag in ingredient.get("vague_flags", []):
+                    if isinstance(flag, dict):
+                        vague_disclosures.append({
+                            "ingredient": name,
+                            "flag": flag.get("flag", ""),
+                            "severity": flag.get("severity", "moderate"),
+                            "penalty": flag.get("penalty", 0),
+                            "message": flag.get("message", "")
+                        })
+
+            # Collect specific functional disclosures (for scoring script to reward)
+            elif ingredient.get("functional_context") and ingredient.get("transparency") == "good":
+                specific_disclosures.append({
+                    "ingredient": name,
+                    "functional_context": ingredient["functional_context"],
+                    "functional_prefix": ingredient.get("functional_prefix", "")
+                })
+
+        # Return organized data for scoring script (NO SCORE CALCULATIONS)
+        return {
+            "vague_disclosures": vague_disclosures,
+            "specific_disclosures": specific_disclosures,
+            "has_vague_disclosures": len(vague_disclosures) > 0,
+            "has_specific_disclosures": len(specific_disclosures) > 0,
+            "vague_count": len(vague_disclosures),
+            "specific_count": len(specific_disclosures)
+        }
+
     def enrich_product(self, product_data: Dict) -> Tuple[Dict, List[str]]:
         """Enrich a single product with v2.0.0 format"""
+        product_id = product_data.get('id', 'unknown')
+
         try:
+            # VALIDATION: Ensure required fields exist
+            if not product_data:
+                self.logger.error(f"Product {product_id}: Empty product data")
+                return None, ["Empty product data"]
+
+            if 'activeIngredients' not in product_data and 'inactiveIngredients' not in product_data:
+                self.logger.warning(f"Product {product_id}: No ingredients found")
+                # Continue processing but flag as incomplete
+
             self.ingredient_registry.clear()  # Reset for each product
-            
+
             # PRESERVE ALL CLEANED DATA - Start with complete product data
             enriched = dict(product_data)  # Copy all fields from cleaned data
 
@@ -336,6 +398,20 @@ class SupplementEnricherV2:
             active_ingredients = product_data.get("activeIngredients", [])
             inactive_ingredients = product_data.get("inactiveIngredients", [])
 
+            # Calculate ingredient breakdown for transparency and intelligent scoring
+            total_ingredients = len(active_ingredients) + len(inactive_ingredients)
+            active_count = len(active_ingredients)
+            inactive_count = len(inactive_ingredients)
+            active_percentage = (active_count / total_ingredients * 100) if total_ingredients > 0 else 0
+
+            # Add ingredient breakdown (enables scoring to handle "1 active + fillers" intelligently)
+            enriched["ingredient_breakdown"] = {
+                "active_count": active_count,
+                "inactive_count": inactive_count,
+                "total_count": total_ingredients,
+                "active_percentage": round(active_percentage, 1)
+            }
+
             # MERGE METADATA: Preserve all cleaned metadata, add enrichment-specific fields
             # This initial merge will be further updated by _calculate_metadata()
             cleaned_metadata = product_data.get("metadata", {})
@@ -344,7 +420,7 @@ class SupplementEnricherV2:
                 "scoring_algorithm_version": "2.1.0",
                 "data_completeness": 100.0,
                 "missing_data": [],
-                "single_ingredient_product": len(active_ingredients) == 1,
+                "single_ingredient_product": total_ingredients == 1,  # Based on TOTAL, not just active
                 "ready_for_scoring": True
             }
             # Merge: cleaned metadata takes precedence, enrichment metadata adds new fields
@@ -354,7 +430,7 @@ class SupplementEnricherV2:
                 enriched["form_quality_mapping"] = self._analyze_ingredient_quality(active_ingredients)
                 enriched["ingredient_quality_analysis"] = self._calculate_quality_analysis(enriched["form_quality_mapping"])
                 enriched["clinical_evidence_matches"] = self._find_clinical_evidence(active_ingredients, product_data)
-                enriched["rda_ul_references"] = self._analyze_rda_ul(active_ingredients)
+                enriched["rda_ul_analysis"] = self._analyze_rda_ul(active_ingredients)  # ← RENAMED for scoring phase
                 enriched["absorption_enhancers"] = self._analyze_absorption_enhancers(active_ingredients + inactive_ingredients)
                 enriched["enhanced_delivery"] = self._analyze_enhanced_delivery(active_ingredients, product_data)
                 enriched["synergy_analysis"] = self._analyze_synergies(active_ingredients)
@@ -371,10 +447,16 @@ class SupplementEnricherV2:
             # Analyze certifications and compliance
             enriched["allergen_compliance"] = self._analyze_allergen_compliance(product_data, enriched["contaminant_analysis"])
             enriched["certification_analysis"] = self._analyze_certifications(product_data)
-            
+
             # Analyze manufacturer
             enriched["manufacturer_analysis"] = self._analyze_manufacturer(product_data)
-            
+
+            # Analyze sustainability (anti-greenwashing: verified packaging claims only)
+            enriched["sustainability_analysis"] = self._analyze_sustainability(product_data)
+
+            # Classify supplement type for context-aware scoring (uses TOTAL ingredients)
+            enriched["supplement_type_classification"] = self._classify_supplement_type(active_ingredients, inactive_ingredients, product_data)
+
             # Set quality flags
             enriched["quality_flags"] = self._set_quality_flags(enriched, product_data)
 
@@ -396,13 +478,69 @@ class SupplementEnricherV2:
 
             # Categorize unmapped ingredients by priority
             enriched["unmapped_ingredients"] = self._categorize_unmapped_ingredients(enriched)
-            
+
+            # TRANSPARENCY DATA: Prepare organized data for scoring script (no scoring here)
+            transparency_data = self._prepare_transparency_data(product_data)
+            enriched["transparency_data"] = transparency_data
+
+            # Update quality flags for vague disclosures (informational only)
+            if transparency_data["has_vague_disclosures"]:
+                enriched["quality_flags"]["vague_ingredient_disclosure"] = True
+
+            # Update disclosure_quality flags (informational only - scoring script will calculate points)
+            enriched["disclosure_quality"]["no_vague_terms"] = not transparency_data["has_vague_disclosures"]
+            enriched["disclosure_quality"]["vague_terms_found"] = [
+                item["ingredient"] for item in transparency_data["vague_disclosures"]
+            ]
+            enriched["disclosure_quality"]["specific_disclosures_found"] = [
+                item["ingredient"] for item in transparency_data["specific_disclosures"]
+            ]
+
             return enriched, issues
-            
+
+        except KeyError as e:
+            self.logger.error(f"Product {product_id}: Missing required field: {e}")
+            self.logger.error(traceback.format_exc())
+            return None, [f"Missing required field: {str(e)}"]
+        except TypeError as e:
+            self.logger.error(f"Product {product_id}: Type error (likely None value): {e}")
+            self.logger.error(traceback.format_exc())
+            return None, [f"Type error: {str(e)}"]
+        except ValueError as e:
+            self.logger.error(f"Product {product_id}: Value error (invalid data): {e}")
+            self.logger.error(traceback.format_exc())
+            return None, [f"Value error: {str(e)}"]
         except Exception as e:
-            self.logger.error(f"Error enriching product {product_data.get('id', 'unknown')}: {e}")
+            self.logger.error(f"Product {product_id}: Unexpected error during enrichment: {e}")
             self.logger.error(traceback.format_exc())
             return None, [f"Enrichment failed: {str(e)}"]
+
+    def _lookup_category(self, standard_name: str, quality_map: Dict) -> str:
+        """
+        Lookup category from ingredient_quality_map using standardName.
+
+        This is ENRICHMENT-PHASE metadata, not core identity.
+        Used only for supplement type classification.
+
+        Args:
+            standard_name: Standardized ingredient name from cleaning phase
+            quality_map: ingredient_quality_map.json database
+
+        Returns:
+            Category string (e.g., "vitamins", "minerals", "herbs") or empty string
+        """
+        if not standard_name or not quality_map:
+            return ""
+
+        # Normalize for lookup
+        key = standard_name.lower().strip()
+
+        # Search ingredient_quality_map for matching standard_name
+        for ing_key, data in quality_map.items():
+            if data.get("standard_name", "").lower() == key:
+                return data.get("category", "").lower()
+
+        return ""
 
     def _analyze_ingredient_quality(self, ingredients: List[Dict]) -> List[Dict]:
         """
@@ -427,6 +565,9 @@ class SupplementEnricherV2:
             # This is critical - harmful additives must be detected for penalties
             additive_match = self._check_harmful_additive(standard_name, additives_db)
             if additive_match:
+                # Get RDA/UL data (usually won't have, but check anyway)
+                rda_ul_data = self._get_rda_ul_data(standard_name, quantity, unit)
+
                 quality_mapping.append({
                     "ingredient": ingredient_name,
                     "standard_name": standard_name,
@@ -441,7 +582,8 @@ class SupplementEnricherV2:
                     "weighted_score": 3.0,
                     "absorption": "n/a",
                     "notes": f"Harmful additive: {additive_match.get('risk_level', 'moderate')} risk",
-                    "is_fallback": False
+                    "is_fallback": False,
+                    "rda_ul_data": rda_ul_data  # ← NEW: Add RDA/UL data
                 })
                 continue
 
@@ -449,6 +591,9 @@ class SupplementEnricherV2:
             # This is critical - allergens must be detected for claim verification
             allergen_match = self._check_allergen(standard_name, allergens_db)
             if allergen_match:
+                # Get RDA/UL data (usually won't have, but check anyway)
+                rda_ul_data = self._get_rda_ul_data(standard_name, quantity, unit)
+
                 quality_mapping.append({
                     "ingredient": ingredient_name,
                     "standard_name": standard_name,
@@ -463,7 +608,8 @@ class SupplementEnricherV2:
                     "weighted_score": 5.0,
                     "absorption": "n/a",
                     "notes": f"Allergen: {allergen_match.get('allergen_type', 'unknown')}",
-                    "is_fallback": False
+                    "is_fallback": False,
+                    "rda_ul_data": rda_ul_data  # ← NEW: Add RDA/UL data
                 })
                 continue
 
@@ -529,6 +675,9 @@ class SupplementEnricherV2:
                 # Log successful mapping for validation
                 self.logger.debug(f"Mapped '{ingredient_name}' -> '{detected_form}' (parent: {parent_key})")
                 
+                # Get RDA/UL data for this ingredient
+                rda_ul_data = self._get_rda_ul_data(reference_standard_name, quantity, unit)
+
                 quality_mapping.append({
                     "ingredient": ingredient_name,  # Preserve exact name from label
                     "standard_name": reference_standard_name,  # From reference data
@@ -542,7 +691,8 @@ class SupplementEnricherV2:
                     "dosage_importance": dosage_importance,
                     "weighted_score": weighted_score,
                     "absorption": matched_form.get('absorption', 'moderate'),
-                    "notes": matched_form.get('notes', '')
+                    "notes": matched_form.get('notes', ''),
+                    "rda_ul_data": rda_ul_data  # ← NEW: Add RDA/UL enrichment data
                 })
             else:
                 # ✅ ENHANCED FALLBACK LOGIC: Intelligent defaults based on ingredient type
@@ -574,6 +724,9 @@ class SupplementEnricherV2:
                 # Use cleaned category if available (better than "unmapped")
                 fallback_category = cleaned_category if cleaned_category != "other" else "unmapped"
 
+                # Get RDA/UL data even for unmapped ingredients (might still have RDA data)
+                rda_ul_data = self._get_rda_ul_data(ingredient_name, quantity, unit)
+
                 # Default values for unmapped ingredients
                 quality_mapping.append({
                     "ingredient": ingredient_name,  # Preserve exact name from label
@@ -590,7 +743,8 @@ class SupplementEnricherV2:
                     "absorption": "moderate",
                     "notes": f"⚠️ UNMAPPED {priority} PRIORITY - Add to quality_map.json",
                     "is_fallback": True,  # ✅ FLAG for dev team tracking
-                    "unmapped_priority": priority  # ✅ ADD for manual review workflow
+                    "unmapped_priority": priority,  # ✅ ADD for manual review workflow
+                    "rda_ul_data": rda_ul_data  # ← NEW: Add RDA/UL data even for unmapped
                 })
         
         return quality_mapping
@@ -810,35 +964,41 @@ class SupplementEnricherV2:
         enhancers_db = self.databases.get('absorption_enhancers', [])
         found_enhancers = []
         enhanced_nutrients = []
-        
+
+        # PERFORMANCE OPTIMIZATION: Build ingredient lookup dictionary once (O(n) instead of O(n²))
+        ingredient_lookup = {}
+        for ing in all_ingredients:
+            std_name = ing.get('standardName', '').lower().strip()
+            name = ing.get('name', '').lower().strip()
+            if std_name:
+                ingredient_lookup[std_name] = ing
+            if name and name != std_name:
+                ingredient_lookup[name] = ing
+
         for ingredient in all_ingredients:
             ingredient_name = ingredient.get('name', '')
-            
+
             for enhancer in enhancers_db:
                 if self._exact_ingredient_match(ingredient_name, enhancer.get('name', ''), enhancer.get('aliases', [])):
                     # Find what nutrients this enhancer affects
                     enhanced_list = enhancer.get('enhances', [])
-                    
-                    # Check if any of the enhanced nutrients are present in the product
-                    # CONSERVATIVE MATCHING: Use only exact matching to avoid false positives
-                    # (e.g., "iron" should not match "environment", "calcium" should not match "decalcium")
-                    for enhanced_nutrient in enhanced_list:
-                        for product_ingredient in all_ingredients:
-                            ingredient_std_name = product_ingredient.get('standardName', '')
-                            ingredient_name = product_ingredient.get('name', '')
 
-                            # Use ONLY exact matching (same fix as banned substances)
-                            if self._exact_ingredient_match(ingredient_std_name, enhanced_nutrient, []) or \
-                               self._exact_ingredient_match(ingredient_name, enhanced_nutrient, []):
-                                if enhanced_nutrient not in enhanced_nutrients:
-                                    enhanced_nutrients.append(enhanced_nutrient)
-                    
+                    # Check if any of the enhanced nutrients are present in the product
+                    # PERFORMANCE: Use O(1) dictionary lookup instead of O(n) loop
+                    for enhanced_nutrient in enhanced_list:
+                        enhanced_nutrient_lower = enhanced_nutrient.lower().strip()
+
+                        # Use ONLY exact matching (same fix as banned substances)
+                        if enhanced_nutrient_lower in ingredient_lookup:
+                            if enhanced_nutrient not in enhanced_nutrients:
+                                enhanced_nutrients.append(enhanced_nutrient)
+
                     found_enhancers.append({
                         "name": ingredient_name,
                         "enhancer_id": enhancer.get('id', ''),
                         "enhanced_nutrients": enhancer.get('enhances', [])
                     })
-        
+
         enhancement_points = 3 if found_enhancers and enhanced_nutrients else 0
         
         return {
@@ -1290,101 +1450,338 @@ class SupplementEnricherV2:
             "bonus_points": bonus_points
         }
 
+    def _normalize_nutrient_name(self, name: str) -> str:
+        """Normalize nutrient name for matching (remove form suffixes, normalize case)"""
+        if not name:
+            return ""
+
+        # Convert to lowercase
+        normalized = name.lower().strip()
+
+        # Remove common form suffixes
+        form_suffixes = [
+            ' (d3)', ' (d2)', ' d3', ' d2',
+            ' (k1)', ' (k2)', ' k1', ' k2',
+            ' (b1)', ' (b2)', ' (b3)', ' (b5)', ' (b6)', ' (b7)', ' (b9)', ' (b12)',
+            ' b1', ' b2', ' b3', ' b5', ' b6', ' b7', ' b9', ' b12',
+            ' (as ', ' as ',
+            ' (from ', ' from ',
+            'cholecalciferol', 'ergocalciferol',
+            'phylloquinone', 'menaquinone',
+            'thiamine', 'riboflavin', 'niacin', 'pantothenic acid', 'pyridoxine',
+            'biotin', 'folate', 'folic acid', 'cobalamin', 'cyanocobalamin'
+        ]
+
+        for suffix in form_suffixes:
+            if suffix in normalized:
+                # For vitamin names, keep the base vitamin name
+                if normalized.startswith('vitamin'):
+                    # Extract just "vitamin x" part
+                    parts = normalized.split()
+                    if len(parts) >= 2:
+                        normalized = f"{parts[0]} {parts[1]}"
+                        break
+
+        return normalized
+
+    def _convert_units(self, quantity: float, from_unit: str, to_unit: str) -> float:
+        """Convert between common supplement units"""
+        if not quantity or not from_unit or not to_unit:
+            return quantity
+
+        # Normalize units
+        from_unit = from_unit.lower().strip()
+        to_unit = to_unit.lower().strip()
+
+        # If units match, no conversion needed
+        if from_unit == to_unit:
+            return quantity
+
+        # Conversion factors to base unit (mg)
+        to_mg = {
+            'g': 1000,
+            'mg': 1,
+            'mcg': 0.001,
+            'μg': 0.001,
+            'ug': 0.001,
+            'iu': 1,  # IU conversion is substance-specific, handled separately
+            'mcg rae': 0.001,  # Retinol Activity Equivalents
+            'mcg dfe': 0.001,  # Dietary Folate Equivalents
+        }
+
+        # Handle IU conversions (substance-specific)
+        if 'iu' in from_unit and 'iu' not in to_unit:
+            # These are approximate conversions
+            # Vitamin D: 1 IU = 0.025 mcg
+            # Vitamin E: 1 IU = 0.67 mg (d-alpha-tocopherol)
+            # Vitamin A: 1 IU = 0.3 mcg (retinol)
+            # For now, return original quantity (needs context)
+            return quantity
+
+        # Standard conversion
+        if from_unit in to_mg and to_unit in to_mg:
+            # Convert to mg, then to target unit
+            quantity_in_mg = quantity * to_mg[from_unit]
+            return quantity_in_mg / to_mg[to_unit]
+
+        # If conversion not possible, return original
+        return quantity
+
+    def _calculate_dosage_category(self, quantity: float, rda: float, optimal_min: float,
+                                   optimal_max: float, ul: float) -> str:
+        """
+        Calculate dosage category based on RDA, optimal range, and UL.
+
+        Categories:
+        - under_dosed: < 50% of RDA
+        - minimal: 50-100% of RDA
+        - optimal: Within optimal range
+        - high: Above optimal but below UL
+        - excessive: Above UL
+        """
+        if not quantity or not rda:
+            return "unknown"
+
+        # Check if excessive (above UL)
+        if ul > 0 and quantity > ul:
+            return "excessive"
+
+        # Check if within optimal range
+        if optimal_min > 0 and optimal_max > 0:
+            if optimal_min <= quantity <= optimal_max:
+                return "optimal"
+            elif quantity > optimal_max:
+                return "high"
+
+        # Check RDA-based categories
+        percent_of_rda = (quantity / rda) * 100
+
+        if percent_of_rda < 50:
+            return "under_dosed"
+        elif percent_of_rda < 100:
+            return "minimal"
+        elif optimal_min > 0 and quantity < optimal_min:
+            return "minimal"
+        else:
+            return "optimal"
+
+    def _calculate_safety_status(self, quantity: float, ul: float) -> str:
+        """
+        Calculate safety status based on UL.
+
+        Status:
+        - safe: Below 80% of UL
+        - caution: 80-100% of UL
+        - excessive: Above UL
+        """
+        if not ul or ul == 0:
+            return "safe"  # No UL established
+
+        if not quantity:
+            return "unknown"
+
+        percent_of_ul = (quantity / ul) * 100
+
+        if percent_of_ul > 100:
+            return "excessive"
+        elif percent_of_ul >= 80:
+            return "caution"
+        else:
+            return "safe"
+
+    def _get_rda_ul_data(self, ingredient_name: str, quantity: float, unit: str) -> Dict:
+        """
+        Get simplified RDA/UL data for enrichment phase.
+        Returns only highest UL, dosage category, and safety status.
+        Detailed RDA/warnings/symptoms should be looked up during scoring phase.
+
+        Args:
+            ingredient_name: Standard name of ingredient (e.g., "Vitamin D")
+            quantity: Amount in product
+            unit: Unit of measurement (e.g., "mcg", "mg")
+
+        Returns:
+            Dict with highest UL, dosage category, safety status (minimal data for enrichment)
+        """
+        rda_ul_db = self.databases.get('rda_optimal_uls', {})
+
+        # Default structure for ingredients without RDA data
+        default_response = {
+            "has_rda_data": False,
+            "ul": 0,
+            "unit": "",
+            "dosage_category": "unknown",
+            "percent_of_ul": 0,
+            "safety_status": "unknown"
+        }
+
+        if not rda_ul_db or not quantity:
+            return default_response
+
+        # Get database info
+        nutrient_recommendations = rda_ul_db.get('nutrient_recommendations', [])
+
+        # Find matching nutrient
+        matched_nutrient = None
+        for nutrient in nutrient_recommendations:
+            nutrient_standard_name = nutrient.get('standard_name', '')
+
+            # Normalize names for comparison (case-insensitive, handle variations)
+            if self._normalize_nutrient_name(ingredient_name) == self._normalize_nutrient_name(nutrient_standard_name):
+                matched_nutrient = nutrient
+                break
+
+        if not matched_nutrient:
+            return default_response
+
+        # Extract only essential nutrient data for enrichment
+        nutrient_unit = matched_nutrient.get('unit', '')
+        optimal_range = matched_nutrient.get('optimal_range', '')
+        highest_ul = matched_nutrient.get('highest_ul', 0)
+
+        # Get RDA value (use adult male 19-30 as default reference for dosage category)
+        rda_value = 0
+        for data_point in matched_nutrient.get('data', []):
+            if data_point.get('group') == 'Male' and data_point.get('age_range') == '19-30':
+                rda_value = data_point.get('rda_ai', 0)
+                break
+
+        # Unit conversion if needed
+        converted_quantity = self._convert_units(quantity, unit, nutrient_unit)
+
+        # Parse optimal range for dosage category calculation
+        optimal_min = 0
+        optimal_max = 0
+        if optimal_range and '-' in optimal_range:
+            try:
+                parts = optimal_range.split('-')
+                optimal_min = float(parts[0].strip())
+                optimal_max = float(parts[1].strip())
+            except (ValueError, IndexError):
+                pass
+
+        # Calculate only what's needed for enrichment
+        percent_of_ul = (converted_quantity / highest_ul * 100) if highest_ul > 0 else 0
+
+        # Determine dosage category (for product-level summary)
+        dosage_category = self._calculate_dosage_category(
+            converted_quantity, rda_value, optimal_min, optimal_max, highest_ul
+        )
+
+        # Determine safety status (for product-level summary)
+        safety_status = self._calculate_safety_status(converted_quantity, highest_ul)
+
+        # Return simplified structure with only essential enrichment data
+        # Detailed RDA/warnings/symptoms will be looked up during scoring phase
+        return {
+            "has_rda_data": True,
+            "ul": highest_ul,
+            "unit": nutrient_unit,
+            "dosage_category": dosage_category,
+            "percent_of_ul": round(percent_of_ul, 1),
+            "safety_status": safety_status
+        }
+
     def _analyze_rda_ul(self, ingredients: List[Dict]) -> Dict:
-        """Analyze UL (Upper Limit) references for safety checking - no RDA calculations"""
-        rda_data = self.databases.get('rda_optimal_uls', {})
-        therapeutic_data = self.databases.get('rda_therapeutic_dosing', {})
-        
-        recommendations = rda_data.get('nutrient_recommendations', [])
-        therapeutic_dosing = therapeutic_data.get('therapeutic_dosing', [])
-        
-        references = {}
-        
+        """
+        Analyze RDA/UL compliance for all ingredients.
+        Returns product-level summary of RDA/UL analysis for scoring phase.
+        """
+        if not ingredients:
+            return {
+                "total_ingredients_with_rda": 0,
+                "optimal_dosed_count": 0,
+                "under_dosed_count": 0,
+                "excessive_dosed_count": 0,
+                "safety_warnings_count": 0,
+                "interaction_warnings_count": 0,
+                "conditionally_essential_count": 0,
+                "overall_dosing_quality": "unknown",
+                "safety_score": 15.0,
+                "dosing_adequacy_score": 0.0
+            }
+
+        # Collect RDA/UL data for all ingredients
+        total_with_rda = 0
+        optimal_count = 0
+        under_dosed_count = 0
+        excessive_count = 0
+        all_warnings = set()
+        all_interactions = set()
+        conditionally_essential_count = 0
+
         for ingredient in ingredients:
-            standard_name = ingredient.get('standardName', '')
+            ingredient_name = ingredient.get('standardName') or ingredient.get('name', '')
             quantity = ingredient.get('quantity', 0)
             unit = ingredient.get('unit', '')
-            
-            # Ensure quantity is numeric
-            try:
-                quantity_num = float(quantity) if quantity else 0
-            except (ValueError, TypeError):
-                quantity_num = 0
-            
-            found_reference = False
-            
-            # First, try to find in main RDA/UL database
-            for rda_item in recommendations:
-                if self._exact_ingredient_match(standard_name, rda_item.get('standard_name', ''), rda_item.get('aliases', [])):
-                    # Get UL value from highest_ul field
-                    highest_ul = rda_item.get('highest_ul', None)
-                    
-                    # Handle "none" string values (some nutrients have no established UL)
-                    if highest_ul == "none":
-                        highest_ul = None
-                    elif isinstance(highest_ul, str):
-                        try:
-                            highest_ul = float(highest_ul)
-                        except (ValueError, TypeError):
-                            highest_ul = None
-                    
-                    # Check if amount exceeds UL (for safety penalty)
-                    exceeds_ul = False
-                    if highest_ul is not None and quantity_num > 0:
-                        exceeds_ul = quantity_num > highest_ul
-                    
-                    references[standard_name.replace(' ', '_').lower()] = {
-                        "standard_name": standard_name,
-                        "product_amount": quantity_num,
-                        "product_unit": unit,
-                        "reference_unit": rda_item.get('unit', ''),
-                        "ul_value": highest_ul,
-                        "exceeds_ul": exceeds_ul,
-                        "optimal_range": rda_item.get('optimal_range', ''),
-                        "therapeutic_range": rda_item.get('therapeutic_range', ''),
-                        "warnings": rda_item.get('warnings', []),
-                        "toxicity_symptoms": rda_item.get('toxicity_symptoms', []),
-                        "data_source": "rda_optimal_uls"
-                    }
-                    found_reference = True
-                    break
-            
-            # If not found in main RDA database, check therapeutic dosing database
-            if not found_reference:
-                for therapeutic_item in therapeutic_dosing:
-                    if self._exact_ingredient_match(standard_name, therapeutic_item.get('standard_name', ''), therapeutic_item.get('aliases', [])):
-                        # Get upper_limit from therapeutic dosing
-                        upper_limit_str = therapeutic_item.get('upper_limit', '')
-                        upper_limit = None
-                        
-                        try:
-                            upper_limit = float(upper_limit_str) if upper_limit_str else None
-                        except (ValueError, TypeError):
-                            upper_limit = None
-                        
-                        # Check if amount exceeds therapeutic upper limit
-                        exceeds_ul = False
-                        if upper_limit is not None and quantity_num > 0:
-                            exceeds_ul = quantity_num > upper_limit
-                        
-                        references[standard_name.replace(' ', '_').lower()] = {
-                            "standard_name": standard_name,
-                            "product_amount": quantity_num,
-                            "product_unit": unit,
-                            "reference_unit": therapeutic_item.get('unit', ''),
-                            "ul_value": upper_limit,
-                            "exceeds_ul": exceeds_ul,
-                            "typical_dosing_range": therapeutic_item.get('typical_dosing_range', ''),
-                            "common_serving_size": therapeutic_item.get('common_serving_size', ''),
-                            "upper_limit_notes": therapeutic_item.get('upper_limit_notes', ''),
-                            "common_use": therapeutic_item.get('common_use', ''),
-                            "evidence_tier": therapeutic_item.get('evidence_tier', ''),
-                            "data_source": "rda_therapeutic_dosing"
-                        }
-                        found_reference = True
-                        break
-        
-        return references
+
+            # Get RDA/UL data
+            rda_data = self._get_rda_ul_data(ingredient_name, quantity, unit)
+
+            if rda_data.get('has_rda_data'):
+                total_with_rda += 1
+
+                # Count dosage categories
+                dosage_category = rda_data.get('dosage_category', 'unknown')
+                if dosage_category == 'optimal':
+                    optimal_count += 1
+                elif dosage_category == 'under_dosed':
+                    under_dosed_count += 1
+                elif dosage_category == 'excessive':
+                    excessive_count += 1
+
+                # Collect warnings
+                warnings = rda_data.get('warnings', [])
+                interactions = rda_data.get('interaction_warnings', [])
+
+                all_warnings.update(warnings)
+                all_interactions.update(interactions)
+
+                # Count conditionally essential
+                if rda_data.get('is_conditionally_essential'):
+                    conditionally_essential_count += 1
+
+        # Calculate overall dosing quality
+        if total_with_rda == 0:
+            overall_quality = "unknown"
+        else:
+            optimal_percent = (optimal_count / total_with_rda) * 100
+            if optimal_percent >= 80:
+                overall_quality = "excellent"
+            elif optimal_percent >= 60:
+                overall_quality = "good"
+            elif optimal_percent >= 40:
+                overall_quality = "fair"
+            else:
+                overall_quality = "poor"
+
+        # Calculate safety score (max 15 points)
+        safety_score = 15.0
+        if excessive_count > 0:
+            safety_score -= (excessive_count * 3)  # -3 points per excessive ingredient
+        safety_score = max(0, safety_score)  # Don't go below 0
+
+        # Calculate dosing adequacy score (max 10 points)
+        if total_with_rda > 0:
+            dosing_score = (optimal_count / total_with_rda) * 10
+            # Penalty for under-dosed
+            dosing_score -= (under_dosed_count / total_with_rda) * 3
+            dosing_score = max(0, min(10, dosing_score))  # Clamp to 0-10
+        else:
+            dosing_score = 0.0
+
+        return {
+            "total_ingredients_with_rda": total_with_rda,
+            "optimal_dosed_count": optimal_count,
+            "under_dosed_count": under_dosed_count,
+            "excessive_dosed_count": excessive_count,
+            "safety_warnings_count": len(all_warnings),
+            "interaction_warnings_count": len(all_interactions),
+            "conditionally_essential_count": conditionally_essential_count,
+            "overall_dosing_quality": overall_quality,
+            "safety_score": round(safety_score, 1),
+            "dosing_adequacy_score": round(dosing_score, 1)
+        }
 
     def _analyze_contaminants(self, all_ingredients: List[Dict], product_data: Dict) -> Dict:
         """Analyze contaminants with negation detection"""
@@ -1704,23 +2101,23 @@ class SupplementEnricherV2:
         """Analyze manufacturer reputation"""
         brand_name = product_data.get('brandName', '')
         contacts = product_data.get('contacts', [])
-        
+
         # Check if in top manufacturers database
         top_manufacturers = self.databases.get('top_manufacturers_data', [])
         in_top = False
         reputation_points = 0
-        
+
         for manufacturer in top_manufacturers:
             if self._exact_ingredient_match(brand_name, manufacturer.get('standard_name', ''), manufacturer.get('aka', [])):
                 in_top = True
                 reputation_points = manufacturer.get('score_contribution', 0)
                 break
-        
+
         # Get parent company from contacts
         parent_company = ""
         if contacts:
             parent_company = contacts[0].get('name', '')
-        
+
         return {
             "company": brand_name,
             "parent_company": parent_company,
@@ -1733,6 +2130,252 @@ class SupplementEnricherV2:
                 "total_penalty": 0,
                 "last_checked": None
             }
+        }
+
+    def _analyze_sustainability(self, product_data: Dict) -> Dict:
+        """
+        Analyze sustainability and eco-friendly packaging claims.
+        ✅ ANTI-GREENWASHING: Only verified keywords with specific packaging evidence.
+
+        This function COLLECTS data only - scoring happens in the scoring phase.
+
+        Returns:
+            Dict with sustainability features found, where they were found, and what terms matched
+        """
+        # Verified sustainability terms - specific and auditable
+        SUSTAINABLE_TERMS = {
+            "glass_packaging": r"\bglass\s+(bottle|jar|container)\b",
+            "recyclable_packaging": r"\b(recyclable|recycled)\s+(packaging|bottle|container|jar)\b",
+            "compostable_packaging": r"\b(compostable|biodegradable)\s+(packaging|pouch|container)\b",
+            "eco_friendly_packaging": r"\beco[-\s]?friendly\s+packaging\b",
+            "plastic_free": r"\bplastic[-\s]?free\b"
+        }
+
+        sustainability_features = {
+            "has_sustainable_packaging": False,
+            "features_found": [],
+            "evidence": []
+        }
+
+        # Fields to check for sustainability claims
+        fields_to_check = {
+            "labelText": product_data.get("labelText", ""),
+            "packaging": product_data.get("packaging", ""),
+            "statements": " ".join([stmt.get("text", "") for stmt in product_data.get("statements", [])]),
+            "claims": " ".join([claim.get("text", "") for claim in product_data.get("claims", [])])
+        }
+
+        # Search for verified sustainability terms
+        for feature_name, pattern in SUSTAINABLE_TERMS.items():
+            for field_name, field_text in fields_to_check.items():
+                if not field_text:
+                    continue
+
+                # Case-insensitive search
+                matches = re.finditer(pattern, field_text, re.IGNORECASE)
+                for match in matches:
+                    matched_text = match.group(0)
+
+                    # Record the finding
+                    sustainability_features["features_found"].append(feature_name)
+                    sustainability_features["evidence"].append({
+                        "feature": feature_name,
+                        "matched_text": matched_text,
+                        "found_in": field_name,
+                        "context": self._extract_context(field_text, match.start(), match.end())
+                    })
+                    sustainability_features["has_sustainable_packaging"] = True
+
+        # Deduplicate features_found
+        sustainability_features["features_found"] = list(set(sustainability_features["features_found"]))
+
+        return sustainability_features
+
+    def _extract_context(self, text: str, start: int, end: int, context_chars: int = 50) -> str:
+        """Extract surrounding context for a matched term"""
+        context_start = max(0, start - context_chars)
+        context_end = min(len(text), end + context_chars)
+        context = text[context_start:context_end].strip()
+
+        # Add ellipsis if truncated
+        if context_start > 0:
+            context = "..." + context
+        if context_end < len(text):
+            context = context + "..."
+
+        return context
+
+    def _classify_supplement_type(self, active_ingredients: List[Dict], inactive_ingredients: List[Dict], product_data: Dict) -> Dict:
+        """
+        Classify supplement type for context-aware scoring.
+
+        DESIGN PHILOSOPHY:
+        - Classification based on TOTAL ingredients (active + inactive) - transparency first
+        - Percentages calculated from active ingredients only - for categorization
+        - This ensures fillers are visible but don't distort category detection
+
+        Types:
+        - single: ONE total ingredient (active + inactive = 1)
+        - targeted: Multiple ingredients with high-dose focus (>50% DV on at least one)
+        - multi: Balanced multivitamin/mineral formula (rewards balance, penalizes low-dose fillers)
+        - herbal_blend: Primarily botanical/herbal ingredients
+        - probiotic: Contains probiotic cultures
+        - specialty: Other specialty categories (enzymes, amino acids, etc.)
+
+        Returns:
+            Dict with classification, confidence, and reasoning
+        """
+        # Configurable thresholds for classification
+        HERBAL_THRESHOLD = 60  # % of botanicals to classify as herbal_blend
+        PROBIOTIC_THRESHOLD = 50  # % of probiotics to classify as probiotic
+        VITAMIN_MINERAL_THRESHOLD = 50  # % of vitamins/minerals for multi classification
+        MIN_MULTI_INGREDIENTS = 5  # Minimum ingredients to classify as multivitamin
+
+        # CORE PHILOSOPHY: Classify by TOTAL ingredients (honesty about what's in the bottle)
+        total_ingredients = len(active_ingredients) + len(inactive_ingredients)
+        active_count = len(active_ingredients)
+
+        # Edge case: No active ingredients
+        if active_count == 0:
+            return {
+                "type": "unknown",
+                "confidence": "low",
+                "reasoning": "No active ingredients found",
+                "total_ingredients": total_ingredients,
+                "active_ingredients": 0
+            }
+
+        # SINGLE INGREDIENT (total = 1, meaning one ingredient in the entire product)
+        if total_ingredients == 1:
+            return {
+                "type": "single",
+                "confidence": "high",
+                "reasoning": "Contains exactly one ingredient total",
+                "total_ingredients": 1,
+                "active_ingredients": active_count
+            }
+
+        # Analyze ingredient characteristics using STRUCTURED DATA (not name parsing)
+        high_dose_count = 0  # Ingredients >50% DV
+        botanical_count = 0
+        probiotic_count = 0
+        vitamin_mineral_count = 0
+        enzyme_count = 0
+        amino_acid_count = 0
+
+        # Get quality_map for category lookups (ENRICHMENT-PHASE metadata)
+        quality_map = self.databases.get('ingredient_quality_map', {})
+
+        for ing in active_ingredients:
+            # Check if high dose (>50% daily value)
+            # Look in enrichment data if available
+            rda_percentage = 0
+            if ing.get("enrichment"):
+                rda_info = ing.get("enrichment", {}).get("rda_ul_info", {})
+                if rda_info.get("rda_percentage"):
+                    rda_percentage = rda_info["rda_percentage"]
+
+            if rda_percentage > 50:
+                high_dose_count += 1
+
+            # ✅ ARCHITECTURAL FIX: Lookup category from ingredient_quality_map
+            # Category is ENRICHMENT-PHASE metadata (classification), not CLEANING-PHASE core identity
+            # This prevents false positives like "magnesium stearate" or "vitamin E oil" (carriers)
+            standard_name = ing.get("standardName", "")
+            category = self._lookup_category(standard_name, quality_map)
+
+            # Check category from structured data (preferred method)
+            if category in ["vitamins", "minerals"]:
+                vitamin_mineral_count += 1
+            elif category in ["herbs", "botanical_ingredients", "adaptogen"]:
+                botanical_count += 1
+            elif category == "probiotics":
+                probiotic_count += 1
+            elif category in ["enzymes"]:
+                enzyme_count += 1
+            elif category in ["amino_acids", "amino_acid_metabolites", "amino_acid_antioxidants"]:
+                amino_acid_count += 1
+            # Fallback: Check legacy fields if category not available
+            elif ing.get("botanical", False) or ing.get("quality", {}).get("isBotanical", False):
+                botanical_count += 1
+            # Fallback: CFU units indicate probiotics
+            elif ing.get("unit", "").upper() == "CFU":
+                probiotic_count += 1
+
+        # Calculate percentages from ACTIVE ingredients only (fillers don't distort categorization)
+        botanical_percentage = (botanical_count / active_count) * 100 if active_count > 0 else 0
+        probiotic_percentage = (probiotic_count / active_count) * 100 if active_count > 0 else 0
+        vitamin_mineral_percentage = (vitamin_mineral_count / active_count) * 100 if active_count > 0 else 0
+
+        # CLASSIFICATION LOGIC (uses configurable thresholds)
+
+        # Probiotic formula (uses PROBIOTIC_THRESHOLD)
+        if probiotic_count > 0 and probiotic_percentage >= PROBIOTIC_THRESHOLD:
+            return {
+                "type": "probiotic",
+                "confidence": "high",
+                "reasoning": f"{probiotic_count}/{active_count} active ingredients are probiotic cultures ({probiotic_percentage:.0f}% >= {PROBIOTIC_THRESHOLD}%)",
+                "total_ingredients": total_ingredients,
+                "active_ingredients": active_count,
+                "probiotic_count": probiotic_count
+            }
+
+        # Herbal blend (uses HERBAL_THRESHOLD)
+        if botanical_percentage >= HERBAL_THRESHOLD:
+            return {
+                "type": "herbal_blend",
+                "confidence": "high",
+                "reasoning": f"{botanical_count}/{active_count} active ingredients are botanical/herbal ({botanical_percentage:.0f}% >= {HERBAL_THRESHOLD}%)",
+                "total_ingredients": total_ingredients,
+                "active_ingredients": active_count,
+                "botanical_count": botanical_count
+            }
+
+        # Targeted formula (multiple ingredients with at least one high dose)
+        if total_ingredients >= 2 and high_dose_count >= 1:
+            return {
+                "type": "targeted",
+                "confidence": "high",
+                "reasoning": f"{high_dose_count} ingredient(s) exceed 50% daily value - focused formula",
+                "total_ingredients": total_ingredients,
+                "active_ingredients": active_count,
+                "high_dose_count": high_dose_count
+            }
+
+        # Multivitamin/Mineral (uses VITAMIN_MINERAL_THRESHOLD and MIN_MULTI_INGREDIENTS)
+        if vitamin_mineral_percentage >= VITAMIN_MINERAL_THRESHOLD and total_ingredients >= MIN_MULTI_INGREDIENTS:
+            return {
+                "type": "multi",
+                "confidence": "high",
+                "reasoning": f"{vitamin_mineral_count}/{active_count} active ingredients are vitamins/minerals ({vitamin_mineral_percentage:.0f}% >= {VITAMIN_MINERAL_THRESHOLD}%) - balanced formula",
+                "total_ingredients": total_ingredients,
+                "active_ingredients": active_count,
+                "vitamin_mineral_count": vitamin_mineral_count
+            }
+
+        # Specialty (enzymes, amino acids, or mixed category)
+        if enzyme_count > 0 or amino_acid_count > 0:
+            specialty_type = []
+            if enzyme_count > 0:
+                specialty_type.append(f"{enzyme_count} enzyme(s)")
+            if amino_acid_count > 0:
+                specialty_type.append(f"{amino_acid_count} amino acid(s)")
+
+            return {
+                "type": "specialty",
+                "confidence": "medium",
+                "reasoning": f"Contains {', '.join(specialty_type)}",
+                "total_ingredients": total_ingredients,
+                "active_ingredients": active_count
+            }
+
+        # Default: Multi-ingredient blend (no clear category)
+        return {
+            "type": "multi",
+            "confidence": "medium",
+            "reasoning": f"{total_ingredients} total ingredients without clear specialization",
+            "total_ingredients": total_ingredients,
+            "active_ingredients": active_count
         }
 
     def _set_quality_flags(self, enriched: Dict, product_data: Dict) -> Dict:
@@ -1792,6 +2435,13 @@ class SupplementEnricherV2:
         # Get existing metadata (should include all cleaned metadata fields)
         existing_metadata = enriched.get("metadata", {})
 
+        # VALIDATION: Check for critical cleaned metadata fields that should not be overwritten
+        critical_cleaned_fields = [
+            "processing_timestamp", "cleaning_version", "original_id",
+            "completeness", "mappingStats", "proprietaryBlendStats",
+            "clinicalDosingValidation", "industryBenchmark", "penaltyWeighting"
+        ]
+
         # Update with enrichment-specific fields
         enrichment_updates = {
             "requires_user_profile_scoring": ingredient_count > 1,
@@ -1801,6 +2451,14 @@ class SupplementEnricherV2:
             "single_ingredient_product": single_ingredient,
             "ready_for_scoring": True
         }
+
+        # SAFETY: Warn if we're about to overwrite critical cleaned metadata
+        for field in critical_cleaned_fields:
+            if field in existing_metadata and field in enrichment_updates:
+                self.logger.warning(
+                    f"Overwriting critical metadata field '{field}' from cleaned data. "
+                    f"Old value: {existing_metadata[field]}, New value: {enrichment_updates[field]}"
+                )
 
         # Merge: existing metadata preserved, enrichment updates added/overwritten
         return {**existing_metadata, **enrichment_updates}

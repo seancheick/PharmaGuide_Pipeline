@@ -27,8 +27,8 @@ RDA_OPTIMAL_ULS = DATA_DIR / "rda_optimal_uls.json"
 RDA_THERAPEUTIC_DOSING = DATA_DIR / "rda_therapeutic_dosing.json"
 UNIT_MAPPINGS = DATA_DIR / "unit_mappings.json"
 INGREDIENT_WEIGHTS = DATA_DIR / "ingredient_weights.json"
-PASSIVE_INACTIVE_INGREDIENTS = DATA_DIR / "passive_inactive_ingredients.json"
-NON_HARMFUL_ADDITIVES = DATA_DIR / "non_harmful_additives.json"
+OTHER_INGREDIENTS = DATA_DIR / "other_ingredients.json"  # Merged: non_harmful_additives + passive_inactive (FDA "Other Ingredients")
+FUNCTIONAL_GROUPINGS = DATA_DIR / "functional_ingredient_groupings.json"  # Functional disclosure patterns & transparency scoring
 BOTANICAL_INGREDIENTS = DATA_DIR / "botanical_ingredients.json"
 
 # Output subdirectories
@@ -526,6 +526,12 @@ VALIDATION_THRESHOLDS = {
     "excellent_mapping": 90.0,       # 90%+ mapping rate for promotion
     "base_score_max": 80             # Maximum base score
 }
+
+# Validation status constants
+STATUS_SUCCESS = "success"
+STATUS_NEEDS_REVIEW = "needs_review"
+STATUS_INCOMPLETE = "incomplete"
+STATUS_ERROR = "error"
 
 # Logging format
 LOG_FORMAT = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"

@@ -2,6 +2,7 @@
   "synergy_clusters": [
     {
       "name": "Curcumin Absorption",
+      "id": "curcumin_absorption",
       "ingredients": [
         "curcumin",
         "turmeric",
@@ -25,6 +26,7 @@
     },
     {
       "name": "Magnesium Nervous System",
+      "id": "magnesium_nervous_system",
       "ingredients": [
         "magnesium",
         "magnesium bisglycinate",
@@ -44,6 +46,7 @@
     },
     {
       "name": "Sleep Stack",
+      "id": "sleep_stack",
       "ingredients": [
         "melatonin",
         "magnesium",
@@ -77,6 +80,7 @@
     },
     {
       "name": "Joint & Inflammation",
+      "id": "joint_inflammation",
       "ingredients": [
         "glucosamine",
         "glucosamine sulfate",
@@ -112,6 +116,7 @@
     },
     {
       "name": "Eye Health",
+      "id": "eye_health",
       "ingredients": [
         "lutein",
         "floraglo",
@@ -141,6 +146,7 @@
     },
     {
       "name": "Methylation Support",
+      "id": "methylation_support",
       "ingredients": [
         "methylcobalamin",
         "methyl b12",
@@ -172,6 +178,7 @@
     },
     {
       "name": "Detox Pathway",
+      "id": "detox_pathway",
       "ingredients": [
         "nac",
         "n-acetylcysteine",
@@ -204,6 +211,7 @@
     },
     {
       "name": "Gut Barrier",
+      "id": "gut_barrier",
       "ingredients": [
         "l-glutamine",
         "glutamine",
@@ -234,6 +242,7 @@
     },
     {
       "name": "Immune Defense",
+      "id": "immune_defense",
       "ingredients": [
         "vitamin c",
         "ascorbic acid",
@@ -268,6 +277,7 @@
     },
     {
       "name": "Energy + Mitochondria",
+      "id": "energy_mitochondria",
       "ingredients": [
         "acetyl-l-carnitine",
         "alcar",
@@ -305,6 +315,7 @@
     },
     {
       "name": "Stress Resilience",
+      "id": "stress_resilience",
       "ingredients": [
         "ashwagandha",
         "ksm-66",
@@ -337,6 +348,7 @@
     },
     {
       "name": "Mood Balance",
+      "id": "mood_balance",
       "ingredients": [
         "5-htp",
         "5-hydroxytryptophan",
@@ -370,6 +382,7 @@
     },
     {
       "name": "Cognitive Performance",
+      "id": "cognitive_performance",
       "ingredients": [
         "bacopa",
         "bacopa monnieri",
@@ -403,6 +416,7 @@
     },
     {
       "name": "Cardiovascular Support",
+      "id": "cardiovascular_support",
       "ingredients": [
         "coq10",
         "coenzyme q10",
@@ -440,6 +454,7 @@
     },
     {
       "name": "Blood Sugar Regulation",
+      "id": "blood_sugar_regulation",
       "ingredients": [
         "berberine",
         "berberine hcl",
@@ -469,6 +484,7 @@
     },
     {
       "name": "Hormone Balance (Men)",
+      "id": "hormone_balance_men",
       "ingredients": [
         "zinc",
         "zinc picolinate",
@@ -499,6 +515,7 @@
     },
     {
       "name": "Hormone Balance (Women)",
+      "id": "hormone_balance_women",
       "ingredients": [
         "chasteberry",
         "vitex",
@@ -527,6 +544,7 @@
     },
     {
       "name": "Hair & Skin Nutrition",
+      "id": "hair_skin_nutrition",
       "ingredients": [
         "biotin",
         "vitamin b7",
@@ -558,6 +576,7 @@
     },
     {
       "name": "Liver Support",
+      "id": "liver_support",
       "ingredients": [
         "milk thistle",
         "silymarin",
@@ -587,6 +606,7 @@
     },
     {
       "name": "Bone Health",
+      "id": "bone_health",
       "ingredients": [
         "calcium",
         "calcium citrate",
@@ -617,6 +637,7 @@
     },
     {
       "name": "Iron Absorption",
+      "id": "iron_absorption",
       "ingredients": [
         "iron",
         "iron bisglycinate",
@@ -640,6 +661,7 @@
     },
     {
       "name": "Antioxidant Defense",
+      "id": "antioxidant_defense",
       "ingredients": [
         "vitamin c",
         "ascorbic acid",
@@ -670,6 +692,7 @@
     },
     {
       "name": "Pre/Post Workout",
+      "id": "pre_post_workout",
       "ingredients": [
         "creatine",
         "creapure",
@@ -698,6 +721,7 @@
     },
     {
       "name": "Digestive Enzymes",
+      "id": "digestive_enzymes",
       "ingredients": [
         "amylase",
         "protease",
@@ -722,6 +746,7 @@
     },
     {
       "name": "Thyroid Support",
+      "id": "thyroid_support",
       "ingredients": [
         "iodine",
         "kelp",
@@ -747,6 +772,7 @@
     },
     {
       "name": "Memory & Learning",
+      "id": "memory_learning",
       "ingredients": [
         "bacopa",
         "bacopa monnieri",
@@ -772,6 +798,7 @@
     },
     {
       "name": "Fat Metabolism",
+      "id": "fat_metabolism",
       "ingredients": [
         "l-carnitine",
         "acetyl-l-carnitine",
@@ -797,6 +824,7 @@
     },
     {
       "name": "Muscle Building/Recovery",
+      "id": "muscle_building_recovery",
       "ingredients": [
         "protein",
         "whey protein",
@@ -826,6 +854,7 @@
     },
     {
       "name": "Inflammation Control",
+      "id": "inflammation_control",
       "ingredients": [
         "omega-3",
         "epa",
@@ -855,6 +884,7 @@
     },
     {
       "name": "Adrenal Support",
+      "id": "adrenal_support",
       "ingredients": [
         "vitamin c",
         "ascorbic acid",
@@ -878,6 +908,7 @@
     },
     {
       "name": "Longevity and Anti-Aging",
+      "id": "longevity_and_anti_aging",
       "ingredients": [
         "resveratrol",
         "nmn",
@@ -899,6 +930,7 @@
     },
     {
       "name": "Probiotic and Gut Health",
+      "id": "probiotic_and_gut_health",
       "ingredients": [
         "probiotics",
         "lactobacillus",
@@ -923,6 +955,7 @@
     },
     {
       "name": "Electrolyte Balance",
+      "id": "electrolyte_balance",
       "ingredients": [
         "sodium",
         "potassium",
@@ -940,6 +973,7 @@
     },
     {
       "name": "Pre-Workout Energy",
+      "id": "pre_workout_energy",
       "ingredients": [
         "citrulline malate",
         "beta-alanine",
@@ -960,6 +994,7 @@
     },
     {
       "name": "Recovery Support",
+      "id": "recovery_support",
       "ingredients": [
         "bcaa",
         "branched chain amino acids",
@@ -981,6 +1016,7 @@
     },
     {
       "name": "Cognitive Amino Acids",
+      "id": "cognitive_amino_acids",
       "ingredients": [
         "acetyl-l-carnitine",
         "alcar",
@@ -1000,6 +1036,7 @@
     },
     {
       "name": "Immune Probiotic Blend",
+      "id": "immune_probiotic_blend",
       "ingredients": [
         "lactobacillus rhamnosus gg",
         "lactobacillus acidophilus",
@@ -1015,6 +1052,7 @@
     },
     {
       "name": "Gut Barrier Probiotic Blend",
+      "id": "gut_barrier_probiotic_blend",
       "ingredients": [
         "saccharomyces boulardii",
         "lactobacillus plantarum",
@@ -1029,6 +1067,7 @@
     },
     {
       "name": "Mood-Gut Axis Probiotic Blend",
+      "id": "mood_gut_axis_probiotic_blend",
       "ingredients": [
         "lactobacillus helveticus",
         "bifidobacterium longum",
@@ -1043,6 +1082,7 @@
     },
     {
       "name": "Skin Health Complex",
+      "id": "skin_health_complex",
       "ingredients": [
         "hyaluronic acid",
         "ceramides",
@@ -1064,6 +1104,7 @@
     },
     {
       "name": "Nitric Oxide & Blood Flow",
+      "id": "nitric_oxide_blood_flow",
       "ingredients": [
         "l-citrulline",
         "citrulline malate",
@@ -1085,6 +1126,7 @@
     },
     {
       "name": "Comprehensive Blood Sugar Support",
+      "id": "comprehensive_blood_sugar_support",
       "ingredients": [
         "berberine",
         "berberine hcl",
@@ -1108,5 +1150,12 @@
       },
       "evidence_tier": 1
     }
-  ]
+  ],
+  "_metadata": {
+    "description": "Ingredient synergy clusters for bonus scoring when complementary ingredients are combined",
+    "purpose": "synergy_bonuses",
+    "total_entries": 42,
+    "schema_version": "1.0",
+    "last_updated": "2025-11-14"
+  }
 }

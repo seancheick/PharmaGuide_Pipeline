@@ -1,9 +1,9 @@
 DSLD Data Cleaning Processing Report
 ==================================================
 
-Generated: 2025-11-11 22:56:14
+Generated: 2025-11-15 22:27:18
 Total Files Processed: 978
-Processing Time: 0.11 minutes
+Processing Time: 0.29 minutes
 
 Results Summary:
   - Successfully cleaned: 978
@@ -12,8 +12,8 @@ Results Summary:
   - Errors: 0
   - Success rate: 100.0%
 
-Mapped ingredients found: 781
-Unmapped ingredients found: 12
+Mapped ingredients found: 786
+Unmapped ingredients found: 1
 
 Top 15 Mapped Ingredients (data insights):
   550x Stearic Acid
@@ -35,19 +35,10 @@ Top 15 Mapped Ingredients (data insights):
 📊 These are the most frequently appearing mapped ingredients
 
 Top 10 Unmapped Ingredients (for enrichment planning):
-  121x May contain one or more of the following
-  107x None
-   95x Contains < 2% of
-   93x Natural yellow/orange coloring
-   74x Natural & Organic Fruit Flavors
-   62x Passion flower (Passiflora incamata) herbs dry extract
-   57x Contains 2% or less of the following
-   52x May contain one or more of the following:
-   50x Proprietary Elderberry Extract
-   43x Naturally Sweet
+    1x Natural & Organic Fruit Flavors
 
 💡 These ingredients should be prioritized for database enrichment
 
 Batch Details:
-  Batch 1: 500 cleaned, 0 review, 0 incomplete, 0 errors (3.3s)
-  Batch 2: 478 cleaned, 0 review, 0 incomplete, 0 errors (3.3s)
+  Batch 1: 500 cleaned, 0 review, 0 incomplete, 0 errors (8.7s)
+  Batch 2: 478 cleaned, 0 review, 0 incomplete, 0 errors (8.8s)

@@ -5,7 +5,6 @@
     "max_penalty_points": 10,
     "penalty_policy": "Only one penalty applied per proprietary blend instance: no disclosure (-10) or partial disclosure (-5)."
   },
-
   "proprietary_blend_concerns": [
     {
       "id": "BLEND_STIMULANT",
@@ -22,6 +21,7 @@
         "Cardio Support Blend",
         "pre-workout blend",
         "cardio matrix",
+        "Whey Protein Blend",
         "pre-workout matrix",
         "stimulant complex",
         "metabolic accelerator",
@@ -578,7 +578,11 @@
     },
     {
       "standard_name": "Immune Health Blend",
-      "aliases": ["immune support blend", "immunity blend", "immune complex"],
+      "aliases": [
+        "immune support blend",
+        "immunity blend",
+        "immune complex"
+      ],
       "category": "health_support",
       "penalty_levels": [
         {
@@ -593,7 +597,8 @@
         }
       ],
       "notes": "Health support blends should disclose all active ingredients and their amounts for proper immune system evaluation.",
-      "last_updated": "2025-08-15"
+      "last_updated": "2025-08-15",
+      "id": "immune_health_blend"
     },
     {
       "standard_name": "Hormone Support Blend",
@@ -616,7 +621,8 @@
         }
       ],
       "notes": "Hormone support blends require full disclosure due to potential for significant physiological effects and drug interactions.",
-      "last_updated": "2025-08-15"
+      "last_updated": "2025-08-15",
+      "id": "hormone_support_blend"
     },
     {
       "standard_name": "Concentrated Enzyme Formula",
@@ -639,7 +645,8 @@
         }
       ],
       "notes": "Enzyme formulas should disclose specific enzymes and their activity levels for proper digestive support evaluation.",
-      "last_updated": "2025-08-15"
+      "last_updated": "2025-08-15",
+      "id": "concentrated_enzyme_formula"
     },
     {
       "id": "BLEND_ENZYMAX",
@@ -702,5 +709,12 @@
       "notes": "Acid Comfort is a proprietary digestive blend typically containing herbal extracts for acid relief and digestive comfort, but lacks transparency in ingredient composition and dosing.",
       "last_updated": "2025-09-21"
     }
-  ]
+  ],
+  "_metadata": {
+    "description": "Proprietary blend penalties for undisclosed ingredient amounts",
+    "purpose": "transparency_penalties",
+    "total_entries": 0,
+    "schema_version": "1.0",
+    "last_updated": "2025-11-14"
+  }
 }

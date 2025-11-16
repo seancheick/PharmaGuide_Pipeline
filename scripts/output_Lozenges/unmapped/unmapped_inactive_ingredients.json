@@ -1,21 +1,10 @@
 {
   "metadata": {
-    "generated_at": "2025-11-12T03:56:14.989089Z",
-    "total_unmapped": 12,
-    "total_occurrences": 767
+    "generated_at": "2025-11-16T03:27:18.914759Z",
+    "total_unmapped": 1,
+    "total_occurrences": 1
   },
   "unmapped_ingredients": {
-    "May contain one or more of the following": 121,
-    "None": 107,
-    "Contains < 2% of": 95,
-    "Natural yellow/orange coloring": 93,
-    "Natural & Organic Fruit Flavors": 74,
-    "Passion flower (Passiflora incamata) herbs dry extract": 62,
-    "Contains 2% or less of the following": 57,
-    "May contain one or more of the following:": 52,
-    "Proprietary Elderberry Extract": 50,
-    "Naturally Sweet": 43,
-    "Ginger Rhizome Extract, Dried": 8,
-    "Propolis, Pure": 5
+    "Natural & Organic Fruit Flavors": 1
   }
 }

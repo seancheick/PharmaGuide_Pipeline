@@ -253,11 +253,7 @@
     {
       "id": "PII_LECITHIN_SOY",
       "standard_name": "Soy Lecithin",
-      "aliases": [
-        "lecithin (soy)",
-        "soybean lecithin",
-        "E322"
-      ],
+      "aliases": ["lecithin (soy)", "soybean lecithin", "E322"],
       "category": "emulsifier",
       "notes": "A very common emulsifier derived from soybeans. It is considered safe, but is a major allergen and often derived from genetically modified sources unless specified otherwise.",
       "last_updated": "2025-08-04"
@@ -308,12 +304,7 @@
     {
       "id": "PII_BEESWAX",
       "standard_name": "Beeswax",
-      "aliases": [
-        "cera alba",
-        "E901",
-        "yellow beeswax",
-        "white beeswax"
-      ],
+      "aliases": ["cera alba", "E901", "yellow beeswax", "white beeswax"],
       "category": "glazing_agent_coating",
       "notes": "A natural wax produced by honey bees. Used as a coating or glazing agent for tablets and softgels to improve appearance and swallowing. Considered safe.",
       "last_updated": "2025-08-04"
@@ -325,7 +316,8 @@
         "natural berry flavors",
         "natural citrus flavors",
         "fruit extracts",
-        "natural fruit essences"
+        "natural fruit essences",
+        "natural and organic fruit flavors"
       ],
       "category": "natural_flavoring",
       "notes": "Flavoring compounds extracted from real fruits, often with carrier solvents. Generally considered safe.",
@@ -385,12 +377,7 @@
     {
       "id": "PII_POLYVINYL_ALCOHOL",
       "standard_name": "Polyvinyl Alcohol",
-      "aliases": [
-        "PVA",
-        "PVOH",
-        "polyvinyl alcohol",
-        "vinyl alcohol polymer"
-      ],
+      "aliases": ["PVA", "PVOH", "polyvinyl alcohol", "vinyl alcohol polymer"],
       "category": "coating_film_former",
       "notes": "A common polymer used in tablet coatings to form protective films. Water-soluble and generally considered safe for pharmaceutical use.",
       "last_updated": "2025-08-12"
@@ -422,11 +409,7 @@
     {
       "id": "PII_TRIETHYL_CITRATE",
       "standard_name": "Triethyl Citrate",
-      "aliases": [
-        "TEC",
-        "citric acid triethyl ester",
-        "E1505"
-      ],
+      "aliases": ["TEC", "citric acid triethyl ester", "E1505"],
       "category": "plasticizer",
       "notes": "A plasticizer for tablet coatings that provides flexibility and prevents film cracking. Generally recognized as safe (GRAS).",
       "last_updated": "2025-08-12"
@@ -514,12 +497,7 @@
     {
       "id": "PII_VEGETABLE_GUM_GENERAL",
       "standard_name": "Vegetable Gum (General)",
-      "aliases": [
-        "vegetable gum",
-        "plant gum",
-        "natural gum",
-        "botanical gum"
-      ],
+      "aliases": ["vegetable gum", "plant gum", "natural gum", "botanical gum"],
       "category": "thickener_stabilizer_general",
       "notes": "A generic term that could refer to various plant-based gums like Gum Arabic, Xanthan Gum, or other natural gums. Specific identification recommended for accurate assessment. Generally considered safe.",
       "last_updated": "2025-08-12"
@@ -612,11 +590,7 @@
     {
       "id": "PII_PEPSIN",
       "standard_name": "Pepsin",
-      "aliases": [
-        "pepsin enzyme",
-        "pepsin powder",
-        "digestive pepsin"
-      ],
+      "aliases": ["pepsin enzyme", "pepsin powder", "digestive pepsin"],
       "category": "enzyme",
       "notes": "A digestive enzyme that breaks down proteins. Generally considered safe and beneficial for digestion when used appropriately.",
       "last_updated": "2025-08-15"
@@ -624,11 +598,7 @@
     {
       "id": "PII_DIASTASE",
       "standard_name": "Diastase",
-      "aliases": [
-        "diastase enzyme",
-        "amylase",
-        "starch-digesting enzyme"
-      ],
+      "aliases": ["diastase enzyme", "amylase", "starch-digesting enzyme"],
       "category": "enzyme",
       "notes": "An enzyme that breaks down starch into sugars. Generally considered safe and beneficial for digestion.",
       "last_updated": "2025-08-15"
@@ -636,10 +606,7 @@
     {
       "id": "PII_CATALASE",
       "standard_name": "Catalase",
-      "aliases": [
-        "catalase enzyme",
-        "hydrogen peroxide catalase"
-      ],
+      "aliases": ["catalase enzyme", "hydrogen peroxide catalase"],
       "category": "enzyme",
       "notes": "An enzyme that breaks down hydrogen peroxide. Generally considered safe and beneficial for cellular protection.",
       "last_updated": "2025-08-15"
@@ -647,10 +614,7 @@
     {
       "id": "PII_XYLANASE",
       "standard_name": "Xylanase",
-      "aliases": [
-        "xylanase enzyme",
-        "fiber-digesting enzyme"
-      ],
+      "aliases": ["xylanase enzyme", "fiber-digesting enzyme"],
       "category": "enzyme",
       "notes": "An enzyme that breaks down xylan, a component of plant fiber. Generally considered safe and beneficial for digestion.",
       "last_updated": "2025-08-15"
@@ -658,9 +622,7 @@
     {
       "id": "PII_MICOSOLLE",
       "standard_name": "Micosolle",
-      "aliases": [
-        "micosolle excipient"
-      ],
+      "aliases": ["micosolle excipient"],
       "category": "excipient",
       "notes": "A branded excipient ingredient. Appears to be a proprietary name for a common pharmaceutical excipient substance.",
       "last_updated": "2025-08-15"
@@ -698,11 +660,7 @@
     {
       "id": "PII_STEARATE",
       "standard_name": "Stearate (unspecified)",
-      "aliases": [
-        "stearate",
-        "stearate powder",
-        "stearate lubricant"
-      ],
+      "aliases": ["stearate", "stearate powder", "stearate lubricant"],
       "category": "lubricant",
       "notes": "General stearate salt used as lubricant in tablet manufacturing. Source not specified - could be magnesium stearate, calcium stearate, or other stearate forms.",
       "last_updated": "2025-09-19"
@@ -710,11 +668,7 @@
     {
       "id": "PII_RICE_DEXTRIN",
       "standard_name": "Rice Dextrin",
-      "aliases": [
-        "rice dextrin",
-        "rice-based dextrin",
-        "dextrin from rice"
-      ],
+      "aliases": ["rice dextrin", "rice-based dextrin", "dextrin from rice"],
       "category": "binder",
       "notes": "Rice-derived dextrin used as a binding agent and bulking agent. Natural carbohydrate polymer that provides structure to tablets and capsules.",
       "last_updated": "2025-09-19"
@@ -722,11 +676,7 @@
     {
       "id": "PII_RICE_STARCH",
       "standard_name": "Rice Starch",
-      "aliases": [
-        "rice starch",
-        "starch from rice",
-        "rice-derived starch"
-      ],
+      "aliases": ["rice starch", "starch from rice", "rice-derived starch"],
       "category": "binder",
       "notes": "Rice-derived starch used as a binding agent, disintegrant, and bulking agent. Natural carbohydrate that aids in tablet formation and dissolution.",
       "last_updated": "2025-09-19"
@@ -734,11 +684,7 @@
     {
       "id": "PII_DEXTRIN",
       "standard_name": "Dextrin (unspecified source)",
-      "aliases": [
-        "dextrin",
-        "dextrin powder",
-        "modified starch"
-      ],
+      "aliases": ["dextrin", "dextrin powder", "modified starch"],
       "category": "binder",
       "notes": "Carbohydrate polymer derived from starch used as a binding agent and bulking agent. Source plant not specified - could be corn, potato, rice, or other starch sources.",
       "last_updated": "2025-09-19"
@@ -852,11 +798,7 @@
     {
       "id": "PII_PEARLITOL",
       "standard_name": "Pearlitol (Mannitol)",
-      "aliases": [
-        "pearlitol",
-        "pharmaceutical mannitol",
-        "mannitol pearlitol"
-      ],
+      "aliases": ["pearlitol", "pharmaceutical mannitol", "mannitol pearlitol"],
       "category": "bulking_agent",
       "notes": "Pharmaceutical grade mannitol used as bulking agent and sweetener. Well-tolerated sugar alcohol with good compaction properties for tablets.",
       "last_updated": "2025-09-19"
@@ -864,10 +806,7 @@
     {
       "id": "PII_PALM_KERNEL_STEARATE",
       "standard_name": "Palm Kernel Stearate",
-      "aliases": [
-        "palm kernel stearate",
-        "palm-derived stearate"
-      ],
+      "aliases": ["palm kernel stearate", "palm-derived stearate"],
       "category": "unclear_additive",
       "notes": "Palm-derived compound with unclear regulatory status. Not found in FDA GRAS databases as a specific ingredient. May be related to palm stearin or sodium palm kernelate but specific composition and regulatory approval uncertain.",
       "last_updated": "2025-09-20"
@@ -875,11 +814,7 @@
     {
       "id": "PII_HONEY_FLAVOR",
       "standard_name": "Honey Flavor",
-      "aliases": [
-        "honey flavor",
-        "natural honey flavor",
-        "honey flavoring"
-      ],
+      "aliases": ["honey flavor", "natural honey flavor", "honey flavoring"],
       "category": "flavor",
       "notes": "Natural or artificial flavoring used to provide honey taste. Generally considered safe for flavoring purposes.",
       "last_updated": "2025-11-11"
@@ -887,11 +822,7 @@
     {
       "id": "PII_APPLE_FLAVOR",
       "standard_name": "Apple Flavor",
-      "aliases": [
-        "apple flavor",
-        "natural apple flavor",
-        "apple flavoring"
-      ],
+      "aliases": ["apple flavor", "natural apple flavor", "apple flavoring"],
       "category": "flavor",
       "notes": "Natural or artificial flavoring used to provide apple taste. Generally considered safe for flavoring purposes.",
       "last_updated": "2025-11-11"
@@ -899,11 +830,7 @@
     {
       "id": "PII_FRESH_FRUITY_FLAVOR",
       "standard_name": "Fresh Fruity Flavor",
-      "aliases": [
-        "fresh fruity flavor",
-        "fruity flavor",
-        "fruit flavor blend"
-      ],
+      "aliases": ["fresh fruity flavor", "fruity flavor", "fruit flavor blend"],
       "category": "flavor",
       "notes": "Natural or artificial flavoring blend used to provide fresh fruit taste. Generally considered safe for flavoring purposes.",
       "last_updated": "2025-11-11"
@@ -911,12 +838,7 @@
     {
       "id": "PII_SALT",
       "standard_name": "Salt (Sodium Chloride)",
-      "aliases": [
-        "salt",
-        "table salt",
-        "sodium chloride",
-        "sea salt"
-      ],
+      "aliases": ["salt", "table salt", "sodium chloride", "sea salt"],
       "category": "flavor_enhancer",
       "notes": "Common salt used as flavor enhancer and preservative. Generally recognized as safe (GRAS) but should be consumed in moderation.",
       "last_updated": "2025-11-11"
@@ -924,10 +846,7 @@
     {
       "id": "PII_CALCIUM_COMPLEX",
       "standard_name": "Calcium Complex",
-      "aliases": [
-        "calcium complex",
-        "calcium blend"
-      ],
+      "aliases": ["calcium complex", "calcium blend"],
       "category": "mineral_blend",
       "notes": "Blend of calcium forms for bone health support.",
       "last_updated": "2025-11-11"
@@ -935,10 +854,7 @@
     {
       "id": "PII_PROTEIN_COATING",
       "standard_name": "Protein Coating",
-      "aliases": [
-        "protein coating",
-        "protein coating blend"
-      ],
+      "aliases": ["protein coating", "protein coating blend"],
       "category": "coating",
       "notes": "Protein-based coating for tablets or capsules to aid swallowing and protect ingredients.",
       "last_updated": "2025-11-11"
@@ -946,10 +862,7 @@
     {
       "id": "PII_VEGETABLE_FIBER",
       "standard_name": "Vegetable Fiber",
-      "aliases": [
-        "vegetable fiber",
-        "plant fiber"
-      ],
+      "aliases": ["vegetable fiber", "plant fiber"],
       "category": "fiber",
       "notes": "General vegetable-derived fiber for bulking and digestive support.",
       "last_updated": "2025-11-11"
@@ -957,10 +870,7 @@
     {
       "id": "PII_OXALOACETATE",
       "standard_name": "Oxaloacetate",
-      "aliases": [
-        "oxaloacetate",
-        "oxaloacetic acid"
-      ],
+      "aliases": ["oxaloacetate", "oxaloacetic acid"],
       "category": "metabolic_intermediate",
       "notes": "Metabolic intermediate used in energy metabolism supplements. Emerging research on longevity benefits.",
       "last_updated": "2025-11-11"
@@ -980,10 +890,7 @@
     {
       "id": "PII_PARTECK",
       "standard_name": "Parteck (Mannitol)",
-      "aliases": [
-        "parteck",
-        "parteck m"
-      ],
+      "aliases": ["parteck", "parteck m"],
       "category": "filler_sweetener",
       "notes": "Branded form of mannitol used as a filler, bulking agent, and sweetener in tablets. Generally recognized as safe.",
       "last_updated": "2025-11-11"
@@ -991,10 +898,7 @@
     {
       "id": "PII_AEROSIL",
       "standard_name": "Aerosil (Colloidal Silicon Dioxide)",
-      "aliases": [
-        "aerosil",
-        "aerosil 200"
-      ],
+      "aliases": ["aerosil", "aerosil 200"],
       "category": "anti_caking_glidant",
       "notes": "Branded form of colloidal silicon dioxide used as anti-caking agent and glidant. Generally recognized as safe.",
       "last_updated": "2025-11-11"
@@ -1002,10 +906,7 @@
     {
       "id": "PII_DIPAC",
       "standard_name": "Di-Pac (Dicalcium Phosphate)",
-      "aliases": [
-        "di-pac",
-        "dipac"
-      ],
+      "aliases": ["di-pac", "dipac"],
       "category": "filler_binder",
       "notes": "Branded form of dicalcium phosphate dihydrate used as a direct compression filler-binder in tablets. Generally recognized as safe.",
       "last_updated": "2025-11-11"
@@ -1013,11 +914,7 @@
     {
       "id": "PII_GLYCEROL_MONOSTEARATE",
       "standard_name": "Glycerol Monostearate",
-      "aliases": [
-        "glycerol monostearate",
-        "GMS",
-        "monostearin"
-      ],
+      "aliases": ["glycerol monostearate", "GMS", "monostearin"],
       "category": "emulsifier_stabilizer",
       "notes": "Emulsifier and stabilizer derived from glycerol and stearic acid. Generally recognized as safe.",
       "last_updated": "2025-11-11"
@@ -1025,10 +922,7 @@
     {
       "id": "PII_DRIED_CANOLA_OIL",
       "standard_name": "Dried Canola Oil",
-      "aliases": [
-        "dried canola oil",
-        "canola oil powder"
-      ],
+      "aliases": ["dried canola oil", "canola oil powder"],
       "category": "carrier_oil",
       "notes": "Spray-dried canola oil used as a carrier or coating agent in supplements. Generally recognized as safe.",
       "last_updated": "2025-11-11"
@@ -1036,11 +930,7 @@
     {
       "id": "PII_STEARIC_ACID",
       "standard_name": "Stearic Acid",
-      "aliases": [
-        "stearic acid",
-        "steric acid",
-        "octadecanoic acid"
-      ],
+      "aliases": ["stearic acid", "steric acid", "octadecanoic acid"],
       "category": "lubricant_emulsifier",
       "notes": "Fatty acid used as a lubricant, emulsifier, and tablet binder. Generally recognized as safe.",
       "last_updated": "2025-11-11"
@@ -1048,11 +938,7 @@
     {
       "id": "PII_COLOSTRUM",
       "standard_name": "Colostrum",
-      "aliases": [
-        "colostrum",
-        "bovine colostrum",
-        "cow colostrum"
-      ],
+      "aliases": ["colostrum", "bovine colostrum", "cow colostrum"],
       "category": "animal_derived_protein",
       "notes": "First milk produced by mammals after giving birth, rich in antibodies and growth factors. Used for immune support. Note: May be considered an active ingredient in some contexts.",
       "last_updated": "2025-11-11"

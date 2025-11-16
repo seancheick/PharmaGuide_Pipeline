@@ -1,6 +1,59 @@
 {
   "non_harmful_additives": [
     {
+      "id": "NHA_MAGNESIUM_STEARATE",
+      "standard_name": "Magnesium Stearate",
+      "aliases": [
+        "magnesium stearate",
+        "magnesium salt of stearic acid",
+        "E572",
+        "vegetable magnesium stearate"
+      ],
+      "risk_level": "none",
+      "category": "tablet_lubricant",
+      "additive_type": "processing_aid",
+      "clean_label_score": 6,
+      "notes": "Widely used tablet and capsule lubricant. Generally recognized as safe (GRAS). Primary considerations are source (plant vs animal) and vegan/halal/kosher suitability. No strong evidence of reduced nutrient absorption at typical use levels.",
+      "regulatory_status": "GRAS",
+      "common_uses": ["tablet lubrication", "flow aid", "manufacturing aid"],
+      "last_updated": "2025-11-12"
+    },
+    {
+      "id": "NHA_STEARIC_ACID",
+      "standard_name": "Stearic Acid",
+      "aliases": [
+        "stearic acid",
+        "octadecanoic acid",
+        "E570",
+        "vegetable stearic acid"
+      ],
+      "risk_level": "none",
+      "category": "fatty_acid_excipient",
+      "additive_type": "processing_aid",
+      "clean_label_score": 7,
+      "notes": "Fatty acid used as excipient and lubricant. GRAS with long history of safe use. Source (plant vs animal) affects vegan suitability.",
+      "regulatory_status": "GRAS",
+      "common_uses": ["tablet lubrication", "emulsifier", "binder"],
+      "last_updated": "2025-11-12"
+    },
+    {
+      "id": "NHA_XANTHAN_GUM",
+      "standard_name": "Xanthan Gum",
+      "aliases": [
+        "xanthan",
+        "E415",
+        "xanthomonas campestris"
+      ],
+      "risk_level": "none",
+      "category": "thickener_stabilizer",
+      "additive_type": "texture_modifier",
+      "clean_label_score": 7,
+      "notes": "Common stabilizer and thickener. Generally safe; may cause digestive discomfort in some and may trigger sensitivity in individuals reactive to corn substrates depending on production.",
+      "regulatory_status": "GRAS",
+      "common_uses": ["stabilizer", "thickener", "suspending agent"],
+      "last_updated": "2025-11-12"
+    },
+    {
       "id": "NHA_STEVIA",
       "standard_name": "Stevia & Stevia Extracts",
       "aliases": [
@@ -1404,6 +1457,7 @@
         "color added",
         "natural orange color",
         "natural yellow orange coloring",
+        "natural yellow/orange coloring",
         "natural carotene coloring"
       ],
       "risk_level": "none",
@@ -1435,11 +1489,7 @@
       "clean_label_score": 6,
       "notes": "Chemically or physically modified starch used as thickener and stabilizer. Generally recognized as safe (GRAS). Common in food and supplements.",
       "regulatory_status": "GRAS",
-      "common_uses": [
-        "thickening",
-        "stabilizing",
-        "texture improvement"
-      ],
+      "common_uses": ["thickening", "stabilizing", "texture improvement"],
       "last_updated": "2025-11-11"
     },
     {
@@ -1523,12 +1573,7 @@
     {
       "id": "NHA_ACACIA_GUM",
       "standard_name": "Acacia Gum",
-      "aliases": [
-        "acacia",
-        "acacia gum",
-        "gum arabic",
-        "arabic gum"
-      ],
+      "aliases": ["acacia", "acacia gum", "gum arabic", "arabic gum"],
       "risk_level": "none",
       "category": "fiber_prebiotic",
       "additive_type": "natural_fiber",
@@ -1558,21 +1603,13 @@
       "clean_label_score": 7,
       "notes": "Plant-derived cellulose used as bulking agent and anticaking agent. Insoluble fiber. GRAS approved.",
       "regulatory_status": "GRAS",
-      "common_uses": [
-        "bulking agent",
-        "anticaking",
-        "tablet binding"
-      ],
+      "common_uses": ["bulking agent", "anticaking", "tablet binding"],
       "last_updated": "2025-11-11"
     },
     {
       "id": "NHA_SORBITOL",
       "standard_name": "Sorbitol",
-      "aliases": [
-        "sorbitol",
-        "sorbitol granular",
-        "d-sorbitol"
-      ],
+      "aliases": ["sorbitol", "sorbitol granular", "d-sorbitol"],
       "risk_level": "none",
       "category": "sweetener_sugar_alcohol",
       "additive_type": "sugar_alcohol",
@@ -1622,11 +1659,7 @@
       "clean_label_score": 6,
       "notes": "Emulsifier derived from glycerin and fatty acids. Generally recognized as safe.",
       "regulatory_status": "GRAS",
-      "common_uses": [
-        "emulsification",
-        "texture improvement",
-        "stability"
-      ],
+      "common_uses": ["emulsification", "texture improvement", "stability"],
       "last_updated": "2025-11-11"
     }
   ],

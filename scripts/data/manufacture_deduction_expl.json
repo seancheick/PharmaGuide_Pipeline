@@ -1,0 +1,243 @@
+{
+  "version": "2.0",
+  "last_updated": "2025-11-13",
+  "description": "Manufacturer Trust Score Deduction Framework for PharmGuide",
+  "max_score": 100,
+  "minimum_viable_score": 0,
+  "total_deduction_cap": -25,
+  "violation_categories": {
+    "CRITICAL": {
+      "score_impact": -15,
+      "timeframe_modifier": {
+        "less_than_1_year": 1.0,
+        "1_to_3_years": 0.5,
+        "3_to_5_years": 0.25,
+        "over_5_years": 0.0
+      },
+      "subcategories": {
+        "CLASS_I_TOXIC_SUBSTANCE": {
+          "base_deduction": -20,
+          "description": "Class I recall with toxic substances (yellow oleander, muscimol, etc.)",
+          "examples": [
+            "yellow oleander contamination",
+            "toxic muscimol levels",
+            "cardiac glycoside contamination"
+          ],
+          "code": "CRI_TOXIC"
+        },
+        "CLASS_I_UNDECLARED_DRUG": {
+          "base_deduction": -15,
+          "description": "Class I recall with undeclared pharmaceutical drugs",
+          "examples": [
+            "sildenafil",
+            "diclofenac",
+            "dexamethasone",
+            "metformin",
+            "glyburide"
+          ],
+          "code": "CRI_UNDRUG"
+        },
+        "CLASS_I_ALLERGEN": {
+          "base_deduction": -12,
+          "description": "Class I recall with undeclared allergens",
+          "examples": [
+            "wheat",
+            "tree nuts",
+            "shellfish",
+            "peanuts"
+          ],
+          "code": "CRI_ALLER"
+        },
+        "CLASS_I_CONTAMINATION": {
+          "base_deduction": -15,
+          "description": "Class I recall with harmful microbial contamination",
+          "examples": [
+            "E. coli",
+            "Salmonella",
+            "Listeria"
+          ],
+          "code": "CRI_CONTA"
+        },
+        "INSPECTION_REFUSAL": {
+          "base_deduction": -18,
+          "description": "Warning letter for refusing FDA inspection",
+          "code": "CRI_INSP"
+        },
+        "ADVERSE_EVENT_SERIOUS": {
+          "base_deduction": -20,
+          "description": "Serious adverse events reported (hospitalization, death)",
+          "code": "CRI_ADVERS"
+        }
+      }
+    },
+    "HIGH": {
+      "score_impact": -10,
+      "timeframe_modifier": {
+        "less_than_1_year": 1.0,
+        "1_to_3_years": 0.5,
+        "3_to_5_years": 0.25,
+        "over_5_years": 0.0
+      },
+      "subcategories": {
+        "CLASS_II_RECALL": {
+          "base_deduction": -10,
+          "description": "Class II recall (potential adverse health consequences)",
+          "code": "HIGH_CII"
+        },
+        "CGMP_FAILURE_CRITICAL": {
+          "base_deduction": -12,
+          "description": "Critical CGMP violations in warning letter (missing purity/identity testing, toxic element testing)",
+          "code": "HIGH_CGMP_CRIT"
+        },
+        "MULTIPLE_CLASS_II_RECALLS": {
+          "base_deduction": -10,
+          "description": "Multiple Class II recalls within 3 years",
+          "count_threshold": 2,
+          "code": "HIGH_MULT_CII"
+        },
+        "ADVERSE_EVENT_MODERATE": {
+          "base_deduction": -8,
+          "description": "Moderate adverse events without hospitalization",
+          "code": "HIGH_ADVERS"
+        }
+      }
+    },
+    "MODERATE": {
+      "score_impact": -5,
+      "timeframe_modifier": {
+        "less_than_1_year": 1.0,
+        "1_to_3_years": 0.5,
+        "3_to_5_years": 0.25,
+        "over_5_years": 0.0
+      },
+      "subcategories": {
+        "CLASS_III_RECALL_SINGLE": {
+          "base_deduction": -3,
+          "description": "Single Class III recall (unlikely to cause harm)",
+          "code": "MOD_CIII_SING"
+        },
+        "CLASS_III_RECALL_MULTIPLE": {
+          "base_deduction": -5,
+          "description": "Multiple Class III recalls",
+          "count_threshold": 2,
+          "code": "MOD_CIII_MULT"
+        },
+        "CGMP_WARNING_LETTER": {
+          "base_deduction": -8,
+          "description": "CGMP warning letter (missing specifications, documentation)",
+          "code": "MOD_CGMP"
+        },
+        "MISBRANDING": {
+          "base_deduction": -5,
+          "description": "Misbranding or labeling violations",
+          "code": "MOD_BRAND"
+        },
+        "DOCUMENTATION_VIOLATIONS": {
+          "base_deduction": -3,
+          "description": "Minor documentation violations (adverse event contact info, incomplete MMRs)",
+          "code": "MOD_DOC"
+        }
+      }
+    },
+    "LOW": {
+      "score_impact": -2,
+      "timeframe_modifier": {
+        "less_than_1_year": 1.0,
+        "1_to_3_years": 0.5,
+        "3_to_5_years": 0.25,
+        "over_5_years": 0.0
+      },
+      "subcategories": {
+        "MINOR_WARNING": {
+          "base_deduction": -2,
+          "description": "Minor administrative or procedural warning",
+          "code": "LOW_WARN"
+        }
+      }
+    }
+  },
+  "modifiers": {
+    "RECENCY": {
+      "description": "Time-based penalty reduction",
+      "ranges": {
+        "less_than_1_year": {
+          "multiplier": 1.0,
+          "label": "Full deduction (violation within 12 months)"
+        },
+        "1_to_3_years": {
+          "multiplier": 0.5,
+          "label": "50% deduction (violation 1-3 years old)"
+        },
+        "3_to_5_years": {
+          "multiplier": 0.25,
+          "label": "25% deduction (violation 3-5 years old)"
+        },
+        "over_5_years": {
+          "multiplier": 0.0,
+          "label": "No deduction (violation 5+ years old, unless unresolved)"
+        }
+      }
+    },
+    "REPEAT_VIOLATIONS": {
+      "description": "Penalty for repeat violations within timeframe",
+      "additional_deduction": -5,
+      "trigger": "2 or more violations within 3 years",
+      "label": "Systemic quality control failure"
+    },
+    "UNRESOLVED_VIOLATIONS": {
+      "description": "Additional penalty for violations not corrected",
+      "additional_deduction": -3,
+      "triggers": [
+        "FDA warning letter without adequate corrective response",
+        "Ongoing investigation",
+        "Failure to complete recall within FDA timeline",
+        "Multiple similar violations after warning"
+      ]
+    },
+    "MULTIPLE_PRODUCT_LINES": {
+      "description": "Penalty when violations affect multiple product lines",
+      "product_line_threshold": 3,
+      "additional_deduction": -3,
+      "label": "Systemic manufacturing issue"
+    }
+  },
+  "calculation_rules": {
+    "step_1": "Start with base score of 100",
+    "step_2": "Identify all violations from manufacturer within review period (typically 5-7 years)",
+    "step_3": "For each violation, apply base deduction from appropriate subcategory",
+    "step_4": "Apply recency multiplier (0.0 - 1.0) based on violation date",
+    "step_5": "Apply additional modifiers: repeat violations (-5), unresolved (-3), multiple product lines (-3)",
+    "step_6": "Sum all deductions",
+    "step_7": "Cap total deduction at -25 points (manufacturer never goes below 75 score from violations alone)",
+    "step_8": "Calculate final trust score: 100 - (capped_total_deduction)",
+    "step_9": "Round to nearest integer"
+  },
+  "score_thresholds": {
+    "trusted": {
+      "min_score": 85,
+      "label": "Trusted",
+      "color": "green",
+      "recommendation": "Safe to recommend"
+    },
+    "acceptable": {
+      "min_score": 70,
+      "max_score": 84,
+      "label": "Acceptable",
+      "color": "yellow",
+      "recommendation": "Caution - review specific violations"
+    },
+    "concerning": {
+      "min_score": 50,
+      "max_score": 69,
+      "label": "Concerning",
+      "color": "orange",
+      "recommendation": "Display warning - recent or multiple violations"
+    },
+    "high_risk": {
+      "max_score": 49,
+      "label": "High Risk",
+      "color": "red",
+      "recommendation": "Do not recommend - critical violations"
+    }
+  }
+}

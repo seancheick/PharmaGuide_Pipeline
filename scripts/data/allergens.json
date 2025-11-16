@@ -101,7 +101,12 @@
     {
       "id": "ALLERGEN_PEANUTS",
       "standard_name": "Peanuts",
-      "aliases": ["peanut oil", "arachis oil", "groundnut", "peanut protein"],
+      "aliases": [
+        "peanut oil",
+        "arachis oil",
+        "groundnut",
+        "peanut protein"
+      ],
       "prevalence": "moderate",
       "severity_level": "high",
       "regulatory_status": "fda_major",
@@ -172,7 +177,12 @@
     {
       "id": "ALLERGEN_SESAME",
       "standard_name": "Sesame",
-      "aliases": ["sesame oil", "tahini", "sesamum indicum", "sesame seed"],
+      "aliases": [
+        "sesame oil",
+        "tahini",
+        "sesamum indicum",
+        "sesame seed"
+      ],
       "prevalence": "low",
       "severity_level": "moderate",
       "regulatory_status": "fda_major",
@@ -210,7 +220,13 @@
     {
       "id": "ALLERGEN_ANNATTO",
       "standard_name": "Annatto",
-      "aliases": ["annatto dye", "160b", "bixin", "norbixin", "bixa orellana"],
+      "aliases": [
+        "annatto dye",
+        "160b",
+        "bixin",
+        "norbixin",
+        "bixa orellana"
+      ],
       "prevalence": "moderate",
       "severity_level": "moderate",
       "regulatory_status": "natural_color",
@@ -236,40 +252,6 @@
       "notes": "Natural red coloring from cochineal insects. Can cause allergic reactions.",
       "category": "allergen",
       "last_updated": "2025-07-16"
-    },
-    {
-      "id": "ALLERGEN_FD_C_DYES",
-      "standard_name": "FD&C Dyes",
-      "aliases": [
-        "FD&C Red No. 40",
-        "Allura Red AC",
-        "E129",
-        "FD&C Blue No. 1",
-        "Brilliant Blue FCF",
-        "E133",
-        "FD&C Yellow No. 5",
-        "Tartrazine",
-        "E102",
-        "FD&C Yellow No. 6",
-        "Sunset Yellow FCF",
-        "E110",
-        "FD&C Blue No. 2",
-        "Indigotine",
-        "E132",
-        "D&C Red No. 33",
-        "D&C Red No. 28",
-        "D&C Yellow No. 10",
-        "D&C Green No. 5",
-        "lake colors",
-        "aluminum lake"
-      ],
-      "prevalence": "high",
-      "severity_level": "moderate",
-      "regulatory_status": "artificial_color",
-      "supplement_context": "Very common in supplements and medications for color coding and brand identification. D&C colors are specifically approved for drugs and cosmetics.",
-      "notes": "Can cause severe allergic reactions, particularly Yellow 5 (Tartrazine) and Red 40. Lake versions (aluminum-based) are common in tablets.",
-      "category": "allergen",
-      "last_updated": "2025-09-11"
     },
     {
       "id": "ALLERGEN_YEAST",
@@ -309,7 +291,11 @@
     {
       "id": "ALLERGEN_CELERY",
       "standard_name": "Celery",
-      "aliases": ["celery seed", "apium graveolens", "celery extract"],
+      "aliases": [
+        "celery seed",
+        "apium graveolens",
+        "celery extract"
+      ],
       "prevalence": "low",
       "severity_level": "moderate",
       "regulatory_status": "eu_allergen",
@@ -321,7 +307,11 @@
     {
       "id": "ALLERGEN_MUSTARD",
       "standard_name": "Mustard",
-      "aliases": ["mustard seed", "sinapis alba", "brassica nigra"],
+      "aliases": [
+        "mustard seed",
+        "sinapis alba",
+        "brassica nigra"
+      ],
       "prevalence": "low",
       "severity_level": "moderate",
       "regulatory_status": "eu_allergen",
@@ -333,7 +323,11 @@
     {
       "id": "ALLERGEN_LUPIN",
       "standard_name": "Lupin",
-      "aliases": ["lupin bean", "lupinus", "lupin flour"],
+      "aliases": [
+        "lupin bean",
+        "lupinus",
+        "lupin flour"
+      ],
       "prevalence": "low",
       "severity_level": "moderate",
       "regulatory_status": "eu_allergen",
@@ -367,76 +361,22 @@
       "last_updated": "2025-08-15"
     },
     {
-      "id": "ALLERGEN_TITANIUM_DIOXIDE",
-      "standard_name": "Titanium Dioxide",
+      "id": "ALLERGEN_SYNTHETIC_DYES_UMBRELLA",
+      "standard_name": "FD&C Dyes (Hypersensitivity Potential)",
       "aliases": [
-        "titanium dioxide",
-        "CI 77891",
-        "E171",
-        "titanium white",
-        "titania"
+        "fd&c dyes",
+        "synthetic dyes",
+        "artificial colors",
+        "certified colors",
+        "lake colors"
       ],
       "prevalence": "high",
-      "severity_level": "low",
-      "regulatory_status": "fda_approved",
-      "supplement_context": "Common whitening agent in pills and capsules, banned in EU food",
-      "notes": "Generally safe but banned as food additive in EU due to potential health concerns.",
-      "category": "excipient_allergen",
-      "last_updated": "2025-08-15"
-    },
-    {
-      "id": "ALLERGEN_POLYETHYLENE_GLYCOL",
-      "standard_name": "Polyethylene Glycol",
-      "aliases": [
-        "PEG",
-        "polyethylene glycol",
-        "PEG-8",
-        "PEG-20",
-        "PEG-40",
-        "macrogol"
-      ],
-      "prevalence": "moderate",
-      "severity_level": "high",
-      "regulatory_status": "fda_approved",
-      "supplement_context": "Solvent and excipient in liquid supplements and soft gels",
-      "notes": "Can cause severe allergic reactions including anaphylaxis in rare cases.",
-      "category": "excipient_allergen",
-      "last_updated": "2025-08-15"
-    },
-    {
-      "id": "ALLERGEN_PROPYLENE_GLYCOL",
-      "standard_name": "Propylene Glycol",
-      "aliases": [
-        "propylene glycol",
-        "1,2-propanediol",
-        "E1520",
-        "propan-1,2-diol"
-      ],
-      "prevalence": "moderate",
       "severity_level": "moderate",
-      "regulatory_status": "generally_recognized_as_safe",
-      "supplement_context": "Preservative and solvent in liquid supplements",
-      "notes": "May cause contact dermatitis and allergic reactions in sensitive individuals.",
-      "category": "excipient_allergen",
-      "last_updated": "2025-08-15"
-    },
-    {
-      "id": "ALLERGEN_MAGNESIUM_STEARATE",
-      "standard_name": "Magnesium Stearate",
-      "aliases": [
-        "magnesium stearate",
-        "magnesium salt of stearic acid",
-        "E572",
-        "vegetable magnesium stearate",
-        "non-GMO magnesium stearate"
-      ],
-      "prevalence": "high",
-      "severity_level": "low",
-      "regulatory_status": "generally_recognized_as_safe",
-      "supplement_context": "Common lubricant in tablets and capsules, can be animal or plant-derived",
-      "notes": "Generally safe but source (animal vs plant) not always disclosed. May affect absorption.",
-      "category": "excipient_allergen",
-      "last_updated": "2025-08-15"
+      "regulatory_status": "fda_approved_varies",
+      "supplement_context": "Synthetic dyes are used across supplements for color coding and branding.",
+      "notes": "Umbrella pointer: some individuals experience hypersensitivity reactions (e.g., hives, asthma-like symptoms). See harmful_additives.json for dye-by-dye risk and regulatory details (e.g., Red 40, Yellow 5/6, Blue 1/2, Red 3).",
+      "category": "artificial_colorant_group",
+      "last_updated": "2025-11-12"
     },
     {
       "id": "ALLERGEN_GELATIN",
@@ -457,24 +397,6 @@
       "last_updated": "2025-08-15"
     },
     {
-      "id": "ALLERGEN_STEARIC_ACID",
-      "standard_name": "Stearic Acid",
-      "aliases": [
-        "stearic acid",
-        "octadecanoic acid",
-        "E570",
-        "vegetable stearic acid",
-        "palmitic acid"
-      ],
-      "prevalence": "high",
-      "severity_level": "low",
-      "regulatory_status": "generally_recognized_as_safe",
-      "supplement_context": "Lubricant and emulsifier, can be animal or plant-derived",
-      "notes": "Generally safe but source (animal vs plant) affects vegetarian/vegan suitability.",
-      "category": "excipient_allergen",
-      "last_updated": "2025-08-15"
-    },
-    {
       "id": "ALLERGEN_GUAR_GUM",
       "standard_name": "Guar Gum",
       "aliases": [
@@ -489,64 +411,9 @@
       "severity_level": "moderate",
       "regulatory_status": "generally_recognized_as_safe",
       "supplement_context": "Common thickener in protein powders and meal replacements",
-      "notes": "Can cause severe allergic reactions, particularly in people with legume allergies.",
+      "notes": "Can cause allergic reactions, particularly in people with legume allergies.",
       "category": "excipient_allergen",
-      "last_updated": "2025-09-11"
-    },
-    {
-      "id": "ALLERGEN_XANTHAN_GUM",
-      "standard_name": "Xanthan Gum",
-      "aliases": [
-        "xanthan",
-        "E415",
-        "corn sugar gum",
-        "bacterial polysaccharide",
-        "xanthomonas campestris"
-      ],
-      "prevalence": "high",
-      "severity_level": "low",
-      "regulatory_status": "generally_recognized_as_safe",
-      "supplement_context": "Stabilizer in liquid supplements and protein shakes",
-      "notes": "May trigger reactions in corn-sensitive individuals. Can cause digestive issues.",
-      "category": "excipient_allergen",
-      "last_updated": "2025-09-11"
-    },
-    {
-      "id": "ALLERGEN_STEVIA",
-      "standard_name": "Stevia",
-      "aliases": [
-        "stevia leaf extract",
-        "steviol glycosides",
-        "rebaudioside A",
-        "stevia rebaudiana",
-        "reb A",
-        "E960"
-      ],
-      "prevalence": "high",
-      "severity_level": "moderate",
-      "regulatory_status": "generally_recognized_as_safe",
-      "supplement_context": "Natural sweetener in flavored supplements",
-      "notes": "Can cause allergic reactions in people sensitive to plants in the Asteraceae/Compositae family.",
-      "category": "natural_sweetener",
-      "last_updated": "2025-09-11"
-    },
-    {
-      "id": "ALLERGEN_MALTODEXTRIN",
-      "standard_name": "Maltodextrin",
-      "aliases": [
-        "maltodextrin",
-        "corn maltodextrin",
-        "tapioca maltodextrin",
-        "wheat maltodextrin",
-        "E1400"
-      ],
-      "prevalence": "high",
-      "severity_level": "moderate",
-      "regulatory_status": "generally_recognized_as_safe",
-      "supplement_context": "Common filler and bulking agent",
-      "notes": "Source (corn, wheat, tapioca) not always declared. Can trigger grain allergies.",
-      "category": "excipient_allergen",
-      "last_updated": "2025-09-11"
+      "last_updated": "2025-11-12"
     },
     {
       "id": "ALLERGEN_ACACIA_GUM",
@@ -609,7 +476,11 @@
     {
       "id": "ALLERGEN_SUCRALOSE",
       "standard_name": "Sucralose",
-      "aliases": ["splenda", "trichlorogalactosucrose", "E955"],
+      "aliases": [
+        "splenda",
+        "trichlorogalactosucrose",
+        "E955"
+      ],
       "prevalence": "high",
       "severity_level": "moderate",
       "regulatory_status": "fda_approved",
@@ -621,7 +492,13 @@
     {
       "id": "ALLERGEN_ACESULFAME_POTASSIUM",
       "standard_name": "Acesulfame Potassium",
-      "aliases": ["ace-k", "acesulfame k", "E950", "sunett", "sweet one"],
+      "aliases": [
+        "ace-k",
+        "acesulfame k",
+        "E950",
+        "sunett",
+        "sweet one"
+      ],
       "prevalence": "high",
       "severity_level": "moderate",
       "regulatory_status": "fda_approved",
@@ -681,31 +558,6 @@
       "last_updated": "2025-09-11"
     },
     {
-      "id": "ALLERGEN_SUGAR_ALCOHOLS",
-      "standard_name": "Sugar Alcohols",
-      "aliases": [
-        "xylitol",
-        "sorbitol",
-        "mannitol",
-        "maltitol",
-        "erythritol",
-        "isomalt",
-        "E967",
-        "E965",
-        "E421",
-        "E420",
-        "E968",
-        "E953"
-      ],
-      "prevalence": "high",
-      "severity_level": "low",
-      "regulatory_status": "generally_recognized_as_safe",
-      "supplement_context": "Common in sugar-free supplements, especially chewables and lozenges",
-      "notes": "Can cause digestive issues in sensitive individuals. Xylitol most commonly reported for reactions.",
-      "category": "sweetener",
-      "last_updated": "2025-09-11"
-    },
-    {
       "id": "ALL_CARMINE_RED",
       "standard_name": "Carmine Red (Cochineal Extract)",
       "aliases": [
@@ -744,25 +596,6 @@
       "last_updated": "2025-09-19"
     },
     {
-      "id": "ALL_BLUE_1",
-      "standard_name": "Blue 1 (Brilliant Blue FCF)",
-      "aliases": [
-        "blue 1",
-        "brilliant blue fcf",
-        "fd&c blue no. 1",
-        "e133",
-        "brilliant blue",
-        "erioglaucine"
-      ],
-      "prevalence": "low",
-      "severity_level": "moderate",
-      "regulatory_status": "approved_with_warnings",
-      "supplement_context": "Used in colored supplements, vitamins, and medications",
-      "notes": "FDA approved but documented allergic reactions including rashes, hives, nasal congestion. FDA issued 2003 warning about toxicity in medical feeding solutions. Affects small percentage of sensitive individuals.",
-      "category": "artificial_colorant",
-      "last_updated": "2025-09-19"
-    },
-    {
       "id": "ALL_SUNFLOWER_LECITHIN",
       "standard_name": "Sunflower Lecithin",
       "aliases": [
@@ -781,5 +614,12 @@
       "category": "plant_derived_emulsifier",
       "last_updated": "2025-09-20"
     }
-  ]
+  ],
+  "_metadata": {
+    "description": "Allergen database for supplement safety flagging and warnings",
+    "purpose": "safety_warnings",
+    "total_entries": 32,
+    "schema_version": "1.0",
+    "last_updated": "2025-11-14"
+  }
 }

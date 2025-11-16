@@ -191,23 +191,20 @@
         ],
         "dosage_importance": 1.5
       },
-      "retinol (free form)": {
+      "retinol": {
         "bio_score": 14,
         "natural": false,
         "score": 14,
         "absorption": "80-100%",
-        "notes": "Highly bioavailable, but unstable in supplements; rarely found in this free form.",
+        "notes": "Active alcohol form of vitamin A; high bioavailability but unstable in isolation.",
         "aliases": [
           "retinol",
-          "free retinol",
-          "pure vitamin a",
-          "unbound retinol",
+          "vitamin a alcohol",
+          "all-trans-retinol",
           "retinol USP",
           "retinol supplement",
-          "free retinol supplement",
-          "pure vitamin a supplement",
-          "pure vit a",
-          "unbound retinol supplement",
+          "vitamin a alcohol supplement",
+          "all-trans-retinol supplement",
           "retinol USP supplement"
         ],
         "dosage_importance": 1.5
@@ -234,29 +231,6 @@
           "marine vit a",
           "fish liver oil vitamin a supplement",
           "fish liver oil vit a"
-        ],
-        "dosage_importance": 1.5
-      },
-      "vitamin A palmitate in oil": {
-        "bio_score": 14,
-        "natural": false,
-        "score": 14,
-        "absorption": "80-90%",
-        "notes": "Oil-based delivery improves absorption for this fat-soluble form. Common and stable.",
-        "aliases": [
-          "vitamin a palmitate oil",
-          "retinyl palmitate in oil",
-          "oil-based vitamin a",
-          "fat-soluble vitamin a",
-          "retinyl palmitate solution",
-          "vitamin a palmitate oil supplement",
-          "vit a palmitate oil",
-          "retinyl palmitate in oil supplement",
-          "oil-based vitamin a supplement",
-          "oil-based vit a",
-          "fat-soluble vitamin a supplement",
-          "fat-soluble vit a",
-          "retinyl palmitate solution supplement"
         ],
         "dosage_importance": 1.5
       },
@@ -560,7 +534,7 @@
         ],
         "dosage_importance": 1.5
       },
-      "thiamine analogs (non-functional)": {
+      "thiamine analog": {
         "bio_score": 3,
         "natural": false,
         "score": 3,
@@ -578,7 +552,7 @@
         ],
         "dosage_importance": 1.5
       },
-      "thiamine degraded by thiaminase": {
+      "thiamine with thiaminase": {
         "bio_score": 2,
         "natural": false,
         "score": 2,
@@ -697,7 +671,7 @@
         ],
         "dosage_importance": 1.5
       },
-      "riboflavin analogs (non-functional)": {
+      "riboflavin analog": {
         "bio_score": 4,
         "natural": false,
         "score": 4,
@@ -715,7 +689,7 @@
         ],
         "dosage_importance": 1.5
       },
-      "riboflavin degraded by light": {
+      "light-degraded riboflavin": {
         "bio_score": 3,
         "natural": false,
         "score": 3,
@@ -876,7 +850,7 @@
         ],
         "dosage_importance": 1.5
       },
-      "niacin from tryptophan": {
+      "tryptophan_derived_niacin": {
         "bio_score": 8,
         "natural": true,
         "score": 11,
@@ -894,7 +868,7 @@
         ],
         "dosage_importance": 1.5
       },
-      "niacin analogs (non-functional)": {
+      "niacin analog": {
         "bio_score": 4,
         "natural": false,
         "score": 4,
@@ -912,7 +886,7 @@
         ],
         "dosage_importance": 1.5
       },
-      "niacin degraded by heat": {
+      "heat-degraded niacin": {
         "bio_score": 3,
         "natural": false,
         "score": 3,
@@ -1043,7 +1017,7 @@
         ],
         "dosage_importance": 1.5
       },
-      "pantothenic acid analogs (inactive)": {
+      "pantothenic_analog": {
         "bio_score": 3,
         "natural": false,
         "score": 3,
@@ -1166,7 +1140,7 @@
         ],
         "dosage_importance": 1.5
       },
-      "pyridoxine oxide": {
+      "pyridoxine_oxide": {
         "bio_score": 4,
         "natural": false,
         "score": 4,
@@ -1182,7 +1156,7 @@
         ],
         "dosage_importance": 1.5
       },
-      "pyridoxine analogs (non-functional)": {
+      "pyridoxine_analog": {
         "bio_score": 3,
         "natural": false,
         "score": 3,
@@ -1292,7 +1266,7 @@
         ],
         "dosage_importance": 1.5
       },
-      "biotinidase-released biotin": {
+      "protein_bound_biotin": {
         "bio_score": 11,
         "natural": true,
         "score": 14,
@@ -1310,7 +1284,7 @@
         ],
         "dosage_importance": 1.5
       },
-      "biotin analogs (non-functional)": {
+      "biotin_analog": {
         "bio_score": 4,
         "natural": false,
         "score": 4,
@@ -1499,7 +1473,7 @@
         ],
         "dosage_importance": 1.5
       },
-      "folate analogs (non-functional)": {
+      "folate_analog": {
         "bio_score": 4,
         "natural": false,
         "score": 4,
@@ -1517,7 +1491,7 @@
         ],
         "dosage_importance": 1.5
       },
-      "folate degraded by heat": {
+      "heat_degraded_folate": {
         "bio_score": 3,
         "natural": false,
         "score": 3,
@@ -1557,7 +1531,11 @@
           "methylated",
           "active"
         ],
-        "context_exclude": ["cyano", "hydroxo", "adenosyl"],
+        "context_exclude": [
+          "cyano",
+          "hydroxo",
+          "adenosyl"
+        ],
         "aliases": [
           "methylcobalamin",
           "methyl-b12",
@@ -1605,7 +1583,7 @@
         "bio_score": 12,
         "natural": false,
         "score": 12,
-        "absorption": "very good (~80\u201390%)",
+        "absorption": "very good (~80–90%)",
         "notes": "Supports mitochondrial energy production; synthetically produced for supplements",
         "aliases": [
           "adenosylcobalamin",
@@ -1636,7 +1614,7 @@
         "bio_score": 12,
         "natural": false,
         "score": 12,
-        "absorption": "good (~70\u201380%)",
+        "absorption": "good (~70–80%)",
         "notes": "Detox-supporting B12; used in injections and cyanide poisoning; synthetically produced",
         "aliases": [
           "hydroxocobalamin",
@@ -1666,7 +1644,7 @@
         "bio_score": 9,
         "natural": false,
         "score": 9,
-        "absorption": "moderate (~50\u201360%)",
+        "absorption": "moderate (~50–60%)",
         "notes": "Synthetic form; requires conversion to active forms; lower biological activity",
         "aliases": [
           "cyanocobalamin",
@@ -1750,42 +1728,6 @@
           "brewer's yeast b12 supplement",
           "whole food b12 supplement",
           "yeast-derived B12 supplement"
-        ],
-        "dosage_importance": 1.5
-      },
-      "b12 analogs (non-functional)": {
-        "bio_score": 4,
-        "natural": false,
-        "score": 4,
-        "absorption": "very poor",
-        "notes": "Structurally similar but biologically inactive; offers no nutritional benefit and may interfere with true B12 absorption.",
-        "aliases": [
-          "b12 analog",
-          "pseudo-b12",
-          "inactive cobalamin",
-          "non-functional B12",
-          "b12 analog supplement",
-          "pseudo-b12 supplement",
-          "inactive cobalamin supplement",
-          "non-functional B12 supplement"
-        ],
-        "dosage_importance": 1.5
-      },
-      "b12 degraded by nitrous oxide": {
-        "bio_score": 3,
-        "natural": false,
-        "score": 3,
-        "absorption": "very poor",
-        "notes": "Inactivated by nitrous oxide exposure, which impairs its methylation capabilities. Can lead to functional deficiency.",
-        "aliases": [
-          "nitrous-degraded b12",
-          "oxidized b12",
-          "inactive b12",
-          "damaged b12",
-          "nitrous-degraded b12 supplement",
-          "oxidized b12 supplement",
-          "inactive b12 supplement",
-          "damaged b12 supplement"
         ],
         "dosage_importance": 1.5
       }
@@ -1964,24 +1906,6 @@
         ],
         "dosage_importance": 1.5
       },
-      "ascorbyl glucoside": {
-        "bio_score": 9,
-        "natural": false,
-        "score": 9,
-        "absorption": "low",
-        "notes": "Used in topical formulations, limited oral bioavailability",
-        "aliases": [
-          "ascorbyl glucoside",
-          "glucose-bound vitamin c",
-          "vitamin c glucoside",
-          "ascorbyl glucoside supplement",
-          "glucose-bound vitamin c supplement",
-          "glucose-bound vit c",
-          "vitamin c glucoside supplement",
-          "vit c glucoside"
-        ],
-        "dosage_importance": 1.5
-      },
       "vitamin C with bioflavonoids": {
         "bio_score": 12,
         "natural": true,
@@ -2101,7 +2025,7 @@
         ],
         "dosage_importance": 1.5
       },
-      "oxidized vitamin C (dehydroascorbic acid)": {
+      "dehydroascorbic acid": {
         "bio_score": 6,
         "natural": false,
         "score": 6,
@@ -2116,7 +2040,13 @@
           "oxidized vit c",
           "inactive c supplement"
         ],
-        "context_include": ["vitamin", "c", "ascorbic", "oxidized", "inactive"],
+        "context_include": [
+          "vitamin",
+          "c",
+          "ascorbic",
+          "oxidized",
+          "inactive"
+        ],
         "context_exclude": [
           "omega",
           "epa",
@@ -2167,7 +2097,12 @@
           "vit",
           "supplement"
         ],
-        "context_exclude": ["d2", "ergocalciferol", "1,25", "calcitriol"],
+        "context_exclude": [
+          "d2",
+          "ergocalciferol",
+          "1,25",
+          "calcitriol"
+        ],
         "aliases": [
           "vitamin d3",
           "Vitamin D3",
@@ -2345,7 +2280,12 @@
           "unspecified",
           "supplement"
         ],
-        "context_exclude": ["d3", "cholecalciferol", "specified", "lichen"],
+        "context_exclude": [
+          "d3",
+          "cholecalciferol",
+          "specified",
+          "lichen"
+        ],
         "aliases": [
           "vitamin d2",
           "ergocalciferol unspecified",
@@ -2561,13 +2501,13 @@
         "notes": "Synthetic all-racemic form, only about half as biologically effective as natural d-alpha-tocopherol.",
         "aliases": [
           "dl-alpha-tocopherol",
-          "dl-\u03b1-tocopherol",
+          "dl-α-tocopherol",
           "synthetic vitamin e",
           "dl-alpha tocopherol",
           "all-rac-alpha-tocopherol",
           "racemic vitamin e",
           "dl-alpha-tocopherol supplement",
-          "dl-\u03b1-tocopherol supplement",
+          "dl-α-tocopherol supplement",
           "synthetic vitamin e supplement",
           "synthetic vit e",
           "dl-alpha tocopherol supplement",
@@ -3315,7 +3255,7 @@
         "bio_score": 10,
         "natural": true,
         "score": 13,
-        "absorption": "good (depends on salt, ~40\u201360%)",
+        "absorption": "good (depends on salt, ~40–60%)",
         "notes": "Found as monocalcium phosphate, disodium phosphate, potassium phosphate, etc. Essential for bones, energy, and DNA.",
         "aliases": [
           "phosphorus",
@@ -3346,7 +3286,7 @@
         "bio_score": 14,
         "natural": false,
         "score": 14,
-        "absorption": "80\u201388%",
+        "absorption": "80–88%",
         "notes": "Chelated with glycine; highly bioavailable, gentle on the stomach, and less likely to cause laxative effects.",
         "context_include": [
           "magnesium",
@@ -3355,7 +3295,12 @@
           "gentle",
           "bisglycinate"
         ],
-        "context_exclude": ["oxide", "sulfate", "chloride", "citrate"],
+        "context_exclude": [
+          "oxide",
+          "sulfate",
+          "chloride",
+          "citrate"
+        ],
         "aliases": [
           "magnesium glycinate",
           "magnesium bisglycinate",
@@ -3606,12 +3551,12 @@
           "magnesium sulfate",
           "epsom salt",
           "mag sulfate",
-          "MgSO\u2084",
+          "MgSO₄",
           "Magnesium Sulphate",
           "magnesium sulfate supplement",
           "epsom salt supplement",
           "mag sulfate supplement",
-          "MgSO\u2084 supplement",
+          "MgSO₄ supplement",
           "Magnesium Sulphate supplement"
         ],
         "dosage_importance": 1.5
@@ -3620,7 +3565,7 @@
         "bio_score": 2,
         "natural": false,
         "score": 2,
-        "absorption": "4\u201323%",
+        "absorption": "4–23%",
         "notes": "High elemental content but poorly absorbed; commonly used as a laxative or antacid due to its low solubility.",
         "aliases": [
           "magnesium oxide",
@@ -3663,30 +3608,12 @@
         "aliases": [
           "magnesium carbonate",
           "mag carbonate",
-          "MgCO\u2083",
+          "MgCO₃",
           "Magnesium Carbonate",
           "magnesium carbonate supplement",
           "mag carbonate supplement",
-          "MgCO\u2083 supplement",
+          "MgCO₃ supplement",
           "Magnesium Carbonate supplement"
-        ],
-        "dosage_importance": 1.5
-      },
-      "magnesium stearate": {
-        "bio_score": 2,
-        "natural": false,
-        "score": 2,
-        "absorption": "negligible",
-        "notes": "Used as a flow agent and lubricant in manufacturing; not a source of supplemental magnesium.",
-        "aliases": [
-          "magnesium stearate",
-          "mag stearate",
-          "inactive magnesium",
-          "Magnesium Stearate",
-          "magnesium stearate supplement",
-          "mag stearate supplement",
-          "inactive magnesium supplement",
-          "Magnesium Stearate supplement"
         ],
         "dosage_importance": 1.5
       },
@@ -3748,7 +3675,12 @@
           "gentle",
           "mineral"
         ],
-        "context_exclude": ["sulfate", "gluconate", "ferric", "carbonyl"],
+        "context_exclude": [
+          "sulfate",
+          "gluconate",
+          "ferric",
+          "carbonyl"
+        ],
         "aliases": [
           "iron bisglycinate",
           "chelated iron",
@@ -3815,7 +3747,7 @@
         "bio_score": 11,
         "natural": true,
         "score": 14,
-        "absorption": "28\u201335%",
+        "absorption": "28–35%",
         "notes": "Food-based iron storage protein, offering a slow-release, gentle form of iron. Typically derived from legumes.",
         "aliases": [
           "ferritin",
@@ -3904,19 +3836,24 @@
           "mineral",
           "supplement"
         ],
-        "context_exclude": ["bisglycinate", "chelated", "carbonyl", "ferric"],
+        "context_exclude": [
+          "bisglycinate",
+          "chelated",
+          "carbonyl",
+          "ferric"
+        ],
         "aliases": [
           "ferrous sulfate",
           "iron sulfate",
           "iron sulphate",
           "green vitriol",
-          "FeSO\u2084",
+          "FeSO₄",
           "Ferrous Sulfate",
           "ferrous sulfate supplement",
           "iron sulfate supplement",
           "iron sulphate supplement",
           "green vitriol supplement",
-          "FeSO\u2084 supplement",
+          "FeSO₄ supplement",
           "Ferrous Sulfate supplement"
         ],
         "dosage_importance": 1.5
@@ -4023,14 +3960,14 @@
           "ferric oxide",
           "iron oxide",
           "rust",
-          "Fe\u2082O\u2083",
+          "Fe₂O₃",
           "red iron oxide",
           "yellow iron oxide",
           "brown iron oxide",
           "ferric oxide supplement",
           "iron oxide supplement",
           "rust supplement",
-          "Fe\u2082O\u2083 supplement",
+          "Fe₂O₃ supplement",
           "red iron oxide supplement",
           "yellow iron oxide supplement",
           "brown iron oxide supplement"
@@ -4082,7 +4019,7 @@
         "bio_score": 14,
         "natural": false,
         "score": 14,
-        "absorption": "excellent (~60\u201370%)",
+        "absorption": "excellent (~60–70%)",
         "notes": "Chelated with picolinic acid; highly bioavailable, well studied, and effectively utilized by the body.",
         "context_include": [
           "zinc",
@@ -4091,7 +4028,12 @@
           "chelated",
           "mineral"
         ],
-        "context_exclude": ["oxide", "sulfate", "gluconate", "citrate"],
+        "context_exclude": [
+          "oxide",
+          "sulfate",
+          "gluconate",
+          "citrate"
+        ],
         "aliases": [
           "zinc picolinate",
           "picolinic acid zinc",
@@ -4110,7 +4052,7 @@
         "bio_score": 12,
         "natural": false,
         "score": 12,
-        "absorption": "58\u201365%",
+        "absorption": "58–65%",
         "notes": "Gentle chelated form, bound to glycine for enhanced absorption and minimal GI upset. Well tolerated and effective.",
         "aliases": [
           "zinc glycinate",
@@ -4515,12 +4457,12 @@
           "sodium selenite",
           "selenious acid sodium",
           "selenite",
-          "Na\u2082SeO\u2083",
+          "Na₂SeO₃",
           "Sodium Selenite",
           "sodium selenite supplement",
           "selenious acid sodium supplement",
           "selenite supplement",
-          "Na\u2082SeO\u2083 supplement",
+          "Na₂SeO₃ supplement",
           "Sodium Selenite supplement"
         ],
         "dosage_importance": 0.5
@@ -4535,11 +4477,11 @@
           "sodium selenate",
           "selenic acid sodium",
           "selenate",
-          "Na\u2082SeO\u2084",
+          "Na₂SeO₄",
           "sodium selenate supplement",
           "selenic acid sodium supplement",
           "selenate supplement",
-          "Na\u2082SeO\u2084 supplement"
+          "Na₂SeO₄ supplement"
         ],
         "dosage_importance": 0.5
       },
@@ -5223,7 +5165,7 @@
   "resveratrol": {
     "standard_name": "Resveratrol",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "cui": "C0074937",
     "rxcui": "none",
     "source": "botanical_extract",
@@ -5242,7 +5184,7 @@
         "bio_score": 12,
         "natural": true,
         "score": 15,
-        "absorption": "superior (~2\u20133x conventional extracts)",
+        "absorption": "superior (~2–3x conventional extracts)",
         "technology": "Phospholipid encapsulation technology",
         "notes": "Liposomal delivery enhances cellular uptake and protects active compounds from degradation. Clinically shown to have 2-3x greater bioavailability than standard extracts. Ideal for maximum therapeutic effects.",
         "aliases": [
@@ -5285,11 +5227,11 @@
         ],
         "dosage_importance": 1.0
       },
-      "supercritical CO\u2082 saw palmetto extract": {
+      "supercritical CO₂ saw palmetto extract": {
         "bio_score": 10,
         "natural": true,
         "score": 13,
-        "absorption": "excellent (~85\u201390% bioavailability)",
+        "absorption": "excellent (~85–90% bioavailability)",
         "extraction_method": "Supercritical carbon dioxide extraction",
         "notes": "Solvent-free extraction preserves the full spectrum of fatty acids (lauric, oleic, myristic) and phytosterols. Considered the gold standard for purity and potency. Free from hexane residues.",
         "aliases": [
@@ -5332,11 +5274,11 @@
         ],
         "dosage_importance": 1.0
       },
-      "liposterolic extract (85\u201395% fatty acids)": {
+      "liposterolic extract (85–95% fatty acids)": {
         "bio_score": 9,
         "natural": true,
         "score": 12,
-        "absorption": "very good (~70\u201385% bioavailability)",
+        "absorption": "very good (~70–85% bioavailability)",
         "standardization": "85-95% fatty acids + sterols",
         "notes": "The most clinically researched form. Standardized to contain the active liposterolic compounds shown to support prostate and urinary health. May use ethanol or hexane extraction.",
         "aliases": [
@@ -5385,7 +5327,7 @@
         "bio_score": 6,
         "natural": true,
         "score": 9,
-        "absorption": "poor (~20\u201330% bioavailability)",
+        "absorption": "poor (~20–30% bioavailability)",
         "processing": "Dried and milled whole berries",
         "notes": "Contains the full spectrum of compounds but in much lower concentrations. Requires higher doses for therapeutic effect. Preferred by some for 'whole food' supplementation approaches.",
         "aliases": [
@@ -5479,7 +5421,7 @@
         "bio_score": 12,
         "natural": false,
         "score": 12,
-        "absorption": "moderate (~1\u20135%)",
+        "absorption": "moderate (~1–5%)",
         "notes": "Most common vanadium supplement; exhibits insulin-mimetic effects but has low oral bioavailability.",
         "aliases": [
           "vanadyl sulfate",
@@ -5497,7 +5439,7 @@
         "bio_score": 14,
         "natural": false,
         "score": 14,
-        "absorption": "high (~10\u201315%)",
+        "absorption": "high (~10–15%)",
         "notes": "Chelated form with superior bioavailability and lower toxicity compared to vanadyl sulfate. More effective.",
         "aliases": [
           "BMOV",
@@ -5555,7 +5497,7 @@
         "bio_score": 10,
         "natural": true,
         "score": 13,
-        "absorption": "good (~70\u201390%)",
+        "absorption": "good (~70–90%)",
         "notes": "Most abundant and biologically active form; supports cellular signaling, ovarian function, and mood.",
         "aliases": [
           "myo-inositol",
@@ -5658,7 +5600,7 @@
         "bio_score": 14,
         "natural": false,
         "score": 14,
-        "absorption": "excellent (~75\u201390%)",
+        "absorption": "excellent (~75–90%)",
         "notes": "Chelated form; gentle on stomach and highly bioavailable. Minimizes potential for GI upset.",
         "aliases": [
           "copper bisglycinate",
@@ -5680,7 +5622,7 @@
         "bio_score": 10,
         "natural": false,
         "score": 10,
-        "absorption": "moderate (~30\u201340%)",
+        "absorption": "moderate (~30–40%)",
         "notes": "Common form in multivitamins; moderate bioavailability and generally well-tolerated.",
         "aliases": [
           "copper gluconate",
@@ -5698,7 +5640,7 @@
         "bio_score": 8,
         "natural": false,
         "score": 8,
-        "absorption": "variable (~20\u201335%)",
+        "absorption": "variable (~20–35%)",
         "notes": "Inexpensive; may cause GI upset or nausea. Less preferred due to potential for irritation.",
         "aliases": [
           "copper sulfate",
@@ -5891,7 +5833,7 @@
         "bio_score": 6,
         "natural": false,
         "score": 6,
-        "absorption": "0.4\u20130.5%",
+        "absorption": "0.4–0.5%",
         "notes": "Inorganic form; poorly absorbed and generally less effective for supplementation.",
         "aliases": [
           "chromium chloride",
@@ -5966,7 +5908,7 @@
   "iodine": {
     "standard_name": "Iodine",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "minerals",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -6029,11 +5971,11 @@
         "aliases": [
           "manganese sulfate",
           "manganese sulphate",
-          "MnSO\u2084",
+          "MnSO₄",
           "Manganese Sulfate",
           "manganese sulfate supplement",
           "manganese sulphate supplement",
-          "MnSO\u2084 supplement",
+          "MnSO₄ supplement",
           "Manganese Sulfate supplement"
         ],
         "dosage_importance": 0.5
@@ -6064,11 +6006,11 @@
         "notes": "An inorganic form of Manganese, but typically better absorbed than sulfate. Still generally less bioavailable than organic or chelated forms.",
         "aliases": [
           "manganese chloride",
-          "MnCl\u2082",
+          "MnCl₂",
           "manganese dichloride",
           "chloride of manganese",
           "manganese chloride supplement",
-          "MnCl\u2082 supplement",
+          "MnCl₂ supplement",
           "manganese dichloride supplement",
           "chloride of manganese supplement"
         ],
@@ -6159,9 +6101,9 @@
         "notes": "Used in some supplements; generally better absorbed than sulfate forms, but still less than chelates.",
         "aliases": [
           "manganese carbonate",
-          "MnCO\u2083",
+          "MnCO₃",
           "manganese carbonate supplement",
-          "MnCO\u2083 supplement"
+          "MnCO₃ supplement"
         ],
         "dosage_importance": 0.5
       },
@@ -6229,7 +6171,10 @@
         "score": 10,
         "absorption": "moderate",
         "notes": "Bound to fumaric acid; used in some formulations. Offers moderate absorption.",
-        "aliases": ["manganese fumarate", "manganese fumarate supplement"],
+        "aliases": [
+          "manganese fumarate",
+          "manganese fumarate supplement"
+        ],
         "dosage_importance": 0.5
       },
       "manganese lactate": {
@@ -6238,7 +6183,10 @@
         "score": 10,
         "absorption": "moderate",
         "notes": "Bound to lactic acid; offers decent absorption and is generally well-tolerated.",
-        "aliases": ["manganese lactate", "manganese lactate supplement"],
+        "aliases": [
+          "manganese lactate",
+          "manganese lactate supplement"
+        ],
         "dosage_importance": 0.5
       },
       "manganese malate": {
@@ -6247,7 +6195,10 @@
         "score": 10,
         "absorption": "good",
         "notes": "Bound to malic acid; involved in energy metabolism and offers good bioavailability.",
-        "aliases": ["manganese malate", "manganese malate supplement"],
+        "aliases": [
+          "manganese malate",
+          "manganese malate supplement"
+        ],
         "dosage_importance": 0.5
       }
     }
@@ -6263,7 +6214,7 @@
         "bio_score": 14,
         "natural": false,
         "score": 14,
-        "absorption": "excellent (~85\u201395%)",
+        "absorption": "excellent (~85–95%)",
         "notes": "A chelated form of Molybdenum, bound to glycine. It is gentle on the stomach and highly bioavailable, making it a preferred form for optimal absorption.",
         "aliases": [
           "molybdenum glycinate",
@@ -6283,17 +6234,17 @@
         "bio_score": 10,
         "natural": false,
         "score": 10,
-        "absorption": "good (~60\u201388%)",
+        "absorption": "good (~60–88%)",
         "notes": "The standard inorganic form of Molybdenum; widely used in supplements and offers good absorption, although slightly less than chelated forms.",
         "aliases": [
           "sodium molybdate",
           "molybdenum",
-          "Na\u2082MoO\u2084",
+          "Na₂MoO₄",
           "molybdate salt",
           "Sodium Molybdate Dihydrate",
           "sodium molybdate supplement",
           "molybdenum supplement",
-          "Na\u2082MoO\u2084 supplement",
+          "Na₂MoO₄ supplement",
           "molybdate salt supplement",
           "Sodium Molybdate Dihydrate supplement"
         ],
@@ -6323,10 +6274,10 @@
         "notes": "Used in some supplements; while better absorbed than some oxides, it is less common and generally less bioavailable than organic forms.",
         "aliases": [
           "molybdenum chloride",
-          "MoCl\u2085",
+          "MoCl₅",
           "chloride-bound molybdenum",
           "molybdenum chloride supplement",
-          "MoCl\u2085 supplement",
+          "MoCl₅ supplement",
           "chloride-bound molybdenum supplement"
         ],
         "dosage_importance": 0.5
@@ -6378,7 +6329,7 @@
         "bio_score": 14,
         "natural": false,
         "score": 14,
-        "absorption": "excellent (~85\u201390%)",
+        "absorption": "excellent (~85–90%)",
         "notes": "A chelated form of Boron, bound to glycine. Offers superior absorption and better gastrointestinal tolerance, making it a highly preferred form.",
         "aliases": [
           "boron glycinate",
@@ -6436,17 +6387,17 @@
         "bio_score": 9,
         "natural": false,
         "score": 9,
-        "absorption": "moderate (~40\u201360%)",
+        "absorption": "moderate (~40–60%)",
         "notes": "An inorganic form of Boron; while used, it may cause GI irritation in some individuals and offers moderate absorption.",
         "aliases": [
           "sodium borate",
           "borax",
-          "Na\u2082B\u2084O\u2087",
+          "Na₂B₄O₇",
           "borate salt",
           "Sodium Borate",
           "sodium borate supplement",
           "borax supplement",
-          "Na\u2082B\u2084O\u2087 supplement",
+          "Na₂B₄O₇ supplement",
           "borate salt supplement",
           "Sodium Borate supplement"
         ],
@@ -6515,7 +6466,7 @@
         "bio_score": 14,
         "natural": false,
         "score": 14,
-        "absorption": "excellent (~10\u201315%)",
+        "absorption": "excellent (~10–15%)",
         "notes": "A chelated form of Vanadium with superior bioavailability and lower toxicity compared to simple inorganic forms. Considered a more effective and safer option for supplementation.",
         "aliases": [
           "BMOV",
@@ -6533,16 +6484,16 @@
         "bio_score": 12,
         "natural": false,
         "score": 12,
-        "absorption": "good (~1\u20135%)",
+        "absorption": "good (~1–5%)",
         "notes": "The most studied form of Vanadium in supplements. Exhibits insulin-mimetic effects but has relatively low oral bioavailability, which can limit its effectiveness.",
         "aliases": [
           "vanadyl sulfate",
-          "VOSO\u2084",
+          "VOSO₄",
           "vanadium sulfate",
           "vanadyl",
           "Vanadyl Sulfate",
           "vanadyl sulfate supplement",
-          "VOSO\u2084 supplement",
+          "VOSO₄ supplement",
           "vanadium sulfate supplement",
           "vanadyl supplement",
           "Vanadyl Sulfate supplement"
@@ -6574,11 +6525,11 @@
         "aliases": [
           "sodium vanadate",
           "sodium metavanadate",
-          "NaVO\u2083",
+          "NaVO₃",
           "vanadate salt",
           "sodium vanadate supplement",
           "sodium metavanadate supplement",
-          "NaVO\u2083 supplement",
+          "NaVO₃ supplement",
           "vanadate salt supplement"
         ],
         "dosage_importance": 0.5
@@ -6695,10 +6646,10 @@
         "aliases": [
           "potassium bicarbonate",
           "potassium hydrogen carbonate",
-          "KHCO\u2083",
+          "KHCO₃",
           "potassium bicarbonate supplement",
           "potassium hydrogen carbonate supplement",
-          "KHCO\u2083 supplement"
+          "KHCO₃ supplement"
         ],
         "dosage_importance": 1.5
       },
@@ -6782,7 +6733,7 @@
         "bio_score": 12,
         "natural": true,
         "score": 15,
-        "absorption": "excellent (~90\u201395%)",
+        "absorption": "excellent (~90–95%)",
         "notes": "The natural form of Omega-3s found in fish oil. It is best absorbed and retained by the body, mimicking how fatty acids are consumed in food.",
         "aliases": [
           "triglyceride omega-3",
@@ -6854,7 +6805,7 @@
         "natural": true,
         "score": 17,
         "absorption": "excellent (when in triglyceride or phospholipid form, >90%)",
-        "notes": "DHA is a major structural component in brain, eye, and nerve tissue\u2014essential for neurodevelopment, visual health, and cell function.",
+        "notes": "DHA is a major structural component in brain, eye, and nerve tissue—essential for neurodevelopment, visual health, and cell function.",
         "aliases": [
           "dha",
           "docosahexaenoic acid",
@@ -6946,7 +6897,7 @@
         "bio_score": 12,
         "natural": false,
         "score": 12,
-        "absorption": "very good (~80\u201390%)",
+        "absorption": "very good (~80–90%)",
         "notes": "A processed form of Omega-3s where ethyl esters are converted back into a triglyceride structure. Offers concentrated EPA/DHA with very good absorption.",
         "aliases": [
           "re-esterified triglyceride",
@@ -6966,7 +6917,7 @@
         "bio_score": 11,
         "natural": true,
         "score": 14,
-        "absorption": "good (~70\u201380%)",
+        "absorption": "good (~70–80%)",
         "notes": "A plant-based source of Omega-3s, specifically DHA (and sometimes EPA). It is an excellent vegan alternative to fish oil, derived from marine algae.",
         "aliases": [
           "algae oil",
@@ -6988,7 +6939,7 @@
         "bio_score": 9,
         "natural": false,
         "score": 9,
-        "absorption": "moderate (~50\u201360%)",
+        "absorption": "moderate (~50–60%)",
         "notes": "A concentrated form of Omega-3s used in many supplements, including pharmaceutical-grade fish oils. It requires fat for optimal absorption and some individuals find it less bioavailable than triglyceride forms.",
         "aliases": [
           "ethyl ester omega-3",
@@ -7030,7 +6981,7 @@
         "bio_score": 11,
         "natural": false,
         "score": 11,
-        "absorption": "enhanced (~2\u20134x)",
+        "absorption": "enhanced (~2–4x)",
         "notes": "Processed to have a smaller particle size, which improves its solubility and uptake, leading to higher bioavailability and reduced fishy burps.",
         "aliases": [
           "micronized omega-3",
@@ -7046,7 +6997,7 @@
         "bio_score": 13,
         "natural": false,
         "score": 13,
-        "absorption": "superior (~5\u201310x)",
+        "absorption": "superior (~5–10x)",
         "notes": "Encapsulated in liposomes for significantly enhanced delivery and stability. Protects the Omega-3s from oxidation and degradation, ensuring maximum bioavailability.",
         "aliases": [
           "liposomal omega-3",
@@ -7210,7 +7161,7 @@
         "bio_score": 8,
         "natural": false,
         "score": 8,
-        "absorption": "baseline (~2\u20133%)",
+        "absorption": "baseline (~2–3%)",
         "notes": "The oxidized form of CoQ10. It requires conversion to ubiquinol in the body, which can be inefficient, especially in older individuals or those with certain health conditions.",
         "aliases": [
           "ubiquinone",
@@ -7303,14 +7254,14 @@
         "bio_score": 12,
         "natural": false,
         "score": 12,
-        "absorption": "very good (~85\u201390%)",
+        "absorption": "very good (~85–90%)",
         "notes": "A stable, water-soluble form of PQQ that is most studied for its role in mitochondrial biogenesis (new mitochondrial growth) and neurological support. Highly bioavailable.",
         "aliases": [
           "disodium pqq",
           "pqq disodium salt",
           "pqq na2",
           "sodium pqq",
-          "pqq\u00b7Na\u2082",
+          "pqq·Na₂",
           "PQQ Disodium Salt",
           "pqq sodium salt",
           "pyrroloquinoline quinone disodium",
@@ -7318,7 +7269,7 @@
           "pqq disodium salt supplement",
           "pqq na2 supplement",
           "sodium pqq supplement",
-          "pqq\u00b7Na\u2082 supplement",
+          "pqq·Na₂ supplement",
           "PQQ Disodium Salt supplement",
           "pqq sodium salt supplement",
           "pyrroloquinoline quinone disodium supplement",
@@ -7349,7 +7300,7 @@
         "bio_score": 9,
         "natural": false,
         "score": 9,
-        "absorption": "moderate (~50\u201360%)",
+        "absorption": "moderate (~50–60%)",
         "notes": "The free acid form of PQQ; it is generally less stable and less bioavailable than the disodium salt, making it a less preferred option for supplementation.",
         "aliases": [
           "pqq acid",
@@ -7422,7 +7373,7 @@
   "berberine": {
     "standard_name": "Berberine",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "herbs",
     "cui": "C0005117",
     "rxcui": "none",
     "source": "botanical_extract",
@@ -7433,7 +7384,7 @@
   "curcumin": {
     "standard_name": "Curcumin",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "herbs",
     "cui": "C0010598",
     "rxcui": "none",
     "source": "botanical_extract",
@@ -7444,7 +7395,7 @@
   "quercetin": {
     "standard_name": "Quercetin",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "cui": "C0078580",
     "rxcui": "none",
     "source": "botanical_extract",
@@ -7462,7 +7413,7 @@
         "bio_score": 14,
         "natural": true,
         "score": 17,
-        "absorption": "excellent (~90\u2013100%)",
+        "absorption": "excellent (~90–100%)",
         "notes": "Encapsulated in liposomes; effectively bypasses digestive breakdown and significantly enhances cellular delivery and absorption, making it highly bioavailable and effective as a systemic antioxidant.",
         "aliases": [
           "liposomal glutathione",
@@ -7482,7 +7433,7 @@
         "bio_score": 12,
         "natural": false,
         "score": 12,
-        "absorption": "very good (~80\u201390%)",
+        "absorption": "very good (~80–90%)",
         "notes": "A stable, acetylated form of Glutathione; it is absorbed intact and then converted intracellularly, offering superior bioavailability compared to standard reduced glutathione.",
         "aliases": [
           "s-acetyl glutathione",
@@ -7500,7 +7451,7 @@
         "bio_score": 9,
         "natural": true,
         "score": 12,
-        "absorption": "moderate (~30\u201350%)",
+        "absorption": "moderate (~30–50%)",
         "notes": "Formulated with Vitamin C, which helps protect Glutathione (GSH) from oxidation and supports its recycling in the body, potentially enhancing its effectiveness over GSH alone.",
         "aliases": [
           "reduced glutathione with vitamin c",
@@ -7843,7 +7794,7 @@
         "bio_score": 6,
         "natural": true,
         "score": 9,
-        "absorption": "<10\u201320% survival",
+        "absorption": "<10–20% survival",
         "notes": "Standard probiotic capsules without acid protection. Most sensitive strains may die in stomach acid, resulting in low delivery of live organisms to the intestines and reduced effectiveness.",
         "aliases": [
           "standard probiotics",
@@ -8481,12 +8432,12 @@
         "notes": "Soluble fiber from oats, barley, and mushrooms that supports beneficial bacteria and provides immune benefits.",
         "aliases": [
           "beta-glucan",
-          "\u03b2-glucan",
+          "β-glucan",
           "oat beta-glucan",
           "barley beta-glucan",
           "mushroom beta-glucan",
           "beta-glucan supplement",
-          "\u03b2-glucan supplement",
+          "β-glucan supplement",
           "oat beta-glucan supplement",
           "barley beta-glucan supplement",
           "mushroom beta-glucan supplement"
@@ -8792,7 +8743,7 @@
         "bio_score": 12,
         "natural": true,
         "score": 15,
-        "absorption": "very good (~80\u201390%)",
+        "absorption": "very good (~80–90%)",
         "notes": "A well-studied form of Phosphatidylserine derived from soy lecithin. Supports cognition and cortisol regulation, but consider potential soy allergens or GMO concerns.",
         "aliases": [
           "soy phosphatidylserine",
@@ -8810,7 +8761,7 @@
         "bio_score": 11,
         "natural": true,
         "score": 14,
-        "absorption": "good (~70\u201385%)",
+        "absorption": "good (~70–85%)",
         "notes": "An animal-derived form of Phosphatidylserine (from bovine brain). While effective, it carries regulatory concerns in some regions due to potential prion risk and is less commonly used now.",
         "aliases": [
           "bovine phosphatidylserine",
@@ -8890,7 +8841,7 @@
         "bio_score": 14,
         "natural": true,
         "score": 17,
-        "absorption": "excellent (~95\u2013100%)",
+        "absorption": "excellent (~95–100%)",
         "notes": "A fundamental amino acid, highly absorbed via active transport. Supports cardiovascular, neurological, and metabolic health. Synthetic form is chemically identical to natural form.",
         "aliases": [
           "taurine",
@@ -9270,7 +9221,7 @@
       "betaine anhydrous": {
         "score": 3,
         "natural": true,
-        "absorption": "excellent (~90\u201395%)",
+        "absorption": "excellent (~90–95%)",
         "notes": "The primary methyl donor form of Betaine. Highly bioavailable and effective for homocysteine reduction, liver function, and athletic performance.",
         "aliases": [
           "betaine anhydrous",
@@ -9305,7 +9256,13 @@
           "homocysteine",
           "glycine"
         ],
-        "context_exclude": ["omega", "fatty", "acid", "fish", "oil"],
+        "context_exclude": [
+          "omega",
+          "fatty",
+          "acid",
+          "fish",
+          "oil"
+        ],
         "dosage_importance": 1.0
       },
       "betaine from food": {
@@ -9359,7 +9316,7 @@
       "betaine hydrochloride": {
         "score": 3,
         "natural": true,
-        "absorption": "good (~70\u201380%)",
+        "absorption": "good (~70–80%)",
         "notes": "A form used as a stomach acid supplement to aid digestion. It is NOT the same as Betaine Anhydrous and does not serve a methylation or liver support role in the same way.",
         "aliases": [
           "betaine HCl",
@@ -10188,7 +10145,7 @@
   "lutein": {
     "standard_name": "Lutein",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "phytonutrients",
     "cui": "C0043328",
     "rxcui": "none",
     "source": "botanical_extract",
@@ -10199,7 +10156,7 @@
   "zeaxanthin": {
     "standard_name": "Zeaxanthin",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "phytonutrients",
     "cui": "C0078752",
     "rxcui": "none",
     "source": "botanical_extract",
@@ -10217,7 +10174,7 @@
         "bio_score": 14,
         "natural": true,
         "score": 17,
-        "absorption": "excellent (~70\u201390%)",
+        "absorption": "excellent (~70–90%)",
         "notes": "A direct, stable form of Sulforaphane; it bypasses the need for enzymatic conversion, ensuring high bioavailability and consistent delivery of its benefits.",
         "aliases": [
           "stabilized sulforaphane",
@@ -10235,7 +10192,7 @@
         "bio_score": 12,
         "natural": true,
         "score": 15,
-        "absorption": "good (~50\u201370%)",
+        "absorption": "good (~50–70%)",
         "notes": "A natural source containing glucoraphanin and active myrosinase enzyme. Supports effective conversion to sulforaphane upon ingestion, offering significant health benefits.",
         "aliases": [
           "broccoli sprout extract",
@@ -10257,7 +10214,7 @@
         "bio_score": 10,
         "natural": true,
         "score": 13,
-        "absorption": "moderate (~5\u201310%)",
+        "absorption": "moderate (~5–10%)",
         "notes": "A precursor to Sulforaphane. It requires enzymatic conversion via myrosinase or gut microbiota to become active, which can limit its overall effectiveness if myrosinase is insufficient.",
         "aliases": [
           "glucoraphanin",
@@ -10277,7 +10234,7 @@
         "bio_score": 13,
         "natural": true,
         "score": 16,
-        "absorption": "very good (~60\u201380%)",
+        "absorption": "very good (~60–80%)",
         "notes": "An optimized formulation that combines glucoraphanin with active myrosinase enzyme. This ensures efficient conversion to sulforaphane upon ingestion, mimicking natural enzymatic hydrolysis for superior bioavailability.",
         "aliases": [
           "glucoraphanin with myrosinase",
@@ -10295,7 +10252,7 @@
         "bio_score": 14,
         "natural": false,
         "score": 14,
-        "absorption": "superior (~2\u20133x)",
+        "absorption": "superior (~2–3x)",
         "notes": "Encapsulated in liposomes for enhanced delivery and stability. Protects Sulforaphane from degradation and significantly improves its cellular uptake and bioavailability.",
         "aliases": [
           "liposomal sulforaphane",
@@ -10341,7 +10298,7 @@
         "bio_score": 13,
         "natural": true,
         "score": 16,
-        "absorption": "superior (~95\u2013100%)",
+        "absorption": "superior (~95–100%)",
         "notes": "Unprocessed, enzymatically active; highest nutrient integrity",
         "aliases": [
           "fresh spirulina",
@@ -10371,7 +10328,7 @@
         "bio_score": 12,
         "natural": true,
         "score": 15,
-        "absorption": "excellent (~90\u201395%)",
+        "absorption": "excellent (~90–95%)",
         "notes": "Certified organic; free of contaminants and additives",
         "aliases": [
           "organic spirulina",
@@ -10400,7 +10357,7 @@
         "bio_score": 12,
         "natural": true,
         "score": 15,
-        "absorption": "80\u201390%",
+        "absorption": "80–90%",
         "notes": "Highly digestible; no cellulose wall; rich in protein and phycocyanin",
         "aliases": [
           "spirulina powder",
@@ -10434,7 +10391,7 @@
         "bio_score": 11,
         "natural": true,
         "score": 14,
-        "absorption": "good (~70\u201385%)",
+        "absorption": "good (~70–85%)",
         "notes": "Compressed form; slower digestion than powder",
         "aliases": [
           "spirulina tablets",
@@ -10499,7 +10456,7 @@
         "bio_score": 12,
         "natural": true,
         "score": 15,
-        "absorption": "excellent (~85\u201395%)",
+        "absorption": "excellent (~85–95%)",
         "notes": "Pre-digested via enzymatic fermentation; enhanced nutrient release",
         "aliases": [
           "fermented chlorella",
@@ -10528,7 +10485,7 @@
         "bio_score": 12,
         "natural": true,
         "score": 15,
-        "absorption": "70\u201380%",
+        "absorption": "70–80%",
         "notes": "Mechanically disrupted wall; improves digestibility and detox potential",
         "aliases": [
           "cracked cell chlorella",
@@ -10558,7 +10515,7 @@
         "bio_score": 10,
         "natural": true,
         "score": 13,
-        "absorption": "moderate (~40\u201360%)",
+        "absorption": "moderate (~40–60%)",
         "notes": "Whole-cell form; limited absorption due to intact cellulose wall",
         "aliases": [
           "chlorella powder",
@@ -10678,7 +10635,7 @@
         "bio_score": 13,
         "natural": false,
         "score": 13,
-        "absorption": "excellent (~75\u201380%)",
+        "absorption": "excellent (~75–80%)",
         "notes": "Ultra-low molecular weight; penetrates intestinal epithelium and skin layers",
         "aliases": [
           "oligosaccharide hyaluronic acid",
@@ -10707,7 +10664,7 @@
         "bio_score": 13,
         "natural": false,
         "score": 13,
-        "absorption": "superior (~2\u20133x)",
+        "absorption": "superior (~2–3x)",
         "notes": "Encapsulated for enhanced delivery and skin penetration",
         "aliases": [
           "liposomal hyaluronic acid",
@@ -10765,7 +10722,7 @@
         "bio_score": 12,
         "natural": false,
         "score": 12,
-        "absorption": "good (~50\u201370%)",
+        "absorption": "good (~50–70%)",
         "notes": "Absorbed in cecum; supports systemic hydration and skin elasticity",
         "aliases": [
           "low molecular weight hyaluronic acid",
@@ -10794,7 +10751,7 @@
         "bio_score": 9,
         "natural": false,
         "score": 9,
-        "absorption": "moderate (~30\u201350%)",
+        "absorption": "moderate (~30–50%)",
         "notes": "Large molecules; systemic distribution but limited absorption",
         "aliases": [
           "high molecular weight hyaluronic acid",
@@ -10859,7 +10816,7 @@
         "bio_score": 13,
         "natural": true,
         "score": 16,
-        "absorption": "excellent (~30\u201340% bioavailability)",
+        "absorption": "excellent (~30–40% bioavailability)",
         "notes": "Biologically active enantiomer; superior mitochondrial uptake and antioxidant potency",
         "aliases": [
           "R-alpha-lipoic acid",
@@ -10908,7 +10865,7 @@
         "bio_score": 12,
         "natural": false,
         "score": 12,
-        "absorption": "superior (~2\u20133x higher)",
+        "absorption": "superior (~2–3x higher)",
         "notes": "Encapsulated for enhanced stability, solubility, and cellular delivery",
         "aliases": [
           "liposomal alpha-lipoic acid",
@@ -10992,7 +10949,7 @@
         "bio_score": 9,
         "natural": false,
         "score": 9,
-        "absorption": "moderate (~20\u201330%)",
+        "absorption": "moderate (~20–30%)",
         "notes": "50:50 mix of R and S enantiomers; lower efficacy and stability",
         "aliases": [
           "alpha-lipoic acid",
@@ -11076,7 +11033,7 @@
         "bio_score": 13,
         "natural": false,
         "score": 13,
-        "absorption": "superior (~2\u20133x)",
+        "absorption": "superior (~2–3x)",
         "notes": "Encapsulated for enhanced delivery and cellular uptake",
         "aliases": [
           "liposomal MSM",
@@ -11104,7 +11061,7 @@
         "bio_score": 12,
         "natural": false,
         "score": 12,
-        "absorption": "improved (~90\u201395%)",
+        "absorption": "improved (~90–95%)",
         "notes": "Vitamin C enhances MSM uptake and synergizes antioxidant effects",
         "aliases": [
           "MSM with vitamin C",
@@ -11140,7 +11097,7 @@
         "bio_score": 12,
         "natural": false,
         "score": 12,
-        "absorption": "good (~80\u201390%)",
+        "absorption": "good (~80–90%)",
         "notes": "Highly bioavailable sulfur donor; supports joints, detox, and antioxidant synthesis",
         "aliases": [
           "MSM",
@@ -11173,7 +11130,13 @@
           "sulfone",
           "DMSO"
         ],
-        "context_exclude": ["omega", "fatty", "acid", "hormone", "vitamin"],
+        "context_exclude": [
+          "omega",
+          "fatty",
+          "acid",
+          "hormone",
+          "vitamin"
+        ],
         "dosage_importance": 1.0
       },
       "oxidized MSM": {
@@ -11216,7 +11179,7 @@
         "bio_score": 13,
         "natural": true,
         "score": 16,
-        "absorption": "excellent (~90\u201395%)",
+        "absorption": "excellent (~90–95%)",
         "notes": "Full-spectrum root extract; high withanolide content; clinically validated for stress, testosterone, and cognition",
         "aliases": [
           "KSM-66",
@@ -11255,7 +11218,7 @@
         "bio_score": 12,
         "natural": false,
         "score": 12,
-        "absorption": "superior (~2\u20133x)",
+        "absorption": "superior (~2–3x)",
         "notes": "Encapsulated for enhanced delivery and stability",
         "aliases": [
           "liposomal ashwagandha",
@@ -11283,7 +11246,7 @@
         "bio_score": 12,
         "natural": true,
         "score": 15,
-        "absorption": "very good (~80\u201390%)",
+        "absorption": "very good (~80–90%)",
         "notes": "Patented leaf + root extract; higher withanolide concentration; focused on stress and cortisol reduction",
         "aliases": [
           "Sensoril",
@@ -11345,7 +11308,7 @@
         "bio_score": 9,
         "natural": true,
         "score": 12,
-        "absorption": "moderate (~50\u201370%)",
+        "absorption": "moderate (~50–70%)",
         "notes": "Generic extract; variable potency and withanolide content",
         "aliases": [
           "ashwagandha extract",
@@ -11378,7 +11341,7 @@
         "bio_score": 7,
         "natural": true,
         "score": 10,
-        "absorption": "low (~30\u201350%)",
+        "absorption": "low (~30–50%)",
         "notes": "Whole root powder; traditional use; low standardization",
         "aliases": [
           "ashwagandha powder",
@@ -11444,7 +11407,7 @@
         "bio_score": 12,
         "natural": true,
         "score": 15,
-        "absorption": "very good (~70\u201385%)",
+        "absorption": "very good (~70–85%)",
         "notes": "Standardized extract; adaptogenic effects on stress, fatigue, and cognition",
         "aliases": [
           "rhodiola rosea extract",
@@ -11477,7 +11440,7 @@
         "bio_score": 12,
         "natural": false,
         "score": 12,
-        "absorption": "superior (~2\u20133x)",
+        "absorption": "superior (~2–3x)",
         "notes": "Encapsulated for enhanced delivery and stability",
         "aliases": [
           "liposomal rhodiola",
@@ -11534,7 +11497,7 @@
         "bio_score": 7,
         "natural": true,
         "score": 10,
-        "absorption": "moderate (~40\u201360%)",
+        "absorption": "moderate (~40–60%)",
         "notes": "Whole root powder; variable potency and bioactive content",
         "aliases": [
           "rhodiola root powder",
@@ -11655,7 +11618,7 @@
         "bio_score": 11,
         "natural": true,
         "score": 14,
-        "absorption": "good (~60\u201370%)",
+        "absorption": "good (~60–70%)",
         "notes": "Standardized to 24% flavone glycosides and 6% terpene lactones; supports circulation, cognition, and antioxidant defense",
         "aliases": [
           "ginkgo biloba extract",
@@ -11688,7 +11651,7 @@
         "bio_score": 7,
         "natural": true,
         "score": 10,
-        "absorption": "poor (~20\u201330%)",
+        "absorption": "poor (~20–30%)",
         "notes": "Unstandardized; low terpene and flavone content",
         "aliases": [
           "ginkgo leaf powder",
@@ -11754,7 +11717,7 @@
         "bio_score": 13,
         "natural": true,
         "score": 16,
-        "absorption": "10x better (~400\u2013500% increase)",
+        "absorption": "10x better (~400–500% increase)",
         "notes": "Silybin-phosphatidylcholine complex; dramatically improves liver delivery and antioxidant potency",
         "aliases": [
           "silymarin phytosome",
@@ -11785,7 +11748,7 @@
         "bio_score": 12,
         "natural": false,
         "score": 12,
-        "absorption": "8\u201312x better",
+        "absorption": "8–12x better",
         "notes": "Micelle-encapsulated silybin; rapid uptake and liver targeting",
         "aliases": [
           "micellar silymarin",
@@ -11814,7 +11777,7 @@
         "bio_score": 9,
         "natural": true,
         "score": 12,
-        "absorption": "moderate (~20\u201330%)",
+        "absorption": "moderate (~20–30%)",
         "notes": "Standard extract from Silybum marianum; contains silybin, silydianin, silychristin",
         "aliases": [
           "silymarin",
@@ -11904,7 +11867,7 @@
   "l_theanine": {
     "standard_name": "L-Theanine",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "amino_acids",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -11950,7 +11913,7 @@
         "natural": true,
         "score": 15,
         "absorption": "90%",
-        "notes": "Small peptides (2\u20135 kDa); rapidly absorbed and distributed to skin, joints, and connective tissue",
+        "notes": "Small peptides (2–5 kDa); rapidly absorbed and distributed to skin, joints, and connective tissue",
         "aliases": [
           "collagen peptides",
           "hydrolyzed collagen",
@@ -11981,7 +11944,7 @@
         "bio_score": 12,
         "natural": false,
         "score": 12,
-        "absorption": "superior (~2\u20133x)",
+        "absorption": "superior (~2–3x)",
         "notes": "Encapsulated for enhanced delivery and stability",
         "aliases": [
           "liposomal collagen",
@@ -12009,7 +11972,7 @@
         "bio_score": 9,
         "natural": true,
         "score": 12,
-        "absorption": "moderate (~30\u201350%)",
+        "absorption": "moderate (~30–50%)",
         "notes": "Type II collagen; immune-modulating effects for joint health",
         "aliases": [
           "undenatured collagen",
@@ -12037,7 +12000,7 @@
         "bio_score": 7,
         "natural": true,
         "score": 10,
-        "absorption": "moderate (~40\u201360%)",
+        "absorption": "moderate (~40–60%)",
         "notes": "Partially hydrolyzed; less soluble and slower uptake than peptides",
         "aliases": [
           "gelatin",
@@ -12102,7 +12065,7 @@
         "bio_score": 13,
         "natural": false,
         "score": 13,
-        "absorption": "excellent (~90\u201395%)",
+        "absorption": "excellent (~90–95%)",
         "notes": "Encapsulated for enhanced delivery and bypass of first-pass metabolism",
         "aliases": [
           "liposomal melatonin",
@@ -12130,7 +12093,7 @@
         "bio_score": 12,
         "natural": false,
         "score": 12,
-        "absorption": "excellent (~85\u201390%)",
+        "absorption": "excellent (~85–90%)",
         "notes": "Transmucosal absorption; rapid onset and bypass of liver metabolism",
         "aliases": [
           "melatonin oral spray",
@@ -12159,7 +12122,7 @@
         "bio_score": 12,
         "natural": false,
         "score": 12,
-        "absorption": "very good (~70\u201385%)",
+        "absorption": "very good (~70–85%)",
         "notes": "Rapid onset; ideal for sleep initiation",
         "aliases": [
           "immediate-release melatonin",
@@ -12194,7 +12157,7 @@
         "bio_score": 11,
         "natural": false,
         "score": 11,
-        "absorption": "timed (~3\u20135 hour peak)",
+        "absorption": "timed (~3–5 hour peak)",
         "notes": "Designed for late-night release; supports sleep maintenance",
         "aliases": [
           "delayed-release melatonin",
@@ -12221,8 +12184,8 @@
         "bio_score": 10,
         "natural": false,
         "score": 10,
-        "absorption": "good (~60\u201370%)",
-        "notes": "Sustained release; mimics natural secretion over 6\u20138 hours",
+        "absorption": "good (~60–70%)",
+        "notes": "Sustained release; mimics natural secretion over 6–8 hours",
         "aliases": [
           "extended-release melatonin",
           "time-release melatonin",
@@ -12286,7 +12249,7 @@
         "bio_score": 13,
         "natural": false,
         "score": 13,
-        "absorption": "excellent (~90\u201395%)",
+        "absorption": "excellent (~90–95%)",
         "notes": "Stable salt form; high concentration of active glucosamine; shellfish-free options available",
         "aliases": [
           "glucosamine HCl",
@@ -12315,7 +12278,7 @@
         "bio_score": 12,
         "natural": false,
         "score": 12,
-        "absorption": "superior (~2\u20133x)",
+        "absorption": "superior (~2–3x)",
         "notes": "Encapsulated for enhanced delivery and stability",
         "aliases": [
           "liposomal glucosamine",
@@ -12343,7 +12306,7 @@
         "bio_score": 12,
         "natural": false,
         "score": 12,
-        "absorption": "very good (~80\u201390%)",
+        "absorption": "very good (~80–90%)",
         "notes": "Most clinically studied form; stabilized with potassium or sodium salt",
         "aliases": [
           "glucosamine sulfate",
@@ -12372,7 +12335,7 @@
         "bio_score": 11,
         "natural": false,
         "score": 11,
-        "absorption": "good (~70\u201380%)",
+        "absorption": "good (~70–80%)",
         "notes": "Acetylated form; supports gut lining and mucosal health more than joint cartilage",
         "aliases": [
           "n-acetyl glucosamine",
@@ -12400,7 +12363,7 @@
         "bio_score": 9,
         "natural": false,
         "score": 9,
-        "absorption": "moderate (~60\u201370%)",
+        "absorption": "moderate (~60–70%)",
         "notes": "Less stable; variable absorption and potency",
         "aliases": [
           "non-crystalline glucosamine sulfate",
@@ -12463,7 +12426,7 @@
         "bio_score": 12,
         "natural": false,
         "score": 12,
-        "absorption": "2\u20133x better",
+        "absorption": "2–3x better",
         "notes": "Phospholipid-bound form; enhanced solubility and intestinal uptake",
         "aliases": [
           "chondroitin phytosome",
@@ -12492,7 +12455,7 @@
         "bio_score": 12,
         "natural": false,
         "score": 12,
-        "absorption": "better (~20\u201330%)",
+        "absorption": "better (~20–30%)",
         "notes": "Depolymerized form; improved uptake and tissue targeting",
         "aliases": [
           "low molecular weight chondroitin",
@@ -12521,7 +12484,7 @@
         "bio_score": 10,
         "natural": true,
         "score": 13,
-        "absorption": "13\u201315%",
+        "absorption": "13–15%",
         "notes": "Standard form; large molecule with limited absorption; often derived from shark or bovine cartilage",
         "aliases": [
           "chondroitin sulfate",
@@ -12588,7 +12551,7 @@
         "bio_score": 13,
         "natural": true,
         "score": 16,
-        "absorption": "excellent (~80\u201390%)",
+        "absorption": "excellent (~80–90%)",
         "notes": "Most potent catechin; supports antioxidant, metabolic, and neuroprotective effects",
         "aliases": [
           "EGCG",
@@ -12617,7 +12580,7 @@
         "bio_score": 13,
         "natural": false,
         "score": 13,
-        "absorption": "superior (~2\u20133x)",
+        "absorption": "superior (~2–3x)",
         "notes": "Encapsulated EGCG and catechins; bypasses degradation and improves cellular delivery",
         "aliases": [
           "liposomal green tea",
@@ -12645,7 +12608,7 @@
         "bio_score": 12,
         "natural": false,
         "score": 12,
-        "absorption": "2\u20133x better",
+        "absorption": "2–3x better",
         "notes": "Phospholipid-bound catechins; enhanced solubility and intestinal uptake",
         "aliases": [
           "green tea phytosome",
@@ -12674,7 +12637,7 @@
         "bio_score": 11,
         "natural": true,
         "score": 14,
-        "absorption": "good (~60\u201370%)",
+        "absorption": "good (~60–70%)",
         "notes": "Standardized extract; contains multiple catechins and polyphenols",
         "aliases": [
           "green tea extract",
@@ -12703,7 +12666,7 @@
         "bio_score": 9,
         "natural": true,
         "score": 12,
-        "absorption": "moderate (~40\u201360%)",
+        "absorption": "moderate (~40–60%)",
         "notes": "Whole leaf powder; contains caffeine, fiber, and full-spectrum antioxidants",
         "aliases": [
           "matcha",
@@ -12768,7 +12731,7 @@
         "bio_score": 13,
         "natural": false,
         "score": 13,
-        "absorption": "superior (~2\u20133x)",
+        "absorption": "superior (~2–3x)",
         "notes": "Encapsulated OPCs and catechins; bypasses degradation and improves cellular delivery",
         "aliases": [
           "liposomal grape seed",
@@ -12796,7 +12759,7 @@
         "bio_score": 13,
         "natural": false,
         "score": 13,
-        "absorption": "2\u20133x better",
+        "absorption": "2–3x better",
         "notes": "Phospholipid-bound OPCs; enhanced solubility and intestinal uptake",
         "aliases": [
           "grape seed phytosome",
@@ -12825,7 +12788,7 @@
         "bio_score": 12,
         "natural": true,
         "score": 15,
-        "absorption": "very good (~60\u201370%)",
+        "absorption": "very good (~60–70%)",
         "notes": "High OPC content; potent antioxidant and vascular support",
         "aliases": [
           "grape seed extract",
@@ -12856,7 +12819,7 @@
         "bio_score": 9,
         "natural": true,
         "score": 12,
-        "absorption": "moderate (~40\u201350%)",
+        "absorption": "moderate (~40–50%)",
         "notes": "Includes skin, pulp, and seed; broader polyphenol spectrum but lower OPC concentration",
         "aliases": [
           "whole grape extract",
@@ -12959,8 +12922,8 @@
         "bio_score": 13,
         "natural": true,
         "score": 16,
-        "absorption": "excellent (~70\u201390%)",
-        "notes": "Patented French maritime pine extract; standardized to 65\u201375% procyanidins; supports circulation, inflammation, and antioxidant defense",
+        "absorption": "excellent (~70–90%)",
+        "notes": "Patented French maritime pine extract; standardized to 65–75% procyanidins; supports circulation, inflammation, and antioxidant defense",
         "aliases": [
           "pycnogenol",
           "french maritime pine",
@@ -12988,7 +12951,7 @@
         "bio_score": 13,
         "natural": false,
         "score": 13,
-        "absorption": "superior (~2\u20133x)",
+        "absorption": "superior (~2–3x)",
         "notes": "Encapsulated for enhanced delivery and cellular uptake",
         "aliases": [
           "liposomal pine bark",
@@ -13016,7 +12979,7 @@
         "bio_score": 12,
         "natural": false,
         "score": 12,
-        "absorption": "2\u20133x better",
+        "absorption": "2–3x better",
         "notes": "Phospholipid-bound procyanidins; enhanced solubility and intestinal uptake",
         "aliases": [
           "pine bark phytosome",
@@ -13045,7 +13008,7 @@
         "bio_score": 10,
         "natural": true,
         "score": 13,
-        "absorption": "good (~50\u201370%)",
+        "absorption": "good (~50–70%)",
         "notes": "Variable source and potency; may lack standardization and consistent OPC content",
         "aliases": [
           "pine bark extract",
@@ -13108,7 +13071,7 @@
         "bio_score": 13,
         "natural": true,
         "score": 16,
-        "absorption": "excellent (~80\u201390%)",
+        "absorption": "excellent (~80–90%)",
         "notes": "Enhanced bioavailability via microbial fermentation; higher levels of Rg3, Rg5, Rk1, and compound K",
         "aliases": [
           "fermented red ginseng",
@@ -13137,7 +13100,7 @@
         "bio_score": 12,
         "natural": true,
         "score": 15,
-        "absorption": "very good (~70\u201385%)",
+        "absorption": "very good (~70–85%)",
         "notes": "Nine-cycle steamed ginseng; enriched in low-MW ginsenosides; potent antioxidant and immune effects",
         "aliases": [
           "black ginseng",
@@ -13166,7 +13129,7 @@
         "bio_score": 13,
         "natural": false,
         "score": 13,
-        "absorption": "superior (~2\u20133x)",
+        "absorption": "superior (~2–3x)",
         "notes": "Encapsulated for enhanced delivery and cellular uptake",
         "aliases": [
           "liposomal ginseng",
@@ -13190,18 +13153,18 @@
         ],
         "dosage_importance": 1.0
       },
-      "panax ginseng extract (4\u20137% ginsenosides)": {
+      "panax ginseng extract (4–7% ginsenosides)": {
         "bio_score": 12,
         "natural": true,
         "score": 15,
-        "absorption": "very good (~60\u201375%)",
+        "absorption": "very good (~60–75%)",
         "notes": "Asian ginseng; adaptogenic effects on energy, stress, and cognition; standardized to ginsenosides Rg1, Rb1, and Re",
         "aliases": [
           "panax ginseng",
           "asian ginseng",
           "korean ginseng",
           "red ginseng",
-          "4\u20137% ginsenosides",
+          "4–7% ginsenosides",
           "panax ginseng extract",
           "standardized panax ginseng",
           "ginseng extract",
@@ -13212,7 +13175,7 @@
           "asian ginseng supplement",
           "korean ginseng supplement",
           "red ginseng supplement",
-          "4\u20137% ginsenosides supplement",
+          "4–7% ginsenosides supplement",
           "panax ginseng extract supplement",
           "standardized panax ginseng supplement",
           "ginseng extract supplement",
@@ -13225,7 +13188,7 @@
         "bio_score": 11,
         "natural": true,
         "score": 14,
-        "absorption": "good (~50\u201365%)",
+        "absorption": "good (~50–65%)",
         "notes": "Cooling adaptogen; higher Rb1 and Re; supports immunity and blood sugar regulation",
         "aliases": [
           "american ginseng",
@@ -13253,7 +13216,7 @@
         "bio_score": 9,
         "natural": true,
         "score": 12,
-        "absorption": "moderate (~40\u201355%)",
+        "absorption": "moderate (~40–55%)",
         "notes": "Not true ginseng; contains eleutherosides; supports endurance and stress resilience",
         "aliases": [
           "siberian ginseng",
@@ -13318,7 +13281,7 @@
         "bio_score": 11,
         "natural": true,
         "score": 14,
-        "absorption": "good (~60\u201370%)",
+        "absorption": "good (~60–70%)",
         "notes": "Most studied species; supports innate immunity via alkylamides and caffeic acid derivatives",
         "aliases": [
           "echinacea purpurea",
@@ -13348,7 +13311,7 @@
         "bio_score": 10,
         "natural": true,
         "score": 13,
-        "absorption": "good (~50\u201365%)",
+        "absorption": "good (~50–65%)",
         "notes": "Traditional root extract; higher alkylamide content; immune and anti-inflammatory effects",
         "aliases": [
           "echinacea angustifolia",
@@ -13378,7 +13341,7 @@
         "bio_score": 12,
         "natural": false,
         "score": 12,
-        "absorption": "2\u20133x better",
+        "absorption": "2–3x better",
         "notes": "Phospholipid-bound alkylamides; enhanced solubility and intestinal uptake",
         "aliases": [
           "echinacea phytosome",
@@ -13407,7 +13370,7 @@
         "bio_score": 13,
         "natural": false,
         "score": 13,
-        "absorption": "superior (~2\u20133x)",
+        "absorption": "superior (~2–3x)",
         "notes": "Encapsulated for enhanced delivery and cellular uptake",
         "aliases": [
           "liposomal echinacea",
@@ -13435,7 +13398,7 @@
         "bio_score": 7,
         "natural": true,
         "score": 10,
-        "absorption": "variable (~30\u201350%)",
+        "absorption": "variable (~30–50%)",
         "notes": "Non-standardized; variable alkylamide and phenolic content",
         "aliases": [
           "whole echinacea",
@@ -13501,7 +13464,7 @@
         "bio_score": 10,
         "natural": true,
         "score": 13,
-        "absorption": "moderate (~20\u201330%)",
+        "absorption": "moderate (~20–30%)",
         "notes": "Standardized for curcumin; absorption enhanced with piperine or lipids",
         "aliases": [
           "turmeric extract",
@@ -13549,7 +13512,7 @@
         "bio_score": 6,
         "natural": true,
         "score": 9,
-        "absorption": "poor (~10\u201320%)",
+        "absorption": "poor (~10–20%)",
         "notes": "Low curcumin content; poorly absorbed without enhancers",
         "aliases": [
           "turmeric powder",
@@ -13684,7 +13647,7 @@
         "bio_score": 12,
         "natural": true,
         "score": 15,
-        "absorption": "very good (~70\u201380%)",
+        "absorption": "very good (~70–80%)",
         "notes": "Stable water-soluble compounds like SAC and SAMC; supports cardiovascular and immune health",
         "aliases": [
           "aged garlic extract",
@@ -13713,7 +13676,7 @@
         "bio_score": 11,
         "natural": true,
         "score": 14,
-        "absorption": "good (~50\u201360%)",
+        "absorption": "good (~50–60%)",
         "notes": "Unstable; rapidly metabolized; potent antimicrobial",
         "aliases": [
           "allicin",
@@ -13742,7 +13705,7 @@
         "bio_score": 7,
         "natural": true,
         "score": 10,
-        "absorption": "variable (~30\u201350%)",
+        "absorption": "variable (~30–50%)",
         "notes": "Depends on processing; may lack active sulfur compounds",
         "aliases": [
           "garlic powder",
@@ -13771,7 +13734,7 @@
         "bio_score": 10,
         "natural": true,
         "score": 13,
-        "absorption": "good (~50\u201365%)",
+        "absorption": "good (~50–65%)",
         "notes": "Fermented garlic; higher antioxidant activity",
         "aliases": [
           "black garlic",
@@ -13836,7 +13799,7 @@
         "bio_score": 12,
         "natural": true,
         "score": 15,
-        "absorption": "very good (~60\u201370%)",
+        "absorption": "very good (~60–70%)",
         "notes": "Standardized PACs; supports urinary tract health",
         "aliases": [
           "cranberry extract",
@@ -13865,7 +13828,7 @@
         "bio_score": 9,
         "natural": true,
         "score": 12,
-        "absorption": "moderate (~40\u201350%)",
+        "absorption": "moderate (~40–50%)",
         "notes": "Contains fiber, sugars, and non-standardized PACs",
         "aliases": [
           "cranberry powder",
@@ -13894,7 +13857,7 @@
         "bio_score": 7,
         "natural": true,
         "score": 10,
-        "absorption": "variable (~30\u201350%)",
+        "absorption": "variable (~30–50%)",
         "notes": "High sugar content; PACs may be degraded",
         "aliases": [
           "cranberry juice",
@@ -13959,7 +13922,7 @@
         "bio_score": 12,
         "natural": true,
         "score": 15,
-        "absorption": "very good (~60\u201370%)",
+        "absorption": "very good (~60–70%)",
         "notes": "Supports retinal health; rich in anthocyanosides",
         "aliases": [
           "bilberry extract",
@@ -13988,7 +13951,7 @@
         "bio_score": 9,
         "natural": true,
         "score": 12,
-        "absorption": "moderate (~40\u201350%)",
+        "absorption": "moderate (~40–50%)",
         "notes": "Lower anthocyanin content; includes fiber and sugars",
         "aliases": [
           "bilberry powder",
@@ -14017,7 +13980,7 @@
         "bio_score": 7,
         "natural": true,
         "score": 10,
-        "absorption": "variable (~30\u201350%)",
+        "absorption": "variable (~30–50%)",
         "notes": "Anthocyanins may degrade; sugar content varies",
         "aliases": [
           "bilberry juice",
@@ -14082,7 +14045,7 @@
         "bio_score": 12,
         "natural": true,
         "score": 15,
-        "absorption": "very good (~60\u201370%)",
+        "absorption": "very good (~60–70%)",
         "notes": "Standardized anthocyanins; immune support",
         "aliases": [
           "sambucol",
@@ -14111,7 +14074,7 @@
         "bio_score": 9,
         "natural": true,
         "score": 12,
-        "absorption": "moderate (~40\u201350%)",
+        "absorption": "moderate (~40–50%)",
         "notes": "Contains fiber and sugars; lower anthocyanin content",
         "aliases": [
           "elderberry powder",
@@ -14140,7 +14103,7 @@
         "bio_score": 7,
         "natural": true,
         "score": 10,
-        "absorption": "variable (~30\u201350%)",
+        "absorption": "variable (~30–50%)",
         "notes": "Traditional form; sugar content may affect absorption",
         "aliases": [
           "elderberry syrup",
@@ -14205,7 +14168,7 @@
         "bio_score": 12,
         "natural": true,
         "score": 15,
-        "absorption": "very good (~70\u201380%)",
+        "absorption": "very good (~70–80%)",
         "notes": "A broad-spectrum blend of enzymes sourced from fungal or botanical sources. Effectively breaks down a variety of foods.",
         "aliases": [
           "plant enzymes",
@@ -14234,7 +14197,7 @@
         "bio_score": 11,
         "natural": true,
         "score": 14,
-        "absorption": "good (~60\u201370%)",
+        "absorption": "good (~60–70%)",
         "notes": "Enzymes sourced from animal pancreases. Requires enteric coating to survive stomach acid and function in the small intestine. Typically includes a mix of amylase, lipase, and protease.",
         "aliases": [
           "pancreatic enzymes",
@@ -14262,7 +14225,7 @@
         "bio_score": 13,
         "natural": true,
         "score": 16,
-        "absorption": "excellent (~80\u201390%)",
+        "absorption": "excellent (~80–90%)",
         "notes": "Targeted, individual enzymes designed to break down specific types of food or to perform a specific function.",
         "aliases": [
           "protease",
@@ -14314,7 +14277,7 @@
         "bio_score": 12,
         "natural": false,
         "score": 12,
-        "absorption": "good (~60\u201370%)",
+        "absorption": "good (~60–70%)",
         "notes": "Encapsulation technology that protects enzymes from stomach acid, ensuring they are released in the small intestine where they are most effective. Essential for pancreatic enzymes.",
         "aliases": [
           "enteric-coated enzymes",
@@ -14369,7 +14332,7 @@
         "bio_score": 13,
         "natural": false,
         "score": 13,
-        "absorption": "excellent (~80\u201390%)",
+        "absorption": "excellent (~80–90%)",
         "notes": "A patented NAD+ precursor that efficiently raises NAD+ levels. It is known for its good oral bioavailability and supports cellular energy and repair.",
         "aliases": [
           "nicotinamide riboside",
@@ -14398,12 +14361,12 @@
         "bio_score": 13,
         "natural": false,
         "score": 13,
-        "absorption": "excellent (~80\u201390%)",
+        "absorption": "excellent (~80–90%)",
         "notes": "A direct NAD+ precursor that is quickly converted to NAD+ in the body. Newer data supports its oral uptake for cellular energy and anti-aging benefits.",
         "aliases": [
           "NMN",
           "nicotinamide mononucleotide",
-          "\u03b2-NMN",
+          "β-NMN",
           "beta-nicotinamide mononucleotide",
           "NAD+ precursor",
           "NMN supplement",
@@ -14413,7 +14376,7 @@
           "NMN NAD precursor",
           "NMN supplement",
           "nicotinamide mononucleotide supplement",
-          "\u03b2-NMN supplement",
+          "β-NMN supplement",
           "beta-nicotinamide mononucleotide supplement",
           "NAD+ precursor supplement",
           "NAD booster NMN supplement",
@@ -14453,7 +14416,7 @@
         "bio_score": 10,
         "natural": true,
         "score": 13,
-        "absorption": "good (~60\u201370%)",
+        "absorption": "good (~60–70%)",
         "notes": "A non-flushing form of Vitamin B3. While it is an NAD+ precursor, its conversion efficiency is lower compared to NR and NMN.",
         "aliases": [
           "niacinamide",
@@ -14482,7 +14445,7 @@
         "bio_score": 9,
         "natural": true,
         "score": 12,
-        "absorption": "good (~60\u201370%)",
+        "absorption": "good (~60–70%)",
         "notes": "The flushing form of Vitamin B3. It converts to NAD+ but is often less tolerable for users due to the 'niacin flush' side effect.",
         "aliases": [
           "niacin",
@@ -14549,7 +14512,7 @@
         "bio_score": 13,
         "natural": false,
         "score": 13,
-        "absorption": "excellent (~90\u201395%)",
+        "absorption": "excellent (~90–95%)",
         "notes": "Active folate; bypasses MTHFR genetic issues",
         "aliases": [
           "5-MTHF",
@@ -14584,7 +14547,7 @@
         "bio_score": 9,
         "natural": false,
         "score": 9,
-        "absorption": "moderate (~50\u201360%)",
+        "absorption": "moderate (~50–60%)",
         "notes": "Synthetic form; requires conversion via DHFR; not suitable for MTHFR mutations",
         "aliases": [
           "folic acid",
@@ -14614,7 +14577,7 @@
         "bio_score": 12,
         "natural": false,
         "score": 12,
-        "absorption": "very good (~70\u201380%)",
+        "absorption": "very good (~70–80%)",
         "notes": "Bypasses initial conversion steps; helpful in methylation disorders",
         "aliases": [
           "folinic acid",
@@ -15134,7 +15097,7 @@
   "gamma_linolenic_acid": {
     "standard_name": "Gamma-Linolenic Acid",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "fatty_acids",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -15155,11 +15118,11 @@
         "aliases": [
           "cryptoxanthin",
           "beta-cryptoxanthin",
-          "\u03b2-cryptoxanthin",
+          "β-cryptoxanthin",
           "carotenoid cryptoxanthin",
           "cryptoxanthin supplement",
           "beta-cryptoxanthin supplement",
-          "\u03b2-cryptoxanthin supplement",
+          "β-cryptoxanthin supplement",
           "carotenoid cryptoxanthin supplement"
         ],
         "dosage_importance": 1.0
@@ -15262,7 +15225,7 @@
   "27_deoxyactein": {
     "standard_name": "27-Deoxyactein",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -15271,7 +15234,7 @@
   "4_hydroxyisoleucine": {
     "standard_name": "4-Hydroxyisoleucine",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "amino_acids",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -15280,7 +15243,7 @@
   "akba": {
     "standard_name": "Akba",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -15289,7 +15252,7 @@
   "cape": {
     "standard_name": "Cape",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -15298,7 +15261,7 @@
   "cgf": {
     "standard_name": "Cgf",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -15307,7 +15270,7 @@
   "d_fraction": {
     "standard_name": "D-Fraction",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -15316,7 +15279,7 @@
   "dnj_1_deoxynojirimycin": {
     "standard_name": "Dnj (1-Deoxynojirimycin)",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -15325,7 +15288,7 @@
   "egcg": {
     "standard_name": "Egcg",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "cui": "C0059514",
     "rxcui": "none",
     "source": "botanical_extract",
@@ -15336,7 +15299,7 @@
   "l_dopa": {
     "standard_name": "L-Dopa",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "amino_acids",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -15345,7 +15308,7 @@
   "opc": {
     "standard_name": "Opc",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -15354,7 +15317,7 @@
   "pac": {
     "standard_name": "Pac",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -15363,7 +15326,7 @@
   "rb1": {
     "standard_name": "Rb1",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -15372,7 +15335,7 @@
   "rg1": {
     "standard_name": "Rg1",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -15381,7 +15344,7 @@
   "rg3": {
     "standard_name": "Rg3",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -15390,7 +15353,7 @@
   "s_allylcysteine": {
     "standard_name": "S-Allylcysteine",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "amino_acids",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -15399,7 +15362,7 @@
   "tsg": {
     "standard_name": "Tsg",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -15408,7 +15371,7 @@
   "acemannan": {
     "standard_name": "Acemannan",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -15417,7 +15380,7 @@
   "acetogenins": {
     "standard_name": "Acetogenins",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -15426,7 +15389,7 @@
   "actein": {
     "standard_name": "Actein",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -15435,7 +15398,7 @@
   "adenosine": {
     "standard_name": "Adenosine",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -15444,7 +15407,7 @@
   "agnuside": {
     "standard_name": "Agnuside",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -15453,7 +15416,7 @@
   "alkaloids": {
     "standard_name": "Alkaloids",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "cui": "C0002062",
     "rxcui": "none",
     "source": "botanical_extract",
@@ -15464,7 +15427,7 @@
   "alkamides": {
     "standard_name": "Alkamides",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -15473,7 +15436,7 @@
   "allicin": {
     "standard_name": "Allicin",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "herbs",
     "cui": "C0051140",
     "rxcui": "none",
     "source": "botanical_extract",
@@ -15484,7 +15447,7 @@
   "alliin": {
     "standard_name": "Alliin",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -15493,7 +15456,7 @@
   "aloin": {
     "standard_name": "Aloin",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -15502,7 +15465,7 @@
   "alpha_linolenic_acid": {
     "standard_name": "Alpha-Linolenic Acid",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "fatty_acids",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -15511,7 +15474,7 @@
   "andrographolide": {
     "standard_name": "Andrographolide",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -15520,7 +15483,7 @@
   "anthocyanins": {
     "standard_name": "Anthocyanins",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "herbs",
     "cui": "C0003161",
     "rxcui": "none",
     "source": "botanical_extract",
@@ -15531,7 +15494,7 @@
   "anthocyanosides": {
     "standard_name": "Anthocyanosides",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -15540,7 +15503,7 @@
   "anthraquinones": {
     "standard_name": "Anthraquinones",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -15573,7 +15536,7 @@
   "arbutin": {
     "standard_name": "Arbutin",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -15582,7 +15545,7 @@
   "arctiin": {
     "standard_name": "Arctiin",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -15591,7 +15554,7 @@
   "arjunolic_acid": {
     "standard_name": "Arjunolic Acid",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -15600,7 +15563,7 @@
   "artepillin_c": {
     "standard_name": "Artepillin C",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -15609,7 +15572,7 @@
   "asiaticoside": {
     "standard_name": "Asiaticoside",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -15618,16 +15581,16 @@
   "aspalathin": {
     "standard_name": "Aspalathin",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
     "dosage_importance": 0.1
   },
   "astaxanthin_geq_3percent": {
-    "standard_name": "Astaxanthin \u2265 3%",
+    "standard_name": "Astaxanthin ≥ 3%",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "phytonutrients",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -15636,7 +15599,7 @@
   "astragalosides": {
     "standard_name": "Astragalosides",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -15645,7 +15608,7 @@
   "aucubin": {
     "standard_name": "Aucubin",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -15654,7 +15617,7 @@
   "bacosides": {
     "standard_name": "Bacosides",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "herbs",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -15663,7 +15626,7 @@
   "beta_glucans": {
     "standard_name": "Beta-Glucans",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "fibers",
     "cui": "C0085239",
     "rxcui": "none",
     "source": "botanical_extract",
@@ -15674,7 +15637,7 @@
   "beta_sitosterol": {
     "standard_name": "Beta-Sitosterol",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -15683,7 +15646,7 @@
   "betalains": {
     "standard_name": "Betalains",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "phytonutrients",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -15692,7 +15655,7 @@
   "betulinic_acid": {
     "standard_name": "Betulinic Acid",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -15701,7 +15664,7 @@
   "bilobalide": {
     "standard_name": "Bilobalide",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -15710,7 +15673,7 @@
   "bisabolol": {
     "standard_name": "Bisabolol",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -15719,7 +15682,7 @@
   "bisdemethoxycurcumin": {
     "standard_name": "Bisdemethoxycurcumin",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "herbs",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -15728,7 +15691,7 @@
   "boswellic_acids": {
     "standard_name": "Boswellic Acids",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -15737,7 +15700,7 @@
   "caffeine": {
     "standard_name": "Caffeine",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "cui": "C0006644",
     "rxcui": "2103",
     "source": "botanical_extract",
@@ -15748,7 +15711,7 @@
   "caffeoyl_derivatives": {
     "standard_name": "Caffeoyl Derivatives",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -15757,7 +15720,7 @@
   "carvacrol": {
     "standard_name": "Carvacrol",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -15766,7 +15729,7 @@
   "casticin": {
     "standard_name": "Casticin",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -15775,7 +15738,7 @@
   "catalpol": {
     "standard_name": "Catalpol",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -15784,7 +15747,7 @@
   "catechins": {
     "standard_name": "Catechins",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "cui": "C0007492",
     "rxcui": "none",
     "source": "botanical_extract",
@@ -15795,7 +15758,7 @@
   "chamazulene": {
     "standard_name": "Chamazulene",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -15804,7 +15767,7 @@
   "charantin": {
     "standard_name": "Charantin",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -15813,7 +15776,7 @@
   "chlorogenic_acids": {
     "standard_name": "Chlorogenic Acids",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -15822,7 +15785,7 @@
   "chlorophyll": {
     "standard_name": "Chlorophyll",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "phytonutrients",
     "cui": "C0008260",
     "rxcui": "none",
     "source": "botanical_extract",
@@ -15833,7 +15796,7 @@
   "cichoric_acid": {
     "standard_name": "Cichoric Acid",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -15842,7 +15805,7 @@
   "cinnamaldehyde": {
     "standard_name": "Cinnamaldehyde",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -15851,7 +15814,7 @@
   "coenzyme_q10": {
     "standard_name": "Coenzyme Q10",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -15861,7 +15824,7 @@
   "cordycepin": {
     "standard_name": "Cordycepin",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -15870,7 +15833,7 @@
   "corosolic_acid": {
     "standard_name": "Corosolic Acid",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -15879,7 +15842,7 @@
   "crocin": {
     "standard_name": "Crocin",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -15888,7 +15851,7 @@
   "curcuminoids": {
     "standard_name": "Curcuminoids",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "herbs",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -15897,7 +15860,7 @@
   "cynarin": {
     "standard_name": "Cynarin",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -15906,7 +15869,7 @@
   "daidzein": {
     "standard_name": "Daidzein",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -15915,7 +15878,7 @@
   "delphinidin": {
     "standard_name": "Delphinidin",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -15924,7 +15887,7 @@
   "demethoxycurcumin": {
     "standard_name": "Demethoxycurcumin",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "herbs",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -15933,7 +15896,7 @@
   "diosgenin": {
     "standard_name": "Diosgenin",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -15942,7 +15905,7 @@
   "ecdysterones": {
     "standard_name": "Ecdysterones",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -15951,7 +15914,7 @@
   "echinacosides": {
     "standard_name": "Echinacosides",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -15960,7 +15923,7 @@
   "eleutherosides": {
     "standard_name": "Eleutherosides",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -15969,7 +15932,7 @@
   "ellagic_acid": {
     "standard_name": "Ellagic Acid",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "cui": "C0013894",
     "rxcui": "none",
     "source": "botanical_extract",
@@ -15980,7 +15943,7 @@
   "ellagitannins": {
     "standard_name": "Ellagitannins",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -15989,7 +15952,7 @@
   "emodin": {
     "standard_name": "Emodin",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -15998,7 +15961,7 @@
   "epigallocatechin_gallate": {
     "standard_name": "Epigallocatechin Gallate",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -16007,7 +15970,7 @@
   "erinacines": {
     "standard_name": "Erinacines",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -16016,7 +15979,7 @@
   "erythrina_alkaloids": {
     "standard_name": "Erythrina Alkaloids",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -16025,7 +15988,7 @@
   "eugenol": {
     "standard_name": "Eugenol",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -16034,7 +15997,7 @@
   "eurycomanone": {
     "standard_name": "Eurycomanone",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -16043,7 +16006,7 @@
   "fatty_acids": {
     "standard_name": "Fatty Acids",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "fatty_acids",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -16052,7 +16015,7 @@
   "ferulic_acid": {
     "standard_name": "Ferulic Acid",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -16061,7 +16024,7 @@
   "fiber": {
     "standard_name": "Fiber",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -16070,7 +16033,7 @@
   "flavone_glycosides": {
     "standard_name": "Flavone Glycosides",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -16079,7 +16042,7 @@
   "flavonoids": {
     "standard_name": "Flavonoids",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "cui": "C0016131",
     "rxcui": "none",
     "source": "botanical_extract",
@@ -16090,7 +16053,7 @@
   "formononetin": {
     "standard_name": "Formononetin",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -16099,7 +16062,7 @@
   "forskolin": {
     "standard_name": "Forskolin",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -16108,7 +16071,7 @@
   "fucoidan": {
     "standard_name": "Fucoidan",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -16117,7 +16080,7 @@
   "galactolipids": {
     "standard_name": "Galactolipids",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -16126,7 +16089,7 @@
   "gallic_acid": {
     "standard_name": "Gallic Acid",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "cui": "C0016979",
     "rxcui": "none",
     "source": "botanical_extract",
@@ -16137,7 +16100,7 @@
   "gallocatechin": {
     "standard_name": "Gallocatechin",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -16146,7 +16109,7 @@
   "ganoderic_acids": {
     "standard_name": "Ganoderic Acids",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -16155,7 +16118,7 @@
   "genistein": {
     "standard_name": "Genistein",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -16164,7 +16127,7 @@
   "gingerols": {
     "standard_name": "Gingerols",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "herbs",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -16173,7 +16136,7 @@
   "ginkgolides": {
     "standard_name": "Ginkgolides",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -16182,7 +16145,7 @@
   "ginsenosides": {
     "standard_name": "Ginsenosides",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "adaptogen",
     "cui": "C0017686",
     "rxcui": "none",
     "source": "botanical_extract",
@@ -16193,7 +16156,7 @@
   "glucosinolates": {
     "standard_name": "Glucosinolates",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -16202,7 +16165,7 @@
   "glycitein": {
     "standard_name": "Glycitein",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -16211,7 +16174,7 @@
   "glycyrrhizic_acid": {
     "standard_name": "Glycyrrhizic Acid",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -16220,7 +16183,7 @@
   "glycyrrhizin": {
     "standard_name": "Glycyrrhizin",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "cui": "C0061996",
     "rxcui": "none",
     "source": "botanical_extract",
@@ -16231,7 +16194,7 @@
   "gymnemic_acids": {
     "standard_name": "Gymnemic Acids",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -16240,7 +16203,7 @@
   "gypenosides": {
     "standard_name": "Gypenosides",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -16249,7 +16212,7 @@
   "harpagoside": {
     "standard_name": "Harpagoside",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -16258,7 +16221,7 @@
   "hericenones": {
     "standard_name": "Hericenones",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -16267,7 +16230,7 @@
   "honokiol": {
     "standard_name": "Honokiol",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -16276,7 +16239,7 @@
   "humulone": {
     "standard_name": "Humulone",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -16285,7 +16248,7 @@
   "huperzine_a": {
     "standard_name": "Huperzine A",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -16294,7 +16257,7 @@
   "hydrastine": {
     "standard_name": "Hydrastine",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -16303,7 +16266,7 @@
   "hydroxytyrosol": {
     "standard_name": "Hydroxytyrosol",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -16312,7 +16275,7 @@
   "hyperforin": {
     "standard_name": "Hyperforin",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "herbs",
     "cui": "C0250248",
     "rxcui": "none",
     "source": "botanical_extract",
@@ -16323,7 +16286,7 @@
   "hypericin": {
     "standard_name": "Hypericin",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "herbs",
     "cui": "C0000521",
     "rxcui": "none",
     "source": "botanical_extract",
@@ -16334,7 +16297,7 @@
   "icariin": {
     "standard_name": "Icariin",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -16343,7 +16306,7 @@
   "indicaxanthin": {
     "standard_name": "Indicaxanthin",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -16352,7 +16315,7 @@
   "inulin": {
     "standard_name": "Inulin",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "fibers",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -16361,7 +16324,7 @@
   "isoflavones": {
     "standard_name": "Isoflavones",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "cui": "C0049620",
     "rxcui": "none",
     "source": "botanical_extract",
@@ -16372,7 +16335,7 @@
   "isopetasin": {
     "standard_name": "Isopetasin",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -16381,7 +16344,7 @@
   "isothiocyanates": {
     "standard_name": "Isothiocyanates",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -16390,7 +16353,7 @@
   "kavalactones": {
     "standard_name": "Kavalactones",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -16399,7 +16362,7 @@
   "ketosteroids": {
     "standard_name": "Ketosteroids",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -16408,7 +16371,7 @@
   "lauric_acid": {
     "standard_name": "Lauric Acid",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -16417,7 +16380,7 @@
   "lectins": {
     "standard_name": "Lectins",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -16426,7 +16389,7 @@
   "lignans": {
     "standard_name": "Lignans",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "cui": "C0064971",
     "rxcui": "none",
     "source": "botanical_extract",
@@ -16437,7 +16400,7 @@
   "ligustilide": {
     "standard_name": "Ligustilide",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -16446,7 +16409,7 @@
   "linalool": {
     "standard_name": "Linalool",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -16455,7 +16418,7 @@
   "linalyl_acetate": {
     "standard_name": "Linalyl Acetate",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -16464,7 +16427,7 @@
   "linoleic_acid": {
     "standard_name": "Linoleic Acid",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "fatty_acids",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -16473,7 +16436,7 @@
   "liquiritin": {
     "standard_name": "Liquiritin",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -16482,7 +16445,7 @@
   "luteolin": {
     "standard_name": "Luteolin",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -16491,7 +16454,7 @@
   "macaenes": {
     "standard_name": "Macaenes",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -16500,7 +16463,7 @@
   "macamides": {
     "standard_name": "Macamides",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -16509,7 +16472,7 @@
   "madecassoside": {
     "standard_name": "Madecassoside",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -16518,7 +16481,7 @@
   "magnolol": {
     "standard_name": "Magnolol",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -16527,7 +16490,7 @@
   "malvin": {
     "standard_name": "Malvin",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -16536,7 +16499,7 @@
   "menthol": {
     "standard_name": "Menthol",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -16545,7 +16508,7 @@
   "mesembrine": {
     "standard_name": "Mesembrine",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -16554,7 +16517,7 @@
   "monacolin_k": {
     "standard_name": "Monacolin K",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -16563,7 +16526,7 @@
   "mucilage": {
     "standard_name": "Mucilage",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -16572,7 +16535,7 @@
   "naringin": {
     "standard_name": "Naringin",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -16581,7 +16544,7 @@
   "nigellone": {
     "standard_name": "Nigellone",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -16590,7 +16553,7 @@
   "oleuropein": {
     "standard_name": "Oleuropein",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "cui": "C0066503",
     "rxcui": "none",
     "source": "botanical_extract",
@@ -16601,7 +16564,7 @@
   "oligomeric_procyanidins": {
     "standard_name": "Oligomeric Procyanidins",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -16610,7 +16573,7 @@
   "oxindole_alkaloids": {
     "standard_name": "Oxindole Alkaloids",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -16619,7 +16582,7 @@
   "parthenolide": {
     "standard_name": "Parthenolide",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "herbs",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -16628,7 +16591,7 @@
   "petasin": {
     "standard_name": "Petasin",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -16637,7 +16600,7 @@
   "phenolic_acids": {
     "standard_name": "Phenolic Acids",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -16646,7 +16609,7 @@
   "phenolic_compounds": {
     "standard_name": "Phenolic Compounds",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -16655,7 +16618,7 @@
   "phenolics": {
     "standard_name": "Phenolics",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -16664,7 +16627,7 @@
   "phycocyanin": {
     "standard_name": "Phycocyanin",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "cui": "C0031993",
     "rxcui": "none",
     "source": "botanical_extract",
@@ -16675,7 +16638,7 @@
   "phytosterols": {
     "standard_name": "Phytosterols",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -16684,7 +16647,7 @@
   "picrocrocin": {
     "standard_name": "Picrocrocin",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -16693,7 +16656,7 @@
   "piperine": {
     "standard_name": "Piperine",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "cui": "C0071342",
     "rxcui": "none",
     "source": "botanical_extract",
@@ -16704,7 +16667,7 @@
   "polypeptide_p": {
     "standard_name": "Polypeptide-P",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -16713,7 +16676,7 @@
   "polyphenols": {
     "standard_name": "Polyphenols",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "cui": "C0071627",
     "rxcui": "none",
     "source": "botanical_extract",
@@ -16724,7 +16687,7 @@
   "polysaccharides": {
     "standard_name": "Polysaccharides",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "fibers",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -16733,7 +16696,7 @@
   "proanthocyanidins": {
     "standard_name": "Proanthocyanidins",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -16742,7 +16705,7 @@
   "procyanidins": {
     "standard_name": "Procyanidins",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -16751,7 +16714,7 @@
   "protein": {
     "standard_name": "Protein",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -16760,7 +16723,7 @@
   "protodioscin": {
     "standard_name": "Protodioscin",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -16769,7 +16732,7 @@
   "puerarin": {
     "standard_name": "Puerarin",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -16778,7 +16741,7 @@
   "punicalagins": {
     "standard_name": "Punicalagins",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -16787,7 +16750,7 @@
   "quassinoids": {
     "standard_name": "Quassinoids",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -16796,7 +16759,7 @@
   "rosavin": {
     "standard_name": "Rosavin",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -16805,7 +16768,7 @@
   "rosavins": {
     "standard_name": "Rosavins",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "adaptogen",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -16814,7 +16777,7 @@
   "rosmarinic_acid": {
     "standard_name": "Rosmarinic Acid",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "cui": "C0073844",
     "rxcui": "none",
     "source": "botanical_extract",
@@ -16825,7 +16788,7 @@
   "ruscogenin": {
     "standard_name": "Ruscogenin",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -16834,7 +16797,7 @@
   "safranal": {
     "standard_name": "Safranal",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -16843,7 +16806,7 @@
   "salicin": {
     "standard_name": "Salicin",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "herbs",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -16852,7 +16815,7 @@
   "salidroside": {
     "standard_name": "Salidroside",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "adaptogen",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -16861,7 +16824,7 @@
   "salvianolic_acid_b": {
     "standard_name": "Salvianolic Acid B",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -16870,7 +16833,7 @@
   "saponins": {
     "standard_name": "Saponins",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "cui": "C0036189",
     "rxcui": "none",
     "source": "botanical_extract",
@@ -16881,7 +16844,7 @@
   "schisandrin": {
     "standard_name": "Schisandrin",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "adaptogen",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -16890,7 +16853,7 @@
   "schisandrins": {
     "standard_name": "Schisandrins",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "adaptogen",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -16899,7 +16862,7 @@
   "sesamin": {
     "standard_name": "Sesamin",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -16908,7 +16871,7 @@
   "sesamolin": {
     "standard_name": "Sesamolin",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -16917,7 +16880,7 @@
   "sesquiterpenes": {
     "standard_name": "Sesquiterpenes",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -16926,7 +16889,7 @@
   "shatavarin_iv": {
     "standard_name": "Shatavarin Iv",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -16935,7 +16898,7 @@
   "shogaols": {
     "standard_name": "Shogaols",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "herbs",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -16944,7 +16907,7 @@
   "silica": {
     "standard_name": "Silica",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "minerals",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -16953,7 +16916,7 @@
   "silybin": {
     "standard_name": "Silybin",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -16962,7 +16925,7 @@
   "silychristin": {
     "standard_name": "Silychristin",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -16971,7 +16934,7 @@
   "silydianin": {
     "standard_name": "Silydianin",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -16980,7 +16943,7 @@
   "silymarin": {
     "standard_name": "Silymarin",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "herbs",
     "cui": "C0074297",
     "rxcui": "none",
     "source": "botanical_extract",
@@ -16991,7 +16954,7 @@
   "steroidal_saponins": {
     "standard_name": "Steroidal Saponins",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -17000,7 +16963,7 @@
   "sterols": {
     "standard_name": "Sterols",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -17009,7 +16972,7 @@
   "stilbenes": {
     "standard_name": "Stilbenes",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -17018,7 +16981,7 @@
   "synephrine": {
     "standard_name": "Synephrine",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -17027,7 +16990,7 @@
   "tannins": {
     "standard_name": "Tannins",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "cui": "C0039348",
     "rxcui": "none",
     "source": "botanical_extract",
@@ -17038,7 +17001,7 @@
   "tanshinones": {
     "standard_name": "Tanshinones",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -17047,7 +17010,7 @@
   "taraxasterol": {
     "standard_name": "Taraxasterol",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -17056,7 +17019,7 @@
   "terpene_lactones": {
     "standard_name": "Terpene Lactones",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -17065,7 +17028,7 @@
   "theobromine": {
     "standard_name": "Theobromine",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -17074,7 +17037,7 @@
   "thymol": {
     "standard_name": "Thymol",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -17083,7 +17046,7 @@
   "thymoquinone": {
     "standard_name": "Thymoquinone",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -17092,7 +17055,7 @@
   "total_carotenoids": {
     "standard_name": "Total Carotenoids",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "phytonutrients",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -17101,7 +17064,7 @@
   "triterpene_glycosides": {
     "standard_name": "Triterpene Glycosides",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -17110,7 +17073,7 @@
   "triterpenes": {
     "standard_name": "Triterpenes",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -17119,7 +17082,7 @@
   "triterpenoid_saponins": {
     "standard_name": "Triterpenoid Saponins",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -17128,7 +17091,7 @@
   "triterpenoids": {
     "standard_name": "Triterpenoids",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -17137,7 +17100,7 @@
   "tyrosol": {
     "standard_name": "Tyrosol",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -17146,7 +17109,7 @@
   "ursolic_acid": {
     "standard_name": "Ursolic Acid",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "cui": "C0077718",
     "rxcui": "none",
     "source": "botanical_extract",
@@ -17157,7 +17120,7 @@
   "valerenic_acid": {
     "standard_name": "Valerenic Acid",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "herbs",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -17166,7 +17129,7 @@
   "valerenic_acids": {
     "standard_name": "Valerenic Acids",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "herbs",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -17175,7 +17138,7 @@
   "verbascoside": {
     "standard_name": "Verbascoside",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -17184,7 +17147,7 @@
   "vicine": {
     "standard_name": "Vicine",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -17193,7 +17156,7 @@
   "viscotoxin": {
     "standard_name": "Viscotoxin",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -17202,7 +17165,7 @@
   "vitexin": {
     "standard_name": "Vitexin",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -17211,7 +17174,7 @@
   "volatile_oils": {
     "standard_name": "Volatile Oils",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -17220,7 +17183,7 @@
   "withaferin_a": {
     "standard_name": "Withaferin A",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "cui": "C0136187",
     "rxcui": "none",
     "source": "botanical_extract",
@@ -17231,7 +17194,7 @@
   "withanolide_a": {
     "standard_name": "Withanolide A",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "adaptogen",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -17240,7 +17203,7 @@
   "withanolides": {
     "standard_name": "Withanolides",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "adaptogen",
     "cui": "C1313866",
     "rxcui": "none",
     "source": "botanical_extract",
@@ -17251,7 +17214,7 @@
   "xanthines": {
     "standard_name": "Xanthines",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -17260,7 +17223,7 @@
   "xanthohumol": {
     "standard_name": "Xanthohumol",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -17269,7 +17232,7 @@
   "yohimbine": {
     "standard_name": "Yohimbine",
     "risk_level": "none",
-    "category": "standardization_marker",
+    "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Standardization marker for botanical extracts",
@@ -17316,10 +17279,10 @@
         "notes": "Direct NAD+ precursor, may have bioavailability challenges.",
         "aliases": [
           "nmn",
-          "\u03b2-nmn",
+          "β-nmn",
           "nad+ precursor",
           "nmn supplement",
-          "\u03b2-nmn supplement",
+          "β-nmn supplement",
           "nad+ precursor supplement"
         ],
         "dosage_importance": 1.0
@@ -17534,12 +17497,12 @@
         "absorption": "good",
         "notes": "Microencapsulated NADH for enhanced stability. Alternative stabilized form to Enada.",
         "aliases": [
-          "panmol nadh\u03bcicro",
+          "panmol nadhμicro",
           "panmol nadh micro",
           "microencapsulated nadh",
           "nadh micro",
           "panmol",
-          "panmol nadh\u03bcicro supplement",
+          "panmol nadhμicro supplement",
           "panmol nadh micro supplement",
           "microencapsulated nadh supplement",
           "nadh micro supplement",
@@ -17750,12 +17713,12 @@
         "notes": "Neurosteroid precursor. Supports cognitive function and hormone balance.",
         "aliases": [
           "pregnenolone",
-          "pregn-5-en-3\u03b2-ol-20-one",
-          "3\u03b2-hydroxypregn-5-en-20-one",
+          "pregn-5-en-3β-ol-20-one",
+          "3β-hydroxypregn-5-en-20-one",
           "pregnenolone supplement",
           "pregnenolone supplement",
-          "pregn-5-en-3\u03b2-ol-20-one supplement",
-          "3\u03b2-hydroxypregn-5-en-20-one supplement"
+          "pregn-5-en-3β-ol-20-one supplement",
+          "3β-hydroxypregn-5-en-20-one supplement"
         ],
         "dosage_importance": 1.0
       },
@@ -17834,7 +17797,8 @@
         ],
         "dosage_importance": 1.0
       }
-    }
+    },
+    "category": "enzymes"
   },
   "dicalcium_phosphate": {
     "standard_name": "Di-Calcium Phosphate",
@@ -17857,7 +17821,8 @@
         ],
         "dosage_importance": 1.0
       }
-    }
+    },
+    "category": "minerals"
   },
   "methionine": {
     "standard_name": "L-Methionine",
@@ -17878,7 +17843,8 @@
         ],
         "dosage_importance": 1.0
       }
-    }
+    },
+    "category": "amino_acids"
   },
   "cordycepsprime": {
     "standard_name": "CordycepsPrime",
@@ -18002,5 +17968,822 @@
         "dosage_importance": 1.4
       }
     }
+  },
+  "pantothenic_acid": {
+    "standard_name": "Pantothenic Acid",
+    "category": "vitamins",
+    "cui": "C0030988",
+    "rxcui": "7916",
+    "forms": {
+      "calcium pantothenate": {
+        "bio_score": 11,
+        "natural": false,
+        "absorption": "good (~85%)",
+        "notes": "Common synthetic form; stable and well-absorbed",
+        "aliases": [
+          "calcium pantothenate",
+          "pantothenic acid calcium",
+          "vitamin b5",
+          "d-pantothenic acid calcium salt"
+        ]
+      },
+      "pantethine": {
+        "bio_score": 15,
+        "natural": true,
+        "absorption": "excellent (~95%)",
+        "notes": "Active coenzyme form; superior bioavailability; supports cholesterol metabolism",
+        "aliases": [
+          "pantethine",
+          "pantetheine",
+          "coenzyme a precursor"
+        ]
+      },
+      "d-pantothenic acid": {
+        "bio_score": 11,
+        "natural": true,
+        "absorption": "good (~85%)",
+        "notes": "Natural form; alcohol form of vitamin B5",
+        "aliases": [
+          "d-pantothenic acid",
+          "pantothenic acid",
+          "pantothenol"
+        ]
+      }
+    }
+  },
+  "vitamin_k1": {
+    "standard_name": "Vitamin K1",
+    "category": "vitamins",
+    "cui": "C0031880",
+    "rxcui": "11256",
+    "forms": {
+      "phylloquinone": {
+        "bio_score": 9,
+        "natural": true,
+        "absorption": "moderate (~60%)",
+        "notes": "Plant-derived K1; primarily for blood clotting",
+        "aliases": [
+          "phylloquinone",
+          "phytonadione",
+          "vitamin k1",
+          "k1"
+        ]
+      },
+      "micellized k1": {
+        "bio_score": 13,
+        "natural": true,
+        "absorption": "excellent (~90%)",
+        "notes": "Micellized for enhanced absorption",
+        "aliases": [
+          "micellized vitamin k1",
+          "micellized phylloquinone"
+        ]
+      }
+    }
+  },
+  "glycine": {
+    "standard_name": "Glycine",
+    "category": "amino_acids",
+    "cui": "C0017890",
+    "rxcui": "4820",
+    "forms": {
+      "glycine powder": {
+        "bio_score": 13,
+        "natural": true,
+        "absorption": "excellent (~95%)",
+        "notes": "Simplest amino acid; supports sleep, collagen synthesis, and nervous system",
+        "aliases": [
+          "glycine",
+          "l-glycine",
+          "glycine powder",
+          "aminoacetic acid"
+        ]
+      },
+      "magnesium glycinate": {
+        "bio_score": 15,
+        "natural": true,
+        "absorption": "excellent (~95%)",
+        "notes": "Chelated with magnesium; dual benefits for sleep and relaxation",
+        "aliases": [
+          "magnesium glycinate",
+          "magnesium bisglycinate",
+          "glycine magnesium chelate"
+        ]
+      }
+    }
+  },
+  "beta_alanine": {
+    "standard_name": "Beta-Alanine",
+    "category": "amino_acids",
+    "cui": "C0004511",
+    "rxcui": "11062",
+    "forms": {
+      "beta-alanine powder": {
+        "bio_score": 13,
+        "natural": false,
+        "absorption": "excellent (~95%)",
+        "notes": "Precursor to carnosine; enhances muscular endurance; may cause tingling (paresthesia)",
+        "aliases": [
+          "beta-alanine",
+          "β-alanine",
+          "beta alanine",
+          "3-aminopropanoic acid"
+        ]
+      },
+      "carnosyn": {
+        "bio_score": 15,
+        "natural": false,
+        "absorption": "excellent (~95%)",
+        "notes": "Patented form; clinically tested; sustained-release available",
+        "aliases": [
+          "carnosyn",
+          "carnosyn beta-alanine",
+          "sustained-release beta-alanine"
+        ]
+      }
+    }
+  },
+  "5_htp": {
+    "standard_name": "5-HTP",
+    "category": "amino_acid_metabolites",
+    "cui": "C0063134",
+    "rxcui": "258326",
+    "forms": {
+      "5-htp extract": {
+        "bio_score": 11,
+        "natural": true,
+        "absorption": "good (~70%)",
+        "notes": "From Griffonia simplicifolia seeds; precursor to serotonin; supports mood and sleep",
+        "aliases": [
+          "5-htp",
+          "5-hydroxytryptophan",
+          "5-htp extract",
+          "oxitriptan"
+        ]
+      }
+    }
+  },
+  "acetyl_l_carnitine": {
+    "standard_name": "Acetyl-L-Carnitine",
+    "category": "amino_acid_metabolites",
+    "cui": "C0001040",
+    "rxcui": "40799",
+    "forms": {
+      "alcar": {
+        "bio_score": 15,
+        "natural": false,
+        "absorption": "excellent (~95%)",
+        "notes": "Crosses blood-brain barrier; supports cognitive function and energy; acetylated form of L-carnitine",
+        "aliases": [
+          "alcar",
+          "acetyl-l-carnitine",
+          "acetylcarnitine",
+          "acetyl l carnitine",
+          "levacecarnine"
+        ]
+      }
+    }
+  },
+  "nac": {
+    "standard_name": "N-Acetyl Cysteine",
+    "category": "amino_acid_antioxidants",
+    "cui": "C0001047",
+    "rxcui": "3821",
+    "forms": {
+      "nac powder": {
+        "bio_score": 15,
+        "natural": false,
+        "absorption": "excellent (~90%)",
+        "notes": "Precursor to glutathione; powerful antioxidant; supports liver detoxification and respiratory health",
+        "aliases": [
+          "nac",
+          "n-acetyl cysteine",
+          "n-acetylcysteine",
+          "n acetyl l cysteine",
+          "acetylcysteine"
+        ]
+      },
+      "nac sustained-release": {
+        "bio_score": 15,
+        "natural": false,
+        "absorption": "excellent (~90%)",
+        "notes": "Sustained-release formulation for extended benefits",
+        "aliases": [
+          "nac sustained release",
+          "nac sr",
+          "time-release nac"
+        ]
+      }
+    }
+  },
+  "ginger": {
+    "standard_name": "Ginger",
+    "category": "herbs",
+    "cui": "C0162751",
+    "rxcui": "258322",
+    "forms": {
+      "ginger root powder": {
+        "bio_score": 9,
+        "natural": true,
+        "absorption": "good (~70%)",
+        "notes": "Whole root powder; supports digestion and anti-inflammation",
+        "aliases": [
+          "ginger root",
+          "ginger powder",
+          "zingiber officinale",
+          "ginger root powder"
+        ]
+      },
+      "ginger extract standardized": {
+        "bio_score": 13,
+        "natural": true,
+        "absorption": "excellent (~85%)",
+        "notes": "Standardized to gingerols (5-10%); enhanced potency",
+        "aliases": [
+          "ginger extract",
+          "standardized ginger",
+          "ginger 5% gingerols",
+          "ginger 10% gingerols"
+        ]
+      },
+      "ginger supercritical extract": {
+        "bio_score": 15,
+        "natural": true,
+        "absorption": "excellent (~90%)",
+        "notes": "CO2 extraction; preserves volatile compounds and gingerols",
+        "aliases": [
+          "supercritical ginger",
+          "co2 ginger extract",
+          "ginger supercritical co2"
+        ]
+      }
+    }
+  },
+  "lions_mane": {
+    "standard_name": "Lion's Mane",
+    "category": "herbs",
+    "cui": "C1005019",
+    "rxcui": "none",
+    "forms": {
+      "lions mane fruiting body": {
+        "bio_score": 11,
+        "natural": true,
+        "absorption": "good (~75%)",
+        "notes": "Whole fruiting body; supports cognitive function and nerve growth factor",
+        "aliases": [
+          "lion's mane mushroom",
+          "hericium erinaceus",
+          "lions mane fruiting body",
+          "yamabushitake"
+        ]
+      },
+      "lions mane standardized extract": {
+        "bio_score": 15,
+        "natural": true,
+        "absorption": "excellent (~90%)",
+        "notes": "Standardized to 30% polysaccharides and beta-glucans; clinically researched",
+        "aliases": [
+          "standardized lion's mane",
+          "lion's mane 30% polysaccharides",
+          "lion's mane extract"
+        ]
+      }
+    }
+  },
+  "bacopa": {
+    "standard_name": "Bacopa Monnieri",
+    "category": "herbs",
+    "cui": "C1100875",
+    "rxcui": "none",
+    "forms": {
+      "bacosides 45%": {
+        "bio_score": 13,
+        "natural": true,
+        "absorption": "good (~80%)",
+        "notes": "Standardized to 45% bacosides; supports memory and cognitive function",
+        "aliases": [
+          "bacopa monnieri",
+          "bacopa 45% bacosides",
+          "bacopa extract",
+          "brahmi"
+        ]
+      },
+      "bacosides 50% (bacognize)": {
+        "bio_score": 15,
+        "natural": true,
+        "absorption": "excellent (~85%)",
+        "notes": "Premium branded form; clinically studied; 50% bacosides",
+        "aliases": [
+          "bacognize",
+          "bacopa bacognize",
+          "bacopa 50% bacosides"
+        ]
+      }
+    }
+  },
+  "reishi": {
+    "standard_name": "Reishi",
+    "category": "herbs",
+    "cui": "C0771755",
+    "rxcui": "none",
+    "forms": {
+      "reishi fruiting body": {
+        "bio_score": 9,
+        "natural": true,
+        "absorption": "moderate (~65%)",
+        "notes": "Whole fruiting body powder; supports immune function and stress adaptation",
+        "aliases": [
+          "reishi mushroom",
+          "ganoderma lucidum",
+          "reishi powder",
+          "lingzhi"
+        ]
+      },
+      "reishi standardized extract": {
+        "bio_score": 13,
+        "natural": true,
+        "absorption": "excellent (~85%)",
+        "notes": "Standardized to 30% polysaccharides and triterpenes",
+        "aliases": [
+          "standardized reishi",
+          "reishi extract",
+          "reishi 30% polysaccharides"
+        ]
+      }
+    }
+  },
+  "cordyceps": {
+    "standard_name": "Cordyceps",
+    "category": "adaptogen",
+    "cui": "C0453133",
+    "rxcui": "none",
+    "forms": {
+      "cordyceps militaris": {
+        "bio_score": 13,
+        "natural": true,
+        "absorption": "good (~80%)",
+        "notes": "Cultivated Cordyceps militaris; high in cordycepin; supports energy and athletic performance",
+        "aliases": [
+          "cordyceps militaris",
+          "cordyceps mushroom",
+          "cordyceps extract"
+        ]
+      },
+      "cordyceps sinensis mycelium": {
+        "bio_score": 9,
+        "natural": true,
+        "absorption": "moderate (~70%)",
+        "notes": "Mycelium-based; traditional form but lower bioactives than fruiting body",
+        "aliases": [
+          "cordyceps sinensis",
+          "cordyceps mycelium",
+          "cs-4"
+        ]
+      }
+    }
+  },
+  "maca": {
+    "standard_name": "Maca",
+    "category": "adaptogen",
+    "cui": "C0950670",
+    "rxcui": "none",
+    "forms": {
+      "gelatinized maca": {
+        "bio_score": 13,
+        "natural": true,
+        "absorption": "excellent (~85%)",
+        "notes": "Pre-cooked to remove starches; easier to digest; supports energy and hormonal balance",
+        "aliases": [
+          "gelatinized maca",
+          "maca gelatinizada",
+          "lepidium meyenii gelatinized"
+        ]
+      },
+      "maca root powder": {
+        "bio_score": 9,
+        "natural": true,
+        "absorption": "moderate (~65%)",
+        "notes": "Raw root powder; full spectrum; may cause digestive upset in sensitive individuals",
+        "aliases": [
+          "maca powder",
+          "maca root",
+          "peruvian maca",
+          "lepidium meyenii"
+        ]
+      }
+    }
+  },
+  "mct_oil": {
+    "standard_name": "MCT Oil",
+    "category": "fatty_acids",
+    "cui": "C0724624",
+    "rxcui": "none",
+    "forms": {
+      "mct oil c8/c10": {
+        "bio_score": 13,
+        "natural": true,
+        "absorption": "excellent (~95%)",
+        "notes": "Medium-chain triglycerides; primarily C8 (caprylic) and C10 (capric) acids; rapid energy source",
+        "aliases": [
+          "mct oil",
+          "medium chain triglycerides",
+          "mct oil c8 c10",
+          "fractionated coconut oil"
+        ]
+      },
+      "c8 mct oil (pure caprylic)": {
+        "bio_score": 15,
+        "natural": true,
+        "absorption": "excellent (~98%)",
+        "notes": "Pure C8 (caprylic acid); fastest conversion to ketones; premium form",
+        "aliases": [
+          "c8 mct",
+          "pure c8",
+          "caprylic acid triglyceride",
+          "octanoic acid"
+        ]
+      }
+    }
+  },
+  "cla": {
+    "standard_name": "CLA",
+    "category": "fatty_acids",
+    "cui": "C0378557",
+    "rxcui": "none",
+    "forms": {
+      "cla 80%": {
+        "bio_score": 11,
+        "natural": false,
+        "absorption": "good (~75%)",
+        "notes": "Conjugated linoleic acid; 80% active isomers; supports body composition",
+        "aliases": [
+          "cla",
+          "conjugated linoleic acid",
+          "cla 80%",
+          "cla safflower oil"
+        ]
+      },
+      "clarinol": {
+        "bio_score": 13,
+        "natural": false,
+        "absorption": "excellent (~85%)",
+        "notes": "Patented CLA form; clinically studied; 80% CLA with optimal c9,t11 and t10,c12 ratio",
+        "aliases": [
+          "clarinol",
+          "clarinol cla",
+          "patented cla"
+        ]
+      }
+    }
+  },
+  "psyllium": {
+    "standard_name": "Psyllium",
+    "category": "fibers",
+    "cui": "C0453077",
+    "rxcui": "8640",
+    "forms": {
+      "psyllium husk powder": {
+        "bio_score": 11,
+        "natural": true,
+        "absorption": "not applicable (fiber)",
+        "notes": "Soluble fiber; supports digestive health and cholesterol management",
+        "aliases": [
+          "psyllium husk",
+          "psyllium fiber",
+          "plantago ovata",
+          "ispaghula"
+        ]
+      },
+      "psyllium seed": {
+        "bio_score": 9,
+        "natural": true,
+        "absorption": "not applicable (fiber)",
+        "notes": "Whole seeds; less refined than husk powder",
+        "aliases": [
+          "psyllium seed",
+          "psyllium whole seed",
+          "plantago seed"
+        ]
+      }
+    }
+  },
+  "beta_glucan": {
+    "standard_name": "Beta-Glucan",
+    "category": "fibers",
+    "cui": "C0053487",
+    "rxcui": "none",
+    "forms": {
+      "beta-glucan from oats": {
+        "bio_score": 11,
+        "natural": true,
+        "absorption": "not applicable (fiber)",
+        "notes": "Soluble fiber from oats; supports heart health and immune function",
+        "aliases": [
+          "oat beta-glucan",
+          "beta glucan oat",
+          "oat fiber"
+        ]
+      },
+      "beta-glucan from mushrooms": {
+        "bio_score": 13,
+        "natural": true,
+        "absorption": "moderate (~70%)",
+        "notes": "From medicinal mushrooms; potent immune modulator; 1,3/1,6-beta-glucan",
+        "aliases": [
+          "mushroom beta-glucan",
+          "beta-glucan 1,3/1,6",
+          "immune beta-glucan"
+        ]
+      },
+      "beta-glucan from yeast": {
+        "bio_score": 13,
+        "natural": true,
+        "absorption": "good (~75%)",
+        "notes": "From baker's yeast; clinically studied for immune support",
+        "aliases": [
+          "yeast beta-glucan",
+          "wellmune",
+          "beta-glucan yeast"
+        ]
+      }
+    }
+  },
+  "lactobacillus_acidophilus": {
+    "standard_name": "Lactobacillus Acidophilus",
+    "category": "probiotics",
+    "cui": "C0022939",
+    "rxcui": "none",
+    "forms": {
+      "lactobacillus acidophilus la-14": {
+        "bio_score": 13,
+        "natural": true,
+        "absorption": "high colonization (~80%)",
+        "notes": "Clinically studied strain; supports digestive health and vaginal flora",
+        "aliases": [
+          "l. acidophilus",
+          "lactobacillus acidophilus",
+          "la-14",
+          "acidophilus"
+        ]
+      },
+      "lactobacillus acidophilus ncfm": {
+        "bio_score": 15,
+        "natural": true,
+        "absorption": "excellent colonization (~90%)",
+        "notes": "Patented strain; extensively researched; supports immune function and gut barrier",
+        "aliases": [
+          "ncfm",
+          "l. acidophilus ncfm",
+          "acidophilus ncfm"
+        ]
+      }
+    }
+  },
+  "bifidobacterium_lactis": {
+    "standard_name": "Bifidobacterium Lactis",
+    "category": "probiotics",
+    "cui": "C0314974",
+    "rxcui": "none",
+    "forms": {
+      "bifidobacterium lactis hn019": {
+        "bio_score": 15,
+        "natural": true,
+        "absorption": "excellent colonization (~90%)",
+        "notes": "Clinically proven strain; supports immune function and digestive transit time",
+        "aliases": [
+          "b. lactis hn019",
+          "hn019",
+          "bifidobacterium lactis",
+          "bifido hn019"
+        ]
+      },
+      "bifidobacterium lactis bl-04": {
+        "bio_score": 13,
+        "natural": true,
+        "absorption": "high colonization (~85%)",
+        "notes": "Supports respiratory health and immune function",
+        "aliases": [
+          "b. lactis bl-04",
+          "bl-04",
+          "bifido bl-04"
+        ]
+      }
+    }
+  },
+  "lactobacillus_rhamnosus": {
+    "standard_name": "Lactobacillus Rhamnosus",
+    "category": "probiotics",
+    "cui": "C0317597",
+    "rxcui": "none",
+    "forms": {
+      "lactobacillus rhamnosus gg": {
+        "bio_score": 15,
+        "natural": true,
+        "absorption": "excellent colonization (~95%)",
+        "notes": "Most researched probiotic strain; supports digestive health, immune function, and skin health",
+        "aliases": [
+          "lgg",
+          "l. rhamnosus gg",
+          "lactobacillus gg",
+          "culturelle"
+        ]
+      },
+      "lactobacillus rhamnosus hn001": {
+        "bio_score": 13,
+        "natural": true,
+        "absorption": "high colonization (~85%)",
+        "notes": "Supports immune function and mood; clinically studied for pregnancy",
+        "aliases": [
+          "l. rhamnosus hn001",
+          "hn001",
+          "lr hn001"
+        ]
+      }
+    }
+  },
+  "lactobacillus_plantarum": {
+    "standard_name": "Lactobacillus Plantarum",
+    "category": "probiotics",
+    "cui": "C0022938",
+    "rxcui": "none",
+    "forms": {
+      "lactobacillus plantarum lp299v": {
+        "bio_score": 15,
+        "natural": true,
+        "absorption": "excellent colonization (~90%)",
+        "notes": "Patented strain; clinically proven for IBS and iron absorption",
+        "aliases": [
+          "lp299v",
+          "l. plantarum 299v",
+          "plantarum 299v"
+        ]
+      },
+      "lactobacillus plantarum dr7": {
+        "bio_score": 13,
+        "natural": true,
+        "absorption": "high colonization (~85%)",
+        "notes": "Supports immune function and cognitive health",
+        "aliases": [
+          "l. plantarum dr7",
+          "dr7",
+          "plantarum dr7"
+        ]
+      }
+    }
+  },
+  "bifidobacterium_longum": {
+    "standard_name": "Bifidobacterium Longum",
+    "category": "probiotics",
+    "cui": "C0314980",
+    "rxcui": "none",
+    "forms": {
+      "bifidobacterium longum bb536": {
+        "bio_score": 15,
+        "natural": true,
+        "absorption": "excellent colonization (~90%)",
+        "notes": "Extensively researched; supports immune function and reduces inflammation",
+        "aliases": [
+          "b. longum bb536",
+          "bb536",
+          "bifido bb536"
+        ]
+      },
+      "bifidobacterium longum 35624": {
+        "bio_score": 15,
+        "natural": true,
+        "absorption": "excellent colonization (~90%)",
+        "notes": "Clinically proven for IBS; supports gut-brain axis",
+        "aliases": [
+          "b. longum 35624",
+          "35624",
+          "align probiotic"
+        ]
+      }
+    }
+  },
+  "lactobacillus_casei": {
+    "standard_name": "Lactobacillus Casei",
+    "category": "probiotics",
+    "cui": "C0022934",
+    "rxcui": "none",
+    "forms": {
+      "lactobacillus casei lc-11": {
+        "bio_score": 13,
+        "natural": true,
+        "absorption": "high colonization (~80%)",
+        "notes": "Supports immune function and digestive health",
+        "aliases": [
+          "l. casei lc-11",
+          "lc-11",
+          "casei lc11"
+        ]
+      },
+      "lactobacillus casei shirota": {
+        "bio_score": 13,
+        "natural": true,
+        "absorption": "high colonization (~85%)",
+        "notes": "Original Yakult strain; supports digestive and immune health",
+        "aliases": [
+          "l. casei shirota",
+          "shirota strain",
+          "yakult"
+        ]
+      }
+    }
+  },
+  "bifidobacterium_bifidum": {
+    "standard_name": "Bifidobacterium Bifidum",
+    "category": "probiotics",
+    "cui": "C0314975",
+    "rxcui": "none",
+    "forms": {
+      "bifidobacterium bifidum bb-06": {
+        "bio_score": 13,
+        "natural": true,
+        "absorption": "high colonization (~80%)",
+        "notes": "Supports digestive health and immune function",
+        "aliases": [
+          "b. bifidum bb-06",
+          "bb-06",
+          "bifido bb06"
+        ]
+      },
+      "bifidobacterium bifidum r0071": {
+        "bio_score": 13,
+        "natural": true,
+        "absorption": "high colonization (~85%)",
+        "notes": "Supports gut barrier function and reduces inflammation",
+        "aliases": [
+          "b. bifidum r0071",
+          "r0071",
+          "rosell-71"
+        ]
+      }
+    }
+  },
+  "saccharomyces_boulardii": {
+    "standard_name": "Saccharomyces Boulardii",
+    "category": "probiotics",
+    "cui": "C0771093",
+    "rxcui": "none",
+    "forms": {
+      "saccharomyces boulardii cncm i-745": {
+        "bio_score": 15,
+        "natural": true,
+        "absorption": "excellent transient colonization (~90%)",
+        "notes": "Beneficial yeast probiotic; clinically proven for diarrhea prevention and C. diff support",
+        "aliases": [
+          "s. boulardii",
+          "saccharomyces boulardii",
+          "florastor",
+          "cncm i-745"
+        ]
+      }
+    }
+  },
+  "lactobacillus_paracasei": {
+    "standard_name": "Lactobacillus Paracasei",
+    "category": "probiotics",
+    "cui": "C0317598",
+    "rxcui": "none",
+    "forms": {
+      "lactobacillus paracasei lpc-37": {
+        "bio_score": 13,
+        "natural": true,
+        "absorption": "high colonization (~85%)",
+        "notes": "Supports digestive health and immune function",
+        "aliases": [
+          "l. paracasei lpc-37",
+          "lpc-37",
+          "paracasei lpc37"
+        ]
+      }
+    }
+  },
+  "streptococcus_thermophilus": {
+    "standard_name": "Streptococcus Thermophilus",
+    "category": "probiotics",
+    "cui": "C0075186",
+    "rxcui": "none",
+    "forms": {
+      "streptococcus thermophilus st-21": {
+        "bio_score": 11,
+        "natural": true,
+        "absorption": "moderate colonization (~70%)",
+        "notes": "Common in yogurt; supports lactose digestion and digestive health",
+        "aliases": [
+          "s. thermophilus",
+          "st-21",
+          "streptococcus thermophilus"
+        ]
+      }
+    }
+  },
+  "_metadata": {
+    "description": "Comprehensive ingredient quality mapping with bioavailability scores for all ingredient forms",
+    "purpose": "quality_scoring",
+    "schema_version": "1.0",
+    "total_entries": 385,
+    "last_updated": "2025-11-14"
   }
 }

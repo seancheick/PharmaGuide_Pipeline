@@ -1,0 +1,581 @@
+{
+  "database_info": {
+    "version": "2.4.0",
+    "last_updated": "2025-09-20",
+    "total_allergens": 49,
+    "scoring_system": {
+      "allergen_free_bonus": 2,
+      "severity_penalties": {
+        "low": -1,
+        "moderate": -1.5,
+        "high": -2
+      }
+    },
+    "regulatory_note": "Based on FDA major allergens (9), EU additional allergens (14 total), plus common supplement allergens, artificial sweeteners, and preservatives with documented allergic reactions"
+  },
+  "common_allergens": [
+    {
+      "id": "ALLERGEN_SOY",
+      "standard_name": "Soy & Soy Lecithin",
+      "aliases": [
+        "soy lecithin",
+        "Soya Lecithin",
+        "soybean oil",
+        "soy protein",
+        "glycine max",
+        "soybean",
+        "soy flour",
+        "lecithin (soy)",
+        "lecithin (from soy)",
+        "E322",
+        "phosphatidylcholine (soy)",
+        "phospholipids (soy)"
+      ],
+      "prevalence": "high",
+      "severity_level": "low",
+      "regulatory_status": "fda_major",
+      "supplement_context": "Extremely common as lecithin emulsifier in supplements, protein powders, and capsules. Often derived from GMO soybeans unless specified otherwise.",
+      "notes": "One of the 9 major FDA allergens requiring label declaration. Soy lecithin moved from harmful_additives.json - primary concern is allergenicity rather than general toxicity. Most soy-allergic individuals can tolerate highly refined soy lecithin, but sensitive individuals may still react.",
+      "category": "major_allergen_emulsifier",
+      "last_updated": "2025-09-20"
+    },
+    {
+      "id": "ALLERGEN_MILK",
+      "standard_name": "Milk",
+      "aliases": [
+        "whey",
+        "casein",
+        "lactose",
+        "dairy",
+        "milk protein",
+        "whey protein",
+        "casein protein"
+      ],
+      "prevalence": "high",
+      "severity_level": "low",
+      "regulatory_status": "fda_major",
+      "supplement_context": "Extremely common in protein supplements",
+      "notes": "Common in protein supplements. Lactose-free options available.",
+      "category": "allergen",
+      "last_updated": "2025-07-16"
+    },
+    {
+      "id": "ALLERGEN_EGGS",
+      "standard_name": "Eggs",
+      "aliases": [
+        "egg protein",
+        "albumin",
+        "ovalbumin",
+        "egg white protein",
+        "egg albumen"
+      ],
+      "prevalence": "moderate",
+      "severity_level": "low",
+      "regulatory_status": "fda_major",
+      "supplement_context": "Less common in supplements, found in some protein powders",
+      "notes": "Less common in supplements. Found in some protein powders.",
+      "category": "allergen",
+      "last_updated": "2025-07-16"
+    },
+    {
+      "id": "ALLERGEN_TREE_NUTS",
+      "standard_name": "Tree Nuts",
+      "aliases": [
+        "almond",
+        "cashew",
+        "walnut",
+        "hazelnut",
+        "pecan",
+        "pistachio",
+        "macadamia",
+        "brazil nut"
+      ],
+      "prevalence": "moderate",
+      "severity_level": "moderate",
+      "regulatory_status": "fda_major",
+      "supplement_context": "Often from cross-contamination in manufacturing",
+      "notes": "Can cause severe reactions. Often from cross-contamination.",
+      "category": "allergen",
+      "last_updated": "2025-07-16"
+    },
+    {
+      "id": "ALLERGEN_PEANUTS",
+      "standard_name": "Peanuts",
+      "aliases": ["peanut oil", "arachis oil", "groundnut", "peanut protein"],
+      "prevalence": "moderate",
+      "severity_level": "high",
+      "regulatory_status": "fda_major",
+      "supplement_context": "Can cause anaphylaxis, refined peanut oil usually safe",
+      "notes": "Can cause anaphylaxis. Refined peanut oil usually safe.",
+      "category": "allergen",
+      "last_updated": "2025-07-16"
+    },
+    {
+      "id": "ALLERGEN_FISH",
+      "standard_name": "Fish",
+      "aliases": [
+        "fish oil",
+        "cod liver oil",
+        "salmon oil",
+        "anchovy oil",
+        "sardine oil"
+      ],
+      "prevalence": "high",
+      "severity_level": "moderate",
+      "regulatory_status": "fda_major",
+      "supplement_context": "Very common in omega-3 supplements",
+      "notes": "Common in omega-3 supplements. Molecular distillation may reduce allergenicity.",
+      "category": "allergen",
+      "last_updated": "2025-07-16"
+    },
+    {
+      "id": "ALLERGEN_CRUSTACEANS",
+      "standard_name": "Crustacean Shellfish",
+      "aliases": [
+        "glucosamine from shellfish",
+        "chitosan",
+        "crab shell",
+        "shrimp shell",
+        "lobster shell",
+        "crayfish",
+        "prawn",
+        "krill oil",
+        "crustacean shell",
+        "decapod crustaceans"
+      ],
+      "prevalence": "moderate",
+      "severity_level": "high",
+      "regulatory_status": "fda_major",
+      "supplement_context": "Glucosamine often derived from shellfish",
+      "notes": "Glucosamine often derived from shellfish. Vegetarian alternatives available.",
+      "category": "allergen",
+      "last_updated": "2025-07-16"
+    },
+    {
+      "id": "ALLERGEN_WHEAT",
+      "standard_name": "Wheat",
+      "aliases": [
+        "wheat germ oil",
+        "wheat protein",
+        "gluten",
+        "wheat flour",
+        "wheat starch"
+      ],
+      "prevalence": "moderate",
+      "severity_level": "moderate",
+      "regulatory_status": "fda_major",
+      "supplement_context": "Contains gluten, important for celiac disease sufferers",
+      "notes": "Contains gluten. Important for celiac disease sufferers.",
+      "category": "allergen",
+      "last_updated": "2025-07-16"
+    },
+    {
+      "id": "ALLERGEN_SESAME",
+      "standard_name": "Sesame",
+      "aliases": ["sesame oil", "tahini", "sesamum indicum", "sesame seed"],
+      "prevalence": "low",
+      "severity_level": "moderate",
+      "regulatory_status": "fda_major",
+      "supplement_context": "Became 9th major allergen in 2021",
+      "notes": "Became 9th major allergen in 2021. Must be declared.",
+      "category": "allergen",
+      "last_updated": "2025-07-16"
+    },
+    {
+      "id": "ALLERGEN_SULFITES",
+      "standard_name": "Sulfites",
+      "aliases": [
+        "sulfur dioxide",
+        "sodium bisulfite",
+        "sodium metabisulfite",
+        "potassium bisulfite",
+        "E220",
+        "E221",
+        "E222",
+        "E223",
+        "E224",
+        "E225",
+        "E226",
+        "E227",
+        "E228"
+      ],
+      "prevalence": "moderate",
+      "severity_level": "high",
+      "regulatory_status": "preservative",
+      "supplement_context": "Used as preservatives, can cause severe reactions especially in asthmatics",
+      "notes": "Can cause severe reactions, especially in asthmatics. Must be declared if >10ppm.",
+      "category": "allergen",
+      "last_updated": "2025-07-16"
+    },
+    {
+      "id": "ALLERGEN_ANNATTO",
+      "standard_name": "Annatto",
+      "aliases": ["annatto dye", "160b", "bixin", "norbixin", "bixa orellana"],
+      "prevalence": "moderate",
+      "severity_level": "moderate",
+      "regulatory_status": "natural_color",
+      "supplement_context": "Natural coloring that can cause reactions worse than artificial colors",
+      "notes": "Natural coloring that can cause anaphylaxis. Increasingly used to replace artificial colors.",
+      "category": "allergen",
+      "last_updated": "2025-07-16"
+    },
+    {
+      "id": "ALLERGEN_CARMINE",
+      "standard_name": "Carmine",
+      "aliases": [
+        "cochineal extract",
+        "carminic acid",
+        "natural red 4",
+        "E120",
+        "crimson lake"
+      ],
+      "prevalence": "low",
+      "severity_level": "moderate",
+      "regulatory_status": "natural_color",
+      "supplement_context": "Natural red coloring from insects, can cause allergic reactions",
+      "notes": "Natural red coloring from cochineal insects. Can cause allergic reactions.",
+      "category": "allergen",
+      "last_updated": "2025-07-16"
+    },
+        {
+      "id": "ALLERGEN_YEAST",
+      "standard_name": "Yeast",
+      "aliases": [
+        "brewer's yeast",
+        "nutritional yeast",
+        "baker's yeast",
+        "saccharomyces cerevisiae"
+      ],
+      "prevalence": "moderate",
+      "severity_level": "low",
+      "regulatory_status": "ingredient",
+      "supplement_context": "Common in B-vitamin supplements and probiotics",
+      "notes": "Common in B-vitamin supplements. Can cause reactions in sensitive individuals.",
+      "category": "allergen",
+      "last_updated": "2025-07-16"
+    },
+    {
+      "id": "ALLERGEN_CORN",
+      "standard_name": "Corn",
+      "aliases": [
+        "corn starch",
+        "corn syrup",
+        "dextrose",
+        "maltodextrin",
+        "zea mays"
+      ],
+      "prevalence": "high",
+      "severity_level": "low",
+      "regulatory_status": "ingredient",
+      "supplement_context": "Very common as fillers and excipients in supplements",
+      "notes": "Very common in supplements as fillers. Can cause reactions in corn-sensitive individuals.",
+      "category": "allergen",
+      "last_updated": "2025-07-16"
+    },
+    {
+      "id": "ALLERGEN_CELERY",
+      "standard_name": "Celery",
+      "aliases": ["celery seed", "apium graveolens", "celery extract"],
+      "prevalence": "low",
+      "severity_level": "moderate",
+      "regulatory_status": "eu_allergen",
+      "supplement_context": "Less common in supplements, EU allergen",
+      "notes": "EU major allergen. Can cause severe reactions including anaphylaxis.",
+      "category": "allergen",
+      "last_updated": "2025-07-16"
+    },
+    {
+      "id": "ALLERGEN_MUSTARD",
+      "standard_name": "Mustard",
+      "aliases": ["mustard seed", "sinapis alba", "brassica nigra"],
+      "prevalence": "low",
+      "severity_level": "moderate",
+      "regulatory_status": "eu_allergen",
+      "supplement_context": "Rare in supplements, EU allergen",
+      "notes": "EU major allergen. Can cause respiratory and skin reactions.",
+      "category": "allergen",
+      "last_updated": "2025-07-16"
+    },
+    {
+      "id": "ALLERGEN_LUPIN",
+      "standard_name": "Lupin",
+      "aliases": ["lupin bean", "lupinus", "lupin flour"],
+      "prevalence": "low",
+      "severity_level": "moderate",
+      "regulatory_status": "eu_allergen",
+      "supplement_context": "Rare in supplements, EU allergen",
+      "notes": "EU major allergen. Can cause severe reactions, especially in peanut-allergic individuals.",
+      "category": "allergen",
+      "last_updated": "2025-07-16"
+    },
+    {
+      "id": "ALLERGEN_NATURAL_FLAVORS",
+      "standard_name": "Natural Flavors",
+      "aliases": [
+        "natural flavors",
+        "natural flavor",
+        "natural flavoring",
+        "botanical flavoring",
+        "fruit flavoring",
+        "spice extract",
+        "natural vanilla flavor",
+        "natural citrus flavor",
+        "natural berry flavor",
+        "natural mint flavor",
+        "botanical extract blend"
+      ],
+      "prevalence": "high",
+      "severity_level": "moderate",
+      "regulatory_status": "generally_recognized_as_safe",
+      "supplement_context": "Vague term that can hide major allergens like milk, eggs, soy, nuts",
+      "notes": "Can contain undisclosed allergens. Only major allergens must be declared separately.",
+      "category": "hidden_allergen",
+      "last_updated": "2025-08-15"
+    },
+    {
+      "id": "ALLERGEN_SYNTHETIC_DYES_UMBRELLA",
+      "standard_name": "FD&C Dyes (Hypersensitivity Potential)",
+      "aliases": [
+        "fd&c dyes",
+        "synthetic dyes",
+        "artificial colors",
+        "certified colors",
+        "lake colors"
+      ],
+      "prevalence": "high",
+      "severity_level": "moderate",
+      "regulatory_status": "fda_approved_varies",
+      "supplement_context": "Synthetic dyes are used across supplements for color coding and branding.",
+      "notes": "Umbrella pointer: some individuals experience hypersensitivity reactions (e.g., hives, asthma-like symptoms). See harmful_additives.json for dye-by-dye risk and regulatory details (e.g., Red 40, Yellow 5/6, Blue 1/2, Red 3).",
+      "category": "artificial_colorant_group",
+      "last_updated": "2025-11-12"
+    },
+                {
+      "id": "ALLERGEN_GELATIN",
+      "standard_name": "Gelatin",
+      "aliases": [
+        "gelatin",
+        "bovine gelatin",
+        "porcine gelatin",
+        "fish gelatin",
+        "collagen"
+      ],
+      "prevalence": "high",
+      "severity_level": "low",
+      "regulatory_status": "generally_recognized_as_safe",
+      "supplement_context": "Capsule shells, not suitable for vegetarians/vegans",
+      "notes": "Animal-derived protein. Halal/kosher concerns, not suitable for vegetarians/vegans.",
+      "category": "excipient_allergen",
+      "last_updated": "2025-08-15"
+    },
+        {
+      "id": "ALLERGEN_GUAR_GUM",
+      "standard_name": "Guar Gum",
+      "aliases": [
+        "guar gum powder",
+        "cyamopsis tetragonoloba",
+        "E412",
+        "guaran",
+        "jaguar gum",
+        "guar flour"
+      ],
+      "prevalence": "high",
+      "severity_level": "moderate",
+      "regulatory_status": "generally_recognized_as_safe",
+      "supplement_context": "Common thickener in protein powders and meal replacements",
+      "notes": "Can cause allergic reactions, particularly in people with legume allergies.",
+      "category": "excipient_allergen",
+      "last_updated": "2025-11-12"
+    },
+            
+    {
+      "id": "ALLERGEN_ACACIA_GUM",
+      "standard_name": "Acacia Gum",
+      "aliases": [
+        "gum arabic",
+        "E414",
+        "acacia seyal gum",
+        "acacia senegal gum",
+        "arabic gum"
+      ],
+      "prevalence": "moderate",
+      "severity_level": "moderate",
+      "regulatory_status": "generally_recognized_as_safe",
+      "supplement_context": "Used in prebiotics and fiber supplements",
+      "notes": "Can cause respiratory allergies and asthma in sensitive individuals.",
+      "category": "excipient_allergen",
+      "last_updated": "2025-09-11"
+    },
+    {
+      "id": "ALLERGEN_RICE_PROTEIN",
+      "standard_name": "Rice Protein",
+      "aliases": [
+        "hydrolyzed rice protein",
+        "oryza sativa protein",
+        "rice protein concentrate",
+        "rice protein isolate"
+      ],
+      "prevalence": "moderate",
+      "severity_level": "moderate",
+      "regulatory_status": "generally_recognized_as_safe",
+      "supplement_context": "Common in hypoallergenic protein supplements",
+      "notes": "Can contain arsenic. May cause reactions in grain-sensitive individuals.",
+      "category": "protein_allergen",
+      "last_updated": "2025-09-11"
+    },
+    {
+      "id": "ALLERGEN_MOLLUSCS",
+      "standard_name": "Molluscs",
+      "aliases": [
+        "clams",
+        "oysters",
+        "mussels",
+        "scallops",
+        "squid",
+        "octopus",
+        "snails",
+        "abalone",
+        "whelk",
+        "cuttlefish"
+      ],
+      "prevalence": "moderate",
+      "severity_level": "high",
+      "regulatory_status": "eu_major",
+      "supplement_context": "Less common in supplements, but found in some marine-based supplements",
+      "notes": "EU major allergen separate from crustacean shellfish. Tropomyosin protein can cause severe reactions.",
+      "category": "allergen",
+      "last_updated": "2025-09-11"
+    },
+    {
+      "id": "ALLERGEN_SUCRALOSE",
+      "standard_name": "Sucralose",
+      "aliases": ["splenda", "trichlorogalactosucrose", "E955"],
+      "prevalence": "high",
+      "severity_level": "moderate",
+      "regulatory_status": "fda_approved",
+      "supplement_context": "Common artificial sweetener in flavored supplements and protein powders",
+      "notes": "Can cause skin irritations, GI symptoms, and allergic reactions in sensitive individuals.",
+      "category": "artificial_sweetener",
+      "last_updated": "2025-09-11"
+    },
+    {
+      "id": "ALLERGEN_ACESULFAME_POTASSIUM",
+      "standard_name": "Acesulfame Potassium",
+      "aliases": ["ace-k", "acesulfame k", "E950", "sunett", "sweet one"],
+      "prevalence": "high",
+      "severity_level": "moderate",
+      "regulatory_status": "fda_approved",
+      "supplement_context": "Common artificial sweetener in sugar-free supplements",
+      "notes": "Documented cases of contact dermatitis and allergic reactions, especially in sulfur-sensitive individuals.",
+      "category": "artificial_sweetener",
+      "last_updated": "2025-09-11"
+    },
+    {
+      "id": "ALLERGEN_ASPARTAME",
+      "standard_name": "Aspartame",
+      "aliases": [
+        "nutrasweet",
+        "equal",
+        "E951",
+        "APM",
+        "aspartyl-phenylalanine-1-methyl ester"
+      ],
+      "prevalence": "high",
+      "severity_level": "moderate",
+      "regulatory_status": "fda_approved",
+      "supplement_context": "Very common in sugar-free supplements, especially chewables and effervescent tablets",
+      "notes": "Contains phenylalanine - dangerous for PKU patients. Can cause headaches and allergic reactions.",
+      "category": "artificial_sweetener",
+      "last_updated": "2025-09-11"
+    },
+    {
+      "id": "ALLERGEN_NEOTAME",
+      "standard_name": "Neotame",
+      "aliases": [
+        "E961",
+        "neotame powder",
+        "N-[N-(3,3-dimethylbutyl)-L-α-aspartyl]-L-phenylalanine 1-methyl ester"
+      ],
+      "prevalence": "moderate",
+      "severity_level": "moderate",
+      "regulatory_status": "fda_approved",
+      "supplement_context": "Newer sweetener used in supplements, more potent than aspartame",
+      "notes": "Related to aspartame but safer for PKU patients. Can cause allergic reactions in aspartame-sensitive individuals.",
+      "category": "artificial_sweetener",
+      "last_updated": "2025-09-11"
+    },
+    {
+      "id": "ALLERGEN_ADVANTAME",
+      "standard_name": "Advantame",
+      "aliases": [
+        "E969",
+        "advantame powder",
+        "N-[N-[3-(3-hydroxy-4-methoxyphenyl)propyl]-α-aspartyl]-L-phenylalanine 1-methyl ester"
+      ],
+      "prevalence": "low",
+      "severity_level": "moderate",
+      "regulatory_status": "fda_approved",
+      "supplement_context": "Newest FDA-approved sweetener, starting to appear in supplements",
+      "notes": "20,000 times sweeter than sugar. Related to aspartame but much lower phenylalanine content.",
+      "category": "artificial_sweetener",
+      "last_updated": "2025-09-11"
+    },
+        {
+      "id": "ALL_CARMINE_RED",
+      "standard_name": "Carmine Red (Cochineal Extract)",
+      "aliases": [
+        "carmine",
+        "carmine red",
+        "cochineal extract",
+        "natural red 4",
+        "e120",
+        "crimson lake",
+        "carmine lake"
+      ],
+      "prevalence": "moderate",
+      "severity_level": "high",
+      "regulatory_status": "approved_with_labeling_requirements",
+      "supplement_context": "Used as natural red colorant in supplements, especially chewables",
+      "notes": "CRITICAL: Can trigger severe allergic reactions including anaphylaxis. FDA requires specific labeling due to allergen potential. Derived from cochineal insects. Reactions can occur at doses as low as 1mg.",
+      "category": "colorant",
+      "last_updated": "2025-09-19"
+    },
+    {
+      "id": "ALL_ARTIFICIAL_FLAVORS",
+      "standard_name": "Artificial Flavors (unspecified)",
+      "aliases": [
+        "artificial flavor",
+        "artificial flavors",
+        "artificial flavoring",
+        "natural and artificial flavors",
+        "artificial and natural flavorings"
+      ],
+      "prevalence": "moderate",
+      "severity_level": "moderate",
+      "regulatory_status": "generally_recognized_as_safe",
+      "supplement_context": "Common in flavored supplements, lozenges, and chewables",
+      "notes": "May contain multiple synthetic compounds. Potential for allergic reactions varies by specific flavor compounds. Cross-reactivity possible with food allergies.",
+      "category": "flavoring",
+      "last_updated": "2025-09-19"
+    },
+        {
+      "id": "ALL_SUNFLOWER_LECITHIN",
+      "standard_name": "Sunflower Lecithin",
+      "aliases": [
+        "sunflower lecithin",
+        "lecithin (sunflower-derived)",
+        "non-GMO lecithin",
+        "organic sunflower lecithin",
+        "phosphatidylcholine",
+        "sunflower-derived lecithin"
+      ],
+      "prevalence": "low",
+      "severity_level": "low",
+      "regulatory_status": "gras_approved",
+      "supplement_context": "Common emulsifier in supplements, preferred over soy lecithin for allergen-sensitive formulations",
+      "notes": "Though less allergenic than soy lecithin, can still cause reactions in sensitive individuals. Most allergists consider it low-risk, but some highly sensitive people may react. Generally well-tolerated alternative to soy lecithin for those with soy allergies.",
+      "category": "plant_derived_emulsifier",
+      "last_updated": "2025-09-20"
+    }
+  ]
+}
