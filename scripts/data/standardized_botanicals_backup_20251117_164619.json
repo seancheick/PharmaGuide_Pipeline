@@ -1,0 +1,2810 @@
+{
+  "standardized_botanicals": [
+    {
+      "standard_name": "Acai",
+      "aliases": [
+        "euterpe oleracea",
+        "acai berry extract",
+        "acai fruit extract"
+      ],
+      "markers": [
+        "anthocyanins",
+        "polyphenols"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-08-09",
+      "id": "acai"
+    },
+    {
+      "standard_name": "African Mango",
+      "aliases": [
+        "irvingia gabonensis",
+        "wild mango",
+        "bush mango extract"
+      ],
+      "markers": [
+        "fiber"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-08-09",
+      "id": "african_mango"
+    },
+    {
+      "standard_name": "Alfalfa",
+      "aliases": [
+        "medicago sativa",
+        "alfalfa extract",
+        "alfalfa leaf extract",
+        "lucerne"
+      ],
+      "markers": [
+        "saponins"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-08-09",
+      "id": "alfalfa"
+    },
+    {
+      "standard_name": "Aloe Vera",
+      "aliases": [
+        "aloe barbadensis",
+        "aloe vera extract",
+        "aloe vera gel",
+        "aloe vera leaf"
+      ],
+      "markers": [
+        "aloin",
+        "polysaccharides",
+        "acemannan"
+      ],
+      "priority": "high",
+      "min_threshold": 10,
+      "last_updated": "2025-08-09",
+      "id": "aloe_vera"
+    },
+    {
+      "standard_name": "American Ginseng",
+      "aliases": [
+        "panax quinquefolius",
+        "american ginseng root extract"
+      ],
+      "markers": [
+        "ginsenosides"
+      ],
+      "min_threshold": 10,
+      "priority": "high",
+      "last_updated": "2025-08-09",
+      "id": "american_ginseng"
+    },
+    {
+      "standard_name": "Amla",
+      "aliases": [
+        "phyllanthus emblica",
+        "indian gooseberry",
+        "amalaki",
+        "amla fruit extract"
+      ],
+      "markers": [
+        "vitamin C",
+        "tannins",
+        "gallic acid"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-08-09",
+      "id": "amla"
+    },
+    {
+      "standard_name": "Andrographis",
+      "aliases": [
+        "andrographis paniculata",
+        "king of bitters",
+        "kalmegh",
+        "andrographis extract"
+      ],
+      "markers": [
+        "andrographolide"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-08-09",
+      "id": "andrographis"
+    },
+    {
+      "standard_name": "Arjuna",
+      "aliases": [
+        "arjun",
+        "terminalia arjuna",
+        "terminalia arjuna bark extract",
+        "terminalia arjuna powder"
+      ],
+      "markers": [
+        "arjunolic acid",
+        "coenzyme Q10"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-08-09",
+      "id": "arjuna"
+    },
+    {
+      "standard_name": "Artichoke",
+      "aliases": [
+        "cynara cardunculus var. scolymus",
+        "artichoke leaf extract",
+        "artichoke extract"
+      ],
+      "markers": [
+        "cynarin",
+        "luteolin"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-08-09",
+      "id": "artichoke"
+    },
+    {
+      "standard_name": "Ashwagandha",
+      "aliases": [
+        "withania somnifera",
+        "indian ginseng",
+        "winter cherry",
+        "ashwagandha root extract",
+        "KSM-66",
+        "Sensoril",
+        "Shoden"
+      ],
+      "markers": [
+        "withanolides",
+        "withaferin A",
+        "withanolide A"
+      ],
+      "min_threshold": 5,
+      "priority": "high",
+      "last_updated": "2025-08-09",
+      "id": "ashwagandha"
+    },
+    {
+      "standard_name": "Astaxanthin",
+      "aliases": [
+        "haematococcus pluvialis extract",
+        "astaxanthin extract",
+        "natural astaxanthin"
+      ],
+      "markers": [
+        "astaxanthin"
+      ],
+      "min_threshold": 1,
+      "priority": "high",
+      "last_updated": "2025-08-15",
+      "id": "astaxanthin"
+    },
+    {
+      "standard_name": "Astaxanthin (Haematococcus pluvialis)",
+      "aliases": [
+        "astaxanthin",
+        "Haematococcus pluvialis",
+        "astaxanthin algae extract",
+        "bioastin",
+        "astareal",
+        "zanthin",
+        "microalgal astaxanthin"
+      ],
+      "markers": [
+        "astaxanthin \u2265 3%",
+        "total carotenoids"
+      ],
+      "min_threshold": 3,
+      "priority": "high",
+      "last_updated": "2025-08-09",
+      "id": "astaxanthin_haematococcus_pluvialis"
+    },
+    {
+      "standard_name": "Astragalus",
+      "aliases": [
+        "astragalus membranaceus",
+        "huang qi",
+        "astragalus root extract"
+      ],
+      "markers": [
+        "astragalosides",
+        "polysaccharides"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-08-09",
+      "id": "astragalus"
+    },
+    {
+      "standard_name": "Astragalus Extract",
+      "aliases": [
+        "astragalus standardized extract",
+        "astragalus membranaceus standardized extract",
+        "standardized astragalus extract"
+      ],
+      "markers": [
+        "polysaccharides",
+        "astragalosides"
+      ],
+      "priority": "high",
+      "standardization": "70% polysaccharides",
+      "category": "root",
+      "last_updated": "2025-09-19",
+      "id": "astragalus_extract"
+    },
+    {
+      "standard_name": "Bacopa",
+      "aliases": [
+        "bacopa monnieri",
+        "brahmi",
+        "water hyssop",
+        "bacopa extract"
+      ],
+      "markers": [
+        "bacosides"
+      ],
+      "min_threshold": 20,
+      "priority": "high",
+      "last_updated": "2025-08-09",
+      "id": "bacopa"
+    },
+    {
+      "standard_name": "Banaba Leaf",
+      "aliases": [
+        "lagerstroemia speciosa",
+        "banaba leaf extract",
+        "banaba extract"
+      ],
+      "markers": [
+        "corosolic acid"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-08-09",
+      "id": "banaba_leaf"
+    },
+    {
+      "standard_name": "Baobab",
+      "aliases": [
+        "adansonia digitata",
+        "baobab fruit powder",
+        "baobab extract"
+      ],
+      "markers": [
+        "vitamin C",
+        "polyphenols"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-08-09",
+      "id": "baobab"
+    },
+    {
+      "standard_name": "Barley Grass",
+      "aliases": [
+        "hordeum vulgare",
+        "barley grass powder",
+        "barley grass extract"
+      ],
+      "markers": [
+        "chlorophyll"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-08-09",
+      "id": "barley_grass"
+    },
+    {
+      "standard_name": "Bee Pollen",
+      "aliases": [
+        "bee pollen extract",
+        "bee pollen granules",
+        "flower pollen",
+        "pollen granules"
+      ],
+      "markers": [
+        "flavonoids",
+        "phenolics"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-08-09",
+      "id": "bee_pollen"
+    },
+    {
+      "standard_name": "Berberine",
+      "aliases": [
+        "berberis aristata",
+        "berberis vulgaris",
+        "goldenseal extract",
+        "oregon grape",
+        "berberine hydrochloride",
+        "berberine sulfate",
+        "berberine extract"
+      ],
+      "markers": [
+        "berberine"
+      ],
+      "min_threshold": 97,
+      "priority": "high",
+      "last_updated": "2025-08-09",
+      "id": "berberine"
+    },
+    {
+      "standard_name": "Beta-Glucans",
+      "aliases": [
+        "beta-d-glucans",
+        "oat beta-glucans",
+        "mushroom beta-glucans",
+        "yeast beta-glucans"
+      ],
+      "markers": [
+        "beta-glucans"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-08-09",
+      "id": "beta_glucans"
+    },
+    {
+      "standard_name": "Bilberry",
+      "aliases": [
+        "vaccinium myrtillus",
+        "european blueberry",
+        "bilberry extract",
+        "bilberry fruit extract"
+      ],
+      "markers": [
+        "anthocyanins",
+        "anthocyanosides"
+      ],
+      "min_threshold": 25,
+      "priority": "high",
+      "last_updated": "2025-08-09",
+      "id": "bilberry"
+    },
+    {
+      "standard_name": "Bitter Melon",
+      "aliases": [
+        "bitter gourd",
+        "bitter melon extract",
+        "momordica charantia"
+      ],
+      "markers": [
+        "charantin",
+        "momordicin",
+        "polypeptide-p",
+        "vicine"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-08-15",
+      "id": "bitter_melon"
+    },
+    {
+      "standard_name": "Black Cohosh",
+      "aliases": [
+        "actaea racemosa",
+        "cimicifuga racemosa",
+        "black cohosh root extract",
+        "black cohosh root standardized extract"
+      ],
+      "markers": [
+        "triterpene glycosides",
+        "actein",
+        "27-deoxyactein"
+      ],
+      "min_threshold": 2.5,
+      "priority": "high",
+      "last_updated": "2025-08-09",
+      "id": "black_cohosh"
+    },
+    {
+      "standard_name": "Black Currant",
+      "aliases": [
+        "ribes nigrum",
+        "blackcurrant extract",
+        "blackcurrant seed oil"
+      ],
+      "markers": [
+        "anthocyanins",
+        "gamma-linolenic acid"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-08-09",
+      "id": "black_currant"
+    },
+    {
+      "standard_name": "Black Pepper Extract",
+      "aliases": [
+        "piper nigrum",
+        "bioperine",
+        "piperine extract"
+      ],
+      "markers": [
+        "piperine"
+      ],
+      "min_threshold": 95,
+      "priority": "high",
+      "last_updated": "2025-08-09",
+      "id": "black_pepper_extract"
+    },
+    {
+      "standard_name": "Black Seed Oil",
+      "aliases": [
+        "nigella sativa",
+        "black cumin",
+        "black cumin seed oil",
+        "nigella sativa oil"
+      ],
+      "markers": [
+        "thymoquinone",
+        "nigellone"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-08-09",
+      "id": "black_seed_oil"
+    },
+    {
+      "standard_name": "Black Sesame",
+      "aliases": [
+        "black sesame seed",
+        "black sesame seed extract",
+        "sesame noir",
+        "sesamum indicum"
+      ],
+      "markers": [
+        "sesamin",
+        "sesamolin"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-08-09",
+      "id": "black_sesame"
+    },
+    {
+      "standard_name": "Bladderwrack",
+      "aliases": [
+        "bladderwrack extract",
+        "fucus",
+        "fucus vesiculosus",
+        "sea wrack"
+      ],
+      "markers": [
+        "fucoidan",
+        "iodine"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-08-09",
+      "id": "bladderwrack"
+    },
+    {
+      "standard_name": "Blue-Green Algae",
+      "aliases": [
+        "aphanizomenon flos-aquae",
+        "afa",
+        "klamath algae"
+      ],
+      "markers": [
+        "phycocyanin"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-08-09",
+      "id": "blue_green_algae"
+    },
+    {
+      "standard_name": "Blueberry",
+      "aliases": [
+        "vaccinium corymbosum",
+        "blueberry extract",
+        "wild blueberry extract"
+      ],
+      "markers": [
+        "anthocyanins"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-08-09",
+      "id": "blueberry"
+    },
+    {
+      "standard_name": "Boswellia",
+      "aliases": [
+        "boswellia serrata",
+        "indian frankincense",
+        "boswellia extract",
+        "frankincense extract"
+      ],
+      "markers": [
+        "boswellic acids",
+        "AKBA"
+      ],
+      "min_threshold": 65,
+      "priority": "high",
+      "last_updated": "2025-08-09",
+      "id": "boswellia"
+    },
+    {
+      "standard_name": "Boswellia Serrata",
+      "aliases": [
+        "indian frankincense extract",
+        "frankincense extract",
+        "boswellin"
+      ],
+      "markers": [
+        "boswellic acids",
+        "AKBA"
+      ],
+      "min_threshold": 65,
+      "priority": "high",
+      "last_updated": "2025-08-09",
+      "id": "boswellia_serrata"
+    },
+    {
+      "standard_name": "Burdock Root",
+      "aliases": [
+        "arctium lappa",
+        "burdock root extract",
+        "burdock extract"
+      ],
+      "markers": [
+        "arctiin"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-08-09",
+      "id": "burdock_root"
+    },
+    {
+      "standard_name": "Butcher's Broom",
+      "aliases": [
+        "box holly",
+        "butcher's broom extract",
+        "ruscus",
+        "ruscus aculeatus"
+      ],
+      "markers": [
+        "ruscogenin"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-08-09",
+      "id": "butcher_s_broom"
+    },
+    {
+      "standard_name": "Butterbur",
+      "aliases": [
+        "petasites hybridus",
+        "butterbur extract",
+        "butterbur root extract"
+      ],
+      "markers": [
+        "petasin",
+        "isopetasin"
+      ],
+      "min_threshold": 7.5,
+      "priority": "high",
+      "last_updated": "2025-08-09",
+      "id": "butterbur"
+    },
+    {
+      "standard_name": "Camu Camu",
+      "aliases": [
+        "myrciaria dubia",
+        "camu camu powder",
+        "camu camu extract"
+      ],
+      "markers": [
+        "vitamin C"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-08-09",
+      "id": "camu_camu"
+    },
+    {
+      "standard_name": "Cat's Claw",
+      "aliases": [
+        "cat's claw bark extract",
+        "samento",
+        "una de gato",
+        "uncaria tomentosa"
+      ],
+      "markers": [
+        "oxindole alkaloids"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-08-09",
+      "id": "cat_s_claw"
+    },
+    {
+      "standard_name": "Catuaba",
+      "aliases": [
+        "catuaba bark",
+        "catuaba bark extract",
+        "erythroxylum catuaba",
+        "trichilia catigua"
+      ],
+      "markers": [
+        "flavonoids",
+        "alkaloids"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-08-09",
+      "id": "catuaba"
+    },
+    {
+      "standard_name": "Century Plant",
+      "aliases": [
+        "agave americana",
+        "agave americana extract",
+        "agave extract",
+        "maguey"
+      ],
+      "markers": [
+        "saponins"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-08-09",
+      "id": "century_plant"
+    },
+    {
+      "standard_name": "Chaga",
+      "aliases": [
+        "black mass",
+        "chaga mushroom",
+        "chaga mushroom extract",
+        "clinker polypore",
+        "inonotus obliquus"
+      ],
+      "markers": [
+        "beta-glucans",
+        "betulinic acid",
+        "polyphenols",
+        "triterpenes"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-08-15",
+      "id": "chaga"
+    },
+    {
+      "standard_name": "Chamomile",
+      "aliases": [
+        "matricaria recutita",
+        "matricaria chamomilla",
+        "german chamomile",
+        "chamomile extract"
+      ],
+      "markers": [
+        "apigenin",
+        "bisabolol",
+        "chamazulene"
+      ],
+      "min_threshold": 1,
+      "priority": "high",
+      "last_updated": "2025-08-09",
+      "id": "chamomile"
+    },
+    {
+      "standard_name": "Chasteberry",
+      "aliases": [
+        "vitex agnus-castus",
+        "agnus castus",
+        "chaste tree berry extract",
+        "vitex extract"
+      ],
+      "markers": [
+        "agnuside",
+        "casticin",
+        "aucubin"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-08-09",
+      "id": "chasteberry"
+    },
+    {
+      "standard_name": "Chlorella",
+      "aliases": [
+        "chlorella extract",
+        "chlorella powder",
+        "chlorella pyrenoidosa",
+        "chlorella vulgaris",
+        "cracked cell wall chlorella"
+      ],
+      "markers": [
+        "CGF",
+        "chlorophyll"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-08-15",
+      "id": "chlorella"
+    },
+    {
+      "standard_name": "Cinnamon",
+      "aliases": [
+        "cinnamomum verum",
+        "ceylon cinnamon",
+        "cinnamomum cassia",
+        "cinnamon bark extract"
+      ],
+      "markers": [
+        "polyphenols",
+        "cinnamaldehyde"
+      ],
+      "min_threshold": 10,
+      "priority": "high",
+      "last_updated": "2025-08-09",
+      "id": "cinnamon"
+    },
+    {
+      "standard_name": "Cinnamon Bark Essential Oil",
+      "aliases": [
+        "cinnamon bark essential oil",
+        "cinnamon essential oil",
+        "cinnamomum verum oil",
+        "cinnamon oil",
+        "cinnamomum cassia oil"
+      ],
+      "markers": [
+        "cinnamaldehyde",
+        "eugenol"
+      ],
+      "priority": "medium",
+      "standardization": "70%+ cinnamaldehyde",
+      "category": "bark",
+      "last_updated": "2025-09-20",
+      "id": "cinnamon_bark_essential_oil"
+    },
+    {
+      "standard_name": "Cissus Quadrangularis",
+      "aliases": [
+        "veld grape",
+        "devil's backbone",
+        "cissus extract"
+      ],
+      "markers": [
+        "ketosteroids"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-08-09",
+      "id": "cissus_quadrangularis"
+    },
+    {
+      "standard_name": "Coffeeberry",
+      "aliases": [
+        "coffea arabica",
+        "coffee fruit extract",
+        "whole coffee fruit extract"
+      ],
+      "markers": [
+        "chlorogenic acids",
+        "polyphenols"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-08-09",
+      "id": "coffeeberry"
+    },
+    {
+      "standard_name": "Coleus Forskohlii",
+      "aliases": [
+        "coleus extract",
+        "indian coleus",
+        "plectranthus barbatus"
+      ],
+      "markers": [
+        "forskolin"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-08-09",
+      "id": "coleus_forskohlii"
+    },
+    {
+      "standard_name": "Cordyceps",
+      "aliases": [
+        "cordyceps extract",
+        "cordyceps militaris",
+        "cordyceps mushroom extract",
+        "cordyceps sinensis",
+        "cs-4"
+      ],
+      "markers": [
+        "adenosine",
+        "beta-glucans",
+        "cordycepin",
+        "polysaccharides"
+      ],
+      "priority": "high",
+      "last_updated": "2025-08-15",
+      "id": "cordyceps"
+    },
+    {
+      "standard_name": "Cranberry",
+      "aliases": [
+        "vaccinium macrocarpon",
+        "cranberry extract",
+        "cranberry fruit extract"
+      ],
+      "markers": [
+        "PAC",
+        "proanthocyanidins"
+      ],
+      "min_threshold": 36,
+      "priority": "high",
+      "last_updated": "2025-08-09",
+      "id": "cranberry"
+    },
+    {
+      "id": "curcumin",
+      "standard_name": "Curcumin",
+      "aliases": [
+        "curcumin extract",
+        "curcuminoids",
+        "curcumin 95%",
+        "curcumin standardized extract",
+        "diferuloylmethane"
+      ],
+      "markers": [
+        "curcuminoids",
+        "curcumin",
+        "demethoxycurcumin",
+        "bisdemethoxycurcumin"
+      ],
+      "min_threshold": 95,
+      "priority": "high",
+      "standardization": "95% curcuminoids",
+      "category": "polyphenol",
+      "last_updated": "2025-11-14"
+    },
+    {
+      "standard_name": "Damiana",
+      "aliases": [
+        "damiana leaf",
+        "damiana leaf extract",
+        "turnera",
+        "turnera diffusa"
+      ],
+      "markers": [
+        "flavonoids"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-08-09",
+      "id": "damiana"
+    },
+    {
+      "standard_name": "Dandelion",
+      "aliases": [
+        "taraxacum officinale",
+        "dandelion root extract",
+        "dandelion leaf extract"
+      ],
+      "markers": [
+        "sesquiterpenes",
+        "taraxasterol"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-08-09",
+      "id": "dandelion"
+    },
+    {
+      "standard_name": "Devil's Claw",
+      "aliases": [
+        "devil's claw extract",
+        "grapple plant",
+        "harpagophytum procumbens",
+        "wood spider"
+      ],
+      "markers": [
+        "harpagoside"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-08-09",
+      "id": "devil_s_claw"
+    },
+    {
+      "standard_name": "Dong Quai",
+      "aliases": [
+        "angelica sinensis",
+        "dang gui",
+        "dong quai root extract"
+      ],
+      "markers": [
+        "ligustilide",
+        "ferulic acid"
+      ],
+      "min_threshold": 1,
+      "priority": "high",
+      "last_updated": "2025-08-09",
+      "id": "dong_quai"
+    },
+    {
+      "standard_name": "Echinacea Angustifolia",
+      "aliases": [
+        "narrow-leaf coneflower",
+        "echinacea angustifolia extract"
+      ],
+      "markers": [
+        "echinacosides"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-08-09",
+      "id": "echinacea_angustifolia"
+    },
+    {
+      "standard_name": "Echinacea Extract",
+      "aliases": [
+        "echinacea standardized extract",
+        "echinacea purpurea standardized extract",
+        "standardized echinacea extract"
+      ],
+      "markers": [
+        "phenolic_compounds",
+        "echinacoside"
+      ],
+      "priority": "high",
+      "standardization": "4% phenolic compounds",
+      "category": "herb",
+      "last_updated": "2025-09-19",
+      "id": "echinacea_extract"
+    },
+    {
+      "standard_name": "Echinacea Purpurea",
+      "aliases": [
+        "purple coneflower",
+        "echinacea purpurea extract"
+      ],
+      "markers": [
+        "phenolic compounds",
+        "echinacosides",
+        "cichoric acid",
+        "alkamides"
+      ],
+      "min_threshold": 4,
+      "priority": "high",
+      "last_updated": "2025-08-09",
+      "id": "echinacea_purpurea"
+    },
+    {
+      "standard_name": "Elder Flower",
+      "aliases": [
+        "sambucus nigra flos",
+        "elderflower extract"
+      ],
+      "markers": [
+        "flavonoids",
+        "phenolic acids"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-08-09",
+      "id": "elder_flower"
+    },
+    {
+      "standard_name": "Elderberry",
+      "aliases": [
+        "black elderberry",
+        "elderberry extract",
+        "elderberry fruit extract",
+        "european elderberry",
+        "sambucus extract",
+        "sambucus nigra"
+      ],
+      "markers": [
+        "anthocyanins",
+        "flavonoids",
+        "polyphenols",
+        "sambucyanins"
+      ],
+      "min_threshold": 10,
+      "priority": "high",
+      "last_updated": "2025-08-15",
+      "id": "elderberry"
+    },
+    {
+      "standard_name": "Elderberry Extract",
+      "aliases": [
+        "elderberry standardized extract",
+        "sambucus standardized extract",
+        "black elderberry standardized extract"
+      ],
+      "markers": [
+        "anthocyanins"
+      ],
+      "priority": "high",
+      "standardization": "10% anthocyanins",
+      "category": "fruit",
+      "last_updated": "2025-09-19",
+      "id": "elderberry_extract"
+    },
+    {
+      "standard_name": "Evening Primrose",
+      "aliases": [
+        "oenothera biennis",
+        "evening primrose oil",
+        "evening primrose seed oil"
+      ],
+      "markers": [
+        "gamma-linolenic acid",
+        "linoleic acid"
+      ],
+      "min_threshold": 9,
+      "priority": "high",
+      "last_updated": "2025-08-09",
+      "id": "evening_primrose"
+    },
+    {
+      "standard_name": "Fenugreek",
+      "aliases": [
+        "fenugreek extract",
+        "fenugreek seed extract",
+        "methi",
+        "trigonella foenum-graecum"
+      ],
+      "markers": [
+        "4-hydroxyisoleucine",
+        "saponins"
+      ],
+      "min_threshold": 50,
+      "priority": "high",
+      "last_updated": "2025-08-15",
+      "id": "fenugreek"
+    },
+    {
+      "standard_name": "Feverfew",
+      "aliases": [
+        "featherfew",
+        "feverfew extract",
+        "tanacetum",
+        "tanacetum parthenium"
+      ],
+      "markers": [
+        "parthenolide"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-08-09",
+      "id": "feverfew"
+    },
+    {
+      "standard_name": "Flaxseed",
+      "aliases": [
+        "linum usitatissimum",
+        "flaxseed oil",
+        "flaxseed extract",
+        "ground flaxseed"
+      ],
+      "markers": [
+        "lignans",
+        "alpha-linolenic acid"
+      ],
+      "priority": "high",
+      "min_threshold": 40,
+      "last_updated": "2025-08-09",
+      "id": "flaxseed"
+    },
+    {
+      "standard_name": "Garlic",
+      "aliases": [
+        "allium sativum",
+        "garlic extract",
+        "aged garlic extract"
+      ],
+      "markers": [
+        "allicin",
+        "S-allylcysteine",
+        "alliin"
+      ],
+      "min_threshold": 1,
+      "priority": "high",
+      "last_updated": "2025-08-09",
+      "id": "garlic"
+    },
+    {
+      "standard_name": "Ginger Extract",
+      "aliases": [
+        "zingiber officinale",
+        "ginger root extract",
+        "ginger extract",
+        "total gingerols and shogaols",
+        "standardized ginger gingerols",
+        "ginger gingerol complex",
+        "ginger standardized extract"
+      ],
+      "markers": [
+        "gingerols",
+        "shogaols"
+      ],
+      "priority": "high",
+      "standardization": "5% total gingerols",
+      "category": "root",
+      "min_threshold": 2,
+      "last_updated": "2025-09-20",
+      "id": "ginger_extract"
+    },
+    {
+      "standard_name": "Gingerols",
+      "aliases": [
+        "gingerols",
+        "gingerol complex",
+        "standardized gingerols",
+        "total gingerols",
+        "ginger gingerols"
+      ],
+      "markers": [
+        "6-gingerol",
+        "8-gingerol",
+        "10-gingerol"
+      ],
+      "priority": "high",
+      "standardization": "5% total gingerols",
+      "category": "active_compound",
+      "last_updated": "2025-09-20",
+      "id": "gingerols"
+    },
+    {
+      "standard_name": "Ginkgo Biloba",
+      "aliases": [
+        "maidenhair tree",
+        "ginkgo",
+        "ginkgo biloba extract",
+        "EGb 761"
+      ],
+      "markers": [
+        "flavone glycosides",
+        "terpene lactones",
+        "ginkgolides",
+        "bilobalide"
+      ],
+      "min_threshold": 24,
+      "priority": "high",
+      "last_updated": "2025-08-09",
+      "id": "ginkgo_biloba"
+    },
+    {
+      "standard_name": "Ginkgolides",
+      "aliases": [
+        "ginkgolides",
+        "ginkgo terpene lactones",
+        "terpene trilactones",
+        "ginkgolide complex"
+      ],
+      "markers": [
+        "ginkgolide A",
+        "ginkgolide B",
+        "ginkgolide C",
+        "ginkgolide J"
+      ],
+      "priority": "high",
+      "standardization": "6% terpene lactones",
+      "category": "active_compound",
+      "last_updated": "2025-09-20",
+      "id": "ginkgolides"
+    },
+    {
+      "standard_name": "Goji Berry",
+      "aliases": [
+        "lycium barbarum",
+        "wolfberry",
+        "goji berry extract"
+      ],
+      "markers": [
+        "polysaccharides",
+        "zeaxanthin"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-08-09",
+      "id": "goji_berry"
+    },
+    {
+      "standard_name": "Goldenseal",
+      "aliases": [
+        "goldenseal extract",
+        "goldenseal root extract",
+        "hydrastis canadensis"
+      ],
+      "markers": [
+        "berberine",
+        "hydrastine"
+      ],
+      "priority": "high",
+      "last_updated": "2025-08-15",
+      "id": "goldenseal"
+    },
+    {
+      "standard_name": "Gotu Kola",
+      "aliases": [
+        "centella asiatica",
+        "gotu kola extract"
+      ],
+      "markers": [
+        "asiaticoside",
+        "triterpenoids",
+        "madecassoside"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-08-09",
+      "id": "gotu_kola"
+    },
+    {
+      "standard_name": "Grape Seed",
+      "aliases": [
+        "vitis vinifera",
+        "grape seed extract"
+      ],
+      "markers": [
+        "OPC",
+        "proanthocyanidins",
+        "procyanidins"
+      ],
+      "min_threshold": 90,
+      "priority": "high",
+      "last_updated": "2025-08-09",
+      "id": "grape_seed"
+    },
+    {
+      "standard_name": "Grape Seed Extract",
+      "aliases": [
+        "vitis vinifera seed extract",
+        "grape seed",
+        "OPC"
+      ],
+      "markers": [
+        "proanthocyanidins",
+        "oligomeric proanthocyanidins"
+      ],
+      "min_threshold": 95,
+      "priority": "high",
+      "last_updated": "2025-08-15",
+      "id": "grape_seed_extract"
+    },
+    {
+      "standard_name": "Grapefruit Seed",
+      "aliases": [
+        "citrus paradisi",
+        "citrus seed extract",
+        "grapefruit seed extract",
+        "grapefruit seed oil"
+      ],
+      "markers": [
+        "naringin"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-08-09",
+      "id": "grapefruit_seed"
+    },
+    {
+      "standard_name": "Graviola",
+      "aliases": [
+        "annona muricata",
+        "soursop",
+        "soursop extract"
+      ],
+      "markers": [
+        "acetogenins"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-08-09",
+      "id": "graviola"
+    },
+    {
+      "standard_name": "Green Coffee Bean",
+      "aliases": [
+        "coffea canephora robusta",
+        "coffea robusta",
+        "green coffee bean extract",
+        "green coffee extract"
+      ],
+      "markers": [
+        "chlorogenic acids"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-08-09",
+      "id": "green_coffee_bean"
+    },
+    {
+      "standard_name": "Green Tea",
+      "aliases": [
+        "camellia sinensis",
+        "green tea extract"
+      ],
+      "markers": [
+        "EGCG",
+        "epigallocatechin gallate",
+        "polyphenols",
+        "catechins",
+        "gallocatechin"
+      ],
+      "min_threshold": 50,
+      "priority": "high",
+      "last_updated": "2025-08-09",
+      "id": "green_tea"
+    },
+    {
+      "standard_name": "Guarana",
+      "aliases": [
+        "guarana extract",
+        "guarana seed",
+        "paullinia",
+        "paullinia cupana"
+      ],
+      "markers": [
+        "caffeine"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-08-09",
+      "id": "guarana"
+    },
+    {
+      "standard_name": "Gymnema Sylvestre",
+      "aliases": [
+        "gurmar",
+        "gymnema",
+        "gymnema extract"
+      ],
+      "markers": [
+        "gymnemic acids"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-08-09",
+      "id": "gymnema_sylvestre"
+    },
+    {
+      "standard_name": "Gynostemma",
+      "aliases": [
+        "gynostemma pentaphyllum",
+        "jiaogulan",
+        "southern ginseng",
+        "gynostemma extract"
+      ],
+      "markers": [
+        "gypenosides",
+        "saponins"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-08-09",
+      "id": "gynostemma"
+    },
+    {
+      "standard_name": "Hawthorn",
+      "aliases": [
+        "crataegus monogyna",
+        "crataegus laevigata",
+        "hawthorn berry extract",
+        "hawthorn leaf and flower extract"
+      ],
+      "markers": [
+        "oligomeric procyanidins",
+        "flavonoids",
+        "vitexin"
+      ],
+      "min_threshold": 2,
+      "priority": "high",
+      "last_updated": "2025-08-09",
+      "id": "hawthorn"
+    },
+    {
+      "standard_name": "He Shou Wu",
+      "aliases": [
+        "polygonum multiflorum",
+        "fo-ti",
+        "fo-ti root extract"
+      ],
+      "markers": [
+        "stilbenes",
+        "TSG",
+        "emodin"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-08-09",
+      "id": "he_shou_wu"
+    },
+    {
+      "standard_name": "Holy Basil",
+      "aliases": [
+        "holy basil extract",
+        "ocimum sanctum",
+        "ocimum tenuiflorum",
+        "tulsi",
+        "tulsi extract"
+      ],
+      "markers": [
+        "eugenol",
+        "rosmarinic acid",
+        "ursolic acid"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-08-15",
+      "id": "holy_basil"
+    },
+    {
+      "standard_name": "Hops",
+      "aliases": [
+        "hop extract",
+        "hops extract",
+        "humulus",
+        "humulus lupulus"
+      ],
+      "markers": [
+        "xanthohumol",
+        "humulone"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-08-09",
+      "id": "hops"
+    },
+    {
+      "standard_name": "Horny Goat Weed",
+      "aliases": [
+        "epimedium",
+        "yin yang huo",
+        "epimedium extract"
+      ],
+      "markers": [
+        "icariin"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-08-09",
+      "id": "horny_goat_weed"
+    },
+    {
+      "standard_name": "Horsetail",
+      "aliases": [
+        "equisetum arvense",
+        "horsetail extract",
+        "field horsetail"
+      ],
+      "markers": [
+        "silica",
+        "flavonoids"
+      ],
+      "min_threshold": 7,
+      "priority": "medium",
+      "last_updated": "2025-08-09",
+      "id": "horsetail"
+    },
+    {
+      "standard_name": "Huperzine A",
+      "aliases": [
+        "huperzia serrata extract",
+        "chinese club moss extract"
+      ],
+      "markers": [
+        "huperzine A"
+      ],
+      "min_threshold": 1,
+      "priority": "medium",
+      "last_updated": "2025-08-09",
+      "id": "huperzine_a"
+    },
+    {
+      "standard_name": "Inulin",
+      "aliases": [
+        "chicory root inulin",
+        "fructooligosaccharides",
+        "FOS"
+      ],
+      "markers": [
+        "inulin"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-08-09",
+      "id": "inulin"
+    },
+    {
+      "standard_name": "Kanna",
+      "aliases": [
+        "channa",
+        "kanna extract",
+        "sceletium",
+        "sceletium tortuosum"
+      ],
+      "markers": [
+        "mesembrine"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-08-09",
+      "id": "kanna"
+    },
+    {
+      "standard_name": "Kava",
+      "aliases": [
+        "piper methysticum",
+        "kava kava",
+        "kava extract"
+      ],
+      "markers": [
+        "kavalactones"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-08-09",
+      "id": "kava"
+    },
+    {
+      "standard_name": "Kelp",
+      "aliases": [
+        "laminaria",
+        "ascophyllum nodosum",
+        "kelp extract"
+      ],
+      "markers": [
+        "iodine"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-08-09",
+      "id": "kelp"
+    },
+    {
+      "standard_name": "Kola Nut",
+      "aliases": [
+        "cola acuminata",
+        "cola acuminata extract",
+        "cola nut",
+        "kola nut extract"
+      ],
+      "markers": [
+        "caffeine"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-08-09",
+      "id": "kola_nut"
+    },
+    {
+      "standard_name": "Kudzu",
+      "aliases": [
+        "kudzu extract",
+        "kudzu root extract",
+        "pueraria montana",
+        "pueraria root"
+      ],
+      "markers": [
+        "puerarin",
+        "daidzein"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-08-09",
+      "id": "kudzu"
+    },
+    {
+      "standard_name": "L-Theanine",
+      "aliases": [
+        "theanine",
+        "gamma-glutamylethylamide",
+        "suntheanine"
+      ],
+      "markers": [
+        "L-theanine"
+      ],
+      "min_threshold": 98,
+      "priority": "medium",
+      "last_updated": "2025-08-09",
+      "id": "l_theanine"
+    },
+    {
+      "standard_name": "Lavender",
+      "aliases": [
+        "lavandula angustifolia",
+        "lavender extract",
+        "lavender oil"
+      ],
+      "markers": [
+        "linalool",
+        "linalyl acetate"
+      ],
+      "min_threshold": 20,
+      "priority": "high",
+      "last_updated": "2025-08-09",
+      "id": "lavender"
+    },
+    {
+      "standard_name": "Lemon Balm",
+      "aliases": [
+        "lemon balm extract",
+        "lemon balm leaf",
+        "melissa",
+        "melissa officinalis"
+      ],
+      "markers": [
+        "rosmarinic acid"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-08-09",
+      "id": "lemon_balm"
+    },
+    {
+      "standard_name": "Licorice",
+      "aliases": [
+        "glycyrrhiza glabra",
+        "licorice root extract",
+        "DGL licorice"
+      ],
+      "markers": [
+        "glycyrrhizin",
+        "glycyrrhizic acid",
+        "liquiritin"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-08-09",
+      "id": "licorice"
+    },
+    {
+      "standard_name": "Linden Flower",
+      "aliases": [
+        "tilia cordata",
+        "tilia platyphyllos",
+        "linden flower extract"
+      ],
+      "markers": [
+        "flavonoids",
+        "volatile oils"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-08-09",
+      "id": "linden_flower"
+    },
+    {
+      "standard_name": "Lion's Mane",
+      "aliases": [
+        "bearded tooth mushroom",
+        "hericium erinaceus",
+        "lion's mane mushroom extract",
+        "yamabushitake"
+      ],
+      "markers": [
+        "beta-glucans",
+        "erinacines",
+        "hericenones",
+        "polysaccharides"
+      ],
+      "priority": "high",
+      "last_updated": "2025-08-15",
+      "id": "lion_s_mane"
+    },
+    {
+      "standard_name": "Maca",
+      "aliases": [
+        "lepidium meyenii",
+        "maca root extract",
+        "peruvian ginseng",
+        "peruvian maca"
+      ],
+      "markers": [
+        "glucosinolates",
+        "macaenes",
+        "macamides"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-08-15",
+      "id": "maca"
+    },
+    {
+      "standard_name": "Magnolia Bark",
+      "aliases": [
+        "houpo",
+        "magnolia bark extract",
+        "magnolia extract",
+        "magnolia officinalis"
+      ],
+      "markers": [
+        "magnolol",
+        "honokiol"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-08-09",
+      "id": "magnolia_bark"
+    },
+    {
+      "standard_name": "Maitake",
+      "aliases": [
+        "grifola frondosa",
+        "maitake mushroom extract",
+        "hen of the woods",
+        "D-fraction"
+      ],
+      "markers": [
+        "D-fraction",
+        "beta-glucans",
+        "grifolan"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-08-15",
+      "id": "maitake"
+    },
+    {
+      "standard_name": "Maitake Mushroom",
+      "aliases": [
+        "grifola frondosa",
+        "maitake extract"
+      ],
+      "markers": [
+        "beta-glucans",
+        "D-fraction"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-08-09",
+      "id": "maitake_mushroom"
+    },
+    {
+      "standard_name": "Mallow",
+      "aliases": [
+        "malva sylvestris",
+        "mallow flower extract",
+        "mallow leaf extract"
+      ],
+      "markers": [
+        "mucilage",
+        "malvin"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-08-09",
+      "id": "mallow"
+    },
+    {
+      "standard_name": "Maqui Berry",
+      "aliases": [
+        "aristotelia",
+        "aristotelia chilensis",
+        "chilean wineberry",
+        "maqui berry extract"
+      ],
+      "markers": [
+        "anthocyanins",
+        "delphinidin"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-08-09",
+      "id": "maqui_berry"
+    },
+    {
+      "standard_name": "Marigold",
+      "aliases": [
+        "calendula officinalis",
+        "calendula",
+        "marigold extract",
+        "tagetes erecta"
+      ],
+      "markers": [
+        "triterpenoid saponins",
+        "flavonoids",
+        "lutein",
+        "zeaxanthin"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-08-09",
+      "id": "marigold"
+    },
+    {
+      "standard_name": "Marshmallow Root",
+      "aliases": [
+        "althaea",
+        "althaea officinalis",
+        "marsh mallow",
+        "marshmallow root extract"
+      ],
+      "markers": [
+        "mucilage",
+        "polysaccharides"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-08-09",
+      "id": "marshmallow_root"
+    },
+    {
+      "standard_name": "Milk Thistle",
+      "aliases": [
+        "silybum marianum",
+        "mary thistle",
+        "milk thistle extract"
+      ],
+      "markers": [
+        "silymarin",
+        "silybin",
+        "silychristin",
+        "silydianin"
+      ],
+      "min_threshold": 80,
+      "priority": "high",
+      "last_updated": "2025-08-09",
+      "id": "milk_thistle"
+    },
+    {
+      "standard_name": "Mistletoe",
+      "aliases": [
+        "european mistletoe",
+        "european mistletoe extract",
+        "viscum",
+        "viscum album"
+      ],
+      "markers": [
+        "viscotoxin",
+        "lectins"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-08-09",
+      "id": "mistletoe"
+    },
+    {
+      "standard_name": "Moringa",
+      "aliases": [
+        "moringa oleifera",
+        "drumstick tree",
+        "moringa leaf extract"
+      ],
+      "markers": [
+        "isothiocyanates",
+        "chlorogenic acids"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-08-09",
+      "id": "moringa"
+    },
+    {
+      "standard_name": "Mucuna Pruriens",
+      "aliases": [
+        "velvet bean",
+        "kapikacchu",
+        "mucuna pruriens extract"
+      ],
+      "markers": [
+        "L-dopa"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-08-09",
+      "id": "mucuna_pruriens"
+    },
+    {
+      "standard_name": "Mulberry",
+      "aliases": [
+        "morus alba",
+        "mulberry leaf extract",
+        "white mulberry"
+      ],
+      "markers": [
+        "DNJ (1-deoxynojirimycin)"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-08-09",
+      "id": "mulberry"
+    },
+    {
+      "standard_name": "Mullein",
+      "aliases": [
+        "common mullein",
+        "mullein extract",
+        "mullein leaf extract",
+        "standardized mullein",
+        "verbascum thapsus"
+      ],
+      "markers": [
+        "verbascoside"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-08-15",
+      "id": "mullein"
+    },
+    {
+      "standard_name": "Mulungu",
+      "aliases": [
+        "coral tree",
+        "erythrina",
+        "erythrina mulungu",
+        "mulungu bark extract"
+      ],
+      "markers": [
+        "erythrina alkaloids"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-08-09",
+      "id": "mulungu"
+    },
+    {
+      "standard_name": "Nettle",
+      "aliases": [
+        "urtica dioica",
+        "stinging nettle",
+        "nettle root extract",
+        "nettle leaf extract"
+      ],
+      "markers": [
+        "flavonoids",
+        "beta-sitosterol"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-08-09",
+      "id": "nettle"
+    },
+    {
+      "standard_name": "Olive Fruit",
+      "aliases": [
+        "olea europaea fructus",
+        "olea fruit",
+        "olive extract",
+        "olive fruit extract"
+      ],
+      "markers": [
+        "hydroxytyrosol"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-08-09",
+      "id": "olive_fruit"
+    },
+    {
+      "standard_name": "Olive Leaf",
+      "aliases": [
+        "olea europaea",
+        "olea leaf",
+        "olive leaf extract",
+        "olive leaf powder"
+      ],
+      "markers": [
+        "oleuropein",
+        "hydroxytyrosol"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-08-09",
+      "id": "olive_leaf"
+    },
+    {
+      "standard_name": "Olive Leaf Extract",
+      "aliases": [
+        "olive leaf standardized extract",
+        "olive leaf extract standardized",
+        "olea europaea standardized extract"
+      ],
+      "markers": [
+        "oleuropein"
+      ],
+      "priority": "high",
+      "standardization": "20% oleuropein",
+      "category": "leaf",
+      "last_updated": "2025-09-19",
+      "id": "olive_leaf_extract"
+    },
+    {
+      "standard_name": "Oregano",
+      "aliases": [
+        "origanum vulgare",
+        "oregano extract",
+        "oregano oil"
+      ],
+      "markers": [
+        "carvacrol",
+        "thymol"
+      ],
+      "min_threshold": 50,
+      "priority": "high",
+      "last_updated": "2025-08-09",
+      "id": "oregano"
+    },
+    {
+      "standard_name": "Panax Ginseng",
+      "aliases": [
+        "korean ginseng",
+        "asian ginseng",
+        "ren shen",
+        "panax ginseng extract"
+      ],
+      "markers": [
+        "ginsenosides",
+        "Rb1",
+        "Rg1",
+        "Rg3"
+      ],
+      "min_threshold": 5,
+      "priority": "high",
+      "last_updated": "2025-08-09",
+      "id": "panax_ginseng"
+    },
+    {
+      "standard_name": "Passionflower",
+      "aliases": [
+        "passiflora incarnata",
+        "passion flower extract",
+        "passion flower 4:1 extract"
+      ],
+      "markers": [
+        "flavonoids",
+        "vitexin"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-08-09",
+      "id": "passionflower"
+    },
+    {
+      "standard_name": "Peppermint",
+      "aliases": [
+        "mentha extract",
+        "mentha piperita",
+        "peppermint leaf extract",
+        "peppermint oil"
+      ],
+      "markers": [
+        "menthol",
+        "rosmarinic acid"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-08-09",
+      "id": "peppermint"
+    },
+    {
+      "standard_name": "Peppermint Essential Oil",
+      "aliases": [
+        "peppermint essential oil",
+        "peppermint aerial parts essential oil",
+        "peppermint leaf essential oil",
+        "mentha piperita oil",
+        "peppermint oil"
+      ],
+      "markers": [
+        "menthol",
+        "menthone"
+      ],
+      "priority": "medium",
+      "standardization": "30%+ menthol",
+      "category": "leaf",
+      "last_updated": "2025-09-20",
+      "id": "peppermint_essential_oil"
+    },
+    {
+      "standard_name": "Pine Bark Extract",
+      "aliases": [
+        "pinus pinaster",
+        "pycnogenol",
+        "pine bark",
+        "maritime pine bark"
+      ],
+      "markers": [
+        "procyanidins",
+        "catechins",
+        "phenolic acids"
+      ],
+      "min_threshold": 95,
+      "priority": "high",
+      "last_updated": "2025-08-15",
+      "id": "pine_bark_extract"
+    },
+    {
+      "standard_name": "Polygala",
+      "aliases": [
+        "polygala extract",
+        "polygala root",
+        "polygala tenuifolia",
+        "yuan zhi"
+      ],
+      "markers": [
+        "saponins"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-08-09",
+      "id": "polygala"
+    },
+    {
+      "standard_name": "Pomegranate",
+      "aliases": [
+        "pomegranate fruit extract",
+        "pomegranate seed",
+        "punica",
+        "punica granatum"
+      ],
+      "markers": [
+        "ellagitannins",
+        "punicalagins",
+        "ellagic acid"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-08-09",
+      "id": "pomegranate"
+    },
+    {
+      "standard_name": "Prickly Pear",
+      "aliases": [
+        "nopal",
+        "opuntia",
+        "opuntia fruit",
+        "prickly pear extract"
+      ],
+      "markers": [
+        "betalains",
+        "indicaxanthin"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-08-09",
+      "id": "prickly_pear"
+    },
+    {
+      "standard_name": "Propolis",
+      "aliases": [
+        "bee propolis",
+        "propoli",
+        "propolis extract",
+        "propolis pure",
+        "propolis, pure",
+        "bee propolis extract",
+        "bee propolis powder"
+      ],
+      "markers": [
+        "polyphenols",
+        "flavonoids",
+        "CAPE",
+        "artepillin C"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-08-09",
+      "id": "propolis"
+    },
+    {
+      "standard_name": "Psyllium",
+      "aliases": [
+        "plantago ovata",
+        "psyllium husk",
+        "psyllium fiber"
+      ],
+      "markers": [
+        "fiber"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-08-09",
+      "id": "psyllium"
+    },
+    {
+      "standard_name": "Pycnogenol",
+      "aliases": [
+        "french maritime pine bark extract",
+        "pinus pinaster",
+        "maritime pine bark"
+      ],
+      "markers": [
+        "OPC",
+        "procyanidins"
+      ],
+      "min_threshold": 65,
+      "priority": "high",
+      "last_updated": "2025-08-09",
+      "id": "pycnogenol"
+    },
+    {
+      "standard_name": "Pygeum",
+      "aliases": [
+        "african plum",
+        "prunus africana",
+        "pygeum africanum extract"
+      ],
+      "markers": [
+        "phytosterols"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-08-09",
+      "id": "pygeum"
+    },
+    {
+      "standard_name": "Quercetin",
+      "aliases": [
+        "quercetin dihydrate",
+        "sophora japonica extract",
+        "quercetin-rich botanicals"
+      ],
+      "markers": [
+        "quercetin"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-08-09",
+      "id": "quercetin"
+    },
+    {
+      "standard_name": "Red Clover",
+      "aliases": [
+        "purple clover",
+        "red clover extract",
+        "trifolium",
+        "trifolium pratense"
+      ],
+      "markers": [
+        "isoflavones",
+        "formononetin"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-08-09",
+      "id": "red_clover"
+    },
+    {
+      "standard_name": "Red Yeast Rice",
+      "aliases": [
+        "monascus purpureus",
+        "red yeast rice extract"
+      ],
+      "markers": [
+        "monacolin K"
+      ],
+      "min_threshold": 0.4,
+      "priority": "high",
+      "last_updated": "2025-08-09",
+      "id": "red_yeast_rice"
+    },
+    {
+      "standard_name": "Rehmannia",
+      "aliases": [
+        "chinese foxglove",
+        "di huang",
+        "rehmannia glutinosa",
+        "rehmannia root extract"
+      ],
+      "markers": [
+        "catalpol"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-08-09",
+      "id": "rehmannia"
+    },
+    {
+      "standard_name": "Reishi",
+      "aliases": [
+        "ganoderma lucidum",
+        "lingzhi",
+        "red reishi",
+        "reishi mushroom",
+        "reishi mushroom extract"
+      ],
+      "markers": [
+        "beta-glucans",
+        "ganoderic acids",
+        "polysaccharides",
+        "triterpenes",
+        "triterpenoids"
+      ],
+      "priority": "high",
+      "last_updated": "2025-08-15",
+      "id": "reishi"
+    },
+    {
+      "standard_name": "Resveratrol",
+      "aliases": [
+        "trans-resveratrol",
+        "polygonum cuspidatum extract",
+        "japanese knotweed extract",
+        "grape skin extract"
+      ],
+      "markers": [
+        "resveratrol"
+      ],
+      "min_threshold": 50,
+      "priority": "high",
+      "last_updated": "2025-08-09",
+      "id": "resveratrol"
+    },
+    {
+      "standard_name": "Rhodiola",
+      "aliases": [
+        "rhodiola rosea",
+        "golden root",
+        "arctic root",
+        "rhodiola rosea extract"
+      ],
+      "markers": [
+        "rosavins",
+        "rosavin",
+        "salidroside",
+        "tyrosol"
+      ],
+      "min_threshold": 3,
+      "priority": "high",
+      "last_updated": "2025-08-09",
+      "id": "rhodiola"
+    },
+    {
+      "standard_name": "Rooibos",
+      "aliases": [
+        "african red tea",
+        "aspalathus linearis",
+        "red bush tea",
+        "rooibos extract"
+      ],
+      "markers": [
+        "aspalathin"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-08-09",
+      "id": "rooibos"
+    },
+    {
+      "standard_name": "Rosehip",
+      "aliases": [
+        "rosa canina",
+        "rosehip extract",
+        "rose hip powder"
+      ],
+      "markers": [
+        "galactolipids",
+        "vitamin C"
+      ],
+      "min_threshold": 40,
+      "priority": "high",
+      "last_updated": "2025-08-09",
+      "id": "rosehip"
+    },
+    {
+      "standard_name": "Saffron",
+      "aliases": [
+        "crocus",
+        "crocus sativus",
+        "saffron extract",
+        "saffron stigma"
+      ],
+      "markers": [
+        "crocin",
+        "safranal",
+        "picrocrocin"
+      ],
+      "min_threshold": 0.3,
+      "priority": "high",
+      "last_updated": "2025-08-09",
+      "id": "saffron"
+    },
+    {
+      "standard_name": "Salvia Miltiorrhiza",
+      "aliases": [
+        "danshen",
+        "red sage",
+        "salvia miltiorrhiza extract"
+      ],
+      "markers": [
+        "tanshinones",
+        "salvianolic acid B"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-08-09",
+      "id": "salvia_miltiorrhiza"
+    },
+    {
+      "standard_name": "Sarsaparilla",
+      "aliases": [
+        "sarsaparilla extract",
+        "sarsaparilla root extract",
+        "smilax extract",
+        "smilax officinalis",
+        "smilax ornata"
+      ],
+      "markers": [
+        "saponins",
+        "steroidal saponins",
+        "steroidal_saponins"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-08-15",
+      "id": "sarsaparilla"
+    },
+    {
+      "standard_name": "Saw Palmetto",
+      "aliases": [
+        "dwarf palm extract",
+        "saw palmetto berry extract",
+        "saw palmetto extract",
+        "serenoa repens"
+      ],
+      "markers": [
+        "beta-sitosterol",
+        "fatty acids",
+        "lauric acid",
+        "sterols"
+      ],
+      "min_threshold": 85,
+      "priority": "high",
+      "last_updated": "2025-08-15",
+      "id": "saw_palmetto"
+    },
+    {
+      "standard_name": "Schisandra",
+      "aliases": [
+        "schisandra chinensis",
+        "wu wei zi",
+        "schisandra berry extract"
+      ],
+      "markers": [
+        "schisandrins",
+        "lignans",
+        "schisandrin"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-08-09",
+      "id": "schisandra"
+    },
+    {
+      "standard_name": "Shatavari",
+      "aliases": [
+        "asparagus racemosus",
+        "asparagus racemosus extract",
+        "shatavari root extract",
+        "wild asparagus"
+      ],
+      "markers": [
+        "saponins",
+        "shatavarin IV"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-08-09",
+      "id": "shatavari"
+    },
+    {
+      "standard_name": "Shiitake",
+      "aliases": [
+        "lentinula edodes",
+        "shiitake mushroom extract",
+        "lentinan"
+      ],
+      "markers": [
+        "lentinan",
+        "beta-glucans",
+        "eritadenine"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-08-15",
+      "id": "shiitake"
+    },
+    {
+      "standard_name": "Shogaols",
+      "aliases": [
+        "shogaols",
+        "shogaol complex",
+        "standardized shogaols",
+        "total shogaols",
+        "ginger shogaols"
+      ],
+      "markers": [
+        "6-shogaol",
+        "8-shogaol",
+        "10-shogaol"
+      ],
+      "priority": "high",
+      "standardization": "dehydrated gingerols",
+      "category": "active_compound",
+      "last_updated": "2025-09-20",
+      "id": "shogaols"
+    },
+    {
+      "standard_name": "Siberian Ginseng",
+      "aliases": [
+        "eleutherococcus senticosus",
+        "eleuthero",
+        "siberian ginseng extract"
+      ],
+      "markers": [
+        "eleutherosides"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-08-09",
+      "id": "siberian_ginseng"
+    },
+    {
+      "standard_name": "Slippery Elm",
+      "aliases": [
+        "red elm",
+        "slippery elm bark extract",
+        "ulmus",
+        "ulmus rubra"
+      ],
+      "markers": [
+        "mucilage"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-08-09",
+      "id": "slippery_elm"
+    },
+    {
+      "standard_name": "Soy Isoflavones",
+      "aliases": [
+        "glycine max",
+        "soy extract",
+        "soy isoflavone extract"
+      ],
+      "markers": [
+        "isoflavones",
+        "genistein",
+        "daidzein",
+        "glycitein"
+      ],
+      "min_threshold": 40,
+      "priority": "high",
+      "last_updated": "2025-08-09",
+      "id": "soy_isoflavones"
+    },
+    {
+      "standard_name": "Spirulina",
+      "aliases": [
+        "arthrospira platensis",
+        "blue-green algae",
+        "spirulina extract",
+        "spirulina platensis",
+        "spirulina powder"
+      ],
+      "markers": [
+        "chlorophyll",
+        "phycocyanin",
+        "protein"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-08-15",
+      "id": "spirulina"
+    },
+    {
+      "standard_name": "St. John's Wort",
+      "aliases": [
+        "hypericum perforatum",
+        "st. john's wort extract"
+      ],
+      "markers": [
+        "hypericin",
+        "hyperforin"
+      ],
+      "min_threshold": 0.3,
+      "priority": "high",
+      "last_updated": "2025-08-09",
+      "id": "st_john_s_wort"
+    },
+    {
+      "standard_name": "Suma",
+      "aliases": [
+        "pfaffia paniculata",
+        "brazilian ginseng",
+        "suma root extract"
+      ],
+      "markers": [
+        "ecdysterones"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-08-09",
+      "id": "suma"
+    },
+    {
+      "standard_name": "Synephrine",
+      "aliases": [
+        "bitter orange",
+        "citrus aurantium",
+        "bitter orange extract"
+      ],
+      "markers": [
+        "synephrine"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-08-09",
+      "id": "synephrine"
+    },
+    {
+      "standard_name": "Tart Cherry",
+      "aliases": [
+        "montmorency cherry",
+        "prunus cerasus",
+        "sour cherry",
+        "tart cherry extract"
+      ],
+      "markers": [
+        "anthocyanins"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-08-09",
+      "id": "tart_cherry"
+    },
+    {
+      "standard_name": "Thyme",
+      "aliases": [
+        "thymus vulgaris",
+        "thyme extract",
+        "thyme oil"
+      ],
+      "markers": [
+        "thymol",
+        "carvacrol"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-08-09",
+      "id": "thyme"
+    },
+    {
+      "standard_name": "Tongkat Ali",
+      "aliases": [
+        "eurycoma longifolia",
+        "malaysian ginseng",
+        "longjack",
+        "tongkat ali extract"
+      ],
+      "markers": [
+        "eurycomanone",
+        "quassinoids"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-08-09",
+      "id": "tongkat_ali"
+    },
+    {
+      "standard_name": "Tribulus",
+      "aliases": [
+        "tribulus terrestris",
+        "tribulus extract",
+        "puncture vine"
+      ],
+      "markers": [
+        "saponins",
+        "protodioscin"
+      ],
+      "min_threshold": 40,
+      "priority": "medium",
+      "last_updated": "2025-08-15",
+      "id": "tribulus"
+    },
+    {
+      "standard_name": "Tribulus Terrestris",
+      "aliases": [
+        "gokshura",
+        "puncture vine",
+        "tribulus terrestris extract"
+      ],
+      "markers": [
+        "protodioscin",
+        "saponins"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-08-09",
+      "id": "tribulus_terrestris"
+    },
+    {
+      "standard_name": "Turkey Tail",
+      "aliases": [
+        "trametes versicolor",
+        "turkey tail mushroom",
+        "coriolus versicolor",
+        "PSK",
+        "PSP"
+      ],
+      "markers": [
+        "polysaccharide-K",
+        "polysaccharopeptide",
+        "beta-glucans"
+      ],
+      "priority": "high",
+      "last_updated": "2025-08-15",
+      "id": "turkey_tail"
+    },
+    {
+      "standard_name": "Turmeric",
+      "aliases": [
+        "curcuma longa",
+        "indian saffron",
+        "turmeric extract"
+      ],
+      "markers": [
+        "curcuminoids",
+        "curcumin",
+        "demethoxycurcumin",
+        "bisdemethoxycurcumin"
+      ],
+      "min_threshold": 95,
+      "priority": "high",
+      "last_updated": "2025-08-09",
+      "id": "turmeric"
+    },
+    {
+      "standard_name": "Uva Ursi",
+      "aliases": [
+        "arctostaphylos uva-ursi",
+        "bearberry",
+        "uva ursi extract"
+      ],
+      "markers": [
+        "arbutin"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-08-09",
+      "id": "uva_ursi"
+    },
+    {
+      "standard_name": "Valerian",
+      "aliases": [
+        "garden heliotrope",
+        "valerian root extract",
+        "valeriana",
+        "valeriana officinalis"
+      ],
+      "markers": [
+        "valerenic acid",
+        "valerenic acids"
+      ],
+      "min_threshold": 0.5,
+      "priority": "high",
+      "last_updated": "2025-08-09",
+      "id": "valerian"
+    },
+    {
+      "standard_name": "Wheatgrass",
+      "aliases": [
+        "triticum",
+        "triticum aestivum",
+        "wheat grass juice",
+        "wheatgrass powder"
+      ],
+      "markers": [
+        "chlorophyll"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-08-09",
+      "id": "wheatgrass"
+    },
+    {
+      "standard_name": "White Willow Bark",
+      "aliases": [
+        "salix alba",
+        "salix alba extract",
+        "white willow bark extract",
+        "willow bark"
+      ],
+      "markers": [
+        "salicin"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-08-09",
+      "id": "white_willow_bark"
+    },
+    {
+      "standard_name": "Wild Yam",
+      "aliases": [
+        "dioscorea extract",
+        "dioscorea villosa",
+        "mexican yam",
+        "wild yam extract"
+      ],
+      "markers": [
+        "diosgenin"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-08-09",
+      "id": "wild_yam"
+    },
+    {
+      "standard_name": "Yellow Dock",
+      "aliases": [
+        "curly dock",
+        "rumex",
+        "rumex crispus",
+        "yellow dock root extract"
+      ],
+      "markers": [
+        "anthraquinones"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-08-09",
+      "id": "yellow_dock"
+    },
+    {
+      "standard_name": "Yerba Mate",
+      "aliases": [
+        "ilex",
+        "ilex paraguariensis",
+        "mate tea",
+        "yerba mate extract"
+      ],
+      "markers": [
+        "caffeine",
+        "theobromine",
+        "caffeoyl derivatives",
+        "xanthines"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-08-09",
+      "id": "yerba_mate"
+    },
+    {
+      "standard_name": "Yohimbe",
+      "aliases": [
+        "pausinystalia",
+        "pausinystalia yohimbe",
+        "yohimbe bark",
+        "yohimbe bark extract"
+      ],
+      "markers": [
+        "yohimbine"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-08-09",
+      "id": "yohimbe"
+    },
+    {
+      "standard_name": "Yucca",
+      "aliases": [
+        "mojave yucca",
+        "yucca extract",
+        "yucca root",
+        "yucca schidigera"
+      ],
+      "markers": [
+        "saponins"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-08-09",
+      "id": "yucca"
+    }
+  ],
+  "_metadata": {
+    "description": "Standardized botanical extracts with marker compounds and minimum thresholds",
+    "total_entries": 174,
+    "entries_with_min_threshold": 50,
+    "schema_version": "1.0",
+    "last_updated": "2025-11-14"
+  }
+}

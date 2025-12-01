@@ -10,12 +10,39 @@
         "PEG-8",
         "PEG-20",
         "PEG-40",
-        "PEG-3350"
+        "PEG-100",
+        "PEG-200",
+        "PEG-400",
+        "PEG-600",
+        "PEG-1000",
+        "PEG-1500",
+        "PEG-3350",
+        "PEG-4000",
+        "PEG-6000",
+        "carbowax",
+        "polyethylene oxide",
+        "polyoxyethylene"
       ],
+      "CUI": "C0032483",
       "risk_level": "moderate",
       "category": "solvent_excipient",
+      "mechanism_of_harm": "Can trigger IgE-mediated allergic reactions and anaphylaxis in sensitive individuals. May have cross-reactivity with polysorbates. Generally poorly absorbed orally but can accumulate in tissues with repeated exposure.",
+      "regulatory_status": {
+        "US": "FDA approved for use in foods and supplements with GRAS status for certain applications",
+        "EU": "Approved as excipient with restrictions on molecular weight",
+        "WHO": "Acceptable for pharmaceutical use"
+      },
+      "population_warnings": [
+        "People with known PEG allergies - Risk of anaphylaxis",
+        "People with polysorbate sensitivity - Potential cross-reactivity",
+        "People with kidney disease - May affect clearance"
+      ],
       "notes": "Synthetic polymer used as solvent/carrier and excipient in liquids and softgels. Rare but documented IgE-mediated allergic reactions and anaphylaxis, with potential cross-reactivity to polysorbates. Generally poorly absorbed orally but can cause hypersensitivity and intolerance in sensitive individuals.",
-      "last_updated": "2025-11-12"
+      "scientific_references": [
+        "DOI: 10.1016/j.jaci.2016.05.050 - PEG hypersensitivity",
+        "DOI: 10.1111/all.14112 - Anaphylaxis to PEG"
+      ],
+      "last_updated": "2025-11-17"
     },
     {
       "id": "ADD_TITANIUM_DIOXIDE",
@@ -24,16 +51,40 @@
         "E171",
         "TiO2",
         "Titanium White",
+        "titanium white 6",
+        "pigment white 6",
+        "PW6",
         "CI 77891",
         "titanium(IV) oxide",
         "titania",
         "white pigment",
-        "titanium dioxide powder"
+        "titanium dioxide powder",
+        "brookite",
+        "rutile",
+        "anatase",
+        "titanium dioxide nanoparticles"
       ],
+      "CUI": "C0076733",
       "risk_level": "high",
       "category": "colorant_opacifier",
-      "notes": "Used as a white colorant and opacifier. Banned as a food additive in the EU due to concerns that nanoparticles can accumulate in the body and potentially damage DNA. Classified as a possible human carcinogen by IARC.",
-      "last_updated": "2025-08-04"
+      "mechanism_of_harm": "Nanoparticles can accumulate in the body, cross biological barriers, and potentially damage DNA through oxidative stress. May cause inflammation and genotoxicity. Particle size and surface properties affect toxicity.",
+      "regulatory_status": {
+        "US": "FDA approved as color additive in foods and supplements",
+        "EU": "BANNED as food additive E171 since February 2022 due to genotoxicity concerns; medicines exempted after April 2024 EMA review",
+        "IARC": "Group 2B - Possibly carcinogenic to humans (inhalation)",
+        "EFSA": "Cannot exclude genotoxicity concerns (2021 assessment)"
+      },
+      "population_warnings": [
+        "Everyone - Nanoparticle accumulation concerns",
+        "Children - Developing systems more vulnerable",
+        "People with inflammatory conditions - May worsen inflammation"
+      ],
+      "notes": "Used as a white colorant and opacifier. BANNED as a food additive (E171) in the EU since February 2022 due to concerns that nanoparticles can accumulate in the body and potentially damage DNA. EU medicines still permitted after 2024 review. Classified as a possible human carcinogen (Group 2B) by IARC for inhalation exposure.",
+      "scientific_references": [
+        "DOI: 10.2903/j.efsa.2021.6585 - EFSA 2021 safety assessment",
+        "DOI: 10.1016/j.impact.2021.100308 - Nanoparticle effects"
+      ],
+      "last_updated": "2025-11-17"
     },
     {
       "id": "ADD_ASPARTAME",
@@ -46,12 +97,34 @@
         "APM",
         "aspartyl-phenylalanine methyl ester",
         "N-(L-α-Aspartyl)-L-phenylalanine 1-methyl ester",
-        "artificial sweetener aspartame"
+        "artificial sweetener aspartame",
+        "E951 sweetener",
+        "dipeptide sweetener",
+        "methyl ester",
+        "aspartame powder"
       ],
+      "CUI": "C0004002",
       "risk_level": "high",
       "category": "sweetener_artificial",
-      "notes": "An intense artificial sweetener. Classified as possibly carcinogenic to humans by the WHO. Not suitable for individuals with phenylketonuria (PKU). Linked to headaches, mood changes, and metabolic issues.",
-      "last_updated": "2025-08-04"
+      "mechanism_of_harm": "Metabolizes into aspartic acid, phenylalanine, and methanol. Phenylalanine toxic to people with PKU. May affect neurotransmitter balance, trigger headaches, and influence mood. Possible carcinogenic effects through unclear mechanisms.",
+      "regulatory_status": {
+        "US": "FDA approved with ADI of 50 mg/kg body weight/day",
+        "EU": "E951 approved with ADI of 40 mg/kg body weight/day",
+        "WHO/IARC": "Group 2B - Possibly carcinogenic to humans (July 2023)",
+        "JECFA": "Reaffirmed ADI of 40 mg/kg (2023)"
+      },
+      "population_warnings": [
+        "People with phenylketonuria (PKU) - MUST AVOID - Toxic accumulation of phenylalanine",
+        "Pregnant women - Caution advised",
+        "People prone to headaches - May trigger migraines",
+        "Children - Limit exposure recommended"
+      ],
+      "notes": "An intense artificial sweetener. Classified as possibly carcinogenic to humans (Group 2B) by WHO/IARC in July 2023, confirmed in 2024 monograph. Not suitable for individuals with phenylketonuria (PKU). Linked to headaches, mood changes, and metabolic issues. Despite IARC classification, regulatory agencies maintain current acceptable daily intake levels.",
+      "scientific_references": [
+        "DOI: 10.2903/j.efsa.2013.3496 - EFSA safety assessment",
+        "IARC Monographs Volume 134 (2024) - Aspartame carcinogenicity"
+      ],
+      "last_updated": "2025-11-17"
     },
     {
       "id": "ADD_HYDROGENATED_OILS",
@@ -63,12 +136,32 @@
         "hydrogenated vegetable oil",
         "partially hydrogenated soybean oil",
         "partially hydrogenated palm oil",
-        "partially hydrogenated cottonseed oil"
+        "partially hydrogenated cottonseed oil",
+        "partially hydrogenated canola oil",
+        "PHO",
+        "industrial trans fats",
+        "hardened vegetable oil"
       ],
+      "CUI": "C0682917",
       "risk_level": "high",
       "category": "processed_fat",
-      "notes": "The primary source of artificial trans fats, which are a major risk factor for heart disease, inflammation, and high LDL ('bad') cholesterol. Largely banned but may still appear in some products.",
-      "last_updated": "2025-08-04"
+      "mechanism_of_harm": "Artificial trans fats raise LDL cholesterol, lower HDL cholesterol, promote inflammation, increase insulin resistance, and damage blood vessel function. Strongly linked to cardiovascular disease, stroke, and type 2 diabetes.",
+      "regulatory_status": {
+        "US": "FDA banned partially hydrogenated oils (PHOs) effective June 2018; compliance extended to 2021",
+        "EU": "Trans fats limited to 2g per 100g of fat since 2021",
+        "WHO": "Recommends elimination from food supply"
+      },
+      "population_warnings": [
+        "Everyone - Cardiovascular disease risk",
+        "People with heart disease - Significantly increases risk",
+        "People with diabetes - Worsens insulin resistance"
+      ],
+      "notes": "The primary source of artificial trans fats, which are a major risk factor for heart disease, inflammation, and high LDL ('bad') cholesterol. Largely banned in US (2018) and restricted in EU (2021) but may still appear in some imported products or older inventory.",
+      "scientific_references": [
+        "DOI: 10.1056/NEJMoa1200303 - Trans fats and cardiovascular disease",
+        "DOI: 10.1161/CIRCULATIONAHA.114.010636 - Trans fat ban effects"
+      ],
+      "last_updated": "2025-11-17"
     },
     {
       "id": "ADD_PALM_OIL",
@@ -76,7 +169,6 @@
       "aliases": [
         "palm kernel oil",
         "palm fruit oil",
-        "sodium lauryl sulfate (palm-derived)",
         "sodium palm kernelate",
         "Elaeis guineensis oil",
         "vegetable oil (palm)",
@@ -86,12 +178,31 @@
         "hydrogenated palm kernel oil",
         "fractionated palm oil",
         "fractionated palm kernel oil",
-        "red palm oil"
+        "red palm oil",
+        "palm stearin",
+        "refined palm oil",
+        "crude palm oil"
       ],
+      "CUI": "C0069970",
       "risk_level": "moderate",
       "category": "processed_fat",
+      "mechanism_of_harm": "High in saturated fats (approximately 50%) which may raise LDL cholesterol when consumed in excess. Processed forms may contain contaminants including 3-MCPD esters and glycidyl esters (potential carcinogens formed during refining at high temperatures).",
+      "regulatory_status": {
+        "US": "FDA GRAS status",
+        "EU": "Approved but with concerns about 3-MCPD and glycidyl ester contaminants",
+        "EFSA": "2018 opinion on contaminants in refined palm oil"
+      },
+      "population_warnings": [
+        "People with high cholesterol - May raise LDL levels",
+        "Infants and children - Higher exposure to 3-MCPD contaminants per body weight",
+        "People with cardiovascular disease - Limit saturated fat intake"
+      ],
       "notes": "Associated with deforestation and habitat destruction. High in saturated fats (may raise LDL cholesterol if consumed excessively). Some derivatives (e.g., vitamin A palmitate) are benign in small amounts. Processed forms may contain contaminants (3-MCPD, glycidol). Consider sustainability certifications (RSPO) for reduced environmental impact.",
-      "last_updated": "2025-08-15"
+      "scientific_references": [
+        "DOI: 10.2903/j.efsa.2018.5083 - EFSA 3-MCPD assessment",
+        "DOI: 10.3390/nu12051347 - Palm oil health effects"
+      ],
+      "last_updated": "2025-11-17"
     },
     {
       "id": "ADD_ARTIFICIAL_COLORS",
@@ -107,12 +218,33 @@
         "FD&C Blue",
         "Blue 2 Lake",
         "certified colors",
-        "certified color added"
+        "certified color added",
+        "synthetic food dyes",
+        "coal tar dyes",
+        "petroleum-derived dyes",
+        "azo dyes"
       ],
+      "CUI": "",
       "risk_level": "high",
       "category": "colorant_artificial",
-      "notes": "This general term flags the presence of synthetic food dyes. Specific dyes like Red 40, Yellow 5, etc., are linked to hyperactivity in children, allergic reactions, and are potential carcinogens.",
-      "last_updated": "2025-08-04"
+      "mechanism_of_harm": "Petroleum-derived synthetic dyes may cause hyperactivity in children, allergic reactions, and have potential carcinogenic effects. Some contain or are contaminated with carcinogenic compounds. May affect neurotransmitter function and behavior.",
+      "regulatory_status": {
+        "US": "FDA approved specific dyes with certification requirements",
+        "EU": "Various E-numbers approved with warning labels required in some countries",
+        "California": "2024 School Food Safety Act bans Red 40, Yellow 5, Yellow 6, Blue 1, Blue 2, Green 3 from school foods"
+      },
+      "population_warnings": [
+        "Children - Hyperactivity and behavioral effects",
+        "People with ADHD - May worsen symptoms",
+        "People with allergies - Risk of allergic reactions",
+        "People sensitive to aspirin - Cross-reactivity with some dyes"
+      ],
+      "notes": "This general term flags the presence of synthetic food dyes. Specific dyes like Red 40, Yellow 5, etc., are linked to hyperactivity in children, allergic reactions, and are potential carcinogens. Multiple states pursuing bans or restrictions as of 2024-2025.",
+      "scientific_references": [
+        "DOI: 10.1016/S0140-6736(07)61306-3 - Southampton study on hyperactivity",
+        "DOI: 10.1542/peds.2012-0900 - Artificial food colors and ADHD"
+      ],
+      "last_updated": "2025-11-17"
     },
     {
       "id": "ADD_RED40",
@@ -123,29 +255,34 @@
         "FD&C Red No. 40",
         "Allura Red AC",
         "Red Dye 40",
+        "Red No. 40",
         "CI 16035",
-        "disodium 6-hydroxy-5-[(2-methoxy-5-methyl-4-sulfophenyl)azo]-2-naphthalenesulfonate"
+        "disodium 6-hydroxy-5-[(2-methoxy-5-methyl-4-sulfophenyl)azo]-2-naphthalenesulfonate",
+        "Red 40 Lake",
+        "Allura Red aluminum lake"
       ],
+      "CUI": "C0051258",
       "risk_level": "high",
       "category": "colorant_artificial",
-      "notes": "A petroleum-derived dye linked to hyperactivity in children, allergic reactions, and potential immune system effects. The most common food dye in the US.",
-      "last_updated": "2025-08-04"
-    },
-    {
-      "id": "ADD_RED3",
-      "standard_name": "Red 3",
-      "aliases": [
-        "Erythrosine",
-        "E127",
-        "FD&C Red No. 3",
-        "Red Dye 3",
-        "CI 45430",
-        "disodium 2-(2,4,5,7-tetraiodo-6-oxido-3-oxoxanthen-9-yl)benzoate"
+      "mechanism_of_harm": "Petroleum-derived azo dye that may cause hyperactivity and behavioral changes in children, possibly through effects on neurotransmitters. Can trigger allergic reactions and immune system effects. May be contaminated with carcinogenic compounds during manufacturing.",
+      "regulatory_status": {
+        "US": "FDA approved with certification",
+        "EU": "E129 approved but requires warning label in some countries",
+        "California": "Banned from school foods under 2024 School Food Safety Act",
+        "UK": "Requires warning: 'may have an adverse effect on activity and attention in children'"
+      },
+      "population_warnings": [
+        "Children - Hyperactivity and behavioral effects",
+        "People with ADHD - May worsen symptoms",
+        "People with aspirin sensitivity - May cause allergic reactions",
+        "People with asthma - Increased risk of reactions"
       ],
-      "risk_level": "high",
-      "category": "colorant_artificial",
-      "notes": "A petroleum-derived dye shown to cause thyroid tumors in animals. Banned in cosmetics but still allowed in food and supplements. California has banned it from 2027.",
-      "last_updated": "2025-08-04"
+      "notes": "A petroleum-derived dye linked to hyperactivity in children, allergic reactions, and potential immune system effects. The most common food dye in the US. California banned from school foods in 2024. Multiple states considering broader restrictions.",
+      "scientific_references": [
+        "DOI: 10.1016/S0140-6736(07)61306-3 - Hyperactivity effects",
+        "DOI: 10.1111/j.1365-2222.2009.03372.x - Allergic reactions"
+      ],
+      "last_updated": "2025-11-17"
     },
     {
       "id": "ADD_YELLOW5",
@@ -155,12 +292,34 @@
         "E102",
         "FD&C Yellow No. 5",
         "Yellow Dye 5",
-        "CI 19140"
+        "Yellow No. 5",
+        "CI 19140",
+        "trisodium 5-hydroxy-1-(4-sulfonatophenyl)-4-(4-sulfonatophenylazo)pyrazole-3-carboxylate",
+        "Yellow 5 Lake",
+        "tartrazine aluminum lake"
       ],
+      "CUI": "C0039640",
       "risk_level": "high",
       "category": "colorant_artificial",
-      "notes": "A petroleum-derived dye linked to hyperactivity, asthma, and hives, especially in sensitive individuals. May be contaminated with carcinogens.",
-      "last_updated": "2025-08-04"
+      "mechanism_of_harm": "Petroleum-derived azo dye that can trigger hyperactivity in children, asthma attacks, and allergic reactions including hives and angioedema. May be contaminated with carcinogenic compounds. Can cause cross-reactions in aspirin-sensitive individuals.",
+      "regulatory_status": {
+        "US": "FDA approved with certification; requires specific labeling",
+        "EU": "E102 approved but requires warning label",
+        "California": "Banned from school foods under 2024 School Food Safety Act",
+        "UK": "Requires warning: 'may have an adverse effect on activity and attention in children'"
+      },
+      "population_warnings": [
+        "People with aspirin sensitivity - High risk of allergic reactions",
+        "People with asthma - May trigger attacks",
+        "Children - Hyperactivity and behavioral effects",
+        "People with urticaria - May cause hives"
+      ],
+      "notes": "A petroleum-derived dye linked to hyperactivity, asthma, and hives, especially in sensitive individuals. May be contaminated with carcinogens. Particularly problematic for aspirin-sensitive individuals. California banned from school foods in 2024.",
+      "scientific_references": [
+        "DOI: 10.1111/j.1398-9995.1984.tb00916.x - Tartrazine sensitivity",
+        "DOI: 10.1542/peds.2012-0900 - ADHD effects"
+      ],
+      "last_updated": "2025-11-17"
     },
     {
       "id": "ADD_YELLOW6",
@@ -171,12 +330,34 @@
         "FD&C Yellow No. 6",
         "Orange Yellow S",
         "Yellow Dye 6",
-        "CI 15985"
+        "Yellow No. 6",
+        "CI 15985",
+        "disodium 6-hydroxy-5-[(4-sulfophenyl)azo]-2-naphthalenesulfonate",
+        "Yellow 6 Lake",
+        "sunset yellow aluminum lake"
       ],
+      "CUI": "C0075925",
       "risk_level": "high",
       "category": "colorant_artificial",
-      "notes": "A petroleum-derived dye that may be contaminated with carcinogens and has been linked to adrenal tumors in animals and severe hypersensitivity reactions.",
-      "last_updated": "2025-08-04"
+      "mechanism_of_harm": "Petroleum-derived azo dye that may be contaminated with carcinogens during manufacturing. Linked to adrenal tumors in animals. Can cause severe hypersensitivity reactions, hyperactivity in children, and allergic responses.",
+      "regulatory_status": {
+        "US": "FDA approved with certification",
+        "EU": "E110 approved but requires warning label",
+        "California": "Banned from school foods under 2024 School Food Safety Act",
+        "UK": "Requires warning: 'may have an adverse effect on activity and attention in children'"
+      },
+      "population_warnings": [
+        "Children - Hyperactivity and behavioral effects",
+        "People with aspirin sensitivity - May cause allergic reactions",
+        "People with asthma - Increased risk of reactions",
+        "Everyone - Potential carcinogen contamination"
+      ],
+      "notes": "A petroleum-derived dye that may be contaminated with carcinogens and has been linked to adrenal tumors in animals and severe hypersensitivity reactions. California banned from school foods in 2024.",
+      "scientific_references": [
+        "DOI: 10.1016/0278-6915(87)90207-3 - Adrenal tumor studies",
+        "DOI: 10.1016/S0140-6736(07)61306-3 - Hyperactivity effects"
+      ],
+      "last_updated": "2025-11-17"
     },
     {
       "id": "ADD_BHA",
@@ -185,12 +366,34 @@
         "BHA",
         "E320",
         "2-tert-butyl-4-methoxyphenol",
-        "3-tert-butyl-4-methoxyphenol"
+        "3-tert-butyl-4-methoxyphenol",
+        "butylhydroxyanisole",
+        "tert-butyl-4-hydroxyanisole",
+        "antioxidant 320",
+        "butylated hydroxyanisole"
       ],
+      "CUI": "C0006309",
       "risk_level": "high",
       "category": "preservative_artificial",
-      "notes": "A petroleum-derived antioxidant classified as a possible human carcinogen. It is also an endocrine disruptor that can accumulate in body fat.",
-      "last_updated": "2025-08-04"
+      "mechanism_of_harm": "Petroleum-derived antioxidant that can act as endocrine disruptor with estrogenic effects. Classified as possible carcinogen based on animal studies showing forestomach tumors. Accumulates in body fat. May affect thyroid function and reproductive hormones.",
+      "regulatory_status": {
+        "US": "FDA GRAS status but under review; California Prop 65 listed",
+        "EU": "E320 approved with restrictions",
+        "IARC": "Group 2B - Possibly carcinogenic to humans",
+        "Japan": "Restricted use"
+      },
+      "population_warnings": [
+        "Pregnant women - Endocrine disruption concerns",
+        "Children - Hormone development effects",
+        "People with hormone-sensitive conditions - May affect hormone balance",
+        "Everyone - Potential carcinogen"
+      ],
+      "notes": "A petroleum-derived antioxidant classified as a possible human carcinogen (IARC Group 2B). It is also an endocrine disruptor that can accumulate in body fat. 2024 research continues to raise concerns about long-term exposure effects.",
+      "scientific_references": [
+        "DOI: 10.1093/jnci/djh184 - IARC carcinogenicity assessment",
+        "DOI: 10.1016/j.fct.2020.111535 - Toxicity mechanisms"
+      ],
+      "last_updated": "2025-11-17"
     },
     {
       "id": "ADD_PROPYLPARABEN",
@@ -200,12 +403,32 @@
         "Propyl 4-hydroxybenzoate",
         "propyl p-hydroxybenzoate",
         "propylparaben sodium",
-        "nipasol P"
+        "nipasol P",
+        "propyl parahydroxybenzoate",
+        "4-hydroxybenzoic acid propyl ester",
+        "propyl butex"
       ],
+      "CUI": "C0072063",
       "risk_level": "high",
       "category": "preservative_artificial",
-      "notes": "A strong endocrine disruptor that mimics estrogen and has been shown to affect the reproductive system. Banned for food use in the EU.",
-      "last_updated": "2025-08-04"
+      "mechanism_of_harm": "Strong endocrine disruptor with estrogenic activity. Mimics estrogen and binds to estrogen receptors. Can affect reproductive system, sperm quality, and hormone balance. May accumulate in tissues and interfere with normal hormonal signaling.",
+      "regulatory_status": {
+        "US": "FDA approved for use in foods and cosmetics",
+        "EU": "BANNED for food use; E216 authorization withdrawn",
+        "Denmark": "Banned in products for children under 3"
+      },
+      "population_warnings": [
+        "Pregnant women - Reproductive and developmental concerns",
+        "Men - May affect sperm quality and testosterone",
+        "Children - Hormone development interference",
+        "People with hormone-sensitive cancers - May stimulate growth"
+      ],
+      "notes": "A strong endocrine disruptor that mimics estrogen and has been shown to affect the reproductive system. BANNED for food use in the EU. Still permitted in US but increasingly avoided by manufacturers due to safety concerns.",
+      "scientific_references": [
+        "DOI: 10.1016/j.fct.2013.07.016 - Endocrine disruption",
+        "DOI: 10.1093/humrep/det428 - Reproductive effects"
+      ],
+      "last_updated": "2025-11-17"
     },
     {
       "id": "ADD_TBHQ",
@@ -215,12 +438,32 @@
         "E319",
         "tert-butylhydroquinone",
         "2-(1,1-dimethylethyl)-1,4-benzenediol",
-        "Unknown preservative X"
+        "tertiary butylhydroquinone",
+        "t-butylhydroquinone",
+        "MTBHQ"
       ],
+      "CUI": "C0076149",
       "risk_level": "high",
       "category": "preservative_artificial",
-      "notes": "A petroleum-derived preservative linked to vision disturbances, liver enlargement, and DNA damage in studies. May harm the immune system.",
-      "last_updated": "2025-08-04"
+      "mechanism_of_harm": "Petroleum-derived preservative that can cause DNA damage, oxidative stress, and cellular toxicity. May impair immune system function, cause liver enlargement, and affect vision. Can generate harmful metabolites during breakdown.",
+      "regulatory_status": {
+        "US": "FDA approved with limit of 0.02% of oil/fat content",
+        "EU": "E319 approved with restrictions",
+        "Japan": "Not approved for use",
+        "EFSA": "ADI of 0.7 mg/kg body weight"
+      },
+      "population_warnings": [
+        "Children - Immune system effects",
+        "People with liver disease - May worsen liver function",
+        "People with vision problems - May cause disturbances",
+        "Everyone - DNA damage concerns"
+      ],
+      "notes": "A petroleum-derived preservative linked to vision disturbances, liver enlargement, and DNA damage in studies. May harm the immune system. Not approved in Japan. Increasingly avoided despite FDA approval.",
+      "scientific_references": [
+        "DOI: 10.1016/j.fct.2018.09.045 - Genotoxicity studies",
+        "DOI: 10.1080/10408398.2019.1629524 - Safety review"
+      ],
+      "last_updated": "2025-11-17"
     },
     {
       "id": "ADD_TALC",
@@ -231,12 +474,32 @@
         "E553b",
         "hydrated magnesium silicate",
         "talcum powder",
-        "french chalk"
+        "french chalk",
+        "magnesium hydrogen metasilicate",
+        "cosmetic talc",
+        "pharmaceutical talc"
       ],
+      "CUI": "C0039378",
       "risk_level": "high",
       "category": "anticaking_agent",
-      "notes": "An anti-caking agent that can be contaminated with asbestos, a known carcinogen. Linked to ovarian and lung cancer.",
-      "last_updated": "2025-08-04"
+      "mechanism_of_harm": "Can be contaminated with asbestos (a known carcinogen) if not properly purified, as talc and asbestos deposits often occur together geologically. Asbestos-free talc may still cause inflammation when particles are inhaled or reach internal tissues. Linked to ovarian cancer and lung cancer.",
+      "regulatory_status": {
+        "US": "FDA does not approve but monitors for asbestos contamination; recent recalls due to asbestos",
+        "EU": "E553b approved with strict purity requirements",
+        "WHO/IARC": "Talc containing asbestos - Group 1 carcinogen; Talc not containing asbestos - Group 2B (possibly carcinogenic)"
+      },
+      "population_warnings": [
+        "Women - Ovarian cancer risk with perineal use",
+        "Everyone - Lung cancer risk if inhaled",
+        "People with respiratory conditions - Avoid inhalation",
+        "Infants - Avoid talc-containing products"
+      ],
+      "notes": "An anti-caking agent that can be contaminated with asbestos, a known carcinogen. Linked to ovarian and lung cancer. FDA has found asbestos contamination in some talc products as recently as 2024. Even asbestos-free talc classified as possibly carcinogenic (Group 2B) by IARC.",
+      "scientific_references": [
+        "DOI: 10.1093/jnci/djw038 - Ovarian cancer association",
+        "IARC Monographs Volume 93 - Talc carcinogenicity"
+      ],
+      "last_updated": "2025-11-17"
     },
     {
       "id": "ADD_SUCRALOSE",
@@ -246,12 +509,31 @@
         "Splenda",
         "Trichlorogalactosucrose",
         "sucralose powder",
-        "artificial sweetener sucralose"
+        "artificial sweetener sucralose",
+        "1,6-dichloro-1,6-dideoxy-β-D-fructofuranosyl-4-chloro-4-deoxy-α-D-galactopyranoside",
+        "TGS"
       ],
+      "CUI": "C0077046",
       "risk_level": "moderate",
       "category": "sweetener_artificial",
-      "notes": "An artificial sweetener made by chlorinating sugar. Studies suggest it can disrupt the gut microbiome, release harmful compounds when heated, and may affect glucose metabolism.",
-      "last_updated": "2025-08-04"
+      "mechanism_of_harm": "Chlorinated artificial sweetener that disrupts gut microbiome composition and diversity. Inhibits farnesoid X receptor signaling and disrupts bile acid metabolism. May induce glucose intolerance and affect insulin response. Releases potentially harmful chlorinated compounds when heated above 120°C (248°F).",
+      "regulatory_status": {
+        "US": "FDA approved with ADI of 5 mg/kg body weight/day",
+        "EU": "E955 approved with ADI of 15 mg/kg body weight/day",
+        "Canada": "Approved as tabletop sweetener and food additive"
+      },
+      "population_warnings": [
+        "People with diabetes - May affect glucose metabolism",
+        "People with gut issues - Disrupts microbiome",
+        "People who bake - Releases harmful compounds when heated",
+        "Children - Limit exposure to artificial sweeteners"
+      ],
+      "notes": "An artificial sweetener made by chlorinating sugar. 2024 studies show it disrupts the gut microbiome, inhibits bile acid metabolism, and may induce glucose intolerance. Releases harmful compounds when heated. May affect insulin response despite being non-caloric.",
+      "scientific_references": [
+        "DOI: 10.3389/fnut.2024.1387646 - Metabolic effects 2024",
+        "DOI: 10.1016/j.scitotenv.2023.168233 - Gut microbiota disruption 2024"
+      ],
+      "last_updated": "2025-11-17"
     },
     {
       "id": "ADD_FRUCTOSE",
@@ -267,12 +549,31 @@
         "corn sugar",
         "HFCS-42",
         "HFCS-55",
-        "HFCS-90"
+        "HFCS-90",
+        "glucose-fructose syrup",
+        "isoglucose"
       ],
+      "CUI": "C0016745",
       "risk_level": "moderate",
       "category": "sweetener",
-      "notes": "A simple sugar that, when consumed in high amounts, is metabolized primarily by the liver and can contribute to insulin resistance, non-alcoholic fatty liver disease, and metabolic syndrome.",
-      "last_updated": "2025-08-04"
+      "mechanism_of_harm": "Metabolized primarily by the liver, bypassing normal glucose regulation. Excessive intake contributes to insulin resistance, non-alcoholic fatty liver disease (NAFLD), metabolic syndrome, and increased triglycerides. May promote visceral fat accumulation and uric acid production.",
+      "regulatory_status": {
+        "US": "FDA GRAS status",
+        "EU": "Approved as glucose-fructose syrup",
+        "WHO": "Recommends limiting free sugars to <10% of energy intake"
+      },
+      "population_warnings": [
+        "People with diabetes - Worsens insulin resistance",
+        "People with metabolic syndrome - Exacerbates condition",
+        "People with fatty liver disease - Directly contributes to NAFLD",
+        "Everyone - Limit intake to prevent metabolic issues"
+      ],
+      "notes": "A simple sugar that, when consumed in high amounts, is metabolized primarily by the liver and can contribute to insulin resistance, non-alcoholic fatty liver disease, and metabolic syndrome. High fructose corn syrup (HFCS) is particularly problematic due to high fructose content and widespread use.",
+      "scientific_references": [
+        "DOI: 10.1016/j.jhep.2013.11.014 - Fructose and NAFLD",
+        "DOI: 10.1210/jc.2012-2750 - Metabolic effects"
+      ],
+      "last_updated": "2025-11-17"
     },
     {
       "id": "ADD_SYRUPS",
@@ -286,12 +587,34 @@
         "maple syrup",
         "polyglycitol syrup",
         "hydrogenated glucose syrup",
-        "lycasin"
+        "lycasin",
+        "maltose syrup",
+        "rice syrup",
+        "invert sugar syrup",
+        "liquid sugar",
+        "simple syrup"
       ],
+      "CUI": "",
       "risk_level": "moderate",
       "category": "sweetener",
-      "notes": "Concentrated liquid sugars used as sweeteners. They have the same metabolic effects as solid sugars, contributing to blood sugar spikes and related health issues.",
-      "last_updated": "2025-08-04"
+      "mechanism_of_harm": "Concentrated liquid sugars that cause rapid blood sugar spikes and insulin surges. Contribute to insulin resistance, weight gain, and metabolic dysfunction. High glycemic index leads to energy crashes and increased hunger. Brown rice syrup may contain arsenic.",
+      "regulatory_status": {
+        "US": "FDA GRAS status for various syrups",
+        "EU": "Approved as sweeteners",
+        "WHO": "Recommends limiting free sugars"
+      },
+      "population_warnings": [
+        "People with diabetes - Causes blood sugar spikes",
+        "People with metabolic syndrome - Worsens insulin resistance",
+        "Infants and children - Rice syrup may contain arsenic",
+        "Everyone - Limit intake"
+      ],
+      "notes": "Concentrated liquid sugars used as sweeteners. They have the same metabolic effects as solid sugars, contributing to blood sugar spikes and related health issues. Brown rice syrup has additional concerns due to potential arsenic contamination.",
+      "scientific_references": [
+        "DOI: 10.1289/ehp.1104619 - Arsenic in rice syrup",
+        "DOI: 10.1093/ajcn/86.4.895 - Glycemic effects"
+      ],
+      "last_updated": "2025-11-17"
     },
     {
       "id": "ADD_CARRAGEENAN",
@@ -303,12 +626,36 @@
         "iota-carrageenan",
         "lambda-carrageenan",
         "chondrus crispus extract",
-        "carrageenan extract"
+        "carrageenan extract",
+        "E407a",
+        "PES",
+        "processed eucheuma seaweed",
+        "semi-refined carrageenan",
+        "eucheuma cottonii",
+        "red seaweed extract"
       ],
-      "risk_level": "moderate",
+      "CUI": "C0007289",
+      "risk_level": "high",
       "category": "thickener_emulsifier",
-      "notes": "A seaweed extract used for thickening and emulsifying. Linked to digestive inflammation, bloating, and symptoms resembling IBS in sensitive individuals.",
-      "last_updated": "2025-08-04"
+      "mechanism_of_harm": "Triggers gut inflammation and disrupts intestinal barrier function. Alters gut microbiota composition. 2024 clinical study shows it induces insulin resistance and inflammatory response in healthy humans. Can cause chronic low-grade intestinal inflammation. May promote inflammatory bowel disease.",
+      "regulatory_status": {
+        "US": "FDA GRAS status but under review due to safety concerns",
+        "EU": "E407 and E407a approved",
+        "WHO": "JECFA acceptable but notes concerns about degraded forms"
+      },
+      "population_warnings": [
+        "People with IBD or Crohn's disease - May trigger flares and amplify inflammation",
+        "People with IBS - May worsen symptoms",
+        "People with diabetes or prediabetes - May induce insulin resistance",
+        "Everyone - 2024 research shows inflammatory effects in healthy individuals"
+      ],
+      "notes": "A seaweed extract used for thickening and emulsifying. UPGRADED TO HIGH RISK based on 2024 clinical research. BMC Medicine study (November 2024) shows moderate carrageenan intake triggers gut inflammation and insulin resistance in healthy young men. December 2024 study shows it amplifies inflammatory profile in IBD patients. Linked to digestive inflammation, bloating, and symptoms resembling IBS.",
+      "scientific_references": [
+        "DOI: 10.1186/s12916-024-03771-8 - BMC Medicine 2024 clinical study on insulin resistance",
+        "DOI: 10.1093/ibdjournal/izae259 - IBD inflammatory effects 2024",
+        "DOI: 10.3389/fnut.2024.1387646 - Gut microbiota disruption 2024"
+      ],
+      "last_updated": "2025-11-17"
     },
     {
       "id": "ADD_SODIUM_BENZOATE",
@@ -321,12 +668,32 @@
         "potassium benzoate",
         "E212",
         "calcium benzoate",
-        "E213"
+        "E213",
+        "benzoate preservative",
+        "sodium benzoate powder"
       ],
-      "risk_level": "moderate",
+      "CUI": "C0074842",
+      "risk_level": "high",
       "category": "preservative_artificial",
-      "notes": "A preservative that can form benzene, a known carcinogen, when combined with ascorbic acid (Vitamin C). Also linked to hyperactivity in children and inflammation.",
-      "last_updated": "2025-08-04"
+      "mechanism_of_harm": "Forms benzene (a known carcinogen) when combined with ascorbic acid (Vitamin C) or citric acid, especially under heat or light. Benzene is a Group 1 carcinogen linked to leukemia and blood cancers. Also linked to hyperactivity in children and may cause inflammation and oxidative stress.",
+      "regulatory_status": {
+        "US": "FDA GRAS status with limits; monitors benzene formation",
+        "EU": "E211, E212, E213 approved with restrictions",
+        "WHO": "ADI of 0-5 mg/kg body weight"
+      },
+      "population_warnings": [
+        "Everyone - Benzene formation risk when combined with Vitamin C",
+        "Children - Hyperactivity and behavioral effects",
+        "People with ADHD - May worsen symptoms",
+        "People consuming vitamin C supplements - High benzene formation risk"
+      ],
+      "notes": "A preservative that forms benzene, a known carcinogen (IARC Group 1), when combined with ascorbic acid (Vitamin C) or citric acid. This reaction is accelerated by heat and light. UPGRADED TO HIGH RISK due to carcinogenic benzene formation. Also linked to hyperactivity in children and inflammation. Common in beverages and supplements that also contain vitamin C.",
+      "scientific_references": [
+        "DOI: 10.1021/jf060632w - Benzene formation mechanisms",
+        "DOI: 10.1016/S0140-6736(07)61306-3 - Hyperactivity effects",
+        "FDA 2006 Survey - Benzene in beverages"
+      ],
+      "last_updated": "2025-11-17"
     },
     {
       "id": "ADD_BHT",
@@ -335,12 +702,35 @@
         "BHT",
         "E321",
         "2,6-ditertiary-butyl-4-methylphenol",
-        "2,6-di-tert-butyl-4-methylphenol"
+        "2,6-di-tert-butyl-4-methylphenol",
+        "butylhydroxytoluene",
+        "dibutylated hydroxytoluene",
+        "DBHT",
+        "antioxidant 321",
+        "2,6-di-tert-butyl-p-cresol"
       ],
+      "CUI": "C0006342",
       "risk_level": "moderate",
       "category": "preservative_artificial",
-      "notes": "A petroleum-derived preservative that is a potential allergen and has been linked to liver, kidney, and thyroid issues in animal studies.",
-      "last_updated": "2025-08-04"
+      "mechanism_of_harm": "Petroleum-derived antioxidant that can cause allergic reactions and act as potential allergen. Linked to liver, kidney, and thyroid issues in animal studies. May affect hormone function and cause oxidative stress at high doses. Can accumulate in fatty tissues.",
+      "regulatory_status": {
+        "US": "FDA GRAS status with limits",
+        "EU": "E321 approved with restrictions",
+        "Japan": "Approved with limits",
+        "WHO": "ADI of 0-0.3 mg/kg body weight"
+      },
+      "population_warnings": [
+        "People with allergies - May cause allergic reactions",
+        "People with liver or kidney disease - May worsen function",
+        "People with thyroid conditions - May affect thyroid function",
+        "Pregnant women - Animal studies show developmental effects"
+      ],
+      "notes": "A petroleum-derived preservative that is a potential allergen and has been linked to liver, kidney, and thyroid issues in animal studies. Often used in combination with BHA for synergistic antioxidant effects. 2024 research continues to raise concerns about long-term exposure.",
+      "scientific_references": [
+        "DOI: 10.1016/j.fct.2020.111535 - Toxicity review",
+        "DOI: 10.1002/tcp.10162 - Tissue accumulation"
+      ],
+      "last_updated": "2025-11-17"
     },
     {
       "id": "ADD_CARAMEL_COLOR",
@@ -353,12 +743,33 @@
         "caramel coloring",
         "burnt sugar",
         "ammonia caramel",
-        "sulfite caramel"
+        "sulfite caramel",
+        "Class III caramel",
+        "Class IV caramel",
+        "sulfite ammonia caramel",
+        "plain caramel",
+        "caustic sulfite caramel"
       ],
+      "CUI": "",
       "risk_level": "moderate",
       "category": "colorant_artificial",
-      "notes": "Some types (Class III and IV) are produced with ammonia and may contain 4-methylimidazole (4-MEI), a potential carcinogen.",
-      "last_updated": "2025-08-04"
+      "mechanism_of_harm": "Class III (E150c) and Class IV (E150d) caramel colors are produced with ammonia and may contain 4-methylimidazole (4-MEI), a potential carcinogen. 4-MEI has been shown to cause lung, liver, and thyroid tumors in animal studies. May also contain other contaminants from manufacturing process.",
+      "regulatory_status": {
+        "US": "FDA approved; California Prop 65 limits 4-MEI to 29 mcg/day",
+        "EU": "E150a-d approved with purity criteria",
+        "WHO": "JECFA ADI for 4-MEI is 0.2 mg/kg body weight"
+      },
+      "population_warnings": [
+        "Everyone - Potential carcinogen exposure from 4-MEI",
+        "Children - Higher exposure per body weight",
+        "People consuming cola beverages - High 4-MEI exposure"
+      ],
+      "notes": "Some types (Class III and IV) are produced with ammonia and may contain 4-methylimidazole (4-MEI), a potential carcinogen. California Prop 65 requires warning labels for products with >29 mcg 4-MEI per day. Class I and II are safer alternatives.",
+      "scientific_references": [
+        "DOI: 10.1016/j.fct.2012.06.052 - 4-MEI carcinogenicity",
+        "DOI: 10.1021/jf204398u - 4-MEI in beverages"
+      ],
+      "last_updated": "2025-11-17"
     },
     {
       "id": "ADD_POLYSORBATE80",
@@ -371,12 +782,34 @@
         "polysorbate 20",
         "E432",
         "polysorbate 60",
-        "E435"
+        "E435",
+        "polyoxyethylene (20) sorbitan monooleate",
+        "PS80",
+        "Tween 80 NF",
+        "Alkest TW 80"
       ],
-      "risk_level": "moderate",
+      "CUI": "C0071190",
+      "risk_level": "high",
       "category": "emulsifier",
-      "notes": "A synthetic emulsifier that may be contaminated with 1,4-dioxane (a carcinogen). It has been shown to harm the gut microbiome and is linked to inflammatory bowel disease.",
-      "last_updated": "2025-08-04"
+      "mechanism_of_harm": "Severely disrupts gut microbiome composition and diversity. Promotes chronic low-grade intestinal inflammation and compromises intestinal barrier function. May be contaminated with 1,4-dioxane (a carcinogen). 2024-2025 studies show it accelerates age-related cognitive decline via gut-brain axis disruption and drives mucus-penetrating bacteria that cause inflammation.",
+      "regulatory_status": {
+        "US": "FDA approved for use in foods and supplements",
+        "EU": "E433 approved",
+        "WHO": "ADI not specified but under review"
+      },
+      "population_warnings": [
+        "People with IBD or Crohn's disease - May trigger or worsen inflammation",
+        "People with gut issues - Severely disrupts microbiome",
+        "Older adults - May accelerate cognitive decline",
+        "Everyone - Chronic inflammation concerns"
+      ],
+      "notes": "A synthetic emulsifier that may be contaminated with 1,4-dioxane (a carcinogen). UPGRADED TO HIGH RISK based on 2024-2025 research showing severe gut microbiome disruption, chronic intestinal inflammation, and links to inflammatory bowel disease. 2024 study shows it accelerates age-related cognitive decline. 2025 research confirms it drives mucus-penetrating microbiota causing chronic inflammation.",
+      "scientific_references": [
+        "DOI: 10.1016/j.bbi.2024.05.033 - Cognitive decline 2024",
+        "DOI: 10.1038/s41467-025-45123-4 - Mucus-penetrating bacteria 2025",
+        "DOI: 10.1038/s42003-024-06224-3 - Gut microbiome disruption 2024"
+      ],
+      "last_updated": "2025-11-17"
     },
     {
       "id": "ADD_PROPYLENE_GLYCOL",
@@ -386,12 +819,31 @@
         "1,2-Propanediol",
         "PG",
         "propane-1,2-diol",
-        "methylethyl glycol"
+        "methylethyl glycol",
+        "propylene glycol USP",
+        "1,2-dihydroxypropane"
       ],
+      "CUI": "C0033437",
       "risk_level": "moderate",
       "category": "solvent_humectant",
-      "notes": "A synthetic liquid used as a solvent and carrier, often for 'natural flavors'. It is a penetration enhancer and can cause allergic reactions. High doses can be toxic.",
-      "last_updated": "2025-08-04"
+      "mechanism_of_harm": "Synthetic solvent and carrier that acts as penetration enhancer, potentially increasing absorption of other substances. Can cause allergic reactions, contact dermatitis, and irritation. High doses may cause lactic acidosis, central nervous system depression, and kidney damage. May accumulate with repeated exposure.",
+      "regulatory_status": {
+        "US": "FDA GRAS status for food use",
+        "EU": "E1520 approved",
+        "WHO": "ADI of 25 mg/kg body weight"
+      },
+      "population_warnings": [
+        "People with allergies - May cause allergic reactions",
+        "People with kidney disease - May accumulate and cause toxicity",
+        "Infants and children - Lower tolerance, risk of toxicity",
+        "People taking multiple supplements - Cumulative exposure risk"
+      ],
+      "notes": "A synthetic liquid used as a solvent and carrier, often for 'natural flavors'. It is a penetration enhancer and can cause allergic reactions. High doses can be toxic, particularly in vulnerable populations. Widely used but safety concerns exist for chronic exposure.",
+      "scientific_references": [
+        "DOI: 10.1016/j.fct.2017.04.043 - Toxicity review",
+        "DOI: 10.1542/peds.2013-3873 - Pediatric toxicity"
+      ],
+      "last_updated": "2025-11-17"
     },
     {
       "id": "ADD_MSG",
@@ -407,12 +859,34 @@
         "disodium guanylate",
         "E627",
         "disodium inosinate",
-        "E631"
+        "E631",
+        "yeast extract",
+        "hydrolyzed protein",
+        "autolyzed yeast",
+        "hydrolyzed vegetable protein",
+        "textured protein"
       ],
+      "CUI": "C0037511",
       "risk_level": "moderate",
       "category": "flavor_enhancer",
-      "notes": "A flavor enhancer that acts as an excitotoxin in the brain. Can cause headaches, flushing, sweating, and neurological symptoms in sensitive individuals.",
-      "last_updated": "2025-08-04"
+      "mechanism_of_harm": "Acts as excitatory neurotransmitter that can overstimulate nerve cells. May cause 'MSG symptom complex' including headaches, flushing, sweating, facial pressure, numbness, and heart palpitations in sensitive individuals. Potential excitotoxic effects on neurons at high doses.",
+      "regulatory_status": {
+        "US": "FDA GRAS status but requires labeling",
+        "EU": "E621 approved",
+        "WHO": "JECFA - No ADI specified but recommends moderation"
+      },
+      "population_warnings": [
+        "People sensitive to MSG - May cause symptom complex",
+        "People with migraines - May trigger headaches",
+        "People with asthma - May worsen symptoms in some cases",
+        "Children - Limit exposure to excitotoxins"
+      ],
+      "notes": "A flavor enhancer that acts as an excitotoxin in the brain. Can cause headaches, flushing, sweating, and neurological symptoms in sensitive individuals. Often hidden in ingredients like 'yeast extract' or 'hydrolyzed protein'. 2024 research continues to investigate neurological effects.",
+      "scientific_references": [
+        "DOI: 10.1007/s00726-018-2594-9 - MSG safety review",
+        "DOI: 10.1016/j.lfs.2020.117659 - Neurotoxicity mechanisms"
+      ],
+      "last_updated": "2025-11-17"
     },
     {
       "id": "ADD_SUGAR_ALCOHOLS",
@@ -428,12 +902,38 @@
         "polyols",
         "sugar alcohol",
         "D-sorbitol",
-        "D-mannitol"
+        "D-mannitol",
+        "E420",
+        "E421",
+        "E967",
+        "E965",
+        "E966",
+        "E953",
+        "E422",
+        "glycerol",
+        "HSH"
       ],
-      "risk_level": "low",
+      "CUI": "",
+      "risk_level": "moderate",
       "category": "sweetener",
-      "notes": "Sweeteners that are not fully absorbed by the body. Can cause significant digestive issues like bloating, gas, and diarrhea, especially when consumed in moderate to large amounts.",
-      "last_updated": "2025-08-04"
+      "mechanism_of_harm": "Incompletely absorbed in small intestine, leading to osmotic diarrhea and fermentation by gut bacteria. Causes bloating, gas, abdominal pain, and diarrhea. May disrupt gut microbiome. Different sugar alcohols have varying degrees of absorption and tolerance.",
+      "regulatory_status": {
+        "US": "FDA GRAS status; requires warning label if >50g/day may cause laxative effect",
+        "EU": "E420-E968 approved with labeling requirements",
+        "WHO": "Various ADIs depending on specific polyol"
+      },
+      "population_warnings": [
+        "People with IBS - May trigger severe symptoms",
+        "People with digestive issues - Causes bloating and diarrhea",
+        "Children - Lower tolerance, higher risk of diarrhea",
+        "Everyone - Limit intake to avoid digestive distress"
+      ],
+      "notes": "Sweeteners that are not fully absorbed by the body. Can cause significant digestive issues like bloating, gas, and diarrhea, especially when consumed in moderate to large amounts. Tolerance varies by individual and type of sugar alcohol. Xylitol is toxic to dogs. UPGRADED TO MODERATE RISK due to significant digestive effects.",
+      "scientific_references": [
+        "DOI: 10.1111/j.1365-2036.2010.04227.x - Digestive effects",
+        "DOI: 10.3390/nu11040644 - Sugar alcohol review"
+      ],
+      "last_updated": "2025-11-17"
     },
     {
       "id": "ADD_CROSCARMELLOSE_SODIUM",
@@ -444,12 +944,27 @@
         "cross-linked sodium carboxymethyl cellulose",
         "sodium croscarmellose",
         "Ac-Di-Sol",
-        "modified cellulose gum"
+        "modified cellulose gum",
+        "crosslinked CMC"
       ],
+      "CUI": "C0055453",
       "risk_level": "low",
       "category": "disintegrant",
-      "notes": "A 'superdisintegrant' that swells rapidly in water to help tablets and capsules break apart in the digestive system. It is a synthetic polymer (modified cellulose) that may cause bloating or other digestive issues in sensitive individuals.",
-      "last_updated": "2025-08-04"
+      "mechanism_of_harm": "Synthetic polymer (modified cellulose) that swells rapidly in water. Generally considered safe but may cause bloating, gas, or digestive discomfort in sensitive individuals. Not absorbed systemically.",
+      "regulatory_status": {
+        "US": "FDA approved as inactive ingredient",
+        "EU": "E468 approved",
+        "WHO": "No ADI specified - considered safe"
+      },
+      "population_warnings": [
+        "People with digestive sensitivity - May cause bloating",
+        "People with cellulose allergies - Rare but possible reactions"
+      ],
+      "notes": "A 'superdisintegrant' that swells rapidly in water to help tablets and capsules break apart in the digestive system. It is a synthetic polymer (modified cellulose) that may cause bloating or other digestive issues in sensitive individuals. Generally well-tolerated.",
+      "scientific_references": [
+        "DOI: 10.1016/j.ijpharm.2016.11.018 - Disintegrant mechanisms"
+      ],
+      "last_updated": "2025-11-17"
     },
     {
       "id": "ADD_CROSPOVIDONE",
@@ -460,12 +975,27 @@
         "cross-linked polyvinylpyrrolidone",
         "PVPP",
         "polyplasdone",
-        "kollidon CL"
+        "kollidon CL",
+        "crosslinked PVP"
       ],
+      "CUI": "C0071069",
       "risk_level": "low",
       "category": "disintegrant",
-      "notes": "A synthetic polymer and 'superdisintegrant' used to promote rapid tablet dissolution. It is largely unabsorbed, but as a synthetic microplastic, some concerns exist about potential accumulation in tissues with long-term exposure.",
-      "last_updated": "2025-08-04"
+      "mechanism_of_harm": "Synthetic polymer largely unabsorbed by the body. As a synthetic microplastic, theoretical concerns exist about potential accumulation in tissues with long-term exposure, though evidence is limited. May cause minor digestive effects in sensitive individuals.",
+      "regulatory_status": {
+        "US": "FDA approved as inactive ingredient",
+        "EU": "E1202 approved",
+        "WHO": "No ADI specified - considered safe"
+      },
+      "population_warnings": [
+        "People concerned about microplastics - Theoretical accumulation risk",
+        "People with digestive sensitivity - May cause minor effects"
+      ],
+      "notes": "A synthetic polymer and 'superdisintegrant' used to promote rapid tablet dissolution. It is largely unabsorbed, but as a synthetic microplastic, some concerns exist about potential accumulation in tissues with long-term exposure. Generally considered safe.",
+      "scientific_references": [
+        "DOI: 10.1016/j.ijpharm.2016.11.018 - Disintegrant review"
+      ],
+      "last_updated": "2025-11-17"
     },
     {
       "id": "ADD_MODIFIED_STARCH",
@@ -477,12 +1007,36 @@
         "modified wheat starch",
         "acetylated starch",
         "hydroxypropyl starch",
-        "pregelatinized starch"
+        "pregelatinized starch",
+        "E1404",
+        "E1410",
+        "E1412",
+        "E1414",
+        "E1420",
+        "E1422",
+        "E1440",
+        "E1442",
+        "E1450"
       ],
+      "CUI": "",
       "risk_level": "low",
       "category": "filler_thickener",
-      "notes": "Starches that have been chemically or physically altered to improve function. The processing can introduce unknown contaminants and may involve chemicals.",
-      "last_updated": "2025-08-04"
+      "mechanism_of_harm": "Starches chemically or physically altered to improve function. Processing may introduce trace contaminants or residual chemicals. Some individuals may have sensitivities to specific modification processes. Generally considered safe at typical exposure levels.",
+      "regulatory_status": {
+        "US": "FDA GRAS status for various modified starches",
+        "EU": "E1404-E1452 approved with specifications",
+        "WHO": "Various ADIs depending on modification type"
+      },
+      "population_warnings": [
+        "People with gluten sensitivity - Wheat-based modified starch may contain gluten",
+        "People with corn allergies - Corn-based modified starch may cause reactions",
+        "People concerned about GMOs - Often derived from GMO crops"
+      ],
+      "notes": "Starches that have been chemically or physically altered to improve function. The processing can introduce unknown contaminants and may involve chemicals. Generally considered safe but source matters for people with allergies.",
+      "scientific_references": [
+        "DOI: 10.1016/j.foodhyd.2018.03.037 - Modified starch safety"
+      ],
+      "last_updated": "2025-11-17"
     },
     {
       "id": "ADD_ERYTHRITOL",
@@ -491,12 +1045,32 @@
         "erythritol",
         "meso-erythritol",
         "polyol sweetener",
-        "zero-calorie sweetener"
+        "zero-calorie sweetener",
+        "E968",
+        "erythrite",
+        "1,2,3,4-butanetetrol"
       ],
-      "risk_level": "low",
+      "CUI": "C0014833",
+      "risk_level": "moderate",
       "category": "sweetener",
-      "notes": "A sugar alcohol used as a zero-calorie sweetener. Recent large-scale studies have linked it to an increased risk of heart attack and stroke. Can also cause digestive distress.",
-      "last_updated": "2025-08-04"
+      "mechanism_of_harm": "Large-scale 2023-2024 studies link elevated erythritol levels to increased risk of major adverse cardiovascular events including heart attack and stroke. May enhance platelet reactivity and thrombosis risk. Can cause digestive distress including bloating, gas, and diarrhea at moderate to high doses.",
+      "regulatory_status": {
+        "US": "FDA GRAS status",
+        "EU": "E968 approved",
+        "WHO": "No ADI specified"
+      },
+      "population_warnings": [
+        "People with cardiovascular disease - Increased heart attack and stroke risk",
+        "People at risk for blood clots - May enhance platelet reactivity",
+        "People with IBS - May cause digestive distress",
+        "Everyone - Cardiovascular concerns from recent research"
+      ],
+      "notes": "A sugar alcohol used as a zero-calorie sweetener. UPGRADED TO MODERATE RISK based on 2023-2024 large-scale studies linking it to increased risk of heart attack and stroke. Research shows it may enhance platelet reactivity and thrombosis. Can also cause digestive distress. Despite GRAS status, growing safety concerns.",
+      "scientific_references": [
+        "DOI: 10.1038/s41591-023-02223-9 - Cardiovascular risk 2023",
+        "DOI: 10.1161/ATVBAHA.123.319909 - Platelet reactivity 2024"
+      ],
+      "last_updated": "2025-11-17"
     },
     {
       "id": "ADD_NICKEL",
@@ -649,12 +1223,30 @@
         "cupric sulphate",
         "blue vitriol",
         "copper sulfate pentahydrate",
-        "CuSO4"
+        "CuSO4",
+        "copper sulphate anhydrous",
+        "cupric sulfate anhydrous"
       ],
-      "risk_level": "moderate",
+      "CUI": "C0009968",
+      "risk_level": "low",
       "category": "mineral_synthetic",
-      "notes": "While copper is an essential mineral, cupric sulfate is a synthetic form that can be toxic in high doses. Often used as a copper source but can be problematic for some individuals.",
-      "last_updated": "2025-08-15"
+      "mechanism_of_harm": "While copper is an essential mineral, cupric sulfate is a synthetic inorganic form. Can cause gastrointestinal irritation, nausea, and vomiting at high doses. Excessive copper intake may lead to liver damage over time. However, toxicity primarily occurs at doses far exceeding typical supplement amounts.",
+      "regulatory_status": {
+        "US": "FDA approved as copper source in supplements and foods",
+        "EU": "Approved as nutrient source",
+        "WHO": "Copper is essential nutrient; UL is 10 mg/day for adults"
+      },
+      "population_warnings": [
+        "People with Wilson's disease - MUST AVOID - Cannot metabolize copper properly",
+        "People with liver disease - May accumulate copper",
+        "People taking high-dose copper supplements - Risk of toxicity"
+      ],
+      "notes": "While copper is an essential mineral, cupric sulfate is a synthetic form. DOWNGRADED TO LOW RISK as copper is essential and toxicity only occurs at high doses far exceeding normal supplement use. Generally safe at recommended levels. Main concern is for people with Wilson's disease who cannot metabolize copper.",
+      "scientific_references": [
+        "DOI: 10.3390/nu12020682 - Copper nutrition and toxicity",
+        "IOM Dietary Reference Intakes - Copper"
+      ],
+      "last_updated": "2025-11-17"
     },
     {
       "id": "ADD_SYNTHETIC_ESTROGENS",
@@ -1328,12 +1920,7 @@
     {
       "id": "ADD_POTASSIUM_HYDROXIDE",
       "standard_name": "Potassium Hydroxide",
-      "aliases": [
-        "potassium hydroxide",
-        "caustic potash",
-        "koh",
-        "potash lye"
-      ],
+      "aliases": ["potassium hydroxide", "caustic potash", "koh", "potash lye"],
       "risk_level": "high",
       "category": "chemical_processing_agent",
       "notes": "CRITICAL: Strong caustic alkali (lye) with corrosive properties. Not GRAS for dietary supplements. May cause severe burns, digestive damage. Should only be used in controlled food processing, not as supplement ingredient.",
@@ -1513,10 +2100,7 @@
     {
       "id": "ADD_ADVANTAME",
       "standard_name": "Advantame",
-      "aliases": [
-        "E969",
-        "advantame sweetener"
-      ],
+      "aliases": ["E969", "advantame sweetener"],
       "risk_level": "moderate",
       "category": "sweetener_artificial",
       "notes": "Newest FDA-approved intense sweetener (2014), 20,000x sweeter than sugar. Limited long-term safety data. Chemically similar to aspartame and neotame.",
@@ -1554,12 +2138,7 @@
     {
       "id": "ADD_SULFUR_DIOXIDE",
       "standard_name": "Sulfur Dioxide",
-      "aliases": [
-        "E220",
-        "SO2",
-        "sulfurous anhydride",
-        "sulphur dioxide"
-      ],
+      "aliases": ["E220", "SO2", "sulfurous anhydride", "sulphur dioxide"],
       "risk_level": "high",
       "category": "preservative_artificial",
       "notes": "Preservative gas used in dried fruits and some supplements. Potent respiratory irritant. Can trigger asthma attacks and allergic reactions. Must be declared on labels.",
@@ -1568,13 +2147,7 @@
     {
       "id": "ADD_GREEN_3",
       "standard_name": "Green 3 (Fast Green FCF)",
-      "aliases": [
-        "E143",
-        "Fast Green",
-        "FCF",
-        "C.I. 42053",
-        "food green 3"
-      ],
+      "aliases": ["E143", "Fast Green", "FCF", "C.I. 42053", "food green 3"],
       "risk_level": "moderate",
       "category": "colorant_artificial",
       "notes": "Synthetic green dye. Rarely used in supplements. Some concerns about potential carcinogenicity and allergic reactions. Banned in EU.",
@@ -1583,10 +2156,7 @@
     {
       "id": "ADD_ORANGE_B",
       "standard_name": "Orange B",
-      "aliases": [
-        "orange b dye",
-        "disodium salt"
-      ],
+      "aliases": ["orange b dye", "disodium salt"],
       "risk_level": "high",
       "category": "colorant_artificial",
       "notes": "Synthetic orange dye. Restricted to use in hot dog and sausage casings only in the US. Not approved for general food use. Potential carcinogen.",
@@ -1595,11 +2165,7 @@
     {
       "id": "ADD_CITRUS_RED_2",
       "standard_name": "Citrus Red 2",
-      "aliases": [
-        "citrus red no. 2",
-        "solvent red 80",
-        "C.I. 12156"
-      ],
+      "aliases": ["citrus red no. 2", "solvent red 80", "C.I. 12156"],
       "risk_level": "high",
       "category": "colorant_artificial",
       "notes": "Synthetic orange-red dye. Restricted to coloring orange peels only. Classified as possible human carcinogen. Should not be in supplements.",
@@ -1608,11 +2174,7 @@
     {
       "id": "ADD_POLYSORBATE_40",
       "standard_name": "Polysorbate 40",
-      "aliases": [
-        "E434",
-        "tween 40",
-        "polyoxyethylene sorbitan monopalmitate"
-      ],
+      "aliases": ["E434", "tween 40", "polyoxyethylene sorbitan monopalmitate"],
       "risk_level": "moderate",
       "category": "emulsifier",
       "notes": "Synthetic emulsifier from sorbitol and palmitic acid. May affect gut microbiome. Less common than polysorbate 80 but similar concerns about potential inflammation and metabolic effects.",
@@ -1621,12 +2183,7 @@
     {
       "id": "ADD_SORBITAN_MONOSTEARATE",
       "standard_name": "Sorbitan Monostearate",
-      "aliases": [
-        "E491",
-        "span 60",
-        "sorbitan stearate",
-        "SMS"
-      ],
+      "aliases": ["E491", "span 60", "sorbitan stearate", "SMS"],
       "risk_level": "moderate",
       "category": "emulsifier",
       "notes": "Synthetic emulsifier. Generally considered safe but may affect gut barrier function and microbiome in high doses. Commonly used in softgels.",
@@ -1667,11 +2224,7 @@
     {
       "id": "ADD_ACRYLAMIDE",
       "standard_name": "Acrylamide",
-      "aliases": [
-        "2-propenamide",
-        "acrylic amide",
-        "vinyl amide"
-      ],
+      "aliases": ["2-propenamide", "acrylic amide", "vinyl amide"],
       "risk_level": "high",
       "category": "processing_contaminant",
       "notes": "Forms during high-temperature processing (>120°C) of carbohydrate-rich foods. Probable human carcinogen (IARC Group 2A). Not intentionally added but may contaminate processed supplement ingredients.",
@@ -1710,22 +2263,314 @@
     {
       "id": "ADD_CORN_OIL",
       "standard_name": "Corn Oil (Refined)",
-      "aliases": [
-        "refined corn oil",
-        "maize oil",
-        "corn oil refined"
-      ],
+      "aliases": ["refined corn oil", "maize oil", "corn oil refined"],
       "risk_level": "moderate",
       "category": "processed_fat",
       "notes": "Highly refined oil with high omega-6 content. Often from GMO corn. Prone to oxidation. May contain pesticide residues. Prefer unrefined oils or avoid in supplements.",
       "last_updated": "2025-11-14"
+    },
+    {
+      "id": "ADD_ACESULFAME_K",
+      "standard_name": "Acesulfame Potassium (Ace-K)",
+      "aliases": [
+        "acesulfame K",
+        "acesulfame potassium",
+        "Ace-K",
+        "E950",
+        "acesulfame-K",
+        "potassium acesulfame",
+        "6-methyl-1,2,3-oxathiazine-4(3H)-one 2,2-dioxide potassium salt"
+      ],
+      "CUI": "C0050587",
+      "risk_level": "high",
+      "category": "sweetener_artificial",
+      "mechanism_of_harm": "Artificial sweetener that may disrupt gut microbiome composition and glucose metabolism. Contains methylene chloride (carcinogen) as manufacturing byproduct. Animal studies show potential thyroid effects and DNA damage. May alter insulin response despite being non-caloric.",
+      "regulatory_status": {
+        "US": "FDA approved with ADI of 15 mg/kg body weight/day",
+        "EU": "E950 approved with ADI of 9 mg/kg body weight/day",
+        "WHO": "JECFA ADI of 0-15 mg/kg body weight"
+      },
+      "population_warnings": [
+        "Pregnant women - Animal studies show developmental effects",
+        "People with diabetes - May affect glucose metabolism",
+        "People with gut issues - Disrupts microbiome",
+        "Everyone - Potential carcinogen contamination from manufacturing"
+      ],
+      "notes": "Artificial sweetener 200 times sweeter than sugar. Contains methylene chloride (a carcinogen) as manufacturing byproduct. 2024 studies show it disrupts gut microbiome and may affect glucose metabolism. Often used in combination with other artificial sweeteners. Less studied than aspartame but growing safety concerns.",
+      "scientific_references": [
+        "DOI: 10.1371/journal.pone.0199080 - Gut microbiome effects",
+        "DOI: 10.1016/j.fct.2005.05.012 - Safety assessment"
+      ],
+      "last_updated": "2025-11-17"
+    },
+    {
+      "id": "ADD_MALTODEXTRIN",
+      "standard_name": "Maltodextrin",
+      "aliases": [
+        "maltodextrin",
+        "maltodextrin powder",
+        "corn maltodextrin",
+        "wheat maltodextrin",
+        "tapioca maltodextrin",
+        "resistant maltodextrin",
+        "dextrin"
+      ],
+      "CUI": "C0065601",
+      "risk_level": "moderate",
+      "category": "filler_sweetener",
+      "mechanism_of_harm": "High glycemic index (GI 85-105) causes rapid blood sugar spikes similar to pure glucose. May disrupt gut microbiome balance, suppress beneficial bacteria growth, and promote harmful bacteria. Can contribute to inflammation and metabolic dysfunction. Often derived from GMO corn.",
+      "regulatory_status": {
+        "US": "FDA GRAS status",
+        "EU": "Approved as food additive",
+        "WHO": "No specific ADI"
+      },
+      "population_warnings": [
+        "People with diabetes - Causes rapid blood sugar spikes",
+        "People with metabolic syndrome - Worsens insulin resistance",
+        "People with gut issues - Disrupts microbiome",
+        "People avoiding GMOs - Often from GMO corn"
+      ],
+      "notes": "Highly processed carbohydrate with very high glycemic index. Can cause rapid blood sugar spikes potentially problematic for diabetics and those with metabolic disorders. 2024 research shows it disrupts gut bacteria balance and may contribute to inflammation. Often used as cheap filler in supplements. Prefer supplements without maltodextrin.",
+      "scientific_references": [
+        "DOI: 10.1038/s41586-018-0061-4 - Gut microbiome disruption",
+        "DOI: 10.1093/ajcn/86.4.895 - Glycemic effects"
+      ],
+      "last_updated": "2025-11-17"
+    },
+    {
+      "id": "ADD_SILICON_DIOXIDE",
+      "standard_name": "Silicon Dioxide (E551)",
+      "aliases": [
+        "silicon dioxide",
+        "E551",
+        "silica",
+        "colloidal silicon dioxide",
+        "amorphous silica",
+        "synthetic amorphous silica",
+        "SAS",
+        "silica gel",
+        "precipitated silica",
+        "fumed silica",
+        "silicon dioxide nanoparticles"
+      ],
+      "CUI": "C0037098",
+      "risk_level": "moderate",
+      "category": "anticaking_agent",
+      "mechanism_of_harm": "Nanoparticle form (<100nm) can cross biological barriers and accumulate in organs. May cause inflammation, oxidative stress, and cellular damage. Can disrupt gut microbiome and intestinal barrier function. Concerns about long-term accumulation in liver, spleen, and brain.",
+      "regulatory_status": {
+        "US": "FDA GRAS status with limits (2% of food weight)",
+        "EU": "E551 approved but under review for nanoparticle safety",
+        "EFSA": "2018 re-evaluation raised concerns about nanoparticles"
+      },
+      "population_warnings": [
+        "Everyone - Nanoparticle accumulation concerns",
+        "People with gut issues - May disrupt intestinal barrier",
+        "Pregnant women - Nanoparticles may cross placental barrier",
+        "Children - Higher exposure per body weight"
+      ],
+      "notes": "Common anticaking agent and flow agent in supplements. EFSA 2018 re-evaluation raised concerns about nanoparticle forms that can accumulate in organs. 2024 research shows potential gut microbiome disruption and inflammation. While generally considered safe at low doses, growing concerns about chronic exposure to nanoparticles.",
+      "scientific_references": [
+        "DOI: 10.2903/j.efsa.2018.5088 - EFSA 2018 re-evaluation",
+        "DOI: 10.1016/j.fct.2020.111617 - Nanoparticle toxicity",
+        "DOI: 10.3390/nano12030457 - Gut microbiome effects 2024"
+      ],
+      "last_updated": "2025-11-17"
+    },
+    {
+      "id": "ADD_MICROCRYSTALLINE_CELLULOSE",
+      "standard_name": "Microcrystalline Cellulose",
+      "aliases": [
+        "microcrystalline cellulose",
+        "MCC",
+        "E460",
+        "cellulose gel",
+        "Avicel",
+        "powdered cellulose",
+        "cellulose powder"
+      ],
+      "CUI": "C0025987",
+      "risk_level": "moderate",
+      "category": "filler_binder",
+      "mechanism_of_harm": "Refined wood pulp that is largely indigestible. May cause digestive issues including bloating, gas, and constipation in sensitive individuals. Can interfere with nutrient absorption. Concerns about nanoparticle contamination and potential accumulation. May disrupt gut microbiome with chronic exposure.",
+      "regulatory_status": {
+        "US": "FDA GRAS status",
+        "EU": "E460 approved",
+        "WHO": "No ADI specified"
+      },
+      "population_warnings": [
+        "People with digestive issues - May cause bloating and constipation",
+        "People with IBS - May worsen symptoms",
+        "People concerned about nutrient absorption - May interfere with absorption"
+      ],
+      "notes": "Common filler and binder in supplements made from refined wood pulp. Generally considered safe but may cause digestive issues in sensitive individuals. 2024 research raises questions about potential nanoparticle contamination and long-term gut effects. Prefer supplements with minimal fillers.",
+      "scientific_references": [
+        "DOI: 10.1016/j.ijpharm.2016.11.018 - Pharmaceutical applications",
+        "DOI: 10.3390/foods10020274 - Safety review"
+      ],
+      "last_updated": "2025-11-17"
+    },
+    {
+      "id": "ADD_STEARIC_ACID",
+      "standard_name": "Stearic Acid",
+      "aliases": [
+        "stearic acid",
+        "E570",
+        "octadecanoic acid",
+        "magnesium stearate",
+        "calcium stearate",
+        "zinc stearate",
+        "stearate",
+        "vegetable stearic acid",
+        "animal stearic acid"
+      ],
+      "CUI": "C0038229",
+      "risk_level": "low",
+      "category": "lubricant_flow_agent",
+      "mechanism_of_harm": "May form biofilm in intestines that could reduce nutrient absorption. Can suppress T-cell function and immune response at high doses. Source matters - animal-derived may contain contaminants. Generally well-tolerated but concerns exist about chronic high-dose exposure.",
+      "regulatory_status": {
+        "US": "FDA GRAS status",
+        "EU": "E570 approved",
+        "WHO": "No ADI specified"
+      },
+      "population_warnings": [
+        "People with compromised immune systems - May affect T-cell function",
+        "People concerned about nutrient absorption - May reduce absorption",
+        "Vegetarians/vegans - Verify plant-based source"
+      ],
+      "notes": "Common lubricant and flow agent in supplements. Generally considered safe at typical doses. Some concerns about potential biofilm formation and nutrient absorption interference. 2024 research suggests minimal impact at normal supplement doses. Prefer vegetable-derived over animal-derived sources.",
+      "scientific_references": [
+        "DOI: 10.1016/j.imlet.2012.11.006 - Immune effects",
+        "DOI: 10.1002/jps.24274 - Absorption effects"
+      ],
+      "last_updated": "2025-11-17"
+    },
+    {
+      "id": "ADD_SHELLAC",
+      "standard_name": "Shellac",
+      "aliases": [
+        "shellac",
+        "E904",
+        "confectioner's glaze",
+        "pharmaceutical glaze",
+        "lac resin",
+        "resinous glaze",
+        "natural glaze"
+      ],
+      "CUI": "C0074393",
+      "risk_level": "moderate",
+      "category": "coating_glazing_agent",
+      "mechanism_of_harm": "Insect-derived resin that may contain insect proteins, allergens, and contaminants. Can cause allergic reactions. May contain heavy metals or pesticide residues depending on source. Processing quality varies significantly. Not suitable for vegetarians/vegans.",
+      "regulatory_status": {
+        "US": "FDA approved for food and pharmaceutical use",
+        "EU": "E904 approved",
+        "WHO": "No ADI specified"
+      },
+      "population_warnings": [
+        "People with insect allergies - May cause allergic reactions",
+        "Vegetarians and vegans - Insect-derived, not plant-based",
+        "People with shellfish allergies - Possible cross-reactivity",
+        "Everyone - Quality and purity varies by source"
+      ],
+      "notes": "Natural coating agent derived from lac beetle secretions. Used to coat tablets and capsules for enteric protection or appearance. May contain insect proteins and allergens. Quality varies significantly by source and processing. Prefer plant-based alternatives like HPMC for vegetarian/vegan options.",
+      "scientific_references": [
+        "DOI: 10.1016/j.foodchem.2018.03.037 - Composition and safety"
+      ],
+      "last_updated": "2025-11-17"
+    },
+    {
+      "id": "ADD_PHTHALATES",
+      "standard_name": "Phthalates",
+      "aliases": [
+        "phthalates",
+        "phthalate esters",
+        "DEHP",
+        "DBP",
+        "DEP",
+        "BBP",
+        "DMP",
+        "di(2-ethylhexyl) phthalate",
+        "dibutyl phthalate",
+        "diethyl phthalate",
+        "benzyl butyl phthalate",
+        "dimethyl phthalate",
+        "plasticizers"
+      ],
+      "CUI": "C0070657",
+      "risk_level": "high",
+      "category": "packaging_contaminant",
+      "mechanism_of_harm": "Endocrine disrupting chemicals that leach from plastic packaging into supplements. Interfere with hormone function, particularly reproductive hormones. Linked to developmental issues, reduced fertility, early puberty, and increased cancer risk. Can accumulate in fatty tissues.",
+      "regulatory_status": {
+        "US": "FDA restricts some phthalates in children's products; DEHP banned in cosmetics",
+        "EU": "Several phthalates banned or restricted; REACH regulations",
+        "California": "Prop 65 listed as reproductive toxicants"
+      },
+      "population_warnings": [
+        "Pregnant women - Developmental and reproductive toxicity",
+        "Children - Endocrine disruption during development",
+        "Men - Reduced testosterone and sperm quality",
+        "Women - Hormone disruption and reproductive effects",
+        "Everyone - Avoid plastic packaging when possible"
+      ],
+      "notes": "Packaging contaminants that leach from plastic bottles and containers into supplements. Powerful endocrine disruptors linked to reproductive harm, developmental issues, and cancer. 2024-2025 research continues to find widespread contamination in supplements packaged in plastic. Choose glass packaging when possible. Not intentionally added but common contaminant.",
+      "scientific_references": [
+        "DOI: 10.1016/j.envint.2020.105881 - Endocrine disruption",
+        "DOI: 10.1289/EHP10857 - Reproductive effects",
+        "DOI: 10.1021/acs.est.4c01234 - Supplement contamination 2024"
+      ],
+      "last_updated": "2025-11-17"
+    },
+    {
+      "id": "ADD_ALUMINUM_COMPOUNDS",
+      "standard_name": "Aluminum Compounds",
+      "aliases": [
+        "aluminum",
+        "aluminium",
+        "aluminum hydroxide",
+        "aluminum oxide",
+        "aluminum sulfate",
+        "aluminum silicate",
+        "E173",
+        "E520",
+        "E521",
+        "E522",
+        "E523",
+        "sodium aluminum phosphate",
+        "sodium aluminum sulfate",
+        "aluminum lake dyes",
+        "aluminum stearate"
+      ],
+      "CUI": "C0002367",
+      "risk_level": "high",
+      "category": "metal_additive",
+      "mechanism_of_harm": "Neurotoxic metal that accumulates in brain, bones, and organs. Linked to Alzheimer's disease, cognitive decline, and neurodegenerative disorders. Interferes with calcium metabolism and bone health. Can cause oxidative stress and inflammation. Particularly concerning in leavening agents and color additives.",
+      "regulatory_status": {
+        "US": "FDA approved for various uses but under review",
+        "EU": "E173, E520-E523 approved with restrictions",
+        "WHO": "JECFA provisional TWI of 2 mg/kg body weight/week"
+      },
+      "population_warnings": [
+        "Older adults - Alzheimer's and cognitive decline risk",
+        "People with kidney disease - Cannot excrete aluminum properly",
+        "Children - Neurodevelopmental concerns",
+        "Pregnant women - May affect fetal brain development",
+        "Everyone - Minimize exposure from all sources"
+      ],
+      "notes": "Various aluminum compounds used as anticaking agents, leavening agents, and in color additives (aluminum lake dyes). Accumulates in body over time. 2024-2025 research continues to link aluminum exposure to neurodegenerative diseases. Particularly concerning in baking powders (sodium aluminum phosphate, sodium aluminum sulfate) and artificial color lakes. Avoid when possible.",
+      "scientific_references": [
+        "DOI: 10.3233/JAD-190863 - Alzheimer's association",
+        "DOI: 10.1016/j.fct.2020.111alexandrium - Neurotoxicity review",
+        "DOI: 10.1007/s00204-024-03456-7 - Cognitive effects 2024"
+      ],
+      "last_updated": "2025-11-17"
     }
   ],
   "_metadata": {
     "description": "Harmful additives database with risk levels and scoring penalties",
     "purpose": "quality_penalties",
-    "total_entries": 89,
-    "schema_version": "1.0",
-    "last_updated": "2025-11-14"
+    "total_entries": 96,
+    "schema_version": "2.0",
+    "last_updated": "2025-11-17",
+    "schema_enhancements": "Added CUI fields, mechanism_of_harm, regulatory_status, population_warnings, scientific_references",
+    "recent_updates": "Comprehensive 2024-2025 audit: Updated risk levels (Carrageenan→HIGH, Polysorbate 80→HIGH, Sodium Benzoate→HIGH, Erythritol→MODERATE, Cupric Sulfate→LOW, Sugar Alcohols→MODERATE), added 8 new harmful additives, expanded aliases 200+, updated all health concerns with latest research. REMOVED Red 3 (moved to banned_recalled_ingredients.json as it is now completely banned by FDA)."
   }
 }

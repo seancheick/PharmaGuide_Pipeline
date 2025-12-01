@@ -12,6 +12,7 @@ from concurrent.futures import ProcessPoolExecutor, as_completed
 from collections import Counter
 from dataclasses import dataclass, asdict
 from tqdm import tqdm
+import psutil
 
 from enhanced_normalizer import EnhancedDSLDNormalizer
 from dsld_validator import DSLDValidator
@@ -26,6 +27,59 @@ from constants import (
 )
 
 logger = logging.getLogger(__name__)
+
+
+class PerformanceTracker:
+    """Track performance metrics during batch processing"""
+
+    def __init__(self):
+        self.start_time = time.time()
+        self.file_times = []
+        self.batch_times = []
+        self.memory_samples = []
+
+    def record_file(self, duration: float):
+        """Record processing time for a single file"""
+        self.file_times.append(duration)
+
+    def record_batch(self, duration: float):
+        """Record processing time for a batch"""
+        self.batch_times.append(duration)
+
+    def record_memory(self):
+        """Record current memory usage"""
+        try:
+            process = psutil.Process()
+            memory_mb = process.memory_info().rss / (1024 * 1024)
+            self.memory_samples.append(memory_mb)
+            return memory_mb
+        except Exception:
+            return 0
+
+    def get_stats(self) -> Dict[str, Any]:
+        """Get performance statistics"""
+        import statistics
+
+        stats = {
+            "total_runtime_seconds": time.time() - self.start_time,
+            "total_files": len(self.file_times)
+        }
+
+        if self.file_times:
+            stats["avg_time_per_file"] = statistics.mean(self.file_times)
+            stats["median_time"] = statistics.median(self.file_times)
+            stats["slowest_file"] = max(self.file_times)
+            stats["fastest_file"] = min(self.file_times)
+            stats["files_per_minute"] = 60 / statistics.mean(self.file_times)
+
+        if self.batch_times:
+            stats["avg_batch_time"] = statistics.mean(self.batch_times)
+
+        if self.memory_samples:
+            stats["avg_memory_mb"] = statistics.mean(self.memory_samples)
+            stats["peak_memory_mb"] = max(self.memory_samples)
+
+        return stats
 
 
 @dataclass
@@ -56,23 +110,26 @@ class BatchState:
 
 class BatchProcessor:
     """Manages batch processing of DSLD files"""
-    
+
     def __init__(self, config: Dict[str, Any]):
         self.config = config
         self.batch_size = config["processing"]["batch_size"]
         self.max_workers = config["processing"]["max_workers"]
         self.output_dir = Path(config["paths"]["output_directory"])
         self.log_dir = Path(config["paths"]["log_directory"])
-        
+
         # Create output directories
         self._create_directories()
-        
+
         # Initialize state
         self.state_file = self.log_dir / "processing_state.json"
-        
+
         # Global counters for unmapped and mapped ingredients
         self.global_unmapped = Counter()
         self.global_mapped = Counter()
+
+        # Initialize performance tracker
+        self.performance_tracker = PerformanceTracker()
 
         # Remove shared normalizer instance for thread safety
         # Each process will create its own normalizer instance
@@ -81,16 +138,90 @@ class BatchProcessor:
         """Create necessary output directories"""
         dirs = [
             self.output_dir / "cleaned",
-            self.output_dir / "needs_review", 
+            self.output_dir / "needs_review",
             self.output_dir / "incomplete",
             self.output_dir / "unmapped",
             self.log_dir,
             Path(self.config["paths"]["output_directory"]) / "reports"
         ]
-        
+
         for directory in dirs:
             directory.mkdir(parents=True, exist_ok=True)
-    
+
+    def check_memory(self) -> Tuple[bool, float]:
+        """
+        Monitor memory usage and warn if high
+        Returns: (is_ok, usage_gb)
+        """
+        try:
+            memory = psutil.Process().memory_info()
+            usage_gb = memory.rss / (1024 * 1024 * 1024)
+
+            # Record for performance tracking
+            self.performance_tracker.record_memory()
+
+            memory_limit = self.config.get("processing", {}).get("memory_limit_gb", 8)
+
+            if usage_gb > memory_limit:
+                logger.warning(f"High memory usage: {usage_gb:.1f}GB (limit: {memory_limit}GB)")
+                return False, usage_gb
+
+            return True, usage_gb
+        except Exception as e:
+            logger.debug(f"Memory check failed: {e}")
+            return True, 0
+
+    def validate_input_file(self, file_path: Path) -> Tuple[bool, Optional[str]]:
+        """
+        Validate JSON file before processing
+        Returns: (is_valid, error_message)
+        """
+        if not self.config.get("validation", {}).get("check_input_integrity", False):
+            return True, None
+
+        try:
+            with open(file_path, 'r', encoding='utf-8') as f:
+                data = json.load(f)
+
+            # Check required fields
+            required = ['id']  # Minimal requirement
+            missing = [f for f in required if f not in data]
+
+            if missing:
+                return False, f"Missing required fields: {missing}"
+
+            # Check if it's a valid DSLD structure
+            if 'ingredientRows' not in data and 'otherIngredients' not in data:
+                return False, "No ingredient data found"
+
+            return True, None
+
+        except json.JSONDecodeError as e:
+            return False, f"Invalid JSON: {str(e)}"
+        except Exception as e:
+            return False, f"Validation error: {str(e)}"
+
+    def verify_output(self, cleaned_data: Dict) -> Tuple[bool, Dict[str, bool]]:
+        """
+        Verify cleaned data meets requirements
+        Returns: (all_checks_passed, individual_checks)
+        """
+        if not self.config.get("validation", {}).get("verify_output", False):
+            return True, {}
+
+        checks = {
+            "has_id": "id" in cleaned_data,
+            "has_metadata": "metadata" in cleaned_data,
+            "has_labelText": "labelText" in cleaned_data,
+            "preserved_original_id": cleaned_data.get("id") is not None,
+            "no_enrichment_fields": all(
+                field not in str(cleaned_data)
+                for field in ["clinicalDosing", "industryBenchmark"]
+            )
+        }
+
+        return all(checks.values()), checks
+
     def get_input_files(self, input_directory: str) -> List[Path]:
         """Get list of input DSLD JSON files"""
         input_path = Path(input_directory)
@@ -216,13 +347,20 @@ class BatchProcessor:
     def process_batch(self, batch_num: int, files: List[Path]) -> Dict[str, Any]:
         """Process a single batch of files"""
         batch_start_time = time.time()
-        
+
+        # Check memory before processing
+        memory_ok, memory_usage = self.check_memory()
+        if not memory_ok and self.config.get("processing", {}).get("pause_on_high_memory", False):
+            logger.warning(f"Pausing for 5 seconds due to high memory usage ({memory_usage:.1f}GB)")
+            time.sleep(5)
+
         # Create batch logger
         batch_log_file = self.log_dir / f"batch_{batch_num + 1}_log.txt"
         batch_logger = self._create_batch_logger(batch_log_file)
-        
+
         batch_logger.info(f"=== Batch {batch_num + 1} Processing Log ===")
         batch_logger.info(f"Started: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+        batch_logger.info(f"Memory usage: {memory_usage:.1f}GB")
         batch_logger.info(f"Files: {files[0].name} to {files[-1].name}")
         
         # Containers for results
@@ -304,6 +442,13 @@ class BatchProcessor:
         
         # Log batch summary
         batch_time = time.time() - batch_start_time
+
+        # Record performance metrics
+        self.performance_tracker.record_batch(batch_time)
+
+        # Final memory check
+        _, final_memory = self.check_memory()
+
         summary = {
             "batch_num": batch_num + 1,
             "processed": len(files),
@@ -312,12 +457,14 @@ class BatchProcessor:
             "incomplete": len(incomplete_products),
             "errors": len(errors),
             "processing_time": batch_time,
-            "avg_time_per_file": batch_time / len(files) if files else 0
+            "avg_time_per_file": batch_time / len(files) if files else 0,
+            "memory_mb": final_memory * 1024  # Convert GB to MB
         }
-        
+
         batch_logger.info(f"Ended: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
         batch_logger.info(f"Summary: {summary}")
         batch_logger.info(f"Unmapped ingredients: {len(batch_unmapped)}")
+        batch_logger.info(f"Final memory usage: {final_memory:.1f}GB")
         
         if errors:
             batch_logger.info("Errors:")
@@ -470,14 +617,17 @@ class BatchProcessor:
                 logger.error(f"Failed to save fallback unmapped ingredients: {str(fallback_error)}")
     
     def _generate_final_summary(self, batch_results: List[Dict], total_time: float) -> Dict[str, Any]:
-        """Generate final processing summary"""
+        """Generate final processing summary with performance metrics"""
         total_processed = sum(r["summary"]["processed"] for r in batch_results)
         total_cleaned = sum(r["summary"]["cleaned"] for r in batch_results)
         total_needs_review = sum(r["summary"]["needs_review"] for r in batch_results)
         total_incomplete = sum(r["summary"]["incomplete"] for r in batch_results)
         total_errors = sum(r["summary"]["errors"] for r in batch_results)
-        
-        return {
+
+        # Get performance stats
+        perf_stats = self.performance_tracker.get_stats()
+
+        summary = {
             "processing_complete": True,
             "total_files": total_processed,
             "results": {
@@ -495,6 +645,12 @@ class BatchProcessor:
             "mapped_ingredients": len(self.global_mapped),
             "success_rate": (total_cleaned / total_processed * 100) if total_processed else 0
         }
+
+        # Add performance metrics if tracking is enabled
+        if self.config.get("monitoring", {}).get("track_performance", False):
+            summary["performance"] = perf_stats
+
+        return summary
     
     def _generate_processing_report(self, summary: Dict, batch_results: List[Dict]):
         """Generate detailed processing report"""
@@ -518,6 +674,17 @@ class BatchProcessor:
                 
                 f.write(f"Mapped ingredients found: {summary['mapped_ingredients']}\n")
                 f.write(f"Unmapped ingredients found: {summary['unmapped_ingredients']}\n\n")
+
+                # Add performance metrics if available
+                if "performance" in summary:
+                    perf = summary["performance"]
+                    f.write("Performance Metrics:\n")
+                    f.write(f"  - Files per minute: {perf.get('files_per_minute', 0):.1f}\n")
+                    f.write(f"  - Average time per file: {perf.get('avg_time_per_file', 0):.2f}s\n")
+                    f.write(f"  - Median time: {perf.get('median_time', 0):.2f}s\n")
+                    if 'peak_memory_mb' in perf:
+                        f.write(f"  - Peak memory usage: {perf['peak_memory_mb']:.1f}MB\n")
+                    f.write("\n")
 
                 # Add top mapped ingredients for data insights
                 if self.global_mapped:

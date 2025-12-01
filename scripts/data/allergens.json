@@ -1,8 +1,8 @@
 {
   "database_info": {
     "version": "2.4.0",
-    "last_updated": "2025-09-20",
-    "total_allergens": 49,
+    "last_updated": "2025-11-17",
+    "total_allergens": 38,
     "scoring_system": {
       "allergen_free_bonus": 2,
       "severity_penalties": {
@@ -531,7 +531,7 @@
       "aliases": [
         "E961",
         "neotame powder",
-        "N-[N-(3,3-dimethylbutyl)-L-α-aspartyl]-L-phenylalanine 1-methyl ester"
+        "N-[N-(3,3-dimethylbutyl)-L-\u03b1-aspartyl]-L-phenylalanine 1-methyl ester"
       ],
       "prevalence": "moderate",
       "severity_level": "moderate",
@@ -547,7 +547,7 @@
       "aliases": [
         "E969",
         "advantame powder",
-        "N-[N-[3-(3-hydroxy-4-methoxyphenyl)propyl]-α-aspartyl]-L-phenylalanine 1-methyl ester"
+        "N-[N-[3-(3-hydroxy-4-methoxyphenyl)propyl]-\u03b1-aspartyl]-L-phenylalanine 1-methyl ester"
       ],
       "prevalence": "low",
       "severity_level": "moderate",
@@ -613,13 +613,125 @@
       "notes": "Though less allergenic than soy lecithin, can still cause reactions in sensitive individuals. Most allergists consider it low-risk, but some highly sensitive people may react. Generally well-tolerated alternative to soy lecithin for those with soy allergies.",
       "category": "plant_derived_emulsifier",
       "last_updated": "2025-09-20"
+    },
+    {
+      "id": "TITANIUM_DIOXIDE_TIO2",
+      "standard_name": "Titanium Dioxide",
+      "aliases": [
+        "titanium dioxide",
+        "TiO2",
+        "E171",
+        "titania",
+        "titanium(IV) oxide",
+        "titanium white"
+      ],
+      "prevalence": "common",
+      "severity_level": "moderate",
+      "regulatory_status": "EU_banned_as_food_additive_2022",
+      "supplement_context": "Common coating agent for pills and capsules, whitening agent. EU banned as food additive in 2022 due to potential genotoxic effects.",
+      "notes": "Used in pharmaceutical coatings and some supplements. Can cause allergic sensitization in susceptible individuals. Nano-particles of concern.",
+      "category": "colorant_coating",
+      "last_updated": "2025-11-17"
+    },
+    {
+      "id": "MSG_MONOSODIUM_GLUTAMATE",
+      "standard_name": "MSG (Monosodium Glutamate)",
+      "aliases": [
+        "monosodium glutamate",
+        "msg",
+        "E621",
+        "sodium glutamate",
+        "glutamic acid sodium salt",
+        "accent",
+        "vetsin"
+      ],
+      "prevalence": "uncommon",
+      "severity_level": "low",
+      "regulatory_status": "FDA_GRAS",
+      "supplement_context": "Occasionally found in savory supplement powders or protein products. Can cause reactions in MSG-sensitive individuals.",
+      "notes": "FDA classifies as GRAS. Some individuals report headaches, flushing, sweating (MSG symptom complex). Generally recognized as safe for most people.",
+      "category": "flavor_enhancer",
+      "last_updated": "2025-11-17"
+    },
+    {
+      "id": "BEE_POLLEN",
+      "standard_name": "Bee Pollen",
+      "aliases": [
+        "bee pollen",
+        "pollen",
+        "flower pollen",
+        "honeybee pollen",
+        "apis mellifera pollen"
+      ],
+      "prevalence": "moderate",
+      "severity_level": "high",
+      "regulatory_status": "FDA_unregulated_supplement",
+      "supplement_context": "Common supplement ingredient marketed for energy, immunity. HIGH RISK for bee-allergic individuals and those with pollen allergies.",
+      "notes": "Can cause severe allergic reactions including anaphylaxis in allergic individuals. Asthmatics at higher risk. Contains proteins from pollen and bee secretions.",
+      "category": "allergen",
+      "last_updated": "2025-11-17"
+    },
+    {
+      "id": "ROYAL_JELLY",
+      "standard_name": "Royal Jelly",
+      "aliases": [
+        "royal jelly",
+        "bee milk",
+        "queen bee jelly",
+        "royal bee jelly",
+        "apis mellifera royal jelly"
+      ],
+      "prevalence": "moderate",
+      "severity_level": "high",
+      "regulatory_status": "FDA_unregulated_supplement",
+      "supplement_context": "Popular supplement for energy, skin health, anti-aging. HIGH RISK for bee-allergic individuals and asthmatics.",
+      "notes": "Well-documented allergen. Multiple case reports of anaphylaxis, especially in asthmatics. Contains major royal jelly proteins (MRJPs) that are potent allergens.",
+      "category": "allergen",
+      "last_updated": "2025-11-17"
+    },
+    {
+      "id": "PROPOLIS",
+      "standard_name": "Propolis",
+      "aliases": [
+        "propolis",
+        "bee propolis",
+        "bee glue",
+        "propolis extract",
+        "apis mellifera propolis"
+      ],
+      "prevalence": "moderate",
+      "severity_level": "moderate",
+      "regulatory_status": "FDA_unregulated_supplement",
+      "supplement_context": "Used in immune support supplements. Contains tree resins collected by bees. Can cause allergic reactions.",
+      "notes": "Known to cause contact dermatitis and allergic reactions. Contains flavonoids and phenolic compounds. Cross-reactivity with other bee products possible.",
+      "category": "allergen",
+      "last_updated": "2025-11-17"
+    },
+    {
+      "id": "GLUTEN",
+      "standard_name": "Gluten",
+      "aliases": [
+        "gluten",
+        "wheat gluten",
+        "gluten protein",
+        "gliadin",
+        "glutenin",
+        "cereal protein"
+      ],
+      "prevalence": "high",
+      "severity_level": "high",
+      "regulatory_status": "FDA_requires_labeling",
+      "supplement_context": "Protein found in wheat, barley, rye. Can be present in supplements as filler or from contamination. CRITICAL for celiac disease patients.",
+      "notes": "Causes celiac disease (autoimmune) and non-celiac gluten sensitivity. Even trace amounts problematic for celiac patients. Check for 'gluten-free' certification.",
+      "category": "allergen",
+      "last_updated": "2025-11-17"
     }
   ],
   "_metadata": {
     "description": "Allergen database for supplement safety flagging and warnings",
     "purpose": "safety_warnings",
-    "total_entries": 32,
+    "total_entries": 38,
     "schema_version": "1.0",
-    "last_updated": "2025-11-14"
+    "last_updated": "2025-11-17"
   }
 }

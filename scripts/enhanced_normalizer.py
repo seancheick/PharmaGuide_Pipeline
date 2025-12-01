@@ -38,13 +38,7 @@ from constants import (
     BOTANICAL_INGREDIENTS,
     ABSORPTION_ENHANCERS,
     ENHANCED_DELIVERY,
-    RDA_OPTIMAL_ULS,
-    RDA_THERAPEUTIC_DOSING,
-    UNIT_CONVERSIONS,
     FUZZY_MATCHING_THRESHOLDS,
-    SCORING_CONSTANTS,
-    EVIDENCE_SCORING,
-    UNIT_ALIASES,
     ENHANCED_EXCLUSION_PATTERNS,
     DSLD_IMAGE_URL_TEMPLATE,
     CERTIFICATION_PATTERNS,
@@ -55,10 +49,8 @@ from constants import (
     PROPRIETARY_BLEND_INDICATORS,
     DELIVERY_ENHANCEMENT_PATTERNS,
     CLINICAL_EVIDENCE_PATTERNS,
-    FORM_QUALIFIERS,
     DEFAULT_SERVING_SIZE,
-    DEFAULT_DAILY_SERVINGS,
-    EXCLUDED_NUTRITION_FACTS
+    DEFAULT_DAILY_SERVINGS
 )
 
 # Import the UnmappedIngredientTracker
@@ -678,12 +670,8 @@ class EnhancedDSLDNormalizer:
         self.other_ingredients = self._load_json(OTHER_INGREDIENTS)  # Merged: non_harmful + passive_inactive
         self.botanical_ingredients = self._load_json(BOTANICAL_INGREDIENTS)
         self.absorption_enhancers = self._load_json(ABSORPTION_ENHANCERS)
-
-        # Load RDA databases for clinical dosing validation
-        self.rda_optimal = self._load_json(RDA_OPTIMAL_ULS)
-        self.rda_therapeutic = self._load_json(RDA_THERAPEUTIC_DOSING)
         self.enhanced_delivery = self._load_json(ENHANCED_DELIVERY)
-        
+
         # Initialize enhanced matcher
         self.matcher = EnhancedIngredientMatcher()
 
@@ -1179,6 +1167,9 @@ class EnhancedDSLDNormalizer:
 
         # PRIORITY 11: Add ENHANCED DELIVERY lookups
         for delivery_key, delivery_data in self.enhanced_delivery.items():
+            # Skip metadata keys (like _comment, _metadata, etc.)
+            if delivery_key.startswith("_") or not isinstance(delivery_data, dict):
+                continue
             delivery_name = delivery_key.replace("_", " ").title()  # Convert key to readable name
             processed_name = self.matcher.preprocess_text(delivery_key)
             if processed_name not in self._fast_exact_lookup:
@@ -1260,20 +1251,32 @@ class EnhancedDSLDNormalizer:
                 "is_active": True  # This method is for active ingredients from the context
             }
 
-        return {
+        # Check if this ingredient is an additive (add metadata flag for enrichment phase)
+        processed_name = self.matcher.preprocess_text(name)
+        is_additive = False
+        additive_type = None
+        if processed_name in self.other_ingredients_lookup:
+            additive_data = self.other_ingredients_lookup[processed_name]
+            is_additive = additive_data.get("is_additive", False)
+            if is_additive:
+                additive_type = additive_data.get("additive_type")
+
+        # CLEANING ONLY - NO ENRICHMENT FIELDS
+        result = {
             "order": ingredient_data.get("order", 0),
             "name": name,
             "standardName": standard_name,
-            "category": ingredient_data.get("category", ""),
-            "ingredientGroup": ingredient_data.get("ingredientGroup", ""),
-            "isHarmful": harmful_info["category"] != "none",
-            "harmfulCategory": harmful_info["category"],
-            "riskLevel": harmful_info["risk_level"],
-            "allergen": allergen_info["is_allergen"],
-            "allergenType": allergen_info["type"],
-            "allergenSeverity": allergen_info["severity"],
+            "ingredientGroup": ingredient_data.get("ingredientGroup"),  # PRESERVE from DSLD (even if wrong)
             "mapped": is_mapped
         }
+
+        # Add additive metadata flag (for enrichment phase to use)
+        if is_additive:
+            result["isAdditive"] = True
+            if additive_type:
+                result["additiveType"] = additive_type
+
+        return result
 
     @property
     def ingredient_variations(self) -> List[str]:
@@ -1372,8 +1375,11 @@ class EnhancedDSLDNormalizer:
         
         # Track conflicts to debug mapping issues
         conflicts = {}
-        
+
         for vitamin_name, vitamin_data in self.ingredient_map.items():
+            # Skip metadata keys (like _metadata, _comment, etc.)
+            if vitamin_name.startswith("_") or not isinstance(vitamin_data, dict):
+                continue
             standard_name = vitamin_data.get("standard_name", vitamin_name)
             
             # Add standard name and its variations FIRST (prioritize exact matches)
@@ -2116,18 +2122,18 @@ class EnhancedDSLDNormalizer:
             # Flatten and process ingredients with enhanced mapping
             raw_ingredients = raw_data.get("ingredientRows", []) or []
             flattened_ingredients = self._flatten_nested_ingredients(raw_ingredients)
-            
-            # Extract nutritional warnings before filtering out nutrition facts
-            # Need to check both active ingredients and other ingredients for nutritional facts
+
+            # Extract nutritional info BEFORE filtering out nutrition facts
             # Handle both "otherIngredients" and "otheringredients" keys
             other_ing_data = raw_data.get("otherIngredients", raw_data.get("otheringredients", {})) or {}
             other_ingredients_raw = other_ing_data.get("ingredients", [])
             # Handle None values from DSLD data
             if other_ingredients_raw is None:
                 other_ingredients_raw = []
-            all_ingredients_for_warnings = flattened_ingredients + other_ingredients_raw
-            nutritional_warnings = self._extract_nutritional_warnings(all_ingredients_for_warnings)
-            
+
+            # Capture nutritional info from ALL ingredients
+            nutritional_info = self._extract_nutritional_info(flattened_ingredients + other_ingredients_raw)
+
             active_ingredients = self._process_ingredients_enhanced(flattened_ingredients, is_active=True)
             
             # Process other ingredients - handle both key formats
@@ -2142,61 +2148,352 @@ class EnhancedDSLDNormalizer:
             # Process serving sizes
             serving_sizes = self._process_serving_sizes(raw_data.get("servingSizes", []) or [])
             
-            # Extract quality flags
-            quality_flags = self._extract_quality_flags(
-                active_ingredients, 
-                inactive_ingredients, 
-                statements
-            )
-            
-            # CRITICAL FIX: Aggregate GMP certifications from statements to contacts
-            # Check if any statement has GMP certification
-            has_gmp_from_statements = any(stmt.get("gmpCertified", False) for stmt in statements)
-            if has_gmp_from_statements and contacts:
-                # contacts is a list, update all contact entries
-                for contact in contacts:
-                    contact["isGMP"] = True
-                
-            # Extract clinical evidence from statements
-            clinical_evidence_mentions = []
-            for stmt in statements:
-                notes = stmt.get("notes", "")
-                for pattern in CLINICAL_EVIDENCE_PATTERNS:
-                    match = re.search(pattern, notes, re.IGNORECASE)
-                    if match:
-                        try:
-                            clinical_evidence_mentions.append(match.group(0))
-                        except IndexError:
-                            # Skip if group access fails
-                            pass
-            
-            # Calculate mapping statistics
+            # Calculate mapping statistics (basic cleaning metadata)
             total_ingredients = len(active_ingredients) + len(inactive_ingredients)
             mapped_ingredients = sum(1 for ing in active_ingredients + inactive_ingredients if ing.get("mapped"))
-            
-            # Calculate proprietary blend disclosure statistics
-            blend_stats = self._calculate_blend_disclosure_stats(active_ingredients + inactive_ingredients)
 
-            # Industry benchmarking against transparency leaders
-            industry_benchmark = self._benchmark_against_industry_leaders(blend_stats)
-
-            # Enhanced penalty weighting based on ingredient category risk
-            penalty_weighting = self._calculate_enhanced_penalty_weighting(
-                active_ingredients + inactive_ingredients, blend_stats
-            )
-            
-            # Extract all certifications for product-level aggregation
+            # Aggregate data from statements and ingredients for labelText.parsed
             all_certifications = []
-            for stmt in statements:
-                all_certifications.extend(stmt.get("certifications", []) or [])
-            
-            # Calculate full ingredient disclosure flag for transparency
-            has_full_disclosure = self._has_full_ingredient_disclosure(blend_stats)
+            all_allergen_free = []
+            all_allergens = []  # Actual allergens PRESENT in product (from "Contains:" warnings)
+            all_warnings = []
+            all_testing = []
+            all_flavors = []
+            all_harvest_methods = []
+            all_marketing_claims = []
+            all_quality_features = []
 
-            # Build cleaned product
+            def add_marketing_claim(claim: str, existing_claims: list):
+                """Helper to clean and add marketing claims, avoiding duplicates"""
+                # Clean up newlines and extra whitespace
+                claim = claim.replace('\n', ' ').replace('\r', ' ')
+                claim = ' '.join(claim.split())  # Normalize whitespace
+                claim = claim.strip()
+
+                # Skip if too short or already exists
+                if len(claim) < 5:
+                    return
+                if claim in existing_claims:
+                    return
+
+                # Skip fragments that start with lowercase "support" (likely partial matches)
+                if claim.lower().startswith('support ') and claim[0].islower():
+                    # This is a fragment like "support Supports immunity"
+                    # Try to extract just the capitalized part
+                    capitalized_match = re.search(r'\b([A-Z][^\n.]{10,})', claim)
+                    if capitalized_match:
+                        claim = capitalized_match.group(1).strip()
+                    else:
+                        return  # Skip this fragment
+
+                # Check for substring duplicates (avoid "X" and "Y...X" both appearing)
+                for existing in existing_claims:
+                    if claim in existing or existing in claim:
+                        # Keep the longer, more descriptive one
+                        if len(claim) > len(existing):
+                            existing_claims.remove(existing)
+                            break
+                        else:
+                            return  # Skip this shorter duplicate
+
+                # Split very long claims at logical boundaries
+                if len(claim) > 120:
+                    # Try to split on common conjunctions that introduce subclauses
+                    parts = re.split(r',\s+(?:ensuring|which|that)\s+', claim, maxsplit=1)
+                    if len(parts) > 1:
+                        # Add both parts separately
+                        for part in parts:
+                            part = part.strip()
+                            if len(part) > 10 and part not in existing_claims:
+                                existing_claims.append(part)
+                        return
+
+                existing_claims.append(claim)
+
+            # Extract from statements (parse directly from notes since statements no longer have enrichment fields)
+            for stmt in statements:
+                notes = stmt.get("notes", "")
+
+                # Extract certifications directly from notes
+                for cert_name, pattern in CERTIFICATION_PATTERNS.items():
+                    if re.search(pattern, notes, re.IGNORECASE):
+                        all_certifications.append(cert_name)
+
+                # Extract allergen-free claims directly from notes
+                for allergen, pattern in ALLERGEN_FREE_PATTERNS.items():
+                    if re.search(pattern, notes, re.IGNORECASE):
+                        all_allergen_free.append(allergen)
+
+                # Also parse compound "No X, Y, Z" lists for allergen-related items
+                if stmt.get("type") == "Formulation re: Does NOT Contain" or re.search(r'\bNo\s+[^.]+(?:,\s*[^.]+)+', notes, re.I):
+                    items_match = re.search(r'No\s+([^.!?]+(?:,\s*(?:or\s+)?[^.!?]+)+)', notes, re.I)
+                    if items_match:
+                        items_text = items_match.group(1)
+                        items = re.split(r',\s*(?:or\s+)?|\s+or\s+', items_text)
+                        for item in items:
+                            item_lower = item.strip().lower()
+                            # Check for common allergens in the list
+                            if 'wheat' in item_lower and 'wheat' not in all_allergen_free:
+                                all_allergen_free.append('wheat')
+                            if 'soy' in item_lower and 'soy' not in all_allergen_free:
+                                all_allergen_free.append('soy')
+                            if 'dairy' in item_lower or 'milk' in item_lower:
+                                if 'dairy' not in all_allergen_free:
+                                    all_allergen_free.append('dairy')
+                            if 'yeast' in item_lower and 'yeast' not in all_allergen_free:
+                                all_allergen_free.append('yeast')
+                            if 'egg' in item_lower and 'egg' not in all_allergen_free:
+                                all_allergen_free.append('egg')
+                            if 'peanut' in item_lower and 'peanut' not in all_allergen_free:
+                                all_allergen_free.append('peanut')
+                            if 'nut' in item_lower and item_lower not in ['peanut', 'donut', 'coconut']:
+                                if 'nut' not in all_allergen_free:
+                                    all_allergen_free.append('nut')
+                            if 'shellfish' in item_lower and 'shellfish' not in all_allergen_free:
+                                all_allergen_free.append('shellfish')
+
+                # Extract warnings
+                if re.search(r"keep\s+out\s+of\s+(the\s+)?reach\s+of\s+children", notes, re.I):
+                    all_warnings.append("Keep out of reach of children")
+                if re.search(r"choking\s+hazard", notes, re.I):
+                    all_warnings.append("Choking hazard")
+                if re.search(r"not\s+recommended.*autoimmune", notes, re.I):
+                    all_warnings.append("Not recommended for individuals with autoimmune conditions")
+                if re.search(r"allergi.*(?:to\s+)?plants.*(?:Asteraceae|Compositae)", notes, re.I):
+                    all_warnings.append("Persons with allergies to plants of the Asteraceae family should use with caution")
+                if re.search(r"(not.*use|before\s+use).*if.*(pregnant|nursing|lactation)", notes, re.I):
+                    all_warnings.append("If pregnant, nursing, or taking any medications, consult a healthcare professional before use")
+                elif re.search(r"(?:if\s+)?pregnant.*nursing.*(?:taking|consult)", notes, re.I):
+                    all_warnings.append("If pregnant, nursing, or taking any medications, consult a healthcare professional before use")
+                elif re.search(r"consult.*(doctor|health\s*care\s+(?:practitioner|professional)|physician).*(pregnant|nursing|medical\s+condition|medication)", notes, re.I):
+                    all_warnings.append("If pregnant, nursing, or taking any medications, consult a healthcare professional before use")
+                if re.search(r"use only as directed", notes, re.I):
+                    all_warnings.append("Use only as directed on label")
+
+                # Extract allergens from "Contains:" warnings
+                contains_match = re.search(r"contains:?\s+([^.]+)", notes, re.I)
+                if contains_match:
+                    contains_text = contains_match.group(1).strip()
+
+                    # Only add "Contains:" warnings for actual allergens, not marketing fluff
+                    is_real_allergen_warning = False
+
+                    # Check for FDA major allergens
+                    if re.search(r"\b(milk|dairy|whey|casein)\b", contains_text, re.I):
+                        if "milk" not in all_allergens:
+                            all_allergens.append("milk")
+                        # Clean up milk warning text
+                        if re.search(r"trace.*ferment", contains_text, re.I):
+                            all_warnings.append("Contains: Milk (trace amounts from fermentation)")
+                        else:
+                            all_warnings.append("Contains: Milk")
+                        is_real_allergen_warning = True
+
+                    if re.search(r"\b(soy|soybean)\b", contains_text, re.I):
+                        if "soy" not in all_allergens:
+                            all_allergens.append("soy")
+                        all_warnings.append("Contains: Soy")
+                        is_real_allergen_warning = True
+
+                    if re.search(r"\b(shellfish|crustacean|shrimp|crab|lobster)\b", contains_text, re.I):
+                        if "shellfish" not in all_allergens:
+                            all_allergens.append("shellfish")
+                        all_warnings.append("Contains: Shellfish")
+                        is_real_allergen_warning = True
+
+                    if re.search(r"\b(tree nuts?|almond|walnut|cashew|pecan)\b", contains_text, re.I):
+                        if "tree nuts" not in all_allergens:
+                            all_allergens.append("tree nuts")
+                        all_warnings.append("Contains: Tree Nuts")
+                        is_real_allergen_warning = True
+
+                    if re.search(r"\b(peanut|groundnut)\b", contains_text, re.I):
+                        if "peanuts" not in all_allergens:
+                            all_allergens.append("peanuts")
+                        all_warnings.append("Contains: Peanuts")
+                        is_real_allergen_warning = True
+
+                    if re.search(r"\b(fish|salmon|tuna|cod)\b", contains_text, re.I):
+                        if "fish" not in all_allergens:
+                            all_allergens.append("fish")
+                        all_warnings.append("Contains: Fish")
+                        is_real_allergen_warning = True
+
+                    if re.search(r"\b(wheat|gluten)\b", contains_text, re.I):
+                        if "wheat" not in all_allergens:
+                            all_allergens.append("wheat")
+                        all_warnings.append("Contains: Wheat")
+                        is_real_allergen_warning = True
+
+                    if re.search(r"\begg\b", contains_text, re.I):
+                        if "eggs" not in all_allergens:
+                            all_allergens.append("eggs")
+                        all_warnings.append("Contains: Eggs")
+                        is_real_allergen_warning = True
+
+                    # Skip marketing fluff like "natural ingredients", "nutrients that clinical research", etc.
+                    # These are NOT warnings, just marketing claims
+
+                # Extract testing claims
+                if re.search(r'third[- ]party tested|third party testing', notes, re.I):
+                    all_testing.append("Third-party tested")
+                if re.search(r'meetyourherbs|traceability|ID #', notes, re.I):
+                    all_testing.append("meetyourherbs traceability system")
+                if re.search(r'analytical results|see analytical', notes, re.I):
+                    all_testing.append("Analytical results available")
+                if re.search(r'batch|COA|certificate of analysis', notes, re.I):
+                    all_quality_features.append("Batch traceability")
+
+                # Extract marketing claims (structure/function)
+                if stmt.get("type") in ["Formulation re: Other", "General Statements: All Other Content", "Formula re: Contains"]:
+                    # Extract specific health-related claims
+                    if re.search(r'\bsupport', notes, re.I):
+                        # Match complete "Support/Supports X" phrases with word boundary at start
+                        claim_matches = re.findall(r'\b((?:Supports?|Support)\s+[^\n.]+?)(?:\n|\.|\*)', notes, re.I)
+                        for claim in claim_matches:
+                            add_marketing_claim(claim, all_marketing_claims)
+
+                    # Brand heritage and quality claims
+                    if re.search(r'since\s+\d{4}', notes, re.I):
+                        match = re.search(r'(since\s+\d{4})', notes, re.I)
+                        add_marketing_claim(match.group(1).title(), all_marketing_claims)
+                    if re.search(r'premium\s+quality', notes, re.I):
+                        match = re.search(r'(premium\s+quality[^.\n]*)', notes, re.I)
+                        add_marketing_claim(match.group(1), all_marketing_claims)
+                    if re.search(r'traditionally\s+used', notes, re.I):
+                        match = re.search(r'(traditionally\s+used[^.\n]+)', notes, re.I)
+                        if match:
+                            add_marketing_claim(match.group(1), all_marketing_claims)
+
+                    # Potency and extraction claims
+                    if re.search(r'maximum.*potency|potency.*maximum', notes, re.I):
+                        match = re.search(r'([^.\n]*(?:maximum|potency)[^.\n]*(?:potency|maximum)[^.\n]*)', notes, re.I)
+                        if match:
+                            add_marketing_claim(match.group(1), all_marketing_claims)
+                    if re.search(r'full[- ]spectrum', notes, re.I):
+                        match = re.search(r'(full[- ]spectrum[^,.\n]+)', notes, re.I)
+                        if match:
+                            add_marketing_claim(match.group(1), all_marketing_claims)
+                    if re.search(r'solvent[- ]free.*extraction|extraction.*solvent[- ]free', notes, re.I):
+                        match = re.search(r'([^.\n]*solvent[- ]free[^.\n]*extraction[^,.\n]*)', notes, re.I)
+                        if match:
+                            add_marketing_claim(match.group(1), all_marketing_claims)
+
+                    # Testing and bioactivity claims
+                    if re.search(r'tested\s+and\s+shown', notes, re.I):
+                        match = re.search(r'(tested\s+and\s+shown[^,.\n]+)', notes, re.I)
+                        if match:
+                            add_marketing_claim(match.group(1), all_marketing_claims)
+
+                    # Standalone marketing claims
+                    standalone_claims = [
+                        r'(oral\s+health)',
+                        r'(fresh\s+breath)',
+                        r'(guaranteed\s+potency)',
+                        r'(contains\s+.*?billion.*?(?:live\s+)?(?:bacteria|cultures?).*?(?:when\s+manufactured|at\s+time\s+of\s+manufacture))',
+                    ]
+                    for pattern in standalone_claims:
+                        match = re.search(pattern, notes, re.I)
+                        if match:
+                            add_marketing_claim(match.group(1), all_marketing_claims)
+
+                # Extract quality features
+                if re.search(r'safety sealed|sealed for.*protection', notes, re.I):
+                    all_quality_features.append("Safety sealed")
+                if re.search(r'GMP|good manufacturing practice', notes, re.I):
+                    all_quality_features.append("GMP certified")
+                if re.search(r'FDA[- ]inspected|FDA inspected facility', notes, re.I):
+                    all_quality_features.append("FDA-inspected facility")
+                if re.search(r'unconditionally\s+guaranteed\s+for\s+purity', notes, re.I):
+                    all_quality_features.append("Unconditionally guaranteed for purity and labeled potency")
+                if re.search(r"doctor'?s\s+suggested\s+use", notes, re.I):
+                    all_quality_features.append("Doctor's Suggested Use")
+
+                # Extract dietary certifications from statement notes (Kosher goes in certifications, not here)
+                if re.search(r'\bvegan\b', notes, re.I):
+                    all_quality_features.append("Vegan")
+                if re.search(r'\bvegetarian\b', notes, re.I) and "Vegan" not in all_quality_features:
+                    all_quality_features.append("Vegetarian")
+
+                # Extract standardization claims
+                if re.search(r'standardized', notes, re.I):
+                    # Extract what it's standardized to
+                    std_match = re.search(r'standardized\s+(?:to\s+)?([^.\n]+)', notes, re.I)
+                    if std_match:
+                        std_text = std_match.group(1).strip()
+                        if len(std_text) < 50:  # Keep it concise
+                            all_quality_features.append(f"Standardized to {std_text}")
+                    else:
+                        all_quality_features.append("Standardized")
+
+                # Extract BioActives and flavonoid content claims
+                if re.search(r'BioActives?|bio[\s-]actives?', notes, re.I):
+                    all_quality_features.append("Contains BioActives")
+                if re.search(r'flavonoid.*content|ensures.*flavonoid', notes, re.I):
+                    all_quality_features.append("Standardized for flavonoid content")
+
+                # Extract patented strain information
+                if re.search(r'patent|trademark.*(?:BLIS|probiotic|strain)', notes, re.I):
+                    if re.search(r'BLIS\s+[KM]\d+', notes, re.I):
+                        all_quality_features.append("Patented probiotic strains")
+
+            # Extract flavors from ingredients (normalized and deduplicated)
+            flavor_keywords = set()  # Track unique flavors
+            for ing in inactive_ingredients:
+                name = ing.get("name", "").lower()
+                if "flavor" in name:
+                    # Normalize flavor name (e.g., "Vanilla flavor" → "vanilla", "Natural Cinnamon Flavor" → "natural cinnamon")
+                    flavor_name = re.sub(r'\s*flavou?r(ing|ed|s)?\s*', ' ', name, flags=re.I).strip()
+                    flavor_name = ' '.join(flavor_name.split())  # Normalize whitespace
+                    if flavor_name and flavor_name not in flavor_keywords:
+                        flavor_keywords.add(flavor_name)
+                        # Keep original capitalization from ingredient name for final output
+                        original_flavor = ing.get("name", "")
+                        all_flavors.append(original_flavor)
+                if "mint" in name and "flavor" not in name:
+                    if "mint" not in flavor_keywords:
+                        flavor_keywords.add("mint")
+                        all_flavors.append(ing.get("name"))
+
+            # Extract harvest methods from botanical ingredients
+            for ing in active_ingredients:
+                if ing.get("harvestMethod"):
+                    all_harvest_methods.append(ing["harvestMethod"])
+
+            # Build proprietary blend disclosure summary
+            proprietary_blends = [ing for ing in active_ingredients if ing.get("proprietaryBlend")]
+            proprietary_blend_disclosure = None
+            if proprietary_blends:
+                blend = proprietary_blends[0]  # Take first blend for summary
+                nested_ings = blend.get("nestedIngredients", [])
+
+                # Check if individual amounts are provided
+                # If ANY nested ingredient has quantityProvided=False or unit="NP", then "Not Provided"
+                any_not_provided = any(
+                    not n.get("quantityProvided", False) or n.get("unit") == "NP"
+                    for n in nested_ings
+                )
+
+                proprietary_blend_disclosure = {
+                    "totalAmount": f"{blend.get('quantity', 0)}{blend.get('unit', '')}",
+                    "individualAmounts": "Not Provided" if any_not_provided else "Provided",
+                    "ingredients": [n["name"] for n in nested_ings]
+                }
+
+            # Build cleaned product - PRESERVE ORIGINAL DSLD FIELDS
             cleaned = {
-                # Core identifiers
+                # ========== ORIGINAL DSLD FIELDS (PRESERVE) ==========
                 "id": product_id,
+                "src": raw_data.get("src"),  # Data source
+                "nhanesId": raw_data.get("nhanesId"),
+                "bundleName": raw_data.get("bundleName"),
+                "brandIpSymbol": raw_data.get("brandIpSymbol"),
+                "productVersionCode": raw_data.get("productVersionCode"),
+                "pdf": raw_data.get("pdf"),
+                "thumbnail": raw_data.get("thumbnail"),
+                "percentDvFootnote": raw_data.get("percentDvFootnote"),
+
+                # Core product info
                 "fullName": raw_data.get("fullName", ""),
                 "brandName": raw_data.get("brandName", ""),
                 "upcSku": raw_data.get("upcSku", ""),
@@ -2207,84 +2504,77 @@ class EnhancedDSLDNormalizer:
                 "status": status,
                 "discontinuedDate": discontinued_date,
                 "offMarket": off_market,
-                
+
                 # Product details
-                "servingsPerContainer": self._safe_int(raw_data.get("servingsPerContainer", 0)),
+                "servingsPerContainer": self._safe_int(raw_data.get("servingsPerContainer")) if raw_data.get("servingsPerContainer") is not None else None,
                 "netContents": self._extract_net_contents(raw_data.get("netContents", [])),
                 "targetGroups": raw_data.get("targetGroups", []) or [],
-                "productType": self._extract_field_value(raw_data.get("productType", "")),
-                "physicalState": self._extract_field_value(raw_data.get("physicalState", "")),
-                
+                "userGroups": raw_data.get("userGroups", []) or [],  # PRESERVE userGroups with Langual codes
+                "productType": raw_data.get("productType", {}),  # PRESERVE full Langual structure
+                "physicalState": raw_data.get("physicalState", {}),  # PRESERVE full Langual structure
+
                 # Images
                 "imageUrl": image_url,
                 "images": raw_data.get("images", []) or [],
-                
-                # Manufacturer info
-                "contacts": contacts,
-                
+
+                # Manufacturer info (PRESERVE original structure with contactId, text, types)
+                "contacts": raw_data.get("contacts", []) or [],  # Keep original structure
+
                 # Events
                 "events": raw_data.get("events", []) or [],
-                
-                # Ingredients
+
+                # ========== INGREDIENTS (CLEANED) ==========
                 "activeIngredients": active_ingredients,
                 "inactiveIngredients": inactive_ingredients,
-                
-                # Statements and claims (with original preserved)
-                "statements": statements,
-                "claims": claims,
-                "original_statements": raw_data.get("statements", []) or [],  # Preserve raw statements for claim extraction
-                
+
+                # ========== NUTRITIONAL INFORMATION ==========
+                "nutritionalInfo": nutritional_info,  # Calories, Carbs, Sugar, etc.
+
+                # ========== STATEMENTS AND CLAIMS ==========
+                "statements": statements,  # Parsed with certifications
+                "claims": claims,  # Keep Langual codes in structure
+
                 # Serving info
                 "servingSizes": serving_sizes,
-                
+
                 # Label relationships
                 "labelRelationships": raw_data.get("labelRelationships", []) or [],
-                
-                # Combined label text for search (with original preserved)
-                "labelText": self._generate_label_text(
-                    active_ingredients,
-                    inactive_ingredients,
-                    statements
-                ),
-                "original_label_text": self._extract_original_label_text(raw_data),  # Preserve raw text for enrichment parsing
-                
-                # RDA compliance (empty for future use)
-                "rdaCompliance": [],
-                
-                # Nutritional warnings for UI display
-                "nutritionalWarnings": nutritional_warnings,
-                
-                # Certifications (product-level aggregation)
-                "hasCertifications": len(all_certifications) > 0,
-                "certificationTypes": list(set(all_certifications)),
 
-                # Transparency flag for data preservation
-                "has_full_ingredient_disclosure": has_full_disclosure,
-                
-                # Enhanced metadata
+                # ========== LABEL TEXT (STRUCTURED) ==========
+                "labelText": {
+                    "raw": self._extract_original_label_text(raw_data),  # Full raw text
+                    "parsed": {
+                        "certifications": list(set(all_certifications)),
+                        "testing": list(set(all_testing)),
+                        "origin": self._extract_origin(self._extract_original_label_text(raw_data), raw_data.get("contacts", [])),
+                        "flavor": list(set(all_flavors)) if all_flavors else [],
+                        "probioticGuarantee": list(set(all_harvest_methods)) if all_harvest_methods else [],
+                        "cleanLabelClaims": self._extract_clean_claims(self._extract_original_label_text(raw_data), all_allergen_free),
+                        "allergens": list(set(all_allergens)) if all_allergens else [],  # Actual allergens present in product (things it CONTAINS)
+                        "allergenFree": list(set(all_allergen_free)) if all_allergen_free else [],  # Allergen-free claims (things it does NOT contain)
+                        "warnings": list(set(all_warnings)),
+                        "storage": self._extract_storage(statements),
+                        "directions": self._extract_directions(statements),
+                        "marketingClaims": list(set(all_marketing_claims)) if all_marketing_claims else [],
+                        "qualityFeatures": list(set(all_quality_features)) if all_quality_features else [],
+                        "proprietaryBlendDisclosure": proprietary_blend_disclosure
+                    },
+                    "searchText": self._generate_label_text(active_ingredients, inactive_ingredients, statements)
+                },
+
+                # ========== METADATA (CLEANING ONLY) ==========
                 "metadata": {
                     "lastCleaned": datetime.utcnow().isoformat() + "Z",
-                    "cleaningVersion": "2.0.0",  # Enhanced version
-                    "completeness": {
-                        "score": 0,  # Will be set by validator
-                        "missingFields": [],
-                        "criticalFieldsComplete": True
-                    },
-                    "qualityFlags": quality_flags,
+                    "cleaningVersion": "2.1.0",  # Updated version - NO ENRICHMENT
                     "mappingStats": {
                         "totalIngredients": total_ingredients,
                         "mappedIngredients": mapped_ingredients,
                         "unmappedIngredients": total_ingredients - mapped_ingredients,
-                        "mappingRate": round((mapped_ingredients / total_ingredients * 100), 2) if total_ingredients > 0 else 0
+                        "mappingRate": round((mapped_ingredients / total_ingredients * 100), 2) if total_ingredients > 0 else 0,
+                        "proprietaryBlends": len(proprietary_blends),
+                        "nestedIngredients": sum(len(b.get("nestedIngredients", [])) for b in proprietary_blends)
                     },
-                    "enhancedFeatures": {
-                        "fuzzyMatchingUsed": FUZZY_AVAILABLE,
-                        "nestedIngredientsFlattened": len(flattened_ingredients) > len(raw_ingredients),
-                        "preprocessingApplied": True
-                    },
-                    "proprietaryBlendStats": blend_stats,
-                    "industryBenchmark": industry_benchmark,
-                    "penaltyWeighting": penalty_weighting
+                    "transparencyMetrics": self._calculate_transparency_metrics(proprietary_blends, active_ingredients)
                 }
             }
             
@@ -2294,16 +2584,71 @@ class EnhancedDSLDNormalizer:
             logger.error(f"Error normalizing product {raw_data.get('id', 'unknown')}: {str(e)}")
             raise
     
+    def _extract_nutritional_info(self, ingredient_rows: List[Dict]) -> Dict[str, Any]:
+        """Extract nutritional information (Calories, Carbs, Sugar, etc.) from ingredients"""
+        nutritional_info = {}
+
+        for ing in ingredient_rows:
+            name = ing.get("name", "").lower()
+
+            # Extract quantities
+            quantity_data = ing.get("quantity", [])
+            if ing.get("unit") and not isinstance(quantity_data, (list, dict)):
+                quantity_data = {"quantity": quantity_data, "unit": ing.get("unit")}
+            elif ing.get("unit") and isinstance(quantity_data, dict) and "unit" not in quantity_data:
+                quantity_data["unit"] = ing.get("unit")
+
+            quantity, unit, _ = self._process_quantity(quantity_data)
+
+            # Capture nutritional facts
+            if "calorie" in name:
+                nutritional_info["calories"] = {
+                    "amount": quantity,
+                    "unit": unit or "kcal"
+                }
+            elif "total carbohydrate" in name or "carbohydrates" in name:
+                nutritional_info["totalCarbohydrates"] = {
+                    "amount": quantity,
+                    "unit": unit or "g"
+                }
+            elif name == "sugar" or "sugars" in name:
+                nutritional_info["sugars"] = {
+                    "amount": quantity,
+                    "unit": unit or "g"
+                }
+            elif "total fat" in name:
+                nutritional_info["totalFat"] = {
+                    "amount": quantity,
+                    "unit": unit or "g"
+                }
+            elif "protein" in name:
+                nutritional_info["protein"] = {
+                    "amount": quantity,
+                    "unit": unit or "g"
+                }
+            elif "sodium" in name:
+                nutritional_info["sodium"] = {
+                    "amount": quantity,
+                    "unit": unit or "mg"
+                }
+            elif "fiber" in name or "dietary fiber" in name:
+                nutritional_info["dietaryFiber"] = {
+                    "amount": quantity,
+                    "unit": unit or "g"
+                }
+
+        return nutritional_info
+
     def _process_ingredients_enhanced(self, ingredient_rows: List[Dict], is_active: bool = True) -> List[Dict]:
         """Process ingredients with enhanced mapping"""
         processed = []
-        
+
         for ing in ingredient_rows:
             processed_ing = self._process_single_ingredient_enhanced(ing, is_active)
             # Skip None values (nutrition facts that were filtered out)
             if processed_ing is not None:
                 processed.append(processed_ing)
-        
+
         return processed
     
     def _process_single_ingredient_enhanced(self, ing: Dict, is_active: bool) -> Dict[str, Any]:
@@ -2327,12 +2672,7 @@ class EnhancedDSLDNormalizer:
         
         # Enhanced mapping with fuzzy matching
         standard_name, mapped, mapped_forms = self._enhanced_ingredient_mapping(name, forms)
-        
-        # Get ingredient quality info - ONLY for active ingredients
-        quality_info = {"natural": False, "bio_score": 0}
-        if is_active:
-            quality_info = self._get_ingredient_quality_info(standard_name, mapped_forms)
-        
+
         # Priority-based ingredient classification to handle overlaps
         classification = self._priority_based_classification(name, forms)
         
@@ -2377,6 +2717,10 @@ class EnhancedDSLDNormalizer:
                     if nested_processed:
                         nested_processed["parentBlend"] = name
                         nested_processed["isNestedIngredient"] = True
+                        # Add quantityProvided flag for nested ingredients
+                        nested_qty = nested_processed.get("quantity", 0)
+                        nested_unit = nested_processed.get("unit", "")
+                        nested_processed["quantityProvided"] = nested_qty > 0 and nested_unit != "NP"
                         nested_ingredients_processed.append(nested_processed)
 
         # An ingredient is considered "mapped" if it's found in ANY reference database
@@ -2401,69 +2745,91 @@ class EnhancedDSLDNormalizer:
                 "is_active": is_active  # Track whether this is an active ingredient
             }
 
-        return {
+        # Preserve forms with full structure (including IDs if available)
+        forms_structured = []
+        raw_forms = ing.get("forms", []) or []
+        for form in raw_forms:
+            if isinstance(form, dict):
+                forms_structured.append({
+                    "name": form.get("name", ""),
+                    "ingredientId": form.get("ingredientId"),
+                    "order": form.get("order"),
+                    "prefix": form.get("prefix"),
+                    "percent": form.get("percent")
+                })
+            elif isinstance(form, str):
+                forms_structured.append({"name": form})
+
+        # Parse botanical details from notes (plantPart, genus, species, harvestMethod, form)
+        botanical_details = self._parse_botanical_details(notes)
+
+        # Check if this ingredient is an additive (add metadata flag for enrichment phase)
+        processed_name_check = self.matcher.preprocess_text(name)
+        is_additive = False
+        additive_type = None
+        if processed_name_check in self.other_ingredients_lookup:
+            additive_data = self.other_ingredients_lookup[processed_name_check]
+            is_additive = additive_data.get("is_additive", False)
+            if is_additive:
+                additive_type = additive_data.get("additive_type")
+
+        # Build base ingredient structure
+        result = {
+            # Original DSLD identifiers (PRESERVE)
+            "ingredientId": ing.get("ingredientId"),
+            "uniiCode": ing.get("uniiCode"),
             "order": ing.get("order", 0),
+
+            # Basic ingredient info
             "name": name,
-            "standardName": standard_name,
+            "standardName": standard_name,  # From our database mapping
+            "ingredientGroup": ing.get("ingredientGroup"),  # PRESERVE from DSLD (even if wrong)
+
+            # Quantity and daily value
             "quantity": quantity,
             "unit": unit,
             "dailyValue": daily_value,
-            "forms": mapped_forms if mapped_forms else (forms if forms else ["unspecified"]),
-            "formDetails": " ".join(mapped_forms) if mapped_forms else " ".join(forms),
-            "notes": notes,
-            "labelPhrases": extracted_features.get("phrases", []),
-            "natural": quality_info.get("natural", False),
-            "standardized": extracted_features.get("standardized", False),
-            "standardizationPercent": extracted_features.get("standardization_percent", None),
-            "category": ing.get("category", ""),
-            "ingredientGroup": ing.get("ingredientGroup", ""),
 
-            # Enhanced allergen info
-            "allergen": allergen_info["is_allergen"],
-            "allergenType": allergen_info["type"],
-            "allergenSeverity": allergen_info["severity"],
+            # Forms (PRESERVE full structure with IDs)
+            "forms": forms_structured if forms_structured else [],
+            "alternateNames": ing.get("alternateNames", []) or [],
 
-            # Enhanced harmful info
-            "harmfulCategory": harmful_info["category"],
-            "riskLevel": harmful_info["risk_level"],
-
-            # Enhanced non-harmful additive info
-            "nonHarmfulCategory": non_harmful_info["category"],
-            "additiveType": non_harmful_info["additive_type"],
-            "cleanLabelScore": non_harmful_info["clean_label_score"],
-
-            # Enhanced banned/recalled info
-            "isBanned": banned_info["is_banned"],
-            "bannedSeverity": banned_info["severity"],
-            "bannedCategory": banned_info["category"],
-
-            # Enhanced passive/inactive info
-            "isPassiveIngredient": passive_info["is_passive"],
-            "passiveCategory": passive_info["category"],
-
-            # Proprietary and mapping
-            "proprietaryBlend": is_proprietary,
-            "isProprietaryBlend": is_proprietary,
-            "disclosureLevel": disclosure_level,  # 'full', 'partial', 'none', or None for non-blends
-            "transparencyPercentage": self._calculate_transparency_percentage(nested_rows) if is_proprietary and nested_rows else None,
+            # Mapping status (basic cleaning metadata)
             "mapped": is_mapped,
-            
-            # Blend information (if applicable)
+
+            # Proprietary blend structure (transparency metadata, NOT scoring)
+            "proprietaryBlend": is_proprietary,
+            "disclosureLevel": disclosure_level if is_proprietary else None,
+
+            # Nested ingredients (preserve hierarchy)
             "parentBlend": ing.get("parentBlend", None),
             "isNestedIngredient": ing.get("isNestedIngredient", False),
-            
-            # Nested ingredients (preserved for blend structure)
-            "nestedIngredients": nested_ingredients_processed,
-            
-            # Clinical dosing validation (evidence-based effectiveness assessment)
-            "clinicalDosing": self._validate_clinical_dosing(name, quantity, unit, standard_name),
-
-            # Enrichment placeholders (to be populated during enrichment phase)
-            "clinicalEvidence": None,
-            "synergyClusters": [],
-            "enhancedDelivery": None,
-            "brandedForm": None
+            "nestedIngredients": nested_ingredients_processed
         }
+
+        # Add additive metadata flag (for enrichment phase to use)
+        if is_additive:
+            result["isAdditive"] = True
+            if additive_type:
+                result["additiveType"] = additive_type
+
+        # Add botanical details if present
+        if botanical_details.get("plantPart"):
+            result["plantPart"] = botanical_details["plantPart"]
+        if botanical_details.get("genus"):
+            result["genus"] = botanical_details["genus"]
+        if botanical_details.get("species"):
+            result["species"] = botanical_details["species"]
+        if botanical_details.get("harvestMethod"):
+            result["harvestMethod"] = botanical_details["harvestMethod"]
+        if botanical_details.get("form"):
+            result["form"] = botanical_details["form"]
+
+        # Add notes field (after botanical parsing)
+        if notes:
+            result["notes"] = notes
+
+        return result
     
     def _process_other_ingredients_enhanced(self, other_ing_data: Dict) -> List[Dict]:
         """Process inactive/other ingredients with enhanced mapping and parallel processing"""
@@ -2551,21 +2917,17 @@ class EnhancedDSLDNormalizer:
                 except Exception as e:
                     ingredient = future_to_ingredient[future]
                     logger.error(f"Error processing ingredient '{ingredient.get('name', 'unknown')}': {e}")
-                    # Add a basic result for failed processing
+                    # Add a basic result for failed processing (CLEANING ONLY - NO ENRICHMENT)
                     processed.append({
                         "order": ingredient.get("order", 0),
+                        "ingredientId": ingredient.get("ingredientId"),
+                        "uniiCode": ingredient.get("uniiCode"),
                         "name": ingredient.get("name", ""),
                         "standardName": ingredient.get("name", ""),
-                        "category": ingredient.get("category", ""),
-                        "ingredientGroup": ingredient.get("ingredientGroup", ""),
-                        "isHarmful": False,
-                        "harmfulCategory": "none",
-                        "riskLevel": None,
-                        "allergen": False,
-                        "allergenType": None,
-                        "allergenSeverity": None,
-                        "mapped": False,
-                        "transparency": "standard"
+                        "ingredientGroup": ingredient.get("ingredientGroup"),
+                        "forms": [],
+                        "alternateNames": [],
+                        "mapped": False
                     })
 
         # Sort by original order (with safe comparison)
@@ -2612,87 +2974,59 @@ class EnhancedDSLDNormalizer:
                 "is_active": False  # Other ingredients
             }
 
-        # Get non-harmful additive info for correct category
-        non_harmful_info = self._enhanced_non_harmful_check(name)
+        # Preserve forms with full structure (including IDs if available)
+        forms_structured = []
+        raw_forms = ingredient_data.get("forms", []) or []
+        for form in raw_forms:
+            if isinstance(form, dict):
+                forms_structured.append({
+                    "name": form.get("name", ""),
+                    "ingredientId": form.get("ingredientId"),
+                    "order": form.get("order"),
+                    "prefix": form.get("prefix"),
+                    "percent": form.get("percent")
+                })
+            elif isinstance(form, str):
+                forms_structured.append({"name": form})
 
-        # Use category from our database if available, otherwise use DSLD category
-        db_category = non_harmful_info.get("category", "none")
-        if db_category != "none":
-            # Use our database category (correct)
-            category = db_category
-            ingredient_group = non_harmful_info.get("additive_type", ingredient_data.get("ingredientGroup", ""))
-        else:
-            # Fall back to DSLD category (may be incorrect but better than nothing)
-            category = ingredient_data.get("category", "")
-            ingredient_group = ingredient_data.get("ingredientGroup", "")
+        # Check if this ingredient is an additive (add metadata flag for enrichment phase)
+        processed_name_check = self.matcher.preprocess_text(name)
+        is_additive = False
+        additive_type = None
+        if processed_name_check in self.other_ingredients_lookup:
+            additive_data = self.other_ingredients_lookup[processed_name_check]
+            is_additive = additive_data.get("is_additive", False)
+            if is_additive:
+                additive_type = additive_data.get("additive_type")
 
-        # Build result with transparency data
+        # Build result - CLEANING ONLY (no enrichment)
         result = {
+            # Original DSLD identifiers (PRESERVE)
+            "ingredientId": ingredient_data.get("ingredientId"),
+            "uniiCode": ingredient_data.get("uniiCode"),
             "order": ingredient_data.get("order", 0),
+
+            # Basic ingredient info
             "name": name,
-            "standardName": standard_name,
-            "category": category,
-            "ingredientGroup": ingredient_group,
-            "isHarmful": harmful_info["category"] != "none",
-            "harmfulCategory": harmful_info["category"],
-            "riskLevel": harmful_info["risk_level"],
-            "allergen": allergen_info["is_allergen"],
-            "allergenType": allergen_info["type"],
-            "allergenSeverity": allergen_info["severity"],
-            "mapped": is_mapped,
-            "transparency": ingredient_data.get("_transparency", "standard")
+            "standardName": standard_name,  # From our database mapping
+            "ingredientGroup": ingredient_data.get("ingredientGroup"),  # PRESERVE from DSLD (even if wrong)
+
+            # Forms (PRESERVE full structure with IDs)
+            "forms": forms_structured if forms_structured else [],
+            "alternateNames": ingredient_data.get("alternateNames", []) or [],
+
+            # Mapping status (basic cleaning metadata)
+            "mapped": is_mapped
         }
 
-        # FORMS DISCLOSURE: Check if ingredient has forms array
-        # If forms exist, preserve them and mark as disclosed
-        # If no forms but it's a functional grouping, mark as undisclosed
-        ing_forms = ingredient_data.get("forms", [])
+        # Add additive metadata flag (for enrichment phase to use)
+        if is_additive:
+            result["isAdditive"] = True
+            if additive_type:
+                result["additiveType"] = additive_type
 
-        # List of functional grouping terms
-        functional_terms = [
-            "natural color", "natural colors",
-            "natural flavor", "natural flavors",
-            "artificial color", "artificial colors",
-            "artificial flavor", "artificial flavors",
-            "preservatives", "sweeteners", "enzymes"
-        ]
-
-        is_functional_grouping = any(
-            term in name.lower()
-            for term in functional_terms
-        )
-
-        if ing_forms and isinstance(ing_forms, list) and len(ing_forms) > 0:
-            # Forms are disclosed - preserve them exactly as they appear
-            forms_list = []
-            for form_item in ing_forms:
-                if isinstance(form_item, dict):
-                    form_name = form_item.get("name", "")
-                    if form_name:
-                        forms_list.append(form_name)
-                elif isinstance(form_item, str):
-                    forms_list.append(form_item)
-
-            if forms_list:
-                result["forms"] = forms_list
-                result["forms_disclosed"] = True
-                # Good transparency because forms are disclosed
-                result["transparency"] = "good"
-        elif is_functional_grouping:
-            # This is a functional grouping but no forms provided
-            result["forms"] = "undisclosed"
-            result["forms_disclosed"] = False
-            # Keep existing transparency (usually "poor" for vague disclosures)
-
-        # Add functional context if present (from colon-style groupings)
-        if "_functional_context" in ingredient_data:
-            result["functional_context"] = ingredient_data["_functional_context"]
-            result["functional_prefix"] = ingredient_data["_functional_prefix"]
-
-        # Add vague disclosure flags if present
-        if ingredient_data.get("_vague_disclosure"):
-            result["vague_disclosure"] = True
-            result["vague_flags"] = ingredient_data.get("_vague_flags", [])
+        # NO ENRICHMENT FIELDS (transparency, formsDisclosed, functional_context, vague_disclosure, etc.)
+        # Those belong in the enrichment phase
 
         return result
 
@@ -2703,196 +3037,88 @@ class EnhancedDSLDNormalizer:
         for ing in ingredients:
             name = ing.get("name", "")
 
-            # TRANSPARENCY SCORING: Check for functional grouping first
-            grouping_data = self.grouping_handler.process_ingredient_for_cleaning(name)
+            # CLEANING ONLY - No enrichment, no transparency scoring
+            # Enhanced mapping to get standardName
+            standard_name, mapped, _ = self._enhanced_ingredient_mapping(name)
 
-            if grouping_data['type'] == 'functional_group_with_details':
-                # Good transparency - preserve with context (e.g., "Natural Colors: Beet Root Powder")
-                for specific_ing in grouping_data['ingredients']:
-                    # Process each specific ingredient
-                    standard_name, mapped, _ = self._enhanced_ingredient_mapping(specific_ing)
-                    allergen_info = self._enhanced_allergen_check(specific_ing)
-                    harmful_info = self._enhanced_harmful_check(specific_ing)
-                    is_proprietary = self._is_proprietary_blend_name(specific_ing)
+            # Enhanced checks ONLY for determining if ingredient is "mapped" (found in database)
+            allergen_info = self._enhanced_allergen_check(name)
+            harmful_info = self._enhanced_harmful_check(name)
+            is_proprietary = self._is_proprietary_blend_name(name)
 
-                    is_mapped = (mapped or
-                                harmful_info["category"] != "none" or
-                                allergen_info["is_allergen"] or
-                                is_proprietary)
+            # An ingredient is considered "mapped" if it's found in ANY reference database
+            is_mapped = (mapped or
+                        harmful_info["category"] != "none" or
+                        allergen_info["is_allergen"] or
+                        is_proprietary)
 
-                    # Track unmapped if needed
-                    if not is_mapped and not self._is_nutrition_fact(specific_ing):
-                        processed_name = self.matcher.preprocess_text(specific_ing)
-                        self.unmapped_ingredients[specific_ing] += 1
-                        self.unmapped_details[specific_ing] = {
-                            "processed_name": processed_name,
-                            "forms": [],
-                            "variations_tried": self.matcher.generate_variations(processed_name),
-                            "is_active": False
-                        }
-
-                    processed.append({
-                        "order": ing.get("order", 0),
-                        "name": specific_ing,
-                        "standardName": standard_name,
-                        "category": ing.get("category", ""),
-                        "ingredientGroup": ing.get("ingredientGroup", ""),
-                        "isHarmful": harmful_info["category"] != "none",
-                        "harmfulCategory": harmful_info["category"],
-                        "riskLevel": harmful_info["risk_level"],
-                        "allergen": allergen_info["is_allergen"],
-                        "allergenType": allergen_info["type"],
-                        "allergenSeverity": allergen_info["severity"],
-                        "mapped": is_mapped,
-                        # TRANSPARENCY SCORING: Add functional context
-                        "functional_context": grouping_data['functional_type'],
-                        "functional_prefix": grouping_data['prefix'],
-                        "transparency": "good"
-                    })
-
-            elif grouping_data['type'] in ['functional_group_vague', 'vague_declaration']:
-                # Poor transparency - flag vague disclosure (e.g., just "Natural Flavors")
-                # Still process the ingredient but flag it
-                standard_name, mapped, _ = self._enhanced_ingredient_mapping(name)
-                allergen_info = self._enhanced_allergen_check(name)
-                harmful_info = self._enhanced_harmful_check(name)
-                is_proprietary = self._is_proprietary_blend_name(name)
-
-                is_mapped = (mapped or
-                            harmful_info["category"] != "none" or
-                            allergen_info["is_allergen"] or
-                            is_proprietary)
-
-                # Track unmapped if needed
-                if not is_mapped and not self._is_nutrition_fact(name):
-                    processed_name = self.matcher.preprocess_text(name)
-                    self.unmapped_ingredients[name] += 1
-                    self.unmapped_details[name] = {
-                        "processed_name": processed_name,
-                        "forms": [],
-                        "variations_tried": self.matcher.generate_variations(processed_name),
-                        "is_active": False
-                    }
-
-                processed.append({
-                    "order": ing.get("order", 0),
-                    "name": name,
-                    "standardName": standard_name,
-                    "category": ing.get("category", ""),
-                    "ingredientGroup": ing.get("ingredientGroup", ""),
-                    "isHarmful": harmful_info["category"] != "none",
-                    "harmfulCategory": harmful_info["category"],
-                    "riskLevel": harmful_info["risk_level"],
-                    "allergen": allergen_info["is_allergen"],
-                    "allergenType": allergen_info["type"],
-                    "allergenSeverity": allergen_info["severity"],
-                    "mapped": is_mapped,
-                    # TRANSPARENCY SCORING: Add vague flags
-                    "transparency": "poor",
-                    "vague_disclosure": True,
-                    "vague_flags": grouping_data.get('vague_flags', [])
-                })
-
-            else:
-                # Regular ingredient - process normally
-                # Enhanced mapping
-                standard_name, mapped, _ = self._enhanced_ingredient_mapping(name)
-
-                # Enhanced checks
-                allergen_info = self._enhanced_allergen_check(name)
-                harmful_info = self._enhanced_harmful_check(name)
-                non_harmful_info = self._enhanced_non_harmful_check(name)
-
-                # Check if proprietary blend
-                is_proprietary = self._is_proprietary_blend_name(name)
-
-                # An ingredient is considered "mapped" if it's found in ANY reference database
-                # This includes ingredient databases, harmful additives, allergen databases, or proprietary blends
-                is_mapped = (mapped or
-                            harmful_info["category"] != "none" or
-                            allergen_info["is_allergen"] or
-                            is_proprietary)
-
-                # Track unmapped ingredients only if not found in any database
-                # DATA INTEGRITY FIX: Filter out label phrases and nutrition facts
-                # This prevents "None", "Contains < 2% of", etc. from appearing in unmapped list
-                if not is_mapped and not self._is_nutrition_fact(name):
-                    processed_name = self.matcher.preprocess_text(name)
-                    self.unmapped_ingredients[name] += 1
-                    self.unmapped_details[name] = {
-                        "processed_name": processed_name,
-                        "forms": [],
-                        "variations_tried": self.matcher.generate_variations(processed_name),
-                        "is_active": False  # Inactive ingredients
-                    }
-
-                # Use category from our database if available, otherwise use DSLD category
-                db_category = non_harmful_info.get("category", "none")
-                if db_category != "none":
-                    # Use our database category (correct)
-                    category = db_category
-                    ingredient_group = non_harmful_info.get("additive_type", ing.get("ingredientGroup", ""))
-                else:
-                    # Fall back to DSLD category (may be incorrect but better than nothing)
-                    category = ing.get("category", "")
-                    ingredient_group = ing.get("ingredientGroup", "")
-
-                result = {
-                    "order": ing.get("order", 0),
-                    "name": name,
-                    "standardName": standard_name,
-                    "category": category,
-                    "ingredientGroup": ingredient_group,
-                    "isHarmful": harmful_info["category"] != "none",
-                    "harmfulCategory": harmful_info["category"],
-                    "riskLevel": harmful_info["risk_level"],
-                    "allergen": allergen_info["is_allergen"],
-                    "allergenType": allergen_info["type"],
-                    "allergenSeverity": allergen_info["severity"],
-                    "mapped": is_mapped,
-                    "transparency": "standard"
+            # Track unmapped ingredients only if not found in any database
+            if not is_mapped and not self._is_nutrition_fact(name):
+                processed_name = self.matcher.preprocess_text(name)
+                self.unmapped_ingredients[name] += 1
+                self.unmapped_details[name] = {
+                    "processed_name": processed_name,
+                    "forms": [],
+                    "variations_tried": self.matcher.generate_variations(processed_name),
+                    "is_active": False  # Inactive ingredients
                 }
 
-                # FORMS DISCLOSURE: Check if ingredient has forms array
-                ing_forms = ing.get("forms", [])
+            # Preserve forms with full structure (including IDs if available)
+            forms_structured = []
+            raw_forms = ing.get("forms", []) or []
+            for form in raw_forms:
+                if isinstance(form, dict):
+                    forms_structured.append({
+                        "name": form.get("name", ""),
+                        "ingredientId": form.get("ingredientId"),
+                        "order": form.get("order"),
+                        "prefix": form.get("prefix"),
+                        "percent": form.get("percent")
+                    })
+                elif isinstance(form, str):
+                    forms_structured.append({"name": form})
 
-                # List of functional grouping terms
-                functional_terms = [
-                    "natural color", "natural colors",
-                    "natural flavor", "natural flavors",
-                    "artificial color", "artificial colors",
-                    "artificial flavor", "artificial flavors",
-                    "preservatives", "sweeteners", "enzymes"
-                ]
+            # Check if this ingredient is an additive (add metadata flag for enrichment phase)
+            processed_name_check = self.matcher.preprocess_text(name)
+            is_additive = False
+            additive_type = None
+            if processed_name_check in self.other_ingredients_lookup:
+                additive_data = self.other_ingredients_lookup[processed_name_check]
+                is_additive = additive_data.get("is_additive", False)
+                if is_additive:
+                    additive_type = additive_data.get("additive_type")
 
-                is_functional_grouping = any(
-                    term in name.lower()
-                    for term in functional_terms
-                )
+            # Build result - CLEANING ONLY (no enrichment)
+            result = {
+                # Original DSLD identifiers (PRESERVE)
+                "ingredientId": ing.get("ingredientId"),
+                "uniiCode": ing.get("uniiCode"),
+                "order": ing.get("order", 0),
 
-                if ing_forms and isinstance(ing_forms, list) and len(ing_forms) > 0:
-                    # Forms are disclosed - preserve them exactly as they appear
-                    forms_list = []
-                    for form_item in ing_forms:
-                        if isinstance(form_item, dict):
-                            form_name = form_item.get("name", "")
-                            if form_name:
-                                forms_list.append(form_name)
-                        elif isinstance(form_item, str):
-                            forms_list.append(form_item)
+                # Basic ingredient info
+                "name": name,
+                "standardName": standard_name,  # From our database mapping
+                "ingredientGroup": ing.get("ingredientGroup"),  # PRESERVE from DSLD (even if wrong)
 
-                    if forms_list:
-                        result["forms"] = forms_list
-                        result["forms_disclosed"] = True
-                        # Good transparency because forms are disclosed
-                        result["transparency"] = "good"
-                elif is_functional_grouping:
-                    # This is a functional grouping but no forms provided
-                    result["forms"] = "undisclosed"
-                    result["forms_disclosed"] = False
-                    # Keep transparency as "standard" or "poor" depending on other checks
+                # Forms (PRESERVE full structure with IDs)
+                "forms": forms_structured if forms_structured else [],
+                "alternateNames": ing.get("alternateNames", []) or [],
 
-                processed.append(result)
+                # Mapping status (basic cleaning metadata)
+                "mapped": is_mapped
+            }
+
+            # Add additive metadata flag (for enrichment phase to use)
+            if is_additive:
+                result["isAdditive"] = True
+                if additive_type:
+                    result["additiveType"] = additive_type
+
+            # NO ENRICHMENT FIELDS - NO category, isHarmful, harmfulCategory, riskLevel,
+            # allergen, allergenType, allergenSeverity, transparency, vague_disclosure, etc.
+            # Those ALL belong in the enrichment phase
+
+            processed.append(result)
 
         return processed
     
@@ -2967,13 +3193,32 @@ class EnhancedDSLDNormalizer:
             
             # Handle complex DSLD parenthetical formats like "Form: as D3 (Alt. Name: Cholecalciferol)"
             if "form:" in clean_match or "as " in clean_match:
-                # Extract after "as " or "form: as "
-                if "as " in clean_match:
-                    form_part = clean_match.split("as ", 1)[1]
-                    # Handle nested parentheses like "as D3 (Alt. Name: Cholecalciferol)"
-                    if "(" in form_part:
-                        form_part = form_part.split("(")[0].strip()
-                    extracted_forms.append(form_part.strip())
+                # Split on " and as " to handle multiple forms in one parenthetical
+                # Example: "(as magnesium bisglycinate chelate, from algae, and as magnesium oxide)"
+                as_parts = re.split(r',?\s+and\s+as\s+', clean_match)
+
+                for part in as_parts:
+                    # Extract after "as " or "form: as "
+                    if "as " in part:
+                        form_part = part.split("as ", 1)[1]
+                        # Handle nested parentheses like "as D3 (Alt. Name: Cholecalciferol)"
+                        if "(" in form_part:
+                            form_part = form_part.split("(")[0].strip()
+
+                        # CLEANUP: Remove source descriptors to get clean chemical form name
+                        # Split on common separators: " and ", " from ", ",", " with "
+                        # This ensures we extract just the form (e.g., "ascorbic acid")
+                        # without source info (e.g., "from ferment media")
+                        for separator in [" and ", " from ", " with "]:
+                            if separator in form_part:
+                                form_part = form_part.split(separator)[0]
+                                break
+
+                        # Remove trailing punctuation and whitespace
+                        form_part = form_part.strip().rstrip('.,;:')
+
+                        if form_part:  # Only add non-empty forms
+                            extracted_forms.append(form_part)
             else:
                 # Direct parenthetical forms - expanded list
                 common_paren_forms = [
@@ -3098,11 +3343,16 @@ class EnhancedDSLDNormalizer:
                     return date + "T00:00:00Z"
         return None
     
-    def _extract_net_contents(self, net_contents: List[Dict]) -> str:
-        """Extract net contents display string"""
-        if net_contents and len(net_contents) > 0:
-            return net_contents[0].get("display", "")
-        return "[]"
+    def _extract_net_contents(self, net_contents: List[Dict]) -> List[Dict]:
+        """
+        Preserve netContents array structure from raw DSLD data
+        Returns: Array with order, quantity, unit, display fields
+        """
+        if not net_contents:
+            return []
+
+        # PRESERVE ORIGINAL STRUCTURE - NO TRANSFORMATION
+        return net_contents
     
     def _process_contacts(self, contacts: List[Dict]) -> List[Dict]:
         """Process manufacturer contact information"""
@@ -3220,25 +3470,6 @@ class EnhancedDSLDNormalizer:
         # Fallback for unexpected types
         logger.warning(f"Unexpected quantity format: {type(quantities)} - {quantities}")
         return 0.0, "unspecified", None
-    
-    def _get_ingredient_quality_info(self, standard_name: str, forms: List[str]) -> Dict[str, Any]:
-        """Get quality information for ingredient"""
-        info = {"natural": False, "bio_score": 0}
-        
-        # Look up in ingredient quality map
-        for vitamin_name, vitamin_data in self.ingredient_map.items():
-            if vitamin_data.get("standard_name", "").lower() == standard_name.lower():
-                # Check each form
-                for form in forms:
-                    form_lower = form.lower()
-                    for form_name, form_data in (vitamin_data.get("forms", {}) or {}).items():
-                        if form_lower == form_name.lower() or form_lower in [a.lower() for a in form_data.get("aliases", []) or []]:
-                            info["natural"] = form_data.get("natural", False)
-                            info["bio_score"] = form_data.get("bio_score", 0)
-                            return info
-        
-        return info
-    
     def _extract_ingredient_features(self, notes: str) -> Dict[str, Any]:
         """Extract features from ingredient notes"""
         features = {
@@ -3288,78 +3519,35 @@ class EnhancedDSLDNormalizer:
         return features
     
     def _process_statements(self, statements: List[Dict]) -> List[Dict]:
-        """Process and extract information from statements"""
+        """
+        Process statements - CLEANING ONLY
+        Preserve original DSLD structure without enrichment
+        """
         processed = []
-        
+
         for stmt in statements:
-            stmt_type = stmt.get("type", "")
-            notes = stmt.get("notes", "")
-            
-            # Extract certifications
-            certifications = []
-            for cert_name, pattern in CERTIFICATION_PATTERNS.items():
-                if re.search(pattern, notes, re.IGNORECASE):
-                    certifications.append(cert_name)
-            
-            # Extract allergen-free claims
-            allergen_free = []
-            for allergen, pattern in ALLERGEN_FREE_PATTERNS.items():
-                if re.search(pattern, notes, re.IGNORECASE):
-                    allergen_free.append(allergen)
-            
-            # Check for GMP
-            gmp_certified = bool(re.search(CERTIFICATION_PATTERNS["GMP-General"], notes, re.IGNORECASE))
-            
-            # Extract allergens mentioned
-            allergens = []
-            if "allergi" in stmt_type.lower():
-                # Extract specific allergens mentioned
-                for allergen_data in self.allergens_db.get("common_allergens", []) or []:
-                    # SAFETY: Ensure standard_name exists
-                    standard_name = allergen_data.get("standard_name", "")
-                    if standard_name and standard_name.lower() in notes.lower():
-                        allergens.append(standard_name.lower())
-            
+            # PRESERVE ORIGINAL STRUCTURE ONLY - NO ENRICHMENT
             processed.append({
-                "type": stmt_type,
-                "notes": notes,
-                "certifications": certifications,
-                "allergenFree": allergen_free,
-                "allergens": allergens,
-                "gmpCertified": gmp_certified,
-                "thirdPartyTested": any(cert.startswith("Third-Party") for cert in certifications)
+                "type": stmt.get("type", ""),
+                "notes": stmt.get("notes", "")
             })
-        
+
         return processed
     
     def _process_claims(self, claims: List[Dict]) -> List[Dict]:
-        """Process product claims"""
+        """
+        Process claims - CLEANING ONLY
+        Preserve original DSLD Langual code structure without enrichment
+        """
         processed = []
-        
+
         for claim in claims:
-            code = claim.get("langualCode", "")
-            description = claim.get("langualCodeDescription", "")
-            
-            # For now, we don't have full claim text in the data
-            full_text = ""
-            
-            # Check for unsubstantiated terms
-            has_unsubstantiated = False
-            flagged_terms = []
-            
-            for pattern in UNSUBSTANTIATED_CLAIM_PATTERNS:
-                if re.search(pattern, full_text, re.IGNORECASE):
-                    has_unsubstantiated = True
-                    flagged_terms.append(pattern)
-            
+            # PRESERVE ORIGINAL STRUCTURE ONLY - NO ENRICHMENT
             processed.append({
-                "code": code,
-                "description": description,
-                "fullText": full_text,
-                "hasUnsubstantiated": has_unsubstantiated,
-                "flaggedTerms": flagged_terms
+                "langualCode": claim.get("langualCode", ""),
+                "langualCodeDescription": claim.get("langualCodeDescription", "")
             })
-        
+
         return processed
     
     def _process_serving_sizes(self, serving_sizes: List[Dict]) -> List[Dict]:
@@ -3378,58 +3566,8 @@ class EnhancedDSLDNormalizer:
                 "maxDailyServings": self._safe_int(serving.get("maxDailyServings", DEFAULT_DAILY_SERVINGS)),
                 "normalizedServing": max_qty  # Use max as normalized
             })
-        
+
         return processed
-    
-    def _extract_quality_flags(self, active_ingredients: List[Dict], 
-                              inactive_ingredients: List[Dict], 
-                              statements: List[Dict]) -> Dict[str, Any]:
-        """Extract quality flags from processed data"""
-        # Check for proprietary blends
-        has_proprietary = any(ing.get("proprietaryBlend", False) for ing in active_ingredients)
-        
-        # Check for harmful additives
-        has_harmful = any(ing.get("isHarmful", False) for ing in inactive_ingredients)
-        
-        # Check for allergens from ingredients
-        allergen_types = []
-        for ing in active_ingredients + inactive_ingredients:
-            if ing.get("allergen"):
-                allergen_type = ing.get("allergenType")
-                if allergen_type:
-                    allergen_types.append(allergen_type)
-        
-        # Add facility cross-contamination allergens from statements
-        for stmt in statements:
-            facility_allergens = stmt.get("allergens", []) or []
-            allergen_types.extend(facility_allergens)
-        
-        # Check for standardized ingredients
-        has_standardized = any(ing.get("standardized", False) for ing in active_ingredients)
-        
-        # Check for natural sources
-        has_natural = any(ing.get("natural", False) for ing in active_ingredients)
-        
-        # Get certifications
-        all_certifications = []
-        for stmt in statements:
-            all_certifications.extend(stmt.get("certifications", []) or [])
-        
-        # Check for unsubstantiated claims
-        has_unsubstantiated = False  # Would be set from claims processing
-        
-        return {
-            "hasProprietary": has_proprietary,
-            "hasHarmfulAdditives": has_harmful,
-            "hasAllergens": len(allergen_types) > 0,
-            "allergenTypes": list(set(allergen_types)),
-            "hasStandardized": has_standardized,
-            "hasNaturalSources": has_natural,
-            "hasCertifications": len(all_certifications) > 0,
-            "certificationTypes": list(set(all_certifications)),
-            "hasUnsubstantiatedClaims": has_unsubstantiated
-        }
-    
     def _generate_label_text(self, active_ingredients: List[Dict], 
                            inactive_ingredients: List[Dict], 
                            statements: List[Dict]) -> str:
@@ -3478,25 +3616,282 @@ class EnhancedDSLDNormalizer:
         # Join all text
         return " ".join(text_parts).strip()
 
-    def _has_full_ingredient_disclosure(self, blend_stats: Dict[str, Any]) -> bool:
+    def _parse_botanical_details(self, notes: str) -> Dict[str, Any]:
         """
-        Determine if product has full ingredient disclosure (transparency flag).
+        Parse botanical details from ingredient notes field.
+        Extracts: plantPart, genus, species, harvestMethod, form
+
+        Example notes:
+        "Sage PlantPart: leaves Genus: Salvia Species: officinalis Note: ecologically harvested"
+        "Peppermint leaf essential oil PlantPart: leaf Genus: Mentha Species: piperita"
+        """
+        if not notes:
+            return {}
+
+        details = {}
+
+        # Extract plant part (case-insensitive)
+        plant_part_match = re.search(r'PlantPart:\s*([^,\n]+?)(?:\s+(?:Genus|Species|Note|Form)|$)', notes, re.I)
+        if plant_part_match:
+            details["plantPart"] = plant_part_match.group(1).strip()
+
+        # Extract genus
+        genus_match = re.search(r'Genus:\s*([^,\s]+)', notes, re.I)
+        if genus_match:
+            details["genus"] = genus_match.group(1).strip()
+
+        # Extract species
+        species_match = re.search(r'Species:\s*([^,\s]+)', notes, re.I)
+        if species_match:
+            details["species"] = species_match.group(1).strip()
+
+        # Extract harvest method from Note: field
+        note_match = re.search(r'Note:\s*(.+?)(?:\s+PlantPart:|$)', notes, re.I)
+        if note_match:
+            harvest_note = note_match.group(1).strip()
+            # Common harvest methods
+            if re.search(r'ecologically\s+harvested|ecological\s+harvest', harvest_note, re.I):
+                details["harvestMethod"] = "ecologically harvested"
+            elif re.search(r'organic|Organic ingredient', harvest_note, re.I):
+                details["harvestMethod"] = harvest_note.strip()
+            elif harvest_note:
+                details["harvestMethod"] = harvest_note
+
+        # Extract form (e.g., "essential oil", "freeze dried extract", "extract")
+        # Look for form patterns in the ingredient name or notes
+        form_patterns = [
+            r'\b(essential oil)\b',
+            r'\b(freeze[- ]dried extract)\b',
+            r'\b(dried extract)\b',
+            r'\b(extract)\b',
+            r'\b(powder)\b',
+            r'\b(oil)\b',
+            r'\b(gel)\b'
+        ]
+        for pattern in form_patterns:
+            form_match = re.search(pattern, notes, re.I)
+            if form_match:
+                details["form"] = form_match.group(1).lower()
+                break
+
+        return details
+
+    def _calculate_transparency_metrics(self, proprietary_blends: List[Dict], active_ingredients: List[Dict]) -> Dict[str, Any]:
+        """
+        Calculate transparency metrics for product metadata.
+        Provides visibility into ingredient disclosure quality.
+        """
+        has_proprietary_blend = len(proprietary_blends) > 0
+
+        if not has_proprietary_blend:
+            return {
+                "hasProprietaryBlend": False,
+                "blendTransparency": "full",
+                "disclosedIngredients": len(active_ingredients),
+                "undisclosedQuantities": 0,
+                "transparencyScore": 100.0
+            }
+
+        # Count disclosed vs undisclosed ingredients
+        total_nested = sum(len(b.get("nestedIngredients", [])) for b in proprietary_blends)
+        disclosed_quantities = sum(
+            1 for b in proprietary_blends
+            for n in b.get("nestedIngredients", [])
+            if n.get("quantityProvided", False)
+        )
+        undisclosed_quantities = total_nested - disclosed_quantities
+
+        # Determine blend transparency level
+        if disclosed_quantities == total_nested:
+            blend_transparency = "full"
+            transparency_score = 100.0
+        elif disclosed_quantities > 0:
+            blend_transparency = "partial"
+            transparency_score = 50.0 + (disclosed_quantities / total_nested * 50)
+        else:
+            blend_transparency = "low"
+            # Score based on whether names are disclosed (even without quantities)
+            transparency_score = 30.0 if total_nested > 0 else 10.0
+
+        return {
+            "hasProprietaryBlend": True,
+            "blendTransparency": blend_transparency,
+            "disclosedIngredients": total_nested,
+            "undisclosedQuantities": undisclosed_quantities,
+            "transparencyScore": round(transparency_score, 1)
+        }
+
+    def _extract_storage(self, statements: List[Dict]) -> List[str]:
+        """Extract storage instructions from statements"""
+        storage = []
+        for stmt in statements:
+            if stmt.get("type") == "Storage":
+                notes = stmt.get("notes", "")
+                if notes:
+                    storage.append(notes.strip())
+        return storage
+
+    def _extract_directions(self, statements: List[Dict]) -> str:
+        """Extract usage directions from statements"""
+        for stmt in statements:
+            if "Suggested" in stmt.get("type", "") or "Usage" in stmt.get("type", "") or "Directions" in stmt.get("type", ""):
+                notes = stmt.get("notes", "")
+                if notes:
+                    # Extract just the directions part
+                    directions_match = re.search(r'(?:Suggested Use|Directions)[:\s]+(.*?)(?:\n|$)', notes, re.I | re.S)
+                    if directions_match:
+                        return directions_match.group(1).strip()
+                    return notes.strip()
+        return ""
+
+    def _extract_origin(self, label_text: str, contacts: List[Dict] = None) -> List[str]:
+        """
+        Extract origin/manufacturing location claims from label text and contacts
+
+        Args:
+            label_text: Text from statements
+            contacts: Contact information from raw DSLD data
 
         Returns:
-            True if no proprietary blends OR all blends have full disclosure
-            False if any blend has partial or no disclosure
+            List of origin/manufacturing location claims
         """
-        # If no proprietary blends, full disclosure is achieved
-        if not blend_stats.get("hasProprietaryBlends", False):
-            return True
+        origins = []
 
-        # If there are proprietary blends, check disclosure levels
-        total_blends = blend_stats.get("totalBlends", 0)
-        full_disclosure_count = blend_stats.get("fullDisclosure", 0)
+        # Extract from label text
+        if "Made in the USA" in label_text or "Made in USA" in label_text:
+            origins.append("Made in USA")
+        if "Made in America" in label_text:
+            origins.append("Made in America")
+        if re.search(r"Manufactured in.*USA", label_text, re.I):
+            origins.append("Manufactured in USA")
 
-        # All blends must have full disclosure
-        return total_blends > 0 and full_disclosure_count == total_blends
+        # Extract from contacts
+        if contacts:
+            for contact in contacts:
+                # Ensure contact_text and country are strings, not None
+                contact_text = contact.get("text") or ""
+                country = contact.get("country") or ""
 
+                # Only process if we have actual text
+                if contact_text:
+                    # Check for "Product of X" in contact text
+                    product_of_match = re.search(r"Product of\s+([A-Za-z\s]+?)(?:\s+Manufactured|$)", contact_text, re.I)
+                    if product_of_match:
+                        country_name = product_of_match.group(1).strip()
+                        origins.append(f"Product of {country_name}")
+
+                    # Check for "Manufactured in X by Y" in contact text
+                    mfg_match = re.search(r"Manufactured (?:in|for.*by)\s+([A-Za-z\s,]+?)(?:\s+by|$)", contact_text, re.I)
+                    if mfg_match:
+                        location = mfg_match.group(1).strip()
+                        # If it's a city/region (like "Tuscany"), append " by Company"
+                        contact_name = contact.get("name")
+                        if contact_name:
+                            origins.append(f"Manufactured in {location} by {contact_name}")
+                        else:
+                            origins.append(f"Manufactured in {location}")
+
+                # Also check country field for manufacturer type contacts
+                if country and "Manufacturer" in (contact.get("types") or []):
+                    if country not in str(origins):  # Avoid duplicates
+                        origins.append(f"Manufactured in {country}")
+
+        return list(set(origins))
+
+    def _extract_clean_claims(self, label_text: str, allergen_free_list: List[str] = None) -> List[str]:
+        """Extract clean label claims from label text
+
+        Args:
+            label_text: Raw label text to parse
+            allergen_free_list: List of allergen-free items detected (e.g., ['gluten', 'soy', 'dairy'])
+
+        Returns:
+            List of clean label claims
+        """
+        claims = []
+
+        # Parse compound "No X, Y, Z" statements (e.g., "No salt, yeast, wheat, soy, dairy products, artificial colors, flavors, or preservatives")
+        no_compound_match = re.search(r'No\s+([^.!?]+(?:,\s*(?:or\s+)?[^.!?]+)+)', label_text, re.I)
+        if no_compound_match:
+            items_text = no_compound_match.group(1)
+            # Split by comma or "or"
+            items = re.split(r',\s*(?:or\s+)?|\s+or\s+', items_text)
+
+            # Check if "artificial" appears in the compound statement context
+            has_artificial_context = 'artificial' in items_text.lower()
+
+            for item in items:
+                item = item.strip().lower()
+                if 'salt' in item:
+                    claims.append("No Salt")
+                if 'yeast' in item and 'yeast' not in [c.lower() for c in claims]:
+                    claims.append("Yeast Free")
+                if 'wheat' in item:
+                    claims.append("No Wheat")
+                if 'soy' in item:
+                    claims.append("Soy Free")
+                if 'dairy' in item or 'milk' in item:
+                    claims.append("Dairy Free")
+
+                # Handle "artificial colors" and bare "colors" if artificial context exists
+                if 'artificial color' in item or 'artificial dye' in item:
+                    claims.append("No Artificial Colors")
+                elif has_artificial_context and ('color' in item or 'dye' in item):
+                    if "No Artificial Colors" not in claims:
+                        claims.append("No Artificial Colors")
+
+                # Handle "artificial flavors" and bare "flavors" if artificial context exists
+                if 'artificial flavor' in item:
+                    claims.append("No Artificial Flavors")
+                elif has_artificial_context and 'flavor' in item:
+                    if "No Artificial Flavors" not in claims:
+                        claims.append("No Artificial Flavors")
+
+                if 'preservative' in item:
+                    claims.append("No Preservatives")
+
+        # Standard pattern matching for individual claims
+        claims_map = {
+            "No Artificial Colors": ["No Artificial Colors", "No Artificial Coloring", "No Artificial Dyes"],
+            "No Artificial Flavors": ["No Artificial Flavors", "No Artificial Flavoring"],
+            "No Preservatives": ["No Preservatives", "Preservative Free"],
+            "No Artificial Dyes or Preservatives": ["No Artificial Dyes or Preservatives"],
+            "No Salt": ["No Salt", "Salt Free", "Sodium Free"],
+            "No Wheat": ["No Wheat", "Wheat Free"],
+            "Gluten Free": ["No Gluten", "Gluten Free", "Gluten-Free"],
+            "Dairy Free": ["No Dairy", "Dairy Free", "Dairy-Free", "No Milk"],
+            "Soy Free": ["No Soy", "Soy Free", "Soy-Free"],
+            "Yeast Free": ["Yeast Free", "No Yeast"],
+            "No Sugar": ["No Sugar", "Sugar Free"],
+            "Non-GMO": ["Non-GMO", "Non GMO", "GMO Free"]
+        }
+
+        for canonical, patterns in claims_map.items():
+            for pattern in patterns:
+                if pattern in label_text:
+                    if canonical not in claims:  # Avoid duplicates
+                        claims.append(canonical)
+                    break
+
+        # Add allergen-free claims if provided
+        if allergen_free_list:
+            allergen_claim_map = {
+                "gluten": "Gluten Free",
+                "dairy": "Dairy Free",
+                "soy": "Soy Free",
+                "nut": "Nut Free",
+                "egg": "Egg Free",
+                "shellfish": "Shellfish Free",
+                "peanut": "Peanut Free",
+                "yeast": "Yeast Free"
+            }
+            for allergen in allergen_free_list:
+                if allergen in allergen_claim_map:
+                    claim = allergen_claim_map[allergen]
+                    if claim not in claims:  # Avoid duplicates
+                        claims.append(claim)
+
+        return list(set(claims))
     def get_unmapped_snapshot(self) -> set:
         """Get a snapshot of current unmapped ingredient names for delta tracking.
 
@@ -3739,1054 +4134,6 @@ class EnhancedDSLDNormalizer:
 
         return round(transparency_percentage, 1)
 
-    def _validate_clinical_dosing(self, ingredient_name: str, quantity: float, unit: str, standard_name: str = None) -> Dict[str, any]:
-        """
-        Validate if disclosed quantity meets clinical effectiveness thresholds
-        Returns clinical adequacy assessment with evidence-based scoring
-        """
-        # Ensure quantity is a number
-        try:
-            quantity = float(quantity) if quantity is not None else 0.0
-        except (ValueError, TypeError):
-            logger.warning(f"Invalid quantity for {ingredient_name}: {quantity}, defaulting to 0")
-            quantity = 0.0
-
-        # Initialize result
-        validation_result = {
-            "has_clinical_data": False,
-            "adequacy_level": "unknown",
-            "adequacy_percentage": 0.0,
-            "clinical_min": 0,
-            "clinical_max": 0,
-            "optimal_dose": 0,
-            "dose_unit": unit,
-            "evidence_level": "none",
-            "dosing_note": "No clinical data available",
-            "clinical_score_modifier": 0
-        }
-
-        if quantity <= 0 or not unit:
-            return validation_result
-
-        # Normalize ingredient name for lookup
-        lookup_names = [
-            self.matcher.preprocess_text(ingredient_name),
-            self.matcher.preprocess_text(standard_name) if standard_name else "",
-            ingredient_name.lower().replace(" ", "-"),
-            ingredient_name.lower().replace("-", "_")
-        ]
-
-        # First try RDA optimal database (vitamins/minerals), then therapeutic database (herbs/supplements)
-        ingredient_data = self._search_rda_optimal(lookup_names)
-        source_db = "rda_optimal"
-
-        if not ingredient_data:
-            ingredient_data = self._search_therapeutic_dosing(lookup_names)
-            source_db = "rda_therapeutic"
-
-        if not ingredient_data:
-            return validation_result
-
-        # Process the data based on source database
-        if source_db == "rda_optimal":
-            return self._process_rda_optimal_data(ingredient_data, quantity, unit, validation_result)
-        else:
-            return self._process_therapeutic_data(ingredient_data, quantity, unit, validation_result)
-
-    def _search_rda_optimal(self, lookup_names: list) -> Dict:
-        """Search RDA optimal database for vitamins/minerals"""
-        for nutrient in self.rda_optimal.get("nutrient_recommendations", []):
-            nutrient_name = nutrient.get("standard_name", "").lower()
-
-            # Check if any lookup name matches the nutrient name or common variations
-            for lookup_name in lookup_names:
-                if (lookup_name in nutrient_name or nutrient_name in lookup_name or
-                    self._check_vitamin_aliases(lookup_name, nutrient_name)):
-                    return nutrient
-        return None
-
-    def _search_therapeutic_dosing(self, lookup_names: list) -> Dict:
-        """Search therapeutic dosing database for herbs/supplements"""
-        for ingredient in self.rda_therapeutic.get("therapeutic_dosing", []):
-            ingredient_name = ingredient.get("standard_name", "").lower()
-            aliases = [alias.lower() for alias in ingredient.get("aliases", [])]
-
-            # Check if any lookup name matches the ingredient name or aliases
-            for lookup_name in lookup_names:
-                if (lookup_name in ingredient_name or ingredient_name in lookup_name or
-                    any(lookup_name in alias or alias in lookup_name for alias in aliases)):
-                    return ingredient
-        return None
-
-    def _check_vitamin_aliases(self, search_term: str, nutrient_name: str) -> bool:
-        """Check common vitamin aliases and variations"""
-        vitamin_aliases = {
-            "vitamin d": ["vitamin d", "vitamin d3", "cholecalciferol"],
-            "vitamin c": ["vitamin c", "ascorbic acid", "ascorbate"],
-            "vitamin b12": ["vitamin b12", "b12", "cobalamin", "cyanocobalamin"],
-            "vitamin b6": ["vitamin b6", "b6", "pyridoxine"],
-            "vitamin b1": ["vitamin b1", "b1", "thiamin", "thiamine"],
-            "vitamin b2": ["vitamin b2", "b2", "riboflavin"],
-            "vitamin b3": ["vitamin b3", "b3", "niacin", "nicotinic acid"],
-            "folate": ["folate", "folic acid", "vitamin b9", "b9"]
-        }
-
-        for vitamin, aliases in vitamin_aliases.items():
-            if vitamin in nutrient_name:
-                return any(alias in search_term for alias in aliases)
-        return False
-
-    def _process_rda_optimal_data(self, ingredient_data: Dict, quantity: float, unit: str, validation_result: Dict) -> Dict:
-        """Process RDA optimal database results"""
-        validation_result["has_clinical_data"] = True
-        validation_result["evidence_level"] = "very_high"  # RDA data is highly evidence-based
-
-        # Parse optimal range (e.g., "700-1500" or "25-100")
-        optimal_range = ingredient_data.get("optimal_range", "")
-        if "-" in optimal_range:
-            try:
-                range_parts = optimal_range.split("-")
-                clinical_min = self._safe_float(range_parts[0].strip(), "clinical_min")
-                clinical_max = self._safe_float(range_parts[1].strip(), "clinical_max")
-                optimal_dose = (clinical_min + clinical_max) / 2  # Use middle of range as optimal
-
-                # Get unit from ingredient data
-                clinical_unit = ingredient_data.get("unit", "")
-
-                # Convert units if necessary
-                ingredient_name = ingredient_data.get("standard_name", "")
-                converted_quantity = self._convert_dosing_units(quantity, unit, clinical_unit, ingredient_name)
-
-                # Ensure converted_quantity is a number, not dict
-                if not isinstance(converted_quantity, (int, float)):
-                    logger.warning(f"Unit conversion returned non-numeric value for {ingredient_name}: {converted_quantity}")
-                    validation_result["dosing_note"] = f"Unit conversion failed: {unit} to {clinical_unit}"
-                    return validation_result
-
-                if converted_quantity <= 0:
-                    validation_result["dosing_note"] = f"Unit conversion failed: {unit} to {clinical_unit}"
-                    return validation_result
-
-                # Ensure all values are numbers before comparisons
-                if not isinstance(optimal_dose, (int, float)):
-                    logger.warning(f"optimal_dose is not numeric for {ingredient_name}: {optimal_dose}")
-                    optimal_dose = 0
-                if not isinstance(clinical_min, (int, float)):
-                    logger.warning(f"clinical_min is not numeric for {ingredient_name}: {clinical_min}")
-                    clinical_min = 0
-                if not isinstance(clinical_max, (int, float)):
-                    logger.warning(f"clinical_max is not numeric for {ingredient_name}: {clinical_max}")
-                    clinical_max = 0
-
-                # Calculate adequacy percentage
-                adequacy_percentage = (converted_quantity / optimal_dose) * 100 if optimal_dose > 0 else 0
-
-                # Determine adequacy level and score modifier
-                if converted_quantity < clinical_min * 0.5:
-                    adequacy_level = "severely_under_dosed"
-                    score_modifier = -2
-                elif converted_quantity < clinical_min:
-                    adequacy_level = "under_dosed"
-                    score_modifier = -1
-                elif converted_quantity <= clinical_max:
-                    adequacy_level = "optimal"
-                    score_modifier = 2
-                elif converted_quantity <= self._safe_float(ingredient_data.get("highest_ul"), "highest_ul", float('inf')):
-                    adequacy_level = "high_dose"
-                    score_modifier = 1
-                else:
-                    adequacy_level = "excessive"
-                    score_modifier = -1
-
-                validation_result.update({
-                    "adequacy_level": adequacy_level,
-                    "adequacy_percentage": round(adequacy_percentage, 1),
-                    "clinical_min": clinical_min,
-                    "clinical_max": clinical_max,
-                    "optimal_dose": optimal_dose,
-                    "dose_unit": clinical_unit,
-                    "dosing_note": f"RDA-based: {converted_quantity} {clinical_unit} (optimal: {optimal_range} {clinical_unit})",
-                    "clinical_score_modifier": score_modifier,
-                    "converted_dose": converted_quantity
-                })
-
-            except (ValueError, IndexError):
-                validation_result["dosing_note"] = f"Could not parse optimal range: {optimal_range}"
-
-        return validation_result
-
-    def _process_therapeutic_data(self, ingredient_data: Dict, quantity: float, unit: str, validation_result: Dict) -> Dict:
-        """Process therapeutic dosing database results"""
-        validation_result["has_clinical_data"] = True
-
-        # Map evidence tier to level
-        evidence_tier = ingredient_data.get("evidence_tier", 3)
-        evidence_mapping = {1: "very_high", 2: "high", 3: "moderate"}
-        validation_result["evidence_level"] = evidence_mapping.get(evidence_tier, "moderate")
-
-        # Parse typical dosing range (e.g., "250-600" or "3-5")
-        dosing_range = ingredient_data.get("typical_dosing_range", "")
-        if "-" in dosing_range:
-            try:
-                range_parts = dosing_range.split("-")
-                clinical_min = float(range_parts[0])
-                clinical_max = float(range_parts[1])
-                optimal_dose = ingredient_data.get("common_serving_size", (clinical_min + clinical_max) / 2)
-                optimal_dose = float(optimal_dose) if isinstance(optimal_dose, str) else optimal_dose
-
-                # Get unit from ingredient data
-                clinical_unit = ingredient_data.get("unit", "")
-
-                # Convert units if necessary
-                ingredient_name = ingredient_data.get("standard_name", "")
-                converted_quantity = self._convert_dosing_units(quantity, unit, clinical_unit, ingredient_name)
-
-                # Ensure converted_quantity is a number, not dict
-                if not isinstance(converted_quantity, (int, float)):
-                    logger.warning(f"Unit conversion returned non-numeric value for {ingredient_name}: {converted_quantity}")
-                    validation_result["dosing_note"] = f"Unit conversion failed: {unit} to {clinical_unit}"
-                    return validation_result
-
-                if converted_quantity <= 0:
-                    validation_result["dosing_note"] = f"Unit conversion failed: {unit} to {clinical_unit}"
-                    return validation_result
-
-                # Ensure all values are numbers before comparisons
-                if not isinstance(optimal_dose, (int, float)):
-                    logger.warning(f"optimal_dose is not numeric for {ingredient_name}: {optimal_dose}")
-                    optimal_dose = 0
-                if not isinstance(clinical_min, (int, float)):
-                    logger.warning(f"clinical_min is not numeric for {ingredient_name}: {clinical_min}")
-                    clinical_min = 0
-                if not isinstance(clinical_max, (int, float)):
-                    logger.warning(f"clinical_max is not numeric for {ingredient_name}: {clinical_max}")
-                    clinical_max = 0
-
-                # Calculate adequacy percentage
-                adequacy_percentage = (converted_quantity / optimal_dose) * 100 if optimal_dose > 0 else 0
-
-                # Determine adequacy level and score modifier
-                if converted_quantity < clinical_min * 0.5:
-                    adequacy_level = "severely_under_dosed"
-                    score_modifier = -2
-                elif converted_quantity < clinical_min:
-                    adequacy_level = "under_dosed"
-                    score_modifier = -1
-                elif converted_quantity <= clinical_max:
-                    adequacy_level = "optimal"
-                    score_modifier = 2
-                elif converted_quantity <= self._safe_float(ingredient_data.get("upper_limit"), "upper_limit", float('inf')):
-                    adequacy_level = "high_dose"
-                    score_modifier = 1
-                else:
-                    adequacy_level = "excessive"
-                    score_modifier = -1
-
-                validation_result.update({
-                    "adequacy_level": adequacy_level,
-                    "adequacy_percentage": round(adequacy_percentage, 1),
-                    "clinical_min": clinical_min,
-                    "clinical_max": clinical_max,
-                    "optimal_dose": optimal_dose,
-                    "dose_unit": clinical_unit,
-                    "dosing_note": f"Therapeutic: {converted_quantity} {clinical_unit} (range: {dosing_range} {clinical_unit})",
-                    "clinical_score_modifier": score_modifier,
-                    "converted_dose": converted_quantity
-                })
-
-                logger.info(f"🧬 Clinical dosing: {ingredient_data.get('standard_name', 'unknown')} {converted_quantity}{clinical_unit} = {adequacy_percentage:.1f}% of optimal ({adequacy_level})")
-
-            except (ValueError, IndexError):
-                validation_result["dosing_note"] = f"Could not parse dosing range: {dosing_range}"
-
-        return validation_result
-
-    def _convert_dosing_units(self, quantity: float, from_unit: str, to_unit: str, ingredient_context: str = None) -> float:
-        """
-        Convert between dosing units using sophisticated UNIT_CONVERSIONS system
-        Supports context-aware conversions (e.g., vitamin-specific IU conversions)
-        """
-        if from_unit == to_unit:
-            return quantity
-
-        # Normalize units
-        from_unit = from_unit.lower().strip()
-        to_unit = to_unit.lower().strip()
-
-        # Handle unit aliases
-        unit_aliases = UNIT_ALIASES
-
-        # Map to full unit names for lookup
-        from_unit_full = unit_aliases.get(from_unit, from_unit)
-        to_unit_full = unit_aliases.get(to_unit, to_unit)
-
-        # Try context-aware conversion first (e.g., vitamin D specific)
-        if ingredient_context and from_unit_full in UNIT_CONVERSIONS:
-            context_conversions = UNIT_CONVERSIONS[from_unit_full]
-            ingredient_lower = ingredient_context.lower()
-
-            # Check for ingredient-specific conversions
-            for ingredient_key, conversion_factor in context_conversions.items():
-                if ingredient_key in ingredient_lower:
-                    # Determine target unit based on vitamin type
-                    if "vitamin a" in ingredient_key and to_unit in ["mcg", "microgram"]:
-                        result = quantity * conversion_factor
-                        logger.info(f"🔄 Context-aware conversion: {ingredient_context} {quantity} {from_unit} → {result} mcg RAE")
-                        return result
-                    elif "vitamin d" in ingredient_key and to_unit in ["mcg", "microgram"]:
-                        result = quantity * conversion_factor
-                        logger.info(f"🔄 Context-aware conversion: {ingredient_context} {quantity} {from_unit} → {result} mcg")
-                        return result
-                    elif "vitamin e" in ingredient_key and to_unit in ["mg", "milligram"]:
-                        result = quantity * conversion_factor
-                        logger.info(f"🔄 Context-aware conversion: {ingredient_context} {quantity} {from_unit} → {result} mg")
-                        return result
-
-        # Try direct unit conversions from UNIT_CONVERSIONS
-        if from_unit_full in UNIT_CONVERSIONS:
-            target_conversions = UNIT_CONVERSIONS[from_unit_full]
-            if to_unit in target_conversions:
-                conversion_factor = target_conversions[to_unit]
-                return quantity * conversion_factor
-
-        # Try reverse conversion
-        if to_unit_full in UNIT_CONVERSIONS:
-            source_conversions = UNIT_CONVERSIONS[to_unit_full]
-            if from_unit in source_conversions:
-                # Reverse the conversion factor
-                conversion_factor = 1 / source_conversions[from_unit]
-                return quantity * conversion_factor
-
-        # Handle special nutrient equivalents conversions
-        if "folate" in (ingredient_context or "").lower():
-            # For folate, mcg and mcg DFE are equivalent for natural folate
-            if (from_unit in ["mcg", "μg"] and "dfe" in to_unit.lower()) or \
-               ("dfe" in from_unit.lower() and to_unit in ["mcg", "μg"]):
-                logger.info(f"🔄 Folate DFE conversion: {quantity} {from_unit} → {quantity} {to_unit}")
-                return quantity
-
-        # Handle Niacin Equivalents (NE) conversions
-        if "niacin" in (ingredient_context or "").lower():
-            # For niacin, mg and mg NE are typically equivalent for direct niacin
-            if (from_unit in ["mg"] and "ne" in to_unit.lower()) or \
-               ("ne" in from_unit.lower() and to_unit in ["mg"]):
-                logger.info(f"🔄 Niacin NE conversion: {quantity} {from_unit} → {quantity} {to_unit}")
-                return quantity
-
-        # Handle Vitamin A RAE (Retinol Activity Equivalents) conversions
-        if "vitamin a" in (ingredient_context or "").lower():
-            # IU to mcg RAE: 1 IU = 0.3 mcg RAE for retinol
-            if from_unit in ["iu"] and "rae" in to_unit.lower():
-                result = quantity * 0.3
-                logger.info(f"🔄 Vitamin A RAE conversion: {quantity} {from_unit} → {result} {to_unit}")
-                return result
-            # mcg to mcg RAE: 1:1 for retinol equivalents
-            elif from_unit in ["mcg", "μg"] and "rae" in to_unit.lower():
-                logger.info(f"🔄 Vitamin A RAE conversion: {quantity} {from_unit} → {quantity} {to_unit}")
-                return quantity
-            # mcg RAE to IU: 1 mcg RAE = 3.33 IU
-            elif "rae" in from_unit.lower() and to_unit in ["iu"]:
-                result = quantity * 3.33
-                logger.info(f"🔄 Vitamin A RAE conversion: {quantity} {from_unit} → {result} {to_unit}")
-                return result
-
-        # Handle Vitamin E alpha-tocopherol conversions
-        if "vitamin e" in (ingredient_context or "").lower():
-            # IU to mg alpha-tocopherol: 1 IU = 0.67 mg
-            if from_unit in ["iu"] and "alpha-tocopherol" in to_unit.lower():
-                result = quantity * 0.67
-                logger.info(f"🔄 Vitamin E alpha-tocopherol conversion: {quantity} {from_unit} → {result} {to_unit}")
-                return result
-
-        # Handle gram(s) variant (with parentheses)
-        from_unit_clean = from_unit.replace("(s)", "").replace("s)", "")
-        to_unit_clean = to_unit.replace("(s)", "").replace("s)", "")
-
-        # Standard metric conversions fallback
-        standard_conversions = {
-            ("gram", "mg"): 1000,
-            ("gram", "mcg"): 1000000,
-            ("g", "mg"): 1000,
-            ("g", "mcg"): 1000000,
-            ("milligram", "mcg"): 1000,
-            ("mcg", "mg"): 0.001,
-            ("mg", "g"): 0.001,
-            ("mcg", "g"): 0.000001,
-            ("μg", "mcg"): 1,
-            ("mcg", "μg"): 1,
-            # Folate DFE conversions
-            ("mcg", "mcg dfe"): 1,
-            ("mcg dfe", "mcg"): 1,
-            ("μg", "mcg dfe"): 1,
-            ("mcg dfe", "μg"): 1,
-            # Niacin NE conversions
-            ("mg", "mg ne"): 1,
-            ("mg ne", "mg"): 1,
-            # Vitamin A RAE conversions
-            ("iu", "mcg rae"): 0.3,
-            ("mcg rae", "iu"): 3.33,
-            ("mcg", "mcg rae"): 1,
-            ("mcg rae", "mcg"): 1,
-            # Vitamin E alpha-tocopherol conversions
-            ("iu", "mg alpha-tocopherol"): 0.67,
-            ("mg alpha-tocopherol", "iu"): 1.49,
-            # Standard mg to alpha-tocopherol (assumes natural form unless specified)
-            ("mg", "mg alpha-tocopherol"): 1.0,
-            ("mg alpha-tocopherol", "mg"): 1.0
-        }
-
-        # Try conversion with cleaned units first
-        conversion_factor = standard_conversions.get((from_unit_clean, to_unit_clean))
-        if conversion_factor:
-            return quantity * conversion_factor
-
-        conversion_factor = standard_conversions.get((from_unit_full, to_unit_full))
-        if conversion_factor:
-            return quantity * conversion_factor
-
-        # Check for suspicious unit combinations that might be data entry errors
-        if from_unit == "ng" and to_unit in ["mg", "mcg"]:
-            logger.warning(f"Suspicious unit conversion: {from_unit} to {to_unit} for {ingredient_context}. "
-                         f"'ng' (nanogram) might be a typo for 'mg' - flagging for manual review")
-            return 0.0  # Return 0 to trigger manual review
-
-        # No conversion available
-        logger.warning(f"Cannot convert {from_unit} to {to_unit} for dosing validation{f' (ingredient: {ingredient_context})' if ingredient_context else ''}")
-        return 0.0
-
-    def _benchmark_against_industry_leaders(self, disclosure_stats: Dict, clinical_validation_stats: Dict = None) -> Dict[str, any]:
-        """
-        Benchmark transparency and clinical dosing against industry leaders (2025 standards)
-        """
-        benchmark_result = {
-            "transparency_benchmark": {},
-            "clinical_benchmark": {},
-            "overall_grade": "C",
-            "industry_percentile": 50,
-            "leader_comparison": {},
-            "improvement_recommendations": []
-        }
-
-        # Industry leader standards (based on 2025 research)
-        industry_leaders = {
-            "nutrabio": {
-                "full_disclosure_rate": 100,  # 100% full disclosure, never uses proprietary blends
-                "transparency_standard": 100,
-                "clinical_dosing_adherence": 90,  # Uses clinically effective doses
-                "grade": "A+",
-                "percentile": 95
-            },
-            "transparent_labs": {
-                "full_disclosure_rate": 100,
-                "transparency_standard": 100,
-                "clinical_dosing_adherence": 85,
-                "grade": "A",
-                "percentile": 90
-            },
-            "industry_average": {
-                "full_disclosure_rate": 30,  # Most companies use proprietary blends
-                "transparency_standard": 45,
-                "clinical_dosing_adherence": 40,  # Often underdosed
-                "grade": "C",
-                "percentile": 50
-            }
-        }
-
-        # Calculate transparency metrics
-        total_blends = disclosure_stats.get("totalBlends", 0)
-        full_disclosure = disclosure_stats.get("fullDisclosure", 0)
-        no_disclosure = disclosure_stats.get("noDisclosure", 0)
-        avg_transparency = disclosure_stats.get("averageTransparencyPercentage", 0)
-
-        if total_blends > 0:
-            full_disclosure_rate = (full_disclosure / total_blends) * 100
-            no_disclosure_rate = (no_disclosure / total_blends) * 100
-        else:
-            full_disclosure_rate = 100 if not disclosure_stats.get("hasProprietaryBlends") else 0
-            no_disclosure_rate = 0
-
-        # Transparency benchmarking
-        transparency_score = full_disclosure_rate
-        if total_blends == 0:  # No proprietary blends at all
-            transparency_score = 100
-
-        benchmark_result["transparency_benchmark"] = {
-            "full_disclosure_rate": full_disclosure_rate,
-            "transparency_score": transparency_score,
-            "industry_leader_comparison": {
-                "nutrabio_gap": 100 - transparency_score,
-                "industry_avg_difference": transparency_score - industry_leaders["industry_average"]["full_disclosure_rate"]
-            }
-        }
-
-        # Clinical dosing benchmarking (if clinical validation stats provided)
-        clinical_score = 70  # Default moderate score
-        if clinical_validation_stats:
-            # This would be populated with actual clinical validation data
-            clinical_score = clinical_validation_stats.get("average_adequacy_percentage", 70)
-            # Ensure clinical_score is not None
-            clinical_score = clinical_score if clinical_score is not None else 70
-
-        # Ensure transparency_score is not None
-        transparency_score = transparency_score if transparency_score is not None else 100
-
-        benchmark_result["clinical_benchmark"] = {
-            "clinical_adequacy_score": clinical_score,
-            "industry_leader_comparison": {
-                "nutrabio_gap": industry_leaders["nutrabio"]["clinical_dosing_adherence"] - clinical_score,
-                "industry_avg_difference": clinical_score - industry_leaders["industry_average"]["clinical_dosing_adherence"]
-            }
-        }
-
-        # Overall grading (weighted: 60% transparency, 40% clinical)
-        # Ensure both scores are numbers, not None
-        transparency_score = transparency_score if transparency_score is not None else 100
-        clinical_score = clinical_score if clinical_score is not None else 70
-        overall_score = (transparency_score * 0.6) + (clinical_score * 0.4)
-
-        # Grade assignment
-        if overall_score >= 95:
-            grade = "A+"
-            percentile = 95
-        elif overall_score >= 90:
-            grade = "A"
-            percentile = 90
-        elif overall_score >= 80:
-            grade = "B+"
-            percentile = 80
-        elif overall_score >= 70:
-            grade = "B"
-            percentile = 70
-        elif overall_score >= 60:
-            grade = "C+"
-            percentile = 60
-        elif overall_score >= 50:
-            grade = "C"
-            percentile = 50
-        else:
-            grade = "D"
-            percentile = 25
-
-        benchmark_result.update({
-            "overall_grade": grade,
-            "industry_percentile": percentile,
-            "overall_score": round(overall_score, 1)
-        })
-
-        # Leader comparison
-        for leader_name, leader_data in industry_leaders.items():
-            if leader_name != "industry_average":
-                benchmark_result["leader_comparison"][leader_name] = {
-                    "transparency_gap": leader_data["full_disclosure_rate"] - transparency_score,
-                    "clinical_gap": leader_data["clinical_dosing_adherence"] - clinical_score,
-                    "overall_gap": leader_data["percentile"] - percentile
-                }
-
-        # Generate improvement recommendations
-        recommendations = []
-        if no_disclosure_rate > 0:
-            recommendations.append("Eliminate proprietary blends with no ingredient disclosure")
-        if transparency_score < 80:
-            recommendations.append("Increase transparency by providing exact quantities for all ingredients")
-        if clinical_score < 70:
-            recommendations.append("Ensure ingredient doses meet clinically effective thresholds")
-        if overall_score < 90:
-            recommendations.append("Follow industry leaders like NutraBio for full transparency standards")
-
-        benchmark_result["improvement_recommendations"] = recommendations
-
-        logger.info(f"🏆 Industry Benchmark: Grade {grade} ({percentile}th percentile) - Transparency: {transparency_score:.1f}%, Clinical: {clinical_score:.1f}%")
-
-        return benchmark_result
-
-    def _calculate_enhanced_penalty_weighting(self, ingredients: List[Dict], blend_stats: Dict) -> Dict[str, any]:
-        """
-        Calculate risk-based penalty weighting for proprietary blends based on ingredient category
-        Higher penalties for higher-risk categories (stimulants, hormones, etc.)
-        """
-        penalty_result = {
-            "total_penalty_score": 0,
-            "category_penalties": {},
-            "risk_assessment": "low",
-            "penalty_breakdown": []
-        }
-
-        # Risk-based penalty multipliers by ingredient category
-        category_risk_multipliers = {
-            "stimulant": 3.0,           # Highest risk - cardiovascular effects
-            "hormone": 2.8,             # Very high risk - endocrine disruption
-            "thermogenic": 2.5,         # High risk - metabolic effects
-            "nootropic": 2.2,           # High risk - neurological effects
-            "pre_workout": 2.0,         # Moderate-high risk - combination effects
-            "fat_burner": 2.0,          # Moderate-high risk - metabolic stress
-            "testosterone_booster": 2.8, # Very high risk - hormonal effects
-            "sleep_aid": 1.8,           # Moderate risk - sedative effects
-            "adaptogens": 1.5,          # Lower risk - generally safer
-            "digestive": 1.3,           # Low risk - digestive enzymes, probiotics
-            "immune": 1.2,              # Low risk - immune support
-            "antioxidant": 1.1,         # Lowest risk - antioxidants
-            "vitamin": 1.0,             # Baseline - essential nutrients
-            "mineral": 1.0              # Baseline - essential nutrients
-        }
-
-        # Base penalties by disclosure level
-        base_penalties = {
-            "none": -10,      # Complete lack of disclosure
-            "partial": -5,    # Some disclosure
-            "full": 0         # Full disclosure, no penalty
-        }
-
-        total_penalty = 0
-        category_penalties = {}
-
-        for ingredient in ingredients:
-            if not ingredient.get("isProprietaryBlend"):
-                continue
-
-            disclosure_level = ingredient.get("disclosureLevel", "none")
-            transparency_percentage = ingredient.get("transparencyPercentage", 0)
-            ingredient_name = ingredient.get("name", "Unknown")
-
-            # Determine ingredient category risk level
-            ingredient_category = self._determine_ingredient_category_risk(ingredient_name, ingredient)
-            risk_multiplier = category_risk_multipliers.get(ingredient_category, 1.5)  # Default moderate risk
-
-            # Calculate base penalty
-            base_penalty = base_penalties.get(disclosure_level, -10)
-
-            # Ensure values are not None
-            risk_multiplier = risk_multiplier if risk_multiplier is not None else 1.5
-            base_penalty = base_penalty if base_penalty is not None else -10
-
-            # Apply risk multiplier
-            weighted_penalty = base_penalty * risk_multiplier
-
-            # Adjust for partial transparency
-            if disclosure_level == "partial" and transparency_percentage > 0:
-                # Reduce penalty based on transparency percentage
-                transparency_bonus = (transparency_percentage / 100) * 2  # Up to 2 point bonus
-                weighted_penalty += transparency_bonus
-
-            # Clinical dosing adjustment
-            clinical_data = ingredient.get("clinicalDosing", {})
-            if clinical_data.get("has_clinical_data"):
-                clinical_modifier = clinical_data.get("clinical_score_modifier", 0)
-                clinical_modifier = clinical_modifier if clinical_modifier is not None else 0
-                weighted_penalty += clinical_modifier
-
-            # Track category penalties
-            if ingredient_category not in category_penalties:
-                category_penalties[ingredient_category] = {
-                    "total_penalty": 0,
-                    "ingredient_count": 0,
-                    "risk_multiplier": risk_multiplier
-                }
-
-            category_penalties[ingredient_category]["total_penalty"] += weighted_penalty
-            category_penalties[ingredient_category]["ingredient_count"] += 1
-
-            penalty_result["penalty_breakdown"].append({
-                "ingredient": ingredient_name,
-                "category": ingredient_category,
-                "disclosure_level": disclosure_level,
-                "transparency_percentage": transparency_percentage,
-                "base_penalty": base_penalty,
-                "risk_multiplier": risk_multiplier,
-                "final_penalty": round(weighted_penalty, 2)
-            })
-
-            total_penalty += weighted_penalty
-
-        # Determine overall risk assessment
-        if total_penalty <= -20:
-            risk_assessment = "very_high"
-        elif total_penalty <= -10:
-            risk_assessment = "high"
-        elif total_penalty <= -5:
-            risk_assessment = "moderate"
-        elif total_penalty <= -2:
-            risk_assessment = "low"
-        else:
-            risk_assessment = "minimal"
-
-        penalty_result.update({
-            "total_penalty_score": round(total_penalty, 2),
-            "category_penalties": category_penalties,
-            "risk_assessment": risk_assessment
-        })
-
-        logger.info(f"⚖️ Enhanced Penalty Weighting: {total_penalty:.2f} points ({risk_assessment} risk)")
-
-        return penalty_result
-
-    def _determine_ingredient_category_risk(self, ingredient_name: str, ingredient_data: Dict) -> str:
-        """
-        Determine the risk category of an ingredient based on name and properties
-        """
-        name_lower = ingredient_name.lower()
-
-        # High-risk stimulant indicators
-        stimulant_indicators = [
-            "caffeine", "guarana", "yerba mate", "green tea extract", "kola nut",
-            "synephrine", "ephedra", "bitter orange", "dmaa", "dmha",
-            "phenylethylamine", "hordenine", "tyramine"
-        ]
-
-        # Hormone/testosterone indicators
-        hormone_indicators = [
-            "dhea", "pregnenolone", "androstenedione", "tribulus",
-            "tongkat ali", "fenugreek", "d-aspartic acid", "zinc aspartate",
-            "boron", "ashwagandha"  # Can affect hormones
-        ]
-
-        # Thermogenic indicators
-        thermogenic_indicators = [
-            "capsaicin", "cayenne", "black pepper extract", "piperine",
-            "forskolin", "yohimbine", "rauwolscine", "green coffee bean"
-        ]
-
-        # Nootropic indicators
-        nootropic_indicators = [
-            "noopept", "piracetam", "alpha gpc", "cdp choline", "huperzine a",
-            "bacopa monnieri", "lion's mane", "rhodiola rosea", "ginkgo biloba"
-        ]
-
-        # Check against patterns
-        for indicator in stimulant_indicators:
-            if indicator in name_lower:
-                return "stimulant"
-
-        for indicator in hormone_indicators:
-            if indicator in name_lower:
-                return "hormone"
-
-        for indicator in thermogenic_indicators:
-            if indicator in name_lower:
-                return "thermogenic"
-
-        for indicator in nootropic_indicators:
-            if indicator in name_lower:
-                return "nootropic"
-
-        # Check blend type indicators
-        if any(term in name_lower for term in ["pre-workout", "pre workout", "energy blend"]):
-            return "pre_workout"
-
-        if any(term in name_lower for term in ["fat burn", "weight loss", "metabolism"]):
-            return "fat_burner"
-
-        if any(term in name_lower for term in ["sleep", "night", "pm formula", "melatonin"]):
-            return "sleep_aid"
-
-        if any(term in name_lower for term in ["digest", "enzyme", "probiotic"]):
-            return "digestive"
-
-        if any(term in name_lower for term in ["immune", "defense", "vitamin c"]):
-            return "immune"
-
-        if any(term in name_lower for term in ["antioxidant", "polyphenol", "flavonoid"]):
-            return "antioxidant"
-
-        if any(term in name_lower for term in ["vitamin", "b-complex", "multivitamin"]):
-            return "vitamin"
-
-        if any(term in name_lower for term in ["mineral", "calcium", "magnesium", "iron", "zinc"]):
-            return "mineral"
-
-        # Default to moderate risk adaptogen category
-        return "adaptogens"
-
-    def _calculate_blend_disclosure_stats(self, ingredients: List[Dict]) -> Dict[str, Any]:
-        """Calculate statistics about proprietary blend disclosure levels with transparency metrics"""
-        stats = {
-            "totalBlends": 0,
-            "fullDisclosure": 0,
-            "partialDisclosure": 0,
-            "noDisclosure": 0,
-            "hasProprietaryBlends": False,
-            "averageTransparencyPercentage": 0.0,
-            "transparencyBreakdown": []
-        }
-        
-        # Count blends by disclosure level and calculate transparency metrics
-        transparency_percentages = []
-
-        for ing in ingredients:
-            if ing.get("isProprietaryBlend"):
-                stats["hasProprietaryBlends"] = True
-                stats["totalBlends"] += 1
-
-                disclosure_level = ing.get("disclosureLevel")
-                transparency_percentage = ing.get("transparencyPercentage", 0)
-                # Ensure transparency_percentage is a number, not None
-                if transparency_percentage is None:
-                    transparency_percentage = 0
-
-                # Track transparency metrics
-                transparency_percentages.append(transparency_percentage)
-                stats["transparencyBreakdown"].append({
-                    "ingredientName": ing.get("name", "Unknown"),
-                    "disclosureLevel": disclosure_level,
-                    "transparencyPercentage": transparency_percentage
-                })
-
-                if disclosure_level == "full":
-                    stats["fullDisclosure"] += 1
-                elif disclosure_level == "partial":
-                    stats["partialDisclosure"] += 1
-                elif disclosure_level == "none":
-                    stats["noDisclosure"] += 1
-
-        # Calculate average transparency percentage
-        if transparency_percentages:
-            # Filter out None values and ensure all are numbers
-            valid_percentages = [p for p in transparency_percentages if p is not None and isinstance(p, (int, float))]
-            if valid_percentages:
-                stats["averageTransparencyPercentage"] = round(
-                    sum(valid_percentages) / len(valid_percentages), 1
-                )
-            else:
-                stats["averageTransparencyPercentage"] = 0.0
-        
-        # Determine overall disclosure level
-        if not stats["hasProprietaryBlends"]:
-            stats["disclosure"] = None  # No proprietary blends
-        elif stats["noDisclosure"] > 0:
-            stats["disclosure"] = "none"  # Any blend with no disclosure = overall none
-        elif stats["partialDisclosure"] > 0:
-            stats["disclosure"] = "partial"  # Any partial disclosure = overall partial
-        else:
-            stats["disclosure"] = "full"  # All blends have full disclosure
-        
-        return stats
-    
-    def smart_split_ingredients(self, text: str) -> List[str]:
-        """
-        Enhanced comma splitting that respects nested parentheses and brackets
-        Useful for parsing raw text ingredient lists from unstructured data
-        """
-        if not text or not isinstance(text, str):
-            return []
-        
-        # Manual parsing to handle complex nesting
-        parts = []
-        current_part = ""
-        paren_depth = 0
-        bracket_depth = 0
-        
-        for char in text:
-            if char == '(':
-                paren_depth += 1
-            elif char == ')':
-                paren_depth -= 1
-            elif char == '[':
-                bracket_depth += 1
-            elif char == ']':
-                bracket_depth -= 1
-            elif char == ',' and paren_depth == 0 and bracket_depth == 0:
-                # Safe to split here
-                if current_part.strip():
-                    parts.append(current_part.strip())
-                current_part = ""
-                continue
-            
-            current_part += char
-        
-        # Add the last part
-        if current_part.strip():
-            parts.append(current_part.strip())
-        
-        return parts
-    
-    def extract_dose_from_text(self, text: str) -> Dict[str, Any]:
-        """
-        Extract ingredient name and dose information from text using enhanced pattern recognition
-        Returns dict with 'ingredient', 'value', 'unit' keys
-        """
-        if not text or not isinstance(text, str):
-            return {"ingredient": text, "value": None, "unit": None}
-        
-        text = text.strip()
-        
-        # Try multiple dose patterns
-        patterns = [
-            # Pattern 1: "Ingredient 500mg" or "Ingredient (500mg)"
-            r'^(.+?)\s*\(?(\d+(?:\.\d+)?)\s*(mg|mcg|g|μg|IU)\s*\)?$',
-            # Pattern 2: "Ingredient 500 mg" (with space)
-            r'^(.+?)\s+(\d+(?:\.\d+)?)\s+(mg|mcg|g|μg|IU)$',
-            # Pattern 3: Handle parentheses with dose: "Ingredient (500 mg)"
-            r'^(.+?)\s*\(\s*(\d+(?:\.\d+)?)\s+(mg|mcg|g|μg|IU)\s*\)$'
-        ]
-        
-        for pattern in patterns:
-            match = re.search(pattern, text, re.IGNORECASE)
-            if match:
-                try:
-                    # Ensure we have all required groups
-                    if len(match.groups()) >= 3:
-                        ingredient_name = match.group(1).strip()
-                        # Remove trailing commas, colons, etc.
-                        ingredient_name = re.sub(r'[,:;]\s*$', '', ingredient_name)
-                        dose_value = float(match.group(2))
-                        dose_unit = match.group(3)
-
-                        return {
-                            "ingredient": ingredient_name,
-                            "value": dose_value,
-                            "unit": dose_unit,
-                            "original_text": text
-                        }
-                except (IndexError, ValueError) as e:
-                    # Skip this pattern if groups are malformed
-                    logger.debug(f"Pattern failed for '{text}': {e}")
-                    continue
-        
-        # If no dose pattern found, return original text as ingredient
-        return {"ingredient": text.strip(), "value": None, "unit": None}
-    
-    def normalize_ingredient_name(self, name: str) -> str:
-        """
-        Enhanced ingredient name normalization with explicit form qualifier removal
-        """
-        if not name or not isinstance(name, str):
-            return name
-
-        # Filter out regulatory text patterns that aren't ingredients
-        regulatory_patterns = [
-            r'contains\s*<?\s*\d+%\s*of:?',    # "Contains <2% of:", etc.
-            r'contains\s*less\s*than\s*\d+%',   # "Contains less than 2%"
-            r'one\s*or\s*more\s*of\s*the\s*following',  # "One or more of the following"
-            r'may\s*contain\s*one\s*or\s*more',  # "May contain one or more"
-            r'and\/or',                         # "and/or" connectors
-            r'other\s*ingredients',             # "Other ingredients"
-            r'inactive\s*ingredients',          # "Inactive ingredients"
-            r'allergen\s*information',          # "Allergen information"
-        ]
-
-        # Check if this is a regulatory pattern rather than an ingredient
-        name_lower = name.lower().strip()
-        for pattern in regulatory_patterns:
-            if re.match(pattern, name_lower, re.IGNORECASE):
-                return ""  # Return empty string for non-ingredients
-
-        # First apply existing preprocessing
-        normalized = self.matcher.preprocess_text(name)
-
-        # Remove form qualifiers more explicitly
-        normalized = re.sub(FORM_QUALIFIERS, '', normalized, flags=re.IGNORECASE)
-
-        # Clean up any extra whitespace
-        normalized = re.sub(r'\s+', ' ', normalized).strip()
-
-        return normalized
-    
-    def _extract_nutritional_warnings(self, ingredient_rows: List[Dict]) -> Dict[str, Any]:
-        """
-        Extract nutritional warning information for UI display
-        Only flag if above thresholds: sugar >1g, sodium >150mg, saturated fat >2g
-        Trans fat is flagged at ANY amount (>0g)
-        """
-        warnings = {
-            "excessiveDoses": [],  # Initialize but do not populate during cleaning
-            "sugarContent": None,
-            "sodiumContent": None,
-            "fatContent": None,
-            "transFat": None  # Added for trans fat warnings
-        }
-
-        # Define nutritional component patterns and thresholds
-        nutritional_checks = {
-            "sugar": {
-                "keywords": ["sugar", "sugars", "total sugar", "total sugars", "added sugar"],
-                "threshold": 1,  # grams
-                "unit_conversions": {"g": 1, "gram": 1, "grams": 1, "mg": 0.001}
-            },
-            "sodium": {
-                "keywords": ["sodium"],
-                "threshold": 150,  # milligrams
-                "unit_conversions": {"mg": 1, "milligram": 1, "milligrams": 1, "g": 1000}
-            },
-            "saturated_fat": {
-                "keywords": ["saturated fat", "saturated fats", "sat fat"],
-                "threshold": 2,  # grams
-                "unit_conversions": {"g": 1, "gram": 1, "grams": 1, "mg": 0.001}
-            },
-            "trans_fat": {
-                "keywords": ["trans fat", "trans fats", "trans fatty acid"],
-                "threshold": 0,  # ANY amount of trans fat is flagged
-                "unit_conversions": {"g": 1, "gram": 1, "grams": 1, "mg": 0.001}
-            }
-        }
-        
-        for ing in ingredient_rows:
-            # Normalize ingredient format (handle both string and dict)
-            if isinstance(ing, str):
-                name = ing.lower().strip()
-                ing_dict = {"name": ing}  # Convert to dict for consistent processing
-            elif isinstance(ing, dict):
-                name = ing.get("name", "").lower().strip()
-                ing_dict = ing
-            else:
-                continue  # Skip invalid entries
-            
-            # Check sugar content
-            for keyword in nutritional_checks["sugar"]["keywords"]:
-                if keyword in name:
-                    amount_info = self._extract_nutritional_amount(ing_dict)
-                    if amount_info:
-                        amount_in_g = self._convert_to_standard_unit(
-                            amount_info["amount"], 
-                            amount_info["unit"], 
-                            nutritional_checks["sugar"]["unit_conversions"]
-                        )
-                        if amount_in_g > nutritional_checks["sugar"]["threshold"]:
-                            warnings["sugarContent"] = f"{amount_in_g}g per serving"
-                    break
-            
-            # Check sodium content
-            for keyword in nutritional_checks["sodium"]["keywords"]:
-                if keyword in name:
-                    amount_info = self._extract_nutritional_amount(ing_dict)
-                    if amount_info:
-                        amount_in_mg = self._convert_to_standard_unit(
-                            amount_info["amount"], 
-                            amount_info["unit"], 
-                            nutritional_checks["sodium"]["unit_conversions"]
-                        )
-                        if amount_in_mg > nutritional_checks["sodium"]["threshold"]:
-                            warnings["sodiumContent"] = f"{amount_in_mg}mg per serving"
-                    break
-            
-            # Check saturated fat content
-            for keyword in nutritional_checks["saturated_fat"]["keywords"]:
-                if keyword in name:
-                    amount_info = self._extract_nutritional_amount(ing_dict)
-                    if amount_info:
-                        amount_in_g = self._convert_to_standard_unit(
-                            amount_info["amount"],
-                            amount_info["unit"],
-                            nutritional_checks["saturated_fat"]["unit_conversions"]
-                        )
-                        if amount_in_g > nutritional_checks["saturated_fat"]["threshold"]:
-                            warnings["fatContent"] = f"{amount_in_g}g saturated fat per serving"
-                    break
-
-            # Check trans fat content (ANY amount is flagged)
-            for keyword in nutritional_checks["trans_fat"]["keywords"]:
-                if keyword in name:
-                    amount_info = self._extract_nutritional_amount(ing_dict)
-                    if amount_info:
-                        amount_in_g = self._convert_to_standard_unit(
-                            amount_info["amount"],
-                            amount_info["unit"],
-                            nutritional_checks["trans_fat"]["unit_conversions"]
-                        )
-                        if amount_in_g > nutritional_checks["trans_fat"]["threshold"]:
-                            warnings["transFat"] = f"{amount_in_g}g trans fat per serving"
-                    break
-
-        return warnings
-    
     def _extract_nutritional_amount(self, ingredient: Dict) -> Optional[Dict]:
         """Extract amount information from ingredient for nutritional warnings"""
         # First check the quantity field

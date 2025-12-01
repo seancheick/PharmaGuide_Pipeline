@@ -537,6 +537,9 @@ class SupplementEnricherV2:
 
         # Search ingredient_quality_map for matching standard_name
         for ing_key, data in quality_map.items():
+            # Skip metadata keys
+            if ing_key.startswith("_") or not isinstance(data, dict):
+                continue
             if data.get("standard_name", "").lower() == key:
                 return data.get("category", "").lower()
 
@@ -623,6 +626,9 @@ class SupplementEnricherV2:
             # PHASE 1: Search all forms across all parent entries first (more specific)
             form_found = False
             for parent_key, parent_data in quality_map.items():
+                # Skip metadata keys
+                if parent_key.startswith("_") or not isinstance(parent_data, dict):
+                    continue
                 forms_dict = parent_data.get('forms', {})
                 for form_key, form_data in forms_dict.items():
                     # Check if ingredient matches this specific form
@@ -639,6 +645,9 @@ class SupplementEnricherV2:
             # PHASE 2: If no form match, try parent-level matches
             if not form_found:
                 for parent_key, parent_data in quality_map.items():
+                    # Skip metadata keys
+                    if parent_key.startswith("_") or not isinstance(parent_data, dict):
+                        continue
                     parent_aliases = parent_data.get('aliases', [])
                     parent_standard_name = parent_data.get('standard_name', '')
                     if self._exact_ingredient_match(ingredient_name, parent_standard_name, parent_aliases):
@@ -714,8 +723,8 @@ class SupplementEnricherV2:
                 else:
                     priority = "LOW"  # Regular inactive ingredients
 
-                # Log unmapped ingredient with priority
-                self.logger.warning(f"No mapping found for ingredient: '{ingredient_name}' (occurrence #{self.unmapped_ingredients[ingredient_name]}, priority: {priority})")
+                # Log unmapped ingredient with priority (DEBUG level to avoid terminal spam)
+                self.logger.debug(f"No mapping found for ingredient: '{ingredient_name}' (occurrence #{self.unmapped_ingredients[ingredient_name]}, priority: {priority})")
 
                 # ✅ INTELLIGENT FALLBACK: Use neutral scores that won't crash scoring
                 # Active ingredients get 8 (neutral), inactives get 5 (slightly below average)
@@ -908,7 +917,8 @@ class SupplementEnricherV2:
     def _find_clinical_evidence(self, ingredients: List[Dict], product_data: Dict) -> List[Dict]:
         """Find clinical evidence matches with brand-specific validation"""
         evidence_matches = []
-        clinical_studies = self.databases.get('backed_clinical_studies', [])
+        clinical_studies_db = self.databases.get('backed_clinical_studies', {})
+        clinical_studies = clinical_studies_db.get('backed_clinical_studies', [])
         
         # Get product text for brand context
         product_text = ' '.join([
@@ -961,7 +971,8 @@ class SupplementEnricherV2:
 
     def _analyze_absorption_enhancers(self, all_ingredients: List[Dict]) -> Dict:
         """Check for absorption enhancers"""
-        enhancers_db = self.databases.get('absorption_enhancers', [])
+        enhancers_database = self.databases.get('absorption_enhancers', {})
+        enhancers_db = enhancers_database.get('absorption_enhancers', [])
         found_enhancers = []
         enhanced_nutrients = []
 
@@ -1021,8 +1032,10 @@ class SupplementEnricherV2:
         ]).lower()
         
         for delivery_name, delivery_data in delivery_db.items():
-            if isinstance(delivery_data, dict):
-                delivery_name_lower = delivery_name.lower()
+            # Skip metadata keys
+            if delivery_name.startswith("_") or not isinstance(delivery_data, dict):
+                continue
+            delivery_name_lower = delivery_name.lower()
                 
                 # Check if delivery system is mentioned in product text
                 if delivery_name_lower in product_text:
@@ -1244,7 +1257,7 @@ class SupplementEnricherV2:
     def _analyze_proprietary_blends(self, ingredients: List[Dict], product_data: Dict) -> Dict:
         """Analyze proprietary blend disclosure"""
         proprietary_db = self.databases.get('proprietary_blends_penalty', {})
-        penalty_rules = proprietary_db.get('penalty_rules', [])
+        penalty_rules = proprietary_db.get('proprietary_blend_concerns', [])
         
         blends = []
         has_proprietary = False
@@ -1661,6 +1674,10 @@ class SupplementEnricherV2:
                 pass
 
         # Calculate only what's needed for enrichment
+        # Handle None converted_quantity (unit conversion failure)
+        if converted_quantity is None or converted_quantity == 0:
+            return default_response
+
         percent_of_ul = (converted_quantity / highest_ul * 100) if highest_ul > 0 else 0
 
         # Determine dosage category (for product-level summary)
@@ -1807,6 +1824,9 @@ class SupplementEnricherV2:
         critical_sections = []
 
         for key, value in banned_db.items():
+            # Skip metadata keys
+            if key.startswith("_"):
+                continue
             if isinstance(value, list) and len(value) > 0:
                 # Check if items in the list have the expected structure for banned substances
                 if any(isinstance(item, dict) and 'standard_name' in item for item in value):
@@ -2103,14 +2123,13 @@ class SupplementEnricherV2:
         contacts = product_data.get('contacts', [])
 
         # Check if in top manufacturers database
-        top_manufacturers = self.databases.get('top_manufacturers_data', [])
+        top_manufacturers_db = self.databases.get('top_manufacturers_data', {})
+        top_manufacturers = top_manufacturers_db.get('top_manufacturers', [])
         in_top = False
-        reputation_points = 0
 
         for manufacturer in top_manufacturers:
-            if self._exact_ingredient_match(brand_name, manufacturer.get('standard_name', ''), manufacturer.get('aka', [])):
+            if self._exact_ingredient_match(brand_name, manufacturer.get('standard_name', ''), manufacturer.get('aliases', [])):
                 in_top = True
-                reputation_points = manufacturer.get('score_contribution', 0)
                 break
 
         # Get parent company from contacts
@@ -2122,7 +2141,6 @@ class SupplementEnricherV2:
             "company": brand_name,
             "parent_company": parent_company,
             "in_top_manufacturers": in_top,
-            "reputation_points": reputation_points,
             "fda_violations": {
                 "recalls": [],
                 "warning_letters": [],

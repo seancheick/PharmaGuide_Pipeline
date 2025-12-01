@@ -1,144 +1,163 @@
 {
   "liposomal": {
-    "points": 6,
-    "description": "Nutrient is encapsulated in a phospholipid bubble, significantly enhancing absorption.",
+    "tier": 1,
+    "description": "Phospholipid encapsulation – routinely 300-1000%+ bioavailability increase",
     "category": "delivery"
   },
   "lypospheric": {
-    "points": 6,
-    "description": "A branded form of liposomal delivery, indicating high-end phospholipid encapsulation.",
-    "category": "delivery"
-  },
-  "phytosome": {
-    "points": 6,
-    "description": "Plant extract bound to phospholipids, improving absorption and bioavailability.",
-    "category": "delivery"
-  },
-  "nanoemulsion": {
-    "points": 6,
-    "description": "Ultra-fine oil droplets increase rapid absorption and bioavailability.",
-    "category": "delivery"
-  },
-  "transdermal": {
-    "points": 6,
-    "description": "Delivery through the skin for systemic absorption, such as patches.",
-    "category": "delivery"
-  },
-  "phospholipid complex": {
-    "points": 6,
-    "description": "Delivery system complexed with phospholipids enhancing effect.",
-    "category": "delivery"
-  },
-  "pegylated": {
-    "points": 6,
-    "description": "Coated with polyethylene glycol to prolong duration of action.",
-    "category": "delivery"
-  },
-  "sublingual": {
-    "points": 4,
-    "description": "Absorbed directly under the tongue, bypassing digestive system.",
-    "category": "delivery"
-  },
-  "enteric-coated": {
-    "points": 4,
-    "description": "Coating resists stomach acid, releasing ingredients in intestines.",
-    "category": "delivery"
-  },
-  "micronized": {
-    "points": 4,
-    "description": "Particles finely ground to improve absorption.",
-    "category": "delivery"
-  },
-  "time-release": {
-    "points": 4,
-    "description": "Ingredients released gradually over time for sustained delivery.",
-    "category": "delivery"
-  },
-  "sustained-release": {
-    "points": 4,
-    "description": "Gradual release to maintain stable blood levels.",
-    "category": "delivery"
-  },
-  "chelated": {
-    "points": 4,
-    "description": "Minerals bound to amino acids for improved absorption.",
-    "category": "delivery"
-  },
-  "microencapsulation": {
-    "points": 2,
-    "description": "Protective coating to shield ingredients, may improve stability.",
-    "category": "delivery"
-  },
-  "effervescent": {
-    "points": 2,
-    "description": "Dissolves in water for faster uptake.",
-    "category": "delivery"
-  },
-  "beadlet": {
-    "points": 2,
-    "description": "Pellets designed for timed or targeted release.",
-    "category": "delivery"
-  },
-  "softgel": {
-    "points": 2,
-    "description": "Gelatin shell improves solubility of fat-soluble vitamins.",
-    "category": "delivery"
-  },
-  "ionized": {
-    "points": 2,
-    "description": "Minerals manufactured to be electrically charged for absorption.",
-    "category": "delivery"
-  },
-  "buccal": {
-    "points": 2,
-    "description": "Absorbed through the cheek lining.",
-    "category": "delivery"
-  },
-  "cold-processed": {
-    "points": 2,
-    "description": "Manufactured at low temperatures to preserve ingredient integrity.",
-    "category": "delivery"
-  },
-  "double liposomal": {
-    "points": 6,
-    "description": "Dual-layered liposomal encapsulation for superior absorption and sustained retention.",
-    "category": "delivery"
-  },
-  "capsule-in-capsule": {
-    "points": 6,
-    "description": "Encapsulates multiple actives or stages for timed and targeted nutrient release.",
-    "category": "delivery"
-  },
-  "gel chew": {
-    "points": 4,
-    "description": "Emulsified gel bites, combining fat- and water-soluble nutrients for high bioavailability and compliance.",
-    "category": "delivery"
-  },
-  "microgranule": {
-    "points": 4,
-    "description": "Micro-sized granules engineered for specific timed, delayed, or extended release.",
-    "category": "delivery"
-  },
-  "capsoil": {
-    "points": 6,
-    "description": "Micronized lipophilic actives formulated into stable, high-absorption powders.",
+    "tier": 1,
+    "description": "Branded liposomal technology",
     "category": "delivery"
   },
   "vesisorb": {
-    "points": 6,
-    "description": "Colloidal droplet system that dramatically increases absorption of poorly bioavailable nutrients.",
+    "tier": 1,
+    "description": "Colloidal droplet system – clinically proven superior absorption",
     "category": "delivery"
   },
-  "directline technology": {
-    "points": 5,
-    "description": "Proprietary delivery technology for enhanced nutrient absorption and bioavailability.",
+  "capsoil": {
+    "tier": 1,
+    "description": "Micronized lipophilic powder technology",
     "category": "delivery"
   },
+  "nanoemulsion": {
+    "tier": 1,
+    "description": "Ultra-fine oil-in-water emulsion – rapid high absorption",
+    "category": "delivery"
+  },
+  "phytosome": {
+    "tier": 1,
+    "description": "Phospholipid-bound botanicals (e.g., Meriva, Greenselect)",
+    "category": "delivery"
+  },
+  "double liposomal": {
+    "tier": 1,
+    "description": "Dual-layer liposomal encapsulation",
+    "category": "delivery"
+  },
+  "capsule-in-capsule": {
+    "tier": 1,
+    "description": "Dual-stage release technology",
+    "category": "delivery"
+  },
+
+  "lozenge": {
+    "tier": 2,
+    "description": "Partial sublingual + mechanical dissolution – excellent for oral/immune actives",
+    "category": "delivery"
+  },
+  "sublingual": {
+    "tier": 2,
+    "description": "True under-tongue absorption bypassing first-pass",
+    "category": "delivery"
+  },
+  "oral spray": {
+    "tier": 2,
+    "description": "Sublingual spray – fast onset, high bioavailability",
+    "category": "delivery"
+  },
+  "chelated": {
+    "tier": 2,
+    "description": "Amino-acid bound minerals – 40-90% better absorption than oxides",
+    "category": "delivery"
+  },
+  "traacs": {
+    "tier": 2,
+    "description": "Albion patented chelates – gold-standard mineral chelation",
+    "category": "delivery"
+  },
+  "albion": {
+    "tier": 2,
+    "description": "Albion chelated minerals",
+    "category": "delivery"
+  },
+  "enteric-coated": {
+    "tier": 2,
+    "description": "Stomach-acid protection – critical for probiotics/enzymes",
+    "category": "delivery"
+  },
+  "micronized": {
+    "tier": 2,
+    "description": "Particle size reduction – proven 2-5× surface area increase",
+    "category": "delivery"
+  },
+  "time-release": {
+    "tier": 2,
+    "description": "Sustained delivery – stable blood levels",
+    "category": "delivery"
+  },
+  "sustained-release": {
+    "tier": 2,
+    "description": "Gradual release matrix",
+    "category": "delivery"
+  },
+  "liquid": {
+    "tier": 2,
+    "description": "High bioavailability when taken sublingually or with fat",
+    "category": "delivery"
+  },
+  "tincture": {
+    "tier": 2,
+    "description": "Alcohol/glycerin extract – rapid absorption",
+    "category": "delivery"
+  },
+
+  "gummy": {
+    "tier": 3,
+    "description": "Better than tablet but sugar/gelatin reduces net benefit",
+    "category": "delivery"
+  },
+  "powder": {
+    "tier": 3,
+    "description": "Flexible dosing – absorption depends on mixing",
+    "category": "delivery"
+  },
+  "effervescent": {
+    "tier": 3,
+    "description": "Fast dissolution",
+    "category": "delivery"
+  },
+  "softgel": {
+    "tier": 3,
+    "description": "Good for fat-solubles",
+    "category": "delivery"
+  },
+  "microencapsulation": {
+    "tier": 3,
+    "description": "Stability coating",
+    "category": "delivery"
+  },
+  "beadlet": {
+    "tier": 3,
+    "description": "Multi-phase pellets",
+    "category": "delivery"
+  },
+  "cold-processed": {
+    "tier": 3,
+    "description": "Preserves heat-sensitive actives",
+    "category": "delivery"
+  },
+  "hydrolyzed": {
+    "tier": 3,
+    "description": "Pre-digested proteins/peptides",
+    "category": "delivery"
+  },
+  "fermented": {
+    "tier": 3,
+    "description": "Pre-metabolized for better tolerance",
+    "category": "delivery"
+  },
+
   "_metadata": {
-    "description": "Enhanced delivery systems that improve supplement absorption and efficacy",
-    "purpose": "delivery_bonuses",
-    "schema_version": "1.0",
-    "total_entries": 27,
-    "last_updated": "2025-11-14"
+    "description": "Tiered enhanced delivery systems – max 3.0 points total per product (highest tier wins)",
+    "tier_points": {
+      "1": 3.0,
+      "2": 2.0,
+      "3": 1.0
+    },
+    "schema_version": "1.2",
+    "total_entries": 38,
+    "last_updated": "2025-11-18",
+    "max_bonus": 3.0,
+    "detection_note": "Search labelText.raw + ingredient forms + product name (case-insensitive). Award only the single highest tier match."
   }
 }

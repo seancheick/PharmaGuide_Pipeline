@@ -2242,11 +2242,11 @@
         "dosage_importance": 1.5
       },
       "ergocalciferol (D2)": {
-        "bio_score": 8,
+        "bio_score": 7,
         "natural": true,
-        "score": 11,
+        "score": 10,
         "absorption": "moderate",
-        "notes": "Plant-based form, less effective at raising and maintaining serum D levels compared to D3, and has a shorter half-life.",
+        "notes": "UPDATE 2024: Meta-analysis of 20 studies confirms D3 raises 25(OH)D levels 15.69 nmol/L higher than D2. Plant-based form, less effective at raising and maintaining serum D levels compared to D3, and has a shorter half-life.",
         "aliases": [
           "ergocalciferol",
           "vitamin d2",
@@ -3666,8 +3666,8 @@
         "bio_score": 14,
         "natural": false,
         "score": 14,
-        "absorption": "45%",
-        "notes": "Chelated form, gentle on the stomach and highly bioavailable. Minimizes GI side effects common with other iron forms. Take with vitamin C for enhanced absorption. Avoid taking with calcium, tea, or coffee.",
+        "absorption": "43-45% (2x higher than ferrous sulfate)",
+        "notes": "UPDATE 2024: Chelated form with 2-fold higher bioavailability than ferrous sulfate/fumarate. Gentle on the stomach and highly bioavailable. Significantly fewer GI side effects (nausea, constipation, metallic taste). Take with vitamin C for enhanced absorption. Avoid taking with calcium, tea, or coffee.",
         "context_include": [
           "iron",
           "bisglycinate",
@@ -3682,42 +3682,26 @@
           "carbonyl"
         ],
         "aliases": [
-          "iron bisglycinate",
-          "chelated iron",
-          "iron glycinate",
-          "gentle iron",
-          "albion iron",
-          "ferrous bisglycinate chelate",
-          "Iron Bisglycinate",
-          "iron bisglycinate supplement",
-          "chelated iron supplement",
-          "iron glycinate supplement",
-          "gentle iron supplement",
-          "albion iron supplement",
-          "ferrous bisglycinate chelate supplement",
-          "Iron Bisglycinate supplement"
-        ],
-        "dosage_importance": 1.5
-      },
-      "ferrous bisglycinate": {
-        "bio_score": 13,
-        "natural": false,
-        "score": 13,
-        "absorption": "43%",
-        "notes": "Well-tolerated chelate, often branded as Ferrochel. Effective for iron repletion with minimal digestive upset.",
-        "aliases": [
-          "ferrous bisglycinate",
-          "ferrous glycinate",
-          "chelated ferrous",
-          "ferrochel",
-          "bisglycinate iron",
           "Ferrous Bisglycinate",
-          "ferrous bisglycinate supplement",
-          "ferrous glycinate supplement",
-          "chelated ferrous supplement",
-          "ferrochel supplement",
-          "bisglycinate iron supplement",
-          "Ferrous Bisglycinate supplement"
+          "Iron Bisglycinate",
+          "Iron Bisglycinate supplement",
+          "albion iron",
+          "albion iron supplement",
+          "bisglycinate iron",
+          "chelated ferrous",
+          "chelated iron",
+          "chelated iron supplement",
+          "ferrochel",
+          "ferrous bisglycinate",
+          "ferrous bisglycinate chelate",
+          "ferrous bisglycinate chelate supplement",
+          "ferrous glycinate",
+          "gentle iron",
+          "gentle iron supplement",
+          "iron bisglycinate",
+          "iron bisglycinate supplement",
+          "iron glycinate",
+          "iron glycinate supplement"
         ],
         "dosage_importance": 1.5
       },
@@ -4049,11 +4033,11 @@
         "dosage_importance": 1.5
       },
       "zinc glycinate": {
-        "bio_score": 12,
+        "bio_score": 14,
         "natural": false,
-        "score": 12,
-        "absorption": "58–65%",
-        "notes": "Gentle chelated form, bound to glycine for enhanced absorption and minimal GI upset. Well tolerated and effective.",
+        "score": 14,
+        "absorption": "58–65% (43.4% better than gluconate)",
+        "notes": "UPDATE 2024: Research shows zinc glycinate had significantly higher plasma zinc levels at 6 weeks vs other forms (p<0.001). Highly bioavailable chelated form, bound to glycine for enhanced absorption and minimal GI upset.",
         "aliases": [
           "zinc glycinate",
           "zinc bisglycinate",

@@ -1,9 +1,9 @@
 DSLD Data Cleaning Processing Report
 ==================================================
 
-Generated: 2025-11-15 22:27:18
+Generated: 2025-11-18 11:59:17
 Total Files Processed: 978
-Processing Time: 0.29 minutes
+Processing Time: 0.18 minutes
 
 Results Summary:
   - Successfully cleaned: 978
@@ -12,8 +12,8 @@ Results Summary:
   - Errors: 0
   - Success rate: 100.0%
 
-Mapped ingredients found: 786
-Unmapped ingredients found: 1
+Mapped ingredients found: 785
+Unmapped ingredients found: 2
 
 Top 15 Mapped Ingredients (data insights):
   550x Stearic Acid
@@ -35,10 +35,11 @@ Top 15 Mapped Ingredients (data insights):
 📊 These are the most frequently appearing mapped ingredients
 
 Top 10 Unmapped Ingredients (for enrichment planning):
+    3x Directline Technology
     1x Natural & Organic Fruit Flavors
 
 💡 These ingredients should be prioritized for database enrichment
 
 Batch Details:
-  Batch 1: 500 cleaned, 0 review, 0 incomplete, 0 errors (8.7s)
-  Batch 2: 478 cleaned, 0 review, 0 incomplete, 0 errors (8.8s)
+  Batch 1: 500 cleaned, 0 review, 0 incomplete, 0 errors (5.3s)
+  Batch 2: 478 cleaned, 0 review, 0 incomplete, 0 errors (5.2s)

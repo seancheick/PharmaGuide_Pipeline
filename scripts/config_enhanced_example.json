@@ -1,0 +1,28 @@
+{
+  "processing": {
+    "batch_size": 100,
+    "max_workers": 4,
+    "memory_limit_gb": 8,
+    "pause_on_high_memory": true
+  },
+  "validation": {
+    "check_input_integrity": true,
+    "verify_output": true,
+    "generate_reports": true
+  },
+  "monitoring": {
+    "track_performance": true,
+    "show_progress_bar": true
+  },
+  "ui": {
+    "show_progress_bar": true
+  },
+  "output_format": {
+    "use_jsonl": false,
+    "pretty_print": false
+  },
+  "paths": {
+    "output_directory": "output_Lozenges",
+    "log_directory": "logs"
+  }
+}

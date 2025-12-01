@@ -2,10 +2,7 @@
   "user_goal_mappings": [
     {
       "user_facing_goal": "Sleep Quality",
-      "primary_clusters": [
-        "Sleep Stack",
-        "Magnesium Nervous System"
-      ],
+      "primary_clusters": ["Sleep Stack", "Magnesium Nervous System"],
       "secondary_clusters": [
         "Stress Resilience",
         "Mood Balance",
@@ -165,10 +162,7 @@
     },
     {
       "user_facing_goal": "Joint & Bone Health",
-      "primary_clusters": [
-        "Joint & Inflammation",
-        "Bone Health"
-      ],
+      "primary_clusters": ["Joint & Inflammation", "Bone Health"],
       "secondary_clusters": [
         "Calcium (from Bone Health)",
         "Vitamin D (from Multiple Clusters)",
@@ -195,10 +189,7 @@
     },
     {
       "user_facing_goal": "Skin, Hair & Nails",
-      "primary_clusters": [
-        "Hair & Skin Nutrition",
-        "Skin Health Complex"
-      ],
+      "primary_clusters": ["Hair & Skin Nutrition", "Skin Health Complex"],
       "secondary_clusters": [
         "Collagen (from Multiple Clusters)",
         "Biotin (from Hair & Skin Nutrition)",
@@ -209,10 +200,7 @@
     },
     {
       "user_facing_goal": "Liver & Detox",
-      "primary_clusters": [
-        "Liver Support",
-        "Detox Pathway"
-      ],
+      "primary_clusters": ["Liver Support", "Detox Pathway"],
       "secondary_clusters": [
         "Gut Barrier",
         "Probiotic and Gut Health",
@@ -223,9 +211,7 @@
     },
     {
       "user_facing_goal": "Eye & Vision",
-      "primary_clusters": [
-        "Eye Health"
-      ],
+      "primary_clusters": ["Eye Health"],
       "secondary_clusters": [
         "Antioxidant Defense",
         "Nitric Oxide & Blood Flow",
