@@ -1,0 +1,256 @@
+{
+  "database_info": {
+    "version": "1.0.0",
+    "last_updated": "2025-12-03",
+    "description": "Clinically studied probiotic strains with documented efficacy in human trials",
+    "purpose": "Award bonus points for products containing well-researched probiotic strains",
+    "scoring_rule": "+1 if product contains any strain from this list"
+  },
+  "clinically_relevant_strains": [
+    {
+      "id": "STRAIN_LGG",
+      "standard_name": "Lactobacillus rhamnosus GG",
+      "aliases": [
+        "L. rhamnosus GG",
+        "LGG",
+        "Lactobacillus GG",
+        "L. rhamnosus",
+        "Lactobacillus rhamnosus"
+      ],
+      "evidence_level": "high",
+      "key_benefits": ["gut health", "immune support", "diarrhea prevention"],
+      "notable_studies": "Over 1000 published studies"
+    },
+    {
+      "id": "STRAIN_REUTERI",
+      "standard_name": "Lactobacillus reuteri",
+      "aliases": [
+        "L. reuteri",
+        "L. reuteri DSM 17938",
+        "L. reuteri ATCC 55730",
+        "L. reuteri Protectis",
+        "Limosilactobacillus reuteri"
+      ],
+      "evidence_level": "high",
+      "key_benefits": ["oral health", "gut health", "colic relief"],
+      "notable_studies": "Multiple RCTs for infant colic and oral health"
+    },
+    {
+      "id": "STRAIN_K12",
+      "standard_name": "Streptococcus salivarius K12",
+      "aliases": ["S. salivarius K12", "BLIS K12", "Streptococcus K12", "K12"],
+      "evidence_level": "high",
+      "key_benefits": ["oral health", "throat health", "ear health"],
+      "notable_studies": "RCTs for strep throat reduction, ear infections"
+    },
+    {
+      "id": "STRAIN_M18",
+      "standard_name": "Streptococcus salivarius M18",
+      "aliases": ["S. salivarius M18", "BLIS M18", "Streptococcus M18", "M18"],
+      "evidence_level": "high",
+      "key_benefits": ["oral health", "dental health", "plaque reduction"],
+      "notable_studies": "Clinical studies for dental health"
+    },
+    {
+      "id": "STRAIN_COAGULANS",
+      "standard_name": "Bacillus coagulans",
+      "aliases": [
+        "B. coagulans",
+        "B. coagulans GBI-30 6086",
+        "Bacillus coagulans GBI-30",
+        "GanedenBC30",
+        "Lactobacillus sporogenes"
+      ],
+      "evidence_level": "high",
+      "key_benefits": ["digestive health", "IBS relief", "immune support"],
+      "notable_studies": "Multiple human RCTs for IBS and digestive health"
+    },
+    {
+      "id": "STRAIN_LACTIS_HN019",
+      "standard_name": "Bifidobacterium lactis HN019",
+      "aliases": [
+        "B. lactis HN019",
+        "Bifidobacterium animalis HN019",
+        "DR10",
+        "HOWARU Bifido"
+      ],
+      "evidence_level": "high",
+      "key_benefits": ["immune support", "gut transit", "digestive health"],
+      "notable_studies": "Multiple RCTs for immune function and constipation"
+    },
+    {
+      "id": "STRAIN_LACTIS_BI07",
+      "standard_name": "Bifidobacterium lactis Bi-07",
+      "aliases": ["B. lactis Bi-07", "Bi-07", "Bifidobacterium animalis Bi-07"],
+      "evidence_level": "high",
+      "key_benefits": ["immune support", "respiratory health"],
+      "notable_studies": "RCTs for upper respiratory infections"
+    },
+    {
+      "id": "STRAIN_PLANTARUM_299V",
+      "standard_name": "Lactobacillus plantarum 299v",
+      "aliases": [
+        "L. plantarum 299v",
+        "Lp299v",
+        "Lactiplantibacillus plantarum 299v"
+      ],
+      "evidence_level": "high",
+      "key_benefits": ["IBS relief", "iron absorption", "gut health"],
+      "notable_studies": "Multiple RCTs for IBS symptoms"
+    },
+    {
+      "id": "STRAIN_PLANTARUM_HEAL9",
+      "standard_name": "Lactobacillus plantarum HEAL9",
+      "aliases": ["L. plantarum HEAL9", "HEAL9", "DSM 15312"],
+      "evidence_level": "moderate",
+      "key_benefits": ["immune support", "cold prevention"],
+      "notable_studies": "Clinical trials for common cold"
+    },
+    {
+      "id": "STRAIN_PARACASEI_8700",
+      "standard_name": "Lactobacillus paracasei 8700:2",
+      "aliases": ["L. paracasei 8700:2", "DSM 13434"],
+      "evidence_level": "moderate",
+      "key_benefits": ["immune support", "respiratory health"],
+      "notable_studies": "RCTs for respiratory infections"
+    },
+    {
+      "id": "STRAIN_INFANTIS_35624",
+      "standard_name": "Bifidobacterium infantis 35624",
+      "aliases": [
+        "B. infantis 35624",
+        "Bifantis",
+        "Bifidobacterium longum 35624",
+        "B. longum subsp. infantis 35624"
+      ],
+      "evidence_level": "high",
+      "key_benefits": ["IBS relief", "gut inflammation"],
+      "notable_studies": "Multiple RCTs for IBS, particularly women"
+    },
+    {
+      "id": "STRAIN_ACIDOPHILUS_NCFM",
+      "standard_name": "Lactobacillus acidophilus NCFM",
+      "aliases": [
+        "L. acidophilus NCFM",
+        "NCFM",
+        "Lactobacillus acidophilus NC-FM"
+      ],
+      "evidence_level": "high",
+      "key_benefits": [
+        "digestive health",
+        "immune support",
+        "lactose digestion"
+      ],
+      "notable_studies": "Over 60 published studies"
+    },
+    {
+      "id": "STRAIN_CASEI_SHIROTA",
+      "standard_name": "Lactobacillus casei Shirota",
+      "aliases": ["L. casei Shirota", "LcS", "Yakult strain"],
+      "evidence_level": "high",
+      "key_benefits": ["digestive health", "immune support"],
+      "notable_studies": "Extensively studied, 100+ publications"
+    },
+    {
+      "id": "STRAIN_SACCHAROMYCES",
+      "standard_name": "Saccharomyces boulardii",
+      "aliases": [
+        "S. boulardii",
+        "Saccharomyces boulardii CNCM I-745",
+        "Florastor",
+        "Saccharomyces cerevisiae var. boulardii"
+      ],
+      "evidence_level": "high",
+      "key_benefits": [
+        "diarrhea prevention",
+        "antibiotic-associated diarrhea",
+        "C. diff prevention"
+      ],
+      "notable_studies": "Gold standard for traveler's diarrhea and AAD"
+    },
+    {
+      "id": "STRAIN_LACTIS_BB12",
+      "standard_name": "Bifidobacterium lactis BB-12",
+      "aliases": ["B. lactis BB-12", "BB-12", "Bifidobacterium animalis BB-12"],
+      "evidence_level": "high",
+      "key_benefits": ["digestive health", "immune support", "infant health"],
+      "notable_studies": "Most documented Bifidobacterium strain"
+    },
+    {
+      "id": "STRAIN_LONGUM_BB536",
+      "standard_name": "Bifidobacterium longum BB536",
+      "aliases": ["B. longum BB536", "BB536"],
+      "evidence_level": "high",
+      "key_benefits": ["immune support", "allergy relief", "gut health"],
+      "notable_studies": "Multiple RCTs for allergies and immune function"
+    },
+    {
+      "id": "STRAIN_SUBTILIS_DE111",
+      "standard_name": "Bacillus subtilis DE111",
+      "aliases": ["B. subtilis DE111", "DE111"],
+      "evidence_level": "moderate",
+      "key_benefits": [
+        "digestive health",
+        "immune support",
+        "spore-forming stability"
+      ],
+      "notable_studies": "Clinical trials for digestive and immune health"
+    },
+    {
+      "id": "STRAIN_CLAUSII",
+      "standard_name": "Bacillus clausii",
+      "aliases": ["B. clausii", "Enterogermina"],
+      "evidence_level": "moderate",
+      "key_benefits": ["diarrhea prevention", "antibiotic support"],
+      "notable_studies": "Multiple studies for acute diarrhea"
+    }
+  ],
+  "prebiotics": {
+    "description": "Prebiotic fibers that synergize with probiotics for +2 bonus",
+    "ingredients": [
+      {
+        "standard_name": "Inulin",
+        "aliases": [
+          "chicory root fiber",
+          "chicory inulin",
+          "oligofructose-enriched inulin"
+        ]
+      },
+      {
+        "standard_name": "Fructooligosaccharides",
+        "aliases": ["FOS", "fructo-oligosaccharides", "oligofructose"]
+      },
+      {
+        "standard_name": "Galactooligosaccharides",
+        "aliases": ["GOS", "galacto-oligosaccharides"]
+      },
+      {
+        "standard_name": "Xylooligosaccharides",
+        "aliases": ["XOS", "xylo-oligosaccharides"]
+      },
+      {
+        "standard_name": "Acacia Fiber",
+        "aliases": ["acacia gum", "gum arabic", "acacia senegal"]
+      },
+      {
+        "standard_name": "Apple Pectin",
+        "aliases": ["pectin", "fruit pectin"]
+      },
+      {
+        "standard_name": "Resistant Starch",
+        "aliases": [
+          "resistant maltodextrin",
+          "digestion resistant maltodextrin"
+        ]
+      },
+      {
+        "standard_name": "Beta-Glucan",
+        "aliases": [
+          "oat beta-glucan",
+          "barley beta-glucan",
+          "yeast beta-glucan"
+        ]
+      }
+    ]
+  }
+}
