@@ -13,7 +13,7 @@
       "reason": "Toxic levels of muscimol causing seizures, hospitalizations, and death",
       "contamination_type": "toxic_muscimol",
       "date": "2024-06-27",
-      "days_since_violation": 504,
+      "days_since_violation": 557,
       "recency_multiplier": 1.0,
       "illnesses_reported": 39,
       "deaths_reported": 1,
@@ -25,7 +25,7 @@
       "repeat_violation": false,
       "multiple_product_lines": false,
       "total_deduction_applied": -23.0,
-      "user_facing_note": "⚠️ CRITICAL SAFETY ISSUE: Prophet Premium Blends products were recalled due to toxic muscimol contamination that caused 39 illnesses, 1 death, and seizures across 20 states. The recall is still unresolved. ALL products from this manufacturer should be avoided until quality control is demonstrated. Penalty: -23 pts (base -20 + unresolved -3). Trust Score: 77/100 (HIGH RISK).",
+      "user_facing_note": "\u26a0\ufe0f CRITICAL SAFETY ISSUE: Prophet Premium Blends products were recalled due to toxic muscimol contamination that caused 39 illnesses, 1 death, and seizures across 20 states. The recall is still unresolved. ALL products from this manufacturer should be avoided until quality control is demonstrated. Penalty: -23 pts (base -20 + unresolved -3). Trust Score: 77/100 (HIGH RISK).",
       "internal_note": "Highest severity - involved death and mass illnesses; unresolved recall indicates ongoing risk"
     },
     {
@@ -41,7 +41,7 @@
       "reason": "Undeclared wheat allergen",
       "contamination_type": "undeclared_allergen_wheat",
       "date": "2025-04-14",
-      "days_since_violation": 213,
+      "days_since_violation": 266,
       "recency_multiplier": 1.0,
       "illnesses_reported": 0,
       "deaths_reported": 0,
@@ -53,7 +53,7 @@
       "repeat_violation": false,
       "multiple_product_lines": false,
       "total_deduction_applied": -12.0,
-      "user_facing_note": "⚠️ ALLERGEN ALERT: Dorado Nutrition recalled products containing undeclared wheat allergen. This is a serious safety issue for those with wheat allergies (can cause anaphylaxis). The recall has been RESOLVED. Penalty: -12 pts (allergen severity). This manufacturer should have caught this during quality control. Monitor future products. Trust Score: 88/100 (ACCEPTABLE).",
+      "user_facing_note": "\u26a0\ufe0f ALLERGEN ALERT: Dorado Nutrition recalled products containing undeclared wheat allergen. This is a serious safety issue for those with wheat allergies (can cause anaphylaxis). The recall has been RESOLVED. Penalty: -12 pts (allergen severity). This manufacturer should have caught this during quality control. Monitor future products. Trust Score: 88/100 (ACCEPTABLE).",
       "internal_note": "Allergen issue resolved but indicates quality control gaps"
     },
     {
@@ -69,7 +69,7 @@
       "reason": "Contains toxic yellow oleander instead of tejocote",
       "contamination_type": "toxic_yellow_oleander",
       "date": "2024-12-13",
-      "days_since_violation": 335,
+      "days_since_violation": 388,
       "recency_multiplier": 1.0,
       "illnesses_reported": 0,
       "deaths_reported": 0,
@@ -81,7 +81,7 @@
       "repeat_violation": false,
       "multiple_product_lines": true,
       "total_deduction_applied": -23.0,
-      "user_facing_note": "🚨 CRITICAL: Motivate Me Ashley products contained TOXIC YELLOW OLEANDER (cardiac glycoside) substituted for tejocote root. Yellow oleander causes serious cardiac and neurological damage. Violated in 4 product lines - indicating SYSTEMIC quality control failure, NOT isolated incident. Penalty: -23 pts (base -20 toxic + -3 multiple lines). ALL products from this manufacturer are flagged. Trust Score: 77/100 (HIGH RISK).",
+      "user_facing_note": "\ud83d\udea8 CRITICAL: Motivate Me Ashley products contained TOXIC YELLOW OLEANDER (cardiac glycoside) substituted for tejocote root. Yellow oleander causes serious cardiac and neurological damage. Violated in 4 product lines - indicating SYSTEMIC quality control failure, NOT isolated incident. Penalty: -23 pts (base -20 toxic + -3 multiple lines). ALL products from this manufacturer are flagged. Trust Score: 77/100 (HIGH RISK).",
       "internal_note": "Toxic substitution across multiple product lines indicates intentional or severe negligence"
     },
     {
@@ -97,7 +97,7 @@
       "reason": "Contains toxic yellow oleander instead of tejocote root",
       "contamination_type": "toxic_yellow_oleander",
       "date": "2024-04-10",
-      "days_since_violation": 582,
+      "days_since_violation": 635,
       "recency_multiplier": 1.0,
       "illnesses_reported": 0,
       "deaths_reported": 0,
@@ -109,7 +109,7 @@
       "repeat_violation": false,
       "multiple_product_lines": true,
       "total_deduction_applied": -23.0,
-      "user_facing_note": "🚨 CRITICAL: Global Mix, Inc. (operating as Eva Nutrition, Science of Alpha, Niwali, NWL Nutra) distributed products containing TOXIC YELLOW OLEANDER instead of tejocote root. This hazardous plant caused cardiac and neurological issues. Affected 4 product lines under different brand names - classic rebranding with dangerous ingredients. Penalty: -23 pts (base -20 toxic + -3 multiple lines). AVOID all products from this manufacturer. Trust Score: 77/100 (HIGH RISK).",
+      "user_facing_note": "\ud83d\udea8 CRITICAL: Global Mix, Inc. (operating as Eva Nutrition, Science of Alpha, Niwali, NWL Nutra) distributed products containing TOXIC YELLOW OLEANDER instead of tejocote root. This hazardous plant caused cardiac and neurological issues. Affected 4 product lines under different brand names - classic rebranding with dangerous ingredients. Penalty: -23 pts (base -20 toxic + -3 multiple lines). AVOID all products from this manufacturer. Trust Score: 77/100 (HIGH RISK).",
       "internal_note": "Multiple brands/labels for same toxic product indicates intentional deception"
     },
     {
@@ -125,7 +125,7 @@
       "reason": "Contains toxic yellow oleander",
       "contamination_type": "toxic_yellow_oleander",
       "date": "2024-01-12",
-      "days_since_violation": 671,
+      "days_since_violation": 724,
       "recency_multiplier": 1.0,
       "illnesses_reported": 0,
       "deaths_reported": 0,
@@ -137,7 +137,7 @@
       "repeat_violation": false,
       "multiple_product_lines": false,
       "total_deduction_applied": -20.0,
-      "user_facing_note": "🚨 CRITICAL: World Green Nutrition products contained TOXIC YELLOW OLEANDER. This plant contains cardiac glycosides that can cause severe heart problems and death. This is a historic toxicity issue with a pattern of recalls from this company. Penalty: -20 pts (toxic contamination). AVOID all products. Trust Score: 80/100 (ACCEPTABLE - due to age and resolved status, but high concern).",
+      "user_facing_note": "\ud83d\udea8 CRITICAL: World Green Nutrition products contained TOXIC YELLOW OLEANDER. This plant contains cardiac glycosides that can cause severe heart problems and death. This is a historic toxicity issue with a pattern of recalls from this company. Penalty: -20 pts (toxic contamination). AVOID all products. Trust Score: 80/100 (ACCEPTABLE - due to age and resolved status, but high concern).",
       "internal_note": "Historic toxicity issue - suggests systemic sourcing problems"
     },
     {
@@ -153,7 +153,7 @@
       "reason": "Contains toxic yellow oleander",
       "contamination_type": "toxic_yellow_oleander",
       "date": "2024-02-23",
-      "days_since_violation": 629,
+      "days_since_violation": 682,
       "recency_multiplier": 1.0,
       "illnesses_reported": 0,
       "deaths_reported": 0,
@@ -165,7 +165,7 @@
       "repeat_violation": false,
       "multiple_product_lines": false,
       "total_deduction_applied": -20.0,
-      "user_facing_note": "🚨 CRITICAL: Backstage Center's Alipotec products contained TOXIC YELLOW OLEANDER causing cardiac toxicity. Penalty: -20 pts. AVOID products. Trust Score: 80/100.",
+      "user_facing_note": "\ud83d\udea8 CRITICAL: Backstage Center's Alipotec products contained TOXIC YELLOW OLEANDER causing cardiac toxicity. Penalty: -20 pts. AVOID products. Trust Score: 80/100.",
       "internal_note": "Yellow oleander contamination"
     },
     {
@@ -185,7 +185,7 @@
         "dexamethasone"
       ],
       "date": "2024-12-16",
-      "days_since_violation": 332,
+      "days_since_violation": 385,
       "recency_multiplier": 1.0,
       "illnesses_reported": 0,
       "deaths_reported": 0,
@@ -197,7 +197,7 @@
       "repeat_violation": false,
       "multiple_product_lines": false,
       "total_deduction_applied": -18.0,
-      "user_facing_note": "⚠️ CRITICAL - UNDECLARED DRUGS: GNMART products contained hidden pharmaceutical drugs (Diclofenac - NSAID pain reliever, Dexamethasone - corticosteroid). These can cause serious interactions with other medications or health conditions. Recall UNRESOLVED. Users taking blood thinners, having kidney disease, or on other steroids face serious risk. Penalty: -18 pts (base -15 + unresolved -3). AVOID. Trust Score: 82/100 (CONCERNING).",
+      "user_facing_note": "\u26a0\ufe0f CRITICAL - UNDECLARED DRUGS: GNMART products contained hidden pharmaceutical drugs (Diclofenac - NSAID pain reliever, Dexamethasone - corticosteroid). These can cause serious interactions with other medications or health conditions. Recall UNRESOLVED. Users taking blood thinners, having kidney disease, or on other steroids face serious risk. Penalty: -18 pts (base -15 + unresolved -3). AVOID. Trust Score: 82/100 (CONCERNING).",
       "internal_note": "Multiple undeclared pharmaceutical drugs; unresolved recall is major red flag"
     },
     {
@@ -217,7 +217,7 @@
         "glyburide"
       ],
       "date": "2024-12-18",
-      "days_since_violation": 330,
+      "days_since_violation": 383,
       "recency_multiplier": 1.0,
       "illnesses_reported": 0,
       "deaths_reported": 0,
@@ -229,7 +229,7 @@
       "repeat_violation": false,
       "multiple_product_lines": false,
       "total_deduction_applied": -18.0,
-      "user_facing_note": "⚠️ CRITICAL - HIDDEN DIABETES DRUGS: Shoppers-Plaza products labeled as 'herbal formula' contained undeclared METFORMIN and GLYBURIDE (powerful diabetes medications). EXTREMELY DANGEROUS for non-diabetics or those taking other diabetes drugs (risk of hypoglycemia, kidney damage). Recall UNRESOLVED. Penalty: -18 pts. AVOID completely. Trust Score: 82/100 (CONCERNING).",
+      "user_facing_note": "\u26a0\ufe0f CRITICAL - HIDDEN DIABETES DRUGS: Shoppers-Plaza products labeled as 'herbal formula' contained undeclared METFORMIN and GLYBURIDE (powerful diabetes medications). EXTREMELY DANGEROUS for non-diabetics or those taking other diabetes drugs (risk of hypoglycemia, kidney damage). Recall UNRESOLVED. Penalty: -18 pts. AVOID completely. Trust Score: 82/100 (CONCERNING).",
       "internal_note": "Diabetes drugs undeclared; unresolved; serious safety risk"
     },
     {
@@ -249,7 +249,7 @@
         "diclofenac"
       ],
       "date": "2024-11-06",
-      "days_since_violation": 372,
+      "days_since_violation": 425,
       "recency_multiplier": 1.0,
       "illnesses_reported": 0,
       "deaths_reported": 0,
@@ -261,7 +261,7 @@
       "repeat_violation": false,
       "multiple_product_lines": true,
       "total_deduction_applied": -18.0,
-      "user_facing_note": "⚠️ CRITICAL - UNDECLARED ERECTILE DYSFUNCTION DRUG: VitalityVita products across 2 product lines (VitalityXtra & PeakMax) contained undeclared SILDENAFIL (Viagra-like drug) and DICLOFENAC (NSAID). Hidden sildenafil causes sudden blood pressure drops, especially dangerous with heart medications or nitrates. AFFECTS MULTIPLE PRODUCT LINES indicating systemic quality failure. Penalty: -18 pts (base -15 undeclared drugs, but no additional multiple-line penalty applied as both under same recall). AVOID. Trust Score: 82/100.",
+      "user_facing_note": "\u26a0\ufe0f CRITICAL - UNDECLARED ERECTILE DYSFUNCTION DRUG: VitalityVita products across 2 product lines (VitalityXtra & PeakMax) contained undeclared SILDENAFIL (Viagra-like drug) and DICLOFENAC (NSAID). Hidden sildenafil causes sudden blood pressure drops, especially dangerous with heart medications or nitrates. AFFECTS MULTIPLE PRODUCT LINES indicating systemic quality failure. Penalty: -18 pts (base -15 undeclared drugs, but no additional multiple-line penalty applied as both under same recall). AVOID. Trust Score: 82/100.",
       "internal_note": "Two product lines with same violations"
     },
     {
@@ -281,7 +281,7 @@
         "diclofenac"
       ],
       "date": "2024-11-04",
-      "days_since_violation": 374,
+      "days_since_violation": 427,
       "recency_multiplier": 1.0,
       "illnesses_reported": 0,
       "deaths_reported": 0,
@@ -293,7 +293,7 @@
       "repeat_violation": false,
       "multiple_product_lines": true,
       "total_deduction_applied": -18.0,
-      "user_facing_note": "⚠️ CRITICAL - UNDECLARED ERECTILE DYSFUNCTION DRUG: Boulla LLC's ZoomMax and ZapMax products contained hidden SILDENAFIL and DICLOFENAC across 2 product lines. Same pattern as VitalityVita - indicates systemic supplier/quality control problem. Hidden sildenafil is life-threatening with certain heart medications. Recall UNRESOLVED. Penalty: -18 pts. AVOID all products from this manufacturer. Trust Score: 82/100 (CONCERNING).",
+      "user_facing_note": "\u26a0\ufe0f CRITICAL - UNDECLARED ERECTILE DYSFUNCTION DRUG: Boulla LLC's ZoomMax and ZapMax products contained hidden SILDENAFIL and DICLOFENAC across 2 product lines. Same pattern as VitalityVita - indicates systemic supplier/quality control problem. Hidden sildenafil is life-threatening with certain heart medications. Recall UNRESOLVED. Penalty: -18 pts. AVOID all products from this manufacturer. Trust Score: 82/100 (CONCERNING).",
       "internal_note": "Multiple products with same drug contamination pattern"
     },
     {
@@ -314,7 +314,7 @@
         "methocarbamol"
       ],
       "date": "2024-10-16",
-      "days_since_violation": 393,
+      "days_since_violation": 446,
       "recency_multiplier": 1.0,
       "illnesses_reported": 0,
       "deaths_reported": 0,
@@ -326,7 +326,7 @@
       "repeat_violation": false,
       "multiple_product_lines": false,
       "total_deduction_applied": -18.0,
-      "user_facing_note": "⚠️ CRITICAL - MULTIPLE UNDECLARED DRUGS: C&A Naturistics AK Forte contained 3 hidden pharmaceutical drugs: DICLOFENAC (NSAID), DEXAMETHASONE (steroid), and METHOCARBAMOL (muscle relaxant). This combination is dangerous with common medications (blood thinners, other pain relievers, statins). Recall UNRESOLVED. Penalty: -18 pts. AVOID. Trust Score: 82/100.",
+      "user_facing_note": "\u26a0\ufe0f CRITICAL - MULTIPLE UNDECLARED DRUGS: C&A Naturistics AK Forte contained 3 hidden pharmaceutical drugs: DICLOFENAC (NSAID), DEXAMETHASONE (steroid), and METHOCARBAMOL (muscle relaxant). This combination is dangerous with common medications (blood thinners, other pain relievers, statins). Recall UNRESOLVED. Penalty: -18 pts. AVOID. Trust Score: 82/100.",
       "internal_note": "Three different undeclared drugs in single product"
     },
     {
@@ -346,7 +346,7 @@
         "omeprazole"
       ],
       "date": "2024-11-19",
-      "days_since_violation": 359,
+      "days_since_violation": 412,
       "recency_multiplier": 1.0,
       "illnesses_reported": 0,
       "deaths_reported": 0,
@@ -358,7 +358,7 @@
       "repeat_violation": false,
       "multiple_product_lines": false,
       "total_deduction_applied": -18.0,
-      "user_facing_note": "⚠️ CRITICAL - UNDECLARED DRUGS IN BEAUTY SUPPLEMENT: MXBBB's UMARY (supposedly a hyaluronic acid beauty supplement) contained hidden DICLOFENAC (NSAID pain reliever) and OMEPRAZOLE (acid reflux medication). The presence of omeprazole suggests this was mislabeled pharmaceutical product sold as supplement. Dangerous if user already takes these drugs. Recall UNRESOLVED. Penalty: -18 pts. AVOID. Trust Score: 82/100.",
+      "user_facing_note": "\u26a0\ufe0f CRITICAL - UNDECLARED DRUGS IN BEAUTY SUPPLEMENT: MXBBB's UMARY (supposedly a hyaluronic acid beauty supplement) contained hidden DICLOFENAC (NSAID pain reliever) and OMEPRAZOLE (acid reflux medication). The presence of omeprazole suggests this was mislabeled pharmaceutical product sold as supplement. Dangerous if user already takes these drugs. Recall UNRESOLVED. Penalty: -18 pts. AVOID. Trust Score: 82/100.",
       "internal_note": "Anti-inflammatory and GI drug combination suggesting pharmaceutical misrepresentation"
     },
     {
@@ -379,7 +379,7 @@
         "chlorpheniramine"
       ],
       "date": "2024-12-13",
-      "days_since_violation": 335,
+      "days_since_violation": 388,
       "recency_multiplier": 1.0,
       "illnesses_reported": 0,
       "deaths_reported": 0,
@@ -391,7 +391,7 @@
       "repeat_violation": false,
       "multiple_product_lines": false,
       "total_deduction_applied": -18.0,
-      "user_facing_note": "⚠️ CRITICAL - MULTIPLE UNDECLARED DRUGS IN HERBAL PRODUCT: buy-herbal.com's product contained 3 hidden drugs: FUROSEMIDE (diuretic for heart/hypertension), DEXAMETHASONE (steroid), and CHLORPHENIRAMINE (antihistamine). Furosemide can cause serious electrolyte imbalance and kidney problems if taken unknowingly. This product appears to be rebranded pharmaceutical. Recall UNRESOLVED. Penalty: -18 pts. AVOID. Trust Score: 82/100.",
+      "user_facing_note": "\u26a0\ufe0f CRITICAL - MULTIPLE UNDECLARED DRUGS IN HERBAL PRODUCT: buy-herbal.com's product contained 3 hidden drugs: FUROSEMIDE (diuretic for heart/hypertension), DEXAMETHASONE (steroid), and CHLORPHENIRAMINE (antihistamine). Furosemide can cause serious electrolyte imbalance and kidney problems if taken unknowingly. This product appears to be rebranded pharmaceutical. Recall UNRESOLVED. Penalty: -18 pts. AVOID. Trust Score: 82/100.",
       "internal_note": "Multiple drug classes undeclared; appears to be pharmaceutical rebranded as herbal"
     },
     {
@@ -411,7 +411,7 @@
         "chlorpheniramine"
       ],
       "date": "2024-09-20",
-      "days_since_violation": 419,
+      "days_since_violation": 472,
       "recency_multiplier": 1.0,
       "illnesses_reported": 0,
       "deaths_reported": 0,
@@ -423,7 +423,7 @@
       "repeat_violation": false,
       "multiple_product_lines": false,
       "total_deduction_applied": -18.0,
-      "user_facing_note": "⚠️ CRITICAL - UNDECLARED STEROID AND ANTIHISTAMINE: 123Herbals' Vail-Bon Jie Yang Wan contained hidden DEXAMETHASONE (strong corticosteroid) and CHLORPHENIRAMINE (antihistamine). Long-term hidden steroid use causes bone loss, immune suppression, and weight gain. Dangerous if user is already on steroids for asthma/autoimmune conditions. Recall UNRESOLVED. Penalty: -18 pts. AVOID. Trust Score: 82/100.",
+      "user_facing_note": "\u26a0\ufe0f CRITICAL - UNDECLARED STEROID AND ANTIHISTAMINE: 123Herbals' Vail-Bon Jie Yang Wan contained hidden DEXAMETHASONE (strong corticosteroid) and CHLORPHENIRAMINE (antihistamine). Long-term hidden steroid use causes bone loss, immune suppression, and weight gain. Dangerous if user is already on steroids for asthma/autoimmune conditions. Recall UNRESOLVED. Penalty: -18 pts. AVOID. Trust Score: 82/100.",
       "internal_note": "Steroid and antihistamine combination; classic pharmaceutical misrepresentation"
     },
     {
@@ -444,7 +444,7 @@
         "phenylbutazone"
       ],
       "date": "2024-07-16",
-      "days_since_violation": 485,
+      "days_since_violation": 538,
       "recency_multiplier": 1.0,
       "illnesses_reported": 0,
       "deaths_reported": 0,
@@ -456,7 +456,7 @@
       "repeat_violation": false,
       "multiple_product_lines": false,
       "total_deduction_applied": -18.0,
-      "user_facing_note": "⚠️ CRITICAL - MULTIPLE HIDDEN PAIN RELIEVERS: Guru Inc.'s Infla-650 contained 3 undeclared pain medications: ACETAMINOPHEN, DICLOFENAC (NSAID), and PHENYLBUTAZONE (powerful NSAID banned in many countries for human use). Taking multiple pain relievers unknowingly causes liver damage, GI bleeding, and kidney failure. If user is already taking Tylenol or ibuprofen, this combination is dangerous. Recall UNRESOLVED. Penalty: -18 pts. AVOID. Trust Score: 82/100.",
+      "user_facing_note": "\u26a0\ufe0f CRITICAL - MULTIPLE HIDDEN PAIN RELIEVERS: Guru Inc.'s Infla-650 contained 3 undeclared pain medications: ACETAMINOPHEN, DICLOFENAC (NSAID), and PHENYLBUTAZONE (powerful NSAID banned in many countries for human use). Taking multiple pain relievers unknowingly causes liver damage, GI bleeding, and kidney failure. If user is already taking Tylenol or ibuprofen, this combination is dangerous. Recall UNRESOLVED. Penalty: -18 pts. AVOID. Trust Score: 82/100.",
       "internal_note": "Multiple analgesics undeclared; phenylbutazone is restricted medication"
     },
     {
@@ -476,7 +476,7 @@
         "acetaminophen"
       ],
       "date": "2024-07-12",
-      "days_since_violation": 489,
+      "days_since_violation": 542,
       "recency_multiplier": 1.0,
       "illnesses_reported": 0,
       "deaths_reported": 0,
@@ -488,7 +488,7 @@
       "repeat_violation": false,
       "multiple_product_lines": true,
       "total_deduction_applied": -18.0,
-      "user_facing_note": "⚠️ CRITICAL - HIDDEN ERECTILE DYSFUNCTION DRUG IN SEXUAL PERFORMANCE SUPPLEMENT: Supercore's Hard Steel products (Capsules & Liquid across 2 product lines) contained undeclared SILDENAFIL (Viagra) and ACETAMINOPHEN. While sildenafil effect is 'desired', NOT DISCLOSING it is dangerous because users don't know about interactions with heart medications, nitrates, or blood pressure drugs. Can cause sudden death with certain medications. AFFECTS 2 PRODUCT LINES - systemic quality failure. Recall UNRESOLVED. Penalty: -18 pts. AVOID. Trust Score: 82/100.",
+      "user_facing_note": "\u26a0\ufe0f CRITICAL - HIDDEN ERECTILE DYSFUNCTION DRUG IN SEXUAL PERFORMANCE SUPPLEMENT: Supercore's Hard Steel products (Capsules & Liquid across 2 product lines) contained undeclared SILDENAFIL (Viagra) and ACETAMINOPHEN. While sildenafil effect is 'desired', NOT DISCLOSING it is dangerous because users don't know about interactions with heart medications, nitrates, or blood pressure drugs. Can cause sudden death with certain medications. AFFECTS 2 PRODUCT LINES - systemic quality failure. Recall UNRESOLVED. Penalty: -18 pts. AVOID. Trust Score: 82/100.",
       "internal_note": "Sexual performance product with dangerous undeclared drugs; multiple product lines affected"
     },
     {
@@ -504,7 +504,7 @@
       "reason": "Contamination with E. coli O7:K1 and 1303",
       "contamination_type": "bacterial_ecoli",
       "date": "2025-10-27",
-      "days_since_violation": 17,
+      "days_since_violation": 70,
       "recency_multiplier": 1.0,
       "illnesses_reported": 0,
       "deaths_reported": 0,
@@ -516,7 +516,7 @@
       "repeat_violation": false,
       "multiple_product_lines": false,
       "total_deduction_applied": -18.0,
-      "user_facing_note": "🚨 FRESH ALERT - BACTERIAL CONTAMINATION: Purity Products' MyBladder supplement was JUST RECALLED (Oct 2025) for E. coli contamination. This is VERY RECENT - the product may still be on shelves. E. coli contamination causes severe diarrhea, kidney failure in severe cases. For urinary supplements, this is particularly dangerous. Recall is UNRESOLVED. Penalty: -18 pts. DO NOT USE - check your medicine cabinet immediately. Trust Score: 82/100 (CONCERNING).",
+      "user_facing_note": "\ud83d\udea8 FRESH ALERT - BACTERIAL CONTAMINATION: Purity Products' MyBladder supplement was JUST RECALLED (Oct 2025) for E. coli contamination. This is VERY RECENT - the product may still be on shelves. E. coli contamination causes severe diarrhea, kidney failure in severe cases. For urinary supplements, this is particularly dangerous. Recall is UNRESOLVED. Penalty: -18 pts. DO NOT USE - check your medicine cabinet immediately. Trust Score: 82/100 (CONCERNING).",
       "internal_note": "Recent E. coli contamination; very fresh recall"
     },
     {
@@ -532,7 +532,7 @@
       "reason": "Potential Salmonella contamination",
       "contamination_type": "bacterial_salmonella",
       "date": "2024-07-16",
-      "days_since_violation": 485,
+      "days_since_violation": 538,
       "recency_multiplier": 1.0,
       "illnesses_reported": 0,
       "deaths_reported": 0,
@@ -544,7 +544,7 @@
       "repeat_violation": false,
       "multiple_product_lines": false,
       "total_deduction_applied": -10.0,
-      "user_facing_note": "⚠️ Class II Recall (RESOLVED): Penn Herb Company's thyroid formula was recalled for potential Salmonella contamination. Salmonella causes severe diarrhea, fever, and abdominal cramps lasting 7+ days. For immunocompromised users or elderly, it's serious. Status: RESOLVED (recall completed). Penalty: -10 pts. While resolved, indicates quality control gaps in manufacturing. Monitor other products from Penn Herb. Trust Score: 90/100 (EXCELLENT).",
+      "user_facing_note": "\u26a0\ufe0f Class II Recall (RESOLVED): Penn Herb Company's thyroid formula was recalled for potential Salmonella contamination. Salmonella causes severe diarrhea, fever, and abdominal cramps lasting 7+ days. For immunocompromised users or elderly, it's serious. Status: RESOLVED (recall completed). Penalty: -10 pts. While resolved, indicates quality control gaps in manufacturing. Monitor other products from Penn Herb. Trust Score: 90/100 (EXCELLENT).",
       "internal_note": "Class II recall with resolved status; lower risk tier"
     },
     {
@@ -560,7 +560,7 @@
       "reason": "Failed to establish component specifications for mushroom components - missing toxic element testing",
       "contamination_type": "cgmp_missing_specs",
       "date": "2024-08-13",
-      "days_since_violation": 457,
+      "days_since_violation": 510,
       "recency_multiplier": 1.0,
       "illnesses_reported": 0,
       "deaths_reported": 0,
@@ -577,7 +577,7 @@
         "missing_toxic_element_specs"
       ],
       "total_deduction_applied": -15.0,
-      "user_facing_note": "⚠️ FDA WARNING LETTER - QUALITY CONTROL FAILURE: Restorative Botanicals received an FDA warning letter for FAILING TO TEST mushroom products for toxic elements (heavy metals like lead, cadmium). Mushrooms are heavy metal accumulators - contaminated mushrooms can cause neurological damage over time. Affects 2 product lines (GUT & IMMUNE shrooms) - systemic facility problem. Company has NOT ADEQUATELY RESPONDED to FDA. Penalty: -15 pts (base -12 + multiple lines -3). HIGH CONCERN. Trust Score: 85/100 (ACCEPTABLE - monitor closely).",
+      "user_facing_note": "\u26a0\ufe0f FDA WARNING LETTER - QUALITY CONTROL FAILURE: Restorative Botanicals received an FDA warning letter for FAILING TO TEST mushroom products for toxic elements (heavy metals like lead, cadmium). Mushrooms are heavy metal accumulators - contaminated mushrooms can cause neurological damage over time. Affects 2 product lines (GUT & IMMUNE shrooms) - systemic facility problem. Company has NOT ADEQUATELY RESPONDED to FDA. Penalty: -15 pts (base -12 + multiple lines -3). HIGH CONCERN. Trust Score: 85/100 (ACCEPTABLE - monitor closely).",
       "internal_note": "High-risk botanical ingredient without proper testing; unresolved; multiple lines affected"
     },
     {
@@ -593,7 +593,7 @@
       "reason": "Failed to establish component specifications for purity and strength, inadequate manufacturing records",
       "contamination_type": "cgmp_missing_specs",
       "date": "2024-06-03",
-      "days_since_violation": 528,
+      "days_since_violation": 581,
       "recency_multiplier": 1.0,
       "illnesses_reported": 0,
       "deaths_reported": 0,
@@ -610,7 +610,7 @@
         "inadequate_records"
       ],
       "total_deduction_applied": -15.0,
-      "user_facing_note": "⚠️ FDA WARNING LETTER - CRITICAL CGMP FAILURES: Top Health Manufacturing has FAILED to establish proper specifications for purity and ingredient strength in Grandma's Herbs Kidney supplement. Additionally, manufacturing records are inadequate - meaning there's no traceability if problems occur. This is especially concerning for kidney supplements where active ingredient consistency is critical for safety. FDA warning UNRESOLVED for 5+ months. Penalty: -15 pts. CAUTION ADVISED. Trust Score: 85/100.",
+      "user_facing_note": "\u26a0\ufe0f FDA WARNING LETTER - CRITICAL CGMP FAILURES: Top Health Manufacturing has FAILED to establish proper specifications for purity and ingredient strength in Grandma's Herbs Kidney supplement. Additionally, manufacturing records are inadequate - meaning there's no traceability if problems occur. This is especially concerning for kidney supplements where active ingredient consistency is critical for safety. FDA warning UNRESOLVED for 5+ months. Penalty: -15 pts. CAUTION ADVISED. Trust Score: 85/100.",
       "internal_note": "Critical CGMP failures in manufacturing controls; unresolved"
     },
     {
@@ -626,7 +626,7 @@
       "reason": "Failed to establish component specifications, lacking heavy metal specifications for botanical components, misbranding",
       "contamination_type": "cgmp_missing_specs",
       "date": "2024-07-09",
-      "days_since_violation": 492,
+      "days_since_violation": 545,
       "recency_multiplier": 1.0,
       "illnesses_reported": 0,
       "deaths_reported": 0,
@@ -643,7 +643,7 @@
         "misbranding"
       ],
       "total_deduction_applied": -15.0,
-      "user_facing_note": "🚨 FDA WARNING LETTER - SYSTEMIC FACILITY FAILURES: Formulation Technology has multiple CRITICAL CGMP violations affecting 5 different product lines: (1) Failed to test for heavy metals in botanicals, (2) Missing ingredient specifications, (3) Misbranding on labels. Five product lines indicates this is NOT isolated - it's a facility-wide quality control breakdown. Company has NOT adequately responded to FDA. Penalty: -15 pts (base -12 + multiple lines -3). AVOID all products from this manufacturer. Trust Score: 85/100.",
+      "user_facing_note": "\ud83d\udea8 FDA WARNING LETTER - SYSTEMIC FACILITY FAILURES: Formulation Technology has multiple CRITICAL CGMP violations affecting 5 different product lines: (1) Failed to test for heavy metals in botanicals, (2) Missing ingredient specifications, (3) Misbranding on labels. Five product lines indicates this is NOT isolated - it's a facility-wide quality control breakdown. Company has NOT adequately responded to FDA. Penalty: -15 pts (base -12 + multiple lines -3). AVOID all products from this manufacturer. Trust Score: 85/100.",
       "internal_note": "Multiple CGMP violations affecting multiple product lines; unresolved; systemic issue"
     },
     {
@@ -659,7 +659,7 @@
       "reason": "Serious violations of CGMP regulations",
       "contamination_type": "cgmp_general",
       "date": "2024-07-24",
-      "days_since_violation": 477,
+      "days_since_violation": 530,
       "recency_multiplier": 1.0,
       "illnesses_reported": 0,
       "deaths_reported": 0,
@@ -674,7 +674,7 @@
         "general_cgmp_violations"
       ],
       "total_deduction_applied": -15.0,
-      "user_facing_note": "⚠️ FDA WARNING LETTER - SERIOUS CGMP VIOLATIONS: Txsyn International has SERIOUS, company-wide CGMP (Good Manufacturing Practice) violations affecting 3 product lines. When FDA uses the term 'serious violations,' it means the manufacturing facility cannot consistently produce safe, pure products. Company has NOT adequately addressed FDA concerns. Penalty: -15 pts (base -12 + multiple lines -3). Facility-wide problem. CAUTION with all products. Trust Score: 85/100.",
+      "user_facing_note": "\u26a0\ufe0f FDA WARNING LETTER - SERIOUS CGMP VIOLATIONS: Txsyn International has SERIOUS, company-wide CGMP (Good Manufacturing Practice) violations affecting 3 product lines. When FDA uses the term 'serious violations,' it means the manufacturing facility cannot consistently produce safe, pure products. Company has NOT adequately addressed FDA concerns. Penalty: -15 pts (base -12 + multiple lines -3). Facility-wide problem. CAUTION with all products. Trust Score: 85/100.",
       "internal_note": "Systemic CGMP compliance issues; multiple product lines affected"
     },
     {
@@ -690,7 +690,7 @@
       "reason": "Serious violations of CGMP, products also classified as unapproved new drugs",
       "contamination_type": "cgmp_unapproved_drug",
       "date": "2025-04-22",
-      "days_since_violation": 205,
+      "days_since_violation": 258,
       "recency_multiplier": 1.0,
       "illnesses_reported": 0,
       "deaths_reported": 0,
@@ -706,7 +706,7 @@
         "unapproved_drug_claim"
       ],
       "total_deduction_applied": -15.0,
-      "user_facing_note": "⚠️ FDA WARNING LETTER - UNAPPROVED DRUG CLAIMS & CGMP FAILURES: M.O.M. Enterprises' Gripe Water and Kids Cough Syrup products have SERIOUS CGMP violations AND are being marketed as drugs without FDA approval. Products labeled 'not FDA-evaluated' but marketed with drug claims for cough/digestive relief. This is especially serious because these are infant/children products. Affects 2 product lines. Unresolved for 6+ months. Penalty: -15 pts. DO NOT USE ON CHILDREN. Trust Score: 85/100.",
+      "user_facing_note": "\u26a0\ufe0f FDA WARNING LETTER - UNAPPROVED DRUG CLAIMS & CGMP FAILURES: M.O.M. Enterprises' Gripe Water and Kids Cough Syrup products have SERIOUS CGMP violations AND are being marketed as drugs without FDA approval. Products labeled 'not FDA-evaluated' but marketed with drug claims for cough/digestive relief. This is especially serious because these are infant/children products. Affects 2 product lines. Unresolved for 6+ months. Penalty: -15 pts. DO NOT USE ON CHILDREN. Trust Score: 85/100.",
       "internal_note": "Products marketed as drugs without approval; CGMP violations; multiple lines; children's products"
     },
     {
@@ -722,7 +722,7 @@
       "reason": "Failed to establish product specifications, misbranding - lacking adverse event reporting contact",
       "contamination_type": "cgmp_specs",
       "date": "2025-04-17",
-      "days_since_violation": 210,
+      "days_since_violation": 263,
       "recency_multiplier": 1.0,
       "illnesses_reported": 0,
       "deaths_reported": 0,
@@ -738,7 +738,7 @@
         "misbranding"
       ],
       "total_deduction_applied": -11.0,
-      "user_facing_note": "⚠️ FDA WARNING LETTER - LABELING & SPECIFICATION FAILURES: Anti L'Age's amino acid and immune support products (3 product lines: ESR Amino, Transfer Factor C, Heart Amino) have misbranding issues and lack proper adverse event reporting contact information. While these are MODERATE severity (not critical contamination), it indicates quality control gaps. Users cannot report problems if they experience adverse effects. Penalty: -11 pts (base -8 + multiple lines -3). Monitor closely. Trust Score: 89/100.",
+      "user_facing_note": "\u26a0\ufe0f FDA WARNING LETTER - LABELING & SPECIFICATION FAILURES: Anti L'Age's amino acid and immune support products (3 product lines: ESR Amino, Transfer Factor C, Heart Amino) have misbranding issues and lack proper adverse event reporting contact information. While these are MODERATE severity (not critical contamination), it indicates quality control gaps. Users cannot report problems if they experience adverse effects. Penalty: -11 pts (base -8 + multiple lines -3). Monitor closely. Trust Score: 89/100.",
       "internal_note": "Multiple product lines with labeling violations; unresolved"
     },
     {
@@ -754,7 +754,7 @@
       "reason": "Adulterated dietary supplement violations, CGMP violations",
       "contamination_type": "cgmp_adulteration",
       "date": "2024-11-13",
-      "days_since_violation": 365,
+      "days_since_violation": 418,
       "recency_multiplier": 1.0,
       "illnesses_reported": 0,
       "deaths_reported": 0,
@@ -770,7 +770,7 @@
         "cgmp_violations"
       ],
       "total_deduction_applied": -15.0,
-      "user_facing_note": "⚠️ FDA WARNING LETTER - ADULTERATION & CGMP VIOLATIONS: Western Innovations has FDA warning for ADULTERATION (products contain harmful or illegal substances) PLUS CGMP violations, affecting 2 product lines. Adulteration is the most serious quality issue possible (products contain unapproved substances). Company has not adequately responded. Penalty: -15 pts. AVOID all products. Trust Score: 85/100.",
+      "user_facing_note": "\u26a0\ufe0f FDA WARNING LETTER - ADULTERATION & CGMP VIOLATIONS: Western Innovations has FDA warning for ADULTERATION (products contain harmful or illegal substances) PLUS CGMP violations, affecting 2 product lines. Adulteration is the most serious quality issue possible (products contain unapproved substances). Company has not adequately responded. Penalty: -15 pts. AVOID all products. Trust Score: 85/100.",
       "internal_note": "Adulteration with CGMP compliance failures; multiple product lines"
     },
     {
@@ -786,7 +786,7 @@
       "reason": "Failed to establish component contamination specifications, product specifications, misbranding",
       "contamination_type": "cgmp_specs",
       "date": "2023-03-07",
-      "days_since_violation": 982,
+      "days_since_violation": 1035,
       "recency_multiplier": 0.5,
       "illnesses_reported": 0,
       "deaths_reported": 0,
@@ -802,7 +802,7 @@
         "misbranding"
       ],
       "total_deduction_applied": -12.0,
-      "user_facing_note": "⚠️ FDA WARNING LETTER - UNRESOLVED FOR 2+ YEARS: Herbal Vitality received an FDA warning (March 2023) for failing to establish contamination specs for botanicals and misbranding - but has NOT adequately responded for 2+ years. This is a red flag: company is either ignoring FDA or unable to fix problems. 4 product lines affected. Penalty: -12 pts (base -12; recency multiplier 0.5 reduces newer penalties but this is 2+ years old AND unresolved so penalty remains). SERIOUS CONCERN. Trust Score: 85/100.",
+      "user_facing_note": "\u26a0\ufe0f FDA WARNING LETTER - UNRESOLVED FOR 2+ YEARS: Herbal Vitality received an FDA warning (March 2023) for failing to establish contamination specs for botanicals and misbranding - but has NOT adequately responded for 2+ years. This is a red flag: company is either ignoring FDA or unable to fix problems. 4 product lines affected. Penalty: -12 pts (base -12; recency multiplier 0.5 reduces newer penalties but this is 2+ years old AND unresolved so penalty remains). SERIOUS CONCERN. Trust Score: 85/100.",
       "internal_note": "Older violation (2+ years old) but still unresolved - indicates systemic inability to comply"
     },
     {
@@ -818,7 +818,7 @@
       "reason": "CGMP violations",
       "contamination_type": "cgmp_general",
       "date": "2022-12-13",
-      "days_since_violation": 1066,
+      "days_since_violation": 1119,
       "recency_multiplier": 0.0,
       "illnesses_reported": 0,
       "deaths_reported": 0,
@@ -830,7 +830,7 @@
       "repeat_violation": false,
       "multiple_product_lines": false,
       "total_deduction_applied": 0.0,
-      "user_facing_note": "✅ FDA WARNING LETTER - RESOLVED (2022): Quality Supplement Manufacturing had an FDA warning letter for CGMP violations, but this was over 3 years ago (Dec 2022) and has been RESOLVED. The company apparently corrected the issues. Penalty: 0 pts (recency multiplier 0.0 due to age + resolved status). This is a good example of a manufacturer that had issues but fixed them. Trust Score: 100/100 (TRUSTED - violations resolved long ago).",
+      "user_facing_note": "\u2705 FDA WARNING LETTER - RESOLVED (2022): Quality Supplement Manufacturing had an FDA warning letter for CGMP violations, but this was over 3 years ago (Dec 2022) and has been RESOLVED. The company apparently corrected the issues. Penalty: 0 pts (recency multiplier 0.0 due to age + resolved status). This is a good example of a manufacturer that had issues but fixed them. Trust Score: 100/100 (TRUSTED - violations resolved long ago).",
       "internal_note": "Older violation beyond 3 years - resolved; good compliance history after correction"
     },
     {
@@ -846,7 +846,7 @@
       "reason": "Potential microbial contamination",
       "contamination_type": "microbial",
       "date": "2023-08-15",
-      "days_since_violation": 821,
+      "days_since_violation": 874,
       "recency_multiplier": 0.5,
       "illnesses_reported": 0,
       "deaths_reported": 0,
@@ -858,7 +858,7 @@
       "repeat_violation": false,
       "multiple_product_lines": true,
       "total_deduction_applied": -8.0,
-      "user_facing_note": "⚠️ Class II Recall (RESOLVED): Nature's Way had a Class II recall for potential microbial contamination affecting 3 product lines across 5 states. Recall is RESOLVED (2+ years ago). Recency has reduced penalty since issue was addressed. Nature's Way is a large, established company that appears to have corrected quality issues. Penalty: -8 pts (recency-adjusted). For context, this was 2+ years ago and appears isolated. Monitor ongoing. Trust Score: 90/100 (EXCELLENT).",
+      "user_facing_note": "\u26a0\ufe0f Class II Recall (RESOLVED): Nature's Way had a Class II recall for potential microbial contamination affecting 3 product lines across 5 states. Recall is RESOLVED (2+ years ago). Recency has reduced penalty since issue was addressed. Nature's Way is a large, established company that appears to have corrected quality issues. Penalty: -8 pts (recency-adjusted). For context, this was 2+ years ago and appears isolated. Monitor ongoing. Trust Score: 90/100 (EXCELLENT).",
       "internal_note": "Multiple product lines affected, resolved; demonstrates ability to correct issues"
     },
     {
@@ -874,7 +874,7 @@
       "reason": "Labeling error - incorrect expiration date",
       "contamination_type": "labeling",
       "date": "2024-03-20",
-      "days_since_violation": 603,
+      "days_since_violation": 656,
       "recency_multiplier": 1.0,
       "illnesses_reported": 0,
       "deaths_reported": 0,
@@ -886,7 +886,7 @@
       "repeat_violation": false,
       "multiple_product_lines": false,
       "total_deduction_applied": -3.0,
-      "user_facing_note": "ℹ️ Class III Recall (RESOLVED): Goli Nutrition had a minor labeling recall - incorrect expiration date printed. Class III recalls are low-risk and this was purely a labeling issue, now resolved. Goli is a popular, well-known brand. This is an example of a minor, quickly-corrected issue. Penalty: -3 pts. Low concern. Trust Score: 97/100 (TRUSTED).",
+      "user_facing_note": "\u2139\ufe0f Class III Recall (RESOLVED): Goli Nutrition had a minor labeling recall - incorrect expiration date printed. Class III recalls are low-risk and this was purely a labeling issue, now resolved. Goli is a popular, well-known brand. This is an example of a minor, quickly-corrected issue. Penalty: -3 pts. Low concern. Trust Score: 97/100 (TRUSTED).",
       "internal_note": "Minor labeling issue, quickly resolved; good company track record"
     },
     {
@@ -902,7 +902,7 @@
       "reason": "Potential foreign matter contamination",
       "contamination_type": "foreign_matter",
       "date": "2023-11-10",
-      "days_since_violation": 734,
+      "days_since_violation": 787,
       "recency_multiplier": 0.5,
       "illnesses_reported": 0,
       "deaths_reported": 0,
@@ -914,7 +914,7 @@
       "repeat_violation": false,
       "multiple_product_lines": true,
       "total_deduction_applied": -8.0,
-      "user_facing_note": "⚠️ Class II Recall (RESOLVED): Vitacost.com (online supplement retailer) had a Class II recall for foreign matter contamination in multiple private label products (4 product lines across 15 states). Recall is RESOLVED (1.5+ years ago). As a large online retailer selling many private label products, this indicates some quality control issues but appears to have been corrected. Penalty: -8 pts (recency-adjusted). Vitacost carries thousands of products from many manufacturers. Monitor which manufacturers their products come from. Trust Score: 90/100.",
+      "user_facing_note": "\u26a0\ufe0f Class II Recall (RESOLVED): Vitacost.com (online supplement retailer) had a Class II recall for foreign matter contamination in multiple private label products (4 product lines across 15 states). Recall is RESOLVED (1.5+ years ago). As a large online retailer selling many private label products, this indicates some quality control issues but appears to have been corrected. Penalty: -8 pts (recency-adjusted). Vitacost carries thousands of products from many manufacturers. Monitor which manufacturers their products come from. Trust Score: 90/100.",
       "internal_note": "Multiple private label products affected; resolved; retailer/distributor quality issue"
     },
     {
@@ -930,7 +930,7 @@
       "reason": "Potential Salmonella contamination",
       "contamination_type": "bacterial_salmonella",
       "date": "2022-06-15",
-      "days_since_violation": 1247,
+      "days_since_violation": 1300,
       "recency_multiplier": 0.25,
       "illnesses_reported": 0,
       "deaths_reported": 0,
@@ -942,7 +942,7 @@
       "repeat_violation": false,
       "multiple_product_lines": false,
       "total_deduction_applied": -2.5,
-      "user_facing_note": "ℹ️ Class II Recall (RESOLVED 3+ YEARS AGO): Jarrow Formulas had a Salmonella contamination recall on B-Right Complex, resolved in June 2022 (3+ years ago). Jarrow is an established, reputable manufacturer. This was an isolated incident now well in the past. Penalty: -2.5 pts (heavily discounted due to age). Jarrow has demonstrated good compliance since. Trust Score: 98/100 (TRUSTED).",
+      "user_facing_note": "\u2139\ufe0f Class II Recall (RESOLVED 3+ YEARS AGO): Jarrow Formulas had a Salmonella contamination recall on B-Right Complex, resolved in June 2022 (3+ years ago). Jarrow is an established, reputable manufacturer. This was an isolated incident now well in the past. Penalty: -2.5 pts (heavily discounted due to age). Jarrow has demonstrated good compliance since. Trust Score: 98/100 (TRUSTED).",
       "internal_note": "Old violation (3+ years); resolved; established good company; isolated incident"
     },
     {
@@ -958,7 +958,7 @@
       "reason": "Potential microcystin contamination above acceptable levels",
       "contamination_type": "toxin_microcystin",
       "date": "2019-11-20",
-      "days_since_violation": 2185,
+      "days_since_violation": 2238,
       "recency_multiplier": 0.0,
       "illnesses_reported": 0,
       "deaths_reported": 0,
@@ -970,7 +970,7 @@
       "repeat_violation": false,
       "multiple_product_lines": false,
       "total_deduction_applied": 0.0,
-      "user_facing_note": "✅ Class II Recall (RESOLVED 5+ YEARS AGO): NOW Health Group had a Salmonella/microcystin contamination recall on spirulina in Nov 2019 - over 5 YEARS AGO. This is well beyond typical concern window and was resolved. NOW is an established, large manufacturer. No recent violations. Penalty: 0 pts (recency multiplier 0.0 due to extreme age + resolved). This shows NOW addressed issues and has maintained compliance. Trust Score: 100/100 (TRUSTED).",
+      "user_facing_note": "\u2705 Class II Recall (RESOLVED 5+ YEARS AGO): NOW Health Group had a Salmonella/microcystin contamination recall on spirulina in Nov 2019 - over 5 YEARS AGO. This is well beyond typical concern window and was resolved. NOW is an established, large manufacturer. No recent violations. Penalty: 0 pts (recency multiplier 0.0 due to extreme age + resolved). This shows NOW addressed issues and has maintained compliance. Trust Score: 100/100 (TRUSTED).",
       "internal_note": "Very old violation (5+ years); resolved; no recent issues; good ongoing compliance"
     },
     {
@@ -986,7 +986,7 @@
       "reason": "Contains toxic yellow oleander",
       "contamination_type": "toxic_yellow_oleander",
       "date": "2025-11-04",
-      "days_since_violation": 9,
+      "days_since_violation": 62,
       "recency_multiplier": 1.0,
       "illnesses_reported": 0,
       "deaths_reported": 0,
@@ -998,7 +998,7 @@
       "repeat_violation": false,
       "multiple_product_lines": false,
       "total_deduction_applied": -20.0,
-      "user_facing_note": "🚨 CRITICAL - FRESH ALERT: SiluetaYa's tejocote root supplement contains TOXIC YELLOW OLEANDER (cardiac glycoside). This is a VERY RECENT recall (Nov 2025) - check your medicine cabinet immediately. Yellow oleander causes serious heart problems and neurological damage. Recall is UNRESOLVED. Penalty: -20 pts. DO NOT USE. Trust Score: 80/100 (CONCERNING - very recent).",
+      "user_facing_note": "\ud83d\udea8 CRITICAL - FRESH ALERT: SiluetaYa's tejocote root supplement contains TOXIC YELLOW OLEANDER (cardiac glycoside). This is a VERY RECENT recall (Nov 2025) - check your medicine cabinet immediately. Yellow oleander causes serious heart problems and neurological damage. Recall is UNRESOLVED. Penalty: -20 pts. DO NOT USE. Trust Score: 80/100 (CONCERNING - very recent).",
       "internal_note": "Fresh yellow oleander recall - VERIFY FDA ID on FDA.gov. Likely still resolving."
     },
     {
@@ -1017,7 +1017,7 @@
         "tadalafil"
       ],
       "date": "2025-08-29",
-      "days_since_violation": 76,
+      "days_since_violation": 129,
       "recency_multiplier": 1.0,
       "illnesses_reported": 0,
       "deaths_reported": 0,
@@ -1029,7 +1029,7 @@
       "repeat_violation": false,
       "multiple_product_lines": false,
       "total_deduction_applied": -18.0,
-      "user_facing_note": "⚠️ CRITICAL - UNDECLARED TADALAFIL: Green Lumber Holding's dietary supplement contained hidden TADALAFIL (Cialis - erectile dysfunction drug). Tadalafil lowers blood pressure dangerously with certain heart medications or nitrates. Users taking blood pressure medications are at serious risk. Recall is UNRESOLVED. Penalty: -18 pts (base -15 + unresolved -3). AVOID. Trust Score: 82/100 (CONCERNING).",
+      "user_facing_note": "\u26a0\ufe0f CRITICAL - UNDECLARED TADALAFIL: Green Lumber Holding's dietary supplement contained hidden TADALAFIL (Cialis - erectile dysfunction drug). Tadalafil lowers blood pressure dangerously with certain heart medications or nitrates. Users taking blood pressure medications are at serious risk. Recall is UNRESOLVED. Penalty: -18 pts (base -15 + unresolved -3). AVOID. Trust Score: 82/100 (CONCERNING).",
       "internal_note": "Undeclared erectile dysfunction drug; unresolved; VERIFY FDA ID"
     },
     {
@@ -1050,7 +1050,7 @@
         "sildenafil"
       ],
       "date": "2025-04-29",
-      "days_since_violation": 198,
+      "days_since_violation": 251,
       "recency_multiplier": 1.0,
       "illnesses_reported": 0,
       "deaths_reported": 0,
@@ -1062,7 +1062,7 @@
       "repeat_violation": false,
       "multiple_product_lines": false,
       "total_deduction_applied": -18.0,
-      "user_facing_note": "⚠️ CRITICAL - MULTIPLE UNDECLARED DRUGS: Health Fixer's male enhancement products contained THREE hidden pharmaceutical drugs: SILDENAFIL, CHLOROPRETADALAFIL, and PROPOXYPHENYLSILDENAFIL (designer versions of Viagra/Cialis). Extremely dangerous with heart medications or blood pressure drugs. Users on nitrates face risk of sudden death. Recall UNRESOLVED for 6+ months. Penalty: -18 pts. AVOID COMPLETELY. Trust Score: 82/100.",
+      "user_facing_note": "\u26a0\ufe0f CRITICAL - MULTIPLE UNDECLARED DRUGS: Health Fixer's male enhancement products contained THREE hidden pharmaceutical drugs: SILDENAFIL, CHLOROPRETADALAFIL, and PROPOXYPHENYLSILDENAFIL (designer versions of Viagra/Cialis). Extremely dangerous with heart medications or blood pressure drugs. Users on nitrates face risk of sudden death. Recall UNRESOLVED for 6+ months. Penalty: -18 pts. AVOID COMPLETELY. Trust Score: 82/100.",
       "internal_note": "Multiple undeclared erectile dysfunction drugs including designer versions; unresolved"
     },
     {
@@ -1082,7 +1082,7 @@
         "arsenic"
       ],
       "date": "2025-03-10",
-      "days_since_violation": 248,
+      "days_since_violation": 301,
       "recency_multiplier": 1.0,
       "illnesses_reported": 0,
       "deaths_reported": 0,
@@ -1094,7 +1094,7 @@
       "repeat_violation": false,
       "multiple_product_lines": false,
       "total_deduction_applied": -18.0,
-      "user_facing_note": "🚨 CRITICAL - HEAVY METAL POISONING RISK: Zaarah Herbals' herbal supplements were contaminated with ELEVATED LEVELS OF LEAD AND ARSENIC. Both are cumulative toxins causing neurological damage, cancer risk, and kidney damage over time. Even low doses accumulate in the body. Particularly dangerous for children and pregnant women. Recall UNRESOLVED for 8+ months. Penalty: -18 pts. DO NOT USE. Trust Score: 82/100 (HIGH RISK).",
+      "user_facing_note": "\ud83d\udea8 CRITICAL - HEAVY METAL POISONING RISK: Zaarah Herbals' herbal supplements were contaminated with ELEVATED LEVELS OF LEAD AND ARSENIC. Both are cumulative toxins causing neurological damage, cancer risk, and kidney damage over time. Even low doses accumulate in the body. Particularly dangerous for children and pregnant women. Recall UNRESOLVED for 8+ months. Penalty: -18 pts. DO NOT USE. Trust Score: 82/100 (HIGH RISK).",
       "internal_note": "Heavy metal contamination (lead + arsenic); unresolved; serious long-term health risk"
     },
     {
@@ -1113,7 +1113,7 @@
         "tadalafil"
       ],
       "date": "2025-02-26",
-      "days_since_violation": 291,
+      "days_since_violation": 313,
       "recency_multiplier": 1.0,
       "illnesses_reported": 0,
       "deaths_reported": 0,
@@ -1125,7 +1125,7 @@
       "repeat_violation": false,
       "multiple_product_lines": false,
       "total_deduction_applied": -18.0,
-      "user_facing_note": "⚠️ CRITICAL - UNDECLARED TADALAFIL IN IRON SUPPLEMENT: Natural Dior's Vitafer L Gold (supposedly an iron supplement) contained hidden TADALAFIL (Cialis). This is especially dangerous because iron supplements are often taken by people with anemia/heart conditions, and tadalafil causes dangerous blood pressure drops. Recall UNRESOLVED for 9+ months. Penalty: -18 pts. AVOID. Trust Score: 82/100.",
+      "user_facing_note": "\u26a0\ufe0f CRITICAL - UNDECLARED TADALAFIL IN IRON SUPPLEMENT: Natural Dior's Vitafer L Gold (supposedly an iron supplement) contained hidden TADALAFIL (Cialis). This is especially dangerous because iron supplements are often taken by people with anemia/heart conditions, and tadalafil causes dangerous blood pressure drops. Recall UNRESOLVED for 9+ months. Penalty: -18 pts. AVOID. Trust Score: 82/100.",
       "internal_note": "Undeclared tadalafil in mislabeled product; unresolved; dangerous for cardiac patients"
     },
     {
@@ -1145,7 +1145,7 @@
         "tadalafil"
       ],
       "date": "2025-02-20",
-      "days_since_violation": 297,
+      "days_since_violation": 319,
       "recency_multiplier": 1.0,
       "illnesses_reported": 0,
       "deaths_reported": 0,
@@ -1157,15 +1157,217 @@
       "repeat_violation": false,
       "multiple_product_lines": false,
       "total_deduction_applied": -18.0,
-      "user_facing_note": "⚠️ CRITICAL - UNDECLARED ERECTILE DYSFUNCTION DRUGS: One Source Nutrition's Vitality male enhancement capsules contained TWO hidden drugs: SILDENAFIL (Viagra) and TADALAFIL (Cialis). Undeclared because user doesn't know about interactions with heart medications or nitrates - risk of sudden death. Recall UNRESOLVED for 9+ months. Penalty: -18 pts. AVOID COMPLETELY. Trust Score: 82/100.",
+      "user_facing_note": "\u26a0\ufe0f CRITICAL - UNDECLARED ERECTILE DYSFUNCTION DRUGS: One Source Nutrition's Vitality male enhancement capsules contained TWO hidden drugs: SILDENAFIL (Viagra) and TADALAFIL (Cialis). Undeclared because user doesn't know about interactions with heart medications or nitrates - risk of sudden death. Recall UNRESOLVED for 9+ months. Penalty: -18 pts. AVOID COMPLETELY. Trust Score: 82/100.",
       "internal_note": "Two undeclared ED drugs; unresolved for 9+ months; life-threatening interaction risk"
+    },
+    {
+      "id": "V039",
+      "manufacturer": "StuffbyNainax LLC",
+      "manufacturer_id": "mfg_stuffbynainax",
+      "product": "MR.7 SUPER 700000 Dietary Supplement",
+      "product_category": "male_enhancement",
+      "violation_type": "Class I Recall",
+      "violation_severity": "CRITICAL",
+      "violation_code": "CRI_UNDRUG",
+      "base_deduction": -15,
+      "reason": "Undeclared Sildenafil and Tadalafil",
+      "contamination_type": "undeclared_drugs",
+      "undeclared_drugs": [
+        "sildenafil",
+        "tadalafil"
+      ],
+      "date": "2025-11-14",
+      "recency_multiplier": 1.0,
+      "illnesses_reported": 0,
+      "deaths_reported": 0,
+      "states_affected": 50,
+      "product_lines_affected": 1,
+      "is_resolved": false,
+      "fda_action": "Recall",
+      "repeat_violation": false,
+      "multiple_product_lines": false,
+      "total_deduction_applied": -18.0,
+      "user_facing_note": "\u26a0\ufe0f CRITICAL - UNDECLARED ERECTILE DYSFUNCTION DRUGS: StuffbyNainax LLC's MR.7 SUPER 700000 capsules contain hidden SILDENAFIL (Viagra) and TADALAFIL (Cialis). Distributed NATIONWIDE between Aug-Nov 2025. These drugs cause dangerous blood pressure drops with heart medications or nitrates - potentially fatal. Recall is UNRESOLVED. Penalty: -18 pts (base -15 + unresolved -3). AVOID. Trust Score: 82/100.",
+      "internal_note": "Recent nationwide distribution; multiple undeclared ED drugs",
+      "days_since_violation": 52
+    },
+    {
+      "id": "V040",
+      "manufacturer": "Gold Star Distribution Inc.",
+      "manufacturer_id": "mfg_goldstar",
+      "product": "Multiple FDA-regulated products including dietary supplements",
+      "product_category": "supplement",
+      "violation_type": "Class I Recall",
+      "violation_severity": "CRITICAL",
+      "violation_code": "CRI_CONTA",
+      "base_deduction": -15,
+      "reason": "Rodent and avian contamination at facility",
+      "contamination_type": "rodent_avian_contamination",
+      "date": "2025-12-26",
+      "recency_multiplier": 1.0,
+      "illnesses_reported": 0,
+      "deaths_reported": 0,
+      "states_affected": 3,
+      "product_lines_affected": 10,
+      "is_resolved": false,
+      "fda_action": "Recall",
+      "repeat_violation": false,
+      "multiple_product_lines": true,
+      "total_deduction_applied": -21.0,
+      "user_facing_note": "\ud83d\udea8 CRITICAL - FRESH ALERT: Gold Star Distribution recalled ALL products due to RODENT AND BIRD CONTAMINATION at their facility. This affects ALL product categories (drugs, devices, cosmetics, supplements, food) across 3 states. Extremely unsanitary conditions indicate severe facility failures. Recall VERY RECENT (Dec 26, 2025). Penalty: -21 pts (base -15 + multiple lines -3 + unresolved -3). AVOID ALL PRODUCTS. Trust Score: 79/100.",
+      "internal_note": "Facility-wide contamination affecting all product types; very recent; systemic failure",
+      "days_since_violation": 10
+    },
+    {
+      "id": "V041",
+      "manufacturer": "Rheumacare",
+      "manufacturer_id": "mfg_rheumacare",
+      "product": "Rheumacare Capsules",
+      "product_category": "supplement",
+      "violation_type": "Class I Recall",
+      "violation_severity": "CRITICAL",
+      "violation_code": "CRI_CONTA",
+      "base_deduction": -15,
+      "reason": "Lead contamination above acceptable levels",
+      "contamination_type": "heavy_metal_lead",
+      "date": "2025-12-29",
+      "recency_multiplier": 1.0,
+      "illnesses_reported": 0,
+      "deaths_reported": 0,
+      "states_affected": 1,
+      "product_lines_affected": 1,
+      "is_resolved": false,
+      "fda_action": "Recall",
+      "repeat_violation": false,
+      "multiple_product_lines": false,
+      "total_deduction_applied": -18.0,
+      "user_facing_note": "\ud83d\udea8 CRITICAL - FRESH ALERT: Rheumacare Capsules recalled due to LEAD CONTAMINATION (Dec 29, 2025). Lead is a cumulative neurotoxin causing brain damage, especially dangerous for children. Even low chronic exposure causes cognitive impairment. Recall JUST ISSUED. Penalty: -18 pts (base -15 + unresolved -3). DO NOT USE. Trust Score: 82/100.",
+      "internal_note": "Very recent lead contamination recall; heavy metal toxicity risk",
+      "days_since_violation": 7
+    },
+    {
+      "id": "V042",
+      "manufacturer": "Genepro",
+      "manufacturer_id": "mfg_genepro",
+      "product": "Genepro Whey 4th Generation Protein",
+      "product_category": "protein_supplement",
+      "violation_type": "Class I Recall",
+      "violation_severity": "CRITICAL",
+      "violation_code": "CRI_ALLER",
+      "base_deduction": -12,
+      "reason": "Undeclared milk allergen",
+      "contamination_type": "undeclared_allergen_milk",
+      "date": "2025-12-15",
+      "recency_multiplier": 1.0,
+      "illnesses_reported": 0,
+      "deaths_reported": 0,
+      "states_affected": 1,
+      "product_lines_affected": 1,
+      "is_resolved": false,
+      "fda_action": "Recall",
+      "repeat_violation": false,
+      "multiple_product_lines": false,
+      "total_deduction_applied": -15.0,
+      "user_facing_note": "\u26a0\ufe0f ALLERGEN ALERT: Genepro Whey 4th Generation Protein recalled for undeclared MILK allergen (Dec 15, 2025). Milk allergy can cause anaphylaxis in sensitive individuals. This is a WHEY protein product that may have been marketed as allergen-free. VERY RECENT recall. Penalty: -15 pts (base -12 + unresolved -3). Check labels carefully. Trust Score: 85/100.",
+      "internal_note": "Recent allergen recall; milk allergen in protein product",
+      "days_since_violation": 21
+    },
+    {
+      "id": "V043",
+      "manufacturer": "Lucky Foods",
+      "manufacturer_id": "mfg_luckyfoods",
+      "product": "Lucky Foods Cinnamon",
+      "product_category": "spice_supplement",
+      "violation_type": "Class I Recall",
+      "violation_severity": "CRITICAL",
+      "violation_code": "CRI_CONTA",
+      "base_deduction": -15,
+      "reason": "Lead contamination",
+      "contamination_type": "heavy_metal_lead",
+      "date": "2025-11-13",
+      "recency_multiplier": 1.0,
+      "illnesses_reported": 0,
+      "deaths_reported": 0,
+      "states_affected": 1,
+      "product_lines_affected": 1,
+      "is_resolved": false,
+      "fda_action": "Recall",
+      "repeat_violation": false,
+      "multiple_product_lines": false,
+      "total_deduction_applied": -18.0,
+      "user_facing_note": "\ud83d\udea8 CRITICAL - LEAD IN CINNAMON: Lucky Foods Cinnamon recalled for LEAD CONTAMINATION (Nov 13, 2025). Lead-contaminated cinnamon is a widespread issue - FDA has issued multiple alerts. Lead is especially dangerous for children, causing developmental delays and brain damage. Recall UNRESOLVED. Penalty: -18 pts. DO NOT USE. Trust Score: 82/100.",
+      "internal_note": "Lead contamination in cinnamon product; part of broader contaminated spice issue",
+      "days_since_violation": 53
+    },
+    {
+      "id": "V044",
+      "manufacturer": "Niacin Products",
+      "manufacturer_id": "mfg_niacinproducts",
+      "product": "Extended Release Niacin",
+      "product_category": "vitamin_supplement",
+      "violation_type": "Class II Recall",
+      "violation_severity": "HIGH",
+      "violation_code": "HIGH_CII",
+      "base_deduction": -10,
+      "reason": "Quality control issues with extended release formulation",
+      "contamination_type": "formulation_issue",
+      "date": "2025-11-24",
+      "recency_multiplier": 1.0,
+      "illnesses_reported": 0,
+      "deaths_reported": 0,
+      "states_affected": 1,
+      "product_lines_affected": 1,
+      "is_resolved": false,
+      "fda_action": "Recall",
+      "repeat_violation": false,
+      "multiple_product_lines": false,
+      "total_deduction_applied": -13.0,
+      "user_facing_note": "\u26a0\ufe0f Class II Recall: Extended Release Niacin recalled due to quality control issues with the release mechanism (Nov 24, 2025). Improper release of niacin can cause liver damage or 'niacin flush'. Recall UNRESOLVED. Penalty: -13 pts (base -10 + unresolved -3). CAUTION. Trust Score: 87/100.",
+      "internal_note": "Formulation issue with extended release; recent; unresolved",
+      "days_since_violation": 42
     }
   ],
   "_metadata": {
-    "description": "Manufacturer violations, warnings, and regulatory issues",
+    "database_info": {
+      "name": "Manufacturer Violations Database",
+      "description": "FDA recalls, warning letters, and regulatory violations for dietary supplement manufacturers",
+      "version": "2.0.0",
+      "last_updated": "2026-01-05",
+      "total_entries": 44,
+      "sources": [
+        "https://www.fda.gov/safety/recalls-market-withdrawals-safety-alerts",
+        "https://www.fda.gov/food/recalls-outbreaks-emergencies/recalls-foods-dietary-supplements",
+        "FDA Warning Letters database",
+        "ConsumerLab.com recall alerts"
+      ]
+    },
     "purpose": "manufacturer_penalties",
-    "schema_version": "1.0",
-    "total_entries": 38,
-    "last_updated": "2025-11-14"
+    "scoring_rule": "Deductions applied based on violation severity, recency, and resolution status. See manufacture_deduction_expl.json for full scoring framework.",
+    "violation_severity_levels": {
+      "CRITICAL": "Class I Recalls, toxic substances, undeclared drugs - base deduction -12 to -20",
+      "HIGH": "Class II Recalls, critical CGMP failures - base deduction -10 to -12",
+      "MODERATE": "Class III Recalls, minor CGMP issues, misbranding - base deduction -3 to -8",
+      "LOW": "Minor administrative warnings - base deduction -2"
+    },
+    "modifiers": {
+      "unresolved_violation": "-3 additional",
+      "multiple_product_lines": "-3 additional",
+      "repeat_violations": "-5 additional"
+    },
+    "recency_multipliers": {
+      "less_than_1_year": 1.0,
+      "1_to_3_years": 0.5,
+      "3_to_5_years": 0.25,
+      "over_5_years": 0.0
+    },
+    "statistics": {
+      "critical_violations": 28,
+      "high_violations": 14,
+      "moderate_violations": 2,
+      "low_violations": 0,
+      "unresolved_count": 32,
+      "resolved_count": 12
+    },
+    "pipeline_integration": "Used by enrichment script to apply manufacturer trust score penalties during scoring"
   }
 }

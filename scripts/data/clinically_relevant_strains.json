@@ -1,10 +1,12 @@
 {
   "database_info": {
-    "version": "1.0.0",
-    "last_updated": "2025-12-03",
-    "description": "Clinically studied probiotic strains with documented efficacy in human trials",
-    "purpose": "Award bonus points for products containing well-researched probiotic strains",
-    "scoring_rule": "+1 if product contains any strain from this list"
+    "version": "2.1.0",
+    "last_updated": "2026-01-05",
+    "description": "Clinically studied probiotic strains with documented efficacy in human RCTs - STRAIN-SPECIFIC only",
+    "purpose": "Award bonus points for products containing well-researched probiotic strains with strain-level clinical evidence",
+    "scoring_rule": "+2 if product contains any strain from this list",
+    "important_note": "Generic species names (e.g. 'L. acidophilus' without strain ID) are NOT included - probiotic benefits are strain-specific",
+    "total_strains": 42
   },
   "clinically_relevant_strains": [
     {
@@ -14,56 +16,166 @@
         "L. rhamnosus GG",
         "LGG",
         "Lactobacillus GG",
-        "L. rhamnosus",
-        "Lactobacillus rhamnosus"
+        "Lacticaseibacillus rhamnosus GG",
+        "ATCC 53103"
       ],
       "evidence_level": "high",
-      "key_benefits": ["gut health", "immune support", "diarrhea prevention"],
-      "notable_studies": "Over 1000 published studies"
+      "key_benefits": [
+        "gut health",
+        "immune support",
+        "diarrhea prevention",
+        "pediatric health"
+      ],
+      "notable_studies": "Over 1000 published studies, 250+ clinical trials, most researched probiotic strain worldwide"
     },
     {
-      "id": "STRAIN_REUTERI",
-      "standard_name": "Lactobacillus reuteri",
+      "id": "STRAIN_REUTERI_DSM17938",
+      "standard_name": "Lactobacillus reuteri DSM 17938",
       "aliases": [
-        "L. reuteri",
         "L. reuteri DSM 17938",
-        "L. reuteri ATCC 55730",
+        "L. reuteri DSM17938",
+        "Limosilactobacillus reuteri DSM 17938",
         "L. reuteri Protectis",
-        "Limosilactobacillus reuteri"
+        "BioGaia Protectis",
+        "Reuteri Protectis"
       ],
       "evidence_level": "high",
-      "key_benefits": ["oral health", "gut health", "colic relief"],
-      "notable_studies": "Multiple RCTs for infant colic and oral health"
+      "key_benefits": [
+        "infant colic relief",
+        "acute gastroenteritis",
+        "gut health",
+        "functional GI disorders"
+      ],
+      "notable_studies": "Meta-analysis for acute gastroenteritis in children, gold standard for infant colic (BioGaia)"
+    },
+    {
+      "id": "STRAIN_REUTERI_PRODENTIS",
+      "standard_name": "Lactobacillus reuteri Prodentis",
+      "aliases": [
+        "L. reuteri ATCC PTA 5289",
+        "L. reuteri ATCC 55730",
+        "L. reuteri Prodentis",
+        "Prodentis",
+        "Prodentis Blend",
+        "BioGaia Prodentis",
+        "Limosilactobacillus reuteri Prodentis"
+      ],
+      "evidence_level": "high",
+      "key_benefits": [
+        "oral health",
+        "periodontal health",
+        "gingivitis reduction",
+        "plaque reduction"
+      ],
+      "notable_studies": "Multiple RCTs for periodontitis, meta-analysis confirmed for oral health (BioGaia)"
     },
     {
       "id": "STRAIN_K12",
       "standard_name": "Streptococcus salivarius K12",
-      "aliases": ["S. salivarius K12", "BLIS K12", "Streptococcus K12", "K12"],
+      "aliases": [
+        "S. salivarius K12",
+        "BLIS K12",
+        "Streptococcus K12",
+        "K12"
+      ],
       "evidence_level": "high",
-      "key_benefits": ["oral health", "throat health", "ear health"],
+      "key_benefits": [
+        "oral health",
+        "throat health",
+        "ear health"
+      ],
       "notable_studies": "RCTs for strep throat reduction, ear infections"
     },
     {
       "id": "STRAIN_M18",
       "standard_name": "Streptococcus salivarius M18",
-      "aliases": ["S. salivarius M18", "BLIS M18", "Streptococcus M18", "M18"],
+      "aliases": [
+        "S. salivarius M18",
+        "BLIS M18",
+        "Streptococcus M18",
+        "M18"
+      ],
       "evidence_level": "high",
-      "key_benefits": ["oral health", "dental health", "plaque reduction"],
+      "key_benefits": [
+        "oral health",
+        "dental health",
+        "plaque reduction"
+      ],
       "notable_studies": "Clinical studies for dental health"
     },
     {
-      "id": "STRAIN_COAGULANS",
-      "standard_name": "Bacillus coagulans",
+      "id": "STRAIN_COAGULANS_GBI30",
+      "standard_name": "Bacillus coagulans GBI-30, 6086",
       "aliases": [
-        "B. coagulans",
         "B. coagulans GBI-30 6086",
+        "B. coagulans GBI-30",
         "Bacillus coagulans GBI-30",
         "GanedenBC30",
-        "Lactobacillus sporogenes"
+        "BC30",
+        "BC30 Bacillus coagulans GBI-30, 6086"
       ],
       "evidence_level": "high",
-      "key_benefits": ["digestive health", "IBS relief", "immune support"],
-      "notable_studies": "Multiple human RCTs for IBS and digestive health"
+      "key_benefits": [
+        "digestive health",
+        "IBS relief",
+        "immune support",
+        "protein absorption"
+      ],
+      "notable_studies": "Multiple RCTs for IBS, immune function, and sports nutrition (Ganeden)"
+    },
+    {
+      "id": "STRAIN_COAGULANS_MTCC5856",
+      "standard_name": "Bacillus coagulans MTCC 5856",
+      "aliases": [
+        "Bacillus coagulans MTCC 5856",
+        "Bacillus coagulans MTCC-5856",
+        "Bacillus coagulans MTCC5856",
+        "LactoSpore",
+        "Lactospore",
+        "B. coagulans LactoSpore",
+        "Bacillus coagulans Lactospore MTCC5856",
+        "Bacillus coagulans Lactospore"
+      ],
+      "evidence_level": "high",
+      "key_benefits": [
+        "digestive health",
+        "IBS relief",
+        "bloating reduction"
+      ],
+      "notable_studies": "RCTs for IBS and functional GI symptoms (Sabinsa LactoSpore)"
+    },
+    {
+      "id": "STRAIN_COAGULANS_IS2",
+      "standard_name": "Bacillus coagulans Unique IS-2",
+      "aliases": [
+        "Bacillus coagulans Unique IS-2",
+        "Bacillus coagulans, IS-2",
+        "Unique IS-2 Bacillus coagulans",
+        "Unique IS-2(TM) Bacillus coagulans",
+        "Unique IS-2"
+      ],
+      "evidence_level": "high",
+      "key_benefits": [
+        "digestive health",
+        "constipation relief",
+        "gut microbiome"
+      ],
+      "notable_studies": "Clinical studies for functional constipation (Unique Biotech)"
+    },
+    {
+      "id": "STRAIN_COAGULANS_SNZ1969",
+      "standard_name": "Bacillus coagulans SNZ 1969",
+      "aliases": [
+        "Bacillus coagulans SNZ1969",
+        "Bacillus coagulans SNZ 1969",
+        "SNZ 1969"
+      ],
+      "evidence_level": "moderate",
+      "key_benefits": [
+        "digestive health",
+        "immune support"
+      ],
+      "notable_studies": "Clinical studies for GI health (Sanzyme)"
     },
     {
       "id": "STRAIN_LACTIS_HN019",
@@ -75,15 +187,26 @@
         "HOWARU Bifido"
       ],
       "evidence_level": "high",
-      "key_benefits": ["immune support", "gut transit", "digestive health"],
+      "key_benefits": [
+        "immune support",
+        "gut transit",
+        "digestive health"
+      ],
       "notable_studies": "Multiple RCTs for immune function and constipation"
     },
     {
       "id": "STRAIN_LACTIS_BI07",
       "standard_name": "Bifidobacterium lactis Bi-07",
-      "aliases": ["B. lactis Bi-07", "Bi-07", "Bifidobacterium animalis Bi-07"],
+      "aliases": [
+        "B. lactis Bi-07",
+        "Bi-07",
+        "Bifidobacterium animalis Bi-07"
+      ],
       "evidence_level": "high",
-      "key_benefits": ["immune support", "respiratory health"],
+      "key_benefits": [
+        "immune support",
+        "respiratory health"
+      ],
       "notable_studies": "RCTs for upper respiratory infections"
     },
     {
@@ -95,24 +218,49 @@
         "Lactiplantibacillus plantarum 299v"
       ],
       "evidence_level": "high",
-      "key_benefits": ["IBS relief", "iron absorption", "gut health"],
+      "key_benefits": [
+        "IBS relief",
+        "iron absorption",
+        "gut health"
+      ],
       "notable_studies": "Multiple RCTs for IBS symptoms"
     },
     {
       "id": "STRAIN_PLANTARUM_HEAL9",
       "standard_name": "Lactobacillus plantarum HEAL9",
-      "aliases": ["L. plantarum HEAL9", "HEAL9", "DSM 15312"],
-      "evidence_level": "moderate",
-      "key_benefits": ["immune support", "cold prevention"],
-      "notable_studies": "Clinical trials for common cold"
+      "aliases": [
+        "L. plantarum HEAL9",
+        "HEAL9",
+        "DSM 15312",
+        "Lactiplantibacillus plantarum HEAL9",
+        "L. plantarum DSM 15312"
+      ],
+      "evidence_level": "high",
+      "key_benefits": [
+        "immune support",
+        "cold prevention",
+        "cognitive function",
+        "respiratory health"
+      ],
+      "notable_studies": "4+ RCTs: common cold reduction in adults/children, cognition improvement, celiac autoimmunity modulation (Probi)"
     },
     {
       "id": "STRAIN_PARACASEI_8700",
       "standard_name": "Lactobacillus paracasei 8700:2",
-      "aliases": ["L. paracasei 8700:2", "DSM 13434"],
-      "evidence_level": "moderate",
-      "key_benefits": ["immune support", "respiratory health"],
-      "notable_studies": "RCTs for respiratory infections"
+      "aliases": [
+        "L. paracasei 8700:2",
+        "DSM 13434",
+        "Lacticaseibacillus paracasei 8700:2",
+        "L. paracasei DSM 13434"
+      ],
+      "evidence_level": "high",
+      "key_benefits": [
+        "immune support",
+        "respiratory health",
+        "cardiometabolic health",
+        "cold prevention"
+      ],
+      "notable_studies": "4+ RCTs: common cold, cardiometabolic (cholesterol, triglycerides), celiac autoimmunity (Probi)"
     },
     {
       "id": "STRAIN_INFANTIS_35624",
@@ -124,7 +272,10 @@
         "B. longum subsp. infantis 35624"
       ],
       "evidence_level": "high",
-      "key_benefits": ["IBS relief", "gut inflammation"],
+      "key_benefits": [
+        "IBS relief",
+        "gut inflammation"
+      ],
       "notable_studies": "Multiple RCTs for IBS, particularly women"
     },
     {
@@ -146,9 +297,16 @@
     {
       "id": "STRAIN_CASEI_SHIROTA",
       "standard_name": "Lactobacillus casei Shirota",
-      "aliases": ["L. casei Shirota", "LcS", "Yakult strain"],
+      "aliases": [
+        "L. casei Shirota",
+        "LcS",
+        "Yakult strain"
+      ],
       "evidence_level": "high",
-      "key_benefits": ["digestive health", "immune support"],
+      "key_benefits": [
+        "digestive health",
+        "immune support"
+      ],
       "notable_studies": "Extensively studied, 100+ publications"
     },
     {
@@ -171,23 +329,47 @@
     {
       "id": "STRAIN_LACTIS_BB12",
       "standard_name": "Bifidobacterium lactis BB-12",
-      "aliases": ["B. lactis BB-12", "BB-12", "Bifidobacterium animalis BB-12"],
+      "aliases": [
+        "B. lactis BB-12",
+        "BB-12",
+        "Bifidobacterium animalis BB-12"
+      ],
       "evidence_level": "high",
-      "key_benefits": ["digestive health", "immune support", "infant health"],
+      "key_benefits": [
+        "digestive health",
+        "immune support",
+        "infant health"
+      ],
       "notable_studies": "Most documented Bifidobacterium strain"
     },
     {
       "id": "STRAIN_LONGUM_BB536",
       "standard_name": "Bifidobacterium longum BB536",
-      "aliases": ["B. longum BB536", "BB536"],
+      "aliases": [
+        "B. longum BB536",
+        "BB536"
+      ],
       "evidence_level": "high",
-      "key_benefits": ["immune support", "allergy relief", "gut health"],
+      "key_benefits": [
+        "immune support",
+        "allergy relief",
+        "gut health"
+      ],
       "notable_studies": "Multiple RCTs for allergies and immune function"
     },
     {
       "id": "STRAIN_SUBTILIS_DE111",
       "standard_name": "Bacillus subtilis DE111",
-      "aliases": ["B. subtilis DE111", "DE111"],
+      "aliases": [
+        "B. subtilis DE111",
+        "DE111",
+        "Bacillus subtilis DE-111",
+        "DE111 Bacillus subtillis",
+        "DE111 Bacillus subtilis",
+        "Bacillus subtillis DE111",
+        "Bacillus subtilis DE111",
+        "B. subtilis DE-111"
+      ],
       "evidence_level": "moderate",
       "key_benefits": [
         "digestive health",
@@ -199,10 +381,379 @@
     {
       "id": "STRAIN_CLAUSII",
       "standard_name": "Bacillus clausii",
-      "aliases": ["B. clausii", "Enterogermina"],
+      "aliases": [
+        "B. clausii",
+        "Enterogermina",
+        "Bacillus clausii O/C",
+        "Bacillus clausii N/R",
+        "Bacillus clausii SIN",
+        "Bacillus clausii T"
+      ],
       "evidence_level": "moderate",
-      "key_benefits": ["diarrhea prevention", "antibiotic support"],
-      "notable_studies": "Multiple studies for acute diarrhea"
+      "key_benefits": [
+        "diarrhea prevention",
+        "antibiotic support",
+        "H. pylori therapy support"
+      ],
+      "notable_studies": "RCTs for acute diarrhea in children, H. pylori side effect reduction (Sanofi Enterogermina)"
+    },
+    {
+      "id": "STRAIN_ACIDOPHILUS_LA5",
+      "standard_name": "Lactobacillus acidophilus LA-5",
+      "aliases": [
+        "L. acidophilus LA-5",
+        "L. acidophilus La-5",
+        "LA-5",
+        "La-5",
+        "Lactobacillus acidophilus La5",
+        "L. acidophilus LA5"
+      ],
+      "evidence_level": "high",
+      "key_benefits": [
+        "antibiotic-associated diarrhea prevention",
+        "vaginal health",
+        "H. pylori support",
+        "digestive health"
+      ],
+      "notable_studies": "150+ publications, 60+ clinical trials, often combined with BB-12 (Chr. Hansen)"
+    },
+    {
+      "id": "STRAIN_RHAMNOSUS_HN001",
+      "standard_name": "Lactobacillus rhamnosus HN001",
+      "aliases": [
+        "L. rhamnosus HN001",
+        "HN001",
+        "DR20",
+        "HOWARU Rhamnosus",
+        "Lacticaseibacillus rhamnosus HN001"
+      ],
+      "evidence_level": "high",
+      "key_benefits": [
+        "gestational diabetes prevention",
+        "eczema prevention",
+        "mental well-being",
+        "immune support",
+        "pregnancy health"
+      ],
+      "notable_studies": "RCTs for gestational diabetes, eczema prevention (to age 11), postpartum depression, immune function (Fonterra/DuPont)"
+    },
+    {
+      "id": "STRAIN_RHAMNOSUS_GR1",
+      "standard_name": "Lactobacillus rhamnosus GR-1",
+      "aliases": [
+        "L. rhamnosus GR-1",
+        "GR-1",
+        "LGR-1",
+        "Lacticaseibacillus rhamnosus GR-1"
+      ],
+      "evidence_level": "high",
+      "key_benefits": [
+        "vaginal health",
+        "UTI prevention",
+        "bacterial vaginosis reduction",
+        "urogenital health"
+      ],
+      "notable_studies": "Most researched probiotic for women's urogenital health, multiple RCTs for UTI and BV prevention (Chr. Hansen)"
+    },
+    {
+      "id": "STRAIN_BREVE_M16V",
+      "standard_name": "Bifidobacterium breve M-16V",
+      "aliases": [
+        "B. breve M-16V",
+        "M-16V",
+        "M16V",
+        "Bifidobacterium breve M16V"
+      ],
+      "evidence_level": "high",
+      "key_benefits": [
+        "preterm infant support",
+        "infant gut colonization",
+        "NEC prevention",
+        "infant microbiome"
+      ],
+      "notable_studies": "FDA GRAS for infant formula, systematic review for preterm infants, multiple hospital NICUs (Morinaga)"
+    },
+    {
+      "id": "STRAIN_CASEI_431",
+      "standard_name": "Lactobacillus paracasei L.CASEI 431",
+      "aliases": [
+        "L. casei 431",
+        "L.CASEI 431",
+        "CASEI 431",
+        "Lactobacillus casei 431",
+        "L. paracasei 431"
+      ],
+      "evidence_level": "high",
+      "key_benefits": [
+        "immune support",
+        "respiratory health",
+        "vaccine response enhancement"
+      ],
+      "notable_studies": "RCTs for immune function, respiratory infections, enhanced antibody response to vaccines (Chr. Hansen)"
+    },
+    {
+      "id": "STRAIN_FERMENTUM_RC14",
+      "standard_name": "Lactobacillus reuteri RC-14",
+      "aliases": [
+        "L. reuteri RC-14",
+        "RC-14",
+        "Limosilactobacillus reuteri RC-14",
+        "L. fermentum RC-14"
+      ],
+      "evidence_level": "high",
+      "key_benefits": [
+        "vaginal health",
+        "UTI prevention",
+        "bacterial vaginosis"
+      ],
+      "notable_studies": "Often combined with GR-1 for women's health, RCTs for BV (Chr. Hansen)"
+    },
+    {
+      "id": "STRAIN_LACTIS_BL04",
+      "standard_name": "Bifidobacterium lactis Bl-04",
+      "aliases": [
+        "B. lactis Bl-04",
+        "Bl-04",
+        "BL-04",
+        "HOWARU Bl-04",
+        "Bifidobacterium animalis Bl-04",
+        "Bifidobacterium animalis subsp. lactis Bl-04"
+      ],
+      "evidence_level": "high",
+      "key_benefits": [
+        "immune support",
+        "respiratory health",
+        "URTI reduction",
+        "antiviral response"
+      ],
+      "notable_studies": "RCT showed 27% reduction in URTI risk in physically active adults. 49+ clinical trial publications. Rhinovirus challenge studies. (IFF/DuPont HOWARU)"
+    },
+    {
+      "id": "STRAIN_GASSERI_SBT2055",
+      "standard_name": "Lactobacillus gasseri SBT2055",
+      "aliases": [
+        "L. gasseri SBT2055",
+        "LG2055",
+        "SBT2055",
+        "Lactobacillus gasseri LG2055"
+      ],
+      "evidence_level": "high",
+      "key_benefits": [
+        "visceral fat reduction",
+        "weight management",
+        "abdominal adiposity",
+        "metabolic health"
+      ],
+      "notable_studies": "Multiple RCTs: 4.6-8.5% visceral fat reduction in 12 weeks. Dose-dependent effects confirmed. Japanese strain with 10+ clinical trials. (Snow Brand)"
+    },
+    {
+      "id": "STRAIN_GASSERI_BNR17",
+      "standard_name": "Lactobacillus gasseri BNR17",
+      "aliases": [
+        "L. gasseri BNR17",
+        "BNR17",
+        "Lactobacillus gasseri BNR-17"
+      ],
+      "evidence_level": "high",
+      "key_benefits": [
+        "visceral fat reduction",
+        "weight management",
+        "waist circumference reduction"
+      ],
+      "notable_studies": "RCT: 21.6 cm\u00b2 visceral fat reduction in high-dose group. Significant waist circumference reduction. Isolated from human breast milk. (Bioneer)"
+    },
+    {
+      "id": "STRAIN_FERMENTUM_ME3",
+      "standard_name": "Lactobacillus fermentum ME-3",
+      "aliases": [
+        "L. fermentum ME-3",
+        "ME-3",
+        "ME3",
+        "Limosilactobacillus fermentum ME-3"
+      ],
+      "evidence_level": "high",
+      "key_benefits": [
+        "glutathione production",
+        "antioxidant support",
+        "cardiovascular health",
+        "oxidized LDL reduction"
+      ],
+      "notable_studies": "20+ years research: 49% increase in reduced/oxidized glutathione ratio, 16% reduction in oxidized LDL. Complete glutathione system (synthesis, uptake, recycling). University of Tartu."
+    },
+    {
+      "id": "STRAIN_HELVETICUS_R0052",
+      "standard_name": "Lactobacillus helveticus R0052",
+      "aliases": [
+        "L. helveticus R0052",
+        "R0052",
+        "Lacticaseibacillus helveticus R0052"
+      ],
+      "evidence_level": "high",
+      "key_benefits": [
+        "stress reduction",
+        "anxiety relief",
+        "cortisol reduction",
+        "mood support",
+        "psychobiotic"
+      ],
+      "notable_studies": "Combined with B. longum R0175 (Cerebiome/Probio'Stick): RCTs show reduced psychological distress, anxiety, and cortisol. Messaoudi 2011 landmark study. (Lallemand)"
+    },
+    {
+      "id": "STRAIN_LONGUM_R0175",
+      "standard_name": "Bifidobacterium longum R0175",
+      "aliases": [
+        "B. longum R0175",
+        "R0175"
+      ],
+      "evidence_level": "high",
+      "key_benefits": [
+        "stress reduction",
+        "anxiety relief",
+        "cortisol reduction",
+        "mood support",
+        "psychobiotic"
+      ],
+      "notable_studies": "Combined with L. helveticus R0052 (Cerebiome/Probio'Stick): RCTs show reduced psychological distress, anxiety, and cortisol. HPA axis modulation. (Lallemand)"
+    },
+    {
+      "id": "STRAIN_LONGUM_1714",
+      "standard_name": "Bifidobacterium longum 1714",
+      "aliases": [
+        "B. longum 1714",
+        "1714",
+        "Bifidobacterium longum NCIMB 41676",
+        "Zenflore"
+      ],
+      "evidence_level": "high",
+      "key_benefits": [
+        "stress resilience",
+        "cognitive function",
+        "anxiety reduction",
+        "psychobiotic"
+      ],
+      "notable_studies": "RCTs show reduced stress response, improved EEG patterns, lower cortisol awakening response. (Alimentary Health/Precisionbiotics)"
+    },
+    {
+      "id": "STRAIN_ACIDOPHILUS_DDS1",
+      "standard_name": "Lactobacillus acidophilus DDS-1",
+      "aliases": [
+        "L. acidophilus DDS-1",
+        "DDS-1",
+        "DDS1",
+        "Lactobacillus acidophilus DDS1"
+      ],
+      "evidence_level": "high",
+      "key_benefits": [
+        "digestive health",
+        "immune support",
+        "lactose digestion",
+        "gut microbiome"
+      ],
+      "notable_studies": "40+ years of research. Multiple clinical trials for digestive health and immune function. University of Nebraska strain. (UAS Labs/Chr. Hansen)"
+    },
+    {
+      "id": "STRAIN_REUTERI_ATCC6475",
+      "standard_name": "Lactobacillus reuteri ATCC 6475",
+      "aliases": [
+        "L. reuteri ATCC 6475",
+        "ATCC 6475",
+        "Limosilactobacillus reuteri ATCC 6475",
+        "L. reuteri 6475"
+      ],
+      "evidence_level": "moderate",
+      "key_benefits": [
+        "bone health",
+        "testosterone support",
+        "immune modulation",
+        "skin health"
+      ],
+      "notable_studies": "Studies show increased bone density in mice, elevated testosterone in animal models, reduced inflammation markers. Human trials ongoing. (BioGaia)"
+    },
+    {
+      "id": "STRAIN_PARACASEI_LPC37",
+      "standard_name": "Lactobacillus paracasei Lpc-37",
+      "aliases": [
+        "L. paracasei Lpc-37",
+        "Lpc-37",
+        "LPC-37",
+        "HOWARU Lpc-37",
+        "Lacticaseibacillus paracasei Lpc-37"
+      ],
+      "evidence_level": "high",
+      "key_benefits": [
+        "immune support",
+        "stress reduction",
+        "mood support",
+        "perceived stress reduction"
+      ],
+      "notable_studies": "RCTs for perceived stress reduction, immune function. Part of HOWARU line. (IFF/DuPont)"
+    },
+    {
+      "id": "STRAIN_CRISPATUS_CTV05",
+      "standard_name": "Lactobacillus crispatus CTV-05",
+      "aliases": [
+        "L. crispatus CTV-05",
+        "CTV-05",
+        "LACTIN-V",
+        "Lactobacillus crispatus CTV05"
+      ],
+      "evidence_level": "high",
+      "key_benefits": [
+        "vaginal health",
+        "bacterial vaginosis prevention",
+        "urogenital health"
+      ],
+      "notable_studies": "Phase 2b RCT: 30% recurrence rate vs 45% placebo for BV prevention. LACTIN-V applicator studied at UCSF. Published in NEJM. (Osel)"
+    },
+    {
+      "id": "STRAIN_NISSLE_1917",
+      "standard_name": "Escherichia coli Nissle 1917",
+      "aliases": [
+        "E. coli Nissle 1917",
+        "EcN",
+        "Nissle 1917",
+        "Mutaflor",
+        "Escherichia coli strain Nissle"
+      ],
+      "evidence_level": "high",
+      "key_benefits": [
+        "ulcerative colitis remission",
+        "IBD support",
+        "intestinal barrier function"
+      ],
+      "notable_studies": "100+ years of use. RCTs show equivalence to mesalazine for UC remission maintenance. EMA approved. (Ardeypharm)"
+    },
+    {
+      "id": "STRAIN_RHAMNOSUS_SP1",
+      "standard_name": "Lactobacillus rhamnosus SP1",
+      "aliases": [
+        "L. rhamnosus SP1",
+        "SP1",
+        "Lacticaseibacillus rhamnosus SP1"
+      ],
+      "evidence_level": "moderate",
+      "key_benefits": [
+        "acne reduction",
+        "skin health",
+        "adult acne"
+      ],
+      "notable_studies": "RCT showed significant reduction in adult acne lesions. Oral probiotic for skin health. (Sacco)"
+    },
+    {
+      "id": "STRAIN_LACTIS_UABla12",
+      "standard_name": "Bifidobacterium lactis UABla-12",
+      "aliases": [
+        "B. lactis UABla-12",
+        "UABla-12",
+        "Bifidobacterium animalis UABla-12"
+      ],
+      "evidence_level": "moderate",
+      "key_benefits": [
+        "digestive health",
+        "immune support",
+        "gut barrier function"
+      ],
+      "notable_studies": "Clinical trials for digestive and immune health. Part of multi-strain formulations. (UAS Labs)"
     }
   ],
   "prebiotics": {
@@ -218,23 +769,42 @@
       },
       {
         "standard_name": "Fructooligosaccharides",
-        "aliases": ["FOS", "fructo-oligosaccharides", "oligofructose"]
+        "aliases": [
+          "FOS",
+          "fructo-oligosaccharides",
+          "oligofructose",
+          "Fructooligosaccharide",
+          "fructooligosaccharide"
+        ]
       },
       {
         "standard_name": "Galactooligosaccharides",
-        "aliases": ["GOS", "galacto-oligosaccharides"]
+        "aliases": [
+          "GOS",
+          "galacto-oligosaccharides"
+        ]
       },
       {
         "standard_name": "Xylooligosaccharides",
-        "aliases": ["XOS", "xylo-oligosaccharides"]
+        "aliases": [
+          "XOS",
+          "xylo-oligosaccharides"
+        ]
       },
       {
         "standard_name": "Acacia Fiber",
-        "aliases": ["acacia gum", "gum arabic", "acacia senegal"]
+        "aliases": [
+          "acacia gum",
+          "gum arabic",
+          "acacia senegal"
+        ]
       },
       {
         "standard_name": "Apple Pectin",
-        "aliases": ["pectin", "fruit pectin"]
+        "aliases": [
+          "pectin",
+          "fruit pectin"
+        ]
       },
       {
         "standard_name": "Resistant Starch",
@@ -249,6 +819,44 @@
           "oat beta-glucan",
           "barley beta-glucan",
           "yeast beta-glucan"
+        ]
+      },
+      {
+        "standard_name": "2'-Fucosyllactose",
+        "aliases": [
+          "2'-FL",
+          "2-FL",
+          "2-fucosyllactose",
+          "human milk oligosaccharide"
+        ]
+      },
+      {
+        "standard_name": "Lacto-N-neotetraose",
+        "aliases": [
+          "LNnT",
+          "human milk oligosaccharide"
+        ]
+      },
+      {
+        "standard_name": "Partially Hydrolyzed Guar Gum",
+        "aliases": [
+          "PHGG",
+          "Sunfiber",
+          "partially hydrolyzed guar",
+          "guar fiber"
+        ]
+      },
+      {
+        "standard_name": "Lactulose",
+        "aliases": [
+          "lactulose prebiotic"
+        ]
+      },
+      {
+        "standard_name": "Polydextrose",
+        "aliases": [
+          "polydextrose fiber",
+          "Litesse"
         ]
       }
     ]

@@ -9,7 +9,8 @@
         "indena meriva"
       ],
       "category": "anti-inflammatory",
-      "evidence_level": "product-human",
+      "evidence_level": "branded-rct",
+      "study_type": "rct_multiple",
       "published_studies": [
         "RCT",
         "meta-analysis"
@@ -36,7 +37,8 @@
         "KSM-66 ashwagandha"
       ],
       "category": "adaptogen",
-      "evidence_level": "product-human",
+      "evidence_level": "branded-rct",
+      "study_type": "rct_multiple",
       "published_studies": [
         "RCT",
         "brand"
@@ -78,7 +80,8 @@
         "Reduce Stress/Anxiety",
         "Focus & Mental Clarity"
       ],
-      "notes": "Standardized leaf/root extract; trials in stress, sleep, cognition."
+      "notes": "Standardized leaf/root extract; trials in stress, sleep, cognition.",
+      "study_type": "rct_multiple"
     },
     {
       "id": "BRAND_BCM95",
@@ -104,7 +107,8 @@
         "Reduce Stress/Anxiety",
         "Healthy Aging/Longevity"
       ],
-      "notes": "Curcumin with turmeric oil; multiple RCTs in inflammation, depression, joint pain."
+      "notes": "Curcumin with turmeric oil; multiple RCTs in inflammation, depression, joint pain.",
+      "study_type": "rct_multiple"
     },
     {
       "id": "BRAND_THERACURMIN",
@@ -128,7 +132,8 @@
         "Focus & Mental Clarity",
         "Healthy Aging/Longevity"
       ],
-      "notes": "Nanoparticle curcumin; high absorption. Trials on arthritis, inflammation, cognition."
+      "notes": "Nanoparticle curcumin; high absorption. Trials on arthritis, inflammation, cognition.",
+      "study_type": "rct_multiple"
     },
     {
       "id": "BRAND_FORCEVAL",
@@ -150,7 +155,8 @@
         "Immune Support",
         "Increase Energy"
       ],
-      "notes": "Used in multiple hospital and international studies for malnutrition support."
+      "notes": "Used in multiple hospital and international studies for malnutrition support.",
+      "study_type": "rct_multiple"
     },
     {
       "id": "BRAND_LIFE_EXTENSION_SUPER_BIOCURCUMIN",
@@ -173,7 +179,8 @@
       "health_goals_supported": [
         "Healthy Aging/Longevity"
       ],
-      "notes": "Uses BCM-95; positive evidence for inflammatory conditions."
+      "notes": "Uses BCM-95; positive evidence for inflammatory conditions.",
+      "study_type": "rct_multiple"
     },
     {
       "id": "BRAND_PYCNOGENOL",
@@ -201,7 +208,8 @@
         "Focus & Mental Clarity",
         "Healthy Aging/Longevity"
       ],
-      "notes": "Multiple clinical studies support use for circulation, skin, ADHD, blood pressure."
+      "notes": "Multiple clinical studies support use for circulation, skin, ADHD, blood pressure.",
+      "study_type": "rct_multiple"
     },
     {
       "id": "BRAND_FLORASTOR",
@@ -226,7 +234,8 @@
         "Digestive Health",
         "Immune Support"
       ],
-      "notes": "Backed for antibiotic-associated diarrhea, gut infections, IBS."
+      "notes": "Backed for antibiotic-associated diarrhea, gut infections, IBS.",
+      "study_type": "rct_multiple"
     },
     {
       "id": "BRAND_ASTAREAL",
@@ -256,7 +265,8 @@
         "Focus & Mental Clarity",
         "Increase Energy"
       ],
-      "notes": "Natural astaxanthin from H. pluvialis; multiple clinical studies for eye strain, skin photoprotection, and exercise recovery."
+      "notes": "Natural astaxanthin from H. pluvialis; multiple clinical studies for eye strain, skin photoprotection, and exercise recovery.",
+      "study_type": "rct_multiple"
     },
     {
       "id": "BRAND_MEGASPORE_BIOTIC",
@@ -280,7 +290,8 @@
         "Digestive Health",
         "Immune Support"
       ],
-      "notes": "Clinically tested for spore-based gut microbiome support."
+      "notes": "Clinically tested for spore-based gut microbiome support.",
+      "study_type": "rct_multiple"
     },
     {
       "id": "BRAND_KANEKA_UBIQUINOL",
@@ -305,7 +316,8 @@
         "Cardiovascular/Heart Health",
         "Increase Energy"
       ],
-      "notes": "Major clinical trials in heart failure, statin users; preferred bioactive CoQ10."
+      "notes": "Major clinical trials in heart failure, statin users; preferred bioactive CoQ10.",
+      "study_type": "rct_multiple"
     },
     {
       "id": "BRAND_ESTERC",
@@ -329,7 +341,8 @@
         "Immune Support",
         "Healthy Aging/Longevity"
       ],
-      "notes": "Buffered vitamin C; clinical evidence for improved bioavailability."
+      "notes": "Buffered vitamin C; clinical evidence for improved bioavailability.",
+      "study_type": "rct_multiple"
     },
     {
       "id": "BRAND_ZYLOFRESH",
@@ -353,7 +366,8 @@
         "Healthy Aging/Longevity",
         "Digestive Health"
       ],
-      "notes": "Plant extract used in numerous plant-based clinical trials."
+      "notes": "Plant extract used in numerous plant-based clinical trials.",
+      "study_type": "rct_multiple"
     },
     {
       "id": "BRAND_CREAPURE",
@@ -379,7 +393,8 @@
         "Increase Energy",
         "Focus & Mental Clarity"
       ],
-      "notes": "German-manufactured creatine with 99.95% purity. Extensive research in strength, power, cognitive function."
+      "notes": "German-manufactured creatine with 99.95% purity. Extensive research in strength, power, cognitive function.",
+      "study_type": "rct_multiple"
     },
     {
       "id": "BRAND_ALBION_MINERALS",
@@ -404,7 +419,8 @@
         "Increase Energy",
         "Immune Support"
       ],
-      "notes": "Patented amino acid chelated minerals with superior bioavailability studies."
+      "notes": "Patented amino acid chelated minerals with superior bioavailability studies.",
+      "study_type": "rct_multiple"
     },
     {
       "id": "BRAND_QUATREFOLIC",
@@ -428,7 +444,8 @@
         "Cardiovascular/Heart Health",
         "Healthy Aging/Longevity"
       ],
-      "notes": "Fourth-generation folate with clinical studies in pregnancy, cardiovascular health."
+      "notes": "Fourth-generation folate with clinical studies in pregnancy, cardiovascular health.",
+      "study_type": "rct_multiple"
     },
     {
       "id": "BRAND_CIRCADIN",
@@ -451,7 +468,8 @@
       "health_goals_supported": [
         "Sleep Quality"
       ],
-      "notes": "European-approved 2mg prolonged-release melatonin with extensive sleep studies."
+      "notes": "European-approved 2mg prolonged-release melatonin with extensive sleep studies.",
+      "study_type": "rct_multiple"
     },
     {
       "id": "BRAND_OPTIFERRIN",
@@ -474,7 +492,8 @@
         "Increase Energy",
         "Immune Support"
       ],
-      "notes": "Clinically studied lactoferrin for iron deficiency and immune support."
+      "notes": "Clinically studied lactoferrin for iron deficiency and immune support.",
+      "study_type": "rct_multiple"
     },
     {
       "id": "BRAND_CARNIPURE",
@@ -497,7 +516,8 @@
         "Increase Energy",
         "Cardiovascular/Heart Health"
       ],
-      "notes": "Pharmaceutical-grade L-carnitine with studies in exercise performance, heart health."
+      "notes": "Pharmaceutical-grade L-carnitine with studies in exercise performance, heart health.",
+      "study_type": "rct_multiple"
     },
     {
       "id": "BRAND_SEAKELP",
@@ -521,7 +541,8 @@
         "Increase Energy",
         "Weight Management"
       ],
-      "notes": "Organic kelp extract with natural iodine; studies in thyroid function."
+      "notes": "Organic kelp extract with natural iodine; studies in thyroid function.",
+      "study_type": "rct_multiple"
     },
     {
       "id": "BRAND_PHOSPHATIDYLSERINE",
@@ -547,7 +568,8 @@
         "Reduce Stress/Anxiety",
         "Increase Energy"
       ],
-      "notes": "Clinical studies in memory, cognitive function, stress response, exercise recovery."
+      "notes": "Clinical studies in memory, cognitive function, stress response, exercise recovery.",
+      "study_type": "rct_multiple"
     },
     {
       "id": "BRAND_MEDIHERB_SILYMARIN",
@@ -571,7 +593,8 @@
         "Healthy Aging/Longevity",
         "Digestive Health"
       ],
-      "notes": "Australian pharmaceutical-grade extract; clinical studies in liver function."
+      "notes": "Australian pharmaceutical-grade extract; clinical studies in liver function.",
+      "study_type": "rct_multiple"
     },
     {
       "id": "BRAND_MITOQ",
@@ -595,7 +618,8 @@
         "Healthy Aging/Longevity",
         "Increase Energy"
       ],
-      "notes": "Unique mitochondrial-targeted antioxidant. Human RCT in vascular, cellular stress."
+      "notes": "Unique mitochondrial-targeted antioxidant. Human RCT in vascular, cellular stress.",
+      "study_type": "rct_multiple"
     },
     {
       "id": "BRAND_COGNIZIN",
@@ -620,7 +644,8 @@
         "Focus & Mental Clarity",
         "Healthy Aging/Longevity"
       ],
-      "notes": "Memory, cognition, neuroprotection in elderly and stroke patients."
+      "notes": "Memory, cognition, neuroprotection in elderly and stroke patients.",
+      "study_type": "rct_multiple"
     },
     {
       "id": "BRAND_SUNTHEANINE",
@@ -646,7 +671,8 @@
         "Focus & Mental Clarity",
         "Sleep Quality"
       ],
-      "notes": "Green tea amino acid, calming effect; validated anxiolytic in studies."
+      "notes": "Green tea amino acid, calming effect; validated anxiolytic in studies.",
+      "study_type": "rct_multiple"
     },
     {
       "id": "BRAND_LACTOSPORE",
@@ -669,7 +695,8 @@
         "Digestive Health",
         "Immune Support"
       ],
-      "notes": "Spore-forming probiotic with clinical studies in digestive health and IBS."
+      "notes": "Spore-forming probiotic with clinical studies in digestive health and IBS.",
+      "study_type": "rct_multiple"
     },
     {
       "id": "BRAND_OPTISHARP",
@@ -692,7 +719,8 @@
         "Healthy Aging/Longevity",
         "Focus & Mental Clarity"
       ],
-      "notes": "Branded lutein/zeaxanthin blend with clinical eye health studies."
+      "notes": "Branded lutein/zeaxanthin blend with clinical eye health studies.",
+      "study_type": "rct_multiple"
     },
     {
       "id": "BRAND_WELLMUNE",
@@ -717,7 +745,8 @@
         "Immune Support",
         "Reduce Stress/Anxiety"
       ],
-      "notes": "Baker's yeast beta-glucan with multiple immune function RCTs."
+      "notes": "Baker's yeast beta-glucan with multiple immune function RCTs.",
+      "study_type": "rct_multiple"
     },
     {
       "id": "BRAND_BIOPERINE",
@@ -742,7 +771,8 @@
         "Increase Energy",
         "Healthy Aging/Longevity"
       ],
-      "notes": "Patented black pepper extract proven to enhance absorption of nutrients and herbs."
+      "notes": "Patented black pepper extract proven to enhance absorption of nutrients and herbs.",
+      "study_type": "rct_multiple"
     },
     {
       "id": "BRAND_SETRIA",
@@ -767,7 +797,8 @@
         "Immune Support",
         "Healthy Aging/Longevity"
       ],
-      "notes": "Tripeptide form of glutathione with clinical studies showing increased blood glutathione levels."
+      "notes": "Tripeptide form of glutathione with clinical studies showing increased blood glutathione levels.",
+      "study_type": "rct_multiple"
     },
     {
       "id": "BRAND_OPTIMSM",
@@ -792,7 +823,8 @@
         "Healthy Aging/Longevity",
         "Increase Energy"
       ],
-      "notes": "Distilled MSM with clinical studies in joint health and exercise recovery."
+      "notes": "Distilled MSM with clinical studies in joint health and exercise recovery.",
+      "study_type": "rct_multiple"
     },
     {
       "id": "BRAND_AQUAMIN",
@@ -817,7 +849,8 @@
         "Healthy Aging/Longevity",
         "Digestive Health"
       ],
-      "notes": "Multi-mineral complex from marine algae with bone and joint health studies."
+      "notes": "Multi-mineral complex from marine algae with bone and joint health studies.",
+      "study_type": "rct_multiple"
     },
     {
       "id": "BRAND_LONGVIDA",
@@ -843,7 +876,8 @@
         "Focus & Mental Clarity",
         "Healthy Aging/Longevity"
       ],
-      "notes": "Patented solid lipid formulation; multiple human studies on brain health, mood, and superior absorption compared to standard curcumin."
+      "notes": "Patented solid lipid formulation; multiple human studies on brain health, mood, and superior absorption compared to standard curcumin.",
+      "study_type": "rct_multiple"
     },
     {
       "id": "BRAND_CURCUMIN_C3",
@@ -869,7 +903,8 @@
         "Healthy Aging/Longevity",
         "Digestive Health"
       ],
-      "notes": "Standardized to 95% curcuminoids; over 80 clinical trials on conditions like arthritis, metabolic syndrome, and liver health."
+      "notes": "Standardized to 95% curcuminoids; over 80 clinical trials on conditions like arthritis, metabolic syndrome, and liver health.",
+      "study_type": "rct_multiple"
     },
     {
       "id": "BRAND_UCII",
@@ -894,7 +929,8 @@
       "health_goals_supported": [
         "Healthy Aging/Longevity"
       ],
-      "notes": "Patented low-dose collagen; RCTs show efficacy in osteoarthritis and rheumatoid arthritis, better than glucosamine/chondroitin combos."
+      "notes": "Patented low-dose collagen; RCTs show efficacy in osteoarthritis and rheumatoid arthritis, better than glucosamine/chondroitin combos.",
+      "study_type": "rct_multiple"
     },
     {
       "id": "BRAND_BIOCELL",
@@ -918,7 +954,8 @@
       "health_goals_supported": [
         "Healthy Aging/Longevity"
       ],
-      "notes": "Matrix of collagen II, chondroitin, and HA; human trials for skin aging and joint support."
+      "notes": "Matrix of collagen II, chondroitin, and HA; human trials for skin aging and joint support.",
+      "study_type": "rct_multiple"
     },
     {
       "id": "BRAND_NIAGEN",
@@ -943,7 +980,8 @@
         "Healthy Aging/Longevity",
         "Increase Energy"
       ],
-      "notes": "Patented NR precursor; multiple human RCTs on NAD+ boosting, safety, and benefits for aging and muscle."
+      "notes": "Patented NR precursor; multiple human RCTs on NAD+ boosting, safety, and benefits for aging and muscle.",
+      "study_type": "rct_multiple"
     },
     {
       "id": "BRAND_MENAQ7",
@@ -968,7 +1006,8 @@
         "Cardiovascular/Heart Health",
         "Healthy Aging/Longevity"
       ],
-      "notes": "Natural MK-7 form; clinical trials on osteoporosis prevention and vascular health."
+      "notes": "Natural MK-7 form; clinical trials on osteoporosis prevention and vascular health.",
+      "study_type": "rct_multiple"
     },
     {
       "id": "BRAND_AFFRON",
@@ -992,7 +1031,8 @@
         "Reduce Stress/Anxiety",
         "Sleep Quality"
       ],
-      "notes": "Standardized to Lepticrosalides; RCTs in adolescents and adults for mood and sleep disorders."
+      "notes": "Standardized to Lepticrosalides; RCTs in adolescents and adults for mood and sleep disorders.",
+      "study_type": "rct_multiple"
     },
     {
       "id": "BRAND_RELORA",
@@ -1016,7 +1056,8 @@
         "Reduce Stress/Anxiety",
         "Weight Management"
       ],
-      "notes": "Proprietary blend; clinical studies on stress reduction and weight control in stressed individuals."
+      "notes": "Proprietary blend; clinical studies on stress reduction and weight control in stressed individuals.",
+      "study_type": "rct_multiple"
     },
     {
       "id": "BRAND_EGB761",
@@ -1042,7 +1083,8 @@
         "Focus & Mental Clarity",
         "Healthy Aging/Longevity"
       ],
-      "notes": "Standardized extract; extensive trials for age-related cognitive decline and peripheral circulation."
+      "notes": "Standardized extract; extensive trials for age-related cognitive decline and peripheral circulation.",
+      "study_type": "rct_multiple"
     },
     {
       "id": "BRAND_MITOPURE",
@@ -1067,7 +1109,8 @@
         "Increase Energy",
         "Healthy Aging/Longevity"
       ],
-      "notes": "Patented urolithin A; human trials on mitochondrial health and physical performance in aging."
+      "notes": "Patented urolithin A; human trials on mitochondrial health and physical performance in aging.",
+      "study_type": "rct_multiple"
     },
     {
       "id": "INGR_BETA_ALANINE",
@@ -1091,7 +1134,8 @@
       "health_goals_supported": [
         "Increase Energy"
       ],
-      "notes": "Well-studied for high-intensity exercise; increases carnosine levels in muscles."
+      "notes": "Well-studied for high-intensity exercise; increases carnosine levels in muscles.",
+      "study_type": "rct_single"
     },
     {
       "id": "INGR_L_CITRULLINE",
@@ -1116,7 +1160,8 @@
         "Increase Energy",
         "Cardiovascular/Heart Health"
       ],
-      "notes": "Human trials support use for endurance, blood pressure, and erectile function."
+      "notes": "Human trials support use for endurance, blood pressure, and erectile function.",
+      "study_type": "rct_single"
     },
     {
       "id": "INGR_COLLAGEN_PEPTIDES",
@@ -1129,18 +1174,27 @@
       "evidence_level": "ingredient-human",
       "published_studies": [
         "RCT",
-        "meta-analysis"
+        "meta-analysis",
+        "systematic_review"
       ],
       "score_contribution": "tier_2",
       "key_endpoints": [
         "skin hydration ↑",
-        "joint pain ↓",
-        "bone density ↑"
+        "skin elasticity ↑",
+        "wrinkles ↓",
+        "joint health ↑",
+        "collagen density ↑"
       ],
       "health_goals_supported": [
-        "Healthy Aging/Longevity"
+        "Healthy Aging/Longevity",
+        "Skin Health",
+        "Joint Health"
       ],
-      "notes": "Extensive human data for skin elasticity, wrinkle reduction, and osteoarthritis relief."
+      "notes": "Strong 2024-2025 systematic review evidence from multiple meta-analyses supports hydrolyzed collagen peptides for skin (hydration, elasticity, wrinkles) and joint health. Low molecular weight peptides (<6 kDa) offer superior absorption. Benefits typically after 90 days.",
+      "evidence_tier": "systematic_review",
+      "tier_points": 5,
+      "notable_studies": "2024-2025 systematic review of 26 RCTs (n=1,721): hydrolyzed collagen significantly improved skin hydration (Z=4.94, P<0.00001) and elasticity (Z=4.49, P<0.00001). 2025 review of type I collagen (n=1,652, studies 2011-2024) showed positive outcomes for joints.",
+      "study_type": "rct_single"
     },
     {
       "id": "INGR_HYALURONIC_ACID",
@@ -1163,7 +1217,8 @@
       "health_goals_supported": [
         "Healthy Aging/Longevity"
       ],
-      "notes": "Oral supplementation shown in trials to improve knee osteoarthritis and skin health."
+      "notes": "Oral supplementation shown in trials to improve knee osteoarthritis and skin health.",
+      "study_type": "rct_single"
     },
     {
       "id": "INGR_GARLIC",
@@ -1188,7 +1243,8 @@
         "Cardiovascular/Heart Health",
         "Immune Support"
       ],
-      "notes": "Strong evidence from trials for hypertension and lipid profile improvement."
+      "notes": "Strong evidence from trials for hypertension and lipid profile improvement.",
+      "study_type": "rct_single"
     },
     {
       "id": "INGR_VITAMIN_K2",
@@ -1213,7 +1269,8 @@
         "Cardiovascular/Heart Health",
         "Healthy Aging/Longevity"
       ],
-      "notes": "Human studies confirm roles in preventing arterial stiffness and osteoporosis."
+      "notes": "Human studies confirm roles in preventing arterial stiffness and osteoporosis.",
+      "study_type": "rct_single"
     },
     {
       "id": "INGR_SELENIUM",
@@ -1237,7 +1294,8 @@
         "Immune Support",
         "Healthy Aging/Longevity"
       ],
-      "notes": "Trials support use in thyroid disorders and as an antioxidant."
+      "notes": "Trials support use in thyroid disorders and as an antioxidant.",
+      "study_type": "rct_single"
     },
     {
       "id": "INGR_5HTP",
@@ -1261,7 +1319,8 @@
         "Reduce Stress/Anxiety",
         "Weight Management"
       ],
-      "notes": "Human trials for depression, fibromyalgia, and weight loss via serotonin modulation."
+      "notes": "Human trials for depression, fibromyalgia, and weight loss via serotonin modulation.",
+      "study_type": "rct_single"
     },
     {
       "id": "INGR_SAME",
@@ -1286,7 +1345,8 @@
         "Reduce Stress/Anxiety",
         "Healthy Aging/Longevity"
       ],
-      "notes": "Comparable to prescription antidepressants in trials; also effective for osteoarthritis."
+      "notes": "Comparable to prescription antidepressants in trials; also effective for osteoarthritis.",
+      "study_type": "rct_single"
     },
     {
       "id": "INGR_CAFFEINE",
@@ -1311,7 +1371,8 @@
         "Increase Energy",
         "Focus & Mental Clarity"
       ],
-      "notes": "Extensively studied for cognitive enhancement, fat burning, and athletic performance."
+      "notes": "Extensively studied for cognitive enhancement, fat burning, and athletic performance.",
+      "study_type": "rct_single"
     },
     {
       "id": "INGR_BERBERINE_HCL",
@@ -1337,7 +1398,8 @@
         "Weight Management",
         "Cardiovascular/Heart Health"
       ],
-      "notes": "Extensively studied for blood sugar control, lipid management, weight management."
+      "notes": "Extensively studied for blood sugar control, lipid management, weight management.",
+      "study_type": "rct_single"
     },
     {
       "id": "INGR_EPICATECHIN",
@@ -1360,7 +1422,8 @@
         "Cardiovascular/Heart Health",
         "Increase Energy"
       ],
-      "notes": "Cocoa flavanol with studies in muscle growth, cardiovascular health, exercise performance."
+      "notes": "Cocoa flavanol with studies in muscle growth, cardiovascular health, exercise performance.",
+      "study_type": "rct_single"
     },
     {
       "id": "INGR_RHODIOLA_3_SALIDROSIDE",
@@ -1385,7 +1448,8 @@
         "Increase Energy",
         "Focus & Mental Clarity"
       ],
-      "notes": "Standardized rhodiola extract with consistent clinical results in fatigue and stress."
+      "notes": "Standardized rhodiola extract with consistent clinical results in fatigue and stress.",
+      "study_type": "rct_single"
     },
     {
       "id": "INGR_MAG_GLYCINATE",
@@ -1398,11 +1462,13 @@
       "evidence_level": "ingredient-human",
       "published_studies": [
         "RCT",
-        "open-label"
+        "systematic_review",
+        "meta-analysis"
       ],
       "score_contribution": "tier_2",
       "key_endpoints": [
         "sleep quality ↑",
+        "insomnia severity ↓",
         "anxiety ↓",
         "GI tolerance ↑"
       ],
@@ -1410,7 +1476,11 @@
         "Sleep Quality",
         "Reduce Stress/Anxiety"
       ],
-      "notes": "Human trials show improved sleep quality, anxiety reduction, and better GI tolerance compared to other magnesium salts."
+      "notes": "2024-2025 evidence supports magnesium bisglycinate for sleep quality and anxiety. August 2025 RCT confirms modest but significant improvements with excellent tolerability. Superior GI tolerance vs magnesium oxide.",
+      "evidence_tier": "rct_multiple",
+      "tier_points": 4,
+      "notable_studies": "August 2025 RCT (n=155) showed magnesium bisglycinate (250mg Mg + 1523mg glycine daily) significantly reduced Insomnia Severity Index with effect size d=0.2. 2024 systematic review of 15 studies found benefits for anxiety and sleep.",
+      "study_type": "rct_single"
     },
     {
       "id": "INGR_NAC",
@@ -1423,19 +1493,28 @@
       "evidence_level": "ingredient-human",
       "published_studies": [
         "RCT",
-        "meta-analysis"
+        "meta-analysis",
+        "systematic_review"
       ],
       "score_contribution": "tier_2",
       "key_endpoints": [
         "glutathione ↑",
         "liver support ↑",
-        "respiratory health ↑"
+        "respiratory health ↑",
+        "oxidative stress ↓",
+        "mental health support ↑"
       ],
       "health_goals_supported": [
         "Immune Support",
-        "Healthy Aging/Longevity"
+        "Healthy Aging/Longevity",
+        "Respiratory Health",
+        "Liver Health"
       ],
-      "notes": "Used in trials for psychiatric disorders, liver support, and respiratory health; strong evidence for glutathione boosting."
+      "notes": "Extensive systematic review evidence supports NAC as powerful antioxidant and glutathione precursor. Well-established for respiratory health (mucolytic, COPD), liver protection, and emerging psychiatric applications. Modulates glutamate pathways.",
+      "evidence_tier": "systematic_review",
+      "tier_points": 5,
+      "notable_studies": "Multiple systematic reviews support NAC for glutathione enhancement, liver support, and respiratory health. Strong evidence for COPD, chronic bronchitis, acetaminophen overdose. RCTs demonstrate benefits for psychiatric conditions including bipolar, depression, OCD, and addiction.",
+      "study_type": "rct_single"
     },
     {
       "id": "INGR_QUERCETIN",
@@ -1460,7 +1539,8 @@
         "Immune Support",
         "Healthy Aging/Longevity"
       ],
-      "notes": "Human studies show anti-inflammatory and antiviral effects; often studied in combination with zinc or vitamin C."
+      "notes": "Human studies show anti-inflammatory and antiviral effects; often studied in combination with zinc or vitamin C.",
+      "study_type": "rct_single"
     },
     {
       "id": "INGR_L_THEANINE",
@@ -1484,7 +1564,8 @@
         "Reduce Stress/Anxiety",
         "Focus & Mental Clarity"
       ],
-      "notes": "Shown to reduce stress and improve focus in healthy adults; synergistic with caffeine."
+      "notes": "Shown to reduce stress and improve focus in healthy adults; synergistic with caffeine.",
+      "study_type": "rct_single"
     },
     {
       "id": "INGR_BACOPA",
@@ -1509,7 +1590,8 @@
         "Focus & Mental Clarity",
         "Healthy Aging/Longevity"
       ],
-      "notes": "Improves memory and attention in healthy adults and elderly; standardized extracts used in trials."
+      "notes": "Improves memory and attention in healthy adults and elderly; standardized extracts used in trials.",
+      "study_type": "rct_single"
     },
     {
       "id": "INGR_COQ10",
@@ -1523,19 +1605,27 @@
       "evidence_level": "ingredient-human",
       "published_studies": [
         "RCT",
-        "meta-analysis"
+        "meta-analysis",
+        "systematic_review"
       ],
       "score_contribution": "tier_2",
       "key_endpoints": [
-        "heart failure ↑",
-        "fatigue ↓",
+        "all-cause mortality ↓ (HF)",
+        "HF hospitalization ↓",
+        "ATP production ↑",
+        "mitochondrial function ↑",
         "statin myopathy ↓"
       ],
       "health_goals_supported": [
         "Cardiovascular/Heart Health",
-        "Increase Energy"
+        "Increase Energy",
+        "Mitochondrial Health"
       ],
-      "notes": "Human trials support use in heart failure, fatigue, and statin-induced myopathy."
+      "notes": "Strong 2024 evidence supports CoQ10 (ubiquinone preferred over ubiquinol) for heart failure with significant mortality and hospitalization reductions. Improves ATP production and mitochondrial function. Effective for statin-induced myopathy.",
+      "evidence_tier": "systematic_review",
+      "tier_points": 5,
+      "notable_studies": "October 2024 BMC meta-analysis of 33 RCTs: CoQ10 reduced all-cause mortality (RR=0.64, P=0.002) and HF hospitalization (RR=0.50, P<0.00001). July 2024 review found increased ATP (SMD 0.82, P<0.001) and mitochondrial capacity (SMD 0.75, P<0.001).",
+      "study_type": "rct_single"
     },
     {
       "id": "INGR_OMEGA3",
@@ -1549,20 +1639,26 @@
       "evidence_level": "ingredient-human",
       "published_studies": [
         "RCT",
-        "meta-analysis"
+        "meta-analysis",
+        "systematic_review"
       ],
       "score_contribution": "tier_2",
       "key_endpoints": [
         "triglycerides ↓",
         "mood ↑",
-        "cardiovascular protection ↑"
+        "cardiovascular protection ↑",
+        "inflammation ↓"
       ],
       "health_goals_supported": [
         "Cardiovascular/Heart Health",
         "Reduce Stress/Anxiety",
-        "Healthy Aging/Longevity"
+        "Brain Health"
       ],
-      "notes": "Extensive human data for triglyceride reduction, mood support, and cardiovascular protection."
+      "notes": "Extensive systematic review evidence supports omega-3 for cardiovascular health, triglyceride reduction, and mood. High-dose EPA particularly effective for CV risk reduction. Quality and formulation affect bioavailability.",
+      "evidence_tier": "systematic_review",
+      "tier_points": 5,
+      "notable_studies": "REDUCE-IT trial showed high-dose EPA (4g/day icosapent ethyl) significantly reduced cardiovascular events. Multiple systematic reviews confirm EPA/DHA reduce triglycerides and support cardiovascular health. RCTs support mood benefits.",
+      "study_type": "rct_single"
     },
     {
       "id": "INGR_VITAMIN_D3",
@@ -1575,20 +1671,27 @@
       "evidence_level": "ingredient-human",
       "published_studies": [
         "RCT",
-        "meta-analysis"
+        "meta-analysis",
+        "systematic_review"
       ],
       "score_contribution": "tier_2",
       "key_endpoints": [
         "bone health ↑",
         "immunity ↑",
-        "mood ↑"
+        "mood ↑",
+        "upper respiratory infection risk ↓"
       ],
       "health_goals_supported": [
         "Immune Support",
         "Reduce Stress/Anxiety",
-        "Healthy Aging/Longevity"
+        "Healthy Aging/Longevity",
+        "Bone Health"
       ],
-      "notes": "Human trials confirm roles in bone health, immunity, and mood regulation."
+      "notes": "Extensive evidence from systematic reviews and meta-analyses (2024-2025) supports vitamin D3 for bone health, immune function, and mood. 2024 Endocrine Society guidelines recommend empiric supplementation for specific populations.",
+      "evidence_tier": "systematic_review",
+      "tier_points": 5,
+      "notable_studies": "2024 DO-HEALTH RCT showed modest benefit on total hip BMD with 2000 IU daily. 2024 Endocrine Society guidelines recommend for children 1-18 years to reduce URTIs, pregnant women, prediabetic patients, and adults 75+ for mortality.",
+      "study_type": "rct_single"
     },
     {
       "id": "INGR_ZINC_PICOLINATE",
@@ -1601,17 +1704,24 @@
       "category": "mineral / immune",
       "evidence_level": "ingredient-human",
       "published_studies": [
-        "RCT"
+        "RCT",
+        "meta-analysis",
+        "systematic_review"
       ],
       "score_contribution": "tier_2",
       "key_endpoints": [
-        "cold duration ↓",
-        "immune function ↑"
+        "cold duration ↓ (33-37% reduction)",
+        "immune function ↑",
+        "upper respiratory symptoms ↓"
       ],
       "health_goals_supported": [
         "Immune Support"
       ],
-      "notes": "Shown to reduce duration of colds and support immune function; picolinate form used in trials."
+      "notes": "Strong 2024 evidence shows zinc lozenges (>75mg/day elemental zinc) substantially reduce cold duration when started within 24 hours. Zinc picolinate form shows good bioavailability and tolerance.",
+      "evidence_tier": "systematic_review",
+      "tier_points": 5,
+      "notable_studies": "2024 analysis showed zinc lozenges (>75mg/day) shortened common cold duration by 33-37% (P<10^-7). Zinc acetate and gluconate lozenges both effective. Meta-analysis showed 2.25 days reduction. Start within 24 hours of onset.",
+      "study_type": "rct_single"
     },
     {
       "id": "INGR_LUTEIN",
@@ -1634,7 +1744,8 @@
       "health_goals_supported": [
         "Healthy Aging/Longevity"
       ],
-      "notes": "Human studies support macular pigment density and visual performance improvements."
+      "notes": "Human studies support macular pigment density and visual performance improvements.",
+      "study_type": "rct_single"
     },
     {
       "id": "INGR_BIOTIN",
@@ -1647,7 +1758,8 @@
       "evidence_level": "ingredient-human",
       "published_studies": [
         "open-label",
-        "case series"
+        "case series",
+        "RCT"
       ],
       "score_contribution": "tier_2",
       "key_endpoints": [
@@ -1655,9 +1767,14 @@
         "nail strength ↑"
       ],
       "health_goals_supported": [
-        "Healthy Aging/Longevity"
+        "Healthy Aging/Longevity",
+        "Hair & Skin Health"
       ],
-      "notes": "Used in trials for hair loss and brittle nails; moderate evidence in deficiency states."
+      "notes": "Moderate evidence from case series and open-label trials support biotin for hair and nail health, particularly in deficiency states. Limited placebo-controlled RCT evidence. Vitamin B7 essential for fatty acid synthesis. High doses (>10mg) may interfere with lab tests.",
+      "evidence_tier": "rct_single",
+      "tier_points": 3,
+      "notable_studies": "Used in trials for hair loss and brittle nails with moderate evidence in deficiency states. Limited high-quality RCT evidence in non-deficient individuals. Some open-label studies show improvements in hair and nail quality.",
+      "study_type": "rct_single"
     },
     {
       "id": "INGR_MELATONIN",
@@ -1670,17 +1787,24 @@
       "evidence_level": "ingredient-human",
       "published_studies": [
         "RCT",
-        "meta-analysis"
+        "meta-analysis",
+        "systematic_review"
       ],
       "score_contribution": "tier_2",
       "key_endpoints": [
         "sleep onset ↑",
-        "jet lag ↓"
+        "jet lag ↓",
+        "sleep quality ↑",
+        "circadian rhythm ↑"
       ],
       "health_goals_supported": [
         "Sleep Quality"
       ],
-      "notes": "Strong evidence for sleep onset and jet lag; dose-dependent effects confirmed in trials."
+      "notes": "Strong systematic review evidence supports melatonin for sleep onset latency, jet lag, and circadian rhythm disorders. Multiple meta-analyses confirm dose-dependent effects. Particularly effective for jet lag, shift work, delayed sleep phase. Generally safe short-term.",
+      "evidence_tier": "systematic_review",
+      "tier_points": 5,
+      "notable_studies": "Multiple systematic reviews and meta-analyses confirm melatonin effectiveness for sleep onset, jet lag, and circadian rhythm disorders. Strong evidence for shift work disorder and delayed sleep phase syndrome. Dose-dependent: 0.5-5mg typically effective. Prolonged-release (Circadin) benefits insomnia in adults 55+.",
+      "study_type": "rct_single"
     },
     {
       "id": "INGR_GINSENG",
@@ -1706,7 +1830,8 @@
         "Immune Support",
         "Increase Energy"
       ],
-      "notes": "Improves mental performance, immune function, and reduces fatigue in human studies."
+      "notes": "Improves mental performance, immune function, and reduces fatigue in human studies.",
+      "study_type": "rct_single"
     },
     {
       "id": "INGR_RHODIOLA",
@@ -1729,7 +1854,8 @@
         "Reduce Stress/Anxiety",
         "Increase Energy"
       ],
-      "notes": "Shown to reduce stress-related fatigue and improve mood in multiple clinical trials."
+      "notes": "Shown to reduce stress-related fatigue and improve mood in multiple clinical trials.",
+      "study_type": "rct_single"
     },
     {
       "id": "INGR_VITAMIN_B12",
@@ -1742,19 +1868,25 @@
       "evidence_level": "ingredient-human",
       "published_studies": [
         "RCT",
-        "open-label"
+        "systematic_review"
       ],
       "score_contribution": "tier_2",
       "key_endpoints": [
         "nerve health ↑",
-        "energy ↑",
-        "fatigue ↓"
+        "energy ↑ (deficiency)",
+        "fatigue ↓ (deficiency)",
+        "CNS biomarkers ↑"
       ],
       "health_goals_supported": [
         "Increase Energy",
-        "Focus & Mental Clarity"
+        "Focus & Mental Clarity",
+        "Neurological Health"
       ],
-      "notes": "Essential for nerve and blood cell health; clinical trials support use in deficiency and fatigue."
+      "notes": "2024-2025 systematic reviews confirm B12 essential for nerve and blood cell health. Clear benefits in deficiency and subclinical deficiency. Methylcobalamin and adenosylcobalamin are active forms.",
+      "evidence_tier": "systematic_review",
+      "tier_points": 5,
+      "notable_studies": "2025 Annals of Neurology study found B12 levels associated with CNS injury biomarkers in older adults. 2025 systematic review on neurological sequelae included 10 RCTs. Clear benefits in deficiency states.",
+      "study_type": "rct_single"
     },
     {
       "id": "INGR_PROBIOTICS",
@@ -1767,18 +1899,26 @@
       "evidence_level": "ingredient-human",
       "published_studies": [
         "RCT",
-        "meta-analysis"
+        "meta-analysis",
+        "systematic_review"
       ],
       "score_contribution": "tier_2",
       "key_endpoints": [
         "digestive health ↑",
-        "immune modulation ↑"
+        "immune modulation ↑",
+        "intestinal barrier ↑",
+        "Bifidobacterium ↑",
+        "Lactobacillus ↑"
       ],
       "health_goals_supported": [
         "Digestive Health",
         "Immune Support"
       ],
-      "notes": "Numerous human trials demonstrate benefits for digestive health and immune modulation."
+      "notes": "2024-2025 systematic reviews strongly support Lactobacillus and Bifidobacterium for gut health and immune function. Improved intestinal barrier, microbiota modulation, SCFA production. Strain-specific effects: L. acidophilus and B. lactis most successful.",
+      "evidence_tier": "systematic_review",
+      "tier_points": 5,
+      "notable_studies": "2024-2025 systematic reviews show probiotics significantly boost Bifidobacterium (SMD 1.85, P=0.01) and Lactobacillus (SMD 2.22, P=0.02). 2024 study showed Lactobacillus-based probiotics decolonized pathogens (62% vs 53%, P=0.04). Benefits for IBS with B. breve, B. longum, L. acidophilus.",
+      "study_type": "rct_single"
     },
     {
       "id": "INGR_TURMERIC",
@@ -1791,19 +1931,28 @@
       "evidence_level": "ingredient-human",
       "published_studies": [
         "RCT",
-        "meta-analysis"
+        "meta-analysis",
+        "systematic_review"
       ],
       "score_contribution": "tier_2",
       "key_endpoints": [
+        "CRP ↓",
+        "TNF-α ↓",
+        "IL-6 ↓",
         "inflammation ↓",
-        "joint pain ↓",
-        "oxidative stress ↓"
+        "oxidative stress ↓",
+        "joint pain ↓"
       ],
       "health_goals_supported": [
+        "Reduce Stress/Anxiety",
         "Healthy Aging/Longevity",
-        "Reduce Stress/Anxiety"
+        "Joint Health"
       ],
-      "notes": "Strong clinical evidence for reducing inflammation, joint pain, and oxidative stress."
+      "notes": "Strong 2024-2025 systematic review evidence supports curcumin for anti-inflammatory and antioxidant effects. Meta-analyses confirm inflammatory marker reductions. Moderate quality evidence for OA pain relief. Bioavailability major limitation; enhanced formulations show >100-fold improvement.",
+      "evidence_tier": "systematic_review",
+      "tier_points": 5,
+      "notable_studies": "2024-2025 systematic reviews/meta-analyses (66 RCTs): curcumin significantly reduces CRP (WMD -0.58 mg/L), TNF-α (WMD -3.48 pg/mL), IL-6 (WMD -1.31 pg/mL). Recent meta-analysis in prediabetes/T2D found reductions in inflammatory markers. Greater benefits ≥1g/day.",
+      "study_type": "rct_single"
     },
     {
       "id": "INGR_VITAMIN_C",
@@ -1816,19 +1965,27 @@
       "evidence_level": "ingredient-human",
       "published_studies": [
         "RCT",
-        "meta-analysis"
+        "meta-analysis",
+        "systematic_review"
       ],
       "score_contribution": "tier_2",
       "key_endpoints": [
         "immune support ↑",
         "collagen synthesis ↑",
-        "antioxidant ↑"
+        "antioxidant ↑",
+        "cold duration ↓",
+        "leukocyte vitamin C ↑"
       ],
       "health_goals_supported": [
         "Immune Support",
-        "Healthy Aging/Longevity"
+        "Healthy Aging/Longevity",
+        "Skin Health"
       ],
-      "notes": "Well-supported for immune support, antioxidant properties, and skin health."
+      "notes": "2024-2025 systematic reviews confirm vitamin C's role in immune function, antioxidant defense, and collagen synthesis. Enhanced forms (calcium ascorbate, liposomal) show improved tolerance. Shortens cold duration.",
+      "evidence_tier": "systematic_review",
+      "tier_points": 5,
+      "notable_studies": "2025 systematic review in Nutrients found calcium ascorbate EC superior to ascorbic acid for tolerability and leukocyte concentrations. 2024 review confirms vitamin C reduces cold duration, greater effects on severe symptoms.",
+      "study_type": "rct_single"
     },
     {
       "id": "INGR_GINGER",
@@ -1852,7 +2009,8 @@
         "Digestive Health",
         "Healthy Aging/Longevity"
       ],
-      "notes": "Human trials show benefits for nausea, joint pain, and anti-inflammatory effects."
+      "notes": "Human trials show benefits for nausea, joint pain, and anti-inflammatory effects.",
+      "study_type": "rct_single"
     },
     {
       "id": "INGR_ASHWAGANDHA",
@@ -1864,19 +2022,27 @@
       "category": "adaptogen / stress",
       "evidence_level": "ingredient-human",
       "published_studies": [
-        "RCT"
+        "RCT",
+        "meta-analysis",
+        "systematic_review"
       ],
       "score_contribution": "tier_2",
       "key_endpoints": [
-        "cortisol ↓",
-        "stress ↓",
-        "strength ↑"
+        "cortisol ↓ (significant)",
+        "anxiety ↓",
+        "stress ↓ (PSS)",
+        "HPA axis modulation ↑"
       ],
       "health_goals_supported": [
         "Reduce Stress/Anxiety",
-        "Increase Energy"
+        "Sleep Quality",
+        "Focus & Mental Clarity"
       ],
-      "notes": "Multiple human trials show stress reduction, cortisol lowering, and strength improvements."
+      "notes": "Strong 2024-2025 systematic review evidence supports ashwagandha for stress and anxiety reduction. Consistently reduces cortisol through HPA axis modulation. Multiple meta-analyses confirm anxiety scale benefits. Generic extract effective at 250-600mg daily.",
+      "evidence_tier": "systematic_review",
+      "tier_points": 5,
+      "notable_studies": "January 2025 systematic review: ashwagandha significantly reduced cortisol (-1.16 μg/dL, P<0.001). 2024 meta-analysis of 9 RCTs (n=558): significant improvements in PSS (MD=-4.72), Hamilton Anxiety (MD=-2.19), cortisol (MD=-2.58). Dose 250-600mg/day for 4-13 weeks.",
+      "study_type": "rct_single"
     },
     {
       "id": "INGR_GREEN_TEA",
@@ -1903,7 +2069,8 @@
         "Increase Energy",
         "Healthy Aging/Longevity"
       ],
-      "notes": "Human studies show metabolic benefits, antioxidant effects, and fat oxidation enhancement."
+      "notes": "Human studies show metabolic benefits, antioxidant effects, and fat oxidation enhancement.",
+      "study_type": "rct_single"
     },
     {
       "id": "INGR_MILK_THISTLE",
@@ -1926,7 +2093,8 @@
       "health_goals_supported": [
         "Healthy Aging/Longevity"
       ],
-      "notes": "Clinical studies support liver protection and enzyme normalization."
+      "notes": "Clinical studies support liver protection and enzyme normalization.",
+      "study_type": "rct_single"
     },
     {
       "id": "INGR_LION_MANE",
@@ -1952,7 +2120,8 @@
         "Focus & Mental Clarity",
         "Healthy Aging/Longevity"
       ],
-      "notes": "Human trials show cognitive improvements and nerve growth factor stimulation in elderly with mild cognitive impairment."
+      "notes": "Human trials show cognitive improvements and nerve growth factor stimulation in elderly with mild cognitive impairment.",
+      "study_type": "rct_single"
     },
     {
       "id": "INGR_GLYCINE",
@@ -1976,7 +2145,8 @@
       "health_goals_supported": [
         "Sleep Quality"
       ],
-      "notes": "Clinical trials demonstrate improved sleep quality and reduced sleep onset time through thermoregulatory effects."
+      "notes": "Clinical trials demonstrate improved sleep quality and reduced sleep onset time through thermoregulatory effects.",
+      "study_type": "rct_single"
     },
     {
       "id": "INGR_TART_CHERRY",
@@ -2002,7 +2172,8 @@
         "Sleep Quality",
         "Reduce Stress/Anxiety"
       ],
-      "notes": "Natural source of melatonin with human studies showing improved sleep duration and quality."
+      "notes": "Natural source of melatonin with human studies showing improved sleep duration and quality.",
+      "study_type": "rct_single"
     },
     {
       "id": "INGR_ELDERBERRY",
@@ -2016,18 +2187,24 @@
       "evidence_level": "ingredient-human",
       "published_studies": [
         "RCT",
-        "meta-analysis"
+        "meta-analysis",
+        "systematic_review"
       ],
       "score_contribution": "tier_2",
       "key_endpoints": [
         "cold duration ↓",
         "flu symptoms ↓",
-        "immune response ↑"
+        "immune response ↑",
+        "upper respiratory symptoms ↓"
       ],
       "health_goals_supported": [
         "Immune Support"
       ],
-      "notes": "Multiple RCTs demonstrate reduced duration and severity of cold and flu symptoms."
+      "notes": "Multiple RCTs and meta-analyses demonstrate elderberry (Sambucus nigra) reduces cold and flu duration/severity. 2021 review confirms safety with no cytokine storm concerns. Antiviral effects via immune stimulation. Start at symptom onset.",
+      "evidence_tier": "rct_multiple",
+      "tier_points": 4,
+      "notable_studies": "2021 BMC systematic review of 5 RCTs (n=180) found elderberry reduces cold/flu duration and severity with large effect sizes. 2019 meta-analysis showed substantial reduction in upper respiratory symptoms. May be comparable to oseltamivir with fewer side effects.",
+      "study_type": "rct_single"
     },
     {
       "id": "INGR_FENUGREEK",
@@ -2052,7 +2229,8 @@
         "Blood Sugar Support",
         "Increase Energy"
       ],
-      "notes": "Human studies show blood glucose reduction and testosterone support in men."
+      "notes": "Human studies show blood glucose reduction and testosterone support in men.",
+      "study_type": "rct_single"
     },
     {
       "id": "INGR_BITTER_MELON",
@@ -2075,7 +2253,8 @@
       "health_goals_supported": [
         "Blood Sugar Support"
       ],
-      "notes": "Traditional medicine with human studies supporting blood glucose management."
+      "notes": "Traditional medicine with human studies supporting blood glucose management.",
+      "study_type": "rct_single"
     },
     {
       "id": "INGR_ALPHA_LIPOIC_ACID",
@@ -2100,7 +2279,8 @@
         "Blood Sugar Support",
         "Healthy Aging/Longevity"
       ],
-      "notes": "Multiple RCTs for diabetic neuropathy, blood sugar control, and antioxidant effects."
+      "notes": "Multiple RCTs for diabetic neuropathy, blood sugar control, and antioxidant effects.",
+      "study_type": "rct_single"
     },
     {
       "id": "INGR_PLANT_STEROLS",
@@ -2124,7 +2304,8 @@
       "health_goals_supported": [
         "Cardiovascular/Heart Health"
       ],
-      "notes": "FDA-approved heart health claim; extensive evidence for cholesterol reduction."
+      "notes": "FDA-approved heart health claim; extensive evidence for cholesterol reduction.",
+      "study_type": "rct_single"
     },
     {
       "id": "INGR_RED_YEAST_RICE",
@@ -2147,7 +2328,8 @@
       "health_goals_supported": [
         "Cardiovascular/Heart Health"
       ],
-      "notes": "Contains natural statins; multiple RCTs for cholesterol management."
+      "notes": "Contains natural statins; multiple RCTs for cholesterol management.",
+      "study_type": "rct_single"
     },
     {
       "id": "INGR_GLUCOSAMINE_SULFATE",
@@ -2171,7 +2353,8 @@
       "health_goals_supported": [
         "Healthy Aging/Longevity"
       ],
-      "notes": "Multiple RCTs for osteoarthritis; prescription form available in Europe."
+      "notes": "Multiple RCTs for osteoarthritis; prescription form available in Europe.",
+      "study_type": "rct_single"
     },
     {
       "id": "INGR_CHONDROITIN_SULFATE",
@@ -2195,7 +2378,8 @@
       "health_goals_supported": [
         "Healthy Aging/Longevity"
       ],
-      "notes": "Clinical evidence for joint health; often combined with glucosamine."
+      "notes": "Clinical evidence for joint health; often combined with glucosamine.",
+      "study_type": "rct_single"
     },
     {
       "id": "INGR_CRANBERRY",
@@ -2218,7 +2402,8 @@
       "health_goals_supported": [
         "Immune Support"
       ],
-      "notes": "Multiple RCTs for urinary tract health and UTI prevention."
+      "notes": "Multiple RCTs for urinary tract health and UTI prevention.",
+      "study_type": "rct_single"
     },
     {
       "id": "INGR_CINNAMON_EXTRACT",
@@ -2242,7 +2427,8 @@
       "health_goals_supported": [
         "Blood Sugar Support"
       ],
-      "notes": "Multiple RCTs showing blood glucose improvements in type 2 diabetes."
+      "notes": "Multiple RCTs showing blood glucose improvements in type 2 diabetes.",
+      "study_type": "rct_single"
     },
     {
       "id": "INGR_DIGESTIVE_ENZYMES",
@@ -2268,7 +2454,8 @@
       "health_goals_supported": [
         "Digestive Health"
       ],
-      "notes": "Clinical evidence for digestive support and pancreatic insufficiency."
+      "notes": "Clinical evidence for digestive support and pancreatic insufficiency.",
+      "study_type": "rct_single"
     },
     {
       "id": "INGR_INULIN",
@@ -2293,7 +2480,8 @@
       "health_goals_supported": [
         "Digestive Health"
       ],
-      "notes": "Prebiotic fiber with RCTs for gut microbiome and mineral absorption."
+      "notes": "Prebiotic fiber with RCTs for gut microbiome and mineral absorption.",
+      "study_type": "rct_single"
     },
     {
       "id": "INGR_IRON_BISGLYCINATE",
@@ -2307,18 +2495,26 @@
       "evidence_level": "ingredient-human",
       "published_studies": [
         "RCT",
-        "comparative"
+        "meta-analysis",
+        "systematic_review"
       ],
       "score_contribution": "tier_2",
       "key_endpoints": [
         "iron status ↑",
+        "hemoglobin ↑",
+        "ferritin ↑",
         "GI tolerance ↑",
         "absorption ↑"
       ],
       "health_goals_supported": [
-        "Increase Energy"
+        "Increase Energy",
+        "Healthy Aging/Longevity"
       ],
-      "notes": "Superior absorption and tolerance compared to ferrous sulfate in clinical studies."
+      "notes": "2023-2025 systematic review evidence supports ferrous bisglycinate as superior chelated iron with better absorption and GI tolerance than ferrous sulfate. Meta-analysis confirms hemoglobin and ferritin increases with fewer adverse events, particularly in pregnancy.",
+      "evidence_tier": "systematic_review",
+      "tier_points": 5,
+      "notable_studies": "2023 systematic review/meta-analysis: ferrous bisglycinate shows benefit over other iron supplements for hemoglobin and reducing GI adverse events in pregnant women. 2025 study: bisglycinate reversed iron deficiency in 14 days without GI inflammation (unlike ferrous sulfate).",
+      "study_type": "rct_single"
     },
     {
       "id": "INGR_FOLATE_MTHF",
@@ -2332,19 +2528,26 @@
       "evidence_level": "ingredient-human",
       "published_studies": [
         "RCT",
-        "comparative"
+        "comparative",
+        "systematic_review"
       ],
       "score_contribution": "tier_2",
       "key_endpoints": [
         "folate status ↑",
         "homocysteine ↓",
-        "bioavailability ↑"
+        "bioavailability ↑",
+        "unmetabolized folic acid ↓"
       ],
       "health_goals_supported": [
         "Cardiovascular/Heart Health",
-        "Healthy Aging/Longevity"
+        "Pregnancy Health",
+        "Neurological Health"
       ],
-      "notes": "Superior to folic acid; RCTs in cardiovascular health and pregnancy."
+      "notes": "2024-2025 evidence shows 5-MTHF is bioavailable active folate form avoiding MTHFR gene concerns and reducing unmetabolized folic acid. Multiple RCTs confirm equivalence to folic acid with lower UMFA. Beneficial for MTHFR polymorphisms. Growing support for prenatal use.",
+      "evidence_tier": "rct_multiple",
+      "tier_points": 4,
+      "notable_studies": "January 2024 RCT (British Journal of Nutrition): 5-MTHF as effective as folic acid for maternal folate while reducing unmetabolized folic acid by ~50%. 2024 reviews support for pregnancy. Both low and high maternal folate associated with increased CHD risk (U-shaped curve).",
+      "study_type": "rct_single"
     },
     {
       "id": "INGR_VALERIAN",
@@ -2368,7 +2571,8 @@
       "health_goals_supported": [
         "Sleep Quality"
       ],
-      "notes": "Multiple RCTs for sleep improvement; traditional use validated."
+      "notes": "Multiple RCTs for sleep improvement; traditional use validated.",
+      "study_type": "rct_single"
     },
     {
       "id": "INGR_PASSIONFLOWER",
@@ -2393,7 +2597,8 @@
         "Sleep Quality",
         "Reduce Stress/Anxiety"
       ],
-      "notes": "RCTs showing anxiety reduction and sleep quality improvement."
+      "notes": "RCTs showing anxiety reduction and sleep quality improvement.",
+      "study_type": "rct_single"
     },
     {
       "id": "INGR_LEMON_BALM",
@@ -2417,7 +2622,8 @@
         "Reduce Stress/Anxiety",
         "Focus & Mental Clarity"
       ],
-      "notes": "Human studies show mood improvement and cognitive enhancement."
+      "notes": "Human studies show mood improvement and cognitive enhancement.",
+      "study_type": "rct_single"
     },
     {
       "id": "PRECLIN_FISETIN",
@@ -2440,7 +2646,8 @@
       "health_goals_supported": [
         "Healthy Aging/Longevity"
       ],
-      "notes": "Clears senescent cells in animal models, extending healthspan; emerging human interest."
+      "notes": "Clears senescent cells in animal models, extending healthspan; emerging human interest.",
+      "study_type": "animal_study"
     },
     {
       "id": "PRECLIN_SPERMIDINE",
@@ -2463,7 +2670,8 @@
       "health_goals_supported": [
         "Healthy Aging/Longevity"
       ],
-      "notes": "Induces autophagy and extends lifespan in yeast, flies, and mice; mechanistic rationale for aging."
+      "notes": "Induces autophagy and extends lifespan in yeast, flies, and mice; mechanistic rationale for aging.",
+      "study_type": "animal_study"
     },
     {
       "id": "PRECLIN_AKG",
@@ -2488,7 +2696,8 @@
         "Healthy Aging/Longevity",
         "Increase Energy"
       ],
-      "notes": "Rejuvenates epigenome and extends lifespan in mice; potential for metabolic disorders."
+      "notes": "Rejuvenates epigenome and extends lifespan in mice; potential for metabolic disorders.",
+      "study_type": "animal_study"
     },
     {
       "id": "PRECLIN_APIGENIN",
@@ -2512,7 +2721,8 @@
         "Sleep Quality",
         "Healthy Aging/Longevity"
       ],
-      "notes": "Inhibits CD38 enzyme to boost NAD+; preclinical data for sleep and anti-aging effects."
+      "notes": "Inhibits CD38 enzyme to boost NAD+; preclinical data for sleep and anti-aging effects.",
+      "study_type": "animal_study"
     },
     {
       "id": "PRECLIN_LUTEOLIN",
@@ -2536,7 +2746,8 @@
         "Immune Support",
         "Healthy Aging/Longevity"
       ],
-      "notes": "Stabilizes mast cells and reduces neuroinflammation in models; potential for allergies and brain health."
+      "notes": "Stabilizes mast cells and reduces neuroinflammation in models; potential for allergies and brain health.",
+      "study_type": "animal_study"
     },
     {
       "id": "PRECLIN_TAURINE",
@@ -2560,7 +2771,8 @@
         "Increase Energy",
         "Healthy Aging/Longevity"
       ],
-      "notes": "Extends lifespan in worms and mice; supports mitochondrial health mechanistically."
+      "notes": "Extends lifespan in worms and mice; supports mitochondrial health mechanistically.",
+      "study_type": "animal_study"
     },
     {
       "id": "PRECLIN_QUERCETIN_PHYTOSOME",
@@ -2584,7 +2796,8 @@
         "Healthy Aging/Longevity",
         "Immune Support"
       ],
-      "notes": "Improved absorption form; preclinical senolytic effects with dasatinib."
+      "notes": "Improved absorption form; preclinical senolytic effects with dasatinib.",
+      "study_type": "animal_study"
     },
     {
       "id": "PRECLIN_NADH",
@@ -2607,7 +2820,8 @@
         "Increase Energy",
         "Focus & Mental Clarity"
       ],
-      "notes": "Direct NAD+ precursor; mechanistic support for fatigue and cognition, limited human data."
+      "notes": "Direct NAD+ precursor; mechanistic support for fatigue and cognition, limited human data.",
+      "study_type": "animal_study"
     },
     {
       "id": "PRECLIN_BETAINE_ANHYDROUS",
@@ -2631,7 +2845,8 @@
         "Cardiovascular/Heart Health",
         "Increase Energy"
       ],
-      "notes": "Methyl donor in animal models; potential for homocysteine reduction and osmoregulation."
+      "notes": "Methyl donor in animal models; potential for homocysteine reduction and osmoregulation.",
+      "study_type": "animal_study"
     },
     {
       "id": "PRECLIN_ASTAXANTHIN_GENERIC",
@@ -2654,7 +2869,8 @@
       "health_goals_supported": [
         "Healthy Aging/Longevity"
       ],
-      "notes": "Carotenoid with strong antioxidant mechanisms; branded forms have human data, generic lacks specific trials."
+      "notes": "Carotenoid with strong antioxidant mechanisms; branded forms have human data, generic lacks specific trials.",
+      "study_type": "animal_study"
     },
     {
       "id": "PRECLIN_SULFORAPHANE",
@@ -2679,7 +2895,8 @@
         "Healthy Aging/Longevity",
         "Immune Support"
       ],
-      "notes": "Strong mechanistic data for Nrf2 activation and phase II detox enzymes; limited human trials."
+      "notes": "Strong mechanistic data for Nrf2 activation and phase II detox enzymes; limited human trials.",
+      "study_type": "animal_study"
     },
     {
       "id": "PRECLIN_PTEROSTILBENE",
@@ -2703,7 +2920,8 @@
         "Focus & Mental Clarity",
         "Healthy Aging/Longevity"
       ],
-      "notes": "Shown to improve cognition and reduce oxidative stress in animal models; human data sparse."
+      "notes": "Shown to improve cognition and reduce oxidative stress in animal models; human data sparse.",
+      "study_type": "animal_study"
     },
     {
       "id": "PRECLIN_ARTICHOKE",
@@ -2728,7 +2946,8 @@
         "Digestive Health",
         "Cardiovascular/Heart Health"
       ],
-      "notes": "Supports bile flow and cholesterol metabolism in vitro; limited human efficacy data."
+      "notes": "Supports bile flow and cholesterol metabolism in vitro; limited human efficacy data.",
+      "study_type": "animal_study"
     },
     {
       "id": "PRECLIN_DGL",
@@ -2752,7 +2971,8 @@
       "health_goals_supported": [
         "Digestive Health"
       ],
-      "notes": "Protects gastric mucosa and supports ulcer healing in rodent models; human trials lacking."
+      "notes": "Protects gastric mucosa and supports ulcer healing in rodent models; human trials lacking.",
+      "study_type": "animal_study"
     },
     {
       "id": "PRECLIN_ZINC_CARNOSINE",
@@ -2776,7 +2996,8 @@
         "Digestive Health",
         "Immune Support"
       ],
-      "notes": "Supports gut lining integrity and mucosal repair; limited human data outside Japan."
+      "notes": "Supports gut lining integrity and mucosal repair; limited human data outside Japan.",
+      "study_type": "animal_study"
     },
     {
       "id": "PRECLIN_BOSWELLIA",
@@ -2801,7 +3022,8 @@
         "Reduce Stress/Anxiety",
         "Healthy Aging/Longevity"
       ],
-      "notes": "Inhibits 5-LOX and leukotriene synthesis; human trials inconsistent or underpowered."
+      "notes": "Inhibits 5-LOX and leukotriene synthesis; human trials inconsistent or underpowered.",
+      "study_type": "animal_study"
     },
     {
       "id": "PRECLIN_HUPERZINE_A",
@@ -2825,7 +3047,8 @@
         "Focus & Mental Clarity",
         "Healthy Aging/Longevity"
       ],
-      "notes": "Acetylcholinesterase inhibitor with strong animal data; human trials limited and regional."
+      "notes": "Acetylcholinesterase inhibitor with strong animal data; human trials limited and regional.",
+      "study_type": "animal_study"
     },
     {
       "id": "PRECLIN_CORDYCEPS",
@@ -2850,7 +3073,8 @@
         "Increase Energy",
         "Cardiovascular/Heart Health"
       ],
-      "notes": "Shown to improve ATP production and oxygen utilization in rodents; human data sparse."
+      "notes": "Shown to improve ATP production and oxygen utilization in rodents; human data sparse.",
+      "study_type": "animal_study"
     },
     {
       "id": "PRECLIN_BETAINE_HCL",
@@ -2872,7 +3096,8 @@
       "health_goals_supported": [
         "Digestive Health"
       ],
-      "notes": "Used to support stomach acid; mechanistic rationale exists but no formal human trials."
+      "notes": "Used to support stomach acid; mechanistic rationale exists but no formal human trials.",
+      "study_type": "animal_study"
     },
     {
       "id": "PRECLIN_SAFFRON",
@@ -2897,7 +3122,8 @@
         "Focus & Mental Clarity",
         "Healthy Aging/Longevity"
       ],
-      "notes": "Neuroprotective and retinal effects shown in rodents; human trials emerging but not definitive."
+      "notes": "Neuroprotective and retinal effects shown in rodents; human trials emerging but not definitive.",
+      "study_type": "animal_study"
     },
     {
       "id": "PRECLIN_CHROMIUM_PICOLINATE",
@@ -2921,7 +3147,8 @@
         "Blood Sugar Support",
         "Weight Management"
       ],
-      "notes": "Shown to improve insulin signaling in vitro and in rodents; human trials inconclusive."
+      "notes": "Shown to improve insulin signaling in vitro and in rodents; human trials inconclusive.",
+      "study_type": "animal_study"
     },
     {
       "id": "PRECLIN_ALCAR",
@@ -2946,7 +3173,8 @@
         "Healthy Aging/Longevity",
         "Increase Energy"
       ],
-      "notes": "Enhances mitochondrial function and neuroprotection in preclinical models; some small human trials but more data needed."
+      "notes": "Enhances mitochondrial function and neuroprotection in preclinical models; some small human trials but more data needed.",
+      "study_type": "animal_study"
     },
     {
       "id": "PRECLIN_NMN",
@@ -2970,7 +3198,8 @@
         "Healthy Aging/Longevity",
         "Increase Energy"
       ],
-      "notes": "Boosts NAD+ levels and mitochondrial function in animal models; human trials are ongoing but limited."
+      "notes": "Boosts NAD+ levels and mitochondrial function in animal models; human trials are ongoing but limited.",
+      "study_type": "animal_study"
     },
     {
       "id": "PRECLIN_PQQ",
@@ -2995,7 +3224,8 @@
         "Healthy Aging/Longevity",
         "Increase Energy"
       ],
-      "notes": "Supports mitochondrial biogenesis in preclinical models; limited human data."
+      "notes": "Supports mitochondrial biogenesis in preclinical models; limited human data.",
+      "study_type": "animal_study"
     },
     {
       "id": "PRECLIN_RESVERATROL",
@@ -3019,7 +3249,8 @@
         "Healthy Aging/Longevity",
         "Cardiovascular/Heart Health"
       ],
-      "notes": "Strong preclinical data for longevity pathways; human trials show mixed results."
+      "notes": "Strong preclinical data for longevity pathways; human trials show mixed results.",
+      "study_type": "animal_study"
     },
     {
       "id": "PRECLIN_CURCUMIN_GENERIC",
@@ -3042,7 +3273,8 @@
       "health_goals_supported": [
         "Healthy Aging/Longevity"
       ],
-      "notes": "Strong preclinical anti-inflammatory data; bioavailability issues limit human efficacy without enhancement."
+      "notes": "Strong preclinical anti-inflammatory data; bioavailability issues limit human efficacy without enhancement.",
+      "study_type": "animal_study"
     },
     {
       "id": "PRECLIN_BERBERINE_GENERIC",
@@ -3065,14 +3297,240 @@
       "health_goals_supported": [
         "Blood Sugar Support"
       ],
-      "notes": "Strong mechanistic data; HCl form has human evidence but generic forms lack specific studies."
+      "notes": "Strong mechanistic data; HCl form has human evidence but generic forms lack specific studies.",
+      "study_type": "animal_study"
+    },
+    {
+      "id": "STRAIN_REUTERI_PRODENTIS",
+      "standard_name": "L. reuteri Prodentis",
+      "aliases": [
+        "lactobacillus reuteri prodentis",
+        "limosilactobacillus reuteri prodentis",
+        "l. reuteri prodentis blend",
+        "biogaia prodentis",
+        "prodentis",
+        "l. reuteri atcc pta 5289",
+        "l. reuteri dsm 17938",
+        "limosilactobacillus reuteri atcc pta 5289",
+        "limosilactobacillus reuteri dsm 17938"
+      ],
+      "category": "probiotic",
+      "evidence_level": "product-human",
+      "published_studies": [
+        "RCT",
+        "meta-analysis",
+        "brand"
+      ],
+      "score_contribution": "tier_1",
+      "key_endpoints": [
+        "gingivitis ↓",
+        "plaque ↓",
+        "bleeding on probing ↓",
+        "pocket depth ↓",
+        "pathogen count ↓"
+      ],
+      "health_goals_supported": [
+        "Oral Health",
+        "Dental Health",
+        "Periodontal Health"
+      ],
+      "notes": "60+ clinical studies. Meta-analysis confirmed efficacy for periodontitis. World's most studied probiotic for oral health.",
+      "study_type": "clinical_strain"
+    },
+    {
+      "id": "BRAND_NITROSIGINE",
+      "standard_name": "Nitrosigine",
+      "aliases": [
+        "nitrosigine",
+        "inositol-stabilized arginine silicate",
+        "arginine silicate",
+        "ASI"
+      ],
+      "category": "sports nutrition / cognitive",
+      "evidence_level": "branded-rct",
+      "study_type": "rct_multiple",
+      "published_studies": ["RCT", "crossover"],
+      "score_contribution": "tier_1",
+      "key_endpoints": ["nitric oxide ↑", "blood flow ↑", "cognitive function ↑", "memory ↑", "vasodilation ↑"],
+      "health_goals_supported": ["Increase Energy", "Focus & Mental Clarity", "Cardiovascular/Heart Health"],
+      "notes": "30+ studies including 8 clinical trials. RCTs show 28-35% improvement in cognitive tests (TMT-B). 1.5g dose comparable to 8g citrulline malate for vasodilation. Patented by Nutrition21.",
+      "last_updated": "2026-01-05"
+    },
+    {
+      "id": "BRAND_LJ100",
+      "standard_name": "LJ100 Tongkat Ali",
+      "aliases": ["lj100", "longjack", "eurycoma longifolia", "tongkat ali lj100"],
+      "category": "testosterone / adaptogen",
+      "evidence_level": "branded-rct",
+      "study_type": "rct_multiple",
+      "published_studies": ["RCT", "double-blind"],
+      "score_contribution": "tier_1",
+      "key_endpoints": ["testosterone ↑", "cortisol ↓", "stress ↓", "libido ↑", "muscle ↑"],
+      "health_goals_supported": ["Increase Energy", "Reduce Stress/Anxiety", "Healthy Aging/Longevity"],
+      "notes": "25+ human clinical studies. MIT/Malaysian government research collaboration. RCTs show 16.4% higher testosterone, 32.3% lower cortisol. Standardized to 40% glycosaponins, 22% eurypeptides.",
+      "last_updated": "2026-01-05"
+    },
+    {
+      "id": "BRAND_SHODEN",
+      "standard_name": "Shoden Ashwagandha",
+      "aliases": ["shoden", "shoden ashwagandha", "35% withanolide glycosides"],
+      "category": "adaptogen",
+      "evidence_level": "branded-rct",
+      "study_type": "rct_multiple",
+      "published_studies": ["RCT", "double-blind", "placebo-controlled"],
+      "score_contribution": "tier_1",
+      "key_endpoints": ["stress ↓", "anxiety ↓", "sleep quality ↑", "cortisol ↓", "testosterone ↑"],
+      "health_goals_supported": ["Reduce Stress/Anxiety", "Sleep Quality", "Increase Energy"],
+      "notes": "High-potency extract (35% withanolide glycosides). 2024 RCT showed significant cortisol reduction and testosterone increase. 60-120mg effective dose. 72% sleep improvement vs 29% placebo.",
+      "last_updated": "2026-01-05"
+    },
+    {
+      "id": "BRAND_TESTOFEN",
+      "standard_name": "Testofen Fenugreek",
+      "aliases": ["testofen", "fenugreek testofen", "fenuside"],
+      "category": "testosterone / sports",
+      "evidence_level": "branded-rct",
+      "study_type": "rct_multiple",
+      "published_studies": ["RCT", "double-blind"],
+      "score_contribution": "tier_1",
+      "key_endpoints": ["testosterone ↑", "libido ↑", "muscle strength ↑", "body composition ↑"],
+      "health_goals_supported": ["Increase Energy", "Healthy Aging/Longevity"],
+      "notes": "Multiple RCTs: 8-week study (n=138) showed greater strength gains. 12-week trial (n=120) improved testosterone and sexual function. 300-600mg dose. Standardized to 50% Fenuside.",
+      "last_updated": "2026-01-05"
+    },
+    {
+      "id": "BRAND_MAGTEIN",
+      "standard_name": "Magtein Magnesium L-Threonate",
+      "aliases": ["magtein", "magnesium l-threonate", "mgt", "magnesium threonate"],
+      "category": "cognitive / sleep",
+      "evidence_level": "branded-rct",
+      "study_type": "rct_multiple",
+      "published_studies": ["RCT", "double-blind", "placebo-controlled"],
+      "score_contribution": "tier_1",
+      "key_endpoints": ["memory ↑", "cognition ↑", "sleep quality ↑", "cognitive age ↓"],
+      "health_goals_supported": ["Focus & Mental Clarity", "Sleep Quality", "Healthy Aging/Longevity"],
+      "notes": "Multiple RCTs. 2025 study: 6-week use improved cognition, working memory, reaction time. 2024 RCT: 21-day use improved deep sleep. Only magnesium form shown to efficiently cross blood-brain barrier.",
+      "last_updated": "2026-01-05"
+    },
+    {
+      "id": "BRAND_SUNFIBER",
+      "standard_name": "Sunfiber PHGG",
+      "aliases": ["sunfiber", "phgg", "partially hydrolyzed guar gum", "guar fiber"],
+      "category": "prebiotic / digestive",
+      "evidence_level": "branded-rct",
+      "study_type": "rct_multiple",
+      "published_studies": ["RCT", "meta-analysis"],
+      "score_contribution": "tier_1",
+      "key_endpoints": ["IBS symptoms ↓", "gut microbiome ↑", "regularity ↑", "SCFA production ↑"],
+      "health_goals_supported": ["Digestive Health", "Immune Support"],
+      "notes": "100+ human clinical studies. RCT for IBS showed significant symptom improvement at 6g/day. Truly regulating fiber - helps both constipation and diarrhea.",
+      "last_updated": "2026-01-05"
+    },
+    {
+      "id": "BRAND_CYNATINE_HNS",
+      "standard_name": "Cynatine HNS Keratin",
+      "aliases": ["cynatine", "cynatine hns", "solubilized keratin"],
+      "category": "hair / skin / nails",
+      "evidence_level": "branded-rct",
+      "study_type": "rct_single",
+      "published_studies": ["RCT", "double-blind"],
+      "score_contribution": "tier_1",
+      "key_endpoints": ["hair growth ↑", "nail strength ↑", "hair loss ↓"],
+      "health_goals_supported": ["Skin, Hair & Nail Health"],
+      "notes": "RCT (n=50) showed significant hair/nail improvement within 90 days. 500mg daily dose. Solubilized keratin form for bioavailability.",
+      "last_updated": "2026-01-05"
+    },
+    {
+      "id": "BRAND_TAMAFLEX",
+      "standard_name": "TamaFlex",
+      "aliases": ["tamaflex", "tamarind turmeric", "tamarind extract joint"],
+      "category": "joint health",
+      "evidence_level": "branded-rct",
+      "study_type": "rct_multiple",
+      "published_studies": ["RCT", "human trial"],
+      "score_contribution": "tier_1",
+      "key_endpoints": ["joint comfort ↑", "mobility ↑", "flexibility ↑"],
+      "health_goals_supported": ["Joint Health", "Active Lifestyle"],
+      "notes": "3 human clinical trials with 300+ participants. Fast-acting: results in 5 days at 250mg. Plant-based. Used in Tylenol supplements, Schiff Move Free, Platinum Performance (2025).",
+      "last_updated": "2026-01-05"
+    },
+    {
+      "id": "BRAND_HMB",
+      "standard_name": "HMB (Beta-Hydroxy Beta-Methylbutyrate)",
+      "aliases": ["hmb", "beta-hydroxy beta-methylbutyrate", "hmb free acid", "calcium hmb"],
+      "category": "sports nutrition / muscle",
+      "evidence_level": "ingredient-human",
+      "study_type": "rct_multiple",
+      "published_studies": ["RCT", "meta-analysis"],
+      "score_contribution": "tier_1",
+      "key_endpoints": ["muscle preservation ↑", "strength ↑", "recovery ↑", "muscle protein synthesis ↑"],
+      "health_goals_supported": ["Increase Energy", "Healthy Aging/Longevity"],
+      "notes": "Leucine metabolite. Multiple meta-analyses confirm efficacy for muscle preservation, especially in elderly/catabolic states. 3g/day typical dose. Free acid form faster acting.",
+      "last_updated": "2026-01-05"
+    },
+    {
+      "id": "BRAND_ZYNAMITE",
+      "standard_name": "Zynamite",
+      "aliases": ["zynamite", "mango leaf extract", "mangiferin"],
+      "category": "cognitive / energy",
+      "evidence_level": "branded-rct",
+      "study_type": "rct_multiple",
+      "published_studies": ["RCT", "crossover"],
+      "score_contribution": "tier_1",
+      "key_endpoints": ["mental performance ↑", "reaction time ↓", "attention ↑", "exercise performance ↑"],
+      "health_goals_supported": ["Focus & Mental Clarity", "Increase Energy"],
+      "notes": "Patented mango leaf extract (>60% mangiferin). RCTs show cognitive benefits comparable to caffeine without stimulant side effects. Often combined with quercetin for synergy.",
+      "last_updated": "2026-01-05"
+    },
+    {
+      "id": "BRAND_HEAL9",
+      "standard_name": "HEAL9 Probiotic",
+      "aliases": ["heal9", "lactiplantibacillus plantarum heal9", "probi mental health"],
+      "category": "probiotic / stress",
+      "evidence_level": "strain-clinical",
+      "study_type": "rct_multiple",
+      "published_studies": ["RCT", "double-blind"],
+      "score_contribution": "tier_1",
+      "key_endpoints": ["sleep quality ↑", "stress ↓", "cortisol ↓", "mood ↑"],
+      "health_goals_supported": ["Sleep Quality", "Reduce Stress/Anxiety"],
+      "notes": "Proprietary L. plantarum strain. Multiple RCTs show improved sleep quality, lower morning cortisol, balanced stress response. Part of Probi Mental Health product line.",
+      "last_updated": "2026-01-05"
     }
   ],
   "_metadata": {
-    "description": "Ingredients backed by clinical research and studies",
+    "description": "Ingredients backed by clinical research and studies - Enhanced for Section C v3.4.0",
     "purpose": "evidence_scoring",
-    "schema_version": "1.0",
-    "total_entries": 125,
-    "last_updated": "2025-11-14"
+    "schema_version": "2.1",
+    "total_entries": 137,
+    "last_updated": "2026-01-05",
+    "changelog": [
+      "2.1 (2026-01-05): Added 12 new clinically-backed branded ingredients (Nitrosigine, LJ100, Shoden, Testofen, Magtein, Sunfiber, Cynatine HNS, TamaFlex, HMB, Zynamite, HEAL9). Total entries: 137",
+      "2.0 (2025-12-04): Added study_type field support, updated evidence_level mapping for hierarchy scoring"
+    ],
+    "evidence_level_values": {
+      "product-human": "Exact product tested in human RCTs (1.0x multiplier)",
+      "product-rct": "Alias for product-human",
+      "branded-rct": "Branded ingredient with own RCTs (0.8x multiplier) - e.g., KSM-66, Meriva",
+      "ingredient-human": "Generic ingredient human studies (0.65x multiplier)",
+      "strain-clinical": "Probiotic strain-specific evidence (0.6x multiplier)",
+      "preclinical": "Animal/in vitro only (0.3x multiplier)"
+    },
+    "study_type_values": {
+      "systematic_review_meta": "Meta-analysis or systematic review (6 base pts)",
+      "rct_multiple": "2+ independent RCTs (5 base pts)",
+      "rct_single": "Single RCT (4 base pts)",
+      "observational": "Cohort/case-control studies (2 base pts)",
+      "clinical_strain": "Probiotic strain clinical evidence (4 base pts)",
+      "animal_study": "Animal studies only (2 base pts)",
+      "in_vitro": "In vitro/cell studies only (1 base pt)"
+    },
+    "_scoring_formula": "score = base_points × multiplier",
+    "_examples": {
+      "Meriva_meta": "systematic_review_meta (6) × product_level (1.0) = 6.0 pts",
+      "KSM66_rct": "rct_multiple (5) × branded_ingredient (0.8) = 4.0 pts",
+      "VitaminD_generic": "rct_single (4) × ingredient_human (0.65) = 2.6 pts",
+      "LGG_strain": "clinical_strain (4) × strain_level (0.6) = 2.4 pts",
+      "NewHerb_animal": "animal_study (2) × preclinical (0.3) = 0.6 pts"
+    }
   }
 }

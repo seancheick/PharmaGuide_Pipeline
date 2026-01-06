@@ -1,9 +1,9 @@
 {
   "database_info": {
-    "version": "2.3.0",
-    "last_updated": "2025-09-03",
-    "total_nutrients": 28,
-    "data_source": "Institute of Medicine (IOM) Dietary Reference Intakes, FDA, USDA, Clinical Research",
+    "version": "2.4.0",
+    "last_updated": "2026-01-05",
+    "total_nutrients": 47,
+    "data_source": "Institute of Medicine (IOM) Dietary Reference Intakes, National Academies 2019 Sodium/Potassium Update, FDA, USDA, Clinical Research",
     "country": "USA",
     "age_brackets": [
       "14-18",
@@ -12,8 +12,14 @@
       "51-70",
       "71+"
     ],
+    "dri_update_history": {
+      "calcium_vitamin_d": "2011 IOM update",
+      "sodium_potassium": "2019 National Academies update",
+      "energy": "2023 National Academies update",
+      "other_nutrients": "1997-2001 original DRI reports"
+    },
     "units_verified": true,
-    "notes": "All values are US RDA/AI and UL. Optimal ranges based on clinical research for therapeutic supplementation. Conditionally essential nutrients flagged for special populations."
+    "notes": "All values are US RDA/AI and UL. Optimal ranges based on clinical research for therapeutic supplementation. Conditionally essential nutrients flagged for special populations. Potassium/Sodium updated per 2019 NASEM report."
   },
   "nutrient_recommendations": [
     {
@@ -3266,13 +3272,14 @@
       "unit": "mg",
       "ul": "ND",
       "ul_note": "No UL established due to lack of observed adverse effects from food sources",
-      "optimal_range": "3000-4700",
+      "optimal_range": "2600-3400",
       "highest_ul": null,
+      "dri_update": "2019 National Academies update - AI values lowered from 2005; now sex-specific (males 3400mg, females 2600mg)",
       "warnings": [
         "High doses may cause hyperkalemia",
         "May interact with heart medications"
       ],
-      "special_considerations": "Most Americans don't get adequate potassium",
+      "special_considerations": "Most Americans don't get adequate potassium. 2019 AIs are sex-specific: 3400mg for adult males, 2600mg for adult females",
       "deficiency_symptoms": [
         "Muscle cramps",
         "Weakness",
@@ -3390,14 +3397,18 @@
       "standard_name": "Sodium",
       "unit": "mg",
       "ul": "ND",
-      "ul_note": "No UL established but <2300mg recommended for health",
+      "ul_note": "No traditional UL established. CDRR (Chronic Disease Risk Reduction) of 2300mg/d introduced in 2019",
       "optimal_range": "1500-2300",
-      "highest_ul": null,
+      "highest_ul": 2300,
+      "cdrr": 2300,
+      "cdrr_note": "2019 National Academies introduced CDRR - the intake above which reduction is expected to lower chronic disease risk (primarily hypertension and CVD)",
+      "dri_update": "2019 National Academies update - introduced first CDRR value for a nutrient",
       "warnings": [
         "High intake linked to high blood pressure",
-        "May affect heart health"
+        "May affect heart health",
+        "Above 2300mg/d increases CVD and hypertension risk"
       ],
-      "special_considerations": "Most Americans consume too much sodium",
+      "special_considerations": "Most Americans consume too much sodium. 2019 CDRR sets 2300mg/d as threshold above which intake reduction is recommended",
       "deficiency_symptoms": [
         "Muscle cramps",
         "Fatigue",

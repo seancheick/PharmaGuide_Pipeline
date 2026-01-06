@@ -828,14 +828,65 @@
       "aliases": [
         "Terra Origin LLC"
       ]
+    },
+    {
+      "id": "MANUF_BIOGAIA",
+      "standard_name": "BioGaia",
+      "evidence": [
+        "60+ clinical studies on probiotic strains",
+        "Meta-analysis confirmed efficacy for periodontitis",
+        "World's most studied probiotic for oral health",
+        "#1 dental hygienist-recommended oral probiotic brand"
+      ],
+      "notes": "Swedish probiotic specialist with L. reuteri Prodentis strain. Research-driven with extensive clinical documentation.",
+      "last_updated": "2025-12-03",
+      "aliases": [
+        "BioGaia AB",
+        "BioGaia Prodentis",
+        "BioGaia Protectis"
+      ]
+    },
+    {
+      "id": "MANUF_CULTURELLE",
+      "standard_name": "Culturelle",
+      "evidence": [
+        "USP Verified products",
+        "Uses clinically studied LGG strain",
+        "No FDA warning letters"
+      ],
+      "notes": "Leading probiotic brand with LGG (Lactobacillus rhamnosus GG) strain.",
+      "last_updated": "2025-12-03",
+      "aliases": [
+        "Culturelle Probiotics",
+        "i-Health Inc"
+      ]
+    },
+    {
+      "id": "MANUF_SEED_HEALTH",
+      "standard_name": "Seed Health",
+      "evidence": [
+        "2022 NutraIngredients-USA Probiotic Product of the Year",
+        "Multiple published RCTs (DDW 2024, DDW 2025)",
+        "Founded by Dr. Gregor Reid (former WHO Expert Panel chair)",
+        "FDA IND authorized for IBS research",
+        "Lot-to-lot third-party testing at accredited labs",
+        "No FDA warning letters or recalls"
+      ],
+      "notes": "Science-forward probiotic company with extensive clinical research. DS-01 has published trials for antibiotic recovery, IBS, and metabolite production.",
+      "last_updated": "2025-12-04",
+      "aliases": [
+        "Seed",
+        "Seed Health Inc.",
+        "DS-01"
+      ]
     }
   ],
   "_metadata": {
     "description": "Top supplement manufacturers with quality ratings and certifications",
     "purpose": "manufacturer_quality",
     "schema_version": "1.0",
-    "total_entries": 58,
-    "last_updated": "2025-11-17",
-    "recent_changes": "2025-11-17: Renamed 'aka' field to 'aliases' for consistency with other reference files. Removed redundant 'score_contribution' field (all values were identical)."
+    "total_entries": 61,
+    "last_updated": "2025-12-04",
+    "recent_changes": "2025-12-04: Added Seed Health (NutraIngredients-USA 2022 winner, multiple RCTs, WHO advisor founded). 2025-12-03: Added BioGaia and Culturelle."
   }
 }

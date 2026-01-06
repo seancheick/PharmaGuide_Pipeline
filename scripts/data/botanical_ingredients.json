@@ -19,7 +19,8 @@
         "acerola fruit",
         "barbados cherry",
         "acerola berry extract",
-        "acerola extract"
+        "acerola extract",
+        "Acerola Cherry juice powder"
       ],
       "category": "fruit",
       "notes": "Whole fruit powder or simple extract, naturally rich in Vitamin C, but not standardized to a specific vitamin C percentage.",
@@ -57,7 +58,8 @@
         "aloe barbadensis miller",
         "aloe vera leaf",
         "organic aloe",
-        "aloe vera gel"
+        "aloe vera gel",
+        "Aloe vera Inner Leaf Gel"
       ],
       "category": "plant extract",
       "notes": "Whole plant or gel extract, often used for digestive support; typically not standardized for active compounds like polysaccharides (unless specified as standardized).",
@@ -132,7 +134,8 @@
         "astragalus membranaceus root",
         "huang qi",
         "huang qi root",
-        "milk vetch root"
+        "milk vetch root",
+        "Astragalus membranaceous Root Extract"
       ],
       "category": "root",
       "notes": "Whole root powder or simple extract, used for immune support and adaptogenic properties; not standardized to astragalosides.",
@@ -229,7 +232,8 @@
       "aliases": [
         "black elder berry",
         "black elderberry",
-        "elderberry bioactives"
+        "elderberry bioactives",
+        "Black Elder (Sambucus nigra) berry juice powder"
       ],
       "category": "fruit",
       "notes": "Black elderberry fruit extract rich in anthocyanins for immune support.",
@@ -476,7 +480,8 @@
         "vitex agnus-castus",
         "organic chaste tree",
         "chasteberry",
-        "monk's pepper"
+        "monk's pepper",
+        "Chasteberry Fruit Extract"
       ],
       "category": "berry",
       "notes": "Berry powder or simple extract, traditionally used for women's health. Not standardized to agnuside or other compounds.",
@@ -735,7 +740,8 @@
         "date",
         "date concentrate",
         "phoenix dactylifera",
-        "date fruit"
+        "date fruit",
+        "Date puree"
       ],
       "category": "fruit",
       "notes": "Date fruit concentrate used as natural sweetener and energy source.",
@@ -749,7 +755,8 @@
         "dong quai root",
         "chinese angelica",
         "female ginseng",
-        "tang kuei"
+        "tang kuei",
+        "Angelica sinensis Root Extract"
       ],
       "category": "root",
       "notes": "Root powder or simple extract, traditionally used in Chinese medicine for women's health. Not standardized to specific compounds.",
@@ -965,7 +972,8 @@
       "aliases": [
         "apple",
         "Pineapple",
-        "papaya"
+        "papaya",
+        "Papaya juice powder"
       ],
       "category": "fruit",
       "notes": "Fruits used for color or taste.",
@@ -1046,7 +1054,9 @@
         "wolfberry",
         "goji fruit",
         "goji powder",
-        "goji"
+        "goji",
+        "Goji Berry Fruit Extract",
+        "Goji Berry Juice, Powder"
       ],
       "category": "fruit",
       "notes": "Whole fruit or simple extract, valued for antioxidant and nutritional content; not standardized to lycium barbarum polysaccharides (unless specified as standardized).",
@@ -1700,7 +1710,10 @@
         "prunus persica",
         "peach powder",
         "peach fruit",
-        "organic peach"
+        "organic peach",
+        "Peach Fruit Puree Concentrate",
+        "Peach Puree Concentrate",
+        "organic Peach puree"
       ],
       "category": "fruit",
       "notes": "Whole fruit powder, valued for vitamins and antioxidants. Not standardized to specific compounds.",
@@ -1901,7 +1914,8 @@
       "aliases": [
         "rosa canina fruit",
         "rose hip fruit",
-        "rosehip"
+        "rosehip",
+        "Rose Hips Fruit"
       ],
       "category": "fruit",
       "notes": "Whole fruit or simple extract, naturally rich in Vitamin C and antioxidants; not standardized to specific vitamin C content (unless specified as standardized).",
@@ -2057,7 +2071,10 @@
     {
       "standard_name": "Strawberry",
       "aliases": [
-        "strawberry"
+        "strawberry",
+        "organic Strawberries",
+        "Strawberry fruit powder",
+        "Strawberry Extract, Natural"
       ],
       "category": "fruit",
       "notes": "Strawberry fruit powder used for flavor and antioxidants.",
@@ -2282,6 +2299,562 @@
       "notes": "Mushroom powder or simple extract, traditionally used in Chinese medicine for urinary support. Not standardized to polysaccharides.",
       "last_updated": "2025-08-12",
       "id": "zhu_ling"
+    },
+    {
+      "standard_name": "Ashwagandha",
+      "aliases": [
+        "Ashwagandha"
+      ],
+      "category": "herb",
+      "notes": "Added from unmapped list; needs curation.",
+      "last_updated": "2026-01-05",
+      "id": "ashwagandha"
+    },
+    {
+      "standard_name": "St. John's Wort",
+      "aliases": [
+        "St. John's wort aerial parts extract"
+      ],
+      "category": "herb",
+      "notes": "Added from unmapped list; needs curation.",
+      "last_updated": "2026-01-05",
+      "id": "st_john_s_wort"
+    },
+    {
+      "standard_name": "Milk Thistle",
+      "aliases": [
+        "Milk Thistle Plant Extract",
+        "Milk Thistle Fruit Extract"
+      ],
+      "category": "herb",
+      "notes": "Added from unmapped list; needs curation.",
+      "last_updated": "2026-01-05",
+      "id": "milk_thistle"
+    },
+    {
+      "standard_name": "Citrus Bergamot",
+      "aliases": [
+        "Citrus Bergamot Fruit Extract"
+      ],
+      "category": "fruit",
+      "notes": "Added from unmapped list; needs curation.",
+      "last_updated": "2026-01-05",
+      "id": "citrus_bergamot"
+    },
+    {
+      "standard_name": "Black Garlic",
+      "aliases": [
+        "Black Garlic Bulb Extract"
+      ],
+      "category": "herb",
+      "notes": "Added from unmapped list; needs curation.",
+      "last_updated": "2026-01-05",
+      "id": "black_garlic"
+    },
+    {
+      "standard_name": "White Mulberry",
+      "aliases": [
+        "White Mulberry leaf extract"
+      ],
+      "category": "leaf",
+      "notes": "Added from unmapped list; needs curation.",
+      "last_updated": "2026-01-05",
+      "id": "white_mulberry"
+    },
+    {
+      "standard_name": "Gymnema Sylvestre",
+      "aliases": [
+        "Gymnema sylvestre leaf extract"
+      ],
+      "category": "leaf",
+      "notes": "Added from unmapped list; needs curation.",
+      "last_updated": "2026-01-05",
+      "id": "gymnema_sylvestre"
+    },
+    {
+      "standard_name": "Bacopa",
+      "aliases": [
+        "Bacopa Leaf Extract"
+      ],
+      "category": "leaf",
+      "notes": "Added from unmapped list; needs curation.",
+      "last_updated": "2026-01-05",
+      "id": "bacopa"
+    },
+    {
+      "standard_name": "Gotu Kola",
+      "aliases": [
+        "Gotu Kola Herb Extract",
+        "Gotu Kola Whole Herb Extract"
+      ],
+      "category": "herb",
+      "notes": "Added from unmapped list; needs curation.",
+      "last_updated": "2026-01-05",
+      "id": "gotu_kola"
+    },
+    {
+      "standard_name": "Cordyceps",
+      "aliases": [
+        "Cordyceps Sporocarp Extract"
+      ],
+      "category": "herb",
+      "notes": "Added from unmapped list; needs curation.",
+      "last_updated": "2026-01-05",
+      "id": "cordyceps"
+    },
+    {
+      "standard_name": "Ceylon Cinnamon",
+      "aliases": [
+        "Ceylon Cinnamon Bark Extract"
+      ],
+      "category": "bark",
+      "notes": "Added from unmapped list; needs curation.",
+      "last_updated": "2026-01-05",
+      "id": "ceylon_cinnamon"
+    },
+    {
+      "standard_name": "Dandelion",
+      "aliases": [
+        "Dandelion Whole Herb Extract"
+      ],
+      "category": "herb",
+      "notes": "Added from unmapped list; needs curation.",
+      "last_updated": "2026-01-05",
+      "id": "dandelion"
+    },
+    {
+      "standard_name": "Rhubarb",
+      "aliases": [
+        "Rhubarb Root Extract"
+      ],
+      "category": "root",
+      "notes": "Added from unmapped list; needs curation.",
+      "last_updated": "2026-01-05",
+      "id": "rhubarb"
+    },
+    {
+      "standard_name": "Kola Nut",
+      "aliases": [
+        "Kola Nut Fruit Extract"
+      ],
+      "category": "seed",
+      "notes": "Added from unmapped list; needs curation.",
+      "last_updated": "2026-01-05",
+      "id": "kola_nut"
+    },
+    {
+      "standard_name": "Red Clover",
+      "aliases": [
+        "Red Clover Flower, Leaf Extract"
+      ],
+      "category": "flower",
+      "notes": "Added from unmapped list; needs curation.",
+      "last_updated": "2026-01-05",
+      "id": "red_clover"
+    },
+    {
+      "standard_name": "Kelp",
+      "aliases": [
+        "Kelp Leaf, Stem Extract"
+      ],
+      "category": "seaweed",
+      "notes": "Added from unmapped list; needs curation.",
+      "last_updated": "2026-01-05",
+      "id": "kelp"
+    },
+    {
+      "standard_name": "Senna",
+      "aliases": [
+        "Senna leaf extract",
+        "Senna",
+        "Senna alexandrina Leaf Extract"
+      ],
+      "category": "leaf",
+      "notes": "Added from unmapped list; needs curation.",
+      "last_updated": "2026-01-05",
+      "id": "senna"
+    },
+    {
+      "standard_name": "Cascara Sagrada",
+      "aliases": [
+        "Cascara Sagrada Bark Extract",
+        "Cascara Sagrada"
+      ],
+      "category": "bark",
+      "notes": "Added from unmapped list; needs curation.",
+      "last_updated": "2026-01-05",
+      "id": "cascara_sagrada"
+    },
+    {
+      "standard_name": "Globe Artichoke",
+      "aliases": [
+        "Globe Artichoke Leaf Extract"
+      ],
+      "category": "leaf",
+      "notes": "Added from unmapped list; needs curation.",
+      "last_updated": "2026-01-05",
+      "id": "globe_artichoke"
+    },
+    {
+      "standard_name": "French Melon",
+      "aliases": [
+        "French Melon extract"
+      ],
+      "category": "fruit",
+      "notes": "Added from unmapped list; needs curation.",
+      "last_updated": "2026-01-05",
+      "id": "french_melon"
+    },
+    {
+      "standard_name": "Coffee Fruit",
+      "aliases": [
+        "CoffeeBerry whole Coffee fruit extract",
+        "NeuroFactor Coffee fruit extract",
+        "Coffee fruit extract"
+      ],
+      "category": "fruit",
+      "notes": "Added from unmapped list; needs curation.",
+      "last_updated": "2026-01-05",
+      "id": "coffee_fruit"
+    },
+    {
+      "standard_name": "Green Tea",
+      "aliases": [
+        "Green Tea Phytosomes",
+        "BioPure Green Tea"
+      ],
+      "category": "leaf",
+      "notes": "Added from unmapped list; needs curation.",
+      "last_updated": "2026-01-05",
+      "id": "green_tea"
+    },
+    {
+      "standard_name": "Sea Buckthorn",
+      "aliases": [
+        "Sea Buckthorn",
+        "Sea Buckthorn Juice, Powder",
+        "Sea Buckthorn, Powder",
+        "organic Sea Buckthorn juice powder",
+        "Sea Buckthorn Juice, Powder"
+      ],
+      "category": "fruit",
+      "notes": "Added from unmapped list; needs curation.",
+      "last_updated": "2026-01-05",
+      "id": "sea_buckthorn"
+    },
+    {
+      "standard_name": "Orange",
+      "aliases": [
+        "Orange Fruit Powder"
+      ],
+      "category": "fruit",
+      "notes": "Added from unmapped list; needs curation.",
+      "last_updated": "2026-01-05",
+      "id": "orange"
+    },
+    {
+      "standard_name": "Garcinia",
+      "aliases": [
+        "Garcinia fruit extract",
+        "Garcinia cambogia extract",
+        "Garcinia cambogia Extract"
+      ],
+      "category": "fruit",
+      "notes": "Added from unmapped list; needs curation.",
+      "last_updated": "2026-01-05",
+      "id": "garcinia"
+    },
+    {
+      "standard_name": "Guava",
+      "aliases": [
+        "organic Guava fruit and leaf (Psidium guajava) extract",
+        "Guava"
+      ],
+      "category": "fruit",
+      "notes": "Added from unmapped list; needs curation.",
+      "last_updated": "2026-01-05",
+      "id": "guava"
+    },
+    {
+      "standard_name": "Japanese Knotweed",
+      "aliases": [
+        "Japanese Knotweed Root Extract"
+      ],
+      "category": "root",
+      "notes": "Added from unmapped list; needs curation.",
+      "last_updated": "2026-01-05",
+      "id": "japanese_knotweed"
+    },
+    {
+      "standard_name": "Sophora Japonica",
+      "aliases": [
+        "Sophora japonica Flower Extract"
+      ],
+      "category": "flower",
+      "notes": "Added from unmapped list; needs curation.",
+      "last_updated": "2026-01-05",
+      "id": "sophora_japonica"
+    },
+    {
+      "standard_name": "Toothed Clubmoss",
+      "aliases": [
+        "Toothed Clubmoss (Huperzia serrata) aerial parts extract"
+      ],
+      "category": "herb",
+      "notes": "Added from unmapped list; needs curation.",
+      "last_updated": "2026-01-05",
+      "id": "toothed_clubmoss"
+    },
+    {
+      "standard_name": "Wheat Germ",
+      "aliases": [
+        "Wheat Germ Extract"
+      ],
+      "category": "seed",
+      "notes": "Added from unmapped list; needs curation.",
+      "last_updated": "2026-01-05",
+      "id": "wheat_germ"
+    },
+    {
+      "standard_name": "Red Yeast Rice",
+      "aliases": [
+        "Red Yeast Rice Seed Extract"
+      ],
+      "category": "seed",
+      "notes": "Added from unmapped list; needs curation.",
+      "last_updated": "2026-01-05",
+      "id": "red_yeast_rice"
+    },
+    {
+      "standard_name": "Millet",
+      "aliases": [
+        "Millet extract"
+      ],
+      "category": "seed",
+      "notes": "Added from unmapped list; needs curation.",
+      "last_updated": "2026-01-05",
+      "id": "millet"
+    },
+    {
+      "standard_name": "Potato",
+      "aliases": [
+        "Potato extract",
+        "Potato Extract"
+      ],
+      "category": "root",
+      "notes": "Added from unmapped list; needs curation.",
+      "last_updated": "2026-01-05",
+      "id": "potato"
+    },
+    {
+      "standard_name": "Cranberry",
+      "aliases": [
+        "Cranberry, Puree",
+        "organic Flowens whole Cranberry",
+        "organic Pacran whole Cranberry",
+        "Cran-Max Cranberry concentrate"
+      ],
+      "category": "fruit",
+      "notes": "Added from unmapped list; needs curation.",
+      "last_updated": "2026-01-05",
+      "id": "cranberry"
+    },
+    {
+      "standard_name": "Bilberry",
+      "aliases": [
+        "Bil-Max Bilberry Concentrate"
+      ],
+      "category": "fruit",
+      "notes": "Added from unmapped list; needs curation.",
+      "last_updated": "2026-01-05",
+      "id": "bilberry"
+    },
+    {
+      "standard_name": "Blueberry",
+      "aliases": [
+        "Blue-Max Blueberry Concentrate",
+        "Blueberry, Natural"
+      ],
+      "category": "fruit",
+      "notes": "Added from unmapped list; needs curation.",
+      "last_updated": "2026-01-05",
+      "id": "blueberry"
+    },
+    {
+      "standard_name": "Maqui",
+      "aliases": [
+        "Maqui",
+        "organic Maqui",
+        "macqui berry concentrate"
+      ],
+      "category": "fruit",
+      "notes": "Added from unmapped list; needs curation.",
+      "last_updated": "2026-01-05",
+      "id": "maqui"
+    },
+    {
+      "standard_name": "Acai",
+      "aliases": [
+        "Acai Berry Pulp"
+      ],
+      "category": "fruit",
+      "notes": "Added from unmapped list; needs curation.",
+      "last_updated": "2026-01-05",
+      "id": "acai"
+    },
+    {
+      "standard_name": "Chokeberry",
+      "aliases": [
+        "Chokeberry"
+      ],
+      "category": "fruit",
+      "notes": "Added from unmapped list; needs curation.",
+      "last_updated": "2026-01-05",
+      "id": "chokeberry"
+    },
+    {
+      "standard_name": "Pomegranate",
+      "aliases": [
+        "Pomegranate fruit juice powder",
+        "Pomegrante"
+      ],
+      "category": "fruit",
+      "notes": "Added from unmapped list; needs curation.",
+      "last_updated": "2026-01-05",
+      "id": "pomegranate"
+    },
+    {
+      "standard_name": "Mangosteen",
+      "aliases": [
+        "Mangosteen"
+      ],
+      "category": "fruit",
+      "notes": "Added from unmapped list; needs curation.",
+      "last_updated": "2026-01-05",
+      "id": "mangosteen"
+    },
+    {
+      "standard_name": "Huito",
+      "aliases": [
+        "Huito Extract"
+      ],
+      "category": "fruit",
+      "notes": "Added from unmapped list; needs curation.",
+      "last_updated": "2026-01-05",
+      "id": "huito"
+    },
+    {
+      "standard_name": "Watermelon",
+      "aliases": [
+        "Watermelon Extract"
+      ],
+      "category": "fruit",
+      "notes": "Added from unmapped list; needs curation.",
+      "last_updated": "2026-01-05",
+      "id": "watermelon"
+    },
+    {
+      "standard_name": "Lemon",
+      "aliases": [
+        "Lemon fruit powder"
+      ],
+      "category": "fruit",
+      "notes": "Added from unmapped list; needs curation.",
+      "last_updated": "2026-01-05",
+      "id": "lemon"
+    },
+    {
+      "standard_name": "Fruit Base",
+      "aliases": [
+        "organic Fruit Base"
+      ],
+      "category": "fruit",
+      "notes": "Added from unmapped list; needs curation.",
+      "last_updated": "2026-01-05",
+      "id": "fruit_base"
+    },
+    {
+      "standard_name": "Turmeric",
+      "aliases": [
+        "Tumeric",
+        "Curcuma Extract, Natural"
+      ],
+      "category": "root",
+      "notes": "Added from unmapped list; needs curation.",
+      "last_updated": "2026-01-05",
+      "id": "turmeric"
+    },
+    {
+      "standard_name": "Seaweed",
+      "aliases": [
+        "Sea Weed Extract"
+      ],
+      "category": "seaweed",
+      "notes": "Added from unmapped list; needs curation.",
+      "last_updated": "2026-01-05",
+      "id": "seaweed"
+    },
+    {
+      "standard_name": "Asparagus",
+      "aliases": [
+        "Asparagus"
+      ],
+      "category": "vegetable",
+      "notes": "Added from unmapped list; needs curation.",
+      "last_updated": "2026-01-05",
+      "id": "asparagus"
+    },
+    {
+      "standard_name": "Black Radish",
+      "aliases": [
+        "Black Radish Root Extract"
+      ],
+      "category": "root",
+      "notes": "Added from unmapped list; needs curation.",
+      "last_updated": "2026-01-05",
+      "id": "black_radish"
+    },
+    {
+      "standard_name": "Beetroot",
+      "aliases": [
+        "Beet root juice powder"
+      ],
+      "category": "root",
+      "notes": "Added from unmapped list; needs curation.",
+      "last_updated": "2026-01-05",
+      "id": "beetroot"
+    },
+    {
+      "standard_name": "Chili Pepper",
+      "aliases": [
+        "Chilli Pepper"
+      ],
+      "category": "spice",
+      "notes": "Added from unmapped list; needs curation.",
+      "last_updated": "2026-01-05",
+      "id": "chili_pepper"
+    },
+    {
+      "standard_name": "Yuzu",
+      "aliases": [
+        "Yuzu",
+        "Yuzu Juice"
+      ],
+      "category": "fruit",
+      "notes": "Added from unmapped list; needs curation.",
+      "last_updated": "2026-01-05",
+      "id": "yuzu"
+    },
+    {
+      "standard_name": "Vegetable Powders",
+      "aliases": [
+        "Vegetable Powders",
+        "Fruits and Vegetables"
+      ],
+      "category": "vegetable",
+      "notes": "Added from unmapped list; needs curation.",
+      "last_updated": "2026-01-05",
+      "id": "vegetable_powders"
     }
   ],
   "_metadata": {

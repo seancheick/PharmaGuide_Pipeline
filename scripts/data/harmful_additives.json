@@ -1,4 +1,19 @@
 {
+  "database_info": {
+    "name": "Harmful Additives Database",
+    "version": "2.0.0",
+    "last_updated": "2026-01-05",
+    "total_additives": 105,
+    "description": "Comprehensive database of harmful additives, contaminants, and concerning ingredients found in dietary supplements. Used for scoring penalties and consumer warnings.",
+    "purpose": "penalty_scoring",
+    "scoring_rule": "Apply penalty points based on risk_level. Critical: -5, High: -3, Moderate: -1.5, Low: -0.5. Multiple additives are cumulative.",
+    "risk_level_definitions": {
+      "critical": "Immediate health hazard, should be avoided entirely (e.g., formaldehyde, colloidal silver)",
+      "high": "Significant health concerns with strong evidence (e.g., trans fats, carcinogenic dyes, heavy metals)",
+      "moderate": "Potential health concerns, limit exposure (e.g., artificial sweeteners, high glycemic fillers)",
+      "low": "Minor concerns, generally safe at typical doses (e.g., some flow agents, natural thickeners)"
+    }
+  },
   "harmful_additives": [
     {
       "id": "ADD_POLYETHYLENE_GLYCOL",
@@ -62,7 +77,9 @@
         "brookite",
         "rutile",
         "anatase",
-        "titanium dioxide nanoparticles"
+        "titanium dioxide nanoparticles",
+        "titanium dioxide color",
+        "titanium dioxide e171"
       ],
       "CUI": "C0076733",
       "risk_level": "high",
@@ -96,7 +113,7 @@
         "Canderel",
         "APM",
         "aspartyl-phenylalanine methyl ester",
-        "N-(L-α-Aspartyl)-L-phenylalanine 1-methyl ester",
+        "N-(L-\u03b1-Aspartyl)-L-phenylalanine 1-methyl ester",
         "artificial sweetener aspartame",
         "E951 sweetener",
         "dipeptide sweetener",
@@ -217,6 +234,7 @@
         "FD&C Green #3",
         "FD&C Blue",
         "Blue 2 Lake",
+        "Blue 2",
         "certified colors",
         "certified color added",
         "synthetic food dyes",
@@ -259,7 +277,10 @@
         "CI 16035",
         "disodium 6-hydroxy-5-[(2-methoxy-5-methyl-4-sulfophenyl)azo]-2-naphthalenesulfonate",
         "Red 40 Lake",
-        "Allura Red aluminum lake"
+        "Allura Red aluminum lake",
+        "FD&C Red #40",
+        "FD&C Red 40",
+        "Red #40"
       ],
       "CUI": "C0051258",
       "risk_level": "high",
@@ -296,7 +317,10 @@
         "CI 19140",
         "trisodium 5-hydroxy-1-(4-sulfonatophenyl)-4-(4-sulfonatophenylazo)pyrazole-3-carboxylate",
         "Yellow 5 Lake",
-        "tartrazine aluminum lake"
+        "tartrazine aluminum lake",
+        "FD&C Yellow #5",
+        "FD&C Yellow 5",
+        "Yellow #5"
       ],
       "CUI": "C0039640",
       "risk_level": "high",
@@ -334,7 +358,10 @@
         "CI 15985",
         "disodium 6-hydroxy-5-[(4-sulfophenyl)azo]-2-naphthalenesulfonate",
         "Yellow 6 Lake",
-        "sunset yellow aluminum lake"
+        "sunset yellow aluminum lake",
+        "FD&C Yellow #6",
+        "FD&C Yellow 6",
+        "Yellow #6"
       ],
       "CUI": "C0075925",
       "risk_level": "high",
@@ -510,13 +537,13 @@
         "Trichlorogalactosucrose",
         "sucralose powder",
         "artificial sweetener sucralose",
-        "1,6-dichloro-1,6-dideoxy-β-D-fructofuranosyl-4-chloro-4-deoxy-α-D-galactopyranoside",
+        "1,6-dichloro-1,6-dideoxy-\u03b2-D-fructofuranosyl-4-chloro-4-deoxy-\u03b1-D-galactopyranoside",
         "TGS"
       ],
       "CUI": "C0077046",
       "risk_level": "moderate",
       "category": "sweetener_artificial",
-      "mechanism_of_harm": "Chlorinated artificial sweetener that disrupts gut microbiome composition and diversity. Inhibits farnesoid X receptor signaling and disrupts bile acid metabolism. May induce glucose intolerance and affect insulin response. Releases potentially harmful chlorinated compounds when heated above 120°C (248°F).",
+      "mechanism_of_harm": "Chlorinated artificial sweetener that disrupts gut microbiome composition and diversity. Inhibits farnesoid X receptor signaling and disrupts bile acid metabolism. May induce glucose intolerance and affect insulin response. Releases potentially harmful chlorinated compounds when heated above 120\u00b0C (248\u00b0F).",
       "regulatory_status": {
         "US": "FDA approved with ADI of 5 mg/kg body weight/day",
         "EU": "E955 approved with ADI of 15 mg/kg body weight/day",
@@ -581,6 +608,8 @@
       "aliases": [
         "glucose syrup",
         "tapioca syrup",
+        "tapioca fiber syrup",
+        "organic tapioca fiber syrup",
         "brown rice syrup",
         "corn syrup",
         "agave syrup",
@@ -592,7 +621,12 @@
         "rice syrup",
         "invert sugar syrup",
         "liquid sugar",
-        "simple syrup"
+        "simple syrup",
+        "natural syrup",
+        "yacon syrup",
+        "peruvian yacon",
+        "yacon syrup extract",
+        "blue agave"
       ],
       "CUI": "",
       "risk_level": "moderate",
@@ -615,6 +649,97 @@
         "DOI: 10.1093/ajcn/86.4.895 - Glycemic effects"
       ],
       "last_updated": "2025-11-17"
+    },
+    {
+      "id": "ADD_CORN_SYRUP_SOLIDS",
+      "standard_name": "Corn Syrup Solids",
+      "aliases": [
+        "corn syrup solids",
+        "corn syrup, solids",
+        "dried corn syrup",
+        "corn syrup powder",
+        "dehydrated corn syrup",
+        "CSS"
+      ],
+      "CUI": "",
+      "risk_level": "high",
+      "category": "high_glycemic_filler",
+      "mechanism_of_harm": "Essentially dried corn syrup - pure glucose with extremely high glycemic index (GI 100+). Causes rapid, severe blood sugar spikes. Metabolically equivalent to pure sugar. Used as cheap filler/sweetener in supplements. Contributes to insulin resistance, weight gain, and metabolic dysfunction.",
+      "regulatory_status": {
+        "US": "FDA GRAS status",
+        "EU": "Approved as food ingredient"
+      },
+      "population_warnings": [
+        "People with diabetes - Extreme blood sugar impact",
+        "People with metabolic syndrome - Worsens condition significantly",
+        "People with insulin resistance - Exacerbates the problem",
+        "Everyone - Essentially sugar, should be minimized"
+      ],
+      "notes": "HIGH RISK: Corn Syrup Solids are dehydrated corn syrup - essentially pure glucose. Has extremely high glycemic index, equivalent to eating pure sugar. Often used as cheap filler in supplements. Indicates low-quality formulation. Should be avoided especially by diabetics and those with metabolic issues.",
+      "scientific_references": [
+        "DOI: 10.1093/ajcn/86.4.895 - Glycemic effects of glucose",
+        "DOI: 10.1016/j.numecd.2019.05.062 - High GI carbohydrates and metabolic disease"
+      ],
+      "last_updated": "2025-12-04"
+    },
+    {
+      "id": "ADD_CASSAVA_DEXTRIN",
+      "standard_name": "Cassava Dextrin (Tapioca Maltodextrin)",
+      "aliases": [
+        "cassava dextrin",
+        "tapioca dextrin",
+        "cassava maltodextrin",
+        "tapioca maltodextrin",
+        "cassava starch dextrin"
+      ],
+      "CUI": "",
+      "risk_level": "moderate",
+      "category": "high_glycemic_filler",
+      "mechanism_of_harm": "Maltodextrin derived from cassava/tapioca. Same metabolic concerns as corn maltodextrin - high glycemic index (GI 85-105), causes rapid blood sugar spikes. May disrupt gut microbiome. Often marketed as 'natural' alternative but metabolically equivalent to other maltodextrins.",
+      "regulatory_status": {
+        "US": "FDA GRAS status",
+        "EU": "Approved as food additive"
+      },
+      "population_warnings": [
+        "People with diabetes - Causes blood sugar spikes",
+        "People with metabolic syndrome - Worsens insulin resistance",
+        "People with gut issues - May disrupt microbiome"
+      ],
+      "notes": "MODERATE RISK: Maltodextrin derived from cassava. Despite being marketed as 'natural' or 'non-GMO' alternative, has the same high glycemic index and metabolic concerns as corn-based maltodextrin. Used as cheap filler in supplements.",
+      "scientific_references": [
+        "DOI: 10.1038/s41586-018-0061-4 - Maltodextrin gut effects",
+        "DOI: 10.1093/ajcn/86.4.895 - Glycemic effects"
+      ],
+      "last_updated": "2025-12-04"
+    },
+    {
+      "id": "ADD_TAPIOCA_FILLER",
+      "standard_name": "Tapioca (Refined Starch Filler)",
+      "aliases": [
+        "tapioca",
+        "tapioca starch",
+        "tapioca flour",
+        "cassava starch",
+        "manioc starch"
+      ],
+      "CUI": "",
+      "risk_level": "moderate",
+      "category": "refined_starch_filler",
+      "mechanism_of_harm": "When listed simply as 'Tapioca' (not tapioca fiber), indicates refined starch used as filler. High glycemic index, causes blood sugar spikes. Provides empty calories with no nutritional benefit. Sign of low-quality supplement formulation using cheap fillers.",
+      "regulatory_status": {
+        "US": "FDA GRAS status",
+        "EU": "Approved as food ingredient"
+      },
+      "population_warnings": [
+        "People with diabetes - High glycemic impact",
+        "People with metabolic issues - Blood sugar effects",
+        "Everyone - Empty calorie filler"
+      ],
+      "notes": "MODERATE RISK: When 'Tapioca' appears as ingredient (not 'tapioca fiber'), it's typically refined starch used as cheap filler. Has high glycemic index and provides no nutritional benefit. Indicates low-quality formulation. Tapioca FIBER is different and acceptable.",
+      "scientific_references": [
+        "DOI: 10.1093/ajcn/76.1.5 - Glycemic index of starches"
+      ],
+      "last_updated": "2025-12-04"
     },
     {
       "id": "ADD_CARRAGEENAN",
@@ -903,6 +1028,9 @@
         "sugar alcohol",
         "D-sorbitol",
         "D-mannitol",
+        "D-sorbitol solution",
+        "sorbitol solution",
+        "sorbitol syrup",
         "E420",
         "E421",
         "E967",
@@ -1358,7 +1486,7 @@
         "dl-alpha tocopherol",
         "synthetic vitamin E",
         "pteroylmonoglutamic acid",
-        "all-rac-α-tocopherol",
+        "all-rac-\u03b1-tocopherol",
         "artificial vitamins",
         "synthetic folate",
         "synthetic vitamin supplements"
@@ -1893,12 +2021,17 @@
         "fd&c blue no. 1",
         "e133",
         "brilliant blue",
-        "erioglaucine"
+        "erioglaucine",
+        "FD&C Blue #1",
+        "FD&C Blue 1",
+        "FDC Blue 1",
+        "Blue #1",
+        "brilliant blue e133"
       ],
-      "risk_level": "moderate",
+      "risk_level": "high",
       "category": "artificial_colorant",
-      "notes": "Synthetic food dye derived from petroleum. Some studies suggest potential hyperactivity in children and allergic reactions. Banned in some countries. FDA approved but controversial.",
-      "last_updated": "2025-09-19"
+      "notes": "HIGH RISK: Synthetic food dye derived from petroleum. Studies link to hyperactivity in children and allergic reactions. Banned in several countries. California 2024 Food Safety Act restricts in school foods. FDA approved but increasingly controversial.",
+      "last_updated": "2025-12-04"
     },
     {
       "id": "ADD_CARMINE_RED",
@@ -1920,7 +2053,12 @@
     {
       "id": "ADD_POTASSIUM_HYDROXIDE",
       "standard_name": "Potassium Hydroxide",
-      "aliases": ["potassium hydroxide", "caustic potash", "koh", "potash lye"],
+      "aliases": [
+        "potassium hydroxide",
+        "caustic potash",
+        "koh",
+        "potash lye"
+      ],
       "risk_level": "high",
       "category": "chemical_processing_agent",
       "notes": "CRITICAL: Strong caustic alkali (lye) with corrosive properties. Not GRAS for dietary supplements. May cause severe burns, digestive damage. Should only be used in controlled food processing, not as supplement ingredient.",
@@ -1973,24 +2111,6 @@
       "last_updated": "2025-09-20"
     },
     {
-      "id": "ADD_MALTODEXTRIN",
-      "standard_name": "Maltodextrin",
-      "aliases": [
-        "maltodextrin",
-        "corn maltodextrin",
-        "wheat maltodextrin",
-        "potato maltodextrin",
-        "rice maltodextrin",
-        "tapioca maltodextrin",
-        "non-GMO maltodextrin",
-        "organic maltodextrin"
-      ],
-      "risk_level": "moderate",
-      "category": "high_glycemic_carrier",
-      "notes": "HEALTH CONCERN: High glycemic index (GI 85-105) similar to pure glucose. Can cause rapid blood sugar spikes, potentially problematic for diabetics and those with metabolic disorders. Often derived from genetically modified corn. May disrupt gut bacteria balance and contribute to inflammation. While FDA GRAS-approved, growing evidence suggests potential negative metabolic effects.",
-      "last_updated": "2025-09-20"
-    },
-    {
       "id": "ADD_SODIUM_COPPER_CHLOROPHYLLIN",
       "standard_name": "Sodium Copper Chlorophyllin",
       "aliases": [
@@ -2030,12 +2150,14 @@
         "malitol",
         "e965",
         "maltitol syrup",
-        "maltitol powder"
+        "maltitol powder",
+        "maltitol solution",
+        "malitol syrup"
       ],
-      "risk_level": "low",
+      "risk_level": "moderate",
       "category": "sugar_alcohol_digestive",
-      "notes": "LOW RISK: Sugar alcohol that can cause digestive distress including bloating, gas, and diarrhea when consumed in moderate amounts (>10g). Has laxative effects. Generally safe but may cause gastrointestinal discomfort in sensitive individuals.",
-      "last_updated": "2025-09-21"
+      "notes": "MODERATE RISK: Sugar alcohol with significant laxative effects. Causes digestive distress including bloating, gas, and diarrhea when consumed in moderate amounts (>10g). Higher GI than other sugar alcohols. Can irritate gut lining and disrupt microbiome. Particularly problematic in supplement form where doses may be concentrated.",
+      "last_updated": "2025-12-04"
     },
     {
       "id": "ADD_HYDROGENATED_STARCH_HYDROLYSATE",
@@ -2050,23 +2172,6 @@
       "category": "sugar_alcohol_digestive",
       "notes": "LOW RISK: Sugar alcohol mixture that can cause digestive issues similar to other sugar alcohols. May cause bloating, gas, and diarrhea when consumed in larger amounts. Generally recognized as safe but may cause gastrointestinal discomfort.",
       "last_updated": "2025-09-21"
-    },
-    {
-      "id": "ADD_ACESULFAME_K",
-      "standard_name": "Acesulfame K",
-      "aliases": [
-        "acesulfame potassium",
-        "ace-K",
-        "E950",
-        "Sunett",
-        "Sweet One",
-        "acesulfame k",
-        "acesulfame-K"
-      ],
-      "risk_level": "moderate",
-      "category": "sweetener_artificial",
-      "notes": "Artificial sweetener ~200x sweeter than sugar. Some studies suggest potential effects on gut microbiome and insulin response. FDA-approved but concerns remain about long-term effects.",
-      "last_updated": "2025-11-14"
     },
     {
       "id": "ADD_SACCHARIN",
@@ -2090,7 +2195,7 @@
       "aliases": [
         "E961",
         "neotame sweetener",
-        "n-[n-(3,3-dimethylbutyl)-l-α-aspartyl]-l-phenylalanine 1-methyl ester"
+        "n-[n-(3,3-dimethylbutyl)-l-\u03b1-aspartyl]-l-phenylalanine 1-methyl ester"
       ],
       "risk_level": "moderate",
       "category": "sweetener_artificial",
@@ -2100,7 +2205,10 @@
     {
       "id": "ADD_ADVANTAME",
       "standard_name": "Advantame",
-      "aliases": ["E969", "advantame sweetener"],
+      "aliases": [
+        "E969",
+        "advantame sweetener"
+      ],
       "risk_level": "moderate",
       "category": "sweetener_artificial",
       "notes": "Newest FDA-approved intense sweetener (2014), 20,000x sweeter than sugar. Limited long-term safety data. Chemically similar to aspartame and neotame.",
@@ -2138,7 +2246,12 @@
     {
       "id": "ADD_SULFUR_DIOXIDE",
       "standard_name": "Sulfur Dioxide",
-      "aliases": ["E220", "SO2", "sulfurous anhydride", "sulphur dioxide"],
+      "aliases": [
+        "E220",
+        "SO2",
+        "sulfurous anhydride",
+        "sulphur dioxide"
+      ],
       "risk_level": "high",
       "category": "preservative_artificial",
       "notes": "Preservative gas used in dried fruits and some supplements. Potent respiratory irritant. Can trigger asthma attacks and allergic reactions. Must be declared on labels.",
@@ -2147,7 +2260,13 @@
     {
       "id": "ADD_GREEN_3",
       "standard_name": "Green 3 (Fast Green FCF)",
-      "aliases": ["E143", "Fast Green", "FCF", "C.I. 42053", "food green 3"],
+      "aliases": [
+        "E143",
+        "Fast Green",
+        "FCF",
+        "C.I. 42053",
+        "food green 3"
+      ],
       "risk_level": "moderate",
       "category": "colorant_artificial",
       "notes": "Synthetic green dye. Rarely used in supplements. Some concerns about potential carcinogenicity and allergic reactions. Banned in EU.",
@@ -2156,7 +2275,10 @@
     {
       "id": "ADD_ORANGE_B",
       "standard_name": "Orange B",
-      "aliases": ["orange b dye", "disodium salt"],
+      "aliases": [
+        "orange b dye",
+        "disodium salt"
+      ],
       "risk_level": "high",
       "category": "colorant_artificial",
       "notes": "Synthetic orange dye. Restricted to use in hot dog and sausage casings only in the US. Not approved for general food use. Potential carcinogen.",
@@ -2165,7 +2287,11 @@
     {
       "id": "ADD_CITRUS_RED_2",
       "standard_name": "Citrus Red 2",
-      "aliases": ["citrus red no. 2", "solvent red 80", "C.I. 12156"],
+      "aliases": [
+        "citrus red no. 2",
+        "solvent red 80",
+        "C.I. 12156"
+      ],
       "risk_level": "high",
       "category": "colorant_artificial",
       "notes": "Synthetic orange-red dye. Restricted to coloring orange peels only. Classified as possible human carcinogen. Should not be in supplements.",
@@ -2174,7 +2300,11 @@
     {
       "id": "ADD_POLYSORBATE_40",
       "standard_name": "Polysorbate 40",
-      "aliases": ["E434", "tween 40", "polyoxyethylene sorbitan monopalmitate"],
+      "aliases": [
+        "E434",
+        "tween 40",
+        "polyoxyethylene sorbitan monopalmitate"
+      ],
       "risk_level": "moderate",
       "category": "emulsifier",
       "notes": "Synthetic emulsifier from sorbitol and palmitic acid. May affect gut microbiome. Less common than polysorbate 80 but similar concerns about potential inflammation and metabolic effects.",
@@ -2183,27 +2313,15 @@
     {
       "id": "ADD_SORBITAN_MONOSTEARATE",
       "standard_name": "Sorbitan Monostearate",
-      "aliases": ["E491", "span 60", "sorbitan stearate", "SMS"],
+      "aliases": [
+        "E491",
+        "span 60",
+        "sorbitan stearate",
+        "SMS"
+      ],
       "risk_level": "moderate",
       "category": "emulsifier",
       "notes": "Synthetic emulsifier. Generally considered safe but may affect gut barrier function and microbiome in high doses. Commonly used in softgels.",
-      "last_updated": "2025-11-14"
-    },
-    {
-      "id": "ADD_PHTHALATES",
-      "standard_name": "Phthalates",
-      "aliases": [
-        "phthalate esters",
-        "DBP",
-        "DEHP",
-        "DEP",
-        "di(2-ethylhexyl) phthalate",
-        "dibutyl phthalate",
-        "diethyl phthalate"
-      ],
-      "risk_level": "high",
-      "category": "endocrine_disruptor",
-      "notes": "Plasticizers that can leach from packaging or coating. Endocrine disruptors linked to reproductive issues, hormone disruption, and developmental problems. Should not be intentionally added but may contaminate from packaging.",
       "last_updated": "2025-11-14"
     },
     {
@@ -2224,10 +2342,14 @@
     {
       "id": "ADD_ACRYLAMIDE",
       "standard_name": "Acrylamide",
-      "aliases": ["2-propenamide", "acrylic amide", "vinyl amide"],
+      "aliases": [
+        "2-propenamide",
+        "acrylic amide",
+        "vinyl amide"
+      ],
       "risk_level": "high",
       "category": "processing_contaminant",
-      "notes": "Forms during high-temperature processing (>120°C) of carbohydrate-rich foods. Probable human carcinogen (IARC Group 2A). Not intentionally added but may contaminate processed supplement ingredients.",
+      "notes": "Forms during high-temperature processing (>120\u00b0C) of carbohydrate-rich foods. Probable human carcinogen (IARC Group 2A). Not intentionally added but may contaminate processed supplement ingredients.",
       "last_updated": "2025-11-14"
     },
     {
@@ -2263,7 +2385,11 @@
     {
       "id": "ADD_CORN_OIL",
       "standard_name": "Corn Oil (Refined)",
-      "aliases": ["refined corn oil", "maize oil", "corn oil refined"],
+      "aliases": [
+        "refined corn oil",
+        "maize oil",
+        "corn oil refined"
+      ],
       "risk_level": "moderate",
       "category": "processed_fat",
       "notes": "Highly refined oil with high omega-6 content. Often from GMO corn. Prone to oxidation. May contain pesticide residues. Prefer unrefined oils or avoid in supplements.",
@@ -2312,6 +2438,7 @@
         "corn maltodextrin",
         "wheat maltodextrin",
         "tapioca maltodextrin",
+        "potato maltodextrin",
         "resistant maltodextrin",
         "dextrin"
       ],
@@ -2562,15 +2689,281 @@
         "DOI: 10.1007/s00204-024-03456-7 - Cognitive effects 2024"
       ],
       "last_updated": "2025-11-17"
+    },
+    {
+      "id": "ADD_SODIUM_TRIPOLYPHOSPHATE",
+      "standard_name": "Sodium Tripolyphosphate",
+      "aliases": [
+        "sodium tripolyphosphate",
+        "STPP",
+        "E451",
+        "E451i",
+        "sodium triphosphate",
+        "pentasodium triphosphate",
+        "tripolyphosphate",
+        "sodium tripolyphosphate anhydrous"
+      ],
+      "risk_level": "low",
+      "category": "phosphate_additive",
+      "mechanism_of_harm": "Excessive phosphate intake can disrupt calcium-phosphorus balance, potentially affecting bone health and kidney function. High intake linked to cardiovascular concerns and accelerated aging in those with compromised kidney function. Common in processed foods contributing to overall phosphate overload.",
+      "regulatory_status": {
+        "US": "FDA GRAS for various uses",
+        "EU": "E451 - approved with ADI of 40 mg/kg body weight (as phosphorus)"
+      },
+      "population_warnings": [
+        "People with kidney disease - Cannot properly excrete phosphate",
+        "People with cardiovascular disease - May contribute to vascular calcification"
+      ],
+      "notes": "LOW RISK: Used as emulsifier, texturizer, and moisture-retention agent. Common in processed foods. Concern is cumulative phosphate intake from multiple sources. Occasional supplement use is generally safe, but indicates processed formulation.",
+      "scientific_references": [
+        "DOI: 10.1016/j.kint.2017.04.046 - Phosphate and cardiovascular disease",
+        "DOI: 10.1093/ndt/gfr268 - Dietary phosphate and CKD"
+      ],
+      "last_updated": "2025-12-04"
+    },
+    {
+      "id": "ADD_TETRASODIUM_DIPHOSPHATE",
+      "standard_name": "Tetrasodium Diphosphate",
+      "aliases": [
+        "tetrasodium diphosphate",
+        "tetrasodium pyrophosphate",
+        "TSPP",
+        "E450iii",
+        "E450",
+        "sodium pyrophosphate",
+        "tetrasodium pyrophosphate decahydrate",
+        "diphosphoric acid tetrasodium salt"
+      ],
+      "risk_level": "low",
+      "category": "phosphate_additive",
+      "mechanism_of_harm": "Similar to other phosphate additives - contributes to cumulative phosphate intake which can disrupt mineral balance. May affect calcium absorption and bone metabolism with chronic high exposure. Generally less concerning than tripolyphosphate but still a processed food marker.",
+      "regulatory_status": {
+        "US": "FDA GRAS",
+        "EU": "E450 - approved with combined phosphate ADI"
+      },
+      "population_warnings": [
+        "People with kidney disease - Phosphate excretion impaired",
+        "People with osteoporosis - May affect calcium-phosphorus ratio"
+      ],
+      "notes": "LOW RISK: Used as emulsifier, buffering agent, and sequestrant. Found in processed cheeses, canned foods, and some supplements. Indicates processed formulation. Occasional exposure is generally safe.",
+      "scientific_references": [
+        "DOI: 10.1007/s00394-019-01961-2 - Food phosphate additives and health",
+        "DOI: 10.3390/nu12092798 - Phosphate additives review"
+      ],
+      "last_updated": "2025-12-04"
+    },
+    {
+      "id": "ADD_ARTIFICIAL_FLAVORS",
+      "standard_name": "Artificial Flavors",
+      "aliases": [
+        "artificial flavor",
+        "artificial flavors",
+        "artificial flavoring",
+        "artificial flavorings",
+        "artificial coffee flavor",
+        "artificial coffee flavors",
+        "artificial raspberry flavor",
+        "artificial raspberry flavors",
+        "artificial blueberry flavor",
+        "artificial strawberry flavor",
+        "artificial vanilla flavor",
+        "artificial fruit flavor",
+        "synthetic flavor",
+        "synthetic flavoring"
+      ],
+      "CUI": "",
+      "risk_level": "high",
+      "category": "synthetic_additive",
+      "mechanism_of_harm": "Synthetic chemicals designed to mimic natural flavors. May contain undisclosed proprietary compounds. Some artificial flavors linked to allergic reactions, headaches, and behavioral issues. Lack of transparency about exact ingredients. Indicates heavily processed formulation. Studies link some synthetic flavorings to potential endocrine disruption.",
+      "regulatory_status": {
+        "US": "FDA approved under GRAS with minimal disclosure requirements",
+        "EU": "Approved with labeling requirements"
+      },
+      "population_warnings": [
+        "People with chemical sensitivities - May trigger reactions",
+        "Children - Some linked to behavioral effects",
+        "People with allergies - Unknown allergen potential",
+        "Everyone - Poor transparency indicator"
+      ],
+      "notes": "HIGH RISK: Synthetic flavoring agents that indicate processed, low-quality formulation. Exact chemical composition often undisclosed (proprietary). Some studies link artificial flavors to allergic reactions, headaches, and hyperactivity. Prefer supplements using natural flavors or no added flavoring.",
+      "scientific_references": [
+        "DOI: 10.1016/j.fct.2016.01.017 - Synthetic flavor safety review",
+        "DOI: 10.1016/j.toxlet.2017.11.023 - Flavor chemical toxicity"
+      ],
+      "last_updated": "2025-12-04"
+    },
+    {
+      "id": "ADD_DEXTROSE",
+      "standard_name": "Dextrose",
+      "aliases": [
+        "dextrose",
+        "glucose",
+        "corn glucose",
+        "grape sugar"
+      ],
+      "CUI": "",
+      "risk_level": "moderate",
+      "category": "sweetener",
+      "mechanism_of_harm": "Rapidly absorbed glucose that spikes blood sugar and insulin. Excess intake contributes to metabolic dysfunction and dental caries.",
+      "regulatory_status": {
+        "US": "FDA GRAS status"
+      },
+      "population_warnings": [
+        "People with diabetes - Raises blood glucose quickly",
+        "People with metabolic syndrome - Contributes to insulin resistance",
+        "Everyone - Limit added sugars"
+      ],
+      "notes": "Simple glucose used as an added sugar and filler. High glycemic impact.",
+      "scientific_references": [],
+      "last_updated": "2026-01-04"
+    },
+    {
+      "id": "ADD_SORBITOL",
+      "standard_name": "Sorbitol",
+      "aliases": [
+        "sorbitol",
+        "sorbitol syrup",
+        "D-sorbitol",
+        "E420"
+      ],
+      "CUI": "",
+      "risk_level": "moderate",
+      "category": "sugar_alcohol",
+      "mechanism_of_harm": "Sugar alcohol that can cause GI distress (bloating, gas, diarrhea) at higher intakes. Lower glycemic impact but not zero.",
+      "regulatory_status": {
+        "US": "FDA GRAS status",
+        "EU": "E420 approved"
+      },
+      "population_warnings": [
+        "People with IBS or sensitive digestion - May cause GI symptoms",
+        "Children - More sensitive to sugar alcohols"
+      ],
+      "notes": "Common sugar alcohol sweetener. Lower glycemic impact than sugar but can cause GI effects.",
+      "scientific_references": [],
+      "last_updated": "2026-01-04"
+    },
+    {
+      "id": "ADD_MALTOTAME",
+      "standard_name": "Maltotame",
+      "aliases": [
+        "maltotame"
+      ],
+      "CUI": "",
+      "risk_level": "moderate",
+      "category": "sweetener_artificial",
+      "mechanism_of_harm": "High-intensity artificial sweetener. Limited dietary prevalence but still an added sweetener with potential taste and metabolic effects.",
+      "regulatory_status": {
+        "US": "FDA approved as sweetener"
+      },
+      "population_warnings": [
+        "People limiting artificial sweeteners - Avoid or minimize"
+      ],
+      "notes": "Very high-intensity sweetener used in small amounts. Treated as artificial sweetener for scoring.",
+      "scientific_references": [],
+      "last_updated": "2026-01-04"
+    },
+    {
+      "id": "ADD_THAUMATIN",
+      "standard_name": "Thaumatin",
+      "aliases": [
+        "thaumatin",
+        "thaumatin protein",
+        "E957"
+      ],
+      "CUI": "",
+      "risk_level": "low",
+      "category": "sweetener_natural",
+      "mechanism_of_harm": "Sweet-tasting protein used at very low levels. Generally well-tolerated; primary concern is added sweetness rather than toxicity.",
+      "regulatory_status": {
+        "EU": "E957 approved",
+        "US": "GRAS status"
+      },
+      "population_warnings": [
+        "People avoiding sweeteners - Note presence"
+      ],
+      "notes": "Sweet protein used as a flavor enhancer/sweetener. Low risk but still an added sweetener.",
+      "scientific_references": [],
+      "last_updated": "2026-01-04"
+    },
+    {
+      "id": "ADD_MALTOL",
+      "standard_name": "Maltol",
+      "aliases": [
+        "maltol",
+        "3-hydroxy-2-methyl-4H-pyran-4-one"
+      ],
+      "CUI": "",
+      "risk_level": "low",
+      "category": "flavor_enhancer",
+      "mechanism_of_harm": "Flavor enhancer used in small amounts. Primary concern is processed flavoring, not direct toxicity.",
+      "regulatory_status": {
+        "US": "FDA approved flavoring"
+      },
+      "population_warnings": [
+        "People avoiding artificial flavor enhancers - Note presence"
+      ],
+      "notes": "Used to enhance sweetness and flavor perception. Treat as a processed flavor additive.",
+      "scientific_references": [],
+      "last_updated": "2026-01-04"
+    },
+    {
+      "id": "ADD_UNSPECIFIED_COLORS",
+      "standard_name": "Unspecified Colors",
+      "aliases": [
+        "red color",
+        "purple color",
+        "yellow color",
+        "blue color",
+        "green color",
+        "color",
+        "colors"
+      ],
+      "CUI": "",
+      "risk_level": "low",
+      "category": "color_unspecified",
+      "mechanism_of_harm": "Lack of disclosure: color source is not specified, which reduces transparency and can mask artificial dye use.",
+      "regulatory_status": {
+        "US": "Allowed but should disclose color source when applicable"
+      },
+      "population_warnings": [
+        "People avoiding artificial dyes - Source is unclear"
+      ],
+      "notes": "Low-severity flag for unspecified color listings. Penalize lightly unless explicit dye tokens indicate artificial colorants.",
+      "scientific_references": [],
+      "last_updated": "2026-01-04"
     }
   ],
   "_metadata": {
-    "description": "Harmful additives database with risk levels and scoring penalties",
-    "purpose": "quality_penalties",
-    "total_entries": 96,
     "schema_version": "2.0",
-    "last_updated": "2025-11-17",
-    "schema_enhancements": "Added CUI fields, mechanism_of_harm, regulatory_status, population_warnings, scientific_references",
-    "recent_updates": "Comprehensive 2024-2025 audit: Updated risk levels (Carrageenan→HIGH, Polysorbate 80→HIGH, Sodium Benzoate→HIGH, Erythritol→MODERATE, Cupric Sulfate→LOW, Sugar Alcohols→MODERATE), added 8 new harmful additives, expanded aliases 200+, updated all health concerns with latest research. REMOVED Red 3 (moved to banned_recalled_ingredients.json as it is now completely banned by FDA)."
+    "fields": {
+      "id": "Unique identifier for the additive",
+      "standard_name": "Common name for the additive",
+      "aliases": "Alternative names, E-numbers, chemical names for matching",
+      "risk_level": "critical | high | moderate | low",
+      "category": "Classification of additive type",
+      "mechanism_of_harm": "Scientific explanation of how the additive causes harm",
+      "regulatory_status": "Approval status in US, EU, and other jurisdictions",
+      "population_warnings": "Specific populations at higher risk",
+      "notes": "Additional context and recent research findings",
+      "scientific_references": "DOIs and citations for claims",
+      "last_updated": "Date of last review"
+    },
+    "risk_breakdown": {
+      "moderate": 48,
+      "high": 44,
+      "low": 11,
+      "critical": 2
+    },
+    "total_entries": 105,
+    "categories_count": 54,
+    "pipeline_integration": "Used by enrichment script to apply penalty points for harmful ingredients during scoring. Matches against ingredient names and other_ingredient forms.",
+    "sources": [
+      "FDA Food Additive Status List",
+      "EFSA Scientific Opinions",
+      "IARC Carcinogenicity Classifications",
+      "WHO JECFA Evaluations",
+      "California Prop 65",
+      "PubMed peer-reviewed studies (DOIs provided per entry)"
+    ]
   }
 }

@@ -1,10 +1,10 @@
 {
   "database_info": {
-    "version": "1.1.0",
-    "last_updated": "2025-09-05",
+    "version": "1.2.0",
+    "last_updated": "2026-01-05",
     "data_source": "Clinical research, meta-analyses, standard therapeutic guidelines",
     "purpose": "Provide therapeutic dosing ranges for dietary supplement ingredients not covered by traditional RDA/UL standards.",
-    "total_entries": 32
+    "total_entries": 44
   },
   "therapeutic_dosing": [
     {
@@ -512,6 +512,210 @@
       "upper_limit_notes": "Pure L-citrulline form, more concentrated than citrulline malate. May cause mild GI upset at higher doses.",
       "evidence_tier": 1,
       "id": "l_citrulline"
+    },
+    {
+      "standard_name": "PQQ (Pyrroloquinoline Quinone)",
+      "aliases": [
+        "pqq",
+        "pyrroloquinoline quinone",
+        "biopqq",
+        "methoxatin"
+      ],
+      "unit": "mg",
+      "common_use": "Mitochondrial biogenesis, cognitive function, cellular energy",
+      "typical_dosing_range": "10-20",
+      "common_serving_size": "20",
+      "upper_limit": "40",
+      "upper_limit_notes": "Clinical trials use 20-21.5mg/day. Higher doses not well studied. Often combined with CoQ10 for synergy.",
+      "evidence_tier": 2,
+      "id": "pqq_pyrroloquinoline_quinone"
+    },
+    {
+      "standard_name": "Phosphatidylserine",
+      "aliases": [
+        "phosphatidylserine",
+        "ps",
+        "ps-100"
+      ],
+      "unit": "mg",
+      "common_use": "Cognitive function, memory, cortisol reduction, athletic recovery",
+      "typical_dosing_range": "100-300",
+      "common_serving_size": "100",
+      "upper_limit": "600",
+      "upper_limit_notes": "Standard dose is 100mg 3x daily. Soy and sunflower-derived forms available. May affect blood thinners.",
+      "evidence_tier": 1,
+      "id": "phosphatidylserine"
+    },
+    {
+      "standard_name": "Ginkgo Biloba Extract",
+      "aliases": [
+        "ginkgo biloba",
+        "ginkgo",
+        "egb 761",
+        "ginkgo extract"
+      ],
+      "unit": "mg",
+      "common_use": "Cognitive function, circulation, memory, tinnitus",
+      "typical_dosing_range": "120-240",
+      "common_serving_size": "120",
+      "upper_limit": "240",
+      "upper_limit_notes": "EGb 761 is standardized extract used in clinical trials. Doses >240mg may increase bleeding risk. Avoid with blood thinners.",
+      "evidence_tier": 1,
+      "id": "ginkgo_biloba_extract"
+    },
+    {
+      "standard_name": "Astaxanthin",
+      "aliases": [
+        "astaxanthin",
+        "haematococcus pluvialis",
+        "astareal",
+        "astazine"
+      ],
+      "unit": "mg",
+      "common_use": "Antioxidant, skin health, eye health, exercise recovery, anti-inflammatory",
+      "typical_dosing_range": "4-12",
+      "common_serving_size": "6",
+      "upper_limit": "24",
+      "upper_limit_notes": "Fat-soluble carotenoid. Take with food. High doses may cause orange/red skin tint. Safe up to 24mg/day in studies.",
+      "evidence_tier": 1,
+      "id": "astaxanthin"
+    },
+    {
+      "standard_name": "HMB (Beta-Hydroxy-Beta-Methylbutyrate)",
+      "aliases": [
+        "hmb",
+        "beta-hydroxy-beta-methylbutyrate",
+        "hmb-ca",
+        "hmb-fa",
+        "calcium hmb"
+      ],
+      "unit": "g",
+      "common_use": "Muscle preservation, anti-catabolic, exercise recovery, sarcopenia prevention",
+      "typical_dosing_range": "3",
+      "common_serving_size": "3",
+      "upper_limit": "6",
+      "upper_limit_notes": "Standard dose is 3g/day (1g 3x daily). HMB-FA form works faster (30-60min pre-workout) vs HMB-Ca (60-120min).",
+      "evidence_tier": 1,
+      "id": "hmb_beta_hydroxy_beta_methylbutyrate"
+    },
+    {
+      "standard_name": "Black Seed Oil (Nigella Sativa)",
+      "aliases": [
+        "black seed oil",
+        "nigella sativa",
+        "black cumin seed oil",
+        "kalonji oil",
+        "thymoquinone"
+      ],
+      "unit": "mg",
+      "common_use": "Immune support, blood sugar regulation, anti-inflammatory, lipid support",
+      "typical_dosing_range": "500-2000",
+      "common_serving_size": "1000",
+      "upper_limit": "3000",
+      "upper_limit_notes": "Active compound is thymoquinone. May lower blood pressure and blood sugar. Caution with anticoagulants.",
+      "evidence_tier": 2,
+      "id": "black_seed_oil_nigella_sativa"
+    },
+    {
+      "standard_name": "Maca Root Extract",
+      "aliases": [
+        "maca",
+        "maca root",
+        "lepidium meyenii",
+        "peruvian ginseng"
+      ],
+      "unit": "mg",
+      "common_use": "Energy, libido, hormonal balance, adaptogenic stress support",
+      "typical_dosing_range": "1500-3000",
+      "common_serving_size": "2000",
+      "upper_limit": "5000",
+      "upper_limit_notes": "Studies use 1.5-3g daily for 6-16 weeks. Does not directly affect hormone levels. Different colors (red, black, yellow) may have different effects.",
+      "evidence_tier": 2,
+      "id": "maca_root_extract"
+    },
+    {
+      "standard_name": "Milk Thistle (Silymarin)",
+      "aliases": [
+        "milk thistle",
+        "silymarin",
+        "silybum marianum",
+        "silybin"
+      ],
+      "unit": "mg",
+      "common_use": "Liver support, hepatoprotective, detoxification, antioxidant",
+      "typical_dosing_range": "140-420",
+      "common_serving_size": "140",
+      "upper_limit": "800",
+      "upper_limit_notes": "Standard dose is 140mg 2-3x daily. Phospholipid-bound forms (phytosome) have better bioavailability. Safe for long-term use.",
+      "evidence_tier": 1,
+      "id": "milk_thistle_silymarin"
+    },
+    {
+      "standard_name": "SAM-e (S-Adenosyl Methionine)",
+      "aliases": [
+        "sam-e",
+        "same",
+        "s-adenosyl methionine",
+        "ademethionine"
+      ],
+      "unit": "mg",
+      "common_use": "Mood support, depression, joint health, liver function, methylation support",
+      "typical_dosing_range": "400-1600",
+      "common_serving_size": "400",
+      "upper_limit": "1600",
+      "upper_limit_notes": "Take on empty stomach. Enteric-coated preferred. AVOID with bipolar disorder (may trigger mania). May interact with antidepressants.",
+      "evidence_tier": 1,
+      "id": "sam_e_s_adenosyl_methionine"
+    },
+    {
+      "standard_name": "Cordyceps Mushroom Extract",
+      "aliases": [
+        "cordyceps",
+        "cordyceps sinensis",
+        "cordyceps militaris",
+        "cs-4"
+      ],
+      "unit": "mg",
+      "common_use": "Athletic performance, energy, respiratory function, immune support",
+      "typical_dosing_range": "1000-3000",
+      "common_serving_size": "1500",
+      "upper_limit": "6000",
+      "upper_limit_notes": "Militaris strain more sustainable than wild sinensis. CS-4 is cultured mycelium. Take before exercise for performance benefits.",
+      "evidence_tier": 2,
+      "id": "cordyceps_mushroom_extract"
+    },
+    {
+      "standard_name": "Reishi Mushroom Extract",
+      "aliases": [
+        "reishi",
+        "ganoderma lucidum",
+        "lingzhi",
+        "reishi mushroom"
+      ],
+      "unit": "mg",
+      "common_use": "Immune modulation, sleep support, stress reduction, adaptogenic",
+      "typical_dosing_range": "1000-3000",
+      "common_serving_size": "1500",
+      "upper_limit": "5000",
+      "upper_limit_notes": "Best taken in evening for sleep benefits. Dual-extraction (water + alcohol) captures more compounds. May affect blood clotting.",
+      "evidence_tier": 2,
+      "id": "reishi_mushroom_extract"
+    },
+    {
+      "standard_name": "Taurine",
+      "aliases": [
+        "taurine",
+        "l-taurine",
+        "2-aminoethanesulfonic acid"
+      ],
+      "unit": "g",
+      "common_use": "Heart health, exercise performance, antioxidant, electrolyte balance, GABA support",
+      "typical_dosing_range": "1-3",
+      "common_serving_size": "1",
+      "upper_limit": "6",
+      "upper_limit_notes": "Conditionally essential amino acid. Safe up to 6g/day in studies. May support longevity per recent research. Take with food.",
+      "evidence_tier": 1,
+      "id": "taurine"
     }
   ],
   "_metadata": {

@@ -67,14 +67,19 @@
         "ashwagandha",
         "l-tryptophan",
         "tryptophan",
-        "apigenin"
+        "apigenin",
+        "glycine",
+        "tart cherry",
+        "reishi",
+        "cbd"
       ],
       "min_effective_doses": {
         "melatonin": 0.5,
         "magnesium": 100,
         "l-theanine": 100,
         "gaba": 100,
-        "apigenin": 50
+        "apigenin": 50,
+        "glycine": 3000
       },
       "evidence_tier": 1
     },
@@ -404,13 +409,20 @@
         "phosphatidylserine",
         "huperzine a",
         "vinpocetine",
-        "caffeine"
+        "caffeine",
+        "pqq",
+        "pyrroloquinoline quinone",
+        "noopept",
+        "uridine",
+        "omega-3",
+        "dha"
       ],
       "min_effective_doses": {
         "bacopa": 300,
         "alpha-gpc": 300,
         "lion's mane": 500,
-        "ginkgo biloba": 120
+        "ginkgo biloba": 120,
+        "pqq": 10
       },
       "evidence_tier": 1
     },
@@ -625,7 +637,9 @@
         "silica",
         "vitamin c",
         "ipriflavone",
-        "phosphorus"
+        "phosphorus",
+        "mk-4",
+        "osteocalcin"
       ],
       "min_effective_doses": {
         "calcium": 500,
@@ -633,7 +647,8 @@
         "vitamin k2": 90,
         "magnesium": 200
       },
-      "evidence_tier": 1
+      "evidence_tier": 1,
+      "synergy_mechanism": "Calcium provides building blocks; Vitamin D enhances absorption; K2 (MK-7) activates osteocalcin to deposit calcium in bones; Magnesium is cofactor for vitamin D activation."
     },
     {
       "name": "Iron Absorption",
@@ -910,23 +925,32 @@
       "name": "Longevity and Anti-Aging",
       "id": "longevity_and_anti_aging",
       "ingredients": [
+        "astaxanthin",
+        "pterostilbene",
+        "nr",
+        "quercetin",
+        "nicotinamide riboside",
+        "ergothioneine",
         "resveratrol",
         "nmn",
         "nicotinamide mononucleotide",
-        "nr",
-        "nicotinamide riboside",
-        "pterostilbene",
         "fisetin",
-        "quercetin",
-        "spermidine"
+        "spermidine",
+        "coq10",
+        "ubiquinol",
+        "urolithin a",
+        "alpha-lipoic acid",
+        "nad+"
       ],
       "min_effective_doses": {
         "resveratrol": 250,
         "nmn": 250,
         "fisetin": 100,
-        "quercetin": 500
+        "quercetin": 500,
+        "astaxanthin": 6
       },
-      "evidence_tier": 2
+      "evidence_tier": 2,
+      "synergy_mechanism": "Senolytics (fisetin, quercetin) clear senescent cells. NAD+ precursors (NMN, NR) support cellular energy. Resveratrol activates sirtuins. Spermidine promotes autophagy."
     },
     {
       "name": "Probiotic and Gut Health",
@@ -1149,13 +1173,375 @@
         "chromium": 200
       },
       "evidence_tier": 1
+    },
+    {
+      "name": "Vitamin D + K2 Calcium Synergy",
+      "id": "vitamin_d_k2_calcium_synergy",
+      "ingredients": [
+        "vitamin d",
+        "vitamin d3",
+        "cholecalciferol",
+        "vitamin k2",
+        "mk-7",
+        "mk-4",
+        "menaquinone",
+        "calcium",
+        "calcium citrate",
+        "calcium carbonate",
+        "magnesium",
+        "magnesium glycinate",
+        "boron"
+      ],
+      "min_effective_doses": {
+        "vitamin d3": 1000,
+        "vitamin k2": 90,
+        "calcium": 500,
+        "magnesium": 200
+      },
+      "synergy_mechanism": "Vitamin D enhances calcium absorption; K2 directs calcium to bones (via osteocalcin) and away from arteries (via matrix Gla-protein). Prevents soft tissue calcification.",
+      "evidence_tier": 1
+    },
+    {
+      "name": "Omega-3 Absorption Enhancement",
+      "id": "omega_3_absorption_enhancement",
+      "ingredients": [
+        "omega-3",
+        "fish oil",
+        "epa",
+        "dha",
+        "krill oil",
+        "phospholipids",
+        "phosphatidylcholine",
+        "astaxanthin",
+        "vitamin e",
+        "alpha-tocopherol",
+        "lecithin",
+        "lipase"
+      ],
+      "min_effective_doses": {
+        "omega-3": 1000,
+        "phosphatidylcholine": 500,
+        "astaxanthin": 4
+      },
+      "synergy_mechanism": "Phospholipid-bound omega-3s have 10x better absorption than ethyl esters. Astaxanthin protects omega-3s from oxidation. Take with fat for optimal absorption.",
+      "evidence_tier": 1
+    },
+    {
+      "name": "Collagen Synthesis Support",
+      "id": "collagen_synthesis_support",
+      "ingredients": [
+        "vitamin c",
+        "ascorbic acid",
+        "lysine",
+        "l-lysine",
+        "proline",
+        "l-proline",
+        "hydroxyproline",
+        "glycine",
+        "copper",
+        "copper bisglycinate",
+        "silica",
+        "silicon",
+        "bamboo extract",
+        "collagen peptides",
+        "type i collagen",
+        "type ii collagen",
+        "type iii collagen",
+        "hyaluronic acid",
+        "zinc"
+      ],
+      "min_effective_doses": {
+        "vitamin c": 500,
+        "lysine": 500,
+        "proline": 500,
+        "copper": 1
+      },
+      "synergy_mechanism": "Vitamin C is essential cofactor for prolyl and lysyl hydroxylase (collagen synthesis enzymes). Copper enables cross-linking via lysyl oxidase. Lysine/proline are primary collagen amino acids.",
+      "evidence_tier": 1
+    },
+    {
+      "name": "Respiratory Health & Lung Support",
+      "id": "respiratory_health_lung_support",
+      "ingredients": [
+        "nac",
+        "n-acetyl cysteine",
+        "n-acetylcysteine",
+        "quercetin",
+        "vitamin c",
+        "ascorbic acid",
+        "zinc",
+        "zinc picolinate",
+        "vitamin d",
+        "vitamin d3",
+        "bromelain",
+        "elderberry",
+        "sambucus",
+        "cordyceps",
+        "mullein",
+        "ivy leaf extract",
+        "pelargonium sidoides"
+      ],
+      "min_effective_doses": {
+        "nac": 600,
+        "quercetin": 500,
+        "vitamin c": 500,
+        "zinc": 15
+      },
+      "synergy_mechanism": "NAC is mucolytic and boosts glutathione. Quercetin has antiviral properties enhanced by vitamin C (which recycles quercetin). Zinc supports immune function. Bromelain reduces inflammation.",
+      "evidence_tier": 1
+    },
+    {
+      "name": "Urinary Tract Health",
+      "id": "urinary_tract_health",
+      "ingredients": [
+        "d-mannose",
+        "cranberry",
+        "cranberry extract",
+        "pacran",
+        "cran-max",
+        "hibiscus",
+        "uva ursi",
+        "probiotics",
+        "lactobacillus",
+        "vitamin c",
+        "ascorbic acid"
+      ],
+      "min_effective_doses": {
+        "d-mannose": 2000,
+        "cranberry extract": 500,
+        "vitamin c": 500
+      },
+      "synergy_mechanism": "D-mannose binds to E. coli preventing adhesion. Cranberry proanthocyanidins (PACs) prevent bacterial adhesion. Vitamin C acidifies urine. Probiotics support healthy urogenital flora.",
+      "evidence_tier": 1
+    },
+    {
+      "name": "Prostate Health",
+      "id": "prostate_health",
+      "ingredients": [
+        "saw palmetto",
+        "serenoa repens",
+        "beta-sitosterol",
+        "plant sterols",
+        "pygeum",
+        "pygeum africanum",
+        "nettle root",
+        "stinging nettle",
+        "zinc",
+        "zinc picolinate",
+        "lycopene",
+        "pumpkin seed oil",
+        "pumpkin seed extract",
+        "selenium",
+        "vitamin d",
+        "vitamin d3",
+        "green tea extract",
+        "egcg"
+      ],
+      "min_effective_doses": {
+        "saw palmetto": 320,
+        "beta-sitosterol": 60,
+        "zinc": 15,
+        "lycopene": 10
+      },
+      "synergy_mechanism": "Saw palmetto inhibits 5-alpha reductase. Beta-sitosterol supports urinary flow. Zinc is highly concentrated in prostate tissue. Lycopene is a prostate-specific antioxidant.",
+      "evidence_tier": 2
+    },
+    {
+      "name": "Focus & Attention Support",
+      "id": "focus_attention_support",
+      "ingredients": [
+        "omega-3",
+        "dha",
+        "epa",
+        "fish oil",
+        "phosphatidylserine",
+        "ps",
+        "zinc",
+        "zinc picolinate",
+        "iron",
+        "iron bisglycinate",
+        "magnesium",
+        "magnesium threonate",
+        "l-theanine",
+        "theanine",
+        "caffeine",
+        "bacopa",
+        "bacopa monnieri",
+        "ginkgo biloba",
+        "citicoline",
+        "cdp-choline",
+        "cognizin"
+      ],
+      "min_effective_doses": {
+        "dha": 500,
+        "phosphatidylserine": 100,
+        "zinc": 15,
+        "iron": 10
+      },
+      "synergy_mechanism": "DHA is critical for brain cell membranes. Phosphatidylserine supports neurotransmitter function. Zinc and iron deficiencies are linked to attention issues. L-theanine + caffeine enhance focus synergistically.",
+      "evidence_tier": 1
+    },
+    {
+      "name": "Menopause & Perimenopause Support",
+      "id": "menopause_perimenopause_support",
+      "ingredients": [
+        "black cohosh",
+        "cimicifuga racemosa",
+        "red clover",
+        "isoflavones",
+        "evening primrose oil",
+        "gamma-linolenic acid",
+        "gla",
+        "maca",
+        "lepidium meyenii",
+        "sage",
+        "salvia officinalis",
+        "dong quai",
+        "shatavari",
+        "vitamin e",
+        "magnesium",
+        "vitamin b6",
+        "p5p",
+        "soy isoflavones",
+        "genistein"
+      ],
+      "min_effective_doses": {
+        "black cohosh": 40,
+        "red clover": 40,
+        "maca": 2000,
+        "evening primrose oil": 500
+      },
+      "synergy_mechanism": "Black cohosh and red clover provide phytoestrogens for hot flash relief. Evening primrose supports hormonal balance. Sage specifically targets hot flashes and night sweats. Maca supports overall hormonal adaptation.",
+      "evidence_tier": 2
+    },
+    {
+      "name": "Prenatal & Pregnancy Support",
+      "id": "prenatal_pregnancy_support",
+      "ingredients": [
+        "folate",
+        "folic acid",
+        "methylfolate",
+        "5-mthf",
+        "quatrefolic",
+        "iron",
+        "iron bisglycinate",
+        "vitamin b12",
+        "methylcobalamin",
+        "vitamin d",
+        "vitamin d3",
+        "dha",
+        "omega-3",
+        "choline",
+        "iodine",
+        "zinc",
+        "calcium",
+        "vitamin b6"
+      ],
+      "min_effective_doses": {
+        "folate": 600,
+        "iron": 27,
+        "dha": 200,
+        "choline": 450,
+        "iodine": 150
+      },
+      "synergy_mechanism": "Folate prevents neural tube defects. Iron supports increased blood volume. DHA is critical for fetal brain/eye development. Choline supports neural development. Iodine supports thyroid and fetal brain development.",
+      "evidence_tier": 1
+    },
+    {
+      "name": "Nerve Health & Neuropathy Support",
+      "id": "nerve_health_neuropathy_support",
+      "ingredients": [
+        "b-complex",
+        "b vitamins",
+        "vitamin b1",
+        "thiamine",
+        "benfotiamine",
+        "vitamin b6",
+        "p5p",
+        "pyridoxal-5-phosphate",
+        "vitamin b12",
+        "methylcobalamin",
+        "alpha-lipoic acid",
+        "ala",
+        "r-lipoic acid",
+        "acetyl-l-carnitine",
+        "alcar",
+        "magnesium",
+        "omega-3",
+        "dha",
+        "lion's mane",
+        "hericium erinaceus"
+      ],
+      "min_effective_doses": {
+        "benfotiamine": 150,
+        "alpha-lipoic acid": 300,
+        "vitamin b12": 1000,
+        "acetyl-l-carnitine": 500
+      },
+      "synergy_mechanism": "B vitamins (especially B1, B6, B12) are essential for nerve function. Alpha-lipoic acid is proven for diabetic neuropathy. Acetyl-L-carnitine supports nerve regeneration. Benfotiamine has superior bioavailability for nerve tissue.",
+      "evidence_tier": 1
+    },
+    {
+      "name": "Histamine & Allergy Support",
+      "id": "histamine_allergy_support",
+      "ingredients": [
+        "quercetin",
+        "vitamin c",
+        "ascorbic acid",
+        "bromelain",
+        "stinging nettle",
+        "urtica dioica",
+        "butterbur",
+        "petasites hybridus",
+        "n-acetyl cysteine",
+        "nac",
+        "vitamin d",
+        "vitamin d3",
+        "probiotics",
+        "dao",
+        "diamine oxidase"
+      ],
+      "min_effective_doses": {
+        "quercetin": 500,
+        "vitamin c": 1000,
+        "bromelain": 500,
+        "stinging nettle": 300
+      },
+      "synergy_mechanism": "Quercetin stabilizes mast cells and inhibits histamine release. Vitamin C is a natural antihistamine and enhances quercetin. Bromelain improves quercetin absorption. DAO enzyme breaks down dietary histamine.",
+      "evidence_tier": 2
+    },
+    {
+      "name": "Kidney Health Support",
+      "id": "kidney_health_support",
+      "ingredients": [
+        "astragalus",
+        "astragalus membranaceus",
+        "cordyceps",
+        "alpha-lipoic acid",
+        "omega-3",
+        "fish oil",
+        "coq10",
+        "ubiquinol",
+        "vitamin d",
+        "vitamin d3",
+        "probiotics",
+        "potassium citrate"
+      ],
+      "min_effective_doses": {
+        "astragalus": 500,
+        "omega-3": 1000,
+        "coq10": 100,
+        "vitamin d": 1000
+      },
+      "synergy_mechanism": "Astragalus and cordyceps have nephroprotective properties. Omega-3s reduce inflammation. CoQ10 supports mitochondrial function in kidney cells. Alpha-lipoic acid provides antioxidant protection.",
+      "evidence_tier": 2
     }
   ],
   "_metadata": {
     "description": "Ingredient synergy clusters for bonus scoring when complementary ingredients are combined",
     "purpose": "synergy_bonuses",
-    "total_entries": 42,
-    "schema_version": "1.0",
-    "last_updated": "2025-11-14"
+    "total_entries": 54,
+    "schema_version": "1.1",
+    "last_updated": "2026-01-05"
   }
 }
