@@ -84,7 +84,7 @@ class DSLDValidator:
             elif len(missing_important) > 1 or (missing_important and quality_issues):
                 # Multiple missing important fields OR combination of issues = needs review
                 status = STATUS_NEEDS_REVIEW
-            elif missing_important and missing_important[0] != "upcSku":
+            elif missing_important and "upcSku" not in missing_important:
                 # Missing important field other than UPC = needs review
                 status = STATUS_NEEDS_REVIEW
             elif quality_issues and quality_issues != ["invalid_upc_sku_format"]:
@@ -101,13 +101,29 @@ class DSLDValidator:
             logger.error(f"Validation error: {str(e)}")
             return STATUS_ERROR, [], {"error": str(e)}
     
+    # Placeholder values that should be treated as missing for critical identity fields
+    PLACEHOLDER_VALUES = {
+        "delete", "unknown", "n/a", "na", "null", "not applicable",
+        "none", "unspecified", "not specified", "nil", "empty",
+        "-", "--", "___", "tbd", "todo", "placeholder"
+    }
+
+    # Fields where placeholder detection should be applied
+    IDENTITY_FIELDS = {"fullName", "brandName", "productVersionCode", "upcSku"}
+
     def _check_fields(self, data: Dict[str, Any], required_fields: Set[str]) -> List[str]:
-        """Check which required fields are missing or empty"""
+        """Check which required fields are missing, empty, or contain placeholder values"""
         missing = []
         for field in required_fields:
             value = data.get(field)
+            # Check for None or empty values
             if value is None or (isinstance(value, (str, list, dict)) and not value):
                 missing.append(field)
+            # Check for placeholder values in identity fields
+            elif field in self.IDENTITY_FIELDS and isinstance(value, str):
+                normalized_value = value.strip().lower()
+                if normalized_value in self.PLACEHOLDER_VALUES:
+                    missing.append(field)
         return missing
     
     def _check_data_quality(self, data: Dict[str, Any]) -> List[str]:
@@ -130,38 +146,64 @@ class DSLDValidator:
         return list(set(issues))  # Remove duplicates
     
     @staticmethod
+    def normalize_upc(upc_sku: str) -> Tuple[str, str]:
+        """
+        C1: Normalize UPC/SKU for consistent storage and comparison.
+
+        Args:
+            upc_sku: Raw UPC or SKU string
+
+        Returns:
+            Tuple of (raw_upc, normalized_upc)
+        """
+        if not upc_sku:
+            return "", ""
+
+        raw = str(upc_sku).strip()
+
+        # Remove common prefixes
+        clean_code = re.sub(
+            r'^(#|Rev\.|SKU:?|Item:?|Code:?)\s*', '', raw, flags=re.IGNORECASE
+        )
+        # Remove spaces and hyphens for normalized version
+        normalized = re.sub(r'[\s\-]', '', clean_code)
+
+        return raw, normalized
+
+    @staticmethod
     def validate_upc_sku(upc_sku: str) -> bool:
         """
         Validate UPC or SKU format based on retail standards
-        
+
         Args:
             upc_sku: UPC or SKU string
-            
+
         Returns:
             bool: True if valid UPC (12 digits) or valid SKU (alphanumeric, reasonable length)
         """
         if not upc_sku or not str(upc_sku).strip():
             return False
-            
-        # Remove common prefixes and clean the code
-        clean_code = str(upc_sku).strip()
-        # Remove common prefixes like #, Rev., etc.
-        clean_code = re.sub(r'^(#|Rev\.|SKU:?|Item:?|Code:?)\s*', '', clean_code, flags=re.IGNORECASE)
-        clean_code = re.sub(r'[\s-]', '', clean_code)
-        
-        # Check if it's a valid UPC (12 digits for UPC-A, 6 digits for UPC-E, 8 digits for EAN-8, 13 for EAN-13)
+
+        # Use normalize_upc to get the cleaned code
+        _, clean_code = DSLDValidator.normalize_upc(upc_sku)
+
+        # Check if it's a valid UPC (12 digits for UPC-A, 6 digits for UPC-E,
+        # 8 digits for EAN-8, 13 for EAN-13)
         if re.match(r'^\d{6}$|^\d{8}$|^\d{12}$|^\d{13}$', clean_code):
             return True
-            
+
         # Check if it's a valid SKU (alphanumeric with common special chars, 2-40 characters)
         # More lenient to accept various SKU formats
         if re.match(r'^[A-Za-z0-9\-_#./]{2,40}$', clean_code):
             return True
-            
+
         # Accept version-style codes (e.g., "Rev. 04", "v1.2")
-        if re.match(r'^(v|ver|version|rev|revision)\.?\s*\d+(\.\d+)?$', upc_sku.lower().strip()):
+        if re.match(
+            r'^(v|ver|version|rev|revision)\.?\s*\d+(\.\d+)?$',
+            str(upc_sku).lower().strip()
+        ):
             return True
-            
+
         return False
     
     @staticmethod
@@ -200,9 +242,11 @@ class DSLDValidator:
         """
         errors = []
         
-        # Check required structure
-        if not isinstance(cleaned_data.get("id"), str):
-            errors.append("id must be string")
+        # Check required structure - id can be string or int (will be normalized to string)
+        id_value = cleaned_data.get("id")
+        if id_value is None or (not isinstance(id_value, (str, int)) or
+                                 (isinstance(id_value, str) and not id_value.strip())):
+            errors.append("id must be a non-empty string or integer")
             
         # Validate arrays are arrays
         array_fields = [

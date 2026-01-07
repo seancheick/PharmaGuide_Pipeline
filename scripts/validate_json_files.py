@@ -45,7 +45,7 @@ SCHEMAS = {
     'allergens': {
         'type': 'object',
         'properties': {
-            'common_allergens': {
+            'allergens': {  # Updated from 'common_allergens' to match current schema
                 'type': 'array',
                 'items': {
                     'type': 'object',
@@ -60,7 +60,7 @@ SCHEMAS = {
                 }
             }
         },
-        'required': ['common_allergens']
+        'required': ['allergens']
     },
     'backed_clinical_studies': {
         'type': 'array',

@@ -40,7 +40,7 @@
       ],
       "CUI": "C0032483",
       "risk_level": "moderate",
-      "category": "solvent_excipient",
+      "category": "excipient_solvent",
       "mechanism_of_harm": "Can trigger IgE-mediated allergic reactions and anaphylaxis in sensitive individuals. May have cross-reactivity with polysorbates. Generally poorly absorbed orally but can accumulate in tissues with repeated exposure.",
       "regulatory_status": {
         "US": "FDA approved for use in foods and supplements with GRAS status for certain applications",
@@ -83,7 +83,7 @@
       ],
       "CUI": "C0076733",
       "risk_level": "high",
-      "category": "colorant_opacifier",
+      "category": "colorant_artificial",
       "mechanism_of_harm": "Nanoparticles can accumulate in the body, cross biological barriers, and potentially damage DNA through oxidative stress. May cause inflammation and genotoxicity. Particle size and surface properties affect toxicity.",
       "regulatory_status": {
         "US": "FDA approved as color additive in foods and supplements",
@@ -161,7 +161,7 @@
       ],
       "CUI": "C0682917",
       "risk_level": "high",
-      "category": "processed_fat",
+      "category": "fat_processed",
       "mechanism_of_harm": "Artificial trans fats raise LDL cholesterol, lower HDL cholesterol, promote inflammation, increase insulin resistance, and damage blood vessel function. Strongly linked to cardiovascular disease, stroke, and type 2 diabetes.",
       "regulatory_status": {
         "US": "FDA banned partially hydrogenated oils (PHOs) effective June 2018; compliance extended to 2021",
@@ -202,7 +202,7 @@
       ],
       "CUI": "C0069970",
       "risk_level": "moderate",
-      "category": "processed_fat",
+      "category": "fat_processed",
       "mechanism_of_harm": "High in saturated fats (approximately 50%) which may raise LDL cholesterol when consumed in excess. Processed forms may contain contaminants including 3-MCPD esters and glycidyl esters (potential carcinogens formed during refining at high temperatures).",
       "regulatory_status": {
         "US": "FDA GRAS status",
@@ -582,7 +582,7 @@
       ],
       "CUI": "C0016745",
       "risk_level": "moderate",
-      "category": "sweetener",
+      "category": "sweetener_artificial",
       "mechanism_of_harm": "Metabolized primarily by the liver, bypassing normal glucose regulation. Excessive intake contributes to insulin resistance, non-alcoholic fatty liver disease (NAFLD), metabolic syndrome, and increased triglycerides. May promote visceral fat accumulation and uric acid production.",
       "regulatory_status": {
         "US": "FDA GRAS status",
@@ -630,7 +630,7 @@
       ],
       "CUI": "",
       "risk_level": "moderate",
-      "category": "sweetener",
+      "category": "sweetener_artificial",
       "mechanism_of_harm": "Concentrated liquid sugars that cause rapid blood sugar spikes and insulin surges. Contribute to insulin resistance, weight gain, and metabolic dysfunction. High glycemic index leads to energy crashes and increased hunger. Brown rice syrup may contain arsenic.",
       "regulatory_status": {
         "US": "FDA GRAS status for various syrups",
@@ -663,7 +663,7 @@
       ],
       "CUI": "",
       "risk_level": "high",
-      "category": "high_glycemic_filler",
+      "category": "filler_high_glycemic",
       "mechanism_of_harm": "Essentially dried corn syrup - pure glucose with extremely high glycemic index (GI 100+). Causes rapid, severe blood sugar spikes. Metabolically equivalent to pure sugar. Used as cheap filler/sweetener in supplements. Contributes to insulin resistance, weight gain, and metabolic dysfunction.",
       "regulatory_status": {
         "US": "FDA GRAS status",
@@ -694,7 +694,7 @@
       ],
       "CUI": "",
       "risk_level": "moderate",
-      "category": "high_glycemic_filler",
+      "category": "filler_high_glycemic",
       "mechanism_of_harm": "Maltodextrin derived from cassava/tapioca. Same metabolic concerns as corn maltodextrin - high glycemic index (GI 85-105), causes rapid blood sugar spikes. May disrupt gut microbiome. Often marketed as 'natural' alternative but metabolically equivalent to other maltodextrins.",
       "regulatory_status": {
         "US": "FDA GRAS status",
@@ -724,7 +724,7 @@
       ],
       "CUI": "",
       "risk_level": "moderate",
-      "category": "refined_starch_filler",
+      "category": "filler_starch",
       "mechanism_of_harm": "When listed simply as 'Tapioca' (not tapioca fiber), indicates refined starch used as filler. High glycemic index, causes blood sugar spikes. Provides empty calories with no nutritional benefit. Sign of low-quality supplement formulation using cheap fillers.",
       "regulatory_status": {
         "US": "FDA GRAS status",
@@ -761,7 +761,7 @@
       ],
       "CUI": "C0007289",
       "risk_level": "high",
-      "category": "thickener_emulsifier",
+      "category": "emulsifier_thickener",
       "mechanism_of_harm": "Triggers gut inflammation and disrupts intestinal barrier function. Alters gut microbiota composition. 2024 clinical study shows it induces insulin resistance and inflammatory response in healthy humans. Can cause chronic low-grade intestinal inflammation. May promote inflammatory bowel disease.",
       "regulatory_status": {
         "US": "FDA GRAS status but under review due to safety concerns",
@@ -875,7 +875,7 @@
         "plain caramel",
         "caustic sulfite caramel"
       ],
-      "CUI": "",
+      "CUI": "C0054436",
       "risk_level": "moderate",
       "category": "colorant_artificial",
       "mechanism_of_harm": "Class III (E150c) and Class IV (E150d) caramel colors are produced with ammonia and may contain 4-methylimidazole (4-MEI), a potential carcinogen. 4-MEI has been shown to cause lung, liver, and thyroid tumors in animal studies. May also contain other contaminants from manufacturing process.",
@@ -950,7 +950,7 @@
       ],
       "CUI": "C0033437",
       "risk_level": "moderate",
-      "category": "solvent_humectant",
+      "category": "excipient_humectant",
       "mechanism_of_harm": "Synthetic solvent and carrier that acts as penetration enhancer, potentially increasing absorption of other substances. Can cause allergic reactions, contact dermatitis, and irritation. High doses may cause lactic acidosis, central nervous system depression, and kidney damage. May accumulate with repeated exposure.",
       "regulatory_status": {
         "US": "FDA GRAS status for food use",
@@ -1043,7 +1043,7 @@
       ],
       "CUI": "",
       "risk_level": "moderate",
-      "category": "sweetener",
+      "category": "sweetener_artificial",
       "mechanism_of_harm": "Incompletely absorbed in small intestine, leading to osmotic diarrhea and fermentation by gut bacteria. Causes bloating, gas, abdominal pain, and diarrhea. May disrupt gut microbiome. Different sugar alcohols have varying degrees of absorption and tolerance.",
       "regulatory_status": {
         "US": "FDA GRAS status; requires warning label if >50g/day may cause laxative effect",
@@ -1146,9 +1146,9 @@
         "E1442",
         "E1450"
       ],
-      "CUI": "",
+      "CUI": "C0038179",
       "risk_level": "low",
-      "category": "filler_thickener",
+      "category": "filler",
       "mechanism_of_harm": "Starches chemically or physically altered to improve function. Processing may introduce trace contaminants or residual chemicals. Some individuals may have sensitivities to specific modification processes. Generally considered safe at typical exposure levels.",
       "regulatory_status": {
         "US": "FDA GRAS status for various modified starches",
@@ -1180,7 +1180,7 @@
       ],
       "CUI": "C0014833",
       "risk_level": "moderate",
-      "category": "sweetener",
+      "category": "sweetener_artificial",
       "mechanism_of_harm": "Large-scale 2023-2024 studies link elevated erythritol levels to increased risk of major adverse cardiovascular events including heart attack and stroke. May enhance platelet reactivity and thrombosis risk. Can cause digestive distress including bloating, gas, and diarrhea at moderate to high doses.",
       "regulatory_status": {
         "US": "FDA GRAS status",
@@ -1217,9 +1217,19 @@
         "soluble nickel"
       ],
       "risk_level": "high",
-      "category": "heavy_metal_contaminant",
+      "category": "heavy_metal",
       "notes": "A heavy metal contaminant that can cause allergic reactions and is a known carcinogen. Common in soil and can accumulate in botanical ingredients. Nickel sulfate is particularly concerning due to its high solubility and bioavailability.",
-      "last_updated": "2025-08-13"
+      "last_updated": "2025-08-13",
+      "CUI": "C0028013",
+      "mechanism_of_harm": "Mechanism requires further documentation.",
+      "regulatory_status": {
+        "US": "Status pending review",
+        "EU": "Status pending review"
+      },
+      "population_warnings": [
+        "General population - review specific concerns"
+      ],
+      "scientific_references": []
     },
     {
       "id": "ADD_TIN",
@@ -1238,9 +1248,19 @@
         "tin(IV) compounds"
       ],
       "risk_level": "high",
-      "category": "heavy_metal_contaminant",
+      "category": "heavy_metal",
       "notes": "A heavy metal that can contaminate supplements, particularly those sourced from regions with industrial pollution. Can cause gastrointestinal issues and potentially affect nervous system function.",
-      "last_updated": "2025-08-13"
+      "last_updated": "2025-08-13",
+      "CUI": "C0040288",
+      "mechanism_of_harm": "Mechanism requires further documentation.",
+      "regulatory_status": {
+        "US": "Status pending review",
+        "EU": "Status pending review"
+      },
+      "population_warnings": [
+        "General population - review specific concerns"
+      ],
+      "scientific_references": []
     },
     {
       "id": "ADD_CADMIUM",
@@ -1258,9 +1278,19 @@
         "cadmium(II) compounds"
       ],
       "risk_level": "high",
-      "category": "heavy_metal_contaminant",
+      "category": "heavy_metal",
       "notes": "A highly toxic heavy metal that can accumulate in the body, particularly in kidneys and bones. Common contaminant in botanical supplements, especially those grown in polluted soils.",
-      "last_updated": "2025-08-13"
+      "last_updated": "2025-08-13",
+      "CUI": "C0006632",
+      "mechanism_of_harm": "Mechanism requires further documentation.",
+      "regulatory_status": {
+        "US": "Status pending review",
+        "EU": "Status pending review"
+      },
+      "population_warnings": [
+        "General population - review specific concerns"
+      ],
+      "scientific_references": []
     },
     {
       "id": "ADD_ARSENIC",
@@ -1279,9 +1309,19 @@
         "arsenic(V) compounds"
       ],
       "risk_level": "high",
-      "category": "heavy_metal_contaminant",
+      "category": "heavy_metal",
       "notes": "A toxic metalloid that can be present in both organic and inorganic forms. Inorganic arsenic is particularly dangerous and is classified as a known human carcinogen. Can contaminate botanical supplements, particularly those from contaminated growing areas.",
-      "last_updated": "2025-08-13"
+      "last_updated": "2025-08-13",
+      "CUI": "C0003818",
+      "mechanism_of_harm": "Mechanism requires further documentation.",
+      "regulatory_status": {
+        "US": "Status pending review",
+        "EU": "Status pending review"
+      },
+      "population_warnings": [
+        "General population - review specific concerns"
+      ],
+      "scientific_references": []
     },
     {
       "id": "ADD_MERCURY",
@@ -1300,9 +1340,19 @@
         "mercury contamination"
       ],
       "risk_level": "high",
-      "category": "heavy_metal_contaminant",
+      "category": "heavy_metal",
       "notes": "A highly toxic heavy metal that can cause severe neurological damage. Can be present in fish oil supplements and botanical products, particularly those sourced from contaminated waters or soils.",
-      "last_updated": "2025-08-13"
+      "last_updated": "2025-08-13",
+      "CUI": "C0025424",
+      "mechanism_of_harm": "Mechanism requires further documentation.",
+      "regulatory_status": {
+        "US": "Status pending review",
+        "EU": "Status pending review"
+      },
+      "population_warnings": [
+        "General population - review specific concerns"
+      ],
+      "scientific_references": []
     },
     {
       "id": "ADD_ANTIMONY",
@@ -1321,9 +1371,19 @@
         "antimony(V) compounds"
       ],
       "risk_level": "high",
-      "category": "heavy_metal_contaminant",
+      "category": "heavy_metal",
       "notes": "A toxic metalloid that can contaminate supplements, particularly those containing botanical ingredients. Can cause respiratory, cardiovascular, and gastrointestinal problems.",
-      "last_updated": "2025-08-13"
+      "last_updated": "2025-08-13",
+      "CUI": "C0003361",
+      "mechanism_of_harm": "Mechanism requires further documentation.",
+      "regulatory_status": {
+        "US": "Status pending review",
+        "EU": "Status pending review"
+      },
+      "population_warnings": [
+        "General population - review specific concerns"
+      ],
+      "scientific_references": []
     },
     {
       "id": "ADD_SODIUM_LAURYL_SULFATE",
@@ -1338,9 +1398,19 @@
         "sodium dodecyl sulphate"
       ],
       "risk_level": "high",
-      "category": "emulsifier_surfactant",
+      "category": "emulsifier",
       "notes": "A synthetic emulsifier and surfactant that can cause skin and gastrointestinal irritation. May disrupt the gut microbiome and cause digestive issues in sensitive individuals.",
-      "last_updated": "2025-08-15"
+      "last_updated": "2025-08-15",
+      "CUI": "C0037513",
+      "mechanism_of_harm": "Mechanism requires further documentation.",
+      "regulatory_status": {
+        "US": "Status pending review",
+        "EU": "Status pending review"
+      },
+      "population_warnings": [
+        "General population - review specific concerns"
+      ],
+      "scientific_references": []
     },
     {
       "id": "ADD_CUPRIC_SULFATE",
@@ -1390,7 +1460,7 @@
         "hormone mimics"
       ],
       "risk_level": "high",
-      "category": "synthetic_hormone",
+      "category": "hormone_synthetic",
       "mechanism_of_harm": "Disrupts natural hormone signaling, potentially leading to reproductive issues, developmental problems, and increased cancer risk. Can interfere with natural estrogen receptors and endocrine system function.",
       "regulatory_status": {
         "US": "Restricted - Requires prescription for hormone-based products",
@@ -1407,7 +1477,8 @@
         "DOI: 10.1016/j.envint.2019.105267 - EDC effects on human health",
         "DOI: 10.1210/er.2015-1010 - Endocrine disrupting chemicals review"
       ],
-      "last_updated": "2025-09-11"
+      "last_updated": "2025-09-11",
+      "CUI": ""
     },
     {
       "id": "ADD_BISPHENOLS",
@@ -1442,7 +1513,8 @@
         "DOI: 10.1016/j.envint.2020.105914 - BPS and BPF toxicity",
         "DOI: 10.1289/EHP2716 - Comparative analysis of BPA alternatives"
       ],
-      "last_updated": "2025-09-11"
+      "last_updated": "2025-09-11",
+      "CUI": ""
     },
     {
       "id": "ADD_SYNTHETIC_AMINO_ACIDS",
@@ -1459,7 +1531,7 @@
         "manufactured amino acids"
       ],
       "risk_level": "high",
-      "category": "synthetic_nutrient",
+      "category": "nutrient_synthetic",
       "mechanism_of_harm": "Synthetic forms may have different bioavailability and metabolism compared to natural forms. DL-forms contain D-isomers that may interfere with natural L-amino acid metabolism. Can accumulate in tissues and may cause imbalances in amino acid pools.",
       "regulatory_status": {
         "US": "GRAS status for specific applications",
@@ -1476,7 +1548,8 @@
         "DOI: 10.1021/jf5019934 - Synthetic vs. natural amino acids",
         "DOI: 10.3390/nu12030725 - Safety of amino acid supplements"
       ],
-      "last_updated": "2025-09-11"
+      "last_updated": "2025-09-11",
+      "CUI": ""
     },
     {
       "id": "ADD_SYNTHETIC_VITAMINS",
@@ -1492,7 +1565,7 @@
         "synthetic vitamin supplements"
       ],
       "risk_level": "moderate",
-      "category": "synthetic_nutrient",
+      "category": "nutrient_synthetic",
       "mechanism_of_harm": "Synthetic forms may have different bioavailability and metabolism. Synthetic folic acid requires conversion to active form, which can be inefficient in some people. Synthetic vitamin E (dl-alpha) has lower biological activity and may interfere with natural form absorption.",
       "regulatory_status": {
         "US": "FDA approved for fortification",
@@ -1509,7 +1582,8 @@
         "DOI: 10.3945/ajcn.114.089284 - Synthetic vs natural folate",
         "DOI: 10.1093/ajcn/84.1.18 - Vitamin E forms comparison"
       ],
-      "last_updated": "2025-09-11"
+      "last_updated": "2025-09-11",
+      "CUI": ""
     },
     {
       "id": "ADD_LEAD",
@@ -1528,7 +1602,7 @@
         "lead(II) compounds"
       ],
       "risk_level": "high",
-      "category": "heavy_metal_contaminant",
+      "category": "heavy_metal",
       "mechanism_of_harm": "Accumulates in bones and soft tissues. Crosses blood-brain barrier. Interferes with enzyme function and cellular processes. Particularly dangerous to neural development. Can replace calcium in bones and disrupt multiple body systems.",
       "regulatory_status": {
         "US": "FDA action level of 5 mcg/day from supplements",
@@ -1546,7 +1620,8 @@
         "DOI: 10.1016/j.envres.2020.109800 - Lead toxicity review",
         "DOI: 10.1016/j.toxlet.2019.06.007 - Lead in supplements"
       ],
-      "last_updated": "2025-09-11"
+      "last_updated": "2025-09-11",
+      "CUI": "C0023175"
     },
     {
       "id": "ADD_NITRITES",
@@ -1582,7 +1657,8 @@
         "DOI: 10.1093/jnci/djq516 - Nitrite cancer risk",
         "DOI: 10.1016/j.meatsci.2018.05.032 - Nitrosamine formation"
       ],
-      "last_updated": "2025-09-11"
+      "last_updated": "2025-09-11",
+      "CUI": "C0028137"
     },
     {
       "id": "ADD_POTASSIUM_SORBATE",
@@ -1612,7 +1688,8 @@
         "DOI: 10.1016/j.toxlet.2017.07.001 - Genotoxicity study",
         "DOI: 10.3390/foods9091317 - Preservative interactions"
       ],
-      "last_updated": "2025-09-11"
+      "last_updated": "2025-09-11",
+      "CUI": "C0071518"
     },
     {
       "id": "ADD_CARBOXYMETHYLCELLULOSE",
@@ -1627,7 +1704,7 @@
         "modified cellulose"
       ],
       "risk_level": "moderate",
-      "category": "thickener_stabilizer",
+      "category": "emulsifier_thickener",
       "mechanism_of_harm": "Alters gut microbiota composition and promotes intestinal inflammation. Can increase gut permeability. May interfere with nutrient absorption.",
       "regulatory_status": {
         "US": "FDA GRAS status",
@@ -1644,7 +1721,8 @@
         "DOI: 10.1038/nature21423 - Microbiome effects",
         "DOI: 10.1016/j.cell.2018.07.008 - Inflammatory response"
       ],
-      "last_updated": "2025-09-11"
+      "last_updated": "2025-09-11",
+      "CUI": "C0007068"
     },
     {
       "id": "ADD_POLYVINYLPYRROLIDONE",
@@ -1659,7 +1737,7 @@
         "synthetic binding agent"
       ],
       "risk_level": "moderate",
-      "category": "binder_stabilizer",
+      "category": "emulsifier_thickener",
       "mechanism_of_harm": "Can accumulate in body tissues. May form complexes with other compounds affecting their absorption. Potential to cross biological barriers due to small particle size.",
       "regulatory_status": {
         "US": "FDA GRAS with limitations",
@@ -1676,7 +1754,8 @@
         "DOI: 10.1016/j.toxlet.2020.12.019 - Tissue accumulation",
         "DOI: 10.1002/jps.24274 - Absorption effects"
       ],
-      "last_updated": "2025-09-11"
+      "last_updated": "2025-09-11",
+      "CUI": "C0032621"
     },
     {
       "id": "ADD_POLYDEXTROSE",
@@ -1690,7 +1769,7 @@
         "modified glucose polymer"
       ],
       "risk_level": "moderate",
-      "category": "bulking_agent",
+      "category": "filler",
       "mechanism_of_harm": "Can cause significant gastrointestinal distress. May alter gut microbiota composition. High doses can lead to mineral absorption issues.",
       "regulatory_status": {
         "US": "FDA GRAS status",
@@ -1707,7 +1786,8 @@
         "DOI: 10.3390/nu12051453 - Digestive effects",
         "DOI: 10.1016/j.jff.2019.103643 - Mineral interactions"
       ],
-      "last_updated": "2025-09-11"
+      "last_updated": "2025-09-11",
+      "CUI": "C0071516"
     },
     {
       "id": "ADD_SYNTHETIC_IRON_OXIDES",
@@ -1724,7 +1804,7 @@
         "artificial iron oxide colors"
       ],
       "risk_level": "moderate",
-      "category": "colorant_synthetic",
+      "category": "colorant_artificial",
       "mechanism_of_harm": "Nanoparticle forms can cross biological barriers. May generate reactive oxygen species. Can accumulate in tissues and organs. Potential for DNA damage through oxidative stress.",
       "regulatory_status": {
         "US": "FDA approved with limits",
@@ -1741,7 +1821,8 @@
         "DOI: 10.1016/j.impact.2021.100308 - Nanoparticle effects",
         "DOI: 10.1002/smll.202000527 - Biological interactions"
       ],
-      "last_updated": "2025-09-11"
+      "last_updated": "2025-09-11",
+      "CUI": ""
     },
     {
       "id": "ADD_QUATERNARY_AMMONIUM_COMPOUNDS",
@@ -1757,7 +1838,7 @@
         "quaternary surfactants"
       ],
       "risk_level": "high",
-      "category": "antimicrobial_preservative",
+      "category": "preservative_artificial",
       "mechanism_of_harm": "Disrupts cell membranes including beneficial bacteria. Can promote antibiotic resistance. May cause respiratory irritation. Known endocrine disruptors.",
       "regulatory_status": {
         "US": "FDA restricted use",
@@ -1774,7 +1855,8 @@
         "DOI: 10.1021/acs.est.0c04452 - Antimicrobial resistance",
         "DOI: 10.1016/j.envint.2020.105881 - Endocrine disruption"
       ],
-      "last_updated": "2025-09-11"
+      "last_updated": "2025-09-11",
+      "CUI": ""
     },
     {
       "id": "ADD_SYNTHETIC_B_VITAMINS",
@@ -1789,7 +1871,7 @@
         "pyridoxine hydrochloride"
       ],
       "risk_level": "moderate",
-      "category": "synthetic_nutrient",
+      "category": "nutrient_synthetic",
       "mechanism_of_harm": "May have different biological activity than natural forms. Some forms require additional conversion steps. Can accumulate in unusual ways. May interfere with natural vitamin metabolism.",
       "regulatory_status": {
         "US": "FDA approved for fortification",
@@ -1806,7 +1888,8 @@
         "DOI: 10.3390/nu12020523 - Synthetic vs natural forms",
         "DOI: 10.1016/j.jnutbio.2019.108365 - Bioavailability comparison"
       ],
-      "last_updated": "2025-09-11"
+      "last_updated": "2025-09-11",
+      "CUI": ""
     },
     {
       "id": "ADD_SYNTHETIC_ANTIOXIDANTS",
@@ -1841,7 +1924,8 @@
         "DOI: 10.1016/j.fct.2020.111535 - Toxicity mechanisms",
         "DOI: 10.1002/tcp.10162 - Accumulation studies"
       ],
-      "last_updated": "2025-09-11"
+      "last_updated": "2025-09-11",
+      "CUI": ""
     },
     {
       "id": "ADD_CALCIUM_SILICATE",
@@ -1873,7 +1957,8 @@
         "DOI: 10.1016/j.fct.2019.110985 - Safety assessment",
         "DOI: 10.3390/molecules24163012 - Biological interactions"
       ],
-      "last_updated": "2025-09-11"
+      "last_updated": "2025-09-11",
+      "CUI": "C0054427"
     },
     {
       "id": "ADD_SYNTHETIC_FOOD_ACIDS",
@@ -1907,7 +1992,8 @@
         "DOI: 10.1016/j.foodchem.2020.127556 - Synthetic acids",
         "DOI: 10.3390/foods9020178 - Health effects"
       ],
-      "last_updated": "2025-09-11"
+      "last_updated": "2025-09-11",
+      "CUI": ""
     },
     {
       "id": "ADD_POTASSIUM_BROMATE",
@@ -1920,9 +2006,19 @@
         "potassium salt of bromic acid"
       ],
       "risk_level": "high",
-      "category": "flour_treatment_agent",
+      "category": "processing_agent",
       "notes": "Carcinogenic flour treatment agent. Banned in EU, Canada, Brazil, and many other countries but still legal in US. Linked to kidney and thyroid tumors in animal studies.",
-      "last_updated": "2025-09-16"
+      "last_updated": "2025-09-16",
+      "CUI": "C0071178",
+      "mechanism_of_harm": "Mechanism requires further documentation.",
+      "regulatory_status": {
+        "US": "Status pending review",
+        "EU": "Status pending review"
+      },
+      "population_warnings": [
+        "General population - review specific concerns"
+      ],
+      "scientific_references": []
     },
     {
       "id": "ADD_CALCIUM_DISODIUM_EDTA",
@@ -1935,9 +2031,19 @@
         "calcium EDTA"
       ],
       "risk_level": "moderate",
-      "category": "preservative_chelating_agent",
+      "category": "preservative_artificial",
       "notes": "Chelating agent that can deplete essential minerals (zinc, iron, copper) from the body. May contain heavy metal contaminants. Can interfere with mineral absorption when consumed regularly.",
-      "last_updated": "2025-09-16"
+      "last_updated": "2025-09-16",
+      "CUI": "C0013576",
+      "mechanism_of_harm": "Mechanism requires further documentation.",
+      "regulatory_status": {
+        "US": "Status pending review",
+        "EU": "Status pending review"
+      },
+      "population_warnings": [
+        "General population - review specific concerns"
+      ],
+      "scientific_references": []
     },
     {
       "id": "ADD_POLYSORBATE_65",
@@ -1952,7 +2058,17 @@
       "risk_level": "moderate",
       "category": "emulsifier",
       "notes": "Synthetic emulsifier that may be contaminated with 1,4-dioxane (carcinogen). Studies show it can disrupt gut microbiome and compromise intestinal barrier function.",
-      "last_updated": "2025-09-16"
+      "last_updated": "2025-09-16",
+      "CUI": "C0071691",
+      "mechanism_of_harm": "Mechanism requires further documentation.",
+      "regulatory_status": {
+        "US": "Status pending review",
+        "EU": "Status pending review"
+      },
+      "population_warnings": [
+        "General population - review specific concerns"
+      ],
+      "scientific_references": []
     },
     {
       "id": "ADD_SODIUM_ALUMINUM_PHOSPHATE",
@@ -1966,7 +2082,17 @@
       "risk_level": "moderate",
       "category": "leavening_agent",
       "notes": "Leavening agent containing aluminum. Research links aluminum accumulation to neurotoxicity and potential Alzheimer's risk. Particularly concerning in products for children and pregnant women.",
-      "last_updated": "2025-09-16"
+      "last_updated": "2025-09-16",
+      "CUI": "C0002535",
+      "mechanism_of_harm": "Mechanism requires further documentation.",
+      "regulatory_status": {
+        "US": "Status pending review",
+        "EU": "Status pending review"
+      },
+      "population_warnings": [
+        "General population - review specific concerns"
+      ],
+      "scientific_references": []
     },
     {
       "id": "ADD_CALCIUM_ALUMINUM_PHOSPHATE",
@@ -1980,7 +2106,17 @@
       "risk_level": "moderate",
       "category": "leavening_agent",
       "notes": "Leavening agent containing aluminum. May contribute to aluminum body burden. Studies suggest potential neurotoxicity concerns, especially with chronic exposure.",
-      "last_updated": "2025-09-16"
+      "last_updated": "2025-09-16",
+      "CUI": "C0002535",
+      "mechanism_of_harm": "Mechanism requires further documentation.",
+      "regulatory_status": {
+        "US": "Status pending review",
+        "EU": "Status pending review"
+      },
+      "population_warnings": [
+        "General population - review specific concerns"
+      ],
+      "scientific_references": []
     },
     {
       "id": "ADD_COLLOIDAL_SILVER",
@@ -1994,9 +2130,19 @@
         "silver particles"
       ],
       "risk_level": "critical",
-      "category": "metal_supplement",
+      "category": "heavy_metal",
       "notes": "CRITICAL SAFETY WARNING: FDA has ruled colloidal silver products are not generally recognized as safe. Can cause permanent argyria (irreversible blue-gray skin discoloration), kidney damage, liver damage, neurological problems, and seizures. NO proven health benefits. AVOID internal use.",
-      "last_updated": "2025-09-19"
+      "last_updated": "2025-09-19",
+      "CUI": "C0037125",
+      "mechanism_of_harm": "Mechanism requires further documentation.",
+      "regulatory_status": {
+        "US": "Status pending review",
+        "EU": "Status pending review"
+      },
+      "population_warnings": [
+        "General population - review specific concerns"
+      ],
+      "scientific_references": []
     },
     {
       "id": "ADD_METHYLPARABEN",
@@ -2008,9 +2154,19 @@
         "methyl parahydroxybenzoate"
       ],
       "risk_level": "moderate",
-      "category": "preservative",
+      "category": "preservative_artificial",
       "notes": "Preservative with potential endocrine disruption concerns. Has weak estrogenic activity. While FDA considers it GRAS at low levels (0.1%), some individuals may experience allergic reactions. Banned in some organic certifications.",
-      "last_updated": "2025-09-19"
+      "last_updated": "2025-09-19",
+      "CUI": "C0066003",
+      "mechanism_of_harm": "Mechanism requires further documentation.",
+      "regulatory_status": {
+        "US": "Status pending review",
+        "EU": "Status pending review"
+      },
+      "population_warnings": [
+        "General population - review specific concerns"
+      ],
+      "scientific_references": []
     },
     {
       "id": "ADD_BLUE_1",
@@ -2029,9 +2185,19 @@
         "brilliant blue e133"
       ],
       "risk_level": "high",
-      "category": "artificial_colorant",
+      "category": "colorant_artificial",
       "notes": "HIGH RISK: Synthetic food dye derived from petroleum. Studies link to hyperactivity in children and allergic reactions. Banned in several countries. California 2024 Food Safety Act restricts in school foods. FDA approved but increasingly controversial.",
-      "last_updated": "2025-12-04"
+      "last_updated": "2025-12-04",
+      "CUI": "C0054102",
+      "mechanism_of_harm": "Mechanism requires further documentation.",
+      "regulatory_status": {
+        "US": "Status pending review",
+        "EU": "Status pending review"
+      },
+      "population_warnings": [
+        "General population - review specific concerns"
+      ],
+      "scientific_references": []
     },
     {
       "id": "ADD_CARMINE_RED",
@@ -2046,9 +2212,19 @@
         "carmine lake"
       ],
       "risk_level": "moderate",
-      "category": "natural_colorant",
+      "category": "colorant_natural",
       "notes": "Natural red colorant derived from cochineal insects. While FDA approved, poses contamination risks from insect-derived proteins. Processing quality varies significantly. Can contain undeclared allergens and contaminants.",
-      "last_updated": "2025-09-19"
+      "last_updated": "2025-09-19",
+      "CUI": "C0006980",
+      "mechanism_of_harm": "Mechanism requires further documentation.",
+      "regulatory_status": {
+        "US": "Status pending review",
+        "EU": "Status pending review"
+      },
+      "population_warnings": [
+        "General population - review specific concerns"
+      ],
+      "scientific_references": []
     },
     {
       "id": "ADD_POTASSIUM_HYDROXIDE",
@@ -2060,9 +2236,19 @@
         "potash lye"
       ],
       "risk_level": "high",
-      "category": "chemical_processing_agent",
+      "category": "processing_agent",
       "notes": "CRITICAL: Strong caustic alkali (lye) with corrosive properties. Not GRAS for dietary supplements. May cause severe burns, digestive damage. Should only be used in controlled food processing, not as supplement ingredient.",
-      "last_updated": "2025-09-19"
+      "last_updated": "2025-09-19",
+      "CUI": "C0071689",
+      "mechanism_of_harm": "Mechanism requires further documentation.",
+      "regulatory_status": {
+        "US": "Status pending review",
+        "EU": "Status pending review"
+      },
+      "population_warnings": [
+        "General population - review specific concerns"
+      ],
+      "scientific_references": []
     },
     {
       "id": "ADD_DISODIUM_EDTA",
@@ -2074,9 +2260,19 @@
         "disodium ethylenediaminetetraacetate"
       ],
       "risk_level": "moderate",
-      "category": "synthetic_preservative",
+      "category": "preservative_artificial",
       "notes": "Synthetic chelating agent and preservative. While FDA approved for food use, concerns about mineral depletion, potential heavy metal mobilization, and cellular membrane disruption. May interfere with nutrient absorption.",
-      "last_updated": "2025-09-19"
+      "last_updated": "2025-09-19",
+      "CUI": "C0013574",
+      "mechanism_of_harm": "Mechanism requires further documentation.",
+      "regulatory_status": {
+        "US": "Status pending review",
+        "EU": "Status pending review"
+      },
+      "population_warnings": [
+        "General population - review specific concerns"
+      ],
+      "scientific_references": []
     },
     {
       "id": "ADD_ANATABINE",
@@ -2088,9 +2284,19 @@
         "tobacco alkaloid anatabine"
       ],
       "risk_level": "high",
-      "category": "alkaloid_tobacco_derived",
+      "category": "alkaloid_tobacco",
       "notes": "REGULATORY WARNING: Tobacco alkaloid with controversial regulatory status. Voluntarily withdrawn from market after FDA concerns about drug claims and tobacco-derived ingredient classification. While found naturally in Solanaceae plants, regulatory status uncertain for dietary supplements.",
-      "last_updated": "2025-09-20"
+      "last_updated": "2025-09-20",
+      "CUI": "",
+      "mechanism_of_harm": "Mechanism requires further documentation.",
+      "regulatory_status": {
+        "US": "Status pending review",
+        "EU": "Status pending review"
+      },
+      "population_warnings": [
+        "General population - review specific concerns"
+      ],
+      "scientific_references": []
     },
     {
       "id": "ADD_D_MANNOSE",
@@ -2106,9 +2312,19 @@
         "urinary tract sugar"
       ],
       "risk_level": "moderate",
-      "category": "unapproved_sweetener",
+      "category": "sweetener_unapproved",
       "notes": "REGULATORY WARNING: Simple sugar lacking FDA approval as food additive and not granted GRAS (Generally Recognized as Safe) status for food use. While naturally occurring and used in dietary supplements, it lacks proper regulatory approval for food additive applications. May be used as unauthorized sweetener without proper food safety evaluation.",
-      "last_updated": "2025-09-20"
+      "last_updated": "2025-09-20",
+      "CUI": "C0024742",
+      "mechanism_of_harm": "Mechanism requires further documentation.",
+      "regulatory_status": {
+        "US": "Status pending review",
+        "EU": "Status pending review"
+      },
+      "population_warnings": [
+        "General population - review specific concerns"
+      ],
+      "scientific_references": []
     },
     {
       "id": "ADD_SODIUM_COPPER_CHLOROPHYLLIN",
@@ -2124,9 +2340,19 @@
         "chlorophyll derivative"
       ],
       "risk_level": "moderate",
-      "category": "synthetic_colorant_copper",
+      "category": "colorant_artificial",
       "notes": "SAFETY CONCERN: Semi-synthetic derivative of chlorophyll with copper substituted for magnesium. Limited long-term safety data for regular consumption. Potential copper accumulation concerns with chronic use. While over 50 years of use and FDA GRAS status, recent studies question safety of regular copper chlorophyllin consumption. May cause gastrointestinal upset in sensitive individuals.",
-      "last_updated": "2025-09-20"
+      "last_updated": "2025-09-20",
+      "CUI": "",
+      "mechanism_of_harm": "Mechanism requires further documentation.",
+      "regulatory_status": {
+        "US": "Status pending review",
+        "EU": "Status pending review"
+      },
+      "population_warnings": [
+        "General population - review specific concerns"
+      ],
+      "scientific_references": []
     },
     {
       "id": "ADD_HYDROGENATED_COCONUT_OIL",
@@ -2138,9 +2364,19 @@
         "trans fat coconut oil"
       ],
       "risk_level": "moderate",
-      "category": "trans_fat_oil",
+      "category": "fat_trans",
       "notes": "MODERATE RISK: Hydrogenation process creates trans fats in coconut oil. Unlike natural coconut oil, hydrogenated form contains harmful trans fatty acids that increase cardiovascular disease risk and inflammation. FDA has banned partially hydrogenated oils in foods.",
-      "last_updated": "2025-09-21"
+      "last_updated": "2025-09-21",
+      "CUI": "C0010065",
+      "mechanism_of_harm": "Mechanism requires further documentation.",
+      "regulatory_status": {
+        "US": "Status pending review",
+        "EU": "Status pending review"
+      },
+      "population_warnings": [
+        "General population - review specific concerns"
+      ],
+      "scientific_references": []
     },
     {
       "id": "ADD_MALTITOL_MALITOL",
@@ -2155,9 +2391,19 @@
         "malitol syrup"
       ],
       "risk_level": "moderate",
-      "category": "sugar_alcohol_digestive",
+      "category": "sweetener_sugar_alcohol",
       "notes": "MODERATE RISK: Sugar alcohol with significant laxative effects. Causes digestive distress including bloating, gas, and diarrhea when consumed in moderate amounts (>10g). Higher GI than other sugar alcohols. Can irritate gut lining and disrupt microbiome. Particularly problematic in supplement form where doses may be concentrated.",
-      "last_updated": "2025-12-04"
+      "last_updated": "2025-12-04",
+      "CUI": "C0065559",
+      "mechanism_of_harm": "Mechanism requires further documentation.",
+      "regulatory_status": {
+        "US": "Status pending review",
+        "EU": "Status pending review"
+      },
+      "population_warnings": [
+        "General population - review specific concerns"
+      ],
+      "scientific_references": []
     },
     {
       "id": "ADD_HYDROGENATED_STARCH_HYDROLYSATE",
@@ -2169,9 +2415,19 @@
         "hydrogenated glucose syrup"
       ],
       "risk_level": "low",
-      "category": "sugar_alcohol_digestive",
+      "category": "sweetener_sugar_alcohol",
       "notes": "LOW RISK: Sugar alcohol mixture that can cause digestive issues similar to other sugar alcohols. May cause bloating, gas, and diarrhea when consumed in larger amounts. Generally recognized as safe but may cause gastrointestinal discomfort.",
-      "last_updated": "2025-09-21"
+      "last_updated": "2025-09-21",
+      "CUI": "",
+      "mechanism_of_harm": "Mechanism requires further documentation.",
+      "regulatory_status": {
+        "US": "Status pending review",
+        "EU": "Status pending review"
+      },
+      "population_warnings": [
+        "General population - review specific concerns"
+      ],
+      "scientific_references": []
     },
     {
       "id": "ADD_SACCHARIN",
@@ -2187,7 +2443,17 @@
       "risk_level": "moderate",
       "category": "sweetener_artificial",
       "notes": "Oldest artificial sweetener (~300-400x sweeter than sugar). Previously linked to bladder cancer in animal studies, though delisted as carcinogen. May have metallic aftertaste and potential effects on gut bacteria.",
-      "last_updated": "2025-11-14"
+      "last_updated": "2025-11-14",
+      "CUI": "C0036084",
+      "mechanism_of_harm": "Mechanism requires further documentation.",
+      "regulatory_status": {
+        "US": "Status pending review",
+        "EU": "Status pending review"
+      },
+      "population_warnings": [
+        "General population - review specific concerns"
+      ],
+      "scientific_references": []
     },
     {
       "id": "ADD_NEOTAME",
@@ -2200,7 +2466,17 @@
       "risk_level": "moderate",
       "category": "sweetener_artificial",
       "notes": "Chemically similar to aspartame but 7,000-13,000x sweeter. Newer sweetener with less long-term safety data. Not widely used in supplements yet.",
-      "last_updated": "2025-11-14"
+      "last_updated": "2025-11-14",
+      "CUI": "C0379518",
+      "mechanism_of_harm": "Mechanism requires further documentation.",
+      "regulatory_status": {
+        "US": "Status pending review",
+        "EU": "Status pending review"
+      },
+      "population_warnings": [
+        "General population - review specific concerns"
+      ],
+      "scientific_references": []
     },
     {
       "id": "ADD_ADVANTAME",
@@ -2212,7 +2488,17 @@
       "risk_level": "moderate",
       "category": "sweetener_artificial",
       "notes": "Newest FDA-approved intense sweetener (2014), 20,000x sweeter than sugar. Limited long-term safety data. Chemically similar to aspartame and neotame.",
-      "last_updated": "2025-11-14"
+      "last_updated": "2025-11-14",
+      "CUI": "C3494193",
+      "mechanism_of_harm": "Mechanism requires further documentation.",
+      "regulatory_status": {
+        "US": "Status pending review",
+        "EU": "Status pending review"
+      },
+      "population_warnings": [
+        "General population - review specific concerns"
+      ],
+      "scientific_references": []
     },
     {
       "id": "ADD_SODIUM_SULFITE",
@@ -2226,7 +2512,17 @@
       "risk_level": "high",
       "category": "preservative_artificial",
       "notes": "Preservative and antioxidant. Can cause severe allergic reactions, especially in asthmatics (estimated 5-10% of asthmatics sensitive). May cause headaches, hives, and respiratory issues.",
-      "last_updated": "2025-11-14"
+      "last_updated": "2025-11-14",
+      "CUI": "C0074552",
+      "mechanism_of_harm": "Mechanism requires further documentation.",
+      "regulatory_status": {
+        "US": "Status pending review",
+        "EU": "Status pending review"
+      },
+      "population_warnings": [
+        "General population - review specific concerns"
+      ],
+      "scientific_references": []
     },
     {
       "id": "ADD_SODIUM_METABISULFITE",
@@ -2241,7 +2537,17 @@
       "risk_level": "high",
       "category": "preservative_artificial",
       "notes": "Powerful preservative that releases sulfur dioxide. Major allergen and asthma trigger. Required to be labeled. Can cause severe reactions including anaphylaxis in sensitive individuals.",
-      "last_updated": "2025-11-14"
+      "last_updated": "2025-11-14",
+      "CUI": "C0074406",
+      "mechanism_of_harm": "Mechanism requires further documentation.",
+      "regulatory_status": {
+        "US": "Status pending review",
+        "EU": "Status pending review"
+      },
+      "population_warnings": [
+        "General population - review specific concerns"
+      ],
+      "scientific_references": []
     },
     {
       "id": "ADD_SULFUR_DIOXIDE",
@@ -2255,7 +2561,17 @@
       "risk_level": "high",
       "category": "preservative_artificial",
       "notes": "Preservative gas used in dried fruits and some supplements. Potent respiratory irritant. Can trigger asthma attacks and allergic reactions. Must be declared on labels.",
-      "last_updated": "2025-11-14"
+      "last_updated": "2025-11-14",
+      "CUI": "C0038777",
+      "mechanism_of_harm": "Mechanism requires further documentation.",
+      "regulatory_status": {
+        "US": "Status pending review",
+        "EU": "Status pending review"
+      },
+      "population_warnings": [
+        "General population - review specific concerns"
+      ],
+      "scientific_references": []
     },
     {
       "id": "ADD_GREEN_3",
@@ -2270,7 +2586,17 @@
       "risk_level": "moderate",
       "category": "colorant_artificial",
       "notes": "Synthetic green dye. Rarely used in supplements. Some concerns about potential carcinogenicity and allergic reactions. Banned in EU.",
-      "last_updated": "2025-11-14"
+      "last_updated": "2025-11-14",
+      "CUI": "C0060735",
+      "mechanism_of_harm": "Mechanism requires further documentation.",
+      "regulatory_status": {
+        "US": "Status pending review",
+        "EU": "Status pending review"
+      },
+      "population_warnings": [
+        "General population - review specific concerns"
+      ],
+      "scientific_references": []
     },
     {
       "id": "ADD_ORANGE_B",
@@ -2282,7 +2608,17 @@
       "risk_level": "high",
       "category": "colorant_artificial",
       "notes": "Synthetic orange dye. Restricted to use in hot dog and sausage casings only in the US. Not approved for general food use. Potential carcinogen.",
-      "last_updated": "2025-11-14"
+      "last_updated": "2025-11-14",
+      "CUI": "",
+      "mechanism_of_harm": "Mechanism requires further documentation.",
+      "regulatory_status": {
+        "US": "Status pending review",
+        "EU": "Status pending review"
+      },
+      "population_warnings": [
+        "General population - review specific concerns"
+      ],
+      "scientific_references": []
     },
     {
       "id": "ADD_CITRUS_RED_2",
@@ -2295,7 +2631,17 @@
       "risk_level": "high",
       "category": "colorant_artificial",
       "notes": "Synthetic orange-red dye. Restricted to coloring orange peels only. Classified as possible human carcinogen. Should not be in supplements.",
-      "last_updated": "2025-11-14"
+      "last_updated": "2025-11-14",
+      "CUI": "",
+      "mechanism_of_harm": "Mechanism requires further documentation.",
+      "regulatory_status": {
+        "US": "Status pending review",
+        "EU": "Status pending review"
+      },
+      "population_warnings": [
+        "General population - review specific concerns"
+      ],
+      "scientific_references": []
     },
     {
       "id": "ADD_POLYSORBATE_40",
@@ -2308,7 +2654,17 @@
       "risk_level": "moderate",
       "category": "emulsifier",
       "notes": "Synthetic emulsifier from sorbitol and palmitic acid. May affect gut microbiome. Less common than polysorbate 80 but similar concerns about potential inflammation and metabolic effects.",
-      "last_updated": "2025-11-14"
+      "last_updated": "2025-11-14",
+      "CUI": "C0071690",
+      "mechanism_of_harm": "Mechanism requires further documentation.",
+      "regulatory_status": {
+        "US": "Status pending review",
+        "EU": "Status pending review"
+      },
+      "population_warnings": [
+        "General population - review specific concerns"
+      ],
+      "scientific_references": []
     },
     {
       "id": "ADD_SORBITAN_MONOSTEARATE",
@@ -2322,7 +2678,17 @@
       "risk_level": "moderate",
       "category": "emulsifier",
       "notes": "Synthetic emulsifier. Generally considered safe but may affect gut barrier function and microbiome in high doses. Commonly used in softgels.",
-      "last_updated": "2025-11-14"
+      "last_updated": "2025-11-14",
+      "CUI": "C0074549",
+      "mechanism_of_harm": "Mechanism requires further documentation.",
+      "regulatory_status": {
+        "US": "Status pending review",
+        "EU": "Status pending review"
+      },
+      "population_warnings": [
+        "General population - review specific concerns"
+      ],
+      "scientific_references": []
     },
     {
       "id": "ADD_FORMALDEHYDE",
@@ -2337,7 +2703,17 @@
       "risk_level": "critical",
       "category": "preservative_artificial",
       "notes": "Toxic preservative and contaminant. Known human carcinogen (IARC Group 1). Banned as food additive in most countries. May form from breakdown of other preservatives. Should never be intentionally added to supplements.",
-      "last_updated": "2025-11-14"
+      "last_updated": "2025-11-14",
+      "CUI": "C0016564",
+      "mechanism_of_harm": "Mechanism requires further documentation.",
+      "regulatory_status": {
+        "US": "Status pending review",
+        "EU": "Status pending review"
+      },
+      "population_warnings": [
+        "General population - review specific concerns"
+      ],
+      "scientific_references": []
     },
     {
       "id": "ADD_ACRYLAMIDE",
@@ -2348,9 +2724,19 @@
         "vinyl amide"
       ],
       "risk_level": "high",
-      "category": "processing_contaminant",
+      "category": "contaminant_processing",
       "notes": "Forms during high-temperature processing (>120\u00b0C) of carbohydrate-rich foods. Probable human carcinogen (IARC Group 2A). Not intentionally added but may contaminate processed supplement ingredients.",
-      "last_updated": "2025-11-14"
+      "last_updated": "2025-11-14",
+      "CUI": "C0050587",
+      "mechanism_of_harm": "Mechanism requires further documentation.",
+      "regulatory_status": {
+        "US": "Status pending review",
+        "EU": "Status pending review"
+      },
+      "population_warnings": [
+        "General population - review specific concerns"
+      ],
+      "scientific_references": []
     },
     {
       "id": "ADD_CHROMIUM_HEXAVALENT",
@@ -2363,9 +2749,19 @@
         "chromate"
       ],
       "risk_level": "high",
-      "category": "heavy_metal_contaminant",
+      "category": "heavy_metal",
       "notes": "Toxic, carcinogenic form of chromium (unlike beneficial Cr(III) used in supplements). Known human carcinogen. May contaminate from industrial processes. Should be tested for and absent from supplements.",
-      "last_updated": "2025-11-14"
+      "last_updated": "2025-11-14",
+      "CUI": "C0008574",
+      "mechanism_of_harm": "Mechanism requires further documentation.",
+      "regulatory_status": {
+        "US": "Status pending review",
+        "EU": "Status pending review"
+      },
+      "population_warnings": [
+        "General population - review specific concerns"
+      ],
+      "scientific_references": []
     },
     {
       "id": "ADD_CANOLA_OIL",
@@ -2378,9 +2774,19 @@
         "LEAR oil"
       ],
       "risk_level": "moderate",
-      "category": "processed_fat",
+      "category": "fat_processed",
       "notes": "Highly processed oil prone to oxidation. Often from GMO sources. High-heat processing may create trans fats and lipid oxidation products. Omega-6 heavy. Prefer cold-pressed or avoid.",
-      "last_updated": "2025-11-14"
+      "last_updated": "2025-11-14",
+      "CUI": "C0054846",
+      "mechanism_of_harm": "Mechanism requires further documentation.",
+      "regulatory_status": {
+        "US": "Status pending review",
+        "EU": "Status pending review"
+      },
+      "population_warnings": [
+        "General population - review specific concerns"
+      ],
+      "scientific_references": []
     },
     {
       "id": "ADD_CORN_OIL",
@@ -2391,9 +2797,19 @@
         "corn oil refined"
       ],
       "risk_level": "moderate",
-      "category": "processed_fat",
+      "category": "fat_processed",
       "notes": "Highly refined oil with high omega-6 content. Often from GMO corn. Prone to oxidation. May contain pesticide residues. Prefer unrefined oils or avoid in supplements.",
-      "last_updated": "2025-11-14"
+      "last_updated": "2025-11-14",
+      "CUI": "C0010029",
+      "mechanism_of_harm": "Mechanism requires further documentation.",
+      "regulatory_status": {
+        "US": "Status pending review",
+        "EU": "Status pending review"
+      },
+      "population_warnings": [
+        "General population - review specific concerns"
+      ],
+      "scientific_references": []
     },
     {
       "id": "ADD_ACESULFAME_K",
@@ -2444,7 +2860,7 @@
       ],
       "CUI": "C0065601",
       "risk_level": "moderate",
-      "category": "filler_sweetener",
+      "category": "filler",
       "mechanism_of_harm": "High glycemic index (GI 85-105) causes rapid blood sugar spikes similar to pure glucose. May disrupt gut microbiome balance, suppress beneficial bacteria growth, and promote harmful bacteria. Can contribute to inflammation and metabolic dysfunction. Often derived from GMO corn.",
       "regulatory_status": {
         "US": "FDA GRAS status",
@@ -2517,7 +2933,7 @@
       ],
       "CUI": "C0025987",
       "risk_level": "moderate",
-      "category": "filler_binder",
+      "category": "filler",
       "mechanism_of_harm": "Refined wood pulp that is largely indigestible. May cause digestive issues including bloating, gas, and constipation in sensitive individuals. Can interfere with nutrient absorption. Concerns about nanoparticle contamination and potential accumulation. May disrupt gut microbiome with chronic exposure.",
       "regulatory_status": {
         "US": "FDA GRAS status",
@@ -2552,7 +2968,7 @@
       ],
       "CUI": "C0038229",
       "risk_level": "low",
-      "category": "lubricant_flow_agent",
+      "category": "excipient_flow_agent",
       "mechanism_of_harm": "May form biofilm in intestines that could reduce nutrient absorption. Can suppress T-cell function and immune response at high doses. Source matters - animal-derived may contain contaminants. Generally well-tolerated but concerns exist about chronic high-dose exposure.",
       "regulatory_status": {
         "US": "FDA GRAS status",
@@ -2585,7 +3001,7 @@
       ],
       "CUI": "C0074393",
       "risk_level": "moderate",
-      "category": "coating_glazing_agent",
+      "category": "excipient_coating",
       "mechanism_of_harm": "Insect-derived resin that may contain insect proteins, allergens, and contaminants. Can cause allergic reactions. May contain heavy metals or pesticide residues depending on source. Processing quality varies significantly. Not suitable for vegetarians/vegans.",
       "regulatory_status": {
         "US": "FDA approved for food and pharmaceutical use",
@@ -2624,7 +3040,7 @@
       ],
       "CUI": "C0070657",
       "risk_level": "high",
-      "category": "packaging_contaminant",
+      "category": "contaminant_packaging",
       "mechanism_of_harm": "Endocrine disrupting chemicals that leach from plastic packaging into supplements. Interfere with hormone function, particularly reproductive hormones. Linked to developmental issues, reduced fertility, early puberty, and increased cancer risk. Can accumulate in fatty tissues.",
       "regulatory_status": {
         "US": "FDA restricts some phthalates in children's products; DEHP banned in cosmetics",
@@ -2668,7 +3084,7 @@
       ],
       "CUI": "C0002367",
       "risk_level": "high",
-      "category": "metal_additive",
+      "category": "heavy_metal",
       "mechanism_of_harm": "Neurotoxic metal that accumulates in brain, bones, and organs. Linked to Alzheimer's disease, cognitive decline, and neurodegenerative disorders. Interferes with calcium metabolism and bone health. Can cause oxidative stress and inflammation. Particularly concerning in leavening agents and color additives.",
       "regulatory_status": {
         "US": "FDA approved for various uses but under review",
@@ -2719,7 +3135,8 @@
         "DOI: 10.1016/j.kint.2017.04.046 - Phosphate and cardiovascular disease",
         "DOI: 10.1093/ndt/gfr268 - Dietary phosphate and CKD"
       ],
-      "last_updated": "2025-12-04"
+      "last_updated": "2025-12-04",
+      "CUI": ""
     },
     {
       "id": "ADD_TETRASODIUM_DIPHOSPHATE",
@@ -2750,7 +3167,8 @@
         "DOI: 10.1007/s00394-019-01961-2 - Food phosphate additives and health",
         "DOI: 10.3390/nu12092798 - Phosphate additives review"
       ],
-      "last_updated": "2025-12-04"
+      "last_updated": "2025-12-04",
+      "CUI": ""
     },
     {
       "id": "ADD_ARTIFICIAL_FLAVORS",
@@ -2801,9 +3219,9 @@
         "corn glucose",
         "grape sugar"
       ],
-      "CUI": "",
+      "CUI": "C0017725",
       "risk_level": "moderate",
-      "category": "sweetener",
+      "category": "sweetener_artificial",
       "mechanism_of_harm": "Rapidly absorbed glucose that spikes blood sugar and insulin. Excess intake contributes to metabolic dysfunction and dental caries.",
       "regulatory_status": {
         "US": "FDA GRAS status"
@@ -2826,9 +3244,9 @@
         "D-sorbitol",
         "E420"
       ],
-      "CUI": "",
+      "CUI": "C0037688",
       "risk_level": "moderate",
-      "category": "sugar_alcohol",
+      "category": "sweetener_sugar_alcohol",
       "mechanism_of_harm": "Sugar alcohol that can cause GI distress (bloating, gas, diarrhea) at higher intakes. Lower glycemic impact but not zero.",
       "regulatory_status": {
         "US": "FDA GRAS status",
@@ -2870,7 +3288,7 @@
         "thaumatin protein",
         "E957"
       ],
-      "CUI": "",
+      "CUI": "C0039656",
       "risk_level": "low",
       "category": "sweetener_natural",
       "mechanism_of_harm": "Sweet-tasting protein used at very low levels. Generally well-tolerated; primary concern is added sweetness rather than toxicity.",
@@ -2892,7 +3310,7 @@
         "maltol",
         "3-hydroxy-2-methyl-4H-pyran-4-one"
       ],
-      "CUI": "",
+      "CUI": "C0065588",
       "risk_level": "low",
       "category": "flavor_enhancer",
       "mechanism_of_harm": "Flavor enhancer used in small amounts. Primary concern is processed flavoring, not direct toxicity.",
@@ -2920,7 +3338,7 @@
       ],
       "CUI": "",
       "risk_level": "low",
-      "category": "color_unspecified",
+      "category": "colorant_unspecified",
       "mechanism_of_harm": "Lack of disclosure: color source is not specified, which reduces transparency and can mask artificial dye use.",
       "regulatory_status": {
         "US": "Allowed but should disclose color source when applicable"

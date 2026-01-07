@@ -30,6 +30,8 @@ INGREDIENT_WEIGHTS = DATA_DIR / "ingredient_weights.json"
 OTHER_INGREDIENTS = DATA_DIR / "other_ingredients.json"  # Merged: non_harmful_additives + passive_inactive (FDA "Other Ingredients")
 FUNCTIONAL_GROUPINGS = DATA_DIR / "functional_ingredient_groupings.json"  # Functional disclosure patterns & transparency scoring
 BOTANICAL_INGREDIENTS = DATA_DIR / "botanical_ingredients.json"
+INGREDIENT_CLASSIFICATION = DATA_DIR / "ingredient_classification.json"  # Hierarchical classification (source/summary/component) to prevent double-scoring
+COLOR_INDICATORS = DATA_DIR / "color_indicators.json"  # Natural vs artificial color classification indicators
 
 # Output subdirectories
 OUTPUT_CLEANED = OUTPUT_DIR / "cleaned"
@@ -63,7 +65,8 @@ EXCLUDED_NUTRITION_FACTS = {
     "calories", "energy", "kcal", "cal",
     "total fat", "fat", "saturated fat", "trans fat", "polyunsaturated fat", "monounsaturated fat",
     "cholesterol", "total cholesterol", "dietary cholesterol",
-    "total carbohydrates", "carbohydrates", "carbs", "total carbs", "total carbohydrate",
+    "total carbohydrates", "carbohydrates", "carbs", "total carbs", "total carb", "total carb.", "total carbohydrate",
+    "net carbs", "net carbohydrates",
     "dietary fiber", "fiber", "soluble fiber", "insoluble fiber",
     "sugars", "total sugars", "added sugars", "sugar", "natural sugars",
     "sugar alcohols", "sugar alcohol", "polyols",
@@ -87,6 +90,7 @@ EXCLUDED_LABEL_PHRASES = {
 
     # Other carbohydrate variations
     "other carbohydrates", "other carbohydrate", "other carbs",
+    "net carbs", "net carbohydrates", "total carb", "total carb.",
 
     # Allergen warnings
     "may contain one or more of the following", "may contain one or more of the following:",
@@ -527,11 +531,8 @@ VALIDATION_THRESHOLDS = {
     "base_score_max": 80             # Maximum base score
 }
 
-# Validation status constants
-STATUS_SUCCESS = "success"
-STATUS_NEEDS_REVIEW = "needs_review"
-STATUS_INCOMPLETE = "incomplete"
-STATUS_ERROR = "error"
+# Note: STATUS_* constants defined in "Processing status codes" section above (lines 427-430)
+# Duplicate definition removed to avoid confusion
 
 # Logging format
 LOG_FORMAT = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"

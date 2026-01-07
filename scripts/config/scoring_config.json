@@ -1,0 +1,404 @@
+{
+  "_documentation": {
+    "version": "3.4.0",
+    "description": "Comprehensive scoring configuration for DSLD supplement scoring system - 100% config-driven",
+    "total_points": "80 calculated server-side (A+B+C+D), 20 user profile on device = 100 total",
+    "last_updated": "2025-12-04",
+    "author": "PharmaGuide Team",
+    "changelog": [
+      "3.4.0: Enhanced Section C with evidence hierarchy (product > branded > ingredient > strain > preclinical), multipliers aligned with EFSA/GRADE/NatMed/Examine standards",
+      "3.3.1: Fixed CFU extraction (billion_count from probiotic_blends), implemented physician/sustainability scoring",
+      "3.3.0: Fixed double-counting (removed full_disclosure +2), violation cap -25 → -20, clinical_strains +2 → +3",
+      "3.2.0: Added detailed_breakdown output, synergy tiers, weighted evidence, enhanced probiotic bonus",
+      "3.1.0: Added penalty caps, deduplication, Section B ceiling fix"
+    ]
+  },
+  "_important_rules": {
+    "no_double_counting": "A bonus/penalty should only apply ONCE. If absence of X avoids penalty, don't also give bonus for 'having no X'.",
+    "config_driven": "ALL point values must come from this config. NO hardcoded numbers in Python code.",
+    "every_subcategory_appears": "All subcategories must appear in output, even if score is 0 or N/A."
+  },
+  "_usage": {
+    "run_scoring": "python score_supplements.py",
+    "run_pipeline": "python run_pipeline.py (runs clean → enrich → score)",
+    "custom_input": "python score_supplements.py --input-dir path/to/enriched --output-dir path/to/scored",
+    "dry_run": "python score_supplements.py --dry-run"
+  },
+  "paths": {
+    "input_directory": "output_Lozenges_enriched/enriched",
+    "_input_help": "Directory containing enriched JSON files",
+    "output_directory": "output_Lozenges_scored",
+    "_output_help": "Where to save scored files",
+    "enriched_folder": "scored",
+    "reports_folder": "reports"
+  },
+  "section_maximums": {
+    "_comment": "Maximum points per section. A+B+C+D can exceed 80 but ceiling cap of 80 is applied.",
+    "A_ingredient_quality": 30,
+    "B_safety_purity": 45,
+    "C_evidence_research": 15,
+    "D_brand_trust": 8,
+    "E_user_profile": 20,
+    "_E_note": "Section E calculated on device, not in this script",
+    "total_calculated": 80,
+    "_total_note": "Ceiling cap at 80 (A+B+C+D theoretical max is 98 but capped). Section E (20 pts) calculated on device.",
+    "total_with_E": 100
+  },
+  "section_A_ingredient_quality": {
+    "_max": 30,
+    "A1_bioavailability_form": {
+      "name": "Bioavailability & Form Quality",
+      "max": 15,
+      "calculation": "weighted_avg_of_score_x_importance",
+      "_formula": "sum(score × dosage_importance) / sum(dosage_importance)",
+      "floor_multiplier_for_multis": 0.7,
+      "_floor_note": "Multivitamins use floor of 0.7 to avoid penalizing diverse formulas"
+    },
+    "A2_premium_forms": {
+      "name": "Multiple Premium Forms",
+      "max": 3,
+      "threshold_bio_score": 12,
+      "_threshold_note": "Forms with bio_score > 12 count as premium",
+      "points_per_form": 0.5,
+      "_example": "3 premium forms = +1.5 pts"
+    },
+    "A3_delivery_system": {
+      "name": "Enhanced Delivery System",
+      "max": 3,
+      "_note": "Actual matching done against data/enhanced_delivery.json (38 systems)",
+      "tiers": {
+        "tier_1": {"points": 3, "examples": ["liposomal", "phytosome", "nanoemulsion", "vesisorb", "capsule-in-capsule"]},
+        "tier_2": {"points": 2, "examples": ["lozenge", "sublingual", "chelated", "enteric-coated", "time-release", "oral spray"]},
+        "tier_3": {"points": 1, "examples": ["softgel", "gummy", "powder", "effervescent", "fermented"]}
+      },
+      "_tier_4_note": "No tier 4 in enhanced_delivery.json - unmatched products get 0 pts"
+    },
+    "A4_absorption_enhancer": {
+      "name": "Absorption Enhancer Present",
+      "max": 3,
+      "points_if_qualifies": 3,
+      "_qualification": "Enhancer present AND enhanced nutrient present",
+      "_note": "Award once only, even if multiple enhancers present"
+    },
+    "A5_formulation_excellence": {
+      "max": 6,
+      "usda_organic": {
+        "name": "USDA Organic Certified",
+        "points": 2,
+        "_note": "Strict USDA Organic certification only"
+      },
+      "standardized_botanicals": {
+        "name": "Standardized Botanicals",
+        "points": 2,
+        "_note": "At least 1 valid standardized botanical"
+      },
+      "synergy_clusters": {
+        "name": "Synergy Clusters",
+        "max": 5,
+        "_note": "Based on number of ingredients in matching cluster",
+        "tier_5_plus": 5,
+        "tier_4": 3,
+        "tier_3": 2,
+        "tier_2": 1,
+        "_calculation": "Award highest cluster tier only, not cumulative"
+      }
+    }
+  },
+  "section_B_safety_purity": {
+    "_max": 45,
+    "_structure": "Start at 45, subtract penalties, add bonuses (floor at 0, ceiling at 45)",
+    "B1_contaminants_additives": {
+      "_comment": "DEDUCTIONS ONLY - no positive points",
+      "banned_recalled": {
+        "name": "Banned/Recalled Substances",
+        "critical": -20,
+        "high": -15,
+        "moderate": -10,
+        "_critical_note": "Immediate fail flag set"
+      },
+      "harmful_additives": {
+        "name": "Harmful Additives",
+        "high": -2,
+        "moderate": -1,
+        "low": -0.5,
+        "cap_total": -5,
+        "_cap_note": "Total additive penalties capped at -5 to avoid over-penalization"
+      },
+      "undeclared_allergens": {
+        "name": "Undeclared Allergens",
+        "high": -2,
+        "moderate": -1.5,
+        "low": -1,
+        "cap_total": -2,
+        "_cap_note": "Total allergen penalties capped at -2"
+      },
+      "deduplication": {
+        "enabled": true,
+        "_method": "Deduplicate by additive_id before applying penalties",
+        "_example": "Magnesium Stearate + Stearic Acid = 1 penalty (same ADD_STEARIC_ACID)"
+      }
+    },
+    "B2_allergen_compliance": {
+      "max": 4,
+      "allergen_free_claim": {
+        "name": "Allergen-Free Claim (Bonus)",
+        "points": 2
+      },
+      "gluten_free": {
+        "name": "Gluten-Free Certified",
+        "points": 1
+      },
+      "vegan_vegetarian": {
+        "name": "Vegan/Vegetarian",
+        "points": 1
+      },
+      "may_contain_warning": {
+        "name": "May Contain Warning",
+        "penalty": -2
+      }
+    },
+    "B3_quality_certifications": {
+      "max": 16,
+      "third_party_testing": {
+        "name": "Third-Party Testing",
+        "per_program": 5,
+        "max_programs": 2,
+        "max_total": 10,
+        "_programs": ["NSF", "USP", "ConsumerLab", "BSCG", "Informed Sport"]
+      },
+      "gmp_certified": {
+        "name": "GMP Certified Facility",
+        "points": 4
+      },
+      "batch_traceability": {
+        "name": "Batch Traceability / COA",
+        "points": 2,
+        "_note": "COA available, QR code, or lookup system"
+      }
+    },
+    "B4_proprietary_blends": {
+      "name": "Proprietary Blend Penalty",
+      "cap_total": -15,
+      "scaling": {
+        "_method": "Scale by hidden ratio (proprietary ingredients / total active)",
+        "ratio_75_plus": -15,
+        "ratio_50_to_74": -10,
+        "ratio_25_to_49": -5,
+        "ratio_under_25": -2
+      },
+      "clinical_evidence_mitigation": {
+        "_note": "Reduce proprietary blend penalty when clinical evidence validates the formulation",
+        "_rationale": "Per Labdoor/ConsumerLab methodology: only poorly-supported blends get full penalty. Clinically-validated formulations are protecting IP, not deceiving consumers.",
+        "_sources": [
+          "Labdoor scoring: https://labdoor.com/about/scores",
+          "PMC Proprietary Blends: https://pmc.ncbi.nlm.nih.gov/articles/PMC10196566/"
+        ],
+        "probiotic_clinical_strains": 0.5,
+        "_probiotic_note": "50% reduction for probiotic blends with clinically documented strains (K12, LGG, Reuteri, etc.)",
+        "herbal_clinical_evidence": 0.6,
+        "_herbal_note": "40% reduction for herbal blends with tier_1/tier_2 clinical evidence (RCTs, meta-analyses)",
+        "standardized_extracts": 0.7,
+        "_standardized_note": "30% reduction for blends containing standardized botanical extracts (guaranteed potency)"
+      }
+    }
+  },
+  "section_C_evidence_research": {
+    "_max": 15,
+    "_methodology": "Evidence hierarchy aligned with EFSA, Natural Medicines (TRC), GRADE (NIH/WHO), and Examine.com frameworks",
+    "_sources": [
+      "https://examine.com/about/grades/",
+      "https://naturalmedicines.therapeuticresearch.com/safety-and-effectiveness-rating.aspx",
+      "https://www.efsa.europa.eu/en/topics/topic/health-claims",
+      "https://pmc.ncbi.nlm.nih.gov/articles/PMC2981887/",
+      "https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0209205"
+    ],
+
+    "evidence_hierarchy": {
+      "_description": "Points awarded based on evidence type and proximity to actual product. Multiplier applied to base points.",
+
+      "product_level": {
+        "_description": "Clinical trials on the exact finished product formulation (gold standard per EFSA/NatMed)",
+        "multiplier": 1.0,
+        "bonus_for_product_trial": 2,
+        "_bonus_note": "+2 bonus if exact product has published RCT (rewards innovation like Seed DS-01)",
+        "base_points": {
+          "systematic_review_meta": 6,
+          "rct_multiple": 5,
+          "rct_single": 4,
+          "observational": 2
+        }
+      },
+
+      "branded_ingredient": {
+        "_description": "Patented/branded ingredient with its own clinical trials (e.g., KSM-66, Meriva, Longvida)",
+        "multiplier": 0.8,
+        "_multiplier_note": "Per GRADE indirectness principle - branded is one step removed from product",
+        "base_points": {
+          "systematic_review_meta": 6,
+          "rct_multiple": 5,
+          "rct_single": 4
+        }
+      },
+
+      "ingredient_human": {
+        "_description": "Generic ingredient studies in humans (e.g., 'vitamin D', 'magnesium' - any form)",
+        "multiplier": 0.65,
+        "_multiplier_note": "Good evidence but not specific to product formulation",
+        "base_points": {
+          "systematic_review_meta": 6,
+          "rct_multiple": 5,
+          "rct_single": 4,
+          "observational": 2
+        }
+      },
+
+      "strain_level_probiotic": {
+        "_description": "Individual probiotic strain evidence - strain-specific but NOT product-specific",
+        "_rationale": "Per Frontiers 2018 meta-analysis: efficacy is strain-specific AND formulation-specific. Multi-strain combo may differ from individual strain studies.",
+        "multiplier": 0.6,
+        "_multiplier_note": "Strain evidence is valuable but doesn't guarantee product combo works identically",
+        "base_points": {
+          "clinical_strain": 4
+        }
+      },
+
+      "preclinical": {
+        "_description": "Animal, in vitro, or mechanistic studies only - weak predictive value for humans",
+        "multiplier": 0.3,
+        "_multiplier_note": "Per Examine: preclinical rarely predicts human efficacy",
+        "base_points": {
+          "animal_study": 2,
+          "in_vitro": 1
+        }
+      }
+    },
+
+    "scoring_rules": {
+      "cap_per_ingredient": 5,
+      "_cap_per_ingredient_note": "No single ingredient contributes >5 pts - prevents one well-studied vitamin from maxing score",
+      "cap_total": 15,
+      "_cap_total_note": "Section C max is 15 - enforced with min(sum, 15)",
+      "consistency_penalty": -1,
+      "_consistency_note": "Deduct 1 pt if evidence for ingredient is mixed/inconsistent (per Examine methodology)"
+    },
+
+    "legacy_tier_mapping": {
+      "_note": "Maps old evidence_level values to new hierarchy for backward compatibility",
+      "product-human": "product_level",
+      "product-rct": "product_level",
+      "branded-rct": "branded_ingredient",
+      "ingredient-human": "ingredient_human",
+      "strain-clinical": "strain_level_probiotic",
+      "preclinical": "preclinical",
+      "ingredient-preclinical": "preclinical",
+      "tier_1": "product_level",
+      "tier_2": "branded_ingredient",
+      "tier_3": "ingredient_human"
+    },
+
+    "unsubstantiated_claims": {
+      "name": "Unsubstantiated Claims Penalty",
+      "penalty": -5,
+      "_note": "Apply once only if product makes health claims without supporting evidence"
+    }
+  },
+  "section_D_brand_trust": {
+    "_max": 8,
+    "_max_note": "Was 10, now 8 after removing full_disclosure (+2 double-counting)",
+    "top_manufacturer": {
+      "name": "Top-Tier Manufacturer",
+      "points": 3,
+      "_note": "Matched to top manufacturers list (Thorne, NOW, Jarrow, etc.)"
+    },
+    "_full_disclosure_removed": {
+      "_reason": "REMOVED - Double counting. Absence of proprietary blend already rewarded by not getting -15 penalty in B4.",
+      "_old_points": 2
+    },
+    "physician_formulated": {
+      "name": "Physician/Formulator Credibility",
+      "points": 1
+    },
+    "high_regulation_country": {
+      "name": "Made in High-Regulation Country",
+      "points": 1,
+      "countries": ["USA", "EU", "Canada", "Australia", "Japan", "UK", "Germany", "Switzerland"]
+    },
+    "sustainable_packaging": {
+      "name": "Sustainable/Recyclable Packaging",
+      "points": 1
+    },
+    "manufacturer_violations": {
+      "name": "Manufacturer Violations (Last 10y)",
+      "_note": "Use total_deduction_applied from violations database",
+      "cap_total": -20,
+      "_cap_rationale": "Class I toxic = -20 base; with -20 cap, worst offenders get 80/100 or lower = 'Concerning' or 'High Risk'"
+    }
+  },
+  "probiotic_bonus": {
+    "_max": 10,
+    "_condition": "Only if is_probiotic_product = true",
+    "_note": "Probiotic bonus can push score above 80 temporarily, final cap at 80 applied after",
+    "cfu_bonus": {
+      "name": "≥10 Billion CFU at Expiration",
+      "threshold_10b": 4,
+      "_note": "+4 if CFU >= 10 billion at expiration"
+    },
+    "strain_diversity": {
+      "name": "≥4 Clinically Studied Strains",
+      "threshold_4_strains": 2,
+      "threshold_8_strains": 4,
+      "_note": "+2 if >= 4 distinct strains, +4 if >= 8 strains"
+    },
+    "clinical_strains": {
+      "name": "Contains Clinically Studied Strains",
+      "points": 3,
+      "_strains": ["K12", "M18", "LGG", "Reuteri", "Coagulans", "BB-12", "NCFM", "Shirota", "etc."],
+      "_rationale": "Clinically proven strains are rare and valuable - worth higher reward"
+    },
+    "prebiotic_pairing": {
+      "name": "Prebiotic Pairing",
+      "points": 3
+    },
+    "survivability_coating": {
+      "name": "Survivability Coating/Technology",
+      "points": 2,
+      "_note": "Delayed-release, enteric coating, or patented delivery"
+    }
+  },
+  "score_floors_and_ceilings": {
+    "_comment": "Prevent extreme scores that don't reflect reality",
+    "section_A_floor": 0,
+    "section_B_floor": 0,
+    "section_C_floor": 0,
+    "section_D_floor": 0,
+    "total_floor": 10,
+    "_floor_note": "No product scores below 10/80 - even worst products have some value",
+    "total_ceiling": 80,
+    "_ceiling_note": "Maximum 80/80 (Section E adds up to 20 on device)",
+    "probiotic_bonus_applies_before_ceiling": true,
+    "_probiotic_note": "Probiotic bonus added to raw score, then ceiling applied"
+  },
+  "display_format": {
+    "primary": "{score}/80",
+    "equivalent": "{score_100}/100",
+    "_example": "65/80 with 81.3/100 equivalent"
+  },
+  "grade_scale": {
+    "_based_on_100_equivalent": true,
+    "A_plus": {"min": 90, "label": "A+"},
+    "A": {"min": 85, "label": "A"},
+    "A_minus": {"min": 80, "label": "A-"},
+    "B_plus": {"min": 77, "label": "B+"},
+    "B": {"min": 73, "label": "B"},
+    "B_minus": {"min": 70, "label": "B-"},
+    "C_plus": {"min": 67, "label": "C+"},
+    "C": {"min": 63, "label": "C"},
+    "C_minus": {"min": 60, "label": "C-"},
+    "D": {"min": 50, "label": "D"},
+    "F": {"min": 0, "label": "F"}
+  },
+  "processing": {
+    "batch_size": 100,
+    "show_progress_bar": true
+  }
+}

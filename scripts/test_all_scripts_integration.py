@@ -21,7 +21,7 @@ databases_to_test = {
     'botanical_ingredients.json': ('botanical_ingredients', True),
     'other_ingredients.json': ('other_ingredients', True),
     'standardized_botanicals.json': ('standardized_botanicals', True),
-    'allergens.json': ('common_allergens', True),
+    'allergens.json': ('allergens', True),  # Updated from 'common_allergens' to match current schema
     'banned_recalled_ingredients.json': ('permanently_banned', True),  # Has multiple arrays, checking first one
     'harmful_additives.json': ('harmful_additives', True),
     'synergy_cluster.json': ('synergy_clusters', True),

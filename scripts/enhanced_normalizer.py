@@ -1681,7 +1681,22 @@ class EnhancedDSLDNormalizer:
                             'form_name': form_name,
                             'form_data': form_data
                         }
-        
+
+            # CRITICAL FIX: Add TOP-LEVEL aliases (aliases on the ingredient entry itself, not inside forms)
+            # These are used for ingredient variants like "Iron, Microencapsulated" -> "Iron"
+            for alias in vitamin_data.get("aliases", []) or []:
+                alias_variations = self.matcher.generate_variations(
+                    self.matcher.preprocess_text(alias)
+                )
+                for variation in alias_variations:
+                    if variation in self.ingredient_alias_lookup:
+                        existing = self.ingredient_alias_lookup[variation]
+                        if existing != standard_name:
+                            conflicts[variation] = f"{existing} -> {standard_name}"
+                            # Keep the first mapping, don't overwrite
+                            continue
+                    self.ingredient_alias_lookup[variation] = standard_name
+
         # Log conflicts for debugging (reduced verbosity)
         if conflicts:
             logger.debug(f"Found {len(conflicts)} mapping conflicts - keeping first mappings")
@@ -1691,7 +1706,9 @@ class EnhancedDSLDNormalizer:
         # Build enhanced allergen lookup
         self.allergen_lookup = {}
 
-        for allergen in self.allergens_db.get("common_allergens", []) or []:
+        # Support both "allergens" (current schema) and "common_allergens" (legacy schema)
+        allergen_list = self.allergens_db.get("allergens", []) or self.allergens_db.get("common_allergens", []) or []
+        for allergen in allergen_list:
             standard_name = allergen["standard_name"]
 
             # Add standard name variations

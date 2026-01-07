@@ -42,34 +42,151 @@ from enhanced_normalizer import EnhancedDSLDNormalizer
 from constants import LOG_FORMAT, LOG_DATE_FORMAT
 
 
+def verify_working_directory(config_path: str) -> None:
+    """
+    Verify that relative paths in config will resolve correctly from current working directory.
+    Prevents accidental split logs/state when running from wrong directory.
+
+    Args:
+        config_path: Path to the configuration file
+
+    Raises:
+        SystemExit: If relative paths won't work from current directory
+    """
+    try:
+        with open(config_path, 'r') as f:
+            config = json.load(f)
+    except (FileNotFoundError, json.JSONDecodeError):
+        # Config loading errors will be handled later by DSLDCleaningPipeline
+        return
+
+    paths = config.get("paths", {})
+    reference_data = paths.get("reference_data", "data")
+
+    # If reference_data is relative and doesn't exist, we're in the wrong directory
+    ref_path = Path(reference_data)
+    if not ref_path.is_absolute() and not ref_path.exists():
+        cwd = Path.cwd()
+        print(f"\n❌ WORKING DIRECTORY ERROR", file=sys.stderr)
+        print(f"   Current directory: {cwd}", file=sys.stderr)
+        print(f"   Expected relative path '{reference_data}/' does not exist here.", file=sys.stderr)
+        print(f"\n   This usually means you're running from the wrong directory.", file=sys.stderr)
+        print(f"   Solution: cd to scripts/ directory and run again:", file=sys.stderr)
+        print(f"      cd scripts/", file=sys.stderr)
+        print(f"      python clean_dsld_data.py", file=sys.stderr)
+        print(f"\n   Or use absolute paths in your config file.\n", file=sys.stderr)
+        sys.exit(1)
+
+    # Also check log_directory to prevent split state
+    log_dir = paths.get("log_directory", "logs")
+    log_path = Path(log_dir)
+    if not log_path.is_absolute():
+        # Don't fail, just warn if logs/ doesn't exist yet (it will be created)
+        # But if there's a logs/ elsewhere and we're creating a new one, that's confusing
+        pass  # Log creation is handled by the pipeline
+
+
 class DSLDCleaningPipeline:
     """Main pipeline for DSLD data cleaning"""
-    
-    def __init__(self, config_path: str):
+
+    def __init__(self, config_path: str, cli_overrides: dict = None):
         self.config_path = Path(config_path)
+        self.cli_overrides = cli_overrides or {}
         self.config = self._load_config()
+        self._apply_cli_overrides()
         self.logger = self._setup_logging()
-        
+        self._log_resolved_paths()
+
     def _load_config(self) -> dict:
         """Load configuration file"""
         if not self.config_path.exists():
             raise FileNotFoundError(f"Configuration file not found: {self.config_path}")
-        
+
         try:
             with open(self.config_path, 'r') as f:
                 config = json.load(f)
-            
-            # Validate required sections
-            required_sections = ["processing", "paths", "options"]
+
+            # Validate required sections (options is optional now)
+            required_sections = ["processing", "paths"]
             for section in required_sections:
                 if section not in config:
                     raise ValueError(f"Missing required config section: {section}")
-            
+
             return config
-            
+
         except json.JSONDecodeError as e:
             raise ValueError(f"Invalid JSON in config file: {str(e)}")
-    
+
+    def _apply_cli_overrides(self):
+        """Apply CLI overrides to config (CLI takes precedence)"""
+        if not self.cli_overrides:
+            return
+
+        paths = self.config.get("paths", {})
+
+        if "input_directory" in self.cli_overrides:
+            paths["input_directory"] = self.cli_overrides["input_directory"]
+        if "output_directory" in self.cli_overrides:
+            paths["output_directory"] = self.cli_overrides["output_directory"]
+        if "reference_data" in self.cli_overrides:
+            paths["reference_data"] = self.cli_overrides["reference_data"]
+
+        self.config["paths"] = paths
+
+    def _log_resolved_paths(self):
+        """Log resolved paths for debugging and auditability"""
+        paths = self.config.get("paths", {})
+        reference_data = paths.get("reference_data", "data")
+        ref_path = Path(reference_data)
+
+        # Resolve to absolute path
+        if not ref_path.is_absolute():
+            ref_path = Path.cwd() / ref_path
+
+        # Log resolved paths
+        logging.info(f"Resolved paths:")
+        logging.info(f"  input_directory: {paths.get('input_directory', 'N/A')}")
+        logging.info(f"  output_directory: {paths.get('output_directory', 'N/A')}")
+        logging.info(f"  reference_data: {ref_path}")
+
+        # Validate reference_data directory exists
+        if not ref_path.exists():
+            raise FileNotFoundError(
+                f"Reference data directory not found: {ref_path}\n"
+                f"Ensure 'data/' directory exists with required database files."
+            )
+
+        # Log versions of critical databases if available
+        self._log_database_versions(ref_path)
+
+    def _log_database_versions(self, ref_path: Path):
+        """Log versions of critical database files for auditability"""
+        critical_dbs = [
+            "color_indicators.json",
+            "ingredient_quality_map.json",
+            "harmful_additives.json",
+            "allergens.json",
+        ]
+
+        for db_file in critical_dbs:
+            db_path = ref_path / db_file
+            if db_path.exists():
+                try:
+                    with open(db_path, 'r') as f:
+                        db_data = json.load(f)
+
+                    # Look for version info in database_info or _metadata
+                    db_info = db_data.get('database_info', db_data.get('_metadata', {}))
+                    version = db_info.get('version', db_info.get('schema_version', 'unknown'))
+                    last_updated = db_info.get('last_updated', 'unknown')
+
+                    if version != 'unknown':
+                        logging.info(f"  {db_file}: v{version} (updated: {last_updated})")
+                except Exception as e:
+                    logging.warning(f"  {db_file}: Failed to read version - {e}")
+            else:
+                logging.warning(f"  {db_file}: NOT FOUND at {db_path}")
+
     def _setup_logging(self) -> logging.Logger:
         """Setup logging configuration"""
         log_config = self.config.get("logging", {})
@@ -120,19 +237,43 @@ class DSLDCleaningPipeline:
             self.logger.error(f"Reference data directory does not exist: {ref_dir}")
             return False
         
-        # Check required reference files
-        required_files = [
+        # Check CRITICAL reference files (fail if missing)
+        # These are required for safety/correctness - cannot clean without them
+        critical_files = [
             "ingredient_quality_map.json",
-            "harmful_additives.json", 
+            "harmful_additives.json",
             "allergens.json",
-            "top_manufacturers_data.json"
+            "banned_recalled_ingredients.json",
+            "ingredient_classification.json",
         ]
-        
-        for filename in required_files:
+
+        for filename in critical_files:
             file_path = ref_dir / filename
             if not file_path.exists():
-                self.logger.error(f"Required reference file missing: {file_path}")
+                self.logger.error("CRITICAL reference file missing: %s", file_path)
                 return False
+
+        # Check RECOMMENDED reference files (warn if missing)
+        # Pipeline can run without these, but with degraded results
+        recommended_files = [
+            "standardized_botanicals.json",
+            "absorption_enhancers.json",
+            "other_ingredients.json",
+            "botanical_ingredients.json",
+            "proprietary_blends_penalty.json",
+        ]
+
+        missing_recommended = []
+        for filename in recommended_files:
+            file_path = ref_dir / filename
+            if not file_path.exists():
+                missing_recommended.append(filename)
+
+        if missing_recommended:
+            self.logger.warning(
+                "RECOMMENDED reference files missing (results may have more unmapped): %s",
+                ", ".join(missing_recommended)
+            )
         
         # Validate processing options
         batch_size = self.config["processing"]["batch_size"]
@@ -283,12 +424,16 @@ def main():
         epilog="""
 Examples:
   %(prog)s --config scripts/config/cleaning_config.json
+  %(prog)s --input-dir raw_data --output-dir cleaned_output
   %(prog)s --resume
   %(prog)s --dry-run
-  %(prog)s --config scripts/config/cleaning_config.json --start-batch 5
+
+CLI vs Config:
+  CLI arguments (--input-dir, --output-dir) override config file values.
+  Config file provides defaults; CLI provides per-run customization.
         """
     )
-    
+
     # Determine default config path based on current directory
     if Path.cwd().name == "scripts":
         default_config = "config/cleaning_config.json"
@@ -302,25 +447,36 @@ Examples:
         default=default_config,
         help=help_text
     )
-    
+
+    # CLI path overrides (take precedence over config)
+    parser.add_argument(
+        "--input-dir",
+        help="Input directory containing raw DSLD JSON files (overrides config)"
+    )
+    parser.add_argument(
+        "--output-dir",
+        help="Output directory for cleaned files (overrides config)"
+    )
+    parser.add_argument(
+        "--reference-data",
+        help="Directory containing reference databases (overrides config paths.reference_data)"
+    )
+
     parser.add_argument(
         "--resume",
         action="store_true",
         help="Resume processing from last completed batch"
     )
-    
+
     parser.add_argument(
         "--dry-run",
         action="store_true",
         help="Validate configuration and test processing without running full pipeline"
     )
-    
-    parser.add_argument(
-        "--start-batch",
-        type=int,
-        help="Start processing from specific batch number"
-    )
-    
+
+    # NOTE: --start-batch was removed because resume is now file-level (processed_file_paths)
+    # The old batch-based start was inconsistent with per-file tracking
+
     parser.add_argument(
         "--verbose",
         "-v",
@@ -329,39 +485,40 @@ Examples:
     )
     
     args = parser.parse_args()
-    
+
+    # GUARD: Verify working directory before doing anything else
+    # This prevents creating split logs/state in wrong directory
+    verify_working_directory(args.config)
+
     # Set up basic logging for startup
     logging.basicConfig(
         level=logging.DEBUG if args.verbose else logging.INFO,
         format=LOG_FORMAT,
         datefmt=LOG_DATE_FORMAT
     )
-    
+
+    # Build CLI overrides dict
+    cli_overrides = {}
+    if args.input_dir:
+        cli_overrides["input_directory"] = args.input_dir
+    if args.output_dir:
+        cli_overrides["output_directory"] = args.output_dir
+    if args.reference_data:
+        cli_overrides["reference_data"] = args.reference_data
+
     try:
-        # Initialize pipeline
-        pipeline = DSLDCleaningPipeline(args.config)
-        
-        # Handle start batch override
-        if args.start_batch is not None:
-            # Load current state and modify it
-            processor = BatchProcessor(pipeline.config)
-            state = processor.load_state()
-            if state:
-                state.last_completed_batch = args.start_batch - 2  # -2 because we add 1 in processor
-                processor.save_state(state)
-                pipeline.logger.info(f"Set start batch to: {args.start_batch}")
-            else:
-                pipeline.logger.warning("No existing state found, --start-batch ignored")
-        
+        # Initialize pipeline with CLI overrides
+        pipeline = DSLDCleaningPipeline(args.config, cli_overrides=cli_overrides)
+
         # Run pipeline
         if args.dry_run:
             success = pipeline.dry_run()
         else:
             success = pipeline.run(resume=args.resume)
-        
+
         # Exit with appropriate code
         sys.exit(0 if success else 1)
-        
+
     except Exception as e:
         logging.error(f"Pipeline initialization failed: {str(e)}")
         sys.exit(1)

@@ -6,7 +6,7 @@ import json
 import logging
 import time
 from pathlib import Path
-from typing import Dict, List, Tuple, Any, Optional
+from typing import Dict, List, Tuple, Any, Optional, Set
 from datetime import datetime
 from concurrent.futures import ProcessPoolExecutor, as_completed
 from collections import Counter
@@ -21,10 +21,11 @@ from constants import (
     STATUS_NEEDS_REVIEW,
     STATUS_INCOMPLETE,
     STATUS_ERROR,
-    OUTPUT_EXTENSION,
     VALID_INPUT_EXTENSIONS,
     VALIDATION_THRESHOLDS
 )
+import traceback
+import os
 
 logger = logging.getLogger(__name__)
 
@@ -92,6 +93,20 @@ class ProcessingResult:
     file_path: Optional[str] = None
     processing_time: float = 0.0
     unmapped_ingredients: Optional[List[str]] = None
+    unmapped_active: Optional[Set[str]] = None  # Track which unmapped ingredients are active
+    validation_errors: Optional[List[str]] = None  # Cleaned data structural validation errors
+    raw_id: Optional[Any] = None  # Original ID from raw data for verify_output comparison
+    error_stage: Optional[str] = None  # P2: Stage where error occurred (load, normalize, validate_cleaned, etc.)
+
+
+@dataclass
+class StructuredError:
+    """D2: Structured error for better debugging and triage"""
+    file_path: str
+    exception_type: str
+    message: str
+    stage: str  # load, normalize, validate, write
+    traceback: Optional[str] = None
 
 
 @dataclass
@@ -106,6 +121,28 @@ class BatchState:
     errors: List[str]
     can_resume: bool
     config_checksum: str
+    # A7: File manifest for robust resume
+    file_manifest_checksum: str = ""  # Hash of sorted file list
+    first_file: str = ""  # First file in manifest
+    last_file: str = ""   # Last file in manifest
+    processed_file_paths: List[str] = None  # List of processed file paths
+    # D1: Run metadata for reproducibility
+    pipeline_version: str = "1.0.0"
+    python_version: str = ""
+    host_info: str = ""
+    input_directory: str = ""
+
+    def __post_init__(self):
+        """Initialize mutable defaults and system info"""
+        if self.processed_file_paths is None:
+            self.processed_file_paths = []
+        # D1: Capture system info
+        if not self.python_version:
+            import sys
+            self.python_version = sys.version.split()[0]
+        if not self.host_info:
+            import platform
+            self.host_info = f"{platform.node()}/{platform.system()}-{platform.release()}"
 
 
 class BatchProcessor:
@@ -126,6 +163,7 @@ class BatchProcessor:
 
         # Global counters for unmapped and mapped ingredients
         self.global_unmapped = Counter()
+        self.global_unmapped_active = set()  # Track which unmapped ingredients are active
         self.global_mapped = Counter()
 
         # Initialize performance tracker
@@ -141,6 +179,8 @@ class BatchProcessor:
             self.output_dir / "needs_review",
             self.output_dir / "incomplete",
             self.output_dir / "unmapped",
+            self.output_dir / "errors",  # D4: Quarantine directory for failed files
+            self.output_dir / "quarantine",  # Validation quarantine directory
             self.log_dir,
             Path(self.config["paths"]["output_directory"]) / "reports"
         ]
@@ -148,27 +188,115 @@ class BatchProcessor:
         for directory in dirs:
             directory.mkdir(parents=True, exist_ok=True)
 
+    def _write_quarantine_file(self, file_path: str, error: StructuredError):
+        """
+        D4: Write failed file metadata to quarantine directory for reprocessing.
+        """
+        quarantine_dir = self.output_dir / "errors"
+        quarantine_file = quarantine_dir / f"{Path(file_path).stem}_error.json"
+
+        error_record = {
+            "original_file": file_path,
+            "error_type": error.exception_type,
+            "error_message": error.message,
+            "processing_stage": error.stage,
+            "timestamp": datetime.utcnow().isoformat() + "Z",
+            "traceback": error.traceback
+        }
+
+        try:
+            with open(quarantine_file, 'w', encoding='utf-8') as f:
+                json.dump(error_record, f, indent=2, ensure_ascii=False)
+            logger.debug("Wrote quarantine record: %s", quarantine_file)
+        except Exception as e:
+            logger.warning("Failed to write quarantine file: %s", e)
+
+    def _write_validation_quarantine(self, result: ProcessingResult):
+        """
+        Write validation error quarantine artifact for debugging/triage.
+        Only called when validation_errors exist in the result.
+        """
+        quarantine_dir = self.output_dir / "quarantine"
+        quarantine_dir.mkdir(parents=True, exist_ok=True)
+
+        # Extract product_id from data or filename
+        product_id = None
+        if result.data:
+            product_id = result.data.get("id")
+        if not product_id and result.file_path:
+            product_id = Path(result.file_path).stem
+
+        quarantine_file = quarantine_dir / f"{product_id}_validation.json"
+
+        # Build quarantine artifact with debugging context
+        quarantine_record = {
+            "file_path": result.file_path,
+            "product_id": product_id,
+            "validation_errors": result.validation_errors,
+            "top_level_keys": list(result.data.keys()) if result.data else [],
+            "pipeline_version": self.config.get("pipeline_version", "unknown"),
+            "config_checksum": self.config.get("config_checksum"),
+            "timestamp": datetime.utcnow().isoformat() + "Z"
+        }
+
+        try:
+            with open(quarantine_file, 'w', encoding='utf-8') as f:
+                json.dump(quarantine_record, f, indent=2, ensure_ascii=False)
+            logger.info("Wrote validation quarantine: %s", quarantine_file)
+        except Exception as e:
+            logger.warning("Failed to write validation quarantine: %s", e)
+
+    @staticmethod
+    def _sort_counter_deterministic(counter: Counter, limit: int = None) -> List[Tuple[str, int]]:
+        """
+        D3: Sort Counter items deterministically for stable CI diffing.
+        Orders by count descending, then by name ascending.
+        """
+        items = list(counter.items())
+        # Sort by count desc, then name asc for deterministic ordering
+        items.sort(key=lambda x: (-x[1], x[0]))
+        if limit:
+            return items[:limit]
+        return items
+
     def check_memory(self) -> Tuple[bool, float]:
         """
-        Monitor memory usage and warn if high
-        Returns: (is_ok, usage_gb)
+        B4: Monitor memory usage and warn if high.
+        Returns: (is_ok, usage_mb) - all memory values in MB for consistency
         """
         try:
-            memory = psutil.Process().memory_info()
-            usage_gb = memory.rss / (1024 * 1024 * 1024)
+            # B4: Check both process and system memory for more accurate monitoring
+            process = psutil.Process()
+            process_memory_mb = process.memory_info().rss / (1024 * 1024)  # MB
 
-            # Record for performance tracking
+            # Also check system-wide memory (helpful when running multiple workers)
+            system_memory = psutil.virtual_memory()
+            system_used_percent = system_memory.percent
+
+            # Record for performance tracking (already in MB)
             self.performance_tracker.record_memory()
 
-            memory_limit = self.config.get("processing", {}).get("memory_limit_gb", 8)
+            # Config is in GB, convert to MB for comparison
+            memory_limit_gb = self.config.get("processing", {}).get("memory_limit_gb", 8)
+            memory_limit_mb = memory_limit_gb * 1024
 
-            if usage_gb > memory_limit:
-                logger.warning(f"High memory usage: {usage_gb:.1f}GB (limit: {memory_limit}GB)")
-                return False, usage_gb
+            # Warn if process memory is high OR system memory is critically low
+            if process_memory_mb > memory_limit_mb:
+                logger.warning(
+                    "High process memory: %.1fMB (limit: %.1fMB), System: %.1f%% used",
+                    process_memory_mb, memory_limit_mb, system_used_percent
+                )
+                return False, process_memory_mb
+            elif system_used_percent > 90:
+                logger.warning(
+                    "System memory critically high: %.1f%% used (process: %.1fMB)",
+                    system_used_percent, process_memory_mb
+                )
+                return False, process_memory_mb
 
-            return True, usage_gb
+            return True, process_memory_mb
         except Exception as e:
-            logger.debug(f"Memory check failed: {e}")
+            logger.debug("Memory check failed: %s", e)
             return True, 0
 
     def validate_input_file(self, file_path: Path) -> Tuple[bool, Optional[str]]:
@@ -190,8 +318,15 @@ class BatchProcessor:
             if missing:
                 return False, f"Missing required fields: {missing}"
 
-            # Check if it's a valid DSLD structure
-            if 'ingredientRows' not in data and 'otherIngredients' not in data:
+            # C3: Check if it's a valid DSLD structure - handle case variations
+            # Accept: ingredientRows, otherIngredients, otheringredients
+            has_ingredient_rows = 'ingredientRows' in data
+            has_other_ingredients = (
+                'otherIngredients' in data or
+                'otheringredients' in data  # C3: Handle lowercase variant
+            )
+
+            if not has_ingredient_rows and not has_other_ingredients:
                 return False, "No ingredient data found"
 
             return True, None
@@ -201,9 +336,11 @@ class BatchProcessor:
         except Exception as e:
             return False, f"Validation error: {str(e)}"
 
-    def verify_output(self, cleaned_data: Dict) -> Tuple[bool, Dict[str, bool]]:
+    def verify_output(
+        self, cleaned_data: Dict, raw_data: Dict = None
+    ) -> Tuple[bool, Dict[str, bool]]:
         """
-        Verify cleaned data meets requirements
+        B3: Verify cleaned data meets requirements with strengthened checks.
         Returns: (all_checks_passed, individual_checks)
         """
         if not self.config.get("validation", {}).get("verify_output", False):
@@ -213,14 +350,59 @@ class BatchProcessor:
             "has_id": "id" in cleaned_data,
             "has_metadata": "metadata" in cleaned_data,
             "has_labelText": "labelText" in cleaned_data,
-            "preserved_original_id": cleaned_data.get("id") is not None,
-            "no_enrichment_fields": all(
-                field not in str(cleaned_data)
-                for field in ["clinicalDosing", "industryBenchmark"]
-            )
         }
 
+        # B3: Strengthen id preservation check - compare with raw if available
+        if raw_data:
+            raw_id = raw_data.get("id")
+            cleaned_id = cleaned_data.get("id")
+            # Handle both string and int comparisons
+            checks["preserved_original_id"] = (
+                cleaned_id is not None and
+                str(cleaned_id) == str(raw_id)
+            )
+        else:
+            checks["preserved_original_id"] = cleaned_data.get("id") is not None
+
+        # B3: Check for disallowed enrichment fields structurally (not string search)
+        disallowed_fields = ["clinicalDosing", "industryBenchmark", "efficacyScore"]
+        checks["no_enrichment_fields"] = self._check_no_disallowed_keys(
+            cleaned_data, disallowed_fields
+        )
+
+        # B3: Validate ingredient arrays are actually arrays
+        checks["valid_ingredients_structure"] = (
+            isinstance(cleaned_data.get("activeIngredients", []), list) and
+            isinstance(cleaned_data.get("inactiveIngredients", []), list)
+        )
+
         return all(checks.values()), checks
+
+    def _check_no_disallowed_keys(
+        self, data: Dict, disallowed: List[str], path: str = ""
+    ) -> bool:
+        """
+        B3: Recursively check that no disallowed keys exist in the data structure.
+        This is safer than string-searching the entire dict.
+        """
+        if not isinstance(data, dict):
+            return True
+
+        for key, value in data.items():
+            if key in disallowed:
+                logger.warning(f"Found disallowed key '{key}' at path: {path}.{key}")
+                return False
+            if isinstance(value, dict):
+                if not self._check_no_disallowed_keys(value, disallowed, f"{path}.{key}"):
+                    return False
+            elif isinstance(value, list):
+                for i, item in enumerate(value):
+                    if isinstance(item, dict):
+                        if not self._check_no_disallowed_keys(
+                            item, disallowed, f"{path}.{key}[{i}]"
+                        ):
+                            return False
+        return True
 
     def get_input_files(self, input_directory: str) -> List[Path]:
         """Get list of input DSLD JSON files"""
@@ -259,10 +441,16 @@ class BatchProcessor:
         except Exception as e:
             logger.error(f"Failed to save state: {str(e)}")
     
-    def create_initial_state(self, total_files: int) -> BatchState:
-        """Create initial processing state"""
+    def create_initial_state(self, files: List[Path]) -> BatchState:
+        """Create initial processing state with file manifest for robust resume"""
+        total_files = len(files)
         total_batches = (total_files + self.batch_size - 1) // self.batch_size
-        
+
+        # A7: Store file manifest info for resume validation
+        sorted_files = sorted(str(f) for f in files)
+        first_file = sorted_files[0] if sorted_files else ""
+        last_file = sorted_files[-1] if sorted_files else ""
+
         return BatchState(
             started=datetime.utcnow().isoformat() + "Z",
             last_updated=datetime.utcnow().isoformat() + "Z",
@@ -272,7 +460,11 @@ class BatchProcessor:
             total_files=total_files,
             errors=[],
             can_resume=True,
-            config_checksum=self._get_config_checksum()
+            config_checksum=self._get_config_checksum(),
+            file_manifest_checksum=self._get_file_manifest_checksum(files),
+            first_file=first_file,
+            last_file=last_file,
+            processed_file_paths=[]
         )
     
     def _get_config_checksum(self) -> str:
@@ -280,25 +472,85 @@ class BatchProcessor:
         config_str = json.dumps(self.config, sort_keys=True)
         import hashlib
         return hashlib.md5(config_str.encode()).hexdigest()
+
+    def _get_file_manifest_checksum(self, files: List[Path]) -> str:
+        """
+        A7: Get checksum of file manifest for resume validation.
+        This ensures resume won't skip/reprocess wrong files if file list changes.
+
+        Includes: path, size, mtime (integer seconds for network filesystem safety)
+        This is a best-effort integrity check, not cryptographic.
+        """
+        import hashlib
+        import os
+
+        manifest_entries = []
+        for f in sorted(files, key=str):
+            try:
+                stat_info = os.stat(f)
+                # Use integer seconds for mtime - network filesystems have varying precision
+                entry = f"{f}|{stat_info.st_size}|{int(stat_info.st_mtime)}"
+                manifest_entries.append(entry)
+            except OSError as e:
+                # File doesn't exist or is inaccessible - include error marker
+                logger.warning("Cannot stat file for manifest: %s - %s", f, e)
+                manifest_entries.append(f"{f}|ERROR")
+
+        manifest_str = "\n".join(manifest_entries)
+        return hashlib.md5(manifest_str.encode()).hexdigest()
     
     def process_all_files(self, files: List[Path], resume: bool = False) -> Dict[str, Any]:
         """Process all files in batches"""
         start_time = time.time()
-        
+
         # Load or create state
         state = None
         if resume:
             state = self.load_state()
-            if state and state.config_checksum != self._get_config_checksum():
-                logger.warning("Config changed since last run, starting fresh")
-                state = None
-        
+            if state:
+                # FAIL-FAST: Check all files exist before resuming
+                missing_files = [f for f in files if not f.exists()]
+                if missing_files:
+                    error_msg = (
+                        f"Resume aborted: {len(missing_files)} file(s) from manifest "
+                        f"no longer exist. First missing: '{missing_files[0]}'"
+                    )
+                    logger.error(error_msg)
+                    raise FileNotFoundError(error_msg)
+
+                # A7: Validate config hasn't changed
+                if state.config_checksum != self._get_config_checksum():
+                    logger.warning("Config changed since last run, starting fresh")
+                    state = None
+                # A7: Validate file manifest hasn't changed (now includes size+mtime)
+                elif state.file_manifest_checksum:
+                    current_manifest = self._get_file_manifest_checksum(files)
+                    if state.file_manifest_checksum != current_manifest:
+                        logger.warning(
+                            "File manifest changed since last run (files added/removed/modified). "
+                            "Starting fresh to avoid skipping or reprocessing wrong files."
+                        )
+                        state = None
+                    else:
+                        logger.info("File manifest validated - safe to resume")
+
         if not state:
-            state = self.create_initial_state(len(files))
-        
+            state = self.create_initial_state(files)
+
+        # FIX 1+2: Skip already-processed files on resume
+        processed_set = set(state.processed_file_paths or [])
+        if resume and processed_set:
+            original_count = len(files)
+            files = [f for f in files if str(f) not in processed_set]
+            skipped_count = original_count - len(files)
+            if skipped_count > 0:
+                logger.info(f"Skipping {skipped_count} already-processed files on resume")
+            # Recompute batches for remaining files
+            state.total_batches = (len(files) + self.batch_size - 1) // self.batch_size
+
         logger.info(f"Processing {len(files)} files in {state.total_batches} batches")
         logger.info(f"Batch size: {self.batch_size}, Max workers: {self.max_workers}")
-        
+
         if resume and state.last_completed_batch >= 0:
             logger.info(f"Resuming from batch {state.last_completed_batch + 1}")
         
@@ -322,6 +574,8 @@ class BatchProcessor:
             state.processed_files += len(batch_files)
             state.last_updated = datetime.utcnow().isoformat() + "Z"
             state.errors.extend(batch_result.get("errors", []))
+            # FIX 1+2: Track processed file paths for per-file resume
+            state.processed_file_paths.extend(batch_result.get("processed_files", []))
             self.save_state(state)
             
             # Log batch completion
@@ -348,10 +602,10 @@ class BatchProcessor:
         """Process a single batch of files"""
         batch_start_time = time.time()
 
-        # Check memory before processing
+        # Check memory before processing (now in MB)
         memory_ok, memory_usage = self.check_memory()
         if not memory_ok and self.config.get("processing", {}).get("pause_on_high_memory", False):
-            logger.warning(f"Pausing for 5 seconds due to high memory usage ({memory_usage:.1f}GB)")
+            logger.warning(f"Pausing for 5 seconds due to high memory usage ({memory_usage:.1f}MB)")
             time.sleep(5)
 
         # Create batch logger
@@ -360,9 +614,9 @@ class BatchProcessor:
 
         batch_logger.info(f"=== Batch {batch_num + 1} Processing Log ===")
         batch_logger.info(f"Started: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
-        batch_logger.info(f"Memory usage: {memory_usage:.1f}GB")
+        batch_logger.info(f"Memory usage: {memory_usage:.1f}MB")
         batch_logger.info(f"Files: {files[0].name} to {files[-1].name}")
-        
+
         # Containers for results
         cleaned_products = []
         needs_review_products = []
@@ -370,6 +624,7 @@ class BatchProcessor:
         errors = []
         batch_unmapped = Counter()
         batch_mapped = Counter()
+        processed_files = []  # FIX 1+2: Track processed file paths
         
         # Process files
         if self.max_workers == 1:
@@ -377,12 +632,31 @@ class BatchProcessor:
             # PERFORMANCE FIX: Initialize worker once before processing files
             init_worker(str(self.output_dir))
             for file_path in files:
+                # FIX 7: Validate input file before processing
+                is_valid, validation_error = self.validate_input_file(file_path)
+                if not is_valid:
+                    error_msg = f"Input validation failed for {file_path}: {validation_error}"
+                    errors.append(error_msg)
+                    batch_logger.error(error_msg)
+                    # FIX 4: Write structured quarantine for validation failures
+                    self._write_quarantine_file(
+                        str(file_path),
+                        StructuredError(
+                            file_path=str(file_path),
+                            exception_type="InputValidationError",
+                            message=validation_error,
+                            stage="validate"
+                        )
+                    )
+                    continue
+
                 result = process_single_file(str(file_path), str(self.output_dir))
+                processed_files.append(str(file_path))  # FIX 1+2: Track processed
                 self._categorize_result(
-                    result, 
-                    cleaned_products, 
-                    needs_review_products, 
-                    incomplete_products, 
+                    result,
+                    cleaned_products,
+                    needs_review_products,
+                    incomplete_products,
                     errors,
                     batch_unmapped,
                     batch_mapped
@@ -390,15 +664,37 @@ class BatchProcessor:
         else:
             # Multi-threaded processing with worker initialization
             # PERFORMANCE FIX: Initialize normalizer once per worker, not per file
+
+            # FIX 7: Pre-validate all files before submitting to executor
+            valid_files = []
+            for file_path in files:
+                is_valid, validation_error = self.validate_input_file(file_path)
+                if not is_valid:
+                    error_msg = f"Input validation failed: {file_path}: {validation_error}"
+                    errors.append(error_msg)
+                    batch_logger.error(error_msg)
+                    # FIX 4: Write structured quarantine for validation failures
+                    self._write_quarantine_file(
+                        str(file_path),
+                        StructuredError(
+                            file_path=str(file_path),
+                            exception_type="InputValidationError",
+                            message=validation_error,
+                            stage="validate"
+                        )
+                    )
+                else:
+                    valid_files.append(file_path)
+
             with ProcessPoolExecutor(
                 max_workers=self.max_workers,
                 initializer=init_worker,
                 initargs=(str(self.output_dir),)
             ) as executor:
-                # Submit all jobs
+                # Submit only validated files
                 future_to_file = {
                     executor.submit(process_single_file, str(f), str(self.output_dir)): f
-                    for f in files
+                    for f in valid_files
                 }
 
                 # Check if progress bar should be shown
@@ -409,7 +705,7 @@ class BatchProcessor:
                 if show_progress:
                     futures_iterator = tqdm(
                         futures_iterator,
-                        total=len(files),
+                        total=len(valid_files),
                         desc=f"Processing Batch {batch_num + 1}",
                         unit="file"
                     )
@@ -419,11 +715,12 @@ class BatchProcessor:
                     file_path = future_to_file[future]
                     try:
                         result = future.result()
+                        processed_files.append(str(file_path))  # FIX 1+2: Track
                         self._categorize_result(
-                            result, 
-                            cleaned_products, 
-                            needs_review_products, 
-                            incomplete_products, 
+                            result,
+                            cleaned_products,
+                            needs_review_products,
+                            incomplete_products,
                             errors,
                             batch_unmapped,
                             batch_mapped
@@ -432,6 +729,17 @@ class BatchProcessor:
                         error_msg = f"Failed to process {file_path}: {str(e)}"
                         errors.append(error_msg)
                         batch_logger.error(error_msg)
+                        # FIX 4: Write quarantine for processing exceptions
+                        self._write_quarantine_file(
+                            str(file_path),
+                            StructuredError(
+                                file_path=str(file_path),
+                                exception_type=type(e).__name__,
+                                message=str(e),
+                                stage="process",
+                                traceback=traceback.format_exc()
+                            )
+                        )
         
         # Update global counters
         self.global_unmapped.update(batch_unmapped)
@@ -458,41 +766,84 @@ class BatchProcessor:
             "errors": len(errors),
             "processing_time": batch_time,
             "avg_time_per_file": batch_time / len(files) if files else 0,
-            "memory_mb": final_memory * 1024  # Convert GB to MB
+            "memory_mb": final_memory  # FIX 6: Already in MB from check_memory()
         }
 
-        batch_logger.info(f"Ended: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
-        batch_logger.info(f"Summary: {summary}")
-        batch_logger.info(f"Unmapped ingredients: {len(batch_unmapped)}")
-        batch_logger.info(f"Final memory usage: {final_memory:.1f}GB")
-        
+        batch_logger.info("Ended: %s", datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
+        batch_logger.info("Summary: %s", summary)
+        batch_logger.info("Unmapped ingredients: %d", len(batch_unmapped))
+        batch_logger.info("Final memory usage: %.1fMB", final_memory)  # FIX 6: MB not GB
+
         if errors:
             batch_logger.info("Errors:")
             for error in errors:
-                batch_logger.error(f"  - {error}")
-        
+                batch_logger.error("  - %s", error)
+
+        # FIX 1+2: Return processed_files for per-file resume tracking
         return {
             "summary": summary,
             "errors": errors,
-            "unmapped_count": len(batch_unmapped)
+            "unmapped_count": len(batch_unmapped),
+            "processed_files": processed_files
         }
     
-    def _categorize_result(self, result: ProcessingResult, cleaned: List, 
+    def _categorize_result(self, result: ProcessingResult, cleaned: List,
                           needs_review: List, incomplete: List, errors: List,
                           batch_unmapped: Counter, batch_mapped: Counter = None):
         """Categorize processing result into appropriate list"""
+        # FIX 5: Record per-file processing time for performance tracking
+        if result.processing_time > 0:
+            self.performance_tracker.record_file(result.processing_time)
+
         if not result.success:
             errors.append(f"{result.file_path}: {result.error}")
+            # P2: Write quarantine with stage context for debugging
+            self._write_quarantine_file(
+                str(result.file_path),
+                StructuredError(
+                    file_path=str(result.file_path),
+                    exception_type="ProcessingError",
+                    message=result.error or "Unknown error",
+                    stage=result.error_stage or "unknown",
+                    traceback=None  # Traceback not available from ProcessingResult
+                )
+            )
             return
-        
+
         # Update unmapped ingredients
         if result.unmapped_ingredients:
             batch_unmapped.update(result.unmapped_ingredients)
-        
+
+        # Track which unmapped ingredients are active
+        if result.unmapped_active:
+            self.global_unmapped_active.update(result.unmapped_active)
+
         # Extract and count mapped ingredients from the processed data
         if batch_mapped is not None and result.data:
             self._extract_mapped_ingredients(result.data, batch_mapped)
-        
+
+        # FIX 7: Verify output structure before categorizing
+        if result.data:
+            # Pass raw_id for ID preservation check (wrapped in dict for verify_output)
+            raw_data_for_check = {"id": result.raw_id} if result.raw_id else None
+            output_ok, output_checks = self.verify_output(result.data, raw_data_for_check)
+            if not output_ok:
+                failed_checks = [k for k, v in output_checks.items() if not v]
+                logger.warning(
+                    "Output verification failed for %s: %s",
+                    result.file_path, failed_checks
+                )
+                # Add to validation_errors for tracking
+                if result.validation_errors is None:
+                    result.validation_errors = []
+                result.validation_errors.append(
+                    f"Output verification failed: {failed_checks}"
+                )
+
+        # VALIDATION QUARANTINE: Write quarantine artifact if validation errors exist
+        if result.validation_errors:
+            self._write_validation_quarantine(result)
+
         # Categorize by status
         if result.status == STATUS_SUCCESS:
             cleaned.append(result.data)
@@ -542,11 +893,16 @@ class BatchProcessor:
             self._write_json_output(output_file, incomplete, use_jsonl)
     
     def _write_json_output(self, file_path: Path, data: List[Dict], use_jsonl: bool = False):
-        """Write data to JSON or JSONL file based on configuration"""
+        """
+        Write data to JSON or JSONL file using atomic write pattern.
+        FIX 8: Write to .tmp file first, then atomically rename to prevent
+        partial writes on crash/interrupt.
+        """
+        tmp_path = file_path.with_suffix(file_path.suffix + '.tmp')
         try:
             pretty_print = self.config.get("output_format", {}).get("pretty_print", False)
-            
-            with open(file_path, 'w', encoding='utf-8') as f:
+
+            with open(tmp_path, 'w', encoding='utf-8') as f:
                 if use_jsonl:
                     # JSONL format: one JSON object per line
                     for item in data:
@@ -557,10 +913,18 @@ class BatchProcessor:
                         json.dump(data, f, ensure_ascii=False, indent=2)
                     else:
                         json.dump(data, f, ensure_ascii=False)
-                        
-            logger.debug(f"Wrote {len(data)} items to {file_path}")
+
+            # FIX 8: Atomic rename - if this fails, original file is untouched
+            os.replace(tmp_path, file_path)
+            logger.debug("Wrote %d items to %s", len(data), file_path)
         except Exception as e:
-            logger.error(f"Failed to write {file_path}: {str(e)}")
+            logger.error("Failed to write %s: %s", file_path, str(e))
+            # Clean up temp file if it exists
+            if tmp_path.exists():
+                try:
+                    tmp_path.unlink()
+                except OSError:
+                    pass
     
     def _save_unmapped_ingredients(self):
         """Save cumulative unmapped ingredients using enhanced tracking"""
@@ -570,17 +934,15 @@ class BatchProcessor:
         
         # Transfer global unmapped data to the normalizer
         temp_normalizer.unmapped_ingredients = self.global_unmapped.copy()
-        
-        # We need to reconstruct the details from what we have
-        # Since batch processing doesn't track active/inactive status globally,
-        # we'll create a basic fallback
+
+        # Reconstruct details with correct is_active status from global tracking
         temp_normalizer.unmapped_details = {}
         for name, count in self.global_unmapped.items():
             temp_normalizer.unmapped_details[name] = {
                 "processed_name": name.lower(),
                 "forms": [],
                 "variations_tried": [],
-                "is_active": False  # Default to inactive since we can't determine from global counter
+                "is_active": name in self.global_unmapped_active  # Use tracked active status
             }
         
         # Process and save with enhanced tracking
@@ -592,6 +954,7 @@ class BatchProcessor:
             logger.error(f"Failed to save enhanced unmapped ingredients: {str(e)}")
             
             # Fallback to original method
+            # D3: Use deterministic ordering
             unmapped_data = {
                 "unmapped": [
                     {
@@ -599,7 +962,7 @@ class BatchProcessor:
                         "occurrences": count,
                         "firstSeen": datetime.utcnow().isoformat() + "Z"
                     }
-                    for name, count in self.global_unmapped.most_common()
+                    for name, count in self._sort_counter_deterministic(self.global_unmapped)
                 ],
                 "stats": {
                     "totalUnmapped": len(self.global_unmapped),
@@ -686,19 +1049,23 @@ class BatchProcessor:
                         f.write(f"  - Peak memory usage: {perf['peak_memory_mb']:.1f}MB\n")
                     f.write("\n")
 
-                # Add top mapped ingredients for data insights
+                # D3: Add top mapped ingredients with deterministic ordering
                 if self.global_mapped:
                     f.write("Top 15 Mapped Ingredients (data insights):\n")
-                    for ingredient, count in self.global_mapped.most_common(15):
+                    for ingredient, count in self._sort_counter_deterministic(
+                        self.global_mapped, 15
+                    ):
                         f.write(f"  {count:>3}x {ingredient}\n")
-                    f.write("\n📊 These are the most frequently appearing mapped ingredients\n\n")
-                
-                # Add top unmapped ingredients for enrichment planning
+                    f.write("\nThese are the most frequently appearing mapped ingredients\n\n")
+
+                # D3: Add top unmapped ingredients with deterministic ordering
                 if self.global_unmapped:
                     f.write("Top 10 Unmapped Ingredients (for enrichment planning):\n")
-                    for ingredient, count in self.global_unmapped.most_common(10):
+                    for ingredient, count in self._sort_counter_deterministic(
+                        self.global_unmapped, 10
+                    ):
                         f.write(f"  {count:>3}x {ingredient}\n")
-                    f.write("\n💡 These ingredients should be prioritized for database enrichment\n\n")
+                    f.write("\nThese ingredients should be prioritized for database enrichment\n\n")
 
                 f.write("Batch Details:\n")
                 for i, batch in enumerate(batch_results):
@@ -996,21 +1363,31 @@ class BatchProcessor:
             f.write("- **Benefit:** Much better data quality for future similar products\n\n")
     
     def _create_batch_logger(self, log_file: Path) -> logging.Logger:
-        """Create batch-specific logger"""
+        """
+        B5: Create batch-specific logger with proper handler management.
+        Prevents handler leaks and duplicate log entries.
+        """
         logger_name = f"batch_{log_file.stem}"
         batch_logger = logging.getLogger(logger_name)
-        
-        # Remove existing handlers
+
+        # B5: Prevent log propagation to root logger (avoid duplicates)
+        batch_logger.propagate = False
+
+        # Remove existing handlers and close them properly
         for handler in batch_logger.handlers[:]:
+            try:
+                handler.close()
+            except Exception:
+                pass
             batch_logger.removeHandler(handler)
-        
+
         # Add file handler
-        handler = logging.FileHandler(log_file)
+        handler = logging.FileHandler(log_file, encoding='utf-8')
         formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
         handler.setFormatter(formatter)
         batch_logger.addHandler(handler)
         batch_logger.setLevel(logging.INFO)
-        
+
         return batch_logger
 
 
@@ -1020,13 +1397,29 @@ _worker_validator = None
 _worker_output_dir = None
 
 
-def init_worker(output_dir: str = None):
+def init_worker(output_dir: str = None, from_defensive_init: bool = False):
     """
     Initialize worker process with shared normalizer and validator instances.
     This is called ONCE per worker process, not per file.
     PERFORMANCE FIX: Avoids reloading databases for every single file.
+
+    Args:
+        output_dir: Output directory for unmapped tracking
+        from_defensive_init: True if called from defensive fallback (for logging)
+
+    Raises:
+        RuntimeError: If critical reference files fail to load
     """
     global _worker_normalizer, _worker_validator, _worker_output_dir
+    # FIX 11: os is already imported at module level, no need to reimport
+
+    # Log warning if this is a defensive initialization
+    if from_defensive_init:
+        logger.warning(
+            "Defensive worker init triggered (PID: %s, output_dir: %s) - "
+            "this may indicate init_worker() was not called properly",
+            os.getpid(), output_dir
+        )
 
     # Initialize normalizer ONCE per worker (loads all databases once)
     _worker_normalizer = EnhancedDSLDNormalizer()
@@ -1036,6 +1429,76 @@ def init_worker(output_dir: str = None):
 
     # Initialize validator ONCE per worker
     _worker_validator = DSLDValidator()
+
+    # POST-INIT VERIFICATION: Fail fast if critical datasets are missing
+    # Critical datasets (required for safety/correctness):
+    # - These are required by core safety logic (banned/harmful detection)
+    # - Without these, outputs would be unsafe/inconsistent
+    critical_datasets = {
+        "ingredient_quality_map": _worker_normalizer.ingredient_map,
+        "harmful_additives": _worker_normalizer.harmful_additives,
+        "allergens_db": _worker_normalizer.allergens_db,
+        "banned_recalled": _worker_normalizer.banned_recalled,
+        "ingredient_classification": _worker_normalizer.ingredient_classification,
+    }
+
+    missing_critical = []
+    for name, data in critical_datasets.items():
+        if not data or (isinstance(data, dict) and len(data) == 0):
+            missing_critical.append(name)
+
+    if missing_critical:
+        error_msg = (
+            f"CRITICAL: Worker init failed - required datasets missing or empty: "
+            f"{', '.join(missing_critical)}. Cannot continue with partial mappings. "
+            f"Ensure these files exist in data/ directory."
+        )
+        logger.error(error_msg)
+        raise RuntimeError(error_msg)
+
+    # Strongly recommended datasets (warn if missing, but don't fail)
+    # - These improve parsing/coverage and reduce false "unmapped"
+    # - Pipeline can still run, but with degraded results
+    recommended_datasets = {
+        "standardized_botanicals": _worker_normalizer.standardized_botanicals,
+        "absorption_enhancers": _worker_normalizer.absorption_enhancers,
+        "other_ingredients": _worker_normalizer.other_ingredients,
+        "botanical_ingredients": _worker_normalizer.botanical_ingredients,
+        "proprietary_blends": _worker_normalizer.proprietary_blends,
+    }
+
+    skipped_recommended = []
+    for name, data in recommended_datasets.items():
+        if not data or (isinstance(data, dict) and len(data) == 0):
+            skipped_recommended.append(name)
+
+    if skipped_recommended:
+        logger.warning(
+            "RECOMMENDED datasets not loaded (PID: %s): %s. "
+            "Results may have more unmapped ingredients, weaker blend/botanical handling.",
+            os.getpid(), ', '.join(skipped_recommended)
+        )
+
+    # Optional datasets (info-level log if skipped)
+    optional_datasets = {
+        "enhanced_delivery": _worker_normalizer.enhanced_delivery,
+    }
+
+    skipped_optional = []
+    for name, data in optional_datasets.items():
+        if not data or (isinstance(data, dict) and len(data) == 0):
+            skipped_optional.append(name)
+
+    if skipped_optional:
+        logger.info(
+            "Optional datasets not loaded (PID: %s): %s",
+            os.getpid(), ', '.join(skipped_optional)
+        )
+
+    logger.debug(
+        "Worker initialized (PID: %s): critical datasets verified",
+        os.getpid()
+    )
 
 
 def process_single_file(file_path: str, output_dir: str = None) -> ProcessingResult:
@@ -1047,9 +1510,16 @@ def process_single_file(file_path: str, output_dir: str = None) -> ProcessingRes
     global _worker_normalizer, _worker_validator
 
     start_time = time.time()
+    stage = "init"  # P2: Track stage for structured error context
 
     try:
+        # A8: Defensive initialization - if globals are None, initialize them
+        # This protects against direct calls without init_worker() being called first
+        if _worker_normalizer is None or _worker_validator is None:
+            init_worker(output_dir, from_defensive_init=True)
+
         # Load JSON data
+        stage = "load"
         with open(file_path, 'r', encoding='utf-8') as f:
             raw_data = json.load(f)
 
@@ -1062,21 +1532,48 @@ def process_single_file(file_path: str, output_dir: str = None) -> ProcessingRes
         unmapped_before = normalizer.get_unmapped_snapshot()
 
         # Normalize the data
+        stage = "normalize"
         cleaned_data = normalizer.normalize_product(raw_data)
 
-        # Validate the result
+        # B2: Validate CLEANED data structure (not just raw data)
+        # SINGLE SOURCE OF TRUTH: If validation errors exist, attach to metadata and force status
+        stage = "validate_cleaned"
+        cleaned_errors = validator.validate_cleaned_product(cleaned_data)
+        validation_forced_review = False
+        if cleaned_errors:
+            # Attach errors to metadata for debugging/triage
+            cleaned_data["metadata"]["validationErrors"] = cleaned_errors
+            cleaned_data["metadata"]["validationErrorCount"] = len(cleaned_errors)
+            # Log at WARN level (not DEBUG) for visibility
+            product_id = cleaned_data.get("id", Path(file_path).stem)
+            logger.warning(
+                "Cleaned data validation errors for product %s: %s",
+                product_id,
+                cleaned_errors
+            )
+            validation_forced_review = True
+
+        # Validate raw data for completeness/status determination
+        stage = "validate_raw"
         status, missing_fields, validation_details = validator.validate_product(raw_data)
 
         # DELTA TRACKING: Get only NEW unmapped ingredients for THIS file
         unmapped_delta = normalizer.get_unmapped_delta(unmapped_before)
         unmapped_list = [item["name"] for item in unmapped_delta["unmapped"]]
+        # Extract which unmapped ingredients are active (from ingredientRows, not otherIngredients)
+        unmapped_active_set = {item["name"] for item in unmapped_delta["unmapped"] if item.get("isActive", False)}
 
-        # Calculate mapping statistics for final status decision
-        total_ingredients = len(cleaned_data.get("activeIngredients", [])) + len(cleaned_data.get("inactiveIngredients", []))
-        unmapped_count = len(unmapped_list)
+        # B1: Calculate mapping statistics from CLEANED ingredient objects directly
+        # This ensures consistency - count mapped:true from actual cleaned data
+        active_ings = cleaned_data.get("activeIngredients", [])
+        inactive_ings = cleaned_data.get("inactiveIngredients", [])
+        total_ingredients = len(active_ings) + len(inactive_ings)
 
-        # CLAMP VALUES: Prevent negative mappedIngredients (can happen if ingredients filtered but counted as unmapped)
-        mapped_count = max(0, total_ingredients - unmapped_count)
+        # Count ingredients that have mapped:true in the cleaned data
+        mapped_count = sum(
+            1 for ing in active_ings + inactive_ings if ing.get("mapped", False)
+        )
+        unmapped_count = total_ingredients - mapped_count
         mapping_rate = (mapped_count / total_ingredients * 100) if total_ingredients > 0 else 100
 
         # Update metadata with validation results AND mapping stats
@@ -1092,27 +1589,36 @@ def process_single_file(file_path: str, output_dir: str = None) -> ProcessingRes
             "unmappedIngredients": unmapped_count,
             "mappingRate": mapping_rate
         }
-        
+
         # IMPROVED: Adjust status based on actual mapping performance
         if status == STATUS_NEEDS_REVIEW:
             # If product has excellent mapping (90%+) and only missing UPC, promote to success
-            if (mapping_rate >= VALIDATION_THRESHOLDS["excellent_mapping"] and 
-                len(missing_fields) == 1 and 
+            if (mapping_rate >= VALIDATION_THRESHOLDS["excellent_mapping"] and
+                len(missing_fields) == 1 and
                 missing_fields[0] == "upcSku" and
                 validation_details.get("critical_fields_complete", False)):
                 status = STATUS_SUCCESS
-        
+
+        # VALIDATION ROUTING: Force NEEDS_REVIEW if cleaned data has structural errors
+        # This OVERRIDES any status promotion above - validation errors are serious
+        if validation_forced_review:
+            status = STATUS_NEEDS_REVIEW
+
+        stage = "finalize"
         processing_time = time.time() - start_time
-        
+
         return ProcessingResult(
             success=True,
             status=status,
             data=cleaned_data,
             file_path=file_path,
             processing_time=processing_time,
-            unmapped_ingredients=unmapped_list
+            unmapped_ingredients=unmapped_list,
+            unmapped_active=unmapped_active_set,  # Track which unmapped are active ingredients
+            validation_errors=cleaned_errors if cleaned_errors else None,
+            raw_id=raw_data.get("id")  # For verify_output ID preservation check
         )
-        
+
     except Exception as e:
         processing_time = time.time() - start_time
         return ProcessingResult(
@@ -1120,5 +1626,6 @@ def process_single_file(file_path: str, output_dir: str = None) -> ProcessingRes
             status=STATUS_ERROR,
             error=str(e),
             file_path=file_path,
-            processing_time=processing_time
+            processing_time=processing_time,
+            error_stage=stage  # P2: Include stage context for debugging
         )

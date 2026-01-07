@@ -11,16 +11,15 @@
     "workflow": "1. CLEANING (this phase) → 2. ENRICHMENT → 3. SCORING → 4. DEPLOYMENT"
   },
   "paths": {
-    "input_directory": "/Users/seancheick/Documents/DataSetDsld/Lozenges-978labels-11-11-25",
-    "output_directory": "output_Lozenges",
+    "input_directory": "/Users/seancheick/Documents/DataSetDsld/Gummies-Jellies-4562-labels-11-11-25",
+    "output_directory": "output_Gummies",
     "reference_data": "data",
     "log_directory": "logs"
   },
   "processing": {
-    "_comment": "Optimized for performance: smaller batches with parallel processing",
+    "_comment": "batch_size controls files per batch, max_workers controls parallel processes",
     "batch_size": 500,
-    "max_workers": 4,
-    "chunk_size": 50
+    "max_workers": 4
   },
   "output_format": {
     "_comment": "JSON formatting - pretty_print=true for development, false for production",
@@ -28,16 +27,14 @@
     "_help": "true = human-readable indented JSON (2x size), false = minified single-line (50% smaller)"
   },
   "logging": {
+    "_comment": "Logs are written as timestamped files: logs/dsld_cleaning_YYYYMMDD_HHMMSS.log",
     "level": "INFO",
     "log_to_console": true,
-    "log_to_file": true,
-    "file": "logs/dsld_cleaning.log",
-    "max_bytes": 10485760,
-    "backup_count": 5
+    "log_to_file": true
   },
   "validation": {
-    "_comment": "Field validation and completeness scoring",
-    "required_fields": {
+    "_comment": "Required fields are defined in constants.py (REQUIRED_FIELDS). This section is for reference only.",
+    "_reference_only": {
       "critical": ["id", "fullName", "brandName", "ingredientRows"],
       "important": ["upcSku", "productType", "physicalState"],
       "optional": [
@@ -45,35 +42,15 @@
         "thumbnail",
         "netContents",
         "targetGroups",
-        "images",
-        "contacts",
-        "events",
-        "statements",
-        "claims",
-        "servingSizes"
+        "images"
       ]
-    },
-    "completeness_threshold": 75.0,
-    "mapping_threshold": 75.0
-  },
-  "normalization": {
-    "_comment": "Enhanced normalizer settings with comprehensive ingredient mapping",
-    "fuzzy_match_threshold": 85,
-    "preserve_original_names": true,
-    "extract_dosages": true,
-    "detect_allergens": true,
-    "flag_harmful_additives": true
+    }
   },
   "options": {
-    "_comment": "Processing options - set resume_processing=true to continue interrupted runs",
-    "resume_processing": false,
-    "dry_run": false,
-    "generate_reports": true,
-    "create_backups": true
+    "_comment": "These options are passed via CLI (--resume, --dry-run), kept for documentation"
   },
   "ui": {
-    "_comment": "User interface settings for interactive processing",
-    "show_progress_bar": true,
-    "_help": "true = show tqdm progress bar for large datasets, false = standard logging only"
+    "_comment": "User interface settings",
+    "show_progress_bar": true
   }
 }
