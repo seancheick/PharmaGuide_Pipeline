@@ -35654,7 +35654,8 @@
       "glandular",
       "energy_substrates"
     ],
-    "cleanup_notes": "Resolved within-ingredient alias collisions; removed 63 redundant unspecified forms"
+    "cleanup_notes": "Resolved within-ingredient alias collisions; removed 63 redundant unspecified forms",
+    "total_entries": 449
   },
   "silicon": {
     "standard_name": "Silicon",

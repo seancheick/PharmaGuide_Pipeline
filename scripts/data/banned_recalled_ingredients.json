@@ -22,13 +22,13 @@
         "scientific_references",
         "aliases"
       ],
-      "authoritative_fields": [
-        "legal_status_enum",
-        "clinical_risk_enum",
-        "jurisdictions",
-        "references_structured",
-        "synonyms"
-      ],
+        "authoritative_fields": [
+          "legal_status_enum",
+          "clinical_risk_enum",
+          "jurisdictions",
+          "references_structured",
+          "aliases"
+        ],
       "deprecation_timeline": "deprecated fields will be removed in v4.0",
       "migrated_from": "2.2",
       "migration_date": "2026-01-08"

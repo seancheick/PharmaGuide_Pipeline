@@ -4,7 +4,8 @@
     "purpose": "match_override",
     "schema_version": "4.0.0",
     "last_updated": "2026-02-16",
-    "version": "1.0.0"
+    "version": "1.0.0",
+    "total_entries": 5
   },
   "allowlist": [
     {

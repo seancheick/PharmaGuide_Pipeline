@@ -125,17 +125,12 @@ SCHEMAS = {
     'rda_optimal_uls': {
         'type': 'object',
         'properties': {
-            'database_info': {
+            '_metadata': {
                 'type': 'object',
                 'properties': {
-                    'version': {'type': 'string'},
+                    'schema_version': {'type': 'string'},
                     'last_updated': {'type': 'string'},
-                    'total_nutrients': {'type': 'integer'},
-                    'data_source': {'type': 'string'},
-                    'country': {'type': 'string'},
-                    'age_brackets': {'type': 'array', 'items': {'type': 'string'}},
-                    'units_verified': {'type': 'boolean'},
-                    'notes': {'type': 'string'}
+                    'total_entries': {'type': 'integer'}
                 }
             },
             'nutrient_recommendations': {
@@ -161,7 +156,7 @@ SCHEMAS = {
                                     'group': {'type': 'string'},
                                     'age_range': {'type': 'string'},
                                     'rda_ai': {'type': ['number', 'null']},
-                                    'ul': {'type': ['number', 'string', 'null']}
+                                    'ul': {'type': ['number', 'null']}
                                 },
                                 'required': ['group', 'age_range']
                             }
@@ -171,7 +166,7 @@ SCHEMAS = {
                 }
             }
         },
-        'required': ['nutrient_recommendations']
+        'required': ['_metadata', 'nutrient_recommendations']
     },
     'standardized_botanicals': {
         'type': 'object',

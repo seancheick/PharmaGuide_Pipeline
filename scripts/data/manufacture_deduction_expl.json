@@ -6,7 +6,8 @@
     "last_updated": "2026-02-16",
     "version": "2.0",
     "max_score": 100,
-    "minimum_viable_score": 0
+    "minimum_viable_score": 0,
+    "total_entries": 5
   },
   "total_deduction_cap": -25,
   "violation_categories": {

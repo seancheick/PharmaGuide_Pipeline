@@ -37,7 +37,8 @@
       "batch_traceability": 4,
       "quality_markers": 6,
       "total_rules": 45
-    }
+    },
+    "total_entries": 45
   },
   "config": {
     "source_field_groups": {

@@ -9,7 +9,8 @@
       "to_version": "3.0.0",
       "migration_date": "2026-01-08",
       "migrated_by": "fix_ingredient_quality_map.py"
-    }
+    },
+    "total_entries": 38
   },
   "counts": {
     "before": {

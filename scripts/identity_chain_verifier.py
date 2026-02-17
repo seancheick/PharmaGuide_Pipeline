@@ -122,7 +122,7 @@ def verify_product(pid, cleaned, enriched, scored):
         result["cleaned"]["inactive_ingredients"].append(info)
 
     # ── ENRICHED stage ────────────────────────────────────────────────
-    e_name = enriched.get("fullName") or enriched.get("product_name", "(no name)")
+    e_name = enriched.get("product_name", "(no name)")
     e_active = enriched.get("activeIngredients", [])
     e_inactive = enriched.get("inactiveIngredients", [])
     e_active_count = len(e_active)

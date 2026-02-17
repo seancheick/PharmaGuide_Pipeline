@@ -11,7 +11,8 @@
       "total_conversion_rules": 37,
       "mcg_only_nutrients": 7,
       "notes": "Added B12, Selenium, Chromium, Biotin, Iodine, Molybdenum for AC4 compliance"
-    }
+    },
+    "total_entries": 37
   },
   "vitamin_conversions": {
     "vitamin_d3": {

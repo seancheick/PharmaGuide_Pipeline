@@ -10,7 +10,6 @@ import logging
 from constants import (
     REQUIRED_FIELDS,
     SEVERITY_LEVELS,
-    RISK_LEVELS,
     HARMFUL_CATEGORIES,
     STATUS_SUCCESS,
     STATUS_NEEDS_REVIEW,

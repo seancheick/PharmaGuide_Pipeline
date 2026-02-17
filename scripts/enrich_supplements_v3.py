@@ -4859,32 +4859,32 @@ class SupplementEnricherV3:
     # Categories with elevated contamination risk (based on ConsumerLab/FDA data)
     HIGH_CONTAMINATION_RISK_CATEGORIES = {
         "protein_powder": {
-            "risk_level": "elevated",
+            "severity_level": "elevated",
             "concerns": ["heavy_metals", "bpa"],
             "note": "Independent tests found lead/arsenic in many protein supplements"
         },
         "greens_superfood": {
-            "risk_level": "elevated",
+            "severity_level": "elevated",
             "concerns": ["heavy_metals", "pesticides"],
             "note": "Plant-based concentrates may accumulate soil contaminants"
         },
         "ayurvedic_herbal": {
-            "risk_level": "high",
+            "severity_level": "high",
             "concerns": ["heavy_metals", "adulterants"],
             "note": "Traditional preparations sometimes contain lead/mercury"
         },
         "weight_loss": {
-            "risk_level": "high",
+            "severity_level": "high",
             "concerns": ["adulterants", "stimulants"],
             "note": "FDA has found hidden drugs in weight loss supplements"
         },
         "sexual_enhancement": {
-            "risk_level": "high",
+            "severity_level": "high",
             "concerns": ["adulterants", "prescription_drugs"],
             "note": "FDA frequently finds hidden Viagra/Cialis analogs"
         },
         "sports_performance": {
-            "risk_level": "moderate",
+            "severity_level": "moderate",
             "concerns": ["banned_substances", "stimulants"],
             "note": "May contain substances banned by WADA"
         }
@@ -4972,7 +4972,7 @@ class SupplementEnricherV3:
             return {
                 "has_elevated_risk": True,
                 "category": detected_category,
-                "risk_level": risk_info["risk_level"],
+                "severity_level": risk_info["severity_level"],
                 "concerns": risk_info["concerns"],
                 "note": risk_info["note"]
             }
@@ -4980,7 +4980,7 @@ class SupplementEnricherV3:
         return {
             "has_elevated_risk": False,
             "category": None,
-            "risk_level": "standard",
+            "severity_level": "standard",
             "concerns": [],
             "note": None
         }

@@ -245,9 +245,9 @@ REQUIRED_FIELDS = {
 }
 
 # Severity levels
-SEVERITY_LEVELS = ["low", "moderate", "high"]
+SEVERITY_LEVELS = ["low", "moderate", "high", "critical"]
 
-# Kept for backward compatibility — prefer SEVERITY_LEVELS
+# DEPRECATED: Use SEVERITY_LEVELS directly. This alias exists only for backward compatibility.
 RISK_LEVELS = SEVERITY_LEVELS
 
 # Harmful categories

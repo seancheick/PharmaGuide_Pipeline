@@ -4,7 +4,8 @@
     "purpose": "ingredient_classification",
     "schema_version": "4.0.0",
     "last_updated": "2026-02-16",
-    "version": "1.0.0"
+    "version": "1.0.0",
+    "total_entries": 20
   },
   "settings": {
     "enable_case_insensitive": true,

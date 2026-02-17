@@ -54,8 +54,8 @@ for db_file, (main_key, needs_ids) in databases_to_test.items():
         with open(filepath, 'r') as f:
             data = json.load(f)
 
-        # Check metadata
-        has_metadata = '_metadata' in data or 'database_info' in data
+        # Check metadata (v4 schema uses only _metadata)
+        has_metadata = '_metadata' in data
         if not has_metadata:
             print(f"❌ {db_file}: Missing _metadata")
             all_pass = False

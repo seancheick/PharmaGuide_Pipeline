@@ -5,20 +5,6 @@
     "schema_version": "4.0.0",
     "last_updated": "2026-02-16",
     "total_entries": 49,
-    "database_info": {
-      "name": "Manufacturer Violations Database",
-      "description": "FDA recalls, warning letters, and regulatory violations for dietary supplement manufacturers",
-      "version": "2.1.0",
-      "last_updated": "2026-01-27",
-      "total_entries": 49,
-      "sources": [
-        "https://www.fda.gov/safety/recalls-market-withdrawals-safety-alerts",
-        "https://www.fda.gov/food/recalls-outbreaks-emergencies/recalls-foods-dietary-supplements",
-        "FDA Warning Letters database",
-        "ConsumerLab.com recall alerts",
-        "CDC Outbreak Investigations"
-      ]
-    },
     "scoring_rule": "Deductions applied based on violation severity, recency, and resolution status. See manufacture_deduction_expl.json for full scoring framework.",
     "severity_level_definitions": {
       "CRITICAL": "Class I Recalls, toxic substances, undeclared drugs - base deduction -12 to -20",
@@ -303,7 +289,10 @@
       "base_deduction": -15,
       "reason": "Undeclared diclofenac and dexamethasone",
       "contamination_type": "undeclared_drugs",
-      "undeclared_drugs": ["diclofenac", "dexamethasone"],
+      "undeclared_drugs": [
+        "diclofenac",
+        "dexamethasone"
+      ],
       "date": "2024-12-16",
       "days_since_violation": 407,
       "recency_multiplier": 1.0,
@@ -341,7 +330,10 @@
       "base_deduction": -15,
       "reason": "Undeclared Metformin and Glyburide",
       "contamination_type": "undeclared_drugs",
-      "undeclared_drugs": ["metformin", "glyburide"],
+      "undeclared_drugs": [
+        "metformin",
+        "glyburide"
+      ],
       "date": "2024-12-18",
       "days_since_violation": 405,
       "recency_multiplier": 1.0,
@@ -379,7 +371,10 @@
       "base_deduction": -15,
       "reason": "Undeclared Sildenafil and Diclofenac",
       "contamination_type": "undeclared_drugs",
-      "undeclared_drugs": ["sildenafil", "diclofenac"],
+      "undeclared_drugs": [
+        "sildenafil",
+        "diclofenac"
+      ],
       "date": "2024-11-06",
       "days_since_violation": 447,
       "recency_multiplier": 1.0,
@@ -417,7 +412,10 @@
       "base_deduction": -15,
       "reason": "Undeclared Sildenafil and Diclofenac",
       "contamination_type": "undeclared_drugs",
-      "undeclared_drugs": ["sildenafil", "diclofenac"],
+      "undeclared_drugs": [
+        "sildenafil",
+        "diclofenac"
+      ],
       "date": "2024-11-04",
       "days_since_violation": 449,
       "recency_multiplier": 1.0,
@@ -455,7 +453,11 @@
       "base_deduction": -15,
       "reason": "Undeclared Diclofenac, Dexamethasone, and Methocarbamol",
       "contamination_type": "undeclared_drugs",
-      "undeclared_drugs": ["diclofenac", "dexamethasone", "methocarbamol"],
+      "undeclared_drugs": [
+        "diclofenac",
+        "dexamethasone",
+        "methocarbamol"
+      ],
       "date": "2024-10-16",
       "days_since_violation": 468,
       "recency_multiplier": 1.0,
@@ -493,7 +495,10 @@
       "base_deduction": -15,
       "reason": "Undeclared diclofenac and omeprazole",
       "contamination_type": "undeclared_drugs",
-      "undeclared_drugs": ["diclofenac", "omeprazole"],
+      "undeclared_drugs": [
+        "diclofenac",
+        "omeprazole"
+      ],
       "date": "2024-11-19",
       "days_since_violation": 434,
       "recency_multiplier": 1.0,
@@ -531,7 +536,11 @@
       "base_deduction": -15,
       "reason": "Undeclared furosemide, Dexamethasone and Chlorpheniramine",
       "contamination_type": "undeclared_drugs",
-      "undeclared_drugs": ["furosemide", "dexamethasone", "chlorpheniramine"],
+      "undeclared_drugs": [
+        "furosemide",
+        "dexamethasone",
+        "chlorpheniramine"
+      ],
       "date": "2024-12-13",
       "days_since_violation": 410,
       "recency_multiplier": 1.0,
@@ -569,7 +578,10 @@
       "base_deduction": -15,
       "reason": "Undeclared dexamethasone and chlorpheniramine",
       "contamination_type": "undeclared_drugs",
-      "undeclared_drugs": ["dexamethasone", "chlorpheniramine"],
+      "undeclared_drugs": [
+        "dexamethasone",
+        "chlorpheniramine"
+      ],
       "date": "2024-09-20",
       "days_since_violation": 494,
       "recency_multiplier": 1.0,
@@ -607,7 +619,11 @@
       "base_deduction": -15,
       "reason": "Undeclared acetaminophen, diclofenac and phenylbutazone",
       "contamination_type": "undeclared_drugs",
-      "undeclared_drugs": ["acetaminophen", "diclofenac", "phenylbutazone"],
+      "undeclared_drugs": [
+        "acetaminophen",
+        "diclofenac",
+        "phenylbutazone"
+      ],
       "date": "2024-07-16",
       "days_since_violation": 560,
       "recency_multiplier": 1.0,
@@ -645,7 +661,10 @@
       "base_deduction": -15,
       "reason": "Undeclared sildenafil and acetaminophen",
       "contamination_type": "undeclared_drugs",
-      "undeclared_drugs": ["sildenafil", "acetaminophen"],
+      "undeclared_drugs": [
+        "sildenafil",
+        "acetaminophen"
+      ],
       "date": "2024-07-12",
       "days_since_violation": 564,
       "recency_multiplier": 1.0,
@@ -897,7 +916,9 @@
       "fda_warning_letter_id": "WL-2024-07-24",
       "repeat_violation": false,
       "multiple_product_lines": true,
-      "cgmp_violations": ["general_cgmp_violations"],
+      "cgmp_violations": [
+        "general_cgmp_violations"
+      ],
       "total_deduction_applied": -15.0,
       "user_facing_note": "⚠️ FDA WARNING LETTER - SERIOUS CGMP VIOLATIONS: Txsyn International has SERIOUS, company-wide CGMP (Good Manufacturing Practice) violations affecting 3 product lines. When FDA uses the term 'serious violations,' it means the manufacturing facility cannot consistently produce safe, pure products. Company has NOT adequately addressed FDA concerns. Penalty: -15 pts (base -12 + multiple lines -3). Facility-wide problem. CAUTION with all products. Trust Score: 85/100.",
       "internal_note": "Systemic CGMP compliance issues; multiple product lines affected",
@@ -935,7 +956,10 @@
       "fda_warning_letter_id": "WL-2025-04-22",
       "repeat_violation": false,
       "multiple_product_lines": true,
-      "cgmp_violations": ["cgmp_violations", "unapproved_drug_claim"],
+      "cgmp_violations": [
+        "cgmp_violations",
+        "unapproved_drug_claim"
+      ],
       "total_deduction_applied": -15.0,
       "user_facing_note": "⚠️ FDA WARNING LETTER - UNAPPROVED DRUG CLAIMS & CGMP FAILURES: M.O.M. Enterprises' Gripe Water and Kids Cough Syrup products have SERIOUS CGMP violations AND are being marketed as drugs without FDA approval. Products labeled 'not FDA-evaluated' but marketed with drug claims for cough/digestive relief. This is especially serious because these are infant/children products. Affects 2 product lines. Unresolved for 6+ months. Penalty: -15 pts. DO NOT USE ON CHILDREN. Trust Score: 85/100.",
       "internal_note": "Products marketed as drugs without approval; CGMP violations; multiple lines; children's products",
@@ -973,7 +997,10 @@
       "fda_warning_letter_id": "WL-2025-04-17",
       "repeat_violation": false,
       "multiple_product_lines": true,
-      "cgmp_violations": ["missing_specs", "misbranding"],
+      "cgmp_violations": [
+        "missing_specs",
+        "misbranding"
+      ],
       "total_deduction_applied": -11.0,
       "user_facing_note": "⚠️ FDA WARNING LETTER - LABELING & SPECIFICATION FAILURES: Anti L'Age's amino acid and immune support products (3 product lines: ESR Amino, Transfer Factor C, Heart Amino) have misbranding issues and lack proper adverse event reporting contact information. While these are MODERATE severity (not critical contamination), it indicates quality control gaps. Users cannot report problems if they experience adverse effects. Penalty: -11 pts (base -8 + multiple lines -3). Monitor closely. Trust Score: 89/100.",
       "internal_note": "Multiple product lines with labeling violations; unresolved",
@@ -1011,7 +1038,10 @@
       "fda_warning_letter_id": "WL-2024-11-13",
       "repeat_violation": false,
       "multiple_product_lines": true,
-      "cgmp_violations": ["adulteration", "cgmp_violations"],
+      "cgmp_violations": [
+        "adulteration",
+        "cgmp_violations"
+      ],
       "total_deduction_applied": -15.0,
       "user_facing_note": "⚠️ FDA WARNING LETTER - ADULTERATION & CGMP VIOLATIONS: Western Innovations has FDA warning for ADULTERATION (products contain harmful or illegal substances) PLUS CGMP violations, affecting 2 product lines. Adulteration is the most serious quality issue possible (products contain unapproved substances). Company has not adequately responded. Penalty: -15 pts. AVOID all products. Trust Score: 85/100.",
       "internal_note": "Adulteration with CGMP compliance failures; multiple product lines",
@@ -1049,7 +1079,10 @@
       "fda_warning_letter_id": "WL-2023-03-07",
       "repeat_violation": false,
       "multiple_product_lines": true,
-      "cgmp_violations": ["missing_specs", "misbranding"],
+      "cgmp_violations": [
+        "missing_specs",
+        "misbranding"
+      ],
       "total_deduction_applied": -12.0,
       "user_facing_note": "⚠️ FDA WARNING LETTER - UNRESOLVED FOR 2+ YEARS: Herbal Vitality received an FDA warning (March 2023) for failing to establish contamination specs for botanicals and misbranding - but has NOT adequately responded for 2+ years. This is a red flag: company is either ignoring FDA or unable to fix problems. 4 product lines affected. Penalty: -12 pts (base -12; recency multiplier 0.5 reduces newer penalties but this is 2+ years old AND unresolved so penalty remains). SERIOUS CONCERN. Trust Score: 85/100.",
       "internal_note": "Older violation (2+ years old) but still unresolved - indicates systemic inability to comply",
@@ -1341,7 +1374,9 @@
       "base_deduction": -15,
       "reason": "Undeclared prescription drug Tadalafil",
       "contamination_type": "undeclared_drugs",
-      "undeclared_drugs": ["tadalafil"],
+      "undeclared_drugs": [
+        "tadalafil"
+      ],
       "date": "2025-08-29",
       "days_since_violation": 151,
       "recency_multiplier": 1.0,
@@ -1421,7 +1456,10 @@
       "base_deduction": -15,
       "reason": "Contaminated with elevated levels of lead and arsenic",
       "contamination_type": "heavy_metal_contamination",
-      "heavy_metals": ["lead", "arsenic"],
+      "heavy_metals": [
+        "lead",
+        "arsenic"
+      ],
       "date": "2025-03-10",
       "days_since_violation": 323,
       "recency_multiplier": 1.0,
@@ -1459,7 +1497,9 @@
       "base_deduction": -15,
       "reason": "Undeclared Tadalafil",
       "contamination_type": "undeclared_drugs",
-      "undeclared_drugs": ["tadalafil"],
+      "undeclared_drugs": [
+        "tadalafil"
+      ],
       "date": "2025-02-26",
       "days_since_violation": 335,
       "recency_multiplier": 1.0,
@@ -1497,7 +1537,10 @@
       "base_deduction": -15,
       "reason": "Undeclared Sildenafil and Tadalafil",
       "contamination_type": "undeclared_drugs",
-      "undeclared_drugs": ["sildenafil", "tadalafil"],
+      "undeclared_drugs": [
+        "sildenafil",
+        "tadalafil"
+      ],
       "date": "2025-02-20",
       "days_since_violation": 341,
       "recency_multiplier": 1.0,
@@ -1535,7 +1578,10 @@
       "base_deduction": -15,
       "reason": "Undeclared Sildenafil and Tadalafil",
       "contamination_type": "undeclared_drugs",
-      "undeclared_drugs": ["sildenafil", "tadalafil"],
+      "undeclared_drugs": [
+        "sildenafil",
+        "tadalafil"
+      ],
       "date": "2025-12-16",
       "recency_multiplier": 1.0,
       "illnesses_reported": 0,
@@ -1763,7 +1809,11 @@
       "base_deduction": -20,
       "reason": "Undeclared 1,4-DMAA, aniracetam, and tianeptine",
       "contamination_type": "undeclared_drugs_multiple",
-      "undeclared_drugs": ["1,4-DMAA", "aniracetam", "tianeptine"],
+      "undeclared_drugs": [
+        "1,4-DMAA",
+        "aniracetam",
+        "tianeptine"
+      ],
       "date": "2026-01-09",
       "days_since_violation": 18,
       "recency_multiplier": 1.0,
@@ -1801,7 +1851,9 @@
       "base_deduction": -15,
       "reason": "Undeclared meloxicam (prescription NSAID)",
       "contamination_type": "undeclared_drugs",
-      "undeclared_drugs": ["meloxicam"],
+      "undeclared_drugs": [
+        "meloxicam"
+      ],
       "date": "2026-01-07",
       "days_since_violation": 20,
       "recency_multiplier": 1.0,
@@ -1814,7 +1866,9 @@
       "fda_recall_id": "F-2867",
       "repeat_violation": true,
       "multiple_product_lines": true,
-      "related_violation_ids": ["V014"],
+      "related_violation_ids": [
+        "V014"
+      ],
       "total_deduction_applied": -26.0,
       "user_facing_note": "🚨 REPEAT OFFENDER - CRITICAL: 123Herbals/Anthony Trinh's Silintan capsules (marketed for joint pain) contain hidden MELOXICAM, a prescription NSAID. Meloxicam can cause heart attack, stroke, GI bleeding, kidney injury. DANGEROUS for those on blood thinners. This is 123Herbals' SECOND recall (first was Vail-Bon with steroids). REPEAT VIOLATION indicates intentional pharmaceutical adulteration. Penalty: -26 pts (base -15 + repeat -5 + multiple lines -3 + unresolved -3). AVOID ALL 123Herbals products. Trust Score: 74/100 (HIGH RISK).",
       "internal_note": "REPEAT OFFENDER: Second recall for different undeclared drug. Pattern of pharmaceutical adulteration.",
@@ -1839,7 +1893,9 @@
       "base_deduction": -12,
       "reason": "Undeclared wheat allergen",
       "contamination_type": "undeclared_allergen_wheat",
-      "allergens": ["wheat"],
+      "allergens": [
+        "wheat"
+      ],
       "date": "2026-01-07",
       "days_since_violation": 20,
       "recency_multiplier": 1.0,
@@ -1915,7 +1971,11 @@
       "base_deduction": -15,
       "reason": "Yeast, mold, and Achromobacter bacterial contamination",
       "contamination_type": "microbial_yeast_mold_bacteria",
-      "contaminants": ["yeast", "mold", "Achromobacter"],
+      "contaminants": [
+        "yeast",
+        "mold",
+        "Achromobacter"
+      ],
       "date": "2025-12-16",
       "days_since_violation": 42,
       "recency_multiplier": 1.0,

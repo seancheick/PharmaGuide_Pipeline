@@ -38,7 +38,7 @@ class UnitConversionTester:
             with open(UNIT_CONVERSIONS_DB, 'r', encoding='utf-8') as f:
                 self.db = json.load(f)
             print(f"✅ Loaded unit_conversions.json")
-            print(f"   Version: {self.db.get('_metadata', self.db.get('database_info', {})).get('version', 'unknown')}")
+            print(f"   Version: {self.db.get('_metadata', {}).get('version', 'unknown')}")
             return True
         except FileNotFoundError:
             print(f"❌ File not found: {UNIT_CONVERSIONS_DB}")
@@ -67,7 +67,7 @@ class UnitConversionTester:
             "_metadata section exists"
         )
 
-        info = self.db.get('_metadata', self.db.get('database_info', {}))
+        info = self.db.get('_metadata', {})
         self._record_result(
             'version' in info,
             "version field exists",
