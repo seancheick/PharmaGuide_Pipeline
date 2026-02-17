@@ -1,0 +1,21 @@
+{
+  "processing_info": {
+    "version": "3.1.0",
+    "files_processed": 1,
+    "duration_seconds": 41.39,
+    "timestamp": "2026-02-16T21:22:56.286871Z"
+  },
+  "stats": {
+    "total_products": 108,
+    "successful": 108,
+    "with_issues": 0
+  },
+  "match_counters": {
+    "pattern_match_wins_count": 0,
+    "contains_match_wins_count": 0,
+    "parent_fallback_count": 2
+  },
+  "unmapped_ingredients": {
+    "active:Anatabine": 2
+  }
+}

@@ -12,7 +12,10 @@ from concurrent.futures import ProcessPoolExecutor, as_completed
 from collections import Counter
 from dataclasses import dataclass, asdict
 from tqdm import tqdm
-import psutil
+try:
+    import psutil
+except ImportError:
+    psutil = None
 
 from enhanced_normalizer import EnhancedDSLDNormalizer
 from dsld_validator import DSLDValidator
@@ -26,6 +29,7 @@ from constants import (
 )
 import traceback
 import os
+import hashlib
 
 logger = logging.getLogger(__name__)
 
@@ -49,6 +53,8 @@ class PerformanceTracker:
 
     def record_memory(self):
         """Record current memory usage"""
+        if psutil is None:
+            return 0
         try:
             process = psutil.Process()
             memory_mb = process.memory_info().rss / (1024 * 1024)
@@ -264,6 +270,8 @@ class BatchProcessor:
         B4: Monitor memory usage and warn if high.
         Returns: (is_ok, usage_mb) - all memory values in MB for consistency
         """
+        if psutil is None:
+            return True, 0
         try:
             # B4: Check both process and system memory for more accurate monitoring
             process = psutil.Process()
@@ -470,7 +478,6 @@ class BatchProcessor:
     def _get_config_checksum(self) -> str:
         """Get checksum of config for validation"""
         config_str = json.dumps(self.config, sort_keys=True)
-        import hashlib
         return hashlib.md5(config_str.encode()).hexdigest()
 
     def _get_file_manifest_checksum(self, files: List[Path]) -> str:
@@ -481,9 +488,6 @@ class BatchProcessor:
         Includes: path, size, mtime (integer seconds for network filesystem safety)
         This is a best-effort integrity check, not cryptographic.
         """
-        import hashlib
-        import os
-
         manifest_entries = []
         for f in sorted(files, key=str):
             try:
@@ -1122,8 +1126,6 @@ class BatchProcessor:
     
     def _write_detailed_review_report(self, report_file: Path, review_products: List[Dict]):
         """Write the detailed review report in markdown format"""
-        from datetime import datetime
-        
         with open(report_file, 'w', encoding='utf-8') as f:
             # Header
             f.write("# DSLD Products Requiring Manual Review\n")

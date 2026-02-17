@@ -1,8 +1,14 @@
 {
+  "_metadata": {
+    "description": "Absorption enhancers that improve nutrient bioavailability",
+    "purpose": "bioavailability_bonuses",
+    "schema_version": "4.0.0",
+    "last_updated": "2026-02-16",
+    "total_entries": 23
+  },
   "absorption_enhancers": [
     {
       "id": "ENHANCER_BLACK_PEPPER",
-      "name": "Black Pepper",
       "aliases": [
         "piperine",
         "bioperine",
@@ -22,11 +28,11 @@
       "typical_dose": "5-10mg",
       "boost_factor": "20-2000% depending on nutrient",
       "score_contribution": 5,
-      "category": "absorption enhancer"
+      "category": "absorption enhancer",
+      "standard_name": "Black Pepper"
     },
     {
       "id": "ENHANCER_MK7_ALL_TRANS",
-      "name": "Vitamin K2 MK-7 (all-trans)",
       "aliases": [
         "k2 mk-7 all-trans",
         "trans-menaquinone-7"
@@ -38,11 +44,11 @@
       "typical_dose": "90-180 µg",
       "boost_factor": "10-15%",
       "score_contribution": 5,
-      "category": "absorption enhancer"
+      "category": "absorption enhancer",
+      "standard_name": "Vitamin K2 MK-7 (all-trans)"
     },
     {
       "id": "ENHANCER_FERRITIN",
-      "name": "Ferritin",
       "aliases": [
         "iron-ferritin complex"
       ],
@@ -53,11 +59,11 @@
       "typical_dose": "N/A – built-in",
       "boost_factor": "20-30%",
       "score_contribution": 5,
-      "category": "absorption enhancer"
+      "category": "absorption enhancer",
+      "standard_name": "Ferritin"
     },
     {
       "id": "ENHANCER_FATS_AND_OILS",
-      "name": "Fats and Oils",
       "aliases": [
         "mct oil",
         "coconut oil",
@@ -80,11 +86,11 @@
       "typical_dose": "5-15g with meal",
       "boost_factor": "30-300%",
       "score_contribution": 5,
-      "category": "absorption enhancer"
+      "category": "absorption enhancer",
+      "standard_name": "Fats and Oils"
     },
     {
       "id": "ENHANCER_VITAMIN_C",
-      "name": "Vitamin C",
       "aliases": [
         "ascorbic acid"
       ],
@@ -97,11 +103,11 @@
       "typical_dose": "25-100mg",
       "boost_factor": "30-400% for iron",
       "score_contribution": 5,
-      "category": "absorption enhancer"
+      "category": "absorption enhancer",
+      "standard_name": "Vitamin C"
     },
     {
       "id": "ENHANCER_VITAMIN_D",
-      "name": "Vitamin D",
       "aliases": [
         "vitamin d3",
         "cholecalciferol"
@@ -115,11 +121,11 @@
       "typical_dose": "400-1000 IU",
       "boost_factor": "30-80%",
       "score_contribution": 5,
-      "category": "absorption enhancer"
+      "category": "absorption enhancer",
+      "standard_name": "Vitamin D"
     },
     {
       "id": "ENHANCER_GLYCINE",
-      "name": "Glycine",
       "aliases": [
         "glycine"
       ],
@@ -133,11 +139,11 @@
       "typical_dose": "Bound with mineral",
       "boost_factor": "20-40%",
       "score_contribution": 5,
-      "category": "absorption enhancer"
+      "category": "absorption enhancer",
+      "standard_name": "Glycine"
     },
     {
       "id": "ENHANCER_LYSINE",
-      "name": "Lysine",
       "aliases": [
         "l-lysine"
       ],
@@ -149,11 +155,11 @@
       "typical_dose": "500-1000mg",
       "boost_factor": "20-50%",
       "score_contribution": 5,
-      "category": "absorption enhancer"
+      "category": "absorption enhancer",
+      "standard_name": "Lysine"
     },
     {
       "id": "ENHANCER_METHIONINE",
-      "name": "Methionine",
       "aliases": [
         "l-methionine"
       ],
@@ -165,11 +171,11 @@
       "typical_dose": "200-500mg",
       "boost_factor": "15-30%",
       "score_contribution": 5,
-      "category": "absorption enhancer"
+      "category": "absorption enhancer",
+      "standard_name": "Methionine"
     },
     {
       "id": "ENHANCER_DIGESTIVE_ENZYMES",
-      "name": "Digestive Enzymes",
       "aliases": [
         "bromelain",
         "papain",
@@ -187,11 +193,11 @@
       "typical_dose": "Varies by enzyme",
       "boost_factor": "10-50%",
       "score_contribution": 5,
-      "category": "absorption enhancer"
+      "category": "absorption enhancer",
+      "standard_name": "Digestive Enzymes"
     },
     {
       "id": "ENHANCER_LIPOSOMAL",
-      "name": "Liposomal Delivery",
       "aliases": [
         "liposomal",
         "phospholipid complex",
@@ -208,11 +214,11 @@
       "typical_dose": "N/A - delivery method",
       "boost_factor": "50-600%",
       "score_contribution": 5,
-      "category": "absorption enhancer"
+      "category": "absorption enhancer",
+      "standard_name": "Liposomal Delivery"
     },
     {
       "id": "ENHANCER_CYCLODEXTRIN",
-      "name": "Cyclodextrin",
       "aliases": [
         "gamma-cyclodextrin"
       ],
@@ -225,11 +231,11 @@
       "typical_dose": "N/A - delivery method",
       "boost_factor": "30-300%",
       "score_contribution": 5,
-      "category": "absorption enhancer"
+      "category": "absorption enhancer",
+      "standard_name": "Cyclodextrin"
     },
     {
       "id": "ENHANCER_NANOEMULSION",
-      "name": "Nanoemulsion",
       "aliases": [
         "nano-particle"
       ],
@@ -243,11 +249,11 @@
       "typical_dose": "N/A - delivery method",
       "boost_factor": "100-1000%",
       "score_contribution": 5,
-      "category": "absorption enhancer"
+      "category": "absorption enhancer",
+      "standard_name": "Nanoemulsion"
     },
     {
       "id": "ENHANCER_CITRIC_ACID",
-      "name": "Citric Acid",
       "aliases": [
         "citrate"
       ],
@@ -261,11 +267,11 @@
       "typical_dose": "200-500mg",
       "boost_factor": "20-40%",
       "score_contribution": 5,
-      "category": "absorption enhancer"
+      "category": "absorption enhancer",
+      "standard_name": "Citric Acid"
     },
     {
       "id": "ENHANCER_ENTERIC_COATING",
-      "name": "Enteric Coating",
       "aliases": [
         "delayed release"
       ],
@@ -278,11 +284,11 @@
       "typical_dose": "N/A - delivery method",
       "boost_factor": "20-100%",
       "score_contribution": 5,
-      "category": "absorption enhancer"
+      "category": "absorption enhancer",
+      "standard_name": "Enteric Coating"
     },
     {
       "id": "ENHANCER_SUSTAINED_RELEASE",
-      "name": "Sustained Release",
       "aliases": [
         "time release",
         "extended release"
@@ -296,11 +302,11 @@
       "typical_dose": "N/A - delivery method",
       "boost_factor": "15-40%",
       "score_contribution": 5,
-      "category": "absorption enhancer"
+      "category": "absorption enhancer",
+      "standard_name": "Sustained Release"
     },
     {
       "id": "ENHANCER_ALOE_VERA",
-      "name": "Aloe Vera",
       "aliases": [
         "aloe vera gel",
         "aloe vera leaf extract"
@@ -314,11 +320,11 @@
       "typical_dose": "100-200mg",
       "boost_factor": "20-80%",
       "score_contribution": 5,
-      "category": "absorption enhancer"
+      "category": "absorption enhancer",
+      "standard_name": "Aloe Vera"
     },
     {
       "id": "ENHANCER_GARLIC",
-      "name": "Garlic",
       "aliases": [
         "allium sativum",
         "allicin",
@@ -334,11 +340,11 @@
       "typical_dose": "300-600mg",
       "boost_factor": "10-30%",
       "score_contribution": 5,
-      "category": "absorption enhancer"
+      "category": "absorption enhancer",
+      "standard_name": "Garlic"
     },
     {
       "id": "ENHANCER_VITAMIN_A",
-      "name": "Vitamin A",
       "aliases": [
         "retinol",
         "beta-carotene"
@@ -350,11 +356,11 @@
       "typical_dose": "1000-2000 IU",
       "boost_factor": "50-200%",
       "score_contribution": 5,
-      "category": "absorption enhancer"
+      "category": "absorption enhancer",
+      "standard_name": "Vitamin A"
     },
     {
       "id": "ENHANCER_PROBIOTICS",
-      "name": "Probiotics",
       "aliases": [
         "lactobacillus",
         "bifidobacterium",
@@ -371,11 +377,11 @@
       "typical_dose": "1-10 billion CFU",
       "boost_factor": "10-50%",
       "score_contribution": 5,
-      "category": "absorption enhancer"
+      "category": "absorption enhancer",
+      "standard_name": "Probiotics"
     },
     {
       "id": "ENHANCER_PREBIOTICS",
-      "name": "Prebiotics",
       "aliases": [
         "inulin",
         "fos",
@@ -392,11 +398,11 @@
       "typical_dose": "5-10g",
       "boost_factor": "10-30%",
       "score_contribution": 5,
-      "category": "absorption enhancer"
+      "category": "absorption enhancer",
+      "standard_name": "Prebiotics"
     },
     {
       "id": "ENHANCER_ASTRAGIN",
-      "name": "AstraGin",
       "aliases": [
         "astragin",
         "astra gin",
@@ -420,11 +426,11 @@
       "typical_dose": "50mg",
       "boost_factor": "20-62%",
       "score_contribution": 5,
-      "category": "absorption enhancer"
+      "category": "absorption enhancer",
+      "standard_name": "AstraGin"
     },
     {
       "id": "ENHANCER_MICOSOLLE",
-      "name": "Micosolle",
       "aliases": [
         "micosolle delivery system",
         "micellar delivery",
@@ -441,14 +447,8 @@
       "typical_dose": "N/A - delivery method",
       "boost_factor": "200-800%",
       "score_contribution": 5,
-      "category": "absorption enhancer"
+      "category": "absorption enhancer",
+      "standard_name": "Micosolle"
     }
-  ],
-  "_metadata": {
-    "description": "Absorption enhancers that improve nutrient bioavailability",
-    "purpose": "bioavailability_bonuses",
-    "schema_version": "1.0",
-    "total_entries": 23,
-    "last_updated": "2025-11-14"
-  }
+  ]
 }

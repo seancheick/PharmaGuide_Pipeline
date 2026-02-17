@@ -1,0 +1,426 @@
+{
+  "id": "14130",
+  "src": "01-raw/2025-03-25/data/label_264.json",
+  "nhanesId": "",
+  "bundleName": "",
+  "brandIpSymbol": "\u00ae",
+  "productVersionCode": "Product No. 6295 09G11L",
+  "pdf": "",
+  "thumbnail": "",
+  "percentDvFootnote": "Not Present",
+  "fullName": "Sublingual Vitamin B12 500 mcg With Folic Acid - Natural Cherry Flavor",
+  "brandName": "Country Life",
+  "upcSku": "0 15794 06295 0",
+  "hasOuterCarton": false,
+  "upcValid": true,
+  "status": "discontinued",
+  "discontinuedDate": "2015-03-24T00:00:00Z",
+  "offMarket": 1,
+  "servingsPerContainer": null,
+  "netContents": [],
+  "targetGroups": [
+    "Vegan",
+    "Vegetarian",
+    "Adult (18 - 50 Years)",
+    "Kosher",
+    "Gluten Free",
+    "Dairy Free",
+    "Sugar Free"
+  ],
+  "userGroups": [
+    {
+      "dailyValueTargetGroupName": "Adults and children 4 or more years of age",
+      "langualCode": "P0250",
+      "langualCodeDescription": "Adults and Children 4 years and above"
+    }
+  ],
+  "productType": {
+    "langualCode": "A1302",
+    "langualCodeDescription": "Vitamin"
+  },
+  "physicalState": {
+    "langualCode": "E0174",
+    "langualCodeDescription": "Lozenge"
+  },
+  "imageUrl": "https://api.ods.od.nih.gov/dsld/s3/pdf/14130.pdf",
+  "images": [],
+  "contacts": [
+    {
+      "contactId": 3384,
+      "text": "Manufactured by",
+      "types": [
+        "Manufacturer"
+      ],
+      "contactDetails": {
+        "src": "01-raw/2025-03-25/data/contact_1.json",
+        "id": 3384,
+        "name": "Country Life, LLC",
+        "streetAddress": "180 Vanderbilt Motor Parkway",
+        "city": "Hauppauge",
+        "state": "NY",
+        "country": "USA",
+        "zipCode": "11788",
+        "phoneNumber": "",
+        "email": "",
+        "webAddress": "CountryLifeVitamins.com"
+      }
+    }
+  ],
+  "events": [
+    {
+      "date": "2015-03-24",
+      "type": "Off Market"
+    },
+    {
+      "date": "2013-02-25",
+      "type": "Date entered into DSLD"
+    }
+  ],
+  "activeIngredients": [
+    {
+      "ingredientId": 279040,
+      "uniiCode": "935E97BOY8",
+      "order": 1,
+      "raw_source_text": "Folic Acid",
+      "branded_token_extracted": null,
+      "raw_source_path": "activeIngredients",
+      "normalized_key": "folic_acid",
+      "name": "Folic Acid",
+      "standardName": "Vitamin B9 (Folate)",
+      "ingredientGroup": "Folate",
+      "quantity": 400.0,
+      "unit": "mcg",
+      "dailyValue": 100.0,
+      "quantityVariants": null,
+      "forms": [],
+      "alternateNames": [],
+      "mapped": true,
+      "proprietaryBlend": false,
+      "disclosureLevel": null,
+      "parentBlend": null,
+      "isNestedIngredient": false,
+      "nestedIngredients": [],
+      "hierarchyType": null
+    },
+    {
+      "ingredientId": 281279,
+      "uniiCode": "8406EY2OQA",
+      "order": 2,
+      "raw_source_text": "Vitamin B12",
+      "branded_token_extracted": null,
+      "raw_source_path": "activeIngredients",
+      "normalized_key": "vitamin_b12",
+      "name": "Vitamin B12",
+      "standardName": "Vitamin B12",
+      "ingredientGroup": "Vitamin B12",
+      "quantity": 500.0,
+      "unit": "mcg",
+      "dailyValue": 8333.0,
+      "quantityVariants": null,
+      "forms": [
+        {
+          "name": "Cyanocobalamin",
+          "ingredientId": 280323,
+          "order": 1,
+          "prefix": null,
+          "percent": null
+        }
+      ],
+      "alternateNames": [],
+      "mapped": true,
+      "proprietaryBlend": false,
+      "disclosureLevel": null,
+      "parentBlend": null,
+      "isNestedIngredient": false,
+      "nestedIngredients": [],
+      "hierarchyType": null,
+      "notes": "Vitamin B12 (Form: as Cyanocobalamin) "
+    }
+  ],
+  "inactiveIngredients": [
+    {
+      "ingredientId": 3789,
+      "uniiCode": null,
+      "order": 1,
+      "raw_source_text": "Sorbitol",
+      "raw_source_path": "inactiveIngredients",
+      "normalized_key": "sorbitol",
+      "name": "Sorbitol",
+      "standardName": "sorbitol",
+      "ingredientGroup": "Sorbitol",
+      "forms": [],
+      "alternateNames": [],
+      "mapped": true,
+      "hierarchyType": null,
+      "isAdditive": true,
+      "additiveType": "sugar_alcohol"
+    },
+    {
+      "ingredientId": 54711,
+      "uniiCode": null,
+      "order": 2,
+      "raw_source_text": "dark Sweet Cherry fruit powder",
+      "raw_source_path": "inactiveIngredients",
+      "normalized_key": "dark_sweet_cherry_fruit_powder",
+      "name": "dark Sweet Cherry fruit powder",
+      "standardName": "Black Cherry",
+      "ingredientGroup": "Sweet Cherry",
+      "forms": [],
+      "alternateNames": [],
+      "mapped": true,
+      "hierarchyType": null
+    },
+    {
+      "ingredientId": 285558,
+      "uniiCode": "4ELV7Z65AP",
+      "order": 3,
+      "raw_source_text": "Stearic Acid",
+      "raw_source_path": "inactiveIngredients",
+      "normalized_key": "stearic_acid",
+      "name": "Stearic Acid",
+      "standardName": "stearic acid",
+      "ingredientGroup": "Stearic Acid",
+      "forms": [],
+      "alternateNames": [
+        "C18:0"
+      ],
+      "mapped": true,
+      "hierarchyType": null,
+      "isAdditive": true,
+      "additiveType": "processing_aid"
+    },
+    {
+      "ingredientId": 15291,
+      "uniiCode": null,
+      "order": 4,
+      "raw_source_text": "Cellulose",
+      "raw_source_path": "inactiveIngredients",
+      "normalized_key": "cellulose",
+      "name": "Cellulose",
+      "standardName": "cellulose powder",
+      "ingredientGroup": "Cellulose",
+      "forms": [],
+      "alternateNames": [],
+      "mapped": true,
+      "hierarchyType": null,
+      "isAdditive": true,
+      "additiveType": "unspecified"
+    },
+    {
+      "ingredientId": 293311,
+      "uniiCode": "ETJ7Z6XBU4",
+      "order": 5,
+      "raw_source_text": "Silica",
+      "raw_source_path": "inactiveIngredients",
+      "normalized_key": "silica",
+      "name": "Silica",
+      "standardName": "Silica",
+      "ingredientGroup": "Silicon",
+      "forms": [],
+      "alternateNames": [],
+      "mapped": true,
+      "hierarchyType": null,
+      "isAdditive": true,
+      "additiveType": "unspecified"
+    },
+    {
+      "ingredientId": 4048,
+      "uniiCode": null,
+      "order": 6,
+      "raw_source_text": "Magnesium Stearate",
+      "raw_source_path": "inactiveIngredients",
+      "normalized_key": "magnesium_stearate",
+      "name": "Magnesium Stearate",
+      "standardName": "magnesium stearate",
+      "ingredientGroup": "Magnesium",
+      "forms": [],
+      "alternateNames": [],
+      "mapped": true,
+      "hierarchyType": null,
+      "isAdditive": true,
+      "additiveType": "processing_aid"
+    }
+  ],
+  "nutritionalInfo": {},
+  "statements": [
+    {
+      "type": "Storage",
+      "notes": "Store between 59(0)-86(0) F."
+    },
+    {
+      "type": "Precautions re: Children",
+      "notes": "Keep out of the reach of children."
+    },
+    {
+      "type": "Seals/Symbols",
+      "notes": "Certified Gluten-Free GF(R)"
+    },
+    {
+      "type": "Seals/Symbols",
+      "notes": "Good Manufacturing Practices\nGMP\nCERTIFIED"
+    },
+    {
+      "type": "Seals/Symbols",
+      "notes": "Our manufacturing supports wind power\nrenewablechoice.com"
+    },
+    {
+      "type": "Seals/Symbols",
+      "notes": "PLEASE RECYCLE"
+    },
+    {
+      "type": "General Statements: All Other Content",
+      "notes": "This product has been manufactured at an NSF GMP Registered facility."
+    },
+    {
+      "type": "Precautions re: All Other",
+      "notes": "Do not accept if seal is broken."
+    },
+    {
+      "type": "General: Product/Version Code",
+      "notes": "Product No. 6295 09G11L"
+    },
+    {
+      "type": "Formula re: Contains",
+      "notes": "B VITAMINS"
+    },
+    {
+      "type": "Formulation re: Does NOT Contain",
+      "notes": "Gluten-Free"
+    },
+    {
+      "type": "FDA Statement of Identity",
+      "notes": "Dietary Supplement"
+    },
+    {
+      "type": "General Statements: All Other Content",
+      "notes": "Lozenges"
+    },
+    {
+      "type": "Suggested/Recommended/Usage/Directions",
+      "notes": "Directions: Adults take one (1) lozenge daily. Place tablet under tongue 30 seconds before swallowing."
+    },
+    {
+      "type": "General Statements: All Other Content",
+      "notes": "As a reminder, discuss the supplements and medications that you take with your health care providers."
+    },
+    {
+      "type": "Precautions re: Pregnant or Nursing or Prescription Medications",
+      "notes": "WARNING: If you are pregnant or nursing, taking medication or planning a surgery, consult your doctor before using this product."
+    },
+    {
+      "type": "Precautions re: All Other",
+      "notes": "If any adverse reactions occur, stop taking the product and consult your doctor."
+    },
+    {
+      "type": "Brand IP Statement(s) re: (c), (TM), (SM)",
+      "notes": "NO: Yeast, wheat, soy, gluten, milk, salt, preservatives or artificial color."
+    },
+    {
+      "type": "Seals/Symbols",
+      "notes": "K PARVE"
+    },
+    {
+      "type": "Seals/Symbols",
+      "notes": "Certified Vegan\nAVA\nAmerican Vegetarian Association(TM)"
+    }
+  ],
+  "claims": [
+    {
+      "langualCode": "P0115",
+      "langualCodeDescription": "All Other"
+    }
+  ],
+  "servingSizes": [
+    {
+      "minQuantity": 1.0,
+      "maxQuantity": 1.0,
+      "unit": "Lozenge(s)",
+      "minDailyServings": 1,
+      "maxDailyServings": 1,
+      "normalizedServing": 1.0
+    }
+  ],
+  "labelRelationships": [
+    {
+      "type": "Image difference, same product",
+      "labelId": 44034
+    },
+    {
+      "type": "Image difference, same product",
+      "labelId": 333221
+    },
+    {
+      "type": "Image difference, same product",
+      "labelId": 75950
+    },
+    {
+      "type": "Image difference, same product",
+      "labelId": 36062
+    }
+  ],
+  "labelText": {
+    "raw": "Store between 59(0)-86(0) F. Keep out of the reach of children. Certified Gluten-Free GF(R) Good Manufacturing Practices\nGMP\nCERTIFIED Our manufacturing supports wind power\nrenewablechoice.com PLEASE RECYCLE This product has been manufactured at an NSF GMP Registered facility. Do not accept if seal is broken. Product No. 6295 09G11L B VITAMINS Gluten-Free Dietary Supplement Lozenges Directions: Adults take one (1) lozenge daily. Place tablet under tongue 30 seconds before swallowing. As a reminder, discuss the supplements and medications that you take with your health care providers. WARNING: If you are pregnant or nursing, taking medication or planning a surgery, consult your doctor before using this product. If any adverse reactions occur, stop taking the product and consult your doctor. NO: Yeast, wheat, soy, gluten, milk, salt, preservatives or artificial color. K PARVE Certified Vegan\nAVA\nAmerican Vegetarian Association(TM)",
+    "parsed": {
+      "certifications": [
+        "Gluten-Free-General",
+        "NSF-GMP",
+        "Certified-Vegan",
+        "GMP-General"
+      ],
+      "testing": [],
+      "origin": [],
+      "flavor": [],
+      "probioticGuarantee": [],
+      "cleanLabelClaims": [
+        "Gluten Free"
+      ],
+      "allergens": [],
+      "allergenFree": [
+        "gluten"
+      ],
+      "warnings": [
+        "Keep out of reach of children",
+        "If pregnant, nursing, or taking any medications, consult a healthcare professional before use"
+      ],
+      "storage": [
+        "Store between 59(0)-86(0) F."
+      ],
+      "directions": "Adults take one (1) lozenge daily. Place tablet under tongue 30 seconds before swallowing.",
+      "marketingClaims": [],
+      "qualityFeatures": [
+        "GMP certified",
+        "Vegan"
+      ],
+      "proprietaryBlendDisclosure": null
+    },
+    "searchText": "Folic Acid Vitamin B12 Cyanocobalamin Vitamin B12 (Form: as Cyanocobalamin) Sorbitol dark Sweet Cherry fruit powder Stearic Acid Cellulose Silica Magnesium Stearate Store between 59(0)-86(0) F. Keep out of the reach of children. Certified Gluten-Free GF(R) Good Manufacturing Practices\nGMP\nCERTIFIED Our manufacturing supports wind power\nrenewablechoice.com PLEASE RECYCLE This product has been manufactured at an NSF GMP Registered facility. Do not accept if seal is broken. Product No. 6295 09G11L B VITAMINS Gluten-Free Dietary Supplement Lozenges Directions: Adults take one (1) lozenge daily. Place tablet under tongue 30 seconds before swallowing. As a reminder, discuss the supplements and medications that you take with your health care providers. WARNING: If you are pregnant or nursing, taking medication or planning a surgery, consult your doctor before using this product. If any adverse reactions occur, stop taking the product and consult your doctor. NO: Yeast, wheat, soy, gluten, milk, salt, preservatives or artificial color. K PARVE Certified Vegan\nAVA\nAmerican Vegetarian Association(TM)"
+  },
+  "metadata": {
+    "lastCleaned": "2026-02-16T21:19:15.181137Z",
+    "cleaningVersion": "2.1.0",
+    "reference_versions": {
+      "color_indicators": {
+        "version": "2.0.0",
+        "last_updated": "2026-01-05"
+      }
+    },
+    "mappingStats": {
+      "totalIngredients": 8,
+      "mappedIngredients": 8,
+      "unmappedIngredients": 0,
+      "mappingRate": 100.0
+    },
+    "transparencyMetrics": {
+      "hasProprietaryBlend": false,
+      "blendTransparency": "full",
+      "disclosedIngredients": 2,
+      "undisclosedQuantities": 0,
+      "transparencyScore": 100.0
+    },
+    "completeness": {
+      "score": 100.0,
+      "missingFields": [],
+      "criticalFieldsComplete": true
+    }
+  }
+}

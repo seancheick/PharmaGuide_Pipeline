@@ -52,7 +52,9 @@ from constants import (
     DELIVERY_ENHANCEMENT_PATTERNS,
     CLINICAL_EVIDENCE_PATTERNS,
     DEFAULT_SERVING_SIZE,
-    DEFAULT_DAILY_SERVINGS
+    DEFAULT_DAILY_SERVINGS,
+    BRANDED_INGREDIENT_TOKENS,
+    CLINICALLY_RELEVANT_STRAINS,
 )
 
 # Import the UnmappedIngredientTracker
@@ -61,6 +63,7 @@ import os
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from unmapped_ingredient_tracker import UnmappedIngredientTracker
 from functional_grouping_handler import FunctionalGroupingHandler
+import normalization as norm_module  # Single-source normalization
 
 logger = logging.getLogger(__name__)
 
@@ -224,58 +227,17 @@ class EnhancedIngredientMatcher:
     @functools.lru_cache(maxsize=2000)  # PERFORMANCE: Reduced from 10000 to prevent memory bloat
     def preprocess_text(self, text: str) -> str:
         """
-        Comprehensive text preprocessing with enhanced validation
+        Comprehensive text preprocessing with enhanced validation.
+
+        Delegates to normalization module for consistent preprocessing across pipeline.
         """
         # SAFETY: Comprehensive input validation
         text = self.validate_input(text, "ingredient_name")
         if not text:
             return ""
-        
-        # Convert to lowercase
-        text = text.lower().strip()
-        
-        # Remove common parenthetical information
-        text = re.sub(r'\([^)]*\)', '', text)
 
-        # Remove brackets and their contents
-        text = re.sub(r'\[[^\]]*\]', '', text)
-
-        # Remove curly braces but keep their contents
-        text = re.sub(r'[{}]', '', text)
-
-        # Remove trademark symbols
-        text = re.sub(r'[™®©]', '', text)
-        
-        # Remove extra whitespace and punctuation at ends
-        text = text.strip(string.punctuation + string.whitespace)
-        
-        # Normalize multiple spaces
-        text = re.sub(r'\s+', ' ', text)
-        
-        # Remove common prefixes/suffixes that don't affect matching
-        prefixes_to_remove = ['dl-', 'd-', 'l-', 'natural ', 'synthetic ', 'organic ']
-        for prefix in prefixes_to_remove:
-            if text.startswith(prefix):
-                text = text[len(prefix):]
-                break
-
-        # Loop suffix removal to handle multiple suffixes like "Extract, Powder"
-        suffixes_to_remove = [' extract', ' powder', ' oil', ' concentrate']
-        changed = True
-        while changed:
-            changed = False
-            # Strip punctuation first to handle cases like "juice, powder" → "juice powder"
-            text = text.strip(string.punctuation + string.whitespace)
-            for suffix in suffixes_to_remove:
-                if text.endswith(suffix):
-                    text = text[:-len(suffix)]
-                    changed = True
-                    break
-
-        # Final cleanup
-        text = text.strip(string.punctuation + string.whitespace)
-
-        return text.strip()
+        # Delegate to single-source normalization module
+        return norm_module.preprocess_text(text)
     
     def generate_variations(self, text: str) -> List[str]:
         """
@@ -525,8 +487,6 @@ class EnhancedIngredientMatcher:
     
     def _has_dosage_confusion(self, query: str, target: str) -> bool:
         """Check if two ingredients have different dosages - CRITICAL for scoring accuracy"""
-        import re
-        
         # Extract dosages from both strings
         dosage_pattern = r'(\d+(?:\.\d+)?)\s*(mg|mcg|iu|g|units?|billion|million)'
         
@@ -574,8 +534,6 @@ class EnhancedIngredientMatcher:
     
     def _has_unit_confusion(self, query: str, target: str) -> bool:
         """Check for dangerous unit confusions (IU vs mcg, etc.)"""
-        import re
-        
         # Dangerous unit pairs that should never be matched
         dangerous_unit_pairs = [
             ('iu', 'mcg'),    # International Units vs micrograms
@@ -613,8 +571,6 @@ class EnhancedIngredientMatcher:
         Returns:
             True if match is valid, False if should be rejected
         """
-        import re
-        
         context_include = ingredient_data.get('context_include', [])
         context_exclude = ingredient_data.get('context_exclude', [])
         
@@ -673,6 +629,9 @@ class EnhancedDSLDNormalizer:
         self.botanical_ingredients = self._load_json(BOTANICAL_INGREDIENTS)
         self.absorption_enhancers = self._load_json(ABSORPTION_ENHANCERS)
         self.enhanced_delivery = self._load_json(ENHANCED_DELIVERY)
+        self.clinical_strains_db = self._load_json(
+            CLINICALLY_RELEVANT_STRAINS
+        )
         self.ingredient_classification = self._load_json(INGREDIENT_CLASSIFICATION)
 
         # Load color indicators for context-aware mapping (REQUIRED)
@@ -690,9 +649,9 @@ class EnhancedDSLDNormalizer:
 
         # Track reference data versions for metadata
         self.reference_versions = {}
-        db_info = color_indicators_db.get("database_info", {})
+        db_info = color_indicators_db.get("_metadata", {})
         if db_info:
-            version = db_info.get("version", "unknown")
+            version = db_info.get("schema_version", db_info.get("version", "unknown"))
             last_updated = db_info.get("last_updated", "unknown")
             self.reference_versions["color_indicators"] = {
                 "version": version,
@@ -736,6 +695,9 @@ class EnhancedDSLDNormalizer:
 
         # Build enhanced lookup indices
         self._build_enhanced_indices()
+
+        # Build probiotic strain lookup for strain-level matching
+        self._probiotic_strain_lookup = self._build_strain_lookup()
 
         # PERFORMANCE OPTIMIZATION: Cache variation lists to avoid recreating them
         # These lists are created once and reused for all fuzzy matching operations
@@ -1044,7 +1006,7 @@ class EnhancedDSLDNormalizer:
                 self._fast_exact_lookup[key] = {
                     "type": "harmful",
                     "category": value.get("category", "other"),
-                    "risk_level": value.get("risk_level", "low"),
+                    "severity_level": value.get("severity_level", "low"),
                     "mapped": True,
                     "priority": 3
                 }
@@ -1190,7 +1152,7 @@ class EnhancedDSLDNormalizer:
         # PRIORITY 10: Add ABSORPTION ENHANCERS lookups
         absorption_enhancers_list = self.absorption_enhancers.get("absorption_enhancers", [])
         for enhancer in absorption_enhancers_list:
-            enhancer_name = enhancer.get("name", "")  # Note: uses 'name' not 'standard_name'
+            enhancer_name = enhancer.get("standard_name", "")
             if enhancer_name:
                 processed_name = self.matcher.preprocess_text(enhancer_name)
                 if processed_name not in self._fast_exact_lookup:
@@ -1419,6 +1381,8 @@ class EnhancedDSLDNormalizer:
         """
         Tier B normalization for skip matching (locked down, no scope creep).
 
+        Delegates to normalization module for consistent behavior across pipeline.
+
         Applies ONLY these operations:
         1. Unicode normalize to NFC
         2. Trim leading/trailing whitespace
@@ -1426,17 +1390,7 @@ class EnhancedDSLDNormalizer:
 
         Does NOT apply: punctuation stripping, lowercasing, qualifier removal.
         """
-        import unicodedata
-        import re as re_module
-        if not name:
-            return ""
-        # NFC normalization
-        normalized = unicodedata.normalize('NFC', name)
-        # Trim whitespace
-        normalized = normalized.strip()
-        # Collapse internal whitespace to single space
-        normalized = re_module.sub(r'\s+', ' ', normalized)
-        return normalized
+        return norm_module.normalize_for_skip_matching(name)
 
     def _build_skip_sets(self) -> Tuple[Set[str], Set[str]]:
         """
@@ -1483,6 +1437,36 @@ class EnhancedDSLDNormalizer:
 
         logger.info(f"Built skip sets: {len(skip_exact)} exact, {len(skip_normalized)} normalized")
         return skip_exact, skip_normalized
+
+    def _extract_branded_token(self, name: str) -> Optional[str]:
+        """
+        Extract branded ingredient token from compound names.
+
+        For inputs like "KSM-66 Ashwagandha Root Extract", extracts "KSM-66"
+        as the raw_source_text for quality map matching.
+
+        This enables correct matching to branded forms (e.g., "KSM-66 ashwagandha")
+        instead of generic forms (e.g., "ashwagandha (unspecified)").
+
+        Returns:
+            The canonical branded token if found, else None.
+        """
+        if not name:
+            return None
+
+        # Normalize for matching (lowercase, strip)
+        name_lower = name.lower().strip()
+
+        # Check for each branded token in the name
+        for token_lower, canonical_form in BRANDED_INGREDIENT_TOKENS.items():
+            # Use word boundary matching to avoid partial matches
+            # e.g., "ksm-66" should match "KSM-66 Ashwagandha" but not "aksm-66z"
+            pattern = r'\b' + re.escape(token_lower) + r'\b'
+            if re.search(pattern, name_lower):
+                logger.debug(f"Extracted branded token '{canonical_form}' from '{name}'")
+                return canonical_form
+
+        return None
 
     def _should_skip_ingredient(self, name: str) -> bool:
         """
@@ -1598,6 +1582,57 @@ class EnhancedDSLDNormalizer:
                 return value
 
         return None
+
+    def _build_strain_lookup(self) -> Dict[str, str]:
+        """Build a normalized lookup from probiotic strain aliases
+        to strain standard_name for strain-level matching bypass."""
+        lookup: Dict[str, str] = {}
+        strains = self.clinical_strains_db.get(
+            'clinically_relevant_strains', []
+        )
+        for strain in strains:
+            std = strain.get('standard_name', '')
+            if not std:
+                continue
+            # Index the standard_name itself
+            key = self.matcher.preprocess_text(std)
+            if key:
+                lookup[key] = std
+            # Index all aliases
+            for alias in strain.get('aliases', []):
+                key = self.matcher.preprocess_text(alias)
+                if key and key not in lookup:
+                    lookup[key] = std
+        if lookup:
+            logger.info(
+                "Probiotic strain lookup: %d keys for %d strains",
+                len(lookup), len(strains),
+            )
+        return lookup
+
+    def _match_probiotic_strain(
+        self, processed_name: str
+    ) -> Optional[str]:
+        """Match a preprocessed ingredient name against the
+        probiotic strain lookup. Uses exact match first, then
+        longest-alias substring match as fallback."""
+        if not processed_name:
+            return None
+        # Pass 1: exact match
+        if processed_name in self._probiotic_strain_lookup:
+            return self._probiotic_strain_lookup[processed_name]
+        # Pass 2: find the longest alias that is a substring
+        # of the input (minimum 6 chars to avoid false positives
+        # like "k12" matching "mk12-something")
+        best_alias = ""
+        best_name = None
+        for alias, std_name in self._probiotic_strain_lookup.items():
+            if len(alias) < 6:
+                continue
+            if alias in processed_name and len(alias) > len(best_alias):
+                best_alias = alias
+                best_name = std_name
+        return best_name
 
     def _build_enhanced_indices(self):
         """Build comprehensive lookup indices with variations - fixed to prevent overwrites"""
@@ -1898,6 +1933,17 @@ class EnhancedDSLDNormalizer:
         # Preprocess the input name
         processed_name = self.matcher.preprocess_text(name)
 
+        # PROBIOTIC STRAIN BYPASS: Check clinically_relevant_strains
+        # BEFORE standard alias lookup to prevent strain-specific names
+        # from being generalized to "Probiotics" by the IQM catchall.
+        strain_name = self._match_probiotic_strain(processed_name)
+        if strain_name:
+            logger.info(
+                "Probiotic strain match: '%s' -> '%s'",
+                name, strain_name,
+            )
+            return strain_name, True, forms or []
+
         # SAFETY FIRST: Try critical exact matching for short aliases (B1, D3, K2, etc.)
         critical_match = self.matcher.exact_match_critical_aliases(name, list(self.ingredient_alias_lookup.keys()))
         if critical_match:
@@ -2150,7 +2196,7 @@ class EnhancedDSLDNormalizer:
         """Thread-safe cached harmful checking"""
         result = {
             "category": "none",
-            "risk_level": None
+            "severity_level": None
         }
 
         processed_name = self.matcher.preprocess_text(name)
@@ -2159,7 +2205,7 @@ class EnhancedDSLDNormalizer:
         if processed_name in self.harmful_lookup:
             harmful = self.harmful_lookup[processed_name]
             result["category"] = harmful.get("category", "other")
-            result["risk_level"] = harmful.get("risk_level", "low")
+            result["severity_level"] = harmful.get("severity_level", "low")
         else:
             # NOTE: Fuzzy matching for harmful additives is INTENTIONALLY DISABLED.
             # "harmful" is NOT in safe_fuzzy_categories, so this always returns (None, 0).
@@ -2168,7 +2214,7 @@ class EnhancedDSLDNormalizer:
             if fuzzy_match:  # Dead code path - fuzzy_match is always None
                 harmful = self.harmful_lookup[fuzzy_match]
                 result["category"] = harmful.get("category", "other")
-                result["risk_level"] = harmful.get("risk_level", "low")
+                result["severity_level"] = harmful.get("severity_level", "low")
                 logger.debug(f"Fuzzy harmful match '{name}' -> '{fuzzy_match}' (score: {score})")
 
         return result
@@ -2295,7 +2341,7 @@ class EnhancedDSLDNormalizer:
         
         # Initialize all classification results
         banned_info = {"is_banned": False, "severity": None, "category": None}
-        harmful_info = {"category": "none", "risk_level": None}
+        harmful_info = {"category": "none", "severity_level": None}
         non_harmful_info = {"category": "none", "additive_type": None, "clean_label_score": None}
         allergen_info = {"is_allergen": False, "type": None, "severity": None}
         passive_info = {"is_passive": False, "category": None}
@@ -2330,13 +2376,13 @@ class EnhancedDSLDNormalizer:
         elif is_non_harmful["category"] != "none":
             # PRIORITY 3: Non-harmful additives - third priority (flagged but safe)
             non_harmful_info = is_non_harmful
-            harmful_info = {"category": "none", "risk_level": None}
+            harmful_info = {"category": "none", "severity_level": None}
             allergen_info = is_allergen  # Allow allergen info to coexist
 
         elif is_allergen["is_allergen"]:
             # PRIORITY 4: Allergens - fourth priority
             allergen_info = is_allergen
-            harmful_info = {"category": "none", "risk_level": None}
+            harmful_info = {"category": "none", "severity_level": None}
             non_harmful_info = {"category": "none", "additive_type": None, "clean_label_score": None}
 
         else:
@@ -3239,6 +3285,10 @@ class EnhancedDSLDNormalizer:
             if is_additive:
                 additive_type = additive_data.get("additive_type")
 
+        # Extract branded token from compound names (e.g., "KSM-66" from "KSM-66 Ashwagandha Root Extract")
+        # This enables correct matching to branded forms in the quality map
+        branded_token = self._extract_branded_token(name)
+
         # Build base ingredient structure
         result = {
             # Original DSLD identifiers (PRESERVE)
@@ -3246,8 +3296,19 @@ class EnhancedDSLDNormalizer:
             "uniiCode": ing.get("uniiCode"),
             "order": ing.get("order", 0),
 
+            # PROVENANCE FIELDS (Pipeline Hardening Phase 2)
+            # raw_source_text: Exact substring from DSLD, set once, never modified
+            "raw_source_text": name,
+            # branded_token_extracted: If present, use for quality map matching instead of raw_source_text
+            # This enables "KSM-66 Ashwagandha Root Extract" to match "KSM-66 ashwagandha" form
+            "branded_token_extracted": branded_token,
+            # raw_source_path: Source section (active/inactive), enrichment adds full path
+            "raw_source_path": "activeIngredients" if is_active else "inactiveIngredients",
+            # normalized_key: Stable key for dedup/tracking, computed ONCE
+            "normalized_key": norm_module.make_normalized_key(name),
+
             # Basic ingredient info
-            "name": name,
+            "name": branded_token if branded_token else name,  # Use branded token as primary name if extracted
             "standardName": standard_name,  # From our database mapping
             "ingredientGroup": ing.get("ingredientGroup"),  # PRESERVE from DSLD (even if wrong)
 
@@ -3433,12 +3494,17 @@ class EnhancedDSLDNormalizer:
                     ingredient = future_to_ingredient[future]
                     logger.error(f"Error processing ingredient '{ingredient.get('name', 'unknown')}': {e}")
                     # Add a basic result for failed processing (CLEANING ONLY - NO ENRICHMENT)
+                    ing_name = ingredient.get("name", "")
                     processed.append({
                         "order": ingredient.get("order", 0),
                         "ingredientId": ingredient.get("ingredientId"),
                         "uniiCode": ingredient.get("uniiCode"),
-                        "name": ingredient.get("name", ""),
-                        "standardName": ingredient.get("name", ""),
+                        # PROVENANCE FIELDS (Pipeline Hardening Phase 2)
+                        "raw_source_text": ing_name,
+                        "raw_source_path": "inactiveIngredients",
+                        "normalized_key": norm_module.make_normalized_key(ing_name),
+                        "name": ing_name,
+                        "standardName": ing_name,
                         "ingredientGroup": ingredient.get("ingredientGroup"),
                         "forms": [],
                         "alternateNames": [],
@@ -3561,6 +3627,14 @@ class EnhancedDSLDNormalizer:
             "uniiCode": ingredient_data.get("uniiCode"),
             "order": ingredient_data.get("order", 0),
 
+            # PROVENANCE FIELDS (Pipeline Hardening Phase 2)
+            # raw_source_text: Exact substring from DSLD, set once, never modified
+            "raw_source_text": name,
+            # raw_source_path: Source section (inactive for other ingredients)
+            "raw_source_path": "inactiveIngredients",
+            # normalized_key: Stable key for dedup/tracking, computed ONCE
+            "normalized_key": norm_module.make_normalized_key(name),
+
             # Basic ingredient info
             "name": name,
             "standardName": standard_name,  # From our database mapping
@@ -3638,6 +3712,10 @@ class EnhancedDSLDNormalizer:
                                     "ingredientId": form.get("ingredientId"),
                                     "uniiCode": form.get("uniiCode"),
                                     "order": form.get("order", ing.get("order", 0)),
+                                    # PROVENANCE FIELDS (Pipeline Hardening Phase 2)
+                                    "raw_source_text": form_name,
+                                    "raw_source_path": "inactiveIngredients",
+                                    "normalized_key": norm_module.make_normalized_key(form_name),
                                     "name": form_name,
                                     "standardName": form_std_name,
                                     "ingredientGroup": ing.get("ingredientGroup"),
@@ -3661,6 +3739,10 @@ class EnhancedDSLDNormalizer:
 
                                 processed.append({
                                     "order": ing.get("order", 0),
+                                    # PROVENANCE FIELDS (Pipeline Hardening Phase 2)
+                                    "raw_source_text": form,
+                                    "raw_source_path": "inactiveIngredients",
+                                    "normalized_key": norm_module.make_normalized_key(form),
                                     "name": form,
                                     "standardName": form_std_name,
                                     "ingredientGroup": ing.get("ingredientGroup"),
@@ -3745,6 +3827,14 @@ class EnhancedDSLDNormalizer:
                 "ingredientId": ing.get("ingredientId"),
                 "uniiCode": ing.get("uniiCode"),
                 "order": ing.get("order", 0),
+
+                # PROVENANCE FIELDS (Pipeline Hardening Phase 2)
+                # raw_source_text: Exact substring from DSLD, set once, never modified
+                "raw_source_text": name,
+                # raw_source_path: Source section (inactive for other ingredients)
+                "raw_source_path": "inactiveIngredients",
+                # normalized_key: Stable key for dedup/tracking, computed ONCE
+                "normalized_key": norm_module.make_normalized_key(name),
 
                 # Basic ingredient info
                 "name": name,
@@ -3904,9 +3994,8 @@ class EnhancedDSLDNormalizer:
         """Extract form information from ingredient name for precise scoring"""
         name = ingredient_name.lower()
         extracted_forms = []
-        
+
         # Enhanced parenthetical extraction for complex DSLD formats
-        import re
         paren_matches = re.findall(r'\(([^)]+)\)', name)
         for match in paren_matches:
             clean_match = match.strip().lower()

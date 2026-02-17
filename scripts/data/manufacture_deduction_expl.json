@@ -1,9 +1,13 @@
 {
-  "version": "2.0",
-  "last_updated": "2025-11-13",
-  "description": "Manufacturer Trust Score Deduction Framework for PharmGuide",
-  "max_score": 100,
-  "minimum_viable_score": 0,
+  "_metadata": {
+    "description": "Manufacturer Trust Score Deduction Framework for PharmGuide",
+    "purpose": "manufacturer_deduction_explanation",
+    "schema_version": "4.0.0",
+    "last_updated": "2026-02-16",
+    "version": "2.0",
+    "max_score": 100,
+    "minimum_viable_score": 0
+  },
   "total_deduction_cap": -25,
   "violation_categories": {
     "CRITICAL": {

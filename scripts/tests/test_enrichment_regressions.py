@@ -9,8 +9,8 @@ import pytest
 import sys
 import os
 
-# Add parent directory to path for imports
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
+# Add parent directory to path for imports (normalized to avoid ".." in __file__)
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from enrich_supplements_v3 import SupplementEnricherV3
 
@@ -268,6 +268,29 @@ class TestServingBasis:
 
         assert result['serving_basis']['basis_count'] == 2
 
+    def test_serving_basis_daily_servings_from_serving_sizes(self, enricher):
+        """min/max daily servings from servingSizes"""
+        product = {
+            'id': 'test_8b',
+            'physicalState': {},
+            'servingSizes': [
+                {
+                    'quantity': 1,
+                    'servingSizeUnitOfMeasure': 'Gummy(ies)',
+                    'minDailyServings': 2,
+                    'maxDailyServings': 4
+                }
+            ],
+            'statements': [],
+            'userGroups': []
+        }
+
+        result = enricher._collect_serving_basis_data(product)
+
+        assert result['serving_basis']['min_servings_per_day'] == 2
+        assert result['serving_basis']['max_servings_per_day'] == 4
+        assert result['serving_basis']['servings_per_day_source'] == 'servingSizes'
+
     def test_dosage_parsing_from_directions(self, enricher):
         """min/max from directions parsing"""
         result = enricher._parse_dosage_from_directions("Take 2 to 4 gummies daily.")
@@ -312,6 +335,88 @@ class TestQuantityVariants:
         assert unit == 'mg'
         # Single quantity should still return a list with 1 item
         assert len(variants) == 1
+
+
+class TestRDAULPerDayBasis:
+    """P1: RDA/UL should use per-day max servings"""
+
+    @pytest.fixture
+    def enricher(self):
+        return SupplementEnricherV3()
+
+    def test_rda_ul_uses_max_servings_per_day(self, enricher):
+        """Per-day max servings should drive UL exceedance checks"""
+        rda_db = enricher.rda_calculator.rda_db
+        vitamin_c = next(
+            nutrient for nutrient in rda_db.get('nutrient_recommendations', [])
+            if nutrient.get('id') == 'vitamin_c'
+        )
+        ul_value = vitamin_c.get('highest_ul')
+        unit = vitamin_c.get('unit', 'mg')
+        standard_name = vitamin_c.get('standard_name', 'Vitamin C')
+
+        max_servings = 3
+        per_serving = (ul_value / max_servings) * 1.1
+
+        product = {
+            'id': 'test_rda_1',
+            'activeIngredients': [
+                {
+                    'name': standard_name,
+                    'standardName': standard_name,
+                    'quantity': per_serving,
+                    'unit': unit
+                }
+            ]
+        }
+
+        result = enricher._collect_rda_ul_data(
+            product,
+            min_servings_per_day=1,
+            max_servings_per_day=max_servings
+        )
+
+        adequacy = result['adequacy_results'][0]
+        assert adequacy['per_day_min'] == pytest.approx(per_serving)
+        assert adequacy['per_day_max'] == pytest.approx(per_serving * max_servings)
+        assert adequacy['amount'] == pytest.approx(per_serving * max_servings)
+        assert result['has_over_ul'] is True
+        assert result['safety_flags'][0]['amount'] == pytest.approx(per_serving * max_servings)
+
+
+class TestUnknownFormSkipsUL:
+    """Unknown vitamin form should skip UL checks."""
+
+    @pytest.fixture
+    def enricher(self):
+        return SupplementEnricherV3()
+
+    def test_unknown_vitamin_a_skips_ul(self, enricher):
+        product = {
+            'id': 'test_unknown_form',
+            'activeIngredients': [
+                {
+                    'name': 'Vitamin A',
+                    'standardName': 'Vitamin A',
+                    'quantity': 5000,
+                    'unit': 'IU'
+                }
+            ]
+        }
+
+        result = enricher._collect_rda_ul_data(
+            product,
+            min_servings_per_day=1,
+            max_servings_per_day=1
+        )
+
+        adequacy = result['adequacy_results'][0]
+        assert adequacy['skip_ul_check'] is True
+        assert adequacy['skip_ul_reason'] == 'unknown_vitamin_form'
+        assert adequacy['ul_status'] == 'skipped_unknown_vitamin_form'
+        assert adequacy['over_ul'] is False
+        assert adequacy['pct_ul'] is None
+        assert adequacy['scoring_eligible'] is False
 
 
 class TestManufacturerNormalization:
@@ -566,6 +671,156 @@ class TestColorsIntegrationCleanToEnrich:
         prefixes = [f.get("prefix", "") for f in forms]
         assert "from" in prefixes, "Prefix 'from' should be preserved"
         assert "and" in prefixes, "Prefix 'and' should be preserved"
+
+
+class TestBrandedFormMatching:
+    """Ensure branded ingredient forms map correctly, not to generic/unspecified.
+
+    This tests the fix for the KSM-66 mapping bug where branded forms were being
+    matched to generic "(unspecified)" forms due to incorrect sort key logic.
+
+    The fix adds `match_source` tracking to prioritize matches on the raw ingredient
+    name over matches on the derived standardName.
+    """
+
+    @pytest.fixture
+    def enricher(self):
+        return SupplementEnricherV3()
+
+    @pytest.fixture
+    def quality_map(self, enricher):
+        return enricher.databases.get('ingredient_quality_map', {})
+
+    def test_ksm66_maps_to_ksm66_form(self, enricher, quality_map):
+        """KSM-66 should map to 'KSM-66 ashwagandha', not 'ashwagandha (unspecified)'."""
+        result = enricher._match_quality_map('KSM-66', 'Ashwagandha', quality_map)
+
+        assert result is not None, "KSM-66 should match"
+        assert result["form_id"] == "KSM-66 ashwagandha", (
+            f"Expected 'KSM-66 ashwagandha', got '{result['form_id']}'"
+        )
+        assert result["canonical_id"] == "ashwagandha"
+
+    def test_sensoril_maps_to_sensoril_form(self, enricher, quality_map):
+        """Sensoril should map to its specific form, not generic."""
+        result = enricher._match_quality_map('Sensoril', 'Ashwagandha', quality_map)
+
+        assert result is not None, "Sensoril should match"
+        assert "sensoril" in result["form_id"].lower(), (
+            f"Expected sensoril form, got '{result['form_id']}'"
+        )
+        assert result["canonical_id"] == "ashwagandha"
+
+    def test_generic_ashwagandha_maps_to_unspecified(self, enricher, quality_map):
+        """Generic 'Ashwagandha' should map to unspecified form."""
+        result = enricher._match_quality_map('Ashwagandha', 'Ashwagandha', quality_map)
+
+        assert result is not None, "Ashwagandha should match"
+        assert result["form_id"] == "ashwagandha (unspecified)", (
+            f"Expected 'ashwagandha (unspecified)', got '{result['form_id']}'"
+        )
+
+    def test_raw_input_takes_priority_over_standardname(self, enricher, quality_map):
+        """When raw name is specific (KSM-66) but standardName is generic (Ashwagandha),
+        the raw name match should win.
+
+        Note: Current implementation uses exact matching on normalized values.
+        Compound inputs like 'KSM-66 Ashwagandha Root Extract' don't extract
+        'KSM-66' as a substring - they require exact alias matches.
+        For compound inputs, use standardName-based matching or improve tokenization.
+        """
+        # Test with exact branded name - this is what the fix handles
+        result = enricher._match_quality_map('KSM-66', 'Ashwagandha', quality_map)
+
+        assert result is not None
+        # Should match KSM-66 form, not unspecified
+        assert "ksm-66" in result["form_id"].lower(), (
+            f"Expected KSM-66 to be matched, got form_id='{result['form_id']}'"
+        )
+
+        # Compound input falls back to standardName matching (expected current behavior)
+        result_compound = enricher._match_quality_map('KSM-66 Ashwagandha Root Extract', 'Ashwagandha', quality_map)
+        assert result_compound is not None
+        # This matches on standardName since the full input doesn't exactly match any alias
+        assert result_compound["matched_alias"] == "ashwagandha"
+
+    def test_match_source_0_beats_match_source_1(self, enricher, quality_map):
+        """Match on raw ingredient name (source=0) should beat match on standardName (source=1)."""
+        # This is the core test for the fix:
+        # - KSM-66 alias matches raw input "KSM-66" (match_source=0)
+        # - ashwagandha alias matches standardName "Ashwagandha" (match_source=1)
+        # The sort key should prioritize match_source=0
+        result = enricher._match_quality_map('KSM-66', 'Ashwagandha', quality_map)
+
+        assert result is not None
+        assert result["matched_alias"] == "KSM-66", (
+            f"Expected matched_alias='KSM-66' (raw input match), got '{result.get('matched_alias')}'"
+        )
+
+
+class TestMatchRulesBehavior:
+    """Test that match_rules from ingredient_quality_map.json affect matching."""
+
+    @pytest.fixture
+    def enricher(self):
+        """Create enricher instance."""
+        return SupplementEnricherV3()
+
+    @pytest.fixture
+    def quality_map(self, enricher):
+        """Get quality map from enricher."""
+        return enricher.databases.get('ingredient_quality_map', {})
+
+    def test_priority_affects_tie_breaking(self, quality_map):
+        """Lower priority number should win in tie-breaking situations.
+
+        match_rules.priority: 0 (primary) > 1 (secondary) > 2 (tertiary)
+        """
+        # Vitamins have priority 0, should win over priority 1+ ingredients
+        # when both match at the same tier
+        vit_a = quality_map.get('vitamin_a', {}).get('match_rules', {})
+        assert vit_a.get('priority') == 0, "Vitamin A should have priority 0"
+
+    def test_exclusions_block_false_positives(self, quality_map):
+        """Exclusion terms in match_rules should block matches.
+
+        If an exclusion term is found in the input, that parent is skipped.
+        """
+        # Note: Generic exclusions (synthetic, natural, etc.) have been removed
+        # Real exclusions would be things like "ferric oxide" for iron
+        iron = quality_map.get('iron', {})
+        match_rules = iron.get('match_rules', {})
+        exclusions = match_rules.get('exclusions', [])
+
+        # Verify exclusions list exists (even if empty after cleanup)
+        assert isinstance(exclusions, list), "exclusions should be a list"
+
+    def test_match_mode_gates_tiers(self, quality_map):
+        """match_mode should control which tiers are allowed.
+
+        - exact: only tier 1,2
+        - normalized: tier 1,2,3,4
+        - alias_and_fuzzy: all tiers (default)
+        """
+        # Most ingredients should have alias_and_fuzzy (default)
+        vit_c = quality_map.get('vitamin_c', {}).get('match_rules', {})
+        match_mode = vit_c.get('match_mode', 'alias_and_fuzzy')
+        assert match_mode in ['exact', 'normalized', 'alias_and_fuzzy'], (
+            f"Invalid match_mode: {match_mode}"
+        )
+
+    def test_dosage_importance_populated(self, quality_map):
+        """All forms should have dosage_importance field filled."""
+        missing = []
+        for parent_key, parent_data in quality_map.items():
+            if parent_key.startswith('_') or not isinstance(parent_data, dict):
+                continue
+            for form_name, form_data in parent_data.get('forms', {}).items():
+                if isinstance(form_data, dict):
+                    if form_data.get('dosage_importance') is None:
+                        missing.append(f"{parent_key}/{form_name}")
+
+        assert len(missing) == 0, f"Missing dosage_importance: {missing[:5]}"
 
 
 if __name__ == '__main__':

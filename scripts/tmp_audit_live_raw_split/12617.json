@@ -1,0 +1,387 @@
+{
+  "id": "12617",
+  "src": "01-raw/2025-03-25/data/label_254.json",
+  "nhanesId": "",
+  "bundleName": "",
+  "brandIpSymbol": "\u00ae",
+  "productVersionCode": "Product No. 1733 LBL. 1130374",
+  "pdf": "",
+  "thumbnail": "",
+  "percentDvFootnote": "Percent Daily Values are based on a 2,000 calorie diet",
+  "fullName": "Shot-O-B12 5000 mcg Natural Wild Berry Flavor",
+  "brandName": "Nature's Plus",
+  "upcSku": "0 97467 01733 7",
+  "hasOuterCarton": false,
+  "upcValid": true,
+  "status": "discontinued",
+  "discontinuedDate": "2015-07-31T00:00:00Z",
+  "offMarket": 1,
+  "servingsPerContainer": null,
+  "netContents": [
+    {
+      "order": 1,
+      "quantity": 30,
+      "unit": "Lozenge(s)",
+      "display": "30 Lozenge(s)"
+    }
+  ],
+  "targetGroups": [
+    "Vegetarian",
+    "Adult (18 - 50 Years)",
+    "No Allergies",
+    "Gluten Free",
+    "Dairy Free"
+  ],
+  "userGroups": [
+    {
+      "dailyValueTargetGroupName": "Adults and children 4 or more years of age",
+      "langualCode": "P0250",
+      "langualCodeDescription": "Adults and Children 4 years and above"
+    }
+  ],
+  "productType": {
+    "langualCode": "A1302",
+    "langualCodeDescription": "Vitamin"
+  },
+  "physicalState": {
+    "langualCode": "E0174",
+    "langualCodeDescription": "Lozenge"
+  },
+  "imageUrl": "https://api.ods.od.nih.gov/dsld/s3/pdf/12617.pdf",
+  "images": [],
+  "contacts": [
+    {
+      "contactId": 7459,
+      "text": "Manufactured with LOVE by",
+      "types": [
+        "Manufacturer"
+      ],
+      "contactDetails": {
+        "src": "01-raw/2025-03-25/data/contact_2.json",
+        "id": 7459,
+        "name": "Natural Organics Laboratories, Inc. makers of Nature's Plus",
+        "streetAddress": "9500 New Horizons Blvd.",
+        "city": "Amityville",
+        "state": "New York",
+        "country": "USA",
+        "zipCode": "11701",
+        "phoneNumber": "",
+        "email": "",
+        "webAddress": "www.naturesplus.com"
+      }
+    }
+  ],
+  "events": [
+    {
+      "date": "2015-07-31",
+      "type": "Off Market"
+    },
+    {
+      "date": "2012-08-24",
+      "type": "Date entered into DSLD"
+    }
+  ],
+  "activeIngredients": [
+    {
+      "ingredientId": 281279,
+      "uniiCode": "8406EY2OQA",
+      "order": 4,
+      "raw_source_text": "Vitamin B12",
+      "branded_token_extracted": null,
+      "raw_source_path": "activeIngredients",
+      "normalized_key": "vitamin_b12",
+      "name": "Vitamin B12",
+      "standardName": "Vitamin B12",
+      "ingredientGroup": "Vitamin B12",
+      "quantity": 5000.0,
+      "unit": "mcg",
+      "dailyValue": 83333.0,
+      "quantityVariants": null,
+      "forms": [
+        {
+          "name": "Cyanocobalamin",
+          "ingredientId": 280323,
+          "order": 1,
+          "prefix": null,
+          "percent": null
+        }
+      ],
+      "alternateNames": [],
+      "mapped": true,
+      "proprietaryBlend": false,
+      "disclosureLevel": null,
+      "parentBlend": null,
+      "isNestedIngredient": false,
+      "nestedIngredients": [],
+      "hierarchyType": null,
+      "notes": "Vitamin B-12 (Form: as Cyanocobalamin) "
+    }
+  ],
+  "inactiveIngredients": [
+    {
+      "ingredientId": 282545,
+      "uniiCode": "6YSS42VSEV",
+      "order": 1,
+      "raw_source_text": "Fructose",
+      "raw_source_path": "inactiveIngredients",
+      "normalized_key": "fructose",
+      "name": "Fructose",
+      "standardName": "Fructose & High Fructose Corn Syrup",
+      "ingredientGroup": "Fructose",
+      "forms": [],
+      "alternateNames": [],
+      "mapped": true,
+      "hierarchyType": null
+    },
+    {
+      "ingredientId": 285558,
+      "uniiCode": "4ELV7Z65AP",
+      "order": 2,
+      "raw_source_text": "Stearic Acid",
+      "raw_source_path": "inactiveIngredients",
+      "normalized_key": "stearic_acid",
+      "name": "Stearic Acid",
+      "standardName": "stearic acid",
+      "ingredientGroup": "Stearic Acid",
+      "forms": [],
+      "alternateNames": [
+        "C18:0"
+      ],
+      "mapped": true,
+      "hierarchyType": null,
+      "isAdditive": true,
+      "additiveType": "processing_aid"
+    },
+    {
+      "ingredientId": 9502,
+      "uniiCode": null,
+      "order": 3,
+      "raw_source_text": "Natural flavor",
+      "raw_source_path": "inactiveIngredients",
+      "normalized_key": "natural_flavor",
+      "name": "Natural flavor",
+      "standardName": "natural flavor",
+      "ingredientGroup": "Flavor",
+      "forms": [],
+      "alternateNames": [],
+      "mapped": true,
+      "hierarchyType": null,
+      "isAdditive": true,
+      "additiveType": "natural_flavor"
+    },
+    {
+      "ingredientId": 4048,
+      "uniiCode": null,
+      "order": 4,
+      "raw_source_text": "Magnesium Stearate",
+      "raw_source_path": "inactiveIngredients",
+      "normalized_key": "magnesium_stearate",
+      "name": "Magnesium Stearate",
+      "standardName": "magnesium stearate",
+      "ingredientGroup": "Magnesium",
+      "forms": [],
+      "alternateNames": [],
+      "mapped": true,
+      "hierarchyType": null,
+      "isAdditive": true,
+      "additiveType": "processing_aid"
+    },
+    {
+      "ingredientId": 293311,
+      "uniiCode": "ETJ7Z6XBU4",
+      "order": 5,
+      "raw_source_text": "Silica",
+      "raw_source_path": "inactiveIngredients",
+      "normalized_key": "silica",
+      "name": "Silica",
+      "standardName": "Silica",
+      "ingredientGroup": "Silicon",
+      "forms": [],
+      "alternateNames": [],
+      "mapped": true,
+      "hierarchyType": null,
+      "isAdditive": true,
+      "additiveType": "unspecified"
+    }
+  ],
+  "nutritionalInfo": {
+    "calories": {
+      "amount": 5.0,
+      "unit": "{Calories}"
+    },
+    "totalCarbohydrates": {
+      "amount": 1.0,
+      "unit": "g"
+    },
+    "sugars": {
+      "amount": 1.0,
+      "unit": "g"
+    }
+  },
+  "statements": [
+    {
+      "type": "Formula re: Type",
+      "notes": "\u2022 HYPO-ALLERGENIC"
+    },
+    {
+      "type": "FDA Disclaimer Statement",
+      "notes": "*This statement has not been evaluated by the Food and Drug Administration. This product is not intended to diagnose, treat, cure or prevent any disease."
+    },
+    {
+      "type": "General: Product/Version Code",
+      "notes": "Product No. 1733 LBL. 1130374"
+    },
+    {
+      "type": "Seals/Symbols",
+      "notes": "GLUTEN Free"
+    },
+    {
+      "type": "Brand IP Statement(s) re: (c), (TM), (SM)",
+      "notes": "The Energy Supplements(R)"
+    },
+    {
+      "type": "General Statements: All Other Content",
+      "notes": "HIGH POTENCY\nFast Acting"
+    },
+    {
+      "type": "FDA Statement of Identity",
+      "notes": "Dietary Supplement"
+    },
+    {
+      "type": "General Statements: All Other Content",
+      "notes": "Natural Wild Berry Flavor"
+    },
+    {
+      "type": "Brand IP Statement(s) re: (c), (TM), (SM)",
+      "notes": "(C)NATURAL ORGANICS(R)"
+    },
+    {
+      "type": "Suggested/Recommended/Usage/Directions",
+      "notes": "DIRECTIONS: As a dietary supplement, one lozenge daily. Allow lozenge to dissolve slowly in the mouth and swallow."
+    },
+    {
+      "type": "General Statements: All Other Content",
+      "notes": "Nutritional Support for Natural Energy Production.*"
+    },
+    {
+      "type": "Formulation re: Does NOT Contain",
+      "notes": "Free from artificial colors and preservatives. Free from the common allergens yeast, wheat, soy and milk."
+    },
+    {
+      "type": "Storage",
+      "notes": "KEEP TIGHTLY CLOSED IN A COOL, DRY PLACE."
+    },
+    {
+      "type": "Precautions re: Children",
+      "notes": "KEEP OUT OF REACH OF CHILDREN."
+    },
+    {
+      "type": "Formulation re: Vegetarian/Vegan",
+      "notes": "VEGETARIAN"
+    }
+  ],
+  "claims": [
+    {
+      "langualCode": "P0115",
+      "langualCodeDescription": "All Other"
+    },
+    {
+      "langualCode": "P0265",
+      "langualCodeDescription": "Structure/Function"
+    }
+  ],
+  "servingSizes": [
+    {
+      "minQuantity": 1.0,
+      "maxQuantity": 1.0,
+      "unit": "Lozenge(s)",
+      "minDailyServings": 1,
+      "maxDailyServings": 1,
+      "normalizedServing": 1.0
+    }
+  ],
+  "labelRelationships": [
+    {
+      "type": "Image difference, same product",
+      "labelId": 147984
+    },
+    {
+      "type": "Image difference, same product",
+      "labelId": 319214
+    },
+    {
+      "type": "Image difference, same product",
+      "labelId": 298604
+    },
+    {
+      "type": "Image difference, same product",
+      "labelId": 49276
+    },
+    {
+      "type": "Image difference, same product",
+      "labelId": 67523
+    }
+  ],
+  "labelText": {
+    "raw": "\u2022 HYPO-ALLERGENIC *This statement has not been evaluated by the Food and Drug Administration. This product is not intended to diagnose, treat, cure or prevent any disease. Product No. 1733 LBL. 1130374 GLUTEN Free The Energy Supplements(R) HIGH POTENCY\nFast Acting Dietary Supplement Natural Wild Berry Flavor (C)NATURAL ORGANICS(R) DIRECTIONS: As a dietary supplement, one lozenge daily. Allow lozenge to dissolve slowly in the mouth and swallow. Nutritional Support for Natural Energy Production.* Free from artificial colors and preservatives. Free from the common allergens yeast, wheat, soy and milk. KEEP TIGHTLY CLOSED IN A COOL, DRY PLACE. KEEP OUT OF REACH OF CHILDREN. VEGETARIAN",
+    "parsed": {
+      "certifications": [],
+      "testing": [],
+      "origin": [],
+      "flavor": [
+        "Natural flavor"
+      ],
+      "probioticGuarantee": [],
+      "cleanLabelClaims": [
+        "Gluten Free"
+      ],
+      "allergens": [],
+      "allergenFree": [
+        "gluten"
+      ],
+      "warnings": [
+        "Keep out of reach of children"
+      ],
+      "storage": [
+        "KEEP TIGHTLY CLOSED IN A COOL, DRY PLACE."
+      ],
+      "directions": "As a dietary supplement, one lozenge daily. Allow lozenge to dissolve slowly in the mouth and swallow.",
+      "marketingClaims": [
+        "Support for Natural Energy Production"
+      ],
+      "qualityFeatures": [
+        "Vegetarian"
+      ],
+      "proprietaryBlendDisclosure": null
+    },
+    "searchText": "Vitamin B12 Cyanocobalamin Vitamin B-12 (Form: as Cyanocobalamin) Fructose Stearic Acid Natural flavor Magnesium Stearate Silica \u2022 HYPO-ALLERGENIC *This statement has not been evaluated by the Food and Drug Administration. This product is not intended to diagnose, treat, cure or prevent any disease. Product No. 1733 LBL. 1130374 GLUTEN Free The Energy Supplements(R) HIGH POTENCY\nFast Acting Dietary Supplement Natural Wild Berry Flavor (C)NATURAL ORGANICS(R) DIRECTIONS: As a dietary supplement, one lozenge daily. Allow lozenge to dissolve slowly in the mouth and swallow. Nutritional Support for Natural Energy Production.* Free from artificial colors and preservatives. Free from the common allergens yeast, wheat, soy and milk. KEEP TIGHTLY CLOSED IN A COOL, DRY PLACE. KEEP OUT OF REACH OF CHILDREN. VEGETARIAN"
+  },
+  "metadata": {
+    "lastCleaned": "2026-02-16T21:19:14.417881Z",
+    "cleaningVersion": "2.1.0",
+    "reference_versions": {
+      "color_indicators": {
+        "version": "2.0.0",
+        "last_updated": "2026-01-05"
+      }
+    },
+    "mappingStats": {
+      "totalIngredients": 6,
+      "mappedIngredients": 6,
+      "unmappedIngredients": 0,
+      "mappingRate": 100.0
+    },
+    "transparencyMetrics": {
+      "hasProprietaryBlend": false,
+      "blendTransparency": "full",
+      "disclosedIngredients": 1,
+      "undisclosedQuantities": 0,
+      "transparencyScore": 100.0
+    },
+    "completeness": {
+      "score": 100.0,
+      "missingFields": [],
+      "criticalFieldsComplete": true
+    }
+  }
+}

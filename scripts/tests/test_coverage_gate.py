@@ -1,0 +1,667 @@
+#!/usr/bin/env python3
+"""
+Coverage Gate Tests (AC5 Compliance)
+
+Tests for the coverage gate module ensuring:
+1. Coverage thresholds are enforced correctly
+2. Correctness checks detect contradictions
+3. Reports are generated properly
+4. Blocking vs warning gates work correctly
+"""
+
+import pytest
+import json
+import sys
+from pathlib import Path
+from tempfile import TemporaryDirectory
+
+# Add scripts directory to path
+sys.path.insert(0, str(Path(__file__).parent.parent))
+
+from coverage_gate import (
+    CoverageGate,
+    CoverageDomainResult,
+    ProductCoverageResult,
+    BatchCoverageResult,
+    CorrectnessIssue,
+    check_enriched_batch,
+    COVERAGE_THRESHOLDS,
+)
+
+
+class TestCoverageThresholds:
+    """Test coverage threshold enforcement."""
+
+    @pytest.fixture
+    def gate(self):
+        return CoverageGate()
+
+    def test_ingredients_threshold_pass(self, gate):
+        """Ingredients at 99.5% should pass."""
+        product = {
+            "dsld_id": 12345,
+            "match_ledger": {
+                "domains": {
+                    "ingredients": {
+                        "total_raw": 100,
+                        "matched": 99,
+                        "unmatched": 0,
+                        "rejected": 0,
+                        "skipped": 1,
+                        "coverage_percent": 100.0
+                    }
+                },
+                "summary": {"coverage_percent": 100.0}
+            }
+        }
+
+        result = gate.check_product(product)
+
+        assert result.can_score
+        assert len(result.blocking_issues) == 0
+
+    def test_ingredients_threshold_fail(self, gate):
+        """Ingredients below 99.5% should BLOCK."""
+        product = {
+            "dsld_id": 12345,
+            "match_ledger": {
+                "domains": {
+                    "ingredients": {
+                        "total_raw": 100,
+                        "matched": 90,
+                        "unmatched": 10,
+                        "rejected": 0,
+                        "skipped": 0,
+                        "coverage_percent": 90.0
+                    }
+                },
+                "summary": {"coverage_percent": 90.0}
+            }
+        }
+
+        result = gate.check_product(product)
+
+        assert not result.can_score
+        assert len(result.blocking_issues) > 0
+        assert "ingredients coverage 90.0%" in result.blocking_issues[0]
+
+    def test_manufacturer_threshold_warn_only(self, gate):
+        """Manufacturer below 95% should WARN but not BLOCK."""
+        product = {
+            "dsld_id": 12345,
+            "match_ledger": {
+                "domains": {
+                    "ingredients": {
+                        "total_raw": 10,
+                        "matched": 10,
+                        "unmatched": 0,
+                        "rejected": 0,
+                        "skipped": 0,
+                        "coverage_percent": 100.0
+                    },
+                    "manufacturer": {
+                        "total_raw": 10,
+                        "matched": 8,
+                        "unmatched": 1,
+                        "rejected": 1,
+                        "skipped": 0,
+                        "coverage_percent": 80.0
+                    }
+                },
+                "summary": {"coverage_percent": 90.0}
+            }
+        }
+
+        result = gate.check_product(product)
+
+        # Should still be able to score (manufacturer is WARN)
+        assert result.can_score
+        assert len(result.warnings) > 0
+        assert "manufacturer coverage 80.0%" in result.warnings[0]
+
+    def test_empty_domain_vacuously_covered(self, gate):
+        """Domain with 0 items should be considered covered."""
+        product = {
+            "dsld_id": 12345,
+            "match_ledger": {
+                "domains": {
+                    "ingredients": {
+                        "total_raw": 10,
+                        "matched": 10,
+                        "unmatched": 0,
+                        "rejected": 0,
+                        "skipped": 0,
+                        "coverage_percent": 100.0
+                    },
+                    "allergens": {
+                        "total_raw": 0,
+                        "matched": 0,
+                        "unmatched": 0,
+                        "rejected": 0,
+                        "skipped": 0,
+                        "coverage_percent": 0.0  # Empty
+                    }
+                },
+                "summary": {"coverage_percent": 100.0}
+            }
+        }
+
+        result = gate.check_product(product)
+
+        assert result.can_score
+        # Empty domain should show 100% coverage (vacuously true)
+        assert result.domain_results["allergens"].coverage_percent == 100.0
+
+
+class TestCorrectnessChecks:
+    """Test correctness checks (AC5)."""
+
+    @pytest.fixture
+    def gate(self):
+        return CoverageGate()
+
+    def test_allergen_free_contradiction(self, gate):
+        """Detect contradiction: claims allergen-free but allergens detected."""
+        product = {
+            "dsld_id": 12345,
+            "match_ledger": {
+                "domains": {},
+                "summary": {"coverage_percent": 100.0}
+            },
+            "claims_data": {
+                "claims": [
+                    {"claim": "Allergen-Free Product"}
+                ]
+            },
+            "allergen_data": {
+                "detected_allergens": [
+                    {"allergen_name": "milk"},
+                    {"allergen_name": "soy"}
+                ]
+            }
+        }
+
+        result = gate.check_product(product)
+
+        # Should have a contradiction warning
+        assert len(result.correctness_issues) > 0
+        assert any(
+            issue.issue_type == "contradiction"
+            for issue in result.correctness_issues
+        )
+
+    def test_gluten_free_contradiction(self, gate):
+        """Detect contradiction: claims gluten-free but wheat detected."""
+        product = {
+            "dsld_id": 12345,
+            "match_ledger": {
+                "domains": {},
+                "summary": {"coverage_percent": 100.0}
+            },
+            "claims_data": {
+                "claims": [
+                    {"claim": "Certified Gluten-Free"}
+                ]
+            },
+            "allergen_data": {
+                "detected_allergens": [
+                    {"allergen_name": "wheat"}
+                ]
+            }
+        }
+
+        result = gate.check_product(product)
+
+        # Should have a contradiction warning
+        assert len(result.correctness_issues) > 0
+        contradiction = next(
+            (i for i in result.correctness_issues if i.issue_type == "contradiction"),
+            None
+        )
+        assert contradiction is not None
+        assert "gluten" in contradiction.description.lower()
+
+    def test_dairy_free_contradiction(self, gate):
+        """Detect contradiction: claims dairy-free but milk detected."""
+        product = {
+            "dsld_id": 12345,
+            "match_ledger": {
+                "domains": {},
+                "summary": {"coverage_percent": 100.0}
+            },
+            "claims_data": {
+                "claims": [
+                    {"claim": "Dairy-Free Formula"}
+                ]
+            },
+            "allergen_data": {
+                "detected_allergens": [
+                    {"allergen_name": "milk protein"}
+                ]
+            }
+        }
+
+        result = gate.check_product(product)
+
+        # Should have a contradiction warning
+        assert len(result.correctness_issues) > 0
+        contradiction = next(
+            (i for i in result.correctness_issues if i.issue_type == "contradiction"),
+            None
+        )
+        assert contradiction is not None
+        assert "dairy" in contradiction.description.lower()
+
+    def test_no_contradiction_when_no_allergens(self, gate):
+        """No contradiction when allergen-free and no allergens detected."""
+        product = {
+            "dsld_id": 12345,
+            "match_ledger": {
+                "domains": {},
+                "summary": {"coverage_percent": 100.0}
+            },
+            "claims_data": {
+                "claims": [
+                    {"claim": "Allergen-Free Product"}
+                ]
+            },
+            "allergen_data": {
+                "detected_allergens": []
+            }
+        }
+
+        result = gate.check_product(product)
+
+        # Should have no contradiction issues
+        contradictions = [
+            i for i in result.correctness_issues
+            if i.issue_type == "contradiction"
+        ]
+        assert len(contradictions) == 0
+
+    def test_missing_conversion_detection(self, gate):
+        """Detect missing unit conversions."""
+        product = {
+            "dsld_id": 12345,
+            "match_ledger": {
+                "domains": {},
+                "summary": {"coverage_percent": 100.0}
+            },
+            "rda_ul_data": {
+                "analyzed_ingredients": [
+                    {
+                        "name": "Novel Nutrient",
+                        "amount": 100,
+                        "unit": "IU",
+                        "conversion_evidence": {
+                            "success": False,
+                            "error": "No conversion rule found for Novel Nutrient"
+                        }
+                    }
+                ]
+            }
+        }
+
+        result = gate.check_product(product)
+
+        # Should have a missing_conversion warning
+        missing = [
+            i for i in result.correctness_issues
+            if i.issue_type == "missing_conversion"
+        ]
+        assert len(missing) > 0
+        assert "Novel Nutrient" in missing[0].details.get("nutrient", "")
+
+    def test_claim_scope_violation_detection(self, gate):
+        """Detect claims that may exceed allowed scope (drug claims)."""
+        product = {
+            "dsld_id": 12345,
+            "match_ledger": {
+                "domains": {},
+                "summary": {"coverage_percent": 100.0}
+            },
+            "claims_data": {
+                "claims": [
+                    {"claim": "Cures joint pain"},
+                    {"claim": "Supports healthy joints"}  # This is OK
+                ]
+            }
+        }
+
+        result = gate.check_product(product)
+
+        # Should have a claim_violation warning
+        violations = [
+            i for i in result.correctness_issues
+            if i.issue_type == "claim_violation"
+        ]
+        assert len(violations) > 0
+        assert "cure" in violations[0].details.get("keyword", "")
+
+
+class TestBatchProcessing:
+    """Test batch processing functionality."""
+
+    @pytest.fixture
+    def gate(self):
+        # Use strict_mode=True for tests to enforce blocking regardless of batch size
+        return CoverageGate(strict_mode=True)
+
+    def test_batch_with_mixed_results(self, gate):
+        """Test batch with some passing and some failing products."""
+        products = [
+            # Good product
+            {
+                "dsld_id": 1,
+                "match_ledger": {
+                    "domains": {
+                        "ingredients": {
+                            "total_raw": 10,
+                            "matched": 10,
+                            "unmatched": 0,
+                            "rejected": 0,
+                            "skipped": 0,
+                            "coverage_percent": 100.0
+                        }
+                    },
+                    "summary": {"coverage_percent": 100.0}
+                }
+            },
+            # Bad product (low ingredient coverage)
+            {
+                "dsld_id": 2,
+                "match_ledger": {
+                    "domains": {
+                        "ingredients": {
+                            "total_raw": 10,
+                            "matched": 5,
+                            "unmatched": 5,
+                            "rejected": 0,
+                            "skipped": 0,
+                            "coverage_percent": 50.0
+                        }
+                    },
+                    "summary": {"coverage_percent": 50.0}
+                }
+            }
+        ]
+
+        result = gate.check_batch(products)
+
+        assert result.total_products == 2
+        assert result.products_can_score == 1
+        assert result.products_blocked == 1
+        assert "2" in result.blocked_product_ids
+
+    def test_batch_coverage_average(self, gate):
+        """Test that average coverage is calculated correctly."""
+        products = [
+            {
+                "dsld_id": 1,
+                "match_ledger": {
+                    "domains": {},
+                    "summary": {"coverage_percent": 80.0}
+                }
+            },
+            {
+                "dsld_id": 2,
+                "match_ledger": {
+                    "domains": {},
+                    "summary": {"coverage_percent": 100.0}
+                }
+            }
+        ]
+
+        result = gate.check_batch(products)
+
+        assert result.average_coverage == pytest.approx(90.0)
+
+
+class TestReportGeneration:
+    """Test report generation."""
+
+    @pytest.fixture
+    def gate(self):
+        return CoverageGate()
+
+    def test_json_report_structure(self, gate):
+        """Test JSON report has correct structure."""
+        products = [
+            {
+                "dsld_id": 1,
+                "match_ledger": {
+                    "domains": {
+                        "ingredients": {
+                            "total_raw": 10,
+                            "matched": 10,
+                            "unmatched": 0,
+                            "rejected": 0,
+                            "skipped": 0,
+                            "coverage_percent": 100.0
+                        }
+                    },
+                    "summary": {"coverage_percent": 100.0}
+                }
+            }
+        ]
+
+        result = gate.check_batch(products)
+
+        with TemporaryDirectory() as tmpdir:
+            json_path, md_path = gate.generate_report(result, Path(tmpdir))
+
+            # Check JSON file exists and has correct structure
+            assert json_path.exists()
+            with open(json_path) as f:
+                report = json.load(f)
+
+            assert "schema_version" in report
+            assert "summary" in report
+            assert "thresholds" in report
+            assert "domain_coverage" in report
+            assert "products" in report
+
+            # Check summary fields
+            summary = report["summary"]
+            assert summary["total_products"] == 1
+            assert summary["products_can_score"] == 1
+            assert summary["products_blocked"] == 0
+
+    def test_markdown_report_generated(self, gate):
+        """Test Markdown report is generated."""
+        products = [
+            {
+                "dsld_id": 1,
+                "match_ledger": {
+                    "domains": {},
+                    "summary": {"coverage_percent": 100.0}
+                }
+            }
+        ]
+
+        result = gate.check_batch(products)
+
+        with TemporaryDirectory() as tmpdir:
+            json_path, md_path = gate.generate_report(result, Path(tmpdir))
+
+            # Check Markdown file exists
+            assert md_path.exists()
+            content = md_path.read_text()
+
+            # Check basic structure
+            assert "# Coverage Gate Report" in content
+            assert "## Summary" in content
+            assert "## Domain Coverage" in content
+
+
+class TestConvenienceFunction:
+    """Test the convenience function check_enriched_batch."""
+
+    def test_check_enriched_batch_returns_tuple(self):
+        """Test check_enriched_batch returns correct tuple."""
+        products = [
+            {
+                "dsld_id": 1,
+                "match_ledger": {
+                    "domains": {
+                        "ingredients": {
+                            "total_raw": 10,
+                            "matched": 10,
+                            "unmatched": 0,
+                            "rejected": 0,
+                            "skipped": 0,
+                            "coverage_percent": 100.0
+                        }
+                    },
+                    "summary": {"coverage_percent": 100.0}
+                }
+            }
+        ]
+
+        can_proceed, result = check_enriched_batch(products)
+
+        assert can_proceed is True
+        assert isinstance(result, BatchCoverageResult)
+        assert result.products_blocked == 0
+
+    def test_check_enriched_batch_blocks_on_failure(self):
+        """Test check_enriched_batch blocks when threshold not met."""
+        products = [
+            {
+                "dsld_id": 1,
+                "match_ledger": {
+                    "domains": {
+                        "ingredients": {
+                            "total_raw": 10,
+                            "matched": 5,
+                            "unmatched": 5,
+                            "rejected": 0,
+                            "skipped": 0,
+                            "coverage_percent": 50.0
+                        }
+                    },
+                    "summary": {"coverage_percent": 50.0}
+                }
+            }
+        ]
+
+        # Use strict_mode=True to enforce blocking on small batches
+        can_proceed, result = check_enriched_batch(products, block_on_failure=True, strict_mode=True)
+
+        assert can_proceed is False
+        assert result.products_blocked == 1
+
+    def test_check_enriched_batch_no_block_option(self):
+        """Test check_enriched_batch can disable blocking."""
+        products = [
+            {
+                "dsld_id": 1,
+                "match_ledger": {
+                    "domains": {
+                        "ingredients": {
+                            "total_raw": 10,
+                            "matched": 5,
+                            "unmatched": 5,
+                            "rejected": 0,
+                            "skipped": 0,
+                            "coverage_percent": 50.0
+                        }
+                    },
+                    "summary": {"coverage_percent": 50.0}
+                }
+            }
+        ]
+
+        # Use strict_mode=True so products_blocked is correctly counted
+        can_proceed, result = check_enriched_batch(products, block_on_failure=False, strict_mode=True)
+
+        # Should proceed even with blocked products
+        assert can_proceed is True
+        assert result.products_blocked == 1
+
+
+class TestCustomThresholds:
+    """Test custom threshold configuration."""
+
+    def test_custom_thresholds(self):
+        """Test that custom thresholds are used."""
+        custom_thresholds = {
+            "ingredients": {"threshold": 50.0, "severity": "BLOCK"},
+            "additives": {"threshold": 50.0, "severity": "BLOCK"},
+            "allergens": {"threshold": 50.0, "severity": "BLOCK"},
+            "manufacturer": {"threshold": 50.0, "severity": "WARN"},
+            "delivery": {"threshold": 50.0, "severity": "WARN"},
+            "claims": {"threshold": 50.0, "severity": "WARN"},
+        }
+
+        gate = CoverageGate(thresholds=custom_thresholds)
+
+        product = {
+            "dsld_id": 1,
+            "match_ledger": {
+                "domains": {
+                    "ingredients": {
+                        "total_raw": 10,
+                        "matched": 6,
+                        "unmatched": 4,
+                        "rejected": 0,
+                        "skipped": 0,
+                        "coverage_percent": 60.0
+                    }
+                },
+                "summary": {"coverage_percent": 60.0}
+            }
+        }
+
+        result = gate.check_product(product)
+
+        # With custom 50% threshold, 60% should pass
+        assert result.can_score
+
+
+class TestEdgeCases:
+    """Test edge cases."""
+
+    @pytest.fixture
+    def gate(self):
+        return CoverageGate()
+
+    def test_missing_match_ledger(self, gate):
+        """Test handling of product without match_ledger."""
+        product = {
+            "dsld_id": 1
+        }
+
+        result = gate.check_product(product)
+
+        # Should handle gracefully
+        assert result.product_id == "1"
+        # With no data, should be able to score
+        assert result.can_score
+
+    def test_empty_batch(self, gate):
+        """Test handling of empty batch."""
+        products = []
+
+        result = gate.check_batch(products)
+
+        assert result.total_products == 0
+        assert result.products_blocked == 0
+        assert result.average_coverage == 0.0
+
+    def test_product_without_id(self, gate):
+        """Test handling of product without dsld_id."""
+        product = {
+            "match_ledger": {
+                "domains": {},
+                "summary": {"coverage_percent": 100.0}
+            }
+        }
+
+        result = gate.check_product(product)
+
+        assert result.product_id == "unknown"
+
+
+if __name__ == "__main__":
+    pytest.main([__file__, "-v"])

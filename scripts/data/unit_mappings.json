@@ -1,4 +1,11 @@
 {
+  "_metadata": {
+    "description": "Unit mapping definitions for specific supplement form conversions",
+    "purpose": "unit_mapping",
+    "schema_version": "4.0.0",
+    "last_updated": "2026-02-16",
+    "total_entries": 14
+  },
   "Vitamin D3": {
     "capsule": {
       "amount": 1000,
@@ -93,7 +100,11 @@
       "unit": "CFU",
       "notes": "1 Billion CFU (for raw input)"
     },
-    "cfu": { "amount": 1, "unit": "CFU", "notes": "Raw CFU unit" }
+    "cfu": {
+      "amount": 1,
+      "unit": "CFU",
+      "notes": "Raw CFU unit"
+    }
   },
   "Multivitamin": {
     "tablet": {

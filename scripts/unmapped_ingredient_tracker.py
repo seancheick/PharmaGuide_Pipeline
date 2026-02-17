@@ -108,26 +108,3 @@ class UnmappedIngredientTracker:
         except Exception as e:
             logger.error(f"Failed to save unmapped tracking files: {str(e)}")
             raise
-    
-    def get_summary_stats(self) -> Dict[str, Any]:
-        """Get summary statistics for unmapped ingredients
-        
-        Returns:
-            Dictionary containing summary statistics
-        """
-        return {
-            "total_processed": self.processed_count,
-            "unmapped_active_count": len(self.unmapped_active),
-            "unmapped_inactive_count": len(self.unmapped_inactive),
-            "total_unmapped": len(self.unmapped_active) + len(self.unmapped_inactive),
-            "active_occurrences": sum(self.unmapped_active.values()),
-            "inactive_occurrences": sum(self.unmapped_inactive.values()),
-            "total_occurrences": sum(self.unmapped_active.values()) + sum(self.unmapped_inactive.values())
-        }
-    
-    def reset(self):
-        """Reset all tracking data"""
-        self.unmapped_active.clear()
-        self.unmapped_inactive.clear() 
-        self.processed_count = 0
-        logger.info("Reset unmapped ingredient tracker")

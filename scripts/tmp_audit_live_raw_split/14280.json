@@ -1,0 +1,438 @@
+{
+  "id": "14280",
+  "src": "01-raw/2024-09-25/data/label_288.json",
+  "nhanesId": "",
+  "bundleName": "",
+  "brandIpSymbol": "\u00ae",
+  "productVersionCode": "CODE 0495 V4",
+  "pdf": "",
+  "thumbnail": "",
+  "percentDvFootnote": "Not Present",
+  "fullName": "Methyl B-12 1000 mcg",
+  "brandName": "NOW",
+  "upcSku": "7 33739 00495 6",
+  "hasOuterCarton": false,
+  "upcValid": true,
+  "status": "discontinued",
+  "discontinuedDate": "2015-07-20T00:00:00Z",
+  "offMarket": 1,
+  "servingsPerContainer": null,
+  "netContents": [
+    {
+      "order": 1,
+      "quantity": 100,
+      "unit": "Lozenge(s)",
+      "display": "100 Lozenge(s)"
+    }
+  ],
+  "targetGroups": [
+    "Vegan",
+    "Vegetarian",
+    "Adult (18 - 50 Years)",
+    "Gluten Free",
+    "Dairy Free"
+  ],
+  "userGroups": [
+    {
+      "dailyValueTargetGroupName": "Adults and children 4 or more years of age",
+      "langualCode": "P0250",
+      "langualCodeDescription": "Adults and Children 4 years and above"
+    }
+  ],
+  "productType": {
+    "langualCode": "A1302",
+    "langualCodeDescription": "Vitamin"
+  },
+  "physicalState": {
+    "langualCode": "E0174",
+    "langualCodeDescription": "Lozenge"
+  },
+  "imageUrl": "https://api.ods.od.nih.gov/dsld/s3/pdf/14280.pdf",
+  "images": [],
+  "contacts": [
+    {
+      "contactId": 3090,
+      "text": "Manufactured by",
+      "types": [
+        "Manufacturer"
+      ],
+      "contactDetails": {
+        "src": "01-raw/2025-03-25/data/contact_1.json",
+        "id": 3090,
+        "name": "NOW FOODS",
+        "streetAddress": "395 S. Glen Ellyn Rd.",
+        "city": "Bloomingdale",
+        "state": "IL",
+        "country": "",
+        "zipCode": "60108",
+        "phoneNumber": "",
+        "email": "",
+        "webAddress": "www.nowfoods.com"
+      }
+    }
+  ],
+  "events": [
+    {
+      "date": "2015-07-20",
+      "type": "Off Market"
+    },
+    {
+      "date": "2012-10-25",
+      "type": "Date entered into DSLD"
+    }
+  ],
+  "activeIngredients": [
+    {
+      "ingredientId": 281388,
+      "uniiCode": "8406EY2OQA",
+      "order": 1,
+      "raw_source_text": "Vitamin B12",
+      "branded_token_extracted": null,
+      "raw_source_path": "activeIngredients",
+      "normalized_key": "vitamin_b12",
+      "name": "Vitamin B12",
+      "standardName": "Vitamin B12",
+      "ingredientGroup": "Vitamin B12",
+      "quantity": 1.0,
+      "unit": "mg",
+      "dailyValue": 16667.0,
+      "quantityVariants": null,
+      "forms": [
+        {
+          "name": "Methylcobalamin",
+          "ingredientId": 280220,
+          "order": 1,
+          "prefix": null,
+          "percent": null
+        }
+      ],
+      "alternateNames": [],
+      "mapped": true,
+      "proprietaryBlend": false,
+      "disclosureLevel": null,
+      "parentBlend": null,
+      "isNestedIngredient": false,
+      "nestedIngredients": [],
+      "hierarchyType": null,
+      "harvestMethod": "1,000 mg",
+      "notes": "Vitamin B-12 (Form: as Methylcobalamin) Note: 1,000 mg "
+    }
+  ],
+  "inactiveIngredients": [
+    {
+      "ingredientId": 282545,
+      "uniiCode": "6YSS42VSEV",
+      "order": 1,
+      "raw_source_text": "Fructose",
+      "raw_source_path": "inactiveIngredients",
+      "normalized_key": "fructose",
+      "name": "Fructose",
+      "standardName": "Fructose & High Fructose Corn Syrup",
+      "ingredientGroup": "Fructose",
+      "forms": [],
+      "alternateNames": [],
+      "mapped": true,
+      "hierarchyType": null
+    },
+    {
+      "ingredientId": 3789,
+      "uniiCode": null,
+      "order": 2,
+      "raw_source_text": "Sorbitol",
+      "raw_source_path": "inactiveIngredients",
+      "normalized_key": "sorbitol",
+      "name": "Sorbitol",
+      "standardName": "sorbitol",
+      "ingredientGroup": "Sorbitol",
+      "forms": [],
+      "alternateNames": [],
+      "mapped": true,
+      "hierarchyType": null,
+      "isAdditive": true,
+      "additiveType": "sugar_alcohol"
+    },
+    {
+      "ingredientId": 9747,
+      "uniiCode": null,
+      "order": 3,
+      "raw_source_text": "Cellulose",
+      "raw_source_path": "inactiveIngredients",
+      "normalized_key": "cellulose",
+      "name": "Cellulose",
+      "standardName": "cellulose powder",
+      "ingredientGroup": "Cellulose",
+      "forms": [],
+      "alternateNames": [],
+      "mapped": true,
+      "hierarchyType": null,
+      "isAdditive": true,
+      "additiveType": "unspecified"
+    },
+    {
+      "ingredientId": 285558,
+      "uniiCode": "4ELV7Z65AP",
+      "order": 4,
+      "raw_source_text": "Stearic Acid",
+      "raw_source_path": "inactiveIngredients",
+      "normalized_key": "stearic_acid",
+      "name": "Stearic Acid",
+      "standardName": "stearic acid",
+      "ingredientGroup": "Stearic Acid",
+      "forms": [],
+      "alternateNames": [
+        "C18:0"
+      ],
+      "mapped": true,
+      "hierarchyType": null,
+      "isAdditive": true,
+      "additiveType": "processing_aid"
+    },
+    {
+      "ingredientId": 3677,
+      "uniiCode": null,
+      "order": 5,
+      "raw_source_text": "Citric Acid",
+      "raw_source_path": "inactiveIngredients",
+      "normalized_key": "citric_acid",
+      "name": "Citric Acid",
+      "standardName": "Citric Acid",
+      "ingredientGroup": "Citric Acid",
+      "forms": [],
+      "alternateNames": [],
+      "mapped": true,
+      "hierarchyType": null,
+      "isAdditive": true,
+      "additiveType": "preservative_natural"
+    },
+    {
+      "ingredientId": 3744,
+      "uniiCode": null,
+      "order": 6,
+      "raw_source_text": "Natural Flavors",
+      "raw_source_path": "inactiveIngredients",
+      "normalized_key": "natural_flavors",
+      "name": "Natural Flavors",
+      "standardName": "natural flavors",
+      "ingredientGroup": "Flavor",
+      "forms": [],
+      "alternateNames": [],
+      "mapped": true,
+      "hierarchyType": null,
+      "isAdditive": true,
+      "additiveType": "flavoring"
+    },
+    {
+      "ingredientId": 51133,
+      "uniiCode": null,
+      "order": 7,
+      "raw_source_text": "Magnesium Stearate",
+      "raw_source_path": "inactiveIngredients",
+      "normalized_key": "magnesium_stearate",
+      "name": "Magnesium Stearate",
+      "standardName": "magnesium stearate",
+      "ingredientGroup": "Magnesium stearate",
+      "forms": [],
+      "alternateNames": [],
+      "mapped": true,
+      "hierarchyType": null,
+      "isAdditive": true,
+      "additiveType": "processing_aid"
+    }
+  ],
+  "nutritionalInfo": {},
+  "statements": [
+    {
+      "type": "General Statements: All Other Content",
+      "notes": "ACTUAL SIZE"
+    },
+    {
+      "type": "Formulation re: Does NOT Contain",
+      "notes": "Contains no salt, yeast, wheat, gluten, soy, milk, egg or shellfish.\n"
+    },
+    {
+      "type": "Seals/Symbols",
+      "notes": "GMP QUALITY ASSURED"
+    },
+    {
+      "type": "General Statements: All Other Content",
+      "notes": "Made in the U.S.A."
+    },
+    {
+      "type": "Precautions re: All Other",
+      "notes": "Do Not Eat Freshness Packet. Keep in Bottle.\n"
+    },
+    {
+      "type": "Storage",
+      "notes": "Store in a cool, dry place."
+    },
+    {
+      "type": "General Statements: All Other Content",
+      "notes": "Please Recycle."
+    },
+    {
+      "type": "Suggested/Recommended/Usage/Directions",
+      "notes": "SUGGESTED USAGE: As a dietary supplement, take 1 lozenge 1 to 2 times daily. Chew lozenge or hold in mouth until dissolved and swallow. Consider taking this product in combination with NOW(R) B-Complex, Folic Acid, B-6 and TMG."
+    },
+    {
+      "type": "FDA Disclaimer Statement",
+      "notes": "*These statements have not been evaluated by the FDA. This product is not intended to diagnose, treat, cure or prevent any disease."
+    },
+    {
+      "type": "General Statements: All Other Content",
+      "notes": "Vitamin B-12 is a water soluble vitamin necessary for the maintenance of a healthy nervous system and for the metabolic utilization of fats and proteins. Vitamin B-12 is also essential for the synthesis of DNA during cell division and therefore is especially important for rapidly multiplying cells, such as blood cells. In addition, adequate intake of Vitamin B-12, along with Folic Acid and Vitamin B-6, encourages healthy serum homocysteine levels, thereby supporting cardiovascular health. Because Vitamin B-12 is found predominantly in animal products, strict vegetarians are at risk of developing Vitamin B-12 deficiency and may benefit from supplementation.*"
+    },
+    {
+      "type": "General Statements: All Other Content",
+      "notes": "SUPPORTS COGNITIVE FUNCTION*"
+    },
+    {
+      "type": "Formula re: Contains",
+      "notes": "Methylcobalamin"
+    },
+    {
+      "type": "FDA Statement of Identity",
+      "notes": "A Dietary Supplement\n"
+    },
+    {
+      "type": "Formulation re: Vegetarian/Vegan",
+      "notes": "Vegetarian Formula"
+    },
+    {
+      "type": "Formulation re: Vegetarian/Vegan",
+      "notes": "Vegetarian/Vegan Product.\n"
+    },
+    {
+      "type": "General: Product/Version Code",
+      "notes": "CODE 0495 V4"
+    }
+  ],
+  "claims": [
+    {
+      "langualCode": "P0115",
+      "langualCodeDescription": "All Other"
+    },
+    {
+      "langualCode": "P0265",
+      "langualCodeDescription": "Structure/Function"
+    }
+  ],
+  "servingSizes": [
+    {
+      "minQuantity": 1.0,
+      "maxQuantity": 1.0,
+      "unit": "Lozenge(s)",
+      "minDailyServings": 1,
+      "maxDailyServings": 2,
+      "normalizedServing": 1.0
+    }
+  ],
+  "labelRelationships": [
+    {
+      "type": "Image difference, same product",
+      "labelId": 47885
+    },
+    {
+      "type": "Image difference, same product",
+      "labelId": 70218
+    },
+    {
+      "type": "Image difference, same product",
+      "labelId": 204894
+    },
+    {
+      "type": "Image difference, same product",
+      "labelId": 313773
+    }
+  ],
+  "labelText": {
+    "raw": "ACTUAL SIZE Contains no salt, yeast, wheat, gluten, soy, milk, egg or shellfish.\n GMP QUALITY ASSURED Made in the U.S.A. Do Not Eat Freshness Packet. Keep in Bottle.\n Store in a cool, dry place. Please Recycle. SUGGESTED USAGE: As a dietary supplement, take 1 lozenge 1 to 2 times daily. Chew lozenge or hold in mouth until dissolved and swallow. Consider taking this product in combination with NOW(R) B-Complex, Folic Acid, B-6 and TMG. *These statements have not been evaluated by the FDA. This product is not intended to diagnose, treat, cure or prevent any disease. Vitamin B-12 is a water soluble vitamin necessary for the maintenance of a healthy nervous system and for the metabolic utilization of fats and proteins. Vitamin B-12 is also essential for the synthesis of DNA during cell division and therefore is especially important for rapidly multiplying cells, such as blood cells. In addition, adequate intake of Vitamin B-12, along with Folic Acid and Vitamin B-6, encourages healthy serum homocysteine levels, thereby supporting cardiovascular health. Because Vitamin B-12 is found predominantly in animal products, strict vegetarians are at risk of developing Vitamin B-12 deficiency and may benefit from supplementation.* SUPPORTS COGNITIVE FUNCTION* Methylcobalamin A Dietary Supplement\n Vegetarian Formula Vegetarian/Vegan Product.\n CODE 0495 V4",
+    "parsed": {
+      "certifications": [
+        "GMP-General"
+      ],
+      "testing": [],
+      "origin": [],
+      "flavor": [
+        "Natural Flavors"
+      ],
+      "probioticGuarantee": [
+        "1,000 mg"
+      ],
+      "cleanLabelClaims": [
+        "Egg Free",
+        "Gluten Free",
+        "No Salt",
+        "Shellfish Free",
+        "Soy Free",
+        "Dairy Free",
+        "Yeast Free",
+        "No Wheat"
+      ],
+      "allergens": [
+        "eggs",
+        "soy",
+        "milk",
+        "wheat",
+        "shellfish"
+      ],
+      "allergenFree": [
+        "egg",
+        "soy",
+        "yeast",
+        "gluten",
+        "dairy",
+        "wheat",
+        "shellfish"
+      ],
+      "warnings": [
+        "Contains: Milk",
+        "Contains: Soy",
+        "Contains: Eggs",
+        "Contains: Shellfish",
+        "Contains: Wheat"
+      ],
+      "storage": [
+        "Store in a cool, dry place."
+      ],
+      "directions": "SUGGESTED USAGE: As a dietary supplement, take 1 lozenge 1 to 2 times daily. Chew lozenge or hold in mouth until dissolved and swallow. Consider taking this product in combination with NOW(R) B-Complex, Folic Acid, B-6 and TMG.",
+      "marketingClaims": [
+        "SUPPORTS COGNITIVE FUNCTION"
+      ],
+      "qualityFeatures": [
+        "GMP certified",
+        "Vegan",
+        "Vegetarian"
+      ],
+      "proprietaryBlendDisclosure": null
+    },
+    "searchText": "Vitamin B12 Methylcobalamin Vitamin B-12 (Form: as Methylcobalamin) Note: 1,000 mg Fructose Sorbitol Cellulose Stearic Acid Citric Acid Natural Flavors Magnesium Stearate ACTUAL SIZE Contains no salt, yeast, wheat, gluten, soy, milk, egg or shellfish. GMP QUALITY ASSURED Made in the U.S.A. Do Not Eat Freshness Packet. Keep in Bottle. Store in a cool, dry place. Please Recycle. SUGGESTED USAGE: As a dietary supplement, take 1 lozenge 1 to 2 times daily. Chew lozenge or hold in mouth until dissolved and swallow. Consider taking this product in combination with NOW(R) B-Complex, Folic Acid, B-6 and TMG. *These statements have not been evaluated by the FDA. This product is not intended to diagnose, treat, cure or prevent any disease. Vitamin B-12 is a water soluble vitamin necessary for the maintenance of a healthy nervous system and for the metabolic utilization of fats and proteins. Vitamin B-12 is also essential for the synthesis of DNA during cell division and therefore is especially important for rapidly multiplying cells, such as blood cells. In addition, adequate intake of Vitamin B-12, along with Folic Acid and Vitamin B-6, encourages healthy serum homocysteine levels, thereby supporting cardiovascular health. Because Vitamin B-12 is found predominantly in animal products, strict vegetarians are at risk of developing Vitamin B-12 deficiency and may benefit from supplementation.* SUPPORTS COGNITIVE FUNCTION* Methylcobalamin A Dietary Supplement Vegetarian Formula Vegetarian/Vegan Product. CODE 0495 V4"
+  },
+  "metadata": {
+    "lastCleaned": "2026-02-16T21:19:15.691883Z",
+    "cleaningVersion": "2.1.0",
+    "reference_versions": {
+      "color_indicators": {
+        "version": "2.0.0",
+        "last_updated": "2026-01-05"
+      }
+    },
+    "mappingStats": {
+      "totalIngredients": 8,
+      "mappedIngredients": 8,
+      "unmappedIngredients": 0,
+      "mappingRate": 100.0
+    },
+    "transparencyMetrics": {
+      "hasProprietaryBlend": false,
+      "blendTransparency": "full",
+      "disclosedIngredients": 1,
+      "undisclosedQuantities": 0,
+      "transparencyScore": 100.0
+    },
+    "completeness": {
+      "score": 100.0,
+      "missingFields": [],
+      "criticalFieldsComplete": true
+    }
+  }
+}

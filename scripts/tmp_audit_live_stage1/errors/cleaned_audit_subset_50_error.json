@@ -1,0 +1,8 @@
+{
+  "original_file": "tmp_audit_live_cleaned/cleaned_audit_subset_50.json",
+  "error_type": "ProcessingError",
+  "error_message": "'list' object has no attribute 'get'",
+  "processing_stage": "normalize",
+  "timestamp": "2026-02-17T04:18:54.107433Z",
+  "traceback": null
+}

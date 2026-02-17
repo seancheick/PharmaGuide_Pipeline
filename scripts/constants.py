@@ -4,12 +4,13 @@ Constants and configuration for DSLD data cleaning pipeline
 from pathlib import Path
 
 # Base paths
-BASE_DIR = Path(__file__).parent.parent
-SCRIPTS_DIR = BASE_DIR / "scripts"
-DATA_DIR = SCRIPTS_DIR / "data"
-CONFIG_DIR = BASE_DIR / "config"
-OUTPUT_DIR = BASE_DIR / "output"
-LOGS_DIR = BASE_DIR / "logs"
+# NOTE: Path resolution designed for portability - all paths relative to scripts/
+BASE_DIR = Path(__file__).parent.parent     # Repository root
+SCRIPTS_DIR = Path(__file__).parent          # scripts/ directory (where this file lives)
+DATA_DIR = SCRIPTS_DIR / "data"              # scripts/data/ - reference databases
+CONFIG_DIR = SCRIPTS_DIR / "config"          # scripts/config/ - pipeline configs
+OUTPUT_DIR = SCRIPTS_DIR / "output"          # scripts/output/ - default output location
+LOGS_DIR = SCRIPTS_DIR / "logs"              # scripts/logs/ - processing logs
 
 # Reference data files
 INGREDIENT_QUALITY_MAP = DATA_DIR / "ingredient_quality_map.json"
@@ -32,6 +33,11 @@ FUNCTIONAL_GROUPINGS = DATA_DIR / "functional_ingredient_groupings.json"  # Func
 BOTANICAL_INGREDIENTS = DATA_DIR / "botanical_ingredients.json"
 INGREDIENT_CLASSIFICATION = DATA_DIR / "ingredient_classification.json"  # Hierarchical classification (source/summary/component) to prevent double-scoring
 COLOR_INDICATORS = DATA_DIR / "color_indicators.json"  # Natural vs artificial color classification indicators
+CLINICALLY_RELEVANT_STRAINS = (
+    DATA_DIR / "clinically_relevant_strains.json"
+)
+CERT_CLAIM_RULES = DATA_DIR / "cert_claim_rules.json"  # Versioned rules for certification/claim detection with evidence-based scoring
+UNIT_CONVERSIONS_DB = DATA_DIR / "unit_conversions.json"  # Nutrient + form specific unit conversions for dosage normalization
 
 # Output subdirectories
 OUTPUT_CLEANED = OUTPUT_DIR / "cleaned"
@@ -60,13 +66,17 @@ UNIT_CONVERSIONS = {
 
 # Nutritional facts that should NOT be treated as supplement ingredients
 # These are macro/nutritional components reported on food labels, not active ingredients
+# NOTE: These are label math/rollups, not discrete scorable ingredients
 EXCLUDED_NUTRITION_FACTS = {
     # Energy and macronutrients
-    "calories", "energy", "kcal", "cal",
+    "calories", "energy", "kcal", "kcals", "cal", "total calories", "calories for fat",
     "total fat", "fat", "saturated fat", "trans fat", "polyunsaturated fat", "monounsaturated fat",
+    "unsaturated fat", "saturated fatty acids", "unsaturated fatty acids",
+    "total saturated fatty acids", "total unsaturated fatty acids",
+    "polyunsaturated fatty acids", "monounsaturated fatty acids",
     "cholesterol", "total cholesterol", "dietary cholesterol",
     "total carbohydrates", "carbohydrates", "carbs", "total carbs", "total carb", "total carb.", "total carbohydrate",
-    "net carbs", "net carbohydrates",
+    "net carbs", "net carbohydrates", "carbohydrate",
     "dietary fiber", "fiber", "soluble fiber", "insoluble fiber",
     "sugars", "total sugars", "added sugars", "sugar", "natural sugars",
     "sugar alcohols", "sugar alcohol", "polyols",
@@ -75,7 +85,78 @@ EXCLUDED_NUTRITION_FACTS = {
     # Common electrolytes/minerals when listed as basic nutrition facts
     "sodium", "salt", "sodium chloride",
     # Other nutritional labels
-    "serving size", "servings per container", "amount per serving"
+    "serving size", "servings per container", "amount per serving",
+
+    # Omega fatty acid totals (label rollups, not discrete ingredients)
+    "total omega-3 fatty acids", "total omega-6 fatty acids", "total omega-9 fatty acids",
+    "total omega-5 fatty acids", "total omega-7 fatty acids", "total omega-11 fatty acids",
+    "total omega 3 fatty acids", "total omega 6 fatty acids", "total omega 9 fatty acids",
+    "omega-6 fatty acids, total", "omega-9 fatty acids, total", "omega-3 fatty acids, total",
+    "total omega-6", "total omega-9", "total omega-3",
+    "total omega 3", "total omega 6", "total omega 9",
+    "other omega-6 fatty acids", "other omega fatty acids", "other omegas", "other omega 3",
+    "omega-5-6-7-8-9-11", "omega-6-7-9-11",
+    "total omega 3-5-6-7-8-9-11", "total omega 3-5-6-7-9-11",
+    "total omega 3-6-7-9-11", "total omega 3-6-9 fatty acids",
+    "total omega-5 & 7 fatty acids", "total omega-5, 7 & 8 fatty acids",
+    "total omega-5, 7 fatty acids", "total omega-9 & 11 fatty acids", "omega-6,9 fatty acids",
+
+    # EPA/DHA totals (computed sums)
+    "total epa + dha", "total epa/dha", "total dha, epa", "total dha plus epa",
+    "epa+dha", "epa + dha", "total epa", "total dha",
+
+    # Fish oil totals
+    "total fish oil", "total fish oils", "total krill oil", "total fish oil concentrate",
+
+    # Phospholipid totals
+    "total phospholipids", "other phospholipids", "other soy phospholipids",
+
+    # Tocotrienol/tocopherol totals
+    "total tocotrienols", "total d-mixed tocotrienols", "total mixed tocotrienols",
+    "total natural tocotrienols", "total natural d-mixed palm tocotrienols",
+
+    # Generic fatty acid aggregates
+    "total fatty acids", "fatty acids and sterols", "fatty acids & sterols",
+    "other fatty acids & phytonutrients", "other fatty acids and phytonutrients",
+    "other omegas + fatty acids", "other beneficial fatty acids & nutrients",
+    "free fatty acids", "esterified fatty acids",
+
+    # Calorie/macro aggregates
+    "total fats", "total sterols", "total amino acids", "total bioflavonoids",
+    "total isoflavones", "total alkaloids", "total cannabinoids", "total collagen",
+    "total omegas", "total caffeine",
+
+    # Pro-resolving mediator totals
+    "total pro-resolving mediators", "pro-resolving mediators",
+    "specialized pro resolving mediators", "spm",
+
+    # Phytosterol totals
+    "total phytosterol esters", "total phytosterols esters",
+
+    # Additional omega variants
+    "omega-5 fatty acids", "omega-7 fatty acids", "omega-11 fatty acids",
+    "omega 3-6-9", "omega 3 fish oil",
+    "total omega long-chain fatty acids", "total omega 3 polyunsaturates",
+    "total omega 3-5-6-7-9", "omega-5,7 fatty acids",
+    "dha and epa", "dha phospholipids", "epa phospholipids",
+
+    # Fish oil aggregates
+    "fish oils", "other fish oils", "fish body oils", "marine oil",
+    "marine oils", "marine fish oil", "omega fatty acids",
+
+    # Calorie/energy variants
+    "grasa total",
+
+    # Compound totals (aggregates, not discrete)
+    "total docosapentaenoic acid", "total turmerones",
+    "total eleutherosides", "total thiosulfinates",
+    "total rosavins", "total ginsenosides",
+
+    # Miscellaneous aggregates
+    "other isomers", "other sterols",
+    "other fatty acids, lignans", "other fatty acid ethyl ester",
+    "five other naturally found fatty acids",
+    "and five other naturally found fatty acids",
 }
 
 # Label phrases and headers that should be excluded from ingredient processing
@@ -136,7 +217,7 @@ NUTRITIONAL_WARNING_FIELDS = {
     "cholesterol": ["cholesterol", "dietary cholesterol"]
 }
 
-# Required fields for completeness check
+# Required fields for RAW DSLD input validation (before cleaning transforms names)
 REQUIRED_FIELDS = {
     "critical": [
         "id",
@@ -166,8 +247,8 @@ REQUIRED_FIELDS = {
 # Severity levels
 SEVERITY_LEVELS = ["low", "moderate", "high"]
 
-# Risk levels
-RISK_LEVELS = ["low", "moderate", "high"]
+# Kept for backward compatibility — prefer SEVERITY_LEVELS
+RISK_LEVELS = SEVERITY_LEVELS
 
 # Harmful categories
 HARMFUL_CATEGORIES = [
@@ -192,6 +273,9 @@ STATEMENT_TYPES_OF_INTEREST = [
     "Storage"
 ]
 
+# DEPRECATED: Use data/cert_claim_rules.json instead for evidence-based certification detection
+# These patterns are kept for backward compatibility but should be migrated to the rules database
+# The new system provides: evidence objects, negative pattern validation, scope enforcement, feature gating
 # Certification patterns - Comprehensive list based on industry research
 CERTIFICATION_PATTERNS = {
     # Core Quality Certifications (Highest Priority)
@@ -303,6 +387,8 @@ FORM_QUALIFIERS = r'\b(extract|powder|root|leaf|fruit|capsule|tablet|softgel|liq
 # Enhanced comma splitting pattern that respects nested parentheses and brackets
 COMMA_SPLIT_PATTERN = r',(?![^()]*\))'
 
+# DEPRECATED: Use data/cert_claim_rules.json (allergen_free_claims section) for evidence-based detection
+# These patterns are kept for backward compatibility; the new system adds negative patterns and conflict checking
 # Allergen-free patterns
 ALLERGEN_FREE_PATTERNS = {
     "gluten": r"(gluten[\s-]*free|contains?\s+no\s+.*?gluten|does\s+not\s+contain\s+.*?gluten|wheat[\s-]*free)",
@@ -457,52 +543,8 @@ FUZZY_MATCHING_THRESHOLDS = {
     "parallel_threshold": 10    # Minimum ingredients to use parallel processing
 }
 
-# Scoring system constants
-SCORING_CONSTANTS = {
-    # Quality bonuses
-    "natural_bonus": 3,
-    "premium_forms_threshold": 3,
-    "super_combo_bonus_threshold": 3,
-    "absorption_enhancement_points": 3,
-    "organic_usda_verified_points": 3,
-    "organic_general_points": 2,
-    "synergy_minimum_ingredients": 2,
-    "standardized_botanical_points": 2,
-
-    # Quality thresholds
-    "minimum_fuzzy_length": 8,  # For safe fuzzy matching
-    "completeness_good_threshold": 90,
-    "mapping_rate_good_threshold": 75,
-    "unmapped_excellent_threshold": 5,
-
-    # Clinical dosing adequacy
-    "under_dosed_penalty": -2,
-    "minimal_effective_penalty": 0,
-    "optimal_dose_bonus": 2,
-    "high_dose_bonus": 1,
-    "excessive_dose_penalty": -1,
-
-    # Industry benchmarking percentiles
-    "industry_leader_percentile_min": 90,
-    "industry_average_percentile": 50,
-    "poor_performance_percentile_max": 25,
-
-    # Product classification thresholds
-    "premium_forms_super_combo_threshold": 3,
-    "premium_forms_minimum_threshold": 2,
-    "synergy_minimum_matched_ingredients": 2,
-    "multivitamin_minimum_ingredients": 3,
-    "high_priority_ingredient_threshold": 10,
-    "safe_fuzzy_matching_minimum_length": 8
-}
-
-# Evidence and validation constants
-EVIDENCE_SCORING = {
-    "tier_1_score": 10,  # Very high evidence
-    "tier_2_score": 7,   # High evidence
-    "tier_3_score": 5,   # Moderate evidence
-    "default_score": 3   # Low/unknown evidence
-}
+# NOTE: SCORING_CONSTANTS and EVIDENCE_SCORING were removed (dead code).
+# All scoring values are now in config/scoring_config.json per "_important_rules": "config_driven".
 
 # Unit conversion aliases and mappings
 UNIT_ALIASES = {
@@ -516,7 +558,8 @@ UNIT_ALIASES = {
     "lb": "pound"
 }
 
-# Validation and processing thresholds
+# Validation and processing thresholds (for batch_processor.py, NOT scoring)
+# NOTE: These are quality gates for pipeline validation, not scoring point values.
 VALIDATION_THRESHOLDS = {
     "excellent_completeness": 90,    # 90%+ for excellent completion
     "good_completeness": 85,         # 85%+ for good completion
@@ -537,3 +580,422 @@ VALIDATION_THRESHOLDS = {
 # Logging format
 LOG_FORMAT = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
 LOG_DATE_FORMAT = "%Y-%m-%d %H:%M:%S"
+
+# ==============================================================================
+# SCORABLE INGREDIENT CLASSIFICATION CONSTANTS
+# ==============================================================================
+# Used by enrichment to separate therapeutic actives (scorable) from
+# non-therapeutic label rows (excipients, headers, macro lines).
+
+# Non-therapeutic parent blend names - ingredients nested under these
+# should be skipped from quality scoring (Group A skip rule)
+NON_THERAPEUTIC_PARENT_DENYLIST = {
+    # Nutrition facts / macro lines
+    "total carbohydrates", "total carbohydrate", "carbohydrates", "carbs",
+    "sugars", "total sugars", "added sugars", "sugar",
+    "calories", "energy", "kcal",
+    "total fat", "fat", "saturated fat", "trans fat",
+    "cholesterol", "dietary cholesterol",
+    "protein", "total protein",
+    "fiber", "dietary fiber",
+    "sodium", "salt",
+    # Other non-therapeutic parents
+    "other carbohydrates", "other carbs",
+    "sugar alcohols", "polyols",
+}
+
+# Additive types that should be skipped from quality scoring
+# These are excipients, not therapeutic ingredients
+ADDITIVE_TYPES_SKIP_SCORING = {
+    "sweetener", "sugar_alcohol", "polyol",
+    "preservative", "preservative_natural", "preservative_synthetic",
+    "processing_aid", "flow_agent", "anti_caking",
+    "coating", "film_coating", "enteric_coating",
+    "binder", "filler", "bulking_agent",
+    "lubricant", "glidant",
+    "colorant", "dye", "color_natural", "color_artificial",
+    "flavor", "flavor_natural", "flavor_artificial",
+    "solvent", "carrier",
+    "emulsifier", "stabilizer", "thickener",
+    "unspecified",  # Generic additive without therapeutic function
+}
+
+# HIGH-CONFIDENCE blend headers - skip even WITH dose present
+# These are extremely unlikely to be actual therapeutic ingredients
+BLEND_HEADER_PATTERNS_HIGH_CONFIDENCE = [
+    # Proprietary prefix patterns - always headers regardless of what follows
+    r"^proprietary\s+\w+\s*blend",  # "Proprietary X Blend", "Proprietary Cartilage Blend"
+    r"^proprietary\s+blend",
+    r"^proprietary\s+formula",
+    r"^proprietary\s+complex",
+    r"^proprietary\s+matrix",
+    r"^proprietary\s+herbal",
+    r"^general\s+proprietary",
+    r"\bproprietary\b.*\bblend\b",  # catches prefixed names like "Brand Proprietary X Blend"
+    r"\{blend\}",                   # Curly brace notation: {blend}
+    r"^total\s+\{?blend\}?$",       # "Total Blend" or "Total {Blend}"
+]
+
+# LOW-CONFIDENCE blend headers - only skip if NO DOSE present
+# These could match legitimate actives if they have a dose
+BLEND_HEADER_PATTERNS_LOW_CONFIDENCE = [
+    # Suffix patterns (only skip without dose)
+    r"\bblends?$",      # "blend" or "blends" at end of name
+    r"\bcomplex$",
+    r"\bmatrix$",
+    r"\bformulas?$",
+
+    # Category-specific headers (only skip without dose)
+    r"\bherbal\s+blend",
+    r"\bbotanical\s+blend",
+    r"\bprobiotic\b.*\bblend",
+    r"\bprebiotic\b.*\bblend",
+    r"\benzyme\s+blend",
+    r"\bamino\b.*\bblend",
+    r"\bvitamin\b.*\bblend",
+    r"\bmineral\b.*\bblend",
+    r"\bantioxidant\b.*\bblend",
+    r"\bimmune\b.*\bblend",
+    r"\benergy\b.*\bblend",
+    r"\bsupport\b.*\bblend",
+    r"\bdefense\b.*\bblend",
+    r"\bsuperfood\b.*\bblend",
+    r"\bomega\b.*\bblend",
+    r"\bcartilage\b.*\bblend",
+    r"\bfruit\b.*\bblend",
+    r"\bvegetable\b.*\bblend",
+    r"\bfoods?\b.*\bblend",
+    r"\bextract\b.*\bblend",
+    r"\bstrain\b.*\bblend",
+
+    # Gummies-specific blend patterns (common blockers from audit)
+    r"orchard\s+fruits?\b.*\bblend",        # "Orchard Fruits & Garden Veggies Powder Blend"
+    r"garden\s+veggies?\b.*\bblend",
+    r"powder\s+blend$",                      # Any "X Powder Blend"
+    r"\bnatural\s+defense\b.*\bblend",       # "Natural Defense Blend"
+    r"\bberry\b.*\bblend",                   # "Berry Blend", "Berry/Fruit Blend"
+    r"\bsuper\s*fruits?\b.*\bblend",         # "Super Fruits Blend"
+    r"\bgreens?\b.*\bblend",                 # "Greens Blend", "Green Blend"
+    r"\bmushroom\b.*\bblend",                # "Mushroom Blend"
+    r"\badaptogen\b.*\bblend",               # "Adaptogen Blend"
+    r"\bpremium\b.*\bblend",                 # "Premium X Blend"
+    r"\bfull[- ]?spectrum\b.*\bblend",       # "Full-Spectrum X Blend"
+]
+
+# Combined for backward compatibility (but prefer using the split lists)
+BLEND_HEADER_PATTERNS = (
+    BLEND_HEADER_PATTERNS_HIGH_CONFIDENCE +
+    BLEND_HEADER_PATTERNS_LOW_CONFIDENCE
+)
+
+# Common excipients that should NEVER be promoted from inactive to scorable
+# Even if they have a dose, these are not therapeutic
+EXCIPIENT_NEVER_PROMOTE = {
+    # Sweeteners
+    "sorbitol", "xylitol", "mannitol", "erythritol", "maltitol", "isomalt",
+    "stevia", "stevia extract", "stevia leaf extract", "stevia rebaudiana",
+    "sucralose", "aspartame", "saccharin", "acesulfame", "acesulfame k",
+    "honey", "sugar", "cane sugar", "organic cane sugar", "fructose",
+    "glucose", "dextrose", "maltodextrin", "corn syrup",
+    # Flavors
+    "natural flavors", "natural flavor", "artificial flavors", "artificial flavor",
+    "natural and artificial flavors", "flavor", "flavoring",
+    # Carriers/fillers
+    "gelatin", "vegetable gelatin", "pectin", "gum base",
+    "cellulose", "microcrystalline cellulose", "cellulose gel",
+    "silicon dioxide", "silica",
+    "magnesium stearate", "stearic acid", "vegetable stearate",
+    "rice flour", "rice bran", "rice powder",
+    "dicalcium phosphate", "tricalcium phosphate",
+    # Coatings
+    "shellac", "carnauba wax", "beeswax", "pharmaceutical glaze",
+    "hydroxypropyl methylcellulose", "hypromellose",
+    # Preservatives
+    "citric acid", "ascorbic acid preservative", "sorbic acid",
+    "potassium sorbate", "sodium benzoate",
+    # Processing aids
+    "water", "purified water", "vegetable glycerin", "glycerin",
+    "medium chain triglycerides", "mct oil",
+    # Colorants (never therapeutic)
+    "titanium dioxide", "caramel color", "annatto",
+    "natural colors", "natural color", "natural coloring",
+    "artificial colors", "artificial color",
+    "food coloring", "vegetable juice color", "fruit juice color",
+    "beta carotene color", "carmine", "fd&c colors",
+
+    # Other common excipients
+    "croscarmellose sodium", "croscarmellose", "sodium starch glycolate",
+    "disodium edta", "edta",
+    "potassium hydroxide", "sodium hydroxide",
+    "lecithin", "soy lecithin", "sunflower lecithin",
+    "non-gmo soy lecithin", "non gmo soy lecithin",
+
+    # Sugar alcohols / polyols (catch generic group terms - singular AND plural)
+    "sugar alcohol", "sugar alcohols",
+    "polyol", "polyols",
+    "sugar alcohols (polyols)", "sugar alcohol (polyol)",
+
+    # Fiber excipients (structural, not therapeutic fiber supplements)
+    # NOTE: "inulin fiber" removed - inulin can be therapeutic in fiber supplements
+    # Handle inulin contextually (when in "Other ingredients" or gummy base)
+    "vegetable fiber", "soluble corn fiber", "tapioca fiber",
+    "organic tapioca fiber",
+
+    # Processing aids / misc
+    "directline technology",  # Brand-specific delivery system, not ingredient
+    "fruit juice", "natural fruit juice", "fruit juice concentrate",
+
+    # OILS/CARRIERS - Never therapeutic actives (from dev audit feedback)
+    # These are carriers/processing aids even when listed in activeIngredients
+    "sunflower oil", "sunflower seed oil", "organic sunflower oil",
+    "coconut oil", "organic coconut oil", "fractionated coconut oil",
+    "olive oil", "extra virgin olive oil",
+    "safflower oil", "safflower seed oil",
+    "soybean oil", "soy oil",
+    "palm oil", "palm kernel oil",
+    "canola oil", "rapeseed oil",
+    "corn oil", "cottonseed oil",
+    "sesame oil", "sesame seed oil",
+    "vegetable oil", "mixed vegetable oils",
+    "flaxseed oil", "linseed oil",  # As carrier, not omega supplement
+    "avocado oil",
+    "grape seed oil", "grapeseed oil",
+    "rice bran oil",
+    "almond oil", "sweet almond oil",
+    "castor oil",
+    "jojoba oil",
+
+    # FOOD POWDERS - Non-bioactive forms (from dev audit feedback)
+    # These are food ingredients, not therapeutic actives
+    "apple cider vinegar", "apple cider vinegar powder",
+    "organic apple cider vinegar", "apple cider vinegar, powder",
+    "beet root juice powder", "beet root juice, powder", "beet juice powder",
+    "pomegranate fruit juice powder", "pomegranate fruit juice, powder",
+    "pomegranate juice powder",
+    "acai juice powder", "acai berry juice powder",
+    "blueberry juice powder", "blueberry fruit juice powder",
+    "cranberry juice powder", "cranberry fruit juice powder",
+    "cherry juice powder", "tart cherry juice powder",
+
+    # Generic food-as-ingredient patterns
+    "fruit powder", "vegetable powder", "veggie powder",
+    "whole food powder", "whole foods powder",
+}
+
+# Patterns for detecting non-therapeutic food ingredients
+# These should be recognized but NOT scored as bioactive
+NON_THERAPEUTIC_ACTIVE_PATTERNS = [
+    r"^apple\s+cider\s+vinegar",
+    r"\bjuice[,]?\s*powder$",
+    r"^(sunflower|coconut|olive|safflower|soybean|palm|canola|corn)\s+oil$",
+    r"\bcarrier\s+oil$",
+    r"^organic\s+(sunflower|coconut|olive)\s+oil$",
+]
+
+# HIGH-SIGNAL potency markers - strong therapeutic indicators
+# These patterns indicate a real therapeutic ingredient, not an excipient
+POTENCY_MARKERS_HIGH_SIGNAL = [
+    r"\d+\s*(mg|mcg|g|μg|iu)",    # Numeric dose with therapeutic unit
+    r"\d+\s*%",                    # Percentage standardization
+    r"\d+:\d+",                    # Extract ratio like 10:1, 4:1
+    r"standardized\s+to",          # "Standardized to X%"
+    r"\d+\s*cfu",                  # Probiotic CFU
+    r"\d+\s*billion",              # Probiotic billions
+    r"active\s+compound",          # "Active compound" language
+]
+
+# LOW-SIGNAL potency markers - need additional context to be therapeutic
+# These alone are not sufficient for promotion (e.g., "vanilla extract" is flavor)
+POTENCY_MARKERS_LOW_SIGNAL = [
+    r"\bextract\b",                # Generic "extract" - needs context
+    r"\bconcentrate\b",            # Could be therapeutic or flavor
+]
+
+# Skip reasons for tracking/debugging
+SKIP_REASON_ADDITIVE = "is_additive"
+SKIP_REASON_ADDITIVE_TYPE = "has_additive_type"
+SKIP_REASON_NESTED_NON_THERAPEUTIC = "nested_under_non_therapeutic_parent"
+SKIP_REASON_BLEND_HEADER_NO_DOSE = "blend_header_without_dosage"
+SKIP_REASON_BLEND_HEADER_WITH_WEIGHT = "blend_header_total_weight_only"
+SKIP_REASON_RECOGNIZED_NON_SCORABLE = "recognized_non_scorable"
+
+# Promotion reasons for tracking/debugging
+PROMOTE_REASON_KNOWN_DB = "known_therapeutic_db"
+PROMOTE_REASON_HAS_DOSE = "has_measurable_dose"
+PROMOTE_REASON_PRODUCT_TYPE_RESCUE = "product_type_rescue"
+PROMOTE_REASON_ABSORPTION_ENHANCER = "absorption_enhancer_exception"
+
+# Pseudo-units that should NOT be treated as valid dose units
+# These appear in dirty data and should be treated as "no dose"
+PSEUDO_UNITS_INVALID = {
+    "serving", "servings", "scoop", "scoops", "capsule", "capsules",
+    "tablet", "tablets", "softgel", "softgels", "gummy", "gummies",
+    "lozenge", "lozenges", "drop", "drops", "spray", "sprays",
+    "n/a", "na", "none", "unknown", "—", "-", "–", "",
+    "piece", "pieces", "pack", "packs", "packet", "packets",
+    "dose", "doses", "portion", "portions",
+}
+
+# Branded ingredient tokens that should be extracted from compound names
+# These are proprietary/trademarked ingredient names that indicate specific forms
+# When detected in a compound name like "KSM-66 Ashwagandha Root Extract",
+# the branded token is extracted as the raw_source_text for quality map matching
+BRANDED_INGREDIENT_TOKENS = {
+    # Ashwagandha branded forms
+    "ksm-66": "KSM-66",
+    "ksm66": "KSM-66",
+    "sensoril": "Sensoril",
+    "shoden": "Shoden",
+    # Curcumin branded forms
+    "meriva": "Meriva",
+    "longvida": "Longvida",
+    "theracurmin": "Theracurmin",
+    "bcm-95": "BCM-95",
+    "curcuwin": "CurcuWin",
+    "novasol": "NovaSol",
+    # CoQ10 branded forms
+    "ubiquinol": "Ubiquinol",
+    "kaneka qh": "Kaneka QH",
+    "kanekaqh": "Kaneka QH",
+    # Magnesium branded forms
+    "magtein": "Magtein",
+    "albion": "Albion",
+    "traacs": "TRAACS",
+    # B vitamins branded forms
+    "quatrefolic": "Quatrefolic",
+    "methylfolate": "Methylfolate",
+    "metafolin": "Metafolin",
+    "mecobalactive": "MecobalActive",
+    # Probiotics
+    "lactobacillus gg": "Lactobacillus GG",
+    "lg-gg": "LGG",
+    "florastor": "Florastor",
+    # Omega-3
+    "superba": "Superba",
+    "omegavia": "OmegaVia",
+    "life's dha": "life's DHA",
+    # Other common branded ingredients
+    "cognizin": "Cognizin",
+    "synapsa": "Synapsa",
+    "suntheanine": "Suntheanine",
+    "lactium": "Lactium",
+    "setria": "Setria",
+    "optizinc": "OptiZinc",
+    "creapure": "Creapure",
+    "carnosyn": "CarnoSyn",
+}
+
+# Deterministic serving unit normalization map
+# Maps plural/variant forms to canonical singular form
+# Used for dose normalization, RDA/UL per-day math, and UI display
+SERVING_UNIT_NORMALIZATION_MAP = {
+    # Capsules
+    "capsules": "capsule",
+    "capsule": "capsule",
+    "caps": "capsule",
+    "cap": "capsule",
+    "vcaps": "capsule",
+    "vcap": "capsule",
+    "veggie capsule": "capsule",
+    "veggie capsules": "capsule",
+    "vegetable capsule": "capsule",
+    "vegetable capsules": "capsule",
+    "veg capsule": "capsule",
+    "veg capsules": "capsule",
+    # Tablets
+    "tablets": "tablet",
+    "tablet": "tablet",
+    "tabs": "tablet",
+    "tab": "tablet",
+    "caplets": "caplet",
+    "caplet": "caplet",
+    # Softgels
+    "softgels": "softgel",
+    "softgel": "softgel",
+    "soft gels": "softgel",
+    "soft gel": "softgel",
+    "liquid softgels": "softgel",
+    "liquid softgel": "softgel",
+    # Gummies
+    "gummies": "gummy",
+    "gummy": "gummy",
+    "gummie": "gummy",
+    "gummys": "gummy",
+    "gummy bear": "gummy",
+    "gummy bears": "gummy",
+    # Lozenges
+    "lozenges": "lozenge",
+    "lozenge": "lozenge",
+    # Drops
+    "drops": "drop",
+    "drop": "drop",
+    "droppers": "dropper",
+    "dropper": "dropper",
+    "dropperfuls": "dropper",
+    "dropperful": "dropper",
+    # Scoops
+    "scoops": "scoop",
+    "scoop": "scoop",
+    # Servings (meta-unit)
+    "servings": "serving",
+    "serving": "serving",
+    # Packets/Sticks
+    "packets": "packet",
+    "packet": "packet",
+    "sticks": "stick",
+    "stick": "stick",
+    "sachets": "sachet",
+    "sachet": "sachet",
+    # Sprays
+    "sprays": "spray",
+    "spray": "spray",
+    "puffs": "puff",
+    "puff": "puff",
+    # Chews
+    "chews": "chew",
+    "chew": "chew",
+    "chewables": "chewable",
+    "chewable": "chewable",
+    # Patches
+    "patches": "patch",
+    "patch": "patch",
+    # Teaspoons/Tablespoons
+    "teaspoons": "teaspoon",
+    "teaspoon": "teaspoon",
+    "tsp": "teaspoon",
+    "tsps": "teaspoon",
+    "tablespoons": "tablespoon",
+    "tablespoon": "tablespoon",
+    "tbsp": "tablespoon",
+    "tbsps": "tablespoon",
+    # Milliliters (for liquids)
+    "ml": "ml",
+    "milliliter": "ml",
+    "milliliters": "ml",
+    "millilitre": "ml",
+    "millilitres": "ml",
+    # Ounces (for liquids)
+    "oz": "oz",
+    "ounce": "oz",
+    "ounces": "oz",
+    "fl oz": "fl oz",
+    "fluid ounce": "fl oz",
+    "fluid ounces": "fl oz",
+}
+
+# Absorption enhancers that may be promoted even without explicit dose
+# These are therapeutically relevant for bioavailability, often hidden in "other ingredients"
+# Promotion only with LOW confidence and when specifically flagged
+ABSORPTION_ENHANCERS_PROMOTE_EXCEPTION = {
+    # Piperine-based enhancers
+    "piperine", "bioperine", "black pepper extract", "black pepper fruit extract",
+    "piper nigrum", "piper nigrum extract",
+    # Ginger-based enhancers
+    "ginger extract", "ginger root extract", "zingiber officinale extract",
+    # Lecithin-based (when therapeutic, not filler)
+    # NOTE: Lecithin as generic filler stays in EXCIPIENT_NEVER_PROMOTE
+    # Bromelain/proteolytic
+    "bromelain", "papain", "proteolytic enzymes",
+    # Fat-soluble vitamin enhancers
+    "medium chain triglycerides therapeutic", "mct therapeutic",
+}

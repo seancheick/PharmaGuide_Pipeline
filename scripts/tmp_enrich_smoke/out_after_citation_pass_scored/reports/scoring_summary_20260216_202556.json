@@ -1,0 +1,25 @@
+{
+  "processing_info": {
+    "scoring_version": "3.0.1",
+    "files_processed": 1,
+    "duration_seconds": 0.13,
+    "timestamp": "2026-02-16T20:25:56.547390+00:00"
+  },
+  "stats": {
+    "total_products": 86,
+    "average_score_80": 49.17,
+    "average_score_100": 61.46,
+    "verdict_distribution": {
+      "SAFE": 84,
+      "POOR": 2
+    }
+  },
+  "scoring_rules": {
+    "max_section_A": 25,
+    "max_section_B": 35,
+    "max_section_C": 15,
+    "max_section_D": 5,
+    "max_total": 80,
+    "fit_score_location": "client-side only"
+  }
+}

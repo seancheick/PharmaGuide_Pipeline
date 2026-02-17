@@ -1,0 +1,638 @@
+{
+  "id": "14378",
+  "src": "01-raw/2025-03-25/data/label_286.json",
+  "nhanesId": "1-000-8170-01",
+  "bundleName": "",
+  "brandIpSymbol": "\u00ae",
+  "productVersionCode": "CODE 0650C V4",
+  "pdf": "",
+  "thumbnail": "",
+  "percentDvFootnote": "Percent Daily Values are based on a 2,000 calorie diet.",
+  "fullName": "Ultimate Zinc-C",
+  "brandName": "NOW",
+  "upcSku": "7 33739 00650 9",
+  "hasOuterCarton": false,
+  "upcValid": true,
+  "status": "active",
+  "discontinuedDate": null,
+  "offMarket": 0,
+  "servingsPerContainer": null,
+  "netContents": [
+    {
+      "order": 1,
+      "quantity": 50,
+      "unit": "Lozenge(s)",
+      "display": "50 Lozenge(s)"
+    }
+  ],
+  "targetGroups": [
+    "Adult (18 - 50 Years)"
+  ],
+  "userGroups": [
+    {
+      "dailyValueTargetGroupName": "Adults and children 4 or more years of age",
+      "langualCode": "P0250",
+      "langualCodeDescription": "Adults and Children 4 years and above"
+    }
+  ],
+  "productType": {
+    "langualCode": "A1317",
+    "langualCodeDescription": "Botanical with Nutrients"
+  },
+  "physicalState": {
+    "langualCode": "E0174",
+    "langualCodeDescription": "Lozenge"
+  },
+  "imageUrl": "https://api.ods.od.nih.gov/dsld/s3/pdf/14378.pdf",
+  "images": [],
+  "contacts": [
+    {
+      "contactId": 3281,
+      "text": "Manufactured by",
+      "types": [
+        "Manufacturer"
+      ],
+      "contactDetails": {
+        "src": "01-raw/2025-03-25/data/contact_1.json",
+        "id": 3281,
+        "name": "NOW FOODS",
+        "streetAddress": "395 S. Glen Ellyn Rd.",
+        "city": "Bloomingdale",
+        "state": "IL",
+        "country": "",
+        "zipCode": "60108",
+        "phoneNumber": "",
+        "email": "",
+        "webAddress": ""
+      }
+    }
+  ],
+  "events": [
+    {
+      "date": "2013-03-25",
+      "type": "Date entered into DSLD"
+    }
+  ],
+  "activeIngredients": [
+    {
+      "ingredientId": 281599,
+      "uniiCode": "81G40H8B0T",
+      "order": 4,
+      "raw_source_text": "Vitamin A",
+      "branded_token_extracted": null,
+      "raw_source_path": "activeIngredients",
+      "normalized_key": "vitamin_a",
+      "name": "Vitamin A",
+      "standardName": "Vitamin A",
+      "ingredientGroup": "Vitamin A",
+      "quantity": 1000.0,
+      "unit": "IU",
+      "dailyValue": 20.0,
+      "quantityVariants": null,
+      "forms": [
+        {
+          "name": "Retinyl Palmitate",
+          "ingredientId": 281212,
+          "order": 1,
+          "prefix": null,
+          "percent": null
+        }
+      ],
+      "alternateNames": [],
+      "mapped": true,
+      "proprietaryBlend": false,
+      "disclosureLevel": null,
+      "parentBlend": null,
+      "isNestedIngredient": false,
+      "nestedIngredients": [],
+      "hierarchyType": null,
+      "notes": "Vitamin A (Form: from Retinyl Palmitate) "
+    },
+    {
+      "ingredientId": 278603,
+      "uniiCode": "PQ6CK8PD0R",
+      "order": 5,
+      "raw_source_text": "Vitamin C",
+      "branded_token_extracted": null,
+      "raw_source_path": "activeIngredients",
+      "normalized_key": "vitamin_c",
+      "name": "Vitamin C",
+      "standardName": "Vitamin C",
+      "ingredientGroup": "Vitamin C",
+      "quantity": 150.0,
+      "unit": "mg",
+      "dailyValue": 250.0,
+      "quantityVariants": null,
+      "forms": [
+        {
+          "name": "Ascorbic Acid",
+          "ingredientId": 278604,
+          "order": 1,
+          "prefix": null,
+          "percent": null
+        }
+      ],
+      "alternateNames": [],
+      "mapped": true,
+      "proprietaryBlend": false,
+      "disclosureLevel": null,
+      "parentBlend": null,
+      "isNestedIngredient": false,
+      "nestedIngredients": [],
+      "hierarchyType": null
+    },
+    {
+      "ingredientId": 55518,
+      "uniiCode": null,
+      "order": 6,
+      "raw_source_text": "Zinc",
+      "branded_token_extracted": null,
+      "raw_source_path": "activeIngredients",
+      "normalized_key": "zinc",
+      "name": "Zinc",
+      "standardName": "Zinc",
+      "ingredientGroup": "Zinc",
+      "quantity": 12.0,
+      "unit": "mg",
+      "dailyValue": 80.0,
+      "quantityVariants": null,
+      "forms": [
+        {
+          "name": "Zinc Amino Acid Chelate",
+          "ingredientId": 67507,
+          "order": 1,
+          "prefix": null,
+          "percent": null
+        },
+        {
+          "name": "Zinc Glycinate",
+          "ingredientId": 39943,
+          "order": 2,
+          "prefix": "from",
+          "percent": null
+        }
+      ],
+      "alternateNames": [],
+      "mapped": true,
+      "proprietaryBlend": false,
+      "disclosureLevel": null,
+      "parentBlend": null,
+      "isNestedIngredient": false,
+      "nestedIngredients": [],
+      "hierarchyType": null,
+      "harvestMethod": "(TRAACS) (Albion)",
+      "notes": "Zinc (Form: from Zinc Glycinate, Zinc Amino Acid Chelate) Note: (TRAACS) (Albion) "
+    },
+    {
+      "ingredientId": 18834,
+      "uniiCode": null,
+      "order": 7,
+      "raw_source_text": "Echinacea purpurea",
+      "branded_token_extracted": null,
+      "raw_source_path": "activeIngredients",
+      "normalized_key": "echinacea_purpurea",
+      "name": "Echinacea purpurea",
+      "standardName": "Echinacea",
+      "ingredientGroup": "Echinacea purpurea",
+      "quantity": 5.0,
+      "unit": "mg",
+      "dailyValue": null,
+      "quantityVariants": null,
+      "forms": [],
+      "alternateNames": [],
+      "mapped": true,
+      "proprietaryBlend": false,
+      "disclosureLevel": null,
+      "parentBlend": null,
+      "isNestedIngredient": false,
+      "nestedIngredients": [],
+      "hierarchyType": null
+    },
+    {
+      "ingredientId": 5604,
+      "uniiCode": null,
+      "order": 8,
+      "raw_source_text": "Bee Propolis",
+      "branded_token_extracted": null,
+      "raw_source_path": "activeIngredients",
+      "normalized_key": "bee_propolis",
+      "name": "Bee Propolis",
+      "standardName": "Propolis",
+      "ingredientGroup": "Propolis",
+      "quantity": 5.0,
+      "unit": "mg",
+      "dailyValue": null,
+      "quantityVariants": null,
+      "forms": [],
+      "alternateNames": [],
+      "mapped": true,
+      "proprietaryBlend": false,
+      "disclosureLevel": null,
+      "parentBlend": null,
+      "isNestedIngredient": false,
+      "nestedIngredients": [],
+      "hierarchyType": null
+    },
+    {
+      "ingredientId": 46100,
+      "uniiCode": null,
+      "order": 9,
+      "raw_source_text": "Slippery Elm",
+      "branded_token_extracted": null,
+      "raw_source_path": "activeIngredients",
+      "normalized_key": "slippery_elm",
+      "name": "Slippery Elm",
+      "standardName": "Slippery Elm",
+      "ingredientGroup": "Slippery Elm",
+      "quantity": 5.0,
+      "unit": "mg",
+      "dailyValue": null,
+      "quantityVariants": null,
+      "forms": [],
+      "alternateNames": [],
+      "mapped": true,
+      "proprietaryBlend": false,
+      "disclosureLevel": null,
+      "parentBlend": null,
+      "isNestedIngredient": false,
+      "nestedIngredients": [],
+      "hierarchyType": null
+    },
+    {
+      "ingredientId": 54668,
+      "uniiCode": null,
+      "order": 10,
+      "raw_source_text": "Goldenseal",
+      "branded_token_extracted": null,
+      "raw_source_path": "activeIngredients",
+      "normalized_key": "goldenseal",
+      "name": "Goldenseal",
+      "standardName": "Goldenseal",
+      "ingredientGroup": "Goldenseal",
+      "quantity": 5.0,
+      "unit": "mg",
+      "dailyValue": null,
+      "quantityVariants": null,
+      "forms": [],
+      "alternateNames": [],
+      "mapped": true,
+      "proprietaryBlend": false,
+      "disclosureLevel": null,
+      "parentBlend": null,
+      "isNestedIngredient": false,
+      "nestedIngredients": [],
+      "hierarchyType": null
+    }
+  ],
+  "inactiveIngredients": [
+    {
+      "ingredientId": 44258,
+      "uniiCode": null,
+      "order": 1,
+      "raw_source_text": "natural Raspberry flavor",
+      "raw_source_path": "inactiveIngredients",
+      "normalized_key": "natural_raspberry_flavor",
+      "name": "natural Raspberry flavor",
+      "standardName": "natural raspberry flavor",
+      "ingredientGroup": "Flavor",
+      "forms": [],
+      "alternateNames": [],
+      "mapped": true,
+      "hierarchyType": null,
+      "isAdditive": true,
+      "additiveType": "natural_flavor"
+    },
+    {
+      "ingredientId": 9747,
+      "uniiCode": null,
+      "order": 2,
+      "raw_source_text": "Cellulose",
+      "raw_source_path": "inactiveIngredients",
+      "normalized_key": "cellulose",
+      "name": "Cellulose",
+      "standardName": "cellulose powder",
+      "ingredientGroup": "Cellulose",
+      "forms": [],
+      "alternateNames": [],
+      "mapped": true,
+      "hierarchyType": null,
+      "isAdditive": true,
+      "additiveType": "unspecified"
+    },
+    {
+      "ingredientId": 3677,
+      "uniiCode": null,
+      "order": 3,
+      "raw_source_text": "Citric Acid",
+      "raw_source_path": "inactiveIngredients",
+      "normalized_key": "citric_acid",
+      "name": "Citric Acid",
+      "standardName": "Citric Acid",
+      "ingredientGroup": "Citric Acid",
+      "forms": [],
+      "alternateNames": [],
+      "mapped": true,
+      "hierarchyType": null,
+      "isAdditive": true,
+      "additiveType": "preservative_natural"
+    },
+    {
+      "ingredientId": 18798,
+      "uniiCode": null,
+      "order": 4,
+      "raw_source_text": "natural Pineapple flavor",
+      "raw_source_path": "inactiveIngredients",
+      "normalized_key": "natural_pineapple_flavor",
+      "name": "natural Pineapple flavor",
+      "standardName": "natural pineapple flavor",
+      "ingredientGroup": "Flavor",
+      "forms": [],
+      "alternateNames": [],
+      "mapped": true,
+      "hierarchyType": null,
+      "isAdditive": true,
+      "additiveType": "natural_flavor"
+    },
+    {
+      "ingredientId": 285558,
+      "uniiCode": "4ELV7Z65AP",
+      "order": 5,
+      "raw_source_text": "Stearic Acid",
+      "raw_source_path": "inactiveIngredients",
+      "normalized_key": "stearic_acid",
+      "name": "Stearic Acid",
+      "standardName": "stearic acid",
+      "ingredientGroup": "Stearic Acid",
+      "forms": [],
+      "alternateNames": [
+        "C18:0"
+      ],
+      "mapped": true,
+      "hierarchyType": null,
+      "isAdditive": true,
+      "additiveType": "processing_aid"
+    },
+    {
+      "ingredientId": 293311,
+      "uniiCode": "ETJ7Z6XBU4",
+      "order": 6,
+      "raw_source_text": "Silica",
+      "raw_source_path": "inactiveIngredients",
+      "normalized_key": "silica",
+      "name": "Silica",
+      "standardName": "Silica",
+      "ingredientGroup": "Silicon",
+      "forms": [],
+      "alternateNames": [],
+      "mapped": true,
+      "hierarchyType": null,
+      "isAdditive": true,
+      "additiveType": "unspecified"
+    },
+    {
+      "ingredientId": 283063,
+      "uniiCode": "TTV12P4NEE",
+      "order": 7,
+      "raw_source_text": "Xanthan Gum",
+      "raw_source_path": "inactiveIngredients",
+      "normalized_key": "xanthan_gum",
+      "name": "Xanthan Gum",
+      "standardName": "xanthan gum",
+      "ingredientGroup": "Xanthan Gum",
+      "forms": [],
+      "alternateNames": [],
+      "mapped": true,
+      "hierarchyType": null,
+      "isAdditive": true,
+      "additiveType": "texture_modifier"
+    },
+    {
+      "ingredientId": 5018,
+      "uniiCode": null,
+      "order": 8,
+      "raw_source_text": "natural Vanilla flavor",
+      "raw_source_path": "inactiveIngredients",
+      "normalized_key": "natural_vanilla_flavor",
+      "name": "natural Vanilla flavor",
+      "standardName": "natural vanilla flavor",
+      "ingredientGroup": "Vanilla",
+      "forms": [],
+      "alternateNames": [],
+      "mapped": true,
+      "hierarchyType": null,
+      "isAdditive": true,
+      "additiveType": "flavoring"
+    },
+    {
+      "ingredientId": 51133,
+      "uniiCode": null,
+      "order": 9,
+      "raw_source_text": "Magnesium Stearate",
+      "raw_source_path": "inactiveIngredients",
+      "normalized_key": "magnesium_stearate",
+      "name": "Magnesium Stearate",
+      "standardName": "magnesium stearate",
+      "ingredientGroup": "Magnesium stearate",
+      "forms": [],
+      "alternateNames": [],
+      "mapped": true,
+      "hierarchyType": null,
+      "isAdditive": true,
+      "additiveType": "processing_aid"
+    },
+    {
+      "ingredientId": 22479,
+      "uniiCode": null,
+      "order": 10,
+      "raw_source_text": "Beet powder",
+      "raw_source_path": "inactiveIngredients",
+      "normalized_key": "beet_powder",
+      "name": "Beet powder",
+      "standardName": "natural colors",
+      "ingredientGroup": "Beet",
+      "forms": [],
+      "alternateNames": [],
+      "mapped": true,
+      "hierarchyType": null,
+      "isAdditive": true,
+      "additiveType": "natural_colorant"
+    }
+  ],
+  "nutritionalInfo": {
+    "calories": {
+      "amount": 5.0,
+      "unit": "{Calories}"
+    },
+    "totalCarbohydrates": {
+      "amount": 2.0,
+      "unit": "g"
+    }
+  },
+  "statements": [
+    {
+      "type": "General: Product/Version Code",
+      "notes": "CODE 0650C V4"
+    },
+    {
+      "type": "Formula re: Contains",
+      "notes": "Xylitol Sweetened"
+    },
+    {
+      "type": "General Statements: All Other Content",
+      "notes": "HERBAL LOZENGES\n\u2022 Healthy Immune Support*"
+    },
+    {
+      "type": "Formula re: Contains",
+      "notes": "\u2022 With Echinacea, Bee Propolis and Slippery Elm"
+    },
+    {
+      "type": "General Statements: All Other Content",
+      "notes": "NO ZINC TASTE!"
+    },
+    {
+      "type": "Precautions re: Children",
+      "notes": "Keep out of reach of children."
+    },
+    {
+      "type": "Precautions re: All Other",
+      "notes": "Do Not Eat Freshness Packet. Keep in Bottle."
+    },
+    {
+      "type": "FDA Statement of Identity",
+      "notes": "A Dietary Supplement"
+    },
+    {
+      "type": "Seals/Symbols",
+      "notes": "GMP QUALITY ASSURED"
+    },
+    {
+      "type": "General Statements: All Other Content",
+      "notes": "Made in the U.S.A."
+    },
+    {
+      "type": "General Statements: All Other Content",
+      "notes": "For more product information visit www.nowfoods.com/0650"
+    },
+    {
+      "type": "Suggested/Recommended/Usage/Directions",
+      "notes": "SUGGESTED USAGE: As a dietary supplement, take 1 lozenge 1 to 3 times daily, or as recommended by your healthcare practitioner. Allow the lozenge to dissolve in mouth completely and swallow. Limit long-term consumption of high levels of Zinc."
+    },
+    {
+      "type": "Storage",
+      "notes": "Store in a cool, dry place, as this lozenge can absorb moisture from the air."
+    },
+    {
+      "type": "Brand IP Statement(s) re: (c), (TM), (SM)",
+      "notes": "Albion(R) and TRAACS(R) (The Real Amino Acid Chelate System) are registered trademarks of Albion Laboratories, Inc. This product is covered by U.S. Patent No. 5,516,925 and patents pending."
+    },
+    {
+      "type": "FDA Disclaimer Statement",
+      "notes": "*This statement has not been evaluated by the FDA. This product is not intended to diagnose, treat, cure or prevent any disease."
+    },
+    {
+      "type": "Precautions re: All Other",
+      "notes": "Caution: For adults only."
+    },
+    {
+      "type": "Precautions re: Pregnant or Nursing or Prescription Medications",
+      "notes": "Consult physician if pregnant/nursing, taking medication, or have a medical condition."
+    }
+  ],
+  "claims": [
+    {
+      "langualCode": "P0115",
+      "langualCodeDescription": "All Other"
+    },
+    {
+      "langualCode": "P0265",
+      "langualCodeDescription": "Structure/Function"
+    }
+  ],
+  "servingSizes": [
+    {
+      "minQuantity": 1.0,
+      "maxQuantity": 1.0,
+      "unit": "Lozenge(s)",
+      "minDailyServings": 1,
+      "maxDailyServings": 3,
+      "normalizedServing": 1.0
+    }
+  ],
+  "labelRelationships": [
+    {
+      "type": "Image difference, same product",
+      "labelId": 84501
+    },
+    {
+      "type": "Package size difference, same product",
+      "labelId": 84501
+    },
+    {
+      "type": "Package size difference, same product",
+      "labelId": 14382
+    }
+  ],
+  "labelText": {
+    "raw": "CODE 0650C V4 Xylitol Sweetened HERBAL LOZENGES\n\u2022 Healthy Immune Support* \u2022 With Echinacea, Bee Propolis and Slippery Elm NO ZINC TASTE! Keep out of reach of children. Do Not Eat Freshness Packet. Keep in Bottle. A Dietary Supplement GMP QUALITY ASSURED Made in the U.S.A. For more product information visit www.nowfoods.com/0650 SUGGESTED USAGE: As a dietary supplement, take 1 lozenge 1 to 3 times daily, or as recommended by your healthcare practitioner. Allow the lozenge to dissolve in mouth completely and swallow. Limit long-term consumption of high levels of Zinc. Store in a cool, dry place, as this lozenge can absorb moisture from the air. Albion(R) and TRAACS(R) (The Real Amino Acid Chelate System) are registered trademarks of Albion Laboratories, Inc. This product is covered by U.S. Patent No. 5,516,925 and patents pending. *This statement has not been evaluated by the FDA. This product is not intended to diagnose, treat, cure or prevent any disease. Caution: For adults only. Consult physician if pregnant/nursing, taking medication, or have a medical condition.",
+    "parsed": {
+      "certifications": [
+        "GMP-General"
+      ],
+      "testing": [],
+      "origin": [],
+      "flavor": [
+        "natural Vanilla flavor",
+        "natural Pineapple flavor",
+        "natural Raspberry flavor"
+      ],
+      "probioticGuarantee": [
+        "(TRAACS) (Albion)"
+      ],
+      "cleanLabelClaims": [],
+      "allergens": [],
+      "allergenFree": [],
+      "warnings": [
+        "Keep out of reach of children",
+        "If pregnant, nursing, or taking any medications, consult a healthcare professional before use"
+      ],
+      "storage": [
+        "Store in a cool, dry place, as this lozenge can absorb moisture from the air."
+      ],
+      "directions": "SUGGESTED USAGE: As a dietary supplement, take 1 lozenge 1 to 3 times daily, or as recommended by your healthcare practitioner. Allow the lozenge to dissolve in mouth completely and swallow. Limit long-term consumption of high levels of Zinc.",
+      "marketingClaims": [],
+      "qualityFeatures": [
+        "GMP certified"
+      ],
+      "proprietaryBlendDisclosure": null
+    },
+    "searchText": "Vitamin A Retinyl Palmitate Vitamin A (Form: from Retinyl Palmitate) Vitamin C Ascorbic Acid Zinc Zinc Amino Acid Chelate Zinc Glycinate Zinc (Form: from Zinc Glycinate, Zinc Amino Acid Chelate) Note: (TRAACS) (Albion) Echinacea purpurea Bee Propolis Slippery Elm Goldenseal natural Raspberry flavor Cellulose Citric Acid natural Pineapple flavor Stearic Acid Silica Xanthan Gum natural Vanilla flavor Magnesium Stearate Beet powder CODE 0650C V4 Xylitol Sweetened HERBAL LOZENGES\n\u2022 Healthy Immune Support* \u2022 With Echinacea, Bee Propolis and Slippery Elm NO ZINC TASTE! Keep out of reach of children. Do Not Eat Freshness Packet. Keep in Bottle. A Dietary Supplement GMP QUALITY ASSURED Made in the U.S.A. For more product information visit www.nowfoods.com/0650 SUGGESTED USAGE: As a dietary supplement, take 1 lozenge 1 to 3 times daily, or as recommended by your healthcare practitioner. Allow the lozenge to dissolve in mouth completely and swallow. Limit long-term consumption of high levels of Zinc. Store in a cool, dry place, as this lozenge can absorb moisture from the air. Albion(R) and TRAACS(R) (The Real Amino Acid Chelate System) are registered trademarks of Albion Laboratories, Inc. This product is covered by U.S. Patent No. 5,516,925 and patents pending. *This statement has not been evaluated by the FDA. This product is not intended to diagnose, treat, cure or prevent any disease. Caution: For adults only. Consult physician if pregnant/nursing, taking medication, or have a medical condition."
+  },
+  "metadata": {
+    "lastCleaned": "2026-02-16T21:19:15.925637Z",
+    "cleaningVersion": "2.1.0",
+    "reference_versions": {
+      "color_indicators": {
+        "version": "2.0.0",
+        "last_updated": "2026-01-05"
+      }
+    },
+    "mappingStats": {
+      "totalIngredients": 17,
+      "mappedIngredients": 17,
+      "unmappedIngredients": 0,
+      "mappingRate": 100.0
+    },
+    "transparencyMetrics": {
+      "hasProprietaryBlend": false,
+      "blendTransparency": "full",
+      "disclosedIngredients": 7,
+      "undisclosedQuantities": 0,
+      "transparencyScore": 100.0
+    },
+    "completeness": {
+      "score": 100.0,
+      "missingFields": [],
+      "criticalFieldsComplete": true
+    }
+  }
+}

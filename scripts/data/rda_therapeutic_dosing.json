@@ -1,10 +1,11 @@
 {
-  "database_info": {
-    "version": "1.2.0",
-    "last_updated": "2026-01-05",
-    "data_source": "Clinical research, meta-analyses, standard therapeutic guidelines",
+  "_metadata": {
+    "description": "Therapeutic dosing ranges for clinical efficacy validation",
     "purpose": "Provide therapeutic dosing ranges for dietary supplement ingredients not covered by traditional RDA/UL standards.",
-    "total_entries": 44
+    "schema_version": "4.0.0",
+    "last_updated": "2026-02-16",
+    "total_entries": 44,
+    "data_source": "Clinical research, meta-analyses, standard therapeutic guidelines"
   },
   "therapeutic_dosing": [
     {
@@ -717,12 +718,5 @@
       "evidence_tier": 1,
       "id": "taurine"
     }
-  ],
-  "_metadata": {
-    "description": "Therapeutic dosing ranges for clinical efficacy validation",
-    "purpose": "therapeutic_validation",
-    "total_entries": 0,
-    "schema_version": "1.0",
-    "last_updated": "2025-11-14"
-  }
+  ]
 }

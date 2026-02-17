@@ -1,7 +1,13 @@
 {
+  "_metadata": {
+    "description": "Ingredient synergy clusters for bonus scoring when complementary ingredients are combined",
+    "purpose": "synergy_bonuses",
+    "schema_version": "4.0.0",
+    "last_updated": "2026-02-16",
+    "total_entries": 54
+  },
   "synergy_clusters": [
     {
-      "name": "Curcumin Absorption",
       "id": "curcumin_absorption",
       "ingredients": [
         "curcumin",
@@ -22,10 +28,11 @@
         "piperine": 5,
         "ginger": 100
       },
-      "evidence_tier": 1
+      "evidence_tier": 1,
+      "standard_name": "Curcumin Absorption",
+      "synergy_mechanism": null
     },
     {
-      "name": "Magnesium Nervous System",
       "id": "magnesium_nervous_system",
       "ingredients": [
         "magnesium",
@@ -42,10 +49,11 @@
         "vitamin b6": 10,
         "taurine": 500
       },
-      "evidence_tier": 1
+      "evidence_tier": 1,
+      "standard_name": "Magnesium Nervous System",
+      "synergy_mechanism": null
     },
     {
-      "name": "Sleep Stack",
       "id": "sleep_stack",
       "ingredients": [
         "melatonin",
@@ -81,10 +89,11 @@
         "apigenin": 50,
         "glycine": 3000
       },
-      "evidence_tier": 1
+      "evidence_tier": 1,
+      "standard_name": "Sleep Stack",
+      "synergy_mechanism": null
     },
     {
-      "name": "Joint & Inflammation",
       "id": "joint_inflammation",
       "ingredients": [
         "glucosamine",
@@ -117,10 +126,11 @@
         "msm": 1000,
         "omega-3": 1000
       },
-      "evidence_tier": 1
+      "evidence_tier": 1,
+      "standard_name": "Joint & Inflammation",
+      "synergy_mechanism": null
     },
     {
-      "name": "Eye Health",
       "id": "eye_health",
       "ingredients": [
         "lutein",
@@ -147,10 +157,11 @@
         "astaxanthin": 4,
         "zinc": 15
       },
-      "evidence_tier": 1
+      "evidence_tier": 1,
+      "standard_name": "Eye Health",
+      "synergy_mechanism": null
     },
     {
-      "name": "Methylation Support",
       "id": "methylation_support",
       "ingredients": [
         "methylcobalamin",
@@ -179,10 +190,11 @@
         "choline": 250,
         "vitamin b6": 10
       },
-      "evidence_tier": 1
+      "evidence_tier": 1,
+      "standard_name": "Methylation Support",
+      "synergy_mechanism": null
     },
     {
-      "name": "Detox Pathway",
       "id": "detox_pathway",
       "ingredients": [
         "nac",
@@ -212,10 +224,11 @@
         "milk thistle": 200,
         "selenium": 100
       },
-      "evidence_tier": 2
+      "evidence_tier": 2,
+      "standard_name": "Detox Pathway",
+      "synergy_mechanism": null
     },
     {
-      "name": "Gut Barrier",
       "id": "gut_barrier",
       "ingredients": [
         "l-glutamine",
@@ -243,10 +256,11 @@
         "zinc carnosine": 75,
         "deglycyrrhizinated licorice": 380
       },
-      "evidence_tier": 2
+      "evidence_tier": 2,
+      "standard_name": "Gut Barrier",
+      "synergy_mechanism": null
     },
     {
-      "name": "Immune Defense",
       "id": "immune_defense",
       "ingredients": [
         "vitamin c",
@@ -278,10 +292,11 @@
         "vitamin d": 1000,
         "quercetin": 500
       },
-      "evidence_tier": 1
+      "evidence_tier": 1,
+      "standard_name": "Immune Defense",
+      "synergy_mechanism": null
     },
     {
-      "name": "Energy + Mitochondria",
       "id": "energy_mitochondria",
       "ingredients": [
         "acetyl-l-carnitine",
@@ -316,10 +331,11 @@
         "creatine": 3000,
         "rhodiola": 200
       },
-      "evidence_tier": 1
+      "evidence_tier": 1,
+      "standard_name": "Energy + Mitochondria",
+      "synergy_mechanism": null
     },
     {
-      "name": "Stress Resilience",
       "id": "stress_resilience",
       "ingredients": [
         "ashwagandha",
@@ -349,10 +365,11 @@
         "rhodiola": 200,
         "magnesium": 200
       },
-      "evidence_tier": 1
+      "evidence_tier": 1,
+      "standard_name": "Stress Resilience",
+      "synergy_mechanism": null
     },
     {
-      "name": "Mood Balance",
       "id": "mood_balance",
       "ingredients": [
         "5-htp",
@@ -383,10 +400,11 @@
         "saffron": 30,
         "epa": 1000
       },
-      "evidence_tier": 1
+      "evidence_tier": 1,
+      "standard_name": "Mood Balance",
+      "synergy_mechanism": null
     },
     {
-      "name": "Cognitive Performance",
       "id": "cognitive_performance",
       "ingredients": [
         "bacopa",
@@ -424,10 +442,11 @@
         "ginkgo biloba": 120,
         "pqq": 10
       },
-      "evidence_tier": 1
+      "evidence_tier": 1,
+      "standard_name": "Cognitive Performance",
+      "synergy_mechanism": null
     },
     {
-      "name": "Cardiovascular Support",
       "id": "cardiovascular_support",
       "ingredients": [
         "coq10",
@@ -462,10 +481,11 @@
         "magnesium": 200,
         "garlic extract": 600
       },
-      "evidence_tier": 1
+      "evidence_tier": 1,
+      "standard_name": "Cardiovascular Support",
+      "synergy_mechanism": null
     },
     {
-      "name": "Blood Sugar Regulation",
       "id": "blood_sugar_regulation",
       "ingredients": [
         "berberine",
@@ -492,10 +512,11 @@
         "alpha-lipoic acid": 300,
         "cinnamon": 500
       },
-      "evidence_tier": 1
+      "evidence_tier": 1,
+      "standard_name": "Blood Sugar Regulation",
+      "synergy_mechanism": null
     },
     {
-      "name": "Hormone Balance (Men)",
       "id": "hormone_balance_men",
       "ingredients": [
         "zinc",
@@ -523,10 +544,11 @@
         "vitamin d": 2000,
         "tongkat ali": 100
       },
-      "evidence_tier": 2
+      "evidence_tier": 2,
+      "standard_name": "Hormone Balance (Men)",
+      "synergy_mechanism": null
     },
     {
-      "name": "Hormone Balance (Women)",
       "id": "hormone_balance_women",
       "ingredients": [
         "chasteberry",
@@ -552,10 +574,11 @@
         "black cohosh": 40,
         "maca": 1500
       },
-      "evidence_tier": 2
+      "evidence_tier": 2,
+      "standard_name": "Hormone Balance (Women)",
+      "synergy_mechanism": null
     },
     {
-      "name": "Hair & Skin Nutrition",
       "id": "hair_skin_nutrition",
       "ingredients": [
         "biotin",
@@ -584,10 +607,11 @@
         "collagen": 2500,
         "vitamin c": 250
       },
-      "evidence_tier": 2
+      "evidence_tier": 2,
+      "standard_name": "Hair & Skin Nutrition",
+      "synergy_mechanism": null
     },
     {
-      "name": "Liver Support",
       "id": "liver_support",
       "ingredients": [
         "milk thistle",
@@ -614,10 +638,11 @@
         "alpha-lipoic acid": 300,
         "tudca": 500
       },
-      "evidence_tier": 2
+      "evidence_tier": 2,
+      "standard_name": "Liver Support",
+      "synergy_mechanism": null
     },
     {
-      "name": "Bone Health",
       "id": "bone_health",
       "ingredients": [
         "calcium",
@@ -648,10 +673,10 @@
         "magnesium": 200
       },
       "evidence_tier": 1,
-      "synergy_mechanism": "Calcium provides building blocks; Vitamin D enhances absorption; K2 (MK-7) activates osteocalcin to deposit calcium in bones; Magnesium is cofactor for vitamin D activation."
+      "synergy_mechanism": "Calcium provides building blocks; Vitamin D enhances absorption; K2 (MK-7) activates osteocalcin to deposit calcium in bones; Magnesium is cofactor for vitamin D activation.",
+      "standard_name": "Bone Health"
     },
     {
-      "name": "Iron Absorption",
       "id": "iron_absorption",
       "ingredients": [
         "iron",
@@ -672,10 +697,11 @@
         "vitamin c": 250,
         "vitamin b12": 50
       },
-      "evidence_tier": 1
+      "evidence_tier": 1,
+      "standard_name": "Iron Absorption",
+      "synergy_mechanism": null
     },
     {
-      "name": "Antioxidant Defense",
       "id": "antioxidant_defense",
       "ingredients": [
         "vitamin c",
@@ -703,10 +729,11 @@
         "astaxanthin": 4,
         "coq10": 100
       },
-      "evidence_tier": 1
+      "evidence_tier": 1,
+      "standard_name": "Antioxidant Defense",
+      "synergy_mechanism": null
     },
     {
-      "name": "Pre/Post Workout",
       "id": "pre_post_workout",
       "ingredients": [
         "creatine",
@@ -732,10 +759,11 @@
         "citrulline malate": 6000,
         "caffeine": 100
       },
-      "evidence_tier": 1
+      "evidence_tier": 1,
+      "standard_name": "Pre/Post Workout",
+      "synergy_mechanism": null
     },
     {
-      "name": "Digestive Enzymes",
       "id": "digestive_enzymes",
       "ingredients": [
         "amylase",
@@ -757,10 +785,11 @@
         "papain": 100,
         "betaine hcl": 650
       },
-      "evidence_tier": 2
+      "evidence_tier": 2,
+      "standard_name": "Digestive Enzymes",
+      "synergy_mechanism": null
     },
     {
-      "name": "Thyroid Support",
       "id": "thyroid_support",
       "ingredients": [
         "iodine",
@@ -783,10 +812,11 @@
         "zinc": 15,
         "tyrosine": 500
       },
-      "evidence_tier": 2
+      "evidence_tier": 2,
+      "standard_name": "Thyroid Support",
+      "synergy_mechanism": null
     },
     {
-      "name": "Memory & Learning",
       "id": "memory_learning",
       "ingredients": [
         "bacopa",
@@ -809,10 +839,11 @@
         "phosphatidylserine": 100,
         "lion's mane": 500
       },
-      "evidence_tier": 1
+      "evidence_tier": 1,
+      "standard_name": "Memory & Learning",
+      "synergy_mechanism": null
     },
     {
-      "name": "Fat Metabolism",
       "id": "fat_metabolism",
       "ingredients": [
         "l-carnitine",
@@ -835,10 +866,11 @@
         "cla": 3000,
         "caffeine": 100
       },
-      "evidence_tier": 2
+      "evidence_tier": 2,
+      "standard_name": "Fat Metabolism",
+      "synergy_mechanism": null
     },
     {
-      "name": "Muscle Building/Recovery",
       "id": "muscle_building_recovery",
       "ingredients": [
         "protein",
@@ -865,10 +897,11 @@
         "glutamine": 5000,
         "hmb": 3000
       },
-      "evidence_tier": 1
+      "evidence_tier": 1,
+      "standard_name": "Muscle Building/Recovery",
+      "synergy_mechanism": null
     },
     {
-      "name": "Inflammation Control",
       "id": "inflammation_control",
       "ingredients": [
         "omega-3",
@@ -895,10 +928,11 @@
         "boswellia": 300,
         "quercetin": 500
       },
-      "evidence_tier": 1
+      "evidence_tier": 1,
+      "standard_name": "Inflammation Control",
+      "synergy_mechanism": null
     },
     {
-      "name": "Adrenal Support",
       "id": "adrenal_support",
       "ingredients": [
         "vitamin c",
@@ -919,10 +953,11 @@
         "ashwagandha": 300,
         "rhodiola": 200
       },
-      "evidence_tier": 2
+      "evidence_tier": 2,
+      "standard_name": "Adrenal Support",
+      "synergy_mechanism": null
     },
     {
-      "name": "Longevity and Anti-Aging",
       "id": "longevity_and_anti_aging",
       "ingredients": [
         "astaxanthin",
@@ -950,10 +985,10 @@
         "astaxanthin": 6
       },
       "evidence_tier": 2,
-      "synergy_mechanism": "Senolytics (fisetin, quercetin) clear senescent cells. NAD+ precursors (NMN, NR) support cellular energy. Resveratrol activates sirtuins. Spermidine promotes autophagy."
+      "synergy_mechanism": "Senolytics (fisetin, quercetin) clear senescent cells. NAD+ precursors (NMN, NR) support cellular energy. Resveratrol activates sirtuins. Spermidine promotes autophagy.",
+      "standard_name": "Longevity and Anti-Aging"
     },
     {
-      "name": "Probiotic and Gut Health",
       "id": "probiotic_and_gut_health",
       "ingredients": [
         "probiotics",
@@ -975,10 +1010,11 @@
         "saccharomyces boulardii": 5000000000,
         "inulin": 5000
       },
-      "evidence_tier": 1
+      "evidence_tier": 1,
+      "standard_name": "Probiotic and Gut Health",
+      "synergy_mechanism": null
     },
     {
-      "name": "Electrolyte Balance",
       "id": "electrolyte_balance",
       "ingredients": [
         "sodium",
@@ -993,10 +1029,11 @@
         "magnesium": 200,
         "sodium": 500
       },
-      "evidence_tier": 1
+      "evidence_tier": 1,
+      "standard_name": "Electrolyte Balance",
+      "synergy_mechanism": null
     },
     {
-      "name": "Pre-Workout Energy",
       "id": "pre_workout_energy",
       "ingredients": [
         "citrulline malate",
@@ -1014,10 +1051,11 @@
         "betaine": 2500,
         "caffeine": 100
       },
-      "evidence_tier": 1
+      "evidence_tier": 1,
+      "standard_name": "Pre-Workout Energy",
+      "synergy_mechanism": null
     },
     {
-      "name": "Recovery Support",
       "id": "recovery_support",
       "ingredients": [
         "bcaa",
@@ -1036,10 +1074,11 @@
         "hmb": 3000,
         "magnesium": 200
       },
-      "evidence_tier": 1
+      "evidence_tier": 1,
+      "standard_name": "Recovery Support",
+      "synergy_mechanism": null
     },
     {
-      "name": "Cognitive Amino Acids",
       "id": "cognitive_amino_acids",
       "ingredients": [
         "acetyl-l-carnitine",
@@ -1056,10 +1095,11 @@
         "alpha-gpc": 300,
         "l-theanine": 100
       },
-      "evidence_tier": 1
+      "evidence_tier": 1,
+      "standard_name": "Cognitive Amino Acids",
+      "synergy_mechanism": null
     },
     {
-      "name": "Immune Probiotic Blend",
       "id": "immune_probiotic_blend",
       "ingredients": [
         "lactobacillus rhamnosus gg",
@@ -1072,10 +1112,11 @@
         "lactobacillus acidophilus": 10000000000,
         "bifidobacterium bifidum": 10000000000
       },
-      "evidence_tier": 1
+      "evidence_tier": 1,
+      "standard_name": "Immune Probiotic Blend",
+      "synergy_mechanism": null
     },
     {
-      "name": "Gut Barrier Probiotic Blend",
       "id": "gut_barrier_probiotic_blend",
       "ingredients": [
         "saccharomyces boulardii",
@@ -1087,10 +1128,11 @@
         "saccharomyces boulardii": 5000000000,
         "lactobacillus plantarum": 10000000000
       },
-      "evidence_tier": 1
+      "evidence_tier": 1,
+      "standard_name": "Gut Barrier Probiotic Blend",
+      "synergy_mechanism": null
     },
     {
-      "name": "Mood-Gut Axis Probiotic Blend",
       "id": "mood_gut_axis_probiotic_blend",
       "ingredients": [
         "lactobacillus helveticus",
@@ -1102,10 +1144,11 @@
         "lactobacillus helveticus": 10000000000,
         "bifidobacterium longum": 10000000000
       },
-      "evidence_tier": 2
+      "evidence_tier": 2,
+      "standard_name": "Mood-Gut Axis Probiotic Blend",
+      "synergy_mechanism": null
     },
     {
-      "name": "Skin Health Complex",
       "id": "skin_health_complex",
       "ingredients": [
         "hyaluronic acid",
@@ -1124,10 +1167,11 @@
         "vitamin c": 250,
         "zinc": 15
       },
-      "evidence_tier": 2
+      "evidence_tier": 2,
+      "standard_name": "Skin Health Complex",
+      "synergy_mechanism": null
     },
     {
-      "name": "Nitric Oxide & Blood Flow",
       "id": "nitric_oxide_blood_flow",
       "ingredients": [
         "l-citrulline",
@@ -1146,10 +1190,11 @@
         "pine bark extract": 100,
         "pomegranate extract": 500
       },
-      "evidence_tier": 1
+      "evidence_tier": 1,
+      "standard_name": "Nitric Oxide & Blood Flow",
+      "synergy_mechanism": null
     },
     {
-      "name": "Comprehensive Blood Sugar Support",
       "id": "comprehensive_blood_sugar_support",
       "ingredients": [
         "berberine",
@@ -1172,10 +1217,11 @@
         "alpha-lipoic acid": 300,
         "chromium": 200
       },
-      "evidence_tier": 1
+      "evidence_tier": 1,
+      "standard_name": "Comprehensive Blood Sugar Support",
+      "synergy_mechanism": null
     },
     {
-      "name": "Vitamin D + K2 Calcium Synergy",
       "id": "vitamin_d_k2_calcium_synergy",
       "ingredients": [
         "vitamin d",
@@ -1199,10 +1245,10 @@
         "magnesium": 200
       },
       "synergy_mechanism": "Vitamin D enhances calcium absorption; K2 directs calcium to bones (via osteocalcin) and away from arteries (via matrix Gla-protein). Prevents soft tissue calcification.",
-      "evidence_tier": 1
+      "evidence_tier": 1,
+      "standard_name": "Vitamin D + K2 Calcium Synergy"
     },
     {
-      "name": "Omega-3 Absorption Enhancement",
       "id": "omega_3_absorption_enhancement",
       "ingredients": [
         "omega-3",
@@ -1224,10 +1270,10 @@
         "astaxanthin": 4
       },
       "synergy_mechanism": "Phospholipid-bound omega-3s have 10x better absorption than ethyl esters. Astaxanthin protects omega-3s from oxidation. Take with fat for optimal absorption.",
-      "evidence_tier": 1
+      "evidence_tier": 1,
+      "standard_name": "Omega-3 Absorption Enhancement"
     },
     {
-      "name": "Collagen Synthesis Support",
       "id": "collagen_synthesis_support",
       "ingredients": [
         "vitamin c",
@@ -1257,10 +1303,10 @@
         "copper": 1
       },
       "synergy_mechanism": "Vitamin C is essential cofactor for prolyl and lysyl hydroxylase (collagen synthesis enzymes). Copper enables cross-linking via lysyl oxidase. Lysine/proline are primary collagen amino acids.",
-      "evidence_tier": 1
+      "evidence_tier": 1,
+      "standard_name": "Collagen Synthesis Support"
     },
     {
-      "name": "Respiratory Health & Lung Support",
       "id": "respiratory_health_lung_support",
       "ingredients": [
         "nac",
@@ -1288,10 +1334,10 @@
         "zinc": 15
       },
       "synergy_mechanism": "NAC is mucolytic and boosts glutathione. Quercetin has antiviral properties enhanced by vitamin C (which recycles quercetin). Zinc supports immune function. Bromelain reduces inflammation.",
-      "evidence_tier": 1
+      "evidence_tier": 1,
+      "standard_name": "Respiratory Health & Lung Support"
     },
     {
-      "name": "Urinary Tract Health",
       "id": "urinary_tract_health",
       "ingredients": [
         "d-mannose",
@@ -1312,10 +1358,10 @@
         "vitamin c": 500
       },
       "synergy_mechanism": "D-mannose binds to E. coli preventing adhesion. Cranberry proanthocyanidins (PACs) prevent bacterial adhesion. Vitamin C acidifies urine. Probiotics support healthy urogenital flora.",
-      "evidence_tier": 1
+      "evidence_tier": 1,
+      "standard_name": "Urinary Tract Health"
     },
     {
-      "name": "Prostate Health",
       "id": "prostate_health",
       "ingredients": [
         "saw palmetto",
@@ -1344,10 +1390,10 @@
         "lycopene": 10
       },
       "synergy_mechanism": "Saw palmetto inhibits 5-alpha reductase. Beta-sitosterol supports urinary flow. Zinc is highly concentrated in prostate tissue. Lycopene is a prostate-specific antioxidant.",
-      "evidence_tier": 2
+      "evidence_tier": 2,
+      "standard_name": "Prostate Health"
     },
     {
-      "name": "Focus & Attention Support",
       "id": "focus_attention_support",
       "ingredients": [
         "omega-3",
@@ -1379,10 +1425,10 @@
         "iron": 10
       },
       "synergy_mechanism": "DHA is critical for brain cell membranes. Phosphatidylserine supports neurotransmitter function. Zinc and iron deficiencies are linked to attention issues. L-theanine + caffeine enhance focus synergistically.",
-      "evidence_tier": 1
+      "evidence_tier": 1,
+      "standard_name": "Focus & Attention Support"
     },
     {
-      "name": "Menopause & Perimenopause Support",
       "id": "menopause_perimenopause_support",
       "ingredients": [
         "black cohosh",
@@ -1412,10 +1458,10 @@
         "evening primrose oil": 500
       },
       "synergy_mechanism": "Black cohosh and red clover provide phytoestrogens for hot flash relief. Evening primrose supports hormonal balance. Sage specifically targets hot flashes and night sweats. Maca supports overall hormonal adaptation.",
-      "evidence_tier": 2
+      "evidence_tier": 2,
+      "standard_name": "Menopause & Perimenopause Support"
     },
     {
-      "name": "Prenatal & Pregnancy Support",
       "id": "prenatal_pregnancy_support",
       "ingredients": [
         "folate",
@@ -1445,10 +1491,10 @@
         "iodine": 150
       },
       "synergy_mechanism": "Folate prevents neural tube defects. Iron supports increased blood volume. DHA is critical for fetal brain/eye development. Choline supports neural development. Iodine supports thyroid and fetal brain development.",
-      "evidence_tier": 1
+      "evidence_tier": 1,
+      "standard_name": "Prenatal & Pregnancy Support"
     },
     {
-      "name": "Nerve Health & Neuropathy Support",
       "id": "nerve_health_neuropathy_support",
       "ingredients": [
         "b-complex",
@@ -1479,10 +1525,10 @@
         "acetyl-l-carnitine": 500
       },
       "synergy_mechanism": "B vitamins (especially B1, B6, B12) are essential for nerve function. Alpha-lipoic acid is proven for diabetic neuropathy. Acetyl-L-carnitine supports nerve regeneration. Benfotiamine has superior bioavailability for nerve tissue.",
-      "evidence_tier": 1
+      "evidence_tier": 1,
+      "standard_name": "Nerve Health & Neuropathy Support"
     },
     {
-      "name": "Histamine & Allergy Support",
       "id": "histamine_allergy_support",
       "ingredients": [
         "quercetin",
@@ -1508,10 +1554,10 @@
         "stinging nettle": 300
       },
       "synergy_mechanism": "Quercetin stabilizes mast cells and inhibits histamine release. Vitamin C is a natural antihistamine and enhances quercetin. Bromelain improves quercetin absorption. DAO enzyme breaks down dietary histamine.",
-      "evidence_tier": 2
+      "evidence_tier": 2,
+      "standard_name": "Histamine & Allergy Support"
     },
     {
-      "name": "Kidney Health Support",
       "id": "kidney_health_support",
       "ingredients": [
         "astragalus",
@@ -1534,14 +1580,8 @@
         "vitamin d": 1000
       },
       "synergy_mechanism": "Astragalus and cordyceps have nephroprotective properties. Omega-3s reduce inflammation. CoQ10 supports mitochondrial function in kidney cells. Alpha-lipoic acid provides antioxidant protection.",
-      "evidence_tier": 2
+      "evidence_tier": 2,
+      "standard_name": "Kidney Health Support"
     }
-  ],
-  "_metadata": {
-    "description": "Ingredient synergy clusters for bonus scoring when complementary ingredients are combined",
-    "purpose": "synergy_bonuses",
-    "total_entries": 54,
-    "schema_version": "1.1",
-    "last_updated": "2026-01-05"
-  }
+  ]
 }

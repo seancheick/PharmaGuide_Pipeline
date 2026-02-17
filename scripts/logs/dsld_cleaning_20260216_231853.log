@@ -1,0 +1,27 @@
+2026-02-16 23:18:53 - dsld_cleaner - INFO - ============================================================
+2026-02-16 23:18:53 - dsld_cleaner - INFO - DSLD Data Cleaning Pipeline Starting
+2026-02-16 23:18:53 - dsld_cleaner - INFO - ============================================================
+2026-02-16 23:18:53 - dsld_cleaner - INFO - Started at: 2026-02-16 23:18:53
+2026-02-16 23:18:53 - dsld_cleaner - INFO - Validating configuration...
+2026-02-16 23:18:53 - dsld_cleaner - INFO - Configuration validation passed
+2026-02-16 23:18:54 - dsld_cleaner - INFO - ============================================================
+2026-02-16 23:18:54 - dsld_cleaner - INFO - PROCESSING COMPLETE
+2026-02-16 23:18:54 - dsld_cleaner - INFO - ============================================================
+2026-02-16 23:18:54 - dsld_cleaner - INFO - Ended at: 2026-02-16 23:18:54
+2026-02-16 23:18:54 - dsld_cleaner - INFO - Total duration: 0:00:00.442711
+2026-02-16 23:18:54 - dsld_cleaner - INFO - Files processed: 1
+2026-02-16 23:18:54 - dsld_cleaner - INFO - Success rate: 0.0%
+2026-02-16 23:18:54 - dsld_cleaner - INFO - 
+2026-02-16 23:18:54 - dsld_cleaner - INFO - Results:
+2026-02-16 23:18:54 - dsld_cleaner - INFO -   - Cleaned: 0
+2026-02-16 23:18:54 - dsld_cleaner - INFO -   - Needs review: 0
+2026-02-16 23:18:54 - dsld_cleaner - INFO -   - Incomplete: 0
+2026-02-16 23:18:54 - dsld_cleaner - INFO -   - Errors: 1
+2026-02-16 23:18:54 - dsld_cleaner - INFO -   - Unmapped ingredients: 0
+2026-02-16 23:18:54 - dsld_cleaner - INFO - 
+2026-02-16 23:18:54 - dsld_cleaner - INFO - Output files saved to:
+2026-02-16 23:18:54 - dsld_cleaner - INFO -   - Cleaned products: tmp_audit_live_stage1/cleaned
+2026-02-16 23:18:54 - dsld_cleaner - INFO -   - Needs review: tmp_audit_live_stage1/needs_review
+2026-02-16 23:18:54 - dsld_cleaner - INFO -   - Incomplete: tmp_audit_live_stage1/incomplete
+2026-02-16 23:18:54 - dsld_cleaner - INFO -   - Unmapped ingredients: tmp_audit_live_stage1/unmapped
+2026-02-16 23:18:54 - dsld_cleaner - INFO -   - Processing report: tmp_audit_live_stage1/reports

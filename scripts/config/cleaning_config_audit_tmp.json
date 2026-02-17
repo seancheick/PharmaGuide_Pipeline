@@ -1,0 +1,65 @@
+{
+  "_comments": {
+    "usage": "To run the DSLD cleaning script with this config:",
+    "from_root_directory": "python scripts/clean_dsld_data.py --config scripts/config/cleaning_config.json",
+    "from_scripts_directory": "python clean_dsld_data.py --config config/cleaning_config.json",
+    "alternatives": [
+      "python clean_dsld_data.py (uses this config by default when in scripts/ dir)",
+      "python clean_dsld_data.py --resume (resume interrupted processing)",
+      "python clean_dsld_data.py --dry-run (test without writing files)"
+    ],
+    "workflow": "1. CLEANING (this phase) \u2192 2. ENRICHMENT \u2192 3. SCORING \u2192 4. DEPLOYMENT"
+  },
+  "paths": {
+    "input_directory": "tmp_audit_live_cleaned",
+    "output_directory": "tmp_audit_live_stage1",
+    "reference_data": "data",
+    "log_directory": "logs"
+  },
+  "processing": {
+    "_comment": "batch_size controls files per batch, max_workers controls parallel processes",
+    "batch_size": 500,
+    "max_workers": 1
+  },
+  "output_format": {
+    "_comment": "JSON formatting - pretty_print=true for development, false for production",
+    "pretty_print": true,
+    "_help": "true = human-readable indented JSON (2x size), false = minified single-line (50% smaller)"
+  },
+  "logging": {
+    "_comment": "Logs are written as timestamped files: logs/dsld_cleaning_YYYYMMDD_HHMMSS.log",
+    "level": "INFO",
+    "log_to_console": true,
+    "log_to_file": true
+  },
+  "validation": {
+    "_comment": "Required fields are defined in constants.py (REQUIRED_FIELDS). This section is for reference only.",
+    "_reference_only": {
+      "critical": [
+        "id",
+        "fullName",
+        "brandName",
+        "ingredientRows"
+      ],
+      "important": [
+        "upcSku",
+        "productType",
+        "physicalState"
+      ],
+      "optional": [
+        "servingsPerContainer",
+        "thumbnail",
+        "netContents",
+        "targetGroups",
+        "images"
+      ]
+    }
+  },
+  "options": {
+    "_comment": "These options are passed via CLI (--resume, --dry-run), kept for documentation"
+  },
+  "ui": {
+    "_comment": "User interface settings",
+    "show_progress_bar": true
+  }
+}

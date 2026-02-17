@@ -9,6 +9,9 @@ A. Sugar Consistency - sugar flags must be internally consistent
 B. Allergen Precedence - no duplicate allergens with weaker presence_type
 C. Colors Consistency - natural colors must not be flagged as artificial
 D. Serving Basis Integrity - form_factor and basis_unit must be consistent
+E. Claims Consistency - claims must have valid evidence and no scoring conflicts
+F. Provenance Integrity - raw_source_text and normalized_key must be present and immutable
+G. Match Ledger Consistency - match_ledger must be present and consistent with unmatched lists
 
 Usage:
     validator = EnrichmentContractValidator()
@@ -24,6 +27,25 @@ from typing import Dict, List, Any, Optional, Set
 from dataclasses import dataclass, field
 
 logger = logging.getLogger(__name__)
+
+
+# =============================================================================
+# PIPELINE CONTRACT VERSION
+# =============================================================================
+# Bump this version when:
+# - Match ledger schema changes (new fields, renamed fields, removed fields)
+# - Invariant rules change (new rules, changed thresholds, removed rules)
+# - Provenance field semantics change
+# - Coverage gate thresholds change in breaking ways
+#
+# This version should be checked by consumers (scoring, reports, downstream tools)
+# to ensure compatibility with the enriched data format.
+#
+# Version history:
+# - 1.0.0: Initial hardened pipeline with match_ledger, provenance fields,
+#          coverage gates, and invariant validation
+# =============================================================================
+PIPELINE_CONTRACT_VERSION = "1.0.0"
 
 
 @dataclass
@@ -49,6 +71,32 @@ class EnrichmentContractValidator:
     - In regression tests
     - For batch auditing
     """
+
+    # =========================================================================
+    # CANONICAL_ID MONOTONICITY SCOPE
+    # =========================================================================
+    # canonical_id monotonicity (cannot downgrade to null) applies ONLY to
+    # these domains. Other domains (manufacturer, delivery, claims) may have
+    # null canonical_id as expected behavior (e.g., unmatched manufacturer).
+    #
+    # Rationale:
+    # - ingredients/additives/allergens: Core scoring domains, must be matched
+    # - manufacturer: Bonus-only, unmatched is acceptable
+    # - delivery: Detected from form, not always matchable
+    # - claims: Optional, many products have no claims
+    # =========================================================================
+    CANONICAL_ID_MONOTONICITY_DOMAINS = frozenset({
+        "ingredients",
+        "additives",
+        "allergens",
+    })
+
+    # Domains where unmatched canonical_id is acceptable (bonus/optional)
+    CANONICAL_ID_OPTIONAL_DOMAINS = frozenset({
+        "manufacturer",
+        "delivery",
+        "claims",
+    })
 
     # Allergen presence type precedence (higher = stronger)
     ALLERGEN_PRESENCE_PRIORITY = {
@@ -103,6 +151,9 @@ class EnrichmentContractValidator:
         violations.extend(self._validate_allergen_precedence(product, product_id))
         violations.extend(self._validate_colors_consistency(product, product_id))
         violations.extend(self._validate_serving_basis_integrity(product, product_id))
+        violations.extend(self._validate_claims_consistency(product, product_id))
+        violations.extend(self._validate_provenance_integrity(product, product_id))
+        violations.extend(self._validate_match_ledger_consistency(product, product_id))
 
         return violations
 
@@ -481,6 +532,453 @@ class EnrichmentContractValidator:
                 expected="numeric value",
                 actual=None,
                 evidence={"reason": reason, "serving_sizes_count": len(serving_sizes)}
+            ))
+
+        return violations
+
+    # =========================================================================
+    # RULE E: Claims Consistency
+    # =========================================================================
+
+    def _validate_claims_consistency(self, product: Dict, product_id: str) -> List[ContractViolation]:
+        """
+        Rule E: Claims consistency validation.
+
+        E.1: USP Verified cannot be score_eligible unless evidence_strength == "strong"
+        E.2: If allergen_free claim has score_eligible=true, no allergen conflict can exist
+        E.3: If batch_traceability is score_eligible, must have actionable evidence
+        E.4: Organic scoring requires scope=product_level (not ingredient_level)
+        E.5: Evidence objects must have valid rule_id from cert_claim_rules.json
+        """
+        violations = []
+
+        certification_data = product.get("certification_data", {})
+        compliance_data = product.get("compliance_data", {})
+        organic_data = product.get("organic", {})
+
+        # E.1: USP Verified strength validation
+        evidence_based = certification_data.get("evidence_based", {})
+        third_party_evidence = evidence_based.get("third_party_programs", []) or []
+
+        for evidence in third_party_evidence:
+            rule_id = evidence.get("rule_id", "")
+            if "USP" in rule_id.upper() and "VERIFIED" in rule_id.upper():
+                if evidence.get("score_eligible", False):
+                    strength = evidence.get("evidence_strength", "")
+                    if strength != "strong":
+                        violations.append(ContractViolation(
+                            rule="E.1",
+                            rule_name="Claims Consistency - USP Verified strength",
+                            severity="error",
+                            message=f"USP Verified claim is score_eligible but evidence_strength is '{strength}' (must be 'strong')",
+                            product_id=product_id,
+                            field_path="certification_data.evidence_based.third_party_programs",
+                            expected="evidence_strength='strong'",
+                            actual=strength,
+                            evidence={
+                                "rule_id": rule_id,
+                                "matched_text": evidence.get("matched_text"),
+                                "score_eligible": evidence.get("score_eligible")
+                            }
+                        ))
+
+        # E.2: Allergen-free claims cannot be score_eligible with allergen conflicts
+        compliance_evidence = compliance_data.get("evidence_based", {})
+        allergen_evidence = compliance_evidence.get("allergen_free_claims", []) or []
+
+        for evidence in allergen_evidence:
+            if evidence.get("score_eligible", False):
+                conflicts = evidence.get("proximity_conflicts", [])
+                if conflicts:
+                    violations.append(ContractViolation(
+                        rule="E.2",
+                        rule_name="Claims Consistency - allergen conflict blocks scoring",
+                        severity="error",
+                        message=f"Allergen-free claim '{evidence.get('display_name')}' is score_eligible but has conflicts: {conflicts}",
+                        product_id=product_id,
+                        field_path="compliance_data.evidence_based.allergen_free_claims",
+                        expected="score_eligible=false when proximity_conflicts exist",
+                        actual=f"score_eligible=true with conflicts={conflicts}",
+                        evidence={
+                            "rule_id": evidence.get("rule_id"),
+                            "matched_text": evidence.get("matched_text"),
+                            "proximity_conflicts": conflicts
+                        }
+                    ))
+
+        # E.3: Batch traceability with score_eligible must have actionable evidence
+        batch_evidence = evidence_based.get("batch_traceability", []) or []
+        actionable_keywords = ["available", "request", "download", "scan", "qr", "url", "website"]
+
+        for evidence in batch_evidence:
+            if evidence.get("score_eligible", False):
+                evidence_strength = evidence.get("evidence_strength", "")
+                matched_text = (evidence.get("matched_text", "") or "").lower()
+
+                # Only weak evidence needs actionable keywords
+                if evidence_strength == "weak":
+                    has_actionable = any(kw in matched_text for kw in actionable_keywords)
+                    if not has_actionable:
+                        violations.append(ContractViolation(
+                            rule="E.3",
+                            rule_name="Claims Consistency - batch traceability actionable",
+                            severity="warning",
+                            message=f"Batch traceability claim with weak evidence is score_eligible without actionable keywords",
+                            product_id=product_id,
+                            field_path="certification_data.evidence_based.batch_traceability",
+                            expected="actionable evidence (available, request, QR, etc.)",
+                            actual=evidence.get("matched_text"),
+                            evidence={
+                                "rule_id": evidence.get("rule_id"),
+                                "evidence_strength": evidence_strength
+                            }
+                        ))
+
+        # E.4: Organic scoring requires product-level scope
+        organic_evidence_based = organic_data.get("evidence_based", {})
+        organic_evidence = organic_evidence_based.get("organic_certifications", []) or []
+
+        for evidence in organic_evidence:
+            if evidence.get("score_eligible", False):
+                scope_violation = evidence.get("scope_violation", False)
+                scope_rule = evidence.get("scope_rule", "")
+
+                if scope_violation:
+                    violations.append(ContractViolation(
+                        rule="E.4",
+                        rule_name="Claims Consistency - organic scope",
+                        severity="error",
+                        message=f"Organic claim is score_eligible but has scope_violation=true",
+                        product_id=product_id,
+                        field_path="organic.evidence_based.organic_certifications",
+                        expected="scope_violation=false for scoring",
+                        actual=f"scope_violation={scope_violation}, scope_rule={scope_rule}",
+                        evidence={
+                            "rule_id": evidence.get("rule_id"),
+                            "source_field": evidence.get("source_field")
+                        }
+                    ))
+
+        # E.5: All evidence objects must have valid rule_id
+        all_evidence = (
+            third_party_evidence +
+            evidence_based.get("gmp_certifications", []) +
+            batch_evidence +
+            allergen_evidence +
+            organic_evidence
+        )
+
+        for evidence in all_evidence:
+            rule_id = evidence.get("rule_id", "")
+            if not rule_id or rule_id == "UNKNOWN":
+                violations.append(ContractViolation(
+                    rule="E.5",
+                    rule_name="Claims Consistency - valid rule_id",
+                    severity="warning",
+                    message=f"Evidence object missing valid rule_id",
+                    product_id=product_id,
+                    field_path="certification_data.evidence_based",
+                    expected="valid rule_id from cert_claim_rules.json",
+                    actual=rule_id or "(empty)",
+                    evidence={
+                        "display_name": evidence.get("display_name"),
+                        "matched_text": evidence.get("matched_text")
+                    }
+                ))
+
+        return violations
+
+    # =========================================================================
+    # RULE F: Provenance Integrity
+    # =========================================================================
+
+    def _validate_provenance_integrity(self, product: Dict, product_id: str) -> List[ContractViolation]:
+        """
+        Rule F: Provenance integrity validation.
+
+        F.1: All matched ingredients must have raw_source_text (never null/empty after cleaning)
+        F.2: All matched ingredients must have normalized_key (computed once, never regenerated)
+        F.3: canonical_id monotonicity - items with canonical_id must maintain provenance chain
+        """
+        violations = []
+
+        # Get all ingredients (active + inactive)
+        active_ingredients = product.get("activeIngredients", []) or []
+        inactive_ingredients = product.get("inactiveIngredients", []) or []
+        all_ingredients = active_ingredients + inactive_ingredients
+
+        # F.1 & F.2: Check provenance fields on ingredients
+        for i, ing in enumerate(active_ingredients):
+            if not ing:
+                continue
+            violations.extend(self._check_ingredient_provenance(
+                ing, product_id, "activeIngredients", i
+            ))
+
+        for i, ing in enumerate(inactive_ingredients):
+            if not ing:
+                continue
+            violations.extend(self._check_ingredient_provenance(
+                ing, product_id, "inactiveIngredients", i
+            ))
+
+        # F.3: Check canonical_id monotonicity in match_ledger entries
+        # NOTE: Monotonicity only applies to core scoring domains (ingredients,
+        # additives, allergens). Bonus/optional domains (manufacturer, delivery,
+        # claims) may have null canonical_id as expected behavior.
+        match_ledger = product.get("match_ledger", {})
+        domains = match_ledger.get("domains", {})
+
+        for domain_name, domain_data in domains.items():
+            # Skip monotonicity check for optional domains
+            if domain_name not in self.CANONICAL_ID_MONOTONICITY_DOMAINS:
+                continue
+
+            entries = domain_data.get("entries", []) or []
+            for entry in entries:
+                canonical_id = entry.get("canonical_id")
+                decision = entry.get("decision", "")
+
+                # If matched in a monotonicity domain, must have canonical_id
+                if decision == "matched" and not canonical_id:
+                    violations.append(ContractViolation(
+                        rule="F.3",
+                        rule_name="Provenance Integrity - canonical_id monotonicity",
+                        severity="error",
+                        message=f"Ledger entry in '{domain_name}' is 'matched' but has no canonical_id",
+                        product_id=product_id,
+                        field_path=f"match_ledger.domains.{domain_name}.entries",
+                        expected="canonical_id present for matched entries in monotonicity domains",
+                        actual=f"decision=matched, canonical_id={canonical_id}",
+                        evidence={
+                            "raw_source_text": entry.get("raw_source_text"),
+                            "domain": domain_name,
+                            "monotonicity_scope": list(self.CANONICAL_ID_MONOTONICITY_DOMAINS)
+                        }
+                    ))
+
+        return violations
+
+    def _check_ingredient_provenance(
+        self, ing: Dict, product_id: str, array_name: str, index: int
+    ) -> List[ContractViolation]:
+        """Helper to check provenance fields on an ingredient."""
+        violations = []
+        ing_name = ing.get("name", ing.get("ingredient", "unknown"))
+
+        # F.1: raw_source_text must be present
+        raw_source_text = ing.get("raw_source_text")
+        if not raw_source_text:
+            # Only flag if this is a matched ingredient (has canonical info)
+            has_canonical = (
+                ing.get("canonical_id") or
+                ing.get("db_id") or
+                ing.get("ingredient_id")
+            )
+            if has_canonical:
+                violations.append(ContractViolation(
+                    rule="F.1",
+                    rule_name="Provenance Integrity - raw_source_text required",
+                    severity="error",
+                    message=f"Matched ingredient '{ing_name}' missing raw_source_text",
+                    product_id=product_id,
+                    field_path=f"{array_name}[{index}].raw_source_text",
+                    expected="non-empty string",
+                    actual=raw_source_text,
+                    evidence={
+                        "ingredient_name": ing_name,
+                        "canonical_id": ing.get("canonical_id") or ing.get("db_id")
+                    }
+                ))
+
+        # F.2: normalized_key must be present for matched ingredients
+        normalized_key = ing.get("normalized_key")
+        if not normalized_key:
+            has_canonical = (
+                ing.get("canonical_id") or
+                ing.get("db_id") or
+                ing.get("ingredient_id")
+            )
+            if has_canonical:
+                violations.append(ContractViolation(
+                    rule="F.2",
+                    rule_name="Provenance Integrity - normalized_key required",
+                    severity="error",
+                    message=f"Matched ingredient '{ing_name}' missing normalized_key",
+                    product_id=product_id,
+                    field_path=f"{array_name}[{index}].normalized_key",
+                    expected="non-empty string",
+                    actual=normalized_key,
+                    evidence={
+                        "ingredient_name": ing_name,
+                        "canonical_id": ing.get("canonical_id") or ing.get("db_id")
+                    }
+                ))
+
+        return violations
+
+    # =========================================================================
+    # RULE G: Match Ledger Consistency
+    # =========================================================================
+
+    def _validate_match_ledger_consistency(self, product: Dict, product_id: str) -> List[ContractViolation]:
+        """
+        Rule G: Match ledger consistency validation.
+
+        G.1: match_ledger must be present in enriched products
+        G.2: Ledger summary totals must equal sum of domain totals
+        G.3: unmatched_* lists must match ledger unmatched counts
+        G.4: coverage_percent must be mathematically correct
+        """
+        violations = []
+
+        match_ledger = product.get("match_ledger")
+
+        # G.1: match_ledger must be present
+        if match_ledger is None:
+            violations.append(ContractViolation(
+                rule="G.1",
+                rule_name="Match Ledger Consistency - ledger present",
+                severity="warning",
+                message="match_ledger not present in enriched product",
+                product_id=product_id,
+                field_path="match_ledger",
+                expected="match_ledger object",
+                actual=None
+            ))
+            return violations  # Can't validate further without ledger
+
+        if not isinstance(match_ledger, dict):
+            violations.append(ContractViolation(
+                rule="G.1",
+                rule_name="Match Ledger Consistency - ledger is object",
+                severity="error",
+                message=f"match_ledger is not a dictionary: {type(match_ledger).__name__}",
+                product_id=product_id,
+                field_path="match_ledger",
+                expected="dict",
+                actual=type(match_ledger).__name__
+            ))
+            return violations
+
+        domains = match_ledger.get("domains", {})
+        summary = match_ledger.get("summary", {})
+
+        # G.2: Summary totals must equal sum of domain totals
+        expected_total = 0
+        expected_matched = 0
+        domain_breakdown = {}
+
+        for domain_name, domain_data in domains.items():
+            total_raw = domain_data.get("total_raw", 0) or 0
+            matched = domain_data.get("matched", 0) or 0
+            expected_total += total_raw
+            expected_matched += matched
+            domain_breakdown[domain_name] = {"total": total_raw, "matched": matched}
+
+        summary_total = summary.get("total_entities", 0)
+        summary_matched = summary.get("total_matched", 0)
+
+        if expected_total != summary_total:
+            violations.append(ContractViolation(
+                rule="G.2a",
+                rule_name="Match Ledger Consistency - total entities",
+                severity="error",
+                message=f"summary.total_entities ({summary_total}) != sum of domain totals ({expected_total})",
+                product_id=product_id,
+                field_path="match_ledger.summary.total_entities",
+                expected=expected_total,
+                actual=summary_total,
+                evidence={"domain_breakdown": domain_breakdown}
+            ))
+
+        if expected_matched != summary_matched:
+            violations.append(ContractViolation(
+                rule="G.2b",
+                rule_name="Match Ledger Consistency - matched entities",
+                severity="error",
+                message=f"summary.total_matched ({summary_matched}) != sum of domain matched ({expected_matched})",
+                product_id=product_id,
+                field_path="match_ledger.summary.total_matched",
+                expected=expected_matched,
+                actual=summary_matched,
+                evidence={"domain_breakdown": domain_breakdown}
+            ))
+
+        # G.3: unmatched_* lists must match ledger unmatched counts
+        unmatched_lists = {
+            "ingredients": product.get("unmatched_ingredients", []) or [],
+            "additives": product.get("unmatched_additives", []) or [],
+            "allergens": product.get("unmatched_allergens", []) or []
+        }
+
+        for domain_name, unmatched_list in unmatched_lists.items():
+            if domain_name not in domains:
+                continue
+
+            domain_data = domains[domain_name]
+            ledger_unmatched = domain_data.get("unmatched", 0) or 0
+            list_count = len(unmatched_list)
+
+            if ledger_unmatched != list_count:
+                violations.append(ContractViolation(
+                    rule="G.3",
+                    rule_name="Match Ledger Consistency - unmatched list count",
+                    severity="error",
+                    message=f"unmatched_{domain_name} list ({list_count}) != ledger unmatched count ({ledger_unmatched})",
+                    product_id=product_id,
+                    field_path=f"unmatched_{domain_name}",
+                    expected=ledger_unmatched,
+                    actual=list_count,
+                    evidence={
+                        "domain": domain_name,
+                        "ledger_unmatched": ledger_unmatched
+                    }
+                ))
+
+        # G.4: coverage_percent must be mathematically correct
+        #
+        # Legacy semantics:
+        #   coverage_percent = total_matched / total_entities * 100
+        #
+        # Current hardened semantics:
+        #   coverage_percent = total_matched / scorable_total * 100
+        #
+        # Accept both, preferring scorable_total when provided.
+        reported_coverage = summary.get("coverage_percent", 0)
+        scorable_total = summary.get("scorable_total", 0) or 0
+        if scorable_total > 0:
+            expected_coverage = round((summary_matched / scorable_total) * 100, 2)
+            tolerance = 0.11
+            evidence = {
+                "coverage_mode": "scorable_total",
+                "total_matched": summary_matched,
+                "scorable_total": scorable_total,
+            }
+        elif summary_total > 0:
+            expected_coverage = round((summary_matched / summary_total) * 100, 1)
+            tolerance = 0.1
+            evidence = {
+                "coverage_mode": "total_entities",
+                "total_matched": summary_matched,
+                "total_entities": summary_total,
+            }
+        else:
+            expected_coverage = None
+            tolerance = None
+            evidence = {}
+
+        if expected_coverage is not None and abs(reported_coverage - expected_coverage) > tolerance:
+            violations.append(ContractViolation(
+                rule="G.4",
+                rule_name="Match Ledger Consistency - coverage percent",
+                severity="error",
+                message=f"coverage_percent ({reported_coverage}) != calculated ({expected_coverage})",
+                product_id=product_id,
+                field_path="match_ledger.summary.coverage_percent",
+                expected=expected_coverage,
+                actual=reported_coverage,
+                evidence=evidence
             ))
 
         return violations

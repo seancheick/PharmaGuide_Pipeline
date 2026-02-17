@@ -1,4 +1,14 @@
 {
+  "_metadata": {
+    "description": "Non-standardized whole herb powders and simple botanical extracts without guaranteed marker compounds. Used for basic ingredient mapping. For premium standardized extracts with marker compounds, see standardized_botanicals.json.",
+    "purpose": "ingredient_mapping",
+    "schema_version": "4.0.0",
+    "last_updated": "2026-02-16",
+    "total_entries": 237,
+    "quality_tier": "basic_raw_botanicals",
+    "standardization": "none",
+    "notes": "This database is separate from standardized_botanicals.json by design. Overlaps are intentional and allow the scoring system to reward standardized forms over raw powders."
+  },
   "botanical_ingredients": [
     {
       "standard_name": "Acai Berry",
@@ -2534,8 +2544,7 @@
         "Sea Buckthorn",
         "Sea Buckthorn Juice, Powder",
         "Sea Buckthorn, Powder",
-        "organic Sea Buckthorn juice powder",
-        "Sea Buckthorn Juice, Powder"
+        "organic Sea Buckthorn juice powder"
       ],
       "category": "fruit",
       "notes": "Added from unmapped list; needs curation.",
@@ -2556,8 +2565,7 @@
       "standard_name": "Garcinia",
       "aliases": [
         "Garcinia fruit extract",
-        "Garcinia cambogia extract",
-        "Garcinia cambogia Extract"
+        "Garcinia cambogia extract"
       ],
       "category": "fruit",
       "notes": "Added from unmapped list; needs curation.",
@@ -2638,8 +2646,7 @@
     {
       "standard_name": "Potato",
       "aliases": [
-        "Potato extract",
-        "Potato Extract"
+        "Potato extract"
       ],
       "category": "root",
       "notes": "Added from unmapped list; needs curation.",
@@ -2856,15 +2863,5 @@
       "last_updated": "2026-01-05",
       "id": "vegetable_powders"
     }
-  ],
-  "_metadata": {
-    "description": "Non-standardized whole herb powders and simple botanical extracts without guaranteed marker compounds. Used for basic ingredient mapping. For premium standardized extracts with marker compounds, see standardized_botanicals.json.",
-    "purpose": "ingredient_mapping",
-    "quality_tier": "basic_raw_botanicals",
-    "standardization": "none",
-    "total_entries": 184,
-    "schema_version": "1.0",
-    "last_updated": "2025-11-14",
-    "notes": "This database is separate from standardized_botanicals.json by design. Overlaps are intentional and allow the scoring system to reward standardized forms over raw powders."
-  }
+  ]
 }

@@ -1,0 +1,396 @@
+{
+  "id": "14119",
+  "src": "01-raw/2025-03-25/data/label_264.json",
+  "nhanesId": "",
+  "bundleName": "",
+  "brandIpSymbol": "\u00ae",
+  "productVersionCode": "Product No. 6241 08I11L",
+  "pdf": "",
+  "thumbnail": "",
+  "percentDvFootnote": "Not Present",
+  "fullName": "Sublingual Active B12 Dibencozide 3000 mcg With Folic Acid",
+  "brandName": "Country Life",
+  "upcSku": "0 15794 06241 7",
+  "hasOuterCarton": false,
+  "upcValid": true,
+  "status": "discontinued",
+  "discontinuedDate": "2015-10-01T00:00:00Z",
+  "offMarket": 1,
+  "servingsPerContainer": null,
+  "netContents": [],
+  "targetGroups": [
+    "Vegan",
+    "Vegetarian",
+    "Adult (18 - 50 Years)",
+    "Kosher",
+    "Gluten Free",
+    "Dairy Free"
+  ],
+  "userGroups": [
+    {
+      "dailyValueTargetGroupName": "Adults and children 4 or more years of age",
+      "langualCode": "P0250",
+      "langualCodeDescription": "Adults and Children 4 years and above"
+    }
+  ],
+  "productType": {
+    "langualCode": "A1302",
+    "langualCodeDescription": "Vitamin"
+  },
+  "physicalState": {
+    "langualCode": "E0174",
+    "langualCodeDescription": "Lozenge"
+  },
+  "imageUrl": "https://api.ods.od.nih.gov/dsld/s3/pdf/14119.pdf",
+  "images": [],
+  "contacts": [
+    {
+      "contactId": 3242,
+      "text": "Manufactured by",
+      "types": [
+        "Manufacturer"
+      ],
+      "contactDetails": {
+        "src": "01-raw/2025-03-25/data/contact_1.json",
+        "id": 3242,
+        "name": "Country Life, LLC",
+        "streetAddress": "180 Vanderbilt Motor Parkway",
+        "city": "Hauppauge",
+        "state": "NY",
+        "country": "",
+        "zipCode": "11788",
+        "phoneNumber": "",
+        "email": "",
+        "webAddress": "CountryLifeVitamins.com"
+      }
+    }
+  ],
+  "events": [
+    {
+      "date": "2015-10-01",
+      "type": "Off Market"
+    },
+    {
+      "date": "2012-10-25",
+      "type": "Date entered into DSLD"
+    }
+  ],
+  "activeIngredients": [
+    {
+      "ingredientId": 279040,
+      "uniiCode": "935E97BOY8",
+      "order": 1,
+      "raw_source_text": "Folic Acid",
+      "branded_token_extracted": null,
+      "raw_source_path": "activeIngredients",
+      "normalized_key": "folic_acid",
+      "name": "Folic Acid",
+      "standardName": "Vitamin B9 (Folate)",
+      "ingredientGroup": "Folate",
+      "quantity": 200.0,
+      "unit": "mcg",
+      "dailyValue": 50.0,
+      "quantityVariants": null,
+      "forms": [],
+      "alternateNames": [],
+      "mapped": true,
+      "proprietaryBlend": false,
+      "disclosureLevel": null,
+      "parentBlend": null,
+      "isNestedIngredient": false,
+      "nestedIngredients": [],
+      "hierarchyType": null
+    },
+    {
+      "ingredientId": 54697,
+      "uniiCode": null,
+      "order": 2,
+      "raw_source_text": "Vitamin B12",
+      "branded_token_extracted": null,
+      "raw_source_path": "activeIngredients",
+      "normalized_key": "vitamin_b12",
+      "name": "Vitamin B12",
+      "standardName": "Vitamin B12",
+      "ingredientGroup": "Vitamin B12 (unspecified)",
+      "quantity": 3000.0,
+      "unit": "mcg",
+      "dailyValue": 50000.0,
+      "quantityVariants": null,
+      "forms": [
+        {
+          "name": "Coenzyme B12",
+          "ingredientId": 54694,
+          "order": 1,
+          "prefix": "as",
+          "percent": null
+        }
+      ],
+      "alternateNames": [],
+      "mapped": true,
+      "proprietaryBlend": false,
+      "disclosureLevel": null,
+      "parentBlend": null,
+      "isNestedIngredient": false,
+      "nestedIngredients": [],
+      "hierarchyType": null,
+      "harvestMethod": "3 mg",
+      "notes": "Vitamin B12 (Form: as coenzyme B12 (Alt. Name: dibencozide)) Note: 3 mg "
+    }
+  ],
+  "inactiveIngredients": [
+    {
+      "ingredientId": 3789,
+      "uniiCode": null,
+      "order": 1,
+      "raw_source_text": "Sorbitol",
+      "raw_source_path": "inactiveIngredients",
+      "normalized_key": "sorbitol",
+      "name": "Sorbitol",
+      "standardName": "sorbitol",
+      "ingredientGroup": "Sorbitol",
+      "forms": [],
+      "alternateNames": [],
+      "mapped": true,
+      "hierarchyType": null,
+      "isAdditive": true,
+      "additiveType": "sugar_alcohol"
+    },
+    {
+      "ingredientId": 285558,
+      "uniiCode": "4ELV7Z65AP",
+      "order": 2,
+      "raw_source_text": "Stearic Acid",
+      "raw_source_path": "inactiveIngredients",
+      "normalized_key": "stearic_acid",
+      "name": "Stearic Acid",
+      "standardName": "stearic acid",
+      "ingredientGroup": "Stearic Acid",
+      "forms": [],
+      "alternateNames": [
+        "C18:0"
+      ],
+      "mapped": true,
+      "hierarchyType": null,
+      "isAdditive": true,
+      "additiveType": "processing_aid"
+    },
+    {
+      "ingredientId": 15291,
+      "uniiCode": null,
+      "order": 3,
+      "raw_source_text": "Cellulose",
+      "raw_source_path": "inactiveIngredients",
+      "normalized_key": "cellulose",
+      "name": "Cellulose",
+      "standardName": "cellulose powder",
+      "ingredientGroup": "Cellulose",
+      "forms": [],
+      "alternateNames": [],
+      "mapped": true,
+      "hierarchyType": null,
+      "isAdditive": true,
+      "additiveType": "unspecified"
+    },
+    {
+      "ingredientId": 293311,
+      "uniiCode": "ETJ7Z6XBU4",
+      "order": 4,
+      "raw_source_text": "Silica",
+      "raw_source_path": "inactiveIngredients",
+      "normalized_key": "silica",
+      "name": "Silica",
+      "standardName": "Silica",
+      "ingredientGroup": "Silicon",
+      "forms": [],
+      "alternateNames": [],
+      "mapped": true,
+      "hierarchyType": null,
+      "isAdditive": true,
+      "additiveType": "unspecified"
+    },
+    {
+      "ingredientId": 4048,
+      "uniiCode": null,
+      "order": 5,
+      "raw_source_text": "Magnesium Stearate",
+      "raw_source_path": "inactiveIngredients",
+      "normalized_key": "magnesium_stearate",
+      "name": "Magnesium Stearate",
+      "standardName": "magnesium stearate",
+      "ingredientGroup": "Magnesium",
+      "forms": [],
+      "alternateNames": [],
+      "mapped": true,
+      "hierarchyType": null,
+      "isAdditive": true,
+      "additiveType": "processing_aid"
+    }
+  ],
+  "nutritionalInfo": {},
+  "statements": [
+    {
+      "type": "Precautions re: All Other",
+      "notes": "Do not accept if seal is broken."
+    },
+    {
+      "type": "General: Product/Version Code",
+      "notes": "Product No. 6241 08I11L"
+    },
+    {
+      "type": "Precautions re: Pregnant or Nursing or Prescription Medications",
+      "notes": "WARNING: If you are pregnant or nursing, taking medication or planning a surgery, consult your doctor before using this product."
+    },
+    {
+      "type": "Precautions re: All Other",
+      "notes": "If any adverse reactions occur, stop taking the product and consult your doctor."
+    },
+    {
+      "type": "Formulation re: Does NOT Contain",
+      "notes": "NO: Yeast, wheat, soy, gluten, milk, salt, preservatives, artificial flavor or artificial color."
+    },
+    {
+      "type": "Seals/Symbols",
+      "notes": "Certified Vegan\nAVA\nAmerican Vegetarian Association(TM)"
+    },
+    {
+      "type": "Seals/Symbols",
+      "notes": "Certified Gluten-Free GF(R)"
+    },
+    {
+      "type": "Seals/Symbols",
+      "notes": "Good Manufacturing Practices\nGMP\nCERTIFIED"
+    },
+    {
+      "type": "Formulation re: Does NOT Contain",
+      "notes": "Gluten-Free"
+    },
+    {
+      "type": "FDA Statement of Identity",
+      "notes": "Dietary Supplement"
+    },
+    {
+      "type": "General Statements: All Other Content",
+      "notes": "Lozenges"
+    },
+    {
+      "type": "Seals/Symbols",
+      "notes": "K PARVE"
+    },
+    {
+      "type": "Suggested/Recommended/Usage/Directions",
+      "notes": "Directions: Adults place one (1) lozenge daily under tongue 30 seconds before swallowing."
+    },
+    {
+      "type": "General Statements: All Other Content",
+      "notes": "As a reminder, discuss the supplements and medications that you take with your health care providers."
+    },
+    {
+      "type": "Storage",
+      "notes": "Store between 59(0)-86(0) F."
+    },
+    {
+      "type": "Precautions re: Children",
+      "notes": "Keep out of the reach of children."
+    },
+    {
+      "type": "Formula re: Contains",
+      "notes": "B VITAMINS"
+    },
+    {
+      "type": "Seals/Symbols",
+      "notes": "Our manufacturing supports wind power\nrenewablechoice.com"
+    },
+    {
+      "type": "Seals/Symbols",
+      "notes": "PLEASE RECYCLE"
+    },
+    {
+      "type": "General Statements: All Other Content",
+      "notes": "This product has been manufactured at an NSF GMP Registered facility."
+    }
+  ],
+  "claims": [
+    {
+      "langualCode": "P0115",
+      "langualCodeDescription": "All Other"
+    }
+  ],
+  "servingSizes": [
+    {
+      "minQuantity": 1.0,
+      "maxQuantity": 1.0,
+      "unit": "Lozenge(s)",
+      "minDailyServings": 1,
+      "maxDailyServings": 1,
+      "normalizedServing": 1.0
+    }
+  ],
+  "labelRelationships": [],
+  "labelText": {
+    "raw": "Do not accept if seal is broken. Product No. 6241 08I11L WARNING: If you are pregnant or nursing, taking medication or planning a surgery, consult your doctor before using this product. If any adverse reactions occur, stop taking the product and consult your doctor. NO: Yeast, wheat, soy, gluten, milk, salt, preservatives, artificial flavor or artificial color. Certified Vegan\nAVA\nAmerican Vegetarian Association(TM) Certified Gluten-Free GF(R) Good Manufacturing Practices\nGMP\nCERTIFIED Gluten-Free Dietary Supplement Lozenges K PARVE Directions: Adults place one (1) lozenge daily under tongue 30 seconds before swallowing. As a reminder, discuss the supplements and medications that you take with your health care providers. Store between 59(0)-86(0) F. Keep out of the reach of children. B VITAMINS Our manufacturing supports wind power\nrenewablechoice.com PLEASE RECYCLE This product has been manufactured at an NSF GMP Registered facility.",
+    "parsed": {
+      "certifications": [
+        "Gluten-Free-General",
+        "NSF-GMP",
+        "Certified-Vegan",
+        "GMP-General"
+      ],
+      "testing": [],
+      "origin": [],
+      "flavor": [],
+      "probioticGuarantee": [
+        "3 mg"
+      ],
+      "cleanLabelClaims": [
+        "Gluten Free"
+      ],
+      "allergens": [],
+      "allergenFree": [
+        "gluten"
+      ],
+      "warnings": [
+        "Keep out of reach of children",
+        "If pregnant, nursing, or taking any medications, consult a healthcare professional before use"
+      ],
+      "storage": [
+        "Store between 59(0)-86(0) F."
+      ],
+      "directions": "Adults place one (1) lozenge daily under tongue 30 seconds before swallowing.",
+      "marketingClaims": [],
+      "qualityFeatures": [
+        "GMP certified",
+        "Vegan"
+      ],
+      "proprietaryBlendDisclosure": null
+    },
+    "searchText": "Folic Acid Vitamin B12 Coenzyme B12 Vitamin B12 (Form: as coenzyme B12 (Alt. Name: dibencozide)) Note: 3 mg Sorbitol Stearic Acid Cellulose Silica Magnesium Stearate Do not accept if seal is broken. Product No. 6241 08I11L WARNING: If you are pregnant or nursing, taking medication or planning a surgery, consult your doctor before using this product. If any adverse reactions occur, stop taking the product and consult your doctor. NO: Yeast, wheat, soy, gluten, milk, salt, preservatives, artificial flavor or artificial color. Certified Vegan\nAVA\nAmerican Vegetarian Association(TM) Certified Gluten-Free GF(R) Good Manufacturing Practices\nGMP\nCERTIFIED Gluten-Free Dietary Supplement Lozenges K PARVE Directions: Adults place one (1) lozenge daily under tongue 30 seconds before swallowing. As a reminder, discuss the supplements and medications that you take with your health care providers. Store between 59(0)-86(0) F. Keep out of the reach of children. B VITAMINS Our manufacturing supports wind power\nrenewablechoice.com PLEASE RECYCLE This product has been manufactured at an NSF GMP Registered facility."
+  },
+  "metadata": {
+    "lastCleaned": "2026-02-16T21:19:15.176139Z",
+    "cleaningVersion": "2.1.0",
+    "reference_versions": {
+      "color_indicators": {
+        "version": "2.0.0",
+        "last_updated": "2026-01-05"
+      }
+    },
+    "mappingStats": {
+      "totalIngredients": 7,
+      "mappedIngredients": 7,
+      "unmappedIngredients": 0,
+      "mappingRate": 100.0
+    },
+    "transparencyMetrics": {
+      "hasProprietaryBlend": false,
+      "blendTransparency": "full",
+      "disclosedIngredients": 2,
+      "undisclosedQuantities": 0,
+      "transparencyScore": 100.0
+    },
+    "completeness": {
+      "score": 100.0,
+      "missingFields": [],
+      "criticalFieldsComplete": true
+    }
+  }
+}

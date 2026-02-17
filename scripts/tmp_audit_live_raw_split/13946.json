@@ -1,0 +1,471 @@
+{
+  "id": "13946",
+  "src": "01-raw/2023-12-14/data/label_221.json",
+  "nhanesId": "",
+  "bundleName": "",
+  "brandIpSymbol": "\u00ae",
+  "productVersionCode": "CODE 2921 V2",
+  "pdf": "",
+  "thumbnail": "",
+  "percentDvFootnote": "Not Present",
+  "fullName": "OralBiotic",
+  "brandName": "NOW",
+  "upcSku": "7 33739 02921 8",
+  "hasOuterCarton": false,
+  "upcValid": true,
+  "status": "discontinued",
+  "discontinuedDate": "2015-08-24T00:00:00Z",
+  "offMarket": 1,
+  "servingsPerContainer": null,
+  "netContents": [
+    {
+      "order": 1,
+      "quantity": 60,
+      "unit": "Lozenge(s)",
+      "display": "60 Lozenge(s)"
+    }
+  ],
+  "targetGroups": [
+    "Adult (18 - 50 Years)",
+    "Gluten Free"
+  ],
+  "userGroups": [
+    {
+      "dailyValueTargetGroupName": "Adults and children 4 or more years of age",
+      "langualCode": "P0250",
+      "langualCodeDescription": "Adults and Children 4 years and above"
+    }
+  ],
+  "productType": {
+    "langualCode": "A1309",
+    "langualCodeDescription": "Non-Nutrient/Non-Botanical"
+  },
+  "physicalState": {
+    "langualCode": "E0174",
+    "langualCodeDescription": "Lozenge"
+  },
+  "imageUrl": "https://api.ods.od.nih.gov/dsld/s3/pdf/13946.pdf",
+  "images": [],
+  "contacts": [
+    {
+      "contactId": 3090,
+      "text": "Manufactured by",
+      "types": [
+        "Manufacturer"
+      ],
+      "contactDetails": {
+        "src": "01-raw/2025-03-25/data/contact_1.json",
+        "id": 3090,
+        "name": "NOW FOODS",
+        "streetAddress": "395 S. Glen Ellyn Rd.",
+        "city": "Bloomingdale",
+        "state": "IL",
+        "country": "",
+        "zipCode": "60108",
+        "phoneNumber": "",
+        "email": "",
+        "webAddress": "www.nowfoods.com"
+      }
+    }
+  ],
+  "events": [
+    {
+      "date": "2015-08-24",
+      "type": "Off Market"
+    },
+    {
+      "date": "2013-02-25",
+      "type": "Date entered into DSLD"
+    }
+  ],
+  "activeIngredients": [
+    {
+      "ingredientId": 55793,
+      "uniiCode": null,
+      "order": 1,
+      "raw_source_text": "BLIS K12 Streptococcus salivarius",
+      "branded_token_extracted": null,
+      "raw_source_path": "activeIngredients",
+      "normalized_key": "blis_k12_streptococcus_salivarius",
+      "name": "BLIS K12 Streptococcus salivarius",
+      "standardName": "Probiotics",
+      "ingredientGroup": "Streptococcus",
+      "quantity": 1000000000.0,
+      "unit": "CFU",
+      "dailyValue": null,
+      "quantityVariants": null,
+      "forms": [],
+      "alternateNames": [],
+      "mapped": true,
+      "proprietaryBlend": false,
+      "disclosureLevel": null,
+      "parentBlend": null,
+      "isNestedIngredient": false,
+      "nestedIngredients": [],
+      "hierarchyType": null
+    }
+  ],
+  "inactiveIngredients": [
+    {
+      "ingredientId": 38957,
+      "uniiCode": null,
+      "order": 1,
+      "raw_source_text": "FOS",
+      "raw_source_path": "inactiveIngredients",
+      "normalized_key": "fos",
+      "name": "FOS",
+      "standardName": "Prebiotics",
+      "ingredientGroup": "Fructo-Oligosaccharides",
+      "forms": [],
+      "alternateNames": [
+        "Fructooligosaccharides"
+      ],
+      "mapped": true,
+      "hierarchyType": null
+    },
+    {
+      "ingredientId": 34718,
+      "uniiCode": null,
+      "order": 2,
+      "raw_source_text": "Xylitol",
+      "raw_source_path": "inactiveIngredients",
+      "normalized_key": "xylitol",
+      "name": "Xylitol",
+      "standardName": "Sugar Alcohols (Polyols)",
+      "ingredientGroup": "Xylitol",
+      "forms": [],
+      "alternateNames": [],
+      "mapped": true,
+      "hierarchyType": null
+    },
+    {
+      "ingredientId": 3789,
+      "uniiCode": null,
+      "order": 3,
+      "raw_source_text": "Sorbitol",
+      "raw_source_path": "inactiveIngredients",
+      "normalized_key": "sorbitol",
+      "name": "Sorbitol",
+      "standardName": "sorbitol",
+      "ingredientGroup": "Sorbitol",
+      "forms": [],
+      "alternateNames": [],
+      "mapped": true,
+      "hierarchyType": null,
+      "isAdditive": true,
+      "additiveType": "sugar_alcohol"
+    },
+    {
+      "ingredientId": 9747,
+      "uniiCode": null,
+      "order": 4,
+      "raw_source_text": "Cellulose",
+      "raw_source_path": "inactiveIngredients",
+      "normalized_key": "cellulose",
+      "name": "Cellulose",
+      "standardName": "cellulose powder",
+      "ingredientGroup": "Cellulose",
+      "forms": [],
+      "alternateNames": [],
+      "mapped": true,
+      "hierarchyType": null,
+      "isAdditive": true,
+      "additiveType": "unspecified"
+    },
+    {
+      "ingredientId": 293311,
+      "uniiCode": "ETJ7Z6XBU4",
+      "order": 5,
+      "raw_source_text": "Silica",
+      "raw_source_path": "inactiveIngredients",
+      "normalized_key": "silica",
+      "name": "Silica",
+      "standardName": "Silica",
+      "ingredientGroup": "Silicon",
+      "forms": [],
+      "alternateNames": [],
+      "mapped": true,
+      "hierarchyType": null,
+      "isAdditive": true,
+      "additiveType": "unspecified"
+    },
+    {
+      "ingredientId": 285558,
+      "uniiCode": "4ELV7Z65AP",
+      "order": 6,
+      "raw_source_text": "Stearic Acid",
+      "raw_source_path": "inactiveIngredients",
+      "normalized_key": "stearic_acid",
+      "name": "Stearic Acid",
+      "standardName": "stearic acid",
+      "ingredientGroup": "Stearic Acid",
+      "forms": [],
+      "alternateNames": [
+        "C18:0"
+      ],
+      "mapped": true,
+      "hierarchyType": null,
+      "isAdditive": true,
+      "additiveType": "processing_aid"
+    },
+    {
+      "ingredientId": 4269,
+      "uniiCode": null,
+      "order": 7,
+      "raw_source_text": "natural Strawberry flavor",
+      "raw_source_path": "inactiveIngredients",
+      "normalized_key": "natural_strawberry_flavor",
+      "name": "natural Strawberry flavor",
+      "standardName": "natural strawberry flavor",
+      "ingredientGroup": "Strawberry",
+      "forms": [],
+      "alternateNames": [],
+      "mapped": true,
+      "hierarchyType": null,
+      "isAdditive": true,
+      "additiveType": "flavoring"
+    },
+    {
+      "ingredientId": 22479,
+      "uniiCode": null,
+      "order": 8,
+      "raw_source_text": "Beet powder",
+      "raw_source_path": "inactiveIngredients",
+      "normalized_key": "beet_powder",
+      "name": "Beet powder",
+      "standardName": "natural colors",
+      "ingredientGroup": "Beet",
+      "forms": [],
+      "alternateNames": [],
+      "mapped": true,
+      "hierarchyType": null,
+      "isAdditive": true,
+      "additiveType": "natural_colorant"
+    },
+    {
+      "ingredientId": 5018,
+      "uniiCode": null,
+      "order": 9,
+      "raw_source_text": "natural Vanilla flavor",
+      "raw_source_path": "inactiveIngredients",
+      "normalized_key": "natural_vanilla_flavor",
+      "name": "natural Vanilla flavor",
+      "standardName": "natural vanilla flavor",
+      "ingredientGroup": "Vanilla",
+      "forms": [],
+      "alternateNames": [],
+      "mapped": true,
+      "hierarchyType": null,
+      "isAdditive": true,
+      "additiveType": "flavoring"
+    }
+  ],
+  "nutritionalInfo": {},
+  "statements": [
+    {
+      "type": "General: Product/Version Code",
+      "notes": "CODE 2921 V2"
+    },
+    {
+      "type": "General Statements: All Other Content",
+      "notes": "Please Recycle."
+    },
+    {
+      "type": "General Statements: All Other Content",
+      "notes": "PROMOTES HEALTHY ORAL BACTERIA"
+    },
+    {
+      "type": "General Statements: All Other Content",
+      "notes": "\u2022 Supports Mouth and Throat Health\n\u2022 Reduces Bad Breath*"
+    },
+    {
+      "type": "FDA Statement of Identity",
+      "notes": "A Dietary Supplement"
+    },
+    {
+      "type": "Seals/Symbols",
+      "notes": "GMP QUALITY ASSURED"
+    },
+    {
+      "type": "General Statements: All Other Content",
+      "notes": "Made in the U.S.A."
+    },
+    {
+      "type": "Suggested/Recommended/Usage/Directions",
+      "notes": "SUGGESTED USAGE: As a dietary supplement, take 1 lozenge 1 to 4 times daily. Allow lozenge to dissolve slowly and completely in mouth and swallow. Consider taking this product in combination with NOW(R) Probiotic-10(TM), Olive Leaf Extract and XyliWhite(TM) Mouthwash."
+    },
+    {
+      "type": "Storage",
+      "notes": "Refrigerate after opening to maintain high potency."
+    },
+    {
+      "type": "Brand IP Statement(s) re: (c), (TM), (SM)",
+      "notes": "NOW(R) OralBiotic(TM) contains the naturally occurring probiotic organism Streptococcus salivarius BLIS K12(R), which has been clinically shown to support oral and throat health.\nAlthough it is not an antibiotic, OralBiotic(TM) BLIS K12(R) successfully colonizes the oral cavity at the expense of other bacteria, promoting oral health. It also helps to improve breath when used in conjunction with proper oral hygiene. Fructooligosaccharides (FOS) provide nutritional support for S. salivarius.*"
+    },
+    {
+      "type": "General Statements: All Other Content",
+      "notes": "ACTUAL\nSIZE"
+    },
+    {
+      "type": "Formula re: Contains",
+      "notes": "Contains milk derivative."
+    },
+    {
+      "type": "Formulation re: Does NOT Contain",
+      "notes": "Contains no salt, wheat, gluten, soy, egg, shellfish or preservatives."
+    },
+    {
+      "type": "General Statements: All Other Content",
+      "notes": "This product is formulated with 2 Billion Bacteria at time of manufacture."
+    },
+    {
+      "type": "Storage",
+      "notes": "Keep refrigerated to maintain live bacteria counts."
+    },
+    {
+      "type": "Brand IP Statement(s) re: (c), (TM), (SM)",
+      "notes": "BLIS K12(R) and the BLIS K12(R) logo are registered trademarks of BLIS Technologies."
+    },
+    {
+      "type": "Precautions re: All Other",
+      "notes": "Do Not Eat Freshness Packet. Keep in Bottle."
+    },
+    {
+      "type": "FDA Disclaimer Statement",
+      "notes": "*These statements have not been evaluated by the FDA. This product is not intended to diagnose, treat, cure or prevent any disease."
+    },
+    {
+      "type": "Seals/Symbols",
+      "notes": "BLIS K12(R)"
+    }
+  ],
+  "claims": [
+    {
+      "langualCode": "P0115",
+      "langualCodeDescription": "All Other"
+    },
+    {
+      "langualCode": "P0265",
+      "langualCodeDescription": "Structure/Function"
+    }
+  ],
+  "servingSizes": [
+    {
+      "minQuantity": 1.0,
+      "maxQuantity": 1.0,
+      "unit": "Lozenge(s)",
+      "minDailyServings": 1,
+      "maxDailyServings": 4,
+      "normalizedServing": 1.0
+    }
+  ],
+  "labelRelationships": [
+    {
+      "type": "Image difference, same product",
+      "labelId": 245611
+    },
+    {
+      "type": "Image difference, same product",
+      "labelId": 50358
+    },
+    {
+      "type": "Image difference, same product",
+      "labelId": 72471
+    },
+    {
+      "type": "Image difference, same product",
+      "labelId": 73857
+    },
+    {
+      "type": "Image difference, same product",
+      "labelId": 205775
+    }
+  ],
+  "labelText": {
+    "raw": "CODE 2921 V2 Please Recycle. PROMOTES HEALTHY ORAL BACTERIA \u2022 Supports Mouth and Throat Health\n\u2022 Reduces Bad Breath* A Dietary Supplement GMP QUALITY ASSURED Made in the U.S.A. SUGGESTED USAGE: As a dietary supplement, take 1 lozenge 1 to 4 times daily. Allow lozenge to dissolve slowly and completely in mouth and swallow. Consider taking this product in combination with NOW(R) Probiotic-10(TM), Olive Leaf Extract and XyliWhite(TM) Mouthwash. Refrigerate after opening to maintain high potency. NOW(R) OralBiotic(TM) contains the naturally occurring probiotic organism Streptococcus salivarius BLIS K12(R), which has been clinically shown to support oral and throat health.\nAlthough it is not an antibiotic, OralBiotic(TM) BLIS K12(R) successfully colonizes the oral cavity at the expense of other bacteria, promoting oral health. It also helps to improve breath when used in conjunction with proper oral hygiene. Fructooligosaccharides (FOS) provide nutritional support for S. salivarius.* ACTUAL\nSIZE Contains milk derivative. Contains no salt, wheat, gluten, soy, egg, shellfish or preservatives. This product is formulated with 2 Billion Bacteria at time of manufacture. Keep refrigerated to maintain live bacteria counts. BLIS K12(R) and the BLIS K12(R) logo are registered trademarks of BLIS Technologies. Do Not Eat Freshness Packet. Keep in Bottle. *These statements have not been evaluated by the FDA. This product is not intended to diagnose, treat, cure or prevent any disease. BLIS K12(R)",
+    "parsed": {
+      "certifications": [
+        "GMP-General"
+      ],
+      "testing": [],
+      "origin": [],
+      "flavor": [
+        "natural Strawberry flavor",
+        "natural Vanilla flavor"
+      ],
+      "probioticGuarantee": [],
+      "cleanLabelClaims": [
+        "Shellfish Free",
+        "No Wheat",
+        "Egg Free",
+        "No Preservatives",
+        "Gluten Free",
+        "No Salt",
+        "Soy Free"
+      ],
+      "allergens": [
+        "shellfish",
+        "milk",
+        "eggs",
+        "wheat",
+        "soy"
+      ],
+      "allergenFree": [
+        "shellfish",
+        "egg",
+        "gluten",
+        "wheat",
+        "soy"
+      ],
+      "warnings": [
+        "Contains: Wheat",
+        "Contains: Soy",
+        "Contains: Eggs",
+        "Contains: Shellfish",
+        "Contains: Milk"
+      ],
+      "storage": [
+        "Refrigerate after opening to maintain high potency.",
+        "Keep refrigerated to maintain live bacteria counts."
+      ],
+      "directions": "SUGGESTED USAGE: As a dietary supplement, take 1 lozenge 1 to 4 times daily. Allow lozenge to dissolve slowly and completely in mouth and swallow. Consider taking this product in combination with NOW(R) Probiotic-10(TM), Olive Leaf Extract and XyliWhite(TM) Mouthwash.",
+      "marketingClaims": [
+        "Supports Mouth and Throat Health"
+      ],
+      "qualityFeatures": [
+        "GMP certified",
+        "Patented probiotic strains"
+      ],
+      "proprietaryBlendDisclosure": null
+    },
+    "searchText": "BLIS K12 Streptococcus salivarius FOS Xylitol Sorbitol Cellulose Silica Stearic Acid natural Strawberry flavor Beet powder natural Vanilla flavor CODE 2921 V2 Please Recycle. PROMOTES HEALTHY ORAL BACTERIA \u2022 Supports Mouth and Throat Health\n\u2022 Reduces Bad Breath* A Dietary Supplement GMP QUALITY ASSURED Made in the U.S.A. SUGGESTED USAGE: As a dietary supplement, take 1 lozenge 1 to 4 times daily. Allow lozenge to dissolve slowly and completely in mouth and swallow. Consider taking this product in combination with NOW(R) Probiotic-10(TM), Olive Leaf Extract and XyliWhite(TM) Mouthwash. Refrigerate after opening to maintain high potency. NOW(R) OralBiotic(TM) contains the naturally occurring probiotic organism Streptococcus salivarius BLIS K12(R), which has been clinically shown to support oral and throat health.\nAlthough it is not an antibiotic, OralBiotic(TM) BLIS K12(R) successfully colonizes the oral cavity at the expense of other bacteria, promoting oral health. It also helps to improve breath when used in conjunction with proper oral hygiene. Fructooligosaccharides (FOS) provide nutritional support for S. salivarius.* ACTUAL\nSIZE Contains milk derivative. Contains no salt, wheat, gluten, soy, egg, shellfish or preservatives. This product is formulated with 2 Billion Bacteria at time of manufacture. Keep refrigerated to maintain live bacteria counts. BLIS K12(R) and the BLIS K12(R) logo are registered trademarks of BLIS Technologies. Do Not Eat Freshness Packet. Keep in Bottle. *These statements have not been evaluated by the FDA. This product is not intended to diagnose, treat, cure or prevent any disease. BLIS K12(R)"
+  },
+  "metadata": {
+    "lastCleaned": "2026-02-16T21:19:15.101779Z",
+    "cleaningVersion": "2.1.0",
+    "reference_versions": {
+      "color_indicators": {
+        "version": "2.0.0",
+        "last_updated": "2026-01-05"
+      }
+    },
+    "mappingStats": {
+      "totalIngredients": 10,
+      "mappedIngredients": 10,
+      "unmappedIngredients": 0,
+      "mappingRate": 100.0
+    },
+    "transparencyMetrics": {
+      "hasProprietaryBlend": false,
+      "blendTransparency": "full",
+      "disclosedIngredients": 1,
+      "undisclosedQuantities": 0,
+      "transparencyScore": 100.0
+    },
+    "completeness": {
+      "score": 100.0,
+      "missingFields": [],
+      "criticalFieldsComplete": true
+    }
+  }
+}

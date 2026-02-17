@@ -1,12 +1,12 @@
 {
-  "database_info": {
-    "version": "2.1.0",
-    "last_updated": "2026-01-05",
-    "description": "Clinically studied probiotic strains with documented efficacy in human RCTs - STRAIN-SPECIFIC only",
-    "purpose": "Award bonus points for products containing well-researched probiotic strains with strain-level clinical evidence",
-    "scoring_rule": "+2 if product contains any strain from this list",
-    "important_note": "Generic species names (e.g. 'L. acidophilus' without strain ID) are NOT included - probiotic benefits are strain-specific",
-    "total_strains": 42
+  "_metadata": {
+    "description": "Clinically relevant probiotic strains and prebiotic compounds",
+    "purpose": "probiotic_strain_validation",
+    "schema_version": "4.0.0",
+    "last_updated": "2026-02-16",
+    "total_entries": 42,
+    "data_source": null,
+    "version": "2.1.0"
   },
   "clinically_relevant_strains": [
     {
@@ -76,7 +76,13 @@
         "S. salivarius K12",
         "BLIS K12",
         "Streptococcus K12",
-        "K12"
+        "K12",
+        "BLIS K12 Streptococcus salivarius",
+        "BLIS K12 Streptococcus salivarius K12",
+        "Blis K12 Streptococcus salivarius",
+        "Streptococcus salivarius BLIS K-12",
+        "S. salivarius BLIS K-12",
+        "S. salivarius BLIS K12"
       ],
       "evidence_level": "high",
       "key_benefits": [
@@ -93,7 +99,11 @@
         "S. salivarius M18",
         "BLIS M18",
         "Streptococcus M18",
-        "M18"
+        "M18",
+        "Streptococcus salivarius BLIS M18",
+        "Streptococcus salivarius BLIS M-18",
+        "S. salivarius BLIS M18",
+        "S. salivarius BLIS M-18"
       ],
       "evidence_level": "high",
       "key_benefits": [
@@ -131,7 +141,6 @@
         "Bacillus coagulans MTCC-5856",
         "Bacillus coagulans MTCC5856",
         "LactoSpore",
-        "Lactospore",
         "B. coagulans LactoSpore",
         "Bacillus coagulans Lactospore MTCC5856",
         "Bacillus coagulans Lactospore"
@@ -402,9 +411,7 @@
       "standard_name": "Lactobacillus acidophilus LA-5",
       "aliases": [
         "L. acidophilus LA-5",
-        "L. acidophilus La-5",
         "LA-5",
-        "La-5",
         "Lactobacillus acidophilus La5",
         "L. acidophilus LA5"
       ],
@@ -514,7 +521,6 @@
       "aliases": [
         "B. lactis Bl-04",
         "Bl-04",
-        "BL-04",
         "HOWARU Bl-04",
         "Bifidobacterium animalis Bl-04",
         "Bifidobacterium animalis subsp. lactis Bl-04"
@@ -560,7 +566,7 @@
         "weight management",
         "waist circumference reduction"
       ],
-      "notable_studies": "RCT: 21.6 cm\u00b2 visceral fat reduction in high-dose group. Significant waist circumference reduction. Isolated from human breast milk. (Bioneer)"
+      "notable_studies": "RCT: 21.6 cm² visceral fat reduction in high-dose group. Significant waist circumference reduction. Isolated from human breast milk. (Bioneer)"
     },
     {
       "id": "STRAIN_FERMENTUM_ME3",
@@ -675,7 +681,6 @@
       "aliases": [
         "L. paracasei Lpc-37",
         "Lpc-37",
-        "LPC-37",
         "HOWARU Lpc-37",
         "Lacticaseibacillus paracasei Lpc-37"
       ],
@@ -773,8 +778,7 @@
           "FOS",
           "fructo-oligosaccharides",
           "oligofructose",
-          "Fructooligosaccharide",
-          "fructooligosaccharide"
+          "Fructooligosaccharide"
         ]
       },
       {

@@ -1,0 +1,27 @@
+2026-02-13 17:11:49 - dsld_cleaner - INFO - ============================================================
+2026-02-13 17:11:49 - dsld_cleaner - INFO - DSLD Data Cleaning Pipeline Starting
+2026-02-13 17:11:49 - dsld_cleaner - INFO - ============================================================
+2026-02-13 17:11:49 - dsld_cleaner - INFO - Started at: 2026-02-13 17:11:49
+2026-02-13 17:11:49 - dsld_cleaner - INFO - Validating configuration...
+2026-02-13 17:11:49 - dsld_cleaner - INFO - Configuration validation passed
+2026-02-13 17:12:10 - dsld_cleaner - INFO - ============================================================
+2026-02-13 17:12:10 - dsld_cleaner - INFO - PROCESSING COMPLETE
+2026-02-13 17:12:10 - dsld_cleaner - INFO - ============================================================
+2026-02-13 17:12:10 - dsld_cleaner - INFO - Ended at: 2026-02-13 17:12:10
+2026-02-13 17:12:10 - dsld_cleaner - INFO - Total duration: 0:00:20.833516
+2026-02-13 17:12:10 - dsld_cleaner - INFO - Files processed: 978
+2026-02-13 17:12:10 - dsld_cleaner - INFO - Success rate: 100.0%
+2026-02-13 17:12:10 - dsld_cleaner - INFO - 
+2026-02-13 17:12:10 - dsld_cleaner - INFO - Results:
+2026-02-13 17:12:10 - dsld_cleaner - INFO -   - Cleaned: 978
+2026-02-13 17:12:10 - dsld_cleaner - INFO -   - Needs review: 0
+2026-02-13 17:12:10 - dsld_cleaner - INFO -   - Incomplete: 0
+2026-02-13 17:12:10 - dsld_cleaner - INFO -   - Errors: 0
+2026-02-13 17:12:10 - dsld_cleaner - INFO -   - Unmapped ingredients: 2
+2026-02-13 17:12:10 - dsld_cleaner - INFO - 
+2026-02-13 17:12:10 - dsld_cleaner - INFO - Output files saved to:
+2026-02-13 17:12:10 - dsld_cleaner - INFO -   - Cleaned products: output_v30_reaudit/cleaned
+2026-02-13 17:12:10 - dsld_cleaner - INFO -   - Needs review: output_v30_reaudit/needs_review
+2026-02-13 17:12:10 - dsld_cleaner - INFO -   - Incomplete: output_v30_reaudit/incomplete
+2026-02-13 17:12:10 - dsld_cleaner - INFO -   - Unmapped ingredients: output_v30_reaudit/unmapped
+2026-02-13 17:12:10 - dsld_cleaner - INFO -   - Processing report: output_v30_reaudit/reports

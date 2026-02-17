@@ -116,17 +116,21 @@ class TestRealLabelCorpus:
     def test_label_matches_expected_ingredient(self, enricher, label_text, expected_key, should_match):
         """Test that label text matches the expected ingredient."""
         # Create a mock product with single ingredient
+        # Use correct field names expected by enricher (camelCase)
         product = {
+            "id": "TEST_001",
             "product_name": "Test Product",
-            "active_ingredients": [{"name": label_text, "amount": "100", "unit": "mg"}]
+            "activeIngredients": [{"name": label_text, "quantity": 100, "unit": "mg"}]
         }
 
-        # Run enrichment
-        enriched = enricher.enrich(product)
+        # Run enrichment (returns tuple of enriched_product, issues)
+        enriched, issues = enricher.enrich_product(product)
 
         # Check if expected ingredient was matched
-        matched_ingredients = enriched.get('enriched_active_ingredients', [])
-        matched_keys = [ing.get('matched_ingredient_key') for ing in matched_ingredients]
+        # Scorable ingredients are in ingredient_quality_data.ingredients_scorable
+        quality_data = enriched.get('ingredient_quality_data', {})
+        matched_ingredients = quality_data.get('ingredients_scorable', [])
+        matched_keys = [ing.get('canonical_id') for ing in matched_ingredients if ing.get('canonical_id')]
 
         if should_match:
             assert expected_key in matched_keys, (
@@ -142,14 +146,17 @@ class TestRealLabelCorpus:
     def test_no_double_matching_parent_child(self, enricher):
         """Curcumin should not also match turmeric in same label."""
         product = {
+            "id": "TEST_002",
             "product_name": "Curcumin Supplement",
-            "active_ingredients": [{"name": "Curcumin C3 Complex", "amount": "500", "unit": "mg"}]
+            "activeIngredients": [{"name": "Curcumin C3 Complex", "quantity": 500, "unit": "mg"}]
         }
 
-        enriched = enricher.enrich(product)
+        enriched, issues = enricher.enrich_product(product)
+        quality_data = enriched.get('ingredient_quality_data', {})
         matched_keys = [
-            ing.get('matched_ingredient_key')
-            for ing in enriched.get('enriched_active_ingredients', [])
+            ing.get('canonical_id')
+            for ing in quality_data.get('ingredients_scorable', [])
+            if ing.get('canonical_id')
         ]
 
         # Should match curcumin but NOT also turmeric
@@ -195,14 +202,17 @@ class TestCollisionAndSubstring:
             pytest.skip("No specific ingredient to test against")
 
         product = {
+            "id": "TEST_FP",
             "product_name": "Test Product",
-            "active_ingredients": [{"name": label_text, "amount": "100", "unit": "mg"}]
+            "activeIngredients": [{"name": label_text, "quantity": 100, "unit": "mg"}]
         }
 
-        enriched = enricher.enrich(product)
+        enriched, issues = enricher.enrich_product(product)
+        quality_data = enriched.get('ingredient_quality_data', {})
         matched_keys = [
-            ing.get('matched_ingredient_key')
-            for ing in enriched.get('enriched_active_ingredients', [])
+            ing.get('canonical_id')
+            for ing in quality_data.get('ingredients_scorable', [])
+            if ing.get('canonical_id')
         ]
 
         assert should_not_match not in matched_keys, (
@@ -223,14 +233,17 @@ class TestCollisionAndSubstring:
     def test_specific_matches_over_generic(self, enricher, label_text, should_match, should_not_match):
         """Test that specific ingredients match over generic categories."""
         product = {
+            "id": "TEST_PRIO",
             "product_name": "Test Product",
-            "active_ingredients": [{"name": label_text, "amount": "100", "unit": "mg"}]
+            "activeIngredients": [{"name": label_text, "quantity": 100, "unit": "mg"}]
         }
 
-        enriched = enricher.enrich(product)
+        enriched, issues = enricher.enrich_product(product)
+        quality_data = enriched.get('ingredient_quality_data', {})
         matched_keys = [
-            ing.get('matched_ingredient_key')
-            for ing in enriched.get('enriched_active_ingredients', [])
+            ing.get('canonical_id')
+            for ing in quality_data.get('ingredients_scorable', [])
+            if ing.get('canonical_id')
         ]
 
         # Check specific match happened
@@ -271,15 +284,18 @@ class TestDeterministicMatching:
         """Run same label 3 times, results should be identical."""
         results = []
 
-        for _ in range(3):
+        for i in range(3):
             product = {
+                "id": f"TEST_DET_{i}",
                 "product_name": "Test Product",
-                "active_ingredients": [{"name": label_text, "amount": "100", "unit": "mg"}]
+                "activeIngredients": [{"name": label_text, "quantity": 100, "unit": "mg"}]
             }
-            enriched = enricher.enrich(product)
+            enriched, issues = enricher.enrich_product(product)
+            quality_data = enriched.get('ingredient_quality_data', {})
             matched_keys = tuple(sorted([
-                ing.get('matched_ingredient_key', '')
-                for ing in enriched.get('enriched_active_ingredients', [])
+                ing.get('canonical_id', '')
+                for ing in quality_data.get('ingredients_scorable', [])
+                if ing.get('canonical_id')
             ]))
             results.append(matched_keys)
 
@@ -345,3 +361,187 @@ class TestAliasResolution:
             f"Alias '{alias}' found in multiple ingredients: {unique_found}\n"
             f"Expected only: {expected_key}"
         )
+
+
+# =============================================================================
+# MULTI-FORM MATCHING TESTS
+# =============================================================================
+
+class TestMultiFormMatching:
+    """
+    Tests for multi-form ingredient matching with weighted averaging.
+
+    These tests verify the contract for handling complex labels like:
+    - "Vitamin B12 (as adenosylcobalamin and methylcobalamin)"
+    - "Vitamin A (as retinyl palmitate and 50% B-carotene)"
+    - "Folate (as MAGNAFOLATE® PRO methylfolate [L-5-MTHF Ca])"
+    """
+
+    def test_dual_form_uses_average_not_first_only(self, enricher):
+        """
+        B12 (adenosyl + methyl) should use average of both forms, not first-only.
+
+        Contract: When multiple forms are specified without explicit percentages,
+        use equal-weight average of all matched forms' bio_scores.
+        """
+        label = "Vitamin B12 (as adenosylcobalamin and methylcobalamin)"
+
+        product = {
+            "id": "TEST_DUAL",
+            "product_name": "Test Dual Form B12",
+            "activeIngredients": [{"name": label, "quantity": 1000, "unit": "mcg"}]
+        }
+
+        enriched, issues = enricher.enrich_product(product)
+        quality_data = enriched.get('ingredient_quality_data', {})
+        scorable = quality_data.get('ingredients_scorable', [])
+
+        assert len(scorable) >= 1, "Should have at least one scorable ingredient"
+
+        # Find the B12 entry
+        b12_entry = None
+        for ing in scorable:
+            if ing.get('canonical_id') == 'vitamin_b12_cobalamin':
+                b12_entry = ing
+                break
+
+        assert b12_entry is not None, "Should match vitamin_b12_cobalamin"
+
+        # Verify multi-form contract
+        assert b12_entry.get('form_extraction_used') == True, "Should use form extraction"
+        assert b12_entry.get('is_dual_form') == True, "Should be marked as dual form"
+
+        matched_forms = b12_entry.get('matched_forms', [])
+        assert len(matched_forms) == 2, f"Should match both forms, got {len(matched_forms)}"
+
+        # Both adenosylcobalamin and methylcobalamin have bio_score 14
+        # Average should be 14.0
+        bio_score = b12_entry.get('bio_score')
+        assert bio_score == 14.0, f"Expected bio_score 14.0 (average), got {bio_score}"
+
+        # Verify aggregation method
+        assert b12_entry.get('aggregation_method') == 'equal', \
+            "Should use equal aggregation for dual forms without explicit percentages"
+
+    def test_percent_share_applies_weighting(self, enricher):
+        """
+        Vitamin A (retinyl palmitate and 50% B-carotene) should apply percentage weighting.
+
+        Contract: When explicit percentages are provided (e.g., "50%"), use weighted
+        average. Remaining percentage goes to forms without explicit percentages.
+        """
+        label = "Vitamin A (as retinyl palmitate and 50% B-carotene)"
+
+        product = {
+            "id": "TEST_WEIGHTED",
+            "product_name": "Test Weighted Vitamin A",
+            "activeIngredients": [{"name": label, "quantity": 5000, "unit": "IU"}]
+        }
+
+        enriched, issues = enricher.enrich_product(product)
+        quality_data = enriched.get('ingredient_quality_data', {})
+        scorable = quality_data.get('ingredients_scorable', [])
+
+        assert len(scorable) >= 1, "Should have at least one scorable ingredient"
+
+        # Find the Vitamin A entry
+        vit_a_entry = None
+        for ing in scorable:
+            if ing.get('canonical_id') == 'vitamin_a':
+                vit_a_entry = ing
+                break
+
+        assert vit_a_entry is not None, "Should match vitamin_a"
+
+        # Verify multi-form contract
+        assert vit_a_entry.get('form_extraction_used') == True, "Should use form extraction"
+        assert vit_a_entry.get('is_dual_form') == True, "Should be marked as dual form"
+
+        matched_forms = vit_a_entry.get('matched_forms', [])
+        assert len(matched_forms) == 2, f"Should match both forms, got {len(matched_forms)}"
+
+        # retinyl palmitate: bio_score 14, share 0.50
+        # B-carotene: bio_score 12, share 0.50
+        # Weighted average: (14 * 0.5 + 12 * 0.5) / 1.0 = 13.0
+        bio_score = vit_a_entry.get('bio_score')
+        assert bio_score == 13.0, f"Expected weighted bio_score 13.0, got {bio_score}"
+
+        # Verify shares were parsed correctly
+        for mf in matched_forms:
+            assert mf.get('percent_share') == 0.5, \
+                f"Each form should have 50% share, got {mf.get('percent_share')}"
+
+    def test_bracket_token_preserved_for_matching(self, enricher):
+        """
+        Folate (... [L-5-MTHF Ca]) should match correctly even with complex brackets.
+
+        Contract: Bracket tokens like [L-5-MTHF Ca], [P-5-P], [D3] are valuable
+        matching signals and must be preserved as match candidates, not stripped.
+        """
+        label = "Folate [Vitamin B9] (as MAGNAFOLATE® PRO methylfolate [L-5-MTHF Ca])"
+
+        product = {
+            "id": "TEST_BRACKET",
+            "product_name": "Test Bracket Folate",
+            "activeIngredients": [{"name": label, "quantity": 400, "unit": "mcg DFE"}]
+        }
+
+        enriched, issues = enricher.enrich_product(product)
+        quality_data = enriched.get('ingredient_quality_data', {})
+        scorable = quality_data.get('ingredients_scorable', [])
+
+        assert len(scorable) >= 1, "Should have at least one scorable ingredient"
+
+        # Find the Folate entry
+        folate_entry = None
+        for ing in scorable:
+            if ing.get('canonical_id') == 'vitamin_b9_folate':
+                folate_entry = ing
+                break
+
+        assert folate_entry is not None, "Should match vitamin_b9_folate"
+
+        # Verify form extraction captured bracket tokens
+        assert folate_entry.get('form_extraction_used') == True, "Should use form extraction"
+
+        # Should match to the 5-MTHF form (bio_score 13)
+        form_id = folate_entry.get('form_id')
+        assert '5-MTHF' in form_id or 'methylfolate' in form_id.lower(), \
+            f"Should match 5-MTHF form, got {form_id}"
+
+        bio_score = folate_entry.get('bio_score')
+        assert bio_score == 13.0, f"Expected bio_score 13.0 for 5-MTHF form, got {bio_score}"
+
+        # Verify the extracted_forms captured the bracket token
+        extracted = folate_entry.get('extracted_forms', [])
+        if extracted:
+            # Check that L-5-MTHF Ca was captured as a match candidate
+            all_candidates = []
+            for ef in extracted:
+                all_candidates.extend(ef.get('match_candidates', []))
+
+            bracket_found = any('L-5-MTHF' in c or 'L5MTHF' in c for c in all_candidates)
+            assert bracket_found, \
+                f"Bracket token 'L-5-MTHF Ca' should be in match candidates: {all_candidates}"
+
+    def test_form_unmapped_when_evidence_but_no_match(self, enricher):
+        """
+        If form evidence exists but mapping fails, status should be FORM_UNMAPPED.
+
+        Contract: Don't fall back to "unspecified" if the label explicitly provides
+        form information that we couldn't match. Mark as FORM_UNMAPPED for database
+        expansion tracking.
+        """
+        # Use a fake form that won't match anything
+        label = "Vitamin X (as totally_fake_form_xyz123)"
+
+        quality_map = enricher.databases.get('ingredient_quality_map', {})
+        result = enricher._match_quality_map(label, label, quality_map)
+
+        # Should return FORM_UNMAPPED, not None or unspecified match
+        assert result is not None, "Should return result (not None)"
+        assert result.get('match_status') == 'FORM_UNMAPPED', \
+            f"Should be FORM_UNMAPPED when form evidence exists but no match, got {result.get('match_status')}"
+        assert result.get('has_form_evidence') == True, "Should flag form evidence exists"
+        assert 'totally_fake_form_xyz123' in str(result.get('unmapped_forms', [])), \
+            "Should include unmapped form in result"

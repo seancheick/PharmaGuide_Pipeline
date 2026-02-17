@@ -1,0 +1,28 @@
+{
+  "processing_info": {
+    "scoring_version": "3.0.1",
+    "files_processed": 2,
+    "duration_seconds": 0.81,
+    "timestamp": "2026-02-17T02:52:01.350391+00:00"
+  },
+  "stats": {
+    "total_products": 978,
+    "average_score_80": 41.45,
+    "average_score_100": 51.81,
+    "verdict_distribution": {
+      "SAFE": 735,
+      "UNSAFE": 15,
+      "POOR": 137,
+      "CAUTION": 90,
+      "NOT_SCORED": 1
+    }
+  },
+  "scoring_rules": {
+    "max_section_A": 25,
+    "max_section_B": 35,
+    "max_section_C": 15,
+    "max_section_D": 5,
+    "max_total": 80,
+    "fit_score_location": "client-side only"
+  }
+}

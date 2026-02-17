@@ -221,11 +221,6 @@ class DSLDValidator:
         return level in SEVERITY_LEVELS or level is None
     
     @staticmethod
-    def validate_risk_level(level: Optional[str]) -> bool:
-        """Validate risk level is from allowed values"""
-        return level in RISK_LEVELS or level is None
-    
-    @staticmethod
     def validate_harmful_category(category: Optional[str]) -> bool:
         """Validate harmful category is from allowed values"""
         return category in HARMFUL_CATEGORIES or category is None
@@ -292,25 +287,3 @@ class DSLDValidator:
             errors.append("status must be 'active' or 'discontinued'")
             
         return errors
-
-
-def check_completeness(product_data: Dict[str, Any]) -> Dict[str, Any]:
-    """
-    Quick completeness check for a product
-    
-    Args:
-        product_data: Product data to check
-        
-    Returns:
-        Completeness details
-    """
-    validator = DSLDValidator()
-    status, missing_fields, details = validator.validate_product(product_data)
-    
-    return {
-        "status": status,
-        "missing_fields": missing_fields,
-        "completeness_score": details.get("completeness_score", 0),
-        "critical_fields_complete": details.get("critical_fields_complete", False),
-        "issues": details.get("data_quality_issues", [])
-    }

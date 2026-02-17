@@ -8,8 +8,8 @@ import pytest
 import sys
 import os
 
-# Add parent directory to path for imports
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
+# Add parent directory to path for imports (normalized to avoid ".." in __file__)
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from enrichment_contract_validator import EnrichmentContractValidator, ContractViolation
 
@@ -431,21 +431,29 @@ class TestValidatorUtilities:
 
     def test_validate_batch(self, validator):
         """Test batch validation"""
+        # Products need match_ledger to avoid G.1 warning
+        valid_ledger = {
+            "domains": {},
+            "summary": {"total_entities": 0, "total_matched": 0, "coverage_percent": 0}
+        }
         products = [
             {
                 "id": "valid_1",
                 "dietary_sensitivity_data": {},
-                "serving_basis": {"canonical_serving_size_quantity": 2}
+                "serving_basis": {"canonical_serving_size_quantity": 2},
+                "match_ledger": valid_ledger
             },
             {
                 "id": "invalid_1",
                 "dietary_sensitivity_data": {"sugar": {"amount_g": 4, "contains_sugar": False}},
-                "serving_basis": {"canonical_serving_size_quantity": 2}
+                "serving_basis": {"canonical_serving_size_quantity": 2},
+                "match_ledger": valid_ledger
             },
             {
                 "id": "valid_2",
                 "dietary_sensitivity_data": {},
-                "serving_basis": {"canonical_serving_size_quantity": 2}
+                "serving_basis": {"canonical_serving_size_quantity": 2},
+                "match_ledger": valid_ledger
             }
         ]
 
@@ -475,6 +483,302 @@ class TestValidatorUtilities:
         assert result["product_id"] == "test_123"
         assert result["expected"] == True
         assert result["actual"] == False
+
+
+class TestProvenanceIntegrityContract:
+    """Rule F: Provenance integrity validation"""
+
+    @pytest.fixture
+    def validator(self):
+        return EnrichmentContractValidator()
+
+    def test_F1_matched_ingredient_missing_raw_source_text(self, validator):
+        """F.1: Matched ingredient missing raw_source_text triggers error"""
+        product = {
+            "id": "test_provenance_1",
+            "activeIngredients": [
+                {
+                    "name": "Vitamin C",
+                    "canonical_id": "ING_VITAMIN_C",  # Has canonical_id = matched
+                    # Missing raw_source_text - VIOLATION
+                    "normalized_key": "vitamin_c"
+                }
+            ]
+        }
+
+        violations = validator.validate(product)
+        rule_violations = [v for v in violations if v.rule == "F.1"]
+
+        assert len(rule_violations) == 1
+        assert rule_violations[0].severity == "error"
+        assert "raw_source_text" in rule_violations[0].message
+
+    def test_F2_matched_ingredient_missing_normalized_key(self, validator):
+        """F.2: Matched ingredient missing normalized_key triggers error"""
+        product = {
+            "id": "test_provenance_2",
+            "activeIngredients": [
+                {
+                    "name": "Vitamin D",
+                    "db_id": "ING_VITAMIN_D",  # Has db_id = matched
+                    "raw_source_text": "Vitamin D3"
+                    # Missing normalized_key - VIOLATION
+                }
+            ]
+        }
+
+        violations = validator.validate(product)
+        rule_violations = [v for v in violations if v.rule == "F.2"]
+
+        assert len(rule_violations) == 1
+        assert rule_violations[0].severity == "error"
+        assert "normalized_key" in rule_violations[0].message
+
+    def test_F3_ledger_matched_without_canonical_id(self, validator):
+        """F.3: Ledger entry marked 'matched' but missing canonical_id"""
+        product = {
+            "id": "test_provenance_3",
+            "match_ledger": {
+                "domains": {
+                    "ingredients": {
+                        "total_raw": 1,
+                        "matched": 1,
+                        "unmatched": 0,
+                        "entries": [
+                            {
+                                "raw_source_text": "Vitamin C",
+                                "decision": "matched",
+                                "canonical_id": None  # VIOLATION
+                            }
+                        ]
+                    }
+                },
+                "summary": {
+                    "total_entities": 1,
+                    "total_matched": 1,
+                    "coverage_percent": 100.0
+                }
+            }
+        }
+
+        violations = validator.validate(product)
+        rule_violations = [v for v in violations if v.rule == "F.3"]
+
+        assert len(rule_violations) == 1
+        assert "canonical_id" in rule_violations[0].message
+
+    def test_F_valid_provenance_no_violations(self, validator):
+        """Valid provenance fields should not trigger violations"""
+        product = {
+            "id": "test_provenance_valid",
+            "activeIngredients": [
+                {
+                    "name": "Vitamin C",
+                    "canonical_id": "ING_VITAMIN_C",
+                    "raw_source_text": "Vitamin C (Ascorbic Acid)",
+                    "normalized_key": "vitamin_c_ascorbic_acid"
+                }
+            ],
+            "inactiveIngredients": [
+                {
+                    "name": "Cellulose",
+                    "db_id": "ING_CELLULOSE",
+                    "raw_source_text": "Microcrystalline Cellulose",
+                    "normalized_key": "microcrystalline_cellulose"
+                }
+            ],
+            "match_ledger": {
+                "domains": {
+                    "ingredients": {
+                        "total_raw": 2,
+                        "matched": 2,
+                        "unmatched": 0,
+                        "entries": [
+                            {
+                                "raw_source_text": "Vitamin C (Ascorbic Acid)",
+                                "decision": "matched",
+                                "canonical_id": "ING_VITAMIN_C"
+                            },
+                            {
+                                "raw_source_text": "Microcrystalline Cellulose",
+                                "decision": "matched",
+                                "canonical_id": "ING_CELLULOSE"
+                            }
+                        ]
+                    }
+                },
+                "summary": {
+                    "total_entities": 2,
+                    "total_matched": 2,
+                    "coverage_percent": 100.0
+                }
+            }
+        }
+
+        violations = validator.validate(product)
+        rule_violations = [v for v in violations if v.rule.startswith("F.")]
+
+        assert len(rule_violations) == 0
+
+    def test_F_unmatched_ingredient_no_provenance_ok(self, validator):
+        """Unmatched ingredients (no canonical_id) don't require provenance"""
+        product = {
+            "id": "test_provenance_unmatched",
+            "activeIngredients": [
+                {
+                    "name": "Mystery Extract",
+                    # No canonical_id/db_id = unmatched, so no provenance required
+                }
+            ]
+        }
+
+        violations = validator.validate(product)
+        rule_violations = [v for v in violations if v.rule.startswith("F.")]
+
+        assert len(rule_violations) == 0
+
+
+class TestMatchLedgerConsistencyContract:
+    """Rule G: Match ledger consistency validation"""
+
+    @pytest.fixture
+    def validator(self):
+        return EnrichmentContractValidator()
+
+    def test_G1_missing_match_ledger_warning(self, validator):
+        """G.1: Missing match_ledger triggers warning"""
+        product = {
+            "id": "test_ledger_1"
+            # No match_ledger - VIOLATION (warning)
+        }
+
+        violations = validator.validate(product)
+        rule_violations = [v for v in violations if v.rule == "G.1"]
+
+        assert len(rule_violations) == 1
+        assert rule_violations[0].severity == "warning"
+
+    def test_G2a_summary_total_mismatch(self, validator):
+        """G.2a: summary.total_entities != sum of domain totals"""
+        product = {
+            "id": "test_ledger_2",
+            "match_ledger": {
+                "domains": {
+                    "ingredients": {"total_raw": 5, "matched": 4, "unmatched": 1},
+                    "additives": {"total_raw": 2, "matched": 2, "unmatched": 0}
+                },
+                "summary": {
+                    "total_entities": 10,  # Should be 7 - VIOLATION
+                    "total_matched": 6,
+                    "coverage_percent": 85.7
+                }
+            }
+        }
+
+        violations = validator.validate(product)
+        rule_violations = [v for v in violations if v.rule == "G.2a"]
+
+        assert len(rule_violations) == 1
+        assert "total_entities" in rule_violations[0].message
+
+    def test_G2b_summary_matched_mismatch(self, validator):
+        """G.2b: summary.total_matched != sum of domain matched"""
+        product = {
+            "id": "test_ledger_3",
+            "match_ledger": {
+                "domains": {
+                    "ingredients": {"total_raw": 5, "matched": 4, "unmatched": 1},
+                    "additives": {"total_raw": 2, "matched": 2, "unmatched": 0}
+                },
+                "summary": {
+                    "total_entities": 7,
+                    "total_matched": 10,  # Should be 6 - VIOLATION
+                    "coverage_percent": 85.7
+                }
+            }
+        }
+
+        violations = validator.validate(product)
+        rule_violations = [v for v in violations if v.rule == "G.2b"]
+
+        assert len(rule_violations) == 1
+        assert "total_matched" in rule_violations[0].message
+
+    def test_G3_unmatched_list_count_mismatch(self, validator):
+        """G.3: unmatched_* list count != ledger unmatched count"""
+        product = {
+            "id": "test_ledger_4",
+            "match_ledger": {
+                "domains": {
+                    "ingredients": {"total_raw": 5, "matched": 4, "unmatched": 1}
+                },
+                "summary": {
+                    "total_entities": 5,
+                    "total_matched": 4,
+                    "coverage_percent": 80.0
+                }
+            },
+            "unmatched_ingredients": [
+                {"raw_source_text": "Mystery 1"},
+                {"raw_source_text": "Mystery 2"},
+                {"raw_source_text": "Mystery 3"}
+                # 3 items but ledger says 1 - VIOLATION
+            ]
+        }
+
+        violations = validator.validate(product)
+        rule_violations = [v for v in violations if v.rule == "G.3"]
+
+        assert len(rule_violations) == 1
+        assert "unmatched_ingredients" in rule_violations[0].message
+
+    def test_G4_coverage_percent_calculation_error(self, validator):
+        """G.4: coverage_percent != calculated value"""
+        product = {
+            "id": "test_ledger_5",
+            "match_ledger": {
+                "domains": {
+                    "ingredients": {"total_raw": 10, "matched": 8, "unmatched": 2}
+                },
+                "summary": {
+                    "total_entities": 10,
+                    "total_matched": 8,
+                    "coverage_percent": 90.0  # Should be 80.0 - VIOLATION
+                }
+            }
+        }
+
+        violations = validator.validate(product)
+        rule_violations = [v for v in violations if v.rule == "G.4"]
+
+        assert len(rule_violations) == 1
+        assert "coverage_percent" in rule_violations[0].message
+
+    def test_G_valid_ledger_no_violations(self, validator):
+        """Valid match ledger should not trigger violations"""
+        product = {
+            "id": "test_ledger_valid",
+            "match_ledger": {
+                "domains": {
+                    "ingredients": {"total_raw": 5, "matched": 4, "unmatched": 1},
+                    "additives": {"total_raw": 2, "matched": 2, "unmatched": 0},
+                    "allergens": {"total_raw": 1, "matched": 1, "unmatched": 0}
+                },
+                "summary": {
+                    "total_entities": 8,
+                    "total_matched": 7,
+                    "coverage_percent": 87.5
+                }
+            },
+            "unmatched_ingredients": [{"raw_source_text": "Mystery Extract"}],
+            "unmatched_additives": [],
+            "unmatched_allergens": []
+        }
+
+        violations = validator.validate(product)
+        rule_violations = [v for v in violations if v.rule.startswith("G.")]
+
+        assert len(rule_violations) == 0
 
 
 if __name__ == "__main__":

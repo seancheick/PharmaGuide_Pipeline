@@ -1,0 +1,8 @@
+2026-01-09 11:37:45,102 - INFO - === Batch 38 Processing Log ===
+2026-01-09 11:37:45,102 - INFO - Started: 2026-01-09 11:37:45
+2026-01-09 11:37:45,102 - INFO - Memory usage: 57.8MB
+2026-01-09 11:37:45,102 - INFO - Files: 77067.json to 81840.json
+2026-01-09 11:38:02,579 - INFO - Ended: 2026-01-09 11:38:02
+2026-01-09 11:38:02,579 - INFO - Summary: {'batch_num': 38, 'processed': 500, 'cleaned': 500, 'needs_review': 0, 'incomplete': 0, 'errors': 0, 'processing_time': 17.47689414024353, 'avg_time_per_file': 0.034953788280487064, 'memory_mb': 48.515625}
+2026-01-09 11:38:02,579 - INFO - Unmapped ingredients: 137
+2026-01-09 11:38:02,579 - INFO - Final memory usage: 48.5MB

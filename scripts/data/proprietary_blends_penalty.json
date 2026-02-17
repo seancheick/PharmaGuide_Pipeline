@@ -1,9 +1,11 @@
 {
-  "database_info": {
-    "version": "2.0.2",
-    "last_updated": "2025-07-24",
-    "max_penalty_points": 10,
-    "penalty_policy": "Only one penalty applied per proprietary blend instance: no disclosure (-10) or partial disclosure (-5)."
+  "_metadata": {
+    "description": "Proprietary blend penalty rules for supplement scoring",
+    "purpose": "blend_penalty_scoring",
+    "schema_version": "4.0.0",
+    "last_updated": "2026-02-16",
+    "total_entries": 18,
+    "scoring_rules": null
   },
   "proprietary_blend_concerns": [
     {
@@ -54,7 +56,10 @@
         }
       ],
       "notes": "Stimulant blends often hide dangerous stimulant combinations. Avoid products with undisclosed stimulant amounts.",
-      "last_updated": "2025-07-24"
+      "last_updated": "2025-07-24",
+      "aliases": null,
+      "category": null,
+      "penalty_levels": null
     },
     {
       "id": "BLEND_TESTOSTERONE",
@@ -95,7 +100,10 @@
         }
       ],
       "notes": "High risk for contamination with banned anabolic agents. Many muscle-building supplements contain undeclared steroids.",
-      "last_updated": "2025-07-24"
+      "last_updated": "2025-07-24",
+      "aliases": null,
+      "category": null,
+      "penalty_levels": null
     },
     {
       "id": "BLEND_WEIGHT_LOSS",
@@ -138,7 +146,10 @@
         }
       ],
       "notes": "A significant portion of weight loss supplements contain undeclared drugs. Sibutramine is a common adulterant.",
-      "last_updated": "2025-07-24"
+      "last_updated": "2025-07-24",
+      "aliases": null,
+      "category": null,
+      "penalty_levels": null
     },
     {
       "id": "BLEND_NOOTROPIC",
@@ -180,7 +191,10 @@
         }
       ],
       "notes": "Increasing contamination of cognitive blends with pharmaceutical nootropics such as modafinil and racetams.",
-      "last_updated": "2025-07-24"
+      "last_updated": "2025-07-24",
+      "aliases": null,
+      "category": null,
+      "penalty_levels": null
     },
     {
       "id": "BLEND_PUMP",
@@ -214,7 +228,10 @@
         }
       ],
       "notes": "‘Pump’ blends often combine nitrates, sodium, and amino acids for effect, often without full labeling.",
-      "last_updated": "2025-07-24"
+      "last_updated": "2025-07-24",
+      "aliases": null,
+      "category": null,
+      "penalty_levels": null
     },
     {
       "id": "BLEND_ADAPTOGEN",
@@ -253,7 +270,10 @@
         }
       ],
       "notes": "Stress/adaptogen blends frequently use proprietary ratios of ashwagandha, rhodiola, etc., which can lead to unpredictable effects if not disclosed.",
-      "last_updated": "2025-07-24"
+      "last_updated": "2025-07-24",
+      "aliases": null,
+      "category": null,
+      "penalty_levels": null
     },
     {
       "id": "BLEND_GENERAL",
@@ -314,7 +334,10 @@
         }
       ],
       "notes": "General proprietary blends hide ingredient amounts, making it impossible to fully assess safety or effectiveness.",
-      "last_updated": "2025-07-24"
+      "last_updated": "2025-07-24",
+      "aliases": null,
+      "category": null,
+      "penalty_levels": null
     },
     {
       "id": "BLEND_BEAUTY",
@@ -348,7 +371,10 @@
         }
       ],
       "notes": "Beauty blends often mix peptides, botanicals and vitamins which require full transparency for safety.",
-      "last_updated": "2025-07-24"
+      "last_updated": "2025-07-24",
+      "aliases": null,
+      "category": null,
+      "penalty_levels": null
     },
     {
       "id": "BLEND_SUPERFOOD",
@@ -415,7 +441,10 @@
         }
       ],
       "notes": "Superfood blends frequently have vague, undefined ingredient quantities leading to transparency concerns.",
-      "last_updated": "2025-07-24"
+      "last_updated": "2025-07-24",
+      "aliases": null,
+      "category": null,
+      "penalty_levels": null
     },
     {
       "id": "BLEND_PROBIOTIC",
@@ -462,7 +491,10 @@
         }
       ],
       "notes": "Probiotic blends require strain-specific CFU disclosure to properly assess efficacy.",
-      "last_updated": "2025-07-24"
+      "last_updated": "2025-07-24",
+      "aliases": null,
+      "category": null,
+      "penalty_levels": null
     },
     {
       "id": "BLEND_HYDRATION",
@@ -503,7 +535,10 @@
         }
       ],
       "notes": "Hydration blends may hide excessive electrolytes or stimulants without proper dosage disclosure.",
-      "last_updated": "2025-07-24"
+      "last_updated": "2025-07-24",
+      "aliases": null,
+      "category": null,
+      "penalty_levels": null
     },
     {
       "id": "BLEND_TRADEMARK",
@@ -534,7 +569,10 @@
         }
       ],
       "notes": "Trademarked proprietary formulas deserve scrutiny as they often mask true composition.",
-      "last_updated": "2025-07-24"
+      "last_updated": "2025-07-24",
+      "aliases": null,
+      "category": null,
+      "penalty_levels": null
     },
     {
       "id": "BLEND_DELIVERY",
@@ -574,7 +612,10 @@
         }
       ],
       "notes": "Delivery technology blends often contain undisclosed excipients, binders, and processing aids that should be transparent.",
-      "last_updated": "2025-08-13"
+      "last_updated": "2025-08-13",
+      "aliases": null,
+      "category": null,
+      "penalty_levels": null
     },
     {
       "standard_name": "Immune Health Blend",
@@ -598,7 +639,11 @@
       ],
       "notes": "Health support blends should disclose all active ingredients and their amounts for proper immune system evaluation.",
       "last_updated": "2025-08-15",
-      "id": "immune_health_blend"
+      "id": "immune_health_blend",
+      "penalties": null,
+      "red_flag_terms": null,
+      "risk_factors": null,
+      "severity_level": "moderate"
     },
     {
       "standard_name": "Hormone Support Blend",
@@ -622,7 +667,11 @@
       ],
       "notes": "Hormone support blends require full disclosure due to potential for significant physiological effects and drug interactions.",
       "last_updated": "2025-08-15",
-      "id": "hormone_support_blend"
+      "id": "hormone_support_blend",
+      "penalties": null,
+      "red_flag_terms": null,
+      "risk_factors": null,
+      "severity_level": "critical"
     },
     {
       "standard_name": "Concentrated Enzyme Formula",
@@ -646,7 +695,11 @@
       ],
       "notes": "Enzyme formulas should disclose specific enzymes and their activity levels for proper digestive support evaluation.",
       "last_updated": "2025-08-15",
-      "id": "concentrated_enzyme_formula"
+      "id": "concentrated_enzyme_formula",
+      "penalties": null,
+      "red_flag_terms": null,
+      "risk_factors": null,
+      "severity_level": "moderate"
     },
     {
       "id": "BLEND_ENZYMAX",
@@ -676,7 +729,10 @@
         }
       ],
       "notes": "Enzymax is a proprietary digestive enzyme blend that lacks transparency in enzyme composition and activity levels, making it difficult to assess digestive support effectiveness.",
-      "last_updated": "2025-09-20"
+      "last_updated": "2025-09-20",
+      "aliases": null,
+      "category": null,
+      "penalty_levels": null
     },
     {
       "id": "BLEND_ACID_COMFORT",
@@ -707,14 +763,10 @@
         }
       ],
       "notes": "Acid Comfort is a proprietary digestive blend typically containing herbal extracts for acid relief and digestive comfort, but lacks transparency in ingredient composition and dosing.",
-      "last_updated": "2025-09-21"
+      "last_updated": "2025-09-21",
+      "aliases": null,
+      "category": null,
+      "penalty_levels": null
     }
-  ],
-  "_metadata": {
-    "description": "Proprietary blend penalties for undisclosed ingredient amounts",
-    "purpose": "transparency_penalties",
-    "total_entries": 0,
-    "schema_version": "1.0",
-    "last_updated": "2025-11-14"
-  }
+  ]
 }

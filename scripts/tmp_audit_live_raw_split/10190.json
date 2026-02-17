@@ -1,0 +1,600 @@
+{
+  "id": "10190",
+  "src": "01-raw/2025-03-25/data/label_22.json",
+  "nhanesId": "",
+  "bundleName": "",
+  "brandIpSymbol": "none",
+  "productVersionCode": "Not Present",
+  "pdf": "",
+  "thumbnail": "",
+  "percentDvFootnote": "Not Present",
+  "fullName": "Anatabloc",
+  "brandName": "Rock Creek Pharmaceuticals",
+  "upcSku": "8 57979 00208 1",
+  "hasOuterCarton": false,
+  "upcValid": true,
+  "status": "discontinued",
+  "discontinuedDate": "2019-11-20T00:00:00Z",
+  "offMarket": 1,
+  "servingsPerContainer": 200,
+  "netContents": [
+    {
+      "order": 1,
+      "quantity": 200,
+      "unit": "Lozenge(s)",
+      "display": "200 Lozenge(s)"
+    }
+  ],
+  "targetGroups": [
+    "Adult (18 - 50 Years)"
+  ],
+  "userGroups": [
+    {
+      "dailyValueTargetGroupName": "Adults and children 4 or more years of age",
+      "langualCode": "P0250",
+      "langualCodeDescription": "Adults and Children 4 years and above"
+    }
+  ],
+  "productType": {
+    "langualCode": "A1325",
+    "langualCodeDescription": "Other Combinations"
+  },
+  "physicalState": {
+    "langualCode": "E0174",
+    "langualCodeDescription": "Lozenge"
+  },
+  "imageUrl": "https://api.ods.od.nih.gov/dsld/s3/pdf/10190.pdf",
+  "images": [],
+  "contacts": [
+    {
+      "contactId": 2711,
+      "text": null,
+      "types": [
+        "Other"
+      ],
+      "contactDetails": {
+        "src": "01-raw/2025-03-25/data/contact_1.json",
+        "id": 2711,
+        "name": "",
+        "streetAddress": "",
+        "city": "",
+        "state": "",
+        "country": "",
+        "zipCode": "",
+        "phoneNumber": "",
+        "email": "",
+        "webAddress": "www.anatabloc.com"
+      }
+    },
+    {
+      "contactId": 2712,
+      "text": "(C)2011",
+      "types": [
+        "Other"
+      ],
+      "contactDetails": {
+        "src": "01-raw/2025-03-25/data/contact_1.json",
+        "id": 2712,
+        "name": "Star Scientific, Inc.",
+        "streetAddress": "",
+        "city": "",
+        "state": "",
+        "country": "",
+        "zipCode": "",
+        "phoneNumber": "800-778-2031",
+        "email": "",
+        "webAddress": ""
+      }
+    },
+    {
+      "contactId": 2713,
+      "text": "Manufactured for",
+      "types": [
+        "Distributor"
+      ],
+      "contactDetails": {
+        "src": "01-raw/2025-03-25/data/contact_1.json",
+        "id": 2713,
+        "name": "Rock Creek Pharmaceuticals",
+        "streetAddress": "55 Blackburn Center",
+        "city": "Gloucester",
+        "state": "MA",
+        "country": "",
+        "zipCode": "01935",
+        "phoneNumber": "",
+        "email": "",
+        "webAddress": ""
+      }
+    }
+  ],
+  "events": [
+    {
+      "date": "2019-11-20",
+      "type": "Off Market"
+    },
+    {
+      "date": "2012-06-25",
+      "type": "Date entered into DSLD"
+    }
+  ],
+  "activeIngredients": [
+    {
+      "ingredientId": 281601,
+      "uniiCode": "81G40H8B0T",
+      "order": 1,
+      "raw_source_text": "Vitamin A",
+      "branded_token_extracted": null,
+      "raw_source_path": "activeIngredients",
+      "normalized_key": "vitamin_a",
+      "name": "Vitamin A",
+      "standardName": "Vitamin A",
+      "ingredientGroup": "Vitamin A",
+      "quantity": 417.0,
+      "unit": "IU",
+      "dailyValue": 8.0,
+      "quantityVariants": null,
+      "forms": [
+        {
+          "name": "Retinyl Acetate",
+          "ingredientId": 281296,
+          "order": 1,
+          "prefix": null,
+          "percent": null
+        }
+      ],
+      "alternateNames": [],
+      "mapped": true,
+      "proprietaryBlend": false,
+      "disclosureLevel": null,
+      "parentBlend": null,
+      "isNestedIngredient": false,
+      "nestedIngredients": [],
+      "hierarchyType": null,
+      "notes": "Vitamin A (Form: as Retinyl Acetate) "
+    },
+    {
+      "ingredientId": 280374,
+      "uniiCode": "1C6V77QF41",
+      "order": 2,
+      "raw_source_text": "Vitamin D3",
+      "branded_token_extracted": null,
+      "raw_source_path": "activeIngredients",
+      "normalized_key": "vitamin_d3",
+      "name": "Vitamin D3",
+      "standardName": "Vitamin D",
+      "ingredientGroup": "Vitamin D",
+      "quantity": 33.0,
+      "unit": "IU",
+      "dailyValue": 8.0,
+      "quantityVariants": null,
+      "forms": [
+        {
+          "name": "Cholecalciferol",
+          "ingredientId": 280176,
+          "order": 1,
+          "prefix": null,
+          "percent": null
+        }
+      ],
+      "alternateNames": [],
+      "mapped": true,
+      "proprietaryBlend": false,
+      "disclosureLevel": null,
+      "parentBlend": null,
+      "isNestedIngredient": false,
+      "nestedIngredients": [],
+      "hierarchyType": null
+    },
+    {
+      "ingredientId": 43160,
+      "uniiCode": null,
+      "order": 3,
+      "raw_source_text": "Anatabine",
+      "branded_token_extracted": null,
+      "raw_source_path": "activeIngredients",
+      "normalized_key": "anatabine",
+      "name": "Anatabine",
+      "standardName": "Anatabine",
+      "ingredientGroup": "Anatabine",
+      "quantity": 1.0,
+      "unit": "mg",
+      "dailyValue": null,
+      "quantityVariants": null,
+      "forms": [
+        {
+          "name": "anatabine citrate",
+          "ingredientId": 43161,
+          "order": 1,
+          "prefix": "as",
+          "percent": null
+        }
+      ],
+      "alternateNames": [],
+      "mapped": true,
+      "proprietaryBlend": false,
+      "disclosureLevel": null,
+      "parentBlend": null,
+      "isNestedIngredient": false,
+      "nestedIngredients": [],
+      "hierarchyType": null,
+      "notes": "Anatabine (Form: as anatabine citrate) "
+    }
+  ],
+  "inactiveIngredients": [
+    {
+      "ingredientId": 3740,
+      "uniiCode": null,
+      "order": 1,
+      "raw_source_text": "Mannitol",
+      "raw_source_path": "inactiveIngredients",
+      "normalized_key": "mannitol",
+      "name": "Mannitol",
+      "standardName": "Sugar Alcohols (Polyols)",
+      "ingredientGroup": "Mannitol",
+      "forms": [],
+      "alternateNames": [],
+      "mapped": true,
+      "hierarchyType": null
+    },
+    {
+      "ingredientId": 43162,
+      "uniiCode": null,
+      "order": 2,
+      "raw_source_text": "natural and artificial mint flavors",
+      "raw_source_path": "inactiveIngredients",
+      "normalized_key": "natural_and_artificial_mint_flavors",
+      "name": "natural and artificial mint flavors",
+      "standardName": "natural and artificial mint flavors",
+      "ingredientGroup": "Flavor",
+      "forms": [],
+      "alternateNames": [],
+      "mapped": true,
+      "hierarchyType": null,
+      "isAdditive": true,
+      "additiveType": "natural_flavor"
+    },
+    {
+      "ingredientId": 35212,
+      "uniiCode": null,
+      "order": 3,
+      "raw_source_text": "Sucralose",
+      "raw_source_path": "inactiveIngredients",
+      "normalized_key": "sucralose",
+      "name": "Sucralose",
+      "standardName": "Sucralose",
+      "ingredientGroup": "Sucralose",
+      "forms": [],
+      "alternateNames": [],
+      "mapped": true,
+      "hierarchyType": null
+    },
+    {
+      "ingredientId": 280319,
+      "uniiCode": "ETJ7Z6XBU4",
+      "order": 4,
+      "raw_source_text": "Silicon Dioxide",
+      "raw_source_path": "inactiveIngredients",
+      "normalized_key": "silicon_dioxide",
+      "name": "Silicon Dioxide",
+      "standardName": "silicon dioxide",
+      "ingredientGroup": "Silicon",
+      "forms": [],
+      "alternateNames": [
+        "SiO2"
+      ],
+      "mapped": true,
+      "hierarchyType": null,
+      "isAdditive": true,
+      "additiveType": "unspecified"
+    },
+    {
+      "ingredientId": 285558,
+      "uniiCode": "4ELV7Z65AP",
+      "order": 5,
+      "raw_source_text": "Stearic Acid",
+      "raw_source_path": "inactiveIngredients",
+      "normalized_key": "stearic_acid",
+      "name": "Stearic Acid",
+      "standardName": "stearic acid",
+      "ingredientGroup": "Stearic Acid",
+      "forms": [],
+      "alternateNames": [
+        "C18:0"
+      ],
+      "mapped": true,
+      "hierarchyType": null,
+      "isAdditive": true,
+      "additiveType": "processing_aid"
+    },
+    {
+      "ingredientId": 32271,
+      "uniiCode": null,
+      "order": 6,
+      "raw_source_text": "Hydroxypropyl Methylcellulose",
+      "raw_source_path": "inactiveIngredients",
+      "normalized_key": "hydroxypropyl_methylcellulose",
+      "name": "Hydroxypropyl Methylcellulose",
+      "standardName": "hydroxypropyl methylcellulose",
+      "ingredientGroup": "Hypromellose",
+      "forms": [],
+      "alternateNames": [],
+      "mapped": true,
+      "hierarchyType": null,
+      "isAdditive": true,
+      "additiveType": "unspecified"
+    },
+    {
+      "ingredientId": 24567,
+      "uniiCode": null,
+      "order": 7,
+      "raw_source_text": "Magnesium Stearate",
+      "raw_source_path": "inactiveIngredients",
+      "normalized_key": "magnesium_stearate",
+      "name": "Magnesium Stearate",
+      "standardName": "magnesium stearate",
+      "ingredientGroup": "Magnesium Stearate",
+      "forms": [],
+      "alternateNames": [],
+      "mapped": true,
+      "hierarchyType": null,
+      "isAdditive": true,
+      "additiveType": "processing_aid"
+    },
+    {
+      "ingredientId": 43163,
+      "uniiCode": null,
+      "order": 8,
+      "raw_source_text": "titanium dioxide",
+      "raw_source_path": "inactiveIngredients",
+      "normalized_key": "titanium_dioxide",
+      "name": "titanium dioxide",
+      "standardName": "Titanium Dioxide",
+      "ingredientGroup": "Titanium Dioxide",
+      "forms": [],
+      "alternateNames": [],
+      "mapped": true,
+      "hierarchyType": null
+    },
+    {
+      "ingredientId": 43165,
+      "uniiCode": null,
+      "order": 9,
+      "raw_source_text": "natural Glaze",
+      "raw_source_path": "inactiveIngredients",
+      "normalized_key": "natural_glaze",
+      "name": "natural Glaze",
+      "standardName": "Natural Glaze",
+      "ingredientGroup": "Coating",
+      "forms": [],
+      "alternateNames": [],
+      "mapped": true,
+      "hierarchyType": null,
+      "isAdditive": true,
+      "additiveType": "unspecified"
+    },
+    {
+      "ingredientId": 43166,
+      "uniiCode": null,
+      "order": 10,
+      "raw_source_text": "methylparaben",
+      "raw_source_path": "inactiveIngredients",
+      "normalized_key": "methylparaben",
+      "name": "methylparaben",
+      "standardName": "Methylparaben",
+      "ingredientGroup": null,
+      "forms": [],
+      "alternateNames": [],
+      "mapped": true,
+      "hierarchyType": null
+    },
+    {
+      "ingredientId": 43167,
+      "uniiCode": null,
+      "order": 11,
+      "raw_source_text": "propylparaben",
+      "raw_source_path": "inactiveIngredients",
+      "normalized_key": "propylparaben",
+      "name": "propylparaben",
+      "standardName": "Propylparaben",
+      "ingredientGroup": null,
+      "forms": [],
+      "alternateNames": [],
+      "mapped": true,
+      "hierarchyType": null
+    },
+    {
+      "ingredientId": 35634,
+      "uniiCode": null,
+      "order": 12,
+      "raw_source_text": "Triethyl Citrate",
+      "raw_source_path": "inactiveIngredients",
+      "normalized_key": "triethyl_citrate",
+      "name": "Triethyl Citrate",
+      "standardName": "Triethyl Citrate",
+      "ingredientGroup": "triethylcitrate",
+      "forms": [],
+      "alternateNames": [],
+      "mapped": true,
+      "hierarchyType": null,
+      "isAdditive": true,
+      "additiveType": "unspecified"
+    },
+    {
+      "ingredientId": 9336,
+      "uniiCode": null,
+      "order": 13,
+      "raw_source_text": "Citric Acid",
+      "raw_source_path": "inactiveIngredients",
+      "normalized_key": "citric_acid",
+      "name": "Citric Acid",
+      "standardName": "Citric Acid",
+      "ingredientGroup": "Citric Acid",
+      "forms": [],
+      "alternateNames": [],
+      "mapped": true,
+      "hierarchyType": null,
+      "isAdditive": true,
+      "additiveType": "preservative_natural"
+    },
+    {
+      "ingredientId": 20956,
+      "uniiCode": null,
+      "order": 14,
+      "raw_source_text": "BHT",
+      "raw_source_path": "inactiveIngredients",
+      "normalized_key": "bht",
+      "name": "BHT",
+      "standardName": "Butylated Hydroxytoluene (BHT)",
+      "ingredientGroup": "Butylated hydroxytoluene",
+      "forms": [],
+      "alternateNames": [],
+      "mapped": true,
+      "hierarchyType": null
+    },
+    {
+      "ingredientId": 6695,
+      "uniiCode": null,
+      "order": 15,
+      "raw_source_text": "Mono and Diglycerides",
+      "raw_source_path": "inactiveIngredients",
+      "normalized_key": "mono_and_diglycerides",
+      "name": "Mono and Diglycerides",
+      "standardName": "mono and diglycerides",
+      "ingredientGroup": "Blend (non-nutrient/non-botanical)",
+      "forms": [],
+      "alternateNames": [],
+      "mapped": true,
+      "hierarchyType": null,
+      "isAdditive": true,
+      "additiveType": "emulsifier"
+    },
+    {
+      "ingredientId": 9402,
+      "uniiCode": null,
+      "order": 16,
+      "raw_source_text": "Polysorbate 80",
+      "raw_source_path": "inactiveIngredients",
+      "normalized_key": "polysorbate_80",
+      "name": "Polysorbate 80",
+      "standardName": "Polysorbate 80",
+      "ingredientGroup": "Polysorbate",
+      "forms": [],
+      "alternateNames": [],
+      "mapped": true,
+      "hierarchyType": null
+    }
+  ],
+  "nutritionalInfo": {},
+  "statements": [
+    {
+      "type": "General Statements: All Other Content",
+      "notes": "(molecular drawing)"
+    },
+    {
+      "type": "General Statements: All Other Content",
+      "notes": "Anti-Inflammatory Support"
+    },
+    {
+      "type": "FDA Statement of Identity",
+      "notes": "Dietary Supplement\n"
+    },
+    {
+      "type": "FDA Disclaimer Statement",
+      "notes": "These statements have not been evaluated by the Food and Drug Administration. This product is not intended to diagnose, treat, cure or prevent any disease."
+    },
+    {
+      "type": "General Statements: All Other Content",
+      "notes": "Patent Pending"
+    },
+    {
+      "type": "Suggested/Recommended/Usage/Directions",
+      "notes": "Place one lozenge in mouth. Let dissolve and swallow.\nRecommended dosage: \nTake one to two lozenges three times daily."
+    },
+    {
+      "type": "Precautions re: All Other",
+      "notes": "Do not exceed 6 tablets a day except on the advice of a physician or pharmacist."
+    },
+    {
+      "type": "Storage",
+      "notes": "For optimum freshness keep the product cool and dry."
+    }
+  ],
+  "claims": [
+    {
+      "langualCode": "P0115",
+      "langualCodeDescription": "All Other"
+    },
+    {
+      "langualCode": "P0265",
+      "langualCodeDescription": "Structure/Function"
+    }
+  ],
+  "servingSizes": [
+    {
+      "minQuantity": 1.0,
+      "maxQuantity": 2.0,
+      "unit": "Tablet(s)",
+      "minDailyServings": 3,
+      "maxDailyServings": 3,
+      "normalizedServing": 2.0
+    }
+  ],
+  "labelRelationships": [
+    {
+      "type": "Package size difference, same product",
+      "labelId": 18765
+    }
+  ],
+  "labelText": {
+    "raw": "(molecular drawing) Anti-Inflammatory Support Dietary Supplement\n These statements have not been evaluated by the Food and Drug Administration. This product is not intended to diagnose, treat, cure or prevent any disease. Patent Pending Place one lozenge in mouth. Let dissolve and swallow.\nRecommended dosage: \nTake one to two lozenges three times daily. Do not exceed 6 tablets a day except on the advice of a physician or pharmacist. For optimum freshness keep the product cool and dry.",
+    "parsed": {
+      "certifications": [],
+      "testing": [],
+      "origin": [],
+      "flavor": [
+        "natural and artificial mint flavors"
+      ],
+      "probioticGuarantee": [],
+      "cleanLabelClaims": [],
+      "allergens": [],
+      "allergenFree": [],
+      "warnings": [],
+      "storage": [
+        "For optimum freshness keep the product cool and dry."
+      ],
+      "directions": "Place one lozenge in mouth. Let dissolve and swallow.\nRecommended dosage: \nTake one to two lozenges three times daily.",
+      "marketingClaims": [],
+      "qualityFeatures": [],
+      "proprietaryBlendDisclosure": null
+    },
+    "searchText": "Vitamin A Retinyl Acetate Vitamin A (Form: as Retinyl Acetate) Vitamin D3 Cholecalciferol Anatabine anatabine citrate Anatabine (Form: as anatabine citrate) Mannitol natural and artificial mint flavors Sucralose Silicon Dioxide Stearic Acid Hydroxypropyl Methylcellulose Magnesium Stearate titanium dioxide natural Glaze methylparaben propylparaben Triethyl Citrate Citric Acid BHT Mono and Diglycerides Polysorbate 80 (molecular drawing) Anti-Inflammatory Support Dietary Supplement These statements have not been evaluated by the Food and Drug Administration. This product is not intended to diagnose, treat, cure or prevent any disease. Patent Pending Place one lozenge in mouth. Let dissolve and swallow.\nRecommended dosage: \nTake one to two lozenges three times daily. Do not exceed 6 tablets a day except on the advice of a physician or pharmacist. For optimum freshness keep the product cool and dry."
+  },
+  "metadata": {
+    "lastCleaned": "2026-02-16T21:19:13.621745Z",
+    "cleaningVersion": "2.1.0",
+    "reference_versions": {
+      "color_indicators": {
+        "version": "2.0.0",
+        "last_updated": "2026-01-05"
+      }
+    },
+    "mappingStats": {
+      "totalIngredients": 19,
+      "mappedIngredients": 19,
+      "unmappedIngredients": 0,
+      "mappingRate": 100.0
+    },
+    "transparencyMetrics": {
+      "hasProprietaryBlend": false,
+      "blendTransparency": "full",
+      "disclosedIngredients": 3,
+      "undisclosedQuantities": 0,
+      "transparencyScore": 100.0
+    },
+    "completeness": {
+      "score": 100.0,
+      "missingFields": [],
+      "criticalFieldsComplete": true
+    }
+  }
+}

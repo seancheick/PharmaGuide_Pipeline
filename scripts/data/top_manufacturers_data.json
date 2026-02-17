@@ -1,4 +1,12 @@
 {
+  "_metadata": {
+    "description": "Top supplement manufacturers with quality ratings and certifications",
+    "purpose": "manufacturer_quality",
+    "schema_version": "4.0.0",
+    "last_updated": "2026-02-16",
+    "total_entries": 61,
+    "recent_changes": "2025-12-04: Added Seed Health (NutraIngredients-USA 2022 winner, multiple RCTs, WHO advisor founded). 2025-12-03: Added BioGaia and Culturelle."
+  },
   "top_manufacturers": [
     {
       "id": "MANUF_NATURE_MADE",
@@ -551,7 +559,7 @@
       "standard_name": "Kirkland Signature",
       "evidence": [
         "USP-verified for many products",
-        "Substantial quality control due to Costco\u2019s internal standards",
+        "Substantial quality control due to Costco’s internal standards",
         "No significant FDA warning letters or major recalls"
       ],
       "notes": "Strong value and quality for mass-market buyers; USP certifications build trust.",
@@ -639,7 +647,7 @@
         "Specializes in pediatric supplements with batch COAs",
         "No reported recalls or FDA warning letters"
       ],
-      "notes": "Highly regarded in pediatric and children\u2019s formulations.",
+      "notes": "Highly regarded in pediatric and children’s formulations.",
       "last_updated": "2025-07-24",
       "aliases": [
         "Pediatrix Nutrition"
@@ -880,13 +888,5 @@
         "DS-01"
       ]
     }
-  ],
-  "_metadata": {
-    "description": "Top supplement manufacturers with quality ratings and certifications",
-    "purpose": "manufacturer_quality",
-    "schema_version": "1.0",
-    "total_entries": 61,
-    "last_updated": "2025-12-04",
-    "recent_changes": "2025-12-04: Added Seed Health (NutraIngredients-USA 2022 winner, multiple RCTs, WHO advisor founded). 2025-12-03: Added BioGaia and Culturelle."
-  }
+  ]
 }

@@ -1,8 +1,11 @@
 {
-  "metadata": {
-    "version": "1.0.0",
-    "description": "Weighting system for different ingredient categories in supplement scoring",
-    "last_updated": "2025-07-22"
+  "_metadata": {
+    "description": "Ingredient weight categories for dosing classification",
+    "purpose": "dosing_categories",
+    "schema_version": "4.0.0",
+    "last_updated": "2026-02-16",
+    "total_entries": 4,
+    "version": "1.0.0"
   },
   "category_weights": {
     "vitamins": {
@@ -92,12 +95,5 @@
       "choline",
       "generic extracts"
     ]
-  },
-  "_metadata": {
-    "description": "Ingredient weight categories for dosing classification",
-    "purpose": "dosing_categories",
-    "schema_version": "1.0",
-    "total_entries": 4,
-    "last_updated": "2025-11-14"
   }
 }

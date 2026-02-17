@@ -379,7 +379,7 @@ This report documents all JSON database files in `scripts/data/`, their complete
       "id": "string",
       "manufacturer": "string",
       "violation_type": "string (warning_letter|recall|consent_decree)",
-      "violation_severity": "string (critical|major|minor)",
+      "severity_level": "string (critical|major|minor)",
       "date": "string (YYYY-MM-DD)",
       "total_deduction_applied": "number (negative)",
       "is_resolved": "boolean",

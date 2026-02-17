@@ -1,0 +1,1708 @@
+{
+  "generated_at": "2026-02-16",
+  "summary": [
+    {
+      "file": "absorption_enhancers.json",
+      "collision_count": 0
+    },
+    {
+      "file": "allergens.json",
+      "collision_count": 0
+    },
+    {
+      "file": "backed_clinical_studies.json",
+      "collision_count": 5
+    },
+    {
+      "file": "banned_recalled_ingredients.json",
+      "collision_count": 0
+    },
+    {
+      "file": "botanical_ingredients.json",
+      "collision_count": 9
+    },
+    {
+      "file": "clinically_relevant_strains.json",
+      "collision_count": 0
+    },
+    {
+      "file": "harmful_additives.json",
+      "collision_count": 0
+    },
+    {
+      "file": "other_ingredients.json",
+      "collision_count": 72
+    },
+    {
+      "file": "proprietary_blends_penalty.json",
+      "collision_count": 0
+    },
+    {
+      "file": "rda_therapeutic_dosing.json",
+      "collision_count": 1
+    },
+    {
+      "file": "standardized_botanicals.json",
+      "collision_count": 18
+    },
+    {
+      "file": "top_manufacturers_data.json",
+      "collision_count": 0
+    }
+  ],
+  "files_with_collisions": [
+    {
+      "file": "backed_clinical_studies.json",
+      "collisions": [
+        {
+          "alias": "5-mthf",
+          "list_key": "backed_clinical_studies",
+          "entries": [
+            {
+              "id": "BRAND_QUATREFOLIC",
+              "name": "Quatrefolic"
+            },
+            {
+              "id": "INGR_FOLATE_MTHF",
+              "name": "L-5-Methyltetrahydrofolate"
+            }
+          ],
+          "entry_count": 2
+        },
+        {
+          "alias": "astaxanthin",
+          "list_key": "backed_clinical_studies",
+          "entries": [
+            {
+              "id": "BRAND_ASTAREAL",
+              "name": "AstaReal Astaxanthin"
+            },
+            {
+              "id": "PRECLIN_ASTAXANTHIN_GENERIC",
+              "name": "Astaxanthin (Generic)"
+            }
+          ],
+          "entry_count": 2
+        },
+        {
+          "alias": "methylfolate",
+          "list_key": "backed_clinical_studies",
+          "entries": [
+            {
+              "id": "BRAND_QUATREFOLIC",
+              "name": "Quatrefolic"
+            },
+            {
+              "id": "INGR_FOLATE_MTHF",
+              "name": "L-5-Methyltetrahydrofolate"
+            }
+          ],
+          "entry_count": 2
+        },
+        {
+          "alias": "mk-7",
+          "list_key": "backed_clinical_studies",
+          "entries": [
+            {
+              "id": "BRAND_MENAQ7",
+              "name": "MenaQ7 Vitamin K2"
+            },
+            {
+              "id": "INGR_VITAMIN_K2",
+              "name": "Vitamin K2 (MK-7)"
+            }
+          ],
+          "entry_count": 2
+        },
+        {
+          "alias": "quercetin phytosome",
+          "list_key": "backed_clinical_studies",
+          "entries": [
+            {
+              "id": "INGR_QUERCETIN",
+              "name": "Quercetin"
+            },
+            {
+              "id": "PRECLIN_QUERCETIN_PHYTOSOME",
+              "name": "Quercetin Phytosome"
+            }
+          ],
+          "entry_count": 2
+        }
+      ],
+      "collision_count": 5
+    },
+    {
+      "file": "botanical_ingredients.json",
+      "collisions": [
+        {
+          "alias": "black elderberry",
+          "list_key": "botanical_ingredients",
+          "entries": [
+            {
+              "id": "black_elderberry",
+              "name": "Black Elderberry"
+            },
+            {
+              "id": "elderberries",
+              "name": "Elderberries"
+            }
+          ],
+          "entry_count": 2
+        },
+        {
+          "alias": "brassica oleracea",
+          "list_key": "botanical_ingredients",
+          "entries": [
+            {
+              "id": "broccoli",
+              "name": "Broccoli"
+            },
+            {
+              "id": "cabbage",
+              "name": "Cabbage"
+            }
+          ],
+          "entry_count": 2
+        },
+        {
+          "alias": "capsicum annuum",
+          "list_key": "botanical_ingredients",
+          "entries": [
+            {
+              "id": "cayenne_pepper",
+              "name": "Cayenne Pepper"
+            },
+            {
+              "id": "green_bell_pepper",
+              "name": "Green Bell Pepper"
+            }
+          ],
+          "entry_count": 2
+        },
+        {
+          "alias": "citrus bioflavonoids",
+          "list_key": "botanical_ingredients",
+          "entries": [
+            {
+              "id": "citrus_fruit_extract",
+              "name": "Citrus Fruit Extract"
+            },
+            {
+              "id": "lemon_bioflavonoids",
+              "name": "Lemon Bioflavonoids"
+            }
+          ],
+          "entry_count": 2
+        },
+        {
+          "alias": "commiphora myrrha",
+          "list_key": "botanical_ingredients",
+          "entries": [
+            {
+              "id": "myrrh",
+              "name": "Myrrh"
+            },
+            {
+              "id": "myrrh_resin",
+              "name": "Myrrh Resin"
+            }
+          ],
+          "entry_count": 2
+        },
+        {
+          "alias": "elderberry bioactives extract",
+          "list_key": "botanical_ingredients",
+          "entries": [
+            {
+              "id": "elderberries",
+              "name": "Elderberries"
+            },
+            {
+              "id": "elderberry_extract",
+              "name": "Elderberry Extract"
+            }
+          ],
+          "entry_count": 2
+        },
+        {
+          "alias": "myrrh resin",
+          "list_key": "botanical_ingredients",
+          "entries": [
+            {
+              "id": "myrrh",
+              "name": "Myrrh"
+            },
+            {
+              "id": "myrrh_resin",
+              "name": "Myrrh Resin"
+            }
+          ],
+          "entry_count": 2
+        },
+        {
+          "alias": "myrrh resin freeze-dried extract",
+          "list_key": "botanical_ingredients",
+          "entries": [
+            {
+              "id": "myrrh_resin",
+              "name": "Myrrh Resin"
+            },
+            {
+              "id": "myrrh_resin_extract",
+              "name": "Myrrh Resin Extract"
+            }
+          ],
+          "entry_count": 2
+        },
+        {
+          "alias": "passion flower",
+          "list_key": "botanical_ingredients",
+          "entries": [
+            {
+              "id": "passion_flower",
+              "name": "Passion Flower"
+            },
+            {
+              "id": "passionflower_herb",
+              "name": "Passionflower Herb"
+            }
+          ],
+          "entry_count": 2
+        }
+      ],
+      "collision_count": 9
+    },
+    {
+      "file": "other_ingredients.json",
+      "collisions": [
+        {
+          "alias": "acacia gum",
+          "list_key": "other_ingredients",
+          "entries": [
+            {
+              "id": "NHA_ACACIA_GUM",
+              "name": "Acacia Gum"
+            },
+            {
+              "id": "NHA_ARABIC_GUM",
+              "name": "Arabic Gum (Acacia Gum)"
+            },
+            {
+              "id": "NHA_NATURAL_GUMS",
+              "name": "Natural Gums"
+            }
+          ],
+          "entry_count": 3
+        },
+        {
+          "alias": "annatto",
+          "list_key": "other_ingredients",
+          "entries": [
+            {
+              "id": "OI_ANNATTO_EXTRACT",
+              "name": "Annatto Extract"
+            },
+            {
+              "id": "NHA_FRUIT_VEG_POWDERS",
+              "name": "Fruit & Vegetable Powders"
+            }
+          ],
+          "entry_count": 2
+        },
+        {
+          "alias": "anthocyanins",
+          "list_key": "other_ingredients",
+          "entries": [
+            {
+              "id": "NHA_NATURAL_COLORS",
+              "name": "Natural Colors from Plants"
+            },
+            {
+              "id": "NHA_ANTHOCYANIN",
+              "name": "Anthocyanin"
+            }
+          ],
+          "entry_count": 2
+        },
+        {
+          "alias": "arabic gum",
+          "list_key": "other_ingredients",
+          "entries": [
+            {
+              "id": "NHA_ACACIA_GUM",
+              "name": "Acacia Gum"
+            },
+            {
+              "id": "NHA_ARABIC_GUM",
+              "name": "Arabic Gum (Acacia Gum)"
+            }
+          ],
+          "entry_count": 2
+        },
+        {
+          "alias": "beet juice powder",
+          "list_key": "other_ingredients",
+          "entries": [
+            {
+              "id": "NHA_BEET_JUICE_COLOR",
+              "name": "Beet Juice Color"
+            },
+            {
+              "id": "NHA_FRUIT_VEG_POWDERS",
+              "name": "Fruit & Vegetable Powders"
+            }
+          ],
+          "entry_count": 2
+        },
+        {
+          "alias": "beet powder",
+          "list_key": "other_ingredients",
+          "entries": [
+            {
+              "id": "OI_BEETROOT_POWDER",
+              "name": "Beetroot Powder"
+            },
+            {
+              "id": "NHA_FRUIT_VEG_POWDERS",
+              "name": "Fruit & Vegetable Powders"
+            }
+          ],
+          "entry_count": 2
+        },
+        {
+          "alias": "beetroot powder",
+          "list_key": "other_ingredients",
+          "entries": [
+            {
+              "id": "NHA_BEET_JUICE_COLOR",
+              "name": "Beet Juice Color"
+            },
+            {
+              "id": "OI_BEETROOT_POWDER",
+              "name": "Beetroot Powder"
+            }
+          ],
+          "entry_count": 2
+        },
+        {
+          "alias": "blackstrap molasses",
+          "list_key": "other_ingredients",
+          "entries": [
+            {
+              "id": "NHA_MAPLE_MOLASSES",
+              "name": "Maple Syrup & Molasses"
+            },
+            {
+              "id": "NHA_BLACK_STRAP_MOLASSES",
+              "name": "Blackstrap Molasses"
+            }
+          ],
+          "entry_count": 2
+        },
+        {
+          "alias": "blueberry natural flavor",
+          "list_key": "other_ingredients",
+          "entries": [
+            {
+              "id": "NHA_NATURAL_FLAVORS",
+              "name": "Natural Flavors"
+            },
+            {
+              "id": "NHA_NATURAL_BLUEBERRY_FLAVOR",
+              "name": "Natural Blueberry Flavor"
+            }
+          ],
+          "entry_count": 2
+        },
+        {
+          "alias": "caramel color",
+          "list_key": "other_ingredients",
+          "entries": [
+            {
+              "id": "NHA_NATURAL_COLORS",
+              "name": "Natural Colors from Plants"
+            },
+            {
+              "id": "NHA_CARAMEL_COLOR",
+              "name": "Caramel Color"
+            }
+          ],
+          "entry_count": 2
+        },
+        {
+          "alias": "carboxymethyl cellulose",
+          "list_key": "other_ingredients",
+          "entries": [
+            {
+              "id": "PII_CARBOXYMETHYL_CELLULOSE",
+              "name": "Carboxymethyl Cellulose"
+            },
+            {
+              "id": "OI_CELLULOSE_GUM",
+              "name": "Cellulose Gum"
+            }
+          ],
+          "entry_count": 2
+        },
+        {
+          "alias": "carrot juice concentrate",
+          "list_key": "other_ingredients",
+          "entries": [
+            {
+              "id": "NHA_JUICE_CONCENTRATES",
+              "name": "Fruit Juice Concentrates"
+            },
+            {
+              "id": "NHA_CARROT_JUICE_COLOR",
+              "name": "Carrot Juice (Color)"
+            }
+          ],
+          "entry_count": 2
+        },
+        {
+          "alias": "cellulose gum",
+          "list_key": "other_ingredients",
+          "entries": [
+            {
+              "id": "PII_CARBOXYMETHYL_CELLULOSE",
+              "name": "Carboxymethyl Cellulose"
+            },
+            {
+              "id": "OI_CELLULOSE_GUM",
+              "name": "Cellulose Gum"
+            }
+          ],
+          "entry_count": 2
+        },
+        {
+          "alias": "cellulose powder",
+          "list_key": "other_ingredients",
+          "entries": [
+            {
+              "id": "NHA_MICROCRYSTALLINE_CELLULOSE",
+              "name": "Microcrystalline Cellulose"
+            },
+            {
+              "id": "PII_VEGETABLE_CELLULOSE",
+              "name": "Vegetable Cellulose"
+            }
+          ],
+          "entry_count": 2
+        },
+        {
+          "alias": "cherry flavor natural",
+          "list_key": "other_ingredients",
+          "entries": [
+            {
+              "id": "NHA_CHERRY_FLAVOR",
+              "name": "Cherry Flavor (Natural & Artificial)"
+            },
+            {
+              "id": "NHA_NATURAL_FLAVORS",
+              "name": "Natural Flavors"
+            }
+          ],
+          "entry_count": 2
+        },
+        {
+          "alias": "cmc",
+          "list_key": "other_ingredients",
+          "entries": [
+            {
+              "id": "PII_CARBOXYMETHYL_CELLULOSE",
+              "name": "Carboxymethyl Cellulose"
+            },
+            {
+              "id": "OI_CELLULOSE_GUM",
+              "name": "Cellulose Gum"
+            }
+          ],
+          "entry_count": 2
+        },
+        {
+          "alias": "deionized water",
+          "list_key": "other_ingredients",
+          "entries": [
+            {
+              "id": "PII_PURIFIED_WATER",
+              "name": "Purified Water"
+            },
+            {
+              "id": "NHA_DI_WATER",
+              "name": "Deionized Water"
+            }
+          ],
+          "entry_count": 2
+        },
+        {
+          "alias": "distilled water",
+          "list_key": "other_ingredients",
+          "entries": [
+            {
+              "id": "PII_PURIFIED_WATER",
+              "name": "Purified Water"
+            },
+            {
+              "id": "NHA_DI_WATER",
+              "name": "Deionized Water"
+            }
+          ],
+          "entry_count": 2
+        },
+        {
+          "alias": "e306",
+          "list_key": "other_ingredients",
+          "entries": [
+            {
+              "id": "NHA_NATURAL_PRESERVATIVES",
+              "name": "Natural Preservatives"
+            },
+            {
+              "id": "OI_TOCOPHEROL_PRESERVATIVE",
+              "name": "Tocopherol (Preservative)"
+            }
+          ],
+          "entry_count": 2
+        },
+        {
+          "alias": "e412",
+          "list_key": "other_ingredients",
+          "entries": [
+            {
+              "id": "OI_GUAR_GUM",
+              "name": "Guar Gum"
+            },
+            {
+              "id": "NHA_NATURAL_GUMS",
+              "name": "Natural Gums"
+            }
+          ],
+          "entry_count": 2
+        },
+        {
+          "alias": "e414",
+          "list_key": "other_ingredients",
+          "entries": [
+            {
+              "id": "NHA_ARABIC_GUM",
+              "name": "Arabic Gum (Acacia Gum)"
+            },
+            {
+              "id": "NHA_NATURAL_GUMS",
+              "name": "Natural Gums"
+            }
+          ],
+          "entry_count": 2
+        },
+        {
+          "alias": "e415",
+          "list_key": "other_ingredients",
+          "entries": [
+            {
+              "id": "NHA_NATURAL_GUMS",
+              "name": "Natural Gums"
+            },
+            {
+              "id": "NHA_XANTHAN_GUM",
+              "name": "Xanthan Gum"
+            }
+          ],
+          "entry_count": 2
+        },
+        {
+          "alias": "fractionated coconut oil",
+          "list_key": "other_ingredients",
+          "entries": [
+            {
+              "id": "NHA_COCONUT_DERIVATIVES",
+              "name": "Coconut Oil Derivatives"
+            },
+            {
+              "id": "PII_MEDIUM_CHAIN_TRIGLYCERIDES",
+              "name": "Medium Chain Triglycerides"
+            }
+          ],
+          "entry_count": 2
+        },
+        {
+          "alias": "fruit and vegetable juice",
+          "list_key": "other_ingredients",
+          "entries": [
+            {
+              "id": "NHA_FRUIT_VEGETABLE_JUICE",
+              "name": "Fruit & Vegetable Juice"
+            },
+            {
+              "id": "NHA_VEGETABLE_FRUIT_JUICE_COLORS",
+              "name": "Vegetable and Fruit Juice Colors"
+            }
+          ],
+          "entry_count": 2
+        },
+        {
+          "alias": "glycerin",
+          "list_key": "other_ingredients",
+          "entries": [
+            {
+              "id": "NHA_VEGETABLE_GLYCERIN",
+              "name": "Vegetable Glycerin"
+            },
+            {
+              "id": "NHA_GLYCERINE",
+              "name": "Glycerine"
+            }
+          ],
+          "entry_count": 2
+        },
+        {
+          "alias": "glycerol",
+          "list_key": "other_ingredients",
+          "entries": [
+            {
+              "id": "NHA_VEGETABLE_GLYCERIN",
+              "name": "Vegetable Glycerin"
+            },
+            {
+              "id": "NHA_GLYCERINE",
+              "name": "Glycerine"
+            }
+          ],
+          "entry_count": 2
+        },
+        {
+          "alias": "guar gum",
+          "list_key": "other_ingredients",
+          "entries": [
+            {
+              "id": "OI_GUAR_GUM",
+              "name": "Guar Gum"
+            },
+            {
+              "id": "NHA_NATURAL_GUMS",
+              "name": "Natural Gums"
+            }
+          ],
+          "entry_count": 2
+        },
+        {
+          "alias": "gum acacia",
+          "list_key": "other_ingredients",
+          "entries": [
+            {
+              "id": "NHA_ARABIC_GUM",
+              "name": "Arabic Gum (Acacia Gum)"
+            },
+            {
+              "id": "NHA_NATURAL_GUMS",
+              "name": "Natural Gums"
+            }
+          ],
+          "entry_count": 2
+        },
+        {
+          "alias": "gum arabic",
+          "list_key": "other_ingredients",
+          "entries": [
+            {
+              "id": "NHA_ACACIA_GUM",
+              "name": "Acacia Gum"
+            },
+            {
+              "id": "NHA_ARABIC_GUM",
+              "name": "Arabic Gum (Acacia Gum)"
+            },
+            {
+              "id": "NHA_NATURAL_GUMS",
+              "name": "Natural Gums"
+            }
+          ],
+          "entry_count": 3
+        },
+        {
+          "alias": "hpmc",
+          "list_key": "other_ingredients",
+          "entries": [
+            {
+              "id": "PII_HPMC",
+              "name": "Hydroxypropyl Methylcellulose"
+            },
+            {
+              "id": "PII_VEGETABLE_CAPSULE_HPMC",
+              "name": "Vegetable Capsule (HPMC)"
+            }
+          ],
+          "entry_count": 2
+        },
+        {
+          "alias": "hypromellose",
+          "list_key": "other_ingredients",
+          "entries": [
+            {
+              "id": "PII_HPMC",
+              "name": "Hydroxypropyl Methylcellulose"
+            },
+            {
+              "id": "PII_VEGETABLE_CAPSULE_HPMC",
+              "name": "Vegetable Capsule (HPMC)"
+            }
+          ],
+          "entry_count": 2
+        },
+        {
+          "alias": "mcc",
+          "list_key": "other_ingredients",
+          "entries": [
+            {
+              "id": "NHA_MICROCRYSTALLINE_CELLULOSE",
+              "name": "Microcrystalline Cellulose"
+            },
+            {
+              "id": "PII_VEGETABLE_CELLULOSE",
+              "name": "Vegetable Cellulose"
+            }
+          ],
+          "entry_count": 2
+        },
+        {
+          "alias": "microcrystalline cellulose",
+          "list_key": "other_ingredients",
+          "entries": [
+            {
+              "id": "NHA_MICROCRYSTALLINE_CELLULOSE",
+              "name": "Microcrystalline Cellulose"
+            },
+            {
+              "id": "PII_VEGETABLE_CELLULOSE",
+              "name": "Vegetable Cellulose"
+            }
+          ],
+          "entry_count": 2
+        },
+        {
+          "alias": "mixed berry flavor",
+          "list_key": "other_ingredients",
+          "entries": [
+            {
+              "id": "OI_NATURAL_BERRY_FLAVOR",
+              "name": "Natural Berry Flavor"
+            },
+            {
+              "id": "NHA_NATURAL_BERRY_FLAVORS",
+              "name": "Natural Berry Flavors"
+            }
+          ],
+          "entry_count": 2
+        },
+        {
+          "alias": "mixed tocopherols",
+          "list_key": "other_ingredients",
+          "entries": [
+            {
+              "id": "NHA_NATURAL_PRESERVATIVES",
+              "name": "Natural Preservatives"
+            },
+            {
+              "id": "OI_TOCOPHEROL_PRESERVATIVE",
+              "name": "Tocopherol (Preservative)"
+            }
+          ],
+          "entry_count": 2
+        },
+        {
+          "alias": "modified starch",
+          "list_key": "other_ingredients",
+          "entries": [
+            {
+              "id": "PII_DEXTRIN",
+              "name": "Dextrin (unspecified source)"
+            },
+            {
+              "id": "NHA_MODIFIED_FOOD_STARCH",
+              "name": "Modified Food Starch"
+            }
+          ],
+          "entry_count": 2
+        },
+        {
+          "alias": "molasses",
+          "list_key": "other_ingredients",
+          "entries": [
+            {
+              "id": "NHA_MAPLE_MOLASSES",
+              "name": "Maple Syrup & Molasses"
+            },
+            {
+              "id": "NHA_BLACK_STRAP_MOLASSES",
+              "name": "Blackstrap Molasses"
+            }
+          ],
+          "entry_count": 2
+        },
+        {
+          "alias": "mono and diglycerides",
+          "list_key": "other_ingredients",
+          "entries": [
+            {
+              "id": "NHA_GLYCERIN_FATTY_ACID_ESTER",
+              "name": "Glycerin Fatty Acid Ester"
+            },
+            {
+              "id": "NHA_MONO_DIGLYCERIDES",
+              "name": "Mono and Diglycerides"
+            }
+          ],
+          "entry_count": 2
+        },
+        {
+          "alias": "natural and organic fruit flavors",
+          "list_key": "other_ingredients",
+          "entries": [
+            {
+              "id": "NHA_NATURAL_FLAVORS",
+              "name": "Natural Flavors"
+            },
+            {
+              "id": "PII_NATURAL_FRUIT_FLAVORS",
+              "name": "Natural Fruit Flavors"
+            }
+          ],
+          "entry_count": 2
+        },
+        {
+          "alias": "natural apple flavor",
+          "list_key": "other_ingredients",
+          "entries": [
+            {
+              "id": "PII_APPLE_FLAVOR",
+              "name": "Apple Flavor"
+            },
+            {
+              "id": "NHA_NATURAL_APPLE_FLAVOR",
+              "name": "Natural Apple Flavor"
+            }
+          ],
+          "entry_count": 2
+        },
+        {
+          "alias": "natural berry flavor",
+          "list_key": "other_ingredients",
+          "entries": [
+            {
+              "id": "OI_NATURAL_BERRY_FLAVOR",
+              "name": "Natural Berry Flavor"
+            },
+            {
+              "id": "NHA_NATURAL_BERRY_FLAVORS",
+              "name": "Natural Berry Flavors"
+            },
+            {
+              "id": "NHA_NATURAL_FLAVORS",
+              "name": "Natural Flavors"
+            }
+          ],
+          "entry_count": 3
+        },
+        {
+          "alias": "natural blueberry flavor",
+          "list_key": "other_ingredients",
+          "entries": [
+            {
+              "id": "NHA_NATURAL_BERRY_FLAVORS",
+              "name": "Natural Berry Flavors"
+            },
+            {
+              "id": "NHA_NATURAL_BLUEBERRY_FLAVOR",
+              "name": "Natural Blueberry Flavor"
+            }
+          ],
+          "entry_count": 2
+        },
+        {
+          "alias": "natural cherry flavor",
+          "list_key": "other_ingredients",
+          "entries": [
+            {
+              "id": "NHA_CHERRY_FLAVOR",
+              "name": "Cherry Flavor (Natural & Artificial)"
+            },
+            {
+              "id": "NHA_NATURAL_FLAVORS",
+              "name": "Natural Flavors"
+            }
+          ],
+          "entry_count": 2
+        },
+        {
+          "alias": "natural citrus flavors",
+          "list_key": "other_ingredients",
+          "entries": [
+            {
+              "id": "PII_NATURAL_FRUIT_FLAVORS",
+              "name": "Natural Fruit Flavors"
+            },
+            {
+              "id": "NHA_NATURAL_ORANGE_TANGERINE_FLAVOR",
+              "name": "Natural Citrus-Orange Flavor"
+            }
+          ],
+          "entry_count": 2
+        },
+        {
+          "alias": "natural color",
+          "list_key": "other_ingredients",
+          "entries": [
+            {
+              "id": "NHA_NATURAL_COLOR",
+              "name": "Natural Color"
+            },
+            {
+              "id": "NHA_NATURAL_COLOURS",
+              "name": "Natural Colours"
+            },
+            {
+              "id": "NHA_VEGETABLE_FRUIT_JUICE_COLORS",
+              "name": "Vegetable and Fruit Juice Colors"
+            }
+          ],
+          "entry_count": 3
+        },
+        {
+          "alias": "natural colors",
+          "list_key": "other_ingredients",
+          "entries": [
+            {
+              "id": "NHA_NATURAL_COLORS",
+              "name": "Natural Colors from Plants"
+            },
+            {
+              "id": "NHA_NATURAL_COLOURS",
+              "name": "Natural Colours"
+            }
+          ],
+          "entry_count": 2
+        },
+        {
+          "alias": "natural colors from fruits",
+          "list_key": "other_ingredients",
+          "entries": [
+            {
+              "id": "NHA_FRUIT_VEG_POWDERS",
+              "name": "Fruit & Vegetable Powders"
+            },
+            {
+              "id": "NHA_VEGETABLE_FRUIT_JUICE_COLORS",
+              "name": "Vegetable and Fruit Juice Colors"
+            }
+          ],
+          "entry_count": 2
+        },
+        {
+          "alias": "natural lemon flavor",
+          "list_key": "other_ingredients",
+          "entries": [
+            {
+              "id": "NHA_NATURAL_FLAVORS",
+              "name": "Natural Flavors"
+            },
+            {
+              "id": "NHA_LEMON_NATURAL",
+              "name": "Natural Lemon Flavor"
+            }
+          ],
+          "entry_count": 2
+        },
+        {
+          "alias": "natural mint flavor",
+          "list_key": "other_ingredients",
+          "entries": [
+            {
+              "id": "NHA_NATURAL_FLAVORS",
+              "name": "Natural Flavors"
+            },
+            {
+              "id": "OI_NATURAL_MINT_FLAVOR",
+              "name": "Natural Mint Flavor"
+            },
+            {
+              "id": "NHA_NATURAL_MINT_FLAVORS",
+              "name": "Natural Mint Flavors"
+            }
+          ],
+          "entry_count": 3
+        },
+        {
+          "alias": "natural orange flavor",
+          "list_key": "other_ingredients",
+          "entries": [
+            {
+              "id": "NHA_NATURAL_FLAVORS",
+              "name": "Natural Flavors"
+            },
+            {
+              "id": "NHA_ORANGE_NATURAL",
+              "name": "Natural Orange Flavor"
+            },
+            {
+              "id": "NHA_NATURAL_ORANGE_TANGERINE_FLAVOR",
+              "name": "Natural Citrus-Orange Flavor"
+            },
+            {
+              "id": "NHA_NATURAL_ORANGE_FLAVOR",
+              "name": "Natural Orange Flavor"
+            }
+          ],
+          "entry_count": 4
+        },
+        {
+          "alias": "natural peppermint flavor",
+          "list_key": "other_ingredients",
+          "entries": [
+            {
+              "id": "NHA_NATURAL_FLAVORS",
+              "name": "Natural Flavors"
+            },
+            {
+              "id": "NHA_NATURAL_MINT_FLAVORS",
+              "name": "Natural Mint Flavors"
+            }
+          ],
+          "entry_count": 2
+        },
+        {
+          "alias": "natural strawberry flavor",
+          "list_key": "other_ingredients",
+          "entries": [
+            {
+              "id": "NHA_NATURAL_BERRY_FLAVORS",
+              "name": "Natural Berry Flavors"
+            },
+            {
+              "id": "NHA_NATURAL_FLAVORS",
+              "name": "Natural Flavors"
+            },
+            {
+              "id": "OI_NATURAL_STRAWBERRY_FLAVOR",
+              "name": "Natural Strawberry Flavor"
+            }
+          ],
+          "entry_count": 3
+        },
+        {
+          "alias": "natural vanilla",
+          "list_key": "other_ingredients",
+          "entries": [
+            {
+              "id": "NHA_NATURAL_VANILLA",
+              "name": "Natural Vanilla & Vanilla Extract"
+            },
+            {
+              "id": "OI_NATURAL_VANILLA_FLAVOR",
+              "name": "Natural Vanilla Flavor"
+            }
+          ],
+          "entry_count": 2
+        },
+        {
+          "alias": "natural vanilla flavor",
+          "list_key": "other_ingredients",
+          "entries": [
+            {
+              "id": "NHA_NATURAL_VANILLA",
+              "name": "Natural Vanilla & Vanilla Extract"
+            },
+            {
+              "id": "OI_NATURAL_VANILLA_FLAVOR",
+              "name": "Natural Vanilla Flavor"
+            }
+          ],
+          "entry_count": 2
+        },
+        {
+          "alias": "orange flavor, natural",
+          "list_key": "other_ingredients",
+          "entries": [
+            {
+              "id": "NHA_ORANGE_NATURAL",
+              "name": "Natural Orange Flavor"
+            },
+            {
+              "id": "NHA_NATURAL_ORANGE_FLAVOR",
+              "name": "Natural Orange Flavor"
+            }
+          ],
+          "entry_count": 2
+        },
+        {
+          "alias": "organic rice extract",
+          "list_key": "other_ingredients",
+          "entries": [
+            {
+              "id": "NHA_RICE_BRAN_EXTRACT",
+              "name": "Rice Bran Extract"
+            },
+            {
+              "id": "NHA_RICE_EXTRACT",
+              "name": "Rice Extract Blend"
+            }
+          ],
+          "entry_count": 2
+        },
+        {
+          "alias": "peach flavor natural",
+          "list_key": "other_ingredients",
+          "entries": [
+            {
+              "id": "NHA_NATURAL_FLAVORS",
+              "name": "Natural Flavors"
+            },
+            {
+              "id": "NHA_PEACH_NATURAL",
+              "name": "Natural Peach Flavor"
+            }
+          ],
+          "entry_count": 2
+        },
+        {
+          "alias": "peppermint flavor natural",
+          "list_key": "other_ingredients",
+          "entries": [
+            {
+              "id": "NHA_NATURAL_FLAVORS",
+              "name": "Natural Flavors"
+            },
+            {
+              "id": "NHA_NATURAL_MINT_FLAVORS",
+              "name": "Natural Mint Flavors"
+            }
+          ],
+          "entry_count": 2
+        },
+        {
+          "alias": "pineapple flavor natural",
+          "list_key": "other_ingredients",
+          "entries": [
+            {
+              "id": "NHA_NATURAL_FLAVORS",
+              "name": "Natural Flavors"
+            },
+            {
+              "id": "NHA_PINEAPPLE_NATURAL",
+              "name": "Natural Pineapple Flavor"
+            }
+          ],
+          "entry_count": 2
+        },
+        {
+          "alias": "plant cellulose",
+          "list_key": "other_ingredients",
+          "entries": [
+            {
+              "id": "NHA_CELLULOSE_PLANT",
+              "name": "Plant-Derived Cellulose"
+            },
+            {
+              "id": "PII_VEGETABLE_CELLULOSE",
+              "name": "Vegetable Cellulose"
+            }
+          ],
+          "entry_count": 2
+        },
+        {
+          "alias": "plant fiber",
+          "list_key": "other_ingredients",
+          "entries": [
+            {
+              "id": "NHA_CELLULOSE_PLANT",
+              "name": "Plant-Derived Cellulose"
+            },
+            {
+              "id": "PII_VEGETABLE_CELLULOSE",
+              "name": "Vegetable Cellulose"
+            },
+            {
+              "id": "PII_VEGETABLE_FIBER",
+              "name": "Vegetable Fiber"
+            }
+          ],
+          "entry_count": 3
+        },
+        {
+          "alias": "plant-based colors",
+          "list_key": "other_ingredients",
+          "entries": [
+            {
+              "id": "NHA_NATURAL_COLORS",
+              "name": "Natural Colors from Plants"
+            },
+            {
+              "id": "NHA_NATURAL_COLOURS",
+              "name": "Natural Colours"
+            }
+          ],
+          "entry_count": 2
+        },
+        {
+          "alias": "red beet powder",
+          "list_key": "other_ingredients",
+          "entries": [
+            {
+              "id": "NHA_BEET_JUICE_COLOR",
+              "name": "Beet Juice Color"
+            },
+            {
+              "id": "OI_BEETROOT_POWDER",
+              "name": "Beetroot Powder"
+            }
+          ],
+          "entry_count": 2
+        },
+        {
+          "alias": "rice extract",
+          "list_key": "other_ingredients",
+          "entries": [
+            {
+              "id": "NHA_RICE_BRAN_EXTRACT",
+              "name": "Rice Bran Extract"
+            },
+            {
+              "id": "NHA_RICE_EXTRACT",
+              "name": "Rice Extract Blend"
+            }
+          ],
+          "entry_count": 2
+        },
+        {
+          "alias": "sodium carboxymethylcellulose",
+          "list_key": "other_ingredients",
+          "entries": [
+            {
+              "id": "PII_CARBOXYMETHYL_CELLULOSE",
+              "name": "Carboxymethyl Cellulose"
+            },
+            {
+              "id": "OI_CELLULOSE_GUM",
+              "name": "Cellulose Gum"
+            },
+            {
+              "id": "PII_SODIUM_CARBOXYMETHYLCELLULOSE",
+              "name": "Sodium Carboxymethylcellulose"
+            }
+          ],
+          "entry_count": 3
+        },
+        {
+          "alias": "strawberry flavor natural",
+          "list_key": "other_ingredients",
+          "entries": [
+            {
+              "id": "NHA_NATURAL_BERRY_FLAVORS",
+              "name": "Natural Berry Flavors"
+            },
+            {
+              "id": "NHA_NATURAL_FLAVORS",
+              "name": "Natural Flavors"
+            }
+          ],
+          "entry_count": 2
+        },
+        {
+          "alias": "trisodium citrate",
+          "list_key": "other_ingredients",
+          "entries": [
+            {
+              "id": "NHA_SODIUM_CITRATE",
+              "name": "Sodium Citrate (Trisodium Citrate)"
+            },
+            {
+              "id": "NHA_TRI_SODIUM_CITRATE",
+              "name": "Trisodium Citrate"
+            }
+          ],
+          "entry_count": 2
+        },
+        {
+          "alias": "vanilla flavor natural",
+          "list_key": "other_ingredients",
+          "entries": [
+            {
+              "id": "NHA_NATURAL_FLAVORS",
+              "name": "Natural Flavors"
+            },
+            {
+              "id": "NHA_NATURAL_VANILLA",
+              "name": "Natural Vanilla & Vanilla Extract"
+            }
+          ],
+          "entry_count": 2
+        },
+        {
+          "alias": "vegetable glaze",
+          "list_key": "other_ingredients",
+          "entries": [
+            {
+              "id": "PII_COATING_GENERAL",
+              "name": "Coating (General)"
+            },
+            {
+              "id": "PII_NATURAL_GLAZE",
+              "name": "Natural Glaze"
+            }
+          ],
+          "entry_count": 2
+        },
+        {
+          "alias": "vegetable glycerine",
+          "list_key": "other_ingredients",
+          "entries": [
+            {
+              "id": "NHA_VEGETABLE_GLYCERIN",
+              "name": "Vegetable Glycerin"
+            },
+            {
+              "id": "NHA_GLYCERINE",
+              "name": "Glycerine"
+            }
+          ],
+          "entry_count": 2
+        },
+        {
+          "alias": "vegetable magnesium stearate",
+          "list_key": "other_ingredients",
+          "entries": [
+            {
+              "id": "NHA_MAGNESIUM_STEARATE",
+              "name": "Magnesium Stearate"
+            },
+            {
+              "id": "NHA_VEGETABLE_STEARATES",
+              "name": "Vegetable-Derived Stearates"
+            }
+          ],
+          "entry_count": 2
+        },
+        {
+          "alias": "vegetable stearic acid",
+          "list_key": "other_ingredients",
+          "entries": [
+            {
+              "id": "NHA_STEARIC_ACID",
+              "name": "Stearic Acid"
+            },
+            {
+              "id": "PII_VEGETABLE_STEARIN",
+              "name": "Vegetable Stearin"
+            },
+            {
+              "id": "PII_VEGETABLE_STEARINE",
+              "name": "Vegetable Stearine"
+            },
+            {
+              "id": "NHA_VEGETABLE_STEARATES",
+              "name": "Vegetable-Derived Stearates"
+            }
+          ],
+          "entry_count": 4
+        }
+      ],
+      "collision_count": 72
+    },
+    {
+      "file": "rda_therapeutic_dosing.json",
+      "collisions": [
+        {
+          "alias": "citrulline",
+          "list_key": "therapeutic_dosing",
+          "entries": [
+            {
+              "id": "citrulline_malate",
+              "name": "Citrulline Malate"
+            },
+            {
+              "id": "l_citrulline",
+              "name": "L-Citrulline"
+            }
+          ],
+          "entry_count": 2
+        }
+      ],
+      "collision_count": 1
+    },
+    {
+      "file": "standardized_botanicals.json",
+      "collisions": [
+        {
+          "alias": "coffee fruit extract",
+          "list_key": "standardized_botanicals",
+          "entries": [
+            {
+              "id": "coffeeberry",
+              "name": "Coffeeberry"
+            },
+            {
+              "id": "neurofactor",
+              "name": "NeuroFactor"
+            }
+          ],
+          "entry_count": 2
+        },
+        {
+          "alias": "devil's claw extract",
+          "list_key": "standardized_botanicals",
+          "entries": [
+            {
+              "id": "devil_s_claw",
+              "name": "Devil's Claw"
+            },
+            {
+              "id": "devils_claw",
+              "name": "Devil's Claw"
+            }
+          ],
+          "entry_count": 2
+        },
+        {
+          "alias": "eps 7630",
+          "list_key": "standardized_botanicals",
+          "entries": [
+            {
+              "id": "eps_7630",
+              "name": "EPs 7630"
+            },
+            {
+              "id": "pelargonium_sidoides",
+              "name": "Pelargonium Sidoides"
+            }
+          ],
+          "entry_count": 2
+        },
+        {
+          "alias": "goldenseal extract",
+          "list_key": "standardized_botanicals",
+          "entries": [
+            {
+              "id": "berberine",
+              "name": "Berberine"
+            },
+            {
+              "id": "goldenseal",
+              "name": "Goldenseal"
+            }
+          ],
+          "entry_count": 2
+        },
+        {
+          "alias": "grapple plant",
+          "list_key": "standardized_botanicals",
+          "entries": [
+            {
+              "id": "devil_s_claw",
+              "name": "Devil's Claw"
+            },
+            {
+              "id": "devils_claw",
+              "name": "Devil's Claw"
+            }
+          ],
+          "entry_count": 2
+        },
+        {
+          "alias": "harpagophytum procumbens",
+          "list_key": "standardized_botanicals",
+          "entries": [
+            {
+              "id": "devil_s_claw",
+              "name": "Devil's Claw"
+            },
+            {
+              "id": "devils_claw",
+              "name": "Devil's Claw"
+            }
+          ],
+          "entry_count": 2
+        },
+        {
+          "alias": "hedgehog mushroom",
+          "list_key": "standardized_botanicals",
+          "entries": [
+            {
+              "id": "lion_s_mane",
+              "name": "Lion's Mane"
+            },
+            {
+              "id": "lions_mane",
+              "name": "Lion's Mane"
+            }
+          ],
+          "entry_count": 2
+        },
+        {
+          "alias": "hericium erinaceus",
+          "list_key": "standardized_botanicals",
+          "entries": [
+            {
+              "id": "lion_s_mane",
+              "name": "Lion's Mane"
+            },
+            {
+              "id": "lions_mane",
+              "name": "Lion's Mane"
+            }
+          ],
+          "entry_count": 2
+        },
+        {
+          "alias": "lion's mane extract",
+          "list_key": "standardized_botanicals",
+          "entries": [
+            {
+              "id": "lion_s_mane",
+              "name": "Lion's Mane"
+            },
+            {
+              "id": "lions_mane",
+              "name": "Lion's Mane"
+            }
+          ],
+          "entry_count": 2
+        },
+        {
+          "alias": "maritime pine bark",
+          "list_key": "standardized_botanicals",
+          "entries": [
+            {
+              "id": "pine_bark_extract",
+              "name": "Pine Bark Extract"
+            },
+            {
+              "id": "pycnogenol",
+              "name": "Pycnogenol"
+            }
+          ],
+          "entry_count": 2
+        },
+        {
+          "alias": "monascus purpureus",
+          "list_key": "standardized_botanicals",
+          "entries": [
+            {
+              "id": "red_yeast_rice",
+              "name": "Red Yeast Rice"
+            },
+            {
+              "id": "monascus",
+              "name": "Monascus"
+            }
+          ],
+          "entry_count": 2
+        },
+        {
+          "alias": "peppermint oil",
+          "list_key": "standardized_botanicals",
+          "entries": [
+            {
+              "id": "peppermint",
+              "name": "Peppermint"
+            },
+            {
+              "id": "peppermint_essential_oil",
+              "name": "Peppermint Essential Oil"
+            }
+          ],
+          "entry_count": 2
+        },
+        {
+          "alias": "pinus pinaster",
+          "list_key": "standardized_botanicals",
+          "entries": [
+            {
+              "id": "pine_bark_extract",
+              "name": "Pine Bark Extract"
+            },
+            {
+              "id": "pycnogenol",
+              "name": "Pycnogenol"
+            }
+          ],
+          "entry_count": 2
+        },
+        {
+          "alias": "turmeric curcumin",
+          "list_key": "standardized_botanicals",
+          "entries": [
+            {
+              "id": "curcumin",
+              "name": "Curcumin"
+            },
+            {
+              "id": "turmeric",
+              "name": "Turmeric"
+            }
+          ],
+          "entry_count": 2
+        },
+        {
+          "alias": "una de gato",
+          "list_key": "standardized_botanicals",
+          "entries": [
+            {
+              "id": "cat_s_claw",
+              "name": "Cat's Claw"
+            },
+            {
+              "id": "cats_claw",
+              "name": "Cat's Claw"
+            }
+          ],
+          "entry_count": 2
+        },
+        {
+          "alias": "uncaria tomentosa",
+          "list_key": "standardized_botanicals",
+          "entries": [
+            {
+              "id": "cat_s_claw",
+              "name": "Cat's Claw"
+            },
+            {
+              "id": "cats_claw",
+              "name": "Cat's Claw"
+            }
+          ],
+          "entry_count": 2
+        },
+        {
+          "alias": "whole coffee fruit extract",
+          "list_key": "standardized_botanicals",
+          "entries": [
+            {
+              "id": "coffeeberry",
+              "name": "Coffeeberry"
+            },
+            {
+              "id": "neurofactor",
+              "name": "NeuroFactor"
+            }
+          ],
+          "entry_count": 2
+        },
+        {
+          "alias": "yamabushitake",
+          "list_key": "standardized_botanicals",
+          "entries": [
+            {
+              "id": "lion_s_mane",
+              "name": "Lion's Mane"
+            },
+            {
+              "id": "lions_mane",
+              "name": "Lion's Mane"
+            }
+          ],
+          "entry_count": 2
+        }
+      ],
+      "collision_count": 18
+    }
+  ]
+}

@@ -1,0 +1,429 @@
+{
+  "id": "10997",
+  "src": "01-raw/2025-03-25/data/label_59.json",
+  "nhanesId": "",
+  "bundleName": "",
+  "brandIpSymbol": "\u00ae",
+  "productVersionCode": "ITEM #4160 B41492 07D",
+  "pdf": "",
+  "thumbnail": "",
+  "percentDvFootnote": "Percent Daily Values are based on a 2,000 calorie diet",
+  "fullName": "Chelated Zinc Lozenges 23 mg",
+  "brandName": "Good 'N Natural",
+  "upcSku": "0 74312 44160 8",
+  "hasOuterCarton": false,
+  "upcValid": true,
+  "status": "discontinued",
+  "discontinuedDate": "2016-03-17T00:00:00Z",
+  "offMarket": 1,
+  "servingsPerContainer": null,
+  "netContents": [
+    {
+      "order": 1,
+      "quantity": 60,
+      "unit": "Lozenge(s)",
+      "display": "60 Lozenge(s)"
+    }
+  ],
+  "targetGroups": [
+    "Vegetarian",
+    "Adult (18 - 50 Years)",
+    "Gluten Free",
+    "Dairy Free"
+  ],
+  "userGroups": [
+    {
+      "dailyValueTargetGroupName": "Adults and children 4 or more years of age",
+      "langualCode": "P0250",
+      "langualCodeDescription": "Adults and Children 4 years and above"
+    }
+  ],
+  "productType": {
+    "langualCode": "A1299",
+    "langualCodeDescription": "Mineral"
+  },
+  "physicalState": {
+    "langualCode": "E0174",
+    "langualCodeDescription": "Lozenge"
+  },
+  "imageUrl": "https://api.ods.od.nih.gov/dsld/s3/pdf/10997.pdf",
+  "images": [],
+  "contacts": [
+    {
+      "contactId": 2730,
+      "text": "Manufactured by",
+      "types": [
+        "Manufacturer"
+      ],
+      "contactDetails": {
+        "src": "01-raw/2025-03-25/data/contact_1.json",
+        "id": 2730,
+        "name": "Good 'N Natural",
+        "streetAddress": "",
+        "city": "Bohemia",
+        "state": "NY",
+        "country": "USA",
+        "zipCode": "11716",
+        "phoneNumber": "800.544.0095",
+        "email": "",
+        "webAddress": "www.goodnnatural.com"
+      }
+    }
+  ],
+  "events": [
+    {
+      "date": "2016-03-17",
+      "type": "Off Market"
+    },
+    {
+      "date": "2012-07-25",
+      "type": "Date entered into DSLD"
+    }
+  ],
+  "activeIngredients": [
+    {
+      "ingredientId": 293046,
+      "uniiCode": "J41CSQ7QDS",
+      "order": 4,
+      "raw_source_text": "Zinc",
+      "branded_token_extracted": null,
+      "raw_source_path": "activeIngredients",
+      "normalized_key": "zinc",
+      "name": "Zinc",
+      "standardName": "Zinc",
+      "ingredientGroup": "Zinc",
+      "quantity": 23.0,
+      "unit": "mg",
+      "dailyValue": 153.0,
+      "quantityVariants": null,
+      "forms": [
+        {
+          "name": "Zinc Citrate",
+          "ingredientId": 292437,
+          "order": 1,
+          "prefix": null,
+          "percent": null
+        },
+        {
+          "name": "Zinc Gluconate",
+          "ingredientId": 292453,
+          "order": 2,
+          "prefix": null,
+          "percent": null
+        }
+      ],
+      "alternateNames": [
+        "Zn"
+      ],
+      "mapped": true,
+      "proprietaryBlend": false,
+      "disclosureLevel": null,
+      "parentBlend": null,
+      "isNestedIngredient": false,
+      "nestedIngredients": [],
+      "hierarchyType": null,
+      "notes": "Zinc (Form: as Zinc Citrate, and Zinc Gluconate) "
+    }
+  ],
+  "inactiveIngredients": [
+    {
+      "ingredientId": 282545,
+      "uniiCode": "6YSS42VSEV",
+      "order": 1,
+      "raw_source_text": "Fructose",
+      "raw_source_path": "inactiveIngredients",
+      "normalized_key": "fructose",
+      "name": "Fructose",
+      "standardName": "Fructose & High Fructose Corn Syrup",
+      "ingredientGroup": "Fructose",
+      "forms": [],
+      "alternateNames": [],
+      "mapped": true,
+      "hierarchyType": null
+    },
+    {
+      "ingredientId": 3789,
+      "uniiCode": null,
+      "order": 2,
+      "raw_source_text": "Sorbitol",
+      "raw_source_path": "inactiveIngredients",
+      "normalized_key": "sorbitol",
+      "name": "Sorbitol",
+      "standardName": "sorbitol",
+      "ingredientGroup": "Sorbitol",
+      "forms": [],
+      "alternateNames": [],
+      "mapped": true,
+      "hierarchyType": null,
+      "isAdditive": true,
+      "additiveType": "sugar_alcohol"
+    },
+    {
+      "ingredientId": 5690,
+      "uniiCode": null,
+      "order": 3,
+      "raw_source_text": "Honey powder",
+      "raw_source_path": "inactiveIngredients",
+      "normalized_key": "honey_powder",
+      "name": "Honey powder",
+      "standardName": "honey",
+      "ingredientGroup": "Honey",
+      "forms": [],
+      "alternateNames": [],
+      "mapped": true,
+      "hierarchyType": null,
+      "isAdditive": true,
+      "additiveType": "unspecified"
+    },
+    {
+      "ingredientId": 285558,
+      "uniiCode": "4ELV7Z65AP",
+      "order": 4,
+      "raw_source_text": "Stearic Acid",
+      "raw_source_path": "inactiveIngredients",
+      "normalized_key": "stearic_acid",
+      "name": "Stearic Acid",
+      "standardName": "stearic acid",
+      "ingredientGroup": "Stearic Acid",
+      "forms": [],
+      "alternateNames": [
+        "C18:0"
+      ],
+      "mapped": true,
+      "hierarchyType": null,
+      "isAdditive": true,
+      "additiveType": "processing_aid"
+    },
+    {
+      "ingredientId": 3677,
+      "uniiCode": null,
+      "order": 5,
+      "raw_source_text": "Citric Acid",
+      "raw_source_path": "inactiveIngredients",
+      "normalized_key": "citric_acid",
+      "name": "Citric Acid",
+      "standardName": "Citric Acid",
+      "ingredientGroup": "Citric Acid",
+      "forms": [],
+      "alternateNames": [],
+      "mapped": true,
+      "hierarchyType": null,
+      "isAdditive": true,
+      "additiveType": "preservative_natural"
+    },
+    {
+      "ingredientId": 3744,
+      "uniiCode": null,
+      "order": 6,
+      "raw_source_text": "Natural Flavors",
+      "raw_source_path": "inactiveIngredients",
+      "normalized_key": "natural_flavors",
+      "name": "Natural Flavors",
+      "standardName": "natural flavors",
+      "ingredientGroup": "Flavor",
+      "forms": [],
+      "alternateNames": [],
+      "mapped": true,
+      "hierarchyType": null,
+      "isAdditive": true,
+      "additiveType": "flavoring"
+    },
+    {
+      "ingredientId": 293311,
+      "uniiCode": "ETJ7Z6XBU4",
+      "order": 7,
+      "raw_source_text": "Silica",
+      "raw_source_path": "inactiveIngredients",
+      "normalized_key": "silica",
+      "name": "Silica",
+      "standardName": "Silica",
+      "ingredientGroup": "Silicon",
+      "forms": [],
+      "alternateNames": [],
+      "mapped": true,
+      "hierarchyType": null,
+      "isAdditive": true,
+      "additiveType": "unspecified"
+    },
+    {
+      "ingredientId": 3813,
+      "uniiCode": null,
+      "order": 8,
+      "raw_source_text": "Vegetable Magnesium Stearate",
+      "raw_source_path": "inactiveIngredients",
+      "normalized_key": "vegetable_magnesium_stearate",
+      "name": "Vegetable Magnesium Stearate",
+      "standardName": "vegetable magnesium stearate",
+      "ingredientGroup": "Magnesium stearate",
+      "forms": [],
+      "alternateNames": [],
+      "mapped": true,
+      "hierarchyType": null,
+      "isAdditive": true,
+      "additiveType": "vegetable_lubricant"
+    }
+  ],
+  "nutritionalInfo": {
+    "calories": {
+      "amount": 5.0,
+      "unit": "{Calories}"
+    },
+    "totalCarbohydrates": {
+      "amount": 1.0,
+      "unit": "g"
+    },
+    "sugars": {
+      "amount": 1.0,
+      "unit": "g"
+    }
+  },
+  "statements": [
+    {
+      "type": "General: Product/Version Code",
+      "notes": "ITEM #4160 B41492 07D"
+    },
+    {
+      "type": "General Statements: All Other Content",
+      "notes": "ACTUAL SIZE"
+    },
+    {
+      "type": "FDA Statement of Identity",
+      "notes": "Dietary Supplement"
+    },
+    {
+      "type": "Seals/Symbols",
+      "notes": "VEGETARIAN FORMULA\nGUARANTEED QUALITY\nLABORATORY TESTED\n"
+    },
+    {
+      "type": "Formulation re: Does NOT Contain",
+      "notes": "No Gluten, No Yeast, No Wheat, No Milk or Milk Derivatives, No Lactose, No Soy, No Egg, No Grapefruit, No Fish, No Artificial Color, No Artificial Flavor, No Sodium."
+    },
+    {
+      "type": "Suggested/Recommended/Usage/Directions",
+      "notes": "Directions: For adults and children 12 and over, dissolve one (1) lozenge in the mouth one or two times daily. Do not exceed two (2) per day. Limit use to no more than seven days.\n"
+    },
+    {
+      "type": "General Statements: All Other Content",
+      "notes": "Zinc lozenges coat the membranes of your mouth and throat with zinc, providing a soothing effect.They have a delicious citrus flavor, and leave no objectionable aftertaste as some other lozenges do.\n"
+    },
+    {
+      "type": "Precautions re: Pregnant or Nursing or Prescription Medications",
+      "notes": "WARNING: If you are pregnant, nursing or taking any medications, consult your doctor before use."
+    },
+    {
+      "type": "Precautions re: All Other",
+      "notes": "Discontinue use and consult your doctor if any adverse reactions occur."
+    },
+    {
+      "type": "Precautions re: Children",
+      "notes": "Keep out of reach of children."
+    },
+    {
+      "type": "Storage",
+      "notes": "Store in a cool, dry place."
+    },
+    {
+      "type": "Precautions re: All Other",
+      "notes": "Do not use if seal under cap is broken or missing."
+    },
+    {
+      "type": "Brand IP Statement(s) re: (c), (TM), (SM)",
+      "notes": "(C) 2009 Good 'N Natural (R)"
+    }
+  ],
+  "claims": [
+    {
+      "langualCode": "P0115",
+      "langualCodeDescription": "All Other"
+    }
+  ],
+  "servingSizes": [
+    {
+      "minQuantity": 1.0,
+      "maxQuantity": 1.0,
+      "unit": "Lozenge(s)",
+      "minDailyServings": 1,
+      "maxDailyServings": 2,
+      "normalizedServing": 1.0
+    }
+  ],
+  "labelRelationships": [
+    {
+      "type": "Image difference, same product",
+      "labelId": 58095
+    }
+  ],
+  "labelText": {
+    "raw": "ITEM #4160 B41492 07D ACTUAL SIZE Dietary Supplement VEGETARIAN FORMULA\nGUARANTEED QUALITY\nLABORATORY TESTED\n No Gluten, No Yeast, No Wheat, No Milk or Milk Derivatives, No Lactose, No Soy, No Egg, No Grapefruit, No Fish, No Artificial Color, No Artificial Flavor, No Sodium. Directions: For adults and children 12 and over, dissolve one (1) lozenge in the mouth one or two times daily. Do not exceed two (2) per day. Limit use to no more than seven days.\n Zinc lozenges coat the membranes of your mouth and throat with zinc, providing a soothing effect.They have a delicious citrus flavor, and leave no objectionable aftertaste as some other lozenges do.\n WARNING: If you are pregnant, nursing or taking any medications, consult your doctor before use. Discontinue use and consult your doctor if any adverse reactions occur. Keep out of reach of children. Store in a cool, dry place. Do not use if seal under cap is broken or missing. (C) 2009 Good 'N Natural (R)",
+    "parsed": {
+      "certifications": [],
+      "testing": [],
+      "origin": [],
+      "flavor": [
+        "Natural Flavors"
+      ],
+      "probioticGuarantee": [],
+      "cleanLabelClaims": [
+        "Dairy Free",
+        "No Wheat",
+        "Egg Free",
+        "Yeast Free",
+        "No Artificial Flavors",
+        "Gluten Free",
+        "No Artificial Colors",
+        "Soy Free"
+      ],
+      "allergens": [],
+      "allergenFree": [
+        "egg",
+        "yeast",
+        "dairy",
+        "wheat",
+        "soy"
+      ],
+      "warnings": [
+        "If pregnant, nursing, or taking any medications, consult a healthcare professional before use",
+        "Keep out of reach of children"
+      ],
+      "storage": [
+        "Store in a cool, dry place."
+      ],
+      "directions": "For adults and children 12 and over, dissolve one (1) lozenge in the mouth one or two times daily. Do not exceed two (2) per day. Limit use to no more than seven days.",
+      "marketingClaims": [],
+      "qualityFeatures": [
+        "Batch traceability",
+        "Vegetarian"
+      ],
+      "proprietaryBlendDisclosure": null
+    },
+    "searchText": "Zinc Zinc Citrate Zinc Gluconate Zinc (Form: as Zinc Citrate, and Zinc Gluconate) Fructose Sorbitol Honey powder Stearic Acid Citric Acid Natural Flavors Silica Vegetable Magnesium Stearate ITEM #4160 B41492 07D ACTUAL SIZE Dietary Supplement VEGETARIAN FORMULA\nGUARANTEED QUALITY\nLABORATORY TESTED No Gluten, No Yeast, No Wheat, No Milk or Milk Derivatives, No Lactose, No Soy, No Egg, No Grapefruit, No Fish, No Artificial Color, No Artificial Flavor, No Sodium. Directions: For adults and children 12 and over, dissolve one (1) lozenge in the mouth one or two times daily. Do not exceed two (2) per day. Limit use to no more than seven days. Zinc lozenges coat the membranes of your mouth and throat with zinc, providing a soothing effect.They have a delicious citrus flavor, and leave no objectionable aftertaste as some other lozenges do. WARNING: If you are pregnant, nursing or taking any medications, consult your doctor before use. Discontinue use and consult your doctor if any adverse reactions occur. Keep out of reach of children. Store in a cool, dry place. Do not use if seal under cap is broken or missing. (C) 2009 Good 'N Natural (R)"
+  },
+  "metadata": {
+    "lastCleaned": "2026-02-16T21:19:13.639331Z",
+    "cleaningVersion": "2.1.0",
+    "reference_versions": {
+      "color_indicators": {
+        "version": "2.0.0",
+        "last_updated": "2026-01-05"
+      }
+    },
+    "mappingStats": {
+      "totalIngredients": 9,
+      "mappedIngredients": 9,
+      "unmappedIngredients": 0,
+      "mappingRate": 100.0
+    },
+    "transparencyMetrics": {
+      "hasProprietaryBlend": false,
+      "blendTransparency": "full",
+      "disclosedIngredients": 1,
+      "undisclosedQuantities": 0,
+      "transparencyScore": 100.0
+    },
+    "completeness": {
+      "score": 100.0,
+      "missingFields": [],
+      "criticalFieldsComplete": true
+    }
+  }
+}

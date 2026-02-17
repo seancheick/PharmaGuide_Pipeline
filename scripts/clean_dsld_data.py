@@ -175,8 +175,7 @@ class DSLDCleaningPipeline:
                     with open(db_path, 'r') as f:
                         db_data = json.load(f)
 
-                    # Look for version info in database_info or _metadata
-                    db_info = db_data.get('database_info', db_data.get('_metadata', {}))
+                    db_info = db_data.get('_metadata', {})
                     version = db_info.get('version', db_info.get('schema_version', 'unknown'))
                     last_updated = db_info.get('last_updated', 'unknown')
 

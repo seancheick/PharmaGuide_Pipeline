@@ -1,7 +1,48 @@
 {
+  "_metadata": {
+    "description": "Tiered enhanced delivery systems for bioavailability scoring",
+    "purpose": "bonus_scoring",
+    "schema_version": "4.0.0",
+    "last_updated": "2026-02-16",
+    "total_entries": 78,
+    "scoring_rule": "Award bonus points based on delivery technology tier. Only the HIGHEST tier match counts (no stacking).",
+    "tier_definitions": {
+      "tier_1": {
+        "name": "Premium Delivery",
+        "points": 3.0,
+        "description": "Advanced technologies with clinically proven 10x+ bioavailability increase (liposomal, phytosome, nanoemulsion, patented curcumin forms)"
+      },
+      "tier_2": {
+        "name": "Enhanced Delivery",
+        "points": 2.0,
+        "description": "Proven absorption enhancement (chelated minerals, sublingual, enteric coating, active vitamin forms)"
+      },
+      "tier_3": {
+        "name": "Basic Enhanced",
+        "points": 1.0,
+        "description": "Modest improvements over standard forms (softgels, powders, fermented, freeze-dried)"
+      }
+    },
+    "tier_points": {
+      "1": 3.0,
+      "2": 2.0,
+      "3": 1.0
+    },
+    "max_bonus": 3.0,
+    "detection_note": "Search labelText.raw + ingredient forms + product name (case-insensitive). Award only the single highest tier match.",
+    "pipeline_integration": "Used by enrichment script to award delivery bonus points during scoring preparation",
+    "sources": [
+      "https://www.nutritionaloutlook.com/view/innovative-delivery-technologies-that-enhance-bioavailability-and-stability",
+      "https://balchem.com/hnh/mn/albion-minerals/",
+      "https://pmc.ncbi.nlm.nih.gov/articles/PMC8527653/",
+      "https://blog.capscanada.com/delivery-formats-for-probiotics",
+      "https://examine.com/supplements/curcumin/",
+      "https://pubmed.ncbi.nlm.nih.gov/curcumin-bioavailability/"
+    ]
+  },
   "liposomal": {
     "tier": 1,
-    "description": "Phospholipid encapsulation \u2013 routinely 300-1000%+ bioavailability increase",
+    "description": "Phospholipid encapsulation – routinely 300-1000%+ bioavailability increase",
     "category": "delivery"
   },
   "lypospheric": {
@@ -11,7 +52,7 @@
   },
   "vesisorb": {
     "tier": 1,
-    "description": "Colloidal droplet system \u2013 clinically proven superior absorption",
+    "description": "Colloidal droplet system – clinically proven superior absorption",
     "category": "delivery"
   },
   "capsoil": {
@@ -21,7 +62,7 @@
   },
   "nanoemulsion": {
     "tier": 1,
-    "description": "Ultra-fine oil-in-water emulsion \u2013 rapid high absorption",
+    "description": "Ultra-fine oil-in-water emulsion – rapid high absorption",
     "category": "delivery"
   },
   "phytosome": {
@@ -41,12 +82,12 @@
   },
   "novasol": {
     "tier": 1,
-    "description": "Micellar solubilization \u2013 up to 185x bioavailability increase for curcumin",
+    "description": "Micellar solubilization – up to 185x bioavailability increase for curcumin",
     "category": "delivery"
   },
   "micellar": {
     "tier": 1,
-    "description": "Micelle encapsulation \u2013 superior intestinal wall interaction, pH resistant",
+    "description": "Micelle encapsulation – superior intestinal wall interaction, pH resistant",
     "category": "delivery"
   },
   "licaps": {
@@ -56,22 +97,22 @@
   },
   "longvida": {
     "tier": 1,
-    "description": "SLCP (Solid Lipid Curcumin Particle) \u2013 65x more bioavailable",
+    "description": "SLCP (Solid Lipid Curcumin Particle) – 65x more bioavailable",
     "category": "delivery"
   },
   "theracurmin": {
     "tier": 1,
-    "description": "Colloidal dispersion curcumin \u2013 27x more bioavailable",
+    "description": "Colloidal dispersion curcumin – 27x more bioavailable",
     "category": "delivery"
   },
   "meriva": {
     "tier": 1,
-    "description": "Curcumin-phosphatidylcholine phytosome \u2013 29x more bioavailable",
+    "description": "Curcumin-phosphatidylcholine phytosome – 29x more bioavailable",
     "category": "delivery"
   },
   "lozenge": {
     "tier": 2,
-    "description": "Partial sublingual + mechanical dissolution \u2013 excellent for oral/immune actives",
+    "description": "Partial sublingual + mechanical dissolution – excellent for oral/immune actives",
     "category": "delivery"
   },
   "sublingual": {
@@ -81,17 +122,17 @@
   },
   "oral spray": {
     "tier": 2,
-    "description": "Sublingual spray \u2013 fast onset, high bioavailability",
+    "description": "Sublingual spray – fast onset, high bioavailability",
     "category": "delivery"
   },
   "chelated": {
     "tier": 2,
-    "description": "Amino-acid bound minerals \u2013 40-90% better absorption than oxides",
+    "description": "Amino-acid bound minerals – 40-90% better absorption than oxides",
     "category": "delivery"
   },
   "traacs": {
     "tier": 2,
-    "description": "Albion patented chelates \u2013 gold-standard mineral chelation",
+    "description": "Albion patented chelates – gold-standard mineral chelation",
     "category": "delivery"
   },
   "albion": {
@@ -101,17 +142,17 @@
   },
   "enteric-coated": {
     "tier": 2,
-    "description": "Stomach-acid protection \u2013 critical for probiotics/enzymes",
+    "description": "Stomach-acid protection – critical for probiotics/enzymes",
     "category": "delivery"
   },
   "micronized": {
     "tier": 2,
-    "description": "Particle size reduction \u2013 proven 2-5\u00d7 surface area increase",
+    "description": "Particle size reduction – proven 2-5× surface area increase",
     "category": "delivery"
   },
   "time-release": {
     "tier": 2,
-    "description": "Sustained delivery \u2013 stable blood levels",
+    "description": "Sustained delivery – stable blood levels",
     "category": "delivery"
   },
   "sustained-release": {
@@ -119,24 +160,19 @@
     "description": "Gradual release matrix",
     "category": "delivery"
   },
-  "liquid": {
-    "tier": 2,
-    "description": "High bioavailability when taken sublingually or with fat",
-    "category": "delivery"
-  },
   "tincture": {
     "tier": 2,
-    "description": "Alcohol/glycerin extract \u2013 rapid absorption",
+    "description": "Alcohol/glycerin extract – rapid absorption",
     "category": "delivery"
   },
   "drcaps": {
     "tier": 2,
-    "description": "Delayed-release capsule \u2013 releases 75-120 min after ingestion, protects from stomach acid",
+    "description": "Delayed-release capsule – releases 75-120 min after ingestion, protects from stomach acid",
     "category": "delivery"
   },
   "bio-tract": {
     "tier": 2,
-    "description": "Time-release tablet \u2013 delivers 15x more probiotics, 8-10 hour release",
+    "description": "Time-release tablet – delivers 15x more probiotics, 8-10 hour release",
     "category": "delivery"
   },
   "maktrek": {
@@ -152,56 +188,6 @@
   "acid-resistant": {
     "tier": 2,
     "description": "Stomach acid protection for sensitive ingredients",
-    "category": "delivery"
-  },
-  "bisglycinate": {
-    "tier": 2,
-    "description": "Amino acid chelated mineral \u2013 high absorption, gentle on stomach",
-    "category": "delivery"
-  },
-  "glycinate": {
-    "tier": 2,
-    "description": "Glycine-bound mineral chelate \u2013 superior bioavailability",
-    "category": "delivery"
-  },
-  "citrate": {
-    "tier": 2,
-    "description": "Citric acid bound mineral \u2013 good absorption, well-tolerated",
-    "category": "delivery"
-  },
-  "picolinate": {
-    "tier": 2,
-    "description": "Picolinic acid chelate \u2013 enhanced mineral absorption",
-    "category": "delivery"
-  },
-  "malate": {
-    "tier": 2,
-    "description": "Malic acid bound mineral \u2013 good absorption with energy benefits",
-    "category": "delivery"
-  },
-  "orotate": {
-    "tier": 2,
-    "description": "Orotic acid chelate \u2013 crosses cell membranes efficiently",
-    "category": "delivery"
-  },
-  "gummy": {
-    "tier": 3,
-    "description": "Better than tablet but sugar/gelatin reduces net benefit",
-    "category": "delivery"
-  },
-  "powder": {
-    "tier": 3,
-    "description": "Flexible dosing \u2013 absorption depends on mixing",
-    "category": "delivery"
-  },
-  "effervescent": {
-    "tier": 3,
-    "description": "Fast dissolution",
-    "category": "delivery"
-  },
-  "softgel": {
-    "tier": 3,
-    "description": "Good for fat-solubles",
     "category": "delivery"
   },
   "microencapsulation": {
@@ -231,7 +217,7 @@
   },
   "curcuwin": {
     "tier": 1,
-    "description": "UltraSOL nutrient delivery \u2013 46x more bioavailable curcumin",
+    "description": "UltraSOL nutrient delivery – 46x more bioavailable curcumin",
     "category": "delivery"
   },
   "curcugen": {
@@ -241,27 +227,27 @@
   },
   "bcm-95": {
     "tier": 1,
-    "description": "Curcumin with essential oils \u2013 7x more bioavailable (Curcugreen)",
+    "description": "Curcumin with essential oils – 7x more bioavailable (Curcugreen)",
     "category": "delivery"
   },
   "c3 reduct": {
     "tier": 1,
-    "description": "Tetrahydrocurcuminoids \u2013 enhanced stability and absorption",
+    "description": "Tetrahydrocurcuminoids – enhanced stability and absorption",
     "category": "delivery"
   },
   "cavacurmin": {
     "tier": 1,
-    "description": "Gamma-cyclodextrin curcumin \u2013 85x more bioavailable",
+    "description": "Gamma-cyclodextrin curcumin – 85x more bioavailable",
     "category": "delivery"
   },
   "self-emulsifying": {
     "tier": 1,
-    "description": "SEDDS/SMEDDS \u2013 forms nanoemulsion in GI tract",
+    "description": "SEDDS/SMEDDS – forms nanoemulsion in GI tract",
     "category": "delivery"
   },
   "cyclodextrin": {
     "tier": 1,
-    "description": "Molecular encapsulation \u2013 enhanced solubility and stability",
+    "description": "Molecular encapsulation – enhanced solubility and stability",
     "category": "delivery"
   },
   "nanoparticle": {
@@ -281,47 +267,47 @@
   },
   "bioperine": {
     "tier": 1,
-    "description": "Piperine absorption enhancer \u2013 increases bioavailability 30-2000%",
+    "description": "Piperine absorption enhancer – increases bioavailability 30-2000%",
     "category": "delivery"
   },
   "threonate": {
     "tier": 2,
-    "description": "Threonic acid chelate \u2013 crosses blood-brain barrier (Magtein)",
+    "description": "Threonic acid chelate – crosses blood-brain barrier (Magtein)",
     "category": "delivery"
   },
   "taurate": {
     "tier": 2,
-    "description": "Taurine-bound mineral \u2013 cardiovascular support",
+    "description": "Taurine-bound mineral – cardiovascular support",
     "category": "delivery"
   },
   "arginate": {
     "tier": 2,
-    "description": "Arginine chelate \u2013 supports nitric oxide production",
+    "description": "Arginine chelate – supports nitric oxide production",
     "category": "delivery"
   },
   "lysinate": {
     "tier": 2,
-    "description": "Lysine-bound mineral \u2013 amino acid chelation",
+    "description": "Lysine-bound mineral – amino acid chelation",
     "category": "delivery"
   },
   "aspartate": {
     "tier": 2,
-    "description": "Aspartic acid chelate \u2013 supports energy metabolism",
+    "description": "Aspartic acid chelate – supports energy metabolism",
     "category": "delivery"
   },
   "hydroxyapatite": {
     "tier": 2,
-    "description": "Bone-derived calcium form \u2013 highly bioavailable MCHA/MCHC",
+    "description": "Bone-derived calcium form – highly bioavailable MCHA/MCHC",
     "category": "delivery"
   },
   "buccal": {
     "tier": 2,
-    "description": "Cheek absorption \u2013 bypasses first-pass metabolism",
+    "description": "Cheek absorption – bypasses first-pass metabolism",
     "category": "delivery"
   },
   "transdermal": {
     "tier": 2,
-    "description": "Skin absorption \u2013 bypasses digestive system",
+    "description": "Skin absorption – bypasses digestive system",
     "category": "delivery"
   },
   "aquasome": {
@@ -331,12 +317,12 @@
   },
   "vcaps": {
     "tier": 2,
-    "description": "Vegetable capsule \u2013 HPMC plant-based delivery",
+    "description": "Vegetable capsule – HPMC plant-based delivery",
     "category": "delivery"
   },
   "plantcaps": {
     "tier": 2,
-    "description": "Pullulan-based plant capsule \u2013 natural fermentation derived",
+    "description": "Pullulan-based plant capsule – natural fermentation derived",
     "category": "delivery"
   },
   "optimsm": {
@@ -346,27 +332,27 @@
   },
   "quatrefolic": {
     "tier": 2,
-    "description": "Glucosamine salt of 5-MTHF \u2013 superior folate bioavailability",
+    "description": "Glucosamine salt of 5-MTHF – superior folate bioavailability",
     "category": "delivery"
   },
   "methylcobalamin": {
     "tier": 2,
-    "description": "Active coenzyme B12 form \u2013 no conversion needed",
+    "description": "Active coenzyme B12 form – no conversion needed",
     "category": "delivery"
   },
   "p5p": {
     "tier": 2,
-    "description": "Pyridoxal-5-phosphate \u2013 active B6, no liver conversion",
+    "description": "Pyridoxal-5-phosphate – active B6, no liver conversion",
     "category": "delivery"
   },
   "ubiquinol": {
     "tier": 2,
-    "description": "Reduced CoQ10 form \u2013 8x more bioavailable than ubiquinone",
+    "description": "Reduced CoQ10 form – 8x more bioavailable than ubiquinone",
     "category": "delivery"
   },
   "r-lipoic acid": {
     "tier": 2,
-    "description": "Natural R-isomer \u2013 more bioactive than racemic ALA",
+    "description": "Natural R-isomer – more bioactive than racemic ALA",
     "category": "delivery"
   },
   "chewable": {
@@ -376,17 +362,17 @@
   },
   "drops": {
     "tier": 3,
-    "description": "Liquid form \u2013 flexible dosing, faster than tablets",
+    "description": "Liquid form – flexible dosing, faster than tablets",
     "category": "delivery"
   },
   "syrup": {
     "tier": 3,
-    "description": "Liquid suspension \u2013 easier for children/elderly",
+    "description": "Liquid suspension – easier for children/elderly",
     "category": "delivery"
   },
   "freeze-dried": {
     "tier": 3,
-    "description": "Lyophilized \u2013 preserves potency and stability",
+    "description": "Lyophilized – preserves potency and stability",
     "category": "delivery"
   },
   "spray-dried": {
@@ -414,45 +400,34 @@
     "description": "BioActives sustained-release micronized technology – enhanced bioavailability for CoQ10, curcumin, and other compounds",
     "category": "delivery"
   },
-  "_metadata": {
-    "description": "Tiered enhanced delivery systems for bioavailability scoring",
-    "purpose": "bonus_scoring",
-    "scoring_rule": "Award bonus points based on delivery technology tier. Only the HIGHEST tier match counts (no stacking).",
-    "tier_definitions": {
-      "tier_1": {
-        "name": "Premium Delivery",
-        "points": 3.0,
-        "description": "Advanced technologies with clinically proven 10x+ bioavailability increase (liposomal, phytosome, nanoemulsion, patented curcumin forms)"
-      },
-      "tier_2": {
-        "name": "Enhanced Delivery",
-        "points": 2.0,
-        "description": "Proven absorption enhancement (chelated minerals, sublingual, enteric coating, active vitamin forms)"
-      },
-      "tier_3": {
-        "name": "Basic Enhanced",
-        "points": 1.0,
-        "description": "Modest improvements over standard forms (softgels, powders, fermented, freeze-dried)"
-      }
-    },
-    "tier_points": {
-      "1": 3.0,
-      "2": 2.0,
-      "3": 1.0
-    },
-    "schema_version": "1.4",
-    "total_entries": 83,
-    "last_updated": "2026-01-06",
-    "max_bonus": 3.0,
-    "detection_note": "Search labelText.raw + ingredient forms + product name (case-insensitive). Award only the single highest tier match.",
-    "pipeline_integration": "Used by enrichment script to award delivery bonus points during scoring preparation",
-    "sources": [
-      "https://www.nutritionaloutlook.com/view/innovative-delivery-technologies-that-enhance-bioavailability-and-stability",
-      "https://balchem.com/hnh/mn/albion-minerals/",
-      "https://pmc.ncbi.nlm.nih.gov/articles/PMC8527653/",
-      "https://blog.capscanada.com/delivery-formats-for-probiotics",
-      "https://examine.com/supplements/curcumin/",
-      "https://pubmed.ncbi.nlm.nih.gov/curcumin-bioavailability/"
-    ]
+  "siliphos": {
+    "tier": 1,
+    "description": "Silybin-phosphatidylcholine phytosome complex – 10x improved milk thistle bioavailability",
+    "category": "delivery"
+  },
+  "greenselect": {
+    "tier": 1,
+    "description": "EGCG-phospholipid phytosome – enhanced green tea catechin absorption",
+    "category": "delivery"
+  },
+  "maxsimil": {
+    "tier": 1,
+    "description": "Self-microemulsifying fish oil technology – 3x improved omega-3 absorption",
+    "category": "delivery"
+  },
+  "suprabio": {
+    "tier": 1,
+    "description": "Tocomin SupraBio – self-emulsifying delivery system for enhanced tocotrienol absorption",
+    "category": "delivery"
+  },
+  "hydrocurc": {
+    "tier": 1,
+    "description": "LipiSperse cold water dispersible curcumin – enhanced bioavailability via colloidal dispersion",
+    "category": "delivery"
+  },
+  "curqfen": {
+    "tier": 1,
+    "description": "Fenugreek galactomannan-curcumin complex – 45x improved curcumin bioavailability",
+    "category": "delivery"
   }
 }

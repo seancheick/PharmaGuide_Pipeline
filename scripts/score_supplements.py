@@ -1,1733 +1,1755 @@
 #!/usr/bin/env python3
-"""
-DSLD Supplement Scoring System v3.1.0
-======================================
-Calculates product scores from enriched data using best-practice algorithms.
+"""PharmaGuide scoring engine (v3.0 spec).
 
-SCORING STRUCTURE (100 POINTS TOTAL):
-- Section A: Ingredient Quality (0-30 pts)
-- Section B: Safety & Purity (0-45 pts)
-- Section C: Evidence & Research (0-15 pts)
-- Section D: Brand Trust (0-10 pts)
-- Section E: User Profile (0-20 pts) - Calculated on device, NOT here
-
-This script calculates 80 points (Sections A-D).
-Display format: "65/80" with "/100 equivalent" shown underneath.
-
-ALGORITHM FEATURES:
-- Uses combined 'score' field (bio_score + natural bonus)
-- Deduplication by additive_id to prevent double penalties
-- Category caps to prevent over-penalization
-- Diminishing returns on stacking penalties
-- Floor/ceiling protection
-
-Usage:
-    python score_supplements.py
-    python score_supplements.py --config config/scoring_config.json
-    python score_supplements.py --input-dir enriched_data --output-dir scored_output
-    python score_supplements.py --dry-run
-
-Author: PharmaGuide Team
-Version: 3.1.0
+This scorer is arithmetic-only: matching and NLP are expected to be performed
+in cleaning/enrichment. The scorer consumes enriched canonical fields.
 """
 
-import json
-import os
-import sys
-import logging
+from __future__ import annotations
+
 import argparse
-from datetime import datetime
-from pathlib import Path
-from typing import Dict, List, Any, Tuple, Set, Optional
+import json
+import logging
+import math
+import os
+import re
+import sys
 from collections import defaultdict
+from datetime import datetime, timezone
+from pathlib import Path
+from typing import Any, Dict, List, Optional, Tuple
+
 
 # Optional tqdm import for progress bars
 try:
     from tqdm import tqdm
+
     TQDM_AVAILABLE = True
-except ImportError:
-    TQDM_AVAILABLE = False
+except Exception:
     tqdm = None
+    TQDM_AVAILABLE = False
+
 
 # Add scripts directory to path
 sys.path.insert(0, str(Path(__file__).parent))
 
-from constants import LOG_FORMAT, LOG_DATE_FORMAT
+from constants import LOG_DATE_FORMAT, LOG_FORMAT
+
+try:
+    from match_ledger import (
+        SCORING_STATUS_BLOCKED,
+        SCORING_STATUS_NOT_APPLICABLE,
+        SCORING_STATUS_SCORED,
+        SCORE_BASIS_BIOACTIVES,
+        SCORE_BASIS_NO_SCORABLE,
+        SCORE_BASIS_SAFETY_BLOCK,
+        SCORE_BASIS_SCORING_ERROR,
+    )
+except Exception:
+    SCORING_STATUS_BLOCKED = "blocked"
+    SCORING_STATUS_NOT_APPLICABLE = "not_applicable"
+    SCORING_STATUS_SCORED = "scored"
+    SCORE_BASIS_BIOACTIVES = "bioactives_scored"
+    SCORE_BASIS_NO_SCORABLE = "no_scorable_ingredients"
+    SCORE_BASIS_SAFETY_BLOCK = "safety_block"
+    SCORE_BASIS_SCORING_ERROR = "scoring_error"
+
+
+def clamp(low: float, high: float, value: float) -> float:
+    return max(low, min(high, value))
+
+
+def as_float(value: Any, default: Optional[float] = 0.0) -> Optional[float]:
+    if value is None:
+        return default
+    try:
+        return float(value)
+    except (TypeError, ValueError):
+        return default
+
+
+def norm_text(value: Any) -> str:
+    if value is None:
+        return ""
+    text = str(value).strip().lower()
+    text = re.sub(r"\s+", " ", text)
+    return text
+
+
+def canon_key(value: Any) -> str:
+    text = norm_text(value)
+    return re.sub(r"[^a-z0-9]+", " ", text).strip()
+
+
+def safe_list(value: Any) -> List[Any]:
+    return value if isinstance(value, list) else []
 
 
 class SupplementScorer:
-    """
-    Scoring system for enriched supplement data.
+    """Main scorer implementing the v3.0 quality score specification."""
 
-    Design Principles:
-    1. Uses 'score' field (bio_score + natural) instead of raw bio_score
-    2. Deduplicates penalties by additive_id to prevent double-counting
-    3. Implements category caps per MCDM best practices
-    4. Provides transparent scoring notes for every calculation
-    """
-
-    VERSION = "3.3.1"
-    COMPATIBLE_ENRICHMENT_VERSIONS = ["3.0.0", "3.0.1", "3.1.0", "3.2.0"]
-
-    # Required fields for enriched product validation
-    REQUIRED_ENRICHED_FIELDS = ['dsld_id', 'product_name', 'enrichment_version']
-    REQUIRED_ENRICHMENT_SECTIONS = [
-        'ingredient_quality_data', 'contaminant_data', 'compliance_data',
-        'certification_data', 'proprietary_data', 'evidence_data', 'manufacturer_data'
+    COMPATIBLE_ENRICHMENT_VERSIONS = [
+        "3.0.0",
+        "3.0.1",
+        "3.1.0",
+        "3.2.0",
+        "3.3.0",
+        "3.4.0",
     ]
 
-    @staticmethod
-    def validate_enriched_product(product: Dict) -> Tuple[bool, List[str]]:
-        """
-        Validate enriched product structure before scoring.
-        Returns: (is_valid, list of issues)
-        """
-        issues = []
-
-        if not isinstance(product, dict):
-            return False, ["Product must be a dictionary"]
-
-        # Check required fields
-        for field in SupplementScorer.REQUIRED_ENRICHED_FIELDS:
-            if field not in product:
-                issues.append(f"Missing required field: {field}")
-
-        # Check enrichment sections exist (warning only, don't fail)
-        for section in SupplementScorer.REQUIRED_ENRICHMENT_SECTIONS:
-            if section not in product:
-                issues.append(f"Missing enrichment section: {section} (will use defaults)")
-
-        # Check enrichment version compatibility
-        enrichment_version = product.get('enrichment_version', '')
-        if enrichment_version and enrichment_version not in SupplementScorer.COMPATIBLE_ENRICHMENT_VERSIONS:
-            issues.append(f"Enrichment version {enrichment_version} may not be compatible")
-
-        # Only fail on truly critical missing fields (accept alternative field names)
-        has_id = 'dsld_id' in product or 'id' in product
-        has_name = 'product_name' in product or 'fullName' in product
-
-        critical_issues = []
-        if not has_id:
-            critical_issues.append("Missing product ID (dsld_id or id)")
-        if not has_name:
-            critical_issues.append("Missing product name (product_name or fullName)")
-
-        return len(critical_issues) == 0, issues + critical_issues
+    REQUIRED_ENRICHED_FIELDS = ["dsld_id", "product_name", "enrichment_version"]
 
     def __init__(self, config_path: str = "config/scoring_config.json"):
-        """Initialize scoring system with configuration"""
         self.logger = self._setup_logging()
         self.config = self._load_config(config_path)
 
-        # Extract scoring parameters from config
-        self.section_max = self.config.get('section_maximums', {})
-        self.section_a_config = self.config.get('section_A_ingredient_quality', {})
-        self.section_b_config = self.config.get('section_B_safety_purity', {})
-        self.section_c_config = self.config.get('section_C_evidence_research', {})
-        self.section_d_config = self.config.get('section_D_brand_trust', {})
-        self.probiotic_config = self.config.get('probiotic_bonus', {})
-        self.floors_ceilings = self.config.get('score_floors_and_ceilings', {})
+        self.VERSION = self.config.get("_documentation", {}).get("version", "3.0.0")
+        self.OUTPUT_SCHEMA_VERSION = self.config.get("_documentation", {}).get(
+            "output_schema_version", self.VERSION
+        )
+
+        self.feature_gates = self.config.get("feature_gates", {})
+        self.paths = self.config.get("paths", {})
 
     def _setup_logging(self) -> logging.Logger:
-        """Setup logging configuration"""
         logging.basicConfig(
             level=logging.INFO,
             format=LOG_FORMAT,
             datefmt=LOG_DATE_FORMAT,
-            handlers=[logging.StreamHandler(sys.stdout)]
+            handlers=[logging.StreamHandler(sys.stdout)],
         )
         return logging.getLogger(__name__)
 
-    def _load_config(self, config_path: str) -> Dict:
-        """Load scoring configuration"""
+    def _load_config(self, config_path: str) -> Dict[str, Any]:
         try:
             if not os.path.isabs(config_path):
-                script_dir = Path(__file__).parent
-                config_path = script_dir / config_path
-
-            with open(config_path, 'r', encoding='utf-8') as f:
-                config = json.load(f)
-            self.logger.info(f"Scoring config loaded from {config_path}")
-            return config
-        except FileNotFoundError:
-            self.logger.warning(f"Config not found at {config_path}, using defaults")
-            return self._default_config()
-        except json.JSONDecodeError as e:
-            self.logger.error(f"Invalid JSON in scoring config {config_path}: {e}")
-            return self._default_config()
-        except PermissionError as e:
-            self.logger.error(f"Permission denied reading config {config_path}: {e}")
-            return self._default_config()
-        except (IOError, OSError) as e:
-            self.logger.error(f"Failed to read config file {config_path}: {e}")
+                config_path = str(Path(__file__).parent / config_path)
+            with open(config_path, "r", encoding="utf-8") as f:
+                return json.load(f)
+        except Exception as exc:
+            self.logger.warning("Using default config due to load error: %s", exc)
             return self._default_config()
 
-    def _default_config(self) -> Dict:
-        """Return sensible defaults if config not found"""
+    def _default_config(self) -> Dict[str, Any]:
         return {
-            "section_maximums": {
-                "A_ingredient_quality": 30,
-                "B_safety_purity": 45,
-                "C_evidence_research": 15,
-                "D_brand_trust": 8,  # Was 10, now 8 after removing full_disclosure (+2 double-counting)
-                "total_without_E": 80
+            "_documentation": {
+                "version": "3.0.0",
+                "description": "Fallback v3.0 scorer config",
+                "last_updated": "2026-02-01",
             },
-            "score_floors_and_ceilings": {
-                "total_floor": 10,
-                "total_ceiling": 80
+            "feature_gates": {
+                "require_full_mapping": False,
+                "probiotic_extended_scoring": False,
             },
             "paths": {
                 "input_directory": "output_Lozenges_enriched/enriched",
-                "output_directory": "output_Lozenges_scored"
+                "output_directory": "output_Lozenges_scored",
+            },
+            "processing": {
+                "show_progress_bar": True,
+            },
+        }
+
+    @staticmethod
+    def validate_enriched_product(product: Dict[str, Any]) -> Tuple[bool, List[str]]:
+        issues: List[str] = []
+        if not isinstance(product, dict):
+            return False, ["Product must be a dictionary"]
+
+        has_id = bool(product.get("dsld_id"))
+        has_name = bool(product.get("product_name"))
+        if not has_id:
+            issues.append("Missing product ID (dsld_id)")
+        if not has_name:
+            issues.append("Missing product name (product_name)")
+
+        if not (product.get("enrichment_version") or product.get("enriched_date")):
+            issues.append("Missing enrichment version metadata")
+
+        return len([i for i in issues if "Missing product" in i]) == 0, issues
+
+    def _feature_on(self, key: str, default: bool = False) -> bool:
+        return bool(self.feature_gates.get(key, default))
+
+    # ---------------------------------------------------------------------
+    # Classifier + mapping gate
+    # ---------------------------------------------------------------------
+
+    def _classify_supplement_type(self, product: Dict[str, Any]) -> str:
+        existing = norm_text(product.get("supplement_type", {}).get("type"))
+        if existing:
+            return existing
+
+        active_count = int(as_float(product.get("supplement_type", {}).get("active_count"), 0) or 0)
+        if not active_count:
+            active_count = len(safe_list(product.get("ingredient_quality_data", {}).get("ingredients")))
+
+        if active_count == 1:
+            return "single"
+        if active_count >= 6:
+            return "multivitamin"
+        if 2 <= active_count <= 5:
+            return "targeted"
+        return "unknown"
+
+    def _mapping_gate(self, product: Dict[str, Any]) -> Dict[str, Any]:
+        iqd = product.get("ingredient_quality_data", {})
+        ingredients = safe_list(iqd.get("ingredients"))
+
+        active_total = int(as_float(iqd.get("total_active"), 0) or 0)
+        if active_total <= 0:
+            active_total = len(ingredients)
+
+        if active_total <= 0:
+            return {
+                "stop": True,
+                "reason": "NO_ACTIVES_DETECTED",
+                "mapped_coverage": 0.0,
+                "unmapped_actives": [],
+                "flags": ["NO_ACTIVES_DETECTED"],
             }
-        }
 
-    # =========================================================================
-    # SECTION A: INGREDIENT QUALITY (0-30 POINTS)
-    # =========================================================================
-
-    def _score_a1_bioavailability(self, ingredients: List[Dict], supplement_type: str, a1_config: Dict) -> Tuple[float, List[str]]:
-        """Score A1: Bioavailability & Form Quality (max 15)"""
-        a1_max = a1_config.get('max', 15)
-        notes = []
-
-        if not ingredients:
-            return 0, ["A1: No ingredients found"]
-
-        total_weighted = 0
-        total_importance = 0
-        skipped_count = 0
-
-        for ing in ingredients:
-            # Skip summaries and sources to prevent double-counting (score only components)
-            hierarchy = ing.get('hierarchyType') or {}
-            hierarchy_type = hierarchy.get('type') if isinstance(hierarchy, dict) else None
-            scoring_rule = hierarchy.get('scoring_rule') if isinstance(hierarchy, dict) else None
-
-            if hierarchy_type in ['summary', 'source']:
-                skipped_count += 1
-                continue
-            if scoring_rule == 'skip_all':
-                skipped_count += 1
-                continue
-
-            score = ing.get('score')
-            if score is None:
-                bio_score = ing.get('bio_score', 5) or 5
-                natural = ing.get('natural', False)
-                score = bio_score + (3 if natural else 0)
-
-            importance = ing.get('dosage_importance', 1.0)
-            total_weighted += score * importance
-            total_importance += importance
-
-        if skipped_count > 0:
-            notes.append(f"A1: Skipped {skipped_count} summary/source ingredients (scoring components only)")
-
-        if total_importance > 0:
-            weighted_avg = total_weighted / total_importance
-
-            if supplement_type == 'multivitamin':
-                floor_mult = a1_config.get('floor_multiplier_for_multis', 0.7)
-                weighted_avg = max(weighted_avg, a1_max * floor_mult)
-                notes.append(f"A1: Multivitamin floor applied (min {a1_max * floor_mult:.1f})")
-
-            a1_score = min(weighted_avg, a1_max)
-            notes.append(f"A1: Weighted avg score = {weighted_avg:.1f} (capped at {a1_max})")
-            return a1_score, notes
-
-        return 0, notes
-
-    def _score_a2_premium_forms(self, ingredients: List[Dict], a2_config: Dict) -> Tuple[float, List[str], int]:
-        """Score A2: Multiple Premium Forms (max 3)"""
-        a2_max = a2_config.get('max', 3)
-        threshold = a2_config.get('threshold_bio_score', 12)
-        points_per = a2_config.get('points_per_form', 0.5)
-
-        premium_count = 0
-        for ing in ingredients:
-            # Skip summaries and sources to prevent double-counting
-            hierarchy = ing.get('hierarchyType') or {}
-            hierarchy_type = hierarchy.get('type') if isinstance(hierarchy, dict) else None
-            scoring_rule = hierarchy.get('scoring_rule') if isinstance(hierarchy, dict) else None
-
-            if hierarchy_type in ['summary', 'source'] or scoring_rule == 'skip_all':
-                continue
-
-            if (ing.get('bio_score') or 0) > threshold:
-                premium_count += 1
-
-        if premium_count > 0:
-            score = min(premium_count * points_per, a2_max)
-            return score, [f"A2: {premium_count} premium forms (bio_score > {threshold}) = +{score:.1f}"], premium_count
-
-        return 0, [], 0
-
-    def _score_a3_delivery(self, delivery_data: Dict, a3_config: Dict) -> Tuple[float, List[str]]:
-        """Score A3: Enhanced Delivery (max 3)"""
-        a3_max = a3_config.get('max', 3)
-
-        if not delivery_data.get('matched', False):
-            return 0, ["A3: No enhanced delivery detected"]
-
-        highest_tier = delivery_data.get('highest_tier', 4)
-        tier_points = a3_config.get('tiers', {}).get(f'tier_{highest_tier}', {}).get('points', 0)
-        score = min(tier_points, a3_max)
-
-        systems = delivery_data.get('systems', [])
-        system_name = systems[0].get('name', 'unknown') if systems else 'unknown'
-        return score, [f"A3: {system_name} (Tier {highest_tier}) = +{score}"]
-
-    def _score_a4_absorption(self, absorption_data: Dict, a4_config: Dict) -> Tuple[float, List[str]]:
-        """Score A4: Absorption Enhancer (max 3, once only)"""
-        a4_max = a4_config.get('max', 3)
-
-        if not absorption_data.get('qualifies_for_bonus', False):
-            return 0, ["A4: No qualifying absorption enhancer"]
-
-        score = min(a4_config.get('points_if_qualifies', 3), a4_max)
-        enhancers = absorption_data.get('enhancers', [])
-        enhancer_name = enhancers[0].get('name', 'unknown') if enhancers else 'unknown'
-        nutrients = absorption_data.get('enhanced_nutrients_present', [])
-        return score, [f"A4: {enhancer_name} enhances {nutrients} = +{score}"]
-
-    def _score_a5_formulation(self, formulation_data: Dict, a5_config: Dict) -> Tuple[float, List[str], Dict]:
-        """Score A5: Formulation Excellence (max 9) - organic, botanicals, synergy"""
-        a5_max = a5_config.get('max', 9)
-        score = 0
-        notes = []
-        details = {'organic_claimed': False, 'qualifying_botanicals': [], 'synergy_pts': 0, 'synergy_note': 'N/A'}
-
-        # Organic (+2)
-        organic = formulation_data.get('organic', {})
-        if organic.get('claimed', False) and organic.get('usda_verified', False):
-            organic_pts = a5_config.get('usda_organic', {}).get('points', 2)
-            score += organic_pts
-            notes.append(f"A5: USDA Organic = +{organic_pts}")
-            details['organic_claimed'] = True
-
-        # Standardized Botanicals (+2)
-        botanicals = formulation_data.get('standardized_botanicals', [])
-        qualifying_botanicals = [b for b in botanicals if b.get('meets_threshold', False)]
-        if qualifying_botanicals:
-            botanical_pts = a5_config.get('standardized_botanicals', {}).get('points', 2)
-            score += botanical_pts
-            notes.append(f"A5: {len(qualifying_botanicals)} standardized botanicals = +{botanical_pts}")
-        details['qualifying_botanicals'] = qualifying_botanicals
-
-        # Synergy Clusters
-        clusters = formulation_data.get('synergy_clusters', [])
-        synergy_config = a5_config.get('synergy_clusters', {})
-        synergy_max = synergy_config.get('max', 5)
-        synergy_pts = 0
-        synergy_note = "N/A"
-
-        if clusters:
-            best_cluster = max(clusters, key=lambda c: c.get('match_count', 0))
-            match_count = best_cluster.get('match_count', 0)
-            cluster_name = best_cluster.get('cluster_name', 'unknown')
-
-            tier_thresholds = [(5, 'tier_5_plus', 5), (4, 'tier_4', 3), (3, 'tier_3', 2), (2, 'tier_2', 1)]
-            for threshold, key, default in tier_thresholds:
-                if match_count >= threshold:
-                    synergy_pts = synergy_config.get(key, default)
-                    synergy_note = f"{cluster_name} ({match_count} ingredients)"
-                    break
-
-            if synergy_pts > 0:
-                synergy_pts = min(synergy_pts, synergy_max)
-                score += synergy_pts
-                notes.append(f"A5: Synergy cluster {synergy_note} = +{synergy_pts}")
-
-        details['synergy_pts'] = synergy_pts
-        details['synergy_note'] = synergy_note
-
-        return min(score, a5_max), notes, details
-
-    def _score_section_a(self, product: Dict) -> Dict:
-        """
-        Score Section A: Ingredient Quality
-
-        Sub-sections:
-        - A1: Bioavailability & Form Quality (0-15) - weighted avg of score × importance
-        - A2: Multiple Premium Forms (0-3) - +0.5 per form with bio_score > 12
-        - A3: Enhanced Delivery (0-3) - tier-based points
-        - A4: Absorption Enhancer (0-3) - once only if qualifies
-        - A5: Formulation Excellence (0-9) - organic, botanicals, synergy
-        """
-        # Load configs
-        a1_config = self.section_a_config.get('A1_bioavailability_form', {})
-        a2_config = self.section_a_config.get('A2_premium_forms', {})
-        a3_config = self.section_a_config.get('A3_delivery_system', {})
-        a4_config = self.section_a_config.get('A4_absorption_enhancer', {})
-        a5_config = self.section_a_config.get('A5_formulation_excellence', {})
-
-        # Extract product data
-        quality_data = product.get('ingredient_quality_data', {})
-        delivery_data = product.get('delivery_data', {})
-        absorption_data = product.get('absorption_data', {})
-        formulation_data = product.get('formulation_data', {})
-        supplement_type = product.get('supplement_type', {}).get('type', 'unknown')
-        ingredients = quality_data.get('ingredients', [])
-
-        # Score each sub-section using helper methods
-        a1_score, a1_notes = self._score_a1_bioavailability(ingredients, supplement_type, a1_config)
-        a2_score, a2_notes, premium_count = self._score_a2_premium_forms(ingredients, a2_config)
-        a3_score, a3_notes = self._score_a3_delivery(delivery_data, a3_config)
-        a4_score, a4_notes = self._score_a4_absorption(absorption_data, a4_config)
-        a5_score, a5_notes, a5_details = self._score_a5_formulation(formulation_data, a5_config)
-
-        # Combine notes
-        notes = a1_notes + a2_notes + a3_notes + a4_notes + a5_notes
-
-        # Total Section A
-        total_a = a1_score + a2_score + a3_score + a4_score + a5_score
-        max_a = self.section_max.get('A_ingredient_quality', 30)
-        total_a = min(total_a, max_a)
-
-        # Get config values for output
-        a1_max = a1_config.get('max', 15)
-        a2_max = a2_config.get('max', 3)
-        a3_max = a3_config.get('max', 3)
-        a4_max = a4_config.get('max', 3)
-        threshold = a2_config.get('threshold_bio_score', 12)
-        synergy_config = a5_config.get('synergy_clusters', {})
-        synergy_max = synergy_config.get('max', 5)
-        organic_pts = a5_config.get('usda_organic', {}).get('points', 2)
-        botanical_pts = a5_config.get('standardized_botanicals', {}).get('points', 2)
-
-        # Build consumer-facing output
-        return {
-            "score": round(total_a, 1),
-            "max": max_a,
-            "subcategories": [
-                {"name": a1_config.get('name', 'Bioavailability & Form Quality'),
-                 "score": round(a1_score, 1), "max": a1_max,
-                 "note": f"Weighted avg of {len(ingredients)} ingredients" if ingredients else "No ingredients found"},
-                {"name": a2_config.get('name', 'Multiple Premium Forms'),
-                 "score": round(a2_score, 1), "max": a2_max,
-                 "note": f"{premium_count} premium forms (bio_score > {threshold})" if premium_count > 0 else "None"},
-                {"name": a3_config.get('name', 'Enhanced Delivery System'),
-                 "score": round(a3_score, 1), "max": a3_max,
-                 "note": self._get_delivery_note(delivery_data)},
-                {"name": a4_config.get('name', 'Absorption Enhancer Present'),
-                 "score": round(a4_score, 1), "max": a4_max,
-                 "note": self._get_absorption_note(absorption_data)},
-                {"name": a5_config.get('usda_organic', {}).get('name', 'USDA Organic Certified'),
-                 "score": organic_pts if a5_details['organic_claimed'] else 0, "max": organic_pts,
-                 "note": "Verified seal" if a5_details['organic_claimed'] else "N/A"},
-                {"name": a5_config.get('standardized_botanicals', {}).get('name', 'Standardized Botanicals'),
-                 "score": botanical_pts if a5_details['qualifying_botanicals'] else 0, "max": botanical_pts,
-                 "note": f"{len(a5_details['qualifying_botanicals'])} found" if a5_details['qualifying_botanicals'] else "N/A"},
-                {"name": synergy_config.get('name', 'Synergy Clusters'),
-                 "score": round(a5_details['synergy_pts'], 1), "max": synergy_max,
-                 "note": a5_details['synergy_note']}
-            ],
-            "details": {
-                "supplement_type": supplement_type,
-                "ingredients_count": len(ingredients),
-                "premium_forms_count": premium_count,
-                "notes": notes
-            }
-        }
-
-    def _get_delivery_note(self, delivery_data: Dict) -> str:
-        """Generate consumer-facing note for delivery system."""
-        if not delivery_data.get('matched'):
-            return "N/A"
-        systems = delivery_data.get('systems', [])
-        system_name = systems[0].get('name', 'N/A') if systems else 'N/A'
-        tier = delivery_data.get('highest_tier', 'N/A')
-        return f"{system_name} (Tier {tier})"
-
-    def _get_absorption_note(self, absorption_data: Dict) -> str:
-        """Generate consumer-facing note for absorption enhancer."""
-        if not absorption_data.get('qualifies_for_bonus'):
-            return "N/A"
-        enhancers = absorption_data.get('enhancers', [])
-        enhancer_name = enhancers[0].get('name', 'N/A') if enhancers else 'N/A'
-        nutrients = absorption_data.get('enhanced_nutrients_present', [])
-        return f"{enhancer_name} enhances {nutrients}"
-
-    # =========================================================================
-    # SECTION B: SAFETY & PURITY (0-45 POINTS)
-    # =========================================================================
-
-    def _score_b1_contaminants(self, contaminant_data: Dict, b1_config: Dict) -> Tuple[float, List[str], bool, Dict]:
-        """
-        Score B1: Contaminants & Additives (deductions only)
-        Returns: (penalty, notes, immediate_fail, details)
-        """
-        penalty = 0
-        notes = []
-        immediate_fail = False
-        additive_penalty = 0
-        allergen_penalty = 0
-        additive_penalties_list = []
-        allergen_penalties_list = []
-
-        # B1a: Banned/Recalled Substances
-        banned = contaminant_data.get('banned_substances', {})
-        banned_config = b1_config.get('banned_recalled', {})
-
-        if banned.get('found', False):
-            for substance in banned.get('substances', []):
-                severity = substance.get('severity_level', 'moderate')
-                pen = banned_config.get(severity, -10)
-                penalty += pen
-                notes.append(f"B1: Banned substance ({substance.get('banned_name', 'unknown')}, {severity}): {pen}")
-                if severity == 'critical':
-                    immediate_fail = True
-                    notes.append("⚠️ CRITICAL: Product flagged as immediate fail")
-
-        # B1b: Harmful Additives (with deduplication and cap)
-        additives = contaminant_data.get('harmful_additives', {})
-        additive_config = b1_config.get('harmful_additives', {})
-        additive_cap = additive_config.get('cap_total', -5)
-
-        if additives.get('found', False):
-            additive_list = additives.get('additives', [])
-            seen_ids: Set[str] = set()
-            unique_additives = []
-
-            for additive in additive_list:
-                additive_id = additive.get('additive_id', '')
-                if additive_id and additive_id not in seen_ids:
-                    seen_ids.add(additive_id)
-                    unique_additives.append(additive)
-                elif not additive_id:
-                    unique_additives.append(additive)
-
-            if len(additive_list) != len(unique_additives):
-                notes.append(f"B1: Deduplicated {len(additive_list)} → {len(unique_additives)} additives")
-
-            for additive in unique_additives:
-                risk = additive.get('risk_level', 'low')
-                pen = additive_config.get(risk, -0.5)
-                additive_penalty += pen
-                name = additive.get('matched_name', 'Unknown')
-                additive_penalties_list.append(f"{name} → {pen}")
-
-            additive_penalty = max(additive_penalty, additive_cap)
-            penalty += additive_penalty
-            notes.append(f"B1: Harmful additives ({len(unique_additives)}): {additive_penalty} (cap: {additive_cap})")
-
-        # B1c: Allergens (with cap)
-        allergens = contaminant_data.get('allergens', {})
-        allergen_config = b1_config.get('undeclared_allergens', {})
-        allergen_cap = allergen_config.get('cap_total', -2)
-
-        if allergens.get('found', False):
-            for allergen in allergens.get('allergens', []):
-                sev = allergen.get('severity_level', 'low')
-                pen = allergen_config.get(sev, -1)
-                allergen_penalty += pen
-                name = allergen.get('allergen_name', 'Unknown')
-                allergen_penalties_list.append(f"{name} → {pen}")
-
-            allergen_penalty = max(allergen_penalty, allergen_cap)
-            penalty += allergen_penalty
-            notes.append(f"B1: Allergens: {allergen_penalty} (cap: {allergen_cap})")
-
-        details = {
-            'banned': banned,
-            'additive_penalty': additive_penalty,
-            'allergen_penalty': allergen_penalty,
-            'additive_penalties_list': additive_penalties_list,
-            'allergen_penalties_list': allergen_penalties_list,
-            'additive_cap': additive_cap,
-            'allergen_cap': allergen_cap
-        }
-        return penalty, notes, immediate_fail, details
-
-    def _score_b2_compliance(self, compliance_data: Dict, b2_config: Dict) -> Tuple[float, List[str]]:
-        """
-        Score B2: Allergen & Dietary Compliance (bonuses)
-        Returns: (score, notes)
-        """
-        b2_max = b2_config.get('max', 4)
-        score = 0
-        notes = []
-
-        allergen_free_claims = compliance_data.get('allergen_free_claims', [])
-        if allergen_free_claims:
-            pts = b2_config.get('allergen_free_claim', {}).get('points', 2)
-            score += pts
-            notes.append(f"B2: Allergen-free claims ({len(allergen_free_claims)}): +{pts}")
-
-        if compliance_data.get('gluten_free', False):
-            pts = b2_config.get('gluten_free', {}).get('points', 1)
-            score += pts
-            notes.append(f"B2: Gluten-free: +{pts}")
-
-        if compliance_data.get('vegan', False) or compliance_data.get('vegetarian', False):
-            pts = b2_config.get('vegan_vegetarian', {}).get('points', 1)
-            score += pts
-            notes.append(f"B2: Vegan/Vegetarian: +{pts}")
-
-        if compliance_data.get('has_may_contain_warning', False):
-            pen = b2_config.get('may_contain_warning', {}).get('penalty', -2)
-            score += pen
-            notes.append(f"B2: 'May contain' warning: {pen}")
-
-        return max(min(score, b2_max), 0), notes
-
-    def _score_b3_certifications(self, certification_data: Dict, b3_config: Dict) -> Tuple[float, List[str], List]:
-        """
-        Score B3: Quality Certifications (bonuses)
-        Returns: (score, notes, tp_programs)
-        """
-        b3_max = b3_config.get('max', 16)
-        score = 0
-        notes = []
-
-        # Third-party testing
-        third_party = certification_data.get('third_party_programs', {})
-        tp_config = b3_config.get('third_party_testing', {})
-        tp_programs = third_party.get('programs', [])
-
-        if third_party.get('count', 0) > 0:
-            num_programs = min(len(tp_programs), tp_config.get('max_programs', 2))
-            tp_bonus = num_programs * tp_config.get('per_program', 5)
-            tp_bonus = min(tp_bonus, tp_config.get('max_total', 10))
-            score += tp_bonus
-            program_names = [p.get('name', 'unknown') for p in tp_programs[:num_programs]]
-            notes.append(f"B3: Third-party ({', '.join(program_names)}): +{tp_bonus}")
-
-        # GMP
-        if certification_data.get('gmp', {}).get('claimed', False):
-            pts = b3_config.get('gmp_certified', {}).get('points', 4)
-            score += pts
-            notes.append(f"B3: GMP certified: +{pts}")
-
-        # Batch traceability
-        if certification_data.get('batch_traceability', {}).get('qualifies', False):
-            pts = b3_config.get('batch_traceability', {}).get('points', 2)
-            score += pts
-            notes.append(f"B3: Batch traceability: +{pts}")
-
-        return min(score, b3_max), notes, tp_programs
-
-    def _score_b4_proprietary(self, product: Dict, proprietary_data: Dict, b4_config: Dict) -> Tuple[float, List[str], str]:
-        """
-        Score B4: Proprietary Blend Penalties
-        Returns: (penalty, notes, note_suffix)
-        """
-        b4_cap = b4_config.get('cap_total', -15)
-        penalty = 0
-        notes = []
-        note_suffix = ""
-
-        if not proprietary_data.get('has_proprietary_blends', False):
-            return 0, notes, note_suffix
-
-        total_active = proprietary_data.get('total_active_ingredients', 1)
-        blends = proprietary_data.get('blends', [])
-        blend_count = len(blends)
-
-        if total_active <= 0:
-            return 0, notes, note_suffix
-
-        ratio = blend_count / total_active
-        scaling = b4_config.get('scaling', {})
-
-        if ratio >= 0.75:
-            penalty = scaling.get('ratio_75_plus', -15)
-        elif ratio >= 0.50:
-            penalty = scaling.get('ratio_50_to_74', -10)
-        elif ratio >= 0.25:
-            penalty = scaling.get('ratio_25_to_49', -5)
-        else:
-            penalty = scaling.get('ratio_under_25', -2)
-
-        # Clinical evidence mitigation
-        mitigation_config = b4_config.get('clinical_evidence_mitigation', {})
-        original_penalty = penalty
-        mitigation_applied = False
-
-        # 1. Probiotic blends with clinically documented strains
-        probiotic_data = product.get('probiotic_data', {})
-        clinical_strain_count = probiotic_data.get('clinical_strain_count', 0)
-        if clinical_strain_count > 0:
-            reduction = mitigation_config.get('probiotic_clinical_strains', 0.5)
-            penalty = penalty * reduction
-            note_suffix = f" (reduced from {original_penalty} → {penalty:.1f}: {clinical_strain_count} clinical probiotic strain(s))"
-            mitigation_applied = True
-
-        # 2. Herbal/botanical blends with clinical evidence
-        if not mitigation_applied:
-            evidence_data = product.get('evidence_data', {})
-            clinical_matches = evidence_data.get('clinical_matches', [])
-            blend_has_evidence = any(
-                m.get('evidence_level') in ['product-human', 'tier_1', 'tier_2', 'systematic_review', 'rct_multiple']
-                for m in clinical_matches
+        unmapped_count = int(as_float(iqd.get("unmapped_count"), 0) or 0)
+        unmapped_actives = [
+            ing.get("name") or ing.get("raw_source_text") or "unknown"
+            for ing in ingredients
+            if not bool(ing.get("mapped", False))
+        ]
+
+        active_mapped = max(0, active_total - unmapped_count)
+        mapped_coverage = active_mapped / active_total if active_total else 0.0
+
+        flags: List[str] = []
+        match_ledger = product.get("match_ledger", {})
+        ledger_entries = safe_list(match_ledger.get("domains", {}).get("ingredients", {}).get("entries"))
+        has_unmapped_inactive = any(
+            (
+                "inactive" in norm_text(e.get("raw_source_path"))
+                and e.get("decision") in {"unmatched", "rejected"}
             )
-            if blend_has_evidence and len(clinical_matches) > 0:
-                reduction = mitigation_config.get('herbal_clinical_evidence', 0.6)
-                penalty = penalty * reduction
-                note_suffix = f" (reduced from {original_penalty} → {penalty:.1f}: {len(clinical_matches)} clinically-backed ingredient(s))"
-                mitigation_applied = True
+            for e in ledger_entries
+        )
+        if has_unmapped_inactive:
+            flags.append("UNMAPPED_INACTIVE_INGREDIENT")
 
-        # 3. Standardized botanical extracts
-        if not mitigation_applied:
-            formulation_data = product.get('formulation_data', {})
-            standardized_botanicals = formulation_data.get('standardized_botanicals', [])
-            std_count = len(standardized_botanicals) if isinstance(standardized_botanicals, list) else standardized_botanicals.get('count', 0)
-            if std_count > 0:
-                reduction = mitigation_config.get('standardized_extracts', 0.7)
-                penalty = penalty * reduction
-                note_suffix = f" (reduced from {original_penalty} → {penalty:.1f}: {std_count} standardized extract(s))"
-
-        penalty = max(penalty, b4_cap)
-        notes.append(f"B4: Proprietary blend ({blend_count}/{total_active} = {ratio:.0%}): {penalty}{note_suffix}")
-
-        return penalty, notes, note_suffix
-
-    def _score_section_b(self, product: Dict) -> Dict:
-        """
-        Score Section B: Safety & Purity
-
-        CRITICAL: Implements deduplication and caps to prevent over-penalization.
-
-        Sub-sections:
-        - B1: Contaminants & Additives (deductions with caps)
-        - B2: Allergen & Dietary Compliance (+4 max)
-        - B3: Quality Certifications (+16 max)
-        - B4: Proprietary Blend Penalties (-15 max)
-        """
-        # Get configs
-        b1_config = self.section_b_config.get('B1_contaminants_additives', {})
-        b2_config = self.section_b_config.get('B2_allergen_compliance', {})
-        b3_config = self.section_b_config.get('B3_quality_certifications', {})
-        b4_config = self.section_b_config.get('B4_proprietary_blends', {})
-
-        # Get product data
-        contaminant_data = product.get('contaminant_data', {})
-        compliance_data = product.get('compliance_data', {})
-        certification_data = product.get('certification_data', {})
-        proprietary_data = product.get('proprietary_data', {})
-
-        max_b = self.section_max.get('B_safety_purity', 45)
-        score = max_b  # Start at max, subtract penalties, add bonuses
-        notes = []
-
-        # B1: Contaminants & Additives (deductions)
-        b1_penalty, b1_notes, immediate_fail, b1_details = self._score_b1_contaminants(contaminant_data, b1_config)
-        score += b1_penalty
-        notes.extend(b1_notes)
-
-        # B2: Allergen & Dietary Compliance (bonuses)
-        b2_score, b2_notes = self._score_b2_compliance(compliance_data, b2_config)
-        score += b2_score
-        notes.extend(b2_notes)
-
-        # B3: Quality Certifications (bonuses)
-        b3_score, b3_notes, tp_programs = self._score_b3_certifications(certification_data, b3_config)
-        score += b3_score
-        notes.extend(b3_notes)
-
-        # B4: Proprietary Blend Penalties
-        b4_penalty, b4_notes, b4_note_suffix = self._score_b4_proprietary(product, proprietary_data, b4_config)
-        score += b4_penalty
-        notes.extend(b4_notes)
-
-        # Apply floor (cannot go below 0) and ceiling (cannot exceed max_b)
-        score = max(min(score, max_b), 0)
-
-        # Extract details from b1 helper for breakdown
-        additive_penalties_list = b1_details.get('additive_penalties_list', [])
-        allergen_penalties_list = b1_details.get('allergen_penalties_list', [])
-        additive_penalty = b1_details.get('additive_penalty', 0)
-        allergen_penalty = b1_details.get('allergen_penalty', 0)
-        additive_cap = b1_details.get('additive_cap', -5)
-        allergen_cap = b1_details.get('allergen_cap', -2)
-        banned = b1_details.get('banned', {})
-        allergen_free_claims = compliance_data.get('allergen_free_claims', [])
-
-        # Get config names for detailed breakdown
-        banned_name = b1_config.get('banned_recalled', {}).get('name', 'Banned/Recalled Substances')
-        additive_name = b1_config.get('harmful_additives', {}).get('name', 'Harmful Additives')
-        allergen_name = b1_config.get('undeclared_allergens', {}).get('name', 'Undeclared Allergens')
-        b2_allergen_name = b2_config.get('allergen_free_claim', {}).get('name', 'Allergen-Free Claim (Bonus)')
-        b2_gluten_name = b2_config.get('gluten_free', {}).get('name', 'Gluten-Free Certified')
-        b2_vegan_name = b2_config.get('vegan_vegetarian', {}).get('name', 'Vegan/Vegetarian')
-        b3_tp_name = b3_config.get('third_party_testing', {}).get('name', 'Third-Party Testing')
-        b3_gmp_name = b3_config.get('gmp_certified', {}).get('name', 'GMP Certified Facility')
-        b3_trace_name = b3_config.get('batch_traceability', {}).get('name', 'Batch Traceability / COA')
-        b4_name = b4_config.get('name', 'Proprietary Blend Penalty')
-        tp_program_names = ', '.join([p.get('name', 'Unknown') for p in tp_programs[:2]]) if tp_programs else "None"
+        if self._feature_on("require_full_mapping", default=False) and mapped_coverage < 1.0:
+            flags.append("UNMAPPED_ACTIVE_INGREDIENT")
+            return {
+                "stop": True,
+                "reason": "UNMAPPED_ACTIVE_INGREDIENT",
+                "mapped_coverage": mapped_coverage,
+                "unmapped_actives": unmapped_actives,
+                "flags": flags,
+            }
 
         return {
-            "score": round(score, 1),
-            "max": max_b,
-            "subcategories": [
-                {"name": banned_name, "score": 0, "max": 0, "note": f"{len(banned.get('substances', []))} found" if banned.get('found') else "None found"},
-                {"name": additive_name, "score": round(additive_penalty, 1) if 'additive_penalty' in dir() else 0, "max": 0,
-                 "penalties": additive_penalties_list if additive_penalties_list else None,
-                 "note": f"capped at {additive_cap}" if additive_penalties_list else "None found"},
-                {"name": allergen_name, "score": round(allergen_penalty, 1) if 'allergen_penalty' in dir() else 0, "max": 0,
-                 "penalties": allergen_penalties_list if allergen_penalties_list else None,
-                 "note": f"capped at {allergen_cap}" if allergen_penalties_list else "None found"},
-                {"name": b2_allergen_name, "score": b2_config.get('allergen_free_claim', {}).get('points', 2) if allergen_free_claims else 0,
-                 "max": b2_config.get('allergen_free_claim', {}).get('points', 2),
-                 "note": f"Verified {len(allergen_free_claims)}-free" if allergen_free_claims else "N/A"},
-                {"name": b2_gluten_name, "score": b2_config.get('gluten_free', {}).get('points', 1) if compliance_data.get('gluten_free') else 0,
-                 "max": b2_config.get('gluten_free', {}).get('points', 1),
-                 "note": "Yes" if compliance_data.get('gluten_free') else "N/A"},
-                {"name": b2_vegan_name, "score": b2_config.get('vegan_vegetarian', {}).get('points', 1) if (compliance_data.get('vegan') or compliance_data.get('vegetarian')) else 0,
-                 "max": b2_config.get('vegan_vegetarian', {}).get('points', 1),
-                 "note": "Yes" if (compliance_data.get('vegan') or compliance_data.get('vegetarian')) else "N/A"},
-                {"name": b3_tp_name, "score": min(len(tp_programs) * b3_config.get('third_party_testing', {}).get('per_program', 5), b3_config.get('third_party_testing', {}).get('max_total', 10)) if tp_programs else 0,
-                 "max": b3_config.get('third_party_testing', {}).get('max_total', 10),
-                 "note": tp_program_names},
-                {"name": b3_gmp_name, "score": b3_config.get('gmp_certified', {}).get('points', 4) if certification_data.get('gmp', {}).get('claimed') else 0,
-                 "max": b3_config.get('gmp_certified', {}).get('points', 4),
-                 "note": "Yes" if certification_data.get('gmp', {}).get('claimed') else "N/A"},
-                {"name": b3_trace_name, "score": b3_config.get('batch_traceability', {}).get('points', 2) if certification_data.get('batch_traceability', {}).get('qualifies') else 0,
-                 "max": b3_config.get('batch_traceability', {}).get('points', 2),
-                 "note": "Publicly available" if certification_data.get('batch_traceability', {}).get('qualifies') else "N/A"},
-                {"name": b4_name, "score": round(b4_penalty, 1), "max": 0,
-                 "note": f"{proprietary_data.get('blend_count', 0)}/{proprietary_data.get('total_active_ingredients', 1)} ingredients hidden{b4_note_suffix}" if proprietary_data.get('has_proprietary_blends') else "Full disclosure — no blends"}
-            ],
-            "details": {
-                "immediate_fail": immediate_fail,
-                "additive_penalty_capped": additive_penalty if 'additive_penalty' in dir() else 0,
-                "allergen_penalty_capped": allergen_penalty if 'allergen_penalty' in dir() else 0,
-                "third_party_pts": min(len(tp_programs) * b3_config.get('third_party_testing', {}).get('per_program', 5), b3_config.get('third_party_testing', {}).get('max_total', 10)) if tp_programs else 0,
-                "notes": notes
-            }
+            "stop": False,
+            "reason": None,
+            "mapped_coverage": mapped_coverage,
+            "unmapped_actives": unmapped_actives,
+            "flags": flags,
         }
 
-    # =========================================================================
-    # SECTION C: EVIDENCE & RESEARCH (0-15 POINTS)
-    # =========================================================================
+    # ---------------------------------------------------------------------
+    # B0 immediate fail
+    # ---------------------------------------------------------------------
 
-    def _get_evidence_hierarchy_config(self) -> Dict:
-        """Get evidence hierarchy config with defaults."""
-        return self.section_c_config.get('evidence_hierarchy', {
-            'product_level': {'multiplier': 1.0, 'bonus_for_product_trial': 2},
-            'branded_ingredient': {'multiplier': 0.8},
-            'ingredient_human': {'multiplier': 0.65},
-            'strain_level_probiotic': {'multiplier': 0.6},
-            'preclinical': {'multiplier': 0.3}
-        })
+    def _normalize_match_type(self, value: Any) -> str:
+        text = norm_text(value)
+        if text in {"exact", "alias", "token_bounded"}:
+            return text
+        if text.startswith("exact"):
+            return "exact"
+        if "alias" in text:
+            return "alias"
+        if "token" in text:
+            return "token_bounded"
+        return text
 
-    def _get_legacy_tier_mapping(self) -> Dict:
-        """Get mapping from legacy evidence levels to new hierarchy."""
-        return self.section_c_config.get('legacy_tier_mapping', {
-            'product-human': 'product_level',
-            'product-rct': 'product_level',
-            'branded-rct': 'branded_ingredient',
-            'ingredient-human': 'ingredient_human',
-            'strain-clinical': 'strain_level_probiotic',
-            'preclinical': 'preclinical',
-            'ingredient-preclinical': 'preclinical',
-            'tier_1': 'product_level',
-            'tier_2': 'branded_ingredient',
-            'tier_3': 'ingredient_human'
-        })
-
-    def _get_base_points_for_study_type(self, hierarchy_level: str, study_type: str) -> float:
-        """Get base points for a study type within a hierarchy level."""
-        hierarchy_config = self._get_evidence_hierarchy_config()
-        level_config = hierarchy_config.get(hierarchy_level, {})
-        base_points = level_config.get('base_points', {})
-
-        # Default base points if not specified
-        defaults = {
-            'systematic_review_meta': 6,
-            'rct_multiple': 5,
-            'rct_single': 4,
-            'observational': 2,
-            'clinical_strain': 4,
-            'animal_study': 2,
-            'in_vitro': 1
-        }
-
-        return base_points.get(study_type, defaults.get(study_type, 3))
-
-    def _calculate_evidence_score(self, evidence_level: str, study_type: str = 'rct_single') -> Tuple[float, str]:
-        """
-        Calculate evidence score using hierarchy multipliers.
-
-        Returns: (score, hierarchy_level_used)
-        """
-        hierarchy_config = self._get_evidence_hierarchy_config()
-        legacy_mapping = self._get_legacy_tier_mapping()
-
-        # Map legacy evidence level to hierarchy
-        hierarchy_level = legacy_mapping.get(evidence_level, 'ingredient_human')
-
-        # Get multiplier for this hierarchy level
-        level_config = hierarchy_config.get(hierarchy_level, {})
-        multiplier = level_config.get('multiplier', 0.65)
-
-        # Get base points for study type
-        base_points = self._get_base_points_for_study_type(hierarchy_level, study_type)
-
-        # Calculate final score
-        score = base_points * multiplier
-
-        return score, hierarchy_level
-
-    def _score_section_c(self, product: Dict) -> Dict:
-        """
-        Score Section C: Evidence & Research (v3.4.0 - Enhanced Hierarchy)
-
-        Uses evidence hierarchy aligned with EFSA, Natural Medicines, GRADE, Examine:
-        - product_level: 1.0x multiplier + bonus for product trials
-        - branded_ingredient: 0.8x multiplier
-        - ingredient_human: 0.65x multiplier
-        - strain_level_probiotic: 0.6x multiplier
-        - preclinical: 0.3x multiplier
-
-        Includes:
-        - Per-ingredient cap (5 pts max per ingredient)
-        - Product trial bonus (+2 for actual product RCTs)
-        - Consistency penalty (-1 for mixed evidence)
-        """
-        evidence_data = product.get('evidence_data', {})
-        max_c = self.section_max.get('C_evidence_research', 15)
-        scoring_rules = self.section_c_config.get('scoring_rules', {})
-        hierarchy_config = self._get_evidence_hierarchy_config()
-
-        cap_per_ingredient = scoring_rules.get('cap_per_ingredient', 5)
-        consistency_penalty = scoring_rules.get('consistency_penalty', -1)
-
-        score = 0
-        notes = []
-        evidence_details = []
-        ingredient_scores = {}  # Track per-ingredient to apply cap
-        has_product_trial = False
-        has_inconsistent_evidence = False
-
-        # Clinical evidence - use hierarchy multipliers
-        clinical_matches = evidence_data.get('clinical_matches', [])
-
-        for match in clinical_matches:
-            ingredient = match.get('ingredient', 'Unknown')
-            evidence_level = match.get('evidence_level', 'preclinical')
-            study_type = match.get('study_type', 'rct_single')
-            is_inconsistent = match.get('inconsistent_evidence', False)
-
-            # Track inconsistency
-            if is_inconsistent:
-                has_inconsistent_evidence = True
-
-            # Check for product-level evidence
-            if evidence_level in ['product-human', 'product-rct']:
-                has_product_trial = True
-
-            # Calculate score using hierarchy
-            match_score, hierarchy_level = self._calculate_evidence_score(evidence_level, study_type)
-
-            # Apply per-ingredient cap
-            current_ingredient_score = ingredient_scores.get(ingredient, 0)
-            capped_contribution = min(match_score, cap_per_ingredient - current_ingredient_score)
-            capped_contribution = max(0, capped_contribution)  # Ensure non-negative
-
-            ingredient_scores[ingredient] = current_ingredient_score + capped_contribution
-            score += capped_contribution
-
-            # Build detail string
-            effective_score = round(capped_contribution, 2)
-            detail = f"{ingredient} → {hierarchy_level} ({evidence_level}) → +{effective_score}"
-            if capped_contribution < match_score:
-                detail += f" (capped from {round(match_score, 2)})"
-            evidence_details.append(detail)
-
-        # Apply product trial bonus
-        product_bonus = 0
-        product_level_config = hierarchy_config.get('product_level', {})
-        if has_product_trial:
-            product_bonus = product_level_config.get('bonus_for_product_trial', 2)
-            score += product_bonus
-            notes.append(f"C: Product-level trial bonus: +{product_bonus}")
-
-        # Apply consistency penalty
-        consistency_deduction = 0
-        if has_inconsistent_evidence:
-            consistency_deduction = consistency_penalty
-            score += consistency_deduction  # penalty is negative
-            notes.append(f"C: Inconsistent evidence penalty: {consistency_deduction}")
-
-        # Summary note
-        if clinical_matches:
-            notes.insert(0, f"C: Clinical evidence ({len(clinical_matches)} matches, hierarchy-weighted): +{round(score - product_bonus - consistency_deduction, 1)}")
-
-        # Cap at max
-        raw_score = score
-        score = min(max(score, 0), max_c)
-
-        return {
-            "score": round(score, 1),
-            "max": max_c,
-            "subcategories": [
-                {
-                    "name": "Clinical Evidence (Hierarchy-Weighted)",
-                    "score": round(score, 1),
-                    "max": max_c,
-                    "details": evidence_details if evidence_details else None,
-                    "note": f"{len(clinical_matches)} ingredients with evidence" if clinical_matches else "No clinical evidence found"
-                }
-            ],
-            "details": {
-                "clinical_matches": len(clinical_matches),
-                "evidence_breakdown": evidence_details,
-                "ingredient_scores": ingredient_scores,
-                "has_product_trial": has_product_trial,
-                "product_trial_bonus": product_bonus,
-                "has_inconsistent_evidence": has_inconsistent_evidence,
-                "consistency_penalty_applied": consistency_deduction if has_inconsistent_evidence else 0,
-                "raw_score_before_cap": round(raw_score, 1),
-                "notes": notes
-            }
-        }
-
-    # =========================================================================
-    # SECTION D: BRAND TRUST (0-10 POINTS)
-    # =========================================================================
-
-    def _score_d_top_manufacturer(self, top_mfr: Dict) -> Tuple[int, List[str]]:
-        """Score top manufacturer bonus (+3 for exact/high-confidence match)."""
-        top_pts = self.section_d_config.get('top_manufacturer', {}).get('points', 3)
-        notes = []
-
-        if not top_mfr.get('found', False):
-            return 0, notes
-
-        match_type = top_mfr.get('match_type', 'exact')
-        confidence = top_mfr.get('match_confidence', 1.0)
-
-        if match_type == 'exact' or confidence >= 0.85:
-            notes.append(f"D: Top manufacturer ({top_mfr.get('name', 'unknown')}): +{top_pts}")
-            return top_pts, notes
-
-        return 0, notes
-
-    def _score_d_country(self, country_data: Dict) -> Tuple[int, List[str]]:
-        """Score high-regulation country bonus (+1)."""
-        if not country_data.get('found', False):
-            return 0, []
-
-        country = country_data.get('country', '')
-        high_reg_countries = self.section_d_config.get('high_regulation_country', {}).get(
-            'countries', ['USA', 'EU', 'Canada', 'Australia', 'Japan']
+    def _evaluate_b0(self, product: Dict[str, Any]) -> Dict[str, Any]:
+        substances = safe_list(
+            product.get("contaminant_data", {})
+            .get("banned_substances", {})
+            .get("substances", [])
         )
 
-        if any(c.lower() in country.lower() for c in high_reg_countries):
-            country_pts = self.section_d_config.get('high_regulation_country', {}).get('points', 1)
-            return country_pts, [f"D: High-regulation country ({country}): +{country_pts}"]
+        flags: List[str] = []
+        moderate_penalty = 0
+        blocked = False
+        unsafe = False
+        reason = None
+        matched_substance_name = None
+        review_needed = False
 
-        return 0, []
+        for substance in substances:
+            match_type = self._normalize_match_type(
+                substance.get("match_type") or substance.get("match_method")
+            )
+            status = norm_text(substance.get("status") or substance.get("recall_status"))
+            severity = norm_text(substance.get("severity_level"))
+            name = (
+                substance.get("banned_name")
+                or substance.get("ingredient")
+                or substance.get("name")
+                or "unknown"
+            )
 
-    def _score_d_bonus_features(self, bonus_features: Dict) -> Tuple[int, List[str], Dict]:
-        """Score bonus features: physician-formulated (+1), sustainable packaging (+1)."""
-        score = 0
-        notes = []
-        details = {'physician': False, 'sustainable': False}
+            # Interim behavior: non exact/alias hits are review-only.
+            if match_type not in {"exact", "alias"}:
+                review_needed = True
+                continue
 
-        physician_pts = self.section_d_config.get('physician_formulated', {}).get('points', 1)
-        if bonus_features.get('physician_formulated', False):
-            score += physician_pts
-            notes.append(f"D: Physician-formulated: +{physician_pts}")
-            details['physician'] = True
+            if status in {"recalled", "both"}:
+                blocked = True
+                reason = f"Product recalled ({name})"
+                matched_substance_name = name
+                break
 
-        sustainable_pts = self.section_d_config.get('sustainable_packaging', {}).get('points', 1)
-        if bonus_features.get('sustainability_claim', False):
-            score += sustainable_pts
-            notes.append(f"D: Sustainable packaging: +{sustainable_pts}")
-            details['sustainable'] = True
+            if severity in {"critical", "high"}:
+                unsafe = True
+                reason = f"Banned/high-risk substance ({name})"
+                matched_substance_name = name
+                break
 
-        return score, notes, details
+            if severity == "moderate":
+                moderate_penalty = 10
+                flags.append("B0_MODERATE_SUBSTANCE")
+            elif severity == "low":
+                flags.append("B0_LOW_SUBSTANCE")
 
-    def _score_d_violations(self, violations: Dict) -> Tuple[int, List[str]]:
-        """Score manufacturer violations (negative, capped at -20)."""
-        if not violations.get('found', False):
-            return 0, []
+        # If a hard fail was triggered, moderate/low advisory flags are not relevant.
+        if blocked or unsafe:
+            moderate_penalty = 0
+            flags = [f for f in flags if f not in {"B0_MODERATE_SUBSTANCE", "B0_LOW_SUBSTANCE"}]
 
-        violation_list = violations.get('violations', [])
-        total_deduction = sum(v.get('total_deduction', -3) for v in violation_list)
-        violation_cap = self.section_d_config.get('manufacturer_violations', {}).get('cap_total', -20)
-        total_deduction = max(total_deduction, violation_cap)
-
-        return total_deduction, [f"D: Manufacturer violations ({len(violation_list)}): {total_deduction}"]
-
-    def _score_section_d(self, product: Dict) -> Dict:
-        """
-        Score Section D: Brand Trust
-
-        - Top manufacturer (+3)
-        - Physician-formulated (+1)
-        - High-regulation country (+1)
-        - Sustainable packaging (+1)
-        - Manufacturer violations (deductions, cap -20)
-        """
-        manufacturer_data = product.get('manufacturer_data', {})
-        max_d = self.section_max.get('D_brand_trust', 8)
-
-        # Extract data
-        top_mfr = manufacturer_data.get('top_manufacturer', {})
-        country_data = manufacturer_data.get('country_of_origin', {})
-        bonus_features = manufacturer_data.get('bonus_features', {})
-        violations = manufacturer_data.get('violations', {})
-
-        # Score each component
-        top_pts, top_notes = self._score_d_top_manufacturer(top_mfr)
-        country_pts, country_notes = self._score_d_country(country_data)
-        bonus_pts, bonus_notes, bonus_details = self._score_d_bonus_features(bonus_features)
-        violation_pts, violation_notes = self._score_d_violations(violations)
-
-        # Calculate total
-        raw_score = top_pts + country_pts + bonus_pts + violation_pts
-        score = max(min(raw_score, max_d), 0)
-        notes = top_notes + country_notes + bonus_notes + violation_notes
-
-        # Get config values for output
-        top_pts_config = self.section_d_config.get('top_manufacturer', {}).get('points', 3)
-        physician_pts_config = self.section_d_config.get('physician_formulated', {}).get('points', 1)
-        country_pts_config = self.section_d_config.get('high_regulation_country', {}).get('points', 1)
-        sustainable_pts_config = self.section_d_config.get('sustainable_packaging', {}).get('points', 1)
+        if review_needed:
+            flags.append("BANNED_MATCH_REVIEW_NEEDED")
 
         return {
-            "score": round(score, 1),
-            "max": max_d,
-            "subcategories": [
-                {"name": self.section_d_config.get('top_manufacturer', {}).get('name', 'Top-Tier Manufacturer'),
-                 "score": top_pts, "max": top_pts_config,
-                 "note": f"Matched to {top_mfr.get('name', 'N/A')}" if top_mfr.get('found') else "N/A"},
-                {"name": self.section_d_config.get('physician_formulated', {}).get('name', 'Physician/Formulator Credibility'),
-                 "score": physician_pts_config if bonus_details['physician'] else 0, "max": physician_pts_config,
-                 "note": "Yes" if bonus_details['physician'] else "N/A"},
-                {"name": self.section_d_config.get('high_regulation_country', {}).get('name', 'Made in High-Regulation Country'),
-                 "score": country_pts, "max": country_pts_config,
-                 "note": country_data.get('country', 'N/A') if country_data.get('found') else "N/A"},
-                {"name": self.section_d_config.get('sustainable_packaging', {}).get('name', 'Sustainable/Recyclable Packaging'),
-                 "score": sustainable_pts_config if bonus_details['sustainable'] else 0, "max": sustainable_pts_config,
-                 "note": bonus_features.get('sustainability_text', 'N/A') if bonus_details['sustainable'] else "N/A"},
-                {"name": self.section_d_config.get('manufacturer_violations', {}).get('name', 'Manufacturer Violations (Last 10y)'),
-                 "score": round(violation_pts, 1), "max": 0,
-                 "note": f"{len(violations.get('violations', []))} violations" if violations.get('found') else "None found"}
-            ],
-            "details": {
-                "top_manufacturer": top_mfr.get('found', False),
-                "notes": notes
-            }
+            "blocked": blocked,
+            "unsafe": unsafe,
+            "reason": reason,
+            "substance": matched_substance_name,
+            "moderate_penalty": moderate_penalty,
+            "flags": sorted(set(flags)),
         }
 
-    # =========================================================================
-    # PROBIOTIC BONUS (0-10 POINTS)
-    # =========================================================================
+    # ---------------------------------------------------------------------
+    # Section A
+    # ---------------------------------------------------------------------
 
-    def _score_probiotic_cfu(self, probiotic_data: Dict) -> Tuple[int, List[str], Dict]:
-        """Score probiotic CFU bonus (max +4 for ≥10B at expiration)."""
-        cfu_config = self.probiotic_config.get('cfu_bonus', {})
-        cfu_pts_config = cfu_config.get('threshold_10b', 4)
-        max_cfu_billions = 0
-        cfu_guarantee = None
-        notes = []
+    def _get_active_ingredients(self, product: Dict[str, Any]) -> List[Dict[str, Any]]:
+        iqd = product.get("ingredient_quality_data", {})
+        ingredients = safe_list(iqd.get("ingredients_scorable"))
+        if not ingredients:
+            ingredients = safe_list(iqd.get("ingredients"))
+        return ingredients
 
-        for blend in probiotic_data.get('probiotic_blends', []):
-            blend_cfu = blend.get('cfu_data', {})
-            if blend_cfu.get('has_cfu', False):
-                billions = blend_cfu.get('billion_count', 0)
-                if billions > max_cfu_billions:
-                    max_cfu_billions = billions
-                    cfu_guarantee = blend_cfu.get('guarantee_type')
+    def _score_a1(self, product: Dict[str, Any], supp_type: str) -> float:
+        ingredients = self._get_active_ingredients(product)
+        if not ingredients:
+            return 0.0
 
-        cfu_pts = 0
-        if max_cfu_billions >= 10:
-            if cfu_guarantee == 'expiration':
-                cfu_pts = cfu_pts_config
-                notes.append(f"Probiotic: {max_cfu_billions}B CFU at expiration: +{cfu_pts}")
+        weighted_values: List[Tuple[float, float]] = []
+        for ing in ingredients:
+            mapped = bool(ing.get("mapped", False))
+            if mapped:
+                s_i = as_float(ing.get("score"), 9.0) or 9.0
+                w_i = as_float(ing.get("dosage_importance"), 1.0) or 1.0
             else:
-                notes.append(f"Probiotic: {max_cfu_billions}B CFU (not guaranteed at expiration)")
+                s_i = 9.0
+                w_i = 1.0
+            if supp_type == "single":
+                w_i = 1.0
+            weighted_values.append((s_i, w_i))
 
-        cfu_note = f"{max_cfu_billions}B CFU" if max_cfu_billions > 0 else "N/A"
-        if cfu_guarantee:
-            cfu_note += f" ({cfu_guarantee})"
+        denom = sum(w for _, w in weighted_values)
+        if denom <= 0:
+            return 0.0
 
-        return cfu_pts, notes, {"max_billions": max_cfu_billions, "guarantee": cfu_guarantee, "note": cfu_note}
+        avg_raw = sum(s * w for s, w in weighted_values) / denom
+        if supp_type == "multivitamin":
+            avg_raw = 0.7 * avg_raw + 0.3 * 9.0
 
-    def _score_probiotic_strain_diversity(self, probiotic_data: Dict) -> Tuple[int, List[str], str]:
-        """Score probiotic strain diversity (tiered: +2 for ≥4, +4 for ≥8)."""
-        strain_config = self.probiotic_config.get('strain_diversity', {})
-        total_strain_count = probiotic_data.get('total_strain_count', 0)
-        strain_pts = 0
-        notes = []
+        return clamp(0.0, 13.0, (avg_raw / 18.0) * 13.0)
 
-        if total_strain_count >= 8:
-            strain_pts = strain_config.get('threshold_8_strains', 4)
-        elif total_strain_count >= 4:
-            strain_pts = strain_config.get('threshold_4_strains', 2)
+    def _score_a2(self, product: Dict[str, Any]) -> float:
+        premium_keys = set()
+        for ing in self._get_active_ingredients(product):
+            score = as_float(ing.get("score"), None)
+            if score is None:
+                continue
+            if score >= 14:
+                key = canon_key(ing.get("canonical_id") or ing.get("standard_name") or ing.get("name"))
+                if key:
+                    premium_keys.add(key)
 
-        if strain_pts > 0:
-            notes.append(f"Probiotic: {total_strain_count} strains: +{strain_pts}")
+        count_premium = len(premium_keys)
+        return clamp(0.0, 3.0, 0.5 * max(0, count_premium - 1))
 
-        note = f"{total_strain_count} distinct strains" if total_strain_count > 0 else "N/A"
-        return strain_pts, notes, note
+    def _score_a3(self, product: Dict[str, Any]) -> float:
+        tier = product.get("delivery_tier")
+        if tier is None:
+            tier = product.get("delivery_data", {}).get("highest_tier")
+        tier_int = int(as_float(tier, 0) or 0)
+        return {1: 3.0, 2: 2.0, 3: 1.0}.get(tier_int, 0.0)
 
-    def _score_probiotic_clinical_strains(self, probiotic_data: Dict) -> Tuple[int, List[str], str]:
-        """Score clinical strain presence (+2 if present)."""
-        clinical_config = self.probiotic_config.get('clinical_strains', {})
-        clinical_pts_config = clinical_config.get('points', 2)
-        clinical_strains = probiotic_data.get('clinical_strains', [])
-        notes = []
-        clinical_pts = 0
+    def _score_a4(self, product: Dict[str, Any]) -> float:
+        if "absorption_enhancer_paired" in product:
+            return 3.0 if bool(product.get("absorption_enhancer_paired")) else 0.0
+        qualifies = bool(product.get("absorption_data", {}).get("qualifies_for_bonus", False))
+        return 3.0 if qualifies else 0.0
 
-        if clinical_strains:
-            clinical_pts = clinical_pts_config
-            notes.append(f"Probiotic: Clinical strains ({len(clinical_strains)}): +{clinical_pts}")
+    def _synergy_cluster_qualified(self, product: Dict[str, Any]) -> bool:
+        if "synergy_cluster_qualified" in product:
+            return bool(product.get("synergy_cluster_qualified"))
 
-        # Extract strain names - handle both dict format and string format
-        strain_names = []
-        for s in clinical_strains[:3]:
-            if isinstance(s, dict):
-                name = s.get('strain_name') or s.get('name') or s.get('strain') or str(s)
-                strain_names.append(name)
-            else:
-                strain_names.append(str(s))
+        clusters = safe_list(product.get("formulation_data", {}).get("synergy_clusters", []))
+        for cluster in clusters:
+            matched_ingredients = safe_list(cluster.get("matched_ingredients"))
+            match_count = int(as_float(cluster.get("match_count"), len(matched_ingredients)) or 0)
+            if match_count < 2:
+                continue
 
-        note = ', '.join(strain_names) if clinical_strains else "N/A"
-        return clinical_pts, notes, note
+            checkable = [
+                item
+                for item in matched_ingredients
+                if as_float(item.get("min_effective_dose"), 0.0) and as_float(item.get("min_effective_dose"), 0.0) > 0
+            ]
+            if not checkable:
+                return True
 
-    def _score_probiotic_prebiotic(self, probiotic_data: Dict) -> Tuple[int, List[str], str]:
-        """Score prebiotic pairing bonus (+3 if present)."""
-        prebiotic_config = self.probiotic_config.get('prebiotic_pairing', {})
-        prebiotic_pts_config = prebiotic_config.get('points', 3)
-        notes = []
-        prebiotic_pts = 0
+            dosed = [item for item in checkable if bool(item.get("meets_minimum", False))]
+            if len(dosed) >= math.ceil(len(checkable) / 2):
+                return True
 
-        if probiotic_data.get('prebiotic_present', False):
-            prebiotic_pts = prebiotic_pts_config
-            notes.append(f"Probiotic: Prebiotic pairing: +{prebiotic_pts}")
+        return False
 
-        note = "Yes" if probiotic_data.get('prebiotic_present') else "N/A"
-        return prebiotic_pts, notes, note
+    def _score_a5(self, product: Dict[str, Any]) -> Dict[str, float]:
+        formulation = product.get("formulation_data", {})
 
-    def _score_probiotic_survivability(self, probiotic_data: Dict) -> Tuple[int, List[str], str]:
-        """Score survivability coating bonus (+2 if present)."""
-        survivability_config = self.probiotic_config.get('survivability_coating', {})
-        survivability_pts_config = survivability_config.get('points', 2)
-        notes = []
-        survivability_pts = 0
+        organic_data = formulation.get("organic")
+        if isinstance(organic_data, dict):
+            is_organic = bool(organic_data.get("usda_verified") or (organic_data.get("claimed") and not organic_data.get("exclusion_matched")))
+        else:
+            is_organic = bool(organic_data)
 
-        if probiotic_data.get('has_survivability_coating', False):
-            survivability_pts = survivability_pts_config
-            reason = probiotic_data.get('survivability_reason', 'detected')
-            notes.append(f"Probiotic: Survivability coating ({reason}): +{survivability_pts}")
+        has_std = bool(product.get("has_standardized_botanical", False))
+        if not has_std:
+            std = safe_list(formulation.get("standardized_botanicals", []))
+            has_std = any(
+                bool(item.get("meets_threshold"))
+                or (
+                    as_float(item.get("percentage_found"), None) is not None
+                    and as_float(item.get("min_threshold"), None) is not None
+                    and as_float(item.get("percentage_found"), 0.0) >= as_float(item.get("min_threshold"), 0.0)
+                )
+                for item in std
+            )
 
-        note = probiotic_data.get('survivability_reason', 'N/A') if probiotic_data.get('has_survivability_coating') else "N/A"
-        return survivability_pts, notes, note
+        has_synergy = self._synergy_cluster_qualified(product)
 
-    def _score_probiotic_bonus(self, product: Dict) -> Dict:
-        """
-        Score Probiotic Bonus (only if is_probiotic_product = true)
+        return {
+            "A5a_organic": 1.0 if is_organic else 0.0,
+            "A5b_standardized_botanical": 1.0 if has_std else 0.0,
+            "A5c_synergy_cluster": 1.0 if has_synergy else 0.0,
+        }
 
-        Enhanced probiotic scoring with tiered strain diversity and clinical strain detection.
-        - CFU bonus (+4 if >= 10B at expiration)
-        - Strain diversity (+2 if >= 4 strains, +4 if >= 8 strains)
-        - Clinical strains (+3)
-        - Prebiotic pairing (+3)
-        - Survivability coating (+2)
-        Total cap: 10 points max
-        """
-        probiotic_data = product.get('probiotic_data', {})
-        max_probiotic = self.probiotic_config.get('_max', 10)
-
-        # Get config names for subcategory output
-        cfu_name = self.probiotic_config.get('cfu_bonus', {}).get('name', '≥10 Billion CFU at Expiration')
-        strain_name = self.probiotic_config.get('strain_diversity', {}).get('name', '≥4 Clinically Studied Strains')
-        clinical_name = self.probiotic_config.get('clinical_strains', {}).get('name', 'Contains Clinically Studied Strains')
-        prebiotic_name = self.probiotic_config.get('prebiotic_pairing', {}).get('name', 'Prebiotic Pairing')
-        survivability_name = self.probiotic_config.get('survivability_coating', {}).get('name', 'Survivability Coating/Technology')
-
-        if not probiotic_data.get('is_probiotic_product', False):
+    def _score_probiotic_bonus(self, product: Dict[str, Any], supp_type: str) -> Dict[str, float]:
+        if supp_type != "probiotic":
             return {
-                "score": 0, "max": max_probiotic, "applied": False,
-                "subcategories": [
-                    {"name": cfu_name, "score": 0, "note": "Not a probiotic"},
-                    {"name": strain_name, "score": 0, "note": "Not a probiotic"},
-                    {"name": clinical_name, "score": 0, "note": "Not a probiotic"},
-                    {"name": prebiotic_name, "score": 0, "note": "Not a probiotic"},
-                    {"name": survivability_name, "score": 0, "note": "Not a probiotic"}
-                ],
-                "details": {"is_probiotic": False, "notes": []}
+                "probiotic_bonus": 0.0,
+                "cfu": 0.0,
+                "diversity": 0.0,
+                "prebiotic": 0.0,
+                "clinical_strains": 0.0,
+                "survivability": 0.0,
             }
 
-        # Score each probiotic bonus category
-        cfu_pts, cfu_notes, cfu_details = self._score_probiotic_cfu(probiotic_data)
-        strain_pts, strain_notes, strain_note = self._score_probiotic_strain_diversity(probiotic_data)
-        clinical_pts, clinical_notes, clinical_note = self._score_probiotic_clinical_strains(probiotic_data)
-        prebiotic_pts, prebiotic_notes, prebiotic_note = self._score_probiotic_prebiotic(probiotic_data)
-        survivability_pts, survivability_notes, survivability_note = self._score_probiotic_survivability(probiotic_data)
+        pdata = product.get("probiotic_data", {})
+        ingredients = self._get_active_ingredients(product)
+        ingredient_names = [norm_text(i.get("name") or i.get("standard_name") or "") for i in ingredients]
 
-        # Combine scores and notes (cap at max_probiotic = 10)
-        uncapped_score = cfu_pts + strain_pts + clinical_pts + prebiotic_pts + survivability_pts
-        score = min(uncapped_score, max_probiotic)
-        notes = cfu_notes + strain_notes + clinical_notes + prebiotic_notes + survivability_notes
+        total_billion = as_float(pdata.get("total_billion_count"), None)
+        if total_billion is None:
+            total_billion = 0.0
+            for blend in safe_list(pdata.get("probiotic_blends")):
+                total_billion += as_float(blend.get("cfu_data", {}).get("billion_count"), 0.0) or 0.0
+
+        strain_count = int(as_float(pdata.get("total_strain_count"), 0) or 0)
+        if strain_count == 0:
+            strains = set()
+            for blend in safe_list(pdata.get("probiotic_blends")):
+                for strain in safe_list(blend.get("strains")):
+                    strains.add(canon_key(strain))
+            strain_count = len([s for s in strains if s])
+
+        prebiotic_terms = ["inulin", "fos", "gos"]
+        prebiotic_hits = sum(1 for term in prebiotic_terms if any(term in ing for ing in ingredient_names))
+
+        if self._feature_on("probiotic_extended_scoring", default=False):
+            if total_billion >= 50:
+                cfu = 4.0
+            elif total_billion >= 10:
+                cfu = 3.0
+            elif total_billion > 1:
+                cfu = 2.0
+            elif total_billion > 0:
+                cfu = 1.0
+            else:
+                cfu = 0.0
+
+            if strain_count >= 10:
+                diversity = 4.0
+            elif strain_count >= 6:
+                diversity = 3.0
+            elif strain_count >= 3:
+                diversity = 2.0
+            elif strain_count > 0:
+                diversity = 1.0
+            else:
+                diversity = 0.0
+
+            known_clinical = ["lgg", "bb-12", "ncfm", "reuteri", "k12", "m18", "coagulans", "shirota"]
+            strain_tokens = " ".join(ingredient_names)
+            clinical_hits = sum(1 for s in known_clinical if s in strain_tokens)
+            if clinical_hits >= 5:
+                clinical_strains = 3.0
+            elif clinical_hits >= 3:
+                clinical_strains = 2.0
+            elif clinical_hits >= 1:
+                clinical_strains = 1.0
+            else:
+                clinical_strains = 0.0
+
+            prebiotic = float(min(3, prebiotic_hits))
+
+            survivability = 0.0
+            survivability_terms = ["delayed release", "enteric", "acid resistant", "microencapsulated"]
+            searchable = norm_text(json.dumps(pdata, ensure_ascii=False))
+            if any(term in searchable for term in survivability_terms):
+                survivability = 2.0
+
+            total = min(10.0, cfu + diversity + clinical_strains + prebiotic + survivability)
+            return {
+                "probiotic_bonus": total,
+                "cfu": cfu,
+                "diversity": diversity,
+                "prebiotic": prebiotic,
+                "clinical_strains": clinical_strains,
+                "survivability": survivability,
+            }
+
+        cfu = 1.0 if total_billion > 1 else 0.0
+        diversity = 1.0 if strain_count >= 3 else 0.0
+        prebiotic = 1.0 if prebiotic_hits > 0 else 0.0
+        total = min(3.0, cfu + diversity + prebiotic)
 
         return {
-            "score": round(score, 1),
-            "max": max_probiotic,
-            "applied": True,
-            "uncapped_score": round(uncapped_score, 1),
-            "subcategories": [
-                {"name": cfu_name, "score": cfu_pts, "note": cfu_details['note']},
-                {"name": strain_name, "score": strain_pts, "note": strain_note},
-                {"name": clinical_name, "score": clinical_pts, "note": clinical_note},
-                {"name": prebiotic_name, "score": prebiotic_pts, "note": prebiotic_note},
-                {"name": survivability_name, "score": survivability_pts, "note": survivability_note}
-            ],
-            "details": {
-                "is_probiotic": True,
-                "cfu_billions": cfu_details['max_billions'],
-                "cfu_guarantee": cfu_details['guarantee'],
-                "strain_count": probiotic_data.get('total_strain_count', 0),
-                "clinical_strain_count": len(probiotic_data.get('clinical_strains', [])),
-                "has_survivability_coating": probiotic_data.get('has_survivability_coating', False),
-                "notes": notes
-            }
+            "probiotic_bonus": total,
+            "cfu": cfu,
+            "diversity": diversity,
+            "prebiotic": prebiotic,
+            "clinical_strains": 0.0,
+            "survivability": 0.0,
         }
 
-    # =========================================================================
-    # MAIN SCORING METHOD
-    # =========================================================================
+    def _score_section_a(self, product: Dict[str, Any], supp_type: str) -> Dict[str, Any]:
+        a1 = self._score_a1(product, supp_type)
+        a2 = self._score_a2(product)
+        a3 = self._score_a3(product)
+        a4 = self._score_a4(product)
+        a5_parts = self._score_a5(product)
+        a5 = sum(a5_parts.values())
+        probiotic = self._score_probiotic_bonus(product, supp_type)
+        probiotic_bonus = probiotic["probiotic_bonus"]
 
-    def score_product(self, product: Dict) -> Dict:
-        """
-        Calculate complete score for a product.
-        Returns scored product with section breakdown.
-        """
-        product_id = product.get('dsld_id', product.get('id', 'unknown'))
-        product_name = product.get('product_name', product.get('fullName', 'Unknown Product'))
+        total = min(25.0, a1 + a2 + a3 + a4 + a5 + probiotic_bonus)
+        return {
+            "score": round(total, 2),
+            "max": 25,
+            "A1": round(a1, 2),
+            "A2": round(a2, 2),
+            "A3": round(a3, 2),
+            "A4": round(a4, 2),
+            "A5": round(a5, 2),
+            "A5a": round(a5_parts["A5a_organic"], 2),
+            "A5b": round(a5_parts["A5b_standardized_botanical"], 2),
+            "A5c": round(a5_parts["A5c_synergy_cluster"], 2),
+            "probiotic_bonus": round(probiotic_bonus, 2),
+            "probiotic_breakdown": probiotic,
+        }
 
-        # Validate enriched product structure
-        is_valid, validation_issues = self.validate_enriched_product(product)
+    # ---------------------------------------------------------------------
+    # Section B
+    # ---------------------------------------------------------------------
+
+    def _score_b1(self, product: Dict[str, Any]) -> float:
+        additives = safe_list(
+            product.get("contaminant_data", {})
+            .get("harmful_additives", {})
+            .get("additives", product.get("harmful_additives", []))
+        )
+        risk_map = {"high": 2.0, "moderate": 1.0, "low": 0.5, "none": 0.0}
+        penalty = 0.0
+        for item in additives:
+            penalty += risk_map.get(norm_text(item.get("severity_level")), 0.0)
+        return clamp(0.0, 5.0, penalty)
+
+    def _score_b2(self, product: Dict[str, Any]) -> float:
+        allergens = safe_list(
+            product.get("contaminant_data", {})
+            .get("allergens", {})
+            .get("allergens", product.get("allergen_hits", []))
+        )
+        risk_map = {"high": 2.0, "moderate": 1.5, "low": 1.0}
+        penalty = 0.0
+        for item in allergens:
+            penalty += risk_map.get(norm_text(item.get("severity_level")), 0.0)
+        return clamp(0.0, 2.0, penalty)
+
+    def _derive_claim_validations(self, product: Dict[str, Any], b2_penalty: float) -> Tuple[bool, bool, bool, List[str]]:
+        flags: List[str] = []
+
+        explicit_allergen = product.get("claim_allergen_free_validated")
+        explicit_gluten = product.get("claim_gluten_free_validated")
+        explicit_vegan = product.get("claim_vegan_validated")
+
+        if explicit_allergen is not None and explicit_gluten is not None and explicit_vegan is not None:
+            return bool(explicit_allergen), bool(explicit_gluten), bool(explicit_vegan), flags
+
+        compliance = product.get("compliance_data", {})
+        conflicts = [norm_text(x) for x in safe_list(compliance.get("conflicts"))]
+        has_may_contain = bool(compliance.get("has_may_contain_warning", False))
+
+        if explicit_allergen is None:
+            allergen_claims = safe_list(compliance.get("allergen_free_claims"))
+            contradiction = has_may_contain or any(
+                any(term in c for term in ["allergen", "dairy", "soy", "egg", "gluten", "wheat", "shellfish", "nut"])
+                for c in conflicts
+            )
+            allergen_valid = bool(allergen_claims) and not contradiction and b2_penalty == 0.0
+        else:
+            allergen_valid = bool(explicit_allergen)
+
+        if explicit_gluten is None:
+            gluten_claim = bool(compliance.get("gluten_free", False))
+            contradiction = has_may_contain or any(
+                ("gluten" in c) or ("wheat" in c) for c in conflicts
+            )
+            gluten_valid = gluten_claim and not contradiction
+        else:
+            gluten_valid = bool(explicit_gluten)
+
+        if explicit_vegan is None:
+            vegan_claim = bool(compliance.get("vegan", False) or compliance.get("vegetarian", False))
+            contradiction = any(
+                any(term in c for term in ["gelatin", "bovine", "porcine", "vegan", "vegetarian"]) for c in conflicts
+            )
+            vegan_valid = vegan_claim and not contradiction
+        else:
+            vegan_valid = bool(explicit_vegan)
+
+        if (bool(compliance.get("allergen_free_claims")) or bool(compliance.get("gluten_free")) or bool(compliance.get("vegan"))) and conflicts:
+            flags.append("LABEL_CONTRADICTION_DETECTED")
+
+        return allergen_valid, gluten_valid, vegan_valid, flags
+
+    def _score_b4(self, product: Dict[str, Any], supp_type: str) -> Dict[str, float]:
+        cert = product.get("certification_data", {})
+
+        named_programs = safe_list(product.get("named_cert_programs"))
+        if not named_programs:
+            programs = cert.get("third_party_programs", {}).get("programs", [])
+            if isinstance(programs, list):
+                named_programs = [p.get("name") if isinstance(p, dict) else p for p in programs]
+
+        canonical_programs = []
+        for p in named_programs:
+            if not p:
+                continue
+            text = norm_text(p)
+            if text:
+                canonical_programs.append(text)
+
+        # IFOS is omega-3 specific; keep only when product appears omega-focused.
+        if canonical_programs:
+            omega_like = supp_type == "specialty" or any(
+                "omega" in norm_text(i.get("name") or i.get("standard_name"))
+                for i in self._get_active_ingredients(product)
+            )
+            filtered = []
+            for p in canonical_programs:
+                if "ifos" in p and not omega_like:
+                    continue
+                filtered.append(p)
+            canonical_programs = sorted(set(filtered))
+
+        b4a = clamp(0.0, 15.0, float(len(canonical_programs) * 5.0))
+
+        gmp_level = norm_text(product.get("gmp_level"))
+        gmp = cert.get("gmp", {})
+        if gmp_level == "certified" or bool(gmp.get("nsf_gmp") or gmp.get("claimed")):
+            b4b = 4.0
+        elif gmp_level == "fda_registered" or bool(gmp.get("fda_registered")):
+            b4b = 2.0
+        else:
+            b4b = 0.0
+
+        has_coa = bool(product.get("has_coa", cert.get("batch_traceability", {}).get("has_coa", False)))
+        has_batch_lookup = bool(
+            product.get(
+                "has_batch_lookup",
+                cert.get("batch_traceability", {}).get("has_batch_lookup", False)
+                or cert.get("batch_traceability", {}).get("has_qr_code", False),
+            )
+        )
+        b4c = float((1 if has_coa else 0) + (1 if has_batch_lookup else 0))
+
+        return {
+            "B4a": b4a,
+            "B4b": b4b,
+            "B4c": b4c,
+            "named_program_count": float(len(canonical_programs)),
+        }
+
+    def _sum_total_active_mg(self, product: Dict[str, Any]) -> float:
+        total = 0.0
+        for ing in self._get_active_ingredients(product):
+            qty = as_float(ing.get("quantity"), None)
+            unit = norm_text(ing.get("unit_normalized") or ing.get("unit"))
+            if qty is None:
+                continue
+            if unit in {"mg", "milligram", "milligrams"}:
+                total += qty
+            elif unit in {"mcg", "ug", "microgram", "micrograms"}:
+                total += qty / 1000.0
+            elif unit in {"g", "gram", "grams"}:
+                total += qty * 1000.0
+        return total
+
+    def _score_b5(self, product: Dict[str, Any], flags: List[str]) -> float:
+        proprietary = product.get("proprietary_data", {})
+        blends = safe_list(product.get("proprietary_blends"))
+        if not blends:
+            blends = safe_list(proprietary.get("blends", []))
+
+        if not blends:
+            return 0.0
+
+        flags.append("PROPRIETARY_BLEND_PRESENT")
+
+        dedup_keys = set()
+        deduped: List[Dict[str, Any]] = []
+        for blend in blends:
+            key = (
+                canon_key(blend.get("name")),
+                norm_text(blend.get("disclosure_level")),
+                as_float(blend.get("total_weight"), None),
+                int(as_float(blend.get("nested_count"), 0) or 0),
+            )
+            if key in dedup_keys:
+                continue
+            dedup_keys.add(key)
+            deduped.append(blend)
+
+        disclosure_base = {"full": 0.0, "partial": 3.0, "none": 6.0}
+
+        total_active_mg = as_float(proprietary.get("total_active_mg"), None)
+        if total_active_mg is None:
+            total_active_mg = self._sum_total_active_mg(product)
+
+        total_active_count = int(
+            as_float(proprietary.get("total_active_ingredients"), 0)
+            or as_float(product.get("ingredient_quality_data", {}).get("total_active"), 0)
+            or len(self._get_active_ingredients(product))
+            or 0
+        )
+
+        penalty_sum = 0.0
+        for blend in deduped:
+            level = norm_text(blend.get("disclosure_level"))
+            base = disclosure_base.get(level, 6.0)
+
+            blend_mg = as_float(blend.get("blend_mg"), None)
+            if blend_mg is None:
+                blend_mg = as_float(blend.get("total_weight"), None)
+
+            impact = None
+            if blend_mg is not None and total_active_mg and total_active_mg > 0:
+                impact = clamp(0.0, 1.0, blend_mg / total_active_mg)
+            if impact is None:
+                hidden_count = int(as_float(blend.get("hidden_count"), 0) or 0)
+                if hidden_count == 0:
+                    hidden_count = int(as_float(blend.get("nested_count"), 0) or 0)
+                if total_active_count > 0:
+                    impact = clamp(0.0, 1.0, hidden_count / total_active_count)
+                else:
+                    impact = 1.0
+
+            penalty_sum += base * impact
+
+        return clamp(0.0, 15.0, penalty_sum)
+
+    def _score_b6(self, product: Dict[str, Any], flags: List[str]) -> float:
+        has_claims = bool(product.get("has_disease_claims", False))
+        if not has_claims:
+            has_claims = bool(product.get("product_signals", {}).get("has_disease_claims", False))
+        if not has_claims:
+            has_claims = bool(
+                product.get("evidence_data", {})
+                .get("unsubstantiated_claims", {})
+                .get("found", False)
+            )
+        if has_claims:
+            flags.append("DISEASE_CLAIM_DETECTED")
+            return 5.0
+        return 0.0
+
+    def _score_section_b(
+        self,
+        product: Dict[str, Any],
+        supp_type: str,
+        b0_moderate_penalty: float,
+        flags: List[str],
+    ) -> Dict[str, Any]:
+        b1 = self._score_b1(product)
+        b2 = self._score_b2(product)
+
+        allergen_valid, gluten_valid, vegan_valid, claim_flags = self._derive_claim_validations(product, b2)
+        for f in claim_flags:
+            if f not in flags:
+                flags.append(f)
+
+        b3 = float((2 if allergen_valid else 0) + (1 if gluten_valid else 0) + (1 if vegan_valid else 0))
+        b3 = clamp(0.0, 4.0, b3)
+
+        b4 = self._score_b4(product, supp_type)
+        b4a, b4b, b4c = b4["B4a"], b4["B4b"], b4["B4c"]
+
+        b5 = self._score_b5(product, flags)
+        b6 = self._score_b6(product, flags)
+
+        bonuses = b3 + b4a + b4b + b4c
+        penalties = b1 + b2 + b5 + b6 + b0_moderate_penalty
+
+        b_raw = 35.0 + bonuses - penalties
+        total = clamp(0.0, 35.0, b_raw)
+
+        return {
+            "score": round(total, 2),
+            "max": 35,
+            "B0_moderate_penalty": round(float(b0_moderate_penalty), 2),
+            "B1_penalty": round(b1, 2),
+            "B2_penalty": round(b2, 2),
+            "B3": round(b3, 2),
+            "B4a": round(b4a, 2),
+            "B4b": round(b4b, 2),
+            "B4c": round(b4c, 2),
+            "B5_penalty": round(b5, 2),
+            "B6_penalty": round(b6, 2),
+            "bonuses": round(bonuses, 2),
+            "penalties": round(penalties, 2),
+            "raw": round(b_raw, 2),
+        }
+
+    # Backward-compatible alias used by internal diagnostics scripts.
+    def _score_b4_proprietary(
+        self,
+        product: Dict[str, Any],
+        proprietary_data: Optional[Dict[str, Any]],
+        _config: Optional[Dict[str, Any]] = None,
+    ) -> Tuple[float, List[str], Dict[str, Any]]:
+        flags: List[str] = []
+        tmp_product = dict(product)
+        if proprietary_data is not None:
+            tmp_product["proprietary_data"] = proprietary_data
+        penalty = self._score_b5(tmp_product, flags)
+        notes = [f"B5 proprietary blend penalty magnitude={round(penalty, 2)}"]
+        details = {
+            "blends_detected_count": len(
+                safe_list((proprietary_data or {}).get("blends", []))
+            ),
+            "use_mg_share": True,
+            "reason": "v3_0_penalty",
+            "flags": flags,
+        }
+        # Legacy method returns negative penalty in old tooling.
+        return -penalty, notes, details
+
+    # ---------------------------------------------------------------------
+    # Section C
+    # ---------------------------------------------------------------------
+
+    def _study_base_points(self, study_type: str) -> float:
+        mapping = {
+            "systematic_review_meta": 6.0,
+            "rct_multiple": 5.0,
+            "rct_single": 4.0,
+            "clinical_strain": 4.0,
+            "observational": 2.0,
+            "animal_study": 2.0,
+            "in_vitro": 1.0,
+        }
+        return mapping.get(norm_text(study_type), 0.0)
+
+    def _evidence_multiplier(self, level: str) -> float:
+        mapping = {
+            "product-human": 1.0,
+            "product_human": 1.0,
+            "product-rct": 1.0,
+            "product_rct": 1.0,
+            "product": 1.0,
+            "branded-rct": 0.8,
+            "branded_rct": 0.8,
+            "ingredient-human": 0.65,
+            "ingredient_human": 0.65,
+            "strain-clinical": 0.6,
+            "strain_clinical": 0.6,
+            "preclinical": 0.3,
+        }
+        return mapping.get(norm_text(level), 0.0)
+
+    def _dose_map(self, product: Dict[str, Any]) -> Dict[str, Tuple[float, str]]:
+        doses: Dict[str, Tuple[float, str]] = {}
+        for ing in self._get_active_ingredients(product):
+            qty = as_float(ing.get("quantity"), None)
+            if qty is None:
+                continue
+            unit = norm_text(ing.get("unit_normalized") or ing.get("unit"))
+            names = [
+                ing.get("standard_name"),
+                ing.get("name"),
+                ing.get("raw_source_text"),
+                ing.get("canonical_id"),
+            ]
+            for n in names:
+                key = canon_key(n)
+                if key:
+                    if key not in doses or qty > doses[key][0]:
+                        doses[key] = (qty, unit)
+        return doses
+
+    def _convert_unit(self, quantity: float, from_unit: str, to_unit: str) -> Optional[float]:
+        from_u = norm_text(from_unit)
+        to_u = norm_text(to_unit)
+
+        if from_u == to_u:
+            return quantity
+
+        mass_factor = {
+            "mcg": 0.001,
+            "ug": 0.001,
+            "microgram": 0.001,
+            "micrograms": 0.001,
+            "mg": 1.0,
+            "milligram": 1.0,
+            "milligrams": 1.0,
+            "g": 1000.0,
+            "gram": 1000.0,
+            "grams": 1000.0,
+        }
+
+        if from_u in mass_factor and to_u in mass_factor:
+            mg = quantity * mass_factor[from_u]
+            return mg / mass_factor[to_u]
+
+        # IU and CFU are not safely convertible to mass without nutrient-specific rules.
+        return None
+
+    def _score_section_c(self, product: Dict[str, Any], flags: List[str]) -> Dict[str, Any]:
+        matches = safe_list(product.get("evidence_data", {}).get("clinical_matches", []))
+
+        ingredient_points: Dict[str, float] = defaultdict(float)
+        matched_entry_ids = set()
+        dose_map = self._dose_map(product)
+
+        for entry in matches:
+            entry_id = (
+                entry.get("id")
+                or entry.get("study_id")
+                or f"{canon_key(entry.get('study_name') or entry.get('ingredient'))}:{norm_text(entry.get('study_type'))}:{norm_text(entry.get('evidence_level'))}"
+            )
+            if entry_id in matched_entry_ids:
+                continue
+            matched_entry_ids.add(entry_id)
+
+            study_type = entry.get("study_type")
+            evidence_level = entry.get("evidence_level")
+            raw = self._study_base_points(study_type) * self._evidence_multiplier(evidence_level)
+            if raw <= 0:
+                continue
+
+            # Clinical dose guard (optional field).
+            min_clinical_dose = as_float(entry.get("min_clinical_dose"), None)
+            if min_clinical_dose is not None:
+                dose_unit = norm_text(entry.get("dose_unit") or "mg")
+                lookup_name = (
+                    entry.get("standard_name")
+                    or entry.get("study_name")
+                    or entry.get("ingredient")
+                    or ""
+                )
+                lookup_key = canon_key(lookup_name)
+                product_dose = dose_map.get(lookup_key)
+                if product_dose is not None:
+                    converted = self._convert_unit(product_dose[0], product_dose[1], dose_unit)
+                    if converted is not None and converted < min_clinical_dose:
+                        raw *= 0.25
+                        if "SUB_CLINICAL_DOSE_DETECTED" not in flags:
+                            flags.append("SUB_CLINICAL_DOSE_DETECTED")
+
+            canonical = canon_key(
+                entry.get("standard_name") or entry.get("study_name") or entry.get("ingredient")
+            )
+            if canonical:
+                ingredient_points[canonical] += raw
+
+        total = 0.0
+        for _, pts in ingredient_points.items():
+            total += min(5.0, pts)
+
+        return {
+            "score": round(clamp(0.0, 15.0, total), 2),
+            "max": 15,
+            "ingredient_points": {k: round(v, 2) for k, v in ingredient_points.items()},
+            "matched_entries": len(matched_entry_ids),
+        }
+
+    # ---------------------------------------------------------------------
+    # Section D + violations
+    # ---------------------------------------------------------------------
+
+    def _score_section_d(self, product: Dict[str, Any]) -> Dict[str, Any]:
+        md = product.get("manufacturer_data", {})
+
+        d1 = 0.0
+        if bool(product.get("is_trusted_manufacturer", False)):
+            d1 = 2.0
+        else:
+            top = md.get("top_manufacturer", {})
+            if bool(top.get("found", False)):
+                d1 = 2.0
+
+        if "has_full_disclosure" in product:
+            has_full_disclosure = bool(product.get("has_full_disclosure"))
+        else:
+            ingredients = self._get_active_ingredients(product)
+            has_missing_dose = any(not bool(i.get("has_dose", False)) for i in ingredients)
+            blends = safe_list(product.get("proprietary_data", {}).get("blends", []))
+            has_hidden_blends = any(norm_text(b.get("disclosure_level")) in {"none", "partial"} for b in blends)
+            has_full_disclosure = (not has_missing_dose) and (not has_hidden_blends)
+        d2 = 1.0 if has_full_disclosure else 0.0
+
+        bonus_features = md.get("bonus_features", {})
+        d3 = 0.5 if bool(product.get("claim_physician_formulated", bonus_features.get("physician_formulated", False))) else 0.0
+
+        region = norm_text(product.get("manufacturing_region") or md.get("country_of_origin", {}).get("country"))
+        high_std_regions = {
+            "usa",
+            "eu",
+            "uk",
+            "germany",
+            "switzerland",
+            "japan",
+            "canada",
+            "australia",
+            "new zealand",
+            "norway",
+            "sweden",
+            "denmark",
+        }
+        d4 = 0.0
+        if bool(md.get("country_of_origin", {}).get("high_regulation_country", False)):
+            d4 = 0.5
+        elif region in high_std_regions:
+            d4 = 0.5
+
+        d5 = 0.5 if bool(product.get("has_sustainable_packaging", bonus_features.get("sustainability_claim", False))) else 0.0
+
+        tail = min(1.5, d3 + d4 + d5)
+        total = min(5.0, d1 + d2 + tail)
+
+        return {
+            "score": round(total, 2),
+            "max": 5,
+            "D1": round(d1, 2),
+            "D2": round(d2, 2),
+            "D3": round(d3, 2),
+            "D4": round(d4, 2),
+            "D5": round(d5, 2),
+        }
+
+    def _manufacturer_violation_penalty(self, product: Dict[str, Any]) -> float:
+        violations = product.get("manufacturer_data", {}).get("violations", {})
+
+        deduction: Optional[float] = None
+        if isinstance(violations, dict):
+            deduction = as_float(violations.get("total_deduction_applied"), None)
+            items = safe_list(violations.get("violations"))
+            if deduction is None and items:
+                # Backward-compatible fallback for older enrichment outputs.
+                if len(items) == 1:
+                    deduction = as_float(
+                        items[0].get("total_deduction_applied", items[0].get("total_deduction")),
+                        None,
+                    )
+                else:
+                    total = 0.0
+                    for item in items:
+                        total += as_float(
+                            item.get("total_deduction_applied", item.get("total_deduction")),
+                            0.0,
+                        ) or 0.0
+                    deduction = total
+        elif isinstance(violations, list):
+            total = 0.0
+            for item in violations:
+                total += as_float(
+                    item.get("total_deduction_applied", item.get("total_deduction")),
+                    0.0,
+                ) or 0.0
+            deduction = total
+
+        if deduction is None:
+            return 0.0
+
+        # Stored as negative, add directly after section sum.
+        return max(float(deduction), -25.0)
+
+    # ---------------------------------------------------------------------
+    # Output helpers
+    # ---------------------------------------------------------------------
+
+    def _grade_word(self, score_100_equivalent: float, verdict: str) -> Optional[str]:
+        if verdict in {"BLOCKED", "UNSAFE", "NOT_SCORED"}:
+            return None
+        if score_100_equivalent >= 90:
+            return "Exceptional"
+        if score_100_equivalent >= 80:
+            return "Excellent"
+        if score_100_equivalent >= 70:
+            return "Good"
+        if score_100_equivalent >= 60:
+            return "Fair"
+        if score_100_equivalent >= 50:
+            return "Below Avg"
+        if score_100_equivalent >= 32:
+            return "Low"
+        return "Very Poor"
+
+    def _derive_verdict(
+        self,
+        b0: Dict[str, Any],
+        mapping_gate: Dict[str, Any],
+        flags: List[str],
+        quality_score: Optional[float],
+    ) -> str:
+        if b0.get("blocked"):
+            return "BLOCKED"
+        if b0.get("unsafe"):
+            return "UNSAFE"
+        if mapping_gate.get("stop"):
+            return "NOT_SCORED"
+        if "B0_MODERATE_SUBSTANCE" in flags or "BANNED_MATCH_REVIEW_NEEDED" in flags:
+            return "CAUTION"
+        if quality_score is not None and quality_score < 32:
+            return "POOR"
+        return "SAFE"
+
+    def _build_core_output(
+        self,
+        product: Dict[str, Any],
+        quality_score: Optional[float],
+        verdict: str,
+        breakdown: Dict[str, Any],
+        flags: List[str],
+        supp_type: str,
+        unmapped_actives: List[str],
+        mapped_coverage: float,
+        reason: Optional[str] = None,
+    ) -> Dict[str, Any]:
+        product_id = product.get("dsld_id", "unknown")
+        product_name = product.get("product_name", "Unknown Product")
+
+        if quality_score is None:
+            score_100_equivalent = None
+            display = "N/A"
+            display_100 = "N/A"
+        else:
+            score_100_equivalent = round((quality_score / 80.0) * 100.0, 1)
+            display = f"{round(quality_score, 1)}/80"
+            display_100 = f"{score_100_equivalent}/100"
+
+        if verdict == "BLOCKED":
+            scoring_status = SCORING_STATUS_BLOCKED
+            score_basis = SCORE_BASIS_SAFETY_BLOCK
+        elif verdict == "NOT_SCORED":
+            scoring_status = "not_scored"
+            score_basis = SCORE_BASIS_NO_SCORABLE
+        else:
+            scoring_status = SCORING_STATUS_SCORED
+            score_basis = SCORE_BASIS_BIOACTIVES
+
+        # Backward-compatible safety_verdict for downstream scripts.
+        if verdict == "POOR":
+            safety_verdict = "SAFE"
+        elif verdict == "NOT_SCORED":
+            safety_verdict = "CAUTION"
+        else:
+            safety_verdict = verdict
+
+        output = {
+            "dsld_id": product_id,
+            "product_name": product_name,
+            "brand_name": product.get("brandName", ""),
+            "quality_score": round(quality_score, 1) if quality_score is not None else None,
+            "score_80": round(quality_score, 1) if quality_score is not None else None,
+            "score_100_equivalent": score_100_equivalent,
+            "display": display,
+            "display_100": display_100,
+            "grade": self._grade_word(score_100_equivalent or 0.0, verdict),
+            "verdict": verdict,
+            "safety_verdict": safety_verdict,
+            "output_schema_version": self.OUTPUT_SCHEMA_VERSION,
+            "scoring_status": scoring_status,
+            "score_basis": score_basis,
+            "evaluation_stage": "scoring" if verdict != "BLOCKED" else "safety",
+            "breakdown": breakdown,
+            "flags": sorted(set(flags)),
+            "supp_type": supp_type,
+            "unmapped_actives": unmapped_actives,
+            "mapped_coverage": round(mapped_coverage, 4),
+            "scoring_metadata": {
+                "scoring_version": self.VERSION,
+                "output_schema_version": self.OUTPUT_SCHEMA_VERSION,
+                "scored_date": datetime.now(timezone.utc).isoformat(),
+                "enrichment_version": product.get("enrichment_version"),
+                "scoring_status": scoring_status,
+                "score_basis": score_basis,
+                "verdict": verdict,
+                "flags": sorted(set(flags)),
+                "mapped_coverage": round(mapped_coverage, 4),
+                "reason": reason,
+            },
+            "section_scores": {
+                "A_ingredient_quality": {
+                    "score": breakdown.get("A", {}).get("score"),
+                    "max": 25,
+                },
+                "B_safety_purity": {
+                    "score": breakdown.get("B", {}).get("score"),
+                    "max": 35,
+                },
+                "C_evidence_research": {
+                    "score": breakdown.get("C", {}).get("score"),
+                    "max": 15,
+                },
+                "D_brand_trust": {
+                    "score": breakdown.get("D", {}).get("score"),
+                    "max": 5,
+                },
+            },
+        }
+
+        if product.get("match_ledger"):
+            output["match_ledger"] = product["match_ledger"]
+
+        return output
+
+    # ---------------------------------------------------------------------
+    # Main scoring
+    # ---------------------------------------------------------------------
+
+    def score_product(self, product: Dict[str, Any]) -> Dict[str, Any]:
+        product_id = product.get("dsld_id", "unknown")
+        product_name = product.get("product_name", "Unknown Product")
+
+        is_valid, issues = self.validate_enriched_product(product)
         if not is_valid:
-            self.logger.error(f"Product {product_id}: Validation failed - {validation_issues}")
-            return self._create_failed_score(product_id, product_name, f"Validation failed: {'; '.join(validation_issues)}")
+            msg = f"Validation failed: {'; '.join(issues)}"
+            self.logger.error("Product %s: %s", product_id, msg)
+            return self._create_failed_score(product_id, product_name, msg)
 
-        # Log warnings for non-critical issues
-        if validation_issues:
-            for issue in validation_issues:
-                self.logger.warning(f"Product {product_id}: {issue}")
+        for issue in issues:
+            self.logger.warning("Product %s: %s", product_id, issue)
 
         try:
-            # Check enrichment version compatibility (already done in validation, but log here too)
-            enrichment_version = product.get('enrichment_version', 'unknown')
-            if enrichment_version not in self.COMPATIBLE_ENRICHMENT_VERSIONS:
-                self.logger.warning(
-                    f"Product {product_id}: Enrichment version {enrichment_version} "
-                    f"may not be compatible with scorer {self.VERSION}"
+            flags: List[str] = []
+            supp_type = self._classify_supplement_type(product)
+
+            # Step 1: B0 immediate fail
+            b0 = self._evaluate_b0(product)
+            for flag in b0.get("flags", []):
+                if flag not in flags:
+                    flags.append(flag)
+
+            if b0.get("blocked"):
+                breakdown = {
+                    "A": {"score": 0.0, "max": 25},
+                    "B": {
+                        "score": 0.0,
+                        "max": 35,
+                        "B0": "BLOCKED",
+                        "reason": b0.get("reason"),
+                    },
+                    "C": {"score": 0.0, "max": 15},
+                    "D": {"score": 0.0, "max": 5},
+                    "violation_penalty": 0.0,
+                }
+                return self._build_core_output(
+                    product,
+                    quality_score=None,
+                    verdict="BLOCKED",
+                    breakdown=breakdown,
+                    flags=flags,
+                    supp_type=supp_type,
+                    unmapped_actives=[],
+                    mapped_coverage=0.0,
+                    reason=b0.get("reason"),
                 )
 
-            # Score each section
-            section_a = self._score_section_a(product)
-            section_b = self._score_section_b(product)
-            section_c = self._score_section_c(product)
+            if b0.get("unsafe"):
+                breakdown = {
+                    "A": {"score": 0.0, "max": 25},
+                    "B": {
+                        "score": 0.0,
+                        "max": 35,
+                        "B0": "UNSAFE",
+                        "reason": b0.get("reason"),
+                    },
+                    "C": {"score": 0.0, "max": 15},
+                    "D": {"score": 0.0, "max": 5},
+                    "violation_penalty": 0.0,
+                }
+                return self._build_core_output(
+                    product,
+                    quality_score=0.0,
+                    verdict="UNSAFE",
+                    breakdown=breakdown,
+                    flags=flags,
+                    supp_type=supp_type,
+                    unmapped_actives=[],
+                    mapped_coverage=0.0,
+                    reason=b0.get("reason"),
+                )
+
+            # Step 2/3: type + mapping gate
+            mapping_gate = self._mapping_gate(product)
+            for flag in mapping_gate.get("flags", []):
+                if flag not in flags:
+                    flags.append(flag)
+
+            if mapping_gate.get("stop"):
+                verdict = self._derive_verdict(b0, mapping_gate, flags, None)
+                breakdown = {
+                    "A": {"score": 0.0, "max": 25},
+                    "B": {"score": 0.0, "max": 35},
+                    "C": {"score": 0.0, "max": 15},
+                    "D": {"score": 0.0, "max": 5},
+                    "violation_penalty": 0.0,
+                }
+                return self._build_core_output(
+                    product,
+                    quality_score=None,
+                    verdict=verdict,
+                    breakdown=breakdown,
+                    flags=flags,
+                    supp_type=supp_type,
+                    unmapped_actives=mapping_gate.get("unmapped_actives", []),
+                    mapped_coverage=mapping_gate.get("mapped_coverage", 0.0),
+                    reason=mapping_gate.get("reason"),
+                )
+
+            # Step 4: sections
+            section_a = self._score_section_a(product, supp_type)
+            section_b = self._score_section_b(
+                product,
+                supp_type,
+                b0_moderate_penalty=float(b0.get("moderate_penalty", 0.0) or 0.0),
+                flags=flags,
+            )
+            section_c = self._score_section_c(product, flags)
             section_d = self._score_section_d(product)
-            probiotic = self._score_probiotic_bonus(product)
 
-            # Calculate total score (80 points max without Section E)
-            # Base score from sections A-D
-            base_score = sum([
-                section_a['score'],
-                section_b['score'],
-                section_c['score'],
-                section_d['score']
-            ])
+            quality_raw = (
+                section_a["score"] + section_b["score"] + section_c["score"] + section_d["score"]
+            )
 
-            # Probiotic bonus is ADDITIONAL - allows score to temporarily exceed 80
-            # Then ceiling is applied. This ensures a 80/80 product + 10pt probiotic bonus
-            # gets full credit shown in breakdown even if final score is capped at 80
-            probiotic_score = probiotic.get('score', 0)
-            raw_score_with_probiotic = base_score + probiotic_score
+            violation_penalty = self._manufacturer_violation_penalty(product)
+            if violation_penalty < 0:
+                flags.append("MANUFACTURER_VIOLATION")
+            quality_raw += violation_penalty
+            quality_score = clamp(0.0, 80.0, quality_raw)
 
-            # Apply floor and ceiling
-            floor = self.floors_ceilings.get('total_floor', 10)
-            ceiling = self.floors_ceilings.get('total_ceiling', 80)
-            score_80 = max(min(raw_score_with_probiotic, ceiling), floor)
+            verdict = self._derive_verdict(b0, mapping_gate, flags, quality_score)
 
-            # Calculate /100 equivalent
-            score_100_equivalent = (score_80 / 80) * 100
-
-            # Collect all notes
-            all_notes = []
-            for section in [section_a, section_b, section_c, section_d, probiotic]:
-                all_notes.extend(section.get('details', {}).get('notes', []))
-
-            # Build detailed_breakdown for consumer-facing output
-            detailed_breakdown = {
-                "A_Ingredient_Quality": {
-                    "total": section_a['score'],
-                    "max": section_a['max'],
-                    "subcategories": section_a.get('subcategories', [])
-                },
-                "B_Safety_and_Purity": {
-                    "total": section_b['score'],
-                    "max": section_b['max'],
-                    "subcategories": section_b.get('subcategories', [])
-                },
-                "C_Evidence_and_Research": {
-                    "total": section_c['score'],
-                    "max": section_c['max'],
-                    "subcategories": section_c.get('subcategories', [])
-                },
-                "D_Brand_Trust": {
-                    "total": section_d['score'],
-                    "max": section_d['max'],
-                    "subcategories": section_d.get('subcategories', [])
-                },
-                "Probiotic_Bonus": {
-                    "total": probiotic['score'],
-                    "max": probiotic['max'],
-                    "applied": probiotic.get('applied', False),
-                    "subcategories": probiotic.get('subcategories', [])
-                }
+            breakdown = {
+                "A": section_a,
+                "B": section_b,
+                "C": section_c,
+                "D": section_d,
+                "violation_penalty": round(violation_penalty, 2),
+                "quality_raw": round(quality_raw, 2),
             }
 
-            # Build scored product with both formats for backward compatibility
-            scored_product = {
-                "dsld_id": product_id,
-                "product_name": product_name,
-                "brand_name": product.get('brandName', ''),
-                "score_80": round(score_80, 1),
-                "score_100_equivalent": round(score_100_equivalent, 1),
-                "display": f"{round(score_80, 1)}/80",
-                "display_100": f"{round(score_100_equivalent, 1)}/100",
-                "grade": self._calculate_grade(score_100_equivalent),
-                # New consumer-facing detailed breakdown
-                "detailed_breakdown": detailed_breakdown,
-                # Legacy format for backward compatibility
-                "section_scores": {
-                    "A_ingredient_quality": {"score": section_a['score'], "max": section_a['max'], "earned": section_a['score']},
-                    "B_safety_purity": {"score": section_b['score'], "max": section_b['max'], "earned": section_b['score']},
-                    "C_evidence_research": {"score": section_c['score'], "max": section_c['max'], "earned": section_c['score']},
-                    "D_brand_trust": {"score": section_d['score'], "max": section_d['max'], "earned": section_d['score']},
-                    "probiotic_bonus": {"score": probiotic['score'], "max": probiotic['max'], "earned": probiotic['score']}
-                },
-                "scoring_notes": all_notes,
-                "scoring_metadata": {
-                    "scoring_version": self.VERSION,
-                    "scored_date": datetime.utcnow().isoformat() + "Z",
-                    "enrichment_version": enrichment_version,
-                    "supplement_type": product.get('supplement_type', {}).get('type', 'unknown'),
-                    "base_score": round(base_score, 1),
-                    "probiotic_bonus_added": round(probiotic_score, 1),
-                    "raw_score_before_ceiling": round(raw_score_with_probiotic, 1),
-                    "ceiling_applied": raw_score_with_probiotic > ceiling,
-                    "floor_applied": raw_score_with_probiotic < floor,
-                    "immediate_fail": section_b.get('details', {}).get('immediate_fail', False)
-                }
-            }
+            return self._build_core_output(
+                product,
+                quality_score=quality_score,
+                verdict=verdict,
+                breakdown=breakdown,
+                flags=flags,
+                supp_type=supp_type,
+                unmapped_actives=mapping_gate.get("unmapped_actives", []),
+                mapped_coverage=mapping_gate.get("mapped_coverage", 1.0),
+            )
 
-            return scored_product
+        except Exception as exc:
+            self.logger.error("Product %s scoring error: %s", product_id, exc, exc_info=True)
+            return self._create_failed_score(product_id, product_name, str(exc))
 
-        except (KeyError, TypeError) as e:
-            # Data structure issues - return failed score
-            self.logger.error(f"Product {product_id}: Data structure error during scoring: {e}")
-            return self._create_failed_score(product_id, product_name, f"Data structure error: {e}")
-        except (ValueError, AttributeError) as e:
-            # Value/attribute issues
-            self.logger.error(f"Product {product_id}: Value error during scoring: {e}")
-            return self._create_failed_score(product_id, product_name, f"Value error: {e}")
-        except Exception as e:
-            # Unexpected error - log with traceback for debugging
-            self.logger.error(f"Product {product_id}: Unexpected scoring error: {e}", exc_info=True)
-            return self._create_failed_score(product_id, product_name, str(e))
-
-    def _create_failed_score(self, product_id: str, product_name: str, error_msg: str) -> Dict:
-        """Create a standardized failed score response"""
+    def _create_failed_score(self, product_id: str, product_name: str, error_msg: str) -> Dict[str, Any]:
         return {
             "dsld_id": product_id,
             "product_name": product_name,
-            "score_80": 10,  # Floor
-            "score_100_equivalent": 12.5,
-            "display": "10/80",
-            "display_100": "12.5/100",
-            "grade": "F",
+            "quality_score": None,
+            "score_80": None,
+            "score_100_equivalent": None,
+            "display": "Error",
+            "display_100": "Error",
+            "grade": None,
+            "verdict": "NOT_SCORED",
+            "safety_verdict": "UNKNOWN",
+            "output_schema_version": self.OUTPUT_SCHEMA_VERSION,
+            "scoring_status": "error",
+            "score_basis": SCORE_BASIS_SCORING_ERROR,
+            "evaluation_stage": "scoring",
             "error": error_msg,
+            "flags": ["SCORING_ERROR"],
             "scoring_metadata": {
                 "scoring_version": self.VERSION,
-                "scored_date": datetime.utcnow().isoformat() + "Z",
-                "status": "failed"
-            }
-            }
+                "output_schema_version": self.OUTPUT_SCHEMA_VERSION,
+                "scored_date": datetime.now(timezone.utc).isoformat(),
+                "scoring_status": "error",
+                "score_basis": SCORE_BASIS_SCORING_ERROR,
+                "error_details": error_msg,
+            },
+        }
 
-    def _calculate_grade(self, score_100: float) -> str:
-        """Calculate letter grade from /100 score"""
-        grade_scale = self.config.get('grade_scale', {})
+    # ---------------------------------------------------------------------
+    # Batch processing
+    # ---------------------------------------------------------------------
 
-        if score_100 >= grade_scale.get('A_plus', {}).get('min', 90):
-            return "A+"
-        elif score_100 >= grade_scale.get('A', {}).get('min', 85):
-            return "A"
-        elif score_100 >= grade_scale.get('A_minus', {}).get('min', 80):
-            return "A-"
-        elif score_100 >= grade_scale.get('B_plus', {}).get('min', 77):
-            return "B+"
-        elif score_100 >= grade_scale.get('B', {}).get('min', 73):
-            return "B"
-        elif score_100 >= grade_scale.get('B_minus', {}).get('min', 70):
-            return "B-"
-        elif score_100 >= grade_scale.get('C_plus', {}).get('min', 67):
-            return "C+"
-        elif score_100 >= grade_scale.get('C', {}).get('min', 63):
-            return "C"
-        elif score_100 >= grade_scale.get('C_minus', {}).get('min', 60):
-            return "C-"
-        elif score_100 >= grade_scale.get('D', {}).get('min', 50):
-            return "D"
-        else:
-            return "F"
+    def process_batch(self, input_file: str, output_dir: str) -> Dict[str, Any]:
+        with open(input_file, "r", encoding="utf-8") as f:
+            products = json.load(f)
+        if not isinstance(products, list):
+            products = [products]
 
-    # =========================================================================
-    # BATCH PROCESSING
-    # =========================================================================
+        scored_products: List[Dict[str, Any]] = []
+        verdict_distribution: Dict[str, int] = defaultdict(int)
 
-    def process_batch(self, input_file: str, output_dir: str) -> Dict:
-        """Process a batch of enriched products"""
-        try:
-            with open(input_file, 'r', encoding='utf-8') as f:
-                products = json.load(f)
+        for product in products:
+            scored = self.score_product(product)
+            scored_products.append(scored)
+            verdict_distribution[scored.get("verdict", "UNKNOWN")] += 1
 
-            if not isinstance(products, list):
-                products = [products]
+        base_name = os.path.splitext(os.path.basename(input_file))[0]
+        if base_name.startswith("enriched_"):
+            base_name = base_name[9:]
 
-            self.logger.info(f"Scoring batch: {len(products)} products from {os.path.basename(input_file)}")
+        scored_dir = os.path.join(output_dir, "scored")
+        os.makedirs(scored_dir, exist_ok=True)
 
-            scored_products = []
-            score_distribution = {"A": 0, "B": 0, "C": 0, "D": 0, "F": 0}
-            fail_count = 0
+        output_file = os.path.join(scored_dir, f"scored_{base_name}.json")
+        with open(output_file, "w", encoding="utf-8") as f:
+            json.dump(scored_products, f, indent=2, ensure_ascii=False)
 
-            # Progress bar
-            show_progress = self.config.get('processing', {}).get('show_progress_bar', True)
-            iterator = products
-            if show_progress and len(products) > 10 and TQDM_AVAILABLE:
-                iterator = tqdm(products, desc="Scoring", unit="product")
+        numeric_scores = [p["score_80"] for p in scored_products if p.get("score_80") is not None]
+        avg_80 = sum(numeric_scores) / len(numeric_scores) if numeric_scores else 0.0
 
-            for product in iterator:
-                scored = self.score_product(product)
-                scored_products.append(scored)
+        return {
+            "total_products": len(products),
+            "successful": len(scored_products),
+            "average_score_80": round(avg_80, 2),
+            "average_score_100": round((avg_80 / 80.0) * 100.0, 2) if numeric_scores else 0.0,
+            "verdict_distribution": dict(verdict_distribution),
+            "output_file": output_file,
+        }
 
-                # Track distribution (with bounds check)
-                grade = scored.get('grade', 'F')
-                grade_letter = grade[0] if grade and len(grade) > 0 else 'F'
-                score_distribution[grade_letter] = score_distribution.get(grade_letter, 0) + 1
-
-                # Track fails
-                if scored.get('scoring_metadata', {}).get('immediate_fail', False):
-                    fail_count += 1
-
-            # Save outputs
-            base_name = os.path.splitext(os.path.basename(input_file))[0]
-            if base_name.startswith('enriched_'):
-                base_name = base_name[9:]
-
-            scored_dir = os.path.join(output_dir, "scored")
-            os.makedirs(scored_dir, exist_ok=True)
-
-            output_file = os.path.join(scored_dir, f"scored_{base_name}.json")
-
-            with open(output_file, 'w', encoding='utf-8') as f:
-                json.dump(scored_products, f, indent=2, ensure_ascii=False)
-
-            self.logger.info(f"Saved {len(scored_products)} scored products to {output_file}")
-
-            # Statistics
-            scores = [p['score_80'] for p in scored_products if 'score_80' in p]
-            avg_score = sum(scores) / len(scores) if scores else 0
-
-            return {
-                "total_products": len(products),
-                "successful": len(scored_products),
-                "immediate_fails": fail_count,
-                "average_score_80": round(avg_score, 1),
-                "average_score_100": round((avg_score / 80) * 100, 1),
-                "score_distribution": score_distribution,
-                "output_file": output_file
-            }
-
-        except json.JSONDecodeError as e:
-            self.logger.error(f"Invalid JSON in batch {input_file}: {e}")
-            raise
-        except PermissionError as e:
-            self.logger.error(f"Permission denied for batch {input_file}: {e}")
-            raise
-        except (IOError, OSError) as e:
-            self.logger.error(f"I/O error processing batch {input_file}: {e}")
-            raise
-        except Exception as e:
-            self.logger.error(f"Unexpected error processing batch {input_file}: {e}", exc_info=True)
-            raise
-
-    def process_all(self, input_path: str, output_dir: str) -> Dict:
-        """Process all files in input path"""
+    def process_all(self, input_path: str, output_dir: str) -> Dict[str, Any]:
         script_dir = Path(__file__).parent
 
         if not os.path.isabs(input_path):
-            input_path = script_dir / input_path
+            input_path = str(script_dir / input_path)
         if not os.path.isabs(output_dir):
-            output_dir = script_dir / output_dir
+            output_dir = str(script_dir / output_dir)
 
-        # Get input files
-        input_files = []
+        input_files: List[str] = []
         if os.path.isfile(input_path):
-            input_files = [str(input_path)]
+            input_files = [input_path]
         elif os.path.isdir(input_path):
             input_files = [
-                os.path.join(input_path, f)
-                for f in os.listdir(input_path)
-                if f.endswith('.json') and not f.startswith('.')
+                os.path.join(input_path, filename)
+                for filename in os.listdir(input_path)
+                if filename.endswith(".json") and not filename.startswith(".")
             ]
+            input_files.sort()
         else:
             raise FileNotFoundError(f"Input path not found: {input_path}")
 
         if not input_files:
             raise ValueError(f"No JSON files found in: {input_path}")
 
-        self.logger.info(f"Found {len(input_files)} files to score")
+        start_time = datetime.now(timezone.utc)
 
-        # Process all files
-        start_time = datetime.utcnow()
-        all_scores = []
-        all_distributions = {"A": 0, "B": 0, "C": 0, "D": 0, "F": 0}
+        all_scores: List[float] = []
+        verdict_distribution: Dict[str, int] = defaultdict(int)
         total_products = 0
-        total_fails = 0
 
-        for input_file in input_files:
-            self.logger.info(f"Processing: {os.path.basename(input_file)}")
-            batch_stats = self.process_batch(input_file, str(output_dir))
+        use_progress = (
+            self.config.get("processing", {}).get("show_progress_bar", True)
+            and len(input_files) > 1
+            and TQDM_AVAILABLE
+        )
+        iterator = tqdm(input_files, desc="Scoring files", unit="file") if use_progress else input_files
 
-            total_products += batch_stats.get("total_products", 0)
-            total_fails += batch_stats.get("immediate_fails", 0)
-            all_scores.append(batch_stats.get("average_score_80", 0))
+        for input_file in iterator:
+            batch_stats = self.process_batch(input_file, output_dir)
+            total_products += batch_stats["total_products"]
+            all_scores.append(batch_stats["average_score_80"])
+            for verdict, count in batch_stats.get("verdict_distribution", {}).items():
+                verdict_distribution[verdict] += count
 
-            for grade, count in batch_stats.get("score_distribution", {}).items():
-                all_distributions[grade] = all_distributions.get(grade, 0) + count
-
-        # Calculate overall averages
-        if all_scores:
-            overall_avg_80 = sum(all_scores) / len(all_scores)
-            overall_avg_100 = (overall_avg_80 / 80) * 100
-        else:
-            overall_avg_80 = 0
-            overall_avg_100 = 0
-
-        # Generate summary
-        end_time = datetime.utcnow()
-        duration = (end_time - start_time).total_seconds()
+        overall_avg_80 = sum(all_scores) / len(all_scores) if all_scores else 0.0
+        overall_avg_100 = (overall_avg_80 / 80.0) * 100.0 if all_scores else 0.0
 
         summary = {
             "processing_info": {
                 "scoring_version": self.VERSION,
                 "files_processed": len(input_files),
-                "duration_seconds": round(duration, 2),
-                "timestamp": end_time.isoformat() + "Z"
+                "duration_seconds": round((datetime.now(timezone.utc) - start_time).total_seconds(), 2),
+                "timestamp": datetime.now(timezone.utc).isoformat(),
             },
             "stats": {
                 "total_products": total_products,
-                "immediate_fails": total_fails,
-                "average_score_80": round(overall_avg_80, 1),
-                "average_score_100": round(overall_avg_100, 1),
-                "score_distribution": all_distributions
+                "average_score_80": round(overall_avg_80, 2),
+                "average_score_100": round(overall_avg_100, 2),
+                "verdict_distribution": dict(verdict_distribution),
             },
             "scoring_rules": {
-                "max_section_A": self.section_max.get('A_ingredient_quality', 30),
-                "max_section_B": self.section_max.get('B_safety_purity', 45),
-                "max_section_C": self.section_max.get('C_evidence_research', 15),
-                "max_section_D": self.section_max.get('D_brand_trust', 10),
+                "max_section_A": 25,
+                "max_section_B": 35,
+                "max_section_C": 15,
+                "max_section_D": 5,
                 "max_total": 80,
-                "probiotic_bonus_max": 10,
-                "note": "Section E (User Profile, +20 max) scored on device"
-            }
+                "fit_score_location": "client-side only",
+            },
         }
 
-        # Save summary
         reports_dir = os.path.join(output_dir, "reports")
         os.makedirs(reports_dir, exist_ok=True)
 
         summary_file = os.path.join(
             reports_dir,
-            f"scoring_summary_{datetime.utcnow().strftime('%Y%m%d_%H%M%S')}.json"
+            f"scoring_summary_{datetime.now(timezone.utc).strftime('%Y%m%d_%H%M%S')}.json",
         )
-
-        with open(summary_file, 'w', encoding='utf-8') as f:
+        with open(summary_file, "w", encoding="utf-8") as f:
             json.dump(summary, f, indent=2, ensure_ascii=False)
 
-        self.logger.info("=" * 50)
-        self.logger.info("SCORING COMPLETE")
-        self.logger.info(f"Total products: {total_products}")
-        self.logger.info(f"Immediate fails: {total_fails}")
-        self.logger.info(f"Average score: {overall_avg_80:.1f}/80 ({overall_avg_100:.1f}/100)")
-        self.logger.info(f"Distribution: {all_distributions}")
-        self.logger.info(f"Duration: {duration:.2f}s")
-        self.logger.info(f"Summary saved: {summary_file}")
-        self.logger.info("=" * 50)
+        self.logger.info("Scoring complete: %s products", total_products)
+        self.logger.info("Average quality: %.2f/80", overall_avg_80)
+        self.logger.info("Verdicts: %s", dict(verdict_distribution))
+        self.logger.info("Summary saved: %s", summary_file)
 
         return summary
 
 
+def generate_impact_report(
+    current_results: List[Dict[str, Any]],
+    baseline_results: Optional[List[Dict[str, Any]]] = None,
+    threshold_score_change: float = 2.0,
+    threshold_pct_change: float = 10.0,
+    threshold_verdict_change: bool = True,
+) -> Dict[str, Any]:
+    """Generate score/verdict drift report between two runs."""
+
+    report: Dict[str, Any] = {
+        "generated_at": datetime.now(timezone.utc).isoformat(),
+        "total_products": len(current_results),
+        "baseline_available": baseline_results is not None,
+        "thresholds": {
+            "score_change": threshold_score_change,
+            "pct_change": threshold_pct_change,
+            "track_verdict_changes": threshold_verdict_change,
+        },
+        "score_changes": [],
+        "verdict_changes": [],
+        "summary_statistics": {},
+        "pass_gate": True,
+        "gate_failures": [],
+    }
+
+    current_scores = [p.get("score_80", 0) for p in current_results if p.get("score_80") is not None]
+    current_verdicts = [p.get("verdict") or p.get("safety_verdict", "SAFE") for p in current_results]
+
+    report["summary_statistics"]["current_run"] = {
+        "total_products": len(current_results),
+        "score_mean": round(sum(current_scores) / len(current_scores), 2) if current_scores else 0.0,
+        "score_min": min(current_scores) if current_scores else 0.0,
+        "score_max": max(current_scores) if current_scores else 0.0,
+        "verdict_distribution": {
+            verdict: current_verdicts.count(verdict) for verdict in sorted(set(current_verdicts))
+        },
+    }
+
+    if not baseline_results:
+        return report
+
+    baseline_lookup = {p.get("dsld_id", "unknown"): p for p in baseline_results}
+
+    for current in current_results:
+        product_id = current.get("dsld_id", "unknown")
+        baseline = baseline_lookup.get(product_id)
+        if not baseline:
+            continue
+
+        cur_score = current.get("score_80")
+        base_score = baseline.get("score_80")
+        if cur_score is None or base_score is None:
+            continue
+
+        delta = cur_score - base_score
+        if abs(delta) >= threshold_score_change:
+            report["score_changes"].append(
+                {
+                    "product_id": product_id,
+                    "product_name": current.get("product_name", "Unknown"),
+                    "baseline_score": base_score,
+                    "current_score": cur_score,
+                    "change": round(delta, 2),
+                    "change_pct": round((delta / base_score) * 100.0, 2) if base_score else 0.0,
+                }
+            )
+
+        if threshold_verdict_change:
+            cur_verdict = current.get("verdict") or current.get("safety_verdict", "SAFE")
+            base_verdict = baseline.get("verdict") or baseline.get("safety_verdict", "SAFE")
+            if cur_verdict != base_verdict:
+                report["verdict_changes"].append(
+                    {
+                        "product_id": product_id,
+                        "product_name": current.get("product_name", "Unknown"),
+                        "baseline_verdict": base_verdict,
+                        "current_verdict": cur_verdict,
+                    }
+                )
+                if cur_verdict == "UNSAFE" and base_verdict != "UNSAFE":
+                    report["gate_failures"].append(
+                        f"Product {product_id} changed to UNSAFE from {base_verdict}"
+                    )
+
+    changed_pct = (len(report["score_changes"]) / len(current_results) * 100.0) if current_results else 0.0
+    if changed_pct >= threshold_pct_change:
+        report["gate_failures"].append(
+            f"{changed_pct:.1f}% of products exceed score-change threshold"
+        )
+
+    report["summary_statistics"]["changes"] = {
+        "score_changes_flagged": len(report["score_changes"]),
+        "verdict_changes_flagged": len(report["verdict_changes"]),
+        "new_unsafe_verdicts": sum(
+            1
+            for item in report["verdict_changes"]
+            if item["current_verdict"] == "UNSAFE" and item["baseline_verdict"] != "UNSAFE"
+        ),
+    }
+
+    report["pass_gate"] = len(report["gate_failures"]) == 0
+    return report
+
+
 def main() -> None:
-    """Main entry point"""
     parser = argparse.ArgumentParser(
-        description='DSLD Supplement Scoring System v3.1.0',
+        description="PharmaGuide score engine",
         formatter_class=argparse.RawDescriptionHelpFormatter,
-        epilog="""
-Examples:
-    python score_supplements.py
-    python score_supplements.py --config config/scoring_config.json
-    python score_supplements.py --input-dir enriched_data --output-dir scored_output
-    python score_supplements.py --dry-run
-        """
     )
 
-    parser.add_argument('--config', default='config/scoring_config.json',
-                        help='Scoring configuration file path')
-    parser.add_argument('--input-dir', help='Input directory (overrides config)')
-    parser.add_argument('--output-dir', help='Output directory (overrides config)')
-    parser.add_argument('--dry-run', action='store_true',
-                        help='Test run without writing files')
+    parser.add_argument("--config", default="config/scoring_config.json", help="Scoring config path")
+    parser.add_argument("--input-dir", help="Input file or directory")
+    parser.add_argument("--output-dir", help="Output directory")
+    parser.add_argument("--dry-run", action="store_true", help="Print resolved paths and exit")
+    parser.add_argument("--impact-report", action="store_true", help="Generate impact report")
+    parser.add_argument("--baseline-dir", help="Baseline scored directory for impact comparison")
+    parser.add_argument("--impact-threshold", type=float, default=2.0)
+    parser.add_argument("--impact-pct-threshold", type=float, default=10.0)
 
     args = parser.parse_args()
 
-    try:
-        scorer = SupplementScorer(args.config)
+    scorer = SupplementScorer(args.config)
 
-        # Determine paths
-        if args.input_dir and args.output_dir:
-            input_path = args.input_dir
-            output_dir = args.output_dir
-        else:
-            paths = scorer.config.get('paths', {})
-            input_path = paths.get('input_directory', 'output_Lozenges_enriched/enriched')
-            output_dir = paths.get('output_directory', 'output_Lozenges_scored')
+    input_path = args.input_dir or scorer.paths.get("input_directory", "output_Lozenges_enriched/enriched")
+    output_dir = args.output_dir or scorer.paths.get("output_directory", "output_Lozenges_scored")
 
-        if args.dry_run:
-            scorer.logger.info("DRY RUN MODE")
-            scorer.logger.info(f"Would score files from: {input_path}")
-            scorer.logger.info(f"Would output to: {output_dir}")
-            return
+    if args.dry_run:
+        scorer.logger.info("DRY RUN")
+        scorer.logger.info("Input: %s", input_path)
+        scorer.logger.info("Output: %s", output_dir)
+        return
 
-        scorer.process_all(input_path, output_dir)
+    if args.impact_report:
+        current_results: List[Dict[str, Any]] = []
+        input_p = Path(input_path)
+        for json_file in sorted(input_p.glob("*.json")):
+            with open(json_file, "r", encoding="utf-8") as f:
+                data = json.load(f)
+            products = data if isinstance(data, list) else [data]
+            current_results.extend([scorer.score_product(product) for product in products])
 
-    except FileNotFoundError as e:
-        logging.error(f"File or directory not found: {e}")
-        sys.exit(1)
-    except json.JSONDecodeError as e:
-        logging.error(f"Invalid JSON file: {e}")
-        sys.exit(1)
-    except PermissionError as e:
-        logging.error(f"Permission denied: {e}")
-        sys.exit(1)
-    except KeyboardInterrupt:
-        logging.info("Scoring interrupted by user")
-        sys.exit(130)
-    except Exception as e:
-        logging.error(f"Fatal error: {e}", exc_info=True)
-        sys.exit(1)
+        baseline_results: Optional[List[Dict[str, Any]]] = None
+        if args.baseline_dir:
+            baseline_results = []
+            for json_file in sorted(Path(args.baseline_dir).glob("**/*.json")):
+                with open(json_file, "r", encoding="utf-8") as f:
+                    data = json.load(f)
+                products = data if isinstance(data, list) else [data]
+                baseline_results.extend(products)
+
+        report = generate_impact_report(
+            current_results,
+            baseline_results=baseline_results,
+            threshold_score_change=args.impact_threshold,
+            threshold_pct_change=args.impact_pct_threshold,
+        )
+
+        report_dir = Path(output_dir) / "reports"
+        report_dir.mkdir(parents=True, exist_ok=True)
+        report_file = report_dir / f"impact_report_{datetime.now(timezone.utc).strftime('%Y%m%d_%H%M%S')}.json"
+        with open(report_file, "w", encoding="utf-8") as f:
+            json.dump(report, f, indent=2, ensure_ascii=False)
+
+        scorer.logger.info("Impact report saved: %s", report_file)
+        scorer.logger.info("Gate status: %s", "PASS" if report["pass_gate"] else "FAIL")
+
+        if not report["pass_gate"]:
+            sys.exit(2)
+        return
+
+    scorer.process_all(input_path, output_dir)
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except FileNotFoundError as exc:
+        logging.error("File not found: %s", exc)
+        sys.exit(1)
+    except json.JSONDecodeError as exc:
+        logging.error("Invalid JSON: %s", exc)
+        sys.exit(1)
+    except KeyboardInterrupt:
+        logging.info("Interrupted")
+        sys.exit(130)
+    except Exception as exc:
+        logging.error("Fatal error: %s", exc, exc_info=True)
+        sys.exit(1)

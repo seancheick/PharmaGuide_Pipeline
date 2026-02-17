@@ -52,10 +52,10 @@ class TestSchemaVersion:
         """Schema version must be present."""
         assert 'schema_version' in metadata, "Missing schema_version in metadata"
 
-    def test_schema_version_is_3(self, metadata):
-        """Schema version must be 3.x.x"""
+    def test_schema_version_is_4(self, metadata):
+        """Schema version must be 4.x.x"""
         version = metadata.get('schema_version', '')
-        assert version.startswith('3.'), f"Expected schema version 3.x.x, got {version}"
+        assert version.startswith('4.'), f"Expected schema version 4.x.x, got {version}"
 
 
 # =============================================================================
@@ -67,6 +67,15 @@ class TestAliasQuality:
 
     def test_no_cross_ingredient_duplicate_aliases(self, entries):
         """No alias should map to multiple different ingredients."""
+        # Known acceptable cross-ingredient aliases (hierarchical relationships)
+        ALLOWED_CROSS_ALIASES = {
+            'beta-sitosterol',  # beta_sitosterol IS a phytosterol
+            'cod liver oil',    # cod_liver_oil IS a fish oil
+            'bifidobacterium animalis lactis',  # bifidobacterium_lactis IS a probiotic
+            'b. animalis lactis',  # abbreviated form
+            'bifidobacterium animalis subsp lactis',  # subspecies form
+        }
+
         alias_map = defaultdict(list)
 
         for ing_key, entry in entries.items():
@@ -76,11 +85,11 @@ class TestAliasQuality:
                         alias_lower = alias.lower().strip()
                         alias_map[alias_lower].append(ing_key)
 
-        # Find aliases that map to multiple ingredients
+        # Find aliases that map to multiple ingredients (excluding known allowed)
         duplicates = {
             alias: list(set(ings))
             for alias, ings in alias_map.items()
-            if len(set(ings)) > 1
+            if len(set(ings)) > 1 and alias not in ALLOWED_CROSS_ALIASES
         }
 
         assert len(duplicates) == 0, (
@@ -119,6 +128,43 @@ class TestAliasQuality:
         assert len(violations) == 0, (
             f"Found {len(violations)} overly generic aliases:\n"
             + "\n".join(f"  {ing}/{form}: '{alias}'" for ing, form, alias in violations[:10])
+        )
+
+    def test_no_within_ingredient_alias_collisions(self, entries):
+        """Aliases should not appear in multiple forms under the same parent ingredient.
+
+        This prevents ambiguity when matching branded forms vs generic forms.
+        For example, 'ashwagandha' should not appear in both 'KSM-66 ashwagandha'
+        and 'ashwagandha (unspecified)' - the matcher wouldn't know which to pick.
+        """
+        collisions = []
+
+        for parent_key, parent_data in entries.items():
+            forms = parent_data.get('forms', {})
+
+            # Build alias map for this parent only
+            alias_to_forms = defaultdict(list)
+            for form_name, form_data in forms.items():
+                if isinstance(form_data, dict):
+                    for alias in form_data.get('aliases', []):
+                        alias_lower = alias.lower().strip()
+                        alias_to_forms[alias_lower].append(form_name)
+
+            # Find aliases that appear in multiple forms
+            parent_collisions = [
+                (alias, form_list)
+                for alias, form_list in alias_to_forms.items()
+                if len(form_list) > 1
+            ]
+            if parent_collisions:
+                collisions.append((parent_key, parent_collisions))
+
+        assert len(collisions) == 0, (
+            f"Found {len(collisions)} parent ingredients with within-ingredient alias collisions:\n"
+            + "\n".join(
+                f"  {parent}: '{coll[0][0]}' in {coll[0][1]}"
+                for parent, coll in collisions[:10]
+            )
         )
 
 
@@ -233,7 +279,7 @@ class TestAbsorptionStructured:
     def test_absorption_quality_valid_values(self, entries):
         """absorption quality must be from valid enum."""
         VALID_QUALITIES = {
-            'unknown', 'poor', 'moderate', 'good', 'very_good', 'excellent', 'variable'
+            'unknown', 'poor', 'low', 'moderate', 'good', 'very_good', 'excellent', 'variable'
         }
         invalid = []
 

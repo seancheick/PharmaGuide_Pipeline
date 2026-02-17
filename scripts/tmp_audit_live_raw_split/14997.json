@@ -1,0 +1,471 @@
+{
+  "id": "14997",
+  "src": "01-raw/2025-03-25/data/label_182.json",
+  "nhanesId": "",
+  "bundleName": "",
+  "brandIpSymbol": "\u2122",
+  "productVersionCode": "CODE P0496 V4",
+  "pdf": "",
+  "thumbnail": "",
+  "percentDvFootnote": "Not Present",
+  "fullName": "Methyl B12 5,000 mcg Methylcobalamin",
+  "brandName": "Protocol For Life Balance",
+  "upcSku": "7 07359 10496 9",
+  "hasOuterCarton": false,
+  "upcValid": true,
+  "status": "discontinued",
+  "discontinuedDate": "2016-08-14T00:00:00Z",
+  "offMarket": 1,
+  "servingsPerContainer": null,
+  "netContents": [
+    {
+      "order": 1,
+      "quantity": 60,
+      "unit": "Lozenge(s)",
+      "display": "60 Lozenge(s)"
+    }
+  ],
+  "targetGroups": [
+    "Vegan",
+    "Vegetarian",
+    "Adult (18 - 50 Years)",
+    "Gluten Free",
+    "Dairy Free"
+  ],
+  "userGroups": [
+    {
+      "dailyValueTargetGroupName": "Adults and children 4 or more years of age",
+      "langualCode": "P0250",
+      "langualCodeDescription": "Adults and Children 4 years and above"
+    }
+  ],
+  "productType": {
+    "langualCode": "A1302",
+    "langualCodeDescription": "Vitamin"
+  },
+  "physicalState": {
+    "langualCode": "E0174",
+    "langualCodeDescription": "Lozenge"
+  },
+  "imageUrl": "https://api.ods.od.nih.gov/dsld/s3/pdf/14997.pdf",
+  "images": [],
+  "contacts": [
+    {
+      "contactId": 3506,
+      "text": "Manufactured by",
+      "types": [
+        "Manufacturer"
+      ],
+      "contactDetails": {
+        "src": "01-raw/2025-03-25/data/contact_1.json",
+        "id": 3506,
+        "name": "NHG",
+        "streetAddress": "P.O. Box 2203",
+        "city": "Sparks",
+        "state": "NV",
+        "country": "U.S.A.",
+        "zipCode": "89431",
+        "phoneNumber": "",
+        "email": "",
+        "webAddress": ""
+      }
+    }
+  ],
+  "events": [
+    {
+      "date": "2016-08-14",
+      "type": "Off Market"
+    },
+    {
+      "date": "2012-11-21",
+      "type": "Date entered into DSLD"
+    }
+  ],
+  "activeIngredients": [
+    {
+      "ingredientId": 279040,
+      "uniiCode": "935E97BOY8",
+      "order": 1,
+      "raw_source_text": "Folic Acid",
+      "branded_token_extracted": null,
+      "raw_source_path": "activeIngredients",
+      "normalized_key": "folic_acid",
+      "name": "Folic Acid",
+      "standardName": "Vitamin B9 (Folate)",
+      "ingredientGroup": "Folate",
+      "quantity": 400.0,
+      "unit": "mcg",
+      "dailyValue": 100.0,
+      "quantityVariants": null,
+      "forms": [],
+      "alternateNames": [],
+      "mapped": true,
+      "proprietaryBlend": false,
+      "disclosureLevel": null,
+      "parentBlend": null,
+      "isNestedIngredient": false,
+      "nestedIngredients": [],
+      "hierarchyType": null
+    },
+    {
+      "ingredientId": 281388,
+      "uniiCode": "8406EY2OQA",
+      "order": 2,
+      "raw_source_text": "Vitamin B12",
+      "branded_token_extracted": null,
+      "raw_source_path": "activeIngredients",
+      "normalized_key": "vitamin_b12",
+      "name": "Vitamin B12",
+      "standardName": "Vitamin B12",
+      "ingredientGroup": "Vitamin B12",
+      "quantity": 5.0,
+      "unit": "mg",
+      "dailyValue": 83333.0,
+      "quantityVariants": null,
+      "forms": [
+        {
+          "name": "Methylcobalamin",
+          "ingredientId": 280220,
+          "order": 1,
+          "prefix": null,
+          "percent": null
+        }
+      ],
+      "alternateNames": [],
+      "mapped": true,
+      "proprietaryBlend": false,
+      "disclosureLevel": null,
+      "parentBlend": null,
+      "isNestedIngredient": false,
+      "nestedIngredients": [],
+      "hierarchyType": null,
+      "harvestMethod": "5,000 mcg",
+      "notes": "Vitamin B12 (Form: as Methylcobalamin) Note: 5,000 mcg "
+    }
+  ],
+  "inactiveIngredients": [
+    {
+      "ingredientId": 282545,
+      "uniiCode": "6YSS42VSEV",
+      "order": 1,
+      "raw_source_text": "Fructose",
+      "raw_source_path": "inactiveIngredients",
+      "normalized_key": "fructose",
+      "name": "Fructose",
+      "standardName": "Fructose & High Fructose Corn Syrup",
+      "ingredientGroup": "Fructose",
+      "forms": [],
+      "alternateNames": [],
+      "mapped": true,
+      "hierarchyType": null
+    },
+    {
+      "ingredientId": 3789,
+      "uniiCode": null,
+      "order": 2,
+      "raw_source_text": "Sorbitol",
+      "raw_source_path": "inactiveIngredients",
+      "normalized_key": "sorbitol",
+      "name": "Sorbitol",
+      "standardName": "sorbitol",
+      "ingredientGroup": "Sorbitol",
+      "forms": [],
+      "alternateNames": [],
+      "mapped": true,
+      "hierarchyType": null,
+      "isAdditive": true,
+      "additiveType": "sugar_alcohol"
+    },
+    {
+      "ingredientId": 9747,
+      "uniiCode": null,
+      "order": 3,
+      "raw_source_text": "Cellulose",
+      "raw_source_path": "inactiveIngredients",
+      "normalized_key": "cellulose",
+      "name": "Cellulose",
+      "standardName": "cellulose powder",
+      "ingredientGroup": "Cellulose",
+      "forms": [],
+      "alternateNames": [],
+      "mapped": true,
+      "hierarchyType": null,
+      "isAdditive": true,
+      "additiveType": "unspecified"
+    },
+    {
+      "ingredientId": 3677,
+      "uniiCode": null,
+      "order": 4,
+      "raw_source_text": "Citric Acid",
+      "raw_source_path": "inactiveIngredients",
+      "normalized_key": "citric_acid",
+      "name": "Citric Acid",
+      "standardName": "Citric Acid",
+      "ingredientGroup": "Citric Acid",
+      "forms": [],
+      "alternateNames": [],
+      "mapped": true,
+      "hierarchyType": null,
+      "isAdditive": true,
+      "additiveType": "preservative_natural"
+    },
+    {
+      "ingredientId": 285558,
+      "uniiCode": "4ELV7Z65AP",
+      "order": 5,
+      "raw_source_text": "Stearic Acid",
+      "raw_source_path": "inactiveIngredients",
+      "normalized_key": "stearic_acid",
+      "name": "Stearic Acid",
+      "standardName": "stearic acid",
+      "ingredientGroup": "Stearic Acid",
+      "forms": [],
+      "alternateNames": [
+        "C18:0"
+      ],
+      "mapped": true,
+      "hierarchyType": null,
+      "isAdditive": true,
+      "additiveType": "processing_aid"
+    },
+    {
+      "ingredientId": 3744,
+      "uniiCode": null,
+      "order": 6,
+      "raw_source_text": "Natural Flavors",
+      "raw_source_path": "inactiveIngredients",
+      "normalized_key": "natural_flavors",
+      "name": "Natural Flavors",
+      "standardName": "natural flavors",
+      "ingredientGroup": "Flavor",
+      "forms": [],
+      "alternateNames": [],
+      "mapped": true,
+      "hierarchyType": null,
+      "isAdditive": true,
+      "additiveType": "flavoring"
+    },
+    {
+      "ingredientId": 27343,
+      "uniiCode": null,
+      "order": 7,
+      "raw_source_text": "Magnesium Stearate",
+      "raw_source_path": "inactiveIngredients",
+      "normalized_key": "magnesium_stearate",
+      "name": "Magnesium Stearate",
+      "standardName": "magnesium stearate",
+      "ingredientGroup": "Magnesium stearate",
+      "forms": [],
+      "alternateNames": [],
+      "mapped": true,
+      "hierarchyType": null,
+      "isAdditive": true,
+      "additiveType": "processing_aid"
+    }
+  ],
+  "nutritionalInfo": {},
+  "statements": [
+    {
+      "type": "Suggested/Recommended/Usage/Directions",
+      "notes": "SUGGESTED USAGE: As a dietary supplement, take 1 lozenge daily. Chew lozenge or hold in mouth until dissolved and swallow. Take higher amounts on the advice of your healthcare practitioner."
+    },
+    {
+      "type": "General Statements: All Other Content",
+      "notes": "HOW IT WORKS: Vitamin B12 has the largest and most complex chemical structure of all the vitamins. Most of its functions are related to its co-enzyme activity, such as enzymes needed for the production of DNA during cell division. It is required for the synthesis of the amino acid methionine, from homocysteine, which helps to maintain already healthy serum homocysteine levels. B12 is also necessary for the maintenance of a healthy nervous system."
+    },
+    {
+      "type": "Precautions re: Pregnant or Nursing or Prescription Medications",
+      "notes": "CAUTIONS/INTERACTIONS: A number of drugs can affect Vitamin B12 levels or its utilization. If you are taking any prescription medications consult your health care practitioner before taking this product."
+    },
+    {
+      "type": "General Statements: All Other Content",
+      "notes": "For more information on this product go to www.protocolforlife.com/P0496."
+    },
+    {
+      "type": "General Statements: All Other Content",
+      "notes": "\u2022 Healthy Homocysteine Metabolism\n\u2022 Supports Healthy Nervous System"
+    },
+    {
+      "type": "FDA Statement of Identity",
+      "notes": "A Dietary Supplement"
+    },
+    {
+      "type": "Formulation re: Vegetarian/Vegan",
+      "notes": "Vegetarian Formula"
+    },
+    {
+      "type": "Seals/Symbols",
+      "notes": "GMP"
+    },
+    {
+      "type": "Formulation re: Does NOT Contain",
+      "notes": "Contains no salt, yeast, wheat, gluten, soy, milk, egg, shellfish."
+    },
+    {
+      "type": "Formulation re: Vegetarian/Vegan",
+      "notes": "Vegetarian/Vegan Product."
+    },
+    {
+      "type": "Precautions re: All Other",
+      "notes": "Do Not Eat Freshness Packet. Keep in Bottle."
+    },
+    {
+      "type": "Storage",
+      "notes": "Store in a cool, dry place."
+    },
+    {
+      "type": "General Statements: All Other Content",
+      "notes": "Please Recycle."
+    },
+    {
+      "type": "FDA Disclaimer Statement",
+      "notes": "These statements have not been evaluated by the FDA. This product is not intended to diagnose, treat, cure or prevent any disease."
+    },
+    {
+      "type": "General Statements: All Other Content",
+      "notes": "Formulated by doctors and clinical scientists exclusively for licensed healthcare practitioners. Manufactured in an A-rated Good Manufacturing (GMP) Certified facility."
+    },
+    {
+      "type": "General: Product/Version Code",
+      "notes": "CODE P0496 V4"
+    },
+    {
+      "type": "Formula re: Contains",
+      "notes": "Methyl B12 5,000 mcg Methylcobalamin with folic acid"
+    }
+  ],
+  "claims": [
+    {
+      "langualCode": "P0065",
+      "langualCodeDescription": "Nutrient "
+    },
+    {
+      "langualCode": "P0115",
+      "langualCodeDescription": "All Other"
+    },
+    {
+      "langualCode": "P0265",
+      "langualCodeDescription": "Structure/Function"
+    }
+  ],
+  "servingSizes": [
+    {
+      "minQuantity": 1.0,
+      "maxQuantity": 1.0,
+      "unit": "Lozenge(s)",
+      "minDailyServings": 1,
+      "maxDailyServings": 1,
+      "normalizedServing": 1.0
+    }
+  ],
+  "labelRelationships": [
+    {
+      "type": "Image difference, same product",
+      "labelId": 118776
+    },
+    {
+      "type": "Image difference, same product",
+      "labelId": 10042
+    },
+    {
+      "type": "Image difference, same product",
+      "labelId": 69001
+    },
+    {
+      "type": "Image difference, same product",
+      "labelId": 292268
+    },
+    {
+      "type": "Image difference, same product",
+      "labelId": 73001
+    }
+  ],
+  "labelText": {
+    "raw": "SUGGESTED USAGE: As a dietary supplement, take 1 lozenge daily. Chew lozenge or hold in mouth until dissolved and swallow. Take higher amounts on the advice of your healthcare practitioner. HOW IT WORKS: Vitamin B12 has the largest and most complex chemical structure of all the vitamins. Most of its functions are related to its co-enzyme activity, such as enzymes needed for the production of DNA during cell division. It is required for the synthesis of the amino acid methionine, from homocysteine, which helps to maintain already healthy serum homocysteine levels. B12 is also necessary for the maintenance of a healthy nervous system. CAUTIONS/INTERACTIONS: A number of drugs can affect Vitamin B12 levels or its utilization. If you are taking any prescription medications consult your health care practitioner before taking this product. For more information on this product go to www.protocolforlife.com/P0496. \u2022 Healthy Homocysteine Metabolism\n\u2022 Supports Healthy Nervous System A Dietary Supplement Vegetarian Formula GMP Contains no salt, yeast, wheat, gluten, soy, milk, egg, shellfish. Vegetarian/Vegan Product. Do Not Eat Freshness Packet. Keep in Bottle. Store in a cool, dry place. Please Recycle. These statements have not been evaluated by the FDA. This product is not intended to diagnose, treat, cure or prevent any disease. Formulated by doctors and clinical scientists exclusively for licensed healthcare practitioners. Manufactured in an A-rated Good Manufacturing (GMP) Certified facility. CODE P0496 V4 Methyl B12 5,000 mcg Methylcobalamin with folic acid",
+    "parsed": {
+      "certifications": [
+        "GMP-General"
+      ],
+      "testing": [],
+      "origin": [],
+      "flavor": [
+        "Natural Flavors"
+      ],
+      "probioticGuarantee": [
+        "5,000 mcg"
+      ],
+      "cleanLabelClaims": [
+        "Egg Free",
+        "Gluten Free",
+        "Shellfish Free",
+        "Soy Free",
+        "Dairy Free",
+        "Yeast Free"
+      ],
+      "allergens": [
+        "eggs",
+        "soy",
+        "milk",
+        "wheat",
+        "shellfish"
+      ],
+      "allergenFree": [
+        "egg",
+        "soy",
+        "yeast",
+        "gluten",
+        "dairy",
+        "wheat",
+        "shellfish"
+      ],
+      "warnings": [
+        "Contains: Milk",
+        "Contains: Soy",
+        "Contains: Eggs",
+        "Contains: Shellfish",
+        "Contains: Wheat"
+      ],
+      "storage": [
+        "Store in a cool, dry place."
+      ],
+      "directions": "SUGGESTED USAGE: As a dietary supplement, take 1 lozenge daily. Chew lozenge or hold in mouth until dissolved and swallow. Take higher amounts on the advice of your healthcare practitioner.",
+      "marketingClaims": [],
+      "qualityFeatures": [
+        "GMP certified",
+        "Vegan",
+        "Vegetarian"
+      ],
+      "proprietaryBlendDisclosure": null
+    },
+    "searchText": "Folic Acid Vitamin B12 Methylcobalamin Vitamin B12 (Form: as Methylcobalamin) Note: 5,000 mcg Fructose Sorbitol Cellulose Citric Acid Stearic Acid Natural Flavors Magnesium Stearate SUGGESTED USAGE: As a dietary supplement, take 1 lozenge daily. Chew lozenge or hold in mouth until dissolved and swallow. Take higher amounts on the advice of your healthcare practitioner. HOW IT WORKS: Vitamin B12 has the largest and most complex chemical structure of all the vitamins. Most of its functions are related to its co-enzyme activity, such as enzymes needed for the production of DNA during cell division. It is required for the synthesis of the amino acid methionine, from homocysteine, which helps to maintain already healthy serum homocysteine levels. B12 is also necessary for the maintenance of a healthy nervous system. CAUTIONS/INTERACTIONS: A number of drugs can affect Vitamin B12 levels or its utilization. If you are taking any prescription medications consult your health care practitioner before taking this product. For more information on this product go to www.protocolforlife.com/P0496. \u2022 Healthy Homocysteine Metabolism\n\u2022 Supports Healthy Nervous System A Dietary Supplement Vegetarian Formula GMP Contains no salt, yeast, wheat, gluten, soy, milk, egg, shellfish. Vegetarian/Vegan Product. Do Not Eat Freshness Packet. Keep in Bottle. Store in a cool, dry place. Please Recycle. These statements have not been evaluated by the FDA. This product is not intended to diagnose, treat, cure or prevent any disease. Formulated by doctors and clinical scientists exclusively for licensed healthcare practitioners. Manufactured in an A-rated Good Manufacturing (GMP) Certified facility. CODE P0496 V4 Methyl B12 5,000 mcg Methylcobalamin with folic acid"
+  },
+  "metadata": {
+    "lastCleaned": "2026-02-16T21:19:15.947810Z",
+    "cleaningVersion": "2.1.0",
+    "reference_versions": {
+      "color_indicators": {
+        "version": "2.0.0",
+        "last_updated": "2026-01-05"
+      }
+    },
+    "mappingStats": {
+      "totalIngredients": 9,
+      "mappedIngredients": 9,
+      "unmappedIngredients": 0,
+      "mappingRate": 100.0
+    },
+    "transparencyMetrics": {
+      "hasProprietaryBlend": false,
+      "blendTransparency": "full",
+      "disclosedIngredients": 2,
+      "undisclosedQuantities": 0,
+      "transparencyScore": 100.0
+    },
+    "completeness": {
+      "score": 100.0,
+      "missingFields": [],
+      "criticalFieldsComplete": true
+    }
+  }
+}

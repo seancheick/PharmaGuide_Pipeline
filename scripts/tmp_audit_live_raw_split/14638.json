@@ -1,0 +1,514 @@
+{
+  "id": "14638",
+  "src": "01-raw/2025-03-25/data/label_60.json",
+  "nhanesId": "",
+  "bundleName": "",
+  "brandIpSymbol": "\u00ae",
+  "productVersionCode": "CODE 3197 V1",
+  "pdf": "",
+  "thumbnail": "",
+  "percentDvFootnote": "Percent Daily Values are based on a 2,000 calorie diet.",
+  "fullName": "Chewable CoQ10 200 mg",
+  "brandName": "NOW",
+  "upcSku": "7 33739 03197 6",
+  "hasOuterCarton": false,
+  "upcValid": true,
+  "status": "discontinued",
+  "discontinuedDate": "2015-12-23T00:00:00Z",
+  "offMarket": 1,
+  "servingsPerContainer": null,
+  "netContents": [
+    {
+      "order": 1,
+      "quantity": 90,
+      "unit": "Lozenge(s)",
+      "display": "90 Lozenge(s)"
+    }
+  ],
+  "targetGroups": [
+    "Vegan",
+    "Vegetarian",
+    "Adult (18 - 50 Years)",
+    "Gluten Free",
+    "Dairy Free"
+  ],
+  "userGroups": [
+    {
+      "dailyValueTargetGroupName": "Adults and children 4 or more years of age",
+      "langualCode": "P0250",
+      "langualCodeDescription": "Adults and Children 4 years and above"
+    }
+  ],
+  "productType": {
+    "langualCode": "A1325",
+    "langualCodeDescription": "Other Combinations"
+  },
+  "physicalState": {
+    "langualCode": "E0174",
+    "langualCodeDescription": "Lozenge"
+  },
+  "imageUrl": "https://api.ods.od.nih.gov/dsld/s3/pdf/14638.pdf",
+  "images": [],
+  "contacts": [
+    {
+      "contactId": 3089,
+      "text": "Manufactured by",
+      "types": [
+        "Manufacturer"
+      ],
+      "contactDetails": {
+        "src": "01-raw/2025-03-25/data/contact_1.json",
+        "id": 3089,
+        "name": "NOW FOODS",
+        "streetAddress": "",
+        "city": "BLOOMINGDALE",
+        "state": "IL",
+        "country": "",
+        "zipCode": "60108",
+        "phoneNumber": "",
+        "email": "",
+        "webAddress": "www.nowfoods.com"
+      }
+    }
+  ],
+  "events": [
+    {
+      "date": "2015-12-23",
+      "type": "Off Market"
+    },
+    {
+      "date": "2012-10-25",
+      "type": "Date entered into DSLD"
+    }
+  ],
+  "activeIngredients": [
+    {
+      "ingredientId": 280735,
+      "uniiCode": "H4N855PNZ1",
+      "order": 4,
+      "raw_source_text": "Vitamin E",
+      "branded_token_extracted": null,
+      "raw_source_path": "activeIngredients",
+      "normalized_key": "vitamin_e",
+      "name": "Vitamin E",
+      "standardName": "Vitamin E",
+      "ingredientGroup": "Vitamin E",
+      "quantity": 100.0,
+      "unit": "IU",
+      "dailyValue": 330.0,
+      "quantityVariants": null,
+      "forms": [
+        {
+          "name": "D-Alpha-Tocopheryl Succinate",
+          "ingredientId": 280573,
+          "order": 1,
+          "prefix": null,
+          "percent": null
+        }
+      ],
+      "alternateNames": [],
+      "mapped": true,
+      "proprietaryBlend": false,
+      "disclosureLevel": null,
+      "parentBlend": null,
+      "isNestedIngredient": false,
+      "nestedIngredients": [],
+      "hierarchyType": null,
+      "isAdditive": true,
+      "additiveType": "preservative_natural",
+      "notes": "Vitamin E (Form: as D-Alpha Tocopheryl Succinate) "
+    },
+    {
+      "ingredientId": 14332,
+      "uniiCode": null,
+      "order": 5,
+      "raw_source_text": "Coenzyme Q10",
+      "branded_token_extracted": null,
+      "raw_source_path": "activeIngredients",
+      "normalized_key": "coenzyme_q10",
+      "name": "Coenzyme Q10",
+      "standardName": "Coenzyme Q10",
+      "ingredientGroup": "Coenzyme Q-10",
+      "quantity": 200.0,
+      "unit": "mg",
+      "dailyValue": null,
+      "quantityVariants": null,
+      "forms": [],
+      "alternateNames": [
+        "CoQ10"
+      ],
+      "mapped": true,
+      "proprietaryBlend": false,
+      "disclosureLevel": null,
+      "parentBlend": null,
+      "isNestedIngredient": false,
+      "nestedIngredients": [],
+      "hierarchyType": null
+    },
+    {
+      "ingredientId": 35067,
+      "uniiCode": null,
+      "order": 6,
+      "raw_source_text": "non-GMO Soy Lecithin",
+      "branded_token_extracted": null,
+      "raw_source_path": "activeIngredients",
+      "normalized_key": "non_gmo_soy_lecithin",
+      "name": "non-GMO Soy Lecithin",
+      "standardName": "non-GMO Soy Lecithin",
+      "ingredientGroup": "lecithin",
+      "quantity": 50.0,
+      "unit": "mg",
+      "dailyValue": null,
+      "quantityVariants": null,
+      "forms": [],
+      "alternateNames": [],
+      "mapped": true,
+      "proprietaryBlend": false,
+      "disclosureLevel": null,
+      "parentBlend": null,
+      "isNestedIngredient": false,
+      "nestedIngredients": [],
+      "hierarchyType": null
+    }
+  ],
+  "inactiveIngredients": [
+    {
+      "ingredientId": 282545,
+      "uniiCode": "6YSS42VSEV",
+      "order": 1,
+      "raw_source_text": "Fructose",
+      "raw_source_path": "inactiveIngredients",
+      "normalized_key": "fructose",
+      "name": "Fructose",
+      "standardName": "Fructose & High Fructose Corn Syrup",
+      "ingredientGroup": "Fructose",
+      "forms": [],
+      "alternateNames": [],
+      "mapped": true,
+      "hierarchyType": null
+    },
+    {
+      "ingredientId": 9747,
+      "uniiCode": null,
+      "order": 2,
+      "raw_source_text": "Cellulose",
+      "raw_source_path": "inactiveIngredients",
+      "normalized_key": "cellulose",
+      "name": "Cellulose",
+      "standardName": "cellulose powder",
+      "ingredientGroup": "Cellulose",
+      "forms": [],
+      "alternateNames": [],
+      "mapped": true,
+      "hierarchyType": null,
+      "isAdditive": true,
+      "additiveType": "unspecified"
+    },
+    {
+      "ingredientId": 3789,
+      "uniiCode": null,
+      "order": 3,
+      "raw_source_text": "Sorbitol",
+      "raw_source_path": "inactiveIngredients",
+      "normalized_key": "sorbitol",
+      "name": "Sorbitol",
+      "standardName": "sorbitol",
+      "ingredientGroup": "Sorbitol",
+      "forms": [],
+      "alternateNames": [],
+      "mapped": true,
+      "hierarchyType": null,
+      "isAdditive": true,
+      "additiveType": "sugar_alcohol"
+    },
+    {
+      "ingredientId": 285558,
+      "uniiCode": "4ELV7Z65AP",
+      "order": 4,
+      "raw_source_text": "Stearic Acid",
+      "raw_source_path": "inactiveIngredients",
+      "normalized_key": "stearic_acid",
+      "name": "Stearic Acid",
+      "standardName": "stearic acid",
+      "ingredientGroup": "Stearic Acid",
+      "forms": [],
+      "alternateNames": [
+        "C18:0"
+      ],
+      "mapped": true,
+      "hierarchyType": null,
+      "isAdditive": true,
+      "additiveType": "processing_aid"
+    },
+    {
+      "ingredientId": 293311,
+      "uniiCode": "ETJ7Z6XBU4",
+      "order": 5,
+      "raw_source_text": "Silica",
+      "raw_source_path": "inactiveIngredients",
+      "normalized_key": "silica",
+      "name": "Silica",
+      "standardName": "Silica",
+      "ingredientGroup": "Silicon",
+      "forms": [],
+      "alternateNames": [],
+      "mapped": true,
+      "hierarchyType": null,
+      "isAdditive": true,
+      "additiveType": "unspecified"
+    },
+    {
+      "ingredientId": 27343,
+      "uniiCode": null,
+      "order": 6,
+      "raw_source_text": "Magnesium Stearate",
+      "raw_source_path": "inactiveIngredients",
+      "normalized_key": "magnesium_stearate",
+      "name": "Magnesium Stearate",
+      "standardName": "magnesium stearate",
+      "ingredientGroup": "Magnesium stearate",
+      "forms": [],
+      "alternateNames": [],
+      "mapped": true,
+      "hierarchyType": null,
+      "isAdditive": true,
+      "additiveType": "processing_aid"
+    },
+    {
+      "ingredientId": 3677,
+      "uniiCode": null,
+      "order": 7,
+      "raw_source_text": "Citric Acid",
+      "raw_source_path": "inactiveIngredients",
+      "normalized_key": "citric_acid",
+      "name": "Citric Acid",
+      "standardName": "Citric Acid",
+      "ingredientGroup": "Citric Acid",
+      "forms": [],
+      "alternateNames": [],
+      "mapped": true,
+      "hierarchyType": null,
+      "isAdditive": true,
+      "additiveType": "preservative_natural"
+    },
+    {
+      "ingredientId": 38680,
+      "uniiCode": null,
+      "order": 8,
+      "raw_source_text": "natural Orange flavor",
+      "raw_source_path": "inactiveIngredients",
+      "normalized_key": "natural_orange_flavor",
+      "name": "natural Orange flavor",
+      "standardName": "natural orange flavor",
+      "ingredientGroup": "Orange (unspecified)",
+      "forms": [],
+      "alternateNames": [],
+      "mapped": true,
+      "hierarchyType": null,
+      "isAdditive": true,
+      "additiveType": "natural_flavoring"
+    }
+  ],
+  "nutritionalInfo": {
+    "calories": {
+      "amount": 10.0,
+      "unit": "{Calories}"
+    },
+    "totalCarbohydrates": {
+      "amount": 2.0,
+      "unit": "g"
+    },
+    "sugars": {
+      "amount": 1.0,
+      "unit": "g"
+    }
+  },
+  "statements": [
+    {
+      "type": "Suggested/Recommended/Usage/Directions",
+      "notes": "SUGGESTED USAGE: As a dietary supplement, take 1 lozenge daily, or as advised by a health practitioner, with meals. We highly recommend taking this product with a source of essential fatty acids such as NOW(R) Flax Oil, Evening Primrose Oil, Borage Oil or Omega-3 Fish Oil."
+    },
+    {
+      "type": "General Statements: All Other Content",
+      "notes": "Coenzyme Q10 is a vitamin-like compound also called ubiquinone. It is an essential component of cells and is necessary for mitochondrial energy production. Years of\nresearch has shown that CoQ10 supports healthy cardiovascular and immune system functions in addition to its vital role in energy production.*"
+    },
+    {
+      "type": "FDA Disclaimer Statement",
+      "notes": "*These statements have not been evaluated by the FDA. This product is not intended to diagnose, treat, cure or prevent any disease."
+    },
+    {
+      "type": "Storage",
+      "notes": "Store in a cool, dry place."
+    },
+    {
+      "type": "General Statements: All Other Content",
+      "notes": "Please Recycle."
+    },
+    {
+      "type": "General Statements: All Other Content",
+      "notes": "Made in the U.S.A."
+    },
+    {
+      "type": "General: Product/Version Code",
+      "notes": "CODE 3197 V1"
+    },
+    {
+      "type": "General Statements: All Other Content",
+      "notes": "CARDIOVASCULAR HEALTH\n\u2022 Supports Healthy Heart Muscle*"
+    },
+    {
+      "type": "Formula re: Contains",
+      "notes": "\u2022 with Vitamin E & Lecithin"
+    },
+    {
+      "type": "FDA Statement of Identity",
+      "notes": "A Dietary Supplement"
+    },
+    {
+      "type": "Formulation re: Vegetarian/Vegan",
+      "notes": "Vegetarian Formula"
+    },
+    {
+      "type": "Seals/Symbols",
+      "notes": "GMP QUALITY ASSURED"
+    },
+    {
+      "type": "Formulation re: Does NOT Contain",
+      "notes": "Contains no salt, starch, yeast, wheat, gluten, milk, egg, shellfish or preservatives."
+    },
+    {
+      "type": "Formulation re: Vegetarian/Vegan",
+      "notes": "Vegetarian/Vegan Product."
+    },
+    {
+      "type": "Brand IP Statement(s) re: (c), (TM), (SM)",
+      "notes": "NOW(R) CoQ10 is Pharmaceutical Grade (USP). NOW CoQ10 products contain only the 100% natural, all-trans form of CoQ10 produced by fermentation."
+    }
+  ],
+  "claims": [
+    {
+      "langualCode": "P0065",
+      "langualCodeDescription": "Nutrient "
+    },
+    {
+      "langualCode": "P0115",
+      "langualCodeDescription": "All Other"
+    },
+    {
+      "langualCode": "P0265",
+      "langualCodeDescription": "Structure/Function"
+    }
+  ],
+  "servingSizes": [
+    {
+      "minQuantity": 1.0,
+      "maxQuantity": 1.0,
+      "unit": "Lozenge(s)",
+      "minDailyServings": 1,
+      "maxDailyServings": 1,
+      "normalizedServing": 1.0
+    }
+  ],
+  "labelRelationships": [
+    {
+      "type": "Image difference, same product",
+      "labelId": 313796
+    },
+    {
+      "type": "Image difference, same product",
+      "labelId": 245833
+    },
+    {
+      "type": "Image difference, same product",
+      "labelId": 57241
+    }
+  ],
+  "labelText": {
+    "raw": "SUGGESTED USAGE: As a dietary supplement, take 1 lozenge daily, or as advised by a health practitioner, with meals. We highly recommend taking this product with a source of essential fatty acids such as NOW(R) Flax Oil, Evening Primrose Oil, Borage Oil or Omega-3 Fish Oil. Coenzyme Q10 is a vitamin-like compound also called ubiquinone. It is an essential component of cells and is necessary for mitochondrial energy production. Years of\nresearch has shown that CoQ10 supports healthy cardiovascular and immune system functions in addition to its vital role in energy production.* *These statements have not been evaluated by the FDA. This product is not intended to diagnose, treat, cure or prevent any disease. Store in a cool, dry place. Please Recycle. Made in the U.S.A. CODE 3197 V1 CARDIOVASCULAR HEALTH\n\u2022 Supports Healthy Heart Muscle* \u2022 with Vitamin E & Lecithin A Dietary Supplement Vegetarian Formula GMP QUALITY ASSURED Contains no salt, starch, yeast, wheat, gluten, milk, egg, shellfish or preservatives. Vegetarian/Vegan Product. NOW(R) CoQ10 is Pharmaceutical Grade (USP). NOW CoQ10 products contain only the 100% natural, all-trans form of CoQ10 produced by fermentation.",
+    "parsed": {
+      "certifications": [
+        "GMP-General",
+        "Pharmaceutical-Grade"
+      ],
+      "testing": [],
+      "origin": [],
+      "flavor": [
+        "natural Orange flavor"
+      ],
+      "probioticGuarantee": [],
+      "cleanLabelClaims": [
+        "Shellfish Free",
+        "Dairy Free",
+        "No Wheat",
+        "Egg Free",
+        "No Preservatives",
+        "Yeast Free",
+        "Gluten Free",
+        "No Salt"
+      ],
+      "allergens": [
+        "eggs",
+        "shellfish",
+        "wheat",
+        "milk"
+      ],
+      "allergenFree": [
+        "shellfish",
+        "egg",
+        "yeast",
+        "dairy",
+        "gluten",
+        "wheat"
+      ],
+      "warnings": [
+        "Contains: Shellfish",
+        "Contains: Eggs",
+        "Contains: Wheat",
+        "Contains: Milk"
+      ],
+      "storage": [
+        "Store in a cool, dry place."
+      ],
+      "directions": "SUGGESTED USAGE: As a dietary supplement, take 1 lozenge daily, or as advised by a health practitioner, with meals. We highly recommend taking this product with a source of essential fatty acids such as NOW(R) Flax Oil, Evening Primrose Oil, Borage Oil or Omega-3 Fish Oil.",
+      "marketingClaims": [
+        "Supports Healthy Heart Muscle",
+        "supports healthy cardiovascular and immune system functions in addition to its vital role in energy production"
+      ],
+      "qualityFeatures": [
+        "GMP certified",
+        "Vegetarian",
+        "Vegan"
+      ],
+      "proprietaryBlendDisclosure": null
+    },
+    "searchText": "Vitamin E D-Alpha-Tocopheryl Succinate Vitamin E (Form: as D-Alpha Tocopheryl Succinate) Coenzyme Q10 non-GMO Soy Lecithin Fructose Cellulose Sorbitol Stearic Acid Silica Magnesium Stearate Citric Acid natural Orange flavor SUGGESTED USAGE: As a dietary supplement, take 1 lozenge daily, or as advised by a health practitioner, with meals. We highly recommend taking this product with a source of essential fatty acids such as NOW(R) Flax Oil, Evening Primrose Oil, Borage Oil or Omega-3 Fish Oil. Coenzyme Q10 is a vitamin-like compound also called ubiquinone. It is an essential component of cells and is necessary for mitochondrial energy production. Years of\nresearch has shown that CoQ10 supports healthy cardiovascular and immune system functions in addition to its vital role in energy production.* *These statements have not been evaluated by the FDA. This product is not intended to diagnose, treat, cure or prevent any disease. Store in a cool, dry place. Please Recycle. Made in the U.S.A. CODE 3197 V1 CARDIOVASCULAR HEALTH\n\u2022 Supports Healthy Heart Muscle* \u2022 with Vitamin E & Lecithin A Dietary Supplement Vegetarian Formula GMP QUALITY ASSURED Contains no salt, starch, yeast, wheat, gluten, milk, egg, shellfish or preservatives. Vegetarian/Vegan Product. NOW(R) CoQ10 is Pharmaceutical Grade (USP). NOW CoQ10 products contain only the 100% natural, all-trans form of CoQ10 produced by fermentation."
+  },
+  "metadata": {
+    "lastCleaned": "2026-02-16T21:19:15.837010Z",
+    "cleaningVersion": "2.1.0",
+    "reference_versions": {
+      "color_indicators": {
+        "version": "2.0.0",
+        "last_updated": "2026-01-05"
+      }
+    },
+    "mappingStats": {
+      "totalIngredients": 11,
+      "mappedIngredients": 11,
+      "unmappedIngredients": 0,
+      "mappingRate": 100.0
+    },
+    "transparencyMetrics": {
+      "hasProprietaryBlend": false,
+      "blendTransparency": "full",
+      "disclosedIngredients": 3,
+      "undisclosedQuantities": 0,
+      "transparencyScore": 100.0
+    },
+    "completeness": {
+      "score": 100.0,
+      "missingFields": [],
+      "criticalFieldsComplete": true
+    }
+  }
+}

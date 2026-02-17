@@ -1,0 +1,4568 @@
+{
+  "standardized_botanicals": [
+    {
+      "standard_name": "Acai",
+      "aliases": [
+        "euterpe oleracea",
+        "acai berry extract",
+        "acai fruit extract"
+      ],
+      "markers": [
+        "anthocyanins",
+        "polyphenols",
+        "cyanidin-3-glucoside"
+      ],
+      "priority": "medium",
+      "last_updated": "2026-01-15",
+      "id": "acai",
+      "notes": "Antioxidant berry standardized for 1% anthocyanins. ORAC value is also used as quality marker.",
+      "category": "herb",
+      "min_threshold": 1
+    },
+    {
+      "standard_name": "African Mango",
+      "aliases": [
+        "irvingia gabonensis",
+        "wild mango",
+        "bush mango extract"
+      ],
+      "markers": [
+        "fiber"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-11-17",
+      "id": "african_mango",
+      "notes": "Botanical ingredient standardized for fiber. Commonly used in dietary supplements.",
+      "category": "herb"
+    },
+    {
+      "standard_name": "Alfalfa",
+      "aliases": [
+        "medicago sativa",
+        "alfalfa extract",
+        "alfalfa leaf extract",
+        "lucerne"
+      ],
+      "markers": [
+        "saponins"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-11-17",
+      "id": "alfalfa",
+      "notes": "Botanical ingredient standardized for saponins. Commonly used in dietary supplements.",
+      "category": "herb"
+    },
+    {
+      "standard_name": "Aloe Vera",
+      "aliases": [
+        "aloe barbadensis",
+        "aloe vera extract",
+        "aloe vera gel",
+        "aloe vera leaf"
+      ],
+      "markers": [
+        "aloin",
+        "polysaccharides",
+        "acemannan"
+      ],
+      "priority": "high",
+      "min_threshold": 10,
+      "last_updated": "2025-11-17",
+      "id": "aloe_vera",
+      "notes": "Botanical ingredient standardized for aloin, polysaccharides. Commonly used in dietary supplements.",
+      "category": "herb"
+    },
+    {
+      "standard_name": "American Ginseng",
+      "aliases": [
+        "panax quinquefolius",
+        "american ginseng root extract",
+        "panax quinquefolius root",
+        "american ginseng extract"
+      ],
+      "markers": [
+        "ginsenosides"
+      ],
+      "min_threshold": 10,
+      "priority": "high",
+      "last_updated": "2025-11-17",
+      "id": "american_ginseng",
+      "notes": "Botanical ingredient standardized for ginsenosides. Commonly used in dietary supplements.",
+      "category": "adaptogen"
+    },
+    {
+      "standard_name": "Amla",
+      "aliases": [
+        "phyllanthus emblica",
+        "indian gooseberry",
+        "amalaki",
+        "amla fruit extract",
+        "emblic fruit extract",
+        "emblic",
+        "organic emblic",
+        "emblic fruit"
+      ],
+      "markers": [
+        "vitamin C",
+        "tannins",
+        "gallic acid",
+        "ellagic acid"
+      ],
+      "priority": "medium",
+      "last_updated": "2026-01-15",
+      "id": "amla",
+      "notes": "Indian gooseberry standardized for 40% tannins. Very high natural vitamin C content.",
+      "category": "herb",
+      "min_threshold": 40
+    },
+    {
+      "standard_name": "Andrographis",
+      "aliases": [
+        "andrographis paniculata",
+        "king of bitters",
+        "kalmegh",
+        "andrographis extract"
+      ],
+      "markers": [
+        "andrographolide",
+        "andrographolides"
+      ],
+      "priority": "medium",
+      "last_updated": "2026-01-15",
+      "id": "andrographis",
+      "notes": "Immune support herb standardized for 10% andrographolides. AP-Bio standardized extract is common.",
+      "category": "herb",
+      "min_threshold": 10
+    },
+    {
+      "standard_name": "Arjuna",
+      "aliases": [
+        "arjun",
+        "terminalia arjuna",
+        "terminalia arjuna bark extract",
+        "terminalia arjuna powder"
+      ],
+      "markers": [
+        "arjunolic acid",
+        "arjunic acid",
+        "tannins"
+      ],
+      "priority": "medium",
+      "last_updated": "2026-01-15",
+      "id": "arjuna",
+      "notes": "Cardiovascular herb standardized for 1% arjunolic acid and 16-20% tannins.",
+      "category": "herb",
+      "min_threshold": 1
+    },
+    {
+      "standard_name": "Artichoke",
+      "aliases": [
+        "cynara cardunculus var. scolymus",
+        "artichoke leaf extract",
+        "artichoke extract"
+      ],
+      "markers": [
+        "cynarin",
+        "chlorogenic acid",
+        "luteolin"
+      ],
+      "priority": "medium",
+      "last_updated": "2026-01-15",
+      "id": "artichoke",
+      "notes": "Digestive and liver support herb standardized for 2.5% cynarin and chlorogenic acids.",
+      "category": "herb",
+      "min_threshold": 2.5
+    },
+    {
+      "standard_name": "Ashwagandha",
+      "aliases": [
+        "withania somnifera",
+        "indian ginseng",
+        "winter cherry",
+        "ashwagandha root extract",
+        "KSM-66",
+        "Sensoril",
+        "Shoden",
+        "withania",
+        "ashwagandha powder",
+        "ashwagandha capsules"
+      ],
+      "markers": [
+        "withanolides",
+        "withaferin A",
+        "withanolide A"
+      ],
+      "min_threshold": 2.5,
+      "priority": "high",
+      "last_updated": "2026-01-15",
+      "id": "ashwagandha",
+      "notes": "Adaptogenic herb standardized for withanolides. USP standard is 2.5% withanolides via gravimetric testing (equivalent to ~1.5% HPLC). Premium extracts like KSM-66 use 5%.",
+      "category": "adaptogen"
+    },
+    {
+      "standard_name": "Astaxanthin",
+      "aliases": [
+        "haematococcus pluvialis extract",
+        "astaxanthin extract",
+        "natural astaxanthin"
+      ],
+      "markers": [
+        "astaxanthin"
+      ],
+      "min_threshold": 1,
+      "priority": "high",
+      "last_updated": "2025-11-17",
+      "id": "astaxanthin",
+      "notes": "Botanical ingredient standardized for astaxanthin. Commonly used in dietary supplements.",
+      "category": "herb"
+    },
+    {
+      "standard_name": "Astaxanthin (Haematococcus pluvialis)",
+      "aliases": [
+        "astaxanthin",
+        "Haematococcus pluvialis",
+        "astaxanthin algae extract",
+        "bioastin",
+        "astareal",
+        "zanthin",
+        "microalgal astaxanthin"
+      ],
+      "markers": [
+        "astaxanthin \u2265 3%",
+        "total carotenoids"
+      ],
+      "min_threshold": 3,
+      "priority": "high",
+      "last_updated": "2025-11-17",
+      "id": "astaxanthin_haematococcus_pluvialis",
+      "notes": "Botanical ingredient standardized for astaxanthin \u2265 3%, total carotenoids. Commonly used in dietary supplements.",
+      "category": "herb"
+    },
+    {
+      "standard_name": "Astragalus",
+      "aliases": [
+        "astragalus membranaceus",
+        "huang qi",
+        "astragalus root extract"
+      ],
+      "markers": [
+        "astragalosides",
+        "polysaccharides",
+        "astragaloside IV"
+      ],
+      "priority": "medium",
+      "last_updated": "2026-01-15",
+      "id": "astragalus",
+      "notes": "Immune support herb standardized for 0.5% astragaloside IV or 16% polysaccharides.",
+      "category": "herb",
+      "min_threshold": 0.5
+    },
+    {
+      "standard_name": "Astragalus Extract",
+      "aliases": [
+        "astragalus standardized extract",
+        "astragalus membranaceus standardized extract",
+        "standardized astragalus extract"
+      ],
+      "markers": [
+        "polysaccharides",
+        "astragalosides"
+      ],
+      "priority": "high",
+      "standardization": "70% polysaccharides",
+      "category": "root",
+      "last_updated": "2025-11-17",
+      "id": "astragalus_extract",
+      "notes": "Standardized botanical extract with polysaccharides, astragalosides as primary marker compounds."
+    },
+    {
+      "standard_name": "Bacopa",
+      "aliases": [
+        "bacopa monnieri",
+        "brahmi",
+        "water hyssop",
+        "bacopa extract",
+        "brahmi extract"
+      ],
+      "markers": [
+        "bacosides"
+      ],
+      "min_threshold": 20,
+      "priority": "high",
+      "last_updated": "2026-01-15",
+      "id": "bacopa",
+      "notes": "Cognitive enhancement botanical standardized for bacosides. Range is 20-55% bacosides; clinical studies commonly use 300-450mg at 50% standardization.",
+      "category": "herb"
+    },
+    {
+      "standard_name": "Banaba Leaf",
+      "aliases": [
+        "lagerstroemia speciosa",
+        "banaba leaf extract",
+        "banaba extract"
+      ],
+      "markers": [
+        "corosolic acid"
+      ],
+      "priority": "medium",
+      "last_updated": "2026-01-15",
+      "id": "banaba_leaf",
+      "notes": "Blood sugar support herb standardized for 1% corosolic acid (GlucoHelp standard is 1%).",
+      "category": "herb_root_bark",
+      "min_threshold": 1
+    },
+    {
+      "standard_name": "Baobab",
+      "aliases": [
+        "adansonia digitata",
+        "baobab fruit powder",
+        "baobab extract"
+      ],
+      "markers": [
+        "vitamin C",
+        "polyphenols"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-11-17",
+      "id": "baobab",
+      "notes": "Botanical ingredient standardized for vitamin C, polyphenols. Commonly used in dietary supplements.",
+      "category": "herb"
+    },
+    {
+      "standard_name": "Barley Grass",
+      "aliases": [
+        "hordeum vulgare",
+        "barley grass powder",
+        "barley grass extract"
+      ],
+      "markers": [
+        "chlorophyll"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-11-17",
+      "id": "barley_grass",
+      "notes": "Botanical ingredient standardized for chlorophyll. Commonly used in dietary supplements.",
+      "category": "herb"
+    },
+    {
+      "standard_name": "Bee Pollen",
+      "aliases": [
+        "bee pollen extract",
+        "bee pollen granules",
+        "flower pollen",
+        "pollen granules"
+      ],
+      "markers": [
+        "flavonoids",
+        "phenolics"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-11-17",
+      "id": "bee_pollen",
+      "notes": "Botanical ingredient standardized for flavonoids, phenolics. Commonly used in dietary supplements.",
+      "category": "herb"
+    },
+    {
+      "standard_name": "Beetroot",
+      "aliases": [
+        "beta vulgaris",
+        "beet root",
+        "beet root extract",
+        "red beet",
+        "beetroot powder"
+      ],
+      "markers": [
+        "nitrates",
+        "betalains",
+        "betanin"
+      ],
+      "priority": "medium",
+      "id": "beetroot",
+      "last_updated": "2026-01-15",
+      "notes": "Performance vegetable standardized for 0.5-1% nitrates for cardiovascular benefits.",
+      "category": "herb_root_bark",
+      "min_threshold": 0.5
+    },
+    {
+      "standard_name": "Berberine",
+      "aliases": [
+        "berberis aristata",
+        "berberis vulgaris",
+        "goldenseal extract",
+        "oregon grape",
+        "berberine hydrochloride",
+        "berberine sulfate",
+        "berberine extract",
+        "berberine hcl",
+        "berberine complex"
+      ],
+      "markers": [
+        "berberine"
+      ],
+      "min_threshold": 97,
+      "priority": "high",
+      "last_updated": "2025-11-17",
+      "id": "berberine",
+      "notes": "Blood sugar support alkaloid standardized to 97% berberine HCl. Emerging alternative to metformin in metabolic health supplements.",
+      "category": "herb"
+    },
+    {
+      "standard_name": "Beta-Glucans",
+      "aliases": [
+        "beta-d-glucans",
+        "oat beta-glucans",
+        "mushroom beta-glucans",
+        "yeast beta-glucans",
+        "baker's yeast beta-glucan extract",
+        "baker's yeast beta glucan extract",
+        "bakers' yeast beta-glucan extract",
+        "baker's yeast beta-glucan",
+        "organic beta glucan",
+        "yeast beta glucan"
+      ],
+      "markers": [
+        "beta-glucans"
+      ],
+      "priority": "medium",
+      "last_updated": "2026-01-05",
+      "id": "beta_glucans",
+      "notes": "Botanical ingredient standardized for beta-glucans. Commonly used in dietary supplements.",
+      "category": "herb"
+    },
+    {
+      "standard_name": "Bilberry",
+      "aliases": [
+        "vaccinium myrtillus",
+        "european blueberry",
+        "bilberry extract",
+        "bilberry fruit extract",
+        "european bilberry",
+        "whortleberry"
+      ],
+      "markers": [
+        "anthocyanins",
+        "anthocyanosides"
+      ],
+      "min_threshold": 25,
+      "priority": "high",
+      "last_updated": "2026-01-15",
+      "id": "bilberry",
+      "notes": "Eye health botanical standardized for 25% anthocyanins (anthocyanosides). Common in vision support supplements.",
+      "category": "seed_fruit"
+    },
+    {
+      "standard_name": "Bitter Melon",
+      "aliases": [
+        "bitter gourd",
+        "bitter melon extract",
+        "momordica charantia"
+      ],
+      "markers": [
+        "charantin",
+        "momordicin",
+        "polypeptide-p",
+        "vicine"
+      ],
+      "priority": "medium",
+      "last_updated": "2026-01-15",
+      "id": "bitter_melon",
+      "notes": "Blood sugar support herb standardized for 10% bitter principles (charantin).",
+      "category": "herb",
+      "min_threshold": 10
+    },
+    {
+      "standard_name": "Black Cohosh",
+      "aliases": [
+        "actaea racemosa",
+        "cimicifuga racemosa",
+        "black cohosh root extract",
+        "black cohosh root standardized extract"
+      ],
+      "markers": [
+        "triterpene glycosides",
+        "actein",
+        "27-deoxyactein"
+      ],
+      "min_threshold": 2.5,
+      "priority": "high",
+      "last_updated": "2025-11-17",
+      "id": "black_cohosh",
+      "notes": "Botanical ingredient standardized for triterpene glycosides, actein. Commonly used in dietary supplements.",
+      "category": "herb"
+    },
+    {
+      "standard_name": "Black Currant",
+      "aliases": [
+        "ribes nigrum",
+        "blackcurrant extract",
+        "blackcurrant seed oil"
+      ],
+      "markers": [
+        "anthocyanins",
+        "gamma-linolenic acid"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-11-17",
+      "id": "black_currant",
+      "notes": "Botanical ingredient standardized for anthocyanins, gamma-linolenic acid. Commonly used in dietary supplements.",
+      "category": "herb"
+    },
+    {
+      "standard_name": "Black Pepper Extract",
+      "aliases": [
+        "piper nigrum",
+        "bioperine",
+        "piperine extract",
+        "black pepper",
+        "piperine supplement"
+      ],
+      "markers": [
+        "piperine"
+      ],
+      "min_threshold": 95,
+      "priority": "high",
+      "last_updated": "2025-11-17",
+      "id": "black_pepper_extract",
+      "notes": "Bioavailability enhancer standardized for 95% piperine (BioPerine\u00ae). Added to turmeric and other supplements to enhance absorption.",
+      "category": "standardized_extract"
+    },
+    {
+      "standard_name": "Black Seed Oil",
+      "aliases": [
+        "nigella sativa",
+        "black cumin",
+        "black cumin seed oil",
+        "nigella sativa oil"
+      ],
+      "markers": [
+        "thymoquinone",
+        "nigellone",
+        "thymohydroquinone"
+      ],
+      "priority": "medium",
+      "last_updated": "2026-01-15",
+      "id": "black_seed_oil",
+      "notes": "Immune and anti-inflammatory oil standardized for 1-2% thymoquinone (TQ). Premium extracts like ThymoQuin use 3%.",
+      "category": "essential_oil",
+      "min_threshold": 1
+    },
+    {
+      "standard_name": "Black Sesame",
+      "aliases": [
+        "black sesame seed",
+        "black sesame seed extract",
+        "sesame noir",
+        "sesamum indicum"
+      ],
+      "markers": [
+        "sesamin",
+        "sesamolin"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-11-17",
+      "id": "black_sesame",
+      "notes": "Botanical ingredient standardized for sesamin, sesamolin. Commonly used in dietary supplements.",
+      "category": "herb"
+    },
+    {
+      "standard_name": "Bladderwrack",
+      "aliases": [
+        "bladderwrack extract",
+        "fucus",
+        "fucus vesiculosus",
+        "sea wrack"
+      ],
+      "markers": [
+        "fucoidan",
+        "iodine"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-11-17",
+      "id": "bladderwrack",
+      "notes": "Botanical ingredient standardized for fucoidan, iodine. Commonly used in dietary supplements.",
+      "category": "herb"
+    },
+    {
+      "standard_name": "Blue-Green Algae",
+      "aliases": [
+        "aphanizomenon flos-aquae",
+        "afa",
+        "klamath algae"
+      ],
+      "markers": [
+        "phycocyanin"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-11-17",
+      "id": "blue_green_algae",
+      "notes": "Botanical ingredient standardized for phycocyanin. Commonly used in dietary supplements.",
+      "category": "algae"
+    },
+    {
+      "standard_name": "Blueberry",
+      "aliases": [
+        "vaccinium corymbosum",
+        "blueberry extract",
+        "wild blueberry extract"
+      ],
+      "markers": [
+        "anthocyanins",
+        "pterostilbene",
+        "polyphenols"
+      ],
+      "priority": "medium",
+      "last_updated": "2026-01-15",
+      "id": "blueberry",
+      "notes": "Antioxidant berry standardized for 1-3% anthocyanins.",
+      "category": "seed_fruit",
+      "min_threshold": 1
+    },
+    {
+      "standard_name": "Boswellia",
+      "aliases": [
+        "boswellia serrata",
+        "indian frankincense",
+        "boswellia extract",
+        "frankincense extract",
+        "boswellin",
+        "boswellia resin",
+        "indian frankincense resin",
+        "5-loxin",
+        "5-loxin advanced",
+        "bosclear",
+        "joint shield",
+        "joint shield 5-loxin",
+        "boswellia serrata extract",
+        "Joint Shield 5-Loxin Advanced Bosclear Boswellia serrata extract"
+      ],
+      "markers": [
+        "boswellic acids",
+        "AKBA"
+      ],
+      "min_threshold": 65,
+      "priority": "high",
+      "last_updated": "2026-01-15",
+      "id": "boswellia",
+      "notes": "Anti-inflammatory herb standardized for 65% boswellic acids (AKBA is key marker). Some extracts go to 70%.",
+      "category": "herb"
+    },
+    {
+      "standard_name": "Broccoli",
+      "aliases": [
+        "brassica oleracea var. italica",
+        "broccoli sprout",
+        "broccoli sprout extract",
+        "broccoli powder"
+      ],
+      "markers": [
+        "sulforaphane",
+        "glucoraphanin",
+        "indole-3-carbinol"
+      ],
+      "priority": "high",
+      "min_threshold": 0.4,
+      "id": "broccoli",
+      "last_updated": "2025-11-17",
+      "notes": "Cruciferous vegetable extract standardized for 0.4% sulforaphane. Used in detoxification and cancer prevention supplements.",
+      "category": "vegetable_greens"
+    },
+    {
+      "standard_name": "Burdock Root",
+      "aliases": [
+        "arctium lappa",
+        "burdock root extract",
+        "burdock extract"
+      ],
+      "markers": [
+        "arctiin"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-11-17",
+      "id": "burdock_root",
+      "notes": "Botanical ingredient standardized for arctiin. Commonly used in dietary supplements.",
+      "category": "herb_root_bark"
+    },
+    {
+      "standard_name": "Butcher's Broom",
+      "aliases": [
+        "box holly",
+        "butcher's broom extract",
+        "ruscus",
+        "ruscus aculeatus"
+      ],
+      "markers": [
+        "ruscogenin"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-11-17",
+      "id": "butcher_s_broom",
+      "notes": "Botanical ingredient standardized for ruscogenin. Commonly used in dietary supplements.",
+      "category": "herb"
+    },
+    {
+      "standard_name": "Butterbur",
+      "aliases": [
+        "petasites hybridus",
+        "butterbur extract",
+        "butterbur root extract"
+      ],
+      "markers": [
+        "petasins",
+        "isopetasin"
+      ],
+      "min_threshold": 7.5,
+      "priority": "high",
+      "last_updated": "2026-01-15",
+      "id": "butterbur",
+      "notes": "Migraine prevention herb standardized for 7.5% petasins. Must be PA-free (pyrrolizidine alkaloid-free).",
+      "category": "herb"
+    },
+    {
+      "standard_name": "Camu Camu",
+      "aliases": [
+        "myrciaria dubia",
+        "camu camu powder",
+        "camu camu extract"
+      ],
+      "markers": [
+        "vitamin C"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-11-17",
+      "id": "camu_camu",
+      "notes": "Botanical ingredient standardized for vitamin C. Commonly used in dietary supplements.",
+      "category": "herb"
+    },
+    {
+      "standard_name": "Carrot",
+      "aliases": [
+        "daucus carota",
+        "carrot root",
+        "carrot extract",
+        "carrot powder"
+      ],
+      "markers": [
+        "beta-carotene",
+        "alpha-carotene",
+        "lutein"
+      ],
+      "priority": "medium",
+      "id": "carrot",
+      "last_updated": "2025-11-17",
+      "notes": "Botanical ingredient standardized for beta-carotene, alpha-carotene. Commonly used in dietary supplements.",
+      "category": "vegetable_greens"
+    },
+    {
+      "standard_name": "Cat's Claw",
+      "aliases": [
+        "cat's claw bark extract",
+        "samento",
+        "una de gato",
+        "uncaria tomentosa"
+      ],
+      "markers": [
+        "oxindole alkaloids",
+        "pentacyclic oxindole alkaloids",
+        "POAs"
+      ],
+      "priority": "medium",
+      "last_updated": "2026-01-15",
+      "id": "cat_s_claw",
+      "notes": "Joint and immune support herb standardized for 3% oxindole alkaloids (pentacyclic type preferred).",
+      "category": "herb",
+      "min_threshold": 3
+    },
+    {
+      "standard_name": "Catuaba",
+      "aliases": [
+        "catuaba bark",
+        "catuaba bark extract",
+        "erythroxylum catuaba",
+        "trichilia catigua"
+      ],
+      "markers": [
+        "flavonoids",
+        "alkaloids"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-11-17",
+      "id": "catuaba",
+      "notes": "Botanical ingredient standardized for flavonoids, alkaloids. Commonly used in dietary supplements.",
+      "category": "herb"
+    },
+    {
+      "standard_name": "Celery",
+      "aliases": [
+        "apium graveolens",
+        "celery seed",
+        "celery seed extract",
+        "celery root"
+      ],
+      "markers": [
+        "phthalides",
+        "3-n-butylphthalide",
+        "apigenin"
+      ],
+      "priority": "medium",
+      "id": "celery",
+      "last_updated": "2025-11-17",
+      "notes": "Botanical ingredient standardized for phthalides, 3-n-butylphthalide. Commonly used in dietary supplements.",
+      "category": "vegetable_greens"
+    },
+    {
+      "standard_name": "Century Plant",
+      "aliases": [
+        "agave americana",
+        "agave americana extract",
+        "agave extract",
+        "maguey"
+      ],
+      "markers": [
+        "saponins"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-11-17",
+      "id": "century_plant",
+      "notes": "Botanical ingredient standardized for saponins. Commonly used in dietary supplements.",
+      "category": "herb"
+    },
+    {
+      "standard_name": "Chaga",
+      "aliases": [
+        "black mass",
+        "chaga mushroom",
+        "chaga mushroom extract",
+        "clinker polypore",
+        "inonotus obliquus"
+      ],
+      "markers": [
+        "beta-glucans",
+        "betulinic acid",
+        "polysaccharides"
+      ],
+      "priority": "medium",
+      "last_updated": "2026-01-15",
+      "id": "chaga",
+      "notes": "Immune support mushroom standardized for 8% beta-glucans or polysaccharides.",
+      "category": "mushroom",
+      "min_threshold": 8
+    },
+    {
+      "standard_name": "Chamomile",
+      "aliases": [
+        "matricaria recutita",
+        "matricaria chamomilla",
+        "german chamomile",
+        "chamomile extract",
+        "german chamomile extract",
+        "wild chamomile"
+      ],
+      "markers": [
+        "apigenin",
+        "bisabolol",
+        "chamazulene"
+      ],
+      "min_threshold": 1,
+      "priority": "high",
+      "last_updated": "2025-11-17",
+      "id": "chamomile",
+      "notes": "Botanical ingredient standardized for apigenin, bisabolol. Commonly used in dietary supplements.",
+      "category": "herb"
+    },
+    {
+      "standard_name": "Chasteberry",
+      "aliases": [
+        "vitex agnus-castus",
+        "agnus castus",
+        "chaste tree berry extract",
+        "vitex extract"
+      ],
+      "markers": [
+        "agnuside",
+        "casticin",
+        "vitexin"
+      ],
+      "priority": "medium",
+      "last_updated": "2026-01-15",
+      "id": "chasteberry",
+      "notes": "Women's hormonal balance herb standardized for 0.5% agnuside (vitex agnus-castus).",
+      "category": "seed_fruit",
+      "min_threshold": 0.5
+    },
+    {
+      "standard_name": "Chlorella",
+      "aliases": [
+        "chlorella extract",
+        "chlorella powder",
+        "chlorella pyrenoidosa",
+        "chlorella vulgaris",
+        "cracked cell wall chlorella",
+        "chlorella algae",
+        "sun chlorella"
+      ],
+      "markers": [
+        "chlorophyll",
+        "chlorella growth factor",
+        "beta-glucans"
+      ],
+      "priority": "medium",
+      "last_updated": "2026-01-15",
+      "id": "chlorella",
+      "notes": "Detox algae standardized for 3% chlorophyll. CGF (Chlorella Growth Factor) is key marker.",
+      "category": "algae",
+      "min_threshold": 3
+    },
+    {
+      "standard_name": "Cinnamon",
+      "aliases": [
+        "cinnamomum verum",
+        "ceylon cinnamon",
+        "cinnamomum cassia",
+        "cinnamon bark extract"
+      ],
+      "markers": [
+        "polyphenols",
+        "cinnamaldehyde"
+      ],
+      "min_threshold": 10,
+      "priority": "high",
+      "last_updated": "2025-11-17",
+      "id": "cinnamon",
+      "notes": "Botanical ingredient standardized for polyphenols, cinnamaldehyde. Commonly used in dietary supplements.",
+      "category": "herb"
+    },
+    {
+      "standard_name": "Cinnamon Bark Essential Oil",
+      "aliases": [
+        "cinnamon bark essential oil",
+        "cinnamon essential oil",
+        "cinnamomum verum oil",
+        "cinnamon oil",
+        "cinnamomum cassia oil"
+      ],
+      "markers": [
+        "cinnamaldehyde",
+        "eugenol"
+      ],
+      "priority": "medium",
+      "standardization": "70%+ cinnamaldehyde",
+      "category": "bark",
+      "last_updated": "2025-11-17",
+      "id": "cinnamon_bark_essential_oil",
+      "notes": "Essential oil standardized for cinnamaldehyde, eugenol. Used for therapeutic and functional benefits."
+    },
+    {
+      "standard_name": "Cissus Quadrangularis",
+      "aliases": [
+        "veld grape",
+        "devil's backbone",
+        "cissus extract"
+      ],
+      "markers": [
+        "ketosteroids"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-11-17",
+      "id": "cissus_quadrangularis",
+      "notes": "Botanical ingredient standardized for ketosteroids. Commonly used in dietary supplements.",
+      "category": "herb"
+    },
+    {
+      "standard_name": "Coffeeberry",
+      "aliases": [
+        "coffea arabica",
+        "coffee fruit extract",
+        "whole coffee fruit extract"
+      ],
+      "markers": [
+        "chlorogenic acids",
+        "polyphenols"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-11-17",
+      "id": "coffeeberry",
+      "notes": "Botanical ingredient standardized for chlorogenic acids, polyphenols. Commonly used in dietary supplements.",
+      "category": "seed_fruit"
+    },
+    {
+      "standard_name": "Coleus Forskohlii",
+      "aliases": [
+        "coleus extract",
+        "indian coleus",
+        "plectranthus barbatus"
+      ],
+      "markers": [
+        "forskolin"
+      ],
+      "priority": "medium",
+      "last_updated": "2026-01-15",
+      "id": "coleus_forskohlii",
+      "notes": "Weight management and cardiovascular herb standardized for 10% forskolin.",
+      "category": "herb",
+      "min_threshold": 10
+    },
+    {
+      "standard_name": "Cordyceps",
+      "aliases": [
+        "cordyceps extract",
+        "cordyceps militaris",
+        "cordyceps mushroom extract",
+        "cordyceps sinensis",
+        "cs-4",
+        "cordyceps mycelium",
+        "caterpillar fungus"
+      ],
+      "markers": [
+        "cordycepin",
+        "adenosine",
+        "polysaccharides",
+        "beta-glucans"
+      ],
+      "priority": "high",
+      "last_updated": "2026-01-15",
+      "id": "cordyceps",
+      "notes": "Performance mushroom standardized for cordycepin (0.1%+) or polysaccharides (40%+).",
+      "category": "mushroom",
+      "min_threshold": 0.1
+    },
+    {
+      "standard_name": "Cranberry",
+      "aliases": [
+        "vaccinium macrocarpon",
+        "cranberry extract",
+        "cranberry fruit extract",
+        "american cranberry",
+        "cranberry juice concentrate",
+        "urophenol"
+      ],
+      "markers": [
+        "PACs",
+        "proanthocyanidins",
+        "A-type proanthocyanidins"
+      ],
+      "min_threshold": 36,
+      "priority": "high",
+      "last_updated": "2026-01-15",
+      "id": "cranberry",
+      "notes": "UTI prevention berry standardized for 36mg PACs per dose (A-type proanthocyanidins).",
+      "category": "seed_fruit"
+    },
+    {
+      "standard_name": "Cucumber",
+      "aliases": [
+        "cucumis sativus",
+        "cucumber extract",
+        "cucumber seed extract"
+      ],
+      "markers": [
+        "cucurbitacins",
+        "vitamin C",
+        "silica"
+      ],
+      "priority": "medium",
+      "id": "cucumber",
+      "last_updated": "2025-11-17",
+      "notes": "Botanical ingredient standardized for cucurbitacins, vitamin C. Commonly used in dietary supplements.",
+      "category": "vegetable_greens"
+    },
+    {
+      "id": "curcumin",
+      "standard_name": "Curcumin",
+      "aliases": [
+        "curcumin extract",
+        "curcuminoids",
+        "curcumin 95%",
+        "curcumin standardized extract",
+        "diferuloylmethane",
+        "turmeric curcumin",
+        "curcumin complex",
+        "curcumin powder"
+      ],
+      "markers": [
+        "curcuminoids",
+        "curcumin",
+        "demethoxycurcumin",
+        "bisdemethoxycurcumin"
+      ],
+      "min_threshold": 95,
+      "priority": "high",
+      "standardization": "95% curcuminoids",
+      "category": "polyphenol",
+      "last_updated": "2026-01-15",
+      "notes": "Anti-inflammatory compound standardized for 95% curcuminoids. C3 Complex is the most studied form."
+    },
+    {
+      "standard_name": "Damiana",
+      "aliases": [
+        "damiana leaf",
+        "damiana leaf extract",
+        "turnera",
+        "turnera diffusa"
+      ],
+      "markers": [
+        "flavonoids"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-11-17",
+      "id": "damiana",
+      "notes": "Botanical ingredient standardized for flavonoids. Commonly used in dietary supplements.",
+      "category": "herb"
+    },
+    {
+      "standard_name": "Dandelion",
+      "aliases": [
+        "taraxacum officinale",
+        "dandelion root extract",
+        "dandelion leaf extract"
+      ],
+      "markers": [
+        "sesquiterpenes",
+        "taraxasterol"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-11-17",
+      "id": "dandelion",
+      "notes": "Botanical ingredient standardized for sesquiterpenes, taraxasterol. Commonly used in dietary supplements.",
+      "category": "mushroom"
+    },
+    {
+      "standard_name": "Devil's Claw",
+      "aliases": [
+        "devil's claw extract",
+        "grapple plant",
+        "harpagophytum procumbens",
+        "wood spider"
+      ],
+      "markers": [
+        "harpagoside"
+      ],
+      "priority": "medium",
+      "last_updated": "2026-01-15",
+      "id": "devil_s_claw",
+      "notes": "Joint health herb standardized for 2% harpagosides. Clinical studies use 50-100mg harpagoside daily.",
+      "category": "herb",
+      "min_threshold": 2
+    },
+    {
+      "standard_name": "Dong Quai",
+      "aliases": [
+        "angelica sinensis",
+        "dang gui",
+        "dong quai root extract"
+      ],
+      "markers": [
+        "ligustilide",
+        "ferulic acid"
+      ],
+      "min_threshold": 1,
+      "priority": "high",
+      "last_updated": "2026-01-15",
+      "id": "dong_quai",
+      "notes": "Women's health herb standardized for 1% ligustilide.",
+      "category": "herb"
+    },
+    {
+      "standard_name": "Echinacea Angustifolia",
+      "aliases": [
+        "narrow-leaf coneflower",
+        "echinacea angustifolia extract"
+      ],
+      "markers": [
+        "echinacoside",
+        "cichoric acid",
+        "alkylamides"
+      ],
+      "priority": "medium",
+      "last_updated": "2026-01-15",
+      "id": "echinacea_angustifolia",
+      "notes": "Immune support herb standardized for 4% echinacoside.",
+      "category": "herb",
+      "min_threshold": 4
+    },
+    {
+      "standard_name": "Echinacea Extract",
+      "aliases": [
+        "echinacea standardized extract",
+        "echinacea purpurea standardized extract",
+        "standardized echinacea extract"
+      ],
+      "markers": [
+        "phenolic_compounds",
+        "echinacoside"
+      ],
+      "priority": "high",
+      "standardization": "4% phenolic compounds",
+      "category": "herb",
+      "last_updated": "2025-11-17",
+      "id": "echinacea_extract",
+      "notes": "Standardized botanical extract with phenolic_compounds, echinacoside as primary marker compounds."
+    },
+    {
+      "standard_name": "Echinacea Purpurea",
+      "aliases": [
+        "purple coneflower",
+        "echinacea purpurea extract",
+        "purple coneflower extract",
+        "echinacea herb"
+      ],
+      "markers": [
+        "cichoric acid",
+        "echinacoside",
+        "phenolic compounds",
+        "alkylamides"
+      ],
+      "min_threshold": 4,
+      "priority": "high",
+      "last_updated": "2026-01-15",
+      "id": "echinacea_purpurea",
+      "notes": "Immune support herb standardized for 4% phenolic compounds (cichoric acid, echinacoside).",
+      "category": "herb"
+    },
+    {
+      "standard_name": "Elder Flower",
+      "aliases": [
+        "sambucus nigra flos",
+        "elderflower extract"
+      ],
+      "markers": [
+        "flavonoids",
+        "phenolic acids"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-11-17",
+      "id": "elder_flower",
+      "notes": "Botanical ingredient standardized for flavonoids, phenolic acids. Commonly used in dietary supplements.",
+      "category": "herb"
+    },
+    {
+      "standard_name": "Elderberry",
+      "aliases": [
+        "black elderberry",
+        "elderberry extract",
+        "elderberry fruit extract",
+        "european elderberry",
+        "sambucus extract",
+        "sambucus nigra",
+        "elder",
+        "sambucol",
+        "black elder",
+        "eldermune",
+        "elder mune"
+      ],
+      "markers": [
+        "anthocyanins",
+        "cyanidin-3-glucoside",
+        "cyanidin-3-sambubioside"
+      ],
+      "min_threshold": 10,
+      "priority": "high",
+      "last_updated": "2026-01-15",
+      "id": "elderberry",
+      "notes": "Immune support berry standardized for 10-15% anthocyanins. Sambucol and other extracts typically use 13% standardization.",
+      "category": "seed_fruit"
+    },
+    {
+      "standard_name": "Elderberry Extract",
+      "aliases": [
+        "elderberry standardized extract",
+        "sambucus standardized extract",
+        "black elderberry standardized extract"
+      ],
+      "markers": [
+        "anthocyanins",
+        "cyanidin-3-glucoside",
+        "cyanidin-3-sambubioside"
+      ],
+      "priority": "high",
+      "standardization": "10% anthocyanins",
+      "category": "fruit",
+      "last_updated": "2026-01-15",
+      "id": "elderberry_extract",
+      "notes": "Immune support berry extract standardized for 13% anthocyanins per Artemis International specifications.",
+      "min_threshold": 13
+    },
+    {
+      "standard_name": "Evening Primrose",
+      "aliases": [
+        "oenothera biennis",
+        "evening primrose oil",
+        "evening primrose seed oil"
+      ],
+      "markers": [
+        "GLA",
+        "gamma-linolenic acid",
+        "linoleic acid"
+      ],
+      "min_threshold": 9,
+      "priority": "high",
+      "last_updated": "2026-01-15",
+      "id": "evening_primrose",
+      "notes": "Women's health oil standardized for 9-10% GLA (gamma-linolenic acid).",
+      "category": "herb"
+    },
+    {
+      "standard_name": "Fenugreek",
+      "aliases": [
+        "fenugreek extract",
+        "fenugreek seed extract",
+        "methi",
+        "trigonella foenum-graecum",
+        "trigonella",
+        "fenugreek seed powder",
+        "fenugreek capsules"
+      ],
+      "markers": [
+        "saponins",
+        "4-hydroxyisoleucine",
+        "trigonelline"
+      ],
+      "min_threshold": 50,
+      "priority": "high",
+      "last_updated": "2026-01-15",
+      "id": "fenugreek",
+      "notes": "Blood sugar and testosterone support seed standardized for 50% saponins.",
+      "category": "herb"
+    },
+    {
+      "standard_name": "Feverfew",
+      "aliases": [
+        "featherfew",
+        "feverfew extract",
+        "tanacetum",
+        "tanacetum parthenium"
+      ],
+      "markers": [
+        "parthenolide",
+        "sesquiterpene lactones"
+      ],
+      "priority": "medium",
+      "last_updated": "2026-01-15",
+      "id": "feverfew",
+      "notes": "Migraine prevention herb standardized for 0.4% parthenolide.",
+      "category": "herb",
+      "min_threshold": 0.4
+    },
+    {
+      "standard_name": "Flaxseed",
+      "aliases": [
+        "linum usitatissimum",
+        "flaxseed oil",
+        "flaxseed extract",
+        "ground flaxseed"
+      ],
+      "markers": [
+        "lignans",
+        "alpha-linolenic acid"
+      ],
+      "priority": "high",
+      "min_threshold": 40,
+      "last_updated": "2025-11-17",
+      "id": "flaxseed",
+      "notes": "Botanical ingredient standardized for lignans, alpha-linolenic acid. Commonly used in dietary supplements.",
+      "category": "seed_fruit"
+    },
+    {
+      "standard_name": "Garlic",
+      "aliases": [
+        "allium sativum",
+        "garlic extract",
+        "aged garlic extract",
+        "garlic bulb",
+        "garlic powder",
+        "kyolic",
+        "odorless garlic"
+      ],
+      "markers": [
+        "allicin",
+        "S-allylcysteine",
+        "alliin"
+      ],
+      "min_threshold": 1,
+      "priority": "high",
+      "last_updated": "2025-11-17",
+      "id": "garlic",
+      "notes": "Cardiovascular support botanical standardized for allicin or aged garlic extract (S-allylcysteine). Used in heart health and immune supplements.",
+      "category": "herb"
+    },
+    {
+      "standard_name": "Ginger Extract",
+      "aliases": [
+        "zingiber officinale",
+        "ginger root extract",
+        "ginger extract",
+        "total gingerols and shogaols",
+        "standardized ginger gingerols",
+        "ginger gingerol complex",
+        "ginger standardized extract",
+        "zingiber",
+        "ginger powder",
+        "ginger rhizome"
+      ],
+      "markers": [
+        "gingerols",
+        "shogaols",
+        "6-gingerol"
+      ],
+      "priority": "high",
+      "standardization": "5% total gingerols",
+      "category": "root",
+      "min_threshold": 5,
+      "last_updated": "2026-01-15",
+      "id": "ginger_extract",
+      "notes": "Digestive and anti-nausea herb standardized for 5% gingerols. Higher concentrations (up to 20%) available."
+    },
+    {
+      "standard_name": "Gingerols",
+      "aliases": [
+        "gingerols",
+        "gingerol complex",
+        "standardized gingerols",
+        "total gingerols",
+        "ginger gingerols"
+      ],
+      "markers": [
+        "6-gingerol",
+        "8-gingerol",
+        "10-gingerol"
+      ],
+      "priority": "high",
+      "standardization": "5% total gingerols",
+      "category": "active_compound",
+      "last_updated": "2025-11-17",
+      "id": "gingerols",
+      "notes": "Botanical ingredient standardized for 6-gingerol, 8-gingerol. Commonly used in dietary supplements."
+    },
+    {
+      "standard_name": "Ginkgo Biloba",
+      "aliases": [
+        "maidenhair tree",
+        "ginkgo",
+        "ginkgo biloba extract",
+        "EGb 761",
+        "ginkgo leaf",
+        "ginkgo extract",
+        "maidenhair"
+      ],
+      "markers": [
+        "flavone glycosides",
+        "ginkgolides",
+        "bilobalide",
+        "terpene lactones"
+      ],
+      "min_threshold": 24,
+      "priority": "high",
+      "last_updated": "2026-01-15",
+      "id": "ginkgo_biloba",
+      "notes": "Cognitive herb standardized for 24% flavone glycosides and 6% terpene lactones. EGb 761 is the most studied standardized extract.",
+      "category": "herb"
+    },
+    {
+      "standard_name": "Ginkgolides",
+      "aliases": [
+        "ginkgolides",
+        "ginkgo terpene lactones",
+        "terpene trilactones",
+        "ginkgolide complex"
+      ],
+      "markers": [
+        "ginkgolide A",
+        "ginkgolide B",
+        "ginkgolide C",
+        "ginkgolide J"
+      ],
+      "priority": "high",
+      "standardization": "6% terpene lactones",
+      "category": "active_compound",
+      "last_updated": "2025-11-17",
+      "id": "ginkgolides",
+      "notes": "Botanical ingredient standardized for ginkgolide A, ginkgolide B. Commonly used in dietary supplements."
+    },
+    {
+      "standard_name": "Goji Berry",
+      "aliases": [
+        "lycium barbarum",
+        "wolfberry",
+        "goji berry extract"
+      ],
+      "markers": [
+        "polysaccharides",
+        "zeaxanthin"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-11-17",
+      "id": "goji_berry",
+      "notes": "Botanical ingredient standardized for polysaccharides, zeaxanthin. Commonly used in dietary supplements.",
+      "category": "seed_fruit"
+    },
+    {
+      "standard_name": "Goldenseal",
+      "aliases": [
+        "goldenseal extract",
+        "goldenseal root extract",
+        "hydrastis canadensis"
+      ],
+      "markers": [
+        "hydrastine",
+        "berberine",
+        "canadine"
+      ],
+      "priority": "high",
+      "last_updated": "2026-01-15",
+      "id": "goldenseal",
+      "notes": "Immune support herb standardized for 5% hydrastine and 5% berberine.",
+      "category": "herb",
+      "min_threshold": 5
+    },
+    {
+      "standard_name": "Gotu Kola",
+      "aliases": [
+        "centella asiatica",
+        "gotu kola extract",
+        "centella",
+        "tiger grass",
+        "asiatic pennywort"
+      ],
+      "markers": [
+        "triterpenes",
+        "asiaticoside",
+        "madecassoside",
+        "asiatic acid"
+      ],
+      "priority": "medium",
+      "last_updated": "2026-01-15",
+      "id": "gotu_kola",
+      "notes": "Cognitive and wound-healing herb standardized for triterpenes (8-40%). TECA extracts contain 40% asiaticoside, 30% asiatic acid, 30% madecassic acid.",
+      "category": "herb",
+      "min_threshold": 10
+    },
+    {
+      "standard_name": "Grape Seed",
+      "aliases": [
+        "vitis vinifera",
+        "grape seed extract",
+        "grape seed proanthocyanidins",
+        "grapeseed",
+        "masquelier's OPC"
+      ],
+      "markers": [
+        "OPCs",
+        "proanthocyanidins",
+        "polyphenols"
+      ],
+      "min_threshold": 90,
+      "priority": "high",
+      "last_updated": "2026-01-15",
+      "id": "grape_seed",
+      "notes": "Cardiovascular antioxidant standardized for 90-95% OPCs (oligomeric proanthocyanidins).",
+      "category": "seed_fruit"
+    },
+    {
+      "standard_name": "Grape Seed Extract",
+      "aliases": [
+        "vitis vinifera seed extract",
+        "grape seed",
+        "OPC"
+      ],
+      "markers": [
+        "proanthocyanidins",
+        "oligomeric proanthocyanidins"
+      ],
+      "min_threshold": 95,
+      "priority": "high",
+      "last_updated": "2026-01-15",
+      "id": "grape_seed_extract",
+      "notes": "Cardiovascular antioxidant standardized for 95% OPCs (oligomeric proanthocyanidins).",
+      "category": "standardized_extract"
+    },
+    {
+      "standard_name": "Grapefruit Seed",
+      "aliases": [
+        "citrus paradisi",
+        "citrus seed extract",
+        "grapefruit seed extract",
+        "grapefruit seed oil"
+      ],
+      "markers": [
+        "naringin"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-11-17",
+      "id": "grapefruit_seed",
+      "notes": "Botanical ingredient standardized for naringin. Commonly used in dietary supplements.",
+      "category": "seed_fruit"
+    },
+    {
+      "standard_name": "Graviola",
+      "aliases": [
+        "annona muricata",
+        "soursop",
+        "soursop extract"
+      ],
+      "markers": [
+        "acetogenins"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-11-17",
+      "id": "graviola",
+      "notes": "Botanical ingredient standardized for acetogenins. Commonly used in dietary supplements.",
+      "category": "herb"
+    },
+    {
+      "standard_name": "Green Coffee Bean",
+      "aliases": [
+        "coffea canephora robusta",
+        "coffea robusta",
+        "green coffee bean extract",
+        "green coffee extract",
+        "coffea canephora robusta bean extract"
+      ],
+      "markers": [
+        "chlorogenic acids",
+        "GCA"
+      ],
+      "priority": "medium",
+      "last_updated": "2026-01-15",
+      "id": "green_coffee_bean",
+      "notes": "Weight management extract standardized for 45-50% chlorogenic acids (GCA).",
+      "category": "herb",
+      "min_threshold": 45
+    },
+    {
+      "standard_name": "Green Tea",
+      "aliases": [
+        "camellia sinensis",
+        "green tea extract",
+        "green tea leaf",
+        "green tea polyphenols",
+        "tea extract",
+        "matcha"
+      ],
+      "markers": [
+        "EGCG",
+        "epigallocatechin gallate",
+        "polyphenols",
+        "catechins",
+        "gallocatechin"
+      ],
+      "min_threshold": 50,
+      "priority": "high",
+      "last_updated": "2025-11-17",
+      "id": "green_tea",
+      "notes": "Antioxidant botanical standardized for 50% polyphenols and EGCG. Popular in weight management and metabolic health supplements.",
+      "category": "herb"
+    },
+    {
+      "standard_name": "Guarana",
+      "aliases": [
+        "guarana extract",
+        "guarana seed",
+        "paullinia",
+        "paullinia cupana"
+      ],
+      "markers": [
+        "caffeine",
+        "guaranine",
+        "theobromine"
+      ],
+      "priority": "medium",
+      "last_updated": "2026-01-15",
+      "id": "guarana",
+      "notes": "Natural stimulant standardized for 22% caffeine (guaranine). Slower release than pure caffeine.",
+      "category": "herb",
+      "min_threshold": 22
+    },
+    {
+      "standard_name": "Gymnema Sylvestre",
+      "aliases": [
+        "gurmar",
+        "gymnema",
+        "gymnema extract"
+      ],
+      "markers": [
+        "gymnemic acids",
+        "gurmarin"
+      ],
+      "priority": "medium",
+      "last_updated": "2026-01-15",
+      "id": "gymnema_sylvestre",
+      "notes": "Blood sugar support herb standardized for 25% gymnemic acids.",
+      "category": "herb",
+      "min_threshold": 25
+    },
+    {
+      "standard_name": "Gynostemma",
+      "aliases": [
+        "gynostemma pentaphyllum",
+        "jiaogulan",
+        "southern ginseng",
+        "gynostemma extract"
+      ],
+      "markers": [
+        "gypenosides",
+        "saponins"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-11-17",
+      "id": "gynostemma",
+      "notes": "Botanical ingredient standardized for gypenosides, saponins. Commonly used in dietary supplements.",
+      "category": "herb"
+    },
+    {
+      "standard_name": "Hawthorn",
+      "aliases": [
+        "crataegus monogyna",
+        "crataegus laevigata",
+        "hawthorn berry extract",
+        "hawthorn leaf and flower extract",
+        "hawthorn berry",
+        "hawthorn extract",
+        "may"
+      ],
+      "markers": [
+        "vitexin",
+        "flavonoids",
+        "oligomeric procyanidins"
+      ],
+      "min_threshold": 1.8,
+      "priority": "high",
+      "last_updated": "2026-01-15",
+      "id": "hawthorn",
+      "notes": "Cardiovascular herb standardized for 1.8% vitexin and 18.75% oligomeric procyanidins.",
+      "category": "herb"
+    },
+    {
+      "standard_name": "He Shou Wu",
+      "aliases": [
+        "polygonum multiflorum",
+        "fo-ti",
+        "fo-ti root extract",
+        "reynoutria multiflora"
+      ],
+      "markers": [
+        "stilbenes",
+        "TSG",
+        "emodin"
+      ],
+      "priority": "medium",
+      "last_updated": "2026-01-05",
+      "id": "he_shou_wu",
+      "notes": "Botanical ingredient standardized for stilbenes, TSG. Commonly used in dietary supplements.",
+      "category": "herb"
+    },
+    {
+      "standard_name": "Holy Basil",
+      "aliases": [
+        "holy basil extract",
+        "ocimum sanctum",
+        "ocimum tenuiflorum",
+        "tulsi",
+        "tulsi extract",
+        "tulsi leaf",
+        "sacred basil"
+      ],
+      "markers": [
+        "ursolic acid",
+        "eugenol",
+        "rosmarinic acid"
+      ],
+      "priority": "medium",
+      "last_updated": "2026-01-15",
+      "id": "holy_basil",
+      "notes": "Holy basil (Tulsi) standardized for 2.5% ursolic acid. Also contains eugenol and rosmarinic acid.",
+      "category": "herb",
+      "min_threshold": 2.5
+    },
+    {
+      "standard_name": "Hops",
+      "aliases": [
+        "hop extract",
+        "hops extract",
+        "humulus",
+        "humulus lupulus"
+      ],
+      "markers": [
+        "alpha acids",
+        "humulene",
+        "xanthohumol"
+      ],
+      "priority": "medium",
+      "last_updated": "2026-01-15",
+      "id": "hops",
+      "notes": "Sleep support herb standardized for 4% alpha acids or xanthohumol content.",
+      "category": "herb",
+      "min_threshold": 4
+    },
+    {
+      "standard_name": "Horny Goat Weed",
+      "aliases": [
+        "epimedium",
+        "yin yang huo",
+        "epimedium extract"
+      ],
+      "markers": [
+        "icariin",
+        "icariins"
+      ],
+      "priority": "medium",
+      "last_updated": "2026-01-15",
+      "id": "horny_goat_weed",
+      "notes": "Men's health herb standardized for 10% icariin. Some extracts go to 20-60% icariin.",
+      "category": "herb",
+      "min_threshold": 10
+    },
+    {
+      "standard_name": "Horsetail",
+      "aliases": [
+        "equisetum arvense",
+        "horsetail extract",
+        "field horsetail"
+      ],
+      "markers": [
+        "silica",
+        "flavonoids"
+      ],
+      "min_threshold": 7,
+      "priority": "medium",
+      "last_updated": "2025-11-17",
+      "id": "horsetail",
+      "notes": "Botanical ingredient standardized for silica, flavonoids. Commonly used in dietary supplements.",
+      "category": "herb"
+    },
+    {
+      "standard_name": "Huperzine A",
+      "aliases": [
+        "huperzia serrata extract",
+        "chinese club moss extract"
+      ],
+      "markers": [
+        "huperzine A"
+      ],
+      "min_threshold": 1,
+      "priority": "medium",
+      "last_updated": "2025-11-17",
+      "id": "huperzine_a",
+      "notes": "Botanical ingredient standardized for huperzine A. Commonly used in dietary supplements.",
+      "category": "herb"
+    },
+    {
+      "standard_name": "Inulin",
+      "aliases": [
+        "chicory root inulin",
+        "fructooligosaccharides",
+        "FOS"
+      ],
+      "markers": [
+        "inulin"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-11-17",
+      "id": "inulin",
+      "notes": "Botanical ingredient standardized for inulin. Commonly used in dietary supplements.",
+      "category": "herb"
+    },
+    {
+      "standard_name": "Kale",
+      "aliases": [
+        "brassica oleracea var. sabellica",
+        "kale leaf",
+        "kale powder",
+        "curly kale"
+      ],
+      "markers": [
+        "glucosinolates",
+        "kaempferol",
+        "lutein"
+      ],
+      "priority": "medium",
+      "id": "kale",
+      "last_updated": "2025-11-17",
+      "notes": "Nutrient-dense leafy green used in greens blends and superfood powders. Rich in vitamins A, C, K and antioxidants.",
+      "category": "vegetable_greens"
+    },
+    {
+      "standard_name": "Kanna",
+      "aliases": [
+        "channa",
+        "kanna extract",
+        "sceletium",
+        "sceletium tortuosum"
+      ],
+      "markers": [
+        "mesembrine"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-11-17",
+      "id": "kanna",
+      "notes": "Botanical ingredient standardized for mesembrine. Commonly used in dietary supplements.",
+      "category": "herb"
+    },
+    {
+      "standard_name": "Kava",
+      "aliases": [
+        "piper methysticum",
+        "kava kava",
+        "kava extract"
+      ],
+      "markers": [
+        "kavalactones",
+        "kavain",
+        "dihydrokavain"
+      ],
+      "priority": "medium",
+      "last_updated": "2026-01-15",
+      "id": "kava",
+      "notes": "Relaxation herb standardized for 30% kavalactones. Clinical doses typically 100-250mg kavalactones daily.",
+      "category": "herb",
+      "min_threshold": 30
+    },
+    {
+      "standard_name": "Kelp",
+      "aliases": [
+        "laminaria",
+        "ascophyllum nodosum",
+        "kelp extract"
+      ],
+      "markers": [
+        "iodine"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-11-17",
+      "id": "kelp",
+      "notes": "Botanical ingredient standardized for iodine. Commonly used in dietary supplements.",
+      "category": "herb"
+    },
+    {
+      "standard_name": "Kola Nut",
+      "aliases": [
+        "cola acuminata",
+        "cola acuminata extract",
+        "cola nut",
+        "kola nut extract"
+      ],
+      "markers": [
+        "caffeine"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-11-17",
+      "id": "kola_nut",
+      "notes": "Botanical ingredient standardized for caffeine. Commonly used in dietary supplements.",
+      "category": "herb"
+    },
+    {
+      "standard_name": "Kudzu",
+      "aliases": [
+        "kudzu extract",
+        "kudzu root extract",
+        "pueraria montana",
+        "pueraria root"
+      ],
+      "markers": [
+        "puerarin",
+        "daidzein"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-11-17",
+      "id": "kudzu",
+      "notes": "Botanical ingredient standardized for puerarin, daidzein. Commonly used in dietary supplements.",
+      "category": "herb"
+    },
+    {
+      "standard_name": "L-Theanine",
+      "aliases": [
+        "theanine",
+        "gamma-glutamylethylamide",
+        "suntheanine"
+      ],
+      "markers": [
+        "L-theanine"
+      ],
+      "min_threshold": 98,
+      "priority": "medium",
+      "last_updated": "2025-11-17",
+      "id": "l_theanine",
+      "notes": "Botanical ingredient standardized for L-theanine. Commonly used in dietary supplements.",
+      "category": "herb"
+    },
+    {
+      "standard_name": "Lavender",
+      "aliases": [
+        "lavandula angustifolia",
+        "lavender extract",
+        "lavender oil",
+        "lavandula",
+        "english lavender"
+      ],
+      "markers": [
+        "linalool",
+        "linalyl acetate"
+      ],
+      "min_threshold": 20,
+      "priority": "high",
+      "last_updated": "2025-11-17",
+      "id": "lavender",
+      "notes": "Botanical ingredient standardized for linalool, linalyl acetate. Commonly used in dietary supplements.",
+      "category": "herb"
+    },
+    {
+      "standard_name": "Lemon Balm",
+      "aliases": [
+        "lemon balm extract",
+        "lemon balm leaf",
+        "melissa",
+        "melissa officinalis",
+        "melissa extract"
+      ],
+      "markers": [
+        "rosmarinic acid",
+        "flavonoids"
+      ],
+      "priority": "medium",
+      "last_updated": "2026-01-15",
+      "id": "lemon_balm",
+      "notes": "Calming herb standardized for 5% rosmarinic acid.",
+      "category": "herb",
+      "min_threshold": 5
+    },
+    {
+      "standard_name": "Licorice",
+      "aliases": [
+        "glycyrrhiza glabra",
+        "licorice root extract",
+        "DGL licorice",
+        "deglycyrrhizinated licorice",
+        "deglycyrrhizinated licorice root extract",
+        "dgl"
+      ],
+      "markers": [
+        "glycyrrhizin",
+        "glycyrrhizic acid",
+        "liquiritin"
+      ],
+      "priority": "medium",
+      "last_updated": "2026-01-05",
+      "id": "licorice",
+      "notes": "Botanical ingredient standardized for glycyrrhizin, glycyrrhizic acid. Commonly used in dietary supplements.",
+      "category": "herb"
+    },
+    {
+      "standard_name": "Linden Flower",
+      "aliases": [
+        "tilia cordata",
+        "tilia platyphyllos",
+        "linden flower extract"
+      ],
+      "markers": [
+        "flavonoids",
+        "volatile oils"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-11-17",
+      "id": "linden_flower",
+      "notes": "Botanical ingredient standardized for flavonoids, volatile oils. Commonly used in dietary supplements.",
+      "category": "herb"
+    },
+    {
+      "standard_name": "Lion's Mane",
+      "aliases": [
+        "bearded tooth mushroom",
+        "hericium erinaceus",
+        "lion's mane mushroom extract",
+        "yamabushitake",
+        "lion's mane extract",
+        "hericium mushroom",
+        "hedgehog mushroom"
+      ],
+      "markers": [
+        "beta-glucans",
+        "hericenones",
+        "erinacines"
+      ],
+      "priority": "high",
+      "last_updated": "2026-01-15",
+      "id": "lion_s_mane",
+      "notes": "Cognitive mushroom standardized for beta-glucans (10-40%) and nerve growth factors (hericenones, erinacines).",
+      "category": "mushroom",
+      "min_threshold": 10
+    },
+    {
+      "standard_name": "Maca",
+      "aliases": [
+        "lepidium meyenii",
+        "maca root extract",
+        "peruvian ginseng",
+        "peruvian maca",
+        "maca root powder",
+        "peruvian ginseng root",
+        "maca powder"
+      ],
+      "markers": [
+        "macamides",
+        "macaenes",
+        "glucosinolates"
+      ],
+      "priority": "medium",
+      "last_updated": "2026-01-15",
+      "id": "maca",
+      "notes": "Adaptogenic root standardized for 0.6% macamides and macaenes. Gelatinized form improves absorption.",
+      "category": "adaptogen",
+      "min_threshold": 0.6
+    },
+    {
+      "standard_name": "Magnolia Bark",
+      "aliases": [
+        "houpo",
+        "magnolia bark extract",
+        "magnolia extract",
+        "magnolia officinalis"
+      ],
+      "markers": [
+        "honokiol",
+        "magnolol"
+      ],
+      "priority": "medium",
+      "last_updated": "2026-01-15",
+      "id": "magnolia_bark",
+      "notes": "Stress and sleep support herb standardized for 2% honokiol and magnolol (total 90% in some extracts).",
+      "category": "herb_root_bark",
+      "min_threshold": 2
+    },
+    {
+      "standard_name": "Maitake",
+      "aliases": [
+        "grifola frondosa",
+        "maitake mushroom extract",
+        "hen of the woods",
+        "D-fraction",
+        "maitake extract"
+      ],
+      "markers": [
+        "beta-glucans",
+        "D-fraction",
+        "polysaccharides"
+      ],
+      "priority": "medium",
+      "last_updated": "2026-01-15",
+      "id": "maitake",
+      "notes": "Immune support mushroom standardized for 20% beta-glucans (D-fraction is most studied).",
+      "category": "mushroom",
+      "min_threshold": 20
+    },
+    {
+      "standard_name": "Mallow",
+      "aliases": [
+        "malva sylvestris",
+        "mallow flower extract",
+        "mallow leaf extract"
+      ],
+      "markers": [
+        "mucilage",
+        "malvin"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-11-17",
+      "id": "mallow",
+      "notes": "Botanical ingredient standardized for mucilage, malvin. Commonly used in dietary supplements.",
+      "category": "herb"
+    },
+    {
+      "standard_name": "Maqui Berry",
+      "aliases": [
+        "aristotelia",
+        "aristotelia chilensis",
+        "chilean wineberry",
+        "maqui berry extract"
+      ],
+      "markers": [
+        "anthocyanins",
+        "delphinidin"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-11-17",
+      "id": "maqui_berry",
+      "notes": "Botanical ingredient standardized for anthocyanins, delphinidin. Commonly used in dietary supplements.",
+      "category": "seed_fruit"
+    },
+    {
+      "standard_name": "Marigold",
+      "aliases": [
+        "calendula officinalis",
+        "calendula",
+        "marigold extract",
+        "tagetes erecta"
+      ],
+      "markers": [
+        "lutein",
+        "zeaxanthin"
+      ],
+      "priority": "medium",
+      "last_updated": "2026-01-15",
+      "id": "marigold",
+      "notes": "Eye health flower standardized for 5-20% lutein. Primary natural source of lutein/zeaxanthin.",
+      "category": "herb",
+      "min_threshold": 5
+    },
+    {
+      "standard_name": "Marshmallow Root",
+      "aliases": [
+        "althaea",
+        "althaea officinalis",
+        "marsh mallow",
+        "marshmallow root extract"
+      ],
+      "markers": [
+        "mucilage",
+        "polysaccharides"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-11-17",
+      "id": "marshmallow_root",
+      "notes": "Botanical ingredient standardized for mucilage, polysaccharides. Commonly used in dietary supplements.",
+      "category": "herb_root_bark"
+    },
+    {
+      "standard_name": "Milk Thistle",
+      "aliases": [
+        "silybum marianum",
+        "mary thistle",
+        "milk thistle extract",
+        "silymarin extract",
+        "saint mary's thistle",
+        "blessed milk thistle"
+      ],
+      "markers": [
+        "silymarin",
+        "silybin",
+        "silychristin",
+        "silydianin"
+      ],
+      "min_threshold": 80,
+      "priority": "high",
+      "last_updated": "2026-01-15",
+      "id": "milk_thistle",
+      "notes": "Liver support herb standardized for 80% silymarin complex. Silybin is the most bioactive component.",
+      "category": "herb"
+    },
+    {
+      "standard_name": "Mistletoe",
+      "aliases": [
+        "european mistletoe",
+        "european mistletoe extract",
+        "viscum",
+        "viscum album"
+      ],
+      "markers": [
+        "viscotoxin",
+        "lectins"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-11-17",
+      "id": "mistletoe",
+      "notes": "Botanical ingredient standardized for viscotoxin, lectins. Commonly used in dietary supplements.",
+      "category": "herb"
+    },
+    {
+      "standard_name": "Moringa",
+      "aliases": [
+        "moringa oleifera",
+        "drumstick tree",
+        "moringa leaf extract"
+      ],
+      "markers": [
+        "isothiocyanates",
+        "chlorogenic acids"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-11-17",
+      "id": "moringa",
+      "notes": "Botanical ingredient standardized for isothiocyanates, chlorogenic acids. Commonly used in dietary supplements.",
+      "category": "herb"
+    },
+    {
+      "standard_name": "Mucuna Pruriens",
+      "aliases": [
+        "velvet bean",
+        "kapikacchu",
+        "mucuna pruriens extract",
+        "kaunch",
+        "kaunch extract"
+      ],
+      "markers": [
+        "L-DOPA",
+        "levodopa"
+      ],
+      "priority": "medium",
+      "last_updated": "2026-01-15",
+      "id": "mucuna_pruriens",
+      "notes": "Dopamine support herb standardized for 15% L-DOPA. Some extracts go to 98%.",
+      "category": "herb",
+      "min_threshold": 15
+    },
+    {
+      "standard_name": "Mulberry",
+      "aliases": [
+        "morus alba",
+        "mulberry leaf extract",
+        "white mulberry"
+      ],
+      "markers": [
+        "DNJ (1-deoxynojirimycin)"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-11-17",
+      "id": "mulberry",
+      "notes": "Botanical ingredient standardized for DNJ (1-deoxynojirimycin). Commonly used in dietary supplements.",
+      "category": "seed_fruit"
+    },
+    {
+      "standard_name": "Mullein",
+      "aliases": [
+        "common mullein",
+        "mullein extract",
+        "mullein leaf extract",
+        "standardized mullein",
+        "verbascum thapsus"
+      ],
+      "markers": [
+        "verbascoside"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-11-17",
+      "id": "mullein",
+      "notes": "Botanical ingredient standardized for verbascoside. Commonly used in dietary supplements.",
+      "category": "herb"
+    },
+    {
+      "standard_name": "Mulungu",
+      "aliases": [
+        "coral tree",
+        "erythrina",
+        "erythrina mulungu",
+        "mulungu bark extract"
+      ],
+      "markers": [
+        "erythrina alkaloids"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-11-17",
+      "id": "mulungu",
+      "notes": "Botanical ingredient standardized for erythrina alkaloids. Commonly used in dietary supplements.",
+      "category": "herb"
+    },
+    {
+      "standard_name": "Nettle",
+      "aliases": [
+        "urtica dioica",
+        "stinging nettle",
+        "nettle root extract",
+        "nettle leaf extract"
+      ],
+      "markers": [
+        "silica",
+        "beta-sitosterol",
+        "scopoletin"
+      ],
+      "priority": "medium",
+      "last_updated": "2026-01-15",
+      "id": "nettle",
+      "notes": "Joint and prostate support herb. Root standardized for 1% beta-sitosterol; leaf for silica.",
+      "category": "herb",
+      "min_threshold": 1
+    },
+    {
+      "standard_name": "Olive Fruit",
+      "aliases": [
+        "olea europaea fructus",
+        "olea fruit",
+        "olive extract",
+        "olive fruit extract"
+      ],
+      "markers": [
+        "hydroxytyrosol"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-11-17",
+      "id": "olive_fruit",
+      "notes": "Botanical ingredient standardized for hydroxytyrosol. Commonly used in dietary supplements.",
+      "category": "seed_fruit"
+    },
+    {
+      "standard_name": "Olive Leaf",
+      "aliases": [
+        "olea europaea",
+        "olea leaf",
+        "olive leaf extract",
+        "olive leaf powder"
+      ],
+      "markers": [
+        "oleuropein",
+        "hydroxytyrosol"
+      ],
+      "priority": "medium",
+      "last_updated": "2026-01-15",
+      "id": "olive_leaf",
+      "notes": "Cardiovascular and immune herb standardized for 18-20% oleuropein.",
+      "category": "herb_root_bark",
+      "min_threshold": 18
+    },
+    {
+      "standard_name": "Olive Leaf Extract",
+      "aliases": [
+        "olive leaf standardized extract",
+        "olive leaf extract standardized",
+        "olea europaea standardized extract"
+      ],
+      "markers": [
+        "oleuropein",
+        "hydroxytyrosol"
+      ],
+      "priority": "high",
+      "standardization": "20% oleuropein",
+      "category": "leaf",
+      "last_updated": "2026-01-15",
+      "id": "olive_leaf_extract",
+      "notes": "Standardized extract with 20% oleuropein. Some concentrates go to 40%.",
+      "min_threshold": 20
+    },
+    {
+      "standard_name": "Onion",
+      "aliases": [
+        "allium cepa",
+        "onion extract",
+        "onion bulb extract"
+      ],
+      "markers": [
+        "quercetin",
+        "organosulfur compounds",
+        "allicin"
+      ],
+      "priority": "medium",
+      "id": "onion",
+      "last_updated": "2025-11-17",
+      "notes": "Botanical ingredient standardized for quercetin, organosulfur compounds. Commonly used in dietary supplements.",
+      "category": "herb"
+    },
+    {
+      "standard_name": "Oregano",
+      "aliases": [
+        "origanum vulgare",
+        "oregano extract",
+        "oregano oil",
+        "wild oregano",
+        "origanum"
+      ],
+      "markers": [
+        "carvacrol",
+        "thymol"
+      ],
+      "min_threshold": 50,
+      "priority": "high",
+      "last_updated": "2025-11-17",
+      "id": "oregano",
+      "notes": "Botanical ingredient standardized for carvacrol, thymol. Commonly used in dietary supplements.",
+      "category": "herb"
+    },
+    {
+      "standard_name": "Panax Ginseng",
+      "aliases": [
+        "korean ginseng",
+        "asian ginseng",
+        "ren shen",
+        "panax ginseng extract",
+        "red ginseng",
+        "korean red ginseng",
+        "ginseng extract",
+        "ginactiv"
+      ],
+      "markers": [
+        "ginsenosides",
+        "Rb1",
+        "Rg1",
+        "Rg3"
+      ],
+      "min_threshold": 5,
+      "priority": "high",
+      "last_updated": "2026-01-05",
+      "id": "panax_ginseng",
+      "notes": "Energy and cognitive support adaptogen standardized for 5% ginsenosides. Premium Korean Red Ginseng is highly valued.",
+      "category": "adaptogen"
+    },
+    {
+      "standard_name": "Passionflower",
+      "aliases": [
+        "passiflora incarnata",
+        "passion flower extract",
+        "passion flower 4:1 extract",
+        "passionflower extract",
+        "maypop"
+      ],
+      "markers": [
+        "flavonoids",
+        "vitexin",
+        "isovitexin",
+        "chrysin"
+      ],
+      "priority": "medium",
+      "last_updated": "2026-01-15",
+      "id": "passionflower",
+      "notes": "Sleep and anxiety support herb standardized for 3.5% flavonoids (vitexin, isovitexin).",
+      "category": "herb",
+      "min_threshold": 3.5
+    },
+    {
+      "standard_name": "Peppermint",
+      "aliases": [
+        "mentha extract",
+        "mentha piperita",
+        "peppermint leaf extract",
+        "peppermint oil",
+        "peppermint leaves",
+        "mentha x piperita"
+      ],
+      "markers": [
+        "menthol",
+        "rosmarinic acid"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-11-17",
+      "id": "peppermint",
+      "notes": "Botanical ingredient standardized for menthol, rosmarinic acid. Commonly used in dietary supplements.",
+      "category": "herb"
+    },
+    {
+      "standard_name": "Peppermint Essential Oil",
+      "aliases": [
+        "peppermint essential oil",
+        "peppermint aerial parts essential oil",
+        "peppermint leaf essential oil",
+        "mentha piperita oil",
+        "peppermint oil"
+      ],
+      "markers": [
+        "menthol",
+        "menthone"
+      ],
+      "priority": "medium",
+      "standardization": "30%+ menthol",
+      "category": "leaf",
+      "last_updated": "2025-11-17",
+      "id": "peppermint_essential_oil",
+      "notes": "Essential oil standardized for menthol, menthone. Used for therapeutic and functional benefits."
+    },
+    {
+      "standard_name": "Pine Bark Extract",
+      "aliases": [
+        "pinus pinaster",
+        "pycnogenol",
+        "pine bark",
+        "maritime pine bark"
+      ],
+      "markers": [
+        "procyanidins",
+        "catechins",
+        "phenolic acids"
+      ],
+      "min_threshold": 95,
+      "priority": "high",
+      "last_updated": "2025-11-17",
+      "id": "pine_bark_extract",
+      "notes": "Standardized botanical extract with procyanidins, catechins as primary marker compounds.",
+      "category": "standardized_extract"
+    },
+    {
+      "standard_name": "Polygala",
+      "aliases": [
+        "polygala extract",
+        "polygala root",
+        "polygala tenuifolia",
+        "yuan zhi"
+      ],
+      "markers": [
+        "saponins"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-11-17",
+      "id": "polygala",
+      "notes": "Botanical ingredient standardized for saponins. Commonly used in dietary supplements.",
+      "category": "herb"
+    },
+    {
+      "standard_name": "Pomegranate",
+      "aliases": [
+        "pomegranate fruit extract",
+        "pomegranate seed",
+        "punica",
+        "punica granatum"
+      ],
+      "markers": [
+        "ellagic acid",
+        "punicalagins",
+        "anthocyanins"
+      ],
+      "priority": "medium",
+      "last_updated": "2026-01-15",
+      "id": "pomegranate",
+      "notes": "Cardiovascular and antioxidant fruit standardized for 40% ellagic acid or punicalagins.",
+      "category": "herb",
+      "min_threshold": 40
+    },
+    {
+      "standard_name": "Prickly Pear",
+      "aliases": [
+        "nopal",
+        "opuntia",
+        "opuntia fruit",
+        "prickly pear extract"
+      ],
+      "markers": [
+        "betalains",
+        "indicaxanthin"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-11-17",
+      "id": "prickly_pear",
+      "notes": "Botanical ingredient standardized for betalains, indicaxanthin. Commonly used in dietary supplements.",
+      "category": "herb"
+    },
+    {
+      "standard_name": "Propolis",
+      "aliases": [
+        "bee propolis",
+        "propoli",
+        "propolis extract",
+        "propolis pure",
+        "propolis, pure",
+        "bee propolis extract",
+        "bee propolis powder"
+      ],
+      "markers": [
+        "polyphenols",
+        "flavonoids",
+        "CAPE",
+        "artepillin C"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-11-17",
+      "id": "propolis",
+      "notes": "Botanical ingredient standardized for polyphenols, flavonoids. Commonly used in dietary supplements.",
+      "category": "herb"
+    },
+    {
+      "standard_name": "Psyllium",
+      "aliases": [
+        "plantago ovata",
+        "psyllium husk",
+        "psyllium fiber"
+      ],
+      "markers": [
+        "fiber"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-11-17",
+      "id": "psyllium",
+      "notes": "Botanical ingredient standardized for fiber. Commonly used in dietary supplements.",
+      "category": "herb"
+    },
+    {
+      "standard_name": "Pycnogenol",
+      "aliases": [
+        "french maritime pine bark extract",
+        "pinus pinaster",
+        "maritime pine bark"
+      ],
+      "markers": [
+        "OPC",
+        "procyanidins"
+      ],
+      "min_threshold": 65,
+      "priority": "high",
+      "last_updated": "2025-11-17",
+      "id": "pycnogenol",
+      "notes": "Botanical ingredient standardized for OPC, procyanidins. Commonly used in dietary supplements.",
+      "category": "herb"
+    },
+    {
+      "standard_name": "Pygeum",
+      "aliases": [
+        "african plum",
+        "prunus africana",
+        "pygeum africanum extract"
+      ],
+      "markers": [
+        "phytosterols",
+        "beta-sitosterol",
+        "ferulic acid"
+      ],
+      "priority": "medium",
+      "last_updated": "2026-01-15",
+      "id": "pygeum",
+      "notes": "Prostate health herb standardized for 13% total sterols including beta-sitosterol.",
+      "category": "herb",
+      "min_threshold": 13
+    },
+    {
+      "standard_name": "Quercetin",
+      "aliases": [
+        "quercetin dihydrate",
+        "sophora japonica extract",
+        "quercetin-rich botanicals"
+      ],
+      "markers": [
+        "quercetin",
+        "quercetin dihydrate"
+      ],
+      "priority": "medium",
+      "last_updated": "2026-01-15",
+      "id": "quercetin",
+      "notes": "Antioxidant flavonoid standardized for 95% quercetin. Often paired with bromelain for absorption.",
+      "category": "herb",
+      "min_threshold": 95
+    },
+    {
+      "standard_name": "Red Clover",
+      "aliases": [
+        "purple clover",
+        "red clover extract",
+        "trifolium",
+        "trifolium pratense"
+      ],
+      "markers": [
+        "isoflavones",
+        "biochanin A",
+        "formononetin"
+      ],
+      "priority": "medium",
+      "last_updated": "2026-01-15",
+      "id": "red_clover",
+      "notes": "Women's health herb standardized for 8% isoflavones. Contains phytoestrogens.",
+      "category": "herb",
+      "min_threshold": 8
+    },
+    {
+      "standard_name": "Red Yeast Rice",
+      "aliases": [
+        "monascus purpureus",
+        "red yeast rice extract"
+      ],
+      "markers": [
+        "monacolin K"
+      ],
+      "min_threshold": 0.4,
+      "priority": "high",
+      "last_updated": "2025-11-17",
+      "id": "red_yeast_rice",
+      "notes": "Botanical ingredient standardized for monacolin K. Commonly used in dietary supplements.",
+      "category": "herb"
+    },
+    {
+      "standard_name": "Rehmannia",
+      "aliases": [
+        "chinese foxglove",
+        "di huang",
+        "rehmannia glutinosa",
+        "rehmannia root extract"
+      ],
+      "markers": [
+        "catalpol"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-11-17",
+      "id": "rehmannia",
+      "notes": "Botanical ingredient standardized for catalpol. Commonly used in dietary supplements.",
+      "category": "herb"
+    },
+    {
+      "standard_name": "Reishi",
+      "aliases": [
+        "ganoderma lucidum",
+        "lingzhi",
+        "red reishi",
+        "reishi mushroom",
+        "reishi mushroom extract",
+        "mushroom of immortality",
+        "ganoderma mushroom",
+        "lingzhi mushroom"
+      ],
+      "markers": [
+        "beta-glucans",
+        "triterpenes",
+        "ganoderic acids"
+      ],
+      "priority": "high",
+      "last_updated": "2026-01-15",
+      "id": "reishi",
+      "notes": "Immune and adaptogenic mushroom standardized for 10-40% polysaccharides or 4% triterpenes.",
+      "category": "mushroom",
+      "min_threshold": 10
+    },
+    {
+      "standard_name": "Resveratrol",
+      "aliases": [
+        "trans-resveratrol",
+        "polygonum cuspidatum extract",
+        "japanese knotweed extract",
+        "grape skin extract",
+        "red wine extract",
+        "trans resveratrol"
+      ],
+      "markers": [
+        "trans-resveratrol",
+        "resveratrol"
+      ],
+      "min_threshold": 50,
+      "priority": "high",
+      "last_updated": "2026-01-15",
+      "id": "resveratrol",
+      "notes": "Antioxidant polyphenol standardized for 50% trans-resveratrol. High-potency extracts can reach 98%.",
+      "category": "herb"
+    },
+    {
+      "standard_name": "Rhodiola",
+      "aliases": [
+        "rhodiola rosea",
+        "golden root",
+        "arctic root",
+        "rhodiola rosea extract",
+        "rose root",
+        "roseroot",
+        "rhodiola root"
+      ],
+      "markers": [
+        "rosavins",
+        "salidroside",
+        "rosavin"
+      ],
+      "min_threshold": 3,
+      "priority": "high",
+      "last_updated": "2026-01-15",
+      "id": "rhodiola",
+      "notes": "Adaptogenic herb standardized for rosavins (min 3%) and salidroside (min 1%). Traditional ratio is 3:1 rosavins:salidroside.",
+      "category": "adaptogen"
+    },
+    {
+      "standard_name": "Rooibos",
+      "aliases": [
+        "african red tea",
+        "aspalathus linearis",
+        "red bush tea",
+        "rooibos extract"
+      ],
+      "markers": [
+        "aspalathin"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-11-17",
+      "id": "rooibos",
+      "notes": "Botanical ingredient standardized for aspalathin. Commonly used in dietary supplements.",
+      "category": "herb"
+    },
+    {
+      "standard_name": "Rosehip",
+      "aliases": [
+        "rosa canina",
+        "rosehip extract",
+        "rose hip powder"
+      ],
+      "markers": [
+        "galactolipids",
+        "vitamin C"
+      ],
+      "min_threshold": 40,
+      "priority": "high",
+      "last_updated": "2025-11-17",
+      "id": "rosehip",
+      "notes": "Botanical ingredient standardized for galactolipids, vitamin C. Commonly used in dietary supplements.",
+      "category": "herb"
+    },
+    {
+      "standard_name": "Rosemary",
+      "aliases": [
+        "rosmarinus officinalis",
+        "salvia rosmarinus",
+        "rosemary extract",
+        "rosemary leaf extract"
+      ],
+      "markers": [
+        "rosmarinic acid",
+        "carnosic acid",
+        "carnosol"
+      ],
+      "priority": "high",
+      "min_threshold": 4,
+      "id": "rosemary",
+      "last_updated": "2025-11-17",
+      "notes": "Antioxidant herb standardized for 4% rosmarinic acid and carnosic acid. Used as natural preservative and cognitive support ingredient.",
+      "category": "herb"
+    },
+    {
+      "standard_name": "Saffron",
+      "aliases": [
+        "crocus",
+        "crocus sativus",
+        "saffron extract",
+        "saffron stigma",
+        "affron"
+      ],
+      "markers": [
+        "crocin",
+        "safranal",
+        "picrocrocin"
+      ],
+      "min_threshold": 0.3,
+      "priority": "high",
+      "last_updated": "2026-01-05",
+      "id": "saffron",
+      "notes": "Botanical ingredient standardized for crocin, safranal. Commonly used in dietary supplements.",
+      "category": "herb"
+    },
+    {
+      "standard_name": "Salvia Miltiorrhiza",
+      "aliases": [
+        "danshen",
+        "red sage",
+        "salvia miltiorrhiza extract"
+      ],
+      "markers": [
+        "tanshinones",
+        "salvianolic acid B"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-11-17",
+      "id": "salvia_miltiorrhiza",
+      "notes": "Botanical ingredient standardized for tanshinones, salvianolic acid B. Commonly used in dietary supplements.",
+      "category": "herb"
+    },
+    {
+      "standard_name": "Sarsaparilla",
+      "aliases": [
+        "sarsaparilla extract",
+        "sarsaparilla root extract",
+        "smilax extract",
+        "smilax officinalis",
+        "smilax ornata"
+      ],
+      "markers": [
+        "saponins",
+        "steroidal saponins",
+        "steroidal_saponins"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-11-17",
+      "id": "sarsaparilla",
+      "notes": "Botanical ingredient standardized for saponins, steroidal saponins. Commonly used in dietary supplements.",
+      "category": "herb"
+    },
+    {
+      "standard_name": "Saw Palmetto",
+      "aliases": [
+        "dwarf palm extract",
+        "saw palmetto berry extract",
+        "saw palmetto extract",
+        "serenoa repens",
+        "sabal",
+        "serenoa",
+        "cabbage palm",
+        "saw palmetto fruit extract"
+      ],
+      "markers": [
+        "fatty acids",
+        "lauric acid",
+        "oleic acid",
+        "myristic acid",
+        "sterols"
+      ],
+      "min_threshold": 85,
+      "priority": "high",
+      "last_updated": "2026-01-15",
+      "id": "saw_palmetto",
+      "notes": "Prostate health herb standardized for 85-95% fatty acids and sterols per USP/European standards.",
+      "category": "herb"
+    },
+    {
+      "standard_name": "Schisandra",
+      "aliases": [
+        "schisandra chinensis",
+        "wu wei zi",
+        "schisandra berry extract"
+      ],
+      "markers": [
+        "schisandrins",
+        "lignans"
+      ],
+      "priority": "medium",
+      "last_updated": "2026-01-15",
+      "id": "schisandra",
+      "notes": "Adaptogenic berry standardized for 2% schisandrins (lignans).",
+      "category": "adaptogen",
+      "min_threshold": 2
+    },
+    {
+      "standard_name": "Shatavari",
+      "aliases": [
+        "asparagus racemosus",
+        "asparagus racemosus extract",
+        "shatavari root extract",
+        "wild asparagus"
+      ],
+      "markers": [
+        "saponins",
+        "shatavarin"
+      ],
+      "priority": "medium",
+      "last_updated": "2026-01-15",
+      "id": "shatavari",
+      "notes": "Women's health adaptogen standardized for 40% saponins (shatavarin).",
+      "category": "herb",
+      "min_threshold": 40
+    },
+    {
+      "standard_name": "Shiitake",
+      "aliases": [
+        "lentinula edodes",
+        "shiitake mushroom extract",
+        "lentinan"
+      ],
+      "markers": [
+        "beta-glucans",
+        "lentinan",
+        "polysaccharides"
+      ],
+      "priority": "medium",
+      "last_updated": "2026-01-15",
+      "id": "shiitake",
+      "notes": "Immune support mushroom standardized for 10% beta-glucans or lentinan content.",
+      "category": "mushroom",
+      "min_threshold": 10
+    },
+    {
+      "standard_name": "Shogaols",
+      "aliases": [
+        "shogaols",
+        "shogaol complex",
+        "standardized shogaols",
+        "total shogaols",
+        "ginger shogaols"
+      ],
+      "markers": [
+        "6-shogaol",
+        "8-shogaol",
+        "10-shogaol"
+      ],
+      "priority": "high",
+      "standardization": "dehydrated gingerols",
+      "category": "active_compound",
+      "last_updated": "2025-11-17",
+      "id": "shogaols",
+      "notes": "Botanical ingredient standardized for 6-shogaol, 8-shogaol. Commonly used in dietary supplements."
+    },
+    {
+      "standard_name": "Siberian Ginseng",
+      "aliases": [
+        "eleutherococcus senticosus",
+        "eleuthero",
+        "siberian ginseng extract",
+        "eleuthero root",
+        "ci wu jia"
+      ],
+      "markers": [
+        "eleutherosides"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-11-17",
+      "id": "siberian_ginseng",
+      "notes": "Botanical ingredient standardized for eleutherosides. Commonly used in dietary supplements.",
+      "category": "adaptogen"
+    },
+    {
+      "standard_name": "Slippery Elm",
+      "aliases": [
+        "red elm",
+        "slippery elm bark extract",
+        "ulmus",
+        "ulmus rubra"
+      ],
+      "markers": [
+        "mucilage"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-11-17",
+      "id": "slippery_elm",
+      "notes": "Botanical ingredient standardized for mucilage. Commonly used in dietary supplements.",
+      "category": "herb"
+    },
+    {
+      "standard_name": "Soy Isoflavones",
+      "aliases": [
+        "glycine max",
+        "soy extract",
+        "soy isoflavone extract"
+      ],
+      "markers": [
+        "isoflavones",
+        "genistein",
+        "daidzein",
+        "glycitein"
+      ],
+      "min_threshold": 40,
+      "priority": "high",
+      "last_updated": "2025-11-17",
+      "id": "soy_isoflavones",
+      "notes": "Botanical ingredient standardized for isoflavones, genistein. Commonly used in dietary supplements.",
+      "category": "herb"
+    },
+    {
+      "standard_name": "Spinach",
+      "aliases": [
+        "spinacia oleracea",
+        "spinach leaf",
+        "spinach powder",
+        "spinach extract"
+      ],
+      "markers": [
+        "lutein",
+        "zeaxanthin",
+        "nitrates"
+      ],
+      "priority": "medium",
+      "id": "spinach",
+      "last_updated": "2025-11-17",
+      "notes": "Leafy green used in greens blends for lutein, zeaxanthin, and nitrates. Popular in pre-workout formulas for nitric oxide support.",
+      "category": "vegetable_greens"
+    },
+    {
+      "standard_name": "Spirulina",
+      "aliases": [
+        "arthrospira platensis",
+        "blue-green algae",
+        "spirulina extract",
+        "spirulina platensis",
+        "spirulina powder",
+        "blue-green algae powder",
+        "spirulina algae"
+      ],
+      "markers": [
+        "phycocyanin",
+        "chlorophyll",
+        "beta-carotene",
+        "protein"
+      ],
+      "priority": "medium",
+      "last_updated": "2026-01-15",
+      "id": "spirulina",
+      "notes": "Blue-green algae standardized for 15-25% phycocyanin content. Contains 60-70% protein.",
+      "category": "algae",
+      "min_threshold": 15
+    },
+    {
+      "standard_name": "St. John's Wort",
+      "aliases": [
+        "hypericum perforatum",
+        "st. john's wort extract",
+        "stjohnswort",
+        "saint john's wort",
+        "klamath weed"
+      ],
+      "markers": [
+        "hypericin",
+        "hyperforin"
+      ],
+      "min_threshold": 0.3,
+      "priority": "high",
+      "last_updated": "2025-11-17",
+      "id": "st_john_s_wort",
+      "notes": "Mood support botanical standardized for 0.3% hypericin. Used in mild-to-moderate depression and mood balance supplements. Interacts with many medications.",
+      "category": "herb"
+    },
+    {
+      "standard_name": "Suma",
+      "aliases": [
+        "pfaffia paniculata",
+        "brazilian ginseng",
+        "suma root extract"
+      ],
+      "markers": [
+        "ecdysterones"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-11-17",
+      "id": "suma",
+      "notes": "Botanical ingredient standardized for ecdysterones. Commonly used in dietary supplements.",
+      "category": "herb"
+    },
+    {
+      "standard_name": "Synephrine",
+      "aliases": [
+        "bitter orange",
+        "citrus aurantium",
+        "bitter orange extract"
+      ],
+      "markers": [
+        "synephrine"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-11-17",
+      "id": "synephrine",
+      "notes": "Botanical ingredient standardized for synephrine. Commonly used in dietary supplements.",
+      "category": "herb"
+    },
+    {
+      "standard_name": "Tart Cherry",
+      "aliases": [
+        "montmorency cherry",
+        "prunus cerasus",
+        "sour cherry",
+        "tart cherry extract"
+      ],
+      "markers": [
+        "anthocyanins"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-11-17",
+      "id": "tart_cherry",
+      "notes": "Botanical ingredient standardized for anthocyanins. Commonly used in dietary supplements.",
+      "category": "herb"
+    },
+    {
+      "standard_name": "Thyme",
+      "aliases": [
+        "thymus vulgaris",
+        "thyme extract",
+        "thyme oil"
+      ],
+      "markers": [
+        "thymol",
+        "carvacrol"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-11-17",
+      "id": "thyme",
+      "notes": "Botanical ingredient standardized for thymol, carvacrol. Commonly used in dietary supplements.",
+      "category": "herb"
+    },
+    {
+      "standard_name": "Tongkat Ali",
+      "aliases": [
+        "eurycoma longifolia",
+        "malaysian ginseng",
+        "longjack",
+        "tongkat ali extract"
+      ],
+      "markers": [
+        "eurycomanone",
+        "eurycoma glycosaponins",
+        "quassinoids"
+      ],
+      "priority": "medium",
+      "last_updated": "2026-01-15",
+      "id": "tongkat_ali",
+      "notes": "Men's health herb standardized for 1-2% eurycomanone or expressed as concentration ratio (100:1, 200:1).",
+      "category": "herb",
+      "min_threshold": 1
+    },
+    {
+      "standard_name": "Tribulus",
+      "aliases": [
+        "tribulus terrestris",
+        "tribulus extract",
+        "puncture vine",
+        "gokshura",
+        "tribulus terrestris extract"
+      ],
+      "markers": [
+        "saponins",
+        "protodioscin"
+      ],
+      "min_threshold": 45,
+      "priority": "medium",
+      "last_updated": "2026-01-15",
+      "id": "tribulus",
+      "notes": "Men's health herb standardized for 45% saponins (protodioscin is key marker).",
+      "category": "herb"
+    },
+    {
+      "standard_name": "Turkey Tail",
+      "aliases": [
+        "trametes versicolor",
+        "turkey tail mushroom",
+        "coriolus versicolor",
+        "PSK",
+        "PSP"
+      ],
+      "markers": [
+        "polysaccharides",
+        "PSK",
+        "PSP",
+        "beta-glucans"
+      ],
+      "priority": "high",
+      "last_updated": "2026-01-15",
+      "id": "turkey_tail",
+      "notes": "Immune support mushroom standardized for 30%+ polysaccharides (PSK, PSP).",
+      "category": "mushroom",
+      "min_threshold": 30
+    },
+    {
+      "standard_name": "Turmeric",
+      "aliases": [
+        "curcuma longa",
+        "indian saffron",
+        "turmeric extract",
+        "turmeric root",
+        "turmeric powder",
+        "haldi",
+        "turmeric curcumin",
+        "turmeric root powder"
+      ],
+      "markers": [
+        "curcuminoids",
+        "curcumin",
+        "demethoxycurcumin",
+        "bisdemethoxycurcumin"
+      ],
+      "min_threshold": 95,
+      "priority": "high",
+      "last_updated": "2026-01-15",
+      "id": "turmeric",
+      "notes": "Anti-inflammatory spice standardized for 95% curcuminoids when in extract form. Raw turmeric contains only 2-5% curcuminoids.",
+      "category": "herb"
+    },
+    {
+      "standard_name": "Uva Ursi",
+      "aliases": [
+        "arctostaphylos uva-ursi",
+        "bearberry",
+        "uva ursi extract"
+      ],
+      "markers": [
+        "arbutin"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-11-17",
+      "id": "uva_ursi",
+      "notes": "Botanical ingredient standardized for arbutin. Commonly used in dietary supplements.",
+      "category": "herb"
+    },
+    {
+      "standard_name": "Valerian",
+      "aliases": [
+        "garden heliotrope",
+        "valerian root extract",
+        "valeriana",
+        "valeriana officinalis",
+        "valerian officinalis",
+        "all-heal",
+        "garden valerian"
+      ],
+      "markers": [
+        "valerenic acid",
+        "valepotriates",
+        "acetoxyvalerenic acid"
+      ],
+      "min_threshold": 0.8,
+      "priority": "high",
+      "last_updated": "2026-01-15",
+      "id": "valerian",
+      "notes": "Sleep support herb standardized for 0.8% valerenic acid per German Commission E recommendations.",
+      "category": "herb"
+    },
+    {
+      "standard_name": "Wheatgrass",
+      "aliases": [
+        "triticum",
+        "triticum aestivum",
+        "wheat grass juice",
+        "wheatgrass powder"
+      ],
+      "markers": [
+        "chlorophyll"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-11-17",
+      "id": "wheatgrass",
+      "notes": "Botanical ingredient standardized for chlorophyll. Commonly used in dietary supplements.",
+      "category": "herb"
+    },
+    {
+      "standard_name": "White Willow Bark",
+      "aliases": [
+        "salix alba",
+        "salix alba extract",
+        "white willow bark extract",
+        "willow bark"
+      ],
+      "markers": [
+        "salicin",
+        "salicylates"
+      ],
+      "priority": "medium",
+      "last_updated": "2026-01-15",
+      "id": "white_willow_bark",
+      "notes": "Natural pain relief herb standardized for 15% salicin. Natural aspirin precursor.",
+      "category": "herb_root_bark",
+      "min_threshold": 15
+    },
+    {
+      "standard_name": "Wild Yam",
+      "aliases": [
+        "dioscorea extract",
+        "dioscorea villosa",
+        "mexican yam",
+        "wild yam extract"
+      ],
+      "markers": [
+        "diosgenin"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-11-17",
+      "id": "wild_yam",
+      "notes": "Botanical ingredient standardized for diosgenin. Commonly used in dietary supplements.",
+      "category": "herb"
+    },
+    {
+      "standard_name": "Yellow Dock",
+      "aliases": [
+        "curly dock",
+        "rumex",
+        "rumex crispus",
+        "yellow dock root extract"
+      ],
+      "markers": [
+        "anthraquinones"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-11-17",
+      "id": "yellow_dock",
+      "notes": "Botanical ingredient standardized for anthraquinones. Commonly used in dietary supplements.",
+      "category": "herb"
+    },
+    {
+      "standard_name": "Yerba Mate",
+      "aliases": [
+        "ilex",
+        "ilex paraguariensis",
+        "mate tea",
+        "yerba mate extract"
+      ],
+      "markers": [
+        "caffeine",
+        "theobromine",
+        "chlorogenic acid"
+      ],
+      "priority": "medium",
+      "last_updated": "2026-01-15",
+      "id": "yerba_mate",
+      "notes": "Energy herb containing 1-2% caffeine plus theobromine and chlorogenic acids.",
+      "category": "herb",
+      "min_threshold": 1
+    },
+    {
+      "standard_name": "Yohimbe",
+      "aliases": [
+        "pausinystalia",
+        "pausinystalia yohimbe",
+        "yohimbe bark",
+        "yohimbe bark extract"
+      ],
+      "markers": [
+        "yohimbine"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-11-17",
+      "id": "yohimbe",
+      "notes": "Botanical ingredient standardized for yohimbine. Commonly used in dietary supplements.",
+      "category": "herb"
+    },
+    {
+      "standard_name": "Yucca",
+      "aliases": [
+        "mojave yucca",
+        "yucca extract",
+        "yucca root",
+        "yucca schidigera"
+      ],
+      "markers": [
+        "saponins"
+      ],
+      "priority": "medium",
+      "last_updated": "2025-11-17",
+      "id": "yucca",
+      "notes": "Botanical ingredient standardized for saponins. Commonly used in dietary supplements.",
+      "category": "herb"
+    },
+    {
+      "standard_name": "KSM-66 Ashwagandha",
+      "aliases": [
+        "KSM-66 Ashwagandha root extract",
+        "KSM66 Ashwagandha root extract",
+        "KSM66 Ashwagandha (Withania somnifera) root extract"
+      ],
+      "markers": [
+        "withanolides"
+      ],
+      "priority": "medium",
+      "last_updated": "2026-01-05",
+      "id": "ksm_66_ashwagandha",
+      "notes": "Brand/standardized extract added from unmapped list; markers unknown.",
+      "category": "herb"
+    },
+    {
+      "standard_name": "EPs 7630",
+      "aliases": [
+        "EPs 7630"
+      ],
+      "markers": [
+        "polyphenols"
+      ],
+      "priority": "medium",
+      "last_updated": "2026-01-05",
+      "id": "eps_7630",
+      "notes": "Brand/standardized extract added from unmapped list; markers unknown.",
+      "category": "herb"
+    },
+    {
+      "standard_name": "Lutemax 2020",
+      "aliases": [
+        "Lutemax 2020",
+        "Lutemax 2020 Marigold extract",
+        "Lutemax 2020 Marigold flower extract"
+      ],
+      "markers": [
+        "lutein",
+        "zeaxanthin"
+      ],
+      "priority": "medium",
+      "last_updated": "2026-01-05",
+      "id": "lutemax_2020",
+      "notes": "Brand/standardized extract added from unmapped list; markers unknown.",
+      "category": "herb"
+    },
+    {
+      "standard_name": "FloraGLO",
+      "aliases": [
+        "FloraGLO"
+      ],
+      "markers": [
+        "lutein"
+      ],
+      "priority": "medium",
+      "last_updated": "2026-01-05",
+      "id": "floraglo",
+      "notes": "Brand/standardized extract added from unmapped list; markers unknown.",
+      "category": "herb"
+    },
+    {
+      "standard_name": "AstaZine",
+      "aliases": [
+        "AstaZine",
+        "Astaferm"
+      ],
+      "markers": [
+        "astaxanthin"
+      ],
+      "priority": "medium",
+      "last_updated": "2026-01-05",
+      "id": "astazine",
+      "notes": "Brand/standardized extract added from unmapped list; markers unknown.",
+      "category": "herb"
+    },
+    {
+      "standard_name": "Cognizin Citicoline",
+      "aliases": [
+        "Cognizin Citicoline"
+      ],
+      "markers": [],
+      "priority": "medium",
+      "last_updated": "2026-01-05",
+      "id": "cognizin_citicoline",
+      "notes": "Brand/standardized extract added from unmapped list; markers unknown.",
+      "category": "standardized"
+    },
+    {
+      "standard_name": "AlphaWave L-Theanine",
+      "aliases": [
+        "AlphaWave L-Theanine",
+        "L-Theanine AlphaWave"
+      ],
+      "markers": [],
+      "priority": "medium",
+      "last_updated": "2026-01-05",
+      "id": "alphawave_l_theanine",
+      "notes": "Brand/standardized extract added from unmapped list; markers unknown.",
+      "category": "standardized"
+    },
+    {
+      "standard_name": "SunActive Iron",
+      "aliases": [
+        "SunActive Iron"
+      ],
+      "markers": [],
+      "priority": "medium",
+      "last_updated": "2026-01-05",
+      "id": "sunactive_iron",
+      "notes": "Brand/standardized extract added from unmapped list; markers unknown.",
+      "category": "standardized"
+    },
+    {
+      "standard_name": "MicroActive Melatonin",
+      "aliases": [
+        "MicroActive Melatonin"
+      ],
+      "markers": [],
+      "priority": "medium",
+      "last_updated": "2026-01-05",
+      "id": "microactive_melatonin",
+      "notes": "Brand/standardized extract added from unmapped list; markers unknown.",
+      "category": "standardized"
+    },
+    {
+      "standard_name": "Wellmune",
+      "aliases": [
+        "Wellmune Baker's Yeast Beta Glucan",
+        "wellmune beta glucan"
+      ],
+      "markers": [],
+      "priority": "medium",
+      "last_updated": "2026-01-05",
+      "id": "wellmune",
+      "notes": "Brand/standardized extract added from unmapped list; markers unknown.",
+      "category": "standardized"
+    },
+    {
+      "standard_name": "EpiCor",
+      "aliases": [
+        "EpiCor High-Metabolite Immunogens"
+      ],
+      "markers": [],
+      "priority": "medium",
+      "last_updated": "2026-01-05",
+      "id": "epicor",
+      "notes": "Brand/standardized extract added from unmapped list; markers unknown.",
+      "category": "standardized"
+    },
+    {
+      "standard_name": "EnXtra",
+      "aliases": [
+        "EnXtra"
+      ],
+      "markers": [],
+      "priority": "medium",
+      "last_updated": "2026-01-05",
+      "id": "enxtra",
+      "notes": "Brand/standardized extract added from unmapped list; markers unknown.",
+      "category": "standardized"
+    },
+    {
+      "standard_name": "Saffr'Activ",
+      "aliases": [
+        "Saffr'Activ"
+      ],
+      "markers": [],
+      "priority": "medium",
+      "last_updated": "2026-01-05",
+      "id": "saffr_activ",
+      "notes": "Brand/standardized extract added from unmapped list; markers unknown.",
+      "category": "standardized"
+    },
+    {
+      "standard_name": "TurmiPure Gold",
+      "aliases": [
+        "TurmiPure Gold"
+      ],
+      "markers": [
+        "curcuminoids"
+      ],
+      "priority": "medium",
+      "last_updated": "2026-01-05",
+      "id": "turmipure_gold",
+      "notes": "Brand/standardized extract added from unmapped list; markers unknown.",
+      "category": "herb"
+    },
+    {
+      "standard_name": "Morosil",
+      "aliases": [
+        "Morosil Sicilian Red Orange Fruit Extract"
+      ],
+      "markers": [],
+      "priority": "medium",
+      "last_updated": "2026-01-05",
+      "id": "morosil",
+      "notes": "Brand/standardized extract added from unmapped list; markers unknown.",
+      "category": "standardized"
+    },
+    {
+      "standard_name": "Chromax",
+      "aliases": [
+        "Chromax",
+        "Cromax"
+      ],
+      "markers": [],
+      "priority": "medium",
+      "last_updated": "2026-01-05",
+      "id": "chromax",
+      "notes": "Brand/standardized extract added from unmapped list; markers unknown.",
+      "category": "standardized"
+    },
+    {
+      "standard_name": "Life's DHA",
+      "aliases": [
+        "Life's DHA",
+        "life'sDHA"
+      ],
+      "markers": [],
+      "priority": "medium",
+      "last_updated": "2026-01-05",
+      "id": "life_s_dha",
+      "notes": "Brand/standardized extract added from unmapped list; markers unknown.",
+      "category": "standardized"
+    },
+    {
+      "standard_name": "Proanthoplex",
+      "aliases": [
+        "Proanthoplex"
+      ],
+      "markers": [],
+      "priority": "medium",
+      "last_updated": "2026-01-05",
+      "id": "proanthoplex",
+      "notes": "Brand/standardized extract added from unmapped list; markers unknown.",
+      "category": "standardized"
+    },
+    {
+      "standard_name": "FruiteX-B Calcium Fructoborate",
+      "aliases": [
+        "FruiteX-B Calcium Fructoborate"
+      ],
+      "markers": [],
+      "priority": "medium",
+      "last_updated": "2026-01-05",
+      "id": "fruitex_b_calcium_fructoborate",
+      "notes": "Brand/standardized extract added from unmapped list; markers unknown.",
+      "category": "standardized"
+    },
+    {
+      "standard_name": "CranRx",
+      "aliases": [
+        "CranRx"
+      ],
+      "markers": [],
+      "priority": "medium",
+      "last_updated": "2026-01-05",
+      "id": "cranrx",
+      "notes": "Brand/standardized extract added from unmapped list; markers unknown.",
+      "category": "standardized"
+    },
+    {
+      "standard_name": "Levagen",
+      "aliases": [
+        "Levagen"
+      ],
+      "markers": [],
+      "priority": "medium",
+      "last_updated": "2026-01-05",
+      "id": "levagen",
+      "notes": "Brand/standardized extract added from unmapped list; markers unknown.",
+      "category": "standardized"
+    },
+    {
+      "standard_name": "Uniflex",
+      "aliases": [
+        "Uniflex"
+      ],
+      "markers": [],
+      "priority": "medium",
+      "last_updated": "2026-01-05",
+      "id": "uniflex",
+      "notes": "Brand/standardized extract added from unmapped list; markers unknown.",
+      "category": "standardized"
+    },
+    {
+      "standard_name": "Thermosil",
+      "aliases": [
+        "Thermosil"
+      ],
+      "markers": [],
+      "priority": "medium",
+      "last_updated": "2026-01-05",
+      "id": "thermosil",
+      "notes": "Brand/standardized extract added from unmapped list; markers unknown.",
+      "category": "standardized"
+    },
+    {
+      "standard_name": "Setria",
+      "aliases": [
+        "Setria"
+      ],
+      "markers": [],
+      "priority": "medium",
+      "last_updated": "2026-01-05",
+      "id": "setria",
+      "notes": "Brand/standardized extract added from unmapped list; markers unknown.",
+      "category": "standardized"
+    },
+    {
+      "standard_name": "KeraGLO",
+      "aliases": [
+        "KeraGLO"
+      ],
+      "markers": [],
+      "priority": "medium",
+      "last_updated": "2026-01-05",
+      "id": "keraglo",
+      "notes": "Brand/standardized extract added from unmapped list; markers unknown.",
+      "category": "standardized"
+    },
+    {
+      "standard_name": "Flowens",
+      "aliases": [
+        "Flowens",
+        "organic Flowens whole Cranberry"
+      ],
+      "markers": [
+        "proanthocyanidins"
+      ],
+      "priority": "medium",
+      "last_updated": "2026-01-05",
+      "id": "flowens",
+      "notes": "Brand/standardized extract added from unmapped list; markers unknown.",
+      "category": "standardized"
+    },
+    {
+      "standard_name": "Enovita",
+      "aliases": [
+        "Enovita"
+      ],
+      "markers": [],
+      "priority": "medium",
+      "last_updated": "2026-01-05",
+      "id": "enovita",
+      "notes": "Brand/standardized extract added from unmapped list; markers unknown.",
+      "category": "standardized"
+    },
+    {
+      "standard_name": "Cran-Max",
+      "aliases": [
+        "Cran-Max Cranberry concentrate"
+      ],
+      "markers": [
+        "proanthocyanidins"
+      ],
+      "priority": "medium",
+      "last_updated": "2026-01-05",
+      "id": "cran_max",
+      "notes": "Brand/standardized extract added from unmapped list; markers unknown if not specified.",
+      "category": "standardized"
+    },
+    {
+      "standard_name": "Pacran",
+      "aliases": [
+        "Pacran",
+        "organic Pacran whole Cranberry"
+      ],
+      "markers": [
+        "proanthocyanidins"
+      ],
+      "priority": "medium",
+      "last_updated": "2026-01-05",
+      "id": "pacran",
+      "notes": "Brand/standardized extract added from unmapped list; markers unknown if not specified.",
+      "category": "standardized"
+    },
+    {
+      "standard_name": "Bil-Max",
+      "aliases": [
+        "Bil-Max Bilberry Concentrate"
+      ],
+      "markers": [
+        "anthocyanins"
+      ],
+      "priority": "medium",
+      "last_updated": "2026-01-05",
+      "id": "bil_max",
+      "notes": "Brand/standardized extract added from unmapped list; markers unknown if not specified.",
+      "category": "standardized"
+    },
+    {
+      "standard_name": "Blue-Max",
+      "aliases": [
+        "Blue-Max Blueberry Concentrate"
+      ],
+      "markers": [
+        "anthocyanins"
+      ],
+      "priority": "medium",
+      "last_updated": "2026-01-05",
+      "id": "blue_max",
+      "notes": "Brand/standardized extract added from unmapped list; markers unknown if not specified.",
+      "category": "standardized"
+    },
+    {
+      "standard_name": "Sharp-PS Green",
+      "aliases": [
+        "Sharp-PS Green"
+      ],
+      "markers": [
+        "phosphatidylserine"
+      ],
+      "priority": "medium",
+      "last_updated": "2026-01-05",
+      "id": "sharp_ps_green",
+      "notes": "Brand/standardized extract added from unmapped list; markers unknown if not specified.",
+      "category": "standardized"
+    },
+    {
+      "standard_name": "Slimbione",
+      "aliases": [
+        "Slimbione"
+      ],
+      "markers": [],
+      "priority": "medium",
+      "last_updated": "2026-01-05",
+      "id": "slimbione",
+      "notes": "Brand/standardized extract added from unmapped list; markers unknown if not specified.",
+      "category": "standardized"
+    },
+    {
+      "standard_name": "Organic Gold Standard Potentiating Nutrients",
+      "aliases": [
+        "Organic Gold Standard Potentiating Nutrients"
+      ],
+      "markers": [],
+      "priority": "medium",
+      "last_updated": "2026-01-05",
+      "id": "organic_gold_standard_potentiating_nutrients",
+      "notes": "Brand/standardized extract added from unmapped list; markers unknown if not specified.",
+      "category": "standardized"
+    },
+    {
+      "standard_name": "Fadogia Agrestis",
+      "aliases": [
+        "fadogia",
+        "fadogia agrestis stem extract",
+        "black aphrodisiac"
+      ],
+      "markers": [
+        "saponins",
+        "alkaloids"
+      ],
+      "priority": "high",
+      "category": "herb",
+      "id": "fadogia_agrestis",
+      "notes": "African herb traditionally used for testosterone support. Limited clinical research - use with caution due to potential liver/kidney concerns.",
+      "last_updated": "2026-01-05"
+    },
+    {
+      "standard_name": "Cistanche",
+      "aliases": [
+        "cistanche tubulosa",
+        "cistanche deserticola",
+        "rou cong rong",
+        "desert hyacinth",
+        "cistanche extract"
+      ],
+      "markers": [
+        "echinacoside",
+        "acteoside",
+        "phenylethanoid glycosides"
+      ],
+      "priority": "medium",
+      "min_threshold": 10,
+      "category": "adaptogen",
+      "id": "cistanche",
+      "notes": "Traditional Chinese medicine herb used for energy and vitality. Standardized for echinacoside content.",
+      "last_updated": "2026-01-05"
+    },
+    {
+      "standard_name": "Shilajit",
+      "aliases": [
+        "shilajit extract",
+        "mumijo",
+        "mineral pitch",
+        "asphaltum punjabinum",
+        "primavie",
+        "asphaltum punjabianum",
+        "asphaltum"
+      ],
+      "markers": [
+        "fulvic acid",
+        "dibenzo-alpha-pyrones",
+        "humic acid"
+      ],
+      "priority": "high",
+      "min_threshold": 50,
+      "category": "adaptogen",
+      "id": "shilajit",
+      "notes": "Himalayan mineral resin standardized for fulvic acid (50%+). Used in Ayurveda for energy and rejuvenation.",
+      "last_updated": "2026-01-05"
+    },
+    {
+      "standard_name": "Sea Buckthorn",
+      "aliases": [
+        "hippophae rhamnoides",
+        "sea buckthorn berry",
+        "sea buckthorn oil",
+        "seaberry",
+        "sea buckthorn extract",
+        "seabuckthorn fruit oil",
+        "seabuckthorn oil",
+        "sea buckthorn fruit oil"
+      ],
+      "markers": [
+        "omega-7",
+        "palmitoleic acid",
+        "carotenoids",
+        "vitamin E"
+      ],
+      "priority": "medium",
+      "category": "seed_fruit",
+      "id": "sea_buckthorn",
+      "notes": "Berry rich in omega-7 fatty acids and antioxidants. Used for skin health and mucous membrane support.",
+      "last_updated": "2026-01-05"
+    },
+    {
+      "standard_name": "Tremella",
+      "aliases": [
+        "tremella fuciformis",
+        "snow fungus",
+        "silver ear mushroom",
+        "white jelly mushroom",
+        "tremella extract"
+      ],
+      "markers": [
+        "polysaccharides",
+        "beta-glucans"
+      ],
+      "priority": "medium",
+      "category": "mushroom",
+      "id": "tremella",
+      "notes": "Beauty mushroom known for skin-hydrating polysaccharides. Traditional use in Chinese medicine.",
+      "last_updated": "2026-01-05"
+    },
+    {
+      "standard_name": "Agaricus Blazei",
+      "aliases": [
+        "agaricus blazei murill",
+        "agaricus brasiliensis",
+        "himematsutake",
+        "royal sun mushroom",
+        "abm mushroom"
+      ],
+      "markers": [
+        "beta-glucans",
+        "ergosterol"
+      ],
+      "priority": "medium",
+      "category": "mushroom",
+      "id": "agaricus_blazei",
+      "notes": "Medicinal mushroom with high beta-glucan content. Used for immune support.",
+      "last_updated": "2026-01-05"
+    },
+    {
+      "standard_name": "Muira Puama",
+      "aliases": [
+        "ptychopetalum olacoides",
+        "potency wood",
+        "marapuama",
+        "muira puama bark extract"
+      ],
+      "markers": [
+        "sterols",
+        "lupeol"
+      ],
+      "priority": "medium",
+      "category": "herb",
+      "id": "muira_puama",
+      "notes": "Men's health herb often sold as crude extract (4:1 to 10:1 concentration ratio).",
+      "last_updated": "2026-01-15",
+      "min_threshold": 1
+    },
+    {
+      "standard_name": "Pumpkin Seed",
+      "aliases": [
+        "cucurbita pepo",
+        "pumpkin seed extract",
+        "pumpkin seed oil",
+        "pepita"
+      ],
+      "markers": [
+        "fatty acids",
+        "zinc",
+        "phytosterols"
+      ],
+      "priority": "medium",
+      "category": "seed_fruit",
+      "id": "pumpkin_seed",
+      "notes": "Prostate health seed standardized for 85% fatty acids when as oil extract.",
+      "last_updated": "2026-01-15",
+      "min_threshold": 85
+    },
+    {
+      "standard_name": "D-Mannose",
+      "aliases": [
+        "d mannose",
+        "mannose"
+      ],
+      "markers": [
+        "mannose"
+      ],
+      "priority": "high",
+      "category": "active_compound",
+      "id": "d_mannose",
+      "notes": "Simple sugar used for urinary tract health. Not a botanical but commonly found in supplement formulas.",
+      "last_updated": "2026-01-05"
+    },
+    {
+      "standard_name": "Lion's Mane",
+      "aliases": [
+        "hericium erinaceus",
+        "lions mane mushroom",
+        "yamabushitake",
+        "hedgehog mushroom",
+        "lion's mane extract"
+      ],
+      "markers": [
+        "beta-glucans",
+        "hericenones",
+        "erinacines"
+      ],
+      "priority": "high",
+      "min_threshold": 10,
+      "category": "mushroom",
+      "id": "lions_mane",
+      "notes": "Cognitive mushroom standardized for beta-glucans (10-40%) and nerve growth factors (hericenones, erinacines).",
+      "last_updated": "2026-01-15"
+    },
+    {
+      "standard_name": "Phosphatidylserine",
+      "aliases": [
+        "ps",
+        "phosphatidyl serine",
+        "sharp ps",
+        "sunps"
+      ],
+      "markers": [
+        "phosphatidylserine"
+      ],
+      "priority": "high",
+      "min_threshold": 100,
+      "category": "active_compound",
+      "id": "phosphatidylserine",
+      "notes": "Phospholipid important for brain cell membranes. Supports cognitive function and stress response.",
+      "last_updated": "2026-01-05"
+    },
+    {
+      "standard_name": "Cat's Claw",
+      "aliases": [
+        "uncaria tomentosa",
+        "cats claw bark",
+        "una de gato",
+        "cat's claw extract"
+      ],
+      "markers": [
+        "oxindole alkaloids",
+        "pentacyclic oxindole alkaloids",
+        "POAs"
+      ],
+      "priority": "medium",
+      "category": "herb",
+      "id": "cats_claw",
+      "notes": "Joint and immune support herb standardized for 3% oxindole alkaloids (pentacyclic type preferred).",
+      "last_updated": "2026-01-15",
+      "min_threshold": 3
+    },
+    {
+      "standard_name": "Devil's Claw",
+      "aliases": [
+        "harpagophytum procumbens",
+        "devils claw root",
+        "grapple plant",
+        "devil's claw extract"
+      ],
+      "markers": [
+        "harpagoside",
+        "harpagide"
+      ],
+      "priority": "medium",
+      "min_threshold": 2,
+      "category": "herb",
+      "id": "devils_claw",
+      "notes": "Joint health herb standardized for 2% harpagosides. Clinical studies use 50-100mg harpagoside daily.",
+      "last_updated": "2026-01-15"
+    },
+    {
+      "standard_name": "Bromelain",
+      "aliases": [
+        "bromelain enzyme",
+        "pineapple enzyme",
+        "pineapple bromelain"
+      ],
+      "markers": [
+        "bromelain",
+        "proteolytic enzymes"
+      ],
+      "priority": "high",
+      "min_threshold": null,
+      "category": "active_compound",
+      "id": "bromelain",
+      "notes": "Pineapple enzyme standardized by activity (GDU/g or MCU/mg), NOT percentage. 2400 GDU/g is standard potency. 1 GDU = ~1.5 MCU.",
+      "last_updated": "2026-01-15",
+      "standardization_type": "activity",
+      "standardization_unit": "GDU/g",
+      "recommended_activity": 2400
+    },
+    {
+      "standard_name": "Pelargonium Sidoides",
+      "aliases": [
+        "pelargonium",
+        "umckaloabo",
+        "south african geranium",
+        "eps 7630",
+        "pelargonium sidoides extract"
+      ],
+      "markers": [
+        "coumarins",
+        "polyphenols"
+      ],
+      "priority": "high",
+      "category": "herb",
+      "id": "pelargonium_sidoides",
+      "notes": "South African plant extract (EPs 7630) clinically studied for respiratory health support.",
+      "last_updated": "2026-01-05"
+    },
+    {
+      "standard_name": "Eucalyptus",
+      "aliases": [
+        "eucalyptus globulus",
+        "eucalyptus leaf",
+        "eucalyptus oil",
+        "eucalyptus extract"
+      ],
+      "markers": [
+        "eucalyptol",
+        "1,8-cineole"
+      ],
+      "priority": "medium",
+      "category": "essential_oil",
+      "id": "eucalyptus",
+      "notes": "Aromatic plant used for respiratory support. Contains eucalyptol (1,8-cineole).",
+      "last_updated": "2026-01-05"
+    },
+    {
+      "standard_name": "Fennel",
+      "aliases": [
+        "foeniculum vulgare",
+        "fennel seed",
+        "fennel extract",
+        "sweet fennel"
+      ],
+      "markers": [
+        "anethole",
+        "fenchone"
+      ],
+      "priority": "medium",
+      "category": "seed_fruit",
+      "id": "fennel",
+      "notes": "Digestive herb containing anethole. Used for bloating and digestive comfort.",
+      "last_updated": "2026-01-05"
+    },
+    {
+      "standard_name": "Caraway",
+      "aliases": [
+        "carum carvi",
+        "caraway seed",
+        "caraway oil",
+        "caraway extract"
+      ],
+      "markers": [
+        "carvone",
+        "limonene"
+      ],
+      "priority": "medium",
+      "category": "seed_fruit",
+      "id": "caraway",
+      "notes": "Digestive seed containing carvone. Often combined with peppermint for IBS support.",
+      "last_updated": "2026-01-05"
+    },
+    {
+      "standard_name": "Gentian",
+      "aliases": [
+        "gentiana lutea",
+        "gentian root",
+        "yellow gentian",
+        "bitter root"
+      ],
+      "markers": [
+        "gentiopicroside",
+        "amarogentin"
+      ],
+      "priority": "medium",
+      "category": "herb_root_bark",
+      "id": "gentian",
+      "notes": "Extremely bitter herb used as digestive tonic. Stimulates stomach acid and bile production.",
+      "last_updated": "2026-01-05"
+    },
+    {
+      "standard_name": "Wormwood",
+      "aliases": [
+        "artemisia absinthium",
+        "wormwood extract",
+        "absinthium",
+        "grand wormwood"
+      ],
+      "markers": [
+        "thujone",
+        "absinthin",
+        "artemisinin"
+      ],
+      "priority": "medium",
+      "category": "herb",
+      "id": "wormwood",
+      "notes": "Bitter herb used for digestive and antimicrobial support. Use with caution due to thujone content.",
+      "last_updated": "2026-01-05"
+    },
+    {
+      "standard_name": "Aronia",
+      "aliases": [
+        "aronia melanocarpa",
+        "chokeberry",
+        "black chokeberry",
+        "aronia berry extract"
+      ],
+      "markers": [
+        "anthocyanins",
+        "proanthocyanidins"
+      ],
+      "priority": "medium",
+      "category": "seed_fruit",
+      "id": "aronia",
+      "notes": "High-antioxidant berry with exceptional anthocyanin content.",
+      "last_updated": "2026-01-05"
+    },
+    {
+      "standard_name": "Monascus",
+      "aliases": [
+        "monascus purpureus",
+        "red yeast rice",
+        "hong qu",
+        "red rice yeast"
+      ],
+      "markers": [
+        "monacolin K",
+        "lovastatin"
+      ],
+      "priority": "high",
+      "min_threshold": 0.4,
+      "category": "standardized",
+      "id": "monascus",
+      "notes": "Fermented rice product containing monacolin K (same as lovastatin). Used for cholesterol support. FDA regulated.",
+      "last_updated": "2026-01-05"
+    },
+    {
+      "standard_name": "Galdieria",
+      "aliases": [
+        "galdieria sulphuraria",
+        "galdieria extract",
+        "galdieria blue"
+      ],
+      "markers": [
+        "c-phycocyanin",
+        "phycocyanin"
+      ],
+      "priority": "medium",
+      "category": "algae",
+      "id": "galdieria",
+      "notes": "Red algae producing blue phycocyanin pigment. FDA approved May 2025 as natural food colorant.",
+      "last_updated": "2026-01-05"
+    },
+    {
+      "standard_name": "Grains of Paradise",
+      "id": "grains_of_paradise",
+      "aliases": [
+        "aframomum melegueta",
+        "guinea pepper",
+        "melegueta pepper",
+        "grains of paradise extract",
+        "paradoxine",
+        "gp extract"
+      ],
+      "markers": [
+        "6-paradol",
+        "6-gingerol",
+        "6-shogaol"
+      ],
+      "category": "herb",
+      "priority": "medium",
+      "notes": "African spice used for thermogenesis and metabolism. Contains 6-paradol which activates brown fat.",
+      "last_updated": "2026-01-05"
+    },
+    {
+      "standard_name": "Black Musli",
+      "id": "black_musli",
+      "aliases": [
+        "curculigo orchioides",
+        "black musli extract",
+        "kali musli",
+        "talamuli",
+        "musli kand"
+      ],
+      "markers": [
+        "curculigosides",
+        "curculigoside A",
+        "saponins"
+      ],
+      "category": "herb",
+      "priority": "medium",
+      "notes": "Ayurvedic herb (Curculigo orchioides) used for vitality and testosterone support.",
+      "last_updated": "2026-01-05"
+    },
+    {
+      "standard_name": "Akarkara",
+      "id": "akarkara",
+      "aliases": [
+        "anacyclus pyrethrum",
+        "akarkara extract",
+        "pellitory root",
+        "spanish chamomile",
+        "akarkara root"
+      ],
+      "markers": [
+        "pellitorine",
+        "anacyclin",
+        "pyrethrin"
+      ],
+      "category": "herb",
+      "priority": "medium",
+      "notes": "Ayurvedic herb traditionally used for libido, oral health, and nerve stimulation.",
+      "last_updated": "2026-01-05"
+    },
+    {
+      "standard_name": "Blackberry",
+      "id": "blackberry",
+      "aliases": [
+        "rubus fruticosus",
+        "blackberry fruit extract",
+        "blackberry extract",
+        "blackberry juice",
+        "blackberry powder"
+      ],
+      "markers": [
+        "anthocyanins",
+        "ellagic acid",
+        "cyanidin-3-glucoside"
+      ],
+      "category": "seed_fruit",
+      "priority": "medium",
+      "notes": "Berry rich in anthocyanins and ellagic acid. High antioxidant capacity.",
+      "last_updated": "2026-01-05"
+    },
+    {
+      "standard_name": "Cognigrape",
+      "id": "cognigrape",
+      "aliases": [
+        "cognigrape",
+        "gognigrape",
+        "grape seed cognitive extract"
+      ],
+      "markers": [
+        "proanthocyanidins",
+        "polyphenols"
+      ],
+      "category": "standardized",
+      "priority": "medium",
+      "notes": "Branded grape seed extract standardized for cognitive health benefits.",
+      "last_updated": "2026-01-05"
+    },
+    {
+      "standard_name": "NeuroFactor",
+      "id": "neurofactor",
+      "aliases": [
+        "neurofactor",
+        "coffee fruit extract",
+        "coffeeberry extract",
+        "whole coffee fruit extract"
+      ],
+      "markers": [
+        "BDNF",
+        "chlorogenic acid",
+        "polyphenols"
+      ],
+      "category": "standardized",
+      "priority": "high",
+      "notes": "Patented coffee fruit extract shown to increase BDNF (brain-derived neurotrophic factor).",
+      "last_updated": "2026-01-05"
+    },
+    {
+      "standard_name": "Slendesta",
+      "id": "slendesta",
+      "aliases": [
+        "slendesta",
+        "potato protein extract",
+        "proteinase inhibitor II",
+        "PI2"
+      ],
+      "markers": [
+        "proteinase inhibitor II"
+      ],
+      "category": "standardized",
+      "priority": "medium",
+      "notes": "Patented potato protein extract that promotes satiety by triggering CCK release.",
+      "last_updated": "2026-01-05"
+    }
+  ],
+  "_metadata": {
+    "database_info": {
+      "name": "Standardized Botanicals Database",
+      "description": "Botanical extracts, herbs, and plant-derived ingredients with standardization markers and thresholds",
+      "version": "2.1.0",
+      "last_updated": "2026-01-05",
+      "sources": [
+        "American Botanical Council (abc.herbalgram.org)",
+        "Natural Medicines Comprehensive Database",
+        "USP Dietary Supplement Standards",
+        "European Pharmacopoeia botanical monographs",
+        "FDA GRAS and NDI notifications"
+      ]
+    },
+    "purpose": "ingredient_mapping_and_standardization",
+    "scoring_rule": "Botanicals with min_threshold are scored higher when meeting standardization requirements. Priority level affects matching weight.",
+    "schema_version": "2.1",
+    "total_entries": 244,
+    "required_fields": [
+      "id",
+      "standard_name",
+      "aliases",
+      "markers",
+      "category",
+      "notes",
+      "priority",
+      "last_updated"
+    ],
+    "optional_fields": [
+      "min_threshold"
+    ],
+    "categories": {
+      "herb": 134,
+      "adaptogen": 9,
+      "root": 2,
+      "herb_root_bark": 8,
+      "seed_fruit": 18,
+      "standardized_extract": 3,
+      "essential_oil": 2,
+      "algae": 4,
+      "vegetable_greens": 6,
+      "mushroom": 11,
+      "bark": 1,
+      "polyphenol": 1,
+      "fruit": 1,
+      "active_compound": 6,
+      "leaf": 2,
+      "standardized": 29
+    },
+    "statistics": {
+      "total_aliases": 911,
+      "entries_with_threshold": 58,
+      "high_priority": 67,
+      "medium_priority": 170
+    },
+    "pipeline_integration": "Used by cleaning script to standardize botanical ingredient names and by enrichment script to identify quality markers",
+    "last_updated": "2026-01-05"
+  }
+}

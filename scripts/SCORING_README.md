@@ -20,11 +20,13 @@ python3 score_supplements.py --dry-run
 ## Scoring Breakdown (80 Points Total)
 
 ### Section A: Ingredient Bio-Score & Dosing (0-25 pts)
+
 - **Single nutrient**: `bio_score × dosage_importance` (capped at 25)
 - **Multivitamin**: Average of top 5 key vitamins/minerals
 - **Multi-ingredient**: Weighted average based on dosage importance
 
 ### Section B: Delivery System & Absorption (0-15 pts)
+
 - **Delivery tiers**:
   - Tier 1 (liposomal, nanoemulsion): +8
   - Tier 2 (softgel, lozenge): +5
@@ -35,6 +37,7 @@ python3 score_supplements.py --dry-run
   - Additional enhancers: +1 each (cap +4 total)
 
 ### Section C: Formulation Quality (0-10 pts)
+
 - Organic/wildcrafted certification: +2
 - Standardized botanicals (meets threshold): +2
 - Synergy cluster (2+ ingredients, adequate doses): +3
@@ -42,9 +45,11 @@ python3 score_supplements.py --dry-run
 - Prebiotic synergy: +2
 
 ### Section D: Safety & Compliance (0-30 pts base with penalties/bonuses)
+
 **Start at 30, apply penalties and bonuses:**
 
 **Penalties:**
+
 - Banned substances: -25 (critical), -10 (high), -5 (moderate)
 - Harmful additives: -3 (high), -2 (moderate), -1 (low)
 - Allergens: -2 (high), -1.5 (moderate), -1 (low)
@@ -52,6 +57,7 @@ python3 score_supplements.py --dry-run
 - FDA violations: -3 per warning
 
 **Bonuses:**
+
 - Allergen-free claims: +1 each (cap +3)
 - Third-party tested (NSF, USP, etc.): +2
 - GMP certified: +1
@@ -62,6 +68,7 @@ python3 score_supplements.py --dry-run
 ## Output Format
 
 ### Scored Product JSON
+
 ```json
 {
   "dsld_id": "10042",
@@ -97,6 +104,7 @@ python3 score_supplements.py --dry-run
 ```
 
 ### Summary Report
+
 Located in `output_Lozenges_scored/reports/scoring_summary_TIMESTAMP.json`
 
 ```json
@@ -126,7 +134,7 @@ Located in `output_Lozenges_scored/reports/scoring_summary_TIMESTAMP.json`
 ## Grade Scale
 
 | Score (/100) | Grade |
-|--------------|-------|
+| ------------ | ----- |
 | 90-100       | A+    |
 | 85-89        | A     |
 | 80-84        | A-    |
@@ -178,11 +186,13 @@ output_Lozenges_scored/
 ## Error Handling
 
 The script gracefully handles:
+
 - Unmapped ingredients (defaults to bio_score = 5)
 - Missing enrichment data (returns score of 0 with error details)
 - Incompatible enrichment versions (logs warning but continues)
 
 Failed products are included in output with:
+
 ```json
 {
   "dsld_id": "...",
@@ -207,6 +217,7 @@ Failed products are included in output with:
 2. **Absorption Enhancer Bonus**: Only awards bonus if BOTH the enhancer AND the enhanced nutrient are present in the formula. This prevents bonus for citric acid in formulas without any minerals.
 
 3. **Proprietary Blend Severity**: Calculated dynamically based on percentage of proprietary ingredients:
+
    - 75%+: Critical (-10)
    - 50-74%: High (-5)
    - <50%: Moderate (-3)
@@ -233,13 +244,16 @@ python3 score_supplements.py --input-dir test_enriched --output-dir test_scored
 
 ## Troubleshooting
 
-**Issue**: Script fails with "unsupported operand type(s) for *: 'NoneType' and 'float'"
+**Issue**: Script fails with "unsupported operand type(s) for \*: 'NoneType' and 'float'"
+
 - **Solution**: Ensure enrichment data includes bio_score for all ingredients, or update to latest scorer version that handles None values
 
 **Issue**: No output files generated
+
 - **Solution**: Check input directory path is correct and contains enriched JSON files
 
 **Issue**: Low scores across all products
+
 - **Solution**: Review enrichment data quality - many penalties may indicate data quality issues
 
 ## Version Compatibility
@@ -250,6 +264,7 @@ python3 score_supplements.py --input-dir test_enriched --output-dir test_scored
 ## Future Enhancements
 
 Section E (User Profile Scoring) will be implemented on the mobile device side to calculate personalized scores based on:
+
 - Age/sex-specific RDA alignment
 - User health goals
 - Specific nutrient needs
