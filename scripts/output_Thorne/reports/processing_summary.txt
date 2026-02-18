@@ -1,0 +1,41 @@
+DSLD Data Cleaning Processing Report
+==================================================
+
+Generated: 2026-02-18 02:03:17
+Total Files Processed: 1715
+Processing Time: 1.12 minutes
+
+Results Summary:
+  - Successfully cleaned: 1715
+  - Needs review: 0
+  - Incomplete: 0
+  - Errors: 0
+  - Success rate: 100.0%
+
+Mapped ingredients found: 656
+Unmapped ingredients found: 0
+
+Top 15 Mapped Ingredients (data insights):
+  1049x Silicon Dioxide
+  677x Hypromellose
+  677x Leucine
+  605x Microcrystalline Cellulose
+  506x Niacin
+  434x Magnesium
+  432x Folate
+  431x Calcium
+  428x Zinc
+  418x Riboflavin
+  413x Vitamin C
+  412x Calcium Laurate
+  407x Vitamin B6
+  401x Hypromellose (derived from Cellulose) Capsule
+  400x Vitamin E
+
+These are the most frequently appearing mapped ingredients
+
+Batch Details:
+  Batch 1: 500 cleaned, 0 review, 0 incomplete, 0 errors (20.2s)
+  Batch 2: 500 cleaned, 0 review, 0 incomplete, 0 errors (18.4s)
+  Batch 3: 500 cleaned, 0 review, 0 incomplete, 0 errors (17.4s)
+  Batch 4: 215 cleaned, 0 review, 0 incomplete, 0 errors (10.9s)

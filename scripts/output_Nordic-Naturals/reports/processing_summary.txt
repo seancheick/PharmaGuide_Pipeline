@@ -1,0 +1,39 @@
+DSLD Data Cleaning Processing Report
+==================================================
+
+Generated: 2026-02-18 02:02:25
+Total Files Processed: 510
+Processing Time: 0.17 minutes
+
+Results Summary:
+  - Successfully cleaned: 510
+  - Needs review: 0
+  - Incomplete: 0
+  - Errors: 0
+  - Success rate: 100.0%
+
+Mapped ingredients found: 209
+Unmapped ingredients found: 0
+
+Top 15 Mapped Ingredients (data insights):
+  422x Docosahexaenoic Acid
+  416x Eicosapentaenoic Acid
+  378x Other Omega-3 Fatty Acids
+  361x Rosemary extract
+  347x D-Alpha-Tocopherol
+  303x purified deep sea Fish Oil
+  245x natural Lemon flavor
+  155x Omega-3 Fatty Acids
+  153x Vitamin D3
+  141x Softgel Capsule
+  123x Soft Gel Capsule
+   91x Vitamin A
+   83x Oleic Acid
+   79x purified Arctic Cod Liver Oil
+   63x Citric Acid
+
+These are the most frequently appearing mapped ingredients
+
+Batch Details:
+  Batch 1: 500 cleaned, 0 review, 0 incomplete, 0 errors (7.7s)
+  Batch 2: 10 cleaned, 0 review, 0 incomplete, 0 errors (2.6s)

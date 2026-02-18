@@ -1,0 +1,7 @@
+2026-02-18 03:22:01 - dsld_cleaner - INFO - ============================================================
+2026-02-18 03:22:01 - dsld_cleaner - INFO - DSLD Data Cleaning Pipeline Starting
+2026-02-18 03:22:01 - dsld_cleaner - INFO - ============================================================
+2026-02-18 03:22:01 - dsld_cleaner - INFO - Started at: 2026-02-18 03:22:01
+2026-02-18 03:22:01 - dsld_cleaner - INFO - Validating configuration...
+2026-02-18 03:22:01 - dsld_cleaner - ERROR - Input directory does not exist: /Users/seancheick/Documents/DataSetDsld/Softgels
+2026-02-18 03:22:01 - dsld_cleaner - ERROR - Configuration validation failed

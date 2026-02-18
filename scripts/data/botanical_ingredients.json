@@ -3,8 +3,8 @@
     "description": "Non-standardized whole herb powders and simple botanical extracts without guaranteed marker compounds. Used for basic ingredient mapping. For premium standardized extracts with marker compounds, see standardized_botanicals.json.",
     "purpose": "ingredient_mapping",
     "schema_version": "4.0.0",
-    "last_updated": "2026-02-16",
-    "total_entries": 237,
+    "last_updated": "2026-02-17",
+    "total_entries": 260,
     "quality_tier": "basic_raw_botanicals",
     "standardization": "none",
     "notes": "This database is separate from standardized_botanicals.json by design. Overlaps are intentional and allow the scoring system to reward standardized forms over raw powders."
@@ -55,7 +55,8 @@
         "medicago sativa leaf",
         "alfalfa leaf powder",
         "lucerne",
-        "alfalfa juice concentrate"
+        "alfalfa juice concentrate",
+        "Alfalfa dried juice"
       ],
       "category": "leaf",
       "notes": "Whole leaf powder or simple extract, typically used for general nutrition; not standardized to specific markers.",
@@ -69,7 +70,8 @@
         "aloe vera leaf",
         "organic aloe",
         "aloe vera gel",
-        "Aloe vera Inner Leaf Gel"
+        "Aloe vera Inner Leaf Gel",
+        "Aloe vera, Dehydrate, Powder"
       ],
       "category": "plant extract",
       "notes": "Whole plant or gel extract, often used for digestive support; typically not standardized for active compounds like polysaccharides (unless specified as standardized).",
@@ -94,7 +96,15 @@
       "aliases": [
         "phyllanthus emblica fruit",
         "indian gooseberry",
-        "amalaki"
+        "amalaki",
+        "Amla Fruit Extract",
+        "Emblica officinalis Fruit Extract",
+        "amla berry",
+        "amla",
+        "capros indian gooseberry",
+        "amla extract",
+        "emblica officinalis",
+        "phyllanthus emblica"
       ],
       "category": "fruit",
       "notes": "Whole fruit powder or simple extract, naturally rich in Vitamin C, but not standardized to a specific vitamin C percentage (unless specified as standardized).",
@@ -145,7 +155,8 @@
         "huang qi",
         "huang qi root",
         "milk vetch root",
-        "Astragalus membranaceous Root Extract"
+        "Astragalus membranaceous Root Extract",
+        "Botalys"
       ],
       "category": "root",
       "notes": "Whole root powder or simple extract, used for immune support and adaptogenic properties; not standardized to astragalosides.",
@@ -294,7 +305,14 @@
       "aliases": [
         "vaccinium corymbosum fruit",
         "blueberry powder",
-        "highbush blueberry"
+        "highbush blueberry",
+        "wild blueberry whole extract",
+        "blueactiv wild blueberry extract",
+        "bluerich blueberry concentrate",
+        "bluerich blueberry vaccinium corymbosum concentrate",
+        "blueberry whole concentrate",
+        "berryrich orac 300",
+        "blueberry 4:1 extract"
       ],
       "category": "fruit",
       "notes": "Whole fruit powder or simple extract, not standardized to specific anthocyanin content (unless specified as standardized).",
@@ -324,19 +342,6 @@
       "notes": "Whole broccoli powder rich in sulforaphane and other phytonutrients.",
       "last_updated": "2025-11-11",
       "id": "broccoli"
-    },
-    {
-      "standard_name": "Brown Rice Syrup Solids",
-      "aliases": [
-        "brown rice syrup solids",
-        "rice syrup powder",
-        "brown rice syrup powder",
-        "dried brown rice syrup"
-      ],
-      "category": "sweetener",
-      "notes": "Dehydrated brown rice syrup used as a natural sweetener and binding agent. Contains complex carbohydrates from rice.",
-      "last_updated": "2025-09-19",
-      "id": "brown_rice_syrup_solids"
     },
     {
       "standard_name": "Brussels Sprout",
@@ -923,7 +928,18 @@
       "standard_name": "Evening Primrose Seed Oil",
       "aliases": [
         "EPO",
-        "oenothera biennis oil"
+        "oenothera biennis oil",
+        "oil of evening primrose",
+        "ultra prim evening primrose oil",
+        "evening primrose oil cold-pressed",
+        "evening primrose oil natural",
+        "cold pressed oil of evening primrose",
+        "evening primrose oil oenothera biennis seed supercritical extract",
+        "evening primrose seed oil cold-pressed",
+        "evening primrose seed oil unrefined",
+        "evening primrose oil cold-pressed pure",
+        "evening primose oil",
+        "evening primose seed oil"
       ],
       "category": "seed oil",
       "notes": "Cold-pressed oil from evening primrose seeds; primarily valued for its Gamma-Linolenic Acid (GLA) content, but not standardized to a specific GLA percentage.",
@@ -1020,12 +1036,10 @@
         "ginger powder",
         "ginger rhizome",
         "ginger rhizome extract dried",
-        "ginger rhizome extract, dried",
         "organic ginger (rhizome) supercritical extract",
         "ginger supercritical extract",
         "organic ginger rhizome",
         "Gingerols & Shogaols",
-        "Gingerols/Shogaols",
         "Total Gingerols & Shogaols",
         "Gingerols and Shogaols"
       ],
@@ -1050,7 +1064,16 @@
       "aliases": [
         "panax ginseng root",
         "korean ginseng",
-        "asian ginseng"
+        "asian ginseng",
+        "Asian Ginseng Root Extract",
+        "panax ginseng c.a. meyer extract",
+        "red ginseng root extract",
+        "korean ginseng root",
+        "korean ginseng root extract",
+        "korean red ginseng root extract",
+        "korean ginseng root powder",
+        "asian ginseng manchurian",
+        "g115 ginseng"
       ],
       "category": "root",
       "notes": "Whole root powder or simple extract, used for adaptogenic properties and energy; not standardized to ginsenosides (unless specified as standardized).",
@@ -1091,7 +1114,13 @@
         "vitis vinifera fruit",
         "grape powder",
         "grape fruit",
-        "whole grape"
+        "whole grape",
+        "french grape vitis vinifera seed extract",
+        "leucoselect grape extract",
+        "wild grape seed extract",
+        "meganatural-bp grape seed extract",
+        "biovin full spectrum grape extract",
+        "grape seed skin extract"
       ],
       "category": "fruit",
       "notes": "Whole fruit powder or simple extract, valued for antioxidant content but not standardized to specific compounds like resveratrol or anthocyanins.",
@@ -1203,7 +1232,14 @@
         "ocimum tenuiflorum leaf",
         "tulsi leaf",
         "holy basil powder",
-        "ocimum sanctum leaf"
+        "ocimum sanctum leaf",
+        "holy basil herb extract",
+        "holy basil ocimum sanctum leaf supercritical extract",
+        "holy basil ocimum sanctum leaf steam-distilled extract",
+        "tulsi ext.",
+        "holy basil supercritical extract",
+        "holy basil leaf supercritical extract",
+        "holy basil leaf steam-distilled extract"
       ],
       "category": "leaf",
       "notes": "Whole leaf powder or simple extract, used as an adaptogen; not standardized to ursolic acid or eugenol (unless specified as standardized).",
@@ -1211,38 +1247,17 @@
       "id": "holy_basil_leaf"
     },
     {
-      "standard_name": "Honey Extract",
-      "aliases": [
-        "honey extract",
-        "honey freeze dried extract",
-        "honey freeze-dried extract",
-        "dried honey extract",
-        "concentrated honey"
-      ],
-      "category": "honey",
-      "notes": "Concentrated or freeze-dried honey extract retaining natural enzymes and compounds. Used for flavor and traditional health benefits.",
-      "last_updated": "2025-09-20",
-      "id": "honey_extract"
-    },
-    {
-      "standard_name": "Honey Powder",
-      "aliases": [
-        "honey, powder",
-        "dried honey",
-        "honey powder",
-        "dehydrated honey"
-      ],
-      "category": "sweetener",
-      "notes": "Dehydrated honey in powder form. Natural sweetener containing trace amounts of enzymes, minerals, and antioxidants.",
-      "last_updated": "2025-09-19",
-      "id": "honey_powder"
-    },
-    {
       "standard_name": "Horsetail Aerial Parts",
       "aliases": [
         "equisetum arvense",
         "field horsetail",
-        "bottle-brush"
+        "bottle-brush",
+        "horse tail",
+        "horsetail equisetum arvense aerial extract",
+        "horsetail herb extract",
+        "horsetail rush stems extract",
+        "horsetail standardized extract",
+        "horse tail standardized extract"
       ],
       "category": "herb",
       "notes": "Whole aerial parts powder or simple extract, valued for natural silica content; not standardized to silica (unless specified as standardized).",
@@ -1343,7 +1358,10 @@
       "standard_name": "Lemon Balm Leaf",
       "aliases": [
         "melissa officinalis leaf",
-        "balm mint"
+        "balm mint",
+        "Relissa",
+        "Lemon Balm Aerial Extract",
+        "Lemon Balm Aerial Parts Extract"
       ],
       "category": "leaf",
       "notes": "Whole leaf powder or simple extract, used for calming properties and digestive comfort; not standardized to rosmarinic acid.",
@@ -1627,7 +1645,8 @@
     {
       "standard_name": "Orange Essential Oil",
       "aliases": [
-        "orange oil"
+        "orange oil",
+        "cold-pressed orange oil"
       ],
       "category": "essential oil",
       "notes": "Essential oil from orange peel for flavor and aromatherapy.",
@@ -1640,7 +1659,8 @@
         "white peony root",
         "bai shao",
         "chinese peony",
-        "paeonia root"
+        "paeonia root",
+        "white peony paeonia lactiflora powder"
       ],
       "category": "root",
       "notes": "Root powder or simple extract, traditionally used in Chinese medicine. Not standardized to paeoniflorin or other compounds.",
@@ -1666,7 +1686,16 @@
         "petroselinum crispum",
         "parsley leaf",
         "organic parsley",
-        "parsley powder"
+        "parsley powder",
+        "parsley seed oil",
+        "parsley seed extract",
+        "parsley seed concentrate",
+        "parsley seed oil concentrate",
+        "parsley supercritical extract",
+        "parsley seed oil extract",
+        "petroselinum crispum seed oil",
+        "petroselinum crispum seed",
+        "parsley leaf stem extract"
       ],
       "category": "herb",
       "notes": "An herb with nutritional value, rich in vitamins and minerals. Whole herb powder or simple extract, not standardized to specific compounds.",
@@ -1681,7 +1710,6 @@
         "passiflora incamata",
         "passion flower passiflora incamata herbs dry",
         "passion flower passiflora incamata herbs dry extract",
-        "passion flower (passiflora incamata) herbs dry extract",
         "passiflora incarnata extract",
         "passionflower extract"
       ],
@@ -1844,7 +1872,13 @@
         "cucurbita pepo",
         "pumpkin powder",
         "pumpkin seed",
-        "organic pumpkin"
+        "organic pumpkin",
+        "go-less pumpkin seed extract",
+        "certified organic pumpkin seed oil",
+        "pumpkin seed oil cold-pressed",
+        "pumpkinseed oil",
+        "extra virgin pumpkin seed oil",
+        "cucurbita pepo seed extract"
       ],
       "category": "fruit",
       "notes": "Whole fruit or seed powder, valued for nutritional content but not standardized to specific compounds.",
@@ -1974,7 +2008,12 @@
       "standard_name": "Schisandra Berry",
       "aliases": [
         "schisandra chinensis fruit",
-        "five-flavor berry"
+        "five-flavor berry",
+        "Schisandra Fruit Extract",
+        "schizandra",
+        "schizandra schisandra chinensis berry extract",
+        "schisandra pe",
+        "schizandrins"
       ],
       "category": "fruit",
       "notes": "Whole fruit powder or simple extract, used as an adaptogen; not standardized to schisandrins.",
@@ -2071,7 +2110,12 @@
       "standard_name": "St. John's Wort Herb",
       "aliases": [
         "hypericum perforatum herb",
-        "kantarion"
+        "kantarion",
+        "st john's wort extract",
+        "st johns wort extract",
+        "st john's wort",
+        "hypericum perforatum",
+        "st. john's wort extract"
       ],
       "category": "herb",
       "notes": "Whole herb powder or simple extract, used for mood support; not standardized to hypericin or hyperforin (unless specified as standardized).",
@@ -2133,7 +2177,12 @@
       "aliases": [
         "thymus vulgaris",
         "thyme leaf",
-        "thyme powder"
+        "thyme powder",
+        "thyme thymus vulgaris whole plant oil extract",
+        "thyme thymus vulgaris leaf and stem oil extract",
+        "thyme whole plant oil",
+        "thyme oil leaf extract",
+        "red thyme oil"
       ],
       "category": "herb",
       "notes": "Aromatic herb with nutritional and antimicrobial properties. Whole herb powder, not standardized to specific compounds like thymol.",
@@ -2146,7 +2195,11 @@
         "solanum lycopersicum",
         "tomato powder",
         "organic tomato",
-        "tomato fruit"
+        "tomato fruit",
+        "lyc-o-mato tomato extract",
+        "lycomato",
+        "lyc-o-mato",
+        "standardized tomato fruit extract"
       ],
       "category": "fruit",
       "notes": "Whole fruit powder, valued for lycopene and other nutrients but not standardized to specific compounds.",
@@ -2160,7 +2213,10 @@
         "tongkat ali root",
         "tongkat ali root powder",
         "eurycoma longifolia",
-        "longjack"
+        "longjack",
+        "Tongkat Ali Root Extract",
+        "LJ100",
+        "LJ100 Tongkat Ali"
       ],
       "category": "root",
       "notes": "Southeast Asian herb traditionally used for vitality and testosterone support.",
@@ -2280,7 +2336,8 @@
         "isatis tinctoria",
         "ban lan gen",
         "woad root",
-        "dyer's woad"
+        "dyer's woad",
+        "Dyer's Woad root extract"
       ],
       "category": "root",
       "notes": "Root powder or simple extract, traditionally used in Chinese medicine for immune support. Not standardized to specific compounds.",
@@ -2291,7 +2348,10 @@
       "standard_name": "Yerba Mate Leaf",
       "aliases": [
         "ilex paraguariensis leaf",
-        "yerba mate powder"
+        "yerba mate powder",
+        "mate yerba mate extract",
+        "mate extract",
+        "mate yerba mate powder"
       ],
       "category": "leaf",
       "notes": "Whole leaf powder or simple extract, not standardized to caffeine or other xanthines (unless specified as standardized).",
@@ -2323,7 +2383,11 @@
     {
       "standard_name": "St. John's Wort",
       "aliases": [
-        "St. John's wort aerial parts extract"
+        "St. John's wort aerial parts extract",
+        "st john's wort extract",
+        "st johns wort extract",
+        "hypericum perforatum",
+        "st. john's wort"
       ],
       "category": "herb",
       "notes": "Added from unmapped list; needs curation.",
@@ -2384,7 +2448,8 @@
     {
       "standard_name": "Bacopa",
       "aliases": [
-        "Bacopa Leaf Extract"
+        "Bacopa Leaf Extract",
+        "Bacopa Herb Extract"
       ],
       "category": "leaf",
       "notes": "Added from unmapped list; needs curation.",
@@ -2395,7 +2460,9 @@
       "standard_name": "Gotu Kola",
       "aliases": [
         "Gotu Kola Herb Extract",
-        "Gotu Kola Whole Herb Extract"
+        "Gotu Kola Whole Herb Extract",
+        "Gotu Kola Aerial Extract",
+        "Centella asiatica aerial extract"
       ],
       "category": "herb",
       "notes": "Added from unmapped list; needs curation.",
@@ -2435,7 +2502,8 @@
     {
       "standard_name": "Rhubarb",
       "aliases": [
-        "Rhubarb Root Extract"
+        "Rhubarb Root Extract",
+        "Chinese Rhubarb extract"
       ],
       "category": "root",
       "notes": "Added from unmapped list; needs curation.",
@@ -2473,29 +2541,6 @@
       "id": "kelp"
     },
     {
-      "standard_name": "Senna",
-      "aliases": [
-        "Senna leaf extract",
-        "Senna",
-        "Senna alexandrina Leaf Extract"
-      ],
-      "category": "leaf",
-      "notes": "Added from unmapped list; needs curation.",
-      "last_updated": "2026-01-05",
-      "id": "senna"
-    },
-    {
-      "standard_name": "Cascara Sagrada",
-      "aliases": [
-        "Cascara Sagrada Bark Extract",
-        "Cascara Sagrada"
-      ],
-      "category": "bark",
-      "notes": "Added from unmapped list; needs curation.",
-      "last_updated": "2026-01-05",
-      "id": "cascara_sagrada"
-    },
-    {
       "standard_name": "Globe Artichoke",
       "aliases": [
         "Globe Artichoke Leaf Extract"
@@ -2520,7 +2565,9 @@
       "aliases": [
         "CoffeeBerry whole Coffee fruit extract",
         "NeuroFactor Coffee fruit extract",
-        "Coffee fruit extract"
+        "Coffee fruit extract",
+        "CognatiQ",
+        "coffee fruit concentrate"
       ],
       "category": "fruit",
       "notes": "Added from unmapped list; needs curation.",
@@ -2562,17 +2609,6 @@
       "id": "orange"
     },
     {
-      "standard_name": "Garcinia",
-      "aliases": [
-        "Garcinia fruit extract",
-        "Garcinia cambogia extract"
-      ],
-      "category": "fruit",
-      "notes": "Added from unmapped list; needs curation.",
-      "last_updated": "2026-01-05",
-      "id": "garcinia"
-    },
-    {
       "standard_name": "Guava",
       "aliases": [
         "organic Guava fruit and leaf (Psidium guajava) extract",
@@ -2596,7 +2632,10 @@
     {
       "standard_name": "Sophora Japonica",
       "aliases": [
-        "Sophora japonica Flower Extract"
+        "Sophora japonica Flower Extract",
+        "japanese sophora flower bud extract",
+        "japanese sophora sophora japonica flower bud extract",
+        "japanese sophora"
       ],
       "category": "flower",
       "notes": "Added from unmapped list; needs curation.",
@@ -2616,7 +2655,8 @@
     {
       "standard_name": "Wheat Germ",
       "aliases": [
-        "Wheat Germ Extract"
+        "Wheat Germ Extract",
+        "fermented Wheat Germ extract"
       ],
       "category": "seed",
       "notes": "Added from unmapped list; needs curation.",
@@ -2624,19 +2664,11 @@
       "id": "wheat_germ"
     },
     {
-      "standard_name": "Red Yeast Rice",
-      "aliases": [
-        "Red Yeast Rice Seed Extract"
-      ],
-      "category": "seed",
-      "notes": "Added from unmapped list; needs curation.",
-      "last_updated": "2026-01-05",
-      "id": "red_yeast_rice"
-    },
-    {
       "standard_name": "Millet",
       "aliases": [
-        "Millet extract"
+        "Millet extract",
+        "millet panicum miliaceum seed oil co2 extract",
+        "miliacin"
       ],
       "category": "seed",
       "notes": "Added from unmapped list; needs curation.",
@@ -2862,6 +2894,377 @@
       "notes": "Added from unmapped list; needs curation.",
       "last_updated": "2026-01-05",
       "id": "vegetable_powders"
+    },
+    {
+      "standard_name": "Picrorhiza Root",
+      "aliases": [
+        "picrorhiza extract",
+        "picrorhiza kurroa",
+        "kutki"
+      ],
+      "category": "root",
+      "notes": "Added from Thorne/Nordic unmapped remediation pass for identity mapping coverage.",
+      "last_updated": "2026-02-17",
+      "id": "picrorhiza_root"
+    },
+    {
+      "standard_name": "Jambolan Seed",
+      "aliases": [
+        "jambolan extract",
+        "jambolan seed extract",
+        "syzygium cumini",
+        "jamun seed"
+      ],
+      "category": "seed",
+      "notes": "Added from Thorne/Nordic unmapped remediation pass for identity mapping coverage.",
+      "last_updated": "2026-02-17",
+      "id": "jambolan_seed"
+    },
+    {
+      "standard_name": "Uva-Ursi Leaf",
+      "aliases": [
+        "uva-ursi extract",
+        "arctostaphylos uva-ursi",
+        "uva ursi leaf extract",
+        "uva ursi extract",
+        "bearberry leaf extract",
+        "bearberry",
+        "uva ursi"
+      ],
+      "category": "leaf",
+      "notes": "Added from Thorne/Nordic unmapped remediation pass for identity mapping coverage.",
+      "last_updated": "2026-02-17",
+      "id": "uva_ursi_leaf"
+    },
+    {
+      "standard_name": "Buchu Leaf",
+      "aliases": [
+        "buchu extract",
+        "agathosma betulina"
+      ],
+      "category": "leaf",
+      "notes": "Added from Thorne/Nordic unmapped remediation pass for identity mapping coverage.",
+      "last_updated": "2026-02-17",
+      "id": "buchu_leaf"
+    },
+    {
+      "standard_name": "Coptis Rhizome",
+      "aliases": [
+        "coptis rhizome extract",
+        "coptis extract",
+        "huang lian"
+      ],
+      "category": "root",
+      "notes": "Added from Thorne/Nordic unmapped remediation pass for identity mapping coverage.",
+      "last_updated": "2026-02-17",
+      "id": "coptis_rhizome"
+    },
+    {
+      "standard_name": "Boneset Herb",
+      "aliases": [
+        "boneset",
+        "eupatorium perfoliatum"
+      ],
+      "category": "herb",
+      "notes": "Added from Thorne/Nordic unmapped remediation pass for identity mapping coverage.",
+      "last_updated": "2026-02-17",
+      "id": "boneset_herb"
+    },
+    {
+      "standard_name": "Osha Root",
+      "aliases": [
+        "osha",
+        "ligusticum porteri"
+      ],
+      "category": "root",
+      "notes": "Added from Thorne/Nordic unmapped remediation pass for identity mapping coverage.",
+      "last_updated": "2026-02-17",
+      "id": "osha_root"
+    },
+    {
+      "standard_name": "Pau d'Arco Bark",
+      "aliases": [
+        "pau d'arco extract",
+        "pau d'arco",
+        "lapacho bark"
+      ],
+      "category": "bark",
+      "notes": "Added from Thorne/Nordic unmapped remediation pass for identity mapping coverage.",
+      "last_updated": "2026-02-17",
+      "id": "pau_darco_bark"
+    },
+    {
+      "standard_name": "Sweet Wormwood Herb",
+      "aliases": [
+        "sweet wormwood extract",
+        "artemisia annua"
+      ],
+      "category": "herb",
+      "notes": "Added from Thorne/Nordic unmapped remediation pass for identity mapping coverage.",
+      "last_updated": "2026-02-17",
+      "id": "sweet_wormwood_herb"
+    },
+    {
+      "standard_name": "Tree Peony Root Bark",
+      "aliases": [
+        "tree peony extract",
+        "moutan bark",
+        "paeonia suffruticosa"
+      ],
+      "category": "bark",
+      "notes": "Added from Thorne/Nordic unmapped remediation pass for identity mapping coverage.",
+      "last_updated": "2026-02-17",
+      "id": "tree_peony_root_bark"
+    },
+    {
+      "standard_name": "Tylophora Leaf",
+      "aliases": [
+        "tylophora extract",
+        "tylophora indica"
+      ],
+      "category": "leaf",
+      "notes": "Added from Thorne/Nordic unmapped remediation pass for identity mapping coverage.",
+      "last_updated": "2026-02-17",
+      "id": "tylophora_leaf"
+    },
+    {
+      "standard_name": "Wild Indigo Root",
+      "aliases": [
+        "wild indigo",
+        "baptisia tinctoria"
+      ],
+      "category": "root",
+      "notes": "Added from Thorne/Nordic unmapped remediation pass for identity mapping coverage.",
+      "last_updated": "2026-02-17",
+      "id": "wild_indigo_root"
+    },
+    {
+      "standard_name": "Evodia Fruit",
+      "aliases": [
+        "evodia extract",
+        "evodia rutaecarpa"
+      ],
+      "category": "fruit",
+      "notes": "Added from Thorne/Nordic unmapped remediation pass for identity mapping coverage.",
+      "last_updated": "2026-02-17",
+      "id": "evodia_fruit"
+    },
+    {
+      "standard_name": "Hawthorn Flowering Tops",
+      "aliases": [
+        "hawthorn flowering tops extract",
+        "hawthorn tops",
+        "hawthorn fruit extract",
+        "chinese hawthorn"
+      ],
+      "category": "flower",
+      "notes": "Added from Thorne/Nordic unmapped remediation pass for identity mapping coverage.",
+      "last_updated": "2026-02-17",
+      "id": "hawthorn_flowering_tops"
+    },
+    {
+      "standard_name": "Bitter Melon Fruit",
+      "aliases": [
+        "bitter melon fruit extract",
+        "bitter melon extract",
+        "momordica charantia fruit"
+      ],
+      "category": "fruit",
+      "notes": "Added from Thorne/Nordic unmapped remediation pass for identity mapping coverage.",
+      "last_updated": "2026-02-17",
+      "id": "bitter_melon_fruit"
+    },
+    {
+      "standard_name": "Blue Flag Root",
+      "aliases": [
+        "blue flag",
+        "iris versicolor"
+      ],
+      "category": "root",
+      "notes": "Added from Thorne/Nordic unmapped remediation pass for identity mapping coverage.",
+      "last_updated": "2026-02-17",
+      "id": "blue_flag_root"
+    },
+    {
+      "standard_name": "Coleus Forskohlii Root",
+      "aliases": [
+        "forskohlii extract",
+        "coleus forskohlii extract",
+        "forskolin source"
+      ],
+      "category": "root",
+      "notes": "Added from Thorne/Nordic unmapped remediation pass for identity mapping coverage.",
+      "last_updated": "2026-02-17",
+      "id": "coleus_forskohlii_root"
+    },
+    {
+      "standard_name": "Frangula Bark",
+      "aliases": [
+        "frangula extract",
+        "frangula alnus"
+      ],
+      "category": "bark",
+      "notes": "Added from Thorne/Nordic unmapped remediation pass for identity mapping coverage.",
+      "last_updated": "2026-02-17",
+      "id": "frangula_bark"
+    },
+    {
+      "standard_name": "Greek Mountain Tea Aerial Parts",
+      "aliases": [
+        "greek mountain tea aerial parts extract",
+        "sideritis scardica"
+      ],
+      "category": "leaf",
+      "notes": "Added from Thorne/Nordic unmapped remediation pass for identity mapping coverage.",
+      "last_updated": "2026-02-17",
+      "id": "greek_mountain_tea_aerial_parts"
+    },
+    {
+      "standard_name": "Guayusa Leaf",
+      "aliases": [
+        "guayusa leaf extract",
+        "guayusa"
+      ],
+      "category": "leaf",
+      "notes": "Added from Thorne/Nordic unmapped remediation pass for identity mapping coverage.",
+      "last_updated": "2026-02-17",
+      "id": "guayusa_leaf"
+    },
+    {
+      "standard_name": "Horse Chestnut Seed",
+      "aliases": [
+        "horse chestnut extract",
+        "aesculus hippocastanum"
+      ],
+      "category": "seed",
+      "notes": "Added from Thorne/Nordic unmapped remediation pass for identity mapping coverage.",
+      "last_updated": "2026-02-17",
+      "id": "horse_chestnut_seed"
+    },
+    {
+      "standard_name": "Indian Elecampane Root",
+      "aliases": [
+        "indian elecampane extract",
+        "inula racemosa"
+      ],
+      "category": "root",
+      "notes": "Added from Thorne/Nordic unmapped remediation pass for identity mapping coverage.",
+      "last_updated": "2026-02-17",
+      "id": "indian_elecampane_root"
+    },
+    {
+      "standard_name": "Witch Hazel Leaf",
+      "aliases": [
+        "witch hazel extract",
+        "hamamelis virginiana"
+      ],
+      "category": "leaf",
+      "notes": "Added from Thorne/Nordic unmapped remediation pass for identity mapping coverage.",
+      "last_updated": "2026-02-17",
+      "id": "witch_hazel_leaf"
+    },
+    {
+      "standard_name": "Mango Leaf Extract",
+      "aliases": [
+        "zynamite",
+        "mangifera indica leaf extract"
+      ],
+      "category": "leaf",
+      "notes": "Added from Thorne/Nordic unmapped remediation pass for identity mapping coverage.",
+      "last_updated": "2026-02-17",
+      "id": "mango_leaf_extract"
+    },
+    {
+      "standard_name": "Medicinal Mushroom Blend",
+      "aliases": [
+        "peako2",
+        "mushroom blend"
+      ],
+      "category": "mushroom",
+      "notes": "Added from Thorne/Nordic unmapped remediation pass for identity mapping coverage.",
+      "last_updated": "2026-02-17",
+      "id": "medicinal_mushroom_blend"
+    },
+    {
+      "standard_name": "Magnolia-Phellodendron Blend",
+      "aliases": [
+        "relora",
+        "magnolia officinalis and phellodendron amurense"
+      ],
+      "category": "bark",
+      "notes": "Added from Thorne/Nordic unmapped remediation pass for identity mapping coverage.",
+      "last_updated": "2026-02-17",
+      "id": "magnolia_phellodendron_blend"
+    },
+    {
+      "standard_name": "Lavender",
+      "aliases": [
+        "lavandula angustifolia",
+        "lavender extract",
+        "lavender oil",
+        "lavandula",
+        "english lavender",
+        "lavender flower oil",
+        "lavender flowering tops oil",
+        "lavender essential oil",
+        "lavender flower essential oil",
+        "english lavender flower essential oil",
+        "english lavender aerial extract",
+        "lavender flower"
+      ],
+      "category": "herb",
+      "notes": "Aromatic herb used in supplements for anxiety relief and sleep support. Essential oil from Lavandula angustifolia flowers.",
+      "last_updated": "2026-02-18",
+      "id": "lavender"
+    },
+    {
+      "standard_name": "Horny Goat Weed",
+      "aliases": [
+        "epimedium",
+        "epimedium extract",
+        "yin yang huo",
+        "epimedium aerial parts extract",
+        "horny goat weed extract",
+        "horny goat weed aerial parts extract",
+        "epimedium stem and leaf extract",
+        "epimedium grandiflorum",
+        "epimedium sagittatum"
+      ],
+      "category": "herb",
+      "notes": "Traditional Chinese herb (Epimedium spp.). Active compound icariin has PDE5-inhibiting properties. Used for libido and bone health support.",
+      "last_updated": "2026-02-18",
+      "id": "horny_goat_weed"
+    },
+    {
+      "standard_name": "Mucuna Pruriens",
+      "aliases": [
+        "mucuna pruriens",
+        "velvet bean",
+        "velvet bean seed extract",
+        "kapikacchu",
+        "mucuna pruriens extract",
+        "kaunch",
+        "cowhage",
+        "mucuna bean"
+      ],
+      "category": "seed",
+      "notes": "Tropical legume (velvet bean). Natural source of L-Dopa. Used for mood, stress, and reproductive health support.",
+      "last_updated": "2026-02-18",
+      "id": "mucuna_pruriens"
+    },
+    {
+      "standard_name": "Hoodia Gordonii",
+      "aliases": [
+        "hoodia gordonii",
+        "hoodia",
+        "hoodia gordonii powder",
+        "hoodia gordonii extract",
+        "hoodia cactus"
+      ],
+      "category": "succulent",
+      "notes": "Southern African succulent traditionally used by San people as appetite suppressant. Legal botanical, not banned. Limited clinical evidence for weight loss efficacy.",
+      "last_updated": "2026-02-18",
+      "id": "hoodia_gordonii"
     }
   ]
 }

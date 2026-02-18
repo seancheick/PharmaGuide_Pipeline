@@ -3,10 +3,30 @@
     "description": "Other/inactive ingredients database for supplement excipients and additives",
     "purpose": "inactive_ingredient_classification",
     "schema_version": "4.0.0",
-    "last_updated": "2026-02-16",
-    "total_entries": 254
+    "last_updated": "2026-02-18",
+    "total_entries": 288
   },
   "other_ingredients": [
+    {
+      "id": "OI_10_UNDECENOIC_ACID",
+      "standard_name": "10-Undecenoic Acid",
+      "aliases": [
+        "10-undecenoic acid",
+        "undecylenic acid"
+      ],
+      "category": "fatty_acid_derivative",
+      "additive_type": "unspecified",
+      "clean_label_score": 5,
+      "notes": "Undecylenic acid derivative mapped for identity coverage; non-scorable until specific IQM quality forms are defined.",
+      "regulatory_status": "varies",
+      "common_uses": [
+        "specialty support"
+      ],
+      "last_updated": "2026-02-17",
+      "is_additive": false,
+      "severity_level": "low",
+      "allergen_flag": null
+    },
     {
       "id": "NHA_ACACIA_GUM",
       "standard_name": "Acacia Gum",
@@ -33,6 +53,26 @@
       "allergen_flag": null
     },
     {
+      "id": "NHA_ACETIC_ACID",
+      "standard_name": "Acetic Acid",
+      "aliases": [
+        "acetic acid"
+      ],
+      "category": "preservative_acidity_regulator",
+      "additive_type": "preservative_natural",
+      "clean_label_score": 8,
+      "notes": "Natural acid (vinegar component) used for pH control and preservation.",
+      "regulatory_status": "GRAS",
+      "common_uses": [
+        "preservation",
+        "pH adjustment"
+      ],
+      "last_updated": "2026-01-04",
+      "is_additive": true,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
       "id": "PII_ACTIVATED_CARBON",
       "standard_name": "Activated Carbon",
       "aliases": [
@@ -50,6 +90,27 @@
       "clean_label_score": 5,
       "regulatory_status": "varies",
       "common_uses": [],
+      "severity_level": "low",
+      "allergen_flag": null
+    },
+    {
+      "id": "OI_ADRENAL_CORTEX",
+      "standard_name": "Adrenal Cortex",
+      "aliases": [
+        "adrenal cortex",
+        "adrenal",
+        "bovine adrenal cortex"
+      ],
+      "category": "glandular_tissue",
+      "additive_type": "unspecified",
+      "clean_label_score": 4,
+      "notes": "Glandular tissue ingredient. Identity is mapped for traceability; not scored in IQM without dedicated glandular quality criteria.",
+      "regulatory_status": "varies",
+      "common_uses": [
+        "glandular support"
+      ],
+      "last_updated": "2026-02-17",
+      "is_additive": false,
       "severity_level": "low",
       "allergen_flag": null
     },
@@ -102,6 +163,100 @@
       "allergen_flag": null
     },
     {
+      "id": "NHA_ALCOHOL",
+      "standard_name": "Alcohol (Ethanol)",
+      "aliases": [
+        "Alcohol",
+        "ethanol",
+        "ethyl alcohol",
+        "grain alcohol"
+      ],
+      "category": "solvent",
+      "additive_type": "processing_aid",
+      "clean_label_score": 6,
+      "notes": "Used as extraction solvent or preservative. Generally evaporates during processing. GRAS approved.",
+      "regulatory_status": "GRAS",
+      "common_uses": [
+        "solvent",
+        "extraction",
+        "preservative"
+      ],
+      "last_updated": "2025-12-04",
+      "is_additive": true,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_ALLULOSE",
+      "standard_name": "Allulose",
+      "aliases": [
+        "allulose",
+        "d-allulose",
+        "psicose",
+        "d-psicose"
+      ],
+      "category": "sweetener_natural",
+      "additive_type": "rare_sugar_sweetener",
+      "clean_label_score": 9,
+      "notes": "Rare natural sugar with 70% sweetness of sucrose but minimal calories. Does not affect blood sugar. FDA recognized as GRAS.",
+      "regulatory_status": "GRAS",
+      "common_uses": [
+        "low-calorie sweetener",
+        "sugar substitute"
+      ],
+      "last_updated": "2025-12-04",
+      "is_additive": true,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_ALPHA_GLUCAN_OLIGOSACCHARIDE",
+      "standard_name": "Alpha-Glucan Oligosaccharide",
+      "aliases": [
+        "alpha-glucan oligosaccharide",
+        "alpha glucans"
+      ],
+      "category": "fiber_prebiotic",
+      "additive_type": "dietary_fiber",
+      "clean_label_score": 8,
+      "notes": "Prebiotic oligosaccharide carbohydrate used for gut-support formulations; mapped as non-scorable identity pending dedicated efficacy scoring policy.",
+      "regulatory_status": "varies",
+      "common_uses": [
+        "prebiotic support",
+        "fiber matrix"
+      ],
+      "last_updated": "2026-02-17",
+      "is_additive": false,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_ANNATTO_VARIANTS",
+      "standard_name": "Annatto (Variants)",
+      "aliases": [
+        "annatto color",
+        "natural annatto color",
+        "annatto seed extract",
+        "annato",
+        "Annato extract",
+        "annatto juice",
+        "annatto, natural"
+      ],
+      "category": "colorant_natural",
+      "additive_type": "natural_colorant",
+      "clean_label_score": 9,
+      "notes": "Natural yellow/orange colorant from annatto seeds. GRAS status. Clean label color.",
+      "regulatory_status": "GRAS",
+      "common_uses": [
+        "natural coloring",
+        "yellow/orange color"
+      ],
+      "last_updated": "2025-12-04",
+      "is_additive": true,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
       "id": "OI_ANNATTO_EXTRACT",
       "standard_name": "Annatto Extract",
       "aliases": [
@@ -126,6 +281,56 @@
       "allergen_flag": null
     },
     {
+      "id": "NHA_ANTHOCYANIN",
+      "standard_name": "Anthocyanin",
+      "aliases": [
+        "Anthocyanin",
+        "anthocyanins",
+        "anthocyanin color",
+        "E163"
+      ],
+      "category": "colorant_natural",
+      "additive_type": "natural_colorant",
+      "clean_label_score": 10,
+      "notes": "Natural purple/red pigment from berries and fruits. Antioxidant properties. Clean label color. GRAS approved.",
+      "regulatory_status": "GRAS",
+      "common_uses": [
+        "natural coloring",
+        "antioxidant"
+      ],
+      "last_updated": "2025-12-04",
+      "is_additive": true,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_APPLE_CIDER_VINEGAR",
+      "standard_name": "Apple Cider Vinegar",
+      "aliases": [
+        "liquid Apple Cider Vinegar",
+        "Apple Cider Vinegar, Liquid, Unfiltered",
+        "Apple Cider Vinegar, Liquid",
+        "apple cider vinegar",
+        "ACV",
+        "organic apple cider vinegar",
+        "unfiltered apple cider vinegar",
+        "raw apple cider vinegar"
+      ],
+      "category": "functional_ingredient",
+      "additive_type": "functional",
+      "clean_label_score": 9,
+      "notes": "Apple cider vinegar used in gummies for digestive health claims. Contains acetic acid. GRAS approved.",
+      "regulatory_status": "GRAS",
+      "common_uses": [
+        "functional ingredient",
+        "flavor"
+      ],
+      "last_updated": "2025-12-04",
+      "is_additive": false,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
       "id": "PII_APPLE_FLAVOR",
       "standard_name": "Apple Flavor",
       "aliases": [
@@ -142,6 +347,31 @@
       "regulatory_status": "varies",
       "common_uses": [],
       "severity_level": "low",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_APPLE_PUREE_CONCENTRATE",
+      "standard_name": "Apple Puree Concentrate",
+      "aliases": [
+        "Apple puree concentrate",
+        "organic Apple puree concentrate",
+        "Apple Puree",
+        "organic Apples",
+        "Apple fruit"
+      ],
+      "category": "fruit_concentrate",
+      "additive_type": "natural_ingredient",
+      "clean_label_score": 10,
+      "notes": "Concentrated apple puree used for flavor and natural sweetness. Clean label ingredient. GRAS approved.",
+      "regulatory_status": "GRAS",
+      "common_uses": [
+        "flavoring",
+        "natural sweetening",
+        "texture"
+      ],
+      "last_updated": "2025-12-04",
+      "is_additive": true,
+      "severity_level": "none",
       "allergen_flag": null
     },
     {
@@ -242,48 +472,6 @@
       "allergen_flag": null
     },
     {
-      "id": "PII_HONEY",
-      "standard_name": "Honey",
-      "aliases": [
-        "honey",
-        "organic honey",
-        "raw honey",
-        "pure honey",
-        "honey powder"
-      ],
-      "category": "sweetener_natural",
-      "notes": "Natural sweetener produced by bees from flower nectar. Used as a sweetener, binder, or flavor in supplements. Generally safe but can cause allergic reactions in sensitive individuals. Not recommended for infants under 1 year.",
-      "last_updated": "2025-11-17",
-      "is_additive": true,
-      "additive_type": "unspecified",
-      "clean_label_score": 5,
-      "regulatory_status": "varies",
-      "common_uses": [],
-      "severity_level": "low",
-      "allergen_flag": null
-    },
-    {
-      "id": "PII_ROYAL_JELLY",
-      "standard_name": "Royal Jelly",
-      "aliases": [
-        "royal jelly",
-        "bee milk",
-        "queen bee jelly",
-        "royal jelly extract",
-        "lyophilized royal jelly"
-      ],
-      "category": "functional_ingredient",
-      "notes": "Glandular secretion from worker bees used to feed queen larvae. Often used as an active ingredient in supplements for its purported health benefits. WARNING: Can cause severe allergic reactions, especially in individuals with asthma or bee allergies. Classified as HIGH severity allergen.",
-      "last_updated": "2025-11-17",
-      "is_additive": false,
-      "additive_type": "unspecified",
-      "clean_label_score": 5,
-      "regulatory_status": "varies",
-      "common_uses": [],
-      "severity_level": "low",
-      "allergen_flag": null
-    },
-    {
       "id": "PII_BEE_POLLEN",
       "standard_name": "Bee Pollen",
       "aliases": [
@@ -295,27 +483,6 @@
       ],
       "category": "functional_ingredient",
       "notes": "Plant pollen collected by bees. Often used as an active ingredient in energy and immunity supplements. WARNING: HIGH RISK allergen - can cause severe reactions in individuals with pollen or bee allergies. Classified as HIGH severity allergen.",
-      "last_updated": "2025-11-17",
-      "is_additive": false,
-      "additive_type": "unspecified",
-      "clean_label_score": 5,
-      "regulatory_status": "varies",
-      "common_uses": [],
-      "severity_level": "low",
-      "allergen_flag": null
-    },
-    {
-      "id": "PII_PROPOLIS",
-      "standard_name": "Propolis",
-      "aliases": [
-        "propolis",
-        "bee propolis",
-        "bee glue",
-        "propolis extract",
-        "propolis resin"
-      ],
-      "category": "functional_ingredient",
-      "notes": "Resinous mixture collected by bees from tree buds and sap. Used in immune support supplements for its antimicrobial properties. Can cause contact dermatitis and allergic reactions. Classified as MODERATE severity allergen.",
       "last_updated": "2025-11-17",
       "is_additive": false,
       "additive_type": "unspecified",
@@ -400,6 +567,196 @@
       "allergen_flag": null
     },
     {
+      "id": "PII_BENTONITE_CLAY",
+      "standard_name": "Bentonite Clay",
+      "aliases": [
+        "bentonite clay",
+        "montmorillonite clay"
+      ],
+      "category": "processing_aid",
+      "additive_type": "unspecified",
+      "clean_label_score": 4,
+      "notes": "Clay/mineral excipient used as processing aid or binder in some products.",
+      "regulatory_status": "varies",
+      "common_uses": [
+        "processing aid",
+        "binder"
+      ],
+      "last_updated": "2026-02-17",
+      "is_additive": true,
+      "severity_level": "low",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_BERRY_PUREES",
+      "standard_name": "Berry Purees",
+      "aliases": [
+        "Blackberry puree",
+        "Raspberry puree",
+        "Blueberries",
+        "organic Raspberries",
+        "organic Blueberries"
+      ],
+      "category": "fruit_concentrate",
+      "additive_type": "natural_ingredient",
+      "clean_label_score": 10,
+      "notes": "Various berry purees used for flavor and color. Clean label ingredients. GRAS approved.",
+      "regulatory_status": "GRAS",
+      "common_uses": [
+        "flavoring",
+        "natural coloring"
+      ],
+      "last_updated": "2025-12-04",
+      "is_additive": true,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "OI_BISMUTH_CITRATE",
+      "standard_name": "Bismuth Citrate",
+      "aliases": [
+        "bismuth citrate"
+      ],
+      "category": "mineral_salt",
+      "additive_type": "unspecified",
+      "clean_label_score": 4,
+      "notes": "Mineral salt used in specialty products; mapped as non-scorable identity.",
+      "regulatory_status": "varies",
+      "common_uses": [
+        "specialty support"
+      ],
+      "last_updated": "2026-02-17",
+      "is_additive": false,
+      "severity_level": "low",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_BLACK_CARROT_COLOR",
+      "standard_name": "Black Carrot Color",
+      "aliases": [
+        "black carrot",
+        "black carrot extract",
+        "black carrot juice concentrate",
+        "black carrot color",
+        "black carrot concentrate",
+        "black carrot juice color concentrate",
+        "black carrot juice color",
+        "black carrot juice",
+        "black carrot powder",
+        "natural black carrot color",
+        "natural black carrot",
+        "organic black carrot juice concentrate",
+        "organic black carrot",
+        "black carrot juice concentrate color",
+        "ebony carrot",
+        "black carrot juice extract"
+      ],
+      "category": "colorant_natural",
+      "additive_type": "natural_colorant",
+      "clean_label_score": 10,
+      "notes": "Natural purple/red colorant from black carrot juice, rich in anthocyanins. Popular in gummies as a clean label alternative to artificial colors. GRAS approved.",
+      "regulatory_status": "GRAS",
+      "common_uses": [
+        "natural coloring",
+        "purple/red color",
+        "antioxidant benefits"
+      ],
+      "last_updated": "2025-12-04",
+      "is_additive": true,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_BLACK_PEPPER_EXTRACT",
+      "standard_name": "Black Pepper Extract",
+      "aliases": [
+        "Black Pepper Fruit Extract",
+        "black pepper extract",
+        "Piper nigrum extract",
+        "piperine"
+      ],
+      "category": "botanical_extract",
+      "additive_type": "bioenhancer",
+      "clean_label_score": 9,
+      "notes": "Black pepper extract containing piperine. Enhances absorption of other nutrients. GRAS approved.",
+      "regulatory_status": "GRAS",
+      "common_uses": [
+        "absorption enhancement",
+        "bioavailability"
+      ],
+      "last_updated": "2025-12-04",
+      "is_additive": false,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_BLACK_STRAP_MOLASSES",
+      "standard_name": "Blackstrap Molasses",
+      "aliases": [
+        "Black Strap Molasses",
+        "blackstrap molasses",
+        "molasses"
+      ],
+      "category": "sweetener_natural",
+      "additive_type": "natural_sweetener",
+      "clean_label_score": 8,
+      "notes": "Nutrient-rich byproduct of sugar refining. Contains minerals. GRAS approved.",
+      "regulatory_status": "GRAS",
+      "common_uses": [
+        "sweetening",
+        "mineral source",
+        "coloring"
+      ],
+      "last_updated": "2025-12-04",
+      "is_additive": true,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_BLADDERWRACK",
+      "standard_name": "Bladderwrack",
+      "aliases": [
+        "Bladderwrack Whole Plant Extract",
+        "bladderwrack",
+        "Fucus vesiculosus",
+        "bladderwrack extract"
+      ],
+      "category": "botanical_extract",
+      "additive_type": "functional",
+      "clean_label_score": 8,
+      "notes": "Brown seaweed traditionally used for thyroid support due to iodine content. GRAS approved.",
+      "regulatory_status": "GRAS",
+      "common_uses": [
+        "iodine source",
+        "thyroid support"
+      ],
+      "last_updated": "2025-12-04",
+      "is_additive": false,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_BLUEBERRY_JUICE_COLOR",
+      "standard_name": "Blueberry Juice (Color)",
+      "aliases": [
+        "blueberry juice",
+        "blueberry juice powder"
+      ],
+      "category": "colorant_natural",
+      "additive_type": "natural_colorant",
+      "clean_label_score": 10,
+      "notes": "Natural blue/purple colorant from blueberry juice. Rich in anthocyanins. Clean label. GRAS approved.",
+      "regulatory_status": "GRAS",
+      "common_uses": [
+        "natural coloring",
+        "blue/purple color"
+      ],
+      "last_updated": "2025-12-04",
+      "is_additive": true,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
       "id": "PII_CALCIUM_CARBONATE",
       "standard_name": "Calcium Carbonate (as filler)",
       "aliases": [
@@ -438,6 +795,26 @@
       "regulatory_status": "varies",
       "common_uses": [],
       "severity_level": "low",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_CALCIUM_HYDROXIDE",
+      "standard_name": "Calcium Hydroxide",
+      "aliases": [
+        "calcium hydroxide"
+      ],
+      "category": "pH_adjuster",
+      "additive_type": "mineral_salt",
+      "clean_label_score": 6,
+      "notes": "pH adjuster used in small amounts. Common in food processing.",
+      "regulatory_status": "GRAS",
+      "common_uses": [
+        "pH adjustment",
+        "processing aid"
+      ],
+      "last_updated": "2026-01-04",
+      "is_additive": true,
+      "severity_level": "none",
       "allergen_flag": null
     },
     {
@@ -490,6 +867,113 @@
       "allergen_flag": null
     },
     {
+      "id": "OI_CALCIUM_UNDECYLENATE",
+      "standard_name": "Calcium Undecylenate",
+      "aliases": [
+        "calcium undecylenate"
+      ],
+      "category": "specialty_compound",
+      "additive_type": "mineral_salt",
+      "clean_label_score": 5,
+      "notes": "Salt of undecylenic acid used in niche formulations; kept as mapped non-scorable identity pending dedicated quality rubric.",
+      "regulatory_status": "varies",
+      "common_uses": [
+        "specialty support"
+      ],
+      "last_updated": "2026-02-17",
+      "is_additive": false,
+      "severity_level": "low",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_CANNABIDIOL",
+      "standard_name": "Cannabidiol (CBD)",
+      "aliases": [
+        "pure CBD extract",
+        "Full Spectrum Cannabidiol",
+        "CBD",
+        "cannabidiol",
+        "CBD isolate",
+        "broad spectrum CBD"
+      ],
+      "category": "phytocannabinoid",
+      "additive_type": "functional",
+      "clean_label_score": 7,
+      "notes": "Non-psychoactive cannabinoid from hemp. Legal in most jurisdictions when derived from industrial hemp. FDA has not approved CBD as dietary supplement ingredient.",
+      "regulatory_status": "Varies",
+      "common_uses": [
+        "relaxation",
+        "sleep support"
+      ],
+      "last_updated": "2025-12-04",
+      "is_additive": false,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_CANNABIGEROL",
+      "standard_name": "Cannabigerol (CBG)",
+      "aliases": [
+        "cannabigerol",
+        "cbg",
+        "cbg isolate"
+      ],
+      "category": "phytocannabinoid",
+      "additive_type": "functional",
+      "clean_label_score": 7,
+      "notes": "Non-psychoactive cannabinoid from hemp. Precursor cannabinoid. Regulatory status similar to CBD.",
+      "regulatory_status": "Varies",
+      "common_uses": [
+        "wellness support"
+      ],
+      "last_updated": "2025-12-04",
+      "is_additive": false,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_CANNABINOL",
+      "standard_name": "Cannabinol (CBN)",
+      "aliases": [
+        "cannabinol",
+        "cbn",
+        "cbn isolate"
+      ],
+      "category": "phytocannabinoid",
+      "additive_type": "functional",
+      "clean_label_score": 7,
+      "notes": "Mildly psychoactive cannabinoid from hemp. Often marketed for sleep. Regulatory status varies.",
+      "regulatory_status": "Varies",
+      "common_uses": [
+        "sleep support"
+      ],
+      "last_updated": "2025-12-04",
+      "is_additive": false,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_CANOLA_LECITHIN",
+      "standard_name": "Canola Lecithin",
+      "aliases": [
+        "canola lecithin",
+        "rapeseed lecithin"
+      ],
+      "category": "emulsifier",
+      "additive_type": "emulsifier",
+      "clean_label_score": 8,
+      "notes": "Natural emulsifier from canola/rapeseed. Alternative to soy lecithin. GRAS approved.",
+      "regulatory_status": "GRAS",
+      "common_uses": [
+        "emulsifier",
+        "texture improvement"
+      ],
+      "last_updated": "2025-12-04",
+      "is_additive": true,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
       "id": "PII_CARBOXYMETHYL_CELLULOSE",
       "standard_name": "Carboxymethyl Cellulose",
       "aliases": [
@@ -510,25 +994,24 @@
       "allergen_flag": null
     },
     {
-      "id": "OI_CARMINE",
-      "standard_name": "Carmine",
+      "id": "NHA_CARROT_JUICE_COLOR",
+      "standard_name": "Carrot Juice (Color)",
       "aliases": [
-        "carmine",
-        "cochineal extract",
-        "E120",
-        "natural red 4",
-        "carminic acid"
+        "carrot juice concentrate",
+        "carrot juice",
+        "carrot juice, natural",
+        "natural carrot color"
       ],
       "category": "colorant_natural",
       "additive_type": "natural_colorant",
-      "clean_label_score": 7,
-      "notes": "Natural red colorant from cochineal insects. FDA approved. Note: Not suitable for vegans/vegetarians.",
-      "regulatory_status": "FDA Approved",
+      "clean_label_score": 10,
+      "notes": "Natural orange colorant from carrot juice. Rich in beta-carotene. Clean label. GRAS approved.",
+      "regulatory_status": "GRAS",
       "common_uses": [
         "natural coloring",
-        "red color"
+        "orange color"
       ],
-      "last_updated": "2025-11-14",
+      "last_updated": "2025-12-04",
       "is_additive": true,
       "severity_level": "none",
       "allergen_flag": null
@@ -577,12 +1060,35 @@
       "allergen_flag": null
     },
     {
+      "id": "NHA_CHAMOMILE_EXTRACT",
+      "standard_name": "Chamomile Extract",
+      "aliases": [
+        "Chamomile flower (Chamomilla recutita) 4:1 extract",
+        "Chamomile flower 4:1 extract",
+        "chamomile extract",
+        "Matricaria chamomilla extract",
+        "chamomile"
+      ],
+      "category": "botanical_extract",
+      "additive_type": "functional",
+      "clean_label_score": 9,
+      "notes": "Calming herb extract used for relaxation and sleep support. GRAS approved.",
+      "regulatory_status": "GRAS",
+      "common_uses": [
+        "relaxation",
+        "sleep support"
+      ],
+      "last_updated": "2025-12-04",
+      "is_additive": false,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
       "id": "NHA_CHERRY_FLAVOR",
       "standard_name": "Cherry Flavor (Natural & Artificial)",
       "aliases": [
         "natural and artificial cherry flavor",
         "cherry flavor natural",
-        "cherry flavor, natural",
         "artificial cherry flavor",
         "cherry flavoring",
         "natural cherry flavor",
@@ -602,6 +1108,52 @@
       ],
       "last_updated": "2025-11-17",
       "is_additive": true,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_CHICORY_ROOT_FIBER",
+      "standard_name": "Chicory Root Fiber",
+      "aliases": [
+        "prebiotic fiber",
+        "prebiotic chicory root fiber",
+        "chicory fiber",
+        "chicory root fibers",
+        "chicory root soluble fiber"
+      ],
+      "category": "fiber_prebiotic",
+      "additive_type": "dietary_fiber",
+      "clean_label_score": 9,
+      "notes": "Chicory-derived prebiotic fiber used for sweetness reduction and gut health support.",
+      "regulatory_status": "GRAS",
+      "common_uses": [
+        "prebiotic fiber",
+        "bulking agent"
+      ],
+      "last_updated": "2026-01-04",
+      "is_additive": false,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_CHILI_PEPPER",
+      "standard_name": "Chili Pepper",
+      "aliases": [
+        "Chili Pepper",
+        "cayenne pepper",
+        "capsicum"
+      ],
+      "category": "botanical_extract",
+      "additive_type": "functional",
+      "clean_label_score": 9,
+      "notes": "Chili pepper containing capsaicin. Used for metabolism and circulation. GRAS approved.",
+      "regulatory_status": "GRAS",
+      "common_uses": [
+        "metabolism support",
+        "thermogenic"
+      ],
+      "last_updated": "2025-12-04",
+      "is_additive": false,
       "severity_level": "none",
       "allergen_flag": null
     },
@@ -671,7 +1223,6 @@
         "food-grade coating",
         "pharmaceutical coating",
         "film coating",
-        "food grade coating",
         "sour coating",
         "coating and filling materials"
       ],
@@ -684,6 +1235,30 @@
       "regulatory_status": "varies",
       "common_uses": [],
       "severity_level": "low",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_COCOA_BUTTER",
+      "standard_name": "Cocoa Butter",
+      "aliases": [
+        "cocoa butter",
+        "cacao butter",
+        "theobroma oil",
+        "theobroma cacao butter"
+      ],
+      "category": "carrier_filler_natural",
+      "additive_type": "carrier",
+      "clean_label_score": 9,
+      "notes": "Natural fat extracted from cocoa beans. Used as a carrier for fat-soluble ingredients and to improve texture in supplements. Melts at body temperature.",
+      "regulatory_status": "GRAS",
+      "common_uses": [
+        "fat-soluble carrier",
+        "texture improvement",
+        "coating agent"
+      ],
+      "last_updated": "2026-01-06",
+      "is_additive": false,
+      "severity_level": "none",
       "allergen_flag": null
     },
     {
@@ -718,26 +1293,29 @@
       "allergen_flag": null
     },
     {
-      "id": "NHA_COCOA_BUTTER",
-      "standard_name": "Cocoa Butter",
+      "id": "NHA_GENERIC_COLOR_TERMS",
+      "standard_name": "Colors Added (Generic)",
       "aliases": [
-        "cocoa butter",
-        "cacao butter",
-        "theobroma oil",
-        "theobroma cacao butter"
+        "colors added",
+        "colored with",
+        "colored",
+        "for colors",
+        "for color",
+        "containing one or more of the following:",
+        "natural and artificial colors",
+        "food color, natural"
       ],
-      "category": "carrier_filler_natural",
-      "additive_type": "carrier",
-      "clean_label_score": 9,
-      "notes": "Natural fat extracted from cocoa beans. Used as a carrier for fat-soluble ingredients and to improve texture in supplements. Melts at body temperature.",
-      "regulatory_status": "GRAS",
+      "category": "colorant_generic",
+      "additive_type": "colorant",
+      "clean_label_score": 5,
+      "notes": "Generic coloring term. May indicate natural or artificial colors - specific identification recommended. Generally safe but vague labeling.",
+      "regulatory_status": "Varies",
       "common_uses": [
-        "fat-soluble carrier",
-        "texture improvement",
-        "coating agent"
+        "coloring",
+        "visual appeal"
       ],
-      "last_updated": "2026-01-06",
-      "is_additive": false,
+      "last_updated": "2025-12-04",
+      "is_additive": true,
       "severity_level": "none",
       "allergen_flag": null
     },
@@ -761,61 +1339,11 @@
       "allergen_flag": null
     },
     {
-      "id": "NHA_YOGURT_POWDER",
-      "standard_name": "Yogurt Powder",
-      "aliases": [
-        "yogurt powder",
-        "yogurt, powder",
-        "dried yogurt",
-        "yoghurt powder"
-      ],
-      "category": "dairy_derivative",
-      "additive_type": "flavor_texture",
-      "clean_label_score": 7,
-      "notes": "Dried yogurt used for flavor and texture. Contains milk allergen. May provide some probiotic benefits if cultures are preserved.",
-      "regulatory_status": "GRAS",
-      "common_uses": [
-        "flavor",
-        "texture",
-        "probiotic base"
-      ],
-      "allergen_flag": "milk",
-      "last_updated": "2026-01-06",
-      "is_additive": false,
-      "severity_level": "none"
-    },
-    {
-      "id": "NHA_SKIM_MILK_POWDER",
-      "standard_name": "Skim Milk Powder",
-      "aliases": [
-        "skim milk powder",
-        "nonfat dry milk",
-        "nonfat milk powder",
-        "dried skim milk"
-      ],
-      "category": "dairy_derivative",
-      "additive_type": "filler_protein",
-      "clean_label_score": 7,
-      "notes": "Dried milk with fat removed. Contains milk allergen. Used as protein source and filler in some supplements.",
-      "regulatory_status": "GRAS",
-      "common_uses": [
-        "protein source",
-        "filler",
-        "tablet binder"
-      ],
-      "allergen_flag": "milk",
-      "last_updated": "2026-01-06",
-      "is_additive": false,
-      "severity_level": "none"
-    },
-    {
       "id": "PII_CONTAINS_LESS_THAN_2_PERCENT",
       "standard_name": "Contains <2% of (ingredient list indicator)",
       "aliases": [
         "contains <2% of:",
-        "contains <2% of",
-        "contains less than 2% of:",
-        "contains less than 2% of"
+        "contains less than 2% of:"
       ],
       "category": "labeling_indicator",
       "notes": "FDA labeling requirement indicating that subsequent ingredients comprise less than 2% of the product by weight. Not an actual ingredient but a regulatory disclosure statement.",
@@ -853,6 +1381,30 @@
       "allergen_flag": null
     },
     {
+      "id": "NHA_CRANBERRY_EXTRACT",
+      "standard_name": "Cranberry Concentrate",
+      "aliases": [
+        "Pacran Cranberry concentrate powder",
+        "CranRx 100% whole Cranberry",
+        "CranRx Cranberry fruit concentrate",
+        "cranberry extract",
+        "cranberry concentrate"
+      ],
+      "category": "fruit_extract",
+      "additive_type": "functional",
+      "clean_label_score": 9,
+      "notes": "Cranberry concentrate used for urinary tract health. Clean label ingredient. GRAS approved.",
+      "regulatory_status": "GRAS",
+      "common_uses": [
+        "UTI support",
+        "antioxidant"
+      ],
+      "last_updated": "2025-12-04",
+      "is_additive": false,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
       "id": "PII_CROSCARMELLOSE",
       "standard_name": "Croscarmellose Sodium",
       "aliases": [
@@ -878,7 +1430,6 @@
       "aliases": [
         "cyclodextrin",
         "beta-cyclodextrin",
-        "γ-cyclodextrin",
         "alpha-cyclodextrin"
       ],
       "category": "solubilizer",
@@ -890,6 +1441,32 @@
       "regulatory_status": "varies",
       "common_uses": [],
       "severity_level": "low",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_DI_WATER",
+      "standard_name": "Deionized Water",
+      "aliases": [
+        "DI Water",
+        "Dl water",
+        "deionized water",
+        "purified water",
+        "water, deionized",
+        "water, distilled",
+        "distilled water"
+      ],
+      "category": "solvent",
+      "additive_type": "processing_aid",
+      "clean_label_score": 10,
+      "notes": "Purified water with minerals removed. Standard pharmaceutical-grade water.",
+      "regulatory_status": "GRAS",
+      "common_uses": [
+        "solvent",
+        "processing"
+      ],
+      "last_updated": "2025-12-04",
+      "is_additive": true,
+      "severity_level": "none",
       "allergen_flag": null
     },
     {
@@ -975,8 +1552,7 @@
       "standard_name": "Directline Technology",
       "aliases": [
         "directline technology",
-        "directline nutrient delivery technology",
-        "directline™ technology"
+        "directline nutrient delivery technology"
       ],
       "category": "delivery_system",
       "notes": "Branded delivery-system label term used as a carrier/technology descriptor. Treated as recognized non-scorable identity in scoring.",
@@ -1031,6 +1607,77 @@
       "allergen_flag": null
     },
     {
+      "id": "NHA_ECHINACEA_EXTRACT",
+      "standard_name": "Echinacea Extract",
+      "aliases": [
+        "Echinacea purpurea (aerial and root parts) 4:1 extract",
+        "Echinacea (Echinacea purpurea) root 4:1 extract",
+        "Echinacea (Echinacea purpurea) aerial parts 4:1 extract",
+        "Echinacea root 4:1 extract",
+        "echinacea extract",
+        "Echinacea purpurea extract"
+      ],
+      "category": "botanical_extract",
+      "additive_type": "functional",
+      "clean_label_score": 9,
+      "notes": "Immune-supporting herb extract. Popular for cold and flu support. GRAS approved.",
+      "regulatory_status": "GRAS",
+      "common_uses": [
+        "immune support",
+        "cold and flu"
+      ],
+      "last_updated": "2025-12-04",
+      "is_additive": false,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_ELDERBERRY_EXTRACT",
+      "standard_name": "Elderberry Extract",
+      "aliases": [
+        "Elderberry Herb Extract",
+        "organic ElderCraft European Elderberry extract",
+        "elderberry extract",
+        "sambucus nigra extract"
+      ],
+      "category": "botanical_extract",
+      "additive_type": "functional",
+      "clean_label_score": 9,
+      "notes": "Elderberry extract used for immune support. Popular cold and flu remedy. GRAS approved.",
+      "regulatory_status": "GRAS",
+      "common_uses": [
+        "immune support",
+        "antioxidant"
+      ],
+      "last_updated": "2025-12-04",
+      "is_additive": false,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_ELDERBERRY_JUICE_COLOR",
+      "standard_name": "Elderberry Juice (Color)",
+      "aliases": [
+        "elderberry juice concentrate",
+        "elderberry juice",
+        "elderberry color",
+        "elderberry juice powder"
+      ],
+      "category": "colorant_natural",
+      "additive_type": "natural_colorant",
+      "clean_label_score": 10,
+      "notes": "Natural colorant from elderberry juice. Rich in anthocyanins. Clean label ingredient. GRAS approved.",
+      "regulatory_status": "GRAS",
+      "common_uses": [
+        "natural coloring",
+        "purple color"
+      ],
+      "last_updated": "2025-12-04",
+      "is_additive": true,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
       "id": "PII_ENTERIC_COATING",
       "standard_name": "Enteric Coating",
       "aliases": [
@@ -1049,6 +1696,31 @@
       "regulatory_status": "varies",
       "common_uses": [],
       "severity_level": "low",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_ETHYLCELLULOSE",
+      "standard_name": "Ethylcellulose",
+      "aliases": [
+        "ethylcellulose",
+        "ethyl cellulose",
+        "ec",
+        "e462"
+      ],
+      "category": "coating_agent",
+      "additive_type": "film_former",
+      "clean_label_score": 7,
+      "notes": "Cellulose derivative used as coating agent and controlled release matrix. Provides moisture barrier and taste masking. GRAS approved with excellent safety profile.",
+      "regulatory_status": "GRAS",
+      "common_uses": [
+        "coating",
+        "controlled release",
+        "moisture barrier",
+        "taste masking"
+      ],
+      "last_updated": "2026-01-06",
+      "is_additive": true,
+      "severity_level": "none",
       "allergen_flag": null
     },
     {
@@ -1117,6 +1789,23 @@
       "allergen_flag": null
     },
     {
+      "id": "PII_FRACTIONATED_COCONUT_OIL_BEESWAX",
+      "standard_name": "Fractionated Coconut Oil/Beeswax",
+      "aliases": [
+        "fractionated coconut oil/beeswax"
+      ],
+      "category": "coating_glazing_natural",
+      "notes": "Blend used as a coating or glazing agent. Generally safe as a passive excipient.",
+      "last_updated": "2026-01-04",
+      "is_additive": true,
+      "additive_type": "unspecified",
+      "clean_label_score": 5,
+      "regulatory_status": "varies",
+      "common_uses": [],
+      "severity_level": "low",
+      "allergen_flag": null
+    },
+    {
       "id": "PII_FRESH_FRUITY_FLAVOR",
       "standard_name": "Fresh Fruity Flavor",
       "aliases": [
@@ -1153,13 +1842,10 @@
         "cherry juice crystals",
         "powdered pomegranate juice concentrate",
         "orange juice powder",
-        "orange juice, powder",
         "lemon juice powder",
         "tomato juice",
         "veg. juice",
-        "veg juice",
-        "fruit juice, natural",
-        "fruit juice natural"
+        "fruit juice, natural"
       ],
       "category": "natural_sweetener_colorant",
       "additive_type": "natural_ingredient",
@@ -1210,6 +1896,42 @@
       "allergen_flag": null
     },
     {
+      "id": "NHA_JUICE_CONCENTRATES",
+      "standard_name": "Fruit Juice Concentrates",
+      "aliases": [
+        "pear juice concentrate",
+        "pineapple juice concentrate",
+        "blueberry juice concentrate",
+        "blackberry juice concentrate",
+        "maqui berry juice concentrate",
+        "carrot juice concentrate",
+        "watermelon juice concentrate",
+        "hibiscus juice concentrate",
+        "cherry juice concentrate",
+        "blackcurrant juice concentrate",
+        "pumpkin juice concentrate",
+        "raspberry juice concentrate",
+        "strawberry juice concentrate",
+        "chokeberry juice concentrate",
+        "juice concentrates",
+        "natural juice concentrates",
+        "lime juice concentrate"
+      ],
+      "category": "colorant_flavoring_natural",
+      "additive_type": "natural_colorant",
+      "clean_label_score": 10,
+      "notes": "Natural fruit juice concentrates used for color and flavor. Clean label ingredients. GRAS approved.",
+      "regulatory_status": "GRAS",
+      "common_uses": [
+        "natural coloring",
+        "flavoring"
+      ],
+      "last_updated": "2025-12-04",
+      "is_additive": true,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
       "id": "PII_GELATIN_CAPSULE",
       "standard_name": "Gelatin Capsule",
       "aliases": [
@@ -1228,7 +1950,13 @@
         "gelatine",
         "pork gelatin",
         "grass fed gelatin",
-        "100% bovine gelatin"
+        "100% bovine gelatin",
+        "soft gel capsule",
+        "Soft Gel Capsule",
+        "softgel",
+        "softgel capsule",
+        "Softgel Shell ingredients",
+        "softgel shell ingredients"
       ],
       "category": "capsule_material",
       "notes": "Derived from animal collagen, forming the shell of traditional capsules and softgels. Provides a protective casing. While animal-derived (not vegan/vegetarian), it is generally considered safe and inert in its role as a capsule material.",
@@ -1239,6 +1967,49 @@
       "regulatory_status": "varies",
       "common_uses": [],
       "severity_level": "low",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_GINGER_EXTRACT",
+      "standard_name": "Ginger Extract",
+      "aliases": [
+        "Ginger dry extract",
+        "ginger extract",
+        "organic fermented Ginger",
+        "Zingiber officinale extract"
+      ],
+      "category": "botanical_extract",
+      "additive_type": "functional",
+      "clean_label_score": 9,
+      "notes": "Ginger root extract used for digestive and anti-inflammatory benefits. GRAS approved.",
+      "regulatory_status": "GRAS",
+      "common_uses": [
+        "digestive support",
+        "anti-nausea"
+      ],
+      "last_updated": "2025-12-04",
+      "is_additive": false,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_GINGER_FLAVOR",
+      "standard_name": "Ginger Flavor",
+      "aliases": [
+        "Ginger flavor",
+        "natural ginger flavor"
+      ],
+      "category": "flavor_natural",
+      "additive_type": "natural_flavoring",
+      "clean_label_score": 8,
+      "notes": "Natural ginger flavoring. GRAS approved.",
+      "regulatory_status": "GRAS",
+      "common_uses": [
+        "flavoring"
+      ],
+      "last_updated": "2025-12-04",
+      "is_additive": true,
+      "severity_level": "none",
       "allergen_flag": null
     },
     {
@@ -1291,6 +2062,31 @@
       "allergen_flag": null
     },
     {
+      "id": "NHA_GLYCERINE",
+      "standard_name": "Glycerine",
+      "aliases": [
+        "glycerine",
+        "glycerin",
+        "glycerol",
+        "vegetable glycerin",
+        "vegetable glycerine"
+      ],
+      "category": "humectant",
+      "additive_type": "moisture_retention",
+      "clean_label_score": 8,
+      "notes": "Natural humectant derived from vegetable oils. Essential for gummy texture and shelf life. GRAS approved.",
+      "regulatory_status": "GRAS",
+      "common_uses": [
+        "humectant",
+        "sweetener",
+        "texture modifier"
+      ],
+      "last_updated": "2025-12-04",
+      "is_additive": true,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
       "id": "PII_GLYCEROL_MONOSTEARATE",
       "standard_name": "Glycerol Monostearate",
       "aliases": [
@@ -1329,6 +2125,79 @@
       "allergen_flag": null
     },
     {
+      "id": "NHA_GLYCYRRHIZIN_SWEETENER",
+      "standard_name": "Glycyrrhizin Sweetener",
+      "aliases": [
+        "glycyrrhizin",
+        "monoammoniated glycyrrhizin",
+        "monoammonium glycyrrhizinate",
+        "mag sweetener",
+        "ammoniated glycyrrhizin",
+        "glycyrrhizin ammonium salt",
+        "licorice sweetener"
+      ],
+      "category": "sweetener_natural",
+      "additive_type": "natural_sweetener",
+      "clean_label_score": 7,
+      "notes": "Natural sweetener derived from licorice root (Glycyrrhiza glabra). Approximately 30-50x sweeter than sugar. Used in small amounts as flavor enhancer. MAG form commonly used in supplements. May raise blood pressure in sensitive individuals with excessive use.",
+      "regulatory_status": "GRAS",
+      "common_uses": [
+        "flavor enhancement",
+        "natural sweetening",
+        "taste masking"
+      ],
+      "last_updated": "2026-01-06",
+      "is_additive": true,
+      "severity_level": "low",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_COCONUT_GRANULATED",
+      "standard_name": "Granulated Coconut",
+      "aliases": [
+        "Coconut, Granulated",
+        "granulated coconut",
+        "coconut granules"
+      ],
+      "category": "flavor_texture",
+      "additive_type": "natural_ingredient",
+      "clean_label_score": 9,
+      "notes": "Dried coconut in granulated form. Used for flavor and texture. GRAS approved.",
+      "regulatory_status": "GRAS",
+      "common_uses": [
+        "flavor",
+        "texture"
+      ],
+      "last_updated": "2025-12-04",
+      "is_additive": true,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_GRAPE_JUICE_COLOR",
+      "standard_name": "Grape Juice Color",
+      "aliases": [
+        "grape juice concentrate",
+        "grape juice",
+        "grape juice color concentrate",
+        "grape juice extract",
+        "red grape juice concentrate"
+      ],
+      "category": "colorant_natural",
+      "additive_type": "natural_colorant",
+      "clean_label_score": 10,
+      "notes": "Natural colorant from grape juice. Rich in anthocyanins. Clean label alternative to artificial colors. GRAS approved.",
+      "regulatory_status": "GRAS",
+      "common_uses": [
+        "natural coloring",
+        "purple/red color"
+      ],
+      "last_updated": "2025-12-04",
+      "is_additive": true,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
       "id": "OI_GUAR_GUM",
       "standard_name": "Guar Gum",
       "aliases": [
@@ -1354,6 +2223,63 @@
       "allergen_flag": null
     },
     {
+      "id": "NHA_HEMP_EXTRACT",
+      "standard_name": "Hemp Extract",
+      "aliases": [
+        "Hemp extract",
+        "Full Spectrum Hemp Extract",
+        "Full Spectrum Hemp Aerial Parts Extract",
+        "Broad Spectrum Hemp extract",
+        "Broad Spectrum Hemp Distillate",
+        "Hemp Flower, Leaf Extract",
+        "Hemp",
+        "industrial hemp extract",
+        "CBD Hemp extract",
+        "Colorado Hemp Extract"
+      ],
+      "category": "botanical_extract",
+      "additive_type": "functional",
+      "clean_label_score": 7,
+      "notes": "Hemp extract containing various phytocannabinoids. Legal hemp contains <0.3% THC. Regulatory status varies by state.",
+      "regulatory_status": "Varies",
+      "common_uses": [
+        "relaxation",
+        "sleep support",
+        "stress relief"
+      ],
+      "last_updated": "2025-12-04",
+      "is_additive": false,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "PII_HONEY",
+      "standard_name": "Honey",
+      "aliases": [
+        "honey",
+        "organic honey",
+        "raw honey",
+        "pure honey",
+        "honey powder",
+        "honey extract",
+        "honey freeze dried extract",
+        "dried honey extract",
+        "concentrated honey",
+        "dried honey",
+        "dehydrated honey"
+      ],
+      "category": "sweetener_natural",
+      "notes": "Natural sweetener produced by bees from flower nectar. Used as a sweetener, binder, or flavor in supplements. Generally safe but can cause allergic reactions in sensitive individuals. Not recommended for infants under 1 year.",
+      "last_updated": "2025-11-17",
+      "is_additive": true,
+      "additive_type": "unspecified",
+      "clean_label_score": 5,
+      "regulatory_status": "varies",
+      "common_uses": [],
+      "severity_level": "low",
+      "allergen_flag": null
+    },
+    {
       "id": "PII_HONEY_FLAVOR",
       "standard_name": "Honey Flavor",
       "aliases": [
@@ -1370,6 +2296,53 @@
       "regulatory_status": "varies",
       "common_uses": [],
       "severity_level": "low",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_HYDROGENATED_COCONUT_OIL",
+      "standard_name": "Hydrogenated Coconut Oil",
+      "aliases": [
+        "Coconut Oil, Hydrogenated",
+        "hydrogenated coconut oil"
+      ],
+      "category": "oil_carrier",
+      "additive_type": "processing_aid",
+      "clean_label_score": 5,
+      "notes": "Coconut oil that has been hydrogenated for stability. Used as carrier and for texture. Less clean label than unhydrogenated.",
+      "regulatory_status": "GRAS",
+      "common_uses": [
+        "carrier",
+        "texture",
+        "stability"
+      ],
+      "last_updated": "2025-12-04",
+      "is_additive": true,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_COLLAGEN_HYDROLYZED",
+      "standard_name": "Hydrolyzed Collagen",
+      "aliases": [
+        "Collagen, Hydrolyzed",
+        "Hydrolyzed Collagen Types 1 & 3",
+        "hydrolyzed Bovine Collagen",
+        "hydrolyzed collagen",
+        "collagen peptides",
+        "hydrolyzed collagen peptides"
+      ],
+      "category": "protein",
+      "additive_type": "functional",
+      "clean_label_score": 8,
+      "notes": "Broken down collagen protein for better absorption. Popular for skin, hair, nail, and joint health. GRAS approved.",
+      "regulatory_status": "GRAS",
+      "common_uses": [
+        "skin health",
+        "joint support"
+      ],
+      "last_updated": "2025-12-04",
+      "is_additive": false,
+      "severity_level": "none",
       "allergen_flag": null
     },
     {
@@ -1413,27 +2386,95 @@
       "allergen_flag": null
     },
     {
-      "id": "NHA_ETHYLCELLULOSE",
-      "standard_name": "Ethylcellulose",
+      "id": "NHA_INULIN",
+      "standard_name": "Inulin",
       "aliases": [
-        "ethylcellulose",
-        "ethyl cellulose",
-        "ec",
-        "e462"
+        "inulin syrup",
+        "inulin fiber"
       ],
-      "category": "coating_agent",
-      "additive_type": "film_former",
-      "clean_label_score": 7,
-      "notes": "Cellulose derivative used as coating agent and controlled release matrix. Provides moisture barrier and taste masking. GRAS approved with excellent safety profile.",
+      "category": "fiber_prebiotic",
+      "additive_type": "dietary_fiber",
+      "clean_label_score": 9,
+      "notes": "Prebiotic fiber commonly derived from chicory root. Supports gut health and texture in gummies.",
       "regulatory_status": "GRAS",
       "common_uses": [
-        "coating",
-        "controlled release",
-        "moisture barrier",
-        "taste masking"
+        "prebiotic fiber",
+        "texture improvement"
       ],
-      "last_updated": "2026-01-06",
-      "is_additive": true,
+      "last_updated": "2026-01-04",
+      "is_additive": false,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_IRISH_SEA_MOSS",
+      "standard_name": "Irish Sea Moss",
+      "aliases": [
+        "Irish Sea Moss",
+        "Irish Sea Moss Extract",
+        "sea moss",
+        "Chondrus crispus",
+        "carrageen moss"
+      ],
+      "category": "botanical_extract",
+      "additive_type": "functional",
+      "clean_label_score": 9,
+      "notes": "Red algae used for mineral content and as a thickening agent. Popular in wellness products. GRAS approved.",
+      "regulatory_status": "GRAS",
+      "common_uses": [
+        "mineral source",
+        "thickener"
+      ],
+      "last_updated": "2025-12-04",
+      "is_additive": false,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_ISOMALTOOLIGOSACCHARIDES",
+      "standard_name": "Isomaltooligosaccharides",
+      "aliases": [
+        "isomalto-oligosaccharides",
+        "isomaltooligosaccharides",
+        "isomalto-oligosaccharide",
+        "isomalto",
+        "imo syrup",
+        "imo"
+      ],
+      "category": "prebiotic_sweetener",
+      "additive_type": "prebiotic_fiber",
+      "clean_label_score": 8,
+      "notes": "Prebiotic fiber syrup used for texture and mild sweetness. Generally well-tolerated and used as a fiber source.",
+      "regulatory_status": "GRAS",
+      "common_uses": [
+        "prebiotic fiber",
+        "mild sweetening",
+        "texture"
+      ],
+      "last_updated": "2026-01-04",
+      "is_additive": false,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_KERATIN",
+      "standard_name": "Keratin",
+      "aliases": [
+        "Keratin",
+        "hydrolyzed keratin",
+        "cynatine HNS"
+      ],
+      "category": "protein",
+      "additive_type": "functional",
+      "clean_label_score": 8,
+      "notes": "Protein for hair, skin, and nail health. Derived from wool or feathers. GRAS approved.",
+      "regulatory_status": "GRAS",
+      "common_uses": [
+        "hair health",
+        "nail health"
+      ],
+      "last_updated": "2025-12-04",
+      "is_additive": false,
       "severity_level": "none",
       "allergen_flag": null
     },
@@ -1503,6 +2544,51 @@
       "allergen_flag": null
     },
     {
+      "id": "NHA_LEMON_BALM_EXTRACT",
+      "standard_name": "Lemon Balm Extract",
+      "aliases": [
+        "Lemon Balm leaf (Melissa officinalis) 4:1 extract",
+        "Lemon Balm Aerial Parts Extract",
+        "Lemon Balm leaf 4:1 extract",
+        "lemon balm extract",
+        "Melissa officinalis extract",
+        "lemon balm"
+      ],
+      "category": "botanical_extract",
+      "additive_type": "functional",
+      "clean_label_score": 9,
+      "notes": "Calming herb extract used for relaxation and sleep support. GRAS approved.",
+      "regulatory_status": "GRAS",
+      "common_uses": [
+        "relaxation",
+        "sleep support",
+        "stress relief"
+      ],
+      "last_updated": "2025-12-04",
+      "is_additive": false,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "OI_LYMPH_GLANDULAR",
+      "standard_name": "Lymph",
+      "aliases": [
+        "lymph"
+      ],
+      "category": "glandular_tissue",
+      "additive_type": "unspecified",
+      "clean_label_score": 4,
+      "notes": "Label-level glandular descriptor mapped for identity coverage.",
+      "regulatory_status": "varies",
+      "common_uses": [
+        "glandular support"
+      ],
+      "last_updated": "2026-02-17",
+      "is_additive": false,
+      "severity_level": "low",
+      "allergen_flag": null
+    },
+    {
       "id": "NHA_MAGNESIUM_STEARATE",
       "standard_name": "Magnesium Stearate",
       "aliases": [
@@ -1558,6 +2644,28 @@
       "allergen_flag": null
     },
     {
+      "id": "NHA_MALT_SYRUP",
+      "standard_name": "Malt Syrup",
+      "aliases": [
+        "malt syrup",
+        "barley malt syrup",
+        "rice syrup solids"
+      ],
+      "category": "sweetener_natural",
+      "additive_type": "natural_sweetener",
+      "clean_label_score": 7,
+      "notes": "Natural sweetener from malted grains. Less refined than corn syrup. Used in gummies for sweetness and texture. GRAS approved.",
+      "regulatory_status": "GRAS",
+      "common_uses": [
+        "sweetening",
+        "texture modification"
+      ],
+      "last_updated": "2025-12-04",
+      "is_additive": true,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
       "id": "NHA_MALTOSE",
       "standard_name": "Maltose",
       "aliases": [
@@ -1577,6 +2685,28 @@
         "food processing"
       ],
       "last_updated": "2025-09-20",
+      "is_additive": true,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_MANGO_PUREE",
+      "standard_name": "Mango Puree",
+      "aliases": [
+        "Mango puree",
+        "organic Mangoes",
+        "mango concentrate"
+      ],
+      "category": "fruit_concentrate",
+      "additive_type": "natural_ingredient",
+      "clean_label_score": 10,
+      "notes": "Mango puree used for flavor and natural sweetness. Clean label ingredient. GRAS approved.",
+      "regulatory_status": "GRAS",
+      "common_uses": [
+        "flavoring",
+        "natural sweetening"
+      ],
+      "last_updated": "2025-12-04",
       "is_additive": true,
       "severity_level": "none",
       "allergen_flag": null
@@ -1616,7 +2746,6 @@
         "medium chain triglyceride",
         "medium chain triglyceride oil",
         "medium chain glycerides",
-        "medium-chain triglycerides",
         "mct coconut oil",
         "coconut oil triglycerides",
         "coconut oil, fractionated",
@@ -1685,23 +2814,73 @@
       "allergen_flag": null
     },
     {
-      "id": "PII_MINERAL_OIL",
-      "standard_name": "Mineral Oil",
+      "id": "NHA_MISC_JUICE_CONCENTRATES",
+      "standard_name": "Miscellaneous Juice Concentrates",
       "aliases": [
-        "liquid paraffin",
-        "white mineral oil",
-        "pharmaceutical mineral oil",
-        "USP mineral oil"
+        "Genipap juice concentrate",
+        "Hibiscus concentrate",
+        "organic Goji juice",
+        "organic Acai puree",
+        "Sweet Potato Juice",
+        "deionized Pineapple",
+        "deionized Pineapple juice Concentrate",
+        "Clarified Lemon Juice Concentrate",
+        "Pepper Juice",
+        "Paprika Juice Concentrate",
+        "Turmeric juice",
+        "organic Peaches",
+        "organic Orange Peel",
+        "Black Elder juice powder",
+        "Red Radish",
+        "organic Banana powder",
+        "Aronia extract",
+        "organic Aronia Berry (Sorbaronia mitschurinii) juice concentrate"
       ],
-      "category": "lubricant_release_agent",
-      "notes": "Can be used as a lubricant or release agent in manufacturing. Food-grade mineral oil is generally considered safe, though some prefer plant-based alternatives.",
-      "last_updated": "2025-11-17",
+      "category": "fruit_vegetable_juice",
+      "additive_type": "natural_colorant",
+      "clean_label_score": 10,
+      "notes": "Various fruit and vegetable juice concentrates used for natural color and flavor. Clean label ingredients. GRAS approved.",
+      "regulatory_status": "GRAS",
+      "common_uses": [
+        "natural coloring",
+        "flavoring"
+      ],
+      "last_updated": "2025-12-04",
       "is_additive": true,
-      "additive_type": "unspecified",
-      "clean_label_score": 5,
-      "regulatory_status": "varies",
-      "common_uses": [],
-      "severity_level": "low",
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_MISC_NATURAL_FLAVORS",
+      "standard_name": "Miscellaneous Natural Flavors",
+      "aliases": [
+        "natural Strawberry-Banana flavor",
+        "natural Raspberry flavors",
+        "natural Lemon-Lime flavor",
+        "natural Passiflora flavor",
+        "Passionfruit flavor",
+        "natural Strawberry flavors",
+        "natural Cranberry-Orange flavor",
+        "Berry natural flavor",
+        "natural Tart Cherry flavor",
+        "Black Tea flavor",
+        "Masking Flavor",
+        "natural Strawberry and Orange extract",
+        "Natural and Artifical flavors",
+        "Lemon, Natural"
+      ],
+      "category": "flavor_natural",
+      "additive_type": "natural_flavoring",
+      "clean_label_score": 8,
+      "notes": "Various natural flavoring agents. GRAS approved.",
+      "regulatory_status": "GRAS",
+      "common_uses": [
+        "flavoring",
+        "taste enhancement"
+      ],
+      "last_updated": "2025-12-04",
+      "is_additive": true,
+      "severity_level": "none",
       "allergen_flag": null
     },
     {
@@ -1710,7 +2889,6 @@
       "aliases": [
         "modified food starch",
         "food starch modified",
-        "food starch, modified",
         "modified starch",
         "modified corn starch"
       ],
@@ -1725,6 +2903,30 @@
         "texture improvement"
       ],
       "last_updated": "2025-11-17",
+      "is_additive": true,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_STARCH_MODIFIED",
+      "standard_name": "Modified Starch",
+      "aliases": [
+        "starch, modified",
+        "modified potato starch",
+        "corn starch, modified",
+        "starch acetate",
+        "Tarch Acetate"
+      ],
+      "category": "thickener_stabilizer",
+      "additive_type": "texture_modifier",
+      "clean_label_score": 6,
+      "notes": "Chemically modified starch for improved stability and texture. FDA approved food additive.",
+      "regulatory_status": "FDA Approved",
+      "common_uses": [
+        "thickener",
+        "stabilizer"
+      ],
+      "last_updated": "2025-12-04",
       "is_additive": true,
       "severity_level": "none",
       "allergen_flag": null
@@ -1767,7 +2969,6 @@
       "aliases": [
         "mono and diglycerides",
         "mono & diglycerides",
-        "mono-and diglycerides",
         "mono- and di-glycerides",
         "monoglycerides",
         "diglycerides",
@@ -1786,6 +2987,56 @@
         "stability enhancement"
       ],
       "last_updated": "2025-11-17",
+      "is_additive": true,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_MUSHROOM_EXTRACTS",
+      "standard_name": "Mushroom Extracts",
+      "aliases": [
+        "Lion's Mane Mushroom Fruiting Body Extract",
+        "Reishi Mushroom Fruiting Body Extract",
+        "Royal Sun Mushroom",
+        "White Button Mushroom",
+        "Black Fungus Mushroom",
+        "lion's mane extract",
+        "reishi extract",
+        "mushroom extract"
+      ],
+      "category": "botanical_extract",
+      "additive_type": "functional",
+      "clean_label_score": 9,
+      "notes": "Functional mushroom extracts used for various health benefits. Popular for cognitive and immune support. GRAS approved.",
+      "regulatory_status": "GRAS",
+      "common_uses": [
+        "cognitive support",
+        "immune support"
+      ],
+      "last_updated": "2025-12-04",
+      "is_additive": false,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_NATURAL_APPLE_FLAVOR",
+      "standard_name": "Natural Apple Flavor",
+      "aliases": [
+        "Apple Flavor, Natural",
+        "Natural Apple flavour",
+        "natural apple flavor",
+        "apple natural flavor"
+      ],
+      "category": "flavor_natural",
+      "additive_type": "natural_flavoring",
+      "clean_label_score": 8,
+      "notes": "Natural flavoring derived from apple sources. GRAS approved.",
+      "regulatory_status": "GRAS",
+      "common_uses": [
+        "flavoring",
+        "taste enhancement"
+      ],
+      "last_updated": "2025-12-04",
       "is_additive": true,
       "severity_level": "none",
       "allergen_flag": null
@@ -1867,6 +3118,28 @@
       "allergen_flag": null
     },
     {
+      "id": "NHA_NATURAL_BLUEBERRY_FLAVOR",
+      "standard_name": "Natural Blueberry Flavor",
+      "aliases": [
+        "Blueberry Flavor, Natural",
+        "natural blueberry flavor",
+        "blueberry natural flavor"
+      ],
+      "category": "flavor_natural",
+      "additive_type": "natural_flavoring",
+      "clean_label_score": 8,
+      "notes": "Natural flavoring derived from blueberry sources. GRAS approved.",
+      "regulatory_status": "GRAS",
+      "common_uses": [
+        "flavoring",
+        "taste enhancement"
+      ],
+      "last_updated": "2025-12-04",
+      "is_additive": true,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
       "id": "NHA_NATURAL_CINNAMON_FLAVOR",
       "standard_name": "Natural Cinnamon Flavor",
       "aliases": [
@@ -1885,6 +3158,36 @@
         "palatability"
       ],
       "last_updated": "2025-09-20",
+      "is_additive": true,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_NATURAL_ORANGE_TANGERINE_FLAVOR",
+      "standard_name": "Natural Citrus-Orange Flavor",
+      "aliases": [
+        "natural orange tangerine flavor",
+        "orange tangerine flavor",
+        "natural citrus flavor",
+        "natural citrus flavors",
+        "natural orange flavor",
+        "natural tangerine flavor",
+        "natural citrus-orange flavors",
+        "citrus orange flavor natural",
+        "natural citrus orange flavor"
+      ],
+      "category": "flavor_natural",
+      "additive_type": "natural_flavor",
+      "clean_label_score": 8,
+      "notes": "Natural flavoring derived from citrus sources including orange and tangerine. FEMA GRAS approved as citrus-derived natural flavor complex. FDA 21 CFR Part 172 compliant.",
+      "regulatory_status": "GRAS",
+      "common_uses": [
+        "flavor enhancement",
+        "taste masking",
+        "product palatability",
+        "citrus profile development"
+      ],
+      "last_updated": "2025-11-15",
       "is_additive": true,
       "severity_level": "none",
       "allergen_flag": null
@@ -1942,7 +3245,6 @@
         "red cabbage",
         "red radish color",
         "radish, natural",
-        "radish natural",
         "beet root color",
         "violet"
       ],
@@ -1974,7 +3276,6 @@
         "color added",
         "natural orange color",
         "natural yellow orange coloring",
-        "natural yellow/orange coloring",
         "natural carotene coloring"
       ],
       "category": "colorant_natural",
@@ -2035,18 +3336,11 @@
         "natural licorice flavor",
         "licorice flavor natural",
         "strawberry flavor natural",
-        "strawberry flavor, natural",
-        "raspberry flavor, natural",
         "mango flavor natural",
-        "mango flavor, natural",
         "natural mango flavor",
         "ginger flavor natural",
-        "ginger flavor, natural",
         "vanilla flavor natural",
-        "vanilla flavor, natural",
         "orange tangerine flavor natural",
-        "orange tangerine flavor, natural",
-        "peppermint flavor, natural",
         "peach flavor, natural",
         "lychee flavor, natural",
         "vegan creamy flavor, natural",
@@ -2056,7 +3350,6 @@
         "banana flavor",
         "blackcurrant flavor",
         "peach natural",
-        "peach flavor natural",
         "cherry flavor natural",
         "red raspberry natural flavor",
         "blueberry natural flavor",
@@ -2068,8 +3361,6 @@
         "organic mint flavoring",
         "natural pear flavor",
         "yumberry flavor, natural",
-        "peach, natural",
-        "{natural} cherry flavor",
         "flavor, natural",
         "sd lemon flavor",
         "sd honey flavor",
@@ -2083,23 +3374,17 @@
         "natural lemon flavors",
         "organic red apple flavor",
         "apple flavoring, natural",
-        "apple flavoring natural",
         "huckleberry flavor",
         "lychee flavor",
         "passionfruit flavor, natural",
-        "passionfruit flavor natural",
         "natural orange flavors",
         "raspberry, natural",
         "tart cherry flavor, natural",
-        "tart cherry flavor natural",
         "soda flavor",
         "dark cherry flavor",
         "pineapple flavor, natural",
-        "pineapple flavor natural",
         "white peach flavor, natural",
-        "white peach flavor natural",
         "oolong tea flavor, natural",
-        "oolong tea flavor natural",
         "natural sour flavors",
         "natural tropical fruit punch flavor",
         "natural strawberry creme flavor",
@@ -2115,7 +3400,6 @@
         "natural grape flavors",
         "other organic flavors",
         "raspberry lemon flavor, natural",
-        "raspberry lemon flavor natural",
         "fruit punch natural flavor",
         "mango natural flavor",
         "blue raspberry flavor",
@@ -2126,30 +3410,22 @@
         "super punch",
         "natural apricot flavor",
         "melon flavor, natural",
-        "melon flavor natural",
         "black tea flavor, natural",
-        "black tea flavor natural",
         "natural apple flavors",
         "cinnamon spice flavor, natural",
-        "cinnamon spice flavor natural",
         "natural green apple flavor",
         "passion fruit, natural",
         "yuzu flavor",
         "vanilla cream flavor, natural",
-        "vanilla cream flavor natural",
         "natural peach flavors",
         "blueberry flavoring",
         "blackcurrant flavoring",
         "natural papaya flavors",
         "cucumber flavor, natural",
-        "cucumber flavor natural",
         "natural lemon lime flavor",
         "pomegranate flavor, natural",
-        "pomegranate flavor natural",
         "sour tart flavor, natural",
-        "sour tart flavor natural",
         "lemon lime flavor, natural",
-        "lemon lime flavor natural",
         "natural mandarin orange flavor",
         "natural orange extract flavor",
         "natural and mixed berry flavor",
@@ -2157,7 +3433,17 @@
         "natural fruit flavors with other natural flavors",
         "organic natural raspberry flavor",
         "organic natural lemon flavor",
-        "natural masking agent"
+        "natural masking agent",
+        "natural lemon-lime flavoring",
+        "natural Lemon-Lime flavoring",
+        "Natural Vanilla and Orange Flavoring",
+        "Vanilla and Orange Flavoring",
+        "natural tutti frutti flavor",
+        "natural Tutti Frutti flavor",
+        "strawberry essence",
+        "Strawberry Essence",
+        "Natural & Organic Fruit Flavors",
+        "natural & organic fruit flavors"
       ],
       "category": "flavor_natural",
       "additive_type": "natural_flavor",
@@ -2170,6 +3456,30 @@
         "aroma improvement"
       ],
       "last_updated": "2025-11-17",
+      "is_additive": true,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_NATURAL_FLAVOR_VARIANTS",
+      "standard_name": "Natural Flavors (Variants)",
+      "aliases": [
+        "organic natural flavors",
+        "organic natural flavor",
+        "organic Natural flavoring",
+        "natural flavours",
+        "natural Flavour"
+      ],
+      "category": "flavor_natural",
+      "additive_type": "flavoring",
+      "clean_label_score": 8,
+      "notes": "Natural flavoring agents derived from plant or animal sources. GRAS approved.",
+      "regulatory_status": "GRAS",
+      "common_uses": [
+        "flavoring",
+        "taste enhancement"
+      ],
+      "last_updated": "2025-12-04",
       "is_additive": true,
       "severity_level": "none",
       "allergen_flag": null
@@ -2214,6 +3524,29 @@
       "regulatory_status": "varies",
       "common_uses": [],
       "severity_level": "low",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_NATURAL_GRAPE_FLAVOR",
+      "standard_name": "Natural Grape Flavor",
+      "aliases": [
+        "natural Grape flavor",
+        "grape flavor, natural",
+        "grape natural flavor",
+        "natural grape flavoring"
+      ],
+      "category": "flavor_natural",
+      "additive_type": "natural_flavoring",
+      "clean_label_score": 8,
+      "notes": "Natural flavoring derived from grape sources. GRAS approved.",
+      "regulatory_status": "GRAS",
+      "common_uses": [
+        "flavoring",
+        "taste enhancement"
+      ],
+      "last_updated": "2025-12-04",
+      "is_additive": true,
+      "severity_level": "none",
       "allergen_flag": null
     },
     {
@@ -2350,31 +3683,25 @@
       "allergen_flag": null
     },
     {
-      "id": "NHA_NATURAL_ORANGE_TANGERINE_FLAVOR",
-      "standard_name": "Natural Citrus-Orange Flavor",
+      "id": "NHA_NATURAL_ORANGE_FLAVOR",
+      "standard_name": "Natural Orange Flavor",
       "aliases": [
-        "natural orange tangerine flavor",
-        "orange tangerine flavor",
-        "natural citrus flavor",
-        "natural citrus flavors",
+        "natural Orange flavour",
+        "Orange, Natural",
         "natural orange flavor",
-        "natural tangerine flavor",
-        "natural citrus-orange flavors",
-        "citrus orange flavor natural",
-        "natural citrus orange flavor"
+        "orange flavor, natural",
+        "orange natural flavor"
       ],
       "category": "flavor_natural",
-      "additive_type": "natural_flavor",
+      "additive_type": "natural_flavoring",
       "clean_label_score": 8,
-      "notes": "Natural flavoring derived from citrus sources including orange and tangerine. FEMA GRAS approved as citrus-derived natural flavor complex. FDA 21 CFR Part 172 compliant.",
+      "notes": "Natural flavoring derived from orange sources. GRAS approved.",
       "regulatory_status": "GRAS",
       "common_uses": [
-        "flavor enhancement",
-        "taste masking",
-        "product palatability",
-        "citrus profile development"
+        "flavoring",
+        "taste enhancement"
       ],
-      "last_updated": "2025-11-15",
+      "last_updated": "2025-12-04",
       "is_additive": true,
       "severity_level": "none",
       "allergen_flag": null
@@ -2540,7 +3867,11 @@
         "pure vanilla extract",
         "french vanilla flavor",
         "natural french vanilla flavor",
-        "vegan creamy flavor natural"
+        "vegan creamy flavor natural",
+        "vanillin crystals",
+        "Vanillin Crystals",
+        "natural vanillin crystals",
+        "natural Vanillin crystals"
       ],
       "category": "flavor_natural",
       "additive_type": "natural_flavor",
@@ -2582,6 +3913,29 @@
       "allergen_flag": null
     },
     {
+      "id": "NHA_NATURAL_WATERMELON_FLAVOR",
+      "standard_name": "Natural Watermelon Flavor",
+      "aliases": [
+        "Watermelon Flavor",
+        "Watermelon Flavor, Natural",
+        "natural watermelon flavor",
+        "watermelon natural flavor"
+      ],
+      "category": "flavor_natural",
+      "additive_type": "natural_flavoring",
+      "clean_label_score": 8,
+      "notes": "Natural flavoring derived from watermelon sources. GRAS approved.",
+      "regulatory_status": "GRAS",
+      "common_uses": [
+        "flavoring",
+        "taste enhancement"
+      ],
+      "last_updated": "2025-12-04",
+      "is_additive": true,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
       "id": "NHA_NATURAL_WAXES",
       "standard_name": "Natural Waxes",
       "aliases": [
@@ -2616,6 +3970,71 @@
         "moisture barrier"
       ],
       "last_updated": "2025-11-17",
+      "is_additive": true,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_NEOHESPERIDIN",
+      "standard_name": "Neohesperidin Dihydrochalcone",
+      "aliases": [
+        "neohesperidin",
+        "neohesperidin dc",
+        "nhdc",
+        "neohesperidin dihydrochalcone",
+        "e959"
+      ],
+      "category": "sweetener_natural",
+      "additive_type": "natural_sweetener",
+      "clean_label_score": 7,
+      "notes": "Natural sweetener derived from citrus bioflavonoids. Approximately 1500x sweeter than sugar. Used in very small amounts. E959 in EU. Derived from naringin in citrus peel.",
+      "regulatory_status": "GRAS",
+      "common_uses": [
+        "flavor enhancement",
+        "natural sweetening",
+        "bitter masking"
+      ],
+      "last_updated": "2026-01-06",
+      "is_additive": true,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "PII_OIL_GENERIC",
+      "standard_name": "Oil (Generic)",
+      "aliases": [
+        "oil"
+      ],
+      "category": "oil_carrier",
+      "notes": "Generic oil listing with no specific source. Treated as a neutral carrier unless otherwise specified.",
+      "last_updated": "2026-01-04",
+      "is_additive": false,
+      "additive_type": "unspecified",
+      "clean_label_score": 5,
+      "regulatory_status": "varies",
+      "common_uses": [],
+      "severity_level": "low",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_OLEIC_ACID",
+      "standard_name": "Oleic Acid",
+      "aliases": [
+        "oleic acid",
+        "omega-9 oleic acid",
+        "cis-9-octadecenoic acid"
+      ],
+      "category": "fatty_acid",
+      "additive_type": "processing_aid",
+      "clean_label_score": 8,
+      "notes": "Naturally occurring monounsaturated omega-9 fatty acid. Used as emulsifier and processing aid. Heart-healthy fat. GRAS approved.",
+      "regulatory_status": "GRAS",
+      "common_uses": [
+        "emulsifier",
+        "carrier",
+        "processing aid"
+      ],
+      "last_updated": "2025-12-04",
       "is_additive": true,
       "severity_level": "none",
       "allergen_flag": null
@@ -2777,6 +4196,54 @@
       "allergen_flag": null
     },
     {
+      "id": "NHA_PARTIALLY_HYDROLYZED_GUAR_GUM",
+      "standard_name": "Partially Hydrolyzed Guar Gum",
+      "aliases": [
+        "guar gum, hydrolyzed",
+        "guar gum, partially hydrolyzed",
+        "guar fiber, partially hydrolyzed"
+      ],
+      "category": "fiber_prebiotic",
+      "additive_type": "dietary_fiber",
+      "clean_label_score": 8,
+      "notes": "Soluble prebiotic fiber derived from guar gum. Often abbreviated PHGG.",
+      "regulatory_status": "GRAS",
+      "common_uses": [
+        "prebiotic fiber",
+        "digestive support"
+      ],
+      "last_updated": "2026-01-04",
+      "is_additive": false,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_PASSIONFLOWER_EXTRACT",
+      "standard_name": "Passionflower Extract",
+      "aliases": [
+        "Passionflower Aerial Parts Extract",
+        "Passionflower Flower, Leaf Extract",
+        "Passiflora extract",
+        "passionflower extract",
+        "Passiflora incarnata extract",
+        "passion flower"
+      ],
+      "category": "botanical_extract",
+      "additive_type": "functional",
+      "clean_label_score": 9,
+      "notes": "Calming herb extract used for relaxation, anxiety, and sleep support. GRAS approved.",
+      "regulatory_status": "GRAS",
+      "common_uses": [
+        "relaxation",
+        "sleep support",
+        "anxiety relief"
+      ],
+      "last_updated": "2025-12-04",
+      "is_additive": false,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
       "id": "PII_PEARLITOL",
       "standard_name": "Pearlitol (Mannitol)",
       "aliases": [
@@ -2846,6 +4313,28 @@
       "regulatory_status": "varies",
       "common_uses": [],
       "severity_level": "low",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_PHOSPHORIC_ACID",
+      "standard_name": "Phosphoric Acid",
+      "aliases": [
+        "Phosphoric Acid",
+        "E338",
+        "orthophosphoric acid"
+      ],
+      "category": "acidity_regulator",
+      "additive_type": "pH_adjuster",
+      "clean_label_score": 5,
+      "notes": "Acidifying agent used for pH control. Common in soft drinks. FDA approved.",
+      "regulatory_status": "FDA Approved",
+      "common_uses": [
+        "acidification",
+        "pH control"
+      ],
+      "last_updated": "2025-12-04",
+      "is_additive": true,
+      "severity_level": "none",
       "allergen_flag": null
     },
     {
@@ -2920,6 +4409,30 @@
       "allergen_flag": null
     },
     {
+      "id": "NHA_POMEGRANATE_JUICE",
+      "standard_name": "Pomegranate Juice Concentrate",
+      "aliases": [
+        "organic Pomegranate juice concentrate",
+        "pomegranate juice concentrate",
+        "Pomegranate Fruit Peel Extract",
+        "pomegranate extract"
+      ],
+      "category": "fruit_concentrate",
+      "additive_type": "natural_colorant",
+      "clean_label_score": 10,
+      "notes": "Pomegranate juice used for color, flavor, and antioxidant benefits. Clean label. GRAS approved.",
+      "regulatory_status": "GRAS",
+      "common_uses": [
+        "natural coloring",
+        "flavoring",
+        "antioxidant"
+      ],
+      "last_updated": "2025-12-04",
+      "is_additive": true,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
       "id": "NHA_POTASSIUM_CITRATE",
       "standard_name": "Potassium Citrate",
       "aliases": [
@@ -2955,6 +4468,47 @@
       "notes": "Natural starch from potatoes, used as a binder and thickener. Gluten-free and generally hypoallergenic.",
       "last_updated": "2025-11-17",
       "is_additive": true,
+      "additive_type": "unspecified",
+      "clean_label_score": 5,
+      "regulatory_status": "varies",
+      "common_uses": [],
+      "severity_level": "low",
+      "allergen_flag": null
+    },
+    {
+      "id": "OI_PREFORPRO",
+      "standard_name": "PreforPro",
+      "aliases": [
+        "preforpro",
+        "preforpro bacteriophage blend"
+      ],
+      "category": "fiber_prebiotic",
+      "additive_type": "prebiotic",
+      "clean_label_score": 6,
+      "notes": "Branded bacteriophage prebiotic blend; mapped for identity and non-scorable classification pending dedicated rubric.",
+      "regulatory_status": "varies",
+      "common_uses": [
+        "prebiotic support"
+      ],
+      "last_updated": "2026-02-17",
+      "is_additive": false,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "PII_PROPOLIS",
+      "standard_name": "Propolis",
+      "aliases": [
+        "propolis",
+        "bee propolis",
+        "bee glue",
+        "propolis extract",
+        "propolis resin"
+      ],
+      "category": "functional_ingredient",
+      "notes": "Resinous mixture collected by bees from tree buds and sap. Used in immune support supplements for its antimicrobial properties. Can cause contact dermatitis and allergic reactions. Classified as MODERATE severity allergen.",
+      "last_updated": "2025-11-17",
+      "is_additive": false,
       "additive_type": "unspecified",
       "clean_label_score": 5,
       "regulatory_status": "varies",
@@ -3029,6 +4583,76 @@
       "regulatory_status": "varies",
       "common_uses": [],
       "severity_level": "low",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_PURPLE_BERRY_COLOR",
+      "standard_name": "Purple Berry Color Concentrate",
+      "aliases": [
+        "purple berry color concentrate",
+        "purple berry concentrate",
+        "purple berry extract"
+      ],
+      "category": "colorant_natural",
+      "additive_type": "natural_colorant",
+      "clean_label_score": 10,
+      "notes": "Natural purple colorant from various berries, rich in anthocyanins. Clean label alternative to artificial colors. GRAS approved.",
+      "regulatory_status": "GRAS",
+      "common_uses": [
+        "natural coloring",
+        "purple color"
+      ],
+      "last_updated": "2025-12-04",
+      "is_additive": true,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_PURPLE_CARROT_COLOR",
+      "standard_name": "Purple Carrot Color",
+      "aliases": [
+        "purple carrot",
+        "purple carrot juice concentrate",
+        "purple carrot concentrate",
+        "purple carrot extract",
+        "purple carrot juice",
+        "organic purple carrot juice concentrate",
+        "purple carrot extract color"
+      ],
+      "category": "colorant_natural",
+      "additive_type": "natural_colorant",
+      "clean_label_score": 10,
+      "notes": "Natural purple colorant from purple carrot juice, rich in anthocyanins. Clean label natural color alternative. GRAS approved.",
+      "regulatory_status": "GRAS",
+      "common_uses": [
+        "natural coloring",
+        "purple color"
+      ],
+      "last_updated": "2025-12-04",
+      "is_additive": true,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_QUILLAJA_EXTRACT",
+      "standard_name": "Quillaja Extract",
+      "aliases": [
+        "Quillaja extract",
+        "quillaja saponaria extract",
+        "soapbark extract"
+      ],
+      "category": "emulsifier",
+      "additive_type": "natural_emulsifier",
+      "clean_label_score": 8,
+      "notes": "Natural saponin extract used as emulsifier and foaming agent. GRAS approved.",
+      "regulatory_status": "GRAS",
+      "common_uses": [
+        "emulsifier",
+        "foaming agent"
+      ],
+      "last_updated": "2025-12-04",
+      "is_additive": true,
+      "severity_level": "none",
       "allergen_flag": null
     },
     {
@@ -3144,6 +4768,27 @@
       "allergen_flag": null
     },
     {
+      "id": "PII_ROYAL_JELLY",
+      "standard_name": "Royal Jelly",
+      "aliases": [
+        "royal jelly",
+        "bee milk",
+        "queen bee jelly",
+        "royal jelly extract",
+        "lyophilized royal jelly"
+      ],
+      "category": "functional_ingredient",
+      "notes": "Glandular secretion from worker bees used to feed queen larvae. Often used as an active ingredient in supplements for its purported health benefits. WARNING: Can cause severe allergic reactions, especially in individuals with asthma or bee allergies. Classified as HIGH severity allergen.",
+      "last_updated": "2025-11-17",
+      "is_additive": false,
+      "additive_type": "unspecified",
+      "clean_label_score": 5,
+      "regulatory_status": "varies",
+      "common_uses": [],
+      "severity_level": "low",
+      "allergen_flag": null
+    },
+    {
       "id": "PII_SAFFLOWER_OIL",
       "standard_name": "Safflower Oil",
       "aliases": [
@@ -3180,6 +4825,28 @@
       "regulatory_status": "varies",
       "common_uses": [],
       "severity_level": "low",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_SEAWEED_EXTRACT",
+      "standard_name": "Seaweed Extract",
+      "aliases": [
+        "Seaweed extract",
+        "kelp extract",
+        "marine algae extract"
+      ],
+      "category": "botanical_extract",
+      "additive_type": "functional",
+      "clean_label_score": 9,
+      "notes": "Extract from various seaweeds. Source of minerals and iodine. GRAS approved.",
+      "regulatory_status": "GRAS",
+      "common_uses": [
+        "mineral source",
+        "iodine source"
+      ],
+      "last_updated": "2025-12-04",
+      "is_additive": false,
+      "severity_level": "none",
       "allergen_flag": null
     },
     {
@@ -3232,6 +4899,50 @@
       "regulatory_status": "varies",
       "common_uses": [],
       "severity_level": "low",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_SKIM_MILK_POWDER",
+      "standard_name": "Skim Milk Powder",
+      "aliases": [
+        "skim milk powder",
+        "nonfat dry milk",
+        "nonfat milk powder",
+        "dried skim milk"
+      ],
+      "category": "dairy_derivative",
+      "additive_type": "filler_protein",
+      "clean_label_score": 7,
+      "notes": "Dried milk with fat removed. Contains milk allergen. Used as protein source and filler in some supplements.",
+      "regulatory_status": "GRAS",
+      "common_uses": [
+        "protein source",
+        "filler",
+        "tablet binder"
+      ],
+      "allergen_flag": "milk",
+      "last_updated": "2026-01-06",
+      "is_additive": false,
+      "severity_level": "none"
+    },
+    {
+      "id": "NHA_SODIUM_ACID_SULFATE",
+      "standard_name": "Sodium Acid Sulfate",
+      "aliases": [
+        "sodium acid sulfate"
+      ],
+      "category": "acidity_regulator",
+      "additive_type": "buffering_agent",
+      "clean_label_score": 6,
+      "notes": "Acidifying agent used for pH control. Common in food applications.",
+      "regulatory_status": "GRAS",
+      "common_uses": [
+        "pH adjustment",
+        "acidification"
+      ],
+      "last_updated": "2026-01-04",
+      "is_additive": true,
+      "severity_level": "none",
       "allergen_flag": null
     },
     {
@@ -3356,6 +5067,96 @@
       "allergen_flag": null
     },
     {
+      "id": "NHA_SODIUM_LACTATE",
+      "standard_name": "Sodium Lactate",
+      "aliases": [
+        "sodium lactate",
+        "lactic acid sodium salt",
+        "E325"
+      ],
+      "category": "humectant_preservative",
+      "additive_type": "moisture_retention",
+      "clean_label_score": 7,
+      "notes": "Sodium salt of lactic acid used as humectant and preservative. Helps maintain moisture in gummies. GRAS approved.",
+      "regulatory_status": "GRAS",
+      "common_uses": [
+        "humectant",
+        "preservative",
+        "pH control"
+      ],
+      "last_updated": "2025-12-04",
+      "is_additive": true,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_CHLOROPHYLLIN",
+      "standard_name": "Sodium Magnesium Chlorophyllin",
+      "aliases": [
+        "Sodium Magnesium Chlorophyllin",
+        "chlorophyllin",
+        "sodium copper chlorophyllin",
+        "E141"
+      ],
+      "category": "colorant_natural",
+      "additive_type": "natural_colorant",
+      "clean_label_score": 8,
+      "notes": "Water-soluble form of chlorophyll used as green colorant. GRAS approved.",
+      "regulatory_status": "GRAS",
+      "common_uses": [
+        "natural coloring",
+        "green color"
+      ],
+      "last_updated": "2025-12-04",
+      "is_additive": true,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_SODIUM_MALATE",
+      "standard_name": "Sodium Malate",
+      "aliases": [
+        "sodium malate",
+        "sodium hydrogen malate"
+      ],
+      "category": "buffering_agent",
+      "additive_type": "acidity_regulator",
+      "clean_label_score": 8,
+      "notes": "Acidity regulator and buffer used for pH control. Generally recognized as safe.",
+      "regulatory_status": "GRAS",
+      "common_uses": [
+        "pH adjustment",
+        "buffering"
+      ],
+      "last_updated": "2026-01-04",
+      "is_additive": true,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_SODIUM_POTASSIUM_TARTRATE",
+      "standard_name": "Sodium Potassium Tartrate",
+      "aliases": [
+        "Sodium Potassium Tartrate",
+        "Rochelle salt",
+        "potassium sodium tartrate",
+        "E337"
+      ],
+      "category": "acidity_regulator",
+      "additive_type": "pH_adjuster",
+      "clean_label_score": 7,
+      "notes": "Double salt used as acidity regulator and leavening agent. GRAS approved.",
+      "regulatory_status": "GRAS",
+      "common_uses": [
+        "pH regulation",
+        "leavening"
+      ],
+      "last_updated": "2025-12-04",
+      "is_additive": true,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
       "id": "PII_SODIUM_STARCH_GLYCOLATE",
       "standard_name": "Sodium Starch Glycolate",
       "aliases": [
@@ -3398,6 +5199,48 @@
       ],
       "last_updated": "2025-11-17",
       "is_additive": true,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "OI_SOLARPLAST",
+      "standard_name": "Solarplast",
+      "aliases": [
+        "solarplast"
+      ],
+      "category": "plant_extract_natural",
+      "additive_type": "unspecified",
+      "clean_label_score": 6,
+      "notes": "Branded algae phytonutrient complex; mapped for identity while clinical scoring form is curated.",
+      "regulatory_status": "varies",
+      "common_uses": [
+        "phytonutrient blend"
+      ],
+      "last_updated": "2026-02-17",
+      "is_additive": false,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_SOLUBLE_CORN_FIBER",
+      "standard_name": "Soluble Corn Fiber",
+      "aliases": [
+        "soluble corn fiber",
+        "corn fiber, soluble",
+        "corn fibersol",
+        "fibersol"
+      ],
+      "category": "fiber_prebiotic",
+      "additive_type": "dietary_fiber",
+      "clean_label_score": 8,
+      "notes": "Fermentable soluble fiber used as a bulking agent and prebiotic.",
+      "regulatory_status": "GRAS",
+      "common_uses": [
+        "prebiotic fiber",
+        "bulking agent"
+      ],
+      "last_updated": "2026-01-04",
+      "is_additive": false,
       "severity_level": "none",
       "allergen_flag": null
     },
@@ -3486,6 +5329,48 @@
       "allergen_flag": null
     },
     {
+      "id": "OI_SPLEEN_GLANDULAR",
+      "standard_name": "Spleen",
+      "aliases": [
+        "spleen",
+        "bovine spleen"
+      ],
+      "category": "glandular_tissue",
+      "additive_type": "unspecified",
+      "clean_label_score": 4,
+      "notes": "Glandular tissue ingredient mapped for identity only.",
+      "regulatory_status": "varies",
+      "common_uses": [
+        "glandular support"
+      ],
+      "last_updated": "2026-02-17",
+      "is_additive": false,
+      "severity_level": "low",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_STARFLOWER_OIL",
+      "standard_name": "Starflower Oil (Borage Oil)",
+      "aliases": [
+        "Starflower Oil",
+        "borage oil",
+        "Borago officinalis oil"
+      ],
+      "category": "fatty_acid",
+      "additive_type": "functional",
+      "clean_label_score": 8,
+      "notes": "Plant oil high in GLA (gamma-linolenic acid). Used for skin and hormonal health. GRAS approved.",
+      "regulatory_status": "GRAS",
+      "common_uses": [
+        "GLA source",
+        "skin health"
+      ],
+      "last_updated": "2025-12-04",
+      "is_additive": false,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
       "id": "PII_STEARATE",
       "standard_name": "Stearate (unspecified)",
       "aliases": [
@@ -3538,7 +5423,6 @@
         "stevia rebaudiana leaf",
         "stevia rebaudiana extract",
         "stevia rebaudiana (leaf) extract",
-        "stevia rebaudiana leaf extract",
         "organic stevia",
         "stevia leaf powder",
         "stevia extract",
@@ -3579,53 +5463,22 @@
       "allergen_flag": null
     },
     {
-      "id": "NHA_GLYCYRRHIZIN_SWEETENER",
-      "standard_name": "Glycyrrhizin Sweetener",
+      "id": "NHA_STRAWBERRY_PUREE",
+      "standard_name": "Strawberry Puree",
       "aliases": [
-        "glycyrrhizin",
-        "monoammoniated glycyrrhizin",
-        "monoammonium glycyrrhizinate",
-        "mag sweetener",
-        "ammoniated glycyrrhizin",
-        "glycyrrhizin ammonium salt",
-        "licorice sweetener"
+        "Strawberry puree",
+        "organic strawberry puree"
       ],
-      "category": "sweetener_natural",
-      "additive_type": "natural_sweetener",
-      "clean_label_score": 7,
-      "notes": "Natural sweetener derived from licorice root (Glycyrrhiza glabra). Approximately 30-50x sweeter than sugar. Used in small amounts as flavor enhancer. MAG form commonly used in supplements. May raise blood pressure in sensitive individuals with excessive use.",
+      "category": "fruit_concentrate",
+      "additive_type": "natural_ingredient",
+      "clean_label_score": 10,
+      "notes": "Strawberry puree used for flavor and color. Clean label ingredient. GRAS approved.",
       "regulatory_status": "GRAS",
       "common_uses": [
-        "flavor enhancement",
-        "natural sweetening",
-        "taste masking"
+        "flavoring",
+        "natural coloring"
       ],
-      "last_updated": "2026-01-06",
-      "is_additive": true,
-      "severity_level": "low",
-      "allergen_flag": null
-    },
-    {
-      "id": "NHA_NEOHESPERIDIN",
-      "standard_name": "Neohesperidin Dihydrochalcone",
-      "aliases": [
-        "neohesperidin",
-        "neohesperidin dc",
-        "nhdc",
-        "neohesperidin dihydrochalcone",
-        "e959"
-      ],
-      "category": "sweetener_natural",
-      "additive_type": "natural_sweetener",
-      "clean_label_score": 7,
-      "notes": "Natural sweetener derived from citrus bioflavonoids. Approximately 1500x sweeter than sugar. Used in very small amounts. E959 in EU. Derived from naringin in citrus peel.",
-      "regulatory_status": "GRAS",
-      "common_uses": [
-        "flavor enhancement",
-        "natural sweetening",
-        "bitter masking"
-      ],
-      "last_updated": "2026-01-06",
+      "last_updated": "2025-12-04",
       "is_additive": true,
       "severity_level": "none",
       "allergen_flag": null
@@ -3651,6 +5504,29 @@
         "mineral content retention"
       ],
       "last_updated": "2025-09-19",
+      "is_additive": true,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_SUCROSE_FATTY_ACID_ESTER",
+      "standard_name": "Sucrose Fatty Acid Ester",
+      "aliases": [
+        "sucrose fatty acid ester",
+        "sucrose fatty acid esters",
+        "sucrose esters",
+        "E473"
+      ],
+      "category": "emulsifier",
+      "additive_type": "emulsifier",
+      "clean_label_score": 7,
+      "notes": "Emulsifier derived from sucrose and fatty acids. Used in gummies for texture. GRAS approved.",
+      "regulatory_status": "GRAS",
+      "common_uses": [
+        "emulsifier",
+        "texture modifier"
+      ],
+      "last_updated": "2025-12-04",
       "is_additive": true,
       "severity_level": "none",
       "allergen_flag": null
@@ -3717,6 +5593,48 @@
       "allergen_flag": null
     },
     {
+      "id": "NHA_SUNFIBER",
+      "standard_name": "Sunfiber",
+      "aliases": [
+        "sunfiber",
+        "sunfiber phgg",
+        "partially hydrolyzed guar gum (sunfiber)"
+      ],
+      "category": "fiber_prebiotic",
+      "additive_type": "dietary_fiber",
+      "clean_label_score": 8,
+      "notes": "Branded partially hydrolyzed guar gum (PHGG) prebiotic fiber.",
+      "regulatory_status": "GRAS",
+      "common_uses": [
+        "prebiotic support",
+        "digestive support"
+      ],
+      "last_updated": "2026-02-17",
+      "is_additive": false,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_SUNFIBER_AG",
+      "standard_name": "Sunfiber AG",
+      "aliases": [
+        "sunfiber ag",
+        "sunfiber"
+      ],
+      "category": "fiber_prebiotic",
+      "additive_type": "dietary_fiber",
+      "clean_label_score": 8,
+      "notes": "Sunfiber AG variant of PHGG prebiotic fiber.",
+      "regulatory_status": "GRAS",
+      "common_uses": [
+        "prebiotic support"
+      ],
+      "last_updated": "2026-02-17",
+      "is_additive": false,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
       "id": "NHA_LECITHIN_SUNFLOWER",
       "standard_name": "Sunflower Lecithin",
       "aliases": [
@@ -3747,7 +5665,9 @@
       "aliases": [
         "helianthus annuus oil",
         "organic sunflower oil",
-        "high oleic sunflower oil"
+        "high oleic sunflower oil",
+        "high-oleic sunflower oil",
+        "high-Oleic Sunflower Oil"
       ],
       "category": "oil_carrier",
       "notes": "A common vegetable oil used as a neutral carrier for fat-soluble vitamins and other lipophilic compounds in supplements. Generally considered safe and inert in this role.",
@@ -3758,6 +5678,51 @@
       "regulatory_status": "varies",
       "common_uses": [],
       "severity_level": "low",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_SUNFLOWER_SEED_OIL",
+      "standard_name": "Sunflower Seed Oil",
+      "aliases": [
+        "sunflower seed oil",
+        "sunflower oil, high oleic"
+      ],
+      "category": "oil_carrier",
+      "additive_type": "oil",
+      "clean_label_score": 8,
+      "notes": "Natural oil from sunflower seeds used as carrier for fat-soluble vitamins. Clean label ingredient. GRAS approved.",
+      "regulatory_status": "GRAS",
+      "common_uses": [
+        "carrier oil",
+        "vitamin delivery"
+      ],
+      "last_updated": "2025-12-04",
+      "is_additive": true,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_TAPIOCA_FIBER",
+      "standard_name": "Tapioca Fiber",
+      "aliases": [
+        "organic tapioca fiber",
+        "tapioca fiber",
+        "soluble tapioca fiber",
+        "tapioca fiber, soluble",
+        "solube tapioca fiber"
+      ],
+      "category": "fiber_prebiotic",
+      "additive_type": "dietary_fiber",
+      "clean_label_score": 8,
+      "notes": "Soluble fiber derived from tapioca used for texture and sugar reduction in gummies.",
+      "regulatory_status": "GRAS",
+      "common_uses": [
+        "prebiotic fiber",
+        "bulking agent"
+      ],
+      "last_updated": "2026-01-04",
+      "is_additive": false,
+      "severity_level": "none",
       "allergen_flag": null
     },
     {
@@ -3799,6 +5764,50 @@
       "clean_label_score": 5,
       "regulatory_status": "varies",
       "common_uses": [],
+      "severity_level": "low",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_TERPENES",
+      "standard_name": "Terpenes",
+      "aliases": [
+        "Terpenes",
+        "Terpenes, Natural",
+        "natural terpenes",
+        "botanical terpenes"
+      ],
+      "category": "botanical_compound",
+      "additive_type": "functional",
+      "clean_label_score": 8,
+      "notes": "Aromatic compounds from plants. Used for flavor and entourage effect in hemp products. GRAS approved.",
+      "regulatory_status": "GRAS",
+      "common_uses": [
+        "flavor",
+        "aroma",
+        "synergy"
+      ],
+      "last_updated": "2025-12-04",
+      "is_additive": true,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "OI_THYMUS_GLANDULAR",
+      "standard_name": "Thymus",
+      "aliases": [
+        "thymus",
+        "bovine thymus"
+      ],
+      "category": "glandular_tissue",
+      "additive_type": "unspecified",
+      "clean_label_score": 4,
+      "notes": "Glandular tissue ingredient mapped for identity only.",
+      "regulatory_status": "varies",
+      "common_uses": [
+        "glandular support"
+      ],
+      "last_updated": "2026-02-17",
+      "is_additive": false,
       "severity_level": "low",
       "allergen_flag": null
     },
@@ -3894,6 +5903,29 @@
       "allergen_flag": null
     },
     {
+      "id": "NHA_TRI_SODIUM_CITRATE",
+      "standard_name": "Trisodium Citrate",
+      "aliases": [
+        "Tri Sodium Citrate",
+        "trisodium citrate",
+        "sodium citrate tribasic",
+        "E331iii"
+      ],
+      "category": "acidity_regulator",
+      "additive_type": "buffering_agent",
+      "clean_label_score": 7,
+      "notes": "Buffering agent and acidity regulator. Same as sodium citrate. GRAS approved.",
+      "regulatory_status": "GRAS",
+      "common_uses": [
+        "buffering",
+        "pH control"
+      ],
+      "last_updated": "2025-12-04",
+      "is_additive": true,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
       "id": "OI_TURMERIC_POWDER_COLOR",
       "standard_name": "Turmeric Powder (Color)",
       "aliases": [
@@ -3935,6 +5967,46 @@
       "regulatory_status": "varies",
       "common_uses": [],
       "severity_level": "low",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_VEGETABLE_FRUIT_JUICE_COLORS",
+      "standard_name": "Vegetable and Fruit Juice Colors",
+      "aliases": [
+        "vegetable and fruit juice colors",
+        "vegetable and fruit juice color",
+        "vegetable juice color",
+        "fruit juice color",
+        "fruit and vegetable juices",
+        "fruit and vegetable juice color",
+        "fruit and vegetable juice concentrates",
+        "fruit and/or vegetable juice concentrates",
+        "fruit and vegetable concentrates",
+        "colors from fruits and vegetables",
+        "colors from fruit and vegetables",
+        "colors from natural sources",
+        "color from natural source",
+        "vegetable juices",
+        "fruit and vegetable juice",
+        "fruit extract",
+        "fruit concentrate",
+        "natural colors from fruits",
+        "natural colors added",
+        "color, natural",
+        "natural color"
+      ],
+      "category": "colorant_natural",
+      "additive_type": "natural_colorant",
+      "clean_label_score": 10,
+      "notes": "Natural colorants derived from vegetables and fruits. Clean label alternative to artificial colors. GRAS approved.",
+      "regulatory_status": "GRAS",
+      "common_uses": [
+        "natural coloring",
+        "clean label coloring"
+      ],
+      "last_updated": "2025-12-04",
+      "is_additive": true,
+      "severity_level": "none",
       "allergen_flag": null
     },
     {
@@ -4006,6 +6078,28 @@
       "regulatory_status": "varies",
       "common_uses": [],
       "severity_level": "low",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_VEGETABLE_GLYCERIDES",
+      "standard_name": "Vegetable Glycerides",
+      "aliases": [
+        "Vegetable Monoglycerides",
+        "Vegetable Diglycerides",
+        "vegetable mono and diglycerides"
+      ],
+      "category": "emulsifier",
+      "additive_type": "emulsifier",
+      "clean_label_score": 7,
+      "notes": "Plant-derived emulsifiers. Used for texture and stability. GRAS approved.",
+      "regulatory_status": "GRAS",
+      "common_uses": [
+        "emulsification",
+        "texture"
+      ],
+      "last_updated": "2025-12-04",
+      "is_additive": true,
+      "severity_level": "none",
       "allergen_flag": null
     },
     {
@@ -4149,6 +6243,94 @@
       "allergen_flag": null
     },
     {
+      "id": "NHA_VERISOL_COLLAGEN",
+      "standard_name": "Verisol Bioactive Collagen Peptides",
+      "aliases": [
+        "Verisol Bioactive Collagen Peptides",
+        "Verisol"
+      ],
+      "category": "branded_ingredient",
+      "additive_type": "functional",
+      "clean_label_score": 9,
+      "notes": "Branded bioactive collagen peptides clinically studied for skin health. Premium collagen ingredient.",
+      "regulatory_status": "GRAS",
+      "common_uses": [
+        "skin health",
+        "anti-aging"
+      ],
+      "last_updated": "2025-12-04",
+      "is_additive": false,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_WEST_INDIAN_CHERRY",
+      "standard_name": "West Indian Cherry (Acerola)",
+      "aliases": [
+        "West Indian Cherry",
+        "acerola",
+        "acerola cherry",
+        "Malpighia glabra",
+        "Malpighia emarginata",
+        "barbados cherry"
+      ],
+      "category": "fruit_extract",
+      "additive_type": "natural_ingredient",
+      "clean_label_score": 10,
+      "notes": "Natural source of vitamin C from acerola cherry. Very high vitamin C content. Clean label ingredient.",
+      "regulatory_status": "GRAS",
+      "common_uses": [
+        "natural vitamin C source",
+        "antioxidant"
+      ],
+      "last_updated": "2025-12-04",
+      "is_additive": false,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "PII_WHEAT_STARCH",
+      "standard_name": "Wheat Starch",
+      "aliases": [
+        "wheat starch"
+      ],
+      "category": "filler_binder_disintegrant",
+      "notes": "Common starch used as a binder or filler. Contains gluten unless specified otherwise.",
+      "last_updated": "2026-01-04",
+      "is_additive": true,
+      "additive_type": "unspecified",
+      "clean_label_score": 5,
+      "regulatory_status": "varies",
+      "common_uses": [],
+      "severity_level": "low",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_WHOLE_BROWN_RICE",
+      "standard_name": "Whole Brown Rice",
+      "aliases": [
+        "whole Brown Rice",
+        "brown rice",
+        "organic Rice Meal",
+        "rice meal",
+        "brown rice powder"
+      ],
+      "category": "filler_binder",
+      "additive_type": "excipient",
+      "clean_label_score": 9,
+      "notes": "Whole grain rice used as a natural filler and binder. Gluten-free. GRAS approved.",
+      "regulatory_status": "GRAS",
+      "common_uses": [
+        "filler",
+        "binder",
+        "flow agent"
+      ],
+      "last_updated": "2025-12-04",
+      "is_additive": true,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
       "id": "NHA_XANTHAN_GUM",
       "standard_name": "Xanthan Gum",
       "aliases": [
@@ -4195,7 +6377,6 @@
       "aliases": [
         "xylo-oligosaccharide",
         "xos",
-        "xylo oligosaccharide",
         "xylooligosaccharide"
       ],
       "category": "prebiotic_sweetener",
@@ -4214,2054 +6395,568 @@
       "allergen_flag": null
     },
     {
-      "id": "NHA_BLACK_CARROT_COLOR",
-      "standard_name": "Black Carrot Color",
+      "id": "NHA_YOGURT_POWDER",
+      "standard_name": "Yogurt Powder",
       "aliases": [
-        "black carrot",
-        "black carrot extract",
-        "black carrot juice concentrate",
-        "black carrot color",
-        "black carrot concentrate",
-        "black carrot juice color concentrate",
-        "black carrot juice color",
-        "black carrot juice",
-        "black carrot powder",
-        "natural black carrot color",
-        "natural black carrot",
-        "organic black carrot juice concentrate",
-        "organic black carrot",
-        "black carrot juice concentrate color",
-        "ebony carrot",
-        "black carrot juice extract"
+        "yogurt powder",
+        "dried yogurt",
+        "yoghurt powder"
       ],
-      "category": "colorant_natural",
-      "additive_type": "natural_colorant",
-      "clean_label_score": 10,
-      "notes": "Natural purple/red colorant from black carrot juice, rich in anthocyanins. Popular in gummies as a clean label alternative to artificial colors. GRAS approved.",
-      "regulatory_status": "GRAS",
-      "common_uses": [
-        "natural coloring",
-        "purple/red color",
-        "antioxidant benefits"
-      ],
-      "last_updated": "2025-12-04",
-      "is_additive": true,
-      "severity_level": "none",
-      "allergen_flag": null
-    },
-    {
-      "id": "NHA_PURPLE_CARROT_COLOR",
-      "standard_name": "Purple Carrot Color",
-      "aliases": [
-        "purple carrot",
-        "purple carrot juice concentrate",
-        "purple carrot concentrate",
-        "purple carrot extract",
-        "purple carrot juice",
-        "organic purple carrot juice concentrate",
-        "purple carrot extract color"
-      ],
-      "category": "colorant_natural",
-      "additive_type": "natural_colorant",
-      "clean_label_score": 10,
-      "notes": "Natural purple colorant from purple carrot juice, rich in anthocyanins. Clean label natural color alternative. GRAS approved.",
-      "regulatory_status": "GRAS",
-      "common_uses": [
-        "natural coloring",
-        "purple color"
-      ],
-      "last_updated": "2025-12-04",
-      "is_additive": true,
-      "severity_level": "none",
-      "allergen_flag": null
-    },
-    {
-      "id": "NHA_PURPLE_BERRY_COLOR",
-      "standard_name": "Purple Berry Color Concentrate",
-      "aliases": [
-        "purple berry color concentrate",
-        "purple berry concentrate",
-        "purple berry extract"
-      ],
-      "category": "colorant_natural",
-      "additive_type": "natural_colorant",
-      "clean_label_score": 10,
-      "notes": "Natural purple colorant from various berries, rich in anthocyanins. Clean label alternative to artificial colors. GRAS approved.",
-      "regulatory_status": "GRAS",
-      "common_uses": [
-        "natural coloring",
-        "purple color"
-      ],
-      "last_updated": "2025-12-04",
-      "is_additive": true,
-      "severity_level": "none",
-      "allergen_flag": null
-    },
-    {
-      "id": "NHA_VEGETABLE_FRUIT_JUICE_COLORS",
-      "standard_name": "Vegetable and Fruit Juice Colors",
-      "aliases": [
-        "vegetable and fruit juice colors",
-        "vegetable and fruit juice color",
-        "vegetable juice color",
-        "fruit juice color",
-        "fruit and vegetable juices",
-        "fruit and vegetable juice color",
-        "fruit and vegetable juice concentrates",
-        "fruit and/or vegetable juice concentrates",
-        "fruit and vegetable concentrates",
-        "colors from fruits and vegetables",
-        "colors from fruit and vegetables",
-        "colors from natural sources",
-        "color from natural source",
-        "vegetable juices",
-        "fruit and vegetable juice",
-        "fruit extract",
-        "fruit concentrate",
-        "natural colors from fruits",
-        "natural colors added",
-        "color, natural",
-        "natural color"
-      ],
-      "category": "colorant_natural",
-      "additive_type": "natural_colorant",
-      "clean_label_score": 10,
-      "notes": "Natural colorants derived from vegetables and fruits. Clean label alternative to artificial colors. GRAS approved.",
-      "regulatory_status": "GRAS",
-      "common_uses": [
-        "natural coloring",
-        "clean label coloring"
-      ],
-      "last_updated": "2025-12-04",
-      "is_additive": true,
-      "severity_level": "none",
-      "allergen_flag": null
-    },
-    {
-      "id": "NHA_GENERIC_COLOR_TERMS",
-      "standard_name": "Colors Added (Generic)",
-      "aliases": [
-        "colors added",
-        "colored with",
-        "colored",
-        "for colors",
-        "for color",
-        "containing one or more of the following:",
-        "natural and artificial colors",
-        "food color, natural"
-      ],
-      "category": "colorant_generic",
-      "additive_type": "colorant",
-      "clean_label_score": 5,
-      "notes": "Generic coloring term. May indicate natural or artificial colors - specific identification recommended. Generally safe but vague labeling.",
-      "regulatory_status": "Varies",
-      "common_uses": [
-        "coloring",
-        "visual appeal"
-      ],
-      "last_updated": "2025-12-04",
-      "is_additive": true,
-      "severity_level": "none",
-      "allergen_flag": null
-    },
-    {
-      "id": "NHA_OLEIC_ACID",
-      "standard_name": "Oleic Acid",
-      "aliases": [
-        "oleic acid",
-        "omega-9 oleic acid",
-        "cis-9-octadecenoic acid"
-      ],
-      "category": "fatty_acid",
-      "additive_type": "processing_aid",
-      "clean_label_score": 8,
-      "notes": "Naturally occurring monounsaturated omega-9 fatty acid. Used as emulsifier and processing aid. Heart-healthy fat. GRAS approved.",
-      "regulatory_status": "GRAS",
-      "common_uses": [
-        "emulsifier",
-        "carrier",
-        "processing aid"
-      ],
-      "last_updated": "2025-12-04",
-      "is_additive": true,
-      "severity_level": "none",
-      "allergen_flag": null
-    },
-    {
-      "id": "NHA_NATURAL_FLAVOR_VARIANTS",
-      "standard_name": "Natural Flavors (Variants)",
-      "aliases": [
-        "organic natural flavors",
-        "organic natural flavor",
-        "organic Natural flavoring",
-        "natural flavours",
-        "natural Flavour"
-      ],
-      "category": "flavor_natural",
-      "additive_type": "flavoring",
-      "clean_label_score": 8,
-      "notes": "Natural flavoring agents derived from plant or animal sources. GRAS approved.",
-      "regulatory_status": "GRAS",
-      "common_uses": [
-        "flavoring",
-        "taste enhancement"
-      ],
-      "last_updated": "2025-12-04",
-      "is_additive": true,
-      "severity_level": "none",
-      "allergen_flag": null
-    },
-    {
-      "id": "NHA_SUNFLOWER_SEED_OIL",
-      "standard_name": "Sunflower Seed Oil",
-      "aliases": [
-        "sunflower seed oil",
-        "sunflower oil, high oleic"
-      ],
-      "category": "oil_carrier",
-      "additive_type": "oil",
-      "clean_label_score": 8,
-      "notes": "Natural oil from sunflower seeds used as carrier for fat-soluble vitamins. Clean label ingredient. GRAS approved.",
-      "regulatory_status": "GRAS",
-      "common_uses": [
-        "carrier oil",
-        "vitamin delivery"
-      ],
-      "last_updated": "2025-12-04",
-      "is_additive": true,
-      "severity_level": "none",
-      "allergen_flag": null
-    },
-    {
-      "id": "NHA_MALT_SYRUP",
-      "standard_name": "Malt Syrup",
-      "aliases": [
-        "malt syrup",
-        "barley malt syrup",
-        "rice syrup solids"
-      ],
-      "category": "sweetener_natural",
-      "additive_type": "natural_sweetener",
+      "category": "dairy_derivative",
+      "additive_type": "flavor_texture",
       "clean_label_score": 7,
-      "notes": "Natural sweetener from malted grains. Less refined than corn syrup. Used in gummies for sweetness and texture. GRAS approved.",
-      "regulatory_status": "GRAS",
-      "common_uses": [
-        "sweetening",
-        "texture modification"
-      ],
-      "last_updated": "2025-12-04",
-      "is_additive": true,
-      "severity_level": "none",
-      "allergen_flag": null
-    },
-    {
-      "id": "NHA_SODIUM_LACTATE",
-      "standard_name": "Sodium Lactate",
-      "aliases": [
-        "sodium lactate",
-        "lactic acid sodium salt",
-        "E325"
-      ],
-      "category": "humectant_preservative",
-      "additive_type": "moisture_retention",
-      "clean_label_score": 7,
-      "notes": "Sodium salt of lactic acid used as humectant and preservative. Helps maintain moisture in gummies. GRAS approved.",
-      "regulatory_status": "GRAS",
-      "common_uses": [
-        "humectant",
-        "preservative",
-        "pH control"
-      ],
-      "last_updated": "2025-12-04",
-      "is_additive": true,
-      "severity_level": "none",
-      "allergen_flag": null
-    },
-    {
-      "id": "NHA_SODIUM_HEXAMETAPHOSPHATE",
-      "standard_name": "Sodium Hexametaphosphate",
-      "aliases": [
-        "sodium hexametaphosphate",
-        "SHMP",
-        "E452i",
-        "sodium hexametaphoshate",
-        "sodium polyphosphate"
-      ],
-      "category": "sequestrant_emulsifier",
-      "additive_type": "texture_modifier",
-      "clean_label_score": 6,
-      "notes": "Sequestrant and emulsifier used for texture and stability in gummies. FDA approved food additive.",
-      "regulatory_status": "FDA Approved",
-      "common_uses": [
-        "emulsifier",
-        "sequestrant",
-        "texture modifier"
-      ],
-      "last_updated": "2025-12-04",
-      "is_additive": true,
-      "severity_level": "none",
-      "allergen_flag": null
-    },
-    {
-      "id": "NHA_GRAPE_JUICE_COLOR",
-      "standard_name": "Grape Juice Color",
-      "aliases": [
-        "grape juice concentrate",
-        "grape juice",
-        "grape juice color concentrate",
-        "grape juice extract",
-        "red grape juice concentrate"
-      ],
-      "category": "colorant_natural",
-      "additive_type": "natural_colorant",
-      "clean_label_score": 10,
-      "notes": "Natural colorant from grape juice. Rich in anthocyanins. Clean label alternative to artificial colors. GRAS approved.",
-      "regulatory_status": "GRAS",
-      "common_uses": [
-        "natural coloring",
-        "purple/red color"
-      ],
-      "last_updated": "2025-12-04",
-      "is_additive": true,
-      "severity_level": "none",
-      "allergen_flag": null
-    },
-    {
-      "id": "NHA_ELDERBERRY_JUICE_COLOR",
-      "standard_name": "Elderberry Juice (Color)",
-      "aliases": [
-        "elderberry juice concentrate",
-        "elderberry juice",
-        "elderberry color",
-        "elderberry juice powder"
-      ],
-      "category": "colorant_natural",
-      "additive_type": "natural_colorant",
-      "clean_label_score": 10,
-      "notes": "Natural colorant from elderberry juice. Rich in anthocyanins. Clean label ingredient. GRAS approved.",
-      "regulatory_status": "GRAS",
-      "common_uses": [
-        "natural coloring",
-        "purple color"
-      ],
-      "last_updated": "2025-12-04",
-      "is_additive": true,
-      "severity_level": "none",
-      "allergen_flag": null
-    },
-    {
-      "id": "NHA_JUICE_CONCENTRATES",
-      "standard_name": "Fruit Juice Concentrates",
-      "aliases": [
-        "pear juice concentrate",
-        "pineapple juice concentrate",
-        "blueberry juice concentrate",
-        "blackberry juice concentrate",
-        "maqui berry juice concentrate",
-        "carrot juice concentrate",
-        "watermelon juice concentrate",
-        "hibiscus juice concentrate",
-        "cherry juice concentrate",
-        "blackcurrant juice concentrate",
-        "pumpkin juice concentrate",
-        "raspberry juice concentrate",
-        "strawberry juice concentrate",
-        "chokeberry juice concentrate",
-        "juice concentrates",
-        "natural juice concentrates",
-        "lime juice concentrate"
-      ],
-      "category": "colorant_flavoring_natural",
-      "additive_type": "natural_colorant",
-      "clean_label_score": 10,
-      "notes": "Natural fruit juice concentrates used for color and flavor. Clean label ingredients. GRAS approved.",
-      "regulatory_status": "GRAS",
-      "common_uses": [
-        "natural coloring",
-        "flavoring"
-      ],
-      "last_updated": "2025-12-04",
-      "is_additive": true,
-      "severity_level": "none",
-      "allergen_flag": null
-    },
-    {
-      "id": "NHA_SUCROSE_FATTY_ACID_ESTER",
-      "standard_name": "Sucrose Fatty Acid Ester",
-      "aliases": [
-        "sucrose fatty acid ester",
-        "sucrose fatty acid esters",
-        "sucrose esters",
-        "E473"
-      ],
-      "category": "emulsifier",
-      "additive_type": "emulsifier",
-      "clean_label_score": 7,
-      "notes": "Emulsifier derived from sucrose and fatty acids. Used in gummies for texture. GRAS approved.",
-      "regulatory_status": "GRAS",
-      "common_uses": [
-        "emulsifier",
-        "texture modifier"
-      ],
-      "last_updated": "2025-12-04",
-      "is_additive": true,
-      "severity_level": "none",
-      "allergen_flag": null
-    },
-    {
-      "id": "NHA_STARCH_MODIFIED",
-      "standard_name": "Modified Starch",
-      "aliases": [
-        "starch, modified",
-        "modified potato starch",
-        "corn starch, modified",
-        "corn starch modified",
-        "starch acetate",
-        "Tarch Acetate"
-      ],
-      "category": "thickener_stabilizer",
-      "additive_type": "texture_modifier",
-      "clean_label_score": 6,
-      "notes": "Chemically modified starch for improved stability and texture. FDA approved food additive.",
-      "regulatory_status": "FDA Approved",
-      "common_uses": [
-        "thickener",
-        "stabilizer"
-      ],
-      "last_updated": "2025-12-04",
-      "is_additive": true,
-      "severity_level": "none",
-      "allergen_flag": null
-    },
-    {
-      "id": "NHA_ALLULOSE",
-      "standard_name": "Allulose",
-      "aliases": [
-        "allulose",
-        "d-allulose",
-        "psicose",
-        "d-psicose"
-      ],
-      "category": "sweetener_natural",
-      "additive_type": "rare_sugar_sweetener",
-      "clean_label_score": 9,
-      "notes": "Rare natural sugar with 70% sweetness of sucrose but minimal calories. Does not affect blood sugar. FDA recognized as GRAS.",
-      "regulatory_status": "GRAS",
-      "common_uses": [
-        "low-calorie sweetener",
-        "sugar substitute"
-      ],
-      "last_updated": "2025-12-04",
-      "is_additive": true,
-      "severity_level": "none",
-      "allergen_flag": null
-    },
-    {
-      "id": "NHA_GLYCERINE",
-      "standard_name": "Glycerine",
-      "aliases": [
-        "glycerine",
-        "glycerin",
-        "glycerol",
-        "vegetable glycerin",
-        "vegetable glycerine"
-      ],
-      "category": "humectant",
-      "additive_type": "moisture_retention",
-      "clean_label_score": 8,
-      "notes": "Natural humectant derived from vegetable oils. Essential for gummy texture and shelf life. GRAS approved.",
-      "regulatory_status": "GRAS",
-      "common_uses": [
-        "humectant",
-        "sweetener",
-        "texture modifier"
-      ],
-      "last_updated": "2025-12-04",
-      "is_additive": true,
-      "severity_level": "none",
-      "allergen_flag": null
-    },
-    {
-      "id": "NHA_CANOLA_LECITHIN",
-      "standard_name": "Canola Lecithin",
-      "aliases": [
-        "canola lecithin",
-        "rapeseed lecithin"
-      ],
-      "category": "emulsifier",
-      "additive_type": "emulsifier",
-      "clean_label_score": 8,
-      "notes": "Natural emulsifier from canola/rapeseed. Alternative to soy lecithin. GRAS approved.",
-      "regulatory_status": "GRAS",
-      "common_uses": [
-        "emulsifier",
-        "texture improvement"
-      ],
-      "last_updated": "2025-12-04",
-      "is_additive": true,
-      "severity_level": "none",
-      "allergen_flag": null
-    },
-    {
-      "id": "NHA_ANNATTO_VARIANTS",
-      "standard_name": "Annatto (Variants)",
-      "aliases": [
-        "annatto color",
-        "natural annatto color",
-        "annatto seed extract",
-        "annato",
-        "Annato extract",
-        "annatto juice",
-        "annatto, natural"
-      ],
-      "category": "colorant_natural",
-      "additive_type": "natural_colorant",
-      "clean_label_score": 9,
-      "notes": "Natural yellow/orange colorant from annatto seeds. GRAS status. Clean label color.",
-      "regulatory_status": "GRAS",
-      "common_uses": [
-        "natural coloring",
-        "yellow/orange color"
-      ],
-      "last_updated": "2025-12-04",
-      "is_additive": true,
-      "severity_level": "none",
-      "allergen_flag": null
-    },
-    {
-      "id": "NHA_CARROT_JUICE_COLOR",
-      "standard_name": "Carrot Juice (Color)",
-      "aliases": [
-        "carrot juice concentrate",
-        "carrot juice",
-        "carrot juice, natural",
-        "natural carrot color"
-      ],
-      "category": "colorant_natural",
-      "additive_type": "natural_colorant",
-      "clean_label_score": 10,
-      "notes": "Natural orange colorant from carrot juice. Rich in beta-carotene. Clean label. GRAS approved.",
-      "regulatory_status": "GRAS",
-      "common_uses": [
-        "natural coloring",
-        "orange color"
-      ],
-      "last_updated": "2025-12-04",
-      "is_additive": true,
-      "severity_level": "none",
-      "allergen_flag": null
-    },
-    {
-      "id": "NHA_BLUEBERRY_JUICE_COLOR",
-      "standard_name": "Blueberry Juice (Color)",
-      "aliases": [
-        "blueberry juice",
-        "blueberry juice powder"
-      ],
-      "category": "colorant_natural",
-      "additive_type": "natural_colorant",
-      "clean_label_score": 10,
-      "notes": "Natural blue/purple colorant from blueberry juice. Rich in anthocyanins. Clean label. GRAS approved.",
-      "regulatory_status": "GRAS",
-      "common_uses": [
-        "natural coloring",
-        "blue/purple color"
-      ],
-      "last_updated": "2025-12-04",
-      "is_additive": true,
-      "severity_level": "none",
-      "allergen_flag": null
-    },
-    {
-      "id": "NHA_NATURAL_GRAPE_FLAVOR",
-      "standard_name": "Natural Grape Flavor",
-      "aliases": [
-        "natural Grape flavor",
-        "grape flavor, natural",
-        "grape natural flavor",
-        "natural grape flavoring"
-      ],
-      "category": "flavor_natural",
-      "additive_type": "natural_flavoring",
-      "clean_label_score": 8,
-      "notes": "Natural flavoring derived from grape sources. GRAS approved.",
-      "regulatory_status": "GRAS",
-      "common_uses": [
-        "flavoring",
-        "taste enhancement"
-      ],
-      "last_updated": "2025-12-04",
-      "is_additive": true,
-      "severity_level": "none",
-      "allergen_flag": null
-    },
-    {
-      "id": "NHA_NATURAL_APPLE_FLAVOR",
-      "standard_name": "Natural Apple Flavor",
-      "aliases": [
-        "Apple Flavor, Natural",
-        "Natural Apple flavour",
-        "natural apple flavor",
-        "apple natural flavor"
-      ],
-      "category": "flavor_natural",
-      "additive_type": "natural_flavoring",
-      "clean_label_score": 8,
-      "notes": "Natural flavoring derived from apple sources. GRAS approved.",
-      "regulatory_status": "GRAS",
-      "common_uses": [
-        "flavoring",
-        "taste enhancement"
-      ],
-      "last_updated": "2025-12-04",
-      "is_additive": true,
-      "severity_level": "none",
-      "allergen_flag": null
-    },
-    {
-      "id": "NHA_NATURAL_WATERMELON_FLAVOR",
-      "standard_name": "Natural Watermelon Flavor",
-      "aliases": [
-        "Watermelon Flavor",
-        "Watermelon Flavor, Natural",
-        "natural watermelon flavor",
-        "watermelon natural flavor"
-      ],
-      "category": "flavor_natural",
-      "additive_type": "natural_flavoring",
-      "clean_label_score": 8,
-      "notes": "Natural flavoring derived from watermelon sources. GRAS approved.",
-      "regulatory_status": "GRAS",
-      "common_uses": [
-        "flavoring",
-        "taste enhancement"
-      ],
-      "last_updated": "2025-12-04",
-      "is_additive": true,
-      "severity_level": "none",
-      "allergen_flag": null
-    },
-    {
-      "id": "NHA_NATURAL_BLUEBERRY_FLAVOR",
-      "standard_name": "Natural Blueberry Flavor",
-      "aliases": [
-        "Blueberry Flavor, Natural",
-        "natural blueberry flavor",
-        "blueberry natural flavor"
-      ],
-      "category": "flavor_natural",
-      "additive_type": "natural_flavoring",
-      "clean_label_score": 8,
-      "notes": "Natural flavoring derived from blueberry sources. GRAS approved.",
-      "regulatory_status": "GRAS",
-      "common_uses": [
-        "flavoring",
-        "taste enhancement"
-      ],
-      "last_updated": "2025-12-04",
-      "is_additive": true,
-      "severity_level": "none",
-      "allergen_flag": null
-    },
-    {
-      "id": "NHA_NATURAL_ORANGE_FLAVOR",
-      "standard_name": "Natural Orange Flavor",
-      "aliases": [
-        "natural Orange flavour",
-        "Orange, Natural",
-        "natural orange flavor",
-        "orange flavor, natural",
-        "orange natural flavor"
-      ],
-      "category": "flavor_natural",
-      "additive_type": "natural_flavoring",
-      "clean_label_score": 8,
-      "notes": "Natural flavoring derived from orange sources. GRAS approved.",
-      "regulatory_status": "GRAS",
-      "common_uses": [
-        "flavoring",
-        "taste enhancement"
-      ],
-      "last_updated": "2025-12-04",
-      "is_additive": true,
-      "severity_level": "none",
-      "allergen_flag": null
-    },
-    {
-      "id": "NHA_APPLE_PUREE_CONCENTRATE",
-      "standard_name": "Apple Puree Concentrate",
-      "aliases": [
-        "Apple puree concentrate",
-        "organic Apple puree concentrate",
-        "Apple Puree",
-        "organic Apples",
-        "Apple fruit"
-      ],
-      "category": "fruit_concentrate",
-      "additive_type": "natural_ingredient",
-      "clean_label_score": 10,
-      "notes": "Concentrated apple puree used for flavor and natural sweetness. Clean label ingredient. GRAS approved.",
-      "regulatory_status": "GRAS",
-      "common_uses": [
-        "flavoring",
-        "natural sweetening",
-        "texture"
-      ],
-      "last_updated": "2025-12-04",
-      "is_additive": true,
-      "severity_level": "none",
-      "allergen_flag": null
-    },
-    {
-      "id": "NHA_MANGO_PUREE",
-      "standard_name": "Mango Puree",
-      "aliases": [
-        "Mango puree",
-        "organic Mangoes",
-        "mango concentrate"
-      ],
-      "category": "fruit_concentrate",
-      "additive_type": "natural_ingredient",
-      "clean_label_score": 10,
-      "notes": "Mango puree used for flavor and natural sweetness. Clean label ingredient. GRAS approved.",
-      "regulatory_status": "GRAS",
-      "common_uses": [
-        "flavoring",
-        "natural sweetening"
-      ],
-      "last_updated": "2025-12-04",
-      "is_additive": true,
-      "severity_level": "none",
-      "allergen_flag": null
-    },
-    {
-      "id": "NHA_STRAWBERRY_PUREE",
-      "standard_name": "Strawberry Puree",
-      "aliases": [
-        "Strawberry puree",
-        "organic strawberry puree"
-      ],
-      "category": "fruit_concentrate",
-      "additive_type": "natural_ingredient",
-      "clean_label_score": 10,
-      "notes": "Strawberry puree used for flavor and color. Clean label ingredient. GRAS approved.",
-      "regulatory_status": "GRAS",
-      "common_uses": [
-        "flavoring",
-        "natural coloring"
-      ],
-      "last_updated": "2025-12-04",
-      "is_additive": true,
-      "severity_level": "none",
-      "allergen_flag": null
-    },
-    {
-      "id": "NHA_BERRY_PUREES",
-      "standard_name": "Berry Purees",
-      "aliases": [
-        "Blackberry puree",
-        "Raspberry puree",
-        "Blueberries",
-        "organic Raspberries",
-        "organic Blueberries"
-      ],
-      "category": "fruit_concentrate",
-      "additive_type": "natural_ingredient",
-      "clean_label_score": 10,
-      "notes": "Various berry purees used for flavor and color. Clean label ingredients. GRAS approved.",
-      "regulatory_status": "GRAS",
-      "common_uses": [
-        "flavoring",
-        "natural coloring"
-      ],
-      "last_updated": "2025-12-04",
-      "is_additive": true,
-      "severity_level": "none",
-      "allergen_flag": null
-    },
-    {
-      "id": "NHA_APPLE_CIDER_VINEGAR",
-      "standard_name": "Apple Cider Vinegar",
-      "aliases": [
-        "liquid Apple Cider Vinegar",
-        "Apple Cider Vinegar, Liquid, Unfiltered",
-        "Apple Cider Vinegar, Liquid",
-        "apple cider vinegar",
-        "ACV",
-        "organic apple cider vinegar",
-        "unfiltered apple cider vinegar",
-        "raw apple cider vinegar"
-      ],
-      "category": "functional_ingredient",
-      "additive_type": "functional",
-      "clean_label_score": 9,
-      "notes": "Apple cider vinegar used in gummies for digestive health claims. Contains acetic acid. GRAS approved.",
-      "regulatory_status": "GRAS",
-      "common_uses": [
-        "functional ingredient",
-        "flavor"
-      ],
-      "last_updated": "2025-12-04",
-      "is_additive": false,
-      "severity_level": "none",
-      "allergen_flag": null
-    },
-    {
-      "id": "NHA_HEMP_EXTRACT",
-      "standard_name": "Hemp Extract",
-      "aliases": [
-        "Hemp extract",
-        "Full Spectrum Hemp Extract",
-        "Full Spectrum Hemp Aerial Parts Extract",
-        "Broad Spectrum Hemp extract",
-        "Broad Spectrum Hemp Distillate",
-        "Hemp Flower, Leaf Extract",
-        "Hemp",
-        "industrial hemp extract",
-        "CBD Hemp extract",
-        "Colorado Hemp Extract"
-      ],
-      "category": "botanical_extract",
-      "additive_type": "functional",
-      "clean_label_score": 7,
-      "notes": "Hemp extract containing various phytocannabinoids. Legal hemp contains <0.3% THC. Regulatory status varies by state.",
-      "regulatory_status": "Varies",
-      "common_uses": [
-        "relaxation",
-        "sleep support",
-        "stress relief"
-      ],
-      "last_updated": "2025-12-04",
-      "is_additive": false,
-      "severity_level": "none",
-      "allergen_flag": null
-    },
-    {
-      "id": "NHA_CANNABIDIOL",
-      "standard_name": "Cannabidiol (CBD)",
-      "aliases": [
-        "pure CBD extract",
-        "Full Spectrum Cannabidiol",
-        "CBD",
-        "cannabidiol",
-        "CBD isolate",
-        "broad spectrum CBD"
-      ],
-      "category": "phytocannabinoid",
-      "additive_type": "functional",
-      "clean_label_score": 7,
-      "notes": "Non-psychoactive cannabinoid from hemp. Legal in most jurisdictions when derived from industrial hemp. FDA has not approved CBD as dietary supplement ingredient.",
-      "regulatory_status": "Varies",
-      "common_uses": [
-        "relaxation",
-        "sleep support"
-      ],
-      "last_updated": "2025-12-04",
-      "is_additive": false,
-      "severity_level": "none",
-      "allergen_flag": null
-    },
-    {
-      "id": "NHA_CANNABIGEROL",
-      "standard_name": "Cannabigerol (CBG)",
-      "aliases": [
-        "cannabigerol",
-        "cbg",
-        "cbg isolate"
-      ],
-      "category": "phytocannabinoid",
-      "additive_type": "functional",
-      "clean_label_score": 7,
-      "notes": "Non-psychoactive cannabinoid from hemp. Precursor cannabinoid. Regulatory status similar to CBD.",
-      "regulatory_status": "Varies",
-      "common_uses": [
-        "wellness support"
-      ],
-      "last_updated": "2025-12-04",
-      "is_additive": false,
-      "severity_level": "none",
-      "allergen_flag": null
-    },
-    {
-      "id": "NHA_CANNABINOL",
-      "standard_name": "Cannabinol (CBN)",
-      "aliases": [
-        "cannabinol",
-        "cbn",
-        "cbn isolate"
-      ],
-      "category": "phytocannabinoid",
-      "additive_type": "functional",
-      "clean_label_score": 7,
-      "notes": "Mildly psychoactive cannabinoid from hemp. Often marketed for sleep. Regulatory status varies.",
-      "regulatory_status": "Varies",
-      "common_uses": [
-        "sleep support"
-      ],
-      "last_updated": "2025-12-04",
-      "is_additive": false,
-      "severity_level": "none",
-      "allergen_flag": null
-    },
-    {
-      "id": "NHA_TERPENES",
-      "standard_name": "Terpenes",
-      "aliases": [
-        "Terpenes",
-        "Terpenes, Natural",
-        "natural terpenes",
-        "botanical terpenes"
-      ],
-      "category": "botanical_compound",
-      "additive_type": "functional",
-      "clean_label_score": 8,
-      "notes": "Aromatic compounds from plants. Used for flavor and entourage effect in hemp products. GRAS approved.",
+      "notes": "Dried yogurt used for flavor and texture. Contains milk allergen. May provide some probiotic benefits if cultures are preserved.",
       "regulatory_status": "GRAS",
       "common_uses": [
         "flavor",
-        "aroma",
-        "synergy"
+        "texture",
+        "probiotic base"
       ],
-      "last_updated": "2025-12-04",
+      "allergen_flag": "milk",
+      "last_updated": "2026-01-06",
+      "is_additive": false,
+      "severity_level": "none"
+    },
+    {
+      "id": "OI_CALCIUM_D_GLUCARATE",
+      "standard_name": "Calcium D-Glucarate",
+      "aliases": [
+        "calcium d-glucarate",
+        "calcium glucarate"
+      ],
+      "category": "specialty_compound",
+      "additive_type": "unspecified",
+      "clean_label_score": 4,
+      "notes": "Added from unmapped remediation for identity coverage. Treated as non-scorable pending dedicated scoring policy.",
+      "regulatory_status": "varies",
+      "common_uses": [
+        "label mapping"
+      ],
+      "last_updated": "2026-02-17",
+      "is_additive": false,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "OI_IPRIFLAVONE",
+      "standard_name": "Ipriflavone",
+      "aliases": [
+        "ipriflavone"
+      ],
+      "category": "specialty_compound",
+      "additive_type": "unspecified",
+      "clean_label_score": 4,
+      "notes": "Added from unmapped remediation for identity coverage. Treated as non-scorable pending dedicated scoring policy.",
+      "regulatory_status": "varies",
+      "common_uses": [
+        "label mapping"
+      ],
+      "last_updated": "2026-02-17",
+      "is_additive": false,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "OI_DIOSMIN",
+      "standard_name": "Diosmin",
+      "aliases": [
+        "diosmin"
+      ],
+      "category": "specialty_compound",
+      "additive_type": "unspecified",
+      "clean_label_score": 4,
+      "notes": "Added from unmapped remediation for identity coverage. Treated as non-scorable pending dedicated scoring policy.",
+      "regulatory_status": "varies",
+      "common_uses": [
+        "label mapping"
+      ],
+      "last_updated": "2026-02-17",
+      "is_additive": false,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "OI_DIMETHYLGLYCINE",
+      "standard_name": "Dimethylglycine",
+      "aliases": [
+        "dimethylglycine",
+        "dmg"
+      ],
+      "category": "amino_acid_derivative",
+      "additive_type": "unspecified",
+      "clean_label_score": 4,
+      "notes": "Added from unmapped remediation for identity coverage. Treated as non-scorable pending dedicated scoring policy.",
+      "regulatory_status": "varies",
+      "common_uses": [
+        "label mapping"
+      ],
+      "last_updated": "2026-02-17",
+      "is_additive": false,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "OI_MITOHEAL",
+      "standard_name": "MitoHeal",
+      "aliases": [
+        "mitoheal"
+      ],
+      "category": "proprietary_blend",
+      "additive_type": "unspecified",
+      "clean_label_score": 4,
+      "notes": "Added from unmapped remediation for identity coverage. Treated as non-scorable pending dedicated scoring policy.",
+      "regulatory_status": "varies",
+      "common_uses": [
+        "label mapping"
+      ],
+      "last_updated": "2026-02-17",
       "is_additive": true,
       "severity_level": "none",
       "allergen_flag": null
     },
     {
-      "id": "NHA_WEST_INDIAN_CHERRY",
-      "standard_name": "West Indian Cherry (Acerola)",
+      "id": "OI_DALTONMAX_700",
+      "standard_name": "DaltonMax 700",
       "aliases": [
-        "West Indian Cherry",
-        "acerola",
-        "acerola cherry",
-        "Malpighia glabra",
-        "Malpighia emarginata",
-        "barbados cherry"
+        "daltonmax 700"
       ],
-      "category": "fruit_extract",
-      "additive_type": "natural_ingredient",
-      "clean_label_score": 10,
-      "notes": "Natural source of vitamin C from acerola cherry. Very high vitamin C content. Clean label ingredient.",
-      "regulatory_status": "GRAS",
+      "category": "proprietary_blend",
+      "additive_type": "unspecified",
+      "clean_label_score": 4,
+      "notes": "Added from unmapped remediation for identity coverage. Treated as non-scorable pending dedicated scoring policy.",
+      "regulatory_status": "varies",
       "common_uses": [
-        "natural vitamin C source",
-        "antioxidant"
+        "label mapping"
       ],
-      "last_updated": "2025-12-04",
-      "is_additive": false,
+      "last_updated": "2026-02-17",
+      "is_additive": true,
       "severity_level": "none",
       "allergen_flag": null
     },
     {
-      "id": "NHA_SEAWEED_EXTRACT",
-      "standard_name": "Seaweed Extract",
+      "id": "OI_BIO_ENHANCED",
+      "standard_name": "Bio-Enhanced",
       "aliases": [
-        "Seaweed extract",
-        "kelp extract",
-        "marine algae extract"
+        "bio-enhanced"
       ],
-      "category": "botanical_extract",
-      "additive_type": "functional",
+      "category": "label_descriptor",
+      "additive_type": "unspecified",
+      "clean_label_score": 4,
+      "notes": "Added from unmapped remediation for identity coverage. Treated as non-scorable pending dedicated scoring policy.",
+      "regulatory_status": "varies",
+      "common_uses": [
+        "label mapping"
+      ],
+      "last_updated": "2026-02-17",
+      "is_additive": true,
+      "severity_level": "low",
+      "allergen_flag": null
+    },
+    {
+      "id": "OI_TOTAL_CULTURES",
+      "standard_name": "Total Cultures",
+      "aliases": [
+        "total cultures"
+      ],
+      "category": "label_descriptor",
+      "additive_type": "unspecified",
+      "clean_label_score": 4,
+      "notes": "Added from unmapped remediation for identity coverage. Treated as non-scorable pending dedicated scoring policy.",
+      "regulatory_status": "varies",
+      "common_uses": [
+        "label mapping"
+      ],
+      "last_updated": "2026-02-17",
+      "is_additive": true,
+      "severity_level": "low",
+      "allergen_flag": null
+    },
+    {
+      "id": "OI_FROM_250MG_DMSA",
+      "standard_name": "from 250 mg DMSA",
+      "aliases": [
+        "from 250 mg dmsa"
+      ],
+      "category": "label_descriptor",
+      "additive_type": "unspecified",
+      "clean_label_score": 4,
+      "notes": "Added from unmapped remediation for identity coverage. Treated as non-scorable pending dedicated scoring policy.",
+      "regulatory_status": "varies",
+      "common_uses": [
+        "label mapping"
+      ],
+      "last_updated": "2026-02-17",
+      "is_additive": true,
+      "severity_level": "low",
+      "allergen_flag": null
+    },
+    {
+      "id": "OI_FROM_100MG_DMSA",
+      "standard_name": "from 100 mg DMSA",
+      "aliases": [
+        "from 100 mg dmsa"
+      ],
+      "category": "label_descriptor",
+      "additive_type": "unspecified",
+      "clean_label_score": 4,
+      "notes": "Added from unmapped remediation for identity coverage. Treated as non-scorable pending dedicated scoring policy.",
+      "regulatory_status": "varies",
+      "common_uses": [
+        "label mapping"
+      ],
+      "last_updated": "2026-02-17",
+      "is_additive": true,
+      "severity_level": "low",
+      "allergen_flag": null
+    },
+    {
+      "id": "OI_25000_IU_MIXED_CAROTENES",
+      "standard_name": "25,000 IU from Mixed Carotenes",
+      "aliases": [
+        "25,000 iu from mixed carotenes"
+      ],
+      "category": "label_descriptor",
+      "additive_type": "unspecified",
+      "clean_label_score": 4,
+      "notes": "Added from unmapped remediation for identity coverage. Treated as non-scorable pending dedicated scoring policy.",
+      "regulatory_status": "varies",
+      "common_uses": [
+        "label mapping"
+      ],
+      "last_updated": "2026-02-17",
+      "is_additive": true,
+      "severity_level": "low",
+      "allergen_flag": null
+    },
+    {
+      "id": "OI_AND_AS_MAGNESIUM_CITRATE",
+      "standard_name": "and as (magnesium) citrate",
+      "aliases": [
+        "and as (magnesium) citrate"
+      ],
+      "category": "label_descriptor",
+      "additive_type": "unspecified",
+      "clean_label_score": 4,
+      "notes": "Added from unmapped remediation for identity coverage. Treated as non-scorable pending dedicated scoring policy.",
+      "regulatory_status": "varies",
+      "common_uses": [
+        "label mapping"
+      ],
+      "last_updated": "2026-02-17",
+      "is_additive": true,
+      "severity_level": "low",
+      "allergen_flag": null
+    },
+    {
+      "id": "OI_PULLULAN",
+      "standard_name": "Pullulan",
+      "aliases": [
+        "pullulan",
+        "Pullulan",
+        "pullulan capsule",
+        "plantcaps pullulan",
+        "tapioca pullulan",
+        "fermented tapioca pullulan"
+      ],
+      "category": "capsule_material",
+      "notes": "Natural polysaccharide produced by fermentation of tapioca starch by Aureobasidium pullulans. Used as vegan capsule shell material (Plantcaps). Clean-label, non-GMO alternative to HPMC and gelatin capsules.",
+      "last_updated": "2026-02-18",
+      "is_additive": true,
+      "additive_type": "capsule_shell",
       "clean_label_score": 9,
-      "notes": "Extract from various seaweeds. Source of minerals and iodine. GRAS approved.",
       "regulatory_status": "GRAS",
       "common_uses": [
-        "mineral source",
-        "iodine source"
+        "vegan capsule shells",
+        "film coating"
       ],
-      "last_updated": "2025-12-04",
-      "is_additive": false,
       "severity_level": "none",
       "allergen_flag": null
     },
     {
-      "id": "NHA_IRISH_SEA_MOSS",
-      "standard_name": "Irish Sea Moss",
+      "id": "OI_RICE_FIBER",
+      "standard_name": "Rice Fiber",
       "aliases": [
-        "Irish Sea Moss",
-        "Irish Sea Moss Extract",
-        "sea moss",
-        "Chondrus crispus",
-        "carrageen moss"
+        "rice fiber",
+        "Rice Fiber",
+        "organic rice fiber",
+        "organic Rice Fiber",
+        "rice hull fiber",
+        "rice bran fiber"
       ],
-      "category": "botanical_extract",
-      "additive_type": "functional",
-      "clean_label_score": 9,
-      "notes": "Red algae used for mineral content and as a thickening agent. Popular in wellness products. GRAS approved.",
-      "regulatory_status": "GRAS",
-      "common_uses": [
-        "mineral source",
-        "thickener"
-      ],
-      "last_updated": "2025-12-04",
-      "is_additive": false,
-      "severity_level": "none",
-      "allergen_flag": null
-    },
-    {
-      "id": "NHA_BLADDERWRACK",
-      "standard_name": "Bladderwrack",
-      "aliases": [
-        "Bladderwrack Whole Plant Extract",
-        "bladderwrack",
-        "Fucus vesiculosus",
-        "bladderwrack extract"
-      ],
-      "category": "botanical_extract",
-      "additive_type": "functional",
+      "category": "filler",
+      "notes": "Natural plant fiber from rice hulls or bran. Used as filler and flow agent in supplement manufacturing. Clean-label, allergen-free alternative to synthetic fillers.",
+      "last_updated": "2026-02-18",
+      "is_additive": true,
+      "additive_type": "filler",
       "clean_label_score": 8,
-      "notes": "Brown seaweed traditionally used for thyroid support due to iodine content. GRAS approved.",
-      "regulatory_status": "GRAS",
-      "common_uses": [
-        "iodine source",
-        "thyroid support"
-      ],
-      "last_updated": "2025-12-04",
-      "is_additive": false,
-      "severity_level": "none",
-      "allergen_flag": null
-    },
-    {
-      "id": "NHA_LEMON_BALM_EXTRACT",
-      "standard_name": "Lemon Balm Extract",
-      "aliases": [
-        "Lemon Balm leaf (Melissa officinalis) 4:1 extract",
-        "Lemon Balm Aerial Parts Extract",
-        "Lemon Balm leaf 4:1 extract",
-        "lemon balm extract",
-        "Melissa officinalis extract",
-        "lemon balm"
-      ],
-      "category": "botanical_extract",
-      "additive_type": "functional",
-      "clean_label_score": 9,
-      "notes": "Calming herb extract used for relaxation and sleep support. GRAS approved.",
-      "regulatory_status": "GRAS",
-      "common_uses": [
-        "relaxation",
-        "sleep support",
-        "stress relief"
-      ],
-      "last_updated": "2025-12-04",
-      "is_additive": false,
-      "severity_level": "none",
-      "allergen_flag": null
-    },
-    {
-      "id": "NHA_CHAMOMILE_EXTRACT",
-      "standard_name": "Chamomile Extract",
-      "aliases": [
-        "Chamomile flower (Chamomilla recutita) 4:1 extract",
-        "Chamomile flower 4:1 extract",
-        "chamomile extract",
-        "Matricaria chamomilla extract",
-        "chamomile"
-      ],
-      "category": "botanical_extract",
-      "additive_type": "functional",
-      "clean_label_score": 9,
-      "notes": "Calming herb extract used for relaxation and sleep support. GRAS approved.",
-      "regulatory_status": "GRAS",
-      "common_uses": [
-        "relaxation",
-        "sleep support"
-      ],
-      "last_updated": "2025-12-04",
-      "is_additive": false,
-      "severity_level": "none",
-      "allergen_flag": null
-    },
-    {
-      "id": "NHA_PASSIONFLOWER_EXTRACT",
-      "standard_name": "Passionflower Extract",
-      "aliases": [
-        "Passionflower Aerial Parts Extract",
-        "Passionflower Flower, Leaf Extract",
-        "Passiflora extract",
-        "passionflower extract",
-        "Passiflora incarnata extract",
-        "passion flower"
-      ],
-      "category": "botanical_extract",
-      "additive_type": "functional",
-      "clean_label_score": 9,
-      "notes": "Calming herb extract used for relaxation, anxiety, and sleep support. GRAS approved.",
-      "regulatory_status": "GRAS",
-      "common_uses": [
-        "relaxation",
-        "sleep support",
-        "anxiety relief"
-      ],
-      "last_updated": "2025-12-04",
-      "is_additive": false,
-      "severity_level": "none",
-      "allergen_flag": null
-    },
-    {
-      "id": "NHA_ECHINACEA_EXTRACT",
-      "standard_name": "Echinacea Extract",
-      "aliases": [
-        "Echinacea purpurea (aerial and root parts) 4:1 extract",
-        "Echinacea (Echinacea purpurea) root 4:1 extract",
-        "Echinacea (Echinacea purpurea) aerial parts 4:1 extract",
-        "Echinacea root 4:1 extract",
-        "echinacea extract",
-        "Echinacea purpurea extract"
-      ],
-      "category": "botanical_extract",
-      "additive_type": "functional",
-      "clean_label_score": 9,
-      "notes": "Immune-supporting herb extract. Popular for cold and flu support. GRAS approved.",
-      "regulatory_status": "GRAS",
-      "common_uses": [
-        "immune support",
-        "cold and flu"
-      ],
-      "last_updated": "2025-12-04",
-      "is_additive": false,
-      "severity_level": "none",
-      "allergen_flag": null
-    },
-    {
-      "id": "NHA_COLLAGEN_HYDROLYZED",
-      "standard_name": "Hydrolyzed Collagen",
-      "aliases": [
-        "Collagen, Hydrolyzed",
-        "Hydrolyzed Collagen Types 1 & 3",
-        "hydrolyzed Bovine Collagen",
-        "hydrolyzed collagen",
-        "collagen peptides",
-        "hydrolyzed collagen peptides"
-      ],
-      "category": "protein",
-      "additive_type": "functional",
-      "clean_label_score": 8,
-      "notes": "Broken down collagen protein for better absorption. Popular for skin, hair, nail, and joint health. GRAS approved.",
-      "regulatory_status": "GRAS",
-      "common_uses": [
-        "skin health",
-        "joint support"
-      ],
-      "last_updated": "2025-12-04",
-      "is_additive": false,
-      "severity_level": "none",
-      "allergen_flag": null
-    },
-    {
-      "id": "NHA_VERISOL_COLLAGEN",
-      "standard_name": "Verisol Bioactive Collagen Peptides",
-      "aliases": [
-        "Verisol Bioactive Collagen Peptides",
-        "Verisol"
-      ],
-      "category": "branded_ingredient",
-      "additive_type": "functional",
-      "clean_label_score": 9,
-      "notes": "Branded bioactive collagen peptides clinically studied for skin health. Premium collagen ingredient.",
-      "regulatory_status": "GRAS",
-      "common_uses": [
-        "skin health",
-        "anti-aging"
-      ],
-      "last_updated": "2025-12-04",
-      "is_additive": false,
-      "severity_level": "none",
-      "allergen_flag": null
-    },
-    {
-      "id": "NHA_KERATIN",
-      "standard_name": "Keratin",
-      "aliases": [
-        "Keratin",
-        "hydrolyzed keratin",
-        "cynatine HNS"
-      ],
-      "category": "protein",
-      "additive_type": "functional",
-      "clean_label_score": 8,
-      "notes": "Protein for hair, skin, and nail health. Derived from wool or feathers. GRAS approved.",
-      "regulatory_status": "GRAS",
-      "common_uses": [
-        "hair health",
-        "nail health"
-      ],
-      "last_updated": "2025-12-04",
-      "is_additive": false,
-      "severity_level": "none",
-      "allergen_flag": null
-    },
-    {
-      "id": "NHA_DI_WATER",
-      "standard_name": "Deionized Water",
-      "aliases": [
-        "DI Water",
-        "Dl water",
-        "deionized water",
-        "purified water",
-        "water, deionized",
-        "water, distilled",
-        "distilled water"
-      ],
-      "category": "solvent",
-      "additive_type": "processing_aid",
-      "clean_label_score": 10,
-      "notes": "Purified water with minerals removed. Standard pharmaceutical-grade water.",
-      "regulatory_status": "GRAS",
-      "common_uses": [
-        "solvent",
-        "processing"
-      ],
-      "last_updated": "2025-12-04",
-      "is_additive": true,
-      "severity_level": "none",
-      "allergen_flag": null
-    },
-    {
-      "id": "NHA_ALCOHOL",
-      "standard_name": "Alcohol (Ethanol)",
-      "aliases": [
-        "Alcohol",
-        "ethanol",
-        "ethyl alcohol",
-        "grain alcohol"
-      ],
-      "category": "solvent",
-      "additive_type": "processing_aid",
-      "clean_label_score": 6,
-      "notes": "Used as extraction solvent or preservative. Generally evaporates during processing. GRAS approved.",
-      "regulatory_status": "GRAS",
-      "common_uses": [
-        "solvent",
-        "extraction",
-        "preservative"
-      ],
-      "last_updated": "2025-12-04",
-      "is_additive": true,
-      "severity_level": "none",
-      "allergen_flag": null
-    },
-    {
-      "id": "NHA_SODIUM_POTASSIUM_TARTRATE",
-      "standard_name": "Sodium Potassium Tartrate",
-      "aliases": [
-        "Sodium Potassium Tartrate",
-        "Rochelle salt",
-        "potassium sodium tartrate",
-        "E337"
-      ],
-      "category": "acidity_regulator",
-      "additive_type": "pH_adjuster",
-      "clean_label_score": 7,
-      "notes": "Double salt used as acidity regulator and leavening agent. GRAS approved.",
-      "regulatory_status": "GRAS",
-      "common_uses": [
-        "pH regulation",
-        "leavening"
-      ],
-      "last_updated": "2025-12-04",
-      "is_additive": true,
-      "severity_level": "none",
-      "allergen_flag": null
-    },
-    {
-      "id": "NHA_PHOSPHORIC_ACID",
-      "standard_name": "Phosphoric Acid",
-      "aliases": [
-        "Phosphoric Acid",
-        "E338",
-        "orthophosphoric acid"
-      ],
-      "category": "acidity_regulator",
-      "additive_type": "pH_adjuster",
-      "clean_label_score": 5,
-      "notes": "Acidifying agent used for pH control. Common in soft drinks. FDA approved.",
-      "regulatory_status": "FDA Approved",
-      "common_uses": [
-        "acidification",
-        "pH control"
-      ],
-      "last_updated": "2025-12-04",
-      "is_additive": true,
-      "severity_level": "none",
-      "allergen_flag": null
-    },
-    {
-      "id": "NHA_TRI_SODIUM_CITRATE",
-      "standard_name": "Trisodium Citrate",
-      "aliases": [
-        "Tri Sodium Citrate",
-        "trisodium citrate",
-        "sodium citrate tribasic",
-        "E331iii"
-      ],
-      "category": "acidity_regulator",
-      "additive_type": "buffering_agent",
-      "clean_label_score": 7,
-      "notes": "Buffering agent and acidity regulator. Same as sodium citrate. GRAS approved.",
-      "regulatory_status": "GRAS",
-      "common_uses": [
-        "buffering",
-        "pH control"
-      ],
-      "last_updated": "2025-12-04",
-      "is_additive": true,
-      "severity_level": "none",
-      "allergen_flag": null
-    },
-    {
-      "id": "NHA_WHOLE_BROWN_RICE",
-      "standard_name": "Whole Brown Rice",
-      "aliases": [
-        "whole Brown Rice",
-        "brown rice",
-        "organic Rice Meal",
-        "rice meal",
-        "brown rice powder"
-      ],
-      "category": "filler_binder",
-      "additive_type": "excipient",
-      "clean_label_score": 9,
-      "notes": "Whole grain rice used as a natural filler and binder. Gluten-free. GRAS approved.",
       "regulatory_status": "GRAS",
       "common_uses": [
         "filler",
-        "binder",
-        "flow agent"
+        "flow agent",
+        "bulking agent"
       ],
-      "last_updated": "2025-12-04",
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "OI_BEET_FIBER",
+      "standard_name": "Beet Fiber",
+      "aliases": [
+        "beet fiber",
+        "Beet Fiber",
+        "sugar beet fiber",
+        "beet root fiber",
+        "beet pulp fiber"
+      ],
+      "category": "filler",
+      "notes": "Natural dietary fiber from sugar beet pulp. Used as natural filler and bulking agent. Clean-label ingredient with some prebiotic properties.",
+      "last_updated": "2026-02-18",
       "is_additive": true,
-      "severity_level": "none",
-      "allergen_flag": null
-    },
-    {
-      "id": "NHA_MUSHROOM_EXTRACTS",
-      "standard_name": "Mushroom Extracts",
-      "aliases": [
-        "Lion's Mane Mushroom Fruiting Body Extract",
-        "Reishi Mushroom Fruiting Body Extract",
-        "Royal Sun Mushroom",
-        "White Button Mushroom",
-        "Black Fungus Mushroom",
-        "lion's mane extract",
-        "reishi extract",
-        "mushroom extract"
-      ],
-      "category": "botanical_extract",
-      "additive_type": "functional",
-      "clean_label_score": 9,
-      "notes": "Functional mushroom extracts used for various health benefits. Popular for cognitive and immune support. GRAS approved.",
-      "regulatory_status": "GRAS",
-      "common_uses": [
-        "cognitive support",
-        "immune support"
-      ],
-      "last_updated": "2025-12-04",
-      "is_additive": false,
-      "severity_level": "none",
-      "allergen_flag": null
-    },
-    {
-      "id": "NHA_GINGER_EXTRACT",
-      "standard_name": "Ginger Extract",
-      "aliases": [
-        "Ginger dry extract",
-        "ginger extract",
-        "organic fermented Ginger",
-        "Zingiber officinale extract"
-      ],
-      "category": "botanical_extract",
-      "additive_type": "functional",
-      "clean_label_score": 9,
-      "notes": "Ginger root extract used for digestive and anti-inflammatory benefits. GRAS approved.",
-      "regulatory_status": "GRAS",
-      "common_uses": [
-        "digestive support",
-        "anti-nausea"
-      ],
-      "last_updated": "2025-12-04",
-      "is_additive": false,
-      "severity_level": "none",
-      "allergen_flag": null
-    },
-    {
-      "id": "NHA_GINGER_FLAVOR",
-      "standard_name": "Ginger Flavor",
-      "aliases": [
-        "Ginger flavor",
-        "natural ginger flavor"
-      ],
-      "category": "flavor_natural",
-      "additive_type": "natural_flavoring",
+      "additive_type": "filler",
       "clean_label_score": 8,
-      "notes": "Natural ginger flavoring. GRAS approved.",
+      "regulatory_status": "GRAS",
+      "common_uses": [
+        "filler",
+        "bulking agent"
+      ],
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "OI_RICE_HUSK",
+      "standard_name": "Rice Husk",
+      "aliases": [
+        "rice husk",
+        "Rice Husk",
+        "rice hull",
+        "rice husks",
+        "rice hulls"
+      ],
+      "category": "filler",
+      "notes": "Outer shell of rice grain. Used as natural filler and source of silica in supplement manufacturing. Natural and inert.",
+      "last_updated": "2026-02-18",
+      "is_additive": true,
+      "additive_type": "filler",
+      "clean_label_score": 7,
+      "regulatory_status": "GRAS",
+      "common_uses": [
+        "filler",
+        "natural silica source"
+      ],
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "OI_CAPSULE_GENERIC",
+      "standard_name": "Capsule",
+      "aliases": [
+        "capsule",
+        "Capsule",
+        "capsules",
+        "delayed-release capsules",
+        "delayed-release Capsules",
+        "delayed release capsule",
+        "enteric-coated capsule"
+      ],
+      "category": "capsule_material",
+      "notes": "Generic capsule delivery format descriptor. Not a specific ingredient but a formulation type. Classified as non-active to prevent unmapped inflation.",
+      "last_updated": "2026-02-18",
+      "is_additive": true,
+      "additive_type": "capsule_shell",
+      "clean_label_score": 5,
+      "regulatory_status": "varies",
+      "common_uses": [
+        "delivery format"
+      ],
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "OI_SPICES",
+      "standard_name": "Spices",
+      "aliases": [
+        "spices",
+        "Spices",
+        "spice blend",
+        "spice extract",
+        "spice extracts"
+      ],
+      "category": "flavor",
+      "notes": "Generic spice flavoring. Not a specific ingredient. Classified as non-active flavoring agent.",
+      "last_updated": "2026-02-18",
+      "is_additive": true,
+      "additive_type": "flavor_natural",
+      "clean_label_score": 8,
       "regulatory_status": "GRAS",
       "common_uses": [
         "flavoring"
       ],
-      "last_updated": "2025-12-04",
-      "is_additive": true,
       "severity_level": "none",
       "allergen_flag": null
     },
     {
-      "id": "NHA_MISC_NATURAL_FLAVORS",
-      "standard_name": "Miscellaneous Natural Flavors",
+      "id": "OI_COCOA_POWDER",
+      "standard_name": "Cocoa Powder",
       "aliases": [
-        "natural Strawberry-Banana flavor",
-        "natural Raspberry flavors",
-        "natural Lemon-Lime flavor",
-        "natural Passiflora flavor",
-        "Passionfruit flavor",
-        "natural Strawberry flavors",
-        "natural Cranberry-Orange flavor",
-        "Berry natural flavor",
-        "natural Tart Cherry flavor",
-        "Black Tea flavor",
-        "Masking Flavor",
-        "natural Strawberry and Orange extract",
-        "Natural and Artifical flavors",
-        "Lemon, Natural"
+        "cocoa powder",
+        "alkalized cocoa powder",
+        "Alkalized Cocoa powder",
+        "alkalized Cocoa powder",
+        "dutch process cocoa",
+        "cocoa",
+        "cacao powder",
+        "organic cocoa powder"
       ],
-      "category": "flavor_natural",
-      "additive_type": "natural_flavoring",
-      "clean_label_score": 8,
-      "notes": "Various natural flavoring agents. GRAS approved.",
+      "category": "flavor",
+      "notes": "Cocoa powder used as flavoring and coloring in supplement formulations. Alkalized (Dutch process) cocoa has reduced polyphenol content. Contains trace theobromine. Benign flavoring agent.",
+      "last_updated": "2026-02-18",
+      "is_additive": true,
+      "additive_type": "flavor_natural",
+      "clean_label_score": 7,
       "regulatory_status": "GRAS",
       "common_uses": [
         "flavoring",
-        "taste enhancement"
-      ],
-      "last_updated": "2025-12-04",
-      "is_additive": true,
-      "severity_level": "none",
-      "allergen_flag": null
-    },
-    {
-      "id": "NHA_POMEGRANATE_JUICE",
-      "standard_name": "Pomegranate Juice Concentrate",
-      "aliases": [
-        "organic Pomegranate juice concentrate",
-        "pomegranate juice concentrate",
-        "Pomegranate Fruit Peel Extract",
-        "pomegranate extract"
-      ],
-      "category": "fruit_concentrate",
-      "additive_type": "natural_colorant",
-      "clean_label_score": 10,
-      "notes": "Pomegranate juice used for color, flavor, and antioxidant benefits. Clean label. GRAS approved.",
-      "regulatory_status": "GRAS",
-      "common_uses": [
-        "natural coloring",
-        "flavoring",
-        "antioxidant"
-      ],
-      "last_updated": "2025-12-04",
-      "is_additive": true,
-      "severity_level": "none",
-      "allergen_flag": null
-    },
-    {
-      "id": "NHA_MISC_JUICE_CONCENTRATES",
-      "standard_name": "Miscellaneous Juice Concentrates",
-      "aliases": [
-        "Genipap juice concentrate",
-        "Hibiscus concentrate",
-        "organic Goji juice",
-        "organic Acai puree",
-        "Sweet Potato Juice",
-        "deionized Pineapple",
-        "deionized Pineapple juice Concentrate",
-        "Clarified Lemon Juice Concentrate",
-        "Pepper Juice",
-        "Paprika Juice Concentrate",
-        "Turmeric juice",
-        "organic Peaches",
-        "organic Orange Peel",
-        "Black Elder juice powder",
-        "Red Radish",
-        "organic Banana powder",
-        "Aronia extract",
-        "organic Aronia Berry (Sorbaronia mitschurinii) juice concentrate"
-      ],
-      "category": "fruit_vegetable_juice",
-      "additive_type": "natural_colorant",
-      "clean_label_score": 10,
-      "notes": "Various fruit and vegetable juice concentrates used for natural color and flavor. Clean label ingredients. GRAS approved.",
-      "regulatory_status": "GRAS",
-      "common_uses": [
-        "natural coloring",
-        "flavoring"
-      ],
-      "last_updated": "2025-12-04",
-      "is_additive": true,
-      "severity_level": "none",
-      "allergen_flag": null
-    },
-    {
-      "id": "NHA_CARAMEL_COLOR",
-      "standard_name": "Caramel Color",
-      "aliases": [
-        "Caramel",
-        "caramel color",
-        "caramel coloring",
-        "E150"
-      ],
-      "category": "colorant_natural",
-      "additive_type": "natural_colorant",
-      "clean_label_score": 6,
-      "notes": "Natural brown colorant from caramelized sugar. FDA approved. Some classes may have quality concerns.",
-      "regulatory_status": "FDA Approved",
-      "common_uses": [
-        "natural coloring",
-        "brown color"
-      ],
-      "last_updated": "2025-12-04",
-      "is_additive": true,
-      "severity_level": "none",
-      "allergen_flag": null
-    },
-    {
-      "id": "NHA_BLACK_STRAP_MOLASSES",
-      "standard_name": "Blackstrap Molasses",
-      "aliases": [
-        "Black Strap Molasses",
-        "blackstrap molasses",
-        "molasses"
-      ],
-      "category": "sweetener_natural",
-      "additive_type": "natural_sweetener",
-      "clean_label_score": 8,
-      "notes": "Nutrient-rich byproduct of sugar refining. Contains minerals. GRAS approved.",
-      "regulatory_status": "GRAS",
-      "common_uses": [
-        "sweetening",
-        "mineral source",
         "coloring"
       ],
-      "last_updated": "2025-12-04",
-      "is_additive": true,
       "severity_level": "none",
       "allergen_flag": null
     },
     {
-      "id": "NHA_HYDROGENATED_COCONUT_OIL",
-      "standard_name": "Hydrogenated Coconut Oil",
+      "id": "OI_HPMC_COMPOSITE",
+      "standard_name": "HPMC Composite Capsule Shell",
       "aliases": [
-        "Coconut Oil, Hydrogenated",
-        "hydrogenated coconut oil"
+        "high and low viscosity Hydroxypropyl Methylcellulose",
+        "High and low viscosity Hydroxypropyl Methyl-Cellulose",
+        "high and low viscosity Hydroxypropyl Methyl-Cellulose",
+        "high and low viscosity Hydroxypropyl Methyl Cellulose",
+        "Hydroxypropylmethlcellulose",
+        "Hydroxypropylmethylcellulose",
+        "High and low viscosity Hydroxypropyl Methyl-Cellulose and Calcium Citrate Laurate",
+        "High and low viscosity hydroxypropyl methylcellulose and Magnesium CitrateLaurate",
+        "High and low viscosity hydroxypropyl methyl-cellulose and CalciumCitrateLaurate",
+        "High and low viscosity hydroxypropyl methylcellulose and MagnesiumCitrateLaurate",
+        "High and low viscosity hydroxypropyl methyl-cellulose and MagnesiumCitrateLaurate",
+        "high and low viscosity Hydroxypropyl Methyl Cellulose and Calcium Citrate Laurate",
+        "high and low viscosity Hydroxypropyl Methylcellulose and Magnesium Citrate Laurate",
+        "high and low viscosity Hydroxypropyl Methylcellulose and CalciumCitrateLaurate",
+        "purified Water and Glycerin (vegetable source) gelcap",
+        "Glycerin (vegetable source) Gelcap",
+        "Glycerin Gelcap",
+        "Glycerin (from vegetable source) gelcap"
       ],
-      "category": "oil_carrier",
-      "additive_type": "processing_aid",
-      "clean_label_score": 5,
-      "notes": "Coconut oil that has been hydrogenated for stability. Used as carrier and for texture. Less clean label than unhydrogenated.",
-      "regulatory_status": "GRAS",
-      "common_uses": [
-        "carrier",
-        "texture",
-        "stability"
-      ],
-      "last_updated": "2025-12-04",
+      "category": "capsule_material",
+      "notes": "Composite vegetarian capsule shell made from HPMC (hydroxypropyl methylcellulose) with flow agents like magnesium/calcium citrate laurate. Common in Thorne and other premium supplement brands. Clean-label capsule material.",
+      "last_updated": "2026-02-18",
       "is_additive": true,
-      "severity_level": "none",
-      "allergen_flag": null
-    },
-    {
-      "id": "NHA_VEGETABLE_GLYCERIDES",
-      "standard_name": "Vegetable Glycerides",
-      "aliases": [
-        "Vegetable Monoglycerides",
-        "Vegetable Diglycerides",
-        "vegetable mono and diglycerides"
-      ],
-      "category": "emulsifier",
-      "additive_type": "emulsifier",
-      "clean_label_score": 7,
-      "notes": "Plant-derived emulsifiers. Used for texture and stability. GRAS approved.",
-      "regulatory_status": "GRAS",
-      "common_uses": [
-        "emulsification",
-        "texture"
-      ],
-      "last_updated": "2025-12-04",
-      "is_additive": true,
-      "severity_level": "none",
-      "allergen_flag": null
-    },
-    {
-      "id": "NHA_QUILLAJA_EXTRACT",
-      "standard_name": "Quillaja Extract",
-      "aliases": [
-        "Quillaja extract",
-        "quillaja saponaria extract",
-        "soapbark extract"
-      ],
-      "category": "emulsifier",
-      "additive_type": "natural_emulsifier",
+      "additive_type": "capsule_shell",
       "clean_label_score": 8,
-      "notes": "Natural saponin extract used as emulsifier and foaming agent. GRAS approved.",
       "regulatory_status": "GRAS",
       "common_uses": [
-        "emulsifier",
-        "foaming agent"
+        "vegetarian capsule shell",
+        "tablet coating"
       ],
-      "last_updated": "2025-12-04",
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "OI_WHOLE_FOOD_BASE",
+      "standard_name": "Whole Food Base",
+      "aliases": [
+        "whole food base",
+        "Whole Food Base",
+        "certified organic concentrates",
+        "Certified organic Concentrates",
+        "Certified Organic Vegetable & Fruit Concentrates",
+        "certified organic vegetable & fruit concentrates",
+        "organic fruit and vegetable concentrates",
+        "fruit and vegetable concentrates"
+      ],
+      "category": "base_blend",
+      "notes": "Generic whole food base or fruit/vegetable concentrate blend used as nutritional carrier in supplement formulations. Not a specific active ingredient.",
+      "last_updated": "2026-02-18",
       "is_additive": true,
+      "additive_type": "carrier",
+      "clean_label_score": 9,
+      "regulatory_status": "GRAS",
+      "common_uses": [
+        "nutritional base",
+        "carrier"
+      ],
       "severity_level": "none",
       "allergen_flag": null
     },
     {
-      "id": "NHA_ANTHOCYANIN",
-      "standard_name": "Anthocyanin",
+      "id": "OI_VITAMIN_PREMIX",
+      "standard_name": "Vitamin Premix",
       "aliases": [
-        "Anthocyanin",
-        "anthocyanins",
-        "anthocyanin color",
-        "E163"
+        "vitamin premix",
+        "Vitamin premix",
+        "vitamin blend",
+        "vitamin mix",
+        "multivitamin premix"
       ],
-      "category": "colorant_natural",
-      "additive_type": "natural_colorant",
-      "clean_label_score": 10,
-      "notes": "Natural purple/red pigment from berries and fruits. Antioxidant properties. Clean label color. GRAS approved.",
-      "regulatory_status": "GRAS",
-      "common_uses": [
-        "natural coloring",
-        "antioxidant"
-      ],
-      "last_updated": "2025-12-04",
+      "category": "base_blend",
+      "notes": "Pre-mixed vitamin blend used as base ingredient in supplement manufacturing. Not a specific active ingredient - individual vitamins should be listed separately.",
+      "last_updated": "2026-02-18",
       "is_additive": true,
-      "severity_level": "none",
-      "allergen_flag": null
-    },
-    {
-      "id": "NHA_CHLOROPHYLLIN",
-      "standard_name": "Sodium Magnesium Chlorophyllin",
-      "aliases": [
-        "Sodium Magnesium Chlorophyllin",
-        "chlorophyllin",
-        "sodium copper chlorophyllin",
-        "E141"
-      ],
-      "category": "colorant_natural",
-      "additive_type": "natural_colorant",
-      "clean_label_score": 8,
-      "notes": "Water-soluble form of chlorophyll used as green colorant. GRAS approved.",
-      "regulatory_status": "GRAS",
-      "common_uses": [
-        "natural coloring",
-        "green color"
-      ],
-      "last_updated": "2025-12-04",
-      "is_additive": true,
-      "severity_level": "none",
-      "allergen_flag": null
-    },
-    {
-      "id": "NHA_COCONUT_GRANULATED",
-      "standard_name": "Granulated Coconut",
-      "aliases": [
-        "Coconut, Granulated",
-        "granulated coconut",
-        "coconut granules"
-      ],
-      "category": "flavor_texture",
-      "additive_type": "natural_ingredient",
-      "clean_label_score": 9,
-      "notes": "Dried coconut in granulated form. Used for flavor and texture. GRAS approved.",
-      "regulatory_status": "GRAS",
-      "common_uses": [
-        "flavor",
-        "texture"
-      ],
-      "last_updated": "2025-12-04",
-      "is_additive": true,
-      "severity_level": "none",
-      "allergen_flag": null
-    },
-    {
-      "id": "NHA_ELDERBERRY_EXTRACT",
-      "standard_name": "Elderberry Extract",
-      "aliases": [
-        "Elderberry Herb Extract",
-        "organic ElderCraft European Elderberry extract",
-        "elderberry extract",
-        "sambucus nigra extract"
-      ],
-      "category": "botanical_extract",
-      "additive_type": "functional",
-      "clean_label_score": 9,
-      "notes": "Elderberry extract used for immune support. Popular cold and flu remedy. GRAS approved.",
-      "regulatory_status": "GRAS",
-      "common_uses": [
-        "immune support",
-        "antioxidant"
-      ],
-      "last_updated": "2025-12-04",
-      "is_additive": false,
-      "severity_level": "none",
-      "allergen_flag": null
-    },
-    {
-      "id": "NHA_CRANBERRY_EXTRACT",
-      "standard_name": "Cranberry Concentrate",
-      "aliases": [
-        "Pacran Cranberry concentrate powder",
-        "CranRx 100% whole Cranberry",
-        "CranRx Cranberry fruit concentrate",
-        "cranberry extract",
-        "cranberry concentrate"
-      ],
-      "category": "fruit_extract",
-      "additive_type": "functional",
-      "clean_label_score": 9,
-      "notes": "Cranberry concentrate used for urinary tract health. Clean label ingredient. GRAS approved.",
-      "regulatory_status": "GRAS",
-      "common_uses": [
-        "UTI support",
-        "antioxidant"
-      ],
-      "last_updated": "2025-12-04",
-      "is_additive": false,
-      "severity_level": "none",
-      "allergen_flag": null
-    },
-    {
-      "id": "NHA_BLACK_PEPPER_EXTRACT",
-      "standard_name": "Black Pepper Extract",
-      "aliases": [
-        "Black Pepper Fruit Extract",
-        "black pepper extract",
-        "Piper nigrum extract",
-        "piperine"
-      ],
-      "category": "botanical_extract",
-      "additive_type": "bioenhancer",
-      "clean_label_score": 9,
-      "notes": "Black pepper extract containing piperine. Enhances absorption of other nutrients. GRAS approved.",
-      "regulatory_status": "GRAS",
-      "common_uses": [
-        "absorption enhancement",
-        "bioavailability"
-      ],
-      "last_updated": "2025-12-04",
-      "is_additive": false,
-      "severity_level": "none",
-      "allergen_flag": null
-    },
-    {
-      "id": "NHA_CHILI_PEPPER",
-      "standard_name": "Chili Pepper",
-      "aliases": [
-        "Chili Pepper",
-        "cayenne pepper",
-        "capsicum"
-      ],
-      "category": "botanical_extract",
-      "additive_type": "functional",
-      "clean_label_score": 9,
-      "notes": "Chili pepper containing capsaicin. Used for metabolism and circulation. GRAS approved.",
-      "regulatory_status": "GRAS",
-      "common_uses": [
-        "metabolism support",
-        "thermogenic"
-      ],
-      "last_updated": "2025-12-04",
-      "is_additive": false,
-      "severity_level": "none",
-      "allergen_flag": null
-    },
-    {
-      "id": "NHA_STARFLOWER_OIL",
-      "standard_name": "Starflower Oil (Borage Oil)",
-      "aliases": [
-        "Starflower Oil",
-        "borage oil",
-        "Borago officinalis oil"
-      ],
-      "category": "fatty_acid",
-      "additive_type": "functional",
-      "clean_label_score": 8,
-      "notes": "Plant oil high in GLA (gamma-linolenic acid). Used for skin and hormonal health. GRAS approved.",
-      "regulatory_status": "GRAS",
-      "common_uses": [
-        "GLA source",
-        "skin health"
-      ],
-      "last_updated": "2025-12-04",
-      "is_additive": false,
-      "severity_level": "none",
-      "allergen_flag": null
-    },
-    {
-      "id": "NHA_ISOMALTOOLIGOSACCHARIDES",
-      "standard_name": "Isomaltooligosaccharides",
-      "aliases": [
-        "isomalto-oligosaccharides",
-        "isomaltooligosaccharides",
-        "isomalto-oligosaccharide",
-        "isomalto",
-        "imo syrup",
-        "imo"
-      ],
-      "category": "prebiotic_sweetener",
-      "additive_type": "prebiotic_fiber",
-      "clean_label_score": 8,
-      "notes": "Prebiotic fiber syrup used for texture and mild sweetness. Generally well-tolerated and used as a fiber source.",
-      "regulatory_status": "GRAS",
-      "common_uses": [
-        "prebiotic fiber",
-        "mild sweetening",
-        "texture"
-      ],
-      "last_updated": "2026-01-04",
-      "is_additive": false,
-      "severity_level": "none",
-      "allergen_flag": null
-    },
-    {
-      "id": "NHA_INULIN",
-      "standard_name": "Inulin",
-      "aliases": [
-        "inulin syrup",
-        "inulin fiber"
-      ],
-      "category": "fiber_prebiotic",
-      "additive_type": "dietary_fiber",
-      "clean_label_score": 9,
-      "notes": "Prebiotic fiber commonly derived from chicory root. Supports gut health and texture in gummies.",
-      "regulatory_status": "GRAS",
-      "common_uses": [
-        "prebiotic fiber",
-        "texture improvement"
-      ],
-      "last_updated": "2026-01-04",
-      "is_additive": false,
-      "severity_level": "none",
-      "allergen_flag": null
-    },
-    {
-      "id": "NHA_CHICORY_ROOT_FIBER",
-      "standard_name": "Chicory Root Fiber",
-      "aliases": [
-        "prebiotic fiber",
-        "prebiotic chicory root fiber",
-        "chicory fiber",
-        "chicory root fibers",
-        "chicory root soluble fiber"
-      ],
-      "category": "fiber_prebiotic",
-      "additive_type": "dietary_fiber",
-      "clean_label_score": 9,
-      "notes": "Chicory-derived prebiotic fiber used for sweetness reduction and gut health support.",
-      "regulatory_status": "GRAS",
-      "common_uses": [
-        "prebiotic fiber",
-        "bulking agent"
-      ],
-      "last_updated": "2026-01-04",
-      "is_additive": false,
-      "severity_level": "none",
-      "allergen_flag": null
-    },
-    {
-      "id": "NHA_SOLUBLE_CORN_FIBER",
-      "standard_name": "Soluble Corn Fiber",
-      "aliases": [
-        "soluble corn fiber",
-        "corn fiber, soluble",
-        "corn fibersol",
-        "fibersol"
-      ],
-      "category": "fiber_prebiotic",
-      "additive_type": "dietary_fiber",
-      "clean_label_score": 8,
-      "notes": "Fermentable soluble fiber used as a bulking agent and prebiotic.",
-      "regulatory_status": "GRAS",
-      "common_uses": [
-        "prebiotic fiber",
-        "bulking agent"
-      ],
-      "last_updated": "2026-01-04",
-      "is_additive": false,
-      "severity_level": "none",
-      "allergen_flag": null
-    },
-    {
-      "id": "NHA_TAPIOCA_FIBER",
-      "standard_name": "Tapioca Fiber",
-      "aliases": [
-        "organic tapioca fiber",
-        "tapioca fiber",
-        "soluble tapioca fiber",
-        "tapioca fiber, soluble",
-        "solube tapioca fiber"
-      ],
-      "category": "fiber_prebiotic",
-      "additive_type": "dietary_fiber",
-      "clean_label_score": 8,
-      "notes": "Soluble fiber derived from tapioca used for texture and sugar reduction in gummies.",
-      "regulatory_status": "GRAS",
-      "common_uses": [
-        "prebiotic fiber",
-        "bulking agent"
-      ],
-      "last_updated": "2026-01-04",
-      "is_additive": false,
-      "severity_level": "none",
-      "allergen_flag": null
-    },
-    {
-      "id": "NHA_PARTIALLY_HYDROLYZED_GUAR_GUM",
-      "standard_name": "Partially Hydrolyzed Guar Gum",
-      "aliases": [
-        "guar gum, hydrolyzed",
-        "guar gum, partially hydrolyzed",
-        "guar fiber, partially hydrolyzed"
-      ],
-      "category": "fiber_prebiotic",
-      "additive_type": "dietary_fiber",
-      "clean_label_score": 8,
-      "notes": "Soluble prebiotic fiber derived from guar gum. Often abbreviated PHGG.",
-      "regulatory_status": "GRAS",
-      "common_uses": [
-        "prebiotic fiber",
-        "digestive support"
-      ],
-      "last_updated": "2026-01-04",
-      "is_additive": false,
-      "severity_level": "none",
-      "allergen_flag": null
-    },
-    {
-      "id": "PII_WHEAT_STARCH",
-      "standard_name": "Wheat Starch",
-      "aliases": [
-        "wheat starch"
-      ],
-      "category": "filler_binder_disintegrant",
-      "notes": "Common starch used as a binder or filler. Contains gluten unless specified otherwise.",
-      "last_updated": "2026-01-04",
-      "is_additive": true,
-      "additive_type": "unspecified",
+      "additive_type": "carrier",
       "clean_label_score": 5,
       "regulatory_status": "varies",
-      "common_uses": [],
-      "severity_level": "low",
-      "allergen_flag": null
-    },
-    {
-      "id": "NHA_SODIUM_MALATE",
-      "standard_name": "Sodium Malate",
-      "aliases": [
-        "sodium malate",
-        "sodium hydrogen malate"
-      ],
-      "category": "buffering_agent",
-      "additive_type": "acidity_regulator",
-      "clean_label_score": 8,
-      "notes": "Acidity regulator and buffer used for pH control. Generally recognized as safe.",
-      "regulatory_status": "GRAS",
       "common_uses": [
-        "pH adjustment",
-        "buffering"
+        "vitamin base blend"
       ],
-      "last_updated": "2026-01-04",
-      "is_additive": true,
       "severity_level": "none",
       "allergen_flag": null
     },
     {
-      "id": "NHA_SODIUM_ACID_SULFATE",
-      "standard_name": "Sodium Acid Sulfate",
+      "id": "PII_LIQUID_LIVER_FRACTIONS",
+      "standard_name": "Liquid Liver Fractions",
       "aliases": [
-        "sodium acid sulfate"
+        "liquid liver fractions",
+        "liquid liver factors",
+        "liver fractions",
+        "desiccated beef liver",
+        "desiccated beef liver defatted",
+        "liver defatted",
+        "liver concentrate",
+        "beef liver extract"
       ],
-      "category": "acidity_regulator",
-      "additive_type": "buffering_agent",
-      "clean_label_score": 6,
-      "notes": "Acidifying agent used for pH control. Common in food applications.",
-      "regulatory_status": "GRAS",
-      "common_uses": [
-        "pH adjustment",
-        "acidification"
-      ],
-      "last_updated": "2026-01-04",
-      "is_additive": true,
-      "severity_level": "none",
-      "allergen_flag": null
-    },
-    {
-      "id": "NHA_ACETIC_ACID",
-      "standard_name": "Acetic Acid",
-      "aliases": [
-        "acetic acid"
-      ],
-      "category": "preservative_acidity_regulator",
-      "additive_type": "preservative_natural",
-      "clean_label_score": 8,
-      "notes": "Natural acid (vinegar component) used for pH control and preservation.",
-      "regulatory_status": "GRAS",
-      "common_uses": [
-        "preservation",
-        "pH adjustment"
-      ],
-      "last_updated": "2026-01-04",
-      "is_additive": true,
-      "severity_level": "none",
-      "allergen_flag": null
-    },
-    {
-      "id": "NHA_CALCIUM_HYDROXIDE",
-      "standard_name": "Calcium Hydroxide",
-      "aliases": [
-        "calcium hydroxide"
-      ],
-      "category": "pH_adjuster",
-      "additive_type": "mineral_salt",
-      "clean_label_score": 6,
-      "notes": "pH adjuster used in small amounts. Common in food processing.",
-      "regulatory_status": "GRAS",
-      "common_uses": [
-        "pH adjustment",
-        "processing aid"
-      ],
-      "last_updated": "2026-01-04",
-      "is_additive": true,
-      "severity_level": "none",
-      "allergen_flag": null
-    },
-    {
-      "id": "PII_FRACTIONATED_COCONUT_OIL_BEESWAX",
-      "standard_name": "Fractionated Coconut Oil/Beeswax",
-      "aliases": [
-        "fractionated coconut oil/beeswax"
-      ],
-      "category": "coating_glazing_natural",
-      "notes": "Blend used as a coating or glazing agent. Generally safe as a passive excipient.",
-      "last_updated": "2026-01-04",
-      "is_additive": true,
-      "additive_type": "unspecified",
-      "clean_label_score": 5,
-      "regulatory_status": "varies",
-      "common_uses": [],
-      "severity_level": "low",
-      "allergen_flag": null
-    },
-    {
-      "id": "PII_OIL_GENERIC",
-      "standard_name": "Oil (Generic)",
-      "aliases": [
-        "oil"
-      ],
-      "category": "oil_carrier",
-      "notes": "Generic oil listing with no specific source. Treated as a neutral carrier unless otherwise specified.",
-      "last_updated": "2026-01-04",
+      "category": "glandular",
+      "notes": "Animal-derived organ supplement (bovine liver extract). Used as a source of iron, B vitamins, and heme protein. Not standardized to specific compounds.",
+      "last_updated": "2026-02-18",
       "is_additive": false,
       "additive_type": "unspecified",
-      "clean_label_score": 5,
-      "regulatory_status": "varies",
-      "common_uses": [],
-      "severity_level": "low",
-      "allergen_flag": null
+      "safety_notes": "Generally safe when sourced from inspected animals. Risk of heavy metal accumulation in liver tissue."
+    },
+    {
+      "id": "PII_SOY_BEAN_OIL",
+      "standard_name": "Soy Bean Oil",
+      "aliases": [
+        "soy bean oil",
+        "soy oil",
+        "soybean oil"
+      ],
+      "category": "carrier_oil",
+      "notes": "Common carrier oil and excipient in softgel capsules. Provides negligible therapeutic value as a supplement ingredient.",
+      "last_updated": "2026-02-18",
+      "is_additive": true,
+      "additive_type": "carrier",
+      "safety_notes": "Major allergen (soy). Often from GMO sources unless specified organic."
+    },
+    {
+      "id": "PII_INTRINSIC_FACTOR",
+      "standard_name": "Intrinsic Factor",
+      "aliases": [
+        "intrinsic factor",
+        "intrinsic factor concentrate",
+        "gastric intrinsic factor"
+      ],
+      "category": "glandular",
+      "notes": "Glycoprotein produced by stomach parietal cells, required for vitamin B12 absorption. Added to B12 supplements for enhanced absorption, especially for those with pernicious anemia.",
+      "last_updated": "2026-02-18",
+      "is_additive": false,
+      "additive_type": "unspecified",
+      "safety_notes": "Generally safe. Typically derived from animal (porcine) sources."
     }
   ]
 }

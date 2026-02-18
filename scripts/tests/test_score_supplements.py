@@ -203,6 +203,53 @@ class TestV30Scoring:
         assert result["score_80"] is None
         assert "UNMAPPED_ACTIVE_INGREDIENT" in result["flags"]
 
+    def test_mapping_kpis_exclude_banned_exact_alias_unmapped(self, scorer):
+        product = make_base_product()
+        product["ingredient_quality_data"]["unmapped_count"] = 1
+        product["ingredient_quality_data"]["ingredients"][1]["mapped"] = False
+        product["ingredient_quality_data"]["ingredients"][1]["name"] = "Anatabine"
+        product["contaminant_data"]["banned_substances"] = {
+            "found": True,
+            "substances": [
+                {
+                    "ingredient": "Anatabine",
+                    "match_type": "exact",
+                    "status": "restricted",
+                    "severity_level": "high",
+                }
+            ],
+        }
+
+        gate = scorer._mapping_gate(product)
+        assert gate["unmapped_actives_total"] == 1
+        assert gate["unmapped_actives_excluding_banned_exact_alias"] == 0
+        assert gate["unmapped_actives"] == []
+        assert gate["unmapped_actives_banned_exact_alias"] == ["Anatabine"]
+        assert gate["mapped_coverage"] == pytest.approx(1.0)
+
+    def test_unmatched_banned_exact_alias_forces_unsafe(self, scorer):
+        product = make_base_product()
+        product["ingredient_quality_data"]["unmapped_count"] = 1
+        product["ingredient_quality_data"]["ingredients"][1]["mapped"] = False
+        product["ingredient_quality_data"]["ingredients"][1]["name"] = "Anatabine"
+        product["contaminant_data"]["banned_substances"] = {
+            "found": True,
+            "substances": [
+                {
+                    "ingredient": "Anatabine",
+                    "match_type": "exact",
+                    "status": "restricted",
+                    "severity_level": "low",
+                }
+            ],
+        }
+
+        result = scorer.score_product(product)
+        assert result["verdict"] == "UNSAFE"
+        assert "UNMAPPED_BANNED_EXACT_ALIAS_GUARD" in result["flags"]
+        assert result["unmapped_actives_total"] == 1
+        assert result["unmapped_actives_excluding_banned_exact_alias"] == 0
+
     def test_a1_uses_precomputed_score_field(self, scorer):
         product = make_base_product()
         product["supplement_type"]["type"] = "single"
@@ -223,6 +270,120 @@ class TestV30Scoring:
 
         section_a = scorer._score_section_a(product, "single")
         assert section_a["A1"] == pytest.approx(13.0, rel=1e-6)
+
+    def test_a1_treats_single_nutrient_as_single(self, scorer):
+        product = make_base_product()
+        product["ingredient_quality_data"]["total_active"] = 1
+        product["ingredient_quality_data"]["ingredients_scorable"] = [
+            {
+                "name": "Weighted Ingredient",
+                "standard_name": "Weighted Ingredient",
+                "score": 18,
+                "dosage_importance": 3.0,
+                "mapped": True,
+                "quantity": 200,
+                "unit": "mg",
+                "has_dose": True,
+            }
+        ]
+        product["ingredient_quality_data"]["ingredients"] = deepcopy(
+            product["ingredient_quality_data"]["ingredients_scorable"]
+        )
+
+        section_single = scorer._score_section_a(product, "single")
+        section_single_nutrient = scorer._score_section_a(product, "single_nutrient")
+
+        assert section_single_nutrient["A1"] == pytest.approx(section_single["A1"], rel=1e-6)
+
+    def test_non_probiotic_prebiotic_only_gets_no_probiotic_bonus(self, scorer):
+        product = make_base_product()
+        product["supplement_type"]["type"] = "specialty"
+        product["product_name"] = "Digestive Support Formula"
+        product["ingredient_quality_data"]["ingredients"] = [
+            {
+                "name": "Inulin",
+                "standard_name": "Inulin",
+                "score": 9,
+                "dosage_importance": 1.0,
+                "mapped": True,
+            }
+        ]
+        product["ingredient_quality_data"]["ingredients_scorable"] = deepcopy(
+            product["ingredient_quality_data"]["ingredients"]
+        )
+        product["probiotic_data"] = {
+            "is_probiotic_product": True,
+            "has_cfu": False,
+            "total_billion_count": 0.0,
+            "total_strain_count": 1,
+            "clinical_strain_count": 0,
+            "guarantee_type": None,
+        }
+
+        probiotic = scorer._score_probiotic_bonus(product, "specialty")
+        assert probiotic["probiotic_bonus"] == 0.0
+        assert probiotic["eligibility"]["mode"] == "non_probiotic"
+        assert probiotic["eligibility"]["eligible"] is False
+
+    def test_non_probiotic_strict_gate_can_award_probiotic_bonus(self, scorer):
+        product = make_base_product()
+        product["supplement_type"]["type"] = "specialty"
+        product["product_name"] = "Women Probiotic Digestive Formula"
+        product["ingredient_quality_data"]["ingredients"] = [
+            {
+                "name": "Inulin",
+                "standard_name": "Inulin",
+                "score": 9,
+                "dosage_importance": 1.0,
+                "mapped": True,
+            }
+        ]
+        product["ingredient_quality_data"]["ingredients_scorable"] = deepcopy(
+            product["ingredient_quality_data"]["ingredients"]
+        )
+        product["product_signals"] = {"label_disclosure_signals": {"strain_id_count": 1}}
+        product["probiotic_data"] = {
+            "is_probiotic_product": True,
+            "has_cfu": True,
+            "total_billion_count": 12.0,
+            "total_strain_count": 4,
+            "clinical_strain_count": 1,
+            "guarantee_type": "at_expiration",
+        }
+
+        probiotic = scorer._score_probiotic_bonus(product, "specialty")
+        assert probiotic["eligibility"]["mode"] == "non_probiotic"
+        assert probiotic["eligibility"]["eligible"] is True
+        assert probiotic["probiotic_bonus"] > 0.0
+
+    def test_probiotic_type_keeps_bonus_path(self, scorer):
+        product = make_base_product()
+        product["supplement_type"]["type"] = "probiotic"
+        product["probiotic_data"] = {
+            "is_probiotic_product": False,
+            "has_cfu": True,
+            "total_billion_count": 5.0,
+            "total_strain_count": 3,
+            "clinical_strain_count": 0,
+            "guarantee_type": "at_manufacture",
+        }
+
+        probiotic = scorer._score_probiotic_bonus(product, "probiotic")
+        assert probiotic["eligibility"]["mode"] == "probiotic"
+        assert probiotic["eligibility"]["eligible"] is True
+        assert probiotic["probiotic_bonus"] == pytest.approx(2.0)
+
+    def test_d1_does_not_award_fuzzy_manufacturer_match(self, scorer):
+        product = make_base_product()
+        product["is_trusted_manufacturer"] = False
+        product["manufacturer_data"]["top_manufacturer"] = {
+            "found": True,
+            "match_type": "fuzzy",
+            "name": "Example Top Manufacturer",
+        }
+
+        section_d = scorer._score_section_d(product)
+        assert section_d["D1"] == 0.0
 
     def test_b_penalties_are_positive_magnitudes_subtracted(self, scorer):
         product = make_base_product()

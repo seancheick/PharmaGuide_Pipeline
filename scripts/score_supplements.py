@@ -140,6 +140,7 @@ class SupplementScorer:
             "feature_gates": {
                 "require_full_mapping": False,
                 "probiotic_extended_scoring": False,
+                "allow_non_probiotic_probiotic_bonus_with_strict_gate": True,
             },
             "paths": {
                 "input_directory": "output_Lozenges_enriched/enriched",
@@ -192,13 +193,68 @@ class SupplementScorer:
             return "targeted"
         return "unknown"
 
+    def _unmapped_active_names(self, product: Dict[str, Any]) -> List[str]:
+        ingredients = safe_list(product.get("ingredient_quality_data", {}).get("ingredients"))
+        return [
+            ing.get("name") or ing.get("standard_name") or ing.get("raw_source_text") or "unknown"
+            for ing in ingredients
+            if not bool(ing.get("mapped", False))
+        ]
+
+    def _banned_exact_alias_name_keys(self, product: Dict[str, Any]) -> set[str]:
+        names: set[str] = set()
+        substances = safe_list(
+            product.get("contaminant_data", {})
+            .get("banned_substances", {})
+            .get("substances", [])
+        )
+        for substance in substances:
+            match_type = self._normalize_match_type(
+                substance.get("match_type") or substance.get("match_method")
+            )
+            if match_type not in {"exact", "alias"}:
+                continue
+            for field in ("ingredient", "banned_name", "matched_variant", "name"):
+                key = canon_key(substance.get(field))
+                if key:
+                    names.add(key)
+        return names
+
+    def _split_unmapped_kpis(self, product: Dict[str, Any]) -> Dict[str, Any]:
+        unmapped_all = self._unmapped_active_names(product)
+        banned_exact_alias_keys = self._banned_exact_alias_name_keys(product)
+
+        banned_exact_alias_unmapped = [
+            name for name in unmapped_all if canon_key(name) in banned_exact_alias_keys
+        ]
+        unmapped_excluding_banned = [
+            name for name in unmapped_all if canon_key(name) not in banned_exact_alias_keys
+        ]
+
+        return {
+            "unmapped_actives_all": unmapped_all,
+            "unmapped_actives_excluding_banned_exact_alias": unmapped_excluding_banned,
+            "unmapped_actives_banned_exact_alias": banned_exact_alias_unmapped,
+        }
+
     def _mapping_gate(self, product: Dict[str, Any]) -> Dict[str, Any]:
         iqd = product.get("ingredient_quality_data", {})
         ingredients = safe_list(iqd.get("ingredients"))
+        kpis = self._split_unmapped_kpis(product)
+        unmapped_all_candidates = kpis["unmapped_actives_all"]
+        unmapped_excluding_candidates = kpis["unmapped_actives_excluding_banned_exact_alias"]
+        unmapped_banned_exact_alias_candidates = kpis["unmapped_actives_banned_exact_alias"]
 
         active_total = int(as_float(iqd.get("total_active"), 0) or 0)
         if active_total <= 0:
             active_total = len(ingredients)
+
+        unmapped_count_raw = int(as_float(iqd.get("unmapped_count"), 0) or 0)
+        banned_overlap_count = min(unmapped_count_raw, len(unmapped_banned_exact_alias_candidates))
+        unmapped_count_excluding_banned = max(0, unmapped_count_raw - banned_overlap_count)
+
+        unmapped_banned_exact_alias = unmapped_banned_exact_alias_candidates[:banned_overlap_count]
+        unmapped_excluding_banned = unmapped_excluding_candidates[:unmapped_count_excluding_banned]
 
         if active_total <= 0:
             return {
@@ -206,17 +262,13 @@ class SupplementScorer:
                 "reason": "NO_ACTIVES_DETECTED",
                 "mapped_coverage": 0.0,
                 "unmapped_actives": [],
+                "unmapped_actives_total": 0,
+                "unmapped_actives_excluding_banned_exact_alias": 0,
+                "unmapped_actives_banned_exact_alias": [],
                 "flags": ["NO_ACTIVES_DETECTED"],
             }
 
-        unmapped_count = int(as_float(iqd.get("unmapped_count"), 0) or 0)
-        unmapped_actives = [
-            ing.get("name") or ing.get("raw_source_text") or "unknown"
-            for ing in ingredients
-            if not bool(ing.get("mapped", False))
-        ]
-
-        active_mapped = max(0, active_total - unmapped_count)
+        active_mapped = max(0, active_total - unmapped_count_excluding_banned)
         mapped_coverage = active_mapped / active_total if active_total else 0.0
 
         flags: List[str] = []
@@ -238,7 +290,10 @@ class SupplementScorer:
                 "stop": True,
                 "reason": "UNMAPPED_ACTIVE_INGREDIENT",
                 "mapped_coverage": mapped_coverage,
-                "unmapped_actives": unmapped_actives,
+                "unmapped_actives": unmapped_excluding_banned,
+                "unmapped_actives_total": unmapped_count_raw,
+                "unmapped_actives_excluding_banned_exact_alias": unmapped_count_excluding_banned,
+                "unmapped_actives_banned_exact_alias": unmapped_banned_exact_alias,
                 "flags": flags,
             }
 
@@ -246,7 +301,10 @@ class SupplementScorer:
             "stop": False,
             "reason": None,
             "mapped_coverage": mapped_coverage,
-            "unmapped_actives": unmapped_actives,
+            "unmapped_actives": unmapped_excluding_banned,
+            "unmapped_actives_total": unmapped_count_raw,
+            "unmapped_actives_excluding_banned_exact_alias": unmapped_count_excluding_banned,
+            "unmapped_actives_banned_exact_alias": unmapped_banned_exact_alias,
             "flags": flags,
         }
 
@@ -350,6 +408,7 @@ class SupplementScorer:
         if not ingredients:
             return 0.0
 
+        is_single = supp_type in {"single", "single_nutrient"}
         weighted_values: List[Tuple[float, float]] = []
         for ing in ingredients:
             mapped = bool(ing.get("mapped", False))
@@ -359,7 +418,7 @@ class SupplementScorer:
             else:
                 s_i = 9.0
                 w_i = 1.0
-            if supp_type == "single":
+            if is_single:
                 w_i = 1.0
             weighted_values.append((s_i, w_i))
 
@@ -455,18 +514,124 @@ class SupplementScorer:
             "A5c_synergy_cluster": 1.0 if has_synergy else 0.0,
         }
 
-    def _score_probiotic_bonus(self, product: Dict[str, Any], supp_type: str) -> Dict[str, float]:
-        if supp_type != "probiotic":
-            return {
-                "probiotic_bonus": 0.0,
-                "cfu": 0.0,
-                "diversity": 0.0,
-                "prebiotic": 0.0,
-                "clinical_strains": 0.0,
-                "survivability": 0.0,
-            }
+    @staticmethod
+    def _probiotic_bonus_zero(eligibility: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+        payload: Dict[str, Any] = {
+            "probiotic_bonus": 0.0,
+            "cfu": 0.0,
+            "diversity": 0.0,
+            "prebiotic": 0.0,
+            "clinical_strains": 0.0,
+            "survivability": 0.0,
+        }
+        if eligibility is not None:
+            payload["eligibility"] = eligibility
+        return payload
 
+    def _non_probiotic_probiotic_gate(
+        self,
+        product: Dict[str, Any],
+        pdata: Dict[str, Any],
+        total_billion: float,
+        strain_count: int,
+        ingredient_names: List[str],
+    ) -> Tuple[bool, Dict[str, Any]]:
+        cfg = (
+            self.config.get("section_A_ingredient_quality", {})
+            .get("probiotic_bonus", {})
+            .get("non_probiotic_strict_gate", {})
+        )
+
+        require_viable_cfu = bool(cfg.get("require_viable_cfu", True))
+        min_total_billion = as_float(cfg.get("min_total_billion_count"), 1.0) or 1.0
+        require_strain_identity = bool(cfg.get("require_strain_level_identity", True))
+        min_clinical_strain_count = int(as_float(cfg.get("min_clinical_strain_count"), 1) or 1)
+        min_strain_id_count = int(as_float(cfg.get("min_strain_id_count"), 1) or 1)
+        require_cfu_guarantee = bool(cfg.get("require_cfu_guarantee", True))
+        accepted_guarantee_types = {
+            norm_text(v) for v in safe_list(cfg.get("accepted_guarantee_types", ["at_expiration"])) if norm_text(v)
+        }
+        require_explicit_intent = bool(cfg.get("require_explicit_intent", True))
+        explicit_intent_terms = [
+            norm_text(v)
+            for v in safe_list(
+                cfg.get(
+                    "explicit_intent_terms",
+                    ["probiotic", "probiotics", "live cultures", "cfu", "gut flora", "microbiome"],
+                )
+            )
+            if norm_text(v)
+        ]
+
+        has_viable_cfu = bool(pdata.get("has_cfu")) and total_billion > 0
+        meets_dose_context = total_billion >= min_total_billion
+
+        clinical_strain_count = int(as_float(pdata.get("clinical_strain_count"), 0) or 0)
+        strain_id_count = int(
+            as_float(
+                product.get("product_signals", {})
+                .get("label_disclosure_signals", {})
+                .get("strain_id_count"),
+                0,
+            )
+            or 0
+        )
+        has_strain_identity = (
+            clinical_strain_count >= min_clinical_strain_count
+            or strain_id_count >= min_strain_id_count
+        )
+
+        guarantee_type = norm_text(pdata.get("guarantee_type"))
+        guarantee_ok = (
+            (not require_cfu_guarantee)
+            or (bool(accepted_guarantee_types) and guarantee_type in accepted_guarantee_types)
+        )
+
+        text_parts = [
+            product.get("product_name", ""),
+            product.get("fullName", ""),
+            product.get("labelText", ""),
+            " ".join(ingredient_names),
+        ]
+        explicit_intent = True
+        if require_explicit_intent:
+            searchable = norm_text(" ".join(str(v) for v in text_parts if v))
+            explicit_intent = any(term in searchable for term in explicit_intent_terms)
+
+        checks = {
+            "require_viable_cfu": not require_viable_cfu or has_viable_cfu,
+            "dose_context": meets_dose_context,
+            "strain_identity": (not require_strain_identity) or has_strain_identity,
+            "cfu_guarantee": guarantee_ok,
+            "explicit_intent": explicit_intent,
+        }
+
+        supp_type_payload = product.get("supplement_type", {})
+        supp_type_value = (
+            supp_type_payload.get("type")
+            if isinstance(supp_type_payload, dict)
+            else supp_type_payload
+        )
+
+        allowed = all(checks.values())
+        details = {
+            "strict_gate_checks": checks,
+            "strict_gate_inputs": {
+                "supp_type": norm_text(supp_type_value),
+                "is_probiotic_product": bool(pdata.get("is_probiotic_product")),
+                "total_billion_count": round(total_billion, 6),
+                "total_strain_count": strain_count,
+                "clinical_strain_count": clinical_strain_count,
+                "strain_id_count": strain_id_count,
+                "guarantee_type": guarantee_type or None,
+            },
+        }
+        return allowed, details
+
+    def _score_probiotic_bonus(self, product: Dict[str, Any], supp_type: str) -> Dict[str, float]:
         pdata = product.get("probiotic_data", {})
+        probiotic_flag = bool(pdata.get("is_probiotic_product"))
+
         ingredients = self._get_active_ingredients(product)
         ingredient_names = [norm_text(i.get("name") or i.get("standard_name") or "") for i in ingredients]
 
@@ -483,6 +648,53 @@ class SupplementScorer:
                 for strain in safe_list(blend.get("strains")):
                     strains.add(canon_key(strain))
             strain_count = len([s for s in strains if s])
+
+        if supp_type != "probiotic":
+            if not probiotic_flag:
+                return self._probiotic_bonus_zero(
+                    {
+                        "mode": "non_probiotic",
+                        "eligible": False,
+                        "reason": "no_probiotic_signal",
+                    }
+                )
+            if not self._feature_on("allow_non_probiotic_probiotic_bonus_with_strict_gate", default=True):
+                return self._probiotic_bonus_zero(
+                    {
+                        "mode": "non_probiotic",
+                        "eligible": False,
+                        "reason": "strict_gate_disabled",
+                    }
+                )
+
+            allowed, gate_details = self._non_probiotic_probiotic_gate(
+                product=product,
+                pdata=pdata,
+                total_billion=total_billion or 0.0,
+                strain_count=strain_count,
+                ingredient_names=ingredient_names,
+            )
+            if not allowed:
+                return self._probiotic_bonus_zero(
+                    {
+                        "mode": "non_probiotic",
+                        "eligible": False,
+                        "reason": "strict_gate_failed",
+                        **gate_details,
+                    }
+                )
+            eligibility = {
+                "mode": "non_probiotic",
+                "eligible": True,
+                "reason": "strict_gate_passed",
+                **gate_details,
+            }
+        else:
+            eligibility = {
+                "mode": "probiotic",
+                "eligible": True,
+                "reason": "supplement_type_probiotic",
+            }
 
         prebiotic_terms = ["inulin", "fos", "gos"]
         prebiotic_hits = sum(1 for term in prebiotic_terms if any(term in ing for ing in ingredient_names))
@@ -538,6 +750,7 @@ class SupplementScorer:
                 "prebiotic": prebiotic,
                 "clinical_strains": clinical_strains,
                 "survivability": survivability,
+                "eligibility": eligibility,
             }
 
         cfu = 1.0 if total_billion > 1 else 0.0
@@ -552,6 +765,7 @@ class SupplementScorer:
             "prebiotic": prebiotic,
             "clinical_strains": 0.0,
             "survivability": 0.0,
+            "eligibility": eligibility,
         }
 
     def _score_section_a(self, product: Dict[str, Any], supp_type: str) -> Dict[str, Any]:
@@ -1028,7 +1242,7 @@ class SupplementScorer:
             d1 = 2.0
         else:
             top = md.get("top_manufacturer", {})
-            if bool(top.get("found", False)):
+            if bool(top.get("found", False)) and norm_text(top.get("match_type")) == "exact":
                 d1 = 2.0
 
         if "has_full_disclosure" in product:
@@ -1166,6 +1380,8 @@ class SupplementScorer:
         flags: List[str],
         supp_type: str,
         unmapped_actives: List[str],
+        unmapped_actives_total: int,
+        unmapped_actives_excluding_banned_exact_alias: int,
         mapped_coverage: float,
         reason: Optional[str] = None,
     ) -> Dict[str, Any]:
@@ -1219,6 +1435,10 @@ class SupplementScorer:
             "flags": sorted(set(flags)),
             "supp_type": supp_type,
             "unmapped_actives": unmapped_actives,
+            "unmapped_actives_total": int(unmapped_actives_total),
+            "unmapped_actives_excluding_banned_exact_alias": int(
+                unmapped_actives_excluding_banned_exact_alias
+            ),
             "mapped_coverage": round(mapped_coverage, 4),
             "scoring_metadata": {
                 "scoring_version": self.VERSION,
@@ -1229,6 +1449,10 @@ class SupplementScorer:
                 "score_basis": score_basis,
                 "verdict": verdict,
                 "flags": sorted(set(flags)),
+                "unmapped_actives_total": int(unmapped_actives_total),
+                "unmapped_actives_excluding_banned_exact_alias": int(
+                    unmapped_actives_excluding_banned_exact_alias
+                ),
                 "mapped_coverage": round(mapped_coverage, 4),
                 "reason": reason,
             },
@@ -1284,6 +1508,18 @@ class SupplementScorer:
                 if flag not in flags:
                     flags.append(flag)
 
+            # Compute mapping KPIs once so every output path reports consistent semantics.
+            mapping_gate = self._mapping_gate(product)
+            guard_overlap = mapping_gate.get("unmapped_actives_banned_exact_alias", [])
+            if guard_overlap and not (b0.get("blocked") or b0.get("unsafe")):
+                # Fail-safe: unmatched + banned exact/alias must never flow to SAFE/CAUTION.
+                b0["unsafe"] = True
+                b0["reason"] = (
+                    "Unmapped active ingredient matched banned exact/alias: "
+                    + ", ".join(sorted(set(guard_overlap)))
+                )
+                flags.append("UNMAPPED_BANNED_EXACT_ALIAS_GUARD")
+
             if b0.get("blocked"):
                 breakdown = {
                     "A": {"score": 0.0, "max": 25},
@@ -1304,8 +1540,12 @@ class SupplementScorer:
                     breakdown=breakdown,
                     flags=flags,
                     supp_type=supp_type,
-                    unmapped_actives=[],
-                    mapped_coverage=0.0,
+                    unmapped_actives=mapping_gate.get("unmapped_actives", []),
+                    unmapped_actives_total=mapping_gate.get("unmapped_actives_total", 0),
+                    unmapped_actives_excluding_banned_exact_alias=mapping_gate.get(
+                        "unmapped_actives_excluding_banned_exact_alias", 0
+                    ),
+                    mapped_coverage=mapping_gate.get("mapped_coverage", 0.0),
                     reason=b0.get("reason"),
                 )
 
@@ -1329,13 +1569,16 @@ class SupplementScorer:
                     breakdown=breakdown,
                     flags=flags,
                     supp_type=supp_type,
-                    unmapped_actives=[],
-                    mapped_coverage=0.0,
+                    unmapped_actives=mapping_gate.get("unmapped_actives", []),
+                    unmapped_actives_total=mapping_gate.get("unmapped_actives_total", 0),
+                    unmapped_actives_excluding_banned_exact_alias=mapping_gate.get(
+                        "unmapped_actives_excluding_banned_exact_alias", 0
+                    ),
+                    mapped_coverage=mapping_gate.get("mapped_coverage", 0.0),
                     reason=b0.get("reason"),
                 )
 
             # Step 2/3: type + mapping gate
-            mapping_gate = self._mapping_gate(product)
             for flag in mapping_gate.get("flags", []):
                 if flag not in flags:
                     flags.append(flag)
@@ -1357,6 +1600,10 @@ class SupplementScorer:
                     flags=flags,
                     supp_type=supp_type,
                     unmapped_actives=mapping_gate.get("unmapped_actives", []),
+                    unmapped_actives_total=mapping_gate.get("unmapped_actives_total", 0),
+                    unmapped_actives_excluding_banned_exact_alias=mapping_gate.get(
+                        "unmapped_actives_excluding_banned_exact_alias", 0
+                    ),
                     mapped_coverage=mapping_gate.get("mapped_coverage", 0.0),
                     reason=mapping_gate.get("reason"),
                 )
@@ -1401,6 +1648,10 @@ class SupplementScorer:
                 flags=flags,
                 supp_type=supp_type,
                 unmapped_actives=mapping_gate.get("unmapped_actives", []),
+                unmapped_actives_total=mapping_gate.get("unmapped_actives_total", 0),
+                unmapped_actives_excluding_banned_exact_alias=mapping_gate.get(
+                    "unmapped_actives_excluding_banned_exact_alias", 0
+                ),
                 mapped_coverage=mapping_gate.get("mapped_coverage", 1.0),
             )
 

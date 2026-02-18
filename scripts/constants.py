@@ -84,6 +84,7 @@ EXCLUDED_NUTRITION_FACTS = {
     "water", "moisture",
     # Common electrolytes/minerals when listed as basic nutrition facts
     "sodium", "salt", "sodium chloride",
+    "chloride", "total chloride",
     # Other nutritional labels
     "serving size", "servings per container", "amount per serving",
 
@@ -94,12 +95,15 @@ EXCLUDED_NUTRITION_FACTS = {
     "omega-6 fatty acids, total", "omega-9 fatty acids, total", "omega-3 fatty acids, total",
     "total omega-6", "total omega-9", "total omega-3",
     "total omega 3", "total omega 6", "total omega 9",
+    "total omega-3s", "total omega 3s", "total omega-6s", "total omega 6s", "total omega-9s", "total omega 9s",
     "other omega-6 fatty acids", "other omega fatty acids", "other omegas", "other omega 3",
+    "other omega-3s", "other omega 3s", "other omega-6s", "other omega 6s",
     "omega-5-6-7-8-9-11", "omega-6-7-9-11",
     "total omega 3-5-6-7-8-9-11", "total omega 3-5-6-7-9-11",
     "total omega 3-6-7-9-11", "total omega 3-6-9 fatty acids",
     "total omega-5 & 7 fatty acids", "total omega-5, 7 & 8 fatty acids",
     "total omega-5, 7 fatty acids", "total omega-9 & 11 fatty acids", "omega-6,9 fatty acids",
+    "total omega oil", "total omega oils",
 
     # EPA/DHA totals (computed sums)
     "total epa + dha", "total epa/dha", "total dha, epa", "total dha plus epa",
@@ -168,6 +172,9 @@ EXCLUDED_LABEL_PHRASES = {
     "contains less than 2% of the following", "contains 2% or less of",
     "less than 2% of", "less than 2%", "<2% of",
     "less than 2% of:", "contains less than 2%", "less than 1% of",
+    "less than 2%:", "contains < 2%", "contains <2%", "contains < 2%:",
+    "may also contain <2% of", "may also contain <2% of:",
+    "may also contain < 2% of", "may also contain < 2% of:",
 
     # Other carbohydrate variations
     "other carbohydrates", "other carbohydrate", "other carbs",
@@ -201,7 +208,18 @@ EXCLUDED_LABEL_PHRASES = {
     "proprietary blend of",
     "from 800 mg of premium cultivar elderberries",
     "includes added sugar",
-    "natural food base blend combination"
+    "natural food base blend combination",
+    "typical amino acid amounts (g)",
+    # Parser artifacts observed in fresh Thorne/Nordic runs
+    "from 250 mg dmsa",
+    "from 100 mg dmsa",
+    "25,000 iu from mixed carotenes",
+    "and as (magnesium) citrate",
+    "total cultures",
+    "daltonmax 700",
+    "bio-enhanced",
+    "bio enhanced",
+    "mitoheal",
 }
 
 # Nutritional warnings to track for UI display (but not map as ingredients)
@@ -602,6 +620,15 @@ NON_THERAPEUTIC_PARENT_DENYLIST = {
     # Other non-therapeutic parents
     "other carbohydrates", "other carbs",
     "sugar alcohols", "polyols",
+    # Omega / fatty acid rollup parents (label math, not discrete actives)
+    "omega-3 fatty acids", "omega-6 fatty acids", "omega-9 fatty acids",
+    "omega 3 fatty acids", "omega 6 fatty acids", "omega 9 fatty acids",
+    "total omega-3 fatty acids", "total omega-6 fatty acids", "total omega-9 fatty acids",
+    "total omega 3 fatty acids", "total omega 6 fatty acids", "total omega 9 fatty acids",
+    "omega fatty acids", "total fatty acids", "fatty acids",
+    "total omegas", "total fish oil", "fish oil",
+    "total omega oil", "total omega oils",
+    "total omega-3s", "total omega 3s", "total omega-6s", "total omega 6s", "total omega-9s", "total omega 9s",
 }
 
 # Additive types that should be skipped from quality scoring
@@ -634,7 +661,46 @@ BLEND_HEADER_PATTERNS_HIGH_CONFIDENCE = [
     r"\bproprietary\b.*\bblend\b",  # catches prefixed names like "Brand Proprietary X Blend"
     r"\{blend\}",                   # Curly brace notation: {blend}
     r"^total\s+\{?blend\}?$",       # "Total Blend" or "Total {Blend}"
+    # Label phrase headers that are never ingredients (P0 gummies audit fix)
+    r"^contains\s+(less\s+than|<)\s*\d+\s*%",  # "Contains less than 2%", "Contains <2%"
+    r"^less\s+than\s+\d+\s*%",                 # "Less than 2% of"
+    r"^<\s*\d+\s*%\s+of",                      # "<2% of"
+    # Parser artifacts observed in Thorne/Nordic runs
+    r"^from\s+\d+(?:,\d{3})?(?:\.\d+)?\s*mg\s+dmsa$",  # "from 250 mg DMSA"
+    r"^\d+(?:,\d{3})?(?:\.\d+)?\s*iu\s+from\s+mixed\s+carotenes$",
+    r"^and\s+as\s*\(magnesium\)\s*citrate$",
+    r"^total\s+cultures$",
+    r"\bblend\s*\(combination\)$",
+    r"^daltonmax\s*\d+$",
+    r"^bio[-\s]?enhanced$",
+    r"^mitoheal$",
 ]
+
+# Exact blend-header labels seen in DSLD where dose is blend total, not per-active dose.
+BLEND_HEADER_EXACT_NAMES = {
+    "acid comfort",
+    "botaniplex",
+    "natural defense blend",
+    "superfood / immune support blends",
+    # Gummies audit: branded blend headers that carry total weight, not per-active dose
+    "smartypants probiotic blend",
+    "omega fatty acid blend",
+    "other omega-3 fatty acids",
+    "other omega-6 fatty acids",
+    "other omega fatty acids",
+    "other omegas",
+    # Parser/header artifacts from gummy and Thorne/Nordic outputs
+    "mitoheal",
+    "bio-enhanced",
+    "bio enhanced",
+    "daltonmax 700",
+    "from 250 mg dmsa",
+    "from 100 mg dmsa",
+    "25,000 iu from mixed carotenes",
+    "and as (magnesium) citrate",
+    "total cultures",
+    "nordic flora woman blend (combination)",
+}
 
 # LOW-CONFIDENCE blend headers - only skip if NO DOSE present
 # These could match legitimate actives if they have a dose
@@ -744,6 +810,9 @@ EXCIPIENT_NEVER_PROMOTE = {
     # Processing aids / misc
     "directline technology",  # Brand-specific delivery system, not ingredient
     "fruit juice", "natural fruit juice", "fruit juice concentrate",
+    # Proprietary blends, not specific ingredients
+    "renewx", "activessence", "quik-sorb",
+    "trumask ultra liquid", "delete",
 
     # OILS/CARRIERS - Never therapeutic actives (from dev audit feedback)
     # These are carriers/processing aids even when listed in activeIngredients
@@ -818,6 +887,8 @@ SKIP_REASON_NESTED_NON_THERAPEUTIC = "nested_under_non_therapeutic_parent"
 SKIP_REASON_BLEND_HEADER_NO_DOSE = "blend_header_without_dosage"
 SKIP_REASON_BLEND_HEADER_WITH_WEIGHT = "blend_header_total_weight_only"
 SKIP_REASON_RECOGNIZED_NON_SCORABLE = "recognized_non_scorable"
+SKIP_REASON_LABEL_PHRASE = "excluded_label_phrase"
+SKIP_REASON_NUTRITION_FACT = "excluded_nutrition_fact"
 
 # Promotion reasons for tracking/debugging
 PROMOTE_REASON_KNOWN_DB = "known_therapeutic_db"

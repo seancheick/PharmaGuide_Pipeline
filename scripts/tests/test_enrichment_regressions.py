@@ -823,5 +823,72 @@ class TestMatchRulesBehavior:
         assert len(missing) == 0, f"Missing dosage_importance: {missing[:5]}"
 
 
+class TestProjectionAndLedgerRegression:
+    """Regression tests for scoring projection and ledger consistency."""
+
+    @pytest.fixture
+    def enricher(self):
+        return SupplementEnricherV3()
+
+    def test_projection_trusted_manufacturer_requires_exact_match(self, enricher):
+        enriched = {
+            "delivery_data": {},
+            "absorption_data": {},
+            "formulation_data": {},
+            "contaminant_data": {},
+            "compliance_data": {},
+            "certification_data": {},
+            "proprietary_data": {},
+            "evidence_data": {},
+            "ingredient_quality_data": {},
+            "manufacturer_data": {
+                "top_manufacturer": {
+                    "found": True,
+                    "match_type": "fuzzy",
+                    "name": "Example Manufacturer",
+                },
+                "bonus_features": {},
+                "country_of_origin": {},
+            },
+        }
+
+        enricher._project_scoring_fields(enriched)
+        assert enriched["is_trusted_manufacturer"] is False
+
+        enriched["manufacturer_data"]["top_manufacturer"]["match_type"] = "exact"
+        enricher._project_scoring_fields(enriched)
+        assert enriched["is_trusted_manufacturer"] is True
+
+    def test_match_ledger_reads_harmful_additives_nested_path(self, enricher):
+        product = {"brandName": "Demo"}
+        enriched = {
+            "ingredient_quality_data": {"ingredients_scorable": [], "ingredients_skipped": []},
+            "contaminant_data": {
+                "harmful_additives": {
+                    "additives": [
+                        {
+                            "ingredient": "Red 40",
+                            "additive_name": "FD&C Red No. 40",
+                            "additive_id": "ADD_RED40",
+                        }
+                    ]
+                }
+            },
+            "compliance_data": {},
+            "manufacturer_data": {"top_manufacturer": {"found": False}},
+            "delivery_data": {},
+        }
+
+        ledger_data = enricher._build_match_ledger(product, enriched)
+        additive_entries = (
+            ledger_data.get("match_ledger", {})
+            .get("domains", {})
+            .get("additives", {})
+            .get("entries", [])
+        )
+        assert len(additive_entries) == 1
+        assert additive_entries[0].get("canonical_id") == "ADD_RED40"
+
+
 if __name__ == '__main__':
     pytest.main([__file__, '-v'])

@@ -144,7 +144,7 @@ class EnrichmentContractValidator:
             List of ContractViolation objects (empty if all rules pass)
         """
         violations = []
-        product_id = product.get("id", product.get("productId", "unknown"))
+        product_id = product.get("dsld_id", product.get("id", product.get("productId", "unknown")))
 
         # Run all contract validations
         violations.extend(self._validate_sugar_consistency(product, product_id))
@@ -166,7 +166,7 @@ class EnrichmentContractValidator:
         """
         results = {}
         for product in products:
-            product_id = product.get("id", product.get("productId", "unknown"))
+            product_id = product.get("dsld_id", product.get("id", product.get("productId", "unknown")))
             violations = self.validate(product)
             if violations:
                 results[product_id] = violations

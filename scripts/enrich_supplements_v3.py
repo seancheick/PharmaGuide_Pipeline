@@ -65,6 +65,7 @@ from constants import (
     NON_THERAPEUTIC_PARENT_DENYLIST,
     ADDITIVE_TYPES_SKIP_SCORING,
     BLEND_HEADER_PATTERNS_HIGH_CONFIDENCE,
+    BLEND_HEADER_EXACT_NAMES,
     BLEND_HEADER_PATTERNS_LOW_CONFIDENCE,
     EXCIPIENT_NEVER_PROMOTE,
     POTENCY_MARKERS_HIGH_SIGNAL,
@@ -78,6 +79,10 @@ from constants import (
     SKIP_REASON_BLEND_HEADER_NO_DOSE,
     SKIP_REASON_BLEND_HEADER_WITH_WEIGHT,
     SKIP_REASON_RECOGNIZED_NON_SCORABLE,
+    SKIP_REASON_LABEL_PHRASE,
+    SKIP_REASON_NUTRITION_FACT,
+    EXCLUDED_LABEL_PHRASES,
+    EXCLUDED_NUTRITION_FACTS,
     PROMOTE_REASON_KNOWN_DB,
     PROMOTE_REASON_HAS_DOSE,
     PROMOTE_REASON_PRODUCT_TYPE_RESCUE,
@@ -1575,12 +1580,19 @@ class SupplementEnricherV3:
                 continue
 
             # Scorable ingredient - try to match against quality map
-            match_result = self._match_quality_map(ing_name, std_name, quality_map)
+            # Pass cleaned forms[] to enable form-aware matching (P0 form-loss fix)
+            ingredient_forms = ingredient.get('forms') or []
+            match_result = self._match_quality_map(
+                ing_name, std_name, quality_map, cleaned_forms=ingredient_forms
+            )
             quality_entry = self._build_quality_entry(
                 ingredient, match_result, hierarchy_type, source_section="active"
             )
+            is_quality_match = bool(
+                match_result and isinstance(match_result, dict) and match_result.get("match_status") != "FORM_UNMAPPED"
+            )
 
-            if match_result:
+            if is_quality_match:
                 match_tier = match_result.get('match_tier')
                 if match_tier == "pattern":
                     pattern_match_wins_count += 1
@@ -1640,7 +1652,10 @@ class SupplementEnricherV3:
                 promotion_confidence = promotion_result.get('confidence', 'MEDIUM')
                 dose_present = bool(quantity and unit)
 
-                match_result = self._match_quality_map(ing_name, std_name, quality_map)
+                ingredient_forms = ingredient.get('forms') or []
+                match_result = self._match_quality_map(
+                    ing_name, std_name, quality_map, cleaned_forms=ingredient_forms
+                )
                 quality_entry = self._build_quality_entry(
                     ingredient, match_result, hierarchy_type,
                     source_section="inactive_promoted",
@@ -1648,8 +1663,11 @@ class SupplementEnricherV3:
                     promotion_confidence=promotion_confidence,
                     dose_present=dose_present
                 )
+                is_quality_match = bool(
+                    match_result and isinstance(match_result, dict) and match_result.get("match_status") != "FORM_UNMAPPED"
+                )
 
-                if match_result:
+                if is_quality_match:
                     match_tier = match_result.get('match_tier')
                     if match_tier == "pattern":
                         pattern_match_wins_count += 1
@@ -1867,9 +1885,55 @@ class SupplementEnricherV3:
             "blend_disclosed_components_count": len(nested) if isinstance(nested, list) else 0
         }
 
+    def _normalize_exclusion_text(self, value: str) -> str:
+        """Normalize label text for robust exclusion checks."""
+        text = (value or "").lower().strip()
+        text = re.sub(r"\s+", " ", text)
+        text = text.rstrip(":;,")
+        return text
+
+    def _excluded_text_reason(self, value: str) -> Optional[str]:
+        """
+        Return exclusion reason if text is a known label/header or nutrition rollup.
+
+        Protects against punctuation/casing variants like:
+        - "Less than 2%:"
+        - "Contains < 2%"
+        - "May also contain <2% of:"
+        """
+        text = self._normalize_exclusion_text(value)
+        if not text:
+            return None
+
+        if text in EXCLUDED_LABEL_PHRASES:
+            return SKIP_REASON_LABEL_PHRASE
+        if text in EXCLUDED_NUTRITION_FACTS:
+            return SKIP_REASON_NUTRITION_FACT
+
+        # Header/label phrase variants that are never ingredients.
+        if re.match(r"^(contains|may also contain)\s*(less than|<)\s*\d+\s*%(\s*of)?", text):
+            return SKIP_REASON_LABEL_PHRASE
+        if re.match(r"^less than\s*\d+\s*%(\s*of)?", text):
+            return SKIP_REASON_LABEL_PHRASE
+        if re.match(r"^<\s*\d+\s*%\s*of", text):
+            return SKIP_REASON_LABEL_PHRASE
+
+        # Nutrition rollup variants.
+        if re.match(r"^other omega[- ]\d+\s+fatty acids$", text):
+            return SKIP_REASON_NUTRITION_FACT
+        if re.match(r"^other omega\s+fatty acids$", text):
+            return SKIP_REASON_NUTRITION_FACT
+
+        return None
+
     def _should_skip_from_scoring(self, ingredient: Dict, quality_map: Dict, botanicals_db: Dict) -> Optional[str]:
         """
         Determine if an ingredient should be SKIPPED from quality scoring.
+
+        Skip Group Z (unconditional, before any override):
+        - Exact match in BLEND_HEADER_EXACT_NAMES
+        - Exact match in EXCLUDED_LABEL_PHRASES (e.g., "Contains less than 2%")
+        - Exact match in EXCLUDED_NUTRITION_FACTS (e.g., "Other Omega-3 Fatty Acids")
 
         Skip Group A (high confidence):
         - isAdditive == true
@@ -1879,7 +1943,7 @@ class SupplementEnricherV3:
         Skip Group B (header rows):
         - Matches blend/proprietary header patterns AND has no dosage
         - Matches blend/proprietary header patterns AND has only total weight
-          (no components means it's a header, even with "500 mg")
+        - proprietaryBlend == true + LOW-CONFIDENCE pattern match (even with dose)
 
         Override (keep scorable):
         - Exists in quality_map or botanicals_db
@@ -1890,8 +1954,29 @@ class SupplementEnricherV3:
         ing_name = ingredient.get('name', '')
         std_name = ingredient.get('standardName', '') or ing_name
         name_lower = ing_name.lower().strip()
+        std_lower = std_name.lower().strip()
+        name_norm = self._normalize_exclusion_text(ing_name)
+        std_norm = self._normalize_exclusion_text(std_name)
+        raw_source = ingredient.get('raw_source_text', '')
 
+        # =================================================================
+        # GROUP Z: Unconditional skips — these are NEVER real ingredients.
+        # No quality_map / potency override can rescue them.
+        # =================================================================
+
+        # Z1: Known label-level blend names should always be treated as headers.
+        if name_norm in BLEND_HEADER_EXACT_NAMES or std_norm in BLEND_HEADER_EXACT_NAMES:
+            return SKIP_REASON_BLEND_HEADER_WITH_WEIGHT
+
+        # Z2/Z3: Excluded label phrases and nutrition-fact rollups.
+        for text in (ing_name, std_name, raw_source, name_lower, std_lower):
+            exclusion_reason = self._excluded_text_reason(text)
+            if exclusion_reason:
+                return exclusion_reason
+
+        # =================================================================
         # OVERRIDE CHECK: If known in quality map or botanicals, always score
+        # =================================================================
         if self._is_known_therapeutic(ing_name, std_name, quality_map, botanicals_db):
             return None
 
@@ -1905,16 +1990,20 @@ class SupplementEnricherV3:
         if self._has_potency_markers(ing_name):
             return None
 
-        # GROUP A: Check isAdditive flag
+        # =================================================================
+        # GROUP A: Structural flags from cleaning
+        # =================================================================
+
+        # A1: Check isAdditive flag
         if ingredient.get('isAdditive', False):
             return SKIP_REASON_ADDITIVE
 
-        # GROUP A: Check additiveType
+        # A2: Check additiveType
         additive_type = ingredient.get('additiveType', '')
         if additive_type and additive_type.lower() in ADDITIVE_TYPES_SKIP_SCORING:
             return SKIP_REASON_ADDITIVE_TYPE
 
-        # GROUP A: Check nested under non-therapeutic parent
+        # A3: Check nested under non-therapeutic parent
         if ingredient.get('isNestedIngredient', False):
             parent_blend = ingredient.get('parentBlend', '')
             if parent_blend and parent_blend.lower().strip() in NON_THERAPEUTIC_PARENT_DENYLIST:
@@ -1929,37 +2018,44 @@ class SupplementEnricherV3:
             ):
                 return SKIP_REASON_NESTED_NON_THERAPEUTIC
 
-        # GROUP B: Check blend header patterns
+        # =================================================================
+        # GROUP B: Blend header pattern matching
+        # =================================================================
         has_dose, is_blend_weight = self._has_valid_therapeutic_dose(ingredient)
 
-        # Structured blend headers with nested components should never be scored.
+        # B1: Structured blend headers with nested components should never be scored.
         ingredient_group = (ingredient.get('ingredientGroup', '') or '').lower()
         nested = ingredient.get('nestedIngredients') or []
         if isinstance(nested, list) and nested and ('blend' in ingredient_group):
             return SKIP_REASON_BLEND_HEADER_WITH_WEIGHT if has_dose else SKIP_REASON_BLEND_HEADER_NO_DOSE
 
-        # HIGH-CONFIDENCE patterns: skip regardless of dose
-        # These are extremely unlikely to be actual therapeutic ingredients
+        # B2: HIGH-CONFIDENCE patterns: skip regardless of dose
         for pattern in BLEND_HEADER_PATTERNS_HIGH_CONFIDENCE:
             if re.search(pattern, name_lower, re.IGNORECASE):
                 if not has_dose:
                     return SKIP_REASON_BLEND_HEADER_NO_DOSE
                 else:
-                    # High-confidence blend header with dose = total weight
                     return SKIP_REASON_BLEND_HEADER_WITH_WEIGHT
 
-        # LOW-CONFIDENCE patterns: only skip if NO dose present
-        # These could match legitimate actives if they have a therapeutic dose
+        # B3: LOW-CONFIDENCE patterns — skip if no dose
         if not has_dose:
             for pattern in BLEND_HEADER_PATTERNS_LOW_CONFIDENCE:
                 if re.search(pattern, name_lower, re.IGNORECASE):
                     return SKIP_REASON_BLEND_HEADER_NO_DOSE
 
-        # If has dose but hierarchyType indicates it's a summary/header row
-        # (applies to all blend patterns regardless of confidence)
+        # B4: LOW-CONFIDENCE patterns WITH dose — skip if structural evidence
+        # says this is a blend header carrying total weight, not a real active.
+        # Evidence: proprietaryBlend flag, ingredientGroup contains "blend",
+        # or hierarchyType indicates summary/header.
+        is_structural_blend = (
+            ingredient.get('proprietaryBlend', False)
+            or ingredient.get('isProprietaryBlend', False)
+            or ('blend' in ingredient_group and 'blend' not in name_lower.split()[-1:])
+        )
         hierarchy_type = ingredient.get('hierarchyType', '')
-        if hierarchy_type in ('summary', 'source', 'blend_header'):
-            # Check any blend pattern match
+        is_header_hierarchy = hierarchy_type in ('summary', 'source', 'blend_header')
+
+        if has_dose and (is_structural_blend or is_header_hierarchy):
             for pattern in BLEND_HEADER_PATTERNS_LOW_CONFIDENCE:
                 if re.search(pattern, name_lower, re.IGNORECASE):
                     return SKIP_REASON_BLEND_HEADER_WITH_WEIGHT
@@ -1979,6 +2075,8 @@ class SupplementEnricherV3:
         - RULE D: Product-type rescue (very conservative, low confidence)
 
         Hard exclusions:
+        - Label phrases and nutrition facts (never real ingredients)
+        - Blend header exact names
         - Common excipients (EXCIPIENT_NEVER_PROMOTE)
         - isAdditive == true
 
@@ -1988,6 +2086,20 @@ class SupplementEnricherV3:
         std_name = ingredient.get('standardName', '') or ing_name
         name_lower = ing_name.lower().strip()
         std_lower = std_name.lower().strip()
+        name_norm = self._normalize_exclusion_text(ing_name)
+        std_norm = self._normalize_exclusion_text(std_name)
+        raw_source = ingredient.get('raw_source_text', '')
+
+        # HARD EXCLUSION: Label phrases, nutrition facts, blend headers
+        # These are never real ingredients — block before any promotion rule.
+        for text in (ing_name, std_name, raw_source, name_lower, std_lower):
+            if self._excluded_text_reason(text):
+                return None
+        if name_norm in BLEND_HEADER_EXACT_NAMES or std_norm in BLEND_HEADER_EXACT_NAMES:
+            return None
+        for pattern in BLEND_HEADER_PATTERNS_HIGH_CONFIDENCE:
+            if re.search(pattern, name_lower, re.IGNORECASE):
+                return None
 
         # RULE C: Absorption enhancer exception (checked BEFORE hard exclusions)
         # These are therapeutically relevant even without dose
@@ -2114,7 +2226,8 @@ class SupplementEnricherV3:
                                quality_map: Dict, botanicals_db: Dict) -> bool:
         """Check if ingredient exists in therapeutic databases."""
         # Check quality map
-        if self._match_quality_map(ing_name, std_name, quality_map):
+        quality_match = self._match_quality_map(ing_name, std_name, quality_map)
+        if quality_match and quality_match.get("match_status") != "FORM_UNMAPPED":
             return True
 
         # Check botanicals database
@@ -2184,6 +2297,22 @@ class SupplementEnricherV3:
             # Strip benign qualifiers for identity-only recognition.
             variants.add(re.sub(r'^(?:organic|natural|raw|pure)\s+', '', base).strip())
             variants.add(re.sub(r'^(?:organic|natural|raw|pure)\s+', '', self._normalize_text(pre)).strip())
+            # Strip common processing qualifiers that should not block identity matching.
+            for v in list(variants):
+                stripped = re.sub(
+                    r'\b(cold[-\s]?pressed|extra virgin|unrefined|certified organic|virgin)\b',
+                    '',
+                    v,
+                    flags=re.IGNORECASE
+                ).strip()
+                variants.add(re.sub(r'\s+', ' ', stripped).strip())
+            # Reorder comma suffix qualifiers: "pumpkin seed oil, cold-pressed" -> "cold-pressed pumpkin seed oil"
+            for v in list(variants):
+                if ',' not in v:
+                    continue
+                parts = [p.strip() for p in v.split(',') if p and p.strip()]
+                if len(parts) >= 2:
+                    variants.add(' '.join(parts[1:] + parts[:1]))
             # Strip common botanical plant-part suffixes for identity-only recognition.
             for v in list(variants):
                 variants.add(re.sub(r'\b(root|leaf|fruit|seed|flower|bark)\b', '', v).strip())
@@ -2267,6 +2396,29 @@ class SupplementEnricherV3:
                     "recognition_type": "botanical_unscored",
                 }
 
+        # Check banned_recalled_ingredients DB for identity-only recognition.
+        # Prevents banned items from inflating the unmapped count.
+        banned_db = self.databases.get('banned_recalled_ingredients', {})
+        banned_list = banned_db.get('ingredients', []) if isinstance(banned_db, dict) else []
+        for entry in banned_list:
+            if not isinstance(entry, dict):
+                continue
+            # Skip non-matchable entity types (products, classes, threats)
+            entity_type = entry.get('entity_type', 'ingredient')
+            if entity_type not in {'ingredient', 'contaminant', None, ''}:
+                continue
+            entry_variants = set(_variants(entry.get('standard_name', '')))
+            for alias in entry.get('aliases', []):
+                entry_variants.update(_variants(alias))
+            if any(v in candidates for v in entry_variants):
+                return {
+                    "recognition_source": "banned_recalled_ingredients",
+                    "recognition_reason": entry.get('severity_level', 'banned'),
+                    "matched_entry_id": entry.get('id'),
+                    "matched_entry_name": entry.get('standard_name'),
+                    "recognition_type": "non_scorable",
+                }
+
         # Check against EXCIPIENT_NEVER_PROMOTE constant list
         # These are explicitly known non-therapeutic ingredients
         name_lower = ing_name.lower().strip()
@@ -2339,11 +2491,64 @@ class SupplementEnricherV3:
         unit_normalized = self._normalize_unit_for_signal(unit)
         is_excipient, never_promote_reason = self._compute_excipient_flags(ingredient)
         blend_flags = self._compute_blend_flags(ingredient, None)
+        is_form_unmapped = bool(
+            match_result and isinstance(match_result, dict) and match_result.get("match_status") == "FORM_UNMAPPED"
+        )
 
-        if match_result:
+        if is_form_unmapped:
+            entry = {
+                "name": ing_name,
+                "raw_source_text": raw_source_text,
+                "standard_name": match_result.get("base_name", std_name),
+                "matched_form": None,
+                "canonical_id": None,
+                "form_id": None,
+                "match_tier": None,
+                "matched_alias": None,
+                "matched_target": None,
+                "match_ambiguity_candidates": [],
+                "bio_score": None,
+                "natural": None,
+                "score": 9,
+                "absorption": None,
+                "notes": None,
+                "dosage_importance": 1.0,
+                "category": ingredient.get('category', 'unknown'),
+                "quantity": quantity,
+                "unit": unit,
+                "unit_normalized": unit_normalized,
+                "has_dose": has_dose,
+                "is_blend_header": blend_flags["is_blend_header"],
+                "is_proprietary_blend": blend_flags["is_proprietary_blend"],
+                "blend_total_weight_only": blend_flags["blend_total_weight_only"],
+                "blend_disclosed_components_count": blend_flags["blend_disclosed_components_count"],
+                "is_excipient": is_excipient,
+                "never_promote_reason": never_promote_reason,
+                "certificates": [],
+                "mapped": False,
+                "mapped_identity": False,
+                "scoreable_identity": False,
+                "role_classification": "active_unmapped",
+                "identity_confidence": 0.0,
+                "identity_decision_reason": "form_unmapped",
+                "hierarchyType": hierarchy_type,
+                "source_section": source_section,
+                "form_extraction_used": True,
+                "is_dual_form": bool(match_result.get("is_dual_form")),
+                "original_label": match_result.get("original_label"),
+                "extracted_forms": match_result.get("extracted_forms", []),
+                "matched_forms": [],
+                "unmapped_forms": match_result.get("unmapped_forms", []),
+                "aggregation_method": None,
+                "final_form_bio_score": None,
+                "additional_forms": [],
+                "form_source": match_result.get("form_source"),
+            }
+        elif match_result:
             bio_score = match_result.get('bio_score', 5)
             natural = match_result.get('natural', False)
             score = match_result.get('score', bio_score + (3 if natural else 0))
+            used_form_fallback = match_result.get('match_status') == 'FORM_UNMAPPED_FALLBACK'
 
             entry = {
                 # LABEL NAME PRESERVATION:
@@ -2379,8 +2584,8 @@ class SupplementEnricherV3:
                 "mapped_identity": True,
                 "scoreable_identity": True,
                 "role_classification": "active_scorable",
-                "identity_confidence": 1.0 if match_result.get('match_tier') == "exact" else 0.9,
-                "identity_decision_reason": "quality_map_match",
+                "identity_confidence": 0.8 if used_form_fallback else (1.0 if match_result.get('match_tier') == "exact" else 0.9),
+                "identity_decision_reason": "form_unmapped_fallback" if used_form_fallback else "quality_map_match",
                 "hierarchyType": hierarchy_type,
                 "source_section": source_section,
                 # Multi-form contract fields (if present)
@@ -2392,7 +2597,9 @@ class SupplementEnricherV3:
                 "unmapped_forms": match_result.get('unmapped_forms', []),
                 "aggregation_method": match_result.get('aggregation_method'),
                 "final_form_bio_score": match_result.get('final_form_bio_score'),
-                "additional_forms": match_result.get('additional_forms', [])
+                "additional_forms": match_result.get('additional_forms', []),
+                "form_source": match_result.get('form_source'),
+                "form_unmapped": bool(used_form_fallback),
             }
         else:
             entry = {
@@ -2462,6 +2669,7 @@ class SupplementEnricherV3:
 
         matched_forms = []
         unmapped_forms = []
+        generic_form_tokens = []
 
         for form_data in extracted_forms:
             match_candidates = form_data.get('match_candidates', [])
@@ -2471,6 +2679,7 @@ class SupplementEnricherV3:
             # Try each match candidate until one succeeds
             form_match = None
             matched_candidate = None
+            matched_unspecified = False
             for candidate in match_candidates:
                 form_match = self._match_quality_map(
                     candidate, candidate, quality_map, _form_extraction_attempt=True
@@ -2482,7 +2691,11 @@ class SupplementEnricherV3:
                         matched_candidate = candidate
                         break
                     else:
-                        form_match = None  # Reject unspecified matches
+                        # Generic/source descriptors frequently resolve to
+                        # unspecified forms (e.g., "fish oil" for DHA/EPA).
+                        # Track these separately to avoid false form-loss flags.
+                        matched_unspecified = True
+                        form_match = None
 
             if form_match and matched_candidate:
                 bio_score = form_match.get('bio_score', 5)
@@ -2502,15 +2715,28 @@ class SupplementEnricherV3:
                     'full_match_data': form_match
                 })
             else:
-                unmapped_forms.append(raw_form_text)
-                # Track unmapped form for database expansion
-                base_name = form_info.get('base_name', '')
-                original_label = form_info.get('original', '')
-                if raw_form_text:
-                    self._track_unmapped_form(raw_form_text, base_name, original_label)
+                if matched_unspecified:
+                    generic_form_tokens.append(raw_form_text)
+                else:
+                    unmapped_forms.append(raw_form_text)
+                    # Track unmapped form for database expansion
+                    base_name = form_info.get('base_name', '')
+                    original_label = form_info.get('original', '')
+                    if raw_form_text:
+                        self._track_unmapped_form(raw_form_text, base_name, original_label)
 
         # If no forms matched, return None (let caller handle FORM_UNMAPPED)
         if not matched_forms:
+            if generic_form_tokens and not unmapped_forms:
+                # All form tokens were generic/source descriptors that only
+                # resolved to unspecified forms; treat as no actionable form
+                # evidence and continue with parent matching.
+                return {
+                    'all_forms_generic': True,
+                    'generic_form_tokens': generic_form_tokens,
+                    'unmapped_forms': [],
+                    'form_extraction_used': True,
+                }
             return None
 
         # Determine aggregation method
@@ -2599,7 +2825,87 @@ class SupplementEnricherV3:
 
         return result
 
-    def _match_quality_map(self, ing_name: str, std_name: str, quality_map: Dict, _form_extraction_attempt: bool = False) -> Optional[Dict]:
+    def _build_form_info_from_cleaned(self, ing_name: str, cleaned_forms: List[Dict]) -> Optional[Dict]:
+        """
+        Build a form_info dict from the cleaning stage's structured forms[] array.
+
+        This bridges the gap between the cleaning stage (which parses
+        "Vitamin A (as Retinyl Palmitate)" into forms[]) and the enricher's
+        _match_multi_form() which expects a form_info dict.
+
+        Args:
+            ing_name: The ingredient name (e.g., "Vitamin A")
+            cleaned_forms: List of form dicts from cleaning, e.g.:
+                [{"name": "Retinyl Palmitate", "percent": null, "order": 1}]
+
+        Returns:
+            form_info dict compatible with _match_multi_form(), or None if
+            cleaned_forms has no usable entries.
+        """
+        if not cleaned_forms:
+            return None
+
+        extracted_forms = []
+        for form in cleaned_forms:
+            form_name = form.get('name', '')
+            if not form_name or not form_name.strip():
+                continue
+
+            # Build match candidates: the form name itself + common variations
+            match_candidates = [form_name]
+            # Also try lowercase and stripped version
+            stripped = form_name.strip()
+            if stripped != form_name:
+                match_candidates.append(stripped)
+            # Normalize wrapper punctuation often emitted by cleaning.
+            unwrapped = re.sub(r'[\{\}\[\]]', '', stripped)
+            unwrapped = re.sub(r'\(([^)]+)\)', r'\1', unwrapped)
+            unwrapped = re.sub(r'\s+', ' ', unwrapped).strip()
+            if unwrapped and unwrapped not in match_candidates:
+                match_candidates.append(unwrapped)
+
+            # Convert percent field: cleaning uses None or a float (0-100)
+            percent_raw = form.get('percent')
+            percent_share = None
+            if percent_raw is not None:
+                try:
+                    percent_share = float(percent_raw) / 100.0
+                except (TypeError, ValueError):
+                    pass
+
+            extracted_forms.append({
+                'raw_form_text': form_name,
+                'match_candidates': match_candidates,
+                'display_form': form_name,
+                'percent_share': percent_share,
+            })
+
+        if not extracted_forms:
+            return None
+
+        # Compute equal shares for forms without explicit percentages
+        forms_without_pct = [f for f in extracted_forms if f['percent_share'] is None]
+        forms_with_pct = [f for f in extracted_forms if f['percent_share'] is not None]
+        total_explicit = sum(f['percent_share'] for f in forms_with_pct)
+        remaining = max(0.0, 1.0 - total_explicit)
+
+        if forms_without_pct:
+            equal_share = remaining / len(forms_without_pct)
+            for f in forms_without_pct:
+                f['percent_share'] = equal_share
+
+        return {
+            'original': ing_name,
+            'base_name': ing_name,
+            'extracted_forms': extracted_forms,
+            'is_dual_form': len(extracted_forms) > 1,
+            'form_extraction_success': True,
+            'has_form_evidence': True,
+        }
+
+    def _match_quality_map(self, ing_name: str, std_name: str, quality_map: Dict,
+                           _form_extraction_attempt: bool = False,
+                           cleaned_forms: Optional[List[Dict]] = None) -> Optional[Dict]:
         """
         Match ingredient against quality map using explicit precedence rules.
 
@@ -2618,34 +2924,102 @@ class SupplementEnricherV3:
         4. Form key alphabetical
 
         Multi-Form Enhancement:
-        - Extracts form names from complex labels like "Vitamin A (as retinyl palmitate)"
+        - Uses pre-parsed cleaned_forms[] from cleaning stage when available
+        - Falls back to label text extraction via _extract_form_from_label()
         - For dual-form ingredients, matches ALL forms and uses weighted average
         - Preserves bracket tokens as match candidates
         - If form evidence exists but mapping fails, marks as FORM_UNMAPPED (not unspecified)
 
+        Args:
+            ing_name: Ingredient name from label
+            std_name: Standardized name
+            quality_map: Quality map database
+            _form_extraction_attempt: Internal flag to prevent recursion
+            cleaned_forms: Pre-parsed forms[] from cleaning stage, e.g.
+                           [{"name": "Retinyl Palmitate", "percent": None, ...}]
+
         Logs structured warnings when multiple candidates exist in the winning tier.
         """
-        # MULTI-FORM EXTRACTION ENHANCEMENT: Handle complex labels with "(as ...)" patterns
-        # Only attempt on first call (not recursive calls from form extraction)
+        # MULTI-FORM MATCHING: Try structured cleaned_forms first, then fall back
+        # to label text extraction. This fixes the "form loss" issue where cleaning
+        # already parsed "Vitamin A (as Retinyl Palmitate)" into forms[] but the
+        # enricher was only seeing "Vitamin A".
         if not _form_extraction_attempt:
+            # PRIORITY 1: Use cleaned_forms[] from cleaning stage (structured, reliable)
+            if cleaned_forms and isinstance(cleaned_forms, list) and len(cleaned_forms) > 0:
+                form_info = self._build_form_info_from_cleaned(ing_name, cleaned_forms)
+                if form_info and form_info.get('form_extraction_success'):
+                    multi_form_result = self._match_multi_form(form_info, quality_map)
+                    if multi_form_result:
+                        if not multi_form_result.get('all_forms_generic'):
+                            return multi_form_result
+
+                    # If form evidence exists but ALL forms failed to match
+                    if form_info.get('has_form_evidence') and not (
+                        multi_form_result and multi_form_result.get('all_forms_generic')
+                    ):
+                        # Safe fallback: try parent/base matching so product can still score
+                        # conservatively while preserving form-unmapped telemetry.
+                        fallback_base = form_info.get('base_name') or ing_name
+                        fallback_match = self._match_quality_map(
+                            fallback_base, std_name, quality_map, _form_extraction_attempt=True
+                        )
+                        if fallback_match:
+                            fallback = dict(fallback_match)
+                            fallback['match_status'] = 'FORM_UNMAPPED_FALLBACK'
+                            fallback['has_form_evidence'] = True
+                            fallback['original_label'] = ing_name
+                            fallback['extracted_forms'] = form_info['extracted_forms']
+                            fallback['unmapped_forms'] = [f['raw_form_text'] for f in form_info['extracted_forms']]
+                            fallback['base_name'] = form_info['base_name']
+                            fallback['form_source'] = 'cleaned_forms'
+                            fallback['form_extraction_used'] = True
+                            return fallback
+                        return {
+                            'match_status': 'FORM_UNMAPPED',
+                            'has_form_evidence': True,
+                            'original_label': ing_name,
+                            'extracted_forms': form_info['extracted_forms'],
+                            'unmapped_forms': [f['raw_form_text'] for f in form_info['extracted_forms']],
+                            'base_name': form_info['base_name'],
+                            'form_source': 'cleaned_forms',
+                        }
+
+            # PRIORITY 2: Fall back to label text extraction (for labels with "(as ...)")
             form_info = self._extract_form_from_label(ing_name)
             if form_info['form_extraction_success']:
                 multi_form_result = self._match_multi_form(form_info, quality_map)
                 if multi_form_result:
-                    return multi_form_result
+                    if not multi_form_result.get('all_forms_generic'):
+                        return multi_form_result
 
                 # If form evidence exists but ALL forms failed to match, mark as FORM_UNMAPPED
-                if form_info['has_form_evidence']:
-                    # Note: Unmapped forms are already tracked in _match_multi_form
-                    # Don't fall through to unspecified - return special marker
+                if form_info['has_form_evidence'] and not (
+                    multi_form_result and multi_form_result.get('all_forms_generic')
+                ):
+                    fallback_base = form_info.get('base_name') or ing_name
+                    fallback_match = self._match_quality_map(
+                        fallback_base, std_name, quality_map, _form_extraction_attempt=True
+                    )
+                    if fallback_match:
+                        fallback = dict(fallback_match)
+                        fallback['match_status'] = 'FORM_UNMAPPED_FALLBACK'
+                        fallback['has_form_evidence'] = True
+                        fallback['original_label'] = ing_name
+                        fallback['extracted_forms'] = form_info['extracted_forms']
+                        fallback['unmapped_forms'] = [f['raw_form_text'] for f in form_info['extracted_forms']]
+                        fallback['base_name'] = form_info['base_name']
+                        fallback['form_source'] = 'label_extraction'
+                        fallback['form_extraction_used'] = True
+                        return fallback
                     return {
                         'match_status': 'FORM_UNMAPPED',
                         'has_form_evidence': True,
                         'original_label': ing_name,
                         'extracted_forms': form_info['extracted_forms'],
                         'unmapped_forms': [f['raw_form_text'] for f in form_info['extracted_forms']],
-                        # Provide base canonical if base name matches
-                        'base_name': form_info['base_name']
+                        'base_name': form_info['base_name'],
+                        'form_source': 'label_extraction',
                     }
 
         ing_exact = self._normalize_exact_text(ing_name)
@@ -2682,6 +3056,64 @@ class SupplementEnricherV3:
         candidates = []
         seen = set()
 
+        def _strip_parenthesis_chars(value: str) -> str:
+            # Keep parenthetical content but remove bracket characters.
+            # Example: "Oregano (Origanum vulgare) (leaf)" -> "Oregano Origanum vulgare leaf"
+            return re.sub(r"[()\[\]]", " ", value or "")
+
+        def _comma_reorder(value: str) -> str:
+            # Handle qualifier suffixes like "Garlic Bulb Extract, Odorless"
+            # so they can match aliases like "Odorless Garlic Bulb Extract".
+            text = value or ""
+            if "," not in text:
+                return text
+            parts = [p.strip() for p in text.split(",") if p and p.strip()]
+            if len(parts) < 2:
+                return text
+            return " ".join(parts[1:] + parts[:1])
+
+        def _build_exact_candidates() -> List[Tuple[str, int]]:
+            out: Dict[str, int] = {}
+
+            def add(value: Optional[str], source: int):
+                if not value:
+                    return
+                normed = self._normalize_exact_text(value)
+                if not normed:
+                    return
+                if normed not in out or source < out[normed]:
+                    out[normed] = source
+
+            add(ing_name, 0)
+            add(std_name, 1)
+            add(base_name, 2)
+            return sorted(out.items(), key=lambda item: item[1])
+
+        def _build_normalized_candidates() -> List[Tuple[str, int]]:
+            out: Dict[str, int] = {}
+
+            def add(value: Optional[str], source: int):
+                if not value:
+                    return
+                variants = {value}
+                variants.add(_strip_parenthesis_chars(value))
+                for v in list(variants):
+                    variants.add(_comma_reorder(v))
+                for v in variants:
+                    normed = self._normalize_text(v)
+                    if not normed:
+                        continue
+                    if normed not in out or source < out[normed]:
+                        out[normed] = source
+
+            add(ing_name, 0)
+            add(std_name, 1)
+            add(base_name, 2)
+            return sorted(out.items(), key=lambda item: item[1])
+
+        exact_candidates = _build_exact_candidates()
+        normalized_candidates = _build_normalized_candidates()
+
         def alias_length(match_type: str, alias: str) -> int:
             if match_type == "exact":
                 return len(self._normalize_exact_text(alias))
@@ -2710,11 +3142,41 @@ class SupplementEnricherV3:
         def build_parent_match_data(parent_key: str, parent_data: Dict) -> Tuple[Dict, bool, Optional[str]]:
             forms = parent_data.get('forms', {})
             if forms:
-                first_form_name, first_form = next(iter(forms.items()))
+                def _norm(value: str) -> str:
+                    return str(value or "").strip().lower()
+
+                def _select_conservative_parent_form(forms_dict: Dict) -> Tuple[str, Dict]:
+                    """
+                    Select a conservative fallback form for parent-level matches.
+
+                    Best-practice policy:
+                    1) Prefer explicit unspecified/default forms when actual form is unknown.
+                    2) Otherwise choose the lowest-score form to avoid premium over-credit.
+                    """
+                    preferred_tokens = ("unspecified", "unknown", "generic", "default", "standard")
+
+                    for form_name, form_data in forms_dict.items():
+                        normalized = _norm(form_name)
+                        if any(token in normalized for token in preferred_tokens):
+                            return form_name, form_data
+
+                    def _score_key(item: Tuple[str, Dict]) -> Tuple[float, str]:
+                        form_name, form_data = item
+                        score = form_data.get("score")
+                        bio = form_data.get("bio_score")
+                        try:
+                            numeric = float(score if score is not None else bio if bio is not None else 5.0)
+                        except (TypeError, ValueError):
+                            numeric = 5.0
+                        return numeric, _norm(form_name)
+
+                    return min(forms_dict.items(), key=_score_key)
+
+                selected_form_name, selected_form = _select_conservative_parent_form(forms)
                 return (
-                    build_form_match_data(parent_key, parent_data, first_form_name, first_form),
+                    build_form_match_data(parent_key, parent_data, selected_form_name, selected_form),
                     True,
-                    first_form_name
+                    selected_form_name
                 )
             return (
                 {
@@ -2748,50 +3210,37 @@ class SupplementEnricherV3:
             candidates.append(candidate)
 
         def collect_alias_matches(
-            ing_value: str,
-            std_value: str,
+            candidate_values: List[Tuple[str, int]],
             target_name: str,
             aliases: List[str],
             normalize_fn,
             match_type: str,
             match_scope: str,
-            base_value: str = None,  # Additional base name value to check
         ) -> List[Dict]:
             matches = []
-
-            def get_match_source(normalized_value: str) -> int:
-                """Return match source priority: 0 (raw) > 1 (std) > 2 (base).
-                Lower number = higher priority in sort."""
-                if ing_value and normalized_value == ing_value:
-                    return 0  # Primary: raw ingredient name
-                elif std_value and normalized_value == std_value:
-                    return 1  # Secondary: standardized name
-                elif base_value and normalized_value == base_value:
-                    return 2  # Tertiary: base name
-                return None  # No match
 
             if target_name:
                 target_norm = normalize_fn(target_name)
                 if target_norm:
-                    match_source = get_match_source(target_norm)
-                    if match_source is not None:
+                    source_hits = [source for value, source in candidate_values if value == target_norm]
+                    if source_hits:
                         matches.append({
                             "matched_alias": target_name,
                             "matched_on": f"{match_scope}_name",
                             "alias_len": alias_length(match_type, target_name),
-                            "match_source": match_source,
+                            "match_source": min(source_hits),
                         })
             for alias in aliases:
                 alias_norm = normalize_fn(alias)
                 if not alias_norm:
                     continue
-                match_source = get_match_source(alias_norm)
-                if match_source is not None:
+                source_hits = [source for value, source in candidate_values if value == alias_norm]
+                if source_hits:
                     matches.append({
                         "matched_alias": alias,
                         "matched_on": f"{match_scope}_alias",
                         "alias_len": alias_length(match_type, alias),
-                        "match_source": match_source,
+                        "match_source": min(source_hits),
                     })
             return matches
 
@@ -2877,8 +3326,8 @@ class SupplementEnricherV3:
                 form_contains_aliases = form_data.get('contains_aliases', [])
 
                 exact_matches = collect_alias_matches(
-                    ing_exact, std_exact, form_name, form_aliases,
-                    self._normalize_exact_text, "exact", "form", base_exact
+                    exact_candidates, form_name, form_aliases,
+                    self._normalize_exact_text, "exact", "form"
                 )
                 for match in exact_matches:
                     if 1 in allowed_tiers:  # Tier gate
@@ -2898,8 +3347,8 @@ class SupplementEnricherV3:
                         })
 
                 normalized_matches = collect_alias_matches(
-                    ing_norm, std_norm, form_name, form_aliases,
-                    self._normalize_text, "normalized", "form", base_norm
+                    normalized_candidates, form_name, form_aliases,
+                    self._normalize_text, "normalized", "form"
                 )
                 for match in normalized_matches:
                     if 3 in allowed_tiers:  # Tier gate
@@ -2940,8 +3389,8 @@ class SupplementEnricherV3:
 
             # Parent-level matches
             exact_matches = collect_alias_matches(
-                ing_exact, std_exact, parent_std_name, parent_aliases,
-                self._normalize_exact_text, "exact", "parent", base_exact
+                exact_candidates, parent_std_name, parent_aliases,
+                self._normalize_exact_text, "exact", "parent"
             )
             for match in exact_matches:
                 if 2 in allowed_tiers:  # Tier gate
@@ -2962,8 +3411,8 @@ class SupplementEnricherV3:
                     })
 
             normalized_matches = collect_alias_matches(
-                ing_norm, std_norm, parent_std_name, parent_aliases,
-                self._normalize_text, "normalized", "parent", base_norm
+                normalized_candidates, parent_std_name, parent_aliases,
+                self._normalize_text, "normalized", "parent"
             )
             for match in normalized_matches:
                 if 4 in allowed_tiers:  # Tier gate
@@ -5388,7 +5837,11 @@ class SupplementEnricherV3:
         )
 
         top_manufacturer = manufacturer_data.get("top_manufacturer", {}) or {}
-        enriched["is_trusted_manufacturer"] = bool(top_manufacturer.get("found", False))
+        # Trusted-manufacturer bonus is exact-match only; fuzzy hits are audit-only.
+        enriched["is_trusted_manufacturer"] = bool(
+            top_manufacturer.get("found", False)
+            and str(top_manufacturer.get("match_type", "")).lower() == "exact"
+        )
 
         ingredients = ingredient_quality_data.get("ingredients_scorable", []) or ingredient_quality_data.get("ingredients", []) or []
         has_missing_dose = any(
@@ -6037,18 +6490,25 @@ class SupplementEnricherV3:
         # Determine type
         supplement_type = "unknown"
 
-        # Probiotic detection: category + name (deduplicated)
+        # Probiotic detection: category + ingredient names (deduplicated)
         probiotic_total = (
             category_counts.get('probiotic', 0)
             + category_counts.get('bacteria', 0)
             + probiotic_name_count
         )
+        product_name_text = " ".join([
+            str(product.get('product_name', '') or ''),
+            str(product.get('fullName', '') or ''),
+            str(product.get('bundleName', '') or ''),
+        ]).lower()
+        probiotic_name_signal = any(term in product_name_text for term in _probiotic_terms)
 
         # Probiotic — check first so single-strain products
         # are classified correctly
         if probiotic_total > 0 and (
             active_count == 1
-            or probiotic_total > active_count * 0.5
+            or probiotic_total >= active_count * 0.5
+            or probiotic_name_signal
         ):
             supplement_type = "probiotic"
 
@@ -7381,11 +7841,41 @@ class SupplementEnricherV3:
         # ADDITIVES DOMAIN (from contaminant_data)
         # =====================================================================
         contaminant_data = enriched.get("contaminant_data", {})
-        for additive in contaminant_data.get("additives", []):
-            raw_text = additive.get("additive_name") or additive.get("ingredient", "")
-            matched_name = additive.get("matched_name", "")
-            canonical_id = additive.get("db_id")
+        additive_hits = (
+            contaminant_data.get("harmful_additives", {}).get("additives")
+            if isinstance(contaminant_data.get("harmful_additives"), dict)
+            else None
+        )
+        if additive_hits is None:
+            # Backward-compatible fallback for older payload shape.
+            additive_hits = contaminant_data.get("additives", [])
+
+        for additive in additive_hits:
+            raw_text = (
+                additive.get("ingredient")
+                or additive.get("raw_source_text")
+                or additive.get("additive_name")
+                or ""
+            )
+            matched_name = (
+                additive.get("additive_name")
+                or additive.get("canonical_name")
+                or additive.get("matched_name")
+                or ""
+            )
+            canonical_id = additive.get("additive_id") or additive.get("db_id")
             normalized_key = additive.get("normalized_key") or norm_module.make_normalized_key(raw_text)
+
+            method_raw = self._normalize_text(additive.get("match_method", ""))
+            if "exact" in method_raw:
+                method = METHOD_EXACT
+                confidence = 1.0
+            elif "normalized" in method_raw:
+                method = METHOD_NORMALIZED
+                confidence = 0.9
+            else:
+                method = METHOD_PATTERN if method_raw else METHOD_NORMALIZED
+                confidence = 0.8
 
             if canonical_id:
                 ledger.record_match(
@@ -7393,9 +7883,9 @@ class SupplementEnricherV3:
                     raw_source_text=raw_text,
                     raw_source_path="inactiveIngredients",
                     canonical_id=canonical_id,
-                    match_method=METHOD_EXACT,
+                    match_method=method,
                     matched_to_name=matched_name,
-                    confidence=1.0,
+                    confidence=confidence,
                     normalized_key=normalized_key,
                 )
             elif matched_name:
@@ -7405,9 +7895,9 @@ class SupplementEnricherV3:
                     raw_source_text=raw_text,
                     raw_source_path="inactiveIngredients",
                     canonical_id=matched_name.lower().replace(" ", "_"),  # Generate ID
-                    match_method=METHOD_NORMALIZED,
+                    match_method=method,
                     matched_to_name=matched_name,
-                    confidence=0.9,
+                    confidence=confidence,
                     normalized_key=normalized_key,
                 )
 

@@ -6,3 +6,75 @@
 2026-01-09 11:35:56,781 - INFO - Summary: {'batch_num': 31, 'processed': 500, 'cleaned': 500, 'needs_review': 0, 'incomplete': 0, 'errors': 0, 'processing_time': 24.621762990951538, 'avg_time_per_file': 0.049243525981903076, 'memory_mb': 50.65625}
 2026-01-09 11:35:56,781 - INFO - Unmapped ingredients: 112
 2026-01-09 11:35:56,781 - INFO - Final memory usage: 50.7MB
+2026-02-18 02:11:50,197 - INFO - === Batch 31 Processing Log ===
+2026-02-18 02:11:50,197 - INFO - Started: 2026-02-18 02:11:50
+2026-02-18 02:11:50,197 - INFO - Memory usage: 56.8MB
+2026-02-18 02:11:50,197 - INFO - Files: 50217.json to 54496.json
+2026-02-18 02:12:09,259 - INFO - Ended: 2026-02-18 02:12:09
+2026-02-18 02:12:09,259 - INFO - Summary: {'batch_num': 31, 'processed': 500, 'cleaned': 500, 'needs_review': 0, 'incomplete': 0, 'errors': 0, 'processing_time': 19.06215190887451, 'avg_time_per_file': 0.038124303817749026, 'memory_mb': 50.625}
+2026-02-18 02:12:09,259 - INFO - Unmapped ingredients: 75
+2026-02-18 02:12:09,259 - INFO - Final memory usage: 50.6MB
+2026-02-18 03:26:57,163 - INFO - === Batch 31 Processing Log ===
+2026-02-18 03:26:57,163 - INFO - Started: 2026-02-18 03:26:57
+2026-02-18 03:26:57,163 - INFO - Memory usage: 0.0MB
+2026-02-18 03:26:57,163 - INFO - Files: 50217.json to 54496.json
+2026-02-18 03:27:08,257 - INFO - Ended: 2026-02-18 03:27:08
+2026-02-18 03:27:08,257 - INFO - Summary: {'batch_num': 31, 'processed': 500, 'cleaned': 500, 'needs_review': 0, 'incomplete': 0, 'errors': 0, 'processing_time': 11.093903064727783, 'avg_time_per_file': 0.022187806129455565, 'memory_mb': 0}
+2026-02-18 03:27:08,257 - INFO - Unmapped ingredients: 52
+2026-02-18 03:27:08,257 - INFO - Final memory usage: 0.0MB
+2026-02-18 03:52:47,323 - INFO - === Batch 31 Processing Log ===
+2026-02-18 03:52:47,323 - INFO - Started: 2026-02-18 03:52:47
+2026-02-18 03:52:47,323 - INFO - Memory usage: 59.9MB
+2026-02-18 03:52:47,323 - INFO - Files: 50217.json to 54496.json
+2026-02-18 03:53:07,649 - INFO - Ended: 2026-02-18 03:53:07
+2026-02-18 03:53:07,649 - INFO - Summary: {'batch_num': 31, 'processed': 500, 'cleaned': 500, 'needs_review': 0, 'incomplete': 0, 'errors': 0, 'processing_time': 20.32628607749939, 'avg_time_per_file': 0.04065257215499878, 'memory_mb': 52.234375}
+2026-02-18 03:53:07,649 - INFO - Unmapped ingredients: 50
+2026-02-18 03:53:07,649 - INFO - Final memory usage: 52.2MB
+2026-02-18 04:09:19,089 - INFO - === Batch 31 Processing Log ===
+2026-02-18 04:09:19,090 - INFO - Started: 2026-02-18 04:09:19
+2026-02-18 04:09:19,090 - INFO - Memory usage: 59.9MB
+2026-02-18 04:09:19,090 - INFO - Files: 50217.json to 54496.json
+2026-02-18 04:09:41,218 - INFO - Ended: 2026-02-18 04:09:41
+2026-02-18 04:09:41,219 - INFO - Summary: {'batch_num': 31, 'processed': 500, 'cleaned': 500, 'needs_review': 0, 'incomplete': 0, 'errors': 0, 'processing_time': 22.129426956176758, 'avg_time_per_file': 0.04425885391235351, 'memory_mb': 55.421875}
+2026-02-18 04:09:41,219 - INFO - Unmapped ingredients: 50
+2026-02-18 04:09:41,219 - INFO - Final memory usage: 55.4MB
+2026-02-18 04:21:10,818 - INFO - === Batch 31 Processing Log ===
+2026-02-18 04:21:10,818 - INFO - Started: 2026-02-18 04:21:10
+2026-02-18 04:21:10,818 - INFO - Memory usage: 59.7MB
+2026-02-18 04:21:10,818 - INFO - Files: 50217.json to 54496.json
+2026-02-18 04:21:44,217 - INFO - Ended: 2026-02-18 04:21:44
+2026-02-18 04:21:44,218 - INFO - Summary: {'batch_num': 31, 'processed': 500, 'cleaned': 500, 'needs_review': 0, 'incomplete': 0, 'errors': 0, 'processing_time': 33.40001082420349, 'avg_time_per_file': 0.06680002164840698, 'memory_mb': 54.53125}
+2026-02-18 04:21:44,218 - INFO - Unmapped ingredients: 50
+2026-02-18 04:21:44,218 - INFO - Final memory usage: 54.5MB
+2026-02-18 04:33:07,471 - INFO - === Batch 31 Processing Log ===
+2026-02-18 04:33:07,471 - INFO - Started: 2026-02-18 04:33:07
+2026-02-18 04:33:07,471 - INFO - Memory usage: 60.0MB
+2026-02-18 04:33:07,471 - INFO - Files: 50217.json to 54496.json
+2026-02-18 04:33:42,649 - INFO - Ended: 2026-02-18 04:33:42
+2026-02-18 04:33:42,650 - INFO - Summary: {'batch_num': 31, 'processed': 500, 'cleaned': 500, 'needs_review': 0, 'incomplete': 0, 'errors': 0, 'processing_time': 35.17886996269226, 'avg_time_per_file': 0.07035773992538452, 'memory_mb': 53.296875}
+2026-02-18 04:33:42,650 - INFO - Unmapped ingredients: 50
+2026-02-18 04:33:42,650 - INFO - Final memory usage: 53.3MB
+2026-02-18 04:45:00,821 - INFO - === Batch 31 Processing Log ===
+2026-02-18 04:45:00,822 - INFO - Started: 2026-02-18 04:45:00
+2026-02-18 04:45:00,822 - INFO - Memory usage: 60.1MB
+2026-02-18 04:45:00,822 - INFO - Files: 50217.json to 54496.json
+2026-02-18 04:45:38,340 - INFO - Ended: 2026-02-18 04:45:38
+2026-02-18 04:45:38,340 - INFO - Summary: {'batch_num': 31, 'processed': 500, 'cleaned': 500, 'needs_review': 0, 'incomplete': 0, 'errors': 0, 'processing_time': 37.51984190940857, 'avg_time_per_file': 0.07503968381881714, 'memory_mb': 56.0}
+2026-02-18 04:45:38,340 - INFO - Unmapped ingredients: 50
+2026-02-18 04:45:38,340 - INFO - Final memory usage: 56.0MB
+2026-02-18 04:54:58,215 - INFO - === Batch 31 Processing Log ===
+2026-02-18 04:54:58,216 - INFO - Started: 2026-02-18 04:54:58
+2026-02-18 04:54:58,216 - INFO - Memory usage: 66.6MB
+2026-02-18 04:54:58,216 - INFO - Files: 50217.json to 54496.json
+2026-02-18 04:55:27,233 - INFO - Ended: 2026-02-18 04:55:27
+2026-02-18 04:55:27,233 - INFO - Summary: {'batch_num': 31, 'processed': 500, 'cleaned': 500, 'needs_review': 0, 'incomplete': 0, 'errors': 0, 'processing_time': 29.017841815948486, 'avg_time_per_file': 0.05803568363189697, 'memory_mb': 67.0625}
+2026-02-18 04:55:27,233 - INFO - Unmapped ingredients: 50
+2026-02-18 04:55:27,233 - INFO - Final memory usage: 67.1MB
+2026-02-18 11:55:18,589 - INFO - === Batch 31 Processing Log ===
+2026-02-18 11:55:18,589 - INFO - Started: 2026-02-18 11:55:18
+2026-02-18 11:55:18,589 - INFO - Memory usage: 0.0MB
+2026-02-18 11:55:18,589 - INFO - Files: 50217.json to 54496.json
+2026-02-18 11:55:31,091 - INFO - Ended: 2026-02-18 11:55:31
+2026-02-18 11:55:31,092 - INFO - Summary: {'batch_num': 31, 'processed': 500, 'cleaned': 500, 'needs_review': 0, 'incomplete': 0, 'errors': 0, 'processing_time': 12.502768993377686, 'avg_time_per_file': 0.02500553798675537, 'memory_mb': 0}
+2026-02-18 11:55:31,092 - INFO - Unmapped ingredients: 50
+2026-02-18 11:55:31,092 - INFO - Final memory usage: 0.0MB

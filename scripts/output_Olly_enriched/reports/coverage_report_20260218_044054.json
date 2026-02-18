@@ -1,0 +1,2833 @@
+{
+  "schema_version": "4.0.0",
+  "generated_at": "2026-02-18T04:40:54.288276Z",
+  "summary": {
+    "total_products": 186,
+    "products_can_score": 183,
+    "products_blocked": 3,
+    "average_coverage_percent": 83.97,
+    "total_correctness_issues": 0,
+    "total_blocking_issues": 3,
+    "total_warnings": 189
+  },
+  "thresholds": {
+    "ingredients": {
+      "threshold": 99.5,
+      "severity": "BLOCK",
+      "scoring_impact": "penalty"
+    },
+    "additives": {
+      "threshold": 98.0,
+      "severity": "BLOCK",
+      "scoring_impact": "penalty"
+    },
+    "allergens": {
+      "threshold": 98.0,
+      "severity": "BLOCK",
+      "scoring_impact": "penalty"
+    },
+    "manufacturer": {
+      "threshold": 95.0,
+      "severity": "WARN",
+      "scoring_impact": "bonus"
+    },
+    "delivery": {
+      "threshold": 90.0,
+      "severity": "WARN",
+      "scoring_impact": "bonus"
+    },
+    "claims": {
+      "threshold": 90.0,
+      "severity": "WARN",
+      "scoring_impact": "none"
+    }
+  },
+  "domain_coverage": {
+    "ingredients": 99.3,
+    "additives": 100.0,
+    "allergens": 100.0,
+    "manufacturer": 0.0,
+    "delivery": 100.0,
+    "claims": 100.0
+  },
+  "issues_by_type": {},
+  "blocked_products": [
+    "267690",
+    "267695",
+    "291407"
+  ],
+  "products": [
+    {
+      "product_id": "180443",
+      "can_score": true,
+      "overall_coverage": 83.33,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "180866",
+      "can_score": true,
+      "overall_coverage": 87.5,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "180853",
+      "can_score": true,
+      "overall_coverage": 95.45,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "180873",
+      "can_score": true,
+      "overall_coverage": 93.75,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "180862",
+      "can_score": true,
+      "overall_coverage": 95.24,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "180875",
+      "can_score": true,
+      "overall_coverage": 83.33,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "180884",
+      "can_score": true,
+      "overall_coverage": 93.33,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "180888",
+      "can_score": true,
+      "overall_coverage": 80.0,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "201070",
+      "can_score": true,
+      "overall_coverage": 94.44,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "201078",
+      "can_score": true,
+      "overall_coverage": 83.33,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "201079",
+      "can_score": true,
+      "overall_coverage": 75.0,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "201065",
+      "can_score": true,
+      "overall_coverage": 90.91,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "180867",
+      "can_score": true,
+      "overall_coverage": 95.0,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "201058",
+      "can_score": true,
+      "overall_coverage": 93.75,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "201081",
+      "can_score": true,
+      "overall_coverage": 80.0,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "201085",
+      "can_score": true,
+      "overall_coverage": 50.0,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "201091",
+      "can_score": true,
+      "overall_coverage": 80.0,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "201092",
+      "can_score": true,
+      "overall_coverage": 92.31,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "201098",
+      "can_score": true,
+      "overall_coverage": 90.91,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "201102",
+      "can_score": true,
+      "overall_coverage": 85.71,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "201111",
+      "can_score": true,
+      "overall_coverage": 93.33,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "201145",
+      "can_score": true,
+      "overall_coverage": 66.67,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "201150",
+      "can_score": true,
+      "overall_coverage": 66.67,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "201106",
+      "can_score": true,
+      "overall_coverage": 93.75,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "201113",
+      "can_score": true,
+      "overall_coverage": 85.71,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "201151",
+      "can_score": true,
+      "overall_coverage": 66.67,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "201164",
+      "can_score": true,
+      "overall_coverage": 87.5,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "201158",
+      "can_score": true,
+      "overall_coverage": 66.67,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "201134",
+      "can_score": true,
+      "overall_coverage": 92.31,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "201721",
+      "can_score": true,
+      "overall_coverage": 66.67,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "201742",
+      "can_score": true,
+      "overall_coverage": 83.33,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "201154",
+      "can_score": true,
+      "overall_coverage": 66.67,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "205252",
+      "can_score": true,
+      "overall_coverage": 80.0,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "201750",
+      "can_score": true,
+      "overall_coverage": 95.45,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "205266",
+      "can_score": true,
+      "overall_coverage": 83.33,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "205299",
+      "can_score": true,
+      "overall_coverage": 75.0,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "201167",
+      "can_score": true,
+      "overall_coverage": 83.33,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "206484",
+      "can_score": true,
+      "overall_coverage": 83.33,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "201724",
+      "can_score": true,
+      "overall_coverage": 95.24,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "205286",
+      "can_score": true,
+      "overall_coverage": 50.0,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "230116",
+      "can_score": true,
+      "overall_coverage": 85.71,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "230118",
+      "can_score": true,
+      "overall_coverage": 94.44,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "230138",
+      "can_score": true,
+      "overall_coverage": 66.67,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "230141",
+      "can_score": true,
+      "overall_coverage": 50.0,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "230104",
+      "can_score": true,
+      "overall_coverage": 85.71,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "230149",
+      "can_score": true,
+      "overall_coverage": 75.0,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "230132",
+      "can_score": true,
+      "overall_coverage": 66.67,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "230153",
+      "can_score": true,
+      "overall_coverage": 87.5,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "230157",
+      "can_score": true,
+      "overall_coverage": 90.91,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "230170",
+      "can_score": true,
+      "overall_coverage": 83.33,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "230173",
+      "can_score": true,
+      "overall_coverage": 88.89,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "230171",
+      "can_score": true,
+      "overall_coverage": 80.0,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "230165",
+      "can_score": true,
+      "overall_coverage": 85.71,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "230186",
+      "can_score": true,
+      "overall_coverage": 91.67,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "230174",
+      "can_score": true,
+      "overall_coverage": 85.71,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "230194",
+      "can_score": true,
+      "overall_coverage": 94.12,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "230217",
+      "can_score": true,
+      "overall_coverage": 93.75,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "206489",
+      "can_score": true,
+      "overall_coverage": 93.33,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "230232",
+      "can_score": true,
+      "overall_coverage": 87.5,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "230207",
+      "can_score": true,
+      "overall_coverage": 93.33,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "230175",
+      "can_score": true,
+      "overall_coverage": 90.0,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "230251",
+      "can_score": true,
+      "overall_coverage": 50.0,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "230253",
+      "can_score": true,
+      "overall_coverage": 66.67,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "230254",
+      "can_score": true,
+      "overall_coverage": 66.67,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "230231",
+      "can_score": true,
+      "overall_coverage": 80.0,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "230238",
+      "can_score": true,
+      "overall_coverage": 94.12,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "230268",
+      "can_score": true,
+      "overall_coverage": 87.5,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "230257",
+      "can_score": true,
+      "overall_coverage": 75.0,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "230288",
+      "can_score": true,
+      "overall_coverage": 75.0,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "230303",
+      "can_score": true,
+      "overall_coverage": 92.31,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "230260",
+      "can_score": true,
+      "overall_coverage": 80.0,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "230242",
+      "can_score": true,
+      "overall_coverage": 95.65,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "230281",
+      "can_score": true,
+      "overall_coverage": 85.71,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "230330",
+      "can_score": true,
+      "overall_coverage": 83.33,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "230344",
+      "can_score": true,
+      "overall_coverage": 96.0,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "240129",
+      "can_score": true,
+      "overall_coverage": 87.5,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "240136",
+      "can_score": true,
+      "overall_coverage": 94.12,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "240370",
+      "can_score": true,
+      "overall_coverage": 94.12,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "230326",
+      "can_score": true,
+      "overall_coverage": 95.0,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "230316",
+      "can_score": true,
+      "overall_coverage": 94.12,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "230349",
+      "can_score": true,
+      "overall_coverage": 95.0,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "253176",
+      "can_score": true,
+      "overall_coverage": 85.71,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "256875",
+      "can_score": true,
+      "overall_coverage": 80.0,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "256878",
+      "can_score": true,
+      "overall_coverage": 83.33,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "253179",
+      "can_score": true,
+      "overall_coverage": 95.65,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "256876",
+      "can_score": true,
+      "overall_coverage": 83.33,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "267660",
+      "can_score": true,
+      "overall_coverage": 90.91,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "256877",
+      "can_score": true,
+      "overall_coverage": 83.33,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "266841",
+      "can_score": true,
+      "overall_coverage": 80.0,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "267686",
+      "can_score": true,
+      "overall_coverage": 85.71,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "267663",
+      "can_score": true,
+      "overall_coverage": 85.71,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "267662",
+      "can_score": true,
+      "overall_coverage": 75.0,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "267689",
+      "can_score": true,
+      "overall_coverage": 87.5,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "267690",
+      "can_score": false,
+      "overall_coverage": 91.3,
+      "blocking_issues": [
+        "ingredients coverage 95.5% < 99.5%"
+      ],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 95.45,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "267695",
+      "can_score": false,
+      "overall_coverage": 90.91,
+      "blocking_issues": [
+        "ingredients coverage 95.2% < 99.5%"
+      ],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 95.24,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "267697",
+      "can_score": true,
+      "overall_coverage": 88.89,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "267693",
+      "can_score": true,
+      "overall_coverage": 80.0,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "267698",
+      "can_score": true,
+      "overall_coverage": 83.33,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "267700",
+      "can_score": true,
+      "overall_coverage": 85.71,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "273198",
+      "can_score": true,
+      "overall_coverage": 95.65,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "265456",
+      "can_score": true,
+      "overall_coverage": 85.71,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "273201",
+      "can_score": true,
+      "overall_coverage": 83.33,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "273615",
+      "can_score": true,
+      "overall_coverage": 80.0,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "273617",
+      "can_score": true,
+      "overall_coverage": 83.33,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "273197",
+      "can_score": true,
+      "overall_coverage": 93.75,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "273622",
+      "can_score": true,
+      "overall_coverage": 90.0,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "273621",
+      "can_score": true,
+      "overall_coverage": 88.89,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "273629",
+      "can_score": true,
+      "overall_coverage": 93.75,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "273631",
+      "can_score": true,
+      "overall_coverage": 80.0,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "273643",
+      "can_score": true,
+      "overall_coverage": 87.5,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "273663",
+      "can_score": true,
+      "overall_coverage": 94.12,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "273665",
+      "can_score": true,
+      "overall_coverage": 95.24,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "273672",
+      "can_score": true,
+      "overall_coverage": 96.0,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "273627",
+      "can_score": true,
+      "overall_coverage": 83.33,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "273199",
+      "can_score": true,
+      "overall_coverage": 66.67,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "273673",
+      "can_score": true,
+      "overall_coverage": 80.0,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "267688",
+      "can_score": true,
+      "overall_coverage": 87.5,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "287781",
+      "can_score": true,
+      "overall_coverage": 94.44,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "290548",
+      "can_score": true,
+      "overall_coverage": 85.71,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "290550",
+      "can_score": true,
+      "overall_coverage": 83.33,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "290549",
+      "can_score": true,
+      "overall_coverage": 85.71,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "287763",
+      "can_score": true,
+      "overall_coverage": 95.65,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "277876",
+      "can_score": true,
+      "overall_coverage": 80.0,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "290588",
+      "can_score": true,
+      "overall_coverage": 87.5,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "290561",
+      "can_score": true,
+      "overall_coverage": 80.0,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "290591",
+      "can_score": true,
+      "overall_coverage": 80.0,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "290587",
+      "can_score": true,
+      "overall_coverage": 80.0,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "290589",
+      "can_score": true,
+      "overall_coverage": 85.71,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "290590",
+      "can_score": true,
+      "overall_coverage": 66.67,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "290625",
+      "can_score": true,
+      "overall_coverage": 88.89,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "290592",
+      "can_score": true,
+      "overall_coverage": 80.0,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "290593",
+      "can_score": true,
+      "overall_coverage": 85.71,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "291220",
+      "can_score": true,
+      "overall_coverage": 85.71,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "291224",
+      "can_score": true,
+      "overall_coverage": 93.75,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "291234",
+      "can_score": true,
+      "overall_coverage": 93.75,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "291235",
+      "can_score": true,
+      "overall_coverage": 87.5,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "290604",
+      "can_score": true,
+      "overall_coverage": 75.0,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "291237",
+      "can_score": true,
+      "overall_coverage": 75.0,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "291221",
+      "can_score": true,
+      "overall_coverage": 50.0,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "291236",
+      "can_score": true,
+      "overall_coverage": 85.71,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "291265",
+      "can_score": true,
+      "overall_coverage": 87.5,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "291266",
+      "can_score": true,
+      "overall_coverage": 87.5,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "291267",
+      "can_score": true,
+      "overall_coverage": 87.5,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "291259",
+      "can_score": true,
+      "overall_coverage": 66.67,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "291135",
+      "can_score": true,
+      "overall_coverage": 85.71,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "291303",
+      "can_score": true,
+      "overall_coverage": 95.24,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "291304",
+      "can_score": true,
+      "overall_coverage": 95.65,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "291307",
+      "can_score": true,
+      "overall_coverage": 95.65,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "291316",
+      "can_score": true,
+      "overall_coverage": 80.0,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "291373",
+      "can_score": true,
+      "overall_coverage": 90.91,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "291238",
+      "can_score": true,
+      "overall_coverage": 80.0,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "291292",
+      "can_score": true,
+      "overall_coverage": 85.71,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "291374",
+      "can_score": true,
+      "overall_coverage": 80.0,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "291375",
+      "can_score": true,
+      "overall_coverage": 95.65,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "291376",
+      "can_score": true,
+      "overall_coverage": 85.71,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "291377",
+      "can_score": true,
+      "overall_coverage": 85.71,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "291401",
+      "can_score": true,
+      "overall_coverage": 83.33,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "291389",
+      "can_score": true,
+      "overall_coverage": 75.0,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "291407",
+      "can_score": false,
+      "overall_coverage": 91.67,
+      "blocking_issues": [
+        "ingredients coverage 95.7% < 99.5%"
+      ],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 95.65,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "291378",
+      "can_score": true,
+      "overall_coverage": 90.0,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "293780",
+      "can_score": true,
+      "overall_coverage": 66.67,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "293779",
+      "can_score": true,
+      "overall_coverage": 85.71,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "295129",
+      "can_score": true,
+      "overall_coverage": 80.0,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "300086",
+      "can_score": true,
+      "overall_coverage": 85.71,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "291390",
+      "can_score": true,
+      "overall_coverage": 85.71,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "295128",
+      "can_score": true,
+      "overall_coverage": 75.0,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "303971",
+      "can_score": true,
+      "overall_coverage": 85.71,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "295130",
+      "can_score": true,
+      "overall_coverage": 80.0,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "303969",
+      "can_score": true,
+      "overall_coverage": 85.71,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "310256",
+      "can_score": true,
+      "overall_coverage": 80.0,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "303972",
+      "can_score": true,
+      "overall_coverage": 85.71,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "315976",
+      "can_score": true,
+      "overall_coverage": 85.71,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "303973",
+      "can_score": true,
+      "overall_coverage": 83.33,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "315978",
+      "can_score": true,
+      "overall_coverage": 75.0,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "313195",
+      "can_score": true,
+      "overall_coverage": 80.0,
+      "blocking_issues": [],
+      "warnings": [
+        "ingredients coverage 83.3% < 99.5%",
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 83.33,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "315979",
+      "can_score": true,
+      "overall_coverage": 80.0,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "315980",
+      "can_score": true,
+      "overall_coverage": 83.33,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "316118",
+      "can_score": true,
+      "overall_coverage": 71.43,
+      "blocking_issues": [],
+      "warnings": [
+        "ingredients coverage 66.7% < 99.5%",
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 66.67,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "303970",
+      "can_score": true,
+      "overall_coverage": 80.0,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "328482",
+      "can_score": true,
+      "overall_coverage": 83.33,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "316119",
+      "can_score": true,
+      "overall_coverage": 62.5,
+      "blocking_issues": [],
+      "warnings": [
+        "ingredients coverage 33.3% < 99.5%",
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 33.33,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "328485",
+      "can_score": true,
+      "overall_coverage": 83.33,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "328486",
+      "can_score": true,
+      "overall_coverage": 94.44,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "315977",
+      "can_score": true,
+      "overall_coverage": 85.71,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "335681",
+      "can_score": true,
+      "overall_coverage": 94.74,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    },
+    {
+      "product_id": "328484",
+      "can_score": true,
+      "overall_coverage": 85.71,
+      "blocking_issues": [],
+      "warnings": [
+        "manufacturer coverage 0.0% < 95.0%"
+      ],
+      "domain_coverage": {
+        "ingredients": 100.0,
+        "additives": 100.0,
+        "manufacturer": 0.0
+      },
+      "correctness_issues": []
+    }
+  ]
+}

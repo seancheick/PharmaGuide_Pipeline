@@ -30,6 +30,8 @@ from constants import (
     SKIP_REASON_NESTED_NON_THERAPEUTIC,
     SKIP_REASON_BLEND_HEADER_NO_DOSE,
     SKIP_REASON_BLEND_HEADER_WITH_WEIGHT,
+    SKIP_REASON_LABEL_PHRASE,
+    SKIP_REASON_NUTRITION_FACT,
     PROMOTE_REASON_ABSORPTION_ENHANCER,
 )
 
@@ -1121,6 +1123,142 @@ class TestBlendPatternPositiveTests:
         assert 'General Proprietary Blend' in skipped_names
 
 
+class TestGummiesHeaderLeakRegression:
+    """Regression tests for gummies header-leak fixes."""
+
+    def test_percentage_header_variants_not_promoted(self, enricher):
+        """Header variants like 'May also contain <2% of:' must never promote."""
+        quality_map = enricher.databases.get('ingredient_quality_map', {})
+        botanicals_db = enricher.databases.get('standardized_botanicals', {})
+        variants = [
+            "Contains < 2%",
+            "Less than 2%:",
+            "May also contain <2% of:",
+        ]
+
+        for label in variants:
+            result = enricher._should_promote_to_scorable(
+                {"name": label, "standardName": label, "quantity": 0, "unit": ""},
+                quality_map,
+                botanicals_db,
+                current_scorable_count=0,
+            )
+            assert result is None, f"{label} should never be promoted"
+
+    def test_blend_with_dose_and_proprietary_flag_skips(self, enricher):
+        """LOW-confidence blend pattern + proprietary flag must skip even with dose."""
+        quality_map = enricher.databases.get('ingredient_quality_map', {})
+        botanicals_db = enricher.databases.get('standardized_botanicals', {})
+        ingredient = {
+            "name": "SmartyPants Probiotic Blend",
+            "standardName": "SmartyPants Probiotic Blend",
+            "quantity": 50,
+            "unit": "mg",
+            "proprietaryBlend": True,
+            "ingredientGroup": "SmartyPants Probiotic Blend",
+        }
+        reason = enricher._should_skip_from_scoring(ingredient, quality_map, botanicals_db)
+        assert reason == SKIP_REASON_BLEND_HEADER_WITH_WEIGHT
+
+    def test_omega_rollup_skips_as_non_therapeutic(self, enricher):
+        """Omega rollup headers should be skipped and never counted as active-unmapped."""
+        quality_map = enricher.databases.get('ingredient_quality_map', {})
+        botanicals_db = enricher.databases.get('standardized_botanicals', {})
+        ingredient = {
+            "name": "Other Omega-3 Fatty Acids",
+            "standardName": "Other Omega-3 Fatty Acids",
+            "isNestedIngredient": True,
+            "parentBlend": "Omega-3 Fatty Acids",
+            "quantity": 15,
+            "unit": "mg",
+        }
+        reason = enricher._should_skip_from_scoring(ingredient, quality_map, botanicals_db)
+        assert reason in {SKIP_REASON_BLEND_HEADER_WITH_WEIGHT, SKIP_REASON_NUTRITION_FACT}
+
+
+class TestFormUnmappedFallbackRegression:
+    """Regression test for form-unmapped fallback behavior."""
+
+    def test_form_unmapped_falls_back_to_parent_not_unmapped(self, enricher):
+        """
+        If cleaned forms[] has an unrecognized form, mapper should:
+        - keep mapped=True via conservative parent fallback
+        - retain form_unmapped_fallback trace fields for QA.
+        """
+        quality_map = enricher.databases.get('ingredient_quality_map', {})
+
+        match = enricher._match_quality_map(
+            "Vitamin E",
+            "Vitamin E",
+            quality_map,
+            cleaned_forms=[{"name": "D-Alpha-Tocopheryl Acid Succinate"}],
+        )
+        assert match is not None
+        assert match.get("match_status") == "FORM_UNMAPPED_FALLBACK"
+
+        entry = enricher._build_quality_entry(
+            {"name": "Vitamin E", "standardName": "Vitamin E", "quantity": 30, "unit": "mg"},
+            match,
+            hierarchy_type=None,
+            source_section="active",
+        )
+        assert entry.get("mapped") is True
+        assert entry.get("identity_decision_reason") == "form_unmapped_fallback"
+        assert entry.get("form_unmapped") is True
+
+    def test_generic_source_token_does_not_trigger_form_unmapped_fallback(self, enricher):
+        """
+        Generic/source-only tokens (e.g., fish-oil provenance) should not be
+        treated as form-loss failures. They should fall back to normal parent
+        matching without FORM_UNMAPPED_FALLBACK telemetry.
+        """
+        quality_map = enricher.databases.get('ingredient_quality_map', {})
+        match = enricher._match_quality_map(
+            "DHA (Docosahexaenoic Acid)",
+            "DHA (Docosahexaenoic Acid)",
+            quality_map,
+            cleaned_forms=[{"name": "Fish Oil"}],
+        )
+        assert match is not None
+        assert match.get("match_status") != "FORM_UNMAPPED_FALLBACK"
+
+    def test_parent_level_dha_fallback_uses_unspecified_form(self, enricher):
+        """
+        Parent-level DHA matches with unknown form must use the conservative
+        unspecified form, not the first/premium form in the database.
+        """
+        quality_map = enricher.databases.get('ingredient_quality_map', {})
+        match = enricher._match_quality_map(
+            "Docosahexaenoic Acid",
+            "Docosahexaenoic Acid",
+            quality_map,
+        )
+        assert match is not None
+        assert match.get("canonical_id") == "dha"
+        assert str(match.get("form_id", "")).lower() == "unspecified"
+        assert float(match.get("score", 0)) <= 13.0
+
+    def test_combined_dha_epa_does_not_get_premium_form_credit(self, enricher):
+        """
+        Combined labels like 'DHA, EPA' without explicit delivery/form evidence
+        must map to a conservative omega-3 unspecified form (no premium boost).
+        """
+        quality_map = enricher.databases.get('ingredient_quality_map', {})
+        match = enricher._match_quality_map(
+            "DHA, EPA",
+            "DHA, EPA",
+            quality_map,
+            cleaned_forms=[
+                {"name": "Docosahexaenoic Acid"},
+                {"name": "Eicosapentaenoic Acid"},
+            ],
+        )
+        assert match is not None
+        assert match.get("canonical_id") == "omega_3"
+        assert "unspecified" in str(match.get("form_id", "")).lower()
+        assert float(match.get("score", 0)) <= 11.0
+
+
 class TestCoverageIntegrity:
     """Test coverage metrics integrity and leak detection."""
 
@@ -1551,6 +1689,39 @@ class TestQualityMapPrecedence:
         first = enricher._match_quality_map("Herb", "Herb", quality_map)
         second = enricher._match_quality_map("Herb", "Herb", shuffled_map)
         assert first == second
+
+    def test_normalized_match_handles_parenthesis_characters(self, enricher):
+        quality_map = enricher.databases.get("ingredient_quality_map", {})
+        result = enricher._match_quality_map(
+            "organic Oregano (Origanum vulgare) (leaf) supercritical extract",
+            "organic Oregano (Origanum vulgare) (leaf) supercritical extract",
+            quality_map,
+        )
+        assert result is not None
+        assert result.get("canonical_id") == "oregano"
+
+    def test_normalized_match_handles_comma_qualifier_reorder(self, enricher):
+        quality_map = enricher.databases.get("ingredient_quality_map", {})
+        result = enricher._match_quality_map(
+            "Garlic Bulb Extract, Odorless",
+            "Garlic Bulb Extract, Odorless",
+            quality_map,
+        )
+        assert result is not None
+        assert result.get("canonical_id") == "garlic"
+
+    def test_recognized_non_scorable_handles_cold_pressed_comma_variants(self, enricher):
+        recognized = enricher._is_recognized_non_scorable(
+            "Pumpkin Seed Oil, Cold-Pressed",
+            "Pumpkin Seed Oil, Cold-Pressed",
+        )
+        assert recognized is not None
+        assert recognized.get("recognition_source") in {
+            "other_ingredients",
+            "botanical_ingredients",
+            "standardized_botanicals",
+            "excipient_list",
+        }
 
 
 if __name__ == "__main__":

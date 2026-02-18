@@ -1,0 +1,290 @@
+[
+  {
+    "id": "312659",
+    "src": "01-raw/2025-02-23/data/label_74.json",
+    "nhanesId": "",
+    "bundleName": "",
+    "brandIpSymbol": "®",
+    "productVersionCode": "001",
+    "pdf": "312659_document.pdf",
+    "thumbnail": "312659_thumbnail.jpg",
+    "percentDvFootnote": "Not Present",
+    "fullName": "Calcium Carbonate & Vitamin D3 Softgels",
+    "brandName": "BulkSupplements.com",
+    "upcSku": "X003CVZCY9",
+    "hasOuterCarton": null,
+    "upcValid": true,
+    "status": "active",
+    "discontinuedDate": null,
+    "offMarket": 0,
+    "servingsPerContainer": 60,
+    "netContents": [
+      {
+        "order": 1,
+        "quantity": 120,
+        "unit": "Softgel(s)",
+        "display": "120 Softgel(s)"
+      }
+    ],
+    "targetGroups": [
+      "Adult (18 - 50 Years)",
+      "Dairy Free"
+    ],
+    "userGroups": [
+      {
+        "dailyValueTargetGroupName": "Adults and children 4 or more years of age",
+        "langualCode": "P0250",
+        "langualCodeDescription": "Adults and Children 4 years and above"
+      }
+    ],
+    "productType": {
+      "langualCode": "A1309",
+      "langualCodeDescription": "Non-Nutrient/Non-Botanical"
+    },
+    "physicalState": {
+      "langualCode": "E0161",
+      "langualCodeDescription": "Softgel Capsule"
+    },
+    "imageUrl": "https://api.ods.od.nih.gov/dsld/s3/pdf/312659.pdf",
+    "images": [],
+    "contacts": [
+      {
+        "contactId": 22143,
+        "text": "Distributed exclusively by",
+        "types": [
+          "Distributor"
+        ],
+        "contactDetails": {
+          "src": "01-raw/2025-03-25/data/contact_4.json",
+          "id": 22143,
+          "name": "BulkSupplements.com",
+          "streetAddress": "7511 Eastgate Rd",
+          "city": "Henderson",
+          "state": "NV",
+          "country": "USA",
+          "zipCode": "89011",
+          "phoneNumber": "",
+          "email": "",
+          "webAddress": "BulkSupplements.com"
+        }
+      }
+    ],
+    "events": [
+      {
+        "date": "2024-10-24",
+        "type": "Date entered into DSLD"
+      }
+    ],
+    "activeIngredients": [],
+    "inactiveIngredients": [
+      {
+        "ingredientId": 283938,
+        "uniiCode": "241ATL177A",
+        "order": 1,
+        "raw_source_text": "Soybean Oil",
+        "raw_source_path": "inactiveIngredients",
+        "normalized_key": "soybean_oil",
+        "name": "Soybean Oil",
+        "standardName": "soybean oil",
+        "ingredientGroup": "Soybean Oil",
+        "forms": [],
+        "alternateNames": [],
+        "mapped": true,
+        "hierarchyType": null,
+        "isAdditive": true,
+        "additiveType": "carrier"
+      },
+      {
+        "ingredientId": 286584,
+        "uniiCode": "2G86QN327L",
+        "order": 2,
+        "raw_source_text": "Gelatin",
+        "raw_source_path": "inactiveIngredients",
+        "normalized_key": "gelatin",
+        "name": "Gelatin",
+        "standardName": "Collagen",
+        "ingredientGroup": "Gelatin",
+        "forms": [],
+        "alternateNames": [],
+        "mapped": true,
+        "hierarchyType": null,
+        "isAdditive": true,
+        "additiveType": "unspecified"
+      },
+      {
+        "ingredientId": 284593,
+        "uniiCode": "PDC6A3C0OX",
+        "order": 3,
+        "raw_source_text": "Glycerin",
+        "raw_source_path": "inactiveIngredients",
+        "normalized_key": "glycerin",
+        "name": "Glycerin",
+        "standardName": "glycerin",
+        "ingredientGroup": "Glycerol",
+        "forms": [],
+        "alternateNames": [],
+        "mapped": true,
+        "hierarchyType": null,
+        "isAdditive": true,
+        "additiveType": "processing_aid"
+      },
+      {
+        "ingredientId": 302526,
+        "uniiCode": "2ZA36H0S2V",
+        "order": 4,
+        "raw_source_text": "Beeswax",
+        "raw_source_path": "inactiveIngredients",
+        "normalized_key": "beeswax",
+        "name": "Beeswax",
+        "standardName": "beeswax",
+        "ingredientGroup": "Beeswax",
+        "forms": [],
+        "alternateNames": [],
+        "mapped": true,
+        "hierarchyType": null,
+        "isAdditive": true,
+        "additiveType": "unspecified"
+      },
+      {
+        "ingredientId": 286588,
+        "uniiCode": "059QF0KO0R",
+        "order": 5,
+        "raw_source_text": "Water, Purified",
+        "raw_source_path": "inactiveIngredients",
+        "normalized_key": "water_purified",
+        "name": "Water, Purified",
+        "standardName": "water, purified",
+        "ingredientGroup": "Water",
+        "forms": [],
+        "alternateNames": [],
+        "mapped": true,
+        "hierarchyType": null,
+        "isAdditive": true,
+        "additiveType": "unspecified"
+      }
+    ],
+    "nutritionalInfo": {},
+    "statements": [
+      {
+        "type": "Formula re: Contains",
+        "notes": "Calcium Carbonate & Vitamin D3 Softgels 1200mg per serving"
+      },
+      {
+        "type": "Suggested/Recommended/Usage/Directions",
+        "notes": "Suggested use: As a dietary supplement, take 2 softgels once daily, or as directed by a physician."
+      },
+      {
+        "type": "FDA Disclaimer Statement",
+        "notes": "Warning: This product is not intended to diagnose, treat, cure, or prevent any disease."
+      },
+      {
+        "type": "Precautions re: All Other",
+        "notes": "Always consult a physician before taking any dietary supplement."
+      },
+      {
+        "type": "Precautions re: Children",
+        "notes": "Keep out of reach of children."
+      },
+      {
+        "type": "Storage",
+        "notes": "Store in a dry, cool place"
+      },
+      {
+        "type": "Formulation re: Does NOT Contain",
+        "notes": "Free of: added sugar, dairy, yeast"
+      },
+      {
+        "type": "Precautions re: Allergies",
+        "notes": "Allergen information: soy"
+      },
+      {
+        "type": "General Statements: All Other Content",
+        "notes": "New\r\nScan me"
+      }
+    ],
+    "claims": [
+      {
+        "langualCode": "P0065",
+        "langualCodeDescription": "Nutrient "
+      },
+      {
+        "langualCode": "P0115",
+        "langualCodeDescription": "All Other"
+      },
+      {
+        "langualCode": "P0265",
+        "langualCodeDescription": "Structure/Function"
+      }
+    ],
+    "servingSizes": [
+      {
+        "minQuantity": 2.0,
+        "maxQuantity": 2.0,
+        "unit": "Softgel(s)",
+        "minDailyServings": 1,
+        "maxDailyServings": 1,
+        "normalizedServing": 2.0
+      }
+    ],
+    "labelRelationships": [
+      {
+        "type": "Package size difference, same product",
+        "labelId": 294477
+      }
+    ],
+    "labelText": {
+      "raw": "Calcium Carbonate & Vitamin D3 Softgels 1200mg per serving Suggested use: As a dietary supplement, take 2 softgels once daily, or as directed by a physician. Warning: This product is not intended to diagnose, treat, cure, or prevent any disease. Always consult a physician before taking any dietary supplement. Keep out of reach of children. Store in a dry, cool place Free of: added sugar, dairy, yeast Allergen information: soy New\r\nScan me",
+      "parsed": {
+        "certifications": [],
+        "testing": [],
+        "origin": [],
+        "flavor": [],
+        "probioticGuarantee": [],
+        "cleanLabelClaims": [],
+        "allergens": [],
+        "allergenFree": [],
+        "warnings": [
+          "Keep out of reach of children"
+        ],
+        "storage": [
+          "Store in a dry, cool place"
+        ],
+        "directions": "As a dietary supplement, take 2 softgels once daily, or as directed by a physician.",
+        "marketingClaims": [],
+        "qualityFeatures": [],
+        "proprietaryBlendDisclosure": null
+      },
+      "searchText": "Soybean Oil Gelatin Glycerin Beeswax Water, Purified Calcium Carbonate & Vitamin D3 Softgels 1200mg per serving Suggested use: As a dietary supplement, take 2 softgels once daily, or as directed by a physician. Warning: This product is not intended to diagnose, treat, cure, or prevent any disease. Always consult a physician before taking any dietary supplement. Keep out of reach of children. Store in a dry, cool place Free of: added sugar, dairy, yeast Allergen information: soy New\r\nScan me"
+    },
+    "metadata": {
+      "lastCleaned": "2026-02-18T16:53:03.775201Z",
+      "cleaningVersion": "2.1.0",
+      "reference_versions": {
+        "color_indicators": {
+          "version": "4.0.0",
+          "last_updated": "2026-02-16"
+        }
+      },
+      "mappingStats": {
+        "totalIngredients": 5,
+        "mappedIngredients": 5,
+        "unmappedIngredients": 0,
+        "mappingRate": 100.0
+      },
+      "transparencyMetrics": {
+        "hasProprietaryBlend": false,
+        "blendTransparency": "full",
+        "disclosedIngredients": 0,
+        "undisclosedQuantities": 0,
+        "transparencyScore": 100.0
+      },
+      "completeness": {
+        "score": 85.71,
+        "missingFields": [
+          "ingredientRows"
+        ],
+        "criticalFieldsComplete": false
+      }
+    }
+  }
+]

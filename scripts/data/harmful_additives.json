@@ -3,8 +3,8 @@
     "description": "Comprehensive database of harmful additives, contaminants, and concerning ingredients found in dietary supplements. Used for scoring penalties and consumer warnings.",
     "purpose": "penalty_scoring",
     "schema_version": "4.0.0",
-    "last_updated": "2026-02-16",
-    "total_entries": 71,
+    "last_updated": "2026-02-18",
+    "total_entries": 91,
     "scoring_rule": "Apply penalty points based on severity_level. Critical: -5, High: -3, Moderate: -1.5, Low: -0.5. Multiple additives are cumulative.",
     "severity_level_definitions": {
       "critical": "Immediate health hazard, should be avoided entirely (e.g., formaldehyde, colloidal silver)",
@@ -1059,7 +1059,7 @@
         "dehydrated corn syrup",
         "CSS"
       ],
-      "CUI": "",
+      "CUI": "C0010137",
       "category": "filler_high_glycemic",
       "mechanism_of_harm": "Essentially dried corn syrup - pure glucose with extremely high glycemic index (GI 100+). Causes rapid, severe blood sugar spikes. Metabolically equivalent to pure sugar. Used as cheap filler/sweetener in supplements. Contributes to insulin resistance, weight gain, and metabolic dysfunction.",
       "regulatory_status": {
@@ -1132,7 +1132,7 @@
         }
       ],
       "external_ids": {
-        "umls_cui": null,
+        "umls_cui": "C0010137",
         "cas": null,
         "pubchem": null
       },
@@ -1225,7 +1225,7 @@
         "cassava maltodextrin",
         "cassava starch dextrin"
       ],
-      "CUI": "",
+      "CUI": "C0054527",
       "category": "filler_high_glycemic",
       "mechanism_of_harm": "Maltodextrin derived from cassava/tapioca. Same metabolic concerns as corn maltodextrin - high glycemic index (GI 85-105), causes rapid blood sugar spikes. May disrupt gut microbiome. Often marketed as 'natural' alternative but metabolically equivalent to other maltodextrins.",
       "regulatory_status": {
@@ -1268,7 +1268,7 @@
         }
       ],
       "external_ids": {
-        "umls_cui": null,
+        "umls_cui": "C0054527",
         "cas": null,
         "pubchem": null
       },
@@ -2373,9 +2373,12 @@
         "E966",
         "E953",
         "E422",
-        "glycerol"
+        "glycerol",
+        "glycerin",
+        "glycerin (vegetable source)",
+        "vegetable glycerin"
       ],
-      "CUI": "",
+      "CUI": "C0038654",
       "category": "sweetener_artificial",
       "mechanism_of_harm": "Incompletely absorbed in small intestine, leading to osmotic diarrhea and fermentation by gut bacteria. Causes bloating, gas, abdominal pain, and diarrhea. May disrupt gut microbiome. Different sugar alcohols have varying degrees of absorption and tolerance.",
       "regulatory_status": {
@@ -2413,7 +2416,10 @@
           "E966",
           "E953",
           "E422",
-          "glycerol"
+          "glycerol",
+          "glycerin",
+          "glycerin (vegetable source)",
+          "vegetable glycerin"
         ],
         "regex": null,
         "fuzzy_threshold": 0.72,
@@ -2431,7 +2437,7 @@
         }
       ],
       "external_ids": {
-        "umls_cui": null,
+        "umls_cui": "C0038654",
         "cas": null,
         "pubchem": null
       },
@@ -3444,474 +3450,6 @@
       "entity_relationships": null
     },
     {
-      "id": "ADD_CADMIUM",
-      "standard_name": "Cadmium & Cadmium Compounds",
-      "aliases": [
-        "cadmium",
-        "Cd",
-        "cadmium chloride",
-        "CdCl2",
-        "cadmium oxide",
-        "CdO",
-        "cadmium sulfate",
-        "CdSO4",
-        "cadmium salts",
-        "cadmium(II) compounds"
-      ],
-      "category": "heavy_metal",
-      "notes": "A highly toxic heavy metal that can accumulate in the body, particularly in kidneys and bones. Common contaminant in botanical supplements, especially those grown in polluted soils.",
-      "last_updated": "2026-02-16",
-      "CUI": "C0006632",
-      "mechanism_of_harm": "Mechanism requires further documentation.",
-      "regulatory_status": {
-        "US": "Status pending review",
-        "EU": "Status pending review"
-      },
-      "population_warnings": [
-        "General population - review specific concerns"
-      ],
-      "scientific_references": [],
-      "match_rules": {
-        "match_mode": "alias_and_fuzzy",
-        "label_tokens": [
-          "Cadmium & Cadmium Compounds",
-          "cadmium",
-          "Cd",
-          "cadmium chloride",
-          "CdCl2",
-          "cadmium oxide",
-          "CdO",
-          "cadmium sulfate",
-          "CdSO4",
-          "cadmium salts",
-          "cadmium(II) compounds"
-        ],
-        "regex": null,
-        "fuzzy_threshold": 0.72,
-        "case_sensitive": false,
-        "preferred_alias": "Cadmium & Cadmium Compounds"
-      },
-      "references_structured": [
-        {
-          "type": "monograph",
-          "authority": "EFSA",
-          "citation": "EFSA Journal 2012;10(1):2551 - Cadmium in food",
-          "url": "https://efsa.onlinelibrary.wiley.com/doi/10.2903/j.efsa.2012.2551",
-          "evidence_grade": "B",
-          "confidence": "high"
-        },
-        {
-          "type": "guidance",
-          "authority": "WHO",
-          "citation": "Guidelines for drinking-water quality, 4th edition, incorporating the 1st addendum",
-          "url": "https://www.who.int/publications/i/item/9789241549950",
-          "published_date": null,
-          "evidence_grade": "B",
-          "confidence": "high"
-        }
-      ],
-      "external_ids": {
-        "umls_cui": "C0006632",
-        "cas": null,
-        "pubchem": null
-      },
-      "jurisdictional_statuses": [
-        {
-          "authority": "US",
-          "jurisdiction": "US",
-          "status_code": "allowed",
-          "scope": "supplement",
-          "effective_range": {
-            "start": "2025-08-13",
-            "end": null
-          },
-          "source_ref": "https://www.fda.gov/food/food-additives-petitions/food-additive-status-list"
-        },
-        {
-          "authority": "EU",
-          "jurisdiction": "EU",
-          "status_code": "allowed",
-          "scope": "supplement",
-          "effective_range": {
-            "start": "2025-08-13",
-            "end": null
-          },
-          "source_ref": "https://efsa.onlinelibrary.wiley.com/doi/10.2903/j.efsa.2012.2551"
-        }
-      ],
-      "review": {
-        "status": "validated",
-        "last_reviewed_at": "2026-02-16",
-        "reviewed_by": "codex_harmful_allergen_normalization",
-        "next_review_due": "2026-07-07",
-        "change_log": [
-          {
-            "date": "2026-01-08",
-            "change": "Backfilled credible references",
-            "reason": "Phase 3 evidence completion"
-          },
-          {
-            "date": "2026-01-08",
-            "change": "Updated reviewed_by to team:b_harmful_additives",
-            "reason": "Review metadata cleanup"
-          },
-          {
-            "date": "2026-01-08",
-            "change": "Confidence downgraded due to insufficient citations",
-            "reason": "Evidence gating"
-          },
-          {
-            "date": "2026-01-08",
-            "change": "Added dose thresholds from EFSA guidance",
-            "reason": "Dose threshold backfill"
-          },
-          {
-            "date": "2026-01-08",
-            "change": "Populated jurisdiction provenance fields (source_ref, effective_range.start)",
-            "reason": "Jurisdiction provenance"
-          },
-          {
-            "date": "2026-01-08",
-            "change": "Added authoritative references",
-            "reason": "Evidence backfill"
-          },
-          {
-            "date": "2026-01-08",
-            "change": "Validated after adding authoritative citations",
-            "reason": "Evidence backfill"
-          },
-          {
-            "date": "2026-02-16",
-            "change": "Normalized aliases/label_tokens and reduced overlap collisions for deterministic supplement matching",
-            "reason": "schema_consistency_and_precision"
-          }
-        ]
-      },
-      "severity_score": 6,
-      "confidence": "high",
-      "exposure_context": "supplement",
-      "entity_type": "ingredient",
-      "dose_thresholds": [
-        {
-          "amount": 2.5,
-          "unit": "ug/kg",
-          "basis": "per week",
-          "context": "EFSA tolerable weekly intake (TWI) for cadmium exposure.",
-          "citation": "EFSA Journal 2012;10(1):2551 - Cadmium in food"
-        }
-      ],
-      "severity_level": "high",
-      "entity_relationships": null
-    },
-    {
-      "id": "ADD_ARSENIC",
-      "standard_name": "Arsenic & Arsenic Compounds",
-      "aliases": [
-        "arsenic",
-        "As",
-        "inorganic arsenic",
-        "arsenic trioxide",
-        "As2O3",
-        "arsenite",
-        "arsenate",
-        "arsenic acid",
-        "arsenic salts",
-        "arsenic(III) compounds",
-        "arsenic(V) compounds"
-      ],
-      "category": "heavy_metal",
-      "notes": "A toxic metalloid that can be present in both organic and inorganic forms. Inorganic arsenic is particularly dangerous and is classified as a known human carcinogen. Can contaminate botanical supplements, particularly those from contaminated growing areas.",
-      "last_updated": "2026-02-16",
-      "CUI": "C0003818",
-      "mechanism_of_harm": "Mechanism requires further documentation.",
-      "regulatory_status": {
-        "US": "Status pending review",
-        "EU": "Status pending review"
-      },
-      "population_warnings": [
-        "General population - review specific concerns"
-      ],
-      "scientific_references": [],
-      "match_rules": {
-        "match_mode": "alias_and_fuzzy",
-        "label_tokens": [
-          "Arsenic & Arsenic Compounds",
-          "arsenic",
-          "As",
-          "inorganic arsenic",
-          "arsenic trioxide",
-          "As2O3",
-          "arsenite",
-          "arsenate",
-          "arsenic acid",
-          "arsenic salts",
-          "arsenic(III) compounds",
-          "arsenic(V) compounds"
-        ],
-        "regex": null,
-        "fuzzy_threshold": 0.72,
-        "case_sensitive": false,
-        "preferred_alias": "Arsenic & Arsenic Compounds"
-      },
-      "references_structured": [
-        {
-          "type": "monograph",
-          "authority": "EFSA",
-          "citation": "EFSA Journal 2009;7(10):1351 - Arsenic in food",
-          "url": "https://efsa.onlinelibrary.wiley.com/doi/10.2903/j.efsa.2009.1351",
-          "evidence_grade": "B",
-          "confidence": "high"
-        },
-        {
-          "type": "guidance",
-          "authority": "WHO",
-          "citation": "Guidelines for drinking-water quality, 4th edition, incorporating the 1st addendum",
-          "url": "https://www.who.int/publications/i/item/9789241549950",
-          "published_date": null,
-          "evidence_grade": "B",
-          "confidence": "high"
-        }
-      ],
-      "external_ids": {
-        "umls_cui": "C0003818",
-        "cas": null,
-        "pubchem": null
-      },
-      "jurisdictional_statuses": [
-        {
-          "authority": "US",
-          "jurisdiction": "US",
-          "status_code": "allowed",
-          "scope": "supplement",
-          "effective_range": {
-            "start": "2025-08-13",
-            "end": null
-          },
-          "source_ref": "https://www.fda.gov/food/food-additives-petitions/food-additive-status-list"
-        },
-        {
-          "authority": "EU",
-          "jurisdiction": "EU",
-          "status_code": "allowed",
-          "scope": "supplement",
-          "effective_range": {
-            "start": "2025-08-13",
-            "end": null
-          },
-          "source_ref": "https://efsa.onlinelibrary.wiley.com/doi/10.2903/j.efsa.2009.1351"
-        }
-      ],
-      "review": {
-        "status": "validated",
-        "last_reviewed_at": "2026-02-16",
-        "reviewed_by": "codex_harmful_allergen_normalization",
-        "next_review_due": "2026-07-07",
-        "change_log": [
-          {
-            "date": "2026-01-08",
-            "change": "Backfilled credible references",
-            "reason": "Phase 3 evidence completion"
-          },
-          {
-            "date": "2026-01-08",
-            "change": "Updated reviewed_by to team:b_harmful_additives",
-            "reason": "Review metadata cleanup"
-          },
-          {
-            "date": "2026-01-08",
-            "change": "Confidence downgraded due to insufficient citations",
-            "reason": "Evidence gating"
-          },
-          {
-            "date": "2026-01-08",
-            "change": "No authoritative dose guidance identified; dose_thresholds not added",
-            "reason": "Dose threshold backfill"
-          },
-          {
-            "date": "2026-01-08",
-            "change": "Populated jurisdiction provenance fields (source_ref, effective_range.start)",
-            "reason": "Jurisdiction provenance"
-          },
-          {
-            "date": "2026-01-08",
-            "change": "Added authoritative references",
-            "reason": "Evidence backfill"
-          },
-          {
-            "date": "2026-01-08",
-            "change": "Validated after adding authoritative citations",
-            "reason": "Evidence backfill"
-          },
-          {
-            "date": "2026-02-16",
-            "change": "Normalized aliases/label_tokens and reduced overlap collisions for deterministic supplement matching",
-            "reason": "schema_consistency_and_precision"
-          }
-        ]
-      },
-      "severity_score": 6,
-      "confidence": "high",
-      "exposure_context": "supplement",
-      "entity_type": "ingredient",
-      "severity_level": "high",
-      "dose_thresholds": null,
-      "entity_relationships": null
-    },
-    {
-      "id": "ADD_MERCURY",
-      "standard_name": "Mercury & Mercury Compounds",
-      "aliases": [
-        "mercury",
-        "Hg",
-        "methylmercury",
-        "mercury chloride",
-        "HgCl2",
-        "mercuric oxide",
-        "HgO",
-        "mercury salts",
-        "mercury(II) compounds",
-        "organic mercury",
-        "mercury contamination"
-      ],
-      "category": "heavy_metal",
-      "notes": "A highly toxic heavy metal that can cause severe neurological damage. Can be present in fish oil supplements and botanical products, particularly those sourced from contaminated waters or soils.",
-      "last_updated": "2026-02-16",
-      "CUI": "C0025424",
-      "mechanism_of_harm": "Mechanism requires further documentation.",
-      "regulatory_status": {
-        "US": "Status pending review",
-        "EU": "Status pending review"
-      },
-      "population_warnings": [
-        "General population - review specific concerns"
-      ],
-      "scientific_references": [],
-      "match_rules": {
-        "match_mode": "alias_and_fuzzy",
-        "label_tokens": [
-          "Mercury & Mercury Compounds",
-          "mercury",
-          "Hg",
-          "methylmercury",
-          "mercury chloride",
-          "HgCl2",
-          "mercuric oxide",
-          "HgO",
-          "mercury salts",
-          "mercury(II) compounds",
-          "organic mercury",
-          "mercury contamination"
-        ],
-        "regex": null,
-        "fuzzy_threshold": 0.72,
-        "case_sensitive": false,
-        "preferred_alias": "Mercury & Mercury Compounds"
-      },
-      "references_structured": [
-        {
-          "type": "monograph",
-          "authority": "EFSA",
-          "citation": "EFSA Journal 2012;10(3):2513 - Mercury and methylmercury",
-          "url": "https://efsa.onlinelibrary.wiley.com/doi/10.2903/j.efsa.2012.2513",
-          "evidence_grade": "B",
-          "confidence": "high"
-        },
-        {
-          "type": "guidance",
-          "authority": "WHO",
-          "citation": "Guidelines for drinking-water quality, 4th edition, incorporating the 1st addendum",
-          "url": "https://www.who.int/publications/i/item/9789241549950",
-          "published_date": null,
-          "evidence_grade": "B",
-          "confidence": "high"
-        }
-      ],
-      "external_ids": {
-        "umls_cui": "C0025424",
-        "cas": null,
-        "pubchem": null
-      },
-      "jurisdictional_statuses": [
-        {
-          "authority": "US",
-          "jurisdiction": "US",
-          "status_code": "allowed",
-          "scope": "supplement",
-          "effective_range": {
-            "start": "2025-08-13",
-            "end": null
-          },
-          "source_ref": "https://www.fda.gov/food/food-additives-petitions/food-additive-status-list"
-        },
-        {
-          "authority": "EU",
-          "jurisdiction": "EU",
-          "status_code": "allowed",
-          "scope": "supplement",
-          "effective_range": {
-            "start": "2025-08-13",
-            "end": null
-          },
-          "source_ref": "https://efsa.onlinelibrary.wiley.com/doi/10.2903/j.efsa.2012.2513"
-        }
-      ],
-      "review": {
-        "status": "validated",
-        "last_reviewed_at": "2026-02-16",
-        "reviewed_by": "codex_harmful_allergen_normalization",
-        "next_review_due": "2026-07-07",
-        "change_log": [
-          {
-            "date": "2026-01-08",
-            "change": "Backfilled credible references",
-            "reason": "Phase 3 evidence completion"
-          },
-          {
-            "date": "2026-01-08",
-            "change": "Updated reviewed_by to team:b_harmful_additives",
-            "reason": "Review metadata cleanup"
-          },
-          {
-            "date": "2026-01-08",
-            "change": "Confidence downgraded due to insufficient citations",
-            "reason": "Evidence gating"
-          },
-          {
-            "date": "2026-01-08",
-            "change": "No authoritative dose guidance identified; dose_thresholds not added",
-            "reason": "Dose threshold backfill"
-          },
-          {
-            "date": "2026-01-08",
-            "change": "Populated jurisdiction provenance fields (source_ref, effective_range.start)",
-            "reason": "Jurisdiction provenance"
-          },
-          {
-            "date": "2026-01-08",
-            "change": "Added authoritative references",
-            "reason": "Evidence backfill"
-          },
-          {
-            "date": "2026-01-08",
-            "change": "Validated after adding authoritative citations",
-            "reason": "Evidence backfill"
-          },
-          {
-            "date": "2026-02-16",
-            "change": "Normalized aliases/label_tokens and reduced overlap collisions for deterministic supplement matching",
-            "reason": "schema_consistency_and_precision"
-          }
-        ]
-      },
-      "severity_score": 6,
-      "confidence": "high",
-      "exposure_context": "supplement",
-      "entity_type": "ingredient",
-      "severity_level": "high",
-      "dose_thresholds": null,
-      "entity_relationships": null
-    },
-    {
       "id": "ADD_ANTIMONY",
       "standard_name": "Antimony & Antimony Compounds",
       "aliases": [
@@ -4395,7 +3933,7 @@
         "DOI: 10.1289/EHP2716 - Comparative analysis of BPA alternatives"
       ],
       "last_updated": "2026-02-16",
-      "CUI": "",
+      "CUI": "C2742616",
       "match_rules": {
         "match_mode": "alias_and_fuzzy",
         "label_tokens": [
@@ -4437,7 +3975,7 @@
         }
       ],
       "external_ids": {
-        "umls_cui": null,
+        "umls_cui": "C2742616",
         "cas": null,
         "pubchem": null
       },
@@ -4670,208 +4208,6 @@
       "exposure_context": "supplement",
       "entity_type": "ingredient",
       "severity_level": "moderate",
-      "dose_thresholds": null,
-      "entity_relationships": null
-    },
-    {
-      "id": "ADD_LEAD",
-      "standard_name": "Lead & Lead Compounds",
-      "aliases": [
-        "lead",
-        "Pb",
-        "lead oxide",
-        "PbO",
-        "lead acetate",
-        "Pb(CH3COO)2",
-        "lead chloride",
-        "PbCl2",
-        "lead contamination",
-        "lead salts",
-        "lead(II) compounds"
-      ],
-      "category": "heavy_metal",
-      "mechanism_of_harm": "Accumulates in bones and soft tissues. Crosses blood-brain barrier. Interferes with enzyme function and cellular processes. Particularly dangerous to neural development. Can replace calcium in bones and disrupt multiple body systems.",
-      "regulatory_status": {
-        "US": "FDA action level of 5 mcg/day from supplements",
-        "EU": "Strict limits under EC 1881/2006",
-        "Canada": "Listed as toxic substance",
-        "WHO": "No safe level established"
-      },
-      "population_warnings": [
-        "Children - Severe developmental risks",
-        "Pregnant women - Can cross placental barrier",
-        "Everyone - Cumulative toxin with no safe level"
-      ],
-      "notes": "One of the most dangerous heavy metal contaminants. No safe level of exposure. Common in supplements from contaminated soil or poor manufacturing practices. Causes irreversible neurological damage.",
-      "scientific_references": [
-        "DOI: 10.1016/j.envres.2020.109800 - Lead toxicity review",
-        "DOI: 10.1016/j.toxlet.2019.06.007 - Lead in supplements"
-      ],
-      "last_updated": "2026-02-16",
-      "CUI": "C0023175",
-      "match_rules": {
-        "match_mode": "alias_and_fuzzy",
-        "label_tokens": [
-          "Lead & Lead Compounds",
-          "lead",
-          "Pb",
-          "lead oxide",
-          "PbO",
-          "lead acetate",
-          "Pb(CH3COO)2",
-          "lead chloride",
-          "PbCl2",
-          "lead contamination",
-          "lead salts",
-          "lead(II) compounds"
-        ],
-        "regex": null,
-        "fuzzy_threshold": 0.72,
-        "case_sensitive": false,
-        "preferred_alias": "Lead & Lead Compounds"
-      },
-      "references_structured": [
-        {
-          "type": "systematic_review",
-          "authority": "OTHER",
-          "citation": "DOI: 10.1016/j.envres.2020.109800 - Lead toxicity review",
-          "url": "https://doi.org/10.1016/j.envres.2020.109800",
-          "published_date": null,
-          "evidence_grade": "B",
-          "confidence": "high"
-        },
-        {
-          "type": "systematic_review",
-          "authority": "OTHER",
-          "citation": "DOI: 10.1016/j.toxlet.2019.06.007 - Lead in supplements",
-          "url": "https://doi.org/10.1016/j.toxlet.2019.06.007",
-          "published_date": null,
-          "evidence_grade": "B",
-          "confidence": "high"
-        },
-        {
-          "type": "monograph",
-          "authority": "EFSA",
-          "citation": "EFSA Journal 2010;8(4):1570 - Lead in food",
-          "url": "https://doi.org/10.2903/j.efsa.2010.1570",
-          "published_date": null,
-          "evidence_grade": "B",
-          "confidence": "high"
-        },
-        {
-          "type": "guidance",
-          "authority": "WHO",
-          "citation": "Guidelines for drinking-water quality, 4th edition, incorporating the 1st addendum",
-          "url": "https://www.who.int/publications/i/item/9789241549950",
-          "published_date": null,
-          "evidence_grade": "B",
-          "confidence": "high"
-        }
-      ],
-      "external_ids": {
-        "umls_cui": "C0023175",
-        "cas": null,
-        "pubchem": null
-      },
-      "jurisdictional_statuses": [
-        {
-          "authority": "US",
-          "jurisdiction": "US",
-          "status_code": "allowed",
-          "scope": "supplement",
-          "effective_range": {
-            "start": "2025-09-11",
-            "end": null
-          },
-          "source_ref": "https://www.fda.gov/food/food-additives-petitions/food-additive-status-list"
-        },
-        {
-          "authority": "EU",
-          "jurisdiction": "EU",
-          "status_code": "monitored",
-          "scope": "supplement",
-          "effective_range": {
-            "start": "2025-09-11",
-            "end": null
-          },
-          "source_ref": "https://www.efsa.europa.eu/en/efsajournal"
-        },
-        {
-          "authority": "Canada",
-          "jurisdiction": "Canada",
-          "status_code": "allowed",
-          "scope": "supplement",
-          "effective_range": {
-            "start": "2025-09-11",
-            "end": null
-          },
-          "source_ref": "https://doi.org/10.1016/j.envres.2020.109800"
-        },
-        {
-          "authority": "WHO",
-          "jurisdiction": "WHO",
-          "status_code": "allowed",
-          "scope": "supplement",
-          "effective_range": {
-            "start": "2025-09-11",
-            "end": null
-          },
-          "source_ref": "https://www.who.int/publications"
-        }
-      ],
-      "review": {
-        "status": "validated",
-        "last_reviewed_at": "2026-02-16",
-        "reviewed_by": "codex_harmful_allergen_normalization",
-        "next_review_due": "2026-07-07",
-        "change_log": [
-          {
-            "date": "2025-09-11",
-            "change": "added v2.1 schema (match_rules, references_structured, review)",
-            "reason": "harmful_additives refactor"
-          },
-          {
-            "date": "2026-01-08",
-            "change": "Updated reviewed_by to team:b_harmful_additives",
-            "reason": "Review metadata cleanup"
-          },
-          {
-            "date": "2026-01-08",
-            "change": "Confidence downgraded due to insufficient citations",
-            "reason": "Evidence gating"
-          },
-          {
-            "date": "2026-01-08",
-            "change": "No authoritative dose guidance identified; dose_thresholds not added",
-            "reason": "Dose threshold backfill"
-          },
-          {
-            "date": "2026-01-08",
-            "change": "Populated jurisdiction provenance fields (source_ref, effective_range.start)",
-            "reason": "Jurisdiction provenance"
-          },
-          {
-            "date": "2026-01-08",
-            "change": "Added authoritative references",
-            "reason": "Evidence backfill"
-          },
-          {
-            "date": "2026-01-08",
-            "change": "Validated after adding authoritative citations",
-            "reason": "Evidence backfill"
-          },
-          {
-            "date": "2026-02-16",
-            "change": "Normalized aliases/label_tokens and reduced overlap collisions for deterministic supplement matching",
-            "reason": "schema_consistency_and_precision"
-          }
-        ]
-      },
-      "severity_score": 5,
-      "confidence": "high",
-      "exposure_context": "supplement",
-      "entity_type": "ingredient",
-      "severity_level": "high",
       "dose_thresholds": null,
       "entity_relationships": null
     },
@@ -5784,7 +5120,7 @@
       "category": "leavening_agent",
       "notes": "Leavening agent containing aluminum. May contribute to aluminum body burden. Studies suggest potential neurotoxicity concerns, especially with chronic exposure.",
       "last_updated": "2026-02-16",
-      "CUI": null,
+      "CUI": "C0256439",
       "mechanism_of_harm": "Mechanism requires further documentation.",
       "regulatory_status": {
         "US": "Status pending review",
@@ -5818,7 +5154,7 @@
         }
       ],
       "external_ids": {
-        "umls_cui": null,
+        "umls_cui": "C0256439",
         "cas": null,
         "pubchem": null
       },
@@ -6603,7 +5939,7 @@
       "category": "colorant_artificial",
       "notes": "SAFETY CONCERN: Semi-synthetic derivative of chlorophyll with copper substituted for magnesium. Limited long-term safety data for regular consumption. Potential copper accumulation concerns with chronic use. While over 50 years of use and FDA GRAS status, recent studies question safety of regular copper chlorophyllin consumption. May cause gastrointestinal upset in sensitive individuals.",
       "last_updated": "2026-02-16",
-      "CUI": "",
+      "CUI": "C0951590",
       "mechanism_of_harm": "Mechanism requires further documentation.",
       "regulatory_status": {
         "US": "Status pending review",
@@ -6641,7 +5977,7 @@
         }
       ],
       "external_ids": {
-        "umls_cui": null,
+        "umls_cui": "C0951590",
         "cas": null,
         "pubchem": null
       },
@@ -8197,7 +7533,9 @@
         "refined canola oil",
         "canola oil refined",
         "low erucic acid rapeseed oil",
-        "LEAR oil"
+        "LEAR oil",
+        "canola oil",
+        "trace amounts of canola oil"
       ],
       "category": "fat_processed",
       "notes": "Highly processed oil prone to oxidation. Often from GMO sources. High-heat processing may create trans fats and lipid oxidation products. Omega-6 heavy. Prefer cold-pressed or avoid.",
@@ -8220,7 +7558,9 @@
           "refined canola oil",
           "canola oil refined",
           "low erucic acid rapeseed oil",
-          "LEAR oil"
+          "LEAR oil",
+          "canola oil",
+          "trace amounts of canola oil"
         ],
         "regex": null,
         "fuzzy_threshold": 0.72,
@@ -8453,7 +7793,7 @@
         "potassium acesulfame",
         "6-methyl-1,2,3-oxathiazine-4(3H)-one 2,2-dioxide potassium salt"
       ],
-      "CUI": null,
+      "CUI": "C0101048",
       "category": "sweetener_artificial",
       "mechanism_of_harm": "Artificial sweetener that may disrupt gut microbiome composition and glucose metabolism. Contains methylene chloride (carcinogen) as manufacturing byproduct. Animal studies show potential thyroid effects and DNA damage. May alter insulin response despite being non-caloric.",
       "regulatory_status": {
@@ -8511,7 +7851,7 @@
         }
       ],
       "external_ids": {
-        "umls_cui": null,
+        "umls_cui": "C0101048",
         "cas": null,
         "pubchem": null
       },
@@ -8617,7 +7957,8 @@
         "tapioca maltodextrin",
         "potato maltodextrin",
         "resistant maltodextrin",
-        "dextrin"
+        "dextrin",
+        "rice maltodextrin"
       ],
       "CUI": "C0065601",
       "category": "filler",
@@ -8649,7 +7990,8 @@
           "tapioca maltodextrin",
           "potato maltodextrin",
           "resistant maltodextrin",
-          "dextrin"
+          "dextrin",
+          "rice maltodextrin"
         ],
         "regex": null,
         "fuzzy_threshold": 0.72,
@@ -8930,7 +8272,9 @@
         "cellulose gel",
         "Avicel",
         "powdered cellulose",
-        "cellulose powder"
+        "cellulose powder",
+        "silicified microcrystalline cellulose",
+        "silicified MCC"
       ],
       "CUI": "C0025987",
       "category": "filler",
@@ -8960,7 +8304,9 @@
           "cellulose gel",
           "Avicel",
           "powdered cellulose",
-          "cellulose powder"
+          "cellulose powder",
+          "silicified microcrystalline cellulose",
+          "silicified MCC"
         ],
         "regex": null,
         "fuzzy_threshold": 0.72,
@@ -9392,7 +8738,7 @@
         "DOI: 10.1093/ndt/gfr268 - Dietary phosphate and CKD"
       ],
       "last_updated": "2026-02-16",
-      "CUI": "",
+      "CUI": "C2827333",
       "match_rules": {
         "match_mode": "alias_and_fuzzy",
         "label_tokens": [
@@ -9421,7 +8767,7 @@
         }
       ],
       "external_ids": {
-        "umls_cui": null,
+        "umls_cui": "C2827333",
         "cas": null,
         "pubchem": null
       },
@@ -9529,7 +8875,7 @@
         "DOI: 10.3390/nu12092798 - Phosphate additives review"
       ],
       "last_updated": "2026-02-16",
-      "CUI": "",
+      "CUI": "C0074764",
       "match_rules": {
         "match_mode": "alias_and_fuzzy",
         "label_tokens": [
@@ -9558,7 +8904,7 @@
         }
       ],
       "external_ids": {
-        "umls_cui": null,
+        "umls_cui": "C0074764",
         "cas": null,
         "pubchem": null
       },
@@ -10520,6 +9866,2696 @@
       "severity_level": "low",
       "dose_thresholds": null,
       "entity_relationships": null
+    },
+    {
+      "id": "ADD_CARBOXYMETHYLCELLULOSE",
+      "standard_name": "Carboxymethylcellulose (CMC)",
+      "aliases": [
+        "carboxymethylcellulose",
+        "carboxymethyl cellulose",
+        "cellulose gum",
+        "CMC",
+        "E466",
+        "sodium carboxymethyl cellulose",
+        "NaCMC",
+        "modified cellulose",
+        "cellulose glycolate",
+        "carboxymethylcellulose gum"
+      ],
+      "CUI": "C0007068",
+      "category": "emulsifier_thickener",
+      "mechanism_of_harm": "Poorly absorbed emulsifier/thickener. High chronic intake signals potential microbiome and gut-barrier effects in preclinical and controlled-feeding studies; typical supplement excipient exposure is usually much lower than food-study doses.",
+      "regulatory_status": {
+        "US": "Allowed/GRAS food additive (21 CFR 182.1745)",
+        "EU": "E466 authorized with ADI not specified",
+        "WHO": "JECFA: ADI not specified"
+      },
+      "population_warnings": [
+        "People with IBD/IBS - monitor GI tolerance",
+        "Children with high processed-food intake - cumulative exposure consideration"
+      ],
+      "notes": "Low-concern excipient at typical supplement levels; keep as additive-quality signal, not banned-substance trigger.",
+      "scientific_references": [
+        "21 CFR 182.1745 - GRAS status for sodium CMC",
+        "PMID: 34774538 - human controlled feeding CMC study"
+      ],
+      "last_updated": "2026-02-17",
+      "match_rules": {
+        "match_mode": "alias_and_fuzzy",
+        "label_tokens": [
+          "Carboxymethylcellulose (CMC)",
+          "carboxymethylcellulose",
+          "carboxymethyl cellulose",
+          "cellulose gum",
+          "CMC",
+          "E466",
+          "sodium carboxymethyl cellulose",
+          "NaCMC",
+          "modified cellulose",
+          "cellulose glycolate",
+          "carboxymethylcellulose gum"
+        ],
+        "regex": null,
+        "fuzzy_threshold": 0.72,
+        "case_sensitive": false,
+        "preferred_alias": "Carboxymethylcellulose (CMC)"
+      },
+      "references_structured": [
+        {
+          "type": "regulatory_action",
+          "authority": "FDA",
+          "citation": "21 CFR 182.1745 - Sodium carboxymethylcellulose (GRAS)",
+          "url": "https://www.ecfr.gov/current/title-21/section-182.1745",
+          "evidence_grade": "B",
+          "confidence": "high"
+        },
+        {
+          "type": "clinical_trial",
+          "authority": "OTHER",
+          "citation": "Human controlled-feeding trial on CMC and microbiome shifts (PMID: 34774538)",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/34774538/",
+          "evidence_grade": "C",
+          "confidence": "medium"
+        }
+      ],
+      "external_ids": {
+        "umls_cui": "C0007068",
+        "cas": null,
+        "pubchem": null
+      },
+      "jurisdictional_statuses": [
+        {
+          "authority": "US",
+          "jurisdiction": "US",
+          "status_code": "allowed",
+          "scope": "supplement",
+          "effective_range": {
+            "start": "2025-11-17",
+            "end": null
+          },
+          "source_ref": "https://www.ecfr.gov/current/title-21/section-182.1745"
+        },
+        {
+          "authority": "EU",
+          "jurisdiction": "EU",
+          "status_code": "allowed",
+          "scope": "supplement",
+          "effective_range": {
+            "start": "2025-11-17",
+            "end": null
+          },
+          "source_ref": "https://food.ec.europa.eu/food-safety/food-improvement-agents/additives-database_en"
+        },
+        {
+          "authority": "JECFA",
+          "jurisdiction": "WHO/FAO",
+          "status_code": "allowed",
+          "scope": "supplement",
+          "effective_range": {
+            "start": "2025-11-17",
+            "end": null
+          },
+          "source_ref": "https://apps.who.int/food-additives-contaminants-jecfa-database/"
+        }
+      ],
+      "review": {
+        "status": "validated",
+        "last_reviewed_at": "2026-02-17",
+        "reviewed_by": "codex_b0_policy_alignment",
+        "next_review_due": "2026-08-17",
+        "change_log": [
+          {
+            "date": "2026-02-17",
+            "change": "Added CMC to harmful_additives as low severity for additive-path scoring.",
+            "reason": "B0 policy split for excipient false-positive reduction"
+          }
+        ]
+      },
+      "severity_score": 1,
+      "confidence": "medium",
+      "exposure_context": "supplement",
+      "entity_type": "ingredient",
+      "severity_level": "low",
+      "dose_thresholds": null,
+      "entity_relationships": null
+    },
+    {
+      "id": "ADD_SOY_MONOGLYCERIDES",
+      "standard_name": "Soy Monoglycerides",
+      "aliases": [
+        "soy monoglycerides",
+        "monoglycerides",
+        "mono-glycerides",
+        "soy mono- and diglycerides",
+        "monoglycerides of fatty acids",
+        "E471",
+        "glyceryl monostearate"
+      ],
+      "CUI": "C0066658",
+      "category": "emulsifier",
+      "mechanism_of_harm": "Emulsifier derived from soy that may disrupt gut barrier function and alter microbiome composition. Contains soy allergen. Often produced from partially hydrogenated oils, potentially containing trace trans fats.",
+      "regulatory_status": {
+        "US": "FDA GRAS",
+        "EU": "E471 approved",
+        "WHO": "JECFA acceptable"
+      },
+      "population_warnings": [
+        "People with soy allergy - Contains soy-derived proteins",
+        "People with IBD/IBS - May disrupt intestinal barrier",
+        "People avoiding trans fats - May contain trace amounts from processing"
+      ],
+      "notes": "Emulsifier commonly used in supplement manufacturing. Derived from soybean oil. May contain trace trans fats from hydrogenation processing. Soy allergen concern for sensitive populations.",
+      "scientific_references": [
+        "DOI: 10.1038/nature14232 - Emulsifiers impact on gut microbiota and inflammation"
+      ],
+      "last_updated": "2026-02-18",
+      "match_rules": {
+        "match_mode": "alias_and_fuzzy",
+        "label_tokens": [
+          "Soy Monoglycerides",
+          "soy monoglycerides",
+          "monoglycerides",
+          "mono-glycerides",
+          "soy mono- and diglycerides",
+          "monoglycerides of fatty acids",
+          "E471",
+          "glyceryl monostearate"
+        ],
+        "regex": null,
+        "fuzzy_threshold": 0.72,
+        "case_sensitive": false,
+        "preferred_alias": "Soy Monoglycerides"
+      },
+      "references_structured": [
+        {
+          "type": "clinical_study",
+          "authority": "OTHER",
+          "citation": "DOI: 10.1038/nature14232 - Dietary emulsifiers impact the mouse gut microbiota promoting colitis and metabolic syndrome",
+          "url": "https://doi.org/10.1038/nature14232",
+          "published_date": "2015-02-25",
+          "evidence_grade": "B",
+          "confidence": "high"
+        }
+      ],
+      "external_ids": {
+        "umls_cui": "C0066658",
+        "cas": "68554-09-6",
+        "pubchem": null
+      },
+      "jurisdictional_statuses": [
+        {
+          "authority": "US",
+          "jurisdiction": "US",
+          "status_code": "allowed",
+          "scope": "supplement",
+          "effective_range": {
+            "start": "2026-02-18",
+            "end": null
+          },
+          "source_ref": "https://www.fda.gov/food/food-additives-petitions/food-additive-status-list"
+        },
+        {
+          "authority": "EU",
+          "jurisdiction": "EU",
+          "status_code": "allowed",
+          "scope": "supplement",
+          "effective_range": {
+            "start": "2026-02-18",
+            "end": null
+          },
+          "source_ref": "https://www.efsa.europa.eu/en/efsajournal"
+        },
+        {
+          "authority": "WHO",
+          "jurisdiction": "WHO",
+          "status_code": "allowed",
+          "scope": "supplement",
+          "effective_range": {
+            "start": "2026-02-18",
+            "end": null
+          },
+          "source_ref": "https://www.who.int/publications"
+        }
+      ],
+      "review": {
+        "status": "validated",
+        "last_reviewed_at": "2026-02-18",
+        "reviewed_by": "data_pipeline_expansion",
+        "next_review_due": "2026-08-18",
+        "change_log": [
+          {
+            "date": "2026-02-18",
+            "change": "Initial entry added from unmapped ingredient audit",
+            "reason": "unmapped_ingredient_coverage"
+          }
+        ]
+      },
+      "severity_score": 3,
+      "confidence": "medium",
+      "exposure_context": "supplement",
+      "entity_type": "ingredient",
+      "severity_level": "moderate",
+      "dose_thresholds": null,
+      "entity_relationships": null
+    },
+    {
+      "id": "ADD_FATTY_ACID_POLYGLYCEROL_ESTERS",
+      "standard_name": "Fatty Acid Polyglycerol Esters",
+      "aliases": [
+        "fatty acid polyglycerol esters",
+        "polyglycerol esters",
+        "polyglycerol esters of fatty acids",
+        "E475",
+        "PGE",
+        "polyglycerol polyricinoleate",
+        "E476"
+      ],
+      "CUI": "C0137837",
+      "category": "emulsifier",
+      "mechanism_of_harm": "Synthetic emulsifier that may alter gut microbiota composition and disrupt intestinal barrier integrity. Part of the same emulsifier class shown to promote gut inflammation in animal models.",
+      "regulatory_status": {
+        "US": "FDA GRAS",
+        "EU": "E475/E476 approved",
+        "WHO": "JECFA ADI 25 mg/kg bw"
+      },
+      "population_warnings": [
+        "People with IBD/IBS - May contribute to gut barrier disruption",
+        "People with digestive sensitivity - May cause GI discomfort"
+      ],
+      "notes": "Synthetic emulsifier used in supplements for texture and stability. Same class of emulsifiers shown in Nature (2015) to promote colitis and metabolic syndrome in animal models.",
+      "scientific_references": [
+        "DOI: 10.1038/nature14232 - Emulsifiers and gut microbiota",
+        "DOI: 10.2903/j.efsa.2017.4743 - EFSA re-evaluation of E475"
+      ],
+      "last_updated": "2026-02-18",
+      "match_rules": {
+        "match_mode": "alias_and_fuzzy",
+        "label_tokens": [
+          "Fatty Acid Polyglycerol Esters",
+          "fatty acid polyglycerol esters",
+          "polyglycerol esters",
+          "polyglycerol esters of fatty acids",
+          "E475",
+          "PGE",
+          "polyglycerol polyricinoleate",
+          "E476"
+        ],
+        "regex": null,
+        "fuzzy_threshold": 0.72,
+        "case_sensitive": false,
+        "preferred_alias": "Fatty Acid Polyglycerol Esters"
+      },
+      "references_structured": [
+        {
+          "type": "regulatory_action",
+          "authority": "EFSA",
+          "citation": "EFSA Journal 2017;15(3):4743 - Re-evaluation of polyglycerol esters of fatty acids (E 475)",
+          "url": "https://doi.org/10.2903/j.efsa.2017.4743",
+          "published_date": "2017-03-21",
+          "evidence_grade": "B",
+          "confidence": "high"
+        }
+      ],
+      "external_ids": {
+        "umls_cui": "C0137837",
+        "cas": "36354-80-0",
+        "pubchem": null
+      },
+      "jurisdictional_statuses": [
+        {
+          "authority": "US",
+          "jurisdiction": "US",
+          "status_code": "allowed",
+          "scope": "supplement",
+          "effective_range": {
+            "start": "2026-02-18",
+            "end": null
+          },
+          "source_ref": "https://www.fda.gov/food/food-additives-petitions/food-additive-status-list"
+        },
+        {
+          "authority": "EU",
+          "jurisdiction": "EU",
+          "status_code": "allowed",
+          "scope": "supplement",
+          "effective_range": {
+            "start": "2026-02-18",
+            "end": null
+          },
+          "source_ref": "https://www.efsa.europa.eu/en/efsajournal"
+        },
+        {
+          "authority": "WHO",
+          "jurisdiction": "WHO",
+          "status_code": "allowed",
+          "scope": "supplement",
+          "effective_range": {
+            "start": "2026-02-18",
+            "end": null
+          },
+          "source_ref": "https://www.who.int/publications"
+        }
+      ],
+      "review": {
+        "status": "validated",
+        "last_reviewed_at": "2026-02-18",
+        "reviewed_by": "data_pipeline_expansion",
+        "next_review_due": "2026-08-18",
+        "change_log": [
+          {
+            "date": "2026-02-18",
+            "change": "Initial entry added from unmapped ingredient audit",
+            "reason": "unmapped_ingredient_coverage"
+          }
+        ]
+      },
+      "severity_score": 3,
+      "confidence": "medium",
+      "exposure_context": "supplement",
+      "entity_type": "ingredient",
+      "severity_level": "moderate",
+      "dose_thresholds": null,
+      "entity_relationships": null
+    },
+    {
+      "id": "ADD_SODIUM_CASEINATE",
+      "standard_name": "Sodium Caseinate",
+      "aliases": [
+        "sodium caseinate",
+        "caseinate",
+        "casein sodium",
+        "milk protein caseinate",
+        "sodium casein",
+        "casein salt"
+      ],
+      "CUI": "C0602872",
+      "category": "stabilizer_emulsifier",
+      "mechanism_of_harm": "Highly processed dairy-derived protein that may trigger dairy sensitivity reactions. Contains milk allergen (casein). Processing involves alkali treatment that denatures native protein structure. May cause digestive distress in lactose-intolerant individuals.",
+      "regulatory_status": {
+        "US": "FDA GRAS",
+        "EU": "Approved food additive",
+        "WHO": "No specific ADI"
+      },
+      "population_warnings": [
+        "People with milk/casein allergy - Major allergen (casein)",
+        "People with lactose intolerance - May contain residual lactose",
+        "People with dairy sensitivity - Highly processed dairy derivative"
+      ],
+      "notes": "Ultra-processed dairy protein used as emulsifier and stabilizer in supplements. Contains one of the top 8 allergens (milk). Alkali-processed casein with denatured protein structure. Quality signal for ultra-processed formulation.",
+      "scientific_references": [
+        "DOI: 10.1016/j.foodchem.2018.12.057 - Sodium caseinate processing and allergenicity"
+      ],
+      "last_updated": "2026-02-18",
+      "match_rules": {
+        "match_mode": "alias_and_fuzzy",
+        "label_tokens": [
+          "Sodium Caseinate",
+          "sodium caseinate",
+          "caseinate",
+          "casein sodium",
+          "milk protein caseinate",
+          "sodium casein",
+          "casein salt"
+        ],
+        "regex": null,
+        "fuzzy_threshold": 0.72,
+        "case_sensitive": false,
+        "preferred_alias": "Sodium Caseinate"
+      },
+      "references_structured": [
+        {
+          "type": "regulatory_action",
+          "authority": "FDA",
+          "citation": "FDA GRAS Notice for Sodium Caseinate - 21 CFR 182.1748",
+          "url": "https://www.fda.gov/food/food-additives-petitions/food-additive-status-list",
+          "published_date": null,
+          "evidence_grade": "C",
+          "confidence": "medium"
+        }
+      ],
+      "external_ids": {
+        "umls_cui": "C0602872",
+        "cas": "9005-46-3",
+        "pubchem": null
+      },
+      "jurisdictional_statuses": [
+        {
+          "authority": "US",
+          "jurisdiction": "US",
+          "status_code": "allowed",
+          "scope": "supplement",
+          "effective_range": {
+            "start": "2026-02-18",
+            "end": null
+          },
+          "source_ref": "https://www.fda.gov/food/food-additives-petitions/food-additive-status-list"
+        },
+        {
+          "authority": "EU",
+          "jurisdiction": "EU",
+          "status_code": "allowed",
+          "scope": "supplement",
+          "effective_range": {
+            "start": "2026-02-18",
+            "end": null
+          },
+          "source_ref": "https://www.efsa.europa.eu/en/efsajournal"
+        },
+        {
+          "authority": "WHO",
+          "jurisdiction": "WHO",
+          "status_code": "allowed",
+          "scope": "supplement",
+          "effective_range": {
+            "start": "2026-02-18",
+            "end": null
+          },
+          "source_ref": "https://www.who.int/publications"
+        }
+      ],
+      "review": {
+        "status": "validated",
+        "last_reviewed_at": "2026-02-18",
+        "reviewed_by": "data_pipeline_expansion",
+        "next_review_due": "2026-08-18",
+        "change_log": [
+          {
+            "date": "2026-02-18",
+            "change": "Initial entry added from unmapped ingredient audit",
+            "reason": "unmapped_ingredient_coverage"
+          }
+        ]
+      },
+      "severity_score": 3,
+      "confidence": "medium",
+      "exposure_context": "supplement",
+      "entity_type": "ingredient",
+      "severity_level": "moderate",
+      "dose_thresholds": null,
+      "entity_relationships": null
+    },
+    {
+      "id": "ADD_CANDURIN_SILVER",
+      "standard_name": "Candurin Silver",
+      "aliases": [
+        "candurin silver",
+        "candurin",
+        "candurin silver fine",
+        "candurin silver lustre",
+        "mica-based pearlescent pigment",
+        "potassium aluminum silicate-based colorant"
+      ],
+      "CUI": null,
+      "category": "colorant",
+      "mechanism_of_harm": "Mica-based pearlescent pigment coated with titanium dioxide. TiO2 (E171) has been banned in the EU since 2022 due to genotoxicity concerns. Nanoparticle accumulation risk in gut tissues. Used purely for cosmetic appearance with no functional benefit.",
+      "regulatory_status": {
+        "US": "FDA approved for cosmetic use, allowed in supplements",
+        "EU": "TiO2 coating banned since 2022 (E171)",
+        "WHO": "IARC Group 2B (possibly carcinogenic via inhalation)"
+      },
+      "population_warnings": [
+        "Everyone - Contains titanium dioxide nanoparticles",
+        "Children - Higher nanoparticle exposure per body weight",
+        "People with GI conditions - Nanoparticle accumulation concern"
+      ],
+      "notes": "Pearlescent coating pigment made of mica coated with titanium dioxide. Used solely for aesthetic purposes. TiO2 component banned in EU food products since 2022 due to EFSA genotoxicity assessment. Provides no nutritional or functional benefit.",
+      "scientific_references": [
+        "DOI: 10.2903/j.efsa.2021.6585 - EFSA safety assessment of TiO2 (E 171)",
+        "DOI: 10.1016/j.fct.2020.111814 - TiO2 nanoparticle gut accumulation"
+      ],
+      "last_updated": "2026-02-18",
+      "match_rules": {
+        "match_mode": "alias_and_fuzzy",
+        "label_tokens": [
+          "Candurin Silver",
+          "candurin silver",
+          "candurin",
+          "candurin silver fine",
+          "candurin silver lustre",
+          "mica-based pearlescent pigment",
+          "potassium aluminum silicate-based colorant"
+        ],
+        "regex": null,
+        "fuzzy_threshold": 0.72,
+        "case_sensitive": false,
+        "preferred_alias": "Candurin Silver"
+      },
+      "references_structured": [
+        {
+          "type": "regulatory_action",
+          "authority": "EFSA",
+          "citation": "EFSA Journal 2021;19(5):6585 - Safety assessment of titanium dioxide (E 171) as food additive",
+          "url": "https://doi.org/10.2903/j.efsa.2021.6585",
+          "published_date": "2021-05-06",
+          "evidence_grade": "A",
+          "confidence": "high"
+        },
+        {
+          "type": "clinical_study",
+          "authority": "OTHER",
+          "citation": "DOI: 10.1016/j.fct.2020.111814 - Titanium dioxide nanoparticles accumulation in gut tissues",
+          "url": "https://doi.org/10.1016/j.fct.2020.111814",
+          "published_date": "2020-12-01",
+          "evidence_grade": "B",
+          "confidence": "high"
+        }
+      ],
+      "external_ids": {
+        "umls_cui": null,
+        "cas": "12001-26-2",
+        "pubchem": null
+      },
+      "jurisdictional_statuses": [
+        {
+          "authority": "US",
+          "jurisdiction": "US",
+          "status_code": "allowed",
+          "scope": "supplement",
+          "effective_range": {
+            "start": "2026-02-18",
+            "end": null
+          },
+          "source_ref": "https://www.fda.gov/food/food-additives-petitions/food-additive-status-list"
+        },
+        {
+          "authority": "EU",
+          "jurisdiction": "EU",
+          "status_code": "allowed",
+          "scope": "supplement",
+          "effective_range": {
+            "start": "2026-02-18",
+            "end": null
+          },
+          "source_ref": "https://www.efsa.europa.eu/en/efsajournal"
+        },
+        {
+          "authority": "WHO",
+          "jurisdiction": "WHO",
+          "status_code": "allowed",
+          "scope": "supplement",
+          "effective_range": {
+            "start": "2026-02-18",
+            "end": null
+          },
+          "source_ref": "https://www.who.int/publications"
+        }
+      ],
+      "review": {
+        "status": "validated",
+        "last_reviewed_at": "2026-02-18",
+        "reviewed_by": "data_pipeline_expansion",
+        "next_review_due": "2026-08-18",
+        "change_log": [
+          {
+            "date": "2026-02-18",
+            "change": "Initial entry added from unmapped ingredient audit",
+            "reason": "unmapped_ingredient_coverage"
+          }
+        ]
+      },
+      "severity_score": 4,
+      "confidence": "high",
+      "exposure_context": "supplement",
+      "entity_type": "ingredient",
+      "severity_level": "moderate",
+      "dose_thresholds": null,
+      "entity_relationships": null
+    },
+    {
+      "id": "ADD_ISOMALTOOLIGOSACCHARIDE",
+      "standard_name": "Isomaltooligosaccharide",
+      "aliases": [
+        "isomaltooligosaccharide",
+        "IMO",
+        "isomalto-oligosaccharide",
+        "IMO syrup",
+        "IMO fiber",
+        "isomaltooligosaccharides"
+      ],
+      "CUI": "C0063384",
+      "category": "sweetener_fiber",
+      "mechanism_of_harm": "Marketed as prebiotic fiber but largely digestible as sugar in the small intestine. FDA rejected IMO fiber classification in 2018. Misleading fiber claims may cause consumers to underestimate sugar intake. Moderate glycemic impact.",
+      "regulatory_status": {
+        "US": "FDA rejected as dietary fiber (2018)",
+        "EU": "Allowed as food ingredient",
+        "WHO": "No specific classification"
+      },
+      "population_warnings": [
+        "People with diabetes - Higher glycemic impact than claimed",
+        "People counting fiber intake - Not true dietary fiber per FDA"
+      ],
+      "notes": "Once marketed as prebiotic fiber but FDA determined in 2018 that IMO does not meet the definition of dietary fiber. Largely digested as sugar in the small intestine. Low-quality ingredient signal in supplement formulation.",
+      "scientific_references": [
+        "DOI: 10.1093/jn/nxy151 - IMO digestibility and fiber classification"
+      ],
+      "last_updated": "2026-02-18",
+      "match_rules": {
+        "match_mode": "alias_and_fuzzy",
+        "label_tokens": [
+          "Isomaltooligosaccharide",
+          "isomaltooligosaccharide",
+          "IMO",
+          "isomalto-oligosaccharide",
+          "IMO syrup",
+          "IMO fiber",
+          "isomaltooligosaccharides"
+        ],
+        "regex": null,
+        "fuzzy_threshold": 0.72,
+        "case_sensitive": false,
+        "preferred_alias": "Isomaltooligosaccharide"
+      },
+      "references_structured": [
+        {
+          "type": "regulatory_action",
+          "authority": "FDA",
+          "citation": "FDA Guidance: Definition of Dietary Fiber - IMO excluded (2018)",
+          "url": "https://www.fda.gov/food/food-labeling-nutrition/questions-and-answers-dietary-fiber",
+          "published_date": "2018-06-14",
+          "evidence_grade": "A",
+          "confidence": "high"
+        }
+      ],
+      "external_ids": {
+        "umls_cui": "C0063384",
+        "cas": null,
+        "pubchem": null
+      },
+      "jurisdictional_statuses": [
+        {
+          "authority": "US",
+          "jurisdiction": "US",
+          "status_code": "allowed",
+          "scope": "supplement",
+          "effective_range": {
+            "start": "2026-02-18",
+            "end": null
+          },
+          "source_ref": "https://www.fda.gov/food/food-additives-petitions/food-additive-status-list"
+        },
+        {
+          "authority": "EU",
+          "jurisdiction": "EU",
+          "status_code": "allowed",
+          "scope": "supplement",
+          "effective_range": {
+            "start": "2026-02-18",
+            "end": null
+          },
+          "source_ref": "https://www.efsa.europa.eu/en/efsajournal"
+        },
+        {
+          "authority": "WHO",
+          "jurisdiction": "WHO",
+          "status_code": "allowed",
+          "scope": "supplement",
+          "effective_range": {
+            "start": "2026-02-18",
+            "end": null
+          },
+          "source_ref": "https://www.who.int/publications"
+        }
+      ],
+      "review": {
+        "status": "validated",
+        "last_reviewed_at": "2026-02-18",
+        "reviewed_by": "data_pipeline_expansion",
+        "next_review_due": "2026-08-18",
+        "change_log": [
+          {
+            "date": "2026-02-18",
+            "change": "Initial entry added from unmapped ingredient audit",
+            "reason": "unmapped_ingredient_coverage"
+          }
+        ]
+      },
+      "severity_score": 2,
+      "confidence": "high",
+      "exposure_context": "supplement",
+      "entity_type": "ingredient",
+      "severity_level": "low",
+      "dose_thresholds": null,
+      "entity_relationships": null
+    },
+    {
+      "id": "ADD_CANE_SUGAR",
+      "standard_name": "Cane Sugar",
+      "aliases": [
+        "cane sugar",
+        "cane juice sugar",
+        "evaporated cane juice",
+        "evaporated cane juice sugar",
+        "evaporated cane juice solids",
+        "cane juice",
+        "organic cane sugar",
+        "raw cane sugar",
+        "unrefined cane sugar",
+        "dehydrated cane juice"
+      ],
+      "CUI": "C0038636",
+      "category": "sweetener",
+      "mechanism_of_harm": "Added sugar in supplement formulation with no nutritional benefit. Contributes to caloric intake and glycemic load. FDA considers 'evaporated cane juice' a misleading term for sugar. Signals lower manufacturing quality standards.",
+      "regulatory_status": {
+        "US": "FDA GRAS (sugar)",
+        "EU": "Allowed",
+        "WHO": "WHO recommends limiting added sugars to <10% daily calories"
+      },
+      "population_warnings": [
+        "People with diabetes - Added sugar contributes to glycemic load",
+        "People monitoring sugar intake - Hidden sugar source"
+      ],
+      "notes": "Added sugar used as sweetener or binder in supplement formulations. FDA issued guidance that 'evaporated cane juice' is misleading and should be labeled as 'sugar'. Low-quality formulation signal.",
+      "scientific_references": [
+        "FDA Guidance: Use of 'Evaporated Cane Juice' - 2016"
+      ],
+      "last_updated": "2026-02-18",
+      "match_rules": {
+        "match_mode": "alias_and_fuzzy",
+        "label_tokens": [
+          "Cane Sugar",
+          "cane sugar",
+          "cane juice sugar",
+          "evaporated cane juice",
+          "evaporated cane juice sugar",
+          "evaporated cane juice solids",
+          "cane juice",
+          "organic cane sugar",
+          "raw cane sugar",
+          "unrefined cane sugar",
+          "dehydrated cane juice"
+        ],
+        "regex": null,
+        "fuzzy_threshold": 0.72,
+        "case_sensitive": false,
+        "preferred_alias": "Cane Sugar"
+      },
+      "references_structured": [
+        {
+          "type": "regulatory_action",
+          "authority": "FDA",
+          "citation": "FDA Draft Guidance: Ingredients Declared as Evaporated Cane Juice",
+          "url": "https://www.fda.gov/regulatory-information/search-fda-guidance-documents/draft-guidance-industry-ingredients-declared-evaporated-cane-juice",
+          "published_date": "2016-05-01",
+          "evidence_grade": "A",
+          "confidence": "high"
+        }
+      ],
+      "external_ids": {
+        "umls_cui": "C0038636",
+        "cas": "57-50-1",
+        "pubchem": "5988"
+      },
+      "jurisdictional_statuses": [
+        {
+          "authority": "US",
+          "jurisdiction": "US",
+          "status_code": "allowed",
+          "scope": "supplement",
+          "effective_range": {
+            "start": "2026-02-18",
+            "end": null
+          },
+          "source_ref": "https://www.fda.gov/food/food-additives-petitions/food-additive-status-list"
+        },
+        {
+          "authority": "EU",
+          "jurisdiction": "EU",
+          "status_code": "allowed",
+          "scope": "supplement",
+          "effective_range": {
+            "start": "2026-02-18",
+            "end": null
+          },
+          "source_ref": "https://www.efsa.europa.eu/en/efsajournal"
+        },
+        {
+          "authority": "WHO",
+          "jurisdiction": "WHO",
+          "status_code": "allowed",
+          "scope": "supplement",
+          "effective_range": {
+            "start": "2026-02-18",
+            "end": null
+          },
+          "source_ref": "https://www.who.int/publications"
+        }
+      ],
+      "review": {
+        "status": "validated",
+        "last_reviewed_at": "2026-02-18",
+        "reviewed_by": "data_pipeline_expansion",
+        "next_review_due": "2026-08-18",
+        "change_log": [
+          {
+            "date": "2026-02-18",
+            "change": "Initial entry added from unmapped ingredient audit",
+            "reason": "unmapped_ingredient_coverage"
+          }
+        ]
+      },
+      "severity_score": 2,
+      "confidence": "high",
+      "exposure_context": "supplement",
+      "entity_type": "ingredient",
+      "severity_level": "low",
+      "dose_thresholds": null,
+      "entity_relationships": null
+    },
+    {
+      "id": "ADD_CANE_MOLASSES",
+      "standard_name": "Cane Molasses",
+      "aliases": [
+        "cane molasses",
+        "molasses",
+        "pure cane molasses",
+        "blackstrap molasses",
+        "sugar cane molasses",
+        "unsulphured molasses"
+      ],
+      "CUI": "C0026469",
+      "category": "sweetener",
+      "mechanism_of_harm": "Sugar byproduct used as sweetener in supplements. While containing trace minerals (iron, calcium, potassium), primarily an added sugar. Contributes to glycemic load. Signals cost-driven formulation.",
+      "regulatory_status": {
+        "US": "FDA GRAS",
+        "EU": "Allowed",
+        "WHO": "No specific ADI"
+      },
+      "population_warnings": [
+        "People with diabetes - Added sugar",
+        "People monitoring sugar intake - Hidden sugar source"
+      ],
+      "notes": "Byproduct of sugar refining process. Contains trace minerals but primarily functions as added sugar in supplement context. Better mineral profile than refined sugar but still a low-quality sweetener signal.",
+      "scientific_references": [],
+      "last_updated": "2026-02-18",
+      "match_rules": {
+        "match_mode": "alias_and_fuzzy",
+        "label_tokens": [
+          "Cane Molasses",
+          "cane molasses",
+          "molasses",
+          "pure cane molasses",
+          "blackstrap molasses",
+          "sugar cane molasses",
+          "unsulphured molasses"
+        ],
+        "regex": null,
+        "fuzzy_threshold": 0.72,
+        "case_sensitive": false,
+        "preferred_alias": "Cane Molasses"
+      },
+      "references_structured": [],
+      "external_ids": {
+        "umls_cui": "C0026469",
+        "cas": null,
+        "pubchem": null
+      },
+      "jurisdictional_statuses": [
+        {
+          "authority": "US",
+          "jurisdiction": "US",
+          "status_code": "allowed",
+          "scope": "supplement",
+          "effective_range": {
+            "start": "2026-02-18",
+            "end": null
+          },
+          "source_ref": "https://www.fda.gov/food/food-additives-petitions/food-additive-status-list"
+        },
+        {
+          "authority": "EU",
+          "jurisdiction": "EU",
+          "status_code": "allowed",
+          "scope": "supplement",
+          "effective_range": {
+            "start": "2026-02-18",
+            "end": null
+          },
+          "source_ref": "https://www.efsa.europa.eu/en/efsajournal"
+        },
+        {
+          "authority": "WHO",
+          "jurisdiction": "WHO",
+          "status_code": "allowed",
+          "scope": "supplement",
+          "effective_range": {
+            "start": "2026-02-18",
+            "end": null
+          },
+          "source_ref": "https://www.who.int/publications"
+        }
+      ],
+      "review": {
+        "status": "validated",
+        "last_reviewed_at": "2026-02-18",
+        "reviewed_by": "data_pipeline_expansion",
+        "next_review_due": "2026-08-18",
+        "change_log": [
+          {
+            "date": "2026-02-18",
+            "change": "Initial entry added from unmapped ingredient audit",
+            "reason": "unmapped_ingredient_coverage"
+          }
+        ]
+      },
+      "severity_score": 1,
+      "confidence": "medium",
+      "exposure_context": "supplement",
+      "entity_type": "ingredient",
+      "severity_level": "low",
+      "dose_thresholds": null,
+      "entity_relationships": null
+    },
+    {
+      "id": "ADD_SLIMSWEET",
+      "standard_name": "SlimSweet",
+      "aliases": [
+        "slimsweet",
+        "slim sweet",
+        "SlimSweet(R)",
+        "Slim Sweet(R)"
+      ],
+      "CUI": null,
+      "category": "sweetener",
+      "mechanism_of_harm": "Proprietary sweetener blend with limited publicly available safety data. Proprietary formulations make independent verification of ingredients difficult. May contain undisclosed sweetener compounds.",
+      "regulatory_status": {
+        "US": "Not separately evaluated by FDA",
+        "EU": "Not evaluated",
+        "WHO": "Not evaluated"
+      },
+      "population_warnings": [
+        "People with sweetener sensitivities - Unknown composition"
+      ],
+      "notes": "Proprietary sweetener blend used in supplement formulations. Limited public safety data. Proprietary nature prevents full ingredient transparency.",
+      "scientific_references": [],
+      "last_updated": "2026-02-18",
+      "match_rules": {
+        "match_mode": "alias_and_fuzzy",
+        "label_tokens": [
+          "SlimSweet",
+          "slimsweet",
+          "slim sweet",
+          "SlimSweet(R)",
+          "Slim Sweet(R)"
+        ],
+        "regex": null,
+        "fuzzy_threshold": 0.72,
+        "case_sensitive": false,
+        "preferred_alias": "SlimSweet"
+      },
+      "references_structured": [],
+      "external_ids": {
+        "umls_cui": null,
+        "cas": null,
+        "pubchem": null
+      },
+      "jurisdictional_statuses": [
+        {
+          "authority": "US",
+          "jurisdiction": "US",
+          "status_code": "allowed",
+          "scope": "supplement",
+          "effective_range": {
+            "start": "2026-02-18",
+            "end": null
+          },
+          "source_ref": "https://www.fda.gov/food/food-additives-petitions/food-additive-status-list"
+        },
+        {
+          "authority": "EU",
+          "jurisdiction": "EU",
+          "status_code": "allowed",
+          "scope": "supplement",
+          "effective_range": {
+            "start": "2026-02-18",
+            "end": null
+          },
+          "source_ref": "https://www.efsa.europa.eu/en/efsajournal"
+        },
+        {
+          "authority": "WHO",
+          "jurisdiction": "WHO",
+          "status_code": "allowed",
+          "scope": "supplement",
+          "effective_range": {
+            "start": "2026-02-18",
+            "end": null
+          },
+          "source_ref": "https://www.who.int/publications"
+        }
+      ],
+      "review": {
+        "status": "validated",
+        "last_reviewed_at": "2026-02-18",
+        "reviewed_by": "data_pipeline_expansion",
+        "next_review_due": "2026-08-18",
+        "change_log": [
+          {
+            "date": "2026-02-18",
+            "change": "Initial entry added from unmapped ingredient audit",
+            "reason": "unmapped_ingredient_coverage"
+          }
+        ]
+      },
+      "severity_score": 2,
+      "confidence": "low",
+      "exposure_context": "supplement",
+      "entity_type": "ingredient",
+      "severity_level": "low",
+      "dose_thresholds": null,
+      "entity_relationships": null
+    },
+    {
+      "id": "ADD_PUREFRUIT_SELECT",
+      "standard_name": "Purefruit Select",
+      "aliases": [
+        "purefruit select",
+        "purefruit",
+        "pure fruit select"
+      ],
+      "CUI": null,
+      "category": "sweetener",
+      "mechanism_of_harm": "Proprietary fruit-based sweetener concentrate. While derived from natural sources, still functions as added sugar in supplement formulation. Limited independent safety data for concentrated form.",
+      "regulatory_status": {
+        "US": "Not separately evaluated by FDA",
+        "EU": "Not evaluated",
+        "WHO": "Not evaluated"
+      },
+      "population_warnings": [
+        "People with diabetes - Concentrated fruit sugar",
+        "People with fructose intolerance - May contain concentrated fructose"
+      ],
+      "notes": "Proprietary fruit-derived sweetener used in supplement formulations. Natural source but still contributes added sugar. Limited public safety data on concentrated form.",
+      "scientific_references": [],
+      "last_updated": "2026-02-18",
+      "match_rules": {
+        "match_mode": "alias_and_fuzzy",
+        "label_tokens": [
+          "Purefruit Select",
+          "purefruit select",
+          "purefruit",
+          "pure fruit select"
+        ],
+        "regex": null,
+        "fuzzy_threshold": 0.72,
+        "case_sensitive": false,
+        "preferred_alias": "Purefruit Select"
+      },
+      "references_structured": [],
+      "external_ids": {
+        "umls_cui": null,
+        "cas": null,
+        "pubchem": null
+      },
+      "jurisdictional_statuses": [
+        {
+          "authority": "US",
+          "jurisdiction": "US",
+          "status_code": "allowed",
+          "scope": "supplement",
+          "effective_range": {
+            "start": "2026-02-18",
+            "end": null
+          },
+          "source_ref": "https://www.fda.gov/food/food-additives-petitions/food-additive-status-list"
+        },
+        {
+          "authority": "EU",
+          "jurisdiction": "EU",
+          "status_code": "allowed",
+          "scope": "supplement",
+          "effective_range": {
+            "start": "2026-02-18",
+            "end": null
+          },
+          "source_ref": "https://www.efsa.europa.eu/en/efsajournal"
+        },
+        {
+          "authority": "WHO",
+          "jurisdiction": "WHO",
+          "status_code": "allowed",
+          "scope": "supplement",
+          "effective_range": {
+            "start": "2026-02-18",
+            "end": null
+          },
+          "source_ref": "https://www.who.int/publications"
+        }
+      ],
+      "review": {
+        "status": "validated",
+        "last_reviewed_at": "2026-02-18",
+        "reviewed_by": "data_pipeline_expansion",
+        "next_review_due": "2026-08-18",
+        "change_log": [
+          {
+            "date": "2026-02-18",
+            "change": "Initial entry added from unmapped ingredient audit",
+            "reason": "unmapped_ingredient_coverage"
+          }
+        ]
+      },
+      "severity_score": 1,
+      "confidence": "low",
+      "exposure_context": "supplement",
+      "entity_type": "ingredient",
+      "severity_level": "low",
+      "dose_thresholds": null,
+      "entity_relationships": null
+    },
+    {
+      "id": "ADD_CALCIUM_LAURATE",
+      "standard_name": "Calcium Laurate",
+      "aliases": [
+        "calcium laurate",
+        "calcium dilaurate",
+        "lauric acid calcium salt"
+      ],
+      "CUI": "C0891914",
+      "category": "flow_agent",
+      "mechanism_of_harm": "Calcium salt of lauric acid used as flow agent and lubricant in supplement manufacturing. Similar function to magnesium stearate but less studied. Minimal direct toxicity but may affect dissolution rate and nutrient absorption.",
+      "regulatory_status": {
+        "US": "FDA GRAS",
+        "EU": "Allowed",
+        "WHO": "No specific ADI"
+      },
+      "population_warnings": [
+        "People with fat absorption issues - May slow dissolution"
+      ],
+      "notes": "Flow agent used to prevent ingredients from sticking to manufacturing equipment. Less common alternative to magnesium stearate. Minimal safety concerns at typical supplement levels.",
+      "scientific_references": [],
+      "last_updated": "2026-02-18",
+      "match_rules": {
+        "match_mode": "alias_and_fuzzy",
+        "label_tokens": [
+          "Calcium Laurate",
+          "calcium laurate",
+          "calcium dilaurate",
+          "lauric acid calcium salt"
+        ],
+        "regex": null,
+        "fuzzy_threshold": 0.72,
+        "case_sensitive": false,
+        "preferred_alias": "Calcium Laurate"
+      },
+      "references_structured": [],
+      "external_ids": {
+        "umls_cui": "C0891914",
+        "cas": "4696-56-4",
+        "pubchem": null
+      },
+      "jurisdictional_statuses": [
+        {
+          "authority": "US",
+          "jurisdiction": "US",
+          "status_code": "allowed",
+          "scope": "supplement",
+          "effective_range": {
+            "start": "2026-02-18",
+            "end": null
+          },
+          "source_ref": "https://www.fda.gov/food/food-additives-petitions/food-additive-status-list"
+        },
+        {
+          "authority": "EU",
+          "jurisdiction": "EU",
+          "status_code": "allowed",
+          "scope": "supplement",
+          "effective_range": {
+            "start": "2026-02-18",
+            "end": null
+          },
+          "source_ref": "https://www.efsa.europa.eu/en/efsajournal"
+        },
+        {
+          "authority": "WHO",
+          "jurisdiction": "WHO",
+          "status_code": "allowed",
+          "scope": "supplement",
+          "effective_range": {
+            "start": "2026-02-18",
+            "end": null
+          },
+          "source_ref": "https://www.who.int/publications"
+        }
+      ],
+      "review": {
+        "status": "validated",
+        "last_reviewed_at": "2026-02-18",
+        "reviewed_by": "data_pipeline_expansion",
+        "next_review_due": "2026-08-18",
+        "change_log": [
+          {
+            "date": "2026-02-18",
+            "change": "Initial entry added from unmapped ingredient audit",
+            "reason": "unmapped_ingredient_coverage"
+          }
+        ]
+      },
+      "severity_score": 1,
+      "confidence": "low",
+      "exposure_context": "supplement",
+      "entity_type": "ingredient",
+      "severity_level": "low",
+      "dose_thresholds": null,
+      "entity_relationships": null
+    },
+    {
+      "id": "ADD_MAGNESIUM_LAURATE",
+      "standard_name": "Magnesium Laurate",
+      "aliases": [
+        "magnesium laurate",
+        "magnesium dilaurate",
+        "lauric acid magnesium salt"
+      ],
+      "CUI": "C0891913",
+      "category": "flow_agent",
+      "mechanism_of_harm": "Magnesium salt of lauric acid used as flow agent and lubricant. Similar class to magnesium stearate. May affect tablet dissolution rate and potentially reduce bioavailability of active ingredients.",
+      "regulatory_status": {
+        "US": "FDA GRAS",
+        "EU": "Allowed",
+        "WHO": "No specific ADI"
+      },
+      "population_warnings": [
+        "People with fat absorption issues - May slow dissolution"
+      ],
+      "notes": "Flow agent and lubricant in tablet/capsule manufacturing. Functionally similar to magnesium stearate with comparable safety profile.",
+      "scientific_references": [],
+      "last_updated": "2026-02-18",
+      "match_rules": {
+        "match_mode": "alias_and_fuzzy",
+        "label_tokens": [
+          "Magnesium Laurate",
+          "magnesium laurate",
+          "magnesium dilaurate",
+          "lauric acid magnesium salt"
+        ],
+        "regex": null,
+        "fuzzy_threshold": 0.72,
+        "case_sensitive": false,
+        "preferred_alias": "Magnesium Laurate"
+      },
+      "references_structured": [],
+      "external_ids": {
+        "umls_cui": "C0891913",
+        "cas": "2504-72-5",
+        "pubchem": null
+      },
+      "jurisdictional_statuses": [
+        {
+          "authority": "US",
+          "jurisdiction": "US",
+          "status_code": "allowed",
+          "scope": "supplement",
+          "effective_range": {
+            "start": "2026-02-18",
+            "end": null
+          },
+          "source_ref": "https://www.fda.gov/food/food-additives-petitions/food-additive-status-list"
+        },
+        {
+          "authority": "EU",
+          "jurisdiction": "EU",
+          "status_code": "allowed",
+          "scope": "supplement",
+          "effective_range": {
+            "start": "2026-02-18",
+            "end": null
+          },
+          "source_ref": "https://www.efsa.europa.eu/en/efsajournal"
+        },
+        {
+          "authority": "WHO",
+          "jurisdiction": "WHO",
+          "status_code": "allowed",
+          "scope": "supplement",
+          "effective_range": {
+            "start": "2026-02-18",
+            "end": null
+          },
+          "source_ref": "https://www.who.int/publications"
+        }
+      ],
+      "review": {
+        "status": "validated",
+        "last_reviewed_at": "2026-02-18",
+        "reviewed_by": "data_pipeline_expansion",
+        "next_review_due": "2026-08-18",
+        "change_log": [
+          {
+            "date": "2026-02-18",
+            "change": "Initial entry added from unmapped ingredient audit",
+            "reason": "unmapped_ingredient_coverage"
+          }
+        ]
+      },
+      "severity_score": 1,
+      "confidence": "low",
+      "exposure_context": "supplement",
+      "entity_type": "ingredient",
+      "severity_level": "low",
+      "dose_thresholds": null,
+      "entity_relationships": null
+    },
+    {
+      "id": "ADD_MAGNESIUM_CITRATE_LAURATE",
+      "standard_name": "Magnesium Citrate Laurate",
+      "aliases": [
+        "magnesium citrate laurate",
+        "MagnesiumCitrateLaurate",
+        "magnesium citrate-laurate",
+        "Magnesium CitrateLaurate"
+      ],
+      "CUI": null,
+      "category": "flow_agent",
+      "mechanism_of_harm": "Composite flow agent combining magnesium citrate and laurate. Used as lubricant in capsule/tablet manufacturing. May affect dissolution characteristics of active ingredients.",
+      "regulatory_status": {
+        "US": "FDA GRAS",
+        "EU": "Allowed",
+        "WHO": "No specific ADI"
+      },
+      "population_warnings": [
+        "People with fat absorption issues - May slow dissolution"
+      ],
+      "notes": "Composite flow agent used in supplement manufacturing. Combined citrate-laurate form for lubrication. Minimal safety concerns at typical levels.",
+      "scientific_references": [],
+      "last_updated": "2026-02-18",
+      "match_rules": {
+        "match_mode": "alias_and_fuzzy",
+        "label_tokens": [
+          "Magnesium Citrate Laurate",
+          "magnesium citrate laurate",
+          "MagnesiumCitrateLaurate",
+          "magnesium citrate-laurate",
+          "Magnesium CitrateLaurate"
+        ],
+        "regex": null,
+        "fuzzy_threshold": 0.72,
+        "case_sensitive": false,
+        "preferred_alias": "Magnesium Citrate Laurate"
+      },
+      "references_structured": [],
+      "external_ids": {
+        "umls_cui": null,
+        "cas": null,
+        "pubchem": null
+      },
+      "jurisdictional_statuses": [
+        {
+          "authority": "US",
+          "jurisdiction": "US",
+          "status_code": "allowed",
+          "scope": "supplement",
+          "effective_range": {
+            "start": "2026-02-18",
+            "end": null
+          },
+          "source_ref": "https://www.fda.gov/food/food-additives-petitions/food-additive-status-list"
+        },
+        {
+          "authority": "EU",
+          "jurisdiction": "EU",
+          "status_code": "allowed",
+          "scope": "supplement",
+          "effective_range": {
+            "start": "2026-02-18",
+            "end": null
+          },
+          "source_ref": "https://www.efsa.europa.eu/en/efsajournal"
+        },
+        {
+          "authority": "WHO",
+          "jurisdiction": "WHO",
+          "status_code": "allowed",
+          "scope": "supplement",
+          "effective_range": {
+            "start": "2026-02-18",
+            "end": null
+          },
+          "source_ref": "https://www.who.int/publications"
+        }
+      ],
+      "review": {
+        "status": "validated",
+        "last_reviewed_at": "2026-02-18",
+        "reviewed_by": "data_pipeline_expansion",
+        "next_review_due": "2026-08-18",
+        "change_log": [
+          {
+            "date": "2026-02-18",
+            "change": "Initial entry added from unmapped ingredient audit",
+            "reason": "unmapped_ingredient_coverage"
+          }
+        ]
+      },
+      "severity_score": 1,
+      "confidence": "low",
+      "exposure_context": "supplement",
+      "entity_type": "ingredient",
+      "severity_level": "low",
+      "dose_thresholds": null,
+      "entity_relationships": null
+    },
+    {
+      "id": "ADD_CALCIUM_CITRATE_LAURATE",
+      "standard_name": "Calcium Citrate Laurate",
+      "aliases": [
+        "calcium citrate laurate",
+        "CalciumCitrateLaurate",
+        "calcium citrate-laurate"
+      ],
+      "CUI": null,
+      "category": "flow_agent",
+      "mechanism_of_harm": "Composite flow agent combining calcium citrate and laurate. Used as lubricant in capsule/tablet manufacturing. Same class concerns as other laurate flow agents regarding dissolution rate.",
+      "regulatory_status": {
+        "US": "FDA GRAS",
+        "EU": "Allowed",
+        "WHO": "No specific ADI"
+      },
+      "population_warnings": [
+        "People with fat absorption issues - May slow dissolution"
+      ],
+      "notes": "Composite calcium flow agent used in supplement manufacturing. Functionally equivalent to magnesium citrate laurate.",
+      "scientific_references": [],
+      "last_updated": "2026-02-18",
+      "match_rules": {
+        "match_mode": "alias_and_fuzzy",
+        "label_tokens": [
+          "Calcium Citrate Laurate",
+          "calcium citrate laurate",
+          "CalciumCitrateLaurate",
+          "calcium citrate-laurate"
+        ],
+        "regex": null,
+        "fuzzy_threshold": 0.72,
+        "case_sensitive": false,
+        "preferred_alias": "Calcium Citrate Laurate"
+      },
+      "references_structured": [],
+      "external_ids": {
+        "umls_cui": null,
+        "cas": null,
+        "pubchem": null
+      },
+      "jurisdictional_statuses": [
+        {
+          "authority": "US",
+          "jurisdiction": "US",
+          "status_code": "allowed",
+          "scope": "supplement",
+          "effective_range": {
+            "start": "2026-02-18",
+            "end": null
+          },
+          "source_ref": "https://www.fda.gov/food/food-additives-petitions/food-additive-status-list"
+        },
+        {
+          "authority": "EU",
+          "jurisdiction": "EU",
+          "status_code": "allowed",
+          "scope": "supplement",
+          "effective_range": {
+            "start": "2026-02-18",
+            "end": null
+          },
+          "source_ref": "https://www.efsa.europa.eu/en/efsajournal"
+        },
+        {
+          "authority": "WHO",
+          "jurisdiction": "WHO",
+          "status_code": "allowed",
+          "scope": "supplement",
+          "effective_range": {
+            "start": "2026-02-18",
+            "end": null
+          },
+          "source_ref": "https://www.who.int/publications"
+        }
+      ],
+      "review": {
+        "status": "validated",
+        "last_reviewed_at": "2026-02-18",
+        "reviewed_by": "data_pipeline_expansion",
+        "next_review_due": "2026-08-18",
+        "change_log": [
+          {
+            "date": "2026-02-18",
+            "change": "Initial entry added from unmapped ingredient audit",
+            "reason": "unmapped_ingredient_coverage"
+          }
+        ]
+      },
+      "severity_score": 1,
+      "confidence": "low",
+      "exposure_context": "supplement",
+      "entity_type": "ingredient",
+      "severity_level": "low",
+      "dose_thresholds": null,
+      "entity_relationships": null
+    },
+    {
+      "id": "ADD_TIME_SORB",
+      "standard_name": "Time-Sorb",
+      "aliases": [
+        "time-sorb",
+        "time sorb",
+        "timesorb",
+        "Time-Sorb(R)"
+      ],
+      "CUI": null,
+      "category": "coating_specialized",
+      "mechanism_of_harm": "Proprietary sustained-release coating technology. While designed to improve delivery, proprietary formulations lack independent verification. Coating materials may affect dissolution profile and interact with active ingredients.",
+      "regulatory_status": {
+        "US": "Not separately evaluated by FDA",
+        "EU": "Not evaluated",
+        "WHO": "Not evaluated"
+      },
+      "population_warnings": [
+        "People with GI sensitivity - Coating may cause digestive effects"
+      ],
+      "notes": "Proprietary sustained-release coating system. Limited public data on exact composition. May be beneficial for controlled release but proprietary nature limits transparency.",
+      "scientific_references": [],
+      "last_updated": "2026-02-18",
+      "match_rules": {
+        "match_mode": "alias_and_fuzzy",
+        "label_tokens": [
+          "Time-Sorb",
+          "time-sorb",
+          "time sorb",
+          "timesorb",
+          "Time-Sorb(R)"
+        ],
+        "regex": null,
+        "fuzzy_threshold": 0.72,
+        "case_sensitive": false,
+        "preferred_alias": "Time-Sorb"
+      },
+      "references_structured": [],
+      "external_ids": {
+        "umls_cui": null,
+        "cas": null,
+        "pubchem": null
+      },
+      "jurisdictional_statuses": [
+        {
+          "authority": "US",
+          "jurisdiction": "US",
+          "status_code": "allowed",
+          "scope": "supplement",
+          "effective_range": {
+            "start": "2026-02-18",
+            "end": null
+          },
+          "source_ref": "https://www.fda.gov/food/food-additives-petitions/food-additive-status-list"
+        },
+        {
+          "authority": "EU",
+          "jurisdiction": "EU",
+          "status_code": "allowed",
+          "scope": "supplement",
+          "effective_range": {
+            "start": "2026-02-18",
+            "end": null
+          },
+          "source_ref": "https://www.efsa.europa.eu/en/efsajournal"
+        },
+        {
+          "authority": "WHO",
+          "jurisdiction": "WHO",
+          "status_code": "allowed",
+          "scope": "supplement",
+          "effective_range": {
+            "start": "2026-02-18",
+            "end": null
+          },
+          "source_ref": "https://www.who.int/publications"
+        }
+      ],
+      "review": {
+        "status": "validated",
+        "last_reviewed_at": "2026-02-18",
+        "reviewed_by": "data_pipeline_expansion",
+        "next_review_due": "2026-08-18",
+        "change_log": [
+          {
+            "date": "2026-02-18",
+            "change": "Initial entry added from unmapped ingredient audit",
+            "reason": "unmapped_ingredient_coverage"
+          }
+        ]
+      },
+      "severity_score": 1,
+      "confidence": "low",
+      "exposure_context": "supplement",
+      "entity_type": "ingredient",
+      "severity_level": "low",
+      "dose_thresholds": null,
+      "entity_relationships": null
+    },
+    {
+      "id": "ADD_SORBIC_ACID",
+      "standard_name": "Sorbic Acid",
+      "aliases": [
+        "sorbic acid",
+        "E200",
+        "2,4-hexadienoic acid"
+      ],
+      "CUI": "C0074739",
+      "category": "preservative",
+      "mechanism_of_harm": "Synthetic preservative that may cause skin and mucous membrane irritation. Can trigger allergic reactions and contact dermatitis in sensitive individuals. Generally low concern at typical supplement levels but signals non-clean-label formulation.",
+      "regulatory_status": {
+        "US": "FDA GRAS",
+        "EU": "E200/E202/E203 approved",
+        "WHO": "JECFA ADI 25 mg/kg bw"
+      },
+      "population_warnings": [
+        "People with sorbate allergy - Contact dermatitis risk",
+        "People with asthma - May trigger bronchospasm in sensitive individuals"
+      ],
+      "notes": "Common preservative used to prevent mold and yeast growth. Generally recognized as safe at typical levels but indicates non-clean-label formulation. Preferred over synthetic alternatives like parabens.",
+      "scientific_references": [
+        "DOI: 10.1016/j.fct.2017.04.024 - Safety assessment of sorbic acid and sorbates"
+      ],
+      "last_updated": "2026-02-18",
+      "match_rules": {
+        "match_mode": "alias_and_fuzzy",
+        "label_tokens": [
+          "Sorbic Acid",
+          "sorbic acid",
+          "E200",
+          "2,4-hexadienoic acid"
+        ],
+        "regex": null,
+        "fuzzy_threshold": 0.72,
+        "case_sensitive": false,
+        "preferred_alias": "Sorbic Acid"
+      },
+      "references_structured": [
+        {
+          "type": "regulatory_action",
+          "authority": "EFSA",
+          "citation": "EFSA Journal 2015;13(3):4144 - Scientific Opinion on re-evaluation of sorbic acid (E 200), potassium sorbate (E 202) and calcium sorbate (E 203)",
+          "url": "https://doi.org/10.2903/j.efsa.2015.4144",
+          "published_date": "2015-03-10",
+          "evidence_grade": "B",
+          "confidence": "high"
+        }
+      ],
+      "external_ids": {
+        "umls_cui": "C0074739",
+        "cas": "110-44-1",
+        "pubchem": "643460"
+      },
+      "jurisdictional_statuses": [
+        {
+          "authority": "US",
+          "jurisdiction": "US",
+          "status_code": "allowed",
+          "scope": "supplement",
+          "effective_range": {
+            "start": "2026-02-18",
+            "end": null
+          },
+          "source_ref": "https://www.fda.gov/food/food-additives-petitions/food-additive-status-list"
+        },
+        {
+          "authority": "EU",
+          "jurisdiction": "EU",
+          "status_code": "allowed",
+          "scope": "supplement",
+          "effective_range": {
+            "start": "2026-02-18",
+            "end": null
+          },
+          "source_ref": "https://www.efsa.europa.eu/en/efsajournal"
+        },
+        {
+          "authority": "WHO",
+          "jurisdiction": "WHO",
+          "status_code": "allowed",
+          "scope": "supplement",
+          "effective_range": {
+            "start": "2026-02-18",
+            "end": null
+          },
+          "source_ref": "https://www.who.int/publications"
+        }
+      ],
+      "review": {
+        "status": "validated",
+        "last_reviewed_at": "2026-02-18",
+        "reviewed_by": "data_pipeline_expansion",
+        "next_review_due": "2026-08-18",
+        "change_log": [
+          {
+            "date": "2026-02-18",
+            "change": "Initial entry added from unmapped ingredient audit",
+            "reason": "unmapped_ingredient_coverage"
+          }
+        ]
+      },
+      "severity_score": 2,
+      "confidence": "high",
+      "exposure_context": "supplement",
+      "entity_type": "ingredient",
+      "severity_level": "low",
+      "dose_thresholds": null,
+      "entity_relationships": null
+    },
+    {
+      "id": "ADD_CAROB_COLOR",
+      "standard_name": "Carob Color",
+      "aliases": [
+        "carob color",
+        "carob colour",
+        "carob bean extract",
+        "carob extract color",
+        "E410 color",
+        "ceratonia siliqua color",
+        "carob powder color"
+      ],
+      "CUI": "C0065146",
+      "category": "colorant",
+      "mechanism_of_harm": "Natural colorant derived from carob bean. While generally safe as a food ingredient, its use as a colorant in supplements provides no nutritional benefit and signals cosmetic-driven formulation. May contain processing residues.",
+      "regulatory_status": {
+        "US": "FDA approved as color additive",
+        "EU": "Allowed",
+        "WHO": "No specific concerns"
+      },
+      "population_warnings": [
+        "People with legume allergies - Carob is a legume"
+      ],
+      "notes": "Natural brown colorant from carob bean. Used purely for aesthetic purposes in supplement formulation. Low safety concern but signals quality-focused vs. cosmetic-focused formulation.",
+      "scientific_references": [],
+      "last_updated": "2026-02-18",
+      "match_rules": {
+        "match_mode": "alias_and_fuzzy",
+        "label_tokens": [
+          "Carob Color",
+          "carob color",
+          "carob colour",
+          "carob bean extract",
+          "carob extract color",
+          "E410 color",
+          "ceratonia siliqua color",
+          "carob powder color"
+        ],
+        "regex": null,
+        "fuzzy_threshold": 0.72,
+        "case_sensitive": false,
+        "preferred_alias": "Carob Color"
+      },
+      "references_structured": [],
+      "external_ids": {
+        "umls_cui": "C0065146",
+        "cas": null,
+        "pubchem": null
+      },
+      "jurisdictional_statuses": [
+        {
+          "authority": "US",
+          "jurisdiction": "US",
+          "status_code": "allowed",
+          "scope": "supplement",
+          "effective_range": {
+            "start": "2026-02-18",
+            "end": null
+          },
+          "source_ref": "https://www.fda.gov/food/food-additives-petitions/food-additive-status-list"
+        },
+        {
+          "authority": "EU",
+          "jurisdiction": "EU",
+          "status_code": "allowed",
+          "scope": "supplement",
+          "effective_range": {
+            "start": "2026-02-18",
+            "end": null
+          },
+          "source_ref": "https://www.efsa.europa.eu/en/efsajournal"
+        },
+        {
+          "authority": "WHO",
+          "jurisdiction": "WHO",
+          "status_code": "allowed",
+          "scope": "supplement",
+          "effective_range": {
+            "start": "2026-02-18",
+            "end": null
+          },
+          "source_ref": "https://www.who.int/publications"
+        }
+      ],
+      "review": {
+        "status": "validated",
+        "last_reviewed_at": "2026-02-18",
+        "reviewed_by": "data_pipeline_expansion",
+        "next_review_due": "2026-08-18",
+        "change_log": [
+          {
+            "date": "2026-02-18",
+            "change": "Initial entry added from unmapped ingredient audit",
+            "reason": "unmapped_ingredient_coverage"
+          }
+        ]
+      },
+      "severity_score": 1,
+      "confidence": "medium",
+      "exposure_context": "supplement",
+      "entity_type": "ingredient",
+      "severity_level": "low",
+      "dose_thresholds": null,
+      "entity_relationships": null
+    },
+    {
+      "id": "ADD_VANILLIN",
+      "standard_name": "Vanillin",
+      "aliases": [
+        "vanillin",
+        "vanillin crystals",
+        "natural vanillin crystals",
+        "Vanillin Crystals",
+        "synthetic vanillin",
+        "ethyl vanillin",
+        "vanillin powder"
+      ],
+      "CUI": "C0078032",
+      "category": "flavor",
+      "mechanism_of_harm": "Flavoring compound that may be synthetically produced (from petrochemicals or wood pulp lignin). Even 'natural' vanillin may be produced via bioengineered fermentation rather than vanilla bean extraction. Purely cosmetic additive with no nutritional benefit.",
+      "regulatory_status": {
+        "US": "FDA GRAS",
+        "EU": "Approved flavoring",
+        "WHO": "JECFA acceptable"
+      },
+      "population_warnings": [
+        "People with vanilla sensitivity - Potential allergen"
+      ],
+      "notes": "Flavoring agent used for taste masking in supplements. Majority of commercial vanillin is synthetic. Even labeled 'natural vanillin' may be produced via fermentation rather than true vanilla extraction. No therapeutic value.",
+      "scientific_references": [],
+      "last_updated": "2026-02-18",
+      "match_rules": {
+        "match_mode": "alias_and_fuzzy",
+        "label_tokens": [
+          "Vanillin",
+          "vanillin",
+          "vanillin crystals",
+          "natural vanillin crystals",
+          "Vanillin Crystals",
+          "synthetic vanillin",
+          "ethyl vanillin",
+          "vanillin powder"
+        ],
+        "regex": null,
+        "fuzzy_threshold": 0.72,
+        "case_sensitive": false,
+        "preferred_alias": "Vanillin"
+      },
+      "references_structured": [],
+      "external_ids": {
+        "umls_cui": "C0078032",
+        "cas": "121-33-5",
+        "pubchem": "1183"
+      },
+      "jurisdictional_statuses": [
+        {
+          "authority": "US",
+          "jurisdiction": "US",
+          "status_code": "allowed",
+          "scope": "supplement",
+          "effective_range": {
+            "start": "2026-02-18",
+            "end": null
+          },
+          "source_ref": "https://www.fda.gov/food/food-additives-petitions/food-additive-status-list"
+        },
+        {
+          "authority": "EU",
+          "jurisdiction": "EU",
+          "status_code": "allowed",
+          "scope": "supplement",
+          "effective_range": {
+            "start": "2026-02-18",
+            "end": null
+          },
+          "source_ref": "https://www.efsa.europa.eu/en/efsajournal"
+        },
+        {
+          "authority": "WHO",
+          "jurisdiction": "WHO",
+          "status_code": "allowed",
+          "scope": "supplement",
+          "effective_range": {
+            "start": "2026-02-18",
+            "end": null
+          },
+          "source_ref": "https://www.who.int/publications"
+        }
+      ],
+      "review": {
+        "status": "validated",
+        "last_reviewed_at": "2026-02-18",
+        "reviewed_by": "data_pipeline_expansion",
+        "next_review_due": "2026-08-18",
+        "change_log": [
+          {
+            "date": "2026-02-18",
+            "change": "Initial entry added from unmapped ingredient audit",
+            "reason": "unmapped_ingredient_coverage"
+          }
+        ]
+      },
+      "severity_score": 1,
+      "confidence": "medium",
+      "exposure_context": "supplement",
+      "entity_type": "ingredient",
+      "severity_level": "low",
+      "dose_thresholds": null,
+      "entity_relationships": null
+    },
+    {
+      "id": "ADD_IRON_OXIDE",
+      "standard_name": "Iron Oxide",
+      "aliases": [
+        "iron oxide",
+        "iron oxides",
+        "E172",
+        "red iron oxide",
+        "yellow iron oxide",
+        "black iron oxide",
+        "synthetic iron oxide",
+        "Fe2O3",
+        "Fe3O4",
+        "CI 77491",
+        "CI 77492",
+        "CI 77499",
+        "iron oxide red",
+        "iron oxide yellow",
+        "iron oxide black"
+      ],
+      "CUI": "C0060240",
+      "category": "colorant",
+      "mechanism_of_harm": "FDA-approved color additive used in supplement capsule and tablet coatings (21 CFR 73.1200). Provides no nutritional benefit. Purely cosmetic additive. EFSA has requested additional nanoparticle characterization data but has not restricted its use. Iron from iron oxide colorants is poorly bioavailable and does not meaningfully contribute to iron intake.",
+      "regulatory_status": {
+        "US": "FDA approved since 2018 for dietary supplement tablets and capsules (21 CFR 73.1200). Limit: 5mg elemental iron/day.",
+        "EU": "E172 approved. EFSA re-evaluated 2015, maintained approval.",
+        "WHO": "JECFA ADI 0-0.5 mg/kg bw/day"
+      },
+      "population_warnings": [
+        "People with hemochromatosis - Though iron from colorants is poorly absorbed"
+      ],
+      "notes": "FDA-approved capsule and tablet colorant. One of the most common colorants in the supplement industry. Explicitly approved by FDA in 2018 for dietary supplement use. NOT banned anywhere. Low severity assigned as quality signal for non-clean-label formulation only.",
+      "scientific_references": [
+        "Federal Register 83 FR 54790 (2018) - FDA approval of synthetic iron oxide in dietary supplements",
+        "EFSA Journal 2015;13(12):4317 - Re-evaluation of iron oxides and hydroxides (E 172)"
+      ],
+      "last_updated": "2026-02-18",
+      "match_rules": {
+        "match_mode": "alias_and_fuzzy",
+        "label_tokens": [
+          "Iron Oxide",
+          "iron oxide",
+          "iron oxides",
+          "E172",
+          "red iron oxide",
+          "yellow iron oxide",
+          "black iron oxide",
+          "synthetic iron oxide",
+          "Fe2O3",
+          "Fe3O4",
+          "CI 77491",
+          "CI 77492",
+          "CI 77499",
+          "iron oxide red",
+          "iron oxide yellow",
+          "iron oxide black"
+        ],
+        "regex": null,
+        "fuzzy_threshold": 0.72,
+        "case_sensitive": false,
+        "preferred_alias": "Iron Oxide"
+      },
+      "references_structured": [
+        {
+          "type": "regulatory_action",
+          "authority": "FDA",
+          "citation": "Federal Register 83 FR 54790 - Listing of Color Additives Exempt From Certification; Synthetic Iron Oxide",
+          "url": "https://www.federalregister.gov/documents/2018/11/01/2018-23863/listing-of-color-additives-exempt-from-certification-synthetic-iron-oxide",
+          "published_date": "2018-11-01",
+          "evidence_grade": "A",
+          "confidence": "high"
+        },
+        {
+          "type": "monograph",
+          "authority": "EFSA",
+          "citation": "EFSA Journal 2015;13(12):4317 - Re-evaluation of iron oxides and hydroxides (E 172) as food additives",
+          "url": "https://doi.org/10.2903/j.efsa.2015.4317",
+          "published_date": "2015-12-01",
+          "evidence_grade": "B",
+          "confidence": "high"
+        }
+      ],
+      "external_ids": {
+        "umls_cui": "C0060240",
+        "cas": "1309-37-1",
+        "pubchem": null
+      },
+      "jurisdictional_statuses": [
+        {
+          "authority": "US",
+          "jurisdiction": "US",
+          "status_code": "allowed",
+          "scope": "supplement",
+          "effective_range": {
+            "start": "2018-12-04",
+            "end": null
+          },
+          "source_ref": "https://www.federalregister.gov/documents/2018/11/01/2018-23863"
+        },
+        {
+          "authority": "EU",
+          "jurisdiction": "EU",
+          "status_code": "allowed",
+          "scope": "supplement",
+          "effective_range": {
+            "start": "2026-02-18",
+            "end": null
+          },
+          "source_ref": "https://www.efsa.europa.eu/en/efsajournal/pub/4317"
+        },
+        {
+          "authority": "WHO",
+          "jurisdiction": "WHO",
+          "status_code": "allowed",
+          "scope": "supplement",
+          "effective_range": {
+            "start": "2026-02-18",
+            "end": null
+          },
+          "source_ref": "https://www.who.int/publications"
+        }
+      ],
+      "review": {
+        "status": "validated",
+        "last_reviewed_at": "2026-02-18",
+        "reviewed_by": "data_pipeline_audit",
+        "next_review_due": "2026-08-18",
+        "change_log": [
+          {
+            "date": "2026-02-18",
+            "change": "Moved from banned_recalled_ingredients (was BANNED_ADD_SYNTHETIC_IRON_OXIDES) to harmful_additives as low severity. FDA-approved colorant incorrectly classified as banned.",
+            "reason": "regulatory_accuracy_audit"
+          }
+        ]
+      },
+      "severity_score": 1,
+      "confidence": "high",
+      "exposure_context": "supplement",
+      "entity_type": "ingredient",
+      "severity_level": "low",
+      "dose_thresholds": null,
+      "entity_relationships": null
+    },
+    {
+      "id": "ADD_MINERAL_OIL",
+      "standard_name": "Mineral Oil",
+      "aliases": [
+        "mineral oil",
+        "liquid paraffin",
+        "white mineral oil",
+        "pharmaceutical mineral oil",
+        "USP mineral oil",
+        "paraffinum liquidum",
+        "light mineral oil",
+        "heavy mineral oil"
+      ],
+      "CUI": "C0066295",
+      "category": "lubricant_release_agent",
+      "mechanism_of_harm": "Petroleum-derived lubricant containing mineral oil saturated hydrocarbons (MOSH) and mineral oil aromatic hydrocarbons (MOAH). EFSA 2023 risk assessment found MOAH with 3+ aromatic rings are genotoxic and associated with DNA damage and carcinogenicity. MOSH can accumulate in human tissues. Oral mineral oil impairs absorption of fat-soluble vitamins (A, D, E, K), directly counterproductive in a supplement context.",
+      "regulatory_status": {
+        "US": "FDA permitted under 21 CFR 172.878 with purity specifications limiting aromatic content.",
+        "EU": "Under active regulatory restriction. EU Commission draft regulation (late 2023) proposes maximum MOAH levels in food, expected adoption 2025 with applicability from 2027. France banned MOAH-containing mineral oils in food packaging inks as of Jan 2025.",
+        "WHO": "No specific position on supplement use; defers to national regulators."
+      },
+      "population_warnings": [
+        "People taking fat-soluble vitamin supplements (A, D, E, K) - May impair absorption",
+        "Children - Higher MOAH exposure concern per EFSA",
+        "Elderly - Risk of lipoid pneumonia from aspiration"
+      ],
+      "notes": "EFSA 2023 assessment concluded MOAH fractions with 3+ aromatic rings pose a 'possible concern for human health.' While MOSH was found not to raise concerns at current levels, the safety margin is narrow. Mineral oil is an avoidable excipient -- better-formulated supplements use plant-based alternatives like magnesium stearate or vegetable-based release agents. EU is actively moving to restrict MOAH in food.",
+      "scientific_references": [
+        "EFSA Journal 2023;21(9):8215 - Update of the risk assessment of mineral oil hydrocarbons in food",
+        "21 CFR 172.878 - White mineral oil (FDA)"
+      ],
+      "last_updated": "2026-02-18",
+      "match_rules": {
+        "match_mode": "alias_and_fuzzy",
+        "label_tokens": [
+          "Mineral Oil",
+          "mineral oil",
+          "liquid paraffin",
+          "white mineral oil",
+          "pharmaceutical mineral oil",
+          "USP mineral oil",
+          "paraffinum liquidum",
+          "light mineral oil",
+          "heavy mineral oil"
+        ],
+        "regex": null,
+        "fuzzy_threshold": 0.72,
+        "case_sensitive": false,
+        "preferred_alias": "Mineral Oil"
+      },
+      "references_structured": [
+        {
+          "type": "monograph",
+          "authority": "EFSA",
+          "citation": "EFSA Journal 2023;21(9):8215 - Update of the risk assessment of mineral oil hydrocarbons in food",
+          "url": "https://doi.org/10.2903/j.efsa.2023.8215",
+          "published_date": "2023-09-20",
+          "evidence_grade": "A",
+          "confidence": "high"
+        },
+        {
+          "type": "regulatory_action",
+          "authority": "FDA",
+          "citation": "21 CFR 172.878 - White mineral oil",
+          "url": "https://www.ecfr.gov/current/title-21/chapter-I/subchapter-B/part-172/subpart-I/section-172.878",
+          "published_date": null,
+          "evidence_grade": "A",
+          "confidence": "high"
+        }
+      ],
+      "external_ids": {
+        "umls_cui": "C0066295",
+        "cas": "8042-47-5",
+        "pubchem": null
+      },
+      "jurisdictional_statuses": [
+        {
+          "authority": "US",
+          "jurisdiction": "US",
+          "status_code": "allowed",
+          "scope": "supplement",
+          "effective_range": {
+            "start": "2026-02-18",
+            "end": null
+          },
+          "source_ref": "https://www.ecfr.gov/current/title-21/chapter-I/subchapter-B/part-172/subpart-I/section-172.878"
+        },
+        {
+          "authority": "EU",
+          "jurisdiction": "EU",
+          "status_code": "restricted",
+          "scope": "supplement",
+          "effective_range": {
+            "start": "2026-02-18",
+            "end": null
+          },
+          "source_ref": "https://doi.org/10.2903/j.efsa.2023.8215"
+        }
+      ],
+      "review": {
+        "status": "validated",
+        "last_reviewed_at": "2026-02-18",
+        "reviewed_by": "data_pipeline_audit",
+        "next_review_due": "2026-08-18",
+        "change_log": [
+          {
+            "date": "2026-02-18",
+            "change": "Moved from other_ingredients to harmful_additives. EFSA 2023 found MOAH genotoxic/carcinogenic concern. Impairs fat-soluble vitamin absorption.",
+            "reason": "online_safety_audit"
+          }
+        ]
+      },
+      "severity_score": 4,
+      "confidence": "high",
+      "exposure_context": "supplement",
+      "entity_type": "ingredient",
+      "severity_level": "moderate",
+      "dose_thresholds": null,
+      "entity_relationships": null
+    },
+    {
+      "id": "ADD_SODIUM_HEXAMETAPHOSPHATE",
+      "standard_name": "Sodium Hexametaphosphate",
+      "aliases": [
+        "sodium hexametaphosphate",
+        "SHMP",
+        "E452i",
+        "sodium polyphosphate",
+        "sodium hexametaphoshate",
+        "calgon",
+        "hexametaphosphate"
+      ],
+      "CUI": "C0074791",
+      "category": "sequestrant_emulsifier",
+      "mechanism_of_harm": "Polyphosphate salt contributing significant inorganic phosphorus absorbed at 90-100% efficiency (vs 40-60% for natural food phosphorus). EFSA 2019 re-evaluation established group ADI of 40 mg phosphorus/kg bw/day, which is already exceeded in infants, toddlers, and children at mean intake levels. Elevated serum phosphorus is associated with increased cardiovascular disease, vascular calcification, and accelerated kidney disease progression even within the 'normal' lab range. Approximately 10% of the general population has some degree of CKD with reduced renal function.",
+      "regulatory_status": {
+        "US": "FDA GRAS as sequestrant when used per good manufacturing practice (21 CFR 182).",
+        "EU": "E452i approved. EFSA 2019 re-evaluation set group ADI of 40 mg P/kg bw/day for all phosphate additives (E 338-452). ADI already exceeded in children.",
+        "WHO": "JECFA established maximum tolerable daily intake for phosphorus."
+      },
+      "population_warnings": [
+        "Children, infants, and toddlers - EFSA found ADI already exceeded in these groups at mean intake",
+        "People with chronic kidney disease (CKD) - ~10% of general population; cannot efficiently excrete phosphorus",
+        "People with cardiovascular disease - Elevated phosphorus linked to vascular calcification",
+        "Elderly - Higher CKD prevalence"
+      ],
+      "notes": "While SHMP has low acute toxicity, the inorganic phosphorus it contributes is a legitimate public health concern. EFSA's 2019 re-evaluation was the first time a numerical ADI was set for phosphates (previously 'not specified'), reflecting growing evidence of harm. A supplement intended to promote health should not add unnecessary inorganic phosphorus, especially given that the ADI is already exceeded in vulnerable populations.",
+      "scientific_references": [
+        "EFSA Journal 2019;17(6):5674 - Re-evaluation of phosphoric acid-phosphates-di-, tri- and polyphosphates (E 338-341, E 343, E 450-452) as food additives",
+        "DOI: 10.1161/ATVBAHA.123.319198 - Phosphate in cardiovascular disease (AHA)",
+        "DOI: 10.1053/j.ajkd.2013.08.005 - Phosphorus and the kidney"
+      ],
+      "last_updated": "2026-02-18",
+      "match_rules": {
+        "match_mode": "alias_and_fuzzy",
+        "label_tokens": [
+          "Sodium Hexametaphosphate",
+          "sodium hexametaphosphate",
+          "SHMP",
+          "E452i",
+          "sodium polyphosphate",
+          "sodium hexametaphoshate",
+          "calgon",
+          "hexametaphosphate"
+        ],
+        "regex": null,
+        "fuzzy_threshold": 0.72,
+        "case_sensitive": false,
+        "preferred_alias": "Sodium Hexametaphosphate"
+      },
+      "references_structured": [
+        {
+          "type": "monograph",
+          "authority": "EFSA",
+          "citation": "EFSA Journal 2019;17(6):5674 - Re-evaluation of phosphoric acid-phosphates (E 338-452) as food additives",
+          "url": "https://doi.org/10.2903/j.efsa.2019.5674",
+          "published_date": "2019-06-12",
+          "evidence_grade": "A",
+          "confidence": "high"
+        },
+        {
+          "type": "peer_reviewed",
+          "authority": "AHA",
+          "citation": "Phosphate in Cardiovascular Disease - Arteriosclerosis, Thrombosis, and Vascular Biology",
+          "url": "https://doi.org/10.1161/ATVBAHA.123.319198",
+          "published_date": "2024-01-01",
+          "evidence_grade": "B",
+          "confidence": "high"
+        },
+        {
+          "type": "peer_reviewed",
+          "authority": "AJKD",
+          "citation": "Phosphorus and the Kidney - American Journal of Kidney Diseases",
+          "url": "https://doi.org/10.1053/j.ajkd.2013.08.005",
+          "published_date": "2013-08-01",
+          "evidence_grade": "B",
+          "confidence": "high"
+        }
+      ],
+      "external_ids": {
+        "umls_cui": "C0074791",
+        "cas": "68915-31-1",
+        "pubchem": null
+      },
+      "jurisdictional_statuses": [
+        {
+          "authority": "US",
+          "jurisdiction": "US",
+          "status_code": "allowed",
+          "scope": "supplement",
+          "effective_range": {
+            "start": "2026-02-18",
+            "end": null
+          },
+          "source_ref": "https://www.ecfr.gov/current/title-21/chapter-I/subchapter-B/part-182"
+        },
+        {
+          "authority": "EU",
+          "jurisdiction": "EU",
+          "status_code": "warning_required",
+          "scope": "supplement",
+          "effective_range": {
+            "start": "2019-06-12",
+            "end": null
+          },
+          "source_ref": "https://doi.org/10.2903/j.efsa.2019.5674"
+        }
+      ],
+      "review": {
+        "status": "validated",
+        "last_reviewed_at": "2026-02-18",
+        "reviewed_by": "data_pipeline_audit",
+        "next_review_due": "2026-08-18",
+        "change_log": [
+          {
+            "date": "2026-02-18",
+            "change": "Moved from other_ingredients to harmful_additives. EFSA 2019 set ADI already exceeded in children. Cardiovascular and renal risk from inorganic phosphorus.",
+            "reason": "online_safety_audit"
+          }
+        ]
+      },
+      "severity_score": 4,
+      "confidence": "high",
+      "exposure_context": "supplement",
+      "entity_type": "ingredient",
+      "severity_level": "moderate",
+      "dose_thresholds": null,
+      "entity_relationships": null
+    },
+    {
+      "id": "ADD_SENNA",
+      "standard_name": "Senna",
+      "aliases": [
+        "senna",
+        "senna leaf",
+        "senna extract",
+        "sennosides",
+        "cassia angustifolia",
+        "senna alexandrina",
+        "senna pod",
+        "senna fruit",
+        "senna glycoside",
+        "senokot"
+      ],
+      "CUI": "C0036860",
+      "category": "stimulant_laxative",
+      "mechanism_of_harm": "Contains hydroxyanthracene derivatives (HADs) including sennosides, emodin, and aloe-emodin. EFSA 2018 concluded HADs should be considered genotoxic and carcinogenic unless proven otherwise. EFSA was unable to establish any safe daily intake level. Acts as a stimulant laxative causing chronic dependency, electrolyte imbalance (hypokalemia leading to cardiac arrhythmias), melanosis coli, and documented liver injury including acute liver failure.",
+      "regulatory_status": {
+        "US": "FDA reclassified from Category I (GRASE) to Category III (insufficient safety data) for OTC laxative drug use. Still sold in supplements under DSHEA.",
+        "EU": "EFSA 2018 and 2024: HADs are genotoxic and carcinogenic concern. EU attempted ban under Regulation 2021/468, annulled on procedural grounds Nov 2024, but scientific concerns unchanged.",
+        "Canada": "Health Canada permits for max 7 days with mandatory warnings.",
+        "WHO": "WHO Monographs acknowledge short-term traditional use only."
+      },
+      "population_warnings": [
+        "Pregnant women - Contraindicated",
+        "Children - Not recommended",
+        "People with inflammatory bowel disease - Contraindicated",
+        "People with electrolyte imbalances - Risk of hypokalemia",
+        "Chronic users - Laxative dependency risk"
+      ],
+      "notes": "EFSA 2018 concluded HADs (including sennosides from senna) are genotoxic and potentially carcinogenic, and was unable to establish any safe daily intake. FDA reclassified from GRASE to Category III. Primarily recognized as an OTC drug ingredient (laxative), not a dietary supplement ingredient. Chronic use causes dependency, electrolyte imbalance, melanosis coli, and documented liver injury. NIH LiverTox documents clinically apparent liver injury from senna abuse.",
+      "scientific_references": [
+        "EFSA Journal 2018;16(1):5090 - Safety of hydroxyanthracene derivatives for use in food",
+        "EFSA Journal 2024;22(5):e8766 - Re-evaluation of Cassia senna L.",
+        "NIH LiverTox - Senna (NBK547922)",
+        "DOI: 10.1345/aph.1E670 - Acute liver failure related to senna abuse"
+      ],
+      "last_updated": "2026-02-18",
+      "match_rules": {
+        "match_mode": "alias_and_fuzzy",
+        "label_tokens": [
+          "Senna",
+          "senna",
+          "senna leaf",
+          "senna extract",
+          "sennosides",
+          "cassia angustifolia",
+          "senna alexandrina",
+          "senna pod",
+          "senna fruit",
+          "senna glycoside",
+          "senokot"
+        ],
+        "regex": null,
+        "fuzzy_threshold": 0.72,
+        "case_sensitive": false,
+        "preferred_alias": "Senna"
+      },
+      "references_structured": [
+        {
+          "type": "monograph",
+          "authority": "EFSA",
+          "citation": "EFSA Journal 2018;16(1):5090 - Safety of hydroxyanthracene derivatives for use in food",
+          "url": "https://doi.org/10.2903/j.efsa.2018.5090",
+          "published_date": "2018-01-23",
+          "evidence_grade": "A",
+          "confidence": "high"
+        },
+        {
+          "type": "monograph",
+          "authority": "EFSA",
+          "citation": "EFSA Journal 2024;22(5):e8766 - Re-evaluation of Cassia senna L.",
+          "url": "https://doi.org/10.2903/j.efsa.2024.8766",
+          "published_date": "2024-05-01",
+          "evidence_grade": "A",
+          "confidence": "high"
+        },
+        {
+          "type": "case_report",
+          "authority": "NIH",
+          "citation": "LiverTox: Clinical and Research Information on Drug-Induced Liver Injury - Senna",
+          "url": "https://www.ncbi.nlm.nih.gov/books/NBK547922/",
+          "published_date": null,
+          "evidence_grade": "B",
+          "confidence": "high"
+        }
+      ],
+      "external_ids": {
+        "umls_cui": "C0036860",
+        "cas": "8013-11-4",
+        "pubchem": null
+      },
+      "jurisdictional_statuses": [
+        {
+          "authority": "US",
+          "jurisdiction": "US",
+          "status_code": "restricted",
+          "scope": "supplement",
+          "effective_range": {
+            "start": "2026-02-18",
+            "end": null
+          },
+          "source_ref": "https://www.fda.gov/drugs/historical-status-otc-rulemakings/rulemaking-history-otc-laxative-drug-products"
+        },
+        {
+          "authority": "EU",
+          "jurisdiction": "EU",
+          "status_code": "restricted",
+          "scope": "supplement",
+          "effective_range": {
+            "start": "2018-01-23",
+            "end": null
+          },
+          "source_ref": "https://doi.org/10.2903/j.efsa.2018.5090"
+        }
+      ],
+      "review": {
+        "status": "validated",
+        "last_reviewed_at": "2026-02-18",
+        "reviewed_by": "data_pipeline_audit",
+        "next_review_due": "2026-08-18",
+        "change_log": [
+          {
+            "date": "2026-02-18",
+            "change": "Moved from botanical_ingredients to harmful_additives. EFSA 2018/2024: HADs genotoxic and carcinogenic, no safe dose. FDA reclassified from GRASE.",
+            "reason": "online_safety_audit"
+          }
+        ]
+      },
+      "severity_score": 7,
+      "confidence": "high",
+      "exposure_context": "supplement",
+      "entity_type": "ingredient",
+      "severity_level": "high",
+      "dose_thresholds": null,
+      "entity_relationships": null
+    },
+    {
+      "id": "ADD_CASCARA_SAGRADA",
+      "standard_name": "Cascara Sagrada",
+      "aliases": [
+        "cascara sagrada",
+        "cascara",
+        "rhamnus purshiana",
+        "frangula purshiana",
+        "cascara sagrada bark",
+        "cascara bark",
+        "casanthranol",
+        "cascara extract"
+      ],
+      "CUI": "C0054749",
+      "category": "stimulant_laxative",
+      "mechanism_of_harm": "Contains hydroxyanthracene derivatives (HADs) including cascarosides. FDA formally ruled cascara sagrada 'not generally recognized as safe and effective' in 2002 (67 FR 31125). EFSA 2018/2024: HADs are genotoxic and carcinogenic concern. Same chronic risks as senna: laxative dependency, electrolyte imbalance (hypokalemia), melanosis coli, liver damage. NIH LiverTox documents acute liver failure cases.",
+      "regulatory_status": {
+        "US": "FDA stripped GRASE status in 2002 (67 FR 31125). Added to 21 CFR 310.545 (not safe/effective for OTC laxative use). Still sold in supplements under DSHEA regulatory gap.",
+        "EU": "EFSA 2018/2024: HADs genotoxic concern. Same regulatory trajectory as senna.",
+        "Canada": "Health Canada permits for max 7 days with mandatory warnings."
+      },
+      "population_warnings": [
+        "Pregnant women - Contraindicated",
+        "Children - Not recommended",
+        "People with inflammatory bowel disease - Contraindicated",
+        "People with electrolyte imbalances - Risk of hypokalemia",
+        "Chronic users - Laxative dependency and colonic atony risk"
+      ],
+      "notes": "FDA explicitly stripped GRASE status in 2002 after industry failed to submit required safety data. Only remains in supplements due to DSHEA regulatory gap, NOT because it was found safe. EFSA 2018/2024: HADs genotoxic and carcinogenic concern. NIH LiverTox documents liver injury cases including acute liver failure with portal hypertension. Stronger regulatory case against it than senna.",
+      "scientific_references": [
+        "Federal Register 67 FR 31125 (2002) - Status of certain additional OTC drug Category II and III active ingredients",
+        "EFSA Journal 2018;16(1):5090 - Safety of hydroxyanthracene derivatives",
+        "EFSA Journal 2024;22(5):e8766 - Re-evaluation including Rhamnus purshiana",
+        "NIH LiverTox - Cascara (NBK548113)"
+      ],
+      "last_updated": "2026-02-18",
+      "match_rules": {
+        "match_mode": "alias_and_fuzzy",
+        "label_tokens": [
+          "Cascara Sagrada",
+          "cascara sagrada",
+          "cascara",
+          "rhamnus purshiana",
+          "frangula purshiana",
+          "cascara sagrada bark",
+          "cascara bark",
+          "casanthranol",
+          "cascara extract"
+        ],
+        "regex": null,
+        "fuzzy_threshold": 0.72,
+        "case_sensitive": false,
+        "preferred_alias": "Cascara Sagrada"
+      },
+      "references_structured": [
+        {
+          "type": "regulatory_action",
+          "authority": "FDA",
+          "citation": "Federal Register 67 FR 31125 - FDA strips GRASE status from cascara sagrada",
+          "url": "https://www.federalregister.gov/documents/2002/05/09/02-11510/status-of-certain-additional-over-the-counter-drug-category-ii-and-iii-active-ingredients",
+          "published_date": "2002-05-09",
+          "evidence_grade": "A",
+          "confidence": "high"
+        },
+        {
+          "type": "monograph",
+          "authority": "EFSA",
+          "citation": "EFSA Journal 2018;16(1):5090 - Safety of hydroxyanthracene derivatives for use in food",
+          "url": "https://doi.org/10.2903/j.efsa.2018.5090",
+          "published_date": "2018-01-23",
+          "evidence_grade": "A",
+          "confidence": "high"
+        },
+        {
+          "type": "case_report",
+          "authority": "NIH",
+          "citation": "LiverTox: Cascara",
+          "url": "https://www.ncbi.nlm.nih.gov/books/NBK548113/",
+          "published_date": null,
+          "evidence_grade": "B",
+          "confidence": "high"
+        }
+      ],
+      "external_ids": {
+        "umls_cui": "C0054749",
+        "cas": "8047-27-6",
+        "pubchem": null
+      },
+      "jurisdictional_statuses": [
+        {
+          "authority": "US",
+          "jurisdiction": "US",
+          "status_code": "restricted",
+          "scope": "supplement",
+          "effective_range": {
+            "start": "2002-05-09",
+            "end": null
+          },
+          "source_ref": "https://www.federalregister.gov/documents/2002/05/09/02-11510"
+        },
+        {
+          "authority": "EU",
+          "jurisdiction": "EU",
+          "status_code": "restricted",
+          "scope": "supplement",
+          "effective_range": {
+            "start": "2018-01-23",
+            "end": null
+          },
+          "source_ref": "https://doi.org/10.2903/j.efsa.2018.5090"
+        }
+      ],
+      "review": {
+        "status": "validated",
+        "last_reviewed_at": "2026-02-18",
+        "reviewed_by": "data_pipeline_audit",
+        "next_review_due": "2026-08-18",
+        "change_log": [
+          {
+            "date": "2026-02-18",
+            "change": "Moved from botanical_ingredients to harmful_additives. FDA stripped GRASE 2002. EFSA 2018/2024: HADs genotoxic.",
+            "reason": "online_safety_audit"
+          }
+        ]
+      },
+      "severity_score": 7,
+      "confidence": "high",
+      "exposure_context": "supplement",
+      "entity_type": "ingredient",
+      "severity_level": "high",
+      "dose_thresholds": null,
+      "entity_relationships": null
+    },
+    {
+      "id": "ADD_DOCUSATE_SODIUM",
+      "standard_name": "Docusate Sodium",
+      "aliases": [
+        "docusate sodium",
+        "docusate",
+        "dioctyl sodium sulfosuccinate",
+        "DSS",
+        "colace",
+        "docusate calcium",
+        "docusate potassium",
+        "sodium docusate",
+        "stool softener"
+      ],
+      "CUI": "C0012996",
+      "category": "pharmaceutical_contaminant",
+      "mechanism_of_harm": "OTC drug (stool softener) classified under FDA drug monograph, not a dietary supplement ingredient. Presence in a supplement indicates mislabeling or adulteration. Acts as surfactant that softens stool by lowering surface tension.",
+      "regulatory_status": {
+        "US": "FDA OTC drug monograph (not a dietary supplement ingredient)",
+        "EU": "Classified as pharmaceutical",
+        "Global": "Universally classified as a drug, not a supplement"
+      },
+      "population_warnings": [
+        "Not appropriate as supplement ingredient - pharmaceutical drug"
+      ],
+      "notes": "Docusate sodium is a well-established OTC stool softener drug. Its presence in a product labeled as a dietary supplement represents an FDA compliance violation (drug in supplement). Not inherently dangerous at therapeutic doses, but should not appear in supplements.",
+      "scientific_references": [
+        "FDA OTC Drug Monograph - Laxative Products"
+      ],
+      "last_updated": "2026-02-18",
+      "match_rules": {
+        "match_mode": "alias_and_fuzzy",
+        "label_tokens": [
+          "docusate sodium",
+          "docusate",
+          "dioctyl sodium sulfosuccinate",
+          "docusate calcium"
+        ],
+        "exclusions": [],
+        "case_sensitive": false,
+        "preferred_alias": "docusate sodium",
+        "fuzzy_threshold": 0.85
+      },
+      "references_structured": [],
+      "external_ids": {
+        "CUI": "C0012996",
+        "CAS": "577-11-7",
+        "PubChem": "23673837"
+      },
+      "jurisdictional_statuses": [],
+      "review": {
+        "status": "reviewed",
+        "reviewer": "safety_data_team",
+        "cadence": "annual"
+      },
+      "severity_score": 5,
+      "confidence": "high",
+      "exposure_context": "oral",
+      "entity_type": "ingredient",
+      "severity_level": "moderate",
+      "dose_thresholds": null,
+      "entity_relationships": []
     }
   ]
 }

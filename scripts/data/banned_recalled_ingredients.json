@@ -3,7 +3,7 @@
     "description": "Banned and recalled ingredients database for regulatory compliance and safety (v3.0)",
     "purpose": "safety_disqualification_and_regulatory_compliance",
     "schema_version": "4.0.0",
-    "last_updated": "2026-02-16",
+    "last_updated": "2026-02-18",
     "total_entries": 140,
     "data_source_metadata": {
       "sources": [
@@ -22,13 +22,13 @@
         "scientific_references",
         "aliases"
       ],
-        "authoritative_fields": [
-          "legal_status_enum",
-          "clinical_risk_enum",
-          "jurisdictions",
-          "references_structured",
-          "aliases"
-        ],
+      "authoritative_fields": [
+        "legal_status_enum",
+        "clinical_risk_enum",
+        "jurisdictions",
+        "references_structured",
+        "aliases"
+      ],
       "deprecation_timeline": "deprecated fields will be removed in v4.0",
       "migrated_from": "2.2",
       "migration_date": "2026-01-08"
@@ -914,266 +914,6 @@
       "recent_recalls_2025": null,
       "safe_dose_limit": null,
       "supersedes_ids": null,
-      "threshold": null,
-      "unii": null,
-      "usp_limit_mcg_day": null,
-      "wada_prohibited": null
-    },
-    {
-      "id": "BANNED_ADD_ALUMINUM_COMPOUNDS",
-      "standard_name": "Aluminum Compounds",
-      "aliases": [
-        "aluminum",
-        "aluminium",
-        "aluminum hydroxide",
-        "aluminum oxide",
-        "aluminum sulfate",
-        "aluminum silicate",
-        "E173",
-        "E520",
-        "E521",
-        "E522",
-        "E523",
-        "sodium aluminum phosphate",
-        "sodium aluminum sulfate",
-        "aluminum lake dyes",
-        "aluminum stearate"
-      ],
-      "CUI": "C0002367",
-      "category": "heavy_metal",
-      "mechanism_of_harm": "Neurotoxic metal that accumulates in brain, bones, and organs. Linked to Alzheimer's disease, cognitive decline, and neurodegenerative disorders. Interferes with calcium metabolism and bone health. Can cause oxidative stress and inflammation. Particularly concerning in leavening agents and color additives.",
-      "regulatory_status": {
-        "US": "FDA approved for various uses but under review",
-        "EU": "E173, E520-E523 approved with restrictions",
-        "WHO": "JECFA provisional TWI of 2 mg/kg body weight/week"
-      },
-      "population_warnings": [
-        "Older adults - Alzheimer's and cognitive decline risk",
-        "People with kidney disease - Cannot excrete aluminum properly",
-        "Children - Neurodevelopmental concerns",
-        "Pregnant women - May affect fetal brain development",
-        "Everyone - Minimize exposure from all sources"
-      ],
-      "notes": "Various aluminum compounds used as anticaking agents, leavening agents, and in color additives (aluminum lake dyes). Accumulates in body over time. 2024-2025 research continues to link aluminum exposure to neurodegenerative diseases. Particularly concerning in baking powders (sodium aluminum phosphate, sodium aluminum sulfate) and artificial color lakes. Avoid when possible. [reclassified_2026-02-16: moved from hard-safety to restricted additive watchlist; enforce via additive penalties, not B0 immediate-fail]",
-      "scientific_references": [
-        "DOI: 10.3233/JAD-190863 - Alzheimer's association",
-        "DOI: 10.1016/j.fct.2020.111alexandrium - Neurotoxicity review",
-        "DOI: 10.1007/s00204-024-03456-7 - Cognitive effects 2024"
-      ],
-      "last_updated": "2025-11-17",
-      "match_rules": {
-        "match_mode": "alias_and_fuzzy",
-        "label_tokens": [
-          "aluminum compounds",
-          "aluminum",
-          "aluminium",
-          "aluminum hydroxide",
-          "aluminum oxide",
-          "aluminum sulfate",
-          "aluminum silicate",
-          "e173",
-          "e520",
-          "e521",
-          "e522",
-          "e523",
-          "sodium aluminum phosphate",
-          "sodium aluminum sulfate",
-          "aluminum lake dyes",
-          "aluminum stearate"
-        ],
-        "exclusions": [],
-        "case_sensitive": false,
-        "priority": 1,
-        "match_type": "normalized",
-        "confidence": "high",
-        "negative_match_terms": []
-      },
-      "references_structured": [
-        {
-          "type": "doi",
-          "id": "10.3233/JAD-190863",
-          "title": "Alzheimer's association",
-          "evidence_grade": "B",
-          "url": "https://doi.org/10.3233/JAD-190863",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
-          "evidence_summary": "Alzheimer's association"
-        },
-        {
-          "type": "doi",
-          "id": "10.1016/j.fct.2020.111alexandrium",
-          "title": "Neurotoxicity review",
-          "evidence_grade": "B",
-          "url": "https://doi.org/10.1016/j.fct.2020.111alexandrium",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
-          "evidence_summary": "Neurotoxicity review"
-        },
-        {
-          "type": "doi",
-          "id": "10.1007/s00204-024-03456-7",
-          "title": "Cognitive effects 2024",
-          "evidence_grade": "B",
-          "url": "https://doi.org/10.1007/s00204-024-03456-7",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
-          "evidence_summary": "Cognitive effects 2024"
-        }
-      ],
-      "external_ids": {
-        "umls_cui": "C0002367",
-        "cas": null,
-        "pubchem": null
-      },
-      "jurisdictional_statuses": [
-        {
-          "authority": "US",
-          "jurisdiction": "US",
-          "status_code": "allowed",
-          "scope": "supplement",
-          "effective_range": {
-            "start": null,
-            "end": null
-          },
-          "source_ref": null
-        },
-        {
-          "authority": "EU",
-          "jurisdiction": "EU",
-          "status_code": "warning_required",
-          "scope": "supplement",
-          "effective_range": {
-            "start": null,
-            "end": null
-          },
-          "source_ref": null
-        },
-        {
-          "authority": "WHO",
-          "jurisdiction": "WHO",
-          "status_code": "allowed",
-          "scope": "supplement",
-          "effective_range": {
-            "start": null,
-            "end": null
-          },
-          "source_ref": null
-        }
-      ],
-      "review": {
-        "status": "validated",
-        "last_reviewed_at": "2026-02-16",
-        "next_review_due": "2026-07-07",
-        "reviewed_by": "migration_script",
-        "change_log": [
-          {
-            "date": "2026-01-08",
-            "change": "Migrated to schema v3.1 with standardized fields",
-            "by": "system"
-          }
-        ]
-      },
-      "severity_score": 5,
-      "confidence": "high",
-      "exposure_context": "supplement",
-      "status": "restricted",
-      "banned_by": "EU; US; WHO",
-      "reason": "Various aluminum compounds used as anticaking agents, leavening agents, and in color additives (aluminum lake dyes). Accumulates in body over time. 2024-2025 research continues to link aluminum exposure to neurodegenerative diseases. Particularly concerning in baking powders (sodium aluminum phosphate, sodium aluminum sulfate) and artificial color lakes. Avoid when possible.",
-      "fda_warning": true,
-      "jurisdictions": [
-        {
-          "region": "US",
-          "level": "federal",
-          "status": "restricted",
-          "effective_date": "",
-          "source": {
-            "type": "fda_action",
-            "citation": "FDA approved for various uses but under review",
-            "accessed_date": "2026-01-08"
-          },
-          "jurisdiction_type": "country",
-          "jurisdiction_code": "US",
-          "last_verified_date": "2026-01-08"
-        },
-        {
-          "region": "US",
-          "level": "state",
-          "name": "WHO",
-          "status": "banned",
-          "effective_date": "",
-          "source": {
-            "type": "state_statute",
-            "citation": "JECFA provisional TWI of 2 mg/kg body weight/week",
-            "accessed_date": "2026-01-08"
-          },
-          "jurisdiction_type": "state",
-          "jurisdiction_code": "US",
-          "last_verified_date": "2026-01-08"
-        }
-      ],
-      "legal_status_enum": "high_risk",
-      "clinical_risk_enum": "moderate",
-      "ingredient_type": "synthetic",
-      "class_tags": [
-        "high_risk_ingredients",
-        "heavy_metal"
-      ],
-      "use_case_categories": [
-        "general"
-      ],
-      "source_category": "high_risk_ingredients",
-      "source_confidence": "medium",
-      "data_quality": {
-        "completeness": 1.0,
-        "missing_fields": [],
-        "review_status": "validated"
-      },
-      "update_flags": {
-        "needs_source_verification": false
-      },
-      "supersedes_ids": [
-        "ADD_ALUMINUM_COMPOUNDS"
-      ],
-      "regulatory_actions": [],
-      "last_reviewed_at": "2026-02-16",
-      "reviewed_by": "migration_script",
-      "regulatory_status_enum": "high_risk",
-      "entity_type": "ingredient",
-      "effective_period": {
-        "start": null,
-        "end": null,
-        "notes": null
-      },
-      "severity_level": "high",
-      "ban_effective_date": null,
-      "banned_countries": null,
-      "banned_date": null,
-      "ca_prop65_limit_mcg_day": null,
-      "cas_number": null,
-      "chemical_symbol": null,
-      "contraindications": null,
-      "cui_note": null,
-      "detection_difficulty": null,
-      "drugbank_id": null,
-      "effective_date": null,
-      "fda_limit_mcg_day": null,
-      "found_in_categories": null,
-      "health_effects": null,
-      "health_risks": null,
-      "high_risk_sources": null,
-      "identifier_note": null,
-      "interaction_tags": null,
-      "nci_thesaurus_code": null,
-      "prohibition_status": null,
-      "pubchem_cid": null,
-      "recent_recalls_2025": null,
-      "safe_dose_limit": null,
       "threshold": null,
       "unii": null,
       "usp_limit_mcg_day": null,
@@ -2582,235 +2322,6 @@
       "wada_prohibited": null
     },
     {
-      "id": "BANNED_ADD_CARBOXYMETHYLCELLULOSE",
-      "standard_name": "Carboxymethylcellulose (CMC)",
-      "aliases": [
-        "cellulose gum",
-        "CMC",
-        "E466",
-        "sodium carboxymethyl cellulose",
-        "NaCMC",
-        "cellulose glycolate",
-        "modified cellulose"
-      ],
-      "category": "emulsifier_thickener",
-      "mechanism_of_harm": "Alters gut microbiota composition and promotes intestinal inflammation. Can increase gut permeability. May interfere with nutrient absorption.",
-      "regulatory_status": {
-        "US": "FDA GRAS status",
-        "EU": "E466 with restrictions",
-        "WHO": "ADI not specified but monitoring"
-      },
-      "population_warnings": [
-        "People with IBD - May trigger flares",
-        "People with celiac disease - Possible cross-reaction",
-        "Children - Developing gut sensitivity"
-      ],
-      "notes": "Synthetic fiber that can alter gut bacteria and promote inflammation. Often used in high quantities in processed foods and supplements. [reclassified_2026-02-16: moved from hard-safety to restricted additive watchlist; enforce via additive penalties, not B0 immediate-fail]",
-      "scientific_references": [
-        "DOI: 10.1038/nature21423 - Microbiome effects",
-        "DOI: 10.1016/j.cell.2018.07.008 - Inflammatory response"
-      ],
-      "last_updated": "2025-09-11",
-      "CUI": "C0007068",
-      "match_rules": {
-        "match_mode": "alias_and_fuzzy",
-        "label_tokens": [
-          "carboxymethylcellulose (cmc)",
-          "cellulose gum",
-          "cmc",
-          "e466",
-          "sodium carboxymethyl cellulose",
-          "nacmc",
-          "cellulose glycolate",
-          "modified cellulose"
-        ],
-        "exclusions": [],
-        "case_sensitive": false,
-        "priority": 1,
-        "match_type": "normalized",
-        "confidence": "high",
-        "negative_match_terms": []
-      },
-      "references_structured": [
-        {
-          "type": "doi",
-          "id": "10.1038/nature21423",
-          "title": "Microbiome effects",
-          "evidence_grade": "B",
-          "url": "https://doi.org/10.1038/nature21423",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
-          "evidence_summary": "Microbiome effects"
-        },
-        {
-          "type": "doi",
-          "id": "10.1016/j.cell.2018.07.008",
-          "title": "Inflammatory response",
-          "evidence_grade": "B",
-          "url": "https://doi.org/10.1016/j.cell.2018.07.008",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
-          "evidence_summary": "Inflammatory response"
-        }
-      ],
-      "external_ids": {
-        "umls_cui": "C0007068",
-        "cas": null,
-        "pubchem": null
-      },
-      "jurisdictional_statuses": [
-        {
-          "authority": "US",
-          "jurisdiction": "US",
-          "status_code": "allowed",
-          "scope": "supplement",
-          "effective_range": {
-            "start": null,
-            "end": null
-          },
-          "source_ref": null
-        },
-        {
-          "authority": "EU",
-          "jurisdiction": "EU",
-          "status_code": "warning_required",
-          "scope": "supplement",
-          "effective_range": {
-            "start": null,
-            "end": null
-          },
-          "source_ref": null
-        },
-        {
-          "authority": "WHO",
-          "jurisdiction": "WHO",
-          "status_code": "monitored",
-          "scope": "supplement",
-          "effective_range": {
-            "start": null,
-            "end": null
-          },
-          "source_ref": null
-        }
-      ],
-      "review": {
-        "status": "validated",
-        "last_reviewed_at": "2026-02-16",
-        "next_review_due": "2026-07-07",
-        "reviewed_by": "migration_script",
-        "change_log": [
-          {
-            "date": "2026-01-08",
-            "change": "Migrated to schema v3.1 with standardized fields",
-            "by": "system"
-          }
-        ]
-      },
-      "severity_score": 5,
-      "confidence": "medium",
-      "exposure_context": "supplement",
-      "status": "restricted",
-      "banned_by": "EU; US; WHO",
-      "reason": "Synthetic fiber that can alter gut bacteria and promote inflammation. Often used in high quantities in processed foods and supplements.",
-      "fda_warning": true,
-      "jurisdictions": [
-        {
-          "region": "US",
-          "level": "federal",
-          "status": "restricted",
-          "effective_date": "",
-          "source": {
-            "type": "fda_action",
-            "citation": "FDA GRAS status",
-            "accessed_date": "2026-01-08"
-          },
-          "jurisdiction_type": "country",
-          "jurisdiction_code": "US",
-          "last_verified_date": "2026-01-08"
-        },
-        {
-          "region": "US",
-          "level": "state",
-          "name": "WHO",
-          "status": "banned",
-          "effective_date": "",
-          "source": {
-            "type": "state_statute",
-            "citation": "ADI not specified but monitoring",
-            "accessed_date": "2026-01-08"
-          },
-          "jurisdiction_type": "state",
-          "jurisdiction_code": "US",
-          "last_verified_date": "2026-01-08"
-        }
-      ],
-      "legal_status_enum": "high_risk",
-      "clinical_risk_enum": "moderate",
-      "ingredient_type": "synthetic",
-      "class_tags": [
-        "high_risk_ingredients",
-        "emulsifier_thickener"
-      ],
-      "use_case_categories": [
-        "general"
-      ],
-      "source_category": "high_risk_ingredients",
-      "source_confidence": "medium",
-      "data_quality": {
-        "completeness": 1.0,
-        "missing_fields": [],
-        "review_status": "validated"
-      },
-      "update_flags": {
-        "needs_source_verification": false
-      },
-      "supersedes_ids": [
-        "ADD_CARBOXYMETHYLCELLULOSE"
-      ],
-      "regulatory_actions": [],
-      "last_reviewed_at": "2026-02-16",
-      "reviewed_by": "migration_script",
-      "regulatory_status_enum": "high_risk",
-      "entity_type": "ingredient",
-      "effective_period": {
-        "start": null,
-        "end": null,
-        "notes": null
-      },
-      "severity_level": "moderate",
-      "ban_effective_date": null,
-      "banned_countries": null,
-      "banned_date": null,
-      "ca_prop65_limit_mcg_day": null,
-      "cas_number": null,
-      "chemical_symbol": null,
-      "contraindications": null,
-      "cui_note": null,
-      "detection_difficulty": null,
-      "drugbank_id": null,
-      "effective_date": null,
-      "fda_limit_mcg_day": null,
-      "found_in_categories": null,
-      "health_effects": null,
-      "health_risks": null,
-      "high_risk_sources": null,
-      "identifier_note": null,
-      "interaction_tags": null,
-      "nci_thesaurus_code": null,
-      "prohibition_status": null,
-      "pubchem_cid": null,
-      "recent_recalls_2025": null,
-      "safe_dose_limit": null,
-      "threshold": null,
-      "unii": null,
-      "usp_limit_mcg_day": null,
-      "wada_prohibited": null
-    },
-    {
       "id": "BANNED_ADD_CITRUS_RED_2",
       "standard_name": "Citrus Red 2",
       "aliases": [
@@ -4103,7 +3614,7 @@
           "supports_claims": [
             "regulatory_action"
           ],
-          "evidence_summary": "FDA historical listing reflects Orange B\u2019s narrow restricted use case."
+          "evidence_summary": "FDA historical listing reflects Orange B’s narrow restricted use case."
         }
       ],
       "external_ids": {
@@ -6560,10 +6071,8 @@
       "id": "BANNED_ADD_SYNTHETIC_AMINO_ACIDS",
       "standard_name": "Synthetic Amino Acids",
       "aliases": [
-        "DL-Phenylalanine",
         "synthetic L-Cysteine",
         "synthetic L-Carnitine",
-        "DLPA",
         "synthetic amino acids",
         "artificial amino acids",
         "racemic amino acids",
@@ -6582,7 +6091,7 @@
         "Pregnant women - Should prefer natural sources",
         "People with kidney disease - May affect amino acid metabolism"
       ],
-      "notes": "Synthetic amino acids may not be processed by the body in the same way as natural forms. DL-forms contain unnatural D-isomers that may have unexpected biological effects. Higher risk of side effects compared to food-derived amino acids. [reclassified_2026-02-16: moved from hard-safety to restricted additive watchlist; enforce via additive penalties, not B0 immediate-fail]",
+      "notes": "Synthetic amino acids may not be processed by the body in the same way as natural forms. DL-forms contain unnatural D-isomers that may have unexpected biological effects. Higher risk of side effects compared to food-derived amino acids. [reclassified_2026-02-16: moved from hard-safety to restricted additive watchlist; enforce via additive penalties, not B0 immediate-fail] [fix_2026-02-18: Removed DL-Phenylalanine (GRAS, legally sold). Removed fda_warning (no FDA warning against these specific aminos).]",
       "scientific_references": [
         "DOI: 10.1021/jf5019934 - Synthetic vs. natural amino acids",
         "DOI: 10.3390/nu12030725 - Safety of amino acid supplements"
@@ -6593,10 +6102,8 @@
         "match_mode": "alias_and_fuzzy",
         "label_tokens": [
           "synthetic amino acids",
-          "dl-phenylalanine",
           "synthetic l-cysteine",
           "synthetic l-carnitine",
-          "dlpa",
           "artificial amino acids",
           "racemic amino acids",
           "dl-amino acids",
@@ -6694,7 +6201,7 @@
       "status": "restricted",
       "banned_by": "EU; Japan; US",
       "reason": "Synthetic amino acids may not be processed by the body in the same way as natural forms. DL-forms contain unnatural D-isomers that may have unexpected biological effects. Higher risk of side effects compared to food-derived amino acids.",
-      "fda_warning": true,
+      "fda_warning": false,
       "jurisdictions": [
         {
           "region": "US",
@@ -7440,226 +6947,6 @@
       },
       "supersedes_ids": [
         "ADD_SYNTHETIC_FOOD_ACIDS"
-      ],
-      "regulatory_actions": [],
-      "last_reviewed_at": "2026-02-16",
-      "reviewed_by": "migration_script",
-      "regulatory_status_enum": "high_risk",
-      "entity_type": "ingredient",
-      "effective_period": {
-        "start": null,
-        "end": null,
-        "notes": null
-      },
-      "severity_level": "moderate",
-      "identifier_note": "Category - represents multiple substances",
-      "ban_effective_date": null,
-      "banned_countries": null,
-      "banned_date": null,
-      "ca_prop65_limit_mcg_day": null,
-      "cas_number": null,
-      "chemical_symbol": null,
-      "contraindications": null,
-      "cui_note": null,
-      "detection_difficulty": null,
-      "drugbank_id": null,
-      "effective_date": null,
-      "fda_limit_mcg_day": null,
-      "found_in_categories": null,
-      "health_effects": null,
-      "health_risks": null,
-      "high_risk_sources": null,
-      "interaction_tags": null,
-      "nci_thesaurus_code": null,
-      "prohibition_status": null,
-      "pubchem_cid": null,
-      "recent_recalls_2025": null,
-      "safe_dose_limit": null,
-      "threshold": null,
-      "unii": null,
-      "usp_limit_mcg_day": null,
-      "wada_prohibited": null
-    },
-    {
-      "id": "BANNED_ADD_SYNTHETIC_IRON_OXIDES",
-      "standard_name": "Synthetic Iron Oxides",
-      "aliases": [
-        "iron oxide",
-        "E172",
-        "synthetic red iron oxide",
-        "synthetic yellow iron oxide",
-        "synthetic black iron oxide",
-        "iron oxide nanoparticles",
-        "Fe2O3",
-        "Fe3O4",
-        "artificial iron oxide colors"
-      ],
-      "category": "colorant_artificial",
-      "mechanism_of_harm": "Nanoparticle forms can cross biological barriers. May generate reactive oxygen species. Can accumulate in tissues and organs. Potential for DNA damage through oxidative stress.",
-      "regulatory_status": {
-        "US": "FDA approved with limits",
-        "EU": "E172 with restrictions",
-        "Australia": "Permitted with conditions"
-      },
-      "population_warnings": [
-        "People with iron disorders - May affect iron metabolism",
-        "People with inflammatory conditions - May increase oxidative stress",
-        "Children - Limited exposure recommended"
-      ],
-      "notes": "While iron is essential, synthetic forms and nanoparticles may have unintended effects. Can contribute to oxidative stress and inflammation. Long-term accumulation effects unknown. [reclassified_2026-02-16: moved from hard-safety to restricted additive watchlist; enforce via additive penalties, not B0 immediate-fail]",
-      "scientific_references": [
-        "DOI: 10.1016/j.impact.2021.100308 - Nanoparticle effects",
-        "DOI: 10.1002/smll.202000527 - Biological interactions"
-      ],
-      "last_updated": "2025-09-11",
-      "CUI": "",
-      "match_rules": {
-        "match_mode": "alias_and_fuzzy",
-        "label_tokens": [
-          "synthetic iron oxides",
-          "iron oxide",
-          "e172",
-          "synthetic red iron oxide",
-          "synthetic yellow iron oxide",
-          "synthetic black iron oxide",
-          "iron oxide nanoparticles",
-          "fe2o3",
-          "fe3o4",
-          "artificial iron oxide colors"
-        ],
-        "exclusions": [],
-        "case_sensitive": false,
-        "priority": 1,
-        "match_type": "normalized",
-        "confidence": "high",
-        "negative_match_terms": []
-      },
-      "references_structured": [
-        {
-          "type": "doi",
-          "id": "10.1016/j.impact.2021.100308",
-          "title": "Nanoparticle effects",
-          "evidence_grade": "B",
-          "url": "https://doi.org/10.1016/j.impact.2021.100308",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
-          "evidence_summary": "Nanoparticle effects"
-        },
-        {
-          "type": "doi",
-          "id": "10.1002/smll.202000527",
-          "title": "Biological interactions",
-          "evidence_grade": "B",
-          "url": "https://doi.org/10.1002/smll.202000527",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
-          "evidence_summary": "Biological interactions"
-        }
-      ],
-      "external_ids": {
-        "umls_cui": null,
-        "cas": null,
-        "pubchem": null
-      },
-      "jurisdictional_statuses": [
-        {
-          "authority": "US",
-          "jurisdiction": "US",
-          "status_code": "monitored",
-          "scope": "supplement",
-          "effective_range": {
-            "start": null,
-            "end": null
-          },
-          "source_ref": null
-        },
-        {
-          "authority": "EU",
-          "jurisdiction": "EU",
-          "status_code": "warning_required",
-          "scope": "supplement",
-          "effective_range": {
-            "start": null,
-            "end": null
-          },
-          "source_ref": null
-        },
-        {
-          "authority": "Australia",
-          "jurisdiction": "Australia",
-          "status_code": "allowed",
-          "scope": "supplement",
-          "effective_range": {
-            "start": null,
-            "end": null
-          },
-          "source_ref": null
-        }
-      ],
-      "review": {
-        "status": "needs_review",
-        "last_reviewed_at": "2026-02-16",
-        "next_review_due": "2026-07-07",
-        "reviewed_by": "migration_script",
-        "change_log": [
-          {
-            "date": "2026-01-08",
-            "change": "Migrated to schema v3.1 with standardized fields",
-            "by": "system"
-          }
-        ]
-      },
-      "severity_score": 5,
-      "confidence": "medium",
-      "exposure_context": "supplement",
-      "status": "restricted",
-      "banned_by": "Australia; EU; US",
-      "reason": "While iron is essential, synthetic forms and nanoparticles may have unintended effects. Can contribute to oxidative stress and inflammation. Long-term accumulation effects unknown.",
-      "fda_warning": true,
-      "jurisdictions": [
-        {
-          "region": "US",
-          "level": "federal",
-          "status": "restricted",
-          "effective_date": "",
-          "source": {
-            "type": "fda_action",
-            "citation": "FDA approved with limits",
-            "accessed_date": "2026-01-08"
-          },
-          "jurisdiction_type": "country",
-          "jurisdiction_code": "US",
-          "last_verified_date": "2026-01-08"
-        }
-      ],
-      "legal_status_enum": "high_risk",
-      "clinical_risk_enum": "moderate",
-      "ingredient_type": "synthetic",
-      "class_tags": [
-        "high_risk_ingredients",
-        "colorant_artificial"
-      ],
-      "use_case_categories": [
-        "general"
-      ],
-      "source_category": "high_risk_ingredients",
-      "source_confidence": "medium",
-      "data_quality": {
-        "completeness": 0.9,
-        "missing_fields": [
-          "CUI"
-        ],
-        "review_status": "validated"
-      },
-      "update_flags": {
-        "needs_source_verification": false
-      },
-      "supersedes_ids": [
-        "ADD_SYNTHETIC_IRON_OXIDES"
       ],
       "regulatory_actions": [],
       "last_reviewed_at": "2026-02-16",
@@ -8978,7 +8265,7 @@
       "id": "BANNED_BMPEA",
       "standard_name": "BMPEA",
       "aliases": [
-        "\u03b2-methylphenylethylamine",
+        "β-methylphenylethylamine",
         "R-beta-methylphenylethylamine",
         "beta-methylphenylethylamine",
         "BMPEA"
@@ -9023,7 +8310,7 @@
         "match_mode": "alias_and_fuzzy",
         "label_tokens": [
           "bmpea",
-          "\u03b2-methylphenylethylamine",
+          "β-methylphenylethylamine",
           "r-beta-methylphenylethylamine",
           "beta-methylphenylethylamine"
         ],
@@ -11495,7 +10782,6 @@
         "insulin-like growth factor 1",
         "insulin like growth factor",
         "somatomedin c",
-        "growth factor",
         "synthetic igf-1",
         "exogenous igf-1",
         "recombinant IGF-1"
@@ -11514,7 +10800,7 @@
       "category": "hormone",
       "severity_level": "critical",
       "fda_warning": true,
-      "notes": "SYNTHETIC growth hormone-related compounds banned in dietary supplements. Natural IGF-1 from deer antler velvet remains legal. Check source and synthetic vs natural distinction. Frequently found in bodybuilding supplements.",
+      "notes": "SYNTHETIC growth hormone-related compounds banned in dietary supplements. Natural IGF-1 from deer antler velvet remains legal. Check source and synthetic vs natural distinction. Frequently found in bodybuilding supplements. [fix_2026-02-18: Removed overly broad 'growth factor' alias. Added deer antler velvet, colostrum to negative_match_terms to prevent false positives on legal products containing natural trace IGF-1.]",
       "scientific_references": [
         "DOI: 10.1210/jc.2009-0491 - IGF-1 and cancer risk",
         "FDA: 1997 - Dietary supplement ban"
@@ -11546,7 +10832,6 @@
           "insulin-like growth factor 1",
           "insulin like growth factor",
           "somatomedin c",
-          "growth factor",
           "synthetic igf-1",
           "exogenous igf-1",
           "recombinant igf-1"
@@ -11564,7 +10849,16 @@
           "long r3",
           "igf-1 lr3",
           "igf1 lr3",
-          "lr3 igf"
+          "lr3 igf",
+          "deer antler",
+          "deer antler velvet",
+          "antler velvet",
+          "velvet antler",
+          "elk antler",
+          "elk velvet",
+          "colostrum",
+          "bovine colostrum",
+          "cervus"
         ]
       },
       "legal_status_enum": "banned_federal",
@@ -12087,7 +11381,7 @@
       "id": "BANNED_PHENIBUT",
       "standard_name": "Phenibut",
       "aliases": [
-        "\u03b2-phenyl-\u03b3-aminobutyric acid",
+        "β-phenyl-γ-aminobutyric acid",
         "fenibut",
         "4-amino-3-phenylbutyric acid",
         "phenibut HCL",
@@ -12135,7 +11429,7 @@
         "match_mode": "alias_and_fuzzy",
         "label_tokens": [
           "phenibut",
-          "\u03b2-phenyl-\u03b3-aminobutyric acid",
+          "β-phenyl-γ-aminobutyric acid",
           "fenibut",
           "4-amino-3-phenylbutyric acid",
           "phenibut hcl",
@@ -14222,7 +13516,7 @@
       "aliases": [
         "yk11",
         "YK-11",
-        "(17\u03b1,20E)-17,20-[(1-methoxyethylidene)bis(oxy)]-3-oxo-19-norpregna-4,20-diene-21-carboxylic acid methyl ester"
+        "(17α,20E)-17,20-[(1-methoxyethylidene)bis(oxy)]-3-oxo-19-norpregna-4,20-diene-21-carboxylic acid methyl ester"
       ],
       "CUI": "",
       "banned_date": "2017-10-31",
@@ -14264,7 +13558,7 @@
         "label_tokens": [
           "yk-11",
           "yk11",
-          "(17\u03b1,20e)-17,20-[(1-methoxyethylidene)bis(oxy)]-3-oxo-19-norpregna-4,20-diene-21-carboxylic acid methyl ester"
+          "(17α,20e)-17,20-[(1-methoxyethylidene)bis(oxy)]-3-oxo-19-norpregna-4,20-diene-21-carboxylic acid methyl ester"
         ],
         "exclusions": [],
         "case_sensitive": false,
@@ -15753,7 +15047,7 @@
     },
     {
       "id": "NOOTROPIC_9MEBC",
-      "standard_name": "9-Methyl-\u03b2-carboline",
+      "standard_name": "9-Methyl-β-carboline",
       "aliases": [
         "9-MBC",
         "9-methyl-beta-carboline",
@@ -15796,7 +15090,7 @@
       "match_rules": {
         "match_mode": "alias_and_fuzzy",
         "label_tokens": [
-          "9-methyl-\u03b2-carboline",
+          "9-methyl-β-carboline",
           "9-mbc",
           "9-methyl-beta-carboline",
           "9-methyl-9h-pyrido[3,4-b]indole"
@@ -15901,7 +15195,7 @@
       "cui_note": "No UMLS entry - synthetic research compound",
       "pubchem_cid": "164979",
       "cas_number": "2521-07-5",
-      "identifier_note": "9-Methyl-\u03b2-carboline; research compound, no UMLS CUI",
+      "identifier_note": "9-Methyl-β-carboline; research compound, no UMLS CUI",
       "banned_countries": null,
       "ca_prop65_limit_mcg_day": null,
       "chemical_symbol": null,
@@ -16559,7 +15853,7 @@
         "bisfluoromodafinil",
         "lauflumide",
         "fluoromodafinil",
-        "4\u2032-fluoromodafinil",
+        "4′-fluoromodafinil",
         "CRL-40940"
       ],
       "CUI": "",
@@ -16605,7 +15899,7 @@
           "bisfluoromodafinil",
           "lauflumide",
           "fluoromodafinil",
-          "4\u2032-fluoromodafinil",
+          "4′-fluoromodafinil",
           "crl-40940"
         ],
         "exclusions": [],
@@ -17544,16 +16838,16 @@
         "Japan": "Approved pharmaceutical (Enerion)"
       },
       "category": "nootropic",
-      "severity_level": "critical",
+      "severity_level": "high",
       "fda_warning": true,
-      "notes": "FDA warning letter April 2025 to Gluten Free Remedies LLC. Synthetic thiamine derivative. Pharmaceutical in France/Japan.",
+      "notes": "FDA warning letter April 2025 to Gluten Free Remedies LLC. Synthetic thiamine derivative. Pharmaceutical in France/Japan. [fix_2026-02-18: Severity lowered from 9 to 7. Confirmed FDA warning letter April 2025 to Gluten Free Remedies LLC. Not a dietary ingredient per FDA. Pharmaceutical safely used in France (Arcalion) and Japan.]",
       "scientific_references": [
         "FDA Warning Letter: April 15, 2025",
         "DOI: 10.1007/BF00426588 - Sulbutiamine pharmacology"
       ],
       "last_updated": "2026-01-05",
       "status": "banned",
-      "severity_score": 9,
+      "severity_score": 7,
       "interaction_tags": [
         "cognitive",
         "cns_active"
@@ -17740,11 +17034,11 @@
         "ethyl apovincaminate"
       ],
       "CUI": "C0078040",
-      "banned_date": "2019-10-11",
-      "ban_effective_date": "2019-10-11",
+      "banned_date": "2016-09-07",
+      "ban_effective_date": "2016-09-07",
       "banned_by": "FDA",
       "reason": "Unapproved drug, birth defect risk",
-      "mechanism_of_harm": "Synthetic compound derived from vincamine (periwinkle plant alkaloid). Causes birth defects in animal studies. Can cause low blood pressure, bleeding risk, and immune suppression. Particularly dangerous for pregnant women.",
+      "mechanism_of_harm": "Synthetic compound derived from vincamine (periwinkle plant alkaloid). FDA tentative conclusion (Sept 2016, never finalized) that it is not a dietary ingredient. Causes miscarriage and decreased fetal weight in animal studies (NTP). Can cause low blood pressure, bleeding risk, and immune suppression. Prescription drug in Germany, Russia, China, Japan (Cavinton).",
       "regulatory_status": {
         "US": "FDA determined not a dietary ingredient (October 11, 2019). Warning for women of childbearing age. Illegal in supplements.",
         "Germany": "Prescription drug (Cavinton)",
@@ -17752,16 +17046,16 @@
         "China": "Prescription drug"
       },
       "category": "nootropic",
-      "severity_level": "critical",
+      "severity_level": "high",
       "fda_warning": true,
-      "notes": "FDA warning for women of childbearing age due to birth defect risk. Pharmaceutical in Germany/Russia/China. Can cause miscarriage.",
+      "notes": "FDA warning for women of childbearing age due to birth defect risk. Pharmaceutical in Germany/Russia/China. Can cause miscarriage. [fix_2026-02-18: Severity lowered from 9 to 7. Fixed dates to Sept 7, 2016 (tentative conclusion) from fabricated Oct 11, 2019. Mechanism updated: 'birth defects' corrected to 'miscarriage and decreased fetal weight'. FDA tentative conclusion never finalized. Still widely sold in US.]",
       "scientific_references": [
         "FDA: October 11, 2019 - Not a dietary ingredient determination",
         "DOI: 10.1016/j.reprotox.2008.09.007 - Vinpocetine reproductive toxicity"
       ],
       "last_updated": "2026-01-05",
       "status": "banned",
-      "severity_score": 9,
+      "severity_score": 7,
       "interaction_tags": [
         "blood_thinner_interaction",
         "cognitive",
@@ -17908,7 +17202,7 @@
       "regulatory_status_enum": "not_lawful_as_supplement",
       "entity_type": "ingredient",
       "effective_period": {
-        "start": "2019-10-11",
+        "start": "2016-09-07",
         "end": null,
         "notes": null
       },
@@ -18153,7 +17447,7 @@
       "ban_effective_date": "2009-01-01",
       "banned_by": "FDA",
       "reason": "Unapproved drug with serious safety concerns including melanoma risk",
-      "mechanism_of_harm": "Synthetic analog of alpha-melanocyte-stimulating hormone (\u03b1-MSH). Stimulates melanin production causing skin darkening. Causes nausea, facial flushing, spontaneous erections (priapism), cardiovascular effects, and dangerous mole changes. Major concern: may promote or mask melanoma development. No quality control in black market products. Injection-related infection risks.",
+      "mechanism_of_harm": "Synthetic analog of alpha-melanocyte-stimulating hormone (α-MSH). Stimulates melanin production causing skin darkening. Causes nausea, facial flushing, spontaneous erections (priapism), cardiovascular effects, and dangerous mole changes. Major concern: may promote or mask melanoma development. No quality control in black market products. Injection-related infection risks.",
       "regulatory_status": {
         "US": "FDA unapproved drug. Warning letters issued. Illegal to sell for human use.",
         "UK": "MHRA warnings issued. Illegal to sell.",
@@ -18356,7 +17650,7 @@
       "id": "PEPTIDE_TB500",
       "standard_name": "TB-500 (Thymosin Beta-4)",
       "aliases": [
-        "thymosin \u03b24",
+        "thymosin β4",
         "tb500",
         "repair peptide",
         "thymosin beta-4"
@@ -18409,7 +17703,7 @@
         "match_mode": "alias_and_fuzzy",
         "label_tokens": [
           "tb-500 (thymosin beta-4)",
-          "thymosin \u03b24",
+          "thymosin β4",
           "tb500",
           "repair peptide",
           "thymosin beta-4"
@@ -18881,7 +18175,7 @@
       "aliases": [
         "GW501516 analogs",
         "modified cardarine",
-        "PPAR\u03b4 agonists",
+        "PPARδ agonists",
         "GW-501516 derivatives"
       ],
       "CUI": "",
@@ -18934,7 +18228,7 @@
           "cardarine derivatives",
           "gw501516 analogs",
           "modified cardarine",
-          "ppar\u03b4 agonists",
+          "pparδ agonists",
           "gw-501516 derivatives"
         ],
         "exclusions": [],
@@ -20388,15 +19682,15 @@
       },
       "category": "stimulant",
       "severity_level": "moderate",
-      "fda_warning": true,
-      "notes": "Often used as ephedra replacement. Can cause similar cardiovascular issues. Multiple case reports of heart attack and stroke, especially when combined with caffeine. [reclassified_2026-02-16: non-federal high-risk/restricted ingredient downgraded to moderate to avoid false UNSAFE; keep as caution-level signal]",
+      "fda_warning": false,
+      "notes": "Often used as ephedra replacement. Can cause similar cardiovascular issues. Multiple case reports of heart attack and stroke, especially when combined with caffeine. [reclassified_2026-02-16: non-federal high-risk/restricted ingredient downgraded to moderate to avoid false UNSAFE; keep as caution-level signal] [fix_2026-02-18: fda_warning set to false - FDA has not issued a formal warning against synephrine itself, only against specific adulterated products. Severity lowered from 7 to 5. Legal supplement in the US. Banned by NCAA. Cardiovascular risk primarily when combined with caffeine.]",
       "scientific_references": [
         "DOI: 10.1016/j.ijcard.2012.09.001 - Bitter orange cardiovascular effects",
         "DOI: 10.1002/mnfr.201100409 - Synephrine safety review"
       ],
       "last_updated": "2026-01-05",
       "status": "restricted",
-      "severity_score": 7,
+      "severity_score": 5,
       "interaction_tags": [
         "cardiovascular",
         "stimulant",
@@ -20736,8 +20030,6 @@
       "standard_name": "Green Tea Extract (High Dose)",
       "aliases": [
         "EGCG >800mg",
-        "camellia sinensis extract",
-        "green tea catechins",
         "high dose EGCG"
       ],
       "CUI": "C1704263",
@@ -20755,13 +20047,13 @@
       "severity_level": "moderate",
       "fda_warning": false,
       "safe_dose_limit": "800mg EGCG daily",
-      "notes": "Safe at normal doses. EFSA set upper limit at 800mg EGCG per day. Liver injury risk increases significantly above this dose. Brewed tea is safe.",
+      "notes": "Safe at normal doses. EFSA set upper limit at 800mg EGCG per day. Liver injury risk increases significantly above this dose. Brewed tea is safe. [fix_2026-02-18: Changed status from 'banned' to 'restricted'. EFSA 800mg EGCG limit is a dose restriction, not a ban. Removed broad aliases 'green tea catechins' and 'camellia sinensis extract' to prevent false positives on standard-dose green tea supplements.]",
       "scientific_references": [
         "DOI: 10.1016/j.fct.2016.12.033 - Green tea extract hepatotoxicity",
         "EFSA: 2018 - Safety assessment of green tea catechins"
       ],
       "last_updated": "2026-01-05",
-      "status": "banned",
+      "status": "restricted",
       "severity_score": 5,
       "interaction_tags": [
         "hepatotoxic"
@@ -20780,8 +20072,6 @@
         "label_tokens": [
           "green tea extract (high dose)",
           "egcg >800mg",
-          "camellia sinensis extract",
-          "green tea catechins",
           "high dose egcg"
         ],
         "exclusions": [],
@@ -21454,7 +20744,10 @@
         "rauwolscine",
         "corynanthine",
         "yohimbine HCl",
-        "yohimbe extract"
+        "yohimbe extract",
+        "yohimbe 2% extract",
+        "yohimbe standardized extract",
+        "yohimbe bark extract 2%"
       ],
       "CUI": "C0724536",
       "banned_date": "",
@@ -21464,18 +20757,18 @@
       "mechanism_of_harm": "Alpha-2 adrenergic receptor antagonist that increases norepinephrine and adrenaline. Causes severe anxiety, panic attacks, rapid heart rate, dangerous blood pressure spikes, seizures, and kidney failure. Can trigger manic episodes in bipolar disorder.",
       "regulatory_status": {
         "US": "FDA warnings for serious adverse events. Not banned but high-risk.",
-        "Canada": "Requires warning labels",
+        "Canada": "Banned as a supplement ingredient",
         "EU": "Restricted in some countries"
       },
       "category": "stimulant",
       "severity_level": "moderate",
-      "fda_warning": true,
+      "fda_warning": false,
       "contraindications": [
         "heart disease",
         "anxiety disorders",
         "high blood pressure"
       ],
-      "notes": "Can interact dangerously with antidepressants (especially MAOIs and SSRIs) and blood pressure medications. Linked to seizures, kidney failure, and death. [reclassified_2026-02-16: non-federal high-risk/restricted ingredient downgraded to moderate to avoid false UNSAFE; keep as caution-level signal]",
+      "notes": "Can interact dangerously with antidepressants (especially MAOIs and SSRIs) and blood pressure medications. Linked to seizures, kidney failure, and death. [reclassified_2026-02-16: non-federal high-risk/restricted ingredient downgraded to moderate to avoid false UNSAFE; keep as caution-level signal] [fix_2026-02-18: fda_warning set to false - FDA has issued warning letters about unapproved health claims on yohimbe products, not against the ingredient itself. Genuinely risky ingredient. Banned in Canada, Australia, UK, Netherlands.]",
       "scientific_references": [
         "DOI: 10.1016/j.forsciint.2012.02.015 - Yohimbine toxicity",
         "FDA: Ongoing adverse event reports"
@@ -21490,7 +20783,7 @@
         "maoi_interaction"
       ],
       "detection_difficulty": "medium",
-      "ingredient_type": "synthetic",
+      "ingredient_type": "natural",
       "class_tags": [
         "high_risk_ingredients",
         "stimulant"
@@ -21510,7 +20803,10 @@
           "rauwolscine",
           "corynanthine",
           "yohimbine hcl",
-          "yohimbe extract"
+          "yohimbe extract",
+          "yohimbe 2% extract",
+          "yohimbe standardized extract",
+          "yohimbe bark extract 2%"
         ],
         "exclusions": [],
         "case_sensitive": false,
@@ -21833,7 +21129,7 @@
       "ban_effective_date": "2017-10-31",
       "banned_by": "FDA",
       "reason": "Cancer risk in animal studies",
-      "mechanism_of_harm": "PPAR\u03b4 agonist (not technically a SARM) that caused cancer in multiple organs in animal studies at all doses tested. Rapidly promotes cancer development in liver, bladder, stomach, skin, tongue, testes, ovaries, and thyroid. Clinical trials terminated due to cancer risk.",
+      "mechanism_of_harm": "PPARδ agonist (not technically a SARM) that caused cancer in multiple organs in animal studies at all doses tested. Rapidly promotes cancer development in liver, bladder, stomach, skin, tongue, testes, ovaries, and thyroid. Clinical trials terminated due to cancer risk.",
       "regulatory_status": {
         "US": "FDA banned in supplements (October 31, 2017). Clinical trials terminated due to cancer.",
         "WADA": "Prohibited at all times (S4.5 Metabolic Modulators)",
@@ -24042,7 +23338,7 @@
       "id": "SPIKE_PHENETHYLAMINE_PEA",
       "standard_name": "Phenethylamine (PEA)",
       "aliases": [
-        "\u03b2-phenylethylamine",
+        "β-phenylethylamine",
         "beta-phenethylamine",
         "B-PEA",
         "2-phenylethylamine"
@@ -24094,7 +23390,7 @@
         "match_mode": "alias_and_fuzzy",
         "label_tokens": [
           "phenethylamine (pea)",
-          "\u03b2-phenylethylamine",
+          "β-phenylethylamine",
           "beta-phenethylamine",
           "b-pea",
           "2-phenylethylamine"
@@ -25052,13 +24348,13 @@
     },
     {
       "id": "STIM_ALPHA_PHP",
-      "standard_name": "\u03b1-PHP",
+      "standard_name": "α-PHP",
       "aliases": [
         "alpha-pyrrolidinohexanophenone",
         "PV-7",
         "alpha-pyrrolidinohexiophenone",
         "designer cathinone",
-        "\u03b1-pyrrolidinohexanophenone"
+        "α-pyrrolidinohexanophenone"
       ],
       "CUI": "",
       "banned_date": "",
@@ -25083,8 +24379,8 @@
       ],
       "notes": "Found in pre-workout supplements labeled as 'proprietary blend'. DEA Schedule I controlled substance. Causes severe psychosis and addiction.",
       "scientific_references": [
-        "DEA: \u03b1-PHP Schedule I classification",
-        "DOI: 10.1016/j.forsciint.2015.09.002 - \u03b1-PHP toxicity"
+        "DEA: α-PHP Schedule I classification",
+        "DOI: 10.1016/j.forsciint.2015.09.002 - α-PHP toxicity"
       ],
       "last_updated": "2026-01-05",
       "category": "stimulant_designer",
@@ -25108,12 +24404,12 @@
       "match_rules": {
         "match_mode": "alias_and_fuzzy",
         "label_tokens": [
-          "\u03b1-php",
+          "α-php",
           "alpha-pyrrolidinohexanophenone",
           "pv-7",
           "alpha-pyrrolidinohexiophenone",
           "designer cathinone",
-          "\u03b1-pyrrolidinohexanophenone"
+          "α-pyrrolidinohexanophenone"
         ],
         "exclusions": [],
         "case_sensitive": false,
@@ -25144,22 +24440,22 @@
       "references_structured": [
         {
           "type": "other",
-          "title": "DEA: \u03b1-PHP Schedule I classification",
+          "title": "DEA: α-PHP Schedule I classification",
           "evidence_grade": "R",
           "supports_claims": [],
-          "evidence_summary": "DEA: \u03b1-PHP Schedule I classification"
+          "evidence_summary": "DEA: α-PHP Schedule I classification"
         },
         {
           "type": "doi",
           "id": "10.1016/j.forsciint.2015.09.002",
-          "title": "\u03b1-PHP toxicity",
+          "title": "α-PHP toxicity",
           "evidence_grade": "B",
           "url": "https://doi.org/10.1016/j.forsciint.2015.09.002",
           "supports_claims": [
             "mechanism_of_harm",
             "clinical_outcomes"
           ],
-          "evidence_summary": "\u03b1-PHP toxicity"
+          "evidence_summary": "α-PHP toxicity"
         }
       ],
       "data_quality": {
@@ -28318,6 +27614,510 @@
       "unii": null,
       "usp_limit_mcg_day": null,
       "wada_prohibited": null
+    },
+    {
+      "id": "BANNED_RED_YEAST_RICE",
+      "standard_name": "Red Yeast Rice (Monacolin K)",
+      "aliases": [
+        "red yeast rice",
+        "monascus purpureus",
+        "monacolin K",
+        "monacolin",
+        "red yeast rice extract",
+        "hong qu",
+        "red koji rice",
+        "RYR",
+        "ryr-max",
+        "ryr-max red yeast rice powder",
+        "ryr-max red yeast rice"
+      ],
+      "CUI": "C1101743",
+      "banned_date": "1998-05-20",
+      "ban_effective_date": "1998-05-20",
+      "banned_by": "FDA; Australia (TGA); Switzerland; EU (pending 2025)",
+      "reason": "Contains monacolin K (chemically identical to lovastatin, a prescription statin drug). FDA considers RYR with significant monacolin K an unapproved new drug. EFSA 2025: no safe daily intake level for monacolins can be established.",
+      "mechanism_of_harm": "Monacolin K is lovastatin. Carries all statin adverse effects without pharmaceutical quality controls: hepatotoxicity (liver damage), myopathy/rhabdomyolysis (skeletal muscle breakdown), nephrotoxicity. The 2024 Kobayashi Pharmaceutical scandal (contamination with puberulic acid) caused up to 120 deaths and 500+ hospitalizations. Citrinin mycotoxin contamination is common in RYR products.",
+      "regulatory_status": {
+        "US": "FDA considers RYR with pharmacologically significant monacolin K an unapproved new drug (since 1998). Multiple warning letters issued.",
+        "EU": "EFSA 2025: no safe dose for monacolins. Commission revoked health claim July 2024. Total EU ban expected 2025.",
+        "Australia": "Listed as S4 controlled substance (prescription-only). Cannot be sold as supplement.",
+        "Switzerland": "Sales of red yeast rice are illegal.",
+        "Canada": "Permits up to 1 mg monacolins/day with mandatory warnings."
+      },
+      "category": "unapproved_drug",
+      "severity_level": "high",
+      "fda_warning": true,
+      "notes": "FDA has treated RYR with monacolin K as an illegal unapproved drug since 1998. EFSA (Jan 2025) concluded no safe daily intake level exists for monacolins from RYR. Australia classifies it as prescription-only (S4). Switzerland banned it entirely. The 2024 Kobayashi scandal caused up to 120 deaths from contaminated RYR. Multiple published cases of rhabdomyolysis and liver failure.",
+      "scientific_references": [
+        "EFSA Journal 2025 - Scientific Opinion on Monacolins from Red Yeast Rice (DOI: 10.2903/j.efsa.2025.9276)",
+        "NIH LiverTox - Red Yeast Rice (NBK548168)",
+        "DOI: 10.3389/fmed.2025.1634047 - Red yeast rice-induced severe rhabdomyolysis"
+      ],
+      "last_updated": "2026-02-18",
+      "status": "banned",
+      "severity_score": 8,
+      "interaction_tags": [
+        "hepatotoxic",
+        "myotoxic",
+        "cyp3a4_substrate",
+        "statin_equivalent"
+      ],
+      "detection_difficulty": "medium",
+      "ingredient_type": "natural",
+      "class_tags": [
+        "unapproved_drug",
+        "hepatotoxic",
+        "high_risk_ingredients"
+      ],
+      "use_case_categories": [
+        "general"
+      ],
+      "match_rules": {
+        "match_mode": "alias_and_fuzzy",
+        "label_tokens": [
+          "red yeast rice",
+          "monascus purpureus",
+          "monacolin K",
+          "monacolin",
+          "red yeast rice extract",
+          "hong qu",
+          "red koji rice",
+          "RYR",
+          "ryr-max",
+          "ryr-max red yeast rice powder",
+          "ryr-max red yeast rice"
+        ],
+        "exclusions": [],
+        "case_sensitive": false,
+        "priority": 1,
+        "match_type": "normalized",
+        "confidence": "high",
+        "negative_match_terms": []
+      },
+      "legal_status_enum": "banned",
+      "clinical_risk_enum": "high",
+      "jurisdictions": [
+        {
+          "region": "US",
+          "level": "federal",
+          "status": "banned",
+          "effective_date": "1998-05-20",
+          "source": {
+            "type": "fda_action",
+            "citation": "FDA considers RYR with monacolin K an unapproved drug",
+            "accessed_date": "2026-02-18"
+          },
+          "jurisdiction_type": "country",
+          "jurisdiction_code": "US",
+          "last_verified_date": "2026-02-18"
+        },
+        {
+          "region": "Australia",
+          "level": "federal",
+          "status": "banned",
+          "effective_date": "",
+          "source": {
+            "type": "regulatory_action",
+            "citation": "TGA S4 controlled substance classification",
+            "accessed_date": "2026-02-18"
+          },
+          "jurisdiction_type": "country",
+          "jurisdiction_code": "AU",
+          "last_verified_date": "2026-02-18"
+        },
+        {
+          "region": "Switzerland",
+          "level": "federal",
+          "status": "banned",
+          "effective_date": "",
+          "source": {
+            "type": "regulatory_action",
+            "citation": "Swiss ban on red yeast rice sales",
+            "accessed_date": "2026-02-18"
+          },
+          "jurisdiction_type": "country",
+          "jurisdiction_code": "CH",
+          "last_verified_date": "2026-02-18"
+        }
+      ],
+      "regulatory_actions": [
+        {
+          "action_type": "warning_letter",
+          "authority": "FDA",
+          "date": "1998-05-20",
+          "description": "FDA declared RYR with monacolin K an unapproved drug"
+        }
+      ],
+      "references_structured": [
+        {
+          "type": "monograph",
+          "authority": "EFSA",
+          "citation": "EFSA Scientific Opinion on Monacolins from Red Yeast Rice",
+          "url": "https://doi.org/10.2903/j.efsa.2025.9276",
+          "published_date": "2025-01-29",
+          "evidence_grade": "A",
+          "confidence": "high"
+        },
+        {
+          "type": "case_report",
+          "authority": "NIH",
+          "citation": "LiverTox: Red Yeast Rice",
+          "url": "https://www.ncbi.nlm.nih.gov/books/NBK548168/",
+          "published_date": null,
+          "evidence_grade": "B",
+          "confidence": "high"
+        }
+      ],
+      "data_quality": {
+        "completeness": "high",
+        "verification_status": "verified",
+        "last_verified_date": "2026-02-18"
+      },
+      "last_reviewed_at": "2026-02-18",
+      "reviewed_by": "data_pipeline_audit",
+      "source_confidence": "high",
+      "update_flags": {},
+      "source_category": "unapproved_drug",
+      "regulatory_status_enum": "banned",
+      "entity_type": "ingredient",
+      "effective_period": {
+        "start": "1998-05-20",
+        "end": null
+      },
+      "review": {
+        "status": "validated",
+        "last_reviewed_at": "2026-02-18",
+        "reviewed_by": "data_pipeline_audit",
+        "next_review_due": "2026-08-18",
+        "change_log": [
+          {
+            "date": "2026-02-18",
+            "change": "Added to banned list. FDA considers it unapproved drug since 1998. EFSA 2025: no safe dose. Banned in AU/CH. 120 deaths from Kobayashi scandal.",
+            "reason": "online_safety_audit"
+          }
+        ]
+      },
+      "banned_countries": null,
+      "ca_prop65_limit_mcg_day": null,
+      "cas_number": null,
+      "chemical_symbol": null,
+      "confidence": null,
+      "contraindications": null,
+      "cui_note": null,
+      "drugbank_id": null,
+      "effective_date": null,
+      "exposure_context": null,
+      "external_ids": null,
+      "fda_limit_mcg_day": null,
+      "found_in_categories": null,
+      "health_effects": null,
+      "health_risks": null,
+      "high_risk_sources": null,
+      "identifier_note": null,
+      "jurisdictional_statuses": null,
+      "nci_thesaurus_code": null,
+      "population_warnings": [
+        "People taking statins or CYP3A4 substrates - dangerous interaction",
+        "People with liver disease - hepatotoxicity risk",
+        "People with muscle disorders - rhabdomyolysis risk",
+        "Pregnant women - contraindicated"
+      ],
+      "prohibition_status": null,
+      "pubchem_cid": null,
+      "recent_recalls_2025": null,
+      "safe_dose_limit": null,
+      "supersedes_ids": null,
+      "threshold": null,
+      "unii": null,
+      "usp_limit_mcg_day": null,
+      "wada_prohibited": null
+    },
+    {
+      "id": "BANNED_GARCINIA_CAMBOGIA",
+      "standard_name": "Garcinia Cambogia",
+      "aliases": [
+        "garcinia cambogia",
+        "garcinia",
+        "hydroxycitric acid",
+        "HCA",
+        "garcinia cambogia extract",
+        "malabar tamarind",
+        "brindleberry",
+        "gambooge",
+        "garcinia fruit extract",
+        "garcinia cambogia rind extract",
+        "garcinia fruit rind extract",
+        "garcinia rind extract",
+        "garcinia fruit, rind extract"
+      ],
+      "CUI": "C0950769",
+      "banned_date": "2025-04-15",
+      "ban_effective_date": "2025-04-15",
+      "banned_by": "France (ANSES 2025); restricted in Australia (TGA 2025), South Korea",
+      "reason": "Severe hepatotoxicity. 1 death, 9 liver transplants, 200+ adverse liver events documented. FDA recalled Hydroxycut products (2009). France banned all GC supplements (2025). Australia mandated liver harm warnings (2025).",
+      "mechanism_of_harm": "Causes clinically apparent acute liver injury ranging from moderate transaminase elevations to fulminant hepatic failure requiring liver transplantation. Mechanism unclear but likely direct hepatotoxicity from HCA or contaminants. 91% hospitalization rate in DILIN study of 22 cases. Also associated with serotonin toxicity, mania, and pancreatitis.",
+      "regulatory_status": {
+        "US": "FDA recalled Hydroxycut products containing garcinia (2009). NCCIH warns it may be unsafe. Not banned as standalone ingredient but under scrutiny.",
+        "France": "Full 1-year ban on import, marketing, and sale (ministerial order April 15, 2025) after fatal fulminant hepatitis case. ANSES warned consumers not to consume it.",
+        "Australia": "Mandatory liver harm warning on all products containing GC or HCA, effective March 1, 2025.",
+        "South Korea": "Expanded mandatory precaution labeling (2025).",
+        "EU": "EFSA ongoing safety assessment, EU-wide restrictions expected."
+      },
+      "category": "hepatotoxic_botanical",
+      "severity_level": "high",
+      "fda_warning": true,
+      "notes": "NIH LiverTox: 'Weight loss products labeled as containing Garcinia cambogia have been linked to development of clinically apparent acute liver injury which can be severe and even fatal.' Systematic review (2025) found 200+ adverse events, 34 published case reports, 1 death, 9 liver transplants. France banned all GC supplements April 2025 after fatal fulminant hepatitis. Australia mandated liver harm warnings March 2025. Banned in France, restricted in Australia and South Korea.",
+      "scientific_references": [
+        "NIH LiverTox - Garcinia Cambogia (NBK548087)",
+        "DOI: 10.1016/j.wmcr.2016.07.002 - Dangerous dietary supplements: GC-associated hepatic failure requiring transplantation",
+        "ANSES 2025 - Do not consume food supplements containing Garcinia cambogia"
+      ],
+      "last_updated": "2026-02-18",
+      "status": "banned",
+      "severity_score": 8,
+      "interaction_tags": [
+        "hepatotoxic",
+        "serotonergic"
+      ],
+      "detection_difficulty": "low",
+      "ingredient_type": "natural",
+      "class_tags": [
+        "hepatotoxic",
+        "high_risk_ingredients",
+        "weight_loss"
+      ],
+      "use_case_categories": [
+        "general"
+      ],
+      "match_rules": {
+        "match_mode": "alias_and_fuzzy",
+        "label_tokens": [
+          "garcinia cambogia",
+          "garcinia",
+          "hydroxycitric acid",
+          "HCA",
+          "garcinia cambogia extract",
+          "malabar tamarind",
+          "brindleberry",
+          "gambooge",
+          "garcinia fruit extract",
+          "garcinia cambogia rind extract",
+          "garcinia fruit rind extract",
+          "garcinia rind extract",
+          "garcinia fruit, rind extract"
+        ],
+        "exclusions": [],
+        "case_sensitive": false,
+        "priority": 1,
+        "match_type": "normalized",
+        "confidence": "high",
+        "negative_match_terms": [
+          "garcinia indica",
+          "kokum",
+          "kokum butter",
+          "garcinia mangostana",
+          "mangosteen"
+        ]
+      },
+      "legal_status_enum": "banned",
+      "clinical_risk_enum": "high",
+      "jurisdictions": [
+        {
+          "region": "France",
+          "level": "federal",
+          "status": "banned",
+          "effective_date": "2025-04-15",
+          "source": {
+            "type": "regulatory_action",
+            "citation": "ANSES ministerial order banning GC supplements",
+            "accessed_date": "2026-02-18"
+          },
+          "jurisdiction_type": "country",
+          "jurisdiction_code": "FR",
+          "last_verified_date": "2026-02-18"
+        },
+        {
+          "region": "Australia",
+          "level": "federal",
+          "status": "restricted",
+          "effective_date": "2025-03-01",
+          "source": {
+            "type": "regulatory_action",
+            "citation": "TGA mandatory liver harm warning",
+            "accessed_date": "2026-02-18"
+          },
+          "jurisdiction_type": "country",
+          "jurisdiction_code": "AU",
+          "last_verified_date": "2026-02-18"
+        }
+      ],
+      "regulatory_actions": [
+        {
+          "action_type": "product_recall",
+          "authority": "FDA",
+          "date": "2009-05-01",
+          "description": "FDA recalled 14 Hydroxycut products containing garcinia after 23 liver injury reports"
+        },
+        {
+          "action_type": "ban",
+          "authority": "ANSES (France)",
+          "date": "2025-04-15",
+          "description": "Full ban on import, marketing and sale of GC supplements after fatal hepatitis case"
+        }
+      ],
+      "references_structured": [
+        {
+          "type": "case_report",
+          "authority": "NIH",
+          "citation": "LiverTox: Garcinia Cambogia",
+          "url": "https://www.ncbi.nlm.nih.gov/books/NBK548087/",
+          "published_date": null,
+          "evidence_grade": "B",
+          "confidence": "high"
+        },
+        {
+          "type": "regulatory_action",
+          "authority": "ANSES",
+          "citation": "ANSES warns against garcinia cambogia consumption",
+          "url": "https://www.anses.fr/en/content/do-not-consume-food-supplements-containing-garcinia-cambogia",
+          "published_date": "2025-03-05",
+          "evidence_grade": "A",
+          "confidence": "high"
+        }
+      ],
+      "data_quality": {
+        "completeness": "high",
+        "verification_status": "verified",
+        "last_verified_date": "2026-02-18"
+      },
+      "last_reviewed_at": "2026-02-18",
+      "reviewed_by": "data_pipeline_audit",
+      "source_confidence": "high",
+      "update_flags": {},
+      "source_category": "hepatotoxic_botanical",
+      "regulatory_status_enum": "banned",
+      "entity_type": "ingredient",
+      "effective_period": {
+        "start": "2025-04-15",
+        "end": null
+      },
+      "review": {
+        "status": "validated",
+        "last_reviewed_at": "2026-02-18",
+        "reviewed_by": "data_pipeline_audit",
+        "next_review_due": "2026-08-18",
+        "change_log": [
+          {
+            "date": "2026-02-18",
+            "change": "Added to banned list. France banned 2025. 1 death + 9 liver transplants. FDA recalled Hydroxycut 2009. Australia mandatory warnings 2025.",
+            "reason": "online_safety_audit"
+          }
+        ]
+      },
+      "banned_countries": null,
+      "ca_prop65_limit_mcg_day": null,
+      "cas_number": null,
+      "chemical_symbol": null,
+      "confidence": null,
+      "contraindications": null,
+      "cui_note": null,
+      "drugbank_id": null,
+      "effective_date": null,
+      "exposure_context": null,
+      "external_ids": null,
+      "fda_limit_mcg_day": null,
+      "found_in_categories": null,
+      "health_effects": null,
+      "health_risks": null,
+      "high_risk_sources": null,
+      "identifier_note": null,
+      "jurisdictional_statuses": null,
+      "nci_thesaurus_code": null,
+      "population_warnings": [
+        "People with liver disease - severe hepatotoxicity risk",
+        "People taking serotonergic drugs - serotonin toxicity risk",
+        "Pregnant women - contraindicated"
+      ],
+      "prohibition_status": null,
+      "pubchem_cid": null,
+      "recent_recalls_2025": null,
+      "safe_dose_limit": null,
+      "supersedes_ids": null,
+      "threshold": null,
+      "unii": null,
+      "usp_limit_mcg_day": null,
+      "wada_prohibited": null
+    },
+    {
+      "id": "BANNED_7_KETO_DHEA",
+      "standard_name": "7-Keto DHEA (7-Oxodehydroepiandrosterone)",
+      "aliases": [
+        "7-keto dhea",
+        "7-keto dehydroepiandrosterone",
+        "7-keto dehydroepiandrosterone acetate",
+        "7-oxo-dhea",
+        "7-oxodehydroepiandrosterone",
+        "7 keto dhea",
+        "7-keto",
+        "3-acetyl-7-oxo-dehydroepiandrosterone"
+      ],
+      "CUI": null,
+      "banned_date": "2025-01-01",
+      "ban_effective_date": "2025-01-01",
+      "banned_by": "United Kingdom (MHRA), Canada (Health Canada), Australia (TGA), New Zealand",
+      "reason": "Classified as a controlled anabolic steroid precursor in multiple countries. Banned in UK, Canada, Australia, and New Zealand. Not approved as a dietary supplement outside the US.",
+      "mechanism_of_harm": "Metabolite of DHEA with androgenic/anabolic steroid activity. Despite marketing as 'non-hormonal', it is a prohormone that modulates cortisol metabolism and thyroid function. Potential for hormonal disruption with long-term use.",
+      "regulatory_status": {
+        "US": "Legal as dietary supplement. FDA has not banned it but has issued warnings about DHEA-related compounds.",
+        "UK": "Classified as anabolic steroid under Misuse of Drugs Act. Illegal to sell or supply.",
+        "Canada": "Not approved as natural health product. Classified as controlled substance.",
+        "Australia": "Schedule 4 (prescription only). Banned from importation and OTC sale.",
+        "New Zealand": "Classified as prescription medicine. Banned from dietary supplements."
+      },
+      "severity_level": "banned",
+      "status": "banned",
+      "severity_score": 6,
+      "interaction_tags": [
+        "hormonal",
+        "endocrine_disruptor"
+      ],
+      "detection_difficulty": "moderate",
+      "ingredient_type": "synthetic",
+      "class_tags": [
+        "prohormone",
+        "controlled_substance",
+        "hormonal"
+      ],
+      "use_case_categories": [
+        "general",
+        "weight_loss",
+        "sports"
+      ],
+      "match_rules": {
+        "match_mode": "alias_and_fuzzy",
+        "label_tokens": [
+          "7-keto dhea",
+          "7-keto dehydroepiandrosterone",
+          "7-keto dehydroepiandrosterone acetate",
+          "7-oxo-dhea",
+          "7-oxodehydroepiandrosterone",
+          "7 keto dhea",
+          "7-keto",
+          "3-acetyl-7-oxo-dehydroepiandrosterone"
+        ],
+        "exclusions": [],
+        "case_sensitive": false,
+        "priority": 1,
+        "match_type": "normalized",
+        "confidence": "high"
+      },
+      "entity_type": "ingredient",
+      "sort_order": 1,
+      "at_risk_populations": [
+        "Women of reproductive age - hormonal disruption",
+        "Adolescents - endocrine system interference",
+        "People with hormone-sensitive conditions"
+      ]
     }
   ]
 }

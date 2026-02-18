@@ -17,10 +17,12 @@
   },
   "feature_gates": {
     "_description": "Scoring rollout controls",
-    "require_full_mapping": false,
-    "_require_full_mapping_note": "OPEN gate for scoring rollout. If true, any unmapped active returns NOT_SCORED",
+    "require_full_mapping": true,
+    "_require_full_mapping_note": "ENFORCED: any unmapped active returns NOT_SCORED; keep blend/header classification clean.",
     "probiotic_extended_scoring": false,
     "_probiotic_extended_scoring_note": "When true, use extended probiotic bonus module (max +10)",
+    "allow_non_probiotic_probiotic_bonus_with_strict_gate": true,
+    "_allow_non_probiotic_probiotic_bonus_with_strict_gate_note": "When true, non-probiotic products can receive probiotic bonus only if strict evidence gates pass.",
     "shadow_mode": true
   },
   "_usage": {
@@ -86,7 +88,27 @@
     "probiotic_bonus": {
       "default_max": 3,
       "extended_max": 10,
-      "extended_gate": "probiotic_extended_scoring"
+      "extended_gate": "probiotic_extended_scoring",
+      "non_probiotic_strict_gate": {
+        "require_viable_cfu": true,
+        "min_total_billion_count": 1.0,
+        "require_strain_level_identity": true,
+        "min_clinical_strain_count": 1,
+        "min_strain_id_count": 1,
+        "require_cfu_guarantee": true,
+        "accepted_guarantee_types": [
+          "at_expiration"
+        ],
+        "require_explicit_intent": true,
+        "explicit_intent_terms": [
+          "probiotic",
+          "probiotics",
+          "live cultures",
+          "cfu",
+          "gut flora",
+          "microbiome"
+        ]
+      }
     }
   },
   "section_B_safety_purity": {

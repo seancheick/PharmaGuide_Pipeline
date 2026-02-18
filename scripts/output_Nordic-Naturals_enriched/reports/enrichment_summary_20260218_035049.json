@@ -1,0 +1,26 @@
+{
+  "processing_info": {
+    "version": "3.1.0",
+    "files_processed": 2,
+    "duration_seconds": 407.46,
+    "timestamp": "2026-02-18T03:50:49.233839Z"
+  },
+  "stats": {
+    "total_products": 510,
+    "successful": 510,
+    "with_issues": 0
+  },
+  "match_counters": {
+    "pattern_match_wins_count": 0,
+    "contains_match_wins_count": 12,
+    "parent_fallback_count": 14
+  },
+  "unmapped_ingredients": {
+    "active:Prebiotic": 2,
+    "active:UC-II standardized Cartilage": 2,
+    "active:Total Omega-3s": 5,
+    "active:Phosphatidyl Choline": 2,
+    "active:Total Cultures": 4,
+    "active:Nordic Flora Woman Blend (Combination)": 1
+  }
+}
