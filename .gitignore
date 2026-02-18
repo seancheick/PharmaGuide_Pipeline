@@ -1,0 +1,21 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+.env
+
+# Pipeline output (regenerable via clean → enrich → score)
+scripts/output_*/
+scripts/tmp_*/
+
+# Logs (regenerated each run)
+scripts/logs/
+
+# Reports (regenerated each run)
+scripts/reports/
+
+# IDE / OS
+.DS_Store
+.vscode/
+.idea/
