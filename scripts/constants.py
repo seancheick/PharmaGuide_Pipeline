@@ -663,6 +663,7 @@ BLEND_HEADER_PATTERNS_HIGH_CONFIDENCE = [
     r"^total\s+\{?blend\}?$",       # "Total Blend" or "Total {Blend}"
     # Label phrase headers that are never ingredients (P0 gummies audit fix)
     r"^contains\s+(less\s+than|<)\s*\d+\s*%",  # "Contains less than 2%", "Contains <2%"
+    r"^contains\s+\d+\s*percent\s+or\s+less(\s+of)?",  # "Contains 2 percent or less of"
     r"^less\s+than\s+\d+\s*%",                 # "Less than 2% of"
     r"^<\s*\d+\s*%\s+of",                      # "<2% of"
     # Parser artifacts observed in Thorne/Nordic runs
@@ -670,6 +671,9 @@ BLEND_HEADER_PATTERNS_HIGH_CONFIDENCE = [
     r"^\d+(?:,\d{3})?(?:\.\d+)?\s*iu\s+from\s+mixed\s+carotenes$",
     r"^and\s+as\s*\(magnesium\)\s*citrate$",
     r"^total\s+cultures$",
+    r"^\s*min\.\s*\d+",
+    r"^\s*providing\s+\d+",
+    r"^\s*standardized\s+to\s+contain\s+\d+",
     r"\bblend\s*\(combination\)$",
     r"^daltonmax\s*\d+$",
     r"^bio[-\s]?enhanced$",
@@ -700,6 +704,15 @@ BLEND_HEADER_EXACT_NAMES = {
     "and as (magnesium) citrate",
     "total cultures",
     "nordic flora woman blend (combination)",
+    "5 billion probiotic blend",
+    "proprietary blend of 9 strains of probiotic bacteria",
+    "pure+ wild fish oil and antarctic krill (euphausia superba) oil concentrates",
+    "pure wild fish oil and antarctic krill euphausia superba oil concentrates",
+    # Softgels clean-stage unmapped high-frequency blend headers
+    "zma",
+    "probiotic fermented culture",
+    "antioxidant boost",
+    "vitality boost",
 }
 
 # LOW-CONFIDENCE blend headers - only skip if NO DOSE present

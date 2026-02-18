@@ -698,6 +698,10 @@ class SupplementScorer:
 
         prebiotic_terms = ["inulin", "fos", "gos"]
         prebiotic_hits = sum(1 for term in prebiotic_terms if any(term in ing for ing in ingredient_names))
+        # Enrichment may detect prebiotics from nested blend children that are not
+        # present as top-level scorable ingredients.
+        if pdata.get("prebiotic_present"):
+            prebiotic_hits = max(prebiotic_hits, 1)
 
         if self._feature_on("probiotic_extended_scoring", default=False):
             if total_billion >= 50:
@@ -1397,7 +1401,7 @@ class SupplementScorer:
             display = f"{round(quality_score, 1)}/80"
             display_100 = f"{score_100_equivalent}/100"
 
-        if verdict == "BLOCKED":
+        if verdict in {"BLOCKED", "UNSAFE"}:
             scoring_status = SCORING_STATUS_BLOCKED
             score_basis = SCORE_BASIS_SAFETY_BLOCK
         elif verdict == "NOT_SCORED":

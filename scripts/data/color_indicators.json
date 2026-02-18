@@ -3,7 +3,7 @@
     "description": "Context-aware indicators for distinguishing natural vs artificial colors in supplement ingredient mapping",
     "purpose": "scoring_classification",
     "schema_version": "4.0.0",
-    "last_updated": "2026-02-16",
+    "last_updated": "2026-02-18",
     "total_natural": null,
     "total_artificial": null,
     "total_entries": 66
@@ -271,6 +271,9 @@
     "Yellow 5 Lake",
     "Yellow 6",
     "Yellow 6 Aluminum Lake",
-    "Yellow 6 Lake"
+    "Yellow 6 Lake",
+    "FD&C Red #3",
+    "FD&C Red # 3",
+    "Red #3"
   ]
 }

@@ -1,9 +1,9 @@
 DSLD Data Cleaning Processing Report
 ==================================================
 
-Generated: 2026-02-18 02:02:30
+Generated: 2026-02-18 14:30:27
 Total Files Processed: 186
-Processing Time: 0.17 minutes
+Processing Time: 0.15 minutes
 
 Results Summary:
   - Successfully cleaned: 186
@@ -12,7 +12,7 @@ Results Summary:
   - Errors: 0
   - Success rate: 100.0%
 
-Mapped ingredients found: 276
+Mapped ingredients found: 275
 Unmapped ingredients found: 0
 
 Top 15 Mapped Ingredients (data insights):
@@ -35,4 +35,4 @@ Top 15 Mapped Ingredients (data insights):
 These are the most frequently appearing mapped ingredients
 
 Batch Details:
-  Batch 1: 186 cleaned, 0 review, 0 incomplete, 0 errors (10.4s)
+  Batch 1: 186 cleaned, 0 review, 0 incomplete, 0 errors (8.8s)

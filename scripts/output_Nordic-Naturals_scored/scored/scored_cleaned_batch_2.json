@@ -88,7 +88,7 @@
     "scoring_metadata": {
       "scoring_version": "3.0.1",
       "output_schema_version": "3.0.1",
-      "scored_date": "2026-02-18T07:08:49.466715+00:00",
+      "scored_date": "2026-02-18T19:42:05.183979+00:00",
       "enrichment_version": "3.1.0",
       "scoring_status": "scored",
       "score_basis": "bioactives_scored",
@@ -119,14 +119,14 @@
     },
     "match_ledger": {
       "schema_version": "1.1.0",
-      "generated_at": "2026-02-18T07:08:41.283106Z",
+      "generated_at": "2026-02-18T19:41:49.122323Z",
       "domains": {
         "ingredients": {
-          "total_raw": 7,
+          "total_raw": 6,
           "matched": 6,
           "unmatched": 0,
           "rejected": 0,
-          "skipped": 1,
+          "skipped": 0,
           "recognized_non_scorable": 0,
           "recognized_botanical_unscored": 0,
           "recognition_coverage_percent": 100.0,
@@ -210,19 +210,6 @@
               "matched_to_name": "Vitamin E",
               "decision": "matched",
               "decision_reason": null,
-              "candidates_top3": []
-            },
-            {
-              "domain": "ingredients",
-              "raw_source_text": "Other Omega-3 Fatty Acids",
-              "raw_source_path": "activeIngredients",
-              "normalized_key": "other_omega_3_fatty_acids",
-              "canonical_id": null,
-              "match_method": null,
-              "confidence": 0.0,
-              "matched_to_name": null,
-              "decision": "skipped",
-              "decision_reason": "blend_header_total_weight_only",
               "candidates_top3": []
             }
           ]
@@ -313,9 +300,9 @@
         }
       },
       "summary": {
-        "total_entities": 8,
+        "total_entities": 7,
         "total_matched": 7,
-        "total_skipped": 1,
+        "total_skipped": 0,
         "total_recognized_non_scorable": 0,
         "total_recognized_botanical_unscored": 0,
         "total_unmatched": 0,
@@ -432,7 +419,7 @@
     "scoring_metadata": {
       "scoring_version": "3.0.1",
       "output_schema_version": "3.0.1",
-      "scored_date": "2026-02-18T07:08:49.466844+00:00",
+      "scored_date": "2026-02-18T19:42:05.184104+00:00",
       "enrichment_version": "3.1.0",
       "scoring_status": "scored",
       "score_basis": "bioactives_scored",
@@ -463,14 +450,14 @@
     },
     "match_ledger": {
       "schema_version": "1.1.0",
-      "generated_at": "2026-02-18T07:08:41.869910Z",
+      "generated_at": "2026-02-18T19:41:50.518288Z",
       "domains": {
         "ingredients": {
-          "total_raw": 7,
+          "total_raw": 6,
           "matched": 6,
           "unmatched": 0,
           "rejected": 0,
-          "skipped": 1,
+          "skipped": 0,
           "recognized_non_scorable": 0,
           "recognized_botanical_unscored": 0,
           "recognition_coverage_percent": 100.0,
@@ -555,19 +542,6 @@
               "decision": "matched",
               "decision_reason": null,
               "candidates_top3": []
-            },
-            {
-              "domain": "ingredients",
-              "raw_source_text": "Other Omega-3 Fatty Acids",
-              "raw_source_path": "activeIngredients",
-              "normalized_key": "other_omega_3_fatty_acids",
-              "canonical_id": null,
-              "match_method": null,
-              "confidence": 0.0,
-              "matched_to_name": null,
-              "decision": "skipped",
-              "decision_reason": "blend_header_total_weight_only",
-              "candidates_top3": []
             }
           ]
         },
@@ -657,9 +631,9 @@
         }
       },
       "summary": {
-        "total_entities": 8,
+        "total_entities": 7,
         "total_matched": 7,
-        "total_skipped": 1,
+        "total_skipped": 0,
         "total_recognized_non_scorable": 0,
         "total_recognized_botanical_unscored": 0,
         "total_unmatched": 0,
@@ -667,382 +641,6 @@
         "recognition_coverage_percent": 100.0,
         "scorable_coverage_percent": 100.0,
         "scorable_total": 7,
-        "coverage_percent": 100.0,
-        "coverage_by_domain": {
-          "ingredients": 100.0,
-          "additives": 100.0,
-          "allergens": 100.0,
-          "manufacturer": 100.0,
-          "delivery": 100.0,
-          "claims": 100.0
-        },
-        "recognition_by_domain": {
-          "ingredients": 100.0,
-          "additives": 0.0,
-          "allergens": 0.0,
-          "manufacturer": 100.0,
-          "delivery": 0.0,
-          "claims": 0.0
-        }
-      }
-    }
-  },
-  {
-    "dsld_id": "8124",
-    "product_name": "Children's DHA",
-    "brand_name": "Nordic Naturals",
-    "quality_score": 56.5,
-    "score_80": 56.5,
-    "score_100_equivalent": 70.7,
-    "display": "56.5/80",
-    "display_100": "70.7/100",
-    "grade": "Good",
-    "verdict": "SAFE",
-    "safety_verdict": "SAFE",
-    "output_schema_version": "3.0.1",
-    "scoring_status": "scored",
-    "score_basis": "bioactives_scored",
-    "evaluation_stage": "scoring",
-    "breakdown": {
-      "A": {
-        "score": 10.14,
-        "max": 25,
-        "A1": 8.14,
-        "A2": 0.0,
-        "A3": 1.0,
-        "A4": 0.0,
-        "A5": 1.0,
-        "A5a": 0.0,
-        "A5b": 0.0,
-        "A5c": 1.0,
-        "probiotic_bonus": 0.0,
-        "probiotic_breakdown": {
-          "probiotic_bonus": 0.0,
-          "cfu": 0.0,
-          "diversity": 0.0,
-          "prebiotic": 0.0,
-          "clinical_strains": 0.0,
-          "survivability": 0.0,
-          "eligibility": {
-            "mode": "non_probiotic",
-            "eligible": false,
-            "reason": "no_probiotic_signal"
-          }
-        }
-      },
-      "B": {
-        "score": 34.0,
-        "max": 35,
-        "B0_moderate_penalty": 0.0,
-        "B1_penalty": 0.0,
-        "B2_penalty": 2.0,
-        "B3": 1.0,
-        "B4a": 0.0,
-        "B4b": 0.0,
-        "B4c": 0.0,
-        "B5_penalty": 0.0,
-        "B6_penalty": 0.0,
-        "bonuses": 1.0,
-        "penalties": 2.0,
-        "raw": 34.0
-      },
-      "C": {
-        "score": 10.4,
-        "max": 15,
-        "ingredient_points": {
-          "vitamin a beta carotene": 2.6,
-          "vitamin d3": 2.6,
-          "vitamin e": 2.6,
-          "omega 3 fatty acids": 2.6
-        },
-        "matched_entries": 4
-      },
-      "D": {
-        "score": 2.0,
-        "max": 5,
-        "D1": 2.0,
-        "D2": 0.0,
-        "D3": 0.0,
-        "D4": 0.0,
-        "D5": 0.0
-      },
-      "violation_penalty": 0.0,
-      "quality_raw": 56.54
-    },
-    "flags": [
-      "PROPRIETARY_BLEND_PRESENT"
-    ],
-    "supp_type": "specialty",
-    "unmapped_actives": [],
-    "unmapped_actives_total": 0,
-    "unmapped_actives_excluding_banned_exact_alias": 0,
-    "mapped_coverage": 1.0,
-    "scoring_metadata": {
-      "scoring_version": "3.0.1",
-      "output_schema_version": "3.0.1",
-      "scored_date": "2026-02-18T07:08:49.466999+00:00",
-      "enrichment_version": "3.1.0",
-      "scoring_status": "scored",
-      "score_basis": "bioactives_scored",
-      "verdict": "SAFE",
-      "flags": [
-        "PROPRIETARY_BLEND_PRESENT"
-      ],
-      "unmapped_actives_total": 0,
-      "unmapped_actives_excluding_banned_exact_alias": 0,
-      "mapped_coverage": 1.0,
-      "reason": null
-    },
-    "section_scores": {
-      "A_ingredient_quality": {
-        "score": 10.14,
-        "max": 25
-      },
-      "B_safety_purity": {
-        "score": 34.0,
-        "max": 35
-      },
-      "C_evidence_research": {
-        "score": 10.4,
-        "max": 15
-      },
-      "D_brand_trust": {
-        "score": 2.0,
-        "max": 5
-      }
-    },
-    "match_ledger": {
-      "schema_version": "1.1.0",
-      "generated_at": "2026-02-18T07:08:42.710006Z",
-      "domains": {
-        "ingredients": {
-          "total_raw": 9,
-          "matched": 7,
-          "unmatched": 0,
-          "rejected": 0,
-          "skipped": 1,
-          "recognized_non_scorable": 1,
-          "recognized_botanical_unscored": 0,
-          "recognition_coverage_percent": 100.0,
-          "scorable_coverage_percent": 100.0,
-          "scorable_total": 7,
-          "coverage_percent": 100.0,
-          "entries": [
-            {
-              "domain": "ingredients",
-              "raw_source_text": "Vitamin A",
-              "raw_source_path": "activeIngredients",
-              "normalized_key": "vitamin_a",
-              "canonical_id": "vitamin_a",
-              "match_method": "exact",
-              "confidence": 1.0,
-              "matched_to_name": "Vitamin A",
-              "decision": "matched",
-              "decision_reason": null,
-              "candidates_top3": []
-            },
-            {
-              "domain": "ingredients",
-              "raw_source_text": "Vitamin D",
-              "raw_source_path": "activeIngredients",
-              "normalized_key": "vitamin_d",
-              "canonical_id": "vitamin_d",
-              "match_method": "exact",
-              "confidence": 1.0,
-              "matched_to_name": "Vitamin D",
-              "decision": "matched",
-              "decision_reason": null,
-              "candidates_top3": []
-            },
-            {
-              "domain": "ingredients",
-              "raw_source_text": "Vitamin E",
-              "raw_source_path": "activeIngredients",
-              "normalized_key": "vitamin_e",
-              "canonical_id": "vitamin_e",
-              "match_method": "exact",
-              "confidence": 1.0,
-              "matched_to_name": "Vitamin E",
-              "decision": "matched",
-              "decision_reason": null,
-              "candidates_top3": []
-            },
-            {
-              "domain": "ingredients",
-              "raw_source_text": "Omega-3 Fatty Acids",
-              "raw_source_path": "activeIngredients",
-              "normalized_key": "omega_3_fatty_acids",
-              "canonical_id": "omega_3",
-              "match_method": "exact",
-              "confidence": 1.0,
-              "matched_to_name": "Omega-3 Fatty Acids",
-              "decision": "matched",
-              "decision_reason": null,
-              "candidates_top3": []
-            },
-            {
-              "domain": "ingredients",
-              "raw_source_text": "Eicosapentaenoic Acid",
-              "raw_source_path": "activeIngredients",
-              "normalized_key": "eicosapentaenoic_acid",
-              "canonical_id": "epa",
-              "match_method": "exact",
-              "confidence": 1.0,
-              "matched_to_name": "EPA (Eicosapentaenoic Acid)",
-              "decision": "matched",
-              "decision_reason": null,
-              "candidates_top3": []
-            },
-            {
-              "domain": "ingredients",
-              "raw_source_text": "Docosahexaenoic Acid",
-              "raw_source_path": "activeIngredients",
-              "normalized_key": "docosahexaenoic_acid",
-              "canonical_id": "dha",
-              "match_method": "exact",
-              "confidence": 1.0,
-              "matched_to_name": "DHA (Docosahexaenoic Acid)",
-              "decision": "matched",
-              "decision_reason": null,
-              "candidates_top3": []
-            },
-            {
-              "domain": "ingredients",
-              "raw_source_text": "purified Arctic Cod Liver Oil",
-              "raw_source_path": "activeIngredients",
-              "normalized_key": "purified_arctic_cod_liver_oil",
-              "canonical_id": "cod_liver_oil",
-              "match_method": "exact",
-              "confidence": 1.0,
-              "matched_to_name": "Cod Liver Oil",
-              "decision": "matched",
-              "decision_reason": null,
-              "candidates_top3": []
-            },
-            {
-              "domain": "ingredients",
-              "raw_source_text": "Other Omega-3 Fatty Acids",
-              "raw_source_path": "activeIngredients",
-              "normalized_key": "other_omega_3_fatty_acids",
-              "canonical_id": null,
-              "match_method": null,
-              "confidence": 0.0,
-              "matched_to_name": null,
-              "decision": "skipped",
-              "decision_reason": "blend_header_total_weight_only",
-              "candidates_top3": []
-            },
-            {
-              "domain": "ingredients",
-              "raw_source_text": "Oleic Acid",
-              "raw_source_path": "activeIngredients",
-              "normalized_key": "oleic_acid",
-              "canonical_id": null,
-              "match_method": "other_ingredients",
-              "confidence": 1.0,
-              "matched_to_name": null,
-              "decision": "recognized_non_scorable",
-              "decision_reason": "fatty_acid",
-              "candidates_top3": []
-            }
-          ]
-        },
-        "additives": {
-          "total_raw": 0,
-          "matched": 0,
-          "unmatched": 0,
-          "rejected": 0,
-          "skipped": 0,
-          "recognized_non_scorable": 0,
-          "recognized_botanical_unscored": 0,
-          "recognition_coverage_percent": 0.0,
-          "scorable_coverage_percent": 100.0,
-          "scorable_total": 0,
-          "coverage_percent": 100.0,
-          "entries": []
-        },
-        "allergens": {
-          "total_raw": 0,
-          "matched": 0,
-          "unmatched": 0,
-          "rejected": 0,
-          "skipped": 0,
-          "recognized_non_scorable": 0,
-          "recognized_botanical_unscored": 0,
-          "recognition_coverage_percent": 0.0,
-          "scorable_coverage_percent": 100.0,
-          "scorable_total": 0,
-          "coverage_percent": 100.0,
-          "entries": []
-        },
-        "manufacturer": {
-          "total_raw": 1,
-          "matched": 1,
-          "unmatched": 0,
-          "rejected": 0,
-          "skipped": 0,
-          "recognized_non_scorable": 0,
-          "recognized_botanical_unscored": 0,
-          "recognition_coverage_percent": 100.0,
-          "scorable_coverage_percent": 100.0,
-          "scorable_total": 1,
-          "coverage_percent": 100.0,
-          "entries": [
-            {
-              "domain": "manufacturer",
-              "raw_source_text": "Nordic Naturals",
-              "raw_source_path": "brandName",
-              "normalized_key": "nordic_naturals",
-              "canonical_id": "MANUF_NORDIC_NATURALS",
-              "match_method": "exact",
-              "confidence": 1.0,
-              "matched_to_name": "Nordic Naturals",
-              "decision": "matched",
-              "decision_reason": null,
-              "candidates_top3": []
-            }
-          ]
-        },
-        "delivery": {
-          "total_raw": 0,
-          "matched": 0,
-          "unmatched": 0,
-          "rejected": 0,
-          "skipped": 0,
-          "recognized_non_scorable": 0,
-          "recognized_botanical_unscored": 0,
-          "recognition_coverage_percent": 0.0,
-          "scorable_coverage_percent": 100.0,
-          "scorable_total": 0,
-          "coverage_percent": 100.0,
-          "entries": []
-        },
-        "claims": {
-          "total_raw": 0,
-          "matched": 0,
-          "unmatched": 0,
-          "rejected": 0,
-          "skipped": 0,
-          "recognized_non_scorable": 0,
-          "recognized_botanical_unscored": 0,
-          "recognition_coverage_percent": 0.0,
-          "scorable_coverage_percent": 100.0,
-          "scorable_total": 0,
-          "coverage_percent": 100.0,
-          "entries": []
-        }
-      },
-      "summary": {
-        "total_entities": 10,
-        "total_matched": 8,
-        "total_skipped": 1,
-        "total_recognized_non_scorable": 1,
-        "total_recognized_botanical_unscored": 0,
-        "total_unmatched": 0,
-        "total_rejected": 0,
-        "recognition_coverage_percent": 100.0,
-        "scorable_coverage_percent": 100.0,
-        "scorable_total": 8,
         "coverage_percent": 100.0,
         "coverage_by_domain": {
           "ingredients": 100.0,
@@ -1156,7 +754,7 @@
     "scoring_metadata": {
       "scoring_version": "3.0.1",
       "output_schema_version": "3.0.1",
-      "scored_date": "2026-02-18T07:08:49.467150+00:00",
+      "scored_date": "2026-02-18T19:42:05.184257+00:00",
       "enrichment_version": "3.1.0",
       "scoring_status": "scored",
       "score_basis": "bioactives_scored",
@@ -1189,14 +787,14 @@
     },
     "match_ledger": {
       "schema_version": "1.1.0",
-      "generated_at": "2026-02-18T07:08:43.496548Z",
+      "generated_at": "2026-02-18T19:41:52.162784Z",
       "domains": {
         "ingredients": {
-          "total_raw": 9,
+          "total_raw": 8,
           "matched": 7,
           "unmatched": 0,
           "rejected": 0,
-          "skipped": 1,
+          "skipped": 0,
           "recognized_non_scorable": 1,
           "recognized_botanical_unscored": 0,
           "recognition_coverage_percent": 100.0,
@@ -1293,19 +891,6 @@
               "matched_to_name": "Cod Liver Oil",
               "decision": "matched",
               "decision_reason": null,
-              "candidates_top3": []
-            },
-            {
-              "domain": "ingredients",
-              "raw_source_text": "Other Omega-3 Fatty Acids",
-              "raw_source_path": "activeIngredients",
-              "normalized_key": "other_omega_3_fatty_acids",
-              "canonical_id": null,
-              "match_method": null,
-              "confidence": 0.0,
-              "matched_to_name": null,
-              "decision": "skipped",
-              "decision_reason": "blend_header_total_weight_only",
               "candidates_top3": []
             },
             {
@@ -1409,9 +994,9 @@
         }
       },
       "summary": {
-        "total_entities": 10,
+        "total_entities": 9,
         "total_matched": 8,
-        "total_skipped": 1,
+        "total_skipped": 0,
         "total_recognized_non_scorable": 1,
         "total_recognized_botanical_unscored": 0,
         "total_unmatched": 0,
@@ -1419,308 +1004,6 @@
         "recognition_coverage_percent": 100.0,
         "scorable_coverage_percent": 100.0,
         "scorable_total": 8,
-        "coverage_percent": 100.0,
-        "coverage_by_domain": {
-          "ingredients": 100.0,
-          "additives": 100.0,
-          "allergens": 100.0,
-          "manufacturer": 100.0,
-          "delivery": 100.0,
-          "claims": 100.0
-        },
-        "recognition_by_domain": {
-          "ingredients": 100.0,
-          "additives": 0.0,
-          "allergens": 0.0,
-          "manufacturer": 100.0,
-          "delivery": 0.0,
-          "claims": 0.0
-        }
-      }
-    }
-  },
-  {
-    "dsld_id": "81952",
-    "product_name": "ProEPA 850 EPA/200 DHA Lemon",
-    "brand_name": "Nordic Naturals",
-    "quality_score": 47.0,
-    "score_80": 47.0,
-    "score_100_equivalent": 58.8,
-    "display": "47.0/80",
-    "display_100": "58.8/100",
-    "grade": "Below Avg",
-    "verdict": "SAFE",
-    "safety_verdict": "SAFE",
-    "output_schema_version": "3.0.1",
-    "scoring_status": "scored",
-    "score_basis": "bioactives_scored",
-    "evaluation_stage": "scoring",
-    "breakdown": {
-      "A": {
-        "score": 10.01,
-        "max": 25,
-        "A1": 10.01,
-        "A2": 0.0,
-        "A3": 0.0,
-        "A4": 0.0,
-        "A5": 0.0,
-        "A5a": 0.0,
-        "A5b": 0.0,
-        "A5c": 0.0,
-        "probiotic_bonus": 0.0,
-        "probiotic_breakdown": {
-          "probiotic_bonus": 0.0,
-          "cfu": 0.0,
-          "diversity": 0.0,
-          "prebiotic": 0.0,
-          "clinical_strains": 0.0,
-          "survivability": 0.0,
-          "eligibility": {
-            "mode": "non_probiotic",
-            "eligible": false,
-            "reason": "no_probiotic_signal"
-          }
-        }
-      },
-      "B": {
-        "score": 35.0,
-        "max": 35,
-        "B0_moderate_penalty": 0.0,
-        "B1_penalty": 0.0,
-        "B2_penalty": 0.0,
-        "B3": 3.0,
-        "B4a": 0.0,
-        "B4b": 0.0,
-        "B4c": 0.0,
-        "B5_penalty": 0.0,
-        "B6_penalty": 0.0,
-        "bonuses": 3.0,
-        "penalties": 0.0,
-        "raw": 38.0
-      },
-      "C": {
-        "score": 0.0,
-        "max": 15,
-        "ingredient_points": {},
-        "matched_entries": 0
-      },
-      "D": {
-        "score": 2.0,
-        "max": 5,
-        "D1": 2.0,
-        "D2": 0.0,
-        "D3": 0.0,
-        "D4": 0.0,
-        "D5": 0.0
-      },
-      "violation_penalty": 0.0,
-      "quality_raw": 47.01
-    },
-    "flags": [],
-    "supp_type": "targeted",
-    "unmapped_actives": [],
-    "unmapped_actives_total": 0,
-    "unmapped_actives_excluding_banned_exact_alias": 0,
-    "mapped_coverage": 1.0,
-    "scoring_metadata": {
-      "scoring_version": "3.0.1",
-      "output_schema_version": "3.0.1",
-      "scored_date": "2026-02-18T07:08:49.467225+00:00",
-      "enrichment_version": "3.1.0",
-      "scoring_status": "scored",
-      "score_basis": "bioactives_scored",
-      "verdict": "SAFE",
-      "flags": [],
-      "unmapped_actives_total": 0,
-      "unmapped_actives_excluding_banned_exact_alias": 0,
-      "mapped_coverage": 1.0,
-      "reason": null
-    },
-    "section_scores": {
-      "A_ingredient_quality": {
-        "score": 10.01,
-        "max": 25
-      },
-      "B_safety_purity": {
-        "score": 35.0,
-        "max": 35
-      },
-      "C_evidence_research": {
-        "score": 0.0,
-        "max": 15
-      },
-      "D_brand_trust": {
-        "score": 2.0,
-        "max": 5
-      }
-    },
-    "match_ledger": {
-      "schema_version": "1.1.0",
-      "generated_at": "2026-02-18T07:08:44.073198Z",
-      "domains": {
-        "ingredients": {
-          "total_raw": 4,
-          "matched": 3,
-          "unmatched": 0,
-          "rejected": 0,
-          "skipped": 1,
-          "recognized_non_scorable": 0,
-          "recognized_botanical_unscored": 0,
-          "recognition_coverage_percent": 100.0,
-          "scorable_coverage_percent": 100.0,
-          "scorable_total": 3,
-          "coverage_percent": 100.0,
-          "entries": [
-            {
-              "domain": "ingredients",
-              "raw_source_text": "Eicosapentaenoic Acid",
-              "raw_source_path": "activeIngredients",
-              "normalized_key": "eicosapentaenoic_acid",
-              "canonical_id": "epa",
-              "match_method": "exact",
-              "confidence": 1.0,
-              "matched_to_name": "EPA (Eicosapentaenoic Acid)",
-              "decision": "matched",
-              "decision_reason": null,
-              "candidates_top3": []
-            },
-            {
-              "domain": "ingredients",
-              "raw_source_text": "Docosahexaenoic Acid",
-              "raw_source_path": "activeIngredients",
-              "normalized_key": "docosahexaenoic_acid",
-              "canonical_id": "dha",
-              "match_method": "exact",
-              "confidence": 1.0,
-              "matched_to_name": "DHA (Docosahexaenoic Acid)",
-              "decision": "matched",
-              "decision_reason": null,
-              "candidates_top3": []
-            },
-            {
-              "domain": "ingredients",
-              "raw_source_text": "D-Alpha-Tocopherol",
-              "raw_source_path": "activeIngredients",
-              "normalized_key": "d_alpha_tocopherol",
-              "canonical_id": "vitamin_e",
-              "match_method": "exact",
-              "confidence": 1.0,
-              "matched_to_name": "Vitamin E",
-              "decision": "matched",
-              "decision_reason": null,
-              "candidates_top3": []
-            },
-            {
-              "domain": "ingredients",
-              "raw_source_text": "Other Omega-3 Fatty Acids",
-              "raw_source_path": "activeIngredients",
-              "normalized_key": "other_omega_3_fatty_acids",
-              "canonical_id": null,
-              "match_method": null,
-              "confidence": 0.0,
-              "matched_to_name": null,
-              "decision": "skipped",
-              "decision_reason": "blend_header_total_weight_only",
-              "candidates_top3": []
-            }
-          ]
-        },
-        "additives": {
-          "total_raw": 0,
-          "matched": 0,
-          "unmatched": 0,
-          "rejected": 0,
-          "skipped": 0,
-          "recognized_non_scorable": 0,
-          "recognized_botanical_unscored": 0,
-          "recognition_coverage_percent": 0.0,
-          "scorable_coverage_percent": 100.0,
-          "scorable_total": 0,
-          "coverage_percent": 100.0,
-          "entries": []
-        },
-        "allergens": {
-          "total_raw": 0,
-          "matched": 0,
-          "unmatched": 0,
-          "rejected": 0,
-          "skipped": 0,
-          "recognized_non_scorable": 0,
-          "recognized_botanical_unscored": 0,
-          "recognition_coverage_percent": 0.0,
-          "scorable_coverage_percent": 100.0,
-          "scorable_total": 0,
-          "coverage_percent": 100.0,
-          "entries": []
-        },
-        "manufacturer": {
-          "total_raw": 1,
-          "matched": 1,
-          "unmatched": 0,
-          "rejected": 0,
-          "skipped": 0,
-          "recognized_non_scorable": 0,
-          "recognized_botanical_unscored": 0,
-          "recognition_coverage_percent": 100.0,
-          "scorable_coverage_percent": 100.0,
-          "scorable_total": 1,
-          "coverage_percent": 100.0,
-          "entries": [
-            {
-              "domain": "manufacturer",
-              "raw_source_text": "Nordic Naturals",
-              "raw_source_path": "brandName",
-              "normalized_key": "nordic_naturals",
-              "canonical_id": "MANUF_NORDIC_NATURALS",
-              "match_method": "exact",
-              "confidence": 1.0,
-              "matched_to_name": "Nordic Naturals",
-              "decision": "matched",
-              "decision_reason": null,
-              "candidates_top3": []
-            }
-          ]
-        },
-        "delivery": {
-          "total_raw": 0,
-          "matched": 0,
-          "unmatched": 0,
-          "rejected": 0,
-          "skipped": 0,
-          "recognized_non_scorable": 0,
-          "recognized_botanical_unscored": 0,
-          "recognition_coverage_percent": 0.0,
-          "scorable_coverage_percent": 100.0,
-          "scorable_total": 0,
-          "coverage_percent": 100.0,
-          "entries": []
-        },
-        "claims": {
-          "total_raw": 0,
-          "matched": 0,
-          "unmatched": 0,
-          "rejected": 0,
-          "skipped": 0,
-          "recognized_non_scorable": 0,
-          "recognized_botanical_unscored": 0,
-          "recognition_coverage_percent": 0.0,
-          "scorable_coverage_percent": 100.0,
-          "scorable_total": 0,
-          "coverage_percent": 100.0,
-          "entries": []
-        }
-      },
-      "summary": {
-        "total_entities": 5,
-        "total_matched": 4,
-        "total_skipped": 1,
-        "total_recognized_non_scorable": 0,
-        "total_recognized_botanical_unscored": 0,
-        "total_unmatched": 0,
-        "total_rejected": 0,
-        "recognition_coverage_percent": 100.0,
-        "scorable_coverage_percent": 100.0,
-        "scorable_total": 4,
         "coverage_percent": 100.0,
         "coverage_by_domain": {
           "ingredients": 100.0,
@@ -1834,7 +1117,7 @@
     "scoring_metadata": {
       "scoring_version": "3.0.1",
       "output_schema_version": "3.0.1",
-      "scored_date": "2026-02-18T07:08:49.467377+00:00",
+      "scored_date": "2026-02-18T19:42:05.184407+00:00",
       "enrichment_version": "3.1.0",
       "scoring_status": "scored",
       "score_basis": "bioactives_scored",
@@ -1867,14 +1150,14 @@
     },
     "match_ledger": {
       "schema_version": "1.1.0",
-      "generated_at": "2026-02-18T07:08:44.864324Z",
+      "generated_at": "2026-02-18T19:41:53.821451Z",
       "domains": {
         "ingredients": {
-          "total_raw": 9,
+          "total_raw": 8,
           "matched": 7,
           "unmatched": 0,
           "rejected": 0,
-          "skipped": 1,
+          "skipped": 0,
           "recognized_non_scorable": 1,
           "recognized_botanical_unscored": 0,
           "recognition_coverage_percent": 100.0,
@@ -1971,19 +1254,6 @@
               "matched_to_name": "Cod Liver Oil",
               "decision": "matched",
               "decision_reason": null,
-              "candidates_top3": []
-            },
-            {
-              "domain": "ingredients",
-              "raw_source_text": "Other Omega-3 Fatty Acids",
-              "raw_source_path": "activeIngredients",
-              "normalized_key": "other_omega_3_fatty_acids",
-              "canonical_id": null,
-              "match_method": null,
-              "confidence": 0.0,
-              "matched_to_name": null,
-              "decision": "skipped",
-              "decision_reason": "blend_header_total_weight_only",
               "candidates_top3": []
             },
             {
@@ -2087,9 +1357,9 @@
         }
       },
       "summary": {
-        "total_entities": 10,
+        "total_entities": 9,
         "total_matched": 8,
-        "total_skipped": 1,
+        "total_skipped": 0,
         "total_recognized_non_scorable": 1,
         "total_recognized_botanical_unscored": 0,
         "total_unmatched": 0,
@@ -2097,6 +1367,295 @@
         "recognition_coverage_percent": 100.0,
         "scorable_coverage_percent": 100.0,
         "scorable_total": 8,
+        "coverage_percent": 100.0,
+        "coverage_by_domain": {
+          "ingredients": 100.0,
+          "additives": 100.0,
+          "allergens": 100.0,
+          "manufacturer": 100.0,
+          "delivery": 100.0,
+          "claims": 100.0
+        },
+        "recognition_by_domain": {
+          "ingredients": 100.0,
+          "additives": 0.0,
+          "allergens": 0.0,
+          "manufacturer": 100.0,
+          "delivery": 0.0,
+          "claims": 0.0
+        }
+      }
+    }
+  },
+  {
+    "dsld_id": "81952",
+    "product_name": "ProEPA 850 EPA/200 DHA Lemon",
+    "brand_name": "Nordic Naturals",
+    "quality_score": 47.0,
+    "score_80": 47.0,
+    "score_100_equivalent": 58.8,
+    "display": "47.0/80",
+    "display_100": "58.8/100",
+    "grade": "Below Avg",
+    "verdict": "SAFE",
+    "safety_verdict": "SAFE",
+    "output_schema_version": "3.0.1",
+    "scoring_status": "scored",
+    "score_basis": "bioactives_scored",
+    "evaluation_stage": "scoring",
+    "breakdown": {
+      "A": {
+        "score": 10.01,
+        "max": 25,
+        "A1": 10.01,
+        "A2": 0.0,
+        "A3": 0.0,
+        "A4": 0.0,
+        "A5": 0.0,
+        "A5a": 0.0,
+        "A5b": 0.0,
+        "A5c": 0.0,
+        "probiotic_bonus": 0.0,
+        "probiotic_breakdown": {
+          "probiotic_bonus": 0.0,
+          "cfu": 0.0,
+          "diversity": 0.0,
+          "prebiotic": 0.0,
+          "clinical_strains": 0.0,
+          "survivability": 0.0,
+          "eligibility": {
+            "mode": "non_probiotic",
+            "eligible": false,
+            "reason": "no_probiotic_signal"
+          }
+        }
+      },
+      "B": {
+        "score": 35.0,
+        "max": 35,
+        "B0_moderate_penalty": 0.0,
+        "B1_penalty": 0.0,
+        "B2_penalty": 0.0,
+        "B3": 3.0,
+        "B4a": 0.0,
+        "B4b": 0.0,
+        "B4c": 0.0,
+        "B5_penalty": 0.0,
+        "B6_penalty": 0.0,
+        "bonuses": 3.0,
+        "penalties": 0.0,
+        "raw": 38.0
+      },
+      "C": {
+        "score": 0.0,
+        "max": 15,
+        "ingredient_points": {},
+        "matched_entries": 0
+      },
+      "D": {
+        "score": 2.0,
+        "max": 5,
+        "D1": 2.0,
+        "D2": 0.0,
+        "D3": 0.0,
+        "D4": 0.0,
+        "D5": 0.0
+      },
+      "violation_penalty": 0.0,
+      "quality_raw": 47.01
+    },
+    "flags": [],
+    "supp_type": "targeted",
+    "unmapped_actives": [],
+    "unmapped_actives_total": 0,
+    "unmapped_actives_excluding_banned_exact_alias": 0,
+    "mapped_coverage": 1.0,
+    "scoring_metadata": {
+      "scoring_version": "3.0.1",
+      "output_schema_version": "3.0.1",
+      "scored_date": "2026-02-18T19:42:05.184479+00:00",
+      "enrichment_version": "3.1.0",
+      "scoring_status": "scored",
+      "score_basis": "bioactives_scored",
+      "verdict": "SAFE",
+      "flags": [],
+      "unmapped_actives_total": 0,
+      "unmapped_actives_excluding_banned_exact_alias": 0,
+      "mapped_coverage": 1.0,
+      "reason": null
+    },
+    "section_scores": {
+      "A_ingredient_quality": {
+        "score": 10.01,
+        "max": 25
+      },
+      "B_safety_purity": {
+        "score": 35.0,
+        "max": 35
+      },
+      "C_evidence_research": {
+        "score": 0.0,
+        "max": 15
+      },
+      "D_brand_trust": {
+        "score": 2.0,
+        "max": 5
+      }
+    },
+    "match_ledger": {
+      "schema_version": "1.1.0",
+      "generated_at": "2026-02-18T19:41:54.695448Z",
+      "domains": {
+        "ingredients": {
+          "total_raw": 3,
+          "matched": 3,
+          "unmatched": 0,
+          "rejected": 0,
+          "skipped": 0,
+          "recognized_non_scorable": 0,
+          "recognized_botanical_unscored": 0,
+          "recognition_coverage_percent": 100.0,
+          "scorable_coverage_percent": 100.0,
+          "scorable_total": 3,
+          "coverage_percent": 100.0,
+          "entries": [
+            {
+              "domain": "ingredients",
+              "raw_source_text": "Eicosapentaenoic Acid",
+              "raw_source_path": "activeIngredients",
+              "normalized_key": "eicosapentaenoic_acid",
+              "canonical_id": "epa",
+              "match_method": "exact",
+              "confidence": 1.0,
+              "matched_to_name": "EPA (Eicosapentaenoic Acid)",
+              "decision": "matched",
+              "decision_reason": null,
+              "candidates_top3": []
+            },
+            {
+              "domain": "ingredients",
+              "raw_source_text": "Docosahexaenoic Acid",
+              "raw_source_path": "activeIngredients",
+              "normalized_key": "docosahexaenoic_acid",
+              "canonical_id": "dha",
+              "match_method": "exact",
+              "confidence": 1.0,
+              "matched_to_name": "DHA (Docosahexaenoic Acid)",
+              "decision": "matched",
+              "decision_reason": null,
+              "candidates_top3": []
+            },
+            {
+              "domain": "ingredients",
+              "raw_source_text": "D-Alpha-Tocopherol",
+              "raw_source_path": "activeIngredients",
+              "normalized_key": "d_alpha_tocopherol",
+              "canonical_id": "vitamin_e",
+              "match_method": "exact",
+              "confidence": 1.0,
+              "matched_to_name": "Vitamin E",
+              "decision": "matched",
+              "decision_reason": null,
+              "candidates_top3": []
+            }
+          ]
+        },
+        "additives": {
+          "total_raw": 0,
+          "matched": 0,
+          "unmatched": 0,
+          "rejected": 0,
+          "skipped": 0,
+          "recognized_non_scorable": 0,
+          "recognized_botanical_unscored": 0,
+          "recognition_coverage_percent": 0.0,
+          "scorable_coverage_percent": 100.0,
+          "scorable_total": 0,
+          "coverage_percent": 100.0,
+          "entries": []
+        },
+        "allergens": {
+          "total_raw": 0,
+          "matched": 0,
+          "unmatched": 0,
+          "rejected": 0,
+          "skipped": 0,
+          "recognized_non_scorable": 0,
+          "recognized_botanical_unscored": 0,
+          "recognition_coverage_percent": 0.0,
+          "scorable_coverage_percent": 100.0,
+          "scorable_total": 0,
+          "coverage_percent": 100.0,
+          "entries": []
+        },
+        "manufacturer": {
+          "total_raw": 1,
+          "matched": 1,
+          "unmatched": 0,
+          "rejected": 0,
+          "skipped": 0,
+          "recognized_non_scorable": 0,
+          "recognized_botanical_unscored": 0,
+          "recognition_coverage_percent": 100.0,
+          "scorable_coverage_percent": 100.0,
+          "scorable_total": 1,
+          "coverage_percent": 100.0,
+          "entries": [
+            {
+              "domain": "manufacturer",
+              "raw_source_text": "Nordic Naturals",
+              "raw_source_path": "brandName",
+              "normalized_key": "nordic_naturals",
+              "canonical_id": "MANUF_NORDIC_NATURALS",
+              "match_method": "exact",
+              "confidence": 1.0,
+              "matched_to_name": "Nordic Naturals",
+              "decision": "matched",
+              "decision_reason": null,
+              "candidates_top3": []
+            }
+          ]
+        },
+        "delivery": {
+          "total_raw": 0,
+          "matched": 0,
+          "unmatched": 0,
+          "rejected": 0,
+          "skipped": 0,
+          "recognized_non_scorable": 0,
+          "recognized_botanical_unscored": 0,
+          "recognition_coverage_percent": 0.0,
+          "scorable_coverage_percent": 100.0,
+          "scorable_total": 0,
+          "coverage_percent": 100.0,
+          "entries": []
+        },
+        "claims": {
+          "total_raw": 0,
+          "matched": 0,
+          "unmatched": 0,
+          "rejected": 0,
+          "skipped": 0,
+          "recognized_non_scorable": 0,
+          "recognized_botanical_unscored": 0,
+          "recognition_coverage_percent": 0.0,
+          "scorable_coverage_percent": 100.0,
+          "scorable_total": 0,
+          "coverage_percent": 100.0,
+          "entries": []
+        }
+      },
+      "summary": {
+        "total_entities": 4,
+        "total_matched": 4,
+        "total_skipped": 0,
+        "total_recognized_non_scorable": 0,
+        "total_recognized_botanical_unscored": 0,
+        "total_unmatched": 0,
+        "total_rejected": 0,
+        "recognition_coverage_percent": 100.0,
+        "scorable_coverage_percent": 100.0,
+        "scorable_total": 4,
         "coverage_percent": 100.0,
         "coverage_by_domain": {
           "ingredients": 100.0,
@@ -2203,7 +1762,7 @@
     "scoring_metadata": {
       "scoring_version": "3.0.1",
       "output_schema_version": "3.0.1",
-      "scored_date": "2026-02-18T07:08:49.467452+00:00",
+      "scored_date": "2026-02-18T19:42:05.184550+00:00",
       "enrichment_version": "3.1.0",
       "scoring_status": "scored",
       "score_basis": "bioactives_scored",
@@ -2234,14 +1793,14 @@
     },
     "match_ledger": {
       "schema_version": "1.1.0",
-      "generated_at": "2026-02-18T07:08:45.435148Z",
+      "generated_at": "2026-02-18T19:41:55.563116Z",
       "domains": {
         "ingredients": {
-          "total_raw": 4,
+          "total_raw": 3,
           "matched": 3,
           "unmatched": 0,
           "rejected": 0,
-          "skipped": 1,
+          "skipped": 0,
           "recognized_non_scorable": 0,
           "recognized_botanical_unscored": 0,
           "recognition_coverage_percent": 100.0,
@@ -2286,19 +1845,6 @@
               "matched_to_name": "Vitamin E",
               "decision": "matched",
               "decision_reason": null,
-              "candidates_top3": []
-            },
-            {
-              "domain": "ingredients",
-              "raw_source_text": "Other Omega-3 Fatty Acids",
-              "raw_source_path": "activeIngredients",
-              "normalized_key": "other_omega_3_fatty_acids",
-              "canonical_id": null,
-              "match_method": null,
-              "confidence": 0.0,
-              "matched_to_name": null,
-              "decision": "skipped",
-              "decision_reason": "blend_header_total_weight_only",
               "candidates_top3": []
             }
           ]
@@ -2389,9 +1935,9 @@
         }
       },
       "summary": {
-        "total_entities": 5,
+        "total_entities": 4,
         "total_matched": 4,
-        "total_skipped": 1,
+        "total_skipped": 0,
         "total_recognized_non_scorable": 0,
         "total_recognized_botanical_unscored": 0,
         "total_unmatched": 0,
@@ -2399,6 +1945,700 @@
         "recognition_coverage_percent": 100.0,
         "scorable_coverage_percent": 100.0,
         "scorable_total": 4,
+        "coverage_percent": 100.0,
+        "coverage_by_domain": {
+          "ingredients": 100.0,
+          "additives": 100.0,
+          "allergens": 100.0,
+          "manufacturer": 100.0,
+          "delivery": 100.0,
+          "claims": 100.0
+        },
+        "recognition_by_domain": {
+          "ingredients": 100.0,
+          "additives": 0.0,
+          "allergens": 0.0,
+          "manufacturer": 100.0,
+          "delivery": 0.0,
+          "claims": 0.0
+        }
+      }
+    }
+  },
+  {
+    "dsld_id": "8124",
+    "product_name": "Children's DHA",
+    "brand_name": "Nordic Naturals",
+    "quality_score": 56.5,
+    "score_80": 56.5,
+    "score_100_equivalent": 70.7,
+    "display": "56.5/80",
+    "display_100": "70.7/100",
+    "grade": "Good",
+    "verdict": "SAFE",
+    "safety_verdict": "SAFE",
+    "output_schema_version": "3.0.1",
+    "scoring_status": "scored",
+    "score_basis": "bioactives_scored",
+    "evaluation_stage": "scoring",
+    "breakdown": {
+      "A": {
+        "score": 10.14,
+        "max": 25,
+        "A1": 8.14,
+        "A2": 0.0,
+        "A3": 1.0,
+        "A4": 0.0,
+        "A5": 1.0,
+        "A5a": 0.0,
+        "A5b": 0.0,
+        "A5c": 1.0,
+        "probiotic_bonus": 0.0,
+        "probiotic_breakdown": {
+          "probiotic_bonus": 0.0,
+          "cfu": 0.0,
+          "diversity": 0.0,
+          "prebiotic": 0.0,
+          "clinical_strains": 0.0,
+          "survivability": 0.0,
+          "eligibility": {
+            "mode": "non_probiotic",
+            "eligible": false,
+            "reason": "no_probiotic_signal"
+          }
+        }
+      },
+      "B": {
+        "score": 34.0,
+        "max": 35,
+        "B0_moderate_penalty": 0.0,
+        "B1_penalty": 0.0,
+        "B2_penalty": 2.0,
+        "B3": 1.0,
+        "B4a": 0.0,
+        "B4b": 0.0,
+        "B4c": 0.0,
+        "B5_penalty": 0.0,
+        "B6_penalty": 0.0,
+        "bonuses": 1.0,
+        "penalties": 2.0,
+        "raw": 34.0
+      },
+      "C": {
+        "score": 10.4,
+        "max": 15,
+        "ingredient_points": {
+          "vitamin a beta carotene": 2.6,
+          "vitamin d3": 2.6,
+          "vitamin e": 2.6,
+          "omega 3 fatty acids": 2.6
+        },
+        "matched_entries": 4
+      },
+      "D": {
+        "score": 2.0,
+        "max": 5,
+        "D1": 2.0,
+        "D2": 0.0,
+        "D3": 0.0,
+        "D4": 0.0,
+        "D5": 0.0
+      },
+      "violation_penalty": 0.0,
+      "quality_raw": 56.54
+    },
+    "flags": [
+      "PROPRIETARY_BLEND_PRESENT"
+    ],
+    "supp_type": "specialty",
+    "unmapped_actives": [],
+    "unmapped_actives_total": 0,
+    "unmapped_actives_excluding_banned_exact_alias": 0,
+    "mapped_coverage": 1.0,
+    "scoring_metadata": {
+      "scoring_version": "3.0.1",
+      "output_schema_version": "3.0.1",
+      "scored_date": "2026-02-18T19:42:05.184698+00:00",
+      "enrichment_version": "3.1.0",
+      "scoring_status": "scored",
+      "score_basis": "bioactives_scored",
+      "verdict": "SAFE",
+      "flags": [
+        "PROPRIETARY_BLEND_PRESENT"
+      ],
+      "unmapped_actives_total": 0,
+      "unmapped_actives_excluding_banned_exact_alias": 0,
+      "mapped_coverage": 1.0,
+      "reason": null
+    },
+    "section_scores": {
+      "A_ingredient_quality": {
+        "score": 10.14,
+        "max": 25
+      },
+      "B_safety_purity": {
+        "score": 34.0,
+        "max": 35
+      },
+      "C_evidence_research": {
+        "score": 10.4,
+        "max": 15
+      },
+      "D_brand_trust": {
+        "score": 2.0,
+        "max": 5
+      }
+    },
+    "match_ledger": {
+      "schema_version": "1.1.0",
+      "generated_at": "2026-02-18T19:41:57.233717Z",
+      "domains": {
+        "ingredients": {
+          "total_raw": 8,
+          "matched": 7,
+          "unmatched": 0,
+          "rejected": 0,
+          "skipped": 0,
+          "recognized_non_scorable": 1,
+          "recognized_botanical_unscored": 0,
+          "recognition_coverage_percent": 100.0,
+          "scorable_coverage_percent": 100.0,
+          "scorable_total": 7,
+          "coverage_percent": 100.0,
+          "entries": [
+            {
+              "domain": "ingredients",
+              "raw_source_text": "Vitamin A",
+              "raw_source_path": "activeIngredients",
+              "normalized_key": "vitamin_a",
+              "canonical_id": "vitamin_a",
+              "match_method": "exact",
+              "confidence": 1.0,
+              "matched_to_name": "Vitamin A",
+              "decision": "matched",
+              "decision_reason": null,
+              "candidates_top3": []
+            },
+            {
+              "domain": "ingredients",
+              "raw_source_text": "Vitamin D",
+              "raw_source_path": "activeIngredients",
+              "normalized_key": "vitamin_d",
+              "canonical_id": "vitamin_d",
+              "match_method": "exact",
+              "confidence": 1.0,
+              "matched_to_name": "Vitamin D",
+              "decision": "matched",
+              "decision_reason": null,
+              "candidates_top3": []
+            },
+            {
+              "domain": "ingredients",
+              "raw_source_text": "Vitamin E",
+              "raw_source_path": "activeIngredients",
+              "normalized_key": "vitamin_e",
+              "canonical_id": "vitamin_e",
+              "match_method": "exact",
+              "confidence": 1.0,
+              "matched_to_name": "Vitamin E",
+              "decision": "matched",
+              "decision_reason": null,
+              "candidates_top3": []
+            },
+            {
+              "domain": "ingredients",
+              "raw_source_text": "Omega-3 Fatty Acids",
+              "raw_source_path": "activeIngredients",
+              "normalized_key": "omega_3_fatty_acids",
+              "canonical_id": "omega_3",
+              "match_method": "exact",
+              "confidence": 1.0,
+              "matched_to_name": "Omega-3 Fatty Acids",
+              "decision": "matched",
+              "decision_reason": null,
+              "candidates_top3": []
+            },
+            {
+              "domain": "ingredients",
+              "raw_source_text": "Eicosapentaenoic Acid",
+              "raw_source_path": "activeIngredients",
+              "normalized_key": "eicosapentaenoic_acid",
+              "canonical_id": "epa",
+              "match_method": "exact",
+              "confidence": 1.0,
+              "matched_to_name": "EPA (Eicosapentaenoic Acid)",
+              "decision": "matched",
+              "decision_reason": null,
+              "candidates_top3": []
+            },
+            {
+              "domain": "ingredients",
+              "raw_source_text": "Docosahexaenoic Acid",
+              "raw_source_path": "activeIngredients",
+              "normalized_key": "docosahexaenoic_acid",
+              "canonical_id": "dha",
+              "match_method": "exact",
+              "confidence": 1.0,
+              "matched_to_name": "DHA (Docosahexaenoic Acid)",
+              "decision": "matched",
+              "decision_reason": null,
+              "candidates_top3": []
+            },
+            {
+              "domain": "ingredients",
+              "raw_source_text": "purified Arctic Cod Liver Oil",
+              "raw_source_path": "activeIngredients",
+              "normalized_key": "purified_arctic_cod_liver_oil",
+              "canonical_id": "cod_liver_oil",
+              "match_method": "exact",
+              "confidence": 1.0,
+              "matched_to_name": "Cod Liver Oil",
+              "decision": "matched",
+              "decision_reason": null,
+              "candidates_top3": []
+            },
+            {
+              "domain": "ingredients",
+              "raw_source_text": "Oleic Acid",
+              "raw_source_path": "activeIngredients",
+              "normalized_key": "oleic_acid",
+              "canonical_id": null,
+              "match_method": "other_ingredients",
+              "confidence": 1.0,
+              "matched_to_name": null,
+              "decision": "recognized_non_scorable",
+              "decision_reason": "fatty_acid",
+              "candidates_top3": []
+            }
+          ]
+        },
+        "additives": {
+          "total_raw": 0,
+          "matched": 0,
+          "unmatched": 0,
+          "rejected": 0,
+          "skipped": 0,
+          "recognized_non_scorable": 0,
+          "recognized_botanical_unscored": 0,
+          "recognition_coverage_percent": 0.0,
+          "scorable_coverage_percent": 100.0,
+          "scorable_total": 0,
+          "coverage_percent": 100.0,
+          "entries": []
+        },
+        "allergens": {
+          "total_raw": 0,
+          "matched": 0,
+          "unmatched": 0,
+          "rejected": 0,
+          "skipped": 0,
+          "recognized_non_scorable": 0,
+          "recognized_botanical_unscored": 0,
+          "recognition_coverage_percent": 0.0,
+          "scorable_coverage_percent": 100.0,
+          "scorable_total": 0,
+          "coverage_percent": 100.0,
+          "entries": []
+        },
+        "manufacturer": {
+          "total_raw": 1,
+          "matched": 1,
+          "unmatched": 0,
+          "rejected": 0,
+          "skipped": 0,
+          "recognized_non_scorable": 0,
+          "recognized_botanical_unscored": 0,
+          "recognition_coverage_percent": 100.0,
+          "scorable_coverage_percent": 100.0,
+          "scorable_total": 1,
+          "coverage_percent": 100.0,
+          "entries": [
+            {
+              "domain": "manufacturer",
+              "raw_source_text": "Nordic Naturals",
+              "raw_source_path": "brandName",
+              "normalized_key": "nordic_naturals",
+              "canonical_id": "MANUF_NORDIC_NATURALS",
+              "match_method": "exact",
+              "confidence": 1.0,
+              "matched_to_name": "Nordic Naturals",
+              "decision": "matched",
+              "decision_reason": null,
+              "candidates_top3": []
+            }
+          ]
+        },
+        "delivery": {
+          "total_raw": 0,
+          "matched": 0,
+          "unmatched": 0,
+          "rejected": 0,
+          "skipped": 0,
+          "recognized_non_scorable": 0,
+          "recognized_botanical_unscored": 0,
+          "recognition_coverage_percent": 0.0,
+          "scorable_coverage_percent": 100.0,
+          "scorable_total": 0,
+          "coverage_percent": 100.0,
+          "entries": []
+        },
+        "claims": {
+          "total_raw": 0,
+          "matched": 0,
+          "unmatched": 0,
+          "rejected": 0,
+          "skipped": 0,
+          "recognized_non_scorable": 0,
+          "recognized_botanical_unscored": 0,
+          "recognition_coverage_percent": 0.0,
+          "scorable_coverage_percent": 100.0,
+          "scorable_total": 0,
+          "coverage_percent": 100.0,
+          "entries": []
+        }
+      },
+      "summary": {
+        "total_entities": 9,
+        "total_matched": 8,
+        "total_skipped": 0,
+        "total_recognized_non_scorable": 1,
+        "total_recognized_botanical_unscored": 0,
+        "total_unmatched": 0,
+        "total_rejected": 0,
+        "recognition_coverage_percent": 100.0,
+        "scorable_coverage_percent": 100.0,
+        "scorable_total": 8,
+        "coverage_percent": 100.0,
+        "coverage_by_domain": {
+          "ingredients": 100.0,
+          "additives": 100.0,
+          "allergens": 100.0,
+          "manufacturer": 100.0,
+          "delivery": 100.0,
+          "claims": 100.0
+        },
+        "recognition_by_domain": {
+          "ingredients": 100.0,
+          "additives": 0.0,
+          "allergens": 0.0,
+          "manufacturer": 100.0,
+          "delivery": 0.0,
+          "claims": 0.0
+        }
+      }
+    }
+  },
+  {
+    "dsld_id": "81965",
+    "product_name": "Children's DHA Strawberry",
+    "brand_name": "Nordic Naturals",
+    "quality_score": 52.4,
+    "score_80": 52.4,
+    "score_100_equivalent": 65.5,
+    "display": "52.4/80",
+    "display_100": "65.5/100",
+    "grade": "Fair",
+    "verdict": "SAFE",
+    "safety_verdict": "SAFE",
+    "output_schema_version": "3.0.1",
+    "scoring_status": "scored",
+    "score_basis": "bioactives_scored",
+    "evaluation_stage": "scoring",
+    "breakdown": {
+      "A": {
+        "score": 10.17,
+        "max": 25,
+        "A1": 8.17,
+        "A2": 0.0,
+        "A3": 1.0,
+        "A4": 0.0,
+        "A5": 1.0,
+        "A5a": 0.0,
+        "A5b": 0.0,
+        "A5c": 1.0,
+        "probiotic_bonus": 0.0,
+        "probiotic_breakdown": {
+          "probiotic_bonus": 0.0,
+          "cfu": 0.0,
+          "diversity": 0.0,
+          "prebiotic": 0.0,
+          "clinical_strains": 0.0,
+          "survivability": 0.0,
+          "eligibility": {
+            "mode": "non_probiotic",
+            "eligible": false,
+            "reason": "no_probiotic_signal"
+          }
+        }
+      },
+      "B": {
+        "score": 35.0,
+        "max": 35,
+        "B0_moderate_penalty": 0.0,
+        "B1_penalty": 0.0,
+        "B2_penalty": 0.0,
+        "B3": 3.0,
+        "B4a": 0.0,
+        "B4b": 0.0,
+        "B4c": 0.0,
+        "B5_penalty": 0.0,
+        "B6_penalty": 0.0,
+        "bonuses": 3.0,
+        "penalties": 0.0,
+        "raw": 38.0
+      },
+      "C": {
+        "score": 5.2,
+        "max": 15,
+        "ingredient_points": {
+          "vitamin a beta carotene": 2.6,
+          "vitamin d3": 2.6
+        },
+        "matched_entries": 2
+      },
+      "D": {
+        "score": 2.0,
+        "max": 5,
+        "D1": 2.0,
+        "D2": 0.0,
+        "D3": 0.0,
+        "D4": 0.0,
+        "D5": 0.0
+      },
+      "violation_penalty": 0.0,
+      "quality_raw": 52.37
+    },
+    "flags": [],
+    "supp_type": "targeted",
+    "unmapped_actives": [],
+    "unmapped_actives_total": 0,
+    "unmapped_actives_excluding_banned_exact_alias": 0,
+    "mapped_coverage": 1.0,
+    "scoring_metadata": {
+      "scoring_version": "3.0.1",
+      "output_schema_version": "3.0.1",
+      "scored_date": "2026-02-18T19:42:05.184808+00:00",
+      "enrichment_version": "3.1.0",
+      "scoring_status": "scored",
+      "score_basis": "bioactives_scored",
+      "verdict": "SAFE",
+      "flags": [],
+      "unmapped_actives_total": 0,
+      "unmapped_actives_excluding_banned_exact_alias": 0,
+      "mapped_coverage": 1.0,
+      "reason": null
+    },
+    "section_scores": {
+      "A_ingredient_quality": {
+        "score": 10.17,
+        "max": 25
+      },
+      "B_safety_purity": {
+        "score": 35.0,
+        "max": 35
+      },
+      "C_evidence_research": {
+        "score": 5.2,
+        "max": 15
+      },
+      "D_brand_trust": {
+        "score": 2.0,
+        "max": 5
+      }
+    },
+    "match_ledger": {
+      "schema_version": "1.1.0",
+      "generated_at": "2026-02-18T19:41:58.520406Z",
+      "domains": {
+        "ingredients": {
+          "total_raw": 6,
+          "matched": 6,
+          "unmatched": 0,
+          "rejected": 0,
+          "skipped": 0,
+          "recognized_non_scorable": 0,
+          "recognized_botanical_unscored": 0,
+          "recognition_coverage_percent": 100.0,
+          "scorable_coverage_percent": 100.0,
+          "scorable_total": 6,
+          "coverage_percent": 100.0,
+          "entries": [
+            {
+              "domain": "ingredients",
+              "raw_source_text": "Vitamin A",
+              "raw_source_path": "activeIngredients",
+              "normalized_key": "vitamin_a",
+              "canonical_id": "vitamin_a",
+              "match_method": "exact",
+              "confidence": 1.0,
+              "matched_to_name": "Vitamin A",
+              "decision": "matched",
+              "decision_reason": null,
+              "candidates_top3": []
+            },
+            {
+              "domain": "ingredients",
+              "raw_source_text": "Vitamin D",
+              "raw_source_path": "activeIngredients",
+              "normalized_key": "vitamin_d",
+              "canonical_id": "vitamin_d",
+              "match_method": "exact",
+              "confidence": 1.0,
+              "matched_to_name": "Vitamin D",
+              "decision": "matched",
+              "decision_reason": null,
+              "candidates_top3": []
+            },
+            {
+              "domain": "ingredients",
+              "raw_source_text": "Eicosapentaenoic Acid",
+              "raw_source_path": "activeIngredients",
+              "normalized_key": "eicosapentaenoic_acid",
+              "canonical_id": "epa",
+              "match_method": "exact",
+              "confidence": 1.0,
+              "matched_to_name": "EPA (Eicosapentaenoic Acid)",
+              "decision": "matched",
+              "decision_reason": null,
+              "candidates_top3": []
+            },
+            {
+              "domain": "ingredients",
+              "raw_source_text": "Docosahexaenoic Acid",
+              "raw_source_path": "activeIngredients",
+              "normalized_key": "docosahexaenoic_acid",
+              "canonical_id": "dha",
+              "match_method": "exact",
+              "confidence": 1.0,
+              "matched_to_name": "DHA (Docosahexaenoic Acid)",
+              "decision": "matched",
+              "decision_reason": null,
+              "candidates_top3": []
+            },
+            {
+              "domain": "ingredients",
+              "raw_source_text": "purified Arctic Cod Liver Oil",
+              "raw_source_path": "activeIngredients",
+              "normalized_key": "purified_arctic_cod_liver_oil",
+              "canonical_id": "cod_liver_oil",
+              "match_method": "exact",
+              "confidence": 1.0,
+              "matched_to_name": "Cod Liver Oil",
+              "decision": "matched",
+              "decision_reason": null,
+              "candidates_top3": []
+            },
+            {
+              "domain": "ingredients",
+              "raw_source_text": "D-Alpha-Tocopherol",
+              "raw_source_path": "activeIngredients",
+              "normalized_key": "d_alpha_tocopherol",
+              "canonical_id": "vitamin_e",
+              "match_method": "exact",
+              "confidence": 1.0,
+              "matched_to_name": "Vitamin E",
+              "decision": "matched",
+              "decision_reason": null,
+              "candidates_top3": []
+            }
+          ]
+        },
+        "additives": {
+          "total_raw": 0,
+          "matched": 0,
+          "unmatched": 0,
+          "rejected": 0,
+          "skipped": 0,
+          "recognized_non_scorable": 0,
+          "recognized_botanical_unscored": 0,
+          "recognition_coverage_percent": 0.0,
+          "scorable_coverage_percent": 100.0,
+          "scorable_total": 0,
+          "coverage_percent": 100.0,
+          "entries": []
+        },
+        "allergens": {
+          "total_raw": 0,
+          "matched": 0,
+          "unmatched": 0,
+          "rejected": 0,
+          "skipped": 0,
+          "recognized_non_scorable": 0,
+          "recognized_botanical_unscored": 0,
+          "recognition_coverage_percent": 0.0,
+          "scorable_coverage_percent": 100.0,
+          "scorable_total": 0,
+          "coverage_percent": 100.0,
+          "entries": []
+        },
+        "manufacturer": {
+          "total_raw": 1,
+          "matched": 1,
+          "unmatched": 0,
+          "rejected": 0,
+          "skipped": 0,
+          "recognized_non_scorable": 0,
+          "recognized_botanical_unscored": 0,
+          "recognition_coverage_percent": 100.0,
+          "scorable_coverage_percent": 100.0,
+          "scorable_total": 1,
+          "coverage_percent": 100.0,
+          "entries": [
+            {
+              "domain": "manufacturer",
+              "raw_source_text": "Nordic Naturals",
+              "raw_source_path": "brandName",
+              "normalized_key": "nordic_naturals",
+              "canonical_id": "MANUF_NORDIC_NATURALS",
+              "match_method": "exact",
+              "confidence": 1.0,
+              "matched_to_name": "Nordic Naturals",
+              "decision": "matched",
+              "decision_reason": null,
+              "candidates_top3": []
+            }
+          ]
+        },
+        "delivery": {
+          "total_raw": 0,
+          "matched": 0,
+          "unmatched": 0,
+          "rejected": 0,
+          "skipped": 0,
+          "recognized_non_scorable": 0,
+          "recognized_botanical_unscored": 0,
+          "recognition_coverage_percent": 0.0,
+          "scorable_coverage_percent": 100.0,
+          "scorable_total": 0,
+          "coverage_percent": 100.0,
+          "entries": []
+        },
+        "claims": {
+          "total_raw": 0,
+          "matched": 0,
+          "unmatched": 0,
+          "rejected": 0,
+          "skipped": 0,
+          "recognized_non_scorable": 0,
+          "recognized_botanical_unscored": 0,
+          "recognition_coverage_percent": 0.0,
+          "scorable_coverage_percent": 100.0,
+          "scorable_total": 0,
+          "coverage_percent": 100.0,
+          "entries": []
+        }
+      },
+      "summary": {
+        "total_entities": 7,
+        "total_matched": 7,
+        "total_skipped": 0,
+        "total_recognized_non_scorable": 0,
+        "total_recognized_botanical_unscored": 0,
+        "total_unmatched": 0,
+        "total_rejected": 0,
+        "recognition_coverage_percent": 100.0,
+        "scorable_coverage_percent": 100.0,
+        "scorable_total": 7,
         "coverage_percent": 100.0,
         "coverage_by_domain": {
           "ingredients": 100.0,
@@ -2512,7 +2752,7 @@
     "scoring_metadata": {
       "scoring_version": "3.0.1",
       "output_schema_version": "3.0.1",
-      "scored_date": "2026-02-18T07:08:49.467614+00:00",
+      "scored_date": "2026-02-18T19:42:05.184963+00:00",
       "enrichment_version": "3.1.0",
       "scoring_status": "scored",
       "score_basis": "bioactives_scored",
@@ -2545,14 +2785,14 @@
     },
     "match_ledger": {
       "schema_version": "1.1.0",
-      "generated_at": "2026-02-18T07:08:46.329617Z",
+      "generated_at": "2026-02-18T19:42:00.473158Z",
       "domains": {
         "ingredients": {
-          "total_raw": 10,
+          "total_raw": 9,
           "matched": 8,
           "unmatched": 0,
           "rejected": 0,
-          "skipped": 1,
+          "skipped": 0,
           "recognized_non_scorable": 1,
           "recognized_botanical_unscored": 0,
           "recognition_coverage_percent": 100.0,
@@ -2666,19 +2906,6 @@
             },
             {
               "domain": "ingredients",
-              "raw_source_text": "Other Omega-3 Fatty Acids",
-              "raw_source_path": "activeIngredients",
-              "normalized_key": "other_omega_3_fatty_acids",
-              "canonical_id": null,
-              "match_method": null,
-              "confidence": 0.0,
-              "matched_to_name": null,
-              "decision": "skipped",
-              "decision_reason": "blend_header_total_weight_only",
-              "candidates_top3": []
-            },
-            {
-              "domain": "ingredients",
               "raw_source_text": "Oleic Acid",
               "raw_source_path": "activeIngredients",
               "normalized_key": "oleic_acid",
@@ -2778,9 +3005,9 @@
         }
       },
       "summary": {
-        "total_entities": 11,
+        "total_entities": 10,
         "total_matched": 9,
-        "total_skipped": 1,
+        "total_skipped": 0,
         "total_recognized_non_scorable": 1,
         "total_recognized_botanical_unscored": 0,
         "total_unmatched": 0,
@@ -2809,361 +3036,17 @@
     }
   },
   {
-    "dsld_id": "81965",
-    "product_name": "Children's DHA Strawberry",
-    "brand_name": "Nordic Naturals",
-    "quality_score": 52.4,
-    "score_80": 52.4,
-    "score_100_equivalent": 65.5,
-    "display": "52.4/80",
-    "display_100": "65.5/100",
-    "grade": "Fair",
-    "verdict": "SAFE",
-    "safety_verdict": "SAFE",
-    "output_schema_version": "3.0.1",
-    "scoring_status": "scored",
-    "score_basis": "bioactives_scored",
-    "evaluation_stage": "scoring",
-    "breakdown": {
-      "A": {
-        "score": 10.17,
-        "max": 25,
-        "A1": 8.17,
-        "A2": 0.0,
-        "A3": 1.0,
-        "A4": 0.0,
-        "A5": 1.0,
-        "A5a": 0.0,
-        "A5b": 0.0,
-        "A5c": 1.0,
-        "probiotic_bonus": 0.0,
-        "probiotic_breakdown": {
-          "probiotic_bonus": 0.0,
-          "cfu": 0.0,
-          "diversity": 0.0,
-          "prebiotic": 0.0,
-          "clinical_strains": 0.0,
-          "survivability": 0.0,
-          "eligibility": {
-            "mode": "non_probiotic",
-            "eligible": false,
-            "reason": "no_probiotic_signal"
-          }
-        }
-      },
-      "B": {
-        "score": 35.0,
-        "max": 35,
-        "B0_moderate_penalty": 0.0,
-        "B1_penalty": 0.0,
-        "B2_penalty": 0.0,
-        "B3": 3.0,
-        "B4a": 0.0,
-        "B4b": 0.0,
-        "B4c": 0.0,
-        "B5_penalty": 0.0,
-        "B6_penalty": 0.0,
-        "bonuses": 3.0,
-        "penalties": 0.0,
-        "raw": 38.0
-      },
-      "C": {
-        "score": 5.2,
-        "max": 15,
-        "ingredient_points": {
-          "vitamin a beta carotene": 2.6,
-          "vitamin d3": 2.6
-        },
-        "matched_entries": 2
-      },
-      "D": {
-        "score": 2.0,
-        "max": 5,
-        "D1": 2.0,
-        "D2": 0.0,
-        "D3": 0.0,
-        "D4": 0.0,
-        "D5": 0.0
-      },
-      "violation_penalty": 0.0,
-      "quality_raw": 52.37
-    },
-    "flags": [],
-    "supp_type": "targeted",
-    "unmapped_actives": [],
-    "unmapped_actives_total": 0,
-    "unmapped_actives_excluding_banned_exact_alias": 0,
-    "mapped_coverage": 1.0,
-    "scoring_metadata": {
-      "scoring_version": "3.0.1",
-      "output_schema_version": "3.0.1",
-      "scored_date": "2026-02-18T07:08:49.467728+00:00",
-      "enrichment_version": "3.1.0",
-      "scoring_status": "scored",
-      "score_basis": "bioactives_scored",
-      "verdict": "SAFE",
-      "flags": [],
-      "unmapped_actives_total": 0,
-      "unmapped_actives_excluding_banned_exact_alias": 0,
-      "mapped_coverage": 1.0,
-      "reason": null
-    },
-    "section_scores": {
-      "A_ingredient_quality": {
-        "score": 10.17,
-        "max": 25
-      },
-      "B_safety_purity": {
-        "score": 35.0,
-        "max": 35
-      },
-      "C_evidence_research": {
-        "score": 5.2,
-        "max": 15
-      },
-      "D_brand_trust": {
-        "score": 2.0,
-        "max": 5
-      }
-    },
-    "match_ledger": {
-      "schema_version": "1.1.0",
-      "generated_at": "2026-02-18T07:08:46.936837Z",
-      "domains": {
-        "ingredients": {
-          "total_raw": 7,
-          "matched": 6,
-          "unmatched": 0,
-          "rejected": 0,
-          "skipped": 1,
-          "recognized_non_scorable": 0,
-          "recognized_botanical_unscored": 0,
-          "recognition_coverage_percent": 100.0,
-          "scorable_coverage_percent": 100.0,
-          "scorable_total": 6,
-          "coverage_percent": 100.0,
-          "entries": [
-            {
-              "domain": "ingredients",
-              "raw_source_text": "Vitamin A",
-              "raw_source_path": "activeIngredients",
-              "normalized_key": "vitamin_a",
-              "canonical_id": "vitamin_a",
-              "match_method": "exact",
-              "confidence": 1.0,
-              "matched_to_name": "Vitamin A",
-              "decision": "matched",
-              "decision_reason": null,
-              "candidates_top3": []
-            },
-            {
-              "domain": "ingredients",
-              "raw_source_text": "Vitamin D",
-              "raw_source_path": "activeIngredients",
-              "normalized_key": "vitamin_d",
-              "canonical_id": "vitamin_d",
-              "match_method": "exact",
-              "confidence": 1.0,
-              "matched_to_name": "Vitamin D",
-              "decision": "matched",
-              "decision_reason": null,
-              "candidates_top3": []
-            },
-            {
-              "domain": "ingredients",
-              "raw_source_text": "Eicosapentaenoic Acid",
-              "raw_source_path": "activeIngredients",
-              "normalized_key": "eicosapentaenoic_acid",
-              "canonical_id": "epa",
-              "match_method": "exact",
-              "confidence": 1.0,
-              "matched_to_name": "EPA (Eicosapentaenoic Acid)",
-              "decision": "matched",
-              "decision_reason": null,
-              "candidates_top3": []
-            },
-            {
-              "domain": "ingredients",
-              "raw_source_text": "Docosahexaenoic Acid",
-              "raw_source_path": "activeIngredients",
-              "normalized_key": "docosahexaenoic_acid",
-              "canonical_id": "dha",
-              "match_method": "exact",
-              "confidence": 1.0,
-              "matched_to_name": "DHA (Docosahexaenoic Acid)",
-              "decision": "matched",
-              "decision_reason": null,
-              "candidates_top3": []
-            },
-            {
-              "domain": "ingredients",
-              "raw_source_text": "purified Arctic Cod Liver Oil",
-              "raw_source_path": "activeIngredients",
-              "normalized_key": "purified_arctic_cod_liver_oil",
-              "canonical_id": "cod_liver_oil",
-              "match_method": "exact",
-              "confidence": 1.0,
-              "matched_to_name": "Cod Liver Oil",
-              "decision": "matched",
-              "decision_reason": null,
-              "candidates_top3": []
-            },
-            {
-              "domain": "ingredients",
-              "raw_source_text": "D-Alpha-Tocopherol",
-              "raw_source_path": "activeIngredients",
-              "normalized_key": "d_alpha_tocopherol",
-              "canonical_id": "vitamin_e",
-              "match_method": "exact",
-              "confidence": 1.0,
-              "matched_to_name": "Vitamin E",
-              "decision": "matched",
-              "decision_reason": null,
-              "candidates_top3": []
-            },
-            {
-              "domain": "ingredients",
-              "raw_source_text": "Other Omega-3 Fatty Acids",
-              "raw_source_path": "activeIngredients",
-              "normalized_key": "other_omega_3_fatty_acids",
-              "canonical_id": null,
-              "match_method": null,
-              "confidence": 0.0,
-              "matched_to_name": null,
-              "decision": "skipped",
-              "decision_reason": "blend_header_total_weight_only",
-              "candidates_top3": []
-            }
-          ]
-        },
-        "additives": {
-          "total_raw": 0,
-          "matched": 0,
-          "unmatched": 0,
-          "rejected": 0,
-          "skipped": 0,
-          "recognized_non_scorable": 0,
-          "recognized_botanical_unscored": 0,
-          "recognition_coverage_percent": 0.0,
-          "scorable_coverage_percent": 100.0,
-          "scorable_total": 0,
-          "coverage_percent": 100.0,
-          "entries": []
-        },
-        "allergens": {
-          "total_raw": 0,
-          "matched": 0,
-          "unmatched": 0,
-          "rejected": 0,
-          "skipped": 0,
-          "recognized_non_scorable": 0,
-          "recognized_botanical_unscored": 0,
-          "recognition_coverage_percent": 0.0,
-          "scorable_coverage_percent": 100.0,
-          "scorable_total": 0,
-          "coverage_percent": 100.0,
-          "entries": []
-        },
-        "manufacturer": {
-          "total_raw": 1,
-          "matched": 1,
-          "unmatched": 0,
-          "rejected": 0,
-          "skipped": 0,
-          "recognized_non_scorable": 0,
-          "recognized_botanical_unscored": 0,
-          "recognition_coverage_percent": 100.0,
-          "scorable_coverage_percent": 100.0,
-          "scorable_total": 1,
-          "coverage_percent": 100.0,
-          "entries": [
-            {
-              "domain": "manufacturer",
-              "raw_source_text": "Nordic Naturals",
-              "raw_source_path": "brandName",
-              "normalized_key": "nordic_naturals",
-              "canonical_id": "MANUF_NORDIC_NATURALS",
-              "match_method": "exact",
-              "confidence": 1.0,
-              "matched_to_name": "Nordic Naturals",
-              "decision": "matched",
-              "decision_reason": null,
-              "candidates_top3": []
-            }
-          ]
-        },
-        "delivery": {
-          "total_raw": 0,
-          "matched": 0,
-          "unmatched": 0,
-          "rejected": 0,
-          "skipped": 0,
-          "recognized_non_scorable": 0,
-          "recognized_botanical_unscored": 0,
-          "recognition_coverage_percent": 0.0,
-          "scorable_coverage_percent": 100.0,
-          "scorable_total": 0,
-          "coverage_percent": 100.0,
-          "entries": []
-        },
-        "claims": {
-          "total_raw": 0,
-          "matched": 0,
-          "unmatched": 0,
-          "rejected": 0,
-          "skipped": 0,
-          "recognized_non_scorable": 0,
-          "recognized_botanical_unscored": 0,
-          "recognition_coverage_percent": 0.0,
-          "scorable_coverage_percent": 100.0,
-          "scorable_total": 0,
-          "coverage_percent": 100.0,
-          "entries": []
-        }
-      },
-      "summary": {
-        "total_entities": 8,
-        "total_matched": 7,
-        "total_skipped": 1,
-        "total_recognized_non_scorable": 0,
-        "total_recognized_botanical_unscored": 0,
-        "total_unmatched": 0,
-        "total_rejected": 0,
-        "recognition_coverage_percent": 100.0,
-        "scorable_coverage_percent": 100.0,
-        "scorable_total": 7,
-        "coverage_percent": 100.0,
-        "coverage_by_domain": {
-          "ingredients": 100.0,
-          "additives": 100.0,
-          "allergens": 100.0,
-          "manufacturer": 100.0,
-          "delivery": 100.0,
-          "claims": 100.0
-        },
-        "recognition_by_domain": {
-          "ingredients": 100.0,
-          "additives": 0.0,
-          "allergens": 0.0,
-          "manufacturer": 100.0,
-          "delivery": 0.0,
-          "claims": 0.0
-        }
-      }
-    }
-  },
-  {
     "dsld_id": "81957",
     "product_name": "Nordic Berries",
     "brand_name": "Nordic Naturals",
-    "quality_score": 51.8,
-    "score_80": 51.8,
-    "score_100_equivalent": 64.8,
-    "display": "51.8/80",
-    "display_100": "64.8/100",
-    "grade": "Fair",
-    "verdict": "CAUTION",
-    "safety_verdict": "CAUTION",
+    "quality_score": 61.8,
+    "score_80": 61.8,
+    "score_100_equivalent": 77.2,
+    "display": "61.8/80",
+    "display_100": "77.2/100",
+    "grade": "Good",
+    "verdict": "SAFE",
+    "safety_verdict": "SAFE",
     "output_schema_version": "3.0.1",
     "scoring_status": "scored",
     "score_basis": "bioactives_scored",
@@ -3196,9 +3079,9 @@
         }
       },
       "B": {
-        "score": 23.5,
+        "score": 33.5,
         "max": 35,
-        "B0_moderate_penalty": 10.0,
+        "B0_moderate_penalty": 0.0,
         "B1_penalty": 1.0,
         "B2_penalty": 1.5,
         "B3": 1.0,
@@ -3208,8 +3091,8 @@
         "B5_penalty": 0.0,
         "B6_penalty": 0.0,
         "bonuses": 1.0,
-        "penalties": 12.5,
-        "raw": 23.5
+        "penalties": 2.5,
+        "raw": 33.5
       },
       "C": {
         "score": 15.0,
@@ -3242,11 +3125,9 @@
         "D5": 0.0
       },
       "violation_penalty": 0.0,
-      "quality_raw": 51.8
+      "quality_raw": 61.8
     },
-    "flags": [
-      "B0_MODERATE_SUBSTANCE"
-    ],
+    "flags": [],
     "supp_type": "specialty",
     "unmapped_actives": [],
     "unmapped_actives_total": 0,
@@ -3255,14 +3136,12 @@
     "scoring_metadata": {
       "scoring_version": "3.0.1",
       "output_schema_version": "3.0.1",
-      "scored_date": "2026-02-18T07:08:49.468013+00:00",
+      "scored_date": "2026-02-18T19:42:05.185225+00:00",
       "enrichment_version": "3.1.0",
       "scoring_status": "scored",
       "score_basis": "bioactives_scored",
-      "verdict": "CAUTION",
-      "flags": [
-        "B0_MODERATE_SUBSTANCE"
-      ],
+      "verdict": "SAFE",
+      "flags": [],
       "unmapped_actives_total": 0,
       "unmapped_actives_excluding_banned_exact_alias": 0,
       "mapped_coverage": 1.0,
@@ -3274,7 +3153,7 @@
         "max": 25
       },
       "B_safety_purity": {
-        "score": 23.5,
+        "score": 33.5,
         "max": 35
       },
       "C_evidence_research": {
@@ -3288,7 +3167,7 @@
     },
     "match_ledger": {
       "schema_version": "1.1.0",
-      "generated_at": "2026-02-18T07:08:48.637213Z",
+      "generated_at": "2026-02-18T19:42:04.262069Z",
       "domains": {
         "ingredients": {
           "total_raw": 17,

@@ -1,0 +1,47 @@
+{
+  "processing_info": {
+    "version": "3.1.0",
+    "files_processed": 1,
+    "duration_seconds": 122.92,
+    "timestamp": "2026-02-18T18:48:59.926394Z"
+  },
+  "stats": {
+    "total_products": 87,
+    "successful": 87,
+    "with_issues": 0
+  },
+  "match_counters": {
+    "pattern_match_wins_count": 0,
+    "contains_match_wins_count": 4,
+    "parent_fallback_count": 6
+  },
+  "unmapped_ingredients": {
+    "active:Acai, Freeze-Dried, Powder": 1,
+    "active:IGOB 131": 1,
+    "active:European Grapeseed Fruit Extract": 1,
+    "active:R-Alpha Lipoic Acid": 2,
+    "active:Eyebright, Powder": 1,
+    "active:Tocotriene": 3,
+    "active:Magnesium Chelate": 2,
+    "active:Casein Hydrolysate": 1,
+    "active:European Hawthorne Berry Extract": 1,
+    "active:MaitakeGold MG 404": 1,
+    "active:RYR-VA Red Yeast Rice": 1,
+    "active:PureWay-C": 3,
+    "active:OptiMSM": 3,
+    "active:Noni, Powder": 1,
+    "active:European Hawthorne berry extract": 1,
+    "active:Quercefit": 3,
+    "active:Slimaluma": 1,
+    "active:SelenoExcell": 1,
+    "active:G63": 1,
+    "active:European Lemon Balm": 1,
+    "active:Bovine Thyroid, Freeze-Dried, Powder": 1,
+    "active:UC-II Chicken Cartilage": 1,
+    "active:Collagen Type II, Undenatured": 1,
+    "active:SelenoExcell ": 1,
+    "active:Meratrim": 1,
+    "active:Glucomanann": 1,
+    "active:Licorice Root Extract, Deglycyrrhizinated ": 1
+  }
+}

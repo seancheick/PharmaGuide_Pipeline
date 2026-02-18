@@ -1,0 +1,19 @@
+{
+  "processing_info": {
+    "version": "3.1.0",
+    "files_processed": 1,
+    "duration_seconds": 18.39,
+    "timestamp": "2026-02-18T19:32:57.196800Z"
+  },
+  "stats": {
+    "total_products": 12,
+    "successful": 12,
+    "with_issues": 0
+  },
+  "match_counters": {
+    "pattern_match_wins_count": 0,
+    "contains_match_wins_count": 0,
+    "parent_fallback_count": 1
+  },
+  "unmapped_ingredients": {}
+}

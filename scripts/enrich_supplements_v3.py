@@ -1913,9 +1913,20 @@ class SupplementEnricherV3:
         # Header/label phrase variants that are never ingredients.
         if re.match(r"^(contains|may also contain)\s*(less than|<)\s*\d+\s*%(\s*of)?", text):
             return SKIP_REASON_LABEL_PHRASE
+        if re.match(r"^contains?\s+\d+\s*percent\s+or\s+less(\s+of)?", text):
+            return SKIP_REASON_LABEL_PHRASE
         if re.match(r"^less than\s*\d+\s*%(\s*of)?", text):
             return SKIP_REASON_LABEL_PHRASE
         if re.match(r"^<\s*\d+\s*%\s*of", text):
+            return SKIP_REASON_LABEL_PHRASE
+        # Spec-string fragments emitted by parser; these are not standalone ingredients.
+        if re.match(r"^\s*min\.\s*\d+", text):
+            return SKIP_REASON_LABEL_PHRASE
+        if re.match(r"^\s*providing(?:\s+minimum)?\s+\d+", text):
+            return SKIP_REASON_LABEL_PHRASE
+        if re.match(r"^\s*standardized\s+to\s+contain(?:ing)?\s+\d+", text):
+            return SKIP_REASON_LABEL_PHRASE
+        if re.match(r"^\s*from\s+\d+(?:,\d{3})?(?:\.\d+)?\s*(mg|mcg|g|iu|billion|million)\b", text):
             return SKIP_REASON_LABEL_PHRASE
 
         # Nutrition rollup variants.
@@ -3793,8 +3804,16 @@ class SupplementEnricherV3:
                     # e.g., percentage=5.0 means 5%, min_threshold=50 means 50%
                     meets_threshold = False
                     if min_threshold is not None:
-                        # Direct comparison - both are raw percentage values
-                        meets_threshold = percentage >= min_threshold if percentage > 0 else False
+                        if percentage > 0:
+                            # Direct comparison - both are raw percentage values
+                            meets_threshold = percentage >= min_threshold
+                        else:
+                            # No explicit percentage on label — fall through to
+                            # marker word evidence (branded extracts like Longvida,
+                            # Meriva, KSM-66 may not restate percentage)
+                            meets_threshold = self._has_marker_word_match(
+                                markers, notes + ' ' + all_text
+                            )
                     else:
                         # No threshold - check for standardization evidence
                         # Use word boundary matching to avoid false positives like
@@ -5489,7 +5508,10 @@ class SupplementEnricherV3:
                 )
 
         # Step 2: Collect cleaning blends (indicator-based from proprietaryBlend flags)
+        # Nested proprietary children should roll up to their parent blend to avoid
+        # inflating B5 penalties (e.g., each enzyme row being treated as a separate blend).
         cleaning_blends = []
+        nested_parent_groups = {}
         for ingredient in active_ingredients + inactive_ingredients:
             is_blend = (
                 ingredient.get('proprietaryBlend', False) or
@@ -5498,16 +5520,50 @@ class SupplementEnricherV3:
             if is_blend:
                 disclosure = ingredient.get('disclosureLevel', 'none')
                 nested = ingredient.get('nestedIngredients', [])
+                is_nested = bool(ingredient.get('isNestedIngredient', False))
+                parent_blend = (ingredient.get('parentBlend', '') or '').strip()
+                quantity = ingredient.get('quantity', 0) or 0
+                unit = ingredient.get('unit', '') or ''
+
+                # Roll nested rows under parent blend key when available.
+                if is_nested and parent_blend:
+                    group_key = (parent_blend.lower(), disclosure)
+                    group = nested_parent_groups.get(group_key)
+                    if not group:
+                        group = {
+                            "name": parent_blend,
+                            "disclosure_level": disclosure,
+                            "nested_count": 0,
+                            "total_weight": 0.0,
+                            "unit": "",
+                            "sources": ["cleaning"],
+                            "evidence": None,
+                            "_child_names": set()
+                        }
+                        nested_parent_groups[group_key] = group
+
+                    child_name = (ingredient.get('name', '') or '').strip()
+                    if child_name:
+                        group["_child_names"].add(child_name.lower())
+                    # Preserve any measured parent quantity if it exists on nested rows.
+                    if isinstance(quantity, (int, float)) and quantity > group["total_weight"]:
+                        group["total_weight"] = float(quantity)
+                        group["unit"] = unit
+                    continue
 
                 cleaning_blends.append({
                     "name": ingredient.get('name', ''),
                     "disclosure_level": disclosure,
                     "nested_count": len(nested),
-                    "total_weight": ingredient.get('quantity', 0),
-                    "unit": ingredient.get('unit', ''),
+                    "total_weight": quantity,
+                    "unit": unit,
                     "sources": ["cleaning"],
                     "evidence": None
                 })
+
+        for group in nested_parent_groups.values():
+            group["nested_count"] = max(group["nested_count"], len(group.pop("_child_names", set())))
+            cleaning_blends.append(group)
 
         # Step 3: Merge and dedupe using union-of-evidence
         merged_blends = self._merge_blend_evidence(detector_blends, cleaning_blends)
@@ -6262,10 +6318,22 @@ class SupplementEnricherV3:
         prebiotic_found = False
         prebiotic_name = ""
 
+        prebiotic_candidates = []
         for ing in all_ingredients:
             ing_name = ing.get('name', '')
             std_name = ing.get('standardName', '') or ing_name
+            prebiotic_candidates.append((ing_name, std_name))
 
+            # Include nested blend children so prebiotic rows inside proprietary
+            # blends are not silently missed.
+            for nested_ing in ing.get('nestedIngredients', []) or []:
+                if not isinstance(nested_ing, dict):
+                    continue
+                nested_name = nested_ing.get('name', '')
+                nested_std = nested_ing.get('standardName', '') or nested_name
+                prebiotic_candidates.append((nested_name, nested_std))
+
+        for ing_name, std_name in prebiotic_candidates:
             for prebiotic in prebiotics_data:
                 pre_name = prebiotic.get('standard_name', '')
                 pre_aliases = prebiotic.get('aliases', [])

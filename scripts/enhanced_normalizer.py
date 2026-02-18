@@ -55,6 +55,8 @@ from constants import (
     DEFAULT_DAILY_SERVINGS,
     BRANDED_INGREDIENT_TOKENS,
     CLINICALLY_RELEVANT_STRAINS,
+    BLEND_HEADER_EXACT_NAMES,
+    BLEND_HEADER_PATTERNS_HIGH_CONFIDENCE,
 )
 
 # Import the UnmappedIngredientTracker
@@ -692,6 +694,19 @@ class EnhancedDSLDNormalizer:
         self._preprocessed_excluded_nutrition = {
             self.matcher.preprocess_text(fact) for fact in EXCLUDED_NUTRITION_FACTS
         }
+        self._preprocessed_blend_header_exact = {
+            self.matcher.preprocess_text(name) for name in BLEND_HEADER_EXACT_NAMES
+        }
+        self._blend_header_high_conf_patterns = [
+            re.compile(pattern, re.IGNORECASE)
+            for pattern in BLEND_HEADER_PATTERNS_HIGH_CONFIDENCE
+        ]
+        # Strict spec-string filters: these are label descriptors, not ingredients.
+        self._spec_string_patterns = [
+            re.compile(r"^\s*min\.\s*\d", re.IGNORECASE),
+            re.compile(r"^\s*providing\s+\d", re.IGNORECASE),
+            re.compile(r"^\s*standardized\s+to\s+contain\s+\d", re.IGNORECASE),
+        ]
 
         # Build enhanced lookup indices
         self._build_enhanced_indices()
@@ -1490,6 +1505,21 @@ class EnhancedDSLDNormalizer:
         normalized = self._normalize_for_skip(name)
         if normalized in self._skip_normalized:
             return True
+
+        # Always skip known exact blend headers (normalized/preprocessed).
+        processed_name = self.matcher.preprocess_text(name)
+        if processed_name in self._preprocessed_blend_header_exact:
+            return True
+
+        # High-confidence blend header patterns (safe to skip even with dose present).
+        for pattern in self._blend_header_high_conf_patterns:
+            if pattern.search(name):
+                return True
+
+        # Skip dosage/specification fragments that are not ingredient identities.
+        for pattern in self._spec_string_patterns:
+            if pattern.search(name):
+                return True
 
         # Tier C: Case-insensitive match (only if enabled in config)
         # Uses dedicated lowercased sets for robust matching regardless of JSON casing

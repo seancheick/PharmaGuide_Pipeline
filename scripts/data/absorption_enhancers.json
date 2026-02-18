@@ -3,7 +3,7 @@
     "description": "Absorption enhancers that improve nutrient bioavailability",
     "purpose": "bioavailability_bonuses",
     "schema_version": "4.0.0",
-    "last_updated": "2026-02-16",
+    "last_updated": "2026-02-18",
     "total_entries": 23
   },
   "absorption_enhancers": [
@@ -17,12 +17,31 @@
       ],
       "enhances": [
         "Turmeric",
+        "Curcumin",
+        "Curcumin C3 Complex",
+        "Curcumin C3 Complex with BioPerine",
+        "Longvida Curcumin",
+        "Meriva Curcumin",
+        "BCM-95 Curcumin",
+        "CurcuWIN",
+        "Theracurmin Curcumin",
+        "NovaSol Curcumin",
+        "Liposomal Curcumin",
+        "Turmeric Root Extract",
         "CoQ10",
+        "Ubiquinol",
+        "Ubiquinone",
+        "Coenzyme Q10",
         "Beta-carotene",
+        "Beta-Carotene from Mixed Carotenoids",
         "Selenium",
+        "Selenomethionine",
+        "Selenium Yeast",
+        "Selenium Glycinate",
         "Vitamin B6",
         "Vitamin C",
-        "Resveratrol"
+        "Resveratrol",
+        "Trans-Resveratrol"
       ],
       "mechanism": "Inhibits glucuronidation in liver, improves permeability",
       "typical_dose": "5-10mg",
@@ -38,7 +57,11 @@
         "trans-menaquinone-7"
       ],
       "enhances": [
-        "Calcium"
+        "Calcium",
+        "Calcium Citrate",
+        "Calcium Carbonate",
+        "Calcium Malate",
+        "Calcium Citrate Malate"
       ],
       "mechanism": "Higher bioactivity vs cis-isomer, directs calcium to bones, additive effect on intestinal calcium absorption with vitamin D.",
       "typical_dose": "90-180 µg",
@@ -53,7 +76,14 @@
         "iron-ferritin complex"
       ],
       "enhances": [
-        "Iron"
+        "Iron",
+        "Iron Bisglycinate",
+        "Ferrous Bisglycinate",
+        "Ferrous Fumarate",
+        "Ferrous Gluconate",
+        "Ferrous Sulfate",
+        "Carbonyl Iron",
+        "Ferric Citrate"
       ],
       "mechanism": "Slow-release ferritin shell, gentle on GI.",
       "typical_dose": "N/A – built-in",
@@ -77,9 +107,19 @@
         "Vitamin A",
         "Vitamin D",
         "Vitamin E",
+        "Mixed Tocopherols",
+        "D-Alpha-Tocopherol",
+        "Tocotrienols",
         "Vitamin K",
         "CoQ10",
+        "Ubiquinol",
+        "Ubiquinone",
+        "Coenzyme Q10",
         "Curcumin",
+        "Longvida Curcumin",
+        "Meriva Curcumin",
+        "Curcumin C3 Complex",
+        "Turmeric",
         "CBD"
       ],
       "mechanism": "Improves absorption of fat-soluble compounds.",
@@ -96,8 +136,21 @@
       ],
       "enhances": [
         "Iron",
+        "Iron Bisglycinate",
+        "Ferrous Bisglycinate",
+        "Ferrous Fumarate",
+        "Ferrous Gluconate",
+        "Ferrous Sulfate",
+        "Carbonyl Iron",
+        "Ferric Citrate",
         "Vitamin E",
-        "Folate"
+        "Mixed Tocopherols",
+        "D-Alpha-Tocopherol",
+        "Folate",
+        "Folic Acid",
+        "5-Methyltetrahydrofolate (5-MTHF)",
+        "5-MTHF (L-methylfolate)",
+        "Calcium L-5-Methyltetrahydrofolate"
       ],
       "mechanism": "Reduces non-heme iron to absorbable form, protects vitamins from oxidation.",
       "typical_dose": "25-100mg",
@@ -114,7 +167,15 @@
       ],
       "enhances": [
         "Calcium",
+        "Calcium Citrate",
+        "Calcium Carbonate",
+        "Calcium Malate",
+        "Calcium Citrate Malate",
         "Magnesium",
+        "Magnesium Glycinate",
+        "Magnesium Citrate",
+        "Magnesium Oxide",
+        "Magnesium L-Threonate",
         "Phosphorus"
       ],
       "mechanism": "Increases intestinal absorption proteins for minerals.",
@@ -131,9 +192,20 @@
       ],
       "enhances": [
         "Magnesium",
+        "Magnesium Glycinate",
+        "Magnesium Citrate",
+        "Magnesium Oxide",
         "Iron",
+        "Iron Bisglycinate",
+        "Ferrous Bisglycinate",
+        "Ferrous Fumarate",
         "Zinc",
-        "Calcium"
+        "Zinc Picolinate",
+        "Zinc Bisglycinate",
+        "Zinc Citrate",
+        "Calcium",
+        "Calcium Citrate",
+        "Calcium Carbonate"
       ],
       "mechanism": "Forms chelated minerals for better absorption.",
       "typical_dose": "Bound with mineral",
@@ -149,7 +221,12 @@
       ],
       "enhances": [
         "Calcium",
-        "Iron"
+        "Calcium Citrate",
+        "Calcium Carbonate",
+        "Iron",
+        "Iron Bisglycinate",
+        "Ferrous Bisglycinate",
+        "Ferrous Fumarate"
       ],
       "mechanism": "Improves intestinal absorption of calcium.",
       "typical_dose": "500-1000mg",
@@ -165,7 +242,13 @@
       ],
       "enhances": [
         "Zinc",
-        "Selenium"
+        "Zinc Picolinate",
+        "Zinc Bisglycinate",
+        "Zinc Citrate",
+        "Selenium",
+        "Selenomethionine",
+        "Selenium Yeast",
+        "Selenium Glycinate"
       ],
       "mechanism": "Forms absorbable complexes.",
       "typical_dose": "200-500mg",
@@ -207,8 +290,16 @@
         "Vitamin C",
         "Glutathione",
         "Curcumin",
+        "Longvida Curcumin",
+        "Meriva Curcumin",
+        "Curcumin C3 Complex",
+        "Turmeric",
         "Resveratrol",
-        "CoQ10"
+        "Trans-Resveratrol",
+        "CoQ10",
+        "Ubiquinol",
+        "Ubiquinone",
+        "Coenzyme Q10"
       ],
       "mechanism": "Encapsulation protects and enhances absorption.",
       "typical_dose": "N/A - delivery method",
@@ -224,8 +315,16 @@
       ],
       "enhances": [
         "Curcumin",
+        "Longvida Curcumin",
+        "Meriva Curcumin",
+        "Curcumin C3 Complex",
+        "Turmeric",
         "Resveratrol",
-        "CoQ10"
+        "Trans-Resveratrol",
+        "CoQ10",
+        "Ubiquinol",
+        "Ubiquinone",
+        "Coenzyme Q10"
       ],
       "mechanism": "Improves solubility of compounds.",
       "typical_dose": "N/A - delivery method",
@@ -242,7 +341,14 @@
       "enhances": [
         "CBD",
         "Curcumin",
+        "Longvida Curcumin",
+        "Meriva Curcumin",
+        "Curcumin C3 Complex",
+        "Turmeric",
         "CoQ10",
+        "Ubiquinol",
+        "Ubiquinone",
+        "Coenzyme Q10",
         "Vitamins"
       ],
       "mechanism": "Smaller particles for better absorption.",
@@ -259,9 +365,21 @@
       ],
       "enhances": [
         "Calcium",
+        "Calcium Citrate",
+        "Calcium Carbonate",
+        "Calcium Malate",
         "Magnesium",
+        "Magnesium Glycinate",
+        "Magnesium Citrate",
+        "Magnesium Oxide",
         "Iron",
-        "Zinc"
+        "Iron Bisglycinate",
+        "Ferrous Bisglycinate",
+        "Ferrous Fumarate",
+        "Zinc",
+        "Zinc Picolinate",
+        "Zinc Bisglycinate",
+        "Zinc Citrate"
       ],
       "mechanism": "Forms soluble complexes.",
       "typical_dose": "200-500mg",
@@ -278,7 +396,11 @@
       "enhances": [
         "Probiotics",
         "Enzymes",
-        "Fish Oil"
+        "Fish Oil",
+        "Omega-3 Triglyceride (rTG)",
+        "Omega-3 Phospholipid (Krill Oil)",
+        "EPA (Eicosapentaenoic Acid)",
+        "DHA (Docosahexaenoic Acid)"
       ],
       "mechanism": "Protects from stomach acid, ensures delivery to intestines.",
       "typical_dose": "N/A - delivery method",
@@ -332,9 +454,19 @@
       ],
       "enhances": [
         "Zinc",
+        "Zinc Picolinate",
+        "Zinc Bisglycinate",
+        "Zinc Citrate",
         "Selenium",
+        "Selenomethionine",
+        "Selenium Yeast",
         "Iron",
-        "Calcium"
+        "Iron Bisglycinate",
+        "Ferrous Bisglycinate",
+        "Ferrous Fumarate",
+        "Calcium",
+        "Calcium Citrate",
+        "Calcium Carbonate"
       ],
       "mechanism": "Enhances mineral absorption",
       "typical_dose": "300-600mg",
@@ -350,7 +482,13 @@
         "beta-carotene"
       ],
       "enhances": [
-        "Iron"
+        "Iron",
+        "Iron Bisglycinate",
+        "Ferrous Bisglycinate",
+        "Ferrous Fumarate",
+        "Ferrous Gluconate",
+        "Ferrous Sulfate",
+        "Carbonyl Iron"
       ],
       "mechanism": "Improves non-heme iron absorption",
       "typical_dose": "1000-2000 IU",
@@ -369,9 +507,17 @@
       "enhances": [
         "B Vitamins",
         "Calcium",
+        "Calcium Citrate",
+        "Calcium Carbonate",
         "Iron",
+        "Iron Bisglycinate",
+        "Ferrous Bisglycinate",
         "Zinc",
-        "Magnesium"
+        "Zinc Picolinate",
+        "Zinc Bisglycinate",
+        "Magnesium",
+        "Magnesium Glycinate",
+        "Magnesium Citrate"
       ],
       "mechanism": "Improves gut health, digestion, and nutrient uptake",
       "typical_dose": "1-10 billion CFU",
@@ -390,9 +536,17 @@
       ],
       "enhances": [
         "Calcium",
+        "Calcium Citrate",
+        "Calcium Carbonate",
         "Magnesium",
+        "Magnesium Glycinate",
+        "Magnesium Citrate",
         "Iron",
-        "Zinc"
+        "Iron Bisglycinate",
+        "Ferrous Bisglycinate",
+        "Zinc",
+        "Zinc Picolinate",
+        "Zinc Bisglycinate"
       ],
       "mechanism": "Fermentation produces short-chain fatty acids that aid mineral absorption",
       "typical_dose": "5-10g",
@@ -438,7 +592,14 @@
       ],
       "enhances": [
         "Curcumin",
+        "Longvida Curcumin",
+        "Meriva Curcumin",
+        "Curcumin C3 Complex",
+        "Turmeric",
         "CoQ10",
+        "Ubiquinol",
+        "Ubiquinone",
+        "Coenzyme Q10",
         "Vitamins",
         "Minerals",
         "Herbal extracts"

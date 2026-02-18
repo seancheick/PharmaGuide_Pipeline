@@ -1,0 +1,27 @@
+2026-02-18 13:46:48 - dsld_cleaner - INFO - ============================================================
+2026-02-18 13:46:48 - dsld_cleaner - INFO - DSLD Data Cleaning Pipeline Starting
+2026-02-18 13:46:48 - dsld_cleaner - INFO - ============================================================
+2026-02-18 13:46:48 - dsld_cleaner - INFO - Started at: 2026-02-18 13:46:48
+2026-02-18 13:46:48 - dsld_cleaner - INFO - Validating configuration...
+2026-02-18 13:46:48 - dsld_cleaner - INFO - Configuration validation passed
+2026-02-18 13:46:56 - dsld_cleaner - INFO - ============================================================
+2026-02-18 13:46:56 - dsld_cleaner - INFO - PROCESSING COMPLETE
+2026-02-18 13:46:56 - dsld_cleaner - INFO - ============================================================
+2026-02-18 13:46:56 - dsld_cleaner - INFO - Ended at: 2026-02-18 13:46:56
+2026-02-18 13:46:56 - dsld_cleaner - INFO - Total duration: 0:00:08.006005
+2026-02-18 13:46:56 - dsld_cleaner - INFO - Files processed: 87
+2026-02-18 13:46:56 - dsld_cleaner - INFO - Success rate: 100.0%
+2026-02-18 13:46:56 - dsld_cleaner - INFO - 
+2026-02-18 13:46:56 - dsld_cleaner - INFO - Results:
+2026-02-18 13:46:56 - dsld_cleaner - INFO -   - Cleaned: 87
+2026-02-18 13:46:56 - dsld_cleaner - INFO -   - Needs review: 0
+2026-02-18 13:46:56 - dsld_cleaner - INFO -   - Incomplete: 0
+2026-02-18 13:46:56 - dsld_cleaner - INFO -   - Errors: 0
+2026-02-18 13:46:56 - dsld_cleaner - INFO -   - Unmapped ingredients: 32
+2026-02-18 13:46:56 - dsld_cleaner - INFO - 
+2026-02-18 13:46:56 - dsld_cleaner - INFO - Output files saved to:
+2026-02-18 13:46:56 - dsld_cleaner - INFO -   - Cleaned products: output_Emerald_labs/cleaned
+2026-02-18 13:46:56 - dsld_cleaner - INFO -   - Needs review: output_Emerald_labs/needs_review
+2026-02-18 13:46:56 - dsld_cleaner - INFO -   - Incomplete: output_Emerald_labs/incomplete
+2026-02-18 13:46:56 - dsld_cleaner - INFO -   - Unmapped ingredients: output_Emerald_labs/unmapped
+2026-02-18 13:46:56 - dsld_cleaner - INFO -   - Processing report: output_Emerald_labs/reports

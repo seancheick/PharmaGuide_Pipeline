@@ -1,0 +1,44 @@
+DSLD Data Cleaning Processing Report
+==================================================
+
+Generated: 2026-02-18 14:32:19
+Total Files Processed: 22
+Processing Time: 0.11 minutes
+
+Results Summary:
+  - Successfully cleaned: 22
+  - Needs review: 0
+  - Incomplete: 0
+  - Errors: 0
+  - Success rate: 100.0%
+
+Mapped ingredients found: 151
+Unmapped ingredients found: 2
+
+Top 15 Mapped Ingredients (data insights):
+    8x Cellulose
+    7x Magnesium Stearate
+    6x Silica
+    6x Vitamin B12
+    6x Vitamin C
+    5x Biotin
+    5x Vitamin A
+    5x Zinc
+    4x Calcium
+    4x Chromium
+    4x Iodine
+    4x Iron
+    4x Magnesium
+    4x Phosphorus
+    4x Rice Flour
+
+These are the most frequently appearing mapped ingredients
+
+Top 10 Unmapped Ingredients (for enrichment planning):
+    2x Coconut Palm Sugar
+    1x Magnesium Trisilicate
+
+These ingredients should be prioritized for database enrichment
+
+Batch Details:
+  Batch 1: 22 cleaned, 0 review, 0 incomplete, 0 errors (6.4s)

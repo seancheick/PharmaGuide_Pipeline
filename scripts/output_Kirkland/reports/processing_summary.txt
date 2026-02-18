@@ -1,0 +1,49 @@
+DSLD Data Cleaning Processing Report
+==================================================
+
+Generated: 2026-02-18 14:31:44
+Total Files Processed: 67
+Processing Time: 0.13 minutes
+
+Results Summary:
+  - Successfully cleaned: 67
+  - Needs review: 0
+  - Incomplete: 0
+  - Errors: 0
+  - Success rate: 100.0%
+
+Mapped ingredients found: 222
+Unmapped ingredients found: 7
+
+Top 15 Mapped Ingredients (data insights):
+   36x Gelatin
+   35x Magnesium Stearate
+   28x Silicon Dioxide
+   27x Croscarmellose Sodium
+   26x Vitamin C
+   25x Calcium
+   24x Vitamin B6
+   22x Vitamin B12
+   22x Vitamin D3
+   22x Vitamin E
+   21x Maltodextrin
+   21x Zinc
+   20x Biotin
+   20x Glycerin
+   20x Pantothenic Acid
+
+These are the most frequently appearing mapped ingredients
+
+Top 10 Unmapped Ingredients (for enrichment planning):
+    2x Cellulose Coating
+    1x Artificial Colors
+    1x Carboxymethylcellulose Sodium
+    1x Silicon Dioxide, Colloidal
+    1x Titanium Dioxide color
+    1x hydrogenated Soybean Oil
+    1x natural & artificial Orange flavors
+
+These ingredients should be prioritized for database enrichment
+
+Batch Details:
+  Batch 1: 67 cleaned, 0 review, 0 incomplete, 0 errors (7.9s)
