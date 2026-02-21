@@ -156,6 +156,96 @@ class TestClaimValidationLogic:
             assert evidence['score_eligible'] is False
             assert evidence['ineligibility_reason'] == 'weak_evidence'
 
+    def test_nsf_certified_sport_without_for_matches(self, enricher):
+        """NSF Certified Sport variant (without 'for') should be accepted."""
+        field_groups = enricher._get_field_groups()
+        rule = enricher.databases['cert_claim_rules']['rules']['third_party_programs']['nsf_sport']
+
+        text = "NSF\r\nCertified Sport"
+        evidence = enricher._check_claim_with_validation(text, "statements", rule, field_groups)
+
+        assert evidence is not None
+        assert evidence['rule_id'] == 'CERT_NSF_SPORT'
+        assert evidence['score_eligible'] is True
+
+    @pytest.mark.parametrize(
+        "category,rule_key,text,expected_rule",
+        [
+            ("third_party_programs", "usp_verified", "USP-Verified", "CERT_USP_VERIFIED"),
+            ("third_party_programs", "usp_verified", "USP Verification Program", "CERT_USP_VERIFIED"),
+            ("third_party_programs", "informed_sport", "Informed-Sport", "CERT_INFORMED_SPORT"),
+            ("third_party_programs", "ifos", "IFOS 5-Star", "CERT_IFOS"),
+            ("gmp_certifications", "cgmp_certified", "cGMP-Compliant", "CERT_CGMP"),
+            ("gmp_certifications", "fda_registered", "FDA-inspected facility", "CERT_FDA_REGISTERED"),
+            ("gmp_certifications", "nsf_gmp", "NSF-GMP Registered", "CERT_NSF_GMP"),
+        ],
+    )
+    def test_cert_hyphen_linebreak_variants_match(self, enricher, category, rule_key, text, expected_rule):
+        """Common punctuation/line-break variants should still be detected."""
+        field_groups = enricher._get_field_groups()
+        rule = enricher.databases['cert_claim_rules']['rules'][category][rule_key]
+        evidence = enricher._check_claim_with_validation(text, "statements", rule, field_groups)
+        assert evidence is not None
+        assert evidence["rule_id"] == expected_rule
+
+    def test_collect_gmp_data_accepts_hyphen_variants(self, enricher):
+        """Legacy GMP extractor should mirror rules-db hyphen tolerance."""
+        enricher._compile_patterns()
+        gmp = enricher._collect_gmp_data("cGMP-Compliant and FDA-inspected facility")
+        assert gmp["claimed"] is True
+        assert gmp["fda_registered"] is True
+
+    @pytest.mark.parametrize(
+        "text",
+        [
+            "USDA Organic",
+            "USDA-Organic",
+            "USDA\nOrganic",
+            "Certified Organic",
+            "Certified-Organic",
+            "100% Organic",
+            "100 percent organic",
+        ],
+    )
+    def test_organic_cert_variants_match(self, enricher, text):
+        """Organic certification variants should map to CERT_USDA_ORGANIC."""
+        field_groups = enricher._get_field_groups()
+        rule = enricher.databases['cert_claim_rules']['rules']['organic_certifications']['usda_organic']
+        evidence = enricher._check_claim_with_validation(text, "statements", rule, field_groups)
+        assert evidence is not None
+        assert evidence["rule_id"] == "CERT_USDA_ORGANIC"
+        assert evidence["score_eligible"] is True
+
+    def test_collect_compliance_data_promotes_statement_gluten_free(self, enricher):
+        """Statement-only gluten-free should set compliance gluten flag."""
+        product = {
+            "statements": [{"notes": "Certified Gluten-Free by GFCO"}],
+            "targetGroups": [],
+        }
+        contaminant_data = {"allergens": {"allergens": [], "has_may_contain_warning": False}}
+        result = enricher._collect_compliance_data(product, contaminant_data=contaminant_data)
+        assert result["gluten_free"] is True
+        assert any("gluten" in c for c in result["allergen_free_claims"])
+
+    def test_collect_compliance_data_promotes_statement_vegan(self, enricher):
+        """Statement-only vegan claim should set vegan flag for B3 validation."""
+        product = {
+            "statements": [{"notes": "Certified Vegan"}],
+            "targetGroups": [],
+        }
+        contaminant_data = {"allergens": {"allergens": [], "has_may_contain_warning": False}}
+        result = enricher._collect_compliance_data(product, contaminant_data=contaminant_data)
+        assert result["vegan"] is True
+
+    def test_collect_organic_data_excludes_made_with_organic_only(self, enricher):
+        """'Made with organic ingredients' should not count as certified organic."""
+        enricher._compile_patterns()
+        product = {"statements": [{"notes": "Made-with-organic ingredients"}]}
+        all_text = enricher._get_all_product_text(product)
+        organic = enricher._collect_organic_data(product, all_text)
+        assert organic["exclusion_matched"] is True
+        assert organic["claimed"] is False
+
 
 class TestFeatureGates:
     """Test feature gate behavior in scoring."""

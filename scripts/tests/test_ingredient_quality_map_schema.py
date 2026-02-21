@@ -69,11 +69,26 @@ class TestAliasQuality:
         """No alias should map to multiple different ingredients."""
         # Known acceptable cross-ingredient aliases (hierarchical relationships)
         ALLOWED_CROSS_ALIASES = {
-            'beta-sitosterol',  # beta_sitosterol IS a phytosterol
-            'cod liver oil',    # cod_liver_oil IS a fish oil
-            'bifidobacterium animalis lactis',  # bifidobacterium_lactis IS a probiotic
-            'b. animalis lactis',  # abbreviated form
-            'bifidobacterium animalis subsp lactis',  # subspecies form
+            'beta-sitosterol',       # beta_sitosterol IS a phytosterol
+            # Phosphorus/calcium shared forms — preferred_parent disambiguates by label nutrient
+            'calcium phosphate',     # phosphorus/phosphate salts + calcium/calcium phosphate
+            'tricalcium phosphate',  # phosphorus/phosphate salts + calcium/calcium phosphate
+            'tcp',                   # abbreviation for tricalcium phosphate
+            'tribasic calcium phosphate',  # synonym for tricalcium phosphate
+            'calcium hydroxyapatite',      # phosphorus/phosphate salts + calcium/calcium hydroxyapatite
+            'microcrystalline hydroxyapatite',  # phosphorus/phosphate salts + calcium/calcium hydroxyapatite
+            'hydroxyapatite',        # phosphorus/phosphate salts + calcium/calcium hydroxyapatite
+            'dicalcium phosphate dihydrate',  # phosphorus/dicalcium phosphate + dicalcium_phosphate parent
+            'calcium hydrogen phosphate',    # phosphorus/dicalcium phosphate + dicalcium_phosphate parent
+            # DCP shared between phosphorus/dicalcium phosphate and dicalcium_phosphate parent forms
+            'dcp',                   # phosphorus/dicalcium phosphate + dicalcium_phosphate forms
+            # Niacinamide ascorbate shared between vitamin_c and vitamin_b3_niacin
+            'niacinamide ascorbate',      # vitamin_c + vitamin_b3_niacin — preferred_parent by label
+            'nicotinamide ascorbate',     # vitamin_c + vitamin_b3_niacin
+            'vitamin c niacinamide',      # vitamin_c + vitamin_b3_niacin
+            'ascorbate niacinamide',      # vitamin_c + vitamin_b3_niacin
+            'niacinamide ascorbate supplement',  # vitamin_c + vitamin_b3_niacin
+            'nicotinamide ascorbate supplement', # vitamin_c + vitamin_b3_niacin
         }
 
         alias_map = defaultdict(list)

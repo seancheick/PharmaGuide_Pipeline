@@ -3,7 +3,7 @@
     "description": "Absorption enhancers that improve nutrient bioavailability",
     "purpose": "bioavailability_bonuses",
     "schema_version": "4.0.0",
-    "last_updated": "2026-02-18",
+    "last_updated": "2026-02-20",
     "total_entries": 23
   },
   "absorption_enhancers": [
@@ -13,11 +13,20 @@
         "piperine",
         "bioperine",
         "black pepper extract",
-        "Bioperine Black Pepper extract"
+        "Bioperine Black Pepper extract",
+        "black pepper fruit extract",
+        "black pepper fruit",
+        "piper nigrum extract",
+        "bioperine complex",
+        "black pepper powder"
       ],
       "enhances": [
         "Turmeric",
+        "Turmeric Extract",
+        "Turmeric Powder",
+        "Turmeric Rhizome Extract",
         "Curcumin",
+        "Curcuminoids",
         "Curcumin C3 Complex",
         "Curcumin C3 Complex with BioPerine",
         "Longvida Curcumin",
@@ -101,7 +110,8 @@
         "organic olive oil",
         "olive oil",
         "phospholipids",
-        "lecithin"
+        "lecithin",
+        "coconut oil powder"
       ],
       "enhances": [
         "Vitamin A",
@@ -116,10 +126,13 @@
         "Ubiquinone",
         "Coenzyme Q10",
         "Curcumin",
+        "Curcumin Phytosome",
+        "Curcumin Phytosome Complex",
         "Longvida Curcumin",
         "Meriva Curcumin",
         "Curcumin C3 Complex",
         "Turmeric",
+        "Turmeric Powder",
         "CBD"
       ],
       "mechanism": "Improves absorption of fat-soluble compounds.",
@@ -163,7 +176,8 @@
       "id": "ENHANCER_VITAMIN_D",
       "aliases": [
         "vitamin d3",
-        "cholecalciferol"
+        "cholecalciferol",
+        "vitamin d3 natural"
       ],
       "enhances": [
         "Calcium",
@@ -284,7 +298,8 @@
       "aliases": [
         "liposomal",
         "phospholipid complex",
-        "phytosome"
+        "phytosome",
+        "liposomal delivery"
       ],
       "enhances": [
         "Vitamin C",
@@ -431,7 +446,13 @@
       "id": "ENHANCER_ALOE_VERA",
       "aliases": [
         "aloe vera gel",
-        "aloe vera leaf extract"
+        "aloe vera leaf extract",
+        "aloe vera powder",
+        "aloe vera extract",
+        "aloe vera concentrate",
+        "aloe vera gel concentrate",
+        "aloe vera gel extract",
+        "aloe vera leaf concentrate"
       ],
       "enhances": [
         "Vitamin C",
@@ -450,7 +471,12 @@
       "aliases": [
         "allium sativum",
         "allicin",
-        "garlic extract"
+        "garlic extract",
+        "garlic oil",
+        "garlic oil concentrate",
+        "garlic oil extract",
+        "garlic concentrate",
+        "garlic extract oil"
       ],
       "enhances": [
         "Zinc",

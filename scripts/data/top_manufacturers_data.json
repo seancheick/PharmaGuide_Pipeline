@@ -3,9 +3,9 @@
     "description": "Top supplement manufacturers with quality ratings and certifications",
     "purpose": "manufacturer_quality",
     "schema_version": "4.0.0",
-    "last_updated": "2026-02-16",
-    "total_entries": 61,
-    "recent_changes": "2025-12-04: Added Seed Health (NutraIngredients-USA 2022 winner, multiple RCTs, WHO advisor founded). 2025-12-03: Added BioGaia and Culturelle."
+    "last_updated": "2026-02-20",
+    "total_entries": 77,
+    "recent_changes": "2025-12-04: Added Seed Health (NutraIngredients-USA 2022 winner, multiple RCTs, WHO advisor founded). 2025-12-03: Added BioGaia and Culturelle. 2026-02-20: Added 16 manufacturer entries (sports, DTC, international, and legacy Care/of coverage) with updated alias coverage for exact matching."
   },
   "top_manufacturers": [
     {
@@ -64,7 +64,7 @@
       ]
     },
     {
-      "id": "MANUF_THRONE",
+      "id": "MANUF_THORNE",
       "standard_name": "Thorne",
       "evidence": [
         "NSF Certified for Sport",
@@ -74,7 +74,10 @@
       "notes": "Highly respected among clinicians for ingredient purity and athletic products.",
       "last_updated": "2025-07-16",
       "aliases": [
-        "Thorne Research Inc."
+        "Thorne Research Inc.",
+        "Thorne Research",
+        "Thorne FX",
+        "Thorne Performance"
       ]
     },
     {
@@ -559,7 +562,7 @@
       "standard_name": "Kirkland Signature",
       "evidence": [
         "USP-verified for many products",
-        "Substantial quality control due to Costco’s internal standards",
+        "Substantial quality control due to Costco\u2019s internal standards",
         "No significant FDA warning letters or major recalls"
       ],
       "notes": "Strong value and quality for mass-market buyers; USP certifications build trust.",
@@ -647,7 +650,7 @@
         "Specializes in pediatric supplements with batch COAs",
         "No reported recalls or FDA warning letters"
       ],
-      "notes": "Highly regarded in pediatric and children’s formulations.",
+      "notes": "Highly regarded in pediatric and children\u2019s formulations.",
       "last_updated": "2025-07-24",
       "aliases": [
         "Pediatrix Nutrition"
@@ -707,7 +710,8 @@
       "notes": "Top choice for athletes seeking clean, plant-based performance products.",
       "last_updated": "2025-07-24",
       "aliases": [
-        "Garden of Life Sport"
+        "Garden of Life Sport",
+        "Garden of Life"
       ]
     },
     {
@@ -887,6 +891,263 @@
         "Seed",
         "Seed Health Inc.",
         "DS-01"
+      ]
+    },
+    {
+      "id": "MANUF_OPTIMUM_NUTRITION",
+      "standard_name": "Optimum Nutrition",
+      "evidence": [
+        "Part of Glanbia Performance Nutrition portfolio (global sports-nutrition leader)",
+        "Company states products are produced in cGMP-compliant facilities with ingredient CoA checks",
+        "Selected products carry Informed Choice certification"
+      ],
+      "notes": "Major global sports-nutrition brand with broad athlete use and mature quality systems.",
+      "last_updated": "2026-02-20",
+      "aliases": [
+        "ON",
+        "Optimum Nutrition Inc",
+        "Optimum Nutrition, Inc.",
+        "Glanbia Performance Nutrition"
+      ]
+    },
+    {
+      "id": "MANUF_TRANSPARENT_LABS",
+      "standard_name": "Transparent Labs",
+      "evidence": [
+        "Publishes third-party testing Certificates of Analysis (COAs) via public lookup page",
+        "Provides ingredient verification and gluten testing records for products",
+        "Brand positioning emphasizes no proprietary blends and label transparency"
+      ],
+      "notes": "High-transparency sports brand with public batch-quality documentation.",
+      "last_updated": "2026-02-20",
+      "aliases": [
+        "Transparent Labs LLC",
+        "Transparent Labs"
+      ]
+    },
+    {
+      "id": "MANUF_KLEAN_ATHLETE",
+      "standard_name": "Klean Athlete",
+      "evidence": [
+        "Brand states NSF Certified for Sport across product line",
+        "Brand states manufacturing in NSF-GMP registered facility",
+        "Brand describes batch-level purity/potency/contaminant testing"
+      ],
+      "notes": "Sports-focused brand with NSF-for-Sport positioning and strict testing narrative.",
+      "last_updated": "2026-02-20",
+      "aliases": [
+        "Klean Athlete",
+        "Klean Athlete Inc."
+      ]
+    },
+    {
+      "id": "MANUF_ATHLETIC_GREENS",
+      "standard_name": "AG1 (Athletic Greens)",
+      "evidence": [
+        "AG1 quality page states NSF Certified for Sport certification",
+        "Brand states manufacturing in TGA-registered GMP facility",
+        "Brand states third-party analytical and microbiological testing"
+      ],
+      "notes": "Large foundational-nutrition brand with explicit NSF-for-Sport quality claims.",
+      "last_updated": "2026-02-20",
+      "aliases": [
+        "Athletic Greens",
+        "AG1",
+        "AG1 by Athletic Greens"
+      ]
+    },
+    {
+      "id": "MANUF_NUTRAFOL",
+      "standard_name": "Nutrafol",
+      "evidence": [
+        "Brand publishes multiple clinical studies on finished formulas",
+        "Brand states studies are run at independent centers under Good Clinical Practice",
+        "Unilever Wellbeing portfolio materials list Nutrafol as strategic wellness brand"
+      ],
+      "notes": "Hair-health brand with unusually strong finished-product clinical evidence for the category.",
+      "last_updated": "2026-02-20",
+      "aliases": [
+        "Nutrafol",
+        "Nutraceutical Wellness Inc."
+      ]
+    },
+    {
+      "id": "MANUF_SPORTS_RESEARCH",
+      "standard_name": "Sports Research",
+      "evidence": [
+        "Brand lists IFOS 5-star certification for selected omega products",
+        "Brand lists iGen Non-GMO and third-party testing claims on key SKUs",
+        "Brand states cGMP-compliant manufacturing practices"
+      ],
+      "notes": "Mainstream softgel-focused brand with visible third-party quality markers on key products.",
+      "last_updated": "2026-02-20",
+      "aliases": [
+        "Sports Research",
+        "Sports Research Corp",
+        "SR"
+      ]
+    },
+    {
+      "id": "MANUF_CENTRUM_HALEON",
+      "standard_name": "Centrum (Haleon)",
+      "evidence": [
+        "Haleon publicly identifies Centrum as a core VMS brand in global portfolio",
+        "Haleon positions brands as science-led and globally scaled consumer-health products",
+        "Centrum available broadly across major international markets"
+      ],
+      "notes": "Large-scale multinational VMS brand under Haleon consumer-health governance.",
+      "last_updated": "2026-02-20",
+      "aliases": [
+        "Centrum",
+        "Haleon",
+        "Centrum by Haleon"
+      ]
+    },
+    {
+      "id": "MANUF_OLLY",
+      "standard_name": "OLLY",
+      "evidence": [
+        "Brand help-center states many products are NSF certified",
+        "Brand states products are rigorously third-party tested in U.S. labs",
+        "Unilever announced OLLY acquisition in 2019"
+      ],
+      "notes": "High-volume gummy/vitamin brand with explicit third-party-testing and certification claims.",
+      "last_updated": "2026-02-20",
+      "aliases": [
+        "OLLY",
+        "OLLY Nutrition",
+        "Olly Nutrition",
+        "OLLY Public Benefit Corporation"
+      ]
+    },
+    {
+      "id": "MANUF_SWISSE",
+      "standard_name": "Swisse",
+      "evidence": [
+        "Brand states over 55-year history and science-backed formulation positioning",
+        "Brand states H&H Group B Corp association",
+        "Brand product pages include third-party testing claims on selected supplements"
+      ],
+      "notes": "Global wellness brand with broad distribution and premium-positioned supplement portfolio.",
+      "last_updated": "2026-02-20",
+      "aliases": [
+        "Swisse",
+        "Swisse Wellness",
+        "Swisse Vitamins"
+      ]
+    },
+    {
+      "id": "MANUF_JAMIESON",
+      "standard_name": "Jamieson Wellness",
+      "evidence": [
+        "Brand states operation since 1922 and extensive in-house manufacturing footprint",
+        "Brand references Health Canada GMP licensing and quality-control framework",
+        "Brand publicly references TRU-ID certification content"
+      ],
+      "notes": "Major Canadian supplement manufacturer with long operating history and structured quality program.",
+      "last_updated": "2026-02-20",
+      "aliases": [
+        "Jamieson",
+        "Jamieson Wellness",
+        "Jamieson Vitamins",
+        "Jamieson Laboratories"
+      ]
+    },
+    {
+      "id": "MANUF_BAYER_CONSUMER_HEALTH",
+      "standard_name": "Bayer Consumer Health",
+      "evidence": [
+        "Bayer is a global life-science company with established consumer-health operations",
+        "Bayer consumer-health portfolio has included major VMS lines (e.g., One A Day)",
+        "Manufacturing/quality systems operate under large multinational governance structures"
+      ],
+      "notes": "Pharma-scale consumer-health organization relevant for major mass-market vitamin lines.",
+      "last_updated": "2026-02-20",
+      "aliases": [
+        "Bayer",
+        "Bayer Consumer Health",
+        "One A Day",
+        "One-A-Day",
+        "Flintstones Vitamins"
+      ]
+    },
+    {
+      "id": "MANUF_NUTRICOST",
+      "standard_name": "Nutricost",
+      "evidence": [
+        "Brand product pages repeatedly state third-party ISO-accredited lab testing",
+        "Brand claims cGMP-compliant manufacturing across product range",
+        "Large single-ingredient catalog with broad U.S. e-commerce distribution"
+      ],
+      "notes": "Value-focused single-ingredient brand with explicit third-party-testing statements on product pages.",
+      "last_updated": "2026-02-20",
+      "aliases": [
+        "Nutricost",
+        "Nutricost LLC",
+        "ESUPP LLC"
+      ]
+    },
+    {
+      "id": "MANUF_ELYSIUM_HEALTH",
+      "standard_name": "Elysium Health",
+      "evidence": [
+        "Basis product page states NSF Certified for Sport status",
+        "Brand cites completed double-blind randomized placebo-controlled clinical trial data on product platform",
+        "Brand provides lot-level quality/purity information links"
+      ],
+      "notes": "Science-forward longevity brand with explicit clinical and certification disclosures.",
+      "last_updated": "2026-02-20",
+      "aliases": [
+        "Elysium",
+        "Elysium Health",
+        "Elysium Health Inc."
+      ]
+    },
+    {
+      "id": "MANUF_FOUR_SIGMATIC",
+      "standard_name": "Four Sigmatic",
+      "evidence": [
+        "Brand quality page states third-party testing for heavy metals, mycotoxins, molds/yeasts, and pesticides",
+        "Brand quality messaging includes finished-product safety checks beyond baseline GMP claims",
+        "Strong focus on functional mushroom sourcing and quality controls"
+      ],
+      "notes": "Functional-mushroom leader with explicit contaminant-testing disclosures.",
+      "last_updated": "2026-02-20",
+      "aliases": [
+        "Four Sigmatic",
+        "Four Sigmatic Foods"
+      ]
+    },
+    {
+      "id": "MANUF_NEEDED",
+      "standard_name": "Needed",
+      "evidence": [
+        "Brand quality page states every batch is third-party tested at accredited labs for heavy metals",
+        "Brand states thresholds are controlled to California Prop 65 limits before release",
+        "Perinatal-focused formulations with detailed quality narratives"
+      ],
+      "notes": "Perinatal nutrition brand with strong public heavy-metal testing disclosure.",
+      "last_updated": "2026-02-20",
+      "aliases": [
+        "Needed",
+        "Needed Nutrition",
+        "This is Needed"
+      ]
+    },
+    {
+      "id": "MANUF_CARE_OF_LEGACY",
+      "standard_name": "Care/of (Legacy)",
+      "evidence": [
+        "Bayer announced majority stake acquisition in 2020",
+        "Brand operated personalized supplement packs with direct-to-consumer model",
+        "Public reports indicate operations were wound down in 2024"
+      ],
+      "notes": "Legacy entry for historical DSLD products; brand operations were reported as closed in 2024.",
+      "last_updated": "2026-02-20",
+      "aliases": [
+        "Care/of",
+        "Care of",
+        "Careof"
       ]
     }
   ]

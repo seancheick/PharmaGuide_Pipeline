@@ -482,6 +482,447 @@ class TestV30Scoring:
         assert scorer._manufacturer_violation_penalty(product) == pytest.approx(-11.5)
 
 
+def _make_blend(
+    name,
+    level,
+    total_weight=None,
+    unit="mg",
+    source_field="activeIngredients[0]",
+    ingredients_with_amounts=None,
+    ingredients_without_amounts=None,
+    nested_count=None,
+):
+    """Build a proprietary blend payload aligned with enrichment output."""
+    with_amounts = ingredients_with_amounts or []
+    without_amounts = ingredients_without_amounts or []
+    if nested_count is None:
+        nested_count = len(with_amounts) + len(without_amounts)
+    return {
+        "name": name,
+        "disclosure_level": level,
+        "total_weight": total_weight,
+        "unit": unit,
+        "nested_count": nested_count,
+        "hidden_count": len(without_amounts),
+        "source_field": source_field,
+        "child_ingredients": [
+            {"name": item.get("name", ""), "amount": item.get("amount"), "unit": item.get("unit", "mg")}
+            for item in with_amounts
+        ] + [{"name": n, "amount": None, "unit": ""} for n in without_amounts],
+        "evidence": {
+            "source_field": source_field,
+            "ingredients_with_amounts": with_amounts,
+            "ingredients_without_amounts": without_amounts,
+        },
+    }
+
+
+class TestB5ProprietaryBlendRedesign:
+    """Hidden-mass blend transparency model with A1/B5 separation."""
+
+    @pytest.fixture
+    def scorer(self):
+        return SupplementScorer()
+
+    def test_no_blends_b5_is_zero(self, scorer):
+        p = make_base_product()
+        assert scorer._score_b5(p, []) == pytest.approx(0.0)
+
+    def test_none_disclosure_full_formula_penalty_near_seven(self, scorer):
+        p = make_base_product()
+        p["ingredient_quality_data"]["ingredients_scorable"] = [
+            {
+                "name": "Mega Blend",
+                "standard_name": "Mega Blend",
+                "score": 5,
+                "mapped": False,
+                "has_dose": True,
+                "quantity": 2000,
+                "unit": "mg",
+                "is_proprietary_blend": True,
+            }
+        ]
+        p["proprietary_blends"] = [
+            _make_blend(
+                "Mega Blend",
+                "none",
+                total_weight=2000,
+                unit="mg",
+                ingredients_with_amounts=[],
+                ingredients_without_amounts=["A", "B", "C"],
+            )
+        ]
+        p["proprietary_data"]["total_active_mg"] = 2000
+        p["proprietary_data"]["total_active_ingredients"] = 1
+
+        assert scorer._score_b5(p, []) == pytest.approx(7.0, abs=0.01)
+        assert scorer._score_a1(p, "targeted") == pytest.approx(0.0)
+
+    def test_partial_hidden_mass_subtracts_disclosed_children_and_a1_scores_them(self, scorer):
+        p = make_base_product()
+        p["ingredient_quality_data"]["ingredients_scorable"] = [
+            {
+                "name": "Caffeine",
+                "standard_name": "caffeine",
+                "score": 14,
+                "mapped": True,
+                "has_dose": True,
+                "quantity": 200,
+                "unit": "mg",
+                "is_proprietary_blend": False,
+            },
+            {
+                "name": "L-Theanine",
+                "standard_name": "l_theanine",
+                "score": 12,
+                "mapped": True,
+                "has_dose": True,
+                "quantity": 300,
+                "unit": "mg",
+                "is_proprietary_blend": False,
+            },
+            {
+                "name": "Focus Blend",
+                "standard_name": "focus_blend",
+                "score": 5,
+                "mapped": False,
+                "has_dose": True,
+                "quantity": 1000,
+                "unit": "mg",
+                "is_proprietary_blend": True,
+            },
+        ]
+        p["proprietary_blends"] = [
+            _make_blend(
+                "Focus Blend",
+                "partial",
+                total_weight=1000,
+                unit="mg",
+                ingredients_with_amounts=[
+                    {"name": "Caffeine", "amount": 200, "unit": "mg"},
+                    {"name": "L-Theanine", "amount": 300, "unit": "mg"},
+                ],
+                ingredients_without_amounts=["Rhodiola"],
+            )
+        ]
+        p["proprietary_data"]["total_active_mg"] = 2000
+        p["proprietary_data"]["total_active_ingredients"] = 3
+        flags = []
+        penalty = scorer._score_b5(p, flags)
+        # hidden_mass = 1000 - (200 + 300) = 500; impact = 500 / 2000 = 0.25
+        # partial penalty = 1 + 3*0.25 = 1.75
+        assert penalty == pytest.approx(1.75, abs=0.01)
+        expected_avg = (14 + 12) / 2.0
+        assert scorer._score_a1(p, "targeted") == pytest.approx((expected_avg / 18.0) * 13.0, abs=0.01)
+        assert "PROPRIETARY_BLEND_PRESENT" in flags
+
+    def test_partial_child_without_amount_not_counted_for_a1_or_disclosed_mass(self, scorer):
+        p = make_base_product()
+        p["ingredient_quality_data"]["ingredients_scorable"] = [
+            {
+                "name": "Caffeine",
+                "standard_name": "caffeine",
+                "score": 14,
+                "mapped": True,
+                "has_dose": True,
+                "quantity": 200,
+                "unit": "mg",
+                "is_proprietary_blend": False,
+            },
+            {
+                "name": "Rhodiola",
+                "standard_name": "rhodiola",
+                "score": 13,
+                "mapped": True,
+                "has_dose": False,
+                "quantity": None,
+                "unit": "",
+                "is_proprietary_blend": False,
+            },
+            {
+                "name": "Focus Blend",
+                "standard_name": "focus_blend",
+                "score": 5,
+                "mapped": False,
+                "has_dose": True,
+                "quantity": 1000,
+                "unit": "mg",
+                "is_proprietary_blend": True,
+            },
+        ]
+        p["proprietary_blends"] = [
+            _make_blend(
+                "Focus Blend",
+                "partial",
+                total_weight=1000,
+                ingredients_with_amounts=[{"name": "Caffeine", "amount": 200, "unit": "mg"}],
+                ingredients_without_amounts=["Rhodiola"],
+            )
+        ]
+        p["proprietary_data"]["total_active_mg"] = 1000
+        penalty = scorer._score_b5(p, [])
+        # hidden_mass = 800; impact = 0.8 => partial = 1 + 2.4 = 3.4
+        assert penalty == pytest.approx(3.4, abs=0.01)
+        # Only Caffeine contributes (Rhodiola has no usable dose, blend container excluded)
+        assert scorer._score_a1(p, "targeted") == pytest.approx((14.0 / 18.0) * 13.0, abs=0.01)
+
+    def test_duplicate_blends_deduped_once(self, scorer):
+        p = make_base_product()
+        blend = _make_blend(
+            "Duplicate Blend",
+            "none",
+            total_weight=1000,
+            source_field="activeIngredients[1]",
+            ingredients_without_amounts=["A", "B"],
+        )
+        p["proprietary_blends"] = [blend, deepcopy(blend)]
+        p["proprietary_data"]["total_active_mg"] = 1000
+        assert scorer._score_b5(p, []) == pytest.approx(7.0, abs=0.01)
+
+    def test_two_distinct_blends_cap_at_ten(self, scorer):
+        p = make_base_product()
+        p["proprietary_blends"] = [
+            _make_blend(
+                "Blend A",
+                "none",
+                total_weight=1000,
+                source_field="activeIngredients[0]",
+                ingredients_without_amounts=["A"],
+            ),
+            _make_blend(
+                "Blend B",
+                "none",
+                total_weight=1000,
+                source_field="activeIngredients[3]",
+                ingredients_without_amounts=["B"],
+            ),
+        ]
+        p["proprietary_data"]["total_active_mg"] = 1000
+        assert scorer._score_b5(p, []) == pytest.approx(10.0, abs=0.01)
+
+    def test_tiny_none_blend_uses_impact_floor(self, scorer):
+        p = make_base_product()
+        p["proprietary_blends"] = [
+            _make_blend(
+                "Tiny Blend",
+                "none",
+                total_weight=50,
+                ingredients_without_amounts=["A"],
+            )
+        ]
+        p["proprietary_data"]["total_active_mg"] = 2000
+        # raw impact = 0.025, floored to 0.1 -> 2 + 5*0.1 = 2.5
+        assert scorer._score_b5(p, []) == pytest.approx(2.5, abs=0.01)
+
+    def test_full_disclosure_blend_zero_penalty_children_score_normally(self, scorer):
+        p = make_base_product()
+        p["ingredient_quality_data"]["ingredients_scorable"] = [
+            {
+                "name": "Caffeine",
+                "standard_name": "caffeine",
+                "score": 14,
+                "mapped": True,
+                "has_dose": True,
+                "quantity": 200,
+                "unit": "mg",
+                "is_proprietary_blend": False,
+            },
+            {
+                "name": "L-Theanine",
+                "standard_name": "l_theanine",
+                "score": 12,
+                "mapped": True,
+                "has_dose": True,
+                "quantity": 300,
+                "unit": "mg",
+                "is_proprietary_blend": False,
+            },
+            {
+                "name": "Transparent Blend",
+                "standard_name": "transparent_blend",
+                "score": 5,
+                "mapped": False,
+                "has_dose": True,
+                "quantity": 500,
+                "unit": "mg",
+                "is_proprietary_blend": True,
+            },
+        ]
+        p["proprietary_blends"] = [
+            _make_blend(
+                "Transparent Blend",
+                "full",
+                total_weight=500,
+                ingredients_with_amounts=[
+                    {"name": "Caffeine", "amount": 200, "unit": "mg"},
+                    {"name": "L-Theanine", "amount": 300, "unit": "mg"},
+                ],
+                ingredients_without_amounts=[],
+            )
+        ]
+        assert scorer._score_b5(p, []) == pytest.approx(0.0, abs=0.01)
+        expected_avg = (14 + 12) / 2.0
+        assert scorer._score_a1(p, "targeted") == pytest.approx((expected_avg / 18.0) * 13.0, abs=0.01)
+
+    def test_no_mg_data_uses_count_share_fallback(self, scorer):
+        p = make_base_product()
+        p["proprietary_blends"] = [
+            _make_blend(
+                "No-Mass Blend",
+                "none",
+                total_weight=None,
+                ingredients_with_amounts=[],
+                ingredients_without_amounts=["A", "B", "C", "D"],
+                nested_count=4,
+            )
+        ]
+        p["proprietary_data"]["total_active_mg"] = None
+        p["proprietary_data"]["total_active_ingredients"] = 8
+        # count share impact = 4/8 = 0.5 -> 2 + 5*0.5 = 4.5
+        assert scorer._score_b5(p, []) == pytest.approx(4.5, abs=0.01)
+
+    def test_mixed_units_convert_correctly_for_hidden_mass(self, scorer):
+        p = make_base_product()
+        p["proprietary_blends"] = [
+            _make_blend(
+                "Unit Blend",
+                "partial",
+                total_weight=1.0,
+                unit="g",
+                ingredients_with_amounts=[
+                    {"name": "A", "amount": 200000, "unit": "mcg"},  # 200 mg
+                    {"name": "B", "amount": 0.2, "unit": "g"},       # 200 mg
+                ],
+                ingredients_without_amounts=["C"],
+            )
+        ]
+        p["proprietary_data"]["total_active_mg"] = 2000
+        # blend=1000mg, disclosed=400mg, hidden=600mg, impact=0.3 -> 1+0.9=1.9
+        assert scorer._score_b5(p, []) == pytest.approx(1.9, abs=0.01)
+
+    def test_disclosed_sum_clamped_when_exceeds_blend_total(self, scorer):
+        p = make_base_product()
+        p["proprietary_blends"] = [
+            _make_blend(
+                "Bad Label Blend",
+                "partial",
+                total_weight=300,
+                unit="mg",
+                ingredients_with_amounts=[
+                    {"name": "A", "amount": 250, "unit": "mg"},
+                    {"name": "B", "amount": 250, "unit": "mg"},
+                ],
+                ingredients_without_amounts=[],
+            )
+        ]
+        p["proprietary_data"]["total_active_mg"] = 1000
+        # disclosed clamps to blend total (300), hidden=0 -> partial base only
+        assert scorer._score_b5(p, []) == pytest.approx(1.0, abs=0.01)
+
+    def test_zero_total_active_mg_falls_back_to_count_share(self, scorer):
+        p = make_base_product()
+        p["proprietary_blends"] = [
+            _make_blend(
+                "Zero Total Blend",
+                "none",
+                total_weight=500,
+                unit="mg",
+                ingredients_without_amounts=["A", "B"],
+                nested_count=2,
+            )
+        ]
+        p["proprietary_data"]["total_active_mg"] = 0
+        p["proprietary_data"]["total_active_ingredients"] = 4
+        # count share impact = 2/4 = 0.5
+        assert scorer._score_b5(p, []) == pytest.approx(4.5, abs=0.01)
+
+
+class TestA1BlendContainerExclusion:
+    """A1 must exclude blend container entries (is_proprietary_blend=True).
+    Their opacity cost is captured by B5; including them in A1 dilutes the
+    quality average with a meaningless stub score.
+    """
+
+    @pytest.fixture
+    def scorer(self):
+        return SupplementScorer()
+
+    def _product_with_blend_container(self, blend_score=5):
+        """Product: Vitamin C (score=15) + a blend container (score=stub)."""
+        p = make_base_product()
+        p["ingredient_quality_data"]["ingredients_scorable"] = [
+            {
+                "name": "Vitamin C",
+                "score": 15,
+                "dosage_importance": 1.0,
+                "mapped": True,
+                "is_proprietary_blend": False,
+                "quantity": 250,
+                "unit": "mg",
+                "has_dose": True,
+            },
+            {
+                "name": "Energy Blend",
+                "score": blend_score,
+                "dosage_importance": 1.0,
+                "mapped": False,
+                "is_proprietary_blend": True,
+                "quantity": 500,
+                "unit": "mg",
+                "has_dose": True,
+            },
+        ]
+        return p
+
+    def test_blend_container_excluded_from_a1(self, scorer):
+        """A1 should only see Vitamin C (score=15), not the blend container."""
+        p = self._product_with_blend_container(blend_score=5)
+        supp_type = "targeted"
+        score_with = scorer._score_a1(p, supp_type)
+
+        # For reference: what it would be if blend IS included
+        # (15×1 + 5×1) / 2 = 10  →  (10/18)×13 ≈ 7.22
+        # Correct (blend excluded): 15/1 = 15  →  (15/18)×13 ≈ 10.83
+        assert score_with == pytest.approx((15.0 / 18.0) * 13.0, abs=0.1)
+
+    def test_a1_not_contaminated_by_stub_score(self, scorer):
+        """Blend container with stub score=5 must not drag A1 below the
+        disclosed-only average."""
+        p = self._product_with_blend_container(blend_score=5)
+        a1_score = scorer._score_a1(p, "targeted")
+        # Score from disclosed ingredients only (score=15): ≈10.83
+        disclosed_only = (15.0 / 18.0) * 13.0
+        # Score if blend were included (score average 10): ≈7.22
+        would_be_dragged = (10.0 / 18.0) * 13.0
+        assert a1_score > would_be_dragged + 1.0
+        assert a1_score == pytest.approx(disclosed_only, abs=0.1)
+
+    def test_a1_with_no_blend_containers_unchanged(self, scorer):
+        """Standard product with no blend containers: A1 unchanged."""
+        p = make_base_product()
+        # Both ingredients have is_proprietary_blend=False (default)
+        p["ingredient_quality_data"]["ingredients_scorable"] = [
+            {"name": "Mg Glycinate", "score": 18, "dosage_importance": 1.0,
+             "mapped": True, "is_proprietary_blend": False, "quantity": 200, "unit": "mg", "has_dose": True},
+            {"name": "Vitamin D3", "score": 15, "dosage_importance": 1.5,
+             "mapped": True, "is_proprietary_blend": False, "quantity": 1000, "unit": "IU", "has_dose": True},
+        ]
+        score = scorer._score_a1(p, "targeted")
+        expected_avg = (18 * 1.0 + 15 * 1.5) / (1.0 + 1.5)
+        assert score == pytest.approx((expected_avg / 18.0) * 13.0, abs=0.1)
+
+    def test_a1_all_blend_containers_returns_zero(self, scorer):
+        """If every ingredient is a proprietary blend container, A1 = 0."""
+        p = make_base_product()
+        p["ingredient_quality_data"]["ingredients_scorable"] = [
+            {"name": "Blend A", "score": 5, "dosage_importance": 1.0,
+             "mapped": False, "is_proprietary_blend": True},
+            {"name": "Blend B", "score": 5, "dosage_importance": 1.0,
+             "mapped": False, "is_proprietary_blend": True},
+        ]
+        assert scorer._score_a1(p, "targeted") == pytest.approx(0.0)
+
+
 class TestImpactReport:
     def test_impact_report_fails_on_new_unsafe(self):
         current = [{"dsld_id": "p1", "score_80": 50, "verdict": "UNSAFE"}]

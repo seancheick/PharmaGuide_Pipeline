@@ -689,15 +689,15 @@ class SupplementEnricherV3:
         """Compile regex patterns for performance"""
         self.compiled_patterns = {
             # Organic certification patterns
-            'usda_organic': re.compile(r'\bUSDA\s*Organic\b', re.I),
-            'certified_organic': re.compile(r'\bcertified\s+organic\b', re.I),
-            'organic_100': re.compile(r'\b100%?\s*organic\b', re.I),
-            'made_with_organic': re.compile(r'\bmade\s+with\s+organic\s+ingredients\b', re.I),
+            'usda_organic': re.compile(r'\bUSDA[\s-]*Organic\b', re.I),
+            'certified_organic': re.compile(r'\bcertified[\s-]+organic\b', re.I),
+            'organic_100': re.compile(r'\b100(?:%|\s*percent)?[\s-]*organic\b', re.I),
+            'made_with_organic': re.compile(r'\bmade[\s-]+with[\s-]+organic[\s-]+ingredients?\b', re.I),
 
             # GMP patterns
-            'gmp': re.compile(r'\b(c?GMP|GMP)\s*(certified|compliant|registered|facility)?\b', re.I),
-            'nsf_gmp': re.compile(r'\bNSF\s*GMP\b', re.I),
-            'fda_registered': re.compile(r'\bFDA[-\s]?registered\s+facility\b', re.I),
+            'gmp': re.compile(r'\b(c?GMP|GMP)[\s-]*(certified|compliant|registered|facility)?\b', re.I),
+            'nsf_gmp': re.compile(r'\bNSF[\s-]*GMP\b', re.I),
+            'fda_registered': re.compile(r'\bFDA[\s-]?(registered|inspected)[\s-]+facility\b', re.I),
 
             # Batch traceability
             'coa': re.compile(r'\b(certificate\s+of\s+analysis|COA)\b', re.I),
@@ -954,7 +954,7 @@ class SupplementEnricherV3:
             'percent_share': percent_share
         }
 
-    def _fuzzy_company_match(self, name1: str, name2: str, threshold: float = 0.85) -> Tuple[bool, float]:
+    def _fuzzy_company_match(self, name1: str, name2: str, threshold: float = 0.90) -> Tuple[bool, float]:
         """
         Fuzzy match company names using best available method.
         Returns (is_match, similarity_score).
@@ -1091,6 +1091,60 @@ class SupplementEnricherV3:
                 return True
 
         return False
+
+    def _collect_clinical_aliases(self, study: Dict) -> List[str]:
+        """Collect alias variants from clinical-study records."""
+        aliases: List[str] = []
+        for field in ("aliases", "aliases_normalized"):
+            value = study.get(field)
+            if isinstance(value, list):
+                aliases.extend([str(item) for item in value if item])
+        return aliases
+
+    def _clinical_study_match(self, candidates: List[str], study: Dict) -> Optional[Dict]:
+        """
+        Exact clinical-study matching with optional false-positive suppression.
+
+        Supports schema extensions:
+          - aliases_normalized: pre-normalized alias list
+          - exclude_aliases: ingredient strings that should explicitly not match
+        """
+        study_name = str(study.get("standard_name", "") or "")
+        if not study_name:
+            return None
+
+        candidate_pairs: List[Tuple[str, str]] = []
+        for candidate in candidates:
+            norm = self._normalize_text(candidate)
+            if norm:
+                candidate_pairs.append((str(candidate), norm))
+        if not candidate_pairs:
+            return None
+
+        excluded = {
+            self._normalize_text(value)
+            for value in (study.get("exclude_aliases") or [])
+            if self._normalize_text(value)
+        }
+        if excluded and any(norm in excluded for _, norm in candidate_pairs):
+            return None
+
+        target_norm = self._normalize_text(study_name)
+        if any(norm == target_norm for _, norm in candidate_pairs):
+            return {"method": "standard_name", "matched_term": study_name}
+
+        alias_map = {}
+        for alias in self._collect_clinical_aliases(study):
+            alias_norm = self._normalize_text(alias)
+            if alias_norm:
+                alias_map[alias_norm] = alias
+
+        for _, norm in candidate_pairs:
+            matched_alias = alias_map.get(norm)
+            if matched_alias and norm not in excluded:
+                return {"method": "alias", "matched_term": matched_alias}
+
+        return None
 
     def _check_additive_match(
         self,
@@ -1366,7 +1420,7 @@ class SupplementEnricherV3:
         }
 
         # Extract strain ID patterns (e.g., "ATCC PTA 5289", "DSM 17938", "K12", "M18")
-        strain_id_pattern = re.compile(r'(atcc\s*(?:pta\s*)?[\d]+|dsm\s*[\d]+|ncfm|gg|k12|m18|bb-?12|bb536|hn019|bi-?07|de111|299v)', re.IGNORECASE)
+        strain_id_pattern = re.compile(r'(atcc\s*(?:pta\s*)?[\d]+|dsm\s*[\d]+|ncfm|\bgg\b|\bk12\b|\bm18\b|bb-?12|bb536|hn019|bi-?07|de111|299v)', re.IGNORECASE)
         strain_ids = strain_id_pattern.findall(strain_norm)
 
         # Extract species name (second word, e.g., "reuteri", "rhamnosus")
@@ -1515,8 +1569,16 @@ class SupplementEnricherV3:
         # PASS 1: Classify activeIngredients as scorable or skipped
         # =================================================================
         for ingredient in active_ingredients:
-            # Use branded_token_extracted for matching if present (e.g., "KSM-66" from "KSM-66 Ashwagandha Root Extract")
-            ing_name = ingredient.get('branded_token_extracted') or ingredient.get('name', '')
+            # Use branded_token_extracted for matching if present AND it differs from name.
+            # When branded_token_extracted == name the clean stage collapsed the full label
+            # to just the brand prefix (e.g. "Albion" from "Albion Magnesium Bisglycinate Chelate").
+            # In that case prefer raw_source_text so IQM alias matching can resolve the full form.
+            _bte = ingredient.get('branded_token_extracted', '')
+            _raw = ingredient.get('name', '')
+            if _bte and _bte != _raw:
+                ing_name = _bte
+            else:
+                ing_name = ingredient.get('raw_source_text') or _raw
             std_name = ingredient.get('standardName', '') or ing_name
             quantity = ingredient.get('quantity', 0)
             unit = ingredient.get('unit', '')
@@ -1635,8 +1697,14 @@ class SupplementEnricherV3:
         # PASS 2: Rescue therapeutic actives from inactiveIngredients
         # =================================================================
         for ingredient in inactive_ingredients:
-            # Use branded_token_extracted for matching if present
-            ing_name = ingredient.get('branded_token_extracted') or ingredient.get('name', '')
+            # Same branded_token_extracted logic as Pass 1: prefer raw_source_text when
+            # the token was collapsed to just the brand prefix (e.g., "Albion").
+            _bte = ingredient.get('branded_token_extracted', '')
+            _raw = ingredient.get('name', '')
+            if _bte and _bte != _raw:
+                ing_name = _bte
+            else:
+                ing_name = ingredient.get('raw_source_text') or _raw
             std_name = ingredient.get('standardName', '') or ing_name
             quantity = ingredient.get('quantity', 0)
             unit = ingredient.get('unit', '')
@@ -1848,7 +1916,6 @@ class SupplementEnricherV3:
     def _compute_excipient_flags(self, ingredient: Dict) -> Tuple[bool, Optional[str]]:
         """Determine excipient status for ingredient-level signals."""
         ing_name = (ingredient.get('name', '') or '').strip().lower()
-        std_name = (ingredient.get('standardName', '') or ing_name).strip().lower()
 
         if ingredient.get('isAdditive', False):
             return True, SKIP_REASON_ADDITIVE
@@ -1857,11 +1924,14 @@ class SupplementEnricherV3:
         if additive_type and additive_type.lower() in ADDITIVE_TYPES_SKIP_SCORING:
             return True, SKIP_REASON_ADDITIVE_TYPE
 
-        if ing_name in EXCIPIENT_NEVER_PROMOTE or std_name in EXCIPIENT_NEVER_PROMOTE:
+        # Check ingredient name only — DSLD standardName can misclassify active botanicals
+        # (e.g. Elderberry/Turmeric → "natural colors"), causing false excipient gates.
+        # isAdditive=True (genuine additives) is already handled above.
+        if ing_name in EXCIPIENT_NEVER_PROMOTE:
             return True, "excipient_never_promote"
 
         for excipient in EXCIPIENT_NEVER_PROMOTE:
-            if excipient in ing_name or excipient in std_name:
+            if excipient in ing_name:
                 return True, "excipient_never_promote"
 
         return False, None
@@ -1984,6 +2054,23 @@ class SupplementEnricherV3:
             exclusion_reason = self._excluded_text_reason(text)
             if exclusion_reason:
                 return exclusion_reason
+
+        # =================================================================
+        # STRUCTURAL BLEND CHECK: Containers with nested children are never
+        # individually scored — even if the name is a known therapeutic.
+        # "Full Spectrum Turmeric Blend" (nested: Turmeric Extract, Turmeric
+        # Root) must be skipped; its dose is the total blend weight, not an
+        # individual ingredient dose.  This check intentionally runs BEFORE
+        # the therapeutic override below.
+        # =================================================================
+        nested_pre = ingredient.get('nestedIngredients') or []
+        ingredient_group_pre = (ingredient.get('ingredientGroup', '') or '').lower()
+        if isinstance(nested_pre, list) and nested_pre and 'blend' in ingredient_group_pre:
+            has_dose_pre, _ = self._has_valid_therapeutic_dose(ingredient)
+            return (
+                SKIP_REASON_BLEND_HEADER_WITH_WEIGHT if has_dose_pre
+                else SKIP_REASON_BLEND_HEADER_NO_DOSE
+            )
 
         # =================================================================
         # OVERRIDE CHECK: If known in quality map or botanicals, always score
@@ -2329,7 +2416,15 @@ class SupplementEnricherV3:
                 variants.add(re.sub(r'\b(root|leaf|fruit|seed|flower|bark)\b', '', v).strip())
             return [v for v in variants if v]
 
-        candidates = set(_variants(ing_name) + _variants(std_name))
+        # Guard: don't include std_name in candidates when it's a known excipient/category
+        # descriptor. DSLD sometimes assigns standardName="natural colors" to botanical
+        # actives (e.g., elderberry), which would falsely match NHA_NATURAL_COLORS if
+        # std_name variants were included.
+        std_name_norm = self._normalize_text(std_name)
+        if std_name_norm in EXCIPIENT_NEVER_PROMOTE:
+            candidates = set(_variants(ing_name))
+        else:
+            candidates = set(_variants(ing_name) + _variants(std_name))
 
         # Check other_ingredients.json
         other_db = self.databases.get('other_ingredients', {})
@@ -2431,22 +2526,25 @@ class SupplementEnricherV3:
                 }
 
         # Check against EXCIPIENT_NEVER_PROMOTE constant list
-        # These are explicitly known non-therapeutic ingredients
+        # Only check ing_name (the label-facing name), NOT std_name.
+        # DSLD sometimes assigns a category std_name like "natural colors" to botanical
+        # actives (e.g., elderberry), and using std_name here would falsely classify
+        # them as excipients. This mirrors the P0 fix in _compute_excipient_flags.
         name_lower = ing_name.lower().strip()
-        std_lower = std_name.lower().strip()
 
-        if name_lower in EXCIPIENT_NEVER_PROMOTE or std_lower in EXCIPIENT_NEVER_PROMOTE:
+        if name_lower in EXCIPIENT_NEVER_PROMOTE:
             return {
                 "recognition_source": "excipient_list",
                 "recognition_reason": "known_excipient",
                 "matched_entry_id": None,
-                "matched_entry_name": name_lower if name_lower in EXCIPIENT_NEVER_PROMOTE else std_lower,
+                "matched_entry_name": name_lower,
                 "recognition_type": "non_scorable",
             }
 
         # Check for partial matches (e.g., "organic sunflower oil" matches "sunflower oil")
+        # Only match against ing_name — std_name is excluded for the same reason as above.
         for excipient in EXCIPIENT_NEVER_PROMOTE:
-            if excipient in name_lower or excipient in std_lower:
+            if excipient in name_lower:
                 return {
                     "recognition_source": "excipient_list",
                     "recognition_reason": "known_excipient_partial",
@@ -2678,6 +2776,28 @@ class SupplementEnricherV3:
         if not extracted_forms:
             return None
 
+        # Derive preferred_parent from base ingredient name.
+        # This resolves compound forms (e.g., "calcium ascorbate") that exist
+        # under multiple parents — the parent matching the base ingredient wins.
+        preferred_parent = None
+        base_name = form_info.get('base_name', '')
+        if base_name:
+            base_norm = self._normalize_text(base_name)
+            for parent_key, parent_data in quality_map.items():
+                if parent_key.startswith('_') or not isinstance(parent_data, dict):
+                    continue
+                parent_std = self._normalize_text(parent_data.get('standard_name', ''))
+                if base_norm == parent_std or base_norm == parent_key:
+                    preferred_parent = parent_key
+                    break
+                # Also check parent aliases
+                for alias in parent_data.get('aliases', []):
+                    if base_norm == self._normalize_text(alias):
+                        preferred_parent = parent_key
+                        break
+                if preferred_parent:
+                    break
+
         matched_forms = []
         unmapped_forms = []
         generic_form_tokens = []
@@ -2693,7 +2813,8 @@ class SupplementEnricherV3:
             matched_unspecified = False
             for candidate in match_candidates:
                 form_match = self._match_quality_map(
-                    candidate, candidate, quality_map, _form_extraction_attempt=True
+                    candidate, candidate, quality_map, _form_extraction_attempt=True,
+                    preferred_parent=preferred_parent
                 )
                 if form_match:
                     form_id = form_match.get('form_id', '')
@@ -2856,14 +2977,45 @@ class SupplementEnricherV3:
         if not cleaned_forms:
             return None
 
+        # Pre-pass: identify "from"-prefix forms and link them as source hints to
+        # the preceding form.  A form with prefix "from" (e.g. "L-5-Methyltetrahydrofolic
+        # Acid" with prefix="from" following "Glucosamine Salt") describes the SOURCE
+        # MATERIAL the compound is derived from, not an independent chemical form.
+        # Adding the source name as a high-priority match candidate lets the IQM
+        # resolve the biologically-active compound rather than the salt/carrier.
+        _FROM_PREFIXES = frozenset({'from', 'From', 'from '})
+        from_source_map: Dict[int, str] = {}  # index → source name
+        for i, form in enumerate(cleaned_forms):
+            if form.get('prefix', '') in _FROM_PREFIXES and i > 0:
+                src = (form.get('name') or '').strip()
+                if src:
+                    from_source_map[i - 1] = src
+
         extracted_forms = []
-        for form in cleaned_forms:
+        for i, form in enumerate(cleaned_forms):
+            # Skip forms that are source descriptors (prefix "from"):
+            # their names are already inserted as priority candidates for the
+            # preceding form via from_source_map.
+            if form.get('prefix', '') in _FROM_PREFIXES:
+                continue
+
             form_name = form.get('name', '')
             if not form_name or not form_name.strip():
                 continue
 
-            # Build match candidates: the form name itself + common variations
-            match_candidates = [form_name]
+            # Build match candidates.  If a "from"-source exists for this form,
+            # prepend it so the biologically-active acid is tried before the
+            # salt/carrier name.
+            match_candidates = []
+            if i in from_source_map:
+                source_name = from_source_map[i]
+                match_candidates.append(source_name)
+                stripped_src = source_name.strip()
+                if stripped_src != source_name:
+                    match_candidates.append(stripped_src)
+
+            # Then try the form name itself + common variations
+            match_candidates.append(form_name)
             # Also try lowercase and stripped version
             stripped = form_name.strip()
             if stripped != form_name:
@@ -2916,7 +3068,8 @@ class SupplementEnricherV3:
 
     def _match_quality_map(self, ing_name: str, std_name: str, quality_map: Dict,
                            _form_extraction_attempt: bool = False,
-                           cleaned_forms: Optional[List[Dict]] = None) -> Optional[Dict]:
+                           cleaned_forms: Optional[List[Dict]] = None,
+                           preferred_parent: Optional[str] = None) -> Optional[Dict]:
         """
         Match ingredient against quality map using explicit precedence rules.
 
@@ -2929,10 +3082,11 @@ class SupplementEnricherV3:
         6. Parent-level pattern/contains match (if present in DB)
 
         Tie-breakers (within same tier):
-        1. Longest matched alias wins
-        2. Form-level outranks parent-level (if applicable)
-        3. Canonical key alphabetical
-        4. Form key alphabetical
+        1. Context parent preference (when available)
+        2. Longest matched alias wins
+        3. Form-level outranks parent-level (if applicable)
+        4. Canonical key alphabetical
+        5. Form key alphabetical
 
         Multi-Form Enhancement:
         - Uses pre-parsed cleaned_forms[] from cleaning stage when available
@@ -3059,6 +3213,32 @@ class SupplementEnricherV3:
                 stripped = re.sub(r'\s+\d+(?:\.\d+)?\s*%\s*$', '', stripped).strip()
                 if stripped and stripped != base_name:
                     base_name = stripped
+
+        def _infer_preferred_parent_from_context(context_name: Optional[str]) -> Optional[str]:
+            """Resolve parent key from contextual ingredient naming (std/base/raw)."""
+            context_norm = self._normalize_text(context_name or "")
+            if not context_norm:
+                return None
+            for parent_key, parent_data in quality_map.items():
+                if parent_key.startswith("_") or not isinstance(parent_data, dict):
+                    continue
+                parent_std = self._normalize_text(parent_data.get('standard_name', ''))
+                if context_norm == parent_std or context_norm == self._normalize_text(parent_key):
+                    return parent_key
+                for alias in parent_data.get('aliases', []):
+                    if context_norm == self._normalize_text(alias):
+                        return parent_key
+            return None
+
+        # If caller didn't pass a parent context, infer from standardized/base names.
+        # This prevents deterministic-but-wrong alphabetical picks when one form exists
+        # under multiple parents (e.g., calcium pantothenate under calcium and B5).
+        if not preferred_parent:
+            for context_name in (std_name, base_name, ing_name):
+                inferred_parent = _infer_preferred_parent_from_context(context_name)
+                if inferred_parent:
+                    preferred_parent = inferred_parent
+                    break
 
         # If base name is different from full name, include it in matching candidates
         base_exact = self._normalize_exact_text(base_name) if base_name else None
@@ -3468,14 +3648,20 @@ class SupplementEnricherV3:
             return None
 
         def candidate_sort_key(candidate: Dict) -> Tuple:
+            # Prefer candidate whose parent matches the base ingredient context.
+            # This resolves compound forms like "calcium ascorbate" appearing under
+            # both vitamin_c and calcium — when the base ingredient is "Vitamin C",
+            # vitamin_c wins; when it's "Calcium", calcium wins.
+            parent_pref = 0 if (preferred_parent and candidate["parent_key"] == preferred_parent) else 1
             return (
                 candidate["tier"],                      # 1. Tier (exact > normalized > contains/pattern)
                 candidate.get("match_source", 1),       # 2. Match source (raw > std > base)
                 candidate.get("priority", 1),           # 3. Priority from match_rules (0 > 1 > 2)
-                -candidate["alias_len"],                # 4. Longer alias wins within same priority
-                0 if candidate["form_key"] else 1,      # 5. Form-level beats parent-level
-                candidate["parent_key"],                # 6. Alphabetical parent key
-                candidate["form_key"] or "",            # 7. Alphabetical form key
+                parent_pref,                            # 4. Prefer parent matching base ingredient
+                -candidate["alias_len"],                # 5. Longer alias wins within same priority
+                0 if candidate["form_key"] else 1,      # 6. Form-level beats parent-level
+                candidate["parent_key"],                # 7. Alphabetical parent key
+                candidate["form_key"] or "",            # 8. Alphabetical form key
             )
 
         candidates.sort(key=candidate_sort_key)
@@ -3502,23 +3688,27 @@ class SupplementEnricherV3:
                 if any(c.get("priority", 1) != best_priority for c in winning_candidates):
                     reasons.append("match_rules_priority")  # Priority from match_rules
                 else:
-                    best_alias_len = best["alias_len"]
-                    if any(c["alias_len"] != best_alias_len for c in winning_candidates):
-                        reasons.append("longest_alias")
+                    best_parent_pref = 0 if (preferred_parent and best["parent_key"] == preferred_parent) else 1
+                    if any((0 if (preferred_parent and c["parent_key"] == preferred_parent) else 1) != best_parent_pref for c in winning_candidates):
+                        reasons.append("parent_context_preference")
                     else:
-                        best_form_rank = 0 if best["form_key"] else 1
-                        if any((0 if c["form_key"] else 1) != best_form_rank for c in winning_candidates):
-                            reasons.append("form_over_parent")
+                        best_alias_len = best["alias_len"]
+                        if any(c["alias_len"] != best_alias_len for c in winning_candidates):
+                            reasons.append("longest_alias")
                         else:
-                            best_parent_key = best["parent_key"]
-                            if any(c["parent_key"] != best_parent_key for c in winning_candidates):
-                                reasons.append("alphabetical_parent_key")
+                            best_form_rank = 0 if best["form_key"] else 1
+                            if any((0 if c["form_key"] else 1) != best_form_rank for c in winning_candidates):
+                                reasons.append("form_over_parent")
                             else:
-                                best_form_key = best["form_key"] or ""
-                                if any((c["form_key"] or "") != best_form_key for c in winning_candidates):
-                                    reasons.append("alphabetical_form_key")
+                                best_parent_key = best["parent_key"]
+                                if any(c["parent_key"] != best_parent_key for c in winning_candidates):
+                                    reasons.append("alphabetical_parent_key")
                                 else:
-                                    reasons.append("alphabetical_fallback")
+                                    best_form_key = best["form_key"] or ""
+                                    if any((c["form_key"] or "") != best_form_key for c in winning_candidates):
+                                        reasons.append("alphabetical_form_key")
+                                    else:
+                                        reasons.append("alphabetical_fallback")
 
             payload = {
                 "ingredient_raw": ing_name,
@@ -3544,12 +3734,16 @@ class SupplementEnricherV3:
                     "tier": best["tier"],
                     "alias_len": best["alias_len"],
                 },
+                "preferred_parent": preferred_parent,
                 "reason": reasons,
             }
             ambiguity_candidates = payload["candidates"]
-            # Only warn if not resolved by raw_name_priority (clean resolution via match source)
+            # Only warn if not resolved cleanly by source precedence or context parent preference.
             # Set ENRICH_DEBUG_AMBIGUITY=1 to see all ambiguity warnings
-            if "raw_name_priority" not in reasons or os.environ.get("ENRICH_DEBUG_AMBIGUITY"):
+            if (
+                ("raw_name_priority" not in reasons and "parent_context_preference" not in reasons)
+                or os.environ.get("ENRICH_DEBUG_AMBIGUITY")
+            ):
                 self._ambiguity_warning_count += 1
                 if self._ambiguity_warning_count <= 10:
                     self.logger.warning(f"Ambiguous quality-map match: {json.dumps(payload, sort_keys=True)}")
@@ -3561,7 +3755,9 @@ class SupplementEnricherV3:
                 else:
                     self.logger.debug(f"Ambiguous quality-map match: {json.dumps(payload, sort_keys=True)}")
             else:
-                self.logger.debug(f"Ambiguity resolved by raw_name_priority: {json.dumps(payload, sort_keys=True)}")
+                self.logger.debug(
+                    f"Ambiguity resolved by source/context precedence: {json.dumps(payload, sort_keys=True)}"
+                )
 
         best["match_data"]["canonical_id"] = best["parent_key"]
         best["match_data"]["form_id"] = best["form_key"] or best["fallback_form_name"]
@@ -3679,7 +3875,8 @@ class SupplementEnricherV3:
         enhanced_nutrients_present = []
 
         for enhancer in enhancers_list:
-            enhancer_name = enhancer.get('name', '')
+            # DB uses standard_name (not name) as primary identifier
+            enhancer_name = enhancer.get('standard_name') or enhancer.get('name', '')
             enhancer_aliases = enhancer.get('aliases', [])
 
             # Check if enhancer present
@@ -3758,6 +3955,16 @@ class SupplementEnricherV3:
 
         # ENHANCED (v1.0.0): Evidence-based organic detection
         organic_evidence = self._collect_claims_from_rules_db(product, 'organic_certifications')
+        certified_organic_evidence = any(
+            ev.get("score_eligible", False) and ev.get("rule_id") == "CERT_USDA_ORGANIC"
+            for ev in organic_evidence
+        )
+
+        if certified_organic_evidence:
+            claimed = True
+            usda_verified = True
+            if not claim_text:
+                claim_text = "USDA Organic"
 
         return {
             # Legacy format for backward compatibility
@@ -4749,6 +4956,44 @@ class SupplementEnricherV3:
         # ENHANCED (v1.0.0): Evidence-based allergen claims with validation
         allergen_evidence = self._collect_claims_from_rules_db(product, 'allergen_free_claims')
 
+        # Promote evidence-based allergen claims to canonical flags so statement-only
+        # labels (without targetGroups metadata) do not silently miss bonuses.
+        eligible_allergen_evidence = [ev for ev in allergen_evidence if ev.get('score_eligible', False)]
+        claim_keys = set(str(x).strip().lower() for x in allergen_free_claims if x)
+        for ev in eligible_allergen_evidence:
+            dedupe_key = str(ev.get('dedupe_key', '')).strip().lower()
+            if dedupe_key.startswith('allergen_free:'):
+                key = dedupe_key.split(':', 1)[1].strip()
+                if key:
+                    claim_keys.add(key)
+        allergen_free_claims = sorted(claim_keys)
+
+        gluten_free = gluten_free or any(
+            ev.get('rule_id') in {'CLAIM_GLUTEN_FREE', 'CLAIM_GLUTEN_FREE_GFCO'}
+            for ev in eligible_allergen_evidence
+        )
+        dairy_free = dairy_free or any(
+            str(ev.get('dedupe_key', '')).lower() == 'allergen_free:dairy'
+            for ev in eligible_allergen_evidence
+        )
+        soy_free = soy_free or any(
+            str(ev.get('dedupe_key', '')).lower() == 'allergen_free:soy'
+            for ev in eligible_allergen_evidence
+        )
+
+        eligible_dietary_evidence = [
+            ev for ev in eligible_allergen_evidence
+            if str(ev.get('dedupe_key', '')).lower().startswith('dietary:')
+        ]
+        vegan = vegan or any(
+            ev.get('rule_id') in {'CLAIM_VEGAN', 'CLAIM_VEGAN_CERTIFIED'}
+            for ev in eligible_dietary_evidence
+        )
+        vegetarian = vegetarian or any(
+            ev.get('rule_id') == 'CLAIM_VEGETARIAN'
+            for ev in eligible_dietary_evidence
+        )
+
         # Apply conflict checking to evidence objects
         for evidence in allergen_evidence:
             conflict_allergens = []
@@ -5227,6 +5472,12 @@ class SupplementEnricherV3:
         gmp_evidence = self._collect_claims_from_rules_db(product, 'gmp_certifications')
         batch_evidence = self._collect_claims_from_rules_db(product, 'batch_traceability')
 
+        # Merge evidence-based third-party detections into legacy structure.
+        # Scoring currently reads projected named_cert_programs from
+        # certification_data.third_party_programs.programs, so keep that source
+        # complete even when only rules-db evidence finds a match.
+        third_party = self._merge_evidence_third_party_programs(third_party, third_party_evidence)
+
         # Derive safety flags from certifications
         # These programs test for heavy metals, contaminants, and/or label accuracy
         safety_flags = self._derive_safety_flags(third_party, product)
@@ -5250,13 +5501,53 @@ class SupplementEnricherV3:
             }
         }
 
+    def _merge_evidence_third_party_programs(self, third_party: Dict, evidence_list: List[Dict]) -> Dict:
+        """
+        Backfill third_party_programs from rules-db evidence when legacy regex
+        misses formatting variants (e.g., line breaks in certification claims).
+        """
+        programs = list((third_party or {}).get("programs", []) or [])
+        existing = {self._normalize_text((p or {}).get("name")) for p in programs if isinstance(p, dict)}
+
+        # Map evidence rule IDs to canonical display names used by safety flags.
+        canonical_name_map = {
+            "CERT_NSF_SPORT": "NSF Sport",
+            "CERT_NSF_CONTENTS": "NSF Certified",
+            "CERT_USP_VERIFIED": "USP Verified",
+            "CERT_CONSUMERLAB": "ConsumerLab",
+            "CERT_INFORMED_SPORT": "Informed Sport",
+            "CERT_INFORMED_CHOICE": "Informed Choice",
+            "CERT_BSCG": "BSCG",
+            "CERT_IFOS": "IFOS",
+            "CERT_LABDOOR": "Labdoor Tested",
+        }
+
+        for ev in evidence_list or []:
+            if not isinstance(ev, dict) or not ev.get("score_eligible", False):
+                continue
+            rule_id = self._normalize_text(ev.get("rule_id"))
+            mapped_name = canonical_name_map.get(rule_id.upper()) if rule_id else None
+            if not mapped_name:
+                mapped_name = ev.get("display_name")
+            key = self._normalize_text(mapped_name)
+            if not key or key in existing:
+                continue
+            programs.append({"name": mapped_name, "verified": True, "source": "rules_db"})
+            existing.add(key)
+
+        merged = dict(third_party or {})
+        merged["programs"] = programs
+        merged["count"] = len(programs)
+        merged["has_generic_claim_only"] = bool(merged.get("has_generic_claim_only", False) and len(programs) == 0)
+        return merged
+
     def _collect_third_party_certs(self, text: str) -> List[Dict]:
         """Collect third-party testing certifications"""
         certs = []
 
         # Priority certification patterns (named programs only)
         cert_checks = [
-            ("NSF Sport", r'\bNSF\b.*certified\s*for\s*sport\b|\bNSF[-\s]?sport\b'),
+            ("NSF Sport", r'\bNSF\b.*certified(?:\s*for)?\s*sport\b|\bNSF[-\s]?sport\b'),
             ("NSF Certified", r'\bNSF\b.*(certified|certification)\b(?!.*sport)|\bNSF/ANSI\s*173\b'),
             ("USP Verified", r'\bUSP\b.*(Verified|Verification\s*Program)\b'),
             ("ConsumerLab", r'\bConsumerLab\b.*(Approved|Seal)\b'),
@@ -5476,18 +5767,70 @@ class SupplementEnricherV3:
         inactive_ingredients = product.get('inactiveIngredients', [])
         total_active = len(active_ingredients)
 
+        def _looks_like_blend_label(value: str) -> bool:
+            text = (value or "").strip().lower()
+            if not text:
+                return False
+            normalized = self._normalize_exclusion_text(text)
+            if normalized in BLEND_HEADER_EXACT_NAMES:
+                return True
+            for pattern in BLEND_HEADER_PATTERNS_HIGH_CONFIDENCE:
+                if re.search(pattern, text, re.IGNORECASE):
+                    return True
+            for pattern in BLEND_HEADER_PATTERNS_LOW_CONFIDENCE:
+                if re.search(pattern, text, re.IGNORECASE):
+                    return True
+            # Safety net for simple canonical blend terms.
+            return bool(re.search(r"\b(proprietary|blend|complex|matrix|formula|stack)\b", text))
+
+        def _is_non_proprietary_aggregate(value: str) -> bool:
+            text = (value or "").strip().lower()
+            if not text:
+                return False
+            normalized = self._normalize_exclusion_text(text)
+            if self._excluded_text_reason(text):
+                return True
+            if normalized in {"total cultures", "total omega 3s", "total omega 6s", "total omega 9s"}:
+                return True
+            if re.match(r"^(total|other)\s+", normalized) and not re.search(
+                r"\b(proprietary|blend|complex|matrix|formula|stack)\b", normalized
+            ):
+                return True
+            return False
+
         # Step 1: Collect detector blends (pattern-based)
         detector_blends = []
         if self.blend_detector:
             try:
                 result = self.blend_detector.analyze_product(product)
                 for blend in result.blends_detected:
+                    detector_with_amounts = blend.ingredients_with_amounts or []
+                    detector_without_amounts = blend.ingredients_without_amounts or []
+                    detector_children = [
+                        {
+                            "name": item.get("name", ""),
+                            "amount": item.get("amount"),
+                            "unit": item.get("unit", "") or "",
+                        }
+                        for item in detector_with_amounts
+                    ] + [
+                        {
+                            "name": name,
+                            "amount": None,
+                            "unit": "",
+                        }
+                        for name in detector_without_amounts
+                    ]
                     detector_blends.append({
                         "name": blend.blend_name,
                         "disclosure_level": blend.disclosure_level,
                         "nested_count": blend.blend_ingredient_count,
                         "total_weight": blend.blend_total_amount,
                         "unit": blend.blend_total_unit or "",
+                        "hidden_count": len(detector_without_amounts),
+                        "source_field": blend.source_field,
+                        "source_path": blend.source_field,
+                        "child_ingredients": detector_children,
                         "sources": ["detector"],
                         "evidence": {
                             "blend_id": blend.blend_id,
@@ -5512,21 +5855,73 @@ class SupplementEnricherV3:
         # inflating B5 penalties (e.g., each enzyme row being treated as a separate blend).
         cleaning_blends = []
         nested_parent_groups = {}
-        for ingredient in active_ingredients + inactive_ingredients:
-            is_blend = (
-                ingredient.get('proprietaryBlend', False) or
-                ingredient.get('isProprietaryBlend', False)
-            )
-            if is_blend:
+        def _collect_child_amounts(children: List[Dict]) -> Tuple[List[Dict], List[str]]:
+            with_amounts: List[Dict] = []
+            without_amounts: List[str] = []
+            for child in children:
+                if not isinstance(child, dict):
+                    continue
+                child_name = (child.get("name", "") or "").strip()
+                child_qty = child.get("quantity")
+                if isinstance(child_qty, (int, float)) and child_qty > 0:
+                    with_amounts.append(
+                        {
+                            "name": child_name,
+                            "amount": float(child_qty),
+                            "unit": (child.get("unit", "") or ""),
+                        }
+                    )
+                elif child_name:
+                    without_amounts.append(child_name)
+            return with_amounts, without_amounts
+
+        for source_name, ingredient_list in (
+            ("activeIngredients", active_ingredients),
+            ("inactiveIngredients", inactive_ingredients),
+        ):
+            for idx, ingredient in enumerate(ingredient_list):
+                is_blend = (
+                    ingredient.get('proprietaryBlend', False) or
+                    ingredient.get('isProprietaryBlend', False)
+                )
+                if not is_blend:
+                    continue
+
                 disclosure = ingredient.get('disclosureLevel', 'none')
                 nested = ingredient.get('nestedIngredients', [])
                 is_nested = bool(ingredient.get('isNestedIngredient', False))
                 parent_blend = (ingredient.get('parentBlend', '') or '').strip()
                 quantity = ingredient.get('quantity', 0) or 0
                 unit = ingredient.get('unit', '') or ''
+                ingredient_group = ingredient.get('ingredientGroup', '') or ''
+                source_field = f"{source_name}[{idx}]"
+                name = ingredient.get('name', '') or ''
+                has_nested_children = isinstance(nested, list) and len(nested) > 0
+                has_parent = bool(parent_blend)
+                name_looks_like_blend = (
+                    _looks_like_blend_label(name)
+                    or _looks_like_blend_label(ingredient_group)
+                )
+                parent_looks_like_blend = _looks_like_blend_label(parent_blend)
+                parent_is_non_proprietary_aggregate = _is_non_proprietary_aggregate(parent_blend)
+                name_is_non_proprietary_aggregate = _is_non_proprietary_aggregate(name)
+
+                # Clean-stage proprietary flags can leak onto single ingredients
+                # (e.g., "Vitamin D", "Bacillus coagulans"). Keep only entries
+                # with structural blend evidence.
+                if name_is_non_proprietary_aggregate:
+                    continue
+                if not has_nested_children and not has_parent and not name_looks_like_blend:
+                    continue
 
                 # Roll nested rows under parent blend key when available.
                 if is_nested and parent_blend:
+                    # Parent aggregates like "Total Cultures"/"Total Omega-3s"
+                    # are not proprietary blends unless the parent label itself
+                    # carries proprietary/blend structure.
+                    if parent_is_non_proprietary_aggregate or not parent_looks_like_blend:
+                        continue
+
                     group_key = (parent_blend.lower(), disclosure)
                     group = nested_parent_groups.get(group_key)
                     if not group:
@@ -5536,33 +5931,89 @@ class SupplementEnricherV3:
                             "nested_count": 0,
                             "total_weight": 0.0,
                             "unit": "",
+                            "hidden_count": 0,
+                            "source_field": source_field,
+                            "source_path": source_field,
                             "sources": ["cleaning"],
-                            "evidence": None,
-                            "_child_names": set()
+                            "_source_fields": set(),
+                            "_children_with_amounts": [],
+                            "_children_without_amounts": set(),
                         }
                         nested_parent_groups[group_key] = group
 
+                    group["_source_fields"].add(source_field)
                     child_name = (ingredient.get('name', '') or '').strip()
-                    if child_name:
-                        group["_child_names"].add(child_name.lower())
+                    child_qty = ingredient.get('quantity')
+                    child_unit = ingredient.get('unit', '') or ''
+                    if isinstance(child_qty, (int, float)) and child_qty > 0 and child_name:
+                        group["_children_with_amounts"].append(
+                            {"name": child_name, "amount": float(child_qty), "unit": child_unit}
+                        )
+                    elif child_name:
+                        group["_children_without_amounts"].add(child_name)
+
                     # Preserve any measured parent quantity if it exists on nested rows.
                     if isinstance(quantity, (int, float)) and quantity > group["total_weight"]:
                         group["total_weight"] = float(quantity)
                         group["unit"] = unit
                     continue
 
+                children_with_amounts, children_without_amounts = _collect_child_amounts(
+                    nested if isinstance(nested, list) else []
+                )
+                child_ingredients = [
+                    {
+                        "name": item.get("name", ""),
+                        "amount": item.get("amount"),
+                        "unit": item.get("unit", "") or "",
+                    }
+                    for item in children_with_amounts
+                ] + [
+                    {"name": child_name, "amount": None, "unit": ""}
+                    for child_name in children_without_amounts
+                ]
                 cleaning_blends.append({
                     "name": ingredient.get('name', ''),
                     "disclosure_level": disclosure,
                     "nested_count": len(nested),
+                    "hidden_count": len(children_without_amounts),
                     "total_weight": quantity,
                     "unit": unit,
+                    "source_field": source_field,
+                    "source_path": source_field,
+                    "child_ingredients": child_ingredients,
                     "sources": ["cleaning"],
-                    "evidence": None
+                    "evidence": {
+                        "source_field": source_field,
+                        "ingredients_with_amounts": children_with_amounts,
+                        "ingredients_without_amounts": children_without_amounts,
+                    }
                 })
 
         for group in nested_parent_groups.values():
-            group["nested_count"] = max(group["nested_count"], len(group.pop("_child_names", set())))
+            with_amounts = group.pop("_children_with_amounts", [])
+            without_amounts = sorted(group.pop("_children_without_amounts", set()))
+            source_fields = sorted(group.pop("_source_fields", set()))
+            group["source_fields"] = source_fields
+            if source_fields:
+                group["source_field"] = source_fields[0]
+                group["source_path"] = source_fields[0]
+            group["child_ingredients"] = [
+                {
+                    "name": item.get("name", ""),
+                    "amount": item.get("amount"),
+                    "unit": item.get("unit", "") or "",
+                }
+                for item in with_amounts
+            ] + [{"name": child_name, "amount": None, "unit": ""} for child_name in without_amounts]
+            group["hidden_count"] = len(without_amounts)
+            group["evidence"] = {
+                "source_field": group.get("source_field", ""),
+                "source_fields": source_fields,
+                "ingredients_with_amounts": with_amounts,
+                "ingredients_without_amounts": without_amounts,
+            }
+            group["nested_count"] = max(group["nested_count"], len(with_amounts) + len(without_amounts))
             cleaning_blends.append(group)
 
         # Step 3: Merge and dedupe using union-of-evidence
@@ -5662,10 +6113,38 @@ class SupplementEnricherV3:
                 existing_sources = set(existing.get("sources", []))
                 existing_sources.add("cleaning")
                 existing["sources"] = list(existing_sources)
+                # Preserve source field provenance.
+                source_paths = set(existing.get("source_fields", []))
+                if existing.get("source_field"):
+                    source_paths.add(existing["source_field"])
+                if cleaning_blend.get("source_field"):
+                    source_paths.add(cleaning_blend["source_field"])
+                for path in cleaning_blend.get("source_fields", []):
+                    if path:
+                        source_paths.add(path)
+                existing["source_fields"] = sorted(source_paths)
+                if existing.get("source_fields"):
+                    existing["source_field"] = existing["source_fields"][0]
+                    existing["source_path"] = existing["source_fields"][0]
                 # Prefer cleaning name for UI (label-facing, more specific)
                 # Keep detector_group as the classifier category
                 if cleaning_blend.get("name"):
                     existing["name"] = cleaning_blend["name"]
+                # Prefer richer child payload from cleaning when available.
+                if cleaning_blend.get("child_ingredients"):
+                    existing["child_ingredients"] = cleaning_blend.get("child_ingredients", [])
+                    existing["hidden_count"] = cleaning_blend.get("hidden_count", existing.get("hidden_count", 0))
+                    cleaning_evidence = cleaning_blend.get("evidence") or {}
+                    existing_evidence = existing.get("evidence") or {}
+                    existing_evidence["ingredients_with_amounts"] = cleaning_evidence.get(
+                        "ingredients_with_amounts",
+                        existing_evidence.get("ingredients_with_amounts", []),
+                    )
+                    existing_evidence["ingredients_without_amounts"] = cleaning_evidence.get(
+                        "ingredients_without_amounts",
+                        existing_evidence.get("ingredients_without_amounts", []),
+                    )
+                    existing["evidence"] = existing_evidence
             else:
                 # New blend from cleaning only - no detector_group
                 blend_copy = cleaning_blend.copy()
@@ -5677,7 +6156,7 @@ class SupplementEnricherV3:
     def _extract_strain_ids_from_product(self, product: Dict) -> List[str]:
         """Extract probiotic strain IDs from product text and ingredient fields."""
         strain_id_pattern = re.compile(
-            r'(atcc\s*(?:pta\s*)?[\d]+|dsm\s*[\d]+|ncfm|gg|k12|m18|bb-?12|bb536|hn019|bi-?07|de111|299v)',
+            r'(atcc\s*(?:pta\s*)?[\d]+|dsm\s*[\d]+|ncfm|\bgg\b|\bk12\b|\bm18\b|bb-?12|bb536|hn019|bi-?07|de111|299v)',
             re.IGNORECASE
         )
         texts = [self._get_all_product_text(product)]
@@ -5815,9 +6294,11 @@ class SupplementEnricherV3:
                 if min_dose > 0:
                     checkable.append(item)
 
+            # Require at least one ingredient with a defined effective-dose threshold.
+            # This prevents broad "ingredient co-occurrence" matches from earning A5c
+            # without any dose-anchored evidence check.
             if not checkable:
-                synergy_cluster_qualified = True
-                break
+                continue
 
             dosed = [item for item in checkable if bool(item.get("meets_minimum", False))]
             required = (len(checkable) + 1) // 2
@@ -5934,13 +6415,18 @@ class SupplementEnricherV3:
         for ingredient in active_ingredients:
             ing_name = ingredient.get('name', '')
             std_name = ingredient.get('standardName', '') or ing_name
+            candidate_names = [
+                ing_name,
+                std_name,
+                ingredient.get("raw_source_text", ""),
+            ]
 
             for study in studies:
                 study_name = study.get('standard_name', '')
-                study_aliases = study.get('aliases', [])
+                study_aliases = self._collect_clinical_aliases(study)
+                matched = self._clinical_study_match(candidate_names, study)
 
-                if self._exact_match(ing_name, study_name, study_aliases) or \
-                   self._exact_match(std_name, study_name, study_aliases):
+                if matched:
 
                     # For brand-specific studies, check brand mention
                     study_id = study.get('id', '')
@@ -5948,16 +6434,36 @@ class SupplementEnricherV3:
                         if not self._brand_mentioned(study_name, study_aliases, product):
                             continue
 
-                    matches.append({
+                    match_payload = {
                         "ingredient": ing_name,
+                        "standard_name": study_name,
+                        "id": study_id,
                         "study_id": study_id,
                         "study_name": study_name,
+                        "match_method": matched.get("method"),
+                        "matched_term": matched.get("matched_term"),
                         "evidence_level": study.get('evidence_level', 'ingredient-human'),
                         "study_type": study.get('study_type', 'rct_single'),
                         "score_contribution": study.get('score_contribution', 'tier_3'),
                         "health_goals_supported": study.get('health_goals_supported', []),
                         "key_endpoints": study.get('key_endpoints', [])
-                    })
+                    }
+
+                    # Optional schema extensions (forward-compatible passthrough).
+                    optional_fields = [
+                        "min_clinical_dose",
+                        "dose_unit",
+                        "typical_effective_dose",
+                        "dose_range",
+                        "base_points",
+                        "multiplier",
+                        "computed_score",
+                    ]
+                    for field in optional_fields:
+                        if field in study and study.get(field) is not None:
+                            match_payload[field] = study.get(field)
+
+                    matches.append(match_payload)
                     break  # One match per ingredient
 
         # Check for unsubstantiated claims
@@ -6046,6 +6552,7 @@ class SupplementEnricherV3:
         brand_normalized = self._normalize_company_name(brand) if brand else ""
         mfr_normalized = self._normalize_company_name(manufacturer) if manufacturer else ""
 
+        # Pass 1: exact-only resolution across all entries.
         for top_mfr in top_list:
             std_name = top_mfr.get('standard_name', '')
             aliases = top_mfr.get('aliases', [])
@@ -6071,6 +6578,11 @@ class SupplementEnricherV3:
                     "source_path": matched_source,
                 }
 
+        # Pass 2: fuzzy fallback only when no exact match exists.
+        best_fuzzy = None
+        for top_mfr in top_list:
+            std_name = top_mfr.get('standard_name', '')
+
             # Fuzzy match as fallback for variations like "Thorne" vs "Thorne Research"
             brand_match, brand_score = self._fuzzy_company_match(brand, std_name)
             mfr_match, mfr_score = self._fuzzy_company_match(manufacturer, std_name)
@@ -6088,7 +6600,7 @@ class SupplementEnricherV3:
                     matched_normalized = mfr_normalized
                     match_conf = mfr_score
 
-                return {
+                candidate = {
                     "found": True,
                     "manufacturer_id": top_mfr.get('id', ''),
                     "name": std_name,
@@ -6099,6 +6611,11 @@ class SupplementEnricherV3:
                     "product_manufacturer_normalized": matched_normalized,
                     "source_path": matched_source,
                 }
+                if best_fuzzy is None or match_conf > best_fuzzy.get("match_confidence", 0):
+                    best_fuzzy = candidate
+
+        if best_fuzzy is not None:
+            return best_fuzzy
 
         # AC2: Include provenance even for non-matches
         return {
@@ -8027,7 +8544,7 @@ class SupplementEnricherV3:
                 # Record as rejected regardless of confidence - this populates rejected_manufacturer_matches
                 # for auditability of why the product didn't get manufacturer bonus
                 rejection_reason = "fuzzy_match_rejected_for_scoring"
-                if confidence < 0.85:
+                if confidence < 0.90:
                     rejection_reason = "fuzzy_below_threshold"
                 ledger.record_rejected(
                     domain=DOMAIN_MANUFACTURER,
@@ -8040,6 +8557,12 @@ class SupplementEnricherV3:
                     rejection_reason=rejection_reason,
                     normalized_key=normalized_key,
                 )
+                # Mirror the ledger rejection in the top_manufacturer dict so that
+                # found=True/False always means "a trusted exact match exists" —
+                # consistent with is_trusted_manufacturer semantics.  The rejected
+                # candidate details (manufacturer_id, name, match_confidence) are
+                # preserved for auditability; only the found flag is corrected.
+                top_match["found"] = False
         else:
             # No match found - use AC2 provenance from top_match if available
             raw_text = top_match.get("product_manufacturer_raw") or product.get("brandName") or product.get("manufacturer", "")

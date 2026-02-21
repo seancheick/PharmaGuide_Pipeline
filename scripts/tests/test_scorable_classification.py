@@ -1122,6 +1122,55 @@ class TestBlendPatternPositiveTests:
 
         assert 'General Proprietary Blend' in skipped_names
 
+    def test_therapeutic_blend_container_with_nested_skips(self, enricher):
+        """
+        A blend container whose ingredientGroup contains 'blend' AND has actual
+        nestedIngredients must be skipped even when its name is a known therapeutic.
+
+        Root cause of the original bypass: _should_skip_from_scoring returned
+        None at the therapeutic-override check before B1 (nested + blend_in_group)
+        could run.  Fix: structural containment check now runs first.
+        """
+        quality_map = enricher.databases.get('ingredient_quality_map', {})
+        botanicals_db = enricher.databases.get('standardized_botanicals', {})
+        ingredient = {
+            "name": "Full Spectrum Turmeric Blend",
+            "standardName": "Turmeric",
+            "quantity": 286,
+            "unit": "mg",
+            "ingredientGroup": "Blend",
+            "proprietaryBlend": True,
+            "nestedIngredients": [
+                {"name": "Turmeric Rhizome Extract", "quantity": 0, "unit": "NP"},
+                {"name": "Turmeric Root Extract", "quantity": 0, "unit": "NP"},
+            ],
+        }
+        reason = enricher._should_skip_from_scoring(ingredient, quality_map, botanicals_db)
+        assert reason == SKIP_REASON_BLEND_HEADER_WITH_WEIGHT, (
+            f"Structural blend container must be skipped even if name is a known "
+            f"therapeutic; got skip_reason={reason!r}"
+        )
+
+    def test_branded_complex_without_nested_still_scores(self, enricher):
+        """
+        Branded names containing 'complex' with NO nestedIngredients must not
+        be caught by the structural blend check.
+        'Curcumin C3 Complex' is a specific branded extract, not a container.
+        """
+        quality_map = enricher.databases.get('ingredient_quality_map', {})
+        botanicals_db = enricher.databases.get('standardized_botanicals', {})
+        ingredient = {
+            "name": "Curcumin C3 Complex",
+            "standardName": "Curcumin",
+            "quantity": 500,
+            "unit": "mg",
+        }
+        reason = enricher._should_skip_from_scoring(ingredient, quality_map, botanicals_db)
+        assert reason is None, (
+            f"Branded 'Complex' without nested children must be scored; "
+            f"got skip_reason={reason!r}"
+        )
+
 
 class TestGummiesHeaderLeakRegression:
     """Regression tests for gummies header-leak fixes."""

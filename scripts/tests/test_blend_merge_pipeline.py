@@ -240,6 +240,67 @@ class TestBlendMergePipeline:
         # Verify no loss
         assert result['blend_sources']['blend_loss_rate'] == 0.0
 
+    def test_cleaning_single_ingredient_false_positive_blend_is_ignored(self, enricher):
+        """Single ingredient rows with leaked proprietary flags must not become B5 blends."""
+        product = {
+            'id': 'test_fp_single',
+            'product_name': 'Single Ingredient Leak',
+            'activeIngredients': [
+                {
+                    'name': 'Vitamin D',
+                    'standardName': 'Vitamin D',
+                    'proprietaryBlend': True,
+                    'disclosureLevel': 'none',
+                    'quantity': 0.0,
+                    'unit': 'NP',
+                    'nestedIngredients': [],
+                    'isNestedIngredient': False,
+                    'parentBlend': '',
+                    'ingredientGroup': 'Vitamin D',
+                }
+            ],
+            'inactiveIngredients': []
+        }
+        result = enricher._collect_proprietary_data(product)
+        assert result['has_proprietary_blends'] is False
+        assert result['blend_count'] == 0
+        assert result['blends'] == []
+
+    def test_nested_parent_aggregate_without_blend_label_not_rolled_into_b5(self, enricher):
+        """Nested parent aggregates like 'Total Cultures' should not become proprietary blends."""
+        product = {
+            'id': 'test_parent_aggregate',
+            'product_name': 'Aggregate Parent',
+            'activeIngredients': [
+                {
+                    'name': 'Lactobacillus acidophilus',
+                    'proprietaryBlend': True,
+                    'disclosureLevel': 'none',
+                    'quantity': 0.0,
+                    'unit': 'NP',
+                    'isNestedIngredient': True,
+                    'parentBlend': 'Total Cultures',
+                    'ingredientGroup': 'Lactobacillus acidophilus',
+                    'nestedIngredients': [],
+                },
+                {
+                    'name': 'Bifidobacterium lactis',
+                    'proprietaryBlend': True,
+                    'disclosureLevel': 'none',
+                    'quantity': 0.0,
+                    'unit': 'NP',
+                    'isNestedIngredient': True,
+                    'parentBlend': 'Total Cultures',
+                    'ingredientGroup': 'Bifidobacterium lactis',
+                    'nestedIngredients': [],
+                },
+            ],
+            'inactiveIngredients': []
+        }
+        result = enricher._collect_proprietary_data(product)
+        assert result['has_proprietary_blends'] is False
+        assert result['blend_count'] == 0
+
 
 class TestBlendMergeDeduplication:
     """Tests for blend deduplication during merge."""

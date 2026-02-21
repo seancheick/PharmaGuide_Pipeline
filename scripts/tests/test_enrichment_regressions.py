@@ -889,6 +889,201 @@ class TestProjectionAndLedgerRegression:
         assert len(additive_entries) == 1
         assert additive_entries[0].get("canonical_id") == "ADD_RED40"
 
+    def test_top_manufacturer_exact_precedence_over_earlier_fuzzy(self, enricher):
+        """Exact match must win even if an earlier entry has a fuzzy hit."""
+        enricher.databases["top_manufacturers_data"] = {
+            "top_manufacturers": [
+                {
+                    "id": "MANUF_FUZZY_FIRST",
+                    "standard_name": "HUM Nutrition",
+                    "aliases": [],
+                },
+                {
+                    "id": "MANUF_EXACT_SECOND",
+                    "standard_name": "Optimum Nutrition",
+                    "aliases": ["ON"],
+                },
+            ]
+        }
+
+        result = enricher._check_top_manufacturer("Optimum Nutrition", "")
+        assert result.get("found") is True
+        assert result.get("match_type") == "exact"
+        assert result.get("manufacturer_id") == "MANUF_EXACT_SECOND"
+
+
+class TestA4AbsorptionEnhancerSchemaRegression:
+    """
+    Regression guard for the A4 absorption enhancer schema bug.
+
+    Root cause: absorption_enhancers.json uses 'standard_name' as the primary
+    identifier, not 'name'.  Code that called enhancer.get('name', '') would
+    silently return '' for every enhancer, causing _exact_match to early-exit
+    on an empty target_name and never award the A4 bonus.
+
+    Fix applied: enrich_supplements_v3.py line 3770 now reads
+        enhancer_name = enhancer.get('standard_name') or enhancer.get('name', '')
+
+    These tests verify the fix survives future refactors.
+    """
+
+    @pytest.fixture
+    def enricher(self):
+        return SupplementEnricherV3()
+
+    def test_black_pepper_plus_turmeric_qualifies(self, enricher):
+        """
+        Black Pepper (BioPerine / piperine) paired with Turmeric must yield
+        qualifies_for_bonus=True.  This exercises the standard_name lookup path
+        in the live absorption_enhancers.json DB.
+        """
+        product = {
+            'activeIngredients': [
+                {'name': 'BioPerine', 'standardName': 'Black Pepper',
+                 'quantity': 5, 'unit': 'mg'},
+                {'name': 'Turmeric Extract', 'standardName': 'Turmeric',
+                 'quantity': 500, 'unit': 'mg'},
+            ],
+            'inactiveIngredients': [],
+        }
+        result = enricher._collect_absorption_data(product)
+
+        assert result['enhancer_present'] is True, (
+            "Black Pepper / BioPerine should be found as an absorption enhancer"
+        )
+        assert result['qualifies_for_bonus'] is True, (
+            "Turmeric paired with Black Pepper must qualify for the A4 bonus"
+        )
+
+    def test_enhancer_alone_does_not_qualify(self, enricher):
+        """Enhancer present but no enhanced nutrient → no bonus."""
+        product = {
+            'activeIngredients': [
+                {'name': 'BioPerine', 'standardName': 'Black Pepper', 'quantity': 5, 'unit': 'mg'},
+            ],
+            'inactiveIngredients': [],
+        }
+        result = enricher._collect_absorption_data(product)
+
+        assert result['enhancer_present'] is True
+        assert result['qualifies_for_bonus'] is False
+
+    def test_no_enhancer_no_bonus(self, enricher):
+        """No enhancer present → no bonus, even with a target nutrient."""
+        product = {
+            'activeIngredients': [
+                {'name': 'Turmeric Extract', 'standardName': 'Turmeric',
+                 'quantity': 500, 'unit': 'mg'},
+            ],
+            'inactiveIngredients': [],
+        }
+        result = enricher._collect_absorption_data(product)
+
+        assert result['enhancer_present'] is False
+        assert result['qualifies_for_bonus'] is False
+
+    def test_piperine_alias_matches_black_pepper_enhancer(self, enricher):
+        """
+        'Piperine' is an alias for 'Black Pepper' in the DB.
+        Matching via alias must work — confirming the full alias lookup path.
+        """
+        product = {
+            'activeIngredients': [
+                {'name': 'Piperine', 'standardName': 'Piperine', 'quantity': 5, 'unit': 'mg'},
+                {'name': 'Curcumin', 'standardName': 'Curcumin', 'quantity': 500, 'unit': 'mg'},
+            ],
+            'inactiveIngredients': [],
+        }
+        result = enricher._collect_absorption_data(product)
+
+        assert result['qualifies_for_bonus'] is True, (
+            "Piperine alias must resolve to Black Pepper enhancer and qualify"
+        )
+
+    def test_black_pepper_fruit_extract_plus_turmeric_powder_qualifies(self, enricher):
+        """Observed label variants should still trigger A4 pairing."""
+        product = {
+            'activeIngredients': [
+                {'name': 'Black Pepper Fruit Extract', 'standardName': 'Black Pepper Fruit Extract', 'quantity': 5, 'unit': 'mg'},
+                {'name': 'Turmeric Powder', 'standardName': 'Turmeric Powder', 'quantity': 500, 'unit': 'mg'},
+            ],
+            'inactiveIngredients': [],
+        }
+        result = enricher._collect_absorption_data(product)
+
+        assert result['enhancer_present'] is True
+        assert result['qualifies_for_bonus'] is True
+
+
+class TestA5cSynergyDoseAnchoringRegression:
+    """A5c should not award bonus on zero-dose-checkable cluster matches."""
+
+    @pytest.fixture
+    def enricher(self):
+        return SupplementEnricherV3()
+
+    def test_synergy_not_qualified_when_no_checkable_min_doses(self, enricher):
+        enriched = {
+            "delivery_data": {},
+            "absorption_data": {},
+            "formulation_data": {
+                "organic": {},
+                "standardized_botanicals": [],
+                "synergy_clusters": [
+                    {
+                        "cluster_id": "test_cluster",
+                        "cluster_name": "Test Cluster",
+                        "match_count": 2,
+                        "matched_ingredients": [
+                            {"ingredient": "Vitamin D3", "min_effective_dose": 0, "meets_minimum": True},
+                            {"ingredient": "Zinc", "min_effective_dose": 0, "meets_minimum": True},
+                        ],
+                    }
+                ],
+            },
+            "contaminant_data": {},
+            "compliance_data": {},
+            "certification_data": {},
+            "proprietary_data": {},
+            "evidence_data": {},
+            "manufacturer_data": {},
+            "ingredient_quality_data": {},
+        }
+
+        enricher._project_scoring_fields(enriched)
+        assert enriched["synergy_cluster_qualified"] is False
+
+    def test_synergy_qualified_with_checkable_min_dose(self, enricher):
+        enriched = {
+            "delivery_data": {},
+            "absorption_data": {},
+            "formulation_data": {
+                "organic": {},
+                "standardized_botanicals": [],
+                "synergy_clusters": [
+                    {
+                        "cluster_id": "test_cluster",
+                        "cluster_name": "Test Cluster",
+                        "match_count": 2,
+                        "matched_ingredients": [
+                            {"ingredient": "NAC", "min_effective_dose": 600, "meets_minimum": True},
+                            {"ingredient": "Quercetin", "min_effective_dose": 500, "meets_minimum": True},
+                        ],
+                    }
+                ],
+            },
+            "contaminant_data": {},
+            "compliance_data": {},
+            "certification_data": {},
+            "proprietary_data": {},
+            "evidence_data": {},
+            "manufacturer_data": {},
+            "ingredient_quality_data": {},
+        }
+
+        enricher._project_scoring_fields(enriched)
+        assert enriched["synergy_cluster_qualified"] is True
+
 
 if __name__ == '__main__':
     pytest.main([__file__, '-v'])

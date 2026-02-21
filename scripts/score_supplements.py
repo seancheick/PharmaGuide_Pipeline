@@ -411,6 +411,16 @@ class SupplementScorer:
         is_single = supp_type in {"single", "single_nutrient"}
         weighted_values: List[Tuple[float, float]] = []
         for ing in ingredients:
+            # Blend containers are opacity signals, not quality signals.
+            # Their cost is captured by B5; including them in A1 would
+            # double-penalise and pollute the quality average with a
+            # meaningless "unspecified form" score of 5.
+            if ing.get("is_proprietary_blend"):
+                continue
+            # A1 is dose-anchored quality. Rows without an individual usable
+            # dose (common for opaque blend children) do not contribute.
+            if not self._has_usable_individual_dose(ing):
+                continue
             mapped = bool(ing.get("mapped", False))
             if mapped:
                 s_i = as_float(ing.get("score"), 9.0) or 9.0
@@ -946,32 +956,160 @@ class SupplementScorer:
                 total += qty * 1000.0
         return total
 
+    def _has_usable_individual_dose(self, ingredient: Dict[str, Any]) -> bool:
+        qty = as_float(ingredient.get("quantity"), None)
+        if qty is None or qty <= 0:
+            return False
+        unit = norm_text(ingredient.get("unit_normalized") or ingredient.get("unit"))
+        if not unit:
+            return bool(ingredient.get("has_dose", False))
+        return unit in {
+            "mg",
+            "milligram",
+            "milligrams",
+            "mcg",
+            "ug",
+            "microgram",
+            "micrograms",
+            "g",
+            "gram",
+            "grams",
+            "iu",
+            "cfu",
+            "billion cfu",
+            "million cfu",
+        }
+
+    # B5 formula constants — hidden-mass transparency model.
+    _B5_BASE = {"full": 0.0, "partial": 1.0, "none": 2.0}
+    _B5_PROP_COEF = {"full": 0.0, "partial": 3.0, "none": 5.0}
+    _B5_CAP = 10.0
+
+    def _blend_quantity_to_mg(self, amount: Any, unit: Any) -> Tuple[Optional[float], bool]:
+        qty = as_float(amount, None)
+        if qty is None:
+            return None, False
+        unit_norm = norm_text(unit)
+        if not unit_norm or unit_norm in {"mg", "milligram", "milligrams"}:
+            return qty, False
+        converted = self._convert_unit(qty, unit_norm, "mg")
+        if converted is None:
+            return None, True
+        return converted, False
+
+    def _blend_child_payload(self, blend: Dict[str, Any]) -> Tuple[List[Dict[str, Any]], List[str]]:
+        children_with_amounts: List[Dict[str, Any]] = []
+        children_without_amounts: List[str] = []
+
+        for child in safe_list(blend.get("child_ingredients")):
+            name = child.get("name") or child.get("ingredient") or ""
+            amount = as_float(child.get("amount"), None)
+            if amount is None or amount <= 0:
+                if name:
+                    children_without_amounts.append(name)
+                continue
+            children_with_amounts.append(
+                {
+                    "name": name,
+                    "amount": amount,
+                    "unit": child.get("unit") or child.get("unit_normalized") or "mg",
+                }
+            )
+
+        evidence = blend.get("evidence") or {}
+        for child in safe_list(evidence.get("ingredients_with_amounts")):
+            name = child.get("name") or child.get("ingredient") or ""
+            amount = as_float(child.get("amount"), None)
+            if amount is None or amount <= 0:
+                continue
+            children_with_amounts.append(
+                {
+                    "name": name,
+                    "amount": amount,
+                    "unit": child.get("unit") or child.get("unit_normalized") or "mg",
+                }
+            )
+        for child in safe_list(evidence.get("ingredients_without_amounts")):
+            if isinstance(child, dict):
+                name = child.get("name") or child.get("ingredient") or ""
+            else:
+                name = str(child or "")
+            if name:
+                children_without_amounts.append(name)
+
+        # Deduplicate while preserving order.
+        seen_with = set()
+        deduped_with: List[Dict[str, Any]] = []
+        for child in children_with_amounts:
+            key = (canon_key(child.get("name")), as_float(child.get("amount"), 0.0), norm_text(child.get("unit")))
+            if key in seen_with:
+                continue
+            seen_with.add(key)
+            deduped_with.append(child)
+
+        seen_without = set()
+        deduped_without: List[str] = []
+        for name in children_without_amounts:
+            key = canon_key(name)
+            if not key or key in seen_without:
+                continue
+            seen_without.add(key)
+            deduped_without.append(name)
+
+        return deduped_with, deduped_without
+
+    def _blend_dedupe_fingerprint(self, blend: Dict[str, Any]) -> Tuple[str, Tuple[str, ...], str, str]:
+        name_key = canon_key(blend.get("name"))
+        children_with, children_without = self._blend_child_payload(blend)
+        child_names = sorted(
+            {
+                canon_key(item.get("name"))
+                for item in children_with
+                if canon_key(item.get("name"))
+            }
+            | {
+                canon_key(name)
+                for name in children_without
+                if canon_key(name)
+            }
+        )
+        amount_value = (
+            blend.get("blend_total_mg")
+            if blend.get("blend_total_mg") is not None
+            else blend.get("total_weight")
+        )
+        amount_unit = "mg" if blend.get("blend_total_mg") is not None else blend.get("unit")
+        blend_total_mg, _ = self._blend_quantity_to_mg(amount_value, amount_unit)
+        blend_total_key = "" if blend_total_mg is None else f"{round(blend_total_mg, 3):.3f}"
+        evidence = blend.get("evidence") or {}
+        source_path = norm_text(
+            blend.get("source_path")
+            or blend.get("source_field")
+            or evidence.get("source_field")
+            or ""
+        )
+        return (name_key, tuple(child_names), blend_total_key, source_path)
+
     def _score_b5(self, product: Dict[str, Any], flags: List[str]) -> float:
         proprietary = product.get("proprietary_data", {})
         blends = safe_list(product.get("proprietary_blends"))
         if not blends:
             blends = safe_list(proprietary.get("blends", []))
 
+        self._last_b5_blend_evidence: List[Dict[str, Any]] = []
         if not blends:
             return 0.0
 
         flags.append("PROPRIETARY_BLEND_PRESENT")
 
-        dedup_keys = set()
+        dedup_keys: set[Tuple[str, Tuple[str, ...], str, str]] = set()
         deduped: List[Dict[str, Any]] = []
         for blend in blends:
-            key = (
-                canon_key(blend.get("name")),
-                norm_text(blend.get("disclosure_level")),
-                as_float(blend.get("total_weight"), None),
-                int(as_float(blend.get("nested_count"), 0) or 0),
-            )
+            key = self._blend_dedupe_fingerprint(blend)
             if key in dedup_keys:
                 continue
             dedup_keys.add(key)
             deduped.append(blend)
-
-        disclosure_base = {"full": 0.0, "partial": 3.0, "none": 6.0}
 
         total_active_mg = as_float(proprietary.get("total_active_mg"), None)
         if total_active_mg is None:
@@ -987,27 +1125,83 @@ class SupplementScorer:
         penalty_sum = 0.0
         for blend in deduped:
             level = norm_text(blend.get("disclosure_level"))
-            base = disclosure_base.get(level, 6.0)
+            base = self._B5_BASE.get(level, self._B5_BASE["none"])
+            prop_coef = self._B5_PROP_COEF.get(level, self._B5_PROP_COEF["none"])
 
-            blend_mg = as_float(blend.get("blend_mg"), None)
-            if blend_mg is None:
-                blend_mg = as_float(blend.get("total_weight"), None)
+            children_with_amounts, children_without_amounts = self._blend_child_payload(blend)
 
-            impact = None
-            if blend_mg is not None and total_active_mg and total_active_mg > 0:
-                impact = clamp(0.0, 1.0, blend_mg / total_active_mg)
-            if impact is None:
+            blend_total_raw = (
+                blend.get("blend_total_mg")
+                if blend.get("blend_total_mg") is not None
+                else blend.get("total_weight")
+            )
+            blend_total_unit = "mg" if blend.get("blend_total_mg") is not None else blend.get("unit")
+            blend_total_mg, blend_unit_fail = self._blend_quantity_to_mg(blend_total_raw, blend_total_unit)
+
+            disclosed_child_mg_sum = 0.0
+            child_unit_fail = False
+            for child in children_with_amounts:
+                child_mg, child_fail = self._blend_quantity_to_mg(child.get("amount"), child.get("unit"))
+                if child_fail:
+                    child_unit_fail = True
+                if child_mg is not None and child_mg > 0:
+                    disclosed_child_mg_sum += child_mg
+
+            hidden_mass_mg = None
+            impact_source = "count_share"
+            impact_floor_applied = False
+            unit_conversion_failed = bool(blend_unit_fail or child_unit_fail)
+
+            # Prefer mg-share when blend mass and active total are usable.
+            if blend_total_mg is not None and total_active_mg and total_active_mg > 0:
+                disclosed_clamped = min(disclosed_child_mg_sum, blend_total_mg)
+                hidden_mass_mg = max(blend_total_mg - disclosed_clamped, 0.0)
+                impact = clamp(0.0, 1.0, hidden_mass_mg / total_active_mg)
+                if hidden_mass_mg > 0 and impact < 0.1:
+                    impact = 0.1
+                    impact_floor_applied = True
+                impact_source = "mg_share"
+                disclosed_child_mg_sum = disclosed_clamped
+            else:
                 hidden_count = int(as_float(blend.get("hidden_count"), 0) or 0)
-                if hidden_count == 0:
+                if hidden_count <= 0:
+                    hidden_count = len(children_without_amounts)
+                if hidden_count <= 0:
                     hidden_count = int(as_float(blend.get("nested_count"), 0) or 0)
-                if total_active_count > 0:
-                    impact = clamp(0.0, 1.0, hidden_count / total_active_count)
-                else:
-                    impact = 1.0
+                denom = total_active_count if total_active_count > 0 else max(hidden_count, 1)
+                impact = clamp(0.0, 1.0, hidden_count / max(denom, 1))
 
-            penalty_sum += base * impact
+            blend_penalty = 0.0
+            if level != "full":
+                blend_penalty = base + (prop_coef * impact)
+                penalty_sum += blend_penalty
 
-        return clamp(0.0, 15.0, penalty_sum)
+            evidence = {
+                "blend_name": blend.get("name") or "",
+                "disclosure_tier": level or "none",
+                "blend_total_mg": None if blend_total_mg is None else round(blend_total_mg, 4),
+                "disclosed_child_mg_sum": round(disclosed_child_mg_sum, 4),
+                "hidden_mass_mg": None if hidden_mass_mg is None else round(hidden_mass_mg, 4),
+                "impact_ratio": round(impact, 6),
+                "impact_source": impact_source,
+                "impact_floor_applied": bool(impact_floor_applied),
+                "base_penalty_formula": (
+                    "full: 0"
+                    if level == "full"
+                    else ("partial: -(1 + 3*impact)" if level == "partial" else "none: -(2 + 5*impact)")
+                ),
+                "computed_blend_penalty": round(-blend_penalty, 4),
+                "computed_blend_penalty_magnitude": round(blend_penalty, 4),
+                "dedupe_fingerprint": (
+                    lambda fp: f"{fp[0]}|{','.join(fp[1])}|{fp[2]}|{fp[3]}"
+                )(self._blend_dedupe_fingerprint(blend)),
+                "unit_conversion_failed": bool(unit_conversion_failed),
+                "children_with_amount_count": len(children_with_amounts),
+                "children_without_amount_count": len(children_without_amounts),
+            }
+            self._last_b5_blend_evidence.append(evidence)
+
+        return clamp(0.0, self._B5_CAP, penalty_sum)
 
     def _score_b6(self, product: Dict[str, Any], flags: List[str]) -> float:
         has_claims = bool(product.get("has_disease_claims", False))
@@ -1065,6 +1259,7 @@ class SupplementScorer:
             "B4b": round(b4b, 2),
             "B4c": round(b4c, 2),
             "B5_penalty": round(b5, 2),
+            "B5_blend_evidence": self._last_b5_blend_evidence,
             "B6_penalty": round(b6, 2),
             "bonuses": round(bonuses, 2),
             "penalties": round(penalties, 2),
@@ -1109,6 +1304,14 @@ class SupplementScorer:
             "animal_study": 2.0,
             "in_vitro": 1.0,
         }
+        config_mapping = (
+            self.config.get("section_C_evidence_research", {}).get("study_type_base_points", {}) or {}
+        )
+        if isinstance(config_mapping, dict):
+            for key, value in config_mapping.items():
+                numeric = as_float(value, None)
+                if numeric is not None:
+                    mapping[norm_text(key)] = numeric
         return mapping.get(norm_text(study_type), 0.0)
 
     def _evidence_multiplier(self, level: str) -> float:
@@ -1126,6 +1329,16 @@ class SupplementScorer:
             "strain_clinical": 0.6,
             "preclinical": 0.3,
         }
+        config_mapping = (
+            self.config.get("section_C_evidence_research", {}).get("evidence_level_multipliers", {}) or {}
+        )
+        if isinstance(config_mapping, dict):
+            for key, value in config_mapping.items():
+                numeric = as_float(value, None)
+                if numeric is not None:
+                    key_norm = norm_text(key)
+                    mapping[key_norm] = numeric
+                    mapping[key_norm.replace("-", "_")] = numeric
         return mapping.get(norm_text(level), 0.0)
 
     def _dose_map(self, product: Dict[str, Any]) -> Dict[str, Tuple[float, str]]:
@@ -1176,6 +1389,9 @@ class SupplementScorer:
         return None
 
     def _score_section_c(self, product: Dict[str, Any], flags: List[str]) -> Dict[str, Any]:
+        section_c_cfg = self.config.get("section_C_evidence_research", {}) or {}
+        cap_per_ingredient = as_float(section_c_cfg.get("cap_per_ingredient"), 5.0) or 5.0
+        cap_total = as_float(section_c_cfg.get("cap_total"), 15.0) or 15.0
         matches = safe_list(product.get("evidence_data", {}).get("clinical_matches", []))
 
         ingredient_points: Dict[str, float] = defaultdict(float)
@@ -1194,7 +1410,16 @@ class SupplementScorer:
 
             study_type = entry.get("study_type")
             evidence_level = entry.get("evidence_level")
-            raw = self._study_base_points(study_type) * self._evidence_multiplier(evidence_level)
+
+            # Optional schema support: explicit base/multiplier from clinical DB entries.
+            base_points = as_float(entry.get("base_points"), None)
+            multiplier = as_float(entry.get("multiplier"), None)
+            if base_points is None:
+                base_points = self._study_base_points(study_type)
+            if multiplier is None:
+                multiplier = self._evidence_multiplier(evidence_level)
+
+            raw = base_points * multiplier
             if raw <= 0:
                 continue
 
@@ -1225,11 +1450,11 @@ class SupplementScorer:
 
         total = 0.0
         for _, pts in ingredient_points.items():
-            total += min(5.0, pts)
+            total += min(cap_per_ingredient, pts)
 
         return {
-            "score": round(clamp(0.0, 15.0, total), 2),
-            "max": 15,
+            "score": round(clamp(0.0, cap_total, total), 2),
+            "max": cap_total,
             "ingredient_points": {k: round(v, 2) for k, v in ingredient_points.items()},
             "matched_entries": len(matched_entry_ids),
         }

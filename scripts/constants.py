@@ -119,6 +119,22 @@ EXCLUDED_NUTRITION_FACTS = {
     "total tocotrienols", "total d-mixed tocotrienols", "total mixed tocotrienols",
     "total natural tocotrienols", "total natural d-mixed palm tocotrienols",
 
+    # Individual saturated/monounsaturated fatty acids (nutrition fact components of oils, not supplements)
+    "palmitic acid", "myristic acid", "stearic acid", "lauric acid",
+    "caprylic acid", "capric acid", "caproic acid", "arachidic acid",
+    "behenic acid", "lignoceric acid",
+    "palmitoleic acid", "oleic acid", "gondoic acid", "erucic acid",
+    # Omega category descriptors (rollup labels from nutrition panels, not discrete ingredients)
+    "omega-3 polyunsaturated fat", "omega-3 polyunsaturated fats",
+    "omega-6 polyunsaturated fat", "omega-6 polyunsaturated fats",
+    "omega-9 monounsaturated fat", "omega-9 monounsaturated fats",
+    # Omega ethyl ester aggregates (nutrition totals, distinct from individual EE forms)
+    "total omega-3 fatty acids ethyl esters", "total omega-3 fatty acid ethyl esters",
+    "other omega-3 fatty acid ethyl ester", "other omega-3 fatty acids ethyl esters",
+    "total omega-3 ethyl esters",
+    # Generic botanical compound descriptors (label markers, not distinct ingredients)
+    "pungent compounds",
+
     # Generic fatty acid aggregates
     "total fatty acids", "fatty acids and sterols", "fatty acids & sterols",
     "other fatty acids & phytonutrients", "other fatty acids and phytonutrients",
@@ -207,9 +223,33 @@ EXCLUDED_LABEL_PHRASES = {
     "may contain one or more of the following", "may contain one or more of the following:",
     "proprietary blend of",
     "from 800 mg of premium cultivar elderberries",
+    "3.2 g (3,200 mg) of premium cultivar elderberries",
     "includes added sugar",
     "natural food base blend combination",
+    # Nutritional macro fields (not ingredients)
+    "net carbohydrate",
+    # Dosage form artifacts (not ingredients)
+    "tablets",
+    # Elderberry serving-count descriptors (e.g. "50 Berries")
+    "50 berries",
+    "75 berries",
+    "100 berries",
+    # Slash-combined multi-nutrient label artifacts
+    "niacin/niacinamide",
+    # Dietary nitrate sub-labels (beet root context)
+    "nitrates",
+    "nitrate",
     "typical amino acid amounts (g)",
+    "typical amino acid amounts (g) per serving",
+    "typical amino acid profile",
+    # Nutritional profile section headers (not ingredient names)
+    "typical fatty acid profile",
+    "fatty acid profile",
+    "amino acid profile",
+    # Ayurvedic processing descriptors (label notes, not discrete ingredients)
+    "processed by the method of siddha ghruta in",
+    "processed by the method of siddha ghruta",
+    "processed by siddha ghruta",
     # Parser artifacts observed in fresh Thorne/Nordic runs
     "from 250 mg dmsa",
     "from 100 mg dmsa",
@@ -220,6 +260,17 @@ EXCLUDED_LABEL_PHRASES = {
     "bio-enhanced",
     "bio enhanced",
     "mitoheal",
+    # Fatty acid composition section headers (not discrete ingredients)
+    "approximate fatty acid content",
+    "approximate essential fatty acid (efa) content",
+    "approximate essential fatty acid content",
+    "fatty acid composition",
+    "fatty acid content",
+    "approximate fatty acid profile",
+    # Omega aggregate totals (label-level summaries, not individual ingredients)
+    "total omega-3, 6, 9 fatty acids",
+    "total omega-3 6 9 fatty acids",
+    "omega-3 6 9 fatty acids",
 }
 
 # Nutritional warnings to track for UI display (but not map as ingredients)

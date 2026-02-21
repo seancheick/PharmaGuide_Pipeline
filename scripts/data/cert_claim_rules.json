@@ -106,10 +106,10 @@
         "dedupe_key": "third_party_program:usp_verified",
         "claim_type": "third_party_certification",
         "positive_patterns": [
-          "\\bUSP\\s+Verified\\b",
-          "\\bUSP\\s+Verification\\s+Program\\b",
-          "\\bUSP\\s+Dietary\\s+Supplement\\s+Verified\\b",
-          "\\bUSP\\s+Verified\\s+Dietary\\s+Supplement\\b"
+          "\\bUSP[\\s-]+Verified\\b",
+          "\\bUSP[\\s-]+Verification[\\s-]+Program\\b",
+          "\\bUSP[\\s-]+Dietary[\\s-]+Supplement[\\s-]+Verified\\b",
+          "\\bUSP[\\s-]+Verified[\\s-]+Dietary[\\s-]+Supplement\\b"
         ],
         "negative_patterns": [
           "\\bUSP\\s+standards?\\b",
@@ -137,7 +137,7 @@
         "dedupe_key": "third_party_program:nsf_sport",
         "claim_type": "third_party_certification",
         "positive_patterns": [
-          "\\bNSF\\s+Certified\\s+for\\s+Sport\\b",
+          "\\bNSF\\s+Certified(?:\\s+for)?\\s+Sport\\b",
           "\\bNSF\\s+Sport\\b",
           "\\bCertified\\s+for\\s+Sport\\b"
         ],
@@ -294,7 +294,7 @@
         "dedupe_key": "gmp:nsf",
         "claim_type": "gmp_certification",
         "positive_patterns": [
-          "\\bNSF\\s*GMP\\s*(Registered|Registration|Certified)?\\b"
+          "\\bNSF[\\s-]*GMP\\s*(Registered|Registration|Certified)?\\b"
         ],
         "negative_patterns": [],
         "evidence_strength": "strong",
@@ -324,7 +324,7 @@
         "dedupe_key": "gmp:ul",
         "claim_type": "gmp_certification",
         "positive_patterns": [
-          "\\bUL\\s*(Solutions\\s*)?GMP\\b"
+          "\\bUL[\\s-]*(Solutions[\\s-]*)?GMP\\b"
         ],
         "negative_patterns": [],
         "evidence_strength": "strong",
@@ -338,7 +338,7 @@
         "dedupe_key": "gmp:cgmp",
         "claim_type": "gmp_certification",
         "positive_patterns": [
-          "\\bcGMP\\s*(Certified|Compliant)\\b",
+          "\\bcGMP[\\s-]*(Certified|Compliant)\\b",
           "\\b21\\s*CFR\\s*Part\\s*(210|211)\\s*(compliant|certified)\\b"
         ],
         "negative_patterns": [
@@ -357,8 +357,8 @@
         "dedupe_key": "gmp:explicit",
         "claim_type": "gmp_certification",
         "positive_patterns": [
-          "\\bGMP\\s+(certified|registered)\\s+(facility|manufacturing)\\b",
-          "\\b(certified|registered)\\s+GMP\\s+(facility|manufacturing)\\b"
+          "\\bGMP[\\s-]+(certified|registered)[\\s-]+(facility|manufacturing)\\b",
+          "\\b(certified|registered)[\\s-]+GMP[\\s-]+(facility|manufacturing)\\b"
         ],
         "negative_patterns": [
           "\\bGMP\\s+practices\\b",
@@ -398,7 +398,7 @@
         "dedupe_key": "gmp:fda_registered",
         "claim_type": "gmp_certification",
         "positive_patterns": [
-          "\\bFDA\\s*(registered|inspected)\\s*(facility|supplement)?\\b"
+          "\\bFDA[\\s-]*(registered|inspected)\\s*(facility|supplement)?\\b"
         ],
         "negative_patterns": [
           "\\bFDA\\s+approved\\b"
@@ -422,19 +422,20 @@
         "dedupe_key": "organic:usda",
         "claim_type": "organic_certification",
         "positive_patterns": [
-          "\\bUSDA\\s+Organic\\b",
-          "\\bCertified\\s+Organic\\b",
-          "\\b100%?\\s*Organic\\b"
+          "\\bUSDA[\\s-]+Organic\\b",
+          "\\bCertified[\\s-]+Organic\\b",
+          "\\b100(?:%|\\s*percent)?[\\s-]*Organic\\b"
         ],
         "negative_patterns": [
-          "\\bmade\\s+with\\s+organic\\s+ingredients?\\b",
-          "\\bnot\\s+(USDA\\s+)?organic\\b",
-          "\\bnot\\s+certified\\s+organic\\b"
+          "\\bmade[\\s-]+with[\\s-]+organic[\\s-]+ingredients?\\b",
+          "\\bnot\\s+(USDA[\\s-]+)?organic\\b",
+          "\\bnot\\s+certified[\\s-]+organic\\b"
         ],
         "required_tokens": [
           "usda",
           "certified",
-          "100%"
+          "100%",
+          "100 percent"
         ],
         "required_tokens_mode": "any",
         "evidence_strength": "strong",
