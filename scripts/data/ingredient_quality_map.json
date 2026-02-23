@@ -1960,8 +1960,7 @@
           "5-methyltetrahydrofolic acid",
           "L-5-Methyltetrahydrofolic Acid supplement",
           "L-Methylfolate Magnesium",
-          "L Methylfolate Magnesium",
-          "pteroylglutamic acid"
+          "L Methylfolate Magnesium"
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
@@ -2099,7 +2098,8 @@
           "pure folic acid supplement",
           "folic acid powder supplement",
           "folic acid pure",
-          "folic acid, pure"
+          "folic acid, pure",
+          "pteroylglutamic acid"
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
@@ -13334,8 +13334,7 @@
           "phosphatidylinositol",
           "phosphatidyl inositol",
           "pi",
-          "phospatidylinositol",
-          "phosphoinositides"
+          "phospatidylinositol"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -13663,11 +13662,7 @@
           "advanced delivery carnitine supplement",
           "liposome-bound carnitine supplement",
           "lipid-bound carnitine supplement",
-          "high-absorption carnitine supplement",
-          "glycocarn glycine propionyl l-carnitine hcl",
-          "glycocarn",
-          "glycine propionyl l-carnitine",
-          "gplc"
+          "high-absorption carnitine supplement"
         ],
         "dosage_importance": 0.5,
         "bio_score": 14,
@@ -13751,7 +13746,11 @@
           "propionyl-l-carnitine supplement",
           "PLC supplement",
           "propionyl carnitine supplement",
-          "l-propionyl carnitine supplement"
+          "l-propionyl carnitine supplement",
+          "glycocarn",
+          "gplc",
+          "glycine propionyl l-carnitine",
+          "glycocarn glycine propionyl l-carnitine hcl"
         ],
         "dosage_importance": 0.5,
         "bio_score": 12,
@@ -19416,9 +19415,7 @@
           "liposome grape seed supplement",
           "nano-encapsulated grape seed supplement",
           "lipid-bound grape seed supplement",
-          "high-absorption grape seed supplement",
-          "vincare",
-          "vincare grape extract"
+          "high-absorption grape seed supplement"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -19504,7 +19501,9 @@
           "meganatural bp",
           "powergrape grape (vitis vinifera) extract",
           "powergrape",
-          "grape seed 95% extract"
+          "grape seed 95% extract",
+          "vincare",
+          "vincare grape extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -21546,9 +21545,7 @@
           "multi-enzyme complex supplement",
           "biocore dairy",
           "dairy digestive enzymes",
-          "Lactase Enzyme",
-          "porcine pancreatic concentrate",
-          "pancreatic concentrate"
+          "Lactase Enzyme"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -21587,7 +21584,9 @@
           "pancreatin 8x",
           "pancreatin concentrate 4x",
           "pancreatin usp",
-          "pancrelipase"
+          "pancrelipase",
+          "porcine pancreatic concentrate",
+          "pancreatic concentrate"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -26980,7 +26979,6 @@
         "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
         "aliases": [
           "eugenol",
-          "cloves",
           "eugenols"
         ],
         "dosage_importance": 1.0,
@@ -29935,8 +29933,7 @@
         "absorption": "unknown",
         "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
         "aliases": [
-          "parthenolide",
-          "feverfew leaf extract"
+          "parthenolide"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -39493,9 +39490,7 @@
         "absorption": "unknown",
         "notes": "",
         "aliases": [
-          "grass-fed desiccated",
-          "parathyroid",
-          "parathyroid glandular"
+          "grass-fed desiccated"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -39583,7 +39578,9 @@
           "pancreas glandular",
           "pancreas substance",
           "thymus glandular",
-          "thymus substance"
+          "thymus substance",
+          "parathyroid",
+          "parathyroid glandular"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -47050,7 +47047,6 @@
         "aliases": [
           "phenylethylamine",
           "phenylethylamine alkaloids",
-          "pea",
           "beta-phenylethylamine",
           "phenylethylamine hcl",
           "b-phenylethylamine"
