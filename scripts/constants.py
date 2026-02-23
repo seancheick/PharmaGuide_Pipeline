@@ -337,6 +337,19 @@ EXCLUDED_LABEL_PHRASES = {
     # Branded blend/tablet technology descriptors (not discrete ingredients)
     "activessence",
     "solutab",
+    # Inactive label descriptors / header leakage (not ingredients)
+    "colour name",
+    "anti-caking agent",
+    "oral dissolve excipient",
+    "vegetable culture",
+    "enzyme digested",
+    "enzyme pre-digested",
+    "herbal extract",
+    "bronson bioaccelerators",
+    "nutrilite phytonutrient concentrate",
+    "foodstate orange vitamin c",
+    "superpotency soyagen",
+    "quik-sorb",
 }
 
 # Nutritional warnings to track for UI display (but not map as ingredients)

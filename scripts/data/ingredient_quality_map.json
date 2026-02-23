@@ -2021,7 +2021,10 @@
           "(6s)-5-methyltetrahydrofolate acid glucosamine salt",
           "(6s)-5-methyltetrahydrofolic acid, glucosamine salt",
           "(6S)-5-Methyltetrahydrofolate Acid, Glucosamine Salt",
-          "(6S)-5-Methyl Tetrahydrofolate Glucosamine Salt"
+          "(6S)-5-Methyl Tetrahydrofolate Glucosamine Salt",
+          "methyltetrafolate",
+          "quatrefolic (6s)-5-methyltetrahydrofolic acid, glucosamine salt",
+          "quatrefolic brand (6s)-5-methyl tetrahydrofolate glucosamine salt"
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
@@ -3929,7 +3932,8 @@
           "menaq7",
           "menaq7 menaquinone-7",
           "vitamin k2 menaquinone-7",
-          "vitamin k2 menaquinone 7"
+          "vitamin k2 menaquinone 7",
+          "mena q7"
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
@@ -4065,7 +4069,6 @@
           "k1",
           "plant vitamin k",
           "leafy green vitamin k",
-          "phytonadione",
           "vitamin k1 supplement",
           "vit k1",
           "phylloquinone supplement",
@@ -4755,7 +4758,8 @@
         "absorption": "unknown",
         "notes": "Unspecified form; conservative scoring to avoid over-crediting.",
         "aliases": [
-          "Calcium"
+          "Calcium",
+          "calcium amino acid chelate"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -5858,7 +5862,8 @@
         "aliases": [
           "zinc",
           "zn",
-          "zinc supplement"
+          "zinc supplement",
+          "zinc amino acid chelate"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -8246,7 +8251,8 @@
           "chromium picolinate supplement",
           "picolinic acid chromium supplement",
           "chromium pic supplement",
-          "CrPic supplement"
+          "CrPic supplement",
+          "pure crystalline chromium picolinate"
         ],
         "dosage_importance": 0.5,
         "absorption_structured": {
@@ -8550,7 +8556,10 @@
         "notes": "Unspecified form; conservative scoring to avoid over-crediting.",
         "aliases": [
           "iodide",
-          "iodine"
+          "iodine",
+          "prolamine iodine",
+          "molecular iodine",
+          "nascent iodine"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -10913,7 +10922,9 @@
           "quercetin bioflavonoid",
           "quercetin supplement",
           "quercetin dihydrate supplement",
-          "quercetin bioflavonoid supplement"
+          "quercetin bioflavonoid supplement",
+          "dihydroquercetin",
+          "taxifolin"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -11049,7 +11060,9 @@
           "GSH supplement",
           "reduced glutathione supplement",
           "l-glutathione supplement",
-          "Reduced L-Glutathione supplement"
+          "Reduced L-Glutathione supplement",
+          "gamma-glutamylcysteines",
+          "gamma-glutamylcysteine"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -12965,7 +12978,8 @@
           "citrate choline",
           "choline citrate supplement",
           "citric acid choline supplement",
-          "citrate choline supplement"
+          "citrate choline supplement",
+          "choline dihydrogen citrate"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -14028,7 +14042,8 @@
           "TMG HCl supplement",
           "betaine digestive aid supplement",
           "stomach acid support betaine supplement",
-          "betain hcl"
+          "betain hcl",
+          "betaine hci"
         ],
         "dosage_importance": 1.0,
         "bio_score": 11,
@@ -15705,7 +15720,9 @@
         "absorption": "unknown",
         "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
         "aliases": [
-          "sulforaphane"
+          "sulforaphane",
+          "broccosinolate",
+          "broccoli sprout/seed extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -16023,7 +16040,9 @@
           "bioavailable chlorella supplement",
           "broken wall algae supplement",
           "chlorella cracked cell supplement",
-          "high-absorption chlorella supplement"
+          "high-absorption chlorella supplement",
+          "shattered cell wall chlorella",
+          "shattered cell wall chlorella powder"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -16536,7 +16555,10 @@
           "active ALA supplement",
           "natural ALA supplement",
           "R-lipoic acid supplement",
-          "pure R-ALA supplement"
+          "pure R-ALA supplement",
+          "sodium r-lipoate",
+          "sodium r-alpha lipoate",
+          "na-r-ala"
         ],
         "context_include": [
           "lipoic",
@@ -17801,7 +17823,8 @@
         "absorption": "unknown",
         "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
         "aliases": [
-          "ginkgo"
+          "ginkgo",
+          "gingko biloba extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -18035,7 +18058,8 @@
         "absorption": "unknown",
         "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
         "aliases": [
-          "milk thistle"
+          "milk thistle",
+          "silymarins"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -19060,7 +19084,8 @@
         "absorption": "unknown",
         "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
         "aliases": [
-          "chondroitin"
+          "chondroitin",
+          "chondroitin sulfate a"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -19302,7 +19327,11 @@
           "green tea catechins supplement",
           "tea polyphenols supplement",
           "green tea EGCG supplement",
-          "green tea polyphenol extract supplement"
+          "green tea polyphenol extract supplement",
+          "green tea 98% extract",
+          "green tea (camellia sinensis) leaf std. extract",
+          "green tea (camellia sinensis) leaf standard extract",
+          "decaffeinated green tea (camellia sinensis) leaf extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -19442,7 +19471,12 @@
           "grape seed ext",
           "european grapeseed extract",
           "grape seed standardized extract",
-          "proanthodyn"
+          "proanthodyn",
+          "meganatural gold grape seed extract",
+          "meganatural-bp",
+          "meganatural bp",
+          "powergrape grape (vitis vinifera) extract",
+          "powergrape"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -20066,7 +20100,8 @@
           "ginseng",
           "red chinese ginseng",
           "american white ginseng",
-          "panax ginseng leaf, stem extract"
+          "panax ginseng leaf, stem extract",
+          "standardized american ginseng extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -21206,7 +21241,9 @@
         "absorption": "unknown",
         "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
         "aliases": [
-          "bilberry"
+          "bilberry",
+          "bilberry fruit ext.",
+          "bilberry fruit extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -21673,7 +21710,11 @@
           "astrazyme",
           "glutalytic",
           "physioproteases",
-          "mycozyme"
+          "mycozyme",
+          "alpha-chymotrypsin",
+          "cellulase enzyme",
+          "rennet",
+          "physioprotease"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -21717,7 +21758,8 @@
           "nsk-sd nattokinase",
           "nattozimes",
           "nattovena",
-          "subtilisin nat"
+          "subtilisin nat",
+          "natto extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -22223,7 +22265,9 @@
           "leucine supplement",
           "l-leucine powder supplement",
           "pure leucine supplement",
-          "bcaa leucine supplement"
+          "bcaa leucine supplement",
+          "vegetarian leucine",
+          "vegan leucine"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -25539,7 +25583,9 @@
           "caffeine natural",
           "caffeine, natural",
           "dicaffeine malate",
-          "caffeine anhydrous 50% extract"
+          "caffeine anhydrous 50% extract",
+          "infinergy",
+          "infinergy dicaffeine malate"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -26131,7 +26177,8 @@
           "glucohelp",
           "banaba",
           "GlucoHelp Banaba leaf extract",
-          "banaba leaf 1% extract"
+          "banaba leaf 1% extract",
+          "glucofit"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -26899,7 +26946,8 @@
         "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
         "aliases": [
           "eugenol",
-          "cloves"
+          "cloves",
+          "eugenols"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -33854,7 +33902,9 @@
           "berberine",
           "Berbevis",
           "glucovantage",
-          "dihydroberberine"
+          "dihydroberberine",
+          "berberpur",
+          "berberpure"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -34372,7 +34422,9 @@
         "notes": "Plant-derived K1; primarily for blood clotting",
         "aliases": [
           "phylloquinone",
-          "vitamin k1"
+          "vitamin k1",
+          "phytomenadione",
+          "phytonadione"
         ],
         "score": 12,
         "dosage_importance": 1.0,
@@ -34921,7 +34973,10 @@
           "bacopa monnieri leaf",
           "bacopa leaf extract",
           "bacopa monnieri herb extract",
-          "bacopa whole plant extract"
+          "bacopa whole plant extract",
+          "bacopa monnieri whole plant extract",
+          "bacopa monniera extract",
+          "bacopa monniera"
         ],
         "score": 9,
         "dosage_importance": 1.0,
@@ -36844,7 +36899,10 @@
         "absorption": "good",
         "notes": "Generic form; adjust when specific form is known.",
         "aliases": [
-          "silicon"
+          "silicon",
+          "jarrosil silicon",
+          "jarrosil",
+          "activated silicon"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -37711,7 +37769,10 @@
           "boswellia serrata",
           "frankincense",
           "indian frankincense unspecified",
-          "boswellia serrata gum extract"
+          "boswellia serrata gum extract",
+          "indian frankincense gum extract",
+          "apresflexboswellia serrata gum extract",
+          "apresflexboswellia"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -38364,7 +38425,9 @@
           "bugbane",
           "black cohosh (cimicifuga racemosa) root and rhizome extract",
           "black cohosh root and rhizome extract",
-          "cimicifuga racemosa root and rhizome extract"
+          "cimicifuga racemosa root and rhizome extract",
+          "black cohosh rhizome, root extract",
+          "black cohosh rhizome root extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -38723,7 +38786,8 @@
           "bergamot",
           "citrus bergamot",
           "citrus bergamia",
-          "Bergamot Phytosome"
+          "Bergamot Phytosome",
+          "bergamot orange extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -39442,7 +39506,46 @@
         "notes": "",
         "aliases": [
           "organ extracts (glandulars)",
-          "organ extracts"
+          "organ extracts",
+          "duodenum",
+          "duodenal substance",
+          "thyroid",
+          "thyroid glandular",
+          "bone marrow",
+          "hypothalamus",
+          "hypothalamus glandular",
+          "prostate concentrate",
+          "prostate",
+          "prostate glandular",
+          "stomach substance",
+          "stomach glandular",
+          "uterus",
+          "uterus glandular",
+          "orchic",
+          "orchic glandular",
+          "orchic substance",
+          "lung",
+          "lung glandular",
+          "lung substance",
+          "brain glandular",
+          "brain substance",
+          "adrenal glandular",
+          "adrenal substance",
+          "adrenal cortex",
+          "pituitary glandular",
+          "pituitary substance",
+          "spleen glandular",
+          "spleen substance",
+          "liver glandular",
+          "liver substance",
+          "kidney glandular",
+          "kidney substance",
+          "heart glandular",
+          "heart substance",
+          "pancreas glandular",
+          "pancreas substance",
+          "thymus glandular",
+          "thymus substance"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -39941,7 +40044,8 @@
         "absorption": "unknown",
         "notes": "",
         "aliases": [
-          "creatine"
+          "creatine",
+          "creatine pyruvate"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -40699,7 +40803,9 @@
           "Lemon Balm whole plant Extract",
           "Lemon Balm Whole Herb Extract",
           "Lemon Balm Juice",
-          "Lemon Balm Aerial Part Extract"
+          "Lemon Balm Aerial Part Extract",
+          "cyracos",
+          "cyracos lemon balm extract"
         ],
         "absorption_structured": {
           "value": 0.55,
@@ -41157,7 +41263,9 @@
           "taraxacum officinale",
           "dandelion leaf",
           "dandelion whole plant extract",
-          "dandelion root 4:1 extract"
+          "dandelion root 4:1 extract",
+          "dandelion whole plant/root extract",
+          "dandelion 4:1 extract"
         ],
         "absorption_structured": {
           "value": 0.55,
@@ -41703,7 +41811,8 @@
         "notes": "Gotu Kola ingredient without form/standardization details; conservative scoring.",
         "aliases": [
           "gotu kola",
-          "centella asiatica"
+          "centella asiatica",
+          "gotu kola aerial parts extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -42372,7 +42481,9 @@
           "humulones",
           "lupulones",
           "hops supercritical extract",
-          "estro8pn hops extract"
+          "estro8pn hops extract",
+          "hops cone extract",
+          "hops strobiles extract"
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
@@ -43037,7 +43148,8 @@
         "aliases": [
           "horsetail equisetum arvense aerial extract",
           "horsetail extract",
-          "equisetum arvense extract"
+          "equisetum arvense extract",
+          "horsetail stem extract"
         ],
         "dosage_importance": 0.8,
         "absorption_structured": {
@@ -45850,7 +45962,8 @@
           "chios mastic gum",
           "mastic resin",
           "mastica",
-          "mastic gum extract"
+          "mastic gum extract",
+          "mastic gum powder"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -46398,7 +46511,11 @@
           "rhapontigenin",
           "rheum rhaponticum extract",
           "rhapontic rhubarb extract",
-          "siberian rhubarb extract"
+          "siberian rhubarb extract",
+          "desoxy-rhaponticin",
+          "deoxyrhaponticin",
+          "rhapontic rhubarb root extract",
+          "rhapontic rhubarb (rheum rhaponticum l.) root extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -46667,7 +46784,9 @@
           "n,n-dimethylglycine",
           "dmg hcl",
           "dimethylglycine",
-          "pangamic acid"
+          "pangamic acid",
+          "dimethyl glycine hydrochloride",
+          "dmg hydrochloride"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -47261,6 +47380,1004 @@
     "category_enum": "herbs",
     "cui_note": "No UMLS entry for botanical/novel compound",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
+    "data_quality": {
+      "completeness": 0.6,
+      "missing_fields": [],
+      "review_status": "needs_review",
+      "last_reviewed_at": "2026-02-23"
+    }
+  },
+  "jujube": {
+    "category": "herbs",
+    "cui": null,
+    "cui_note": "No UMLS entry for botanical/novel compound",
+    "forms": {
+      "jujube (unspecified)": {
+        "score": 5,
+        "bio_score": 5,
+        "aliases": [
+          "jujube",
+          "jujube seed extract",
+          "jujube extract",
+          "ziziphus jujuba",
+          "ziziphus jujuba extract",
+          "jujube fruit extract",
+          "jujube seed",
+          "suan zao ren",
+          "ziziphus spinosa"
+        ],
+        "notes": "Stub score for Jujube. Conservative fallback.",
+        "natural": false,
+        "absorption": "unknown",
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": null,
+          "quality": "unknown",
+          "notes": "Data not available"
+        }
+      }
+    },
+    "standard_name": "Jujube",
+    "rxcui": null,
+    "rxcui_note": "No RxNorm concept for supplement ingredient",
+    "match_rules": {
+      "priority": 0,
+      "match_mode": "alias_and_fuzzy",
+      "exclusions": [],
+      "parent_id": null,
+      "confidence": "medium"
+    },
+    "category_enum": "herbs",
+    "data_quality": {
+      "completeness": 0.6,
+      "missing_fields": [],
+      "review_status": "needs_review",
+      "last_reviewed_at": "2026-02-23"
+    }
+  },
+  "threonic_acid": {
+    "category": "other",
+    "cui": null,
+    "cui_note": "No UMLS entry for threonic acid",
+    "forms": {
+      "threonic acid (unspecified)": {
+        "score": 5,
+        "bio_score": 5,
+        "aliases": [
+          "threonic acid",
+          "l-threonic acid",
+          "calcium threonate",
+          "l-threonate"
+        ],
+        "notes": "Stub score for Threonic Acid. Conservative fallback.",
+        "natural": false,
+        "absorption": "unknown",
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": null,
+          "quality": "unknown",
+          "notes": "Data not available"
+        }
+      }
+    },
+    "standard_name": "Threonic Acid",
+    "rxcui": null,
+    "rxcui_note": "No RxNorm concept for supplement ingredient",
+    "match_rules": {
+      "priority": 0,
+      "match_mode": "alias_and_fuzzy",
+      "exclusions": [],
+      "parent_id": null,
+      "confidence": "medium"
+    },
+    "category_enum": "other",
+    "data_quality": {
+      "completeness": 0.6,
+      "missing_fields": [],
+      "review_status": "needs_review",
+      "last_reviewed_at": "2026-02-23"
+    }
+  },
+  "dihydromyricetin": {
+    "category": "antioxidants",
+    "cui": null,
+    "cui_note": "No UMLS entry for botanical/novel compound",
+    "forms": {
+      "dihydromyricetin (unspecified)": {
+        "score": 5,
+        "bio_score": 5,
+        "aliases": [
+          "dihydromyricetin",
+          "dhm",
+          "ampelopsin",
+          "hovenia dulcis extract",
+          "ampelopsis grossedentata extract"
+        ],
+        "notes": "Stub score for Dihydromyricetin. Conservative fallback.",
+        "natural": false,
+        "absorption": "unknown",
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": null,
+          "quality": "unknown",
+          "notes": "Data not available"
+        }
+      }
+    },
+    "standard_name": "Dihydromyricetin",
+    "rxcui": null,
+    "rxcui_note": "No RxNorm concept for supplement ingredient",
+    "match_rules": {
+      "priority": 0,
+      "match_mode": "alias_and_fuzzy",
+      "exclusions": [],
+      "parent_id": null,
+      "confidence": "medium"
+    },
+    "category_enum": "antioxidants",
+    "data_quality": {
+      "completeness": 0.6,
+      "missing_fields": [],
+      "review_status": "needs_review",
+      "last_reviewed_at": "2026-02-23"
+    }
+  },
+  "diamine_oxidase": {
+    "category": "enzymes",
+    "cui": null,
+    "cui_note": "No UMLS entry for botanical/novel compound",
+    "forms": {
+      "diamine oxidase (unspecified)": {
+        "score": 5,
+        "bio_score": 5,
+        "aliases": [
+          "diamine oxidase",
+          "dao",
+          "dao enzyme",
+          "histamine degrading enzyme",
+          "diamine oxidase enzyme"
+        ],
+        "notes": "Stub score for Diamine Oxidase. Conservative fallback.",
+        "natural": false,
+        "absorption": "unknown",
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": null,
+          "quality": "unknown",
+          "notes": "Data not available"
+        }
+      }
+    },
+    "standard_name": "Diamine Oxidase",
+    "rxcui": null,
+    "rxcui_note": "No RxNorm concept for supplement ingredient",
+    "match_rules": {
+      "priority": 0,
+      "match_mode": "alias_and_fuzzy",
+      "exclusions": [],
+      "parent_id": null,
+      "confidence": "medium"
+    },
+    "category_enum": "enzymes",
+    "data_quality": {
+      "completeness": 0.6,
+      "missing_fields": [],
+      "review_status": "needs_review",
+      "last_reviewed_at": "2026-02-23"
+    }
+  },
+  "yohimbe": {
+    "category": "herbs",
+    "cui": null,
+    "cui_note": "No UMLS entry for botanical/novel compound",
+    "forms": {
+      "yohimbe (unspecified)": {
+        "score": 5,
+        "bio_score": 5,
+        "aliases": [
+          "yohimbe",
+          "yohimbe bark extract",
+          "yohimbine",
+          "yohimbine hcl",
+          "alpha yohimbine",
+          "rauwolscine",
+          "pausinystalia yohimbe",
+          "yohimbe bark",
+          "yohimbine hydrochloride"
+        ],
+        "notes": "Stub score for Yohimbe. Conservative fallback.",
+        "natural": false,
+        "absorption": "unknown",
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": null,
+          "quality": "unknown",
+          "notes": "Data not available"
+        }
+      }
+    },
+    "standard_name": "Yohimbe",
+    "rxcui": null,
+    "rxcui_note": "No RxNorm concept for supplement ingredient",
+    "match_rules": {
+      "priority": 0,
+      "match_mode": "alias_and_fuzzy",
+      "exclusions": [],
+      "parent_id": null,
+      "confidence": "medium"
+    },
+    "category_enum": "herbs",
+    "data_quality": {
+      "completeness": 0.6,
+      "missing_fields": [],
+      "review_status": "needs_review",
+      "last_reviewed_at": "2026-02-23"
+    }
+  },
+  "activated_charcoal": {
+    "category": "other",
+    "cui": null,
+    "cui_note": "No UMLS entry for botanical/novel compound",
+    "forms": {
+      "activated charcoal (unspecified)": {
+        "score": 5,
+        "bio_score": 5,
+        "aliases": [
+          "activated charcoal",
+          "activated carbon",
+          "charcoal powder",
+          "activated coconut charcoal",
+          "actisorb base",
+          "actisorb",
+          "coconut shell activated charcoal"
+        ],
+        "notes": "Stub score for Activated Charcoal. Conservative fallback.",
+        "natural": false,
+        "absorption": "unknown",
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": null,
+          "quality": "unknown",
+          "notes": "Data not available"
+        }
+      }
+    },
+    "standard_name": "Activated Charcoal",
+    "rxcui": null,
+    "rxcui_note": "No RxNorm concept for supplement ingredient",
+    "match_rules": {
+      "priority": 0,
+      "match_mode": "alias_and_fuzzy",
+      "exclusions": [],
+      "parent_id": null,
+      "confidence": "medium"
+    },
+    "category_enum": "other",
+    "data_quality": {
+      "completeness": 0.6,
+      "missing_fields": [],
+      "review_status": "needs_review",
+      "last_reviewed_at": "2026-02-23"
+    }
+  },
+  "aloe_vera": {
+    "category": "herbs",
+    "cui": null,
+    "cui_note": "No UMLS entry for botanical/novel compound",
+    "forms": {
+      "aloe vera (unspecified)": {
+        "score": 5,
+        "bio_score": 5,
+        "aliases": [
+          "aloe vera",
+          "aloe vera extract",
+          "aloe vera leaf gel extract",
+          "aloe vera gel",
+          "aloe barbadensis",
+          "aloe vera leaf",
+          "aloe vera inner leaf",
+          "aloe vera powder",
+          "aloe vera 200:1 extract"
+        ],
+        "notes": "Stub score for Aloe Vera. Conservative fallback.",
+        "natural": false,
+        "absorption": "unknown",
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": null,
+          "quality": "unknown",
+          "notes": "Data not available"
+        }
+      }
+    },
+    "standard_name": "Aloe Vera",
+    "rxcui": null,
+    "rxcui_note": "No RxNorm concept for supplement ingredient",
+    "match_rules": {
+      "priority": 0,
+      "match_mode": "alias_and_fuzzy",
+      "exclusions": [],
+      "parent_id": null,
+      "confidence": "medium"
+    },
+    "category_enum": "herbs",
+    "data_quality": {
+      "completeness": 0.6,
+      "missing_fields": [],
+      "review_status": "needs_review",
+      "last_reviewed_at": "2026-02-23"
+    }
+  },
+  "wild_yam": {
+    "category": "herbs",
+    "cui": null,
+    "cui_note": "No UMLS entry for botanical/novel compound",
+    "forms": {
+      "wild yam (unspecified)": {
+        "score": 5,
+        "bio_score": 5,
+        "aliases": [
+          "wild yam",
+          "wild yam extract",
+          "wild yam root",
+          "dioscorea villosa",
+          "wild yam 16% extract",
+          "wild yam root extract",
+          "mexican wild yam",
+          "dioscorea villosa extract"
+        ],
+        "notes": "Stub score for Wild Yam. Conservative fallback.",
+        "natural": false,
+        "absorption": "unknown",
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": null,
+          "quality": "unknown",
+          "notes": "Data not available"
+        }
+      }
+    },
+    "standard_name": "Wild Yam",
+    "rxcui": null,
+    "rxcui_note": "No RxNorm concept for supplement ingredient",
+    "match_rules": {
+      "priority": 0,
+      "match_mode": "alias_and_fuzzy",
+      "exclusions": [],
+      "parent_id": null,
+      "confidence": "medium"
+    },
+    "category_enum": "herbs",
+    "data_quality": {
+      "completeness": 0.6,
+      "missing_fields": [],
+      "review_status": "needs_review",
+      "last_reviewed_at": "2026-02-23"
+    }
+  },
+  "red_clover": {
+    "category": "herbs",
+    "cui": null,
+    "cui_note": "No UMLS entry for botanical/novel compound",
+    "forms": {
+      "red clover (unspecified)": {
+        "score": 5,
+        "bio_score": 5,
+        "aliases": [
+          "red clover",
+          "red clover extract",
+          "red clover flowering tops extract",
+          "trifolium pratense",
+          "red clover flower extract",
+          "red clover isoflavones",
+          "red clover blossom"
+        ],
+        "notes": "Stub score for Red Clover. Conservative fallback.",
+        "natural": false,
+        "absorption": "unknown",
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": null,
+          "quality": "unknown",
+          "notes": "Data not available"
+        }
+      }
+    },
+    "standard_name": "Red Clover",
+    "rxcui": null,
+    "rxcui_note": "No RxNorm concept for supplement ingredient",
+    "match_rules": {
+      "priority": 0,
+      "match_mode": "alias_and_fuzzy",
+      "exclusions": [],
+      "parent_id": null,
+      "confidence": "medium"
+    },
+    "category_enum": "herbs",
+    "data_quality": {
+      "completeness": 0.6,
+      "missing_fields": [],
+      "review_status": "needs_review",
+      "last_reviewed_at": "2026-02-23"
+    }
+  },
+  "juniper": {
+    "category": "herbs",
+    "cui": null,
+    "cui_note": "No UMLS entry for botanical/novel compound",
+    "forms": {
+      "juniper (unspecified)": {
+        "score": 5,
+        "bio_score": 5,
+        "aliases": [
+          "juniper",
+          "juniper berry",
+          "juniper berry extract",
+          "juniperus communis",
+          "juniper 4:1 extract",
+          "juniper extract",
+          "juniper berries"
+        ],
+        "notes": "Stub score for Juniper. Conservative fallback.",
+        "natural": false,
+        "absorption": "unknown",
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": null,
+          "quality": "unknown",
+          "notes": "Data not available"
+        }
+      }
+    },
+    "standard_name": "Juniper",
+    "rxcui": null,
+    "rxcui_note": "No RxNorm concept for supplement ingredient",
+    "match_rules": {
+      "priority": 0,
+      "match_mode": "alias_and_fuzzy",
+      "exclusions": [],
+      "parent_id": null,
+      "confidence": "medium"
+    },
+    "category_enum": "herbs",
+    "data_quality": {
+      "completeness": 0.6,
+      "missing_fields": [],
+      "review_status": "needs_review",
+      "last_reviewed_at": "2026-02-23"
+    }
+  },
+  "nopal": {
+    "category": "herbs",
+    "cui": null,
+    "cui_note": "No UMLS entry for botanical/novel compound",
+    "forms": {
+      "nopal (unspecified)": {
+        "score": 5,
+        "bio_score": 5,
+        "aliases": [
+          "nopal",
+          "nopal cactus",
+          "prickly pear",
+          "opuntia ficus-indica",
+          "opuntia extract",
+          "nopal extract",
+          "prickly pear cactus",
+          "nopal cactus powder"
+        ],
+        "notes": "Stub score for Nopal. Conservative fallback.",
+        "natural": false,
+        "absorption": "unknown",
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": null,
+          "quality": "unknown",
+          "notes": "Data not available"
+        }
+      }
+    },
+    "standard_name": "Nopal",
+    "rxcui": null,
+    "rxcui_note": "No RxNorm concept for supplement ingredient",
+    "match_rules": {
+      "priority": 0,
+      "match_mode": "alias_and_fuzzy",
+      "exclusions": [],
+      "parent_id": null,
+      "confidence": "medium"
+    },
+    "category_enum": "herbs",
+    "data_quality": {
+      "completeness": 0.6,
+      "missing_fields": [],
+      "review_status": "needs_review",
+      "last_reviewed_at": "2026-02-23"
+    }
+  },
+  "cocoa": {
+    "category": "herbs",
+    "cui": null,
+    "cui_note": "UMLS CUI: C0009209",
+    "forms": {
+      "cocoa (unspecified)": {
+        "score": 5,
+        "bio_score": 5,
+        "aliases": [
+          "cocoa",
+          "cocoa extract",
+          "cocoa seed extract",
+          "theobroma cacao",
+          "cocoa bean extract",
+          "cocoa flavanols",
+          "cocoa powder extract",
+          "cacao extract"
+        ],
+        "notes": "Stub score for Cocoa. Conservative fallback.",
+        "natural": false,
+        "absorption": "unknown",
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": null,
+          "quality": "unknown",
+          "notes": "Data not available"
+        }
+      }
+    },
+    "standard_name": "Cocoa",
+    "rxcui": null,
+    "rxcui_note": "No RxNorm concept for supplement ingredient",
+    "match_rules": {
+      "priority": 0,
+      "match_mode": "alias_and_fuzzy",
+      "exclusions": [],
+      "parent_id": null,
+      "confidence": "medium"
+    },
+    "category_enum": "herbs",
+    "data_quality": {
+      "completeness": 0.6,
+      "missing_fields": [],
+      "review_status": "needs_review",
+      "last_reviewed_at": "2026-02-23"
+    }
+  },
+  "alfalfa": {
+    "category": "herbs",
+    "cui": null,
+    "cui_note": "No UMLS entry for botanical/novel compound",
+    "forms": {
+      "alfalfa (unspecified)": {
+        "score": 5,
+        "bio_score": 5,
+        "aliases": [
+          "alfalfa",
+          "alfalfa extract",
+          "alfalfa leaf",
+          "medicago sativa",
+          "alfalfa grass",
+          "organic alfalfa grass powder",
+          "alfalfa herb powder",
+          "alfalfa leaf & stem extract",
+          "organic alfalfa",
+          "alfalfa juice concentrate"
+        ],
+        "notes": "Stub score for Alfalfa. Conservative fallback.",
+        "natural": false,
+        "absorption": "unknown",
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": null,
+          "quality": "unknown",
+          "notes": "Data not available"
+        }
+      }
+    },
+    "standard_name": "Alfalfa",
+    "rxcui": null,
+    "rxcui_note": "No RxNorm concept for supplement ingredient",
+    "match_rules": {
+      "priority": 0,
+      "match_mode": "alias_and_fuzzy",
+      "exclusions": [],
+      "parent_id": null,
+      "confidence": "medium"
+    },
+    "category_enum": "herbs",
+    "data_quality": {
+      "completeness": 0.6,
+      "missing_fields": [],
+      "review_status": "needs_review",
+      "last_reviewed_at": "2026-02-23"
+    }
+  },
+  "klamath_algae": {
+    "category": "herbs",
+    "cui": null,
+    "cui_note": "No UMLS entry for klamath blue-green algae",
+    "forms": {
+      "klamath blue-green algae (unspecified)": {
+        "score": 5,
+        "bio_score": 5,
+        "aliases": [
+          "klamath blue green algae",
+          "klamath algae",
+          "aphanizomenon flos-aquae",
+          "afa algae",
+          "afa blue-green algae",
+          "klamath lake algae",
+          "e3live"
+        ],
+        "notes": "Stub score for Klamath Blue-Green Algae. Conservative fallback.",
+        "natural": false,
+        "absorption": "unknown",
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": null,
+          "quality": "unknown",
+          "notes": "Data not available"
+        }
+      }
+    },
+    "standard_name": "Klamath Blue-Green Algae",
+    "rxcui": null,
+    "rxcui_note": "No RxNorm concept for supplement ingredient",
+    "match_rules": {
+      "priority": 0,
+      "match_mode": "alias_and_fuzzy",
+      "exclusions": [],
+      "parent_id": null,
+      "confidence": "medium"
+    },
+    "category_enum": "herbs",
+    "data_quality": {
+      "completeness": 0.6,
+      "missing_fields": [],
+      "review_status": "needs_review",
+      "last_reviewed_at": "2026-02-23"
+    }
+  },
+  "rubidium": {
+    "category": "minerals",
+    "cui": null,
+    "cui_note": "UMLS CUI: C0035930",
+    "forms": {
+      "rubidium (unspecified)": {
+        "score": 5,
+        "bio_score": 5,
+        "aliases": [
+          "rubidium",
+          "rubidium chloride",
+          "rubidium trace mineral"
+        ],
+        "notes": "Stub score for Rubidium. Conservative fallback.",
+        "natural": false,
+        "absorption": "unknown",
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": null,
+          "quality": "unknown",
+          "notes": "Data not available"
+        }
+      }
+    },
+    "standard_name": "Rubidium",
+    "rxcui": null,
+    "rxcui_note": "No RxNorm concept for supplement ingredient",
+    "match_rules": {
+      "priority": 0,
+      "match_mode": "alias_and_fuzzy",
+      "exclusions": [],
+      "parent_id": null,
+      "confidence": "medium"
+    },
+    "category_enum": "minerals",
+    "data_quality": {
+      "completeness": 0.6,
+      "missing_fields": [],
+      "review_status": "needs_review",
+      "last_reviewed_at": "2026-02-23"
+    }
+  },
+  "theophylline": {
+    "category": "other",
+    "cui": null,
+    "cui_note": "UMLS CUI: C0039771",
+    "forms": {
+      "theophylline (unspecified)": {
+        "score": 5,
+        "bio_score": 5,
+        "aliases": [
+          "theophylline",
+          "theophylline anhydrous",
+          "1,3-dimethylxanthine"
+        ],
+        "notes": "Stub score for Theophylline. Conservative fallback.",
+        "natural": false,
+        "absorption": "unknown",
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": null,
+          "quality": "unknown",
+          "notes": "Data not available"
+        }
+      }
+    },
+    "standard_name": "Theophylline",
+    "rxcui": null,
+    "rxcui_note": "No RxNorm concept for supplement ingredient",
+    "match_rules": {
+      "priority": 0,
+      "match_mode": "alias_and_fuzzy",
+      "exclusions": [],
+      "parent_id": null,
+      "confidence": "medium"
+    },
+    "category_enum": "other",
+    "data_quality": {
+      "completeness": 0.6,
+      "missing_fields": [],
+      "review_status": "needs_review",
+      "last_reviewed_at": "2026-02-23"
+    }
+  },
+  "centrophenoxine": {
+    "category": "other",
+    "cui": null,
+    "cui_note": "UMLS CUI: C0025023",
+    "forms": {
+      "centrophenoxine (unspecified)": {
+        "score": 5,
+        "bio_score": 5,
+        "aliases": [
+          "centrophenoxine",
+          "meclofenoxate",
+          "lucidril",
+          "centro phenoxine"
+        ],
+        "notes": "Stub score for Centrophenoxine. Conservative fallback.",
+        "natural": false,
+        "absorption": "unknown",
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": null,
+          "quality": "unknown",
+          "notes": "Data not available"
+        }
+      }
+    },
+    "standard_name": "Centrophenoxine",
+    "rxcui": null,
+    "rxcui_note": "No RxNorm concept for supplement ingredient",
+    "match_rules": {
+      "priority": 0,
+      "match_mode": "alias_and_fuzzy",
+      "exclusions": [],
+      "parent_id": null,
+      "confidence": "medium"
+    },
+    "category_enum": "other",
+    "data_quality": {
+      "completeness": 0.6,
+      "missing_fields": [],
+      "review_status": "needs_review",
+      "last_reviewed_at": "2026-02-23"
+    }
+  },
+  "rhaponticum": {
+    "category": "herbs",
+    "cui": null,
+    "cui_note": "No UMLS entry for Rhaponticum carthamoides",
+    "forms": {
+      "rhaponticum (unspecified)": {
+        "score": 5,
+        "bio_score": 5,
+        "aliases": [
+          "rhaponticum",
+          "rhaponticum carthamoides",
+          "rhaponticum carthamoides root extract",
+          "maral root",
+          "leuzea carthamoides",
+          "rhaponticum carthamoides extract"
+        ],
+        "notes": "Stub score for Rhaponticum. Conservative fallback.",
+        "natural": false,
+        "absorption": "unknown",
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": null,
+          "quality": "unknown",
+          "notes": "Data not available"
+        }
+      }
+    },
+    "standard_name": "Rhaponticum",
+    "rxcui": null,
+    "rxcui_note": "No RxNorm concept for supplement ingredient",
+    "match_rules": {
+      "priority": 0,
+      "match_mode": "alias_and_fuzzy",
+      "exclusions": [],
+      "parent_id": null,
+      "confidence": "medium"
+    },
+    "category_enum": "herbs",
+    "data_quality": {
+      "completeness": 0.6,
+      "missing_fields": [],
+      "review_status": "needs_review",
+      "last_reviewed_at": "2026-02-23"
+    }
+  },
+  "birch_polypore": {
+    "category": "herbs",
+    "cui": null,
+    "cui_note": "No UMLS entry for birch polypore mushroom",
+    "forms": {
+      "birch polypore (unspecified)": {
+        "score": 5,
+        "bio_score": 5,
+        "aliases": [
+          "birch polypore",
+          "piptoporus betulinus",
+          "fomitopsis betulina",
+          "birch bracket",
+          "birch polypore extract"
+        ],
+        "notes": "Stub score for Birch Polypore. Conservative fallback.",
+        "natural": false,
+        "absorption": "unknown",
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": null,
+          "quality": "unknown",
+          "notes": "Data not available"
+        }
+      }
+    },
+    "standard_name": "Birch Polypore",
+    "rxcui": null,
+    "rxcui_note": "No RxNorm concept for supplement ingredient",
+    "match_rules": {
+      "priority": 0,
+      "match_mode": "alias_and_fuzzy",
+      "exclusions": [],
+      "parent_id": null,
+      "confidence": "medium"
+    },
+    "category_enum": "herbs",
+    "data_quality": {
+      "completeness": 0.6,
+      "missing_fields": [],
+      "review_status": "needs_review",
+      "last_reviewed_at": "2026-02-23"
+    }
+  },
+  "bismuth": {
+    "category": "minerals",
+    "cui": null,
+    "cui_note": "UMLS CUI: C0005581",
+    "forms": {
+      "bismuth (unspecified)": {
+        "score": 5,
+        "bio_score": 5,
+        "aliases": [
+          "bismuth",
+          "bismuth citrate",
+          "bismuth subcitrate",
+          "bismuth subsalicylate"
+        ],
+        "notes": "Stub score for Bismuth. Conservative fallback.",
+        "natural": false,
+        "absorption": "unknown",
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": null,
+          "quality": "unknown",
+          "notes": "Data not available"
+        }
+      }
+    },
+    "standard_name": "Bismuth",
+    "rxcui": null,
+    "rxcui_note": "No RxNorm concept for supplement ingredient",
+    "match_rules": {
+      "priority": 0,
+      "match_mode": "alias_and_fuzzy",
+      "exclusions": [],
+      "parent_id": null,
+      "confidence": "medium"
+    },
+    "category_enum": "minerals",
+    "data_quality": {
+      "completeness": 0.6,
+      "missing_fields": [],
+      "review_status": "needs_review",
+      "last_reviewed_at": "2026-02-23"
+    }
+  },
+  "bentonite": {
+    "category": "other",
+    "cui": null,
+    "cui_note": "No UMLS entry for bentonite supplement",
+    "forms": {
+      "bentonite (unspecified)": {
+        "score": 5,
+        "bio_score": 5,
+        "aliases": [
+          "bentonite",
+          "bentonite clay",
+          "bentonite mineral powder",
+          "montmorillonite clay",
+          "bentonite powder"
+        ],
+        "notes": "Stub score for Bentonite. Conservative fallback.",
+        "natural": false,
+        "absorption": "unknown",
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": null,
+          "quality": "unknown",
+          "notes": "Data not available"
+        }
+      }
+    },
+    "standard_name": "Bentonite",
+    "rxcui": null,
+    "rxcui_note": "No RxNorm concept for supplement ingredient",
+    "match_rules": {
+      "priority": 0,
+      "match_mode": "alias_and_fuzzy",
+      "exclusions": [],
+      "parent_id": null,
+      "confidence": "medium"
+    },
+    "category_enum": "other",
+    "data_quality": {
+      "completeness": 0.6,
+      "missing_fields": [],
+      "review_status": "needs_review",
+      "last_reviewed_at": "2026-02-23"
+    }
+  },
+  "grains_of_paradise": {
+    "category": "herbs",
+    "cui": null,
+    "cui_note": "No UMLS entry for grains of paradise supplement",
+    "forms": {
+      "grains of paradise (unspecified)": {
+        "score": 5,
+        "bio_score": 5,
+        "aliases": [
+          "grains of paradise",
+          "aframomum melegueta",
+          "paradoxine",
+          "grains of paradise extract",
+          "caloriburnGP",
+          "caloriburn gp",
+          "caloriburn"
+        ],
+        "notes": "Stub score for Grains of Paradise. Conservative fallback.",
+        "natural": false,
+        "absorption": "unknown",
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": null,
+          "quality": "unknown",
+          "notes": "Data not available"
+        }
+      }
+    },
+    "standard_name": "Grains of Paradise",
+    "rxcui": null,
+    "rxcui_note": "No RxNorm concept for supplement ingredient",
+    "match_rules": {
+      "priority": 0,
+      "match_mode": "alias_and_fuzzy",
+      "exclusions": [],
+      "parent_id": null,
+      "confidence": "medium"
+    },
+    "category_enum": "herbs",
     "data_quality": {
       "completeness": 0.6,
       "missing_fields": [],

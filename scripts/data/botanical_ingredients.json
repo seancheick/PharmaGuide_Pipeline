@@ -4,7 +4,7 @@
     "purpose": "ingredient_mapping",
     "schema_version": "4.0.0",
     "last_updated": "2026-02-23",
-    "total_entries": 325,
+    "total_entries": 339,
     "quality_tier": "basic_raw_botanicals",
     "standardization": "none",
     "notes": "This database is separate from standardized_botanicals.json by design. Overlaps are intentional and allow the scoring system to reward standardized forms over raw powders."
@@ -2082,7 +2082,10 @@
       "standard_name": "Magnolia-Phellodendron Blend",
       "aliases": [
         "relora",
-        "magnolia officinalis and phellodendron amurense"
+        "magnolia officinalis and phellodendron amurense",
+        "phellodendron, powder",
+        "phellodendron powder",
+        "huang bai powder"
       ],
       "category": "bark",
       "notes": "Added from Thorne/Nordic unmapped remediation pass for identity mapping coverage.",
@@ -3617,7 +3620,9 @@
         "oat straw",
         "oat straw extract",
         "avena sativa straw",
-        "avena sativa aerial parts"
+        "avena sativa aerial parts",
+        "organic oat grass powder",
+        "oat grass powder"
       ],
       "category": "grain",
       "notes": "Aerial parts (straw) of oats used in calming and nervine formulas; identity mapping only, not standardized to marker compounds.",
@@ -3699,7 +3704,10 @@
         "achillea millefolium aerial parts",
         "achillea millefolium extract",
         "yarrow flowers",
-        "yarrow flower"
+        "yarrow flower",
+        "yarrow flowers powder",
+        "yarrow flower powder",
+        "yarrow powder"
       ],
       "category": "aerial parts",
       "notes": "Identity-only mapping for yarrow preparations (whole herb/aerial parts).",
@@ -3872,7 +3880,8 @@
         "european angelica extract",
         "garden angelica",
         "angelica archangelica root",
-        "angelica archangelica leaf"
+        "angelica archangelica leaf",
+        "angelica (angelica archangelica) leaf extract"
       ],
       "category": "leaf",
       "notes": "Identity-only mapping for Angelica archangelica (European Angelica). Distinct from dong quai (Angelica sinensis).",
@@ -3950,7 +3959,8 @@
         "stone breaker",
         "stone breaker extract",
         "phyllanthus niruri",
-        "phyllanthus niruri extract"
+        "phyllanthus niruri extract",
+        "chanca piedra whole plant extract"
       ],
       "category": "herb",
       "notes": "Identity-only mapping for Chanca Piedra (Phyllanthus niruri).",
@@ -4100,7 +4110,8 @@
         "muira puama bark extract",
         "ptychopetalum olacoides",
         "ptychopetalum olacoides extract",
-        "potency wood"
+        "potency wood",
+        "muira puama root powder"
       ],
       "category": "bark",
       "notes": "Identity-only mapping for Muira Puama (Ptychopetalum olacoides).",
@@ -4115,7 +4126,9 @@
         "oat straw herb",
         "avena sativa herb",
         "avena sativa extract",
-        "avena sativa aerial parts"
+        "avena sativa aerial parts",
+        "organic oat grass powder",
+        "oat grass powder"
       ],
       "category": "herb",
       "notes": "Identity-only mapping for Oatstraw (Avena sativa herb). Distinct from oat bran and oat straw entries which cover other preparations.",
@@ -4147,7 +4160,10 @@
         "phellodendron amurense",
         "phellodendron amurense extract",
         "huang bai",
-        "huang bai bark"
+        "huang bai bark",
+        "phellodendron, powder",
+        "phellodendron powder",
+        "huang bai powder"
       ],
       "category": "bark",
       "notes": "Identity-only mapping for Phellodendron (Phellodendron amurense / Huang Bai bark). Distinct from magnolia-phellodendron blend.",
@@ -4162,7 +4178,10 @@
         "common polypody",
         "common polypody extract",
         "polypody fern",
-        "polypody fern extract"
+        "polypody fern extract",
+        "polypodium vulgare, powder",
+        "polypodium vulgare powder",
+        "polypodium vulgare, powder extract"
       ],
       "category": "leaf",
       "notes": "Identity-only mapping for Polypodium vulgare (Common polypody fern). Distinct species from Polypodium leucotomos.",
@@ -4179,7 +4198,8 @@
         "solomon's seal root",
         "solomons seal root",
         "polygonatum odoratum",
-        "polygonatum odoratum extract"
+        "polygonatum odoratum extract",
+        "aromatic solomon's seal"
       ],
       "category": "root",
       "notes": "Identity-only mapping for Solomon's Seal (Polygonatum odoratum).",
@@ -4232,6 +4252,206 @@
       ],
       "category": "leaf",
       "notes": "Identity-only mapping for Wormwood (Artemisia absinthium). Distinct from Sweet Wormwood (Artemisia annua).",
+      "last_updated": "2026-02-23"
+    },
+    {
+      "id": "oregon_grape",
+      "standard_name": "Oregon Grape",
+      "aliases": [
+        "oregon grape",
+        "oregon grape root",
+        "oregon grape root extract",
+        "mahonia aquifolium",
+        "berberis aquifolium",
+        "oregon grape extract"
+      ],
+      "category": "root",
+      "notes": "Mahonia aquifolium, contains berberine. Root bark used traditionally.",
+      "last_updated": "2026-02-23"
+    },
+    {
+      "id": "bayberry",
+      "standard_name": "Bayberry",
+      "aliases": [
+        "bayberry",
+        "bayberry bark",
+        "bayberry root bark",
+        "myrica cerifera",
+        "bayberry extract"
+      ],
+      "category": "bark",
+      "notes": "Myrica cerifera, traditional astringent bark.",
+      "last_updated": "2026-02-23"
+    },
+    {
+      "id": "celandine",
+      "standard_name": "Greater Celandine",
+      "aliases": [
+        "celandine",
+        "greater celandine",
+        "chelidonium majus",
+        "celandine extract",
+        "celandine herb"
+      ],
+      "category": "herb",
+      "notes": "Chelidonium majus, traditional European liver herb.",
+      "last_updated": "2026-02-23"
+    },
+    {
+      "id": "goats_rue",
+      "standard_name": "Goat's Rue",
+      "aliases": [
+        "goat's rue",
+        "goats rue",
+        "galega officinalis",
+        "goat's rue extract",
+        "goat's rue herb",
+        "french lilac"
+      ],
+      "category": "herb",
+      "notes": "Galega officinalis, traditional galactogogue.",
+      "last_updated": "2026-02-23"
+    },
+    {
+      "id": "butternut",
+      "standard_name": "Butternut",
+      "aliases": [
+        "butternut",
+        "butternut bark",
+        "juglans cinerea",
+        "butternut extract",
+        "white walnut"
+      ],
+      "category": "bark",
+      "notes": "Juglans cinerea, traditional mild laxative bark.",
+      "last_updated": "2026-02-23"
+    },
+    {
+      "id": "graviola",
+      "standard_name": "Graviola",
+      "aliases": [
+        "graviola",
+        "graviola leaf",
+        "graviola leaf powder",
+        "graviola extract",
+        "soursop",
+        "annona muricata",
+        "guanabana"
+      ],
+      "category": "leaf",
+      "notes": "Annona muricata, tropical tree used in traditional medicine.",
+      "last_updated": "2026-02-23"
+    },
+    {
+      "id": "red_root",
+      "standard_name": "Red Root",
+      "aliases": [
+        "red root",
+        "ceanothus americanus",
+        "new jersey tea",
+        "red root extract",
+        "red root bark"
+      ],
+      "category": "root",
+      "notes": "Ceanothus americanus, lymphatic/spleen support herb.",
+      "last_updated": "2026-02-23"
+    },
+    {
+      "id": "java_tea",
+      "standard_name": "Java Tea",
+      "aliases": [
+        "java tea",
+        "java tea leaf extract",
+        "orthosiphon stamineus",
+        "orthosiphon aristatus",
+        "cats whiskers",
+        "java tea extract"
+      ],
+      "category": "leaf",
+      "notes": "Orthosiphon stamineus, kidney/urinary support herb.",
+      "last_updated": "2026-02-23"
+    },
+    {
+      "id": "cnidium",
+      "standard_name": "Cnidium",
+      "aliases": [
+        "cnidium",
+        "cnidium monnieri",
+        "cnidium seed",
+        "cnidium, powder",
+        "she chuang zi",
+        "cnidium fruit extract"
+      ],
+      "category": "seed",
+      "notes": "Cnidium monnieri, traditional Chinese herb.",
+      "last_updated": "2026-02-23"
+    },
+    {
+      "id": "blue_cohosh",
+      "standard_name": "Blue Cohosh",
+      "aliases": [
+        "blue cohosh",
+        "caulophyllum thalictroides",
+        "blue cohosh root",
+        "blue cohosh extract",
+        "blue cohosh root extract"
+      ],
+      "category": "root",
+      "notes": "Caulophyllum thalictroides, traditional womens health herb.",
+      "last_updated": "2026-02-23"
+    },
+    {
+      "id": "apple_fiber",
+      "standard_name": "Apple Fiber",
+      "aliases": [
+        "apple fiber",
+        "apple fruit fiber",
+        "apple pectin fiber",
+        "apple fiber powder"
+      ],
+      "category": "fruit",
+      "notes": "Apple fruit fiber, dietary fiber source.",
+      "last_updated": "2026-02-23"
+    },
+    {
+      "id": "eleuthero_stem",
+      "standard_name": "Eleuthero Stem",
+      "aliases": [
+        "eleutherococcus senticosus stem extract",
+        "eleuthero stem extract",
+        "siberian ginseng stem"
+      ],
+      "category": "stem",
+      "notes": "Eleutherococcus senticosus stem preparation.",
+      "last_updated": "2026-02-23"
+    },
+    {
+      "id": "amadou",
+      "standard_name": "Amadou",
+      "aliases": [
+        "amadou",
+        "fomes fomentarius",
+        "tinder fungus",
+        "amadou extract",
+        "horse hoof fungus"
+      ],
+      "category": "mushroom",
+      "notes": "Fomes fomentarius, traditional medicinal fungus.",
+      "last_updated": "2026-02-23"
+    },
+    {
+      "id": "nigella",
+      "standard_name": "Nigella",
+      "aliases": [
+        "nigella",
+        "organic nigella",
+        "nigella sativa",
+        "black seed",
+        "black cumin seed",
+        "kalonji"
+      ],
+      "category": "seed",
+      "notes": "Nigella sativa, traditional Middle Eastern/South Asian herb.",
       "last_updated": "2026-02-23"
     }
   ]

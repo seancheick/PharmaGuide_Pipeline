@@ -4,7 +4,7 @@
     "purpose": "inactive_ingredient_classification",
     "schema_version": "4.0.0",
     "last_updated": "2026-02-23",
-    "total_entries": 362
+    "total_entries": 380
   },
   "other_ingredients": [
     {
@@ -897,7 +897,10 @@
         "coconut oil, refined",
         "coconut oil, natural",
         "refined coconut oil",
-        "natural coconut oil"
+        "natural coconut oil",
+        "coconut oil, virgin",
+        "virgin coconut oil",
+        "organic virgin coconut oil"
       ],
       "category": "carrier_filler_natural",
       "additive_type": "carrier",
@@ -1724,7 +1727,8 @@
         "magnesium vegetable stearate",
         "veg. magnesium stearate",
         "vegetarian magnesium stearate",
-        "vegetable source magnesium stearate"
+        "vegetable source magnesium stearate",
+        "magnesium stearates"
       ],
       "category": "tablet_lubricant",
       "additive_type": "processing_aid",
@@ -2660,7 +2664,9 @@
         "E306",
         "rosemary extract",
         "tocopherol blend",
-        "natural antioxidants"
+        "natural antioxidants",
+        "d-alpha-tocopherol acetate",
+        "d-alpha tocopherol acetate"
       ],
       "category": "preservative_natural",
       "additive_type": "preservative_natural",
@@ -3237,7 +3243,13 @@
         "organic rice hulls",
         "Nu-FLOW",
         "rice bran powder",
-        "white rice bran"
+        "white rice bran",
+        "brown rice bran",
+        "stabilized rice bran",
+        "rice polishings",
+        "certified organic rice flour",
+        "rice flower",
+        "pregelatinized rice starch"
       ],
       "category": "flow_agent_filler",
       "additive_type": "flow_agent",
@@ -4580,7 +4592,13 @@
         "delayed-release capsules",
         "delayed-release Capsules",
         "delayed release capsule",
-        "enteric-coated capsule"
+        "enteric-coated capsule",
+        "hypromellose capsules",
+        "hydropropyl methylcellulose",
+        "hydroxy propyl methyl cellulose",
+        "organic vegetable pullulan capsules",
+        "pullulan polysaccharide",
+        "pullulan capsule"
       ],
       "category": "capsule_material",
       "notes": "Generic capsule delivery format descriptor. Not a specific ingredient but a formulation type. Classified as non-active to prevent unmapped inflation.",
@@ -6579,7 +6597,9 @@
         "vegetable glaze",
         "botanical coating",
         "natural coating",
-        "plant-derived glaze"
+        "plant-derived glaze",
+        "confectioners glaze",
+        "confectioner's glaze"
       ],
       "category": "coating_protective",
       "notes": "A coating derived from plant sources, used to protect supplements and improve appearance. Often made from plant waxes or resins. Generally considered safe.",
@@ -8538,7 +8558,8 @@
         "fructooligosaccharides",
         "fos",
         "fructo oligosaccharides",
-        "short-chain fos"
+        "short-chain fos",
+        "fructo-oligosaccharide"
       ],
       "category": "fiber_prebiotic",
       "additive_type": "prebiotic_fiber",
@@ -8773,6 +8794,223 @@
       "is_additive": true,
       "severity_level": "none",
       "allergen_flag": null
+    },
+    {
+      "id": "NHA_SILICONE_DIOXIDE",
+      "standard_name": "Silicone Dioxide",
+      "category": "anti-caking agent",
+      "aliases": [
+        "silicone dioxide",
+        "silicon dioxide flow agent"
+      ],
+      "notes": "Likely misspelling of silicon dioxide. Anti-caking agent.",
+      "last_updated": "2026-02-23"
+    },
+    {
+      "id": "NHA_BOTANICAL_WAX",
+      "standard_name": "Botanical Wax",
+      "category": "coating",
+      "aliases": [
+        "botanical wax",
+        "vegetable wax",
+        "plant wax",
+        "carnauba wax coating"
+      ],
+      "notes": "Plant-derived wax coating.",
+      "last_updated": "2026-02-23"
+    },
+    {
+      "id": "NHA_CITRUS_ESSENTIAL_OIL",
+      "standard_name": "Citrus Essential Oil",
+      "category": "flavoring",
+      "aliases": [
+        "citrus essential oil",
+        "citrus oil",
+        "orange essential oil",
+        "lemon essential oil"
+      ],
+      "notes": "Citrus essential oil used as flavoring agent.",
+      "last_updated": "2026-02-23"
+    },
+    {
+      "id": "NHA_TRI_MAGNESIUM_CITRATE",
+      "standard_name": "Tri-Magnesium Citrate",
+      "category": "mineral salt",
+      "aliases": [
+        "tri-magnesium citrate",
+        "trimagnesium citrate"
+      ],
+      "notes": "Magnesium salt used as inactive ingredient.",
+      "last_updated": "2026-02-23"
+    },
+    {
+      "id": "NHA_POTASSIUM_AMINO_ACID_CHELATE",
+      "standard_name": "Potassium Amino Acid Chelate",
+      "category": "mineral salt",
+      "aliases": [
+        "potassium amino acid chelate"
+      ],
+      "notes": "Chelated potassium in inactive context.",
+      "last_updated": "2026-02-23"
+    },
+    {
+      "id": "NHA_POLYMETHACRYLATE",
+      "standard_name": "Polymethacrylate",
+      "category": "coating",
+      "aliases": [
+        "polymethacrylate",
+        "methacrylic acid copolymer",
+        "eudragit"
+      ],
+      "notes": "Enteric coating polymer.",
+      "last_updated": "2026-02-23"
+    },
+    {
+      "id": "NHA_CALCIUM_CHLORIDE",
+      "standard_name": "Calcium Chloride",
+      "category": "processing aid",
+      "aliases": [
+        "calcium chloride anhydrous",
+        "calcium chloride",
+        "anhydrous calcium chloride"
+      ],
+      "notes": "Processing aid / stabilizer.",
+      "last_updated": "2026-02-23"
+    },
+    {
+      "id": "NHA_GLYCERIN_ESTERS",
+      "standard_name": "Glycerin Fatty Acid Esters",
+      "category": "emulsifier",
+      "aliases": [
+        "glycerin fatty acid esters",
+        "glyceryl fatty acid esters",
+        "mono- and diglycerides",
+        "mono and diglycerides",
+        "monoglyceride",
+        "monoglycerides",
+        "diacetylated monoglycerides"
+      ],
+      "notes": "Emulsifier / stabilizer.",
+      "last_updated": "2026-02-23"
+    },
+    {
+      "id": "NHA_VEGETABLE_LUBRICANTS",
+      "standard_name": "Vegetable Lubricants",
+      "category": "lubricant",
+      "aliases": [
+        "vegetable lubricants",
+        "vegetable lubricant",
+        "plant-based lubricant"
+      ],
+      "notes": "Tablet/capsule manufacturing lubricant.",
+      "last_updated": "2026-02-23"
+    },
+    {
+      "id": "NHA_PVP",
+      "standard_name": "Polyvinyl Pyrrolidone",
+      "category": "binder",
+      "aliases": [
+        "polyvinyl pyrrolidone",
+        "pvp",
+        "povidone",
+        "polyvinylpyrrolidone"
+      ],
+      "notes": "Binder / disintegrant.",
+      "last_updated": "2026-02-23"
+    },
+    {
+      "id": "NHA_WHITE_THYME_OIL",
+      "standard_name": "White Thyme Oil",
+      "category": "flavoring",
+      "aliases": [
+        "white thyme oil",
+        "thyme oil",
+        "thymus vulgaris oil"
+      ],
+      "notes": "Essential oil flavoring.",
+      "last_updated": "2026-02-23"
+    },
+    {
+      "id": "NHA_YLANG_YLANG_OIL",
+      "standard_name": "Ylang Ylang Oil",
+      "category": "flavoring",
+      "aliases": [
+        "ylang ylang oil",
+        "ylang-ylang oil",
+        "cananga odorata oil"
+      ],
+      "notes": "Essential oil used as flavoring/scent.",
+      "last_updated": "2026-02-23"
+    },
+    {
+      "id": "NHA_AMMONIUM_MOLYBDATE",
+      "standard_name": "Ammonium Molybdate",
+      "category": "mineral salt",
+      "aliases": [
+        "ammonium molybdate",
+        "ammonium molybdate tetrahydrate"
+      ],
+      "notes": "Molybdenum source used as inactive mineral.",
+      "last_updated": "2026-02-23"
+    },
+    {
+      "id": "NHA_VEGETABLE_CELLULOSE_COATING",
+      "standard_name": "Vegetable Cellulose Coating",
+      "category": "coating",
+      "aliases": [
+        "vegetable cellulose coating",
+        "cellulose coating",
+        "plant cellulose coating"
+      ],
+      "notes": "Tablet coating material.",
+      "last_updated": "2026-02-23"
+    },
+    {
+      "id": "NHA_HYPROMELLOSE_PHTHALATE",
+      "standard_name": "Hypromellose Phthalate",
+      "category": "coating",
+      "aliases": [
+        "hypromellose phthalate",
+        "hpmc phthalate",
+        "hpmcp"
+      ],
+      "notes": "Enteric coating polymer.",
+      "last_updated": "2026-02-23"
+    },
+    {
+      "id": "NHA_KAOLIN",
+      "standard_name": "Kaolin",
+      "category": "filler",
+      "aliases": [
+        "kaolin",
+        "kaolin clay",
+        "china clay",
+        "aluminum silicate"
+      ],
+      "notes": "Clay mineral used as filler/adsorbent.",
+      "last_updated": "2026-02-23"
+    },
+    {
+      "id": "NHA_AQUEOUS_CLEAR_COAT",
+      "standard_name": "Aqueous Clear Coat",
+      "category": "coating",
+      "aliases": [
+        "aqueous clear coat",
+        "clear coat",
+        "aqueous coating"
+      ],
+      "notes": "Water-based tablet coating.",
+      "last_updated": "2026-02-23"
+    },
+    {
+      "id": "NHA_MAGNESIUM_BORATE",
+      "standard_name": "Magnesium Borate",
+      "category": "processing aid",
+      "aliases": [
+        "magnesium borate"
+      ],
+      "notes": "Mineral salt processing aid.",
+      "last_updated": "2026-02-23"
     }
   ]
 }
