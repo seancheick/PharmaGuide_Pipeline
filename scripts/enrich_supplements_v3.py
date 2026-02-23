@@ -1994,6 +1994,20 @@ class SupplementEnricherV3:
             return SKIP_REASON_LABEL_PHRASE
         if re.match(r"^\s*providing(?:\s+minimum)?\s+\d+", text):
             return SKIP_REASON_LABEL_PHRASE
+        if re.match(r"^\s*providing[:\s]", text):
+            return SKIP_REASON_LABEL_PHRASE
+        if re.match(r"^\s*provides?\b", text):
+            return SKIP_REASON_LABEL_PHRASE
+        if re.match(r"^\s*supplying\b", text):
+            return SKIP_REASON_LABEL_PHRASE
+        if re.match(r"^\s*typical(?:ly)?\b", text):
+            return SKIP_REASON_LABEL_PHRASE
+        if re.match(r"^\s*which\s+contains?\s+\d", text):
+            return SKIP_REASON_LABEL_PHRASE
+        if re.match(r"^\s*contains?\s+\d+(?:,\d{3})?(?:\.\d+)?\s*(mg|mcg|g|iu|cfu|billion|million)\b", text):
+            return SKIP_REASON_LABEL_PHRASE
+        if re.match(r"^\s*<\s*\d+(?:,\d{3})?(?:\.\d+)?\s*(mg|mcg|g|iu|cfu|billion|million)\s+of\b", text):
+            return SKIP_REASON_LABEL_PHRASE
         if re.match(r"^\s*standardized\s+to\s+contain(?:ing)?\s+\d+", text):
             return SKIP_REASON_LABEL_PHRASE
         if re.match(r"^\s*from\s+\d+(?:,\d{3})?(?:\.\d+)?\s*(mg|mcg|g|iu|billion|million)\b", text):
@@ -2004,6 +2018,31 @@ class SupplementEnricherV3:
             return SKIP_REASON_NUTRITION_FACT
         if re.match(r"^other omega\s+fatty acids$", text):
             return SKIP_REASON_NUTRITION_FACT
+        # Descriptor/rollup rows frequently emitted as pseudo-ingredients.
+        if re.match(r"^contains\s+zeaxanthin$", text):
+            return SKIP_REASON_NUTRITION_FACT
+        if re.match(r"^total\s+(mixed\s+)?tocopherols?$", text):
+            return SKIP_REASON_NUTRITION_FACT
+        if re.match(r"^total\s+mixed\s+carotenoids?$", text):
+            return SKIP_REASON_NUTRITION_FACT
+        if re.match(r"^total\s+curcuminoids?$", text):
+            return SKIP_REASON_NUTRITION_FACT
+        if re.match(r"^total\s+gingerols(\s+and\s+shogaols?)?$", text):
+            return SKIP_REASON_NUTRITION_FACT
+        if re.match(r"^total\s+calamari\s+oil$", text):
+            return SKIP_REASON_NUTRITION_FACT
+        if re.match(r"^total\s+omega[- ]?3.*", text):
+            return SKIP_REASON_NUTRITION_FACT
+        if re.match(r"^other\s+omega[- ]?3.*", text):
+            return SKIP_REASON_NUTRITION_FACT
+        if re.match(r"^total\s+(astaxanthin|cbd|cannabidiol|vitamin a)$", text):
+            return SKIP_REASON_NUTRITION_FACT
+        if re.match(r"^also\s+containing\s+additional\s+carotenoids?$", text):
+            return SKIP_REASON_NUTRITION_FACT
+        if re.match(r"^these\s+three\s+oils\s+typically\s+provide\s+the\s+following\s+fatty\s+acid\s+profile$", text):
+            return SKIP_REASON_NUTRITION_FACT
+        if re.match(r"^quath\s+dravya\s+of$", text):
+            return SKIP_REASON_LABEL_PHRASE
 
         return None
 
@@ -2389,6 +2428,30 @@ class SupplementEnricherV3:
             base = self._normalize_text(value)
             pre = norm_module.preprocess_text(value)
             variants = {base, self._normalize_text(pre)}
+            # Strip parenthetical groups for identity matching.
+            variants.add(self._normalize_text(re.sub(r"\([^)]*\)", " ", value)))
+            # Strip leading dosage wrappers occasionally leaked into name fields.
+            variants.add(
+                self._normalize_text(
+                    re.sub(
+                        r"^\s*\d+(?:\.\d+)?\s*(?:mg|mcg|g|iu|cfu)\b\s*",
+                        "",
+                        re.sub(r"[{}\[\]]", " ", value),
+                        flags=re.IGNORECASE,
+                    )
+                )
+            )
+            # Strip inline quantity tokens (e.g., "... 24 mg hydroethanolic extract").
+            variants.add(
+                self._normalize_text(
+                    re.sub(
+                        r"\b\d+(?:\.\d+)?\s*(?:mg|mcg|g|iu|cfu)\b",
+                        " ",
+                        re.sub(r"[{}\[\]]", " ", value),
+                        flags=re.IGNORECASE,
+                    )
+                )
+            )
             # Strip percentage + "whole" prefix commonly found in fruit extracts.
             variants.add(re.sub(r'^\d+(?:\.\d+)?%\s*whole\s+', '', base).strip())
             variants.add(re.sub(r'^\d+(?:\.\d+)?%\s*whole\s+', '', self._normalize_text(pre)).strip())
@@ -3230,6 +3293,37 @@ class SupplementEnricherV3:
                         return parent_key
             return None
 
+        def _resolve_compound_parent_override(
+            ing_norm_value: str,
+            std_norm_value: str,
+            base_norm_value: Optional[str],
+        ) -> Optional[str]:
+            """
+            Resolve known cross-parent compound forms without alphabetical tie-breaks.
+
+            Example: "niacinamide ascorbate" appears under vitamin_b3_niacin and vitamin_c.
+            If no explicit context is available, default to vitamin_c (ascorbate-bearing form).
+            """
+            blob = " ".join(
+                x for x in (ing_norm_value, std_norm_value, base_norm_value or "") if x
+            )
+            compound_tokens = (
+                "niacinamide ascorbate",
+                "nicotinamide ascorbate",
+                "ascorbate niacinamide",
+            )
+            if not any(token in blob for token in compound_tokens):
+                return None
+
+            context_blob = " ".join(x for x in (std_norm_value, base_norm_value or "") if x)
+            if re.search(r"\b(niacin|vitamin b3)\b", context_blob):
+                return "vitamin_b3_niacin"
+            if re.search(r"\b(vitamin c|ascorbic acid|ascorbate)\b", context_blob):
+                return "vitamin_c"
+
+            # Default when context is missing or mixed.
+            return "vitamin_c"
+
         # If caller didn't pass a parent context, infer from standardized/base names.
         # This prevents deterministic-but-wrong alphabetical picks when one form exists
         # under multiple parents (e.g., calcium pantothenate under calcium and B5).
@@ -3244,6 +3338,10 @@ class SupplementEnricherV3:
         base_exact = self._normalize_exact_text(base_name) if base_name else None
         base_norm = self._normalize_text(base_name) if base_name else None
 
+        # Compound-form override for known cross-parent aliases when context is absent.
+        if not preferred_parent:
+            preferred_parent = _resolve_compound_parent_override(ing_norm, std_norm, base_norm)
+
         candidates = []
         seen = set()
 
@@ -3251,6 +3349,25 @@ class SupplementEnricherV3:
             # Keep parenthetical content but remove bracket characters.
             # Example: "Oregano (Origanum vulgare) (leaf)" -> "Oregano Origanum vulgare leaf"
             return re.sub(r"[()\[\]]", " ", value or "")
+
+        def _strip_parenthetical_groups(value: str) -> str:
+            # Drop parenthetical groups entirely.
+            # Example: "Red Raspberry (Rubus idaeus) powder" -> "Red Raspberry powder"
+            return re.sub(r"\([^)]*\)", " ", value or "")
+
+        def _strip_leading_quantity_prefix(value: str) -> str:
+            # Drop leading quantity wrappers leaked from label fragments.
+            # Example: "30 mg {Garlic} hydroethanolic extract" -> "Garlic hydroethanolic extract"
+            text = re.sub(r"[{}\[\]]", " ", value or "")
+            text = re.sub(r"^\s*\d+(?:\.\d+)?\s*(?:mg|mcg|g|iu|cfu)\b\s*", "", text, flags=re.IGNORECASE)
+            return text
+
+        def _strip_inline_quantity_tokens(value: str) -> str:
+            # Drop inline dose tokens that are identity-irrelevant.
+            # Example: "Commiphora ... 24 mg hydroethanolic extract" -> "Commiphora ... hydroethanolic extract"
+            text = re.sub(r"[{}\[\]]", " ", value or "")
+            text = re.sub(r"\b\d+(?:\.\d+)?\s*(?:mg|mcg|g|iu|cfu)\b", " ", text, flags=re.IGNORECASE)
+            return re.sub(r"\s+", " ", text).strip()
 
         def _comma_reorder(value: str) -> str:
             # Handle qualifier suffixes like "Garlic Bulb Extract, Odorless"
@@ -3286,8 +3403,17 @@ class SupplementEnricherV3:
             def add(value: Optional[str], source: int):
                 if not value:
                     return
-                variants = {value}
-                variants.add(_strip_parenthesis_chars(value))
+                variants = {
+                    value,
+                    _strip_parenthesis_chars(value),
+                    _strip_parenthetical_groups(value),
+                    _strip_leading_quantity_prefix(value),
+                    _strip_inline_quantity_tokens(value),
+                    _strip_leading_quantity_prefix(_strip_parenthesis_chars(value)),
+                    _strip_leading_quantity_prefix(_strip_parenthetical_groups(value)),
+                    _strip_inline_quantity_tokens(_strip_parenthesis_chars(value)),
+                    _strip_inline_quantity_tokens(_strip_parenthetical_groups(value)),
+                }
                 for v in list(variants):
                     variants.add(_comma_reorder(v))
                 for v in variants:
@@ -3341,15 +3467,28 @@ class SupplementEnricherV3:
                     Select a conservative fallback form for parent-level matches.
 
                     Best-practice policy:
-                    1) Prefer explicit unspecified/default forms when actual form is unknown.
-                    2) Otherwise choose the lowest-score form to avoid premium over-credit.
+                    1) If label text clearly indicates a preparation (e.g., powder/oil),
+                       prefer the corresponding non-premium form when available.
+                    2) Otherwise prefer explicit unspecified/default forms when actual form
+                       is unknown.
+                    3) Otherwise choose the lowest-score form to avoid premium over-credit.
                     """
-                    preferred_tokens = ("unspecified", "unknown", "generic", "default", "standard")
+                    preferred_tokens = ("unspecified", "unknown", "generic", "default")
 
-                    for form_name, form_data in forms_dict.items():
-                        normalized = _norm(form_name)
-                        if any(token in normalized for token in preferred_tokens):
-                            return form_name, form_data
+                    input_norm = f"{_norm(ing_name)} {_norm(std_name)}".strip()
+                    hint_tokens = {
+                        "powder": ("powder", "particulate", "meal"),
+                        "oil": ("oil",),
+                    }
+
+                    def _form_matches_hint(form_name: str, form_data: Dict, hint: str) -> bool:
+                        form_norm = _norm(form_name)
+                        if hint in form_norm:
+                            return True
+                        for alias in form_data.get("aliases", []) or []:
+                            if hint in _norm(alias):
+                                return True
+                        return False
 
                     def _score_key(item: Tuple[str, Dict]) -> Tuple[float, str]:
                         form_name, form_data = item
@@ -3360,6 +3499,25 @@ class SupplementEnricherV3:
                         except (TypeError, ValueError):
                             numeric = 5.0
                         return numeric, _norm(form_name)
+
+                    for hint, tokens in hint_tokens.items():
+                        if any(token in input_norm for token in tokens):
+                            hinted_matches = [
+                                (form_name, form_data)
+                                for form_name, form_data in forms_dict.items()
+                                if _form_matches_hint(form_name, form_data, hint)
+                            ]
+                            if hinted_matches:
+                                for form_name, form_data in hinted_matches:
+                                    normalized = _norm(form_name)
+                                    if any(token in normalized for token in preferred_tokens):
+                                        return form_name, form_data
+                                return min(hinted_matches, key=_score_key)
+
+                    for form_name, form_data in forms_dict.items():
+                        normalized = _norm(form_name)
+                        if any(token in normalized for token in preferred_tokens):
+                            return form_name, form_data
 
                     return min(forms_dict.items(), key=_score_key)
 
@@ -3982,7 +4140,9 @@ class SupplementEnricherV3:
     def _collect_standardized_botanicals(self, product: Dict) -> List[Dict]:
         """Collect standardized botanical data"""
         botanicals_db = self.databases.get('standardized_botanicals', {})
-        botanicals_list = botanicals_db.get('standardized_botanicals', [])
+        botanicals_list = self._merge_standardized_botanicals(
+            botanicals_db.get('standardized_botanicals', [])
+        )
 
         active_ingredients = product.get('activeIngredients', [])
         all_text = self._get_all_product_text(product)
@@ -4004,30 +4164,68 @@ class SupplementEnricherV3:
                     # Extract standardization percentage
                     markers = botanical.get('markers', [])
                     min_threshold = botanical.get('min_threshold')
-                    percentage = self._extract_percentage(notes + ' ' + all_text, markers)
+                    local_text = " ".join([
+                        ing_name,
+                        std_name,
+                        notes,
+                        ingredient.get("raw_source_text", "") or "",
+                        ingredient.get("rawName", "") or "",
+                    ]).strip()
+                    alias_terms = bot_aliases if isinstance(bot_aliases, list) else []
+                    context_terms = [ing_name, std_name, bot_name] + alias_terms[:12]
+                    context_text = self._extract_text_windows_by_terms(
+                        all_text,
+                        context_terms,
+                        radius=140,
+                        max_windows=8,
+                    )
+
+                    percentage = self._extract_percentage(
+                        local_text,
+                        markers,
+                        require_marker_proximity=False,
+                    )
+                    percentage_source = "local"
+                    if percentage <= 0 and context_text:
+                        percentage = self._extract_percentage(
+                            context_text,
+                            markers,
+                            require_marker_proximity=True,
+                        )
+                        if percentage > 0:
+                            percentage_source = "context"
+                    marker_text = f"{local_text} {context_text}".strip()
 
                     # Determine if meets threshold
                     # Both percentage and min_threshold are stored as raw percentages
                     # e.g., percentage=5.0 means 5%, min_threshold=50 means 50%
                     meets_threshold = False
+                    evidence_source = "none"
                     if min_threshold is not None:
                         if percentage > 0:
                             # Direct comparison - both are raw percentage values
                             meets_threshold = percentage >= min_threshold
+                            evidence_source = f"percentage_{percentage_source}"
                         else:
                             # No explicit percentage on label — fall through to
                             # marker word evidence (branded extracts like Longvida,
                             # Meriva, KSM-66 may not restate percentage)
                             meets_threshold = self._has_marker_word_match(
-                                markers, notes + ' ' + all_text
+                                markers, marker_text
                             )
+                            if meets_threshold:
+                                evidence_source = "marker_word_match"
                     else:
                         # No threshold - check for standardization evidence
                         # Use word boundary matching to avoid false positives like
                         # "De-Glycyrrhizinated" matching "glycyrrhizin"
                         meets_threshold = percentage > 0 or self._has_marker_word_match(
-                            markers, notes + ' ' + all_text
+                            markers, marker_text
                         )
+                        if percentage > 0:
+                            evidence_source = f"percentage_{percentage_source}"
+                        elif meets_threshold:
+                            evidence_source = "marker_word_match"
 
                     found_botanicals.append({
                         "name": ing_name,
@@ -4035,32 +4233,129 @@ class SupplementEnricherV3:
                         "standard_name": bot_name,
                         "markers": markers,
                         "percentage_found": percentage,
+                        "percentage_source": percentage_source if percentage > 0 else None,
                         "min_threshold": min_threshold,
-                        "meets_threshold": meets_threshold
+                        "meets_threshold": meets_threshold,
+                        "evidence_source": evidence_source,
                     })
                     break  # One match per ingredient
 
         return found_botanicals
 
-    def _extract_percentage(self, text: str, markers: List[str]) -> float:
+    def _merge_standardized_botanicals(self, entries: List[Dict]) -> List[Dict]:
+        """
+        Merge duplicate standardized-botanical rows by standard_name.
+
+        Keeps the first record as canonical and unions aliases/markers to avoid
+        duplicate bonus evaluation from DB duplicates (e.g., cat's claw variants).
+        """
+        merged: Dict[str, Dict] = {}
+        for entry in (entries if isinstance(entries, list) else []):
+            if not isinstance(entry, dict):
+                continue
+            name = (entry.get("standard_name") or "").strip()
+            if not name:
+                continue
+            key = self._normalize_text(name)
+            current = merged.get(key)
+            if current is None:
+                item = dict(entry)
+                entry_aliases = entry.get("aliases") if isinstance(entry.get("aliases"), list) else []
+                entry_markers = entry.get("markers") if isinstance(entry.get("markers"), list) else []
+                item["aliases"] = list(dict.fromkeys(entry_aliases))
+                item["markers"] = list(dict.fromkeys(entry_markers))
+                merged[key] = item
+                continue
+
+            # Merge aliases/markers with stable order and conservative thresholding.
+            current_aliases = current.get("aliases") if isinstance(current.get("aliases"), list) else []
+            entry_aliases = entry.get("aliases") if isinstance(entry.get("aliases"), list) else []
+            current_markers = current.get("markers") if isinstance(current.get("markers"), list) else []
+            entry_markers = entry.get("markers") if isinstance(entry.get("markers"), list) else []
+            aliases = list(dict.fromkeys(current_aliases + entry_aliases))
+            markers = list(dict.fromkeys(current_markers + entry_markers))
+            current["aliases"] = aliases
+            current["markers"] = markers
+
+            cur_min = current.get("min_threshold")
+            new_min = entry.get("min_threshold")
+            if cur_min is None and new_min is not None:
+                current["min_threshold"] = new_min
+            elif isinstance(cur_min, (int, float)) and isinstance(new_min, (int, float)):
+                # Higher threshold is more conservative for bonus qualification.
+                current["min_threshold"] = max(cur_min, new_min)
+
+        return list(merged.values())
+
+    def _extract_text_windows_by_terms(
+        self,
+        text: str,
+        terms: List[str],
+        radius: int = 120,
+        max_windows: int = 6,
+    ) -> str:
+        """Extract nearby text windows around matched terms for evidence-local checks."""
+        if not text:
+            return ""
+        text_lower = text.lower()
+        windows: List[str] = []
+        seen = set()
+
+        for term in (terms if isinstance(terms, list) else []):
+            term_norm = re.sub(r"\s+", " ", (term or "").lower()).strip()
+            if not term_norm or len(term_norm) < 3:
+                continue
+            term_pattern = re.escape(term_norm).replace(r"\ ", r"\s+")
+            pattern = re.compile(term_pattern)
+            for m in pattern.finditer(text_lower):
+                start = max(0, m.start() - radius)
+                end = min(len(text_lower), m.end() + radius)
+                key = (start, end)
+                if key in seen:
+                    continue
+                seen.add(key)
+                windows.append(text_lower[start:end])
+                if len(windows) >= max_windows:
+                    return " ".join(windows)
+        return " ".join(windows)
+
+    def _extract_percentage(
+        self,
+        text: str,
+        markers: List[str],
+        require_marker_proximity: bool = True,
+    ) -> float:
         """Extract standardization percentage from text"""
         if not text:
             return 0.0
 
         text_lower = text.lower()
 
-        # Try standardized pattern first
-        match = self.compiled_patterns['standardized_pct'].search(text_lower)
-        if match:
-            return float(match.group(1))
-
-        # Try marker-specific patterns
+        # Marker-specific patterns (highest confidence).
         for marker in markers:
             marker_lower = marker.lower()
-            pattern = rf'(\d+(?:\.\d+)?)\s*%\s*{re.escape(marker_lower)}'
-            match = re.search(pattern, text_lower)
-            if match:
-                return float(match.group(1))
+            marker_patterns = [
+                rf'(\d+(?:\.\d+)?)\s*%\s*(?:total\s+)?{re.escape(marker_lower)}\b',
+                rf'{re.escape(marker_lower)}\s*\(?\s*(\d+(?:\.\d+)?)\s*%\)?',
+            ]
+            for pattern in marker_patterns:
+                match = re.search(pattern, text_lower)
+                if match:
+                    return float(match.group(1))
+
+        # Generic standardized pattern (only valid with marker proximity when markers exist).
+        pattern = self.compiled_patterns['standardized_pct']
+        for match in pattern.finditer(text_lower):
+            pct = float(match.group(1))
+            if not markers or not require_marker_proximity:
+                return pct
+            nearby = (
+                text_lower[max(0, match.start() - 60):match.start()]
+                + " "
+                + text_lower[match.end(): match.end() + 140]
+            )
+            if self._has_marker_word_match(markers, nearby):
+                return pct
 
         return 0.0
 

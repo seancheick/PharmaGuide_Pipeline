@@ -15,8 +15,8 @@
     },
     "purpose": "ingredient_mapping_and_standardization",
     "schema_version": "4.0.0",
-    "last_updated": "2026-02-16",
-    "total_entries": 244,
+    "last_updated": "2026-02-22",
+    "total_entries": 243,
     "scoring_rule": "Botanicals with min_threshold are scored higher when meeting standardization requirements. Priority level affects matching weight.",
     "required_fields": [
       "id",
@@ -986,7 +986,9 @@
         "cat's claw bark extract",
         "samento",
         "una de gato",
-        "uncaria tomentosa"
+        "uncaria tomentosa",
+        "cats claw bark",
+        "cat's claw extract"
       ],
       "markers": [
         "oxindole alkaloids",
@@ -1244,6 +1246,61 @@
       "standardization_unit": null
     },
     {
+      "standard_name": "Citrus Bergamot Extract",
+      "aliases": [
+        "citrus bergamia",
+        "citrus bergamot",
+        "bergamot extract",
+        "bergamot fruit extract",
+        "bergamot polyphenolic fraction",
+        "BPF"
+      ],
+      "markers": [
+        "neoeriocitrin",
+        "naringin",
+        "neohesperidin",
+        "brutieridin",
+        "melitidin"
+      ],
+      "priority": "high",
+      "last_updated": "2026-02-22",
+      "id": "citrus_bergamot_extract",
+      "notes": "Polyphenol-rich bergamot extract used for lipid and cardiometabolic support. Clinical literature commonly profiles neoeriocitrin, naringin, and neohesperidin in bergamot polyphenolic fractions.",
+      "category": "fruit",
+      "min_threshold": null,
+      "recommended_activity": null,
+      "standardization": null,
+      "standardization_type": null,
+      "standardization_unit": null
+    },
+    {
+      "standard_name": "Cocoa Flavanol Extract",
+      "aliases": [
+        "theobroma cacao extract",
+        "cocoa extract",
+        "cacao extract",
+        "cocoa flavanol extract",
+        "high-flavanol cocoa extract",
+        "cocoa polyphenol extract"
+      ],
+      "markers": [
+        "cocoa flavanols",
+        "flavanols",
+        "(-)-epicatechin",
+        "catechins"
+      ],
+      "priority": "high",
+      "last_updated": "2026-02-22",
+      "id": "cocoa_flavanol_extract",
+      "notes": "Cocoa extract used for vascular and cardiometabolic support. Clinical evidence most often references daily cocoa flavanol content and epicatechin-rich profiles rather than a universal label percentage threshold.",
+      "category": "seed_fruit",
+      "min_threshold": null,
+      "recommended_activity": null,
+      "standardization": null,
+      "standardization_type": null,
+      "standardization_unit": null
+    },
+    {
       "standard_name": "Coffeeberry",
       "aliases": [
         "coffea arabica",
@@ -1442,10 +1499,12 @@
         "devil's claw extract",
         "grapple plant",
         "harpagophytum procumbens",
-        "wood spider"
+        "wood spider",
+        "devils claw root"
       ],
       "markers": [
-        "harpagoside"
+        "harpagoside",
+        "harpagide"
       ],
       "priority": "medium",
       "last_updated": "2026-01-15",
@@ -2305,6 +2364,31 @@
       "standardization_unit": null
     },
     {
+      "standard_name": "Hibiscus Extract",
+      "aliases": [
+        "hibiscus sabdariffa",
+        "hibiscus extract",
+        "hibiscus flower extract",
+        "roselle",
+        "roselle extract"
+      ],
+      "markers": [
+        "anthocyanins",
+        "delphinidin-3-sambubioside",
+        "cyanidin-3-sambubioside"
+      ],
+      "priority": "high",
+      "last_updated": "2026-02-22",
+      "id": "hibiscus_extract",
+      "notes": "Hibiscus (roselle) extract used for cardiometabolic support. Standardization is typically described by anthocyanin profile rather than a universal threshold percentage.",
+      "category": "herb",
+      "min_threshold": null,
+      "recommended_activity": null,
+      "standardization": null,
+      "standardization_type": null,
+      "standardization_unit": null
+    },
+    {
       "standard_name": "Inulin",
       "aliases": [
         "chicory root inulin",
@@ -2589,7 +2673,8 @@
         "yamabushitake",
         "lion's mane extract",
         "hericium mushroom",
-        "hedgehog mushroom"
+        "hedgehog mushroom",
+        "lions mane mushroom"
       ],
       "markers": [
         "beta-glucans",
@@ -3607,7 +3692,9 @@
         "crocus sativus",
         "saffron extract",
         "saffron stigma",
-        "affron"
+        "affron",
+        "saffr'activ",
+        "saffr'active"
       ],
       "markers": [
         "crocin",
@@ -4557,23 +4644,6 @@
       "standardization_unit": null
     },
     {
-      "standard_name": "Saffr'Activ",
-      "aliases": [
-        "Saffr'Activ"
-      ],
-      "markers": [],
-      "priority": "medium",
-      "last_updated": "2026-01-05",
-      "id": "saffr_activ",
-      "notes": "Brand/standardized extract added from unmapped list; markers unknown.",
-      "category": "standardized",
-      "min_threshold": null,
-      "recommended_activity": null,
-      "standardization": null,
-      "standardization_type": null,
-      "standardization_unit": null
-    },
-    {
       "standard_name": "TurmiPure Gold",
       "aliases": [
         "TurmiPure Gold"
@@ -5167,31 +5237,6 @@
       "standardization_unit": null
     },
     {
-      "standard_name": "Lion's Mane",
-      "aliases": [
-        "hericium erinaceus",
-        "lions mane mushroom",
-        "yamabushitake",
-        "hedgehog mushroom",
-        "lion's mane extract"
-      ],
-      "markers": [
-        "beta-glucans",
-        "hericenones",
-        "erinacines"
-      ],
-      "priority": "high",
-      "min_threshold": 10,
-      "category": "mushroom",
-      "id": "lions_mane",
-      "notes": "Cognitive mushroom standardized for beta-glucans (10-40%) and nerve growth factors (hericenones, erinacines).",
-      "last_updated": "2026-01-15",
-      "recommended_activity": null,
-      "standardization": null,
-      "standardization_type": null,
-      "standardization_unit": null
-    },
-    {
       "standard_name": "Phosphatidylserine",
       "aliases": [
         "ps",
@@ -5208,53 +5253,6 @@
       "id": "phosphatidylserine",
       "notes": "Phospholipid important for brain cell membranes. Supports cognitive function and stress response.",
       "last_updated": "2026-01-05",
-      "recommended_activity": null,
-      "standardization": null,
-      "standardization_type": null,
-      "standardization_unit": null
-    },
-    {
-      "standard_name": "Cat's Claw",
-      "aliases": [
-        "uncaria tomentosa",
-        "cats claw bark",
-        "una de gato",
-        "cat's claw extract"
-      ],
-      "markers": [
-        "oxindole alkaloids",
-        "pentacyclic oxindole alkaloids",
-        "POAs"
-      ],
-      "priority": "medium",
-      "category": "herb",
-      "id": "cats_claw",
-      "notes": "Joint and immune support herb standardized for 3% oxindole alkaloids (pentacyclic type preferred).",
-      "last_updated": "2026-01-15",
-      "min_threshold": 3,
-      "recommended_activity": null,
-      "standardization": null,
-      "standardization_type": null,
-      "standardization_unit": null
-    },
-    {
-      "standard_name": "Devil's Claw",
-      "aliases": [
-        "harpagophytum procumbens",
-        "devils claw root",
-        "grapple plant",
-        "devil's claw extract"
-      ],
-      "markers": [
-        "harpagoside",
-        "harpagide"
-      ],
-      "priority": "medium",
-      "min_threshold": 2,
-      "category": "herb",
-      "id": "devils_claw",
-      "notes": "Joint health herb standardized for 2% harpagosides. Clinical studies use 50-100mg harpagoside daily.",
-      "last_updated": "2026-01-15",
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,

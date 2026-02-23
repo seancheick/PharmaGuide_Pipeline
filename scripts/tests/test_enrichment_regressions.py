@@ -822,6 +822,222 @@ class TestMatchRulesBehavior:
 
         assert len(missing) == 0, f"Missing dosage_importance: {missing[:5]}"
 
+class TestCompoundParentDisambiguation:
+    """Regression tests for shared-form parent disambiguation."""
+
+    @pytest.fixture
+    def enricher(self):
+        return SupplementEnricherV3()
+
+    @pytest.fixture
+    def quality_map(self, enricher):
+        return enricher.databases.get("ingredient_quality_map", {})
+
+    def test_niacinamide_ascorbate_defaults_to_vitamin_c_without_context(self, enricher, quality_map):
+        """No explicit B3 context should route niacinamide ascorbate to Vitamin C parent."""
+        result = enricher._match_quality_map("Niacinamide Ascorbate", "Niacinamide Ascorbate", quality_map)
+        assert result is not None
+        assert result["canonical_id"] == "vitamin_c"
+        assert result["form_id"] == "niacinamide ascorbate"
+
+    def test_niacinamide_ascorbate_respects_b3_standardname_context(self, enricher, quality_map):
+        """Explicit Niacin/Vitamin B3 context should route to B3 parent to avoid ambiguity ties."""
+        result = enricher._match_quality_map("Niacinamide Ascorbate", "Niacin", quality_map)
+        assert result is not None
+        assert result["canonical_id"] == "vitamin_b3_niacin"
+        assert result["form_id"] == "niacinamide ascorbate"
+
+
+class TestP2AliasCoverageRegression:
+    """High-confidence alias additions should map deterministically."""
+
+    @pytest.fixture
+    def enricher(self):
+        return SupplementEnricherV3()
+
+    @pytest.fixture
+    def quality_map(self, enricher):
+        return enricher.databases.get("ingredient_quality_map", {})
+
+    @pytest.mark.parametrize(
+        "name,expected_parent",
+        [
+            ("MaxEPA(R) Fish Oil Concentrate", "fish_oil"),
+            ("BioPureDHA(R) Fish Oil concentrate", "fish_oil"),
+            ("ecOmega Norwegian Cod Liver Oil", "cod_liver_oil"),
+            ("naturally-occurring Cannabidiol", "cbd_full_spectrum"),
+            ("(6S)-5-Methyltetrahydrofolate Calcium", "vitamin_b9_folate"),
+            ("KD-Pur EPA", "epa"),
+            ("Cryptozanthin", "cryptoxanthin"),
+            ("Chromium-Chelavite", "chromium"),
+            ("Ginsenoside Rg3", "ginsenosides"),
+            ("Hyal-Joint", "hyaluronic_acid"),
+            ("Cardiose Flavonoid Glycoside", "citrus_bioflavonoids"),
+        ],
+    )
+    def test_new_aliases_map_to_expected_parent(self, enricher, quality_map, name, expected_parent):
+        result = enricher._match_quality_map(name, name, quality_map)
+        assert result is not None, f"Expected mapping for {name}"
+        assert result["canonical_id"] == expected_parent, f"{name} mapped to {result['canonical_id']}, expected {expected_parent}"
+
+
+class TestStandardizedBotanicalAliasRegression:
+    """Regression tests for standardized botanical alias pickup."""
+
+    @pytest.fixture
+    def enricher(self):
+        return SupplementEnricherV3()
+
+    def test_saffr_activ_maps_to_saffron_standardized_entry(self, enricher):
+        """Branded Saffr'Activ labels should map to saffron and qualify when marker threshold is present."""
+        product = {
+            "activeIngredients": [
+                {
+                    "name": "Saffr'Activ Saffron Extract standardized to 0.3% safranal",
+                    "standardName": "Saffron",
+                    "quantity": 30,
+                    "unit": "mg",
+                }
+            ],
+            "inactiveIngredients": [],
+        }
+
+        standardized_hits = enricher._collect_standardized_botanicals(product)
+        assert standardized_hits, "Expected standardized saffron hit for Saffr'Activ label"
+
+        first = standardized_hits[0]
+        assert first.get("botanical_id") == "saffron"
+        assert first.get("meets_threshold") is True
+
+    def test_citrus_bergamot_standardized_profile_qualifies(self, enricher):
+        """Bergamot polyphenolic profile labels should qualify as standardized botanical evidence."""
+        product = {
+            "activeIngredients": [
+                {
+                    "name": "Citrus Bergamot Extract standardized to 38% polyphenolic fraction (naringin, neoeriocitrin, neohesperidin)",
+                    "standardName": "Citrus Bergamot",
+                    "quantity": 500,
+                    "unit": "mg",
+                }
+            ],
+            "inactiveIngredients": [],
+        }
+
+        standardized_hits = enricher._collect_standardized_botanicals(product)
+        assert standardized_hits, "Expected standardized bergamot hit"
+        first = standardized_hits[0]
+        assert first.get("botanical_id") == "citrus_bergamot_extract"
+        assert first.get("meets_threshold") is True
+
+    def test_hibiscus_anthocyanin_standardization_qualifies(self, enricher):
+        """Hibiscus with marker/percentage evidence should qualify for A5b."""
+        product = {
+            "activeIngredients": [
+                {
+                    "name": "Hibiscus sabdariffa flower extract standardized to 10% anthocyanins",
+                    "standardName": "Hibiscus Extract",
+                    "quantity": 250,
+                    "unit": "mg",
+                }
+            ],
+            "inactiveIngredients": [],
+        }
+
+        standardized_hits = enricher._collect_standardized_botanicals(product)
+        assert standardized_hits, "Expected standardized hibiscus hit"
+        first = standardized_hits[0]
+        assert first.get("botanical_id") == "hibiscus_extract"
+        assert first.get("meets_threshold") is True
+
+    def test_hibiscus_plain_extract_does_not_auto_qualify(self, enricher):
+        """Plain hibiscus extract without marker/percentage evidence should not qualify."""
+        product = {
+            "activeIngredients": [
+                {
+                    "name": "Hibiscus Extract",
+                    "standardName": "Hibiscus",
+                    "quantity": 250,
+                    "unit": "mg",
+                }
+            ],
+            "inactiveIngredients": [],
+        }
+
+        standardized_hits = enricher._collect_standardized_botanicals(product)
+        assert standardized_hits, "Expected hibiscus alias match to be recorded"
+        first = standardized_hits[0]
+        assert first.get("botanical_id") == "hibiscus_extract"
+        assert first.get("meets_threshold") is False
+
+    def test_cocoa_flavanol_standardization_qualifies(self, enricher):
+        """Cocoa extract with flavanol marker evidence should qualify."""
+        product = {
+            "activeIngredients": [
+                {
+                    "name": "Cocoa Extract standardized to 20% cocoa flavanols",
+                    "standardName": "Cocoa Extract",
+                    "quantity": 500,
+                    "unit": "mg",
+                }
+            ],
+            "inactiveIngredients": [],
+        }
+
+        standardized_hits = enricher._collect_standardized_botanicals(product)
+        assert standardized_hits, "Expected cocoa standardized hit"
+        first = standardized_hits[0]
+        assert first.get("botanical_id") == "cocoa_flavanol_extract"
+        assert first.get("meets_threshold") is True
+
+    def test_cocoa_plain_extract_does_not_auto_qualify(self, enricher):
+        """Plain cocoa extract without marker/percentage evidence should not qualify."""
+        product = {
+            "activeIngredients": [
+                {
+                    "name": "Cocoa Extract",
+                    "standardName": "Cocoa",
+                    "quantity": 500,
+                    "unit": "mg",
+                }
+            ],
+            "inactiveIngredients": [],
+        }
+
+        standardized_hits = enricher._collect_standardized_botanicals(product)
+        assert standardized_hits, "Expected cocoa alias match to be recorded"
+        first = standardized_hits[0]
+        assert first.get("botanical_id") == "cocoa_flavanol_extract"
+        assert first.get("meets_threshold") is False
+
+
+class TestBotanicalIdentityCoverageRegression:
+    """Botanical synonym additions should route to non-scorable identity recognition."""
+
+    @pytest.fixture
+    def enricher(self):
+        return SupplementEnricherV3()
+
+    def test_mandukparnee_is_recognized_botanical_identity(self, enricher):
+        rec = enricher._is_recognized_non_scorable("Mandukparnee", "Mandukparnee")
+        assert rec is not None
+        assert rec.get("recognition_source") == "botanical_ingredients"
+
+    @pytest.mark.parametrize(
+        "name,expected_source",
+        [
+            ("Kumari", "botanical_ingredients"),
+            ("Posinol", "botanical_ingredients"),
+            ("Carob flavonoid extract", "botanical_ingredients"),
+            ("Galactomannan", "other_ingredients"),
+            ("Isolase(R)", "other_ingredients"),
+            ("Artemisinin", "other_ingredients"),
+        ],
+    )
+    def test_remaining_softgels_unknowns_are_recognized(self, enricher, name, expected_source):
+        rec = enricher._is_recognized_non_scorable(name, name)
+        assert rec is not None, f"Expected recognition for {name}"
+        assert rec.get("recognition_source") == expected_source, f"{name} source mismatch: {rec}"
+
 
 class TestProjectionAndLedgerRegression:
     """Regression tests for scoring projection and ledger consistency."""
@@ -1015,6 +1231,161 @@ class TestA4AbsorptionEnhancerSchemaRegression:
         assert result['qualifies_for_bonus'] is True
 
 
+class TestFormFallbackPrecisionRegression:
+    """Guard against over-crediting from ambiguous botanical/form fallbacks."""
+
+    @pytest.fixture
+    def enricher(self):
+        return SupplementEnricherV3()
+
+    def test_flaxseed_particulates_maps_to_meal_powder_not_oil(self, enricher):
+        qm = enricher.databases.get("ingredient_quality_map", {})
+        match = enricher._match_quality_map("Flaxseed particulates", "Flaxseed particulates", qm)
+        assert match.get("canonical_id") == "flaxseed"
+        assert match.get("form_name") == "flaxseed meal/powder"
+        assert not match.get("form_unmapped_fallback")
+
+    def test_amla_powder_maps_to_powder_not_standardized_extract(self, enricher):
+        qm = enricher.databases.get("ingredient_quality_map", {})
+        match = enricher._match_quality_map("Amla, Powder", "Amla, Powder", qm)
+        assert match.get("canonical_id") == "amla"
+        assert match.get("form_name") == "amla fruit powder"
+        assert not match.get("form_unmapped_fallback")
+
+    def test_turmeric_powder_maps_to_turmeric_parent_not_curcumin(self, enricher):
+        qm = enricher.databases.get("ingredient_quality_map", {})
+        match = enricher._match_quality_map("Turmeric, Powder", "Turmeric, Powder", qm)
+        assert match.get("canonical_id") == "turmeric"
+        assert match.get("form_name") == "whole turmeric powder"
+        assert not match.get("form_unmapped_fallback")
+
+    def test_st_johns_wort_generic_extract_stays_conservative(self, enricher):
+        qm = enricher.databases.get("ingredient_quality_map", {})
+        match = enricher._match_quality_map("St. John's Wort Extract", "St. John's Wort Extract", qm)
+        assert match.get("canonical_id") == "st_johns_wort"
+        assert "standardized" not in str(match.get("form_name", "")).lower()
+
+    def test_st_johns_wort_standardized_extract_maps_to_standardized_form(self, enricher):
+        qm = enricher.databases.get("ingredient_quality_map", {})
+        match = enricher._match_quality_map(
+            "St. John's Wort Extract standardized to 0.3% hypericin",
+            "St. John's Wort Extract standardized to 0.3% hypericin",
+            qm,
+        )
+        assert match.get("canonical_id") == "st_johns_wort"
+        assert "standardized" in str(match.get("form_name", "")).lower()
+
+    def test_orange_pekoe_black_tea_routes_to_botanical_identity_only(self, enricher):
+        qm = enricher.databases.get("ingredient_quality_map", {})
+        name = "Orange Pekoe (Black) Tea extract"
+        match = enricher._match_quality_map(name, name, qm)
+        assert match is None
+        recognized = enricher._is_recognized_non_scorable(name, name)
+        assert recognized is not None
+        assert recognized.get("recognition_type") == "botanical_unscored"
+        assert recognized.get("matched_entry_id") == "black_tea_leaf"
+
+    def test_galactomannan_maps_conservatively_to_fiber(self, enricher):
+        qm = enricher.databases.get("ingredient_quality_map", {})
+        match = enricher._match_quality_map("Galactomannan", "Galactomannan", qm)
+        assert match is not None
+        assert match.get("canonical_id") == "fiber"
+        assert "unspecified" in str(match.get("form_name", "")).lower()
+        assert float(match.get("score", 0)) <= 5.0
+
+    def test_dha_epa_combined_alias_maps_to_epa_dha(self, enricher):
+        qm = enricher.databases.get("ingredient_quality_map", {})
+        match = enricher._match_quality_map("DHA/EPA", "DHA/EPA", qm)
+        assert match is not None
+        assert match.get("canonical_id") == "epa_dha"
+
+    def test_trimethylglycine_hydrochloride_maps_to_betaine_hcl(self, enricher):
+        qm = enricher.databases.get("ingredient_quality_map", {})
+        match = enricher._match_quality_map("Trimethylglycine Hydrochloride", "Trimethylglycine Hydrochloride", qm)
+        assert match is not None
+        assert match.get("canonical_id") == "tmg_betaine"
+        assert "hydrochloride" in str(match.get("form_name", "")).lower()
+
+    def test_odorless_garlic_routes_to_unspecified_not_aged(self, enricher):
+        qm = enricher.databases.get("ingredient_quality_map", {})
+        match = enricher._match_quality_map("Garlic, Odorless", "Garlic, Odorless", qm)
+        assert match is not None
+        assert match.get("canonical_id") == "garlic"
+        assert "unspecified" in str(match.get("form_name", "")).lower()
+
+    def test_green_tea_aqueous_extract_avoids_oxidized_fallback(self, enricher):
+        qm = enricher.databases.get("ingredient_quality_map", {})
+        label = "organic Green Tea (Camellia sinensis) (leaf) aqueous extract"
+        match = enricher._match_quality_map(label, label, qm)
+        assert match is not None
+        assert match.get("canonical_id") == "green_tea_extract"
+        assert "oxidized" not in str(match.get("form_name", "")).lower()
+        assert not match.get("form_unmapped_fallback")
+
+    def test_fish_oil_generic_oil_text_does_not_pick_premium_form_on_fallback(self, enricher):
+        qm = enricher.databases.get("ingredient_quality_map", {})
+        label = "Red Sockeye Salmon Oil, Natural, Wild"
+        match = enricher._match_quality_map(label, label, qm)
+        assert match is not None
+        assert match.get("canonical_id") == "fish_oil"
+        assert "triglyceride" not in str(match.get("form_name", "")).lower()
+
+    def test_pure_cbd_extract_hits_banned_cbd_us(self, enricher):
+        banned = enricher._check_banned_substances([{"name": "pure CBD extract"}], {})
+        assert banned.get("found") is True
+        ids = {s.get("banned_id") for s in banned.get("substances", [])}
+        assert "BANNED_CBD_US" in ids
+
+    def test_medium_chain_triglyceride_oil_is_recognized_non_scorable(self, enricher):
+        recognized = enricher._is_recognized_non_scorable(
+            "Medium-Chain Triglyceride Oil",
+            "Medium-Chain Triglyceride Oil",
+        )
+        assert recognized is not None
+        assert recognized.get("matched_entry_id") == "PII_MEDIUM_CHAIN_TRIGLYCERIDES"
+
+    def test_petroselinic_acid_is_recognized_non_scorable(self, enricher):
+        recognized = enricher._is_recognized_non_scorable("Petroselinic Acid", "Petroselinic Acid")
+        assert recognized is not None
+        assert recognized.get("matched_entry_id") == "PII_PETROSELINIC_ACID"
+
+    def test_usplus_maps_to_saw_palmetto_supercritical_form(self, enricher):
+        qm = enricher.databases.get("ingredient_quality_map", {})
+        match = enricher._match_quality_map("USPLUS", "USPLUS", qm)
+        assert match is not None
+        assert match.get("canonical_id") == "saw_palmetto"
+        assert "supercritical" in str(match.get("form_name", "")).lower()
+
+    def test_probiotic_fermented_multi_culture_skipped_as_blend_header(self, enricher):
+        qm = enricher.databases.get("ingredient_quality_map", {})
+        bot = enricher.databases.get("botanical_ingredients", {})
+        skip = enricher._should_skip_from_scoring(
+            {"name": "Probiotic Fermented Multi-Culture", "standardName": "Probiotic Fermented Multi-Culture"},
+            qm,
+            bot,
+        )
+        assert skip in {"blend_header_without_dosage", "blend_header_total_weight_only"}
+
+    def test_safety_additives_route_to_harmful_not_banned(self, enricher):
+        ingredients = [
+            {"name": "Blue #1"},
+            {"name": "FD&C Red #40 Lake"},
+            {"name": "Propyl Paraben"},
+            {"name": "Titanium Oxide"},
+        ]
+        harmful = enricher._check_harmful_additives(ingredients)
+        banned = enricher._check_banned_substances(ingredients, {})
+        assert harmful.get("found") is True
+        assert len(harmful.get("additives", [])) >= 4
+        assert banned.get("found") is False
+
+    def test_yellow_6_variant_routes_to_harmful_additives(self, enricher):
+        harmful = enricher._check_harmful_additives([{"name": "Yellow #6"}])
+        assert harmful.get("found") is True
+        ids = {a.get("additive_id") for a in harmful.get("additives", [])}
+        assert "ADD_YELLOW6" in ids
+
+
 class TestA5cSynergyDoseAnchoringRegression:
     """A5c should not award bonus on zero-dose-checkable cluster matches."""
 
@@ -1083,6 +1454,32 @@ class TestA5cSynergyDoseAnchoringRegression:
 
         enricher._project_scoring_fields(enriched)
         assert enriched["synergy_cluster_qualified"] is True
+
+
+class TestDescriptorLeakageRegression:
+    """Regression checks for descriptor/header leakage rows."""
+
+    @pytest.fixture
+    def enricher(self):
+        return SupplementEnricherV3()
+
+    def test_known_descriptor_headers_are_excluded(self, enricher):
+        cases = [
+            ("Also Containing Additional Carotenoids", {"excluded_nutrition_fact", "excluded_label_phrase"}),
+            ("These three oils typically provide the following Fatty Acid Profile", {"excluded_nutrition_fact", "excluded_label_phrase"}),
+            ("Quath Dravya of", "excluded_label_phrase"),
+            ("Omega 6 Fatty Acids", "excluded_nutrition_fact"),
+            ("OmegaChoice Omega-3 Essential Fatty Acids:", "excluded_nutrition_fact"),
+            ("Aromatase Inhibition/Estrogen Modulation/DHT Block", "excluded_label_phrase"),
+            ("<1 mg of natural caffeine", "excluded_label_phrase"),
+            ("Carvacrol and Thymol", "excluded_label_phrase"),
+        ]
+        for text, expected in cases:
+            reason = enricher._excluded_text_reason(text)
+            if isinstance(expected, set):
+                assert reason in expected, f"{text} expected one of {expected}, got {reason}"
+            else:
+                assert reason == expected, f"{text} expected {expected}, got {reason}"
 
 
 if __name__ == '__main__':

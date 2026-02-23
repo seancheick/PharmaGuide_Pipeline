@@ -128,6 +128,8 @@ EXCLUDED_NUTRITION_FACTS = {
     "omega-3 polyunsaturated fat", "omega-3 polyunsaturated fats",
     "omega-6 polyunsaturated fat", "omega-6 polyunsaturated fats",
     "omega-9 monounsaturated fat", "omega-9 monounsaturated fats",
+    "omega 6 fatty acids", "omega 7 fatty acids", "omega 9 fatty acids",
+    "omegachoice omega-3 essential fatty acids",
     # Omega ethyl ester aggregates (nutrition totals, distinct from individual EE forms)
     "total omega-3 fatty acids ethyl esters", "total omega-3 fatty acid ethyl esters",
     "other omega-3 fatty acid ethyl ester", "other omega-3 fatty acids ethyl esters",
@@ -171,12 +173,27 @@ EXCLUDED_NUTRITION_FACTS = {
     "total docosapentaenoic acid", "total turmerones",
     "total eleutherosides", "total thiosulfinates",
     "total rosavins", "total ginsenosides",
+    # Audit-derived descriptor/rollup rows leaking into scorable actives
+    "total mixed tocopherols", "total tocopherols", "total mixed carotenoids",
+    "total curcuminoids", "total gingerols", "total gingerols and shogaols",
+    "contains zeaxanthin", "other omega-3 essential fatty acids",
+    "other omega-3 fatty acids triglycerides", "other omega-3",
+    "total omega-3 polyunsaturates", "total omega-3's", "total omega 3 fish oil",
+    "total omega-3 long-chain fatty acids", "total omega-3 fatty acid",
+    "total omega-3 fatty acids ethyl ester", "total astaxanthin",
+    "total cbd", "total cannabidiol", "total non alpha tocopherol forms",
+    "total active cla c18:2 conjugated", "total calamari oil",
+    "total vitamin a", "total polyphenols",
 
     # Miscellaneous aggregates
     "other isomers", "other sterols",
     "other fatty acids, lignans", "other fatty acid ethyl ester",
     "five other naturally found fatty acids",
     "and five other naturally found fatty acids",
+    # Descriptor-only blend headers observed in cleaned outputs
+    "mineral enzyme activators",
+    "ionic plant based minerals",
+    "ionic plant-based minerals",
 }
 
 # Label phrases and headers that should be excluded from ingredient processing
@@ -246,6 +263,9 @@ EXCLUDED_LABEL_PHRASES = {
     "typical fatty acid profile",
     "fatty acid profile",
     "amino acid profile",
+    "also containing additional carotenoids",
+    "quath dravya of",
+    "these three oils typically provide the following fatty acid profile",
     # Ayurvedic processing descriptors (label notes, not discrete ingredients)
     "processed by the method of siddha ghruta in",
     "processed by the method of siddha ghruta",
@@ -260,6 +280,16 @@ EXCLUDED_LABEL_PHRASES = {
     "bio-enhanced",
     "bio enhanced",
     "mitoheal",
+    # Audit-derived descriptor fragments leaking as ingredient rows
+    "contains less than 0.5% of:",
+    "contains less than 0.5% of",
+    "providing",
+    "providing:",
+    "providing tocotrienols",
+    "providing carvacrol",
+    "carvacrol and thymol",
+    "aromatase inhibition/estrogen modulation/dht block",
+    "contains 12.5 mcg of stabilized allicin",
     # Fatty acid composition section headers (not discrete ingredients)
     "approximate fatty acid content",
     "approximate essential fatty acid (efa) content",
@@ -762,8 +792,13 @@ BLEND_HEADER_EXACT_NAMES = {
     # Softgels clean-stage unmapped high-frequency blend headers
     "zma",
     "probiotic fermented culture",
+    "probiotic fermented multi-culture",
+    "probiotic fermented multi culture",
     "antioxidant boost",
     "vitality boost",
+    "mineral enzyme activators",
+    "ionic plant based minerals",
+    "ionic plant-based minerals",
 }
 
 # LOW-CONFIDENCE blend headers - only skip if NO DOSE present

@@ -6608,6 +6608,9 @@
       "aliases": [
         "cannabidiol",
         "cbd",
+        "pure cbd extract",
+        "cbd hemp extract",
+        "cannabidiol hemp extract",
         "hemp extract cbd",
         "cannabis extract",
         "hemp oil cbd",
@@ -17648,7 +17651,9 @@
         "citrus aurantium",
         "p-synephrine",
         "bitter orange extract",
-        "seville orange"
+        "seville orange",
+        "bitter orange citrus bioflavonoids",
+        "bitter orange citrus bioflavonoid"
       ],
       "CUI": "C0330890",
       "banned_date": "",
@@ -17694,7 +17699,9 @@
           "citrus aurantium",
           "p-synephrine",
           "bitter orange extract",
-          "seville orange"
+          "seville orange",
+          "bitter orange citrus bioflavonoids",
+          "bitter orange citrus bioflavonoid"
         ],
         "exclusions": [],
         "case_sensitive": false,

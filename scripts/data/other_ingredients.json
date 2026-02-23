@@ -3,8 +3,8 @@
     "description": "Other/inactive ingredients database for supplement excipients and additives",
     "purpose": "inactive_ingredient_classification",
     "schema_version": "4.0.0",
-    "last_updated": "2026-02-18",
-    "total_entries": 314
+    "last_updated": "2026-02-22",
+    "total_entries": 330
   },
   "other_ingredients": [
     {
@@ -917,7 +917,9 @@
         "hydrolyzed Bovine Collagen",
         "hydrolyzed collagen",
         "collagen peptides",
-        "hydrolyzed collagen peptides"
+        "hydrolyzed collagen peptides",
+        "Hydrolyzed Collagen Type I",
+        "hydrolyzed Collagen Type 1"
       ],
       "category": "protein",
       "additive_type": "functional",
@@ -1381,7 +1383,10 @@
         "Hemp",
         "industrial hemp extract",
         "CBD Hemp extract",
-        "Colorado Hemp Extract"
+        "Colorado Hemp Extract",
+        "organic broad-spectrum hemp aerial part extract",
+        "organic broad-spectrum hemp (aerial part) extract",
+        "broad-spectrum hemp extract"
       ],
       "category": "botanical_extract",
       "additive_type": "functional",
@@ -1578,6 +1583,7 @@
       "aliases": [
         "lecithin (sunflower-derived)",
         "sunflower lecithin",
+        "hydroxylated lecithin",
         "phosphatidylcholine",
         "non-GMO lecithin",
         "organic sunflower lecithin",
@@ -3628,12 +3634,13 @@
         "stevia leaf extract",
         "stevia leaf extract, purified",
         "purified stevia",
-        "purified stevia extract"
+        "purified stevia extract",
+        "purified stevia leaf extract"
       ],
       "category": "sweetener_natural",
       "additive_type": "natural_sweetener",
       "clean_label_score": 9,
-      "notes": "Natural, calorie-free sweetener from the Stevia rebaudiana plant. FDA GRAS status applies to HIGH-PURITY extracts (≥95% steviol glycosides) including rebaudioside A and stevioside. Whole stevia leaves and crude extracts are NOT FDA GRAS approved. Includes branded forms like BetterStevia, Truvia, and PureVia. Clean label alternative to artificial sweeteners.",
+      "notes": "Natural, calorie-free sweetener from the Stevia rebaudiana plant. FDA GRAS status applies to HIGH-PURITY extracts (\u226595% steviol glycosides) including rebaudioside A and stevioside. Whole stevia leaves and crude extracts are NOT FDA GRAS approved. Includes branded forms like BetterStevia, Truvia, and PureVia. Clean label alternative to artificial sweeteners.",
       "regulatory_status": "GRAS",
       "common_uses": [
         "flavor enhancement",
@@ -3980,7 +3987,9 @@
       "aliases": [
         "Vegetable Monoglycerides",
         "Vegetable Diglycerides",
-        "vegetable mono and diglycerides"
+        "vegetable mono and diglycerides",
+        "plant glycerides",
+        "vegetable shortening"
       ],
       "category": "emulsifier",
       "additive_type": "emulsifier",
@@ -4006,7 +4015,9 @@
         "vegetable glycerine",
         "plant-based glycerin",
         "1,2,3-propanetriol",
-        "Veg. Glycerin"
+        "Veg. Glycerin",
+        "vegetable glycerol",
+        "non-gmo vegetable glycerin"
       ],
       "category": "humectant_solvent",
       "additive_type": "processing_aid",
@@ -4656,6 +4667,7 @@
         "high and low viscosity Hydroxypropyl Methyl Cellulose",
         "Hydroxypropylmethlcellulose",
         "Hydroxypropylmethylcellulose",
+        "Hydroxypropyl Methyl Cellulose",
         "High and low viscosity Hydroxypropyl Methyl-Cellulose and Calcium Citrate Laurate",
         "High and low viscosity hydroxypropyl methylcellulose and Magnesium CitrateLaurate",
         "High and low viscosity hydroxypropyl methyl-cellulose and CalciumCitrateLaurate",
@@ -4889,7 +4901,8 @@
         "pullulan capsule",
         "plantcaps pullulan",
         "tapioca pullulan",
-        "fermented tapioca pullulan"
+        "fermented tapioca pullulan",
+        "vegetable pullulan"
       ],
       "category": "capsule_material",
       "notes": "Natural polysaccharide produced by fermentation of tapioca starch by Aureobasidium pullulans. Used as vegan capsule shell material (Plantcaps). Clean-label, non-GMO alternative to HPMC and gelatin capsules.",
@@ -5710,7 +5723,8 @@
       "aliases": [
         "diastase enzyme",
         "amylase",
-        "starch-digesting enzyme"
+        "starch-digesting enzyme",
+        "glucoamylase"
       ],
       "category": "enzyme",
       "notes": "An enzyme that breaks down starch into sugars. Generally considered safe and beneficial for digestion.",
@@ -5731,7 +5745,8 @@
         "DCP",
         "calcium hydrogen phosphate",
         "dibasic calcium phosphate",
-        "calcium phosphate dibasic"
+        "calcium phosphate dibasic",
+        "dicalcium phosphate anhydrous"
       ],
       "category": "filler_binder",
       "notes": "Used as a tablet binder and filler. While it provides calcium and phosphorus, its primary role in 'other ingredients' is often mechanical. Generally considered safe.",
@@ -6132,7 +6147,9 @@
         "HPMC",
         "hypromellose",
         "cellulose hydroxypropyl methyl ether",
-        "cellulose coating"
+        "cellulose coating",
+        "hydroxypropyl methyl cellulose",
+        "hydroxypropyl methylcellulose phthalate"
       ],
       "category": "capsule_shell",
       "notes": "Plant-derived cellulose material used for vegetarian capsule shells and as a coating agent. Provides barrier protection and controlled release properties.",
@@ -6293,6 +6310,7 @@
         "fractioned coconut oil",
         "medium-chain triglycerides",
         "medium-chain triglycerides oil",
+        "medium-chain triglyceride oil",
         "non-GMO medium chain triglycerides"
       ],
       "category": "oil_carrier",
@@ -6304,6 +6322,27 @@
       "regulatory_status": "varies",
       "common_uses": [],
       "severity_level": "low",
+      "allergen_flag": null
+    },
+    {
+      "id": "PII_PETROSELINIC_ACID",
+      "standard_name": "Petroselinic Acid",
+      "aliases": [
+        "petroselinic acid",
+        "cis-6-octadecenoic acid",
+        "omega-12 fatty acid"
+      ],
+      "category": "fatty_acid_component",
+      "notes": "Monounsaturated fatty acid component typically present within seed oils (e.g., coriander/parsley families). Tracked for identity mapping; not scored as a standalone therapeutic active.",
+      "last_updated": "2026-02-22",
+      "is_additive": false,
+      "additive_type": "unspecified",
+      "clean_label_score": 5,
+      "regulatory_status": "varies",
+      "common_uses": [
+        "identity_mapping"
+      ],
+      "severity_level": "none",
       "allergen_flag": null
     },
     {
@@ -6902,7 +6941,8 @@
         "silica gel",
         "silicon dioxide",
         "silicon dioxide (amorphous)",
-        "synthetic amorphous silica"
+        "synthetic amorphous silica",
+        "Colloidal Silicium Dioxide"
       ],
       "category": "flow_agent_anticaking",
       "notes": "A very common anti-caking and flow agent in powders, capsules, and tablets, preventing ingredients from clumping. Naturally occurring mineral, generally considered safe. Merged from NHA_COLLOIDAL_SILICON_DIOXIDE on 2025-11-17.",
@@ -7011,7 +7051,8 @@
         "soybean oil",
         "non-GMO Soybean Oil",
         "refined Soybean Oil",
-        "hydrogenated soybean oil"
+        "hydrogenated soybean oil",
+        "soybeal oil"
       ],
       "category": "carrier_oil",
       "notes": "Common carrier oil and excipient in softgel capsules. Provides negligible therapeutic value as a supplement ingredient. Major allergen (soy). Often from GMO sources unless specified organic.",
@@ -7072,7 +7113,8 @@
         "organic sunflower oil",
         "high oleic sunflower oil",
         "high-oleic sunflower oil",
-        "high-Oleic Sunflower Oil"
+        "high-Oleic Sunflower Oil",
+        "Sun Flower Oil"
       ],
       "category": "oil_carrier",
       "notes": "A common vegetable oil used as a neutral carrier for fat-soluble vitamins and other lipophilic compounds in supplements. Generally considered safe and inert in this role.",
@@ -7196,6 +7238,7 @@
         "HPMC capsule",
         "cellulose capsule",
         "vegetarian capsule",
+        "non-gmo vegetable cellulose",
         "vegan capsule",
         "V-caps",
         "Vcaps Plus",
@@ -7598,6 +7641,316 @@
       "last_updated": "2026-02-18",
       "is_additive": true,
       "severity_level": "low",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_LURALEAN",
+      "standard_name": "LuraLean",
+      "aliases": [
+        "LuraLean",
+        "LuraLean(R)"
+      ],
+      "category": "branded_blend",
+      "additive_type": "unspecified",
+      "clean_label_score": 5,
+      "notes": "Branded blend descriptor added for mapping coverage; treat as non-scorable until ingredient-level decomposition.",
+      "regulatory_status": "varies",
+      "common_uses": [
+        "weight management blend"
+      ],
+      "last_updated": "2026-02-22",
+      "is_additive": false,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_ASTRAGIN",
+      "standard_name": "AstraGin",
+      "aliases": [
+        "AstraGin"
+      ],
+      "category": "branded_blend",
+      "additive_type": "unspecified",
+      "clean_label_score": 5,
+      "notes": "Branded blend descriptor added for mapping coverage; treat as non-scorable until ingredient-level decomposition.",
+      "regulatory_status": "varies",
+      "common_uses": [
+        "absorption support blend"
+      ],
+      "last_updated": "2026-02-22",
+      "is_additive": false,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_HERBATONIN",
+      "standard_name": "Herbatonin",
+      "aliases": [
+        "Herbatonin"
+      ],
+      "category": "branded_ingredient",
+      "additive_type": "unspecified",
+      "clean_label_score": 5,
+      "notes": "Branded ingredient descriptor added for mapping coverage; treat as non-scorable until ingredient-level decomposition.",
+      "regulatory_status": "varies",
+      "common_uses": [
+        "sleep support"
+      ],
+      "last_updated": "2026-02-22",
+      "is_additive": false,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_SOFT_GEL_DESCRIPTOR",
+      "standard_name": "Soft-gel Descriptor",
+      "aliases": [
+        "soft-gel",
+        "{soft-gel}",
+        "soft gel descriptor"
+      ],
+      "category": "packaging_descriptor",
+      "additive_type": "unspecified",
+      "clean_label_score": 10,
+      "notes": "Label/form-factor descriptor captured for mapping suppression; not an ingredient.",
+      "regulatory_status": "n/a",
+      "common_uses": [
+        "label descriptor"
+      ],
+      "last_updated": "2026-02-22",
+      "is_additive": false,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_CAFFEIC_ACID",
+      "standard_name": "Caffeic Acid",
+      "aliases": [
+        "Caffeic Acid"
+      ],
+      "category": "phytochemical_constituent",
+      "additive_type": "unspecified",
+      "clean_label_score": 6,
+      "notes": "Phytochemical constituent descriptor captured for mapping coverage; treat as non-scorable unless elevated to dedicated IQM entry.",
+      "regulatory_status": "varies",
+      "common_uses": [
+        "polyphenol constituent"
+      ],
+      "last_updated": "2026-02-22",
+      "is_additive": false,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_SYRINGIC_ACID",
+      "standard_name": "Syringic Acid",
+      "aliases": [
+        "Syringic Acid"
+      ],
+      "category": "phytochemical_constituent",
+      "additive_type": "unspecified",
+      "clean_label_score": 6,
+      "notes": "Phytochemical constituent descriptor captured for mapping coverage; treat as non-scorable unless elevated to dedicated IQM entry.",
+      "regulatory_status": "varies",
+      "common_uses": [
+        "polyphenol constituent"
+      ],
+      "last_updated": "2026-02-22",
+      "is_additive": false,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_DIOSMETIN",
+      "standard_name": "Diosmetin",
+      "aliases": [
+        "Diosmetin"
+      ],
+      "category": "phytochemical_constituent",
+      "additive_type": "unspecified",
+      "clean_label_score": 6,
+      "notes": "Phytochemical constituent descriptor captured for mapping coverage; treat as non-scorable unless elevated to dedicated IQM entry.",
+      "regulatory_status": "varies",
+      "common_uses": [
+        "flavonoid constituent"
+      ],
+      "last_updated": "2026-02-22",
+      "is_additive": false,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_ERYTHRODIOL",
+      "standard_name": "Erythrodiol",
+      "aliases": [
+        "Erythrodiol"
+      ],
+      "category": "phytochemical_constituent",
+      "additive_type": "unspecified",
+      "clean_label_score": 6,
+      "notes": "Phytochemical constituent descriptor captured for mapping coverage; treat as non-scorable unless elevated to dedicated IQM entry.",
+      "regulatory_status": "varies",
+      "common_uses": [
+        "triterpenoid constituent"
+      ],
+      "last_updated": "2026-02-22",
+      "is_additive": false,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "PII_EMU_OIL",
+      "standard_name": "Emu Oil",
+      "aliases": [
+        "emu oil"
+      ],
+      "category": "oil_carrier",
+      "notes": "Animal-derived oil used as a carrier in some softgel formulations; treated as non-scorable identity mapping.",
+      "last_updated": "2026-02-22",
+      "is_additive": false,
+      "additive_type": "unspecified",
+      "clean_label_score": 5,
+      "regulatory_status": "varies",
+      "common_uses": [],
+      "severity_level": "low",
+      "allergen_flag": null
+    },
+    {
+      "id": "PII_ORCHIC_SUBSTANCE",
+      "standard_name": "Orchic Substance",
+      "aliases": [
+        "orchic substance"
+      ],
+      "category": "glandular_extract",
+      "notes": "Traditional glandular-derived ingredient label term used in legacy male vitality formulations; treated as non-scorable identity mapping.",
+      "last_updated": "2026-02-22",
+      "is_additive": false,
+      "additive_type": "unspecified",
+      "clean_label_score": 5,
+      "regulatory_status": "varies",
+      "common_uses": [],
+      "severity_level": "low",
+      "allergen_flag": null
+    },
+    {
+      "id": "PII_GALACTOMANNAN",
+      "standard_name": "Galactomannan",
+      "aliases": [
+        "galactomannan",
+        "fenugreek galactomannan"
+      ],
+      "category": "soluble_fiber_matrix",
+      "notes": "Polysaccharide matrix commonly derived from fenugreek/guar and used as delivery or fiber component; mapped for identity without form-quality scoring.",
+      "last_updated": "2026-02-22",
+      "is_additive": false,
+      "additive_type": "unspecified",
+      "clean_label_score": 5,
+      "regulatory_status": "varies",
+      "common_uses": [
+        "delivery matrix",
+        "fiber base"
+      ],
+      "severity_level": "low",
+      "allergen_flag": null
+    },
+    {
+      "id": "PII_ISOLASE",
+      "standard_name": "Isolase",
+      "aliases": [
+        "Isolase(R)",
+        "isolase"
+      ],
+      "category": "proprietary_complex",
+      "notes": "Branded proprietary complex label term (often used in soy isoflavone formulas); mapped for identity to prevent unmapped leakage pending deeper manufacturer-specific composition data.",
+      "last_updated": "2026-02-22",
+      "is_additive": false,
+      "additive_type": "unspecified",
+      "clean_label_score": 5,
+      "regulatory_status": "varies",
+      "common_uses": [
+        "botanical formula complex"
+      ],
+      "severity_level": "low",
+      "allergen_flag": null
+    },
+    {
+      "id": "PII_ARTEMISININ",
+      "standard_name": "Artemisinin",
+      "aliases": [
+        "artemisinin"
+      ],
+      "category": "phytochemical_isolate",
+      "notes": "Isolated sesquiterpene lactone from Artemisia annua; mapped conservatively as identity-only pending dedicated IQM form-scoring policy for this pharmacologically active compound.",
+      "last_updated": "2026-02-22",
+      "is_additive": false,
+      "additive_type": "unspecified",
+      "clean_label_score": 5,
+      "regulatory_status": "varies",
+      "common_uses": [
+        "botanical active isolate"
+      ],
+      "severity_level": "low",
+      "allergen_flag": null
+    },
+    {
+      "id": "PII_CASTOR_OIL",
+      "standard_name": "Castor Oil",
+      "aliases": [
+        "castor oil",
+        "ricinus communis seed oil"
+      ],
+      "category": "carrier_oil",
+      "additive_type": "carrier_oil",
+      "clean_label_score": 6,
+      "notes": "Identity mapping for castor oil label variants; role may be carrier/excipient in softgels.",
+      "regulatory_status": "varies",
+      "common_uses": [
+        "carrier oil",
+        "capsule fill"
+      ],
+      "last_updated": "2026-02-22",
+      "is_additive": true,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "PII_ETHYL_OLEATE",
+      "standard_name": "Ethyl Oleate",
+      "aliases": [
+        "ethyl oleate"
+      ],
+      "category": "excipient_lipid",
+      "additive_type": "solvent_carrier",
+      "clean_label_score": 5,
+      "notes": "Identity mapping for ethyl oleate excipient/carrier use.",
+      "regulatory_status": "allowed",
+      "common_uses": [
+        "solvent",
+        "carrier"
+      ],
+      "last_updated": "2026-02-22",
+      "is_additive": true,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "PII_GLYCERYL_MONOOLEATE",
+      "standard_name": "Glyceryl Monooleate",
+      "aliases": [
+        "glyceryl monooleate"
+      ],
+      "category": "emulsifier",
+      "additive_type": "emulsifier",
+      "clean_label_score": 5,
+      "notes": "Identity mapping for glyceryl monooleate emulsifier use.",
+      "regulatory_status": "allowed",
+      "common_uses": [
+        "emulsifier",
+        "stabilizer"
+      ],
+      "last_updated": "2026-02-22",
+      "is_additive": true,
+      "severity_level": "none",
       "allergen_flag": null
     }
   ]

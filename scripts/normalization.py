@@ -48,6 +48,18 @@ def normalize_text(raw: str) -> str:
     # Lowercase and strip
     text = text.lower().strip()
 
+    # Normalize smart quotes/apostrophes to ASCII equivalents
+    text = text.translate(str.maketrans({
+        "’": "'",
+        "‘": "'",
+        "‚": "'",
+        "‛": "'",
+        "“": '"',
+        "”": '"',
+        "„": '"',
+        "‟": '"',
+    }))
+
     # Normalize Greek beta: ONLY in known supplement compound patterns
     # β-glucan, β-carotene, β-sitosterol, β-alanine, β-hydroxy, etc.
     text = re.sub(r'β-(glucan|carotene|sitosterol|alanine|hydroxy|cryptoxanthin)',
@@ -72,6 +84,8 @@ def normalize_text(raw: str) -> str:
 
     # Remove trademark symbols
     text = re.sub(r'[™®©]', '', text)
+    # Also remove parenthesized mark tokens that frequently survive OCR/vendor exports
+    text = re.sub(r'\((?:tm|r|c)\)', '', text)
 
     # Collapse whitespace
     text = re.sub(r'\s+', ' ', text)
@@ -244,12 +258,21 @@ def preprocess_text(text: str) -> str:
     # Normalize multiple spaces
     text = re.sub(r'\s+', ' ', text)
 
-    # Remove common prefixes that don't affect matching
-    prefixes_to_remove = ['dl-', 'd-', 'l-', 'natural ', 'synthetic ', 'organic ']
-    for prefix in prefixes_to_remove:
-        if text.startswith(prefix):
-            text = text[len(prefix):]
-            break
+    # Remove common prefixes that don't affect matching.
+    # Apply iteratively so compound prefixes like "raw organic" are fully normalized.
+    prefixes_to_remove = [
+        'dl-', 'd-', 'l-',
+        'natural ', 'synthetic ', 'organic ',
+        'raw ', 'wild crafted ', 'wild-crafted ', 'wildcrafted '
+    ]
+    changed = True
+    while changed:
+        changed = False
+        for prefix in prefixes_to_remove:
+            if text.startswith(prefix):
+                text = text[len(prefix):].strip()
+                changed = True
+                break
 
     # Loop suffix removal to handle multiple suffixes like "Extract, Powder"
     suffixes_to_remove = [' extract', ' powder', ' oil', ' concentrate']
