@@ -4,7 +4,7 @@
     "purpose": "penalty_scoring",
     "schema_version": "4.0.0",
     "last_updated": "2026-02-22",
-    "total_entries": 104,
+    "total_entries": 106,
     "scoring_rule": "Apply penalty points based on severity_level. Critical: -5, High: -3, Moderate: -1.5, Low: -0.5. Multiple additives are cumulative.",
     "severity_level_definitions": {
       "critical": "Immediate health hazard, should be avoided entirely (e.g., formaldehyde, colloidal silver)",
@@ -13351,6 +13351,217 @@
       "dose_thresholds": null,
       "entity_relationships": null,
       "cui_note": "CUI was incorrectly copied from ADD_RED40 (C0054436). Needs UMLS Metathesaurus verification."
+    },
+    {
+      "id": "ADD_GREEN3",
+      "standard_name": "FD&C Green No. 3",
+      "aliases": [
+        "Green 3",
+        "Fast Green FCF",
+        "FD&C Green #3",
+        "FD&C Green No. 3",
+        "Green 3 Lake",
+        "E143",
+        "Green #3",
+        "FD&C Green 3",
+        "FD and C Green 3",
+        "FD&C Green No 3",
+        "Fast Green"
+      ],
+      "CUI": null,
+      "category": "colorant_artificial",
+      "mechanism_of_harm": "Synthetic triphenylmethane dye. Animal studies suggest potential for chromosomal aberrations and allergic-type reactions. Limited human safety data. Banned in EU and several countries.",
+      "regulatory_status": {
+        "US": "FDA approved for use in foods, drugs, and cosmetics",
+        "EU": "Not approved (E143 not permitted)",
+        "WHO": "JECFA ADI 25 mg/kg body weight"
+      },
+      "population_warnings": [
+        "Children - Higher exposure per body weight",
+        "Individuals with dye sensitivities"
+      ],
+      "notes": "Synthetic color additive. Permitted in US but banned in EU. Tracked as additive-risk signal.",
+      "scientific_references": [
+        "FDA: CFR Title 21, Part 74.203 - FD&C Green No. 3"
+      ],
+      "last_updated": "2026-02-22",
+      "match_rules": {
+        "match_mode": "alias_and_fuzzy",
+        "label_tokens": [
+          "green 3",
+          "fast green fcf",
+          "fd&c green #3",
+          "fd&c green no. 3",
+          "green 3 lake",
+          "e143",
+          "green #3",
+          "fd&c green 3",
+          "fd and c green 3",
+          "fd&c green no 3",
+          "fast green"
+        ],
+        "regex": null,
+        "fuzzy_threshold": 0.72,
+        "case_sensitive": false,
+        "preferred_alias": "FD&C Green No. 3"
+      },
+      "references_structured": [
+        {
+          "type": "regulation",
+          "authority": "FDA",
+          "citation": "CFR Title 21, Part 74.203 - FD&C Green No. 3",
+          "url": "",
+          "published_date": null,
+          "evidence_grade": "R",
+          "confidence": "high"
+        }
+      ],
+      "external_ids": {
+        "umls_cui": null,
+        "cas": "2353-45-9",
+        "pubchem": null
+      },
+      "jurisdictional_statuses": [
+        {
+          "authority": "US",
+          "jurisdiction": "US",
+          "status_code": "monitored",
+          "scope": "supplement",
+          "effective_range": { "start": "1982-01-01", "end": null },
+          "source_ref": "FDA CFR Title 21, Part 74.203"
+        }
+      ],
+      "review": {
+        "status": "validated",
+        "last_reviewed_at": "2026-02-22",
+        "reviewed_by": "pipeline_audit",
+        "next_review_due": "2026-08-22",
+        "change_log": [
+          {
+            "date": "2026-02-22",
+            "change": "Initial entry created to close safety routing gap",
+            "reason": "unmapped_inactive_audit"
+          }
+        ]
+      },
+      "severity_score": 3,
+      "confidence": "medium",
+      "exposure_context": "supplement",
+      "entity_type": "ingredient",
+      "severity_level": "moderate",
+      "dose_thresholds": null,
+      "entity_relationships": null
+    },
+    {
+      "id": "ADD_RED3",
+      "standard_name": "FD&C Red No. 3",
+      "aliases": [
+        "Red 3",
+        "Erythrosine",
+        "FD&C Red #3",
+        "FD&C Red No. 3",
+        "Red 3 Lake",
+        "E127",
+        "Red #3",
+        "FD&C Red 3",
+        "FD and C Red 3",
+        "FD&C Red No 3",
+        "Erythrosine B"
+      ],
+      "CUI": null,
+      "category": "colorant_artificial",
+      "mechanism_of_harm": "Thyroid carcinogen in animal studies. FDA revoked authorization for use in foods and ingested drugs effective January 2027 (announced January 2025). Contains iodine which may affect thyroid function.",
+      "regulatory_status": {
+        "US": "FDA revoked authorization (January 2025); banned effective January 15, 2027 for foods, January 18, 2028 for ingested drugs",
+        "EU": "E127 approved with restrictions",
+        "WHO": "JECFA ADI 0.1 mg/kg body weight"
+      },
+      "population_warnings": [
+        "Everyone - Thyroid carcinogen in animals",
+        "Children - Higher exposure per body weight",
+        "Individuals with thyroid conditions"
+      ],
+      "notes": "FDA banned Red No. 3 in January 2025 due to thyroid tumor evidence in animal studies. Compliance deadline: Jan 15, 2027 for foods, Jan 18, 2028 for ingested drugs.",
+      "scientific_references": [
+        "FDA: Revocation of FD&C Red No. 3 (January 2025)",
+        "DOI: 10.1016/j.fct.2007.09.001 - Erythrosine thyroid effects"
+      ],
+      "last_updated": "2026-02-22",
+      "match_rules": {
+        "match_mode": "alias_and_fuzzy",
+        "label_tokens": [
+          "red 3",
+          "erythrosine",
+          "fd&c red #3",
+          "fd&c red no. 3",
+          "red 3 lake",
+          "e127",
+          "red #3",
+          "fd&c red 3",
+          "fd and c red 3",
+          "fd&c red no 3",
+          "erythrosine b"
+        ],
+        "regex": null,
+        "fuzzy_threshold": 0.72,
+        "case_sensitive": false,
+        "preferred_alias": "FD&C Red No. 3"
+      },
+      "references_structured": [
+        {
+          "type": "regulatory_action",
+          "authority": "FDA",
+          "citation": "FDA revocation of FD&C Red No. 3 listing (January 2025)",
+          "url": "",
+          "published_date": "2025-01-15",
+          "evidence_grade": "R",
+          "confidence": "high"
+        },
+        {
+          "type": "research",
+          "authority": "peer-reviewed",
+          "citation": "DOI: 10.1016/j.fct.2007.09.001 - Erythrosine thyroid effects in animals",
+          "url": "https://doi.org/10.1016/j.fct.2007.09.001",
+          "published_date": null,
+          "evidence_grade": "B",
+          "confidence": "high"
+        }
+      ],
+      "external_ids": {
+        "umls_cui": null,
+        "cas": "16423-68-0",
+        "pubchem": null
+      },
+      "jurisdictional_statuses": [
+        {
+          "authority": "US",
+          "jurisdiction": "US",
+          "status_code": "monitored",
+          "scope": "supplement",
+          "effective_range": { "start": "2025-01-15", "end": null },
+          "source_ref": "FDA revocation January 2025; compliance deadline Jan 2027 (foods), Jan 2028 (ingested drugs)"
+        }
+      ],
+      "review": {
+        "status": "validated",
+        "last_reviewed_at": "2026-02-22",
+        "reviewed_by": "pipeline_audit",
+        "next_review_due": "2026-08-22",
+        "change_log": [
+          {
+            "date": "2026-02-22",
+            "change": "Initial entry created — FDA-banned colorant",
+            "reason": "safety_routing_gap"
+          }
+        ]
+      },
+      "severity_score": 5,
+      "confidence": "high",
+      "exposure_context": "supplement",
+      "entity_type": "ingredient",
+      "severity_level": "high",
+      "dose_thresholds": null,
+      "entity_relationships": null
     },
     {
       "id": "ADD_TITANIUM_DIOXIDE",

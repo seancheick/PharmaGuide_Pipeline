@@ -2011,7 +2011,11 @@
           "(6S)-5-methyltetrahydrofolate glucosamine salt supplement",
           "quatrefolic methylfolate",
           "quatrefolic brand methylfolate",
-          "quatrefolic brand (6s)-5-methyltetrahydrofolate glucosamine"
+          "quatrefolic brand (6s)-5-methyltetrahydrofolate glucosamine",
+          "quatrefolic brand (6s)-5-methyltetrahydrofolate glucosamine salt",
+          "(6s)-5-methyltetrahydrofolic acid glucosamine salt",
+          "(6s)-5-methyltetrahydrofolate acid glucosamine salt",
+          "(6s)-5-methyltetrahydrofolic acid, glucosamine salt"
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
@@ -6540,7 +6544,13 @@
           "Citrus Bioflavanoids",
           "seville orange extract bioflavonoids",
           "seville orange citrus aurantium extract bioflavonoids",
-          "Cardiose Flavonoid Glycoside"
+          "Cardiose Flavonoid Glycoside",
+          "lemon bioflavonoid",
+          "lemon bioflavonoids",
+          "lemon bioflavonoid complex",
+          "bitter orange bioflavonoids",
+          "bitter orange citrus bioflavonoids",
+          "mixed citrus bioflavonoids"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -7862,7 +7872,10 @@
           "d-chiro-inositol supplement",
           "DCI supplement",
           "d-pinitol supplement",
-          "chiro-inositol supplement"
+          "chiro-inositol supplement",
+          "d-chiro inositol",
+          "d chiro inositol",
+          "d chiro-inositol"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -8225,7 +8238,10 @@
           "chromium polynicotinate supplement",
           "niacin-bound chromium supplement",
           "chromium nicotinate supplement",
-          "chromium niacinate supplement"
+          "chromium niacinate supplement",
+          "chromemate",
+          "chromemate chromium polynicotinate",
+          "chrome mate"
         ],
         "dosage_importance": 0.5,
         "absorption_structured": {
@@ -12483,7 +12499,10 @@
           "Sc-FOS",
           "GoFos",
           "Fructo Oligo Saccharides",
-          "Inulin FOS"
+          "Inulin FOS",
+          "nutraflora scfos",
+          "nutraflora short chain fructooligosaccharides",
+          "short chain fructooligosaccharides"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -17035,7 +17054,10 @@
           "bioactive ashwagandha supplement",
           "stress-relief ashwagandha supplement",
           "high-potency sensoril supplement",
-          "ashwagandha sensoril brand root and leaf extract"
+          "ashwagandha sensoril brand root and leaf extract",
+          "sensoril ashwagandha root and leaf extract",
+          "sensoril ashwagandha extract",
+          "sensoril ashwagandha withania somnifera root and leaf extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -18098,7 +18120,11 @@
           "Bovine Collagen, Hydrolyzed",
           "bovine collagen hydrolyzed",
           "bovine hydrolyzed collagen",
-          "Fish Collagen Peptides"
+          "Fish Collagen Peptides",
+          "biocell collagen ii",
+          "biocell collagen type ii",
+          "biocell collagen hydrolyzed collagen complex",
+          "collagen type ii hydrolyzed"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -21442,7 +21468,9 @@
           "specific enzymes supplement",
           "targeted digestive enzymes supplement",
           "Prohydrolase",
-          "prohydrolase enzyme blend"
+          "prohydrolase enzyme blend",
+          "serratiopeptidase",
+          "serratia peptidase"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -25369,7 +25397,9 @@
           "purcaf",
           "purcaf caffeine",
           "innovatea",
-          "innovatea natural tea extract"
+          "innovatea natural tea extract",
+          "caffeine natural",
+          "caffeine, natural"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -27086,7 +27116,11 @@
         "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
         "aliases": [
           "forskolin",
-          "coleus forskohlii extract powder"
+          "coleus forskohlii extract powder",
+          "forslean",
+          "forslean coleus forskohlii extract",
+          "coleus forskohlii root extract",
+          "forskolin extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -28220,7 +28254,10 @@
           "horny goat weed aerial parts extract",
           "epimedium stem and leaf extract",
           "icariins",
-          "yin yang huo"
+          "yin yang huo",
+          "horny goat weed aerial plant extract",
+          "horny goat weed herb extract",
+          "epimedium leaf extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -34707,7 +34744,11 @@
         "aliases": [
           "bacopa herb extract",
           "bacopa",
-          "bacopa aerial parts extract"
+          "bacopa aerial parts extract",
+          "bacopa monnieri leaf extract",
+          "bacopa monnieri leaf",
+          "bacopa leaf extract",
+          "bacopa monnieri herb extract"
         ],
         "score": 9,
         "dosage_importance": 1.0,
@@ -41056,7 +41097,14 @@
           "cinnamon extract",
           "cinnamomum",
           "ceylon cinnamon",
-          "organic cinnamon"
+          "organic cinnamon",
+          "cinnulin pf",
+          "cinnulin",
+          "cinnamon bark extract",
+          "cinnamomum cassia extract",
+          "cinnamomum verum extract",
+          "cinnamomum burmannii extract",
+          "true cinnamon extract"
         ],
         "absorption_structured": {
           "value": 0.55,
@@ -42473,7 +42521,9 @@
           "ip6",
           "phytic acid",
           "ip6 phytate",
-          "phytate"
+          "phytate",
+          "ip-6",
+          "ip 6"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -44537,7 +44587,10 @@
         "absorption": "unknown",
         "notes": "Form not specified; conservative scoring applied.",
         "aliases": [
-          "lithium"
+          "lithium",
+          "lithium aspartate",
+          "elemental lithium",
+          "lithium citrate"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -44576,7 +44629,10 @@
         "aliases": [
           "alpha ketoglutarate",
           "alpha-ketoglutarate",
-          "2-oxoglutarate"
+          "2-oxoglutarate",
+          "alpha-ketoglutaric acid",
+          "alpha ketoglutaric acid",
+          "akg"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -44614,6 +44670,892 @@
     },
     "data_quality": {
       "completeness": 0.7,
+      "missing_fields": [],
+      "review_status": "needs_review",
+      "last_reviewed_at": "2026-02-22"
+    }
+  },
+  "hawthorn": {
+    "standard_name": "Hawthorn (Crataegus)",
+    "category": "botanicals",
+    "cui": "",
+    "rxcui": "",
+    "forms": {
+      "hawthorn berry extract": {
+        "bio_score": 10,
+        "natural": true,
+        "score": 13,
+        "absorption": "good (~60%)",
+        "notes": "Standardized hawthorn berry extract. Contains oligomeric proanthocyanidins (OPCs) and flavonoids. Studied for cardiovascular support.",
+        "aliases": [
+          "hawthorn berry extract",
+          "hawthorn berry standardized extract",
+          "crataegus berry extract",
+          "crataegus oxyacantha berry extract",
+          "hawthorn berries extract"
+        ],
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": 0.6,
+          "range_low": 0.5,
+          "range_high": 0.7,
+          "quality": "good",
+          "notes": "good"
+        }
+      },
+      "hawthorn leaf and flower extract": {
+        "bio_score": 11,
+        "natural": true,
+        "score": 14,
+        "absorption": "good (~65%)",
+        "notes": "European Pharmacopoeia standardized leaf and flower extract. Higher flavonoid content than berry-only extracts.",
+        "aliases": [
+          "hawthorn leaf and flower extract",
+          "hawthorn leaf flower extract",
+          "hawthorn flower leaf extract",
+          "hawthorn flower, leaf extract",
+          "crataegus leaf and flower extract",
+          "hawthorn leaf extract",
+          "hawthorn flower extract",
+          "hawthorn berry and leaf extract",
+          "hawthorn berry leaf extract"
+        ],
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": 0.65,
+          "range_low": 0.55,
+          "range_high": 0.7,
+          "quality": "good",
+          "notes": "good"
+        }
+      },
+      "hawthorn (unspecified)": {
+        "bio_score": 5,
+        "natural": true,
+        "score": 5,
+        "absorption": "unknown",
+        "notes": "Form not specified; conservative scoring applied.",
+        "aliases": [
+          "hawthorn",
+          "hawthorn berry",
+          "hawthorn berries",
+          "hawthorne",
+          "hawthorne berry",
+          "crataegus",
+          "crataegus oxyacantha",
+          "crataegus monogyna",
+          "crataegus laevigata",
+          "hawthorn extract",
+          "hawthorne extract"
+        ],
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": null,
+          "quality": "unknown",
+          "notes": "Data not available"
+        }
+      }
+    },
+    "match_rules": {
+      "priority": 1,
+      "match_mode": "alias_and_fuzzy",
+      "exclusions": [],
+      "parent_id": null,
+      "confidence": "medium"
+    },
+    "data_quality": {
+      "completeness": 0.7,
+      "missing_fields": [],
+      "review_status": "needs_review",
+      "last_reviewed_at": "2026-02-22"
+    }
+  },
+  "garcinia_cambogia": {
+    "standard_name": "Garcinia Cambogia (Hydroxycitric Acid)",
+    "category": "botanicals",
+    "cui": "",
+    "rxcui": "",
+    "forms": {
+      "garcinia cambogia extract 60% HCA": {
+        "bio_score": 9,
+        "natural": true,
+        "score": 12,
+        "absorption": "moderate (~40%)",
+        "notes": "Standardized to 60% hydroxycitric acid (HCA). Weight management ingredient.",
+        "aliases": [
+          "garcinia cambogia 60% hca",
+          "garcinia cambogia extract 60%",
+          "hydroxycitric acid 60%"
+        ],
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": 0.4,
+          "range_low": 0.3,
+          "range_high": 0.5,
+          "quality": "moderate",
+          "notes": "moderate"
+        }
+      },
+      "garcinia cambogia extract 50% HCA": {
+        "bio_score": 8,
+        "natural": true,
+        "score": 11,
+        "absorption": "moderate (~40%)",
+        "notes": "Standardized to 50% HCA.",
+        "aliases": [
+          "garcinia cambogia 50% extract",
+          "garcinia cambogia extract 50%",
+          "garcinia cambogia 50% hca"
+        ],
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": 0.4,
+          "range_low": 0.3,
+          "range_high": 0.5,
+          "quality": "moderate",
+          "notes": "moderate"
+        }
+      },
+      "garcinia cambogia (unspecified)": {
+        "bio_score": 5,
+        "natural": true,
+        "score": 5,
+        "absorption": "unknown",
+        "notes": "Form not specified; conservative scoring applied.",
+        "aliases": [
+          "garcinia cambogia",
+          "garcinia",
+          "garcinia cambogia fruit extract",
+          "garcinia cambogia fruit",
+          "garcinia cambogia extract",
+          "garcinia cambogia rind extract",
+          "hydroxycitric acid",
+          "hca",
+          "malabar tamarind",
+          "brindleberry",
+          "garcinia cambogia rind",
+          "garcinia gummi-gutta"
+        ],
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": null,
+          "quality": "unknown",
+          "notes": "Data not available"
+        }
+      }
+    },
+    "match_rules": {
+      "priority": 1,
+      "match_mode": "alias_and_fuzzy",
+      "exclusions": [],
+      "parent_id": null,
+      "confidence": "medium"
+    },
+    "data_quality": {
+      "completeness": 0.6,
+      "missing_fields": [],
+      "review_status": "needs_review",
+      "last_reviewed_at": "2026-02-22"
+    }
+  },
+  "capsaicin": {
+    "standard_name": "Capsaicin (Capsicum)",
+    "category": "botanicals",
+    "cui": "",
+    "rxcui": "",
+    "forms": {
+      "capsimax": {
+        "bio_score": 11,
+        "natural": true,
+        "score": 14,
+        "absorption": "good (~70%)",
+        "notes": "OmniActive branded capsicum extract using OmniBead beadlet technology for delayed release. Reduces GI irritation.",
+        "aliases": [
+          "capsimax",
+          "capsimax capsicum extract",
+          "capsimax cayenne extract",
+          "omnibead capsicum"
+        ],
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": 0.7,
+          "range_low": 0.6,
+          "range_high": 0.8,
+          "quality": "good",
+          "notes": "OmniBead technology improves GI tolerability and absorption"
+        }
+      },
+      "capsaicin extract": {
+        "bio_score": 9,
+        "natural": true,
+        "score": 12,
+        "absorption": "moderate (~50%)",
+        "notes": "Standardized capsaicin extract from cayenne or capsicum peppers.",
+        "aliases": [
+          "capsaicin extract",
+          "capsaicin",
+          "capsicum extract",
+          "cayenne pepper extract",
+          "cayenne extract",
+          "capsicum annuum extract",
+          "capsicum frutescens extract",
+          "hot pepper extract"
+        ],
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": 0.5,
+          "range_low": 0.4,
+          "range_high": 0.6,
+          "quality": "moderate",
+          "notes": "moderate"
+        }
+      },
+      "capsaicin (unspecified)": {
+        "bio_score": 5,
+        "natural": true,
+        "score": 5,
+        "absorption": "unknown",
+        "notes": "Form not specified; conservative scoring applied.",
+        "aliases": [
+          "capsicum",
+          "cayenne",
+          "cayenne pepper",
+          "capsicum annuum",
+          "capsicum frutescens",
+          "cayenne pepper powder",
+          "cayenne powder",
+          "hot pepper"
+        ],
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": null,
+          "quality": "unknown",
+          "notes": "Data not available"
+        }
+      }
+    },
+    "match_rules": {
+      "priority": 1,
+      "match_mode": "alias_and_fuzzy",
+      "exclusions": [],
+      "parent_id": null,
+      "confidence": "medium"
+    },
+    "data_quality": {
+      "completeness": 0.7,
+      "missing_fields": [],
+      "review_status": "needs_review",
+      "last_reviewed_at": "2026-02-22"
+    }
+  },
+  "tribulus": {
+    "standard_name": "Tribulus Terrestris",
+    "category": "botanicals",
+    "cui": "",
+    "rxcui": "",
+    "forms": {
+      "tribulus standardized extract": {
+        "bio_score": 9,
+        "natural": true,
+        "score": 12,
+        "absorption": "moderate (~45%)",
+        "notes": "Standardized to saponins (typically 40-90%). Used for athletic performance and testosterone support.",
+        "aliases": [
+          "tribulus terrestris extract",
+          "tribulus extract",
+          "tribulus terrestris fruit extract",
+          "tribulus terrestris aerial parts extract",
+          "tribulus fruit extract",
+          "tribulus terrestris standardized extract",
+          "tribulus terrestris 45% saponins"
+        ],
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": 0.45,
+          "range_low": 0.35,
+          "range_high": 0.55,
+          "quality": "moderate",
+          "notes": "moderate"
+        }
+      },
+      "tribulus (unspecified)": {
+        "bio_score": 5,
+        "natural": true,
+        "score": 5,
+        "absorption": "unknown",
+        "notes": "Form not specified; conservative scoring applied.",
+        "aliases": [
+          "tribulus",
+          "tribulus terrestris",
+          "puncture vine",
+          "gokshura",
+          "tribulus terrestris herb",
+          "tribulus terrestris fruit",
+          "tribulus terrestris aerial parts",
+          "tribulus terrestris powder"
+        ],
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": null,
+          "quality": "unknown",
+          "notes": "Data not available"
+        }
+      }
+    },
+    "match_rules": {
+      "priority": 1,
+      "match_mode": "alias_and_fuzzy",
+      "exclusions": [],
+      "parent_id": null,
+      "confidence": "medium"
+    },
+    "data_quality": {
+      "completeness": 0.6,
+      "missing_fields": [],
+      "review_status": "needs_review",
+      "last_reviewed_at": "2026-02-22"
+    }
+  },
+  "theacrine": {
+    "standard_name": "Theacrine",
+    "category": "purine_alkaloids",
+    "cui": "",
+    "rxcui": "",
+    "forms": {
+      "teacrine branded": {
+        "bio_score": 10,
+        "natural": false,
+        "score": 13,
+        "absorption": "good (~65%)",
+        "notes": "Compound Solutions branded theacrine (TeaCrine). Purine alkaloid structurally similar to caffeine but without tolerance build-up.",
+        "aliases": [
+          "teacrine",
+          "teacrine theacrine",
+          "compound solutions teacrine"
+        ],
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": 0.65,
+          "range_low": 0.55,
+          "range_high": 0.75,
+          "quality": "good",
+          "notes": "good"
+        }
+      },
+      "theacrine (unspecified)": {
+        "bio_score": 5,
+        "natural": false,
+        "score": 5,
+        "absorption": "unknown",
+        "notes": "Form not specified; conservative scoring applied.",
+        "aliases": [
+          "theacrine",
+          "1,3,7,9-tetramethyluric acid",
+          "theacrine supplement"
+        ],
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": null,
+          "quality": "unknown",
+          "notes": "Data not available"
+        }
+      }
+    },
+    "match_rules": {
+      "priority": 1,
+      "match_mode": "alias_and_fuzzy",
+      "exclusions": [],
+      "parent_id": null,
+      "confidence": "medium"
+    },
+    "data_quality": {
+      "completeness": 0.6,
+      "missing_fields": [],
+      "review_status": "needs_review",
+      "last_reviewed_at": "2026-02-22"
+    }
+  },
+  "agmatine": {
+    "standard_name": "Agmatine Sulfate",
+    "category": "amino_acid_derivatives",
+    "cui": "",
+    "rxcui": "",
+    "forms": {
+      "agmatine sulfate": {
+        "bio_score": 9,
+        "natural": false,
+        "score": 12,
+        "absorption": "moderate (~50%)",
+        "notes": "Decarboxylated arginine. Used in sports nutrition for nitric oxide modulation and neuroprotection.",
+        "aliases": [
+          "agmatine sulfate",
+          "agmatine sulphate",
+          "agmatine"
+        ],
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": 0.5,
+          "range_low": 0.4,
+          "range_high": 0.6,
+          "quality": "moderate",
+          "notes": "moderate"
+        }
+      },
+      "agmatine (unspecified)": {
+        "bio_score": 5,
+        "natural": false,
+        "score": 5,
+        "absorption": "unknown",
+        "notes": "Form not specified; conservative scoring applied.",
+        "aliases": [
+          "agmatine supplement",
+          "4-aminobutylguanidine"
+        ],
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": null,
+          "quality": "unknown",
+          "notes": "Data not available"
+        }
+      }
+    },
+    "match_rules": {
+      "priority": 1,
+      "match_mode": "alias_and_fuzzy",
+      "exclusions": [],
+      "parent_id": null,
+      "confidence": "medium"
+    },
+    "data_quality": {
+      "completeness": 0.6,
+      "missing_fields": [],
+      "review_status": "needs_review",
+      "last_reviewed_at": "2026-02-22"
+    }
+  },
+  "watercress": {
+    "standard_name": "Watercress",
+    "category": "botanicals",
+    "cui": "",
+    "rxcui": "",
+    "forms": {
+      "watercress (unspecified)": {
+        "bio_score": 5,
+        "natural": true,
+        "score": 5,
+        "absorption": "unknown",
+        "notes": "Cruciferous vegetable (Nasturtium officinale). Rich in glucosinolates and antioxidants. Used in greens formulas.",
+        "aliases": [
+          "watercress",
+          "watercress leaf",
+          "watercress extract",
+          "watercress powder",
+          "nasturtium officinale",
+          "watercress herb",
+          "watercress leaf powder",
+          "watercress juice powder"
+        ],
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": null,
+          "quality": "unknown",
+          "notes": "Data not available"
+        }
+      }
+    },
+    "match_rules": {
+      "priority": 1,
+      "match_mode": "alias_and_fuzzy",
+      "exclusions": [],
+      "parent_id": null,
+      "confidence": "medium"
+    },
+    "data_quality": {
+      "completeness": 0.5,
+      "missing_fields": [],
+      "review_status": "needs_review",
+      "last_reviewed_at": "2026-02-22"
+    }
+  },
+  "anise": {
+    "standard_name": "Anise (Pimpinella anisum)",
+    "category": "botanicals",
+    "cui": "",
+    "rxcui": "",
+    "forms": {
+      "anise (unspecified)": {
+        "bio_score": 5,
+        "natural": true,
+        "score": 5,
+        "absorption": "unknown",
+        "notes": "Common spice herb. Contains anethole. Used in digestive and respiratory formulations.",
+        "aliases": [
+          "anise",
+          "aniseed",
+          "anise seed",
+          "anise extract",
+          "pimpinella anisum",
+          "anise powder",
+          "anise seed extract",
+          "anise seed powder",
+          "star anise",
+          "illicium verum"
+        ],
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": null,
+          "quality": "unknown",
+          "notes": "Data not available"
+        }
+      }
+    },
+    "match_rules": {
+      "priority": 1,
+      "match_mode": "alias_and_fuzzy",
+      "exclusions": [],
+      "parent_id": null,
+      "confidence": "medium"
+    },
+    "data_quality": {
+      "completeness": 0.5,
+      "missing_fields": [],
+      "review_status": "needs_review",
+      "last_reviewed_at": "2026-02-22"
+    }
+  },
+  "guggul": {
+    "standard_name": "Guggul (Commiphora mukul)",
+    "category": "botanicals",
+    "cui": "",
+    "rxcui": "",
+    "forms": {
+      "guggul standardized extract": {
+        "bio_score": 9,
+        "natural": true,
+        "score": 12,
+        "absorption": "moderate (~45%)",
+        "notes": "Standardized to guggulsterones (2.5-10%). Used for cholesterol and thyroid support.",
+        "aliases": [
+          "guggulsterones",
+          "guggul extract",
+          "guggul standardized extract",
+          "gugulipid",
+          "gugulipid extract",
+          "commiphora mukul extract",
+          "guggul resin extract",
+          "guggulsterone extract"
+        ],
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": 0.45,
+          "range_low": 0.35,
+          "range_high": 0.55,
+          "quality": "moderate",
+          "notes": "moderate"
+        }
+      },
+      "guggul (unspecified)": {
+        "bio_score": 5,
+        "natural": true,
+        "score": 5,
+        "absorption": "unknown",
+        "notes": "Form not specified; conservative scoring applied.",
+        "aliases": [
+          "guggul",
+          "guggulu",
+          "commiphora mukul",
+          "commiphora wightii",
+          "guggul gum resin",
+          "guggul resin"
+        ],
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": null,
+          "quality": "unknown",
+          "notes": "Data not available"
+        }
+      }
+    },
+    "match_rules": {
+      "priority": 1,
+      "match_mode": "alias_and_fuzzy",
+      "exclusions": [],
+      "parent_id": null,
+      "confidence": "medium"
+    },
+    "data_quality": {
+      "completeness": 0.6,
+      "missing_fields": [],
+      "review_status": "needs_review",
+      "last_reviewed_at": "2026-02-22"
+    }
+  },
+  "devils_claw": {
+    "standard_name": "Devil's Claw (Harpagophytum procumbens)",
+    "category": "botanicals",
+    "cui": "",
+    "rxcui": "",
+    "forms": {
+      "devil's claw extract": {
+        "bio_score": 9,
+        "natural": true,
+        "score": 12,
+        "absorption": "moderate (~45%)",
+        "notes": "Standardized to harpagosides. Used for joint pain and inflammation.",
+        "aliases": [
+          "devil's claw extract",
+          "devils claw extract",
+          "devil's claw root extract",
+          "devils claw root extract",
+          "harpagophytum extract",
+          "harpagophytum procumbens extract",
+          "harpagophytum root extract"
+        ],
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": 0.45,
+          "range_low": 0.35,
+          "range_high": 0.55,
+          "quality": "moderate",
+          "notes": "moderate"
+        }
+      },
+      "devil's claw (unspecified)": {
+        "bio_score": 5,
+        "natural": true,
+        "score": 5,
+        "absorption": "unknown",
+        "notes": "Form not specified; conservative scoring applied.",
+        "aliases": [
+          "devil's claw",
+          "devils claw",
+          "harpagophytum",
+          "harpagophytum procumbens",
+          "devil's claw root",
+          "devils claw root",
+          "wood spider",
+          "grapple plant"
+        ],
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": null,
+          "quality": "unknown",
+          "notes": "Data not available"
+        }
+      }
+    },
+    "match_rules": {
+      "priority": 1,
+      "match_mode": "alias_and_fuzzy",
+      "exclusions": [],
+      "parent_id": null,
+      "confidence": "medium"
+    },
+    "data_quality": {
+      "completeness": 0.6,
+      "missing_fields": [],
+      "review_status": "needs_review",
+      "last_reviewed_at": "2026-02-22"
+    }
+  },
+  "elecampane": {
+    "standard_name": "Elecampane (Inula helenium)",
+    "category": "botanicals",
+    "cui": "",
+    "rxcui": "",
+    "forms": {
+      "elecampane (unspecified)": {
+        "bio_score": 5,
+        "natural": true,
+        "score": 5,
+        "absorption": "unknown",
+        "notes": "Traditional herb used for respiratory support. Contains inulin and alantolactone.",
+        "aliases": [
+          "elecampane",
+          "elecampane root",
+          "elecampane extract",
+          "elecampane root extract",
+          "inula helenium",
+          "inula helenium extract",
+          "elecampane root powder",
+          "elecampane powder"
+        ],
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": null,
+          "quality": "unknown",
+          "notes": "Data not available"
+        }
+      }
+    },
+    "match_rules": {
+      "priority": 1,
+      "match_mode": "alias_and_fuzzy",
+      "exclusions": [],
+      "parent_id": null,
+      "confidence": "medium"
+    },
+    "data_quality": {
+      "completeness": 0.5,
+      "missing_fields": [],
+      "review_status": "needs_review",
+      "last_reviewed_at": "2026-02-22"
+    }
+  },
+  "black_walnut": {
+    "standard_name": "Black Walnut (Juglans nigra)",
+    "category": "botanicals",
+    "cui": "",
+    "rxcui": "",
+    "forms": {
+      "black walnut (unspecified)": {
+        "bio_score": 5,
+        "natural": true,
+        "score": 5,
+        "absorption": "unknown",
+        "notes": "Traditional herbal ingredient from the hull/bark of black walnut tree. Used in anti-parasitic and digestive formulations.",
+        "aliases": [
+          "black walnut",
+          "black walnut hull",
+          "black walnut hulls",
+          "black walnut extract",
+          "black walnut hull extract",
+          "juglans nigra",
+          "juglans nigra extract",
+          "black walnut hull powder",
+          "black walnut powder",
+          "green black walnut hull"
+        ],
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": null,
+          "quality": "unknown",
+          "notes": "Data not available"
+        }
+      }
+    },
+    "match_rules": {
+      "priority": 1,
+      "match_mode": "alias_and_fuzzy",
+      "exclusions": [],
+      "parent_id": null,
+      "confidence": "medium"
+    },
+    "data_quality": {
+      "completeness": 0.5,
+      "missing_fields": [],
+      "review_status": "needs_review",
+      "last_reviewed_at": "2026-02-22"
+    }
+  },
+  "monolaurin": {
+    "standard_name": "Monolaurin (Glycerol Monolaurate)",
+    "category": "fatty_acid_derivatives",
+    "cui": "",
+    "rxcui": "",
+    "forms": {
+      "monolaurin (unspecified)": {
+        "bio_score": 8,
+        "natural": false,
+        "score": 11,
+        "absorption": "moderate (~55%)",
+        "notes": "Glycerol ester of lauric acid. Antimicrobial properties. Used for immune support. Distinct from free lauric acid.",
+        "aliases": [
+          "monolaurin",
+          "glycerol monolaurate",
+          "glyceryl monolaurate",
+          "lauricidin",
+          "monolaurin supplement",
+          "glyceryl laurate"
+        ],
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": 0.55,
+          "range_low": 0.45,
+          "range_high": 0.65,
+          "quality": "moderate",
+          "notes": "moderate"
+        }
+      }
+    },
+    "match_rules": {
+      "priority": 1,
+      "match_mode": "alias_and_fuzzy",
+      "exclusions": [],
+      "parent_id": null,
+      "confidence": "medium"
+    },
+    "data_quality": {
+      "completeness": 0.6,
+      "missing_fields": [],
+      "review_status": "needs_review",
+      "last_reviewed_at": "2026-02-22"
+    }
+  },
+  "mucuna_pruriens": {
+    "standard_name": "Mucuna Pruriens (Velvet Bean)",
+    "category": "botanicals",
+    "cui": "",
+    "rxcui": "",
+    "forms": {
+      "mucuna pruriens standardized extract": {
+        "bio_score": 10,
+        "natural": true,
+        "score": 13,
+        "absorption": "moderate (~50%)",
+        "notes": "Standardized to L-DOPA content (typically 15-98%). Natural source of L-DOPA used for dopamine support and athletic performance.",
+        "aliases": [
+          "mucuna pruriens extract",
+          "mucuna pruriens seed extract",
+          "mucuna extract",
+          "mucuna pruriens standardized extract",
+          "velvet bean extract",
+          "mucuna pruriens 15% l-dopa",
+          "mucuna pruriens 98% l-dopa"
+        ],
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": 0.5,
+          "range_low": 0.4,
+          "range_high": 0.6,
+          "quality": "moderate",
+          "notes": "moderate"
+        }
+      },
+      "mucuna pruriens (unspecified)": {
+        "bio_score": 5,
+        "natural": true,
+        "score": 5,
+        "absorption": "unknown",
+        "notes": "Form not specified; conservative scoring applied.",
+        "aliases": [
+          "mucuna pruriens",
+          "mucuna",
+          "velvet bean",
+          "mucuna pruriens seed",
+          "mucuna pruriens powder",
+          "mucuna pruriens seed powder",
+          "cowhage",
+          "kapikachhu",
+          "atmagupta"
+        ],
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": null,
+          "quality": "unknown",
+          "notes": "Data not available"
+        }
+      }
+    },
+    "match_rules": {
+      "priority": 1,
+      "match_mode": "alias_and_fuzzy",
+      "exclusions": [],
+      "parent_id": null,
+      "confidence": "medium"
+    },
+    "data_quality": {
+      "completeness": 0.6,
       "missing_fields": [],
       "review_status": "needs_review",
       "last_reviewed_at": "2026-02-22"

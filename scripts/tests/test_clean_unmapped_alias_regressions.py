@@ -21,7 +21,7 @@ def normalizer():
         ("N-Acetyl L-Cysteine", "N-Acetyl Cysteine"),
         ("Glucosamine Sulfate 2KCI", "Glucosamine"),
         ("Pylopass Lactobacillus reuteri", "Probiotics"),
-        ("Bitter Orange Citrus Bioflavonoids", "Bitter Orange"),
+        ("Bitter Orange Citrus Bioflavonoids", "Citrus Bioflavonoids"),
         ("melatonin, micronized", "Melatonin"),
         ("Phase 2 White Kidney (bean) extract", "Common Bean Extract"),
         ("Red Sockeye Salmon Oil, Natural, Wild", "Fish Oil"),
