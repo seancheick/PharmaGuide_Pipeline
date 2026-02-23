@@ -1960,7 +1960,8 @@
           "5-methyltetrahydrofolic acid",
           "L-5-Methyltetrahydrofolic Acid supplement",
           "L-Methylfolate Magnesium",
-          "L Methylfolate Magnesium"
+          "L Methylfolate Magnesium",
+          "calcium l-5-methylfolate"
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
@@ -2024,7 +2025,8 @@
           "(6S)-5-Methyl Tetrahydrofolate Glucosamine Salt",
           "methyltetrafolate",
           "quatrefolic (6s)-5-methyltetrahydrofolic acid, glucosamine salt",
-          "quatrefolic brand (6s)-5-methyl tetrahydrofolate glucosamine salt"
+          "quatrefolic brand (6s)-5-methyl tetrahydrofolate glucosamine salt",
+          "quatrefolic (6s)-5-methyltetrahydrofolic acid"
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
@@ -4762,7 +4764,8 @@
         "notes": "Unspecified form; conservative scoring to avoid over-crediting.",
         "aliases": [
           "Calcium",
-          "calcium amino acid chelate"
+          "calcium amino acid chelate",
+          "calcium aspartate"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -7177,7 +7180,8 @@
           "diindolylymethane",
           "indole-3-carbinol",
           "3,3'-diindolymethane",
-          "3,3 diindolylmethane"
+          "3,3 diindolylmethane",
+          "3,3' diindolylmethane"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -7241,7 +7245,11 @@
           "japanese knotweed",
           "polygonum cuspidatum extract",
           "polygonum cuspidatum root extract",
-          "chinese knotweed extract"
+          "chinese knotweed extract",
+          "transresveratrol",
+          "trans-resveratrol",
+          "trans resveratrol",
+          "polygonum cuspidatum 50% extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -7668,7 +7676,9 @@
           "stinging nettle",
           "nettle",
           "urtica dioica",
-          "urtica"
+          "urtica",
+          "stinging nettle freeze-dried",
+          "stinging nettle, freeze-dried"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -8570,7 +8580,8 @@
           "iodine",
           "prolamine iodine",
           "molecular iodine",
-          "nascent iodine"
+          "nascent iodine",
+          "total iodine/iodide"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -9606,7 +9617,8 @@
         "notes": "Unspecified form; conservative scoring to avoid over-crediting.",
         "aliases": [
           "Vanadium",
-          "bis-glycinato oxovanadium"
+          "bis-glycinato oxovanadium",
+          "vanadyl sulfate hydrate"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -13334,7 +13346,8 @@
           "phosphatidylinositol",
           "phosphatidyl inositol",
           "pi",
-          "phospatidylinositol"
+          "phospatidylinositol",
+          "phosphoinositides"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -14135,7 +14148,8 @@
         "absorption": "unknown",
         "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
         "aliases": [
-          "tmg (trimethylglycine)"
+          "tmg (trimethylglycine)",
+          "tri-methyl glycine"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -14564,7 +14578,8 @@
           "nalt supplement",
           "acetyl-l-tyrosine supplement",
           "nalt powder supplement",
-          "tyrosine hcl supplement"
+          "tyrosine hcl supplement",
+          "n-acetyl tyrosine"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -14667,7 +14682,9 @@
           "pure cysteine supplement",
           "free-form cysteine supplement",
           "cysteine powder supplement",
-          "L-Cystine"
+          "L-Cystine",
+          "l-cysteine hydrochloride anhydrous",
+          "l-cysteine hcl anhydrous"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -15742,7 +15759,9 @@
         "aliases": [
           "sulforaphane",
           "broccosinolate",
-          "broccoli sprout/seed extract"
+          "broccoli sprout/seed extract",
+          "broccophane",
+          "broccoraphanin"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -18081,7 +18100,8 @@
         "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
         "aliases": [
           "milk thistle",
-          "silymarins"
+          "silymarins",
+          "biosorb"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -18414,7 +18434,8 @@
         "absorption": "unknown",
         "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
         "aliases": [
-          "collagen"
+          "collagen",
+          "tendoguard"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -18921,7 +18942,9 @@
         "absorption": "unknown",
         "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
         "aliases": [
-          "glucosamine"
+          "glucosamine",
+          "potassium glucosamine sulfate",
+          "greengrown"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -19109,7 +19132,9 @@
         "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
         "aliases": [
           "chondroitin",
-          "chondroitin sulfate a"
+          "chondroitin sulfate a",
+          "chondriotin sulfate",
+          "bovine tracheal cartilage"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -19258,7 +19283,8 @@
           "organic green tea (camellia sinensis) (leaf) aqueous extract",
           "decaffeinated green tea leaf extract",
           "green tea 50% extract",
-          "green tea 5:1 extract"
+          "green tea 5:1 extract",
+          "green tea leaves extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -20005,7 +20031,9 @@
           "standardized panax ginseng supplement",
           "ginseng extract supplement",
           "korean red ginseng supplement",
-          "asian ginseng extract supplement"
+          "asian ginseng extract supplement",
+          "hrg80",
+          "hrg80 red ginseng"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -20075,7 +20103,10 @@
           "eleutherococcus extract supplement",
           "siberian eleuthero",
           "siberian root",
-          "eleutherococcus senticosus root extract"
+          "eleutherococcus senticosus root extract",
+          "eleuthero ginseng",
+          "eleutherococcus senticosus 0.8% extract",
+          "siberian eleuthero root extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -20898,7 +20929,11 @@
           "garlic aqueous extract",
           "odorless garlic concentrated extract",
           "odorless garlic bulb extract",
-          "odorless garlic concentrate liquid"
+          "odorless garlic concentrate liquid",
+          "aged garlic bulb extract, powder",
+          "aged garlic bulb extract",
+          "allicin potential",
+          "concentrated garlic"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -21084,7 +21119,8 @@
         "absorption": "unknown",
         "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
         "aliases": [
-          "cranberry"
+          "cranberry",
+          "vitacran"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -21151,7 +21187,8 @@
           "blueberry 25:1 extract",
           "bilberry standardised extract",
           "bilberry, powder, wild",
-          "bilberry powder wild"
+          "bilberry powder wild",
+          "bilberon"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -21274,7 +21311,8 @@
         "aliases": [
           "bilberry",
           "bilberry fruit ext.",
-          "bilberry fruit extract"
+          "bilberry fruit extract",
+          "swedish bilberry fruit extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -21586,7 +21624,8 @@
           "pancreatin usp",
           "pancrelipase",
           "porcine pancreatic concentrate",
-          "pancreatic concentrate"
+          "pancreatic concentrate",
+          "pancreatin 10x"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -21747,7 +21786,8 @@
           "alpha-chymotrypsin",
           "cellulase enzyme",
           "rennet",
-          "physioprotease"
+          "physioprotease",
+          "prolyl endopeptidase"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -22714,7 +22754,10 @@
           "sod supplement",
           "superoxide dismutase supplement",
           "sod enzyme supplement",
-          "antioxidant enzyme supplement"
+          "antioxidant enzyme supplement",
+          "sod b extramel",
+          "extramel",
+          "sod-b extramel"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -22803,7 +22846,9 @@
         "absorption": "unknown",
         "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
         "aliases": [
-          "same (s-adenosyl-l-methionine)"
+          "same (s-adenosyl-l-methionine)",
+          "s-adenosyl-l-methionine disulfate tosylate",
+          "s-adenosyl-l-methionine tosylate disulfate"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -23642,7 +23687,8 @@
         "absorption": "unknown",
         "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
         "aliases": [
-          "egcg"
+          "egcg",
+          "epigallo-catechin-3-gallate"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -25618,7 +25664,8 @@
           "dicaffeine malate",
           "caffeine anhydrous 50% extract",
           "infinergy",
-          "infinergy dicaffeine malate"
+          "infinergy dicaffeine malate",
+          "di-caffeine malate"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -26347,7 +26394,9 @@
         "absorption": "unknown",
         "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
         "aliases": [
-          "cynarin"
+          "cynarin",
+          "artichoke ext.",
+          "artichoke extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -26392,7 +26441,8 @@
         "absorption": "unknown",
         "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
         "aliases": [
-          "daidzein"
+          "daidzein",
+          "daidzin"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -27162,7 +27212,11 @@
         "aliases": [
           "fiber",
           "galactomannan",
-          "glucomannan"
+          "glucomannan",
+          "konjac",
+          "konjac root",
+          "konjac glucomannan",
+          "amorphophallus konjac"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -27617,7 +27671,8 @@
         "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
         "aliases": [
           "genistein",
-          "Virtiva"
+          "Virtiva",
+          "genistin"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -28653,7 +28708,8 @@
           "40% isoflavones",
           "soy germ extract",
           "soy germ concentrate",
-          "soylife"
+          "soylife",
+          "glycitin"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -28785,7 +28841,15 @@
         "absorption": "unknown",
         "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
         "aliases": [
-          "kavalactones"
+          "kavalactones",
+          "kava",
+          "kava kava",
+          "kava root extract",
+          "kava kava root extract",
+          "kava kava extract",
+          "piper methysticum",
+          "piper methysticum root extract",
+          "kava root"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -30254,7 +30318,10 @@
           "pine phytosterols",
           "phytosterol concentrate",
           "free plant sterols",
-          "Sterolins"
+          "Sterolins",
+          "corowise",
+          "corowise plant sterols",
+          "brassicasterol"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -31296,7 +31363,12 @@
         "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
         "aliases": [
           "schisandrin",
-          "schizandra berry extract"
+          "schizandra berry extract",
+          "schisandra fruit, seed extract",
+          "schisandra fruit extract",
+          "schisandra",
+          "schisandra chinensis",
+          "schisandra berry"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -31341,7 +31413,8 @@
         "absorption": "unknown",
         "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
         "aliases": [
-          "sesamin"
+          "sesamin",
+          "sesaplex"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -32195,7 +32268,8 @@
         "absorption": "unknown",
         "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
         "aliases": [
-          "thymoquinone"
+          "thymoquinone",
+          "organic nigella"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -33186,7 +33260,9 @@
           "trans-3,5-dimethoxy-4'-hydroxystilbene",
           "pterostilbene supplement",
           "trans-3,5-dimethoxy-4'-hydroxystilbene supplement",
-          "silbinol"
+          "silbinol",
+          "pteropure",
+          "ptero pure"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -33585,7 +33661,8 @@
           "arabinogalactin gum supplement",
           "larch arabinogalactin gum supplement",
           "ResistAid",
-          "ara-larix"
+          "ara-larix",
+          "arabinogalactans"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -34547,7 +34624,11 @@
           "oxitriptan",
           "5-hydroxytryptophan supplement",
           "hydroxytryptophan supplement",
-          "oxitriptan supplement"
+          "oxitriptan supplement",
+          "griffonia simplicifolia",
+          "griffonia simplicifolia seed extract",
+          "griffonia seed extract",
+          "griffonia simplicifolia extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -35007,7 +35088,8 @@
           "bacopa whole plant extract",
           "bacopa monnieri whole plant extract",
           "bacopa monniera extract",
-          "bacopa monniera"
+          "bacopa monniera",
+          "bacopin"
         ],
         "score": 9,
         "dosage_importance": 1.0,
@@ -35135,7 +35217,8 @@
           "dancing mushroom",
           "king of mushrooms",
           "maitake fruiting body supplement",
-          "Maitake mushroom fruiting body extract"
+          "Maitake mushroom fruiting body extract",
+          "maitake (grifola frondosa) fruiting body proprietary extract"
         ],
         "score": 12,
         "dosage_importance": 1.0,
@@ -35594,7 +35677,8 @@
         "absorption": "unknown",
         "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
         "aliases": [
-          "maca"
+          "maca",
+          "black maca extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -35854,7 +35938,8 @@
         "absorption": "unknown",
         "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
         "aliases": [
-          "psyllium"
+          "psyllium",
+          "psyllium husk fiber"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -35909,7 +35994,9 @@
           "beta 1,3 glucan",
           "beta-1,3-glucan",
           "beta 1 3 glucan",
-          "beta glucan 1,3/1,6"
+          "beta glucan 1,3/1,6",
+          "beta-1,3-1,6-glucan",
+          "beta-1,3/1,6-glucan"
         ],
         "absorption_structured": {
           "value": 0.45,
@@ -37020,7 +37107,9 @@
           "alpha-glycerophosphocholine",
           "glycerophosphocholine",
           "choline alphoscerate",
-          "alpha gpc choline"
+          "alpha gpc choline",
+          "glycerylphosphorylcholine",
+          "glycerophosphorylcholine"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -37489,7 +37578,14 @@
           "D-Beta-Hydroxybutyrate",
           "Beta-Hydroxybutyrate",
           "BHB",
-          "Beta Hydroxybutyrate"
+          "Beta Hydroxybutyrate",
+          "calcium beta-hydroxybutyrate",
+          "sodium beta-hydroxybutyrate",
+          "magnesium beta-hydroxybutyrate",
+          "potassium beta-hydroxybutyrate",
+          "calcium bhb",
+          "sodium bhb",
+          "bhb salts"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -37637,7 +37733,10 @@
           "Full Spectrum Hemp Distillate",
           "Broad Spectrum Hemp Aerial Parts Extract",
           "Hemp Aerial Parts Extract",
-          "naturally-occurring Cannabidiol"
+          "naturally-occurring Cannabidiol",
+          "cannabis sativa oil extract",
+          "pure cannabidiol",
+          "hemp-derived cannabidiol"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -38734,7 +38833,9 @@
           "chaste tree berry",
           "monk's pepper",
           "Chaste Berry Tree (Vitex) extract",
-          "chaste extract"
+          "chaste extract",
+          "vitex chasteberry extract",
+          "chasteberry 0.5% extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -38820,7 +38921,8 @@
           "citrus bergamot",
           "citrus bergamia",
           "Bergamot Phytosome",
-          "bergamot orange extract"
+          "bergamot orange extract",
+          "bergamonte citrus bergamot polyphenolic extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -39580,7 +39682,10 @@
           "thymus glandular",
           "thymus substance",
           "parathyroid",
-          "parathyroid glandular"
+          "parathyroid glandular",
+          "ovarian concentrate",
+          "new zealand grassfed liver",
+          "raw veal bone"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -40896,7 +41001,8 @@
           "proliva olive fruit extract",
           "moroccan olive extract",
           "hytolive",
-          "olcenic"
+          "olcenic",
+          "olivol"
         ],
         "absorption_structured": {
           "value": null,
@@ -41195,7 +41301,8 @@
           "astragalus root",
           "astragalus membranaceus",
           "huang qi",
-          "astragalus root extract"
+          "astragalus root extract",
+          "astragaloside iv"
         ],
         "absorption_structured": {
           "value": 0.45,
@@ -41555,7 +41662,8 @@
           "black currant seed oil",
           "blackcurrant seed oil",
           "black currant fruit",
-          "blackcurrant fruit extract"
+          "blackcurrant fruit extract",
+          "blackcurrant fruit 4:1 extract"
         ],
         "absorption_structured": {
           "value": 0.55,
@@ -41611,7 +41719,8 @@
           "licorice root extract, deglycyrrhizinated",
           "deglycyrrhizinated licorice root extract",
           "dgl licorice root",
-          "gutgard"
+          "gutgard",
+          "licorice 1% extract"
         ],
         "absorption_structured": {
           "value": 0.45,
@@ -41784,7 +41893,8 @@
         "aliases": [
           "tongkat ali",
           "eurycoma longifolia",
-          "longjack"
+          "longjack",
+          "lj100 eurycoma longifolia extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -42523,7 +42633,9 @@
           "hops supercritical extract",
           "estro8pn hops extract",
           "hops cone extract",
-          "hops strobiles extract"
+          "hops strobiles extract",
+          "hops flower 10:1 extract",
+          "humulex"
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
@@ -42989,7 +43101,9 @@
           "uridine-5'-monophosphate disodium salt",
           "ump uridine",
           "uridine 5 monophosphate",
-          "uridine 5'-monophosphate"
+          "uridine 5'-monophosphate",
+          "uridine",
+          "uridine 5'-monophosphate disodium salt"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -43335,7 +43449,10 @@
           "brown kelp powder",
           "kelp powder",
           "brown seaweed (laminaria japonica) extract",
-          "atlantic kelp"
+          "atlantic kelp",
+          "norwegian kelp",
+          "ascophyllum nodosum",
+          "sea kelp"
         ],
         "dosage_importance": 0.8,
         "absorption_structured": {
@@ -44026,7 +44143,8 @@
           "tang kuei",
           "dang gui",
           "danggui",
-          "dong quai root"
+          "dong quai root",
+          "dong quai 1% extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -44125,7 +44243,9 @@
           "rosemary herb",
           "rosemary leaf",
           "rosemary powder",
-          "organic rosemary"
+          "organic rosemary",
+          "rosemarinic acid",
+          "roseox"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -45113,7 +45233,8 @@
           "crataegus monogyna",
           "crataegus laevigata",
           "hawthorn extract",
-          "hawthorne extract"
+          "hawthorne extract",
+          "hawthorn leaf & flower extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -45295,7 +45416,8 @@
           "capsicum frutescens",
           "cayenne pepper powder",
           "cayenne powder",
-          "hot pepper"
+          "hot pepper",
+          "cayenne fruit extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -45363,7 +45485,9 @@
           "tribulus terrestris herb",
           "tribulus terrestris fruit",
           "tribulus terrestris aerial parts",
-          "tribulus terrestris powder"
+          "tribulus terrestris powder",
+          "tribulus terrestris whole herb extract",
+          "tribulus terestris aerial parts extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -46694,7 +46818,8 @@
           "bile salts",
           "bile acid extract",
           "purified bile salts",
-          "ox bile powder"
+          "ox bile powder",
+          "bile"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -47819,7 +47944,9 @@
           "red clover isoflavones",
           "red clover blossom",
           "red clover (trifolium pratense) blossom extract",
-          "red clover blossom extract"
+          "red clover blossom extract",
+          "red clover aerial parts extract",
+          "red clover 1% extract"
         ],
         "notes": "Stub score for Red Clover. Conservative fallback.",
         "natural": false,
@@ -47959,7 +48086,8 @@
           "cocoa bean extract",
           "cocoa flavanols",
           "cocoa powder extract",
-          "cacao extract"
+          "cacao extract",
+          "andean cocoa seed extract"
         ],
         "notes": "Stub score for Cocoa. Conservative fallback.",
         "natural": false,
@@ -48272,7 +48400,8 @@
           "piptoporus betulinus",
           "fomitopsis betulina",
           "birch bracket",
-          "birch polypore extract"
+          "birch polypore extract",
+          "birch powder"
         ],
         "notes": "Stub score for Birch Polypore. Conservative fallback.",
         "natural": false,
@@ -48405,7 +48534,8 @@
           "grains of paradise extract",
           "caloriburnGP",
           "caloriburn gp",
-          "caloriburn"
+          "caloriburn",
+          "grains of paradise seed extract"
         ],
         "notes": "Stub score for Grains of Paradise. Conservative fallback.",
         "natural": false,
@@ -48434,6 +48564,434 @@
       "missing_fields": [],
       "review_status": "needs_review",
       "last_reviewed_at": "2026-02-23"
+    }
+  },
+  "taxifolin": {
+    "standard_name": "Taxifolin",
+    "category": "antioxidants",
+    "cui": "C0039458",
+    "cui_note": "",
+    "rxcui": "",
+    "rxcui_note": "",
+    "match_rules": {
+      "priority": 1,
+      "match_mode": "alias",
+      "exclusions": [],
+      "parent_id": "taxifolin",
+      "confidence": "verified"
+    },
+    "category_enum": "antioxidant",
+    "data_quality": {
+      "completeness": 0.3,
+      "missing_fields": [
+        "detailed_scores"
+      ],
+      "review_status": "pending",
+      "last_reviewed_at": "2026-02-23"
+    },
+    "forms": {
+      "taxifolin (unspecified)": {
+        "score": 5,
+        "bio_score": 5,
+        "aliases": [
+          "taxifolin",
+          "dihydroquercetin",
+          "(+)-taxifolin",
+          "3,3',4',5,7-pentahydroxyflavanone"
+        ],
+        "notes": "Flavanonol (dihydroflavonol), CAS 480-18-2, PubChem CID 439533. Distinct from quercetin (different flavonoid subclass). Antioxidant/anti-inflammatory.",
+        "natural": true,
+        "absorption": "moderate",
+        "dosage_importance": "moderate",
+        "absorption_structured": {
+          "value": 0.5,
+          "quality": "unknown",
+          "notes": "Stub — pending detailed review"
+        }
+      }
+    }
+  },
+  "aloe_ferox": {
+    "standard_name": "Aloe Ferox",
+    "category": "herbs",
+    "cui": "",
+    "cui_note": "",
+    "rxcui": "",
+    "rxcui_note": "",
+    "match_rules": {
+      "priority": 1,
+      "match_mode": "alias",
+      "exclusions": [],
+      "parent_id": "aloe_ferox",
+      "confidence": "verified"
+    },
+    "category_enum": "botanical",
+    "data_quality": {
+      "completeness": 0.3,
+      "missing_fields": [
+        "detailed_scores"
+      ],
+      "review_status": "pending",
+      "last_reviewed_at": "2026-02-23"
+    },
+    "forms": {
+      "aloe ferox (unspecified)": {
+        "score": 5,
+        "bio_score": 5,
+        "aliases": [
+          "aloe ferox",
+          "cape aloe",
+          "aloe ferox leaf extract",
+          "aloe ferox mill.",
+          "bitter aloe",
+          "aloe ferox gel"
+        ],
+        "notes": "Aloe ferox Mill. (Cape Aloe), distinct species from Aloe vera (A. barbadensis). Native to South Africa. Contains 20x more aloin than A. vera. Primarily used as digestive cleanser/laxative.",
+        "natural": true,
+        "absorption": "moderate",
+        "dosage_importance": "moderate",
+        "absorption_structured": {
+          "value": 0.5,
+          "quality": "unknown",
+          "notes": "Stub — pending detailed review"
+        }
+      }
+    }
+  },
+  "pau_darco": {
+    "standard_name": "Pau D'Arco",
+    "category": "herbs",
+    "cui": "",
+    "cui_note": "",
+    "rxcui": "",
+    "rxcui_note": "",
+    "match_rules": {
+      "priority": 1,
+      "match_mode": "alias",
+      "exclusions": [],
+      "parent_id": "pau_d'arco",
+      "confidence": "verified"
+    },
+    "category_enum": "botanical",
+    "data_quality": {
+      "completeness": 0.3,
+      "missing_fields": [
+        "detailed_scores"
+      ],
+      "review_status": "pending",
+      "last_reviewed_at": "2026-02-23"
+    },
+    "forms": {
+      "pau d'arco (unspecified)": {
+        "score": 5,
+        "bio_score": 5,
+        "aliases": [
+          "pau d'arco",
+          "pau darco",
+          "pau d'arco bark extract",
+          "pau d' arco",
+          "tabebuia",
+          "tabebuia impetiginosa",
+          "taheebo",
+          "lapacho",
+          "tabebuia avellanedae",
+          "pau d'arco bark"
+        ],
+        "notes": "Inner bark of Tabebuia impetiginosa. Contains lapachol, beta-lapachone, and other naphthoquinones. Traditional South American remedy.",
+        "natural": true,
+        "absorption": "moderate",
+        "dosage_importance": "moderate",
+        "absorption_structured": {
+          "value": 0.5,
+          "quality": "unknown",
+          "notes": "Stub — pending detailed review"
+        }
+      }
+    }
+  },
+  "noni": {
+    "standard_name": "Noni",
+    "category": "herbs",
+    "cui": "",
+    "cui_note": "",
+    "rxcui": "",
+    "rxcui_note": "",
+    "match_rules": {
+      "priority": 1,
+      "match_mode": "alias",
+      "exclusions": [],
+      "parent_id": "noni",
+      "confidence": "verified"
+    },
+    "category_enum": "botanical",
+    "data_quality": {
+      "completeness": 0.3,
+      "missing_fields": [
+        "detailed_scores"
+      ],
+      "review_status": "pending",
+      "last_reviewed_at": "2026-02-23"
+    },
+    "forms": {
+      "noni (unspecified)": {
+        "score": 5,
+        "bio_score": 5,
+        "aliases": [
+          "noni",
+          "noni fruit extract",
+          "noni fruit",
+          "morinda citrifolia",
+          "morinda citrifolia fruit extract",
+          "noni juice",
+          "noni leaf"
+        ],
+        "notes": "Morinda citrifolia fruit. Rich in anthraquinones, flavonoids, and iridoids. Traditional Polynesian remedy. NCCIH notes limited evidence and potential hepatotoxicity concerns.",
+        "natural": true,
+        "absorption": "moderate",
+        "dosage_importance": "moderate",
+        "absorption_structured": {
+          "value": 0.5,
+          "quality": "unknown",
+          "notes": "Stub — pending detailed review"
+        }
+      }
+    }
+  },
+  "goji_berry": {
+    "standard_name": "Goji Berry",
+    "category": "herbs",
+    "cui": "",
+    "cui_note": "",
+    "rxcui": "",
+    "rxcui_note": "",
+    "match_rules": {
+      "priority": 1,
+      "match_mode": "alias",
+      "exclusions": [],
+      "parent_id": "goji_berry",
+      "confidence": "verified"
+    },
+    "category_enum": "botanical",
+    "data_quality": {
+      "completeness": 0.3,
+      "missing_fields": [
+        "detailed_scores"
+      ],
+      "review_status": "pending",
+      "last_reviewed_at": "2026-02-23"
+    },
+    "forms": {
+      "goji berry (unspecified)": {
+        "score": 5,
+        "bio_score": 5,
+        "aliases": [
+          "goji berry",
+          "goji",
+          "goji berry extract",
+          "goji berry 40% extract",
+          "lycium barbarum",
+          "lycium fruit extract",
+          "wolfberry",
+          "lycium barbarum extract",
+          "lycium fruit",
+          "goji berries"
+        ],
+        "notes": "Lycium barbarum fruit. Rich in polysaccharides, zeaxanthin, and betaine. Traditional Chinese medicine tonic.",
+        "natural": true,
+        "absorption": "moderate",
+        "dosage_importance": "moderate",
+        "absorption_structured": {
+          "value": 0.5,
+          "quality": "unknown",
+          "notes": "Stub — pending detailed review"
+        }
+      }
+    }
+  },
+  "african_mango": {
+    "standard_name": "African Mango",
+    "category": "herbs",
+    "cui": "",
+    "cui_note": "",
+    "rxcui": "",
+    "rxcui_note": "",
+    "match_rules": {
+      "priority": 1,
+      "match_mode": "alias",
+      "exclusions": [],
+      "parent_id": "african_mango",
+      "confidence": "verified"
+    },
+    "category_enum": "botanical",
+    "data_quality": {
+      "completeness": 0.3,
+      "missing_fields": [
+        "detailed_scores"
+      ],
+      "review_status": "pending",
+      "last_reviewed_at": "2026-02-23"
+    },
+    "forms": {
+      "african mango (unspecified)": {
+        "score": 5,
+        "bio_score": 5,
+        "aliases": [
+          "african mango",
+          "african mango seed extract",
+          "irvingia gabonensis",
+          "irvingia gabonensis seed extract",
+          "igob131",
+          "african mango extract"
+        ],
+        "notes": "Irvingia gabonensis seed extract. Seeds contain ellagic acid and related polyphenols. Studied for weight management (moderate evidence, study quality concerns). NIH/PubMed research available.",
+        "natural": true,
+        "absorption": "moderate",
+        "dosage_importance": "moderate",
+        "absorption_structured": {
+          "value": 0.5,
+          "quality": "unknown",
+          "notes": "Stub — pending detailed review"
+        }
+      }
+    }
+  },
+  "chanca_piedra": {
+    "standard_name": "Chanca Piedra",
+    "category": "herbs",
+    "cui": "",
+    "cui_note": "",
+    "rxcui": "",
+    "rxcui_note": "",
+    "match_rules": {
+      "priority": 1,
+      "match_mode": "alias",
+      "exclusions": [],
+      "parent_id": "chanca_piedra",
+      "confidence": "verified"
+    },
+    "category_enum": "botanical",
+    "data_quality": {
+      "completeness": 0.3,
+      "missing_fields": [
+        "detailed_scores"
+      ],
+      "review_status": "pending",
+      "last_reviewed_at": "2026-02-23"
+    },
+    "forms": {
+      "chanca piedra (unspecified)": {
+        "score": 5,
+        "bio_score": 5,
+        "aliases": [
+          "chanca piedra",
+          "chanca piedra extract",
+          "phyllanthus niruri",
+          "phyllanthus amarus",
+          "phyllanthus amarus extract",
+          "phyllanthus niruri extract",
+          "stone breaker",
+          "phyllanthus niruri herb extract"
+        ],
+        "notes": "Phyllanthus niruri (syn. P. amarus per modern taxonomy). 'Stone breaker' in Spanish. Used for kidney stone and liver support. DISTINCT from P. emblica (amla).",
+        "natural": true,
+        "absorption": "moderate",
+        "dosage_importance": "moderate",
+        "absorption_structured": {
+          "value": 0.5,
+          "quality": "unknown",
+          "notes": "Stub — pending detailed review"
+        }
+      }
+    }
+  },
+  "l_norvaline": {
+    "standard_name": "L-Norvaline",
+    "category": "amino_acids",
+    "cui": "",
+    "cui_note": "",
+    "rxcui": "",
+    "rxcui_note": "",
+    "match_rules": {
+      "priority": 1,
+      "match_mode": "alias",
+      "exclusions": [],
+      "parent_id": "l_norvaline",
+      "confidence": "verified"
+    },
+    "category_enum": "amino_acid",
+    "data_quality": {
+      "completeness": 0.3,
+      "missing_fields": [
+        "detailed_scores"
+      ],
+      "review_status": "pending",
+      "last_reviewed_at": "2026-02-23"
+    },
+    "forms": {
+      "l-norvaline (unspecified)": {
+        "score": 5,
+        "bio_score": 5,
+        "aliases": [
+          "l-norvaline",
+          "norvaline"
+        ],
+        "notes": "Non-proteinogenic amino acid, PubChem CID 65098, CAS 6600-40-4. Arginase inhibitor used in sports nutrition for nitric oxide support. Safety concerns at high doses (cytotoxicity per PubMed).",
+        "natural": true,
+        "absorption": "moderate",
+        "dosage_importance": "moderate",
+        "absorption_structured": {
+          "value": 0.5,
+          "quality": "unknown",
+          "notes": "Stub — pending detailed review"
+        }
+      }
+    }
+  },
+  "theaflavins": {
+    "standard_name": "Theaflavins",
+    "category": "antioxidants",
+    "cui": "",
+    "cui_note": "",
+    "rxcui": "",
+    "rxcui_note": "",
+    "match_rules": {
+      "priority": 1,
+      "match_mode": "alias",
+      "exclusions": [],
+      "parent_id": "theaflavins",
+      "confidence": "verified"
+    },
+    "category_enum": "antioxidant",
+    "data_quality": {
+      "completeness": 0.3,
+      "missing_fields": [
+        "detailed_scores"
+      ],
+      "review_status": "pending",
+      "last_reviewed_at": "2026-02-23"
+    },
+    "forms": {
+      "theaflavins (unspecified)": {
+        "score": 5,
+        "bio_score": 5,
+        "aliases": [
+          "theaflavins",
+          "theaflavin",
+          "black tea extract theaflavins",
+          "theaflavin-3-gallate",
+          "theaflavin-3'-gallate",
+          "theaflavin-3,3'-digallate"
+        ],
+        "notes": "Black tea polyphenolic pigments formed by oxidative dimerization of catechins during tea fermentation. Chemically distinct from catechins (different flavonoid class). Antioxidant and cardiovascular support.",
+        "natural": true,
+        "absorption": "moderate",
+        "dosage_importance": "moderate",
+        "absorption_structured": {
+          "value": 0.5,
+          "quality": "unknown",
+          "notes": "Stub — pending detailed review"
+        }
+      }
     }
   }
 }

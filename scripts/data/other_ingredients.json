@@ -4,7 +4,7 @@
     "purpose": "inactive_ingredient_classification",
     "schema_version": "4.0.0",
     "last_updated": "2026-02-23",
-    "total_entries": 390
+    "total_entries": 395
   },
   "other_ingredients": [
     {
@@ -9142,6 +9142,68 @@
         "magnesium silicate"
       ],
       "notes": "Anti-caking agent.",
+      "last_updated": "2026-02-23"
+    },
+    {
+      "id": "simethicone",
+      "standard_name": "Simethicone",
+      "aliases": [
+        "simethicone",
+        "simeticone",
+        "polydimethylsiloxane",
+        "activated dimethicone",
+        "gas-x"
+      ],
+      "category": "anti_foaming",
+      "notes": "Silicone-based anti-foaming agent. FDA OTC anti-gas drug. Not absorbed systemically.",
+      "last_updated": "2026-02-23"
+    },
+    {
+      "id": "palatinose",
+      "standard_name": "Palatinose",
+      "aliases": [
+        "palatinose",
+        "isomaltulose",
+        "palatinose isomaltulose"
+      ],
+      "category": "sweetener",
+      "notes": "Isomaltulose, slowly-digestible disaccharide sugar. BENEO brand. Used as functional carbohydrate/energy carrier in supplements.",
+      "last_updated": "2026-02-23"
+    },
+    {
+      "id": "lentil_powder",
+      "standard_name": "Lentil Powder",
+      "aliases": [
+        "lentil powder",
+        "lentil",
+        "lentil flour",
+        "lens culinaris"
+      ],
+      "category": "filler",
+      "notes": "Food ingredient used as filler/carrier in supplement formulations.",
+      "last_updated": "2026-02-23"
+    },
+    {
+      "id": "millet_flour",
+      "standard_name": "Millet Flour",
+      "aliases": [
+        "millet flour",
+        "millet",
+        "millet powder"
+      ],
+      "category": "filler",
+      "notes": "Grain flour used as filler/carrier in supplement formulations.",
+      "last_updated": "2026-02-23"
+    },
+    {
+      "id": "mucin",
+      "standard_name": "Mucin",
+      "aliases": [
+        "mucin",
+        "mucin extract"
+      ],
+      "category": "processing_aid",
+      "notes": "Glycoprotein found in mucous secretions. Used as excipient/coating agent.",
       "last_updated": "2026-02-23"
     }
   ]

@@ -91,6 +91,8 @@ class TestAliasQuality:
             'nicotinamide ascorbate supplement', # vitamin_c + vitamin_b3_niacin
             # Dolomite — CaMg(CO3)2 — shared between calcium/calcium_carbonate + magnesium/magnesium_carbonate
             'dolomite',
+            # BHB mineral salts — shared between d_beta_hydroxybutyrate_bhb + mineral parent
+            'magnesium beta-hydroxybutyrate',
         }
 
         alias_map = defaultdict(list)

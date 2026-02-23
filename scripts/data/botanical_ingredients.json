@@ -4,7 +4,7 @@
     "purpose": "ingredient_mapping",
     "schema_version": "4.0.0",
     "last_updated": "2026-02-23",
-    "total_entries": 341,
+    "total_entries": 351,
     "quality_tier": "basic_raw_botanicals",
     "standardization": "none",
     "notes": "This database is separate from standardized_botanicals.json by design. Overlaps are intentional and allow the scoring system to reward standardized forms over raw powders."
@@ -4483,6 +4483,154 @@
       ],
       "category": "herb",
       "notes": "Caralluma fimbriata, succulent plant used for appetite support.",
+      "last_updated": "2026-02-23"
+    },
+    {
+      "id": "celastrus_paniculatus",
+      "standard_name": "Celastrus paniculatus",
+      "aliases": [
+        "celastrus paniculatus",
+        "celastrus paniculatus seed extract",
+        "celastrus paniculatus extract",
+        "intellect tree",
+        "jyotishmati"
+      ],
+      "category": "herbs",
+      "notes": "Celastrus paniculatus seed. Ayurvedic nootropic herb (Jyotishmati). Contains sesquiterpenes.",
+      "last_updated": "2026-02-23"
+    },
+    {
+      "id": "prickly_ash",
+      "standard_name": "Prickly Ash",
+      "aliases": [
+        "prickly ash",
+        "prickly ash bark",
+        "zanthoxylum americanum",
+        "zanthoxylum clava-herculis",
+        "prickly ash bark extract"
+      ],
+      "category": "herbs",
+      "notes": "Zanthoxylum americanum bark. Traditional circulatory stimulant. Contains alkylamides.",
+      "last_updated": "2026-02-23"
+    },
+    {
+      "id": "gravel_root",
+      "standard_name": "Gravel Root",
+      "aliases": [
+        "gravel root",
+        "gravel root, powder",
+        "gravel root extract",
+        "eupatorium purpureum",
+        "joe-pye weed"
+      ],
+      "category": "herbs",
+      "notes": "Eupatorium purpureum. Traditional kidney/urinary herb. Also known as Joe-Pye Weed.",
+      "last_updated": "2026-02-23"
+    },
+    {
+      "id": "stoneroot",
+      "standard_name": "Stoneroot",
+      "aliases": [
+        "stoneroot",
+        "stone root",
+        "collinsonia",
+        "collinsonia canadensis",
+        "collinsonia root",
+        "stoneroot extract"
+      ],
+      "category": "herbs",
+      "notes": "Collinsonia canadensis root. Traditional remedy for hemorrhoids and venous insufficiency.",
+      "last_updated": "2026-02-23"
+    },
+    {
+      "id": "hyssop",
+      "standard_name": "Hyssop",
+      "aliases": [
+        "hyssop",
+        "hyssop herb",
+        "hyssopus officinalis",
+        "hyssop extract",
+        "hyssop leaf"
+      ],
+      "category": "herbs",
+      "notes": "Hyssopus officinalis herb. Traditional respiratory herb. Contains pinocamphone.",
+      "last_updated": "2026-02-23"
+    },
+    {
+      "id": "cassia_nomame",
+      "standard_name": "Cassia Nomame",
+      "aliases": [
+        "cassia nomame",
+        "cassia nomame seed extract",
+        "cassia nomame extract",
+        "chamaecrista nomame"
+      ],
+      "category": "herbs",
+      "notes": "Chamaecrista nomame (syn. Cassia nomame). Japanese botanical. Contains flavan dimers that inhibit lipase.",
+      "last_updated": "2026-02-23"
+    },
+    {
+      "id": "winged_treebine",
+      "standard_name": "Winged Treebine",
+      "aliases": [
+        "winged treebine",
+        "winged treebine extract",
+        "cissus quadrangularis",
+        "cissus quadrangularis extract",
+        "cissus"
+      ],
+      "category": "herbs",
+      "notes": "Cissus quadrangularis (Winged Treebine). Tropical plant used for bone health and weight management. Contains ketosterone and 3-ketosteroid.",
+      "last_updated": "2026-02-23"
+    },
+    {
+      "id": "catuaba",
+      "standard_name": "Catuaba",
+      "aliases": [
+        "catuaba",
+        "catauba",
+        "catuaba bark",
+        "catuaba bark extract",
+        "erythroxylum catuaba",
+        "trichilia catigua"
+      ],
+      "category": "herbs",
+      "notes": "Erythroxylum catuaba or Trichilia catigua bark. Brazilian traditional herb used as tonic. 'Catauba' is a common misspelling.",
+      "last_updated": "2026-02-23"
+    },
+    {
+      "id": "feverfew",
+      "standard_name": "Feverfew",
+      "aliases": [
+        "feverfew",
+        "feverfew leaf extract",
+        "feverfew leaf",
+        "feverfew extract",
+        "tanacetum parthenium",
+        "tanacetum parthenium leaf extract",
+        "feverfew herb",
+        "feverfew leaf powder"
+      ],
+      "category": "herbs",
+      "notes": "Tanacetum parthenium leaf. Traditional migraine herb. Contains parthenolide but is NOT the same as isolated parthenolide. Whole herb has different pharmacology than isolated compound.",
+      "last_updated": "2026-02-23"
+    },
+    {
+      "id": "cloves",
+      "standard_name": "Cloves",
+      "aliases": [
+        "cloves",
+        "clove",
+        "clove bud",
+        "clove extract",
+        "clove bud extract",
+        "syzygium aromaticum",
+        "eugenia caryophyllata",
+        "clove powder",
+        "clove bud oil"
+      ],
+      "category": "herbs",
+      "notes": "Syzygium aromaticum (syn. Eugenia caryophyllata) flower bud. Culinary spice and traditional remedy. Rich in eugenol but NOT the same as isolated eugenol. Whole clove also contains beta-caryophyllene, acetyl eugenol.",
       "last_updated": "2026-02-23"
     }
   ]

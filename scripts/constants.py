@@ -358,6 +358,24 @@ EXCLUDED_LABEL_PHRASES = {
     "antioxidant response",
     "niacin & niacinamide",
     "niacin and niacinamide",
+    # Skip phrases added for 7-9 occ tier remediation
+    "ionic sea minerals",
+    "ultra trace minerals",
+    "trace mineral concentrate",
+    "organic aqua superfoods",
+    "fermented botanicals",
+    "vegetarian enzyme concentrate",
+    "nature's c with qpower",
+    "food based nutrients",
+    "proprietary hcc",
+    "glucodox amp activated protein kinase hormone booster",
+    "male support factors",
+    "a 4:1 proprietary extract",
+    "vitaveggie",
+    "low-sodium concentrace(r)",
+    "gentle digestive support",
+    "active flavonols, flavonones, flavones & naringin",
+    "100% pure optipure coral calcium",
 }
 
 # Nutritional warnings to track for UI display (but not map as ingredients)
@@ -1147,6 +1165,28 @@ BRANDED_INGREDIENT_TOKENS = {
     "source-70": "Source-70",
     "seditol": "Seditol",
     "ultra potent-c": "Ultra Potent-C",
+    # Branded tokens added for 7-9 occ tier remediation
+    "sod b extramel": "SOD B Extramel",
+    "broccophane": "BroccoPhane",
+    "vitacran": "VitaCran",
+    "pteropure": "pTeroPure",
+    "greengrown": "GreenGrown",
+    "bacopin": "Bacopin",
+    "hrg80": "HRG80",
+    "biosorb": "BioSorb",
+    "humulex": "Humulex",
+    "bilberon": "Bilberon",
+    "roseox": "RoseOx",
+    "broccoraphanin": "BroccoRaphanin",
+    "corowise": "Corowise",
+    "sesaplex": "SesaPlex",
+    "olivol": "Olivol",
+    "tendoguard": "TendoGuard",
+    "estrog-100": "EstroG-100",
+    "vitaberry": "VitaBerry",
+    "dermaval": "Dermaval",
+    "biocore optimum complete": "BioCore Optimum Complete",
+    "cynatine flx": "Cynatine FLX",
 }
 
 # Deterministic serving unit normalization map

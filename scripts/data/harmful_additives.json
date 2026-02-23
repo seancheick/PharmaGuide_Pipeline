@@ -4,7 +4,7 @@
     "purpose": "penalty_scoring",
     "schema_version": "4.0.0",
     "last_updated": "2026-02-23",
-    "total_entries": 110,
+    "total_entries": 111,
     "scoring_rule": "Apply penalty points based on severity_level. Critical: -5, High: -3, Moderate: -1.5, Low: -0.5. Multiple additives are cumulative.",
     "severity_level_definitions": {
       "critical": "Immediate health hazard, should be avoided entirely (e.g., formaldehyde, colloidal silver)",
@@ -15073,7 +15073,8 @@
         "p-synephrine",
         "para-synephrine",
         "oxedrine",
-        "advantra z"
+        "advantra z",
+        "synephrine alkaloids"
       ],
       "CUI": null,
       "category": "stimulant_sympathomimetic",
@@ -15180,6 +15181,30 @@
       "severity_level": "moderate",
       "dose_thresholds": null,
       "entity_relationships": null
+    },
+    {
+      "id": "ADD_N_PHENETHYL_DIMETHYLAMINE",
+      "standard_name": "N-Phenethyl Dimethylamine",
+      "severity_level": "warning",
+      "description": "Substituted phenethylamine CNS stimulant (CAS 1126-71-2) from Eria jarensis orchid. Structurally similar to PEA, DMAA, and amphetamine. Banned by WADA. Zero clinical studies. Listed on BSCG Dietary Supplement Ingredient Advisory List.",
+      "aliases": [
+        "n-phenethyl dimethylamine",
+        "n,n-dimethylphenethylamine",
+        "eria jarensis extract",
+        "eria jarensis",
+        "n-phenethyldimethylamine",
+        "2-(dimethylamino)-1-phenylethanone"
+      ],
+      "match_tokens": [
+        "phenethyl dimethylamine",
+        "eria jarensis",
+        "dimethylphenethylamine"
+      ],
+      "regulatory_refs": [
+        "WADA Prohibited List S6b",
+        "BSCG Dietary Supplement Ingredient Advisory List"
+      ],
+      "last_updated": "2026-02-23"
     }
   ]
 }
