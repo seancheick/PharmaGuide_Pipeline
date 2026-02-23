@@ -4,7 +4,7 @@
     "purpose": "ingredient_mapping",
     "schema_version": "4.0.0",
     "last_updated": "2026-02-23",
-    "total_entries": 339,
+    "total_entries": 341,
     "quality_tier": "basic_raw_botanicals",
     "standardization": "none",
     "notes": "This database is separate from standardized_botanicals.json by design. Overlaps are intentional and allow the scoring system to reward standardized forms over raw powders."
@@ -2478,7 +2478,8 @@
         "pau d'arco extract",
         "pau d'arco",
         "lapacho bark",
-        "Pau d’Arco"
+        "Pau d’Arco",
+        "pau d'arco bark extract"
       ],
       "category": "bark",
       "notes": "Added from Thorne/Nordic unmapped remediation pass for identity mapping coverage.",
@@ -4248,7 +4249,8 @@
         "wormwood leaf extract",
         "wormwood herb",
         "artemisia absinthium",
-        "artemisia absinthium extract"
+        "artemisia absinthium extract",
+        "wormwood leaf powder"
       ],
       "category": "leaf",
       "notes": "Identity-only mapping for Wormwood (Artemisia absinthium). Distinct from Sweet Wormwood (Artemisia annua).",
@@ -4448,10 +4450,39 @@
         "nigella sativa",
         "black seed",
         "black cumin seed",
-        "kalonji"
+        "kalonji",
+        "nigella seed extract"
       ],
       "category": "seed",
       "notes": "Nigella sativa, traditional Middle Eastern/South Asian herb.",
+      "last_updated": "2026-02-23"
+    },
+    {
+      "id": "blackcurrant",
+      "standard_name": "Blackcurrant",
+      "aliases": [
+        "blackcurrant",
+        "blackcurrant fruit",
+        "blackcurrant fruit 4:1 extract",
+        "ribes nigrum",
+        "black currant extract"
+      ],
+      "category": "fruit",
+      "notes": "Ribes nigrum, anthocyanin-rich berry.",
+      "last_updated": "2026-02-23"
+    },
+    {
+      "id": "caralluma",
+      "standard_name": "Caralluma",
+      "aliases": [
+        "caralluma",
+        "caralluma fimbriata",
+        "caralluma fimbriata whole plant extract",
+        "caralluma fimbriata extract",
+        "slimaluma"
+      ],
+      "category": "herb",
+      "notes": "Caralluma fimbriata, succulent plant used for appetite support.",
       "last_updated": "2026-02-23"
     }
   ]

@@ -1960,7 +1960,8 @@
           "5-methyltetrahydrofolic acid",
           "L-5-Methyltetrahydrofolic Acid supplement",
           "L-Methylfolate Magnesium",
-          "L Methylfolate Magnesium"
+          "L Methylfolate Magnesium",
+          "pteroylglutamic acid"
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
@@ -4349,7 +4350,9 @@
           "calcium citrate supplement",
           "cal citrate supplement",
           "citrate calcium supplement",
-          "citrated calcium supplement"
+          "citrated calcium supplement",
+          "optipure coral calcium",
+          "mineralized red algae"
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
@@ -4936,7 +4939,9 @@
           "TRAACS Magnesium Bisglycinate Chelate",
           "TRAACS Magnesium Bisglycinate Chelate supplement",
           "magnesium bisglycinate chelate supplement",
-          "TRAACS Magnesium supplement"
+          "TRAACS Magnesium supplement",
+          "magnesium lysinate glycinate chelate",
+          "magnesium lysinate glycinate"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -6581,7 +6586,10 @@
           "mixed citrus bioflavonoids",
           "mixed bioflavonoids",
           "grapefruit bioflavonoids",
-          "microbiomex"
+          "microbiomex",
+          "flavanones",
+          "citrus sinensis",
+          "citrus sinensis extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -6609,7 +6617,8 @@
           "vitamin p hesperidin supplement",
           "vit p hesperidin",
           "Hesperidin Methyl Chalcone",
-          "hesperidin methylchalcone"
+          "hesperidin methylchalcone",
+          "hesperetin"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -7167,7 +7176,8 @@
           "diindolymethane",
           "diindolylymethane",
           "indole-3-carbinol",
-          "3,3'-diindolymethane"
+          "3,3'-diindolymethane",
+          "3,3 diindolylmethane"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -8252,7 +8262,8 @@
           "picolinic acid chromium supplement",
           "chromium pic supplement",
           "CrPic supplement",
-          "pure crystalline chromium picolinate"
+          "pure crystalline chromium picolinate",
+          "g.t.f. chromium"
         ],
         "dosage_importance": 0.5,
         "absorption_structured": {
@@ -10922,9 +10933,7 @@
           "quercetin bioflavonoid",
           "quercetin supplement",
           "quercetin dihydrate supplement",
-          "quercetin bioflavonoid supplement",
-          "dihydroquercetin",
-          "taxifolin"
+          "quercetin bioflavonoid supplement"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -11060,9 +11069,7 @@
           "GSH supplement",
           "reduced glutathione supplement",
           "l-glutathione supplement",
-          "Reduced L-Glutathione supplement",
-          "gamma-glutamylcysteines",
-          "gamma-glutamylcysteine"
+          "Reduced L-Glutathione supplement"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -13130,7 +13137,8 @@
           "sharp ps green",
           "sharp ps 20 d",
           "pure phosphatidylserine",
-          "sharp-ps phosphatidylserine"
+          "sharp-ps phosphatidylserine",
+          "neurosyn"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -13326,7 +13334,8 @@
           "phosphatidylinositol",
           "phosphatidyl inositol",
           "pi",
-          "phospatidylinositol"
+          "phospatidylinositol",
+          "phosphoinositides"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -13654,7 +13663,11 @@
           "advanced delivery carnitine supplement",
           "liposome-bound carnitine supplement",
           "lipid-bound carnitine supplement",
-          "high-absorption carnitine supplement"
+          "high-absorption carnitine supplement",
+          "glycocarn glycine propionyl l-carnitine hcl",
+          "glycocarn",
+          "glycine propionyl l-carnitine",
+          "gplc"
         ],
         "dosage_importance": 0.5,
         "bio_score": 14,
@@ -14043,7 +14056,8 @@
           "betaine digestive aid supplement",
           "stomach acid support betaine supplement",
           "betain hcl",
-          "betaine hci"
+          "betaine hci",
+          "betain"
         ],
         "dosage_importance": 1.0,
         "bio_score": 11,
@@ -14309,7 +14323,11 @@
           "arginine alpha-ketoglutarate supplement",
           "a-ketoglutarate supplement",
           "l-arginine alpha-ketoglutarate supplement",
-          "aakg powder supplement"
+          "aakg powder supplement",
+          "l-arginine akg 2:1 extract",
+          "l-arginine akg 2:1",
+          "a-akg",
+          "l-arginine alpha ketoglutarate"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -14367,7 +14385,9 @@
           "l-arginine pyroglutamate",
           "nitrosigine",
           "arginine silicate",
-          "arginine silicate inositol"
+          "arginine silicate inositol",
+          "arginine pyroglutamate",
+          "l-arginine l-pyroglutamate"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -15625,7 +15645,8 @@
           "glucosinolate supplement",
           "Sulforaphane Glucosinolate",
           "Sulforaphane Glucosinate",
-          "TrueBroc"
+          "TrueBroc",
+          "myrosinase"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -16251,7 +16272,9 @@
           "micro hyaluronic acid supplement",
           "short-chain HA supplement",
           "nano HA supplement",
-          "ultra-low MW HA supplement"
+          "ultra-low MW HA supplement",
+          "hyabest hyaluronic acid",
+          "hyabest"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -18172,7 +18195,9 @@
           "bioactive tripeptides supplement",
           "collagen tripeptide powder supplement",
           "advanced collagen tripeptides supplement",
-          "high-potency collagen tripeptides supplement"
+          "high-potency collagen tripeptides supplement",
+          "hydrolysed collagen",
+          "hydrolysed fish collagen"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -19391,7 +19416,9 @@
           "liposome grape seed supplement",
           "nano-encapsulated grape seed supplement",
           "lipid-bound grape seed supplement",
-          "high-absorption grape seed supplement"
+          "high-absorption grape seed supplement",
+          "vincare",
+          "vincare grape extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -19476,7 +19503,8 @@
           "meganatural-bp",
           "meganatural bp",
           "powergrape grape (vitis vinifera) extract",
-          "powergrape"
+          "powergrape",
+          "grape seed 95% extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -19871,7 +19899,9 @@
           "microbial ginseng supplement",
           "fermented panax ginseng supplement",
           "high-potency red ginseng supplement",
-          "bioactive red ginseng supplement"
+          "bioactive red ginseng supplement",
+          "standardized korean ginseng extract",
+          "korean ginseng extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -21120,7 +21150,9 @@
           "bilberry pumace fruit powder",
           "huckleberry/bilberry",
           "blueberry 25:1 extract",
-          "bilberry standardised extract"
+          "bilberry standardised extract",
+          "bilberry, powder, wild",
+          "bilberry powder wild"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -21514,7 +21546,9 @@
           "multi-enzyme complex supplement",
           "biocore dairy",
           "dairy digestive enzymes",
-          "Lactase Enzyme"
+          "Lactase Enzyme",
+          "porcine pancreatic concentrate",
+          "pancreatic concentrate"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -37658,7 +37692,8 @@
           "20% 3-o-acetyl-11-keto-beta-boswellic acid",
           "20% 3-0-acetyl-11-keto-beta-boswellic acid",
           "3-o-acetyl-11-keto beta-boswellic acid",
-          "joint shield 5-loxin advanced boswellia serrata extract"
+          "joint shield 5-loxin advanced boswellia serrata extract",
+          "apresflex boswellia serrata gum extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -38246,7 +38281,8 @@
           "testofen",
           "testofen fenugreek",
           "fenuside 50%",
-          "testofen fenugreek seed extract"
+          "testofen fenugreek seed extract",
+          "furanomax fenugreek extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -39457,7 +39493,9 @@
         "absorption": "unknown",
         "notes": "",
         "aliases": [
-          "grass-fed desiccated"
+          "grass-fed desiccated",
+          "parathyroid",
+          "parathyroid glandular"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -41413,7 +41451,11 @@
           "cinnamomum verum extract",
           "cinnamomum burmannii extract",
           "true cinnamon extract",
-          "cinnamomum spp. bark extract"
+          "cinnamomum spp. bark extract",
+          "cinsulin",
+          "cassia",
+          "cassia cinnamon",
+          "cinnamomum spp. bark ext."
         ],
         "absorption_structured": {
           "value": 0.55,
@@ -41465,7 +41507,8 @@
           "blueberry fruit",
           "organic blueberry",
           "AuroraBlue",
-          "wild blueberry fruit extract"
+          "wild blueberry fruit extract",
+          "blueberry extract, powder, wild"
         ],
         "absorption_structured": {
           "value": 0.55,
@@ -44441,7 +44484,8 @@
           "phosphatidyl ethanolamine",
           "pe (phosphatidylethanolamine)",
           "phosphatidylethanolamine (pe)",
-          "soy phosphatidylethanolamine"
+          "soy phosphatidylethanolamine",
+          "cephalin"
         ],
         "dosage_importance": 0.8,
         "absorption_structured": {
@@ -45111,7 +45155,9 @@
         "aliases": [
           "garcinia cambogia 60% hca",
           "garcinia cambogia extract 60%",
-          "hydroxycitric acid 60%"
+          "hydroxycitric acid 60%",
+          "super citrimax clinical strength garcinia cambogia extract",
+          "citrimax"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -45846,7 +45892,8 @@
           "mucuna pruriens standardized extract",
           "velvet bean extract",
           "mucuna pruriens 15% l-dopa",
-          "mucuna pruriens 98% l-dopa"
+          "mucuna pruriens 98% l-dopa",
+          "mucuna seed extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -46960,7 +47007,8 @@
           "phellinus linteus extract",
           "mesima",
           "mesima mushroom",
-          "sang hwang mushroom"
+          "sang hwang mushroom",
+          "meshima (phellinus linteus) fruiting body extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -47052,7 +47100,9 @@
           "bitter gourd",
           "karela",
           "bitter melon fruit extract",
-          "momordica charantia extract"
+          "momordica charantia extract",
+          "glycostat wild bitter melon extract",
+          "glycostat"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -47583,7 +47633,8 @@
           "rauwolscine",
           "pausinystalia yohimbe",
           "yohimbe bark",
-          "yohimbine hydrochloride"
+          "yohimbine hydrochloride",
+          "yohimbines"
         ],
         "notes": "Stub score for Yohimbe. Conservative fallback.",
         "natural": false,
@@ -47770,7 +47821,9 @@
           "trifolium pratense",
           "red clover flower extract",
           "red clover isoflavones",
-          "red clover blossom"
+          "red clover blossom",
+          "red clover (trifolium pratense) blossom extract",
+          "red clover blossom extract"
         ],
         "notes": "Stub score for Red Clover. Conservative fallback.",
         "natural": false,
@@ -47959,7 +48012,9 @@
           "alfalfa herb powder",
           "alfalfa leaf & stem extract",
           "organic alfalfa",
-          "alfalfa juice concentrate"
+          "alfalfa juice concentrate",
+          "alfalfa leaf, stem extract",
+          "alfalfa leaf stem extract"
         ],
         "notes": "Stub score for Alfalfa. Conservative fallback.",
         "natural": false,

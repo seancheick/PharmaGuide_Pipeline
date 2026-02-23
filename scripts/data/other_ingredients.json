@@ -4,7 +4,7 @@
     "purpose": "inactive_ingredient_classification",
     "schema_version": "4.0.0",
     "last_updated": "2026-02-23",
-    "total_entries": 380
+    "total_entries": 390
   },
   "other_ingredients": [
     {
@@ -1306,7 +1306,9 @@
         "glucose, liquid",
         "liquid glucose",
         "glucose syrup",
-        "dextrose syrup"
+        "dextrose syrup",
+        "glucose syrup, solids",
+        "glucose syrup solids"
       ],
       "category": "sweetener_natural",
       "additive_type": "natural_sugar",
@@ -1754,7 +1756,8 @@
         "vegetable magnesium silicate",
         "magnesium silicate, hydrated",
         "magnesium silicate hydrated",
-        "hydrated magnesium silicate"
+        "hydrated magnesium silicate",
+        "syloid"
       ],
       "category": "antacid_excipient",
       "additive_type": "processing_aid",
@@ -2012,7 +2015,8 @@
         "Non-GMO modified cornstarch",
         "Food Starch",
         "modified vegetable starch",
-        "modified food and corn starch"
+        "modified food and corn starch",
+        "manioc"
       ],
       "category": "thickener_stabilizer",
       "additive_type": "texture_modifier",
@@ -2269,7 +2273,9 @@
         "red radish color",
         "radish, natural",
         "beet root color",
-        "violet"
+        "violet",
+        "natural caramel flavor",
+        "natural caramel colour"
       ],
       "category": "colorant_natural",
       "additive_type": "natural_colorant",
@@ -2472,7 +2478,9 @@
         "Natural Lemon/Lime flavor",
         "natural Lime flavor",
         "Lime flavor",
-        "natural anise flavor"
+        "natural anise flavor",
+        "natural vanilla flavour",
+        "natural vanilla flavor"
       ],
       "category": "flavor_natural",
       "additive_type": "natural_flavor",
@@ -2774,7 +2782,8 @@
         "micro wax",
         "organic copernicia cerifera wax",
         "copernicia cerifera",
-        "copernicia cerifera wax"
+        "copernicia cerifera wax",
+        "non-gmo rice bran wax"
       ],
       "category": "coating_glazing_natural",
       "additive_type": "coating_agent",
@@ -9010,6 +9019,129 @@
         "magnesium borate"
       ],
       "notes": "Mineral salt processing aid.",
+      "last_updated": "2026-02-23"
+    },
+    {
+      "id": "NHA_MIXED_BERRY_FLAVOR",
+      "standard_name": "Natural Mixed Berry Flavor",
+      "category": "flavoring",
+      "aliases": [
+        "natural mixed berry flavors",
+        "mixed berry flavor",
+        "natural berry flavors"
+      ],
+      "notes": "Natural mixed berry flavoring.",
+      "last_updated": "2026-02-23"
+    },
+    {
+      "id": "NHA_ORANGE_FLAVOR",
+      "standard_name": "Orange Flavor",
+      "category": "flavoring",
+      "aliases": [
+        "natural & artificial orange flavor",
+        "natural and artificial orange flavor",
+        "orange flavor",
+        "natural orange flavor"
+      ],
+      "notes": "Orange flavoring agent.",
+      "last_updated": "2026-02-23"
+    },
+    {
+      "id": "NHA_CHOCOLATE_FLAVOR",
+      "standard_name": "Natural Chocolate Flavor",
+      "category": "flavoring",
+      "aliases": [
+        "chocolate flavor, natural",
+        "natural chocolate flavor",
+        "chocolate flavor"
+      ],
+      "notes": "Natural chocolate flavoring.",
+      "last_updated": "2026-02-23"
+    },
+    {
+      "id": "NHA_MANDARIN_FLAVOR",
+      "standard_name": "Mandarin Peel Flavor",
+      "category": "flavoring",
+      "aliases": [
+        "mandarin peel flavor",
+        "mandarin flavor",
+        "mandarin orange flavor"
+      ],
+      "notes": "Citrus peel flavoring.",
+      "last_updated": "2026-02-23"
+    },
+    {
+      "id": "NHA_CARROT_EXTRACT_COLOR",
+      "standard_name": "Carrot Extract Color",
+      "category": "colorant",
+      "aliases": [
+        "carrot extract color",
+        "carrot color extract",
+        "carrot extract"
+      ],
+      "notes": "Natural vegetable colorant.",
+      "last_updated": "2026-02-23"
+    },
+    {
+      "id": "NHA_TOMATO_COLOR",
+      "standard_name": "Tomato Color",
+      "category": "colorant",
+      "aliases": [
+        "tomato color",
+        "tomato extract color",
+        "tomato lycopene color"
+      ],
+      "notes": "Natural vegetable colorant.",
+      "last_updated": "2026-02-23"
+    },
+    {
+      "id": "NHA_FDC_YELLOW_10",
+      "standard_name": "FD&C Yellow #10",
+      "category": "colorant",
+      "aliases": [
+        "fd&c yellow #10",
+        "fd&c yellow no. 10",
+        "quinoline yellow",
+        "yellow #10"
+      ],
+      "notes": "Synthetic food dye.",
+      "last_updated": "2026-02-23"
+    },
+    {
+      "id": "NHA_FDC_BLUE_1",
+      "standard_name": "FD&C Blue #1",
+      "category": "colorant",
+      "aliases": [
+        "fd&c blue#1",
+        "fd&c blue #1",
+        "fd&c blue no. 1",
+        "brilliant blue fcf",
+        "blue #1"
+      ],
+      "notes": "Synthetic food dye.",
+      "last_updated": "2026-02-23"
+    },
+    {
+      "id": "NHA_GLYCERYL_CAPRYLATE_CAPRATE",
+      "standard_name": "Glyceryl Caprylate/Caprate",
+      "category": "emulsifier",
+      "aliases": [
+        "glyceryl caprylate/caprate",
+        "glyceryl caprylate caprate"
+      ],
+      "notes": "Emollient/emulsifier.",
+      "last_updated": "2026-02-23"
+    },
+    {
+      "id": "NHA_VEG_MAGNESIUM_SILICATE",
+      "standard_name": "Vegetable Magnesium Silicate",
+      "category": "anti-caking agent",
+      "aliases": [
+        "veg. magnesium silicate",
+        "vegetable magnesium silicate",
+        "magnesium silicate"
+      ],
+      "notes": "Anti-caking agent.",
       "last_updated": "2026-02-23"
     }
   ]

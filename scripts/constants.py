@@ -350,6 +350,14 @@ EXCLUDED_LABEL_PHRASES = {
     "foodstate orange vitamin c",
     "superpotency soyagen",
     "quik-sorb",
+    # Label aggregate/descriptor phrases
+    "total iodide/iodine",
+    "total iodide iodine",
+    "lactic acid bacteria",
+    "female support factors",
+    "antioxidant response",
+    "niacin & niacinamide",
+    "niacin and niacinamide",
 }
 
 # Nutritional warnings to track for UI display (but not map as ingredients)
