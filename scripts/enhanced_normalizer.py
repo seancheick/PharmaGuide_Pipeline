@@ -706,6 +706,7 @@ class EnhancedDSLDNormalizer:
             re.compile(r"^\s*min\.\s*\d", re.IGNORECASE),
             re.compile(r"^\s*providing\s+\d", re.IGNORECASE),
             re.compile(r"^\s*standardized\s+to\s+contain\s+\d", re.IGNORECASE),
+            re.compile(r"^\s*from\s+\d+(?:,\d{3})?(?:\.\d+)?\s*mg(?:\s+of)?\b", re.IGNORECASE),
         ]
 
         # Build enhanced lookup indices
@@ -1509,6 +1510,10 @@ class EnhancedDSLDNormalizer:
         # Always skip known exact blend headers (normalized/preprocessed).
         processed_name = self.matcher.preprocess_text(name)
         if processed_name in self._preprocessed_blend_header_exact:
+            return True
+
+        # Skip known label/header phrases even when this helper is called directly.
+        if processed_name in self._preprocessed_excluded_labels:
             return True
 
         # High-confidence blend header patterns (safe to skip even with dose present).

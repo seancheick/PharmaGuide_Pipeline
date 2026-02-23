@@ -194,19 +194,8 @@ EXCLUDED_NUTRITION_FACTS = {
     "mineral enzyme activators",
     "ionic plant based minerals",
     "ionic plant-based minerals",
-    "trace elements",
-    "trace minerals",
-    "co-nutrients",
-    "carotenoid mix",
-    "bioactive enzymes & proteins",
     "bioactive enzymes and proteins",
-    "digestive aids/enzymes",
     "digestive aids and enzymes",
-    "whole food enzymes",
-    "complete digestive support",
-    "herbal extracts",
-    "enzymes",
-    "sulfate",
 }
 
 # Label phrases and headers that should be excluded from ingredient processing
@@ -239,13 +228,14 @@ EXCLUDED_LABEL_PHRASES = {
 
     # Other common label phrases
     "other ingredients", "inactive ingredients", "active ingredients",
+    "ingredients",
     "contains", "includes", "consisting of", "also contains",
 
     # Invalid or placeholder values
     "none", "n/a", "not applicable", "null", "unknown",
 
     # Descriptive text that's not ingredients
-    "naturally sweet", "stomach", "liver", "energized nutrients",
+    "naturally sweet", "energized nutrients",
     "acid reflux", "acid redux",
 
     # Quantity/composition descriptions
@@ -264,11 +254,7 @@ EXCLUDED_LABEL_PHRASES = {
     "50 berries",
     "75 berries",
     "100 berries",
-    # Slash-combined multi-nutrient label artifacts
-    "niacin/niacinamide",
     # Dietary nitrate sub-labels (beet root context)
-    "nitrates",
-    "nitrate",
     "typical amino acid amounts (g)",
     "typical amino acid amounts (g) per serving",
     "typical amino acid profile",
@@ -329,11 +315,8 @@ EXCLUDED_LABEL_PHRASES = {
     "nothing else",
     "may contain one or both of the following",
     # Marketing/proprietary blend descriptors (not discrete ingredients)
-    "futurebiotics bioaccelerators",
     "immune factors",
     "farm fresh factors",
-    "ionic trace minerals",
-    "whole food phytoalgae",
     # Branded blend/tablet technology descriptors (not discrete ingredients)
     "activessence",
     "solutab",
@@ -344,29 +327,17 @@ EXCLUDED_LABEL_PHRASES = {
     "vegetable culture",
     "enzyme digested",
     "enzyme pre-digested",
-    "herbal extract",
-    "bronson bioaccelerators",
-    "nutrilite phytonutrient concentrate",
-    "foodstate orange vitamin c",
     "superpotency soyagen",
     "quik-sorb",
     # Label aggregate/descriptor phrases
     "total iodide/iodine",
     "total iodide iodine",
-    "lactic acid bacteria",
     "female support factors",
     "antioxidant response",
-    "niacin & niacinamide",
-    "niacin and niacinamide",
     # Skip phrases added for 7-9 occ tier remediation
-    "ionic sea minerals",
-    "ultra trace minerals",
-    "trace mineral concentrate",
     "organic aqua superfoods",
     "fermented botanicals",
     "vegetarian enzyme concentrate",
-    "nature's c with qpower",
-    "food based nutrients",
     "proprietary hcc",
     "glucodox amp activated protein kinase hormone booster",
     "male support factors",
