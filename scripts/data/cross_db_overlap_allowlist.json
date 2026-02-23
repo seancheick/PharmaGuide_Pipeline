@@ -1,6 +1,8 @@
 {
   "_metadata": {
-    "version": "1.0.0",
+    "version": "4.0.0",
+    "schema_version": "4.0.0",
+    "purpose": "Explicitly allowed normalized term overlaps across routing databases. Any new overlap must be reviewed before scoring deployment.",
     "description": "Explicitly allowed normalized term overlaps across routing databases. Any new overlap must be reviewed before scoring deployment.",
     "last_updated": "2026-02-22"
   },

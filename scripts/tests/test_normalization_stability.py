@@ -240,8 +240,8 @@ class TestPreprocessTextGoldenFixtures:
         # Bracket removal
         ("Vitamin D [from lanolin]", "vitamin d"),
 
-        # Prefix removal
-        ("DL-Alpha Tocopherol", "alpha tocopherol"),
+        # Prefix removal (dl-/d- preserved before alpha/beta/gamma/delta tocopherol)
+        ("DL-Alpha Tocopherol", "dl-alpha tocopherol"),
         ("D-Calcium Pantothenate", "calcium pantothenate"),
         ("L-Theanine", "theanine"),
         ("Natural Vitamin E", "vitamin e"),

@@ -39915,8 +39915,7 @@
         "absorption": "unknown",
         "notes": "",
         "aliases": [
-          "natural triglyceride",
-          "red sockeye salmon oil, natural, wild"
+          "natural triglyceride"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -40030,7 +40029,9 @@
           "pharmaceutical fish oil",
           "pharmaceutical grade fish oil",
           "Fish Oil, Natural, Purified",
-          "Deep sea fish oil"
+          "Deep sea fish oil",
+          "red sockeye salmon oil, natural, wild",
+          "salmon oil, natural, wild"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {

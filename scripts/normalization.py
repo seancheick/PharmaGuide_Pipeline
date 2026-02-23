@@ -260,6 +260,11 @@ def preprocess_text(text: str) -> str:
 
     # Remove common prefixes that don't affect matching.
     # Apply iteratively so compound prefixes like "raw organic" are fully normalized.
+    # NOTE: 'dl-', 'd-', 'l-' are stereoisomer prefixes that ARE meaningful for
+    # vitamin E forms (d-alpha vs dl-alpha tocopherol) and some amino acids.
+    # We guard against stripping them when followed by alpha/beta/gamma/delta
+    # (tocopherol stereoisomers) to preserve matching fidelity.
+    _stereo_guard = re.compile(r'^[dl]l?-(alpha|beta|gamma|delta)\b')
     prefixes_to_remove = [
         'dl-', 'd-', 'l-',
         'natural ', 'synthetic ', 'organic ',
@@ -270,6 +275,9 @@ def preprocess_text(text: str) -> str:
         changed = False
         for prefix in prefixes_to_remove:
             if text.startswith(prefix):
+                # Guard: don't strip d-/dl-/l- before tocopherol stereoisomers
+                if prefix in ('dl-', 'd-', 'l-') and _stereo_guard.match(text):
+                    continue
                 text = text[len(prefix):].strip()
                 changed = True
                 break
