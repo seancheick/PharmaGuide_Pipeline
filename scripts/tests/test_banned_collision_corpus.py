@@ -111,15 +111,15 @@ class TestTruePositives:
     def test_kratom_alkaloid_variants(self, enricher, variant, expected_id):
         assert expected_id in _banned_ids(enricher, variant)
 
-    # Red No. 3
-    @pytest.mark.parametrize("variant,expected_id", [
-        ("FD&C Red No. 3", "BANNED_RED_NO_3"),
-        ("Red 3", "BANNED_RED_NO_3"),
-        ("erythrosine", "BANNED_RED_NO_3"),
-        ("E127", "BANNED_RED_NO_3"),
+    # Red No. 3 is handled as harmful additive risk (B1), not B0 banned gate
+    @pytest.mark.parametrize("variant", [
+        "FD&C Red No. 3",
+        "Red 3",
+        "erythrosine",
+        "E127",
     ])
-    def test_red_no_3_variants(self, enricher, variant, expected_id):
-        assert expected_id in _banned_ids(enricher, variant)
+    def test_red_no_3_variants_not_in_banned(self, enricher, variant):
+        assert "BANNED_RED_NO_3" not in _banned_ids(enricher, variant)
 
 
 # =============================================================================

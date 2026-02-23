@@ -3,8 +3,8 @@
     "description": "Other/inactive ingredients database for supplement excipients and additives",
     "purpose": "inactive_ingredient_classification",
     "schema_version": "4.0.0",
-    "last_updated": "2026-02-22",
-    "total_entries": 331
+    "last_updated": "2026-02-23",
+    "total_entries": 347
   },
   "other_ingredients": [
     {
@@ -133,7 +133,8 @@
       "standard_name": "Alpha-Glucan Oligosaccharide",
       "aliases": [
         "alpha-glucan oligosaccharide",
-        "alpha glucans"
+        "alpha glucans",
+        "oligosaccharides"
       ],
       "category": "fiber_prebiotic",
       "additive_type": "dietary_fiber",
@@ -144,7 +145,7 @@
         "prebiotic support",
         "fiber matrix"
       ],
-      "last_updated": "2026-02-17",
+      "last_updated": "2026-02-23",
       "is_additive": false,
       "severity_level": "none",
       "allergen_flag": null
@@ -371,7 +372,8 @@
         "natural black cherry flavor",
         "black cherry flavor natural",
         "natural black cherry flavoring",
-        "black cherry extract flavor"
+        "black cherry extract flavor",
+        "cherry flavor, natural"
       ],
       "category": "flavor_natural",
       "additive_type": "natural_flavor",
@@ -383,7 +385,7 @@
         "taste masking",
         "palatability improvement"
       ],
-      "last_updated": "2025-09-19",
+      "last_updated": "2026-02-23",
       "is_additive": true,
       "severity_level": "none",
       "allergen_flag": null
@@ -642,7 +644,8 @@
         "wood pulp cellulose",
         "cotton cellulose",
         "bamboo cellulose",
-        "plant fiber"
+        "plant fiber",
+        "cellulose, plant"
       ],
       "category": "filler_fiber",
       "additive_type": "bulking_agent",
@@ -1667,7 +1670,11 @@
         "vegetable magnesium stearate",
         "mag stearate",
         "magnesium octadecanoate",
-        "magnesium salt"
+        "magnesium salt",
+        "magnesium vegetable stearate",
+        "veg. magnesium stearate",
+        "vegetarian magnesium stearate",
+        "vegetable source magnesium stearate"
       ],
       "category": "tablet_lubricant",
       "additive_type": "processing_aid",
@@ -1689,7 +1696,8 @@
       "standard_name": "Magnesium Trisilicate",
       "aliases": [
         "magnesium trisilicate",
-        "magnesium trisilicate anhydrous"
+        "magnesium trisilicate anhydrous",
+        "vegetable magnesium silicate"
       ],
       "category": "antacid_excipient",
       "additive_type": "processing_aid",
@@ -1839,7 +1847,9 @@
         "avicel ph 101",
         "avicel ph 102",
         "avicel ph 200",
-        "ph-102"
+        "ph-102",
+        "microcystalline cellulose",
+        "microcrystalline"
       ],
       "category": "bulking_agent",
       "additive_type": "fiber_bulking",
@@ -2398,7 +2408,8 @@
         "natural Lemon Oil flavor",
         "Natural Lemon/Lime flavor",
         "natural Lime flavor",
-        "Lime flavor"
+        "Lime flavor",
+        "natural anise flavor"
       ],
       "category": "flavor_natural",
       "additive_type": "natural_flavor",
@@ -2690,7 +2701,11 @@
         "natural glazing agent",
         "wax",
         "microcrystalline wax",
-        "beeswax and/or carnauba wax"
+        "beeswax and/or carnauba wax",
+        "china wax",
+        "vegetable waxes",
+        "micro wax",
+        "organic copernicia cerifera wax"
       ],
       "category": "coating_glazing_natural",
       "additive_type": "coating_agent",
@@ -2702,7 +2717,7 @@
         "gloss enhancement",
         "moisture barrier"
       ],
-      "last_updated": "2025-11-17",
+      "last_updated": "2026-02-23",
       "is_additive": true,
       "severity_level": "none",
       "allergen_flag": null
@@ -2762,7 +2777,8 @@
         "orange crystals",
         "crystallized orange",
         "orange crystal flavor",
-        "natural orange crystals"
+        "natural orange crystals",
+        "orange juice crystals"
       ],
       "category": "flavor_natural",
       "additive_type": "natural_flavor",
@@ -2774,7 +2790,7 @@
         "taste masking",
         "palatability improvement"
       ],
-      "last_updated": "2025-09-21",
+      "last_updated": "2026-02-23",
       "is_additive": true,
       "severity_level": "none",
       "allergen_flag": null
@@ -3541,7 +3557,8 @@
         "modified potato starch",
         "corn starch, modified",
         "starch acetate",
-        "Tarch Acetate"
+        "Tarch Acetate",
+        "pea starch"
       ],
       "category": "thickener_stabilizer",
       "additive_type": "texture_modifier",
@@ -3640,7 +3657,7 @@
       "category": "sweetener_natural",
       "additive_type": "natural_sweetener",
       "clean_label_score": 9,
-      "notes": "Natural, calorie-free sweetener from the Stevia rebaudiana plant. FDA GRAS status applies to HIGH-PURITY extracts (\u226595% steviol glycosides) including rebaudioside A and stevioside. Whole stevia leaves and crude extracts are NOT FDA GRAS approved. Includes branded forms like BetterStevia, Truvia, and PureVia. Clean label alternative to artificial sweeteners.",
+      "notes": "Natural, calorie-free sweetener from the Stevia rebaudiana plant. FDA GRAS status applies to HIGH-PURITY extracts (≥95% steviol glycosides) including rebaudioside A and stevioside. Whole stevia leaves and crude extracts are NOT FDA GRAS approved. Includes branded forms like BetterStevia, Truvia, and PureVia. Clean label alternative to artificial sweeteners.",
       "regulatory_status": "GRAS",
       "common_uses": [
         "flavor enhancement",
@@ -4492,7 +4509,8 @@
         "cmc",
         "carboxymethyl cellulose",
         "sodium carboxymethylcellulose",
-        "E466"
+        "E466",
+        "vegetable modified cellulose gum"
       ],
       "category": "thickener_stabilizer",
       "additive_type": "texture_modifier",
@@ -4783,7 +4801,9 @@
         "mint flavoring",
         "natural peppermint",
         "natural spearmint",
-        "mint extract flavor"
+        "mint extract flavor",
+        "oil of peppermint",
+        "natural vanilla mint flavor"
       ],
       "category": "flavor_natural",
       "additive_type": "flavoring",
@@ -4794,7 +4814,7 @@
         "flavoring",
         "breath freshening"
       ],
-      "last_updated": "2025-11-14",
+      "last_updated": "2026-02-23",
       "is_additive": true,
       "severity_level": "none",
       "allergen_flag": null
@@ -4806,7 +4826,8 @@
         "natural strawberry flavor",
         "strawberry flavoring",
         "natural strawberry",
-        "berry flavor strawberry"
+        "berry flavor strawberry",
+        "strawberry flavor, natural"
       ],
       "category": "flavor_natural",
       "additive_type": "flavoring",
@@ -4817,7 +4838,7 @@
         "flavoring",
         "taste enhancement"
       ],
-      "last_updated": "2025-11-14",
+      "last_updated": "2026-02-23",
       "is_additive": true,
       "severity_level": "none",
       "allergen_flag": null
@@ -4829,7 +4850,8 @@
         "natural vanilla flavor",
         "vanilla flavoring",
         "natural vanilla",
-        "vanilla extract flavor"
+        "vanilla extract flavor",
+        "vanilla flavor, natural"
       ],
       "category": "flavor_natural",
       "additive_type": "flavoring",
@@ -5210,11 +5232,12 @@
         "activated coal",
         "carbon black",
         "purified carbon",
-        "filtering carbon"
+        "filtering carbon",
+        "carbon, activated"
       ],
       "category": "processing_aid",
       "notes": "A processing aid used for filtering and purification of ingredients. Not typically present in the final product as it's removed during processing. Generally considered safe.",
-      "last_updated": "2025-11-17",
+      "last_updated": "2026-02-23",
       "is_additive": true,
       "additive_type": "unspecified",
       "clean_label_score": 5,
@@ -5288,7 +5311,9 @@
         "water-based coating",
         "aqueous coating system",
         "film coating aqueous",
-        "water-based film coating"
+        "water-based film coating",
+        "aqueous film-coating",
+        "clear aqueous coating"
       ],
       "category": "coating",
       "notes": "A specific type of coating using water-based systems, often listed as a sub-ingredient. Provides protective barrier and improved swallowing. Generally considered safe.",
@@ -5537,11 +5562,21 @@
         "pharmaceutical coating",
         "film coating",
         "sour coating",
-        "coating and filling materials"
+        "coating and filling materials",
+        "film coat",
+        "glycerin coating",
+        "cellulose & glycerin coating",
+        "food grade coating",
+        "vegetable-based coating",
+        "aqueous-based coating",
+        "food glaze coating",
+        "vegetable food glaze",
+        "cellulose glaze",
+        "chlorophyll coating"
       ],
       "category": "coating_protective",
       "notes": "General or specific terms for coatings, which are passive ingredients that protect the tablet or capsule, mask taste, or aid in swallowing. Composition varies but generally considered safe.",
-      "last_updated": "2025-11-17",
+      "last_updated": "2026-02-23",
       "is_additive": true,
       "additive_type": "unspecified",
       "clean_label_score": 5,
@@ -5598,7 +5633,9 @@
         "organic corn starch",
         "non-GMO corn starch",
         "starch",
-        "maize kernel starch"
+        "maize kernel starch",
+        "pregelatinized corn starch",
+        "modified cornstarch"
       ],
       "category": "filler_binder_disintegrant",
       "notes": "A common plant-derived starch used as a binder, filler, or disintegrant. Generally safe, but non-GMO/organic sources are often preferred.",
@@ -5620,7 +5657,11 @@
         "sodium carboxymethylcellulose crosslinked",
         "modified cellulose",
         "croscamellose sodium",
-        "croscamellose"
+        "croscamellose",
+        "sodium croscamellose",
+        "croscarmelose sodium",
+        "sodium starch glucolate",
+        "carboxymethylstarch sodium salt"
       ],
       "category": "disintegrant",
       "notes": "Modified cellulose used as tablet disintegrant to aid dissolution. FDA approved excipient with excellent safety profile. Derived from plant cellulose.",
@@ -5640,11 +5681,13 @@
         "cyclodextrin",
         "beta-cyclodextrin",
         "alpha-cyclodextrin",
-        "Gamma Cyclodextrin"
+        "Gamma Cyclodextrin",
+        "hydroxypropyl-beta-cyclodextrin",
+        "hydroxypropyl beta cyclodextrin"
       ],
       "category": "solubilizer",
       "notes": "Cyclic oligosaccharide used to improve solubility and stability of active ingredients. FDA approved GRAS ingredient. Enhances bioavailability of poorly soluble compounds.",
-      "last_updated": "2025-11-17",
+      "last_updated": "2026-02-23",
       "is_additive": true,
       "additive_type": "unspecified",
       "clean_label_score": 5,
@@ -5704,7 +5747,8 @@
         "dextrin",
         "dextrin powder",
         "modified starch",
-        "wheat dextrin"
+        "wheat dextrin",
+        "dextrates"
       ],
       "category": "binder_filler",
       "notes": "Carbohydrate polymer derived from starch used as a binding agent and bulking agent. Source plant not specified - could be corn, potato, rice, or other starch sources.",
@@ -5746,7 +5790,10 @@
         "calcium hydrogen phosphate",
         "dibasic calcium phosphate",
         "calcium phosphate dibasic",
-        "dicalcium phosphate anhydrous"
+        "dicalcium phosphate anhydrous",
+        "di calcium phosphate",
+        "dibasic calcium phosphate dihydrate",
+        "dicalcium phosphate dihydrate"
       ],
       "category": "filler_binder",
       "notes": "Used as a tablet binder and filler. While it provides calcium and phosphorus, its primary role in 'other ingredients' is often mechanical. Generally considered safe.",
@@ -5844,7 +5891,8 @@
         "intestinal coating",
         "pH-dependent coating",
         "Methacrylic Acid Copolymer",
-        "methacrylate copolymer"
+        "methacrylate copolymer",
+        "methacrylic acid"
       ],
       "category": "coating_specialized",
       "notes": "A specialized coating designed to prevent the tablet from dissolving in the stomach, allowing it to pass into the intestines. Key passive ingredient for targeted delivery. Generally considered safe.",
@@ -6041,7 +6089,8 @@
         "kosher Gelatin",
         "Kosher Beef Gelatin",
         "BSE-free Beef Gelatin",
-        "Bovine-derived Gelatin"
+        "Bovine-derived Gelatin",
+        "k-gelatin"
       ],
       "category": "capsule_material",
       "notes": "Derived from animal collagen, forming the shell of traditional capsules and softgels. Provides a protective casing. While animal-derived (not vegan/vegetarian), it is generally considered safe and inert in its role as a capsule material.",
@@ -6061,7 +6110,8 @@
         "glycerol monostearate",
         "GMS",
         "monostearin",
-        "Glyceryl Stearate"
+        "Glyceryl Stearate",
+        "glycerol palmitostearate"
       ],
       "category": "emulsifier_stabilizer",
       "notes": "Emulsifier and stabilizer derived from glycerol and stearic acid. Generally recognized as safe.",
@@ -6149,7 +6199,16 @@
         "cellulose hydroxypropyl methyl ether",
         "cellulose coating",
         "hydroxypropyl methyl cellulose",
-        "hydroxypropyl methylcellulose phthalate"
+        "hydroxypropyl methylcellulose phthalate",
+        "methylcellulose",
+        "methyl cellulose",
+        "methocel",
+        "vegetable modified cellulose",
+        "modified vegetable cellulose",
+        "hydroxypropylmethyl cellulose",
+        "hydroxpropyl methylcellulose",
+        "hydroxypropyl methylcellose",
+        "hydroxypropyl methycellulose"
       ],
       "category": "capsule_shell",
       "notes": "Plant-derived cellulose material used for vegetarian capsule shells and as a coating agent. Provides barrier protection and controlled release properties.",
@@ -6212,11 +6271,12 @@
         "polyvinylpyrrolidone",
         "povidone",
         "kollidon cl",
-        "crospovidone"
+        "crospovidone",
+        "polyvinylpolypyrrolidone"
       ],
       "category": "pharmaceutical_excipient",
       "notes": "Pharmaceutical-grade polyvinylpyrrolidone used as binder, disintegrant, and solubilizer. FDA approved excipient with GRAS status. Well-established safety profile in pharmaceutical applications.",
-      "last_updated": "2025-11-17",
+      "last_updated": "2026-02-23",
       "is_additive": true,
       "additive_type": "unspecified",
       "clean_label_score": 5,
@@ -6311,7 +6371,8 @@
         "medium-chain triglycerides",
         "medium-chain triglycerides oil",
         "medium-chain triglyceride oil",
-        "non-GMO medium chain triglycerides"
+        "non-GMO medium chain triglycerides",
+        "triglycerides"
       ],
       "category": "oil_carrier",
       "notes": "Easily absorbed fatty acids derived from coconut or palm kernel oil. Used as carrier for fat-soluble vitamins and active ingredients. Generally well-tolerated.",
@@ -6714,7 +6775,9 @@
       "aliases": [
         "protein coating",
         "protein film",
-        "protein glaze"
+        "protein glaze",
+        "zein protein coating",
+        "zein protein"
       ],
       "category": "coating",
       "notes": "Protein-based coating for tablets or capsules to aid swallowing and protect ingredients.",
@@ -6942,7 +7005,11 @@
         "silicon dioxide",
         "silicon dioxide (amorphous)",
         "synthetic amorphous silica",
-        "Colloidal Silicium Dioxide"
+        "Colloidal Silicium Dioxide",
+        "silica dioxide",
+        "silica, colloidal anhydrous",
+        "cab-o-sil",
+        "vegetable magnesium silicate"
       ],
       "category": "flow_agent_anticaking",
       "notes": "A very common anti-caking and flow agent in powders, capsules, and tablets, preventing ingredients from clumping. Naturally occurring mineral, generally considered safe. Merged from NHA_COLLOIDAL_SILICON_DIOXIDE on 2025-11-17.",
@@ -6962,7 +7029,8 @@
         "alginic acid sodium salt",
         "E401",
         "alginate",
-        "brown algae extract"
+        "brown algae extract",
+        "alginic acid"
       ],
       "category": "gelling_agent_stabilizer",
       "notes": "A gum from brown algae used as a gelling agent and stabilizer. Natural, vegan-friendly, and generally considered safe. Can provide dietary fiber benefits.",
@@ -6982,7 +7050,8 @@
         "sodium carboxy methylcellulose",
         "sodium carboxymethylcellulose",
         "cmc sodium",
-        "carboxymethylcellulose sodium"
+        "carboxymethylcellulose sodium",
+        "sodium carboxymethycellulose"
       ],
       "category": "thickener_stabilizer",
       "notes": "Modified cellulose used as thickener and stabilizer. Generally recognized as safe.",
@@ -7092,7 +7161,10 @@
       "aliases": [
         "stearate",
         "stearate powder",
-        "stearate lubricant"
+        "stearate lubricant",
+        "vegetable stearates",
+        "vegetable stearins",
+        "veg. stearic acid"
       ],
       "category": "lubricant",
       "notes": "General stearate salt used as lubricant in tablet manufacturing. Source not specified - could be magnesium stearate, calcium stearate, or other stearate forms.",
@@ -7246,7 +7318,19 @@
         "HPMC",
         "Vegetarian Softgel",
         "non-GMO PlantGel softgel",
-        "vegan softgel"
+        "vegan softgel",
+        "vegetable cellulose capsule",
+        "vegetable cellulose capsules",
+        "plant-derived capsule",
+        "vegetable capsules",
+        "methylcellulose capsule",
+        "natural vegetable capsules",
+        "vegetable hypromellose",
+        "kosher vegetable capsules",
+        "modified cellulose capsule",
+        "vegancaps",
+        "plant-source capsules",
+        "plant-source capsule"
       ],
       "category": "capsule_material",
       "notes": "A plant-derived cellulose material (Hydroxypropyl Methylcellulose) used to form vegetarian and vegan capsule shells. Provides a protective casing for ingredients and is generally considered inert and safe for consumption.",
@@ -7270,7 +7354,12 @@
         "MCC",
         "cellulose powder",
         "plant fiber",
-        "cellulose bulking agent"
+        "cellulose bulking agent",
+        "veg. cellulose",
+        "cellulose derivatives",
+        "natural mineral or vegetable source cellulose",
+        "cellulose, plant",
+        "vegetable polysaccharide"
       ],
       "category": "bulking_agent",
       "notes": "Plant-derived cellulose used as a bulking agent, anti-caking agent, and texture enhancer. Provides dietary fiber and is physiologically inert. Commonly used in tablet and capsule manufacturing.",
@@ -7289,7 +7378,8 @@
       "aliases": [
         "vegetable fiber",
         "plant fiber",
-        "dietary fiber vegetable"
+        "dietary fiber vegetable",
+        "hypoallergenic plant fiber"
       ],
       "category": "fiber_prebiotic",
       "notes": "General vegetable-derived fiber for bulking and digestive support.",
@@ -7950,6 +8040,331 @@
       ],
       "last_updated": "2026-02-22",
       "is_additive": true,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "PII_SACCHAROMYCES_CEREVISIAE",
+      "standard_name": "Saccharomyces cerevisiae (yeast)",
+      "aliases": [
+        "S. cerevisiae",
+        "saccharomyces cerevisiae",
+        "s cerevisiae"
+      ],
+      "category": "fermentation_yeast",
+      "additive_type": "functional",
+      "clean_label_score": 6,
+      "notes": "Identity-level mapping for generic S. cerevisiae labels when strain-level probiotic identity is not provided.",
+      "regulatory_status": "GRAS",
+      "common_uses": [
+        "fermentation",
+        "nutritional yeast",
+        "probiotic yeast labeling"
+      ],
+      "last_updated": "2026-02-23",
+      "is_additive": false,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "PII_PITUITARY_TISSUE",
+      "standard_name": "Pituitary Tissue",
+      "aliases": [
+        "Pituitary",
+        "pituitary gland"
+      ],
+      "category": "animal_glandular_tissue",
+      "additive_type": "functional",
+      "clean_label_score": 4,
+      "notes": "Identity mapping for glandular tissue ingredient labels; not treated as additive penalty.",
+      "regulatory_status": "varies",
+      "common_uses": [
+        "glandular supplement matrix"
+      ],
+      "last_updated": "2026-02-23",
+      "is_additive": false,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "PII_KIDNEY_TISSUE",
+      "standard_name": "Kidney Tissue",
+      "aliases": [
+        "Kidney",
+        "kidney tissue"
+      ],
+      "category": "animal_glandular_tissue",
+      "additive_type": "functional",
+      "clean_label_score": 4,
+      "notes": "Identity mapping for glandular tissue ingredient labels; not treated as additive penalty.",
+      "regulatory_status": "varies",
+      "common_uses": [
+        "glandular supplement matrix"
+      ],
+      "last_updated": "2026-02-23",
+      "is_additive": false,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "PII_PANCREAS_TISSUE",
+      "standard_name": "Pancreas Tissue",
+      "aliases": [
+        "Pancreas",
+        "pancreas substance"
+      ],
+      "category": "animal_glandular_tissue",
+      "additive_type": "functional",
+      "clean_label_score": 4,
+      "notes": "Identity mapping for glandular tissue ingredient labels; not treated as additive penalty.",
+      "regulatory_status": "varies",
+      "common_uses": [
+        "glandular supplement matrix"
+      ],
+      "last_updated": "2026-02-23",
+      "is_additive": false,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "PII_HEART_TISSUE",
+      "standard_name": "Heart Tissue",
+      "aliases": [
+        "Heart",
+        "heart tissue"
+      ],
+      "category": "animal_glandular_tissue",
+      "additive_type": "functional",
+      "clean_label_score": 4,
+      "notes": "Identity mapping for glandular tissue ingredient labels; not treated as additive penalty.",
+      "regulatory_status": "varies",
+      "common_uses": [
+        "glandular supplement matrix"
+      ],
+      "last_updated": "2026-02-23",
+      "is_additive": false,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "PII_OVARY_TISSUE",
+      "standard_name": "Ovary Tissue",
+      "aliases": [
+        "Ovary",
+        "ovary tissue"
+      ],
+      "category": "animal_glandular_tissue",
+      "additive_type": "functional",
+      "clean_label_score": 4,
+      "notes": "Identity mapping for glandular tissue ingredient labels; not treated as additive penalty.",
+      "regulatory_status": "varies",
+      "common_uses": [
+        "glandular supplement matrix"
+      ],
+      "last_updated": "2026-02-23",
+      "is_additive": false,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "PII_CALCIUM_SULFATE",
+      "standard_name": "Calcium Sulfate",
+      "aliases": [
+        "calcium sulfate"
+      ],
+      "category": "mineral_excipient",
+      "additive_type": "filler",
+      "clean_label_score": 5,
+      "notes": "Common excipient/filler mineral used in tablets and capsules.",
+      "regulatory_status": "GRAS",
+      "common_uses": [
+        "filler",
+        "firming agent"
+      ],
+      "last_updated": "2026-02-23",
+      "is_additive": true,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "PII_LACTOSE_MONOHYDRATE",
+      "standard_name": "Lactose Monohydrate",
+      "aliases": [
+        "lactose monohydrate",
+        "lactose"
+      ],
+      "category": "dairy_excipient",
+      "additive_type": "filler",
+      "clean_label_score": 4,
+      "notes": "Milk-derived excipient used as tablet/capsule filler and carrier.",
+      "regulatory_status": "GRAS",
+      "common_uses": [
+        "filler",
+        "carrier"
+      ],
+      "last_updated": "2026-02-23",
+      "is_additive": true,
+      "severity_level": "none",
+      "allergen_flag": "dairy"
+    },
+    {
+      "id": "PII_CARBOMER",
+      "standard_name": "Carbomer",
+      "aliases": [
+        "carbomer"
+      ],
+      "category": "stabilizer_thickener",
+      "additive_type": "stabilizer",
+      "clean_label_score": 4,
+      "notes": "Synthetic polymer used for viscosity control and suspension stability.",
+      "regulatory_status": "varies",
+      "common_uses": [
+        "stabilizer",
+        "thickener"
+      ],
+      "last_updated": "2026-02-23",
+      "is_additive": true,
+      "severity_level": "low",
+      "allergen_flag": null
+    },
+    {
+      "id": "PII_YELLOW_OCHRE",
+      "standard_name": "Yellow Ochre",
+      "aliases": [
+        "yellow ochre"
+      ],
+      "category": "colorant_mineral",
+      "additive_type": "natural_colorant",
+      "clean_label_score": 6,
+      "notes": "Mineral iron-oxide based natural colorant descriptor on some labels.",
+      "regulatory_status": "varies",
+      "common_uses": [
+        "coloring"
+      ],
+      "last_updated": "2026-02-23",
+      "is_additive": true,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "PII_LITHOTHAMNION_CALCAREA",
+      "standard_name": "Lithothamnion calcarea",
+      "aliases": [
+        "lithothamnion calcarea",
+        "natural lithothamnion calcarea",
+        "lithothamnion calcareum",
+        "algas calcareas"
+      ],
+      "category": "marine_mineral_algae",
+      "additive_type": "functional",
+      "clean_label_score": 6,
+      "notes": "Marine red algae mineral source identity mapping for non-standardized label forms.",
+      "regulatory_status": "varies",
+      "common_uses": [
+        "mineral matrix",
+        "marine algae source"
+      ],
+      "last_updated": "2026-02-23",
+      "is_additive": false,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "PII_OYSTER_EXTRACT",
+      "standard_name": "Oyster Extract",
+      "aliases": [
+        "oyster extract"
+      ],
+      "category": "marine_animal_extract",
+      "additive_type": "functional",
+      "clean_label_score": 5,
+      "notes": "Marine animal extract identity mapping when formula-specific standardization is not declared.",
+      "regulatory_status": "varies",
+      "common_uses": [
+        "trace mineral source"
+      ],
+      "last_updated": "2026-02-23",
+      "is_additive": false,
+      "severity_level": "none",
+      "allergen_flag": "shellfish"
+    },
+    {
+      "id": "PII_SODIUM_METASILICATE",
+      "standard_name": "Sodium Metasilicate",
+      "aliases": [
+        "sodium metasilicate"
+      ],
+      "category": "processing_aid_mineral",
+      "additive_type": "processing_aid",
+      "clean_label_score": 4,
+      "notes": "GRAS processing aid identity mapping (21 CFR 184.1769a); typically used under GMP process-aid contexts.",
+      "regulatory_status": "GRAS_processing_aid",
+      "common_uses": [
+        "processing aid",
+        "lye peeling/washing aid"
+      ],
+      "last_updated": "2026-02-23",
+      "is_additive": true,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "PII_WHEAT_GERM_FLOUR",
+      "standard_name": "Wheat Germ Flour",
+      "aliases": [
+        "wheat germ flour"
+      ],
+      "category": "grain_flour",
+      "additive_type": "functional",
+      "clean_label_score": 6,
+      "notes": "Wheat germ-derived flour identity mapping for whole-food matrix labels.",
+      "regulatory_status": "GRAS",
+      "common_uses": [
+        "whole-food base",
+        "nutrient matrix"
+      ],
+      "last_updated": "2026-02-23",
+      "is_additive": false,
+      "severity_level": "none",
+      "allergen_flag": "gluten"
+    },
+    {
+      "id": "PII_GUM_GHATTI",
+      "standard_name": "Gum Ghatti",
+      "aliases": [
+        "gum ghatti"
+      ],
+      "category": "thickener_stabilizer",
+      "additive_type": "gum_stabilizer",
+      "clean_label_score": 7,
+      "notes": "Natural plant gum (Anogeissus latifolia) used as stabilizer/emulsifier.",
+      "regulatory_status": "GRAS",
+      "common_uses": [
+        "stabilizer",
+        "thickener"
+      ],
+      "last_updated": "2026-02-23",
+      "is_additive": true,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "PII_PAROTID_TISSUE",
+      "standard_name": "Parotid Tissue",
+      "aliases": [
+        "Parotid",
+        "parotid gland"
+      ],
+      "category": "animal_glandular_tissue",
+      "additive_type": "functional",
+      "clean_label_score": 4,
+      "notes": "Identity mapping for glandular tissue labels.",
+      "regulatory_status": "varies",
+      "common_uses": [
+        "glandular supplement matrix"
+      ],
+      "last_updated": "2026-02-23",
+      "is_additive": false,
       "severity_level": "none",
       "allergen_flag": null
     }

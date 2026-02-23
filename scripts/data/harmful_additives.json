@@ -3,8 +3,8 @@
     "description": "Comprehensive database of harmful additives, contaminants, and concerning ingredients found in dietary supplements. Used for scoring penalties and consumer warnings.",
     "purpose": "penalty_scoring",
     "schema_version": "4.0.0",
-    "last_updated": "2026-02-22",
-    "total_entries": 106,
+    "last_updated": "2026-02-23",
+    "total_entries": 109,
     "scoring_rule": "Apply penalty points based on severity_level. Critical: -5, High: -3, Moderate: -1.5, Low: -0.5. Multiple additives are cumulative.",
     "severity_level_definitions": {
       "critical": "Immediate health hazard, should be avoided entirely (e.g., formaldehyde, colloidal silver)",
@@ -60,7 +60,7 @@
         "Canderel",
         "APM",
         "aspartyl-phenylalanine methyl ester",
-        "N-(L-\u03b1-Aspartyl)-L-phenylalanine 1-methyl ester",
+        "N-(L-α-Aspartyl)-L-phenylalanine 1-methyl ester",
         "artificial sweetener aspartame",
         "E951 sweetener",
         "dipeptide sweetener",
@@ -98,7 +98,7 @@
           "Canderel",
           "APM",
           "aspartyl-phenylalanine methyl ester",
-          "N-(L-\u03b1-Aspartyl)-L-phenylalanine 1-methyl ester",
+          "N-(L-α-Aspartyl)-L-phenylalanine 1-methyl ester",
           "artificial sweetener aspartame",
           "E951 sweetener",
           "dipeptide sweetener",
@@ -569,12 +569,12 @@
         "Trichlorogalactosucrose",
         "sucralose powder",
         "artificial sweetener sucralose",
-        "1,6-dichloro-1,6-dideoxy-\u03b2-D-fructofuranosyl-4-chloro-4-deoxy-\u03b1-D-galactopyranoside",
+        "1,6-dichloro-1,6-dideoxy-β-D-fructofuranosyl-4-chloro-4-deoxy-α-D-galactopyranoside",
         "TGS"
       ],
       "CUI": "C0077046",
       "category": "sweetener_artificial",
-      "mechanism_of_harm": "Chlorinated artificial sweetener that disrupts gut microbiome composition and diversity. Inhibits farnesoid X receptor signaling and disrupts bile acid metabolism. May induce glucose intolerance and affect insulin response. Releases potentially harmful chlorinated compounds when heated above 120\u00b0C (248\u00b0F).",
+      "mechanism_of_harm": "Chlorinated artificial sweetener that disrupts gut microbiome composition and diversity. Inhibits farnesoid X receptor signaling and disrupts bile acid metabolism. May induce glucose intolerance and affect insulin response. Releases potentially harmful chlorinated compounds when heated above 120°C (248°F).",
       "regulatory_status": {
         "US": "FDA approved with ADI of 5 mg/kg body weight/day",
         "EU": "E955 approved with ADI of 15 mg/kg body weight/day",
@@ -601,7 +601,7 @@
           "Trichlorogalactosucrose",
           "sucralose powder",
           "artificial sweetener sucralose",
-          "1,6-dichloro-1,6-dideoxy-\u03b2-D-fructofuranosyl-4-chloro-4-deoxy-\u03b1-D-galactopyranoside",
+          "1,6-dichloro-1,6-dideoxy-β-D-fructofuranosyl-4-chloro-4-deoxy-α-D-galactopyranoside",
           "TGS"
         ],
         "regex": null,
@@ -895,7 +895,8 @@
         "yacon syrup",
         "peruvian yacon",
         "yacon syrup extract",
-        "blue agave"
+        "blue agave",
+        "brown rice syrup solids"
       ],
       "CUI": "",
       "category": "sweetener_artificial",
@@ -940,7 +941,8 @@
           "yacon syrup",
           "peruvian yacon",
           "yacon syrup extract",
-          "blue agave"
+          "blue agave",
+          "brown rice syrup solids"
         ],
         "regex": null,
         "fuzzy_threshold": 0.72,
@@ -4090,7 +4092,7 @@
         "dl-alpha tocopherol",
         "synthetic vitamin E",
         "pteroylmonoglutamic acid",
-        "all-rac-\u03b1-tocopherol",
+        "all-rac-α-tocopherol",
         "artificial vitamins",
         "synthetic folate",
         "synthetic vitamin supplements"
@@ -4122,7 +4124,7 @@
           "dl-alpha tocopherol",
           "synthetic vitamin E",
           "pteroylmonoglutamic acid",
-          "all-rac-\u03b1-tocopherol",
+          "all-rac-α-tocopherol",
           "artificial vitamins",
           "synthetic folate",
           "synthetic vitamin supplements"
@@ -6342,7 +6344,7 @@
       "aliases": [
         "E961",
         "neotame sweetener",
-        "n-[n-(3,3-dimethylbutyl)-l-\u03b1-aspartyl]-l-phenylalanine 1-methyl ester"
+        "n-[n-(3,3-dimethylbutyl)-l-α-aspartyl]-l-phenylalanine 1-methyl ester"
       ],
       "category": "sweetener_artificial",
       "notes": "Chemically similar to aspartame but 7,000-13,000x sweeter. Newer sweetener with less long-term safety data. Not widely used in supplements yet.",
@@ -6363,7 +6365,7 @@
           "Neotame",
           "E961",
           "neotame sweetener",
-          "n-[n-(3,3-dimethylbutyl)-l-\u03b1-aspartyl]-l-phenylalanine 1-methyl ester"
+          "n-[n-(3,3-dimethylbutyl)-l-α-aspartyl]-l-phenylalanine 1-methyl ester"
         ],
         "regex": null,
         "fuzzy_threshold": 0.72,
@@ -7279,7 +7281,7 @@
         "vinyl amide"
       ],
       "category": "contaminant_processing",
-      "notes": "Forms during high-temperature processing (>120\u00b0C) of carbohydrate-rich foods. Probable human carcinogen (IARC Group 2A). Not intentionally added but may contaminate processed supplement ingredients.",
+      "notes": "Forms during high-temperature processing (>120°C) of carbohydrate-rich foods. Probable human carcinogen (IARC Group 2A). Not intentionally added but may contaminate processed supplement ingredients.",
       "last_updated": "2026-02-16",
       "CUI": "C0050587",
       "mechanism_of_harm": "Mechanism requires further documentation.",
@@ -9208,7 +9210,9 @@
         "dextrose",
         "glucose",
         "corn glucose",
-        "grape sugar"
+        "grape sugar",
+        "tapioca dextrose",
+        "dextrose monohydrate"
       ],
       "CUI": "C0017725",
       "category": "sweetener_artificial",
@@ -9230,7 +9234,9 @@
           "Dextrose",
           "glucose",
           "corn glucose",
-          "grape sugar"
+          "grape sugar",
+          "tapioca dextrose",
+          "dextrose monohydrate"
         ],
         "regex": null,
         "fuzzy_threshold": 0.72,
@@ -9792,7 +9798,8 @@
         "green color",
         "color",
         "colors",
-        "artificial colors"
+        "artificial colors",
+        "artificial color"
       ],
       "CUI": "",
       "category": "colorant_unspecified",
@@ -9817,7 +9824,8 @@
           "green color",
           "color",
           "colors",
-          "artificial colors"
+          "artificial colors",
+          "artificial color"
         ],
         "regex": null,
         "fuzzy_threshold": 0.72,
@@ -10045,7 +10053,8 @@
         "soy mono- and diglycerides",
         "monoglycerides of fatty acids",
         "E471",
-        "glyceryl monostearate"
+        "glyceryl monostearate",
+        "monoglycerides and diglycerides"
       ],
       "CUI": "C0066658",
       "category": "emulsifier",
@@ -10075,7 +10084,8 @@
           "soy mono- and diglycerides",
           "monoglycerides of fatty acids",
           "E471",
-          "glyceryl monostearate"
+          "glyceryl monostearate",
+          "monoglycerides and diglycerides"
         ],
         "regex": null,
         "fuzzy_threshold": 0.72,
@@ -12737,7 +12747,10 @@
         "FD&C Red 40 Lake",
         "FD and C Red 40 Lake",
         "Red 40 Aluminum Lake",
-        "Allura Red Lake"
+        "Allura Red Lake",
+        "FD&C Red #40 Aluminum Lake",
+        "FD&C Red No. 40 Aluminum Lake",
+        "FD&C Red No 40 Aluminum Lake"
       ],
       "CUI": "C0054436",
       "category": "colorant_artificial",
@@ -12776,7 +12789,10 @@
           "FD&C Red 40 Lake",
           "FD and C Red 40 Lake",
           "Red 40 Aluminum Lake",
-          "Allura Red Lake"
+          "Allura Red Lake",
+          "FD&C Red #40 Aluminum Lake",
+          "FD&C Red No. 40 Aluminum Lake",
+          "FD&C Red No 40 Aluminum Lake"
         ],
         "regex": null,
         "fuzzy_threshold": 0.72,
@@ -12896,7 +12912,13 @@
         "Yellow Dye 5",
         "Yellow 5 Lake",
         "Tartrazine aluminum lake",
-        "E102"
+        "E102",
+        "FD&C Yellow #5 Lake",
+        "FD&C Yellow #5 Aluminum Lake",
+        "FD&C Yellow No. 5 Lake",
+        "FD&C Yellow No. 5 Aluminum Lake",
+        "Yellow #5 Lake",
+        "Yellow #5 Aluminum Lake"
       ],
       "CUI": null,
       "category": "colorant_artificial",
@@ -12927,7 +12949,13 @@
           "Yellow Dye 5",
           "Yellow 5 Lake",
           "Tartrazine aluminum lake",
-          "E102"
+          "E102",
+          "FD&C Yellow #5 Lake",
+          "FD&C Yellow #5 Aluminum Lake",
+          "FD&C Yellow No. 5 Lake",
+          "FD&C Yellow No. 5 Aluminum Lake",
+          "Yellow #5 Lake",
+          "Yellow #5 Aluminum Lake"
         ],
         "regex": null,
         "fuzzy_threshold": 0.72,
@@ -13052,7 +13080,11 @@
         "Sunset Yellow aluminum lake",
         "E110",
         "Yellow #6 Lake",
-        "FD&C Yellow #6 Lake"
+        "FD&C Yellow #6 Lake",
+        "FD&C Yellow #6 Aluminum Lake",
+        "FD&C Yellow No. 6 Lake",
+        "FD&C Yellow No. 6 Aluminum Lake",
+        "Yellow #6 Aluminum Lake"
       ],
       "CUI": null,
       "category": "colorant_artificial",
@@ -13083,7 +13115,11 @@
           "Yellow Dye 6",
           "Yellow 6 Lake",
           "Sunset Yellow aluminum lake",
-          "E110"
+          "E110",
+          "FD&C Yellow #6 Aluminum Lake",
+          "FD&C Yellow No. 6 Lake",
+          "FD&C Yellow No. 6 Aluminum Lake",
+          "Yellow #6 Aluminum Lake"
         ],
         "regex": null,
         "fuzzy_threshold": 0.72,
@@ -13207,7 +13243,13 @@
         "Blue #1",
         "FD&C Blue 1",
         "FD and C Blue 1",
-        "FD&C Blue No 1"
+        "FD&C Blue No 1",
+        "FD&C Blue #1 Lake",
+        "FD&C Blue #1 Aluminum Lake",
+        "FD&C Blue No. 1 Lake",
+        "FD&C Blue No. 1 Aluminum Lake",
+        "Blue #1 Aluminum Lake",
+        "Blue #1 Lake"
       ],
       "CUI": null,
       "category": "colorant_artificial",
@@ -13241,7 +13283,13 @@
           "Blue #1",
           "FD&C Blue 1",
           "FD and C Blue 1",
-          "FD&C Blue No 1"
+          "FD&C Blue No 1",
+          "FD&C Blue #1 Lake",
+          "FD&C Blue #1 Aluminum Lake",
+          "FD&C Blue No. 1 Lake",
+          "FD&C Blue No. 1 Aluminum Lake",
+          "Blue #1 Aluminum Lake",
+          "Blue #1 Lake"
         ],
         "regex": null,
         "fuzzy_threshold": 0.72,
@@ -13427,7 +13475,10 @@
           "jurisdiction": "US",
           "status_code": "monitored",
           "scope": "supplement",
-          "effective_range": { "start": "1982-01-01", "end": null },
+          "effective_range": {
+            "start": "1982-01-01",
+            "end": null
+          },
           "source_ref": "FDA CFR Title 21, Part 74.203"
         }
       ],
@@ -13481,10 +13532,11 @@
         "Children - Higher exposure per body weight",
         "Individuals with thyroid conditions"
       ],
-      "notes": "FDA banned Red No. 3 in January 2025 due to thyroid tumor evidence in animal studies. Compliance deadline: Jan 15, 2027 for foods, Jan 18, 2028 for ingested drugs.",
+      "notes": "FDA revoked FD&C Red No. 3 authorization on January 15, 2025 due to thyroid tumor evidence in animal studies. Compliance deadline: January 15, 2027 for foods/dietary supplements and January 18, 2028 for ingested drugs. Source: FDA Constituent Update (2025-01-15).",
       "scientific_references": [
         "FDA: Revocation of FD&C Red No. 3 (January 2025)",
-        "DOI: 10.1016/j.fct.2007.09.001 - Erythrosine thyroid effects"
+        "DOI: 10.1016/j.fct.2007.09.001 - Erythrosine thyroid effects",
+        "FDA Constituent Update (2025-01-15): FDA to Revoke Authorization for the Use of Red No. 3 in Food and Ingested Drugs"
       ],
       "last_updated": "2026-02-22",
       "match_rules": {
@@ -13512,7 +13564,7 @@
           "type": "regulatory_action",
           "authority": "FDA",
           "citation": "FDA revocation of FD&C Red No. 3 listing (January 2025)",
-          "url": "",
+          "url": "https://www.fda.gov/food/hfp-constituent-updates/fda-revoke-authorization-use-red-no-3-food-and-ingested-drugs",
           "published_date": "2025-01-15",
           "evidence_grade": "R",
           "confidence": "high"
@@ -13538,7 +13590,10 @@
           "jurisdiction": "US",
           "status_code": "monitored",
           "scope": "supplement",
-          "effective_range": { "start": "2025-01-15", "end": null },
+          "effective_range": {
+            "start": "2025-01-15",
+            "end": null
+          },
           "source_ref": "FDA revocation January 2025; compliance deadline Jan 2027 (foods), Jan 2028 (ingested drugs)"
         }
       ],
@@ -14097,7 +14152,8 @@
       "aliases": [
         "calcium silicate",
         "E552",
-        "calcium metasilicate"
+        "calcium metasilicate",
+        "sodium aluminum silicate"
       ],
       "CUI": "C0054483",
       "category": "anti_caking_agent",
@@ -14119,7 +14175,8 @@
         "label_tokens": [
           "Calcium Silicate",
           "calcium silicate",
-          "E552"
+          "E552",
+          "sodium aluminum silicate"
         ],
         "fuzzy_threshold": 0.85,
         "preferred_alias": "Calcium Silicate"
@@ -14505,7 +14562,9 @@
         "Hydrogenated Vegetable Oil",
         "hydrogenated vegetable oil",
         "partially hydrogenated vegetable oil",
-        "hydrogenated oil"
+        "hydrogenated oil",
+        "hydrogenated cottonseed oil",
+        "sterotex nf"
       ],
       "CUI": null,
       "category": "fat_oil_hydrogenated",
@@ -14532,7 +14591,9 @@
           "Hydrogenated Vegetable Oil",
           "hydrogenated vegetable oil",
           "partially hydrogenated vegetable oil",
-          "hydrogenated oil"
+          "hydrogenated oil",
+          "hydrogenated cottonseed oil",
+          "sterotex nf"
         ],
         "regex": null,
         "fuzzy_threshold": 0.72,
@@ -14647,6 +14708,342 @@
       "dose_thresholds": null,
       "entity_relationships": null,
       "cui_note": "CUI was incorrectly copied from ADD_RED40 (C0054436). Needs UMLS Metathesaurus verification."
+    },
+    {
+      "id": "ADD_BLUE2",
+      "standard_name": "FD&C Blue No. 2",
+      "aliases": [
+        "Blue 2",
+        "Blue #2",
+        "FD&C Blue #2",
+        "FD&C Blue No. 2",
+        "FD&C Blue 2",
+        "FD and C Blue 2",
+        "FD&C Blue No 2",
+        "Blue 2 Lake",
+        "Blue #2 Lake",
+        "FD&C Blue #2 Lake",
+        "FD&C Blue No. 2 Lake",
+        "Blue 2 Aluminum Lake",
+        "Blue #2 Aluminum Lake",
+        "FD&C Blue #2 Aluminum Lake",
+        "FD&C Blue No. 2 Aluminum Lake",
+        "Indigotine",
+        "Indigo Carmine",
+        "E132"
+      ],
+      "CUI": null,
+      "category": "colorant_artificial",
+      "mechanism_of_harm": "Synthetic color additive. Potential hypersensitivity reactions in susceptible individuals; caution warranted with repeated exposure to synthetic dye blends.",
+      "regulatory_status": {
+        "US": "FDA approved for use in foods, drugs, and cosmetics",
+        "EU": "Permitted with restrictions (E132)",
+        "WHO": "JECFA ADI established for indigotine derivatives"
+      },
+      "population_warnings": [
+        "Children - higher dye exposure per body weight",
+        "Individuals with dye sensitivities"
+      ],
+      "notes": "Synthetic blue color additive. Included for additive-risk routing and label transparency checks; not treated as B0 banned substance.",
+      "scientific_references": [
+        "FDA: CFR Title 21, Part 74.102 - FD&C Blue No. 2"
+      ],
+      "last_updated": "2026-02-23",
+      "match_rules": {
+        "match_mode": "alias_and_fuzzy",
+        "label_tokens": [
+          "blue 2",
+          "blue #2",
+          "fd&c blue #2",
+          "fd&c blue no. 2",
+          "fd&c blue 2",
+          "fd and c blue 2",
+          "fd&c blue no 2",
+          "blue 2 lake",
+          "blue #2 lake",
+          "fd&c blue #2 lake",
+          "fd&c blue no. 2 lake",
+          "blue 2 aluminum lake",
+          "blue #2 aluminum lake",
+          "fd&c blue #2 aluminum lake",
+          "fd&c blue no. 2 aluminum lake",
+          "indigotine",
+          "indigo carmine",
+          "e132"
+        ],
+        "regex": null,
+        "fuzzy_threshold": 0.72,
+        "case_sensitive": false,
+        "preferred_alias": "FD&C Blue No. 2"
+      },
+      "references_structured": [
+        {
+          "type": "regulation",
+          "authority": "FDA",
+          "citation": "CFR Title 21, Part 74.102 - FD&C Blue No. 2",
+          "url": "",
+          "published_date": null,
+          "evidence_grade": "R",
+          "confidence": "high"
+        }
+      ],
+      "external_ids": {
+        "umls_cui": null,
+        "cas": "860-22-0",
+        "pubchem": null
+      },
+      "jurisdictional_statuses": [
+        {
+          "authority": "US",
+          "jurisdiction": "US",
+          "status_code": "monitored",
+          "scope": "supplement",
+          "effective_range": {
+            "start": "1982-01-01",
+            "end": null
+          },
+          "source_ref": "FDA CFR Title 21, Part 74.102"
+        }
+      ],
+      "review": {
+        "status": "validated",
+        "last_reviewed_at": "2026-02-23",
+        "reviewed_by": "pipeline_audit",
+        "next_review_due": "2026-08-23",
+        "change_log": [
+          {
+            "date": "2026-02-23",
+            "change": "Initial entry created to close FD&C Blue #2 routing gap",
+            "reason": "tablets_clean_unmapped_p0"
+          }
+        ]
+      },
+      "severity_score": 3,
+      "confidence": "medium",
+      "exposure_context": "supplement",
+      "entity_type": "ingredient",
+      "severity_level": "moderate",
+      "dose_thresholds": null,
+      "entity_relationships": null
+    },
+    {
+      "id": "ADD_HORDENINE",
+      "standard_name": "Hordenine",
+      "aliases": [
+        "hordenine",
+        "hordenine hcl",
+        "hordenine hydrochloride",
+        "n,n-dimethyltyramine",
+        "hordenine sulfate",
+        "barley hordenine"
+      ],
+      "CUI": null,
+      "category": "stimulant_sympathomimetic",
+      "mechanism_of_harm": "Beta-2 adrenergic agonist and MAO-B inhibitor structurally related to ephedrine. Potentiates norepinephrine release, raising heart rate and blood pressure. FDA considers supplements containing hordenine potentially adulterated as it lacks NDI notification history.",
+      "regulatory_status": {
+        "US": "FDA considers potentially adulterated NDI (no pre-DSHEA history, no NDI notification)",
+        "EU": "Not authorized as novel food ingredient"
+      },
+      "population_warnings": [
+        "People with cardiovascular disease - Risk of tachycardia and hypertension",
+        "People taking MAO inhibitors - Dangerous interaction potential",
+        "Pregnant or nursing women - Insufficient safety data"
+      ],
+      "notes": "Naturally found in barley sprouts but concentrated in supplements at pharmacological doses. Frequently combined with other stimulants in weight-loss and pre-workout products, amplifying cardiovascular risk. FDA has issued warning letters to companies marketing hordenine-containing supplements.",
+      "scientific_references": [
+        "DOI: 10.1016/j.fct.2019.110676 - Hordenine toxicological review",
+        "FDA Warning Letters: Stimulant-containing dietary supplements (2019-2024)"
+      ],
+      "last_updated": "2026-02-22",
+      "match_rules": {
+        "match_mode": "alias_and_fuzzy",
+        "label_tokens": [
+          "hordenine",
+          "hordenine hcl",
+          "hordenine hydrochloride",
+          "n,n-dimethyltyramine",
+          "hordenine sulfate",
+          "barley hordenine"
+        ],
+        "regex": null,
+        "fuzzy_threshold": 0.72,
+        "case_sensitive": false,
+        "preferred_alias": "Hordenine"
+      },
+      "references_structured": [
+        {
+          "type": "regulatory_action",
+          "authority": "FDA",
+          "citation": "FDA considers hordenine-containing supplements potentially adulterated (NDI without notification)",
+          "url": "https://www.fda.gov/food/dietary-supplements",
+          "published_date": null,
+          "evidence_grade": "B",
+          "confidence": "high"
+        },
+        {
+          "type": "toxicological_review",
+          "authority": "OTHER",
+          "citation": "DOI: 10.1016/j.fct.2019.110676 - Hordenine toxicological review",
+          "url": "https://doi.org/10.1016/j.fct.2019.110676",
+          "published_date": null,
+          "evidence_grade": "B",
+          "confidence": "medium"
+        }
+      ],
+      "external_ids": {
+        "umls_cui": null,
+        "cas": "539-15-1",
+        "pubchem": null
+      },
+      "jurisdictional_statuses": [
+        {
+          "authority": "US",
+          "jurisdiction": "US",
+          "status_code": "monitored",
+          "scope": "supplement",
+          "effective_range": {
+            "start": "2019-01-01",
+            "end": null
+          },
+          "source_ref": "FDA NDI enforcement actions"
+        }
+      ],
+      "review": {
+        "status": "validated",
+        "last_reviewed_at": "2026-02-22",
+        "reviewed_by": "pipeline_audit",
+        "next_review_due": "2026-08-22",
+        "change_log": [
+          {
+            "date": "2026-02-22",
+            "change": "Initial entry created from capsules unmapped safety audit",
+            "reason": "capsules_clean_unmapped_safety"
+          }
+        ]
+      },
+      "severity_score": 4,
+      "confidence": "high",
+      "exposure_context": "supplement",
+      "entity_type": "ingredient",
+      "severity_level": "moderate",
+      "dose_thresholds": null,
+      "entity_relationships": null
+    },
+    {
+      "id": "ADD_SYNEPHRINE",
+      "standard_name": "Synephrine",
+      "aliases": [
+        "synephrine",
+        "synephrine hcl",
+        "synephrine hydrochloride",
+        "p-synephrine",
+        "para-synephrine",
+        "oxedrine"
+      ],
+      "CUI": null,
+      "category": "stimulant_sympathomimetic",
+      "mechanism_of_harm": "Alpha-1 adrenergic agonist that causes vasoconstriction. Associated with cardiac adverse events including myocardial infarction, arrhythmias, and stroke, especially when combined with caffeine. ANSES (France) limits to 20 mg/day due to cardiovascular risks.",
+      "regulatory_status": {
+        "US": "FDA monitoring - not banned but subject to adverse event reports",
+        "EU": "Not banned; ANSES recommends max 20 mg/day",
+        "ANSES": "2014 opinion recommending daily limit of 20 mg"
+      },
+      "population_warnings": [
+        "People with cardiovascular disease - Risk of MI, arrhythmias, stroke",
+        "People taking caffeine or other stimulants - Amplified cardiovascular risk",
+        "Pregnant or nursing women - Insufficient safety data",
+        "People with hypertension - May worsen blood pressure"
+      ],
+      "notes": "Found naturally in bitter orange (Citrus aurantium) peel. Marketed as ephedra alternative in weight-loss supplements. Multiple case reports of serious cardiac events. Risk substantially increases when combined with caffeine, which is common in weight-loss formulations.",
+      "scientific_references": [
+        "DOI: 10.3390/nu15040998 - Synephrine cardiovascular adverse events review (2023)",
+        "ANSES Opinion 2014-SA-0073 - Assessment of risks related to p-synephrine"
+      ],
+      "last_updated": "2026-02-22",
+      "match_rules": {
+        "match_mode": "alias_and_fuzzy",
+        "label_tokens": [
+          "synephrine",
+          "synephrine hcl",
+          "synephrine hydrochloride",
+          "p-synephrine",
+          "para-synephrine",
+          "oxedrine"
+        ],
+        "regex": null,
+        "fuzzy_threshold": 0.72,
+        "case_sensitive": false,
+        "preferred_alias": "Synephrine"
+      },
+      "references_structured": [
+        {
+          "type": "systematic_review",
+          "authority": "OTHER",
+          "citation": "DOI: 10.3390/nu15040998 - Synephrine cardiovascular adverse events review (2023)",
+          "url": "https://doi.org/10.3390/nu15040998",
+          "published_date": null,
+          "evidence_grade": "B",
+          "confidence": "high"
+        },
+        {
+          "type": "regulatory_action",
+          "authority": "ANSES",
+          "citation": "ANSES Opinion 2014-SA-0073 - p-synephrine risk assessment",
+          "url": "",
+          "published_date": null,
+          "evidence_grade": "B",
+          "confidence": "high"
+        }
+      ],
+      "external_ids": {
+        "umls_cui": null,
+        "cas": "94-07-5",
+        "pubchem": null
+      },
+      "jurisdictional_statuses": [
+        {
+          "authority": "US",
+          "jurisdiction": "US",
+          "status_code": "monitored",
+          "scope": "supplement",
+          "effective_range": {
+            "start": "2004-01-01",
+            "end": null
+          },
+          "source_ref": "FDA adverse event monitoring post-ephedra ban"
+        },
+        {
+          "authority": "ANSES",
+          "jurisdiction": "FR",
+          "status_code": "warning_required",
+          "scope": "supplement",
+          "effective_range": {
+            "start": "2014-01-01",
+            "end": null
+          },
+          "source_ref": "ANSES Opinion 2014-SA-0073"
+        }
+      ],
+      "review": {
+        "status": "validated",
+        "last_reviewed_at": "2026-02-22",
+        "reviewed_by": "pipeline_audit",
+        "next_review_due": "2026-08-22",
+        "change_log": [
+          {
+            "date": "2026-02-22",
+            "change": "Initial entry created from capsules unmapped safety audit",
+            "reason": "capsules_clean_unmapped_safety"
+          }
+        ]
+      },
+      "severity_score": 4,
+      "confidence": "high",
+      "exposure_context": "supplement",
+      "entity_type": "ingredient",
+      "severity_level": "moderate",
+      "dose_thresholds": null,
+      "entity_relationships": null
     }
   ]
 }

@@ -194,6 +194,19 @@ EXCLUDED_NUTRITION_FACTS = {
     "mineral enzyme activators",
     "ionic plant based minerals",
     "ionic plant-based minerals",
+    "trace elements",
+    "trace minerals",
+    "co-nutrients",
+    "carotenoid mix",
+    "bioactive enzymes & proteins",
+    "bioactive enzymes and proteins",
+    "digestive aids/enzymes",
+    "digestive aids and enzymes",
+    "whole food enzymes",
+    "complete digestive support",
+    "herbal extracts",
+    "enzymes",
+    "sulfate",
 }
 
 # Label phrases and headers that should be excluded from ingredient processing
@@ -301,6 +314,20 @@ EXCLUDED_LABEL_PHRASES = {
     "total omega-3, 6, 9 fatty acids",
     "total omega-3 6 9 fatty acids",
     "omega-3 6 9 fatty acids",
+    # Category/marketing descriptors (not discrete ingredients)
+    "microbial enzymes",
+    "vitamin c support base",
+    "organic alkalizing green juice powders",
+    "male support",
+    "female support",
+    "immune support",
+    "whole food and herb base",
+    "stress & energy adaptogens",
+    "cleansing & tonic support",
+    "proprietary mix",
+    # Inactive label phrases (not ingredients)
+    "nothing else",
+    "may contain one or both of the following",
 }
 
 # Nutritional warnings to track for UI display (but not map as ingredients)

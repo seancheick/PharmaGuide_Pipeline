@@ -5,7 +5,7 @@
             "schema_version": "4.0.0",
             "last_updated": "2026-02-18",
             "version": "2.0.0",
-            "total_entries": 26,
+            "total_entries": 25,
             "data_source": "banned_recalled_ingredients.json supersedes_ids field",
             "categories": {
                   "ADD_": "Additive IDs merged into BANNED_ADD_ canonical entries",
@@ -47,11 +47,6 @@
             {
                   "deprecated_id": "ADD_FORMALDEHYDE",
                   "canonical_id": "BANNED_ADD_FORMALDEHYDE",
-                  "reason": "Additive entry merged into canonical banned entry"
-            },
-            {
-                  "deprecated_id": "ADD_GREEN_3",
-                  "canonical_id": "BANNED_ADD_GREEN_3",
                   "reason": "Additive entry merged into canonical banned entry"
             },
             {
@@ -153,7 +148,6 @@
             "ADD_BLUE_1": "BANNED_ADD_BLUE_1",
             "ADD_CITRUS_RED_2": "BANNED_ADD_CITRUS_RED_2",
             "ADD_FORMALDEHYDE": "BANNED_ADD_FORMALDEHYDE",
-            "ADD_GREEN_3": "BANNED_ADD_GREEN_3",
             "ADD_HYDROGENATED_COCONUT_OIL": "BANNED_ADD_HYDROGENATED_COCONUT_OIL",
             "ADD_METHYLPARABEN": "BANNED_ADD_METHYLPARABEN",
             "ADD_ORANGE_B": "BANNED_ADD_ORANGE_B",

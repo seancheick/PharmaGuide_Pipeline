@@ -3,8 +3,8 @@
     "description": "Non-standardized whole herb powders and simple botanical extracts without guaranteed marker compounds. Used for basic ingredient mapping. For premium standardized extracts with marker compounds, see standardized_botanicals.json.",
     "purpose": "ingredient_mapping",
     "schema_version": "4.0.0",
-    "last_updated": "2026-02-22",
-    "total_entries": 297,
+    "last_updated": "2026-02-23",
+    "total_entries": 301,
     "quality_tier": "basic_raw_botanicals",
     "standardization": "none",
     "notes": "This database is separate from standardized_botanicals.json by design. Overlaps are intentional and allow the scoring system to reward standardized forms over raw powders."
@@ -2359,11 +2359,12 @@
       "aliases": [
         "Orange Fruit Powder",
         "seville orange",
-        "citrus aurantium extract"
+        "citrus aurantium extract",
+        "oranges"
       ],
       "category": "fruit",
       "notes": "Added from unmapped list; needs curation.",
-      "last_updated": "2026-01-05",
+      "last_updated": "2026-02-23",
       "id": "orange"
     },
     {
@@ -2472,7 +2473,7 @@
         "pau d'arco extract",
         "pau d'arco",
         "lapacho bark",
-        "Pau d\u2019Arco"
+        "Pau d’Arco"
       ],
       "category": "bark",
       "notes": "Added from Thorne/Nordic unmapped remediation pass for identity mapping coverage.",
@@ -3804,6 +3805,53 @@
       "category": "oil",
       "notes": "Identity-only mapping for avocado oil label variants.",
       "last_updated": "2026-02-22"
+    },
+    {
+      "id": "andrographis",
+      "standard_name": "Andrographis",
+      "aliases": [
+        "Andrographis aerial parts extract",
+        "andrographis paniculata aerial parts extract",
+        "andrographis paniculata extract",
+        "andrographis extract"
+      ],
+      "category": "herb",
+      "notes": "Identity-level botanical mapping for non-standardized andrographis labels. Clinical efficacy scoring handled via evidence database, not this mapping table.",
+      "last_updated": "2026-02-23"
+    },
+    {
+      "id": "horehound",
+      "standard_name": "Horehound",
+      "aliases": [
+        "horehound",
+        "horehound aerial parts extract",
+        "marrubium vulgare"
+      ],
+      "category": "herb",
+      "notes": "Identity-level mapping for horehound terms without standardized marker details.",
+      "last_updated": "2026-02-23"
+    },
+    {
+      "id": "green_cabbage",
+      "standard_name": "Green Cabbage",
+      "aliases": [
+        "green cabbage"
+      ],
+      "category": "vegetable",
+      "notes": "Identity mapping for vegetable-derived label terms (often color/whole-food matrix descriptors).",
+      "last_updated": "2026-02-23"
+    },
+    {
+      "id": "wheat_barley_grass_blend",
+      "standard_name": "Wheat Grass/Barley Grass Blend",
+      "aliases": [
+        "wheat grass/barley grass",
+        "wheatgrass/barley grass",
+        "wheat grass and barley grass"
+      ],
+      "category": "grass_blend",
+      "notes": "Identity-level mapping for mixed cereal grass blend labels without form/dose standardization details.",
+      "last_updated": "2026-02-23"
     }
   ]
 }
