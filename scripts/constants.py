@@ -328,6 +328,15 @@ EXCLUDED_LABEL_PHRASES = {
     # Inactive label phrases (not ingredients)
     "nothing else",
     "may contain one or both of the following",
+    # Marketing/proprietary blend descriptors (not discrete ingredients)
+    "futurebiotics bioaccelerators",
+    "immune factors",
+    "farm fresh factors",
+    "ionic trace minerals",
+    "whole food phytoalgae",
+    # Branded blend/tablet technology descriptors (not discrete ingredients)
+    "activessence",
+    "solutab",
 }
 
 # Nutritional warnings to track for UI display (but not map as ingredients)
@@ -885,6 +894,7 @@ BLEND_HEADER_PATTERNS = (
 EXCIPIENT_NEVER_PROMOTE = {
     # Sweeteners
     "sorbitol", "xylitol", "mannitol", "erythritol", "maltitol", "isomalt",
+    "d-xylose", "xylose",
     "stevia", "stevia extract", "stevia leaf extract", "stevia rebaudiana",
     "sucralose", "aspartame", "saccharin", "acesulfame", "acesulfame k",
     "honey", "sugar", "cane sugar", "organic cane sugar", "fructose",
@@ -1080,6 +1090,42 @@ BRANDED_INGREDIENT_TOKENS = {
     "optizinc": "OptiZinc",
     "creapure": "Creapure",
     "carnosyn": "CarnoSyn",
+    # Branded supplement ingredients (Wave 6)
+    "nem": "NEM",
+    "cerecalase": "CereCalase",
+    "glucovantage": "GlucoVantage",
+    "dynamine": "Dynamine",
+    "astrazyme": "AstraZyme",
+    "microbiomex": "MicrobiomeX",
+    "carnipure": "Carnipure",
+    "vegd3": "VegD3",
+    "nitrosigine": "Nitrosigine",
+    "neo-plex": "Neo-Plex",
+    "furanomax": "FuranoMax",
+    "gs4 plus": "GS4 Plus",
+    "paractin": "ParActin",
+    "silbinol": "Silbinol",
+    "clear'saff": "Clear'Saff",
+    "clearsaff": "Clear'Saff",
+    "gutgard": "Gutgard",
+    "glutalytic": "Glutalytic",
+    "physioproteases": "pHysioProtease",
+    "mycozyme": "Mycozyme",
+    "soylife": "Soylife",
+    "proanthodyn": "Proanthodyn",
+    "oligonol": "Oligonol",
+    "mitoburn": "MitoBurn",
+    "ostivone": "Ostivone",
+    "tamaflex": "TamaFlex",
+    # Branded blends (no single parent mapping)
+    "s7": "S7",
+    "innoslim": "InnoSlim",
+    "actisorb": "ActiSorb",
+    "elevatp": "elevATP",
+    "spectra": "Spectra",
+    "source-70": "Source-70",
+    "seditol": "Seditol",
+    "ultra potent-c": "Ultra Potent-C",
 }
 
 # Deterministic serving unit normalization map

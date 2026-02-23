@@ -89,6 +89,8 @@ class TestAliasQuality:
             'ascorbate niacinamide',      # vitamin_c + vitamin_b3_niacin
             'niacinamide ascorbate supplement',  # vitamin_c + vitamin_b3_niacin
             'nicotinamide ascorbate supplement', # vitamin_c + vitamin_b3_niacin
+            # Dolomite — CaMg(CO3)2 — shared between calcium/calcium_carbonate + magnesium/magnesium_carbonate
+            'dolomite',
         }
 
         alias_map = defaultdict(list)

@@ -4,7 +4,7 @@
     "purpose": "ingredient_mapping",
     "schema_version": "4.0.0",
     "last_updated": "2026-02-23",
-    "total_entries": 301,
+    "total_entries": 325,
     "quality_tier": "basic_raw_botanicals",
     "standardization": "none",
     "notes": "This database is separate from standardized_botanicals.json by design. Overlaps are intentional and allow the scoring system to reward standardized forms over raw powders."
@@ -498,7 +498,9 @@
       "standard_name": "Buchu Leaf",
       "aliases": [
         "buchu extract",
-        "agathosma betulina"
+        "agathosma betulina",
+        "buchu 4:1 extract",
+        "buchu leaf extract"
       ],
       "category": "leaf",
       "notes": "Added from Thorne/Nordic unmapped remediation pass for identity mapping coverage.",
@@ -3349,7 +3351,11 @@
         "ban lan gen",
         "woad root",
         "dyer's woad",
-        "Dyer's Woad root extract"
+        "Dyer's Woad root extract",
+        "isatis root extract",
+        "isatis tinctoria root extract",
+        "isatis leaf extract",
+        "isatis tinctoria leaf extract"
       ],
       "category": "root",
       "notes": "Root powder or simple extract, traditionally used in Chinese medicine for immune support. Not standardized to specific compounds.",
@@ -3691,7 +3697,9 @@
         "yarrow",
         "organic yarrow",
         "achillea millefolium aerial parts",
-        "achillea millefolium extract"
+        "achillea millefolium extract",
+        "yarrow flowers",
+        "yarrow flower"
       ],
       "category": "aerial parts",
       "notes": "Identity-only mapping for yarrow preparations (whole herb/aerial parts).",
@@ -3729,7 +3737,8 @@
       "aliases": [
         "polypodium leucotomos extract",
         "fernblock",
-        "polypodium leucotomos leaf extract"
+        "polypodium leucotomos leaf extract",
+        "polypodium leucotomos aerial parts"
       ],
       "category": "leaf",
       "notes": "Identity-only mapping for Polypodium leucotomos fern extracts.",
@@ -3851,6 +3860,378 @@
       ],
       "category": "grass_blend",
       "notes": "Identity-level mapping for mixed cereal grass blend labels without form/dose standardization details.",
+      "last_updated": "2026-02-23"
+    },
+    {
+      "id": "angelica_archangelica",
+      "standard_name": "Angelica archangelica",
+      "aliases": [
+        "angelica archangelica",
+        "angelica archangelica extract",
+        "european angelica",
+        "european angelica extract",
+        "garden angelica",
+        "angelica archangelica root",
+        "angelica archangelica leaf"
+      ],
+      "category": "leaf",
+      "notes": "Identity-only mapping for Angelica archangelica (European Angelica). Distinct from dong quai (Angelica sinensis).",
+      "last_updated": "2026-02-23"
+    },
+    {
+      "id": "boldo_leaf",
+      "standard_name": "Boldo",
+      "aliases": [
+        "boldo",
+        "boldo extract",
+        "boldo leaf",
+        "boldo leaf extract",
+        "peumus boldus",
+        "peumus boldus extract"
+      ],
+      "category": "leaf",
+      "notes": "Identity-only mapping for Boldo (Peumus boldus).",
+      "last_updated": "2026-02-23"
+    },
+    {
+      "id": "buckwheat_seed",
+      "standard_name": "Buckwheat",
+      "aliases": [
+        "buckwheat",
+        "buckwheat extract",
+        "buckwheat seed",
+        "buckwheat seed extract",
+        "fagopyrum esculentum",
+        "fagopyrum esculentum extract"
+      ],
+      "category": "seed",
+      "notes": "Identity-only mapping for Buckwheat (Fagopyrum esculentum).",
+      "last_updated": "2026-02-23"
+    },
+    {
+      "id": "bupleurum_root",
+      "standard_name": "Bupleurum",
+      "aliases": [
+        "bupleurum",
+        "bupleurum extract",
+        "bupleurum root",
+        "bupleurum root extract",
+        "bupleurum chinense",
+        "bupleurum chinense extract",
+        "chai hu",
+        "chai hu extract"
+      ],
+      "category": "root",
+      "notes": "Identity-only mapping for Bupleurum (Bupleurum chinense / Chai Hu).",
+      "last_updated": "2026-02-23"
+    },
+    {
+      "id": "catnip_leaf",
+      "standard_name": "Catnip",
+      "aliases": [
+        "catnip",
+        "catnip extract",
+        "catnip leaf",
+        "catnip leaf extract",
+        "catnip herb",
+        "nepeta cataria",
+        "nepeta cataria extract"
+      ],
+      "category": "leaf",
+      "notes": "Identity-only mapping for Catnip (Nepeta cataria). Distinct from Japanese catnip (Schizonepeta).",
+      "last_updated": "2026-02-23"
+    },
+    {
+      "id": "chanca_piedra",
+      "standard_name": "Chanca Piedra",
+      "aliases": [
+        "chanca piedra",
+        "chanca piedra extract",
+        "stone breaker",
+        "stone breaker extract",
+        "phyllanthus niruri",
+        "phyllanthus niruri extract"
+      ],
+      "category": "herb",
+      "notes": "Identity-only mapping for Chanca Piedra (Phyllanthus niruri).",
+      "last_updated": "2026-02-23"
+    },
+    {
+      "id": "chickweed_herb",
+      "standard_name": "Chickweed",
+      "aliases": [
+        "chickweed",
+        "chickweed extract",
+        "chickweed herb",
+        "stellaria media",
+        "stellaria media extract"
+      ],
+      "category": "herb",
+      "notes": "Identity-only mapping for Chickweed (Stellaria media).",
+      "last_updated": "2026-02-23"
+    },
+    {
+      "id": "cleavers_herb",
+      "standard_name": "Cleavers",
+      "aliases": [
+        "cleavers",
+        "cleavers extract",
+        "cleavers herb",
+        "cleavers herb extract",
+        "galium aparine",
+        "galium aparine extract"
+      ],
+      "category": "herb",
+      "notes": "Identity-only mapping for Cleavers (Galium aparine).",
+      "last_updated": "2026-02-23"
+    },
+    {
+      "id": "couch_grass",
+      "standard_name": "Couch Grass",
+      "aliases": [
+        "couch grass",
+        "couch grass extract",
+        "couch grass root",
+        "couch grass root extract",
+        "elymus repens",
+        "elymus repens extract",
+        "agropyron repens"
+      ],
+      "category": "root",
+      "notes": "Identity-only mapping for Couch Grass (Elymus repens).",
+      "last_updated": "2026-02-23"
+    },
+    {
+      "id": "cramp_bark",
+      "standard_name": "Cramp Bark",
+      "aliases": [
+        "cramp bark",
+        "cramp bark extract",
+        "viburnum opulus",
+        "viburnum opulus extract",
+        "viburnum opulus bark"
+      ],
+      "category": "bark",
+      "notes": "Identity-only mapping for Cramp Bark (Viburnum opulus).",
+      "last_updated": "2026-02-23"
+    },
+    {
+      "id": "dill_weed",
+      "standard_name": "Dill Weed",
+      "aliases": [
+        "dill weed",
+        "dill weed extract",
+        "dill herb",
+        "dill seed",
+        "dill seed extract",
+        "anethum graveolens",
+        "anethum graveolens extract"
+      ],
+      "category": "herb",
+      "notes": "Identity-only mapping for Dill Weed (Anethum graveolens).",
+      "last_updated": "2026-02-23"
+    },
+    {
+      "id": "dulse_seaweed",
+      "standard_name": "Dulse",
+      "aliases": [
+        "dulse",
+        "dulse extract",
+        "dulse powder",
+        "palmaria palmata",
+        "palmaria palmata extract"
+      ],
+      "category": "whole_plant",
+      "notes": "Identity-only mapping for Dulse (Palmaria palmata), a red seaweed.",
+      "last_updated": "2026-02-23"
+    },
+    {
+      "id": "hydrangea_root",
+      "standard_name": "Hydrangea",
+      "aliases": [
+        "hydrangea",
+        "hydrangea extract",
+        "hydrangea root",
+        "hydrangea root extract",
+        "hydrangea arborescens",
+        "hydrangea arborescens extract"
+      ],
+      "category": "root",
+      "notes": "Identity-only mapping for Hydrangea (Hydrangea arborescens).",
+      "last_updated": "2026-02-23"
+    },
+    {
+      "id": "jerusalem_artichoke",
+      "standard_name": "Jerusalem Artichoke",
+      "aliases": [
+        "jerusalem artichoke",
+        "jerusalem artichoke extract",
+        "jerusalem artichoke powder",
+        "helianthus tuberosus",
+        "helianthus tuberosus extract",
+        "sunchoke"
+      ],
+      "category": "root",
+      "notes": "Identity-only mapping for Jerusalem Artichoke (Helianthus tuberosus). A natural inulin source.",
+      "last_updated": "2026-02-23"
+    },
+    {
+      "id": "motherwort_herb",
+      "standard_name": "Motherwort",
+      "aliases": [
+        "motherwort",
+        "motherwort extract",
+        "motherwort herb",
+        "motherwort herb extract",
+        "leonurus cardiaca",
+        "leonurus cardiaca extract"
+      ],
+      "category": "herb",
+      "notes": "Identity-only mapping for Motherwort (Leonurus cardiaca).",
+      "last_updated": "2026-02-23"
+    },
+    {
+      "id": "muira_puama_bark",
+      "standard_name": "Muira Puama",
+      "aliases": [
+        "muira puama",
+        "muira puama extract",
+        "muira puama bark",
+        "muira puama bark extract",
+        "ptychopetalum olacoides",
+        "ptychopetalum olacoides extract",
+        "potency wood"
+      ],
+      "category": "bark",
+      "notes": "Identity-only mapping for Muira Puama (Ptychopetalum olacoides).",
+      "last_updated": "2026-02-23"
+    },
+    {
+      "id": "oatstraw_herb",
+      "standard_name": "Oatstraw",
+      "aliases": [
+        "oatstraw",
+        "oatstraw extract",
+        "oat straw herb",
+        "avena sativa herb",
+        "avena sativa extract",
+        "avena sativa aerial parts"
+      ],
+      "category": "herb",
+      "notes": "Identity-only mapping for Oatstraw (Avena sativa herb). Distinct from oat bran and oat straw entries which cover other preparations.",
+      "last_updated": "2026-02-23"
+    },
+    {
+      "id": "okra_fruit",
+      "standard_name": "Okra",
+      "aliases": [
+        "okra",
+        "okra extract",
+        "okra fruit",
+        "okra fruit extract",
+        "abelmoschus esculentus",
+        "abelmoschus esculentus extract"
+      ],
+      "category": "fruit",
+      "notes": "Identity-only mapping for Okra (Abelmoschus esculentus).",
+      "last_updated": "2026-02-23"
+    },
+    {
+      "id": "phellodendron_bark",
+      "standard_name": "Phellodendron",
+      "aliases": [
+        "phellodendron",
+        "phellodendron extract",
+        "phellodendron bark",
+        "phellodendron bark extract",
+        "phellodendron amurense",
+        "phellodendron amurense extract",
+        "huang bai",
+        "huang bai bark"
+      ],
+      "category": "bark",
+      "notes": "Identity-only mapping for Phellodendron (Phellodendron amurense / Huang Bai bark). Distinct from magnolia-phellodendron blend.",
+      "last_updated": "2026-02-23"
+    },
+    {
+      "id": "polypodium_vulgare",
+      "standard_name": "Polypodium vulgare",
+      "aliases": [
+        "polypodium vulgare",
+        "polypodium vulgare extract",
+        "common polypody",
+        "common polypody extract",
+        "polypody fern",
+        "polypody fern extract"
+      ],
+      "category": "leaf",
+      "notes": "Identity-only mapping for Polypodium vulgare (Common polypody fern). Distinct species from Polypodium leucotomos.",
+      "last_updated": "2026-02-23"
+    },
+    {
+      "id": "solomons_seal_root",
+      "standard_name": "Solomon's Seal",
+      "aliases": [
+        "solomon's seal",
+        "solomons seal",
+        "solomon's seal extract",
+        "solomons seal extract",
+        "solomon's seal root",
+        "solomons seal root",
+        "polygonatum odoratum",
+        "polygonatum odoratum extract"
+      ],
+      "category": "root",
+      "notes": "Identity-only mapping for Solomon's Seal (Polygonatum odoratum).",
+      "last_updated": "2026-02-23"
+    },
+    {
+      "id": "turkey_rhubarb_root",
+      "standard_name": "Turkey Rhubarb",
+      "aliases": [
+        "turkey rhubarb",
+        "turkey rhubarb extract",
+        "turkey rhubarb root",
+        "turkey rhubarb root extract",
+        "rheum palmatum",
+        "rheum palmatum extract",
+        "chinese rhubarb",
+        "da huang"
+      ],
+      "category": "root",
+      "notes": "Identity-only mapping for Turkey Rhubarb (Rheum palmatum). Distinct from culinary rhubarb.",
+      "last_updated": "2026-02-23"
+    },
+    {
+      "id": "wasabi_root",
+      "standard_name": "Wasabi",
+      "aliases": [
+        "wasabi",
+        "wasabi extract",
+        "wasabi root",
+        "wasabi root extract",
+        "wasabia japonica",
+        "wasabia japonica extract",
+        "eutrema japonicum"
+      ],
+      "category": "root",
+      "notes": "Identity-only mapping for Wasabi (Wasabia japonica).",
+      "last_updated": "2026-02-23"
+    },
+    {
+      "id": "wormwood_leaf",
+      "standard_name": "Wormwood",
+      "aliases": [
+        "wormwood",
+        "wormwood extract",
+        "wormwood leaf",
+        "wormwood leaf extract",
+        "wormwood herb",
+        "artemisia absinthium",
+        "artemisia absinthium extract"
+      ],
+      "category": "leaf",
+      "notes": "Identity-only mapping for Wormwood (Artemisia absinthium). Distinct from Sweet Wormwood (Artemisia annua).",
       "last_updated": "2026-02-23"
     }
   ]

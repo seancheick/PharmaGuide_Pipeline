@@ -4,7 +4,7 @@
     "purpose": "inactive_ingredient_classification",
     "schema_version": "4.0.0",
     "last_updated": "2026-02-23",
-    "total_entries": 347
+    "total_entries": 362
   },
   "other_ingredients": [
     {
@@ -151,6 +151,29 @@
       "allergen_flag": null
     },
     {
+      "id": "NHA_AMMONIUM_CHLORIDE",
+      "standard_name": "Ammonium Chloride",
+      "aliases": [
+        "ammonium chloride",
+        "sal ammoniac",
+        "ammonium muriate"
+      ],
+      "category": "buffering_agent",
+      "additive_type": "processing_aid",
+      "clean_label_score": 6,
+      "notes": "Inorganic salt used as buffering agent and pH adjuster in supplement formulations. GRAS status.",
+      "regulatory_status": "GRAS",
+      "common_uses": [
+        "buffering agent",
+        "pH adjustment",
+        "processing aid"
+      ],
+      "last_updated": "2026-02-23",
+      "is_additive": true,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
       "id": "NHA_ANNATTO_VARIANTS",
       "standard_name": "Annatto (Variants)",
       "aliases": [
@@ -288,7 +311,9 @@
         "natural red beet color",
         "beet root juice color",
         "beetroot powder",
-        "red beet powder"
+        "red beet powder",
+        "natural beet color",
+        "red beet root juice"
       ],
       "category": "colorant_natural",
       "additive_type": "natural_color",
@@ -959,6 +984,29 @@
       ],
       "last_updated": "2025-12-04",
       "is_additive": false,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_D_XYLOSE",
+      "standard_name": "D-Xylose",
+      "aliases": [
+        "d-xylose",
+        "xylose",
+        "wood sugar"
+      ],
+      "category": "sweetener_natural",
+      "additive_type": "sweetener_natural",
+      "clean_label_score": 7,
+      "notes": "Natural aldopentose sugar from wood/plant fiber. FDA GRAS. Used as sweetener/excipient (~40-70% sweetness of sucrose, ~2.4 cal/g). Not a bioactive supplement ingredient — no human clinical trials support therapeutic use.",
+      "regulatory_status": "GRAS",
+      "common_uses": [
+        "sweetening",
+        "carrier",
+        "tablet excipient"
+      ],
+      "last_updated": "2026-02-23",
+      "is_additive": true,
       "severity_level": "none",
       "allergen_flag": null
     },
@@ -1639,7 +1687,9 @@
       "aliases": [
         "lemon flavor, natural",
         "natural lemon flavor",
-        "lemon flavoring natural"
+        "lemon flavoring natural",
+        "natural lemonade flavor",
+        "lemonade flavor, natural"
       ],
       "category": "flavor_natural",
       "additive_type": "natural_flavor",
@@ -1697,7 +1747,10 @@
       "aliases": [
         "magnesium trisilicate",
         "magnesium trisilicate anhydrous",
-        "vegetable magnesium silicate"
+        "vegetable magnesium silicate",
+        "magnesium silicate, hydrated",
+        "magnesium silicate hydrated",
+        "hydrated magnesium silicate"
       ],
       "category": "antacid_excipient",
       "additive_type": "processing_aid",
@@ -1849,7 +1902,10 @@
         "avicel ph 200",
         "ph-102",
         "microcystalline cellulose",
-        "microcrystalline"
+        "microcrystalline",
+        "silicified microcrystalline cellulose",
+        "silicified microcrystaline cellulose",
+        "micro crystalline cellulose"
       ],
       "category": "bulking_agent",
       "additive_type": "fiber_bulking",
@@ -1920,7 +1976,9 @@
         "Masking Flavor",
         "natural Strawberry and Orange extract",
         "Natural and Artifical flavors",
-        "Lemon, Natural"
+        "Lemon, Natural",
+        "raspberry flavor, natural",
+        "natural raspberry flavor"
       ],
       "category": "flavor_natural",
       "additive_type": "natural_flavoring",
@@ -1949,7 +2007,8 @@
         "non-GMO modified Corn Starch",
         "Non-GMO modified cornstarch",
         "Food Starch",
-        "modified vegetable starch"
+        "modified vegetable starch",
+        "modified food and corn starch"
       ],
       "category": "thickener_stabilizer",
       "additive_type": "texture_modifier",
@@ -2541,7 +2600,9 @@
         "Orange, Natural",
         "natural orange flavor",
         "orange flavor, natural",
-        "orange natural flavor"
+        "orange natural flavor",
+        "proprietary orange essence",
+        "sweet orange oil"
       ],
       "category": "flavor_natural",
       "additive_type": "natural_flavoring",
@@ -2705,7 +2766,9 @@
         "china wax",
         "vegetable waxes",
         "micro wax",
-        "organic copernicia cerifera wax"
+        "organic copernicia cerifera wax",
+        "copernicia cerifera",
+        "copernicia cerifera wax"
       ],
       "category": "coating_glazing_natural",
       "additive_type": "coating_agent",
@@ -3173,7 +3236,8 @@
         "rice hull extract",
         "organic rice hulls",
         "Nu-FLOW",
-        "rice bran powder"
+        "rice bran powder",
+        "white rice bran"
       ],
       "category": "flow_agent_filler",
       "additive_type": "flow_agent",
@@ -3197,7 +3261,9 @@
         "rice extract blend",
         "rice extract",
         "rice bran extract",
-        "organic rice extract"
+        "organic rice extract",
+        "whole rice concentrate",
+        "rice concentrate"
       ],
       "category": "anticaking_flow_agent",
       "additive_type": "natural_flow_agent",
@@ -3481,6 +3547,30 @@
       "allergen_flag": null
     },
     {
+      "id": "NHA_SODIUM_SULFATE",
+      "standard_name": "Sodium Sulfate",
+      "aliases": [
+        "sodium sulfate",
+        "sodium sulphate",
+        "glauber's salt",
+        "na2so4"
+      ],
+      "category": "processing_aid",
+      "additive_type": "processing_aid",
+      "clean_label_score": 6,
+      "notes": "Inorganic salt used as processing aid and drying agent in supplement manufacturing. Also known as Glauber's salt.",
+      "regulatory_status": "GRAS",
+      "common_uses": [
+        "processing aid",
+        "drying agent",
+        "tablet manufacturing"
+      ],
+      "last_updated": "2026-02-23",
+      "is_additive": true,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
       "id": "NHA_SOLUBLE_CORN_FIBER",
       "standard_name": "Soluble Corn Fiber",
       "aliases": [
@@ -3723,7 +3813,8 @@
         "sucrose fatty acid ester",
         "sucrose fatty acid esters",
         "sucrose esters",
-        "E473"
+        "E473",
+        "sucrose esters of fatty acids"
       ],
       "category": "emulsifier",
       "additive_type": "emulsifier",
@@ -3782,7 +3873,8 @@
         "invert sugar, liquid",
         "invert sugar, syrup",
         "invert liquid sugar",
-        "sugar cane"
+        "sugar cane",
+        "saccharose"
       ],
       "category": "sweetener_natural",
       "additive_type": "natural_sweetener",
@@ -4066,7 +4158,8 @@
         "vegetable magnesium stearate",
         "plant-based stearate",
         "calcium stearate",
-        "vegetable calcium stearate"
+        "vegetable calcium stearate",
+        "vegetable fatty acid"
       ],
       "category": "lubricant_plant_based",
       "additive_type": "vegetable_lubricant",
@@ -4359,7 +4452,8 @@
         "beet root powder",
         "beet powder",
         "red beet powder",
-        "beetroot color"
+        "beetroot color",
+        "red beet root powder"
       ],
       "category": "colorant_natural",
       "additive_type": "natural_colorant",
@@ -4538,7 +4632,8 @@
         "dutch process cocoa",
         "cocoa",
         "cacao powder",
-        "organic cocoa powder"
+        "organic cocoa powder",
+        "cocoa bean powder"
       ],
       "category": "flavor",
       "notes": "Cocoa powder used as flavoring and coloring in supplement formulations. Alkalized (Dutch process) cocoa has reduced polyphenol content. Contains trace theobromine. Benign flavoring agent.",
@@ -4924,7 +5019,8 @@
         "plantcaps pullulan",
         "tapioca pullulan",
         "fermented tapioca pullulan",
-        "vegetable pullulan"
+        "vegetable pullulan",
+        "pullulan capsules"
       ],
       "category": "capsule_material",
       "notes": "Natural polysaccharide produced by fermentation of tapioca starch by Aureobasidium pullulans. Used as vegan capsule shell material (Plantcaps). Clean-label, non-GMO alternative to HPMC and gelatin capsules.",
@@ -5113,7 +5209,10 @@
         "D-Beta Tocopherol",
         "Vitamin E, Natural",
         "mixed Vitamin E Tocopherols",
-        "natural mixed tocopherol"
+        "natural mixed tocopherol",
+        "d-alpha tocopherol",
+        "d-alpha-tocopheryl acid succinate",
+        "d-alpha tocopheryl acetate"
       ],
       "category": "preservative_natural",
       "additive_type": "antioxidant_preservative",
@@ -5572,7 +5671,8 @@
         "food glaze coating",
         "vegetable food glaze",
         "cellulose glaze",
-        "chlorophyll coating"
+        "chlorophyll coating",
+        "coating ingredients"
       ],
       "category": "coating_protective",
       "notes": "General or specific terms for coatings, which are passive ingredients that protect the tablet or capsule, mask taste, or aid in swallowing. Composition varies but generally considered safe.",
@@ -5748,7 +5848,8 @@
         "dextrin powder",
         "modified starch",
         "wheat dextrin",
-        "dextrates"
+        "dextrates",
+        "potato dextrin"
       ],
       "category": "binder_filler",
       "notes": "Carbohydrate polymer derived from starch used as a binding agent and bulking agent. Source plant not specified - could be corn, potato, rice, or other starch sources.",
@@ -5937,7 +6038,8 @@
         "pure Olive Oil",
         "extra-virgin Olive Oil",
         "Olive Oil, Pure",
-        "organic, extra virgin Olive Oil"
+        "organic, extra virgin Olive Oil",
+        "virgin olive oil"
       ],
       "category": "oil_carrier",
       "notes": "A high-quality, healthy fat often used as a neutral carrier for fat-soluble vitamins (like D, E, K, A) and other lipophilic active ingredients in liquid or softgel formulations. Primarily serves as a passive base.",
@@ -6272,7 +6374,9 @@
         "povidone",
         "kollidon cl",
         "crospovidone",
-        "polyvinylpolypyrrolidone"
+        "polyvinylpolypyrrolidone",
+        "povidone k30",
+        "povidone k-30"
       ],
       "category": "pharmaceutical_excipient",
       "notes": "Pharmaceutical-grade polyvinylpyrrolidone used as binder, disintegrant, and solubilizer. FDA approved excipient with GRAS status. Well-established safety profile in pharmaceutical applications.",
@@ -6372,7 +6476,8 @@
         "medium-chain triglycerides oil",
         "medium-chain triglyceride oil",
         "non-GMO medium chain triglycerides",
-        "triglycerides"
+        "triglycerides",
+        "medium-chained triglycerides"
       ],
       "category": "oil_carrier",
       "notes": "Easily absorbed fatty acids derived from coconut or palm kernel oil. Used as carrier for fat-soluble vitamins and active ingredients. Generally well-tolerated.",
@@ -7009,7 +7114,8 @@
         "silica dioxide",
         "silica, colloidal anhydrous",
         "cab-o-sil",
-        "vegetable magnesium silicate"
+        "vegetable magnesium silicate",
+        "silicate"
       ],
       "category": "flow_agent_anticaking",
       "notes": "A very common anti-caking and flow agent in powders, capsules, and tablets, preventing ingredients from clumping. Naturally occurring mineral, generally considered safe. Merged from NHA_COLLOIDAL_SILICON_DIOXIDE on 2025-11-17.",
@@ -7164,7 +7270,8 @@
         "stearate lubricant",
         "vegetable stearates",
         "vegetable stearins",
-        "veg. stearic acid"
+        "veg. stearic acid",
+        "vegetarian stearate"
       ],
       "category": "lubricant",
       "notes": "General stearate salt used as lubricant in tablet manufacturing. Source not specified - could be magnesium stearate, calcium stearate, or other stearate forms.",
@@ -7330,7 +7437,12 @@
         "modified cellulose capsule",
         "vegancaps",
         "plant-source capsules",
-        "plant-source capsule"
+        "plant-source capsule",
+        "vegetable hypromellose capsule",
+        "vegetarian cellulose capsule",
+        "vegetable cellulose shell",
+        "vegetarian caplique capsule",
+        "caplique capsule"
       ],
       "category": "capsule_material",
       "notes": "A plant-derived cellulose material (Hydroxypropyl Methylcellulose) used to form vegetarian and vegan capsule shells. Provides a protective casing for ingredients and is generally considered inert and safe for consumption.",
@@ -7359,7 +7471,8 @@
         "cellulose derivatives",
         "natural mineral or vegetable source cellulose",
         "cellulose, plant",
-        "vegetable polysaccharide"
+        "vegetable polysaccharide",
+        "vegetarian cellulose"
       ],
       "category": "bulking_agent",
       "notes": "Plant-derived cellulose used as a bulking agent, anti-caking agent, and texture enhancer. Provides dietary fiber and is physiologically inert. Commonly used in tablet and capsule manufacturing.",
@@ -7379,7 +7492,8 @@
         "vegetable fiber",
         "plant fiber",
         "dietary fiber vegetable",
-        "hypoallergenic plant fiber"
+        "hypoallergenic plant fiber",
+        "hypo-allergenic plant fiber"
       ],
       "category": "fiber_prebiotic",
       "notes": "General vegetable-derived fiber for bulking and digestive support.",
@@ -7513,7 +7627,9 @@
       "standard_name": "Casein Hydrolysate",
       "aliases": [
         "Casein Hydrolysate",
-        "Hydrolyzed Casein"
+        "Hydrolyzed Casein",
+        "casein peptones",
+        "casein peptone"
       ],
       "category": "protein_derivative",
       "additive_type": "unspecified",
@@ -8365,6 +8481,296 @@
       ],
       "last_updated": "2026-02-23",
       "is_additive": false,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_CRANBERRY_FIBER",
+      "standard_name": "Cranberry Fiber",
+      "aliases": [
+        "cranberry fiber",
+        "cranberry fibre",
+        "cranberry seed oil",
+        "cranberry seed fiber"
+      ],
+      "category": "fiber_plant",
+      "additive_type": "fiber",
+      "clean_label_score": 8,
+      "notes": "Cranberry fiber and seed oil used as plant-based filler/carrier in supplements.",
+      "regulatory_status": "GRAS",
+      "common_uses": [
+        "filler",
+        "carrier",
+        "fiber source"
+      ],
+      "last_updated": "2026-02-23",
+      "is_additive": true,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_RICE_CHELATE",
+      "standard_name": "Rice Chelate",
+      "aliases": [
+        "rice chelate",
+        "rice protein chelate",
+        "rice amino acid chelate"
+      ],
+      "category": "carrier_base",
+      "additive_type": "carrier",
+      "clean_label_score": 7,
+      "notes": "Rice-based mineral carrier/chelating agent used for improved mineral absorption in supplements.",
+      "regulatory_status": "GRAS",
+      "common_uses": [
+        "mineral carrier",
+        "chelating base"
+      ],
+      "last_updated": "2026-02-23",
+      "is_additive": true,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_FOS",
+      "standard_name": "Fructo-Oligosaccharides (FOS)",
+      "aliases": [
+        "fructo-oligosaccharides",
+        "fructooligosaccharides",
+        "fos",
+        "fructo oligosaccharides",
+        "short-chain fos"
+      ],
+      "category": "fiber_prebiotic",
+      "additive_type": "prebiotic_fiber",
+      "clean_label_score": 8,
+      "notes": "Prebiotic fiber composed of short fructose chains. FDA GRAS. Used as prebiotic and mild sweetener.",
+      "regulatory_status": "GRAS",
+      "common_uses": [
+        "prebiotic",
+        "fiber source",
+        "sweetener"
+      ],
+      "last_updated": "2026-02-23",
+      "is_additive": true,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_AGAVE_FIBER",
+      "standard_name": "Agave Fiber",
+      "aliases": [
+        "agave fiber",
+        "agave fibre",
+        "agave inulin fiber",
+        "organic agave fiber"
+      ],
+      "category": "fiber_plant",
+      "additive_type": "fiber",
+      "clean_label_score": 8,
+      "notes": "Agave-derived fiber used as prebiotic filler in supplements.",
+      "regulatory_status": "GRAS",
+      "common_uses": [
+        "fiber source",
+        "prebiotic",
+        "filler"
+      ],
+      "last_updated": "2026-02-23",
+      "is_additive": true,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_LO_HAN_GUO",
+      "standard_name": "Lo Han Guo (Monk Fruit)",
+      "aliases": [
+        "lo han",
+        "lo han guo",
+        "luo han guo",
+        "monk fruit extract",
+        "momordica grosvenorii",
+        "lo han (momordica grosvenorii) extract",
+        "mogrosides",
+        "mogropure"
+      ],
+      "category": "sweetener_natural",
+      "additive_type": "sweetener_natural",
+      "clean_label_score": 9,
+      "notes": "Monk fruit (Siraitia grosvenorii) extract. FDA GRAS. Natural zero-calorie sweetener. Contains mogrosides.",
+      "regulatory_status": "GRAS",
+      "common_uses": [
+        "sweetening",
+        "flavoring"
+      ],
+      "last_updated": "2026-02-23",
+      "is_additive": true,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_SODIUM_TETRABORATE",
+      "standard_name": "Sodium Tetraborate",
+      "aliases": [
+        "sodium tetraborate",
+        "borax",
+        "sodium borate",
+        "sodium tetraborate decahydrate"
+      ],
+      "category": "buffering_agent",
+      "additive_type": "buffering_agent",
+      "clean_label_score": 4,
+      "notes": "Boron compound used as buffering agent and preservative. FDA-permitted in limited applications.",
+      "regulatory_status": "FDA_permitted",
+      "common_uses": [
+        "buffering",
+        "preservative",
+        "emulsifier"
+      ],
+      "last_updated": "2026-02-23",
+      "is_additive": true,
+      "severity_level": "low",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_SOY_PEPTONES",
+      "standard_name": "Soy Peptones",
+      "aliases": [
+        "soy peptones",
+        "soy peptone",
+        "soybean peptones",
+        "soya peptones"
+      ],
+      "category": "fermentation_medium",
+      "additive_type": "processing_aid",
+      "clean_label_score": 5,
+      "notes": "Soy-derived protein hydrolysate used as fermentation growth medium for probiotic cultures.",
+      "regulatory_status": "GRAS",
+      "common_uses": [
+        "fermentation medium",
+        "nutrient source"
+      ],
+      "last_updated": "2026-02-23",
+      "is_additive": true,
+      "severity_level": "none",
+      "allergen_flag": "soy"
+    },
+    {
+      "id": "NHA_MAGNESIUM_PHOSPHATE_EXCIPIENT",
+      "standard_name": "Magnesium Phosphate (Excipient)",
+      "aliases": [
+        "magnesium phosphate",
+        "trimagnesium phosphate",
+        "dimagnesium phosphate",
+        "magnesium hydrogen phosphate"
+      ],
+      "category": "buffering_agent",
+      "additive_type": "buffering_agent",
+      "clean_label_score": 6,
+      "notes": "Magnesium phosphate used as pH buffering agent and anticaking agent in supplements.",
+      "regulatory_status": "GRAS",
+      "common_uses": [
+        "buffering",
+        "anticaking",
+        "nutrient source"
+      ],
+      "last_updated": "2026-02-23",
+      "is_additive": true,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_MYCELIATED_RICE",
+      "standard_name": "Myceliated Brown Rice",
+      "aliases": [
+        "dried myceliated brown rice",
+        "myceliated brown rice",
+        "myceliated rice",
+        "mushroom mycelium on brown rice",
+        "mycelium on rice"
+      ],
+      "category": "carrier_base",
+      "additive_type": "carrier",
+      "clean_label_score": 7,
+      "notes": "Mushroom mycelium grown on brown rice substrate. Used as carrier/base for medicinal mushroom supplements.",
+      "regulatory_status": "GRAS",
+      "common_uses": [
+        "carrier",
+        "mushroom base",
+        "substrate"
+      ],
+      "last_updated": "2026-02-23",
+      "is_additive": true,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_SODIUM_HYDROXIDE",
+      "standard_name": "Sodium Hydroxide",
+      "aliases": [
+        "sodium hydroxide",
+        "naoh",
+        "lye",
+        "caustic soda"
+      ],
+      "category": "ph_adjuster",
+      "additive_type": "ph_adjuster",
+      "clean_label_score": 4,
+      "notes": "Strong base used as pH adjuster in supplement manufacturing. FDA GRAS for food use.",
+      "regulatory_status": "GRAS",
+      "common_uses": [
+        "pH adjustment",
+        "processing aid"
+      ],
+      "last_updated": "2026-02-23",
+      "is_additive": true,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_SUNFLOWER_OIL_ESTERS",
+      "standard_name": "Sunflower Oil Esters",
+      "aliases": [
+        "sunflower oil esters",
+        "sunflower esters",
+        "vegetable oil esters",
+        "sunflower wax esters"
+      ],
+      "category": "emulsifier",
+      "additive_type": "emulsifier",
+      "clean_label_score": 7,
+      "notes": "Esterified sunflower oil used as emulsifier and coating agent in supplement tablets.",
+      "regulatory_status": "GRAS",
+      "common_uses": [
+        "emulsifier",
+        "coating",
+        "tablet lubricant"
+      ],
+      "last_updated": "2026-02-23",
+      "is_additive": true,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_YOUNG_BARLEY",
+      "standard_name": "Young Barley",
+      "aliases": [
+        "young barley",
+        "barley grass",
+        "young barley grass",
+        "barley greens",
+        "organic barley grass"
+      ],
+      "category": "carrier_base",
+      "additive_type": "whole_food_base",
+      "clean_label_score": 8,
+      "notes": "Young barley grass used as whole food base/filler in green superfood supplements.",
+      "regulatory_status": "GRAS",
+      "common_uses": [
+        "whole food base",
+        "filler",
+        "nutrient base"
+      ],
+      "last_updated": "2026-02-23",
+      "is_additive": true,
       "severity_level": "none",
       "allergen_flag": null
     }

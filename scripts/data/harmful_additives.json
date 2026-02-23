@@ -4,7 +4,7 @@
     "purpose": "penalty_scoring",
     "schema_version": "4.0.0",
     "last_updated": "2026-02-23",
-    "total_entries": 109,
+    "total_entries": 110,
     "scoring_rule": "Apply penalty points based on severity_level. Critical: -5, High: -3, Moderate: -1.5, Low: -0.5. Multiple additives are cumulative.",
     "severity_level_definitions": {
       "critical": "Immediate health hazard, should be avoided entirely (e.g., formaldehyde, colloidal silver)",
@@ -13401,6 +13401,140 @@
       "cui_note": "CUI was incorrectly copied from ADD_RED40 (C0054436). Needs UMLS Metathesaurus verification."
     },
     {
+      "id": "ADD_GERMANIUM_GE132",
+      "standard_name": "Germanium Sesquioxide (Ge-132)",
+      "aliases": [
+        "ge-132",
+        "germanium sesquioxide",
+        "bis-carboxyethyl germanium sesquioxide",
+        "organic germanium",
+        "carboxyethylgermanium sesquioxide",
+        "propagermanium",
+        "germanium dioxide",
+        "geo2",
+        "germanium supplement",
+        "germanium 132"
+      ],
+      "CUI": null,
+      "category": "toxic_mineral",
+      "mechanism_of_harm": "Germanium compounds cause renal tubular degeneration leading to irreversible kidney failure. At least 31 documented cases of renal failure and 2 deaths from chronic oral germanium intake (doses 15-300g over 2-36 months). Both organic (Ge-132) and inorganic (GeO2) forms implicated; organic products often contaminated with nephrotoxic GeO2. Damage persists after discontinuation; some patients required permanent dialysis.",
+      "regulatory_status": {
+        "US": "FDA Import Alert 54-07: ALL germanium supplements detained as 'poisonous or deleterious substance' under Section 801(a)(3). One step below formal ban.",
+        "EU": "Effectively prohibited — germanium not listed in Annex I/II of Directive 2002/46/EC (permitted minerals for food supplements)",
+        "UK": "Not included in Schedule 1 of permitted substances for food supplements"
+      },
+      "population_warnings": [
+        "ALL populations - FDA classifies as 'poisonous or deleterious substance'",
+        "People with any renal impairment - Extreme risk of irreversible kidney failure",
+        "Elderly populations - Reduced renal clearance amplifies nephrotoxic risk",
+        "Pregnant or nursing women - Insufficient safety data; organ toxicity risk"
+      ],
+      "notes": "FDA Import Alert 54-07 authorizes border detention of ALL germanium supplements without physical examination. Memorial Sloan Kettering states 'should not be consumed because they can cause renal, hepatic, and neurotoxicities.' The distinction between pure Ge-132 and contaminated/inorganic forms is debated (Reddeman 2020 vs Tao & Bolger 1997), but consumer-facing products cannot guarantee purity, and the consequences (irreversible renal failure, death) justify high severity.",
+      "scientific_references": [
+        "PMID: 9237323 - Tao & Bolger, Regulatory Toxicology & Pharmacology 1997;25(3):211-219 (FDA hazard assessment)",
+        "PMID: 1726409 - Schauss, Biol Trace Elem Res 1991;29(3):267-280 (18 renal failure cases)",
+        "FDA Import Alert 54-07 - Detention Without Physical Examination of Germanium Supplements"
+      ],
+      "last_updated": "2026-02-23",
+      "match_rules": {
+        "match_mode": "alias_and_fuzzy",
+        "label_tokens": [
+          "ge-132",
+          "germanium sesquioxide",
+          "bis-carboxyethyl germanium sesquioxide",
+          "organic germanium",
+          "carboxyethylgermanium sesquioxide",
+          "propagermanium",
+          "germanium dioxide",
+          "geo2",
+          "germanium supplement",
+          "germanium 132"
+        ],
+        "regex": null,
+        "fuzzy_threshold": 0.72,
+        "case_sensitive": false,
+        "preferred_alias": "Germanium Sesquioxide (Ge-132)"
+      },
+      "references_structured": [
+        {
+          "type": "hazard_assessment",
+          "authority": "FDA",
+          "citation": "Tao SH, Bolger PM. Hazard assessment of germanium supplements. Reg Toxicol Pharmacol. 1997;25(3):211-219",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/9237323/",
+          "published_date": "1997-06-01",
+          "evidence_grade": "A",
+          "confidence": "high"
+        },
+        {
+          "type": "regulatory_action",
+          "authority": "FDA",
+          "citation": "FDA Import Alert 54-07: Detention Without Physical Examination of Germanium Supplements for Human Consumption",
+          "url": "https://www.accessdata.fda.gov/cms_ia/importalert_139.html",
+          "published_date": "2025-02-21",
+          "evidence_grade": "A",
+          "confidence": "high"
+        },
+        {
+          "type": "case_series",
+          "authority": "OTHER",
+          "citation": "Schauss AG. Nephrotoxicity and neurotoxicity in humans from organogermanium compounds. Biol Trace Elem Res. 1991;29(3):267-280",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/1726409/",
+          "published_date": "1991-01-01",
+          "evidence_grade": "B",
+          "confidence": "high"
+        }
+      ],
+      "external_ids": {
+        "umls_cui": null,
+        "cas": "12758-40-6",
+        "pubchem": null
+      },
+      "jurisdictional_statuses": [
+        {
+          "authority": "US",
+          "jurisdiction": "US",
+          "status_code": "warning_required",
+          "scope": "supplement",
+          "effective_range": {
+            "start": "1997-01-01",
+            "end": null
+          },
+          "source_ref": "FDA Import Alert 54-07"
+        },
+        {
+          "authority": "EU",
+          "jurisdiction": "EU",
+          "status_code": "warning_required",
+          "scope": "supplement",
+          "effective_range": {
+            "start": "2002-01-01",
+            "end": null
+          },
+          "source_ref": "Directive 2002/46/EC Annex I/II — germanium absent from permitted minerals"
+        }
+      ],
+      "review": {
+        "status": "validated",
+        "last_reviewed_at": "2026-02-23",
+        "reviewed_by": "pipeline_audit",
+        "next_review_due": "2026-08-23",
+        "change_log": [
+          {
+            "date": "2026-02-23",
+            "change": "Initial entry created from full unmapped remediation safety audit",
+            "reason": "full_clean_unmapped_safety"
+          }
+        ]
+      },
+      "severity_score": 7,
+      "confidence": "high",
+      "exposure_context": "supplement",
+      "entity_type": "ingredient",
+      "severity_level": "high",
+      "dose_thresholds": null,
+      "entity_relationships": null
+    },
+    {
       "id": "ADD_GREEN3",
       "standard_name": "FD&C Green No. 3",
       "aliases": [
@@ -14938,7 +15072,8 @@
         "synephrine hydrochloride",
         "p-synephrine",
         "para-synephrine",
-        "oxedrine"
+        "oxedrine",
+        "advantra z"
       ],
       "CUI": null,
       "category": "stimulant_sympathomimetic",
@@ -14968,7 +15103,8 @@
           "synephrine hydrochloride",
           "p-synephrine",
           "para-synephrine",
-          "oxedrine"
+          "oxedrine",
+          "advantra z"
         ],
         "regex": null,
         "fuzzy_threshold": 0.72,
