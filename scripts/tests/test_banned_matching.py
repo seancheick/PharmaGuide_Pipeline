@@ -47,6 +47,36 @@ def test_pho_variants_match(enricher, variant):
     assert "BANNED_PHO" in banned_ids
 
 
+@pytest.mark.parametrize("variant", ["Dymethazine", "Dimethazine", "D-Zine"])
+def test_dymethazine_variants_match(enricher, variant):
+    banned_ids = _banned_ids(enricher, variant)
+    assert "BANNED_DYMETHAZINE" in banned_ids
+
+
+def test_dimethylamine_not_dymethazine(enricher):
+    banned_ids = _banned_ids(enricher, "dimethylamine")
+    assert "BANNED_DYMETHAZINE" not in banned_ids
+
+
+@pytest.mark.parametrize(
+    "variant",
+    [
+        "7-Oxo-Dehydroepiandrosterone-3Beta-Acetate",
+        "DHEA-Acetate-7-one",
+        "3-Desoxy, 7-Keto DHEA",
+    ],
+)
+def test_7keto_dhea_alias_variants_match(enricher, variant):
+    banned_ids = _banned_ids(enricher, variant)
+    assert "BANNED_7_KETO_DHEA" in banned_ids
+
+
+@pytest.mark.parametrize("variant", ["2-Amino-5 Methylhexane", "2-amino-5-methylhexane"])
+def test_dmha_analog_variant_matches(enricher, variant):
+    banned_ids = _banned_ids(enricher, variant)
+    assert "BANNED_DMHA" in banned_ids
+
+
 @pytest.mark.parametrize("variant", ["IGF binding protein", "IGFBP", "IGFBP3"])
 def test_igf_binding_protein_denied(enricher, variant):
     banned_ids = _banned_ids(enricher, variant)

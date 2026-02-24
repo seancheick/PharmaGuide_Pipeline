@@ -203,6 +203,43 @@ class TestV30Scoring:
         assert result["score_80"] is None
         assert "UNMAPPED_ACTIVE_INGREDIENT" in result["flags"]
 
+    def test_mapping_gate_ignores_proprietary_blend_container(self, scorer):
+        product = make_base_product()
+        product["ingredient_quality_data"]["unmapped_count"] = 1
+        product["ingredient_quality_data"]["ingredients"] = [
+            {
+                "name": "Curcumin",
+                "standard_name": "Curcumin",
+                "score": 8,
+                "dosage_importance": 1.0,
+                "mapped": True,
+                "quantity": 250,
+                "unit": "mg",
+                "has_dose": True,
+                "is_proprietary_blend": False,
+            },
+            {
+                "name": "Rice Protein Matrix and Polyphenols",
+                "standard_name": "Rice Protein Matrix and Polyphenols",
+                "mapped": False,
+                "quantity": 250,
+                "unit": "mg",
+                "has_dose": True,
+                "is_proprietary_blend": True,
+                "is_blend_header": True,
+                "blend_total_weight_only": True,
+            },
+        ]
+        product["ingredient_quality_data"]["ingredients_scorable"] = deepcopy(
+            product["ingredient_quality_data"]["ingredients"]
+        )
+        scorer.feature_gates["require_full_mapping"] = True
+
+        gate = scorer._mapping_gate(product)
+        assert gate["stop"] is False
+        assert gate["unmapped_actives_total"] == 0
+        assert gate["unmapped_actives_excluding_banned_exact_alias"] == 0
+
     def test_mapping_kpis_exclude_banned_exact_alias_unmapped(self, scorer):
         product = make_base_product()
         product["ingredient_quality_data"]["unmapped_count"] = 1

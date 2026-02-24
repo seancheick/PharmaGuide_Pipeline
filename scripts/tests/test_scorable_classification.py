@@ -446,6 +446,46 @@ class TestHardeningBlendHeaderWithWeight:
             SKIP_REASON_BLEND_HEADER_WITH_WEIGHT
         )
 
+    def test_non_nested_proprietary_flagged_blend_group_is_skipped(self, enricher):
+        """
+        Non-nested rows can still be blend containers when cleaning marks
+        proprietaryBlend=true and ingredientGroup carries blend/proprietary tags.
+        """
+        product = {
+            "id": "test_blend_structural_001",
+            "fullName": "Product with Structural Blend Container",
+            "activeIngredients": [
+                {
+                    "name": "Rice Protein Matrix and Polyphenols",
+                    "standardName": "Rice Protein Matrix and Polyphenols",
+                    "quantity": 250.0,
+                    "unit": "mg",
+                    "proprietaryBlend": True,
+                    "isNestedIngredient": False,
+                    "ingredientGroup": "Blend (Combination)",
+                    "hierarchyType": None,
+                },
+                {
+                    "name": "Curcumin",
+                    "standardName": "Curcumin",
+                    "quantity": 250.0,
+                    "unit": "mg",
+                    "isNestedIngredient": True,
+                    "parentBlend": "Proprietary Mix of Curcumin",
+                    "hierarchyType": None,
+                },
+            ],
+            "inactiveIngredients": []
+        }
+
+        result = enricher._collect_ingredient_quality_data(product)
+        skipped_dict = {ing['name']: ing for ing in result['ingredients_skipped']}
+        scorable_names = [ing['name'] for ing in result['ingredients_scorable']]
+
+        assert "Rice Protein Matrix and Polyphenols" in skipped_dict
+        assert skipped_dict["Rice Protein Matrix and Polyphenols"]["skip_reason"] == SKIP_REASON_BLEND_HEADER_WITH_WEIGHT
+        assert "Rice Protein Matrix and Polyphenols" not in scorable_names
+
 
 class TestHardeningUnitGarbage:
     """Test Risk A: Unit garbage and pseudo-units should not count as valid dose"""

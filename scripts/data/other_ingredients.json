@@ -3,8 +3,8 @@
     "description": "Other/inactive ingredients database for supplement excipients and additives",
     "purpose": "inactive_ingredient_classification",
     "schema_version": "4.0.0",
-    "last_updated": "2026-02-23",
-    "total_entries": 437
+    "last_updated": "2026-02-24",
+    "total_entries": 528
   },
   "other_ingredients": [
     {
@@ -268,7 +268,8 @@
         "liquid Apple Cider Vinegar",
         "organic apple cider vinegar",
         "raw apple cider vinegar",
-        "unfiltered apple cider vinegar"
+        "unfiltered apple cider vinegar",
+        "Vinegar"
       ],
       "category": "functional_ingredient",
       "additive_type": "functional",
@@ -279,7 +280,7 @@
         "functional ingredient",
         "flavor"
       ],
-      "last_updated": "2025-12-04",
+      "last_updated": "2026-02-24",
       "is_additive": false,
       "severity_level": "none",
       "allergen_flag": null
@@ -1280,7 +1281,7 @@
       "category": "sweetener_natural",
       "additive_type": "sweetener_natural",
       "clean_label_score": 7,
-      "notes": "Natural aldopentose sugar from wood/plant fiber. FDA GRAS. Used as sweetener/excipient (~40-70% sweetness of sucrose, ~2.4 cal/g). Not a bioactive supplement ingredient \u2014 no human clinical trials support therapeutic use.",
+      "notes": "Natural aldopentose sugar from wood/plant fiber. FDA GRAS. Used as sweetener/excipient (~40-70% sweetness of sucrose, ~2.4 cal/g). Not a bioactive supplement ingredient — no human clinical trials support therapeutic use.",
       "regulatory_status": "GRAS",
       "common_uses": [
         "sweetening",
@@ -2049,6 +2050,7 @@
       "standard_name": "Keratin",
       "aliases": [
         "cynatine HNS",
+        "cynatine flx",
         "hydrolyzed keratin",
         "Keratin"
       ],
@@ -2231,6 +2233,7 @@
         "dimagnesium phosphate",
         "magnesium hydrogen phosphate",
         "magnesium phosphate",
+        "tribasic magnesium phosphate",
         "trimagnesium phosphate"
       ],
       "category": "buffering_agent",
@@ -2588,6 +2591,7 @@
       "aliases": [
         "Food Starch",
         "food starch modified",
+        "modofoed food starch",
         "Food Starch, Modified",
         "manioc",
         "modified corn starch",
@@ -2659,6 +2663,9 @@
         "mono- and di-glycerides",
         "mono- and diglycerides of fatty acids",
         "monoglycerides",
+        "monoglycerides & diglycerides",
+        "mono & diglycerides of fatty acids",
+        "glycerides of fatty acids",
         "Polyglycerol Fatty Acid Esters"
       ],
       "category": "emulsifier",
@@ -4608,7 +4615,7 @@
       "category": "sweetener_natural",
       "additive_type": "natural_sweetener",
       "clean_label_score": 9,
-      "notes": "Natural, calorie-free sweetener from the Stevia rebaudiana plant. FDA GRAS status applies to HIGH-PURITY extracts (\u226595% steviol glycosides) including rebaudioside A and stevioside. Whole stevia leaves and crude extracts are NOT FDA GRAS approved. Includes branded forms like BetterStevia, Truvia, and PureVia. Clean label alternative to artificial sweeteners.",
+      "notes": "Natural, calorie-free sweetener from the Stevia rebaudiana plant. FDA GRAS status applies to HIGH-PURITY extracts (≥95% steviol glycosides) including rebaudioside A and stevioside. Whole stevia leaves and crude extracts are NOT FDA GRAS approved. Includes branded forms like BetterStevia, Truvia, and PureVia. Clean label alternative to artificial sweeteners.",
       "regulatory_status": "GRAS",
       "common_uses": [
         "flavor enhancement",
@@ -6341,7 +6348,9 @@
       "standard_name": "Tocopherol (Preservative)",
       "aliases": [
         "d-alpha tocopherol",
+        "d-alpha tocopherol acetate",
         "d-alpha tocopheryl acetate",
+        "dl-alpha tocopherol acetate",
         "d-alpha-tocopheryl acid succinate",
         "D-Beta Tocopherol",
         "D-Delta-Tocopherol",
@@ -6734,7 +6743,57 @@
         "razberi-k",
         "sinetrol xpur c1",
         "vx1",
-        "withanolide glycoside conjugates"
+        "withanolide glycoside conjugates",
+        "Sendara",
+        "Sustained Energy Support",
+        "The Fiber Expert",
+        "Plant-Gest Support",
+        "Byroviron",
+        "Meadow Mix",
+        "Richberry 4000",
+        "Amino Acid Triplex",
+        "PerfectAmino",
+        "Orgen-FA",
+        "PreticX",
+        "Go-Less powder",
+        "Botanica Cleanse",
+        "Gorilla Mind Absorption Catalyst",
+        "CinnaBolic Elite",
+        "Green Art",
+        "CSAT",
+        "ENT-12(TM)",
+        "Hypertrol",
+        "Isoplex",
+        "PicroMax",
+        "Chocamine Plus",
+        "Chocamine",
+        "HAI Amino Acid Extract",
+        "ProbioActive(TM)",
+        "BetaTOR",
+        "Masquelier's Original OPCs",
+        "CoffeeGenic Green Coffee extract",
+        "KoAct Calcium Collagen Chelate",
+        "InSea2",
+        "BlueActiv",
+        "PentaTrol Brand 5-Tier Trans-Resveratrol",
+        "Nutri-Fructo B-88",
+        "NeuroFactor whole Coffee fruit extract",
+        "PectaSol-C",
+        "GlucosaGreen",
+        "Bio-MOS",
+        "Arthricor Olive extract",
+        "LeanGBB",
+        "Lean GBB",
+        "HonoPure",
+        "Peak02",
+        "Oleaburn",
+        "Newlase",
+        "BioCore DPP IV",
+        "Proline Rich Polypeptides",
+        "Proline-rich Polypeptides",
+        "CARE4U",
+        "Calzbone",
+        "Hexadrone"
       ],
       "category": "marketing_descriptor",
       "notes": "Brand/trademark complex labels that are not chemically specific ingredients by themselves.",
@@ -7380,6 +7439,7 @@
         "intestinal coating",
         "methacrylate copolymer",
         "methacrylic acid",
+        "methacrylic acid co-polymer",
         "Methacrylic Acid Copolymer",
         "pH-dependent coating"
       ],
@@ -7481,6 +7541,45 @@
       "allergen_flag": null
     },
     {
+      "id": "PII_CORN_OIL",
+      "standard_name": "Corn Oil",
+      "aliases": [
+        "corn oil",
+        "corn oil / medium chain triglycerides",
+        "maize oil",
+        "zea mays oil"
+      ],
+      "category": "oil_carrier",
+      "notes": "Vegetable oil used as a carrier or solvent in softgel formulations. Sometimes blended with MCT oil.",
+      "last_updated": "2026-02-24",
+      "is_additive": false,
+      "additive_type": "unspecified",
+      "clean_label_score": 6,
+      "regulatory_status": "GRAS",
+      "common_uses": ["carrier", "solvent"],
+      "severity_level": "low",
+      "allergen_flag": null
+    },
+    {
+      "id": "PII_ALUMINUM_OXIDE",
+      "standard_name": "Aluminum Oxide",
+      "aliases": [
+        "alumina",
+        "aluminum oxide",
+        "aluminium oxide"
+      ],
+      "category": "coating_agent",
+      "notes": "Inert mineral used as a tablet coating and color stabilizer. FDA-approved for use in supplements and pharmaceuticals.",
+      "last_updated": "2026-02-24",
+      "is_additive": true,
+      "additive_type": "coating",
+      "clean_label_score": 5,
+      "regulatory_status": "FDA_approved",
+      "common_uses": ["tablet coating", "color stabilizer"],
+      "severity_level": "low",
+      "allergen_flag": null
+    },
+    {
       "id": "PII_FATTY_ACID_PROFILE_COMPONENT",
       "standard_name": "Fatty Acid Profile Component",
       "aliases": [
@@ -7536,6 +7635,7 @@
         "bacterial growth medium",
         "culture media",
         "culture medium",
+        "dried yeast",
         "dried yeasts",
         "fermentation base",
         "fermentation medium",
@@ -7670,6 +7770,9 @@
         "k-gelatin",
         "Kosher Beef Gelatin",
         "kosher Gelatin",
+        "avian",
+        "bovine",
+        "porcine",
         "porcine gelatin capsule",
         "pork gelatin",
         "Soft Gel Capsule",
@@ -8209,7 +8312,8 @@
         "liquid liver fractions",
         "liver concentrate",
         "liver defatted",
-        "liver fractions"
+        "liver fractions",
+        "Liver Tissue"
       ],
       "category": "glandular",
       "notes": "Animal-derived organ supplement (bovine liver extract). Used as a source of iron, B vitamins, and heme protein. Not standardized to specific compounds. Generally safe when sourced from inspected animals. Risk of heavy metal accumulation in liver tissue.",
@@ -10085,6 +10189,1795 @@
       "category": "anti_foaming",
       "notes": "Silicone-based anti-foaming agent. FDA OTC anti-gas drug. Not absorbed systemically.",
       "last_updated": "2026-02-23"
+    },
+    {
+      "id": "NHA_LACTIUM",
+      "standard_name": "Lactium",
+      "aliases": [
+        "lactium",
+        "lactium®",
+        "lactium alpha-s1 casein hydrolysate",
+        "alpha-s1 casein hydrolysate",
+        "hydrolyzed milk protein (lactium)"
+      ],
+      "category": "bioactive_peptide_complex",
+      "additive_type": "branded_complex",
+      "clean_label_score": 6,
+      "notes": "Branded milk-protein peptide complex (alpha-s1 casein hydrolysate). Mapped as identity-only to avoid form-score inflation.",
+      "regulatory_status": "varies",
+      "common_uses": [
+        "stress support",
+        "sleep support"
+      ],
+      "last_updated": "2026-02-24",
+      "is_additive": false,
+      "severity_level": "none",
+      "allergen_flag": "milk"
+    },
+    {
+      "id": "NHA_CYCLOASTRAGENOL",
+      "standard_name": "Cycloastragenol",
+      "aliases": [
+        "cycloastragenol",
+        "cycloastragenol (astragalus membranaceus root)",
+        "cycloastragenol extract",
+        "ta-65 cycloastragenol"
+      ],
+      "category": "phytochemical_novel",
+      "additive_type": "bioactive_constituent",
+      "clean_label_score": 6,
+      "notes": "Astragalus-derived triterpenoid. Identity-only mapping pending evidence-gated scoring policy.",
+      "regulatory_status": "varies",
+      "common_uses": [
+        "healthy aging support"
+      ],
+      "last_updated": "2026-02-24",
+      "is_additive": false,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_SENACTIV",
+      "standard_name": "Senactiv",
+      "aliases": [
+        "senactiv",
+        "senactiv®",
+        "senactiv branded blend",
+        "panax notoginseng and rosa roxburghii blend"
+      ],
+      "category": "branded_botanical_complex",
+      "additive_type": "branded_complex",
+      "clean_label_score": 6,
+      "notes": "Branded botanical complex (Panax notoginseng + Rosa roxburghii fractions). Identity-only mapping; not treated as product-level proprietary blend container by default.",
+      "regulatory_status": "varies",
+      "common_uses": [
+        "exercise recovery support",
+        "performance support"
+      ],
+      "last_updated": "2026-02-24",
+      "is_additive": false,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_YEAST_FERMENTATE_DRIED",
+      "standard_name": "Yeast Fermentate (Dried)",
+      "aliases": [
+        "yeast fermentate, dried",
+        "dried yeast fermentate",
+        "yeast fermentate dried",
+        "epicor dried yeast fermentate"
+      ],
+      "category": "fermentation_complex",
+      "additive_type": "branded_complex",
+      "clean_label_score": 6,
+      "notes": "Identity-only mapping for dried yeast fermentate complexes (including branded EpiCor-style labels).",
+      "regulatory_status": "varies",
+      "common_uses": [
+        "immune support"
+      ],
+      "last_updated": "2026-02-24",
+      "is_additive": false,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_SOYNATTO_FERMENTED_SOYFOOD",
+      "standard_name": "Soynatto Fermented Soyfood",
+      "aliases": [
+        "soynatto fermented soyfood",
+        "soynatto",
+        "fermented soyfood"
+      ],
+      "category": "fermented_food_complex",
+      "additive_type": "branded_complex",
+      "clean_label_score": 6,
+      "notes": "Identity-only mapping for Soynatto branded fermented soyfood labels.",
+      "regulatory_status": "varies",
+      "common_uses": [
+        "digestive support"
+      ],
+      "last_updated": "2026-02-24",
+      "is_additive": false,
+      "severity_level": "none",
+      "allergen_flag": "soy"
+    },
+    {
+      "id": "NHA_PAEONIFLORIN",
+      "standard_name": "Paeoniflorin",
+      "aliases": [
+        "paeoniflorin"
+      ],
+      "category": "phytochemical_novel",
+      "additive_type": "bioactive_constituent",
+      "clean_label_score": 6,
+      "notes": "Identity-only mapping for paeoniflorin marker labels.",
+      "regulatory_status": "varies",
+      "common_uses": [
+        "botanical marker"
+      ],
+      "last_updated": "2026-02-24",
+      "is_additive": false,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_ISOVITEXIN",
+      "standard_name": "Isovitexin",
+      "aliases": [
+        "isovitexin"
+      ],
+      "category": "phytochemical_novel",
+      "additive_type": "bioactive_constituent",
+      "clean_label_score": 6,
+      "notes": "Identity-only mapping for isovitexin marker labels.",
+      "regulatory_status": "varies",
+      "common_uses": [
+        "botanical marker"
+      ],
+      "last_updated": "2026-02-24",
+      "is_additive": false,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_GAMMA_BUTYROBETAINE_HCL",
+      "standard_name": "Gamma-Butyrobetaine Hydrochloride",
+      "aliases": [
+        "gamma-butyrobetaine hydrochloride",
+        "gamma butyrobetaine hydrochloride",
+        "gamma-butyrobetaine hcl"
+      ],
+      "category": "amino_acid_derivative",
+      "additive_type": "bioactive_constituent",
+      "clean_label_score": 6,
+      "notes": "Identity-only mapping for gamma-butyrobetaine hydrochloride labels.",
+      "regulatory_status": "varies",
+      "common_uses": [
+        "metabolic support"
+      ],
+      "last_updated": "2026-02-24",
+      "is_additive": false,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_GAMMA_GLUTAMYLCYSTEINES",
+      "standard_name": "Gamma-Glutamylcysteines",
+      "aliases": [
+        "gamma-glutamylcysteines",
+        "gamma glutamylcysteines"
+      ],
+      "notes": "Identity-only mapping for garlic marker-compound labels; scoring policy pending evidence/form curation.",
+      "category": "phytochemical_marker",
+      "additive_type": "bioactive_constituent",
+      "clean_label_score": 6,
+      "regulatory_status": "varies",
+      "common_uses": [
+        "garlic marker disclosure"
+      ],
+      "last_updated": "2026-02-24",
+      "is_additive": false,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_GKG",
+      "standard_name": "GKG",
+      "aliases": [
+        "gkg"
+      ],
+      "notes": "Identity-only mapping for abbreviated performance-label term GKG; mapped conservatively pending explicit chemistry confirmation.",
+      "category": "amino_acid_derivative",
+      "additive_type": "bioactive_constituent",
+      "clean_label_score": 6,
+      "regulatory_status": "varies",
+      "common_uses": [
+        "sports performance labeling"
+      ],
+      "last_updated": "2026-02-24",
+      "is_additive": false,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_AKIC",
+      "standard_name": "A-KIC",
+      "aliases": [
+        "a-kic",
+        "akic"
+      ],
+      "notes": "Identity-only mapping for A-KIC label abbreviation (alpha-ketoisocaproic-acid shorthand).",
+      "category": "amino_acid_derivative",
+      "additive_type": "bioactive_constituent",
+      "clean_label_score": 6,
+      "regulatory_status": "varies",
+      "common_uses": [
+        "sports performance labeling"
+      ],
+      "last_updated": "2026-02-24",
+      "is_additive": false,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_N_METHYL_D_ASPARTIC_ACID",
+      "standard_name": "N-Methyl-D-Aspartic Acid",
+      "aliases": [
+        "n-methyl-d-aspartic acid",
+        "nmda"
+      ],
+      "notes": "Identity-only mapping for NMDA-labeled ingredient rows pending explicit scoring policy.",
+      "category": "amino_acid_derivative",
+      "additive_type": "bioactive_constituent",
+      "clean_label_score": 6,
+      "regulatory_status": "varies",
+      "common_uses": [
+        "neuro/performance labeling"
+      ],
+      "last_updated": "2026-02-24",
+      "is_additive": false,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_2_BETA_COXATENE",
+      "standard_name": "2-Beta Coxatene",
+      "aliases": [
+        "2-beta coxatene",
+        "2 beta coxatene"
+      ],
+      "notes": "Identity-only mapping for branded blend component labels (Cyplexinol/Boswellia-associated marketing term).",
+      "category": "branded_botanical_complex",
+      "additive_type": "bioactive_constituent",
+      "clean_label_score": 6,
+      "regulatory_status": "varies",
+      "common_uses": [
+        "joint support branding"
+      ],
+      "last_updated": "2026-02-24",
+      "is_additive": false,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_ATPRO",
+      "standard_name": "ATPro",
+      "aliases": [
+        "atpro",
+        "atpro blend"
+      ],
+      "notes": "Identity-only mapping for branded ATP-support complex labels.",
+      "category": "branded_botanical_complex",
+      "additive_type": "bioactive_constituent",
+      "clean_label_score": 6,
+      "regulatory_status": "varies",
+      "common_uses": [
+        "energy/performance branding"
+      ],
+      "last_updated": "2026-02-24",
+      "is_additive": false,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_ENZOPHARM_PLUS",
+      "standard_name": "Enzopharm(R) Plus",
+      "aliases": [
+        "enzopharm(r) plus",
+        "enzopharm plus"
+      ],
+      "notes": "Identity-only mapping for branded enzyme-complex label text.",
+      "category": "branded_enzyme_complex",
+      "additive_type": "bioactive_constituent",
+      "clean_label_score": 6,
+      "regulatory_status": "varies",
+      "common_uses": [
+        "digestive enzyme branding"
+      ],
+      "last_updated": "2026-02-24",
+      "is_additive": false,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_DNF10_YEAST_HYDROLYSATE",
+      "standard_name": "DNF-10 Yeast Hydrolysate",
+      "aliases": [
+        "dnf-10 yeast hydrolysate",
+        "dnf10 yeast hydrolysate",
+        "dnf-10"
+      ],
+      "notes": "Identity-only mapping for branded yeast-hydrolysate ingredient labels.",
+      "category": "fermentation_complex",
+      "additive_type": "bioactive_constituent",
+      "clean_label_score": 6,
+      "regulatory_status": "varies",
+      "common_uses": [
+        "immune support branding"
+      ],
+      "last_updated": "2026-02-24",
+      "is_additive": false,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_FRAC",
+      "standard_name": "FRAC(R)",
+      "aliases": [
+        "frac(r)",
+        "frac",
+        "frac r"
+      ],
+      "notes": "Identity-only mapping for branded antioxidant/ORAC descriptor labels.",
+      "category": "marketing_descriptor",
+      "additive_type": "bioactive_constituent",
+      "clean_label_score": 6,
+      "regulatory_status": "varies",
+      "common_uses": [
+        "antioxidant branding"
+      ],
+      "last_updated": "2026-02-24",
+      "is_additive": false,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_EP107",
+      "standard_name": "EP107",
+      "aliases": [
+        "ep107",
+        "ep-107"
+      ],
+      "notes": "Identity-only mapping for branded ingredient token EP107 pending compositional disclosure.",
+      "category": "branded_complex",
+      "additive_type": "bioactive_constituent",
+      "clean_label_score": 6,
+      "regulatory_status": "varies",
+      "common_uses": [
+        "proprietary ingredient branding"
+      ],
+      "last_updated": "2026-02-24",
+      "is_additive": false,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_PEAT_EXTRACT",
+      "standard_name": "Peat Extract",
+      "aliases": [
+        "peat extract",
+        "ancient peat extract"
+      ],
+      "notes": "Identity-only mapping for peat-derived extract rows (often in elevATP formulations).",
+      "category": "botanical_extract",
+      "additive_type": "bioactive_constituent",
+      "clean_label_score": 6,
+      "regulatory_status": "varies",
+      "common_uses": [
+        "energy support branding"
+      ],
+      "last_updated": "2026-02-24",
+      "is_additive": false,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_LACTOTRIPEPTIDES",
+      "standard_name": "Lactotripeptides",
+      "aliases": [
+        "lactotripeptides",
+        "ipp",
+        "vpp",
+        "isoleucyl-prolyl-proline",
+        "valyl-prolyl-proline"
+      ],
+      "notes": "Identity-only mapping for milk-casein tripeptide labels (IPP/VPP) pending dedicated scoring policy.",
+      "category": "bioactive_peptide_complex",
+      "additive_type": "bioactive_constituent",
+      "clean_label_score": 6,
+      "regulatory_status": "varies",
+      "common_uses": [
+        "cardiovascular support"
+      ],
+      "last_updated": "2026-02-24",
+      "is_additive": false,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_CYPLEXINOL",
+      "standard_name": "Cyplexinol",
+      "aliases": [
+        "cyplexinol",
+        "cyplexinol pro nature's bmp complex",
+        "cyplexinol pro natures bmp complex"
+      ],
+      "notes": "Identity-only mapping for branded bone-protein complex labels.",
+      "category": "branded_protein_complex",
+      "additive_type": "bioactive_constituent",
+      "clean_label_score": 6,
+      "regulatory_status": "varies",
+      "common_uses": [
+        "bone/joint support"
+      ],
+      "last_updated": "2026-02-24",
+      "is_additive": false,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_MITOPURE_UROLITHIN_A",
+      "standard_name": "Mitopure Urolithin A",
+      "aliases": [
+        "mitopure urolithin a",
+        "mitopure"
+      ],
+      "notes": "Identity-only mapping for Mitopure-branded Urolithin A rows until dedicated IQM parent/form policy is finalized.",
+      "category": "branded_novel_compound",
+      "additive_type": "bioactive_constituent",
+      "clean_label_score": 6,
+      "regulatory_status": "varies",
+      "common_uses": [
+        "mitochondrial health support"
+      ],
+      "last_updated": "2026-02-24",
+      "is_additive": false,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_PHYTOPIN",
+      "standard_name": "Phytopin",
+      "aliases": [
+        "phytopin",
+        "phytopin pine sterols",
+        "phytopin pine phytosterols"
+      ],
+      "notes": "Identity-only mapping for Phytopin trademark tokens to avoid unmapped branded wrapper rows where phytosterol actives are separately listed.",
+      "category": "branded_phytosterol_wrapper",
+      "additive_type": "bioactive_constituent",
+      "clean_label_score": 6,
+      "regulatory_status": "varies",
+      "common_uses": [
+        "phytosterol branding"
+      ],
+      "last_updated": "2026-02-24",
+      "is_additive": false,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_PHYTOSURE",
+      "standard_name": "PhytoSure",
+      "aliases": [
+        "phytosure",
+        "phytosure certified"
+      ],
+      "notes": "Identity-only mapping for PhytoSure certification/brand wrapper rows where quercetin active is separately represented.",
+      "category": "certification_wrapper",
+      "additive_type": "bioactive_constituent",
+      "clean_label_score": 6,
+      "regulatory_status": "varies",
+      "common_uses": [
+        "quercetin branding"
+      ],
+      "last_updated": "2026-02-24",
+      "is_additive": false,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_TOTAL_TERPENE_LACTONES",
+      "standard_name": "Total Terpene Lactones",
+      "aliases": [
+        "total terpene lactones"
+      ],
+      "notes": "Standardization marker descriptor (typically for ginkgo extracts); identity-only mapping to avoid double-counting marker rows.",
+      "category": "descriptor_component",
+      "additive_type": "descriptor",
+      "clean_label_score": 6,
+      "regulatory_status": "varies",
+      "common_uses": [
+        "identity mapping"
+      ],
+      "last_updated": "2026-02-24",
+      "is_additive": false,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_TOTAL_RESVERATROLS",
+      "standard_name": "Total Resveratrols",
+      "aliases": [
+        "total resveratrols"
+      ],
+      "notes": "Standardization marker descriptor for resveratrol-containing extracts; identity-only mapping.",
+      "category": "descriptor_component",
+      "additive_type": "descriptor",
+      "clean_label_score": 6,
+      "regulatory_status": "varies",
+      "common_uses": [
+        "identity mapping"
+      ],
+      "last_updated": "2026-02-24",
+      "is_additive": false,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_TOTAL_BILE_ACIDS",
+      "standard_name": "Total Bile Acids",
+      "aliases": [
+        "total bile acids"
+      ],
+      "notes": "Descriptor marker for bile extract potency; identity-only mapping pending dedicated policy.",
+      "category": "descriptor_component",
+      "additive_type": "descriptor",
+      "clean_label_score": 6,
+      "regulatory_status": "varies",
+      "common_uses": [
+        "identity mapping"
+      ],
+      "last_updated": "2026-02-24",
+      "is_additive": false,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_THYROID_SUBSTANCE",
+      "standard_name": "Thyroid Substance",
+      "aliases": [
+        "thyroid substance",
+        "thyroid gland"
+      ],
+      "notes": "Glandular descriptor row mapped for identity-only handling.",
+      "category": "descriptor_component",
+      "additive_type": "descriptor",
+      "clean_label_score": 6,
+      "regulatory_status": "varies",
+      "common_uses": [
+        "identity mapping"
+      ],
+      "last_updated": "2026-02-24",
+      "is_additive": false,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_VITAMIN_U",
+      "standard_name": "Vitamin U",
+      "aliases": [
+        "vitamin u"
+      ],
+      "notes": "Legacy naming descriptor (commonly S-methylmethionine contexts); identity-only mapping pending explicit form policy.",
+      "category": "descriptor_component",
+      "additive_type": "descriptor",
+      "clean_label_score": 6,
+      "regulatory_status": "varies",
+      "common_uses": [
+        "identity mapping"
+      ],
+      "last_updated": "2026-02-24",
+      "is_additive": false,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_TRANSPORT_C_PLUS",
+      "standard_name": "Transport C-Plus",
+      "aliases": [
+        "transport c-plus",
+        "transport c-plus(r)",
+        "transport c plus"
+      ],
+      "notes": "Identity-only mapping for branded vitamin C transport complex labels.",
+      "category": "descriptor_component",
+      "additive_type": "descriptor",
+      "clean_label_score": 6,
+      "regulatory_status": "varies",
+      "common_uses": [
+        "identity mapping"
+      ],
+      "last_updated": "2026-02-24",
+      "is_additive": false,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_UNIVESTIN",
+      "standard_name": "Univestin",
+      "aliases": [
+        "univestin"
+      ],
+      "notes": "Identity-only mapping for Univestin branded botanical complex labels.",
+      "category": "descriptor_component",
+      "additive_type": "descriptor",
+      "clean_label_score": 6,
+      "regulatory_status": "varies",
+      "common_uses": [
+        "identity mapping"
+      ],
+      "last_updated": "2026-02-24",
+      "is_additive": false,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_XANTHONES",
+      "standard_name": "Xanthones",
+      "aliases": [
+        "xanthones"
+      ],
+      "notes": "Polyphenol class marker term; identity-only mapping to avoid marker row unmapped drift.",
+      "category": "descriptor_component",
+      "additive_type": "descriptor",
+      "clean_label_score": 6,
+      "regulatory_status": "varies",
+      "common_uses": [
+        "identity mapping"
+      ],
+      "last_updated": "2026-02-24",
+      "is_additive": false,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_SUMALATE",
+      "standard_name": "Sumalate",
+      "aliases": [
+        "sumalate"
+      ],
+      "notes": "Identity-only mapping for branded mineral chelate label token.",
+      "category": "descriptor_component",
+      "additive_type": "descriptor",
+      "clean_label_score": 6,
+      "regulatory_status": "varies",
+      "common_uses": [
+        "identity mapping"
+      ],
+      "last_updated": "2026-02-24",
+      "is_additive": false,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_THYROGEN",
+      "standard_name": "Thyrogen",
+      "aliases": [
+        "thyrogen"
+      ],
+      "notes": "Identity-only mapping for thyroid-support branded label token.",
+      "category": "descriptor_component",
+      "additive_type": "descriptor",
+      "clean_label_score": 6,
+      "regulatory_status": "varies",
+      "common_uses": [
+        "identity mapping"
+      ],
+      "last_updated": "2026-02-24",
+      "is_additive": false,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_NEUMENTIX",
+      "standard_name": "Neumentix",
+      "aliases": [
+        "neumentix"
+      ],
+      "notes": "Identity-only mapping for branded spearmint-extract token.",
+      "category": "branded_botanical_complex",
+      "additive_type": "descriptor",
+      "clean_label_score": 6,
+      "regulatory_status": "varies",
+      "common_uses": [
+        "cognitive support branding"
+      ],
+      "last_updated": "2026-02-24",
+      "is_additive": false,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_NEM_EGGSHELL_MEMBRANE",
+      "standard_name": "NEM Natural Eggshell Membrane",
+      "aliases": [
+        "nem natural eggshell membrane",
+        "nem eggshell membrane",
+        "NEM brand Eggshell Membrane"
+      ],
+      "notes": "Identity-only mapping for branded eggshell-membrane labels.",
+      "category": "branded_protein_complex",
+      "additive_type": "descriptor",
+      "clean_label_score": 6,
+      "regulatory_status": "varies",
+      "common_uses": [
+        "joint support branding"
+      ],
+      "last_updated": "2026-02-24",
+      "is_additive": false,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_MYTHOCONDRO",
+      "standard_name": "Mythocondro",
+      "aliases": [
+        "mythocondro"
+      ],
+      "notes": "Identity-only mapping for branded joint-support blend token.",
+      "category": "branded_complex",
+      "additive_type": "descriptor",
+      "clean_label_score": 6,
+      "regulatory_status": "varies",
+      "common_uses": [
+        "identity mapping"
+      ],
+      "last_updated": "2026-02-24",
+      "is_additive": false,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_MOBILEE",
+      "standard_name": "Mobilee",
+      "aliases": [
+        "mobilee"
+      ],
+      "notes": "Identity-only mapping for branded hyaluronan matrix token.",
+      "category": "branded_complex",
+      "additive_type": "descriptor",
+      "clean_label_score": 6,
+      "regulatory_status": "varies",
+      "common_uses": [
+        "identity mapping"
+      ],
+      "last_updated": "2026-02-24",
+      "is_additive": false,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_MIRTOGENOL",
+      "standard_name": "Mirtogenol",
+      "aliases": [
+        "mirtogenol"
+      ],
+      "notes": "Identity-only mapping for branded botanical blend token.",
+      "category": "branded_botanical_complex",
+      "additive_type": "descriptor",
+      "clean_label_score": 6,
+      "regulatory_status": "varies",
+      "common_uses": [
+        "identity mapping"
+      ],
+      "last_updated": "2026-02-24",
+      "is_additive": false,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_MINOR_CANNABINOIDS",
+      "standard_name": "Minor Cannabinoids",
+      "aliases": [
+        "minor cannabinoids"
+      ],
+      "notes": "Descriptor row for cannabinoid profile; identity-only mapping.",
+      "category": "phytocannabinoid_descriptor",
+      "additive_type": "descriptor",
+      "clean_label_score": 6,
+      "regulatory_status": "varies",
+      "common_uses": [
+        "identity mapping"
+      ],
+      "last_updated": "2026-02-24",
+      "is_additive": false,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_MPFF",
+      "standard_name": "Micronized Purified Flavonoid Fraction",
+      "aliases": [
+        "micronized purified flavonoid fraction"
+      ],
+      "notes": "Identity-only mapping for MPFF descriptor rows pending dedicated composition policy.",
+      "category": "phytochemical_descriptor",
+      "additive_type": "descriptor",
+      "clean_label_score": 6,
+      "regulatory_status": "varies",
+      "common_uses": [
+        "identity mapping"
+      ],
+      "last_updated": "2026-02-24",
+      "is_additive": false,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_RECEPTOMAX_PROFILE",
+      "standard_name": "ReceptoMax Precision Release Profile",
+      "aliases": [
+        "receptomax precision release profile"
+      ],
+      "notes": "Descriptor row for branded release-profile system.",
+      "category": "marketing_descriptor",
+      "additive_type": "descriptor",
+      "clean_label_score": 6,
+      "regulatory_status": "varies",
+      "common_uses": [
+        "identity mapping"
+      ],
+      "last_updated": "2026-02-24",
+      "is_additive": false,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_SYNTOL_DIGESTIVE_YEAST_CLEANSE",
+      "standard_name": "Syntol Digestive Yeast Cleanse",
+      "aliases": [
+        "syntol digestive yeast cleanse"
+      ],
+      "notes": "Descriptor row for branded formula name.",
+      "category": "marketing_descriptor",
+      "additive_type": "descriptor",
+      "clean_label_score": 6,
+      "regulatory_status": "varies",
+      "common_uses": [
+        "identity mapping"
+      ],
+      "last_updated": "2026-02-24",
+      "is_additive": false,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_TRUE_FOOD_SUPERPOTENCY_SOYAGEN",
+      "standard_name": "True Food Superpotency Soyagen",
+      "aliases": [
+        "true food superpotency soyagen"
+      ],
+      "notes": "Descriptor row for branded formula name.",
+      "category": "marketing_descriptor",
+      "additive_type": "descriptor",
+      "clean_label_score": 6,
+      "regulatory_status": "varies",
+      "common_uses": [
+        "identity mapping"
+      ],
+      "last_updated": "2026-02-24",
+      "is_additive": false,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_IMMUNOLIN",
+      "standard_name": "ImmunoLin",
+      "aliases": [
+        "immunolin"
+      ],
+      "notes": "Identity-only mapping for ImmunoLin branded immunoglobulin complex.",
+      "category": "branded_protein_complex",
+      "additive_type": "descriptor",
+      "clean_label_score": 6,
+      "regulatory_status": "varies",
+      "common_uses": [
+        "immune support branding"
+      ],
+      "last_updated": "2026-02-24",
+      "is_additive": false,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_L_ARABINOSE",
+      "standard_name": "L-Arabinose",
+      "aliases": [
+        "l-arabinose"
+      ],
+      "notes": "Identity-only mapping for L-arabinose rows pending dedicated scoring policy.",
+      "category": "carbohydrate_derivative",
+      "additive_type": "descriptor",
+      "clean_label_score": 6,
+      "regulatory_status": "varies",
+      "common_uses": [
+        "identity mapping"
+      ],
+      "last_updated": "2026-02-24",
+      "is_additive": false,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_SARCOSINE",
+      "standard_name": "Sarcosine",
+      "aliases": [
+        "sarcosine"
+      ],
+      "notes": "Identity-only mapping for sarcosine rows pending dedicated scoring policy.",
+      "category": "amino_acid_derivative",
+      "additive_type": "descriptor",
+      "clean_label_score": 6,
+      "regulatory_status": "varies",
+      "common_uses": [
+        "identity mapping"
+      ],
+      "last_updated": "2026-02-24",
+      "is_additive": false,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_RUTAECARPINE",
+      "standard_name": "Rutaecarpine",
+      "aliases": [
+        "rutaecarpine"
+      ],
+      "notes": "Identity-only mapping for rutaecarpine marker rows.",
+      "category": "phytochemical_marker",
+      "additive_type": "descriptor",
+      "clean_label_score": 6,
+      "regulatory_status": "varies",
+      "common_uses": [
+        "identity mapping"
+      ],
+      "last_updated": "2026-02-24",
+      "is_additive": false,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_IMMUNE_SUPPORT_RESPONSE",
+      "standard_name": "Immune Support Response",
+      "aliases": [
+        "immune support response"
+      ],
+      "notes": "Descriptor row for marketing phrase; identity-only mapping.",
+      "category": "marketing_descriptor",
+      "additive_type": "descriptor",
+      "clean_label_score": 6,
+      "regulatory_status": "varies",
+      "common_uses": [
+        "identity mapping"
+      ],
+      "last_updated": "2026-02-24",
+      "is_additive": false,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_GLYCOSAPONINS",
+      "standard_name": "Glycosaponins",
+      "aliases": [
+        "glycosaponins"
+      ],
+      "notes": "Constituent marker label row mapped identity-only.",
+      "category": "phytochemical_marker",
+      "additive_type": "descriptor",
+      "clean_label_score": 6,
+      "regulatory_status": "varies",
+      "common_uses": [
+        "identity mapping"
+      ],
+      "last_updated": "2026-02-24",
+      "is_additive": false,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_FLAVANOLS",
+      "standard_name": "Flavanols",
+      "aliases": [
+        "flavanols"
+      ],
+      "notes": "Constituent marker label row mapped identity-only.",
+      "category": "phytochemical_marker",
+      "additive_type": "descriptor",
+      "clean_label_score": 6,
+      "regulatory_status": "varies",
+      "common_uses": [
+        "identity mapping"
+      ],
+      "last_updated": "2026-02-24",
+      "is_additive": false,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_EURYPEPTIDES",
+      "standard_name": "Eurypeptides",
+      "aliases": [
+        "eurypeptides"
+      ],
+      "notes": "Constituent marker row associated with tongkat-ali products; identity-only mapping.",
+      "category": "phytochemical_marker",
+      "additive_type": "descriptor",
+      "clean_label_score": 6,
+      "regulatory_status": "varies",
+      "common_uses": [
+        "identity mapping"
+      ],
+      "last_updated": "2026-02-24",
+      "is_additive": false,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_ERGOGEN_XT",
+      "standard_name": "Ergogen-XT",
+      "aliases": [
+        "ergogen-xt",
+        "ergogen xt"
+      ],
+      "notes": "Descriptor row for branded complex.",
+      "category": "branded_complex",
+      "additive_type": "descriptor",
+      "clean_label_score": 6,
+      "regulatory_status": "varies",
+      "common_uses": [
+        "identity mapping"
+      ],
+      "last_updated": "2026-02-24",
+      "is_additive": false,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_EMOTHION",
+      "standard_name": "Emothion",
+      "aliases": [
+        "emothion"
+      ],
+      "notes": "Descriptor row for branded complex.",
+      "category": "branded_complex",
+      "additive_type": "descriptor",
+      "clean_label_score": 6,
+      "regulatory_status": "varies",
+      "common_uses": [
+        "identity mapping"
+      ],
+      "last_updated": "2026-02-24",
+      "is_additive": false,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_ECOGANIC_SUPER_FRUITS",
+      "standard_name": "Ecoganic Super Fruits",
+      "aliases": [
+        "ecoganic super fruits"
+      ],
+      "notes": "Descriptor row for branded blend naming.",
+      "category": "marketing_descriptor",
+      "additive_type": "descriptor",
+      "clean_label_score": 6,
+      "regulatory_status": "varies",
+      "common_uses": [
+        "identity mapping"
+      ],
+      "last_updated": "2026-02-24",
+      "is_additive": false,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_ETAS",
+      "standard_name": "ETAS",
+      "aliases": [
+        "etas"
+      ],
+      "notes": "Descriptor row for ETAS branded ingredient token.",
+      "category": "branded_complex",
+      "additive_type": "descriptor",
+      "clean_label_score": 6,
+      "regulatory_status": "varies",
+      "common_uses": [
+        "identity mapping"
+      ],
+      "last_updated": "2026-02-24",
+      "is_additive": false,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_DHQVITAL_DIHYDROQUERCETIN",
+      "standard_name": "DHQVital Dihydroquercetin",
+      "aliases": [
+        "dhqvital dihydroquercetin"
+      ],
+      "notes": "Identity-only mapping for branded dihydroquercetin token.",
+      "category": "branded_phytochemical",
+      "additive_type": "descriptor",
+      "clean_label_score": 6,
+      "regulatory_status": "varies",
+      "common_uses": [
+        "identity mapping"
+      ],
+      "last_updated": "2026-02-24",
+      "is_additive": false,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_DIHYDROQUERCETIN_3_RHAMNOSIDE",
+      "standard_name": "Dihydroquercetin-3-Rhamnoside",
+      "aliases": [
+        "dihydroquercetin-3-rhamnoside"
+      ],
+      "notes": "Identity-only mapping for specific flavonoid marker row.",
+      "category": "phytochemical_marker",
+      "additive_type": "descriptor",
+      "clean_label_score": 6,
+      "regulatory_status": "varies",
+      "common_uses": [
+        "identity mapping"
+      ],
+      "last_updated": "2026-02-24",
+      "is_additive": false,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_DIATOMACEOUS_EARTH",
+      "standard_name": "Diatomaceous Earth",
+      "aliases": [
+        "diatomaceous earth"
+      ],
+      "notes": "Identity-only mapping for silica-source descriptor rows.",
+      "category": "mineral_descriptor",
+      "additive_type": "descriptor",
+      "clean_label_score": 6,
+      "regulatory_status": "varies",
+      "common_uses": [
+        "identity mapping"
+      ],
+      "last_updated": "2026-02-24",
+      "is_additive": false,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_GBBGO",
+      "standard_name": "GBBGO",
+      "aliases": [
+        "gbbgo"
+      ],
+      "notes": "Identity-only mapping for branded ingredient token.",
+      "category": "branded_complex",
+      "additive_type": "descriptor",
+      "clean_label_score": 6,
+      "regulatory_status": "varies",
+      "common_uses": [
+        "identity mapping"
+      ],
+      "last_updated": "2026-02-24",
+      "is_additive": false,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_COGNIBOOST",
+      "standard_name": "CogniBoost",
+      "aliases": [
+        "cogniboost"
+      ],
+      "notes": "Identity-only mapping for branded cognitive-support token.",
+      "category": "branded_complex",
+      "additive_type": "descriptor",
+      "clean_label_score": 6,
+      "regulatory_status": "varies",
+      "common_uses": [
+        "identity mapping"
+      ],
+      "last_updated": "2026-02-24",
+      "is_additive": false,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_COCOABUTEROL",
+      "standard_name": "Cocoabuterol",
+      "aliases": [
+        "cocoabuterol"
+      ],
+      "notes": "Identity-only mapping for branded cocoa extract token.",
+      "category": "branded_complex",
+      "additive_type": "descriptor",
+      "clean_label_score": 6,
+      "regulatory_status": "varies",
+      "common_uses": [
+        "identity mapping"
+      ],
+      "last_updated": "2026-02-24",
+      "is_additive": false,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_CONJUGATED_BILE_ACID",
+      "standard_name": "Conjugated Bile Acid",
+      "aliases": [
+        "conjugated bile acid"
+      ],
+      "notes": "Identity-only mapping for bile-acid descriptor rows.",
+      "category": "lipid_descriptor",
+      "additive_type": "descriptor",
+      "clean_label_score": 6,
+      "regulatory_status": "varies",
+      "common_uses": [
+        "identity mapping"
+      ],
+      "last_updated": "2026-02-24",
+      "is_additive": false,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_CALCIUM_GLYCEROPHOSPHATE",
+      "standard_name": "Calcium Glycerophosphate",
+      "aliases": [
+        "calcium glycerophosphate"
+      ],
+      "notes": "Identity-only mapping pending dedicated calcium-form curation.",
+      "category": "mineral_salt",
+      "additive_type": "descriptor",
+      "clean_label_score": 6,
+      "regulatory_status": "varies",
+      "common_uses": [
+        "identity mapping"
+      ],
+      "last_updated": "2026-02-24",
+      "is_additive": false,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_CALCIUM_CAPRYLATE",
+      "standard_name": "Calcium Caprylate",
+      "aliases": [
+        "calcium caprylate"
+      ],
+      "notes": "Identity-only mapping for caprylate salt labels.",
+      "category": "fatty_acid_salt",
+      "additive_type": "descriptor",
+      "clean_label_score": 6,
+      "regulatory_status": "varies",
+      "common_uses": [
+        "identity mapping"
+      ],
+      "last_updated": "2026-02-24",
+      "is_additive": false,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_CROMINEX_3_PLUS",
+      "standard_name": "Crominex 3+",
+      "aliases": [
+        "crominex 3+"
+      ],
+      "notes": "Identity-only mapping for branded chromium complex token.",
+      "category": "branded_mineral_complex",
+      "additive_type": "descriptor",
+      "clean_label_score": 6,
+      "regulatory_status": "varies",
+      "common_uses": [
+        "identity mapping"
+      ],
+      "last_updated": "2026-02-24",
+      "is_additive": false,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_BETA_ECDYSTERONE",
+      "standard_name": "Beta-Ecdysterone",
+      "aliases": [
+        "beta-ecdysterone"
+      ],
+      "notes": "Identity-only mapping for ecdysteroid marker rows.",
+      "category": "phytochemical_marker",
+      "additive_type": "descriptor",
+      "clean_label_score": 6,
+      "regulatory_status": "varies",
+      "common_uses": [
+        "identity mapping"
+      ],
+      "last_updated": "2026-02-24",
+      "is_additive": false,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_CAROTENE_NATURAL",
+      "standard_name": "Carotene, Natural",
+      "aliases": [
+        "carotene, natural"
+      ],
+      "notes": "Identity-only mapping for generic carotene descriptor labels pending explicit isomer disclosure.",
+      "category": "carotenoid_descriptor",
+      "additive_type": "descriptor",
+      "clean_label_score": 6,
+      "regulatory_status": "varies",
+      "common_uses": [
+        "identity mapping"
+      ],
+      "last_updated": "2026-02-24",
+      "is_additive": false,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_MALATE_GENERIC",
+      "standard_name": "Malate",
+      "aliases": [
+        "malate"
+      ],
+      "notes": "Identity-only mapping for generic malate descriptor rows.",
+      "category": "descriptor_component",
+      "additive_type": "descriptor",
+      "clean_label_score": 6,
+      "regulatory_status": "varies",
+      "common_uses": [
+        "identity mapping"
+      ],
+      "last_updated": "2026-02-24",
+      "is_additive": false,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_AVOCADO_SOY_UNSAPONIFIABLES",
+      "standard_name": "Avocado/Soy Unsaponifiables",
+      "aliases": [
+        "avocado/soy unsaponifiables",
+        "ASU"
+      ],
+      "notes": "Identity-only mapping for ASU blend label rows.",
+      "category": "lipid_descriptor",
+      "additive_type": "descriptor",
+      "clean_label_score": 6,
+      "regulatory_status": "varies",
+      "common_uses": [
+        "identity mapping"
+      ],
+      "last_updated": "2026-02-24",
+      "is_additive": false,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_ALPHA_GLYCOSYL_ISOQUERCITRIN",
+      "standard_name": "Alpha-Glycosyl Isoquercitrin",
+      "aliases": [
+        "alpha-glycosyl isoquercitrin"
+      ],
+      "notes": "Identity-only mapping for flavonoid derivative rows.",
+      "category": "phytochemical_marker",
+      "additive_type": "descriptor",
+      "clean_label_score": 6,
+      "regulatory_status": "varies",
+      "common_uses": [
+        "identity mapping"
+      ],
+      "last_updated": "2026-02-24",
+      "is_additive": false,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_AMP_XT",
+      "standard_name": "AMP-XT",
+      "aliases": [
+        "amp-xt",
+        "amp xt"
+      ],
+      "notes": "Descriptor row for branded formula token.",
+      "category": "marketing_descriptor",
+      "additive_type": "descriptor",
+      "clean_label_score": 6,
+      "regulatory_status": "varies",
+      "common_uses": [
+        "identity mapping"
+      ],
+      "last_updated": "2026-02-24",
+      "is_additive": false,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_ANTI_FUNGI_11X_88",
+      "standard_name": "Anti-Fungi 11X-88",
+      "aliases": [
+        "anti-fungi 11x-88"
+      ],
+      "notes": "Descriptor row for branded antifungal complex name.",
+      "category": "marketing_descriptor",
+      "additive_type": "descriptor",
+      "clean_label_score": 6,
+      "regulatory_status": "varies",
+      "common_uses": [
+        "identity mapping"
+      ],
+      "last_updated": "2026-02-24",
+      "is_additive": false,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_ANTI_FUNGI_10X_88",
+      "standard_name": "Anti-Fungi 10X-88",
+      "aliases": [
+        "anti-fungi 10x-88"
+      ],
+      "notes": "Descriptor row for branded antifungal complex name.",
+      "category": "marketing_descriptor",
+      "additive_type": "descriptor",
+      "clean_label_score": 6,
+      "regulatory_status": "varies",
+      "common_uses": [
+        "identity mapping"
+      ],
+      "last_updated": "2026-02-24",
+      "is_additive": false,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_HEMP_ISOLATE_99",
+      "standard_name": "Hemp Isolate (99%)",
+      "aliases": [
+        "99% pure hemp isolate"
+      ],
+      "notes": "Identity-only mapping for high-purity hemp isolate descriptor labels.",
+      "category": "hemp_descriptor",
+      "additive_type": "descriptor",
+      "clean_label_score": 6,
+      "regulatory_status": "varies",
+      "common_uses": [
+        "identity mapping"
+      ],
+      "last_updated": "2026-02-24",
+      "is_additive": false,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_MUSCLE_DESCRIPTOR",
+      "standard_name": "Muscle (Generic Descriptor)",
+      "aliases": [
+        "muscle"
+      ],
+      "notes": "Generic descriptor row for tissue labeling; identity-only mapping.",
+      "category": "descriptor_component",
+      "additive_type": "descriptor",
+      "clean_label_score": 6,
+      "regulatory_status": "varies",
+      "common_uses": [
+        "identity mapping"
+      ],
+      "last_updated": "2026-02-24",
+      "is_additive": false,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_L_ASPARAGINE",
+      "standard_name": "L-Asparagine",
+      "aliases": [
+        "l-asparagine"
+      ],
+      "notes": "Identity-only mapping for L-asparagine labels pending dedicated scoring policy.",
+      "category": "amino_acid_derivative",
+      "additive_type": "descriptor",
+      "clean_label_score": 6,
+      "regulatory_status": "varies",
+      "common_uses": [
+        "identity mapping"
+      ],
+      "last_updated": "2026-02-24",
+      "is_additive": false,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_OLEAMIDE",
+      "standard_name": "Oleamide",
+      "aliases": [
+        "oleamide"
+      ],
+      "notes": "Identity-only mapping for oleamide labels.",
+      "category": "fatty_acid_derivative",
+      "additive_type": "descriptor",
+      "clean_label_score": 6,
+      "regulatory_status": "varies",
+      "common_uses": [
+        "identity mapping"
+      ],
+      "last_updated": "2026-02-24",
+      "is_additive": false,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_PHLORIDZIN",
+      "standard_name": "Phloridzin",
+      "aliases": [
+        "phloridzin"
+      ],
+      "notes": "Identity-only mapping for phloridzin marker rows.",
+      "category": "phytochemical_marker",
+      "additive_type": "descriptor",
+      "clean_label_score": 6,
+      "regulatory_status": "varies",
+      "common_uses": [
+        "identity mapping"
+      ],
+      "last_updated": "2026-02-24",
+      "is_additive": false,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "NHA_TOTAL_SULFUR",
+      "standard_name": "Total Sulfur",
+      "aliases": [
+        "total sulfur"
+      ],
+      "notes": "Descriptor row for elemental sulfur total labels.",
+      "category": "descriptor_component",
+      "additive_type": "descriptor",
+      "clean_label_score": 6,
+      "regulatory_status": "varies",
+      "common_uses": [
+        "identity mapping"
+      ],
+      "last_updated": "2026-02-24",
+      "is_additive": false,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "OI_AORTA_TISSUE",
+      "standard_name": "Aorta Tissue",
+      "aliases": [
+        "Aorta",
+        "aorta tissue"
+      ],
+      "category": "animal_glandular_tissue",
+      "additive_type": "functional",
+      "clean_label_score": 6,
+      "notes": "Glandular/organ-derived identity mapping for aorta tissue terms. Identity-only mapping; no direct scoring bonus/penalty.",
+      "regulatory_status": "varies",
+      "common_uses": [
+        "glandular support"
+      ],
+      "last_updated": "2026-02-24",
+      "is_additive": false,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "OI_BRAIN_TISSUE",
+      "standard_name": "Brain Tissue",
+      "aliases": [
+        "Brain",
+        "brain tissue"
+      ],
+      "category": "animal_glandular_tissue",
+      "additive_type": "functional",
+      "clean_label_score": 6,
+      "notes": "Glandular/organ-derived identity mapping for brain tissue terms. Identity-only mapping; no direct scoring bonus/penalty.",
+      "regulatory_status": "varies",
+      "common_uses": [
+        "glandular support"
+      ],
+      "last_updated": "2026-02-24",
+      "is_additive": false,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "OI_PINEAL_TISSUE",
+      "standard_name": "Pineal Tissue",
+      "aliases": [
+        "Pineal",
+        "pineal gland",
+        "pineal tissue"
+      ],
+      "category": "animal_glandular_tissue",
+      "additive_type": "functional",
+      "clean_label_score": 6,
+      "notes": "Glandular/organ-derived identity mapping for pineal tissue terms. Identity-only mapping; no direct scoring bonus/penalty.",
+      "regulatory_status": "varies",
+      "common_uses": [
+        "glandular support"
+      ],
+      "last_updated": "2026-02-24",
+      "is_additive": false,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "OI_WHEAT_BRAN",
+      "standard_name": "Wheat Bran",
+      "aliases": [
+        "Wheat Bran",
+        "wheat bran"
+      ],
+      "category": "fiber_plant",
+      "additive_type": "fiber",
+      "clean_label_score": 9,
+      "notes": "Whole-food wheat bran identity mapping; non-standardized food fiber term.",
+      "regulatory_status": "GRAS",
+      "common_uses": [
+        "fiber source"
+      ],
+      "last_updated": "2026-02-24",
+      "is_additive": false,
+      "severity_level": "none",
+      "allergen_flag": "wheat"
+    },
+    {
+      "id": "OI_ARROWROOT",
+      "standard_name": "Arrowroot",
+      "aliases": [
+        "Arrowroot",
+        "arrowroot starch",
+        "maranta arundinacea starch"
+      ],
+      "category": "filler_binder",
+      "additive_type": "filler",
+      "clean_label_score": 9,
+      "notes": "Arrowroot starch identity mapping; non-scorable carrier/base ingredient.",
+      "regulatory_status": "GRAS",
+      "common_uses": [
+        "starch base",
+        "binder"
+      ],
+      "last_updated": "2026-02-24",
+      "is_additive": false,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "OI_SODIUM_CAPRYLATE",
+      "standard_name": "Sodium Caprylate",
+      "aliases": [
+        "Sodium Caprylate"
+      ],
+      "category": "fatty_acid_salt",
+      "additive_type": "functional",
+      "clean_label_score": 7,
+      "notes": "Identity mapping for sodium caprylate terms; non-scorable unless safety policy changes.",
+      "regulatory_status": "varies",
+      "common_uses": [
+        "fatty acid salt",
+        "functional carrier"
+      ],
+      "last_updated": "2026-02-24",
+      "is_additive": false,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "OI_MAGNESIUM_CAPRYLATE",
+      "standard_name": "Magnesium Caprylate",
+      "aliases": [
+        "Magnesium Caprylate"
+      ],
+      "category": "fatty_acid_salt",
+      "additive_type": "functional",
+      "clean_label_score": 7,
+      "notes": "Identity mapping for magnesium caprylate terms; non-scorable unless safety policy changes.",
+      "regulatory_status": "varies",
+      "common_uses": [
+        "fatty acid salt",
+        "functional carrier"
+      ],
+      "last_updated": "2026-02-24",
+      "is_additive": false,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "OI_URSOLIC_OLEANOLIC_ACIDS",
+      "standard_name": "Ursolic & Oleanolic Acids",
+      "aliases": [
+        "Ursolic & Oleanolic Acids"
+      ],
+      "category": "triterpenes",
+      "additive_type": "functional",
+      "clean_label_score": 7,
+      "notes": "Identity mapping for ursolic/oleanolic acid descriptor terms; treated as non-scorable identity bucket pending dedicated scoring model.",
+      "regulatory_status": "varies",
+      "common_uses": [
+        "botanical marker compounds"
+      ],
+      "last_updated": "2026-02-24",
+      "is_additive": false,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "OI_BONE_MARROW_CONCENTRATE",
+      "standard_name": "Bone Marrow Concentrate",
+      "aliases": [
+        "New Zealand grassfed Bone Marrow",
+        "bone marrow concentrate"
+      ],
+      "category": "animal_glandular_tissue",
+      "additive_type": "functional",
+      "clean_label_score": 6,
+      "notes": "Identity mapping for bone marrow concentrate terms.",
+      "regulatory_status": "varies",
+      "common_uses": [
+        "glandular support"
+      ],
+      "last_updated": "2026-02-24",
+      "is_additive": false,
+      "severity_level": "none",
+      "allergen_flag": null
+    },
+    {
+      "id": "OI_SALMON_NASAL_CARTILAGE",
+      "standard_name": "Salmon Nasal Cartilage",
+      "aliases": [
+        "Salmon Nasal Cartilage powder"
+      ],
+      "category": "marine_tissue",
+      "additive_type": "functional",
+      "clean_label_score": 6,
+      "notes": "Identity mapping for salmon cartilage terms.",
+      "regulatory_status": "varies",
+      "common_uses": [
+        "marine tissue ingredient"
+      ],
+      "last_updated": "2026-02-24",
+      "is_additive": false,
+      "severity_level": "none",
+      "allergen_flag": "fish"
+    },
+    {
+      "id": "OI_EDIBLE_HEMOGLOBIN",
+      "standard_name": "Edible Hemoglobin",
+      "aliases": [
+        "edible Hemoglobin"
+      ],
+      "category": "animal_derived",
+      "additive_type": "functional",
+      "clean_label_score": 5,
+      "notes": "Identity mapping for edible hemoglobin terms.",
+      "regulatory_status": "varies",
+      "common_uses": [
+        "animal-derived nutrient source"
+      ],
+      "last_updated": "2026-02-24",
+      "is_additive": false,
+      "severity_level": "none",
+      "allergen_flag": null
     }
   ]
 }

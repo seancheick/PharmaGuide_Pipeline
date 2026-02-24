@@ -2166,6 +2166,19 @@ class SupplementEnricherV3:
         if isinstance(nested, list) and nested and ('blend' in ingredient_group):
             return SKIP_REASON_BLEND_HEADER_WITH_WEIGHT if has_dose else SKIP_REASON_BLEND_HEADER_NO_DOSE
 
+        # B1b: Strong structural blend container signal from cleaning.
+        # Some labels emit non-nested container rows (e.g., "Rice Protein Matrix and Polyphenols")
+        # with proprietary flags and blend-like group tags, which should not enter A1/mapping gate.
+        is_non_nested = not bool(ingredient.get('isNestedIngredient', False))
+        has_proprietary_flag = bool(
+            ingredient.get('proprietaryBlend', False) or ingredient.get('isProprietaryBlend', False)
+        )
+        group_signals_blend = any(
+            token in ingredient_group for token in ('blend', 'proprietary')
+        )
+        if is_non_nested and has_proprietary_flag and group_signals_blend:
+            return SKIP_REASON_BLEND_HEADER_WITH_WEIGHT if has_dose else SKIP_REASON_BLEND_HEADER_NO_DOSE
+
         # B2: HIGH-CONFIDENCE patterns: skip regardless of dose
         for pattern in BLEND_HEADER_PATTERNS_HIGH_CONFIDENCE:
             if re.search(pattern, name_lower, re.IGNORECASE):

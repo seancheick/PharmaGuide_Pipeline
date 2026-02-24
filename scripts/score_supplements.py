@@ -195,10 +195,22 @@ class SupplementScorer:
 
     def _unmapped_active_names(self, product: Dict[str, Any]) -> List[str]:
         ingredients = safe_list(product.get("ingredient_quality_data", {}).get("ingredients"))
+
+        def _is_unmapped_gate_candidate(ing: Dict[str, Any]) -> bool:
+            # Blend containers/headers are opacity signals handled by B5, not mapping blockers.
+            if bool(ing.get("is_proprietary_blend")):
+                return False
+            if bool(ing.get("is_blend_header")) or bool(ing.get("blend_total_weight_only")):
+                return False
+            role = norm_text(ing.get("role_classification"))
+            if role in {"recognized_non_scorable", "inactive_non_scorable"}:
+                return False
+            return True
+
         return [
             ing.get("name") or ing.get("standard_name") or ing.get("raw_source_text") or "unknown"
             for ing in ingredients
-            if not bool(ing.get("mapped", False))
+            if _is_unmapped_gate_candidate(ing) and not bool(ing.get("mapped", False))
         ]
 
     def _banned_exact_alias_name_keys(self, product: Dict[str, Any]) -> set[str]:
@@ -249,12 +261,12 @@ class SupplementScorer:
         if active_total <= 0:
             active_total = len(ingredients)
 
-        unmapped_count_raw = int(as_float(iqd.get("unmapped_count"), 0) or 0)
-        banned_overlap_count = min(unmapped_count_raw, len(unmapped_banned_exact_alias_candidates))
-        unmapped_count_excluding_banned = max(0, unmapped_count_raw - banned_overlap_count)
-
-        unmapped_banned_exact_alias = unmapped_banned_exact_alias_candidates[:banned_overlap_count]
-        unmapped_excluding_banned = unmapped_excluding_candidates[:unmapped_count_excluding_banned]
+        # Derive mapping-gate counts from gate-eligible ingredient rows, not legacy enrichment counters.
+        # This prevents structural blend containers from silently blocking scoring.
+        unmapped_banned_exact_alias = list(unmapped_banned_exact_alias_candidates)
+        unmapped_excluding_banned = list(unmapped_excluding_candidates)
+        unmapped_count_raw = len(unmapped_all_candidates)
+        unmapped_count_excluding_banned = len(unmapped_excluding_banned)
 
         if active_total <= 0:
             return {

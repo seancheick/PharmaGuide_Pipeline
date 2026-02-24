@@ -3,7 +3,7 @@
     "description": "Comprehensive database of harmful additives, contaminants, and concerning ingredients found in dietary supplements. Used for scoring penalties and consumer warnings.",
     "purpose": "penalty_scoring",
     "schema_version": "4.0.0",
-    "last_updated": "2026-02-23",
+    "last_updated": "2026-02-24",
     "total_entries": 114,
     "scoring_rule": "Apply penalty points based on severity_level. Critical: -5, High: -3, Moderate: -1.5, Low: -0.5. Multiple additives are cumulative.",
     "severity_level_definitions": {
@@ -62,7 +62,8 @@
         "alpha hydroxy laxogenin",
         "laxogenin",
         "alpha hydroxy laxogenine",
-        "5a hydroxy laxogenin"
+        "5a hydroxy laxogenin",
+        "laxosterone"
       ],
       "CUI": null,
       "category": "steroidal_analog",
@@ -331,7 +332,7 @@
         "vinyl amide"
       ],
       "category": "contaminant_processing",
-      "notes": "Forms during high-temperature processing (>120\u00b0C) of carbohydrate-rich foods. Probable human carcinogen (IARC Group 2A). Not intentionally added but may contaminate processed supplement ingredients.",
+      "notes": "Forms during high-temperature processing (>120°C) of carbohydrate-rich foods. Probable human carcinogen (IARC Group 2A). Not intentionally added but may contaminate processed supplement ingredients.",
       "last_updated": "2026-02-16",
       "CUI": "C0050587",
       "mechanism_of_harm": "Mechanism requires further documentation.",
@@ -930,7 +931,7 @@
         "Canderel",
         "APM",
         "aspartyl-phenylalanine methyl ester",
-        "N-(L-\u03b1-Aspartyl)-L-phenylalanine 1-methyl ester",
+        "N-(L-α-Aspartyl)-L-phenylalanine 1-methyl ester",
         "artificial sweetener aspartame",
         "E951 sweetener",
         "dipeptide sweetener",
@@ -968,7 +969,7 @@
           "Canderel",
           "APM",
           "aspartyl-phenylalanine methyl ester",
-          "N-(L-\u03b1-Aspartyl)-L-phenylalanine 1-methyl ester",
+          "N-(L-α-Aspartyl)-L-phenylalanine 1-methyl ester",
           "artificial sweetener aspartame",
           "E951 sweetener",
           "dipeptide sweetener",
@@ -1259,6 +1260,7 @@
         "Blue 1",
         "Brilliant Blue FCF",
         "FD&C Blue #1",
+        "FD&C Blue # 1",
         "FD&C Blue No. 1",
         "Blue 1 Lake",
         "E133",
@@ -1299,6 +1301,7 @@
           "Blue 1",
           "Brilliant Blue FCF",
           "FD&C Blue #1",
+          "FD&C Blue # 1",
           "FD&C Blue No. 1",
           "Blue 1 Lake",
           "E133",
@@ -3367,7 +3370,9 @@
         "cascara sagrada bark",
         "cascara bark",
         "casanthranol",
-        "cascara extract"
+        "cascara extract",
+        "Cascara Sagrada P.E.",
+        "cascara sagrada pe"
       ],
       "CUI": "C0054749",
       "category": "stimulant_laxative",
@@ -5654,7 +5659,7 @@
       "mechanism_of_harm": "Germanium compounds cause renal tubular degeneration leading to irreversible kidney failure. At least 31 documented cases of renal failure and 2 deaths from chronic oral germanium intake (doses 15-300g over 2-36 months). Both organic (Ge-132) and inorganic (GeO2) forms implicated; organic products often contaminated with nephrotoxic GeO2. Damage persists after discontinuation; some patients required permanent dialysis.",
       "regulatory_status": {
         "US": "FDA Import Alert 54-07: ALL germanium supplements detained as 'poisonous or deleterious substance' under Section 801(a)(3). One step below formal ban.",
-        "EU": "Effectively prohibited \u2014 germanium not listed in Annex I/II of Directive 2002/46/EC (permitted minerals for food supplements)",
+        "EU": "Effectively prohibited — germanium not listed in Annex I/II of Directive 2002/46/EC (permitted minerals for food supplements)",
         "UK": "Not included in Schedule 1 of permitted substances for food supplements"
       },
       "population_warnings": [
@@ -5744,7 +5749,7 @@
             "start": "2002-01-01",
             "end": null
           },
-          "source_ref": "Directive 2002/46/EC Annex I/II \u2014 germanium absent from permitted minerals"
+          "source_ref": "Directive 2002/46/EC Annex I/II — germanium absent from permitted minerals"
         }
       ],
       "review": {
@@ -7830,7 +7835,7 @@
       "aliases": [
         "E961",
         "neotame sweetener",
-        "n-[n-(3,3-dimethylbutyl)-l-\u03b1-aspartyl]-l-phenylalanine 1-methyl ester"
+        "n-[n-(3,3-dimethylbutyl)-l-α-aspartyl]-l-phenylalanine 1-methyl ester"
       ],
       "category": "sweetener_artificial",
       "notes": "Chemically similar to aspartame but 7,000-13,000x sweeter. Newer sweetener with less long-term safety data. Not widely used in supplements yet.",
@@ -7851,7 +7856,7 @@
           "Neotame",
           "E961",
           "neotame sweetener",
-          "n-[n-(3,3-dimethylbutyl)-l-\u03b1-aspartyl]-l-phenylalanine 1-methyl ester"
+          "n-[n-(3,3-dimethylbutyl)-l-α-aspartyl]-l-phenylalanine 1-methyl ester"
         ],
         "regex": null,
         "fuzzy_threshold": 0.72,
@@ -10353,7 +10358,7 @@
         "change_log": [
           {
             "date": "2026-02-22",
-            "change": "Initial entry created \u2014 FDA-banned colorant",
+            "change": "Initial entry created — FDA-banned colorant",
             "reason": "safety_routing_gap"
           }
         ]
@@ -10375,6 +10380,7 @@
         "Allura Red",
         "Allura Red AC",
         "FD&C Red #40",
+        "FD&C Red # 40",
         "Red Dye 40",
         "Red 40 Lake",
         "Red #40 Lake",
@@ -10417,6 +10423,7 @@
           "Allura Red",
           "Allura Red AC",
           "FD&C Red #40",
+          "FD&C Red # 40",
           "Red Dye 40",
           "Red 40 Lake",
           "Red #40 Lake",
@@ -13017,12 +13024,12 @@
         "Trichlorogalactosucrose",
         "sucralose powder",
         "artificial sweetener sucralose",
-        "1,6-dichloro-1,6-dideoxy-\u03b2-D-fructofuranosyl-4-chloro-4-deoxy-\u03b1-D-galactopyranoside",
+        "1,6-dichloro-1,6-dideoxy-β-D-fructofuranosyl-4-chloro-4-deoxy-α-D-galactopyranoside",
         "TGS"
       ],
       "CUI": "C0077046",
       "category": "sweetener_artificial",
-      "mechanism_of_harm": "Chlorinated artificial sweetener that disrupts gut microbiome composition and diversity. Inhibits farnesoid X receptor signaling and disrupts bile acid metabolism. May induce glucose intolerance and affect insulin response. Releases potentially harmful chlorinated compounds when heated above 120\u00b0C (248\u00b0F).",
+      "mechanism_of_harm": "Chlorinated artificial sweetener that disrupts gut microbiome composition and diversity. Inhibits farnesoid X receptor signaling and disrupts bile acid metabolism. May induce glucose intolerance and affect insulin response. Releases potentially harmful chlorinated compounds when heated above 120°C (248°F).",
       "regulatory_status": {
         "US": "FDA approved with ADI of 5 mg/kg body weight/day",
         "EU": "E955 approved with ADI of 15 mg/kg body weight/day",
@@ -13049,7 +13056,7 @@
           "Trichlorogalactosucrose",
           "sucralose powder",
           "artificial sweetener sucralose",
-          "1,6-dichloro-1,6-dideoxy-\u03b2-D-fructofuranosyl-4-chloro-4-deoxy-\u03b1-D-galactopyranoside",
+          "1,6-dichloro-1,6-dideoxy-β-D-fructofuranosyl-4-chloro-4-deoxy-α-D-galactopyranoside",
           "TGS"
         ],
         "regex": null,
@@ -13765,7 +13772,7 @@
         "dl-alpha tocopherol",
         "synthetic vitamin E",
         "pteroylmonoglutamic acid",
-        "all-rac-\u03b1-tocopherol",
+        "all-rac-α-tocopherol",
         "artificial vitamins",
         "synthetic folate",
         "synthetic vitamin supplements"
@@ -13797,7 +13804,7 @@
           "dl-alpha tocopherol",
           "synthetic vitamin E",
           "pteroylmonoglutamic acid",
-          "all-rac-\u03b1-tocopherol",
+          "all-rac-α-tocopherol",
           "artificial vitamins",
           "synthetic folate",
           "synthetic vitamin supplements"

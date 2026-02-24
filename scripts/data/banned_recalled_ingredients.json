@@ -3,8 +3,8 @@
     "description": "Banned and recalled ingredients database for regulatory compliance and safety (v3.0)",
     "purpose": "safety_disqualification_and_regulatory_compliance",
     "schema_version": "4.0.0",
-    "last_updated": "2026-02-23",
-    "total_entries": 126,
+    "last_updated": "2026-02-24",
+    "total_entries": 127,
     "data_source_metadata": {
       "sources": [
         "FDA",
@@ -1106,7 +1106,13 @@
         "7-keto",
         "3-acetyl-7-oxo-dehydroepiandrosterone",
         "7-oxo-dhea acetate",
-        "7 oxo dhea acetate"
+        "7 oxo dhea acetate",
+        "7-oxo-dehydroepiandrosterone-3beta-acetate",
+        "7 oxo dehydroepiandrosterone 3beta acetate",
+        "dhea-acetate-7-one",
+        "dhea acetate 7 one",
+        "3-desoxy, 7-keto dhea",
+        "3-desoxy 7-keto dhea"
       ],
       "CUI": null,
       "banned_date": "2025-01-01",
@@ -1151,7 +1157,13 @@
           "7 keto dhea",
           "7-keto",
           "3-acetyl-7-oxo-dehydroepiandrosterone",
-          "7-oxo-dhea acetate"
+          "7-oxo-dhea acetate",
+          "7-oxo-dehydroepiandrosterone-3beta-acetate",
+          "7 oxo dehydroepiandrosterone 3beta acetate",
+          "dhea-acetate-7-one",
+          "dhea acetate 7 one",
+          "3-desoxy, 7-keto dhea",
+          "3-desoxy 7-keto dhea"
         ],
         "exclusions": [],
         "case_sensitive": false,
@@ -2704,7 +2716,7 @@
         "paraformaldehyde"
       ],
       "category": "preservative_artificial",
-      "notes": "Toxic preservative and contaminant. Known human carcinogen (IARC Group 1). Banned as food additive in most countries (EU delisted E240). May form from breakdown of other preservatives. Should never be intentionally added to supplements. [reclassified_2026-02-16: moved from hard-safety \u2014 REVERSED by audit_remediation 2026-02-18: Formaldehyde is IARC Group 1 carcinogen and genuinely banned; severity correctly remains critical]",
+      "notes": "Toxic preservative and contaminant. Known human carcinogen (IARC Group 1). Banned as food additive in most countries (EU delisted E240). May form from breakdown of other preservatives. Should never be intentionally added to supplements. [reclassified_2026-02-16: moved from hard-safety — REVERSED by audit_remediation 2026-02-18: Formaldehyde is IARC Group 1 carcinogen and genuinely banned; severity correctly remains critical]",
       "last_updated": "2025-11-14",
       "CUI": "C0016564",
       "mechanism_of_harm": "Mechanism requires further documentation.",
@@ -3352,7 +3364,7 @@
           "supports_claims": [
             "regulatory_action"
           ],
-          "evidence_summary": "FDA historical listing reflects Orange B\u2019s narrow restricted use case."
+          "evidence_summary": "FDA historical listing reflects Orange B’s narrow restricted use case."
         }
       ],
       "external_ids": {
@@ -6407,7 +6419,7 @@
       "id": "BANNED_BMPEA",
       "standard_name": "BMPEA",
       "aliases": [
-        "\u03b2-methylphenylethylamine",
+        "β-methylphenylethylamine",
         "R-beta-methylphenylethylamine",
         "beta-methylphenylethylamine",
         "BMPEA"
@@ -6452,7 +6464,7 @@
         "match_mode": "alias_and_fuzzy",
         "label_tokens": [
           "bmpea",
-          "\u03b2-methylphenylethylamine",
+          "β-methylphenylethylamine",
           "r-beta-methylphenylethylamine",
           "beta-methylphenylethylamine"
         ],
@@ -8164,7 +8176,10 @@
         "dimethylhexylamine",
         "DMHA",
         "2-aminoheptane",
-        "amidrine"
+        "amidrine",
+        "2-amino-5-methylhexane",
+        "2 amino 5 methylhexane",
+        "2-amino-5 methylhexane"
       ],
       "CUI": "C3254308",
       "banned_date": "2019-10-01",
@@ -8212,7 +8227,10 @@
           "2-amino-6-methylheptane",
           "dimethylhexylamine",
           "2-aminoheptane",
-          "amidrine"
+          "amidrine",
+          "2-amino-5-methylhexane",
+          "2 amino 5 methylhexane",
+          "2-amino-5 methylhexane"
         ],
         "exclusions": [],
         "case_sensitive": false,
@@ -10111,7 +10129,7 @@
       "category": "supplement_pediatric",
       "severity_level": "moderate",
       "fda_warning": true,
-      "notes": "FDA announced plans to remove fluoride supplements for children from market following safety review (May 2025). Concerns about fluorosis and neurodevelopmental effects. NTP 2024 report found moderate confidence linking fluoride to lower IQ. Still under regulatory review \u2014 not yet finalized. [normalized_non_iso_dates: ban_effective_date_raw=pending]",
+      "notes": "FDA announced plans to remove fluoride supplements for children from market following safety review (May 2025). Concerns about fluorosis and neurodevelopmental effects. NTP 2024 report found moderate confidence linking fluoride to lower IQ. Still under regulatory review — not yet finalized. [normalized_non_iso_dates: ban_effective_date_raw=pending]",
       "scientific_references": [
         "NTP Monograph: August 2024 - Fluoride and neurodevelopment",
         "DOI: 10.1001/jamapediatrics.2019.1729 - Fluoride and IQ",
@@ -10313,7 +10331,7 @@
       "id": "BANNED_PHENIBUT",
       "standard_name": "Phenibut",
       "aliases": [
-        "\u03b2-phenyl-\u03b3-aminobutyric acid",
+        "β-phenyl-γ-aminobutyric acid",
         "fenibut",
         "4-amino-3-phenylbutyric acid",
         "phenibut HCL",
@@ -10361,7 +10379,7 @@
         "match_mode": "alias_and_fuzzy",
         "label_tokens": [
           "phenibut",
-          "\u03b2-phenyl-\u03b3-aminobutyric acid",
+          "β-phenyl-γ-aminobutyric acid",
           "fenibut",
           "4-amino-3-phenylbutyric acid",
           "phenibut hcl",
@@ -12467,7 +12485,7 @@
       "aliases": [
         "yk11",
         "YK-11",
-        "(17\u03b1,20E)-17,20-[(1-methoxyethylidene)bis(oxy)]-3-oxo-19-norpregna-4,20-diene-21-carboxylic acid methyl ester"
+        "(17α,20E)-17,20-[(1-methoxyethylidene)bis(oxy)]-3-oxo-19-norpregna-4,20-diene-21-carboxylic acid methyl ester"
       ],
       "CUI": "",
       "banned_date": "2017-10-31",
@@ -12509,7 +12527,7 @@
         "label_tokens": [
           "yk-11",
           "yk11",
-          "(17\u03b1,20e)-17,20-[(1-methoxyethylidene)bis(oxy)]-3-oxo-19-norpregna-4,20-diene-21-carboxylic acid methyl ester"
+          "(17α,20e)-17,20-[(1-methoxyethylidene)bis(oxy)]-3-oxo-19-norpregna-4,20-diene-21-carboxylic acid methyl ester"
         ],
         "exclusions": [],
         "case_sensitive": false,
@@ -13998,7 +14016,7 @@
     },
     {
       "id": "NOOTROPIC_9MEBC",
-      "standard_name": "9-Methyl-\u03b2-carboline",
+      "standard_name": "9-Methyl-β-carboline",
       "aliases": [
         "9-MBC",
         "9-methyl-beta-carboline",
@@ -14017,7 +14035,7 @@
       "category": "nootropic",
       "severity_level": "high",
       "fda_warning": true,
-      "notes": "Found in cognitive enhancement supplements. No human safety data. Research chemical only. Potential neurotoxicity. No specific FDA ban date \u2014 unapproved new dietary ingredient by default.",
+      "notes": "Found in cognitive enhancement supplements. No human safety data. Research chemical only. Potential neurotoxicity. No specific FDA ban date — unapproved new dietary ingredient by default.",
       "scientific_references": [
         "PubMed: 22380576 - 9-MeBC cognitive effects and dopamine",
         "DOI: 10.1016/j.neuropharm.2015.08.025 - Beta-carboline neurotoxicity"
@@ -14041,7 +14059,7 @@
       "match_rules": {
         "match_mode": "alias_and_fuzzy",
         "label_tokens": [
-          "9-methyl-\u03b2-carboline",
+          "9-methyl-β-carboline",
           "9-mbc",
           "9-methyl-beta-carboline",
           "9-methyl-9h-pyrido[3,4-b]indole"
@@ -14146,7 +14164,7 @@
       "cui_note": "No UMLS entry - synthetic research compound",
       "pubchem_cid": "164979",
       "cas_number": "2521-07-5",
-      "identifier_note": "9-Methyl-\u03b2-carboline; research compound, no UMLS CUI",
+      "identifier_note": "9-Methyl-β-carboline; research compound, no UMLS CUI",
       "banned_countries": null,
       "ca_prop65_limit_mcg_day": null,
       "chemical_symbol": null,
@@ -14626,7 +14644,7 @@
       "category": "nootropic",
       "severity_level": "critical",
       "fda_warning": true,
-      "notes": "Russian pharmaceutical (Ladasten). Found in nootropic supplements. Previously WADA prohibited. Stimulant effects. No specific FDA ban date \u2014 classified as unapproved drug by default.",
+      "notes": "Russian pharmaceutical (Ladasten). Found in nootropic supplements. Previously WADA prohibited. Stimulant effects. No specific FDA ban date — classified as unapproved drug by default.",
       "scientific_references": [
         "CFSRE Monograph - Bromantane pharmacology and detection",
         "DOI: 10.1007/s11055-013-9858-1 - Bromantane effects"
@@ -14706,7 +14724,7 @@
             "start": "",
             "end": null
           },
-          "summary": "Unapproved drug. No specific ban date \u2014 classified as not lawful by default.",
+          "summary": "Unapproved drug. No specific ban date — classified as not lawful by default.",
           "reference_ids": []
         }
       ],
@@ -14805,7 +14823,7 @@
         "bisfluoromodafinil",
         "lauflumide",
         "fluoromodafinil",
-        "4\u2032-fluoromodafinil",
+        "4′-fluoromodafinil",
         "CRL-40940"
       ],
       "CUI": "",
@@ -14851,7 +14869,7 @@
           "bisfluoromodafinil",
           "lauflumide",
           "fluoromodafinil",
-          "4\u2032-fluoromodafinil",
+          "4′-fluoromodafinil",
           "crl-40940"
         ],
         "exclusions": [],
@@ -16399,7 +16417,7 @@
       "ban_effective_date": "2009-01-01",
       "banned_by": "FDA",
       "reason": "Unapproved drug with serious safety concerns including melanoma risk",
-      "mechanism_of_harm": "Synthetic analog of alpha-melanocyte-stimulating hormone (\u03b1-MSH). Stimulates melanin production causing skin darkening. Causes nausea, facial flushing, spontaneous erections (priapism), cardiovascular effects, and dangerous mole changes. Major concern: may promote or mask melanoma development. No quality control in black market products. Injection-related infection risks.",
+      "mechanism_of_harm": "Synthetic analog of alpha-melanocyte-stimulating hormone (α-MSH). Stimulates melanin production causing skin darkening. Causes nausea, facial flushing, spontaneous erections (priapism), cardiovascular effects, and dangerous mole changes. Major concern: may promote or mask melanoma development. No quality control in black market products. Injection-related infection risks.",
       "regulatory_status": {
         "US": "FDA unapproved drug. Warning letters issued. Illegal to sell for human use.",
         "UK": "MHRA warnings issued. Illegal to sell.",
@@ -16602,7 +16620,7 @@
       "id": "PEPTIDE_TB500",
       "standard_name": "TB-500 (Thymosin Beta-4)",
       "aliases": [
-        "thymosin \u03b24",
+        "thymosin β4",
         "tb500",
         "repair peptide",
         "thymosin beta-4"
@@ -16655,7 +16673,7 @@
         "match_mode": "alias_and_fuzzy",
         "label_tokens": [
           "tb-500 (thymosin beta-4)",
-          "thymosin \u03b24",
+          "thymosin β4",
           "tb500",
           "repair peptide",
           "thymosin beta-4"
@@ -17175,7 +17193,7 @@
           "cardarine derivatives",
           "gw501516 analogs",
           "modified cardarine",
-          "ppar\u03b4 agonists",
+          "pparδ agonists",
           "gw-501516 derivatives"
         ],
         "exclusions": [],
@@ -20646,7 +20664,8 @@
         "biak",
         "thom",
         "kratom",
-        "ketum"
+        "ketum",
+        "mitragynine"
       ],
       "CUI": "C2936381",
       "banned_date": "",
@@ -21285,7 +21304,7 @@
       "ban_effective_date": "2017-10-31",
       "banned_by": "FDA",
       "reason": "Cancer risk in animal studies",
-      "mechanism_of_harm": "PPAR\u03b4 agonist (not technically a SARM) that caused cancer in multiple organs in animal studies at all doses tested. Rapidly promotes cancer development in liver, bladder, stomach, skin, tongue, testes, ovaries, and thyroid. Clinical trials terminated due to cancer risk.",
+      "mechanism_of_harm": "PPARδ agonist (not technically a SARM) that caused cancer in multiple organs in animal studies at all doses tested. Rapidly promotes cancer development in liver, bladder, stomach, skin, tongue, testes, ovaries, and thyroid. Clinical trials terminated due to cancer risk.",
       "regulatory_status": {
         "US": "FDA banned in supplements (October 31, 2017). Clinical trials terminated due to cancer.",
         "WADA": "Prohibited at all times (S4.5 Metabolic Modulators)",
@@ -23548,7 +23567,7 @@
       "id": "SPIKE_PHENETHYLAMINE_PEA",
       "standard_name": "Phenethylamine (PEA)",
       "aliases": [
-        "\u03b2-phenylethylamine",
+        "β-phenylethylamine",
         "beta-phenethylamine",
         "B-PEA",
         "2-phenylethylamine",
@@ -23602,7 +23621,7 @@
         "match_mode": "alias_and_fuzzy",
         "label_tokens": [
           "phenethylamine (pea)",
-          "\u03b2-phenylethylamine",
+          "β-phenylethylamine",
           "beta-phenethylamine",
           "b-pea",
           "2-phenylethylamine",
@@ -24558,13 +24577,13 @@
     },
     {
       "id": "STIM_ALPHA_PHP",
-      "standard_name": "\u03b1-PHP",
+      "standard_name": "α-PHP",
       "aliases": [
         "alpha-pyrrolidinohexanophenone",
         "PV-7",
         "alpha-pyrrolidinohexiophenone",
         "designer cathinone",
-        "\u03b1-pyrrolidinohexanophenone"
+        "α-pyrrolidinohexanophenone"
       ],
       "CUI": "",
       "banned_date": "",
@@ -24589,8 +24608,8 @@
       ],
       "notes": "Found in pre-workout supplements labeled as 'proprietary blend'. DEA Schedule I controlled substance. Causes severe psychosis and addiction.",
       "scientific_references": [
-        "DEA: \u03b1-PHP Schedule I classification",
-        "DOI: 10.1016/j.forsciint.2015.09.002 - \u03b1-PHP toxicity"
+        "DEA: α-PHP Schedule I classification",
+        "DOI: 10.1016/j.forsciint.2015.09.002 - α-PHP toxicity"
       ],
       "last_updated": "2026-01-05",
       "category": "stimulant_designer",
@@ -24614,12 +24633,12 @@
       "match_rules": {
         "match_mode": "alias_and_fuzzy",
         "label_tokens": [
-          "\u03b1-php",
+          "α-php",
           "alpha-pyrrolidinohexanophenone",
           "pv-7",
           "alpha-pyrrolidinohexiophenone",
           "designer cathinone",
-          "\u03b1-pyrrolidinohexanophenone"
+          "α-pyrrolidinohexanophenone"
         ],
         "exclusions": [],
         "case_sensitive": false,
@@ -24650,22 +24669,22 @@
       "references_structured": [
         {
           "type": "other",
-          "title": "DEA: \u03b1-PHP Schedule I classification",
+          "title": "DEA: α-PHP Schedule I classification",
           "evidence_grade": "R",
           "supports_claims": [],
-          "evidence_summary": "DEA: \u03b1-PHP Schedule I classification"
+          "evidence_summary": "DEA: α-PHP Schedule I classification"
         },
         {
           "type": "doi",
           "id": "10.1016/j.forsciint.2015.09.002",
-          "title": "\u03b1-PHP toxicity",
+          "title": "α-PHP toxicity",
           "evidence_grade": "B",
           "url": "https://doi.org/10.1016/j.forsciint.2015.09.002",
           "supports_claims": [
             "mechanism_of_harm",
             "clinical_outcomes"
           ],
-          "evidence_summary": "\u03b1-PHP toxicity"
+          "evidence_summary": "α-PHP toxicity"
         }
       ],
       "data_quality": {
@@ -25427,6 +25446,158 @@
       "unii": null,
       "usp_limit_mcg_day": null,
       "wada_prohibited": null
+    },
+    {
+      "id": "BANNED_DYMETHAZINE",
+      "standard_name": "Dymethazine",
+      "aliases": [
+        "dymethazine",
+        "dimethazine",
+        "dymethazine supplement",
+        "d-zine",
+        "d zine",
+        "methasterone azine"
+      ],
+      "CUI": null,
+      "banned_date": "2012-01-01",
+      "ban_effective_date": "2012-01-01",
+      "banned_by": "FDA",
+      "reason": "Synthetic anabolic steroid / designer prohormone sold as dietary supplement",
+      "mechanism_of_harm": "Designer anabolic steroid linked to hepatotoxicity, endocrine suppression, cardiovascular risk, and severe adverse events from undeclared/illegal steroid exposure.",
+      "regulatory_status": {
+        "US": "Not a lawful dietary ingredient; subject to FDA recall/enforcement as tainted supplement constituent.",
+        "WADA": "Anabolic agents are prohibited in sport contexts."
+      },
+      "category": "steroid",
+      "severity_level": "critical",
+      "fda_warning": true,
+      "notes": "Routed from unmapped high-risk androgenic compound. Classified as banned/prohibited steroid-like constituent.",
+      "scientific_references": [
+        "FDA recall: Ultra Research & Development Laboratories - Ultra-Sten (D-Zine) (2012)",
+        "USADA advisory: prohormone/designer steroid contamination risk"
+      ],
+      "last_updated": "2026-02-24",
+      "status": "banned",
+      "severity_score": 10,
+      "interaction_tags": [
+        "hepatic",
+        "endocrine",
+        "cardiovascular",
+        "hormonal"
+      ],
+      "detection_difficulty": "medium",
+      "ingredient_type": "steroid",
+      "class_tags": [
+        "permanently_banned",
+        "steroid"
+      ],
+      "use_case_categories": [
+        "general"
+      ],
+      "match_rules": {
+        "match_mode": "alias_and_fuzzy",
+        "label_tokens": [
+          "dymethazine",
+          "dimethazine",
+          "d-zine",
+          "d zine",
+          "methasterone azine"
+        ],
+        "exclusions": [],
+        "case_sensitive": false,
+        "priority": 1,
+        "match_type": "normalized",
+        "confidence": "high",
+        "negative_match_terms": []
+      },
+      "legal_status_enum": "banned_federal",
+      "clinical_risk_enum": "critical",
+      "jurisdictions": [
+        {
+          "region": "US",
+          "level": "federal",
+          "status": "restricted",
+          "effective_date": "2012-01-01",
+          "source": {
+            "type": "fda_recall",
+            "citation": "FDA recall: Ultra Research & Development Laboratories - Ultra-Sten (D-Zine) (2012)",
+            "accessed_date": "2026-02-24"
+          },
+          "jurisdiction_type": "country",
+          "jurisdiction_code": "US",
+          "last_verified_date": "2026-02-24"
+        }
+      ],
+      "regulatory_actions": [
+        {
+          "action_type": "ban",
+          "authority": "FDA",
+          "jurisdiction_code": null,
+          "scope": "supplement",
+          "effective_period": {
+            "start": "2012-01-01",
+            "end": null
+          },
+          "summary": "Synthetic anabolic steroid / designer prohormone sold as dietary supplement",
+          "reference_ids": []
+        }
+      ],
+      "references_structured": [
+        {
+          "type": "fda_recall",
+          "title": "FDA Recall: Ultra Research & Development Laboratories - Ultra-Sten (D-Zine)",
+          "evidence_grade": "R",
+          "url": "https://www.fda.gov/safety/recalls-market-withdrawals-safety-alerts/ultra-research-development-laboratories-announces-voluntary-nationwide-recall-ultra-sten-d-zine",
+          "supports_claims": [
+            "regulatory_action",
+            "legal_status"
+          ],
+          "evidence_summary": "Recall for undeclared/illegal steroid-like ingredient in supplement."
+        },
+        {
+          "type": "fda_advisory",
+          "title": "USADA advisory on prohormone/designer steroid risk in supplements",
+          "evidence_grade": "R",
+          "url": "https://www.usada.org/spirit-of-sport/education/five-things-know-prohormones/",
+          "supports_claims": [
+            "clinical_outcomes",
+            "mechanism_of_harm"
+          ],
+          "evidence_summary": "Designer steroids/prohormones carry serious health and doping risks."
+        }
+      ],
+      "data_quality": {
+        "completeness": 0.96,
+        "missing_fields": [],
+        "review_status": "validated"
+      },
+      "last_reviewed_at": "2026-02-24",
+      "reviewed_by": "codex_guarded_p0",
+      "source_confidence": "high",
+      "update_flags": {
+        "needs_source_verification": false
+      },
+      "source_category": "permanently_banned",
+      "regulatory_status_enum": "banned_federal",
+      "entity_type": "ingredient",
+      "effective_period": {
+        "start": "2012-01-01",
+        "end": null,
+        "notes": null
+      },
+      "review": {
+        "status": "validated",
+        "last_reviewed_at": "2026-02-24",
+        "next_review_due": "2026-08-24",
+        "reviewed_by": "codex_guarded_p0",
+        "change_log": [
+          {
+            "date": "2026-02-24",
+            "change": "Added from unmapped high-risk steroid term routing pass",
+            "by": "codex_guarded_p0"
+          }
+        ]
+      }
     }
   ]
 }
