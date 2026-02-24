@@ -4,7 +4,7 @@
     "purpose": "inactive_ingredient_classification",
     "schema_version": "4.0.0",
     "last_updated": "2026-02-24",
-    "total_entries": 528
+    "total_entries": 538
   },
   "other_ingredients": [
     {
@@ -380,7 +380,9 @@
         "natural red beet color",
         "red beet color",
         "red beet powder",
-        "red beet root juice"
+        "red beet root juice",
+        "Beet, Natural",
+        "beet natural"
       ],
       "category": "colorant_natural",
       "additive_type": "natural_color",
@@ -913,7 +915,9 @@
         "chicory root fibers",
         "chicory root soluble fiber",
         "prebiotic chicory root fiber",
-        "prebiotic fiber"
+        "prebiotic fiber",
+        "Fiber, Soluble",
+        "soluble fiber"
       ],
       "category": "fiber_prebiotic",
       "additive_type": "dietary_fiber",
@@ -1021,7 +1025,9 @@
         "citrus essential oil",
         "citrus oil",
         "lemon essential oil",
-        "orange essential oil"
+        "orange essential oil",
+        "natural citrus oils",
+        "citrus oils, natural"
       ],
       "notes": "Citrus essential oil used as flavoring agent.",
       "last_updated": "2026-02-23"
@@ -1699,7 +1705,9 @@
         "glycerine",
         "glycerol",
         "vegetable glycerin",
-        "vegetable glycerine"
+        "vegetable glycerine",
+        "glycerin, natural",
+        "natural glycerin"
       ],
       "category": "humectant",
       "additive_type": "moisture_retention",
@@ -2101,7 +2109,9 @@
         "non-GMO Sunflower Lecithin",
         "organic sunflower lecithin",
         "phosphatidylcholine",
-        "sunflower lecithin"
+        "sunflower lecithin",
+        "Sunflower Glycerides",
+        "sunflower phospholipids"
       ],
       "category": "emulsifier",
       "additive_type": "emulsifier",
@@ -2601,7 +2611,8 @@
         "modified vegetable starch",
         "non-GMO modified Corn Starch",
         "Non-GMO modified cornstarch",
-        "Tapioca Starch, Modified"
+        "Tapioca Starch, Modified",
+        "Starch-modified"
       ],
       "category": "thickener_stabilizer",
       "additive_type": "texture_modifier",
@@ -3116,7 +3127,14 @@
         "yuzu flavor",
         "natural flavouring",
         "natural cranberry flavor",
-        "natural wild berry flavor"
+        "natural wild berry flavor",
+        "natural vanilla bean flavor",
+        "vanilla bean flavor, natural",
+        "vanilla bean flavor natural",
+        "natural orange and citrus flavors",
+        "natural orange and citrus flavor",
+        "natural roasted chicken flavor",
+        "ginger flavor, natural"
       ],
       "category": "flavor_natural",
       "additive_type": "natural_flavor",
@@ -3141,7 +3159,10 @@
         "natural flavours",
         "organic natural flavor",
         "organic Natural flavoring",
-        "organic natural flavors"
+        "organic natural flavors",
+        "mixed Berry",
+        "Caramel Flavor, Natural",
+        "caramel flavor"
       ],
       "category": "flavor_natural",
       "additive_type": "flavoring",
@@ -3196,7 +3217,9 @@
         "gum arabic",
         "locust bean gum",
         "organic locust",
-        "xanthan gum"
+        "xanthan gum",
+        "hydrolyzed guar gum",
+        "sunfiber hydrolyzed guar gum"
       ],
       "category": "thickener_stabilizer",
       "additive_type": "texture_modifier",
@@ -3310,7 +3333,8 @@
         "natural vitamin E",
         "rosemary extract",
         "tocopherol blend",
-        "vitamin C ester"
+        "vitamin C ester",
+        "ascorbate palmitate"
       ],
       "category": "preservative_natural",
       "additive_type": "preservative_natural",
@@ -3793,7 +3817,9 @@
       "aliases": [
         "eudragit",
         "methacrylic acid copolymer",
-        "polymethacrylate"
+        "polymethacrylate",
+        "Methacrylic Acid Copolymer Dispersion NF",
+        "methacrylic acid copolymer dispersion"
       ],
       "notes": "Enteric coating polymer.",
       "last_updated": "2026-02-23"
@@ -6366,7 +6392,9 @@
         "tocopherol, natural",
         "tocopherols, natural",
         "vitamin e preservative",
-        "Vitamin E, Natural"
+        "Vitamin E, Natural",
+        "proprietary natural tocopherols",
+        "natural alpha tocopherol"
       ],
       "category": "preservative_natural",
       "additive_type": "antioxidant_preservative",
@@ -7556,7 +7584,76 @@
       "additive_type": "unspecified",
       "clean_label_score": 6,
       "regulatory_status": "GRAS",
-      "common_uses": ["carrier", "solvent"],
+      "common_uses": [
+        "carrier",
+        "solvent"
+      ],
+      "severity_level": "low",
+      "allergen_flag": null
+    },
+    {
+      "id": "PII_WHEY_PROTEIN_ISOLATE",
+      "standard_name": "Whey Protein Isolate",
+      "aliases": [
+        "Provon 292 SFL rBST free Whey Protein isolate",
+        "whey protein isolate",
+        "whey protein",
+        "whey isolate"
+      ],
+      "category": "protein_base",
+      "notes": "Whey protein isolate used as a carrier or base in supplement formulations. Provon 292 is a Glanbia brand.",
+      "last_updated": "2026-02-24",
+      "is_additive": false,
+      "additive_type": "unspecified",
+      "clean_label_score": 8,
+      "regulatory_status": "GRAS",
+      "common_uses": [
+        "protein base",
+        "carrier"
+      ],
+      "severity_level": "none",
+      "allergen_flag": "dairy"
+    },
+    {
+      "id": "PII_TASTE_MODIFIER",
+      "standard_name": "Taste Modifier",
+      "aliases": [
+        "taste modifier",
+        "taste masking agent",
+        "flavor modifier"
+      ],
+      "category": "flavoring",
+      "notes": "Generic taste modifier or masking agent used to improve palatability of supplement formulations.",
+      "last_updated": "2026-02-24",
+      "is_additive": true,
+      "additive_type": "flavoring",
+      "clean_label_score": 5,
+      "regulatory_status": "GRAS",
+      "common_uses": [
+        "taste masking",
+        "palatability"
+      ],
+      "severity_level": "low",
+      "allergen_flag": null
+    },
+    {
+      "id": "PII_ARABINOSE",
+      "standard_name": "Arabinose",
+      "aliases": [
+        "arabinose",
+        "l-arabinose"
+      ],
+      "category": "sweetener",
+      "notes": "Naturally occurring pentose sugar used as a sucrase inhibitor and sweetener excipient in supplement formulations.",
+      "last_updated": "2026-02-24",
+      "is_additive": true,
+      "additive_type": "sweetener",
+      "clean_label_score": 7,
+      "regulatory_status": "GRAS",
+      "common_uses": [
+        "sweetener",
+        "sucrase inhibitor"
+      ],
       "severity_level": "low",
       "allergen_flag": null
     },
@@ -7575,7 +7672,10 @@
       "additive_type": "coating",
       "clean_label_score": 5,
       "regulatory_status": "FDA_approved",
-      "common_uses": ["tablet coating", "color stabilizer"],
+      "common_uses": [
+        "tablet coating",
+        "color stabilizer"
+      ],
       "severity_level": "low",
       "allergen_flag": null
     },
@@ -8371,7 +8471,9 @@
         "medium-chain triglycerides oil",
         "medium-chained triglycerides",
         "non-GMO medium chain triglycerides",
-        "triglycerides"
+        "triglycerides",
+        "c8vantage",
+        "c8vantage medium chain triglyceride c8 powder"
       ],
       "category": "oil_carrier",
       "notes": "Easily absorbed fatty acids derived from coconut or palm kernel oil. Used as carrier for fat-soluble vitamins and active ingredients. Generally well-tolerated.",
@@ -11978,6 +12080,66 @@
       "is_additive": false,
       "severity_level": "none",
       "allergen_flag": null
+    },
+    {
+      "id": "PII_CHIA_SEED_MEAL",
+      "standard_name": "Chia Seed Meal",
+      "aliases": [
+        "chia seed meal",
+        "chia seed powder",
+        "ground chia seed"
+      ],
+      "category": "filler_binder",
+      "risk_level": "none",
+      "description": "Ground chia seeds used as filler/binder in supplements"
+    },
+    {
+      "id": "PII_CLOVE_POWDER",
+      "standard_name": "Clove Powder",
+      "aliases": [
+        "clove flower bud powder",
+        "clove powder",
+        "ground clove"
+      ],
+      "category": "flavoring",
+      "risk_level": "none",
+      "description": "Ground clove flower bud used as flavoring"
+    },
+    {
+      "id": "PII_SIENNA_COLOR",
+      "standard_name": "Sienna Juice Color",
+      "aliases": [
+        "sienna juice",
+        "sienna fruit juice color",
+        "sienna color"
+      ],
+      "category": "colorant",
+      "risk_level": "none",
+      "description": "Natural sienna fruit juice used as colorant"
+    },
+    {
+      "id": "PII_BONE_BROTH",
+      "standard_name": "Bone Broth Powder",
+      "aliases": [
+        "beef bone broth, powder",
+        "beef bone broth powder",
+        "bone broth powder",
+        "bone broth"
+      ],
+      "category": "protein_source",
+      "risk_level": "none",
+      "description": "Powdered bone broth used as protein base"
+    },
+    {
+      "id": "PII_CINNAMON_FLAVORING",
+      "standard_name": "Cinnamon (Natural Flavoring)",
+      "aliases": [
+        "cinnamon, natural",
+        "natural cinnamon flavoring"
+      ],
+      "category": "flavoring",
+      "risk_level": "none",
+      "description": "Natural cinnamon used as flavoring in supplements"
     }
   ]
 }
