@@ -140,6 +140,9 @@ EXCLUDED_NUTRITION_FACTS = {
     # Mineral component descriptors (listed as separate active but just a salt component)
     "sulfate", "sulfate ion",
 
+    # Generic fiber descriptors (nutrition panel labels, not specific fibers)
+    "dietary fibers",
+
     # Generic fatty acid aggregates
     "total fatty acids", "fatty acids and sterols", "fatty acids & sterols",
     "other fatty acids & phytonutrients", "other fatty acids and phytonutrients",

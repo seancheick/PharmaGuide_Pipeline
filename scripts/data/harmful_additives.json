@@ -14939,7 +14939,9 @@
         "FD&C White",
         "titanium dioxide color",
         "Titanium Oxide",
-        "Titanium Dioxide (E171)"
+        "Titanium Dioxide (E171)",
+        "Titanium Dioxide E171",
+        "titanium dioxide e-171"
       ],
       "CUI": null,
       "category": "colorant_artificial",
@@ -14971,7 +14973,8 @@
           "E171",
           "FD&C White",
           "titanium dioxide color",
-          "Titanium Oxide"
+          "Titanium Oxide",
+          "Titanium Dioxide E171"
         ],
         "regex": null,
         "fuzzy_threshold": 0.72,

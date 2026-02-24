@@ -4,7 +4,7 @@
     "purpose": "inactive_ingredient_classification",
     "schema_version": "4.0.0",
     "last_updated": "2026-02-24",
-    "total_entries": 538
+    "total_entries": 542
   },
   "other_ingredients": [
     {
@@ -1735,7 +1735,8 @@
         "mono and diglycerides",
         "mono- and diglycerides",
         "monoglyceride",
-        "monoglycerides"
+        "monoglycerides",
+        "mono-and diglycerides"
       ],
       "notes": "Emulsifier / stabilizer.",
       "last_updated": "2026-02-23"
@@ -3134,7 +3135,12 @@
         "natural orange and citrus flavors",
         "natural orange and citrus flavor",
         "natural roasted chicken flavor",
-        "ginger flavor, natural"
+        "ginger flavor, natural",
+        "natural orange and vanilla flavors",
+        "mango flavor, natural",
+        "orange tangerine flavor, natural",
+        "peppermint flavor, natural",
+        "peach, natural"
       ],
       "category": "flavor_natural",
       "additive_type": "natural_flavor",
@@ -4542,7 +4548,8 @@
         "pea starch",
         "starch acetate",
         "starch, modified",
-        "Tarch Acetate"
+        "Tarch Acetate",
+        "corn starch modified"
       ],
       "category": "thickener_stabilizer",
       "additive_type": "texture_modifier",
@@ -6394,7 +6401,8 @@
         "vitamin e preservative",
         "Vitamin E, Natural",
         "proprietary natural tocopherols",
-        "natural alpha tocopherol"
+        "natural alpha tocopherol",
+        "alpha tocopherol"
       ],
       "category": "preservative_natural",
       "additive_type": "antioxidant_preservative",
@@ -12140,6 +12148,56 @@
       "category": "flavoring",
       "risk_level": "none",
       "description": "Natural cinnamon used as flavoring in supplements"
+    },
+    {
+      "id": "PII_MICELLAR_CASEIN",
+      "standard_name": "Micellar Casein",
+      "aliases": [
+        "micellar casein",
+        "micellar casein protein",
+        "casein micellar"
+      ],
+      "category": "protein_source",
+      "risk_level": "none",
+      "description": "Slow-release milk protein used as base ingredient in protein supplements"
+    },
+    {
+      "id": "PII_MARINE_PROTEIN",
+      "standard_name": "Hydrolyzed Marine Protein",
+      "aliases": [
+        "hydrolyzed marine protein",
+        "marine protein",
+        "hydrolyzed marine collagen",
+        "marine protein hydrolysate"
+      ],
+      "category": "protein_source",
+      "risk_level": "none",
+      "description": "Fish-derived protein peptides used as protein base in supplements"
+    },
+    {
+      "id": "PII_NATURAL_COLORING",
+      "standard_name": "Natural Coloring",
+      "aliases": [
+        "natural yellow/orange coloring",
+        "natural yellow orange coloring",
+        "natural yellow coloring",
+        "natural orange coloring"
+      ],
+      "category": "colorant",
+      "risk_level": "none",
+      "description": "Natural plant-derived colorant (typically from turmeric, annatto, or similar)"
+    },
+    {
+      "id": "PII_TRUMASK",
+      "standard_name": "TruMask Flavor Masking",
+      "aliases": [
+        "trumask ultra liquid",
+        "trumask",
+        "trumask ultra"
+      ],
+      "category": "flavoring",
+      "risk_level": "none",
+      "description": "Branded flavor masking technology used to hide bitter tastes in supplements"
     }
   ]
 }

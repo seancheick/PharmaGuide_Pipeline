@@ -5692,7 +5692,8 @@
       "sunactive",
       "sunactive iron",
       "micronized iron",
-      "ferronyl carbonyl iron"
+      "ferronyl carbonyl iron",
+      "iron, microencapsulated"
     ],
     "match_rules": {
       "priority": 0,
@@ -12676,7 +12677,10 @@
           "probiotics",
           "bifidobacterium breve",
           "b. breve",
-          "lactococcus lactis strain plasma"
+          "lactococcus lactis strain plasma",
+          "l. lactis",
+          "lactococcus lactis",
+          "l lactis"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -18557,7 +18561,8 @@
           "type ii collagen hydrolyzed",
           "koact calcium collagen chelate",
           "koact",
-          "calcium collagen chelate"
+          "calcium collagen chelate",
+          "collagen, hydrolysate"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -50303,7 +50308,10 @@
           "dnf-10",
           "dnf-10 yeast hydrolysate",
           "dnf 10",
-          "saccharomyces cerevisiae fermentate"
+          "saccharomyces cerevisiae fermentate",
+          "renewx",
+          "renewx probiotic",
+          "renewx prebiotic"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -51066,5 +51074,203 @@
       "review_status": "stub"
     },
     "cui_note": "No UMLS CUI for supplement ingredient"
+  },
+  "l_asparagine": {
+    "standard_name": "L-Asparagine",
+    "severity_level": "none",
+    "category": "amino_acids",
+    "source": "synthetic",
+    "priority": "medium",
+    "description": "Non-essential amino acid. Precursor to aspartate. Found in protein supplements and amino acid blends. Involved in nitrogen transport and ammonia detoxification.",
+    "dosage_importance": 0.1,
+    "forms": {
+      "l-asparagine (unspecified)": {
+        "bio_score": 5,
+        "natural": true,
+        "score": 5,
+        "absorption": "unknown",
+        "notes": "Form not specified; conservative scoring applied.",
+        "aliases": [
+          "l-asparagine",
+          "asparagine",
+          "l asparagine"
+        ],
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": null,
+          "quality": "unknown",
+          "notes": "Data not available"
+        }
+      }
+    },
+    "cui": null,
+    "cui_note": "No UMLS CUI for supplement ingredient",
+    "rxcui": null,
+    "match_rules": {
+      "priority": 0,
+      "match_mode": "alias_and_fuzzy",
+      "exclusions": [],
+      "parent_id": null,
+      "confidence": "high"
+    },
+    "category_enum": "amino_acids",
+    "rxcui_note": "No RxNorm concept for supplement ingredient",
+    "data_quality": {
+      "completeness": 0.2,
+      "review_status": "stub",
+      "last_reviewed_at": "2026-02-24"
+    }
+  },
+  "dietary_nitrate": {
+    "standard_name": "Dietary Nitrate",
+    "severity_level": "none",
+    "category": "other",
+    "source": "plant_derived",
+    "priority": "medium",
+    "description": "Inorganic nitrate (NO3-) for sports performance. Converts to nitric oxide via nitrate-nitrite-NO pathway. Clinically studied at 300-600mg for exercise efficiency and blood pressure.",
+    "dosage_importance": 0.1,
+    "forms": {
+      "dietary nitrate (unspecified)": {
+        "bio_score": 8,
+        "natural": true,
+        "score": 10,
+        "absorption": "unknown",
+        "notes": "Dietary nitrate from beetroot or potassium nitrate. Well-studied for exercise performance (improved VO2 max efficiency) and blood pressure reduction. Dose: 300-600mg nitrate/day.",
+        "aliases": [
+          "dietary nitrate",
+          "nitrate",
+          "nitrates",
+          "dietary nitrates",
+          "inorganic nitrate",
+          "potassium nitrate supplement"
+        ],
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": null,
+          "quality": "unknown",
+          "notes": "Data not available"
+        }
+      }
+    },
+    "cui": null,
+    "cui_note": "No UMLS CUI for supplement ingredient",
+    "rxcui": null,
+    "match_rules": {
+      "priority": 0,
+      "match_mode": "alias_and_fuzzy",
+      "exclusions": [],
+      "parent_id": null,
+      "confidence": "high"
+    },
+    "category_enum": "other",
+    "rxcui_note": "No RxNorm concept for supplement ingredient",
+    "data_quality": {
+      "completeness": 0.2,
+      "review_status": "stub",
+      "last_reviewed_at": "2026-02-24"
+    }
+  },
+  "senna": {
+    "standard_name": "Senna",
+    "severity_level": "none",
+    "category": "herbs",
+    "source": "botanical_extract",
+    "priority": "medium",
+    "description": "Senna alexandrina (syn. Cassia angustifolia) leaf/pod extract. Contains sennosides (anthraquinone glycosides). FDA-approved OTC stimulant laxative. Short-term use only.",
+    "dosage_importance": 0.1,
+    "forms": {
+      "senna leaf extract": {
+        "bio_score": 7,
+        "natural": true,
+        "score": 8,
+        "absorption": "unknown",
+        "notes": "FDA OTC monograph laxative. Sennosides A+B are the active glycosides. Effective at 15-30mg sennosides. Not for long-term use (>2 weeks) due to electrolyte depletion and dependency risk.",
+        "aliases": [
+          "senna",
+          "senna extract",
+          "senna leaf extract",
+          "senna alexandrina",
+          "senna alexandrina leaf extract",
+          "cassia angustifolia",
+          "cassia angustifolia extract",
+          "senna leaf",
+          "senna pod extract",
+          "sennosides"
+        ],
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": null,
+          "quality": "unknown",
+          "notes": "Data not available"
+        }
+      }
+    },
+    "cui": null,
+    "cui_note": "No UMLS CUI for supplement ingredient",
+    "rxcui": null,
+    "match_rules": {
+      "priority": 0,
+      "match_mode": "alias_and_fuzzy",
+      "exclusions": [],
+      "parent_id": null,
+      "confidence": "high"
+    },
+    "category_enum": "herbs",
+    "rxcui_note": "No RxNorm concept for supplement ingredient",
+    "data_quality": {
+      "completeness": 0.2,
+      "review_status": "stub",
+      "last_reviewed_at": "2026-02-24"
+    }
+  },
+  "red_yeast_rice": {
+    "standard_name": "Red Yeast Rice",
+    "severity_level": "none",
+    "category": "other",
+    "source": "fermented",
+    "priority": "medium",
+    "description": "Monascus purpureus fermented rice. Contains monacolin K (chemically identical to lovastatin). Clinically proven for LDL cholesterol reduction. FDA regulatory scrutiny on monacolin K content.",
+    "dosage_importance": 0.1,
+    "forms": {
+      "red yeast rice extract": {
+        "bio_score": 9,
+        "natural": true,
+        "score": 11,
+        "absorption": "unknown",
+        "notes": "Active compound monacolin K is identical to lovastatin. Meta-analyses show 15-25% LDL reduction. FDA warns products with significant monacolin K levels are unapproved drugs. Quality varies greatly between brands.",
+        "aliases": [
+          "red yeast rice",
+          "red yeast rice extract",
+          "red yeast rice seed extract",
+          "monascus purpureus",
+          "monascus purpureus extract",
+          "red yeast rice powder",
+          "red fermented rice"
+        ],
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": null,
+          "quality": "unknown",
+          "notes": "Data not available"
+        }
+      }
+    },
+    "cui": null,
+    "cui_note": "No UMLS CUI for supplement ingredient",
+    "rxcui": null,
+    "match_rules": {
+      "priority": 0,
+      "match_mode": "alias_and_fuzzy",
+      "exclusions": [],
+      "parent_id": null,
+      "confidence": "high"
+    },
+    "category_enum": "other",
+    "rxcui_note": "No RxNorm concept for supplement ingredient",
+    "data_quality": {
+      "completeness": 0.2,
+      "review_status": "stub",
+      "last_reviewed_at": "2026-02-24"
+    }
   }
 }

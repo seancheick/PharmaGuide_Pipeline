@@ -4,7 +4,7 @@
     "schema_version": "4.0.0",
     "purpose": "Explicitly allowed normalized term overlaps across routing databases. Any new overlap must be reviewed before scoring deployment.",
     "description": "Explicitly allowed normalized term overlaps across routing databases. Any new overlap must be reviewed before scoring deployment.",
-    "last_updated": "2026-02-22"
+    "last_updated": "2026-02-24"
   },
   "allowed_overlaps": [
     {
@@ -56,6 +56,36 @@
       "term_normalized": "synthetic vitamin e",
       "db_pairs": ["harmful:iqm"],
       "reason": "Policy overlap between synthetic-form transparency and active vitamin E mapping."
+    },
+    {
+      "term_normalized": "cassia angustifolia",
+      "db_pairs": ["harmful:iqm"],
+      "reason": "Senna species synonym; FDA-approved OTC laxative with legitimate therapeutic use, but chronic overuse carries safety concerns (anthraquinone stimulant laxative)."
+    },
+    {
+      "term_normalized": "senna",
+      "db_pairs": ["harmful:iqm"],
+      "reason": "Senna herb; dual-listed because it is a legitimate laxative supplement ingredient but also flagged for chronic-use safety concerns."
+    },
+    {
+      "term_normalized": "senna alexandrina",
+      "db_pairs": ["harmful:iqm"],
+      "reason": "Senna species name; same dual-listing rationale as senna."
+    },
+    {
+      "term_normalized": "senna extract",
+      "db_pairs": ["harmful:iqm"],
+      "reason": "Senna extract form; same dual-listing rationale as senna."
+    },
+    {
+      "term_normalized": "senna leaf",
+      "db_pairs": ["harmful:iqm"],
+      "reason": "Senna leaf form; same dual-listing rationale as senna."
+    },
+    {
+      "term_normalized": "sennosides",
+      "db_pairs": ["harmful:iqm"],
+      "reason": "Active glycosides in senna; same dual-listing rationale as senna."
     }
   ]
 }
