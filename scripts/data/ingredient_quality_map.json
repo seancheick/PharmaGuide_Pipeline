@@ -11242,7 +11242,9 @@
           "Reduced L-Glutathione supplement",
           "opitac",
           "opitac glutathione",
-          "opitac reduced glutathione"
+          "opitac reduced glutathione",
+          "gamma-glutamylcysteines",
+          "gamma-glutamylcysteine"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -14036,7 +14038,10 @@
           "pure L-Carnitine supplement",
           "carnipure l-carnitine",
           "carnipure l carnitine",
-          "L-Carnitine HCl"
+          "L-Carnitine HCl",
+          "gamma-butyrobetaine hydrochloride",
+          "gamma-butyrobetaine hcl",
+          "gamma-butyrobetaine"
         ],
         "dosage_importance": 0.5,
         "bio_score": 12,
@@ -15994,7 +15999,8 @@
           "BroccoPlus Brassica concentrate",
           "TrueBroc Broccoli extract",
           "Broccoli Aerial Parts, Plant, Seed Extract Concentrate",
-          "Broccoli Plant, Seed Extract Concentrate"
+          "Broccoli Plant, Seed Extract Concentrate",
+          "watercress (nasturtium officinale) aerial parts 4:1 extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -16845,7 +16851,8 @@
           "Sodium R-Alpha Lipoic Acid",
           "Sodium R Alpha Lipoic Acid",
           "BioEnhanced Stabilized Na-RALA Sodium R-Lipoate",
-          "R Lipoic Acid"
+          "R Lipoic Acid",
+          "sodium r-lipoic acid"
         ],
         "context_include": [
           "lipoic",
@@ -20493,7 +20500,9 @@
           "american white ginseng",
           "panax ginseng leaf, stem extract",
           "standardized american ginseng extract",
-          "Asian Ginseng (4:1) - Manchurian"
+          "Asian Ginseng (4:1) - Manchurian",
+          "senactiv",
+          "senactiv panax notoginseng"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -25002,7 +25011,10 @@
           "andrographis leaf extract",
           "andrographolides",
           "paractin",
-          "Andrographis Stem Extract"
+          "Andrographis Stem Extract",
+          "andrographis aerial extract",
+          "andrographis aerial parts extract",
+          "andrographis paniculata aerial extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -35597,7 +35609,8 @@
           "bacopin",
           "bacopa (bacopa monnieri) aerial part extract",
           "bacopa monnieri aerial part extract",
-          "bacopa aerial part extract"
+          "bacopa aerial part extract",
+          "bacopa monnieri whole herb extract"
         ],
         "score": 9,
         "dosage_importance": 1.0,
@@ -41739,7 +41752,9 @@
           "oregano leaf",
           "origanum vulgare extract",
           "oregano leaf extract",
-          "dried oregano extract"
+          "dried oregano extract",
+          "oregano 4:1 extract",
+          "oregano leaf 4:1 extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -42323,7 +42338,9 @@
           "black currant fruit",
           "blackcurrant fruit extract",
           "blackcurrant fruit 4:1 extract",
-          "Black Currant Oil, Cold-Pressed"
+          "Black Currant Oil, Cold-Pressed",
+          "blackcurrant freeze-dried extract",
+          "blackcurrant freeze dried extract"
         ],
         "absorption_structured": {
           "value": 0.55,
@@ -47293,7 +47310,9 @@
           "horse chestnut saponin",
           "aesculus hippocastanum extract",
           "horse chestnut seed extract",
-          "beta-aescin"
+          "beta-aescin",
+          "horse chestnut 20% extract",
+          "horse chestnut extract 20%"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -48517,7 +48536,10 @@
           "pausinystalia yohimbe",
           "yohimbe bark",
           "yohimbine hydrochloride",
-          "yohimbines"
+          "yohimbines",
+          "rauwolfia vomitoria",
+          "rauwolfia vomitoria root bark extract",
+          "rauwolfia vomitoria extract"
         ],
         "notes": "Stub score for Yohimbe. Conservative fallback.",
         "natural": false,
@@ -50311,7 +50333,8 @@
           "saccharomyces cerevisiae fermentate",
           "renewx",
           "renewx probiotic",
-          "renewx prebiotic"
+          "renewx prebiotic",
+          "yeast fermentate, dried"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -50363,7 +50386,8 @@
           "picroliv (picrorhiza kurroa) extract",
           "picroprotect",
           "picroprotect picrorhiza kurroa extract",
-          "kutkin"
+          "kutkin",
+          "picrorhiza kurroa root extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -50415,6 +50439,94 @@
           "maquibright aristotelia chilensis berry standardized extract",
           "maquibright berry standardized extract",
           "aristotelia chilensis berry extract"
+        ],
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": null,
+          "quality": "unknown",
+          "notes": "Data not available"
+        }
+      }
+    },
+    "cui": null,
+    "rxcui": null,
+    "match_rules": {
+      "priority": 0,
+      "match_mode": "alias_and_fuzzy",
+      "exclusions": [],
+      "parent_id": null,
+      "confidence": "high"
+    },
+    "category_enum": "antioxidants",
+    "rxcui_note": "No RxNorm concept for supplement ingredient",
+    "data_quality": {
+      "completeness": 0.2,
+      "last_reviewed_at": "2026-02-24",
+      "review_status": "stub"
+    },
+    "cui_note": "No UMLS CUI for supplement ingredient"
+  },
+  "mangosteen": {
+    "standard_name": "Mangosteen",
+    "severity_level": "none",
+    "category": "antioxidants",
+    "source": "botanical_extract",
+    "priority": "medium",
+    "description": "Garcinia mangostana fruit. Rich in xanthones (alpha-mangostin, gamma-mangostin). Antioxidant and anti-inflammatory properties. Low oral bioavailability limits therapeutic potential. Limited controlled human clinical trials.",
+    "dosage_importance": 0.1,
+    "forms": {
+      "pericarp extract": {
+        "bio_score": 6,
+        "natural": true,
+        "score": 9,
+        "absorption": "low (~5-10%)",
+        "notes": "Concentrated xanthone source (10:1). Low oral bioavailability limits therapeutic potential despite antioxidant activity.",
+        "aliases": [
+          "mangosteen pericarp extract",
+          "mangosteen pericarp",
+          "mangosteen rind extract",
+          "xanthone extract",
+          "alpha-mangostin extract"
+        ],
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": 0.07,
+          "quality": "low",
+          "notes": "Xanthones absorbed but rapidly conjugated; Cmax ~3 ng/mL after 94 mg dose"
+        }
+      },
+      "whole fruit powder": {
+        "bio_score": 5,
+        "natural": true,
+        "score": 8,
+        "absorption": "very low",
+        "notes": "Generic powder form with lower xanthone concentration than pericarp extract.",
+        "aliases": [
+          "mangosteen powder",
+          "mangosteen fruit powder",
+          "mangosteen whole fruit powder"
+        ],
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": null,
+          "quality": "poor",
+          "notes": "Unprocessed powder; xanthone release during digestion is limited"
+        }
+      },
+      "mangosteen (unspecified)": {
+        "bio_score": 5,
+        "natural": true,
+        "score": 8,
+        "absorption": "unknown",
+        "notes": "Form not specified; conservative scoring applied.",
+        "aliases": [
+          "mangosteen",
+          "garcinia mangostana",
+          "mangosteen fruit",
+          "mangosteen extract",
+          "mangosteen fruit extract",
+          "alpha-mangostin",
+          "xanthone"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
