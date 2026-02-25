@@ -593,7 +593,7 @@
       "fda_action": "Recall",
       "fda_recall_id": "F-2796",
       "repeat_violation": true,
-      "multiple_product_lines": true,
+      "multiple_product_lines": false,
       "total_deduction_applied": -15.5,
       "user_facing_note": "🚨 REPEAT OFFENDER - CRITICAL: 123Herbals has TWO separate recalls: (1) Vail-Bon Jie Yang Wan with hidden dexamethasone/chlorpheniramine, AND (2) Silintan capsules with hidden meloxicam (Jan 2026). This is a REPEAT VIOLATION pattern indicating systemic pharmaceutical adulteration. Long-term hidden steroid use causes bone loss, immune suppression. MULTIPLE PRODUCTS AFFECTED. Penalty: -26 pts (base -15 + repeat -5 + multiple lines -3 + unresolved -3). AVOID ALL 123Herbals products. Trust Score: 74/100 (HIGH RISK).",
       "internal_note": "REPEAT OFFENDER: Two separate recalls for different undeclared drugs in different products indicates intentional pharmaceutical adulteration",
@@ -1865,7 +1865,7 @@
       "fda_action": "Recall",
       "fda_recall_id": "F-2867",
       "repeat_violation": true,
-      "multiple_product_lines": true,
+      "multiple_product_lines": false,
       "related_violation_ids": [
         "V014"
       ],

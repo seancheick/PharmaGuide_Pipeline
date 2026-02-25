@@ -830,7 +830,7 @@ class SupplementScorer:
             .get("harmful_additives", {})
             .get("additives", product.get("harmful_additives", []))
         )
-        risk_map = {"high": 2.0, "moderate": 1.0, "low": 0.5, "none": 0.0}
+        risk_map = {"critical": 3.0, "high": 2.0, "moderate": 1.0, "low": 0.5, "none": 0.0}
         penalty = 0.0
         for item in additives:
             penalty += risk_map.get(norm_text(item.get("severity_level")), 0.0)
