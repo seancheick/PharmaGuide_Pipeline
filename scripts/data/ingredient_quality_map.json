@@ -47390,23 +47390,51 @@
   "royal_sun_blazei": {
     "standard_name": "Royal Sun Blazei",
     "category": "herbs",
+    "category_enum": "herbs",
+    "source": "botanical_extract",
+    "priority": "low",
+    "description": "Agaricus blazei Murill (syn. Agaricus brasiliensis), Brazilian medicinal mushroom. Rich in beta-glucans and polysaccharides. Some human evidence for hepatoprotective effects at 1,500mg/day. Mostly preclinical immunomodulatory and antitumor data. Extract quality varies.",
     "cui": null,
     "rxcui": null,
     "forms": {
+      "agaricus blazei fruiting body extract": {
+        "bio_score": 9,
+        "natural": true,
+        "score": 12,
+        "absorption": "moderate",
+        "notes": "Extract from Agaricus blazei fruiting bodies. Some human RCT evidence: hepatoprotective at 1,500mg/day in chronic hepatitis B (PMID 17309383, 26933886). Predominantly preclinical immunomodulatory and antitumor data. Extract quality varies significantly between suppliers.",
+        "aliases": [
+          "royal sun mushroom fruiting body extract",
+          "royal sun mushroom extract",
+          "agaricus blazei fruiting body extract",
+          "agaricus blazei murill extract",
+          "agaricus brasiliensis fruiting body extract",
+          "agaricus brasiliensis extract",
+          "sun mushroom extract",
+          "agaricus blazei extract"
+        ],
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": null,
+          "quality": "moderate",
+          "notes": "Beta-glucans partially absorbed; exact bioavailability data limited."
+        }
+      },
       "royal sun blazei (unspecified)": {
         "bio_score": 5,
-        "natural": false,
-        "score": 5,
+        "natural": true,
+        "score": 8,
         "absorption": "unknown",
         "notes": "Form not specified; conservative scoring applied. Agaricus blazei Murill mushroom (Himematsutake). Immune-modulating beta-glucans.",
         "aliases": [
           "royal sun blazei",
+          "royal sun mushroom",
           "agaricus blazei",
           "agaricus blazei murill",
           "himematsutake",
           "agaricus brasiliensis",
-          "agaricus blazei extract",
-          "blazei mushroom"
+          "blazei mushroom",
+          "agaricus blazei murill mushroom"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -51564,6 +51592,147 @@
           "spearmint leaf",
           "spearmint powder",
           "spearmint herb"
+        ],
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": null,
+          "quality": "unknown",
+          "notes": "Data not available"
+        }
+      }
+    },
+    "match_rules": {
+      "priority": 0,
+      "match_mode": "alias_and_fuzzy",
+      "exclusions": [],
+      "parent_id": null,
+      "confidence": "high"
+    },
+    "data_quality": {
+      "completeness": 0.3,
+      "review_status": "stub",
+      "last_reviewed_at": "2026-02-25"
+    }
+  },
+  "button_mushroom": {
+    "standard_name": "Button Mushroom",
+    "severity_level": "none",
+    "category": "herbs",
+    "category_enum": "herbs",
+    "source": "botanical_extract",
+    "priority": "low",
+    "description": "White button mushroom (Agaricus bisporus). Rich in beta-glucans, ergothioneine, glutathione, and polysaccharides. Supports immune function via Dectin-1 receptor activation. Antioxidant and prebiotic effects. Primarily culinary; more modest medicinal evidence than reishi or maitake.",
+    "dosage_importance": 0.1,
+    "cui": null,
+    "cui_note": "No UMLS CUI for supplement ingredient",
+    "rxcui": null,
+    "rxcui_note": "No RxNorm concept for supplement ingredient",
+    "forms": {
+      "button mushroom fruiting body extract": {
+        "bio_score": 8,
+        "natural": true,
+        "score": 11,
+        "absorption": "moderate",
+        "notes": "Extract from Agaricus bisporus fruiting bodies. Beta-glucans activate macrophages and NK cells. Ergothioneine and glutathione provide antioxidant protection. Emerging oncology research (PMID 32653808, 22113068). Less medicinal evidence than reishi/maitake/shiitake.",
+        "aliases": [
+          "white button mushroom fruiting body extract",
+          "button mushroom fruiting body extract",
+          "button mushroom extract",
+          "white button mushroom extract",
+          "agaricus bisporus extract",
+          "agaricus bisporus fruiting body extract"
+        ],
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": null,
+          "quality": "moderate",
+          "notes": "Beta-glucans partially absorbed; ergothioneine well-absorbed orally."
+        }
+      },
+      "button mushroom (unspecified)": {
+        "bio_score": 5,
+        "natural": true,
+        "score": 8,
+        "absorption": "unknown",
+        "notes": "Form not specified; conservative scoring applied.",
+        "aliases": [
+          "button mushroom",
+          "white button mushroom",
+          "agaricus bisporus",
+          "common mushroom",
+          "white mushroom"
+        ],
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": null,
+          "quality": "unknown",
+          "notes": "Data not available"
+        }
+      }
+    },
+    "match_rules": {
+      "priority": 0,
+      "match_mode": "alias_and_fuzzy",
+      "exclusions": [],
+      "parent_id": null,
+      "confidence": "high"
+    },
+    "data_quality": {
+      "completeness": 0.3,
+      "review_status": "stub",
+      "last_reviewed_at": "2026-02-25"
+    }
+  },
+  "auricularia": {
+    "standard_name": "Wood Ear Mushroom",
+    "severity_level": "none",
+    "category": "herbs",
+    "category_enum": "herbs",
+    "source": "botanical_extract",
+    "priority": "low",
+    "description": "Black fungus / wood ear mushroom (Auricularia auricula-judae). Traditional Chinese medicine mushroom rich in polysaccharides and melanin. Animal models show antioxidant, anti-aging (extends nematode lifespan ~20%), and metabolic effects. Limited human clinical trials.",
+    "dosage_importance": 0.1,
+    "cui": null,
+    "cui_note": "No UMLS CUI for supplement ingredient",
+    "rxcui": null,
+    "rxcui_note": "No RxNorm concept for supplement ingredient",
+    "forms": {
+      "auricularia fruiting body extract": {
+        "bio_score": 7,
+        "natural": true,
+        "score": 10,
+        "absorption": "moderate",
+        "notes": "Extract from Auricularia auricula-judae fruiting bodies. TCM mushroom with polysaccharide-rich profile. Animal studies show antioxidant and metabolic benefits (PMID 39968271). Limited human clinical evidence — conservative scoring applied.",
+        "aliases": [
+          "black fungus mushroom fruiting body extract",
+          "black fungus mushroom extract",
+          "black fungus mushroom fruiting body",
+          "auricularia auricula-judae extract",
+          "auricularia extract",
+          "wood ear mushroom extract",
+          "cloud ear mushroom extract",
+          "black fungus extract"
+        ],
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": null,
+          "quality": "moderate",
+          "notes": "Polysaccharide bioavailability variable; direct pharmacokinetic data limited."
+        }
+      },
+      "auricularia (unspecified)": {
+        "bio_score": 5,
+        "natural": true,
+        "score": 8,
+        "absorption": "unknown",
+        "notes": "Form not specified; conservative scoring applied.",
+        "aliases": [
+          "auricularia",
+          "black fungus",
+          "wood ear mushroom",
+          "cloud ear mushroom",
+          "auricularia auricula-judae",
+          "black fungus mushroom"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
