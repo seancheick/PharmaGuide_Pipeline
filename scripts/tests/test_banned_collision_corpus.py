@@ -290,7 +290,7 @@ class TestIdRedirects:
 
         # Validate v2.0.0 schema completeness
         meta = data.get('_metadata', {})
-        assert meta.get('schema_version') == '4.0.0'
+        assert meta.get('schema_version') == '4.1.0'
         assert meta.get('total_entries') == len(data['redirects'])
         assert meta.get('total_entries') == len(data['lookup'])
 

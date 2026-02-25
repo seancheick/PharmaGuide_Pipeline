@@ -2,7 +2,7 @@
   "_metadata": {
     "description": "Mapping of user health goals to ingredient synergy clusters for personalized recommendations",
     "purpose": "goal_mapping",
-    "schema_version": "4.0.0",
+    "schema_version": "4.1.0",
     "last_updated": "2026-02-16",
     "total_entries": 16
   },

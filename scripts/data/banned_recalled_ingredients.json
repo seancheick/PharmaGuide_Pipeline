@@ -2,7 +2,7 @@
   "_metadata": {
     "description": "Banned and recalled ingredients database for regulatory compliance and safety (v3.0)",
     "purpose": "safety_disqualification_and_regulatory_compliance",
-    "schema_version": "4.0.0",
+    "schema_version": "4.1.0",
     "last_updated": "2026-02-24",
     "total_entries": 127,
     "data_source_metadata": {
@@ -155,8 +155,8 @@
         "meloxicam tablets"
       ],
       "CUI": "C0083699",
-      "banned_date": "",
-      "ban_effective_date": "",
+      "banned_date": null,
+      "ban_effective_date": null,
       "banned_by": "FDA",
       "reason": "Prescription NSAID illegally added to dietary supplements",
       "mechanism_of_harm": "Prescription nonsteroidal anti-inflammatory drug (NSAID) illegally added to supplements marketed for pain relief. Causes serious gastrointestinal bleeding, cardiovascular events (heart attack, stroke), kidney damage, and allergic reactions. Dangerous for patients on blood thinners, with heart disease, kidney disease, or NSAID allergies. Found undeclared in joint pain supplements.",
@@ -329,8 +329,8 @@
         "metformin"
       ],
       "CUI": "C0025598",
-      "banned_date": "",
-      "ban_effective_date": "",
+      "banned_date": null,
+      "ban_effective_date": null,
       "banned_by": "FDA",
       "reason": "Prescription diabetes medication illegally added to weight loss supplements",
       "mechanism_of_harm": "Prescription diabetes medication (biguanide) illegally added to weight loss supplements. Causes dangerous hypoglycemia (low blood sugar - can be fatal), lactic acidosis (potentially fatal), and vitamin B12 deficiency. Requires medical monitoring. Found in numerous recalled weight loss products.",
@@ -477,8 +477,8 @@
         "SR141716"
       ],
       "CUI": "C0299375",
-      "banned_date": "",
-      "ban_effective_date": "",
+      "banned_date": null,
+      "ban_effective_date": null,
       "banned_by": "FDA/EMA",
       "reason": "Severe psychiatric side effects including depression, anxiety, and suicidal ideation",
       "mechanism_of_harm": "CB1 receptor antagonist weight loss drug. Never approved in US. Withdrawn from EU market 2008 due to severe psychiatric side effects (depression, anxiety, suicidal ideation). Still illegally added to weight loss supplements. Causes severe psychiatric effects and suicide risk.",
@@ -3964,6 +3964,7 @@
       "standard_name": "Propylparaben",
       "aliases": [
         "E216",
+        "propyl paraben",
         "Propyl 4-hydroxybenzoate",
         "propyl p-hydroxybenzoate",
         "propylparaben sodium",
@@ -3996,6 +3997,7 @@
         "match_mode": "alias_and_fuzzy",
         "label_tokens": [
           "propylparaben",
+          "propyl paraben",
           "e216",
           "propyl 4-hydroxybenzoate",
           "propyl p-hydroxybenzoate",
@@ -7342,8 +7344,8 @@
         "mounjaro contamination"
       ],
       "CUI": "",
-      "banned_date": "",
-      "ban_effective_date": "",
+      "banned_date": null,
+      "ban_effective_date": null,
       "banned_by": "FDA",
       "reason": "Lack of sterility assurance, potential bacterial contamination in compounded formulations",
       "mechanism_of_harm": "Bacterial contamination in non-sterile compounded GLP-1 formulations. Can cause serious infections, sepsis, abscess formation, and death. Compounding pharmacies failing sterility testing. Injectable products require strict sterility - contamination is life-threatening.",
@@ -7559,8 +7561,8 @@
       "supersedes_ids": [
         "STATE_DELTA8_THC"
       ],
-      "banned_date": "",
-      "ban_effective_date": "",
+      "banned_date": null,
+      "ban_effective_date": null,
       "banned_by": "State legislatures",
       "reason": "Psychoactive cannabinoid with safety concerns. Banned in many states.",
       "mechanism_of_harm": "Psychoactive cannabinoid that binds to CB1 receptors. Products often contain contaminants from synthesis process. Associated with intoxication, impaired driving, and adverse effects especially in children who consume edibles.",
@@ -10117,7 +10119,7 @@
       ],
       "CUI": "C0016327",
       "banned_date": "2025-05-14",
-      "ban_effective_date": "",
+      "ban_effective_date": null,
       "banned_by": "FDA",
       "reason": "Potential harm to children's health, reassessment of risk-benefit profile",
       "mechanism_of_harm": "Excessive fluoride exposure in children causes dental fluorosis (permanent tooth discoloration and pitting), skeletal fluorosis, and potential neurodevelopmental effects. Recent studies link fluoride exposure to lower IQ in children. Risk-benefit profile no longer favorable given widespread fluoridated water.",
@@ -10339,8 +10341,8 @@
         "beta-phenyl-GABA"
       ],
       "CUI": "C0070007",
-      "banned_date": "",
-      "ban_effective_date": "",
+      "banned_date": null,
+      "ban_effective_date": null,
       "banned_by": "FDA",
       "reason": "Dependence, severe withdrawal, benzodiazepine-like effects",
       "mechanism_of_harm": "GABA-B receptor agonist that causes CNS depression, severe physical dependence, and life-threatening withdrawal syndrome similar to benzodiazepines and alcohol. Withdrawal can cause seizures, psychosis, and death. Highly addictive.",
@@ -11913,8 +11915,8 @@
         "za za red"
       ],
       "CUI": "C0145527",
-      "banned_date": "",
-      "ban_effective_date": "",
+      "banned_date": null,
+      "ban_effective_date": null,
       "banned_by": "Multiple States + FDA",
       "reason": "Opioid-like effects, addiction potential, overdose risk",
       "mechanism_of_harm": "Atypical antidepressant that acts as mu-opioid receptor agonist at high doses, causing opioid-like euphoria, severe physical dependence, and life-threatening withdrawal. Linked to overdoses, seizures, and deaths. Highly addictive.",
@@ -12291,7 +12293,7 @@
         "thevetia neriifolia"
       ],
       "CUI": "C0331564",
-      "banned_date": "",
+      "banned_date": null,
       "ban_effective_date": "2023-09-01",
       "banned_by": "FDA",
       "reason": "Severe cardiotoxicity, substituted in tejocote root supplements",
@@ -12655,8 +12657,8 @@
         "chaparral tea"
       ],
       "CUI": "C0949920",
-      "banned_date": "",
-      "ban_effective_date": "",
+      "banned_date": null,
+      "ban_effective_date": null,
       "banned_by": "FDA",
       "reason": "Severe liver damage; linked to hepatitis and liver failure",
       "mechanism_of_harm": "Contains nordihydroguaiaretic acid (NDGA) which causes severe hepatotoxicity including acute hepatitis, cholestatic hepatitis, cirrhosis, and liver failure requiring transplantation. At least 18 documented cases of serious liver injury. Mechanism involves oxidative stress and mitochondrial damage.",
@@ -12819,8 +12821,8 @@
         "germander extract"
       ],
       "CUI": "C0949920",
-      "banned_date": "",
-      "ban_effective_date": "",
+      "banned_date": null,
+      "ban_effective_date": null,
       "banned_by": "FDA",
       "reason": "Hepatotoxicity; liver damage; multiple cases of acute hepatitis",
       "mechanism_of_harm": "Contains furan-containing diterpenoids that cause severe hepatotoxicity through metabolic activation to reactive intermediates. Causes acute hepatitis, chronic hepatitis, and liver failure. Over 30 cases of serious liver injury documented in France alone. Can cause death.",
@@ -13015,8 +13017,8 @@
         "pennyroyal"
       ],
       "CUI": "C0949920",
-      "banned_date": "",
-      "ban_effective_date": "",
+      "banned_date": null,
+      "ban_effective_date": null,
       "banned_by": "FDA",
       "reason": "Severe hepatotoxicity; can cause liver failure and death even in small doses",
       "mechanism_of_harm": "Contains pulegone which is metabolized to toxic compounds causing severe liver necrosis, kidney failure, seizures, and death. Even small doses (teaspoon) can be fatal. Historically misused to induce abortion - causes maternal death before abortion occurs. Multiple fatalities documented.",
@@ -13190,8 +13192,8 @@
       "standard_name": "Arsenic (Inorganic)",
       "chemical_symbol": "As",
       "CUI": "C0003818",
-      "banned_date": "",
-      "ban_effective_date": "",
+      "banned_date": null,
+      "ban_effective_date": null,
       "banned_by": "",
       "fda_limit_mcg_day": 10,
       "usp_limit_mcg_day": 15,
@@ -13419,8 +13421,8 @@
       "standard_name": "Cadmium",
       "chemical_symbol": "Cd",
       "CUI": "C0006632",
-      "banned_date": "",
-      "ban_effective_date": "",
+      "banned_date": null,
+      "ban_effective_date": null,
       "banned_by": "",
       "fda_limit_mcg_day": 5,
       "usp_limit_mcg_day": 5,
@@ -13617,8 +13619,8 @@
       "standard_name": "Lead",
       "chemical_symbol": "Pb",
       "CUI": "C0023175",
-      "banned_date": "",
-      "ban_effective_date": "",
+      "banned_date": null,
+      "ban_effective_date": null,
       "banned_by": "",
       "fda_limit_mcg_day": 10,
       "usp_limit_mcg_day": 10,
@@ -13818,8 +13820,8 @@
       "standard_name": "Mercury",
       "chemical_symbol": "Hg",
       "CUI": "C0025424",
-      "banned_date": "",
-      "ban_effective_date": "",
+      "banned_date": null,
+      "ban_effective_date": null,
       "banned_by": "",
       "fda_limit_mcg_day": 15,
       "usp_limit_mcg_day": 15,
@@ -14023,8 +14025,8 @@
         "9-methyl-9H-pyrido[3,4-b]indole"
       ],
       "CUI": "",
-      "banned_date": "",
-      "ban_effective_date": "",
+      "banned_date": null,
+      "ban_effective_date": null,
       "banned_by": "FDA (unapproved new dietary ingredient)",
       "reason": "Unapproved research chemical, neurotoxicity concerns",
       "mechanism_of_harm": "Research chemical with no human safety data. Beta-carboline compounds can be neurotoxic and cause tremors, seizures, and anxiety. Not evaluated for human consumption. Potential dopaminergic neurotoxicity.",
@@ -14631,8 +14633,8 @@
         "bromantane"
       ],
       "CUI": "C0106586",
-      "banned_date": "",
-      "ban_effective_date": "",
+      "banned_date": null,
+      "ban_effective_date": null,
       "banned_by": "FDA (unapproved drug classification)",
       "reason": "Unapproved drug, stimulant properties",
       "mechanism_of_harm": "Synthetic adamantane derivative with stimulant and anxiolytic properties. Unapproved drug. Can cause overstimulation, insomnia, and cardiovascular effects. No safety data for supplements.",
@@ -16229,8 +16231,8 @@
         "BPC 157"
       ],
       "CUI": "C1313547",
-      "banned_date": "",
-      "ban_effective_date": "",
+      "banned_date": null,
+      "ban_effective_date": null,
       "banned_by": "",
       "found_in_categories": [
         "healing supplements",
@@ -16626,8 +16628,8 @@
         "thymosin beta-4"
       ],
       "CUI": "C0076068",
-      "banned_date": "",
-      "ban_effective_date": "",
+      "banned_date": null,
+      "ban_effective_date": null,
       "banned_by": "",
       "found_in_categories": [
         "recovery supplements",
@@ -16807,8 +16809,8 @@
         "dapoxetine hydrochloride"
       ],
       "CUI": "C1176306",
-      "banned_date": "",
-      "ban_effective_date": "",
+      "banned_date": null,
+      "ban_effective_date": null,
       "banned_by": "",
       "found_in_categories": [
         "male enhancement",
@@ -17144,8 +17146,8 @@
       "standard_name": "Policy Watchlist: Cardarine Derivatives",
       "aliases": [],
       "CUI": "",
-      "banned_date": "",
-      "ban_effective_date": "",
+      "banned_date": null,
+      "ban_effective_date": null,
       "banned_by": "",
       "found_in_categories": [
         "endurance supplements",
@@ -18023,8 +18025,8 @@
         "jack3d micro"
       ],
       "CUI": "",
-      "banned_date": "",
-      "ban_effective_date": "",
+      "banned_date": null,
+      "ban_effective_date": null,
       "banned_by": "FDA",
       "reason": "Contained DMAA; linked to heart attacks and deaths in military personnel",
       "mechanism_of_harm": "Pre-workout supplement containing DMAA (banned stimulant). Linked to heart attacks, strokes, and deaths in military personnel (2 US soldiers died). Caused cardiovascular events. Original formula banned. Reformulated without DMAA.",
@@ -19819,8 +19821,8 @@
         "bitter orange citrus bioflavonoid"
       ],
       "CUI": "C0330890",
-      "banned_date": "",
-      "ban_effective_date": "",
+      "banned_date": null,
+      "ban_effective_date": null,
       "banned_by": "",
       "reason": "Ephedra-like cardiovascular effects",
       "mechanism_of_harm": "Contains synephrine (similar to ephedrine). Increases blood pressure and heart rate, causes arrhythmias, heart attack, and stroke. Particularly dangerous when combined with caffeine. Marketed as ephedra replacement with similar risks.",
@@ -19994,8 +19996,8 @@
         "inorganic germanium"
       ],
       "CUI": "C0017987",
-      "banned_date": "",
-      "ban_effective_date": "",
+      "banned_date": null,
+      "ban_effective_date": null,
       "banned_by": "",
       "reason": "Kidney damage, neurologic effects",
       "mechanism_of_harm": "Inorganic germanium accumulates in kidneys causing irreversible renal tubular damage, kidney failure, and death. Also causes peripheral neuropathy and muscle weakness. Multiple fatalities reported. Organic germanium (Ge-132) may be safer but still controversial.",
@@ -20184,8 +20186,8 @@
         "high dose EGCG"
       ],
       "CUI": "C1704263",
-      "banned_date": "",
-      "ban_effective_date": "",
+      "banned_date": null,
+      "ban_effective_date": null,
       "banned_by": "",
       "reason": "Liver damage at doses >800mg EGCG daily",
       "mechanism_of_harm": "High doses of EGCG (epigallocatechin gallate) cause hepatotoxicity through oxidative stress and mitochondrial dysfunction. Doses >800mg daily significantly increase liver enzyme elevations and liver injury risk. Safe at normal dietary doses.",
@@ -20361,8 +20363,8 @@
         "kavain"
       ],
       "CUI": "C0948381",
-      "banned_date": "",
-      "ban_effective_date": "",
+      "banned_date": null,
+      "ban_effective_date": null,
       "banned_by": "",
       "reason": "Severe liver damage, banned in multiple countries",
       "mechanism_of_harm": "Contains kavalactones that cause severe hepatotoxicity including hepatitis, cirrhosis, and liver failure requiring transplantation. Mechanism unclear but may involve CYP450 enzyme inhibition and glutathione depletion. Over 100 cases of liver toxicity reported.",
@@ -20668,8 +20670,8 @@
         "mitragynine"
       ],
       "CUI": "C2936381",
-      "banned_date": "",
-      "ban_effective_date": "",
+      "banned_date": null,
+      "ban_effective_date": null,
       "banned_by": "",
       "reason": "Addiction potential, liver toxicity, seizures",
       "mechanism_of_harm": "Contains mitragynine and 7-hydroxymitragynine (opioid agonists). Causes physical dependence, severe withdrawal, liver toxicity, seizures, respiratory depression, and death (especially when combined with other substances). Over 100 deaths associated with kratom.",
@@ -20915,8 +20917,8 @@
         "12.5 mg yohimbine alkaloids"
       ],
       "CUI": "C0724536",
-      "banned_date": "",
-      "ban_effective_date": "",
+      "banned_date": null,
+      "ban_effective_date": null,
       "banned_by": "",
       "reason": "Anxiety, heart palpitations, dangerous blood pressure changes",
       "mechanism_of_harm": "Alpha-2 adrenergic receptor antagonist that increases norepinephrine and adrenaline. Causes severe anxiety, panic attacks, rapid heart rate, dangerous blood pressure spikes, seizures, and kidney failure. Can trigger manic episodes in bipolar disorder.",
@@ -22082,7 +22084,7 @@
         "panther cap"
       ],
       "CUI": "C0066351",
-      "banned_date": "",
+      "banned_date": null,
       "ban_effective_date": "2024-06-27",
       "banned_by": "FDA",
       "found_in_categories": [
@@ -22589,8 +22591,8 @@
         "estra-4,9,11,triene-3,17 dione"
       ],
       "CUI": "",
-      "banned_date": "",
-      "ban_effective_date": "",
+      "banned_date": null,
+      "ban_effective_date": null,
       "banned_by": "",
       "found_in_categories": [
         "muscle building",
@@ -22774,8 +22776,8 @@
         "chloropretadalafil"
       ],
       "CUI": "",
-      "banned_date": "",
-      "ban_effective_date": "",
+      "banned_date": null,
+      "ban_effective_date": null,
       "banned_by": "",
       "found_in_categories": [
         "male enhancement",
@@ -22931,8 +22933,8 @@
         "dexamethasone sodium phosphate"
       ],
       "CUI": "C0011777",
-      "banned_date": "",
-      "ban_effective_date": "",
+      "banned_date": null,
+      "ban_effective_date": null,
       "banned_by": "",
       "found_in_categories": [
         "anti-inflammatory",
@@ -23086,8 +23088,8 @@
         "diclofenac sodium"
       ],
       "CUI": "C0012091",
-      "banned_date": "",
-      "ban_effective_date": "",
+      "banned_date": null,
+      "ban_effective_date": null,
       "banned_by": "",
       "found_in_categories": [
         "pain relief",
@@ -23259,8 +23261,8 @@
         "fluoxetine hydrochloride"
       ],
       "CUI": "C0016365",
-      "banned_date": "",
-      "ban_effective_date": "",
+      "banned_date": null,
+      "ban_effective_date": null,
       "banned_by": "",
       "found_in_categories": [
         "mood supplements",
@@ -23414,8 +23416,8 @@
         "7-methyl mitragynine"
       ],
       "CUI": "",
-      "banned_date": "",
-      "ban_effective_date": "",
+      "banned_date": null,
+      "ban_effective_date": null,
       "banned_by": "",
       "found_in_categories": [
         "kratom products",
@@ -23575,8 +23577,8 @@
         "methylphenethylamine tartrate"
       ],
       "CUI": "C0031030",
-      "banned_date": "",
-      "ban_effective_date": "",
+      "banned_date": null,
+      "ban_effective_date": null,
       "banned_by": "",
       "found_in_categories": [
         "pre-workout",
@@ -23752,8 +23754,8 @@
         "phenolphthalein"
       ],
       "CUI": "C0031433",
-      "banned_date": "",
-      "ban_effective_date": "",
+      "banned_date": null,
+      "ban_effective_date": null,
       "banned_by": "FDA",
       "found_in_categories": [
         "weight loss",
@@ -23941,8 +23943,8 @@
         "propoxyphenyl sildenafil"
       ],
       "CUI": "",
-      "banned_date": "",
-      "ban_effective_date": "",
+      "banned_date": null,
+      "ban_effective_date": null,
       "banned_by": "",
       "found_in_categories": [
         "male enhancement",
@@ -24099,8 +24101,8 @@
         "sildenafil citrate"
       ],
       "CUI": "C0529793",
-      "banned_date": "",
-      "ban_effective_date": "",
+      "banned_date": null,
+      "ban_effective_date": null,
       "banned_by": "",
       "found_in_categories": [
         "male enhancement",
@@ -24254,8 +24256,8 @@
         "tadalafil citrate"
       ],
       "CUI": "C1176316",
-      "banned_date": "",
-      "ban_effective_date": "",
+      "banned_date": null,
+      "ban_effective_date": null,
       "banned_by": "",
       "found_in_categories": [
         "male enhancement",
@@ -24404,8 +24406,8 @@
       "standard_name": "Policy Watchlist: Tianeptine Analogues",
       "aliases": [],
       "CUI": "",
-      "banned_date": "",
-      "ban_effective_date": "",
+      "banned_date": null,
+      "ban_effective_date": null,
       "banned_by": "",
       "found_in_categories": [
         "mood supplements",
@@ -24586,8 +24588,8 @@
         "α-pyrrolidinohexanophenone"
       ],
       "CUI": "",
-      "banned_date": "",
-      "ban_effective_date": "",
+      "banned_date": null,
+      "ban_effective_date": null,
       "banned_by": "",
       "found_in_categories": [
         "pre-workout",
@@ -24754,8 +24756,8 @@
       "standard_name": "Policy Watchlist: DMAA Analogs",
       "aliases": [],
       "CUI": "",
-      "banned_date": "",
-      "ban_effective_date": "",
+      "banned_date": null,
+      "ban_effective_date": null,
       "banned_by": "",
       "found_in_categories": [
         "pre-workout",
@@ -24957,8 +24959,8 @@
         "cumyl-pica"
       ],
       "CUI": "",
-      "banned_date": "",
-      "ban_effective_date": "",
+      "banned_date": null,
+      "ban_effective_date": null,
       "banned_by": "",
       "found_in_categories": [
         "hemp products",
@@ -25133,8 +25135,8 @@
         "delta 9 tetrahydrocannabinol"
       ],
       "CUI": "C0039663",
-      "banned_date": "",
-      "ban_effective_date": "",
+      "banned_date": null,
+      "ban_effective_date": null,
       "banned_by": "WADA",
       "prohibition_status": "in_competition_only",
       "mechanism_of_harm": "Cannabinoid prohibited in athletic competition by WADA. Threshold: 150 ng/mL urine. CBD not prohibited if THC content <0.3%. In-competition only (not prohibited out-of-competition).",

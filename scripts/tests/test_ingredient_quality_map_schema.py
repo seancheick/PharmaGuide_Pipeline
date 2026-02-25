@@ -256,6 +256,20 @@ class TestMatchRules:
             + "\n".join(f"  {k}" for k in missing[:10])
         )
 
+    def test_match_mode_enum_valid(self, entries):
+        """match_mode must be one of supported matcher gates."""
+        valid_modes = {"exact", "normalized", "alias_and_fuzzy"}
+        invalid = []
+        for ing_key, entry in entries.items():
+            mode = (entry.get("match_rules") or {}).get("match_mode")
+            if mode not in valid_modes:
+                invalid.append((ing_key, mode))
+
+        assert len(invalid) == 0, (
+            f"Found {len(invalid)} invalid match_mode values:\n"
+            + "\n".join(f"  {k}: {m}" for k, m in invalid[:10])
+        )
+
 
 # =============================================================================
 # ABSORPTION TESTS (A-IQM-3 Enforcement)
@@ -478,6 +492,20 @@ class TestCategories:
         if missing:
             pytest.skip(f"{len(missing)} ingredients missing category_enum (advisory)")
 
+    def test_category_enum_matches_category(self, entries):
+        """category_enum should mirror category for parent-level consistency."""
+        mismatches = []
+        for ing_key, entry in entries.items():
+            category = entry.get("category")
+            category_enum = entry.get("category_enum")
+            if category and category_enum and category != category_enum:
+                mismatches.append((ing_key, category, category_enum))
+
+        assert len(mismatches) == 0, (
+            f"Found {len(mismatches)} category/category_enum mismatches:\n"
+            + "\n".join(f"  {k}: category={c}, category_enum={ce}" for k, c, ce in mismatches[:10])
+        )
+
 
 # =============================================================================
 # BIO SCORE TESTS
@@ -501,6 +529,47 @@ class TestBioScore:
         assert len(invalid) == 0, (
             f"Found {len(invalid)} invalid bio_scores:\n"
             + "\n".join(f"  {ing}/{form}: {b}" for ing, form, b in invalid[:10])
+        )
+
+    def test_score_matches_bio_and_natural_formula(self, entries):
+        """score must be deterministic: bio_score + 3 if natural else bio_score."""
+        mismatches = []
+        for ing_key, entry in entries.items():
+            for form_name, form_data in entry.get("forms", {}).items():
+                if not isinstance(form_data, dict):
+                    continue
+                bio = form_data.get("bio_score")
+                natural = bool(form_data.get("natural", False))
+                score = form_data.get("score")
+                if isinstance(bio, (int, float)) and isinstance(score, (int, float)):
+                    expected = bio + (3 if natural else 0)
+                    if score != expected:
+                        mismatches.append((ing_key, form_name, bio, natural, score, expected))
+
+        assert len(mismatches) == 0, (
+            f"Found {len(mismatches)} score/bio_score mismatches:\n"
+            + "\n".join(
+                f"  {ing}/{form}: bio={bio}, natural={nat}, score={score}, expected={expected}"
+                for ing, form, bio, nat, score, expected in mismatches[:10]
+            )
+        )
+
+    def test_dosage_importance_numeric(self, entries):
+        """dosage_importance should be numeric to avoid silent scorer fallback."""
+        invalid = []
+        for ing_key, entry in entries.items():
+            for form_name, form_data in entry.get("forms", {}).items():
+                if not isinstance(form_data, dict):
+                    continue
+                value = form_data.get("dosage_importance")
+                if value is None:
+                    continue
+                if not isinstance(value, (int, float)):
+                    invalid.append((ing_key, form_name, value))
+
+        assert len(invalid) == 0, (
+            f"Found {len(invalid)} non-numeric dosage_importance values:\n"
+            + "\n".join(f"  {ing}/{form}: {v!r}" for ing, form, v in invalid[:10])
         )
 
 

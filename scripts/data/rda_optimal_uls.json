@@ -2,7 +2,7 @@
   "_metadata": {
     "description": "RDA (Recommended Dietary Allowance), optimal dosing, and UL (Upper Limit) reference values for nutrient dosing validation",
     "purpose": "dosing_validation",
-    "schema_version": "4.0.0",
+    "schema_version": "4.1.0",
     "last_updated": "2026-02-16",
     "total_entries": 47,
     "data_source": "Institute of Medicine (IOM) Dietary Reference Intakes, National Academies 2019 Sodium/Potassium Update, FDA, USDA, Clinical Research",

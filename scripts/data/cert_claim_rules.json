@@ -2,8 +2,8 @@
   "_metadata": {
     "description": "Versioned rules for certification/claim detection with evidence-based scoring eligibility",
     "purpose": "claims_scoring",
-    "schema_version": "4.0.0",
-    "last_updated": "2026-02-16",
+    "schema_version": "4.1.0",
+    "last_updated": "2026-02-25",
     "scoring_rule": "Only award points when evidence_strength >= 'medium' AND score_eligible=true AND feature gate enabled",
     "design_principles": [
       "Separation of concerns: Enrichment extracts claims, Scoring computes points",
@@ -31,9 +31,9 @@
     ],
     "statistics": {
       "third_party_programs": 10,
-      "gmp_certifications": 6,
+      "gmp_certifications": 7,
       "organic_certifications": 2,
-      "allergen_free_claims": 17,
+      "allergen_free_claims": 16,
       "batch_traceability": 4,
       "quality_markers": 6,
       "total_rules": 45

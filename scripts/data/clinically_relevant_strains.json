@@ -2,7 +2,7 @@
   "_metadata": {
     "description": "Clinically relevant probiotic strains and prebiotic compounds",
     "purpose": "probiotic_strain_validation",
-    "schema_version": "4.0.0",
+    "schema_version": "4.1.0",
     "last_updated": "2026-02-16",
     "total_entries": 42,
     "data_source": null,

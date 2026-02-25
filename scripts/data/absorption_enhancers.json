@@ -2,7 +2,7 @@
   "_metadata": {
     "description": "Absorption enhancers that improve nutrient bioavailability",
     "purpose": "bioavailability_bonuses",
-    "schema_version": "4.0.0",
+    "schema_version": "4.1.0",
     "last_updated": "2026-02-20",
     "total_entries": 23
   },

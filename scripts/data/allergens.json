@@ -2,7 +2,7 @@
   "_metadata": {
     "description": "Comprehensive allergen identification database for supplement ingredients. Primarily used for consumer warnings and on-device personalization rather than general score penalties.",
     "purpose": "allergen_flagging",
-    "schema_version": "4.0.0",
+    "schema_version": "4.1.0",
     "last_updated": "2026-02-16",
     "total_entries": 32,
     "scoring_system": {

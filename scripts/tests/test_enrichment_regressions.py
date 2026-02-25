@@ -822,6 +822,57 @@ class TestMatchRulesBehavior:
 
         assert len(missing) == 0, f"Missing dosage_importance: {missing[:5]}"
 
+    def test_low_confidence_entries_are_runtime_capped(self, enricher, quality_map):
+        """needs_review/stub/pending entries should not emit premium-equivalent scores."""
+        result = enricher._match_quality_map(
+            "PA-free butterbur extract (Petadolex)",
+            "PA-free butterbur extract (Petadolex)",
+            quality_map,
+        )
+        assert result is not None
+        assert result["canonical_id"] == "butterbur"
+        assert result["bio_score"] <= 10
+        assert result["score"] <= 10
+
+    def test_legacy_match_mode_standard_is_treated_as_exact(self, enricher):
+        """Legacy match_mode='standard' must not allow pattern/contains tiers."""
+        custom_map = {
+            "legacy_mode_ingredient": {
+                "standard_name": "Legacy Mode Ingredient",
+                "category": "other",
+                "forms": {
+                    "legacy form": {
+                        "bio_score": 10,
+                        "natural": True,
+                        "score": 13,
+                        "aliases": ["legacy ingredient"],
+                        "pattern_aliases": [r"legacy\s+.+\s+ingredient"],
+                        "contains_aliases": ["legacy ingredient complex"],
+                        "dosage_importance": 1.0,
+                    }
+                },
+                "match_rules": {
+                    "priority": 1,
+                    "match_mode": "standard",
+                    "exclusions": [],
+                },
+                "data_quality": {"review_status": "validated"},
+            }
+        }
+
+        # Pattern-only text should not match when legacy 'standard' is normalized to exact.
+        no_match = enricher._match_quality_map(
+            "legacy very complex ingredient",
+            "legacy very complex ingredient",
+            custom_map,
+        )
+        assert no_match is None
+
+        # Exact alias should still match.
+        exact_match = enricher._match_quality_map("legacy ingredient", "legacy ingredient", custom_map)
+        assert exact_match is not None
+        assert exact_match["canonical_id"] == "legacy_mode_ingredient"
+
 class TestCompoundParentDisambiguation:
     """Regression tests for shared-form parent disambiguation."""
 
@@ -1366,7 +1417,7 @@ class TestFormFallbackPrecisionRegression:
         )
         assert skip in {"blend_header_without_dosage", "blend_header_total_weight_only"}
 
-    def test_safety_additives_route_to_harmful_not_banned(self, enricher):
+    def test_safety_additives_route_to_harmful_or_banned_by_policy(self, enricher):
         ingredients = [
             {"name": "Blue #1"},
             {"name": "FD&C Red #40 Lake"},
@@ -1376,8 +1427,10 @@ class TestFormFallbackPrecisionRegression:
         harmful = enricher._check_harmful_additives(ingredients)
         banned = enricher._check_banned_substances(ingredients, {})
         assert harmful.get("found") is True
-        assert len(harmful.get("additives", [])) >= 4
-        assert banned.get("found") is False
+        # Propyl Paraben is now routed through banned/recalled policy (B0 path),
+        # while dyes/TiO2 remain harmful-additive penalties (B1 path).
+        assert len(harmful.get("additives", [])) >= 3
+        assert banned.get("found") is True
 
     def test_yellow_6_variant_routes_to_harmful_additives(self, enricher):
         harmful = enricher._check_harmful_additives([{"name": "Yellow #6"}])

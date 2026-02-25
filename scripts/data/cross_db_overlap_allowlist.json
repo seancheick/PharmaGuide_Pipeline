@@ -1,7 +1,7 @@
 {
   "_metadata": {
     "version": "4.0.0",
-    "schema_version": "4.0.0",
+    "schema_version": "4.1.0",
     "purpose": "Explicitly allowed normalized term overlaps across routing databases. Any new overlap must be reviewed before scoring deployment.",
     "description": "Explicitly allowed normalized term overlaps across routing databases. Any new overlap must be reviewed before scoring deployment.",
     "last_updated": "2026-02-24"
@@ -9,82 +9,114 @@
   "allowed_overlaps": [
     {
       "term_normalized": "blue vitriol",
-      "db_pairs": ["harmful:iqm"],
+      "db_pairs": [
+        "harmful:iqm"
+      ],
       "reason": "Copper sulfate synonym; can appear as active mineral form while still treated as harmful additive in inactive context."
     },
     {
       "term_normalized": "chondrus crispus extract",
-      "db_pairs": ["harmful:iqm"],
+      "db_pairs": [
+        "harmful:iqm"
+      ],
       "reason": "Irish moss source overlap; additive risk is context-dependent and should remain explicitly guarded."
     },
     {
       "term_normalized": "copper sulfate",
-      "db_pairs": ["harmful:iqm"],
+      "db_pairs": [
+        "harmful:iqm"
+      ],
       "reason": "May be listed as an active copper form in some labels; harmful classification applies when used as additive context."
     },
     {
       "term_normalized": "cupric sulfate",
-      "db_pairs": ["harmful:iqm"],
+      "db_pairs": [
+        "harmful:iqm"
+      ],
       "reason": "Copper sulfate synonym with context-dependent routing."
     },
     {
       "term_normalized": "dl alpha tocopherol",
-      "db_pairs": ["harmful:iqm"],
+      "db_pairs": [
+        "harmful:iqm"
+      ],
       "reason": "Synthetic vitamin E form; retained in IQM for form mapping but tracked in harmful additives for transparency policy."
     },
     {
       "term_normalized": "irish moss extract",
-      "db_pairs": ["harmful:iqm"],
+      "db_pairs": [
+        "harmful:iqm"
+      ],
       "reason": "Sea moss overlap requires explicit policy guard to avoid accidental cross-file contamination."
     },
     {
       "term_normalized": "iron oxide",
-      "db_pairs": ["harmful:iqm"],
+      "db_pairs": [
+        "harmful:iqm"
+      ],
       "reason": "Additive colorant overlap with iron nomenclature; explicitly allowlisted until data-model split is completed."
     },
     {
       "term_normalized": "pteroylmonoglutamic acid",
-      "db_pairs": ["harmful:iqm"],
+      "db_pairs": [
+        "harmful:iqm"
+      ],
       "reason": "Synthetic folate synonym; context-aware policy overlap."
     },
     {
       "term_normalized": "synthetic folate",
-      "db_pairs": ["harmful:iqm"],
+      "db_pairs": [
+        "harmful:iqm"
+      ],
       "reason": "Policy overlap between synthetic-form transparency and active folate mapping."
     },
     {
       "term_normalized": "synthetic vitamin e",
-      "db_pairs": ["harmful:iqm"],
+      "db_pairs": [
+        "harmful:iqm"
+      ],
       "reason": "Policy overlap between synthetic-form transparency and active vitamin E mapping."
     },
     {
       "term_normalized": "cassia angustifolia",
-      "db_pairs": ["harmful:iqm"],
+      "db_pairs": [
+        "harmful:iqm"
+      ],
       "reason": "Senna species synonym; FDA-approved OTC laxative with legitimate therapeutic use, but chronic overuse carries safety concerns (anthraquinone stimulant laxative)."
     },
     {
       "term_normalized": "senna",
-      "db_pairs": ["harmful:iqm"],
+      "db_pairs": [
+        "harmful:iqm"
+      ],
       "reason": "Senna herb; dual-listed because it is a legitimate laxative supplement ingredient but also flagged for chronic-use safety concerns."
     },
     {
       "term_normalized": "senna alexandrina",
-      "db_pairs": ["harmful:iqm"],
+      "db_pairs": [
+        "harmful:iqm"
+      ],
       "reason": "Senna species name; same dual-listing rationale as senna."
     },
     {
       "term_normalized": "senna extract",
-      "db_pairs": ["harmful:iqm"],
+      "db_pairs": [
+        "harmful:iqm"
+      ],
       "reason": "Senna extract form; same dual-listing rationale as senna."
     },
     {
       "term_normalized": "senna leaf",
-      "db_pairs": ["harmful:iqm"],
+      "db_pairs": [
+        "harmful:iqm"
+      ],
       "reason": "Senna leaf form; same dual-listing rationale as senna."
     },
     {
       "term_normalized": "sennosides",
-      "db_pairs": ["harmful:iqm"],
+      "db_pairs": [
+        "harmful:iqm"
+      ],
       "reason": "Active glycosides in senna; same dual-listing rationale as senna."
     }
   ]

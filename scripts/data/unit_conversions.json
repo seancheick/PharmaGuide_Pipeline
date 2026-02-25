@@ -2,7 +2,7 @@
   "_metadata": {
     "description": "Unit conversion factors for supplement dosing normalization",
     "purpose": "dosing_normalization",
-    "schema_version": "4.0.0",
+    "schema_version": "4.1.0",
     "last_updated": "2026-02-16",
     "version": "1.0.0",
     "statistics": {

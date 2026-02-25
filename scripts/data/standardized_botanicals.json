@@ -4,7 +4,7 @@
       "name": "Standardized Botanicals Database",
       "description": "Botanical extracts, herbs, and plant-derived ingredients with standardization markers and thresholds",
       "version": "2.1.0",
-      "last_updated": "2026-01-05",
+      "last_updated": "2026-02-25",
       "sources": [
         "American Botanical Council (abc.herbalgram.org)",
         "Natural Medicines Comprehensive Database",
@@ -14,9 +14,9 @@
       ]
     },
     "purpose": "ingredient_mapping_and_standardization",
-    "schema_version": "4.0.0",
-    "last_updated": "2026-02-22",
-    "total_entries": 243,
+    "schema_version": "4.1.0",
+    "last_updated": "2026-02-25",
+    "total_entries": 238,
     "scoring_rule": "Botanicals with min_threshold are scored higher when meeting standardization requirements. Priority level affects matching weight.",
     "required_fields": [
       "id",
@@ -32,27 +32,27 @@
       "min_threshold"
     ],
     "categories": {
-      "herb": 134,
-      "adaptogen": 9,
-      "root": 2,
-      "herb_root_bark": 8,
-      "seed_fruit": 18,
-      "standardized_extract": 3,
-      "essential_oil": 2,
-      "algae": 4,
-      "vegetable_greens": 6,
-      "mushroom": 11,
-      "bark": 1,
-      "polyphenol": 1,
-      "fruit": 1,
       "active_compound": 6,
+      "adaptogen": 9,
+      "algae": 4,
+      "bark": 1,
+      "essential_oil": 2,
+      "fruit": 2,
+      "herb": 132,
+      "herb_root_bark": 8,
       "leaf": 2,
-      "standardized": 29
+      "mushroom": 10,
+      "polyphenol": 1,
+      "root": 2,
+      "seed_fruit": 20,
+      "standardized": 30,
+      "standardized_extract": 3,
+      "vegetable_greens": 6
     },
     "statistics": {
-      "total_aliases": 911,
-      "entries_with_threshold": 58,
-      "high_priority": 67,
+      "total_aliases": 976,
+      "entries_with_threshold": 108,
+      "high_priority": 68,
       "medium_priority": 170
     },
     "pipeline_integration": "Used by cleaning script to standardize botanical ingredient names and by enrichment script to identify quality markers"
@@ -2456,29 +2456,6 @@
       "standardization_unit": null
     },
     {
-      "standard_name": "Kava",
-      "aliases": [
-        "piper methysticum",
-        "kava kava",
-        "kava extract"
-      ],
-      "markers": [
-        "kavalactones",
-        "kavain",
-        "dihydrokavain"
-      ],
-      "priority": "medium",
-      "last_updated": "2026-01-15",
-      "id": "kava",
-      "notes": "Relaxation herb standardized for 30% kavalactones. Clinical doses typically 100-250mg kavalactones daily.",
-      "category": "herb",
-      "min_threshold": 30,
-      "recommended_activity": null,
-      "standardization": null,
-      "standardization_type": null,
-      "standardization_unit": null
-    },
-    {
       "standard_name": "Kelp",
       "aliases": [
         "laminaria",
@@ -3496,26 +3473,6 @@
       "standardization_unit": null
     },
     {
-      "standard_name": "Red Yeast Rice",
-      "aliases": [
-        "monascus purpureus",
-        "red yeast rice extract"
-      ],
-      "markers": [
-        "monacolin K"
-      ],
-      "min_threshold": 0.4,
-      "priority": "high",
-      "last_updated": "2025-11-17",
-      "id": "red_yeast_rice",
-      "notes": "Botanical ingredient standardized for monacolin K. Commonly used in dietary supplements.",
-      "category": "herb",
-      "recommended_activity": null,
-      "standardization": null,
-      "standardization_type": null,
-      "standardization_unit": null
-    },
-    {
       "standard_name": "Rehmannia",
       "aliases": [
         "chinese foxglove",
@@ -4049,27 +4006,6 @@
       "standardization_unit": null
     },
     {
-      "standard_name": "Synephrine",
-      "aliases": [
-        "bitter orange",
-        "citrus aurantium",
-        "bitter orange extract"
-      ],
-      "markers": [
-        "synephrine"
-      ],
-      "priority": "medium",
-      "last_updated": "2025-11-17",
-      "id": "synephrine",
-      "notes": "Botanical ingredient standardized for synephrine. Commonly used in dietary supplements.",
-      "category": "herb",
-      "min_threshold": null,
-      "recommended_activity": null,
-      "standardization": null,
-      "standardization_type": null,
-      "standardization_unit": null
-    },
-    {
       "standard_name": "Tart Cherry",
       "aliases": [
         "montmorency cherry",
@@ -4372,28 +4308,6 @@
       "notes": "Energy herb containing 1-2% caffeine plus theobromine and chlorogenic acids.",
       "category": "herb",
       "min_threshold": 1,
-      "recommended_activity": null,
-      "standardization": null,
-      "standardization_type": null,
-      "standardization_unit": null
-    },
-    {
-      "standard_name": "Yohimbe",
-      "aliases": [
-        "pausinystalia",
-        "pausinystalia yohimbe",
-        "yohimbe bark",
-        "yohimbe bark extract"
-      ],
-      "markers": [
-        "yohimbine"
-      ],
-      "priority": "medium",
-      "last_updated": "2025-11-17",
-      "id": "yohimbe",
-      "notes": "Botanical ingredient standardized for yohimbine. Commonly used in dietary supplements.",
-      "category": "herb",
-      "min_threshold": null,
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
@@ -5438,29 +5352,6 @@
       "notes": "High-antioxidant berry with exceptional anthocyanin content.",
       "last_updated": "2026-01-05",
       "min_threshold": null,
-      "recommended_activity": null,
-      "standardization": null,
-      "standardization_type": null,
-      "standardization_unit": null
-    },
-    {
-      "standard_name": "Monascus",
-      "aliases": [
-        "monascus purpureus",
-        "red yeast rice",
-        "hong qu",
-        "red rice yeast"
-      ],
-      "markers": [
-        "monacolin K",
-        "lovastatin"
-      ],
-      "priority": "high",
-      "min_threshold": 0.4,
-      "category": "standardized",
-      "id": "monascus",
-      "notes": "Fermented rice product containing monacolin K (same as lovastatin). Used for cholesterol support. FDA regulated.",
-      "last_updated": "2026-01-05",
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,

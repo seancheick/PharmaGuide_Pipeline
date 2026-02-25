@@ -87,7 +87,7 @@ class TestManufacturerPolicyScoring:
                 ]
             },
             "match_ledger": {
-                "schema_version": "4.0.0",
+                "schema_version": "4.1.0",
                 "domains": {
                     "ingredients": {
                         "total_raw": 1,

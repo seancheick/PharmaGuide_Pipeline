@@ -1,170 +1,170 @@
 {
-      "_metadata": {
-            "description": "Redirects deprecated IDs to canonical IDs in banned_recalled_ingredients.json",
-            "purpose": "id_redirect",
-            "schema_version": "4.0.0",
-            "last_updated": "2026-02-18",
-            "version": "2.0.0",
-            "total_entries": 25,
-            "data_source": "banned_recalled_ingredients.json supersedes_ids field",
-            "categories": {
-                  "ADD_": "Additive IDs merged into BANNED_ADD_ canonical entries",
-                  "SPIKE_": "Spike/adulteration IDs merged into BANNED_ canonical entries",
-                  "STATE_": "State-level ban IDs merged into federal BANNED_ entries"
-            }
-      },
-      "redirects": [
-            {
-                  "deprecated_id": "ADD_ANATABINE",
-                  "canonical_id": "BANNED_ADD_ANATABINE",
-                  "reason": "Additive entry merged into canonical banned entry"
-            },
-            {
-                  "deprecated_id": "ADD_ARTIFICIAL_COLORS",
-                  "canonical_id": "BANNED_ADD_ARTIFICIAL_COLORS",
-                  "reason": "Additive entry merged into canonical banned entry"
-            },
-            {
-                  "deprecated_id": "ADD_BHA",
-                  "canonical_id": "BANNED_ADD_BHA",
-                  "reason": "Additive entry merged into canonical banned entry"
-            },
-            {
-                  "deprecated_id": "ADD_BHT",
-                  "canonical_id": "BANNED_ADD_BHT",
-                  "reason": "Additive entry merged into canonical banned entry"
-            },
-            {
-                  "deprecated_id": "ADD_BLUE_1",
-                  "canonical_id": "BANNED_ADD_BLUE_1",
-                  "reason": "Additive entry merged into canonical banned entry"
-            },
-            {
-                  "deprecated_id": "ADD_CITRUS_RED_2",
-                  "canonical_id": "BANNED_ADD_CITRUS_RED_2",
-                  "reason": "Additive entry merged into canonical banned entry"
-            },
-            {
-                  "deprecated_id": "ADD_FORMALDEHYDE",
-                  "canonical_id": "BANNED_ADD_FORMALDEHYDE",
-                  "reason": "Additive entry merged into canonical banned entry"
-            },
-            {
-                  "deprecated_id": "ADD_HYDROGENATED_COCONUT_OIL",
-                  "canonical_id": "BANNED_ADD_HYDROGENATED_COCONUT_OIL",
-                  "reason": "Additive entry merged into canonical banned entry"
-            },
-            {
-                  "deprecated_id": "ADD_METHYLPARABEN",
-                  "canonical_id": "BANNED_ADD_METHYLPARABEN",
-                  "reason": "Additive entry merged into canonical banned entry"
-            },
-            {
-                  "deprecated_id": "ADD_ORANGE_B",
-                  "canonical_id": "BANNED_ADD_ORANGE_B",
-                  "reason": "Additive entry merged into canonical banned entry"
-            },
-            {
-                  "deprecated_id": "ADD_PHTHALATES",
-                  "canonical_id": "BANNED_ADD_PHTHALATES",
-                  "reason": "Additive entry merged into canonical banned entry"
-            },
-            {
-                  "deprecated_id": "ADD_POTASSIUM_BROMATE",
-                  "canonical_id": "BANNED_ADD_POTASSIUM_BROMATE",
-                  "reason": "Additive entry merged into canonical banned entry"
-            },
-            {
-                  "deprecated_id": "ADD_PROPYLPARABEN",
-                  "canonical_id": "BANNED_ADD_PROPYLPARABEN",
-                  "reason": "Additive entry merged into canonical banned entry"
-            },
-            {
-                  "deprecated_id": "ADD_RED40",
-                  "canonical_id": "BANNED_ADD_RED40",
-                  "reason": "Additive entry merged into canonical banned entry"
-            },
-            {
-                  "deprecated_id": "ADD_SYNTHETIC_ANTIOXIDANTS",
-                  "canonical_id": "BANNED_ADD_SYNTHETIC_ANTIOXIDANTS",
-                  "reason": "Additive entry merged into canonical banned entry"
-            },
-            {
-                  "deprecated_id": "ADD_SYNTHETIC_ESTROGENS",
-                  "canonical_id": "BANNED_ADD_SYNTHETIC_ESTROGENS",
-                  "reason": "Additive entry merged into canonical banned entry"
-            },
-            {
-                  "deprecated_id": "ADD_SYNTHETIC_FOOD_ACIDS",
-                  "canonical_id": "BANNED_ADD_SYNTHETIC_FOOD_ACIDS",
-                  "reason": "Additive entry merged into canonical banned entry"
-            },
-            {
-                  "deprecated_id": "ADD_TBHQ",
-                  "canonical_id": "BANNED_ADD_TBHQ",
-                  "reason": "Additive entry merged into canonical banned entry"
-            },
-            {
-                  "deprecated_id": "ADD_TITANIUM_DIOXIDE",
-                  "canonical_id": "BANNED_ADD_TITANIUM_DIOXIDE",
-                  "reason": "Additive entry merged into canonical banned entry"
-            },
-            {
-                  "deprecated_id": "ADD_YELLOW5",
-                  "canonical_id": "BANNED_ADD_YELLOW5",
-                  "reason": "Additive entry merged into canonical banned entry"
-            },
-            {
-                  "deprecated_id": "ADD_YELLOW6",
-                  "canonical_id": "BANNED_ADD_YELLOW6",
-                  "reason": "Additive entry merged into canonical banned entry"
-            },
-            {
-                  "deprecated_id": "STATE_DELTA8_THC",
-                  "canonical_id": "BANNED_DELTA8_THC",
-                  "reason": "State-level ban merged into federal banned entry"
-            },
-            {
-                  "deprecated_id": "STATE_DMAA_CALIFORNIA",
-                  "canonical_id": "BANNED_DMAA",
-                  "reason": "State-level ban merged into federal banned entry"
-            },
-            {
-                  "deprecated_id": "SPIKE_SIBUTRAMINE",
-                  "canonical_id": "BANNED_SIBUTRAMINE",
-                  "reason": "Spike/adulteration entry merged into canonical banned entry"
-            },
-            {
-                  "deprecated_id": "STATE_KRATOM_BANS",
-                  "canonical_id": "RISK_KRATOM_NATURAL",
-                  "reason": "State-level ban merged into risk assessment entry"
-            }
-      ],
-      "lookup": {
-            "ADD_ANATABINE": "BANNED_ADD_ANATABINE",
-            "ADD_ARTIFICIAL_COLORS": "BANNED_ADD_ARTIFICIAL_COLORS",
-            "ADD_BHA": "BANNED_ADD_BHA",
-            "ADD_BHT": "BANNED_ADD_BHT",
-            "ADD_BLUE_1": "BANNED_ADD_BLUE_1",
-            "ADD_CITRUS_RED_2": "BANNED_ADD_CITRUS_RED_2",
-            "ADD_FORMALDEHYDE": "BANNED_ADD_FORMALDEHYDE",
-            "ADD_HYDROGENATED_COCONUT_OIL": "BANNED_ADD_HYDROGENATED_COCONUT_OIL",
-            "ADD_METHYLPARABEN": "BANNED_ADD_METHYLPARABEN",
-            "ADD_ORANGE_B": "BANNED_ADD_ORANGE_B",
-            "ADD_PHTHALATES": "BANNED_ADD_PHTHALATES",
-            "ADD_POTASSIUM_BROMATE": "BANNED_ADD_POTASSIUM_BROMATE",
-            "ADD_PROPYLPARABEN": "BANNED_ADD_PROPYLPARABEN",
-            "ADD_RED40": "BANNED_ADD_RED40",
-            "ADD_SYNTHETIC_ANTIOXIDANTS": "BANNED_ADD_SYNTHETIC_ANTIOXIDANTS",
-            "ADD_SYNTHETIC_ESTROGENS": "BANNED_ADD_SYNTHETIC_ESTROGENS",
-            "ADD_SYNTHETIC_FOOD_ACIDS": "BANNED_ADD_SYNTHETIC_FOOD_ACIDS",
-            "ADD_TBHQ": "BANNED_ADD_TBHQ",
-            "ADD_TITANIUM_DIOXIDE": "BANNED_ADD_TITANIUM_DIOXIDE",
-            "ADD_YELLOW5": "BANNED_ADD_YELLOW5",
-            "ADD_YELLOW6": "BANNED_ADD_YELLOW6",
-            "STATE_DELTA8_THC": "BANNED_DELTA8_THC",
-            "STATE_DMAA_CALIFORNIA": "BANNED_DMAA",
-            "SPIKE_SIBUTRAMINE": "BANNED_SIBUTRAMINE",
-            "STATE_KRATOM_BANS": "RISK_KRATOM_NATURAL"
-      }
+  "_metadata": {
+    "description": "Redirects deprecated IDs to canonical IDs in banned_recalled_ingredients.json",
+    "purpose": "id_redirect",
+    "schema_version": "4.1.0",
+    "last_updated": "2026-02-18",
+    "version": "2.0.0",
+    "total_entries": 25,
+    "data_source": "banned_recalled_ingredients.json supersedes_ids field",
+    "categories": {
+      "ADD_": "Additive IDs merged into BANNED_ADD_ canonical entries",
+      "SPIKE_": "Spike/adulteration IDs merged into BANNED_ canonical entries",
+      "STATE_": "State-level ban IDs merged into federal BANNED_ entries"
+    }
+  },
+  "redirects": [
+    {
+      "deprecated_id": "ADD_ANATABINE",
+      "canonical_id": "BANNED_ADD_ANATABINE",
+      "reason": "Additive entry merged into canonical banned entry"
+    },
+    {
+      "deprecated_id": "ADD_ARTIFICIAL_COLORS",
+      "canonical_id": "BANNED_ADD_ARTIFICIAL_COLORS",
+      "reason": "Additive entry merged into canonical banned entry"
+    },
+    {
+      "deprecated_id": "ADD_BHA",
+      "canonical_id": "BANNED_ADD_BHA",
+      "reason": "Additive entry merged into canonical banned entry"
+    },
+    {
+      "deprecated_id": "ADD_BHT",
+      "canonical_id": "BANNED_ADD_BHT",
+      "reason": "Additive entry merged into canonical banned entry"
+    },
+    {
+      "deprecated_id": "ADD_BLUE_1",
+      "canonical_id": "BANNED_ADD_BLUE_1",
+      "reason": "Additive entry merged into canonical banned entry"
+    },
+    {
+      "deprecated_id": "ADD_CITRUS_RED_2",
+      "canonical_id": "BANNED_ADD_CITRUS_RED_2",
+      "reason": "Additive entry merged into canonical banned entry"
+    },
+    {
+      "deprecated_id": "ADD_FORMALDEHYDE",
+      "canonical_id": "BANNED_ADD_FORMALDEHYDE",
+      "reason": "Additive entry merged into canonical banned entry"
+    },
+    {
+      "deprecated_id": "ADD_HYDROGENATED_COCONUT_OIL",
+      "canonical_id": "BANNED_ADD_HYDROGENATED_COCONUT_OIL",
+      "reason": "Additive entry merged into canonical banned entry"
+    },
+    {
+      "deprecated_id": "ADD_METHYLPARABEN",
+      "canonical_id": "BANNED_ADD_METHYLPARABEN",
+      "reason": "Additive entry merged into canonical banned entry"
+    },
+    {
+      "deprecated_id": "ADD_ORANGE_B",
+      "canonical_id": "BANNED_ADD_ORANGE_B",
+      "reason": "Additive entry merged into canonical banned entry"
+    },
+    {
+      "deprecated_id": "ADD_PHTHALATES",
+      "canonical_id": "BANNED_ADD_PHTHALATES",
+      "reason": "Additive entry merged into canonical banned entry"
+    },
+    {
+      "deprecated_id": "ADD_POTASSIUM_BROMATE",
+      "canonical_id": "BANNED_ADD_POTASSIUM_BROMATE",
+      "reason": "Additive entry merged into canonical banned entry"
+    },
+    {
+      "deprecated_id": "ADD_PROPYLPARABEN",
+      "canonical_id": "BANNED_ADD_PROPYLPARABEN",
+      "reason": "Additive entry merged into canonical banned entry"
+    },
+    {
+      "deprecated_id": "ADD_RED40",
+      "canonical_id": "BANNED_ADD_RED40",
+      "reason": "Additive entry merged into canonical banned entry"
+    },
+    {
+      "deprecated_id": "ADD_SYNTHETIC_ANTIOXIDANTS",
+      "canonical_id": "BANNED_ADD_SYNTHETIC_ANTIOXIDANTS",
+      "reason": "Additive entry merged into canonical banned entry"
+    },
+    {
+      "deprecated_id": "ADD_SYNTHETIC_ESTROGENS",
+      "canonical_id": "BANNED_ADD_SYNTHETIC_ESTROGENS",
+      "reason": "Additive entry merged into canonical banned entry"
+    },
+    {
+      "deprecated_id": "ADD_SYNTHETIC_FOOD_ACIDS",
+      "canonical_id": "BANNED_ADD_SYNTHETIC_FOOD_ACIDS",
+      "reason": "Additive entry merged into canonical banned entry"
+    },
+    {
+      "deprecated_id": "ADD_TBHQ",
+      "canonical_id": "BANNED_ADD_TBHQ",
+      "reason": "Additive entry merged into canonical banned entry"
+    },
+    {
+      "deprecated_id": "ADD_TITANIUM_DIOXIDE",
+      "canonical_id": "BANNED_ADD_TITANIUM_DIOXIDE",
+      "reason": "Additive entry merged into canonical banned entry"
+    },
+    {
+      "deprecated_id": "ADD_YELLOW5",
+      "canonical_id": "BANNED_ADD_YELLOW5",
+      "reason": "Additive entry merged into canonical banned entry"
+    },
+    {
+      "deprecated_id": "ADD_YELLOW6",
+      "canonical_id": "BANNED_ADD_YELLOW6",
+      "reason": "Additive entry merged into canonical banned entry"
+    },
+    {
+      "deprecated_id": "STATE_DELTA8_THC",
+      "canonical_id": "BANNED_DELTA8_THC",
+      "reason": "State-level ban merged into federal banned entry"
+    },
+    {
+      "deprecated_id": "STATE_DMAA_CALIFORNIA",
+      "canonical_id": "BANNED_DMAA",
+      "reason": "State-level ban merged into federal banned entry"
+    },
+    {
+      "deprecated_id": "SPIKE_SIBUTRAMINE",
+      "canonical_id": "BANNED_SIBUTRAMINE",
+      "reason": "Spike/adulteration entry merged into canonical banned entry"
+    },
+    {
+      "deprecated_id": "STATE_KRATOM_BANS",
+      "canonical_id": "RISK_KRATOM_NATURAL",
+      "reason": "State-level ban merged into risk assessment entry"
+    }
+  ],
+  "lookup": {
+    "ADD_ANATABINE": "BANNED_ADD_ANATABINE",
+    "ADD_ARTIFICIAL_COLORS": "BANNED_ADD_ARTIFICIAL_COLORS",
+    "ADD_BHA": "BANNED_ADD_BHA",
+    "ADD_BHT": "BANNED_ADD_BHT",
+    "ADD_BLUE_1": "BANNED_ADD_BLUE_1",
+    "ADD_CITRUS_RED_2": "BANNED_ADD_CITRUS_RED_2",
+    "ADD_FORMALDEHYDE": "BANNED_ADD_FORMALDEHYDE",
+    "ADD_HYDROGENATED_COCONUT_OIL": "BANNED_ADD_HYDROGENATED_COCONUT_OIL",
+    "ADD_METHYLPARABEN": "BANNED_ADD_METHYLPARABEN",
+    "ADD_ORANGE_B": "BANNED_ADD_ORANGE_B",
+    "ADD_PHTHALATES": "BANNED_ADD_PHTHALATES",
+    "ADD_POTASSIUM_BROMATE": "BANNED_ADD_POTASSIUM_BROMATE",
+    "ADD_PROPYLPARABEN": "BANNED_ADD_PROPYLPARABEN",
+    "ADD_RED40": "BANNED_ADD_RED40",
+    "ADD_SYNTHETIC_ANTIOXIDANTS": "BANNED_ADD_SYNTHETIC_ANTIOXIDANTS",
+    "ADD_SYNTHETIC_ESTROGENS": "BANNED_ADD_SYNTHETIC_ESTROGENS",
+    "ADD_SYNTHETIC_FOOD_ACIDS": "BANNED_ADD_SYNTHETIC_FOOD_ACIDS",
+    "ADD_TBHQ": "BANNED_ADD_TBHQ",
+    "ADD_TITANIUM_DIOXIDE": "BANNED_ADD_TITANIUM_DIOXIDE",
+    "ADD_YELLOW5": "BANNED_ADD_YELLOW5",
+    "ADD_YELLOW6": "BANNED_ADD_YELLOW6",
+    "STATE_DELTA8_THC": "BANNED_DELTA8_THC",
+    "STATE_DMAA_CALIFORNIA": "BANNED_DMAA",
+    "SPIKE_SIBUTRAMINE": "BANNED_SIBUTRAMINE",
+    "STATE_KRATOM_BANS": "RISK_KRATOM_NATURAL"
+  }
 }

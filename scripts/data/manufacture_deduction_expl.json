@@ -2,7 +2,7 @@
   "_metadata": {
     "description": "Manufacturer Trust Score Deduction Framework for PharmGuide",
     "purpose": "manufacturer_deduction_explanation",
-    "schema_version": "4.0.0",
+    "schema_version": "4.1.0",
     "last_updated": "2026-02-16",
     "version": "2.0",
     "max_score": 100,

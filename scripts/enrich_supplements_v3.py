@@ -3452,9 +3452,47 @@ class SupplementEnricherV3:
         def build_form_match_data(
             parent_key: str, parent_data: Dict, form_name: str, form_data: Dict
         ) -> Dict:
-            bio_score = form_data.get('bio_score', 5)
-            natural = form_data.get('natural', False)
-            score = form_data.get('score', bio_score + (3 if natural else 0))
+            def _as_float(value, default):
+                try:
+                    return float(value)
+                except (TypeError, ValueError):
+                    return default
+
+            def _coerce_dosage_importance(value) -> float:
+                if isinstance(value, (int, float)):
+                    return float(value)
+                if isinstance(value, str):
+                    normalized = value.strip().lower()
+                    str_map = {
+                        "primary": 1.5,
+                        "high": 1.5,
+                        "major": 1.5,
+                        "secondary": 1.0,
+                        "moderate": 1.0,
+                        "medium": 1.0,
+                        "normal": 1.0,
+                        "trace": 0.5,
+                        "low": 0.5,
+                        "minor": 0.5,
+                    }
+                    if normalized in str_map:
+                        return str_map[normalized]
+                return 1.0
+
+            review_status = str((parent_data.get("data_quality") or {}).get("review_status", "")).strip().lower()
+            low_confidence_review = review_status in {"stub", "pending", "needs_review"}
+
+            bio_score = _as_float(form_data.get('bio_score', 5), 5.0)
+            natural = bool(form_data.get('natural', False))
+            expected_score = bio_score + (3.0 if natural else 0.0)
+            score = _as_float(form_data.get('score', expected_score), expected_score)
+
+            # Conservative runtime cap for provisional IQM entries until validated.
+            # Prevents provisional records from receiving premium-form credit.
+            if low_confidence_review:
+                bio_score = min(bio_score, 10.0)
+                score = min(score, 10.0)
+
             return {
                 "canonical_id": parent_key,
                 "form_id": form_name,
@@ -3465,7 +3503,7 @@ class SupplementEnricherV3:
                 "score": score,
                 "absorption": form_data.get('absorption'),
                 "notes": form_data.get('notes'),
-                "dosage_importance": form_data.get('dosage_importance', 1.0),
+                "dosage_importance": _coerce_dosage_importance(form_data.get('dosage_importance', 1.0)),
                 "category": parent_data.get('category', 'other'),
             }
 
@@ -3664,14 +3702,23 @@ class SupplementEnricherV3:
                 if excluded:
                     continue  # Skip this parent entirely
 
+            normalized_match_mode = str(parent_match_mode or "alias_and_fuzzy").strip().lower()
+            legacy_mode_map = {
+                "standard": "exact",
+                "alias": "normalized",
+            }
+            normalized_match_mode = legacy_mode_map.get(normalized_match_mode, normalized_match_mode)
+            if normalized_match_mode not in {"exact", "normalized", "alias_and_fuzzy"}:
+                normalized_match_mode = "normalized"
+
             # match_mode gates which tiers are allowed
             # exact: only tier 1,2 (exact matches)
             # normalized: tier 1,2,3,4 (exact + normalized)
             # alias_and_fuzzy: all tiers (exact + normalized + contains/pattern)
             allowed_tiers = {1, 2, 3, 4, 5, 6}  # Default: all
-            if parent_match_mode == 'exact':
+            if normalized_match_mode == 'exact':
                 allowed_tiers = {1, 2}
-            elif parent_match_mode == 'normalized':
+            elif normalized_match_mode == 'normalized':
                 allowed_tiers = {1, 2, 3, 4}
             # alias_and_fuzzy allows all tiers (default)
 

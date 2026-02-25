@@ -2,9 +2,9 @@
   "_metadata": {
     "description": "Comprehensive database of harmful additives, contaminants, and concerning ingredients found in dietary supplements. Used for scoring penalties and consumer warnings.",
     "purpose": "penalty_scoring",
-    "schema_version": "4.0.0",
-    "last_updated": "2026-02-24",
-    "total_entries": 114,
+    "schema_version": "4.1.0",
+    "last_updated": "2026-02-25",
+    "total_entries": 110,
     "scoring_rule": "Apply penalty points based on severity_level. Critical: -5, High: -3, Moderate: -1.5, Low: -0.5. Multiple additives are cumulative.",
     "severity_level_definitions": {
       "critical": "Immediate health hazard, should be avoided entirely (e.g., formaldehyde, colloidal silver)",
@@ -33,12 +33,12 @@
       "severity_level": "critical | high | moderate | low"
     },
     "risk_breakdown": {
-      "high": 22,
-      "moderate": 46,
-      "low": 29,
-      "none": 1
+      "critical": 0,
+      "high": 25,
+      "moderate": 51,
+      "low": 34
     },
-    "categories_count": 54,
+    "categories_count": 49,
     "pipeline_integration": "Used by enrichment script to apply penalty points for harmful ingredients during scoring. Matches against ingredient names and other_ingredient forms.",
     "sources": [
       "FDA Food Additive Status List",
@@ -5640,140 +5640,6 @@
       "entity_relationships": null
     },
     {
-      "id": "ADD_GERMANIUM_GE132",
-      "standard_name": "Germanium Sesquioxide (Ge-132)",
-      "aliases": [
-        "ge-132",
-        "germanium sesquioxide",
-        "bis-carboxyethyl germanium sesquioxide",
-        "organic germanium",
-        "carboxyethylgermanium sesquioxide",
-        "propagermanium",
-        "germanium dioxide",
-        "geo2",
-        "germanium supplement",
-        "germanium 132"
-      ],
-      "CUI": null,
-      "category": "toxic_mineral",
-      "mechanism_of_harm": "Germanium compounds cause renal tubular degeneration leading to irreversible kidney failure. At least 31 documented cases of renal failure and 2 deaths from chronic oral germanium intake (doses 15-300g over 2-36 months). Both organic (Ge-132) and inorganic (GeO2) forms implicated; organic products often contaminated with nephrotoxic GeO2. Damage persists after discontinuation; some patients required permanent dialysis.",
-      "regulatory_status": {
-        "US": "FDA Import Alert 54-07: ALL germanium supplements detained as 'poisonous or deleterious substance' under Section 801(a)(3). One step below formal ban.",
-        "EU": "Effectively prohibited — germanium not listed in Annex I/II of Directive 2002/46/EC (permitted minerals for food supplements)",
-        "UK": "Not included in Schedule 1 of permitted substances for food supplements"
-      },
-      "population_warnings": [
-        "ALL populations - FDA classifies as 'poisonous or deleterious substance'",
-        "People with any renal impairment - Extreme risk of irreversible kidney failure",
-        "Elderly populations - Reduced renal clearance amplifies nephrotoxic risk",
-        "Pregnant or nursing women - Insufficient safety data; organ toxicity risk"
-      ],
-      "notes": "FDA Import Alert 54-07 authorizes border detention of ALL germanium supplements without physical examination. Memorial Sloan Kettering states 'should not be consumed because they can cause renal, hepatic, and neurotoxicities.' The distinction between pure Ge-132 and contaminated/inorganic forms is debated (Reddeman 2020 vs Tao & Bolger 1997), but consumer-facing products cannot guarantee purity, and the consequences (irreversible renal failure, death) justify high severity.",
-      "scientific_references": [
-        "PMID: 9237323 - Tao & Bolger, Regulatory Toxicology & Pharmacology 1997;25(3):211-219 (FDA hazard assessment)",
-        "PMID: 1726409 - Schauss, Biol Trace Elem Res 1991;29(3):267-280 (18 renal failure cases)",
-        "FDA Import Alert 54-07 - Detention Without Physical Examination of Germanium Supplements"
-      ],
-      "last_updated": "2026-02-23",
-      "match_rules": {
-        "match_mode": "alias_and_fuzzy",
-        "label_tokens": [
-          "ge-132",
-          "germanium sesquioxide",
-          "bis-carboxyethyl germanium sesquioxide",
-          "organic germanium",
-          "carboxyethylgermanium sesquioxide",
-          "propagermanium",
-          "germanium dioxide",
-          "geo2",
-          "germanium supplement",
-          "germanium 132"
-        ],
-        "regex": null,
-        "fuzzy_threshold": 0.72,
-        "case_sensitive": false,
-        "preferred_alias": "Germanium Sesquioxide (Ge-132)"
-      },
-      "references_structured": [
-        {
-          "type": "hazard_assessment",
-          "authority": "FDA",
-          "citation": "Tao SH, Bolger PM. Hazard assessment of germanium supplements. Reg Toxicol Pharmacol. 1997;25(3):211-219",
-          "url": "https://pubmed.ncbi.nlm.nih.gov/9237323/",
-          "published_date": "1997-06-01",
-          "evidence_grade": "A",
-          "confidence": "high"
-        },
-        {
-          "type": "regulatory_action",
-          "authority": "FDA",
-          "citation": "FDA Import Alert 54-07: Detention Without Physical Examination of Germanium Supplements for Human Consumption",
-          "url": "https://www.accessdata.fda.gov/cms_ia/importalert_139.html",
-          "published_date": "2025-02-21",
-          "evidence_grade": "A",
-          "confidence": "high"
-        },
-        {
-          "type": "case_series",
-          "authority": "OTHER",
-          "citation": "Schauss AG. Nephrotoxicity and neurotoxicity in humans from organogermanium compounds. Biol Trace Elem Res. 1991;29(3):267-280",
-          "url": "https://pubmed.ncbi.nlm.nih.gov/1726409/",
-          "published_date": "1991-01-01",
-          "evidence_grade": "B",
-          "confidence": "high"
-        }
-      ],
-      "external_ids": {
-        "umls_cui": null,
-        "cas": "12758-40-6",
-        "pubchem": null
-      },
-      "jurisdictional_statuses": [
-        {
-          "authority": "US",
-          "jurisdiction": "US",
-          "status_code": "warning_required",
-          "scope": "supplement",
-          "effective_range": {
-            "start": "1997-01-01",
-            "end": null
-          },
-          "source_ref": "FDA Import Alert 54-07"
-        },
-        {
-          "authority": "EU",
-          "jurisdiction": "EU",
-          "status_code": "warning_required",
-          "scope": "supplement",
-          "effective_range": {
-            "start": "2002-01-01",
-            "end": null
-          },
-          "source_ref": "Directive 2002/46/EC Annex I/II — germanium absent from permitted minerals"
-        }
-      ],
-      "review": {
-        "status": "validated",
-        "last_reviewed_at": "2026-02-23",
-        "reviewed_by": "pipeline_audit",
-        "next_review_due": "2026-08-23",
-        "change_log": [
-          {
-            "date": "2026-02-23",
-            "change": "Initial entry created from full unmapped remediation safety audit",
-            "reason": "full_clean_unmapped_safety"
-          }
-        ]
-      },
-      "severity_score": 7,
-      "confidence": "high",
-      "exposure_context": "supplement",
-      "entity_type": "ingredient",
-      "severity_level": "high",
-      "dose_thresholds": null,
-      "entity_relationships": null
-    },
-    {
       "id": "ADD_GREEN3",
       "standard_name": "FD&C Green No. 3",
       "aliases": [
@@ -5978,160 +5844,6 @@
       "severity_level": "moderate",
       "dose_thresholds": null,
       "entity_relationships": null
-    },
-    {
-      "id": "ADD_HYDROGENATED_OILS",
-      "standard_name": "Hydrogenated Vegetable Oil",
-      "aliases": [
-        "Hydrogenated Vegetable Oil",
-        "hydrogenated vegetable oil",
-        "partially hydrogenated vegetable oil",
-        "hydrogenated oil",
-        "hydrogenated cottonseed oil",
-        "sterotex nf"
-      ],
-      "CUI": null,
-      "category": "fat_oil_hydrogenated",
-      "mechanism_of_harm": "Hydrogenation can produce trans fatty acids; health risk is dose-dependent and formulation-specific.",
-      "regulatory_status": {
-        "US": "FDA approved; California Prop 65 limits 4-MEI to 29 mcg/day",
-        "EU": "E150a-d approved with purity criteria",
-        "WHO": "JECFA ADI for 4-MEI is 0.2 mg/kg body weight"
-      },
-      "population_warnings": [
-        "Everyone - Potential carcinogen exposure from 4-MEI",
-        "Children - Higher exposure per body weight",
-        "People consuming cola beverages - High 4-MEI exposure"
-      ],
-      "notes": "Hydrogenated oils may contribute trans-fat exposure depending on processing profile; treated as low additive-risk signal.",
-      "scientific_references": [
-        "WHO trans-fat elimination guidance",
-        "FDA PHO determinations"
-      ],
-      "last_updated": "2026-02-22",
-      "match_rules": {
-        "match_mode": "alias_and_fuzzy",
-        "label_tokens": [
-          "Hydrogenated Vegetable Oil",
-          "hydrogenated vegetable oil",
-          "partially hydrogenated vegetable oil",
-          "hydrogenated oil",
-          "hydrogenated cottonseed oil",
-          "sterotex nf"
-        ],
-        "regex": null,
-        "fuzzy_threshold": 0.72,
-        "case_sensitive": false,
-        "preferred_alias": "Hydrogenated Vegetable Oil"
-      },
-      "references_structured": [
-        {
-          "type": "regulation",
-          "title": "21 CFR 74.101 FD&C Blue No. 1",
-          "evidence_grade": "R",
-          "url": "https://www.law.cornell.edu/cfr/text/21/74.101",
-          "supports_claims": [
-            "regulatory_status"
-          ],
-          "evidence_summary": "Authorized U.S. color additive use under specified conditions."
-        }
-      ],
-      "external_ids": {
-        "umls_cui": null,
-        "cas": null,
-        "pubchem": null
-      },
-      "jurisdictional_statuses": [
-        {
-          "authority": "US",
-          "jurisdiction": "US",
-          "status_code": "monitored",
-          "scope": "supplement",
-          "effective_range": {
-            "start": "2025-11-17",
-            "end": null
-          },
-          "source_ref": "https://www.fda.gov/food/food-additives-petitions/food-additive-status-list"
-        },
-        {
-          "authority": "EU",
-          "jurisdiction": "EU",
-          "status_code": "allowed",
-          "scope": "supplement",
-          "effective_range": {
-            "start": "2025-11-17",
-            "end": null
-          },
-          "source_ref": "https://www.efsa.europa.eu/en/efsajournal"
-        },
-        {
-          "authority": "WHO",
-          "jurisdiction": "WHO",
-          "status_code": "allowed",
-          "scope": "supplement",
-          "effective_range": {
-            "start": "2025-11-17",
-            "end": null
-          },
-          "source_ref": "https://www.who.int/publications"
-        }
-      ],
-      "review": {
-        "status": "validated",
-        "last_reviewed_at": "2026-02-22",
-        "reviewed_by": "codex_harmful_allergen_normalization",
-        "next_review_due": "2026-08-22",
-        "change_log": [
-          {
-            "date": "2025-11-17",
-            "change": "added v2.1 schema (match_rules, references_structured, review)",
-            "reason": "harmful_additives refactor"
-          },
-          {
-            "date": "2026-01-08",
-            "change": "Downgraded to needs_review (missing credible evidence)",
-            "reason": "Phase 3 evidence completion"
-          },
-          {
-            "date": "2026-01-08",
-            "change": "Backfilled credible references",
-            "reason": "Phase 3 evidence completion"
-          },
-          {
-            "date": "2026-01-08",
-            "change": "Updated reviewed_by to team:b_harmful_additives",
-            "reason": "Review metadata cleanup"
-          },
-          {
-            "date": "2026-01-08",
-            "change": "Confidence downgraded due to insufficient citations",
-            "reason": "Evidence gating"
-          },
-          {
-            "date": "2026-01-08",
-            "change": "Populated jurisdiction provenance fields (source_ref, effective_range.start)",
-            "reason": "Jurisdiction provenance"
-          },
-          {
-            "date": "2026-02-16",
-            "change": "Normalized aliases/label_tokens and reduced overlap collisions for deterministic supplement matching",
-            "reason": "schema_consistency_and_precision"
-          },
-          {
-            "date": "2026-02-22",
-            "change": "Added targeted mapping entry from softgels unmapped audit",
-            "reason": "improve additive detection coverage"
-          }
-        ]
-      },
-      "severity_score": 2,
-      "confidence": "medium",
-      "exposure_context": "supplement",
-      "entity_type": "ingredient",
-      "severity_level": "low",
-      "dose_thresholds": null,
-      "entity_relationships": null,
-      "cui_note": "CUI was incorrectly copied from ADD_RED40 (C0054436). Needs UMLS Metathesaurus verification."
     },
     {
       "id": "ADD_HYDROGENATED_STARCH_HYDROLYSATE",
@@ -8319,7 +8031,7 @@
     {
       "id": "ADD_N_PHENETHYL_DIMETHYLAMINE",
       "standard_name": "N-Phenethyl Dimethylamine",
-      "severity_level": "warning",
+      "severity_level": "moderate",
       "description": "Substituted phenethylamine CNS stimulant (CAS 1126-71-2) from Eria jarensis orchid. Structurally similar to PEA, DMAA, and amphetamine. Banned by WADA. Zero clinical studies. Listed on BSCG Dietary Supplement Ingredient Advisory List.",
       "aliases": [
         "n-phenethyl dimethylamine",
@@ -9996,156 +9708,6 @@
       "severity_level": "moderate",
       "dose_thresholds": null,
       "entity_relationships": null
-    },
-    {
-      "id": "ADD_PROPYL_PARABEN",
-      "standard_name": "Propyl Paraben",
-      "aliases": [
-        "Propyl Paraben",
-        "Propylparaben",
-        "E216",
-        "propyl p-hydroxybenzoate"
-      ],
-      "CUI": null,
-      "category": "preservative_synthetic",
-      "mechanism_of_harm": "Parabens can exhibit weak estrogenic activity; risk assessment depends on cumulative exposure.",
-      "regulatory_status": {
-        "US": "FDA approved; California Prop 65 limits 4-MEI to 29 mcg/day",
-        "EU": "E150a-d approved with purity criteria",
-        "WHO": "JECFA ADI for 4-MEI is 0.2 mg/kg body weight"
-      },
-      "population_warnings": [
-        "Everyone - Potential carcinogen exposure from 4-MEI",
-        "Children - Higher exposure per body weight",
-        "People consuming cola beverages - High 4-MEI exposure"
-      ],
-      "notes": "Synthetic paraben preservative; flagged as additive risk due endocrine-disruption concerns in susceptible populations.",
-      "scientific_references": [
-        "DOI: 10.1289/ehp.10188 - Paraben exposure and endocrine activity",
-        "EFSA Journal parabens risk assessments"
-      ],
-      "last_updated": "2026-02-22",
-      "match_rules": {
-        "match_mode": "alias_and_fuzzy",
-        "label_tokens": [
-          "Propyl Paraben",
-          "Propylparaben",
-          "E216",
-          "propyl p-hydroxybenzoate"
-        ],
-        "regex": null,
-        "fuzzy_threshold": 0.72,
-        "case_sensitive": false,
-        "preferred_alias": "Propyl Paraben"
-      },
-      "references_structured": [
-        {
-          "type": "regulation",
-          "title": "21 CFR 74.101 FD&C Blue No. 1",
-          "evidence_grade": "R",
-          "url": "https://www.law.cornell.edu/cfr/text/21/74.101",
-          "supports_claims": [
-            "regulatory_status"
-          ],
-          "evidence_summary": "Authorized U.S. color additive use under specified conditions."
-        }
-      ],
-      "external_ids": {
-        "umls_cui": null,
-        "cas": null,
-        "pubchem": null
-      },
-      "jurisdictional_statuses": [
-        {
-          "authority": "US",
-          "jurisdiction": "US",
-          "status_code": "monitored",
-          "scope": "supplement",
-          "effective_range": {
-            "start": "2025-11-17",
-            "end": null
-          },
-          "source_ref": "https://www.fda.gov/food/food-additives-petitions/food-additive-status-list"
-        },
-        {
-          "authority": "EU",
-          "jurisdiction": "EU",
-          "status_code": "allowed",
-          "scope": "supplement",
-          "effective_range": {
-            "start": "2025-11-17",
-            "end": null
-          },
-          "source_ref": "https://www.efsa.europa.eu/en/efsajournal"
-        },
-        {
-          "authority": "WHO",
-          "jurisdiction": "WHO",
-          "status_code": "allowed",
-          "scope": "supplement",
-          "effective_range": {
-            "start": "2025-11-17",
-            "end": null
-          },
-          "source_ref": "https://www.who.int/publications"
-        }
-      ],
-      "review": {
-        "status": "validated",
-        "last_reviewed_at": "2026-02-22",
-        "reviewed_by": "codex_harmful_allergen_normalization",
-        "next_review_due": "2026-08-22",
-        "change_log": [
-          {
-            "date": "2025-11-17",
-            "change": "added v2.1 schema (match_rules, references_structured, review)",
-            "reason": "harmful_additives refactor"
-          },
-          {
-            "date": "2026-01-08",
-            "change": "Downgraded to needs_review (missing credible evidence)",
-            "reason": "Phase 3 evidence completion"
-          },
-          {
-            "date": "2026-01-08",
-            "change": "Backfilled credible references",
-            "reason": "Phase 3 evidence completion"
-          },
-          {
-            "date": "2026-01-08",
-            "change": "Updated reviewed_by to team:b_harmful_additives",
-            "reason": "Review metadata cleanup"
-          },
-          {
-            "date": "2026-01-08",
-            "change": "Confidence downgraded due to insufficient citations",
-            "reason": "Evidence gating"
-          },
-          {
-            "date": "2026-01-08",
-            "change": "Populated jurisdiction provenance fields (source_ref, effective_range.start)",
-            "reason": "Jurisdiction provenance"
-          },
-          {
-            "date": "2026-02-16",
-            "change": "Normalized aliases/label_tokens and reduced overlap collisions for deterministic supplement matching",
-            "reason": "schema_consistency_and_precision"
-          },
-          {
-            "date": "2026-02-22",
-            "change": "Added targeted mapping entry from softgels unmapped audit",
-            "reason": "improve additive detection coverage"
-          }
-        ]
-      },
-      "severity_score": 3,
-      "confidence": "medium",
-      "exposure_context": "supplement",
-      "entity_type": "ingredient",
-      "severity_level": "moderate",
-      "dose_thresholds": null,
-      "entity_relationships": null,
-      "cui_note": "CUI was incorrectly copied from ADD_RED40 (C0054436). Needs UMLS Metathesaurus verification."
     },
     {
       "id": "ADD_PUREFRUIT_SELECT",
@@ -13478,141 +13040,6 @@
       "entity_relationships": null
     },
     {
-      "id": "ADD_SYNEPHRINE",
-      "standard_name": "Synephrine",
-      "aliases": [
-        "synephrine",
-        "synephrine hcl",
-        "synephrine hydrochloride",
-        "p-synephrine",
-        "para-synephrine",
-        "oxedrine",
-        "advantra z",
-        "synephrine alkaloids",
-        "methylsynephrine",
-        "methylsynephrine hcl",
-        "methylsynephrine hydrochloride",
-        "methyl synephrine",
-        "methyl synephrine hcl",
-        "methyl synephrine hydrochloride",
-        "isopropylnorsynephrine",
-        "n-isopropylnorsynephrine",
-        "n-isopropylnorsynephrine hcl",
-        "n isopropylnorsynephrine",
-        "synephrine caprylate"
-      ],
-      "CUI": null,
-      "category": "stimulant_sympathomimetic",
-      "mechanism_of_harm": "Alpha-1 adrenergic agonist that causes vasoconstriction. Associated with cardiac adverse events including myocardial infarction, arrhythmias, and stroke, especially when combined with caffeine. ANSES (France) limits to 20 mg/day due to cardiovascular risks.",
-      "regulatory_status": {
-        "US": "FDA monitoring - not banned but subject to adverse event reports",
-        "EU": "Not banned; ANSES recommends max 20 mg/day",
-        "ANSES": "2014 opinion recommending daily limit of 20 mg"
-      },
-      "population_warnings": [
-        "People with cardiovascular disease - Risk of MI, arrhythmias, stroke",
-        "People taking caffeine or other stimulants - Amplified cardiovascular risk",
-        "Pregnant or nursing women - Insufficient safety data",
-        "People with hypertension - May worsen blood pressure"
-      ],
-      "notes": "Found naturally in bitter orange (Citrus aurantium) peel. Marketed as ephedra alternative in weight-loss supplements. Multiple case reports of serious cardiac events. Risk substantially increases when combined with caffeine, which is common in weight-loss formulations.",
-      "scientific_references": [
-        "DOI: 10.3390/nu15040998 - Synephrine cardiovascular adverse events review (2023)",
-        "ANSES Opinion 2014-SA-0073 - Assessment of risks related to p-synephrine"
-      ],
-      "last_updated": "2026-02-23",
-      "match_rules": {
-        "match_mode": "alias_and_fuzzy",
-        "label_tokens": [
-          "synephrine",
-          "synephrine hcl",
-          "synephrine hydrochloride",
-          "p-synephrine",
-          "para-synephrine",
-          "oxedrine",
-          "advantra z",
-          "methylsynephrine",
-          "methylsynephrine hcl",
-          "isopropylnorsynephrine",
-          "n-isopropylnorsynephrine",
-          "synephrine caprylate"
-        ],
-        "regex": null,
-        "fuzzy_threshold": 0.72,
-        "case_sensitive": false,
-        "preferred_alias": "Synephrine"
-      },
-      "references_structured": [
-        {
-          "type": "systematic_review",
-          "authority": "OTHER",
-          "citation": "DOI: 10.3390/nu15040998 - Synephrine cardiovascular adverse events review (2023)",
-          "url": "https://doi.org/10.3390/nu15040998",
-          "published_date": null,
-          "evidence_grade": "B",
-          "confidence": "high"
-        },
-        {
-          "type": "regulatory_action",
-          "authority": "ANSES",
-          "citation": "ANSES Opinion 2014-SA-0073 - p-synephrine risk assessment",
-          "url": "",
-          "published_date": null,
-          "evidence_grade": "B",
-          "confidence": "high"
-        }
-      ],
-      "external_ids": {
-        "umls_cui": null,
-        "cas": "94-07-5",
-        "pubchem": null
-      },
-      "jurisdictional_statuses": [
-        {
-          "authority": "US",
-          "jurisdiction": "US",
-          "status_code": "monitored",
-          "scope": "supplement",
-          "effective_range": {
-            "start": "2004-01-01",
-            "end": null
-          },
-          "source_ref": "FDA adverse event monitoring post-ephedra ban"
-        },
-        {
-          "authority": "ANSES",
-          "jurisdiction": "FR",
-          "status_code": "warning_required",
-          "scope": "supplement",
-          "effective_range": {
-            "start": "2014-01-01",
-            "end": null
-          },
-          "source_ref": "ANSES Opinion 2014-SA-0073"
-        }
-      ],
-      "review": {
-        "status": "validated",
-        "last_reviewed_at": "2026-02-23",
-        "reviewed_by": "codex_p3_audit",
-        "next_review_due": "2026-08-22",
-        "change_log": [
-          {
-            "date": "2026-02-22",
-            "change": "Initial entry created from capsules unmapped safety audit",
-            "reason": "capsules_clean_unmapped_safety"
-          }
-        ]
-      },
-      "severity_score": 4,
-      "confidence": "high",
-      "exposure_context": "supplement",
-      "entity_type": "ingredient",
-      "severity_level": "moderate",
-      "dose_thresholds": null,
-      "entity_relationships": null
-    },
-    {
       "id": "ADD_SYNTHETIC_B_VITAMINS",
       "standard_name": "Synthetic B Vitamins",
       "aliases": [
@@ -13760,7 +13187,7 @@
       "confidence": "medium",
       "exposure_context": "supplement",
       "entity_type": "ingredient",
-      "severity_level": "none",
+      "severity_level": "low",
       "dose_thresholds": null,
       "entity_relationships": null
     },

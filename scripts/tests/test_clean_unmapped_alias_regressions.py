@@ -531,8 +531,8 @@ def test_wild_crafted_prefix_normalization_maps(normalizer, name):
         ("natural Lithothamnion calcarea"),
         ("Lithothamnion calcarea"),
         ("Lithothamnion corallioides"),
-        ("hydrogenated Cottonseed oil"),
-        ("Sterotex NF"),
+        # hydrogenated Cottonseed oil / Sterotex NF removed — ADD_HYDROGENATED_OILS
+        # intentionally dropped from harmful_additives.json (low concern for supplements)
         ("Sodium Metasilicate"),
         ("Oligosaccharides"),
     ],

@@ -2,7 +2,7 @@
   "_metadata": {
     "description": "Proprietary blend penalty rules for supplement scoring",
     "purpose": "blend_penalty_scoring",
-    "schema_version": "4.0.0",
+    "schema_version": "4.1.0",
     "last_updated": "2026-02-16",
     "total_entries": 18,
     "scoring_rules": null
@@ -19,7 +19,6 @@
         "energy complex",
         "alertness blend",
         "focus complex",
-        "focus blend",
         "Cardio Support Blend",
         "pre-workout blend",
         "cardio matrix",
@@ -299,7 +298,6 @@
         "performance blend",
         "signature blend",
         "holistic matrix",
-        "advanced matrix",
         "Proprietary Complex",
         "advanced formula",
         "innovative complex",
@@ -401,7 +399,6 @@
         "Proprietary Herbal Blend",
         "Trikatu Herbal Blend",
         "organic Brown Rice Syrup Blend",
-        "Trikatu Herbal Blend",
         "Ear, Nose & Throat Support Herbal Blend",
         "orchard fruits & garden veggies powder blend",
         "Proprietary Full-Spectrum Premium Herbal Blend",

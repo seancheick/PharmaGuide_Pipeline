@@ -40,7 +40,7 @@ class TestClaimsRulesDatabase:
         """Database must have version information."""
         assert "_metadata" in rules_db
         assert "schema_version" in rules_db["_metadata"]
-        assert rules_db["_metadata"]["schema_version"] == "4.0.0"
+        assert rules_db["_metadata"]["schema_version"] == "4.1.0"
 
     def test_database_has_source_field_groups(self, rules_db):
         """Database must have centralized field groups."""

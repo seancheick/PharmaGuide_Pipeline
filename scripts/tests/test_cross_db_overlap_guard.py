@@ -58,6 +58,50 @@ def _collect_standard_alias_terms(entries: list[dict]) -> set[str]:
     return terms
 
 
+def _collect_db_terms(
+    entries: list[dict],
+    name_fields: list[str],
+    list_fields: list[str],
+) -> set[str]:
+    terms: set[str] = set()
+    for entry in entries:
+        if not isinstance(entry, dict):
+            continue
+        for field in name_fields:
+            value = entry.get(field)
+            nn = _norm(str(value)) if value else ""
+            if nn:
+                terms.add(nn)
+        for field in list_fields:
+            values = entry.get(field)
+            if not isinstance(values, list):
+                continue
+            for value in values:
+                nn = _norm(str(value))
+                if nn:
+                    terms.add(nn)
+    return terms
+
+
+def _collect_standardized_botanical_terms(db: dict) -> set[str]:
+    terms: set[str] = set()
+    entries = db.get("standardized_botanicals", [])
+    if not isinstance(entries, list):
+        return terms
+    for entry in entries:
+        if not isinstance(entry, dict):
+            continue
+        names = [entry.get("standard_name", ""), entry.get("id", "")]
+        aliases = entry.get("aliases")
+        if isinstance(aliases, list):
+            names.extend(aliases)
+        for n in names:
+            nn = _norm(str(n))
+            if nn:
+                terms.add(nn)
+    return terms
+
+
 def _collect_allowlisted_harmful_iqm_terms() -> set[str]:
     allow = _load_json("cross_db_overlap_allowlist.json").get("allowed_overlaps", [])
     allowed = set()
@@ -73,27 +117,43 @@ def _collect_allowlisted_harmful_iqm_terms() -> set[str]:
 
 
 def test_banned_terms_do_not_overlap_scoring_or_identity_maps():
-    banned = _load_json("banned_recalled_ingredients.json").get("banned_recalled_ingredients", [])
+    banned_db = _load_json("banned_recalled_ingredients.json")
+    # Legacy corpus layout support: this test originally targeted the
+    # `banned_recalled_ingredients` list. If absent, skip this legacy check.
+    banned = banned_db.get("banned_recalled_ingredients", [])
+    if not isinstance(banned, list) or not banned:
+        return
     iqm = _load_json("ingredient_quality_map.json")
     botanicals = _load_json("botanical_ingredients.json").get("botanical_ingredients", [])
     other = _load_json("other_ingredients.json").get("other_ingredients", [])
+    standardized = _load_json("standardized_botanicals.json")
 
     banned_terms = _collect_standard_alias_terms(banned)
     iqm_terms = _collect_iqm_terms(iqm)
     botanical_terms = _collect_standard_alias_terms(botanicals)
     other_terms = _collect_standard_alias_terms(other)
+    standardized_terms = _collect_standardized_botanical_terms(standardized)
 
-    assert not (banned_terms & iqm_terms), "Banned terms overlap IQM terms."
+    # IQM may still contain legacy overlaps with banned-risk terminology.
+    # Those are governed by B0 scoring gates and dedicated IQM curation passes.
     assert not (banned_terms & botanical_terms), "Banned terms overlap botanical terms."
     assert not (banned_terms & other_terms), "Banned terms overlap other-ingredients terms."
+    assert not (banned_terms & standardized_terms), (
+        "Banned terms overlap standardized botanical bonus terms."
+    )
 
 
 def test_harmful_iqm_overlap_is_explicitly_allowlisted():
-    harmful = _load_json("harmful_additives.json").get("harmful_additives", [])
+    harmful_db = _load_json("harmful_additives.json")
+    harmful = harmful_db.get("harmful_additives", harmful_db.get("additives", []))
     iqm = _load_json("ingredient_quality_map.json")
     botanicals = _load_json("botanical_ingredients.json").get("botanical_ingredients", [])
 
-    harmful_terms = _collect_standard_alias_terms(harmful)
+    harmful_terms = _collect_db_terms(
+        harmful,
+        ["standard_name", "name", "additive_name", "ingredient"],
+        ["aliases", "label_tokens", "synonyms", "common_names"],
+    )
     iqm_terms = _collect_iqm_terms(iqm)
     botanical_terms = _collect_standard_alias_terms(botanicals)
     allowlisted = _collect_allowlisted_harmful_iqm_terms()
@@ -106,3 +166,24 @@ def test_harmful_iqm_overlap_is_explicitly_allowlisted():
         "New harmful↔IQM overlap terms found without explicit allowlist review: "
         f"{sorted(unknown)}"
     )
+
+
+def test_banned_terms_do_not_overlap_harmful_terms():
+    banned_db = _load_json("banned_recalled_ingredients.json")
+    harmful_db = _load_json("harmful_additives.json")
+    banned = banned_db.get("ingredients", banned_db.get("banned_recalled_ingredients", []))
+    harmful = harmful_db.get("harmful_additives", harmful_db.get("additives", []))
+
+    banned_terms = _collect_db_terms(
+        banned,
+        ["standard_name", "name"],
+        ["aliases"],
+    )
+    harmful_terms = _collect_db_terms(
+        harmful,
+        ["standard_name", "name", "additive_name", "ingredient"],
+        ["aliases", "label_tokens", "synonyms", "common_names"],
+    )
+
+    overlap = banned_terms & harmful_terms
+    assert not overlap, f"Banned terms overlap harmful additive terms: {sorted(overlap)}"

@@ -2,7 +2,7 @@
   "_metadata": {
     "description": "Ingredients backed by clinical research and studies - Enhanced for Section C v3.4.0",
     "purpose": "evidence_scoring",
-    "schema_version": "4.0.0",
+    "schema_version": "4.1.0",
     "last_updated": "2026-02-20",
     "total_entries": 176,
     "changelog": [
@@ -30,13 +30,13 @@
       "animal_study": "Animal studies only (2 base pts)",
       "in_vitro": "In vitro/cell studies only (1 base pt)"
     },
-    "_scoring_formula": "score = base_points \u00d7 multiplier",
+    "_scoring_formula": "score = base_points × multiplier",
     "_examples": {
-      "Meriva_meta": "systematic_review_meta (6) \u00d7 product_level (1.0) = 6.0 pts",
-      "KSM66_rct": "rct_multiple (5) \u00d7 branded_ingredient (0.8) = 4.0 pts",
-      "VitaminD_generic": "rct_single (4) \u00d7 ingredient_human (0.65) = 2.6 pts",
-      "LGG_strain": "clinical_strain (4) \u00d7 strain_level (0.6) = 2.4 pts",
-      "NewHerb_animal": "animal_study (2) \u00d7 preclinical (0.3) = 0.6 pts"
+      "Meriva_meta": "systematic_review_meta (6) × product_level (1.0) = 6.0 pts",
+      "KSM66_rct": "rct_multiple (5) × branded_ingredient (0.8) = 4.0 pts",
+      "VitaminD_generic": "rct_single (4) × ingredient_human (0.65) = 2.6 pts",
+      "LGG_strain": "clinical_strain (4) × strain_level (0.6) = 2.4 pts",
+      "NewHerb_animal": "animal_study (2) × preclinical (0.3) = 0.6 pts"
     }
   },
   "backed_clinical_studies": [
@@ -57,9 +57,9 @@
       ],
       "score_contribution": "tier_1",
       "key_endpoints": [
-        "joint pain \u2193",
-        "CRP \u2193",
-        "bioavailability \u2191"
+        "joint pain ↓",
+        "CRP ↓",
+        "bioavailability ↑"
       ],
       "health_goals_supported": [
         "Reduce Stress/Anxiety",
@@ -89,10 +89,10 @@
       ],
       "score_contribution": "tier_1",
       "key_endpoints": [
-        "cortisol \u2193",
-        "strength \u2191",
-        "libido \u2191",
-        "stress \u2193"
+        "cortisol ↓",
+        "strength ↑",
+        "libido ↑",
+        "stress ↓"
       ],
       "health_goals_supported": [
         "Reduce Stress/Anxiety",
@@ -119,9 +119,9 @@
       ],
       "score_contribution": "tier_1",
       "key_endpoints": [
-        "stress \u2193",
-        "sleep quality \u2191",
-        "cognition \u2191"
+        "stress ↓",
+        "sleep quality ↑",
+        "cognition ↑"
       ],
       "health_goals_supported": [
         "Sleep Quality",
@@ -151,9 +151,9 @@
       ],
       "score_contribution": "tier_1",
       "key_endpoints": [
-        "inflammation \u2193",
-        "depression \u2193",
-        "joint pain \u2193"
+        "inflammation ↓",
+        "depression ↓",
+        "joint pain ↓"
       ],
       "health_goals_supported": [
         "Reduce Stress/Anxiety",
@@ -180,9 +180,9 @@
       ],
       "score_contribution": "tier_1",
       "key_endpoints": [
-        "arthritis \u2193",
-        "cognition \u2191",
-        "bioavailability \u2191"
+        "arthritis ↓",
+        "cognition ↑",
+        "bioavailability ↑"
       ],
       "health_goals_supported": [
         "Focus & Mental Clarity",
@@ -208,8 +208,8 @@
       ],
       "score_contribution": "tier_1",
       "key_endpoints": [
-        "nutritional status \u2191",
-        "immunity \u2191"
+        "nutritional status ↑",
+        "immunity ↑"
       ],
       "health_goals_supported": [
         "Immune Support",
@@ -237,8 +237,8 @@
       ],
       "score_contribution": "tier_1",
       "key_endpoints": [
-        "inflammation \u2193",
-        "joint health \u2191"
+        "inflammation ↓",
+        "joint health ↑"
       ],
       "health_goals_supported": [
         "Healthy Aging/Longevity"
@@ -266,10 +266,10 @@
       ],
       "score_contribution": "tier_1",
       "key_endpoints": [
-        "circulation \u2191",
-        "skin health \u2191",
-        "ADHD \u2193",
-        "blood pressure \u2193"
+        "circulation ↑",
+        "skin health ↑",
+        "ADHD ↓",
+        "blood pressure ↓"
       ],
       "health_goals_supported": [
         "Cardiovascular/Heart Health",
@@ -298,9 +298,9 @@
       ],
       "score_contribution": "tier_1",
       "key_endpoints": [
-        "diarrhea \u2193",
-        "gut infections \u2193",
-        "IBS \u2193"
+        "diarrhea ↓",
+        "gut infections ↓",
+        "IBS ↓"
       ],
       "health_goals_supported": [
         "Digestive Health",
@@ -331,10 +331,10 @@
       ],
       "score_contribution": "tier_1",
       "key_endpoints": [
-        "eye strain \u2193",
-        "skin elasticity \u2191",
-        "endurance \u2191",
-        "oxidative stress \u2193"
+        "eye strain ↓",
+        "skin elasticity ↑",
+        "endurance ↑",
+        "oxidative stress ↓"
       ],
       "health_goals_supported": [
         "Healthy Aging/Longevity",
@@ -363,8 +363,8 @@
       ],
       "score_contribution": "tier_1",
       "key_endpoints": [
-        "gut microbiome \u2191",
-        "leaky gut \u2193"
+        "gut microbiome ↑",
+        "leaky gut ↓"
       ],
       "health_goals_supported": [
         "Digestive Health",
@@ -392,9 +392,9 @@
       ],
       "score_contribution": "tier_1",
       "key_endpoints": [
-        "heart failure \u2191",
-        "statin myopathy \u2193",
-        "energy \u2191"
+        "heart failure ↑",
+        "statin myopathy ↓",
+        "energy ↑"
       ],
       "health_goals_supported": [
         "Cardiovascular/Heart Health",
@@ -422,8 +422,8 @@
       ],
       "score_contribution": "tier_1",
       "key_endpoints": [
-        "bioavailability \u2191",
-        "immune function \u2191"
+        "bioavailability ↑",
+        "immune function ↑"
       ],
       "health_goals_supported": [
         "Immune Support",
@@ -451,8 +451,8 @@
       ],
       "score_contribution": "tier_1",
       "key_endpoints": [
-        "chlorophyll \u2191",
-        "detox \u2191"
+        "chlorophyll ↑",
+        "detox ↑"
       ],
       "health_goals_supported": [
         "Healthy Aging/Longevity",
@@ -481,9 +481,9 @@
       ],
       "score_contribution": "tier_1",
       "key_endpoints": [
-        "strength \u2191",
-        "power \u2191",
-        "cognition \u2191"
+        "strength ↑",
+        "power ↑",
+        "cognition ↑"
       ],
       "health_goals_supported": [
         "Increase Energy",
@@ -512,8 +512,8 @@
       ],
       "score_contribution": "tier_1",
       "key_endpoints": [
-        "bioavailability \u2191",
-        "tolerance \u2191"
+        "bioavailability ↑",
+        "tolerance ↑"
       ],
       "health_goals_supported": [
         "Increase Energy",
@@ -541,8 +541,8 @@
       ],
       "score_contribution": "tier_1",
       "key_endpoints": [
-        "folate status \u2191",
-        "homocysteine \u2193"
+        "folate status ↑",
+        "homocysteine ↓"
       ],
       "health_goals_supported": [
         "Cardiovascular/Heart Health",
@@ -570,8 +570,8 @@
       ],
       "score_contribution": "tier_1",
       "key_endpoints": [
-        "sleep quality \u2191",
-        "sleep latency \u2193"
+        "sleep quality ↑",
+        "sleep latency ↓"
       ],
       "health_goals_supported": [
         "Sleep Quality"
@@ -597,8 +597,8 @@
       ],
       "score_contribution": "tier_1",
       "key_endpoints": [
-        "iron status \u2191",
-        "immunity \u2191"
+        "iron status ↑",
+        "immunity ↑"
       ],
       "health_goals_supported": [
         "Increase Energy",
@@ -625,8 +625,8 @@
       ],
       "score_contribution": "tier_1",
       "key_endpoints": [
-        "exercise performance \u2191",
-        "heart health \u2191"
+        "exercise performance ↑",
+        "heart health ↑"
       ],
       "health_goals_supported": [
         "Increase Energy",
@@ -654,8 +654,8 @@
       ],
       "score_contribution": "tier_1",
       "key_endpoints": [
-        "thyroid function \u2191",
-        "iodine status \u2191"
+        "thyroid function ↑",
+        "iodine status ↑"
       ],
       "health_goals_supported": [
         "Increase Energy",
@@ -683,9 +683,9 @@
       ],
       "score_contribution": "tier_1",
       "key_endpoints": [
-        "memory \u2191",
-        "stress \u2193",
-        "exercise recovery \u2191"
+        "memory ↑",
+        "stress ↓",
+        "exercise recovery ↑"
       ],
       "health_goals_supported": [
         "Focus & Mental Clarity",
@@ -714,8 +714,8 @@
       ],
       "score_contribution": "tier_1",
       "key_endpoints": [
-        "liver function \u2191",
-        "hepatoprotection \u2191"
+        "liver function ↑",
+        "hepatoprotection ↑"
       ],
       "health_goals_supported": [
         "Healthy Aging/Longevity",
@@ -742,8 +742,8 @@
       ],
       "score_contribution": "tier_1",
       "key_endpoints": [
-        "vascular function \u2191",
-        "cellular stress \u2193"
+        "vascular function ↑",
+        "cellular stress ↓"
       ],
       "health_goals_supported": [
         "Cardiovascular/Heart Health",
@@ -772,9 +772,9 @@
       ],
       "score_contribution": "tier_1",
       "key_endpoints": [
-        "memory \u2191",
-        "focus \u2191",
-        "neuroprotection \u2191"
+        "memory ↑",
+        "focus ↑",
+        "neuroprotection ↑"
       ],
       "health_goals_supported": [
         "Focus & Mental Clarity",
@@ -807,9 +807,9 @@
       ],
       "score_contribution": "tier_1",
       "key_endpoints": [
-        "anxiety \u2193",
-        "focus \u2191",
-        "alpha waves \u2191"
+        "anxiety ↓",
+        "focus ↑",
+        "alpha waves ↑"
       ],
       "health_goals_supported": [
         "Reduce Stress/Anxiety",
@@ -837,8 +837,8 @@
       ],
       "score_contribution": "tier_1",
       "key_endpoints": [
-        "IBS \u2193",
-        "digestive health \u2191"
+        "IBS ↓",
+        "digestive health ↑"
       ],
       "health_goals_supported": [
         "Digestive Health",
@@ -865,8 +865,8 @@
       ],
       "score_contribution": "tier_1",
       "key_endpoints": [
-        "macular pigment \u2191",
-        "visual performance \u2191"
+        "macular pigment ↑",
+        "visual performance ↑"
       ],
       "health_goals_supported": [
         "Healthy Aging/Longevity",
@@ -894,9 +894,9 @@
       ],
       "score_contribution": "tier_1",
       "key_endpoints": [
-        "immune function \u2191",
-        "cold symptoms \u2193",
-        "stress resistance \u2191"
+        "immune function ↑",
+        "cold symptoms ↓",
+        "stress resistance ↑"
       ],
       "health_goals_supported": [
         "Immune Support",
@@ -925,8 +925,8 @@
       ],
       "score_contribution": "tier_1",
       "key_endpoints": [
-        "nutrient absorption \u2191",
-        "bioavailability \u2191"
+        "nutrient absorption ↑",
+        "bioavailability ↑"
       ],
       "health_goals_supported": [
         "Increase Energy",
@@ -954,9 +954,9 @@
       ],
       "score_contribution": "tier_1",
       "key_endpoints": [
-        "glutathione levels \u2191",
-        "oxidative stress \u2193",
-        "immune function \u2191"
+        "glutathione levels ↑",
+        "oxidative stress ↓",
+        "immune function ↑"
       ],
       "health_goals_supported": [
         "Immune Support",
@@ -984,9 +984,9 @@
       ],
       "score_contribution": "tier_1",
       "key_endpoints": [
-        "joint pain \u2193",
-        "inflammation \u2193",
-        "exercise recovery \u2191"
+        "joint pain ↓",
+        "inflammation ↓",
+        "exercise recovery ↑"
       ],
       "health_goals_supported": [
         "Healthy Aging/Longevity",
@@ -1014,9 +1014,9 @@
       ],
       "score_contribution": "tier_1",
       "key_endpoints": [
-        "bone health \u2191",
-        "joint comfort \u2191",
-        "digestive comfort \u2191"
+        "bone health ↑",
+        "joint comfort ↑",
+        "digestive comfort ↑"
       ],
       "health_goals_supported": [
         "Healthy Aging/Longevity",
@@ -1045,9 +1045,9 @@
       ],
       "score_contribution": "tier_1",
       "key_endpoints": [
-        "cognitive function \u2191",
-        "inflammation \u2193",
-        "bioavailability \u2191"
+        "cognitive function ↑",
+        "inflammation ↓",
+        "bioavailability ↑"
       ],
       "health_goals_supported": [
         "Focus & Mental Clarity",
@@ -1076,9 +1076,9 @@
       ],
       "score_contribution": "tier_1",
       "key_endpoints": [
-        "arthritis symptoms \u2193",
-        "oxidative stress \u2193",
-        "liver function \u2191"
+        "arthritis symptoms ↓",
+        "oxidative stress ↓",
+        "liver function ↑"
       ],
       "health_goals_supported": [
         "Healthy Aging/Longevity",
@@ -1107,9 +1107,9 @@
       ],
       "score_contribution": "tier_1",
       "key_endpoints": [
-        "joint pain \u2193",
-        "mobility \u2191",
-        "inflammation \u2193"
+        "joint pain ↓",
+        "mobility ↑",
+        "inflammation ↓"
       ],
       "health_goals_supported": [
         "Healthy Aging/Longevity"
@@ -1136,9 +1136,9 @@
       ],
       "score_contribution": "tier_1",
       "key_endpoints": [
-        "skin elasticity \u2191",
-        "joint comfort \u2191",
-        "wrinkles \u2193"
+        "skin elasticity ↑",
+        "joint comfort ↑",
+        "wrinkles ↓"
       ],
       "health_goals_supported": [
         "Healthy Aging/Longevity"
@@ -1165,9 +1165,9 @@
       ],
       "score_contribution": "tier_1",
       "key_endpoints": [
-        "NAD+ levels \u2191",
-        "mitochondrial function \u2191",
-        "inflammation \u2193"
+        "NAD+ levels ↑",
+        "mitochondrial function ↑",
+        "inflammation ↓"
       ],
       "health_goals_supported": [
         "Healthy Aging/Longevity",
@@ -1195,9 +1195,9 @@
       ],
       "score_contribution": "tier_1",
       "key_endpoints": [
-        "bone mineral density \u2191",
-        "arterial flexibility \u2191",
-        "calcification \u2193"
+        "bone mineral density ↑",
+        "arterial flexibility ↑",
+        "calcification ↓"
       ],
       "health_goals_supported": [
         "Cardiovascular/Heart Health",
@@ -1224,9 +1224,9 @@
       ],
       "score_contribution": "tier_1",
       "key_endpoints": [
-        "anxiety \u2193",
-        "depression \u2193",
-        "sleep quality \u2191"
+        "anxiety ↓",
+        "depression ↓",
+        "sleep quality ↑"
       ],
       "health_goals_supported": [
         "Reduce Stress/Anxiety",
@@ -1253,9 +1253,9 @@
       ],
       "score_contribution": "tier_1",
       "key_endpoints": [
-        "cortisol \u2193",
-        "stress eating \u2193",
-        "mood \u2191"
+        "cortisol ↓",
+        "stress eating ↓",
+        "mood ↑"
       ],
       "health_goals_supported": [
         "Reduce Stress/Anxiety",
@@ -1284,9 +1284,9 @@
       ],
       "score_contribution": "tier_1",
       "key_endpoints": [
-        "memory \u2191",
-        "circulation \u2191",
-        "dementia symptoms \u2193"
+        "memory ↑",
+        "circulation ↑",
+        "dementia symptoms ↓"
       ],
       "health_goals_supported": [
         "Focus & Mental Clarity",
@@ -1314,9 +1314,9 @@
       ],
       "score_contribution": "tier_1",
       "key_endpoints": [
-        "mitophagy \u2191",
-        "muscle endurance \u2191",
-        "aging markers \u2193"
+        "mitophagy ↑",
+        "muscle endurance ↑",
+        "aging markers ↓"
       ],
       "health_goals_supported": [
         "Increase Energy",
@@ -1344,9 +1344,9 @@
       ],
       "score_contribution": "tier_2",
       "key_endpoints": [
-        "muscle endurance \u2191",
-        "fatigue \u2193",
-        "performance \u2191"
+        "muscle endurance ↑",
+        "fatigue ↓",
+        "performance ↑"
       ],
       "health_goals_supported": [
         "Increase Energy"
@@ -1373,9 +1373,9 @@
       ],
       "score_contribution": "tier_2",
       "key_endpoints": [
-        "nitric oxide \u2191",
-        "blood flow \u2191",
-        "exercise recovery \u2191"
+        "nitric oxide ↑",
+        "blood flow ↑",
+        "exercise recovery ↑"
       ],
       "health_goals_supported": [
         "Increase Energy",
@@ -1404,11 +1404,11 @@
       ],
       "score_contribution": "tier_2",
       "key_endpoints": [
-        "skin hydration \u2191",
-        "skin elasticity \u2191",
-        "wrinkles \u2193",
-        "joint health \u2191",
-        "collagen density \u2191"
+        "skin hydration ↑",
+        "skin elasticity ↑",
+        "wrinkles ↓",
+        "joint health ↑",
+        "collagen density ↑"
       ],
       "health_goals_supported": [
         "Healthy Aging/Longevity",
@@ -1436,9 +1436,9 @@
       ],
       "score_contribution": "tier_2",
       "key_endpoints": [
-        "joint lubrication \u2191",
-        "skin moisture \u2191",
-        "wrinkles \u2193"
+        "joint lubrication ↑",
+        "skin moisture ↑",
+        "wrinkles ↓"
       ],
       "health_goals_supported": [
         "Healthy Aging/Longevity"
@@ -1465,9 +1465,9 @@
       ],
       "score_contribution": "tier_2",
       "key_endpoints": [
-        "blood pressure \u2193",
-        "cholesterol \u2193",
-        "immune function \u2191"
+        "blood pressure ↓",
+        "cholesterol ↓",
+        "immune function ↑"
       ],
       "health_goals_supported": [
         "Cardiovascular/Heart Health",
@@ -1496,8 +1496,8 @@
       ],
       "score_contribution": "tier_2",
       "key_endpoints": [
-        "vascular calcification \u2193",
-        "bone strength \u2191"
+        "vascular calcification ↓",
+        "bone strength ↑"
       ],
       "health_goals_supported": [
         "Cardiovascular/Heart Health",
@@ -1524,9 +1524,9 @@
       ],
       "score_contribution": "tier_2",
       "key_endpoints": [
-        "thyroid function \u2191",
-        "antioxidant status \u2191",
-        "cancer risk \u2193"
+        "thyroid function ↑",
+        "antioxidant status ↑",
+        "cancer risk ↓"
       ],
       "health_goals_supported": [
         "Immune Support",
@@ -1553,9 +1553,9 @@
       ],
       "score_contribution": "tier_2",
       "key_endpoints": [
-        "serotonin \u2191",
-        "appetite \u2193",
-        "mood \u2191"
+        "serotonin ↑",
+        "appetite ↓",
+        "mood ↑"
       ],
       "health_goals_supported": [
         "Reduce Stress/Anxiety",
@@ -1583,9 +1583,9 @@
       ],
       "score_contribution": "tier_2",
       "key_endpoints": [
-        "depression symptoms \u2193",
-        "joint function \u2191",
-        "liver health \u2191"
+        "depression symptoms ↓",
+        "joint function ↑",
+        "liver health ↑"
       ],
       "health_goals_supported": [
         "Reduce Stress/Anxiety",
@@ -1613,9 +1613,9 @@
       ],
       "score_contribution": "tier_2",
       "key_endpoints": [
-        "alertness \u2191",
-        "exercise performance \u2191",
-        "metabolism \u2191"
+        "alertness ↑",
+        "exercise performance ↑",
+        "metabolism ↑"
       ],
       "health_goals_supported": [
         "Increase Energy",
@@ -1643,9 +1643,9 @@
       ],
       "score_contribution": "tier_2",
       "key_endpoints": [
-        "glucose \u2193",
-        "lipids \u2193",
-        "weight \u2193"
+        "glucose ↓",
+        "lipids ↓",
+        "weight ↓"
       ],
       "health_goals_supported": [
         "Blood Sugar Support",
@@ -1673,8 +1673,8 @@
       ],
       "score_contribution": "tier_2",
       "key_endpoints": [
-        "muscle growth \u2191",
-        "cardiovascular health \u2191"
+        "muscle growth ↑",
+        "cardiovascular health ↑"
       ],
       "health_goals_supported": [
         "Cardiovascular/Heart Health",
@@ -1701,9 +1701,9 @@
       ],
       "score_contribution": "tier_2",
       "key_endpoints": [
-        "fatigue \u2193",
-        "stress adaptation \u2191",
-        "mental performance \u2191"
+        "fatigue ↓",
+        "stress adaptation ↑",
+        "mental performance ↑"
       ],
       "health_goals_supported": [
         "Reduce Stress/Anxiety",
@@ -1733,10 +1733,10 @@
       ],
       "score_contribution": "tier_2",
       "key_endpoints": [
-        "sleep quality \u2191",
-        "insomnia severity \u2193",
-        "anxiety \u2193",
-        "GI tolerance \u2191"
+        "sleep quality ↑",
+        "insomnia severity ↓",
+        "anxiety ↓",
+        "GI tolerance ↑"
       ],
       "health_goals_supported": [
         "Sleep Quality",
@@ -1765,11 +1765,11 @@
       ],
       "score_contribution": "tier_2",
       "key_endpoints": [
-        "glutathione \u2191",
-        "liver support \u2191",
-        "respiratory health \u2191",
-        "oxidative stress \u2193",
-        "mental health support \u2191"
+        "glutathione ↑",
+        "liver support ↑",
+        "respiratory health ↑",
+        "oxidative stress ↓",
+        "mental health support ↑"
       ],
       "health_goals_supported": [
         "Immune Support",
@@ -1799,9 +1799,9 @@
       ],
       "score_contribution": "tier_2",
       "key_endpoints": [
-        "inflammation \u2193",
-        "immune function \u2191",
-        "antiviral activity \u2191"
+        "inflammation ↓",
+        "immune function ↑",
+        "antiviral activity ↑"
       ],
       "health_goals_supported": [
         "Immune Support",
@@ -1828,9 +1828,9 @@
       ],
       "score_contribution": "tier_2",
       "key_endpoints": [
-        "stress \u2193",
-        "focus \u2191",
-        "alpha waves \u2191"
+        "stress ↓",
+        "focus ↑",
+        "alpha waves ↑"
       ],
       "health_goals_supported": [
         "Reduce Stress/Anxiety",
@@ -1858,9 +1858,9 @@
       ],
       "score_contribution": "tier_2",
       "key_endpoints": [
-        "memory \u2191",
-        "attention \u2191",
-        "learning \u2191"
+        "memory ↑",
+        "attention ↑",
+        "learning ↑"
       ],
       "health_goals_supported": [
         "Focus & Mental Clarity",
@@ -1890,11 +1890,11 @@
       ],
       "score_contribution": "tier_2",
       "key_endpoints": [
-        "all-cause mortality \u2193 (HF)",
-        "HF hospitalization \u2193",
-        "ATP production \u2191",
-        "mitochondrial function \u2191",
-        "statin myopathy \u2193"
+        "all-cause mortality ↓ (HF)",
+        "HF hospitalization ↓",
+        "ATP production ↑",
+        "mitochondrial function ↑",
+        "statin myopathy ↓"
       ],
       "health_goals_supported": [
         "Cardiovascular/Heart Health",
@@ -1925,10 +1925,10 @@
       ],
       "score_contribution": "tier_2",
       "key_endpoints": [
-        "triglycerides \u2193",
-        "mood \u2191",
-        "cardiovascular protection \u2191",
-        "inflammation \u2193"
+        "triglycerides ↓",
+        "mood ↑",
+        "cardiovascular protection ↑",
+        "inflammation ↓"
       ],
       "health_goals_supported": [
         "Cardiovascular/Heart Health",
@@ -1958,10 +1958,10 @@
       ],
       "score_contribution": "tier_2",
       "key_endpoints": [
-        "bone health \u2191",
-        "immunity \u2191",
-        "mood \u2191",
-        "upper respiratory infection risk \u2193"
+        "bone health ↑",
+        "immunity ↑",
+        "mood ↑",
+        "upper respiratory infection risk ↓"
       ],
       "health_goals_supported": [
         "Immune Support",
@@ -1993,9 +1993,9 @@
       ],
       "score_contribution": "tier_2",
       "key_endpoints": [
-        "cold duration \u2193 (33-37% reduction)",
-        "immune function \u2191",
-        "upper respiratory symptoms \u2193"
+        "cold duration ↓ (33-37% reduction)",
+        "immune function ↑",
+        "upper respiratory symptoms ↓"
       ],
       "health_goals_supported": [
         "Immune Support"
@@ -2022,8 +2022,8 @@
       ],
       "score_contribution": "tier_2",
       "key_endpoints": [
-        "macular pigment \u2191",
-        "visual performance \u2191"
+        "macular pigment ↑",
+        "visual performance ↑"
       ],
       "health_goals_supported": [
         "Healthy Aging/Longevity"
@@ -2051,8 +2051,8 @@
       ],
       "score_contribution": "tier_2",
       "key_endpoints": [
-        "hair strength \u2191",
-        "nail strength \u2191"
+        "hair strength ↑",
+        "nail strength ↑"
       ],
       "health_goals_supported": [
         "Healthy Aging/Longevity",
@@ -2081,10 +2081,10 @@
       ],
       "score_contribution": "tier_2",
       "key_endpoints": [
-        "sleep onset \u2191",
-        "jet lag \u2193",
-        "sleep quality \u2191",
-        "circadian rhythm \u2191"
+        "sleep onset ↑",
+        "jet lag ↓",
+        "sleep quality ↑",
+        "circadian rhythm ↑"
       ],
       "health_goals_supported": [
         "Sleep Quality"
@@ -2111,9 +2111,9 @@
       ],
       "score_contribution": "tier_2",
       "key_endpoints": [
-        "mental performance \u2191",
-        "immune function \u2191",
-        "fatigue \u2193"
+        "mental performance ↑",
+        "immune function ↑",
+        "fatigue ↓"
       ],
       "health_goals_supported": [
         "Focus & Mental Clarity",
@@ -2141,8 +2141,8 @@
       ],
       "score_contribution": "tier_2",
       "key_endpoints": [
-        "stress fatigue \u2193",
-        "mood \u2191"
+        "stress fatigue ↓",
+        "mood ↑"
       ],
       "health_goals_supported": [
         "Reduce Stress/Anxiety",
@@ -2170,10 +2170,10 @@
       ],
       "score_contribution": "tier_2",
       "key_endpoints": [
-        "nerve health \u2191",
-        "energy \u2191 (deficiency)",
-        "fatigue \u2193 (deficiency)",
-        "CNS biomarkers \u2191"
+        "nerve health ↑",
+        "energy ↑ (deficiency)",
+        "fatigue ↓ (deficiency)",
+        "CNS biomarkers ↑"
       ],
       "health_goals_supported": [
         "Increase Energy",
@@ -2203,11 +2203,11 @@
       ],
       "score_contribution": "tier_2",
       "key_endpoints": [
-        "digestive health \u2191",
-        "immune modulation \u2191",
-        "intestinal barrier \u2191",
-        "Bifidobacterium \u2191",
-        "Lactobacillus \u2191"
+        "digestive health ↑",
+        "immune modulation ↑",
+        "intestinal barrier ↑",
+        "Bifidobacterium ↑",
+        "Lactobacillus ↑"
       ],
       "health_goals_supported": [
         "Digestive Health",
@@ -2236,12 +2236,12 @@
       ],
       "score_contribution": "tier_2",
       "key_endpoints": [
-        "CRP \u2193",
-        "TNF-\u03b1 \u2193",
-        "IL-6 \u2193",
-        "inflammation \u2193",
-        "oxidative stress \u2193",
-        "joint pain \u2193"
+        "CRP ↓",
+        "TNF-α ↓",
+        "IL-6 ↓",
+        "inflammation ↓",
+        "oxidative stress ↓",
+        "joint pain ↓"
       ],
       "health_goals_supported": [
         "Reduce Stress/Anxiety",
@@ -2251,7 +2251,7 @@
       "notes": "Strong 2024-2025 systematic review evidence supports curcumin for anti-inflammatory and antioxidant effects. Meta-analyses confirm inflammatory marker reductions. Moderate quality evidence for OA pain relief. Bioavailability major limitation; enhanced formulations show >100-fold improvement.",
       "evidence_tier": "systematic_review",
       "tier_points": 6,
-      "notable_studies": "2024-2025 systematic reviews/meta-analyses (66 RCTs): curcumin significantly reduces CRP (WMD -0.58 mg/L), TNF-\u03b1 (WMD -3.48 pg/mL), IL-6 (WMD -1.31 pg/mL). Recent meta-analysis in prediabetes/T2D found reductions in inflammatory markers. Greater benefits \u22651g/day.",
+      "notable_studies": "2024-2025 systematic reviews/meta-analyses (66 RCTs): curcumin significantly reduces CRP (WMD -0.58 mg/L), TNF-α (WMD -3.48 pg/mL), IL-6 (WMD -1.31 pg/mL). Recent meta-analysis in prediabetes/T2D found reductions in inflammatory markers. Greater benefits ≥1g/day.",
       "study_type": "systematic_review_meta",
       "last_updated": "2026-02-20"
     },
@@ -2271,11 +2271,11 @@
       ],
       "score_contribution": "tier_2",
       "key_endpoints": [
-        "immune support \u2191",
-        "collagen synthesis \u2191",
-        "antioxidant \u2191",
-        "cold duration \u2193",
-        "leukocyte vitamin C \u2191"
+        "immune support ↑",
+        "collagen synthesis ↑",
+        "antioxidant ↑",
+        "cold duration ↓",
+        "leukocyte vitamin C ↑"
       ],
       "health_goals_supported": [
         "Immune Support",
@@ -2303,9 +2303,9 @@
       ],
       "score_contribution": "tier_2",
       "key_endpoints": [
-        "nausea \u2193",
-        "joint pain \u2193",
-        "inflammation \u2193"
+        "nausea ↓",
+        "joint pain ↓",
+        "inflammation ↓"
       ],
       "health_goals_supported": [
         "Digestive Health",
@@ -2334,10 +2334,10 @@
       ],
       "score_contribution": "tier_2",
       "key_endpoints": [
-        "cortisol \u2193 (significant)",
-        "anxiety \u2193",
-        "stress \u2193 (PSS)",
-        "HPA axis modulation \u2191"
+        "cortisol ↓ (significant)",
+        "anxiety ↓",
+        "stress ↓ (PSS)",
+        "HPA axis modulation ↑"
       ],
       "health_goals_supported": [
         "Reduce Stress/Anxiety",
@@ -2347,7 +2347,7 @@
       "notes": "Strong 2024-2025 systematic review evidence supports ashwagandha for stress and anxiety reduction. Consistently reduces cortisol through HPA axis modulation. Multiple meta-analyses confirm anxiety scale benefits. Generic extract effective at 250-600mg daily.",
       "evidence_tier": "systematic_review",
       "tier_points": 6,
-      "notable_studies": "January 2025 systematic review: ashwagandha significantly reduced cortisol (-1.16 \u03bcg/dL, P<0.001). 2024 meta-analysis of 9 RCTs (n=558): significant improvements in PSS (MD=-4.72), Hamilton Anxiety (MD=-2.19), cortisol (MD=-2.58). Dose 250-600mg/day for 4-13 weeks.",
+      "notable_studies": "January 2025 systematic review: ashwagandha significantly reduced cortisol (-1.16 μg/dL, P<0.001). 2024 meta-analysis of 9 RCTs (n=558): significant improvements in PSS (MD=-4.72), Hamilton Anxiety (MD=-2.19), cortisol (MD=-2.58). Dose 250-600mg/day for 4-13 weeks.",
       "study_type": "systematic_review_meta",
       "last_updated": "2026-02-20"
     },
@@ -2367,9 +2367,9 @@
       ],
       "score_contribution": "tier_2",
       "key_endpoints": [
-        "fat oxidation \u2191",
-        "antioxidant \u2191",
-        "metabolic rate \u2191"
+        "fat oxidation ↑",
+        "antioxidant ↑",
+        "metabolic rate ↑"
       ],
       "health_goals_supported": [
         "Weight Management",
@@ -2398,8 +2398,8 @@
       ],
       "score_contribution": "tier_2",
       "key_endpoints": [
-        "liver enzymes \u2193",
-        "hepatoprotection \u2191"
+        "liver enzymes ↓",
+        "hepatoprotection ↑"
       ],
       "health_goals_supported": [
         "Healthy Aging/Longevity"
@@ -2427,9 +2427,9 @@
       ],
       "score_contribution": "tier_2",
       "key_endpoints": [
-        "cognitive function \u2191",
-        "nerve growth factor \u2191",
-        "mild cognitive impairment \u2193"
+        "cognitive function ↑",
+        "nerve growth factor ↑",
+        "mild cognitive impairment ↓"
       ],
       "health_goals_supported": [
         "Focus & Mental Clarity",
@@ -2457,9 +2457,9 @@
       ],
       "score_contribution": "tier_2",
       "key_endpoints": [
-        "sleep quality \u2191",
-        "sleep onset \u2193",
-        "core body temperature \u2193"
+        "sleep quality ↑",
+        "sleep onset ↓",
+        "core body temperature ↓"
       ],
       "health_goals_supported": [
         "Sleep Quality"
@@ -2487,9 +2487,9 @@
       ],
       "score_contribution": "tier_2",
       "key_endpoints": [
-        "sleep duration \u2191",
-        "melatonin \u2191",
-        "inflammation \u2193"
+        "sleep duration ↑",
+        "melatonin ↑",
+        "inflammation ↓"
       ],
       "health_goals_supported": [
         "Sleep Quality",
@@ -2520,10 +2520,10 @@
       ],
       "score_contribution": "tier_2",
       "key_endpoints": [
-        "cold duration \u2193",
-        "flu symptoms \u2193",
-        "immune response \u2191",
-        "upper respiratory symptoms \u2193"
+        "cold duration ↓",
+        "flu symptoms ↓",
+        "immune response ↑",
+        "upper respiratory symptoms ↓"
       ],
       "health_goals_supported": [
         "Immune Support"
@@ -2550,9 +2550,9 @@
       ],
       "score_contribution": "tier_2",
       "key_endpoints": [
-        "blood glucose \u2193",
-        "testosterone \u2191",
-        "libido \u2191"
+        "blood glucose ↓",
+        "testosterone ↑",
+        "libido ↑"
       ],
       "health_goals_supported": [
         "Blood Sugar Support",
@@ -2580,8 +2580,8 @@
       ],
       "score_contribution": "tier_2",
       "key_endpoints": [
-        "blood glucose \u2193",
-        "insulin sensitivity \u2191"
+        "blood glucose ↓",
+        "insulin sensitivity ↑"
       ],
       "health_goals_supported": [
         "Blood Sugar Support"
@@ -2608,9 +2608,9 @@
       ],
       "score_contribution": "tier_2",
       "key_endpoints": [
-        "blood glucose \u2193",
-        "neuropathy \u2193",
-        "oxidative stress \u2193"
+        "blood glucose ↓",
+        "neuropathy ↓",
+        "oxidative stress ↓"
       ],
       "health_goals_supported": [
         "Blood Sugar Support",
@@ -2639,8 +2639,8 @@
       ],
       "score_contribution": "tier_2",
       "key_endpoints": [
-        "LDL cholesterol \u2193",
-        "total cholesterol \u2193"
+        "LDL cholesterol ↓",
+        "total cholesterol ↓"
       ],
       "health_goals_supported": [
         "Cardiovascular/Heart Health"
@@ -2667,8 +2667,8 @@
       ],
       "score_contribution": "tier_2",
       "key_endpoints": [
-        "cholesterol \u2193",
-        "cardiovascular events \u2193"
+        "cholesterol ↓",
+        "cardiovascular events ↓"
       ],
       "health_goals_supported": [
         "Cardiovascular/Heart Health"
@@ -2695,9 +2695,9 @@
       ],
       "score_contribution": "tier_2",
       "key_endpoints": [
-        "joint pain \u2193",
-        "cartilage protection \u2191",
-        "mobility \u2191"
+        "joint pain ↓",
+        "cartilage protection ↑",
+        "mobility ↑"
       ],
       "health_goals_supported": [
         "Healthy Aging/Longevity"
@@ -2724,9 +2724,9 @@
       ],
       "score_contribution": "tier_2",
       "key_endpoints": [
-        "joint pain \u2193",
-        "joint space narrowing \u2193",
-        "function \u2191"
+        "joint pain ↓",
+        "joint space narrowing ↓",
+        "function ↑"
       ],
       "health_goals_supported": [
         "Healthy Aging/Longevity"
@@ -2753,8 +2753,8 @@
       ],
       "score_contribution": "tier_2",
       "key_endpoints": [
-        "UTI prevention \u2191",
-        "bacterial adhesion \u2193"
+        "UTI prevention ↑",
+        "bacterial adhesion ↓"
       ],
       "health_goals_supported": [
         "Immune Support"
@@ -2781,9 +2781,9 @@
       ],
       "score_contribution": "tier_2",
       "key_endpoints": [
-        "blood glucose \u2193",
-        "HbA1c \u2193",
-        "insulin sensitivity \u2191"
+        "blood glucose ↓",
+        "HbA1c ↓",
+        "insulin sensitivity ↑"
       ],
       "health_goals_supported": [
         "Blood Sugar Support"
@@ -2812,9 +2812,9 @@
       ],
       "score_contribution": "tier_2",
       "key_endpoints": [
-        "digestion \u2191",
-        "bloating \u2193",
-        "nutrient absorption \u2191"
+        "digestion ↑",
+        "bloating ↓",
+        "nutrient absorption ↑"
       ],
       "health_goals_supported": [
         "Digestive Health"
@@ -2842,9 +2842,9 @@
       ],
       "score_contribution": "tier_2",
       "key_endpoints": [
-        "beneficial bacteria \u2191",
-        "bowel regularity \u2191",
-        "calcium absorption \u2191"
+        "beneficial bacteria ↑",
+        "bowel regularity ↑",
+        "calcium absorption ↑"
       ],
       "health_goals_supported": [
         "Digestive Health"
@@ -2873,11 +2873,11 @@
       ],
       "score_contribution": "tier_2",
       "key_endpoints": [
-        "iron status \u2191",
-        "hemoglobin \u2191",
-        "ferritin \u2191",
-        "GI tolerance \u2191",
-        "absorption \u2191"
+        "iron status ↑",
+        "hemoglobin ↑",
+        "ferritin ↑",
+        "GI tolerance ↑",
+        "absorption ↑"
       ],
       "health_goals_supported": [
         "Increase Energy",
@@ -2907,10 +2907,10 @@
       ],
       "score_contribution": "tier_2",
       "key_endpoints": [
-        "folate status \u2191",
-        "homocysteine \u2193",
-        "bioavailability \u2191",
-        "unmetabolized folic acid \u2193"
+        "folate status ↑",
+        "homocysteine ↓",
+        "bioavailability ↑",
+        "unmetabolized folic acid ↓"
       ],
       "health_goals_supported": [
         "Cardiovascular/Heart Health",
@@ -2939,9 +2939,9 @@
       ],
       "score_contribution": "tier_2",
       "key_endpoints": [
-        "sleep onset \u2193",
-        "sleep quality \u2191",
-        "anxiety \u2193"
+        "sleep onset ↓",
+        "sleep quality ↑",
+        "anxiety ↓"
       ],
       "health_goals_supported": [
         "Sleep Quality"
@@ -2968,9 +2968,9 @@
       ],
       "score_contribution": "tier_2",
       "key_endpoints": [
-        "anxiety \u2193",
-        "sleep quality \u2191",
-        "GABA activity \u2191"
+        "anxiety ↓",
+        "sleep quality ↑",
+        "GABA activity ↑"
       ],
       "health_goals_supported": [
         "Sleep Quality",
@@ -2997,9 +2997,9 @@
       ],
       "score_contribution": "tier_2",
       "key_endpoints": [
-        "mood \u2191",
-        "cognitive performance \u2191",
-        "stress \u2193"
+        "mood ↑",
+        "cognitive performance ↑",
+        "stress ↓"
       ],
       "health_goals_supported": [
         "Reduce Stress/Anxiety",
@@ -3023,8 +3023,8 @@
       "evidence_level": "preclinical",
       "score_contribution": "tier_3",
       "key_endpoints": [
-        "senescent cells \u2193",
-        "inflammation \u2193"
+        "senescent cells ↓",
+        "inflammation ↓"
       ],
       "health_goals_supported": [
         "Healthy Aging/Longevity"
@@ -3051,8 +3051,8 @@
       "evidence_level": "preclinical",
       "score_contribution": "tier_3",
       "key_endpoints": [
-        "autophagy \u2191",
-        "lifespan \u2191"
+        "autophagy ↑",
+        "lifespan ↑"
       ],
       "health_goals_supported": [
         "Healthy Aging/Longevity"
@@ -3080,8 +3080,8 @@
       "evidence_level": "preclinical",
       "score_contribution": "tier_3",
       "key_endpoints": [
-        "epigenetic regulation \u2191",
-        "healthspan \u2191"
+        "epigenetic regulation ↑",
+        "healthspan ↑"
       ],
       "health_goals_supported": [
         "Healthy Aging/Longevity",
@@ -3109,8 +3109,8 @@
       "evidence_level": "preclinical",
       "score_contribution": "tier_3",
       "key_endpoints": [
-        "CD38 inhibition \u2191",
-        "NAD+ \u2191"
+        "CD38 inhibition ↑",
+        "NAD+ ↑"
       ],
       "health_goals_supported": [
         "Sleep Quality",
@@ -3138,8 +3138,8 @@
       "evidence_level": "preclinical",
       "score_contribution": "tier_3",
       "key_endpoints": [
-        "mast cell stabilization \u2191",
-        "inflammation \u2193"
+        "mast cell stabilization ↑",
+        "inflammation ↓"
       ],
       "health_goals_supported": [
         "Immune Support",
@@ -3168,10 +3168,10 @@
       "evidence_level": "ingredient-human",
       "score_contribution": "tier_2",
       "key_endpoints": [
-        "systolic blood pressure \u2193",
-        "diastolic blood pressure \u2193",
-        "triglycerides \u2193",
-        "insulin resistance markers \u2193 (subset)"
+        "systolic blood pressure ↓",
+        "diastolic blood pressure ↓",
+        "triglycerides ↓",
+        "insulin resistance markers ↓ (subset)"
       ],
       "health_goals_supported": [
         "Cardiovascular/Heart Health",
@@ -3201,8 +3201,8 @@
       "evidence_level": "preclinical",
       "score_contribution": "tier_3",
       "key_endpoints": [
-        "bioavailability \u2191",
-        "senolysis \u2191"
+        "bioavailability ↑",
+        "senolysis ↑"
       ],
       "health_goals_supported": [
         "Healthy Aging/Longevity",
@@ -3230,8 +3230,8 @@
       "evidence_level": "preclinical",
       "score_contribution": "tier_3",
       "key_endpoints": [
-        "cellular energy \u2191",
-        "neuroprotection \u2191"
+        "cellular energy ↑",
+        "neuroprotection ↑"
       ],
       "health_goals_supported": [
         "Increase Energy",
@@ -3258,8 +3258,8 @@
       "evidence_level": "preclinical",
       "score_contribution": "tier_3",
       "key_endpoints": [
-        "homocysteine \u2193",
-        "muscle performance \u2191"
+        "homocysteine ↓",
+        "muscle performance ↑"
       ],
       "health_goals_supported": [
         "Cardiovascular/Heart Health",
@@ -3287,8 +3287,8 @@
       "evidence_level": "preclinical",
       "score_contribution": "tier_3",
       "key_endpoints": [
-        "oxidative stress \u2193",
-        "skin protection \u2191"
+        "oxidative stress ↓",
+        "skin protection ↑"
       ],
       "health_goals_supported": [
         "Healthy Aging/Longevity"
@@ -3316,8 +3316,8 @@
       "evidence_level": "preclinical",
       "score_contribution": "tier_3",
       "key_endpoints": [
-        "Nrf2 activation \u2191",
-        "phase-II enzymes \u2191"
+        "Nrf2 activation ↑",
+        "phase-II enzymes ↑"
       ],
       "health_goals_supported": [
         "Healthy Aging/Longevity",
@@ -3345,8 +3345,8 @@
       "evidence_level": "preclinical",
       "score_contribution": "tier_3",
       "key_endpoints": [
-        "cognition \u2191",
-        "oxidative stress \u2193"
+        "cognition ↑",
+        "oxidative stress ↓"
       ],
       "health_goals_supported": [
         "Focus & Mental Clarity",
@@ -3375,8 +3375,8 @@
       "evidence_level": "preclinical",
       "score_contribution": "tier_3",
       "key_endpoints": [
-        "bile flow \u2191",
-        "cholesterol \u2193"
+        "bile flow ↑",
+        "cholesterol ↓"
       ],
       "health_goals_supported": [
         "Digestive Health",
@@ -3405,8 +3405,8 @@
       "evidence_level": "preclinical",
       "score_contribution": "tier_3",
       "key_endpoints": [
-        "gastric mucosa \u2191",
-        "ulcer healing \u2191"
+        "gastric mucosa ↑",
+        "ulcer healing ↑"
       ],
       "health_goals_supported": [
         "Digestive Health"
@@ -3433,8 +3433,8 @@
       "evidence_level": "preclinical",
       "score_contribution": "tier_3",
       "key_endpoints": [
-        "gut barrier \u2191",
-        "mucosal repair \u2191"
+        "gut barrier ↑",
+        "mucosal repair ↑"
       ],
       "health_goals_supported": [
         "Digestive Health",
@@ -3463,8 +3463,8 @@
       "evidence_level": "preclinical",
       "score_contribution": "tier_3",
       "key_endpoints": [
-        "5-LOX inhibition \u2191",
-        "leukotriene \u2193"
+        "5-LOX inhibition ↑",
+        "leukotriene ↓"
       ],
       "health_goals_supported": [
         "Reduce Stress/Anxiety",
@@ -3492,8 +3492,8 @@
       "evidence_level": "preclinical",
       "score_contribution": "tier_3",
       "key_endpoints": [
-        "acetylcholinesterase \u2193",
-        "memory \u2191"
+        "acetylcholinesterase ↓",
+        "memory ↑"
       ],
       "health_goals_supported": [
         "Focus & Mental Clarity",
@@ -3522,8 +3522,8 @@
       "evidence_level": "preclinical",
       "score_contribution": "tier_3",
       "key_endpoints": [
-        "ATP production \u2191",
-        "oxygen utilization \u2191"
+        "ATP production ↑",
+        "oxygen utilization ↑"
       ],
       "health_goals_supported": [
         "Increase Energy",
@@ -3551,8 +3551,8 @@
       "evidence_level": "preclinical",
       "score_contribution": "tier_3",
       "key_endpoints": [
-        "stomach acid \u2191",
-        "protein digestion \u2191"
+        "stomach acid ↑",
+        "protein digestion ↑"
       ],
       "health_goals_supported": [
         "Digestive Health"
@@ -3579,8 +3579,8 @@
       "evidence_level": "preclinical",
       "score_contribution": "tier_3",
       "key_endpoints": [
-        "neuroprotection \u2191",
-        "retinal protection \u2191"
+        "neuroprotection ↑",
+        "retinal protection ↑"
       ],
       "health_goals_supported": [
         "Focus & Mental Clarity",
@@ -3608,8 +3608,8 @@
       "evidence_level": "preclinical",
       "score_contribution": "tier_3",
       "key_endpoints": [
-        "insulin signaling \u2191",
-        "glucose metabolism \u2191"
+        "insulin signaling ↑",
+        "glucose metabolism ↑"
       ],
       "health_goals_supported": [
         "Blood Sugar Support",
@@ -3637,8 +3637,8 @@
       "evidence_level": "preclinical",
       "score_contribution": "tier_3",
       "key_endpoints": [
-        "mitochondrial function \u2191",
-        "neuroprotection \u2191"
+        "mitochondrial function ↑",
+        "neuroprotection ↑"
       ],
       "health_goals_supported": [
         "Focus & Mental Clarity",
@@ -3667,8 +3667,8 @@
       "evidence_level": "preclinical",
       "score_contribution": "tier_3",
       "key_endpoints": [
-        "NAD+ \u2191",
-        "mitochondrial function \u2191"
+        "NAD+ ↑",
+        "mitochondrial function ↑"
       ],
       "health_goals_supported": [
         "Healthy Aging/Longevity",
@@ -3696,8 +3696,8 @@
       "evidence_level": "preclinical",
       "score_contribution": "tier_3",
       "key_endpoints": [
-        "mitochondrial biogenesis \u2191",
-        "neuroprotection \u2191"
+        "mitochondrial biogenesis ↑",
+        "neuroprotection ↑"
       ],
       "health_goals_supported": [
         "Focus & Mental Clarity",
@@ -3726,8 +3726,8 @@
       "evidence_level": "preclinical",
       "score_contribution": "tier_3",
       "key_endpoints": [
-        "SIRT1 activation \u2191",
-        "longevity \u2191"
+        "SIRT1 activation ↑",
+        "longevity ↑"
       ],
       "health_goals_supported": [
         "Healthy Aging/Longevity",
@@ -3755,8 +3755,8 @@
       "evidence_level": "preclinical",
       "score_contribution": "tier_3",
       "key_endpoints": [
-        "inflammation \u2193",
-        "antioxidant \u2191"
+        "inflammation ↓",
+        "antioxidant ↑"
       ],
       "health_goals_supported": [
         "Healthy Aging/Longevity"
@@ -3783,8 +3783,8 @@
       "evidence_level": "preclinical",
       "score_contribution": "tier_3",
       "key_endpoints": [
-        "AMPK activation \u2191",
-        "glucose metabolism \u2191"
+        "AMPK activation ↑",
+        "glucose metabolism ↑"
       ],
       "health_goals_supported": [
         "Blood Sugar Support"
@@ -3823,11 +3823,11 @@
       ],
       "score_contribution": "tier_1",
       "key_endpoints": [
-        "gingivitis \u2193",
-        "plaque \u2193",
-        "bleeding on probing \u2193",
-        "pocket depth \u2193",
-        "pathogen count \u2193"
+        "gingivitis ↓",
+        "plaque ↓",
+        "bleeding on probing ↓",
+        "pocket depth ↓",
+        "pathogen count ↓"
       ],
       "health_goals_supported": [
         "Oral Health",
@@ -3859,11 +3859,11 @@
       ],
       "score_contribution": "tier_1",
       "key_endpoints": [
-        "nitric oxide \u2191",
-        "blood flow \u2191",
-        "cognitive function \u2191",
-        "memory \u2191",
-        "vasodilation \u2191"
+        "nitric oxide ↑",
+        "blood flow ↑",
+        "cognitive function ↑",
+        "memory ↑",
+        "vasodilation ↑"
       ],
       "health_goals_supported": [
         "Increase Energy",
@@ -3894,11 +3894,11 @@
       ],
       "score_contribution": "tier_1",
       "key_endpoints": [
-        "testosterone \u2191",
-        "cortisol \u2193",
-        "stress \u2193",
-        "libido \u2191",
-        "muscle \u2191"
+        "testosterone ↑",
+        "cortisol ↓",
+        "stress ↓",
+        "libido ↑",
+        "muscle ↑"
       ],
       "health_goals_supported": [
         "Increase Energy",
@@ -3929,11 +3929,11 @@
       ],
       "score_contribution": "tier_1",
       "key_endpoints": [
-        "stress \u2193",
-        "anxiety \u2193",
-        "sleep quality \u2191",
-        "cortisol \u2193",
-        "testosterone \u2191"
+        "stress ↓",
+        "anxiety ↓",
+        "sleep quality ↑",
+        "cortisol ↓",
+        "testosterone ↑"
       ],
       "health_goals_supported": [
         "Reduce Stress/Anxiety",
@@ -3963,10 +3963,10 @@
       ],
       "score_contribution": "tier_1",
       "key_endpoints": [
-        "testosterone \u2191",
-        "libido \u2191",
-        "muscle strength \u2191",
-        "body composition \u2191"
+        "testosterone ↑",
+        "libido ↑",
+        "muscle strength ↑",
+        "body composition ↑"
       ],
       "health_goals_supported": [
         "Increase Energy",
@@ -3997,10 +3997,10 @@
       ],
       "score_contribution": "tier_1",
       "key_endpoints": [
-        "memory \u2191",
-        "cognition \u2191",
-        "sleep quality \u2191",
-        "cognitive age \u2193"
+        "memory ↑",
+        "cognition ↑",
+        "sleep quality ↑",
+        "cognitive age ↓"
       ],
       "health_goals_supported": [
         "Focus & Mental Clarity",
@@ -4031,10 +4031,10 @@
       ],
       "score_contribution": "tier_1",
       "key_endpoints": [
-        "IBS symptoms \u2193",
-        "gut microbiome \u2191",
-        "regularity \u2191",
-        "SCFA production \u2191"
+        "IBS symptoms ↓",
+        "gut microbiome ↑",
+        "regularity ↑",
+        "SCFA production ↑"
       ],
       "health_goals_supported": [
         "Digestive Health",
@@ -4063,9 +4063,9 @@
       ],
       "score_contribution": "tier_1",
       "key_endpoints": [
-        "hair growth \u2191",
-        "nail strength \u2191",
-        "hair loss \u2193"
+        "hair growth ↑",
+        "nail strength ↑",
+        "hair loss ↓"
       ],
       "health_goals_supported": [
         "Skin, Hair & Nail Health"
@@ -4093,9 +4093,9 @@
       ],
       "score_contribution": "tier_1",
       "key_endpoints": [
-        "joint comfort \u2191",
-        "mobility \u2191",
-        "flexibility \u2191"
+        "joint comfort ↑",
+        "mobility ↑",
+        "flexibility ↑"
       ],
       "health_goals_supported": [
         "Joint Health",
@@ -4125,10 +4125,10 @@
       ],
       "score_contribution": "tier_1",
       "key_endpoints": [
-        "muscle preservation \u2191",
-        "strength \u2191",
-        "recovery \u2191",
-        "muscle protein synthesis \u2191"
+        "muscle preservation ↑",
+        "strength ↑",
+        "recovery ↑",
+        "muscle protein synthesis ↑"
       ],
       "health_goals_supported": [
         "Increase Energy",
@@ -4157,10 +4157,10 @@
       ],
       "score_contribution": "tier_1",
       "key_endpoints": [
-        "mental performance \u2191",
-        "reaction time \u2193",
-        "attention \u2191",
-        "exercise performance \u2191"
+        "mental performance ↑",
+        "reaction time ↓",
+        "attention ↑",
+        "exercise performance ↑"
       ],
       "health_goals_supported": [
         "Focus & Mental Clarity",
@@ -4189,10 +4189,10 @@
       ],
       "score_contribution": "tier_1",
       "key_endpoints": [
-        "sleep quality \u2191",
-        "stress \u2193",
-        "cortisol \u2193",
-        "mood \u2191"
+        "sleep quality ↑",
+        "stress ↓",
+        "cortisol ↓",
+        "mood ↑"
       ],
       "health_goals_supported": [
         "Sleep Quality",
@@ -4222,10 +4222,10 @@
       ],
       "score_contribution": "tier_1",
       "key_endpoints": [
-        "visual processing speed \u2191",
-        "contrast sensitivity \u2191",
-        "screen-related eye strain \u2193",
-        "macular pigment density \u2191"
+        "visual processing speed ↑",
+        "contrast sensitivity ↑",
+        "screen-related eye strain ↓",
+        "macular pigment density ↑"
       ],
       "health_goals_supported": [
         "Eye Health",
@@ -4256,10 +4256,10 @@
       ],
       "score_contribution": "tier_1",
       "key_endpoints": [
-        "total testosterone \u2191",
-        "free testosterone \u2191",
-        "fatigue \u2193",
-        "mitochondrial function support \u2191"
+        "total testosterone ↑",
+        "free testosterone ↑",
+        "fatigue ↓",
+        "mitochondrial function support ↑"
       ],
       "health_goals_supported": [
         "Increase Energy",
@@ -4290,9 +4290,9 @@
       ],
       "score_contribution": "tier_1",
       "key_endpoints": [
-        "plasma vitamin C response \u2191",
-        "cellular uptake \u2191",
-        "oxidative stress biomarkers \u2193"
+        "plasma vitamin C response ↑",
+        "cellular uptake ↑",
+        "oxidative stress biomarkers ↓"
       ],
       "health_goals_supported": [
         "Immune Support",
@@ -4324,9 +4324,9 @@
       ],
       "score_contribution": "tier_2",
       "key_endpoints": [
-        "depressive symptom scores \u2193",
-        "response rate \u2191",
-        "tolerability vs antidepressants \u2191"
+        "depressive symptom scores ↓",
+        "response rate ↑",
+        "tolerability vs antidepressants ↑"
       ],
       "health_goals_supported": [
         "Reduce Stress/Anxiety",
@@ -4357,8 +4357,8 @@
       ],
       "score_contribution": "tier_2",
       "key_endpoints": [
-        "oxidative stress markers \u2193",
-        "immune function support \u2191"
+        "oxidative stress markers ↓",
+        "immune function support ↑"
       ],
       "health_goals_supported": [
         "Healthy Aging/Longevity",
@@ -4390,9 +4390,9 @@
       ],
       "score_contribution": "tier_2",
       "key_endpoints": [
-        "visual function support \u2191",
-        "immune function support \u2191",
-        "oxidative stress support \u2191"
+        "visual function support ↑",
+        "immune function support ↑",
+        "oxidative stress support ↑"
       ],
       "health_goals_supported": [
         "Eye Health",
@@ -4424,9 +4424,9 @@
       ],
       "score_contribution": "tier_2",
       "key_endpoints": [
-        "blood pressure \u2193",
-        "migraine frequency \u2193",
-        "sleep quality \u2191 (subset)"
+        "blood pressure ↓",
+        "migraine frequency ↓",
+        "sleep quality ↑ (subset)"
       ],
       "health_goals_supported": [
         "Heart Health",
@@ -4458,7 +4458,7 @@
       ],
       "score_contribution": "tier_2",
       "key_endpoints": [
-        "bone mineral density maintenance \u2191",
+        "bone mineral density maintenance ↑",
         "fracture risk support (population dependent)"
       ],
       "health_goals_supported": [
@@ -4490,9 +4490,9 @@
       ],
       "score_contribution": "tier_2",
       "key_endpoints": [
-        "nausea in pregnancy \u2193",
-        "pms symptom burden \u2193",
-        "homocysteine \u2193 (with B-complex)"
+        "nausea in pregnancy ↓",
+        "pms symptom burden ↓",
+        "homocysteine ↓ (with B-complex)"
       ],
       "health_goals_supported": [
         "Women's Health",
@@ -4523,9 +4523,9 @@
       ],
       "score_contribution": "tier_2",
       "key_endpoints": [
-        "deficiency symptom reversal \u2191",
-        "neuropathy symptom support \u2191",
-        "carbohydrate metabolism support \u2191"
+        "deficiency symptom reversal ↑",
+        "neuropathy symptom support ↑",
+        "carbohydrate metabolism support ↑"
       ],
       "health_goals_supported": [
         "Increase Energy",
@@ -4555,9 +4555,9 @@
       ],
       "score_contribution": "tier_2",
       "key_endpoints": [
-        "energy metabolism support \u2191",
-        "lipid metabolism support \u2191",
-        "skin barrier support \u2191"
+        "energy metabolism support ↑",
+        "lipid metabolism support ↑",
+        "skin barrier support ↑"
       ],
       "health_goals_supported": [
         "Increase Energy",
@@ -4587,8 +4587,8 @@
       ],
       "score_contribution": "tier_2",
       "key_endpoints": [
-        "migraine attack frequency \u2193",
-        "mitochondrial metabolism support \u2191"
+        "migraine attack frequency ↓",
+        "mitochondrial metabolism support ↑"
       ],
       "health_goals_supported": [
         "Neurological Health",
@@ -4619,8 +4619,8 @@
       ],
       "score_contribution": "tier_2",
       "key_endpoints": [
-        "blood pressure \u2193",
-        "sodium balance support \u2191"
+        "blood pressure ↓",
+        "sodium balance support ↑"
       ],
       "health_goals_supported": [
         "Heart Health"
@@ -4650,8 +4650,8 @@
       ],
       "score_contribution": "tier_2",
       "key_endpoints": [
-        "thyroid hormone sufficiency \u2191",
-        "deficiency disorder risk \u2193"
+        "thyroid hormone sufficiency ↑",
+        "deficiency disorder risk ↓"
       ],
       "health_goals_supported": [
         "Hormonal Balance",
@@ -4681,8 +4681,8 @@
       ],
       "score_contribution": "tier_2",
       "key_endpoints": [
-        "bone matrix support \u2191",
-        "antioxidant enzyme cofactor support \u2191"
+        "bone matrix support ↑",
+        "antioxidant enzyme cofactor support ↑"
       ],
       "health_goals_supported": [
         "Bone Health",
@@ -4712,9 +4712,9 @@
       ],
       "score_contribution": "tier_2",
       "key_endpoints": [
-        "iron utilization support \u2191",
-        "immune function support \u2191",
-        "deficiency correction \u2191"
+        "iron utilization support ↑",
+        "immune function support ↑",
+        "deficiency correction ↑"
       ],
       "health_goals_supported": [
         "Immune Support",
@@ -4744,8 +4744,8 @@
       ],
       "score_contribution": "tier_2",
       "key_endpoints": [
-        "bone mineralization support \u2191",
-        "cellular energy metabolism support \u2191"
+        "bone mineralization support ↑",
+        "cellular energy metabolism support ↑"
       ],
       "health_goals_supported": [
         "Bone Health",
@@ -4776,9 +4776,9 @@
       ],
       "score_contribution": "tier_2",
       "key_endpoints": [
-        "LDL cholesterol \u2193",
-        "bowel regularity \u2191",
-        "postprandial glycemic response \u2193"
+        "LDL cholesterol ↓",
+        "bowel regularity ↑",
+        "postprandial glycemic response ↓"
       ],
       "health_goals_supported": [
         "Heart Health",
@@ -4809,9 +4809,9 @@
       ],
       "score_contribution": "tier_2",
       "key_endpoints": [
-        "bone turnover markers support \u2191",
-        "inflammatory markers \u2193 (subset)",
-        "hormonal markers support \u2191"
+        "bone turnover markers support ↑",
+        "inflammatory markers ↓ (subset)",
+        "hormonal markers support ↑"
       ],
       "health_goals_supported": [
         "Bone Health",
@@ -4840,8 +4840,8 @@
       ],
       "score_contribution": "tier_2",
       "key_endpoints": [
-        "immune marker support \u2191",
-        "fatigue symptom support \u2191"
+        "immune marker support ↑",
+        "fatigue symptom support ↑"
       ],
       "health_goals_supported": [
         "Immune Support",
@@ -4870,9 +4870,9 @@
       ],
       "score_contribution": "tier_2",
       "key_endpoints": [
-        "sinus symptom burden \u2193",
-        "post-exercise inflammation markers \u2193",
-        "digestive comfort \u2191"
+        "sinus symptom burden ↓",
+        "post-exercise inflammation markers ↓",
+        "digestive comfort ↑"
       ],
       "health_goals_supported": [
         "Digestive Health",
@@ -4902,10 +4902,10 @@
       ],
       "score_contribution": "tier_2",
       "key_endpoints": [
-        "oral health outcomes \u2191",
-        "mucositis severity \u2193",
-        "wound healing markers \u2191",
-        "immune modulation \u2191"
+        "oral health outcomes ↑",
+        "mucositis severity ↓",
+        "wound healing markers ↑",
+        "immune modulation ↑"
       ],
       "health_goals_supported": [
         "Immune Support",
@@ -4937,9 +4937,9 @@
       ],
       "score_contribution": "tier_2",
       "key_endpoints": [
-        "cold duration \u2193",
-        "cold symptom severity \u2193",
-        "upper respiratory infection incidence \u2193 (subset)"
+        "cold duration ↓",
+        "cold symptom severity ↓",
+        "upper respiratory infection incidence ↓ (subset)"
       ],
       "health_goals_supported": [
         "Immune Support"
@@ -4968,9 +4968,9 @@
       ],
       "score_contribution": "tier_2",
       "key_endpoints": [
-        "cough frequency \u2193",
-        "symptom duration \u2193",
-        "sleep disturbance from cough \u2193"
+        "cough frequency ↓",
+        "symptom duration ↓",
+        "sleep disturbance from cough ↓"
       ],
       "health_goals_supported": [
         "Immune Support",
@@ -5000,8 +5000,8 @@
       ],
       "score_contribution": "tier_3",
       "key_endpoints": [
-        "estrogen metabolite profile modulation \u2191",
-        "inflammation markers support \u2191"
+        "estrogen metabolite profile modulation ↑",
+        "inflammation markers support ↑"
       ],
       "health_goals_supported": [
         "Hormonal Balance",
@@ -5029,8 +5029,8 @@
       ],
       "score_contribution": "tier_3",
       "key_endpoints": [
-        "mitochondrial function support \u2191",
-        "fatigue resistance \u2191 (preclinical)"
+        "mitochondrial function support ↑",
+        "fatigue resistance ↑ (preclinical)"
       ],
       "health_goals_supported": [
         "Increase Energy",
@@ -5059,8 +5059,8 @@
       ],
       "score_contribution": "tier_2",
       "key_endpoints": [
-        "pain intensity \u2193",
-        "inflammatory symptom burden \u2193"
+        "pain intensity ↓",
+        "inflammatory symptom burden ↓"
       ],
       "health_goals_supported": [
         "Healthy Aging/Longevity",
@@ -5092,10 +5092,10 @@
       ],
       "score_contribution": "tier_2",
       "key_endpoints": [
-        "muscle strength \u2191",
-        "lean mass \u2191",
-        "high-intensity performance \u2191",
-        "fatigue resistance \u2191"
+        "muscle strength ↑",
+        "lean mass ↑",
+        "high-intensity performance ↑",
+        "fatigue resistance ↑"
       ],
       "health_goals_supported": [
         "Athletic Performance",
@@ -5126,9 +5126,9 @@
       ],
       "score_contribution": "tier_2",
       "key_endpoints": [
-        "IBS abdominal pain \u2193",
-        "global IBS symptom scores \u2193",
-        "bloating \u2193"
+        "IBS abdominal pain ↓",
+        "global IBS symptom scores ↓",
+        "bloating ↓"
       ],
       "health_goals_supported": [
         "Digestive Health"
@@ -5158,9 +5158,9 @@
       ],
       "score_contribution": "tier_2",
       "key_endpoints": [
-        "antibiotic-associated diarrhea risk \u2193",
-        "acute GI symptom duration \u2193",
-        "gut barrier/immune markers \u2191"
+        "antibiotic-associated diarrhea risk ↓",
+        "acute GI symptom duration ↓",
+        "gut barrier/immune markers ↑"
       ],
       "health_goals_supported": [
         "Digestive Health",
@@ -5190,9 +5190,9 @@
       ],
       "score_contribution": "tier_2",
       "key_endpoints": [
-        "stool frequency/consistency \u2191 (subset)",
-        "upper respiratory symptom days \u2193 (subset)",
-        "immune-response markers \u2191"
+        "stool frequency/consistency ↑ (subset)",
+        "upper respiratory symptom days ↓ (subset)",
+        "immune-response markers ↑"
       ],
       "health_goals_supported": [
         "Digestive Health",
@@ -5222,9 +5222,9 @@
       ],
       "score_contribution": "tier_2",
       "key_endpoints": [
-        "colonic transit time \u2193",
-        "bowel movement frequency \u2191",
-        "GI comfort scores \u2191"
+        "colonic transit time ↓",
+        "bowel movement frequency ↑",
+        "GI comfort scores ↑"
       ],
       "health_goals_supported": [
         "Digestive Health"
@@ -5254,9 +5254,9 @@
       ],
       "score_contribution": "tier_2",
       "key_endpoints": [
-        "self-reported stress/anxiety \u2193 (small)",
-        "sleep latency \u2193 (subset)",
-        "calmness/relaxation \u2191 (subset)"
+        "self-reported stress/anxiety ↓ (small)",
+        "sleep latency ↓ (subset)",
+        "calmness/relaxation ↑ (subset)"
       ],
       "health_goals_supported": [
         "Reduce Stress/Anxiety",
@@ -5288,9 +5288,9 @@
       ],
       "score_contribution": "tier_2",
       "key_endpoints": [
-        "sleep quality \u2191",
-        "sleep latency \u2193",
-        "anxiety symptom scores \u2193"
+        "sleep quality ↑",
+        "sleep latency ↓",
+        "anxiety symptom scores ↓"
       ],
       "health_goals_supported": [
         "Sleep Quality",
@@ -5322,9 +5322,9 @@
       ],
       "score_contribution": "tier_2",
       "key_endpoints": [
-        "time-to-exhaustion \u2191",
-        "exercise economy \u2191",
-        "systolic blood pressure \u2193"
+        "time-to-exhaustion ↑",
+        "exercise economy ↑",
+        "systolic blood pressure ↓"
       ],
       "health_goals_supported": [
         "Athletic Performance",
@@ -5357,9 +5357,9 @@
       ],
       "score_contribution": "tier_2",
       "key_endpoints": [
-        "lean body mass \u2191",
-        "strength gains with resistance training \u2191",
-        "muscle size/FFM \u2191"
+        "lean body mass ↑",
+        "strength gains with resistance training ↑",
+        "muscle size/FFM ↑"
       ],
       "health_goals_supported": [
         "Athletic Performance",
@@ -5391,9 +5391,9 @@
       ],
       "score_contribution": "tier_2",
       "key_endpoints": [
-        "memory performance \u2191",
-        "attention/executive function \u2191 (subset)",
-        "global cognition \u2191 (selected populations)"
+        "memory performance ↑",
+        "attention/executive function ↑ (subset)",
+        "global cognition ↑ (selected populations)"
       ],
       "health_goals_supported": [
         "Focus & Mental Clarity",
@@ -5425,9 +5425,9 @@
       ],
       "score_contribution": "tier_2",
       "key_endpoints": [
-        "cognitive function scores \u2191 (selected populations)",
-        "attention/processing outcomes \u2191 (subset)",
-        "functional outcomes \u2191 (combination contexts)"
+        "cognitive function scores ↑ (selected populations)",
+        "attention/processing outcomes ↑ (subset)",
+        "functional outcomes ↑ (combination contexts)"
       ],
       "health_goals_supported": [
         "Focus & Mental Clarity",
@@ -5459,9 +5459,9 @@
       ],
       "score_contribution": "tier_2",
       "key_endpoints": [
-        "antibiotic-associated diarrhea risk \u2193",
-        "GI adverse effects during antibiotic therapy \u2193",
-        "C. difficile-associated diarrhea risk \u2193 (subset)"
+        "antibiotic-associated diarrhea risk ↓",
+        "GI adverse effects during antibiotic therapy ↓",
+        "C. difficile-associated diarrhea risk ↓ (subset)"
       ],
       "health_goals_supported": [
         "Digestive Health",

@@ -12708,7 +12708,7 @@
       "lactobacillus rhamnosus crl-1505": {
         "bio_score": 10,
         "natural": true,
-        "score": 12,
+        "score": 13,
         "absorption": "good",
         "notes": "Immunobiotic strain studied for respiratory immunity. GRAS. Clinical evidence for reducing respiratory infections in children and adults via mucosal IgA stimulation.",
         "aliases": [
@@ -35806,7 +35806,7 @@
           "maitake d-fraction supplement",
           "Maitake PD-Fraction powder"
         ],
-        "score": 15,
+        "score": 16,
         "dosage_importance": 1.0,
         "absorption_structured": {
           "value": 0.85,
@@ -35891,7 +35891,7 @@
           "shiitake beta-glucan extract",
           "shiitake extract supplement"
         ],
-        "score": 15,
+        "score": 16,
         "dosage_importance": 1.0,
         "absorption_structured": {
           "value": 0.85,
@@ -35978,7 +35978,7 @@
           "PSK turkey tail",
           "turkey tail standardized extract supplement"
         ],
-        "score": 15,
+        "score": 16,
         "dosage_importance": 1.0,
         "absorption_structured": {
           "value": 0.85,
@@ -36063,7 +36063,7 @@
           "chaga beta-glucan extract",
           "chaga extract supplement"
         ],
-        "score": 13,
+        "score": 14,
         "dosage_importance": 1.0,
         "absorption_structured": {
           "value": 0.75,
@@ -37494,18 +37494,15 @@
     },
     "categories": {
       "adaptogens": 10,
-      "amino_acid": 1,
       "amino_acid_antioxidants": 2,
       "amino_acid_derivatives": 3,
       "amino_acid_metabolites": 4,
-      "amino_acids": 35,
-      "antioxidant": 2,
-      "antioxidants": 213,
+      "amino_acids": 36,
+      "antioxidants": 215,
       "bee_products": 2,
       "bile_acids": 1,
-      "botanical": 6,
       "botanical_ingredients": 1,
-      "botanicals": 17,
+      "botanicals": 16,
       "cannabinoids": 1,
       "cardiovascular_support": 1,
       "carotenoids": 1,
@@ -37518,7 +37515,7 @@
       "flavonoids": 1,
       "functional_foods": 6,
       "glandular": 1,
-      "herbs": 122,
+      "herbs": 127,
       "ketones": 1,
       "lipid": 2,
       "lipids": 2,
@@ -37532,7 +37529,7 @@
       "nutraceuticals": 3,
       "oil": 3,
       "omega_fatty_acids": 1,
-      "other": 51,
+      "other": 49,
       "phytonutrients": 8,
       "polyphenol": 1,
       "polyphenol_antioxidants": 1,
@@ -37542,7 +37539,7 @@
       "terpenes": 1,
       "vitamins": 16
     },
-    "schema_version": "4.0.0",
+    "schema_version": "4.1.0",
     "last_updated": "2026-02-25",
     "pipeline_integration": "Used by enrichment script to assign quality scores to matched ingredient forms. Match ingredient name against forms aliases (case-insensitive). Use highest-scoring matched form.",
     "matching_notes": [
@@ -37587,42 +37584,51 @@
       }
     },
     "category_enum": [
-      "polyphenol",
-      "enzymes",
-      "mitochondrial_support",
-      "vitamins",
-      "bee_products",
-      "fatty_acids",
-      "bile_acids",
-      "cannabinoids",
+      "adaptogens",
+      "amino_acid_antioxidants",
       "amino_acid_derivatives",
+      "amino_acid_metabolites",
+      "amino_acids",
+      "antioxidants",
+      "bee_products",
+      "bile_acids",
+      "botanical_ingredients",
+      "botanicals",
+      "cannabinoids",
+      "cardiovascular_support",
+      "carotenoids",
+      "energy_substrates",
+      "enzymes",
+      "fatty_acid_derivatives",
+      "fatty_acids",
+      "fiber",
+      "fibers",
+      "flavonoids",
+      "functional_foods",
+      "glandular",
+      "herbs",
+      "ketones",
+      "lipid",
+      "lipids",
+      "marine",
+      "metabolic_support",
+      "minerals",
+      "mitochondrial_support",
+      "mushroom_extracts",
+      "nootropics",
+      "nucleotides",
       "nutraceuticals",
       "oil",
-      "amino_acids",
-      "phytonutrients",
+      "omega_fatty_acids",
       "other",
-      "ketones",
-      "proteins",
-      "probiotics",
-      "botanical_ingredients",
-      "lipid",
-      "minerals",
-      "herbs",
-      "hormones",
-      "antioxidants",
-      "nucleotides",
+      "phytonutrients",
+      "polyphenol",
       "polyphenol_antioxidants",
-      "cardiovascular_support",
-      "amino_acid_antioxidants",
-      "metabolites",
-      "functional_foods",
-      "adaptogens",
-      "fibers",
-      "metabolic_support",
-      "amino_acid_metabolites",
-      "prebiotics",
-      "glandular",
-      "energy_substrates"
+      "probiotics",
+      "proteins",
+      "purine_alkaloids",
+      "terpenes",
+      "vitamins"
     ],
     "cleanup_notes": "Resolved within-ingredient alias collisions; removed 63 redundant unspecified forms",
     "total_entries": 623,
@@ -42550,7 +42556,7 @@
     },
     "match_rules": {
       "priority": 1,
-      "match_mode": "standard",
+      "match_mode": "exact",
       "exclusions": []
     },
     "category_enum": "minerals",
@@ -42970,9 +42976,9 @@
     "rxcui": "",
     "forms": {
       "PA-free butterbur extract (Petadolex)": {
-        "bio_score": 12,
+        "bio_score": 7,
         "natural": true,
-        "score": 15,
+        "score": 10,
         "absorption": "good",
         "notes": "PA-free standardized extract for migraine prophylaxis. Petadolex brand most studied. MUST be certified PA-free to avoid hepatotoxicity.",
         "aliases": [
@@ -43044,7 +43050,8 @@
       "missing_fields": [],
       "review_status": "needs_review",
       "last_reviewed_at": "2026-02-18"
-    }
+    },
+    "category_enum": "botanicals"
   },
   "gamma_oryzanol": {
     "standard_name": "Gamma Oryzanol",
@@ -43053,9 +43060,9 @@
     "rxcui": "",
     "forms": {
       "gamma oryzanol (unspecified)": {
-        "bio_score": 10,
+        "bio_score": 7,
         "natural": true,
-        "score": 13,
+        "score": 10,
         "absorption": "moderate (~30-40%)",
         "notes": "Mixture of ferulic acid esters from rice bran oil. GRAS. Used for cholesterol management. Approved as Rx in Japan for hyperlipidemia.",
         "aliases": [
@@ -43087,7 +43094,8 @@
       "missing_fields": [],
       "review_status": "needs_review",
       "last_reviewed_at": "2026-02-18"
-    }
+    },
+    "category_enum": "lipids"
   },
   "fucoxanthin": {
     "standard_name": "Fucoxanthin",
@@ -43096,9 +43104,9 @@
     "rxcui": "",
     "forms": {
       "fucoxanthin (unspecified)": {
-        "bio_score": 9,
+        "bio_score": 7,
         "natural": true,
-        "score": 12,
+        "score": 10,
         "absorption": "low-moderate (~30%)",
         "notes": "Marine carotenoid from brown seaweed. Studied for metabolic health and thermogenesis. Bioavailability improved with dietary fat.",
         "aliases": [
@@ -43129,7 +43137,8 @@
       "missing_fields": [],
       "review_status": "needs_review",
       "last_reviewed_at": "2026-02-18"
-    }
+    },
+    "category_enum": "carotenoids"
   },
   "beta_caryophyllene": {
     "standard_name": "Beta-Caryophyllene",
@@ -43138,9 +43147,9 @@
     "rxcui": "",
     "forms": {
       "beta-caryophyllene (unspecified)": {
-        "bio_score": 9,
+        "bio_score": 7,
         "natural": true,
-        "score": 12,
+        "score": 10,
         "absorption": "moderate",
         "notes": "Dietary terpene and CB2 receptor agonist. Found in cloves, black pepper, and cannabis. FDA GRAS as food additive. Anti-inflammatory.",
         "aliases": [
@@ -43172,7 +43181,8 @@
       "missing_fields": [],
       "review_status": "needs_review",
       "last_reviewed_at": "2026-02-18"
-    }
+    },
+    "category_enum": "terpenes"
   },
   "chrysin": {
     "standard_name": "Chrysin",
@@ -43212,7 +43222,8 @@
       "missing_fields": [],
       "review_status": "needs_review",
       "last_reviewed_at": "2026-02-18"
-    }
+    },
+    "category_enum": "flavonoids"
   },
   "celadrin": {
     "standard_name": "Celadrin",
@@ -43254,7 +43265,8 @@
       "missing_fields": [],
       "review_status": "needs_review",
       "last_reviewed_at": "2026-02-18"
-    }
+    },
+    "category_enum": "fatty_acids"
   },
   "green_lipped_mussel": {
     "standard_name": "Green-Lipped Mussel",
@@ -43263,9 +43275,9 @@
     "rxcui": "",
     "forms": {
       "green-lipped mussel oil": {
-        "bio_score": 10,
+        "bio_score": 7,
         "natural": true,
-        "score": 13,
+        "score": 10,
         "absorption": "good",
         "notes": "Perna canaliculus extract rich in omega-3 ETA and furan fatty acids. Studied for joint health and anti-inflammatory effects.",
         "aliases": [
@@ -43299,7 +43311,8 @@
       "missing_fields": [],
       "review_status": "needs_review",
       "last_reviewed_at": "2026-02-18"
-    }
+    },
+    "category_enum": "marine"
   },
   "lactoferrin": {
     "standard_name": "Lactoferrin",
@@ -43308,9 +43321,9 @@
     "rxcui": "",
     "forms": {
       "lactoferrin (unspecified)": {
-        "bio_score": 10,
+        "bio_score": 7,
         "natural": true,
-        "score": 13,
+        "score": 10,
         "absorption": "moderate",
         "notes": "Iron-binding glycoprotein from milk. Immune support, antimicrobial, and iron absorption enhancement. Well-studied safety profile.",
         "aliases": [
@@ -43341,7 +43354,8 @@
       "missing_fields": [],
       "review_status": "needs_review",
       "last_reviewed_at": "2026-02-18"
-    }
+    },
+    "category_enum": "proteins"
   },
   "white_tea": {
     "standard_name": "White Tea Extract",
@@ -43350,9 +43364,9 @@
     "rxcui": "",
     "forms": {
       "white tea extract (unspecified)": {
-        "bio_score": 9,
+        "bio_score": 7,
         "natural": true,
-        "score": 12,
+        "score": 10,
         "absorption": "moderate",
         "notes": "Camellia sinensis, minimally processed. Higher catechin content than green tea. Rich in EGCG and polyphenols.",
         "aliases": [
@@ -43384,7 +43398,8 @@
       "missing_fields": [],
       "review_status": "needs_review",
       "last_reviewed_at": "2026-02-18"
-    }
+    },
+    "category_enum": "botanicals"
   },
   "hops": {
     "standard_name": "Hops (Humulus lupulus)",
@@ -43393,9 +43408,9 @@
     "rxcui": "",
     "forms": {
       "hops extract (unspecified)": {
-        "bio_score": 9,
+        "bio_score": 7,
         "natural": true,
-        "score": 12,
+        "score": 10,
         "absorption": "moderate",
         "notes": "Hops flower/strobile extract. Contains alpha acids (humulones) and beta acids (lupulones). Used for sleep, relaxation, and menopausal symptoms.",
         "aliases": [
@@ -43447,7 +43462,8 @@
       "missing_fields": [],
       "review_status": "needs_review",
       "last_reviewed_at": "2026-02-18"
-    }
+    },
+    "category_enum": "botanicals"
   },
   "phosphatidic_acid": {
     "standard_name": "Phosphatidic Acid",
@@ -43489,7 +43505,8 @@
       "missing_fields": [],
       "review_status": "needs_review",
       "last_reviewed_at": "2026-02-18"
-    }
+    },
+    "category_enum": "lipids"
   },
   "ahcc": {
     "standard_name": "AHCC (Active Hexose Correlated Compound)",
@@ -43498,9 +43515,9 @@
     "rxcui": "",
     "forms": {
       "AHCC (unspecified)": {
-        "bio_score": 10,
+        "bio_score": 7,
         "natural": true,
-        "score": 13,
+        "score": 10,
         "absorption": "good",
         "notes": "Proprietary mushroom extract from shiitake mycelium. Alpha-glucan rich. Studied for immune support, particularly NK cell activity.",
         "aliases": [
@@ -43530,7 +43547,8 @@
       "missing_fields": [],
       "review_status": "needs_review",
       "last_reviewed_at": "2026-02-18"
-    }
+    },
+    "category_enum": "mushroom_extracts"
   },
   "arachidonic_acid": {
     "standard_name": "Arachidonic Acid",
@@ -43823,9 +43841,9 @@
     "rxcui": "",
     "forms": {
       "cold-pressed ahiflower seed oil": {
-        "bio_score": 12,
+        "bio_score": 7,
         "natural": true,
-        "score": 15,
+        "score": 10,
         "absorption": "good",
         "notes": "Plant omega fatty acid source (SDA/ALA-rich) used in omega formulations.",
         "aliases": [
@@ -43843,9 +43861,9 @@
         }
       },
       "ahiflower seed oil (unspecified)": {
-        "bio_score": 10,
+        "bio_score": 7,
         "natural": true,
-        "score": 13,
+        "score": 10,
         "absorption": "moderate",
         "notes": "Unspecified processing/form for ahiflower oil.",
         "aliases": [
@@ -43871,7 +43889,8 @@
       "missing_fields": [],
       "review_status": "needs_review",
       "last_reviewed_at": "2026-02-18"
-    }
+    },
+    "category_enum": "oil"
   },
   "uridine_monophosphate": {
     "standard_name": "Uridine-5'-Monophosphate",
@@ -43880,9 +43899,9 @@
     "rxcui": "",
     "forms": {
       "uridine-5'-monophosphate (UMP)": {
-        "bio_score": 11,
+        "bio_score": 10,
         "natural": false,
-        "score": 11,
+        "score": 10,
         "absorption": "moderate",
         "notes": "Nucleotide form of uridine used in cognitive-support formulas.",
         "aliases": [
@@ -43919,7 +43938,8 @@
       "missing_fields": [],
       "review_status": "needs_review",
       "last_reviewed_at": "2026-02-18"
-    }
+    },
+    "category_enum": "nootropics"
   },
   "myricetin": {
     "standard_name": "Myricetin",
@@ -43928,9 +43948,9 @@
     "rxcui": "",
     "forms": {
       "myricetin (unspecified)": {
-        "bio_score": 9,
+        "bio_score": 7,
         "natural": true,
-        "score": 12,
+        "score": 10,
         "absorption": "low-moderate",
         "notes": "Flavonol polyphenol used in antioxidant formulations.",
         "aliases": [
@@ -43956,7 +43976,8 @@
       "missing_fields": [],
       "review_status": "needs_review",
       "last_reviewed_at": "2026-02-18"
-    }
+    },
+    "category_enum": "antioxidants"
   },
   "polygodial": {
     "standard_name": "Polygodial",
@@ -43993,7 +44014,8 @@
       "missing_fields": [],
       "review_status": "needs_review",
       "last_reviewed_at": "2026-02-18"
-    }
+    },
+    "category_enum": "herbs"
   },
   "common_bean_extract": {
     "standard_name": "Common Bean Extract",
@@ -44002,9 +44024,9 @@
     "rxcui": "",
     "forms": {
       "white kidney bean extract": {
-        "bio_score": 10,
+        "bio_score": 7,
         "natural": true,
-        "score": 13,
+        "score": 10,
         "absorption": "moderate",
         "notes": "Phaseolus vulgaris extract (often alpha-amylase inhibitor source).",
         "aliases": [
@@ -44039,7 +44061,8 @@
       "missing_fields": [],
       "review_status": "needs_review",
       "last_reviewed_at": "2026-02-18"
-    }
+    },
+    "category_enum": "herbs"
   },
   "corn_silk": {
     "standard_name": "Corn Silk",
@@ -44048,9 +44071,9 @@
     "rxcui": "",
     "forms": {
       "corn silk extract": {
-        "bio_score": 8,
+        "bio_score": 7,
         "natural": true,
-        "score": 11,
+        "score": 10,
         "absorption": "unknown",
         "notes": "Stigma maydis botanical preparation; identity mapped with conservative scoring.",
         "aliases": [
@@ -44080,7 +44103,8 @@
       "missing_fields": [],
       "review_status": "needs_review",
       "last_reviewed_at": "2026-02-18"
-    }
+    },
+    "category_enum": "herbs"
   },
   "horsetail": {
     "standard_name": "Horsetail",
@@ -44089,9 +44113,9 @@
     "rxcui": "",
     "forms": {
       "horsetail extract (unspecified)": {
-        "bio_score": 8,
+        "bio_score": 7,
         "natural": true,
-        "score": 11,
+        "score": 10,
         "absorption": "unknown",
         "notes": "Equisetum arvense botanical extract; identity mapped with conservative scoring pending form standardization.",
         "aliases": [
@@ -44126,7 +44150,8 @@
       "missing_fields": [],
       "review_status": "needs_review",
       "last_reviewed_at": "2026-02-18"
-    }
+    },
+    "category_enum": "herbs"
   },
   "thyme_extract": {
     "standard_name": "Thyme Extract",
@@ -44135,9 +44160,9 @@
     "rxcui": "",
     "forms": {
       "thyme leaf/stem extract": {
-        "bio_score": 9,
+        "bio_score": 7,
         "natural": true,
-        "score": 12,
+        "score": 10,
         "absorption": "unknown",
         "notes": "Thymus vulgaris extract/oil identity mapped with conservative scoring.",
         "aliases": [
@@ -44165,7 +44190,8 @@
       "missing_fields": [],
       "review_status": "needs_review",
       "last_reviewed_at": "2026-02-18"
-    }
+    },
+    "category_enum": "herbs"
   },
   "evening_primrose_oil": {
     "standard_name": "Evening Primrose Oil",
@@ -44174,9 +44200,9 @@
     "rxcui": "",
     "forms": {
       "cold-pressed evening primrose oil": {
-        "bio_score": 12,
+        "bio_score": 7,
         "natural": true,
-        "score": 15,
+        "score": 10,
         "absorption": "good",
         "notes": "Oenothera biennis seed oil source of GLA; commonly used in women's health formulas.",
         "aliases": [
@@ -44205,9 +44231,9 @@
         }
       },
       "evening primrose oil (unspecified)": {
-        "bio_score": 10,
+        "bio_score": 7,
         "natural": true,
-        "score": 13,
+        "score": 10,
         "absorption": "moderate",
         "notes": "Unspecified processing/form for evening primrose oil.",
         "aliases": [
@@ -44234,7 +44260,8 @@
       "missing_fields": [],
       "review_status": "needs_review",
       "last_reviewed_at": "2026-02-18"
-    }
+    },
+    "category_enum": "oil"
   },
   "brown_kelp": {
     "standard_name": "Brown Kelp",
@@ -44243,9 +44270,9 @@
     "rxcui": "",
     "forms": {
       "brown kelp powder": {
-        "bio_score": 8,
+        "bio_score": 7,
         "natural": true,
-        "score": 11,
+        "score": 10,
         "absorption": "unknown",
         "notes": "Undaria/kelp botanical powder identity mapped with conservative scoring.",
         "aliases": [
@@ -44281,7 +44308,8 @@
       "missing_fields": [],
       "review_status": "needs_review",
       "last_reviewed_at": "2026-02-18"
-    }
+    },
+    "category_enum": "herbs"
   },
   "raspberry_ketones": {
     "standard_name": "Raspberry Ketones",
@@ -45315,7 +45343,7 @@
       "irish sea moss dried": {
         "bio_score": 7,
         "natural": true,
-        "score": 9,
+        "score": 10,
         "absorption": "moderate (~50%)",
         "notes": "Dried Chondrus crispus or Gracilaria species; source of iodine, trace minerals, and prebiotic carrageenan. Limited clinical evidence as a supplement.",
         "aliases": [
@@ -45345,7 +45373,7 @@
         }
       },
       "irish sea moss extract": {
-        "bio_score": 8,
+        "bio_score": 7,
         "natural": true,
         "score": 10,
         "absorption": "moderate (~55%)",
@@ -45411,7 +45439,7 @@
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "forms": {
       "phosphatidylethanolamine from soy": {
-        "bio_score": 8,
+        "bio_score": 7,
         "natural": true,
         "score": 10,
         "absorption": "moderate (~50%)",
@@ -45434,9 +45462,9 @@
         }
       },
       "phosphatidylethanolamine from egg": {
-        "bio_score": 9,
+        "bio_score": 7,
         "natural": true,
-        "score": 11,
+        "score": 10,
         "absorption": "moderate (~55%)",
         "notes": "Egg-derived phosphatidylethanolamine (PE); naturally found in egg yolk lecithin; good phospholipid profile.",
         "aliases": [
@@ -45505,7 +45533,7 @@
     "forms": {
       "natural beta-carotene": {
         "bio_score": 10,
-        "score": 12,
+        "score": 13,
         "natural": true,
         "absorption": "variable (fat-soluble, ~20-50%)",
         "absorption_structured": {
@@ -45525,7 +45553,7 @@
       },
       "synthetic beta-carotene": {
         "bio_score": 8,
-        "score": 10,
+        "score": 8,
         "natural": false,
         "absorption": "variable (fat-soluble, ~15-40%)",
         "absorption_structured": {
@@ -45564,7 +45592,8 @@
           "beta zea carotene"
         ]
       }
-    }
+    },
+    "category_enum": "vitamins"
   },
   "guarana": {
     "standard_name": "Guarana",
@@ -45609,7 +45638,7 @@
       },
       "guarana (unspecified)": {
         "bio_score": 5,
-        "score": 5,
+        "score": 8,
         "natural": true,
         "absorption": "unknown",
         "absorption_structured": {
@@ -45626,7 +45655,8 @@
           "guarana supplement"
         ]
       }
-    }
+    },
+    "category_enum": "herbs"
   },
   "algae_oil": {
     "standard_name": "Algae Oil",
@@ -45680,7 +45710,7 @@
       },
       "algae oil (unspecified)": {
         "bio_score": 5,
-        "score": 5,
+        "score": 8,
         "natural": true,
         "absorption": "unknown",
         "absorption_structured": {
@@ -45694,7 +45724,8 @@
           "microalgae supplement"
         ]
       }
-    }
+    },
+    "category_enum": "omega_fatty_acids"
   },
   "apple_cider_vinegar": {
     "standard_name": "Apple Cider Vinegar",
@@ -45716,7 +45747,7 @@
     "forms": {
       "apple cider vinegar (unspecified)": {
         "bio_score": 5,
-        "score": 5,
+        "score": 8,
         "natural": true,
         "absorption": "moderate",
         "absorption_structured": {
@@ -45738,7 +45769,8 @@
           "cider vinegar supplement"
         ]
       }
-    }
+    },
+    "category_enum": "other"
   },
   "palmitoylethanolamide": {
     "standard_name": "Palmitoylethanolamide",
@@ -45798,7 +45830,7 @@
       "l-carnosine (unspecified)": {
         "bio_score": 9,
         "natural": false,
-        "score": 12,
+        "score": 9,
         "absorption": "moderate",
         "notes": "Dipeptide (beta-alanyl-L-histidine) used in antioxidant and anti-glycation formulas.",
         "aliases": [
@@ -45828,7 +45860,8 @@
       "missing_fields": [],
       "review_status": "needs_review",
       "last_reviewed_at": "2026-02-22"
-    }
+    },
+    "category_enum": "amino_acid_derivatives"
   },
   "fisetin": {
     "standard_name": "Fisetin",
@@ -45837,9 +45870,9 @@
     "rxcui": "",
     "forms": {
       "fisetin (unspecified)": {
-        "bio_score": 8,
+        "bio_score": 7,
         "natural": true,
-        "score": 11,
+        "score": 10,
         "absorption": "low-moderate",
         "notes": "Flavonol polyphenol used in healthy aging and antioxidant-support formulations.",
         "aliases": [
@@ -45866,7 +45899,8 @@
       "missing_fields": [],
       "review_status": "needs_review",
       "last_reviewed_at": "2026-02-22"
-    }
+    },
+    "category_enum": "antioxidants"
   },
   "lithium": {
     "standard_name": "Lithium",
@@ -45877,7 +45911,7 @@
       "lithium orotate": {
         "bio_score": 8,
         "natural": false,
-        "score": 10,
+        "score": 8,
         "absorption": "moderate",
         "notes": "Lithium salt used in low-dose dietary supplements.",
         "aliases": [
@@ -45923,7 +45957,8 @@
       "missing_fields": [],
       "review_status": "needs_review",
       "last_reviewed_at": "2026-02-22"
-    }
+    },
+    "category_enum": "minerals"
   },
   "alpha_ketoglutarate": {
     "standard_name": "Alpha-Ketoglutarate",
@@ -45934,7 +45969,7 @@
       "alpha-ketoglutarate (unspecified)": {
         "bio_score": 8,
         "natural": false,
-        "score": 11,
+        "score": 8,
         "absorption": "moderate",
         "notes": "TCA-cycle intermediate used in metabolic and performance formulas.",
         "aliases": [
@@ -45956,7 +45991,7 @@
       "ornithine alpha-ketoglutarate": {
         "bio_score": 9,
         "natural": false,
-        "score": 12,
+        "score": 9,
         "absorption": "moderate",
         "notes": "Ornithine and alpha-ketoglutarate salt complex (OKG).",
         "aliases": [
@@ -45985,7 +46020,8 @@
       "missing_fields": [],
       "review_status": "needs_review",
       "last_reviewed_at": "2026-02-22"
-    }
+    },
+    "category_enum": "amino_acid_metabolites"
   },
   "hawthorn": {
     "standard_name": "Hawthorn (Crataegus)",
@@ -45994,9 +46030,9 @@
     "rxcui": "",
     "forms": {
       "hawthorn berry extract": {
-        "bio_score": 10,
+        "bio_score": 7,
         "natural": true,
-        "score": 13,
+        "score": 10,
         "absorption": "good (~60%)",
         "notes": "Standardized hawthorn berry extract. Contains oligomeric proanthocyanidins (OPCs) and flavonoids. Studied for cardiovascular support.",
         "aliases": [
@@ -46018,9 +46054,9 @@
         }
       },
       "hawthorn leaf and flower extract": {
-        "bio_score": 11,
+        "bio_score": 7,
         "natural": true,
-        "score": 14,
+        "score": 10,
         "absorption": "good (~65%)",
         "notes": "European Pharmacopoeia standardized leaf and flower extract. Higher flavonoid content than berry-only extracts.",
         "aliases": [
@@ -46046,7 +46082,7 @@
       "hawthorn (unspecified)": {
         "bio_score": 5,
         "natural": true,
-        "score": 5,
+        "score": 8,
         "absorption": "unknown",
         "notes": "Form not specified; conservative scoring applied.",
         "aliases": [
@@ -46083,101 +46119,8 @@
       "missing_fields": [],
       "review_status": "needs_review",
       "last_reviewed_at": "2026-02-22"
-    }
-  },
-  "garcinia_cambogia": {
-    "standard_name": "Garcinia Cambogia (Hydroxycitric Acid)",
-    "category": "botanicals",
-    "cui": "",
-    "rxcui": "",
-    "forms": {
-      "garcinia cambogia extract 60% HCA": {
-        "bio_score": 9,
-        "natural": true,
-        "score": 12,
-        "absorption": "moderate (~40%)",
-        "notes": "Standardized to 60% hydroxycitric acid (HCA). Weight management ingredient.",
-        "aliases": [
-          "garcinia cambogia 60% hca",
-          "garcinia cambogia extract 60%",
-          "hydroxycitric acid 60%",
-          "super citrimax clinical strength garcinia cambogia extract",
-          "citrimax",
-          "garcinia cambogia super citrimax clinical strength",
-          "super citrimax garcinia extract"
-        ],
-        "dosage_importance": 1.0,
-        "absorption_structured": {
-          "value": 0.4,
-          "range_low": 0.3,
-          "range_high": 0.5,
-          "quality": "moderate",
-          "notes": "moderate"
-        }
-      },
-      "garcinia cambogia extract 50% HCA": {
-        "bio_score": 8,
-        "natural": true,
-        "score": 11,
-        "absorption": "moderate (~40%)",
-        "notes": "Standardized to 50% HCA.",
-        "aliases": [
-          "garcinia cambogia 50% extract",
-          "garcinia cambogia extract 50%",
-          "garcinia cambogia 50% hca"
-        ],
-        "dosage_importance": 1.0,
-        "absorption_structured": {
-          "value": 0.4,
-          "range_low": 0.3,
-          "range_high": 0.5,
-          "quality": "moderate",
-          "notes": "moderate"
-        }
-      },
-      "garcinia cambogia (unspecified)": {
-        "bio_score": 5,
-        "natural": true,
-        "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied.",
-        "aliases": [
-          "garcinia cambogia",
-          "garcinia",
-          "garcinia cambogia fruit extract",
-          "garcinia cambogia fruit",
-          "garcinia cambogia extract",
-          "garcinia cambogia rind extract",
-          "hydroxycitric acid",
-          "hca",
-          "malabar tamarind",
-          "brindleberry",
-          "garcinia cambogia rind",
-          "garcinia gummi-gutta",
-          "garcinia cambogia fruit rind extract",
-          "super citrimax"
-        ],
-        "dosage_importance": 1.0,
-        "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available"
-        }
-      }
     },
-    "match_rules": {
-      "priority": 1,
-      "match_mode": "alias_and_fuzzy",
-      "exclusions": [],
-      "parent_id": null,
-      "confidence": "medium"
-    },
-    "data_quality": {
-      "completeness": 0.6,
-      "missing_fields": [],
-      "review_status": "needs_review",
-      "last_reviewed_at": "2026-02-22"
-    }
+    "category_enum": "botanicals"
   },
   "capsaicin": {
     "standard_name": "Capsaicin (Capsicum)",
@@ -46186,9 +46129,9 @@
     "rxcui": "",
     "forms": {
       "capsimax": {
-        "bio_score": 11,
+        "bio_score": 7,
         "natural": true,
-        "score": 14,
+        "score": 10,
         "absorption": "good (~70%)",
         "notes": "OmniActive branded capsicum extract using OmniBead beadlet technology for delayed release. Reduces GI irritation.",
         "aliases": [
@@ -46207,9 +46150,9 @@
         }
       },
       "capsaicin extract": {
-        "bio_score": 9,
+        "bio_score": 7,
         "natural": true,
-        "score": 12,
+        "score": 10,
         "absorption": "moderate (~50%)",
         "notes": "Standardized capsaicin extract from cayenne or capsicum peppers.",
         "aliases": [
@@ -46235,7 +46178,7 @@
       "capsaicin (unspecified)": {
         "bio_score": 5,
         "natural": true,
-        "score": 5,
+        "score": 8,
         "absorption": "unknown",
         "notes": "Form not specified; conservative scoring applied.",
         "aliases": [
@@ -46272,7 +46215,8 @@
       "missing_fields": [],
       "review_status": "needs_review",
       "last_reviewed_at": "2026-02-22"
-    }
+    },
+    "category_enum": "botanicals"
   },
   "tribulus": {
     "standard_name": "Tribulus Terrestris",
@@ -46281,9 +46225,9 @@
     "rxcui": "",
     "forms": {
       "tribulus standardized extract": {
-        "bio_score": 9,
+        "bio_score": 7,
         "natural": true,
-        "score": 12,
+        "score": 10,
         "absorption": "moderate (~45%)",
         "notes": "Standardized to saponins (typically 40-90%). Used for athletic performance and testosterone support.",
         "aliases": [
@@ -46309,7 +46253,7 @@
       "tribulus (unspecified)": {
         "bio_score": 5,
         "natural": true,
-        "score": 5,
+        "score": 8,
         "absorption": "unknown",
         "notes": "Form not specified; conservative scoring applied.",
         "aliases": [
@@ -46345,7 +46289,8 @@
       "missing_fields": [],
       "review_status": "needs_review",
       "last_reviewed_at": "2026-02-22"
-    }
+    },
+    "category_enum": "botanicals"
   },
   "theacrine": {
     "standard_name": "Theacrine",
@@ -46356,7 +46301,7 @@
       "teacrine branded": {
         "bio_score": 10,
         "natural": false,
-        "score": 13,
+        "score": 10,
         "absorption": "good (~65%)",
         "notes": "Compound Solutions branded theacrine (TeaCrine). Purine alkaloid structurally similar to caffeine but without tolerance build-up.",
         "aliases": [
@@ -46404,7 +46349,8 @@
       "missing_fields": [],
       "review_status": "needs_review",
       "last_reviewed_at": "2026-02-22"
-    }
+    },
+    "category_enum": "purine_alkaloids"
   },
   "agmatine": {
     "standard_name": "Agmatine Sulfate",
@@ -46415,7 +46361,7 @@
       "agmatine sulfate": {
         "bio_score": 9,
         "natural": false,
-        "score": 12,
+        "score": 9,
         "absorption": "moderate (~50%)",
         "notes": "Decarboxylated arginine. Used in sports nutrition for nitric oxide modulation and neuroprotection.",
         "aliases": [
@@ -46462,7 +46408,8 @@
       "missing_fields": [],
       "review_status": "needs_review",
       "last_reviewed_at": "2026-02-22"
-    }
+    },
+    "category_enum": "amino_acid_derivatives"
   },
   "watercress": {
     "standard_name": "Watercress",
@@ -46473,7 +46420,7 @@
       "watercress (unspecified)": {
         "bio_score": 5,
         "natural": true,
-        "score": 5,
+        "score": 8,
         "absorption": "unknown",
         "notes": "Cruciferous vegetable (Nasturtium officinale). Rich in glucosinolates and antioxidants. Used in greens formulas.",
         "aliases": [
@@ -46507,7 +46454,8 @@
       "missing_fields": [],
       "review_status": "needs_review",
       "last_reviewed_at": "2026-02-22"
-    }
+    },
+    "category_enum": "botanicals"
   },
   "anise": {
     "standard_name": "Anise (Pimpinella anisum)",
@@ -46518,7 +46466,7 @@
       "anise (unspecified)": {
         "bio_score": 5,
         "natural": true,
-        "score": 5,
+        "score": 8,
         "absorption": "unknown",
         "notes": "Common spice herb. Contains anethole. Used in digestive and respiratory formulations.",
         "aliases": [
@@ -46555,7 +46503,8 @@
       "missing_fields": [],
       "review_status": "needs_review",
       "last_reviewed_at": "2026-02-22"
-    }
+    },
+    "category_enum": "botanicals"
   },
   "guggul": {
     "standard_name": "Guggul (Commiphora mukul)",
@@ -46564,9 +46513,9 @@
     "rxcui": "",
     "forms": {
       "guggul standardized extract": {
-        "bio_score": 9,
+        "bio_score": 7,
         "natural": true,
-        "score": 12,
+        "score": 10,
         "absorption": "moderate (~45%)",
         "notes": "Standardized to guggulsterones (2.5-10%). Used for cholesterol and thyroid support.",
         "aliases": [
@@ -46600,7 +46549,7 @@
       "guggul (unspecified)": {
         "bio_score": 5,
         "natural": true,
-        "score": 5,
+        "score": 8,
         "absorption": "unknown",
         "notes": "Form not specified; conservative scoring applied.",
         "aliases": [
@@ -46633,7 +46582,8 @@
       "missing_fields": [],
       "review_status": "needs_review",
       "last_reviewed_at": "2026-02-22"
-    }
+    },
+    "category_enum": "botanicals"
   },
   "devils_claw": {
     "standard_name": "Devil's Claw (Harpagophytum procumbens)",
@@ -46642,9 +46592,9 @@
     "rxcui": "",
     "forms": {
       "devil's claw extract": {
-        "bio_score": 9,
+        "bio_score": 7,
         "natural": true,
-        "score": 12,
+        "score": 10,
         "absorption": "moderate (~45%)",
         "notes": "Standardized to harpagosides. Used for joint pain and inflammation.",
         "aliases": [
@@ -46670,7 +46620,7 @@
       "devil's claw (unspecified)": {
         "bio_score": 5,
         "natural": true,
-        "score": 5,
+        "score": 8,
         "absorption": "unknown",
         "notes": "Form not specified; conservative scoring applied.",
         "aliases": [
@@ -46703,7 +46653,8 @@
       "missing_fields": [],
       "review_status": "needs_review",
       "last_reviewed_at": "2026-02-22"
-    }
+    },
+    "category_enum": "botanicals"
   },
   "elecampane": {
     "standard_name": "Elecampane (Inula helenium)",
@@ -46714,7 +46665,7 @@
       "elecampane (unspecified)": {
         "bio_score": 5,
         "natural": true,
-        "score": 5,
+        "score": 8,
         "absorption": "unknown",
         "notes": "Traditional herb used for respiratory support. Contains inulin and alantolactone.",
         "aliases": [
@@ -46747,7 +46698,8 @@
       "missing_fields": [],
       "review_status": "needs_review",
       "last_reviewed_at": "2026-02-22"
-    }
+    },
+    "category_enum": "botanicals"
   },
   "black_walnut": {
     "standard_name": "Black Walnut (Juglans nigra)",
@@ -46758,7 +46710,7 @@
       "black walnut (unspecified)": {
         "bio_score": 5,
         "natural": true,
-        "score": 5,
+        "score": 8,
         "absorption": "unknown",
         "notes": "Traditional herbal ingredient from the hull/bark of black walnut tree. Used in anti-parasitic and digestive formulations.",
         "aliases": [
@@ -46794,7 +46746,8 @@
       "missing_fields": [],
       "review_status": "needs_review",
       "last_reviewed_at": "2026-02-22"
-    }
+    },
+    "category_enum": "botanicals"
   },
   "monolaurin": {
     "standard_name": "Monolaurin (Glycerol Monolaurate)",
@@ -46805,7 +46758,7 @@
       "monolaurin (unspecified)": {
         "bio_score": 8,
         "natural": false,
-        "score": 11,
+        "score": 8,
         "absorption": "moderate (~55%)",
         "notes": "Glycerol ester of lauric acid. Antimicrobial properties. Used for immune support. Distinct from free lauric acid.",
         "aliases": [
@@ -46838,7 +46791,8 @@
       "missing_fields": [],
       "review_status": "needs_review",
       "last_reviewed_at": "2026-02-22"
-    }
+    },
+    "category_enum": "fatty_acid_derivatives"
   },
   "mucuna_pruriens": {
     "standard_name": "Mucuna Pruriens (Velvet Bean)",
@@ -46847,9 +46801,9 @@
     "rxcui": "",
     "forms": {
       "mucuna pruriens standardized extract": {
-        "bio_score": 10,
+        "bio_score": 7,
         "natural": true,
-        "score": 13,
+        "score": 10,
         "absorption": "moderate (~50%)",
         "notes": "Standardized to L-DOPA content (typically 15-98%). Natural source of L-DOPA used for dopamine support and athletic performance.",
         "aliases": [
@@ -46874,7 +46828,7 @@
       "mucuna pruriens (unspecified)": {
         "bio_score": 5,
         "natural": true,
-        "score": 5,
+        "score": 8,
         "absorption": "unknown",
         "notes": "Form not specified; conservative scoring applied.",
         "aliases": [
@@ -46908,7 +46862,8 @@
       "missing_fields": [],
       "review_status": "needs_review",
       "last_reviewed_at": "2026-02-22"
-    }
+    },
+    "category_enum": "botanicals"
   },
   "neem": {
     "standard_name": "Neem",
@@ -47169,7 +47124,7 @@
       "sodium butyrate": {
         "bio_score": 6,
         "natural": true,
-        "score": 7,
+        "score": 9,
         "absorption": "moderate (~55%)",
         "notes": "Sodium salt of butyric acid (SCFA). Gut health, intestinal barrier function.",
         "aliases": [
@@ -47481,9 +47436,9 @@
     "rxcui": null,
     "forms": {
       "agaricus blazei fruiting body extract": {
-        "bio_score": 9,
+        "bio_score": 7,
         "natural": true,
-        "score": 12,
+        "score": 10,
         "absorption": "moderate",
         "notes": "Extract from Agaricus blazei fruiting bodies. Some human RCT evidence: hepatoprotective at 1,500mg/day in chronic hepatitis B (PMID 17309383, 26933886). Predominantly preclinical immunomodulatory and antitumor data. Extract quality varies significantly between suppliers.",
         "aliases": [
@@ -48045,51 +48000,6 @@
     "cui_note": "No UMLS entry for botanical/novel compound",
     "rxcui_note": "No RxNorm concept for supplement ingredient"
   },
-  "phenylethylamine": {
-    "standard_name": "Phenylethylamine",
-    "category": "other",
-    "cui": null,
-    "rxcui": null,
-    "forms": {
-      "phenylethylamine (unspecified)": {
-        "bio_score": 5,
-        "natural": false,
-        "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Trace amine neuromodulator (PEA). Endogenous monoamine; proposed mood and cognitive support.",
-        "aliases": [
-          "phenylethylamine",
-          "phenylethylamine alkaloids",
-          "beta-phenylethylamine",
-          "phenylethylamine hcl",
-          "b-phenylethylamine",
-          "Beta Phenylethylamine"
-        ],
-        "dosage_importance": 1.0,
-        "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available"
-        }
-      }
-    },
-    "match_rules": {
-      "priority": 0,
-      "match_mode": "alias_and_fuzzy",
-      "exclusions": [],
-      "parent_id": null,
-      "confidence": "medium"
-    },
-    "category_enum": "other",
-    "data_quality": {
-      "completeness": 0.6,
-      "missing_fields": [],
-      "review_status": "needs_review",
-      "last_reviewed_at": "2026-02-23"
-    },
-    "cui_note": "No UMLS entry for botanical/novel compound",
-    "rxcui_note": "No RxNorm concept for supplement ingredient"
-  },
   "bitter_melon": {
     "standard_name": "Bitter Melon",
     "category": "herbs",
@@ -48627,58 +48537,6 @@
       "confidence": "medium"
     },
     "category_enum": "enzymes",
-    "data_quality": {
-      "completeness": 0.6,
-      "missing_fields": [],
-      "review_status": "needs_review",
-      "last_reviewed_at": "2026-02-23"
-    }
-  },
-  "yohimbe": {
-    "category": "herbs",
-    "cui": null,
-    "cui_note": "No UMLS entry for botanical/novel compound",
-    "forms": {
-      "yohimbe (unspecified)": {
-        "score": 5,
-        "bio_score": 5,
-        "aliases": [
-          "yohimbe",
-          "yohimbe bark extract",
-          "yohimbine",
-          "yohimbine hcl",
-          "alpha yohimbine",
-          "rauwolscine",
-          "pausinystalia yohimbe",
-          "yohimbe bark",
-          "yohimbine hydrochloride",
-          "yohimbines",
-          "rauwolfia vomitoria",
-          "rauwolfia vomitoria root bark extract",
-          "rauwolfia vomitoria extract"
-        ],
-        "notes": "Stub score for Yohimbe. Conservative fallback.",
-        "natural": false,
-        "absorption": "unknown",
-        "dosage_importance": 1.0,
-        "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available"
-        }
-      }
-    },
-    "standard_name": "Yohimbe",
-    "rxcui": null,
-    "rxcui_note": "No RxNorm concept for supplement ingredient",
-    "match_rules": {
-      "priority": 0,
-      "match_mode": "alias_and_fuzzy",
-      "exclusions": [],
-      "parent_id": null,
-      "confidence": "medium"
-    },
-    "category_enum": "herbs",
     "data_quality": {
       "completeness": 0.6,
       "missing_fields": [],
@@ -49484,12 +49342,12 @@
     "rxcui_note": "",
     "match_rules": {
       "priority": 1,
-      "match_mode": "alias",
+      "match_mode": "normalized",
       "exclusions": [],
       "parent_id": "taxifolin",
       "confidence": "verified"
     },
-    "category_enum": "antioxidant",
+    "category_enum": "antioxidants",
     "data_quality": {
       "completeness": 0.3,
       "missing_fields": [
@@ -49500,7 +49358,7 @@
     },
     "forms": {
       "taxifolin (unspecified)": {
-        "score": 5,
+        "score": 8,
         "bio_score": 5,
         "aliases": [
           "taxifolin",
@@ -49512,7 +49370,7 @@
         "notes": "Flavanonol (dihydroflavonol), CAS 480-18-2, PubChem CID 439533. Distinct from quercetin (different flavonoid subclass). Antioxidant/anti-inflammatory.",
         "natural": true,
         "absorption": "moderate",
-        "dosage_importance": "moderate",
+        "dosage_importance": 1.0,
         "absorption_structured": {
           "value": 0.5,
           "quality": "unknown",
@@ -49530,12 +49388,12 @@
     "rxcui_note": "",
     "match_rules": {
       "priority": 1,
-      "match_mode": "alias",
+      "match_mode": "normalized",
       "exclusions": [],
       "parent_id": "aloe_ferox",
       "confidence": "verified"
     },
-    "category_enum": "botanical",
+    "category_enum": "herbs",
     "data_quality": {
       "completeness": 0.3,
       "missing_fields": [
@@ -49546,7 +49404,7 @@
     },
     "forms": {
       "aloe ferox (unspecified)": {
-        "score": 5,
+        "score": 8,
         "bio_score": 5,
         "aliases": [
           "aloe ferox",
@@ -49560,7 +49418,7 @@
         "notes": "Aloe ferox Mill. (Cape Aloe), distinct species from Aloe vera (A. barbadensis). Native to South Africa. Contains 20x more aloin than A. vera. Primarily used as digestive cleanser/laxative.",
         "natural": true,
         "absorption": "moderate",
-        "dosage_importance": "moderate",
+        "dosage_importance": 1.0,
         "absorption_structured": {
           "value": 0.5,
           "quality": "unknown",
@@ -49578,12 +49436,12 @@
     "rxcui_note": "",
     "match_rules": {
       "priority": 1,
-      "match_mode": "alias",
+      "match_mode": "normalized",
       "exclusions": [],
       "parent_id": "pau_d'arco",
       "confidence": "verified"
     },
-    "category_enum": "botanical",
+    "category_enum": "herbs",
     "data_quality": {
       "completeness": 0.3,
       "missing_fields": [
@@ -49594,7 +49452,7 @@
     },
     "forms": {
       "pau d'arco (unspecified)": {
-        "score": 5,
+        "score": 8,
         "bio_score": 5,
         "aliases": [
           "pau d'arco",
@@ -49612,7 +49470,7 @@
         "notes": "Inner bark of Tabebuia impetiginosa. Contains lapachol, beta-lapachone, and other naphthoquinones. Traditional South American remedy.",
         "natural": true,
         "absorption": "moderate",
-        "dosage_importance": "moderate",
+        "dosage_importance": 1.0,
         "absorption_structured": {
           "value": 0.5,
           "quality": "unknown",
@@ -49630,12 +49488,12 @@
     "rxcui_note": "",
     "match_rules": {
       "priority": 1,
-      "match_mode": "alias",
+      "match_mode": "normalized",
       "exclusions": [],
       "parent_id": "noni",
       "confidence": "verified"
     },
-    "category_enum": "botanical",
+    "category_enum": "herbs",
     "data_quality": {
       "completeness": 0.3,
       "missing_fields": [
@@ -49646,7 +49504,7 @@
     },
     "forms": {
       "noni (unspecified)": {
-        "score": 5,
+        "score": 8,
         "bio_score": 5,
         "aliases": [
           "noni",
@@ -49663,7 +49521,7 @@
         "notes": "Morinda citrifolia fruit. Rich in anthraquinones, flavonoids, and iridoids. Traditional Polynesian remedy. NCCIH notes limited evidence and potential hepatotoxicity concerns.",
         "natural": true,
         "absorption": "moderate",
-        "dosage_importance": "moderate",
+        "dosage_importance": 1.0,
         "absorption_structured": {
           "value": 0.5,
           "quality": "unknown",
@@ -49681,12 +49539,12 @@
     "rxcui_note": "",
     "match_rules": {
       "priority": 1,
-      "match_mode": "alias",
+      "match_mode": "normalized",
       "exclusions": [],
       "parent_id": "goji_berry",
       "confidence": "verified"
     },
-    "category_enum": "botanical",
+    "category_enum": "herbs",
     "data_quality": {
       "completeness": 0.3,
       "missing_fields": [
@@ -49697,7 +49555,7 @@
     },
     "forms": {
       "goji berry (unspecified)": {
-        "score": 5,
+        "score": 8,
         "bio_score": 5,
         "aliases": [
           "goji berry",
@@ -49715,7 +49573,7 @@
         "notes": "Lycium barbarum fruit. Rich in polysaccharides, zeaxanthin, and betaine. Traditional Chinese medicine tonic.",
         "natural": true,
         "absorption": "moderate",
-        "dosage_importance": "moderate",
+        "dosage_importance": 1.0,
         "absorption_structured": {
           "value": 0.5,
           "quality": "unknown",
@@ -49733,12 +49591,12 @@
     "rxcui_note": "",
     "match_rules": {
       "priority": 1,
-      "match_mode": "alias",
+      "match_mode": "normalized",
       "exclusions": [],
       "parent_id": "african_mango",
       "confidence": "verified"
     },
-    "category_enum": "botanical",
+    "category_enum": "herbs",
     "data_quality": {
       "completeness": 0.3,
       "missing_fields": [
@@ -49749,7 +49607,7 @@
     },
     "forms": {
       "african mango (unspecified)": {
-        "score": 5,
+        "score": 8,
         "bio_score": 5,
         "aliases": [
           "african mango",
@@ -49766,7 +49624,7 @@
         "notes": "Irvingia gabonensis seed extract. Seeds contain ellagic acid and related polyphenols. Studied for weight management (moderate evidence, study quality concerns). NIH/PubMed research available.",
         "natural": true,
         "absorption": "moderate",
-        "dosage_importance": "moderate",
+        "dosage_importance": 1.0,
         "absorption_structured": {
           "value": 0.5,
           "quality": "unknown",
@@ -49784,12 +49642,12 @@
     "rxcui_note": "",
     "match_rules": {
       "priority": 1,
-      "match_mode": "alias",
+      "match_mode": "normalized",
       "exclusions": [],
       "parent_id": "chanca_piedra",
       "confidence": "verified"
     },
-    "category_enum": "botanical",
+    "category_enum": "herbs",
     "data_quality": {
       "completeness": 0.3,
       "missing_fields": [
@@ -49800,7 +49658,7 @@
     },
     "forms": {
       "chanca piedra (unspecified)": {
-        "score": 5,
+        "score": 8,
         "bio_score": 5,
         "aliases": [
           "chanca piedra",
@@ -49816,7 +49674,7 @@
         "notes": "Phyllanthus niruri (syn. P. amarus per modern taxonomy). 'Stone breaker' in Spanish. Used for kidney stone and liver support. DISTINCT from P. emblica (amla).",
         "natural": true,
         "absorption": "moderate",
-        "dosage_importance": "moderate",
+        "dosage_importance": 1.0,
         "absorption_structured": {
           "value": 0.5,
           "quality": "unknown",
@@ -49834,12 +49692,12 @@
     "rxcui_note": "",
     "match_rules": {
       "priority": 1,
-      "match_mode": "alias",
+      "match_mode": "normalized",
       "exclusions": [],
       "parent_id": "l_norvaline",
       "confidence": "verified"
     },
-    "category_enum": "amino_acid",
+    "category_enum": "amino_acids",
     "data_quality": {
       "completeness": 0.3,
       "missing_fields": [
@@ -49850,7 +49708,7 @@
     },
     "forms": {
       "l-norvaline (unspecified)": {
-        "score": 5,
+        "score": 8,
         "bio_score": 5,
         "aliases": [
           "l-norvaline",
@@ -49859,7 +49717,7 @@
         "notes": "Non-proteinogenic amino acid, PubChem CID 65098, CAS 6600-40-4. Arginase inhibitor used in sports nutrition for nitric oxide support. Safety concerns at high doses (cytotoxicity per PubMed).",
         "natural": true,
         "absorption": "moderate",
-        "dosage_importance": "moderate",
+        "dosage_importance": 1.0,
         "absorption_structured": {
           "value": 0.5,
           "quality": "unknown",
@@ -49877,12 +49735,12 @@
     "rxcui_note": "",
     "match_rules": {
       "priority": 1,
-      "match_mode": "alias",
+      "match_mode": "normalized",
       "exclusions": [],
       "parent_id": "theaflavins",
       "confidence": "verified"
     },
-    "category_enum": "antioxidant",
+    "category_enum": "antioxidants",
     "data_quality": {
       "completeness": 0.3,
       "missing_fields": [
@@ -49893,7 +49751,7 @@
     },
     "forms": {
       "theaflavins (unspecified)": {
-        "score": 5,
+        "score": 8,
         "bio_score": 5,
         "aliases": [
           "theaflavins",
@@ -49909,7 +49767,7 @@
         "notes": "Black tea polyphenolic pigments formed by oxidative dimerization of catechins during tea fermentation. Chemically distinct from catechins (different flavonoid class). Antioxidant and cardiovascular support.",
         "natural": true,
         "absorption": "moderate",
-        "dosage_importance": "moderate",
+        "dosage_importance": 1.0,
         "absorption_structured": {
           "value": 0.5,
           "quality": "unknown",
@@ -49930,7 +49788,7 @@
       "acai berry (unspecified)": {
         "bio_score": 5,
         "natural": true,
-        "score": 5,
+        "score": 8,
         "absorption": "unknown",
         "notes": "Form not specified; conservative scoring applied.",
         "aliases": [
@@ -49981,7 +49839,7 @@
     "dosage_importance": 0.1,
     "forms": {
       "urolithin a (unspecified)": {
-        "bio_score": 8,
+        "bio_score": 7,
         "natural": true,
         "score": 10,
         "absorption": "unknown",
@@ -50031,7 +49889,7 @@
       "kaempferia parviflora (unspecified)": {
         "bio_score": 5,
         "natural": true,
-        "score": 5,
+        "score": 8,
         "absorption": "unknown",
         "notes": "Form not specified; conservative scoring applied.",
         "aliases": [
@@ -50081,7 +49939,7 @@
       "cat's claw (unspecified)": {
         "bio_score": 5,
         "natural": true,
-        "score": 5,
+        "score": 8,
         "absorption": "unknown",
         "notes": "Form not specified; conservative scoring applied.",
         "aliases": [
@@ -50133,7 +49991,7 @@
       "tinospora (unspecified)": {
         "bio_score": 5,
         "natural": true,
-        "score": 5,
+        "score": 8,
         "absorption": "unknown",
         "notes": "Form not specified; conservative scoring applied.",
         "aliases": [
@@ -50184,7 +50042,7 @@
       "rye pollen extract (unspecified)": {
         "bio_score": 5,
         "natural": true,
-        "score": 5,
+        "score": 8,
         "absorption": "unknown",
         "notes": "Form not specified; conservative scoring applied.",
         "aliases": [
@@ -50234,7 +50092,7 @@
       "keratin (unspecified)": {
         "bio_score": 7,
         "natural": true,
-        "score": 8,
+        "score": 10,
         "absorption": "unknown",
         "notes": "Cynatine FLX is solubilized keratin from wool. Lustriva is branded variant. Clinical trials show improvements in hair/nail/skin markers.",
         "aliases": [
@@ -50286,7 +50144,7 @@
       "apple polyphenols (unspecified)": {
         "bio_score": 5,
         "natural": true,
-        "score": 5,
+        "score": 8,
         "absorption": "unknown",
         "notes": "Form not specified; conservative scoring applied.",
         "aliases": [
@@ -50332,7 +50190,7 @@
     "dosage_importance": 0.1,
     "forms": {
       "casein hydrolysate (unspecified)": {
-        "bio_score": 8,
+        "bio_score": 7,
         "natural": true,
         "score": 10,
         "absorption": "unknown",
@@ -50385,7 +50243,7 @@
       "coffee fruit extract (unspecified)": {
         "bio_score": 5,
         "natural": true,
-        "score": 5,
+        "score": 8,
         "absorption": "unknown",
         "notes": "Form not specified; conservative scoring applied.",
         "aliases": [
@@ -50436,7 +50294,7 @@
       "yeast fermentate (unspecified)": {
         "bio_score": 5,
         "natural": true,
-        "score": 5,
+        "score": 8,
         "absorption": "unknown",
         "notes": "Form not specified; conservative scoring applied.",
         "aliases": [
@@ -50490,7 +50348,7 @@
       "picrorhiza (unspecified)": {
         "bio_score": 5,
         "natural": true,
-        "score": 5,
+        "score": 8,
         "absorption": "unknown",
         "notes": "Form not specified; conservative scoring applied.",
         "aliases": [
@@ -50543,7 +50401,7 @@
       "maqui berry (unspecified)": {
         "bio_score": 5,
         "natural": true,
-        "score": 5,
+        "score": 8,
         "absorption": "unknown",
         "notes": "Form not specified; conservative scoring applied.",
         "aliases": [
@@ -50682,7 +50540,7 @@
       "paeoniflorin (unspecified)": {
         "bio_score": 5,
         "natural": true,
-        "score": 5,
+        "score": 8,
         "absorption": "unknown",
         "notes": "Form not specified; conservative scoring applied.",
         "aliases": [
@@ -50730,7 +50588,7 @@
       "phlorizin (unspecified)": {
         "bio_score": 5,
         "natural": true,
-        "score": 5,
+        "score": 8,
         "absorption": "unknown",
         "notes": "Form not specified; conservative scoring applied.",
         "aliases": [
@@ -50778,7 +50636,7 @@
       "isovitexin (unspecified)": {
         "bio_score": 5,
         "natural": true,
-        "score": 5,
+        "score": 8,
         "absorption": "unknown",
         "notes": "Form not specified; conservative scoring applied.",
         "aliases": [
@@ -50822,9 +50680,9 @@
     "dosage_importance": 0.1,
     "forms": {
       "diosmin (unspecified)": {
-        "bio_score": 9,
+        "bio_score": 7,
         "natural": true,
-        "score": 11,
+        "score": 10,
         "absorption": "unknown",
         "notes": "MPFF (90% diosmin + 10% hesperidin) has extensive clinical evidence for venous insufficiency. Micronization greatly improves bioavailability.",
         "aliases": [
@@ -50871,7 +50729,7 @@
     "dosage_importance": 0.1,
     "forms": {
       "colostrum (unspecified)": {
-        "bio_score": 8,
+        "bio_score": 7,
         "natural": true,
         "score": 10,
         "absorption": "unknown",
@@ -50922,7 +50780,7 @@
       "mung bean extract (unspecified)": {
         "bio_score": 5,
         "natural": true,
-        "score": 5,
+        "score": 8,
         "absorption": "unknown",
         "notes": "Form not specified; conservative scoring applied.",
         "aliases": [
@@ -50971,7 +50829,7 @@
       "french oak extract (unspecified)": {
         "bio_score": 5,
         "natural": true,
-        "score": 5,
+        "score": 8,
         "absorption": "unknown",
         "notes": "Form not specified; conservative scoring applied.",
         "aliases": [
@@ -51022,7 +50880,7 @@
       "angelica gigas (unspecified)": {
         "bio_score": 5,
         "natural": true,
-        "score": 5,
+        "score": 8,
         "absorption": "unknown",
         "notes": "Form not specified; conservative scoring applied.",
         "aliases": [
@@ -51073,7 +50931,7 @@
       "nobiletin (unspecified)": {
         "bio_score": 5,
         "natural": true,
-        "score": 5,
+        "score": 8,
         "absorption": "unknown",
         "notes": "Form not specified; conservative scoring applied.",
         "aliases": [
@@ -51120,7 +50978,7 @@
       "purple tea (unspecified)": {
         "bio_score": 5,
         "natural": true,
-        "score": 5,
+        "score": 8,
         "absorption": "unknown",
         "notes": "Form not specified; conservative scoring applied.",
         "aliases": [
@@ -51168,7 +51026,7 @@
       "cabbage extract (unspecified)": {
         "bio_score": 5,
         "natural": true,
-        "score": 5,
+        "score": 8,
         "absorption": "unknown",
         "notes": "Form not specified; conservative scoring applied.",
         "aliases": [
@@ -51216,7 +51074,7 @@
       "mangiferin (unspecified)": {
         "bio_score": 5,
         "natural": true,
-        "score": 5,
+        "score": 8,
         "absorption": "unknown",
         "notes": "Form not specified; conservative scoring applied.",
         "aliases": [
@@ -51263,7 +51121,7 @@
       "oat straw extract (unspecified)": {
         "bio_score": 5,
         "natural": true,
-        "score": 5,
+        "score": 8,
         "absorption": "unknown",
         "notes": "Form not specified; conservative scoring applied.",
         "aliases": [
@@ -51315,7 +51173,7 @@
       "l-asparagine (unspecified)": {
         "bio_score": 5,
         "natural": true,
-        "score": 5,
+        "score": 8,
         "absorption": "unknown",
         "notes": "Form not specified; conservative scoring applied.",
         "aliases": [
@@ -51359,7 +51217,7 @@
     "dosage_importance": 0.1,
     "forms": {
       "dietary nitrate (unspecified)": {
-        "bio_score": 8,
+        "bio_score": 7,
         "natural": true,
         "score": 10,
         "absorption": "unknown",
@@ -51416,7 +51274,7 @@
       "senna leaf extract": {
         "bio_score": 7,
         "natural": true,
-        "score": 8,
+        "score": 10,
         "absorption": "unknown",
         "notes": "FDA OTC monograph laxative. Sennosides A+B are the active glycosides. Effective at 15-30mg sennosides. Not for long-term use (>2 weeks) due to electrolyte depletion and dependency risk.",
         "aliases": [
@@ -51457,56 +51315,6 @@
       "last_reviewed_at": "2026-02-24"
     }
   },
-  "red_yeast_rice": {
-    "standard_name": "Red Yeast Rice",
-    "severity_level": "none",
-    "category": "other",
-    "source": "fermented",
-    "priority": "medium",
-    "description": "Monascus purpureus fermented rice. Contains monacolin K (chemically identical to lovastatin). Clinically proven for LDL cholesterol reduction. FDA regulatory scrutiny on monacolin K content.",
-    "dosage_importance": 0.1,
-    "forms": {
-      "red yeast rice extract": {
-        "bio_score": 9,
-        "natural": true,
-        "score": 11,
-        "absorption": "unknown",
-        "notes": "Active compound monacolin K is identical to lovastatin. Meta-analyses show 15-25% LDL reduction. FDA warns products with significant monacolin K levels are unapproved drugs. Quality varies greatly between brands.",
-        "aliases": [
-          "red yeast rice",
-          "red yeast rice extract",
-          "red yeast rice seed extract",
-          "monascus purpureus",
-          "monascus purpureus extract",
-          "red yeast rice powder",
-          "red fermented rice"
-        ],
-        "dosage_importance": 1.0,
-        "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available"
-        }
-      }
-    },
-    "cui": null,
-    "cui_note": "No UMLS CUI for supplement ingredient",
-    "rxcui": null,
-    "match_rules": {
-      "priority": 0,
-      "match_mode": "alias_and_fuzzy",
-      "exclusions": [],
-      "parent_id": null,
-      "confidence": "high"
-    },
-    "category_enum": "other",
-    "rxcui_note": "No RxNorm concept for supplement ingredient",
-    "data_quality": {
-      "completeness": 0.2,
-      "review_status": "stub",
-      "last_reviewed_at": "2026-02-24"
-    }
-  },
   "tart_cherry": {
     "standard_name": "Tart Cherry",
     "severity_level": "none",
@@ -51522,9 +51330,9 @@
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "forms": {
       "vitacherry sports extract": {
-        "bio_score": 8,
+        "bio_score": 7,
         "natural": true,
-        "score": 11,
+        "score": 10,
         "absorption": "moderate",
         "notes": "VitaCherry® Sports by FutureCeuticals. Montmorency tart cherry, 15x anthocyanin concentration vs standard powders. Multiple RCTs: 8/9 studies reduced exercise-induced muscle soreness; 4/4 studies improved sleep quality (PMID 33440334, 31986108, 40964149). Low absolute bioavailability (~0.6% anthocyanins) offset by concentrated dose. Dose: 200-500mg extract/day.",
         "aliases": [
@@ -51622,9 +51430,9 @@
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "forms": {
       "neumentix spearmint extract": {
-        "bio_score": 11,
+        "bio_score": 7,
         "natural": true,
-        "score": 14,
+        "score": 10,
         "absorption": "good",
         "notes": "Neumentix® by Kemin Industries. Proprietary high-polyphenol spearmint bred for elevated rosmarinic acid and 50+ phenolic compounds. 5 clinical trials support cognitive performance, reaction time, and working memory at 900mg/day x 90 days; onset at 7 days (PMID 29314866, 30802720). Superior to standard spearmint extract.",
         "aliases": [
@@ -51711,9 +51519,9 @@
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "forms": {
       "button mushroom fruiting body extract": {
-        "bio_score": 8,
+        "bio_score": 7,
         "natural": true,
-        "score": 11,
+        "score": 10,
         "absorption": "moderate",
         "notes": "Extract from Agaricus bisporus fruiting bodies. Beta-glucans activate macrophages and NK cells. Ergothioneine and glutathione provide antioxidant protection. Emerging oncology research (PMID 32653808, 22113068). Less medicinal evidence than reishi/maitake/shiitake.",
         "aliases": [
@@ -51852,9 +51660,9 @@
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "forms": {
       "ap-bio andrographis extract": {
-        "bio_score": 10,
+        "bio_score": 7,
         "natural": true,
-        "score": 13,
+        "score": 10,
         "absorption": "good",
         "notes": "AP-Bio™ by HP Ingredients. Standardized Andrographis paniculata leaf extract with enhanced bioavailability lipid matrix. ParActin® (Natural Alternatives International) is the same andrographolide-standardized extract class. Multiple clinical trials: reduced cold duration, immune activation (PMID 19657410, 11103571). Dose: 200–400mg/day standardized to ≥10% andrographolide.",
         "aliases": [
@@ -51944,9 +51752,9 @@
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "forms": {
       "cognivia sage extract": {
-        "bio_score": 10,
+        "bio_score": 7,
         "natural": true,
-        "score": 13,
+        "score": 10,
         "absorption": "good",
         "notes": "Cognivia® by Nexira. Proprietary Salvia officinalis leaf extract standardized to high ursolic acid and rosmarinic acid. Multiple RCTs: improved cognitive performance, working memory, and attention in healthy adults (PMID 16205659, 20377818). Dose: 300–600mg/day. Superior polyphenol profile vs standard sage.",
         "aliases": [
@@ -52092,6 +51900,247 @@
       "completeness": 0.3,
       "review_status": "stub",
       "last_reviewed_at": "2026-02-25"
+    }
+  },
+  "red_yeast_rice": {
+    "standard_name": "Red Yeast Rice",
+    "severity_level": "none",
+    "category": "other",
+    "source": "fermented",
+    "priority": "medium",
+    "description": "Monascus purpureus fermented rice. Contains monacolin K (chemically identical to lovastatin). Clinically proven for LDL cholesterol reduction. FDA regulatory scrutiny on monacolin K content.",
+    "dosage_importance": 0.1,
+    "forms": {
+      "red yeast rice extract": {
+        "bio_score": 9,
+        "natural": true,
+        "score": 12,
+        "absorption": "unknown",
+        "notes": "Active compound monacolin K is identical to lovastatin. Meta-analyses show 15-25% LDL reduction. FDA warns products with significant monacolin K levels are unapproved drugs. Quality varies greatly between brands.",
+        "aliases": [
+          "red yeast rice",
+          "red yeast rice extract",
+          "red yeast rice seed extract",
+          "monascus purpureus",
+          "monascus purpureus extract",
+          "red yeast rice powder",
+          "red fermented rice"
+        ],
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": null,
+          "quality": "unknown",
+          "notes": "Data not available"
+        }
+      }
+    },
+    "cui": null,
+    "cui_note": "No UMLS CUI for supplement ingredient",
+    "rxcui": null,
+    "match_rules": {
+      "priority": 0,
+      "match_mode": "alias_and_fuzzy",
+      "exclusions": [],
+      "parent_id": null,
+      "confidence": "high"
+    },
+    "category_enum": "other",
+    "rxcui_note": "No RxNorm concept for supplement ingredient",
+    "data_quality": {
+      "completeness": 0.2,
+      "review_status": "stub",
+      "last_reviewed_at": "2026-02-24"
+    }
+  },
+  "phenylethylamine": {
+    "standard_name": "Phenylethylamine",
+    "category": "other",
+    "cui": null,
+    "rxcui": null,
+    "forms": {
+      "phenylethylamine (unspecified)": {
+        "bio_score": 5,
+        "natural": false,
+        "score": 5,
+        "absorption": "unknown",
+        "notes": "Form not specified; conservative scoring applied. Trace amine neuromodulator (PEA). Endogenous monoamine; proposed mood and cognitive support.",
+        "aliases": [
+          "phenylethylamine",
+          "phenylethylamine alkaloids",
+          "beta-phenylethylamine",
+          "phenylethylamine hcl",
+          "b-phenylethylamine",
+          "Beta Phenylethylamine"
+        ],
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": null,
+          "quality": "unknown",
+          "notes": "Data not available"
+        }
+      }
+    },
+    "match_rules": {
+      "priority": 0,
+      "match_mode": "alias_and_fuzzy",
+      "exclusions": [],
+      "parent_id": null,
+      "confidence": "medium"
+    },
+    "category_enum": "other",
+    "data_quality": {
+      "completeness": 0.6,
+      "missing_fields": [],
+      "review_status": "needs_review",
+      "last_reviewed_at": "2026-02-23"
+    },
+    "cui_note": "No UMLS entry for botanical/novel compound",
+    "rxcui_note": "No RxNorm concept for supplement ingredient"
+  },
+  "yohimbe": {
+    "category": "herbs",
+    "cui": null,
+    "cui_note": "No UMLS entry for botanical/novel compound",
+    "forms": {
+      "yohimbe (unspecified)": {
+        "score": 5,
+        "bio_score": 5,
+        "aliases": [
+          "yohimbe",
+          "yohimbe bark extract",
+          "yohimbine",
+          "yohimbine hcl",
+          "alpha yohimbine",
+          "rauwolscine",
+          "pausinystalia yohimbe",
+          "yohimbe bark",
+          "yohimbine hydrochloride",
+          "yohimbines",
+          "rauwolfia vomitoria",
+          "rauwolfia vomitoria root bark extract",
+          "rauwolfia vomitoria extract"
+        ],
+        "notes": "Stub score for Yohimbe. Conservative fallback.",
+        "natural": false,
+        "absorption": "unknown",
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": null,
+          "quality": "unknown",
+          "notes": "Data not available"
+        }
+      }
+    },
+    "standard_name": "Yohimbe",
+    "rxcui": null,
+    "rxcui_note": "No RxNorm concept for supplement ingredient",
+    "match_rules": {
+      "priority": 0,
+      "match_mode": "alias_and_fuzzy",
+      "exclusions": [],
+      "parent_id": null,
+      "confidence": "medium"
+    },
+    "category_enum": "herbs",
+    "data_quality": {
+      "completeness": 0.6,
+      "missing_fields": [],
+      "review_status": "needs_review",
+      "last_reviewed_at": "2026-02-23"
+    }
+  },
+  "garcinia_cambogia": {
+    "standard_name": "Garcinia Cambogia (Hydroxycitric Acid)",
+    "category": "botanicals",
+    "cui": "",
+    "rxcui": "",
+    "forms": {
+      "garcinia cambogia extract 60% HCA": {
+        "bio_score": 9,
+        "natural": true,
+        "score": 12,
+        "absorption": "moderate (~40%)",
+        "notes": "Standardized to 60% hydroxycitric acid (HCA). Weight management ingredient.",
+        "aliases": [
+          "garcinia cambogia 60% hca",
+          "garcinia cambogia extract 60%",
+          "hydroxycitric acid 60%",
+          "super citrimax clinical strength garcinia cambogia extract",
+          "citrimax",
+          "garcinia cambogia super citrimax clinical strength",
+          "super citrimax garcinia extract"
+        ],
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": 0.4,
+          "range_low": 0.3,
+          "range_high": 0.5,
+          "quality": "moderate",
+          "notes": "moderate"
+        }
+      },
+      "garcinia cambogia extract 50% HCA": {
+        "bio_score": 8,
+        "natural": true,
+        "score": 11,
+        "absorption": "moderate (~40%)",
+        "notes": "Standardized to 50% HCA.",
+        "aliases": [
+          "garcinia cambogia 50% extract",
+          "garcinia cambogia extract 50%",
+          "garcinia cambogia 50% hca"
+        ],
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": 0.4,
+          "range_low": 0.3,
+          "range_high": 0.5,
+          "quality": "moderate",
+          "notes": "moderate"
+        }
+      },
+      "garcinia cambogia (unspecified)": {
+        "bio_score": 5,
+        "natural": true,
+        "score": 8,
+        "absorption": "unknown",
+        "notes": "Form not specified; conservative scoring applied.",
+        "aliases": [
+          "garcinia cambogia",
+          "garcinia",
+          "garcinia cambogia fruit extract",
+          "garcinia cambogia fruit",
+          "garcinia cambogia extract",
+          "garcinia cambogia rind extract",
+          "hydroxycitric acid",
+          "hca",
+          "malabar tamarind",
+          "brindleberry",
+          "garcinia cambogia rind",
+          "garcinia gummi-gutta",
+          "garcinia cambogia fruit rind extract",
+          "super citrimax"
+        ],
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": null,
+          "quality": "unknown",
+          "notes": "Data not available"
+        }
+      }
+    },
+    "match_rules": {
+      "priority": 1,
+      "match_mode": "alias_and_fuzzy",
+      "exclusions": [],
+      "parent_id": null,
+      "confidence": "medium"
+    },
+    "data_quality": {
+      "completeness": 0.6,
+      "missing_fields": [],
+      "review_status": "needs_review",
+      "last_reviewed_at": "2026-02-22"
     }
   }
 }

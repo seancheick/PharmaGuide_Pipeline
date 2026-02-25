@@ -2,7 +2,7 @@
   "_metadata": {
     "description": "Functional ingredient grouping patterns and transparency scoring for supplement labeling",
     "purpose": "Preserve functional context while penalizing vague disclosures",
-    "schema_version": "4.0.0",
+    "schema_version": "4.1.0",
     "last_updated": "2026-02-16",
     "total_entries": 8,
     "regulatory_basis": "FDA 21 CFR 101.22 - Allows generic declarations but best practice is specific disclosure"
