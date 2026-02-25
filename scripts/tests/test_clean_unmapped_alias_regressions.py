@@ -297,7 +297,7 @@ def normalizer():
         ("Laminaria digitata", "Kelp"),
         ("Ivy Leaf Extract", "Ivy"),
         ("Linden", "Linden"),
-        ("Neumentix", "neumentix"),
+        ("Neumentix", "Spearmint"),
         ("NEM Natural Eggshell Membrane", "nem"),
         ("Mythocondro", "mythocondro"),
         ("Mobilee", "mobilee"),

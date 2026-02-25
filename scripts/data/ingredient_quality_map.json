@@ -12050,7 +12050,9 @@
           "SC208 supplement",
           "spore-forming lactobacillus",
           "bacillus coagulans probiotic",
-          "Bacillus coagulans probiotic supplement"
+          "Bacillus coagulans probiotic supplement",
+          "b. coagulans probiotic",
+          "b.coagulans probiotic"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -12263,7 +12265,8 @@
           "BC30 Bacillus coagulans GBl-30, 6086",
           "BC30 Bacillus coagulans GBl-30",
           "Bacillus coagulans GBl-30 6086",
-          "B. coagulans GBl-30"
+          "B. coagulans GBl-30",
+          "BC30 Bacillus coagulans"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -45586,7 +45589,10 @@
           "algal dha",
           "algae-derived dha",
           "algae oil supplement",
-          "algal oil supplement"
+          "algal oil supplement",
+          "omega-3 docosahexaenoic acid (form: algal oil)",
+          "docosahexaenoic acid (form: algal oil)",
+          "omega-3 dha (form: algal oil)"
         ]
       },
       "algae oil (unspecified)": {
@@ -51254,7 +51260,13 @@
           "nitrates",
           "dietary nitrates",
           "inorganic nitrate",
-          "potassium nitrate supplement"
+          "potassium nitrate supplement",
+          "trubeet",
+          "trubeet beet root extract",
+          "trubeet standardized extract",
+          "trubeet 6% nitrate",
+          "beetroot nitrate extract",
+          "nitrate-rich beetroot extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -51383,6 +51395,195 @@
       "completeness": 0.2,
       "review_status": "stub",
       "last_reviewed_at": "2026-02-24"
+    }
+  },
+  "tart_cherry": {
+    "standard_name": "Tart Cherry",
+    "severity_level": "none",
+    "category": "antioxidants",
+    "category_enum": "antioxidants",
+    "source": "botanical_extract",
+    "priority": "medium",
+    "description": "Montmorency tart cherry (Prunus cerasus). Rich in anthocyanins, flavonols, and melatonin precursors. Clinical evidence supports exercise-induced muscle recovery, sleep quality improvement, and inflammation modulation. Low absolute anthocyanin bioavailability (~0.6%) offset by dose optimization in trials.",
+    "dosage_importance": 0.1,
+    "cui": null,
+    "cui_note": "No UMLS CUI for supplement ingredient",
+    "rxcui": null,
+    "rxcui_note": "No RxNorm concept for supplement ingredient",
+    "forms": {
+      "vitacherry sports extract": {
+        "bio_score": 8,
+        "natural": true,
+        "score": 11,
+        "absorption": "moderate",
+        "notes": "VitaCherry® Sports by FutureCeuticals. Montmorency tart cherry, 15x anthocyanin concentration vs standard powders. Multiple RCTs: 8/9 studies reduced exercise-induced muscle soreness; 4/4 studies improved sleep quality (PMID 33440334, 31986108, 40964149). Low absolute bioavailability (~0.6% anthocyanins) offset by concentrated dose. Dose: 200-500mg extract/day.",
+        "aliases": [
+          "vitacherry",
+          "vitacherry sports",
+          "vitacherry® sports",
+          "vitacherry® by futureceuticals",
+          "futureceuticals vitacherry",
+          "vitacherry concentrate",
+          "vitacherry anthocyanin extract",
+          "vitacherry sports concentrate"
+        ],
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": 0.006,
+          "quality": "moderate",
+          "notes": "~0.6% peak anthocyanin bioavailability; plasma Cmax 1-2h post-dose. Clinically effective due to high dose concentration despite low absolute absorption."
+        }
+      },
+      "tart cherry extract": {
+        "bio_score": 6,
+        "natural": true,
+        "score": 9,
+        "absorption": "low",
+        "notes": "Standard Montmorency tart cherry extract. Good clinical evidence for muscle recovery and sleep. Lower anthocyanin concentration than standardized forms. Dose: 60-90mL concentrate or 300-500mg extract/day.",
+        "aliases": [
+          "tart cherry extract",
+          "montmorency tart cherry extract",
+          "montmorency cherry extract",
+          "sour cherry extract",
+          "prunus cerasus extract",
+          "tart cherry concentrate",
+          "montmorency tart cherry concentrate",
+          "tart cherry fruit extract",
+          "tart cherry juice concentrate",
+          "montmorency tart cherry juice concentrate",
+          "tart cherry powder",
+          "tart cherry fruit powder"
+        ],
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": null,
+          "quality": "low",
+          "notes": "Anthocyanin bioavailability ~0.6-2%; formulation quality significantly affects absorption."
+        }
+      },
+      "tart cherry (unspecified)": {
+        "bio_score": 5,
+        "natural": true,
+        "score": 8,
+        "absorption": "unknown",
+        "notes": "Form not specified; conservative scoring applied.",
+        "aliases": [
+          "tart cherry",
+          "montmorency cherry",
+          "sour cherry",
+          "prunus cerasus",
+          "montmorency tart cherry",
+          "tart cherry fruit",
+          "tart cherry berry"
+        ],
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": null,
+          "quality": "unknown",
+          "notes": "Data not available"
+        }
+      }
+    },
+    "match_rules": {
+      "priority": 0,
+      "match_mode": "alias_and_fuzzy",
+      "exclusions": [],
+      "parent_id": null,
+      "confidence": "high"
+    },
+    "data_quality": {
+      "completeness": 0.4,
+      "review_status": "stub",
+      "last_reviewed_at": "2026-02-25"
+    }
+  },
+  "spearmint": {
+    "standard_name": "Spearmint",
+    "severity_level": "none",
+    "category": "herbs",
+    "category_enum": "herbs",
+    "source": "botanical_extract",
+    "priority": "medium",
+    "description": "Spearmint (Mentha spicata). Rich in rosmarinic acid, luteolin, and phenolic compounds. Standard extracts used for digestion and flavoring. Proprietary high-polyphenol variants (Neumentix) clinically studied for cognitive performance and focus.",
+    "dosage_importance": 0.1,
+    "cui": null,
+    "cui_note": "No UMLS CUI for supplement ingredient",
+    "rxcui": null,
+    "rxcui_note": "No RxNorm concept for supplement ingredient",
+    "forms": {
+      "neumentix spearmint extract": {
+        "bio_score": 11,
+        "natural": true,
+        "score": 14,
+        "absorption": "good",
+        "notes": "Neumentix® by Kemin Industries. Proprietary high-polyphenol spearmint bred for elevated rosmarinic acid and 50+ phenolic compounds. 5 clinical trials support cognitive performance, reaction time, and working memory at 900mg/day x 90 days; onset at 7 days (PMID 29314866, 30802720). Superior to standard spearmint extract.",
+        "aliases": [
+          "neumentix",
+          "neumentix spearmint",
+          "neumentix spearmint extract",
+          "kemin neumentix",
+          "kemin spearmint extract",
+          "high-polyphenol spearmint extract",
+          "spearmint extract (neumentix)"
+        ],
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": null,
+          "quality": "good",
+          "notes": "Polyphenol bioavailability assumed good based on water-soluble phenolic compounds; no direct pharmacokinetic data available."
+        }
+      },
+      "spearmint extract": {
+        "bio_score": 6,
+        "natural": true,
+        "score": 9,
+        "absorption": "moderate",
+        "notes": "Standard spearmint extract. Polyphenol content variable between suppliers. Limited clinical evidence for cognitive effects; primarily used as digestive aid and flavoring.",
+        "aliases": [
+          "spearmint extract",
+          "mentha spicata extract",
+          "spearmint leaf extract",
+          "spearmint herb extract"
+        ],
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": null,
+          "quality": "moderate",
+          "notes": "Rosmarinic acid and flavonoids have moderate polyphenol bioavailability."
+        }
+      },
+      "spearmint (unspecified)": {
+        "bio_score": 5,
+        "natural": true,
+        "score": 8,
+        "absorption": "unknown",
+        "notes": "Form not specified; conservative scoring applied.",
+        "aliases": [
+          "spearmint",
+          "mentha spicata",
+          "spearmint leaf",
+          "spearmint powder",
+          "spearmint herb"
+        ],
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": null,
+          "quality": "unknown",
+          "notes": "Data not available"
+        }
+      }
+    },
+    "match_rules": {
+      "priority": 0,
+      "match_mode": "alias_and_fuzzy",
+      "exclusions": [],
+      "parent_id": null,
+      "confidence": "high"
+    },
+    "data_quality": {
+      "completeness": 0.3,
+      "review_status": "stub",
+      "last_reviewed_at": "2026-02-25"
     }
   }
 }
