@@ -4539,7 +4539,10 @@
           "algae-derived calcium supplement",
           "Lithothamnion supplement",
           "Aquamin supplement",
-          "certified organic algaecal"
+          "certified organic algaecal",
+          "calcified marine red algae",
+          "calcified red algae",
+          "red algae, calcified"
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
@@ -6549,7 +6552,11 @@
           "Astaxanthin Esters",
           "Icelandic Astalif",
           "Astalif",
-          "AstaZine"
+          "AstaZine",
+          "organic astapure astaxanthin",
+          "organic astapure arava whole algae astaxanthin powder",
+          "astapure arava whole algae astaxanthin powder",
+          "astapure arava astaxanthin"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -9744,7 +9751,9 @@
           "bis-glycinato oxovanadium",
           "vanadyl sulfate hydrate",
           "vanadium amino acid chelate",
-          "vanadium glycinate"
+          "vanadium glycinate",
+          "vanadium, natural",
+          "natural vanadium"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -9980,7 +9989,9 @@
           "Potassium",
           "potassium ascorbate complex",
           "Potasio",
-          "Potassium Carbonate"
+          "Potassium Carbonate",
+          "potassium, natural",
+          "natural potassium"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -12936,7 +12947,10 @@
           "acacia fiber supplement",
           "acacia gum supplement",
           "gum arabic supplement",
-          "acacia senegal supplement"
+          "acacia senegal supplement",
+          "organic acacia prebiotic fiber",
+          "acacia prebiotic fiber",
+          "acacia fiber prebiotic"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -16323,7 +16337,10 @@
           "chlorella cracked cell supplement",
           "high-absorption chlorella supplement",
           "shattered cell wall chlorella",
-          "shattered cell wall chlorella powder"
+          "shattered cell wall chlorella powder",
+          "cracked-wall chlorella",
+          "cracked wall chlorella",
+          "cracked cell wall chlorella"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -20166,7 +20183,11 @@
           "pinus radiata extract",
           "monterey pine bark extract",
           "phytopin",
-          "phytopin pine bark extract"
+          "phytopin pine bark extract",
+          "fenoprolic pine bark extract",
+          "fenoprolic",
+          "organic fenoprolic pine bark extract",
+          "fenoprolic pine bark"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -23165,7 +23186,11 @@
           "extramel",
           "sod-b extramel",
           "glisodin",
-          "glisodin melon sod"
+          "glisodin melon sod",
+          "organic extramel superoxide dismutase (sod) french melon fruit concentrate",
+          "organic extramel sod",
+          "extramel superoxide dismutase french melon concentrate",
+          "organic extramel french melon sod"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -29567,7 +29592,12 @@
           "hmr lignan",
           "hmr lignan-7-hydroxymatairesinol",
           "7-hydroxymatairesinol",
-          "hmr lignans"
+          "hmr lignans",
+          "flax lignan (seed) extract",
+          "flax lignan extract",
+          "flax lignan seed extract",
+          "flaxseed lignan extract",
+          "flaxseed lignans extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -29838,7 +29868,11 @@
           "luteolin",
           "Luteolin Phytosome",
           "luteolin-7-o-glucoside",
-          "luteolin-7-0-glucoside"
+          "luteolin-7-0-glucoside",
+          "d.r.-luteolin",
+          "dr-luteolin",
+          "dr. luteolin",
+          "dr luteolin"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -35338,7 +35372,10 @@
           "ginger root",
           "ginger root powder",
           "organic fermented ginger",
-          "ginger powder"
+          "ginger powder",
+          "ginger, fermented",
+          "fermented ginger",
+          "ginger root, fermented"
         ],
         "score": 12,
         "dosage_importance": 1.0,
@@ -36549,7 +36586,9 @@
           "total beta glucan",
           "Beta 1,3 Glucans",
           "Beta Glucan 3/6/9",
-          "Beta Glucan 1,3"
+          "Beta Glucan 1,3",
+          "beta-1,3/1,6-d-glucan",
+          "beta 1,3/1,6 d-glucan"
         ],
         "absorption_structured": {
           "value": 0.45,
@@ -37050,7 +37089,8 @@
         "absorption": "unknown",
         "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
         "aliases": [
-          "bifidobacterium longum"
+          "bifidobacterium longum",
+          "bifidobacterium longum infantis"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -37447,48 +37487,63 @@
       }
     },
     "statistics": {
-      "total_ingredients": 478,
-      "total_forms": 1194,
-      "total_aliases": 8493,
+      "total_ingredients": 622,
+      "total_forms": 1430,
+      "total_aliases": 12308,
       "ingredients_with_relationships": 24
     },
     "categories": {
       "adaptogens": 10,
+      "amino_acid": 1,
       "amino_acid_antioxidants": 2,
-      "amino_acid_derivatives": 1,
-      "amino_acid_metabolites": 3,
-      "amino_acids": 31,
-      "antioxidants": 199,
+      "amino_acid_derivatives": 3,
+      "amino_acid_metabolites": 4,
+      "amino_acids": 35,
+      "antioxidant": 2,
+      "antioxidants": 213,
       "bee_products": 2,
       "bile_acids": 1,
+      "botanical": 6,
       "botanical_ingredients": 1,
+      "botanicals": 17,
       "cannabinoids": 1,
       "cardiovascular_support": 1,
+      "carotenoids": 1,
       "energy_substrates": 1,
-      "enzymes": 6,
-      "fatty_acids": 25,
+      "enzymes": 8,
+      "fatty_acid_derivatives": 1,
+      "fatty_acids": 33,
+      "fiber": 1,
       "fibers": 5,
+      "flavonoids": 1,
       "functional_foods": 6,
       "glandular": 1,
-      "herbs": 61,
+      "herbs": 122,
       "ketones": 1,
       "lipid": 2,
+      "lipids": 2,
+      "marine": 1,
       "metabolic_support": 1,
-      "minerals": 20,
+      "minerals": 24,
       "mitochondrial_support": 1,
+      "mushroom_extracts": 1,
+      "nootropics": 1,
       "nucleotides": 1,
       "nutraceuticals": 3,
-      "oil": 1,
-      "other": 22,
+      "oil": 3,
+      "omega_fatty_acids": 1,
+      "other": 51,
       "phytonutrients": 8,
       "polyphenol": 1,
       "polyphenol_antioxidants": 1,
-      "probiotics": 14,
-      "proteins": 2,
-      "vitamins": 15
+      "probiotics": 15,
+      "proteins": 7,
+      "purine_alkaloids": 1,
+      "terpenes": 1,
+      "vitamins": 16
     },
     "schema_version": "4.0.0",
-    "last_updated": "2026-02-23",
+    "last_updated": "2026-02-25",
     "pipeline_integration": "Used by enrichment script to assign quality scores to matched ingredient forms. Match ingredient name against forms aliases (case-insensitive). Use highest-scoring matched form.",
     "matching_notes": [
       "Match ingredient name + forms text against aliases array (case-insensitive)",
@@ -37516,6 +37571,18 @@
           "Added relationships[] for parent/child links",
           "Added data_quality blocks",
           "Resolved 45 duplicate aliases"
+        ]
+      },
+      "4.1.0": {
+        "date": "2026-02-25",
+        "changes": [
+          "Added tart_cherry, spearmint, button_mushroom, auricularia parents (P1/P2)",
+          "Fixed royal_sun_blazei natural flag and added extract form",
+          "Added andrographis, sage, kefir_culture parents (GardenOfLife)",
+          "Added 18 batch alias sets for GardenOfLife unmapped ingredients",
+          "Fixed flax lignan fallback (added to lignans parent)",
+          "Added EXCLUDED_LABEL_PHRASES: 35% alcohol, ionic minerals, alkaline proteases",
+          "Added EXCLUDED_NUTRITION_FACTS: omega-9 fatty acid (singular)"
         ]
       }
     },
@@ -37558,8 +37625,8 @@
       "energy_substrates"
     ],
     "cleanup_notes": "Resolved within-ingredient alias collisions; removed 63 redundant unspecified forms",
-    "total_entries": 520,
-    "total_ingredients": 478,
+    "total_entries": 623,
+    "total_ingredients": 622,
     "data_quality": {
       "review_status": "stub"
     },
@@ -39502,7 +39569,9 @@
           "citrus bergamot extract",
           "bergamot polyphenols",
           "bergamot fruit extract",
-          "Vazguard"
+          "Vazguard",
+          "bergamot orange fruit extract",
+          "bergamot orange"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -41316,7 +41385,12 @@
           "chia seed extract",
           "raw cold-pressed chia seed oil",
           "raw cold pressed chia seed oil",
-          "Chia Seed Oil extract Tresalbio"
+          "Chia Seed Oil extract Tresalbio",
+          "chia seed oil, cold-pressed, raw",
+          "raw chia seed oil, cold-pressed",
+          "cold-pressed raw chia seed oil",
+          "chia seed oil cold-pressed raw",
+          "raw organic chia seed oil"
         ],
         "absorption_structured": {
           "value": 0.55,
@@ -41733,7 +41807,11 @@
           "oil of oregano aerial extract",
           "oregano aerial oil extract",
           "organic Oregano (Origanum vulgare) (leaf) supercritical extract",
-          "Oregano leaf supercritical CO2 extract"
+          "Oregano leaf supercritical CO2 extract",
+          "syrian oregano",
+          "origanum syriacum",
+          "syrian oregano leaf",
+          "biblical oregano"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -42462,7 +42540,10 @@
           "strontium ranelate",
           "Sr",
           "strontium chloride",
-          "strontium carbonate"
+          "strontium carbonate",
+          "strontium, natural",
+          "natural strontium",
+          "elemental strontium"
         ],
         "dosage_importance": 0.5
       }
@@ -42937,7 +43018,9 @@
           "purple butterbur",
           "butterbur root extract",
           "Purple Butterbur (Petasites hybridus) (Petadolex brand) root extract",
-          "Purple Butterbur (Petasites hybridus) (Petadolex(R) brand) Root Extract"
+          "Purple Butterbur (Petasites hybridus) (Petadolex(R) brand) Root Extract",
+          "butterbur stem extract",
+          "petasites hybridus stem extract"
         ],
         "dosage_importance": 2.0,
         "absorption_structured": {
@@ -47451,7 +47534,6 @@
       "parent_id": null,
       "confidence": "medium"
     },
-    "category_enum": "herbs",
     "data_quality": {
       "completeness": 0.6,
       "missing_fields": [],
@@ -51733,6 +51815,263 @@
           "cloud ear mushroom",
           "auricularia auricula-judae",
           "black fungus mushroom"
+        ],
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": null,
+          "quality": "unknown",
+          "notes": "Data not available"
+        }
+      }
+    },
+    "match_rules": {
+      "priority": 0,
+      "match_mode": "alias_and_fuzzy",
+      "exclusions": [],
+      "parent_id": null,
+      "confidence": "high"
+    },
+    "data_quality": {
+      "completeness": 0.3,
+      "review_status": "stub",
+      "last_reviewed_at": "2026-02-25"
+    }
+  },
+  "andrographis": {
+    "standard_name": "Andrographis",
+    "severity_level": "none",
+    "category": "herbs",
+    "category_enum": "herbs",
+    "source": "botanical_extract",
+    "priority": "medium",
+    "description": "Andrographis paniculata (King of Bitters). Active compound andrographolide has immunomodulatory, anti-inflammatory, and antiviral properties. Clinical evidence supports reduction in severity and duration of upper respiratory tract infections. Proprietary standardized forms (AP-Bio, ParActin) show 4–6× higher andrographolide bioavailability via lipid-matrix delivery.",
+    "dosage_importance": 0.1,
+    "cui": null,
+    "cui_note": "No UMLS CUI for supplement ingredient",
+    "rxcui": null,
+    "rxcui_note": "No RxNorm concept for supplement ingredient",
+    "forms": {
+      "ap-bio andrographis extract": {
+        "bio_score": 10,
+        "natural": true,
+        "score": 13,
+        "absorption": "good",
+        "notes": "AP-Bio™ by HP Ingredients. Standardized Andrographis paniculata leaf extract with enhanced bioavailability lipid matrix. ParActin® (Natural Alternatives International) is the same andrographolide-standardized extract class. Multiple clinical trials: reduced cold duration, immune activation (PMID 19657410, 11103571). Dose: 200–400mg/day standardized to ≥10% andrographolide.",
+        "aliases": [
+          "ap-bio andrographis paniculata leaf extract",
+          "ap-bio(tm) proprietary andrographis paniculata (leaf) extract",
+          "ap-bio proprietary andrographis paniculata (leaf) extract",
+          "ap-bio andrographis",
+          "ap-bio",
+          "andrographis paniculata standardized extract",
+          "andrographis standardized andrographolide"
+        ],
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": null,
+          "quality": "good",
+          "notes": "Lipid-matrix delivery enhances andrographolide absorption 4–6× vs standard powder. Standard andrographolide oral bioavailability ~20–35%."
+        }
+      },
+      "andrographis extract": {
+        "bio_score": 7,
+        "natural": true,
+        "score": 10,
+        "absorption": "moderate",
+        "notes": "Standard Andrographis paniculata extract. Typically standardized to 10% andrographolide. Good clinical evidence for immune support and reduction of upper respiratory symptoms. Dose: 400–1200mg/day.",
+        "aliases": [
+          "andrographis extract",
+          "andrographis paniculata extract",
+          "andrographis paniculata leaf extract",
+          "andrographolide extract",
+          "andrographis herb extract",
+          "andrographis paniculata (leaf) extract",
+          "andrographis paniculata herb extract",
+          "king of bitters extract"
+        ],
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": null,
+          "quality": "moderate",
+          "notes": "Andrographolide oral bioavailability approximately 20–35%; variable across formulations."
+        }
+      },
+      "andrographis (unspecified)": {
+        "bio_score": 5,
+        "natural": true,
+        "score": 8,
+        "absorption": "unknown",
+        "notes": "Form not specified; conservative scoring applied.",
+        "aliases": [
+          "andrographis",
+          "andrographis paniculata",
+          "kalmegh",
+          "king of bitters"
+        ],
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": null,
+          "quality": "unknown",
+          "notes": "Data not available"
+        }
+      }
+    },
+    "match_rules": {
+      "priority": 0,
+      "match_mode": "alias_and_fuzzy",
+      "exclusions": [],
+      "parent_id": null,
+      "confidence": "high"
+    },
+    "data_quality": {
+      "completeness": 0.4,
+      "review_status": "stub",
+      "last_reviewed_at": "2026-02-25"
+    }
+  },
+  "sage": {
+    "standard_name": "Sage",
+    "severity_level": "none",
+    "category": "herbs",
+    "category_enum": "herbs",
+    "source": "botanical_extract",
+    "priority": "medium",
+    "description": "Salvia officinalis (Common Sage). Rich in rosmarinic acid, ursolic acid, and polyphenols. Well-documented cholinesterase inhibitory activity and antioxidant properties. Multiple RCTs support cognitive performance enhancement in healthy adults, particularly memory, attention, and processing speed (PMID 16205659, 20377818). Cognivia® (Nexira) is a proprietary high-polyphenol extract with clinical backing.",
+    "dosage_importance": 0.1,
+    "cui": null,
+    "cui_note": "No UMLS CUI for supplement ingredient",
+    "rxcui": null,
+    "rxcui_note": "No RxNorm concept for supplement ingredient",
+    "forms": {
+      "cognivia sage extract": {
+        "bio_score": 10,
+        "natural": true,
+        "score": 13,
+        "absorption": "good",
+        "notes": "Cognivia® by Nexira. Proprietary Salvia officinalis leaf extract standardized to high ursolic acid and rosmarinic acid. Multiple RCTs: improved cognitive performance, working memory, and attention in healthy adults (PMID 16205659, 20377818). Dose: 300–600mg/day. Superior polyphenol profile vs standard sage.",
+        "aliases": [
+          "cognivia sage extract",
+          "cognivia sage (leaf) extract",
+          "organic cognivia sage (leaf) extract",
+          "cognivia",
+          "cognivia salvia officinalis extract",
+          "nexira cognivia sage extract"
+        ],
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": null,
+          "quality": "good",
+          "notes": "Rosmarinic acid and ursolic acid bioavailability moderate-good; phenolic matrix enhances uptake."
+        }
+      },
+      "sage extract": {
+        "bio_score": 7,
+        "natural": true,
+        "score": 10,
+        "absorption": "moderate",
+        "notes": "Standard Salvia officinalis extract. Polyphenol content variable. Clinical evidence for cognitive and memory support. Dose: 300–600mg/day leaf extract.",
+        "aliases": [
+          "sage extract",
+          "salvia officinalis extract",
+          "sage leaf extract",
+          "common sage extract",
+          "salvia officinalis leaf extract",
+          "salvia officinalis (leaf) extract",
+          "sage herb extract",
+          "sage aerial parts extract"
+        ],
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": null,
+          "quality": "moderate",
+          "notes": "Polyphenol bioavailability moderate; rosmarinic acid well-absorbed."
+        }
+      },
+      "sage (unspecified)": {
+        "bio_score": 5,
+        "natural": true,
+        "score": 8,
+        "absorption": "unknown",
+        "notes": "Form not specified; conservative scoring applied.",
+        "aliases": [
+          "sage",
+          "salvia officinalis",
+          "sage leaf",
+          "common sage",
+          "garden sage",
+          "sage powder",
+          "sage herb"
+        ],
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": null,
+          "quality": "unknown",
+          "notes": "Data not available"
+        }
+      }
+    },
+    "match_rules": {
+      "priority": 0,
+      "match_mode": "alias_and_fuzzy",
+      "exclusions": [],
+      "parent_id": null,
+      "confidence": "high"
+    },
+    "data_quality": {
+      "completeness": 0.4,
+      "review_status": "stub",
+      "last_reviewed_at": "2026-02-25"
+    }
+  },
+  "kefir_culture": {
+    "standard_name": "Kefir Culture",
+    "severity_level": "none",
+    "category": "probiotics",
+    "category_enum": "probiotics",
+    "source": "fermented",
+    "priority": "low",
+    "description": "Traditional fermented kefir starter culture containing a symbiotic consortium of lactic acid bacteria, acetic acid bacteria, and yeasts embedded in kefir grains. Provides diverse probiotic strains plus beta-glucan polysaccharides from kefir grain matrix. Evidence supports gut microbiome diversity, immune modulation, and lactose digestion improvement.",
+    "dosage_importance": 0.1,
+    "cui": null,
+    "cui_note": "No UMLS CUI for supplement ingredient",
+    "rxcui": null,
+    "rxcui_note": "No RxNorm concept for supplement ingredient",
+    "forms": {
+      "kefir culture (fermented)": {
+        "bio_score": 7,
+        "natural": true,
+        "score": 10,
+        "absorption": "moderate",
+        "notes": "Traditional fermented kefir grain culture (Eastern European origin). Consortium of Lactobacillus, Leuconostoc, Acetobacter species plus Saccharomyces and Kluyveromyces yeasts. Provides diverse probiotic strains; evidence for gut health, immune function, and lactose digestion (general fermented dairy evidence). Dose: varies by CFU content.",
+        "aliases": [
+          "eastern european wild kefir culture",
+          "wild kefir culture",
+          "kefir culture",
+          "kefir grain culture",
+          "kefir starter culture",
+          "fermented kefir culture",
+          "traditional kefir culture",
+          "kefir probiotic culture",
+          "whole kefir culture"
+        ],
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": null,
+          "quality": "moderate",
+          "notes": "Live culture viability and colonization depends on CFU count, acid tolerance, and gut transit conditions."
+        }
+      },
+      "kefir (unspecified)": {
+        "bio_score": 5,
+        "natural": true,
+        "score": 8,
+        "absorption": "unknown",
+        "notes": "Form not specified; conservative scoring applied.",
+        "aliases": [
+          "kefir",
+          "kefir powder",
+          "kefir extract",
+          "kefir complex"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {

@@ -129,6 +129,7 @@ EXCLUDED_NUTRITION_FACTS = {
     "omega-6 polyunsaturated fat", "omega-6 polyunsaturated fats",
     "omega-9 monounsaturated fat", "omega-9 monounsaturated fats",
     "omega 6 fatty acids", "omega 7 fatty acids", "omega 9 fatty acids",
+    "omega-9 fatty acid", "omega 9 fatty acid",
     "omegachoice omega-3 essential fatty acids",
     # Omega ethyl ester aggregates (nutrition totals, distinct from individual EE forms)
     "total omega-3 fatty acids ethyl esters", "total omega-3 fatty acid ethyl esters",
@@ -289,6 +290,17 @@ EXCLUDED_LABEL_PHRASES = {
     # Audit-derived descriptor fragments leaking as ingredient rows
     "contains less than 0.5% of:",
     "contains less than 0.5% of",
+    "contains less than 0.5% of the following:",
+    "contains less than 0.5% of the following",
+    # Alcohol solvent/carrier (not an active ingredient)
+    "35% alcohol",
+    "20% alcohol",
+    "25% alcohol",
+    "40% alcohol",
+    "50% alcohol",
+    # Generic blend/enzyme header descriptors
+    "ionic minerals",
+    "alkaline & neutral bacterial proteases",
     "providing",
     "providing:",
     "providing tocotrienols",
