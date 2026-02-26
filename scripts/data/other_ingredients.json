@@ -206,7 +206,8 @@
         "ammonium molybdate tetrahydrate"
       ],
       "notes": "Molybdenum source used as inactive mineral.",
-      "last_updated": "2026-02-23"
+      "last_updated": "2026-02-23",
+      "severity_level": "none"
     },
     {
       "id": "NHA_ANNATTO_VARIANTS",
@@ -320,7 +321,8 @@
         "clear coat"
       ],
       "notes": "Water-based tablet coating.",
-      "last_updated": "2026-02-23"
+      "last_updated": "2026-02-23",
+      "severity_level": "none"
     },
     {
       "id": "NHA_ARABIC_GUM",
@@ -586,7 +588,8 @@
         "vegetable wax"
       ],
       "notes": "Plant-derived wax coating.",
-      "last_updated": "2026-02-23"
+      "last_updated": "2026-02-23",
+      "severity_level": "none"
     },
     {
       "id": "NHA_CAFFEIC_ACID",
@@ -637,7 +640,8 @@
         "calcium chloride anhydrous"
       ],
       "notes": "Processing aid / stabilizer.",
-      "last_updated": "2026-02-23"
+      "last_updated": "2026-02-23",
+      "severity_level": "none"
     },
     {
       "id": "NHA_CALCIUM_HYDROXIDE",
@@ -781,7 +785,8 @@
         "carrot extract color"
       ],
       "notes": "Natural vegetable colorant.",
-      "last_updated": "2026-02-23"
+      "last_updated": "2026-02-23",
+      "severity_level": "none"
     },
     {
       "id": "NHA_CARROT_JUICE_COLOR",
@@ -988,7 +993,8 @@
         "natural chocolate flavor"
       ],
       "notes": "Natural chocolate flavoring.",
-      "last_updated": "2026-02-23"
+      "last_updated": "2026-02-23",
+      "severity_level": "none"
     },
     {
       "id": "NHA_CITRIC_ACID",
@@ -1030,7 +1036,8 @@
         "citrus oils, natural"
       ],
       "notes": "Citrus essential oil used as flavoring agent.",
-      "last_updated": "2026-02-23"
+      "last_updated": "2026-02-23",
+      "severity_level": "none"
     },
     {
       "id": "NHA_CITRUS_FIBER",
@@ -1489,7 +1496,8 @@
         "fd&c blue#1"
       ],
       "notes": "Synthetic food dye.",
-      "last_updated": "2026-02-23"
+      "last_updated": "2026-02-23",
+      "severity_level": "none"
     },
     {
       "id": "NHA_FDC_YELLOW_10",
@@ -1502,7 +1510,8 @@
         "yellow #10"
       ],
       "notes": "Synthetic food dye.",
-      "last_updated": "2026-02-23"
+      "last_updated": "2026-02-23",
+      "severity_level": "none"
     },
     {
       "id": "NHA_FOS",
@@ -1739,7 +1748,8 @@
         "mono-and diglycerides"
       ],
       "notes": "Emulsifier / stabilizer.",
-      "last_updated": "2026-02-23"
+      "last_updated": "2026-02-23",
+      "severity_level": "none"
     },
     {
       "id": "NHA_GLYCERIN_FATTY_ACID_ESTER",
@@ -1775,7 +1785,8 @@
         "glyceryl caprylate/caprate"
       ],
       "notes": "Emollient/emulsifier.",
-      "last_updated": "2026-02-23"
+      "last_updated": "2026-02-23",
+      "severity_level": "none"
     },
     {
       "id": "NHA_GLYCYRRHIZIN_SWEETENER",
@@ -1932,7 +1943,8 @@
         "hypromellose phthalate"
       ],
       "notes": "Enteric coating polymer.",
-      "last_updated": "2026-02-23"
+      "last_updated": "2026-02-23",
+      "severity_level": "none"
     },
     {
       "id": "NHA_INULIN",
@@ -2052,7 +2064,8 @@
         "kaolin clay"
       ],
       "notes": "Clay mineral used as filler/adsorbent.",
-      "last_updated": "2026-02-23"
+      "last_updated": "2026-02-23",
+      "severity_level": "none"
     },
     {
       "id": "NHA_KERATIN",
@@ -2235,7 +2248,8 @@
         "magnesium borate"
       ],
       "notes": "Mineral salt processing aid.",
-      "last_updated": "2026-02-23"
+      "last_updated": "2026-02-23",
+      "severity_level": "none"
     },
     {
       "id": "NHA_MAGNESIUM_PHOSPHATE_EXCIPIENT",
@@ -2406,7 +2420,8 @@
         "mandarin peel flavor"
       ],
       "notes": "Citrus peel flavoring.",
-      "last_updated": "2026-02-23"
+      "last_updated": "2026-02-23",
+      "severity_level": "none"
     },
     {
       "id": "NHA_MANGO_PUREE",
@@ -2594,7 +2609,8 @@
         "natural mixed berry flavors"
       ],
       "notes": "Natural mixed berry flavoring.",
-      "last_updated": "2026-02-23"
+      "last_updated": "2026-02-23",
+      "severity_level": "none"
     },
     {
       "id": "NHA_MODIFIED_FOOD_STARCH",
@@ -3569,7 +3585,8 @@
         "orange flavor"
       ],
       "notes": "Orange flavoring agent.",
-      "last_updated": "2026-02-23"
+      "last_updated": "2026-02-23",
+      "severity_level": "none"
     },
     {
       "id": "NHA_ORANGE_NATURAL",
@@ -3828,7 +3845,8 @@
         "methacrylic acid copolymer dispersion"
       ],
       "notes": "Enteric coating polymer.",
-      "last_updated": "2026-02-23"
+      "last_updated": "2026-02-23",
+      "severity_level": "none"
     },
     {
       "id": "NHA_POMEGRANATE_JUICE",
@@ -3862,7 +3880,8 @@
         "potassium amino acid chelate"
       ],
       "notes": "Chelated potassium in inactive context.",
-      "last_updated": "2026-02-23"
+      "last_updated": "2026-02-23",
+      "severity_level": "none"
     },
     {
       "id": "NHA_POTASSIUM_CITRATE",
@@ -3947,7 +3966,8 @@
         "pvp"
       ],
       "notes": "Binder / disintegrant.",
-      "last_updated": "2026-02-23"
+      "last_updated": "2026-02-23",
+      "severity_level": "none"
     },
     {
       "id": "NHA_QUILLAJA_EXTRACT",
@@ -4136,7 +4156,8 @@
         "silicone dioxide"
       ],
       "notes": "Likely misspelling of silicon dioxide. Anti-caking agent.",
-      "last_updated": "2026-02-23"
+      "last_updated": "2026-02-23",
+      "severity_level": "none"
     },
     {
       "id": "NHA_SKIM_MILK_POWDER",
@@ -4957,7 +4978,8 @@
         "tomato lycopene color"
       ],
       "notes": "Natural vegetable colorant.",
-      "last_updated": "2026-02-23"
+      "last_updated": "2026-02-23",
+      "severity_level": "none"
     },
     {
       "id": "NHA_TREHALOSE",
@@ -4992,7 +5014,8 @@
         "trimagnesium citrate"
       ],
       "notes": "Magnesium salt used as inactive ingredient.",
-      "last_updated": "2026-02-23"
+      "last_updated": "2026-02-23",
+      "severity_level": "none"
     },
     {
       "id": "NHA_TRI_SODIUM_CITRATE",
@@ -5027,7 +5050,8 @@
         "vegetable cellulose coating"
       ],
       "notes": "Tablet coating material.",
-      "last_updated": "2026-02-23"
+      "last_updated": "2026-02-23",
+      "severity_level": "none"
     },
     {
       "id": "NHA_VEGETABLE_FRUIT_JUICE_COLORS",
@@ -5132,7 +5156,8 @@
         "vegetable lubricants"
       ],
       "notes": "Tablet/capsule manufacturing lubricant.",
-      "last_updated": "2026-02-23"
+      "last_updated": "2026-02-23",
+      "severity_level": "none"
     },
     {
       "id": "NHA_VEGETABLE_STEARATES",
@@ -5178,7 +5203,8 @@
         "vegetable magnesium silicate"
       ],
       "notes": "Anti-caking agent.",
-      "last_updated": "2026-02-23"
+      "last_updated": "2026-02-23",
+      "severity_level": "none"
     },
     {
       "id": "NHA_VERISOL_COLLAGEN",
@@ -5236,7 +5262,8 @@
         "white thyme oil"
       ],
       "notes": "Essential oil flavoring.",
-      "last_updated": "2026-02-23"
+      "last_updated": "2026-02-23",
+      "severity_level": "none"
     },
     {
       "id": "NHA_WHOLE_BROWN_RICE",
@@ -5319,7 +5346,8 @@
         "ylang-ylang oil"
       ],
       "notes": "Essential oil used as flavoring/scent.",
-      "last_updated": "2026-02-23"
+      "last_updated": "2026-02-23",
+      "severity_level": "none"
     },
     {
       "id": "NHA_YOGURT_POWDER",
@@ -10249,7 +10277,8 @@
       ],
       "category": "filler",
       "notes": "Food ingredient used as filler/carrier in supplement formulations.",
-      "last_updated": "2026-02-23"
+      "last_updated": "2026-02-23",
+      "severity_level": "none"
     },
     {
       "id": "millet_flour",
@@ -10261,7 +10290,8 @@
       ],
       "category": "filler",
       "notes": "Grain flour used as filler/carrier in supplement formulations.",
-      "last_updated": "2026-02-23"
+      "last_updated": "2026-02-23",
+      "severity_level": "none"
     },
     {
       "id": "mucin",
@@ -10272,7 +10302,8 @@
       ],
       "category": "processing_aid",
       "notes": "Glycoprotein found in mucous secretions. Used as excipient/coating agent.",
-      "last_updated": "2026-02-23"
+      "last_updated": "2026-02-23",
+      "severity_level": "none"
     },
     {
       "id": "palatinose",
@@ -10284,7 +10315,8 @@
       ],
       "category": "sweetener",
       "notes": "Isomaltulose, slowly-digestible disaccharide sugar. BENEO brand. Used as functional carbohydrate/energy carrier in supplements.",
-      "last_updated": "2026-02-23"
+      "last_updated": "2026-02-23",
+      "severity_level": "none"
     },
     {
       "id": "simethicone",
@@ -10298,7 +10330,8 @@
       ],
       "category": "anti_foaming",
       "notes": "Silicone-based anti-foaming agent. FDA OTC anti-gas drug. Not absorbed systemically.",
-      "last_updated": "2026-02-23"
+      "last_updated": "2026-02-23",
+      "severity_level": "none"
     },
     {
       "id": "NHA_LACTIUM",
@@ -12099,7 +12132,8 @@
       ],
       "category": "filler_binder",
       "risk_level": "none",
-      "description": "Ground chia seeds used as filler/binder in supplements"
+      "description": "Ground chia seeds used as filler/binder in supplements",
+      "severity_level": "none"
     },
     {
       "id": "PII_CLOVE_POWDER",
@@ -12111,7 +12145,8 @@
       ],
       "category": "flavoring",
       "risk_level": "none",
-      "description": "Ground clove flower bud used as flavoring"
+      "description": "Ground clove flower bud used as flavoring",
+      "severity_level": "none"
     },
     {
       "id": "PII_SIENNA_COLOR",
@@ -12123,7 +12158,8 @@
       ],
       "category": "colorant",
       "risk_level": "none",
-      "description": "Natural sienna fruit juice used as colorant"
+      "description": "Natural sienna fruit juice used as colorant",
+      "severity_level": "none"
     },
     {
       "id": "PII_BONE_BROTH",
@@ -12136,7 +12172,8 @@
       ],
       "category": "protein_source",
       "risk_level": "none",
-      "description": "Powdered bone broth used as protein base"
+      "description": "Powdered bone broth used as protein base",
+      "severity_level": "none"
     },
     {
       "id": "PII_CINNAMON_FLAVORING",
@@ -12147,7 +12184,8 @@
       ],
       "category": "flavoring",
       "risk_level": "none",
-      "description": "Natural cinnamon used as flavoring in supplements"
+      "description": "Natural cinnamon used as flavoring in supplements",
+      "severity_level": "none"
     },
     {
       "id": "PII_MICELLAR_CASEIN",
@@ -12159,7 +12197,8 @@
       ],
       "category": "protein_source",
       "risk_level": "none",
-      "description": "Slow-release milk protein used as base ingredient in protein supplements"
+      "description": "Slow-release milk protein used as base ingredient in protein supplements",
+      "severity_level": "none"
     },
     {
       "id": "PII_MARINE_PROTEIN",
@@ -12172,7 +12211,8 @@
       ],
       "category": "protein_source",
       "risk_level": "none",
-      "description": "Fish-derived protein peptides used as protein base in supplements"
+      "description": "Fish-derived protein peptides used as protein base in supplements",
+      "severity_level": "none"
     },
     {
       "id": "PII_NATURAL_COLORING",
@@ -12185,7 +12225,8 @@
       ],
       "category": "colorant",
       "risk_level": "none",
-      "description": "Natural plant-derived colorant (typically from turmeric, annatto, or similar)"
+      "description": "Natural plant-derived colorant (typically from turmeric, annatto, or similar)",
+      "severity_level": "none"
     },
     {
       "id": "PII_TRUMASK",
@@ -12197,7 +12238,8 @@
       ],
       "category": "flavoring",
       "risk_level": "none",
-      "description": "Branded flavor masking technology used to hide bitter tastes in supplements"
+      "description": "Branded flavor masking technology used to hide bitter tastes in supplements",
+      "severity_level": "none"
     }
   ]
 }

@@ -952,7 +952,7 @@
         "cassia nomame extract",
         "chamaecrista nomame"
       ],
-      "category": "herbs",
+      "category": "herb",
       "notes": "Chamaecrista nomame (syn. Cassia nomame). Japanese botanical. Contains flavan dimers that inhibit lipase.",
       "last_updated": "2026-02-23"
     },
@@ -999,7 +999,7 @@
         "erythroxylum catuaba",
         "trichilia catigua"
       ],
-      "category": "herbs",
+      "category": "herb",
       "notes": "Erythroxylum catuaba or Trichilia catigua bark. Brazilian traditional herb used as tonic. 'Catauba' is a common misspelling.",
       "last_updated": "2026-02-23"
     },
@@ -1051,7 +1051,7 @@
         "intellect tree",
         "jyotishmati"
       ],
-      "category": "herbs",
+      "category": "herb",
       "notes": "Celastrus paniculatus seed. Ayurvedic nootropic herb (Jyotishmati). Contains sesquiterpenes.",
       "last_updated": "2026-02-23"
     },
@@ -1323,7 +1323,7 @@
         "clove powder",
         "clove bud oil"
       ],
-      "category": "herbs",
+      "category": "herb",
       "notes": "Syzygium aromaticum (syn. Eugenia caryophyllata) flower bud. Culinary spice and traditional remedy. Rich in eugenol but NOT the same as isolated eugenol. Whole clove also contains beta-caryophyllene, acetyl eugenol.",
       "last_updated": "2026-02-23"
     },
@@ -1940,7 +1940,7 @@
         "feverfew leaf powder",
         "feverfew 4:1 extract"
       ],
-      "category": "herbs",
+      "category": "herb",
       "notes": "Tanacetum parthenium leaf. Traditional migraine herb. Contains parthenolide but is NOT the same as isolated parthenolide. Whole herb has different pharmacology than isolated compound.",
       "last_updated": "2026-02-23"
     },
@@ -2300,7 +2300,7 @@
         "eupatorium purpureum",
         "joe-pye weed"
       ],
-      "category": "herbs",
+      "category": "herb",
       "notes": "Eupatorium purpureum. Traditional kidney/urinary herb. Also known as Joe-Pye Weed.",
       "last_updated": "2026-02-23"
     },
@@ -2632,7 +2632,7 @@
         "hyssop extract",
         "hyssop leaf"
       ],
-      "category": "herbs",
+      "category": "herb",
       "notes": "Hyssopus officinalis herb. Traditional respiratory herb. Contains pinocamphone.",
       "last_updated": "2026-02-23"
     },
@@ -3895,7 +3895,7 @@
         "zanthoxylum clava-herculis",
         "prickly ash bark extract"
       ],
-      "category": "herbs",
+      "category": "herb",
       "notes": "Zanthoxylum americanum bark. Traditional circulatory stimulant. Contains alkylamides.",
       "last_updated": "2026-02-23"
     },
@@ -4379,7 +4379,7 @@
         "collinsonia root",
         "stoneroot extract"
       ],
-      "category": "herbs",
+      "category": "herb",
       "notes": "Collinsonia canadensis root. Traditional remedy for hemorrhoids and venous insufficiency.",
       "last_updated": "2026-02-23"
     },
@@ -4829,7 +4829,7 @@
         "cissus quadrangularis stem extract",
         "cqr-300 cissus quadrangularis stem and leaf extract"
       ],
-      "category": "herbs",
+      "category": "herb",
       "notes": "Cissus quadrangularis (Winged Treebine). Tropical plant used for bone health and weight management. Contains ketosterone and 3-ketosteroid.",
       "last_updated": "2026-02-24"
     },

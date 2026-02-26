@@ -12,7 +12,8 @@
       "mcg_only_nutrients": 7,
       "notes": "Added B12, Selenium, Chromium, Biotin, Iodine, Molybdenum for AC4 compliance"
     },
-    "total_entries": 37
+    "total_entries": 20,
+    "total_entries_note": "Count of vitamin_conversions rules; mass_conversions has 6 rules, probiotic_conversions is 1 section, form_detection_patterns has 2 vitamin patterns"
   },
   "vitamin_conversions": {
     "vitamin_d3": {

@@ -1,18 +1,6 @@
 {
   "_metadata": {
-    "description": {
-      "name": "Standardized Botanicals Database",
-      "description": "Botanical extracts, herbs, and plant-derived ingredients with standardization markers and thresholds",
-      "version": "2.1.0",
-      "last_updated": "2026-02-25",
-      "sources": [
-        "American Botanical Council (abc.herbalgram.org)",
-        "Natural Medicines Comprehensive Database",
-        "USP Dietary Supplement Standards",
-        "European Pharmacopoeia botanical monographs",
-        "FDA GRAS and NDI notifications"
-      ]
-    },
+    "description": "Botanical extracts, herbs, and plant-derived ingredients with standardization markers and thresholds",
     "purpose": "ingredient_mapping_and_standardization",
     "schema_version": "4.1.0",
     "last_updated": "2026-02-25",
@@ -22,14 +10,14 @@
       "id",
       "standard_name",
       "aliases",
-      "markers",
       "category",
       "notes",
       "priority",
       "last_updated"
     ],
     "optional_fields": [
-      "min_threshold"
+      "min_threshold",
+      "markers"
     ],
     "categories": {
       "active_compound": 6,
@@ -55,7 +43,14 @@
       "high_priority": 68,
       "medium_priority": 170
     },
-    "pipeline_integration": "Used by cleaning script to standardize botanical ingredient names and by enrichment script to identify quality markers"
+    "pipeline_integration": "Used by cleaning script to standardize botanical ingredient names and by enrichment script to identify quality markers",
+    "sources": [
+      "American Botanical Council (abc.herbalgram.org)",
+      "Natural Medicines Comprehensive Database",
+      "USP Dietary Supplement Standards",
+      "European Pharmacopoeia botanical monographs",
+      "FDA GRAS and NDI notifications"
+    ]
   },
   "standardized_botanicals": [
     {

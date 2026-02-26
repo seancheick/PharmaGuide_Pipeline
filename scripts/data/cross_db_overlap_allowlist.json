@@ -4,7 +4,8 @@
     "schema_version": "4.1.0",
     "purpose": "Explicitly allowed normalized term overlaps across routing databases. Any new overlap must be reviewed before scoring deployment.",
     "description": "Explicitly allowed normalized term overlaps across routing databases. Any new overlap must be reviewed before scoring deployment.",
-    "last_updated": "2026-02-24"
+    "last_updated": "2026-02-24",
+    "total_entries": 16
   },
   "allowed_overlaps": [
     {
