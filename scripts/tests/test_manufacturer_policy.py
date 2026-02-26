@@ -82,7 +82,8 @@ class TestManufacturerPolicyScoring:
                         "name": "Vitamin C",
                         "canonical_id": "vitamin_c_ascorbic_acid",
                         "quality_score": 5,
-                        "form_detected": "ascorbic_acid"
+                        "form_detected": "ascorbic_acid",
+                        "mapped": True
                     }
                 ]
             },
