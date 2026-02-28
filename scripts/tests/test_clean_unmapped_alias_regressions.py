@@ -228,7 +228,7 @@ def normalizer():
         ("Full Strength Pancreatin", "Digestive Enzymes"),
         ("Yaeyama Chlorella", "Chlorella"),
         ("l3C", "Diindolylmethane"),
-        ("Gymnemic Acid", "Gymnemic Acids"),
+        ("Gymnemic Acid", "Gymnema Sylvestre"),
         ("Female Hops cone extract", "Hops"),
         ("TryptoGold", "L-Tryptophan"),
         ("Trachea", "Organ Extracts"),

@@ -14894,7 +14894,12 @@
           "ginkgo bilobalide",
           "ginkgo terpene lactones",
           "flavone glycosides",
-          "flavonoid glycosides"
+          "flavonoid glycosides",
+          "ginkgolides",
+          "ginkgolide A",
+          "ginkgolide B",
+          "ginkgolide C",
+          "terpene lactones"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -22251,25 +22256,28 @@
     "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
-    "description": "Standardization marker for botanical extracts",
-    "dosage_importance": 0.1,
+    "description": "Methoxylated isoflavone from red clover and astragalus; prodrug to daidzein via gut microbiota",
+    "dosage_importance": 1.0,
     "forms": {
       "formononetin (unspecified)": {
-        "bio_score": 5,
-        "natural": false,
-        "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
+        "bio_score": 8,
+        "natural": true,
+        "score": 11,
+        "absorption": "~21.8% aglycone (PMID 29504397); gut microbiome converts to daidzein",
+        "notes": "Methoxylated isoflavone from red clover (Trifolium pratense). Oral F ~21.8% (PMID 29504397). Gut microbiota convert formononetin to daidzein via Eubacterium limosum (PMID 11040423). DB-RCT (PMID 25369831, n=40): formononetin-enriched red clover isoflavones reduced LDL 12% vs 2% placebo (P=0.005). ERbeta preferential binding; lower ERalpha affinity vs genistein.",
         "aliases": [
-          "formononetin"
+          "formononetin",
+          "formononetin extract",
+          "ononin",
+          "red clover formononetin"
         ],
-        "dosage_importance": 1.0,
+        "dosage_importance": 1.5,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.22,
+          "range_low": 0.2,
+          "range_high": 0.3,
+          "quality": "moderate",
+          "notes": "~21.8% aglycone F (PMID 29504397); gut microbiota convert to daidzein in ~26% of population; high plasma protein binding 93-96% (PMID 21266188)"
         }
       }
     },
@@ -22295,18 +22303,18 @@
   "forskolin": {
     "standard_name": "Forskolin",
     "severity_level": "none",
-    "category": "antioxidants",
+    "category": "herbs",
     "source": "botanical_extract",
     "priority": "high",
-    "description": "Standardization marker for botanical extracts",
-    "dosage_importance": 0.1,
+    "description": "Diterpene from Coleus forskohlii; direct adenylate cyclase activator elevating cAMP",
+    "dosage_importance": 1.0,
     "forms": {
       "forskolin (unspecified)": {
-        "bio_score": 5,
-        "natural": false,
-        "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
+        "bio_score": 8,
+        "natural": true,
+        "score": 11,
+        "absorption": "~25-40% estimated (BCS Class II; no definitive human F% published)",
+        "notes": "Diterpene from Coleus forskohlii root (branded: ForsLean, Sabinsa). Direct adenylate cyclase activation elevates intracellular cAMP, stimulating hormone-sensitive lipase. DB-RCT (PMID 16129715, n=30 men, 12 wk): 500 mg/day 10% ForsLean decreased body fat -4.52% and increased free testosterone vs placebo. Women trial (PMC2129145) showed weight stabilization but not loss.",
         "aliases": [
           "forskolin",
           "coleus forskohlii extract powder",
@@ -22314,15 +22322,20 @@
           "forslean coleus forskohlii extract",
           "coleus forskohlii root extract",
           "forskolin extract",
-          "forskohlii root extract"
+          "forskohlii root extract",
+          "coleus forskohlii extract standardized",
+          "ForsLean 10%",
+          "10% forskolin coleus",
+          "20% forskolin",
+          "coleus forskohlii root powder"
         ],
-        "dosage_importance": 1.0,
+        "dosage_importance": 1.5,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.32,
+          "range_low": 0.25,
+          "range_high": 0.4,
+          "quality": "low",
+          "notes": "Estimated from rat gut perfusion (PMID 22411728) and lipophilicity (log P ~3.5); no peer-reviewed human oral F study exists"
         }
       }
     },
@@ -22335,7 +22348,7 @@
       "parent_id": null,
       "confidence": "high"
     },
-    "category_enum": "antioxidants",
+    "category_enum": "herbs",
     "cui_note": "No UMLS entry for botanical/novel compound",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "data_quality": {
@@ -22348,18 +22361,18 @@
   "fucoidan": {
     "standard_name": "Fucoidan",
     "severity_level": "none",
-    "category": "antioxidants",
+    "category": "herbs",
     "source": "botanical_extract",
     "priority": "high",
-    "description": "Standardization marker for botanical extracts",
-    "dosage_importance": 0.1,
+    "description": "Sulfated polysaccharide from brown seaweed; immunostimulatory via TLR4/NK cell activation",
+    "dosage_importance": 1.0,
     "forms": {
       "fucoidan (unspecified)": {
-        "bio_score": 5,
-        "natural": false,
-        "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
+        "bio_score": 7,
+        "natural": true,
+        "score": 10,
+        "absorption": "<0.6% high-MW native fucoidan (human); ~28% low-MW depolymerized form (mouse)",
+        "notes": "Sulfated polysaccharide from brown seaweed (Undaria pinnatifida/wakame). Branded: Maritech 926 (Marinova, 85% fucoidan), InSea2 (depolymerized LMWF, better bioavailability). TLR4 agonism activates dendritic/NK cells (PMC8779234). Systematic review (PMC9140503, 4 human studies) found safety and possible QoL benefit as cancer adjunct. Oral F highly MW-dependent.",
         "aliases": [
           "fucoidan",
           "Maritech 926 wild-harvested Patagonian Wakame",
@@ -22372,15 +22385,20 @@
           "maritech wakame extract",
           "wakame extract",
           "undaria pinnatifida extract",
-          "patagonian wakame"
+          "patagonian wakame",
+          "fucoidan extract",
+          "fucoidan polysaccharide",
+          "brown seaweed fucoidan",
+          "wakame fucoidan",
+          "fucus vesiculosus fucoidan"
         ],
-        "dosage_importance": 1.0,
+        "dosage_importance": 1.5,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.005,
+          "range_low": 0.001,
+          "range_high": 0.28,
+          "quality": "poor",
+          "notes": "MW-dependent: native high-MW (>=66 kDa, Maritech 926) F <0.6% in humans; LMWF (<10 kDa, InSea2) F ~28% in mice; gut-level immunostimulation may occur via GALT"
         }
       }
     },
@@ -22393,7 +22411,7 @@
       "parent_id": null,
       "confidence": "high"
     },
-    "category_enum": "antioxidants",
+    "category_enum": "herbs",
     "cui_note": "No UMLS entry for botanical/novel compound",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "data_quality": {
@@ -22406,28 +22424,34 @@
   "galactolipids": {
     "standard_name": "Galactolipids",
     "severity_level": "none",
-    "category": "antioxidants",
+    "category": "herbs",
     "source": "botanical_extract",
     "priority": "high",
-    "description": "Standardization marker for botanical extracts",
-    "dosage_importance": 0.1,
+    "description": "Anti-inflammatory glycolipid (GOPO) from rosehip; OA pain reduction in multiple DB-RCTs",
+    "dosage_importance": 1.0,
     "forms": {
       "galactolipids (unspecified)": {
-        "bio_score": 5,
-        "natural": false,
-        "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
+        "bio_score": 8,
+        "natural": true,
+        "score": 11,
+        "absorption": "unknown human F%; glycolipid class suggests lymphatic absorption ~40-60%",
+        "notes": "Anti-inflammatory glycolipid (GLGPG/GOPO) from rosehip (Rosa canina). Inhibits neutrophil chemotaxis, reduces IL-6/TNF-alpha in macrophages (PMC3231956). Meta-analysis of 3 DB-RCTs (PMID 18407528, n=287 OA patients): 37% reduction in OA pain scores vs placebo. GOPO Rosehip (Jakemans/Pharmos) is the branded form used in clinical trials. No human PK data published.",
         "aliases": [
-          "galactolipids"
+          "galactolipids",
+          "GOPO",
+          "GOPO rosehip",
+          "rosehip galactolipids",
+          "rosa canina galactolipids",
+          "GLGPG",
+          "glycolipids from rosehip"
         ],
-        "dosage_importance": 1.0,
+        "dosage_importance": 1.5,
         "absorption_structured": {
           "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
           "range_low": null,
-          "range_high": null
+          "range_high": null,
+          "quality": "unknown",
+          "notes": "No published human PK for GOPO galactolipid; glycolipid structure suggests lymphatic chylomicron pathway like dietary fats"
         }
       }
     },
@@ -22440,7 +22464,7 @@
       "parent_id": null,
       "confidence": "high"
     },
-    "category_enum": "antioxidants",
+    "category_enum": "herbs",
     "cui_note": "No UMLS entry for botanical/novel compound",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "data_quality": {
@@ -22458,25 +22482,28 @@
     "rxcui": null,
     "source": "botanical_extract",
     "priority": "high",
-    "description": "Standardization marker for botanical extracts",
-    "dosage_importance": 0.1,
+    "description": "Phenolic acid (3,4,5-trihydroxybenzoic acid) with ~70% oral bioavailability; found in green tea, pomegranate, oak bark",
+    "dosage_importance": 1.0,
     "forms": {
       "gallic acid (unspecified)": {
-        "bio_score": 5,
-        "natural": false,
-        "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
+        "bio_score": 7,
+        "natural": true,
+        "score": 10,
+        "absorption": "~70% relative bioavailability in humans (PMID 11285327); Tmax ~1.2h, T1/2 ~1.1h",
+        "notes": "Phenolic acid (3,4,5-trihydroxybenzoic acid) from green tea, pomegranate rind, gallnuts. Rapidly absorbed: ~70% relative bioavailability, Tmax ~1.2h, T1/2 ~1.1h (PMID 11285327, n=10 humans). Mechanisms: NF-kB/MAPK inhibition (PMC6528712). Short half-life limits sustained exposure. No standalone human RCTs at supplement doses; all evidence from polyphenol matrices.",
         "aliases": [
-          "gallic acid"
+          "gallic acid",
+          "gallotannin hydrolysate",
+          "3,4,5-trihydroxybenzoic acid",
+          "gallic acid monohydrate"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.7,
+          "range_low": 0.6,
+          "range_high": 0.8,
+          "quality": "good",
+          "notes": "~70% relative F from tea (PMID 11285327, Shahrzad 2001, n=10 humans); primary metabolite 4-O-methylgallic acid; short T1/2 ~1.1h"
         }
       }
     },
@@ -22502,25 +22529,28 @@
     "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
-    "description": "Standardization marker for botanical extracts",
-    "dosage_importance": 0.1,
+    "description": "Minor green tea catechin (<5% of total catechins); distinct from EGCG",
+    "dosage_importance": 0.5,
     "forms": {
       "gallocatechin (unspecified)": {
-        "bio_score": 5,
-        "natural": false,
-        "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
+        "bio_score": 6,
+        "natural": true,
+        "score": 9,
+        "absorption": "<5% estimated by catechin class (PMID 10909265)",
+        "notes": "Minor catechin of green tea (Camellia sinensis), <5% of total catechin fraction. C-3 epimer of epigallocatechin (EGC). Low oral bioavailability shared with catechin class (<5%, PMC6225109). No standalone clinical trials; bioactivity from green tea mixtures. Weaker antioxidant than EGCG on most assays. See green_tea_extract/egcg for clinical evidence.",
         "aliases": [
-          "gallocatechin"
+          "gallocatechin",
+          "GC catechin",
+          "(+)-gallocatechin",
+          "gallocatechin green tea"
         ],
-        "dosage_importance": 1.0,
+        "dosage_importance": 0.5,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.03,
+          "range_low": 0.01,
+          "range_high": 0.05,
+          "quality": "poor",
+          "notes": "Minor catechin; GC metabolites = 11.4% of ingested EGC+GC dose (PMID 10909265); extensive colonic catabolism and phase II conjugation"
         }
       }
     },
@@ -22546,126 +22576,36 @@
   "ganoderic_acids": {
     "standard_name": "Ganoderic Acids",
     "severity_level": "none",
-    "category": "antioxidants",
-    "source": "botanical_extract",
-    "priority": "high",
-    "description": "Standardization marker for botanical extracts",
-    "dosage_importance": 0.1,
-    "forms": {
-      "ganoderic acids (unspecified)": {
-        "bio_score": 5,
-        "natural": false,
-        "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
-        "aliases": [
-          "ganoderic acids"
-        ],
-        "dosage_importance": 1.0,
-        "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
-        }
-      }
-    },
-    "cui": null,
-    "rxcui": null,
-    "match_rules": {
-      "priority": 0,
-      "match_mode": "alias_and_fuzzy",
-      "exclusions": [],
-      "parent_id": null,
-      "confidence": "high"
-    },
-    "category_enum": "antioxidants",
-    "cui_note": "No UMLS entry for botanical/novel compound",
-    "rxcui_note": "No RxNorm concept for supplement ingredient",
-    "data_quality": {
-      "completeness": 1.0,
-      "missing_fields": [],
-      "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
-    }
-  },
-  "genistein": {
-    "standard_name": "Genistein",
-    "severity_level": "none",
-    "category": "antioxidants",
-    "source": "botanical_extract",
-    "priority": "high",
-    "description": "Standardization marker for botanical extracts",
-    "dosage_importance": 0.1,
-    "forms": {
-      "genistein (unspecified)": {
-        "bio_score": 5,
-        "natural": false,
-        "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
-        "aliases": [
-          "genistein",
-          "Virtiva",
-          "genistin",
-          "genivida genistein",
-          "Genistein/Genistin"
-        ],
-        "dosage_importance": 1.0,
-        "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
-        }
-      }
-    },
-    "cui": null,
-    "rxcui": null,
-    "match_rules": {
-      "priority": 0,
-      "match_mode": "alias_and_fuzzy",
-      "exclusions": [],
-      "parent_id": null,
-      "confidence": "high"
-    },
-    "category_enum": "antioxidants",
-    "cui_note": "No UMLS entry for botanical/novel compound",
-    "rxcui_note": "No RxNorm concept for supplement ingredient",
-    "data_quality": {
-      "completeness": 1.0,
-      "missing_fields": [],
-      "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
-    }
-  },
-  "gingerols": {
-    "standard_name": "Gingerols",
-    "severity_level": "none",
     "category": "herbs",
     "source": "botanical_extract",
     "priority": "high",
-    "description": "Standardization marker for botanical extracts",
-    "dosage_importance": 0.1,
+    "description": "Lanostane triterpenoids from reishi (Ganoderma lucidum); standardization marker with human PK data",
+    "dosage_importance": 1.0,
     "forms": {
-      "gingerols (unspecified)": {
-        "bio_score": 5,
-        "natural": false,
-        "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
+      "ganoderic acids (unspecified)": {
+        "bio_score": 8,
+        "natural": true,
+        "score": 11,
+        "absorption": "~26-34% in rats; human Tmax ~30 min, T1/2 <40 min fasting (PMID 22577465)",
+        "notes": "Lanostane triterpenoids from Ganoderma lucidum (reishi) fruiting body; 400+ individual ganoderic acids identified. Human PK (PMID 22577465): rapid absorption Tmax ~30 min, short T1/2 <40 min fasting. Mechanisms: 5-alpha-reductase inhibition (PMID 16462054), HMG-CoA reductase inhibition. Standardization marker for reishi (6% triterpene spec). No standalone human RCT; evidence from whole reishi extract trials.",
         "aliases": [
-          "gingerols"
+          "ganoderic acids",
+          "ganoderic acid A",
+          "ganoderic acid B",
+          "ganoderic acid C",
+          "ganoderic acid F",
+          "reishi triterpenes",
+          "lingzhi triterpenes",
+          "ganoderma triterpenes",
+          "reishi triterpenoids"
         ],
-        "dosage_importance": 1.0,
+        "dosage_importance": 1.5,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.3,
+          "range_low": 0.26,
+          "range_high": 0.34,
+          "quality": "moderate",
+          "notes": "Rapid absorption: human Tmax ~30 min for GA-A/GA-F (PMID 22577465); short T1/2 <40 min fasting; rat oral F ~26-34% for GA-A"
         }
       }
     },
@@ -22688,31 +22628,40 @@
       "last_reviewed_at": "2026-02-28"
     }
   },
-  "ginkgolides": {
-    "standard_name": "Ginkgolides",
+  "genistein": {
+    "standard_name": "Genistein",
     "severity_level": "none",
     "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
-    "description": "Standardization marker for botanical extracts",
-    "dosage_importance": 0.1,
+    "description": "Predominant soy isoflavone phytoestrogen; branded geniVida (DSM) for bone and menopausal support",
+    "dosage_importance": 1.0,
     "forms": {
-      "ginkgolides (unspecified)": {
-        "bio_score": 5,
-        "natural": false,
-        "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
+      "genistein (unspecified)": {
+        "bio_score": 9,
+        "natural": true,
+        "score": 12,
+        "absorption": "~25% oral F in humans (PMID 8207540; SCCS 2023 consensus)",
+        "notes": "Predominant soy isoflavone. Branded: geniVida (DSM, 99% pure, GRAS). Oral F ~25% (PMID 8207540; SCCS 2023). ERalpha:ERbeta selectivity ~1:6 (preferential ERbeta). DB-RCT (PMC3549413, n=58, 6 mo): geniVida + cofactors increased femoral neck BMD +3.4% vs placebo. Hot flash DB-RCT: 51% reduction at 12 wk. Phase I (PMID 14652284): well tolerated up to 800 mg. Less bioavailable than daidzein (~52% F). Estrogenic: caution in hormone-sensitive populations.",
         "aliases": [
-          "ginkgolides"
+          "genistein",
+          "Virtiva",
+          "genistin",
+          "genivida genistein",
+          "Genistein/Genistin",
+          "genistein aglycone",
+          "soy genistein",
+          "genisteine",
+          "4',5,7-trihydroxyisoflavone",
+          "geniVida 30mg"
         ],
-        "dosage_importance": 1.0,
+        "dosage_importance": 1.5,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.25,
+          "range_low": 0.2,
+          "range_high": 0.3,
+          "quality": "moderate",
+          "notes": "~25% aglycone F (PMID 8207540, SCCS 2023 consensus); glycoside genistin shows greater AUC despite delayed Tmax (PMID 11285356); free T1/2 ~3.8h, conjugated ~10.1h"
         }
       }
     },
@@ -22743,26 +22692,29 @@
     "rxcui": null,
     "source": "botanical_extract",
     "priority": "high",
-    "description": "Standardization marker for botanical extracts",
-    "dosage_importance": 0.1,
+    "description": "Primary saponin fraction of Panax ginseng; standardization marker and routing target for ginsenoside-labeled products",
+    "dosage_importance": 1.0,
     "forms": {
       "ginsenosides (unspecified)": {
-        "bio_score": 5,
-        "natural": false,
-        "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
+        "bio_score": 7,
+        "natural": true,
+        "score": 10,
+        "absorption": "Variable: Rb1 F 1.2-4.3%, Rg1 ~18.4% (PMID 32148404); gut converts to Compound K",
+        "notes": "Primary saponins of Panax ginseng (protopanaxadiol/protopanaxatriol types). Rb1 oral F 1.2-4.3%, Rg1 ~18.4% (PMID 32148404); both convert to Compound K via gut microbiome (Tmax 8-12h), the systemic bioactive form. Fermented ginseng achieves 115-135x higher Compound K AUC (PMID 27516803). Conservative stub for unspecified ginsenoside declarations.",
         "aliases": [
           "ginsenosides",
-          "Ginsenoside Rg3"
+          "total ginsenosides",
+          "panax ginsenosides",
+          "ginsenoside complex",
+          "ginsenoside extract"
         ],
-        "dosage_importance": 1.0,
+        "dosage_importance": 1.5,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.05,
+          "range_low": 0.01,
+          "range_high": 0.18,
+          "quality": "variable",
+          "notes": "Highly variable: Rb1 F 1.2-4.3%, Rg1 ~18.4% (PMID 32148404); all ginsenosides converted to Compound K by gut microbiota"
         }
       }
     },
@@ -22788,25 +22740,29 @@
     "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
-    "description": "Standardization marker for botanical extracts",
-    "dosage_importance": 0.1,
+    "description": "Cruciferous sulfur compound class (~200 members); precursors to isothiocyanates via myrosinase",
+    "dosage_importance": 0.5,
     "forms": {
       "glucosinolates (unspecified)": {
-        "bio_score": 5,
-        "natural": false,
-        "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
+        "bio_score": 6,
+        "natural": true,
+        "score": 9,
+        "absorption": "Variable: glucoraphanin→sulforaphane ~5% without myrosinase (PMC3076202); watercress ITC ~80%",
+        "notes": "Sulfur-containing plant defense compounds (~200 members) from Brassicaceae. Hydrolyzed by myrosinase to isothiocyanates (glucoraphanin→sulforaphane ~5% without myrosinase, PMC3076202; watercress gluconasturtiin→PEITC ~80%, PMID 9041956). Class-level label claim; specific identity determines bioavailability. Epidemiological cancer risk reduction (PMID 12432933).",
         "aliases": [
-          "glucosinolates"
+          "glucosinolates",
+          "cruciferous glucosinolates",
+          "broccoli glucosinolates",
+          "glucosinolate complex",
+          "indole glucosinolates"
         ],
-        "dosage_importance": 1.0,
+        "dosage_importance": 0.5,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.1,
+          "range_low": 0.05,
+          "range_high": 0.8,
+          "quality": "variable",
+          "notes": "Highly variable by specific glucosinolate: glucoraphanin→sulforaphane ~5% without myrosinase (PMC3076202); watercress→PEITC ~80% (PMID 9041956)"
         }
       }
     },
@@ -22835,166 +22791,28 @@
     "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
-    "description": "Standardization marker for botanical extracts",
-    "dosage_importance": 0.1,
+    "description": "Minor soy isoflavone (5-10% of total); 6-methoxydaidzein with weak ERbeta agonism",
+    "dosage_importance": 0.5,
     "forms": {
       "glycitein (unspecified)": {
-        "bio_score": 5,
-        "natural": false,
-        "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
+        "bio_score": 7,
+        "natural": true,
+        "score": 10,
+        "absorption": "~30-40% estimated in women (PMID 10799377, 13C-labeled isoflavone PK)",
+        "notes": "Minor soy isoflavone (5-10% of total soy isoflavones; CAS 40957-83-3), with C-6 methoxylation distinct from daidzein/genistein. Oral F ~30-40% estimated (PMID 10799377, 13C-labeled PK). Weak ERbeta agonist. No dedicated glycitein-only RCTs; effects derived from mixed soy isoflavone trials (40-80 mg/day total reduces hot flash frequency 26%, PMID 22433977).",
         "aliases": [
-          "glycitein"
+          "glycitein",
+          "glycitein isoflavone",
+          "soy glycitein",
+          "6-methoxydaidzein"
         ],
-        "dosage_importance": 1.0,
+        "dosage_importance": 0.5,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
-        }
-      }
-    },
-    "cui": null,
-    "rxcui": null,
-    "match_rules": {
-      "priority": 0,
-      "match_mode": "alias_and_fuzzy",
-      "exclusions": [],
-      "parent_id": null,
-      "confidence": "high"
-    },
-    "category_enum": "antioxidants",
-    "cui_note": "No UMLS entry for botanical/novel compound",
-    "rxcui_note": "No RxNorm concept for supplement ingredient",
-    "data_quality": {
-      "completeness": 1.0,
-      "missing_fields": [],
-      "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
-    }
-  },
-  "glycyrrhizic_acid": {
-    "standard_name": "Glycyrrhizic Acid",
-    "severity_level": "none",
-    "category": "antioxidants",
-    "source": "botanical_extract",
-    "priority": "high",
-    "description": "Standardization marker for botanical extracts",
-    "dosage_importance": 0.1,
-    "forms": {
-      "glycyrrhizic acid (unspecified)": {
-        "bio_score": 5,
-        "natural": false,
-        "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
-        "aliases": [
-          "glycyrrhizic acid"
-        ],
-        "dosage_importance": 1.0,
-        "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
-        }
-      }
-    },
-    "cui": null,
-    "rxcui": null,
-    "match_rules": {
-      "priority": 0,
-      "match_mode": "alias_and_fuzzy",
-      "exclusions": [],
-      "parent_id": null,
-      "confidence": "high"
-    },
-    "category_enum": "antioxidants",
-    "cui_note": "No UMLS entry for botanical/novel compound",
-    "rxcui_note": "No RxNorm concept for supplement ingredient",
-    "data_quality": {
-      "completeness": 1.0,
-      "missing_fields": [],
-      "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
-    }
-  },
-  "glycyrrhizin": {
-    "standard_name": "Glycyrrhizin",
-    "severity_level": "none",
-    "category": "antioxidants",
-    "cui": "C0061996",
-    "rxcui": null,
-    "source": "botanical_extract",
-    "priority": "high",
-    "description": "Standardization marker for botanical extracts",
-    "dosage_importance": 0.1,
-    "forms": {
-      "glycyrrhizin (unspecified)": {
-        "bio_score": 5,
-        "natural": false,
-        "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
-        "aliases": [
-          "glycyrrhizin"
-        ],
-        "dosage_importance": 1.0,
-        "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
-        }
-      }
-    },
-    "match_rules": {
-      "priority": 0,
-      "match_mode": "alias_and_fuzzy",
-      "exclusions": [],
-      "parent_id": null,
-      "confidence": "high"
-    },
-    "category_enum": "antioxidants",
-    "rxcui_note": "No RxNorm concept for supplement ingredient",
-    "data_quality": {
-      "completeness": 1.0,
-      "missing_fields": [],
-      "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
-    }
-  },
-  "gymnemic_acids": {
-    "standard_name": "Gymnemic Acids",
-    "severity_level": "none",
-    "category": "antioxidants",
-    "source": "botanical_extract",
-    "priority": "high",
-    "description": "Standardization marker for botanical extracts",
-    "dosage_importance": 0.1,
-    "forms": {
-      "gymnemic acids (unspecified)": {
-        "bio_score": 5,
-        "natural": false,
-        "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
-        "aliases": [
-          "gymnemic acids",
-          "gymnemic acid"
-        ],
-        "dosage_importance": 1.0,
-        "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.35,
+          "range_low": 0.3,
+          "range_high": 0.4,
+          "quality": "moderate",
+          "notes": "Estimated ~30-40% from 13C-labeled isoflavone PK study in women (PMID 10799377); Cmax lower than daidzein/genistein"
         }
       }
     },
@@ -23020,31 +22838,36 @@
   "gypenosides": {
     "standard_name": "Gypenosides",
     "severity_level": "none",
-    "category": "antioxidants",
+    "category": "herbs",
     "source": "botanical_extract",
     "priority": "high",
-    "description": "Standardization marker for botanical extracts",
-    "dosage_importance": 0.1,
+    "description": "Gynostemma pentaphyllum (jiaogulan) saponins; AMPK activator with weight management RCT evidence",
+    "dosage_importance": 1.0,
     "forms": {
       "gypenosides (unspecified)": {
-        "bio_score": 5,
-        "natural": false,
-        "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
+        "bio_score": 9,
+        "natural": true,
+        "score": 12,
+        "absorption": "~30-40% relative bioavailability in rats; Tmax ~2h",
+        "notes": "Gynostemma pentaphyllum leaf saponins (ActivAMP/Actiponin standardized to 50% gypenosides). AMPK pathway activator — same mechanism as metformin. 12-week RCT (n=80, PMID 26920064): ActivAMP reduced body weight -4.4 kg and improved insulin sensitivity vs placebo. Anti-diabetic pilot RCT: reduced fasting glucose and HbA1c in T2DM (PMID 21193004).",
         "aliases": [
           "gypenosides",
           "ActivAMP Gynostemma pentaphyllum Extract",
           "ActivAMP Gynostemma extract",
-          "Actiponin Gynostemma extract"
+          "Actiponin Gynostemma extract",
+          "gynostemma extract",
+          "gynostemma pentaphyllum",
+          "jiaogulan extract",
+          "jiaogulan",
+          "AMPK activator gynostemma"
         ],
-        "dosage_importance": 1.0,
+        "dosage_importance": 1.5,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.35,
+          "range_low": 0.3,
+          "range_high": 0.4,
+          "quality": "moderate",
+          "notes": "Rat models show ~30-40% relative bioavailability; Tmax ~2h; gypenoside metabolites detected in human plasma confirming absorption (PMID 26920064)"
         }
       }
     },
@@ -23057,195 +22880,7 @@
       "parent_id": null,
       "confidence": "high"
     },
-    "category_enum": "antioxidants",
-    "cui_note": "No UMLS entry for botanical/novel compound",
-    "rxcui_note": "No RxNorm concept for supplement ingredient",
-    "data_quality": {
-      "completeness": 1.0,
-      "missing_fields": [],
-      "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
-    }
-  },
-  "harpagoside": {
-    "standard_name": "Harpagoside",
-    "severity_level": "none",
-    "category": "antioxidants",
-    "source": "botanical_extract",
-    "priority": "high",
-    "description": "Standardization marker for botanical extracts",
-    "dosage_importance": 0.1,
-    "forms": {
-      "harpagoside (unspecified)": {
-        "bio_score": 5,
-        "natural": false,
-        "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
-        "aliases": [
-          "harpagoside"
-        ],
-        "dosage_importance": 1.0,
-        "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
-        }
-      }
-    },
-    "cui": null,
-    "rxcui": null,
-    "match_rules": {
-      "priority": 0,
-      "match_mode": "alias_and_fuzzy",
-      "exclusions": [],
-      "parent_id": null,
-      "confidence": "high"
-    },
-    "category_enum": "antioxidants",
-    "cui_note": "No UMLS entry for botanical/novel compound",
-    "rxcui_note": "No RxNorm concept for supplement ingredient",
-    "data_quality": {
-      "completeness": 1.0,
-      "missing_fields": [],
-      "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
-    }
-  },
-  "hericenones": {
-    "standard_name": "Hericenones",
-    "severity_level": "none",
-    "category": "antioxidants",
-    "source": "botanical_extract",
-    "priority": "high",
-    "description": "Standardization marker for botanical extracts",
-    "dosage_importance": 0.1,
-    "forms": {
-      "hericenones (unspecified)": {
-        "bio_score": 5,
-        "natural": false,
-        "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
-        "aliases": [
-          "hericenones"
-        ],
-        "dosage_importance": 1.0,
-        "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
-        }
-      }
-    },
-    "cui": null,
-    "rxcui": null,
-    "match_rules": {
-      "priority": 0,
-      "match_mode": "alias_and_fuzzy",
-      "exclusions": [],
-      "parent_id": null,
-      "confidence": "high"
-    },
-    "category_enum": "antioxidants",
-    "cui_note": "No UMLS entry for botanical/novel compound",
-    "rxcui_note": "No RxNorm concept for supplement ingredient",
-    "data_quality": {
-      "completeness": 1.0,
-      "missing_fields": [],
-      "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
-    }
-  },
-  "honokiol": {
-    "standard_name": "Honokiol",
-    "severity_level": "none",
-    "category": "antioxidants",
-    "source": "botanical_extract",
-    "priority": "high",
-    "description": "Standardization marker for botanical extracts",
-    "dosage_importance": 0.1,
-    "forms": {
-      "honokiol (unspecified)": {
-        "bio_score": 5,
-        "natural": false,
-        "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
-        "aliases": [
-          "honokiol"
-        ],
-        "dosage_importance": 1.0,
-        "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
-        }
-      }
-    },
-    "cui": null,
-    "rxcui": null,
-    "match_rules": {
-      "priority": 0,
-      "match_mode": "alias_and_fuzzy",
-      "exclusions": [],
-      "parent_id": null,
-      "confidence": "high"
-    },
-    "category_enum": "antioxidants",
-    "cui_note": "No UMLS entry for botanical/novel compound",
-    "rxcui_note": "No RxNorm concept for supplement ingredient",
-    "data_quality": {
-      "completeness": 1.0,
-      "missing_fields": [],
-      "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
-    }
-  },
-  "humulone": {
-    "standard_name": "Humulone",
-    "severity_level": "none",
-    "category": "antioxidants",
-    "source": "botanical_extract",
-    "priority": "high",
-    "description": "Standardization marker for botanical extracts",
-    "dosage_importance": 0.1,
-    "forms": {
-      "humulone (unspecified)": {
-        "bio_score": 5,
-        "natural": false,
-        "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
-        "aliases": [
-          "humulone"
-        ],
-        "dosage_importance": 1.0,
-        "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
-        }
-      }
-    },
-    "cui": null,
-    "rxcui": null,
-    "match_rules": {
-      "priority": 0,
-      "match_mode": "alias_and_fuzzy",
-      "exclusions": [],
-      "parent_id": null,
-      "confidence": "high"
-    },
-    "category_enum": "antioxidants",
+    "category_enum": "herbs",
     "cui_note": "No UMLS entry for botanical/novel compound",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "data_quality": {
@@ -23258,31 +22893,35 @@
   "huperzine_a": {
     "standard_name": "Huperzine A",
     "severity_level": "none",
-    "category": "antioxidants",
+    "category": "herbs",
     "source": "botanical_extract",
     "priority": "high",
-    "description": "Standardization marker for botanical extracts",
-    "dosage_importance": 0.1,
+    "description": "Potent AChE inhibitor from Huperzia serrata; ~96% oral bioavailability with strong Alzheimer RCT evidence",
+    "dosage_importance": 1.0,
     "forms": {
       "huperzine a (unspecified)": {
-        "bio_score": 5,
-        "natural": false,
-        "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
+        "bio_score": 12,
+        "natural": true,
+        "score": 15,
+        "absorption": "~96% absolute oral bioavailability in humans (PMID 9421157)",
+        "notes": "Potent, selective AChE inhibitor from Huperzia serrata (Chinese club moss). Oral F ~96% with Tmax ~1h and t1/2 10-14h (PMID 9421157). Multi-center RCT (n=202): 200 mcg bid x 12 wk significantly improved MMSE and ADAS-Cog in Alzheimer patients. Cochrane meta-analysis of 6 RCTs (PMID 18425924) confirms cognitive benefits. More AChE-selective than donepezil. Caution: drug interactions with cholinergic medications.",
         "aliases": [
           "huperzine a",
           "huperizine a",
           "huperzine",
-          "Toothed Clubmoss Leaf Extract"
+          "Toothed Clubmoss Leaf Extract",
+          "huperzia serrata extract",
+          "chinese club moss extract",
+          "toothed clubmoss extract",
+          "huperzine A 1%"
         ],
-        "dosage_importance": 1.0,
+        "dosage_importance": 1.5,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.96,
+          "range_low": 0.9,
+          "range_high": 0.98,
+          "quality": "excellent",
+          "notes": "~96% absolute oral F in human PK study; Tmax 1.0-1.5h; highly lipophilic with rapid CNS penetration; t1/2 10-14h (PMID 9421157)"
         }
       }
     },
@@ -23295,103 +22934,7 @@
       "parent_id": null,
       "confidence": "high"
     },
-    "category_enum": "antioxidants",
-    "cui_note": "No UMLS entry for botanical/novel compound",
-    "rxcui_note": "No RxNorm concept for supplement ingredient",
-    "data_quality": {
-      "completeness": 1.0,
-      "missing_fields": [],
-      "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
-    }
-  },
-  "hydrastine": {
-    "standard_name": "Hydrastine",
-    "severity_level": "none",
-    "category": "antioxidants",
-    "source": "botanical_extract",
-    "priority": "high",
-    "description": "Standardization marker for botanical extracts",
-    "dosage_importance": 0.1,
-    "forms": {
-      "hydrastine (unspecified)": {
-        "bio_score": 5,
-        "natural": false,
-        "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
-        "aliases": [
-          "hydrastine"
-        ],
-        "dosage_importance": 1.0,
-        "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
-        }
-      }
-    },
-    "cui": null,
-    "rxcui": null,
-    "match_rules": {
-      "priority": 0,
-      "match_mode": "alias_and_fuzzy",
-      "exclusions": [],
-      "parent_id": null,
-      "confidence": "high"
-    },
-    "category_enum": "antioxidants",
-    "cui_note": "No UMLS entry for botanical/novel compound",
-    "rxcui_note": "No RxNorm concept for supplement ingredient",
-    "data_quality": {
-      "completeness": 1.0,
-      "missing_fields": [],
-      "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
-    }
-  },
-  "hydroxytyrosol": {
-    "standard_name": "Hydroxytyrosol",
-    "severity_level": "none",
-    "category": "antioxidants",
-    "source": "botanical_extract",
-    "priority": "high",
-    "description": "Standardization marker for botanical extracts",
-    "dosage_importance": 0.1,
-    "forms": {
-      "hydroxytyrosol (unspecified)": {
-        "bio_score": 5,
-        "natural": false,
-        "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
-        "aliases": [
-          "hydroxytyrosol",
-          "hydroxytyrosol-glucoside",
-          "hydroxytyrosol glucoside"
-        ],
-        "dosage_importance": 1.0,
-        "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
-        }
-      }
-    },
-    "cui": null,
-    "rxcui": null,
-    "match_rules": {
-      "priority": 0,
-      "match_mode": "alias_and_fuzzy",
-      "exclusions": [],
-      "parent_id": null,
-      "confidence": "high"
-    },
-    "category_enum": "antioxidants",
+    "category_enum": "herbs",
     "cui_note": "No UMLS entry for botanical/novel compound",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "data_quality": {
@@ -27247,53 +26790,6 @@
       "last_reviewed_at": "2026-02-28"
     }
   },
-  "terpene_lactones": {
-    "standard_name": "Terpene Lactones",
-    "severity_level": "none",
-    "category": "antioxidants",
-    "source": "botanical_extract",
-    "priority": "high",
-    "description": "Standardization marker for botanical extracts",
-    "dosage_importance": 0.1,
-    "forms": {
-      "terpene lactones (unspecified)": {
-        "bio_score": 5,
-        "natural": false,
-        "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
-        "aliases": [
-          "terpene lactones"
-        ],
-        "dosage_importance": 1.0,
-        "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
-        }
-      }
-    },
-    "cui": null,
-    "rxcui": null,
-    "match_rules": {
-      "priority": 0,
-      "match_mode": "alias_and_fuzzy",
-      "exclusions": [],
-      "parent_id": null,
-      "confidence": "high"
-    },
-    "category_enum": "antioxidants",
-    "cui_note": "No UMLS entry for botanical/novel compound",
-    "rxcui_note": "No RxNorm concept for supplement ingredient",
-    "data_quality": {
-      "completeness": 1.0,
-      "missing_fields": [],
-      "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
-    }
-  },
   "theobromine": {
     "standard_name": "Theobromine",
     "severity_level": "none",
@@ -28595,7 +28091,11 @@
           "goldenseal standardized extract",
           "berberine standardized goldenseal",
           "goldenseal standardized extract supplement",
-          "berberine standardized goldenseal supplement"
+          "berberine standardized goldenseal supplement",
+          "hydrastine",
+          "beta-hydrastine",
+          "hydrastine HCl",
+          "goldenseal hydrastine"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -29042,7 +28542,12 @@
           "gurmar extract supplement",
           "meshashringi extract supplement",
           "gs4 plus",
-          "gs4+"
+          "gs4+",
+          "gymnemic acids",
+          "gymnemic acid",
+          "gymnemagenin",
+          "gymnemic acids 25%",
+          "gymnemic acids 75%"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -30064,7 +29569,12 @@
           "ginger root hydroethanolic extract",
           "Ginger Root Extract, Dry",
           "ginger root extract dry",
-          "dried ginger root extract"
+          "dried ginger root extract",
+          "gingerols",
+          "6-gingerol",
+          "8-gingerol",
+          "10-gingerol",
+          "gingerol extract"
         ],
         "score": 12,
         "dosage_importance": 1.0,
@@ -30175,7 +29685,11 @@
           "lions mane fruiting body extract",
           "hericium erinaceus fruiting body extract",
           "Lions Mane Mushroom Fruiting Body Extract",
-          "Lion's Mane Mushroom Fruiting Body Extract"
+          "Lion's Mane Mushroom Fruiting Body Extract",
+          "hericenones",
+          "hericenone C",
+          "hericenone D",
+          "lion's mane hericenones"
         ],
         "score": 11,
         "dosage_importance": 1.0,
@@ -32736,7 +32250,7 @@
       "vitamins"
     ],
     "cleanup_notes": "Resolved within-ingredient alias collisions; removed 63 redundant unspecified forms",
-    "total_entries": 597,
+    "total_entries": 585,
     "total_ingredients": 623,
     "data_quality": {
       "review_status": "stub"
@@ -36869,6 +36383,30 @@
           "notes": "good (~50-60%)"
         },
         "dosage_importance": 1.0
+      },
+      "hydroxytyrosol (olive phenolic)": {
+        "bio_score": 11,
+        "natural": true,
+        "score": 14,
+        "absorption": "~55% relative oral F in humans (PMID 19007325)",
+        "notes": "Olive phenolic with EU health claim (EFSA 2011): >=5 mg/day protects LDL from oxidative damage — one of the strongest evidence-backed EU Article 13.1 supplement claims. RCT (n=40, PMID 19007325): 25 mg/day x 3 wk reduced LDL oxidation markers. Cardioprotective via SIRT1 activation, NF-kB suppression, direct radical scavenging. Rapidly absorbed: Tmax ~30 min, urinary recovery 35-55% as metabolites.",
+        "aliases": [
+          "hydroxytyrosol",
+          "hydroxytyrosol extract",
+          "hydroxytyrosol-glucoside",
+          "hydroxytyrosol glucoside",
+          "olive hydroxytyrosol",
+          "olivenet",
+          "olive phenolic extract"
+        ],
+        "dosage_importance": 1.5,
+        "absorption_structured": {
+          "value": 0.55,
+          "range_low": 0.35,
+          "range_high": 0.55,
+          "quality": "moderate",
+          "notes": "Urinary recovery 35-55% as metabolites in human crossover; Tmax ~30 min; t1/2 ~1.5h (PMID 19007325, 21443285)"
+        }
       }
     },
     "match_rules": {
@@ -37218,6 +36756,29 @@
           "notes": "moderate (~40-50%)"
         },
         "dosage_importance": 1.0
+      },
+      "magnolia bark honokiol-enriched": {
+        "bio_score": 11,
+        "natural": true,
+        "score": 14,
+        "absorption": "~30-40% oral F in rodent models; lipophilic with CNS penetration",
+        "notes": "Magnolia officinalis bark extract enriched/standardized to honokiol (neolignan). Positive allosteric modulator of GABA-A receptors — anxiolytic without diazepam-like sedation (PMID 24893163). Anti-inflammatory via COX-2/NF-kB suppression. Anti-tumor activity via STAT3 inhibition (PMID 23394783). Human RCT data limited to small anxiolytic pilots. Often co-standardized with magnolol (5:1 to 10:1 honokiol:magnolol ratios).",
+        "aliases": [
+          "honokiol",
+          "honokiol extract",
+          "magnolia honokiol",
+          "honokiol magnolia bark",
+          "magnolol honokiol",
+          "magnolia bark 90% honokiol"
+        ],
+        "dosage_importance": 1.5,
+        "absorption_structured": {
+          "value": 0.35,
+          "range_low": 0.3,
+          "range_high": 0.4,
+          "quality": "moderate",
+          "notes": "~30-40% oral F in rodent models; lipophilic with hepatic glucuronidation; nanoformulations reach ~70% but not in standard supplements (PMID 24893163)"
+        }
       }
     },
     "match_rules": {
@@ -37230,10 +36791,6 @@
     "category_enum": "herbs",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "relationships": [
-      {
-        "type": "contains",
-        "target_id": "honokiol"
-      },
       {
         "type": "contains",
         "target_id": "magnolol"
@@ -37614,7 +37171,13 @@
           "Licorice root 4:1 extract",
           "Kaneka Glavonoid Licorice Flavonoid Oil",
           "Kaneka Glavonoid",
-          "Licorice root flavonoid oil"
+          "Licorice root flavonoid oil",
+          "glycyrrhizin",
+          "glycyrrhizic acid",
+          "glycyrrhizic acid ammonium salt",
+          "ammonium glycyrrhizinate",
+          "glycyrrhetinic acid",
+          "18beta-glycyrrhetinic acid"
         ],
         "absorption_structured": {
           "value": 0.45,
@@ -37635,12 +37198,6 @@
     },
     "category_enum": "herbs",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
-    "relationships": [
-      {
-        "type": "contains",
-        "target_id": "glycyrrhizin"
-      }
-    ],
     "data_quality": {
       "completeness": 1.0,
       "missing_fields": [],
@@ -38598,7 +38155,10 @@
           "Xanthovital Hops extract",
           "Estro8PN",
           "hops aerial parts extract",
-          "hops aerial part extract"
+          "hops aerial part extract",
+          "humulone",
+          "alpha-acid hops",
+          "isohumulone"
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
@@ -41830,6 +41390,28 @@
           "notes": "Data not available",
           "range_low": null,
           "range_high": null
+        }
+      },
+      "devil's claw standardized (harpagoside)": {
+        "bio_score": 9,
+        "natural": true,
+        "score": 12,
+        "absorption": "~28% oral F in humans (PMID 11054882)",
+        "notes": "Devil's claw extract standardized to harpagoside (iridoid glycoside). Cochrane review (PMID 24395557): supports short-term LBP relief, effect comparable to 12.5 mg rofecoxib. RCT (n=197, PMID 16083521): WS 1531 extract (50 mg harpagoside/day) reduced chronic LBP VAS by -25 mm at 12 wk vs placebo. COX-1/COX-2 inhibition at therapeutic levels.",
+        "aliases": [
+          "harpagoside",
+          "harpagophytum procumbens 2% harpagoside",
+          "devil's claw standardized harpagoside",
+          "WS 1531",
+          "devil's claw 9% harpagoside"
+        ],
+        "dosage_importance": 1.5,
+        "absorption_structured": {
+          "value": 0.28,
+          "range_low": 0.24,
+          "range_high": 0.32,
+          "quality": "moderate",
+          "notes": "24-32% oral BA for harpagoside from aqueous devil's claw extract; Tmax 1.5-2.5h (PMID 11054882, 16083521)"
         }
       }
     },

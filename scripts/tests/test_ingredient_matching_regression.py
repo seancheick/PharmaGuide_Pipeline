@@ -98,7 +98,7 @@ class TestRealLabelCorpus:
         ("Buffered Creatine (Kre-Alkalyn)", "creatine_monohydrate", True),
 
         # Magnolia compounds
-        ("Honokiol 98%", "honokiol", True),
+        ("Honokiol 98%", "magnolia_bark", True),
         ("Magnolia Bark Extract", "magnolia_bark", True),
 
         # Vitamin forms
