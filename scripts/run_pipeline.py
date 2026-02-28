@@ -231,11 +231,17 @@ class PipelineRunner:
         logger.info("=" * 60)
 
         script = self.config["scripts"]["enrich"]
+        config_file = self.config["configs"]["enrich"]
 
         args = [
             "--input-dir", cleaned_dir,
             "--output-dir", output_dir
         ]
+
+        # Add config if exists
+        config_path = self.script_dir / config_file
+        if config_path.exists():
+            args.extend(["--config", str(config_path)])
 
         return self._run_script(script, args, dry_run)
 

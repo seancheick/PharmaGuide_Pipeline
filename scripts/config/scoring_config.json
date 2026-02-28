@@ -1,11 +1,12 @@
 {
   "_documentation": {
-    "version": "3.0.1",
-    "description": "PharmaGuide scoring configuration aligned to v3.0 arithmetic-only scoring",
+    "version": "3.1.0",
+    "description": "PharmaGuide scoring configuration aligned to v3.1 schema-aligned arithmetic scoring",
     "total_points": "80 calculated server-side (A+B+C+D), 20 fit score computed on device",
-    "last_updated": "2026-02-13",
+    "last_updated": "2026-02-26",
     "author": "PharmaGuide Team",
     "changelog": [
+      "3.1.0: Rebalanced section caps (B30/C20), A1 max 15, A6 single-efficiency bonus, B5 hidden-mass model, D reachability update",
       "3.0.1: Normalized config to v3.0 section caps and penalty-sign convention; scoring gate kept open for rollout",
       "3.0.0: Arithmetic-only scorer; matching and NLP moved to enrichment"
     ]
@@ -23,7 +24,10 @@
     "_probiotic_extended_scoring_note": "When true, use extended probiotic bonus module (max +10)",
     "allow_non_probiotic_probiotic_bonus_with_strict_gate": true,
     "_allow_non_probiotic_probiotic_bonus_with_strict_gate_note": "When true, non-probiotic products can receive probiotic bonus only if strict evidence gates pass.",
-    "shadow_mode": true
+    "shadow_mode": true,
+    "enable_non_gmo_bonus": false,
+    "enable_hypoallergenic_bonus": false,
+    "enable_d1_middle_tier": false
   },
   "_usage": {
     "run_scoring": "python score_supplements.py",
@@ -40,10 +44,10 @@
     "reports_folder": "reports"
   },
   "section_maximums": {
-    "_comment": "v3.0 exact section caps. A+B+C+D = 80.",
+    "_comment": "v3.1 exact section caps. A+B+C+D = 80.",
     "A_ingredient_quality": 25,
-    "B_safety_purity": 35,
-    "C_evidence_research": 15,
+    "B_safety_purity": 30,
+    "C_evidence_research": 20,
     "D_brand_trust": 5,
     "E_user_profile": 20,
     "_E_note": "Section E is client-side only and is not computed by this script",
@@ -54,7 +58,7 @@
   "section_A_ingredient_quality": {
     "_max": 25,
     "A1_bioavailability_form": {
-      "max": 13,
+      "max": 15,
       "range_score_field": "0-18",
       "multivitamin_smoothing_factor": 0.7,
       "multivitamin_floor": 9
@@ -83,7 +87,20 @@
       "max": 3,
       "organic": 1,
       "standardized_botanical": 1,
-      "synergy_cluster": 1
+      "synergy_cluster": 1,
+      "non_gmo_project_verified": 0.5
+    },
+    "A6_single_ingredient_efficiency": {
+      "max": 3,
+      "single_types": [
+        "single",
+        "single_nutrient"
+      ],
+      "tiers": {
+        ">=16": 3,
+        ">=14": 2,
+        ">=12": 1
+      }
     },
     "probiotic_bonus": {
       "default_max": 3,
@@ -112,9 +129,10 @@
     }
   },
   "section_B_safety_purity": {
-    "_max": 35,
-    "base_score": 35,
-    "_formula": "B = clamp(0, 35, 35 + bonuses - penalties)",
+    "_max": 30,
+    "base_score": 25,
+    "bonus_pool_cap": 5,
+    "_formula": "B = clamp(0, 30, base_score + min(bonus_pool_cap, bonuses) - penalties)",
     "B0_immediate_fail": {
       "moderate_penalty": 10,
       "allowed_match_types_for_hard_fail": [
@@ -128,6 +146,7 @@
     "B1_harmful_additives": {
       "cap": 5,
       "risk_points": {
+        "critical": 3.0,
         "high": 2.0,
         "moderate": 1.0,
         "low": 0.5,
@@ -164,21 +183,27 @@
       }
     },
     "B5_proprietary_blends": {
-      "cap": 15,
-      "disclosure_base": {
+      "cap": 10,
+      "presence_penalty": {
+        "full": 0,
+        "partial": 1,
+        "none": 2
+      },
+      "proportional_coef": {
         "full": 0,
         "partial": 3,
-        "none": 6
-      }
+        "none": 5
+      },
+      "count_share_min_denominator_constant": 8
     },
     "B6_marketing_penalty": {
       "penalty": 5
     }
   },
   "section_C_evidence_research": {
-    "_max": 15,
-    "cap_per_ingredient": 5,
-    "cap_total": 15,
+    "_max": 20,
+    "cap_per_ingredient": 7,
+    "cap_total": 20,
     "evidence_level_multipliers": {
       "product-human": 1.0,
       "branded-rct": 0.8,
@@ -196,6 +221,7 @@
       "in_vitro": 1
     },
     "sub_clinical_dose_guard_multiplier": 0.25,
+    "supra_clinical_multiple": 3.0,
     "_canonical_key": "entry.standard_name"
   },
   "section_D_brand_trust": {
@@ -203,9 +229,9 @@
     "D1_manufacturer_reputation": 2,
     "D2_disclosure_quality": 1,
     "D3_physician_formulated": 0.5,
-    "D4_high_standard_region": 0.5,
+    "D4_high_standard_region": 1.0,
     "D5_sustainability": 0.5,
-    "D3_D4_D5_combined_cap": 1.5
+    "D3_D4_D5_combined_cap": 2.0
   },
   "manufacturer_violations": {
     "cap_total": -25,

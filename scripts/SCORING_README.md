@@ -1,270 +1,272 @@
-# DSLD Supplement Scoring System v3.0.0
+# PharmaGuide Scoring README (v3.1.0)
 
-## Overview
+This document is the implementation-facing guide for the current scorer:
 
-The scoring script (`score_supplements.py`) calculates product quality scores based on enriched data from the enrichment pipeline. It implements the Scoring v3.0 specification with 80 points total (Section E for User Profile is calculated on device).
+- Code: `/Users/seancheick/.claude-worktrees/dsld_clean/peaceful-ritchie/scripts/score_supplements.py`
+- Config: `/Users/seancheick/.claude-worktrees/dsld_clean/peaceful-ritchie/scripts/config/scoring_config.json`
 
-## Quick Start
+It is aligned to the current `v3.1.0` behavior in code and config.
+
+## 1) What The Scorer Does
+
+The scorer is deterministic arithmetic + gate logic + batch-level percentile post-processing.
+It does not perform enrichment/matching NLP.
+
+It consumes enriched products and produces:
+
+- `quality_score` (`score_80`)
+- `score_100_equivalent`
+- `verdict` / `safety_verdict`
+- `badges` (including `FULL_DISCLOSURE` when applicable)
+- `category_percentile` (batch-cohort percentile context)
+- `percentile_category*` audit fields from enrichment (`category`, `label`, `source`, `confidence`, `signals`)
+- section breakdown (`A`, `B`, `C`, `D`)
+- scoring flags and metadata
+
+## 2) Run Commands
+
+From `/scripts`:
 
 ```bash
-# Default: reads from output_Lozenges_enriched/enriched, outputs to output_Lozenges_scored
 python3 score_supplements.py
-
-# With custom paths
 python3 score_supplements.py --input-dir path/to/enriched --output-dir path/to/scored
-
-# Test mode (no files written)
 python3 score_supplements.py --dry-run
 ```
 
-## Scoring Breakdown (80 Points Total)
-
-### Section A: Ingredient Bio-Score & Dosing (0-25 pts)
-
-- **Single nutrient**: `bio_score × dosage_importance` (capped at 25)
-- **Multivitamin**: Average of top 5 key vitamins/minerals
-- **Multi-ingredient**: Weighted average based on dosage importance
-
-### Section B: Delivery System & Absorption (0-15 pts)
-
-- **Delivery tiers**:
-  - Tier 1 (liposomal, nanoemulsion): +8
-  - Tier 2 (softgel, lozenge): +5
-  - Tier 3 (capsule): +3
-  - Tier 4 (tablet): +1
-- **Absorption enhancers**:
-  - First qualifying enhancer: +3 (requires both enhancer AND enhanced nutrient present)
-  - Additional enhancers: +1 each (cap +4 total)
-
-### Section C: Formulation Quality (0-10 pts)
-
-- Organic/wildcrafted certification: +2
-- Standardized botanicals (meets threshold): +2
-- Synergy cluster (2+ ingredients, adequate doses): +3
-- Clinical probiotic strain: +1
-- Prebiotic synergy: +2
-
-### Section D: Safety & Compliance (0-30 pts base with penalties/bonuses)
-
-**Start at 30, apply penalties and bonuses:**
-
-**Penalties:**
-
-- Banned substances: -25 (critical), -10 (high), -5 (moderate)
-- Harmful additives: -3 (high), -2 (moderate), -1 (low)
-- Allergens: -2 (high), -1.5 (moderate), -1 (low)
-- Proprietary blends: -10 (critical 75%+), -5 (high 50-74%), -3 (moderate <50%)
-- FDA violations: -3 per warning
-
-**Bonuses:**
-
-- Allergen-free claims: +1 each (cap +3)
-- Third-party tested (NSF, USP, etc.): +2
-- GMP certified: +1
-- Batch traceability (COA/QR/lookup): +1
-- Top manufacturer (>85% confidence): +2
-- CFU documented (probiotics): +1
-
-## Output Format
-
-### Scored Product JSON
-
-```json
-{
-  "dsld_id": "10042",
-  "product_name": "Methyl B12 5,000 mcg Methylcobalamin",
-  "brand_name": "Protocol For Life Balance",
-  "score_80": 47.5,
-  "score_100_equivalent": 59.4,
-  "display": "47.5/80",
-  "grade": "D",
-  "section_scores": {
-    "A_ingredient_bio_dosing": {
-      "score": 18.0,
-      "max": 25,
-      "details": {...}
-    },
-    "B_delivery_absorption": {...},
-    "C_formulation_quality": {...},
-    "D_safety_compliance": {...}
-  },
-  "scoring_notes": [
-    "Single nutrient: Vitamin B12",
-    "Bio-score: 12, Dosage importance: 1.5",
-    "Delivery system: lozenge (Tier 2) = +5",
-    ...
-  ],
-  "scoring_metadata": {
-    "scoring_version": "3.0.0",
-    "scored_date": "2025-12-03T20:14:19.741552Z",
-    "enrichment_version": "3.0.0",
-    "supplement_type": "single_nutrient"
-  }
-}
-```
-
-### Summary Report
-
-Located in `output_Lozenges_scored/reports/scoring_summary_TIMESTAMP.json`
-
-```json
-{
-  "processing_info": {
-    "scoring_version": "3.0.0",
-    "files_processed": 2,
-    "duration_seconds": 0.24,
-    "timestamp": "2025-12-03T20:14:19.741552Z"
-  },
-  "stats": {
-    "total_products": 978,
-    "successful": 978,
-    "average_score_80": 44.4,
-    "average_score_100": 55.5,
-    "score_distribution": {
-      "A": 0,
-      "B": 40,
-      "C": 234,
-      "D": 517,
-      "F": 187
-    }
-  }
-}
-```
-
-## Grade Scale
-
-| Score (/100) | Grade |
-| ------------ | ----- |
-| 90-100       | A+    |
-| 85-89        | A     |
-| 80-84        | A-    |
-| 77-79        | B+    |
-| 73-76        | B     |
-| 70-72        | B-    |
-| 67-69        | C+    |
-| 63-66        | C     |
-| 60-62        | C-    |
-| 50-59        | D     |
-| <50          | F     |
-
-## Configuration
-
-The script uses the same config file as enrichment (`config/enrichment_config.json`). Key settings:
-
-```json
-{
-  "paths": {
-    "input_directory": "output_Lozenges_enriched/enriched",
-    "output_directory": "output_Lozenges_scored"
-  },
-  "scoring_weights": {
-    "absorption_enhancers": {
-      "presence_bonus": 3,
-      "per_enhancer_bonus": 1
-    },
-    "allergens": {
-      "low_penalty": -1,
-      "moderate_penalty": -1.5,
-      "high_penalty": -2
-    },
-    ...
-  }
-}
-```
-
-## Output Structure
-
-```
-output_Lozenges_scored/
-├── scored/
-│   ├── scored_cleaned_batch_1.json  (scored products)
-│   └── scored_cleaned_batch_2.json
-└── reports/
-    └── scoring_summary_20251203_201419.json  (summary stats)
-```
-
-## Error Handling
-
-The script gracefully handles:
-
-- Unmapped ingredients (defaults to bio_score = 5)
-- Missing enrichment data (returns score of 0 with error details)
-- Incompatible enrichment versions (logs warning but continues)
-
-Failed products are included in output with:
-
-```json
-{
-  "dsld_id": "...",
-  "product_name": "...",
-  "score_80": 0,
-  "score_100_equivalent": 0,
-  "display": "0/80",
-  "grade": "F",
-  "error": "error message here",
-  "scoring_metadata": {
-    "status": "failed"
-  }
-}
-```
-
-## Implementation Notes
-
-### Key Design Decisions
-
-1. **Unmapped Ingredient Handling**: Ingredients without bio_score data default to 5 (middle of scale) to avoid penalizing products with ingredients not yet in the quality map.
-
-2. **Absorption Enhancer Bonus**: Only awards bonus if BOTH the enhancer AND the enhanced nutrient are present in the formula. This prevents bonus for citric acid in formulas without any minerals.
-
-3. **Proprietary Blend Severity**: Calculated dynamically based on percentage of proprietary ingredients:
-
-   - 75%+: Critical (-10)
-   - 50-74%: High (-5)
-   - <50%: Moderate (-3)
-
-4. **Top Manufacturer Matching**: Requires >85% confidence for fuzzy matches to avoid false positives.
-
-5. **Section D Floor**: Safety & Compliance score cannot go below 0 (prevents negative section scores).
-
-## Dependencies
-
-- Python 3.7+
-- Standard library only (json, os, sys, logging, argparse, datetime, pathlib, typing)
-- Optional: `tqdm` for progress bars (falls back gracefully if not installed)
-
-## Testing
+From repo root:
 
 ```bash
-# Test with dry-run
-python3 score_supplements.py --dry-run
-
-# Test with small dataset
-python3 score_supplements.py --input-dir test_enriched --output-dir test_scored
+python3 scripts/score_supplements.py
+python3 scripts/score_supplements.py --input-dir scripts/path/to/enriched --output-dir scripts/path/to/scored
 ```
 
-## Troubleshooting
+## 3) High-Level Scoring Flow
 
-**Issue**: Script fails with "unsupported operand type(s) for \*: 'NoneType' and 'float'"
+For each product:
 
-- **Solution**: Ensure enrichment data includes bio_score for all ingredients, or update to latest scorer version that handles None values
+1. Validate required product identity (`dsld_id`, `product_name`, enrichment metadata).
+2. Run B0 immediate safety gate (blocked/unsafe/moderate/review semantics).
+3. Run mapping gate (`require_full_mapping` behavior).
+4. Apply unmapped+banned exact/alias regression guard.
+5. Score sections A/B/C/D.
+6. Apply manufacturer violation penalty.
+7. Derive final verdict and output payload.
 
-**Issue**: No output files generated
+## 4) Score Model (v3.1)
 
-- **Solution**: Check input directory path is correct and contains enriched JSON files
+Final score:
 
-**Issue**: Low scores across all products
+```text
+quality_raw = A + B + C + D + violation_penalty
+quality_score = clamp(0, 80, quality_raw)
+score_100_equivalent = (quality_score / 80) * 100
+```
 
-- **Solution**: Review enrichment data quality - many penalties may indicate data quality issues
+Section caps:
 
-## Version Compatibility
+- A: 25
+- B: 30
+- C: 20
+- D: 5
+- Total: 80
 
-- **Enrichment v3.0.0+**: Fully compatible
-- **Enrichment v2.x**: May have missing fields, script will handle gracefully with defaults
+## 5) Section Details
 
-## Future Enhancements
+### Section A: Ingredient Quality (max 25)
 
-Section E (User Profile Scoring) will be implemented on the mobile device side to calculate personalized scores based on:
+```text
+A = min(25, A1 + A2 + A3 + A4 + A5 + A6 + probiotic_bonus)
+```
 
-- Age/sex-specific RDA alignment
-- User health goals
-- Specific nutrient needs
+- A1 (max 15): weighted bioavailability score.
+  - Excludes blend containers (`is_proprietary_blend=true`).
+  - Excludes rows without usable individual dose.
+  - Mapped row uses `score` and `dosage_importance`.
+  - Unmapped row fallback is score `9.0`, weight `1.0`.
+  - `single` and `single_nutrient`: force all weights to `1.0`.
+  - `multivitamin`: smoothing `avg = 0.7*avg + 0.3*9.0`.
+- A2 (max 3): premium forms bonus based on count of unique ingredients with score >= 14.
+  - excludes blend containers (`is_proprietary_blend=true`)
+  - requires usable individual dose (same dose-anchored rule as A1/A6)
+- A3 (max 3): delivery tier points.
+- A4 (max 3): absorption enhancer paired boolean.
+- A5 (max 3): organic + standardized botanical + synergy cluster (+ optional gated non-GMO contribution).
+- A6 (max 3): single-ingredient efficiency bonus for `supp_type in {single, single_nutrient}` using IQM form score tiers:
+  - uses `score` as primary value
+  - falls back to `bio_score` only when `score` is missing
+- Probiotic bonus:
+  - default mode max 3
+  - extended mode max 10 (gated)
+  - non-probiotic strict-gate path enabled by config.
+
+### Section B: Safety & Purity (max 30)
+
+Sign convention: penalties are positive magnitudes and are subtracted once.
+
+```text
+B_raw = base_score + bonuses - penalties
+B = clamp(0, 30, B_raw)
+base_score = 25
+bonuses = min(5, B3 + B4a + B4b + B4c + B_hypoallergenic)
+penalties = B0_moderate + B1 + B2 + B5 + B6
+```
+
+- B0: immediate safety gate logic (blocked/unsafe/moderate/review).
+- B1: harmful additives penalty (capped at 5).
+- B2: allergen penalty (capped at 2).
+- B3: claim compliance bonus (max 4 inside shared bonus pool).
+- B4: quality certifications (computed internally, pooled under bonus cap).
+- B5: proprietary blend transparency penalty (max 10).
+- B6: disease/marketing claim penalty.
+- Optional gated `B_hypoallergenic` contribution can be added to bonus pool.
+
+#### B5 proprietary blend model
+
+Per blend:
+
+```text
+hidden_mass_mg = max(blend_total_mg - disclosed_child_mg_sum, 0)
+impact = clamp(hidden_mass_mg / total_active_mg, 0, 1)  # mg-share path
+if hidden_mass_mg > 0 and impact < 0.1: impact = 0.1
+
+fallback impact = clamp(hidden_count / max(total_active_count, 8), 0, 1)  # count-share path
+
+presence = {full:0, partial:1, none:2}
+coef = {full:0, partial:3, none:5}
+blend_penalty = presence + coef * impact
+B5 = clamp(0, 10, sum(blend_penalty))
+```
+
+The scorer also emits per-blend evidence payloads used for explainability.
+
+### Section C: Evidence & Research (max 20)
+
+- Match source: `evidence_data.clinical_matches[]`
+- Per-match points: `study_type_base_points * evidence_level_multiplier`
+- Sub-clinical dose guard: multiply by `0.25` when below minimum clinical dose.
+- Supra-clinical flag: adds `SUPRA_CLINICAL_DOSE` when product dose > `3x` max studied dose (informational only).
+- Per-ingredient cap: `7`
+- Section cap: `20`
+
+### Section D: Brand Trust (max 5)
+
+```text
+D = min(5, D1 + D2 + min(2.0, D3 + D4 + D5))
+```
+
+- D1: trusted manufacturer path.
+  - `2` for trusted/exact match.
+  - optional gated middle-tier `1` for verifiable NSF/USP/GMP evidence.
+- D2: full disclosure.
+- D3: physician formulated.
+- D4: high-standard region contribution.
+- D5: sustainability.
+
+### Output badges
+
+- `FULL_DISCLOSURE` badge is emitted when:
+  - product is not `BLOCKED`, `UNSAFE`, or `NOT_SCORED`
+  - disclosure evaluation is true:
+    - if enriched `has_full_disclosure` exists, scorer uses it directly
+    - otherwise scorer computes from:
+      - all non-blend active ingredients have usable individual doses
+      - no proprietary blend is `partial` or `none`
+
+Badge payload:
+
+```json
+{
+  "id": "FULL_DISCLOSURE",
+  "label": "FULL DISCLOSURE",
+  "description": "This product lists exact amounts for every active ingredient."
+}
+```
+
+### Category percentile output
+
+Percentile is assigned after each batch is fully scored (cohort-aware pass).
+
+- Cohort key priority:
+  1. `percentile_category` from enrichment (recommended)
+  2. scorer fallback inference chain
+- Uses score on 100-equivalent scale.
+- `top_percent` is lower-is-better (example: `Top 35%`).
+- Requires minimum cohort size of `5`; otherwise scorer returns
+  `category_percentile.available=false` with reason `insufficient_cohort_size`.
+- `category_percentile` includes `category_source`, `category_confidence`, and `category_signals` for auditability.
+
+## 6) Gates And Defaults (Current)
+
+From current config:
+
+- `require_full_mapping = true`
+- `probiotic_extended_scoring = false`
+- `allow_non_probiotic_probiotic_bonus_with_strict_gate = true`
+- `shadow_mode = true`
+- `enable_non_gmo_bonus = false`
+- `enable_hypoallergenic_bonus = false`
+- `enable_d1_middle_tier = false`
+
+## 7) Verdicts
+
+Precedence:
+
+1. `BLOCKED`
+2. `UNSAFE`
+3. `NOT_SCORED`
+4. `CAUTION`
+5. `POOR` (`quality_score < 32`)
+6. `SAFE`
+
+Grade words (only for non-blocked, non-unsafe, non-not_scored):
+
+- >= 90: Exceptional
+- >= 80: Excellent
+- >= 70: Good
+- >= 60: Fair
+- >= 50: Below Avg
+- >= 32: Low
+- < 32: Very Poor
+
+## 8) Output Structure
+
+Scored files:
+
+```text
+<output_dir>/
+  scored/
+    scored_<batch_name>.json
+  reports/
+    scoring_summary_<timestamp>.json
+```
+
+Core output fields include:
+
+- `quality_score`, `score_80`, `score_100_equivalent`
+- `verdict`, `safety_verdict`
+- `badges`
+- `category_percentile`, `category_percentile_text`
+- `percentile_category`, `percentile_category_label`, `percentile_category_source`, `percentile_category_confidence`, `percentile_category_signals`
+- `breakdown` (A/B/C/D and penalties)
+- `section_scores` (with config-driven max values)
+- `flags`
+- mapping KPI fields (`unmapped_actives_total`, `mapped_coverage`, etc.)
+
+## 9) Backward Compatibility Notes
+
+- B and C section max values changed (B: 35 -> 30, C: 15 -> 20).
+- `section_scores.*.max` now resolves from config, not hardcoded constants.
+- B5 exposes both signed and magnitude penalty fields in evidence:
+  - `computed_blend_penalty` (signed)
+  - `computed_blend_penalty_magnitude` (positive)
+
+See detailed release notes:
+
+- `/Users/seancheick/.claude-worktrees/dsld_clean/peaceful-ritchie/scripts/SCORING_V3_1_ROLLOUT_NOTES.md`
+
+## 10) Validation Commands
+
+```bash
+python3 -m pytest scripts/tests/test_score_supplements.py -q
+python3 -m pytest scripts/tests -q
+```

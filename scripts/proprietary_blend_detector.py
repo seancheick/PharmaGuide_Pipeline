@@ -458,7 +458,11 @@ class ProprietaryBlendDetector:
                     else:
                         result["without_amounts"].append(sub)
 
-        # Determine disclosure level
+        # Determine disclosure level — three-tier model per 21 CFR 101.36
+        #   full:    every sub-ingredient has individual amount
+        #   partial: blend total declared AND sub-ingredients listed,
+        #            but individual amounts missing (or only some present)
+        #   none:    missing blend total OR missing sub-ingredient list
         total_subs = len(result["with_amounts"]) + len(result["without_amounts"])
 
         if total_subs == 0:
@@ -469,12 +473,13 @@ class ProprietaryBlendDetector:
             # All sub-ingredients have amounts = full disclosure
             result["level"] = "full"
             result["amounts_present"] = "full"
-        elif len(result["with_amounts"]) > 0:
-            # Some have amounts, some don't = partial
+        elif result["total_declared"] and total_subs > 0:
+            # Blend total declared AND sub-ingredients listed, but
+            # individual amounts missing (or only some present).
             result["level"] = "partial"
-            result["amounts_present"] = "partial"
+            result["amounts_present"] = "partial" if len(result["with_amounts"]) > 0 else "none"
         else:
-            # Listed but no amounts = none
+            # Missing blend total OR no amounts on any sub-ingredient
             result["level"] = "none"
             result["amounts_present"] = "none"
 

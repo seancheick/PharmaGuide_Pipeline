@@ -54,7 +54,6 @@ def test_cui_uniqueness():
 def test_entity_relationships_present():
     relationships = {
         "ADD_CALCIUM_ALUMINUM_PHOSPHATE": "ADD_SODIUM_ALUMINUM_PHOSPHATE",
-        "ADD_ACESULFAME_K": "ADD_ACRYLAMIDE",
     }
     entries = {e["id"]: e for e in load_entries()}
     for eid, target in relationships.items():

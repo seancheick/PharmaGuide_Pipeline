@@ -63,13 +63,15 @@
         "laxogenin",
         "alpha hydroxy laxogenine",
         "5a hydroxy laxogenin",
-        "laxosterone"
+        "laxosterone",
+        "Laxogenin Acetate",
+        "5\u03b1-hydroxy laxogenin"
       ],
       "CUI": null,
       "category": "steroidal_analog",
-      "mechanism_of_harm": "Steroid-like synthetic/semisynthetic analog marketed for anabolic effects with insufficient human safety data and regulatory concern as unlawful supplement ingredient.",
+      "mechanism_of_harm": "Synthetic/semisynthetic steroidal analog with claimed anabolic activity. Lacks human safety data; FDA does not recognize it as a lawful dietary ingredient.",
       "regulatory_status": {
-        "US": "Appears in FDA warning-letter actions for unlawful supplement ingredients; not established as lawful dietary ingredient.",
+        "US": "Not recognized as a lawful dietary ingredient; FDA Warning Letter 607248 (2020). No NDI notification on file.",
         "WADA": "Steroid-like performance agents are prohibited in sport contexts."
       },
       "population_warnings": [
@@ -77,7 +79,7 @@
         "Adolescents/young adults using muscle-building products",
         "Pregnant or nursing women"
       ],
-      "notes": "Routed from recurrent unresolved prohormone-like terms in capsules/tablets; treated as harmful high-risk pending stronger legal canonization.",
+      "notes": "A steroidal plant compound marketed for muscle building. The FDA has not accepted it as a lawful dietary ingredient and has issued warning letters to manufacturers. No adequate human safety studies exist. Avoid, especially if you are an athlete subject to anti-doping testing (WADA prohibited class).",
       "scientific_references": [
         "FDA Warning Letter 607248 (2020)",
         "FDA constituent update listing for 5-alpha-hydroxy-laxogenin"
@@ -92,7 +94,9 @@
           "alpha hydroxy laxogenin",
           "laxogenin",
           "alpha hydroxy laxogenine",
-          "5a hydroxy laxogenin"
+          "5a hydroxy laxogenin",
+          "Laxogenin Acetate",
+          "5\u03b1-hydroxy laxogenin"
         ],
         "regex": null,
         "fuzzy_threshold": 0.75,
@@ -168,26 +172,28 @@
         "E950",
         "acesulfame-K",
         "potassium acesulfame",
-        "6-methyl-1,2,3-oxathiazine-4(3H)-one 2,2-dioxide potassium salt"
+        "6-methyl-1,2,3-oxathiazine-4(3H)-one 2,2-dioxide potassium salt",
+        "Sunett",
+        "Sweet One"
       ],
       "CUI": "C0101048",
       "category": "sweetener_artificial",
-      "mechanism_of_harm": "Artificial sweetener that may disrupt gut microbiome composition and glucose metabolism. Contains methylene chloride (carcinogen) as manufacturing byproduct. Animal studies show potential thyroid effects and DNA damage. May alter insulin response despite being non-caloric.",
+      "mechanism_of_harm": "May alter gut microbiome composition and glucose metabolism at high doses. Methylene chloride (manufacturing byproduct) is present at trace levels well below safety thresholds.",
       "regulatory_status": {
         "US": "FDA approved with ADI of 15 mg/kg body weight/day",
         "EU": "E950 approved with ADI of 9 mg/kg body weight/day",
         "WHO": "JECFA ADI of 0-15 mg/kg body weight"
       },
       "population_warnings": [
-        "Pregnant women - Animal studies show developmental effects",
-        "People with diabetes - May affect glucose metabolism",
-        "People with gut issues - Disrupts microbiome",
-        "Everyone - Potential carcinogen contamination from manufacturing"
+        "Pregnant women — limited long-term data on developmental effects",
+        "People with diabetes — some studies suggest effects on glucose metabolism",
+        "People with gut sensitivities — may alter microbiome composition at high doses"
       ],
-      "notes": "Artificial sweetener 200 times sweeter than sugar. Contains methylene chloride (a carcinogen) as manufacturing byproduct. 2024 studies show it disrupts gut microbiome and may affect glucose metabolism. Often used in combination with other artificial sweeteners. Less studied than aspartame but growing safety concerns.",
+      "notes": "An artificial sweetener ~200\u00d7 sweeter than sugar (E950). FDA-approved with an ADI of 15 mg/kg/day. Some studies suggest effects on gut microbiome composition and glucose/insulin response, but evidence is limited. WHO (2023) advises against long-term use of non-sugar sweeteners for weight control. Generally safe at typical supplement doses.",
       "scientific_references": [
         "DOI: 10.1371/journal.pone.0199080 - Gut microbiome effects",
-        "DOI: 10.1016/j.fct.2005.05.012 - Safety assessment"
+        "DOI: 10.1016/j.fct.2005.05.012 - Safety assessment",
+        "WHO Guideline: Use of non-sugar sweeteners (2023)"
       ],
       "last_updated": "2026-02-16",
       "match_rules": {
@@ -200,7 +206,9 @@
           "E950",
           "acesulfame-K",
           "potassium acesulfame",
-          "6-methyl-1,2,3-oxathiazine-4(3H)-one 2,2-dioxide potassium salt"
+          "6-methyl-1,2,3-oxathiazine-4(3H)-one 2,2-dioxide potassium salt",
+          "Sunett",
+          "Sweet One"
         ],
         "regex": null,
         "fuzzy_threshold": 0.72,
@@ -224,6 +232,15 @@
           "url": "https://doi.org/10.1016/j.fct.2005.05.012",
           "published_date": null,
           "evidence_grade": "B",
+          "confidence": "high"
+        },
+        {
+          "type": "guidance",
+          "authority": "WHO",
+          "citation": "WHO Guideline: Use of non-sugar sweeteners (2023)",
+          "url": "https://www.who.int/publications/i/item/9789240073616",
+          "published_date": "2023-05-15",
+          "evidence_grade": "A",
           "confidence": "high"
         }
       ],
@@ -307,20 +324,20 @@
             "date": "2026-02-16",
             "change": "Normalized aliases/label_tokens and reduced overlap collisions for deterministic supplement matching",
             "reason": "schema_consistency_and_precision"
+          },
+          {
+            "date": "2026-02-26",
+            "change": "Downgraded severity_level from high to moderate (FDA/EU/WHO-approved with established ADIs; methylene chloride at trace levels). Removed erroneous entity_relationship to ADD_ACRYLAMIDE (different chemicals, different CUIs). Added WHO 2023 guideline reference. Upgraded confidence to medium. Added Sunett/Sweet One aliases.",
+            "reason": "batch_1_audit_cleanup"
           }
         ]
       },
-      "severity_score": 5,
-      "confidence": "low",
+      "severity_score": 3,
+      "confidence": "medium",
       "exposure_context": "supplement",
       "entity_type": "ingredient",
-      "entity_relationships": [
-        {
-          "type": "supersedes",
-          "target_id": "ADD_ACRYLAMIDE"
-        }
-      ],
-      "severity_level": "high",
+      "entity_relationships": null,
+      "severity_level": "moderate",
       "dose_thresholds": null
     },
     {
@@ -329,28 +346,37 @@
       "aliases": [
         "2-propenamide",
         "acrylic amide",
-        "vinyl amide"
+        "vinyl amide",
+        "CAS 79-06-1",
+        "prop-2-enamide"
       ],
       "category": "contaminant_processing",
-      "notes": "Forms during high-temperature processing (>120°C) of carbohydrate-rich foods. Probable human carcinogen (IARC Group 2A). Not intentionally added but may contaminate processed supplement ingredients.",
-      "last_updated": "2026-02-16",
+      "notes": "A processing contaminant formed when carbohydrate-rich ingredients are heated above 120\u00b0C. Classified as a probable human carcinogen by IARC (Group 2A). Not intentionally added to supplements, but may be present as a contaminant in processed botanical extracts. EFSA and FDA have set mitigation guidance.",
+      "last_updated": "2026-02-26",
       "CUI": "C0050587",
-      "mechanism_of_harm": "Mechanism requires further documentation.",
+      "mechanism_of_harm": "Metabolized to glycidamide, which forms DNA adducts and causes genotoxicity. Classified as IARC Group 2A (probable human carcinogen) based on animal studies showing tumor induction.",
       "regulatory_status": {
-        "US": "Status pending review",
-        "EU": "Status pending review"
+        "US": "Not banned but FDA has issued guidance to reduce acrylamide in food (2016). California Prop 65 listed.",
+        "EU": "Commission Regulation (EU) 2017/2158 sets benchmark levels for acrylamide in food."
       },
       "population_warnings": [
-        "General population - review specific concerns"
+        "Pregnant women \u2014 developmental neurotoxicity in animal studies",
+        "Children \u2014 higher exposure per kg body weight",
+        "General population \u2014 minimize exposure from processed ingredients"
       ],
-      "scientific_references": [],
+      "scientific_references": [
+        "IARC Monographs Vol 100F (2012)",
+        "DOI: 10.2903/j.efsa.2015.4104"
+      ],
       "match_rules": {
         "match_mode": "alias_and_fuzzy",
         "label_tokens": [
           "Acrylamide",
           "2-propenamide",
           "acrylic amide",
-          "vinyl amide"
+          "vinyl amide",
+          "CAS 79-06-1",
+          "prop-2-enamide"
         ],
         "regex": null,
         "fuzzy_threshold": 0.72,
@@ -378,7 +404,7 @@
       ],
       "external_ids": {
         "umls_cui": "C0050587",
-        "cas": null,
+        "cas": "79-06-1",
         "pubchem": null
       },
       "jurisdictional_statuses": [
@@ -450,6 +476,11 @@
             "date": "2026-02-16",
             "change": "Normalized aliases/label_tokens and reduced overlap collisions for deterministic supplement matching",
             "reason": "schema_consistency_and_precision"
+          },
+          {
+            "date": "2026-02-26",
+            "change": "Rewrote notes for consumer UI. Replaced placeholder mechanism_of_harm with glycidamide/genotoxicity pathway. Updated regulatory_status with FDA guidance and EU 2017/2158. Added CAS 79-06-1, prop-2-enamide aliases. Added population_warnings and scientific_references.",
+            "reason": "batch_1_audit_cleanup"
           }
         ]
       },
@@ -466,27 +497,35 @@
       "standard_name": "Advantame",
       "aliases": [
         "E969",
-        "advantame sweetener"
+        "advantame sweetener",
+        "advantame",
+        "CAS 714229-20-6"
       ],
       "category": "sweetener_artificial",
-      "notes": "Newest FDA-approved intense sweetener (2014), 20,000x sweeter than sugar. Limited long-term safety data. Chemically similar to aspartame and neotame.",
-      "last_updated": "2026-02-16",
+      "notes": "An ultra-high-intensity artificial sweetener (~20,000\u00d7 sweeter than sugar), approved by the FDA in 2014 (E969). Chemically derived from aspartame but does not require PKU warning at typical use levels. Limited long-term human safety data. Used at very low doses in supplements.",
+      "last_updated": "2026-02-26",
       "CUI": "C3494193",
-      "mechanism_of_harm": "Mechanism requires further documentation.",
+      "mechanism_of_harm": "Aspartame derivative that is rapidly metabolized. At typical ultra-low usage levels, phenylalanine exposure is negligible. Potential concerns relate to insufficient long-term human safety studies rather than an identified acute mechanism.",
       "regulatory_status": {
-        "US": "Status pending review",
-        "EU": "Status pending review"
+        "US": "FDA approved as general-purpose sweetener (21 CFR 172.785, 2014). ADI of 32.8 mg/kg/day.",
+        "EU": "E969 approved by EFSA with ADI of 5 mg/kg/day (2013)."
       },
       "population_warnings": [
-        "General population - review specific concerns"
+        "People sensitive to aspartame \u2014 chemically related, though PKU risk is negligible at typical doses",
+        "Pregnant women \u2014 limited long-term data"
       ],
-      "scientific_references": [],
+      "scientific_references": [
+        "FDA Final Rule 79 FR 30175 (2014) - Advantame approval",
+        "EFSA Journal 2013;11(7):3301 - Advantame safety"
+      ],
       "match_rules": {
         "match_mode": "alias_and_fuzzy",
         "label_tokens": [
           "Advantame",
           "E969",
-          "advantame sweetener"
+          "advantame sweetener",
+          "advantame",
+          "CAS 714229-20-6"
         ],
         "regex": null,
         "fuzzy_threshold": 0.72,
@@ -501,11 +540,20 @@
           "url": "https://www.fda.gov/food/food-additives-petitions/food-additive-status-list",
           "evidence_grade": "B",
           "confidence": "high"
+        },
+        {
+          "type": "regulatory_action",
+          "authority": "EFSA",
+          "citation": "EFSA Journal 2013;11(7):3301 - Scientific Opinion on the safety of advantame",
+          "url": "https://doi.org/10.2903/j.efsa.2013.3301",
+          "published_date": "2013-07-12",
+          "evidence_grade": "A",
+          "confidence": "high"
         }
       ],
       "external_ids": {
         "umls_cui": "C3494193",
-        "cas": null,
+        "cas": "714229-20-6",
         "pubchem": null
       },
       "jurisdictional_statuses": [
@@ -572,6 +620,11 @@
             "date": "2026-02-16",
             "change": "Normalized aliases/label_tokens and reduced overlap collisions for deterministic supplement matching",
             "reason": "schema_consistency_and_precision"
+          },
+          {
+            "date": "2026-02-26",
+            "change": "Rewrote notes for consumer UI. Replaced placeholder mechanism_of_harm. Updated regulatory_status with FDA 21 CFR 172.785 and EFSA ADI. Added EFSA structured reference. Added CAS 714229-20-6 and 'advantame' aliases. Updated population_warnings and scientific_references.",
+            "reason": "batch_1_audit_cleanup"
           }
         ]
       },
@@ -597,21 +650,28 @@
         "SbCl3",
         "antimony salts",
         "antimony(III) compounds",
-        "antimony(V) compounds"
+        "antimony(V) compounds",
+        "CAS 7440-36-0",
+        "stibium"
       ],
       "category": "heavy_metal",
-      "notes": "A toxic metalloid that can contaminate supplements, particularly those containing botanical ingredients. Can cause respiratory, cardiovascular, and gastrointestinal problems.",
-      "last_updated": "2026-02-16",
+      "notes": "A toxic metalloid (chemical symbol Sb) that can contaminate supplements through botanical raw materials or packaging leaching (PET bottles). Chronic low-level exposure may cause respiratory irritation, cardiovascular effects, and GI disturbance. California Prop 65 listed. Typically a contaminant rather than an intentional additive.",
+      "last_updated": "2026-02-26",
       "CUI": "C0003361",
-      "mechanism_of_harm": "Mechanism requires further documentation.",
+      "mechanism_of_harm": "Inhibits cellular enzymes including pyruvate dehydrogenase. Chronic exposure linked to respiratory irritation, cardiac arrhythmia, and GI effects. Antimony trioxide is classified as IARC Group 2B (possibly carcinogenic).",
       "regulatory_status": {
-        "US": "Status pending review",
-        "EU": "Status pending review"
+        "US": "EPA oral reference dose (RfD) of 0.0004 mg/kg/day for antimony. California Prop 65 listed. FDA monitors as contaminant.",
+        "EU": "EFSA TDI of 0.006 mg/kg/day (antimony trioxide). Regulated under EU 2023/915 for contaminants in food."
       },
       "population_warnings": [
-        "General population - review specific concerns"
+        "People with respiratory conditions \u2014 antimony dust irritates airways",
+        "People with cardiovascular disease \u2014 may exacerbate arrhythmias",
+        "Children \u2014 higher vulnerability per kg body weight"
       ],
-      "scientific_references": [],
+      "scientific_references": [
+        "IARC Monographs Vol 47 - Antimony trioxide (Group 2B)",
+        "DOI: 10.1016/j.envint.2009.02.003 - Antimony toxicology review"
+      ],
       "match_rules": {
         "match_mode": "alias_and_fuzzy",
         "label_tokens": [
@@ -626,7 +686,9 @@
           "SbCl3",
           "antimony salts",
           "antimony(III) compounds",
-          "antimony(V) compounds"
+          "antimony(V) compounds",
+          "CAS 7440-36-0",
+          "stibium"
         ],
         "regex": null,
         "fuzzy_threshold": 0.72,
@@ -650,11 +712,20 @@
           "published_date": null,
           "evidence_grade": "B",
           "confidence": "high"
+        },
+        {
+          "type": "monograph",
+          "authority": "IARC",
+          "citation": "IARC Monographs Vol 47 - Antimony Trioxide and Trisulfide",
+          "url": "https://monographs.iarc.who.int/list-of-classifications",
+          "published_date": null,
+          "evidence_grade": "A",
+          "confidence": "high"
         }
       ],
       "external_ids": {
         "umls_cui": "C0003361",
-        "cas": null,
+        "cas": "7440-36-0",
         "pubchem": null
       },
       "jurisdictional_statuses": [
@@ -726,6 +797,11 @@
             "date": "2026-02-16",
             "change": "Normalized aliases/label_tokens and reduced overlap collisions for deterministic supplement matching",
             "reason": "schema_consistency_and_precision"
+          },
+          {
+            "date": "2026-02-26",
+            "change": "Rewrote notes for consumer UI. Replaced placeholder mechanism_of_harm with enzyme inhibition/IARC 2B pathway. Updated regulatory_status with EPA RfD and EFSA TDI. Added IARC structured reference. Added CAS 7440-36-0, stibium aliases. Updated population_warnings and scientific_references.",
+            "reason": "batch_1_audit_cleanup"
           }
         ]
       },
@@ -754,27 +830,29 @@
         "artificial vanilla flavor",
         "artificial fruit flavor",
         "synthetic flavor",
-        "synthetic flavoring"
+        "synthetic flavoring",
+        "artificial flavours",
+        "artificially flavored",
+        "artificially flavoured"
       ],
-      "CUI": "",
+      "CUI": null,
       "category": "synthetic_additive",
-      "mechanism_of_harm": "Synthetic chemicals designed to mimic natural flavors. May contain undisclosed proprietary compounds. Some artificial flavors linked to allergic reactions, headaches, and behavioral issues. Lack of transparency about exact ingredients. Indicates heavily processed formulation. Studies link some synthetic flavorings to potential endocrine disruption.",
+      "mechanism_of_harm": "Synthetic chemicals designed to mimic natural flavors. Exact composition is often proprietary and undisclosed on supplement labels. Some individual flavoring compounds have been linked to allergic reactions, headaches, and behavioral effects in sensitive individuals, though the category as a whole is FDA GRAS-approved.",
       "regulatory_status": {
-        "US": "FDA approved under GRAS with minimal disclosure requirements",
-        "EU": "Approved with labeling requirements"
+        "US": "FDA approved under GRAS (21 CFR 101.22). Manufacturers not required to disclose individual flavoring chemicals.",
+        "EU": "Approved under Regulation (EC) No 1334/2008 with mandatory labeling as 'flavouring'."
       },
       "population_warnings": [
-        "People with chemical sensitivities - May trigger reactions",
-        "Children - Some linked to behavioral effects",
-        "People with allergies - Unknown allergen potential",
-        "Everyone - Poor transparency indicator"
+        "People with chemical sensitivities \u2014 undisclosed compounds may trigger reactions",
+        "Children \u2014 some synthetic flavoring agents linked to behavioral effects (Southampton study)",
+        "People with allergies \u2014 proprietary blends may contain undisclosed allergens"
       ],
-      "notes": "HIGH RISK: Synthetic flavoring agents that indicate processed, low-quality formulation. Exact chemical composition often undisclosed (proprietary). Some studies link artificial flavors to allergic reactions, headaches, and hyperactivity. Prefer supplements using natural flavors or no added flavoring.",
+      "notes": "A broad category of synthetic flavoring agents used in supplement formulations. Individual chemicals are FDA GRAS-approved, but exact compositions are proprietary and not disclosed on labels. This lack of transparency makes it difficult to assess individual risk. Some flavoring compounds have been linked to allergic reactions and headaches. Presence signals a heavily processed formulation.",
       "scientific_references": [
         "DOI: 10.1016/j.fct.2016.01.017 - Synthetic flavor safety review",
         "DOI: 10.1016/j.toxlet.2017.11.023 - Flavor chemical toxicity"
       ],
-      "last_updated": "2026-02-16",
+      "last_updated": "2026-02-26",
       "match_rules": {
         "match_mode": "alias_and_fuzzy",
         "label_tokens": [
@@ -791,7 +869,10 @@
           "artificial vanilla flavor",
           "artificial fruit flavor",
           "synthetic flavor",
-          "synthetic flavoring"
+          "synthetic flavoring",
+          "artificial flavours",
+          "artificially flavored",
+          "artificially flavoured"
         ],
         "regex": null,
         "fuzzy_threshold": 0.72,
@@ -910,14 +991,19 @@
             "date": "2026-02-16",
             "change": "Normalized aliases/label_tokens and reduced overlap collisions for deterministic supplement matching",
             "reason": "schema_consistency_and_precision"
+          },
+          {
+            "date": "2026-02-26",
+            "change": "Downgraded severity_level from high to moderate (FDA GRAS-approved category; concerns are transparency-based, not clinical toxicity). Removed 'HIGH RISK' prefix from notes. Replaced unsupported endocrine disruption claim in mechanism_of_harm. Fixed CUI from empty string to null. Added British-spelling aliases.",
+            "reason": "batch_2_audit_cleanup"
           }
         ]
       },
-      "severity_score": 5,
-      "confidence": "high",
+      "severity_score": 3,
+      "confidence": "medium",
       "exposure_context": "supplement",
       "entity_type": "ingredient",
-      "severity_level": "high",
+      "severity_level": "moderate",
       "dose_thresholds": null,
       "entity_relationships": null
     },
@@ -931,34 +1017,36 @@
         "Canderel",
         "APM",
         "aspartyl-phenylalanine methyl ester",
-        "N-(L-α-Aspartyl)-L-phenylalanine 1-methyl ester",
+        "N-(L-\u03b1-Aspartyl)-L-phenylalanine 1-methyl ester",
+        "L-aspartyl-L-phenylalanine methyl ester",
         "artificial sweetener aspartame",
         "E951 sweetener",
         "dipeptide sweetener",
         "methyl ester",
-        "aspartame powder"
+        "aspartame powder",
+        "CAS 22839-47-0"
       ],
       "CUI": "C0004002",
       "category": "sweetener_artificial",
-      "mechanism_of_harm": "Metabolizes into aspartic acid, phenylalanine, and methanol. Phenylalanine toxic to people with PKU. May affect neurotransmitter balance, trigger headaches, and influence mood. Possible carcinogenic effects through unclear mechanisms.",
+      "mechanism_of_harm": "Metabolizes into aspartic acid, phenylalanine, and methanol. Phenylalanine is toxic to individuals with phenylketonuria (PKU) due to inability to metabolize it. Methanol is further metabolized to formaldehyde. IARC evaluated limited evidence of hepatocellular carcinoma in animal studies (Ramazzini Institute) and limited epidemiological evidence linking aspartame to hepatocellular carcinoma and non-Hodgkin lymphoma.",
       "regulatory_status": {
-        "US": "FDA approved with ADI of 50 mg/kg body weight/day",
-        "EU": "E951 approved with ADI of 40 mg/kg body weight/day",
-        "WHO/IARC": "Group 2B - Possibly carcinogenic to humans (July 2023)",
-        "JECFA": "Reaffirmed ADI of 40 mg/kg (2023)"
+        "US": "FDA approved with ADI of 50 mg/kg body weight/day (21 CFR 172.804)",
+        "EU": "E951 approved with ADI of 40 mg/kg body weight/day (EFSA 2013 re-evaluation)",
+        "WHO/IARC": "Group 2B - Possibly carcinogenic to humans (July 2023, Monographs Vol 134)",
+        "JECFA": "Reaffirmed ADI of 40 mg/kg (2023 joint assessment with IARC)"
       },
       "population_warnings": [
-        "People with phenylketonuria (PKU) - MUST AVOID - Toxic accumulation of phenylalanine",
-        "Pregnant women - Caution advised",
-        "People prone to headaches - May trigger migraines",
-        "Children - Limit exposure recommended"
+        "People with phenylketonuria (PKU) \u2014 MUST AVOID \u2014 cannot metabolize phenylalanine",
+        "Pregnant women \u2014 caution advised due to fetal phenylalanine exposure",
+        "People prone to headaches \u2014 may trigger migraines in sensitive individuals",
+        "Children \u2014 limit exposure recommended; higher intake per kg body weight"
       ],
-      "notes": "An intense artificial sweetener. Classified as possibly carcinogenic to humans (Group 2B) by WHO/IARC in July 2023, confirmed in 2024 monograph. Not suitable for individuals with phenylketonuria (PKU). Linked to headaches, mood changes, and metabolic issues. Despite IARC classification, regulatory agencies maintain current acceptable daily intake levels.",
+      "notes": "An intense artificial sweetener (~200\u00d7 sweeter than sugar). Classified as IARC Group 2B (possibly carcinogenic) in July 2023. Individuals with phenylketonuria (PKU) must avoid aspartame entirely. Metabolizes to phenylalanine, aspartic acid, and methanol. FDA and EFSA maintain established acceptable daily intake (ADI) levels. Commonly found in sugar-free supplement formulations.",
       "scientific_references": [
-        "DOI: 10.2903/j.efsa.2013.3496 - EFSA safety assessment",
-        "IARC Monographs Volume 134 (2024) - Aspartame carcinogenicity"
+        "DOI: 10.2903/j.efsa.2013.3496 - EFSA safety assessment of aspartame",
+        "IARC Monographs Volume 134 (2024) - Aspartame carcinogenicity evaluation"
       ],
-      "last_updated": "2026-02-16",
+      "last_updated": "2026-02-26",
       "match_rules": {
         "match_mode": "alias_and_fuzzy",
         "label_tokens": [
@@ -969,12 +1057,14 @@
           "Canderel",
           "APM",
           "aspartyl-phenylalanine methyl ester",
-          "N-(L-α-Aspartyl)-L-phenylalanine 1-methyl ester",
+          "N-(L-\u03b1-Aspartyl)-L-phenylalanine 1-methyl ester",
+          "L-aspartyl-L-phenylalanine methyl ester",
           "artificial sweetener aspartame",
           "E951 sweetener",
           "dipeptide sweetener",
           "methyl ester",
-          "aspartame powder"
+          "aspartame powder",
+          "CAS 22839-47-0"
         ],
         "regex": null,
         "fuzzy_threshold": 0.72,
@@ -1003,7 +1093,7 @@
       ],
       "external_ids": {
         "umls_cui": "C0004002",
-        "cas": null,
+        "cas": "22839-47-0",
         "pubchem": null
       },
       "jurisdictional_statuses": [
@@ -1082,6 +1172,11 @@
             "date": "2026-02-16",
             "change": "Normalized aliases/label_tokens and reduced overlap collisions for deterministic supplement matching",
             "reason": "schema_consistency_and_precision"
+          },
+          {
+            "date": "2026-02-26",
+            "change": "Rewrote notes for consumer UI. Tightened mechanism_of_harm with Ramazzini/IARC findings. Updated regulatory_status with CFR/EFSA citations. Added CAS 22839-47-0 and L-aspartyl alias. Improved population_warnings formatting.",
+            "reason": "batch_2_audit_cleanup"
           }
         ]
       },
@@ -1106,26 +1201,29 @@
         "4,4'-dihydroxydiphenylmethane",
         "bis(4-hydroxyphenyl)methane",
         "BPA substitute",
-        "BPA-free plastic component"
+        "BPA-free plastic component",
+        "CAS 80-09-1",
+        "CAS 620-92-8"
       ],
       "category": "endocrine_disruptor",
-      "mechanism_of_harm": "Acts as endocrine disruptors by mimicking estrogen, potentially interfering with hormone signaling pathways. Can leach from plastic packaging into supplements. May have similar or worse effects than BPA.",
+      "mechanism_of_harm": "BPS and BPF bind estrogen receptors (ER\u03b1 and ER\u03b2) with comparable affinity to BPA, disrupting endocrine signaling. They can leach from plastic supplement packaging ('BPA-free' containers) into contents. In vitro studies show estrogenic, anti-androgenic, and thyroid-disrupting activity. BPF additionally shows genotoxic potential in some assays.",
       "regulatory_status": {
-        "US": "Under review by FDA",
-        "EU": "Under evaluation by ECHA",
-        "Canada": "Listed as toxic substance"
+        "US": "No specific FDA regulation for BPS/BPF. FDA banned BPA in infant formula packaging (2013). BPS/BPF not yet individually regulated.",
+        "EU": "EFSA dramatically lowered BPA TDI to 0.2 ng/kg bw/day in 2023 (from 4 \u00b5g/kg), raising scrutiny of structural analogs BPS/BPF. ECHA evaluating BPS under REACH.",
+        "Canada": "BPA declared toxic under CEPA Schedule 1. BPS/BPF under assessment as potential toxic substances."
       },
       "population_warnings": [
-        "Pregnant women - May affect fetal development",
-        "Children - Potential developmental effects",
-        "People with hormone-sensitive conditions"
+        "Pregnant women \u2014 endocrine disruption may affect fetal development and reproductive programming",
+        "Children \u2014 developing endocrine systems more vulnerable to estrogenic compounds",
+        "People with hormone-sensitive conditions \u2014 breast cancer, endometriosis, PCOS"
       ],
-      "notes": "Common BPA substitutes found in 'BPA-free' plastic packaging. Research suggests they may be as harmful as or worse than BPA, with similar endocrine-disrupting properties.",
+      "notes": "BPA substitutes commonly found in 'BPA-free' supplement packaging. Research shows BPS and BPF have similar estrogen-mimicking activity to BPA and may be equally harmful. These are contaminants from packaging rather than intentional ingredients. EFSA's 2023 dramatic reduction of the BPA TDI (by ~20,000\u00d7) has increased regulatory scrutiny of all bisphenol analogs.",
       "scientific_references": [
         "DOI: 10.1016/j.envint.2020.105914 - BPS and BPF toxicity",
-        "DOI: 10.1289/EHP2716 - Comparative analysis of BPA alternatives"
+        "DOI: 10.1289/EHP2716 - Comparative analysis of BPA alternatives",
+        "DOI: 10.2903/j.efsa.2023.6857 - EFSA 2023 BPA re-evaluation (TDI context)"
       ],
-      "last_updated": "2026-02-16",
+      "last_updated": "2026-02-26",
       "CUI": "C2742616",
       "match_rules": {
         "match_mode": "alias_and_fuzzy",
@@ -1140,7 +1238,9 @@
           "4,4'-dihydroxydiphenylmethane",
           "bis(4-hydroxyphenyl)methane",
           "BPA substitute",
-          "BPA-free plastic component"
+          "BPA-free plastic component",
+          "CAS 80-09-1",
+          "CAS 620-92-8"
         ],
         "regex": null,
         "fuzzy_threshold": 0.72,
@@ -1165,11 +1265,20 @@
           "published_date": null,
           "evidence_grade": "B",
           "confidence": "high"
+        },
+        {
+          "type": "regulatory_action",
+          "authority": "EFSA",
+          "citation": "EFSA 2023 BPA re-evaluation - TDI reduced to 0.2 ng/kg bw/day",
+          "url": "https://doi.org/10.2903/j.efsa.2023.6857",
+          "published_date": "2023-04-19",
+          "evidence_grade": "A",
+          "confidence": "high"
         }
       ],
       "external_ids": {
         "umls_cui": "C2742616",
-        "cas": null,
+        "cas": "80-09-1 (BPS), 620-92-8 (BPF)",
         "pubchem": null
       },
       "jurisdictional_statuses": [
@@ -1242,6 +1351,11 @@
             "date": "2026-02-16",
             "change": "Normalized aliases/label_tokens and reduced overlap collisions for deterministic supplement matching",
             "reason": "schema_consistency_and_precision"
+          },
+          {
+            "date": "2026-02-26",
+            "change": "Rewrote notes for consumer UI. Updated mechanism_of_harm with ER\u03b1/ER\u03b2 receptor binding. Updated regulatory_status with EFSA 2023 BPA TDI context and ECHA/CEPA details. Added EFSA BPA re-evaluation structured reference. Added CAS 80-09-1 (BPS) and 620-92-8 (BPF) to external_ids and aliases.",
+            "reason": "batch_2_audit_cleanup"
           }
         ]
       },
@@ -1273,27 +1387,28 @@
         "FD&C Blue No. 1 Lake",
         "FD&C Blue No. 1 Aluminum Lake",
         "Blue #1 Aluminum Lake",
-        "Blue #1 Lake"
+        "Blue #1 Lake",
+        "CI 42090",
+        "CAS 3844-45-9"
       ],
       "CUI": null,
       "category": "colorant_artificial",
-      "mechanism_of_harm": "Class III (E150c) and Class IV (E150d) caramel colors are produced with ammonia and may contain 4-methylimidazole (4-MEI), a potential carcinogen. 4-MEI has been shown to cause lung, liver, and thyroid tumors in animal studies. May also contain other contaminants from manufacturing process.",
+      "mechanism_of_harm": "Triarylmethane dye (Brilliant Blue FCF / E133). May cause hypersensitivity reactions in susceptible individuals. Some in vitro studies suggest mitochondrial toxicity at high concentrations. The Southampton study (2007) included Blue No. 1 in dye mixtures linked to increased hyperactivity in children, though individual dye contributions were not isolated.",
       "regulatory_status": {
-        "US": "FDA approved; California Prop 65 limits 4-MEI to 29 mcg/day",
-        "EU": "E150a-d approved with purity criteria",
-        "WHO": "JECFA ADI for 4-MEI is 0.2 mg/kg body weight"
+        "US": "FDA approved under 21 CFR 74.101 for foods, drugs, and cosmetics. No specific ADI set by FDA.",
+        "EU": "E133 approved with ADI of 6 mg/kg bw/day (EFSA 2010 re-evaluation). Requires warning label for mixtures per Southampton study."
       },
       "population_warnings": [
-        "Everyone - Potential carcinogen exposure from 4-MEI",
-        "Children - Higher exposure per body weight",
-        "People consuming cola beverages - High 4-MEI exposure"
+        "Children \u2014 included in Southampton study dye mixtures linked to hyperactivity; EU requires warning label",
+        "Individuals with aspirin sensitivity \u2014 cross-reactivity with triarylmethane dyes reported",
+        "People with dye allergies \u2014 may cause urticaria or bronchospasm in rare cases"
       ],
-      "notes": "Synthetic color additive. U.S. authorized; tracked as B1 additive-risk signal rather than B0 hard-ban.",
+      "notes": "A synthetic triarylmethane dye (Brilliant Blue FCF / E133) used as a colorant in supplement tablets and capsules. FDA-approved; EU-approved with ADI of 6 mg/kg/day. Included in the Southampton study dye mixtures associated with childhood hyperactivity. Tracked as a B1 additive-risk signal for label transparency rather than a hard ban.",
       "scientific_references": [
-        "DOI: 10.1016/j.fct.2012.06.052 - 4-MEI carcinogenicity",
-        "DOI: 10.1021/jf204398u - 4-MEI in beverages"
+        "DOI: 10.1016/S0140-6736(07)61306-3 - McCann et al. (2007) Southampton study on food colors and hyperactivity",
+        "DOI: 10.2903/j.efsa.2010.1853 - EFSA 2010 re-evaluation of Brilliant Blue FCF (E133)"
       ],
-      "last_updated": "2026-02-18",
+      "last_updated": "2026-02-26",
       "match_rules": {
         "match_mode": "alias_and_fuzzy",
         "label_tokens": [
@@ -1314,7 +1429,9 @@
           "FD&C Blue No. 1 Lake",
           "FD&C Blue No. 1 Aluminum Lake",
           "Blue #1 Aluminum Lake",
-          "Blue #1 Lake"
+          "Blue #1 Lake",
+          "CI 42090",
+          "CAS 3844-45-9"
         ],
         "regex": null,
         "fuzzy_threshold": 0.72,
@@ -1324,18 +1441,35 @@
       "references_structured": [
         {
           "type": "regulation",
-          "title": "21 CFR 74.101 FD&C Blue No. 1",
-          "evidence_grade": "R",
+          "authority": "FDA",
+          "citation": "21 CFR 74.101 - FD&C Blue No. 1",
           "url": "https://www.law.cornell.edu/cfr/text/21/74.101",
-          "supports_claims": [
-            "regulatory_status"
-          ],
-          "evidence_summary": "Authorized U.S. color additive use under specified conditions."
+          "published_date": null,
+          "evidence_grade": "R",
+          "confidence": "high"
+        },
+        {
+          "type": "systematic_review",
+          "authority": "OTHER",
+          "citation": "DOI: 10.1016/S0140-6736(07)61306-3 - McCann et al. Southampton study on food colors and hyperactivity",
+          "url": "https://doi.org/10.1016/S0140-6736(07)61306-3",
+          "published_date": "2007-11-03",
+          "evidence_grade": "A",
+          "confidence": "high"
+        },
+        {
+          "type": "regulatory_action",
+          "authority": "EFSA",
+          "citation": "EFSA 2010 re-evaluation of Brilliant Blue FCF (E133) - ADI 6 mg/kg/day",
+          "url": "https://doi.org/10.2903/j.efsa.2010.1853",
+          "published_date": "2010-11-12",
+          "evidence_grade": "A",
+          "confidence": "high"
         }
       ],
       "external_ids": {
         "umls_cui": null,
-        "cas": null,
+        "cas": "3844-45-9",
         "pubchem": null
       },
       "jurisdictional_statuses": [
@@ -1413,6 +1547,11 @@
             "date": "2026-02-16",
             "change": "Normalized aliases/label_tokens and reduced overlap collisions for deterministic supplement matching",
             "reason": "schema_consistency_and_precision"
+          },
+          {
+            "date": "2026-02-26",
+            "change": "CRITICAL FIX: Replaced entirely wrong compound data (Caramel Color / 4-MEI / E150) with correct Brilliant Blue FCF (E133) data. Rewrote mechanism_of_harm, regulatory_status, population_warnings, notes, and scientific_references. Added CI 42090 alias and CAS 3844-45-9. Replaced references_structured with correct FDA 21 CFR 74.101, Southampton study, and EFSA E133 re-evaluation.",
+            "reason": "batch_2_audit_critical_data_corruption_fix"
           }
         ]
       },
@@ -1446,25 +1585,29 @@
         "FD&C Blue No. 2 Aluminum Lake",
         "Indigotine",
         "Indigo Carmine",
-        "E132"
+        "E132",
+        "CI 73015",
+        "CAS 860-22-0"
       ],
       "CUI": null,
       "category": "colorant_artificial",
-      "mechanism_of_harm": "Synthetic color additive. Potential hypersensitivity reactions in susceptible individuals; caution warranted with repeated exposure to synthetic dye blends.",
+      "mechanism_of_harm": "Sulfonated indigo dye (Indigotine / E132). May cause hypersensitivity reactions including nausea, hypertension, and skin rash in susceptible individuals. Included in the Southampton study dye mixtures linked to hyperactivity in children (Mix A). Some in vitro evidence of serotonin receptor binding at high concentrations, though clinical significance at dietary levels is unclear.",
       "regulatory_status": {
-        "US": "FDA approved for use in foods, drugs, and cosmetics",
-        "EU": "Permitted with restrictions (E132)",
-        "WHO": "JECFA ADI established for indigotine derivatives"
+        "US": "FDA approved under 21 CFR 74.102 for foods, drugs, and cosmetics",
+        "EU": "E132 approved with ADI of 5 mg/kg bw/day (EFSA 2014 re-evaluation). Subject to Southampton study warning label requirements for dye mixtures.",
+        "WHO": "JECFA ADI of 5 mg/kg bw/day for indigotine"
       },
       "population_warnings": [
-        "Children - higher dye exposure per body weight",
-        "Individuals with dye sensitivities"
+        "Children \u2014 included in Southampton study Mix A dye blend linked to hyperactivity; EU requires warning label on mixtures",
+        "Individuals with dye sensitivities \u2014 may cause nausea, skin rash, or hypertension in rare cases"
       ],
-      "notes": "Synthetic blue color additive. Included for additive-risk routing and label transparency checks; not treated as B0 banned substance.",
+      "notes": "A synthetic sulfonated indigo dye (Indigotine / Indigo Carmine / E132) used as a colorant in supplement tablets and capsules. FDA-approved; EU-approved with ADI of 5 mg/kg/day. Included in the Southampton study Mix A dye blend associated with childhood hyperactivity. Tracked as a B1 additive-risk signal for label transparency rather than a hard ban.",
       "scientific_references": [
-        "FDA: CFR Title 21, Part 74.102 - FD&C Blue No. 2"
+        "FDA: CFR Title 21, Part 74.102 - FD&C Blue No. 2",
+        "DOI: 10.1016/S0140-6736(07)61306-3 - McCann et al. (2007) Southampton study on food colors and hyperactivity",
+        "DOI: 10.2903/j.efsa.2014.3768 - EFSA 2014 re-evaluation of Indigo Carmine (E132)"
       ],
-      "last_updated": "2026-02-23",
+      "last_updated": "2026-02-26",
       "match_rules": {
         "match_mode": "alias_and_fuzzy",
         "label_tokens": [
@@ -1485,7 +1628,9 @@
           "fd&c blue no. 2 aluminum lake",
           "indigotine",
           "indigo carmine",
-          "e132"
+          "e132",
+          "CI 73015",
+          "CAS 860-22-0"
         ],
         "regex": null,
         "fuzzy_threshold": 0.72,
@@ -1496,10 +1641,28 @@
         {
           "type": "regulation",
           "authority": "FDA",
-          "citation": "CFR Title 21, Part 74.102 - FD&C Blue No. 2",
-          "url": "",
+          "citation": "21 CFR 74.102 - FD&C Blue No. 2",
+          "url": "https://www.law.cornell.edu/cfr/text/21/74.102",
           "published_date": null,
           "evidence_grade": "R",
+          "confidence": "high"
+        },
+        {
+          "type": "systematic_review",
+          "authority": "OTHER",
+          "citation": "DOI: 10.1016/S0140-6736(07)61306-3 - McCann et al. Southampton study on food colors and hyperactivity",
+          "url": "https://doi.org/10.1016/S0140-6736(07)61306-3",
+          "published_date": "2007-11-03",
+          "evidence_grade": "A",
+          "confidence": "high"
+        },
+        {
+          "type": "regulatory_action",
+          "authority": "EFSA",
+          "citation": "EFSA 2014 re-evaluation of Indigo Carmine (E132) - ADI 5 mg/kg/day",
+          "url": "https://doi.org/10.2903/j.efsa.2014.3768",
+          "published_date": "2014-07-22",
+          "evidence_grade": "A",
           "confidence": "high"
         }
       ],
@@ -1531,6 +1694,11 @@
             "date": "2026-02-23",
             "change": "Initial entry created to close FD&C Blue #2 routing gap",
             "reason": "tablets_clean_unmapped_p0"
+          },
+          {
+            "date": "2026-02-26",
+            "change": "Rewrote notes for consumer UI. Expanded mechanism_of_harm with sulfonated indigo chemistry and Southampton Mix A details. Updated regulatory_status with 21 CFR 74.102, EFSA ADI 5 mg/kg/day, and JECFA ADI. Added CI 73015 alias. Added Southampton and EFSA structured references.",
+            "reason": "batch_2_audit_cleanup"
           }
         ]
       },
@@ -1548,28 +1716,35 @@
       "aliases": [
         "E544",
         "calcium aluminophosphate",
-        "aluminum calcium phosphate"
+        "aluminum calcium phosphate",
+        "CAS 10103-46-5"
       ],
       "category": "leavening_agent",
-      "notes": "Leavening agent containing aluminum. May contribute to aluminum body burden. Studies suggest potential neurotoxicity concerns, especially with chronic exposure.",
-      "last_updated": "2026-02-16",
+      "notes": "A leavening and anti-caking agent that contains bioavailable aluminum. Contributes to total aluminum body burden. EFSA established a tolerable weekly intake (TWI) of 1 mg Al/kg body weight due to neurotoxicity concerns with chronic exposure. Used in supplement tablet manufacturing.",
+      "last_updated": "2026-02-26",
       "CUI": "C0256439",
-      "mechanism_of_harm": "Mechanism requires further documentation.",
+      "mechanism_of_harm": "Releases bioavailable aluminum ions (Al\u00b3\u207a) during digestion. Aluminum accumulates in bone and brain tissue with chronic exposure. EFSA identified developmental neurotoxicity as the critical endpoint for aluminum compounds, establishing a TWI of 1 mg/kg bw/week. Animal studies show aluminum-induced oxidative stress, mitochondrial dysfunction, and interference with calcium/iron homeostasis.",
       "regulatory_status": {
-        "US": "Status pending review",
-        "EU": "Status pending review"
+        "US": "FDA approved food additive under 21 CFR 172.620. No specific limit for aluminum from this source.",
+        "EU": "E544 authorized. EFSA TWI for aluminum from all dietary sources: 1 mg/kg bw/week (2008, reconfirmed 2011)."
       },
       "population_warnings": [
-        "General population - review specific concerns"
+        "People with renal impairment \u2014 reduced aluminum clearance increases accumulation risk",
+        "Children \u2014 developing nervous system more vulnerable to aluminum neurotoxicity; higher intake per kg body weight",
+        "Elderly \u2014 chronic aluminum exposure studied as potential Alzheimer\u2019s disease cofactor (inconclusive but under active investigation)"
       ],
-      "scientific_references": [],
+      "scientific_references": [
+        "DOI: 10.2903/j.efsa.2008.754 - EFSA 2008 safety of aluminium from dietary intake (TWI 1 mg/kg/week)",
+        "21 CFR 172.620 - FDA food additive listing for calcium aluminum phosphate"
+      ],
       "match_rules": {
         "match_mode": "alias_and_fuzzy",
         "label_tokens": [
           "Calcium Aluminum Phosphate",
           "E544",
           "calcium aluminophosphate",
-          "aluminum calcium phosphate"
+          "aluminum calcium phosphate",
+          "CAS 10103-46-5"
         ],
         "regex": null,
         "fuzzy_threshold": 0.72,
@@ -1580,15 +1755,25 @@
         {
           "type": "regulatory_action",
           "authority": "FDA",
-          "citation": "FDA Food Additive Status List - Calcium aluminum phosphate (21 CFR 172.620)",
-          "url": "https://www.fda.gov/food/food-additives-petitions/food-additive-status-list",
-          "evidence_grade": "B",
+          "citation": "21 CFR 172.620 - Calcium aluminum phosphate food additive listing",
+          "url": "https://www.law.cornell.edu/cfr/text/21/172.620",
+          "published_date": null,
+          "evidence_grade": "R",
+          "confidence": "high"
+        },
+        {
+          "type": "systematic_review",
+          "authority": "EFSA",
+          "citation": "EFSA 2008 - Safety of aluminium from dietary intake, TWI 1 mg/kg bw/week",
+          "url": "https://doi.org/10.2903/j.efsa.2008.754",
+          "published_date": "2008-07-22",
+          "evidence_grade": "A",
           "confidence": "high"
         }
       ],
       "external_ids": {
         "umls_cui": "C0256439",
-        "cas": null,
+        "cas": "10103-46-5",
         "pubchem": null
       },
       "jurisdictional_statuses": [
@@ -1660,6 +1845,11 @@
             "date": "2026-02-16",
             "change": "Normalized aliases/label_tokens and reduced overlap collisions for deterministic supplement matching",
             "reason": "schema_consistency_and_precision"
+          },
+          {
+            "date": "2026-02-26",
+            "change": "Replaced placeholder mechanism_of_harm with Al\u00b3\u207a bioavailability and EFSA TWI data. Replaced placeholder regulatory_status with 21 CFR 172.620 and EFSA TWI. Replaced generic population_warnings with renal/children/elderly specifics. Rewrote notes for consumer UI. Added EFSA structured reference. Added CAS 10103-46-5.",
+            "reason": "batch_3_audit_placeholder_fix"
           }
         ]
       },
@@ -1694,18 +1884,18 @@
       ],
       "CUI": null,
       "category": "flow_agent",
-      "mechanism_of_harm": "Composite flow agent combining calcium citrate and laurate. Used as lubricant in capsule/tablet manufacturing. Same class concerns as other laurate flow agents regarding dissolution rate.",
+      "mechanism_of_harm": "Composite flow agent combining calcium citrate and lauric acid salt. Used as lubricant and anti-caking agent in capsule/tablet manufacturing. Laurate component is a medium-chain fatty acid that may form a hydrophobic film around active ingredients, potentially slowing dissolution rate. Minimal direct toxicity at typical supplement levels.",
       "regulatory_status": {
-        "US": "FDA GRAS",
-        "EU": "Allowed",
-        "WHO": "No specific ADI"
+        "US": "FDA GRAS as processing aid",
+        "EU": "Allowed as food additive",
+        "WHO": "No specific ADI established"
       },
       "population_warnings": [
-        "People with fat absorption issues - May slow dissolution"
+        "People with fat malabsorption syndromes \u2014 laurate coating may further slow nutrient dissolution"
       ],
-      "notes": "Composite calcium flow agent used in supplement manufacturing. Functionally equivalent to magnesium citrate laurate.",
+      "notes": "A composite calcium flow agent used in supplement tablet and capsule manufacturing. Functionally equivalent to magnesium citrate laurate. Minimal safety concerns at typical levels. Presence indicates use of manufacturing lubricants rather than a direct health hazard.",
       "scientific_references": [],
-      "last_updated": "2026-02-18",
+      "last_updated": "2026-02-26",
       "match_rules": {
         "match_mode": "alias_and_fuzzy",
         "label_tokens": [
@@ -1721,14 +1911,13 @@
       },
       "references_structured": [
         {
-          "type": "regulatory",
-          "title": "Regulatory status documentation for Calcium Citrate Laurate",
-          "url": "",
+          "type": "regulatory_action",
+          "authority": "FDA",
+          "citation": "FDA GRAS status - calcium citrate laurate as processing aid",
+          "url": null,
+          "published_date": null,
           "evidence_grade": "R",
-          "confidence": "low",
-          "supports_claims": [
-            "regulatory_status"
-          ]
+          "confidence": "low"
         }
       ],
       "external_ids": {
@@ -1781,6 +1970,11 @@
             "date": "2026-02-18",
             "change": "Initial entry added from unmapped ingredient audit",
             "reason": "unmapped_ingredient_coverage"
+          },
+          {
+            "date": "2026-02-26",
+            "change": "Rewrote notes and mechanism_of_harm for consumer UI. Improved population_warnings specificity. Fixed refs_structured schema (removed non-standard fields).",
+            "reason": "batch_3_audit_cleanup"
           }
         ]
       },
@@ -1800,21 +1994,28 @@
         "E385",
         "calcium disodium ethylenediaminetetraacetate",
         "edetate calcium disodium",
-        "calcium EDTA"
+        "calcium EDTA",
+        "CaNa2-EDTA",
+        "CAS 62-33-9"
       ],
       "category": "preservative_artificial",
-      "notes": "Chelating agent that can deplete essential minerals (zinc, iron, copper) from the body. May contain heavy metal contaminants. Can interfere with mineral absorption when consumed regularly.",
-      "last_updated": "2026-02-16",
+      "notes": "A synthetic chelating agent used as a preservative in supplements to bind metal ions and prevent oxidation. Can deplete essential minerals (zinc, iron, copper) when consumed regularly. FDA limits use to 75 ppm in food. Not recommended in mineral-containing supplement formulations where it may reduce bioavailability of the active ingredients.",
+      "last_updated": "2026-02-26",
       "CUI": "C0013576",
-      "mechanism_of_harm": "Mechanism requires further documentation.",
+      "mechanism_of_harm": "Non-selective chelator that binds divalent and trivalent metal ions (Zn\u00b2\u207a, Fe\u00b2\u207a/Fe\u00b3\u207a, Cu\u00b2\u207a, Ca\u00b2\u207a, Mn\u00b2\u207a) with high affinity, forming stable complexes excreted renally. Chronic dietary exposure can deplete essential trace minerals. In supplements containing mineral ingredients, EDTA may chelate and reduce bioavailability of the intended active. Poorly absorbed orally (~5%), limiting systemic toxicity, but GI-level mineral binding still occurs.",
       "regulatory_status": {
-        "US": "Status pending review",
-        "EU": "Status pending review"
+        "US": "FDA approved food additive under 21 CFR 172.120. Limited to specific foods; max 75\u2013500 ppm depending on application.",
+        "EU": "E385 authorized with ADI of 2.5 mg/kg bw/day as calcium disodium EDTA (EFSA, SCF 2003 re-evaluation)."
       },
       "population_warnings": [
-        "General population - review specific concerns"
+        "People taking mineral supplements \u2014 EDTA may chelate and reduce absorption of zinc, iron, copper, and calcium",
+        "People with mineral deficiencies \u2014 further depletion risk from chronic chelation",
+        "People with renal impairment \u2014 reduced clearance of EDTA-metal complexes"
       ],
-      "scientific_references": [],
+      "scientific_references": [
+        "21 CFR 172.120 - FDA food additive listing for calcium disodium EDTA",
+        "DOI: 10.2903/j.efsa.2019.5747 - EFSA 2019 re-evaluation of calcium disodium EDTA (E385)"
+      ],
       "match_rules": {
         "match_mode": "alias_and_fuzzy",
         "label_tokens": [
@@ -1823,7 +2024,9 @@
           "E385",
           "calcium disodium ethylenediaminetetraacetate",
           "edetate calcium disodium",
-          "calcium EDTA"
+          "calcium EDTA",
+          "CaNa2-EDTA",
+          "CAS 62-33-9"
         ],
         "regex": null,
         "fuzzy_threshold": 0.72,
@@ -1834,15 +2037,25 @@
         {
           "type": "regulatory_action",
           "authority": "FDA",
-          "citation": "FDA Food Additive Status List - Calcium disodium EDTA (21 CFR 172.160)",
-          "url": "https://www.fda.gov/food/food-additives-petitions/food-additive-status-list",
-          "evidence_grade": "B",
+          "citation": "21 CFR 172.120 - Calcium disodium EDTA food additive listing",
+          "url": "https://www.law.cornell.edu/cfr/text/21/172.120",
+          "published_date": null,
+          "evidence_grade": "R",
+          "confidence": "high"
+        },
+        {
+          "type": "regulatory_action",
+          "authority": "EFSA",
+          "citation": "EFSA 2019 re-evaluation of calcium disodium EDTA (E385) - ADI 2.5 mg/kg/day",
+          "url": "https://doi.org/10.2903/j.efsa.2019.5747",
+          "published_date": "2019-06-13",
+          "evidence_grade": "A",
           "confidence": "high"
         }
       ],
       "external_ids": {
         "umls_cui": "C0013576",
-        "cas": null,
+        "cas": "62-33-9",
         "pubchem": null
       },
       "jurisdictional_statuses": [
@@ -1909,6 +2122,11 @@
             "date": "2026-02-16",
             "change": "Normalized aliases/label_tokens and reduced overlap collisions for deterministic supplement matching",
             "reason": "schema_consistency_and_precision"
+          },
+          {
+            "date": "2026-02-26",
+            "change": "Replaced placeholder mechanism_of_harm with chelation mechanism (Zn/Fe/Cu/Ca/Mn depletion, oral bioavailability). Replaced placeholder regulatory_status with 21 CFR 172.120 and EFSA E385 ADI 2.5 mg/kg/day. Replaced generic population_warnings with mineral supplement/deficiency/renal specifics. Rewrote notes for consumer UI. Added CAS 62-33-9 and CaNa2-EDTA alias. Added EFSA structured reference. Fixed refs_structured FDA citation to correct CFR section (172.120, not 172.160).",
+            "reason": "batch_3_audit_placeholder_fix"
           }
         ]
       },
@@ -1930,18 +2148,18 @@
       ],
       "CUI": "C0891914",
       "category": "flow_agent",
-      "mechanism_of_harm": "Calcium salt of lauric acid used as flow agent and lubricant in supplement manufacturing. Similar function to magnesium stearate but less studied. Minimal direct toxicity but may affect dissolution rate and nutrient absorption.",
+      "mechanism_of_harm": "Calcium salt of lauric acid (C12 medium-chain fatty acid) used as flow agent and lubricant in supplement manufacturing. Similar function to magnesium stearate but less studied. Forms a hydrophobic film that may slow tablet dissolution. Minimal direct toxicity at typical supplement levels. Lauric acid itself is a naturally occurring fatty acid found in coconut oil.",
       "regulatory_status": {
-        "US": "FDA GRAS",
-        "EU": "Allowed",
-        "WHO": "No specific ADI"
+        "US": "FDA GRAS as processing aid",
+        "EU": "Allowed as food additive",
+        "WHO": "No specific ADI established"
       },
       "population_warnings": [
-        "People with fat absorption issues - May slow dissolution"
+        "People with fat malabsorption syndromes \u2014 laurate coating may slow dissolution of active ingredients"
       ],
-      "notes": "Flow agent used to prevent ingredients from sticking to manufacturing equipment. Less common alternative to magnesium stearate. Minimal safety concerns at typical supplement levels.",
+      "notes": "A calcium-based flow agent used to prevent ingredients from sticking to manufacturing equipment. Less common alternative to magnesium stearate. Lauric acid is a naturally occurring fatty acid (found in coconut oil). Minimal safety concerns at typical supplement levels. Presence indicates use of manufacturing lubricants.",
       "scientific_references": [],
-      "last_updated": "2026-02-18",
+      "last_updated": "2026-02-26",
       "match_rules": {
         "match_mode": "alias_and_fuzzy",
         "label_tokens": [
@@ -1957,14 +2175,13 @@
       },
       "references_structured": [
         {
-          "type": "regulatory",
-          "title": "FDA GRAS status - calcium laurate as food additive",
-          "url": "",
+          "type": "regulatory_action",
+          "authority": "FDA",
+          "citation": "FDA GRAS status - calcium laurate as processing aid",
+          "url": null,
+          "published_date": null,
           "evidence_grade": "R",
-          "confidence": "low",
-          "supports_claims": [
-            "regulatory_status"
-          ]
+          "confidence": "low"
         }
       ],
       "external_ids": {
@@ -2017,6 +2234,11 @@
             "date": "2026-02-18",
             "change": "Initial entry added from unmapped ingredient audit",
             "reason": "unmapped_ingredient_coverage"
+          },
+          {
+            "date": "2026-02-26",
+            "change": "Rewrote notes and mechanism_of_harm for consumer UI (added lauric acid C12 context). Improved population_warnings specificity. Fixed refs_structured schema (removed non-standard fields).",
+            "reason": "batch_3_audit_cleanup"
           }
         ]
       },
@@ -2035,48 +2257,63 @@
         "calcium silicate",
         "E552",
         "calcium metasilicate",
-        "sodium aluminum silicate"
+        "CAS 1344-95-2"
       ],
       "CUI": "C0054483",
       "category": "anti_caking_agent",
-      "mechanism_of_harm": "FDA GRAS anti-caking agent (21 CFR 182.2227). Also permitted food additive (21 CFR 172.410, max 2% by weight). Generally safe. May interfere with mineral absorption at high doses. Presence signals use of flow agents.",
+      "mechanism_of_harm": "Inert calcium silicate used as anti-caking and flow agent. FDA GRAS (21 CFR 182.2227) and permitted food additive (21 CFR 172.410, max 2% by weight). At high doses, insoluble silicate may physically interfere with mineral absorption in the GI tract. Generally considered safe at typical supplement levels. Does NOT contain aluminum (unlike sodium aluminum silicate, E554, which is a different compound).",
       "regulatory_status": {
-        "US": "FDA GRAS (21 CFR 182.2227) + Food Additive (21 CFR 172.410, max 2%)",
-        "EU": "E552, quantum satis",
-        "WHO": "JECFA: not limited"
+        "US": "FDA GRAS (21 CFR 182.2227) + Food Additive (21 CFR 172.410, max 2% by weight)",
+        "EU": "E552 authorized, quantum satis (no numerical limit)",
+        "WHO": "JECFA: ADI not limited"
       },
-      "population_warnings": [],
-      "notes": "FDA GRAS anti-caking agent. Moved from banned_recalled to harmful_additives (2026-02-18) after dual FDA listing confirmed (GRAS + food additive).",
-      "scientific_references": [
-        "21 CFR 182.2227 - FDA GRAS listing",
-        "21 CFR 172.410 - Food additive listing"
+      "population_warnings": [
+        "People with impaired kidney function \u2014 reduced silicate clearance at very high intakes (theoretical)"
       ],
-      "last_updated": "2026-02-18",
+      "notes": "An FDA GRAS anti-caking agent commonly used in supplement powders and tablets. Dual FDA listing (GRAS + food additive, max 2%). EU-authorized as E552. Generally considered safe. Presence indicates use of standard manufacturing flow agents. Not to be confused with sodium aluminum silicate (E554), which contains aluminum.",
+      "scientific_references": [
+        "21 CFR 182.2227 - FDA GRAS listing for calcium silicate",
+        "21 CFR 172.410 - FDA food additive listing, max 2% by weight"
+      ],
+      "last_updated": "2026-02-26",
       "match_rules": {
         "match_mode": "alias_and_fuzzy",
         "label_tokens": [
           "Calcium Silicate",
           "calcium silicate",
           "E552",
-          "sodium aluminum silicate"
+          "calcium metasilicate",
+          "CAS 1344-95-2"
         ],
+        "regex": null,
         "fuzzy_threshold": 0.85,
+        "case_sensitive": false,
         "preferred_alias": "Calcium Silicate"
       },
       "references_structured": [
         {
-          "type": "regulatory",
-          "title": "Regulatory status documentation for Calcium Silicate",
-          "url": "",
+          "type": "regulatory_action",
+          "authority": "FDA",
+          "citation": "21 CFR 182.2227 - Calcium silicate GRAS listing",
+          "url": "https://www.ecfr.gov/current/title-21/section-182.2227",
+          "published_date": null,
           "evidence_grade": "R",
-          "confidence": "low",
-          "supports_claims": [
-            "regulatory_status"
-          ]
+          "confidence": "high"
+        },
+        {
+          "type": "regulatory_action",
+          "authority": "FDA",
+          "citation": "21 CFR 172.410 - Calcium silicate food additive, max 2% by weight",
+          "url": "https://www.ecfr.gov/current/title-21/section-172.410",
+          "published_date": null,
+          "evidence_grade": "R",
+          "confidence": "high"
         }
       ],
       "external_ids": {
-        "CAS": "1344-95-2"
+        "umls_cui": "C0054483",
+        "cas": "1344-95-2",
+        "pubchem": null
       },
       "jurisdictional_statuses": [
         {
@@ -2101,6 +2338,11 @@
             "date": "2026-02-18",
             "change": "Moved from banned_recalled to harmful_additives",
             "reason": "FDA GRAS confirmed (21 CFR 182.2227)"
+          },
+          {
+            "date": "2026-02-26",
+            "change": "CRITICAL: Removed incorrect alias 'sodium aluminum silicate' (E554 \u2014 different compound). Fixed external_ids schema (CAS\u2192cas, added umls_cui/pubchem keys). Rewrote notes for consumer UI. Added population_warnings. Synced label_tokens with corrected aliases. Added structured references for both CFR sections.",
+            "reason": "batch_3_audit_critical_alias_fix"
           }
         ]
       },
@@ -2133,16 +2375,16 @@
         "WHO": "IARC Group 2B (possibly carcinogenic via inhalation)"
       },
       "population_warnings": [
-        "Everyone - Contains titanium dioxide nanoparticles",
-        "Children - Higher nanoparticle exposure per body weight",
-        "People with GI conditions - Nanoparticle accumulation concern"
+        "Everyone \u2014 contains titanium dioxide nanoparticles with uncertain long-term safety",
+        "Children \u2014 higher nanoparticle exposure per kg body weight",
+        "People with GI conditions \u2014 nanoparticle accumulation concern in gut tissues"
       ],
-      "notes": "Pearlescent coating pigment made of mica coated with titanium dioxide. Used solely for aesthetic purposes. TiO2 component banned in EU food products since 2022 due to EFSA genotoxicity assessment. Provides no nutritional or functional benefit.",
+      "notes": "A pearlescent coating pigment made of mica (potassium aluminum silicate) coated with titanium dioxide (TiO2). Used solely for aesthetic appearance with no nutritional benefit. \u26a0\ufe0f BANNED in EU: The TiO2 component (E171) was banned in EU food products in 2022 after EFSA concluded genotoxicity concerns could not be ruled out. Still permitted in US supplements.",
       "scientific_references": [
         "DOI: 10.2903/j.efsa.2021.6585 - EFSA safety assessment of TiO2 (E 171)",
         "DOI: 10.1016/j.fct.2020.111814 - TiO2 nanoparticle gut accumulation"
       ],
-      "last_updated": "2026-02-18",
+      "last_updated": "2026-02-26",
       "match_rules": {
         "match_mode": "alias_and_fuzzy",
         "label_tokens": [
@@ -2152,7 +2394,8 @@
           "candurin silver fine",
           "candurin silver lustre",
           "mica-based pearlescent pigment",
-          "potassium aluminum silicate-based colorant"
+          "potassium aluminum silicate-based colorant",
+          "pearlescent pigment"
         ],
         "regex": null,
         "fuzzy_threshold": 0.72,
@@ -2229,6 +2472,11 @@
             "date": "2026-02-18",
             "change": "Initial entry added from unmapped ingredient audit",
             "reason": "unmapped_ingredient_coverage"
+          },
+          {
+            "date": "2026-02-26",
+            "change": "Polished notes to emphasize EU TiO2 (E171) ban (2022). Improved population_warnings formatting (em-dashes). Added 'pearlescent pigment' to label_tokens.",
+            "reason": "batch_4_audit_ban_notation"
           }
         ]
       },
@@ -2260,12 +2508,12 @@
         "WHO": "No specific ADI"
       },
       "population_warnings": [
-        "People with diabetes - Added sugar",
-        "People monitoring sugar intake - Hidden sugar source"
+        "People with diabetes \u2014 added sugar contributes to glycemic load",
+        "People monitoring sugar intake \u2014 hidden sugar source in supplement"
       ],
-      "notes": "Byproduct of sugar refining process. Contains trace minerals but primarily functions as added sugar in supplement context. Better mineral profile than refined sugar but still a low-quality sweetener signal.",
+      "notes": "A byproduct of sugar cane refining. Contains trace minerals (iron, calcium, potassium) but primarily functions as added sugar. Blackstrap molasses has the highest mineral content. Not banned anywhere. Low-quality sweetener signal in supplements.",
       "scientific_references": [],
-      "last_updated": "2026-02-18",
+      "last_updated": "2026-02-26",
       "match_rules": {
         "match_mode": "alias_and_fuzzy",
         "label_tokens": [
@@ -2284,14 +2532,13 @@
       },
       "references_structured": [
         {
-          "type": "regulatory",
-          "title": "FDA GRAS status - cane molasses as natural sweetener",
-          "url": "",
+          "type": "regulatory_action",
+          "authority": "FDA",
+          "citation": "FDA GRAS status - cane molasses as natural sweetener",
+          "url": null,
+          "published_date": null,
           "evidence_grade": "R",
-          "confidence": "medium",
-          "supports_claims": [
-            "regulatory_status"
-          ]
+          "confidence": "medium"
         }
       ],
       "external_ids": {
@@ -2344,6 +2591,11 @@
             "date": "2026-02-18",
             "change": "Initial entry added from unmapped ingredient audit",
             "reason": "unmapped_ingredient_coverage"
+          },
+          {
+            "date": "2026-02-26",
+            "change": "Fixed refs_structured schema (removed non-standard fields, empty URL\u2192null). Polished notes and population_warnings (em-dashes).",
+            "reason": "batch_4_audit_cleanup"
           }
         ]
       },
@@ -2368,26 +2620,25 @@
         "organic cane sugar",
         "raw cane sugar",
         "unrefined cane sugar",
-        "dehydrated cane juice",
-        "coconut palm sugar"
+        "dehydrated cane juice"
       ],
       "CUI": "C0038636",
       "category": "sweetener",
-      "mechanism_of_harm": "Added sugar in supplement formulation with no nutritional benefit. Contributes to caloric intake and glycemic load. FDA considers 'evaporated cane juice' a misleading term for sugar. Signals lower manufacturing quality standards.",
+      "mechanism_of_harm": "Added sugar (sucrose) in supplement formulation with no nutritional benefit beyond calories. Contributes to glycemic load. FDA considers 'evaporated cane juice' a misleading term that should be labeled as 'sugar'. Signals lower manufacturing quality standards.",
       "regulatory_status": {
         "US": "FDA GRAS (sugar)",
         "EU": "Allowed",
-        "WHO": "WHO recommends limiting added sugars to <10% daily calories"
+        "WHO": "WHO recommends limiting added sugars to <10% of daily calories"
       },
       "population_warnings": [
-        "People with diabetes - Added sugar contributes to glycemic load",
-        "People monitoring sugar intake - Hidden sugar source"
+        "People with diabetes \u2014 added sugar contributes to glycemic load",
+        "People monitoring sugar intake \u2014 hidden sugar source in supplement"
       ],
-      "notes": "Added sugar used as sweetener or binder in supplement formulations. FDA issued guidance that 'evaporated cane juice' is misleading and should be labeled as 'sugar'. Low-quality formulation signal.",
+      "notes": "Added sugar used as sweetener or binder in supplement formulations. FDA issued guidance (2016) that 'evaporated cane juice' is misleading and should be labeled as 'sugar'. Not banned anywhere. Low-quality formulation signal.",
       "scientific_references": [
-        "FDA Guidance: Use of 'Evaporated Cane Juice' - 2016"
+        "FDA Draft Guidance: Ingredients Declared as Evaporated Cane Juice - 2016"
       ],
-      "last_updated": "2026-02-18",
+      "last_updated": "2026-02-26",
       "match_rules": {
         "match_mode": "alias_and_fuzzy",
         "label_tokens": [
@@ -2401,8 +2652,7 @@
           "organic cane sugar",
           "raw cane sugar",
           "unrefined cane sugar",
-          "dehydrated cane juice",
-          "coconut palm sugar"
+          "dehydrated cane juice"
         ],
         "regex": null,
         "fuzzy_threshold": 0.72,
@@ -2470,6 +2720,11 @@
             "date": "2026-02-18",
             "change": "Initial entry added from unmapped ingredient audit",
             "reason": "unmapped_ingredient_coverage"
+          },
+          {
+            "date": "2026-02-26",
+            "change": "Removed 'coconut palm sugar' from aliases and label_tokens (different product from cane sugar). Polished notes and population_warnings (em-dashes).",
+            "reason": "batch_4_audit_alias_correction"
           }
         ]
       },
@@ -2491,21 +2746,27 @@
         "low erucic acid rapeseed oil",
         "LEAR oil",
         "canola oil",
-        "trace amounts of canola oil"
+        "trace amounts of canola oil",
+        "CAS 8002-13-9"
       ],
       "category": "fat_processed",
-      "notes": "Highly processed oil prone to oxidation. Often from GMO sources. High-heat processing may create trans fats and lipid oxidation products. Omega-6 heavy. Prefer cold-pressed or avoid.",
-      "last_updated": "2026-02-16",
+      "notes": "A highly refined vegetable oil used as a carrier or softgel fill in supplements. High-heat refining (deodorization at 200\u2013270\u00b0C) may generate lipid oxidation products and trace trans fats. Predominantly omega-6 linoleic acid; chronic high intake may shift omega-6/omega-3 balance. Not banned anywhere. Quality concern rather than acute toxicity.",
+      "last_updated": "2026-02-26",
       "CUI": "C0054846",
-      "mechanism_of_harm": "Mechanism requires further documentation.",
+      "mechanism_of_harm": "Refined canola oil undergoes high-heat processing (bleaching, deodorization at 200\u2013270\u00b0C) that may generate lipid oxidation products (aldehydes, peroxides) and trace trans fatty acids. High omega-6 content (~20% linoleic acid) may contribute to pro-inflammatory eicosanoid pathways when dietary omega-6/omega-3 ratio is already elevated. Modern canola is bred for low erucic acid (<2%) to avoid cardiotoxicity concerns of traditional rapeseed. Primarily a quality/formulation signal rather than acute harm.",
       "regulatory_status": {
-        "US": "Status pending review",
-        "EU": "Status pending review"
+        "US": "FDA GRAS. Qualified health claim allowed for reduced saturated fat (21 CFR 101.83).",
+        "EU": "Allowed. Low erucic acid rapeseed oil authorized; erucic acid limit 2% of total fatty acids (Reg 2019/649).",
+        "WHO": "No specific ADI. WHO recommends balanced omega-6/omega-3 intake."
       },
       "population_warnings": [
-        "General population - review specific concerns"
+        "People with inflammatory conditions \u2014 high omega-6 intake may promote pro-inflammatory pathways",
+        "People concerned about oxidation products \u2014 refined oils contain aldehydes from high-heat processing"
       ],
-      "scientific_references": [],
+      "scientific_references": [
+        "DOI: 10.1016/j.fct.2017.07.055 - Aldehydes in heated cooking oils",
+        "EU Reg 2019/649 - Erucic acid limits in food"
+      ],
       "match_rules": {
         "match_mode": "alias_and_fuzzy",
         "label_tokens": [
@@ -2516,7 +2777,8 @@
           "low erucic acid rapeseed oil",
           "LEAR oil",
           "canola oil",
-          "trace amounts of canola oil"
+          "trace amounts of canola oil",
+          "CAS 8002-13-9"
         ],
         "regex": null,
         "fuzzy_threshold": 0.72,
@@ -2535,7 +2797,7 @@
       ],
       "external_ids": {
         "umls_cui": "C0054846",
-        "cas": null,
+        "cas": "8002-13-9",
         "pubchem": null
       },
       "jurisdictional_statuses": [
@@ -2602,6 +2864,11 @@
             "date": "2026-02-16",
             "change": "Normalized aliases/label_tokens and reduced overlap collisions for deterministic supplement matching",
             "reason": "schema_consistency_and_precision"
+          },
+          {
+            "date": "2026-02-26",
+            "change": "Replaced placeholder mechanism_of_harm with omega-6/oxidation data. Replaced placeholder regulatory_status with FDA GRAS/EU erucic acid limits/WHO guidance. Replaced generic population_warnings with inflammation/oxidation specifics. Rewrote notes for consumer UI. Added CAS 8002-13-9.",
+            "reason": "batch_4_audit_placeholder_fix"
           }
         ]
       },
@@ -2645,16 +2912,16 @@
         "WHO": "JECFA ADI for 4-MEI is 0.2 mg/kg body weight"
       },
       "population_warnings": [
-        "Everyone - Potential carcinogen exposure from 4-MEI",
-        "Children - Higher exposure per body weight",
-        "People consuming cola beverages - High 4-MEI exposure"
+        "Everyone \u2014 Class III/IV types contain 4-MEI, a potential carcinogen",
+        "Children \u2014 higher 4-MEI exposure per kg body weight",
+        "People consuming multiple cola products \u2014 cumulative 4-MEI exposure"
       ],
-      "notes": "Some types (Class III and IV) are produced with ammonia and may contain 4-methylimidazole (4-MEI), a potential carcinogen. California Prop 65 requires warning labels for products with >29 mcg 4-MEI per day. Class I and II are safer alternatives.",
+      "notes": "A coloring agent with four classes (I\u2013IV). Class III (E150c) and Class IV (E150d) are produced with ammonia and may contain 4-methylimidazole (4-MEI), classified as possibly carcinogenic. California Prop 65 requires warning labels for products with >29 \u03bcg 4-MEI/day. Not banned anywhere, but monitored. Class I (E150a) and II (E150b) are safer alternatives.",
       "scientific_references": [
-        "DOI: 10.1016/j.fct.2012.06.052 - 4-MEI carcinogenicity",
-        "DOI: 10.1021/jf204398u - 4-MEI in beverages"
+        "DOI: 10.1016/j.fct.2012.06.052 - 4-MEI carcinogenicity in rodents",
+        "DOI: 10.1021/jf204398u - 4-MEI levels in beverages"
       ],
-      "last_updated": "2026-02-16",
+      "last_updated": "2026-02-26",
       "match_rules": {
         "match_mode": "alias_and_fuzzy",
         "label_tokens": [
@@ -2773,6 +3040,11 @@
             "date": "2026-02-16",
             "change": "Normalized aliases/label_tokens and reduced overlap collisions for deterministic supplement matching",
             "reason": "schema_consistency_and_precision"
+          },
+          {
+            "date": "2026-02-26",
+            "change": "Polished notes (Class I–IV explanation, Prop 65 μg notation) and population_warnings (em-dashes). Removed non-standard cui_note field (contained: 'CUI needs UMLS Metathesaurus verification for caramel coloring').",
+            "reason": "batch_4_audit_schema_cleanup"
           }
         ]
       },
@@ -2782,8 +3054,7 @@
       "entity_type": "ingredient",
       "severity_level": "moderate",
       "dose_thresholds": null,
-      "entity_relationships": null,
-      "cui_note": "CUI needs UMLS Metathesaurus verification for caramel coloring."
+      "entity_relationships": null
     },
     {
       "id": "ADD_CARBOXYMETHYLCELLULOSE",
@@ -2798,7 +3069,8 @@
         "NaCMC",
         "modified cellulose",
         "cellulose glycolate",
-        "carboxymethylcellulose gum"
+        "carboxymethylcellulose gum",
+        "CAS 9004-32-4"
       ],
       "CUI": "C0007068",
       "category": "emulsifier_thickener",
@@ -2809,15 +3081,15 @@
         "WHO": "JECFA: ADI not specified"
       },
       "population_warnings": [
-        "People with IBD/IBS - monitor GI tolerance",
-        "Children with high processed-food intake - cumulative exposure consideration"
+        "People with IBD/IBS \u2014 monitor GI tolerance at high cumulative intake",
+        "Children with high processed-food intake \u2014 cumulative exposure consideration"
       ],
-      "notes": "Low-concern excipient at typical supplement levels; keep as additive-quality signal, not banned-substance trigger.",
+      "notes": "A cellulose-derived thickener and stabilizer used in supplement capsules and formulations. FDA GRAS status. Recent controlled-feeding studies suggest high chronic intake may affect gut microbiome, but typical supplement excipient doses are much lower than study levels. Not banned anywhere. Low-concern quality signal.",
       "scientific_references": [
         "21 CFR 182.1745 - GRAS status for sodium CMC",
         "PMID: 34774538 - human controlled feeding CMC study"
       ],
-      "last_updated": "2026-02-17",
+      "last_updated": "2026-02-26",
       "match_rules": {
         "match_mode": "alias_and_fuzzy",
         "label_tokens": [
@@ -2831,7 +3103,8 @@
           "NaCMC",
           "modified cellulose",
           "cellulose glycolate",
-          "carboxymethylcellulose gum"
+          "carboxymethylcellulose gum",
+          "CAS 9004-32-4"
         ],
         "regex": null,
         "fuzzy_threshold": 0.72,
@@ -2858,7 +3131,7 @@
       ],
       "external_ids": {
         "umls_cui": "C0007068",
-        "cas": null,
+        "cas": "9004-32-4",
         "pubchem": null
       },
       "jurisdictional_statuses": [
@@ -2906,6 +3179,11 @@
             "date": "2026-02-17",
             "change": "Added CMC to harmful_additives as low severity for additive-path scoring.",
             "reason": "B0 policy split for excipient false-positive reduction"
+          },
+          {
+            "date": "2026-02-26",
+            "change": "Polished notes for consumer UI. Fixed population_warnings (em-dashes). Added CAS 9004-32-4.",
+            "reason": "batch_5_audit_cleanup"
           }
         ]
       },
@@ -2927,21 +3205,28 @@
         "natural red 4",
         "e120",
         "crimson lake",
-        "carmine lake"
+        "carmine lake",
+        "CAS 1390-65-4"
       ],
       "category": "colorant_natural",
-      "notes": "Natural red colorant derived from cochineal insects. While FDA approved, poses contamination risks from insect-derived proteins. Processing quality varies significantly. Can contain undeclared allergens and contaminants.",
-      "last_updated": "2026-02-16",
+      "notes": "A natural red colorant (E120) derived from dried female cochineal insects (*Dactylopius coccus*). Contains carminic acid, which can trigger IgE-mediated allergic reactions ranging from urticaria to anaphylaxis. ⚠️ FDA MANDATE: Since 2009, FDA requires explicit labeling of 'cochineal extract' or 'carmine' (21 CFR 73.100) due to severe allergic reactions. Not banned anywhere, but allergenic. Quality concern for sensitive individuals.",
+      "last_updated": "2026-02-26",
       "CUI": "C0006980",
-      "mechanism_of_harm": "Mechanism requires further documentation.",
+      "mechanism_of_harm": "Carmine contains carminic acid and insect-derived proteins that can trigger IgE-mediated hypersensitivity reactions. Documented cases include urticaria, angioedema, bronchospasm, and anaphylaxis. Cross-reactivity with other insect allergens possible. FDA issued mandatory labeling rule in 2009 after multiple severe allergic reactions were reported. Allergenicity varies with processing quality and protein content.",
       "regulatory_status": {
-        "US": "Status pending review",
-        "EU": "Status pending review"
+        "US": "FDA approved as color additive (21 CFR 73.100). Mandatory allergen labeling required since 2009.",
+        "EU": "E120 approved with purity criteria. Allergen labeling required.",
+        "WHO": "JECFA ADI 0-5 mg/kg body weight (as carminic acid)"
       },
       "population_warnings": [
-        "General population - review specific concerns"
+        "People with insect allergies \u2014 may trigger IgE-mediated anaphylaxis",
+        "People with asthma \u2014 increased risk of bronchospasm",
+        "Children with atopic conditions \u2014 higher allergic reaction risk"
       ],
-      "scientific_references": [],
+      "scientific_references": [
+        "21 CFR 73.100 - FDA mandatory labeling for cochineal extract/carmine (2009)",
+        "DOI: 10.1016/j.anai.2009.03.011 - Anaphylaxis to carmine colorant"
+      ],
       "match_rules": {
         "match_mode": "alias_and_fuzzy",
         "label_tokens": [
@@ -2952,7 +3237,8 @@
           "natural red 4",
           "e120",
           "crimson lake",
-          "carmine lake"
+          "carmine lake",
+          "CAS 1390-65-4"
         ],
         "regex": null,
         "fuzzy_threshold": 0.72,
@@ -2963,15 +3249,25 @@
         {
           "type": "regulatory_action",
           "authority": "FDA",
-          "citation": "FDA Food Additive Status List - Carmine (E120) (21 CFR 73.100)",
-          "url": "https://www.fda.gov/food/food-additives-petitions/food-additive-status-list",
-          "evidence_grade": "B",
+          "citation": "21 CFR 73.100 - Mandatory labeling for cochineal extract/carmine (2009)",
+          "url": "https://www.ecfr.gov/current/title-21/section-73.100",
+          "published_date": "2009-01-05",
+          "evidence_grade": "R",
+          "confidence": "high"
+        },
+        {
+          "type": "clinical_trial",
+          "authority": "OTHER",
+          "citation": "DOI: 10.1016/j.anai.2009.03.011 - Anaphylaxis to carmine colorant",
+          "url": "https://doi.org/10.1016/j.anai.2009.03.011",
+          "published_date": null,
+          "evidence_grade": "C",
           "confidence": "high"
         }
       ],
       "external_ids": {
         "umls_cui": "C0006980",
-        "cas": null,
+        "cas": "1390-65-4",
         "pubchem": null
       },
       "jurisdictional_statuses": [
@@ -3038,6 +3334,11 @@
             "date": "2026-02-16",
             "change": "Normalized aliases/label_tokens and reduced overlap collisions for deterministic supplement matching",
             "reason": "schema_consistency_and_precision"
+          },
+          {
+            "date": "2026-02-26",
+            "change": "Replaced placeholder mechanism_of_harm with IgE-mediated hypersensitivity/anaphylaxis data (carminic acid allergen). Replaced placeholder regulatory_status with FDA 21 CFR 73.100 mandatory labeling (2009)/EU E120/WHO JECFA ADI. Replaced generic population_warnings with allergen-specific warnings. Rewrote notes for consumer UI (FDA 2009 mandate). Added CAS 1390-65-4. Added scientific references (FDA 21 CFR 73.100, DOI anaphylaxis study).",
+            "reason": "batch_5_audit_placeholder_fix"
           }
         ]
       },
@@ -3070,11 +3371,11 @@
         "WHO": "No specific concerns"
       },
       "population_warnings": [
-        "People with legume allergies - Carob is a legume"
+        "People with legume allergies \u2014 carob (*Ceratonia siliqua*) is a legume"
       ],
-      "notes": "Natural brown colorant from carob bean. Used purely for aesthetic purposes in supplement formulation. Low safety concern but signals quality-focused vs. cosmetic-focused formulation.",
+      "notes": "A natural brown colorant derived from carob bean (*Ceratonia siliqua*). Used purely for aesthetic purposes with no nutritional benefit. Low safety concern. Not banned anywhere. Signals cosmetic-focused formulation.",
       "scientific_references": [],
-      "last_updated": "2026-02-18",
+      "last_updated": "2026-02-26",
       "match_rules": {
         "match_mode": "alias_and_fuzzy",
         "label_tokens": [
@@ -3094,14 +3395,13 @@
       },
       "references_structured": [
         {
-          "type": "regulatory",
-          "title": "Regulatory status documentation for Carob Color",
-          "url": "",
+          "type": "regulatory_action",
+          "authority": "FDA",
+          "citation": "FDA color additive status - Carob bean extract",
+          "url": null,
+          "published_date": null,
           "evidence_grade": "R",
-          "confidence": "low",
-          "supports_claims": [
-            "regulatory_status"
-          ]
+          "confidence": "low"
         }
       ],
       "external_ids": {
@@ -3154,6 +3454,11 @@
             "date": "2026-02-18",
             "change": "Initial entry added from unmapped ingredient audit",
             "reason": "unmapped_ingredient_coverage"
+          },
+          {
+            "date": "2026-02-26",
+            "change": "Fixed refs_structured schema (removed non-standard fields, empty URL→null). Polished notes and population_warnings (em-dashes, scientific name).",
+            "reason": "batch_5_audit_cleanup"
           }
         ]
       },
@@ -3183,7 +3488,8 @@
         "eucheuma cottonii",
         "red seaweed extract",
         "Carageenan",
-        "carrageenan"
+        "carrageenan",
+        "CAS 9000-07-1"
       ],
       "CUI": "C0007289",
       "category": "emulsifier_thickener",
@@ -3194,18 +3500,18 @@
         "WHO": "JECFA acceptable but notes concerns about degraded forms"
       },
       "population_warnings": [
-        "People with IBD or Crohn's disease - May trigger flares and amplify inflammation",
-        "People with IBS - May worsen symptoms",
-        "People with diabetes or prediabetes - May induce insulin resistance",
-        "Everyone - 2024 research shows inflammatory effects in healthy individuals"
+        "People with IBD or Crohn's disease \u2014 may trigger flares and amplify inflammation",
+        "People with IBS \u2014 may worsen symptoms",
+        "People with diabetes or prediabetes \u2014 may induce insulin resistance",
+        "Everyone \u2014 2024 research shows inflammatory effects in healthy individuals"
       ],
-      "notes": "A seaweed extract used for thickening and emulsifying. UPGRADED TO HIGH RISK based on 2024 clinical research. BMC Medicine study (November 2024) shows moderate carrageenan intake triggers gut inflammation and insulin resistance in healthy young men. December 2024 study shows it amplifies inflammatory profile in IBD patients. Linked to digestive inflammation, bloating, and symptoms resembling IBS.",
+      "notes": "A red seaweed extract (E407/E407a) used for thickening and emulsifying. ⚠️ UPGRADED TO HIGH RISK based on 2024 clinical research. BMC Medicine study (November 2024) shows moderate carrageenan intake triggers gut inflammation and insulin resistance in healthy young men. December 2024 study shows it amplifies inflammatory profile in IBD patients. Not banned anywhere, but mounting evidence of harm. Linked to digestive inflammation, bloating, and IBS-like symptoms.",
       "scientific_references": [
         "DOI: 10.1186/s12916-024-03771-8 - BMC Medicine 2024 clinical study on insulin resistance",
         "DOI: 10.1093/ibdjournal/izae259 - IBD inflammatory effects 2024",
         "DOI: 10.3389/fnut.2024.1387646 - Gut microbiota disruption 2024"
       ],
-      "last_updated": "2026-02-16",
+      "last_updated": "2026-02-26",
       "match_rules": {
         "match_mode": "alias_and_fuzzy",
         "label_tokens": [
@@ -3223,7 +3529,8 @@
           "semi-refined carrageenan",
           "eucheuma cottonii",
           "red seaweed extract",
-          "Carageenan"
+          "Carageenan",
+          "CAS 9000-07-1"
         ],
         "regex": null,
         "fuzzy_threshold": 0.72,
@@ -3270,7 +3577,7 @@
       ],
       "external_ids": {
         "umls_cui": "C0007289",
-        "cas": null,
+        "cas": "9000-07-1",
         "pubchem": null
       },
       "jurisdictional_statuses": [
@@ -3348,6 +3655,11 @@
             "date": "2026-02-16",
             "change": "Normalized aliases/label_tokens and reduced overlap collisions for deterministic supplement matching",
             "reason": "schema_consistency_and_precision"
+          },
+          {
+            "date": "2026-02-26",
+            "change": "Polished notes (E407/E407a notation, 2024 research emphasis). Fixed population_warnings (em-dashes). Added CAS 9000-07-1.",
+            "reason": "batch_5_audit_cleanup"
           }
         ]
       },
@@ -3644,9 +3956,7 @@
         "US": "Status pending review",
         "EU": "Status pending review"
       },
-      "population_warnings": [
-        "General population - review specific concerns"
-      ],
+      "population_warnings": ["General population - review specific concerns"],
       "scientific_references": [],
       "match_rules": {
         "match_mode": "alias_and_fuzzy",
@@ -3787,9 +4097,7 @@
         "US": "Status pending review",
         "EU": "Status pending review"
       },
-      "population_warnings": [
-        "General population - review specific concerns"
-      ],
+      "population_warnings": ["General population - review specific concerns"],
       "scientific_references": [],
       "match_rules": {
         "match_mode": "alias_and_fuzzy",
@@ -3913,11 +4221,7 @@
     {
       "id": "ADD_CORN_OIL",
       "standard_name": "Corn Oil (Refined)",
-      "aliases": [
-        "refined corn oil",
-        "maize oil",
-        "corn oil refined"
-      ],
+      "aliases": ["refined corn oil", "maize oil", "corn oil refined"],
       "category": "fat_processed",
       "notes": "Highly refined oil with high omega-6 content. Often from GMO corn. Prone to oxidation. May contain pesticide residues. Prefer unrefined oils or avoid in supplements.",
       "last_updated": "2026-02-16",
@@ -3927,9 +4231,7 @@
         "US": "Status pending review",
         "EU": "Status pending review"
       },
-      "population_warnings": [
-        "General population - review specific concerns"
-      ],
+      "population_warnings": ["General population - review specific concerns"],
       "scientific_references": [],
       "match_rules": {
         "match_mode": "alias_and_fuzzy",
@@ -4893,9 +5195,7 @@
         "US": "Status pending review",
         "EU": "Status pending review"
       },
-      "population_warnings": [
-        "General population - review specific concerns"
-      ],
+      "population_warnings": ["General population - review specific concerns"],
       "scientific_references": [],
       "match_rules": {
         "match_mode": "alias_and_fuzzy",
@@ -5026,9 +5326,7 @@
         "Not appropriate as supplement ingredient - pharmaceutical drug"
       ],
       "notes": "Docusate sodium is a well-established OTC stool softener drug. Its presence in a product labeled as a dietary supplement represents an FDA compliance violation (drug in supplement). Not inherently dangerous at therapeutic doses, but should not appear in supplements.",
-      "scientific_references": [
-        "FDA OTC Drug Monograph - Laxative Products"
-      ],
+      "scientific_references": ["FDA OTC Drug Monograph - Laxative Products"],
       "last_updated": "2026-02-18",
       "match_rules": {
         "match_mode": "alias_and_fuzzy",
@@ -5050,9 +5348,7 @@
           "url": "",
           "evidence_grade": "R",
           "confidence": "medium",
-          "supports_claims": [
-            "mechanism_of_harm"
-          ]
+          "supports_claims": ["mechanism_of_harm"]
         }
       ],
       "external_ids": {
@@ -5062,10 +5358,10 @@
       },
       "jurisdictional_statuses": [],
       "review": {
-        "status": "reviewed",
+        "status": "validated",
         "cadence": "annual",
-        "reviewed_by": "safety_data_team",
-        "last_reviewed_at": "2026-02-18",
+        "reviewed_by": "source_verified_audit",
+        "last_reviewed_at": "2026-02-26",
         "next_review_due": "2026-08-18"
       },
       "severity_score": 5,
@@ -5098,9 +5394,7 @@
         "US": "Status pending review",
         "EU": "Status pending review"
       },
-      "population_warnings": [
-        "General population - review specific concerns"
-      ],
+      "population_warnings": ["General population - review specific concerns"],
       "scientific_references": [],
       "match_rules": {
         "match_mode": "alias_and_fuzzy",
@@ -5862,9 +6156,7 @@
         "US": "Status pending review",
         "EU": "Status pending review"
       },
-      "population_warnings": [
-        "General population - review specific concerns"
-      ],
+      "population_warnings": ["General population - review specific concerns"],
       "scientific_references": [],
       "match_rules": {
         "match_mode": "alias_and_fuzzy",
@@ -6271,9 +6563,7 @@
           "url": "",
           "evidence_grade": "R",
           "confidence": "low",
-          "supports_claims": [
-            "regulatory_status"
-          ]
+          "supports_claims": ["regulatory_status"]
         }
       ],
       "external_ids": {
@@ -6379,9 +6669,7 @@
           "url": "",
           "evidence_grade": "R",
           "confidence": "low",
-          "supports_claims": [
-            "regulatory_status"
-          ]
+          "supports_claims": ["regulatory_status"]
         }
       ],
       "external_ids": {
@@ -6466,9 +6754,7 @@
         "US": "Status pending review",
         "EU": "Status pending review"
       },
-      "population_warnings": [
-        "General population - review specific concerns"
-      ],
+      "population_warnings": ["General population - review specific concerns"],
       "scientific_references": [],
       "match_rules": {
         "match_mode": "alias_and_fuzzy",
@@ -6733,10 +7019,7 @@
     {
       "id": "ADD_MALTOL",
       "standard_name": "Maltol",
-      "aliases": [
-        "maltol",
-        "3-hydroxy-2-methyl-4H-pyran-4-one"
-      ],
+      "aliases": ["maltol", "3-hydroxy-2-methyl-4H-pyran-4-one"],
       "CUI": "C0065588",
       "category": "flavor_enhancer",
       "mechanism_of_harm": "Flavor enhancer used in small amounts. Primary concern is processed flavoring, not direct toxicity.",
@@ -6751,10 +7034,7 @@
       "last_updated": "2026-02-16",
       "match_rules": {
         "match_mode": "alias_and_fuzzy",
-        "label_tokens": [
-          "Maltol",
-          "3-hydroxy-2-methyl-4H-pyran-4-one"
-        ],
+        "label_tokens": ["Maltol", "3-hydroxy-2-methyl-4H-pyran-4-one"],
         "regex": null,
         "fuzzy_threshold": 0.72,
         "case_sensitive": false,
@@ -6842,9 +7122,7 @@
     {
       "id": "ADD_MALTOTAME",
       "standard_name": "Maltotame",
-      "aliases": [
-        "maltotame"
-      ],
+      "aliases": ["maltotame"],
       "CUI": "",
       "category": "sweetener_artificial",
       "mechanism_of_harm": "High-intensity artificial sweetener. Limited dietary prevalence but still an added sweetener with potential taste and metabolic effects.",
@@ -6859,9 +7137,7 @@
       "last_updated": "2026-02-16",
       "match_rules": {
         "match_mode": "alias_and_fuzzy",
-        "label_tokens": [
-          "Maltotame"
-        ],
+        "label_tokens": ["Maltotame"],
         "regex": null,
         "fuzzy_threshold": 0.72,
         "case_sensitive": false,
@@ -7558,9 +7834,7 @@
         "US": "Status pending review",
         "EU": "Status pending review"
       },
-      "population_warnings": [
-        "General population - review specific concerns"
-      ],
+      "population_warnings": ["General population - review specific concerns"],
       "scientific_references": [],
       "match_rules": {
         "match_mode": "alias_and_fuzzy",
@@ -7692,9 +7966,7 @@
         "US": "Status pending review",
         "EU": "Status pending review"
       },
-      "population_warnings": [
-        "General population - review specific concerns"
-      ],
+      "population_warnings": ["General population - review specific concerns"],
       "scientific_references": [],
       "match_rules": {
         "match_mode": "alias_and_fuzzy",
@@ -8160,11 +8432,7 @@
     {
       "id": "ADD_OCTOPAMINE",
       "standard_name": "Octopamine",
-      "aliases": [
-        "octopamine",
-        "octopamine hcl",
-        "octopamine hydrochloride"
-      ],
+      "aliases": ["octopamine", "octopamine hcl", "octopamine hydrochloride"],
       "CUI": null,
       "category": "stimulant_sympathomimetic",
       "mechanism_of_harm": "Sympathomimetic amine with stimulant cardiovascular effects; may increase blood pressure and heart rate, especially with caffeine/stimulant stacks.",
@@ -8944,11 +9212,7 @@
     {
       "id": "ADD_POLYSORBATE_40",
       "standard_name": "Polysorbate 40",
-      "aliases": [
-        "E434",
-        "tween 40",
-        "polyoxyethylene sorbitan monopalmitate"
-      ],
+      "aliases": ["E434", "tween 40", "polyoxyethylene sorbitan monopalmitate"],
       "category": "emulsifier",
       "notes": "Synthetic emulsifier from sorbitol and palmitic acid. May affect gut microbiome. Less common than polysorbate 80 but similar concerns about potential inflammation and metabolic effects.",
       "last_updated": "2026-02-16",
@@ -8958,9 +9222,7 @@
         "US": "Status pending review",
         "EU": "Status pending review"
       },
-      "population_warnings": [
-        "General population - review specific concerns"
-      ],
+      "population_warnings": ["General population - review specific concerns"],
       "scientific_references": [],
       "match_rules": {
         "match_mode": "alias_and_fuzzy",
@@ -9092,9 +9354,7 @@
         "US": "Status pending review",
         "EU": "Status pending review"
       },
-      "population_warnings": [
-        "General population - review specific concerns"
-      ],
+      "population_warnings": ["General population - review specific concerns"],
       "scientific_references": [],
       "match_rules": {
         "match_mode": "alias_and_fuzzy",
@@ -9340,12 +9600,7 @@
     {
       "id": "ADD_POTASSIUM_HYDROXIDE",
       "standard_name": "Potassium Hydroxide",
-      "aliases": [
-        "potassium hydroxide",
-        "caustic potash",
-        "koh",
-        "potash lye"
-      ],
+      "aliases": ["potassium hydroxide", "caustic potash", "koh", "potash lye"],
       "category": "processing_agent",
       "notes": "CRITICAL: Strong caustic alkali (lye) with corrosive properties. Not GRAS for dietary supplements. May cause severe burns, digestive damage. Should only be used in controlled food processing, not as supplement ingredient.",
       "last_updated": "2026-02-16",
@@ -9355,9 +9610,7 @@
         "US": "Status pending review",
         "EU": "Status pending review"
       },
-      "population_warnings": [
-        "General population - review specific concerns"
-      ],
+      "population_warnings": ["General population - review specific concerns"],
       "scientific_references": [],
       "match_rules": {
         "match_mode": "alias_and_fuzzy",
@@ -9502,11 +9755,7 @@
       "last_updated": "2026-02-18",
       "match_rules": {
         "match_mode": "alias_and_fuzzy",
-        "label_tokens": [
-          "Potassium Sorbate",
-          "potassium sorbate",
-          "E202"
-        ],
+        "label_tokens": ["Potassium Sorbate", "potassium sorbate", "E202"],
         "fuzzy_threshold": 0.85,
         "preferred_alias": "Potassium Sorbate"
       },
@@ -9517,9 +9766,7 @@
           "url": "",
           "evidence_grade": "R",
           "confidence": "low",
-          "supports_claims": [
-            "regulatory_status"
-          ]
+          "supports_claims": ["regulatory_status"]
         }
       ],
       "external_ids": {
@@ -9712,11 +9959,7 @@
     {
       "id": "ADD_PUREFRUIT_SELECT",
       "standard_name": "Purefruit Select",
-      "aliases": [
-        "purefruit select",
-        "purefruit",
-        "pure fruit select"
-      ],
+      "aliases": ["purefruit select", "purefruit", "pure fruit select"],
       "CUI": null,
       "category": "sweetener",
       "mechanism_of_harm": "Proprietary fruit-based sweetener concentrate. While derived from natural sources, still functions as added sugar in supplement formulation. Limited independent safety data for concentrated form.",
@@ -9752,9 +9995,7 @@
           "url": "",
           "evidence_grade": "R",
           "confidence": "low",
-          "supports_claims": [
-            "regulatory_status"
-          ]
+          "supports_claims": ["regulatory_status"]
         }
       ],
       "external_ids": {
@@ -10011,9 +10252,7 @@
           "title": "21 CFR 74.340 FD&C Red No. 40",
           "evidence_grade": "R",
           "url": "https://www.law.cornell.edu/cfr/text/21/74.340",
-          "supports_claims": [
-            "regulatory_status"
-          ],
+          "supports_claims": ["regulatory_status"],
           "evidence_summary": "Authorized U.S. color additive use under specified conditions."
         }
       ],
@@ -10154,9 +10393,7 @@
           "url": "",
           "evidence_grade": "R",
           "confidence": "low",
-          "supports_claims": [
-            "regulatory_status"
-          ]
+          "supports_claims": ["regulatory_status"]
         }
       ],
       "external_ids": {
@@ -10571,10 +10808,7 @@
           "title": "EFSA re-evaluation of silicon dioxide (E 551) follow-up (2024)",
           "evidence_grade": "R",
           "url": "https://www.efsa.europa.eu/en/efsajournal/pub/8880",
-          "supports_claims": [
-            "clinical_context",
-            "regulatory_status"
-          ],
+          "supports_claims": ["clinical_context", "regulatory_status"],
           "evidence_summary": "EFSA concluded E551 does not raise a safety concern at current reported use levels, with noted uncertainties for nanosize considerations."
         }
       ],
@@ -10657,12 +10891,7 @@
     {
       "id": "ADD_SLIMSWEET",
       "standard_name": "SlimSweet",
-      "aliases": [
-        "slimsweet",
-        "slim sweet",
-        "SlimSweet(R)",
-        "Slim Sweet(R)"
-      ],
+      "aliases": ["slimsweet", "slim sweet", "SlimSweet(R)", "Slim Sweet(R)"],
       "CUI": null,
       "category": "sweetener",
       "mechanism_of_harm": "Proprietary sweetener blend with limited publicly available safety data. Proprietary formulations make independent verification of ingredients difficult. May contain undisclosed sweetener compounds.",
@@ -10698,9 +10927,7 @@
           "url": "",
           "evidence_grade": "R",
           "confidence": "low",
-          "supports_claims": [
-            "regulatory_status"
-          ]
+          "supports_claims": ["regulatory_status"]
         }
       ],
       "external_ids": {
@@ -10782,9 +11009,7 @@
         "US": "Status pending review",
         "EU": "Status pending review"
       },
-      "population_warnings": [
-        "General population - review specific concerns"
-      ],
+      "population_warnings": ["General population - review specific concerns"],
       "scientific_references": [],
       "match_rules": {
         "match_mode": "alias_and_fuzzy",
@@ -10948,9 +11173,7 @@
           "url": "",
           "evidence_grade": "R",
           "confidence": "low",
-          "supports_claims": [
-            "regulatory_status"
-          ]
+          "supports_claims": ["regulatory_status"]
         }
       ],
       "external_ids": {
@@ -11129,9 +11352,7 @@
         "US": "Status pending review",
         "EU": "Status pending review"
       },
-      "population_warnings": [
-        "General population - review specific concerns"
-      ],
+      "population_warnings": ["General population - review specific concerns"],
       "scientific_references": [],
       "match_rules": {
         "match_mode": "alias_and_fuzzy",
@@ -11390,9 +11611,7 @@
         "US": "Status pending review",
         "EU": "Status pending review"
       },
-      "population_warnings": [
-        "General population - review specific concerns"
-      ],
+      "population_warnings": ["General population - review specific concerns"],
       "scientific_references": [],
       "match_rules": {
         "match_mode": "alias_and_fuzzy",
@@ -11534,9 +11753,7 @@
         "US": "Status pending review",
         "EU": "Status pending review"
       },
-      "population_warnings": [
-        "General population - review specific concerns"
-      ],
+      "population_warnings": ["General population - review specific concerns"],
       "scientific_references": [],
       "match_rules": {
         "match_mode": "alias_and_fuzzy",
@@ -11675,9 +11892,7 @@
         "US": "Status pending review",
         "EU": "Status pending review"
       },
-      "population_warnings": [
-        "General population - review specific concerns"
-      ],
+      "population_warnings": ["General population - review specific concerns"],
       "scientific_references": [],
       "match_rules": {
         "match_mode": "alias_and_fuzzy",
@@ -11937,11 +12152,7 @@
     {
       "id": "ADD_SORBIC_ACID",
       "standard_name": "Sorbic Acid",
-      "aliases": [
-        "sorbic acid",
-        "E200",
-        "2,4-hexadienoic acid"
-      ],
+      "aliases": ["sorbic acid", "E200", "2,4-hexadienoic acid"],
       "CUI": "C0074739",
       "category": "preservative",
       "mechanism_of_harm": "Synthetic preservative that may cause skin and mucous membrane irritation. Can trigger allergic reactions and contact dermatitis in sensitive individuals. Generally low concern at typical supplement levels but signals non-clean-label formulation.",
@@ -12047,12 +12258,7 @@
     {
       "id": "ADD_SORBITAN_MONOSTEARATE",
       "standard_name": "Sorbitan Monostearate",
-      "aliases": [
-        "E491",
-        "span 60",
-        "sorbitan stearate",
-        "SMS"
-      ],
+      "aliases": ["E491", "span 60", "sorbitan stearate", "SMS"],
       "category": "emulsifier",
       "notes": "Synthetic emulsifier. Generally considered safe but may affect gut barrier function and microbiome in high doses. Commonly used in softgels.",
       "last_updated": "2026-02-16",
@@ -12062,9 +12268,7 @@
         "US": "Status pending review",
         "EU": "Status pending review"
       },
-      "population_warnings": [
-        "General population - review specific concerns"
-      ],
+      "population_warnings": ["General population - review specific concerns"],
       "scientific_references": [],
       "match_rules": {
         "match_mode": "alias_and_fuzzy",
@@ -12181,12 +12385,7 @@
     {
       "id": "ADD_SORBITOL",
       "standard_name": "Sorbitol",
-      "aliases": [
-        "sorbitol",
-        "sorbitol syrup",
-        "D-sorbitol",
-        "E420"
-      ],
+      "aliases": ["sorbitol", "sorbitol syrup", "D-sorbitol", "E420"],
       "CUI": "C0037688",
       "category": "sweetener_sugar_alcohol",
       "mechanism_of_harm": "Sugar alcohol that can cause GI distress (bloating, gas, diarrhea) at higher intakes. Lower glycemic impact but not zero.",
@@ -12203,12 +12402,7 @@
       "last_updated": "2026-02-16",
       "match_rules": {
         "match_mode": "alias_and_fuzzy",
-        "label_tokens": [
-          "Sorbitol",
-          "sorbitol syrup",
-          "D-sorbitol",
-          "E420"
-        ],
+        "label_tokens": ["Sorbitol", "sorbitol syrup", "D-sorbitol", "E420"],
         "regex": null,
         "fuzzy_threshold": 0.72,
         "case_sensitive": false,
@@ -12902,12 +13096,7 @@
     {
       "id": "ADD_SULFUR_DIOXIDE",
       "standard_name": "Sulfur Dioxide",
-      "aliases": [
-        "E220",
-        "SO2",
-        "sulfurous anhydride",
-        "sulphur dioxide"
-      ],
+      "aliases": ["E220", "SO2", "sulfurous anhydride", "sulphur dioxide"],
       "category": "preservative_artificial",
       "notes": "Preservative gas used in dried fruits and some supplements. Potent respiratory irritant. Can trigger asthma attacks and allergic reactions. Must be declared on labels.",
       "last_updated": "2026-02-16",
@@ -12917,9 +13106,7 @@
         "US": "Status pending review",
         "EU": "Status pending review"
       },
-      "population_warnings": [
-        "General population - review specific concerns"
-      ],
+      "population_warnings": ["General population - review specific concerns"],
       "scientific_references": [],
       "match_rules": {
         "match_mode": "alias_and_fuzzy",
@@ -13093,10 +13280,7 @@
           "title": "NIH ODS Vitamin B12 Fact Sheet for Health Professionals",
           "evidence_grade": "R",
           "url": "https://ods.od.nih.gov/factsheets/VitaminB12//",
-          "supports_claims": [
-            "regulatory_status",
-            "clinical_context"
-          ],
+          "supports_claims": ["regulatory_status", "clinical_context"],
           "evidence_summary": "Cyanocobalamin is the most common form of vitamin B12 in dietary supplements."
         }
       ],
@@ -13970,11 +14154,7 @@
     {
       "id": "ADD_THAUMATIN",
       "standard_name": "Thaumatin",
-      "aliases": [
-        "thaumatin",
-        "thaumatin protein",
-        "E957"
-      ],
+      "aliases": ["thaumatin", "thaumatin protein", "E957"],
       "CUI": "C0039656",
       "category": "sweetener_natural",
       "mechanism_of_harm": "Sweet-tasting protein used at very low levels. Generally well-tolerated; primary concern is added sweetness rather than toxicity.",
@@ -13982,19 +14162,13 @@
         "EU": "E957 approved",
         "US": "GRAS status"
       },
-      "population_warnings": [
-        "People avoiding sweeteners - Note presence"
-      ],
+      "population_warnings": ["People avoiding sweeteners - Note presence"],
       "notes": "Sweet protein used as a flavor enhancer/sweetener. Low risk but still an added sweetener.",
       "scientific_references": [],
       "last_updated": "2026-02-16",
       "match_rules": {
         "match_mode": "alias_and_fuzzy",
-        "label_tokens": [
-          "Thaumatin",
-          "thaumatin protein",
-          "E957"
-        ],
+        "label_tokens": ["Thaumatin", "thaumatin protein", "E957"],
         "regex": null,
         "fuzzy_threshold": 0.72,
         "case_sensitive": false,
@@ -14093,12 +14267,7 @@
     {
       "id": "ADD_TIME_SORB",
       "standard_name": "Time-Sorb",
-      "aliases": [
-        "time-sorb",
-        "time sorb",
-        "timesorb",
-        "Time-Sorb(R)"
-      ],
+      "aliases": ["time-sorb", "time sorb", "timesorb", "Time-Sorb(R)"],
       "CUI": null,
       "category": "coating_specialized",
       "mechanism_of_harm": "Proprietary sustained-release coating technology. While designed to improve delivery, proprietary formulations lack independent verification. Coating materials may affect dissolution profile and interact with active ingredients.",
@@ -14134,9 +14303,7 @@
           "url": "",
           "evidence_grade": "R",
           "confidence": "low",
-          "supports_claims": [
-            "regulatory_status"
-          ]
+          "supports_claims": ["regulatory_status"]
         }
       ],
       "external_ids": {
@@ -14225,9 +14392,7 @@
         "US": "Status pending review",
         "EU": "Status pending review"
       },
-      "population_warnings": [
-        "General population - review specific concerns"
-      ],
+      "population_warnings": ["General population - review specific concerns"],
       "scientific_references": [],
       "match_rules": {
         "match_mode": "alias_and_fuzzy",
@@ -14414,9 +14579,7 @@
           "title": "21 CFR 73.575 Titanium dioxide",
           "evidence_grade": "R",
           "url": "https://www.law.cornell.edu/cfr/text/21/73.575",
-          "supports_claims": [
-            "regulatory_status"
-          ],
+          "supports_claims": ["regulatory_status"],
           "evidence_summary": "Authorized U.S. use as color additive under concentration limits."
         },
         {
@@ -14424,9 +14587,7 @@
           "title": "EU Commission Regulation (EU) 2022/63 (E171 ban)",
           "evidence_grade": "R",
           "url": "https://eur-lex.europa.eu/eli/reg/2022/63/oj",
-          "supports_claims": [
-            "regulatory_status"
-          ],
+          "supports_claims": ["regulatory_status"],
           "evidence_summary": "EU removed authorization for titanium dioxide (E171) in foods."
         }
       ],
@@ -14696,9 +14857,7 @@
           "url": "",
           "evidence_grade": "R",
           "confidence": "low",
-          "supports_claims": [
-            "regulatory_status"
-          ]
+          "supports_claims": ["regulatory_status"]
         }
       ],
       "external_ids": {
@@ -14828,9 +14987,7 @@
           "title": "21 CFR 74.705 FD&C Yellow No. 5",
           "evidence_grade": "R",
           "url": "https://www.law.cornell.edu/cfr/text/21/74.705",
-          "supports_claims": [
-            "regulatory_status"
-          ],
+          "supports_claims": ["regulatory_status"],
           "evidence_summary": "Authorized U.S. color additive use under specified conditions."
         }
       ],
@@ -14992,9 +15149,7 @@
           "title": "21 CFR 74.706 FD&C Yellow No. 6",
           "evidence_grade": "R",
           "url": "https://www.law.cornell.edu/cfr/text/21/74.706",
-          "supports_claims": [
-            "regulatory_status"
-          ],
+          "supports_claims": ["regulatory_status"],
           "evidence_summary": "Authorized U.S. color additive use under specified conditions."
         }
       ],

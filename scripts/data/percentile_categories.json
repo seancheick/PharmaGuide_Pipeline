@@ -1,0 +1,294 @@
+{
+  "_metadata": {
+    "description": "Deterministic product cohort categories used for category percentile ranking in scoring output.",
+    "purpose": "Map enriched products into stable percentile cohorts with auditable inference signals.",
+    "schema_version": "4.1.0",
+    "version": "1.0.0",
+    "last_updated": "2026-02-28"
+  },
+  "categories": {
+    "greens_powder": {
+      "label": "Greens Powders",
+      "priority": 20,
+      "required": {
+        "form": [
+          "powder"
+        ]
+      },
+      "evidence": {
+        "name_tokens": {
+          "values": [
+            "green",
+            "greens",
+            "superfood",
+            "supergreen",
+            "superfoods"
+          ],
+          "weight": 3
+        },
+        "canonical_ingredients": {
+          "values": [
+            "wheatgrass",
+            "wheat_grass",
+            "spirulina",
+            "chlorella",
+            "barley_grass",
+            "barley_grass_juice",
+            "alfalfa",
+            "kale",
+            "spinach"
+          ],
+          "min_match": 2,
+          "weight": 2
+        }
+      },
+      "min_evidence_score": 6
+    },
+    "protein_powder": {
+      "label": "Protein Powders",
+      "priority": 10,
+      "required": {
+        "form": [
+          "powder"
+        ]
+      },
+      "evidence": {
+        "name_tokens": {
+          "values": [
+            "protein",
+            "whey",
+            "casein",
+            "isolate",
+            "mass gainer"
+          ],
+          "weight": 3
+        },
+        "canonical_ingredients": {
+          "values": [
+            "whey_protein",
+            "whey_protein_isolate",
+            "whey_protein_concentrate",
+            "pea_protein",
+            "rice_protein",
+            "casein",
+            "micellar_casein",
+            "egg_protein"
+          ],
+          "min_match": 1,
+          "weight": 3
+        }
+      },
+      "min_evidence_score": 5
+    },
+    "pre_workout": {
+      "label": "Pre-Workout",
+      "priority": 15,
+      "required": {
+        "form": [
+          "powder"
+        ]
+      },
+      "evidence": {
+        "name_tokens": {
+          "values": [
+            "pre-workout",
+            "preworkout",
+            "pre workout"
+          ],
+          "weight": 4
+        },
+        "canonical_ingredients": {
+          "values": [
+            "caffeine",
+            "beta_alanine",
+            "citrulline",
+            "l_citrulline",
+            "arginine",
+            "creatine",
+            "taurine"
+          ],
+          "min_match": 2,
+          "weight": 2
+        }
+      },
+      "min_evidence_score": 6
+    },
+    "collagen_powder": {
+      "label": "Collagen Powders",
+      "priority": 30,
+      "required": {
+        "form": [
+          "powder"
+        ]
+      },
+      "evidence": {
+        "name_tokens": {
+          "values": [
+            "collagen"
+          ],
+          "weight": 3
+        },
+        "canonical_ingredients": {
+          "values": [
+            "collagen",
+            "collagen_peptides",
+            "hydrolyzed_collagen",
+            "type_ii_collagen",
+            "bovine_collagen",
+            "marine_collagen"
+          ],
+          "min_match": 1,
+          "weight": 3
+        }
+      },
+      "min_evidence_score": 4
+    },
+    "electrolyte_powder": {
+      "label": "Electrolyte Powders",
+      "priority": 25,
+      "required": {
+        "form": [
+          "powder"
+        ]
+      },
+      "evidence": {
+        "name_tokens": {
+          "values": [
+            "electrolyte",
+            "hydration",
+            "hydrate"
+          ],
+          "weight": 3
+        },
+        "canonical_ingredients": {
+          "values": [
+            "sodium",
+            "potassium",
+            "magnesium",
+            "chloride",
+            "calcium"
+          ],
+          "min_match": 3,
+          "weight": 2
+        }
+      },
+      "min_evidence_score": 5
+    },
+    "fish_oil": {
+      "label": "Fish Oil & Omega-3s",
+      "priority": 40,
+      "required": {},
+      "evidence": {
+        "name_tokens": {
+          "values": [
+            "fish oil",
+            "omega-3",
+            "omega 3",
+            "krill oil",
+            "cod liver"
+          ],
+          "weight": 3
+        },
+        "canonical_ingredients": {
+          "values": [
+            "omega_3",
+            "epa",
+            "dha",
+            "fish_oil",
+            "algae_oil",
+            "krill_oil",
+            "cod_liver_oil"
+          ],
+          "min_match": 1,
+          "weight": 3
+        }
+      },
+      "min_evidence_score": 4
+    },
+    "probiotic": {
+      "label": "Probiotics",
+      "priority": 35,
+      "required": {},
+      "evidence": {
+        "name_tokens": {
+          "values": [
+            "probiotic",
+            "gut health",
+            "digestive flora"
+          ],
+          "weight": 2
+        },
+        "canonical_ingredients": {
+          "values": [
+            "lactobacillus",
+            "bifidobacterium",
+            "bacillus_coagulans",
+            "saccharomyces_boulardii"
+          ],
+          "min_match": 1,
+          "weight": 3
+        },
+        "supplement_types": {
+          "values": [
+            "probiotic"
+          ],
+          "weight": 4
+        }
+      },
+      "min_evidence_score": 4
+    },
+    "multivitamin": {
+      "label": "Multivitamins",
+      "priority": 50,
+      "required": {},
+      "evidence": {
+        "name_tokens": {
+          "values": [
+            "multivitamin",
+            "multi-vitamin",
+            "daily vitamin"
+          ],
+          "weight": 3
+        },
+        "supplement_types": {
+          "values": [
+            "multivitamin"
+          ],
+          "weight": 4
+        },
+        "canonical_ingredients": {
+          "values": [
+            "vitamin_a",
+            "vitamin_c",
+            "vitamin_d",
+            "vitamin_e",
+            "vitamin_b1",
+            "vitamin_b2",
+            "vitamin_b6",
+            "vitamin_b12",
+            "folate",
+            "zinc",
+            "magnesium"
+          ],
+          "min_match": 4,
+          "weight": 1
+        }
+      },
+      "min_evidence_score": 6
+    },
+    "general_supplement": {
+      "label": "General Supplements",
+      "priority": 999,
+      "required": null,
+      "evidence": null,
+      "min_evidence_score": 0,
+      "is_fallback": true
+    }
+  },
+  "classification_rules": {
+    "confidence_threshold": 0.4,
+    "margin_threshold": 2.0,
+    "score_normalizer": 12.0,
+    "tie_break_by": "priority"
+  }
+}

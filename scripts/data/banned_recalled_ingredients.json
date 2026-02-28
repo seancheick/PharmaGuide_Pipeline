@@ -1283,11 +1283,11 @@
       "regulatory_status_enum": null,
       "effective_period": null,
       "review": {
-        "status": "reviewed",
+        "status": "validated",
         "date": "2026-02-18",
         "notes": "v4 schema migration completed. Legal in US, banned internationally.",
-        "last_reviewed_at": "2026-02-23",
-        "reviewed_by": "codex_p3_audit"
+        "last_reviewed_at": "2026-02-26",
+        "reviewed_by": "source_verified_audit"
       },
       "banned_countries": [
         "GB",
@@ -4585,10 +4585,10 @@
         }
       ],
       "review": {
-        "status": "needs_review",
-        "last_reviewed_at": "2026-02-16",
+        "status": "validated",
+        "last_reviewed_at": "2026-02-26",
         "next_review_due": "2026-07-07",
-        "reviewed_by": "migration_script",
+        "reviewed_by": "source_verified_audit",
         "change_log": [
           {
             "date": "2026-01-08",
@@ -4818,10 +4818,10 @@
         }
       ],
       "review": {
-        "status": "needs_review",
-        "last_reviewed_at": "2026-02-16",
+        "status": "validated",
+        "last_reviewed_at": "2026-02-26",
         "next_review_due": "2026-07-07",
-        "reviewed_by": "migration_script",
+        "reviewed_by": "source_verified_audit",
         "change_log": [
           {
             "date": "2026-01-08",
@@ -5047,10 +5047,10 @@
         }
       ],
       "review": {
-        "status": "needs_review",
-        "last_reviewed_at": "2026-02-16",
+        "status": "validated",
+        "last_reviewed_at": "2026-02-26",
         "next_review_due": "2026-07-07",
-        "reviewed_by": "migration_script",
+        "reviewed_by": "source_verified_audit",
         "change_log": [
           {
             "date": "2026-01-08",
@@ -7354,7 +7354,7 @@
         "FDA": "Ongoing enforcement against contaminated compounded GLP-1 products"
       },
       "category": "contaminant_pharmaceutical",
-      "severity_level": "moderate",
+      "severity_level": "critical",
       "fda_warning": true,
       "notes": "Multiple Class II recalls for contaminated compounding pharmacy GLP-1 products (2024-2025). Risk of serious infections from non-sterile preparations. FDA warning against non-FDA approved compounded versions. Only use FDA-approved products (Ozempic, Wegovy, Mounjaro, Zepbound). [normalized_non_iso_dates: banned_date_raw=2025-ongoing; ban_effective_date_raw=2025-ongoing] [reclassified_2026-02-16: non-federal high-risk/restricted ingredient downgraded to moderate to avoid false UNSAFE; keep as caution-level signal]",
       "scientific_references": [
@@ -7489,10 +7489,10 @@
         "notes": "2025-ongoing"
       },
       "review": {
-        "status": "needs_review",
-        "last_reviewed_at": "2026-02-16",
+        "status": "validated",
+        "last_reviewed_at": "2026-02-26",
         "next_review_due": "2026-07-07",
-        "reviewed_by": "migration_script",
+        "reviewed_by": "source_verified_audit",
         "change_log": [
           {
             "date": "2026-01-08",
@@ -8697,10 +8697,10 @@
         "notes": null
       },
       "review": {
-        "status": "needs_review",
-        "last_reviewed_at": "2026-02-16",
+        "status": "validated",
+        "last_reviewed_at": "2026-02-26",
         "next_review_due": "2026-07-07",
-        "reviewed_by": "migration_script",
+        "reviewed_by": "source_verified_audit",
         "change_log": [
           {
             "date": "2026-01-08",
@@ -10061,10 +10061,10 @@
         "notes": null
       },
       "review": {
-        "status": "needs_review",
-        "last_reviewed_at": "2026-02-16",
+        "status": "validated",
+        "last_reviewed_at": "2026-02-26",
         "next_review_due": "2026-07-07",
-        "reviewed_by": "migration_script",
+        "reviewed_by": "source_verified_audit",
         "change_log": [
           {
             "date": "2026-01-08",
@@ -10798,7 +10798,7 @@
       "banned_by": "FDA",
       "reason": "Unapproved drug, does not meet supplement definition",
       "category": "nootropic",
-      "severity_level": "critical",
+      "severity_level": "high",
       "fda_warning": true,
       "notes": "Synthetic compound developed in Russia as pharmaceutical drug.",
       "last_updated": "2026-01-05",
@@ -10840,7 +10840,7 @@
         "confidence": "high",
         "negative_match_terms": []
       },
-      "legal_status_enum": "banned_federal",
+      "legal_status_enum": "not_lawful_as_supplement",
       "clinical_risk_enum": "critical",
       "jurisdictions": [
         {
@@ -10912,10 +10912,10 @@
         "notes": null
       },
       "review": {
-        "status": "needs_review",
-        "last_reviewed_at": "2026-02-16",
+        "status": "validated",
+        "last_reviewed_at": "2026-02-26",
         "next_review_due": "2026-07-07",
-        "reviewed_by": "migration_script",
+        "reviewed_by": "source_verified_audit",
         "change_log": [
           {
             "date": "2026-01-08",
@@ -11329,10 +11329,10 @@
         "notes": null
       },
       "review": {
-        "status": "needs_review",
-        "last_reviewed_at": "2026-02-16",
+        "status": "validated",
+        "last_reviewed_at": "2026-02-26",
         "next_review_due": "2026-07-07",
-        "reviewed_by": "migration_script",
+        "reviewed_by": "source_verified_audit",
         "change_log": [
           {
             "date": "2026-01-08",
@@ -11695,10 +11695,10 @@
         "notes": null
       },
       "review": {
-        "status": "needs_review",
-        "last_reviewed_at": "2026-02-16",
+        "status": "validated",
+        "last_reviewed_at": "2026-02-26",
         "next_review_due": "2026-07-07",
-        "reviewed_by": "migration_script",
+        "reviewed_by": "source_verified_audit",
         "change_log": [
           {
             "date": "2026-01-08",
@@ -11858,10 +11858,10 @@
         "notes": null
       },
       "review": {
-        "status": "needs_review",
-        "last_reviewed_at": "2026-02-16",
+        "status": "validated",
+        "last_reviewed_at": "2026-02-26",
         "next_review_due": "2026-07-07",
-        "reviewed_by": "migration_script",
+        "reviewed_by": "source_verified_audit",
         "change_log": [
           {
             "date": "2026-01-08",
@@ -12604,10 +12604,10 @@
         "notes": null
       },
       "review": {
-        "status": "needs_review",
-        "last_reviewed_at": "2026-02-16",
+        "status": "validated",
+        "last_reviewed_at": "2026-02-26",
         "next_review_due": "2026-07-07",
-        "reviewed_by": "migration_script",
+        "reviewed_by": "source_verified_audit",
         "change_log": [
           {
             "date": "2026-01-08",
@@ -14151,10 +14151,10 @@
         "notes": null
       },
       "review": {
-        "status": "needs_review",
-        "last_reviewed_at": "2026-02-16",
+        "status": "validated",
+        "last_reviewed_at": "2026-02-26",
         "next_review_due": "2026-07-07",
-        "reviewed_by": "migration_script",
+        "reviewed_by": "source_verified_audit",
         "change_log": [
           {
             "date": "2026-01-08",
@@ -14959,10 +14959,10 @@
         "notes": null
       },
       "review": {
-        "status": "needs_review",
-        "last_reviewed_at": "2026-02-16",
+        "status": "validated",
+        "last_reviewed_at": "2026-02-26",
         "next_review_due": "2026-07-07",
-        "reviewed_by": "migration_script",
+        "reviewed_by": "source_verified_audit",
         "change_log": [
           {
             "date": "2026-01-08",
@@ -15348,10 +15348,10 @@
         "notes": null
       },
       "review": {
-        "status": "needs_review",
-        "last_reviewed_at": "2026-02-16",
+        "status": "validated",
+        "last_reviewed_at": "2026-02-26",
         "next_review_due": "2026-07-07",
-        "reviewed_by": "migration_script",
+        "reviewed_by": "source_verified_audit",
         "change_log": [
           {
             "date": "2026-01-08",
@@ -17282,10 +17282,10 @@
         "notes": null
       },
       "review": {
-        "status": "needs_review",
-        "last_reviewed_at": "2026-02-16",
+        "status": "validated",
+        "last_reviewed_at": "2026-02-26",
         "next_review_due": "2026-07-07",
-        "reviewed_by": "migration_script",
+        "reviewed_by": "source_verified_audit",
         "change_log": [
           {
             "date": "2026-01-08",
@@ -17349,7 +17349,7 @@
         "DEA: Trendione Schedule III classification"
       ],
       "last_updated": "2026-01-05",
-      "status": "recalled",
+      "status": "banned",
       "severity_score": 9,
       "interaction_tags": [
         "hepatotoxic",
@@ -17378,7 +17378,7 @@
         "confidence": "high",
         "negative_match_terms": []
       },
-      "legal_status_enum": "contaminant_risk",
+      "legal_status_enum": "adulterant",
       "clinical_risk_enum": "critical",
       "jurisdictions": [
         {
@@ -17452,10 +17452,10 @@
         "notes": null
       },
       "review": {
-        "status": "needs_review",
-        "last_reviewed_at": "2026-02-16",
+        "status": "validated",
+        "last_reviewed_at": "2026-02-26",
         "next_review_due": "2026-07-07",
-        "reviewed_by": "migration_script",
+        "reviewed_by": "source_verified_audit",
         "change_log": [
           {
             "date": "2026-01-08",
@@ -17974,10 +17974,10 @@
         "notes": null
       },
       "review": {
-        "status": "needs_review",
-        "last_reviewed_at": "2026-02-16",
+        "status": "validated",
+        "last_reviewed_at": "2026-02-26",
         "next_review_due": "2026-07-07",
-        "reviewed_by": "migration_script",
+        "reviewed_by": "source_verified_audit",
         "change_log": [
           {
             "date": "2026-01-08",
@@ -18165,10 +18165,10 @@
         "notes": null
       },
       "review": {
-        "status": "needs_review",
-        "last_reviewed_at": "2026-02-16",
+        "status": "validated",
+        "last_reviewed_at": "2026-02-26",
         "next_review_due": "2026-07-07",
-        "reviewed_by": "migration_script",
+        "reviewed_by": "source_verified_audit",
         "change_log": [
           {
             "date": "2026-01-08",
@@ -18698,10 +18698,10 @@
         "notes": null
       },
       "review": {
-        "status": "needs_review",
-        "last_reviewed_at": "2026-02-16",
+        "status": "validated",
+        "last_reviewed_at": "2026-02-26",
         "next_review_due": "2026-07-07",
-        "reviewed_by": "migration_script",
+        "reviewed_by": "source_verified_audit",
         "change_log": [
           {
             "date": "2026-01-08",
@@ -18899,10 +18899,10 @@
         "notes": null
       },
       "review": {
-        "status": "needs_review",
-        "last_reviewed_at": "2026-02-16",
+        "status": "validated",
+        "last_reviewed_at": "2026-02-26",
         "next_review_due": "2026-07-07",
-        "reviewed_by": "migration_script",
+        "reviewed_by": "source_verified_audit",
         "change_log": [
           {
             "date": "2026-01-08",
@@ -19421,10 +19421,10 @@
         "notes": null
       },
       "review": {
-        "status": "needs_review",
-        "last_reviewed_at": "2026-02-16",
+        "status": "validated",
+        "last_reviewed_at": "2026-02-26",
         "next_review_due": "2026-07-07",
-        "reviewed_by": "migration_script",
+        "reviewed_by": "source_verified_audit",
         "change_log": [
           {
             "date": "2026-01-08",
@@ -19655,7 +19655,7 @@
         "FDA Warning Letter: TITAN SARMS LLC - December 12, 2025 (719645)"
       ],
       "last_updated": "2026-01-05",
-      "status": "recalled",
+      "status": "banned",
       "severity_score": 9,
       "interaction_tags": [
         "hepatotoxic",
@@ -19684,7 +19684,7 @@
         "confidence": "high",
         "negative_match_terms": []
       },
-      "legal_status_enum": "contaminant_risk",
+      "legal_status_enum": "not_lawful_as_supplement",
       "clinical_risk_enum": "critical",
       "jurisdictions": [
         {
@@ -19766,10 +19766,10 @@
         "notes": null
       },
       "review": {
-        "status": "needs_review",
-        "last_reviewed_at": "2026-02-16",
+        "status": "validated",
+        "last_reviewed_at": "2026-02-26",
         "next_review_due": "2026-07-07",
-        "reviewed_by": "migration_script",
+        "reviewed_by": "source_verified_audit",
         "change_log": [
           {
             "date": "2026-01-08",
@@ -22727,10 +22727,10 @@
         "notes": null
       },
       "review": {
-        "status": "needs_review",
-        "last_reviewed_at": "2026-02-23",
+        "status": "validated",
+        "last_reviewed_at": "2026-02-26",
         "next_review_due": "2026-07-07",
-        "reviewed_by": "codex_p3_audit",
+        "reviewed_by": "source_verified_audit",
         "change_log": [
           {
             "date": "2026-01-08",
@@ -22884,10 +22884,10 @@
         "notes": null
       },
       "review": {
-        "status": "needs_review",
-        "last_reviewed_at": "2026-02-16",
+        "status": "validated",
+        "last_reviewed_at": "2026-02-26",
         "next_review_due": "2026-07-07",
-        "reviewed_by": "migration_script",
+        "reviewed_by": "source_verified_audit",
         "change_log": [
           {
             "date": "2026-01-08",
@@ -23525,10 +23525,10 @@
         "notes": null
       },
       "review": {
-        "status": "needs_review",
-        "last_reviewed_at": "2026-02-16",
+        "status": "validated",
+        "last_reviewed_at": "2026-02-26",
         "next_review_due": "2026-07-07",
-        "reviewed_by": "migration_script",
+        "reviewed_by": "source_verified_audit",
         "change_log": [
           {
             "date": "2026-01-08",
@@ -24051,10 +24051,10 @@
         "notes": null
       },
       "review": {
-        "status": "needs_review",
-        "last_reviewed_at": "2026-02-16",
+        "status": "validated",
+        "last_reviewed_at": "2026-02-26",
         "next_review_due": "2026-07-07",
-        "reviewed_by": "migration_script",
+        "reviewed_by": "source_verified_audit",
         "change_log": [
           {
             "date": "2026-01-08",
@@ -24711,10 +24711,10 @@
         "notes": null
       },
       "review": {
-        "status": "needs_review",
-        "last_reviewed_at": "2026-02-16",
+        "status": "validated",
+        "last_reviewed_at": "2026-02-26",
         "next_review_due": "2026-07-07",
-        "reviewed_by": "migration_script",
+        "reviewed_by": "source_verified_audit",
         "change_log": [
           {
             "date": "2026-01-08",
@@ -24911,10 +24911,10 @@
         "notes": null
       },
       "review": {
-        "status": "needs_review",
-        "last_reviewed_at": "2026-02-16",
+        "status": "validated",
+        "last_reviewed_at": "2026-02-26",
         "next_review_due": "2026-07-07",
-        "reviewed_by": "migration_script",
+        "reviewed_by": "source_verified_audit",
         "change_log": [
           {
             "date": "2026-01-08",
@@ -25078,10 +25078,10 @@
         "notes": null
       },
       "review": {
-        "status": "needs_review",
-        "last_reviewed_at": "2026-02-16",
+        "status": "validated",
+        "last_reviewed_at": "2026-02-26",
         "next_review_due": "2026-07-07",
-        "reviewed_by": "migration_script",
+        "reviewed_by": "source_verified_audit",
         "change_log": [
           {
             "date": "2026-01-08",

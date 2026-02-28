@@ -94,8 +94,8 @@ class TestRealLabelCorpus:
 
         # Creatine forms
         ("Creatine Monohydrate 5g", "creatine_monohydrate", True),
-        ("Creatine HCl (Con-Cret)", "creatine", True),
-        ("Buffered Creatine (Kre-Alkalyn)", "creatine", True),
+        ("Creatine HCl (Con-Cret)", "creatine_monohydrate", True),
+        ("Buffered Creatine (Kre-Alkalyn)", "creatine_monohydrate", True),
 
         # Magnolia compounds
         ("Honokiol 98%", "honokiol", True),
@@ -461,10 +461,10 @@ class TestMultiFormMatching:
         assert len(matched_forms) == 2, f"Should match both forms, got {len(matched_forms)}"
 
         # retinyl palmitate: bio_score 14, share 0.50
-        # B-carotene: bio_score 12, share 0.50
-        # Weighted average: (14 * 0.5 + 12 * 0.5) / 1.0 = 13.0
+        # B-carotene (mixed carotenoids): bio_score 10, share 0.50
+        # Weighted average: (14 * 0.5 + 10 * 0.5) / 1.0 = 12.0
         bio_score = vit_a_entry.get('bio_score')
-        assert bio_score == 13.0, f"Expected weighted bio_score 13.0, got {bio_score}"
+        assert bio_score == 12.0, f"Expected weighted bio_score 12.0, got {bio_score}"
 
         # Verify shares were parsed correctly
         for mf in matched_forms:
@@ -504,13 +504,14 @@ class TestMultiFormMatching:
         # Verify form extraction captured bracket tokens
         assert folate_entry.get('form_extraction_used') == True, "Should use form extraction"
 
-        # Should match to the 5-MTHF form (bio_score 13)
+        # Should match to the 5-MTHF form (bio_score 14 after B9 cleanup merged
+        # the duplicate "5-MTHF (L-methylfolate)" into the base form)
         form_id = folate_entry.get('form_id')
         assert '5-MTHF' in form_id or 'methylfolate' in form_id.lower(), \
             f"Should match 5-MTHF form, got {form_id}"
 
         bio_score = folate_entry.get('bio_score')
-        assert bio_score == 13.0, f"Expected bio_score 13.0 for 5-MTHF form, got {bio_score}"
+        assert bio_score == 14.0, f"Expected bio_score 14.0 for 5-MTHF form, got {bio_score}"
 
         # Verify the extracted_forms captured the bracket token
         extracted = folate_entry.get('extracted_forms', [])

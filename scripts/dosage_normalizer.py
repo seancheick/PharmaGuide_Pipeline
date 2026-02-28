@@ -170,6 +170,7 @@ class DosageNormalizer:
         'tablespoon': 1, 'tbsp': 1,
         'serving': 0,
     }
+    NO_RULE_ERROR_PREFIX = "No conversion rule found for nutrient:"
 
     def __init__(self, unit_converter: Optional[UnitConverter] = None):
         """
@@ -647,6 +648,10 @@ class DosageNormalizer:
             per_day_min = conversion_result.converted_value * serving_basis.servings_per_day_min
             per_day_max = conversion_result.converted_value * serving_basis.servings_per_day_max
 
+        conversion_evidence = self._sanitize_conversion_evidence_for_output(
+            conversion_result.to_dict()
+        )
+
         return NormalizedIngredient(
             original_name=name,
             standard_name=conversion_result.form_detected,
@@ -656,9 +661,51 @@ class DosageNormalizer:
             normalized_unit=conversion_result.converted_unit,
             per_day_min=per_day_min,
             per_day_max=per_day_max,
-            conversion_evidence=conversion_result.to_dict(),
+            conversion_evidence=conversion_evidence,
             source_field=source_field
         )
+
+    def _sanitize_conversion_evidence_for_output(self, evidence: Dict) -> Dict:
+        """
+        Downgrade expected "no conversion rule" outcomes from error semantics to
+        informational semantics for cleaner audits.
+
+        This preserves failure state (`success=False`) while avoiding noisy
+        false-positive error interpretation in downstream audit views.
+        """
+        if not isinstance(evidence, dict):
+            return evidence
+
+        sanitized = dict(evidence)
+        error_msg = sanitized.get("error")
+        if not isinstance(error_msg, str):
+            return sanitized
+
+        if not error_msg.startswith(self.NO_RULE_ERROR_PREFIX):
+            return sanitized
+
+        warnings = list(sanitized.get("warnings") or [])
+        notes = list(sanitized.get("notes") or [])
+        nutrient = (sanitized.get("nutrient_detected") or "").strip()
+
+        info_msg = (
+            f"No unit conversion rule configured for nutrient: {nutrient or 'unknown'}; "
+            "kept original amount/unit for reference."
+        )
+        if info_msg not in warnings:
+            warnings.append(info_msg)
+        notes_msg = "Expected non-converted nutrient path (informational, non-fatal)."
+        if notes_msg not in notes:
+            notes.append(notes_msg)
+
+        sanitized["original_error"] = error_msg
+        sanitized["error"] = None
+        sanitized["conversion_status"] = "not_converted_expected"
+        sanitized["nonfatal_reason"] = "no_conversion_rule"
+        sanitized["severity"] = "info"
+        sanitized["warnings"] = warnings
+        sanitized["notes"] = notes
+        return sanitized
 
 
 # Convenience function

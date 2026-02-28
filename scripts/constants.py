@@ -283,7 +283,7 @@ EXCLUDED_LABEL_PHRASES = {
     "25,000 iu from mixed carotenes",
     "and as (magnesium) citrate",
     "total cultures",
-    "daltonmax 700",
+    # NOTE: "daltonmax 700" removed — DaltonMax 700 is a therapeutic 200:1 aloe vera concentrate (Pharmachem)
     "bio-enhanced",
     "bio enhanced",
     "mitoheal",
@@ -870,7 +870,6 @@ BLEND_HEADER_PATTERNS_HIGH_CONFIDENCE = [
     r"^\s*providing\s+\d+",
     r"^\s*standardized\s+to\s+contain\s+\d+",
     r"\bblend\s*\(combination\)$",
-    r"^daltonmax\s*\d+$",
     r"^bio[-\s]?enhanced$",
     r"^mitoheal$",
 ]
@@ -892,7 +891,6 @@ BLEND_HEADER_EXACT_NAMES = {
     "mitoheal",
     "bio-enhanced",
     "bio enhanced",
-    "daltonmax 700",
     "from 250 mg dmsa",
     "from 100 mg dmsa",
     "25,000 iu from mixed carotenes",
@@ -904,7 +902,7 @@ BLEND_HEADER_EXACT_NAMES = {
     "pure+ wild fish oil and antarctic krill (euphausia superba) oil concentrates",
     "pure wild fish oil and antarctic krill euphausia superba oil concentrates",
     # Softgels clean-stage unmapped high-frequency blend headers
-    "zma",
+    # NOTE: "zma" removed — ZMA sub-ingredients (zinc, magnesium, B6) should be scored individually
     "probiotic fermented culture",
     "probiotic fermented multi-culture",
     "probiotic fermented multi culture",
@@ -1025,7 +1023,7 @@ EXCIPIENT_NEVER_PROMOTE = {
     "directline technology",  # Brand-specific delivery system, not ingredient
     "fruit juice", "natural fruit juice", "fruit juice concentrate",
     # Proprietary blends, not specific ingredients
-    "renewx", "activessence", "quik-sorb",
+    "activessence", "quik-sorb",
     "trumask ultra liquid", "delete",
 
     # OILS/CARRIERS - Never therapeutic actives (from dev audit feedback)
@@ -1050,6 +1048,10 @@ EXCIPIENT_NEVER_PROMOTE = {
 
     # FOOD POWDERS - Non-bioactive forms (from dev audit feedback)
     # These are food ingredients, not therapeutic actives
+    # NOTE: Even though some have IQM parents (dietary_nitrate, tart_cherry, cranberry,
+    # pomegranate), juice powders are dilute food forms and scoring them as active
+    # ingredients would pollute A1 scores. The IQM aliases exist for standardized
+    # extracts, not generic juice powders used as food ingredients.
     "apple cider vinegar", "apple cider vinegar powder",
     "organic apple cider vinegar", "apple cider vinegar, powder",
     "beet root juice powder", "beet root juice, powder", "beet juice powder",

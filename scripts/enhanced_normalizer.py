@@ -5025,13 +5025,15 @@ class EnhancedDSLDNormalizer:
     
     def _determine_disclosure_level(self, name: str, quantity: float, unit: str, nested_ingredients: List[Dict]) -> Optional[str]:
         """
-        Determine the disclosure level of a proprietary blend
-        
-        Returns:
-            'full' - All ingredients have specific quantities
-            'partial' - Some ingredients have quantities, some don't
-            'none' - Only total blend weight given, no individual quantities
-            None - Not a proprietary blend
+        Determine the disclosure level of a proprietary blend.
+
+        Three-tier model per 21 CFR 101.36 transparency spectrum:
+            'full'    - Every sub-ingredient has an individual amount listed.
+            'partial' - Blend total declared AND sub-ingredients listed,
+                        but individual amounts are missing (or only some present).
+            'none'    - Missing blend total, OR missing sub-ingredient list,
+                        OR vague / no structural disclosure at all.
+            None      - Not a proprietary blend.
         """
         # Check if this is actually a blend
         if not (self._is_proprietary_blend_name(name) or unit == "NP" or quantity == 0):
@@ -5039,22 +5041,30 @@ class EnhancedDSLDNormalizer:
             if not nested_ingredients:
                 return None
 
-        # If no nested ingredients, it's a proprietary blend with no disclosure
-        # This includes:
-        # 1. Ingredients with proprietary keywords in name
-        # 2. Ingredients marked proprietary by unit="NP" or quantity=0
-        # In both cases, if there are no nested ingredients, disclosure is "none"
-        if not nested_ingredients:
-            return "none"  # No ingredient breakdown = no disclosure
-        
-        # Check disclosure level based on nested ingredients
+        # Determine whether the blend total is declared.
+        # quantity/unit come from the parent blend row in the DSLD data.
+        has_blend_total = (
+            quantity is not None
+            and isinstance(quantity, (int, float))
+            and quantity > 0
+            and unit not in ["NP", "", None]
+        )
+
+        has_sub_ingredients = bool(nested_ingredients)
+
+        # If no nested ingredients listed at all → "none"
+        # (regardless of whether a total is declared)
+        if not has_sub_ingredients:
+            return "none"
+
+        # Check which sub-ingredients have real individual quantities
         has_quantities = []
         for nested_ing in nested_ingredients:
             # Handle quantity as list format (DSLD uses list of quantity objects)
             quantity_list = nested_ing.get("quantity", [])
             nested_qty = 0
             nested_unit = ""
-            
+
             if isinstance(quantity_list, list) and quantity_list:
                 # Get first quantity entry
                 qty_entry = quantity_list[0] if quantity_list else {}
@@ -5063,20 +5073,24 @@ class EnhancedDSLDNormalizer:
             elif isinstance(quantity_list, (int, float)):
                 nested_qty = quantity_list
                 nested_unit = nested_ing.get("unit", "")
-            
+
             # Check if nested ingredient has a real quantity
             if nested_qty > 0 and nested_unit not in ["NP", "", None]:
                 has_quantities.append(True)
             else:
                 has_quantities.append(False)
-        
-        # Determine disclosure level
+
+        # Determine disclosure level — three-tier model
         if all(has_quantities) and len(has_quantities) > 0:
-            return "full"  # All nested ingredients have quantities
-        elif any(has_quantities):
-            return "partial"  # Some have quantities, some don't
+            return "full"  # All sub-ingredients have individual amounts
+        elif has_blend_total and has_sub_ingredients:
+            # Blend total declared AND sub-ingredients listed, but
+            # individual amounts are missing (or only some present).
+            # This is FDA-compliant partial disclosure per 21 CFR 101.36.
+            return "partial"
         else:
-            return "none"  # No individual quantities provided
+            # Missing blend total OR no sub-ingredient amounts at all
+            return "none"
 
     def _calculate_transparency_percentage(self, nested_ingredients: List[Dict]) -> float:
         """

@@ -98,6 +98,7 @@ class SupplementScorer:
     ]
 
     REQUIRED_ENRICHED_FIELDS = ["dsld_id", "product_name", "enrichment_version"]
+    _CATEGORY_PERCENTILE_MIN_COHORT = 5
 
     def __init__(self, config_path: str = "config/scoring_config.json"):
         self.logger = self._setup_logging()
@@ -133,14 +134,17 @@ class SupplementScorer:
     def _default_config(self) -> Dict[str, Any]:
         return {
             "_documentation": {
-                "version": "3.0.0",
-                "description": "Fallback v3.0 scorer config",
-                "last_updated": "2026-02-01",
+                "version": "3.1.0",
+                "description": "Fallback v3.1 scorer config",
+                "last_updated": "2026-02-25",
             },
             "feature_gates": {
                 "require_full_mapping": False,
                 "probiotic_extended_scoring": False,
                 "allow_non_probiotic_probiotic_bonus_with_strict_gate": True,
+                "enable_non_gmo_bonus": False,
+                "enable_hypoallergenic_bonus": False,
+                "enable_d1_middle_tier": False,
             },
             "paths": {
                 "input_directory": "output_Lozenges_enriched/enriched",
@@ -171,6 +175,34 @@ class SupplementScorer:
 
     def _feature_on(self, key: str, default: bool = False) -> bool:
         return bool(self.feature_gates.get(key, default))
+
+    def _section_max(self, section: str, default: float) -> float:
+        section_key = norm_text(section)
+        section_maximums = self.config.get("section_maximums", {}) or {}
+        mapping = {
+            "a": (
+                self.config.get("section_A_ingredient_quality", {}).get("_max"),
+                section_maximums.get("A_ingredient_quality"),
+            ),
+            "b": (
+                self.config.get("section_B_safety_purity", {}).get("_max"),
+                section_maximums.get("B_safety_purity"),
+            ),
+            "c": (
+                self.config.get("section_C_evidence_research", {}).get("_max"),
+                section_maximums.get("C_evidence_research"),
+            ),
+            "d": (
+                self.config.get("section_D_brand_trust", {}).get("_max"),
+                section_maximums.get("D_brand_trust"),
+            ),
+        }
+        candidates = mapping.get(section_key, ())
+        for value in candidates:
+            numeric = as_float(value, None)
+            if numeric is not None:
+                return numeric
+        return default
 
     # ---------------------------------------------------------------------
     # Classifier + mapping gate
@@ -452,11 +484,21 @@ class SupplementScorer:
         if supp_type == "multivitamin":
             avg_raw = 0.7 * avg_raw + 0.3 * 9.0
 
-        return clamp(0.0, 13.0, (avg_raw / 18.0) * 13.0)
+        max_points = as_float(
+            self.config.get("section_A_ingredient_quality", {}).get("A1_bioavailability_form", {}).get("max"),
+            15.0,
+        ) or 15.0
+        return clamp(0.0, max_points, (avg_raw / 18.0) * max_points)
 
     def _score_a2(self, product: Dict[str, Any]) -> float:
         premium_keys = set()
         for ing in self._get_active_ingredients(product):
+            # Keep A2 aligned with A1/A6 dose-anchored separation:
+            # proprietary blend containers do not receive quality credit.
+            if ing.get("is_proprietary_blend"):
+                continue
+            if not self._has_usable_individual_dose(ing):
+                continue
             score = as_float(ing.get("score"), None)
             if score is None:
                 continue
@@ -530,11 +572,63 @@ class SupplementScorer:
 
         has_synergy = self._synergy_cluster_qualified(product)
 
+        non_gmo_verified = bool(product.get("claim_non_gmo_project_verified", False))
+        if not non_gmo_verified:
+            named_programs = safe_list(product.get("named_cert_programs"))
+            if not named_programs:
+                programs = (
+                    product.get("certification_data", {})
+                    .get("third_party_programs", {})
+                    .get("programs", [])
+                )
+                if isinstance(programs, list):
+                    named_programs = [p.get("name") if isinstance(p, dict) else p for p in programs]
+            for program in named_programs:
+                text = norm_text(program)
+                if "non gmo project" in text or "non-gmo project" in text:
+                    non_gmo_verified = True
+                    break
+
+        a5d = 0.5 if (self._feature_on("enable_non_gmo_bonus", default=False) and non_gmo_verified) else 0.0
+
         return {
             "A5a_organic": 1.0 if is_organic else 0.0,
             "A5b_standardized_botanical": 1.0 if has_std else 0.0,
             "A5c_synergy_cluster": 1.0 if has_synergy else 0.0,
+            "A5d_non_gmo_verified": a5d,
         }
+
+    def _score_a6(self, product: Dict[str, Any], supp_type: str) -> float:
+        if supp_type not in {"single", "single_nutrient"}:
+            return 0.0
+
+        candidates = []
+        for ing in self._get_active_ingredients(product):
+            if ing.get("is_proprietary_blend"):
+                continue
+            if not self._has_usable_individual_dose(ing):
+                continue
+            candidates.append(ing)
+
+        if not candidates:
+            return 0.0
+
+        ing = candidates[0]
+        # A6 tiers are calibrated to IQM form score ranges used by A1/A2.
+        # Prefer score, then fall back to bio_score when score is unavailable.
+        form_score = as_float(ing.get("score"), None)
+        if form_score is None:
+            form_score = as_float(ing.get("bio_score"), None)
+        if form_score is None:
+            return 0.0
+
+        if form_score >= 16.0:
+            return 3.0
+        if form_score >= 14.0:
+            return 2.0
+        if form_score >= 12.0:
+            return 1.0
+        return 0.0
 
     @staticmethod
     def _probiotic_bonus_zero(eligibility: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
@@ -795,19 +889,21 @@ class SupplementScorer:
         }
 
     def _score_section_a(self, product: Dict[str, Any], supp_type: str) -> Dict[str, Any]:
+        section_max = self._section_max("a", 25.0)
         a1 = self._score_a1(product, supp_type)
         a2 = self._score_a2(product)
         a3 = self._score_a3(product)
         a4 = self._score_a4(product)
         a5_parts = self._score_a5(product)
-        a5 = sum(a5_parts.values())
+        a5 = min(3.0, sum(a5_parts.values()))
+        a6 = self._score_a6(product, supp_type)
         probiotic = self._score_probiotic_bonus(product, supp_type)
         probiotic_bonus = probiotic["probiotic_bonus"]
 
-        total = min(25.0, a1 + a2 + a3 + a4 + a5 + probiotic_bonus)
+        total = min(section_max, a1 + a2 + a3 + a4 + a5 + a6 + probiotic_bonus)
         return {
             "score": round(total, 2),
-            "max": 25,
+            "max": round(section_max, 2),
             "A1": round(a1, 2),
             "A2": round(a2, 2),
             "A3": round(a3, 2),
@@ -816,6 +912,8 @@ class SupplementScorer:
             "A5a": round(a5_parts["A5a_organic"], 2),
             "A5b": round(a5_parts["A5b_standardized_botanical"], 2),
             "A5c": round(a5_parts["A5c_synergy_cluster"], 2),
+            "A5d": round(a5_parts.get("A5d_non_gmo_verified", 0.0), 2),
+            "A6": round(a6, 2),
             "probiotic_bonus": round(probiotic_bonus, 2),
             "probiotic_breakdown": probiotic,
         }
@@ -831,6 +929,16 @@ class SupplementScorer:
             .get("additives", product.get("harmful_additives", []))
         )
         risk_map = {"critical": 3.0, "high": 2.0, "moderate": 1.0, "low": 0.5, "none": 0.0}
+        config_risk = (
+            self.config.get("section_B_safety_purity", {})
+            .get("B1_harmful_additives", {})
+            .get("risk_points", {})
+        )
+        if isinstance(config_risk, dict):
+            for key, value in config_risk.items():
+                numeric = as_float(value, None)
+                if numeric is not None:
+                    risk_map[norm_text(key)] = numeric
         penalty = 0.0
         for item in additives:
             penalty += risk_map.get(norm_text(item.get("severity_level")), 0.0)
@@ -897,6 +1005,16 @@ class SupplementScorer:
 
     def _score_b4(self, product: Dict[str, Any], supp_type: str) -> Dict[str, float]:
         cert = product.get("certification_data", {})
+        b4_cfg = self.config.get("section_B_safety_purity", {}).get("B4_quality_certifications", {})
+        b4a_cfg = b4_cfg.get("B4a_named_programs", {}) if isinstance(b4_cfg, dict) else {}
+        b4a_points_per = as_float(
+            b4a_cfg.get("points_per_program"),
+            5.0,
+        ) or 5.0
+        b4a_cap = as_float(
+            b4a_cfg.get("cap"),
+            15.0,
+        ) or 15.0
 
         named_programs = safe_list(product.get("named_cert_programs"))
         if not named_programs:
@@ -925,7 +1043,7 @@ class SupplementScorer:
                 filtered.append(p)
             canonical_programs = sorted(set(filtered))
 
-        b4a = clamp(0.0, 15.0, float(len(canonical_programs) * 5.0))
+        b4a = clamp(0.0, b4a_cap, float(len(canonical_programs) * b4a_points_per))
 
         gmp_level = norm_text(product.get("gmp_level"))
         gmp = cert.get("gmp", {})
@@ -991,6 +1109,25 @@ class SupplementScorer:
             "billion cfu",
             "million cfu",
         }
+
+    def _get_disclosure_blends(self, product: Dict[str, Any]) -> List[Dict[str, Any]]:
+        blends = safe_list(product.get("proprietary_blends"))
+        if blends:
+            return blends
+        return safe_list(product.get("proprietary_data", {}).get("blends", []))
+
+    def _has_full_disclosure(self, product: Dict[str, Any]) -> bool:
+        if "has_full_disclosure" in product:
+            return bool(product.get("has_full_disclosure"))
+
+        ingredients = self._get_active_ingredients(product)
+        has_missing_dose = any(
+            (not bool(i.get("is_proprietary_blend"))) and (not self._has_usable_individual_dose(i))
+            for i in ingredients
+        )
+        blends = self._get_disclosure_blends(product)
+        has_hidden_blends = any(norm_text(b.get("disclosure_level")) in {"none", "partial"} for b in blends)
+        return (not has_missing_dose) and (not has_hidden_blends)
 
     # B5 formula constants — hidden-mass transparency model.
     _B5_BASE = {"full": 0.0, "partial": 1.0, "none": 2.0}
@@ -1147,6 +1284,9 @@ class SupplementScorer:
                 if blend.get("blend_total_mg") is not None
                 else blend.get("total_weight")
             )
+            # Treat zero/falsy total_weight as no declared total.
+            if blend_total_raw is not None and (not isinstance(blend_total_raw, (int, float)) or blend_total_raw <= 0):
+                blend_total_raw = None
             blend_total_unit = "mg" if blend.get("blend_total_mg") is not None else blend.get("unit")
             blend_total_mg, blend_unit_fail = self._blend_quantity_to_mg(blend_total_raw, blend_total_unit)
 
@@ -1180,7 +1320,8 @@ class SupplementScorer:
                     hidden_count = len(children_without_amounts)
                 if hidden_count <= 0:
                     hidden_count = int(as_float(blend.get("nested_count"), 0) or 0)
-                denom = total_active_count if total_active_count > 0 else max(hidden_count, 1)
+                # Deterministic count-share denominator constant for small formulas.
+                denom = max(total_active_count, 8)
                 impact = clamp(0.0, 1.0, hidden_count / max(denom, 1))
 
             blend_penalty = 0.0
@@ -1197,6 +1338,8 @@ class SupplementScorer:
                 "impact_ratio": round(impact, 6),
                 "impact_source": impact_source,
                 "impact_floor_applied": bool(impact_floor_applied),
+                "presence_penalty": round(base, 4),
+                "proportional_coef": round(prop_coef, 4),
                 "base_penalty_formula": (
                     "full: 0"
                     if level == "full"
@@ -1237,6 +1380,11 @@ class SupplementScorer:
         b0_moderate_penalty: float,
         flags: List[str],
     ) -> Dict[str, Any]:
+        section_b_cfg = self.config.get("section_B_safety_purity", {}) or {}
+        max_points = as_float(section_b_cfg.get("_max"), 30.0) or 30.0
+        base_score = as_float(section_b_cfg.get("base_score"), 25.0) or 25.0
+        bonus_pool_cap = as_float(section_b_cfg.get("bonus_pool_cap"), 5.0) or 5.0
+
         b1 = self._score_b1(product)
         b2 = self._score_b2(product)
 
@@ -1248,21 +1396,32 @@ class SupplementScorer:
         b3 = float((2 if allergen_valid else 0) + (1 if gluten_valid else 0) + (1 if vegan_valid else 0))
         b3 = clamp(0.0, 4.0, b3)
 
+        b_hypoallergenic = 0.0
+        if self._feature_on("enable_hypoallergenic_bonus", default=False):
+            compliance = product.get("compliance_data", {})
+            has_may_contain = bool(compliance.get("has_may_contain_warning", False))
+            contradiction = "LABEL_CONTRADICTION_DETECTED" in flags
+            hypo_flag = bool(product.get("claim_hypoallergenic_validated", False))
+            if not hypo_flag:
+                hypo_flag = bool(compliance.get("hypoallergenic", False))
+            if hypo_flag and b2 == 0.0 and not has_may_contain and not contradiction and (allergen_valid or gluten_valid):
+                b_hypoallergenic = 0.5
+
         b4 = self._score_b4(product, supp_type)
         b4a, b4b, b4c = b4["B4a"], b4["B4b"], b4["B4c"]
 
         b5 = self._score_b5(product, flags)
         b6 = self._score_b6(product, flags)
 
-        bonuses = b3 + b4a + b4b + b4c
+        bonuses = min(bonus_pool_cap, b3 + b4a + b4b + b4c + b_hypoallergenic)
         penalties = b1 + b2 + b5 + b6 + b0_moderate_penalty
 
-        b_raw = 35.0 + bonuses - penalties
-        total = clamp(0.0, 35.0, b_raw)
+        b_raw = base_score + bonuses - penalties
+        total = clamp(0.0, max_points, b_raw)
 
         return {
             "score": round(total, 2),
-            "max": 35,
+            "max": round(max_points, 2),
             "B0_moderate_penalty": round(float(b0_moderate_penalty), 2),
             "B1_penalty": round(b1, 2),
             "B2_penalty": round(b2, 2),
@@ -1270,6 +1429,7 @@ class SupplementScorer:
             "B4a": round(b4a, 2),
             "B4b": round(b4b, 2),
             "B4c": round(b4c, 2),
+            "B_hypoallergenic": round(b_hypoallergenic, 2),
             "B5_penalty": round(b5, 2),
             "B5_blend_evidence": self._last_b5_blend_evidence,
             "B6_penalty": round(b6, 2),
@@ -1402,8 +1562,9 @@ class SupplementScorer:
 
     def _score_section_c(self, product: Dict[str, Any], flags: List[str]) -> Dict[str, Any]:
         section_c_cfg = self.config.get("section_C_evidence_research", {}) or {}
-        cap_per_ingredient = as_float(section_c_cfg.get("cap_per_ingredient"), 5.0) or 5.0
-        cap_total = as_float(section_c_cfg.get("cap_total"), 15.0) or 15.0
+        cap_per_ingredient = as_float(section_c_cfg.get("cap_per_ingredient"), 7.0) or 7.0
+        cap_total = as_float(section_c_cfg.get("cap_total"), 20.0) or 20.0
+        supra_multiple = as_float(section_c_cfg.get("supra_clinical_multiple"), 3.0) or 3.0
         matches = safe_list(product.get("evidence_data", {}).get("clinical_matches", []))
 
         ingredient_points: Dict[str, float] = defaultdict(float)
@@ -1453,6 +1614,20 @@ class SupplementScorer:
                         raw *= 0.25
                         if "SUB_CLINICAL_DOSE_DETECTED" not in flags:
                             flags.append("SUB_CLINICAL_DOSE_DETECTED")
+                    max_studied_dose = as_float(
+                        entry.get("max_studied_clinical_dose")
+                        or entry.get("max_clinical_dose")
+                        or entry.get("max_studied_dose"),
+                        None,
+                    )
+                    if (
+                        converted is not None
+                        and max_studied_dose is not None
+                        and max_studied_dose > 0
+                        and converted > (supra_multiple * max_studied_dose)
+                    ):
+                        if "SUPRA_CLINICAL_DOSE" not in flags:
+                            flags.append("SUPRA_CLINICAL_DOSE")
 
             canonical = canon_key(
                 entry.get("standard_name") or entry.get("study_name") or entry.get("ingredient")
@@ -1476,6 +1651,7 @@ class SupplementScorer:
     # ---------------------------------------------------------------------
 
     def _score_section_d(self, product: Dict[str, Any]) -> Dict[str, Any]:
+        section_max = self._section_max("d", 5.0)
         md = product.get("manufacturer_data", {})
 
         d1 = 0.0
@@ -1485,15 +1661,11 @@ class SupplementScorer:
             top = md.get("top_manufacturer", {})
             if bool(top.get("found", False)) and norm_text(top.get("match_type")) == "exact":
                 d1 = 2.0
+            elif self._feature_on("enable_d1_middle_tier", default=False):
+                if self._has_verifiable_mid_tier_manufacturer_evidence(product):
+                    d1 = 1.0
 
-        if "has_full_disclosure" in product:
-            has_full_disclosure = bool(product.get("has_full_disclosure"))
-        else:
-            ingredients = self._get_active_ingredients(product)
-            has_missing_dose = any(not bool(i.get("has_dose", False)) for i in ingredients)
-            blends = safe_list(product.get("proprietary_data", {}).get("blends", []))
-            has_hidden_blends = any(norm_text(b.get("disclosure_level")) in {"none", "partial"} for b in blends)
-            has_full_disclosure = (not has_missing_dose) and (not has_hidden_blends)
+        has_full_disclosure = self._has_full_disclosure(product)
         d2 = 1.0 if has_full_disclosure else 0.0
 
         bonus_features = md.get("bonus_features", {})
@@ -1514,26 +1686,206 @@ class SupplementScorer:
             "sweden",
             "denmark",
         }
+        d4_value = as_float(
+            self.config.get("section_D_brand_trust", {}).get("D4_high_standard_region"),
+            1.0,
+        ) or 1.0
         d4 = 0.0
         if bool(md.get("country_of_origin", {}).get("high_regulation_country", False)):
-            d4 = 0.5
+            d4 = d4_value
         elif region in high_std_regions:
-            d4 = 0.5
+            d4 = d4_value
 
         d5 = 0.5 if bool(product.get("has_sustainable_packaging", bonus_features.get("sustainability_claim", False))) else 0.0
 
-        tail = min(1.5, d3 + d4 + d5)
-        total = min(5.0, d1 + d2 + tail)
+        tail_cap = as_float(
+            self.config.get("section_D_brand_trust", {}).get("D3_D4_D5_combined_cap"),
+            2.0,
+        ) or 2.0
+        tail = min(tail_cap, d3 + d4 + d5)
+        total = min(section_max, d1 + d2 + tail)
 
         return {
             "score": round(total, 2),
-            "max": 5,
+            "max": round(section_max, 2),
             "D1": round(d1, 2),
             "D2": round(d2, 2),
             "D3": round(d3, 2),
             "D4": round(d4, 2),
             "D5": round(d5, 2),
         }
+
+    def _build_badges(self, product: Dict[str, Any], verdict: str) -> List[Dict[str, str]]:
+        badges: List[Dict[str, str]] = []
+        if verdict in {"BLOCKED", "UNSAFE", "NOT_SCORED"}:
+            return badges
+        if self._has_full_disclosure(product):
+            badges.append(
+                {
+                    "id": "FULL_DISCLOSURE",
+                    "label": "FULL DISCLOSURE",
+                    "description": "This product lists exact amounts for every active ingredient.",
+                }
+            )
+        return badges
+
+    def _resolve_percentile_category(
+        self,
+        product: Dict[str, Any],
+        scored: Dict[str, Any],
+    ) -> Tuple[str, str, str, Optional[float], List[str]]:
+        def _stable_key(value: str) -> str:
+            return re.sub(r"[^a-z0-9]+", "_", norm_text(value)).strip("_")
+
+        explicit_category = norm_text(product.get("percentile_category"))
+        explicit_label = str(product.get("percentile_category_label") or "").strip()
+        explicit_source = norm_text(product.get("percentile_category_source"))
+        explicit_confidence = as_float(product.get("percentile_category_confidence"), None)
+        explicit_signals_raw = product.get("percentile_category_signals")
+        explicit_signals = (
+            [str(item) for item in explicit_signals_raw if item is not None]
+            if isinstance(explicit_signals_raw, list)
+            else []
+        )
+
+        if explicit_category:
+            category_key = _stable_key(explicit_category)
+            category_label = explicit_label or re.sub(r"[_-]+", " ", explicit_category).strip().title()
+            source = explicit_source or "explicit"
+            return category_key, category_label, source, explicit_confidence, explicit_signals
+
+        category = ""
+        supplement_type = product.get("supplement_type", {})
+        if isinstance(supplement_type, dict):
+            for key in ("category", "subtype", "sub_type", "type"):
+                value = norm_text(supplement_type.get(key))
+                if value:
+                    category = value
+                    break
+        else:
+            category = norm_text(supplement_type)
+
+        if not category:
+            for key in ("product_category", "category", "primary_category"):
+                value = norm_text(product.get(key))
+                if value:
+                    category = value
+                    break
+
+        if not category:
+            category = norm_text(scored.get("supp_type")) or "all supplements"
+
+        form = ""
+        for key in ("dosage_form", "form", "product_form", "serving_form"):
+            value = norm_text(product.get(key))
+            if value:
+                form = value
+                break
+
+        category_label = re.sub(r"[_-]+", " ", category).strip()
+        if form:
+            form_label = re.sub(r"[_-]+", " ", form).strip()
+            if form_label.endswith("s"):
+                category_label = f"{category_label} {form_label}"
+            else:
+                category_label = f"{category_label} {form_label}s"
+
+        category_label = category_label.strip() or "supplements"
+        category_key = _stable_key(category_label)
+        return category_key, category_label, "fallback_scorer", None, []
+
+    def _attach_category_percentiles(
+        self,
+        products: List[Dict[str, Any]],
+        scored_products: List[Dict[str, Any]],
+    ) -> None:
+        if not products or len(products) != len(scored_products):
+            return
+
+        cohorts: Dict[str, List[Tuple[int, float, str, str, Optional[float], List[str]]]] = defaultdict(list)
+        for idx, (product, scored) in enumerate(zip(products, scored_products)):
+            score_100 = as_float(scored.get("score_100_equivalent"), None)
+            if score_100 is None:
+                continue
+            category_key, category_label, category_source, category_confidence, category_signals = (
+                self._resolve_percentile_category(product, scored)
+            )
+            if not category_key:
+                continue
+            cohorts[category_key].append(
+                (
+                    idx,
+                    score_100,
+                    category_label,
+                    category_source,
+                    category_confidence,
+                    category_signals,
+                )
+            )
+
+        for category_key, entries in cohorts.items():
+            cohort_size = len(entries)
+            if cohort_size < self._CATEGORY_PERCENTILE_MIN_COHORT:
+                for idx, _, category_label, category_source, category_confidence, category_signals in entries:
+                    scored_products[idx]["category_percentile"] = {
+                        "available": False,
+                        "reason": "insufficient_cohort_size",
+                        "category_key": category_key,
+                        "category_label": category_label,
+                        "category_source": category_source,
+                        "category_confidence": category_confidence,
+                        "category_signals": category_signals,
+                        "cohort_size": cohort_size,
+                    }
+                continue
+
+            scores = [score for _, score, _, _, _, _ in entries]
+            for idx, score, category_label, category_source, category_confidence, category_signals in entries:
+                higher_count = sum(1 for value in scores if value > score)
+                equal_count = sum(1 for value in scores if value == score)
+                rank = higher_count + ((equal_count + 1.0) / 2.0)
+                top_percent = round(clamp(0.0, 100.0, (rank / cohort_size) * 100.0), 1)
+                percentile_rank = round(100.0 - top_percent, 1)
+                scored_products[idx]["category_percentile"] = {
+                    "available": True,
+                    "category_key": category_key,
+                    "category_label": category_label,
+                    "category_source": category_source,
+                    "category_confidence": category_confidence,
+                    "category_signals": category_signals,
+                    "cohort_size": cohort_size,
+                    "top_percent": top_percent,
+                    "percentile_rank": percentile_rank,
+                    "text": f"Among {category_label}: Top {top_percent}%",
+                }
+                scored_products[idx]["category_percentile_text"] = (
+                    f"Among {category_label}: Top {top_percent}%"
+                )
+
+    def _has_verifiable_mid_tier_manufacturer_evidence(self, product: Dict[str, Any]) -> bool:
+        cert_data = product.get("certification_data", {}) or {}
+        gmp = cert_data.get("gmp", {}) or {}
+        if bool(gmp.get("nsf_gmp", False)) or bool(gmp.get("fda_registered", False)):
+            return True
+
+        named_programs = safe_list(product.get("named_cert_programs"))
+        if not named_programs:
+            programs = cert_data.get("third_party_programs", {}).get("programs", [])
+            if isinstance(programs, list):
+                named_programs = [p.get("name") if isinstance(p, dict) else p for p in programs]
+
+        for program in named_programs:
+            text = norm_text(program)
+            if not text:
+                continue
+            if "usp" in text:
+                return True
+            if "nsf" in text:
+                return True
+            if "gmp" in text and "cert" in text:
+                return True
+
+        return False
 
     def _manufacturer_violation_penalty(self, product: Dict[str, Any]) -> float:
         violations = product.get("manufacturer_data", {}).get("violations", {})
@@ -1628,6 +1980,10 @@ class SupplementScorer:
     ) -> Dict[str, Any]:
         product_id = product.get("dsld_id", "unknown")
         product_name = product.get("product_name", "Unknown Product")
+        section_a_max = self._section_max("a", 25.0)
+        section_b_max = self._section_max("b", 30.0)
+        section_c_max = self._section_max("c", 20.0)
+        section_d_max = self._section_max("d", 5.0)
 
         if quality_score is None:
             score_100_equivalent = None
@@ -1668,6 +2024,14 @@ class SupplementScorer:
             "grade": self._grade_word(score_100_equivalent or 0.0, verdict),
             "verdict": verdict,
             "safety_verdict": safety_verdict,
+            "badges": self._build_badges(product, verdict),
+            "category_percentile": None,
+            "category_percentile_text": None,
+            "percentile_category": product.get("percentile_category"),
+            "percentile_category_label": product.get("percentile_category_label"),
+            "percentile_category_source": product.get("percentile_category_source"),
+            "percentile_category_confidence": product.get("percentile_category_confidence"),
+            "percentile_category_signals": product.get("percentile_category_signals"),
             "output_schema_version": self.OUTPUT_SCHEMA_VERSION,
             "scoring_status": scoring_status,
             "score_basis": score_basis,
@@ -1700,19 +2064,19 @@ class SupplementScorer:
             "section_scores": {
                 "A_ingredient_quality": {
                     "score": breakdown.get("A", {}).get("score"),
-                    "max": 25,
+                    "max": section_a_max,
                 },
                 "B_safety_purity": {
                     "score": breakdown.get("B", {}).get("score"),
-                    "max": 35,
+                    "max": section_b_max,
                 },
                 "C_evidence_research": {
                     "score": breakdown.get("C", {}).get("score"),
-                    "max": 15,
+                    "max": section_c_max,
                 },
                 "D_brand_trust": {
                     "score": breakdown.get("D", {}).get("score"),
-                    "max": 5,
+                    "max": section_d_max,
                 },
             },
         }
@@ -1745,6 +2109,10 @@ class SupplementScorer:
 
             # Step 1: B0 immediate fail
             b0 = self._evaluate_b0(product)
+            section_a_max = self._section_max("a", 25.0)
+            section_b_max = self._section_max("b", 30.0)
+            section_c_max = self._section_max("c", 20.0)
+            section_d_max = self._section_max("d", 5.0)
             for flag in b0.get("flags", []):
                 if flag not in flags:
                     flags.append(flag)
@@ -1763,15 +2131,15 @@ class SupplementScorer:
 
             if b0.get("blocked"):
                 breakdown = {
-                    "A": {"score": 0.0, "max": 25},
+                    "A": {"score": 0.0, "max": section_a_max},
                     "B": {
                         "score": 0.0,
-                        "max": 35,
+                        "max": section_b_max,
                         "B0": "BLOCKED",
                         "reason": b0.get("reason"),
                     },
-                    "C": {"score": 0.0, "max": 15},
-                    "D": {"score": 0.0, "max": 5},
+                    "C": {"score": 0.0, "max": section_c_max},
+                    "D": {"score": 0.0, "max": section_d_max},
                     "violation_penalty": 0.0,
                 }
                 return self._build_core_output(
@@ -1792,15 +2160,15 @@ class SupplementScorer:
 
             if b0.get("unsafe"):
                 breakdown = {
-                    "A": {"score": 0.0, "max": 25},
+                    "A": {"score": 0.0, "max": section_a_max},
                     "B": {
                         "score": 0.0,
-                        "max": 35,
+                        "max": section_b_max,
                         "B0": "UNSAFE",
                         "reason": b0.get("reason"),
                     },
-                    "C": {"score": 0.0, "max": 15},
-                    "D": {"score": 0.0, "max": 5},
+                    "C": {"score": 0.0, "max": section_c_max},
+                    "D": {"score": 0.0, "max": section_d_max},
                     "violation_penalty": 0.0,
                 }
                 return self._build_core_output(
@@ -1827,10 +2195,10 @@ class SupplementScorer:
             if mapping_gate.get("stop"):
                 verdict = self._derive_verdict(b0, mapping_gate, flags, None)
                 breakdown = {
-                    "A": {"score": 0.0, "max": 25},
-                    "B": {"score": 0.0, "max": 35},
-                    "C": {"score": 0.0, "max": 15},
-                    "D": {"score": 0.0, "max": 5},
+                    "A": {"score": 0.0, "max": section_a_max},
+                    "B": {"score": 0.0, "max": section_b_max},
+                    "C": {"score": 0.0, "max": section_c_max},
+                    "D": {"score": 0.0, "max": section_d_max},
                     "violation_penalty": 0.0,
                 }
                 return self._build_core_output(
@@ -1912,6 +2280,14 @@ class SupplementScorer:
             "grade": None,
             "verdict": "NOT_SCORED",
             "safety_verdict": "UNKNOWN",
+            "badges": [],
+            "category_percentile": None,
+            "category_percentile_text": None,
+            "percentile_category": None,
+            "percentile_category_label": None,
+            "percentile_category_source": None,
+            "percentile_category_confidence": None,
+            "percentile_category_signals": [],
             "output_schema_version": self.OUTPUT_SCHEMA_VERSION,
             "scoring_status": "error",
             "score_basis": SCORE_BASIS_SCORING_ERROR,
@@ -1945,6 +2321,9 @@ class SupplementScorer:
             scored = self.score_product(product)
             scored_products.append(scored)
             verdict_distribution[scored.get("verdict", "UNKNOWN")] += 1
+
+        # Percentiles require cohort context, so assign after batch scoring.
+        self._attach_category_percentiles(products, scored_products)
 
         base_name = os.path.splitext(os.path.basename(input_file))[0]
         if base_name.startswith("enriched_"):
@@ -2030,10 +2409,10 @@ class SupplementScorer:
                 "verdict_distribution": dict(verdict_distribution),
             },
             "scoring_rules": {
-                "max_section_A": 25,
-                "max_section_B": 35,
-                "max_section_C": 15,
-                "max_section_D": 5,
+                "max_section_A": self._section_max("a", 25.0),
+                "max_section_B": self._section_max("b", 30.0),
+                "max_section_C": self._section_max("c", 20.0),
+                "max_section_D": self._section_max("d", 5.0),
                 "max_total": 80,
                 "fit_score_location": "client-side only",
             },

@@ -93,6 +93,8 @@ class TestAliasQuality:
             'dolomite',
             # BHB mineral salts — shared between d_beta_hydroxybutyrate_bhb + mineral parent
             'magnesium beta-hydroxybutyrate',
+            # Creatine magnesium chelate — shared between creatine_monohydrate + magnesium
+            'magnesium creatine chelate',
         }
 
         alias_map = defaultdict(list)

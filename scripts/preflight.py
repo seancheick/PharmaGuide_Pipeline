@@ -55,6 +55,8 @@ IMPORTANT_DATA_FILES = [
     ("cert_claim_rules.json", "Certification claim detection"),
     ("unit_conversions.json", "Unit conversion rules"),
     ("clinically_relevant_strains.json", "Clinical probiotic strain database"),
+    ("clinical_risk_taxonomy.json", "Condition and medication-class enum taxonomy"),
+    ("ingredient_interaction_rules.json", "Ingredient-level interaction alert rules"),
 ]
 
 # Optional data files - nice to have
@@ -137,6 +139,7 @@ SCHEMA_V4_DATABASES = [
     "botanical_ingredients.json",
     "cert_claim_rules.json",
     "clinically_relevant_strains.json",
+    "clinical_risk_taxonomy.json",
     "color_indicators.json",
     "enhanced_delivery.json",
     "functional_ingredient_groupings.json",
@@ -144,6 +147,7 @@ SCHEMA_V4_DATABASES = [
     "id_redirects.json",
     "ingredient_classification.json",
     "ingredient_quality_map.json",
+    "ingredient_interaction_rules.json",
     "ingredient_weights.json",
     "manufacture_deduction_expl.json",
     "manufacturer_violations.json",

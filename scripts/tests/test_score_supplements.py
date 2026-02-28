@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
-"""Tests for v3.0 scoring engine behavior."""
+"""Tests for schema-aligned scoring engine behavior."""
 
 from copy import deepcopy
+import json
 from pathlib import Path
 import sys
 
@@ -139,6 +140,28 @@ class TestV30Scoring:
         assert result["score_80"] is not None
         assert result["score_80"] > 0
         assert result["quality_score"] == result["score_80"]
+
+    def test_full_disclosure_badge_present_when_fully_disclosed(self, scorer):
+        result = scorer.score_product(make_base_product())
+        badge_ids = {badge.get("id") for badge in result.get("badges", [])}
+        assert "FULL_DISCLOSURE" in badge_ids
+
+    def test_full_disclosure_badge_absent_when_hidden_blend_exists(self, scorer):
+        product = make_base_product()
+        product["proprietary_data"]["has_proprietary_blends"] = True
+        product["proprietary_data"]["blends"] = [
+            _make_blend(
+                "Opaque Blend",
+                "none",
+                total_weight=500,
+                unit="mg",
+                ingredients_without_amounts=["A", "B"],
+            )
+        ]
+
+        result = scorer.score_product(product)
+        badge_ids = {badge.get("id") for badge in result.get("badges", [])}
+        assert "FULL_DISCLOSURE" not in badge_ids
 
     def test_b0_recall_blocks(self, scorer):
         product = make_base_product()
@@ -306,7 +329,7 @@ class TestV30Scoring:
         product["ingredient_quality_data"]["ingredients"] = deepcopy(product["ingredient_quality_data"]["ingredients_scorable"])
 
         section_a = scorer._score_section_a(product, "single")
-        assert section_a["A1"] == pytest.approx(13.0, rel=1e-6)
+        assert section_a["A1"] == pytest.approx(15.0, rel=1e-6)
 
     def test_a1_treats_single_nutrient_as_single(self, scorer):
         product = make_base_product()
@@ -331,6 +354,155 @@ class TestV30Scoring:
         section_single_nutrient = scorer._score_section_a(product, "single_nutrient")
 
         assert section_single_nutrient["A1"] == pytest.approx(section_single["A1"], rel=1e-6)
+
+    def test_a6_uses_score_first_when_both_score_and_bio_score_exist(self, scorer):
+        product = make_base_product()
+        product["ingredient_quality_data"]["total_active"] = 1
+        product["ingredient_quality_data"]["ingredients_scorable"] = [
+            {
+                "name": "Test Ingredient",
+                "standard_name": "Test Ingredient",
+                "score": 16,
+                "bio_score": 12,
+                "dosage_importance": 1.0,
+                "mapped": True,
+                "quantity": 100,
+                "unit": "mg",
+                "has_dose": True,
+            }
+        ]
+        product["ingredient_quality_data"]["ingredients"] = deepcopy(
+            product["ingredient_quality_data"]["ingredients_scorable"]
+        )
+        assert scorer._score_a6(product, "single") == pytest.approx(3.0)
+
+    def test_a6_falls_back_to_bio_score_when_score_missing(self, scorer):
+        product = make_base_product()
+        product["ingredient_quality_data"]["total_active"] = 1
+        product["ingredient_quality_data"]["ingredients_scorable"] = [
+            {
+                "name": "Fallback Ingredient",
+                "standard_name": "Fallback Ingredient",
+                "bio_score": 14,
+                "dosage_importance": 1.0,
+                "mapped": True,
+                "quantity": 100,
+                "unit": "mg",
+                "has_dose": True,
+            }
+        ]
+        product["ingredient_quality_data"]["ingredients"] = deepcopy(
+            product["ingredient_quality_data"]["ingredients_scorable"]
+        )
+        assert scorer._score_a6(product, "single") == pytest.approx(2.0)
+
+    def test_a6_only_applies_to_single_types(self, scorer):
+        product = make_base_product()
+        product["ingredient_quality_data"]["total_active"] = 1
+        product["ingredient_quality_data"]["ingredients_scorable"] = [
+            {
+                "name": "Single Ingredient",
+                "standard_name": "Single Ingredient",
+                "score": 16,
+                "dosage_importance": 1.0,
+                "mapped": True,
+                "quantity": 100,
+                "unit": "mg",
+                "has_dose": True,
+            }
+        ]
+        product["ingredient_quality_data"]["ingredients"] = deepcopy(
+            product["ingredient_quality_data"]["ingredients_scorable"]
+        )
+        assert scorer._score_a6(product, "targeted") == pytest.approx(0.0)
+
+    def test_a2_excludes_blend_containers(self, scorer):
+        product = make_base_product()
+        product["ingredient_quality_data"]["ingredients_scorable"] = [
+            {
+                "name": "Transparent Blend",
+                "standard_name": "Transparent Blend",
+                "canonical_id": "transparent_blend",
+                "score": 18,
+                "mapped": True,
+                "is_proprietary_blend": True,
+                "quantity": 500,
+                "unit": "mg",
+                "has_dose": True,
+            },
+            {
+                "name": "Magnesium Glycinate",
+                "standard_name": "Magnesium",
+                "canonical_id": "magnesium",
+                "score": 14,
+                "mapped": True,
+                "is_proprietary_blend": False,
+                "quantity": 200,
+                "unit": "mg",
+                "has_dose": True,
+            },
+            {
+                "name": "Vitamin D3",
+                "standard_name": "Vitamin D",
+                "canonical_id": "vitamin_d",
+                "score": 14,
+                "mapped": True,
+                "is_proprietary_blend": False,
+                "quantity": 1000,
+                "unit": "IU",
+                "has_dose": True,
+            },
+        ]
+        product["ingredient_quality_data"]["ingredients"] = deepcopy(
+            product["ingredient_quality_data"]["ingredients_scorable"]
+        )
+
+        # Two premium disclosed ingredients -> 0.5 points (count-1).
+        assert scorer._score_a2(product) == pytest.approx(0.5)
+
+    def test_a2_requires_usable_individual_dose(self, scorer):
+        product = make_base_product()
+        product["ingredient_quality_data"]["ingredients_scorable"] = [
+            {
+                "name": "Premium Undosed",
+                "standard_name": "Premium Undosed",
+                "canonical_id": "premium_undosed",
+                "score": 18,
+                "mapped": True,
+                "is_proprietary_blend": False,
+                "quantity": None,
+                "unit": "",
+                "has_dose": False,
+            },
+            {
+                "name": "Magnesium Glycinate",
+                "standard_name": "Magnesium",
+                "canonical_id": "magnesium",
+                "score": 14,
+                "mapped": True,
+                "is_proprietary_blend": False,
+                "quantity": 200,
+                "unit": "mg",
+                "has_dose": True,
+            },
+            {
+                "name": "Vitamin D3",
+                "standard_name": "Vitamin D",
+                "canonical_id": "vitamin_d",
+                "score": 14,
+                "mapped": True,
+                "is_proprietary_blend": False,
+                "quantity": 1000,
+                "unit": "IU",
+                "has_dose": True,
+            },
+        ]
+        product["ingredient_quality_data"]["ingredients"] = deepcopy(
+            product["ingredient_quality_data"]["ingredients_scorable"]
+        )
+
+        # Undosed premium ingredient should not count toward A2.
+        assert scorer._score_a2(product) == pytest.approx(0.5)
 
     def test_non_probiotic_prebiotic_only_gets_no_probiotic_bonus(self, scorer):
         product = make_base_product()
@@ -430,7 +602,7 @@ class TestV30Scoring:
         }
         section_b = scorer._score_section_b(product, "targeted", 0.0, [])
         assert section_b["B1_penalty"] == pytest.approx(2.0)
-        assert section_b["score"] == pytest.approx(33.0)
+        assert section_b["score"] == pytest.approx(23.0)
 
     def test_c_per_ingredient_cap_by_canonical_name(self, scorer):
         product = make_base_product()
@@ -451,7 +623,7 @@ class TestV30Scoring:
             ]
         }
         section_c = scorer._score_section_c(product, [])
-        assert section_c["score"] == pytest.approx(5.0)
+        assert section_c["score"] == pytest.approx(7.0)
 
     def test_low_quality_is_poor_not_unsafe(self, scorer):
         product = make_base_product()
@@ -528,13 +700,14 @@ def _make_blend(
     ingredients_with_amounts=None,
     ingredients_without_amounts=None,
     nested_count=None,
+    blend_total_mg=None,
 ):
     """Build a proprietary blend payload aligned with enrichment output."""
     with_amounts = ingredients_with_amounts or []
     without_amounts = ingredients_without_amounts or []
     if nested_count is None:
         nested_count = len(with_amounts) + len(without_amounts)
-    return {
+    result = {
         "name": name,
         "disclosure_level": level,
         "total_weight": total_weight,
@@ -552,6 +725,9 @@ def _make_blend(
             "ingredients_without_amounts": without_amounts,
         },
     }
+    if blend_total_mg is not None:
+        result["blend_total_mg"] = blend_total_mg
+    return result
 
 
 class TestB5ProprietaryBlendRedesign:
@@ -650,7 +826,7 @@ class TestB5ProprietaryBlendRedesign:
         # partial penalty = 1 + 3*0.25 = 1.75
         assert penalty == pytest.approx(1.75, abs=0.01)
         expected_avg = (14 + 12) / 2.0
-        assert scorer._score_a1(p, "targeted") == pytest.approx((expected_avg / 18.0) * 13.0, abs=0.01)
+        assert scorer._score_a1(p, "targeted") == pytest.approx((expected_avg / 18.0) * 15.0, abs=0.01)
         assert "PROPRIETARY_BLEND_PRESENT" in flags
 
     def test_partial_child_without_amount_not_counted_for_a1_or_disclosed_mass(self, scorer):
@@ -701,7 +877,7 @@ class TestB5ProprietaryBlendRedesign:
         # hidden_mass = 800; impact = 0.8 => partial = 1 + 2.4 = 3.4
         assert penalty == pytest.approx(3.4, abs=0.01)
         # Only Caffeine contributes (Rhodiola has no usable dose, blend container excluded)
-        assert scorer._score_a1(p, "targeted") == pytest.approx((14.0 / 18.0) * 13.0, abs=0.01)
+        assert scorer._score_a1(p, "targeted") == pytest.approx((14.0 / 18.0) * 15.0, abs=0.01)
 
     def test_duplicate_blends_deduped_once(self, scorer):
         p = make_base_product()
@@ -799,7 +975,7 @@ class TestB5ProprietaryBlendRedesign:
         ]
         assert scorer._score_b5(p, []) == pytest.approx(0.0, abs=0.01)
         expected_avg = (14 + 12) / 2.0
-        assert scorer._score_a1(p, "targeted") == pytest.approx((expected_avg / 18.0) * 13.0, abs=0.01)
+        assert scorer._score_a1(p, "targeted") == pytest.approx((expected_avg / 18.0) * 15.0, abs=0.01)
 
     def test_no_mg_data_uses_count_share_fallback(self, scorer):
         p = make_base_product()
@@ -870,8 +1046,8 @@ class TestB5ProprietaryBlendRedesign:
         ]
         p["proprietary_data"]["total_active_mg"] = 0
         p["proprietary_data"]["total_active_ingredients"] = 4
-        # count share impact = 2/4 = 0.5
-        assert scorer._score_b5(p, []) == pytest.approx(4.5, abs=0.01)
+        # count share impact = 2/max(4,8) = 0.25
+        assert scorer._score_b5(p, []) == pytest.approx(3.25, abs=0.01)
 
 
 class TestA1BlendContainerExclusion:
@@ -918,19 +1094,19 @@ class TestA1BlendContainerExclusion:
         score_with = scorer._score_a1(p, supp_type)
 
         # For reference: what it would be if blend IS included
-        # (15×1 + 5×1) / 2 = 10  →  (10/18)×13 ≈ 7.22
-        # Correct (blend excluded): 15/1 = 15  →  (15/18)×13 ≈ 10.83
-        assert score_with == pytest.approx((15.0 / 18.0) * 13.0, abs=0.1)
+        # (15×1 + 5×1) / 2 = 10  →  (10/18)×15 ≈ 8.33
+        # Correct (blend excluded): 15/1 = 15  →  (15/18)×15 = 12.5
+        assert score_with == pytest.approx((15.0 / 18.0) * 15.0, abs=0.1)
 
     def test_a1_not_contaminated_by_stub_score(self, scorer):
         """Blend container with stub score=5 must not drag A1 below the
         disclosed-only average."""
         p = self._product_with_blend_container(blend_score=5)
         a1_score = scorer._score_a1(p, "targeted")
-        # Score from disclosed ingredients only (score=15): ≈10.83
-        disclosed_only = (15.0 / 18.0) * 13.0
-        # Score if blend were included (score average 10): ≈7.22
-        would_be_dragged = (10.0 / 18.0) * 13.0
+        # Score from disclosed ingredients only (score=15): 12.5
+        disclosed_only = (15.0 / 18.0) * 15.0
+        # Score if blend were included (score average 10): ≈8.33
+        would_be_dragged = (10.0 / 18.0) * 15.0
         assert a1_score > would_be_dragged + 1.0
         assert a1_score == pytest.approx(disclosed_only, abs=0.1)
 
@@ -946,7 +1122,7 @@ class TestA1BlendContainerExclusion:
         ]
         score = scorer._score_a1(p, "targeted")
         expected_avg = (18 * 1.0 + 15 * 1.5) / (1.0 + 1.5)
-        assert score == pytest.approx((expected_avg / 18.0) * 13.0, abs=0.1)
+        assert score == pytest.approx((expected_avg / 18.0) * 15.0, abs=0.1)
 
     def test_a1_all_blend_containers_returns_zero(self, scorer):
         """If every ingredient is a proprietary blend container, A1 = 0."""
@@ -958,6 +1134,277 @@ class TestA1BlendContainerExclusion:
              "mapped": False, "is_proprietary_blend": True},
         ]
         assert scorer._score_a1(p, "targeted") == pytest.approx(0.0)
+
+
+class TestB5DisclosureTierEdgeCases:
+    """Edge cases for the three-tier disclosure model (full/partial/none)
+    and the penalty sign convention."""
+
+    @pytest.fixture
+    def scorer(self):
+        return SupplementScorer()
+
+    # ── Branded blend, no dosage, no children ("VitaTix Blend") ──
+    def test_branded_blend_no_info_gets_none_presence_floor(self, scorer):
+        """Completely opaque blend: no total, no children → none, impact=0, penalty=2.0."""
+        p = make_base_product()
+        p["proprietary_blends"] = [
+            _make_blend(
+                "VitaTix Blend",
+                "none",
+                total_weight=None,
+                nested_count=0,
+            )
+        ]
+        p["proprietary_data"]["total_active_ingredients"] = 4
+        penalty = scorer._score_b5(p, [])
+        assert penalty == pytest.approx(2.0, abs=0.01)
+
+    # ── Partial: total declared + subs listed, no individual amounts ──
+    def test_partial_total_plus_subs_penalty_proportional(self, scorer):
+        """FDA-compliant blend: 500mg total, 3 herbs listed, no individual amounts.
+        Under the corrected three-tier model this is 'partial'."""
+        p = make_base_product()
+        p["proprietary_blends"] = [
+            _make_blend(
+                "Herbal Blend",
+                "partial",
+                total_weight=500,
+                blend_total_mg=500.0,
+                ingredients_without_amounts=["Ashwagandha", "Lemon Balm", "Chamomile"],
+            )
+        ]
+        p["proprietary_data"]["total_active_mg"] = 2000
+        p["proprietary_data"]["total_active_ingredients"] = 5
+        penalty = scorer._score_b5(p, [])
+        # hidden_mass = 500, impact = 500/2000 = 0.25 → 1 + 3*0.25 = 1.75
+        assert penalty == pytest.approx(1.75, abs=0.01)
+
+    # ── Same blend as above but mislabeled as "none" would give higher penalty ──
+    def test_none_vs_partial_penalty_difference(self, scorer):
+        """Verify partial saves ~1.5 points vs none for same blend."""
+        p = make_base_product()
+        blend_args = dict(
+            total_weight=500,
+            blend_total_mg=500.0,
+            ingredients_without_amounts=["Ashwagandha", "Lemon Balm", "Chamomile"],
+        )
+        p["proprietary_data"]["total_active_mg"] = 2000
+
+        p["proprietary_blends"] = [_make_blend("B", "none", **blend_args)]
+        none_penalty = scorer._score_b5(p, [])
+
+        p["proprietary_blends"] = [_make_blend("B", "partial", **blend_args)]
+        partial_penalty = scorer._score_b5(p, [])
+
+        # none: 2 + 5*0.25 = 3.25;  partial: 1 + 3*0.25 = 1.75;  diff = 1.5
+        assert none_penalty - partial_penalty == pytest.approx(1.5, abs=0.01)
+
+    # ── Blend IS the entire product (impact=1.0) ──
+    def test_partial_blend_is_entire_product_max_impact(self, scorer):
+        """When partial blend total == total_active_mg, impact=1.0, penalty=4.0."""
+        p = make_base_product()
+        p["proprietary_blends"] = [
+            _make_blend(
+                "Total Blend",
+                "partial",
+                total_weight=500,
+                blend_total_mg=500.0,
+                ingredients_without_amounts=["A", "B", "C"],
+            )
+        ]
+        p["proprietary_data"]["total_active_mg"] = 500
+        penalty = scorer._score_b5(p, [])
+        # impact = 500/500 = 1.0 → 1 + 3*1.0 = 4.0
+        assert penalty == pytest.approx(4.0, abs=0.01)
+
+    def test_none_blend_is_entire_product_max_impact(self, scorer):
+        """When none blend total == total_active_mg, impact=1.0, penalty=7.0."""
+        p = make_base_product()
+        p["proprietary_blends"] = [
+            _make_blend(
+                "Total Blend",
+                "none",
+                total_weight=500,
+                blend_total_mg=500.0,
+                ingredients_without_amounts=["A", "B", "C"],
+            )
+        ]
+        p["proprietary_data"]["total_active_mg"] = 500
+        penalty = scorer._score_b5(p, [])
+        # impact = 500/500 = 1.0 → 2 + 5*1.0 = 7.0
+        assert penalty == pytest.approx(7.0, abs=0.01)
+
+    # ── Zero total_weight normalised to None (scorer edge case fix) ──
+    def test_zero_total_weight_uses_count_share_not_mg_share(self, scorer):
+        """Blend with total_weight=0 should NOT enter mg-share path."""
+        p = make_base_product()
+        p["proprietary_blends"] = [
+            _make_blend(
+                "Zero Weight Blend",
+                "none",
+                total_weight=0,
+                unit="",
+                ingredients_without_amounts=["A", "B"],
+                nested_count=2,
+            )
+        ]
+        p["proprietary_data"]["total_active_mg"] = 1000
+        p["proprietary_data"]["total_active_ingredients"] = 8
+        penalty = scorer._score_b5(p, [])
+        # count-share: 2/8 = 0.25 → 2 + 5*0.25 = 3.25
+        assert penalty == pytest.approx(3.25, abs=0.01)
+        evidence = scorer._last_b5_blend_evidence[0]
+        assert evidence["impact_source"] == "count_share"
+        assert evidence["blend_total_mg"] is None
+
+    # ── blend_total_mg field preferred over total_weight ──
+    def test_blend_total_mg_preferred_over_total_weight(self, scorer):
+        """When both blend_total_mg and total_weight exist, blend_total_mg wins."""
+        p = make_base_product()
+        p["proprietary_blends"] = [
+            _make_blend(
+                "Converted Blend",
+                "none",
+                total_weight=1.5,
+                unit="g",
+                blend_total_mg=1500.0,
+                ingredients_without_amounts=["A"],
+            )
+        ]
+        p["proprietary_data"]["total_active_mg"] = 3000
+        penalty = scorer._score_b5(p, [])
+        # blend_total_mg=1500, hidden=1500, impact=1500/3000=0.5 → 2+5*0.5=4.5
+        assert penalty == pytest.approx(4.5, abs=0.01)
+
+    # ── Penalty sign convention: B5 is subtracted from B ──
+    def test_b5_penalty_subtracted_from_b_section(self, scorer):
+        """Verify B5 is a positive magnitude subtracted in B formula."""
+        p = make_base_product()
+        # No blends → full B score as baseline
+        b_no_blend = scorer._score_section_b(p, "targeted", 0.0, [])
+
+        # Add a blend
+        p["proprietary_blends"] = [
+            _make_blend(
+                "Penalty Blend",
+                "none",
+                total_weight=1000,
+                blend_total_mg=1000.0,
+                ingredients_without_amounts=["A"],
+            )
+        ]
+        p["proprietary_data"]["total_active_mg"] = 2000
+        b_with_blend = scorer._score_section_b(p, "targeted", 0.0, [])
+
+        # B5 penalty should be positive
+        assert b_with_blend["B5_penalty"] > 0
+        # B section score should decrease by the penalty amount
+        expected_decrease = b_with_blend["B5_penalty"]
+        assert b_no_blend["score"] - b_with_blend["score"] == pytest.approx(
+            expected_decrease, abs=0.1
+        )
+
+    # ── Multiple blends with mixed tiers ──
+    def test_mixed_disclosure_tiers_stack_correctly(self, scorer):
+        """Multiple blends: full + partial + none. Full contributes 0."""
+        p = make_base_product()
+        p["proprietary_blends"] = [
+            _make_blend("Full Blend", "full", total_weight=200, blend_total_mg=200.0,
+                        ingredients_with_amounts=[
+                            {"name": "A", "amount": 100, "unit": "mg"},
+                            {"name": "B", "amount": 100, "unit": "mg"},
+                        ]),
+            _make_blend("Partial Blend", "partial", total_weight=400, blend_total_mg=400.0,
+                        source_field="activeIngredients[1]",
+                        ingredients_without_amounts=["C", "D"]),
+            _make_blend("None Blend", "none", total_weight=600, blend_total_mg=600.0,
+                        source_field="activeIngredients[2]",
+                        ingredients_without_amounts=["E"]),
+        ]
+        p["proprietary_data"]["total_active_mg"] = 2000
+        penalty = scorer._score_b5(p, [])
+        # full: 0
+        # partial: hidden=400, impact=0.2 → 1+3*0.2 = 1.6
+        # none: hidden=600, impact=0.3 → 2+5*0.3 = 3.5
+        # total: 5.1
+        assert penalty == pytest.approx(5.1, abs=0.01)
+
+    # ── B5 evidence payload completeness ──
+    def test_b5_evidence_payload_has_all_required_fields(self, scorer):
+        """Verify every required field in the B5 evidence payload."""
+        p = make_base_product()
+        p["proprietary_blends"] = [
+            _make_blend("Evidence Blend", "partial", total_weight=500, blend_total_mg=500.0,
+                        ingredients_without_amounts=["A", "B"])
+        ]
+        p["proprietary_data"]["total_active_mg"] = 1000
+        scorer._score_b5(p, [])
+        ev = scorer._last_b5_blend_evidence[0]
+        required_fields = [
+            "blend_name", "disclosure_tier", "blend_total_mg",
+            "disclosed_child_mg_sum", "hidden_mass_mg", "impact_ratio",
+            "impact_source", "impact_floor_applied", "presence_penalty",
+            "proportional_coef", "computed_blend_penalty",
+            "computed_blend_penalty_magnitude", "dedupe_fingerprint",
+        ]
+        for field in required_fields:
+            assert field in ev, f"Missing field: {field}"
+        # Sign convention: computed_blend_penalty is negative
+        assert ev["computed_blend_penalty"] < 0
+        # Magnitude is positive
+        assert ev["computed_blend_penalty_magnitude"] > 0
+        assert ev["computed_blend_penalty"] == pytest.approx(
+            -ev["computed_blend_penalty_magnitude"], abs=0.0001
+        )
+
+    # ── Sanity-check examples from the spec ──
+    def test_spec_example_partial_400mg_no_children(self, scorer):
+        """Spec: Partial 400mg, no children, total_active=2000 → penalty 1.6."""
+        p = make_base_product()
+        p["proprietary_blends"] = [
+            _make_blend("Spec Blend", "partial", total_weight=400, blend_total_mg=400.0,
+                        ingredients_without_amounts=["A"])
+        ]
+        p["proprietary_data"]["total_active_mg"] = 2000
+        # impact = 400/2000 = 0.2 → 1+3*0.2 = 1.6
+        assert scorer._score_b5(p, []) == pytest.approx(1.6, abs=0.01)
+
+    def test_spec_example_none_1200mg(self, scorer):
+        """Spec: None 1200mg, total_active=2000 → penalty 5.0."""
+        p = make_base_product()
+        p["proprietary_blends"] = [
+            _make_blend("Spec Blend", "none", total_weight=1200, blend_total_mg=1200.0,
+                        ingredients_without_amounts=["A"])
+        ]
+        p["proprietary_data"]["total_active_mg"] = 2000
+        # impact = 0.6 → 2+5*0.6 = 5.0
+        assert scorer._score_b5(p, []) == pytest.approx(5.0, abs=0.01)
+
+    def test_spec_example_partial_1200mg_800mg_disclosed(self, scorer):
+        """Spec: Partial 1200mg, 800mg children disclosed → penalty 1.6."""
+        p = make_base_product()
+        p["proprietary_blends"] = [
+            _make_blend("Spec Blend", "partial", total_weight=1200, blend_total_mg=1200.0,
+                        ingredients_with_amounts=[
+                            {"name": "A", "amount": 500, "unit": "mg"},
+                            {"name": "B", "amount": 300, "unit": "mg"},
+                        ],
+                        ingredients_without_amounts=["C"])
+        ]
+        p["proprietary_data"]["total_active_mg"] = 2000
+        # hidden = 1200-800 = 400, impact = 0.2 → 1+3*0.2 = 1.6
+        assert scorer._score_b5(p, []) == pytest.approx(1.6, abs=0.01)
+
+    def test_spec_example_tiny_none_50mg_floored(self, scorer):
+        """Spec: Tiny none 50mg, total=2000 → raw impact 0.025, floored to 0.1, penalty 2.5."""
+        p = make_base_product()
+        p["proprietary_blends"] = [
+            _make_blend("Tiny", "none", total_weight=50, blend_total_mg=50.0,
+                        ingredients_without_amounts=["A"])
+        ]
+        p["proprietary_data"]["total_active_mg"] = 2000
+        assert scorer._score_b5(p, []) == pytest.approx(2.5, abs=0.01)
 
 
 class TestImpactReport:
@@ -974,3 +1421,92 @@ class TestImpactReport:
 
         assert report["pass_gate"] is False
         assert report["summary_statistics"]["changes"]["new_unsafe_verdicts"] == 1
+
+
+class TestCategoryPercentiles:
+    @pytest.fixture
+    def scorer(self):
+        return SupplementScorer()
+
+    def test_batch_assigns_category_percentiles_for_sufficient_cohort(self, scorer, tmp_path):
+        products = []
+        for idx, score in enumerate([18, 16, 14, 12, 10], start=1):
+            product = make_base_product()
+            product["dsld_id"] = f"pct-{idx}"
+            product["product_name"] = f"Greens Powder {idx}"
+            product["supplement_type"] = {"type": "greens"}
+            product["form"] = "powder"
+            for ingredient in product["ingredient_quality_data"]["ingredients_scorable"]:
+                ingredient["score"] = score
+            for ingredient in product["ingredient_quality_data"]["ingredients"]:
+                ingredient["score"] = score
+            products.append(product)
+
+        input_file = tmp_path / "enriched_batch.json"
+        input_file.write_text(json.dumps(products), encoding="utf-8")
+        output_dir = tmp_path / "output"
+
+        stats = scorer.process_batch(str(input_file), str(output_dir))
+        scored = json.loads(Path(stats["output_file"]).read_text(encoding="utf-8"))
+        top_entry = next(item for item in scored if item["dsld_id"] == "pct-1")
+
+        assert top_entry["category_percentile"]["available"] is True
+        assert top_entry["category_percentile"]["cohort_size"] == 5
+        assert top_entry["category_percentile"]["category_source"] == "fallback_scorer"
+        assert top_entry["category_percentile"]["top_percent"] == pytest.approx(20.0)
+        assert "Among greens powders: Top 20.0%" == top_entry["category_percentile"]["text"]
+
+    def test_batch_marks_percentile_unavailable_for_small_cohort(self, scorer, tmp_path):
+        products = []
+        for idx in range(1, 4):
+            product = make_base_product()
+            product["dsld_id"] = f"small-{idx}"
+            product["product_name"] = f"Small Cohort {idx}"
+            product["supplement_type"] = {"type": "greens"}
+            product["form"] = "powder"
+            products.append(product)
+
+        input_file = tmp_path / "enriched_small_batch.json"
+        input_file.write_text(json.dumps(products), encoding="utf-8")
+        output_dir = tmp_path / "output"
+
+        stats = scorer.process_batch(str(input_file), str(output_dir))
+        scored = json.loads(Path(stats["output_file"]).read_text(encoding="utf-8"))
+
+        for entry in scored:
+            percentile = entry.get("category_percentile", {})
+            assert percentile.get("available") is False
+            assert percentile.get("reason") == "insufficient_cohort_size"
+
+    def test_batch_prefers_enriched_percentile_category_metadata(self, scorer, tmp_path):
+        products = []
+        for idx, score in enumerate([18, 16, 14, 12, 10], start=1):
+            product = make_base_product()
+            product["dsld_id"] = f"exp-{idx}"
+            product["product_name"] = f"Explicit Category {idx}"
+            product["supplement_type"] = {"type": "targeted"}
+            product["percentile_category"] = "greens_powder"
+            product["percentile_category_label"] = "Greens Powders"
+            product["percentile_category_source"] = "inferred"
+            product["percentile_category_confidence"] = 0.87
+            product["percentile_category_signals"] = ["name:greens", "form:powder"]
+            product["form"] = "powder"
+            for ingredient in product["ingredient_quality_data"]["ingredients_scorable"]:
+                ingredient["score"] = score
+            for ingredient in product["ingredient_quality_data"]["ingredients"]:
+                ingredient["score"] = score
+            products.append(product)
+
+        input_file = tmp_path / "enriched_explicit_batch.json"
+        input_file.write_text(json.dumps(products), encoding="utf-8")
+        output_dir = tmp_path / "output"
+
+        stats = scorer.process_batch(str(input_file), str(output_dir))
+        scored = json.loads(Path(stats["output_file"]).read_text(encoding="utf-8"))
+        top_entry = next(item for item in scored if item["dsld_id"] == "exp-1")
+
+        assert top_entry["category_percentile"]["available"] is True
+        assert top_entry["category_percentile"]["category_label"] == "Greens Powders"
+        assert top_entry["category_percentile"]["category_source"] == "inferred"
+        assert top_entry["category_percentile"]["category_confidence"] == pytest.approx(0.87)
+        assert top_entry["percentile_category"] == "greens_powder"
