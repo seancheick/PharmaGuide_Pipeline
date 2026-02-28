@@ -10436,7 +10436,13 @@
           "mervia curcumin",
           "bisdemethoxycurcumin",
           "BDMC",
-          "curcuminoid III"
+          "curcuminoid III",
+          "curcuminoids",
+          "curcumins",
+          "total curcuminoids",
+          "demethoxycurcumin",
+          "DMC",
+          "curcuminoid II"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -10462,11 +10468,6 @@
         "type": "active_in",
         "target_id": "turmeric",
         "notes": "Primary active compound"
-      },
-      {
-        "type": "parent_of",
-        "target_id": "curcuminoids",
-        "notes": "Specific curcuminoid"
       }
     ],
     "data_quality": {
@@ -14891,7 +14892,9 @@
           "european ginkgo biloba extract",
           "bilobalide",
           "ginkgo bilobalide",
-          "ginkgo terpene lactones"
+          "ginkgo terpene lactones",
+          "flavone glycosides",
+          "flavonoid glycosides"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -16501,7 +16504,12 @@
           "eleutherococcus senticosus root extract",
           "eleuthero ginseng",
           "eleutherococcus senticosus 0.8% extract",
-          "siberian eleuthero root extract"
+          "siberian eleuthero root extract",
+          "eleutherosides",
+          "eleutherosides B and E",
+          "eleutheroside B",
+          "eleutheroside E",
+          "syringin eleutheroside B"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -16550,11 +16558,6 @@
       {
         "type": "contains",
         "target_id": "ginsenosides"
-      },
-      {
-        "type": "contains",
-        "target_id": "eleutherosides",
-        "notes": "Siberian ginseng only"
       }
     ],
     "data_quality": {
@@ -16625,7 +16628,10 @@
           "alkylamide-rich echinacea",
           "echinacea root extract",
           "traditional echinacea",
-          "narrow-leaved coneflower (echinacea angustifoliae) root extract"
+          "narrow-leaved coneflower (echinacea angustifoliae) root extract",
+          "echinacosides",
+          "echinacoside",
+          "echinacoside standardized extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -19769,11 +19775,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.035,
+          "range_low": 0.02,
+          "range_high": 0.05,
+          "quality": "poor",
+          "notes": "2-5% fasted oral F; food reduces AUC 2.7-3.9x (PMID 32438698); strong inter-subject variability >6-fold in Cmax"
         }
       }
     },
@@ -21484,18 +21490,18 @@
   "corosolic_acid": {
     "standard_name": "Corosolic Acid",
     "severity_level": "none",
-    "category": "antioxidants",
+    "category": "herbs",
     "source": "botanical_extract",
     "priority": "high",
-    "description": "Standardization marker for botanical extracts",
-    "dosage_importance": 0.1,
+    "description": "Banaba leaf pentacyclic triterpene; primary marker for glucose-lowering standardized extracts",
+    "dosage_importance": 1.0,
     "forms": {
       "corosolic acid (unspecified)": {
-        "bio_score": 5,
-        "natural": false,
-        "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
+        "bio_score": 8,
+        "natural": true,
+        "score": 11,
+        "absorption": "~9% oral bioavailability in rats",
+        "notes": "Dual PTP1B inhibition + GLUT4 translocation lowers postprandial glucose; 10 mg/day GlucoHelp RCT showed −12% fasting glucose vs placebo (PMID 22095937). Banaba 1% corosolic acid is standard commercial specification (PMID 15256748).",
         "aliases": [
           "corosolic acid",
           "banaba leaf extract",
@@ -21511,108 +21517,13 @@
           "Corosolic",
           "GlucoHelp Banaba extract"
         ],
-        "dosage_importance": 1.0,
+        "dosage_importance": 1.5,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
-        }
-      }
-    },
-    "cui": null,
-    "rxcui": null,
-    "match_rules": {
-      "priority": 0,
-      "match_mode": "alias_and_fuzzy",
-      "exclusions": [],
-      "parent_id": null,
-      "confidence": "high"
-    },
-    "category_enum": "antioxidants",
-    "cui_note": "No UMLS entry for botanical/novel compound",
-    "rxcui_note": "No RxNorm concept for supplement ingredient",
-    "data_quality": {
-      "completeness": 1.0,
-      "missing_fields": [],
-      "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
-    }
-  },
-  "crocin": {
-    "standard_name": "Crocin",
-    "severity_level": "none",
-    "category": "antioxidants",
-    "source": "botanical_extract",
-    "priority": "high",
-    "description": "Standardization marker for botanical extracts",
-    "dosage_importance": 0.1,
-    "forms": {
-      "crocin (unspecified)": {
-        "bio_score": 5,
-        "natural": false,
-        "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
-        "aliases": [
-          "crocin"
-        ],
-        "dosage_importance": 1.0,
-        "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
-        }
-      }
-    },
-    "cui": null,
-    "rxcui": null,
-    "match_rules": {
-      "priority": 0,
-      "match_mode": "alias_and_fuzzy",
-      "exclusions": [],
-      "parent_id": null,
-      "confidence": "high"
-    },
-    "category_enum": "antioxidants",
-    "cui_note": "No UMLS entry for botanical/novel compound",
-    "rxcui_note": "No RxNorm concept for supplement ingredient",
-    "data_quality": {
-      "completeness": 1.0,
-      "missing_fields": [],
-      "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
-    }
-  },
-  "curcuminoids": {
-    "standard_name": "Curcuminoids",
-    "severity_level": "none",
-    "category": "herbs",
-    "source": "botanical_extract",
-    "priority": "high",
-    "description": "Standardization marker for botanical extracts",
-    "dosage_importance": 0.1,
-    "forms": {
-      "curcuminoids (unspecified)": {
-        "bio_score": 5,
-        "natural": false,
-        "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
-        "aliases": [
-          "curcuminoids",
-          "curcumins"
-        ],
-        "dosage_importance": 1.0,
-        "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.09,
+          "range_low": 0.05,
+          "range_high": 0.12,
+          "quality": "low",
+          "notes": "~9% F in rat PK (no human PK); pentacyclic triterpene with hepatic first-pass; extrapolated from preclinical data"
         }
       }
     },
@@ -21638,18 +21549,18 @@
   "cynarin": {
     "standard_name": "Cynarin",
     "severity_level": "none",
-    "category": "antioxidants",
+    "category": "herbs",
     "source": "botanical_extract",
     "priority": "high",
-    "description": "Standardization marker for botanical extracts",
-    "dosage_importance": 0.1,
+    "description": "Artichoke caffeoylquinic acid; primary standardization marker for cynara scolymus extracts",
+    "dosage_importance": 1.0,
     "forms": {
       "cynarin (unspecified)": {
-        "bio_score": 5,
-        "natural": false,
-        "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
+        "bio_score": 6,
+        "natural": true,
+        "score": 9,
+        "absorption": "~low; rapidly hydrolyzed to caffeic and quinic acids",
+        "notes": "Cynarin is rapidly hydrolyzed in the gut; choleretic and lipid-lowering effects are mediated by metabolites chlorogenic acid and caffeic acid (PMID 15693705). Artichoke leaf extract 600 mg/day RCT: −18.5% LDL vs placebo (PMID 23195882). Pycrinil is a branded artichoke extract standardized to cynarin content.",
         "aliases": [
           "cynarin",
           "artichoke ext.",
@@ -21658,13 +21569,13 @@
           "pycrinil",
           "artichoke leaf extract"
         ],
-        "dosage_importance": 1.0,
+        "dosage_importance": 1.5,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.05,
+          "range_low": 0.02,
+          "range_high": 0.1,
+          "quality": "low",
+          "notes": "Cynarin undergoes rapid hydrolysis to caffeic/quinic acid in GI tract; parent compound bioavailability very low (PMID 15693705)"
         }
       }
     },
@@ -21677,7 +21588,7 @@
       "parent_id": null,
       "confidence": "high"
     },
-    "category_enum": "antioxidants",
+    "category_enum": "herbs",
     "cui_note": "No UMLS entry for botanical/novel compound",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "data_quality": {
@@ -21693,29 +21604,31 @@
     "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
-    "description": "Standardization marker for botanical extracts",
-    "dosage_importance": 0.1,
+    "description": "Soy isoflavone aglycone; sold independently for menopausal and bone-density support",
+    "dosage_importance": 1.0,
     "forms": {
       "daidzein (unspecified)": {
-        "bio_score": 5,
-        "natural": false,
-        "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
+        "bio_score": 9,
+        "natural": true,
+        "score": 12,
+        "absorption": "~50-60% aglycone form; glycoside daidzin ~20-30%",
+        "notes": "Daidzein is more bioavailable than genistein (52% vs 25% F, PMID 8207540). Gut microbiome converts daidzein to equol in ~30-50% of Western populations; equol producers show stronger estrogenic benefit. 40-80 mg/day isoflavones reduced hot flash frequency by 26% in meta-analysis (PMID 22433977).",
         "aliases": [
           "daidzein",
           "daidzin",
           "diadzein",
-          "Daidzen",
-          "Daidzein/Daidzin"
+          "daidzen",
+          "daidzein/daidzin",
+          "soy daidzein",
+          "daidzein aglycone"
         ],
-        "dosage_importance": 1.0,
+        "dosage_importance": 1.5,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.52,
+          "range_low": 0.4,
+          "range_high": 0.6,
+          "quality": "moderate",
+          "notes": "Aglycone daidzein ~52% bioavailability (PMID 8207540); glycoside daidzin requires deglycosylation, ~20-30% net absorption"
         }
       }
     },
@@ -21744,28 +21657,32 @@
     "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
-    "description": "Standardization marker for botanical extracts",
-    "dosage_importance": 0.1,
+    "description": "Maqui berry anthocyanidin; sold as branded Delphinol/MaquiBright extracts for glycemic and eye health",
+    "dosage_importance": 1.0,
     "forms": {
       "delphinidin (unspecified)": {
-        "bio_score": 5,
-        "natural": false,
-        "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
+        "bio_score": 7,
+        "natural": true,
+        "score": 10,
+        "absorption": "~2-5% intact anthocyanidin; gut metabolites may contribute",
+        "notes": "Delphinol (standardized maqui berry, 35% delphinidins) 60 mg BID RCT: −5% HbA1c in prediabetics (PMID 27163077). MaquiBright 60 mg/day improved tear production +72% in dry-eye RCT (PMID 25412725). Potent ORAC anthocyanidin with rapid plasma appearance despite low absolute bioavailability.",
         "aliases": [
           "delphinidin",
           "delphinidins",
-          "Delphinol",
-          "delphinol maqui berry extract"
+          "delphinol",
+          "delphinol maqui berry extract",
+          "maquibright",
+          "maqui berry delphinidin",
+          "delphinidin 3-glucoside",
+          "delphinidin 3-sambubioside"
         ],
-        "dosage_importance": 1.0,
+        "dosage_importance": 1.5,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.03,
+          "range_low": 0.02,
+          "range_high": 0.05,
+          "quality": "low",
+          "notes": "Intact delphinidin ~2-5% bioavailability; rapid phase II conjugation; gut-derived phenolic metabolites extend systemic exposure"
         }
       }
     },
@@ -21788,31 +21705,34 @@
       "last_reviewed_at": "2026-02-28"
     }
   },
-  "demethoxycurcumin": {
-    "standard_name": "Demethoxycurcumin",
+  "diosgenin": {
+    "standard_name": "Diosgenin",
     "severity_level": "none",
     "category": "herbs",
     "source": "botanical_extract",
     "priority": "high",
-    "description": "Standardization marker for botanical extracts",
-    "dosage_importance": 0.1,
+    "description": "Steroidal sapogenin from fenugreek/wild yam; precursor in pharmaceutical steroid synthesis but NOT converted in vivo",
+    "dosage_importance": 1.0,
     "forms": {
-      "demethoxycurcumin (unspecified)": {
+      "diosgenin (unspecified)": {
         "bio_score": 5,
-        "natural": false,
-        "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
+        "natural": true,
+        "score": 8,
+        "absorption": "~9% in rats; poor oral bioavailability",
+        "notes": "Steroidal sapogenin used industrially as precursor for progesterone synthesis, but human body cannot convert diosgenin to hormones in vivo (no CYP side-chain cleavage). Rat PK: ~9% oral F (PMID 33995027). Fenugreek diosgenin 500 mg/day showed modest testosterone support in resistance-trained men (PMID 21116018). Low bio_score reflects poor absorption and lack of direct hormonal conversion.",
         "aliases": [
-          "demethoxycurcumin"
+          "diosgenin",
+          "diosgenin saponin",
+          "steroidal sapogenin",
+          "fenugreek diosgenin"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.09,
+          "range_low": 0.05,
+          "range_high": 0.12,
+          "quality": "low",
+          "notes": "~9% oral F in rats (PMID 33995027); no human PK data; poor aqueous solubility limits GI absorption"
         }
       }
     },
@@ -21835,79 +21755,39 @@
       "last_reviewed_at": "2026-02-28"
     }
   },
-  "diosgenin": {
-    "standard_name": "Diosgenin",
-    "severity_level": "none",
-    "category": "antioxidants",
-    "source": "botanical_extract",
-    "priority": "high",
-    "description": "Standardization marker for botanical extracts",
-    "dosage_importance": 0.1,
-    "forms": {
-      "diosgenin (unspecified)": {
-        "bio_score": 5,
-        "natural": false,
-        "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
-        "aliases": [
-          "diosgenin"
-        ],
-        "dosage_importance": 1.0,
-        "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
-        }
-      }
-    },
-    "cui": null,
-    "rxcui": null,
-    "match_rules": {
-      "priority": 0,
-      "match_mode": "alias_and_fuzzy",
-      "exclusions": [],
-      "parent_id": null,
-      "confidence": "high"
-    },
-    "category_enum": "antioxidants",
-    "cui_note": "No UMLS entry for botanical/novel compound",
-    "rxcui_note": "No RxNorm concept for supplement ingredient",
-    "data_quality": {
-      "completeness": 1.0,
-      "missing_fields": [],
-      "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
-    }
-  },
   "ecdysterones": {
     "standard_name": "Ecdysterones",
     "severity_level": "none",
-    "category": "antioxidants",
+    "category": "herbs",
     "source": "botanical_extract",
     "priority": "high",
-    "description": "Standardization marker for botanical extracts",
-    "dosage_importance": 0.1,
+    "description": "Phytoecdysteroids from Ajuga turkestanica and spinach; used for muscle protein synthesis and athletic performance",
+    "dosage_importance": 1.0,
     "forms": {
       "ecdysterones (unspecified)": {
-        "bio_score": 5,
-        "natural": false,
-        "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
+        "bio_score": 7,
+        "natural": true,
+        "score": 10,
+        "absorption": "~1% oral F for 20-hydroxyecdysone; metabolite poststerone ~19%",
+        "notes": "10-week RCT (n=46): ecdysterone 200-1600 mg/day from spinach extract produced >2 kg lean mass gain vs placebo (PMID 31123801). Binds estrogen receptor-beta (not AR), stimulating mTOR/protein synthesis without androgenic effects. WADA monitoring program 2022. Turkesterone from Ajuga turkestanica is the potency variant; 20-hydroxyecdysone is the most studied form.",
         "aliases": [
           "ecdysterones",
-          "ajuga turkestanica extract"
+          "ajuga turkestanica extract",
+          "turkesterone",
+          "20-hydroxyecdysone",
+          "beta-ecdysterone",
+          "ecdysterone",
+          "ajuga turkestanica",
+          "phytoecdysteroids",
+          "spinach extract ecdysterone"
         ],
-        "dosage_importance": 1.0,
+        "dosage_importance": 1.5,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.01,
+          "range_low": 0.005,
+          "range_high": 0.02,
+          "quality": "low",
+          "notes": "~1% oral F for 20-hydroxyecdysone parent compound; metabolite poststerone ~19% F; urinary recovery up to 50% as parent+metabolites (PMC8227119)"
         }
       }
     },
@@ -21920,102 +21800,7 @@
       "parent_id": null,
       "confidence": "high"
     },
-    "category_enum": "antioxidants",
-    "cui_note": "No UMLS entry for botanical/novel compound",
-    "rxcui_note": "No RxNorm concept for supplement ingredient",
-    "data_quality": {
-      "completeness": 1.0,
-      "missing_fields": [],
-      "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
-    }
-  },
-  "echinacosides": {
-    "standard_name": "Echinacosides",
-    "severity_level": "none",
-    "category": "antioxidants",
-    "source": "botanical_extract",
-    "priority": "high",
-    "description": "Standardization marker for botanical extracts",
-    "dosage_importance": 0.1,
-    "forms": {
-      "echinacosides (unspecified)": {
-        "bio_score": 5,
-        "natural": false,
-        "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
-        "aliases": [
-          "echinacosides"
-        ],
-        "dosage_importance": 1.0,
-        "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
-        }
-      }
-    },
-    "cui": null,
-    "rxcui": null,
-    "match_rules": {
-      "priority": 0,
-      "match_mode": "alias_and_fuzzy",
-      "exclusions": [],
-      "parent_id": null,
-      "confidence": "high"
-    },
-    "category_enum": "antioxidants",
-    "cui_note": "No UMLS entry for botanical/novel compound",
-    "rxcui_note": "No RxNorm concept for supplement ingredient",
-    "data_quality": {
-      "completeness": 1.0,
-      "missing_fields": [],
-      "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
-    }
-  },
-  "eleutherosides": {
-    "standard_name": "Eleutherosides",
-    "severity_level": "none",
-    "category": "antioxidants",
-    "source": "botanical_extract",
-    "priority": "high",
-    "description": "Standardization marker for botanical extracts",
-    "dosage_importance": 0.1,
-    "forms": {
-      "eleutherosides (unspecified)": {
-        "bio_score": 5,
-        "natural": false,
-        "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
-        "aliases": [
-          "eleutherosides",
-          "standardized eleuthero extract"
-        ],
-        "dosage_importance": 1.0,
-        "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
-        }
-      }
-    },
-    "cui": null,
-    "rxcui": null,
-    "match_rules": {
-      "priority": 0,
-      "match_mode": "alias_and_fuzzy",
-      "exclusions": [],
-      "parent_id": null,
-      "confidence": "high"
-    },
-    "category_enum": "antioxidants",
+    "category_enum": "herbs",
     "cui_note": "No UMLS entry for botanical/novel compound",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "data_quality": {
@@ -22033,25 +21818,29 @@
     "rxcui": null,
     "source": "botanical_extract",
     "priority": "high",
-    "description": "Standardization marker for botanical extracts",
-    "dosage_importance": 0.1,
+    "description": "Polyphenol from pomegranate, berries, walnuts; BCS Class IV prodrug converted to urolithins by gut microbiota",
+    "dosage_importance": 1.0,
     "forms": {
       "ellagic acid (unspecified)": {
         "bio_score": 5,
-        "natural": false,
-        "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
+        "natural": true,
+        "score": 8,
+        "absorption": "<1% parent compound; BCS Class IV (low solubility + low permeability)",
+        "notes": "BCS Class IV: <1% parent EA absorbed; gut microbiota converts to urolithins (A, B, C, D) which ARE systemically active. Only ~40% of adults are urolithin A producers (metabotype A). Pomegranate juice 237 mL delivers ~121 mg EA; Cmax 0.06 umol/L, t1/2 0.71h (PMID 15369737). Dose escalation shows saturation absorption — no benefit above ~500 mg (PMID 31552981).",
         "aliases": [
-          "ellagic acid"
+          "ellagic acid",
+          "ellagic acid extract",
+          "pomegranate ellagic acid",
+          "raspberry ellagic acid",
+          "urolithin precursor"
         ],
-        "dosage_importance": 1.0,
+        "dosage_importance": 1.5,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.008,
+          "range_low": 0.003,
+          "range_high": 0.01,
+          "quality": "poor",
+          "notes": "BCS Class IV: Cmax 0.06 umol/L from 121 mg EA dose (PMID 15369737); saturation absorption with no dose-response above 500 mg (PMID 31552981)"
         }
       }
     },
@@ -22063,53 +21852,6 @@
       "confidence": "high"
     },
     "category_enum": "antioxidants",
-    "rxcui_note": "No RxNorm concept for supplement ingredient",
-    "data_quality": {
-      "completeness": 1.0,
-      "missing_fields": [],
-      "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
-    }
-  },
-  "ellagitannins": {
-    "standard_name": "Ellagitannins",
-    "severity_level": "none",
-    "category": "antioxidants",
-    "source": "botanical_extract",
-    "priority": "high",
-    "description": "Standardization marker for botanical extracts",
-    "dosage_importance": 0.1,
-    "forms": {
-      "ellagitannins (unspecified)": {
-        "bio_score": 5,
-        "natural": false,
-        "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
-        "aliases": [
-          "ellagitannins"
-        ],
-        "dosage_importance": 1.0,
-        "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
-        }
-      }
-    },
-    "cui": null,
-    "rxcui": null,
-    "match_rules": {
-      "priority": 0,
-      "match_mode": "alias_and_fuzzy",
-      "exclusions": [],
-      "parent_id": null,
-      "confidence": "high"
-    },
-    "category_enum": "antioxidants",
-    "cui_note": "No UMLS entry for botanical/novel compound",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "data_quality": {
       "completeness": 1.0,
@@ -22120,29 +21862,34 @@
   },
   "emodin": {
     "standard_name": "Emodin",
-    "severity_level": "none",
-    "category": "antioxidants",
+    "severity_level": "moderate",
+    "category": "herbs",
     "source": "botanical_extract",
     "priority": "high",
-    "description": "Standardization marker for botanical extracts",
-    "dosage_importance": 0.1,
+    "description": "Anthraquinone from rhubarb, aloe, Polygonum; NTP genotoxicity signal and hepatotoxicity concern at higher doses",
+    "dosage_importance": 1.0,
     "forms": {
       "emodin (unspecified)": {
-        "bio_score": 5,
-        "natural": false,
-        "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
+        "bio_score": 3,
+        "natural": true,
+        "score": 6,
+        "absorption": "Very poor; only detected as glucuronide/sulfate conjugates in plasma",
+        "notes": "NTP 2-year carcinogenesis study: equivocal evidence in male mice for renal adenoma/carcinoma (PMID 12563347). Genotoxic in bacterial assays via Topo II inhibition (PMC6010407). Hepatotoxicity confirmed at higher doses via CYP/NF-kB/NLRP3 pathway (PMID 41579920). All clinical evidence is preclinical — no approved human RCT for standalone emodin. Found in multiple herbs: rhubarb, aloe, Polygonum cuspidatum, Cassia.",
         "aliases": [
-          "emodin"
+          "emodin",
+          "emodin anthraquinone",
+          "rhubarb emodin",
+          "aloe emodin",
+          "polygonum emodin",
+          "1,3,8-trihydroxy-6-methylanthraquinone"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.02,
+          "range_low": 0.005,
+          "range_high": 0.04,
+          "quality": "poor",
+          "notes": "Only detectable as glucuronide/sulfate conjugates after plasma hydrolysis; free emodin AUC negligible (PMID 23802430)"
         }
       }
     },
@@ -22155,101 +21902,7 @@
       "parent_id": null,
       "confidence": "high"
     },
-    "category_enum": "antioxidants",
-    "cui_note": "No UMLS entry for botanical/novel compound",
-    "rxcui_note": "No RxNorm concept for supplement ingredient",
-    "data_quality": {
-      "completeness": 1.0,
-      "missing_fields": [],
-      "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
-    }
-  },
-  "epigallocatechin_gallate": {
-    "standard_name": "Epigallocatechin Gallate",
-    "severity_level": "none",
-    "category": "antioxidants",
-    "source": "botanical_extract",
-    "priority": "high",
-    "description": "Standardization marker for botanical extracts",
-    "dosage_importance": 0.1,
-    "forms": {
-      "epigallocatechin gallate (unspecified)": {
-        "bio_score": 5,
-        "natural": false,
-        "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
-        "aliases": [
-          "epigallocatechin gallate"
-        ],
-        "dosage_importance": 1.0,
-        "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
-        }
-      }
-    },
-    "cui": null,
-    "rxcui": null,
-    "match_rules": {
-      "priority": 0,
-      "match_mode": "alias_and_fuzzy",
-      "exclusions": [],
-      "parent_id": null,
-      "confidence": "high"
-    },
-    "category_enum": "antioxidants",
-    "cui_note": "No UMLS entry for botanical/novel compound",
-    "rxcui_note": "No RxNorm concept for supplement ingredient",
-    "data_quality": {
-      "completeness": 1.0,
-      "missing_fields": [],
-      "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
-    }
-  },
-  "erinacines": {
-    "standard_name": "Erinacines",
-    "severity_level": "none",
-    "category": "antioxidants",
-    "source": "botanical_extract",
-    "priority": "high",
-    "description": "Standardization marker for botanical extracts",
-    "dosage_importance": 0.1,
-    "forms": {
-      "erinacines (unspecified)": {
-        "bio_score": 5,
-        "natural": false,
-        "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
-        "aliases": [
-          "erinacines"
-        ],
-        "dosage_importance": 1.0,
-        "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
-        }
-      }
-    },
-    "cui": null,
-    "rxcui": null,
-    "match_rules": {
-      "priority": 0,
-      "match_mode": "alias_and_fuzzy",
-      "exclusions": [],
-      "parent_id": null,
-      "confidence": "high"
-    },
-    "category_enum": "antioxidants",
+    "category_enum": "herbs",
     "cui_note": "No UMLS entry for botanical/novel compound",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "data_quality": {
@@ -22262,28 +21915,33 @@
   "erythrina_alkaloids": {
     "standard_name": "Erythrina Alkaloids",
     "severity_level": "none",
-    "category": "antioxidants",
+    "category": "herbs",
     "source": "botanical_extract",
     "priority": "high",
-    "description": "Standardization marker for botanical extracts",
-    "dosage_importance": 0.1,
+    "description": "Erythrina mulungu bark alkaloids with GABAergic/nicotinic activity; limited clinical evidence",
+    "dosage_importance": 1.0,
     "forms": {
       "erythrina alkaloids (unspecified)": {
-        "bio_score": 5,
-        "natural": false,
-        "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
+        "bio_score": 4,
+        "natural": true,
+        "score": 7,
+        "absorption": "unknown (no human PK; rat IV t1/2=44 min)",
+        "notes": "Erythrina mulungu bark alkaloids (erysotrine, erythraline) with alpha4beta2 nicotinic antagonist and GABAergic activity (PMID 30767297). Human RCT (NCT01948622, n=200) found 500 mg mulungu failed to outperform placebo for dental-procedure anxiety. No human PK data; rat IV t1/2=44 min (PMID 24548728). Do not combine with CNS depressants.",
         "aliases": [
-          "erythrina alkaloids"
+          "erythrina alkaloids",
+          "erythrina mulungu extract",
+          "mulungu bark alkaloids",
+          "mulungu alkaloid extract",
+          "erysotrine",
+          "erythraline"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
           "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
           "range_low": null,
-          "range_high": null
+          "range_high": null,
+          "quality": "unknown",
+          "notes": "No human PK data; rat IV t1/2=44 min (PMID 24548728); oral F unknown"
         }
       }
     },
@@ -22296,7 +21954,7 @@
       "parent_id": null,
       "confidence": "high"
     },
-    "category_enum": "antioxidants",
+    "category_enum": "herbs",
     "cui_note": "No UMLS entry for botanical/novel compound",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "data_quality": {
@@ -22309,32 +21967,36 @@
   "eugenol": {
     "standard_name": "Eugenol",
     "severity_level": "none",
-    "category": "antioxidants",
+    "category": "herbs",
     "source": "botanical_extract",
     "priority": "high",
-    "description": "Standardization marker for botanical extracts",
-    "dosage_importance": 0.1,
+    "description": "Primary phenolic of clove oil (Syzygium aromaticum); antioxidant and mild analgesic",
+    "dosage_importance": 1.0,
     "forms": {
       "eugenol (unspecified)": {
-        "bio_score": 5,
-        "natural": false,
-        "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
+        "bio_score": 6,
+        "natural": true,
+        "score": 9,
+        "absorption": "low (~5%; extensive first-pass glucuronidation/sulfation)",
+        "notes": "Primary phenolic of clove (59-88% of clove oil). Anti-inflammatory via NF-kB/COX-2 inhibition (PMID 21299140). Oral F ~5% due to first-pass conjugation (PMID 17321520). Clovinol branded extract (41.2% polyphenols) raised GSH 6x and SOD 56% in 84-day open-label study. High-dose eugenol is hepatotoxic; safe at supplement doses.",
         "aliases": [
           "eugenol",
           "eugenols",
           "clovinol",
           "clovinol clove flower bud extract",
-          "clove flower bud extract"
+          "clove flower bud extract",
+          "clove oil extract",
+          "clove bud extract polyphenols",
+          "eugenol extract",
+          "syzygium aromaticum extract"
         ],
-        "dosage_importance": 1.0,
+        "dosage_importance": 1.5,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.05,
+          "range_low": 0.03,
+          "range_high": 0.07,
+          "quality": "low",
+          "notes": "~5% oral F estimated; extensive glucuronidation/sulfation first-pass; t1/2 14-18h in rats due to enterohepatic recirculation (PMID 17321520)"
         }
       }
     },
@@ -22347,54 +22009,7 @@
       "parent_id": null,
       "confidence": "high"
     },
-    "category_enum": "antioxidants",
-    "cui_note": "No UMLS entry for botanical/novel compound",
-    "rxcui_note": "No RxNorm concept for supplement ingredient",
-    "data_quality": {
-      "completeness": 1.0,
-      "missing_fields": [],
-      "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
-    }
-  },
-  "eurycomanone": {
-    "standard_name": "Eurycomanone",
-    "severity_level": "none",
-    "category": "antioxidants",
-    "source": "botanical_extract",
-    "priority": "high",
-    "description": "Standardization marker for botanical extracts",
-    "dosage_importance": 0.1,
-    "forms": {
-      "eurycomanone (unspecified)": {
-        "bio_score": 5,
-        "natural": false,
-        "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
-        "aliases": [
-          "eurycomanone"
-        ],
-        "dosage_importance": 1.0,
-        "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
-        }
-      }
-    },
-    "cui": null,
-    "rxcui": null,
-    "match_rules": {
-      "priority": 0,
-      "match_mode": "alias_and_fuzzy",
-      "exclusions": [],
-      "parent_id": null,
-      "confidence": "high"
-    },
-    "category_enum": "antioxidants",
+    "category_enum": "herbs",
     "cui_note": "No UMLS entry for botanical/novel compound",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "data_quality": {
@@ -22410,25 +22025,28 @@
     "category": "fatty_acids",
     "source": "botanical_extract",
     "priority": "high",
-    "description": "Standardization marker for botanical extracts",
-    "dosage_importance": 0.1,
+    "description": "Generic unspecified fatty acids; see omega-3/6/7/9 parents for evidence-based scoring",
+    "dosage_importance": 0.5,
     "forms": {
       "fatty acids (unspecified)": {
         "bio_score": 5,
-        "natural": false,
-        "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
+        "natural": true,
+        "score": 8,
+        "absorption": "variable (depends on class; typical dietary FA >90%)",
+        "notes": "Generic label term covering 6+ fatty acid classes (omega-3/6/7/9, saturated, MCT). Dietary FA absorption generally >90% but efficacy is entirely class-dependent. Product labeling of \"fatty acids\" without specifying class indicates incomplete disclosure. For evidence-based scoring see omega_3, omega_6, fish_oil parent entries.",
         "aliases": [
-          "fatty acids"
+          "fatty acids",
+          "total fatty acids",
+          "essential fatty acids",
+          "fatty acid blend"
         ],
-        "dosage_importance": 1.0,
+        "dosage_importance": 0.5,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.9,
+          "range_low": 0.85,
+          "range_high": 0.95,
+          "quality": "good",
+          "notes": "Generic dietary fatty acid absorption >90% via pancreatic lipase/bile salt emulsification; actual value depends on chain length and saturation"
         }
       }
     },
@@ -22457,26 +22075,30 @@
     "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
-    "description": "Standardization marker for botanical extracts",
-    "dosage_importance": 0.1,
+    "description": "Hydroxycinnamic acid from rice bran/wheat bran; antioxidant with human lipid-lowering RCT evidence",
+    "dosage_importance": 1.0,
     "forms": {
       "ferulic acid (unspecified)": {
-        "bio_score": 5,
-        "natural": false,
-        "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
+        "bio_score": 9,
+        "natural": true,
+        "score": 12,
+        "absorption": "moderate (11-25% urinary recovery in humans; PMID 9878519)",
+        "notes": "Hydroxycinnamic acid from rice bran, wheat bran, oats. Urinary recovery 11-25% in humans with peak at 7h (PMID 9878519); among the better-absorbed phenolic acids. DB-RCT (n=48, 1000 mg/day x 6 wk) in hyperlipidemic adults: TC -8.1%, LDL -9.3%, TG -12.1%, HDL +4.3%, ox-LDL -7.1% (Nutrients 2018, DOI:10.3390/nu10060713). Synergistic with vitamin E as UV photoprotectant.",
         "aliases": [
           "ferulic acid",
-          "Trans-Ferulic Acid"
+          "Trans-Ferulic Acid",
+          "rice bran ferulic acid",
+          "ferulic acid from rice bran",
+          "hydroxycinnamic acid",
+          "ferulic acid extract"
         ],
-        "dosage_importance": 1.0,
+        "dosage_importance": 1.5,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.18,
+          "range_low": 0.11,
+          "range_high": 0.25,
+          "quality": "moderate",
+          "notes": "11-25% urinary recovery in humans (PMID 9878519); enterocyte uptake ~56% with substantial first-pass conjugation (PMID 12097677)"
         }
       }
     },
@@ -22502,34 +22124,57 @@
   "fiber": {
     "standard_name": "Fiber",
     "severity_level": "none",
-    "category": "antioxidants",
+    "category": "fibers",
     "source": "botanical_extract",
     "priority": "high",
-    "description": "Standardization marker for botanical extracts",
-    "dosage_importance": 0.1,
+    "description": "Dietary fiber including konjac glucomannan; viscous soluble fiber with strong lipid-lowering evidence",
+    "dosage_importance": 1.0,
     "forms": {
       "fiber (unspecified)": {
         "bio_score": 5,
-        "natural": false,
-        "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
+        "natural": true,
+        "score": 8,
+        "absorption": "N/A (fiber acts via luminal mechanism, not systemic absorption)",
+        "notes": "Generic dietary fiber without type specification. Fiber acts via luminal mechanisms (viscosity, fermentation to SCFAs, bile acid sequestration) not systemic absorption. Efficacy is type-dependent: soluble viscous fibers (glucomannan, psyllium) have strongest lipid/glycemic evidence. See konjac glucomannan form for specific clinical data.",
         "aliases": [
           "fiber",
-          "galactomannan",
+          "dietary fiber",
+          "soluble fiber",
+          "fiber blend",
+          "total dietary fiber"
+        ],
+        "dosage_importance": 0.5,
+        "absorption_structured": {
+          "value": null,
+          "range_low": null,
+          "range_high": null,
+          "quality": "unknown",
+          "notes": "Fiber acts via luminal viscosity mechanism, not systemic absorption"
+        }
+      },
+      "konjac glucomannan": {
+        "bio_score": 9,
+        "natural": true,
+        "score": 12,
+        "absorption": "N/A (soluble fiber; luminal viscosity mechanism)",
+        "notes": "Highly viscous soluble fiber from Amorphophallus konjac root. Meta-analysis of 12 RCTs (n=370, PMID 28356275): LDL-C -10%, non-HDL-C -7% at ~3 g/day. Additional meta-analysis confirms modest weight loss (PMID 24533610). Improves glycemia in T2DM (PMID 10372241). Mechanism: luminal viscosity reduces bile acid reabsorption and slows glucose absorption. Effective dose 3-5 g/day with adequate water before meals.",
+        "aliases": [
           "glucomannan",
           "konjac",
           "konjac root",
           "konjac glucomannan",
-          "amorphophallus konjac"
+          "amorphophallus konjac",
+          "galactomannan",
+          "konjac flour",
+          "konjac mannan"
         ],
-        "dosage_importance": 1.0,
+        "dosage_importance": 1.5,
         "absorption_structured": {
           "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
           "range_low": null,
-          "range_high": null
+          "range_high": null,
+          "quality": "unknown",
+          "notes": "Soluble fiber; mechanism is luminal viscosity and SCFA fermentation, not systemic absorption"
         }
       }
     },
@@ -22542,54 +22187,7 @@
       "parent_id": null,
       "confidence": "high"
     },
-    "category_enum": "antioxidants",
-    "cui_note": "No UMLS entry for botanical/novel compound",
-    "rxcui_note": "No RxNorm concept for supplement ingredient",
-    "data_quality": {
-      "completeness": 1.0,
-      "missing_fields": [],
-      "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
-    }
-  },
-  "flavone_glycosides": {
-    "standard_name": "Flavone Glycosides",
-    "severity_level": "none",
-    "category": "antioxidants",
-    "source": "botanical_extract",
-    "priority": "high",
-    "description": "Standardization marker for botanical extracts",
-    "dosage_importance": 0.1,
-    "forms": {
-      "flavone glycosides (unspecified)": {
-        "bio_score": 5,
-        "natural": false,
-        "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
-        "aliases": [
-          "flavone glycosides"
-        ],
-        "dosage_importance": 1.0,
-        "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
-        }
-      }
-    },
-    "cui": null,
-    "rxcui": null,
-    "match_rules": {
-      "priority": 0,
-      "match_mode": "alias_and_fuzzy",
-      "exclusions": [],
-      "parent_id": null,
-      "confidence": "high"
-    },
-    "category_enum": "antioxidants",
+    "category_enum": "fibers",
     "cui_note": "No UMLS entry for botanical/novel compound",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "data_quality": {
@@ -22607,25 +22205,27 @@
     "rxcui": null,
     "source": "botanical_extract",
     "priority": "high",
-    "description": "Standardization marker for botanical extracts",
-    "dosage_importance": 0.1,
+    "description": "Generic polyphenol term covering 6+ flavonoid subclasses; see specific entries for evidence-based scoring",
+    "dosage_importance": 0.5,
     "forms": {
       "flavonoids (unspecified)": {
-        "bio_score": 5,
-        "natural": false,
-        "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
+        "bio_score": 7,
+        "natural": true,
+        "score": 10,
+        "absorption": "variable (0.3-43% depending on subclass; PMID 15640486)",
+        "notes": "Generic polyphenol term covering flavones, flavonols, flavanones, isoflavones, anthocyanins, flavan-3-ols. Bioavailability ranges from <1% (anthocyanins) to ~43% (isoflavones/gallic acid) (PMID 15640486). No clinical evidence applies to \"flavonoids\" as a class — efficacy is entirely subclass-specific. See quercetin, rutin, hesperidin, EGCG, citrus_bioflavonoids for specific data.",
         "aliases": [
-          "flavonoids"
+          "flavonoids",
+          "plant flavonoids",
+          "polyphenol flavonoids"
         ],
-        "dosage_importance": 1.0,
+        "dosage_importance": 0.5,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.1,
+          "range_low": 0.003,
+          "range_high": 0.43,
+          "quality": "variable",
+          "notes": "0.3-43% depending on subclass (PMID 15640486); isoflavones highest, anthocyanins lowest"
         }
       }
     },
@@ -26385,53 +25985,6 @@
         "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
         "aliases": [
           "puerarin"
-        ],
-        "dosage_importance": 1.0,
-        "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
-        }
-      }
-    },
-    "cui": null,
-    "rxcui": null,
-    "match_rules": {
-      "priority": 0,
-      "match_mode": "alias_and_fuzzy",
-      "exclusions": [],
-      "parent_id": null,
-      "confidence": "high"
-    },
-    "category_enum": "antioxidants",
-    "cui_note": "No UMLS entry for botanical/novel compound",
-    "rxcui_note": "No RxNorm concept for supplement ingredient",
-    "data_quality": {
-      "completeness": 1.0,
-      "missing_fields": [],
-      "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
-    }
-  },
-  "punicalagins": {
-    "standard_name": "Punicalagins",
-    "severity_level": "none",
-    "category": "antioxidants",
-    "source": "botanical_extract",
-    "priority": "high",
-    "description": "Standardization marker for botanical extracts",
-    "dosage_importance": 0.1,
-    "forms": {
-      "punicalagins (unspecified)": {
-        "bio_score": 5,
-        "natural": false,
-        "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
-        "aliases": [
-          "punicalagins"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -30642,7 +30195,12 @@
         "aliases": [
           "standardized lion's mane",
           "lion's mane 30% polysaccharides",
-          "lion's mane extract"
+          "lion's mane extract",
+          "erinacines",
+          "erinacine A",
+          "erinacine A-enriched mycelium",
+          "hericium erinaceus mycelium erinacine A",
+          "erinacine A-enriched hericium erinaceus mycelium"
         ],
         "score": 12,
         "dosage_importance": 1.0,
@@ -33178,7 +32736,7 @@
       "vitamins"
     ],
     "cleanup_notes": "Resolved within-ingredient alias collisions; removed 63 redundant unspecified forms",
-    "total_entries": 601,
+    "total_entries": 597,
     "total_ingredients": 623,
     "data_quality": {
       "review_status": "stub"
@@ -38254,6 +37812,28 @@
           "quality": "moderate",
           "notes": "moderate (~50%)"
         }
+      },
+      "tongkat ali eurycomanone-standardized extract": {
+        "bio_score": 9,
+        "natural": true,
+        "score": 12,
+        "absorption": "~10.5% oral F in rat (PMID 16206032)",
+        "notes": "Eurycomanone-enriched tongkat ali extract (2-10% eurycomanone by HPTLC). Primary quassinoid in Eurycoma longifolia root; inhibits aromatase and PDE (PMID 23810842). Absolute oral F ~10.5% in rat (PMID 16206032); standardized water extract matrix improves relative bioavailability (PMC6161288). Human RCTs used whole-root extract, not isolated eurycomanone.",
+        "aliases": [
+          "eurycomanone",
+          "eurycomanone extract",
+          "eurycomanone-standardized tongkat ali",
+          "tongkat ali 10% eurycomanone",
+          "high-eurycomanone tongkat ali"
+        ],
+        "dosage_importance": 1.5,
+        "absorption_structured": {
+          "value": 0.105,
+          "range_low": 0.08,
+          "range_high": 0.13,
+          "quality": "low",
+          "notes": "10.5% oral F in rats (PMID 16206032); matrix effects in whole extract improve relative bioavailability (PMC6161288)"
+        }
       }
     },
     "match_rules": {
@@ -40048,7 +39628,12 @@
           "pomegranate fruit extract",
           "pomegranate extract",
           "punica granatum extract",
-          "pomegranate polyphenols"
+          "pomegranate polyphenols",
+          "ellagitannins",
+          "punicalagins",
+          "pomegranate ellagitannins",
+          "punicalagin-rich pomegranate extract",
+          "ellagitannin-rich pomegranate"
         ],
         "dosage_importance": 0.9,
         "absorption_structured": {
@@ -43841,7 +43426,11 @@
           "clearsaff",
           "safr'inside",
           "safr inside",
-          "Affron Eye"
+          "Affron Eye",
+          "crocin",
+          "crocins",
+          "crocetin",
+          "saffron crocin extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {

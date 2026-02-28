@@ -101,6 +101,7 @@ class TestAliasQuality:
             'epigallocatechin gallate', # egcg stub + epigallocatechin_gallate
             'proanthocyanidins',        # pac stub + proanthocyanidins
             'ginsenoside rg3',          # rg3 stub + ginsenosides
+            'maquibright',              # delphinidin branded extract + maqui_berry
         }
 
         alias_map = defaultdict(list)

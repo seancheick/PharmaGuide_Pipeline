@@ -1336,13 +1336,12 @@ class TestFormFallbackPrecisionRegression:
         assert recognized.get("recognition_type") == "botanical_unscored"
         assert recognized.get("matched_entry_id") == "black_tea_leaf"
 
-    def test_galactomannan_maps_conservatively_to_fiber(self, enricher):
+    def test_galactomannan_maps_to_fiber_konjac_form(self, enricher):
         qm = enricher.databases.get("ingredient_quality_map", {})
         match = enricher._match_quality_map("Galactomannan", "Galactomannan", qm)
         assert match is not None
         assert match.get("canonical_id") == "fiber"
-        assert "unspecified" in str(match.get("form_name", "")).lower()
-        assert float(match.get("score", 0)) <= 5.0
+        assert "konjac" in str(match.get("form_name", "")).lower()
 
     def test_dha_epa_combined_alias_maps_to_epa_dha(self, enricher):
         qm = enricher.databases.get("ingredient_quality_map", {})

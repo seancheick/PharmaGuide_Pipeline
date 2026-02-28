@@ -378,7 +378,7 @@ def normalizer():
         ("Calcium Glycerophosphate", "calcium glycerophosphate"),
         ("Calcium Caprylate", "calcium caprylate"),
         ("Crominex 3+", "crominex 3+"),
-        ("Beta-Ecdysterone", "beta-ecdysterone"),
+        ("Beta-Ecdysterone", "Ecdysterones"),
         ("Carotene, Natural", "carotene, natural"),
         ("Malate", "malate"),
         ("Lactococcus lactis strain plasma", "Probiotics"),
