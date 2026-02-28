@@ -22944,113 +22944,21 @@
       "last_reviewed_at": "2026-02-28"
     }
   },
-  "hyperforin": {
-    "standard_name": "Hyperforin",
-    "severity_level": "none",
-    "category": "herbs",
-    "cui": "C0250248",
-    "rxcui": null,
-    "source": "botanical_extract",
-    "priority": "high",
-    "description": "Standardization marker for botanical extracts",
-    "dosage_importance": 0.1,
-    "forms": {
-      "hyperforin (unspecified)": {
-        "bio_score": 5,
-        "natural": false,
-        "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
-        "aliases": [
-          "hyperforin"
-        ],
-        "dosage_importance": 1.0,
-        "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
-        }
-      }
-    },
-    "match_rules": {
-      "priority": 0,
-      "match_mode": "alias_and_fuzzy",
-      "exclusions": [],
-      "parent_id": null,
-      "confidence": "high"
-    },
-    "category_enum": "herbs",
-    "rxcui_note": "No RxNorm concept for supplement ingredient",
-    "data_quality": {
-      "completeness": 1.0,
-      "missing_fields": [],
-      "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
-    }
-  },
-  "hypericin": {
-    "standard_name": "Hypericin",
-    "severity_level": "none",
-    "category": "herbs",
-    "cui": "C0000521",
-    "rxcui": null,
-    "source": "botanical_extract",
-    "priority": "high",
-    "description": "Standardization marker for botanical extracts",
-    "dosage_importance": 0.1,
-    "forms": {
-      "hypericin (unspecified)": {
-        "bio_score": 5,
-        "natural": false,
-        "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
-        "aliases": [
-          "hypericin"
-        ],
-        "dosage_importance": 1.0,
-        "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
-        }
-      }
-    },
-    "match_rules": {
-      "priority": 0,
-      "match_mode": "alias_and_fuzzy",
-      "exclusions": [],
-      "parent_id": null,
-      "confidence": "high"
-    },
-    "category_enum": "herbs",
-    "rxcui_note": "No RxNorm concept for supplement ingredient",
-    "data_quality": {
-      "completeness": 1.0,
-      "missing_fields": [],
-      "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
-    }
-  },
   "icariin": {
     "standard_name": "Icariin",
     "severity_level": "none",
-    "category": "antioxidants",
+    "category": "herbs",
     "source": "botanical_extract",
     "priority": "high",
-    "description": "Standardization marker for botanical extracts",
-    "dosage_importance": 0.1,
+    "description": "Primary flavonoid bioactive of Epimedium (horny goat weed); PDE5 inhibitor via active metabolites",
+    "dosage_importance": 1.5,
     "forms": {
       "icariin (unspecified)": {
-        "bio_score": 5,
-        "natural": false,
-        "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
+        "bio_score": 7,
+        "natural": true,
+        "score": 10,
+        "absorption": "~5% intact; active metabolites via gut deglycosylation (PMID 30522143)",
+        "notes": "Prenylated flavonol glycoside from Epimedium (horny goat weed). PDE5 inhibitor (IC50 ~0.4 uM, ~100x less potent than sildenafil). Intact oral F very low (undetectable at most doses, Brown 2019 DB-RCT); gut/hepatic deglycosylation generates icariside II (Tmax ~4h) and desmethylicaritin (PMID 30522143). Bone RCT: 60 mg/day Epimedium flavonoids x 24 mo increased BMD vs placebo. ERbeta agonist; NF-kB inhibitor. No human RCT for erectile dysfunction.",
         "aliases": [
           "icariin",
           "epimedium",
@@ -23067,15 +22975,20 @@
           "epimedium leaf extract",
           "horny goat weed p.e.",
           "horny goat weed leaf extract",
-          "Horny Goat Weed Leaf, Stem Extract"
+          "Horny Goat Weed Leaf, Stem Extract",
+          "epimedium icariin",
+          "icariin standardized",
+          "icariside II",
+          "icariin 60%",
+          "epimedium 20% icariin"
         ],
-        "dosage_importance": 1.0,
+        "dosage_importance": 1.5,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.05,
+          "range_low": 0.01,
+          "range_high": 0.1,
+          "quality": "poor",
+          "notes": "Intact icariin very low F%; intestinal/hepatic deglycosylation produces icariside II (Tmax ~4h) and desmethylicaritin (Tmax ~24h) as primary bioactive metabolites (PMID 30522143)"
         }
       }
     },
@@ -23088,7 +23001,7 @@
       "parent_id": null,
       "confidence": "high"
     },
-    "category_enum": "antioxidants",
+    "category_enum": "herbs",
     "cui_note": "No UMLS entry for botanical/novel compound",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "data_quality": {
@@ -23104,25 +23017,29 @@
     "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
-    "description": "Standardization marker for botanical extracts",
-    "dosage_importance": 0.1,
+    "description": "Yellow-orange betaxanthin betalain from prickly pear (Opuntia); highest bioavailability of all betalains",
+    "dosage_importance": 1.0,
     "forms": {
       "indicaxanthin (unspecified)": {
-        "bio_score": 5,
-        "natural": false,
-        "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
+        "bio_score": 8,
+        "natural": true,
+        "score": 11,
+        "absorption": "~76% urinary recovery in humans (PMID 15447903); Tmax ~180 min",
+        "notes": "Yellow-orange betaxanthin betalain from prickly pear (Opuntia ficus-indica). Exceptionally high oral bioavailability: 76% urinary recovery from 28 mg oral dose, Tmax ~180 min, plasma peak ~6.9 uM (PMID 15447903). Absorbed in native form without metabolic transformation — unlike betanin (<1%). Incorporates into LDL particles; increases oxidation resistance. Anti-inflammatory via NF-kB/COX-2. No large-scale RCTs for disease endpoints.",
         "aliases": [
-          "indicaxanthin"
+          "indicaxanthin",
+          "prickly pear indicaxanthin",
+          "opuntia indicaxanthin",
+          "betaxanthin",
+          "prickly pear betalain"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.76,
+          "range_low": 0.73,
+          "range_high": 0.79,
+          "quality": "good",
+          "notes": "76 +/- 3% urinary recovery in 8 healthy volunteers from 28 mg oral dose; absorbed in native form without metabolic transformation (PMID 15447903)"
         }
       }
     },
@@ -23217,15 +23134,15 @@
     "rxcui": null,
     "source": "botanical_extract",
     "priority": "high",
-    "description": "Standardization marker for botanical extracts",
-    "dosage_importance": 0.1,
+    "description": "Generic soy isoflavone class; catch-all for non-individualized label claims (NovaSOY, SoyLife)",
+    "dosage_importance": 1.0,
     "forms": {
       "isoflavones (unspecified)": {
-        "bio_score": 5,
-        "natural": false,
-        "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
+        "bio_score": 8,
+        "natural": true,
+        "score": 11,
+        "absorption": "Daidzein ~52%, genistein ~25% (PMID 8207540); glycoside forms 1.6-1.8x higher Cmax",
+        "notes": "Mixed soy isoflavone class (daidzein, genistein, glycitein). Glycoside forms show 1.6-1.8x higher Cmax than aglycones via intestinal beta-glucosidase (PMID 11285356). Meta-analysis (PMID 22433977, 9 RCTs, n=988): 40-80 mg/day reduced hot flash frequency 30.5% vs placebo. Equol production (30-50% of adults) determines response strength. ERbeta preferential agonism. See daidzein/genistein parents for individualized scoring.",
         "aliases": [
           "isoflavones",
           "Isoflavone Glycosides",
@@ -23251,11 +23168,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.35,
+          "range_low": 0.25,
+          "range_high": 0.52,
+          "quality": "moderate",
+          "notes": "Class average; daidzein ~52%, genistein ~25% (PMID 8207540); glycoside Cmax 1.6-1.8x higher but delayed Tmax (PMID 11285356)"
         }
       }
     },
@@ -23267,53 +23184,6 @@
       "confidence": "high"
     },
     "category_enum": "antioxidants",
-    "rxcui_note": "No RxNorm concept for supplement ingredient",
-    "data_quality": {
-      "completeness": 1.0,
-      "missing_fields": [],
-      "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
-    }
-  },
-  "isopetasin": {
-    "standard_name": "Isopetasin",
-    "severity_level": "none",
-    "category": "antioxidants",
-    "source": "botanical_extract",
-    "priority": "high",
-    "description": "Standardization marker for botanical extracts",
-    "dosage_importance": 0.1,
-    "forms": {
-      "isopetasin (unspecified)": {
-        "bio_score": 5,
-        "natural": false,
-        "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
-        "aliases": [
-          "isopetasin"
-        ],
-        "dosage_importance": 1.0,
-        "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
-        }
-      }
-    },
-    "cui": null,
-    "rxcui": null,
-    "match_rules": {
-      "priority": 0,
-      "match_mode": "alias_and_fuzzy",
-      "exclusions": [],
-      "parent_id": null,
-      "confidence": "high"
-    },
-    "category_enum": "antioxidants",
-    "cui_note": "No UMLS entry for botanical/novel compound",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "data_quality": {
       "completeness": 1.0,
@@ -23328,25 +23198,31 @@
     "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
-    "description": "Standardization marker for botanical extracts",
-    "dosage_importance": 0.1,
+    "description": "Bioactive glucosinolate hydrolysis products (~200+ members); class catch-all for non-sulforaphane ITC claims",
+    "dosage_importance": 0.5,
     "forms": {
       "isothiocyanates (unspecified)": {
-        "bio_score": 5,
-        "natural": false,
-        "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
+        "bio_score": 8,
+        "natural": true,
+        "score": 11,
+        "absorption": "PEITC ~80% (PMID 9041956); sulforaphane ~70% (PMID 21747065); varies by compound",
+        "notes": "Organosulfur phytochemicals from Brassicaceae via myrosinase hydrolysis. PEITC (watercress) ~80% absorbed (PMID 9041956); sulforaphane (broccoli sprouts) ~70% urinary recovery (PMID 21747065). Supplements without myrosinase produce only 5-10% conversion. Primary mechanism: Nrf2/ARE pathway → phase II detox enzymes (NQO1, GST, HO-1). HDAC inhibitor. Crucifer consumption associated with reduced cancer risk (PMID 12432933).",
         "aliases": [
-          "isothiocyanates"
+          "isothiocyanates",
+          "cruciferous isothiocyanates",
+          "broccoli isothiocyanates",
+          "isothiocyanate complex",
+          "phenethyl isothiocyanate",
+          "PEITC",
+          "allyl isothiocyanate"
         ],
-        "dosage_importance": 1.0,
+        "dosage_importance": 0.5,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.7,
+          "range_low": 0.05,
+          "range_high": 0.8,
+          "quality": "variable",
+          "notes": "PEITC ~80% from watercress (PMID 9041956); sulforaphane ~70% from fresh sprouts (PMID 21747065); 5-10% from glucosinolate supplements without myrosinase"
         }
       }
     },
@@ -24626,53 +24502,6 @@
       "confidence": "high"
     },
     "category_enum": "herbs",
-    "cui_note": "No UMLS entry for botanical/novel compound",
-    "rxcui_note": "No RxNorm concept for supplement ingredient",
-    "data_quality": {
-      "completeness": 1.0,
-      "missing_fields": [],
-      "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
-    }
-  },
-  "petasin": {
-    "standard_name": "Petasin",
-    "severity_level": "none",
-    "category": "antioxidants",
-    "source": "botanical_extract",
-    "priority": "high",
-    "description": "Standardization marker for botanical extracts",
-    "dosage_importance": 0.1,
-    "forms": {
-      "petasin (unspecified)": {
-        "bio_score": 5,
-        "natural": false,
-        "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
-        "aliases": [
-          "petasin"
-        ],
-        "dosage_importance": 1.0,
-        "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
-        }
-      }
-    },
-    "cui": null,
-    "rxcui": null,
-    "match_rules": {
-      "priority": 0,
-      "match_mode": "alias_and_fuzzy",
-      "exclusions": [],
-      "parent_id": null,
-      "confidence": "high"
-    },
-    "category_enum": "antioxidants",
     "cui_note": "No UMLS entry for botanical/novel compound",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "data_quality": {
@@ -32250,7 +32079,7 @@
       "vitamins"
     ],
     "cleanup_notes": "Resolved within-ingredient alias collisions; removed 63 redundant unspecified forms",
-    "total_entries": 585,
+    "total_entries": 581,
     "total_ingredients": 623,
     "data_quality": {
       "review_status": "stub"
@@ -33902,7 +33731,9 @@
           "standardized st. john's wort extract",
           "st. john's wort standardized extract",
           "st. john's wort extract standardized to 0.3% hypericin",
-          "hypericins"
+          "hypericins",
+          "hyperforin",
+          "hypericin"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -37715,7 +37546,12 @@
           "urovex purple butterbur root ext.",
           "petadolex purple butterbur root ext",
           "petadolex purple butterbur root ext.",
-          "Butterbur 15% extract"
+          "Butterbur 15% extract",
+          "isopetasin",
+          "petasin",
+          "petasin extract",
+          "isopetasin extract",
+          "total petasins"
         ],
         "dosage_importance": 2.0,
         "absorption_structured": {
