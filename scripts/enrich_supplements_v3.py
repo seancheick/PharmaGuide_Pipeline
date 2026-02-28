@@ -24,6 +24,7 @@ import json
 import os
 import sys
 import re
+import math
 import logging
 import argparse
 import traceback
@@ -169,6 +170,29 @@ class SupplementEnricherV3:
         'manufacturer_data': {},
         'probiotic_data': {'is_probiotic_product': False},
         'dietary_sensitivity_data': {},
+        'interaction_profile': {
+            'ingredient_alerts': [],
+            'condition_summary': {},
+            'drug_class_summary': {},
+            'highest_severity': None,
+            'data_sources': [],
+            'rules_version': None,
+            'taxonomy_version': None,
+            'user_condition_alerts': {
+                'enabled': False,
+                'conditions_checked': [],
+                'drug_classes_checked': [],
+                'alerts': [],
+                'highest_severity': None
+            }
+        },
+        'user_condition_alerts': {
+            'enabled': False,
+            'conditions_checked': [],
+            'drug_classes_checked': [],
+            'alerts': [],
+            'highest_severity': None
+        },
         'rda_ul_data': {},
         'proprietary_data': {},
         'enrichment_metadata': {'ready_for_scoring': False}
@@ -281,6 +305,7 @@ class SupplementEnricherV3:
         self._rda_ul_warning_count = 0
         self._ambiguity_warning_count = 0
         self._parent_fallback_info_count = 0
+        self._parent_fallback_details = []  # Collect ALL fallback details for report
 
         # Initialize scoring hardening modules
         self._init_scoring_modules()
@@ -397,6 +422,9 @@ class SupplementEnricherV3:
                 "cert_claim_rules": "data/cert_claim_rules.json",
                 # Tiered matching: other_ingredients for recognized-but-non-scorable
                 "other_ingredients": "data/other_ingredients.json",
+                "percentile_categories": "data/percentile_categories.json",
+                "clinical_risk_taxonomy": "data/clinical_risk_taxonomy.json",
+                "ingredient_interaction_rules": "data/ingredient_interaction_rules.json",
             }
 
         # Add clinically_relevant_strains if not present
@@ -441,6 +469,9 @@ class SupplementEnricherV3:
                     "allowlist",
                     "denylist",
                     "entries",
+                    "interaction_rules",
+                    "conditions",
+                    "drug_classes",
                 )
                 for key in preferred_list_keys:
                     value = payload.get(key)
@@ -512,6 +543,9 @@ class SupplementEnricherV3:
             "rda_optimal_uls", "clinically_relevant_strains", "enhanced_delivery",
             "cert_claim_rules",  # Required for evidence-based claims detection
             "banned_match_allowlist",
+            "percentile_categories",
+            "clinical_risk_taxonomy",
+            "ingredient_interaction_rules",
         ]
 
         # Log reference data versions for auditability
@@ -583,7 +617,8 @@ class SupplementEnricherV3:
 
         # Track other versioned databases
         versioned_dbs = [
-            'harmful_additives', 'allergens', 'ingredient_quality_map', 'banned_match_allowlist'
+            'harmful_additives', 'allergens', 'ingredient_quality_map', 'banned_match_allowlist',
+            'percentile_categories', 'clinical_risk_taxonomy', 'ingredient_interaction_rules'
         ]
         for db_name in versioned_dbs:
             db = self.databases.get(db_name, {})
@@ -1634,6 +1669,7 @@ class SupplementEnricherV3:
                     "role_classification": "inactive_non_scorable",
                     "identity_confidence": 1.0 if (recognition_info or is_excipient) else 0.0,
                     "identity_decision_reason": skip_reason,
+                    "safety_hits": [],
                     "certificates": [],
                     "source_section": "active",
                     "hierarchyType": hierarchy_type
@@ -2716,6 +2752,7 @@ class SupplementEnricherV3:
                 "role_classification": "active_unmapped",
                 "identity_confidence": 0.0,
                 "identity_decision_reason": "form_unmapped",
+                "safety_hits": [],
                 "hierarchyType": hierarchy_type,
                 "source_section": source_section,
                 "form_extraction_used": True,
@@ -2771,6 +2808,7 @@ class SupplementEnricherV3:
                 "role_classification": "active_scorable",
                 "identity_confidence": 0.8 if used_form_fallback else (1.0 if match_result.get('match_tier') == "exact" else 0.9),
                 "identity_decision_reason": "form_unmapped_fallback" if used_form_fallback else "quality_map_match",
+                "safety_hits": [],
                 "hierarchyType": hierarchy_type,
                 "source_section": source_section,
                 # Multi-form contract fields (if present)
@@ -2823,6 +2861,7 @@ class SupplementEnricherV3:
                 "role_classification": "active_unmapped",
                 "identity_confidence": 0.0,
                 "identity_decision_reason": "no_quality_map_match",
+                "safety_hits": [],
                 "hierarchyType": hierarchy_type,
                 "source_section": source_section
             }
@@ -4001,13 +4040,14 @@ class SupplementEnricherV3:
                 "match_type": best["match_type"],
                 "tier": best["tier"],
             }
+            self._parent_fallback_details.append(payload)
             self._parent_fallback_info_count += 1
             if self._parent_fallback_info_count <= 10:
                 self.logger.info(f"Parent fallback form selected: {json.dumps(payload, sort_keys=True)}")
             elif self._parent_fallback_info_count == 11:
                 self.logger.info(
-                    "Parent fallback logs are being suppressed after 10 occurrences; "
-                    "enable DEBUG logs for full detail."
+                    "Parent fallback logs suppressed after 10; full details saved to "
+                    "parent_fallback_report.json in output directory."
                 )
             else:
                 self.logger.debug(f"Parent fallback form selected: {json.dumps(payload, sort_keys=True)}")
@@ -6374,6 +6414,45 @@ class SupplementEnricherV3:
         # Step 3: Merge and dedupe using union-of-evidence
         merged_blends = self._merge_blend_evidence(detector_blends, cleaning_blends)
 
+        # Step 3b: Normalize blend_total_mg for scorer direct access.
+        # The scorer reads blend_total_mg (in mg) first, falls back to total_weight.
+        # We convert here so the scorer doesn't have to guess units.
+        for blend in merged_blends:
+            tw = blend.get("total_weight")
+            bu = (blend.get("unit") or "").strip().lower()
+            if tw is not None and isinstance(tw, (int, float)) and tw > 0:
+                if bu in ("mg", "milligram", "milligrams", ""):
+                    blend["blend_total_mg"] = round(float(tw), 4)
+                elif bu in ("g", "gram", "grams", "gram(s)"):
+                    blend["blend_total_mg"] = round(float(tw) * 1000.0, 4)
+                elif bu in ("mcg", "ug", "microgram", "micrograms"):
+                    blend["blend_total_mg"] = round(float(tw) / 1000.0, 4)
+                else:
+                    blend["blend_total_mg"] = None  # Unknown unit
+            else:
+                blend["blend_total_mg"] = None
+
+        # Step 3c: Compute total_active_mg for scorer B5 impact calculation.
+        total_active_mg = 0.0
+        for ing in active_ingredients:
+            qty_list = ing.get("quantity", [])
+            qty_val = 0.0
+            qty_unit = ""
+            if isinstance(qty_list, list) and qty_list:
+                entry = qty_list[0] if qty_list else {}
+                qty_val = entry.get("quantity", 0) if isinstance(entry.get("quantity"), (int, float)) else 0
+                qty_unit = (entry.get("unit", "") or "").strip().lower()
+            elif isinstance(qty_list, (int, float)):
+                qty_val = qty_list
+                qty_unit = (ing.get("unit", "") or "").strip().lower()
+            if qty_val and qty_val > 0:
+                if qty_unit in ("mg", "milligram", "milligrams", ""):
+                    total_active_mg += qty_val
+                elif qty_unit in ("g", "gram", "grams", "gram(s)"):
+                    total_active_mg += qty_val * 1000.0
+                elif qty_unit in ("mcg", "ug", "microgram", "micrograms"):
+                    total_active_mg += qty_val / 1000.0
+
         # Step 4: Compute counts and metrics for transparency
         detector_count = len(detector_blends)
         cleaning_count = len(cleaning_blends)
@@ -6399,6 +6478,7 @@ class SupplementEnricherV3:
             "blends": merged_blends,
             "blend_count": len(merged_blends),
             "total_active_ingredients": total_active,
+            "total_active_mg": round(total_active_mg, 4),
             # Provenance tracking for auditing (Issue #1 & #2 from audit)
             "blend_sources": {
                 # Raw counts (before deduplication)
@@ -7391,6 +7471,243 @@ class SupplementEnricherV3:
     # SUPPLEMENT TYPE CLASSIFIER
     # =========================================================================
 
+    def _canonical_token(self, value: Any) -> str:
+        """Normalize free text to a stable underscore token for deterministic matching."""
+        normalized = self._normalize_text(str(value or ""))
+        return re.sub(r"[^a-z0-9]+", "_", normalized).strip("_")
+
+    def _word_token_match(self, token: str, haystack: str) -> bool:
+        """Word-boundary token match that tolerates spaces/hyphens in tokens."""
+        normalized = self._normalize_text(token)
+        if not normalized:
+            return False
+        pattern = r"\b" + re.escape(normalized).replace(r"\ ", r"[\s\-]+") + r"\b"
+        return bool(re.search(pattern, haystack, re.IGNORECASE))
+
+    def _percentile_category_fallback_id(self, categories: Dict[str, Any]) -> str:
+        for category_id, category_def in categories.items():
+            if isinstance(category_def, dict) and category_def.get("is_fallback"):
+                return str(category_id)
+        return "general_supplement"
+
+    def _collect_percentile_context(
+        self,
+        product: Dict[str, Any],
+        enriched: Dict[str, Any],
+    ) -> Dict[str, Any]:
+        """Collect normalized context fields used for percentile category inference."""
+        name_blob = " ".join(
+            str(v)
+            for v in (
+                product.get("fullName"),
+                product.get("product_name"),
+                product.get("bundleName"),
+                enriched.get("product_name"),
+            )
+            if v
+        )
+        normalized_name = self._normalize_text(name_blob)
+
+        canonical_ingredients: set[str] = set()
+        iqd = enriched.get("ingredient_quality_data", {}) or {}
+        ingredient_rows = iqd.get("ingredients_scorable") or iqd.get("ingredients") or []
+        for ingredient in ingredient_rows:
+            if not isinstance(ingredient, dict):
+                continue
+            for key in ("canonical_id", "standard_name", "standardName", "name"):
+                token = self._canonical_token(ingredient.get(key))
+                if token:
+                    canonical_ingredients.add(token)
+
+        supp_type = (
+            enriched.get("supplement_type", {}).get("type")
+            if isinstance(enriched.get("supplement_type"), dict)
+            else enriched.get("supplement_type")
+        )
+        supplement_type = self._normalize_text(supp_type)
+
+        form_factor = self._normalize_text(
+            enriched.get("form_factor")
+            or product.get("form_factor")
+            or product.get("product_form")
+            or ""
+        )
+
+        return {
+            "normalized_name": normalized_name,
+            "canonical_ingredients": canonical_ingredients,
+            "supplement_type": supplement_type,
+            "form_factor": form_factor,
+        }
+
+    def _infer_percentile_category(self, product: Dict, enriched: Dict) -> Dict[str, Any]:
+        """
+        Infer a stable percentile category for cohort scoring.
+
+        Priority:
+        1) explicit percentile_category in source payload (if valid)
+        2) deterministic rule inference from percentile_categories database
+        3) fallback category
+        """
+        db = self.databases.get("percentile_categories", {}) or {}
+        categories = db.get("categories") if isinstance(db, dict) else None
+        rules = db.get("classification_rules") if isinstance(db, dict) else None
+
+        if not isinstance(categories, dict) or not categories:
+            return {
+                "percentile_category": "general_supplement",
+                "percentile_category_label": "General Supplements",
+                "percentile_category_source": "fallback",
+                "percentile_category_confidence": 0.0,
+                "percentile_category_signals": ["missing_percentile_categories_config"],
+            }
+
+        fallback_category = self._percentile_category_fallback_id(categories)
+        fallback_label = str(
+            (categories.get(fallback_category) or {}).get("label") or "General Supplements"
+        )
+
+        explicit_category = self._canonical_token(
+            product.get("percentile_category") or enriched.get("percentile_category")
+        )
+        if explicit_category and explicit_category in categories:
+            explicit_def = categories.get(explicit_category) or {}
+            return {
+                "percentile_category": explicit_category,
+                "percentile_category_label": str(explicit_def.get("label") or explicit_category),
+                "percentile_category_source": "explicit",
+                "percentile_category_confidence": 1.0,
+                "percentile_category_signals": ["explicit_field"],
+            }
+
+        context = self._collect_percentile_context(product, enriched)
+        name_blob = context["normalized_name"]
+        canonical_ingredients = context["canonical_ingredients"]
+        supplement_type = context["supplement_type"]
+        form_factor = context["form_factor"]
+
+        candidates: List[Dict[str, Any]] = []
+        for category_id, category_def in categories.items():
+            if not isinstance(category_def, dict):
+                continue
+            if category_def.get("is_fallback"):
+                continue
+
+            required = category_def.get("required") or {}
+            required_forms = required.get("form") if isinstance(required, dict) else None
+            if required_forms:
+                form_values = {
+                    self._canonical_token(v)
+                    for v in (required_forms if isinstance(required_forms, list) else [required_forms])
+                    if v
+                }
+                if self._canonical_token(form_factor) not in form_values:
+                    continue
+
+            evidence_score = 0.0
+            matched_signals: List[str] = []
+            evidence = category_def.get("evidence") or {}
+
+            name_evidence = evidence.get("name_tokens") if isinstance(evidence, dict) else None
+            if isinstance(name_evidence, dict):
+                weight = float(name_evidence.get("weight", 0))
+                for token in name_evidence.get("values", []) or []:
+                    if self._word_token_match(str(token), name_blob):
+                        evidence_score += weight
+                        matched_signals.append(f"name:{self._normalize_text(token)}")
+
+            ing_evidence = evidence.get("canonical_ingredients") if isinstance(evidence, dict) else None
+            if isinstance(ing_evidence, dict):
+                weight = float(ing_evidence.get("weight", 0))
+                min_match = int(ing_evidence.get("min_match", 1) or 1)
+                configured = {
+                    self._canonical_token(value)
+                    for value in (ing_evidence.get("values") or [])
+                    if value
+                }
+                matches = sorted(configured & canonical_ingredients)
+                if len(matches) >= min_match:
+                    evidence_score += weight * len(matches)
+                    matched_signals.extend([f"ingredient:{m}" for m in matches])
+
+            type_evidence = evidence.get("supplement_types") if isinstance(evidence, dict) else None
+            if isinstance(type_evidence, dict):
+                weight = float(type_evidence.get("weight", 0))
+                configured_types = {
+                    self._normalize_text(value) for value in (type_evidence.get("values") or []) if value
+                }
+                if supplement_type and supplement_type in configured_types:
+                    evidence_score += weight
+                    matched_signals.append(f"supp_type:{supplement_type}")
+
+            min_evidence_score = float(category_def.get("min_evidence_score", 0) or 0)
+            if evidence_score < min_evidence_score:
+                continue
+
+            candidates.append(
+                {
+                    "category": str(category_id),
+                    "label": str(category_def.get("label") or category_id),
+                    "score": evidence_score,
+                    "signals": matched_signals,
+                    "priority": int(category_def.get("priority", 999)),
+                }
+            )
+
+        if not candidates:
+            return {
+                "percentile_category": fallback_category,
+                "percentile_category_label": fallback_label,
+                "percentile_category_source": "fallback",
+                "percentile_category_confidence": 0.0,
+                "percentile_category_signals": [],
+            }
+
+        candidates.sort(key=lambda item: (-item["score"], item["priority"], item["category"]))
+        best = candidates[0]
+        second = candidates[1] if len(candidates) > 1 else None
+
+        rules = rules if isinstance(rules, dict) else {}
+        margin_threshold = float(rules.get("margin_threshold", 2.0) or 2.0)
+        confidence_threshold = float(rules.get("confidence_threshold", 0.4) or 0.4)
+        score_normalizer = float(rules.get("score_normalizer", 12.0) or 12.0)
+        second_score = float(second["score"]) if second else 0.0
+        margin = float(best["score"]) - second_score
+
+        if (
+            second
+            and best["score"] == second["score"]
+            and best["priority"] == second["priority"]
+            and margin < margin_threshold
+        ):
+            return {
+                "percentile_category": fallback_category,
+                "percentile_category_label": fallback_label,
+                "percentile_category_source": "fallback",
+                "percentile_category_confidence": 0.0,
+                "percentile_category_signals": ["ambiguous_tie"],
+            }
+
+        raw_confidence = min(float(best["score"]) / max(score_normalizer, 1.0), 1.0)
+        margin_factor = 1.0 if not second else min(margin / max(margin_threshold, 1.0), 1.0)
+        confidence = round(raw_confidence * max(margin_factor, 0.0), 2)
+        if confidence < confidence_threshold:
+            return {
+                "percentile_category": fallback_category,
+                "percentile_category_label": fallback_label,
+                "percentile_category_source": "fallback",
+                "percentile_category_confidence": confidence,
+                "percentile_category_signals": best["signals"] + ["low_confidence"],
+            }
+
+        return {
+            "percentile_category": best["category"],
+            "percentile_category_label": best["label"],
+            "percentile_category_source": "inferred",
+            "percentile_category_confidence": confidence,
+            "percentile_category_signals": best["signals"],
+        }
+
     def _classify_supplement_type(self, product: Dict) -> Dict:
         """
         Classify supplement type for context-aware scoring.
@@ -8142,6 +8459,680 @@ class SupplementEnricherV3:
 
         return warnings
 
+    # =========================================================================
+    # INTERACTION PROFILE COLLECTOR (alerts-only, score-neutral)
+    # =========================================================================
+
+    def _empty_interaction_profile(self, taxonomy_version: Optional[str] = None,
+                                   rules_version: Optional[str] = None) -> Dict:
+        return {
+            "ingredient_alerts": [],
+            "condition_summary": {},
+            "drug_class_summary": {},
+            "highest_severity": None,
+            "data_sources": [],
+            "rules_version": rules_version,
+            "taxonomy_version": taxonomy_version,
+            "user_condition_alerts": {
+                "enabled": False,
+                "conditions_checked": [],
+                "drug_classes_checked": [],
+                "alerts": [],
+                "highest_severity": None
+            }
+        }
+
+    def _interaction_severity_weight_map(self, taxonomy_db: Dict) -> Dict[str, float]:
+        default = {
+            "contraindicated": 5.0,
+            "avoid": 4.0,
+            "caution": 3.0,
+            "monitor": 2.0,
+            "info": 1.0,
+        }
+        levels = taxonomy_db.get("severity_levels", [])
+        if not isinstance(levels, list):
+            return default
+        for level in levels:
+            if not isinstance(level, dict):
+                continue
+            level_id = str(level.get("id", "")).strip().lower()
+            if not level_id:
+                continue
+            try:
+                default[level_id] = float(level.get("weight", default.get(level_id, 1.0)))
+            except (TypeError, ValueError):
+                continue
+        return default
+
+    def _normalize_interaction_db_key(self, value: Any) -> Optional[str]:
+        db_key = str(value or "").strip().lower()
+        valid = {
+            "ingredient_quality_map",
+            "other_ingredients",
+            "harmful_additives",
+            "banned_recalled_ingredients",
+            "botanical_ingredients",
+        }
+        return db_key if db_key in valid else None
+
+    def _derive_interaction_subject_ref(self, ingredient: Dict) -> Optional[Dict[str, str]]:
+        canonical_id = str(ingredient.get("canonical_id") or "").strip()
+        if canonical_id:
+            return {
+                "db": "ingredient_quality_map",
+                "canonical_id": canonical_id,
+            }
+
+        recognition_source = self._normalize_interaction_db_key(ingredient.get("recognition_source"))
+        recognized_id = str(
+            ingredient.get("matched_entry_id")
+            or ingredient.get("recognized_entry_id")
+            or ""
+        ).strip()
+        if recognition_source and recognized_id:
+            return {
+                "db": recognition_source,
+                "canonical_id": recognized_id,
+            }
+        return None
+
+    def _interaction_rule_applies(self, rule: Dict, ingredient: Dict) -> bool:
+        form_scope = rule.get("form_scope")
+        if form_scope is None:
+            return True
+        if not isinstance(form_scope, list) or not form_scope:
+            return False
+        form_id = str(ingredient.get("form_id") or "").strip()
+        if not form_id:
+            return False
+        return form_id in {str(item).strip() for item in form_scope if str(item).strip()}
+
+    def _collect_profile_context(self, user_profile: Any) -> Dict[str, List[str]]:
+        if not isinstance(user_profile, dict):
+            return {"conditions": [], "drug_classes": []}
+
+        def _collect_ids(raw: Any) -> List[str]:
+            items: List[str] = []
+            if isinstance(raw, list):
+                for item in raw:
+                    if isinstance(item, str):
+                        value = item.strip().lower()
+                        if value:
+                            items.append(value)
+                    elif isinstance(item, dict):
+                        value = str(item.get("id") or item.get("condition_id") or item.get("drug_class_id") or "").strip().lower()
+                        if value:
+                            items.append(value)
+            elif isinstance(raw, str):
+                value = raw.strip().lower()
+                if value:
+                    items.append(value)
+            return items
+
+        condition_fields = ("conditions", "condition_ids", "health_conditions")
+        drug_fields = ("drug_classes", "medication_classes")
+
+        conditions: List[str] = []
+        drug_classes: List[str] = []
+
+        for field in condition_fields:
+            conditions.extend(_collect_ids(user_profile.get(field)))
+        for field in drug_fields:
+            drug_classes.extend(_collect_ids(user_profile.get(field)))
+
+        return {
+            "conditions": sorted(set(conditions)),
+            "drug_classes": sorted(set(drug_classes)),
+        }
+
+    def _normalize_threshold_unit(self, unit: Any) -> str:
+        text = str(unit or "").strip().lower()
+        text = text.replace("µg", "mcg").replace("μg", "mcg").replace(" ", "").replace("_", "")
+        alias_map = {
+            "ug": "mcg",
+            "microgram": "mcg",
+            "micrograms": "mcg",
+            "milligram": "mg",
+            "milligrams": "mg",
+            "gram": "g",
+            "grams": "g",
+            "internationalunits": "iu",
+            "internationalunit": "iu",
+        }
+        return alias_map.get(text, text)
+
+    def _is_mass_unit(self, unit: str) -> bool:
+        return unit in {"mcg", "mg", "g"}
+
+    def _convert_mass(self, value: float, from_unit: str, to_unit: str) -> Optional[float]:
+        if not (self._is_mass_unit(from_unit) and self._is_mass_unit(to_unit)):
+            return None
+        factors_mg = {
+            "mcg": 0.001,
+            "mg": 1.0,
+            "g": 1000.0,
+        }
+        mg_value = value * factors_mg[from_unit]
+        return mg_value / factors_mg[to_unit]
+
+    def _to_float_safe(self, value: Any) -> Optional[float]:
+        try:
+            converted = float(value)
+            if math.isfinite(converted):
+                return converted
+        except (TypeError, ValueError):
+            return None
+        return None
+
+    def _compare_threshold(self, amount: float, comparator: str, threshold: float) -> Optional[bool]:
+        if comparator == ">":
+            return amount > threshold
+        if comparator == ">=":
+            return amount >= threshold
+        if comparator == "<":
+            return amount < threshold
+        if comparator == "<=":
+            return amount <= threshold
+        if comparator == "==":
+            return amount == threshold
+        return None
+
+    def _convert_amount_to_target_unit(
+        self,
+        amount: float,
+        from_unit: str,
+        target_unit: str,
+        ingredient_name: str,
+        standard_name: str,
+    ) -> Tuple[Optional[float], Optional[str]]:
+        src = self._normalize_threshold_unit(from_unit)
+        tgt = self._normalize_threshold_unit(target_unit)
+        if not src or not tgt:
+            return None, "missing_unit"
+        if src == tgt:
+            return amount, None
+
+        mass_converted = self._convert_mass(amount, src, tgt)
+        if mass_converted is not None:
+            return mass_converted, None
+
+        # Try nutrient-aware conversion (IU/RAE and nutrient-specific transforms).
+        if self.unit_converter:
+            try:
+                conversion = self.unit_converter.convert_nutrient(
+                    nutrient=standard_name or ingredient_name,
+                    amount=amount,
+                    from_unit=src,
+                    ingredient_name=ingredient_name
+                )
+                conv_value = getattr(conversion, "converted_value", None)
+                conv_unit = self._normalize_threshold_unit(getattr(conversion, "converted_unit", None))
+                conv_success = bool(getattr(conversion, "success", False))
+                if conv_success and conv_value is not None and conv_unit:
+                    if conv_unit == tgt:
+                        return float(conv_value), None
+                    mass_from_conv = self._convert_mass(float(conv_value), conv_unit, tgt)
+                    if mass_from_conv is not None:
+                        return mass_from_conv, None
+            except Exception:
+                return None, "conversion_exception"
+
+        return None, "no_conversion_rule"
+
+    def _evaluate_dose_thresholds_for_target(
+        self,
+        thresholds: List[Dict[str, Any]],
+        target_type: str,
+        target_id: str,
+        ingredient: Dict[str, Any],
+        servings_per_day_max: float,
+        base_severity: str,
+    ) -> Tuple[str, Optional[Dict[str, Any]]]:
+        relevant = []
+        for threshold in thresholds:
+            if not isinstance(threshold, dict):
+                continue
+            scope = str(threshold.get("scope") or "").strip().lower()
+            scoped_target = str(threshold.get("target_id") or "").strip().lower()
+            if scope == target_type and scoped_target == target_id:
+                relevant.append(threshold)
+        if not relevant:
+            return base_severity, None
+
+        quantity = self._to_float_safe(ingredient.get("quantity"))
+        unit = self._normalize_threshold_unit(ingredient.get("unit"))
+        ingredient_name = str(ingredient.get("raw_source_text") or ingredient.get("name") or "")
+        standard_name = str(ingredient.get("standard_name") or "")
+        if quantity is None or quantity <= 0 or not unit:
+            return base_severity, {
+                "evaluated": False,
+                "reason": "missing_or_invalid_dose",
+            }
+
+        severity_candidate = base_severity
+        evaluated_any = False
+        details: Dict[str, Any] = {
+            "evaluated": False,
+            "matched_threshold": False,
+            "thresholds_checked": [],
+        }
+
+        for threshold in relevant:
+            comparator = str(threshold.get("comparator") or "").strip()
+            threshold_value = self._to_float_safe(threshold.get("value"))
+            threshold_unit = self._normalize_threshold_unit(threshold.get("unit"))
+            basis = str(threshold.get("basis") or "per_day").strip().lower()
+            severity_if_met = str(threshold.get("severity_if_met") or "").strip().lower()
+            severity_if_not_met = str(threshold.get("severity_if_not_met") or "").strip().lower()
+            if threshold_value is None or not threshold_unit or not comparator:
+                details["thresholds_checked"].append({
+                    "evaluated": False,
+                    "reason": "invalid_threshold_definition",
+                    "threshold": threshold,
+                })
+                continue
+
+            amount_basis = quantity * (servings_per_day_max if basis == "per_day" else 1.0)
+            converted_amount, convert_reason = self._convert_amount_to_target_unit(
+                amount=amount_basis,
+                from_unit=unit,
+                target_unit=threshold_unit,
+                ingredient_name=ingredient_name,
+                standard_name=standard_name,
+            )
+            if converted_amount is None:
+                details["thresholds_checked"].append({
+                    "evaluated": False,
+                    "reason": convert_reason or "conversion_failed",
+                    "basis": basis,
+                    "threshold_value": threshold_value,
+                    "threshold_unit": threshold_unit,
+                    "comparator": comparator,
+                })
+                continue
+
+            comparison = self._compare_threshold(converted_amount, comparator, threshold_value)
+            if comparison is None:
+                details["thresholds_checked"].append({
+                    "evaluated": False,
+                    "reason": "invalid_comparator",
+                    "basis": basis,
+                    "computed_amount": converted_amount,
+                    "threshold_value": threshold_value,
+                    "threshold_unit": threshold_unit,
+                    "comparator": comparator,
+                })
+                continue
+
+            evaluated_any = True
+            checked = {
+                "evaluated": True,
+                "basis": basis,
+                "computed_amount": converted_amount,
+                "computed_unit": threshold_unit,
+                "threshold_value": threshold_value,
+                "threshold_unit": threshold_unit,
+                "comparator": comparator,
+                "matched": bool(comparison),
+            }
+            details["thresholds_checked"].append(checked)
+
+            if comparison and severity_if_met:
+                severity_candidate = severity_if_met
+                details["matched_threshold"] = True
+                details["selected_from"] = "severity_if_met"
+                details["selected_severity"] = severity_candidate
+                break
+            if (not comparison) and severity_if_not_met:
+                severity_candidate = severity_if_not_met
+                details["selected_from"] = "severity_if_not_met"
+                details["selected_severity"] = severity_candidate
+
+        details["evaluated"] = evaluated_any
+        if not evaluated_any and "selected_severity" not in details:
+            details["selected_severity"] = base_severity
+            details["selected_from"] = "base_severity"
+            details["reason"] = "dose_threshold_not_evaluable"
+        elif "selected_severity" not in details:
+            details["selected_severity"] = severity_candidate
+            details["selected_from"] = "base_severity" if severity_candidate == base_severity else "threshold_not_met_override"
+
+        return severity_candidate, details
+
+    def _collect_interaction_profile(self, enriched: Dict, user_profile: Optional[Dict] = None) -> Dict:
+        taxonomy_db = self.databases.get("clinical_risk_taxonomy", {}) or {}
+        rules_db = self.databases.get("ingredient_interaction_rules", {}) or {}
+        taxonomy_version = (taxonomy_db.get("_metadata") or {}).get("schema_version")
+        rules_version = (rules_db.get("_metadata") or {}).get("schema_version")
+        profile = self._empty_interaction_profile(
+            taxonomy_version=taxonomy_version,
+            rules_version=rules_version
+        )
+
+        iqd = enriched.get("ingredient_quality_data", {}) or {}
+        ingredients = iqd.get("ingredients", [])
+        skipped = iqd.get("ingredients_skipped", [])
+        if not isinstance(ingredients, list):
+            ingredients = []
+        if not isinstance(skipped, list):
+            skipped = []
+
+        for ingredient in ingredients:
+            if isinstance(ingredient, dict):
+                ingredient["safety_hits"] = []
+        for ingredient in skipped:
+            if isinstance(ingredient, dict):
+                ingredient["safety_hits"] = []
+
+        condition_defs = taxonomy_db.get("conditions", []) if isinstance(taxonomy_db, dict) else []
+        drug_defs = taxonomy_db.get("drug_classes", []) if isinstance(taxonomy_db, dict) else []
+        evidence_defs = taxonomy_db.get("evidence_levels", []) if isinstance(taxonomy_db, dict) else []
+        valid_conditions = {
+            str(item.get("id")).strip().lower(): item
+            for item in condition_defs if isinstance(item, dict) and item.get("id")
+        }
+        valid_drug_classes = {
+            str(item.get("id")).strip().lower(): item
+            for item in drug_defs if isinstance(item, dict) and item.get("id")
+        }
+        valid_evidence = {
+            str(item.get("id")).strip().lower()
+            for item in evidence_defs if isinstance(item, dict) and item.get("id")
+        }
+        severity_weights = self._interaction_severity_weight_map(taxonomy_db)
+        serving_basis = enriched.get("serving_basis", {}) if isinstance(enriched, dict) else {}
+        servings_per_day_max = self._to_float_safe((serving_basis or {}).get("max_servings_per_day"))
+        if servings_per_day_max is None or servings_per_day_max <= 0:
+            servings_per_day_max = self._to_float_safe((serving_basis or {}).get("min_servings_per_day"))
+        if servings_per_day_max is None or servings_per_day_max <= 0:
+            servings_per_day_max = 1.0
+
+        raw_rules = rules_db.get("interaction_rules", []) if isinstance(rules_db, dict) else []
+        if not isinstance(raw_rules, list) or not raw_rules:
+            return profile
+
+        rule_index: Dict[Tuple[str, str], List[Dict]] = {}
+        for rule in raw_rules:
+            if not isinstance(rule, dict):
+                continue
+            subject_ref = rule.get("subject_ref", {})
+            if not isinstance(subject_ref, dict):
+                continue
+            db_key = self._normalize_interaction_db_key(subject_ref.get("db"))
+            canonical_id = str(subject_ref.get("canonical_id") or "").strip()
+            if not db_key or not canonical_id:
+                continue
+            rule_index.setdefault((db_key, canonical_id), []).append(rule)
+
+        condition_summary_sets: Dict[str, Dict[str, Any]] = {}
+        drug_summary_sets: Dict[str, Dict[str, Any]] = {}
+        source_set: set = set()
+        highest_weight = -1.0
+        highest_severity: Optional[str] = None
+
+        all_ingredient_rows: List[Tuple[str, Dict]] = []
+        for row in ingredients:
+            if isinstance(row, dict):
+                all_ingredient_rows.append(("ingredients", row))
+        for row in skipped:
+            if isinstance(row, dict):
+                all_ingredient_rows.append(("ingredients_skipped", row))
+
+        for source_bucket, ingredient in all_ingredient_rows:
+            subject = self._derive_interaction_subject_ref(ingredient)
+            if not subject:
+                continue
+
+            matched_rules = rule_index.get((subject["db"], subject["canonical_id"]), [])
+            if not matched_rules:
+                continue
+
+            ingredient_name = ingredient.get("raw_source_text") or ingredient.get("name") or ingredient.get("standard_name") or "unknown"
+
+            for rule in matched_rules:
+                if not self._interaction_rule_applies(rule, ingredient):
+                    continue
+
+                condition_hits: List[Dict[str, Any]] = []
+                drug_hits: List[Dict[str, Any]] = []
+                pregnancy_block = rule.get("pregnancy_lactation") if isinstance(rule.get("pregnancy_lactation"), dict) else None
+                thresholds = rule.get("dose_thresholds", []) if isinstance(rule.get("dose_thresholds"), list) else []
+
+                for cond_rule in rule.get("condition_rules", []) or []:
+                    if not isinstance(cond_rule, dict):
+                        continue
+                    condition_id = str(cond_rule.get("condition_id") or "").strip().lower()
+                    severity = str(cond_rule.get("severity") or "").strip().lower()
+                    evidence = str(cond_rule.get("evidence_level") or "").strip().lower()
+                    if condition_id not in valid_conditions or severity not in severity_weights:
+                        continue
+                    if evidence and valid_evidence and evidence not in valid_evidence:
+                        continue
+                    adjusted_severity, threshold_eval = self._evaluate_dose_thresholds_for_target(
+                        thresholds=thresholds,
+                        target_type="condition",
+                        target_id=condition_id,
+                        ingredient=ingredient,
+                        servings_per_day_max=servings_per_day_max,
+                        base_severity=severity,
+                    )
+                    if adjusted_severity in severity_weights:
+                        severity = adjusted_severity
+                    sources = [str(s).strip() for s in (cond_rule.get("sources") or []) if str(s).strip()]
+                    for src in sources:
+                        source_set.add(src)
+                    condition_hits.append({
+                        "condition_id": condition_id,
+                        "severity": severity,
+                        "evidence_level": evidence or None,
+                        "mechanism": cond_rule.get("mechanism"),
+                        "action": cond_rule.get("action"),
+                        "sources": sources,
+                        "dose_threshold_evaluation": threshold_eval,
+                    })
+
+                if pregnancy_block:
+                    for cond_key, field in (("pregnancy", "pregnancy_category"), ("lactation", "lactation_category")):
+                        severity = str(pregnancy_block.get(field) or "").strip().lower()
+                        if severity and cond_key in valid_conditions and severity in severity_weights:
+                            sources = [str(s).strip() for s in (pregnancy_block.get("sources") or []) if str(s).strip()]
+                            for src in sources:
+                                source_set.add(src)
+                            condition_hits.append({
+                                "condition_id": cond_key,
+                                "severity": severity,
+                                "evidence_level": str(pregnancy_block.get("evidence_level") or "").strip().lower() or None,
+                                "mechanism": pregnancy_block.get("mechanism"),
+                                "action": pregnancy_block.get("notes"),
+                                "sources": sources,
+                            })
+
+                for drug_rule in rule.get("drug_class_rules", []) or []:
+                    if not isinstance(drug_rule, dict):
+                        continue
+                    drug_class_id = str(drug_rule.get("drug_class_id") or "").strip().lower()
+                    severity = str(drug_rule.get("severity") or "").strip().lower()
+                    evidence = str(drug_rule.get("evidence_level") or "").strip().lower()
+                    if drug_class_id not in valid_drug_classes or severity not in severity_weights:
+                        continue
+                    if evidence and valid_evidence and evidence not in valid_evidence:
+                        continue
+                    adjusted_severity, threshold_eval = self._evaluate_dose_thresholds_for_target(
+                        thresholds=thresholds,
+                        target_type="drug_class",
+                        target_id=drug_class_id,
+                        ingredient=ingredient,
+                        servings_per_day_max=servings_per_day_max,
+                        base_severity=severity,
+                    )
+                    if adjusted_severity in severity_weights:
+                        severity = adjusted_severity
+                    sources = [str(s).strip() for s in (drug_rule.get("sources") or []) if str(s).strip()]
+                    for src in sources:
+                        source_set.add(src)
+                    drug_hits.append({
+                        "drug_class_id": drug_class_id,
+                        "severity": severity,
+                        "evidence_level": evidence or None,
+                        "mechanism": drug_rule.get("mechanism"),
+                        "action": drug_rule.get("action"),
+                        "sources": sources,
+                        "dose_threshold_evaluation": threshold_eval,
+                    })
+
+                if not condition_hits and not drug_hits and not pregnancy_block:
+                    continue
+
+                safety_hit = {
+                    "rule_id": rule.get("id"),
+                    "subject_ref": subject,
+                    "source_bucket": source_bucket,
+                    "condition_hits": condition_hits,
+                    "drug_class_hits": drug_hits,
+                    "pregnancy_lactation": pregnancy_block or {},
+                    "last_reviewed": rule.get("last_reviewed"),
+                }
+                ingredient.setdefault("safety_hits", []).append(safety_hit)
+
+                profile["ingredient_alerts"].append({
+                    "ingredient_name": ingredient_name,
+                    "standard_name": ingredient.get("standard_name"),
+                    "subject_ref": subject,
+                    "rule_id": rule.get("id"),
+                    "condition_hits": condition_hits,
+                    "drug_class_hits": drug_hits,
+                })
+
+                for condition_hit in condition_hits:
+                    condition_id = condition_hit["condition_id"]
+                    bucket = condition_summary_sets.setdefault(
+                        condition_id,
+                        {
+                            "label": valid_conditions.get(condition_id, {}).get("label", condition_id),
+                            "highest_severity": None,
+                            "highest_weight": -1.0,
+                            "ingredients": set(),
+                            "rule_ids": set(),
+                            "actions": set(),
+                        }
+                    )
+                    bucket["ingredients"].add(ingredient_name)
+                    if safety_hit.get("rule_id"):
+                        bucket["rule_ids"].add(safety_hit["rule_id"])
+                    if condition_hit.get("action"):
+                        bucket["actions"].add(str(condition_hit["action"]))
+                    severity = condition_hit["severity"]
+                    weight = severity_weights.get(severity, 0.0)
+                    if weight > bucket["highest_weight"]:
+                        bucket["highest_weight"] = weight
+                        bucket["highest_severity"] = severity
+                    if weight > highest_weight:
+                        highest_weight = weight
+                        highest_severity = severity
+
+                for drug_hit in drug_hits:
+                    drug_class_id = drug_hit["drug_class_id"]
+                    bucket = drug_summary_sets.setdefault(
+                        drug_class_id,
+                        {
+                            "label": valid_drug_classes.get(drug_class_id, {}).get("label", drug_class_id),
+                            "highest_severity": None,
+                            "highest_weight": -1.0,
+                            "ingredients": set(),
+                            "rule_ids": set(),
+                            "actions": set(),
+                        }
+                    )
+                    bucket["ingredients"].add(ingredient_name)
+                    if safety_hit.get("rule_id"):
+                        bucket["rule_ids"].add(safety_hit["rule_id"])
+                    if drug_hit.get("action"):
+                        bucket["actions"].add(str(drug_hit["action"]))
+                    severity = drug_hit["severity"]
+                    weight = severity_weights.get(severity, 0.0)
+                    if weight > bucket["highest_weight"]:
+                        bucket["highest_weight"] = weight
+                        bucket["highest_severity"] = severity
+                    if weight > highest_weight:
+                        highest_weight = weight
+                        highest_severity = severity
+
+        profile["condition_summary"] = {
+            key: {
+                "label": value["label"],
+                "highest_severity": value["highest_severity"],
+                "ingredient_count": len(value["ingredients"]),
+                "ingredients": sorted(value["ingredients"]),
+                "rule_ids": sorted(value["rule_ids"]),
+                "actions": sorted(value["actions"]),
+            }
+            for key, value in condition_summary_sets.items()
+        }
+        profile["drug_class_summary"] = {
+            key: {
+                "label": value["label"],
+                "highest_severity": value["highest_severity"],
+                "ingredient_count": len(value["ingredients"]),
+                "ingredients": sorted(value["ingredients"]),
+                "rule_ids": sorted(value["rule_ids"]),
+                "actions": sorted(value["actions"]),
+            }
+            for key, value in drug_summary_sets.items()
+        }
+        profile["highest_severity"] = highest_severity
+        profile["data_sources"] = sorted(source_set)
+
+        context = self._collect_profile_context(user_profile)
+        conditions_checked = context.get("conditions", [])
+        drug_classes_checked = context.get("drug_classes", [])
+        user_alerts = {
+            "enabled": bool(conditions_checked or drug_classes_checked),
+            "conditions_checked": conditions_checked,
+            "drug_classes_checked": drug_classes_checked,
+            "alerts": [],
+            "highest_severity": None,
+        }
+        user_highest_weight = -1.0
+        for ingredient_alert in profile["ingredient_alerts"]:
+            ingredient_name = ingredient_alert.get("ingredient_name", "unknown")
+            rule_id = ingredient_alert.get("rule_id")
+            for condition_hit in ingredient_alert.get("condition_hits", []):
+                condition_id = condition_hit.get("condition_id")
+                if condition_id in conditions_checked:
+                    severity = condition_hit.get("severity")
+                    weight = severity_weights.get(severity, 0.0)
+                    user_alerts["alerts"].append({
+                        "type": "condition",
+                        "condition_id": condition_id,
+                        "ingredient_name": ingredient_name,
+                        "rule_id": rule_id,
+                        "severity": severity,
+                        "action": condition_hit.get("action"),
+                    })
+                    if weight > user_highest_weight:
+                        user_highest_weight = weight
+                        user_alerts["highest_severity"] = severity
+            for drug_hit in ingredient_alert.get("drug_class_hits", []):
+                drug_class_id = drug_hit.get("drug_class_id")
+                if drug_class_id in drug_classes_checked:
+                    severity = drug_hit.get("severity")
+                    weight = severity_weights.get(severity, 0.0)
+                    user_alerts["alerts"].append({
+                        "type": "drug_class",
+                        "drug_class_id": drug_class_id,
+                        "ingredient_name": ingredient_name,
+                        "rule_id": rule_id,
+                        "severity": severity,
+                        "action": drug_hit.get("action"),
+                    })
+                    if weight > user_highest_weight:
+                        user_highest_weight = weight
+                        user_alerts["highest_severity"] = severity
+
+        profile["user_condition_alerts"] = user_alerts
+        return profile
+
     def _empty_rda_ul_payload(self, reason: str) -> Dict:
         """Return a schema-stable empty RDA/UL payload when collection is skipped."""
         return {
@@ -8483,6 +9474,9 @@ class SupplementEnricherV3:
             enriched["serving_basis"] = serving_data["serving_basis"]
             enriched["form_factor"] = serving_data["form_factor"]
 
+            # Percentile category (config-driven, deterministic inference for cohort ranking)
+            enriched.update(self._infer_percentile_category(product, enriched))
+
             # Section E: User Profile Data (for device-side scoring)
             collect_rda_ul_data = self.config.get("processing_config", {}).get("collect_rda_ul_data", True)
             if collect_rda_ul_data:
@@ -8503,6 +9497,20 @@ class SupplementEnricherV3:
 
             # Dietary sensitivity data (sugar/sodium for diabetes/hypertension users)
             enriched["dietary_sensitivity_data"] = self._collect_dietary_sensitivity_data(product)
+
+            # Interaction profile (alerts-only, score-neutral)
+            interaction_profile = self._collect_interaction_profile(
+                enriched,
+                user_profile=product.get("user_profile")
+            )
+            enriched["interaction_profile"] = interaction_profile
+            enriched["user_condition_alerts"] = interaction_profile.get("user_condition_alerts", {
+                "enabled": False,
+                "conditions_checked": [],
+                "drug_classes_checked": [],
+                "alerts": [],
+                "highest_severity": None
+            })
 
             # Product-level signals (coverage, certificates, label disclosure)
             enriched["product_signals"] = self._collect_product_signals(
@@ -9119,6 +10127,34 @@ class SupplementEnricherV3:
 
         # Atomic write: prevents partial files on crash
         self._atomic_write_json(summary_file, summary)
+
+        # Save parent fallback report (all details, not just first 10)
+        if self._parent_fallback_details:
+            # Deduplicate by ingredient_normalized + parent_key for cleaner report
+            seen_fallbacks = {}
+            for fb in self._parent_fallback_details:
+                key = (fb["ingredient_normalized"], fb["parent_key"])
+                if key not in seen_fallbacks:
+                    seen_fallbacks[key] = {**fb, "occurrence_count": 1}
+                else:
+                    seen_fallbacks[key]["occurrence_count"] += 1
+            fallback_report = {
+                "total_fallback_count": len(self._parent_fallback_details),
+                "unique_fallback_count": len(seen_fallbacks),
+                "note": "These ingredients matched an IQM parent but no specific form alias. "
+                        "They fell back to the (unspecified) form with conservative scoring. "
+                        "Adding form-level aliases in IQM would improve scoring accuracy.",
+                "fallbacks": sorted(
+                    seen_fallbacks.values(),
+                    key=lambda x: (-x["occurrence_count"], x["parent_key"])
+                ),
+            }
+            fallback_file = os.path.join(reports_dir, "parent_fallback_report.json")
+            self._atomic_write_json(fallback_file, fallback_report)
+            self.logger.info(
+                f"Parent fallback report saved: {fallback_file} "
+                f"({len(seen_fallbacks)} unique, {len(self._parent_fallback_details)} total)"
+            )
 
         self.logger.info("=" * 50)
         self.logger.info("ENRICHMENT COMPLETE")

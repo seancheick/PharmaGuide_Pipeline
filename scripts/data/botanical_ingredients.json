@@ -4,7 +4,7 @@
     "purpose": "ingredient_mapping",
     "schema_version": "4.1.0",
     "last_updated": "2026-02-24",
-    "total_entries": 412,
+    "total_entries": 414,
     "quality_tier": "basic_raw_botanicals",
     "standardization": "none",
     "notes": "This database is separate from standardized_botanicals.json by design. Overlaps are intentional and allow the scoring system to reward standardized forms over raw powders."
@@ -5442,6 +5442,39 @@
       "notes": "Identity mapping for squash terms; non-standardized botanical mapping only.",
       "last_updated": "2026-02-24",
       "id": "squash"
+    },
+    {
+      "id": "mugwort",
+      "standard_name": "Mugwort",
+      "aliases": [
+        "mugwort",
+        "artemisia vulgaris",
+        "mugwort leaf",
+        "mugwort herb",
+        "mugwort extract",
+        "mugwort leaf extract",
+        "common mugwort"
+      ],
+      "category": "herb",
+      "notes": "Artemisia vulgaris. Traditional herb used in moxibustion and digestive support. Contains thujone; contraindicated in pregnancy due to uterotonic activity.",
+      "last_updated": "2026-02-28"
+    },
+    {
+      "id": "rue",
+      "standard_name": "Rue",
+      "aliases": [
+        "rue",
+        "ruta graveolens",
+        "rue herb",
+        "rue extract",
+        "common rue",
+        "herb of grace",
+        "rue leaf",
+        "ruta graveolens extract"
+      ],
+      "category": "herb",
+      "notes": "Ruta graveolens. Traditional herb with documented abortifacient properties. Contains furanocoumarins and alkaloids including rutine. Contraindicated in pregnancy.",
+      "last_updated": "2026-02-28"
     }
   ]
 }
