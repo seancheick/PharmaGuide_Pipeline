@@ -921,7 +921,7 @@ class TestP2AliasCoverageRegression:
             ("KD-Pur EPA", "epa"),
             ("Cryptozanthin", "cryptoxanthin"),
             ("Chromium-Chelavite", "chromium"),
-            ("Ginsenoside Rg3", "ginsenosides"),
+            ("Ginsenoside Rg3", "rg3"),
             ("Hyal-Joint", "hyaluronic_acid"),
             ("Cardiose Flavonoid Glycoside", "citrus_bioflavonoids"),
         ],

@@ -5,7 +5,7 @@
     "purpose": "Explicitly allowed normalized term overlaps across routing databases. Any new overlap must be reviewed before scoring deployment.",
     "description": "Explicitly allowed normalized term overlaps across routing databases. Any new overlap must be reviewed before scoring deployment.",
     "last_updated": "2026-02-24",
-    "total_entries": 16
+    "total_entries": 19
   },
   "allowed_overlaps": [
     {
@@ -119,6 +119,27 @@
         "harmful:iqm"
       ],
       "reason": "Active glycosides in senna; same dual-listing rationale as senna."
+    },
+    {
+      "term_normalized": "chlorophyllin",
+      "db_pairs": [
+        "harmful:iqm"
+      ],
+      "reason": "Copper chlorophyllin is both a scorable supplement form and flagged in harmful additives as a synthetic colorant additive."
+    },
+    {
+      "term_normalized": "copper chlorophyllin",
+      "db_pairs": [
+        "harmful:iqm"
+      ],
+      "reason": "Copper chlorophyllin dual-listed: supplement form (IQM) and synthetic colorant (harmful additives)."
+    },
+    {
+      "term_normalized": "sodium copper chlorophyllin",
+      "db_pairs": [
+        "harmful:iqm"
+      ],
+      "reason": "SCC dual-listed: supplement form (IQM) and synthetic colorant (harmful additives)."
     }
   ]
 }

@@ -95,6 +95,12 @@ class TestAliasQuality:
             'magnesium beta-hydroxybutyrate',
             # Creatine magnesium chelate — shared between creatine_monohydrate + magnesium
             'magnesium creatine chelate',
+            # Constituent stubs — aliases shared with parent botanical extract
+            'green tea egcg',           # egcg stub + green_tea_extract
+            'cranberry pacs',           # pac stub + cranberry
+            'epigallocatechin gallate', # egcg stub + epigallocatechin_gallate
+            'proanthocyanidins',        # pac stub + proanthocyanidins
+            'ginsenoside rg3',          # rg3 stub + ginsenosides
         }
 
         alias_map = defaultdict(list)

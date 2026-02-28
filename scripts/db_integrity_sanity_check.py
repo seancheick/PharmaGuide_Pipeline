@@ -336,10 +336,17 @@ def check_iqm(findings: List[Finding], data: Dict[str, Any], file: str) -> None:
         if sn is None or not isinstance(sn, str):
             findings.append(Finding("error", file, f"{ing_key}.standard_name", "missing_or_wrong_type", "str", _type_name(sn)))
 
-        # category_enum: must be a string (not validated against a fixed set — too many valid values).
+        # category_enum: must be one of the 12 canonical categories.
+        VALID_CATEGORIES = {
+            "amino_acids", "antioxidants", "enzymes", "fatty_acids",
+            "fibers", "functional_foods", "herbs", "minerals",
+            "other", "probiotics", "proteins", "vitamins",
+        }
         ce = entry.get("category_enum")
         if ce is None or not isinstance(ce, str):
             findings.append(Finding("error", file, f"{ing_key}.category_enum", "missing_or_wrong_type", "str", _type_name(ce)))
+        elif ce not in VALID_CATEGORIES:
+            findings.append(Finding("error", file, f"{ing_key}.category_enum", "invalid_category", f"one of {sorted(VALID_CATEGORIES)}", ce))
 
         # data_quality block.
         dq = entry.get("data_quality")

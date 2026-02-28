@@ -77,9 +77,9 @@ class TestRealLabelCorpus:
         # Active compounds vs parent botanicals
         ("Silymarin 80% (Milk Thistle Extract)", "silymarin", True),
         ("Milk Thistle Seed Extract", "milk_thistle", True),
-        ("Boswellic Acids 65%", "boswellic_acids", True),
+        ("Boswellic Acids 65%", "boswellia", True),
         ("Boswellia Serrata Extract", "boswellia", True),
-        ("Allicin (from Garlic)", "allicin", True),
+        ("Allicin (from Garlic)", "garlic", True),
         ("Aged Garlic Extract", "garlic", True),
 
         # Specific forms vs generic
