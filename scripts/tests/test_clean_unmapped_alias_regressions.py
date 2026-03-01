@@ -236,7 +236,7 @@ def normalizer():
         ("Sodium Succinate", "Succinic Acid"),
         ("Lagerstroemia speciosa leaf extract", "Corosolic Acid"),
         ("GliSODin", "Superoxide Dismutase"),
-        ("Zembrin", "Kanna"),
+        ("Zembrin", "Mesembrine"),
         ("Xanthoparmelia scabrosa", "Xanthoparmelia"),
         ("Yeast Fermentate, Dried", "yeast fermentate"),
         ("EpiCor dried Yeast Fermentate", "yeast fermentate"),

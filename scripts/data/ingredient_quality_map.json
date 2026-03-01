@@ -13679,6 +13679,32 @@
           "quality": "unknown",
           "notes": "Data not available"
         }
+      },
+      "phycocyanin extract (spirulina)": {
+        "bio_score": 8,
+        "natural": true,
+        "score": 11,
+        "absorption": "low (chromophore)",
+        "notes": "Purified C-phycocyanin from Arthrospira platensis (spirulina). Anti-inflammatory via PCB chromophore inhibiting NADPH oxidase and acting as bilirubin analog (PMC9185767). Intact protein MW 70-131 kDa limits direct GI absorption; phycocyanobilin is the bioavailable chromophore released upon digestion. Used in 'blue spirulina' products. Spray drying causes ~20% phycocyanin loss (PMC10144176).",
+        "aliases": [
+          "phycocyanin",
+          "c-phycocyanin",
+          "spirulina phycocyanin",
+          "phycocyanin extract",
+          "blue spirulina extract",
+          "phycocyanin from spirulina",
+          "spirulina blue pigment",
+          "phycocyanobilin",
+          "spirulina phycocyanin extract"
+        ],
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": null,
+          "range_low": null,
+          "range_high": null,
+          "quality": "low",
+          "notes": "Intact C-phycocyanin (70-131 kDa) poorly absorbed; PCB chromophore is absorbed species; microencapsulation improves delivery"
+        }
       }
     },
     "match_rules": {
@@ -16107,7 +16133,11 @@
           "MegaNatural-BP Grape seed Non-GMO extract",
           "MegaNatural(R)-BP Grape Seed (Vitis vinifera) Non-GMO Extract",
           "european grapeseed fruit extract",
-          "MegaNatural-BP Grape (Vitis vinifera) extract"
+          "MegaNatural-BP Grape (Vitis vinifera) extract",
+          "oligomeric procyanidins",
+          "OPC grape seed",
+          "proanthocyanidin oligomers",
+          "grape OPCs"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -16283,7 +16313,8 @@
           "pycnogenol dried french maritime pine extract",
           "oligopin french maritime pine (pinus pinaster) extract",
           "masson pine bark extract",
-          "pycnogenol pine bark extract"
+          "pycnogenol pine bark extract",
+          "pine OPCs"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -16321,7 +16352,9 @@
           "fenoprolic pine bark extract",
           "fenoprolic",
           "organic fenoprolic pine bark extract",
-          "fenoprolic pine bark"
+          "fenoprolic pine bark",
+          "pine bark OPC extract",
+          "oligomeric procyanidins pine bark"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -19925,7 +19958,6 @@
         "notes": "Type-A proanthocyanidins (PACs) — the key bioactive in cranberry responsible for urinary tract health. Unlike common B-type PACs in grape seed, cranberry A-type PACs have a unique double interflavan linkage that prevents E. coli from adhering to bladder epithelium. 36 mg PACs/day is the threshold dose supported by clinical evidence for UTI prevention. Listed on cranberry supplement labels as the primary quality marker.",
         "aliases": [
           "pac",
-          "proanthocyanidins",
           "proanthocyanidins type a",
           "cranberry PACs",
           "type-a proanthocyanidins",
@@ -20643,7 +20675,11 @@
           "berry anthocyanins",
           "anthocyanin extract",
           "anthocyanosides",
-          "anthocyanoside extract"
+          "anthocyanoside extract",
+          "malvin",
+          "malvidin-3,5-diglucoside",
+          "malvidin diglucoside",
+          "grape malvidin"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -23247,19 +23283,18 @@
   },
   "kavalactones": {
     "standard_name": "Kavalactones",
-    "severity_level": "none",
-    "category": "antioxidants",
+    "severity_level": "moderate",
+    "category": "herbs",
     "source": "botanical_extract",
-    "priority": "high",
-    "description": "Standardization marker for botanical extracts",
-    "dosage_importance": 0.1,
+    "description": "Active lactones of kava (Piper methysticum) with anxiolytic properties",
+    "dosage_importance": 1.5,
     "forms": {
       "kavalactones (unspecified)": {
-        "bio_score": 5,
-        "natural": false,
-        "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
+        "bio_score": 8,
+        "natural": true,
+        "score": 11,
+        "absorption": "moderate (~45%)",
+        "notes": "Kava's active lactones (kavain, dihydrokavain, methysticin) bind GABA-A receptors and inhibit MAO-B, reducing anxiety in 8+ RCTs. Effective at 120-250 mg/day for generalized anxiety (Cochrane 2003; PMID 35777607 pharmacokinetics 2022). FDA advisory 2002 for rare liver injury risk — contraindicated with alcohol or hepatotoxic drugs.",
         "aliases": [
           "kavalactones",
           "kava",
@@ -23269,15 +23304,20 @@
           "kava kava extract",
           "piper methysticum",
           "piper methysticum root extract",
-          "kava root"
+          "kava root",
+          "kavain",
+          "dihydrokavain",
+          "methysticin",
+          "kava lactones",
+          "kava standardized extract"
         ],
-        "dosage_importance": 1.0,
+        "dosage_importance": 1.5,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.45,
+          "range_low": 0.35,
+          "range_high": 0.6,
+          "quality": "moderate",
+          "notes": "Kavain Tmax ~10 min; oral F ~40-55% estimated; half-life ~9 h; yangonin poorly absorbed"
         }
       }
     },
@@ -23290,7 +23330,7 @@
       "parent_id": null,
       "confidence": "high"
     },
-    "category_enum": "antioxidants",
+    "category_enum": "herbs",
     "cui_note": "No UMLS entry for botanical/novel compound",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "data_quality": {
@@ -23303,28 +23343,33 @@
   "ketosteroids": {
     "standard_name": "Ketosteroids",
     "severity_level": "none",
-    "category": "antioxidants",
-    "source": "botanical_extract",
-    "priority": "high",
-    "description": "Standardization marker for botanical extracts",
-    "dosage_importance": 0.1,
+    "category": "herbs",
+    "description": "Phytosteroid standardization marker for Cissus quadrangularis extracts",
+    "dosage_importance": 1.0,
     "forms": {
       "ketosteroids (unspecified)": {
-        "bio_score": 5,
-        "natural": false,
-        "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
+        "bio_score": 4,
+        "natural": true,
+        "score": 7,
+        "absorption": "poor (~10%)",
+        "notes": "Cissus quadrangularis standardization marker (plant phytosterols). Per PMID 27279709, ketosteroids may not be the true active fraction — iridoids and flavonoids likely drive bone/joint benefits. Human trials show joint pain reduction at 300-1200 mg/day. Anabolic/bodybuilding marketing claims lack clinical support.",
         "aliases": [
-          "ketosteroids"
+          "ketosteroids",
+          "cissus quadrangularis",
+          "cissus quadrangularis extract",
+          "cissus extract",
+          "cissus",
+          "hadjod",
+          "bone setter plant extract",
+          "3-ketosteroids"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.1,
+          "range_low": 0.05,
+          "range_high": 0.2,
+          "quality": "poor",
+          "notes": "Plant sterols: 5-20% intestinal absorption; no human PK data for Cissus ketosteroids specifically"
         }
       }
     },
@@ -23337,7 +23382,7 @@
       "parent_id": null,
       "confidence": "high"
     },
-    "category_enum": "antioxidants",
+    "category_enum": "herbs",
     "cui_note": "No UMLS entry for botanical/novel compound",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "data_quality": {
@@ -23350,28 +23395,29 @@
   "lauric_acid": {
     "standard_name": "Lauric Acid",
     "severity_level": "none",
-    "category": "antioxidants",
-    "source": "botanical_extract",
-    "priority": "high",
-    "description": "Standardization marker for botanical extracts",
-    "dosage_importance": 0.1,
+    "category": "fatty_acids",
+    "description": "C12 medium-chain saturated fatty acid, primary constituent of coconut oil",
+    "dosage_importance": 1.0,
     "forms": {
       "lauric acid (unspecified)": {
         "bio_score": 5,
-        "natural": false,
-        "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
+        "natural": true,
+        "score": 8,
+        "absorption": "moderate (~65%)",
+        "notes": "C12 saturated fatty acid comprising ~50% of coconut oil. Absorbed via both lymphatic (~51%) and portal vein pathways (PMID 9323689). Raises both LDL-C and HDL-C with neutral net cardiovascular effect (PMID 1415008). Most inhibitory saturated FA against Gram-positive bacteria in vitro (PMC11260118). Monolaurin (glycerol monolaurate) is the more bioactive antimicrobial form.",
         "aliases": [
-          "lauric acid"
+          "lauric acid",
+          "dodecanoic acid",
+          "c12 fatty acid",
+          "c12:0"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.65,
+          "range_low": 0.5,
+          "range_high": 0.75,
+          "quality": "moderate",
+          "notes": "~51% recovered in lymphatics in rat studies; combined portal+lymphatic absorption 60-75%"
         }
       }
     },
@@ -23384,7 +23430,7 @@
       "parent_id": null,
       "confidence": "high"
     },
-    "category_enum": "antioxidants",
+    "category_enum": "fatty_acids",
     "cui_note": "No UMLS entry for botanical/novel compound",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "data_quality": {
@@ -23444,29 +23490,30 @@
   },
   "lectins": {
     "standard_name": "Lectins",
-    "severity_level": "none",
-    "category": "antioxidants",
-    "source": "botanical_extract",
-    "priority": "high",
-    "description": "Standardization marker for botanical extracts",
-    "dosage_importance": 0.1,
+    "severity_level": "low",
+    "category": "proteins",
+    "description": "Carbohydrate-binding plant proteins; anti-nutrient marker on supplement labels",
+    "dosage_importance": 0.5,
     "forms": {
       "lectins (unspecified)": {
-        "bio_score": 5,
-        "natural": false,
-        "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
+        "bio_score": 3,
+        "natural": true,
+        "score": 6,
+        "absorption": "poor (~3%)",
+        "notes": "Plant carbohydrate-binding proteins that survive GI digestion intact. Primarily appear as incidental label disclosures on plant protein products rather than intentional supplement ingredients. At high doses, reduce mineral absorption (Ca, Fe, Zn, P) and cause GI irritation (PMID 15302522). Mistletoe lectin (Iscador) has Phase II oncology data (PMC7120034).",
         "aliases": [
-          "lectins"
+          "lectins",
+          "lectin",
+          "plant lectins",
+          "phytolectins"
         ],
-        "dosage_importance": 1.0,
+        "dosage_importance": 0.5,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.03,
+          "range_low": 0.01,
+          "range_high": 0.05,
+          "quality": "poor",
+          "notes": "Intact lectins survive digestion but systemic absorption is very low (~1-5%); most activity is luminal"
         }
       }
     },
@@ -23479,7 +23526,7 @@
       "parent_id": null,
       "confidence": "high"
     },
-    "category_enum": "antioxidants",
+    "category_enum": "proteins",
     "cui_note": "No UMLS entry for botanical/novel compound",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "data_quality": {
@@ -23497,15 +23544,15 @@
     "rxcui": null,
     "source": "botanical_extract",
     "priority": "high",
-    "description": "Standardization marker for botanical extracts",
-    "dosage_importance": 0.1,
+    "description": "Polyphenolic plant compounds from flaxseed, sesame, and spruce with phytoestrogenic and cardiovascular effects",
+    "dosage_importance": 1.0,
     "forms": {
       "lignans (unspecified)": {
-        "bio_score": 5,
-        "natural": false,
-        "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
+        "bio_score": 7,
+        "natural": true,
+        "score": 10,
+        "absorption": "variable (~30%)",
+        "notes": "Plant polyphenols (SDG, secoisolariciresinol) converted by gut bacteria to mammalian lignans enterodiol and enterolactone. Absorption is gut-microbiome dependent with high inter-individual variation (3 metabolizer phenotypes). >=500 mg SDG/day for 8+ weeks reduces SBP ~2.9 mmHg and DBP ~2.4 mmHg (PMC2951311, 8 RCTs). Weak phytoestrogen; epidemiological data links higher enterolactone to reduced breast/prostate cancer risk.",
         "aliases": [
           "lignans",
           "sesame seed lignan extract",
@@ -23535,11 +23582,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.3,
+          "range_low": 0.1,
+          "range_high": 0.55,
+          "quality": "variable",
+          "notes": "SDG bioavailability is gut microbiome-dependent; 3 distinct metabolizer phenotypes (low/medium/high enterolactone producers)"
         }
       }
     },
@@ -23551,53 +23598,6 @@
       "confidence": "high"
     },
     "category_enum": "antioxidants",
-    "rxcui_note": "No RxNorm concept for supplement ingredient",
-    "data_quality": {
-      "completeness": 1.0,
-      "missing_fields": [],
-      "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
-    }
-  },
-  "ligustilide": {
-    "standard_name": "Ligustilide",
-    "severity_level": "none",
-    "category": "antioxidants",
-    "source": "botanical_extract",
-    "priority": "high",
-    "description": "Standardization marker for botanical extracts",
-    "dosage_importance": 0.1,
-    "forms": {
-      "ligustilide (unspecified)": {
-        "bio_score": 5,
-        "natural": false,
-        "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
-        "aliases": [
-          "ligustilide"
-        ],
-        "dosage_importance": 1.0,
-        "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
-        }
-      }
-    },
-    "cui": null,
-    "rxcui": null,
-    "match_rules": {
-      "priority": 0,
-      "match_mode": "alias_and_fuzzy",
-      "exclusions": [],
-      "parent_id": null,
-      "confidence": "high"
-    },
-    "category_enum": "antioxidants",
-    "cui_note": "No UMLS entry for botanical/novel compound",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "data_quality": {
       "completeness": 1.0,
@@ -23609,28 +23609,38 @@
   "linalool": {
     "standard_name": "Linalool",
     "severity_level": "none",
-    "category": "antioxidants",
-    "source": "botanical_extract",
-    "priority": "high",
-    "description": "Standardization marker for botanical extracts",
-    "dosage_importance": 0.1,
+    "category": "herbs",
+    "description": "Monoterpene alcohol; primary active constituent of lavender oil (Silexan)",
+    "dosage_importance": 1.5,
     "forms": {
       "linalool (unspecified)": {
-        "bio_score": 5,
-        "natural": false,
-        "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
+        "bio_score": 8,
+        "natural": true,
+        "score": 11,
+        "absorption": "moderate (~40%)",
+        "notes": "Monoterpene comprising ~25-40% of lavender essential oil. Primary constituent of Silexan (oral lavender oil capsule), with 5 Phase III RCTs (524+ participants) showing significant anxiolytic effects vs. placebo for generalized anxiety (Scientific Reports 2019 meta-analysis). Mechanism: VGCC inhibition + serotonin 5-HT1A + GABA potentiation. Oral Tmax ~1 h, half-life ~3.9 h (PMC10538094 2023 human PK).",
         "aliases": [
-          "linalool"
+          "linalool",
+          "lavender oil",
+          "lavender essential oil",
+          "lavandula angustifolia oil",
+          "lavandula oil",
+          "silexan",
+          "lavender extract",
+          "lavender flower oil",
+          "lavender",
+          "lavandula angustifolia",
+          "lavandula angustifolia extract",
+          "linalyl acetate",
+          "lavender linalyl acetate"
         ],
-        "dosage_importance": 1.0,
+        "dosage_importance": 1.5,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.4,
+          "range_low": 0.25,
+          "range_high": 0.55,
+          "quality": "moderate",
+          "notes": "100 mg oral linalool: Cmax 85.5 ng/mL, Tmax ~1 h, t1/2 3.9 h (PMC10538094); rapidly metabolized hepatically"
         }
       }
     },
@@ -23643,54 +23653,7 @@
       "parent_id": null,
       "confidence": "high"
     },
-    "category_enum": "antioxidants",
-    "cui_note": "No UMLS entry for botanical/novel compound",
-    "rxcui_note": "No RxNorm concept for supplement ingredient",
-    "data_quality": {
-      "completeness": 1.0,
-      "missing_fields": [],
-      "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
-    }
-  },
-  "linalyl_acetate": {
-    "standard_name": "Linalyl Acetate",
-    "severity_level": "none",
-    "category": "antioxidants",
-    "source": "botanical_extract",
-    "priority": "high",
-    "description": "Standardization marker for botanical extracts",
-    "dosage_importance": 0.1,
-    "forms": {
-      "linalyl acetate (unspecified)": {
-        "bio_score": 5,
-        "natural": false,
-        "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
-        "aliases": [
-          "linalyl acetate"
-        ],
-        "dosage_importance": 1.0,
-        "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
-        }
-      }
-    },
-    "cui": null,
-    "rxcui": null,
-    "match_rules": {
-      "priority": 0,
-      "match_mode": "alias_and_fuzzy",
-      "exclusions": [],
-      "parent_id": null,
-      "confidence": "high"
-    },
-    "category_enum": "antioxidants",
+    "category_enum": "herbs",
     "cui_note": "No UMLS entry for botanical/novel compound",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "data_quality": {
@@ -23702,30 +23665,31 @@
   },
   "linoleic_acid": {
     "standard_name": "Linoleic Acid",
-    "severity_level": "none",
     "category": "fatty_acids",
-    "source": "botanical_extract",
-    "priority": "high",
-    "description": "Standardization marker for botanical extracts",
-    "dosage_importance": 0.1,
+    "description": "Essential omega-6 polyunsaturated fatty acid (18:2n-6)",
+    "dosage_importance": 1.0,
     "forms": {
       "linoleic acid (unspecified)": {
-        "bio_score": 5,
-        "natural": false,
-        "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
+        "bio_score": 9,
+        "natural": true,
+        "score": 12,
+        "absorption": "95-98%",
+        "notes": "Essential omega-6 PUFA absorbed 95-98% via jejunal micelles (PMID 1940613). Precursor to arachidonic acid via delta-6-desaturase. Supplement context is LA-concentrate from seed oils (sunflower, safflower, evening primrose). RCTs show LDL-lowering when replacing saturated fat (PMID 22351658, Farvid 2014 meta-analysis). Not CLA — LA is unconjugated 18:2n-6.",
         "aliases": [
           "linoleic acid",
-          "Cis-Linoleic Acid"
+          "Cis-Linoleic Acid",
+          "linoleic acid 18:2",
+          "omega-6 linoleic acid",
+          "cis,cis-9,12-octadecadienoic acid",
+          "LA (omega-6)"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.97,
+          "range_low": 0.95,
+          "range_high": 0.98,
+          "quality": "very_good",
+          "notes": "95-98% absorption via micellar solubilization in jejunum (PMID 1940613)"
         }
       }
     },
@@ -23748,68 +23712,18 @@
       "last_reviewed_at": "2026-02-28"
     }
   },
-  "liquiritin": {
-    "standard_name": "Liquiritin",
-    "severity_level": "none",
-    "category": "antioxidants",
-    "source": "botanical_extract",
-    "priority": "high",
-    "description": "Standardization marker for botanical extracts",
-    "dosage_importance": 0.1,
-    "forms": {
-      "liquiritin (unspecified)": {
-        "bio_score": 5,
-        "natural": false,
-        "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
-        "aliases": [
-          "liquiritin"
-        ],
-        "dosage_importance": 1.0,
-        "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
-        }
-      }
-    },
-    "cui": null,
-    "rxcui": null,
-    "match_rules": {
-      "priority": 0,
-      "match_mode": "alias_and_fuzzy",
-      "exclusions": [],
-      "parent_id": null,
-      "confidence": "high"
-    },
-    "category_enum": "antioxidants",
-    "cui_note": "No UMLS entry for botanical/novel compound",
-    "rxcui_note": "No RxNorm concept for supplement ingredient",
-    "data_quality": {
-      "completeness": 1.0,
-      "missing_fields": [],
-      "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
-    }
-  },
   "luteolin": {
     "standard_name": "Luteolin",
-    "severity_level": "none",
     "category": "antioxidants",
-    "source": "botanical_extract",
-    "priority": "high",
-    "description": "Standardization marker for botanical extracts",
-    "dosage_importance": 0.1,
+    "description": "Flavone polyphenol sold standalone for brain health and anti-inflammatory applications",
+    "dosage_importance": 1.5,
     "forms": {
       "luteolin (unspecified)": {
-        "bio_score": 5,
-        "natural": false,
-        "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
+        "bio_score": 7,
+        "natural": true,
+        "score": 10,
+        "absorption": "1-5%",
+        "notes": "Flavone from Sophora japonica (98% purity), artichoke, thyme. Potent NF-kB/IL-6 inhibitor; mast cell stabilizer studied in neuroinflammation (PMID 22493219, Theoharides 2012). Luteolin-7-glucoside deglycosylated by gut lactase; urinary recovery ~1-5% as glucuronides (PMID 9649280). Phytosome and DR-Luteolin (delayed-release) improve absorption 3-5x. Sold standalone for brain health and anti-allergy.",
         "aliases": [
           "luteolin",
           "Luteolin Phytosome",
@@ -23818,297 +23732,18 @@
           "d.r.-luteolin",
           "dr-luteolin",
           "dr. luteolin",
-          "dr luteolin"
+          "dr luteolin",
+          "luteolin 98%",
+          "sophora japonica extract luteolin",
+          "luteolin flavone"
         ],
-        "dosage_importance": 1.0,
+        "dosage_importance": 1.5,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
-        }
-      }
-    },
-    "cui": null,
-    "rxcui": null,
-    "match_rules": {
-      "priority": 0,
-      "match_mode": "alias_and_fuzzy",
-      "exclusions": [],
-      "parent_id": null,
-      "confidence": "high"
-    },
-    "category_enum": "antioxidants",
-    "cui_note": "No UMLS entry for botanical/novel compound",
-    "rxcui_note": "No RxNorm concept for supplement ingredient",
-    "data_quality": {
-      "completeness": 1.0,
-      "missing_fields": [],
-      "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
-    }
-  },
-  "macaenes": {
-    "standard_name": "Macaenes",
-    "severity_level": "none",
-    "category": "antioxidants",
-    "source": "botanical_extract",
-    "priority": "high",
-    "description": "Standardization marker for botanical extracts",
-    "dosage_importance": 0.1,
-    "forms": {
-      "macaenes (unspecified)": {
-        "bio_score": 5,
-        "natural": false,
-        "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
-        "aliases": [
-          "macaenes"
-        ],
-        "dosage_importance": 1.0,
-        "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
-        }
-      }
-    },
-    "cui": null,
-    "rxcui": null,
-    "match_rules": {
-      "priority": 0,
-      "match_mode": "alias_and_fuzzy",
-      "exclusions": [],
-      "parent_id": null,
-      "confidence": "high"
-    },
-    "category_enum": "antioxidants",
-    "cui_note": "No UMLS entry for botanical/novel compound",
-    "rxcui_note": "No RxNorm concept for supplement ingredient",
-    "data_quality": {
-      "completeness": 1.0,
-      "missing_fields": [],
-      "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
-    }
-  },
-  "macamides": {
-    "standard_name": "Macamides",
-    "severity_level": "none",
-    "category": "antioxidants",
-    "source": "botanical_extract",
-    "priority": "high",
-    "description": "Standardization marker for botanical extracts",
-    "dosage_importance": 0.1,
-    "forms": {
-      "macamides (unspecified)": {
-        "bio_score": 5,
-        "natural": false,
-        "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
-        "aliases": [
-          "macamides"
-        ],
-        "dosage_importance": 1.0,
-        "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
-        }
-      }
-    },
-    "cui": null,
-    "rxcui": null,
-    "match_rules": {
-      "priority": 0,
-      "match_mode": "alias_and_fuzzy",
-      "exclusions": [],
-      "parent_id": null,
-      "confidence": "high"
-    },
-    "category_enum": "antioxidants",
-    "cui_note": "No UMLS entry for botanical/novel compound",
-    "rxcui_note": "No RxNorm concept for supplement ingredient",
-    "data_quality": {
-      "completeness": 1.0,
-      "missing_fields": [],
-      "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
-    }
-  },
-  "madecassoside": {
-    "standard_name": "Madecassoside",
-    "severity_level": "none",
-    "category": "antioxidants",
-    "source": "botanical_extract",
-    "priority": "high",
-    "description": "Standardization marker for botanical extracts",
-    "dosage_importance": 0.1,
-    "forms": {
-      "madecassoside (unspecified)": {
-        "bio_score": 5,
-        "natural": false,
-        "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
-        "aliases": [
-          "madecassoside"
-        ],
-        "dosage_importance": 1.0,
-        "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
-        }
-      }
-    },
-    "cui": null,
-    "rxcui": null,
-    "match_rules": {
-      "priority": 0,
-      "match_mode": "alias_and_fuzzy",
-      "exclusions": [],
-      "parent_id": null,
-      "confidence": "high"
-    },
-    "category_enum": "antioxidants",
-    "cui_note": "No UMLS entry for botanical/novel compound",
-    "rxcui_note": "No RxNorm concept for supplement ingredient",
-    "data_quality": {
-      "completeness": 1.0,
-      "missing_fields": [],
-      "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
-    }
-  },
-  "magnolol": {
-    "standard_name": "Magnolol",
-    "severity_level": "none",
-    "category": "antioxidants",
-    "source": "botanical_extract",
-    "priority": "high",
-    "description": "Standardization marker for botanical extracts",
-    "dosage_importance": 0.1,
-    "forms": {
-      "magnolol (unspecified)": {
-        "bio_score": 5,
-        "natural": false,
-        "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
-        "aliases": [
-          "magnolol"
-        ],
-        "dosage_importance": 1.0,
-        "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
-        }
-      }
-    },
-    "cui": null,
-    "rxcui": null,
-    "match_rules": {
-      "priority": 0,
-      "match_mode": "alias_and_fuzzy",
-      "exclusions": [],
-      "parent_id": null,
-      "confidence": "high"
-    },
-    "category_enum": "antioxidants",
-    "cui_note": "No UMLS entry for botanical/novel compound",
-    "rxcui_note": "No RxNorm concept for supplement ingredient",
-    "data_quality": {
-      "completeness": 1.0,
-      "missing_fields": [],
-      "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
-    }
-  },
-  "malvin": {
-    "standard_name": "Malvin",
-    "severity_level": "none",
-    "category": "antioxidants",
-    "source": "botanical_extract",
-    "priority": "high",
-    "description": "Standardization marker for botanical extracts",
-    "dosage_importance": 0.1,
-    "forms": {
-      "malvin (unspecified)": {
-        "bio_score": 5,
-        "natural": false,
-        "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
-        "aliases": [
-          "malvin"
-        ],
-        "dosage_importance": 1.0,
-        "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
-        }
-      }
-    },
-    "cui": null,
-    "rxcui": null,
-    "match_rules": {
-      "priority": 0,
-      "match_mode": "alias_and_fuzzy",
-      "exclusions": [],
-      "parent_id": null,
-      "confidence": "high"
-    },
-    "category_enum": "antioxidants",
-    "cui_note": "No UMLS entry for botanical/novel compound",
-    "rxcui_note": "No RxNorm concept for supplement ingredient",
-    "data_quality": {
-      "completeness": 1.0,
-      "missing_fields": [],
-      "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
-    }
-  },
-  "menthol": {
-    "standard_name": "Menthol",
-    "severity_level": "none",
-    "category": "antioxidants",
-    "source": "botanical_extract",
-    "priority": "high",
-    "description": "Standardization marker for botanical extracts",
-    "dosage_importance": 0.1,
-    "forms": {
-      "menthol (unspecified)": {
-        "bio_score": 5,
-        "natural": false,
-        "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
-        "aliases": [
-          "menthol"
-        ],
-        "dosage_importance": 1.0,
-        "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.03,
+          "range_low": 0.01,
+          "range_high": 0.05,
+          "quality": "poor",
+          "notes": "Free luteolin oral F ~1-5%; Phytosome 3-5x improved in animal models (PMID 9649280)"
         }
       }
     },
@@ -24134,28 +23769,36 @@
   "mesembrine": {
     "standard_name": "Mesembrine",
     "severity_level": "none",
-    "category": "antioxidants",
-    "source": "botanical_extract",
-    "priority": "high",
-    "description": "Standardization marker for botanical extracts",
-    "dosage_importance": 0.1,
+    "category": "herbs",
+    "description": "Primary alkaloid of Sceletium tortuosum (Kanna); SSRI + PDE4 inhibitor",
+    "dosage_importance": 1.5,
     "forms": {
       "mesembrine (unspecified)": {
-        "bio_score": 5,
-        "natural": false,
-        "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
+        "bio_score": 9,
+        "natural": true,
+        "score": 12,
+        "absorption": "~65%",
+        "notes": "Primary alkaloid of Sceletium tortuosum (Kanna). Dual mechanism: SSRI + PDE4 inhibitor (PMID 21130846, Harvey 2011). Zembrin (25 mg/day) reduced amygdala threat-reactivity vs placebo in crossover RCT n=16 (PMID 23428430, Terburg 2013). Executive function improvement at 8 weeks (PMID 25029945). No hepatotoxicity signals; no MAOIs. Traditional San/Khoikhoi use for mood and anxiety.",
         "aliases": [
-          "mesembrine"
+          "mesembrine",
+          "Zembrin",
+          "sceletium tortuosum extract",
+          "sceletium tortuosum alkaloids",
+          "kanna extract",
+          "kanna",
+          "Sceletium",
+          "sceletium alkaloids",
+          "mesembrenone",
+          "sceletium tortuosum",
+          "kanna herb"
         ],
-        "dosage_importance": 1.0,
+        "dosage_importance": 1.5,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.65,
+          "range_low": 0.55,
+          "range_high": 0.75,
+          "quality": "good",
+          "notes": "Lipophilic alkaloid (MW 319); estimated oral F >60% by pharmacokinetic class analogy"
         }
       }
     },
@@ -24168,7 +23811,7 @@
       "parent_id": null,
       "confidence": "high"
     },
-    "category_enum": "antioxidants",
+    "category_enum": "herbs",
     "cui_note": "No UMLS entry for botanical/novel compound",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "data_quality": {
@@ -24181,28 +23824,31 @@
   "mucilage": {
     "standard_name": "Mucilage",
     "severity_level": "none",
-    "category": "antioxidants",
-    "source": "botanical_extract",
-    "priority": "high",
-    "description": "Standardization marker for botanical extracts",
-    "dosage_importance": 0.1,
+    "category": "fibers",
+    "description": "Gel-forming soluble polysaccharide fiber from plant sources",
+    "dosage_importance": 1.0,
     "forms": {
       "mucilage (unspecified)": {
-        "bio_score": 5,
-        "natural": false,
-        "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
+        "bio_score": 6,
+        "natural": true,
+        "score": 9,
+        "absorption": "not absorbed",
+        "notes": "Gel-forming soluble polysaccharide from slippery elm, marshmallow root, flaxseed, chia. Not systemically absorbed — acts as GI demulcent coating intestinal mucosa. Slows gastric emptying and blunts postprandial glucose (PMID 30348445). Prebiotic fermentation produces SCFAs. Clinical use: IBS demulcency, gastritis, GERD symptom relief.",
         "aliases": [
-          "mucilage"
+          "mucilage",
+          "plant mucilage",
+          "herbal mucilage",
+          "marshmallow root mucilage",
+          "seed mucilage",
+          "demulcent fiber"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
+          "value": 0.0,
+          "range_low": 0.0,
+          "range_high": 0.0,
           "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "notes": "Not absorbed systemically; remains in GI lumen as viscous gel demulcent"
         }
       }
     },
@@ -24215,7 +23861,7 @@
       "parent_id": null,
       "confidence": "high"
     },
-    "category_enum": "antioxidants",
+    "category_enum": "fibers",
     "cui_note": "No UMLS entry for botanical/novel compound",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "data_quality": {
@@ -24277,265 +23923,37 @@
       "last_reviewed_at": "2026-02-28"
     }
   },
-  "nigellone": {
-    "standard_name": "Nigellone",
-    "severity_level": "none",
-    "category": "antioxidants",
-    "source": "botanical_extract",
-    "priority": "high",
-    "description": "Standardization marker for botanical extracts",
-    "dosage_importance": 0.1,
-    "forms": {
-      "nigellone (unspecified)": {
-        "bio_score": 5,
-        "natural": false,
-        "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
-        "aliases": [
-          "nigellone"
-        ],
-        "dosage_importance": 1.0,
-        "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
-        }
-      }
-    },
-    "cui": null,
-    "rxcui": null,
-    "match_rules": {
-      "priority": 0,
-      "match_mode": "alias_and_fuzzy",
-      "exclusions": [],
-      "parent_id": null,
-      "confidence": "high"
-    },
-    "category_enum": "antioxidants",
-    "cui_note": "No UMLS entry for botanical/novel compound",
-    "rxcui_note": "No RxNorm concept for supplement ingredient",
-    "data_quality": {
-      "completeness": 1.0,
-      "missing_fields": [],
-      "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
-    }
-  },
-  "oleuropein": {
-    "standard_name": "Oleuropein",
-    "severity_level": "none",
-    "category": "antioxidants",
-    "cui": "C0066503",
-    "rxcui": null,
-    "source": "botanical_extract",
-    "priority": "high",
-    "description": "Standardization marker for botanical extracts",
-    "dosage_importance": 0.1,
-    "forms": {
-      "oleuropein (unspecified)": {
-        "bio_score": 5,
-        "natural": false,
-        "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
-        "aliases": [
-          "oleuropein"
-        ],
-        "dosage_importance": 1.0,
-        "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
-        }
-      }
-    },
-    "match_rules": {
-      "priority": 0,
-      "match_mode": "alias_and_fuzzy",
-      "exclusions": [],
-      "parent_id": null,
-      "confidence": "high"
-    },
-    "category_enum": "antioxidants",
-    "rxcui_note": "No RxNorm concept for supplement ingredient",
-    "data_quality": {
-      "completeness": 1.0,
-      "missing_fields": [],
-      "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
-    }
-  },
-  "oligomeric_procyanidins": {
-    "standard_name": "Oligomeric Procyanidins",
-    "severity_level": "none",
-    "category": "antioxidants",
-    "source": "botanical_extract",
-    "priority": "high",
-    "description": "Standardization marker for botanical extracts",
-    "dosage_importance": 0.1,
-    "forms": {
-      "oligomeric procyanidins (unspecified)": {
-        "bio_score": 5,
-        "natural": false,
-        "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
-        "aliases": [
-          "oligomeric procyanidins"
-        ],
-        "dosage_importance": 1.0,
-        "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
-        }
-      }
-    },
-    "cui": null,
-    "rxcui": null,
-    "match_rules": {
-      "priority": 0,
-      "match_mode": "alias_and_fuzzy",
-      "exclusions": [],
-      "parent_id": null,
-      "confidence": "high"
-    },
-    "category_enum": "antioxidants",
-    "cui_note": "No UMLS entry for botanical/novel compound",
-    "rxcui_note": "No RxNorm concept for supplement ingredient",
-    "data_quality": {
-      "completeness": 1.0,
-      "missing_fields": [],
-      "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
-    }
-  },
-  "oxindole_alkaloids": {
-    "standard_name": "Oxindole Alkaloids",
-    "severity_level": "none",
-    "category": "antioxidants",
-    "source": "botanical_extract",
-    "priority": "high",
-    "description": "Standardization marker for botanical extracts",
-    "dosage_importance": 0.1,
-    "forms": {
-      "oxindole alkaloids (unspecified)": {
-        "bio_score": 5,
-        "natural": false,
-        "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
-        "aliases": [
-          "oxindole alkaloids"
-        ],
-        "dosage_importance": 1.0,
-        "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
-        }
-      }
-    },
-    "cui": null,
-    "rxcui": null,
-    "match_rules": {
-      "priority": 0,
-      "match_mode": "alias_and_fuzzy",
-      "exclusions": [],
-      "parent_id": null,
-      "confidence": "high"
-    },
-    "category_enum": "antioxidants",
-    "cui_note": "No UMLS entry for botanical/novel compound",
-    "rxcui_note": "No RxNorm concept for supplement ingredient",
-    "data_quality": {
-      "completeness": 1.0,
-      "missing_fields": [],
-      "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
-    }
-  },
-  "parthenolide": {
-    "standard_name": "Parthenolide",
-    "severity_level": "none",
-    "category": "herbs",
-    "source": "botanical_extract",
-    "priority": "high",
-    "description": "Standardization marker for botanical extracts",
-    "dosage_importance": 0.1,
-    "forms": {
-      "parthenolide (unspecified)": {
-        "bio_score": 5,
-        "natural": false,
-        "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
-        "aliases": [
-          "parthenolide"
-        ],
-        "dosage_importance": 1.0,
-        "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
-        }
-      }
-    },
-    "cui": null,
-    "rxcui": null,
-    "match_rules": {
-      "priority": 0,
-      "match_mode": "alias_and_fuzzy",
-      "exclusions": [],
-      "parent_id": null,
-      "confidence": "high"
-    },
-    "category_enum": "herbs",
-    "cui_note": "No UMLS entry for botanical/novel compound",
-    "rxcui_note": "No RxNorm concept for supplement ingredient",
-    "data_quality": {
-      "completeness": 1.0,
-      "missing_fields": [],
-      "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
-    }
-  },
   "phenolic_acids": {
     "standard_name": "Phenolic Acids",
     "severity_level": "none",
     "category": "antioxidants",
-    "source": "botanical_extract",
-    "priority": "high",
-    "description": "Standardization marker for botanical extracts",
-    "dosage_importance": 0.1,
+    "description": "Hydroxycinnamic and hydroxybenzoic acid class of plant polyphenols",
+    "dosage_importance": 0.5,
     "forms": {
       "phenolic acids (unspecified)": {
-        "bio_score": 5,
-        "natural": false,
-        "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
+        "bio_score": 7,
+        "natural": true,
+        "score": 10,
+        "absorption": "variable (~48%)",
+        "notes": "Broad class of hydroxycinnamic and hydroxybenzoic acids (ferulic, caffeic, chlorogenic, p-coumaric, gallic). Human urinary excretion: ferulic 73% > caffeic 62% > p-coumaric 54% >> chlorogenic ~5% (PMC6838876). Esterification reduces absorption. Small intestine absorbs free acids; colon metabolizes esters. Antioxidant, anti-inflammatory via Nrf2 and NF-kB pathways.",
         "aliases": [
-          "phenolic acids"
+          "phenolic acids",
+          "phenolics",
+          "phenolic compounds",
+          "plant phenolics",
+          "total phenolics",
+          "total phenolic content",
+          "hydroxycinnamic acids",
+          "hydroxybenzoic acids",
+          "total phenols"
         ],
-        "dosage_importance": 1.0,
+        "dosage_importance": 0.5,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.48,
+          "range_low": 0.05,
+          "range_high": 0.73,
+          "quality": "variable",
+          "notes": "Wide range by compound: ferulic 73%, caffeic 62%, p-coumaric 54%, chlorogenic ~5% (PMC6838876)"
         }
       }
     },
@@ -24550,146 +23968,6 @@
     },
     "category_enum": "antioxidants",
     "cui_note": "No UMLS entry for botanical/novel compound",
-    "rxcui_note": "No RxNorm concept for supplement ingredient",
-    "data_quality": {
-      "completeness": 1.0,
-      "missing_fields": [],
-      "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
-    }
-  },
-  "phenolic_compounds": {
-    "standard_name": "Phenolic Compounds",
-    "severity_level": "none",
-    "category": "antioxidants",
-    "source": "botanical_extract",
-    "priority": "high",
-    "description": "Standardization marker for botanical extracts",
-    "dosage_importance": 0.1,
-    "forms": {
-      "phenolic compounds (unspecified)": {
-        "bio_score": 5,
-        "natural": false,
-        "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
-        "aliases": [
-          "phenolic compounds"
-        ],
-        "dosage_importance": 1.0,
-        "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
-        }
-      }
-    },
-    "cui": null,
-    "rxcui": null,
-    "match_rules": {
-      "priority": 0,
-      "match_mode": "alias_and_fuzzy",
-      "exclusions": [],
-      "parent_id": null,
-      "confidence": "high"
-    },
-    "category_enum": "antioxidants",
-    "cui_note": "No UMLS entry for botanical/novel compound",
-    "rxcui_note": "No RxNorm concept for supplement ingredient",
-    "data_quality": {
-      "completeness": 1.0,
-      "missing_fields": [],
-      "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
-    }
-  },
-  "phenolics": {
-    "standard_name": "Phenolics",
-    "severity_level": "none",
-    "category": "antioxidants",
-    "source": "botanical_extract",
-    "priority": "high",
-    "description": "Standardization marker for botanical extracts",
-    "dosage_importance": 0.1,
-    "forms": {
-      "phenolics (unspecified)": {
-        "bio_score": 5,
-        "natural": false,
-        "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
-        "aliases": [
-          "phenolics"
-        ],
-        "dosage_importance": 1.0,
-        "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
-        }
-      }
-    },
-    "cui": null,
-    "rxcui": null,
-    "match_rules": {
-      "priority": 0,
-      "match_mode": "alias_and_fuzzy",
-      "exclusions": [],
-      "parent_id": null,
-      "confidence": "high"
-    },
-    "category_enum": "antioxidants",
-    "cui_note": "No UMLS entry for botanical/novel compound",
-    "rxcui_note": "No RxNorm concept for supplement ingredient",
-    "data_quality": {
-      "completeness": 1.0,
-      "missing_fields": [],
-      "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
-    }
-  },
-  "phycocyanin": {
-    "standard_name": "Phycocyanin",
-    "severity_level": "none",
-    "category": "antioxidants",
-    "cui": "C0031993",
-    "rxcui": null,
-    "source": "botanical_extract",
-    "priority": "high",
-    "description": "Standardization marker for botanical extracts",
-    "dosage_importance": 0.1,
-    "forms": {
-      "phycocyanin (unspecified)": {
-        "bio_score": 5,
-        "natural": false,
-        "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
-        "aliases": [
-          "phycocyanin"
-        ],
-        "dosage_importance": 1.0,
-        "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
-        }
-      }
-    },
-    "match_rules": {
-      "priority": 0,
-      "match_mode": "alias_and_fuzzy",
-      "exclusions": [],
-      "parent_id": null,
-      "confidence": "high"
-    },
-    "category_enum": "antioxidants",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "data_quality": {
       "completeness": 1.0,
@@ -24879,81 +24157,37 @@
       "last_reviewed": "2026-02-28"
     }
   },
-  "picrocrocin": {
-    "standard_name": "Picrocrocin",
-    "severity_level": "none",
-    "category": "antioxidants",
-    "source": "botanical_extract",
-    "priority": "high",
-    "description": "Standardization marker for botanical extracts",
-    "dosage_importance": 0.1,
-    "forms": {
-      "picrocrocin (unspecified)": {
-        "bio_score": 5,
-        "natural": false,
-        "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
-        "aliases": [
-          "picrocrocin"
-        ],
-        "dosage_importance": 1.0,
-        "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
-        }
-      }
-    },
-    "cui": null,
-    "rxcui": null,
-    "match_rules": {
-      "priority": 0,
-      "match_mode": "alias_and_fuzzy",
-      "exclusions": [],
-      "parent_id": null,
-      "confidence": "high"
-    },
-    "category_enum": "antioxidants",
-    "cui_note": "No UMLS entry for botanical/novel compound",
-    "rxcui_note": "No RxNorm concept for supplement ingredient",
-    "data_quality": {
-      "completeness": 1.0,
-      "missing_fields": [],
-      "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
-    }
-  },
   "piperine": {
-    "standard_name": "Piperine",
+    "standard_name": "Piperine (Black Pepper Extract)",
     "severity_level": "none",
-    "category": "antioxidants",
+    "category": "herbs",
     "cui": "C0071342",
     "rxcui": null,
-    "source": "botanical_extract",
-    "priority": "high",
-    "description": "Standardization marker for botanical extracts",
-    "dosage_importance": 0.1,
+    "description": "Black pepper alkaloid; primary bioavailability enhancer (BioPerine)",
+    "dosage_importance": 0.5,
     "forms": {
       "piperine (unspecified)": {
-        "bio_score": 5,
-        "natural": false,
-        "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
+        "bio_score": 9,
+        "natural": true,
+        "score": 12,
+        "absorption": "good (~85%)",
+        "notes": "Primary pungent alkaloid of black pepper (Piper nigrum). BioPerine (Sabinsa, 95%+ piperine) is the patented standardized form. Inhibits CYP3A4, CYP1A2, P-glycoprotein, and UGTs — increases curcumin AUC ~20-fold (PMID 9619120). Enhances beta-carotene absorption ~2x at 5 mg (PMC7353321). Rapid transcellular passive diffusion; high Caco-2 permeability (PMID 9536651). Standard dose: 5-20 mg as adjuvant.",
         "aliases": [
           "piperine",
+          "BioPerine",
+          "piper nigrum extract",
+          "black pepper extract",
+          "black pepper",
+          "piper nigrum",
+          "black pepper alkaloid",
+          "piperine 95%",
+          "black pepper piperine",
+          "piper nigrum fruit extract",
+          "black pepper fruit extract",
           "black pepper ext",
           "black pepper ext.",
-          "black pepper extract",
-          "black pepper fruit extract",
-          "piper nigrum extract",
-          "bioperine",
           "black pepper 95% piperine",
           "black pepper extract supplement",
-          "piper nigrum",
           "Bioperine Black Pepper extract",
           "Bioperine Black Pepper Fruit Extract",
           "BioPerine Complex",
@@ -24965,13 +24199,13 @@
           "bioperine nature’s thermonutrient",
           "1-piperoylpiperidine"
         ],
-        "dosage_importance": 1.0,
+        "dosage_importance": 0.5,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.85,
+          "range_low": 0.75,
+          "range_high": 0.95,
+          "quality": "good",
+          "notes": "High apparent permeability in Caco-2 (PMID 9536651); Tmax ~15 min rats; human t1/2 13-16h (PMC8796742)"
         }
       }
     },
@@ -24982,54 +24216,7 @@
       "parent_id": null,
       "confidence": "high"
     },
-    "category_enum": "antioxidants",
-    "rxcui_note": "No RxNorm concept for supplement ingredient",
-    "data_quality": {
-      "completeness": 1.0,
-      "missing_fields": [],
-      "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
-    }
-  },
-  "polypeptide_p": {
-    "standard_name": "Polypeptide-P",
-    "severity_level": "none",
-    "category": "antioxidants",
-    "source": "botanical_extract",
-    "priority": "high",
-    "description": "Standardization marker for botanical extracts",
-    "dosage_importance": 0.1,
-    "forms": {
-      "polypeptide-p (unspecified)": {
-        "bio_score": 5,
-        "natural": false,
-        "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
-        "aliases": [
-          "polypeptide-p"
-        ],
-        "dosage_importance": 1.0,
-        "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
-        }
-      }
-    },
-    "cui": null,
-    "rxcui": null,
-    "match_rules": {
-      "priority": 0,
-      "match_mode": "alias_and_fuzzy",
-      "exclusions": [],
-      "parent_id": null,
-      "confidence": "high"
-    },
-    "category_enum": "antioxidants",
-    "cui_note": "No UMLS entry for botanical/novel compound",
+    "category_enum": "herbs",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "data_quality": {
       "completeness": 1.0,
@@ -25044,27 +24231,33 @@
     "category": "antioxidants",
     "cui": "C0071627",
     "rxcui": null,
-    "source": "botanical_extract",
-    "priority": "high",
-    "description": "Standardization marker for botanical extracts",
-    "dosage_importance": 0.1,
+    "description": "Broad umbrella class of plant secondary metabolites (flavonoids, tannins, stilbenes, phenolic acids)",
+    "dosage_importance": 0.5,
     "forms": {
       "polyphenols (unspecified)": {
-        "bio_score": 5,
-        "natural": false,
-        "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
+        "bio_score": 6,
+        "natural": true,
+        "score": 9,
+        "absorption": "variable",
+        "notes": "Largest class of plant secondary metabolites (~8,000+ compounds) including flavonoids, phenolic acids, stilbenes, lignans, and tannins. Bioavailability is highly structure-dependent: anthocyanins ~0.1%, flavonols ~1-10%, isoflavones up to 60%. Gut microbiota metabolizes larger polymers (PMC9324685). Generic 'total polyphenols' label claims do not specify absorbed fractions.",
         "aliases": [
-          "polyphenols"
+          "polyphenols",
+          "polyphenol complex",
+          "polyphenol blend",
+          "total polyphenols",
+          "plant polyphenols",
+          "natural polyphenols",
+          "polyphenol extract",
+          "mixed polyphenols",
+          "polyphenol antioxidants"
         ],
-        "dosage_importance": 1.0,
+        "dosage_importance": 0.5,
         "absorption_structured": {
           "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "range_low": 0.01,
+          "range_high": 0.9,
+          "quality": "variable",
+          "notes": "Highly structure-dependent; anthocyanins ~0.1%, isoflavones ~60%; gut microbiota dominant for polymers (PMC9324685)"
         }
       }
     },
@@ -25135,74 +24328,32 @@
     "standard_name": "Proanthocyanidins",
     "severity_level": "none",
     "category": "antioxidants",
-    "source": "botanical_extract",
-    "priority": "high",
-    "description": "Standardization marker for botanical extracts",
-    "dosage_importance": 0.1,
+    "description": "Condensed tannins (flavan-3-ol oligomers/polymers); umbrella for OPC and PAC subtypes",
+    "dosage_importance": 1.0,
     "forms": {
       "proanthocyanidins (unspecified)": {
-        "bio_score": 5,
-        "natural": false,
-        "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
+        "bio_score": 7,
+        "natural": true,
+        "score": 10,
+        "absorption": "low (~15%)",
+        "notes": "Condensed tannins from grape seed, pine bark, apple, cranberry, cacao. Oligomers (dimers-tetramers) absorbed in small intestine at ~10-30% (PMC10215713). High polymers reach colon and are metabolized to phenylvalerolactones. Antioxidant potency 50x vitamin E in vitro. Cardiovascular, skin collagen, and venous insufficiency support documented. See 'opc' for grape/pine oligomers; 'pac' for cranberry Type-A.",
         "aliases": [
-          "proanthocyanidins"
+          "proanthocyanidins",
+          "condensed tannins",
+          "procyanidins",
+          "procyanidin complex",
+          "procyanidolic oligomers",
+          "flavan-3-ols",
+          "proanthocyanidins complex",
+          "PCO"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
-        }
-      }
-    },
-    "cui": null,
-    "rxcui": null,
-    "match_rules": {
-      "priority": 0,
-      "match_mode": "alias_and_fuzzy",
-      "exclusions": [],
-      "parent_id": null,
-      "confidence": "high"
-    },
-    "category_enum": "antioxidants",
-    "cui_note": "No UMLS entry for botanical/novel compound",
-    "rxcui_note": "No RxNorm concept for supplement ingredient",
-    "data_quality": {
-      "completeness": 1.0,
-      "missing_fields": [],
-      "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
-    }
-  },
-  "procyanidins": {
-    "standard_name": "Procyanidins",
-    "severity_level": "none",
-    "category": "antioxidants",
-    "source": "botanical_extract",
-    "priority": "high",
-    "description": "Standardization marker for botanical extracts",
-    "dosage_importance": 0.1,
-    "forms": {
-      "procyanidins (unspecified)": {
-        "bio_score": 5,
-        "natural": false,
-        "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
-        "aliases": [
-          "procyanidins"
-        ],
-        "dosage_importance": 1.0,
-        "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.15,
+          "range_low": 0.05,
+          "range_high": 0.3,
+          "quality": "low",
+          "notes": "Dimers-tetramers absorbed ~10-30%; polymers >4 units metabolized by colonic microbiota (PMC10215713)"
         }
       }
     },
@@ -30238,7 +29389,10 @@
         "aliases": [
           "gelatinized maca",
           "maca gelatinizada",
-          "lepidium meyenii gelatinized"
+          "lepidium meyenii gelatinized",
+          "macamides",
+          "maca macamides standardized",
+          "n-benzylalkylamides maca"
         ],
         "score": 16,
         "dosage_importance": 1.0,
@@ -30259,7 +29413,12 @@
           "maca powder",
           "maca root",
           "peruvian maca",
-          "lepidium meyenii"
+          "lepidium meyenii",
+          "macaenes",
+          "maca macaenes",
+          "lepidium meyenii macaenes",
+          "maca macamides",
+          "lepidium meyenii macamides"
         ],
         "score": 12,
         "dosage_importance": 1.0,
@@ -31821,7 +30980,11 @@
           "MIG-99",
           "feverfew CO2 extract",
           "feverfew 4:1 extract",
-          "feverfew supercritical extract"
+          "feverfew supercritical extract",
+          "parthenolide",
+          "parthenolide standardized",
+          "tanacetum parthenium parthenolide",
+          "parthenolide sesquiterpene lactone"
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
@@ -32079,7 +31242,7 @@
       "vitamins"
     ],
     "cleanup_notes": "Resolved within-ingredient alias collisions; removed 63 redundant unspecified forms",
-    "total_entries": 581,
+    "total_entries": 561,
     "total_ingredients": 623,
     "data_quality": {
       "review_status": "stub"
@@ -33094,7 +32257,10 @@
           "5x-tq",
           "black cumin seed oil, cold-pressed",
           "black cumin seed oil cold-pressed",
-          "thymocid black cumin seed oil"
+          "thymocid black cumin seed oil",
+          "nigellone",
+          "dithymoquinone",
+          "nigella sativa nigellone"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -36177,7 +35343,12 @@
           "moroccan olive extract",
           "hytolive",
           "olcenic",
-          "olivol"
+          "olivol",
+          "oleuropein",
+          "oleuropein standardized",
+          "olive oleuropein",
+          "oleuropein extract",
+          "olive leaf oleuropein"
         ],
         "absorption_structured": {
           "value": null,
@@ -36600,7 +35771,11 @@
           "magnolia honokiol",
           "honokiol magnolia bark",
           "magnolol honokiol",
-          "magnolia bark 90% honokiol"
+          "magnolia bark 90% honokiol",
+          "magnolol",
+          "magnolol extract",
+          "magnolia bark magnolol",
+          "magnolol standardized"
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
@@ -36621,12 +35796,7 @@
     },
     "category_enum": "herbs",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
-    "relationships": [
-      {
-        "type": "contains",
-        "target_id": "magnolol"
-      }
-    ],
+    "relationships": [],
     "data_quality": {
       "completeness": 1.0,
       "missing_fields": [],
@@ -36751,7 +35921,11 @@
           "peppermint extract",
           "peppermint leaf",
           "mentha piperita",
-          "peppermint oil"
+          "peppermint oil",
+          "menthol",
+          "l-menthol",
+          "natural menthol",
+          "peppermint menthol"
         ],
         "absorption_structured": {
           "value": 0.55,
@@ -37008,7 +36182,10 @@
           "glycyrrhizic acid ammonium salt",
           "ammonium glycyrrhizinate",
           "glycyrrhetinic acid",
-          "18beta-glycyrrhetinic acid"
+          "18beta-glycyrrhetinic acid",
+          "liquiritin",
+          "liquiritin standardized extract",
+          "licorice liquiritin"
         ],
         "absorption_structured": {
           "value": 0.45,
@@ -37264,7 +36441,11 @@
           "asiaticoside",
           "TTFCA",
           "ECa 233",
-          "total triterpenic fraction"
+          "total triterpenic fraction",
+          "madecassoside",
+          "madecassoside standardized",
+          "centella asiatica madecassoside",
+          "madecassic acid extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -39518,7 +38699,7 @@
         "natural": true,
         "score": 13,
         "absorption": "moderate (~30-50%)",
-        "notes": "Standardized root extract containing ligustilide and ferulic acid. Traditionally used for women's health.",
+        "notes": "Standardized dong quai root extract containing ligustilide (primary phthalide, ~2.6-7.5% oral F in rats per PMID 23373200) and ferulic acid. Traditionally used for menstrual regulation and women's health. Ligustilide promotes bone formation via GPR30/EGFR (PMID 31061445). Mixed RCT results for menopausal symptoms.",
         "aliases": [
           "dong quai extract",
           "angelica sinensis extract",
@@ -39527,7 +38708,10 @@
           "chinese angelica extract",
           "dang gui extract",
           "standardized dong quai",
-          "angelica root extract"
+          "angelica root extract",
+          "ligustilide",
+          "z-ligustilide",
+          "ligustilide standardized dong quai"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -42673,11 +41857,11 @@
     "rxcui": null,
     "forms": {
       "bitter melon (unspecified)": {
-        "bio_score": 5,
+        "bio_score": 6,
         "natural": true,
-        "score": 8,
+        "score": 9,
         "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Momordica charantia. Traditional botanical for blood sugar support; contains charantin and polypeptide-p.",
+        "notes": "Momordica charantia fruit extract containing charantin (steroidal saponin), momordicin, and polypeptide-p (insulin-like peptide). Hypoglycemic via alpha-glucosidase inhibition and GLUT4 upregulation. 12-week Korean RCT (PMC10050654) improved OGTT glucose in prediabetics. Polypeptide-p effective only subcutaneously; oral delivery fails due to peptide digestion.",
         "aliases": [
           "bitter melon",
           "bitter melon extract",
@@ -42690,15 +41874,20 @@
           "glycostat wild bitter melon extract",
           "glycostat",
           "charantin",
-          "bitter melon charantin"
+          "bitter melon charantin",
+          "polypeptide-p",
+          "polypeptide p",
+          "plant insulin",
+          "p-insulin",
+          "bitter melon polypeptide-p"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
           "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
           "range_low": null,
-          "range_high": null
+          "range_high": null,
+          "quality": "low",
+          "notes": "Charantin/momordicin absorbed from GI; polypeptide-p (~11 kDa) zero oral bioavailability"
         }
       }
     },
@@ -42829,11 +42018,11 @@
     "rxcui": null,
     "forms": {
       "saffron (unspecified)": {
-        "bio_score": 5,
+        "bio_score": 7,
         "natural": true,
-        "score": 8,
+        "score": 10,
         "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Crocus sativus stigma extract. Used for mood support; contains safranal and crocin.",
+        "notes": "Crocus sativus stigma — active constituents are crocins (converted to crocetin post-absorption), safranal (volatile aroma), and picrocrocin (bitter taste marker). Human RCTs support 28-30 mg/day for mood improvement and depression (comparable to fluoxetine). Branded extracts: Affron, CrocuSativan. ISO 3632 uses crocin, safranal, and picrocrocin as quality markers.",
         "aliases": [
           "saffron",
           "saffron extract",
@@ -42848,15 +42037,18 @@
           "crocin",
           "crocins",
           "crocetin",
-          "saffron crocin extract"
+          "saffron crocin extract",
+          "picrocrocin",
+          "saffron picrocrocin",
+          "saffron bitterness compound"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
           "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
           "range_low": null,
-          "range_high": null
+          "range_high": null,
+          "quality": "unknown",
+          "notes": "Crocins converted to crocetin by intestinal esterases; picrocrocin poorly absorbed (PMC7013346)"
         }
       }
     },
@@ -44693,17 +43885,15 @@
     "standard_name": "Cat's Claw",
     "severity_level": "none",
     "category": "herbs",
-    "source": "botanical_extract",
-    "priority": "medium",
-    "description": "Uncaria tomentosa bark extract. Contains oxindole alkaloids. Traditional Amazonian herb for immune support and inflammation.",
-    "dosage_importance": 0.1,
+    "description": "Cat's claw (Uncaria tomentosa) bark extract standardized for pentacyclic oxindole alkaloids",
+    "dosage_importance": 1.5,
     "forms": {
       "cat's claw (unspecified)": {
-        "bio_score": 5,
+        "bio_score": 8,
         "natural": true,
-        "score": 8,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied.",
+        "score": 11,
+        "absorption": "moderate (~45%)",
+        "notes": "Cat's claw bark (Uncaria tomentosa) standardized for pentacyclic oxindole alkaloids (POAs: pteropodine, isopteropodine, mitraphylline). POAs modulate macrophage phagocytosis and lymphocyte proliferation (PMC11176511 review 2024). Mouse bioavailability 27-69% by alkaloid type (PMID 32879877). Dosing: 250-300 mg extract. Inhibits TNF-a, NF-kB, COX-2. DNA repair activity in smoker RCT (PMID 11753476).",
         "aliases": [
           "cat's claw",
           "cats claw",
@@ -44713,19 +43903,28 @@
           "cat's claw (uncaria tomentosa) extract",
           "cat's claw inner vine bark extract",
           "cat's claw bark extract",
-          "una de gato"
+          "una de gato",
+          "oxindole alkaloids",
+          "una de gato extract",
+          "uncaria tomentosa bark extract",
+          "pentacyclic oxindole alkaloids",
+          "POA",
+          "TOA-free cat's claw",
+          "cat's claw standardized extract",
+          "saventaro",
+          "c-med-100"
         ],
-        "dosage_importance": 1.0,
+        "dosage_importance": 1.5,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.45,
+          "range_low": 0.27,
+          "range_high": 0.69,
+          "quality": "moderate",
+          "notes": "Mouse PK: 27-69% bioavailability across 6 alkaloids (PMID 32879877); human PK data lacking"
         }
       }
     },
-    "cui": null,
+    "cui": "C0054746",
     "rxcui": null,
     "match_rules": {
       "priority": 0,
