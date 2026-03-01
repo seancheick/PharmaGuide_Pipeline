@@ -14627,7 +14627,17 @@
           "withania somnifera extract",
           "ashwagandha (withania somnifera) root 15:1 extract",
           "Ashwagandha root & leaf extract",
-          "Ashwagandha 7% extract"
+          "Ashwagandha 7% extract",
+          "withaferin A",
+          "withaferin-A",
+          "withaferin a content",
+          "withanolide A",
+          "withanolide-A",
+          "withanolide A content",
+          "withanolides",
+          "total withanolides",
+          "withanolide content",
+          "withanolide glycosides"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -25192,78 +25202,37 @@
       "last_reviewed_at": "2026-02-28"
     }
   },
-  "taraxasterol": {
-    "standard_name": "Taraxasterol",
-    "severity_level": "none",
-    "category": "antioxidants",
-    "source": "botanical_extract",
-    "priority": "high",
-    "description": "Standardization marker for botanical extracts",
-    "dosage_importance": 0.1,
-    "forms": {
-      "taraxasterol (unspecified)": {
-        "bio_score": 5,
-        "natural": false,
-        "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
-        "aliases": [
-          "taraxasterol"
-        ],
-        "dosage_importance": 1.0,
-        "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
-        }
-      }
-    },
-    "cui": null,
-    "rxcui": null,
-    "match_rules": {
-      "priority": 0,
-      "match_mode": "alias_and_fuzzy",
-      "exclusions": [],
-      "parent_id": null,
-      "confidence": "high"
-    },
-    "category_enum": "antioxidants",
-    "cui_note": "No UMLS entry for botanical/novel compound",
-    "rxcui_note": "No RxNorm concept for supplement ingredient",
-    "data_quality": {
-      "completeness": 1.0,
-      "missing_fields": [],
-      "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
-    }
-  },
   "theobromine": {
     "standard_name": "Theobromine",
     "severity_level": "none",
-    "category": "antioxidants",
+    "category": "herbs",
     "source": "botanical_extract",
     "priority": "high",
-    "description": "Standardization marker for botanical extracts",
-    "dosage_importance": 0.1,
+    "description": "Primary methylxanthine alkaloid of Theobroma cacao; cocoa stand-in",
+    "dosage_importance": 1.0,
     "forms": {
       "theobromine (unspecified)": {
-        "bio_score": 5,
-        "natural": false,
-        "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
+        "bio_score": 11,
+        "natural": true,
+        "score": 14,
+        "absorption": "excellent",
+        "notes": "Primary methylxanthine alkaloid of Theobroma cacao (1-3% dry weight). Oral bioavailability ~95% with t1/2 6-10h (PMID 3098622). PDE inhibitor and adenosine receptor antagonist with weaker CNS stimulation than caffeine. 250 mg/day RCT (PMID 23810065) showed sustained attention and mood improvement without cardiovascular stress.",
         "aliases": [
-          "theobromine"
+          "theobromine",
+          "3,7-dimethylxanthine",
+          "cacao theobromine",
+          "cocoa alkaloid",
+          "theobroma cacao alkaloid",
+          "xantheose",
+          "cocoa methylxanthine"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.95,
+          "quality": "excellent",
+          "notes": "Near-complete oral absorption (~95%); t1/2 6-10h; rapidly absorbed from GI tract",
+          "range_low": 0.9,
+          "range_high": 1.0
         }
       }
     },
@@ -25276,102 +25245,7 @@
       "parent_id": null,
       "confidence": "high"
     },
-    "category_enum": "antioxidants",
-    "cui_note": "No UMLS entry for botanical/novel compound",
-    "rxcui_note": "No RxNorm concept for supplement ingredient",
-    "data_quality": {
-      "completeness": 1.0,
-      "missing_fields": [],
-      "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
-    }
-  },
-  "thymol": {
-    "standard_name": "Thymol",
-    "severity_level": "none",
-    "category": "antioxidants",
-    "source": "botanical_extract",
-    "priority": "high",
-    "description": "Standardization marker for botanical extracts",
-    "dosage_importance": 0.1,
-    "forms": {
-      "thymol (unspecified)": {
-        "bio_score": 5,
-        "natural": false,
-        "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
-        "aliases": [
-          "thymol"
-        ],
-        "dosage_importance": 1.0,
-        "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
-        }
-      }
-    },
-    "cui": null,
-    "rxcui": null,
-    "match_rules": {
-      "priority": 0,
-      "match_mode": "alias_and_fuzzy",
-      "exclusions": [],
-      "parent_id": null,
-      "confidence": "high"
-    },
-    "category_enum": "antioxidants",
-    "cui_note": "No UMLS entry for botanical/novel compound",
-    "rxcui_note": "No RxNorm concept for supplement ingredient",
-    "data_quality": {
-      "completeness": 1.0,
-      "missing_fields": [],
-      "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
-    }
-  },
-  "thymoquinone": {
-    "standard_name": "Thymoquinone",
-    "severity_level": "none",
-    "category": "antioxidants",
-    "source": "botanical_extract",
-    "priority": "high",
-    "description": "Standardization marker for botanical extracts",
-    "dosage_importance": 0.1,
-    "forms": {
-      "thymoquinone (unspecified)": {
-        "bio_score": 5,
-        "natural": false,
-        "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
-        "aliases": [
-          "thymoquinone",
-          "organic nigella"
-        ],
-        "dosage_importance": 1.0,
-        "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
-        }
-      }
-    },
-    "cui": null,
-    "rxcui": null,
-    "match_rules": {
-      "priority": 0,
-      "match_mode": "alias_and_fuzzy",
-      "exclusions": [],
-      "parent_id": null,
-      "confidence": "high"
-    },
-    "category_enum": "antioxidants",
+    "category_enum": "herbs",
     "cui_note": "No UMLS entry for botanical/novel compound",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "data_quality": {
@@ -25387,25 +25261,31 @@
     "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
-    "description": "Standardization marker for botanical extracts",
-    "dosage_importance": 0.1,
+    "description": "Mixed carotenoid blends from natural plant sources",
+    "dosage_importance": 1.0,
     "forms": {
       "total carotenoids (unspecified)": {
-        "bio_score": 5,
-        "natural": false,
-        "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
+        "bio_score": 8,
+        "natural": true,
+        "score": 11,
+        "absorption": "variable",
+        "notes": "Mixed plant carotenoid blends containing alpha/beta-carotene, lycopene, lutein, zeaxanthin, cryptoxanthin. Absorption 10-65% varies by food matrix, fat co-ingestion, and BCO1 enzyme polymorphisms (PMID 12936953). PREDIMED/NHANES epidemiological data associate total carotenoid intake with reduced CVD and all-cause mortality risk.",
         "aliases": [
-          "total carotenoids"
+          "total carotenoids",
+          "mixed carotenoid blend",
+          "full-spectrum carotenoids",
+          "natural carotenoid complex",
+          "plant carotenoids",
+          "total plant carotenoids",
+          "carotenoid spectrum blend"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.3,
+          "quality": "variable",
+          "notes": "Highly variable absorption (10-65%); fat-soluble — requires dietary fat for absorption; BCO1 polymorphisms affect conversion",
+          "range_low": 0.1,
+          "range_high": 0.65
         }
       }
     },
@@ -25434,25 +25314,29 @@
     "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
-    "description": "Standardization marker for botanical extracts",
-    "dosage_importance": 0.1,
+    "description": "Glycosylated triterpenes found across adaptogenic herbs (ginsenosides, withanolides, ganoderic acids)",
+    "dosage_importance": 0.5,
     "forms": {
       "triterpene glycosides (unspecified)": {
-        "bio_score": 5,
-        "natural": false,
-        "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
+        "bio_score": 7,
+        "natural": true,
+        "score": 10,
+        "absorption": "variable",
+        "notes": "Glycosylated pentacyclic/tetracyclic triterpenes spanning ginsenosides (Panax ginseng), withanolides (ashwagandha), ganoderic acids (reishi). Oral absorption 10-40% due to gut microbiota hydrolysis to aglycone forms (PMID 25892825). Clinical evidence resides primarily with source herb; generic label claim indicates extract quality marker.",
         "aliases": [
-          "triterpene glycosides"
+          "triterpene glycosides",
+          "triterpenoid glycosides",
+          "saponin glycosides",
+          "glycosylated triterpenes",
+          "pentacyclic triterpene glycosides"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.2,
+          "quality": "variable",
+          "notes": "Variable absorption (10-40%); intestinal hydrolysis by gut microbiota to bioactive aglycones",
+          "range_low": 0.1,
+          "range_high": 0.4
         }
       }
     },
@@ -25481,119 +25365,32 @@
     "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
-    "description": "Standardization marker for botanical extracts",
-    "dosage_importance": 0.1,
+    "description": "C30 isoprenoid terpenes (oleanolic acid, ursolic acid, betulinic acid, boswellic acids)",
+    "dosage_importance": 0.5,
     "forms": {
       "triterpenes (unspecified)": {
-        "bio_score": 5,
-        "natural": false,
-        "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
+        "bio_score": 6,
+        "natural": true,
+        "score": 9,
+        "absorption": "variable",
+        "notes": "C30 isoprenoid terpenes biosynthesized via mevalonate pathway. Subclasses include oleanolic acid, ursolic acid, betulinic acid, lupeol, boswellic acids. Lipophilic with low aqueous solubility limiting absorption to 10-35% unless formulated with phospholipids (PMID 31600905). Anti-inflammatory and hepatoprotective effects documented across multiple herb-specific RCTs.",
         "aliases": [
-          "triterpenes"
+          "triterpenes",
+          "triterpenoids",
+          "triterpene compounds",
+          "total triterpenoids",
+          "plant triterpenoids",
+          "total triterpenes",
+          "triterpene fraction",
+          "plant triterpenes"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
-        }
-      }
-    },
-    "cui": null,
-    "rxcui": null,
-    "match_rules": {
-      "priority": 0,
-      "match_mode": "alias_and_fuzzy",
-      "exclusions": [],
-      "parent_id": null,
-      "confidence": "high"
-    },
-    "category_enum": "antioxidants",
-    "cui_note": "No UMLS entry for botanical/novel compound",
-    "rxcui_note": "No RxNorm concept for supplement ingredient",
-    "data_quality": {
-      "completeness": 1.0,
-      "missing_fields": [],
-      "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
-    }
-  },
-  "triterpenoids": {
-    "standard_name": "Triterpenoids",
-    "severity_level": "none",
-    "category": "antioxidants",
-    "source": "botanical_extract",
-    "priority": "high",
-    "description": "Standardization marker for botanical extracts",
-    "dosage_importance": 0.1,
-    "forms": {
-      "triterpenoids (unspecified)": {
-        "bio_score": 5,
-        "natural": false,
-        "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
-        "aliases": [
-          "triterpenoids"
-        ],
-        "dosage_importance": 1.0,
-        "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
-        }
-      }
-    },
-    "cui": null,
-    "rxcui": null,
-    "match_rules": {
-      "priority": 0,
-      "match_mode": "alias_and_fuzzy",
-      "exclusions": [],
-      "parent_id": null,
-      "confidence": "high"
-    },
-    "category_enum": "antioxidants",
-    "cui_note": "No UMLS entry for botanical/novel compound",
-    "rxcui_note": "No RxNorm concept for supplement ingredient",
-    "data_quality": {
-      "completeness": 1.0,
-      "missing_fields": [],
-      "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
-    }
-  },
-  "tyrosol": {
-    "standard_name": "Tyrosol",
-    "severity_level": "none",
-    "category": "antioxidants",
-    "source": "botanical_extract",
-    "priority": "high",
-    "description": "Standardization marker for botanical extracts",
-    "dosage_importance": 0.1,
-    "forms": {
-      "tyrosol (unspecified)": {
-        "bio_score": 5,
-        "natural": false,
-        "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
-        "aliases": [
-          "tyrosol"
-        ],
-        "dosage_importance": 1.0,
-        "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.2,
+          "quality": "variable",
+          "notes": "Low aqueous solubility limits absorption (10-35%); phospholipid complexation improves 2-5x",
+          "range_low": 0.1,
+          "range_high": 0.35
         }
       }
     },
@@ -25624,25 +25421,31 @@
     "rxcui": null,
     "source": "botanical_extract",
     "priority": "high",
-    "description": "Standardization marker for botanical extracts",
-    "dosage_importance": 0.1,
+    "description": "Pentacyclic ursane-type triterpene from apple peel, rosemary, holy basil; sold as standalone supplement",
+    "dosage_importance": 1.0,
     "forms": {
       "ursolic acid (unspecified)": {
-        "bio_score": 5,
-        "natural": false,
-        "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
+        "bio_score": 9,
+        "natural": true,
+        "score": 12,
+        "absorption": "poor",
+        "notes": "Pentacyclic ursane-type triterpene from apple peel (~50-70 mg/100g), rosemary, holy basil. Native oral bioavailability 5-30% due to low aqueous solubility; nanoparticle formulations improve 3-8x (PMID 23384083). 450 mg/day RCT (PMID 23549054, n=16) showed increased IGF-1 in resistance-trained subjects. mTOR activation supports muscle protein synthesis.",
         "aliases": [
-          "ursolic acid"
+          "ursolic acid",
+          "urson",
+          "prunol",
+          "malol",
+          "apple peel ursolic acid",
+          "rosemary ursolic acid",
+          "3-beta-hydroxy-urs-12-en-28-oic acid"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.15,
+          "quality": "poor",
+          "notes": "Poor native absorption (5-30%); lipophilic; nanoparticle/liposomal formulations improve 3-8x",
+          "range_low": 0.05,
+          "range_high": 0.3
         }
       }
     },
@@ -25662,78 +25465,37 @@
       "last_reviewed_at": "2026-02-28"
     }
   },
-  "valerenic_acid": {
-    "standard_name": "Valerenic Acid",
-    "severity_level": "none",
-    "category": "herbs",
-    "source": "botanical_extract",
-    "priority": "high",
-    "description": "Standardization marker for botanical extracts",
-    "dosage_importance": 0.1,
-    "forms": {
-      "valerenic acid (unspecified)": {
-        "bio_score": 5,
-        "natural": false,
-        "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
-        "aliases": [
-          "valerenic acid"
-        ],
-        "dosage_importance": 1.0,
-        "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
-        }
-      }
-    },
-    "cui": null,
-    "rxcui": null,
-    "match_rules": {
-      "priority": 0,
-      "match_mode": "alias_and_fuzzy",
-      "exclusions": [],
-      "parent_id": null,
-      "confidence": "high"
-    },
-    "category_enum": "herbs",
-    "cui_note": "No UMLS entry for botanical/novel compound",
-    "rxcui_note": "No RxNorm concept for supplement ingredient",
-    "data_quality": {
-      "completeness": 1.0,
-      "missing_fields": [],
-      "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
-    }
-  },
   "verbascoside": {
     "standard_name": "Verbascoside",
     "severity_level": "none",
     "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
-    "description": "Standardization marker for botanical extracts",
-    "dosage_importance": 0.1,
+    "description": "Phenylethanoid glycoside (acteoside) from mullein, olive leaf, Cistanche",
+    "dosage_importance": 0.5,
     "forms": {
       "verbascoside (unspecified)": {
-        "bio_score": 5,
-        "natural": false,
-        "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
+        "bio_score": 7,
+        "natural": true,
+        "score": 10,
+        "absorption": "poor",
+        "notes": "Phenylethanoid glycoside (also called acteoside) from Verbascum thapsus (mullein), olive leaf, Cistanche. Oral bioavailability ~5-15% due to intestinal hydrolysis to hydroxytyrosol and caffeic acid metabolites (PMID 16460997). Anti-inflammatory via NF-kB inhibition and COX-2 suppression. Neuroprotective in beta-amyloid models (PMID 18835060). Standardization marker for Cistanche and Verbascum extracts.",
         "aliases": [
-          "verbascoside"
+          "verbascoside",
+          "acteoside",
+          "kusaginin",
+          "orobanchoside",
+          "mullein verbascoside",
+          "cistanche verbascoside",
+          "phenylethanoid glycoside"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.1,
+          "quality": "poor",
+          "notes": "Low bioavailability (~5-15%); hydrolyzed to hydroxytyrosol and caffeic acid — metabolites are bioactive",
+          "range_low": 0.05,
+          "range_high": 0.15
         }
       }
     },
@@ -25758,29 +25520,32 @@
   },
   "vicine": {
     "standard_name": "Vicine",
-    "severity_level": "none",
-    "category": "antioxidants",
+    "severity_level": "caution",
+    "category": "other",
     "source": "botanical_extract",
     "priority": "high",
-    "description": "Standardization marker for botanical extracts",
-    "dosage_importance": 0.1,
+    "description": "Pyrimidine glucoside from fava beans; G6PD hemolytic risk — safety marker, not therapeutic",
+    "dosage_importance": 0.5,
     "forms": {
       "vicine (unspecified)": {
-        "bio_score": 5,
-        "natural": false,
+        "bio_score": 2,
+        "natural": true,
         "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
+        "absorption": "moderate",
+        "notes": "Pyrimidine nucleoside glucoside from fava beans (Vicia faba), up to 0.4% dry seed weight. In G6PD-deficient individuals, gut bacterial beta-glucosidase hydrolyzes vicine to divicine, generating reactive oxygen species causing hemolytic anemia (favism, PMID 23718910). No therapeutic benefit — appears on supplement labels as a contaminant marker in fava bean protein products.",
         "aliases": [
-          "vicine"
+          "vicine",
+          "fava bean vicine",
+          "vicia faba vicine",
+          "broad bean pyrimidine glucoside"
         ],
-        "dosage_importance": 1.0,
+        "dosage_importance": 0.5,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.5,
+          "quality": "moderate",
+          "notes": "Moderate absorption (~50%); hydrolyzed by gut beta-glucosidase to divicine aglycone — the toxic moiety in G6PD deficiency",
+          "range_low": 0.3,
+          "range_high": 0.7
         }
       }
     },
@@ -25793,7 +25558,7 @@
       "parent_id": null,
       "confidence": "high"
     },
-    "category_enum": "antioxidants",
+    "category_enum": "other",
     "cui_note": "No UMLS entry for botanical/novel compound",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "data_quality": {
@@ -25805,29 +25570,33 @@
   },
   "viscotoxin": {
     "standard_name": "Viscotoxin",
-    "severity_level": "none",
-    "category": "antioxidants",
+    "severity_level": "caution",
+    "category": "herbs",
     "source": "botanical_extract",
     "priority": "high",
-    "description": "Standardization marker for botanical extracts",
-    "dosage_importance": 0.1,
+    "description": "Cytotoxic polypeptide from European mistletoe (Viscum album); not orally bioavailable — quality/safety marker",
+    "dosage_importance": 0.5,
     "forms": {
       "viscotoxin (unspecified)": {
-        "bio_score": 5,
-        "natural": false,
+        "bio_score": 2,
+        "natural": true,
         "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
+        "absorption": "poor",
+        "notes": "Small basic polypeptide (~5 kDa, 46 aa) from European mistletoe (Viscum album), thionin superfamily. Cytotoxic and cardiotoxic via cell membrane disruption (PMID 10535766). Clinically administered subcutaneously in integrative oncology (Iscador, Helixor) — NOT orally bioavailable, degraded by GI proteases. Appears on labels as quality/safety marker for mistletoe extracts.",
         "aliases": [
-          "viscotoxin"
+          "viscotoxin",
+          "mistletoe viscotoxin",
+          "viscum album viscotoxin",
+          "mistletoe thionin",
+          "mistletoe polypeptide"
         ],
-        "dosage_importance": 1.0,
+        "dosage_importance": 0.5,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.05,
+          "quality": "poor",
+          "notes": "Essentially zero oral bioavailability — degraded by gastrointestinal proteases; only effective via subcutaneous injection",
+          "range_low": 0.01,
+          "range_high": 0.1
         }
       }
     },
@@ -25840,7 +25609,7 @@
       "parent_id": null,
       "confidence": "high"
     },
-    "category_enum": "antioxidants",
+    "category_enum": "herbs",
     "cui_note": "No UMLS entry for botanical/novel compound",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "data_quality": {
@@ -25856,25 +25625,30 @@
     "category": "antioxidants",
     "source": "botanical_extract",
     "priority": "high",
-    "description": "Standardization marker for botanical extracts",
-    "dosage_importance": 0.1,
+    "description": "C-glycosyl flavone (apigenin-8-C-glucoside) from hawthorn, passionflower, bamboo",
+    "dosage_importance": 0.5,
     "forms": {
       "vitexin (unspecified)": {
-        "bio_score": 5,
-        "natural": false,
-        "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
+        "bio_score": 7,
+        "natural": true,
+        "score": 10,
+        "absorption": "poor",
+        "notes": "C-glycosyl flavone (apigenin-8-C-glucoside) from hawthorn (Crataegus), passionflower (Passiflora incarnata), bamboo leaves. Low oral bioavailability (~5-30%) due to poor membrane permeability of C-glycosidic bond (PMID 25822272). Anti-inflammatory via NF-kB suppression and Nrf2/HO-1 activation. Not to be confused with Vitex agnus-castus (chasteberry) — named for discovery in Vitex leaves.",
         "aliases": [
-          "vitexin"
+          "vitexin",
+          "apigenin-8-C-glucoside",
+          "apigenin 8-C-glucoside",
+          "hawthorn vitexin",
+          "passionflower vitexin",
+          "bamboo leaf vitexin"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.15,
+          "quality": "poor",
+          "notes": "Low bioavailability (5-30%); C-glycosidic bond resists gut hydrolysis differently from O-glycosides",
+          "range_low": 0.05,
+          "range_high": 0.3
         }
       }
     },
@@ -25900,121 +25674,34 @@
   "volatile_oils": {
     "standard_name": "Volatile Oils",
     "severity_level": "none",
-    "category": "antioxidants",
+    "category": "herbs",
     "source": "botanical_extract",
     "priority": "high",
-    "description": "Standardization marker for botanical extracts",
-    "dosage_importance": 0.1,
+    "description": "Steam-distilled terpenoid/phenylpropanoid fractions from herbal extracts",
+    "dosage_importance": 0.5,
     "forms": {
       "volatile oils (unspecified)": {
-        "bio_score": 5,
-        "natural": false,
-        "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
+        "bio_score": 6,
+        "natural": true,
+        "score": 9,
+        "absorption": "variable",
+        "notes": "Steam-distilled terpenoid/phenylpropanoid fractions used as standardization markers for herbal extracts (oregano, thyme, peppermint, ginger). Lipophilic monoterpenes absorbed rapidly from GI but undergo extensive Phase II glucuronidation (PMID 2726994). Antimicrobial via membrane disruption (PMC8053297). Anti-inflammatory via NF-kB/COX-2 inhibition.",
         "aliases": [
-          "volatile oils"
+          "volatile oils",
+          "volatile oil",
+          "essential oil fraction",
+          "essential oils",
+          "volatile oil content",
+          "terpenoid fraction",
+          "aromatic fraction"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
-        }
-      }
-    },
-    "cui": null,
-    "rxcui": null,
-    "match_rules": {
-      "priority": 0,
-      "match_mode": "alias_and_fuzzy",
-      "exclusions": [],
-      "parent_id": null,
-      "confidence": "high"
-    },
-    "category_enum": "antioxidants",
-    "cui_note": "No UMLS entry for botanical/novel compound",
-    "rxcui_note": "No RxNorm concept for supplement ingredient",
-    "data_quality": {
-      "completeness": 1.0,
-      "missing_fields": [],
-      "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
-    }
-  },
-  "withaferin_a": {
-    "standard_name": "Withaferin A",
-    "severity_level": "none",
-    "category": "antioxidants",
-    "cui": "C0136187",
-    "rxcui": null,
-    "source": "botanical_extract",
-    "priority": "high",
-    "description": "Standardization marker for botanical extracts",
-    "dosage_importance": 0.1,
-    "forms": {
-      "withaferin a (unspecified)": {
-        "bio_score": 5,
-        "natural": false,
-        "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
-        "aliases": [
-          "withaferin a"
-        ],
-        "dosage_importance": 1.0,
-        "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
-        }
-      }
-    },
-    "match_rules": {
-      "priority": 0,
-      "match_mode": "alias_and_fuzzy",
-      "exclusions": [],
-      "parent_id": null,
-      "confidence": "high"
-    },
-    "category_enum": "antioxidants",
-    "rxcui_note": "No RxNorm concept for supplement ingredient",
-    "data_quality": {
-      "completeness": 1.0,
-      "missing_fields": [],
-      "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
-    }
-  },
-  "withanolide_a": {
-    "standard_name": "Withanolide A",
-    "severity_level": "none",
-    "category": "herbs",
-    "source": "botanical_extract",
-    "priority": "high",
-    "description": "Standardization marker for botanical extracts",
-    "dosage_importance": 0.1,
-    "forms": {
-      "withanolide a (unspecified)": {
-        "bio_score": 5,
-        "natural": false,
-        "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
-        "aliases": [
-          "withanolide a"
-        ],
-        "dosage_importance": 1.0,
-        "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.3,
+          "quality": "variable",
+          "notes": "Lipophilic monoterpenes rapidly absorbed; extensive glucuronidation limits systemic parent levels; menthol Tmax ~1h",
+          "range_low": 0.15,
+          "range_high": 0.5
         }
       }
     },
@@ -26029,52 +25716,6 @@
     },
     "category_enum": "herbs",
     "cui_note": "No UMLS entry for botanical/novel compound",
-    "rxcui_note": "No RxNorm concept for supplement ingredient",
-    "data_quality": {
-      "completeness": 1.0,
-      "missing_fields": [],
-      "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
-    }
-  },
-  "withanolides": {
-    "standard_name": "Withanolides",
-    "severity_level": "none",
-    "category": "herbs",
-    "cui": "C1313866",
-    "rxcui": null,
-    "source": "botanical_extract",
-    "priority": "high",
-    "description": "Standardization marker for botanical extracts",
-    "dosage_importance": 0.1,
-    "forms": {
-      "withanolides (unspecified)": {
-        "bio_score": 5,
-        "natural": false,
-        "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
-        "aliases": [
-          "withanolides"
-        ],
-        "dosage_importance": 1.0,
-        "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
-        }
-      }
-    },
-    "match_rules": {
-      "priority": 0,
-      "match_mode": "alias_and_fuzzy",
-      "exclusions": [],
-      "parent_id": null,
-      "confidence": "high"
-    },
-    "category_enum": "herbs",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "data_quality": {
       "completeness": 1.0,
@@ -26086,28 +25727,34 @@
   "xanthines": {
     "standard_name": "Xanthines",
     "severity_level": "none",
-    "category": "antioxidants",
+    "category": "other",
     "source": "botanical_extract",
     "priority": "high",
-    "description": "Standardization marker for botanical extracts",
-    "dosage_importance": 0.1,
+    "description": "Methylxanthine alkaloid class (caffeine, theobromine, theophylline) from botanical sources",
+    "dosage_importance": 1.5,
     "forms": {
       "xanthines (unspecified)": {
-        "bio_score": 5,
-        "natural": false,
-        "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
+        "bio_score": 11,
+        "natural": true,
+        "score": 14,
+        "absorption": "excellent",
+        "notes": "Methylxanthine alkaloids (caffeine, theobromine, theophylline) from guarana, yerba mate, green tea, kola nut. Near-complete oral bioavailability (~97-99% for caffeine, PMID 6832208). Non-selective adenosine receptor antagonists with PDE inhibition. CNS stimulation, thermogenesis, ergogenic performance enhancement. CYP1A2 primary metabolic enzyme.",
         "aliases": [
-          "xanthines"
+          "xanthines",
+          "methylxanthines",
+          "xanthine alkaloids",
+          "xanthine complex",
+          "total xanthines",
+          "xanthine content",
+          "purine alkaloids"
         ],
-        "dosage_importance": 1.0,
+        "dosage_importance": 1.5,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.97,
+          "quality": "excellent",
+          "notes": "Near-complete GI absorption (97-99%); Tmax 0.5-2h; CYP1A2 substrates; no significant first-pass effect",
+          "range_low": 0.9,
+          "range_high": 1.0
         }
       }
     },
@@ -26120,54 +25767,7 @@
       "parent_id": null,
       "confidence": "high"
     },
-    "category_enum": "antioxidants",
-    "cui_note": "No UMLS entry for botanical/novel compound",
-    "rxcui_note": "No RxNorm concept for supplement ingredient",
-    "data_quality": {
-      "completeness": 1.0,
-      "missing_fields": [],
-      "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
-    }
-  },
-  "xanthohumol": {
-    "standard_name": "Xanthohumol",
-    "severity_level": "none",
-    "category": "antioxidants",
-    "source": "botanical_extract",
-    "priority": "high",
-    "description": "Standardization marker for botanical extracts",
-    "dosage_importance": 0.1,
-    "forms": {
-      "xanthohumol (unspecified)": {
-        "bio_score": 5,
-        "natural": false,
-        "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
-        "aliases": [
-          "xanthohumol"
-        ],
-        "dosage_importance": 1.0,
-        "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
-        }
-      }
-    },
-    "cui": null,
-    "rxcui": null,
-    "match_rules": {
-      "priority": 0,
-      "match_mode": "alias_and_fuzzy",
-      "exclusions": [],
-      "parent_id": null,
-      "confidence": "high"
-    },
-    "category_enum": "antioxidants",
+    "category_enum": "other",
     "cui_note": "No UMLS entry for botanical/novel compound",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "data_quality": {
@@ -30686,7 +30286,7 @@
       "vitamins"
     ],
     "cleanup_notes": "Resolved within-ingredient alias collisions; removed 63 redundant unspecified forms",
-    "total_entries": 545,
+    "total_entries": 535,
     "total_ingredients": 623,
     "data_quality": {
       "review_status": "stub"
@@ -31668,7 +31268,10 @@
           "tq extract",
           "black seed thymoquinone",
           "thymoquinone standardized",
-          "5XTQ Black Cumin (seed) oil"
+          "5XTQ Black Cumin (seed) oil",
+          "thymoquinone",
+          "TQ",
+          "nigella sativa quinone"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -31770,7 +31373,8 @@
           "nigella sativa",
           "black cumin",
           "kalonji",
-          "habbatus sauda"
+          "habbatus sauda",
+          "organic nigella"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -31792,12 +31396,6 @@
     },
     "category_enum": "herbs",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
-    "relationships": [
-      {
-        "type": "contains",
-        "target_id": "thymoquinone"
-      }
-    ],
     "data_quality": {
       "completeness": 1.0,
       "missing_fields": [],
@@ -32440,7 +32038,10 @@
           "valeriana officinalis extract",
           "valerian root extract",
           "valerenic acid extract",
-          "valerian 0.8%"
+          "valerian 0.8%",
+          "valerenic acid",
+          "valerian valerenic acid",
+          "valerenic acid 0.8%"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -34853,6 +34454,28 @@
           "quality": "moderate",
           "notes": "Urinary recovery 35-55% as metabolites in human crossover; Tmax ~30 min; t1/2 ~1.5h (PMID 19007325, 21443285)"
         }
+      },
+      "tyrosol (olive phenolic)": {
+        "bio_score": 8,
+        "natural": true,
+        "score": 11,
+        "absorption": "good",
+        "notes": "Simple phenylethanol in olive oil (0.9-6 mg/100g EVOO). Oral bioavailability ~75-90% with rapid plasma appearance (PMID 11754880). Antioxidant via DPPH radical scavenging at ~60% of hydroxytyrosol potency. EFSA-approved LDL oxidation protection claim for olive polyphenol blends containing tyrosol + hydroxytyrosol.",
+        "aliases": [
+          "tyrosol",
+          "p-tyrosol",
+          "2-(4-hydroxyphenyl)ethanol",
+          "olive polyphenol tyrosol",
+          "olive oil phenolic tyrosol"
+        ],
+        "dosage_importance": 0.5,
+        "absorption_structured": {
+          "value": 0.8,
+          "quality": "good",
+          "notes": "High oral bioavailability (75-90%) with rapid GI absorption; urinary excretion within 24h",
+          "range_low": 0.6,
+          "range_high": 0.9
+        }
       }
     },
     "match_rules": {
@@ -35273,7 +34896,10 @@
           "dandelion whole plant/root extract",
           "dandelion 4:1 extract",
           "Dandelion PE",
-          "Dandelion leaf and root extract"
+          "Dandelion leaf and root extract",
+          "taraxasterol",
+          "taraxacum triterpene",
+          "dandelion triterpene"
         ],
         "absorption_structured": {
           "value": 0.55,
@@ -36621,7 +36247,12 @@
           "hops aerial part extract",
           "humulone",
           "alpha-acid hops",
-          "isohumulone"
+          "isohumulone",
+          "xanthohumol",
+          "xanthohumol content",
+          "hops xanthohumol",
+          "hops chalcone",
+          "prenylated flavonoid hops"
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
@@ -37367,7 +36998,11 @@
         "aliases": [
           "thyme thymus vulgaris leaf and stem oil extract",
           "thyme leaf extract",
-          "thyme extract"
+          "thyme extract",
+          "thymol",
+          "2-isopropyl-5-methylphenol",
+          "thyme phenol",
+          "thyme monoterpene"
         ],
         "dosage_importance": 0.8,
         "absorption_structured": {
