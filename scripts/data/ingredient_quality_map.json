@@ -26636,7 +26636,9 @@
         "absorption": "unknown",
         "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
         "aliases": [
-          "gymnema sylvestre"
+          "gymnema sylvestre",
+          "gymnema",
+          "gurmar"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -27105,7 +27107,9 @@
         "absorption": "good (~70%)",
         "notes": "5-Hydroxytryptophan from Griffonia simplicifolia seeds. Mean oral bioavailability 69.2% (range 47-84%) at steady state (Magnussen 1980, PMID 6966118). Absorbed via amino acid transporters in upper intestine (Tmax 1.8-3.3h). Serotonin precursor used for mood support, sleep, and appetite regulation at 100-300 mg/day. With carbidopa co-admin, F~48% but therapeutic exposure increases due to reduced peripheral decarboxylation.",
         "aliases": [
-          "5-htp extract"
+          "5-htp extract",
+          "griffonia simplicifolia extract",
+          "5-hydroxytryptophan extract"
         ],
         "score": 14,
         "dosage_importance": 1.0,
@@ -27135,8 +27139,7 @@
           "oxitriptan supplement",
           "griffonia simplicifolia",
           "griffonia simplicifolia seed extract",
-          "griffonia seed extract",
-          "griffonia simplicifolia extract"
+          "griffonia seed extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -29310,7 +29313,9 @@
         "absorption": "excellent colonization (~90%)",
         "notes": "Morinaga Milk strain with 50+ years of research. RCTs show reduced Japanese cedar pollinosis symptoms (eye/nasal), reduced cold/flu duration in children, and constipation relief in elderly. Modulates Th1/Th2 immune balance.",
         "aliases": [
-          "bifido bb536"
+          "bifido bb536",
+          "B. longum BB536",
+          "Morinaga BB536"
         ],
         "score": 18,
         "dosage_importance": 1.0,
@@ -29360,7 +29365,6 @@
           "Bifantis",
           "OLP-01",
           "bifidobacterium longum supplement",
-          "B. longum BB536",
           "BB536",
           "B. longum R0175",
           "B. longum 35624"
@@ -29512,7 +29516,9 @@
         "absorption": "high colonization (~80%)",
         "notes": "DuPont/Danisco strain used in multi-strain formulas. RCT evidence for improved waist circumference and antioxidant enzyme activity in overweight women. Also studied for ADHD in children (12-week RCT).",
         "aliases": [
-          "bifido bb06"
+          "bifido bb06",
+          "B. bifidum Bb-06",
+          "DuPont Bb-06"
         ],
         "score": 16,
         "dosage_importance": 1.0,
@@ -29563,7 +29569,6 @@
           "HA-132",
           "bifidobacterium bifidum HA-132",
           "bifido bifidum",
-          "B. bifidum Bb-06",
           "Bb-06"
         ],
         "dosage_importance": 1.0,
@@ -29627,7 +29632,9 @@
         "absorption": "excellent transient colonization (~90%)",
         "notes": "Beneficial yeast probiotic; clinically proven for diarrhea prevention and C. diff support",
         "aliases": [
-          "cncm i-745"
+          "cncm i-745",
+          "Florastor",
+          "Biocodex CNCM I-745"
         ],
         "score": 18,
         "dosage_importance": 1.0,
@@ -29649,7 +29656,6 @@
           "saccharomyces boulardii",
           "S. boulardii",
           "probiotic yeast",
-          "florastor",
           "Saccharomyces cerevisiae CNCM I-745",
           "SBFloractiv",
           "saccharomyces boulardii supplement",
@@ -29716,7 +29722,9 @@
         "absorption": "unknown",
         "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
         "aliases": [
-          "lactobacillus paracasei"
+          "lactobacillus paracasei",
+          "l. paracasei",
+          "lacticaseibacillus paracasei"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -29778,7 +29786,9 @@
         "absorption": "moderate colonization (~70%)",
         "notes": "DuPont/Danisco strain. Limited strain-specific RCT data. Class-level evidence supports reduced diarrhea duration, IBS symptom relief (bloating, flatulence), and skin ceramide improvement. Primarily a supporting strain in multi-strain blends.",
         "aliases": [
-          "st-21"
+          "st-21",
+          "S. thermophilus ST-21",
+          "DuPont ST-21"
         ],
         "score": 14,
         "dosage_importance": 1.0,
@@ -30175,7 +30185,9 @@
         "absorption": "good",
         "notes": "Supplemental fluoride (typically as sodium fluoride). Supports dental enamel mineralization and reduces dental caries. Present in fluoridated water at ~0.7 ppm. Supplementation primarily for children in non-fluoridated water areas. Narrow therapeutic window — excess causes fluorosis.",
         "aliases": [
-          "fluoride"
+          "fluoride",
+          "sodium fluoride",
+          "fluoride supplement"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -30594,7 +30606,9 @@
         "absorption": "good",
         "notes": "Miscellaneous fatty acid supplement. May include unusual or specialty fatty acids not classified under standard omega categories. Conservative scoring reflects unspecified identity. Check label for specific fatty acid content and concentration.",
         "aliases": [
-          "Other Fatty Acids"
+          "Other Fatty Acids",
+          "miscellaneous fatty acids",
+          "other lipids"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -32591,7 +32605,9 @@
         "absorption": "unknown",
         "notes": "Chemically synthesized ceramides. Identical molecular structure to natural ceramides but produced via chemical synthesis rather than plant extraction. May have batch-to-batch consistency advantages. Less studied in oral supplement context than plant-derived forms.",
         "aliases": [
-          "CERAMIDES synthetic"
+          "CERAMIDES synthetic",
+          "synthetic ceramides",
+          "phytoceramide synthetic"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -32657,7 +32673,8 @@
         "absorption": "unknown",
         "notes": "Mixed bioflavonoids from citrus peel (hesperidin, naringin, rutin, quercetin). Support capillary integrity and vitamin C recycling. Typically standardized to total bioflavonoid content. Often combined with vitamin C supplements to enhance antioxidant activity and absorption.",
         "aliases": [
-          "citrus complex"
+          "citrus complex",
+          "citrus flavonoid complex"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -32675,7 +32692,9 @@
         "absorption": "unknown",
         "notes": "Bioflavonoid complex standardized for high hesperidin content from citrus peel. Hesperidin is the most abundant citrus flavonoid. Supports venous tone, capillary permeability, and anti-inflammatory pathways. Diosmin-hesperidin combinations used clinically for chronic venous insufficiency.",
         "aliases": [
-          "hesperidin-rich"
+          "hesperidin-rich",
+          "hesperidin bioflavonoid",
+          "hesperidin concentrate"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -32693,7 +32712,9 @@
         "absorption": "unknown",
         "notes": "Bioflavonoid complex rich in rutin (quercetin-3-rutinoside) from buckwheat, citrus, or eucalyptus. Rutin supports capillary strength, anti-inflammatory activity, and antioxidant defense. Metabolized by gut bacteria to quercetin. Historically used for vascular fragility and bruising.",
         "aliases": [
-          "rutin complex"
+          "rutin complex",
+          "rutin bioflavonoid complex",
+          "rutin + quercetin"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -32760,7 +32781,9 @@
         "absorption": "unknown",
         "notes": "Enzymatically hydrolyzed silk fibroin from Bombyx mori (silkworm cocoon). Rich in serine (~33%), glycine (~44%), and alanine (~29%). Peptides are more bioavailable than intact silk protein. Used for skin, hair, and joint support. Traditionally consumed in Asian medicine.",
         "aliases": [
-          "hydrolyzed silk protein"
+          "hydrolyzed silk protein",
+          "silk protein hydrolysate",
+          "bombyx mori silk"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -32778,7 +32801,9 @@
         "absorption": "unknown",
         "notes": "Low-molecular-weight peptides (typically <3 kDa) from silk fibroin hydrolysis. Better absorption than intact protein due to small peptide size. May support collagen synthesis and skin hydration. Limited clinical evidence for oral supplementation vs topical use.",
         "aliases": [
-          "silk peptides"
+          "silk peptides",
+          "bioactive silk peptides",
+          "silk peptide powder"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -32796,7 +32821,9 @@
         "absorption": "unknown",
         "notes": "Silk amino acid form not specified. Conservative scoring. Derived from silkworm cocoon protein. Rich in serine, glycine, and alanine. Check label for hydrolyzed or peptide specification.",
         "aliases": [
-          "silk amino acids"
+          "silk amino acids",
+          "silk amino acid complex",
+          "silk protein"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -33422,7 +33449,9 @@
         "absorption": "unknown",
         "notes": "Medical-grade manuka honey (Leptospermum scoparium, NZ). UMF 15+ corresponds to MGO 514+ mg/kg — strong antibacterial activity. Methylglyoxal (MGO) is the primary bioactive. Clinical evidence for wound healing, H. pylori inhibition, and upper respiratory support. Comvita and Manuka Health are leading brands. Expensive; verify UMF certification authenticity.",
         "aliases": [
-          "umf 15+ / mgo 514+"
+          "umf 15+ / mgo 514+",
+          "manuka umf 15+",
+          "manuka mgo 500+"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -33440,7 +33469,9 @@
         "absorption": "unknown",
         "notes": "Mid-grade manuka honey. UMF 10+ / MGO 263+ provides meaningful antibacterial activity above regular honey. Suitable for general health maintenance and mild throat/digestive support. More affordable than UMF 15+. Still requires verified New Zealand UMF trademark certification.",
         "aliases": [
-          "umf 10+ / mgo 263+"
+          "umf 10+ / mgo 263+",
+          "manuka umf 10+",
+          "manuka mgo 250+"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -33458,7 +33489,9 @@
         "absorption": "unknown",
         "notes": "Entry-level manuka honey. UMF 5+ / MGO 83+ has mild antibacterial activity above regular honey but below therapeutic grades. Suitable as a premium honey for general wellness use. Limited clinical evidence at this MGO concentration for specific health claims.",
         "aliases": [
-          "umf 5+ / mgo 83+"
+          "umf 5+ / mgo 83+",
+          "manuka umf 5+",
+          "manuka mgo 83+"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -33476,7 +33509,9 @@
         "absorption": "unknown",
         "notes": "Manuka honey without official UMF or MGO grading. May contain low or variable methylglyoxal levels. Without certified testing, antibacterial activity cannot be verified. Price should reflect uncertainty. Consider purchasing UMF-certified products for health purposes.",
         "aliases": [
-          "ungraded manuka"
+          "ungraded manuka",
+          "non-umf manuka",
+          "manuka honey ungraded"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -33494,7 +33529,9 @@
         "absorption": "unknown",
         "notes": "Manuka honey grade not specified. Conservative scoring. Manuka's benefits depend on MGO content — verify UMF or MGO certification on label.",
         "aliases": [
-          "manuka honey"
+          "manuka honey",
+          "manuka honey generic",
+          "new zealand manuka"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -35587,7 +35624,8 @@
         "absorption": "unknown",
         "notes": "Clupea harengus roe extract; naturally phospholipid-bound omega-3 (DHA/EPA) with superior brain bioavailability vs triglyceride fish oil. Contains choline and astaxanthin. Form unspecified.",
         "aliases": [
-          "herring roe unspecified"
+          "herring roe unspecified",
+          "clupea harengus roe"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -36529,7 +36567,8 @@
         "absorption": "moderate",
         "notes": "Buglossoides arvensis seed oil; richest plant source of stearidonic acid (SDA, omega-3 precursor). SDA converts to EPA 3-5x more efficiently than ALA. Sustainable non-marine omega-3. Form unspecified.",
         "aliases": [
-          "ahiflower"
+          "ahiflower",
+          "buglossoides arvensis oil"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -36620,7 +36659,9 @@
         "absorption": "low-moderate",
         "notes": "Flavonol polyphenol found in berries, tea, wine, and vegetables. Anti-inflammatory and antioxidant via Nrf2/NF-kB modulation. Limited human clinical data; mostly preclinical evidence. Form unspecified.",
         "aliases": [
-          "myricetin"
+          "myricetin",
+          "cannabiscetin",
+          "myricetin flavonol"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -36660,7 +36701,9 @@
         "absorption": "unknown",
         "notes": "Sesquiterpene dialdehyde constituent in botanical extracts; limited human-standardization data.",
         "aliases": [
-          "polygodial"
+          "polygodial",
+          "polygodial sesquiterpene",
+          "water pepper polygodial"
         ],
         "dosage_importance": 0.8,
         "absorption_structured": {
@@ -38193,7 +38236,8 @@
         "absorption": "unknown",
         "notes": "PE is a major phospholipid in cell membranes, constituting ~25% of all phospholipids. Supports membrane fluidity and autophagy. Found in eggs, soybeans, and organ meats. Form unspecified.",
         "aliases": [
-          "phosphatidylethanolamine supplement"
+          "phosphatidylethanolamine supplement",
+          "PE phospholipid"
         ],
         "dosage_importance": 0.8,
         "absorption_structured": {
