@@ -14775,7 +14775,15 @@
           "standardized rhodiola extract",
           "rhodiola (rhodiola rosea l.) rhizome extract",
           "rhodiola rosea 3% extract",
-          "Rhodiola rosea root 3% extract"
+          "Rhodiola rosea root 3% extract",
+          "rosavin",
+          "rosavins",
+          "rosavin extract",
+          "rhodiola rosavin",
+          "salidroside",
+          "salidrosides",
+          "rhodiola salidroside",
+          "tyrosol glucoside"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -24281,27 +24289,28 @@
     "standard_name": "Polysaccharides",
     "severity_level": "none",
     "category": "fibers",
-    "source": "botanical_extract",
-    "priority": "high",
-    "description": "Standardization marker for botanical extracts",
-    "dosage_importance": 0.1,
+    "description": "Generic polysaccharide class (beta-glucans, fructans, mannans); prebiotic/immune marker",
+    "dosage_importance": 0.5,
     "forms": {
       "polysaccharides (unspecified)": {
-        "bio_score": 5,
-        "natural": false,
-        "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
+        "bio_score": 6,
+        "natural": true,
+        "score": 9,
+        "absorption": "not absorbed intact",
+        "notes": "Generic polysaccharide class (beta-glucans, fructans, mannans, fucoidans). Not absorbed intact — act via Dectin-1/TLR receptor engagement in Peyer's patches and prebiotic SCFA production (PMC10902450, PMC8308413). Specific polysaccharides (beta-glucan, fucoidan, arabinogalactan) have dedicated IQM parents with more precise scoring.",
         "aliases": [
-          "polysaccharides"
+          "polysaccharides",
+          "plant polysaccharides",
+          "complex polysaccharides",
+          "immunopolysaccharides"
         ],
-        "dosage_importance": 1.0,
+        "dosage_importance": 0.5,
         "absorption_structured": {
           "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
           "range_low": null,
-          "range_high": null
+          "range_high": null,
+          "quality": "low",
+          "notes": "Not systemically absorbed; function via intestinal epithelial transcytosis and colonic fermentation (PMC8308413)"
         }
       }
     },
@@ -24387,10 +24396,10 @@
     "forms": {
       "protein (unspecified)": {
         "bio_score": 5,
-        "natural": false,
-        "score": 5,
+        "natural": true,
+        "score": 8,
         "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
+        "notes": "Generic protein stub for labels that do not specify source. True DIAAS ranges from 0.37 (rice concentrate) to 1.09 (whey isolate; PMID 28382889). Conservative score applied — check specific protein parents (whey_protein, casein_protein, pea_protein) for accurate scoring.",
         "aliases": [
           "protein",
           "Whey Protein Isolate",
@@ -24418,10 +24427,10 @@
         "dosage_importance": 1.0,
         "absorption_structured": {
           "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
           "range_low": null,
-          "range_high": null
+          "range_high": null,
+          "quality": "unknown",
+          "notes": "Source-dependent: whey DIAAS 1.09, casein 1.08, soy 0.90, pea 0.82, rice 0.37 (PMID 28382889)"
         }
       }
     },
@@ -24444,78 +24453,37 @@
       "last_reviewed_at": "2026-02-28"
     }
   },
-  "protodioscin": {
-    "standard_name": "Protodioscin",
-    "severity_level": "none",
-    "category": "antioxidants",
-    "source": "botanical_extract",
-    "priority": "high",
-    "description": "Standardization marker for botanical extracts",
-    "dosage_importance": 0.1,
-    "forms": {
-      "protodioscin (unspecified)": {
-        "bio_score": 5,
-        "natural": false,
-        "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
-        "aliases": [
-          "protodioscin"
-        ],
-        "dosage_importance": 1.0,
-        "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
-        }
-      }
-    },
-    "cui": null,
-    "rxcui": null,
-    "match_rules": {
-      "priority": 0,
-      "match_mode": "alias_and_fuzzy",
-      "exclusions": [],
-      "parent_id": null,
-      "confidence": "high"
-    },
-    "category_enum": "antioxidants",
-    "cui_note": "No UMLS entry for botanical/novel compound",
-    "rxcui_note": "No RxNorm concept for supplement ingredient",
-    "data_quality": {
-      "completeness": 1.0,
-      "missing_fields": [],
-      "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
-    }
-  },
   "puerarin": {
-    "standard_name": "Puerarin",
+    "standard_name": "Puerarin (Kudzu Extract)",
     "severity_level": "none",
     "category": "antioxidants",
-    "source": "botanical_extract",
-    "priority": "high",
-    "description": "Standardization marker for botanical extracts",
-    "dosage_importance": 0.1,
+    "description": "Principal isoflavone of kudzu (Pueraria lobata) root",
+    "dosage_importance": 1.5,
     "forms": {
       "puerarin (unspecified)": {
-        "bio_score": 5,
-        "natural": false,
-        "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
+        "bio_score": 8,
+        "natural": true,
+        "score": 11,
+        "absorption": "low (~7%)",
+        "notes": "Principal C-glycosyl isoflavone of kudzu (Pueraria lobata). Oral bioavailability ~7% due to biliary excretion and poor lipophilicity (PMID 29801513). Human PK confirms rapid absorption, peak at ~1h (PMID 16884345). Cardioprotective, antioxidant, neuroprotective, and estrogenic agonist (PMC9686758). Used as IV puerarin for cerebrovascular disease in China.",
         "aliases": [
-          "puerarin"
+          "puerarin",
+          "kudzu",
+          "kudzu root extract",
+          "kudzu extract",
+          "pueraria lobata",
+          "pueraria lobata extract",
+          "pueraria lobata root extract",
+          "kudzu root",
+          "puerarin isoflavone"
         ],
-        "dosage_importance": 1.0,
+        "dosage_importance": 1.5,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.07,
+          "range_low": 0.05,
+          "range_high": 0.12,
+          "quality": "low",
+          "notes": "Oral bioavailability ~7% in rats (PMID 29801513); rapid absorption, Tmax ~1h in humans (PMID 16884345)"
         }
       }
     },
@@ -24541,264 +24509,31 @@
   "quassinoids": {
     "standard_name": "Quassinoids",
     "severity_level": "none",
-    "category": "antioxidants",
-    "source": "botanical_extract",
-    "priority": "high",
-    "description": "Standardization marker for botanical extracts",
-    "dosage_importance": 0.1,
+    "category": "herbs",
+    "description": "Bitter terpenoid class from Quassia amara; digestive bitter marker",
+    "dosage_importance": 0.5,
     "forms": {
       "quassinoids (unspecified)": {
         "bio_score": 5,
-        "natural": false,
-        "score": 5,
+        "natural": true,
+        "score": 8,
         "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
+        "notes": "Bitter terpenoid class from Quassia amara bark. Simalikalactone D (SkD) most bioactive — IC50 10 nM vs P. falciparum in vitro (PMID 19665539). Traditional use as digestive bitter/appetite stimulant. No human oral bioavailability data; cytotoxic at pharmacological doses. Supplement use primarily as bitter standardization marker.",
         "aliases": [
-          "quassinoids"
+          "quassinoids",
+          "quassia amara extract",
+          "quassia extract",
+          "quassia",
+          "bitter wood extract",
+          "simalikalactone"
         ],
-        "dosage_importance": 1.0,
+        "dosage_importance": 0.5,
         "absorption_structured": {
           "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
           "range_low": null,
-          "range_high": null
-        }
-      }
-    },
-    "cui": null,
-    "rxcui": null,
-    "match_rules": {
-      "priority": 0,
-      "match_mode": "alias_and_fuzzy",
-      "exclusions": [],
-      "parent_id": null,
-      "confidence": "high"
-    },
-    "category_enum": "antioxidants",
-    "cui_note": "No UMLS entry for botanical/novel compound",
-    "rxcui_note": "No RxNorm concept for supplement ingredient",
-    "data_quality": {
-      "completeness": 1.0,
-      "missing_fields": [],
-      "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
-    }
-  },
-  "rosavin": {
-    "standard_name": "Rosavin",
-    "severity_level": "none",
-    "category": "antioxidants",
-    "source": "botanical_extract",
-    "priority": "high",
-    "description": "Standardization marker for botanical extracts",
-    "dosage_importance": 0.1,
-    "forms": {
-      "rosavin (unspecified)": {
-        "bio_score": 5,
-        "natural": false,
-        "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
-        "aliases": [
-          "rosavin",
-          "rosavins"
-        ],
-        "dosage_importance": 1.0,
-        "absorption_structured": {
-          "value": null,
+          "range_high": null,
           "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
-        }
-      }
-    },
-    "cui": null,
-    "rxcui": null,
-    "match_rules": {
-      "priority": 0,
-      "match_mode": "alias_and_fuzzy",
-      "exclusions": [],
-      "parent_id": null,
-      "confidence": "high"
-    },
-    "category_enum": "antioxidants",
-    "cui_note": "No UMLS entry for botanical/novel compound",
-    "rxcui_note": "No RxNorm concept for supplement ingredient",
-    "data_quality": {
-      "completeness": 1.0,
-      "missing_fields": [],
-      "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
-    }
-  },
-  "rosmarinic_acid": {
-    "standard_name": "Rosmarinic Acid",
-    "severity_level": "none",
-    "category": "antioxidants",
-    "cui": "C0073844",
-    "rxcui": null,
-    "source": "botanical_extract",
-    "priority": "high",
-    "description": "Standardization marker for botanical extracts",
-    "dosage_importance": 0.1,
-    "forms": {
-      "rosmarinic acid (unspecified)": {
-        "bio_score": 5,
-        "natural": false,
-        "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
-        "aliases": [
-          "rosmarinic acid"
-        ],
-        "dosage_importance": 1.0,
-        "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
-        }
-      }
-    },
-    "match_rules": {
-      "priority": 0,
-      "match_mode": "alias_and_fuzzy",
-      "exclusions": [],
-      "parent_id": null,
-      "confidence": "high"
-    },
-    "category_enum": "antioxidants",
-    "rxcui_note": "No RxNorm concept for supplement ingredient",
-    "data_quality": {
-      "completeness": 1.0,
-      "missing_fields": [],
-      "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
-    }
-  },
-  "ruscogenin": {
-    "standard_name": "Ruscogenin",
-    "severity_level": "none",
-    "category": "antioxidants",
-    "source": "botanical_extract",
-    "priority": "high",
-    "description": "Standardization marker for botanical extracts",
-    "dosage_importance": 0.1,
-    "forms": {
-      "ruscogenin (unspecified)": {
-        "bio_score": 5,
-        "natural": false,
-        "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
-        "aliases": [
-          "ruscogenin",
-          "ruscogenins"
-        ],
-        "dosage_importance": 1.0,
-        "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
-        }
-      }
-    },
-    "cui": null,
-    "rxcui": null,
-    "match_rules": {
-      "priority": 0,
-      "match_mode": "alias_and_fuzzy",
-      "exclusions": [],
-      "parent_id": null,
-      "confidence": "high"
-    },
-    "category_enum": "antioxidants",
-    "cui_note": "No UMLS entry for botanical/novel compound",
-    "rxcui_note": "No RxNorm concept for supplement ingredient",
-    "data_quality": {
-      "completeness": 1.0,
-      "missing_fields": [],
-      "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
-    }
-  },
-  "safranal": {
-    "standard_name": "Safranal",
-    "severity_level": "none",
-    "category": "antioxidants",
-    "source": "botanical_extract",
-    "priority": "high",
-    "description": "Standardization marker for botanical extracts",
-    "dosage_importance": 0.1,
-    "forms": {
-      "safranal (unspecified)": {
-        "bio_score": 5,
-        "natural": false,
-        "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
-        "aliases": [
-          "safranal"
-        ],
-        "dosage_importance": 1.0,
-        "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
-        }
-      }
-    },
-    "cui": null,
-    "rxcui": null,
-    "match_rules": {
-      "priority": 0,
-      "match_mode": "alias_and_fuzzy",
-      "exclusions": [],
-      "parent_id": null,
-      "confidence": "high"
-    },
-    "category_enum": "antioxidants",
-    "cui_note": "No UMLS entry for botanical/novel compound",
-    "rxcui_note": "No RxNorm concept for supplement ingredient",
-    "data_quality": {
-      "completeness": 1.0,
-      "missing_fields": [],
-      "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
-    }
-  },
-  "salicin": {
-    "standard_name": "Salicin",
-    "severity_level": "none",
-    "category": "herbs",
-    "source": "botanical_extract",
-    "priority": "high",
-    "description": "Standardization marker for botanical extracts",
-    "dosage_importance": 0.1,
-    "forms": {
-      "salicin (unspecified)": {
-        "bio_score": 5,
-        "natural": false,
-        "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
-        "aliases": [
-          "salicin"
-        ],
-        "dosage_importance": 1.0,
-        "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "notes": "No human bioavailability data; oral SkD active in rodent malaria models (PMID 19665539)"
         }
       }
     },
@@ -24821,32 +24556,87 @@
       "last_reviewed_at": "2026-02-28"
     }
   },
-  "salidroside": {
-    "standard_name": "Salidroside",
+  "rosmarinic_acid": {
+    "standard_name": "Rosmarinic Acid",
     "severity_level": "none",
-    "category": "herbs",
-    "source": "botanical_extract",
-    "priority": "high",
-    "description": "Standardization marker for botanical extracts",
-    "dosage_importance": 0.1,
+    "category": "antioxidants",
+    "cui": "C0073844",
+    "rxcui": null,
+    "description": "Hydroxycinnamic acid ester ubiquitous in Lamiaceae (rosemary, lemon balm, sage, perilla)",
+    "dosage_importance": 1.0,
     "forms": {
-      "salidroside (unspecified)": {
-        "bio_score": 5,
-        "natural": false,
-        "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
+      "rosmarinic acid (unspecified)": {
+        "bio_score": 7,
+        "natural": true,
+        "score": 10,
+        "absorption": "very low (~1.3%)",
+        "notes": "Hydroxycinnamic acid ester ubiquitous in Lamiaceae (rosemary, lemon balm, sage, perilla). Oral bioavailability 0.9-1.7% in rats; extensively metabolized to caffeic/ferulic acid conjugates which retain activity (PMID 15120569, PMID 33285594). Human peak plasma at 1h. Anti-inflammatory via NF-kB/COX-2, antioxidant, cognitive support. Not rosemary-specific.",
         "aliases": [
-          "salidroside",
-          "salidrosides"
+          "rosmarinic acid",
+          "rosmarinic acid extract",
+          "rosemary rosmarinic acid",
+          "lemon balm rosmarinic acid",
+          "perilla rosmarinic acid"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.013,
+          "range_low": 0.009,
+          "range_high": 0.017,
+          "quality": "low",
+          "notes": "Oral bioavailability 0.9-1.7% in rats; parent degraded by gut microflora to caffeic/ferulic acid (PMID 15120569)"
+        }
+      }
+    },
+    "match_rules": {
+      "priority": 0,
+      "match_mode": "alias_and_fuzzy",
+      "exclusions": [],
+      "parent_id": null,
+      "confidence": "high"
+    },
+    "category_enum": "antioxidants",
+    "rxcui_note": "No RxNorm concept for supplement ingredient",
+    "data_quality": {
+      "completeness": 1.0,
+      "missing_fields": [],
+      "review_status": "validated",
+      "last_reviewed_at": "2026-02-28"
+    }
+  },
+  "ruscogenin": {
+    "standard_name": "Ruscogenin (Butcher's Broom)",
+    "severity_level": "none",
+    "category": "herbs",
+    "description": "Steroidal saponin from Ruscus aculeatus (butcher's broom); venotonic",
+    "dosage_importance": 1.5,
+    "forms": {
+      "ruscogenin (unspecified)": {
+        "bio_score": 9,
+        "natural": true,
+        "score": 12,
+        "absorption": "good (~60%)",
+        "notes": "Steroidal saponin aglycone from Ruscus aculeatus (butcher's broom). Unlike most saponins, demonstrates high GI absorption and good oral bioavailability (PMID 23896689). Vasoconstriction via norepinephrine release. Standardized extract reduced leg volume in 166-patient CVI RCT (PMID 12040966). European Commission monograph supports use for venous insufficiency and hemorrhoids.",
+        "aliases": [
+          "ruscogenin",
+          "ruscogenins",
+          "neoruscogenin",
+          "butcher's broom",
+          "butcher's broom extract",
+          "butchers broom",
+          "butchers broom extract",
+          "ruscus aculeatus",
+          "ruscus aculeatus extract",
+          "butcher's broom root extract",
+          "ruscus extract"
+        ],
+        "dosage_importance": 1.5,
+        "absorption_structured": {
+          "value": 0.6,
+          "range_low": 0.4,
+          "range_high": 0.8,
+          "quality": "good",
+          "notes": "Neoruscogenin shows high GI absorption and excellent microsomal stability (PMID 23896689)"
         }
       }
     },
@@ -24870,30 +24660,36 @@
     }
   },
   "salvianolic_acid_b": {
-    "standard_name": "Salvianolic Acid B",
+    "standard_name": "Salvianolic Acid B (Danshen)",
     "severity_level": "none",
     "category": "antioxidants",
-    "source": "botanical_extract",
-    "priority": "high",
-    "description": "Standardization marker for botanical extracts",
-    "dosage_importance": 0.1,
+    "description": "Primary water-soluble phenolic from Danshen (Salvia miltiorrhiza)",
+    "dosage_importance": 1.5,
     "forms": {
       "salvianolic acid b (unspecified)": {
-        "bio_score": 5,
-        "natural": false,
-        "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
+        "bio_score": 7,
+        "natural": true,
+        "score": 10,
+        "absorption": "very low (~1-2%)",
+        "notes": "Most abundant water-soluble phenolic in Danshen (Salvia miltiorrhiza) root. Oral bioavailability ~1-2% in animals due to tight junction barrier and biliary excretion (PMC10538146, PMID 21569331). Potent antioxidant; cardioprotective via HO-1 upregulation and arginase inhibition (PMID 22442118). IV puerarin used clinically in China. Oral efficacy limited — phospholipid complexes may enhance absorption.",
         "aliases": [
-          "salvianolic acid b"
+          "salvianolic acid b",
+          "danshen",
+          "danshen extract",
+          "salvia miltiorrhiza",
+          "salvia miltiorrhiza extract",
+          "dan shen",
+          "red sage root extract",
+          "tanshinone",
+          "danshen root extract"
         ],
-        "dosage_importance": 1.0,
+        "dosage_importance": 1.5,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.015,
+          "range_low": 0.01,
+          "range_high": 0.023,
+          "quality": "low",
+          "notes": "Oral bioavailability ~1.07% in dogs, ~2.3% in rats (PMC10538146, PMID 21569331)"
         }
       }
     },
@@ -24919,30 +24715,33 @@
   "saponins": {
     "standard_name": "Saponins",
     "severity_level": "none",
-    "category": "antioxidants",
+    "category": "herbs",
     "cui": "C0036189",
     "rxcui": null,
-    "source": "botanical_extract",
-    "priority": "high",
-    "description": "Standardization marker for botanical extracts",
-    "dosage_importance": 0.1,
+    "description": "Generic glycoside class (steroidal + triterpenoid) from diverse botanicals",
+    "dosage_importance": 0.5,
     "forms": {
       "saponins (unspecified)": {
-        "bio_score": 5,
-        "natural": false,
-        "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
+        "bio_score": 6,
+        "natural": true,
+        "score": 9,
+        "absorption": "low",
+        "notes": "Broad glycoside class (steroidal + triterpenoid) from ginseng, tribulus, soy, oats, quillaia. Poor direct GI absorption; gut microbiota deglycosylation to sapogenins enables partial systemic uptake (PMID 37216483). Cholesterol-lowering via bile acid binding; immunomodulation via Quil-A adjuvant pathway. Generic label marker — specific saponin parents score more precisely.",
         "aliases": [
-          "saponins"
+          "saponins",
+          "plant saponins",
+          "saponin extract",
+          "saponin complex",
+          "steroidal saponin complex",
+          "triterpenoid saponin complex"
         ],
-        "dosage_importance": 1.0,
+        "dosage_importance": 0.5,
         "absorption_structured": {
           "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
           "range_low": null,
-          "range_high": null
+          "range_high": null,
+          "quality": "low",
+          "notes": "Generally poor; gut microbiota deglycosylation to sapogenins required for systemic uptake (PMID 37216483)"
         }
       }
     },
@@ -24953,7 +24752,7 @@
       "parent_id": null,
       "confidence": "high"
     },
-    "category_enum": "antioxidants",
+    "category_enum": "herbs",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "data_quality": {
       "completeness": 1.0,
@@ -25489,53 +25288,6 @@
       "last_reviewed_at": "2026-02-28"
     }
   },
-  "steroidal_saponins": {
-    "standard_name": "Steroidal Saponins",
-    "severity_level": "none",
-    "category": "antioxidants",
-    "source": "botanical_extract",
-    "priority": "high",
-    "description": "Standardization marker for botanical extracts",
-    "dosage_importance": 0.1,
-    "forms": {
-      "steroidal saponins (unspecified)": {
-        "bio_score": 5,
-        "natural": false,
-        "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
-        "aliases": [
-          "steroidal saponins"
-        ],
-        "dosage_importance": 1.0,
-        "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
-        }
-      }
-    },
-    "cui": null,
-    "rxcui": null,
-    "match_rules": {
-      "priority": 0,
-      "match_mode": "alias_and_fuzzy",
-      "exclusions": [],
-      "parent_id": null,
-      "confidence": "high"
-    },
-    "category_enum": "antioxidants",
-    "cui_note": "No UMLS entry for botanical/novel compound",
-    "rxcui_note": "No RxNorm concept for supplement ingredient",
-    "data_quality": {
-      "completeness": 1.0,
-      "missing_fields": [],
-      "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
-    }
-  },
   "sterols": {
     "standard_name": "Sterols",
     "severity_level": "none",
@@ -26023,53 +25775,6 @@
         "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
         "aliases": [
           "triterpenes"
-        ],
-        "dosage_importance": 1.0,
-        "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
-        }
-      }
-    },
-    "cui": null,
-    "rxcui": null,
-    "match_rules": {
-      "priority": 0,
-      "match_mode": "alias_and_fuzzy",
-      "exclusions": [],
-      "parent_id": null,
-      "confidence": "high"
-    },
-    "category_enum": "antioxidants",
-    "cui_note": "No UMLS entry for botanical/novel compound",
-    "rxcui_note": "No RxNorm concept for supplement ingredient",
-    "data_quality": {
-      "completeness": 1.0,
-      "missing_fields": [],
-      "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
-    }
-  },
-  "triterpenoid_saponins": {
-    "standard_name": "Triterpenoid Saponins",
-    "severity_level": "none",
-    "category": "antioxidants",
-    "source": "botanical_extract",
-    "priority": "high",
-    "description": "Standardization marker for botanical extracts",
-    "dosage_importance": 0.1,
-    "forms": {
-      "triterpenoid saponins (unspecified)": {
-        "bio_score": 5,
-        "natural": false,
-        "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
-        "aliases": [
-          "triterpenoid saponins"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -31242,7 +30947,7 @@
       "vitamins"
     ],
     "cleanup_notes": "Resolved within-ingredient alias collisions; removed 63 redundant unspecified forms",
-    "total_entries": 561,
+    "total_entries": 554,
     "total_ingredients": 623,
     "data_quality": {
       "review_status": "stub"
@@ -35619,14 +35324,16 @@
         "natural": true,
         "score": 13,
         "absorption": "good",
-        "notes": "Salix alba bark extract standardized to salicin (typically 15-25%). Natural aspirin precursor — salicin is converted to salicylic acid in the liver. Anti-inflammatory and analgesic for back pain and osteoarthritis (240 mg salicin/day in RCTs). Slower onset but fewer GI side effects than aspirin.",
+        "notes": "White willow bark extract standardized to 15% salicin. Oral bioavailability 43.3% as total salicylates (PMID 11599656); salicin hydrolyzed to salicylic acid within 2h. Effective at 120-240 mg/day for low back pain and OA in RCTs (PMID 25997859). Broader mechanism than aspirin: NF-kB/TNF-a downregulation + flavonoid synergy (PMID 21226125). Less GI risk than aspirin.",
         "aliases": [
           "white willow bark standardized",
           "white willow bark 15% salicin",
           "standardized white willow bark",
           "white willow bark extract (standardized to salicin)",
           "willow bark 15% salicin",
-          "white willow 120mg salicin"
+          "white willow 120mg salicin",
+          "salicin",
+          "salicin standardized"
         ],
         "absorption_structured": {
           "value": null,
@@ -38859,7 +38566,6 @@
           "rosemary leaf",
           "rosemary powder",
           "organic rosemary",
-          "rosemarinic acid",
           "roseox"
         ],
         "dosage_importance": 1.0,
@@ -39997,7 +39703,11 @@
           "tribulus terrestris standardized extract",
           "tribulus terrestris 45% saponins",
           "tribulosides",
-          "Bulgarian Tribulus"
+          "Bulgarian Tribulus",
+          "protodioscin",
+          "protodioscin standardized",
+          "tribulus protodioscin",
+          "tribulus terrestris protodioscin"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -42040,7 +41750,10 @@
           "saffron crocin extract",
           "picrocrocin",
           "saffron picrocrocin",
-          "saffron bitterness compound"
+          "saffron bitterness compound",
+          "safranal",
+          "saffron safranal",
+          "saffron volatile oil"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {

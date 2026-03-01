@@ -106,7 +106,7 @@ def normalizer():
         ("Artist's Conk", "Artist's Conk"),
         ("Fringe Tree (Chionanthus virginicus) bark extract", "Fringe Tree"),
         ("Lobelia", "Lobelia"),
-        ("Quassia", "Quassia"),
+        ("Quassia", "Quassinoids"),
         ("Horseradish", "Horseradish"),
         ("Actazin Kiwifruit Powder", "Kiwifruit"),
         ("Tillandsia", "Tillandsia"),
