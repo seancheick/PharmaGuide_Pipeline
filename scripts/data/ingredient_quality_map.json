@@ -1377,8 +1377,8 @@
         "dosage_importance": 1.0,
         "absorption_structured": {
           "value": 0.85,
-          "range_low": null,
-          "range_high": null,
+          "range_low": 0.68,
+          "range_high": 1.0,
           "quality": "good",
           "notes": "good (~85%)"
         }
@@ -2463,8 +2463,8 @@
         "dosage_importance": 1.5,
         "absorption_structured": {
           "value": 0.8,
-          "range_low": null,
-          "range_high": null,
+          "range_low": 0.64,
+          "range_high": 0.96,
           "quality": "very_good",
           "notes": "80%"
         }
@@ -2491,8 +2491,8 @@
         "dosage_importance": 1.5,
         "absorption_structured": {
           "value": 0.8,
-          "range_low": null,
-          "range_high": null,
+          "range_low": 0.64,
+          "range_high": 0.96,
           "quality": "very_good",
           "notes": "80%"
         }
@@ -2530,8 +2530,8 @@
         "dosage_importance": 1.5,
         "absorption_structured": {
           "value": 0.78,
-          "range_low": null,
-          "range_high": null,
+          "range_low": 0.624,
+          "range_high": 0.936,
           "quality": "very_good",
           "notes": "78%"
         }
@@ -2557,8 +2557,8 @@
         "dosage_importance": 1.5,
         "absorption_structured": {
           "value": 0.78,
-          "range_low": null,
-          "range_high": null,
+          "range_low": 0.624,
+          "range_high": 0.936,
           "quality": "very_good",
           "notes": "78%"
         }
@@ -2587,8 +2587,8 @@
         "dosage_importance": 1.5,
         "absorption_structured": {
           "value": 0.7,
-          "range_low": null,
-          "range_high": null,
+          "range_low": 0.56,
+          "range_high": 0.84,
           "quality": "very_good",
           "notes": "70%"
         }
@@ -2614,8 +2614,8 @@
         "dosage_importance": 1.5,
         "absorption_structured": {
           "value": 0.4,
-          "range_low": null,
-          "range_high": null,
+          "range_low": 0.3,
+          "range_high": 0.5,
           "quality": "moderate",
           "notes": "40%"
         }
@@ -2645,8 +2645,8 @@
         "dosage_importance": 1.5,
         "absorption_structured": {
           "value": 0.75,
-          "range_low": null,
-          "range_high": null,
+          "range_low": 0.6,
+          "range_high": 0.9,
           "quality": "very_good",
           "notes": "75%"
         }
@@ -3568,8 +3568,8 @@
         "dosage_importance": 1.5,
         "absorption_structured": {
           "value": 0.5,
-          "range_low": null,
-          "range_high": null,
+          "range_low": 0.4,
+          "range_high": 0.6,
           "quality": "good",
           "notes": "50%"
         }
@@ -3590,8 +3590,8 @@
         "dosage_importance": 1.5,
         "absorption_structured": {
           "value": 0.45,
-          "range_low": null,
-          "range_high": null,
+          "range_low": 0.35,
+          "range_high": 0.55,
           "quality": "moderate",
           "notes": "45%"
         }
@@ -3617,8 +3617,8 @@
         "dosage_importance": 1.5,
         "absorption_structured": {
           "value": 0.5,
-          "range_low": null,
-          "range_high": null,
+          "range_low": 0.4,
+          "range_high": 0.6,
           "quality": "good",
           "notes": "50%"
         }
@@ -4197,8 +4197,8 @@
         "dosage_importance": 1.5,
         "absorption_structured": {
           "value": 0.42,
-          "range_low": null,
-          "range_high": null,
+          "range_low": 0.32,
+          "range_high": 0.52,
           "quality": "moderate",
           "notes": "42%"
         }
@@ -4226,8 +4226,8 @@
         "dosage_importance": 1.5,
         "absorption_structured": {
           "value": 0.4,
-          "range_low": null,
-          "range_high": null,
+          "range_low": 0.3,
+          "range_high": 0.5,
           "quality": "moderate",
           "notes": "40%"
         }
@@ -4260,8 +4260,8 @@
         "dosage_importance": 1.5,
         "absorption_structured": {
           "value": 0.4,
-          "range_low": null,
-          "range_high": null,
+          "range_low": 0.3,
+          "range_high": 0.5,
           "quality": "moderate",
           "notes": "40%"
         }
@@ -4289,8 +4289,8 @@
         "dosage_importance": 1.5,
         "absorption_structured": {
           "value": 0.38,
-          "range_low": null,
-          "range_high": null,
+          "range_low": 0.28,
+          "range_high": 0.48,
           "quality": "moderate",
           "notes": "38%"
         }
@@ -4336,8 +4336,8 @@
         "dosage_importance": 1.5,
         "absorption_structured": {
           "value": 0.37,
-          "range_low": null,
-          "range_high": null,
+          "range_low": 0.27,
+          "range_high": 0.47,
           "quality": "moderate",
           "notes": "37%"
         }
@@ -4359,8 +4359,8 @@
         "dosage_importance": 1.5,
         "absorption_structured": {
           "value": 0.35,
-          "range_low": null,
-          "range_high": null,
+          "range_low": 0.25,
+          "range_high": 0.45,
           "quality": "moderate",
           "notes": "35%"
         }
@@ -4382,8 +4382,8 @@
         "dosage_importance": 1.5,
         "absorption_structured": {
           "value": 0.33,
-          "range_low": null,
-          "range_high": null,
+          "range_low": 0.23,
+          "range_high": 0.43,
           "quality": "moderate",
           "notes": "33%"
         }
@@ -4410,8 +4410,8 @@
         "dosage_importance": 1.5,
         "absorption_structured": {
           "value": 0.31,
-          "range_low": null,
-          "range_high": null,
+          "range_low": 0.21,
+          "range_high": 0.41,
           "quality": "moderate",
           "notes": "31%"
         }
@@ -4438,8 +4438,8 @@
         "dosage_importance": 1.5,
         "absorption_structured": {
           "value": 0.25,
-          "range_low": null,
-          "range_high": null,
+          "range_low": 0.15,
+          "range_high": 0.35,
           "quality": "poor",
           "notes": "25%"
         }
@@ -4460,8 +4460,8 @@
         "dosage_importance": 1.5,
         "absorption_structured": {
           "value": 0.25,
-          "range_low": null,
-          "range_high": null,
+          "range_low": 0.15,
+          "range_high": 0.35,
           "quality": "poor",
           "notes": "25%"
         }
@@ -4511,8 +4511,8 @@
         "dosage_importance": 1.5,
         "absorption_structured": {
           "value": 0.42,
-          "range_low": null,
-          "range_high": null,
+          "range_low": 0.32,
+          "range_high": 0.52,
           "quality": "moderate",
           "notes": "42%"
         }
@@ -4534,8 +4534,8 @@
         "dosage_importance": 1.5,
         "absorption_structured": {
           "value": 0.38,
-          "range_low": null,
-          "range_high": null,
+          "range_low": 0.28,
+          "range_high": 0.48,
           "quality": "moderate",
           "notes": "38%"
         }
@@ -4556,8 +4556,8 @@
         "dosage_importance": 1.5,
         "absorption_structured": {
           "value": 0.35,
-          "range_low": null,
-          "range_high": null,
+          "range_low": 0.25,
+          "range_high": 0.45,
           "quality": "moderate",
           "notes": "35%"
         }
@@ -4645,8 +4645,8 @@
         "dosage_importance": 1.5,
         "absorption_structured": {
           "value": 0.3,
-          "range_low": null,
-          "range_high": null,
+          "range_low": 0.2,
+          "range_high": 0.4,
           "quality": "moderate",
           "notes": "30% - calcium content is incidental to vitamin B5 delivery"
         }
@@ -4807,8 +4807,8 @@
         "dosage_importance": 1.0,
         "absorption_structured": {
           "value": 0.8,
-          "range_low": null,
-          "range_high": null,
+          "range_low": 0.64,
+          "range_high": 0.96,
           "quality": "very_good",
           "notes": "80%+"
         }
@@ -5148,8 +5148,8 @@
         "dosage_importance": 1.5,
         "absorption_structured": {
           "value": 0.3,
-          "range_low": null,
-          "range_high": null,
+          "range_low": 0.2,
+          "range_high": 0.4,
           "quality": "moderate",
           "notes": "30% - magnesium content is incidental to vitamin C delivery"
         }
@@ -5269,8 +5269,8 @@
         "dosage_importance": 1.0,
         "absorption_structured": {
           "value": 0.33,
-          "range_low": null,
-          "range_high": null,
+          "range_low": 0.23,
+          "range_high": 0.43,
           "quality": "good",
           "notes": "moderate-high (33% elemental)"
         }
@@ -5626,8 +5626,8 @@
         "dosage_importance": 1.0,
         "absorption_structured": {
           "value": 0.87,
-          "range_low": null,
-          "range_high": null,
+          "range_low": 0.696,
+          "range_high": 1.0,
           "quality": "good",
           "notes": "high (87%)"
         }
@@ -5694,8 +5694,8 @@
         "dosage_importance": 1.0,
         "absorption_structured": {
           "value": 0.61,
-          "range_low": null,
-          "range_high": null,
+          "range_low": 0.488,
+          "range_high": 0.732,
           "quality": "good",
           "notes": "moderate-high (61%)"
         }
@@ -6032,8 +6032,8 @@
         "dosage_importance": 0.5,
         "absorption_structured": {
           "value": 0.9,
-          "range_low": null,
-          "range_high": null,
+          "range_low": 0.72,
+          "range_high": 1.0,
           "quality": "excellent",
           "notes": "90%+"
         }
@@ -6090,8 +6090,8 @@
         "dosage_importance": 0.5,
         "absorption_structured": {
           "value": 0.85,
-          "range_low": null,
-          "range_high": null,
+          "range_low": 0.68,
+          "range_high": 1.0,
           "quality": "excellent",
           "notes": "85%"
         }
@@ -6140,8 +6140,8 @@
         "dosage_importance": 0.5,
         "absorption_structured": {
           "value": 0.5,
-          "range_low": null,
-          "range_high": null,
+          "range_low": 0.4,
+          "range_high": 0.6,
           "quality": "good",
           "notes": "50%"
         }
@@ -6165,8 +6165,8 @@
         "dosage_importance": 0.5,
         "absorption_structured": {
           "value": 0.45,
-          "range_low": null,
-          "range_high": null,
+          "range_low": 0.35,
+          "range_high": 0.55,
           "quality": "moderate",
           "notes": "45%"
         }
@@ -6188,8 +6188,8 @@
         "dosage_importance": 0.5,
         "absorption_structured": {
           "value": 0.4,
-          "range_low": null,
-          "range_high": null,
+          "range_low": 0.3,
+          "range_high": 0.5,
           "quality": "moderate",
           "notes": "40%"
         }
@@ -6725,8 +6725,8 @@
         "dosage_importance": 0.5,
         "absorption_structured": {
           "value": 0.99,
-          "range_low": null,
-          "range_high": null,
+          "range_low": 0.792,
+          "range_high": 1.0,
           "quality": "excellent",
           "notes": "excellent (~99%)"
         }
@@ -7073,8 +7073,8 @@
         "dosage_importance": 1.0,
         "absorption_structured": {
           "value": 0.95,
-          "range_low": null,
-          "range_high": null,
+          "range_low": 0.76,
+          "range_high": 1.0,
           "quality": "excellent",
           "notes": "excellent (~95%+)"
         }
@@ -7988,8 +7988,8 @@
         "dosage_importance": 1.5,
         "absorption_structured": {
           "value": 0.005,
-          "range_low": null,
-          "range_high": null,
+          "range_low": 0.0,
+          "range_high": 0.105,
           "quality": "poor",
           "notes": "poor (~0.5%)"
         }
@@ -8233,8 +8233,8 @@
         "dosage_importance": 0.5,
         "absorption_structured": {
           "value": 0.1,
-          "range_low": null,
-          "range_high": null,
+          "range_low": 0.0,
+          "range_high": 0.2,
           "quality": "poor",
           "notes": "poor (<10%)"
         }
@@ -8349,8 +8349,8 @@
         "dosage_importance": 0.5,
         "absorption_structured": {
           "value": 0.028,
-          "range_low": null,
-          "range_high": null,
+          "range_low": 0.0,
+          "range_high": 0.128,
           "quality": "poor",
           "notes": "2.8%"
         }
@@ -8375,8 +8375,8 @@
         "dosage_importance": 0.5,
         "absorption_structured": {
           "value": 0.024,
-          "range_low": null,
-          "range_high": null,
+          "range_low": 0.0,
+          "range_high": 0.124,
           "quality": "poor",
           "notes": "2.4%"
         }
@@ -8399,8 +8399,8 @@
         "dosage_importance": 0.5,
         "absorption_structured": {
           "value": 0.02,
-          "range_low": null,
-          "range_high": null,
+          "range_low": 0.0,
+          "range_high": 0.12,
           "quality": "poor",
           "notes": "2%"
         }
@@ -8420,8 +8420,8 @@
         "dosage_importance": 0.5,
         "absorption_structured": {
           "value": 0.043,
-          "range_low": null,
-          "range_high": null,
+          "range_low": 0.0,
+          "range_high": 0.143,
           "quality": "poor",
           "notes": "~4.3% (Anderson 2004, PMID 15564651)"
         }
@@ -9355,8 +9355,8 @@
         "dosage_importance": 1.5,
         "absorption_structured": {
           "value": 0.9,
-          "range_low": null,
-          "range_high": null,
+          "range_low": 0.72,
+          "range_high": 1.0,
           "quality": "excellent",
           "notes": "~90%"
         }
@@ -9376,8 +9376,8 @@
         "dosage_importance": 1.5,
         "absorption_structured": {
           "value": 0.9,
-          "range_low": null,
-          "range_high": null,
+          "range_low": 0.72,
+          "range_high": 1.0,
           "quality": "excellent",
           "notes": "~90%"
         }
@@ -9398,8 +9398,8 @@
         "dosage_importance": 1.5,
         "absorption_structured": {
           "value": 0.9,
-          "range_low": null,
-          "range_high": null,
+          "range_low": 0.72,
+          "range_high": 1.0,
           "quality": "excellent",
           "notes": "~90%"
         }
@@ -9420,8 +9420,8 @@
         "dosage_importance": 1.5,
         "absorption_structured": {
           "value": 0.9,
-          "range_low": null,
-          "range_high": null,
+          "range_low": 0.72,
+          "range_high": 1.0,
           "quality": "excellent",
           "notes": "~90%"
         }
@@ -9464,8 +9464,8 @@
         "dosage_importance": 1.5,
         "absorption_structured": {
           "value": 0.9,
-          "range_low": null,
-          "range_high": null,
+          "range_low": 0.72,
+          "range_high": 1.0,
           "quality": "excellent",
           "notes": "~90% (absorbed like all K salts, despite marketing claims)"
         }
@@ -9755,8 +9755,8 @@
         "dosage_importance": 1.0,
         "absorption_structured": {
           "value": 0.96,
-          "range_low": null,
-          "range_high": null,
+          "range_low": 0.768,
+          "range_high": 1.0,
           "quality": "good",
           "notes": "ALA absorption ~96%, but EPA/DHA conversion only 5-10% (Burdge 2006)"
         }
@@ -10018,8 +10018,8 @@
         "dosage_importance": 1.0,
         "absorption_structured": {
           "value": 0.013,
-          "range_low": null,
-          "range_high": null,
+          "range_low": 0.0,
+          "range_high": 0.113,
           "quality": "poor",
           "notes": "~1.3% (Lopez-Lluch 2019)"
         }
@@ -10104,8 +10104,8 @@
         "dosage_importance": 1.0,
         "absorption_structured": {
           "value": 0.62,
-          "range_low": null,
-          "range_high": null,
+          "range_low": 0.496,
+          "range_high": 0.744,
           "quality": "moderate",
           "notes": "~62% (Smidt 1991, mouse data; no human PK study exists)"
         }
@@ -10156,6 +10156,27 @@
           "range_high": null,
           "quality": "unknown",
           "notes": "Data not available"
+        }
+      },
+      "lifepqq": {
+        "bio_score": 13,
+        "natural": true,
+        "score": 16,
+        "absorption": "stabilized",
+        "notes": "Stabilized PQQ form with enhanced stability and bioavailability. Premium branded pyrroloquinoline quinone for mitochondrial support.",
+        "aliases": [
+          "lifepqq",
+          "stabilized pqq",
+          "branded pqq",
+          "lifepqq pqq"
+        ],
+        "dosage_importance": 1.5,
+        "absorption_structured": {
+          "value": null,
+          "range_low": null,
+          "range_high": null,
+          "quality": "unknown",
+          "notes": "stabilized"
         }
       }
     },
@@ -10432,8 +10453,8 @@
         "dosage_importance": 1.0,
         "absorption_structured": {
           "value": 0.01,
-          "range_low": null,
-          "range_high": null,
+          "range_low": 0.0,
+          "range_high": 0.11,
           "quality": "poor",
           "notes": "<1%"
         }
@@ -10575,8 +10596,8 @@
         "dosage_importance": 1.0,
         "absorption_structured": {
           "value": 0.02,
-          "range_low": null,
-          "range_high": null,
+          "range_low": 0.0,
+          "range_high": 0.12,
           "quality": "poor",
           "notes": "~2% (Hollman 1995)"
         }
@@ -10704,8 +10725,8 @@
         "dosage_importance": 1.0,
         "absorption_structured": {
           "value": 0.1,
-          "range_low": null,
-          "range_high": null,
+          "range_low": 0.0,
+          "range_high": 0.2,
           "quality": "poor",
           "notes": "poor (<10%); but Richie 2015 showed blood GSH increases at high doses over months"
         }
@@ -17986,6 +18007,27 @@
           "quality": "low",
           "notes": "27.7 kDa protein; detected in serum via ELISA but actual F% unknown (PMID:23709455)"
         }
+      },
+      "nattokinase nsk-sd": {
+        "bio_score": 10,
+        "natural": true,
+        "score": 13,
+        "absorption": "standardized",
+        "notes": "NSK-SD (Nattokinase Standardized by JBSL) — purified, vitamin K2-free standardized nattokinase. Same 27.7 kDa serine protease as standard nattokinase but with controlled purity and removal of vitamin K2 (important for patients on warfarin). Standardized to fibrinolytic activity units (FU). Same GI survival challenges as standard nattokinase. Most clinical trials used NSK-SD or equivalent standardized forms. Fibrinolytic activity 6x more efficient than plasmin for cross-linked fibrin cleavage (PMC4479826).",
+        "aliases": [
+          "nsk-sd",
+          "standardized nattokinase",
+          "branded nattokinase",
+          "nsk sd nattokinase"
+        ],
+        "dosage_importance": 1.4,
+        "absorption_structured": {
+          "value": 0.18,
+          "range_low": 0.08,
+          "range_high": 0.28,
+          "quality": "low",
+          "notes": "Standardized purity but same large-protein absorption challenges; ELISA-detectable in serum"
+        }
       }
     },
     "match_rules": {
@@ -18689,8 +18731,8 @@
         "dosage_importance": 1.0,
         "absorption_structured": {
           "value": 0.95,
-          "range_low": null,
-          "range_high": null,
+          "range_low": 0.76,
+          "range_high": 1.0,
           "quality": "excellent",
           "notes": "Near-complete intestinal absorption; no hepatic first-pass for citrulline"
         }
@@ -24218,7 +24260,7 @@
         "natural": false,
         "score": 5,
         "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied.",
+        "notes": "Plant-derived sterols (beta-sitosterol, campesterol, stigmasterol) that competitively inhibit intestinal cholesterol absorption. EFSA/FDA-approved health claim for LDL reduction at 1.5-3 g/day. Form unspecified; conservative scoring applied.",
         "aliases": [
           "phytosterols",
           "plant sterols unspecified",
@@ -26844,7 +26886,7 @@
         "natural": false,
         "score": 6,
         "absorption": "unknown",
-        "notes": "Unspecified form; conservative scoring to avoid over-crediting.",
+        "notes": "Dicalcium phosphate (DCP) provides both calcium (~29%) and phosphorus (~23%). Used as tablet filler and calcium source. Absorption comparable to milk calcium at ~30% efficiency.",
         "aliases": [
           "Di-Calcium Phosphate"
         ],
@@ -26919,248 +26961,6 @@
       "last_reviewed_at": "2026-02-28"
     }
   },
-  "cordycepsprime": {
-    "standard_name": "CordycepsPrime",
-    "category": "herbs",
-    "forms": {
-      "cordycepsprime": {
-        "bio_score": 12,
-        "natural": true,
-        "score": 15,
-        "absorption": "enhanced",
-        "notes": "Enhanced cordyceps bioavailability formula with improved absorption technology. Branded cordyceps extract with superior cellular uptake.",
-        "aliases": [
-          "cordycepsprime",
-          "cordyceps prime",
-          "enhanced cordyceps",
-          "cordyceps enhanced bioavailability"
-        ],
-        "dosage_importance": 1.3,
-        "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "unknown",
-          "notes": "enhanced"
-        }
-      }
-    },
-    "cui": null,
-    "rxcui": null,
-    "match_rules": {
-      "priority": 0,
-      "match_mode": "alias_and_fuzzy",
-      "exclusions": [],
-      "parent_id": null,
-      "confidence": "high"
-    },
-    "category_enum": "herbs",
-    "cui_note": "No UMLS entry for botanical/novel compound",
-    "rxcui_note": "No RxNorm concept for supplement ingredient",
-    "data_quality": {
-      "completeness": 1.0,
-      "missing_fields": [],
-      "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
-    }
-  },
-  "testosurge": {
-    "standard_name": "TestoSurge",
-    "category": "herbs",
-    "forms": {
-      "testosurge": {
-        "bio_score": 12,
-        "natural": true,
-        "score": 15,
-        "absorption": "enhanced",
-        "notes": "Branded fenugreek extract with enhanced saponins standardization. Clinically studied for testosterone support and male health.",
-        "aliases": [
-          "testosurge",
-          "testo surge",
-          "enhanced fenugreek",
-          "branded fenugreek extract"
-        ],
-        "dosage_importance": 1.4,
-        "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "unknown",
-          "notes": "enhanced"
-        }
-      }
-    },
-    "cui": null,
-    "rxcui": null,
-    "match_rules": {
-      "priority": 0,
-      "match_mode": "alias_and_fuzzy",
-      "exclusions": [],
-      "parent_id": null,
-      "confidence": "high"
-    },
-    "category_enum": "herbs",
-    "cui_note": "No UMLS entry for botanical/novel compound",
-    "rxcui_note": "No RxNorm concept for supplement ingredient",
-    "data_quality": {
-      "completeness": 1.0,
-      "missing_fields": [],
-      "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
-    }
-  },
-  "lifepqq": {
-    "standard_name": "LifePQQ",
-    "category": "other",
-    "forms": {
-      "lifepqq": {
-        "bio_score": 13,
-        "natural": true,
-        "score": 16,
-        "absorption": "stabilized",
-        "notes": "Stabilized PQQ form with enhanced stability and bioavailability. Premium branded pyrroloquinoline quinone for mitochondrial support.",
-        "aliases": [
-          "lifepqq",
-          "life pqq",
-          "stabilized pqq",
-          "branded pqq"
-        ],
-        "dosage_importance": 1.5,
-        "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "unknown",
-          "notes": "stabilized"
-        }
-      }
-    },
-    "cui": null,
-    "rxcui": null,
-    "match_rules": {
-      "priority": 0,
-      "match_mode": "alias_and_fuzzy",
-      "exclusions": [],
-      "parent_id": null,
-      "confidence": "high"
-    },
-    "category_enum": "other",
-    "cui_note": "No UMLS entry for botanical/novel compound",
-    "rxcui_note": "No RxNorm concept for supplement ingredient",
-    "data_quality": {
-      "completeness": 1.0,
-      "missing_fields": [],
-      "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
-    }
-  },
-  "nattokinase_nsk_sd": {
-    "standard_name": "Nattokinase NSK-SD",
-    "category": "other",
-    "forms": {
-      "nsk-sd": {
-        "bio_score": 10,
-        "natural": true,
-        "score": 13,
-        "absorption": "standardized",
-        "notes": "NSK-SD (Nattokinase Standardized by JBSL) — purified, vitamin K2-free standardized nattokinase. Same 27.7 kDa serine protease as standard nattokinase but with controlled purity and removal of vitamin K2 (important for patients on warfarin). Standardized to fibrinolytic activity units (FU). Same GI survival challenges as standard nattokinase. Most clinical trials used NSK-SD or equivalent standardized forms. Fibrinolytic activity 6x more efficient than plasmin for cross-linked fibrin cleavage (PMC4479826).",
-        "aliases": [
-          "nattokinase nsk-sd",
-          "nsk-sd",
-          "standardized nattokinase",
-          "branded nattokinase"
-        ],
-        "dosage_importance": 1.4,
-        "absorption_structured": {
-          "value": 0.18,
-          "range_low": 0.08,
-          "range_high": 0.28,
-          "quality": "low",
-          "notes": "Standardized purity but same large-protein absorption challenges; ELISA-detectable in serum"
-        }
-      }
-    },
-    "cui": null,
-    "rxcui": null,
-    "match_rules": {
-      "priority": 0,
-      "match_mode": "alias_and_fuzzy",
-      "exclusions": [],
-      "parent_id": null,
-      "confidence": "high"
-    },
-    "category_enum": "other",
-    "cui_note": "No UMLS entry for botanical/novel compound",
-    "rxcui_note": "No RxNorm concept for supplement ingredient",
-    "data_quality": {
-      "completeness": 1.0,
-      "missing_fields": [],
-      "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
-    }
-  },
-  "ganeden_bc30": {
-    "standard_name": "GanedenBC30",
-    "category": "probiotics",
-    "forms": {
-      "ganendenbc30": {
-        "bio_score": 14,
-        "natural": true,
-        "score": 17,
-        "absorption": "superior_survival",
-        "notes": "Spore-forming probiotic with superior survival through digestive tract. Bacillus coagulans with enhanced stability and efficacy.",
-        "aliases": [
-          "ganendenbc30",
-          "spore forming probiotic",
-          "bacillus coagulans bc30"
-        ],
-        "dosage_importance": 1.3,
-        "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "excellent",
-          "notes": "superior_survival"
-        }
-      },
-      "ganedenbc30 (unspecified)": {
-        "bio_score": 5,
-        "natural": false,
-        "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
-        "aliases": [
-          "ganedenbc30"
-        ],
-        "dosage_importance": 1.0,
-        "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
-        }
-      }
-    },
-    "cui": null,
-    "rxcui": null,
-    "match_rules": {
-      "priority": 0,
-      "match_mode": "alias_and_fuzzy",
-      "exclusions": [],
-      "parent_id": null,
-      "confidence": "high"
-    },
-    "category_enum": "probiotics",
-    "cui_note": "No UMLS entry for botanical/novel compound",
-    "rxcui_note": "No RxNorm concept for supplement ingredient",
-    "data_quality": {
-      "completeness": 1.0,
-      "missing_fields": [],
-      "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
-    }
-  },
   "coenzymated_complex": {
     "standard_name": "Coenzymated Complex",
     "category": "vitamins",
@@ -27192,7 +26992,7 @@
         "natural": false,
         "score": 6,
         "absorption": "unknown",
-        "notes": "Unspecified form; conservative scoring to avoid over-crediting.",
+        "notes": "Pre-activated B-vitamin complex containing coenzymated forms (P5P, methylcobalamin, MTHF, riboflavin-5-phosphate). Bypasses hepatic activation step; may benefit those with genetic polymorphisms affecting vitamin metabolism.",
         "aliases": [
           "Coenzymated Complex"
         ],
@@ -27246,8 +27046,8 @@
         "dosage_importance": 1.0,
         "absorption_structured": {
           "value": 0.6,
-          "range_low": null,
-          "range_high": null,
+          "range_low": 0.48,
+          "range_high": 0.72,
           "quality": "moderate",
           "notes": "moderate (~60%)"
         }
@@ -27265,8 +27065,8 @@
         "dosage_importance": 1.0,
         "absorption_structured": {
           "value": 0.9,
-          "range_low": null,
-          "range_high": null,
+          "range_low": 0.72,
+          "range_high": 1.0,
           "quality": "excellent",
           "notes": "excellent (~90%)"
         }
@@ -27647,8 +27447,8 @@
         "dosage_importance": 0.8,
         "absorption_structured": {
           "value": 0.65,
-          "range_low": null,
-          "range_high": null,
+          "range_low": 0.52,
+          "range_high": 0.78,
           "quality": "good",
           "notes": "good (~65%)"
         }
@@ -27871,8 +27671,8 @@
         "dosage_importance": 1.0,
         "absorption_structured": {
           "value": 0.55,
-          "range_low": null,
-          "range_high": null,
+          "range_low": 0.44,
+          "range_high": 0.66,
           "quality": "moderate",
           "notes": "moderate (~55%)"
         }
@@ -27916,8 +27716,8 @@
         "dosage_importance": 1.0,
         "absorption_structured": {
           "value": 0.65,
-          "range_low": null,
-          "range_high": null,
+          "range_low": 0.52,
+          "range_high": 0.78,
           "quality": "moderate",
           "notes": "moderate (~65%)"
         }
@@ -27936,8 +27736,8 @@
         "dosage_importance": 1.0,
         "absorption_structured": {
           "value": 0.85,
-          "range_low": null,
-          "range_high": null,
+          "range_low": 0.68,
+          "range_high": 1.0,
           "quality": "excellent",
           "notes": "excellent (~85%)"
         }
@@ -28039,7 +27839,7 @@
         "natural": false,
         "score": 5,
         "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied.",
+        "notes": "Grifola frondosa mushroom (maitake); contains beta-glucans (D-fraction, MD-fraction) with immunomodulatory properties. Preclinical evidence for blood glucose regulation. Form not specified; conservative scoring applied.",
         "aliases": [
           "maitake"
         ],
@@ -28126,7 +27926,7 @@
         "natural": false,
         "score": 5,
         "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied.",
+        "notes": "Lentinula edodes mushroom (shiitake); source of lentinan (beta-1,3-glucan) with documented immunostimulatory activity. Contains eritadenine for cholesterol reduction. Form not specified; conservative scoring applied.",
         "aliases": [
           "shiitake"
         ],
@@ -28216,7 +28016,7 @@
         "natural": false,
         "score": 5,
         "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied.",
+        "notes": "Trametes versicolor mushroom (turkey tail); source of PSK (polysaccharide-K) and PSP with clinical evidence in oncology adjuvant therapy. Japanese approval for cancer immunotherapy support. Form not specified.",
         "aliases": [
           "turkey tail"
         ],
@@ -28302,7 +28102,7 @@
         "natural": false,
         "score": 5,
         "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied.",
+        "notes": "Inonotus obliquus mushroom (chaga); rich in betulinic acid, melanin, and polysaccharides. Traditional Siberian medicine for immune and GI support. Limited human clinical data; most evidence preclinical. Form not specified.",
         "aliases": [
           "chaga"
         ],
@@ -28374,8 +28174,8 @@
         "dosage_importance": 1.0,
         "absorption_structured": {
           "value": 0.7,
-          "range_low": null,
-          "range_high": null,
+          "range_low": 0.56,
+          "range_high": 0.84,
           "quality": "moderate",
           "notes": "moderate (~70%)"
         }
@@ -28401,6 +28201,27 @@
           "notes": "Data not available",
           "range_low": null,
           "range_high": null
+        }
+      },
+      "cordycepsprime extract": {
+        "bio_score": 12,
+        "natural": true,
+        "score": 15,
+        "absorption": "enhanced",
+        "notes": "Enhanced cordyceps bioavailability formula with improved absorption technology. Branded cordyceps extract with superior cellular uptake.",
+        "aliases": [
+          "cordycepsprime",
+          "enhanced cordyceps",
+          "cordyceps enhanced bioavailability",
+          "cordycepsprime extract"
+        ],
+        "dosage_importance": 1.3,
+        "absorption_structured": {
+          "value": null,
+          "range_low": null,
+          "range_high": null,
+          "quality": "unknown",
+          "notes": "enhanced"
         }
       }
     },
@@ -28470,8 +28291,8 @@
         "dosage_importance": 1.0,
         "absorption_structured": {
           "value": 0.65,
-          "range_low": null,
-          "range_high": null,
+          "range_low": 0.52,
+          "range_high": 0.78,
           "quality": "moderate",
           "notes": "moderate (~65%)"
         }
@@ -28543,8 +28364,8 @@
         "dosage_importance": 1.0,
         "absorption_structured": {
           "value": 0.95,
-          "range_low": null,
-          "range_high": null,
+          "range_low": 0.76,
+          "range_high": 1.0,
           "quality": "excellent",
           "notes": "excellent (~95%)"
         }
@@ -28567,8 +28388,8 @@
         "dosage_importance": 1.0,
         "absorption_structured": {
           "value": 0.98,
-          "range_low": null,
-          "range_high": null,
+          "range_low": 0.784,
+          "range_high": 1.0,
           "quality": "excellent",
           "notes": "excellent (~98%)"
         }
@@ -28589,8 +28410,8 @@
         "dosage_importance": 1.0,
         "absorption_structured": {
           "value": 0.95,
-          "range_low": null,
-          "range_high": null,
+          "range_low": 0.76,
+          "range_high": 1.0,
           "quality": "excellent",
           "notes": "excellent (~95%)"
         }
@@ -28637,8 +28458,8 @@
         "dosage_importance": 1.0,
         "absorption_structured": {
           "value": 0.75,
-          "range_low": null,
-          "range_high": null,
+          "range_low": 0.6,
+          "range_high": 0.9,
           "quality": "good",
           "notes": "good (~75%)"
         }
@@ -28657,8 +28478,8 @@
         "dosage_importance": 1.0,
         "absorption_structured": {
           "value": 0.85,
-          "range_low": null,
-          "range_high": null,
+          "range_low": 0.68,
+          "range_high": 1.0,
           "quality": "excellent",
           "notes": "excellent (~85%)"
         }
@@ -28685,8 +28506,8 @@
         "dosage_importance": 1.0,
         "absorption_structured": {
           "value": 0.85,
-          "range_low": null,
-          "range_high": null,
+          "range_low": 0.68,
+          "range_high": 1.0,
           "quality": "excellent",
           "notes": "excellent (~85%)"
         }
@@ -30288,7 +30109,7 @@
       "vitamins"
     ],
     "cleanup_notes": "Resolved within-ingredient alias collisions; removed 63 redundant unspecified forms",
-    "total_entries": 535,
+    "total_entries": 530,
     "total_ingredients": 623,
     "data_quality": {
       "review_status": "stub"
@@ -31214,7 +31035,7 @@
         "natural": true,
         "score": 9,
         "absorption": "unknown",
-        "notes": "Unspecified form, conservative scoring.",
+        "notes": "Boswellia serrata resin containing boswellic acids (AKBA). Anti-inflammatory via 5-LOX inhibition. Form not specified; conservative scoring applied.",
         "aliases": [
           "boswellia",
           "boswellia serrata",
@@ -31369,7 +31190,7 @@
         "natural": true,
         "score": 9,
         "absorption": "unknown",
-        "notes": "Unspecified form.",
+        "notes": "Nigella sativa (black seed/black cumin). Contains thymoquinone, thymol, and essential fatty acids. Traditional Islamic medicine use. Form/processing unspecified; conservative scoring.",
         "aliases": [
           "black seed",
           "nigella sativa",
@@ -31505,7 +31326,7 @@
         "natural": true,
         "score": 9,
         "absorption": "unknown",
-        "notes": "Unspecified form.",
+        "notes": "Hippophae rhamnoides berry/seed oil; rich in palmitoleic acid (omega-7), flavonoids, and vitamins C/E. Traditional Tibetan/Ayurvedic medicine. Form unspecified.",
         "aliases": [
           "sea buckthorn",
           "seaberry",
@@ -31652,7 +31473,7 @@
         "natural": true,
         "score": 9,
         "absorption": "unknown",
-        "notes": "Unspecified form.",
+        "notes": "Mineral pitch (mumijo) from Himalayan rock exudate; contains fulvic acid, dibenzo-alpha-pyrones, and trace minerals. Ayurvedic adaptogen. Form unspecified; conservative scoring.",
         "aliases": [
           "shilajit",
           "mineral pitch",
@@ -31762,7 +31583,7 @@
         "natural": true,
         "score": 9,
         "absorption": "unknown",
-        "notes": "Unspecified form.",
+        "notes": "Trigonella foenum-graecum seed containing furostanol saponins (protodioscin), galactomannan fiber, and 4-hydroxyisoleucine. Supports glycemic control and testosterone. Form unspecified.",
         "aliases": [
           "fenugreek",
           "trigonella",
@@ -31778,6 +31599,29 @@
           "notes": "Data not available",
           "range_low": null,
           "range_high": null
+        }
+      },
+      "testosurge extract": {
+        "bio_score": 12,
+        "natural": true,
+        "score": 15,
+        "absorption": "enhanced",
+        "notes": "Branded fenugreek extract with enhanced saponins standardization. Clinically studied for testosterone support and male health.",
+        "aliases": [
+          "testosurge",
+          "testo surge",
+          "enhanced fenugreek",
+          "branded fenugreek extract",
+          "testosurge fenugreek",
+          "testosurge extract"
+        ],
+        "dosage_importance": 1.4,
+        "absorption_structured": {
+          "value": null,
+          "range_low": null,
+          "range_high": null,
+          "quality": "unknown",
+          "notes": "enhanced"
         }
       }
     },
@@ -31877,7 +31721,7 @@
         "natural": true,
         "score": 9,
         "absorption": "unknown",
-        "notes": "Unspecified form.",
+        "notes": "Actaea racemosa (Cimicifuga) rhizome; contains triterpene glycosides (actein, 23-epi-26-deoxyactein). Evidence for menopausal vasomotor symptoms. Form unspecified; conservative scoring.",
         "aliases": [
           "black cohosh",
           "cimicifuga",
@@ -31980,7 +31824,7 @@
         "natural": true,
         "score": 9,
         "absorption": "unknown",
-        "notes": "Unspecified form.",
+        "notes": "Hypericum perforatum herb; contains hypericin and hyperforin. Well-documented antidepressant for mild-moderate depression (Cochrane review). CYP3A4/P-gp inducer. Form unspecified.",
         "aliases": [
           "st johns wort",
           "st john's wort",
@@ -32081,7 +31925,7 @@
         "natural": true,
         "score": 9,
         "absorption": "unknown",
-        "notes": "Unspecified form.",
+        "notes": "Valeriana officinalis root; contains valerenic acid and valepotriates. GABA-A receptor modulator for sleep and anxiolysis. European Pharmacopoeia monograph. Form unspecified; conservative scoring.",
         "aliases": [
           "valerian",
           "valeriana",
@@ -32176,7 +32020,7 @@
         "natural": true,
         "score": 9,
         "absorption": "unknown",
-        "notes": "Unspecified form.",
+        "notes": "Vitex agnus-castus berry; contains diterpenes (rotundifuran) and iridoids (agnuside, aucubin). Dopaminergic action reduces prolactin. Evidence for PMS and menstrual irregularities. Form unspecified.",
         "aliases": [
           "chasteberry",
           "vitex",
@@ -32278,7 +32122,7 @@
         "natural": true,
         "score": 9,
         "absorption": "unknown",
-        "notes": "Unspecified form.",
+        "notes": "Citrus bergamia extract; contains statin-like HMG-CoA reductase inhibitors (brutieridin, melitidin). Evidence for LDL/triglyceride reduction. Form unspecified; conservative scoring.",
         "aliases": [
           "bergamot",
           "citrus bergamot",
@@ -32372,7 +32216,7 @@
         "natural": true,
         "score": 9,
         "absorption": "unknown",
-        "notes": "Unspecified form.",
+        "notes": "Psidium guajava leaf extract; contains quercetin glycosides and gallic acid. Traditional anti-diarrheal and antidiabetic use. Form unspecified; conservative scoring.",
         "aliases": [
           "guava",
           "guava leaf",
@@ -35301,8 +35145,8 @@
         "absorption_structured": {
           "quality": "moderate",
           "value": 0.5,
-          "range_low": null,
-          "range_high": null,
+          "range_low": 0.4,
+          "range_high": 0.6,
           "notes": "Data not available"
         },
         "notes": "Trace mineral that supports bone health. Most commonly used as strontium citrate or ranelate in supplements.",
@@ -35425,8 +35269,8 @@
         "dosage_importance": 1.0,
         "absorption_structured": {
           "value": 0.6,
-          "range_low": null,
-          "range_high": null,
+          "range_low": 0.48,
+          "range_high": 0.72,
           "quality": "good",
           "notes": "good (~60%)"
         }
@@ -35446,8 +35290,8 @@
         "dosage_importance": 1.0,
         "absorption_structured": {
           "value": 0.5,
-          "range_low": null,
-          "range_high": null,
+          "range_low": 0.4,
+          "range_high": 0.6,
           "quality": "moderate",
           "notes": "moderate (~50%)"
         }
@@ -35545,8 +35389,8 @@
         "dosage_importance": 1.0,
         "absorption_structured": {
           "value": 0.5,
-          "range_low": null,
-          "range_high": null,
+          "range_low": 0.4,
+          "range_high": 0.6,
           "quality": "moderate",
           "notes": "moderate (~50%)"
         }
@@ -35610,7 +35454,7 @@
         "natural": false,
         "score": 5,
         "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied.",
+        "notes": "Bovine-derived immunoglobulin concentrate (IgG); supports mucosal immunity and GI barrier function. Serum-derived bovine immunoglobulin/protein isolate (SBI) has clinical evidence. Form unspecified.",
         "aliases": [
           "immunoglobulin unspecified"
         ],
@@ -35675,7 +35519,7 @@
         "natural": false,
         "score": 5,
         "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied.",
+        "notes": "Borago officinalis seed oil; richest botanical source of gamma-linolenic acid (GLA, ~23%). Anti-inflammatory via DGLA/prostaglandin E1 pathway. Used for atopic dermatitis and RA. Form unspecified.",
         "aliases": [
           "borage unspecified"
         ],
@@ -35741,7 +35585,7 @@
         "natural": false,
         "score": 5,
         "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied.",
+        "notes": "Clupea harengus roe extract; naturally phospholipid-bound omega-3 (DHA/EPA) with superior brain bioavailability vs triglyceride fish oil. Contains choline and astaxanthin. Form unspecified.",
         "aliases": [
           "herring roe unspecified"
         ],
@@ -36683,7 +36527,7 @@
         "natural": true,
         "score": 10,
         "absorption": "moderate",
-        "notes": "Unspecified processing/form for ahiflower oil.",
+        "notes": "Buglossoides arvensis seed oil; richest plant source of stearidonic acid (SDA, omega-3 precursor). SDA converts to EPA 3-5x more efficiently than ALA. Sustainable non-marine omega-3. Form unspecified.",
         "aliases": [
           "ahiflower"
         ],
@@ -36774,7 +36618,7 @@
         "natural": true,
         "score": 10,
         "absorption": "low-moderate",
-        "notes": "Flavonol polyphenol used in antioxidant formulations.",
+        "notes": "Flavonol polyphenol found in berries, tea, wine, and vegetables. Anti-inflammatory and antioxidant via Nrf2/NF-kB modulation. Limited human clinical data; mostly preclinical evidence. Form unspecified.",
         "aliases": [
           "myricetin"
         ],
@@ -37075,7 +36919,7 @@
         "natural": true,
         "score": 10,
         "absorption": "moderate",
-        "notes": "Unspecified processing/form for evening primrose oil.",
+        "notes": "Oenothera biennis seed oil; contains 8-10% gamma-linolenic acid (GLA). Studied for atopic eczema, PMS, and mastalgia. Cochrane reviews show mixed results. Form unspecified.",
         "aliases": [
           "oenothera biennis seed oil",
           "evening primrose oil, natural"
@@ -37223,8 +37067,8 @@
         "dosage_importance": 0.7,
         "absorption_structured": {
           "value": 0.7,
-          "range_low": null,
-          "range_high": null,
+          "range_low": 0.56,
+          "range_high": 0.84,
           "quality": "good",
           "notes": "good (~70%)"
         }
@@ -37309,7 +37153,7 @@
         "natural": true,
         "score": 8,
         "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied.",
+        "notes": "Punica granatum fruit extract; contains punicalagins (ellagitannins) metabolized to urolithin A by gut microbiota. Evidence for cardiovascular and prostate health. Form unspecified.",
         "aliases": [
           "pomegranate",
           "punica granatum"
@@ -37363,8 +37207,8 @@
         "dosage_importance": 0.8,
         "absorption_structured": {
           "value": 0.65,
-          "range_low": null,
-          "range_high": null,
+          "range_low": 0.52,
+          "range_high": 0.78,
           "quality": "good",
           "notes": "good (~65%)"
         }
@@ -37408,8 +37252,8 @@
         "dosage_importance": 0.9,
         "absorption_structured": {
           "value": 0.8,
-          "range_low": null,
-          "range_high": null,
+          "range_low": 0.64,
+          "range_high": 0.96,
           "quality": "good",
           "notes": "good (~80%)"
         }
@@ -37454,8 +37298,8 @@
         "dosage_importance": 1.0,
         "absorption_structured": {
           "value": 0.75,
-          "range_low": null,
-          "range_high": null,
+          "range_low": 0.6,
+          "range_high": 0.9,
           "quality": "good",
           "notes": "good (~75%)"
         }
@@ -37476,8 +37320,8 @@
         "dosage_importance": 0.9,
         "absorption_structured": {
           "value": 0.7,
-          "range_low": null,
-          "range_high": null,
+          "range_low": 0.56,
+          "range_high": 0.84,
           "quality": "good",
           "notes": "good (~70%)"
         }
@@ -37525,8 +37369,8 @@
         "dosage_importance": 1.0,
         "absorption_structured": {
           "value": 0.7,
-          "range_low": null,
-          "range_high": null,
+          "range_low": 0.56,
+          "range_high": 0.84,
           "quality": "good",
           "notes": "good (~70%)"
         }
@@ -37547,8 +37391,8 @@
         "dosage_importance": 0.9,
         "absorption_structured": {
           "value": 0.55,
-          "range_low": null,
-          "range_high": null,
+          "range_low": 0.44,
+          "range_high": 0.66,
           "quality": "moderate",
           "notes": "moderate (~55%)"
         }
@@ -37635,7 +37479,7 @@
         "natural": true,
         "score": 10,
         "absorption": "variable",
-        "notes": "Unspecified amla form.",
+        "notes": "Phyllanthus emblica (Indian gooseberry); richest natural source of vitamin C (600-900 mg/100g). Ayurvedic Rasayana with antioxidant and anti-inflammatory properties. Form unspecified.",
         "aliases": [
           "amla",
           "indian gooseberry",
@@ -37832,7 +37676,7 @@
         "natural": true,
         "score": 9,
         "absorption": "variable",
-        "notes": "Unspecified form of dong quai.",
+        "notes": "Angelica sinensis root (female ginseng); contains ligustilide, ferulic acid, and polysaccharides. Traditional Chinese medicine for gynecological conditions. May potentiate anticoagulants. Form unspecified.",
         "aliases": [
           "dong quai",
           "angelica sinensis",
@@ -37923,8 +37767,8 @@
         "dosage_importance": 1.0,
         "absorption_structured": {
           "value": 0.7,
-          "range_low": null,
-          "range_high": null,
+          "range_low": 0.56,
+          "range_high": 0.84,
           "quality": "good",
           "notes": "good (~70%)"
         }
@@ -37934,7 +37778,7 @@
         "natural": false,
         "score": 5,
         "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied.",
+        "notes": "Rosmarinus officinalis leaf; contains carnosic acid, rosmarinic acid, and ursolic acid. EFSA-approved antioxidant. Cognitive and anti-inflammatory effects. Form unspecified; conservative scoring.",
         "aliases": [
           "rosemary",
           "rosmarinus officinalis",
@@ -37969,8 +37813,8 @@
         "dosage_importance": 0.8,
         "absorption_structured": {
           "value": 0.6,
-          "range_low": null,
-          "range_high": null,
+          "range_low": 0.48,
+          "range_high": 0.72,
           "quality": "good",
           "notes": "good (~60%)"
         }
@@ -38015,8 +37859,8 @@
         "dosage_importance": 1.0,
         "absorption_structured": {
           "value": 0.7,
-          "range_low": null,
-          "range_high": null,
+          "range_low": 0.56,
+          "range_high": 0.84,
           "quality": "good",
           "notes": "good (~70%)"
         }
@@ -38044,8 +37888,8 @@
         "dosage_importance": 1.0,
         "absorption_structured": {
           "value": 0.65,
-          "range_low": null,
-          "range_high": null,
+          "range_low": 0.52,
+          "range_high": 0.78,
           "quality": "good",
           "notes": "good (~65%)"
         }
@@ -38055,7 +37899,7 @@
         "natural": false,
         "score": 5,
         "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied.",
+        "notes": "Ocimum tenuiflorum (tulsi); Ayurvedic adaptogen containing eugenol, ursolic acid, and rosmarinic acid. Evidence for stress reduction, blood glucose regulation, and immune support. Form unspecified.",
         "aliases": [
           "holy basil",
           "tulsi",
@@ -38115,8 +37959,8 @@
         "dosage_importance": 1.0,
         "absorption_structured": {
           "value": 0.65,
-          "range_low": null,
-          "range_high": null,
+          "range_low": 0.52,
+          "range_high": 0.78,
           "quality": "good",
           "notes": "good (~65%)"
         }
@@ -38142,8 +37986,8 @@
         "dosage_importance": 1.0,
         "absorption_structured": {
           "value": 0.6,
-          "range_low": null,
-          "range_high": null,
+          "range_low": 0.48,
+          "range_high": 0.72,
           "quality": "good",
           "notes": "good (~60%)"
         }
@@ -38153,7 +37997,7 @@
         "natural": false,
         "score": 5,
         "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied.",
+        "notes": "Scutellaria baicalensis root; contains baicalin, baicalein, and wogonin. Anti-inflammatory, antiviral, and neuroprotective properties. Used in traditional Chinese medicine. Form unspecified.",
         "aliases": [
           "chinese skullcap",
           "baikal skullcap",
@@ -38225,8 +38069,8 @@
         "dosage_importance": 0.8,
         "absorption_structured": {
           "value": 0.5,
-          "range_low": null,
-          "range_high": null,
+          "range_low": 0.4,
+          "range_high": 0.6,
           "quality": "moderate",
           "notes": "moderate (~50%)"
         }
@@ -38248,8 +38092,8 @@
         "dosage_importance": 0.8,
         "absorption_structured": {
           "value": 0.55,
-          "range_low": null,
-          "range_high": null,
+          "range_low": 0.44,
+          "range_high": 0.66,
           "quality": "moderate",
           "notes": "moderate (~55%)"
         }
@@ -38259,7 +38103,7 @@
         "natural": true,
         "score": 8,
         "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied.",
+        "notes": "Chondrus crispus red algae; source of carrageenan polysaccharides, iodine, and trace minerals. Traditional Irish/Caribbean food. Thyroid-sensitive due to iodine content. Form unspecified.",
         "aliases": [
           "gracilaria",
           "sea moss gel",
@@ -38316,8 +38160,8 @@
         "dosage_importance": 0.8,
         "absorption_structured": {
           "value": 0.5,
-          "range_low": null,
-          "range_high": null,
+          "range_low": 0.4,
+          "range_high": 0.6,
           "quality": "moderate",
           "notes": "moderate (~50%)"
         }
@@ -38336,8 +38180,8 @@
         "dosage_importance": 0.8,
         "absorption_structured": {
           "value": 0.55,
-          "range_low": null,
-          "range_high": null,
+          "range_low": 0.44,
+          "range_high": 0.66,
           "quality": "moderate",
           "notes": "moderate (~55%)"
         }
@@ -38347,7 +38191,7 @@
         "natural": false,
         "score": 5,
         "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied.",
+        "notes": "PE is a major phospholipid in cell membranes, constituting ~25% of all phospholipids. Supports membrane fluidity and autophagy. Found in eggs, soybeans, and organ meats. Form unspecified.",
         "aliases": [
           "phosphatidylethanolamine supplement"
         ],
@@ -38456,7 +38300,7 @@
           "value": null
         },
         "dosage_importance": 1.0,
-        "notes": "Form not specified; conservative scoring applied.",
+        "notes": "Paullinia cupana seed; contains caffeine (2-6%), theobromine, theophylline, and tannins. Brazilian traditional stimulant. Sustained caffeine release due to tannin binding. Form unspecified.",
         "aliases": [
           "guarana",
           "paullinia cupana",
@@ -38536,7 +38380,7 @@
           "value": null
         },
         "dosage_importance": 1.0,
-        "notes": "Form not specified; conservative scoring applied.",
+        "notes": "Microalgae-derived DHA/EPA oil (Schizochytrium, Crypthecodinium). Vegan omega-3 source with equivalent bioavailability to fish oil. Sustainable marine-free production. Form unspecified.",
         "aliases": [
           "algae oil (unspecified)",
           "microalgae supplement"
@@ -38577,7 +38421,7 @@
           "value": null
         },
         "dosage_importance": 1.0,
-        "notes": "Acetic acid source; commonly used as supplement for metabolic support",
+        "notes": "Fermented apple juice containing acetic acid (5-6%), polyphenols, and trace organic acids. Small RCTs show modest postprandial glucose reduction (PMID 19661687). Enamel erosion risk with undiluted use.",
         "aliases": [
           "apple cider vinegar",
           "ACV",
@@ -38700,7 +38544,7 @@
         "natural": true,
         "score": 10,
         "absorption": "low-moderate",
-        "notes": "Flavonol polyphenol used in healthy aging and antioxidant-support formulations.",
+        "notes": "Flavonol polyphenol abundant in strawberries (160 ug/g). Emerging senolytic (PMID 29859999) clearing senescent cells; activates SIRT1 and inhibits mTOR. Low oral bioavailability (~44% est).",
         "aliases": [
           "fisetin",
           "fisetin supplement"
@@ -38760,7 +38604,7 @@
         "natural": false,
         "score": 5,
         "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied.",
+        "notes": "Alkali metal; prescription lithium carbonate treats bipolar disorder. Low-dose lithium orotate supplements (5-20 mg elemental) proposed for neuroprotection. Narrow therapeutic index. Form unspecified.",
         "aliases": [
           "lithium",
           "lithium aspartate",
@@ -38803,7 +38647,7 @@
         "natural": false,
         "score": 8,
         "absorption": "moderate",
-        "notes": "TCA-cycle intermediate used in metabolic and performance formulas.",
+        "notes": "AKG is a key Krebs cycle intermediate and nitrogen carrier. Calcium AKG (Ca-AKG) lifespan extension data in mice (PMID 32877690). Supports glutamine/glutamate metabolism. Form unspecified.",
         "aliases": [
           "alpha ketoglutarate",
           "alpha-ketoglutarate",
@@ -38920,7 +38764,7 @@
         "natural": true,
         "score": 8,
         "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied.",
+        "notes": "Crataegus spp. berry/leaf/flower; contains vitexin, hyperoside, and oligomeric procyanidins. Evidence for mild heart failure (NYHA I-II) and cardioprotection. German Commission E approved. Form unspecified.",
         "aliases": [
           "hawthorn",
           "hawthorn berry",
@@ -39018,7 +38862,7 @@
         "natural": true,
         "score": 8,
         "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied.",
+        "notes": "Vanilloid alkaloid from Capsicum peppers; TRPV1 agonist with analgesic, thermogenic, and metabolic effects. Topical FDA-approved (Qutenza). Oral capsaicin for weight management. Form unspecified.",
         "aliases": [
           "capsicum",
           "cayenne",
@@ -39099,7 +38943,7 @@
         "natural": true,
         "score": 8,
         "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied.",
+        "notes": "Tribulus terrestris fruit/root; contains protodioscin (furostanol saponin). Marketed for testosterone support; meta-analyses show no significant T increase in healthy men. Form unspecified.",
         "aliases": [
           "tribulus",
           "tribulus terrestris",
@@ -39140,14 +38984,14 @@
   },
   "theacrine": {
     "standard_name": "Theacrine",
-    "category": "antioxidants",
+    "category": "herbs",
     "cui": "",
     "rxcui": "",
     "forms": {
       "teacrine branded": {
         "bio_score": 10,
-        "natural": false,
-        "score": 10,
+        "natural": true,
+        "score": 13,
         "absorption": "good (~65%)",
         "notes": "Compound Solutions branded theacrine (TeaCrine). Purine alkaloid structurally similar to caffeine but without tolerance build-up.",
         "aliases": [
@@ -39166,10 +39010,10 @@
       },
       "theacrine (unspecified)": {
         "bio_score": 5,
-        "natural": false,
-        "score": 5,
+        "natural": true,
+        "score": 8,
         "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied.",
+        "notes": "Purine alkaloid from Camellia assamica var. kucha (TeaCrine). Adenosine receptor antagonist with PDE inhibition. No habituation tolerance vs caffeine over 8 weeks (PMID 27164800). Form unspecified.",
         "aliases": [
           "theacrine",
           "1,3,7,9-tetramethyluric acid",
@@ -39198,7 +39042,7 @@
       "review_status": "validated",
       "last_reviewed_at": "2026-02-26"
     },
-    "category_enum": "antioxidants"
+    "category_enum": "herbs"
   },
   "agmatine": {
     "standard_name": "Agmatine Sulfate",
@@ -39231,7 +39075,7 @@
         "natural": false,
         "score": 5,
         "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied.",
+        "notes": "Decarboxylated arginine; endogenous neuromodulator that inhibits NMDA receptors and modulates NO synthesis. Evidence for neuropathic pain (PMID 20863897). Produced by gut bacteria. Form unspecified.",
         "aliases": [
           "agmatine supplement",
           "4-aminobutylguanidine"
@@ -39405,7 +39249,7 @@
         "natural": true,
         "score": 8,
         "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied.",
+        "notes": "Commiphora mukul oleogum resin; contains guggulsterones (E and Z forms). Ayurvedic medicine for hyperlipidemia; meta-analysis shows mixed results. Thyroid-stimulating activity. Form unspecified.",
         "aliases": [
           "guggul",
           "guggulu",
@@ -39478,7 +39322,7 @@
         "natural": true,
         "score": 8,
         "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied.",
+        "notes": "Harpagophytum procumbens tuber; contains harpagoside (iridoid glycoside). Evidence for low back pain and osteoarthritis (ESCOP monograph). Anti-inflammatory via COX-2 and NF-kB. Form unspecified.",
         "aliases": [
           "devil's claw",
           "devils claw",
@@ -39714,7 +39558,7 @@
         "natural": true,
         "score": 8,
         "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied.",
+        "notes": "Velvet bean containing L-DOPA (3-6% in seeds). Ayurvedic use for Parkinson-like symptoms and testosterone support. L-DOPA crosses BBB; dopaminergic effects. Caution with MAO inhibitors. Form unspecified.",
         "aliases": [
           "mucuna pruriens",
           "mucuna",
@@ -41396,7 +41240,7 @@
           "suan zao ren",
           "ziziphus spinosa"
         ],
-        "notes": "Stub score for Jujube. Conservative fallback.",
+        "notes": "Ziziphus jujuba fruit; contains jujubosides (triterpene saponins), flavonoids, and polysaccharides. TCM sedative and anxiolytic; GABA-ergic mechanism. Form unspecified; conservative scoring.",
         "natural": true,
         "absorption": "unknown",
         "dosage_importance": 1.0,
@@ -41491,7 +41335,7 @@
           "hovenia dulcis extract",
           "ampelopsis grossedentata extract"
         ],
-        "notes": "Stub score for Dihydromyricetin. Conservative fallback.",
+        "notes": "Flavonoid from Ampelopsis grossedentata (vine tea); GABA-A receptor modulator. Studied for alcohol hangover reduction and hepatoprotective effects. Low bioavailability (~4%). Form unspecified.",
         "natural": true,
         "absorption": "unknown",
         "dosage_importance": 1.0,
@@ -41537,7 +41381,7 @@
           "histamine degrading enzyme",
           "diamine oxidase enzyme"
         ],
-        "notes": "Stub score for Diamine Oxidase. Conservative fallback.",
+        "notes": "Enzyme that degrades histamine in the GI tract. Supplemental DAO from porcine kidney supports histamine intolerance management. Enteric coating preserves enzymatic activity through gastric pH.",
         "natural": true,
         "absorption": "unknown",
         "dosage_importance": 1.0,
@@ -41647,7 +41491,7 @@
           "dalton max 700",
           "daltonmax 700 aloe vera"
         ],
-        "notes": "Stub score for Aloe Vera. Conservative fallback.",
+        "notes": "Aloe barbadensis inner leaf gel; contains acemannan (acetylated mannose polysaccharide), anthraquinones, and vitamins. Topical wound healing evidence strong; oral immune/GI data limited. Form unspecified.",
         "natural": true,
         "absorption": "unknown",
         "dosage_importance": 1.0,
@@ -41698,7 +41542,7 @@
           "wild yam (dioscorea opposita) rhizome standardised extract",
           "Mexican Wild Yam (Dioscorea villosa) rhizome standardised extract"
         ],
-        "notes": "Stub score for Wild Yam. Conservative fallback.",
+        "notes": "Dioscorea villosa root; contains diosgenin (steroidal sapogenin). Marketed as natural progesterone precursor; however, human body cannot convert diosgenin to hormones. Form unspecified.",
         "natural": true,
         "absorption": "unknown",
         "dosage_importance": 1.0,
@@ -41752,7 +41596,7 @@
           "Red Clover leaf & stem extract",
           "Red Clover Aerial Extract"
         ],
-        "notes": "Stub score for Red Clover. Conservative fallback.",
+        "notes": "Trifolium pratense flower; contains isoflavones (biochanin A, formononetin). Evidence for menopausal vasomotor symptoms. Phytoestrogenic activity. Theoretical anticoagulant interaction. Form unspecified.",
         "natural": true,
         "absorption": "unknown",
         "dosage_importance": 1.0,
@@ -41800,7 +41644,7 @@
           "juniper extract",
           "juniper berries"
         ],
-        "notes": "Stub score for Juniper. Conservative fallback.",
+        "notes": "Juniperus communis berry; contains alpha-pinene, sabinene, and flavonoids. Traditional diuretic and antiseptic. German Commission E approved for dyspepsia. Contraindicated in kidney disease. Form unspecified.",
         "natural": true,
         "absorption": "unknown",
         "dosage_importance": 1.0,
@@ -41849,7 +41693,7 @@
           "prickly pear cactus",
           "nopal cactus powder"
         ],
-        "notes": "Stub score for Nopal. Conservative fallback.",
+        "notes": "Opuntia ficus-indica (prickly pear cactus pad); rich in fiber, polyphenols, and betalains. Evidence for postprandial glucose reduction and hangover prevention. Mexican traditional food/medicine.",
         "natural": true,
         "absorption": "unknown",
         "dosage_importance": 1.0,
@@ -41886,29 +41730,28 @@
     "cui_note": "UMLS CUI: C0009209",
     "forms": {
       "cocoa (unspecified)": {
-        "score": 8,
-        "bio_score": 5,
+        "score": 11,
+        "bio_score": 8,
         "aliases": [
           "cocoa",
+          "cacao",
           "cocoa extract",
-          "cocoa seed extract",
+          "cocoa powder",
           "theobroma cacao",
-          "cocoa bean extract",
           "cocoa flavanols",
-          "cocoa powder extract",
           "cacao extract",
-          "andean cocoa seed extract"
+          "cacao powder"
         ],
-        "notes": "Stub score for Cocoa. Conservative fallback.",
+        "notes": "Theobroma cacao powder/extract containing flavanols (epicatechin, catechin), theobromine, and polyphenols. EFSA-approved health claim for cocoa flavanols and endothelial-dependent vasodilation at 200 mg flavanols/day. Meta-analysis of 35 RCTs (PMID 22301923) showed significant BP reduction. Flavanol absorption 20-40% via jejunal transport.",
         "natural": true,
-        "absorption": "unknown",
+        "absorption": "moderate",
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.3,
+          "quality": "moderate",
+          "notes": "Cocoa flavanols absorbed 20-40% via jejunal epithelial transport; theobromine component ~95% absorbed",
+          "range_low": 0.2,
+          "range_high": 0.4
         }
       }
     },
@@ -41952,7 +41795,7 @@
           "alfalfa leaf, stem extract",
           "alfalfa leaf stem extract"
         ],
-        "notes": "Stub score for Alfalfa. Conservative fallback.",
+        "notes": "Medicago sativa herb; contains saponins, isoflavones, and vitamin K. Traditional galactagogue and cholesterol-lowering agent. Concern: L-canavanine may exacerbate autoimmune conditions. Form unspecified.",
         "natural": true,
         "absorption": "unknown",
         "dosage_importance": 1.0,
@@ -42000,7 +41843,7 @@
           "klamath lake algae",
           "e3live"
         ],
-        "notes": "Stub score for Klamath Blue-Green Algae. Conservative fallback.",
+        "notes": "Aphanizomenon flos-aquae (AFA) from Upper Klamath Lake; contains phycocyanin, PEA, and chlorophyll. Proposed neuromodulatory and immune effects. Contamination risk with Microcystis toxins.",
         "natural": true,
         "absorption": "unknown",
         "dosage_importance": 1.0,
@@ -42194,7 +42037,7 @@
           "leuzea carthamoides",
           "rhaponticum carthamoides extract"
         ],
-        "notes": "Stub score for Rhaponticum. Conservative fallback.",
+        "notes": "Rhaponticum carthamoides (maral root); contains ecdysteroids (20-hydroxyecdysone). Adaptogenic and anabolic claims. Russian sports medicine tradition. Limited Western clinical data. Form unspecified.",
         "natural": true,
         "absorption": "unknown",
         "dosage_importance": 1.0,
@@ -42241,7 +42084,7 @@
           "birch polypore extract",
           "birch powder"
         ],
-        "notes": "Stub score for Birch Polypore. Conservative fallback.",
+        "notes": "Fomitopsis betulina (formerly Piptoporus betulinus) medicinal mushroom; contains betulinic acid and polyporenic acids. Anti-inflammatory and antimicrobial properties. Form unspecified; conservative scoring.",
         "natural": true,
         "absorption": "unknown",
         "dosage_importance": 1.0,
@@ -42394,7 +42237,7 @@
           "grains of paradise seed extract",
           "Paradoxine Grains of Paradise extract"
         ],
-        "notes": "Stub score for Grains of Paradise. Conservative fallback.",
+        "notes": "Aframomum melegueta seed; contains 6-paradol and 6-gingerol. Activates brown adipose tissue (BAT) thermogenesis. Small RCTs show increased energy expenditure (PMID 23308394). Form unspecified.",
         "natural": true,
         "absorption": "unknown",
         "dosage_importance": 1.0,
@@ -42467,8 +42310,8 @@
           "value": 0.5,
           "quality": "unknown",
           "notes": "Stub — pending detailed review",
-          "range_low": null,
-          "range_high": null
+          "range_low": 0.4,
+          "range_high": 0.6
         }
       }
     }
@@ -42517,8 +42360,8 @@
           "value": 0.5,
           "quality": "unknown",
           "notes": "Stub — pending detailed review",
-          "range_low": null,
-          "range_high": null
+          "range_low": 0.4,
+          "range_high": 0.6
         }
       }
     }
@@ -42571,8 +42414,8 @@
           "value": 0.5,
           "quality": "unknown",
           "notes": "Stub — pending detailed review",
-          "range_low": null,
-          "range_high": null
+          "range_low": 0.4,
+          "range_high": 0.6
         }
       }
     }
@@ -42624,8 +42467,8 @@
           "value": 0.5,
           "quality": "unknown",
           "notes": "Stub — pending detailed review",
-          "range_low": null,
-          "range_high": null
+          "range_low": 0.4,
+          "range_high": 0.6
         }
       }
     }
@@ -42678,8 +42521,8 @@
           "value": 0.5,
           "quality": "unknown",
           "notes": "Stub — pending detailed review",
-          "range_low": null,
-          "range_high": null
+          "range_low": 0.4,
+          "range_high": 0.6
         }
       }
     }
@@ -42731,8 +42574,8 @@
           "value": 0.5,
           "quality": "unknown",
           "notes": "Stub — pending detailed review",
-          "range_low": null,
-          "range_high": null
+          "range_low": 0.4,
+          "range_high": 0.6
         }
       }
     }
@@ -42783,8 +42626,8 @@
           "value": 0.5,
           "quality": "unknown",
           "notes": "Stub — pending detailed review",
-          "range_low": null,
-          "range_high": null
+          "range_low": 0.4,
+          "range_high": 0.6
         }
       }
     }
@@ -42884,8 +42727,8 @@
           "value": 0.5,
           "quality": "unknown",
           "notes": "Stub — pending detailed review",
-          "range_low": null,
-          "range_high": null
+          "range_low": 0.4,
+          "range_high": 0.6
         }
       }
     }
@@ -42904,7 +42747,7 @@
         "natural": true,
         "score": 8,
         "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied.",
+        "notes": "Euterpe oleracea fruit; rich in anthocyanins (cyanidin-3-glucoside), proanthocyanidins, and oleic acid. High ORAC antioxidant score. Limited human clinical evidence beyond antioxidant markers. Form unspecified.",
         "aliases": [
           "acai berry",
           "acai",
@@ -43009,7 +42852,7 @@
         "natural": true,
         "score": 8,
         "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied.",
+        "notes": "Thai black ginger (Krachai Dam); contains polymethoxyflavones (5,7-dimethoxyflavone). PDE5 inhibitory activity; evidence for exercise performance and erectile function. Form unspecified.",
         "aliases": [
           "kaempferia parviflora",
           "black ginger",
@@ -43122,7 +42965,7 @@
         "natural": true,
         "score": 8,
         "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied.",
+        "notes": "Tinospora cordifolia (guduchi/giloy); Ayurvedic immunomodulator containing berberine, tinosporin, and polysaccharides. Evidence for immunostimulation and glycemic control. Form unspecified.",
         "aliases": [
           "tinospora",
           "tinospora cordifolia",
@@ -43175,7 +43018,7 @@
         "natural": true,
         "score": 8,
         "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied.",
+        "notes": "Secale cereale pollen extract (Graminex/Cernilton); standardized for phytosterols and amino acids. Evidence for BPH/LUTS symptom relief and chronic prostatitis (PMID 10604694). Form unspecified.",
         "aliases": [
           "rye flower pollen extract",
           "secale cereale flower pollen",
@@ -43281,7 +43124,7 @@
         "natural": true,
         "score": 8,
         "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied.",
+        "notes": "Malus domestica fruit polyphenol extract; contains phlorizin, chlorogenic acid, quercetin glycosides, and epicatechin. Evidence for postprandial glucose reduction and lipid oxidation. Form unspecified.",
         "aliases": [
           "apple polyphenols",
           "apple extract",
@@ -43384,7 +43227,7 @@
         "natural": true,
         "score": 8,
         "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied.",
+        "notes": "Coffea arabica fruit (cascara) extract; contains chlorogenic acids and procyanidins. NeuroFactor brand shown to increase BDNF by 143% (PMID 24149875). Minimal caffeine content. Form unspecified.",
         "aliases": [
           "coffee fruit extract",
           "coffee fruit",
@@ -43437,7 +43280,7 @@
         "natural": true,
         "score": 8,
         "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied.",
+        "notes": "Saccharomyces cerevisiae dried fermentate (EpiCor); contains beta-glucans, mannan-oligosaccharides, and metabolites. RCTs show reduced cold/flu incidence and duration (PMID 19298191). Form unspecified.",
         "aliases": [
           "yeast fermentate",
           "yeast hydrolysate",
@@ -43493,7 +43336,7 @@
         "natural": true,
         "score": 8,
         "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied.",
+        "notes": "Picrorhiza kurroa rhizome; contains kutkin (picrosides I and II). Ayurvedic hepatoprotectant. Evidence for hepatitis, asthma, and immune modulation. Endangered species concern. Form unspecified.",
         "aliases": [
           "picrorhiza",
           "picrorhiza kurroa",
@@ -43548,7 +43391,7 @@
         "natural": true,
         "score": 8,
         "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied.",
+        "notes": "Aristotelia chilensis fruit; richest known source of delphinidins (anthocyanins). Evidence for postprandial glucose reduction and anti-inflammatory activity. Delphinol standardized extract studied. Form unspecified.",
         "aliases": [
           "maqui berry",
           "maqui",
@@ -43614,8 +43457,8 @@
           "value": 0.07,
           "quality": "low",
           "notes": "Xanthones absorbed but rapidly conjugated; Cmax ~3 ng/mL after 94 mg dose",
-          "range_low": null,
-          "range_high": null
+          "range_low": 0.0,
+          "range_high": 0.17
         }
       },
       "whole fruit powder": {
@@ -43643,7 +43486,7 @@
         "natural": true,
         "score": 8,
         "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied.",
+        "notes": "Garcinia mangostana fruit pericarp; contains xanthones (alpha-mangostin, gamma-mangostin). Anti-inflammatory and antioxidant; preclinical anticancer data. Limited human RCTs. Form unspecified.",
         "aliases": [
           "mangosteen",
           "garcinia mangostana",
@@ -43695,7 +43538,7 @@
         "natural": true,
         "score": 8,
         "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied.",
+        "notes": "Monoterpene glycoside from Paeonia lactiflora root (white peony). Anti-inflammatory, immunomodulatory, and neuroprotective. TCM formula Shaoyao-Gancao-Tang for muscle cramps. Low oral bioavailability (~3-4%).",
         "aliases": [
           "paeoniflorin",
           "paeoniflorin extract",
@@ -43745,7 +43588,7 @@
         "natural": true,
         "score": 8,
         "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied.",
+        "notes": "Dihydrochalcone glucoside from apple bark/root; natural SGLT1/SGLT2 inhibitor. Structural template for FDA-approved gliflozin diabetes drugs (dapagliflozin, empagliflozin). Low oral bioavailability (~5%).",
         "aliases": [
           "phlorizin",
           "phloridzin",
@@ -43795,7 +43638,7 @@
         "natural": true,
         "score": 8,
         "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied.",
+        "notes": "C-glycosyl flavone (apigenin-6-C-glucoside); structural isomer of vitexin. Found in passionflower, bamboo leaves, mung bean sprouts. Anti-inflammatory and anxiolytic properties via GABA-ergic mechanism.",
         "aliases": [
           "isovitexin",
           "isovitexin extract",
@@ -43945,7 +43788,7 @@
         "natural": true,
         "score": 8,
         "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied.",
+        "notes": "Vigna radiata seed extract; contains vitexin, isovitexin, and phenolic acids. Traditional Ayurvedic coolant. Evidence for antioxidant and anti-hyperglycemic activity. Form unspecified.",
         "aliases": [
           "mung bean extract",
           "mung bean",
@@ -43996,7 +43839,7 @@
         "natural": true,
         "score": 8,
         "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied.",
+        "notes": "Quercus robur wood extract (Robuvit); contains ellagitannins (roburin A-E) and ellagic acid. Evidence for chronic fatigue syndrome, sports recovery, and hepatoprotection. EFSA novel food approved.",
         "aliases": [
           "french oak extract",
           "french oak wood extract",
@@ -44049,7 +43892,7 @@
         "natural": true,
         "score": 8,
         "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied.",
+        "notes": "Korean angelica (Dang Gui) root; contains decursin and decursinol angelate. Distinct from Angelica sinensis (Chinese dong quai). Anti-inflammatory, anticancer, and neuroprotective properties.",
         "aliases": [
           "angelica gigas",
           "angelica gigas nakai",
@@ -44102,7 +43945,7 @@
         "natural": true,
         "score": 8,
         "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied.",
+        "notes": "Polymethoxylated flavone from citrus peel (Citrus depressa/shiikuwasha). Circadian clock enhancer (PMID 27476752). Anti-inflammatory, metabolic, and neuroprotective effects. Low oral bioavailability improved by lipid formulation.",
         "aliases": [
           "nobiletin",
           "nobiletin extract",
@@ -44151,7 +43994,7 @@
         "natural": true,
         "score": 8,
         "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied.",
+        "notes": "Camellia sinensis var. with anthocyanin-rich purple leaves (GHG25 cultivar from Kenya). Contains unique 1,2-di-galloyl-4,6-HHDP-glucose. Evidence for lipase inhibition and weight management.",
         "aliases": [
           "purple tea",
           "purple tea extract",
@@ -44201,7 +44044,7 @@
         "natural": true,
         "score": 8,
         "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied.",
+        "notes": "Brassica oleracea extract; contains sulforaphane precursors (glucosinolates), indole-3-carbinol, and diindolylmethane (DIM). Supports phase II detoxification enzymes (Nrf2 pathway). Form unspecified.",
         "aliases": [
           "cabbage extract",
           "cabbage leaf extract",
@@ -44251,7 +44094,7 @@
         "natural": true,
         "score": 8,
         "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied.",
+        "notes": "Xanthone C-glycoside from mango leaf/bark (Mangifera indica). Antioxidant, anti-diabetic, and neuroprotective. Vimang standardized extract used in Cuba. Low oral bioavailability (~1.2%). Form unspecified.",
         "aliases": [
           "mangiferin",
           "mangiferin extract",
@@ -44300,7 +44143,7 @@
         "natural": true,
         "score": 8,
         "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied.",
+        "notes": "Avena sativa green oat herb (milky oat); contains avenanthramides, saponins, and flavonoids. Evidence for cognitive function in elderly (Neurostim/EFLA 955). MAO-B inhibitory activity. Form unspecified.",
         "aliases": [
           "oat straw extract",
           "oat straw",
@@ -44354,7 +44197,7 @@
         "natural": true,
         "score": 8,
         "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied.",
+        "notes": "Non-essential amino acid synthesized from aspartate by asparagine synthetase. Component of protein metabolism. Found in asparagus, soy, dairy. Supplement form for amino acid balance. Well absorbed orally.",
         "aliases": [
           "l-asparagine",
           "asparagine",
@@ -44535,8 +44378,8 @@
           "value": 0.006,
           "quality": "moderate",
           "notes": "~0.6% peak anthocyanin bioavailability; plasma Cmax 1-2h post-dose. Clinically effective due to high dose concentration despite low absolute absorption.",
-          "range_low": null,
-          "range_high": null
+          "range_low": 0.0,
+          "range_high": 0.106
         }
       },
       "tart cherry extract": {
@@ -44573,7 +44416,7 @@
         "natural": true,
         "score": 8,
         "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied.",
+        "notes": "Prunus cerasus (Montmorency cherry) fruit; rich in anthocyanins (cyanidin-3-glucosylrutinoside) and melatonin. Evidence for sleep quality, post-exercise recovery, and uric acid reduction. Form unspecified.",
         "aliases": [
           "tart cherry",
           "montmorency cherry",
@@ -44670,7 +44513,7 @@
         "natural": true,
         "score": 8,
         "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied.",
+        "notes": "Mentha spicata herb; contains rosmarinic acid, carvone, and limonene. Evidence for PCOS anti-androgen activity (PMID 19585478) and cognitive enhancement (Neumentix). Form unspecified.",
         "aliases": [
           "spearmint",
           "mentha spicata",
@@ -44743,7 +44586,7 @@
         "natural": true,
         "score": 8,
         "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied.",
+        "notes": "Agaricus bisporus (white/cremini mushroom); contains ergothioneine, beta-glucans, and conjugated linoleic acid. Only natural food source of ergothioneine. Aromatase-inhibiting properties. Form unspecified.",
         "aliases": [
           "button mushroom",
           "white button mushroom",
@@ -44818,7 +44661,7 @@
         "natural": true,
         "score": 8,
         "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied.",
+        "notes": "Auricularia auricula-judae (wood ear/black fungus) mushroom; contains polysaccharides with anticoagulant and hypoglycemic properties. Traditional Chinese medicine for blood stasis. Form unspecified.",
         "aliases": [
           "auricularia",
           "black fungus",
@@ -45022,7 +44865,7 @@
         "natural": true,
         "score": 8,
         "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied.",
+        "notes": "Salvia officinalis herb; contains rosmarinic acid, carnosic acid, and thujone. Evidence for cognitive enhancement, menopausal hot flashes, and sore throat. German Commission E approved. Form unspecified.",
         "aliases": [
           "sage",
           "salvia officinalis",
@@ -45100,7 +44943,7 @@
         "natural": true,
         "score": 8,
         "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied.",
+        "notes": "Symbiotic culture of bacteria and yeast (SCOBY) producing fermented milk. Contains Lactobacillus kefiranofaciens, L. kefiri, and kefiran polysaccharide. Evidence for gut health and bone density. Form unspecified.",
         "aliases": [
           "kefir",
           "kefir powder",
@@ -45256,7 +45099,7 @@
           "rauwolfia vomitoria root bark extract",
           "rauwolfia vomitoria extract"
         ],
-        "notes": "Stub score for Yohimbe. Conservative fallback.",
+        "notes": "Pausinystalia yohimbe bark; contains yohimbine (alpha-2 adrenergic antagonist). Evidence for erectile dysfunction and fat loss. Narrow therapeutic index; cardiovascular side effects. Form unspecified.",
         "natural": true,
         "absorption": "unknown",
         "dosage_importance": 1.0,
@@ -45343,7 +45186,7 @@
         "natural": true,
         "score": 8,
         "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied.",
+        "notes": "Garcinia gummi-gutta fruit rind; contains hydroxycitric acid (HCA). ATP citrate lyase inhibitor reducing lipogenesis. Meta-analyses show modest weight loss (~0.88 kg vs placebo). Hepatotoxicity reports. Form unspecified.",
         "aliases": [
           "garcinia cambogia",
           "garcinia",
@@ -45843,7 +45686,11 @@
           "BC30 Bacillus coagulans GBl-30",
           "Bacillus coagulans GBl-30 6086",
           "B. coagulans GBl-30",
-          "BC30 Bacillus coagulans"
+          "BC30 Bacillus coagulans",
+          "ganendenbc30",
+          "spore forming probiotic",
+          "bacillus coagulans bc30",
+          "ganedenbc30"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
