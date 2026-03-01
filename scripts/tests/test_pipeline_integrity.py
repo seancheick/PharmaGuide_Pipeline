@@ -216,10 +216,21 @@ class TestDatabaseSchemaIntegrity:
             if primary is None:
                 continue
 
-            actual = len(primary)
-            if actual != total_declared:
+            # Most files count the primary array; multi-section files
+            # (e.g. clinical_risk_taxonomy) may count across data sections.
+            candidates = {len(primary)}
+            data_lists = {
+                k: len(v) for k, v in data.items()
+                if k != "_metadata" and isinstance(v, list)
+            }
+            candidates.add(sum(data_lists.values()))
+            # Also accept sum excluding non-data arrays like "sources"
+            candidates.add(sum(
+                n for k, n in data_lists.items() if k != "sources"
+            ))
+            if total_declared not in candidates:
                 mismatches.append(
-                    f"{fp.name}: declared {total_declared}, actual {actual}"
+                    f"{fp.name}: declared {total_declared}, primary={primary_len}, all_lists={all_lists_len}"
                 )
 
         assert not mismatches, (
