@@ -75,7 +75,7 @@ class TestRealLabelCorpus:
         ("Saccharomyces boulardii CNCM I-745", "saccharomyces_boulardii", True),
 
         # Active compounds vs parent botanicals
-        ("Silymarin 80% (Milk Thistle Extract)", "silymarin", True),
+        ("Silymarin 80% (Milk Thistle Extract)", "milk_thistle", True),
         ("Milk Thistle Seed Extract", "milk_thistle", True),
         ("Boswellic Acids 65%", "boswellia", True),
         ("Boswellia Serrata Extract", "boswellia", True),
@@ -225,7 +225,7 @@ class TestCollisionAndSubstring:
         ("Vitamin K1", "vitamin_k1", "vitamin_k"),  # K1 > K
         ("Nicotinamide Riboside", "nicotinamide_riboside", "vitamin_b3_niacin"),  # NR > B3
         ("Lactobacillus acidophilus", "lactobacillus_acidophilus", "probiotics"),  # Specific > category
-        ("Silymarin extract", "silymarin", "milk_thistle"),  # Compound > botanical
+        ("Silymarin extract", "milk_thistle", "silymarin"),  # silymarin merged into milk_thistle
         ("5-HTP", "5_htp", "l_tryptophan"),  # Metabolite > precursor
     ]
 
@@ -323,7 +323,7 @@ class TestAliasResolution:
         ("meriva", "curcumin"),
         ("flaxseed oil", "flaxseed"),
         ("linseed oil", "flaxseed"),
-        ("silymarin", "silymarin"),
+        ("silymarin", "milk_thistle"),
         ("5-htp", "5_htp"),
         ("alcar", "acetyl_l_carnitine"),
         ("quercetin dihydrate", "quercetin"),

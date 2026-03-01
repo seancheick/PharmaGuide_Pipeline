@@ -7378,6 +7378,27 @@
           "quality": "unknown",
           "notes": "Data not available"
         }
+      },
+      "stilbenes (resveratrol-family)": {
+        "bio_score": 8,
+        "natural": true,
+        "score": 11,
+        "absorption": "variable (~50%)",
+        "notes": "Stilbenes include trans-resveratrol (SIRT1/AMPK, F ~20%), pterostilbene (CB2 agonist, F ~80% due to methoxy groups), and polydatin (resveratrol glucoside). When labeled as 'stilbenes' likely a mixture. Pterostilbene's superior metabolic stability drives class average above resveratrol alone (PMID 21116625, PMID 29322567).",
+        "aliases": [
+          "stilbenes",
+          "stilbene complex",
+          "grape stilbenes",
+          "polyphenolic stilbenes"
+        ],
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": 0.5,
+          "range_low": 0.2,
+          "range_high": 0.8,
+          "quality": "variable",
+          "notes": "Trans-resveratrol F ~20%, pterostilbene F ~80% (PMID 21116625); polydatin hydrolyzed in gut"
+        }
       }
     },
     "match_rules": {
@@ -15099,7 +15120,11 @@
           "milk thistle fruit, seed extract",
           "milk thistle seed 30:1 extract",
           "milk thistle 80% extract",
-          "european milk thistle extract"
+          "european milk thistle extract",
+          "silymarin",
+          "silymarin extract",
+          "silymarin 80%",
+          "silymarin standardized extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -15159,6 +15184,68 @@
           "quality": "unknown",
           "notes": "Data not available"
         }
+      },
+      "silybin (isolated)": {
+        "bio_score": 7,
+        "natural": true,
+        "score": 10,
+        "absorption": "very low (~1% free)",
+        "notes": "Silybin (silibinin) is the most abundant flavonolignan in silymarin (50-70%). Absolute oral F ~0.95% as free compound (PMID 14692709); GI absorption 20-50% but extensive glucuronidation (55%) and sulfation (28%) (PMID 1572758). Hepatoprotective: evidence for alcoholic liver disease, NAFLD, chemo-hepatotoxicity. Phytosome (IdB 1016) improves F 3.4x.",
+        "aliases": [
+          "silybin",
+          "silibinin",
+          "silybin a",
+          "silybin b",
+          "silybin a/b",
+          "silibinin a",
+          "silibinin b",
+          "total silybins",
+          "silybins"
+        ],
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": 0.0095,
+          "range_low": 0.005,
+          "range_high": 0.015,
+          "quality": "poor",
+          "notes": "Absolute oral F ~0.95%; GI absorption 20-50% but 83% conjugated (PMID 14692709, PMID 1572758)"
+        }
+      },
+      "silychristin (minor flavonolignan)": {
+        "bio_score": 5,
+        "natural": true,
+        "score": 8,
+        "absorption": "poor",
+        "notes": "Silychristin comprises ~20% of silymarin. Lowest systemic exposure of major silymarin flavonolignans (PMC3876803). Most potent MCT8 thyroid transporter inhibitor in silymarin complex (PMID 26910310). No standalone clinical data.",
+        "aliases": [
+          "silychristin"
+        ],
+        "dosage_importance": 0.5,
+        "absorption_structured": {
+          "value": null,
+          "range_low": null,
+          "range_high": null,
+          "quality": "poor",
+          "notes": "Lowest plasma exposure among silymarin flavonolignans (PMC3876803)"
+        }
+      },
+      "silydianin (minor flavonolignan)": {
+        "bio_score": 4,
+        "natural": true,
+        "score": 7,
+        "absorption": "very poor",
+        "notes": "Silydianin comprises ~10% of silymarin. Barely detectable in plasma at standard milk thistle doses (PMC3876803). No standalone clinical trials; minor constituent marker only.",
+        "aliases": [
+          "silydianin"
+        ],
+        "dosage_importance": 0.5,
+        "absorption_structured": {
+          "value": null,
+          "range_low": null,
+          "range_high": null,
+          "quality": "poor",
+          "notes": "Minimal systemic exposure; lowest AUC of all silymarin flavonolignans (PMC3876803)"
+        }
       }
     },
     "match_rules": {
@@ -15169,12 +15256,7 @@
       "confidence": "high"
     },
     "category_enum": "herbs",
-    "relationships": [
-      {
-        "type": "contains",
-        "target_id": "silymarin"
-      }
-    ],
+    "relationships": [],
     "data_quality": {
       "completeness": 1.0,
       "missing_fields": [],
@@ -24133,7 +24215,9 @@
           "Vegetable Oil Phytosterols",
           "Plant Phytosterols",
           "Phytosterol 90%",
-          "Plant Sterolins"
+          "Plant Sterolins",
+          "sterols",
+          "total sterols"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -24680,7 +24764,6 @@
           "salvia miltiorrhiza extract",
           "dan shen",
           "red sage root extract",
-          "tanshinone",
           "danshen root extract"
         ],
         "dosage_importance": 1.5,
@@ -24690,6 +24773,29 @@
           "range_high": 0.023,
           "quality": "low",
           "notes": "Oral bioavailability ~1.07% in dogs, ~2.3% in rats (PMC10538146, PMID 21569331)"
+        }
+      },
+      "tanshinones (danshen lipophilic fraction)": {
+        "bio_score": 6,
+        "natural": true,
+        "score": 9,
+        "absorption": "very low (<3.5%)",
+        "notes": "Lipophilic diterpenes (tanshinone I, IIA, cryptotanshinone) from Danshen (Salvia miltiorrhiza). Absolute oral F <3.5% (PMID 32629068); granular powder AUC 5-184x vs decoction (PMC5498502). Cardiovascular, antifibrotic, antimicrobial effects primarily with IV route. Lipid nanocapsules improve oral bioavailability.",
+        "aliases": [
+          "tanshinones",
+          "tanshinone",
+          "tanshinone iia",
+          "tanshinone i",
+          "cryptotanshinone",
+          "danshen tanshinones"
+        ],
+        "dosage_importance": 0.5,
+        "absorption_structured": {
+          "value": 0.035,
+          "range_low": 0.01,
+          "range_high": 0.05,
+          "quality": "poor",
+          "notes": "Tanshinone IIA absolute oral F <3.5% (PMID 32629068); poor solubility, limited permeability"
         }
       }
     },
@@ -24762,37 +24868,41 @@
     }
   },
   "schisandrin": {
-    "standard_name": "Schisandrin",
+    "standard_name": "Schisandrin (Schisandra chinensis)",
     "severity_level": "none",
     "category": "herbs",
-    "source": "botanical_extract",
-    "priority": "high",
-    "description": "Standardization marker for botanical extracts",
-    "dosage_importance": 0.1,
+    "description": "Dibenzocyclooctadiene lignan from Schisandra chinensis (Wu Wei Zi)",
+    "dosage_importance": 1.5,
     "forms": {
       "schisandrin (unspecified)": {
-        "bio_score": 5,
-        "natural": false,
-        "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
+        "bio_score": 8,
+        "natural": true,
+        "score": 11,
+        "absorption": "variable (~15-55%)",
+        "notes": "Signature lignan of Schisandra chinensis (Wu Wei Zi). Oral F ~15.6% for schisandrin A (PMID 29342955); schisandrin B F 19-55% sex-dependent with enterohepatic recirculation (PMID 28833320). Hepatoprotective via CYP modulation and antioxidant defense upregulation. TCM adaptogen with 2000-year use history (PMC11984061). Extract bioavailability exceeds isolated compound.",
         "aliases": [
           "schisandrin",
-          "schizandra berry extract",
-          "schisandra fruit, seed extract",
-          "schisandra fruit extract",
           "schisandra",
           "schisandra chinensis",
+          "schisandra chinensis extract",
+          "wu wei zi",
+          "five flavor berry",
+          "schizandra",
+          "schisandra extract",
           "schisandra berry",
-          "schisandrins"
+          "schisandrin a",
+          "schisandrin b",
+          "schisandrin c",
+          "gomisin",
+          "schisandra berry extract"
         ],
-        "dosage_importance": 1.0,
+        "dosage_importance": 1.5,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.156,
+          "range_low": 0.05,
+          "range_high": 0.55,
+          "quality": "variable",
+          "notes": "Schisandrin oral F ~15.6% in rats (PMID 29342955); schisandrin B F 19-55% sex-dependent (PMID 28833320)"
         }
       }
     },
@@ -24819,76 +24929,50 @@
     "standard_name": "Sesamin",
     "severity_level": "none",
     "category": "antioxidants",
-    "source": "botanical_extract",
-    "priority": "high",
-    "description": "Standardization marker for botanical extracts",
-    "dosage_importance": 0.1,
+    "description": "Furofuran lignan from sesame seeds; CYP inhibitor and cardiovascular support",
+    "dosage_importance": 1.5,
     "forms": {
       "sesamin (unspecified)": {
-        "bio_score": 5,
-        "natural": false,
-        "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
+        "bio_score": 8,
+        "natural": true,
+        "score": 11,
+        "absorption": "moderate (~35%)",
+        "notes": "Primary furofuran lignan of sesame (Sesamum indicum). Meta-analysis of 7 RCTs (n=212, 60-200 mg/day) found modest reductions in SBP, triglycerides, and body weight (PMC8931661). CYP1A2/2C9 inhibition elevates gamma-tocopherol; delta-5-desaturase inhibition shifts FA profile (PMID 26151734). SNEDDS formulations improve bioavailability 2-3x (PMID 32650503).",
         "aliases": [
           "sesamin",
+          "sesame lignan",
+          "sesame seed lignan",
+          "sesamin complex",
+          "sesamin from sesame",
+          "sesamine",
           "sesaplex",
           "sesaplex sesame seed extract"
         ],
-        "dosage_importance": 1.0,
+        "dosage_importance": 1.5,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.35,
+          "range_low": 0.2,
+          "range_high": 0.5,
+          "quality": "moderate",
+          "notes": "Rat ADME 37.5% urinary recovery (PMID 27991716); SNEDDS enhances F 2-3x (PMID 32650503)"
         }
-      }
-    },
-    "cui": null,
-    "rxcui": null,
-    "match_rules": {
-      "priority": 0,
-      "match_mode": "alias_and_fuzzy",
-      "exclusions": [],
-      "parent_id": null,
-      "confidence": "high"
-    },
-    "category_enum": "antioxidants",
-    "cui_note": "No UMLS entry for botanical/novel compound",
-    "rxcui_note": "No RxNorm concept for supplement ingredient",
-    "data_quality": {
-      "completeness": 1.0,
-      "missing_fields": [],
-      "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
-    }
-  },
-  "sesamolin": {
-    "standard_name": "Sesamolin",
-    "severity_level": "none",
-    "category": "antioxidants",
-    "source": "botanical_extract",
-    "priority": "high",
-    "description": "Standardization marker for botanical extracts",
-    "dosage_importance": 0.1,
-    "forms": {
-      "sesamolin (unspecified)": {
+      },
+      "sesamolin (minor lignan)": {
         "bio_score": 5,
-        "natural": false,
-        "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
+        "natural": true,
+        "score": 8,
+        "absorption": "poor (<25%)",
+        "notes": "Minor furofuran lignan in sesame (~25% of sesamin content). Oral bioavailability <25%; acid-labile under gastric conditions (PMC8510241). In vivo converted partially to sesamol (antioxidant). No standalone clinical trials; functions as minor constituent in sesame lignan complexes.",
         "aliases": [
           "sesamolin"
         ],
-        "dosage_importance": 1.0,
+        "dosage_importance": 0.5,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.12,
+          "range_low": 0.05,
+          "range_high": 0.2,
+          "quality": "poor",
+          "notes": "<25% absorbed; acid-labile in stomach; no urinary metabolites detected (PMC8510241)"
         }
       }
     },
@@ -24914,28 +24998,29 @@
   "sesquiterpenes": {
     "standard_name": "Sesquiterpenes",
     "severity_level": "none",
-    "category": "antioxidants",
-    "source": "botanical_extract",
-    "priority": "high",
-    "description": "Standardization marker for botanical extracts",
-    "dosage_importance": 0.1,
+    "category": "herbs",
+    "description": "Diverse C15 terpene class (beta-caryophyllene, bisabolol, etc.)",
+    "dosage_importance": 0.5,
     "forms": {
       "sesquiterpenes (unspecified)": {
-        "bio_score": 5,
-        "natural": false,
-        "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
+        "bio_score": 6,
+        "natural": true,
+        "score": 9,
+        "absorption": "poor (~10%)",
+        "notes": "Diverse C15 terpene class; on supplement labels most commonly refers to beta-caryophyllene-rich fractions (hops, copaiba) or bisabolol (chamomile). Beta-caryophyllene: CB2 agonist, oral F <10% unformulated, improved 2.2x with SEDDS (PMC9104399). Heterogeneous class — specific identity needed for precise scoring.",
         "aliases": [
-          "sesquiterpenes"
+          "sesquiterpenes",
+          "sesquiterpene",
+          "sesquiterpene fraction",
+          "sesquiterpene extract"
         ],
-        "dosage_importance": 1.0,
+        "dosage_importance": 0.5,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.1,
+          "range_low": 0.05,
+          "range_high": 0.25,
+          "quality": "poor",
+          "notes": "Beta-caryophyllene <10% oral F unformulated (PMC9104399); lipophilic, high first-pass"
         }
       }
     },
@@ -24948,7 +25033,7 @@
       "parent_id": null,
       "confidence": "high"
     },
-    "category_enum": "antioxidants",
+    "category_enum": "herbs",
     "cui_note": "No UMLS entry for botanical/novel compound",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "data_quality": {
@@ -24959,77 +25044,37 @@
     }
   },
   "shatavarin_iv": {
-    "standard_name": "Shatavarin Iv",
-    "severity_level": "none",
-    "category": "antioxidants",
-    "source": "botanical_extract",
-    "priority": "high",
-    "description": "Standardization marker for botanical extracts",
-    "dosage_importance": 0.1,
-    "forms": {
-      "shatavarin iv (unspecified)": {
-        "bio_score": 5,
-        "natural": false,
-        "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
-        "aliases": [
-          "shatavarin iv"
-        ],
-        "dosage_importance": 1.0,
-        "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
-        }
-      }
-    },
-    "cui": null,
-    "rxcui": null,
-    "match_rules": {
-      "priority": 0,
-      "match_mode": "alias_and_fuzzy",
-      "exclusions": [],
-      "parent_id": null,
-      "confidence": "high"
-    },
-    "category_enum": "antioxidants",
-    "cui_note": "No UMLS entry for botanical/novel compound",
-    "rxcui_note": "No RxNorm concept for supplement ingredient",
-    "data_quality": {
-      "completeness": 1.0,
-      "missing_fields": [],
-      "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
-    }
-  },
-  "shogaols": {
-    "standard_name": "Shogaols",
+    "standard_name": "Shatavarin IV (Shatavari)",
     "severity_level": "none",
     "category": "herbs",
-    "source": "botanical_extract",
-    "priority": "high",
-    "description": "Standardization marker for botanical extracts",
-    "dosage_importance": 0.1,
+    "description": "Steroidal saponin marker of Shatavari (Asparagus racemosus); Ayurvedic adaptogen",
+    "dosage_importance": 1.5,
     "forms": {
-      "shogaols (unspecified)": {
-        "bio_score": 5,
-        "natural": false,
-        "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
+      "shatavarin iv (unspecified)": {
+        "bio_score": 7,
+        "natural": true,
+        "score": 10,
+        "absorption": "unknown (saponin class)",
+        "notes": "Primary steroidal saponin marker of Shatavari (Asparagus racemosus), a central Ayurvedic rasayana adaptogen. No published human PK for shatavarin IV; steroidal saponins undergo gut bacterial deglycosylation to sarsasapogenin aglycone before absorption (PMID 40334116). Human RCTs for whole root as galactagogue and adaptogen. Conservative scoring applied.",
         "aliases": [
-          "shogaols"
+          "shatavarin iv",
+          "shatavari",
+          "asparagus racemosus",
+          "shatavari extract",
+          "asparagus racemosus extract",
+          "asparagus racemosus root extract",
+          "shatavari root extract",
+          "shatavari root",
+          "shatavarins",
+          "wild asparagus root"
         ],
-        "dosage_importance": 1.0,
+        "dosage_importance": 1.5,
         "absorption_structured": {
           "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
           "range_low": null,
-          "range_high": null
+          "range_high": null,
+          "quality": "unknown",
+          "notes": "No published human PK; steroidal saponin class analogy suggests moderate F after gut hydrolysis"
         }
       }
     },
@@ -25062,21 +25107,21 @@
     "dosage_importance": 0.1,
     "forms": {
       "silica (unspecified)": {
-        "bio_score": 6,
-        "natural": false,
-        "score": 6,
+        "bio_score": 7,
+        "natural": true,
+        "score": 10,
         "absorption": "unknown",
-        "notes": "Unspecified form; conservative scoring to avoid over-crediting.",
+        "notes": "Dietary silica (SiO2) as silicon source for collagen cross-linking, bone mineralization, and connective tissue integrity. Amorphous dietary silica: 27-44% oral bioavailability by urinary Si excretion (PMID 19356271, PMC2744664). Distinct from silicon dioxide used as excipient flow agent in capsules.",
         "aliases": [
           "Silica"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.35,
+          "range_low": 0.27,
+          "range_high": 0.44,
+          "quality": "moderate",
+          "notes": "Amorphous dietary silica: 27-44% urinary Si recovery (PMID 19356271, PMC2744664)"
         }
       }
     },
@@ -25099,316 +25144,35 @@
       "last_reviewed_at": "2026-02-28"
     }
   },
-  "silybin": {
-    "standard_name": "Silybin",
-    "severity_level": "none",
-    "category": "antioxidants",
-    "source": "botanical_extract",
-    "priority": "high",
-    "description": "Standardization marker for botanical extracts",
-    "dosage_importance": 0.1,
-    "forms": {
-      "silybin (unspecified)": {
-        "bio_score": 5,
-        "natural": false,
-        "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
-        "aliases": [
-          "silybin",
-          "silibinins",
-          "Total Silybins"
-        ],
-        "dosage_importance": 1.0,
-        "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
-        }
-      }
-    },
-    "cui": null,
-    "rxcui": null,
-    "match_rules": {
-      "priority": 0,
-      "match_mode": "alias_and_fuzzy",
-      "exclusions": [],
-      "parent_id": null,
-      "confidence": "high"
-    },
-    "category_enum": "antioxidants",
-    "cui_note": "No UMLS entry for botanical/novel compound",
-    "rxcui_note": "No RxNorm concept for supplement ingredient",
-    "data_quality": {
-      "completeness": 1.0,
-      "missing_fields": [],
-      "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
-    }
-  },
-  "silychristin": {
-    "standard_name": "Silychristin",
-    "severity_level": "none",
-    "category": "antioxidants",
-    "source": "botanical_extract",
-    "priority": "high",
-    "description": "Standardization marker for botanical extracts",
-    "dosage_importance": 0.1,
-    "forms": {
-      "silychristin (unspecified)": {
-        "bio_score": 5,
-        "natural": false,
-        "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
-        "aliases": [
-          "silychristin"
-        ],
-        "dosage_importance": 1.0,
-        "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
-        }
-      }
-    },
-    "cui": null,
-    "rxcui": null,
-    "match_rules": {
-      "priority": 0,
-      "match_mode": "alias_and_fuzzy",
-      "exclusions": [],
-      "parent_id": null,
-      "confidence": "high"
-    },
-    "category_enum": "antioxidants",
-    "cui_note": "No UMLS entry for botanical/novel compound",
-    "rxcui_note": "No RxNorm concept for supplement ingredient",
-    "data_quality": {
-      "completeness": 1.0,
-      "missing_fields": [],
-      "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
-    }
-  },
-  "silydianin": {
-    "standard_name": "Silydianin",
-    "severity_level": "none",
-    "category": "antioxidants",
-    "source": "botanical_extract",
-    "priority": "high",
-    "description": "Standardization marker for botanical extracts",
-    "dosage_importance": 0.1,
-    "forms": {
-      "silydianin (unspecified)": {
-        "bio_score": 5,
-        "natural": false,
-        "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
-        "aliases": [
-          "silydianin"
-        ],
-        "dosage_importance": 1.0,
-        "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
-        }
-      }
-    },
-    "cui": null,
-    "rxcui": null,
-    "match_rules": {
-      "priority": 0,
-      "match_mode": "alias_and_fuzzy",
-      "exclusions": [],
-      "parent_id": null,
-      "confidence": "high"
-    },
-    "category_enum": "antioxidants",
-    "cui_note": "No UMLS entry for botanical/novel compound",
-    "rxcui_note": "No RxNorm concept for supplement ingredient",
-    "data_quality": {
-      "completeness": 1.0,
-      "missing_fields": [],
-      "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
-    }
-  },
-  "silymarin": {
-    "standard_name": "Silymarin",
-    "severity_level": "none",
-    "category": "herbs",
-    "cui": "C0074297",
-    "rxcui": null,
-    "source": "botanical_extract",
-    "priority": "high",
-    "description": "Standardization marker for botanical extracts",
-    "dosage_importance": 0.1,
-    "forms": {
-      "silymarin (unspecified)": {
-        "bio_score": 5,
-        "natural": false,
-        "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
-        "aliases": [
-          "silymarin"
-        ],
-        "dosage_importance": 1.0,
-        "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
-        }
-      }
-    },
-    "match_rules": {
-      "priority": 0,
-      "match_mode": "alias_and_fuzzy",
-      "exclusions": [],
-      "parent_id": null,
-      "confidence": "high"
-    },
-    "category_enum": "herbs",
-    "rxcui_note": "No RxNorm concept for supplement ingredient",
-    "data_quality": {
-      "completeness": 1.0,
-      "missing_fields": [],
-      "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
-    }
-  },
-  "sterols": {
-    "standard_name": "Sterols",
-    "severity_level": "none",
-    "category": "antioxidants",
-    "source": "botanical_extract",
-    "priority": "high",
-    "description": "Standardization marker for botanical extracts",
-    "dosage_importance": 0.1,
-    "forms": {
-      "sterols (unspecified)": {
-        "bio_score": 5,
-        "natural": false,
-        "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
-        "aliases": [
-          "sterols"
-        ],
-        "dosage_importance": 1.0,
-        "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
-        }
-      }
-    },
-    "cui": null,
-    "rxcui": null,
-    "match_rules": {
-      "priority": 0,
-      "match_mode": "alias_and_fuzzy",
-      "exclusions": [],
-      "parent_id": null,
-      "confidence": "high"
-    },
-    "category_enum": "antioxidants",
-    "cui_note": "No UMLS entry for botanical/novel compound",
-    "rxcui_note": "No RxNorm concept for supplement ingredient",
-    "data_quality": {
-      "completeness": 1.0,
-      "missing_fields": [],
-      "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
-    }
-  },
-  "stilbenes": {
-    "standard_name": "Stilbenes",
-    "severity_level": "none",
-    "category": "antioxidants",
-    "source": "botanical_extract",
-    "priority": "high",
-    "description": "Standardization marker for botanical extracts",
-    "dosage_importance": 0.1,
-    "forms": {
-      "stilbenes (unspecified)": {
-        "bio_score": 5,
-        "natural": false,
-        "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
-        "aliases": [
-          "stilbenes"
-        ],
-        "dosage_importance": 1.0,
-        "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
-        }
-      }
-    },
-    "cui": null,
-    "rxcui": null,
-    "match_rules": {
-      "priority": 0,
-      "match_mode": "alias_and_fuzzy",
-      "exclusions": [],
-      "parent_id": null,
-      "confidence": "high"
-    },
-    "category_enum": "antioxidants",
-    "cui_note": "No UMLS entry for botanical/novel compound",
-    "rxcui_note": "No RxNorm concept for supplement ingredient",
-    "data_quality": {
-      "completeness": 1.0,
-      "missing_fields": [],
-      "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
-    }
-  },
   "tannins": {
     "standard_name": "Tannins",
     "severity_level": "none",
     "category": "antioxidants",
     "cui": "C0039348",
     "rxcui": null,
-    "source": "botanical_extract",
-    "priority": "high",
-    "description": "Standardization marker for botanical extracts",
-    "dosage_importance": 0.1,
+    "description": "Polyphenol class (hydrolyzable + condensed); astringent plant compounds",
+    "dosage_importance": 0.5,
     "forms": {
       "tannins (unspecified)": {
-        "bio_score": 5,
-        "natural": false,
-        "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
+        "bio_score": 6,
+        "natural": true,
+        "score": 9,
+        "absorption": "variable (~20%)",
+        "notes": "Polyphenols classified as hydrolyzable (gallotannins, ellagitannins) and condensed (proanthocyanidins). Bioavailability varies: gallic acid from hydrolyzable tannins F ~70%; condensed tannins poorly absorbed but gut-microbiome metabolized to urolithins and phenolic acids (PMID 33947064, PMC8145700). Generic class catch-all; specific identification needed for precise scoring.",
         "aliases": [
-          "tannins"
+          "tannins",
+          "total tannins",
+          "tannin content",
+          "tannin extract",
+          "hydrolyzable tannins"
         ],
-        "dosage_importance": 1.0,
+        "dosage_importance": 0.5,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.2,
+          "range_low": 0.05,
+          "range_high": 0.6,
+          "quality": "variable",
+          "notes": "Hydrolyzable: gallic acid F ~70%; condensed: gut microbiome conversion to urolithins (PMID 33947064)"
         }
       }
     },
@@ -25420,53 +25184,6 @@
       "confidence": "high"
     },
     "category_enum": "antioxidants",
-    "rxcui_note": "No RxNorm concept for supplement ingredient",
-    "data_quality": {
-      "completeness": 1.0,
-      "missing_fields": [],
-      "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
-    }
-  },
-  "tanshinones": {
-    "standard_name": "Tanshinones",
-    "severity_level": "none",
-    "category": "antioxidants",
-    "source": "botanical_extract",
-    "priority": "high",
-    "description": "Standardization marker for botanical extracts",
-    "dosage_importance": 0.1,
-    "forms": {
-      "tanshinones (unspecified)": {
-        "bio_score": 5,
-        "natural": false,
-        "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
-        "aliases": [
-          "tanshinones"
-        ],
-        "dosage_importance": 1.0,
-        "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
-        }
-      }
-    },
-    "cui": null,
-    "rxcui": null,
-    "match_rules": {
-      "priority": 0,
-      "match_mode": "alias_and_fuzzy",
-      "exclusions": [],
-      "parent_id": null,
-      "confidence": "high"
-    },
-    "category_enum": "antioxidants",
-    "cui_note": "No UMLS entry for botanical/novel compound",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "data_quality": {
       "completeness": 1.0,
@@ -28333,6 +28050,28 @@
           "quality": "good",
           "notes": "good (~65%)"
         }
+      },
+      "shogaols (dried ginger concentrate)": {
+        "bio_score": 9,
+        "natural": true,
+        "score": 12,
+        "absorption": "high (conjugated)",
+        "notes": "Shogaols (6-, 8-, 10-shogaol) are dehydration products of gingerols, enriched in dried/heat-processed ginger. More lipophilic than gingerols — higher GI absorption but same Phase II glucuronidation; no free shogaols in systemic circulation (PMID 18708382). Superior anti-inflammatory potency vs gingerols in vitro (COX/LOX/NF-kB). Rat interconversion PK: gingerol <-> shogaol in vivo (PMC11187260).",
+        "aliases": [
+          "shogaols",
+          "6-shogaol",
+          "ginger shogaols",
+          "shogaol",
+          "dried ginger shogaols"
+        ],
+        "dosage_importance": 0.5,
+        "absorption_structured": {
+          "value": 0.85,
+          "range_low": 0.7,
+          "range_high": 0.95,
+          "quality": "moderate",
+          "notes": "High lipophilic GI absorption; detected as glucuronide conjugates (PMID 30546874); no free shogaol systemically"
+        }
       }
     },
     "match_rules": {
@@ -30947,7 +30686,7 @@
       "vitamins"
     ],
     "cleanup_notes": "Resolved within-ingredient alias collisions; removed 63 redundant unspecified forms",
-    "total_entries": 554,
+    "total_entries": 545,
     "total_ingredients": 623,
     "data_quality": {
       "review_status": "stub"

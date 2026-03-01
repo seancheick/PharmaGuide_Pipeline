@@ -845,7 +845,7 @@ def test_descriptor_terms_map_via_other_ingredients_identity(normalizer, name):
         ("Daidzein/Daidzin", "Daidzein"),
         ("Genistein/Genistin", "Genistein"),
         ("Siliphos Silybin Phytosome", "Milk Thistle"),
-        ("Total Silybins", "Silybin"),
+        ("Total Silybins", "Milk Thistle"),
         ("Banaba 1% extract", "Corosolic Acid"),
         ("L-Valine, Micronized", "L-Valine"),
         ("L-Isoleucine, Micronized", "L-Isoleucine"),
