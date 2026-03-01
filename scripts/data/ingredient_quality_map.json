@@ -7142,7 +7142,9 @@
         "absorption": "unknown",
         "notes": "Generic ATP listing without a specified salt form. Cannot determine bioavailability or purity. Conservative score applied — look for Peak ATP (disodium salt) for the clinically studied version.",
         "aliases": [
-          "atp (adenosine triphosphate)"
+          "atp (adenosine triphosphate)",
+          "atp energy supplement",
+          "cellular atp"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -7856,7 +7858,8 @@
         "absorption": "unknown",
         "notes": "Generic pygeum listing without specifying standardization or extraction method. Look for products standardized to 14% triterpenes and 0.5% n-docosanol for clinical-grade potency. Conservative score applied.",
         "aliases": [
-          "pygeum"
+          "pygeum",
+          "african cherry bark"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -12103,7 +12106,9 @@
         "absorption": "unknown",
         "notes": "L-carnitine form not specified on label. Scored conservatively — ALCAR (brain health) and tartrate (athletic performance) are the most clinically supported forms.",
         "aliases": [
-          "l-carnitine (unspecified)"
+          "l-carnitine (unspecified)",
+          "l-carnitine supplement",
+          "carnitine supplement"
         ],
         "dosage_importance": 0.5,
         "absorption_structured": {
@@ -13204,7 +13209,8 @@
         "absorption": "unknown",
         "notes": "GABA form not specified on label. Scored conservatively. Oral GABA has documented gut absorption but limited/unproven direct BBB crossing; clinical effects likely via gut-brain axis (Boonstra 2015).",
         "aliases": [
-          "gaba (gamma-aminobutyric acid)"
+          "gaba (gamma-aminobutyric acid)",
+          "gaba supplement"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -13711,7 +13717,8 @@
         "absorption": "unknown",
         "notes": "Spirulina form not specified on label. Scored conservatively. Human protein digestibility of dried spirulina is ~85% (PMC6179135). Spirulina has a peptidoglycan cell wall (more digestible than chlorella's cellulose wall).",
         "aliases": [
-          "spirulina"
+          "spirulina",
+          "blue-green algae spirulina"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -15249,7 +15256,9 @@
         "absorption": "poor",
         "notes": "Silychristin comprises ~20% of silymarin. Lowest systemic exposure of major silymarin flavonolignans (PMC3876803). Most potent MCT8 thyroid transporter inhibitor in silymarin complex (PMID 26910310). No standalone clinical data.",
         "aliases": [
-          "silychristin"
+          "silychristin",
+          "silychristin A",
+          "milk thistle silychristin"
         ],
         "dosage_importance": 0.5,
         "absorption_structured": {
@@ -15267,7 +15276,9 @@
         "absorption": "very poor",
         "notes": "Silydianin comprises ~10% of silymarin. Barely detectable in plasma at standard milk thistle doses (PMC3876803). No standalone clinical trials; minor constituent marker only.",
         "aliases": [
-          "silydianin"
+          "silydianin",
+          "silydianin flavonolignan",
+          "milk thistle silydianin"
         ],
         "dosage_importance": 0.5,
         "absorption_structured": {
@@ -15719,7 +15730,8 @@
         "absorption": "unknown",
         "notes": "Form not specified. Oral melatonin F = 14.3-15.9% (PMID:10883420, DeMuro 2000) with high inter-individual variability (9-33%, PMID:26008214). Extensive first-pass CYP1A2 metabolism. Despite low F, clinically effective at 0.5-5 mg doses. Scored conservatively until form is confirmed.",
         "aliases": [
-          "melatonin"
+          "melatonin",
+          "sleep hormone melatonin"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -16838,7 +16850,8 @@
         "absorption": "unknown",
         "notes": "Form not specified on the label. Echinacea products span three species (purpurea, angustifolia, pallida), different plant parts (root, aerial, whole herb), and both standardized extracts and raw powders. Immune-active compounds (alkylamides, cichoric acid) vary significantly between species and preparations. Scored conservatively.",
         "aliases": [
-          "echinacea"
+          "echinacea",
+          "coneflower extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -18332,7 +18345,9 @@
         "absorption": "unknown",
         "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
         "aliases": [
-          "nad+ precursors"
+          "nad+ precursors",
+          "nad precursor",
+          "nicotinamide adenine dinucleotide precursor"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -18480,7 +18495,8 @@
         "absorption": "unknown",
         "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
         "aliases": [
-          "paba (para-aminobenzoic acid)"
+          "paba (para-aminobenzoic acid)",
+          "aminobenzoic acid"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -18817,7 +18833,8 @@
         "absorption": "unknown",
         "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
         "aliases": [
-          "dmae (dimethylaminoethanol)"
+          "dmae (dimethylaminoethanol)",
+          "dimethylethanolamine"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -18983,7 +19000,8 @@
         "absorption": "unknown",
         "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
         "aliases": [
-          "superoxide dismutase (sod)"
+          "superoxide dismutase (sod)",
+          "superoxide dismutase enzyme"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -19127,7 +19145,9 @@
         "absorption": "unknown",
         "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
         "aliases": [
-          "rna/dna (nucleic acids)"
+          "rna/dna (nucleic acids)",
+          "nucleic acid supplement",
+          "RNA DNA complex"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -25018,7 +25038,9 @@
         "absorption": "poor (<25%)",
         "notes": "Minor furofuran lignan in sesame (~25% of sesamin content). Oral bioavailability <25%; acid-labile under gastric conditions (PMC8510241). In vivo converted partially to sesamol (antioxidant). No standalone clinical trials; functions as minor constituent in sesame lignan complexes.",
         "aliases": [
-          "sesamolin"
+          "sesamolin",
+          "sesame sesamolin",
+          "sesamolin lignan"
         ],
         "dosage_importance": 0.5,
         "absorption_structured": {
@@ -25167,7 +25189,9 @@
         "absorption": "unknown",
         "notes": "Dietary silica (SiO2) as silicon source for collagen cross-linking, bone mineralization, and connective tissue integrity. Amorphous dietary silica: 27-44% oral bioavailability by urinary Si excretion (PMID 19356271, PMC2744664). Distinct from silicon dioxide used as excipient flow agent in capsules.",
         "aliases": [
-          "Silica"
+          "Silica",
+          "silicon dioxide",
+          "silica supplement"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -25861,7 +25885,8 @@
         "absorption": "unknown",
         "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
         "aliases": [
-          "nicotinamide riboside"
+          "nicotinamide riboside",
+          "niagen generic"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -25928,7 +25953,8 @@
         "absorption": "unknown",
         "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
         "aliases": [
-          "nicotinamide mononucleotide"
+          "nicotinamide mononucleotide",
+          "nmn powder"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -26068,7 +26094,9 @@
         "absorption": "unknown",
         "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
         "aliases": [
-          "mullein"
+          "mullein",
+          "mullein herb",
+          "great mullein"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {

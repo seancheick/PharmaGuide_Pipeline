@@ -5,7 +5,7 @@
     "purpose": "Explicitly allowed normalized term overlaps across routing databases. Any new overlap must be reviewed before scoring deployment.",
     "description": "Explicitly allowed normalized term overlaps across routing databases. Any new overlap must be reviewed before scoring deployment.",
     "last_updated": "2026-02-24",
-    "total_entries": 19
+    "total_entries": 20
   },
   "allowed_overlaps": [
     {
@@ -140,6 +140,13 @@
         "harmful:iqm"
       ],
       "reason": "SCC dual-listed: supplement form (IQM) and synthetic colorant (harmful additives)."
+    },
+    {
+      "term_normalized": "silicon dioxide",
+      "db_pairs": [
+        "harmful:iqm"
+      ],
+      "reason": "Silicon dioxide is both a common tablet excipient/flow agent (harmful additives) and the chemical name for supplemental silica mineral (IQM)."
     }
   ]
 }
