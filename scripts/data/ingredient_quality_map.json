@@ -19284,30 +19284,32 @@
     "category": "fatty_acids",
     "source": "botanical_extract",
     "priority": "high",
-    "description": "Standardization marker for botanical extracts",
-    "dosage_importance": 0.1,
+    "description": "Omega-6 polyunsaturated fatty acid from borage/evening primrose oil",
+    "dosage_importance": 1.0,
     "forms": {
       "gamma-linolenic acid (unspecified)": {
-        "bio_score": 5,
-        "natural": false,
-        "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
+        "bio_score": 7,
+        "natural": true,
+        "score": 10,
+        "absorption": "good",
+        "notes": "GLA (C18:3 n-6) from borage/evening primrose oil. Elongated to DGLA which competitively inhibits arachidonic acid conversion to pro-inflammatory eicosanoids. RA RCTs at 1.4-2.8 g/day (PMID 2181884, PMID 8177983) show anti-inflammatory efficacy. Requires dietary fat for optimal absorption.",
         "aliases": [
           "gamma-linolenic acid",
           "gla",
           "gamma linolenic acid",
           "gamma linoleic acid",
           "gamma linoleic",
-          "gamma-linolenic"
+          "gamma-linolenic",
+          "omega-6 gla",
+          "gla supplement"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.65,
+          "quality": "good",
+          "notes": "Well absorbed as fatty acid triglyceride; requires dietary fat co-ingestion for optimal micelle formation",
+          "range_low": 0.55,
+          "range_high": 0.8
         }
       }
     },
@@ -21569,9 +21571,9 @@
     "dosage_importance": 0.1,
     "forms": {
       "copper chlorophyllin": {
-        "bio_score": 5,
+        "bio_score": 6,
         "natural": false,
-        "score": 5,
+        "score": 6,
         "dosage_importance": 1.0,
         "absorption_structured": {
           "value": null,
@@ -39857,10 +39859,10 @@
     "forms": {
       "l-pyroglutamic acid (unspecified)": {
         "bio_score": 5,
-        "natural": false,
-        "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Pyroglutamate (PCA/pidolic acid). Cyclized glutamate; proposed as cognitive support.",
+        "natural": true,
+        "score": 8,
+        "absorption": "good",
+        "notes": "L-pyroglutamic acid (5-oxoproline) is a cyclic lactam formed by cyclization of L-glutamic acid. Endogenous metabolite in plasma (~5-25 umol/L) and found in garlic, beets, fermented foods. Efficiently absorbed orally (>80%) due to lipophilic cyclic ring. Proposed to support cognition via acetylcholine modulation (piracetam shares pharmacophore). Limited human evidence (PMID 6143607).",
         "aliases": [
           "l-pyroglutamic acid",
           "pyroglutamic acid",
@@ -39872,11 +39874,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.85,
+          "quality": "good",
+          "notes": "Efficient oral absorption (>80%) via amino acid transporters; lipophilic cyclic structure aids permeability",
+          "range_low": 0.75,
+          "range_high": 0.95
         }
       }
     },
@@ -39895,7 +39897,9 @@
       "last_reviewed_at": "2026-02-28"
     },
     "cui_note": "No UMLS entry for botanical/novel compound",
-    "rxcui_note": "No RxNorm concept for supplement ingredient"
+    "rxcui_note": "No RxNorm concept for supplement ingredient",
+    "description": "Cyclic amino acid metabolite; cognition-supporting supplement",
+    "dosage_importance": 0.5
   },
   "calcium_pyruvate": {
     "standard_name": "Calcium Pyruvate",
@@ -39907,21 +39911,22 @@
         "bio_score": 5,
         "natural": false,
         "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Calcium salt of pyruvic acid. Used for energy metabolism and weight management support.",
+        "absorption": "good",
+        "notes": "Calcium salt of pyruvic acid, a key glycolysis/TCA cycle intermediate. Dissociates in GI tract; pyruvate absorbed ~70% via monocarboxylate transporters. Weight loss RCTs (PMID 1542005, PMID 8290828) found modest fat loss at extreme doses (22-44 g/day) — standard 2-5 g supplement doses are far below studied doses. No meaningful ergogenic evidence at supplement-level dosing.",
         "aliases": [
           "calcium pyruvate",
           "pyruvate",
           "pyruvic acid calcium salt",
-          "ca pyruvate"
+          "ca pyruvate",
+          "pyruvate supplement"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.7,
+          "quality": "good",
+          "notes": "Pyruvate efficiently absorbed via monocarboxylate transporters after dissociation from calcium salt",
+          "range_low": 0.6,
+          "range_high": 0.8
         }
       }
     },
@@ -39940,7 +39945,9 @@
       "last_reviewed_at": "2026-02-28"
     },
     "cui_note": "No UMLS entry for botanical/novel compound",
-    "rxcui_note": "No RxNorm concept for supplement ingredient"
+    "rxcui_note": "No RxNorm concept for supplement ingredient",
+    "description": "Calcium salt of pyruvic acid; glycolysis intermediate",
+    "dosage_importance": 0.5
   },
   "ecklonia_cava": {
     "standard_name": "Ecklonia Cava",
@@ -39989,16 +39996,16 @@
   },
   "butyric_acid": {
     "standard_name": "Butyric Acid",
-    "category": "other",
+    "category": "fatty_acids",
     "cui": null,
     "rxcui": null,
     "forms": {
       "butyric acid (unspecified)": {
         "bio_score": 5,
-        "natural": false,
-        "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Short-chain fatty acid (SCFA) produced by gut bacteria; supports intestinal health.",
+        "natural": true,
+        "score": 8,
+        "absorption": "good",
+        "notes": "Butyric acid (C4 SCFA) naturally produced by colonic bacterial fermentation of dietary fiber. Primary colonocyte energy substrate (~70% of energy needs). Inhibits histone deacetylases (HDACs) modulating NF-kB-driven inflammation. Tributyrin (glycerol triester) form provides superior oral delivery vs free acid (PMID 28381011). Protective against colorectal cancer in preclinical models.",
         "aliases": [
           "butyric acid",
           "butyrate",
@@ -40010,11 +40017,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.8,
+          "quality": "good",
+          "notes": "Rapidly absorbed in colon via passive diffusion; most extracted by colonocytes/hepatocytes before systemic circulation",
+          "range_low": 0.7,
+          "range_high": 0.9
         }
       },
       "sodium butyrate": {
@@ -40032,8 +40039,8 @@
         "dosage_importance": 1.0,
         "absorption_structured": {
           "value": 0.55,
-          "range_low": null,
-          "range_high": null,
+          "range_low": 0.45,
+          "range_high": 0.65,
           "quality": "moderate",
           "notes": "moderate (~55%)"
         }
@@ -40046,7 +40053,7 @@
       "parent_id": null,
       "confidence": "medium"
     },
-    "category_enum": "other",
+    "category_enum": "fatty_acids",
     "data_quality": {
       "completeness": 0.6,
       "missing_fields": [],
@@ -40054,7 +40061,9 @@
       "last_reviewed_at": "2026-02-26"
     },
     "cui_note": "No UMLS entry for botanical/novel compound",
-    "rxcui_note": "No RxNorm concept for supplement ingredient"
+    "rxcui_note": "No RxNorm concept for supplement ingredient",
+    "description": "Short-chain fatty acid (SCFA) produced by gut bacterial fermentation",
+    "dosage_importance": 1.0
   },
   "inosine": {
     "standard_name": "Inosine",
@@ -40063,23 +40072,25 @@
     "rxcui": null,
     "forms": {
       "inosine (unspecified)": {
-        "bio_score": 5,
-        "natural": false,
-        "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Purine nucleoside and ATP precursor. Used for energy and exercise performance.",
+        "bio_score": 6,
+        "natural": true,
+        "score": 9,
+        "absorption": "good",
+        "notes": "Purine nucleoside (hypoxanthine + ribose), endogenous in all cells as purine salvage/ATP intermediate. Oral bioavailability ~80% via equilibrative nucleoside transporters. Raises serum uric acid (potent antioxidant) — proposed MS mechanism. Phase II MS RCT (PMID 19474430) showed uric acid elevation but no clear clinical benefit. Ergogenic claims not well supported (PMID 1569488).",
         "aliases": [
           "inosine",
           "hypoxanthine riboside",
-          "inosine supplement"
+          "inosine supplement",
+          "inosine monohydrate",
+          "purine nucleoside inosine"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.8,
+          "quality": "good",
+          "notes": "Efficiently absorbed via equilibrative nucleoside transporters in GI epithelium; phosphorylated intracellularly",
+          "range_low": 0.7,
+          "range_high": 0.9
         }
       }
     },
@@ -40098,7 +40109,9 @@
       "last_reviewed_at": "2026-02-28"
     },
     "cui_note": "No UMLS entry for botanical/novel compound",
-    "rxcui_note": "No RxNorm concept for supplement ingredient"
+    "rxcui_note": "No RxNorm concept for supplement ingredient",
+    "description": "Purine nucleoside; ATP biosynthesis intermediate",
+    "dosage_importance": 0.5
   },
   "sea_cucumber": {
     "standard_name": "Sea Cucumber",
@@ -40155,23 +40168,24 @@
     "rxcui": null,
     "forms": {
       "humic acid (unspecified)": {
-        "bio_score": 5,
-        "natural": false,
-        "score": 5,
+        "bio_score": 3,
+        "natural": true,
+        "score": 6,
         "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Soil-derived organic compound. Proposed for mineral transport and detoxification.",
+        "notes": "Humic acid is a heterogeneous mixture of high-MW polycarboxylic acids from decomposed plant/microbial matter in soil and peat. Oral bioavailability is essentially unstudied — polymeric structure (MW 10,000-100,000 Da) makes systemic absorption unlikely. In vitro antiviral activity reported (PMID 27137840) but no human RCTs. Safety data insufficient; FDA considers GRAS only from food-grade sources.",
         "aliases": [
           "humic acid",
           "humic substances",
           "humic extract",
-          "fulvic and humic acid",
-          "humate"
+          "humate",
+          "leonardite extract",
+          "humic mineral complex"
         ],
-        "dosage_importance": 1.0,
+        "dosage_importance": 0.5,
         "absorption_structured": {
           "value": null,
           "quality": "unknown",
-          "notes": "Data not available",
+          "notes": "No established oral bioavailability data; high molecular weight polymeric structure makes systemic absorption unlikely",
           "range_low": null,
           "range_high": null
         }
@@ -40192,7 +40206,9 @@
       "last_reviewed_at": "2026-02-28"
     },
     "cui_note": "No UMLS entry for botanical/novel compound",
-    "rxcui_note": "No RxNorm concept for supplement ingredient"
+    "rxcui_note": "No RxNorm concept for supplement ingredient",
+    "description": "Complex polycarboxylic organic acids from decomposed organic matter",
+    "dosage_importance": 0.5
   },
   "lumbrokinase": {
     "standard_name": "Lumbrokinase",
@@ -40517,26 +40533,26 @@
     "rxcui": null,
     "forms": {
       "cobalt (unspecified)": {
-        "bio_score": 5,
+        "bio_score": 3,
         "natural": false,
-        "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Essential trace mineral; cofactor in vitamin B12 (cobalamin). Required in very small amounts.",
+        "score": 3,
+        "absorption": "variable",
+        "notes": "Cobalt is essential solely as the central atom of vitamin B12 (cobalamin). Inorganic cobalt supplementation does NOT substitute for B12 deficiency. Absorbed 10-40% via DMT1 iron transporters. Excess is nephrotoxic and cardiotoxic; causes polycythemia at high doses (WADA banned). No established human RDA separate from B12. Supplemental inorganic cobalt provides no documented benefit.",
         "aliases": [
           "cobalt",
-          "cobalt supplement",
           "cobalt gluconate",
           "cobalt chloride",
           "cobaltous sulfate",
-          "trace cobalt"
+          "trace cobalt",
+          "cobalt mineral"
         ],
-        "dosage_importance": 1.0,
+        "dosage_importance": 0.5,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.25,
+          "quality": "variable",
+          "notes": "Absorbed 10-40% via DMT1 iron transporters; absorption varies by salt form and iron status",
+          "range_low": 0.1,
+          "range_high": 0.4
         }
       }
     },
@@ -40555,7 +40571,9 @@
       "last_reviewed_at": "2026-02-28"
     },
     "cui_note": "No UMLS entry for botanical/novel compound",
-    "rxcui_note": "No RxNorm concept for supplement ingredient"
+    "rxcui_note": "No RxNorm concept for supplement ingredient",
+    "description": "Trace mineral; central atom of vitamin B12 but inorganic form has no separate indication",
+    "dosage_importance": 0.5
   },
   "bile_extract": {
     "standard_name": "Bile Extract",
@@ -40564,28 +40582,29 @@
     "rxcui": null,
     "forms": {
       "bile extract (unspecified)": {
-        "bio_score": 5,
-        "natural": false,
-        "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Ox bile or bovine bile extract. Digestive support for fat digestion and gallbladder function.",
+        "bio_score": 7,
+        "natural": true,
+        "score": 10,
+        "absorption": "excellent",
+        "notes": "Bile extract (ox bile) contains conjugated bile acids (taurocholic/glycocholic), phospholipids, cholesterol. Amphipathic molecules emulsify dietary fats enabling pancreatic lipase access and fat-soluble vitamin absorption (A, D, E, K). In enterohepatic cycle 90-95% reabsorbed in terminal ileum. Supports fat digestion post-cholecystectomy. Doses 100-500 mg/meal.",
         "aliases": [
           "bile extract",
           "ox bile",
           "bovine bile",
           "bile salts",
           "bile acid extract",
-          "purified bile salts",
           "ox bile powder",
-          "bile"
+          "bile",
+          "bovine bile extract",
+          "desiccated bile"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.95,
+          "quality": "excellent",
+          "notes": "Bile acids are amphipathic molecules efficiently absorbed (90-95%) in terminal ileum via active transport (ASBT)",
+          "range_low": 0.9,
+          "range_high": 0.99
         }
       }
     },
@@ -40604,7 +40623,9 @@
       "last_reviewed_at": "2026-02-28"
     },
     "cui_note": "No UMLS entry for botanical/novel compound",
-    "rxcui_note": "No RxNorm concept for supplement ingredient"
+    "rxcui_note": "No RxNorm concept for supplement ingredient",
+    "description": "Ox/bovine bile for fat digestion support in cholecystectomy/bile insufficiency",
+    "dosage_importance": 1.0
   },
   "apoaequorin": {
     "standard_name": "Apoaequorin",
@@ -40613,25 +40634,26 @@
     "rxcui": null,
     "forms": {
       "apoaequorin (unspecified)": {
-        "bio_score": 5,
+        "bio_score": 2,
         "natural": false,
-        "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Calcium-binding protein from jellyfish (Aequorea victoria). Marketed for cognitive support (Prevagen).",
+        "score": 2,
+        "absorption": "poor",
+        "notes": "Calcium-binding photoprotein from Aequorea victoria jellyfish, marketed as Prevagen. Produced via recombinant E. coli fermentation. Subject to complete proteolytic digestion in GI tract — probability of intact apoaequorin reaching CNS is near zero. FDA warning letter (2012) and FTC deceptive advertising complaint (2017). Published RCT (PMID 26869340) criticized for post-hoc subgroup analysis.",
         "aliases": [
           "apoaequorin",
           "prevagen",
           "jellyfish protein",
           "aequorea victoria protein",
-          "apoaequorin supplement"
+          "apoaequorin supplement",
+          "recombinant apoaequorin"
         ],
-        "dosage_importance": 1.0,
+        "dosage_importance": 0.5,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.01,
+          "quality": "poor",
+          "notes": "Protein is proteolytically digested in GI tract; intact systemic absorption is effectively zero",
+          "range_low": 0.005,
+          "range_high": 0.02
         }
       }
     },
@@ -40650,7 +40672,9 @@
       "last_reviewed_at": "2026-02-28"
     },
     "cui_note": "No UMLS entry for botanical/novel compound",
-    "rxcui_note": "No RxNorm concept for supplement ingredient"
+    "rxcui_note": "No RxNorm concept for supplement ingredient",
+    "description": "Recombinant jellyfish protein (Prevagen); digested orally — implausible oral bioavailability",
+    "dosage_importance": 0.5
   },
   "split_gill_polypore": {
     "standard_name": "Split Gill Polypore",
@@ -40705,11 +40729,11 @@
     "rxcui": null,
     "forms": {
       "dimethyl glycine (unspecified)": {
-        "bio_score": 5,
-        "natural": false,
-        "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. DMG (N,N-dimethylglycine). Methylation donor; intermediate in choline-to-glycine metabolism.",
+        "bio_score": 6,
+        "natural": true,
+        "score": 9,
+        "absorption": "good",
+        "notes": "N,N-Dimethylglycine (DMG) is an endogenous amino acid metabolite in the choline→betaine→DMG→sarcosine→glycine catabolic pathway. Orally well absorbed (>80%) via amino acid transporters. Methyl donor in one-carbon metabolism. Limited human evidence for cognition (PMID 6125095) and athletic performance (PMID 8117012) — no adequately powered RCTs confirm claims. Safe at 125-500 mg/day.",
         "aliases": [
           "dimethyl glycine",
           "dimethyl glycine hcl",
@@ -40725,11 +40749,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.85,
+          "quality": "good",
+          "notes": "Well absorbed via amino acid transporters; plasma half-life ~2-4 hours; rapidly metabolized",
+          "range_low": 0.75,
+          "range_high": 0.95
         }
       }
     },
@@ -40748,7 +40772,9 @@
       "last_reviewed_at": "2026-02-28"
     },
     "cui_note": "No UMLS entry for botanical/novel compound",
-    "rxcui_note": "No RxNorm concept for supplement ingredient"
+    "rxcui_note": "No RxNorm concept for supplement ingredient",
+    "description": "Methylated amino acid metabolite; choline catabolism intermediate",
+    "dosage_importance": 0.5
   },
   "oleanolic_acid": {
     "standard_name": "Oleanolic Acid",
@@ -40801,24 +40827,25 @@
     "rxcui": null,
     "forms": {
       "glucuronolactone (unspecified)": {
-        "bio_score": 5,
-        "natural": false,
-        "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Natural metabolite of glucose. Found in energy drinks; proposed for detoxification support.",
+        "bio_score": 4,
+        "natural": true,
+        "score": 7,
+        "absorption": "good",
+        "notes": "D-Glucuronolactone is a glucose metabolite via the glucuronic acid pathway, ubiquitous in energy drinks (Red Bull: 600 mg/can). Hydrolyzed to glucuronic acid in GI tract, which participates in hepatic phase II glucuronidation. Supplemental doses trivial vs endogenous capacity — no evidence of augmented detoxification. Crossover study (PMID 18641237) could not attribute effects to glucuronolactone vs caffeine/taurine.",
         "aliases": [
           "glucuronolactone",
-          "d-glucurono-gamma-lactone",
           "d-glucuronolactone",
-          "glucurono lactone"
+          "d-glucurono-gamma-lactone",
+          "glucurono lactone",
+          "glucuronic acid lactone"
         ],
-        "dosage_importance": 1.0,
+        "dosage_importance": 0.5,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.75,
+          "quality": "good",
+          "notes": "Efficiently hydrolyzed to glucuronic acid in GI tract and absorbed; participates in hepatic conjugation",
+          "range_low": 0.65,
+          "range_high": 0.85
         }
       }
     },
@@ -40837,7 +40864,9 @@
       "last_reviewed_at": "2026-02-28"
     },
     "cui_note": "No UMLS entry for botanical/novel compound",
-    "rxcui_note": "No RxNorm concept for supplement ingredient"
+    "rxcui_note": "No RxNorm concept for supplement ingredient",
+    "description": "Glucose metabolite; hepatic glucuronidation pathway component",
+    "dosage_importance": 0.5
   },
   "methylliberine": {
     "standard_name": "Methylliberine",
@@ -40846,25 +40875,27 @@
     "rxcui": null,
     "forms": {
       "methylliberine (unspecified)": {
-        "bio_score": 5,
-        "natural": false,
-        "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Purine alkaloid related to theacrine and caffeine. Neuromodulator marketed as Dynamine.",
+        "bio_score": 9,
+        "natural": true,
+        "score": 12,
+        "absorption": "good",
+        "notes": "Purine alkaloid from Camellia assamica var. kucha (Dynamine). Near-complete GI absorption (est. 75-95%) with Tmax ~30 min. Adenosine receptor antagonist and PDE inhibitor. Prolongs caffeine half-life via CYP1A2 inhibition. Short-term safety confirmed at 100-200 mg (PMID 32150228); mood/affect improvement (PMID 37979661). No long-term RCT data.",
         "aliases": [
           "methylliberine",
           "dynamine",
           "methylliberine supplement",
           "o-methyl-liberine",
-          "methyliberine"
+          "methyliberine",
+          "dynamine methylliberine",
+          "compound solutions dynamine"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.85,
+          "quality": "good",
+          "notes": "Rapid oral absorption (75-95%); Tmax ~30 min; structurally similar to theacrine/caffeine",
+          "range_low": 0.75,
+          "range_high": 0.95
         }
       }
     },
@@ -40883,7 +40914,8 @@
       "last_reviewed_at": "2026-02-28"
     },
     "cui_note": "No UMLS entry for botanical/novel compound",
-    "rxcui_note": "No RxNorm concept for supplement ingredient"
+    "rxcui_note": "No RxNorm concept for supplement ingredient",
+    "description": "Purine alkaloid from kucha tea (Dynamine brand); adenosine receptor antagonist"
   },
   "meshima_mushroom": {
     "standard_name": "Meshima Mushroom",
@@ -41163,23 +41195,26 @@
     "rxcui": null,
     "forms": {
       "ipriflavone (unspecified)": {
-        "bio_score": 5,
+        "bio_score": 8,
         "natural": false,
-        "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Synthetic isoflavone derivative. Used for bone health and calcium absorption.",
+        "score": 8,
+        "absorption": "poor",
+        "notes": "Synthetic isoflavone (7-isopropoxyisoflavone); oral bioavailability ~24% fasted, 8-20x higher with food (PMID 11883708). Inhibits osteoclast activity and stimulates osteoblast collagen synthesis without estrogenic activity. Multiple RCTs showed BMD preservation in postmenopausal women (PMID 9263613, PMID 8062153). Caution: ~33% incidence of lymphocyte depression with long-term use (PMID 10754346).",
         "aliases": [
           "ipriflavone",
           "7-isopropoxyisoflavone",
-          "ostivone"
+          "ostivone",
+          "ipriflavone 200mg",
+          "isoflavone derivative ipriflavone",
+          "ipriflavone bone"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.24,
+          "quality": "poor",
+          "notes": "Low fasted bioavailability (~24%); food increases absorption 8-20x; metabolized to active M1/M5",
+          "range_low": 0.1,
+          "range_high": 0.45
         }
       }
     },
@@ -41198,7 +41233,8 @@
       "missing_fields": [],
       "review_status": "validated",
       "last_reviewed_at": "2026-02-28"
-    }
+    },
+    "description": "Synthetic isoflavone for postmenopausal bone density preservation"
   },
   "l_baiba": {
     "standard_name": "L-BAIBA",
@@ -41207,24 +41243,28 @@
     "rxcui": null,
     "forms": {
       "L-BAIBA (unspecified)": {
-        "bio_score": 5,
-        "natural": false,
-        "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Beta-aminoisobutyric acid. Exercise-induced myokine; proposed for metabolic health.",
+        "bio_score": 8,
+        "natural": true,
+        "score": 11,
+        "absorption": "good",
+        "notes": "L-BAIBA (beta-aminoisobutyric acid) is an endogenous exercise-induced myokine from L-valine catabolism. Oral MitoBurn supplementation achieves dose-proportional plasma exposure, Tmax ~60 min (PMID 36184601). Promotes PPARa-mediated fat oxidation, white adipose browning, and osteocyte survival (PMC5832359). Plasma BAIBA inversely correlated with adiposity (PMID 37661199). No powered human fat mass RCT yet.",
         "aliases": [
           "l-baiba",
           "beta-aminoisobutyric acid",
           "baiba",
-          "mitoburn"
+          "mitoburn",
+          "l-beta-aminoisobutyric acid",
+          "beta aminoisobutyric acid",
+          "MitoBurn L-BAIBA",
+          "NNB MitoBurn"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.8,
+          "quality": "good",
+          "notes": "Dose-proportional absorption; Tmax ~60 min; first-in-human PK study confirmed linear kinetics",
+          "range_low": 0.65,
+          "range_high": 0.9
         }
       }
     },
@@ -41243,7 +41283,8 @@
       "missing_fields": [],
       "review_status": "validated",
       "last_reviewed_at": "2026-02-28"
-    }
+    },
+    "description": "Exercise-induced myokine (beta-aminoisobutyric acid); promotes fat oxidation via PPARa"
   },
   "lychee_polyphenol": {
     "standard_name": "Lychee Polyphenol",
@@ -41387,29 +41428,32 @@
     }
   },
   "threonic_acid": {
-    "category": "other",
+    "category": "vitamins",
     "cui": null,
     "cui_note": "No UMLS entry for threonic acid",
     "forms": {
       "threonic acid (unspecified)": {
-        "score": 5,
-        "bio_score": 5,
+        "score": 7,
+        "bio_score": 4,
         "aliases": [
           "threonic acid",
           "l-threonic acid",
           "calcium threonate",
-          "l-threonate"
+          "l-threonate",
+          "threonate",
+          "vitamin c metabolite threonate",
+          "magnesium threonate ligand"
         ],
-        "notes": "Stub score for Threonic Acid. Conservative fallback.",
-        "natural": false,
-        "absorption": "unknown",
+        "notes": "Threonic acid is an endogenous oxidative breakdown product of L-ascorbic acid (vitamin C). Typically represents the threonate ligand in magnesium L-threonate (Magtein), which facilitates Mg transport across the BBB, elevating CSF Mg2+ by 7-15% vs other Mg salts (Liu et al., Neuron 2010). Open-label dementia trial used Mg-threonate (PMID 32162987). As isolated ingredient, no independent bioactivity demonstrated.",
+        "natural": true,
+        "absorption": "good",
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.75,
+          "quality": "good",
+          "notes": "Small organic acid readily absorbed (~75%); rapid GI uptake via monocarboxylate pathways",
+          "range_low": 0.6,
+          "range_high": 0.9
         }
       }
     },
@@ -41423,13 +41467,14 @@
       "parent_id": null,
       "confidence": "medium"
     },
-    "category_enum": "other",
+    "category_enum": "vitamins",
     "data_quality": {
       "completeness": 0.6,
       "missing_fields": [],
       "review_status": "validated",
       "last_reviewed_at": "2026-02-28"
-    }
+    },
+    "description": "Oxidative metabolite of vitamin C; threonate chelate ligand for magnesium BBB transport"
   },
   "dihydromyricetin": {
     "category": "antioxidants",
@@ -41529,7 +41574,7 @@
     "cui_note": "No UMLS entry for botanical/novel compound",
     "forms": {
       "activated charcoal (unspecified)": {
-        "score": 5,
+        "score": 8,
         "bio_score": 5,
         "aliases": [
           "activated charcoal",
@@ -41538,18 +41583,21 @@
           "activated coconut charcoal",
           "actisorb base",
           "actisorb",
-          "coconut shell activated charcoal"
+          "coconut shell activated charcoal",
+          "medical grade charcoal",
+          "food grade activated charcoal",
+          "active charcoal"
         ],
-        "notes": "Stub score for Activated Charcoal. Conservative fallback.",
-        "natural": false,
-        "absorption": "unknown",
+        "notes": "Activated charcoal is carbonized organic material (coconut shell/wood/peat) with ~1,000 m2/g microporous surface area enabling non-selective GI adsorption. Reduces co-ingested substance bioavailability by ~69% within 30 min (StatPearls NBK482294). Emergency standard-of-care for acute oral poisoning. Supplement 'detox' evidence is anecdotal; no powered RCTs (PMC6620762). Critical risk: adsorbs co-administered medications/nutrients.",
+        "natural": true,
+        "absorption": "poor",
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.02,
+          "quality": "poor",
+          "notes": "Not systemically absorbed (<2%); acts by surface adsorption in GI tract",
+          "range_low": 0.0,
+          "range_high": 0.05
         }
       }
     },
@@ -41569,7 +41617,8 @@
       "missing_fields": [],
       "review_status": "validated",
       "last_reviewed_at": "2026-02-28"
-    }
+    },
+    "description": "Carbonized microporous material for GI adsorption of toxins; emergency medicine standard-of-care"
   },
   "aloe_vera": {
     "category": "herbs",
@@ -41988,23 +42037,26 @@
     "cui_note": "UMLS CUI: C0035930",
     "forms": {
       "rubidium (unspecified)": {
-        "score": 5,
-        "bio_score": 5,
+        "score": 3,
+        "bio_score": 3,
         "aliases": [
           "rubidium",
           "rubidium chloride",
-          "rubidium trace mineral"
+          "rubidium trace mineral",
+          "rubidium supplement",
+          "rb trace mineral",
+          "rubidium ultra trace"
         ],
-        "notes": "Stub score for Rubidium. Conservative fallback.",
+        "notes": "Rubidium (Rb+) is a non-essential alkali metal absorbed via intestinal potassium transporters with >90% efficiency (PMID 5561654). Partially substitutes K+ intracellularly. No recognized RDA or deficiency state (PMID 8330790). Early psychiatric interest (antidepressant-like rodent data, PMID 2637251) not translated to human RCTs. Long biological half-life leads to tissue accumulation (PMID 2010564). K+ displacement risk at high doses.",
         "natural": false,
-        "absorption": "unknown",
+        "absorption": "excellent",
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.9,
+          "quality": "excellent",
+          "notes": "Absorbed >90% via K+ transporters; long biological half-life (weeks); widespread tissue distribution",
+          "range_low": 0.8,
+          "range_high": 0.98
         }
       }
     },
@@ -42024,7 +42076,8 @@
       "missing_fields": [],
       "review_status": "validated",
       "last_reviewed_at": "2026-02-28"
-    }
+    },
+    "description": "Non-essential alkali metal trace element; no established dietary role"
   },
   "theophylline": {
     "category": "other",
@@ -42032,23 +42085,26 @@
     "cui_note": "UMLS CUI: C0039771",
     "forms": {
       "theophylline (unspecified)": {
-        "score": 5,
-        "bio_score": 5,
+        "score": 14,
+        "bio_score": 11,
         "aliases": [
           "theophylline",
           "theophylline anhydrous",
-          "1,3-dimethylxanthine"
+          "1,3-dimethylxanthine",
+          "aminophylline",
+          "oxtriphylline",
+          "theophylline monohydrate"
         ],
-        "notes": "Stub score for Theophylline. Conservative fallback.",
-        "natural": false,
-        "absorption": "unknown",
+        "notes": "1,3-dimethylxanthine naturally in Camellia sinensis and Theobroma cacao. Oral immediate-release bioavailability ~96% with no significant first-pass effect (PMID 868891, PMID 7361576). Non-selective PDE inhibitor + adenosine A1/A2A antagonist; activates HDAC2 restoring corticosteroid sensitivity in COPD (PMID 15282340). Narrow therapeutic index (10-20 ug/mL therapeutic vs toxicity >20 ug/mL). Major CYP1A2/3A4 drug interactions.",
+        "natural": true,
+        "absorption": "excellent",
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.96,
+          "quality": "excellent",
+          "notes": "Near-complete oral absorption (~96%); Tmax 0.5-2h; no significant first-pass metabolism",
+          "range_low": 0.9,
+          "range_high": 1.0
         }
       }
     },
@@ -42068,7 +42124,9 @@
       "missing_fields": [],
       "review_status": "validated",
       "last_reviewed_at": "2026-02-28"
-    }
+    },
+    "description": "1,3-dimethylxanthine; naturally in tea/cacao; pharmaceutical bronchodilator with narrow therapeutic index",
+    "severity_level": "caution"
   },
   "centrophenoxine": {
     "category": "other",
@@ -42076,24 +42134,27 @@
     "cui_note": "UMLS CUI: C0025023",
     "forms": {
       "centrophenoxine (unspecified)": {
-        "score": 5,
-        "bio_score": 5,
+        "score": 6,
+        "bio_score": 6,
         "aliases": [
           "centrophenoxine",
           "meclofenoxate",
           "lucidril",
-          "centro phenoxine"
+          "centro phenoxine",
+          "centrophenoxine hcl",
+          "dmae ester",
+          "ANP 235"
         ],
-        "notes": "Stub score for Centrophenoxine. Conservative fallback.",
+        "notes": "Centrophenoxine (meclofenoxate, Lucidril) is a synthetic ester of DMAE and p-chlorophenoxyacetic acid. Oral hydrolysis releases DMAE → choline → acetylcholine. pCPA moiety enhances DMAE BBB penetration. Clinical evidence weak and inconsistent; most trials underpowered (ALZDF: insufficient evidence). Classified as unapproved drug in dietary supplements by FDA (PMID 35959800). DMAE trial (n=242 AD) reported serious AEs including fatal cardiac failure.",
         "natural": false,
-        "absorption": "unknown",
+        "absorption": "moderate",
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.55,
+          "quality": "moderate",
+          "notes": "Moderate oral absorption (~55%); hydrolyzed to DMAE + pCPA; DMAE crosses BBB",
+          "range_low": 0.4,
+          "range_high": 0.7
         }
       }
     },
@@ -42113,7 +42174,9 @@
       "missing_fields": [],
       "review_status": "validated",
       "last_reviewed_at": "2026-02-28"
-    }
+    },
+    "description": "Synthetic nootropic (meclofenoxate); DMAE ester — FDA-classified unapproved drug in supplements",
+    "severity_level": "caution"
   },
   "rhaponticum": {
     "category": "herbs",
@@ -42215,24 +42278,29 @@
     "cui_note": "UMLS CUI: C0005581",
     "forms": {
       "bismuth (unspecified)": {
-        "score": 5,
-        "bio_score": 5,
+        "score": 6,
+        "bio_score": 6,
         "aliases": [
           "bismuth",
           "bismuth citrate",
           "bismuth subcitrate",
-          "bismuth subsalicylate"
+          "bismuth subsalicylate",
+          "colloidal bismuth subcitrate",
+          "de-nol bismuth",
+          "pepto bismol active",
+          "potassium bismuth citrate",
+          "bismuth subgallate"
         ],
-        "notes": "Stub score for Bismuth. Conservative fallback.",
+        "notes": "Bismuth salts (subsalicylate, subcitrate) act topically in GI tract; systemic absorption <0.2% of ingested dose (StatPearls NBK560697). Antimicrobial vs H. pylori (disrupts membrane/urease), cytoprotective (stimulates mucus/prostaglandins). H. pylori quadruple therapy achieves ~90% eradication (PMID 9146788). Travelers' diarrhea prevention (meta-analysis PMC8236042). Risk: nephropathy at high chronic doses; accumulates in bone/brain.",
         "natural": false,
-        "absorption": "unknown",
+        "absorption": "poor",
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.002,
+          "quality": "poor",
+          "notes": "Minimal systemic absorption (<0.2%); acts topically in GI lumen; salicylate moiety from BSS is well absorbed",
+          "range_low": 0.001,
+          "range_high": 0.005
         }
       }
     },
@@ -42252,7 +42320,8 @@
       "missing_fields": [],
       "review_status": "validated",
       "last_reviewed_at": "2026-02-28"
-    }
+    },
+    "description": "Heavy metal GI agent (Pepto-Bismol); topical antimicrobial vs H. pylori"
   },
   "bentonite": {
     "category": "other",
@@ -42260,25 +42329,30 @@
     "cui_note": "No UMLS entry for bentonite supplement",
     "forms": {
       "bentonite (unspecified)": {
-        "score": 5,
-        "bio_score": 5,
+        "score": 6,
+        "bio_score": 3,
         "aliases": [
           "bentonite",
           "bentonite clay",
           "bentonite mineral powder",
           "montmorillonite clay",
-          "bentonite powder"
+          "bentonite powder",
+          "calcium bentonite",
+          "sodium bentonite",
+          "healing clay",
+          "living clay",
+          "aztec clay"
         ],
-        "notes": "Stub score for Bentonite. Conservative fallback.",
-        "natural": false,
-        "absorption": "unknown",
+        "notes": "Bentonite is a volcanic ash-derived smectite clay (primarily montmorillonite) that acts by GI adsorption of toxins, aflatoxins, and bacterial pathogens. Animal data: reduces fecal aflatoxin and T-2 mycotoxin (PMC5632318). Human evidence limited to small IBS pilot. Not systemically absorbed (<1-3%). Critical safety: FDA warned multiple products contain lead at 37.5+ ppm (2016); PMID 32059757 documents arsenic contamination. Risk of co-adsorbing medications.",
+        "natural": true,
+        "absorption": "poor",
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.01,
+          "quality": "poor",
+          "notes": "Not systemically absorbed (<1-3%); acts by surface adsorption in GI tract like activated charcoal",
+          "range_low": 0.0,
+          "range_high": 0.03
         }
       }
     },
@@ -42298,7 +42372,8 @@
       "missing_fields": [],
       "review_status": "validated",
       "last_reviewed_at": "2026-02-28"
-    }
+    },
+    "description": "Volcanic ash smectite clay; GI adsorption of mycotoxins/pathogens"
   },
   "grains_of_paradise": {
     "category": "herbs",
@@ -42739,25 +42814,29 @@
     },
     "forms": {
       "l-norvaline (unspecified)": {
-        "score": 5,
-        "bio_score": 5,
+        "score": 7,
+        "bio_score": 7,
         "aliases": [
           "l-norvaline",
-          "norvaline"
+          "norvaline",
+          "n-propylglycine",
+          "2-aminopentanoic acid",
+          "norvaline amino acid"
         ],
-        "notes": "Non-proteinogenic amino acid, PubChem CID 65098, CAS 6600-40-4. Arginase inhibitor used in sports nutrition for nitric oxide support. Safety concerns at high doses (cytotoxicity per PubMed).",
+        "notes": "L-norvaline (CAS 6600-40-4) is a non-proteinogenic C5 amino acid and competitive arginase inhibitor (Ki ~0.8 mM). Inhibiting arginase redirects L-arginine toward NOS, elevating nitric oxide and endothelial function (PMC3124670). Rodent data: reduces blood pressure 10-20 mmHg in hypertensive models (PMC7042509). In vitro cytotoxicity reports (PMID 30703532) likely overstated at supplement doses (PMID 31861122 rebuttal). No human PK data; used in pre-workout for NO support.",
         "natural": false,
         "absorption": "moderate",
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": 0.5,
-          "quality": "unknown",
-          "notes": "Stub — pending detailed review",
-          "range_low": null,
-          "range_high": null
+          "value": 0.55,
+          "quality": "moderate",
+          "notes": "Estimated moderate absorption (~55%) based on short-chain amino acid class; no human PK data published",
+          "range_low": 0.4,
+          "range_high": 0.7
         }
       }
-    }
+    },
+    "description": "Non-proteinogenic amino acid; competitive arginase inhibitor for NO/arginine axis"
   },
   "theaflavins": {
     "standard_name": "Theaflavins",
@@ -45111,25 +45190,28 @@
     "forms": {
       "phenylethylamine (unspecified)": {
         "bio_score": 5,
-        "natural": false,
-        "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Trace amine neuromodulator (PEA). Endogenous monoamine; proposed mood and cognitive support.",
+        "natural": true,
+        "score": 8,
+        "absorption": "poor",
+        "notes": "Beta-phenylethylamine (PEA) is an endogenous trace amine from L-phenylalanine, found in fermented foods and chocolate. Oral bioavailability severely limited: >90% first-pass MAO-B deamination (t1/2 ~5-10 min oral; PMC3904499, PMID 24482732). Acts via TAAR1 receptor inducing dopamine/norepinephrine efflux (PMID 15447669, PMID 18182557). Clinically relevant only with concurrent MAO-B inhibitor. Supplement mood/focus effect likely minimal without MAOI.",
         "aliases": [
           "phenylethylamine",
           "phenylethylamine alkaloids",
           "beta-phenylethylamine",
           "phenylethylamine hcl",
           "b-phenylethylamine",
-          "Beta Phenylethylamine"
+          "Beta Phenylethylamine",
+          "pea supplement",
+          "2-phenylethylamine",
+          "phenethylamine"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.1,
+          "quality": "poor",
+          "notes": "Severely limited by MAO-B first-pass deamination (>90%); t1/2 ~5-10 min oral; functional bioavailability near zero",
+          "range_low": 0.05,
+          "range_high": 0.2
         }
       }
     },
@@ -45148,7 +45230,8 @@
       "last_reviewed_at": "2026-02-28"
     },
     "cui_note": "No UMLS entry for botanical/novel compound",
-    "rxcui_note": "No RxNorm concept for supplement ingredient"
+    "rxcui_note": "No RxNorm concept for supplement ingredient",
+    "description": "Endogenous trace amine neuromodulator; dopamine/norepinephrine efflux via TAAR1"
   },
   "yohimbe": {
     "category": "herbs",
