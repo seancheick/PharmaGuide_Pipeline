@@ -3,8 +3,8 @@
     "description": "Banned and recalled ingredients database for regulatory compliance and safety (v3.0)",
     "purpose": "safety_disqualification_and_regulatory_compliance",
     "schema_version": "4.1.0",
-    "last_updated": "2026-02-24",
-    "total_entries": 127,
+    "last_updated": "2026-03-01",
+    "total_entries": 128,
     "data_source_metadata": {
       "sources": [
         "FDA",
@@ -118,6 +118,20 @@
             "Added 1 FDA UNII identifiers",
             "Added identifier notes for 38 product/category entries"
           ]
+        },
+        {
+          "version": "4.1.1",
+          "date": "2026-03-01",
+          "changes": [
+            "Full data quality audit: 8 stub mechanisms replaced with clinically accurate text",
+            "2 short notes expanded (BANNED_DMBA, BANNED_PICAMILON)",
+            "12 class entries set to match_mode=disabled (matcher skips entity_type=class)",
+            "Added SPIKE_METHOCARBAMOL (prescription muscle relaxant spiking agent)",
+            "Alias-token bidirectional sync completed (192 aliases added in earlier chunks)",
+            "13 clinical_risk_enum mismatches resolved",
+            "4 severity upgrades (bitter orange, yohimbe, tramadol, delta-8 THC)",
+            "Total entries: 127 → 128"
+          ]
         }
       ],
       "known_limitations": [
@@ -142,7 +156,13 @@
       "Added jurisdictions for state/regional ban support",
       "Added operations metadata (data_quality, last_reviewed_at, update_flags)",
       "Merged 1 duplicate entries using supersedes_ids"
-    ]
+    ],
+    "risk_breakdown": {
+      "critical": 87,
+      "high": 20,
+      "moderate": 13,
+      "low": 8
+    }
   },
   "ingredients": [
     {
@@ -195,7 +215,8 @@
         "label_tokens": [
           "meloxicam",
           "mobic",
-          "meloxicam sodium"
+          "meloxicam sodium",
+          "meloxicam tablets"
         ],
         "exclusions": [],
         "case_sensitive": false,
@@ -474,7 +495,8 @@
         "acomplia",
         "zimulti",
         "rimonabant hydrochloride",
-        "SR141716"
+        "SR141716",
+        "rimonabant"
       ],
       "CUI": "C0299375",
       "banned_date": null,
@@ -650,7 +672,8 @@
         "BDO",
         "butylene glycol",
         "tetramethylene glycol",
-        "1,4-butylene glycol"
+        "1,4-butylene glycol",
+        "1,4-butanediol"
       ],
       "CUI": "C0005576",
       "banned_date": "2000-02-01",
@@ -1163,7 +1186,8 @@
           "dhea-acetate-7-one",
           "dhea acetate 7 one",
           "3-desoxy, 7-keto dhea",
-          "3-desoxy 7-keto dhea"
+          "3-desoxy 7-keto dhea",
+          "7 oxo dhea acetate"
         ],
         "exclusions": [],
         "case_sensitive": false,
@@ -1353,7 +1377,7 @@
       "notes": "REGULATORY WARNING: Tobacco alkaloid with controversial regulatory status. Voluntarily withdrawn from market after FDA concerns about drug claims and tobacco-derived ingredient classification. While found naturally in Solanaceae plants, regulatory status uncertain for dietary supplements. [reclassified_2026-02-16: moved from hard-safety to restricted additive watchlist; enforce via additive penalties, not B0 immediate-fail]",
       "last_updated": "2025-09-20",
       "CUI": "",
-      "mechanism_of_harm": "Mechanism requires further documentation.",
+      "mechanism_of_harm": "Tobacco alkaloid structurally related to nicotine. Binds nicotinic acetylcholine receptors (nAChRs), modulating inflammatory signaling via the cholinergic anti-inflammatory pathway. At pharmacological doses, may suppress NF-κB-mediated cytokine release. Chronic exposure carries risk of nicotinic receptor desensitization and cardiovascular stimulation (elevated heart rate, blood pressure). FDA flagged unapproved drug claims; voluntary market withdrawal in 2013.",
       "regulatory_status": {
         "US": "Status pending review",
         "EU": "Status pending review"
@@ -1541,7 +1565,19 @@
     {
       "id": "BANNED_ADD_ARTIFICIAL_COLORS",
       "standard_name": "Policy Watchlist: Artificial Colors (General)",
-      "aliases": [],
+      "aliases": [
+        "artificial colors (general)",
+        "artificial colors",
+        "artificial dyes",
+        "synthetic colors",
+        "fd&c colors",
+        "certified colors",
+        "certified color added",
+        "synthetic food dyes",
+        "coal tar dyes",
+        "petroleum-derived dyes",
+        "azo dyes"
+      ],
       "CUI": "",
       "category": "colorant_artificial",
       "mechanism_of_harm": "Petroleum-derived synthetic dyes may cause hyperactivity in children, allergic reactions, and have potential carcinogenic effects. Some contain or are contaminated with carcinogenic compounds. May affect neurotransmitter function and behavior.",
@@ -1563,7 +1599,7 @@
       ],
       "last_updated": "2025-11-17",
       "match_rules": {
-        "match_mode": "alias_and_fuzzy",
+        "match_mode": "disabled",
         "label_tokens": [
           "artificial colors (general)",
           "artificial colors",
@@ -1785,7 +1821,8 @@
         "butylhydroxyanisole",
         "tert-butyl-4-hydroxyanisole",
         "antioxidant 320",
-        "butylated hydroxyanisole"
+        "butylated hydroxyanisole",
+        "butylated hydroxyanisole (bha)"
       ],
       "CUI": "C0006309",
       "category": "preservative_artificial",
@@ -2045,7 +2082,8 @@
         "dibutylated hydroxytoluene",
         "DBHT",
         "antioxidant 321",
-        "2,6-di-tert-butyl-p-cresol"
+        "2,6-di-tert-butyl-p-cresol",
+        "butylated hydroxytoluene (bht)"
       ],
       "CUI": "C0006342",
       "category": "preservative_artificial",
@@ -2297,12 +2335,25 @@
     {
       "id": "BANNED_ADD_BLUE_1",
       "standard_name": "Policy Watchlist: Blue 1 (Brilliant Blue FCF)",
-      "aliases": [],
+      "aliases": [
+        "blue 1 (brilliant blue fcf)",
+        "blue 1",
+        "brilliant blue fcf",
+        "fd&c blue no. 1",
+        "e133",
+        "brilliant blue",
+        "erioglaucine",
+        "fd&c blue #1",
+        "fd&c blue 1",
+        "fdc blue 1",
+        "blue #1",
+        "brilliant blue e133"
+      ],
       "category": "colorant_artificial",
       "notes": "HIGH RISK: Synthetic food dye derived from petroleum. Studies link to hyperactivity in children and allergic reactions. Banned in several countries. California 2024 Food Safety Act restricts in school foods. FDA approved but increasingly controversial. [reclassified_2026-02-16: moved from hard-safety to restricted additive watchlist; enforce via additive penalties, not B0 immediate-fail] Policy watchlist only; active matching handled in harmful_additives.json.",
       "last_updated": "2025-12-04",
       "CUI": "C0054102",
-      "mechanism_of_harm": "Mechanism requires further documentation.",
+      "mechanism_of_harm": "Synthetic triphenylmethane dye (Brilliant Blue FCF, E133). Poorly absorbed from GI tract (<5%), but animal studies show it can cross a compromised blood-brain barrier. Linked to hypersensitivity reactions and behavioral effects in children (Southampton study). Inhibits mitochondrial respiration at high concentrations in vitro. EFSA ADI set at 6 mg/kg/day; some countries ban it due to precautionary concerns about neurotoxicity in sensitive populations.",
       "regulatory_status": {
         "US": "Status pending review",
         "EU": "Status pending review"
@@ -2315,7 +2366,7 @@
         "FDA Color Additives History table"
       ],
       "match_rules": {
-        "match_mode": "alias_and_fuzzy",
+        "match_mode": "disabled",
         "label_tokens": [
           "blue 1 (brilliant blue fcf)",
           "blue 1",
@@ -2514,13 +2565,14 @@
       "aliases": [
         "citrus red no. 2",
         "solvent red 80",
-        "C.I. 12156"
+        "C.I. 12156",
+        "citrus red 2"
       ],
       "category": "colorant_artificial",
       "notes": "Synthetic orange-red dye. Restricted to coloring orange peels only. Classified as possible human carcinogen. Should not be in supplements. [reclassified_2026-02-16: moved from hard-safety to restricted additive watchlist; enforce via additive penalties, not B0 immediate-fail]",
       "last_updated": "2025-11-14",
       "CUI": "",
-      "mechanism_of_harm": "Mechanism requires further documentation.",
+      "mechanism_of_harm": "Synthetic monoazo dye (E121). Classified as IARC Group 2B (possibly carcinogenic to humans) based on bladder tumor induction in animal studies. Metabolized to aniline derivatives, which can form methemoglobin and N-hydroxylamine intermediates with genotoxic potential. FDA restricts use solely to orange peel coloring at ≤2 ppm. Not approved for ingestion in supplements or food in the EU.",
       "regulatory_status": {
         "US": "Status pending review",
         "EU": "Status pending review"
@@ -2713,13 +2765,14 @@
         "methanal",
         "methylene oxide",
         "formalin",
-        "paraformaldehyde"
+        "paraformaldehyde",
+        "formaldehyde"
       ],
       "category": "preservative_artificial",
       "notes": "Toxic preservative and contaminant. Known human carcinogen (IARC Group 1). Banned as food additive in most countries (EU delisted E240). May form from breakdown of other preservatives. Should never be intentionally added to supplements. [reclassified_2026-02-16: moved from hard-safety — REVERSED by audit_remediation 2026-02-18: Formaldehyde is IARC Group 1 carcinogen and genuinely banned; severity correctly remains critical]",
       "last_updated": "2025-11-14",
       "CUI": "C0016564",
-      "mechanism_of_harm": "Mechanism requires further documentation.",
+      "mechanism_of_harm": "Highly reactive aldehyde classified as IARC Group 1 carcinogen. Forms DNA-protein crosslinks and DNA adducts, disrupting repair mechanisms. Causes direct mucosal irritation and cytotoxicity. Chronic exposure linked to nasopharyngeal cancer and leukemia. Inhibits mucociliary clearance in respiratory tract. In supplements, may form as degradation product of certain preservatives (e.g., DMDM hydantoin). EU delisted food additive E240.",
       "regulatory_status": {
         "US": "Status pending review",
         "EU": "Status pending review"
@@ -2842,7 +2895,7 @@
         }
       ],
       "legal_status_enum": "high_risk",
-      "clinical_risk_enum": "moderate",
+      "clinical_risk_enum": "critical",
       "ingredient_type": "synthetic",
       "class_tags": [
         "high_risk_ingredients",
@@ -2909,12 +2962,21 @@
     {
       "id": "BANNED_ADD_HYDROGENATED_COCONUT_OIL",
       "standard_name": "Policy Watchlist: Hydrogenated Coconut Oil",
-      "aliases": [],
+      "aliases": [
+        "hydrogenated coconut oil",
+        "partially hydrogenated coconut oil",
+        "hardened coconut oil",
+        "trans fat coconut oil",
+        "coconut oil (hydrogenated)",
+        "coconut oil, hydrogenated",
+        "coconut oil hydrogenated",
+        "coconut oil (partially hydrogenated)"
+      ],
       "category": "fat_trans",
       "notes": "Do not hard-match generic \"hydrogenated coconut oil\" in B0. Regulatory actions target PARTIALLY hydrogenated oils (PHOs). Keep as policy-class record to avoid false unsafe blocks.",
       "last_updated": "2025-09-21",
       "CUI": "C0010065",
-      "mechanism_of_harm": "Mechanism requires further documentation.",
+      "mechanism_of_harm": "Partial hydrogenation converts cis-unsaturated fatty acids to trans-fatty acids (TFAs). TFAs raise LDL cholesterol, lower HDL cholesterol, and promote systemic inflammation via NF-κB activation. Increase risk of coronary heart disease (WHO estimates 500,000 CVD deaths/year globally from TFAs). FDA banned PHOs as food additives in 2018 (no longer GRAS). Fully hydrogenated oils contain minimal TFAs but are policy-tracked due to labeling ambiguity.",
       "regulatory_status": {
         "US": "Status pending review",
         "EU": "Status pending review"
@@ -2927,7 +2989,7 @@
         "FDA Trans Fat regulatory timeline"
       ],
       "match_rules": {
-        "match_mode": "alias_and_fuzzy",
+        "match_mode": "disabled",
         "label_tokens": [
           "hydrogenated coconut oil",
           "partially hydrogenated coconut oil",
@@ -3126,7 +3188,7 @@
       "notes": "Preservative with potential endocrine disruption concerns. Has weak estrogenic activity. While FDA considers it GRAS at low levels (0.1%), some individuals may experience allergic reactions. Banned in some organic certifications. [reclassified_2026-02-16: moved from hard-safety to restricted additive watchlist; enforce via additive penalties, not B0 immediate-fail]",
       "last_updated": "2025-09-19",
       "CUI": "C0066003",
-      "mechanism_of_harm": "Mechanism requires further documentation.",
+      "mechanism_of_harm": "Alkyl ester of para-hydroxybenzoic acid used as antimicrobial preservative. Exhibits weak estrogenic activity — binds estrogen receptors (ERα/ERβ) at ~10,000× lower affinity than estradiol, but concern arises from chronic low-dose exposure and bioaccumulation in tissues. In vitro studies show it can stimulate MCF-7 breast cancer cell proliferation. May also inhibit mitochondrial complex I. Allergic contact dermatitis reported in sensitive individuals.",
       "regulatory_status": {
         "US": "Status pending review",
         "EU": "Status pending review"
@@ -3314,13 +3376,14 @@
       "id": "BANNED_ADD_ORANGE_B",
       "standard_name": "Orange B",
       "aliases": [
-        "orange b dye"
+        "orange b dye",
+        "orange b"
       ],
       "category": "colorant_artificial",
       "notes": "Synthetic orange dye. Restricted to use in hot dog and sausage casings only in the US. Not approved for general food use. Potential carcinogen. [reclassified_2026-02-16: moved from hard-safety to restricted additive watchlist; enforce via additive penalties, not B0 immediate-fail]",
       "last_updated": "2025-11-14",
       "CUI": "",
-      "mechanism_of_harm": "Mechanism requires further documentation.",
+      "mechanism_of_harm": "Synthetic monoazo dye. Metabolized by intestinal bacteria via azo-bond reduction to sulfanilic acid and 1-amino-2-naphthol, both with potential toxicological activity. 1-amino-2-naphthol is a known mutagen. Animal studies indicate potential carcinogenicity at high doses. FDA restricts use to hot dog/sausage casings at ≤150 ppm; not approved for general food or supplement use. Not permitted in the EU, Canada, or Japan.",
       "regulatory_status": {
         "US": "Status pending review",
         "EU": "Status pending review"
@@ -3766,13 +3829,14 @@
         "E924a",
         "flour improver",
         "dough conditioner",
-        "potassium salt of bromic acid"
+        "potassium salt of bromic acid",
+        "potassium bromate"
       ],
       "category": "processing_agent",
       "notes": "Carcinogenic flour treatment agent. Banned in EU, Canada, Brazil, and many other countries but still legal in US. Linked to kidney and thyroid tumors in animal studies. [reclassified_2026-02-16: moved from hard-safety to restricted additive watchlist; enforce via additive penalties, not B0 immediate-fail]",
       "last_updated": "2025-09-16",
       "CUI": "C0071178",
-      "mechanism_of_harm": "Mechanism requires further documentation.",
+      "mechanism_of_harm": "Oxidizing agent (KBrO₃) used as flour improver. Classified as IARC Group 2B (possibly carcinogenic). Induces oxidative DNA damage and renal cell tumors in rodents. Mechanism involves generation of reactive oxygen species and 8-oxodeoxyguanosine DNA adducts. Also linked to thyroid follicular cell tumors. Banned in EU (1990), UK, Canada, Brazil, China. Still permitted in US at ≤75 ppm in flour, though California Prop 65 lists it as carcinogen.",
       "regulatory_status": {
         "US": "Status pending review",
         "EU": "Status pending review"
@@ -3971,7 +4035,8 @@
         "nipasol P",
         "propyl parahydroxybenzoate",
         "4-hydroxybenzoic acid propyl ester",
-        "propyl butex"
+        "propyl butex",
+        "propylparaben"
       ],
       "CUI": "C0072063",
       "category": "preservative_artificial",
@@ -4196,7 +4261,22 @@
     {
       "id": "BANNED_ADD_RED40",
       "standard_name": "Policy Watchlist: Red 40",
-      "aliases": [],
+      "aliases": [
+        "red 40",
+        "allura red",
+        "e129",
+        "fd&c red no. 40",
+        "allura red ac",
+        "red dye 40",
+        "red no. 40",
+        "ci 16035",
+        "disodium 6-hydroxy-5-[(2-methoxy-5-methyl-4-sulfophenyl)azo]-2-naphthalenesulfonate",
+        "red 40 lake",
+        "allura red aluminum lake",
+        "fd&c red #40",
+        "fd&c red 40",
+        "red #40"
+      ],
       "CUI": "C0051258",
       "category": "colorant_artificial",
       "mechanism_of_harm": "Petroleum-derived azo dye that may cause hyperactivity and behavioral changes in children, possibly through effects on neurotransmitters. Can trigger allergic reactions and immune system effects. May be contaminated with carcinogenic compounds during manufacturing.",
@@ -4219,7 +4299,7 @@
       ],
       "last_updated": "2025-11-17",
       "match_rules": {
-        "match_mode": "alias_and_fuzzy",
+        "match_mode": "disabled",
         "label_tokens": [
           "red 40",
           "allura red",
@@ -4475,7 +4555,8 @@
         "dodecyl gallate",
         "E312",
         "synthetic preservatives",
-        "artificial antioxidants"
+        "artificial antioxidants",
+        "synthetic antioxidants"
       ],
       "category": "preservative_artificial",
       "mechanism_of_harm": "Can form harmful compounds during metabolism. May act as pro-oxidants in certain conditions. Can accumulate in liver and fatty tissues. Potential endocrine disrupting effects.",
@@ -4710,7 +4791,8 @@
         "xenoestrogens",
         "synthetic hormone",
         "artificial estrogen",
-        "hormone mimics"
+        "hormone mimics",
+        "synthetic estrogens"
       ],
       "category": "hormone_synthetic",
       "mechanism_of_harm": "Disrupts natural hormone signaling, potentially leading to reproductive issues, developmental problems, and increased cancer risk. Can interfere with natural estrogen receptors and endocrine system function.",
@@ -4869,7 +4951,7 @@
         }
       ],
       "legal_status_enum": "high_risk",
-      "clinical_risk_enum": "moderate",
+      "clinical_risk_enum": "high",
       "ingredient_type": "synthetic",
       "class_tags": [
         "high_risk_ingredients",
@@ -4935,7 +5017,18 @@
     {
       "id": "BANNED_ADD_SYNTHETIC_FOOD_ACIDS",
       "standard_name": "Policy Watchlist: Synthetic Food Acids",
-      "aliases": [],
+      "aliases": [
+        "synthetic food acids",
+        "fumaric acid",
+        "e297",
+        "adipic acid",
+        "e355",
+        "succinic acid",
+        "e363",
+        "synthetic citric acid",
+        "artificial food acids",
+        "manufactured acids"
+      ],
       "category": "acidity_regulator",
       "mechanism_of_harm": "Can erode tooth enamel. May disrupt mineral absorption. Some forms can affect metabolism. Potential gut irritant in sensitive individuals.",
       "regulatory_status": {
@@ -4956,7 +5049,7 @@
       "last_updated": "2025-09-11",
       "CUI": "",
       "match_rules": {
-        "match_mode": "alias_and_fuzzy",
+        "match_mode": "disabled",
         "label_tokens": [
           "synthetic food acids",
           "fumaric acid",
@@ -5156,7 +5249,8 @@
         "2-(1,1-dimethylethyl)-1,4-benzenediol",
         "tertiary butylhydroquinone",
         "t-butylhydroquinone",
-        "MTBHQ"
+        "MTBHQ",
+        "tertiary butylhydroquinone (tbhq)"
       ],
       "CUI": "C0076149",
       "category": "preservative_artificial",
@@ -5406,7 +5500,26 @@
     {
       "id": "BANNED_ADD_TITANIUM_DIOXIDE",
       "standard_name": "Policy Watchlist: Titanium Dioxide",
-      "aliases": [],
+      "aliases": [
+        "titanium dioxide",
+        "e171",
+        "tio2",
+        "titanium white",
+        "titanium white 6",
+        "pigment white 6",
+        "pw6",
+        "ci 77891",
+        "titanium(iv) oxide",
+        "titania",
+        "white pigment",
+        "titanium dioxide powder",
+        "brookite",
+        "rutile",
+        "anatase",
+        "titanium dioxide nanoparticles",
+        "titanium dioxide color",
+        "titanium dioxide e171"
+      ],
       "CUI": "C0076733",
       "category": "colorant_artificial",
       "mechanism_of_harm": "Nanoparticles can accumulate in the body, cross biological barriers, and potentially damage DNA through oxidative stress. May cause inflammation and genotoxicity. Particle size and surface properties affect toxicity.",
@@ -5428,7 +5541,7 @@
       ],
       "last_updated": "2025-11-17",
       "match_rules": {
-        "match_mode": "alias_and_fuzzy",
+        "match_mode": "disabled",
         "label_tokens": [
           "titanium dioxide",
           "e171",
@@ -5678,7 +5791,21 @@
     {
       "id": "BANNED_ADD_YELLOW5",
       "standard_name": "Policy Watchlist: Yellow 5",
-      "aliases": [],
+      "aliases": [
+        "yellow 5",
+        "tartrazine",
+        "e102",
+        "fd&c yellow no. 5",
+        "yellow dye 5",
+        "yellow no. 5",
+        "ci 19140",
+        "trisodium 5-hydroxy-1-(4-sulfonatophenyl)-4-(4-sulfonatophenylazo)pyrazole-3-carboxylate",
+        "yellow 5 lake",
+        "tartrazine aluminum lake",
+        "fd&c yellow #5",
+        "fd&c yellow 5",
+        "yellow #5"
+      ],
       "CUI": "C0039640",
       "category": "colorant_artificial",
       "mechanism_of_harm": "Petroleum-derived azo dye that can trigger hyperactivity in children, asthma attacks, and allergic reactions including hives and angioedema. May be contaminated with carcinogenic compounds. Can cause cross-reactions in aspirin-sensitive individuals.",
@@ -5701,7 +5828,7 @@
       ],
       "last_updated": "2025-11-17",
       "match_rules": {
-        "match_mode": "alias_and_fuzzy",
+        "match_mode": "disabled",
         "label_tokens": [
           "yellow 5",
           "tartrazine",
@@ -5946,7 +6073,22 @@
     {
       "id": "BANNED_ADD_YELLOW6",
       "standard_name": "Policy Watchlist: Yellow 6",
-      "aliases": [],
+      "aliases": [
+        "yellow 6",
+        "sunset yellow fcf",
+        "e110",
+        "fd&c yellow no. 6",
+        "orange yellow s",
+        "yellow dye 6",
+        "yellow no. 6",
+        "ci 15985",
+        "disodium 6-hydroxy-5-[(4-sulfophenyl)azo]-2-naphthalenesulfonate",
+        "yellow 6 lake",
+        "sunset yellow aluminum lake",
+        "fd&c yellow #6",
+        "fd&c yellow 6",
+        "yellow #6"
+      ],
       "CUI": "C0075925",
       "category": "colorant_artificial",
       "mechanism_of_harm": "Petroleum-derived azo dye that may be contaminated with carcinogens during manufacturing. Linked to adrenal tumors in animals. Can cause severe hypersensitivity reactions, hyperactivity in children, and allergic responses.",
@@ -5969,7 +6111,7 @@
       ],
       "last_updated": "2025-11-17",
       "match_rules": {
-        "match_mode": "alias_and_fuzzy",
+        "match_mode": "disabled",
         "label_tokens": [
           "yellow 6",
           "sunset yellow fcf",
@@ -6226,7 +6368,8 @@
         "aristolochia manshuriensis",
         "asarum canadense",
         "guang fang ji",
-        "mu tong"
+        "mu tong",
+        "aristolochic acid"
       ],
       "CUI": "C0052895",
       "banned_date": "2001-04-09",
@@ -6854,7 +6997,8 @@
         "Hemp Aerial Parts Extract",
         "Full Spectrum CBD Distillate",
         "Phytocannabinoid Hemp Oil",
-        "cannabinoid extract"
+        "cannabinoid extract",
+        "cbd (cannabidiol)"
       ],
       "CUI": "C0006863",
       "banned_date": "2018-12-20",
@@ -6910,7 +7054,24 @@
           "cbd isolate",
           "full spectrum cbd",
           "broad spectrum cbd",
-          "hemp-derived cbd"
+          "hemp-derived cbd",
+          "pure cbd extract",
+          "cbd hemp extract",
+          "cannabidiol hemp extract",
+          "Full Spectrum Cannabidiol",
+          "Broad Spectrum Cannabidiol",
+          "Hemp derived Crystalline Cannabidiol",
+          "Cannabidiol, Distillate",
+          "cannabidiol distillate",
+          "CBD distillate",
+          "Full-Spectrum Hemp, Distillate",
+          "full-spectrum hemp distillate",
+          "Full Spectrum Hemp Distillate",
+          "Broad Spectrum Hemp Aerial Parts Extract",
+          "Hemp Aerial Parts Extract",
+          "Full Spectrum CBD Distillate",
+          "Phytocannabinoid Hemp Oil",
+          "cannabinoid extract"
         ],
         "exclusions": [],
         "case_sensitive": false,
@@ -7124,7 +7285,8 @@
         "comfrey root",
         "comfrey leaf",
         "pyrrolizidine alkaloids",
-        "PA-containing herbs"
+        "PA-containing herbs",
+        "comfrey (internal use)"
       ],
       "CUI": "C0524968",
       "banned_date": "2001-07-06",
@@ -7140,7 +7302,7 @@
         "Australia": "Restricted - external use only"
       },
       "category": "botanical",
-      "severity_level": "high",
+      "severity_level": "critical",
       "fda_warning": true,
       "notes": "Contains hepatotoxic pyrrolizidine alkaloids. Banned for internal use in many countries. External use (topical creams) still permitted in some jurisdictions. Linked to liver failure and death. No safe level for internal consumption.",
       "scientific_references": [
@@ -7341,7 +7503,8 @@
         "GLP-1 receptor agonist contamination",
         "ozempic contamination",
         "wegovy contamination",
-        "mounjaro contamination"
+        "mounjaro contamination",
+        "contaminated glp-1 compounds"
       ],
       "CUI": "",
       "banned_date": null,
@@ -7399,7 +7562,7 @@
         "negative_match_terms": []
       },
       "legal_status_enum": "high_risk",
-      "clinical_risk_enum": "high",
+      "clinical_risk_enum": "critical",
       "jurisdictions": [
         {
           "region": "US",
@@ -7572,7 +7735,7 @@
         "EU": "Varies by country"
       },
       "category": "cannabinoid",
-      "severity_level": "moderate",
+      "severity_level": "high",
       "severity_score": 4,
       "fda_warning": true,
       "notes": "State-level regulation varies widely. Legal in some states, banned in others. Often sold in gas stations and smoke shops. Quality control concerns. [normalized_non_iso_dates: banned_date_raw=varies; ban_effective_date_raw=varies]",
@@ -7596,7 +7759,13 @@
           "delta8 thc",
           "delta-8-thc",
           "d8 thc",
-          "d8-thc"
+          "d8-thc",
+          "delta-8 tetrahydrocannabinol",
+          "Delta-8-Tetrahydrocannabinol",
+          "Delta-8-Tetrahydrocannabinol Distillate",
+          "delta-8 distillate",
+          "delta 8 distillate",
+          "Delta 8"
         ],
         "exclusions": [],
         "case_sensitive": false,
@@ -7606,7 +7775,7 @@
         "negative_match_terms": []
       },
       "legal_status_enum": "banned_state",
-      "clinical_risk_enum": "moderate",
+      "clinical_risk_enum": "high",
       "jurisdictions": [
         {
           "region": "US",
@@ -7748,7 +7917,8 @@
         "forthane",
         "1,3-DMAA",
         "geranamine",
-        "dimethylamylamine"
+        "dimethylamylamine",
+        "dmaa"
       ],
       "CUI": "C0771503",
       "banned_date": "2013-04-11",
@@ -8021,7 +8191,8 @@
         "amperall",
         "amp citrate",
         "4-amp citrate",
-        "4-methyl-2-pentanamine"
+        "4-methyl-2-pentanamine",
+        "dmba"
       ],
       "status": "banned",
       "severity_level": "critical",
@@ -8041,7 +8212,7 @@
         "Global": "Regulatory status varies by jurisdiction"
       },
       "fda_warning": true,
-      "notes": "Added from FDA Dietary Supplement Ingredient Directory (DMBA aliases listed).",
+      "notes": "CRITICAL: 1,3-Dimethylbutylamine (DMBA/AMP Citrate) is a synthetic stimulant marketed as a \"natural\" plant extract. FDA issued warning letters to multiple manufacturers (2015) stating DMBA does not qualify as a dietary ingredient. Associated with elevated blood pressure, tachycardia, and serious cardiovascular events. Structurally similar to DMAA (another banned stimulant). Found in pre-workout and weight-loss supplements. No clinical safety data exists for human consumption.",
       "scientific_references": [
         "FDA Dietary Supplement Ingredient Directory: DMBA (1,3-dimethylbutylamine)"
       ],
@@ -8374,7 +8545,8 @@
         "ephedra distachya",
         "ephedrine",
         "pseudoephedrine",
-        "phenylpropanolamine"
+        "phenylpropanolamine",
+        "ephedra"
       ],
       "CUI": "C0014485",
       "banned_date": "2004-04-12",
@@ -8755,7 +8927,8 @@
         "food red 9",
         "acid red 27",
         "azorubin s",
-        "naphthalene red"
+        "naphthalene red",
+        "fd&c red no. 2 (amaranth)"
       ],
       "CUI": "C0051186",
       "banned_date": "1976-01-19",
@@ -9210,7 +9383,8 @@
         "lotus seed embryo extract",
         "demethylcoclaurine HCl",
         "higenamine HCl",
-        "higenamine hydrochloride"
+        "higenamine hydrochloride",
+        "higenamine"
       ],
       "CUI": "C0062579",
       "banned_date": "2019-04-01",
@@ -9460,7 +9634,9 @@
           "mk-0677",
           "ibutamoren",
           "ibutamoren mesylate",
-          "ibutamorin"
+          "ibutamorin",
+          "ibutamorin mk-0677",
+          "growth hormone secretagogues ibutamorin mk-0677"
         ],
         "exclusions": [],
         "case_sensitive": false,
@@ -9556,7 +9732,8 @@
         "somatomedin c",
         "synthetic igf-1",
         "exogenous igf-1",
-        "recombinant IGF-1"
+        "recombinant IGF-1",
+        "igf-1 (insulin-like growth factor 1)"
       ],
       "CUI": "C0021665",
       "banned_date": "1997-01-01",
@@ -9820,7 +9997,8 @@
           "lr3 igf1",
           "lr3-igf-1",
           "lr3-igf1",
-          "long arginine 3 igf-1"
+          "long arginine 3 igf-1",
+          "insulin-like growth factor 1 lr3"
         ],
         "exclusions": [],
         "case_sensitive": false,
@@ -9943,7 +10121,8 @@
         "metal contamination",
         "metallic particles",
         "steel fibers",
-        "iron fibers"
+        "iron fibers",
+        "metal fiber contamination"
       ],
       "CUI": "",
       "banned_date": "2024-07-25",
@@ -9956,7 +10135,7 @@
         "US": "FDA monitoring. Class I recall risk (most serious)."
       },
       "category": "contaminant_manufacturing",
-      "severity_level": "high",
+      "severity_level": "critical",
       "fda_warning": true,
       "notes": "Major recalls in Canada affecting 22+ supplement brands including multivitamins, prenatal vitamins, and specialized supplements. Metal fibers originated from manufacturing equipment malfunction. Class I recall (most serious - can cause death or serious injury). [reclassified_2026-02-16: non-federal high-risk/restricted ingredient downgraded to moderate to avoid false UNSAFE; keep as caution-level signal]",
       "scientific_references": [
@@ -10115,7 +10294,8 @@
         "fluoride chewables",
         "NaF supplements",
         "luride",
-        "flura-drops"
+        "flura-drops",
+        "fluoride supplements (children)"
       ],
       "CUI": "C0016327",
       "banned_date": "2025-05-14",
@@ -10338,7 +10518,8 @@
         "4-amino-3-phenylbutyric acid",
         "phenibut HCL",
         "noofen",
-        "beta-phenyl-GABA"
+        "beta-phenyl-GABA",
+        "phenibut"
       ],
       "CUI": "C0070007",
       "banned_date": null,
@@ -10577,7 +10758,8 @@
         "partially hydrogenated canola oil",
         "trans fats",
         "industrial trans fats",
-        "artificial trans fats"
+        "artificial trans fats",
+        "partially hydrogenated oils (phos)"
       ],
       "CUI": "C0597649",
       "banned_date": "2015-06-16",
@@ -10792,15 +10974,16 @@
       "aliases": [
         "nicotinoyl-GABA",
         "pycamilon",
-        "N-nicotinoyl-GABA"
+        "N-nicotinoyl-GABA",
+        "picamilon"
       ],
       "banned_date": "2015-11-30",
       "banned_by": "FDA",
       "reason": "Unapproved drug, does not meet supplement definition",
       "category": "nootropic",
-      "severity_level": "high",
+      "severity_level": "critical",
       "fda_warning": true,
-      "notes": "Synthetic compound developed in Russia as pharmaceutical drug.",
+      "notes": "CRITICAL: Synthetic GABA-nicotinic acid ester (nicotinoyl-GABA) developed in Russia in 1969 as a prescription pharmaceutical for cerebrovascular disorders. FDA ruled in 2015 that picamilon does not meet the definition of a dietary ingredient — it is a synthetic drug, not found in food. Acts as a prodrug: crosses the blood-brain barrier, then hydrolyzes to release GABA and niacin in the CNS. Five supplement companies received FDA warning letters. Not approved as a drug or supplement in the US.",
       "last_updated": "2026-01-05",
       "status": "banned",
       "severity_score": 9,
@@ -11379,7 +11562,8 @@
         "reductil",
         "sibutral",
         "sibutramine hydrochloride",
-        "sibutramine HCl"
+        "sibutramine HCl",
+        "sibutramine"
       ],
       "CUI": "C0074442",
       "banned_date": "2010-10-08",
@@ -11912,7 +12096,8 @@
         "tianeptine sodium",
         "tianeptine sulfate",
         "tianaa",
-        "za za red"
+        "za za red",
+        "tianeptine"
       ],
       "CUI": "C0145527",
       "banned_date": null,
@@ -12290,7 +12475,8 @@
         "lucky nut",
         "be-still tree",
         "yellow oleander seeds",
-        "thevetia neriifolia"
+        "thevetia neriifolia",
+        "yellow oleander (recent recalls 2025)"
       ],
       "CUI": "C0331564",
       "banned_date": null,
@@ -12654,7 +12840,8 @@
         "creosote bush",
         "greasewood",
         "chaparral extract",
-        "chaparral tea"
+        "chaparral tea",
+        "chaparral"
       ],
       "CUI": "C0949920",
       "banned_date": null,
@@ -12818,7 +13005,8 @@
         "teucrium chamaedrys",
         "wall germander",
         "wild germander",
-        "germander extract"
+        "germander extract",
+        "germander"
       ],
       "CUI": "C0949920",
       "banned_date": null,
@@ -13014,7 +13202,8 @@
         "pulegium oil",
         "pennyroyal extract",
         "european pennyroyal",
-        "pennyroyal"
+        "pennyroyal",
+        "pennyroyal oil"
       ],
       "CUI": "C0949920",
       "banned_date": null,
@@ -13028,7 +13217,7 @@
         "UK": "Banned for internal use"
       },
       "category": "botanical",
-      "severity_level": "high",
+      "severity_level": "critical",
       "fda_warning": true,
       "notes": "Especially dangerous when used to induce abortion - causes maternal death before abortion. Multiple deaths reported. Even small doses can cause liver failure. One of the most dangerous herbs. [reclassified_2026-02-16: non-federal high-risk/restricted ingredient downgraded to moderate to avoid false UNSAFE; keep as caution-level signal]",
       "scientific_references": [
@@ -13223,7 +13412,9 @@
       "aliases": [
         "arsenic contamination",
         "arsenite",
-        "arsenate"
+        "arsenate",
+        "arsenic (inorganic)",
+        "as"
       ],
       "category": "heavy_metal",
       "reason": "Carcinogenic; linked to skin, lung, and bladder cancer. FDA concern level varies by product type",
@@ -13261,7 +13452,7 @@
         "negative_match_terms": []
       },
       "legal_status_enum": "contaminant_risk",
-      "clinical_risk_enum": "high",
+      "clinical_risk_enum": "critical",
       "jurisdictions": [
         {
           "region": "US",
@@ -13448,7 +13639,9 @@
       "last_updated": "2026-01-05",
       "aliases": [
         "cadmium contamination",
-        "cadmium compounds"
+        "cadmium compounds",
+        "cadmium",
+        "cd"
       ],
       "category": "heavy_metal",
       "reason": "Kidney damage; bone loss. California Prop 65 limit: 4.1 mcg/day",
@@ -13484,7 +13677,7 @@
         "negative_match_terms": []
       },
       "legal_status_enum": "contaminant_risk",
-      "clinical_risk_enum": "high",
+      "clinical_risk_enum": "critical",
       "jurisdictions": [
         {
           "region": "US",
@@ -13648,7 +13841,9 @@
       "aliases": [
         "lead compounds",
         "lead contamination",
-        "plumbum"
+        "plumbum",
+        "lead",
+        "pb"
       ],
       "category": "heavy_metal",
       "reason": "Neurotoxic; harmful to brain development and cognitive function. Prop 65 limit: 0.5 mcg/day",
@@ -13685,7 +13880,7 @@
         "negative_match_terms": []
       },
       "legal_status_enum": "contaminant_risk",
-      "clinical_risk_enum": "high",
+      "clinical_risk_enum": "critical",
       "jurisdictions": [
         {
           "region": "US",
@@ -13849,7 +14044,9 @@
       "aliases": [
         "mercury contamination",
         "methylmercury",
-        "mercury compounds"
+        "mercury compounds",
+        "mercury",
+        "hg"
       ],
       "category": "heavy_metal",
       "reason": "Neurotoxic; harmful to developing fetuses and children. EPA reference dose: 0.1 mcg/kg/day",
@@ -13886,7 +14083,7 @@
         "negative_match_terms": []
       },
       "legal_status_enum": "contaminant_risk",
-      "clinical_risk_enum": "high",
+      "clinical_risk_enum": "critical",
       "jurisdictions": [
         {
           "region": "US",
@@ -14022,7 +14219,8 @@
       "aliases": [
         "9-MBC",
         "9-methyl-beta-carboline",
-        "9-methyl-9H-pyrido[3,4-b]indole"
+        "9-methyl-9H-pyrido[3,4-b]indole",
+        "9-methyl-β-carboline"
       ],
       "CUI": "",
       "banned_date": null,
@@ -14035,7 +14233,7 @@
         "Global": "No approvals anywhere"
       },
       "category": "nootropic",
-      "severity_level": "high",
+      "severity_level": "critical",
       "fda_warning": true,
       "notes": "Found in cognitive enhancement supplements. No human safety data. Research chemical only. Potential neurotoxicity. No specific FDA ban date — unapproved new dietary ingredient by default.",
       "scientific_references": [
@@ -14826,7 +15024,8 @@
         "lauflumide",
         "fluoromodafinil",
         "4′-fluoromodafinil",
-        "CRL-40940"
+        "CRL-40940",
+        "flmodafinil"
       ],
       "CUI": "",
       "banned_date": "2025-08-15",
@@ -14839,7 +15038,7 @@
         "Global": "No approvals anywhere"
       },
       "category": "nootropic",
-      "severity_level": "high",
+      "severity_level": "critical",
       "fda_warning": true,
       "notes": "Found in nootropic supplements 2025. More potent than modafinil. Designer drug analog of controlled substance.",
       "scientific_references": [
@@ -15810,7 +16009,7 @@
         "Japan": "Approved pharmaceutical (Enerion)"
       },
       "category": "nootropic",
-      "severity_level": "high",
+      "severity_level": "critical",
       "fda_warning": true,
       "notes": "FDA warning letter April 2025 to Gluten Free Remedies LLC. Synthetic thiamine derivative. Pharmaceutical in France/Japan. [fix_2026-02-18: Severity lowered from 9 to 7. Confirmed FDA warning letter April 2025 to Gluten Free Remedies LLC. Not a dietary ingredient per FDA. Pharmaceutical safely used in France (Arcalion) and Japan.]",
       "scientific_references": [
@@ -16018,7 +16217,7 @@
         "China": "Prescription drug"
       },
       "category": "nootropic",
-      "severity_level": "high",
+      "severity_level": "critical",
       "fda_warning": true,
       "notes": "FDA warning for women of childbearing age due to birth defect risk. Pharmaceutical in Germany/Russia/China. Can cause miscarriage. [fix_2026-02-18: Severity lowered from 9 to 7. Fixed dates to Sept 7, 2016 (tentative conclusion) from fabricated Oct 11, 2019. Mechanism updated: 'birth defects' corrected to 'miscarriage and decreased fetal weight'. FDA tentative conclusion never finalized. Still widely sold in US.]",
       "scientific_references": [
@@ -16228,7 +16427,8 @@
         "body protection compound-157",
         "PL 14736",
         "healing peptide",
-        "BPC 157"
+        "BPC 157",
+        "bpc-157"
       ],
       "CUI": "C1313547",
       "banned_date": null,
@@ -16412,7 +16612,8 @@
         "barbie drug",
         "tanning peptide",
         "tanning injection",
-        "afamelanotide precursor"
+        "afamelanotide precursor",
+        "melanotan ii"
       ],
       "CUI": "C1137123",
       "banned_date": "2009-01-01",
@@ -16625,7 +16826,8 @@
         "thymosin β4",
         "tb500",
         "repair peptide",
-        "thymosin beta-4"
+        "thymosin beta-4",
+        "tb-500 (thymosin beta-4)"
       ],
       "CUI": "C0076068",
       "banned_date": null,
@@ -16806,7 +17008,8 @@
         "priligy",
         "westoxetin",
         "SSRIs in supplements",
-        "dapoxetine hydrochloride"
+        "dapoxetine hydrochloride",
+        "dapoxetine"
       ],
       "CUI": "C1176306",
       "banned_date": null,
@@ -16963,7 +17166,8 @@
         "belviq",
         "lorqess",
         "hidden weight loss drug",
-        "lorcaserin hydrochloride"
+        "lorcaserin hydrochloride",
+        "lorcaserin"
       ],
       "CUI": "C1609165",
       "banned_date": "2020-02-13",
@@ -17144,7 +17348,13 @@
     {
       "id": "RC_CARDARINE_ANALOGS",
       "standard_name": "Policy Watchlist: Cardarine Derivatives",
-      "aliases": [],
+      "aliases": [
+        "cardarine derivatives",
+        "gw501516 analogs",
+        "modified cardarine",
+        "pparδ agonists",
+        "gw-501516 derivatives"
+      ],
       "CUI": "",
       "banned_date": null,
       "ban_effective_date": null,
@@ -17190,7 +17400,7 @@
         "general"
       ],
       "match_rules": {
-        "match_mode": "alias_and_fuzzy",
+        "match_mode": "disabled",
         "label_tokens": [
           "cardarine derivatives",
           "gw501516 analogs",
@@ -19818,7 +20028,8 @@
         "bitter orange extract",
         "seville orange",
         "bitter orange citrus bioflavonoids",
-        "bitter orange citrus bioflavonoid"
+        "bitter orange citrus bioflavonoid",
+        "bitter orange"
       ],
       "CUI": "C0330890",
       "banned_date": null,
@@ -19832,7 +20043,7 @@
         "EU": "Under review for restrictions"
       },
       "category": "stimulant",
-      "severity_level": "moderate",
+      "severity_level": "high",
       "fda_warning": false,
       "notes": "Often used as ephedra replacement. Can cause similar cardiovascular issues. Multiple case reports of heart attack and stroke, especially when combined with caffeine. [reclassified_2026-02-16: non-federal high-risk/restricted ingredient downgraded to moderate to avoid false UNSAFE; keep as caution-level signal] [fix_2026-02-18: fda_warning set to false - FDA has not issued a formal warning against synephrine itself, only against specific adulterated products. Severity lowered from 7 to 5. Legal supplement in the US. Banned by NCAA. Cardiovascular risk primarily when combined with caffeine.]",
       "scientific_references": [
@@ -19993,7 +20204,8 @@
       "aliases": [
         "germanium dioxide",
         "germanium sesquioxide",
-        "inorganic germanium"
+        "inorganic germanium",
+        "germanium (inorganic)"
       ],
       "CUI": "C0017987",
       "banned_date": null,
@@ -20183,7 +20395,8 @@
       "standard_name": "Green Tea Extract (High Dose)",
       "aliases": [
         "EGCG >800mg",
-        "high dose EGCG"
+        "high dose EGCG",
+        "green tea extract (high dose)"
       ],
       "CUI": "C1704263",
       "banned_date": null,
@@ -20360,7 +20573,9 @@
         "piper methysticum",
         "kava kava",
         "kava extract",
-        "kavain"
+        "kavain",
+        "kava",
+        "awa"
       ],
       "CUI": "C0948381",
       "banned_date": null,
@@ -20667,7 +20882,8 @@
         "thom",
         "kratom",
         "ketum",
-        "mitragynine"
+        "mitragynine",
+        "kratom (natural leaf)"
       ],
       "CUI": "C2936381",
       "banned_date": null,
@@ -20714,7 +20930,8 @@
           "biak",
           "thom",
           "kratom",
-          "ketum"
+          "ketum",
+          "mitragynine"
         ],
         "exclusions": [],
         "case_sensitive": false,
@@ -20914,7 +21131,8 @@
         "yohimbine bark extract",
         "pausinystalia yohimbe bark extract",
         "2% yohimbe alkaloid",
-        "12.5 mg yohimbine alkaloids"
+        "12.5 mg yohimbine alkaloids",
+        "yohimbe"
       ],
       "CUI": "C0724536",
       "banned_date": null,
@@ -20928,7 +21146,7 @@
         "EU": "Restricted in some countries"
       },
       "category": "stimulant",
-      "severity_level": "moderate",
+      "severity_level": "high",
       "fda_warning": false,
       "contraindications": [
         "heart disease",
@@ -20983,7 +21201,10 @@
           "yohimbine bark extract",
           "pausinystalia yohimbe bark extract",
           "2% yohimbe alkaloid",
-          "12.5 mg yohimbine alkaloids"
+          "12.5 mg yohimbine alkaloids",
+          "alpha-yohimbine hydrochloride",
+          "alpha yohimbe",
+          "yohimbines"
         ],
         "exclusions": [],
         "case_sensitive": false,
@@ -21484,7 +21705,8 @@
         "LGD4033",
         "ldg-4033",
         "ligandroll ldg-4033",
-        "ligandrol ldg-4033"
+        "ligandrol ldg-4033",
+        "ligandroll"
       ],
       "CUI": "C3658706",
       "banned_date": "2017-10-31",
@@ -21532,7 +21754,9 @@
           "vk5211",
           "lgd4033",
           "ldg-4033",
-          "ligandroll"
+          "ligandroll",
+          "ligandroll ldg-4033",
+          "ligandrol ldg-4033"
         ],
         "exclusions": [],
         "case_sensitive": false,
@@ -21733,7 +21957,10 @@
           "enobosarm",
           "gtx-024",
           "mk2866",
-          "ostarine mk-2866"
+          "ostarine mk-2866",
+          "ostarine - mk-2866",
+          "ostarine-mk 2866",
+          "ostarine mk2866"
         ],
         "exclusions": [],
         "case_sensitive": false,
@@ -22081,7 +22308,8 @@
         "legal shrooms",
         "muscimol gummies",
         "amanita pantherina",
-        "panther cap"
+        "panther cap",
+        "amanita muscaria / muscimol"
       ],
       "CUI": "C0066351",
       "banned_date": null,
@@ -22100,7 +22328,7 @@
         "Louisiana": "Banned effective August 1, 2025",
         "FDA": "Multiple warning letters. Not legal to sell as supplement."
       },
-      "severity_level": "high",
+      "severity_level": "critical",
       "health_risks": [
         "seizures",
         "coma",
@@ -22320,7 +22548,8 @@
         "liberty caps",
         "psychedelic mushrooms",
         "4-phosphoryloxy-DMT",
-        "4-HO-DMT"
+        "4-HO-DMT",
+        "psilocybin/psilocin"
       ],
       "CUI": "C0033825",
       "banned_date": "1970-10-27",
@@ -22588,7 +22817,14 @@
         "sarm component",
         "2,3a-epithio-17a-methyletioallo cholan-17b-ol",
         "methylstenbolone 2,17a-dimethyl-5a-androsta-1-en-17b-ol-3-one",
-        "estra-4,9,11,triene-3,17 dione"
+        "estra-4,9,11,triene-3,17 dione",
+        "synthetic anabolic steroids",
+        "methasterone",
+        "prostanozol",
+        "dimethazine",
+        "designer steroids",
+        "prohormones",
+        "methylstenbolone"
       ],
       "CUI": "",
       "banned_date": null,
@@ -22635,7 +22871,7 @@
         "general"
       ],
       "match_rules": {
-        "match_mode": "alias_and_fuzzy",
+        "match_mode": "disabled",
         "label_tokens": [
           "synthetic anabolic steroids",
           "methasterone",
@@ -22654,7 +22890,33 @@
           "pure sarm",
           "2,3a-epithio-17a-methyletioallo cholan-17b-ol",
           "methylstenbolone",
-          "estra-4,9,11,triene-3,17 dione"
+          "estra-4,9,11,triene-3,17 dione",
+          "androst-3,5-diene-7,17-dione",
+          "androsta-3,5-dien-7,17-dione",
+          "androst 3,5-dien-7,17-dione",
+          "androsta-3,5-diene-7, 17-dione",
+          "androsta-3, 5-diene-7, 17-dione",
+          "estra-4,9,11, triene-3,17 dione",
+          "3beta-hydroxy-5-androstan-17-one",
+          "3beta-hydroxy-5alpha-androstan-17-one azine",
+          "androsta-3 5-diene-7,17-dione",
+          "androsta-3 5-diene-7-17-dione",
+          "androsta 3,5-diene-7,17-dione",
+          "androst-3, 5-dien-7, 17-dione",
+          "androst-3, 5-diene-7, 17-dione",
+          "estra -4,9,11-triene-3,17 dione",
+          "2,17a-dimethyl-5a-androsta-1-en-17b-ol-3-one",
+          "2,17a-methyl-5a-androsta-1en-17b-ol-3-one",
+          "2a,3a-epithio-17a-methyl-etioallocholan-17b-ol",
+          "2a,3a-epithio-17a-methyl-5a-androstan-17b-ol",
+          "2a,3a epithio-17a-methyl-17b-hydroxy-5a-androstane",
+          "2a, 3a-epithio-17a-methyl-5a-androstan-17b-ol",
+          "17b-hydroxy-2a, 17b-dimethyl-5a-androstan-3-one-azine",
+          "38-acetoxy-androst-5-en-7, 17-dione",
+          "3-hydroxy-androstane-17-one",
+          "1-4 ohp17beta-[{1-ketoethyl}-androsta-1, 4-diene-3-one,17a-ol]",
+          "3-beta-hydroxy-1,4-androstadien-17-one undecanoate, 17a-hydroxy-pregna-1,4-diene-3,20-dione",
+          "methylstenbolone 2,17a-dimethyl-5a-androsta-1-en-17b-ol-3-one"
         ],
         "exclusions": [],
         "case_sensitive": false,
@@ -22930,7 +23192,8 @@
       "aliases": [
         "decadron",
         "dexasone",
-        "dexamethasone sodium phosphate"
+        "dexamethasone sodium phosphate",
+        "dexamethasone"
       ],
       "CUI": "C0011777",
       "banned_date": null,
@@ -23085,7 +23348,8 @@
       "aliases": [
         "voltaren",
         "pennsaid",
-        "diclofenac sodium"
+        "diclofenac sodium",
+        "diclofenac"
       ],
       "CUI": "C0012091",
       "banned_date": null,
@@ -23258,7 +23522,8 @@
       "aliases": [
         "prozac",
         "SSRI antidepressant",
-        "fluoxetine hydrochloride"
+        "fluoxetine hydrochloride",
+        "fluoxetine"
       ],
       "CUI": "C0016365",
       "banned_date": null,
@@ -23413,7 +23678,8 @@
         "7-MK",
         "methylated kratom extract",
         "enhanced kratom",
-        "7-methyl mitragynine"
+        "7-methyl mitragynine",
+        "7-methylkratom"
       ],
       "CUI": "",
       "banned_date": null,
@@ -23574,7 +23840,9 @@
         "B-PEA",
         "2-phenylethylamine",
         "microencapsulated phenethylamine hcl",
-        "methylphenethylamine tartrate"
+        "methylphenethylamine tartrate",
+        "phenethylamine (pea)",
+        "phenethylamine hcl"
       ],
       "CUI": "C0031030",
       "banned_date": null,
@@ -23940,7 +24208,8 @@
       "aliases": [
         "modified sildenafil",
         "designer sildenafil",
-        "propoxyphenyl sildenafil"
+        "propoxyphenyl sildenafil",
+        "propoxyphenylsildenafil"
       ],
       "CUI": "",
       "banned_date": null,
@@ -24098,7 +24367,8 @@
         "viagra",
         "revatio",
         "PDE5 inhibitor",
-        "sildenafil citrate"
+        "sildenafil citrate",
+        "sildenafil"
       ],
       "CUI": "C0529793",
       "banned_date": null,
@@ -24253,7 +24523,8 @@
       "aliases": [
         "cialis",
         "adcirca",
-        "tadalafil citrate"
+        "tadalafil citrate",
+        "tadalafil"
       ],
       "CUI": "C1176316",
       "banned_date": null,
@@ -24404,7 +24675,13 @@
     {
       "id": "SPIKE_TIANEPTINE_ANALOGUES",
       "standard_name": "Policy Watchlist: Tianeptine Analogues",
-      "aliases": [],
+      "aliases": [
+        "tianeptine analogues",
+        "modified tianeptine",
+        "ethyl-tianeptine",
+        "methyl-tianeptine",
+        "fluorinated tianeptine"
+      ],
       "CUI": "",
       "banned_date": null,
       "ban_effective_date": null,
@@ -24449,7 +24726,7 @@
         "general"
       ],
       "match_rules": {
-        "match_mode": "alias_and_fuzzy",
+        "match_mode": "disabled",
         "label_tokens": [
           "tianeptine analogues",
           "modified tianeptine",
@@ -24585,7 +24862,8 @@
         "PV-7",
         "alpha-pyrrolidinohexiophenone",
         "designer cathinone",
-        "α-pyrrolidinohexanophenone"
+        "α-pyrrolidinohexanophenone",
+        "α-php"
       ],
       "CUI": "",
       "banned_date": null,
@@ -24754,7 +25032,13 @@
     {
       "id": "STIM_METHYLHEXANAMINE_ANALOGS",
       "standard_name": "Policy Watchlist: DMAA Analogs",
-      "aliases": [],
+      "aliases": [
+        "dmaa analogs",
+        "1,4-dmaa",
+        "1,3-dmaa analogs",
+        "octodrine derivatives",
+        "2-amino-6-methylheptane analogs"
+      ],
       "CUI": "",
       "banned_date": null,
       "ban_effective_date": null,
@@ -24802,7 +25086,7 @@
         "general"
       ],
       "match_rules": {
-        "match_mode": "alias_and_fuzzy",
+        "match_mode": "disabled",
         "label_tokens": [
           "dmaa analogs",
           "1,4-dmaa",
@@ -25132,7 +25416,8 @@
         "d9 thc",
         "d9-thc",
         "delta9-thc",
-        "delta 9 tetrahydrocannabinol"
+        "delta 9 tetrahydrocannabinol",
+        "cannabis/thc"
       ],
       "CUI": "C0039663",
       "banned_date": null,
@@ -25176,7 +25461,14 @@
           "marijuana",
           "thc",
           "delta-9-thc",
-          "tetrahydrocannabinol"
+          "tetrahydrocannabinol",
+          "Delta-9-Tetrahydrocannabinol",
+          "delta 9 thc",
+          "delta-9 thc",
+          "d9 thc",
+          "d9-thc",
+          "delta9-thc",
+          "delta 9 tetrahydrocannabinol"
         ],
         "exclusions": [],
         "case_sensitive": false,
@@ -25186,7 +25478,7 @@
         "negative_match_terms": []
       },
       "legal_status_enum": "wada_prohibited",
-      "clinical_risk_enum": "moderate",
+      "clinical_risk_enum": "high",
       "jurisdictions": [
         {
           "region": "US",
@@ -25295,7 +25587,8 @@
         "ultram",
         "tramal",
         "zydol",
-        "tramadol hydrochloride"
+        "tramadol hydrochloride",
+        "tramadol"
       ],
       "CUI": "C0040610",
       "banned_date": "2024-01-01",
@@ -25310,7 +25603,7 @@
       },
       "category": "opioid",
       "effective_date": "2024-01-01",
-      "severity_level": "moderate",
+      "severity_level": "critical",
       "notes": "New addition to 2024 WADA Prohibited List. In-competition only. 24-hour washout period required. DEA Schedule IV controlled substance.",
       "scientific_references": [
         "WADA: 2024 Prohibited List - Tramadol added"
@@ -25349,7 +25642,7 @@
         "negative_match_terms": []
       },
       "legal_status_enum": "wada_prohibited",
-      "clinical_risk_enum": "high",
+      "clinical_risk_enum": "critical",
       "jurisdictions": [
         {
           "region": "US",
@@ -25503,7 +25796,8 @@
           "dimethazine",
           "d-zine",
           "d zine",
-          "methasterone azine"
+          "methasterone azine",
+          "dymethazine supplement"
         ],
         "exclusions": [],
         "case_sensitive": false,
@@ -25600,6 +25894,171 @@
           }
         ]
       }
+    },
+    {
+      "id": "SPIKE_METHOCARBAMOL",
+      "standard_name": "Methocarbamol",
+      "aliases": [
+        "methocarbamol",
+        "robaxin",
+        "guaiacol glyceryl ether carbamate",
+        "3-(2-methoxyphenoxy)-1,2-propanediol 1-carbamate"
+      ],
+      "CUI": "C0025637",
+      "banned_date": null,
+      "ban_effective_date": null,
+      "banned_by": "",
+      "found_in_categories": [
+        "muscle relaxant",
+        "pain relief"
+      ],
+      "reason": "Prescription muscle relaxant found as undeclared ingredient in dietary supplements",
+      "mechanism_of_harm": "Centrally-acting skeletal muscle relaxant that depresses polysynaptic reflexes in the spinal cord and subcortical areas. Exact mechanism unclear but involves general CNS depression rather than direct action on muscle fibers. Causes sedation, dizziness, and impaired coordination. Can potentiate effects of alcohol and other CNS depressants. Risk of hypotension, bradycardia, and seizures in overdose. As an undeclared pharmaceutical in supplements, consumers are exposed without medical supervision or awareness of drug interactions.",
+      "regulatory_status": {
+        "US": "Prescription drug (Rx only). Illegal as undeclared supplement ingredient. FDA enforcement action.",
+        "Global": "Prescription-only in most countries"
+      },
+      "severity_level": "critical",
+      "health_risks": [
+        "CNS depression",
+        "sedation",
+        "drug interactions",
+        "hypotension",
+        "seizures in overdose"
+      ],
+      "notes": "CRITICAL: Prescription muscle relaxant (brand name Robaxin) illegally spiked into dietary supplements marketed for pain relief and muscle relaxation. FDA has issued warning letters and recalls for supplements containing undeclared methocarbamol. Consumers may unknowingly combine with alcohol or benzodiazepines, risking severe CNS depression. Not a dietary ingredient under DSHEA.",
+      "scientific_references": [
+        "FDA Safety Alert: Undeclared drug ingredients in dietary supplements",
+        "Methocarbamol prescribing information (DailyMed/NLM)"
+      ],
+      "last_updated": "2026-03-01",
+      "category": "drug_muscle_relaxant",
+      "status": "banned",
+      "severity_score": 9,
+      "interaction_tags": [
+        "cns_depressant",
+        "alcohol_interaction"
+      ],
+      "detection_difficulty": "low",
+      "fda_warning": true,
+      "ingredient_type": "pharmaceutical",
+      "class_tags": [
+        "illegal_spiking_agents",
+        "drug_muscle_relaxant"
+      ],
+      "use_case_categories": [
+        "general"
+      ],
+      "match_rules": {
+        "match_mode": "alias_and_fuzzy",
+        "label_tokens": [
+          "methocarbamol",
+          "robaxin",
+          "guaiacol glyceryl ether carbamate",
+          "3-(2-methoxyphenoxy)-1,2-propanediol 1-carbamate"
+        ],
+        "exclusions": [],
+        "case_sensitive": false,
+        "priority": 1,
+        "match_type": "exact",
+        "confidence": "high",
+        "negative_match_terms": []
+      },
+      "legal_status_enum": "adulterant",
+      "clinical_risk_enum": "critical",
+      "jurisdictions": [
+        {
+          "region": "US",
+          "level": "federal",
+          "status": "banned",
+          "effective_date": null,
+          "source": {
+            "type": "fda_action",
+            "citation": "FDA enforcement: undeclared methocarbamol in dietary supplements (prescription drug spiking).",
+            "accessed_date": "2026-03-01"
+          },
+          "jurisdiction_type": "country",
+          "jurisdiction_code": "US",
+          "last_verified_date": "2026-03-01"
+        }
+      ],
+      "regulatory_actions": [],
+      "references_structured": [
+        {
+          "type": "fda_advisory",
+          "title": "FDA Safety Alert: Undeclared drug ingredients in dietary supplements",
+          "evidence_grade": "R",
+          "date": "2025",
+          "supports_claims": [
+            "regulatory_action"
+          ],
+          "evidence_summary": "FDA enforcement against supplements containing undeclared methocarbamol"
+        }
+      ],
+      "data_quality": {
+        "completeness": 0.95,
+        "missing_fields": [],
+        "review_status": "validated"
+      },
+      "last_reviewed_at": "2026-03-01",
+      "reviewed_by": "manual_audit",
+      "source_confidence": "high",
+      "update_flags": {
+        "needs_source_verification": false
+      },
+      "source_category": "illegal_spiking_agents",
+      "regulatory_status_enum": "adulterant",
+      "entity_type": "contaminant",
+      "effective_period": {
+        "start": null,
+        "end": null,
+        "notes": null
+      },
+      "review": {
+        "status": "validated",
+        "last_reviewed_at": "2026-03-01",
+        "next_review_due": "2026-09-01",
+        "reviewed_by": "manual_audit",
+        "change_log": [
+          {
+            "date": "2026-03-01",
+            "change": "Added during banned_recalled_ingredients audit",
+            "by": "manual_audit"
+          }
+        ]
+      },
+      "cui_note": "UMLS CUI C0025637 = Methocarbamol",
+      "identifier_note": null,
+      "banned_countries": null,
+      "ca_prop65_limit_mcg_day": null,
+      "cas_number": "532-03-6",
+      "chemical_symbol": null,
+      "confidence": null,
+      "contraindications": null,
+      "drugbank_id": "DB00423",
+      "effective_date": null,
+      "exposure_context": null,
+      "external_ids": {
+        "umls_cui": "C0025637",
+        "pubchem_cid": "4107",
+        "drugbank_id": "DB00423",
+        "cas_number": "532-03-6"
+      },
+      "fda_limit_mcg_day": null,
+      "health_effects": null,
+      "high_risk_sources": null,
+      "jurisdictional_statuses": null,
+      "nci_thesaurus_code": null,
+      "population_warnings": null,
+      "prohibition_status": null,
+      "pubchem_cid": "4107",
+      "recent_recalls_2025": null,
+      "safe_dose_limit": null,
+      "supersedes_ids": null,
+      "threshold": null,
+      "unii": "125OD7737X",
+      "usp_limit_mcg_day": null,
+      "wada_prohibited": null
     }
   ]
 }

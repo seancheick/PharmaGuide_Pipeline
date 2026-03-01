@@ -168,6 +168,20 @@ def test_harmful_iqm_overlap_is_explicitly_allowlisted():
     )
 
 
+def _collect_allowlisted_banned_harmful_terms() -> set[str]:
+    allow = _load_json("cross_db_overlap_allowlist.json").get("allowed_overlaps", [])
+    allowed = set()
+    for row in allow:
+        if not isinstance(row, dict):
+            continue
+        pairs = row.get("db_pairs") or []
+        if "banned:harmful" in pairs:
+            term = _norm(str(row.get("term_normalized", "")))
+            if term:
+                allowed.add(term)
+    return allowed
+
+
 def test_banned_terms_do_not_overlap_harmful_terms():
     banned_db = _load_json("banned_recalled_ingredients.json")
     harmful_db = _load_json("harmful_additives.json")
@@ -184,6 +198,8 @@ def test_banned_terms_do_not_overlap_harmful_terms():
         ["standard_name", "name", "additive_name", "ingredient"],
         ["aliases", "label_tokens", "synonyms", "common_names"],
     )
+    allowlisted = _collect_allowlisted_banned_harmful_terms()
 
     overlap = banned_terms & harmful_terms
-    assert not overlap, f"Banned terms overlap harmful additive terms: {sorted(overlap)}"
+    unknown = overlap - allowlisted
+    assert not unknown, f"Banned terms overlap harmful additive terms without allowlist: {sorted(unknown)}"
