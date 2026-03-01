@@ -4770,6 +4770,8 @@ class SupplementEnricherV3:
                         "entity_type": entity_type,
                         "legal_status_enum": banned_item.get('legal_status_enum'),
                         "clinical_risk_enum": banned_item.get('clinical_risk_enum'),
+                        "regulatory_date": banned_item.get('regulatory_date'),
+                        "regulatory_date_label": banned_item.get('regulatory_date_label'),
                     })
 
         return {
