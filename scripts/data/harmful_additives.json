@@ -4,7 +4,7 @@
     "purpose": "penalty_scoring",
     "schema_version": "4.1.0",
     "last_updated": "2026-03-01",
-    "total_entries": 111,
+    "total_entries": 117,
     "scoring_rule": "Apply penalty points based on severity_level. Critical: -5, High: -3, Moderate: -1.5, Low: -0.5. Multiple additives are cumulative.",
     "severity_level_definitions": {
       "critical": "Immediate health hazard, should be avoided entirely (e.g., formaldehyde, colloidal silver)",
@@ -32,10 +32,9 @@
       "severity_level": "critical | high | moderate | low"
     },
     "risk_breakdown": {
-      "critical": 0,
-      "high": 20,
+      "high": 25,
       "moderate": 54,
-      "low": 37
+      "low": 38
     },
     "categories_count": 49,
     "pipeline_integration": "Used by enrichment script to apply penalty points for harmful ingredients during scoring. Matches against ingredient names and other_ingredient forms.",
@@ -15518,6 +15517,579 @@
       "dose_thresholds": null,
       "entity_relationships": null,
       "cui_note": "CUI was incorrectly copied from ADD_RED40 (C0054436). Needs UMLS Metathesaurus verification."
+    },
+    {
+      "id": "ADD_DMSA_100MG",
+      "standard_name": "DMSA (Succimer) 100mg",
+      "aliases": [
+        "from 100 mg dmsa",
+        "100 mg dmsa",
+        "dmsa",
+        "succimer",
+        "dimercaptosuccinic acid"
+      ],
+      "CUI": "C0038846",
+      "category": "prescription_chelation_drug",
+      "mechanism_of_harm": "Succimer (DMSA) is an FDA-approved prescription chelation agent for lead poisoning. Not a lawful dietary supplement ingredient. Oral chelation therapy without medical supervision risks essential mineral depletion (zinc, copper, iron) and renal toxicity.",
+      "regulatory_status": {
+        "US": "FDA-approved Rx drug (NDA 019998). Not a dietary ingredient under DSHEA.",
+        "EU": "Prescription-only medicinal product."
+      },
+      "population_warnings": [
+        "Children",
+        "Pregnant women",
+        "Patients with renal impairment"
+      ],
+      "notes": "DMSA 100mg found on supplement labels represents unlawful inclusion of a prescription chelation drug. FDA has issued warning letters to supplement companies marketing chelation products.",
+      "scientific_references": [
+        "doi:10.1016/j.toxlet.2018.01.015"
+      ],
+      "last_updated": "2026-03-01",
+      "severity_level": "high",
+      "confidence": "high",
+      "common_uses": [
+        "chelation therapy"
+      ],
+      "is_additive": false,
+      "match_rules": {
+        "match_mode": "alias_and_fuzzy",
+        "label_tokens": [
+          "from 100 mg dmsa",
+          "100 mg dmsa",
+          "dmsa",
+          "succimer",
+          "dimercaptosuccinic acid"
+        ],
+        "regex": null,
+        "fuzzy_threshold": 0.75,
+        "case_sensitive": false,
+        "preferred_alias": "DMSA (Succimer) 100mg"
+      },
+      "references_structured": [
+        {
+          "type": "regulatory",
+          "authority": "FDA",
+          "citation": "FDA NDA 019998 - Chemet (succimer) approval for lead poisoning chelation",
+          "url": null,
+          "published_date": "1991-01-29",
+          "evidence_grade": "R",
+          "confidence": "high"
+        }
+      ],
+      "external_ids": {
+        "umls_cui": "C0038846",
+        "cas": "304-55-2",
+        "pubchem": "5765"
+      },
+      "jurisdictional_statuses": [
+        {
+          "authority": "US",
+          "jurisdiction": "US",
+          "status_code": "monitored",
+          "scope": "supplement",
+          "effective_range": {
+            "start": "1991-01-01",
+            "end": null
+          },
+          "source_ref": "FDA Rx drug, not dietary ingredient under DSHEA"
+        }
+      ],
+      "review": {
+        "status": "validated",
+        "last_reviewed_at": "2026-03-01",
+        "reviewed_by": "oi_audit_batch1",
+        "next_review_due": "2026-09-01",
+        "change_log": [
+          {
+            "date": "2026-03-01",
+            "change": "Moved from other_ingredients.json — does not belong in safe excipient DB",
+            "reason": "other_ingredients_deep_audit"
+          }
+        ]
+      },
+      "exposure_context": "supplement",
+      "entity_type": "ingredient",
+      "dose_thresholds": null,
+      "entity_relationships": null
+    },
+    {
+      "id": "ADD_DMSA_250MG",
+      "standard_name": "DMSA (Succimer) 250mg",
+      "aliases": [
+        "from 250 mg dmsa",
+        "250 mg dmsa",
+        "dmsa",
+        "succimer",
+        "dimercaptosuccinic acid"
+      ],
+      "CUI": "C0038846",
+      "category": "prescription_chelation_drug",
+      "mechanism_of_harm": "Succimer (DMSA) is an FDA-approved prescription chelation agent for lead poisoning. Not a lawful dietary supplement ingredient. Oral chelation therapy without medical supervision risks essential mineral depletion (zinc, copper, iron) and renal toxicity.",
+      "regulatory_status": {
+        "US": "FDA-approved Rx drug (NDA 019998). Not a dietary ingredient under DSHEA.",
+        "EU": "Prescription-only medicinal product."
+      },
+      "population_warnings": [
+        "Children",
+        "Pregnant women",
+        "Patients with renal impairment"
+      ],
+      "notes": "DMSA 250mg found on supplement labels represents unlawful inclusion of a prescription chelation drug. FDA has issued warning letters to supplement companies marketing chelation products.",
+      "scientific_references": [
+        "doi:10.1016/j.toxlet.2018.01.015"
+      ],
+      "last_updated": "2026-03-01",
+      "severity_level": "high",
+      "confidence": "high",
+      "common_uses": [
+        "chelation therapy"
+      ],
+      "is_additive": false,
+      "match_rules": {
+        "match_mode": "alias_and_fuzzy",
+        "label_tokens": [
+          "from 250 mg dmsa",
+          "250 mg dmsa",
+          "dmsa",
+          "succimer",
+          "dimercaptosuccinic acid"
+        ],
+        "regex": null,
+        "fuzzy_threshold": 0.75,
+        "case_sensitive": false,
+        "preferred_alias": "DMSA (Succimer) 250mg"
+      },
+      "references_structured": [
+        {
+          "type": "regulatory",
+          "authority": "FDA",
+          "citation": "FDA NDA 019998 - Chemet (succimer) approval for lead poisoning chelation",
+          "url": null,
+          "published_date": "1991-01-29",
+          "evidence_grade": "R",
+          "confidence": "high"
+        }
+      ],
+      "external_ids": {
+        "umls_cui": null,
+        "cas": "304-55-2",
+        "pubchem": "5765"
+      },
+      "jurisdictional_statuses": [
+        {
+          "authority": "US",
+          "jurisdiction": "US",
+          "status_code": "monitored",
+          "scope": "supplement",
+          "effective_range": {
+            "start": "1991-01-01",
+            "end": null
+          },
+          "source_ref": "FDA Rx drug, not dietary ingredient under DSHEA"
+        }
+      ],
+      "review": {
+        "status": "validated",
+        "last_reviewed_at": "2026-03-01",
+        "reviewed_by": "oi_audit_batch1",
+        "next_review_due": "2026-09-01",
+        "change_log": [
+          {
+            "date": "2026-03-01",
+            "change": "Moved from other_ingredients.json — does not belong in safe excipient DB",
+            "reason": "other_ingredients_deep_audit"
+          }
+        ]
+      },
+      "exposure_context": "supplement",
+      "entity_type": "ingredient",
+      "dose_thresholds": null,
+      "entity_relationships": null
+    },
+    {
+      "id": "ADD_SODIUM_TETRABORATE",
+      "standard_name": "Sodium Tetraborate (Borax)",
+      "aliases": [
+        "borax",
+        "sodium borate",
+        "sodium tetraborate",
+        "sodium tetraborate decahydrate",
+        "E285"
+      ],
+      "CUI": "C0142812",
+      "category": "banned_food_additive",
+      "mechanism_of_harm": "Reproductive and developmental toxicant. EU-banned as food additive (Regulation EC 1333/2008). Classified CMR Category 1B (H360FD). LD50 ~2.66 g/kg oral (rat). Chronic exposure causes testicular atrophy and reduced fertility in animal models.",
+      "regulatory_status": {
+        "US": "Not GRAS for internal use. FDA permits only in limited topical applications.",
+        "EU": "Banned as food additive. REACH SVHC (Substance of Very High Concern).",
+        "EFSA": "No safe level for food use established."
+      },
+      "population_warnings": [
+        "Pregnant women",
+        "Children",
+        "Individuals with renal impairment"
+      ],
+      "notes": "Borax (sodium tetraborate) is an EU-banned food additive classified as a reproductive toxicant (CMR 1B). Despite folk remedy claims, no dietary supplement use is warranted. ECHA SVHC listing under REACH since 2010.",
+      "scientific_references": [
+        "doi:10.2903/j.efsa.2013.3407",
+        "ECHA SVHC ED/61/2010"
+      ],
+      "last_updated": "2026-03-01",
+      "severity_level": "high",
+      "confidence": "high",
+      "common_uses": [
+        "buffering",
+        "preservative"
+      ],
+      "is_additive": true,
+      "match_rules": {
+        "match_mode": "alias_and_fuzzy",
+        "label_tokens": [
+          "borax",
+          "sodium borate",
+          "sodium tetraborate",
+          "sodium tetraborate decahydrate",
+          "E285"
+        ],
+        "regex": null,
+        "fuzzy_threshold": 0.75,
+        "case_sensitive": false,
+        "preferred_alias": "Sodium Tetraborate (Borax)"
+      },
+      "references_structured": [
+        {
+          "type": "regulatory",
+          "authority": "EFSA",
+          "citation": "EFSA Journal 2013;11(10):3407 — Scientific Opinion on boron compounds",
+          "url": "https://doi.org/10.2903/j.efsa.2013.3407",
+          "published_date": "2013-10-08",
+          "evidence_grade": "A",
+          "confidence": "high"
+        },
+        {
+          "type": "regulatory",
+          "authority": "ECHA",
+          "citation": "ECHA SVHC identification ED/61/2010 — Sodium tetraborate decahydrate (borax)",
+          "url": null,
+          "published_date": "2010-06-18",
+          "evidence_grade": "R",
+          "confidence": "high"
+        }
+      ],
+      "external_ids": {
+        "umls_cui": "C0142812",
+        "cas": "1303-96-4",
+        "pubchem": "16211214"
+      },
+      "jurisdictional_statuses": [
+        {
+          "authority": "EU",
+          "jurisdiction": "EU",
+          "status_code": "monitored",
+          "scope": "food_additive",
+          "effective_range": {
+            "start": "2008-12-16",
+            "end": null
+          },
+          "source_ref": "EC 1333/2008 - banned as food additive; REACH SVHC since 2010"
+        }
+      ],
+      "review": {
+        "status": "validated",
+        "last_reviewed_at": "2026-03-01",
+        "reviewed_by": "oi_audit_batch1",
+        "next_review_due": "2026-09-01",
+        "change_log": [
+          {
+            "date": "2026-03-01",
+            "change": "Moved from other_ingredients.json — does not belong in safe excipient DB",
+            "reason": "other_ingredients_deep_audit"
+          }
+        ]
+      },
+      "exposure_context": "supplement",
+      "entity_type": "ingredient",
+      "dose_thresholds": null,
+      "entity_relationships": null
+    },
+    {
+      "id": "ADD_THYROGEN",
+      "standard_name": "Thyrogen (Thyrotropin Alfa)",
+      "aliases": [
+        "thyrogen",
+        "thyrotropin alfa",
+        "thyrotropin alpha",
+        "recombinant tsh"
+      ],
+      "CUI": "C0728862",
+      "category": "prescription_biologic",
+      "mechanism_of_harm": "Thyrotropin alfa is an FDA-approved prescription recombinant human TSH biologic (Genzyme/Sanofi). Indicated only for thyroid cancer follow-up and radioiodine ablation. Unauthorized supplement inclusion risks thyroid storm, cardiac arrhythmias, and severe hyperthyroidism.",
+      "regulatory_status": {
+        "US": "FDA-approved Rx biologic (BLA 125104). Not a dietary ingredient under DSHEA.",
+        "EU": "Prescription-only medicinal product (EMA)."
+      },
+      "population_warnings": [
+        "Patients with cardiovascular disease",
+        "Elderly",
+        "Pregnant women"
+      ],
+      "notes": "Thyrogen is a prescription biologic for thyroid cancer management. Any supplement label containing this ingredient represents illegal drug inclusion. FDA has jurisdiction under FD&C Act §301.",
+      "scientific_references": [
+        "FDA BLA 125104"
+      ],
+      "last_updated": "2026-03-01",
+      "severity_level": "high",
+      "confidence": "high",
+      "common_uses": [
+        "thyroid cancer diagnosis"
+      ],
+      "is_additive": false,
+      "match_rules": {
+        "match_mode": "alias_and_fuzzy",
+        "label_tokens": [
+          "thyrogen",
+          "thyrotropin alfa",
+          "thyrotropin alpha",
+          "recombinant tsh"
+        ],
+        "regex": null,
+        "fuzzy_threshold": 0.75,
+        "case_sensitive": false,
+        "preferred_alias": "Thyrogen (Thyrotropin Alfa)"
+      },
+      "references_structured": [
+        {
+          "type": "regulatory",
+          "authority": "FDA",
+          "citation": "FDA BLA 125104 — Thyrogen (thyrotropin alfa) biologic approval",
+          "url": null,
+          "published_date": "1998-11-30",
+          "evidence_grade": "R",
+          "confidence": "high"
+        }
+      ],
+      "external_ids": {
+        "umls_cui": "C0728862",
+        "cas": null,
+        "pubchem": null
+      },
+      "jurisdictional_statuses": [
+        {
+          "authority": "US",
+          "jurisdiction": "US",
+          "status_code": "monitored",
+          "scope": "supplement",
+          "effective_range": {
+            "start": "1998-01-01",
+            "end": null
+          },
+          "source_ref": "FDA-approved Rx biologic, not a dietary ingredient under DSHEA"
+        }
+      ],
+      "review": {
+        "status": "validated",
+        "last_reviewed_at": "2026-03-01",
+        "reviewed_by": "oi_audit_batch1",
+        "next_review_due": "2026-09-01",
+        "change_log": [
+          {
+            "date": "2026-03-01",
+            "change": "Moved from other_ingredients.json — does not belong in safe excipient DB",
+            "reason": "other_ingredients_deep_audit"
+          }
+        ]
+      },
+      "exposure_context": "supplement",
+      "entity_type": "ingredient",
+      "dose_thresholds": null,
+      "entity_relationships": null
+    },
+    {
+      "id": "ADD_SIMETHICONE",
+      "standard_name": "Simethicone",
+      "aliases": [
+        "activated dimethicone",
+        "gas-x",
+        "polydimethylsiloxane",
+        "simethicone",
+        "simeticone",
+        "E900"
+      ],
+      "CUI": "C0037153",
+      "category": "otc_drug_ingredient",
+      "mechanism_of_harm": "Simethicone is an FDA-approved OTC drug active ingredient (anti-flatulent). Not a lawful dietary supplement ingredient under DSHEA as it was marketed as a drug prior to 1994. Silicone-based anti-foaming agent that reduces surface tension of gas bubbles.",
+      "regulatory_status": {
+        "US": "FDA OTC monograph drug (21 CFR 332). Not a dietary ingredient under DSHEA.",
+        "EU": "Authorized pharmaceutical excipient."
+      },
+      "population_warnings": [],
+      "notes": "Simethicone is an OTC drug active ingredient under FDA monograph. While generally safe, its presence in supplements indicates regulatory non-compliance. Not absorbed systemically; works mechanically on gas bubbles in GI tract.",
+      "scientific_references": [
+        "21 CFR 332.10"
+      ],
+      "last_updated": "2026-03-01",
+      "severity_level": "low",
+      "confidence": "high",
+      "common_uses": [
+        "anti-foaming",
+        "anti-flatulent"
+      ],
+      "is_additive": true,
+      "match_rules": {
+        "match_mode": "alias_and_fuzzy",
+        "label_tokens": [
+          "activated dimethicone",
+          "gas-x",
+          "polydimethylsiloxane",
+          "simethicone",
+          "simeticone",
+          "E900"
+        ],
+        "regex": null,
+        "fuzzy_threshold": 0.75,
+        "case_sensitive": false,
+        "preferred_alias": "Simethicone"
+      },
+      "references_structured": [
+        {
+          "type": "regulatory",
+          "authority": "FDA",
+          "citation": "21 CFR 332.10 — OTC antiflatulent drug products, simethicone monograph",
+          "url": null,
+          "published_date": null,
+          "evidence_grade": "R",
+          "confidence": "high"
+        }
+      ],
+      "external_ids": {
+        "umls_cui": "C0037153",
+        "cas": "8050-81-5",
+        "pubchem": null
+      },
+      "jurisdictional_statuses": [
+        {
+          "authority": "US",
+          "jurisdiction": "US",
+          "status_code": "monitored",
+          "scope": "supplement",
+          "effective_range": {
+            "start": "1994-01-01",
+            "end": null
+          },
+          "source_ref": "FDA OTC drug monograph, pre-DSHEA drug ingredient"
+        }
+      ],
+      "review": {
+        "status": "validated",
+        "last_reviewed_at": "2026-03-01",
+        "reviewed_by": "oi_audit_batch1",
+        "next_review_due": "2026-09-01",
+        "change_log": [
+          {
+            "date": "2026-03-01",
+            "change": "Moved from other_ingredients.json — does not belong in safe excipient DB",
+            "reason": "other_ingredients_deep_audit"
+          }
+        ]
+      },
+      "exposure_context": "supplement",
+      "entity_type": "ingredient",
+      "dose_thresholds": null,
+      "entity_relationships": null
+    },
+    {
+      "id": "ADD_HEXADRONE",
+      "standard_name": "Hexadrone (6-Chloro-androst-4-ene-3-one-17b-ol)",
+      "aliases": [
+        "hexadrone",
+        "6-chloro-androst-4-ene-3-one-17b-ol",
+        "6-chloro-4-androstene-3-one-17b-ol",
+        "6-chloro androstene"
+      ],
+      "CUI": null,
+      "category": "anabolic_steroid_prohormone",
+      "mechanism_of_harm": "Chlorinated anabolic steroid prohormone. Classified as a designer anabolic steroid under the Designer Anabolic Steroid Control Act (DASCA, 2014). Hepatotoxic, suppresses endogenous testosterone via HPTA suppression, associated with cholestatic liver injury and cardiovascular strain.",
+      "regulatory_status": {
+        "US": "Schedule III controlled substance under DASCA 2014. Banned by FDA as adulterated supplement.",
+        "WADA": "Prohibited at all times (S1.1 Anabolic Agents)."
+      },
+      "population_warnings": [
+        "All populations — controlled substance",
+        "Adolescents",
+        "Women (virilization risk)",
+        "Individuals with liver disease"
+      ],
+      "notes": "Hexadrone is a Schedule III controlled substance classified as a designer anabolic steroid. Supplement products containing this compound are adulterated under FD&C Act. Associated with liver toxicity (cholestatic pattern) and HPTA suppression.",
+      "scientific_references": [
+        "DASCA 2014 (Pub.L. 113-260)",
+        "doi:10.1016/j.cgh.2019.04.001"
+      ],
+      "last_updated": "2026-03-01",
+      "severity_level": "high",
+      "confidence": "high",
+      "common_uses": [
+        "muscle building (illegal)"
+      ],
+      "is_additive": false,
+      "match_rules": {
+        "match_mode": "alias_and_fuzzy",
+        "label_tokens": [
+          "hexadrone",
+          "6-chloro-androst-4-ene-3-one-17b-ol",
+          "6-chloro-4-androstene-3-one-17b-ol",
+          "6-chloro androstene"
+        ],
+        "regex": null,
+        "fuzzy_threshold": 0.75,
+        "case_sensitive": false,
+        "preferred_alias": "Hexadrone (6-Chloro-androst-4-ene-3-one-17b-ol)"
+      },
+      "references_structured": [
+        {
+          "type": "regulatory",
+          "authority": "US_Congress",
+          "citation": "Designer Anabolic Steroid Control Act of 2014, Pub.L. 113-260",
+          "url": null,
+          "published_date": "2014-12-18",
+          "evidence_grade": "R",
+          "confidence": "high"
+        }
+      ],
+      "external_ids": {
+        "umls_cui": null,
+        "cas": null,
+        "pubchem": null
+      },
+      "jurisdictional_statuses": [
+        {
+          "authority": "US",
+          "jurisdiction": "US",
+          "status_code": "monitored",
+          "scope": "supplement",
+          "effective_range": {
+            "start": "2014-12-18",
+            "end": null
+          },
+          "source_ref": "DASCA 2014 — Schedule III controlled substance"
+        }
+      ],
+      "review": {
+        "status": "validated",
+        "last_reviewed_at": "2026-03-01",
+        "reviewed_by": "oi_audit_batch1",
+        "next_review_due": "2026-09-01",
+        "change_log": [
+          {
+            "date": "2026-03-01",
+            "change": "Moved from other_ingredients.json — does not belong in safe excipient DB",
+            "reason": "other_ingredients_deep_audit"
+          }
+        ]
+      },
+      "exposure_context": "supplement",
+      "entity_type": "ingredient",
+      "dose_thresholds": null,
+      "entity_relationships": null
     }
   ]
 }

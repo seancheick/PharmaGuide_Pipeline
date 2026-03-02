@@ -338,7 +338,7 @@ def normalizer():
         ("Chastetree berry extract", "Chasteberry"),
         ("Chaste Berry Fruit Extract", "Chasteberry"),
         ("Conjugated Bile Acid", "conjugated bile acid"),
-        ("Collinsonia root PE", "Collinsonia Root"),
+        ("Collinsonia root PE", "Stoneroot"),
         ("CogniBoost", "cogniboost"),
         ("Cocoabuterol", "cocoabuterol"),
         ("Cowslip", "Cowslip"),
@@ -895,7 +895,7 @@ def test_high_confidence_alias_batch_maps(normalizer, name, expected_substring):
         ("Olive Water extract", "Olive"),
         ("Guduchi root extract", "Tinospora"),
         ("Celery 10:1 extract", "Celery"),
-        ("Bitter Orange Fruit Extract", "Bitter Orange"),
+        # Bitter Orange moved to banned_recalled_ingredients (RISK_BITTER_ORANGE)
         ("Huperzia serrata leaf extract", "Toothed Clubmoss"),
         ("Cape Aloe leaf latex extract", "Aloe"),
         ("Bitter Melon P.E.", "Bitter Melon"),

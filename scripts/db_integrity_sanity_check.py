@@ -309,9 +309,6 @@ def check_clinical_db(findings: List[Finding], data: Dict[str, Any], file: str) 
         _check_enum(findings, file, e, i, "score_contribution", {"tier_1", "tier_2", "tier_3"})
         _check_list_of_strings(findings, file, e, i, "health_goals_supported", required=True, allow_empty=False)
         _check_list_of_strings(findings, file, e, i, "key_endpoints", required=True, allow_empty=False)
-        tp = e.get("tier_points")
-        if tp is not None and not isinstance(tp, (int, float)):
-            findings.append(Finding("warning", file, f"[{i}].tier_points", "type_fallback_risk", "number|null", _type_name(tp)))
 
 
 def check_iqm(findings: List[Finding], data: Dict[str, Any], file: str) -> None:

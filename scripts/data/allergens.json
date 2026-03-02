@@ -1,10 +1,10 @@
 {
   "_metadata": {
-    "description": "Comprehensive allergen identification database for supplement ingredients. Primarily used for consumer warnings and on-device personalization rather than general score penalties.",
+    "description": "Regulatory allergen identification database for supplement ingredients. Covers FDA major allergens (9) and EU Annex II allergens (8). Used for consumer warnings and on-device personalization — not for general score penalties.",
     "purpose": "allergen_flagging",
     "schema_version": "4.1.0",
-    "last_updated": "2026-02-16",
-    "total_entries": 32,
+    "last_updated": "2026-03-01",
+    "total_entries": 17,
     "scoring_system": {
       "allergen_free_bonus": 2,
       "severity_penalties": {
@@ -12,91 +12,109 @@
         "moderate": -1.5,
         "high": -2
       },
-      "rule": "Apply severity_penalties ONLY when general_handling == 'penalize'. If general_handling == 'flag_only', do not deduct points (severity_level still used for warnings and on-device personalization)."
+      "rule": "All entries are flag_only — no score deductions. severity_level is used for warning priority and on-device personalization only. Severity tiers: high = documented fatal anaphylaxis risk; moderate = significant IgE reactions / celiac trigger; low = usually mild reactions."
     },
-    "regulatory_note": "Includes FDA major allergens, EU Annex II allergens, and common supplement allergens with documented reactions. This file is for allergen flagging first; general-score penalties are reserved for umbrella terms that reduce transparency.",
+    "regulatory_note": "Strictly limited to FDA FALCPA/FASTER Act major allergens and EU Annex II allergens. Non-regulatory sensitivities (nightshades, latex cross-reactivity, corn, coconut, etc.) are NOT included — those belong in consumer preference profiles, not allergen flagging. Transparency penalties (natural/artificial flavors) belong in harmful_additives or other_ingredients.",
     "fields": {
-      "severity_level": "Used for warning priority and (optionally) penalty mapping when general_handling == 'penalize'. Values: low, moderate, high.",
-      "general_handling": "flag_only | penalize. Most allergens are flag_only; only umbrella terms (Natural Flavors, Artificial Flavors) penalize for transparency.",
-      "aliases": "Case-insensitive matching; normalize punctuation and whitespace before matching.",
-      "regulatory_status": "FDA major allergens, EU Annex II, or supplement-specific allergens.",
-      "prevalence": "How commonly this allergen appears in supplements: low, moderate, high."
+      "severity_level": "Warning priority for on-device personalization. Values: low, moderate, high.",
+      "general_handling": "Always flag_only for regulatory allergens.",
+      "aliases": "Case-insensitive matching. MUST NOT include IQM-scorable ingredient names — allergen check runs before IQM lookup in the normalizer and would hijack ingredient identity.",
+      "regulatory_status": "fda_major | eu_allergen | eu_major.",
+      "prevalence": "How commonly this allergen appears in supplements: low, moderate, high.",
+      "CUI": "UMLS Concept Unique Identifier. null for composite groups spanning multiple species."
     }
   },
   "allergens": [
     {
       "id": "ALLERGEN_SOY",
       "standard_name": "Soy & Soy Lecithin",
+      "CUI": null,
       "aliases": [
         "soy",
-        "soy lecithin",
         "soya lecithin",
         "soybean oil",
         "soy protein",
         "glycine max",
         "soybean",
         "soy flour",
-        "lecithin (soy)",
-        "lecithin (from soy)",
-        "e322",
-        "phosphatidylcholine (soy)",
-        "phospholipids (soy)"
+        "soy lecithin e322",
+        "phospholipids from soy",
+        "soya",
+        "hydrolyzed soy protein",
+        "soy concentrate",
+        "soybean extract",
+        "soy peptides",
+        "fermented soy",
+        "soy protein concentrate"
       ],
       "prevalence": "high",
       "severity_level": "low",
       "regulatory_status": "fda_major",
       "supplement_context": "Common emulsifier/excipient and in protein products.",
-      "notes": "Major allergen; do not penalize general score. Flag for warnings and on-device personalization.",
+      "notes": "FDA major allergen (FALCPA). Soy lecithin is the most common form in supplements, used as emulsifier in softgels and powders. Highly refined soy oil may not trigger reactions but must still be labeled. Cross-reactivity with other legumes (peanut, lupin) occurs in 5-10% of soy-allergic individuals. Fermented soy (natto) retains allergenic proteins.",
       "category": "major_allergen_emulsifier",
       "general_handling": "flag_only",
-      "last_updated": "2026-01-04"
+      "last_updated": "2026-03-01"
     },
     {
       "id": "ALLERGEN_MILK",
       "standard_name": "Milk",
+      "CUI": null,
       "aliases": [
         "milk",
         "dairy",
         "whey",
         "casein",
         "lactose",
-        "milk protein",
-        "whey protein",
-        "casein protein",
-        "caseinate"
+        "caseinate",
+        "micellar casein",
+        "whey peptides",
+        "milk calcium",
+        "milk solids",
+        "sodium caseinate",
+        "calcium caseinate"
       ],
       "prevalence": "high",
-      "severity_level": "low",
+      "severity_level": "moderate",
       "regulatory_status": "fda_major",
       "supplement_context": "Common in protein supplements, some probiotics, and tablets/capsules (lactose).",
-      "notes": "Major allergen; flag only.",
+      "notes": "FDA major allergen (FALCPA). Severity moderate: milk is the 3rd most common cause of pediatric food anaphylaxis (after peanut and tree nuts). Casein and whey are the two primary allergenic protein fractions; casein allergy tends to be more persistent and severe. Lactose intolerance (non-immune) is distinct from milk allergy (IgE-mediated) but both require flagging. Probiotic strains grown on milk media may carry trace proteins.",
       "category": "allergen",
       "general_handling": "flag_only",
-      "last_updated": "2026-01-04"
+      "last_updated": "2026-03-01"
     },
     {
       "id": "ALLERGEN_EGGS",
       "standard_name": "Eggs",
+      "CUI": null,
       "aliases": [
         "egg",
         "egg protein",
-        "albumin",
+        "egg albumin",
         "ovalbumin",
         "egg white protein",
-        "egg albumen"
+        "egg albumen",
+        "egg yolk",
+        "egg white",
+        "egg powder",
+        "ovomucin",
+        "ovotransferrin",
+        "whole egg powder",
+        "egg yolk powder"
       ],
       "prevalence": "moderate",
-      "severity_level": "low",
+      "severity_level": "moderate",
       "regulatory_status": "fda_major",
       "supplement_context": "Sometimes in protein powders and specialty formulas.",
-      "notes": "Major allergen; flag only.",
+      "notes": "FDA major allergen (FALCPA). Severity moderate: egg allergy can cause anaphylaxis, especially in children; ovomucoid (Gal d 1) is heat-stable and survives cooking/processing. Ovalbumin (egg white) is the dominant allergen by mass. Lysozyme (muramidase) is egg white-derived but excluded from aliases (IQM-scored). Bare 'albumin' excluded — bovine serum albumin and plant albumins are not egg allergens.",
       "category": "allergen",
       "general_handling": "flag_only",
-      "last_updated": "2026-01-04"
+      "last_updated": "2026-03-01"
     },
     {
       "id": "ALLERGEN_TREE_NUTS",
       "standard_name": "Tree Nuts",
+      "CUI": null,
       "aliases": [
         "tree nuts",
         "almond",
@@ -106,59 +124,74 @@
         "pecan",
         "pistachio",
         "macadamia",
-        "brazil nut"
+        "brazil nut",
+        "chestnut",
+        "pine nut",
+        "almond oil",
+        "walnut oil",
+        "hazelnut oil",
+        "shea nut",
+        "macadamia oil",
+        "almond flour",
+        "almond butter"
       ],
       "prevalence": "moderate",
-      "severity_level": "moderate",
+      "severity_level": "high",
       "regulatory_status": "fda_major",
       "supplement_context": "Oils/extracts; cross-contamination in manufacturing.",
-      "notes": "Major allergen; flag only.",
+      "notes": "FDA major allergen (FALCPA). Severity high: tree nuts are the 2nd leading cause of fatal food-induced anaphylaxis after peanuts. Cashew and walnut are the most commonly implicated species. Cross-reactivity between tree nut species is common (cashew-pistachio, walnut-pecan). Nut oils retain allergenic proteins unless highly refined. Shea nut (Vitellaria paradoxa) is FDA-classified as tree nut.",
       "category": "allergen",
       "general_handling": "flag_only",
-      "last_updated": "2026-01-04"
+      "last_updated": "2026-03-01"
     },
     {
       "id": "ALLERGEN_PEANUTS",
       "standard_name": "Peanuts",
+      "CUI": null,
       "aliases": [
         "peanut",
         "peanut oil",
         "arachis oil",
         "groundnut",
-        "peanut protein"
+        "peanut protein",
+        "arachis hypogaea",
+        "peanut flour",
+        "peanut butter"
       ],
       "prevalence": "moderate",
       "severity_level": "high",
       "regulatory_status": "fda_major",
       "supplement_context": "Oils/extracts; high-risk allergen for sensitive individuals.",
-      "notes": "Major allergen; flag only.",
+      "notes": "FDA major allergen (FALCPA). Peanut allergy is the leading cause of food-induced anaphylaxis in the US. Ara h 1, h 2, h 3 are the major allergenic proteins; they survive roasting and processing. Cross-reactivity with lupin (30-50%) and other legumes (soy, lentil) is clinically significant. Even highly refined peanut oil may contain trace proteins in supplement contexts.",
       "category": "allergen",
       "general_handling": "flag_only",
-      "last_updated": "2026-01-04"
+      "last_updated": "2026-03-01"
     },
     {
       "id": "ALLERGEN_FISH",
       "standard_name": "Fish",
+      "CUI": null,
       "aliases": [
         "fish",
-        "fish oil",
-        "cod liver oil",
-        "salmon oil",
-        "anchovy oil",
-        "sardine oil"
+        "fish protein",
+        "fish peptides",
+        "fish gelatin",
+        "fish hydrolysate",
+        "marine fish oil"
       ],
       "prevalence": "high",
       "severity_level": "moderate",
       "regulatory_status": "fda_major",
       "supplement_context": "Very common in omega-3 supplements and some vitamin A/D sources.",
-      "notes": "Major allergen; flag only (do not penalize fish oil for containing fish).",
+      "notes": "FDA major allergen (FALCPA). Parvalbumin is the major fish allergen; it is heat-stable and present across most bony fish species. Fish collagen/gelatin retains allergenic potential. IQM-scored fish derivatives (fish oil, cod liver oil, salmon oil, marine collagen) are excluded from aliases to preserve IQM identity — they are flagged via the enricher's allergen cross-reference, not normalizer interception.",
       "category": "allergen",
       "general_handling": "flag_only",
-      "last_updated": "2026-01-04"
+      "last_updated": "2026-03-01"
     },
     {
       "id": "ALLERGEN_CRUSTACEANS",
       "standard_name": "Crustacean Shellfish",
+      "CUI": null,
       "aliases": [
         "shellfish",
         "crustacean",
@@ -167,117 +200,147 @@
         "crab",
         "lobster",
         "crayfish",
-        "krill oil",
         "glucosamine from shellfish",
         "chitosan",
         "crustacean shell",
-        "decapod crustaceans"
+        "decapod crustaceans",
+        "krill astaxanthin",
+        "chitin",
+        "krill powder",
+        "shellfish extract"
       ],
       "prevalence": "moderate",
       "severity_level": "high",
       "regulatory_status": "fda_major",
       "supplement_context": "Glucosamine often derived from shellfish; krill oil is crustacean-derived.",
-      "notes": "Major allergen; flag only.",
+      "notes": "FDA major allergen (FALCPA). Tropomyosin is the major crustacean allergen; it cross-reacts with dust mite and cockroach tropomyosin. Chitosan (deacetylated chitin from shells) retains allergenic risk. Krill oil is excluded from aliases (IQM-scored) but is crustacean-derived. Glucosamine from shellfish shells may contain trace tropomyosin. Shellfish allergy affects ~2% of adults and can cause severe anaphylaxis.",
       "category": "allergen",
       "general_handling": "flag_only",
-      "last_updated": "2026-01-04"
+      "last_updated": "2026-03-01"
     },
     {
       "id": "ALLERGEN_WHEAT",
       "standard_name": "Wheat",
+      "CUI": null,
       "aliases": [
         "wheat",
         "wheat germ oil",
         "wheat protein",
         "wheat flour",
         "wheat starch",
-        "gluten"
+        "gluten",
+        "spelt",
+        "kamut",
+        "einkorn",
+        "emmer",
+        "farro",
+        "durum",
+        "semolina",
+        "triticum aestivum",
+        "wheat bran",
+        "wheat germ",
+        "triticale",
+        "wheat grass",
+        "wheat dextrin"
       ],
       "prevalence": "moderate",
       "severity_level": "moderate",
       "regulatory_status": "fda_major",
       "supplement_context": "May indicate gluten presence; important for celiac/gluten sensitivity.",
-      "notes": "Major allergen; flag only.",
+      "notes": "FDA major allergen (FALCPA). Wheat allergy (IgE-mediated) is distinct from celiac disease (autoimmune) but both require flagging. Gluten proteins (gliadin/glutenin) are the primary triggers. Spelt, kamut, einkorn, emmer, and farro are wheat species that contain gluten. Triticale is a wheat-rye hybrid. Wheat germ oil is typically low in protein but not guaranteed gluten-free.",
       "category": "allergen",
       "general_handling": "flag_only",
-      "last_updated": "2026-01-04"
+      "last_updated": "2026-03-01"
     },
     {
       "id": "ALLERGEN_SESAME",
       "standard_name": "Sesame",
+      "CUI": null,
       "aliases": [
         "sesame",
         "sesame oil",
         "tahini",
         "sesamum indicum",
-        "sesame seed"
+        "sesame seed",
+        "black sesame",
+        "sesame flour"
       ],
       "prevalence": "low",
       "severity_level": "moderate",
       "regulatory_status": "fda_major",
       "supplement_context": "Can appear as oil/extract; major allergen.",
-      "notes": "Major allergen; flag only.",
+      "notes": "FDA major allergen as of January 2023 (FASTER Act). Ses i 1 is the major allergenic protein. Sesame allergy prevalence is rising, estimated at 0.2% in the US. Sesamin and sesamolin (lignan compounds) are excluded from aliases because they have IQM entries. Cross-reactivity with poppy seed, kiwi, and tree nuts has been reported.",
       "category": "allergen",
       "general_handling": "flag_only",
-      "last_updated": "2026-01-04"
+      "last_updated": "2026-03-01"
     },
     {
       "id": "ALLERGEN_BARLEY",
       "standard_name": "Barley",
+      "CUI": null,
       "aliases": [
         "barley",
         "hordeum vulgare",
         "malt",
-        "malt extract",
-        "barley grass"
+        "barley grass",
+        "barley flour",
+        "barley malt",
+        "pearl barley"
       ],
       "prevalence": "low",
       "severity_level": "moderate",
       "regulatory_status": "eu_allergen",
       "supplement_context": "May appear in greens powders, malt-based excipients, or flavor bases.",
-      "notes": "EU allergen category under cereals containing gluten; flag only.",
+      "notes": "EU Annex II allergen (cereals containing gluten). Barley contains hordein, a gluten-type prolamin toxic to celiac patients. Malt and malt extract are barley-derived and contain gluten. Barley grass harvested pre-jointing may be low in gluten but is still flagged. Barley beta-glucan (a soluble fiber) is used in heart-health supplements and retains the grain origin.",
       "category": "eu_allergen_gluten_cereal",
       "general_handling": "flag_only",
-      "last_updated": "2026-01-04"
+      "last_updated": "2026-03-01"
     },
     {
       "id": "ALLERGEN_RYE",
       "standard_name": "Rye",
+      "CUI": null,
       "aliases": [
         "rye",
-        "secale cereale"
+        "secale cereale",
+        "rye flour",
+        "rye fiber"
       ],
       "prevalence": "low",
       "severity_level": "moderate",
       "regulatory_status": "eu_allergen",
       "supplement_context": "Less common; may appear in fiber blends or flavor carriers.",
-      "notes": "EU allergen category under cereals containing gluten; flag only.",
+      "notes": "EU Annex II allergen (cereals containing gluten). Rye contains secalin, a gluten-type prolamin that triggers celiac disease. Rye fiber supplements may carry residual gluten. Cross-reactivity with wheat is very high due to prolamin homology. Triticale (wheat-rye hybrid) is listed under wheat but also relevant for rye-allergic individuals.",
       "category": "eu_allergen_gluten_cereal",
       "general_handling": "flag_only",
-      "last_updated": "2026-01-04"
+      "last_updated": "2026-03-01"
     },
     {
       "id": "ALLERGEN_OATS",
       "standard_name": "Oats",
+      "CUI": null,
       "aliases": [
         "oats",
         "avenin",
         "avena sativa",
         "oat flour",
-        "oat fiber"
+        "oat fiber",
+        "oat bran",
+        "oatmeal"
       ],
       "prevalence": "moderate",
       "severity_level": "low",
       "regulatory_status": "eu_allergen",
       "supplement_context": "Common in meal replacements/protein blends; gluten cross-contact possible.",
-      "notes": "Often tolerated but important for strict gluten avoidance; flag only.",
+      "notes": "EU Annex II allergen (cereals containing gluten). Avenin is the oat prolamin; most celiac patients tolerate pure oats (Codex threshold <20 ppm), but 5-10% react to avenin itself. Commercial oats are frequently cross-contaminated with wheat/barley. Oat beta-glucan and oat straw extract are excluded from aliases (IQM-scored) but retain grain origin for allergen context.",
       "category": "eu_allergen_gluten_cereal",
       "general_handling": "flag_only",
-      "last_updated": "2026-01-04"
+      "last_updated": "2026-03-01"
     },
     {
       "id": "ALLERGEN_MOLLUSCS",
       "standard_name": "Molluscs",
+      "CUI": null,
       "aliases": [
         "molluscs",
         "clams",
@@ -289,20 +352,23 @@
         "snails",
         "abalone",
         "whelk",
-        "cuttlefish"
+        "cuttlefish",
+        "green-lipped mussel",
+        "pearl powder"
       ],
       "prevalence": "moderate",
       "severity_level": "high",
       "regulatory_status": "eu_major",
       "supplement_context": "Less common; found in some marine-based supplements.",
-      "notes": "EU allergen; flag only.",
+      "notes": "EU Annex II major allergen. Tropomyosin is the primary mollusc allergen, homologous to crustacean tropomyosin — cross-reactivity between molluscs and crustaceans is 10-30%. Green-lipped mussel (Perna canaliculus) extract is a popular joint supplement (IQM-scored, excluded from aliases). Oyster extract and pearl powder are used in mineral/beauty supplements.",
       "category": "allergen",
       "general_handling": "flag_only",
-      "last_updated": "2026-01-04"
+      "last_updated": "2026-03-01"
     },
     {
       "id": "ALLERGEN_SULFITES",
       "standard_name": "Sulfites",
+      "CUI": null,
       "aliases": [
         "sulfites",
         "sulfur dioxide",
@@ -317,383 +383,79 @@
         "e225",
         "e226",
         "e227",
-        "e228"
+        "e228",
+        "sulphites",
+        "sulphur dioxide"
       ],
       "prevalence": "moderate",
       "severity_level": "high",
-      "regulatory_status": "preservative",
+      "regulatory_status": "eu_allergen",
       "supplement_context": "Can trigger reactions in sensitive individuals (notably asthma).",
-      "notes": "Flag only; treat as high-risk warning.",
+      "notes": "EU Annex II allergen and FDA-regulated preservative (>10 ppm requires labeling). Sulfite sensitivity affects 5-10% of asthmatics, manifesting as bronchospasm, urticaria, or anaphylaxis. Mechanism involves SO2 inhalation from acidic gastric conversion. E220-E228 are EU additive codes for sulfiting agents. UK/EU spelling variants (sulphites, sulphur dioxide) included for international label matching.",
       "category": "allergen",
       "general_handling": "flag_only",
-      "last_updated": "2026-01-04"
+      "last_updated": "2026-03-01"
     },
     {
       "id": "ALLERGEN_CELERY",
       "standard_name": "Celery",
+      "CUI": null,
       "aliases": [
         "celery",
         "celery seed",
         "apium graveolens",
-        "celery extract"
+        "celery juice powder"
       ],
       "prevalence": "low",
       "severity_level": "moderate",
       "regulatory_status": "eu_allergen",
       "supplement_context": "Rare; EU allergen.",
-      "notes": "Flag only.",
+      "notes": "EU Annex II allergen. Api g 1 is the major celery allergen, homologous to birch pollen Bet v 1 — celery allergy is strongly associated with birch pollen sensitization (celery-mugwort-spice syndrome). Celery seed extract is used in joint/blood-pressure supplements (IQM-scored, excluded from aliases). Reactions can range from OAS (oral allergy syndrome) to severe anaphylaxis.",
       "category": "allergen",
       "general_handling": "flag_only",
-      "last_updated": "2026-01-04"
+      "last_updated": "2026-03-01"
     },
     {
       "id": "ALLERGEN_MUSTARD",
       "standard_name": "Mustard",
+      "CUI": null,
       "aliases": [
         "mustard",
         "mustard seed",
         "sinapis alba",
-        "brassica nigra"
+        "brassica nigra",
+        "mustard seed oil"
       ],
       "prevalence": "low",
       "severity_level": "moderate",
       "regulatory_status": "eu_allergen",
       "supplement_context": "Rare; EU allergen.",
-      "notes": "Flag only.",
+      "notes": "EU Annex II allergen. Sin a 1 (yellow mustard) and Bra j 1 (brown/black mustard) are the major allergens; both are heat-stable and survive processing. Mustard seed oil is used in some Ayurvedic and topical supplement formulations. Cross-reactivity within Brassicaceae family (rapeseed, cabbage) is possible. Mustard allergy can cause severe anaphylaxis, particularly in France and Spain.",
       "category": "allergen",
       "general_handling": "flag_only",
-      "last_updated": "2026-01-04"
+      "last_updated": "2026-03-01"
     },
     {
       "id": "ALLERGEN_LUPIN",
       "standard_name": "Lupin",
+      "CUI": null,
       "aliases": [
         "lupin",
         "lupine",
         "lupinus",
         "lupin flour",
-        "lupin bean"
+        "lupin bean",
+        "lupin protein",
+        "lupin seed"
       ],
       "prevalence": "low",
       "severity_level": "moderate",
       "regulatory_status": "eu_allergen",
       "supplement_context": "Rare; EU allergen; cross-reactivity possible with peanut allergy.",
-      "notes": "Flag only.",
+      "notes": "EU Annex II allergen. Lupin (Lupinus spp.) is a legume with strong cross-reactivity to peanut — 30-50% of peanut-allergic individuals react to lupin. Lupin protein is emerging as a plant protein source in vegan supplements. The allergenic proteins (conglutins) survive thermal processing. Lupin flour may appear as an excipient. Mandatory labeling in EU; not yet an FDA major allergen.",
       "category": "allergen",
       "general_handling": "flag_only",
-      "last_updated": "2026-01-04"
-    },
-    {
-      "id": "ALLERGEN_GUAR_GUM",
-      "standard_name": "Guar Gum",
-      "aliases": [
-        "guar gum",
-        "cyamopsis tetragonoloba",
-        "e412",
-        "guaran",
-        "guar flour"
-      ],
-      "prevalence": "high",
-      "severity_level": "moderate",
-      "regulatory_status": "generally_recognized_as_safe",
-      "supplement_context": "Thickener in powders/meal replacements; reactions in some individuals.",
-      "notes": "Flag only.",
-      "category": "excipient_allergen",
-      "general_handling": "flag_only",
-      "last_updated": "2026-01-04"
-    },
-    {
-      "id": "ALLERGEN_ACACIA_GUM",
-      "standard_name": "Acacia Gum",
-      "aliases": [
-        "acacia gum",
-        "gum arabic",
-        "e414",
-        "acacia senegal",
-        "acacia seyal"
-      ],
-      "prevalence": "moderate",
-      "severity_level": "moderate",
-      "regulatory_status": "generally_recognized_as_safe",
-      "supplement_context": "Used in fibers/prebiotics; can trigger respiratory allergy in sensitive individuals.",
-      "notes": "Flag only.",
-      "category": "excipient_allergen",
-      "general_handling": "flag_only",
-      "last_updated": "2026-01-04"
-    },
-    {
-      "id": "ALLERGEN_BEE_POLLEN",
-      "standard_name": "Bee Pollen",
-      "aliases": [
-        "bee pollen",
-        "pollen",
-        "flower pollen",
-        "apis mellifera pollen"
-      ],
-      "prevalence": "moderate",
-      "severity_level": "high",
-      "regulatory_status": "supplement_common_allergen",
-      "supplement_context": "Higher-risk allergen for pollen/bee-allergic individuals.",
-      "notes": "Flag only.",
-      "category": "allergen",
-      "general_handling": "flag_only",
-      "last_updated": "2026-01-04"
-    },
-    {
-      "id": "ALLERGEN_ROYAL_JELLY",
-      "standard_name": "Royal Jelly",
-      "aliases": [
-        "royal jelly",
-        "bee milk",
-        "queen bee jelly",
-        "apis mellifera royal jelly"
-      ],
-      "prevalence": "moderate",
-      "severity_level": "high",
-      "regulatory_status": "supplement_common_allergen",
-      "supplement_context": "Higher-risk allergen for bee-allergic individuals and some asthmatics.",
-      "notes": "Flag only.",
-      "category": "allergen",
-      "general_handling": "flag_only",
-      "last_updated": "2026-01-04"
-    },
-    {
-      "id": "ALLERGEN_PROPOLIS",
-      "standard_name": "Propolis",
-      "aliases": [
-        "propolis",
-        "bee propolis",
-        "bee glue",
-        "propolis extract"
-      ],
-      "prevalence": "moderate",
-      "severity_level": "moderate",
-      "regulatory_status": "supplement_common_allergen",
-      "supplement_context": "Can cause allergic reactions and contact dermatitis.",
-      "notes": "Flag only.",
-      "category": "allergen",
-      "general_handling": "flag_only",
-      "last_updated": "2026-01-04"
-    },
-    {
-      "id": "ALLERGEN_YEAST",
-      "standard_name": "Yeast",
-      "aliases": [
-        "yeast",
-        "brewer's yeast",
-        "nutritional yeast",
-        "baker's yeast",
-        "saccharomyces cerevisiae"
-      ],
-      "prevalence": "moderate",
-      "severity_level": "low",
-      "regulatory_status": "ingredient",
-      "supplement_context": "Common in B-vitamin supplements and some probiotics.",
-      "notes": "Flag only.",
-      "category": "allergen",
-      "general_handling": "flag_only",
-      "last_updated": "2026-01-04"
-    },
-    {
-      "id": "ALLERGEN_CORN",
-      "standard_name": "Corn",
-      "aliases": [
-        "corn",
-        "corn starch",
-        "corn syrup",
-        "dextrose",
-        "maltodextrin",
-        "zea mays"
-      ],
-      "prevalence": "high",
-      "severity_level": "low",
-      "regulatory_status": "ingredient",
-      "supplement_context": "Very common filler/excipient source; sensitivity exists in some individuals.",
-      "notes": "Flag only.",
-      "category": "allergen",
-      "general_handling": "flag_only",
-      "last_updated": "2026-01-04"
-    },
-    {
-      "id": "ALLERGEN_COCONUT",
-      "standard_name": "Coconut",
-      "aliases": [
-        "coconut",
-        "cocos nucifera",
-        "mct oil",
-        "medium chain triglycerides (coconut)",
-        "coconut oil"
-      ],
-      "prevalence": "moderate",
-      "severity_level": "low",
-      "regulatory_status": "consumer_relevant",
-      "supplement_context": "Common oil base (MCT), powders, creamers; allergy exists though uncommon.",
-      "notes": "Flag only.",
-      "category": "allergen",
-      "general_handling": "flag_only",
-      "last_updated": "2026-01-04"
-    },
-    {
-      "id": "ALLERGEN_PEA_PROTEIN",
-      "standard_name": "Pea / Pea Protein",
-      "aliases": [
-        "pea",
-        "pea protein",
-        "pisum sativum",
-        "pea isolate",
-        "pea concentrate"
-      ],
-      "prevalence": "high",
-      "severity_level": "low",
-      "regulatory_status": "consumer_relevant",
-      "supplement_context": "Very common in plant protein powders and meal replacements; some reactions reported.",
-      "notes": "Flag only.",
-      "category": "protein_allergen",
-      "general_handling": "flag_only",
-      "last_updated": "2026-01-04"
-    },
-    {
-      "id": "ALLERGEN_NATURAL_FLAVORS",
-      "standard_name": "Natural Flavors (Umbrella)",
-      "aliases": [
-        "natural flavors",
-        "natural flavor",
-        "natural flavoring",
-        "botanical flavoring",
-        "fruit flavoring",
-        "spice extract",
-        "botanical extract blend",
-        "natural vanilla flavor",
-        "natural citrus flavor",
-        "natural berry flavor",
-        "natural mint flavor"
-      ],
-      "prevalence": "high",
-      "severity_level": "moderate",
-      "regulatory_status": "transparency_risk",
-      "supplement_context": "Umbrella term; composition not disclosed; can hide sources relevant for sensitive users.",
-      "notes": "Penalize for transparency (not because it's a 'major allergen').",
-      "category": "hidden_allergen",
-      "general_handling": "penalize",
-      "last_updated": "2026-01-04"
-    },
-    {
-      "id": "ALL_ARTIFICIAL_FLAVORS",
-      "standard_name": "Artificial Flavors (unspecified)",
-      "aliases": [
-        "artificial flavor",
-        "artificial flavors",
-        "artificial flavoring",
-        "natural and artificial flavors",
-        "artificial and natural flavorings"
-      ],
-      "prevalence": "moderate",
-      "severity_level": "moderate",
-      "regulatory_status": "transparency_risk",
-      "supplement_context": "Umbrella term; composition not disclosed.",
-      "notes": "Penalize for transparency.",
-      "category": "flavoring",
-      "general_handling": "penalize",
-      "last_updated": "2026-01-04"
-    },
-    {
-      "id": "ALLERGEN_GELATIN",
-      "standard_name": "Gelatin",
-      "aliases": [
-        "gelatin",
-        "beef gelatin",
-        "pork gelatin",
-        "bovine gelatin",
-        "porcine gelatin",
-        "fish gelatin",
-        "hydrolyzed collagen",
-        "gelatin capsule",
-        "gel cap",
-        "softgel"
-      ],
-      "prevalence": "high",
-      "severity_level": "moderate",
-      "regulatory_status": "consumer_relevant",
-      "supplement_context": "Very common capsule material. Important for vegetarians, religious restrictions, and alpha-gal syndrome (red meat allergy from tick bites).",
-      "notes": "Flag only. Critical for alpha-gal patients who may react to mammalian-derived gelatin.",
-      "category": "allergen",
-      "general_handling": "flag_only",
-      "last_updated": "2026-01-05"
-    },
-    {
-      "id": "ALLERGEN_ALGAE",
-      "standard_name": "Algae & Spirulina",
-      "aliases": [
-        "algae",
-        "spirulina",
-        "chlorella",
-        "blue-green algae",
-        "afa algae",
-        "aphanizomenon flos-aquae",
-        "dunaliella",
-        "haematococcus",
-        "astaxanthin (algae)",
-        "algal oil",
-        "algae dha",
-        "phycocyanin"
-      ],
-      "prevalence": "moderate",
-      "severity_level": "moderate",
-      "regulatory_status": "supplement_common_allergen",
-      "supplement_context": "Increasingly common in vegan omega-3, protein powders, and greens supplements. Allergies are emerging as usage increases.",
-      "notes": "Flag only. Cross-reactivity with other algae types possible.",
-      "category": "allergen",
-      "general_handling": "flag_only",
-      "last_updated": "2026-01-05"
-    },
-    {
-      "id": "ALLERGEN_LATEX_CROSS",
-      "standard_name": "Latex Cross-Reactive Foods",
-      "aliases": [
-        "banana",
-        "banana powder",
-        "avocado",
-        "kiwi",
-        "kiwifruit",
-        "chestnut",
-        "papaya",
-        "mango",
-        "passion fruit"
-      ],
-      "prevalence": "moderate",
-      "severity_level": "high",
-      "regulatory_status": "supplement_common_allergen",
-      "supplement_context": "Common in fruit-based supplements, greens powders, and tropical blends. Important for latex-allergy patients due to cross-reactivity.",
-      "notes": "Flag only. Latex-fruit syndrome affects 30-50% of latex-allergic individuals.",
-      "category": "allergen",
-      "general_handling": "flag_only",
-      "last_updated": "2026-01-05"
-    },
-    {
-      "id": "ALLERGEN_NIGHTSHADE",
-      "standard_name": "Nightshades (Solanaceae)",
-      "aliases": [
-        "nightshade",
-        "solanaceae",
-        "tomato",
-        "potato",
-        "eggplant",
-        "bell pepper",
-        "paprika",
-        "cayenne",
-        "ashwagandha",
-        "withania somnifera",
-        "goji berry",
-        "lycium barbarum"
-      ],
-      "prevalence": "moderate",
-      "severity_level": "low",
-      "regulatory_status": "consumer_relevant",
-      "supplement_context": "Ashwagandha is a nightshade. Important for autoimmune patients and those with nightshade sensitivity.",
-      "notes": "Flag only. Common sensitivity in autoimmune conditions.",
-      "category": "allergen",
-      "general_handling": "flag_only",
-      "last_updated": "2026-01-05"
+      "last_updated": "2026-03-01"
     }
   ]
 }

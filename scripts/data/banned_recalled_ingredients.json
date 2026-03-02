@@ -4,7 +4,7 @@
     "purpose": "safety_disqualification_and_regulatory_compliance",
     "schema_version": "4.1.0",
     "last_updated": "2026-03-01",
-    "total_entries": 128,
+    "total_entries": 129,
     "data_source_metadata": {
       "sources": [
         "FDA",
@@ -197,7 +197,7 @@
     "risk_breakdown": {
       "critical": 87,
       "high": 20,
-      "moderate": 13,
+      "moderate": 14,
       "low": 8
     }
   },
@@ -22740,6 +22740,176 @@
       "wada_prohibited": null,
       "regulatory_date": "2025-01-01",
       "regulatory_date_label": "First FDA enforcement action"
+    },
+    {
+      "id": "RISK_LOBELIA",
+      "standard_name": "Lobelia",
+      "aliases": [
+        "lobelia",
+        "lobelia inflata",
+        "lobelia herb",
+        "lobelia extract",
+        "lobelia leaf",
+        "lobeline",
+        "indian tobacco",
+        "puke weed",
+        "asthma weed",
+        "lobelia tincture"
+      ],
+      "CUI": "C0023928",
+      "category": "toxic_botanical",
+      "notes": "SAFETY WARNING: Lobelia inflata contains lobeline, a nicotinic receptor partial agonist with a narrow therapeutic index. FDA lists Lobelia inflata in its Poisonous Plant Database. The toxic threshold for lobeline is approximately 8 mg; ingestion of ~4 g dried leaf can be fatal. FDA banned lobeline in OTC drug products in 1993 (21 CFR 310.544). Adverse effects include respiratory depression, seizures, profuse diaphoresis, hypotension, tachycardia, and coma. Cochrane-level evidence does not support efficacy for any indication (smoking cessation, asthma). Risk is dose-dependent but the margin of safety is narrow enough to warrant a regulatory warning on all supplement products containing lobelia.",
+      "last_updated": "2026-03-01",
+      "mechanism_of_harm": "Lobeline is a piperidine alkaloid that acts as a partial agonist at nicotinic acetylcholine receptors (nAChRs), particularly alpha-4-beta-2 subtypes. At low doses it stimulates autonomic ganglia; at toxic doses it causes ganglionic blockade leading to respiratory depression, bradycardia, and cardiovascular collapse. Also inhibits vesicular monoamine transporter (VMAT2), disrupting dopamine and norepinephrine storage. Narrow therapeutic index: emetic dose overlaps with toxic dose range.",
+      "regulatory_status": {
+        "US": "FDA Poisonous Plant Database listing; lobeline banned in OTC drugs (21 CFR 310.544, 1993). Not explicitly banned as dietary ingredient but FDA has issued warnings.",
+        "EU": "Not approved as a novel food ingredient in several member states."
+      },
+      "population_warnings": [
+        "Pregnant or nursing women — uterotonic effects reported",
+        "Children — heightened sensitivity to alkaloid toxicity",
+        "Individuals with cardiovascular disease — ganglionic effects on heart rate and blood pressure",
+        "Individuals with respiratory conditions — paradoxical bronchospasm at toxic doses",
+        "Concurrent nicotine or smoking cessation product use — additive nAChR effects"
+      ],
+      "match_rules": {
+        "match_mode": "alias_and_fuzzy",
+        "label_tokens": [
+          "lobelia",
+          "lobelia inflata",
+          "lobelia herb",
+          "lobelia extract",
+          "lobelia leaf",
+          "lobeline",
+          "indian tobacco"
+        ],
+        "exclusions": [],
+        "case_sensitive": false,
+        "priority": 1,
+        "match_type": "normalized",
+        "confidence": "high",
+        "negative_match_terms": [
+          "lobelia cardinalis",
+          "cardinal flower"
+        ]
+      },
+      "references_structured": [
+        {
+          "type": "regulatory_database",
+          "title": "FDA Poisonous Plant Database — Lobelia inflata",
+          "evidence_grade": "R",
+          "url": "https://www.fda.gov/food/natural-toxins-food/poisonous-plant-database",
+          "supports_claims": [
+            "toxicity",
+            "regulatory_action"
+          ],
+          "evidence_summary": "FDA lists Lobelia inflata as a poisonous plant with documented human toxicity cases."
+        },
+        {
+          "type": "regulatory_action",
+          "title": "21 CFR 310.544 — Drug products containing lobeline as OTC smoking deterrent",
+          "evidence_grade": "R",
+          "url": "https://www.ecfr.gov/current/title-21/chapter-I/subchapter-D/part-310/subpart-E/section-310.544",
+          "supports_claims": [
+            "regulatory_action"
+          ],
+          "evidence_summary": "FDA final rule (1993) declaring lobeline-containing OTC smoking deterrent drug products not GRASE."
+        },
+        {
+          "type": "systematic_review",
+          "title": "Lobeline for smoking cessation (Cochrane Review)",
+          "evidence_grade": "A",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/24373424",
+          "supports_claims": [
+            "lack_of_efficacy"
+          ],
+          "evidence_summary": "PMID 24373424 — Cochrane review found no evidence that lobeline aids smoking cessation. Adverse effects noted."
+        }
+      ],
+      "external_ids": {
+        "umls_cui": "C0023928",
+        "cas": "90-69-7",
+        "pubchem": "101612"
+      },
+      "review": {
+        "status": "validated",
+        "last_reviewed_at": "2026-03-01",
+        "next_review_due": "2026-09-01",
+        "reviewed_by": "botanical_safety_audit",
+        "change_log": [
+          {
+            "date": "2026-03-01",
+            "change": "Moved from botanical_ingredients.json to banned_recalled_ingredients.json — FDA Poisonous Plant DB listing, narrow therapeutic index, lobeline OTC ban",
+            "by": "botanical_audit_batch1"
+          }
+        ]
+      },
+      "severity_score": 4,
+      "confidence": "high",
+      "status": "restricted",
+      "banned_by": "US",
+      "banned_date": "1993-12-29",
+      "reason": "FDA Poisonous Plant Database listing. Lobeline banned in OTC drugs (21 CFR 310.544, 1993). Narrow therapeutic index — toxic dose overlaps with emetic dose. Not demonstrated effective for any indication (Cochrane).",
+      "fda_warning": true,
+      "jurisdictions": [
+        {
+          "region": "US",
+          "level": "federal",
+          "status": "restricted",
+          "effective_date": "1993-12-29",
+          "source": {
+            "type": "fda_action",
+            "citation": "21 CFR 310.544 — lobeline OTC ban; FDA Poisonous Plant Database",
+            "accessed_date": "2026-03-01"
+          },
+          "jurisdiction_type": "country",
+          "jurisdiction_code": "US",
+          "last_verified_date": "2026-03-01"
+        }
+      ],
+      "legal_status_enum": "restricted",
+      "clinical_risk_enum": "moderate",
+      "severity_level": "moderate",
+      "ingredient_type": "botanical",
+      "class_tags": [
+        "toxic_botanical",
+        "alkaloid"
+      ],
+      "use_case_categories": [
+        "general"
+      ],
+      "source_category": "toxic_botanical",
+      "source_confidence": "high",
+      "data_quality": {
+        "completeness": 0.95,
+        "missing_fields": [],
+        "review_status": "validated"
+      },
+      "entity_type": "ingredient",
+      "effective_period": {
+        "start": "1993-12-29",
+        "end": null,
+        "notes": "Lobeline OTC drug ban effective date (21 CFR 310.544)"
+      },
+      "regulatory_date": "1993-12-29",
+      "regulatory_date_label": "FDA lobeline OTC ban effective",
+      "detection_difficulty": null,
+      "drugbank_id": null,
+      "found_in_categories": null,
+      "health_risks": null,
+      "interaction_tags": null,
+      "nci_thesaurus_code": null,
+      "threshold": null,
+      "unii": null,
+      "wada_prohibited": null,
+      "cas_number": "90-69-7",
+      "pubchem_cid": "101612",
+      "identifier_note": "CAS/PubChem for lobeline (primary toxic alkaloid); CUI C0023928 for Lobelia plant genus",
+      "cui_note": null,
+      "supersedes_ids": null,
+      "regulatory_actions": [],
+      "last_reviewed_at": "2026-03-01",
+      "reviewed_by": "botanical_safety_audit"
     }
   ]
 }

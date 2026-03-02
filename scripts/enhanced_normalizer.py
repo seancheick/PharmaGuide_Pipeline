@@ -1103,7 +1103,6 @@ class EnhancedDSLDNormalizer:
                     "standard_name": value.get("standard_name", key),
                     "category": value.get("category", "other"),
                     "additive_type": value.get("additive_type", "unknown"),
-                    "clean_label_score": value.get("clean_label_score", 7),
                     "mapped": True,
                     "priority": 7
                 }
@@ -2265,7 +2264,6 @@ class EnhancedDSLDNormalizer:
         result = {
             "category": "none",
             "additive_type": None,
-            "clean_label_score": None,
             "is_additive": None
         }
 
@@ -2276,7 +2274,6 @@ class EnhancedDSLDNormalizer:
             other_ing = self.other_ingredients_lookup[processed_name]
             result["category"] = other_ing.get("category", "other")
             result["additive_type"] = other_ing.get("additive_type", "unknown")
-            result["clean_label_score"] = other_ing.get("clean_label_score", 7)
             result["is_additive"] = other_ing.get("is_additive", False)
         else:
             # Try fuzzy match (using cached list) - SAFETY: Other ingredients are safe for fuzzy matching
@@ -2285,7 +2282,6 @@ class EnhancedDSLDNormalizer:
                 other_ing = self.other_ingredients_lookup[fuzzy_match]
                 result["category"] = other_ing.get("category", "other")
                 result["additive_type"] = other_ing.get("additive_type", "unknown")
-                result["clean_label_score"] = other_ing.get("clean_label_score", 7)
                 result["is_additive"] = other_ing.get("is_additive", False)
                 logger.debug(f"Fuzzy other ingredient match '{name}' -> '{fuzzy_match}' (score: {score})")
 
@@ -2377,7 +2373,7 @@ class EnhancedDSLDNormalizer:
         # Initialize all classification results
         banned_info = {"is_banned": False, "severity": None, "category": None}
         harmful_info = {"category": "none", "severity_level": None}
-        non_harmful_info = {"category": "none", "additive_type": None, "clean_label_score": None}
+        non_harmful_info = {"category": "none", "additive_type": None}
         allergen_info = {"is_allergen": False, "type": None, "severity": None}
         passive_info = {"is_passive": False, "category": None}
         
@@ -2405,7 +2401,7 @@ class EnhancedDSLDNormalizer:
         elif is_harmful["category"] != "none":
             # PRIORITY 2: Harmful additives - second priority
             harmful_info = is_harmful
-            non_harmful_info = {"category": "none", "additive_type": None, "clean_label_score": None}
+            non_harmful_info = {"category": "none", "additive_type": None}
             allergen_info = is_allergen  # Allow allergen info to coexist
 
         elif is_non_harmful["category"] != "none":
@@ -2418,7 +2414,7 @@ class EnhancedDSLDNormalizer:
             # PRIORITY 4: Allergens - fourth priority
             allergen_info = is_allergen
             harmful_info = {"category": "none", "severity_level": None}
-            non_harmful_info = {"category": "none", "additive_type": None, "clean_label_score": None}
+            non_harmful_info = {"category": "none", "additive_type": None}
 
         else:
             # No classification found in any database

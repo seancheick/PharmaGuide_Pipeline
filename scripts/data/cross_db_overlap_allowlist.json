@@ -5,9 +5,44 @@
     "purpose": "Explicitly allowed normalized term overlaps across routing databases. Any new overlap must be reviewed before scoring deployment.",
     "description": "Explicitly allowed normalized term overlaps across routing databases. Any new overlap must be reviewed before scoring deployment.",
     "last_updated": "2026-03-01",
-    "total_entries": 58
+    "total_entries": 61
   },
   "allowed_overlaps": [
+    {
+      "term_normalized": "allura red",
+      "db_pairs": [
+        "banned:harmful"
+      ],
+      "reason": "Red 40/Allura Red: exists in harmful_additives as additive penalty + banned_recalled as policy watchlist class (match_mode=disabled)."
+    },
+    {
+      "term_normalized": "allura red ac",
+      "db_pairs": [
+        "banned:harmful"
+      ],
+      "reason": "Red 40/Allura Red: exists in harmful_additives as additive penalty + banned_recalled as policy watchlist class (match_mode=disabled)."
+    },
+    {
+      "term_normalized": "allura red aluminum lake",
+      "db_pairs": [
+        "banned:harmful"
+      ],
+      "reason": "Red 40/Allura Red: exists in harmful_additives as additive penalty + banned_recalled as policy watchlist class (match_mode=disabled)."
+    },
+    {
+      "term_normalized": "artificial colors",
+      "db_pairs": [
+        "banned:harmful"
+      ],
+      "reason": "Artificial Colors umbrella: exists in harmful_additives as general category + banned_recalled as policy watchlist class (match_mode=disabled)."
+    },
+    {
+      "term_normalized": "blue 1",
+      "db_pairs": [
+        "banned:harmful"
+      ],
+      "reason": "Blue 1/Brilliant Blue FCF: exists in harmful_additives as additive penalty + banned_recalled as policy watchlist class (match_mode=disabled)."
+    },
     {
       "term_normalized": "blue vitriol",
       "db_pairs": [
@@ -16,11 +51,53 @@
       "reason": "Copper sulfate synonym; can appear as active mineral form while still treated as harmful additive in inactive context."
     },
     {
+      "term_normalized": "borax",
+      "db_pairs": [
+        "harmful:iqm"
+      ],
+      "reason": "Sodium tetraborate (borax) is an EU-banned food additive but also the IQM form name for boron/sodium_borate supplement form. Harmful in additive context; valid as active boron source."
+    },
+    {
+      "term_normalized": "brilliant blue fcf",
+      "db_pairs": [
+        "banned:harmful"
+      ],
+      "reason": "Blue 1/Brilliant Blue FCF: exists in harmful_additives as additive penalty + banned_recalled as policy watchlist class (match_mode=disabled)."
+    },
+    {
+      "term_normalized": "cassia angustifolia",
+      "db_pairs": [
+        "harmful:iqm"
+      ],
+      "reason": "Senna species synonym; FDA-approved OTC laxative with legitimate therapeutic use, but chronic overuse carries safety concerns (anthraquinone stimulant laxative)."
+    },
+    {
+      "term_normalized": "chlorophyllin",
+      "db_pairs": [
+        "harmful:iqm"
+      ],
+      "reason": "Copper chlorophyllin is both a scorable supplement form and flagged in harmful additives as a synthetic colorant additive."
+    },
+    {
       "term_normalized": "chondrus crispus extract",
       "db_pairs": [
         "harmful:iqm"
       ],
       "reason": "Irish moss source overlap; additive risk is context-dependent and should remain explicitly guarded."
+    },
+    {
+      "term_normalized": "ci 77891",
+      "db_pairs": [
+        "banned:harmful"
+      ],
+      "reason": "Titanium Dioxide: exists in harmful_additives as additive penalty + banned_recalled as policy watchlist class (match_mode=disabled)."
+    },
+    {
+      "term_normalized": "copper chlorophyllin",
+      "db_pairs": [
+        "harmful:iqm"
+      ],
+      "reason": "Copper chlorophyllin dual-listed: supplement form (IQM) and synthetic colorant (harmful additives)."
     },
     {
       "term_normalized": "copper sulfate",
@@ -44,6 +121,97 @@
       "reason": "Synthetic vitamin E form; retained in IQM for form mapping but tracked in harmful additives for transparency policy."
     },
     {
+      "term_normalized": "e102",
+      "db_pairs": [
+        "banned:harmful"
+      ],
+      "reason": "Yellow 5/Tartrazine: exists in harmful_additives as additive penalty + banned_recalled as policy watchlist class (match_mode=disabled)."
+    },
+    {
+      "term_normalized": "e110",
+      "db_pairs": [
+        "banned:harmful"
+      ],
+      "reason": "Yellow 6/Sunset Yellow: exists in harmful_additives as additive penalty + banned_recalled as policy watchlist class (match_mode=disabled)."
+    },
+    {
+      "term_normalized": "e129",
+      "db_pairs": [
+        "banned:harmful"
+      ],
+      "reason": "Red 40/Allura Red: exists in harmful_additives as additive penalty + banned_recalled as policy watchlist class (match_mode=disabled)."
+    },
+    {
+      "term_normalized": "e133",
+      "db_pairs": [
+        "banned:harmful"
+      ],
+      "reason": "Blue 1/Brilliant Blue FCF: exists in harmful_additives as additive penalty + banned_recalled as policy watchlist class (match_mode=disabled)."
+    },
+    {
+      "term_normalized": "e171",
+      "db_pairs": [
+        "banned:harmful"
+      ],
+      "reason": "Titanium Dioxide: exists in harmful_additives as additive penalty + banned_recalled as policy watchlist class (match_mode=disabled)."
+    },
+    {
+      "term_normalized": "fd c blue 1",
+      "db_pairs": [
+        "banned:harmful"
+      ],
+      "reason": "Blue 1/Brilliant Blue FCF: exists in harmful_additives as additive penalty + banned_recalled as policy watchlist class (match_mode=disabled)."
+    },
+    {
+      "term_normalized": "fd c blue no 1",
+      "db_pairs": [
+        "banned:harmful"
+      ],
+      "reason": "Blue 1/Brilliant Blue FCF: exists in harmful_additives as additive penalty + banned_recalled as policy watchlist class (match_mode=disabled)."
+    },
+    {
+      "term_normalized": "fd c red 40",
+      "db_pairs": [
+        "banned:harmful"
+      ],
+      "reason": "Red 40/Allura Red: exists in harmful_additives as additive penalty + banned_recalled as policy watchlist class (match_mode=disabled)."
+    },
+    {
+      "term_normalized": "fd c red no 40",
+      "db_pairs": [
+        "banned:harmful"
+      ],
+      "reason": "Red 40/Allura Red: exists in harmful_additives as additive penalty + banned_recalled as policy watchlist class (match_mode=disabled)."
+    },
+    {
+      "term_normalized": "fd c yellow 5",
+      "db_pairs": [
+        "banned:harmful"
+      ],
+      "reason": "Yellow 5/Tartrazine: exists in harmful_additives as additive penalty + banned_recalled as policy watchlist class (match_mode=disabled)."
+    },
+    {
+      "term_normalized": "fd c yellow 6",
+      "db_pairs": [
+        "banned:harmful"
+      ],
+      "reason": "Yellow 6/Sunset Yellow: exists in harmful_additives as additive penalty + banned_recalled as policy watchlist class (match_mode=disabled)."
+    },
+    {
+      "term_normalized": "fd c yellow no 5",
+      "db_pairs": [
+        "banned:harmful"
+      ],
+      "reason": "Yellow 5/Tartrazine: exists in harmful_additives as additive penalty + banned_recalled as policy watchlist class (match_mode=disabled)."
+    },
+    {
+      "term_normalized": "fd c yellow no 6",
+      "db_pairs": [
+        "banned:harmful"
+      ],
+      "reason": "Yellow 6/Sunset Yellow: exists in harmful_additives as additive penalty + banned_recalled as policy watchlist class (match_mode=disabled)."
+    },
+    {
       "term_normalized": "irish moss extract",
       "db_pairs": [
         "harmful:iqm"
@@ -65,25 +233,25 @@
       "reason": "Synthetic folate synonym; context-aware policy overlap."
     },
     {
-      "term_normalized": "synthetic folate",
+      "term_normalized": "red 40",
       "db_pairs": [
-        "harmful:iqm"
+        "banned:harmful"
       ],
-      "reason": "Policy overlap between synthetic-form transparency and active folate mapping."
+      "reason": "Red 40/Allura Red: exists in harmful_additives as additive penalty + banned_recalled as policy watchlist class (match_mode=disabled)."
     },
     {
-      "term_normalized": "synthetic vitamin e",
+      "term_normalized": "red 40 lake",
       "db_pairs": [
-        "harmful:iqm"
+        "banned:harmful"
       ],
-      "reason": "Policy overlap between synthetic-form transparency and active vitamin E mapping."
+      "reason": "Red 40/Allura Red: exists in harmful_additives as additive penalty + banned_recalled as policy watchlist class (match_mode=disabled)."
     },
     {
-      "term_normalized": "cassia angustifolia",
+      "term_normalized": "red dye 40",
       "db_pairs": [
-        "harmful:iqm"
+        "banned:harmful"
       ],
-      "reason": "Senna species synonym; FDA-approved OTC laxative with legitimate therapeutic use, but chronic overuse carries safety concerns (anthraquinone stimulant laxative)."
+      "reason": "Red 40/Allura Red: exists in harmful_additives as additive penalty + banned_recalled as policy watchlist class (match_mode=disabled)."
     },
     {
       "term_normalized": "senna",
@@ -121,18 +289,18 @@
       "reason": "Active glycosides in senna; same dual-listing rationale as senna."
     },
     {
-      "term_normalized": "chlorophyllin",
+      "term_normalized": "silicon dioxide",
       "db_pairs": [
         "harmful:iqm"
       ],
-      "reason": "Copper chlorophyllin is both a scorable supplement form and flagged in harmful additives as a synthetic colorant additive."
+      "reason": "Silicon dioxide is both a common tablet excipient/flow agent (harmful additives) and the chemical name for supplemental silica mineral (IQM)."
     },
     {
-      "term_normalized": "copper chlorophyllin",
+      "term_normalized": "sodium borate",
       "db_pairs": [
         "harmful:iqm"
       ],
-      "reason": "Copper chlorophyllin dual-listed: supplement form (IQM) and synthetic colorant (harmful additives)."
+      "reason": "Sodium borate overlaps between harmful additive (borax) and IQM boron/sodium_borate active form. Context-dependent routing."
     },
     {
       "term_normalized": "sodium copper chlorophyllin",
@@ -142,130 +310,39 @@
       "reason": "SCC dual-listed: supplement form (IQM) and synthetic colorant (harmful additives)."
     },
     {
-      "term_normalized": "silicon dioxide",
+      "term_normalized": "sodium tetraborate",
       "db_pairs": [
         "harmful:iqm"
       ],
-      "reason": "Silicon dioxide is both a common tablet excipient/flow agent (harmful additives) and the chemical name for supplemental silica mineral (IQM)."
+      "reason": "Chemical name for borax; overlaps harmful additive and IQM boron/sodium_borate form. Context-dependent routing."
     },
     {
-      "term_normalized": "allura red",
+      "term_normalized": "sunset yellow aluminum lake",
       "db_pairs": [
         "banned:harmful"
       ],
-      "reason": "Red 40/Allura Red: exists in harmful_additives as additive penalty + banned_recalled as policy watchlist class (match_mode=disabled)."
+      "reason": "Yellow 6/Sunset Yellow: exists in harmful_additives as additive penalty + banned_recalled as policy watchlist class (match_mode=disabled)."
     },
     {
-      "term_normalized": "allura red ac",
+      "term_normalized": "sunset yellow fcf",
       "db_pairs": [
         "banned:harmful"
       ],
-      "reason": "Red 40/Allura Red: exists in harmful_additives as additive penalty + banned_recalled as policy watchlist class (match_mode=disabled)."
+      "reason": "Yellow 6/Sunset Yellow: exists in harmful_additives as additive penalty + banned_recalled as policy watchlist class (match_mode=disabled)."
     },
     {
-      "term_normalized": "allura red aluminum lake",
+      "term_normalized": "synthetic folate",
       "db_pairs": [
-        "banned:harmful"
+        "harmful:iqm"
       ],
-      "reason": "Red 40/Allura Red: exists in harmful_additives as additive penalty + banned_recalled as policy watchlist class (match_mode=disabled)."
+      "reason": "Policy overlap between synthetic-form transparency and active folate mapping."
     },
     {
-      "term_normalized": "red 40",
+      "term_normalized": "synthetic vitamin e",
       "db_pairs": [
-        "banned:harmful"
+        "harmful:iqm"
       ],
-      "reason": "Red 40/Allura Red: exists in harmful_additives as additive penalty + banned_recalled as policy watchlist class (match_mode=disabled)."
-    },
-    {
-      "term_normalized": "red 40 lake",
-      "db_pairs": [
-        "banned:harmful"
-      ],
-      "reason": "Red 40/Allura Red: exists in harmful_additives as additive penalty + banned_recalled as policy watchlist class (match_mode=disabled)."
-    },
-    {
-      "term_normalized": "red dye 40",
-      "db_pairs": [
-        "banned:harmful"
-      ],
-      "reason": "Red 40/Allura Red: exists in harmful_additives as additive penalty + banned_recalled as policy watchlist class (match_mode=disabled)."
-    },
-    {
-      "term_normalized": "fd c red 40",
-      "db_pairs": [
-        "banned:harmful"
-      ],
-      "reason": "Red 40/Allura Red: exists in harmful_additives as additive penalty + banned_recalled as policy watchlist class (match_mode=disabled)."
-    },
-    {
-      "term_normalized": "fd c red no 40",
-      "db_pairs": [
-        "banned:harmful"
-      ],
-      "reason": "Red 40/Allura Red: exists in harmful_additives as additive penalty + banned_recalled as policy watchlist class (match_mode=disabled)."
-    },
-    {
-      "term_normalized": "e129",
-      "db_pairs": [
-        "banned:harmful"
-      ],
-      "reason": "Red 40/Allura Red: exists in harmful_additives as additive penalty + banned_recalled as policy watchlist class (match_mode=disabled)."
-    },
-    {
-      "term_normalized": "blue 1",
-      "db_pairs": [
-        "banned:harmful"
-      ],
-      "reason": "Blue 1/Brilliant Blue FCF: exists in harmful_additives as additive penalty + banned_recalled as policy watchlist class (match_mode=disabled)."
-    },
-    {
-      "term_normalized": "brilliant blue fcf",
-      "db_pairs": [
-        "banned:harmful"
-      ],
-      "reason": "Blue 1/Brilliant Blue FCF: exists in harmful_additives as additive penalty + banned_recalled as policy watchlist class (match_mode=disabled)."
-    },
-    {
-      "term_normalized": "fd c blue 1",
-      "db_pairs": [
-        "banned:harmful"
-      ],
-      "reason": "Blue 1/Brilliant Blue FCF: exists in harmful_additives as additive penalty + banned_recalled as policy watchlist class (match_mode=disabled)."
-    },
-    {
-      "term_normalized": "fd c blue no 1",
-      "db_pairs": [
-        "banned:harmful"
-      ],
-      "reason": "Blue 1/Brilliant Blue FCF: exists in harmful_additives as additive penalty + banned_recalled as policy watchlist class (match_mode=disabled)."
-    },
-    {
-      "term_normalized": "e133",
-      "db_pairs": [
-        "banned:harmful"
-      ],
-      "reason": "Blue 1/Brilliant Blue FCF: exists in harmful_additives as additive penalty + banned_recalled as policy watchlist class (match_mode=disabled)."
-    },
-    {
-      "term_normalized": "yellow 5",
-      "db_pairs": [
-        "banned:harmful"
-      ],
-      "reason": "Yellow 5/Tartrazine: exists in harmful_additives as additive penalty + banned_recalled as policy watchlist class (match_mode=disabled)."
-    },
-    {
-      "term_normalized": "yellow 5 lake",
-      "db_pairs": [
-        "banned:harmful"
-      ],
-      "reason": "Yellow 5/Tartrazine: exists in harmful_additives as additive penalty + banned_recalled as policy watchlist class (match_mode=disabled)."
-    },
-    {
-      "term_normalized": "yellow dye 5",
-      "db_pairs": [
-        "banned:harmful"
-      ],
-      "reason": "Yellow 5/Tartrazine: exists in harmful_additives as additive penalty + banned_recalled as policy watchlist class (match_mode=disabled)."
+      "reason": "Policy overlap between synthetic-form transparency and active vitamin E mapping."
     },
     {
       "term_normalized": "tartrazine",
@@ -282,81 +359,11 @@
       "reason": "Yellow 5/Tartrazine: exists in harmful_additives as additive penalty + banned_recalled as policy watchlist class (match_mode=disabled)."
     },
     {
-      "term_normalized": "fd c yellow 5",
+      "term_normalized": "tio2",
       "db_pairs": [
         "banned:harmful"
       ],
-      "reason": "Yellow 5/Tartrazine: exists in harmful_additives as additive penalty + banned_recalled as policy watchlist class (match_mode=disabled)."
-    },
-    {
-      "term_normalized": "fd c yellow no 5",
-      "db_pairs": [
-        "banned:harmful"
-      ],
-      "reason": "Yellow 5/Tartrazine: exists in harmful_additives as additive penalty + banned_recalled as policy watchlist class (match_mode=disabled)."
-    },
-    {
-      "term_normalized": "e102",
-      "db_pairs": [
-        "banned:harmful"
-      ],
-      "reason": "Yellow 5/Tartrazine: exists in harmful_additives as additive penalty + banned_recalled as policy watchlist class (match_mode=disabled)."
-    },
-    {
-      "term_normalized": "yellow 6",
-      "db_pairs": [
-        "banned:harmful"
-      ],
-      "reason": "Yellow 6/Sunset Yellow: exists in harmful_additives as additive penalty + banned_recalled as policy watchlist class (match_mode=disabled)."
-    },
-    {
-      "term_normalized": "yellow 6 lake",
-      "db_pairs": [
-        "banned:harmful"
-      ],
-      "reason": "Yellow 6/Sunset Yellow: exists in harmful_additives as additive penalty + banned_recalled as policy watchlist class (match_mode=disabled)."
-    },
-    {
-      "term_normalized": "yellow dye 6",
-      "db_pairs": [
-        "banned:harmful"
-      ],
-      "reason": "Yellow 6/Sunset Yellow: exists in harmful_additives as additive penalty + banned_recalled as policy watchlist class (match_mode=disabled)."
-    },
-    {
-      "term_normalized": "sunset yellow fcf",
-      "db_pairs": [
-        "banned:harmful"
-      ],
-      "reason": "Yellow 6/Sunset Yellow: exists in harmful_additives as additive penalty + banned_recalled as policy watchlist class (match_mode=disabled)."
-    },
-    {
-      "term_normalized": "sunset yellow aluminum lake",
-      "db_pairs": [
-        "banned:harmful"
-      ],
-      "reason": "Yellow 6/Sunset Yellow: exists in harmful_additives as additive penalty + banned_recalled as policy watchlist class (match_mode=disabled)."
-    },
-    {
-      "term_normalized": "fd c yellow 6",
-      "db_pairs": [
-        "banned:harmful"
-      ],
-      "reason": "Yellow 6/Sunset Yellow: exists in harmful_additives as additive penalty + banned_recalled as policy watchlist class (match_mode=disabled)."
-    },
-    {
-      "term_normalized": "fd c yellow no 6",
-      "db_pairs": [
-        "banned:harmful"
-      ],
-      "reason": "Yellow 6/Sunset Yellow: exists in harmful_additives as additive penalty + banned_recalled as policy watchlist class (match_mode=disabled)."
-    },
-    {
-      "term_normalized": "e110",
-      "db_pairs": [
-        "banned:harmful"
-      ],
-      "reason": "Yellow 6/Sunset Yellow: exists in harmful_additives as additive penalty + banned_recalled as policy watchlist class (match_mode=disabled)."
+      "reason": "Titanium Dioxide: exists in harmful_additives as additive penalty + banned_recalled as policy watchlist class (match_mode=disabled)."
     },
     {
       "term_normalized": "titanium dioxide",
@@ -387,32 +394,46 @@
       "reason": "Titanium Dioxide: exists in harmful_additives as additive penalty + banned_recalled as policy watchlist class (match_mode=disabled)."
     },
     {
-      "term_normalized": "tio2",
+      "term_normalized": "yellow 5",
       "db_pairs": [
         "banned:harmful"
       ],
-      "reason": "Titanium Dioxide: exists in harmful_additives as additive penalty + banned_recalled as policy watchlist class (match_mode=disabled)."
+      "reason": "Yellow 5/Tartrazine: exists in harmful_additives as additive penalty + banned_recalled as policy watchlist class (match_mode=disabled)."
     },
     {
-      "term_normalized": "ci 77891",
+      "term_normalized": "yellow 5 lake",
       "db_pairs": [
         "banned:harmful"
       ],
-      "reason": "Titanium Dioxide: exists in harmful_additives as additive penalty + banned_recalled as policy watchlist class (match_mode=disabled)."
+      "reason": "Yellow 5/Tartrazine: exists in harmful_additives as additive penalty + banned_recalled as policy watchlist class (match_mode=disabled)."
     },
     {
-      "term_normalized": "e171",
+      "term_normalized": "yellow 6",
       "db_pairs": [
         "banned:harmful"
       ],
-      "reason": "Titanium Dioxide: exists in harmful_additives as additive penalty + banned_recalled as policy watchlist class (match_mode=disabled)."
+      "reason": "Yellow 6/Sunset Yellow: exists in harmful_additives as additive penalty + banned_recalled as policy watchlist class (match_mode=disabled)."
     },
     {
-      "term_normalized": "artificial colors",
+      "term_normalized": "yellow 6 lake",
       "db_pairs": [
         "banned:harmful"
       ],
-      "reason": "Artificial Colors umbrella: exists in harmful_additives as general category + banned_recalled as policy watchlist class (match_mode=disabled)."
+      "reason": "Yellow 6/Sunset Yellow: exists in harmful_additives as additive penalty + banned_recalled as policy watchlist class (match_mode=disabled)."
+    },
+    {
+      "term_normalized": "yellow dye 5",
+      "db_pairs": [
+        "banned:harmful"
+      ],
+      "reason": "Yellow 5/Tartrazine: exists in harmful_additives as additive penalty + banned_recalled as policy watchlist class (match_mode=disabled)."
+    },
+    {
+      "term_normalized": "yellow dye 6",
+      "db_pairs": [
+        "banned:harmful"
+      ],
+      "reason": "Yellow 6/Sunset Yellow: exists in harmful_additives as additive penalty + banned_recalled as policy watchlist class (match_mode=disabled)."
     }
   ]
 }
