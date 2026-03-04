@@ -172,7 +172,6 @@ class TestV30Scoring:
                     "ingredient": "Example",
                     "match_type": "exact",
                     "status": "recalled",
-                    "severity_level": "moderate",
                 }
             ],
         }
@@ -189,7 +188,6 @@ class TestV30Scoring:
                     "ingredient": "DMAA",
                     "match_type": "exact",
                     "status": "banned",
-                    "severity_level": "critical",
                 }
             ],
         }
@@ -205,12 +203,14 @@ class TestV30Scoring:
                 {
                     "ingredient": "Anatabine",
                     "match_method": "token_bounded",
-                    "severity_level": "high",
+                    "status": "banned",
                 }
             ],
         }
         result = scorer.score_product(product)
-        assert result["verdict"] == "CAUTION"
+        # token_bounded matches set the review flag but do NOT override verdict.
+        # The flag is informational for human review; verdict respects the score.
+        assert result["verdict"] == "SAFE"
         assert "BANNED_MATCH_REVIEW_NEEDED" in result["flags"]
         assert result["score_80"] is not None
 
@@ -274,8 +274,7 @@ class TestV30Scoring:
                 {
                     "ingredient": "Anatabine",
                     "match_type": "exact",
-                    "status": "restricted",
-                    "severity_level": "high",
+                    "status": "high_risk",
                 }
             ],
         }
@@ -298,8 +297,7 @@ class TestV30Scoring:
                 {
                     "ingredient": "Anatabine",
                     "match_type": "exact",
-                    "status": "restricted",
-                    "severity_level": "low",
+                    "status": "watchlist",
                 }
             ],
         }
@@ -603,6 +601,49 @@ class TestV30Scoring:
         section_b = scorer._score_section_b(product, "targeted", 0.0, [])
         assert section_b["B1_penalty"] == pytest.approx(2.0)
         assert section_b["score"] == pytest.approx(23.0)
+
+    def test_b1_deduplicates_same_additive_id(self, scorer):
+        """Two additives with same additive_id but different severity → only higher penalty counted."""
+        product = make_base_product()
+        product["contaminant_data"]["harmful_additives"] = {
+            "found": True,
+            "additives": [
+                {"additive_id": "ADD_BHA", "severity_level": "moderate"},
+                {"additive_id": "ADD_BHA", "severity_level": "critical"},
+            ],
+        }
+        section_b = scorer._score_section_b(product, "targeted", 0.0, [])
+        # Only the critical penalty (3.0) should apply, not moderate+critical (1+3=4)
+        assert section_b["B1_penalty"] == pytest.approx(3.0)
+
+    def test_b1_different_additive_ids_both_count(self, scorer):
+        """Different additive_ids are chemically distinct and both count."""
+        product = make_base_product()
+        product["contaminant_data"]["harmful_additives"] = {
+            "found": True,
+            "additives": [
+                {"additive_id": "ADD_STEARIC_ACID", "severity_level": "high"},
+                {"additive_id": "ADD_BHA", "severity_level": "critical"},
+            ],
+        }
+        section_b = scorer._score_section_b(product, "targeted", 0.0, [])
+        # high (2.0) + critical (3.0) = 5.0
+        assert section_b["B1_penalty"] == pytest.approx(5.0)
+
+    def test_b1_cap_is_config_driven(self, scorer):
+        """B1 cap should be read from config (currently 8)."""
+        product = make_base_product()
+        product["contaminant_data"]["harmful_additives"] = {
+            "found": True,
+            "additives": [
+                {"additive_id": "ADD_BHA", "severity_level": "critical"},
+                {"additive_id": "ADD_BHT", "severity_level": "critical"},
+                {"additive_id": "ADD_TBHQ", "severity_level": "critical"},
+            ],
+        }
+        section_b = scorer._score_section_b(product, "targeted", 0.0, [])
+        # 3 critical = 9.0, capped at config cap of 8
+        assert section_b["B1_penalty"] == pytest.approx(8.0)
 
     def test_c_per_ingredient_cap_by_canonical_name(self, scorer):
         product = make_base_product()
@@ -1510,3 +1551,464 @@ class TestCategoryPercentiles:
         assert top_entry["category_percentile"]["category_source"] == "inferred"
         assert top_entry["category_percentile"]["category_confidence"] == pytest.approx(0.87)
         assert top_entry["percentile_category"] == "greens_powder"
+
+
+# =====================================================================
+# Spec Section 10 — additional coverage for P1-1, P1-2, P1-3, P2-1, P2-2
+# =====================================================================
+
+
+class TestSectionCEvidenceScoring:
+    """P1-2: Clinical evidence tier scoring tests."""
+
+    @pytest.fixture
+    def scorer(self):
+        return SupplementScorer()
+
+    def test_c_multi_ingredient_aggregation(self, scorer):
+        """Multiple ingredients each contribute independently, capped per ingredient."""
+        product = make_base_product()
+        product["evidence_data"] = {
+            "clinical_matches": [
+                {
+                    "id": "E1",
+                    "standard_name": "Magnesium",
+                    "study_type": "systematic_review_meta",
+                    "evidence_level": "product-human",
+                },
+                {
+                    "id": "E2",
+                    "standard_name": "Vitamin D",
+                    "study_type": "rct_multiple",
+                    "evidence_level": "ingredient-human",
+                },
+            ]
+        }
+        section_c = scorer._score_section_c(product, [])
+        # Magnesium: 6 * 1.0 = 6.0; Vitamin D: 5 * 0.65 = 3.25
+        assert section_c["score"] == pytest.approx(9.25)
+        assert section_c["matched_entries"] == 2
+
+    def test_c_per_ingredient_cap_enforced(self, scorer):
+        """Multiple studies for same canonical ingredient are capped at 7."""
+        product = make_base_product()
+        product["evidence_data"] = {
+            "clinical_matches": [
+                {
+                    "id": "E1",
+                    "standard_name": "Magnesium",
+                    "study_type": "systematic_review_meta",
+                    "evidence_level": "product-human",
+                },
+                {
+                    "id": "E2",
+                    "standard_name": "Magnesium",
+                    "study_type": "rct_multiple",
+                    "evidence_level": "product-human",
+                },
+            ]
+        }
+        section_c = scorer._score_section_c(product, [])
+        # 6 + 5 = 11 raw for Magnesium, capped at 7
+        assert section_c["score"] == pytest.approx(7.0)
+
+    def test_c_no_double_counting_same_study_id(self, scorer):
+        """Duplicate study IDs are counted only once."""
+        product = make_base_product()
+        product["evidence_data"] = {
+            "clinical_matches": [
+                {
+                    "id": "E1",
+                    "standard_name": "Magnesium",
+                    "study_type": "systematic_review_meta",
+                    "evidence_level": "product-human",
+                },
+                {
+                    "id": "E1",
+                    "standard_name": "Magnesium",
+                    "study_type": "systematic_review_meta",
+                    "evidence_level": "product-human",
+                },
+            ]
+        }
+        section_c = scorer._score_section_c(product, [])
+        assert section_c["score"] == pytest.approx(6.0)
+        assert section_c["matched_entries"] == 1
+
+    def test_c_total_cap_at_20(self, scorer):
+        """Section C total is capped at 20 even with many ingredients."""
+        product = make_base_product()
+        matches = []
+        for i, name in enumerate(["Magnesium", "Vitamin D", "Zinc", "Iron"]):
+            matches.append({
+                "id": f"E{i}",
+                "standard_name": name,
+                "study_type": "systematic_review_meta",
+                "evidence_level": "product-human",
+            })
+        product["evidence_data"] = {"clinical_matches": matches}
+        section_c = scorer._score_section_c(product, [])
+        # Each: 6*1.0=6.0, 4 ingredients = 24 raw, capped at 20
+        assert section_c["score"] == pytest.approx(20.0)
+
+    def test_c_sub_clinical_dose_guard(self, scorer):
+        """Sub-clinical dose applies 0.25x multiplier and sets flag."""
+        product = make_base_product()
+        product["evidence_data"] = {
+            "clinical_matches": [
+                {
+                    "id": "E1",
+                    "standard_name": "Magnesium",
+                    "study_type": "rct_multiple",
+                    "evidence_level": "product-human",
+                    "min_clinical_dose": 400,
+                    "dose_unit": "mg",
+                },
+            ]
+        }
+        flags = []
+        section_c = scorer._score_section_c(product, flags)
+        # Product has 200mg Mg, min_clinical_dose=400mg → 5*1.0*0.25 = 1.25
+        assert section_c["score"] == pytest.approx(1.25)
+        assert "SUB_CLINICAL_DOSE_DETECTED" in flags
+
+    def test_c_supra_clinical_dose_flag(self, scorer):
+        """Supra-clinical dose (>3x max studied) sets flag but doesn't reduce points."""
+        product = make_base_product()
+        # Set Magnesium dose very high
+        for ing in product["ingredient_quality_data"]["ingredients"]:
+            if ing["standard_name"] == "Magnesium":
+                ing["quantity"] = 5000
+        for ing in product["ingredient_quality_data"]["ingredients_scorable"]:
+            if ing["standard_name"] == "Magnesium":
+                ing["quantity"] = 5000
+        product["evidence_data"] = {
+            "clinical_matches": [
+                {
+                    "id": "E1",
+                    "standard_name": "Magnesium",
+                    "study_type": "rct_single",
+                    "evidence_level": "ingredient-human",
+                    "min_clinical_dose": 200,
+                    "max_studied_clinical_dose": 1000,
+                    "dose_unit": "mg",
+                },
+            ]
+        }
+        flags = []
+        section_c = scorer._score_section_c(product, flags)
+        # 5000mg > 3*1000mg → supra flag; 4*0.65 = 2.6 (no dose reduction)
+        assert section_c["score"] == pytest.approx(2.6)
+        assert "SUPRA_CLINICAL_DOSE" in flags
+
+    def test_c_branded_rct_multiplier(self, scorer):
+        """branded-rct evidence level uses 0.8x multiplier."""
+        product = make_base_product()
+        product["evidence_data"] = {
+            "clinical_matches": [
+                {
+                    "id": "E1",
+                    "standard_name": "Magnesium",
+                    "study_type": "rct_multiple",
+                    "evidence_level": "branded-rct",
+                },
+            ]
+        }
+        section_c = scorer._score_section_c(product, [])
+        # 5 * 0.8 = 4.0
+        assert section_c["score"] == pytest.approx(4.0)
+
+    def test_c_preclinical_evidence_low_multiplier(self, scorer):
+        """Preclinical evidence uses 0.3x multiplier."""
+        product = make_base_product()
+        product["evidence_data"] = {
+            "clinical_matches": [
+                {
+                    "id": "E1",
+                    "standard_name": "Magnesium",
+                    "study_type": "rct_single",
+                    "evidence_level": "preclinical",
+                },
+            ]
+        }
+        section_c = scorer._score_section_c(product, [])
+        # 4 * 0.3 = 1.2
+        assert section_c["score"] == pytest.approx(1.2)
+
+    def test_c_no_matches_returns_zero(self, scorer):
+        """Products with no clinical matches score 0."""
+        product = make_base_product()
+        product["evidence_data"] = {"clinical_matches": []}
+        section_c = scorer._score_section_c(product, [])
+        assert section_c["score"] == pytest.approx(0.0)
+        assert section_c["matched_entries"] == 0
+
+
+class TestProbioticScoringSpec:
+    """P1-1: Probiotic scoring tests beyond basic coverage."""
+
+    @pytest.fixture
+    def scorer(self):
+        return SupplementScorer()
+
+    def _make_probiotic_product(self, total_billion=10.0, strain_count=5,
+                                 supp_type="probiotic", prebiotic=False):
+        product = make_base_product()
+        product["supplement_type"] = {"type": supp_type, "active_count": 2}
+        product["probiotic_data"] = {
+            "is_probiotic_product": True,
+            "total_billion_count": total_billion,
+            "total_strain_count": strain_count,
+            "probiotic_blends": [
+                {
+                    "strains": [{"name": f"Strain_{i}"} for i in range(strain_count)],
+                    "cfu_data": {"billion_count": total_billion},
+                }
+            ],
+        }
+        if prebiotic:
+            product["probiotic_data"]["prebiotic_fiber_detected"] = True
+        return product
+
+    def test_probiotic_default_mode_cfu_threshold(self, scorer):
+        """Default mode: total_billion > 1 gives 1pt CFU."""
+        product = self._make_probiotic_product(total_billion=2.0, strain_count=1)
+        bonus = scorer._score_probiotic_bonus(product, "probiotic")
+        assert bonus["cfu"] == pytest.approx(1.0)
+        assert bonus["diversity"] == pytest.approx(0.0)  # < 3 strains
+
+    def test_probiotic_default_mode_diversity_threshold(self, scorer):
+        """Default mode: strain_count >= 3 gives 1pt diversity."""
+        product = self._make_probiotic_product(total_billion=0.5, strain_count=4)
+        bonus = scorer._score_probiotic_bonus(product, "probiotic")
+        assert bonus["cfu"] == pytest.approx(0.0)  # <= 1 billion
+        assert bonus["diversity"] == pytest.approx(1.0)
+
+    def test_probiotic_default_mode_cap_at_3(self, scorer):
+        """Default mode caps at 3 points (config-driven)."""
+        product = self._make_probiotic_product(total_billion=5.0, strain_count=5)
+        product["probiotic_data"]["prebiotic_present"] = True
+        bonus = scorer._score_probiotic_bonus(product, "probiotic")
+        # cfu=1 + diversity=1 + prebiotic=1 = 3, capped at 3
+        assert bonus["probiotic_bonus"] == pytest.approx(3.0)
+
+    def test_probiotic_below_all_thresholds_zero(self, scorer):
+        """Below all thresholds gives 0 bonus."""
+        product = self._make_probiotic_product(total_billion=0.5, strain_count=1)
+        bonus = scorer._score_probiotic_bonus(product, "probiotic")
+        assert bonus["probiotic_bonus"] == pytest.approx(0.0)
+
+
+class TestSynergyClusterSpec:
+    """P2-1: Synergy cluster qualification tests."""
+
+    @pytest.fixture
+    def scorer(self):
+        return SupplementScorer()
+
+    def test_synergy_explicit_flag_respected(self, scorer):
+        """Pre-computed synergy_cluster_qualified is used when present."""
+        product = make_base_product()
+        product["synergy_cluster_qualified"] = True
+        assert scorer._synergy_cluster_qualified(product) is True
+
+    def test_synergy_explicit_flag_false(self, scorer):
+        """Pre-computed False flag is respected."""
+        product = make_base_product()
+        product["synergy_cluster_qualified"] = False
+        assert scorer._synergy_cluster_qualified(product) is False
+
+    def test_synergy_two_ingredient_match_qualifies(self, scorer):
+        """Cluster with 2+ matched ingredients (no dose thresholds) qualifies."""
+        product = make_base_product()
+        product["formulation_data"] = {
+            "synergy_clusters": [
+                {
+                    "cluster_name": "Bone Health",
+                    "match_count": 2,
+                    "matched_ingredients": [
+                        {"name": "Calcium"},
+                        {"name": "Vitamin D"},
+                    ],
+                }
+            ]
+        }
+        assert scorer._synergy_cluster_qualified(product) is True
+
+    def test_synergy_single_match_does_not_qualify(self, scorer):
+        """Cluster with only 1 matched ingredient does not qualify."""
+        product = make_base_product()
+        product["formulation_data"] = {
+            "synergy_clusters": [
+                {
+                    "cluster_name": "Bone Health",
+                    "match_count": 1,
+                    "matched_ingredients": [{"name": "Calcium"}],
+                }
+            ]
+        }
+        assert scorer._synergy_cluster_qualified(product) is False
+
+    def test_synergy_underdosed_ingredients_no_bonus(self, scorer):
+        """Cluster where none meet minimum dose does not qualify."""
+        product = make_base_product()
+        product["formulation_data"] = {
+            "synergy_clusters": [
+                {
+                    "cluster_name": "Bone Health",
+                    "match_count": 2,
+                    "matched_ingredients": [
+                        {"name": "Calcium", "min_effective_dose": 500, "meets_minimum": False},
+                        {"name": "Vitamin D", "min_effective_dose": 1000, "meets_minimum": False},
+                    ],
+                }
+            ]
+        }
+        assert scorer._synergy_cluster_qualified(product) is False
+
+    def test_synergy_half_dosed_qualifies(self, scorer):
+        """Cluster where >= half of checkable ingredients meet dose qualifies."""
+        product = make_base_product()
+        product["formulation_data"] = {
+            "synergy_clusters": [
+                {
+                    "cluster_name": "Bone Health",
+                    "match_count": 2,
+                    "matched_ingredients": [
+                        {"name": "Calcium", "min_effective_dose": 500, "meets_minimum": True},
+                        {"name": "Vitamin D", "min_effective_dose": 1000, "meets_minimum": False},
+                    ],
+                }
+            ]
+        }
+        # 1/2 dosed, ceil(2/2) = 1, 1 >= 1 → qualifies
+        assert scorer._synergy_cluster_qualified(product) is True
+
+
+class TestManufacturerViolationsSpec:
+    """P2-2: Manufacturer violation penalty tests."""
+
+    @pytest.fixture
+    def scorer(self):
+        return SupplementScorer()
+
+    def test_violation_no_data_zero_penalty(self, scorer):
+        """No violation data → 0 penalty."""
+        product = make_base_product()
+        penalty = scorer._manufacturer_violation_penalty(product)
+        assert penalty == pytest.approx(0.0)
+
+    def test_violation_total_deduction_applied_preferred(self, scorer):
+        """Pre-computed total_deduction_applied is used directly."""
+        product = make_base_product()
+        product["manufacturer_data"] = {
+            "violations": {
+                "total_deduction_applied": -8.0,
+                "violations": [
+                    {"description": "FDA Warning Letter 2024", "total_deduction_applied": -8.0}
+                ],
+            }
+        }
+        penalty = scorer._manufacturer_violation_penalty(product)
+        assert penalty == pytest.approx(-8.0)
+
+    def test_violation_cap_at_minus_25(self, scorer):
+        """Violation penalty is capped at -25."""
+        product = make_base_product()
+        product["manufacturer_data"] = {
+            "violations": {
+                "total_deduction_applied": -30.0,
+            }
+        }
+        penalty = scorer._manufacturer_violation_penalty(product)
+        assert penalty == pytest.approx(-25.0)
+
+    def test_violation_sum_multiple_items(self, scorer):
+        """Multiple violation items are summed."""
+        product = make_base_product()
+        product["manufacturer_data"] = {
+            "violations": {
+                "violations": [
+                    {"total_deduction_applied": -5.0},
+                    {"total_deduction_applied": -3.0},
+                ],
+            }
+        }
+        penalty = scorer._manufacturer_violation_penalty(product)
+        assert penalty == pytest.approx(-8.0)
+
+    def test_violation_list_format_backward_compat(self, scorer):
+        """Violations as a list (legacy format) are summed."""
+        product = make_base_product()
+        product["manufacturer_data"] = {
+            "violations": [
+                {"total_deduction": -4.0},
+                {"total_deduction": -6.0},
+            ]
+        }
+        penalty = scorer._manufacturer_violation_penalty(product)
+        assert penalty == pytest.approx(-10.0)
+
+    def test_violation_list_format_capped(self, scorer):
+        """Legacy list format also respects -25 cap."""
+        product = make_base_product()
+        product["manufacturer_data"] = {
+            "violations": [
+                {"total_deduction": -15.0},
+                {"total_deduction": -15.0},
+            ]
+        }
+        penalty = scorer._manufacturer_violation_penalty(product)
+        assert penalty == pytest.approx(-25.0)
+
+
+class TestSectionDSpec:
+    """Additional Section D brand trust tests."""
+
+    @pytest.fixture
+    def scorer(self):
+        return SupplementScorer()
+
+    def test_d1_trusted_manufacturer(self, scorer):
+        """is_trusted_manufacturer flag gives D1 = 2."""
+        product = make_base_product()
+        product["is_trusted_manufacturer"] = True
+        section_d = scorer._score_section_d(product)
+        assert section_d["D1"] == pytest.approx(2.0)
+
+    def test_d2_full_disclosure_gives_one(self, scorer):
+        """Full disclosure gives D2 = 1."""
+        product = make_base_product()
+        product["is_trusted_manufacturer"] = True
+        # No proprietary blends → full disclosure
+        section_d = scorer._score_section_d(product)
+        assert section_d["D2"] == pytest.approx(1.0)
+
+    def test_d4_high_standard_region(self, scorer):
+        """Manufacturing in high-regulation country gives D4 points."""
+        product = make_base_product()
+        product["manufacturing_region"] = "USA"
+        section_d = scorer._score_section_d(product)
+        assert section_d["D4"] == pytest.approx(1.0)
+
+    def test_d3_d4_d5_combined_cap(self, scorer):
+        """D3+D4+D5 are capped at 2.0 combined."""
+        product = make_base_product()
+        product["claim_physician_formulated"] = True  # D3 = 0.5
+        product["manufacturing_region"] = "USA"  # D4 = 1.0
+        product["has_sustainable_packaging"] = True  # D5 = 0.5
+        section_d = scorer._score_section_d(product)
+        tail = section_d["D3"] + section_d["D4"] + section_d["D5"]
+        # 0.5 + 1.0 + 0.5 = 2.0, capped at 2.0
+        assert tail == pytest.approx(2.0)
+
+    def test_d_section_max_5(self, scorer):
+        """Section D total is capped at 5."""
+        product = make_base_product()
+        product["is_trusted_manufacturer"] = True  # D1 = 2
+        product["claim_physician_formulated"] = True  # D3 = 0.5
+        product["manufacturing_region"] = "USA"  # D4 = 1.0
+        product["has_sustainable_packaging"] = True  # D5 = 0.5
+        section_d = scorer._score_section_d(product)
+        # D1=2 + D2=1 + tail=2 = 5.0
+        assert section_d["score"] == pytest.approx(5.0)

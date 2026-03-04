@@ -1424,12 +1424,10 @@ class TestFormFallbackPrecisionRegression:
             {"name": "Titanium Oxide"},
         ]
         harmful = enricher._check_harmful_additives(ingredients)
-        banned = enricher._check_banned_substances(ingredients, {})
         assert harmful.get("found") is True
-        # Propyl Paraben is now routed through banned/recalled policy (B0 path),
-        # while dyes/TiO2 remain harmful-additive penalties (B1 path).
+        # After v5.0 migration, parabens + dyes + TiO2 all route through
+        # harmful_additives (B1 path) for penalty scoring.
         assert len(harmful.get("additives", [])) >= 3
-        assert banned.get("found") is True
 
     def test_yellow_6_variant_routes_to_harmful_additives(self, enricher):
         harmful = enricher._check_harmful_additives([{"name": "Yellow #6"}])

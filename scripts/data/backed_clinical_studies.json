@@ -2,9 +2,9 @@
   "_metadata": {
     "description": "Ingredients backed by clinical research and studies - Enhanced for Section C v3.4.0",
     "purpose": "evidence_scoring",
-    "schema_version": "4.1.0",
-    "last_updated": "2026-03-01",
-    "total_entries": 176,
+    "schema_version": "5.0.0",
+    "last_updated": "2026-03-03",
+    "total_entries": 177,
     "changelog": [
       "2.5 (2026-02-20): Added 4 high-impact clinical entries (whey protein, generic citicoline, alpha-GPC, Saccharomyces boulardii strain), upgraded taurine from preclinical to ingredient-human systematic-review evidence, and added brand/generic guardrails for Cognizin aliases. Total entries: 176",
       "2.4 (2026-02-20): Added 8 high-impact clinical records (generic creatine monohydrate, peppermint oil, LGG/BB-12/HN019 strains, GABA, chamomile, beetroot) and aligned 19 systematic-review entries to study_type=systematic_review_meta for score consistency. Total entries: 172",
@@ -5124,6 +5124,34 @@
       "notes": "Strain-level yeast probiotic evidence is strongest for prevention of antibiotic-associated diarrhea, with additional supportive evidence in selected GI contexts.",
       "last_updated": "2026-02-20",
       "notable_studies": "Updated systematic review/meta-analysis across 21 randomized trials found reduced antibiotic-associated diarrhea risk with S. boulardii (PMID: 26216624)."
+    },
+    {
+      "id": "ING_UNDECYLENIC_ACID",
+      "standard_name": "10-Undecenoic Acid",
+      "aliases": [
+        "10-undecenoic acid",
+        "undecylenic acid",
+        "undecenoic acid"
+      ],
+      "category": "antifungal",
+      "evidence_level": "ingredient-human",
+      "study_type": "rct_single",
+      "published_studies": [
+        "RCT",
+        "in-vitro"
+      ],
+      "score_contribution": "tier_2",
+      "key_endpoints": [
+        "Candida colonization ↓",
+        "fungal infection resolution ↑"
+      ],
+      "health_goals_supported": [
+        "Immune Support",
+        "Digestive Health"
+      ],
+      "notes": "FDA OTC monograph topical antifungal (21 CFR 333.210). In vitro fungistatic against C. albicans at MIC 0.5-2 mM. McLain et al. (2000) showed dose-dependent inhibition of Candida morphogenesis. Limited oral-specific RCTs; most human evidence is topical. Oral supplement use extrapolated from in-vitro MIC and medium-chain fatty acid pharmacokinetics.",
+      "last_updated": "2026-03-03",
+      "notable_studies": "McLain N, Bhagwandin B (2000): 10-undecenoic acid inhibits C. albicans morphogenesis in vitro, MIC 0.5-2 mM (Bioorg Med Chem 8:2491, PMID 11403866). FDA 21 CFR 333.210 OTC monograph for topical antifungal at 10-25% concentration. No large oral-specific RCTs identified; clinical use supported by FDA monograph status and in-vitro evidence."
     }
   ]
 }

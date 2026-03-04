@@ -2,7 +2,7 @@
   "_metadata": {
     "description": "Botanical extracts, herbs, and plant-derived ingredients with standardization markers and thresholds",
     "purpose": "ingredient_mapping_and_standardization",
-    "schema_version": "4.1.0",
+    "schema_version": "5.0.0",
     "last_updated": "2026-02-25",
     "total_entries": 238,
     "scoring_rule": "Botanicals with min_threshold are scored higher when meeting standardization requirements. Priority level affects matching weight.",

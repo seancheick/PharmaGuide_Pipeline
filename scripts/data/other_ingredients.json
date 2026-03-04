@@ -2,7 +2,7 @@
   "_metadata": {
     "description": "Other/inactive ingredients database for supplement excipients and additives",
     "purpose": "inactive_ingredient_classification",
-    "schema_version": "4.1.0",
+    "schema_version": "5.0.0",
     "last_updated": "2026-03-01",
     "total_entries": 531
   },

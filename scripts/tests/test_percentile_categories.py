@@ -87,7 +87,7 @@ class TestPercentileCategorySchema:
         data = json.loads(path.read_text(encoding="utf-8"))
 
         assert isinstance(data.get("_metadata"), dict)
-        assert data["_metadata"].get("schema_version") == "4.1.0"
+        assert data["_metadata"].get("schema_version") == "5.0.0"
         assert isinstance(data.get("categories"), dict)
         assert isinstance(data.get("classification_rules"), dict)
 

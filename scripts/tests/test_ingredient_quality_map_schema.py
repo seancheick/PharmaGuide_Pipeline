@@ -52,10 +52,10 @@ class TestSchemaVersion:
         """Schema version must be present."""
         assert 'schema_version' in metadata, "Missing schema_version in metadata"
 
-    def test_schema_version_is_4(self, metadata):
-        """Schema version must be 4.x.x"""
+    def test_schema_version_is_5(self, metadata):
+        """Schema version must be 5.x.x"""
         version = metadata.get('schema_version', '')
-        assert version.startswith('4.'), f"Expected schema version 4.x.x, got {version}"
+        assert version.startswith('5.'), f"Expected schema version 5.x.x, got {version}"
 
 
 # =============================================================================

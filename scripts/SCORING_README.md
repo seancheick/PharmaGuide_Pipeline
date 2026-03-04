@@ -1,4 +1,4 @@
-# PharmaGuide Scoring README (v3.1.0)
+# PharmaGuide Scoring README (v3.1.0 / Data Schema 5.0.0)
 
 This document is the implementation-facing guide for the current scorer:
 
@@ -111,7 +111,10 @@ bonuses = min(5, B3 + B4a + B4b + B4c + B_hypoallergenic)
 penalties = B0_moderate + B1 + B2 + B5 + B6
 ```
 
-- B0: immediate safety gate logic (blocked/unsafe/moderate/review).
+- B0: immediate safety gate logic.
+  - v5.0 status-based: `banned` -> UNSAFE, `recalled` -> BLOCKED, `high_risk` -> -10 + CAUTION, `watchlist` -> -5 + CAUTION.
+  - Pre-5.0 severity fallback: `critical/high` -> UNSAFE, `moderate` -> -10 + CAUTION, `low` -> advisory.
+  - Non-exact/alias matches -> review-only (`BANNED_MATCH_REVIEW_NEEDED`).
 - B1: harmful additives penalty (capped at 5).
 - B2: allergen penalty (capped at 2).
 - B3: claim compliance bonus (max 4 inside shared bonus pool).
@@ -211,10 +214,10 @@ From current config:
 
 Precedence:
 
-1. `BLOCKED`
-2. `UNSAFE`
-3. `NOT_SCORED`
-4. `CAUTION`
+1. `BLOCKED` — recalled substance (B0)
+2. `UNSAFE` — banned substance (B0)
+3. `NOT_SCORED` — mapping gate failed
+4. `CAUTION` — `B0_HIGH_RISK_SUBSTANCE`, `B0_WATCHLIST_SUBSTANCE`, `B0_MODERATE_SUBSTANCE`, or `BANNED_MATCH_REVIEW_NEEDED`
 5. `POOR` (`quality_score < 32`)
 6. `SAFE`
 

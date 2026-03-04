@@ -1,6 +1,6 @@
 # SCORING_ENGINE_SPEC.md
 
-> Scoring version: **3.1.0** — aligned to current `score_supplements.py` and `config/scoring_config.json`.
+> Scoring version: **3.1.0** / Data schema: **5.0.0** — aligned to current `score_supplements.py` and `config/scoring_config.json`.
 
 ## Scope
 
@@ -71,14 +71,20 @@ Match-type semantics:
 - Hard-fail eligible types: `exact`, `alias`
 - Non-hard-fail types: `token_bounded` and any other value -> review-only flag
 
-Rules:
-- `status in {"recalled","both"}` + exact/alias -> `BLOCKED`
+Status-based rules (v5.0 schema, primary path):
+- `status == "banned"` + exact/alias -> `UNSAFE`
+- `status == "recalled"` + exact/alias -> `BLOCKED`
+- `status == "high_risk"` + exact/alias -> B0 penalty `10`; adds `B0_HIGH_RISK_SUBSTANCE`
+- `status == "watchlist"` + exact/alias -> B0 penalty `5`; adds `B0_WATCHLIST_SUBSTANCE`
+
+Severity-based fallback (pre-5.0 enriched data):
 - `severity_level in {"critical","high"}` + exact/alias -> `UNSAFE`
 - `severity_level == "moderate"` + exact/alias -> B0 moderate penalty `10`; adds `B0_MODERATE_SUBSTANCE`
 - `severity_level == "low"` + exact/alias -> advisory only; adds `B0_LOW_SUBSTANCE`
-- Any review-only (non exact/alias) hit -> `BANNED_MATCH_REVIEW_NEEDED`
 
-Note: if a hard fail fires, all moderate/low flags are stripped from that evaluation.
+Common rules:
+- Any review-only (non exact/alias) hit -> `BANNED_MATCH_REVIEW_NEEDED`
+- If a hard fail fires (blocked/unsafe), all moderate/low/watchlist flags are stripped from that evaluation.
 
 ### Mapping Gate
 
@@ -248,7 +254,7 @@ penalties = B0_moderate + B1 + B2 + B5 + B6
 - `base_score` (25) and `bonus_pool_cap` (5) are read from config
 - Optional `B_hypoallergenic` (+0.5) feeds into the bonus pool (gated — requires `enable_hypoallergenic_bonus: true`; also requires zero allergen penalty, no "may contain" text, no contradictions, and at least one validated allergen-free/gluten-free claim)
 
-### B1 Harmful Additives (max penalty 5)
+### B1 Harmful Additives (max penalty 8)
 
 Input:
 - `contaminant_data.harmful_additives.additives[]`
@@ -260,7 +266,7 @@ Severity map (config-overridable):
 - low: 0.5
 - none: 0.0
 
-Summed and capped at 5.
+Deduplicated by `additive_id` (highest severity wins per ID). Summed and capped at 8.
 
 ### B2 Allergen Presence (max penalty 2)
 
@@ -515,7 +521,7 @@ Precedence (first match wins):
 | 1 | `BLOCKED` | `b0.blocked == true` |
 | 2 | `UNSAFE` | `b0.unsafe == true` |
 | 3 | `NOT_SCORED` | mapping gate stopped |
-| 4 | `CAUTION` | `B0_MODERATE_SUBSTANCE` or `BANNED_MATCH_REVIEW_NEEDED` in flags |
+| 4 | `CAUTION` | `B0_MODERATE_SUBSTANCE`, `B0_HIGH_RISK_SUBSTANCE`, `B0_WATCHLIST_SUBSTANCE`, or `BANNED_MATCH_REVIEW_NEEDED` in flags |
 | 5 | `POOR` | `quality_score < 32` |
 | 6 | `SAFE` | default |
 
@@ -588,8 +594,10 @@ Section scores shorthand (`section_scores`):
 | Flag | Source | Meaning |
 |---|---|---|
 | `BANNED_MATCH_REVIEW_NEEDED` | B0 | Non-exact/alias banned substance match found — human review needed |
-| `B0_LOW_SUBSTANCE` | B0 | Low-severity banned substance exact/alias hit |
-| `B0_MODERATE_SUBSTANCE` | B0 | Moderate-severity banned substance hit; triggers CAUTION verdict + 10pt penalty |
+| `B0_HIGH_RISK_SUBSTANCE` | B0 | High-risk substance (v5.0 status); triggers CAUTION verdict + 10pt penalty |
+| `B0_WATCHLIST_SUBSTANCE` | B0 | Watchlist substance (v5.0 status); triggers CAUTION verdict + 5pt penalty |
+| `B0_LOW_SUBSTANCE` | B0 | Low-severity banned substance exact/alias hit (pre-5.0 fallback) |
+| `B0_MODERATE_SUBSTANCE` | B0 | Moderate-severity banned substance hit (pre-5.0 fallback); triggers CAUTION verdict + 10pt penalty |
 | `DISEASE_CLAIM_DETECTED` | B6 | Product makes unsubstantiated disease claims |
 | `LABEL_CONTRADICTION_DETECTED` | B3 | Compliance claims contradict other label text |
 | `MANUFACTURER_VIOLATION` | Post-section | Manufacturer has documented violations; deduction applied |
@@ -620,6 +628,21 @@ Section scores shorthand (`section_scores`):
 | D4 points | 0.5 | 1.0 |
 | Section caps | partially hardcoded | fully config-driven via `_section_max()` |
 | Feature gates | 4 gates | 7 gates (added non_gmo, hypoallergenic, d1_middle_tier) |
+| B1 cap | 5 | 8 |
+| B1 dedup | none | by `additive_id` (highest severity wins) |
+| Subsection caps | hardcoded | all config-driven |
+
+---
+
+## Data Schema v5.0 Changes (affecting scorer)
+
+| Area | Before v5.0 | v5.0 |
+|---|---|---|
+| B0 primary logic | `severity_level` based (critical/high/moderate/low) | `status` based (banned/recalled/high_risk/watchlist) |
+| B0 `"both"` status | Treated as recalled | Removed; entries migrated to `recalled` |
+| Enricher hit payload | `severity_level` from banned entry | `severity_level` derived from `status` via `_STATUS_TO_SEVERITY` map |
+| Banned entry `match_mode` | Not present | `active`/`disabled`/`historical` — enricher skips non-active |
+| Banned `severity_level` field | Present on entries | Removed; scorer falls back to severity-based logic only for pre-5.0 enriched data |
 
 ---
 

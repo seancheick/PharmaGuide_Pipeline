@@ -2,7 +2,7 @@
   "_metadata": {
     "description": "Versioned rules for certification/claim detection with evidence-based scoring eligibility",
     "purpose": "claims_scoring",
-    "schema_version": "4.1.0",
+    "schema_version": "5.0.0",
     "last_updated": "2026-02-25",
     "scoring_rule": "Only award points when evidence_strength >= 'medium' AND score_eligible=true AND feature gate enabled",
     "design_principles": [

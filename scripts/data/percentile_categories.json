@@ -2,7 +2,7 @@
   "_metadata": {
     "description": "Deterministic product cohort categories used for category percentile ranking in scoring output.",
     "purpose": "Map enriched products into stable percentile cohorts with auditable inference signals.",
-    "schema_version": "4.1.0",
+    "schema_version": "5.0.0",
     "version": "1.0.0",
     "last_updated": "2026-02-28"
   },

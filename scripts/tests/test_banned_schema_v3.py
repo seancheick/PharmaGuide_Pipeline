@@ -39,11 +39,6 @@ CLINICAL_RISK_ENUM_VALUES = [
     'critical', 'high', 'moderate', 'low', 'dose_dependent'
 ]
 
-INGREDIENT_TYPE_VALUES = [
-    'botanical', 'synthetic', 'pharmaceutical', 'contaminant',
-    'peptide', 'hormone', 'sarm', 'stimulant', 'nootropic', 'steroid'
-]
-
 REFERENCE_TYPE_VALUES = [
     'doi', 'pubmed', 'fda_advisory', 'fda_warning_letter', 'fda_recall',
     'fda_import_alert', 'dea_scheduling', 'state_statute', 'wada_list',
@@ -70,21 +65,21 @@ def ingredients(banned_data):
 # Schema Version Tests
 # =============================================================================
 
-def test_schema_version_is_4(banned_data):
-    """Schema version must be 4.x (in _metadata)."""
+def test_schema_version_is_5(banned_data):
+    """Schema version must be 5.x (in _metadata)."""
     metadata = banned_data.get('_metadata', {})
     version = metadata.get('schema_version', '')
-    assert version.startswith('4.'), \
-        f"Expected schema_version 4.x, got {version}"
+    assert version.startswith('5.'), \
+        f"Expected schema_version 5.x, got {version}"
 
 
 def test_has_migration_block(banned_data):
-    """Migration block must be present documenting deprecated fields."""
+    """Migration block must be present documenting schema history."""
     metadata = banned_data.get('_metadata', {})
     migration = metadata.get('migration')
     assert migration is not None, "Missing migration block in _metadata"
-    assert 'deprecated_fields' in migration, "Missing deprecated_fields in migration"
-    assert 'authoritative_fields' in migration, "Missing authoritative_fields in migration"
+    assert 'completed_migrations' in migration, "Missing completed_migrations in migration"
+    assert 'v5_removed_fields' in migration, "Missing v5_removed_fields in migration"
 
 
 def test_has_data_source_metadata(banned_data):
@@ -108,17 +103,17 @@ def test_id_unique(ingredients):
 
 
 def test_standard_name_unique_within_type(ingredients):
-    """standard_name must be unique within same ingredient_type."""
+    """standard_name must be unique within same entity_type."""
     seen = set()
     duplicates = []
     for item in ingredients:
         name = item.get('standard_name')
-        ing_type = item.get('ingredient_type', 'unknown')
-        key = (name, ing_type)
+        ent_type = item.get('entity_type', 'unknown')
+        key = (name, ent_type)
         if key in seen:
             duplicates.append(key)
         seen.add(key)
-    assert len(duplicates) == 0, f"Duplicate (standard_name, ingredient_type): {duplicates}"
+    assert len(duplicates) == 0, f"Duplicate (standard_name, entity_type): {duplicates}"
 
 
 # =============================================================================
@@ -152,22 +147,10 @@ def test_all_entries_have_clinical_risk_enum(ingredients):
     assert len(missing) == 0, f"Entries missing clinical_risk_enum: {missing}"
 
 
-def test_all_entries_have_severity_level(ingredients):
-    """All entries must have severity_level (for backward compatibility with scoring)."""
-    missing = [item.get('id') for item in ingredients if not item.get('severity_level')]
-    assert len(missing) == 0, f"Entries missing severity_level: {missing}"
-
-
 def test_all_entries_have_match_rules(ingredients):
     """All entries must have match_rules block."""
     missing = [item.get('id') for item in ingredients if not item.get('match_rules')]
     assert len(missing) == 0, f"Entries missing match_rules: {missing}"
-
-
-def test_all_entries_have_data_quality(ingredients):
-    """All entries must have data_quality block."""
-    missing = [item.get('id') for item in ingredients if not item.get('data_quality')]
-    assert len(missing) == 0, f"Entries missing data_quality: {missing}"
 
 
 # =============================================================================
@@ -272,26 +255,6 @@ def test_reference_types_valid(ingredients):
 # Match Rules Validation Tests
 # =============================================================================
 
-def test_match_rules_has_label_tokens(ingredients):
-    """All match_rules must have label_tokens."""
-    missing = []
-    for item in ingredients:
-        match_rules = item.get('match_rules', {})
-        if not match_rules.get('label_tokens'):
-            missing.append(item.get('id'))
-    assert len(missing) == 0, f"Entries missing match_rules.label_tokens: {missing}"
-
-
-def test_match_rules_has_match_mode(ingredients):
-    """All match_rules must have match_mode."""
-    missing = []
-    for item in ingredients:
-        match_rules = item.get('match_rules', {})
-        if not match_rules.get('match_mode'):
-            missing.append(item.get('id'))
-    assert len(missing) == 0, f"Entries missing match_rules.match_mode: {missing}"
-
-
 # =============================================================================
 # Source Verification Tests
 # =============================================================================
@@ -307,37 +270,18 @@ def test_no_unverified_sources_in_prod(ingredients):
         f"Entries with unverified sources cannot ship: {unverified}"
 
 
-def test_all_entries_have_last_reviewed_at(ingredients):
-    """All entries must have last_reviewed_at for audit trail."""
-    missing = [item.get('id') for item in ingredients if not item.get('last_reviewed_at')]
-    assert len(missing) == 0, f"Entries missing last_reviewed_at: {missing}"
-
-
 # =============================================================================
-# Backward Compatibility Tests
+# Status and Scoring Tests (v5.0)
 # =============================================================================
 
 def test_all_entries_have_status(ingredients):
-    """Old 'status' field must remain for backward compatibility."""
+    """All entries must have status field with v5.0 enum value."""
+    valid_statuses = {'banned', 'recalled', 'high_risk', 'watchlist'}
     missing = [item.get('id') for item in ingredients if 'status' not in item]
-    assert len(missing) == 0, f"Entries missing status (needed for compatibility): {missing}"
-
-
-def test_all_entries_have_severity_level_for_scoring(ingredients):
-    """severity_level must be present (drives scoring logic)."""
-    missing = [item.get('id') for item in ingredients if not item.get('severity_level')]
-    assert len(missing) == 0, f"Entries missing severity_level: {missing}"
-
-
-def test_severity_level_valid_values(ingredients):
-    """severity_level must be critical, high, moderate, or low."""
-    valid = ['critical', 'high', 'moderate', 'low']
-    invalid = []
-    for item in ingredients:
-        level = item.get('severity_level')
-        if level and level not in valid:
-            invalid.append((item.get('id'), level))
-    assert len(invalid) == 0, f"Invalid severity_level values: {invalid}"
+    assert len(missing) == 0, f"Entries missing status: {missing}"
+    invalid = [(item.get('id'), item.get('status')) for item in ingredients
+               if item.get('status') not in valid_statuses]
+    assert len(invalid) == 0, f"Entries with invalid status: {invalid}"
 
 
 # =============================================================================
@@ -375,52 +319,40 @@ def test_sibutramine_dedupe_complete(ingredients):
 # Status Contradiction Tests
 # =============================================================================
 
-def test_high_risk_entries_not_marked_banned_federal(ingredients):
-    """Entries with legal_status_enum='high_risk' should not have status contradictions."""
+def test_status_legal_enum_consistency(ingredients):
+    """Check that status and legal_status_enum are consistent (v5.0)."""
     contradictions = []
     for item in ingredients:
-        if item.get('legal_status_enum') == 'high_risk':
-            # These should have appropriate clinical risk but not be legally banned
-            # This is about UI accuracy - "high risk" is not the same as "banned"
-            pass  # No specific contradiction to test, just ensuring enum exists
-    # This test validates that status fixes were applied
-    assert True
-
-
-def test_status_legal_enum_consistency(ingredients):
-    """Check that status and legal_status_enum are reasonably consistent."""
-    # banned_federal should have status="banned"
-    # high_risk should typically have status="banned" (legacy) but legal_status_enum="high_risk"
-    # This is expected during transition period
-    pass  # Soft validation - documented inconsistency during migration
+        status = item.get('status')
+        legal = item.get('legal_status_enum')
+        eid = item.get('id')
+        # banned_federal/controlled_substance/adulterant/not_lawful_as_supplement -> status=banned
+        if legal in ('banned_federal', 'controlled_substance') and status not in ('banned', 'recalled'):
+            contradictions.append((eid, f"legal={legal} but status={status}"))
+    if contradictions:
+        print(f"Info: {len(contradictions)} status/legal_status_enum inconsistencies: {contradictions[:5]}")
 
 
 # =============================================================================
-# Data Quality Tests
+# Review Block Tests (v5.0 — replaces data_quality)
 # =============================================================================
 
-def test_data_quality_completeness_valid(ingredients):
-    """data_quality.completeness must be between 0 and 1."""
-    invalid = []
-    for item in ingredients:
-        dq = item.get('data_quality', {})
-        completeness = dq.get('completeness')
-        if completeness is not None:
-            if not (0 <= completeness <= 1):
-                invalid.append((item.get('id'), completeness))
-    assert len(invalid) == 0, f"Invalid completeness values: {invalid}"
+def test_review_block_present(ingredients):
+    """All entries must have a review block (v5.0)."""
+    missing = [item.get('id') for item in ingredients if not item.get('review')]
+    assert len(missing) == 0, f"Entries missing review block: {missing}"
 
 
-def test_data_quality_review_status_valid(ingredients):
-    """data_quality.review_status must be valid."""
-    valid = ['validated', 'pending_review', 'needs_update', 'needs_review', 'unreviewed']
+def test_review_status_valid(ingredients):
+    """review.status must be a valid value."""
+    valid = {'validated', 'pending_review', 'needs_update', 'needs_review', 'unreviewed'}
     invalid = []
     for item in ingredients:
-        dq = item.get('data_quality', {})
-        status = dq.get('review_status')
+        review = item.get('review', {})
+        status = review.get('status')
         if status and status not in valid:
             invalid.append((item.get('id'), status))
-    assert len(invalid) == 0, f"Invalid review_status values: {invalid}"
+    assert len(invalid) == 0, f"Invalid review.status values: {invalid}"
 
 
 # =============================================================================
@@ -438,7 +370,9 @@ def test_summary_statistics(ingredients):
         'total_entries': len(ingredients),
         'by_legal_status': {},
         'by_clinical_risk': {},
-        'by_ingredient_type': {},
+        'by_entity_type': {},
+        'by_status': {},
+        'by_match_mode': {},
         'with_jurisdictions': 0,
         'with_supersedes_ids': 0,
     }
@@ -452,9 +386,17 @@ def test_summary_statistics(ingredients):
         cr = item.get('clinical_risk_enum', 'unknown')
         stats['by_clinical_risk'][cr] = stats['by_clinical_risk'].get(cr, 0) + 1
 
-        # Ingredient type
-        it = item.get('ingredient_type', 'unknown')
-        stats['by_ingredient_type'][it] = stats['by_ingredient_type'].get(it, 0) + 1
+        # Entity type
+        et = item.get('entity_type', 'unknown')
+        stats['by_entity_type'][et] = stats['by_entity_type'].get(et, 0) + 1
+
+        # Status (v5.0)
+        st = item.get('status', 'unknown')
+        stats['by_status'][st] = stats['by_status'].get(st, 0) + 1
+
+        # Match mode (v5.0)
+        mm = item.get('match_mode', 'unknown')
+        stats['by_match_mode'][mm] = stats['by_match_mode'].get(mm, 0) + 1
 
         # Jurisdictions
         if item.get('jurisdictions'):
@@ -464,10 +406,13 @@ def test_summary_statistics(ingredients):
         if item.get('supersedes_ids'):
             stats['with_supersedes_ids'] += 1
 
-    print(f"\n=== Banned Ingredients Database v3 Statistics ===")
+    print(f"\n=== Banned Ingredients Database v5.0 Statistics ===")
     print(f"Total entries: {stats['total_entries']}")
+    print(f"By status: {stats['by_status']}")
+    print(f"By match_mode: {stats['by_match_mode']}")
     print(f"By legal status: {stats['by_legal_status']}")
     print(f"By clinical risk: {stats['by_clinical_risk']}")
+    print(f"By entity type: {stats['by_entity_type']}")
     print(f"Entries with jurisdictions: {stats['with_jurisdictions']}")
     print(f"Entries with supersedes_ids: {stats['with_supersedes_ids']}")
 
@@ -524,26 +469,6 @@ def test_product_entries_have_negative_match_terms_where_needed(ingredients):
         f"Products with generic names missing negative_match_terms: {missing_negatives}"
 
 
-def test_product_aliases_label_tokens_synced(ingredients):
-    """Product aliases and label_tokens should be synchronized."""
-    product_entries = [i for i in ingredients if i.get('entity_type') == 'product']
-    out_of_sync = []
-
-    for item in product_entries:
-        aliases = set(item.get('aliases', []))
-        label_tokens = set(item.get('match_rules', {}).get('label_tokens', []))
-
-        if aliases != label_tokens:
-            out_of_sync.append({
-                'id': item.get('id'),
-                'aliases': len(aliases),
-                'label_tokens': len(label_tokens)
-            })
-
-    assert len(out_of_sync) == 0, \
-        f"Product entries with out-of-sync aliases/label_tokens: {out_of_sync}"
-
-
 def test_product_aliases_are_brand_qualified(ingredients):
     """
     Product aliases should include brand context to prevent false positives.
@@ -579,3 +504,54 @@ def test_product_aliases_are_brand_qualified(ingredients):
     if potentially_generic:
         print(f"\nWarning: Potentially generic aliases (review manually): "
               f"{potentially_generic[:5]}...")  # Show first 5
+
+
+# =============================================================================
+# Schema v5.0 Enforcement Tests
+# =============================================================================
+
+def test_all_entries_have_match_mode(ingredients):
+    """All entries must have top-level match_mode field (v5.0)."""
+    valid_modes = {'active', 'disabled', 'historical'}
+    missing = []
+    invalid = []
+    for item in ingredients:
+        mode = item.get('match_mode')
+        if not mode:
+            missing.append(item.get('id'))
+        elif mode not in valid_modes:
+            invalid.append((item.get('id'), mode))
+    assert len(missing) == 0, f"Entries missing match_mode: {missing}"
+    assert len(invalid) == 0, f"Invalid match_mode values: {invalid}"
+
+
+def test_status_enum_v5(ingredients):
+    """status must be one of: banned, recalled, high_risk, watchlist (v5.0)."""
+    valid_statuses = {'banned', 'recalled', 'high_risk', 'watchlist'}
+    invalid = []
+    for item in ingredients:
+        status = item.get('status')
+        if status and status not in valid_statuses:
+            invalid.append((item.get('id'), status))
+    assert len(invalid) == 0, f"Invalid status values: {invalid}"
+
+
+def test_recall_scope_present_for_recalls(ingredients):
+    """Recalled entries should have recall_scope populated."""
+    missing = []
+    for item in ingredients:
+        if item.get('status') == 'recalled':
+            if item.get('entity_type') == 'product' and not item.get('recall_scope'):
+                missing.append(item.get('id'))
+    assert len(missing) == 0, f"Recalled product entries missing recall_scope: {missing}"
+
+
+def test_match_mode_valid_values(ingredients):
+    """match_mode must be active, disabled, or historical."""
+    valid = {'active', 'disabled', 'historical'}
+    invalid = []
+    for item in ingredients:
+        mode = item.get('match_mode')
+        if mode and mode not in valid:
+            invalid.append((item.get('id'), mode))
+    assert len(invalid) == 0, f"Invalid match_mode values: {invalid}"

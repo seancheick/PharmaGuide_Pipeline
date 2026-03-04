@@ -2572,7 +2572,7 @@ class SupplementEnricherV3:
             if any(v in candidates for v in entry_variants):
                 return {
                     "recognition_source": "harmful_additives",
-                    "recognition_reason": entry.get('severity_level', 'known_additive'),
+                    "recognition_reason": "known_additive",
                     "matched_entry_id": entry.get('id'),
                     "matched_entry_name": entry.get('standard_name'),
                     "recognition_type": "non_scorable",
@@ -2631,7 +2631,7 @@ class SupplementEnricherV3:
             if any(v in candidates for v in entry_variants):
                 return {
                     "recognition_source": "banned_recalled_ingredients",
-                    "recognition_reason": entry.get('severity_level', 'banned'),
+                    "recognition_reason": "banned",
                     "matched_entry_id": entry.get('id'),
                     "matched_entry_name": entry.get('standard_name'),
                     "recognition_type": "non_scorable",
@@ -4661,6 +4661,11 @@ class SupplementEnricherV3:
                 if entity_type not in MATCHABLE_ENTITY_TYPES:
                     continue
 
+                # P0b: Filter by match_mode - skip disabled/historical entries
+                match_mode = banned_item.get('match_mode', 'active')
+                if match_mode in ('disabled', 'historical'):
+                    continue
+
                 # Product-level recalls/bans should match product identity
                 # (full name / brand), not ingredient labels.
                 candidate_ing_name = ing_name
@@ -4753,13 +4758,22 @@ class SupplementEnricherV3:
                         "token_bounded": 0.7
                     }
 
+                    # Derive severity_level from status for backward compat with scorer
+                    _STATUS_TO_SEVERITY = {
+                        "banned": "critical", "recalled": "critical",
+                        "high_risk": "moderate", "watchlist": "low"
+                    }
+                    derived_severity = _STATUS_TO_SEVERITY.get(
+                        banned_item.get('status', ''), 'high'
+                    )
+
                     found.append({
                         "ingredient": candidate_ing_name,
                         "banned_name": banned_name,
                         "banned_id": banned_item.get('id', ''),
                         "category": section_key,
                         "status": banned_item.get('status') or banned_item.get('recall_status'),
-                        "severity_level": banned_item.get('severity_level', 'high'),
+                        "severity_level": derived_severity,
                         "reason": banned_item.get('reason', ''),
                         "match_type": match_type,
                         "confidence": confidence_map.get(match_type, 0.5),
@@ -5875,6 +5889,13 @@ class SupplementEnricherV3:
         # complete even when only rules-db evidence finds a match.
         third_party = self._merge_evidence_third_party_programs(third_party, third_party_evidence)
 
+        # Manufacturer-level certification injection: when the product matches a
+        # known top-manufacturer, cross-reference that manufacturer's evidence
+        # strings for certification keywords.  This catches certifications that
+        # are not printed on the physical label but are publicly verifiable
+        # at the company level (e.g., "NSF Certified for Sport" for Thorne).
+        third_party = self._inject_manufacturer_certs(third_party, product, gmp)
+
         # Derive safety flags from certifications
         # These programs test for heavy metals, contaminants, and/or label accuracy
         safety_flags = self._derive_safety_flags(third_party, product)
@@ -5936,6 +5957,93 @@ class SupplementEnricherV3:
         merged["programs"] = programs
         merged["count"] = len(programs)
         merged["has_generic_claim_only"] = bool(merged.get("has_generic_claim_only", False) and len(programs) == 0)
+        return merged
+
+    # Patterns mapping manufacturer evidence strings to canonical cert names.
+    _MANUFACTURER_CERT_PATTERNS = [
+        (re.compile(r'NSF\s+Certified\s+for\s+Sport', re.I), "NSF Sport"),
+        (re.compile(r'NSF\s+Certified', re.I), "NSF Certified"),
+        (re.compile(r'USP.?verified', re.I), "USP Verified"),
+        (re.compile(r'ConsumerLab', re.I), "ConsumerLab"),
+        (re.compile(r'Informed[\s-]?Sport', re.I), "Informed Sport"),
+        (re.compile(r'Informed[\s-]?Choice', re.I), "Informed Choice"),
+        (re.compile(r'BSCG', re.I), "BSCG"),
+        (re.compile(r'\bIFOS\b', re.I), "IFOS"),
+        (re.compile(r'\bGMP\b', re.I), None),  # GMP handled separately
+    ]
+
+    def _inject_manufacturer_certs(
+        self, third_party: Dict, product: Dict, gmp: Dict
+    ) -> Dict:
+        """Inject certifications from top_manufacturers_data evidence strings.
+
+        When a product matches a known top-manufacturer, that manufacturer's
+        ``evidence`` list is scanned for certification keywords.  Detected
+        certifications are added to the third_party programs list (deduped).
+        GMP evidence is injected into the gmp dict in-place.
+        """
+        brand = product.get("brandName", "")
+        contacts = product.get("contacts", [])
+        manufacturer = ""
+        for contact in contacts:
+            if "Manufacturer" in (contact.get("types") or []):
+                manufacturer = (
+                    contact.get("contactDetails", {}) or {}
+                ).get("name", "")
+                break
+        if not manufacturer:
+            manufacturer = brand
+
+        top_match = self._check_top_manufacturer(brand, manufacturer)
+        if not top_match.get("found"):
+            return third_party
+
+        # Find the matching manufacturer entry to get evidence strings.
+        top_db = self.databases.get("top_manufacturers_data", {})
+        top_list = top_db.get("top_manufacturers", [])
+        evidence_strings = []
+        matched_id = top_match.get("manufacturer_id", "")
+        for entry in top_list:
+            if entry.get("id") == matched_id:
+                evidence_strings = entry.get("evidence", [])
+                break
+
+        if not evidence_strings:
+            return third_party
+
+        programs = list((third_party or {}).get("programs", []) or [])
+        existing = {
+            self._normalize_text((p or {}).get("name"))
+            for p in programs
+            if isinstance(p, dict)
+        }
+
+        for ev_str in evidence_strings:
+            for pattern, cert_name in self._MANUFACTURER_CERT_PATTERNS:
+                if not pattern.search(ev_str):
+                    continue
+                if cert_name is None:
+                    # GMP — inject into gmp dict
+                    if not gmp.get("nsf_gmp") and not gmp.get("claimed"):
+                        gmp["claimed"] = True
+                        gmp["source"] = "manufacturer_evidence"
+                    continue
+                key = self._normalize_text(cert_name)
+                if key in existing:
+                    continue
+                programs.append({
+                    "name": cert_name,
+                    "verified": True,
+                    "source": "manufacturer_evidence",
+                })
+                existing.add(key)
+                break  # one cert per evidence string
+
+        merged = dict(third_party or {})
+        merged["programs"] = programs
+        merged["count"] = len(programs)
+        if programs:
+            merged["has_generic_claim_only"] = False
         return merged
 
     def _collect_third_party_certs(self, text: str) -> List[Dict]:
@@ -7112,8 +7220,21 @@ class SupplementEnricherV3:
             "violations": found
         }
 
+    # Countries considered high-regulation for D4 scoring.
+    _HIGH_REG_COUNTRIES = {
+        "usa", "us", "united states", "united states of america",
+        "canada", "uk", "united kingdom", "germany", "switzerland",
+        "japan", "australia", "new zealand", "norway", "sweden",
+        "denmark", "eu",
+    }
+
     def _extract_country(self, product: Dict) -> Dict:
-        """Extract country of origin data"""
+        """Extract country of origin data.
+
+        Detection order:
+        1. Regex scan of label text ("made in USA", etc.)
+        2. Structured contacts[].contactDetails.country for Manufacturer contacts
+        """
         all_text = self._get_all_product_text(product)
 
         made_usa = bool(self.compiled_patterns['made_usa'].search(all_text))
@@ -7130,6 +7251,18 @@ class SupplementEnricherV3:
             eu_match = self.compiled_patterns['made_eu'].search(all_text)
             if eu_match:
                 country = eu_match.group(0)
+
+        # Fallback: read structured contacts for Manufacturer address
+        if not country:
+            for contact in product.get("contacts", []):
+                if "Manufacturer" in (contact.get("types") or []):
+                    details = contact.get("contactDetails", {}) or {}
+                    raw_country = (details.get("country") or "").strip()
+                    if raw_country:
+                        country = raw_country
+                        if raw_country.lower() in self._HIGH_REG_COUNTRIES:
+                            high_reg = True
+                        break
 
         return {
             "detected": country != "",

@@ -2,7 +2,7 @@
   "_metadata": {
     "description": "Tiered enhanced delivery systems for bioavailability scoring",
     "purpose": "bonus_scoring",
-    "schema_version": "4.1.0",
+    "schema_version": "5.0.0",
     "last_updated": "2026-02-16",
     "total_entries": 78,
     "scoring_rule": "Award bonus points based on delivery technology tier. Only the HIGHEST tier match counts (no stacking).",

@@ -6,6 +6,7 @@
     "last_updated": "2026-02-26",
     "author": "PharmaGuide Team",
     "changelog": [
+      "3.1.1: B1 cap raised from 5 to 8, B1 additive_id deduplication, all subsection caps now config-driven",
       "3.1.0: Rebalanced section caps (B30/C20), A1 max 15, A6 single-efficiency bonus, B5 hidden-mass model, D reachability update",
       "3.0.1: Normalized config to v3.0 section caps and penalty-sign convention; scoring gate kept open for rollout",
       "3.0.0: Arithmetic-only scorer; matching and NLP moved to enrichment"
@@ -144,7 +145,7 @@
       ]
     },
     "B1_harmful_additives": {
-      "cap": 5,
+      "cap": 8,
       "risk_points": {
         "critical": 3.0,
         "high": 2.0,

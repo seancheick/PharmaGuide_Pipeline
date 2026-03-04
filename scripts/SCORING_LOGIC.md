@@ -1,17 +1,17 @@
 # DSLD Supplement Scoring System - Complete Scoring Logic
 
-**Version:** 3.4.0
-**Last Updated:** 2025-12-04
+**Version:** 5.0.0
+**Last Updated:** 2026-03-03
 **Author:** PharmaGuide Team
 
 ---
 
 ## Table of Contents
 1. [Overview](#overview)
-2. [Section A: Ingredient Quality (0-30 pts)](#section-a-ingredient-quality-0-30-pts)
-3. [Section B: Safety & Purity (0-45 pts)](#section-b-safety--purity-0-45-pts)
-4. [Section C: Evidence & Research (0-15 pts)](#section-c-evidence--research-0-15-pts)
-5. [Section D: Brand Trust (0-8 pts)](#section-d-brand-trust-0-8-pts)
+2. [Section A: Ingredient Quality (0-25 pts)](#section-a-ingredient-quality-0-25-pts)
+3. [Section B: Safety & Purity (0-30 pts)](#section-b-safety--purity-0-30-pts)
+4. [Section C: Evidence & Research (0-20 pts)](#section-c-evidence--research-0-20-pts)
+5. [Section D: Brand Trust (0-5 pts)](#section-d-brand-trust-0-5-pts)
 6. [Probiotic Bonus (0-10 pts)](#probiotic-bonus-0-10-pts)
 7. [Section E: User Profile (0-20 pts)](#section-e-user-profile-0-20-pts)
 8. [Score Calculation & Grade Scale](#score-calculation--grade-scale)
@@ -24,12 +24,12 @@
 ### Total Score Structure
 | Component | Max Points | Calculated Where |
 |-----------|------------|------------------|
-| Section A: Ingredient Quality | 30 | Server |
-| Section B: Safety & Purity | 45 | Server |
-| Section C: Evidence & Research | 15 | Server |
-| Section D: Brand Trust | 8 | Server |
+| Section A: Ingredient Quality | 25 | Server |
+| Section B: Safety & Purity | 30 | Server |
+| Section C: Evidence & Research | 20 | Server |
+| Section D: Brand Trust | 5 | Server |
 | **Subtotal (Server)** | **80** | Server |
-| Probiotic Bonus | +10 | Server (applies before ceiling) |
+| Probiotic Bonus | +10 | Server (folded into Section A) |
 | Section E: User Profile | 20 | On-device |
 | **Total Maximum** | **100** | Combined |
 
@@ -41,9 +41,13 @@
 
 ---
 
-## Section A: Ingredient Quality (0-30 pts)
+## Section A: Ingredient Quality (0-25 pts)
 
 Section A evaluates the bioavailability, quality, and formulation excellence of ingredients.
+
+```
+A = min(25, A1 + A2 + A3 + A4 + A5 + A6 + probiotic_bonus)
+```
 
 ### A1: Bioavailability & Form Quality (0-15 pts)
 
@@ -51,17 +55,21 @@ Section A evaluates the bioavailability, quality, and formulation excellence of 
 
 ```
 Score = Σ(ingredient_score × dosage_importance) / Σ(dosage_importance)
+A1 = clamp(0, 15, (weighted_avg / 18) * 15)
 ```
 
 | Factor | Description |
 |--------|-------------|
-| `ingredient_score` | bio_score (0-15) + natural_bonus (0-3) |
+| `ingredient_score` | IQM score field (0-18) |
 | `dosage_importance` | Weight based on clinical dosage (0.0-2.0) |
 | Cap | Maximum 15 points |
 
-**Special Rule - Multivitamin Floor:**
-- Multivitamins get a floor of `15 × 0.7 = 10.5` minimum
-- Prevents unfairly penalizing diverse formulas with many low-bioavailability ingredients
+**Exclusions:** Blend containers (`is_proprietary_blend: true`) are excluded from A1. Their cost is captured by B5.
+
+**Supplement-type effects:**
+- `single` / `single_nutrient`: all weights forced to `1.0`
+- `multivitamin`: smoothing applied — `avg = 0.7*avg + 0.3*9.0`
+- Unmapped ingredients: fallback `score=9.0`, `weight=1.0`
 
 ---
 
@@ -71,10 +79,10 @@ Score = Σ(ingredient_score × dosage_importance) / Σ(dosage_importance)
 
 | Condition | Points |
 |-----------|--------|
-| Each ingredient with `bio_score > 12` | +0.5 pts |
+| Count unique ingredients with `score >= 14` (minus 1) × 0.5 | up to 3 pts |
 | **Maximum** | 3 pts |
 
-**Example:** 6 premium forms = 6 × 0.5 = 3 pts (capped)
+**Note:** Excludes blend containers and requires usable individual dose.
 
 ---
 
@@ -111,55 +119,110 @@ Score = Σ(ingredient_score × dosage_importance) / Σ(dosage_importance)
 
 ---
 
-### A5: Formulation Excellence (0-9 pts)
+### A5: Formulation Excellence (0-3 pts)
 
-#### A5a: USDA Organic Certified (+2 pts)
+```
+A5 = min(3, A5a + A5b + A5c + A5d)
+```
+
+#### A5a: USDA Organic Certified (+1 pt)
 | Condition | Points |
 |-----------|--------|
-| USDA Organic seal verified | +2 pts |
+| USDA Organic seal verified or valid claim path | +1 pt |
 
-#### A5b: Standardized Botanicals (+2 pts)
+#### A5b: Standardized Botanicals (+1 pt)
 | Condition | Points |
 |-----------|--------|
-| At least 1 standardized botanical extract | +2 pts |
+| At least 1 standardized botanical extract | +1 pt |
 
 **What qualifies:** Extracts with guaranteed active compound percentages (e.g., "standardized to 95% curcuminoids")
 
-#### A5c: Synergy Clusters (0-5 pts)
-
-**Points based on number of synergistic ingredients in a cluster**
-
-| Ingredients in Cluster | Points |
-|------------------------|--------|
-| 5+ | 5 pts |
-| 4 | 3 pts |
-| 3 | 2 pts |
-| 2 | 1 pt |
+#### A5c: Synergy Clusters (+1 pt)
+| Condition | Points |
+|-----------|--------|
+| Qualifying synergy cluster detected | +1 pt |
 
 **Synergy cluster examples:**
 - Bone Health: Calcium + Vitamin D + Vitamin K2 + Magnesium
 - Antioxidant: Vitamin C + Vitamin E + Selenium + CoQ10
-- B-Complex: B1 + B2 + B6 + B12 + Folate
 
-**Rule:** Only the best-matching cluster counts (not cumulative).
+#### A5d: Non-GMO Verified (+0.5 pts, gated)
+| Condition | Points |
+|-----------|--------|
+| Non-GMO Project Verified (requires `enable_non_gmo_bonus: true`) | +0.5 pts |
 
 ---
 
-## Section B: Safety & Purity (0-45 pts)
+### A6: Single-Ingredient Efficiency (0-3 pts)
 
-Section B evaluates product safety through penalties and bonuses. **Starts at 45, then adjusts.**
+**Only applies when `supp_type in {"single", "single_nutrient"}`**
+
+Uses the highest bio score among scorable ingredients:
+
+| bio_score threshold | Points |
+|---------------------|--------|
+| >= 16 | 3 pts |
+| >= 14 | 2 pts |
+| >= 12 | 1 pt |
+| < 12 | 0 pts |
+
+---
+
+## Section B: Safety & Purity (0-30 pts)
+
+Section B evaluates product safety through penalties and bonuses.
+
+```
+B_raw = base_score + bonuses - penalties
+B = clamp(0, 30, B_raw)
+
+base_score = 25
+bonuses  = min(5, B3 + B4a + B4b + B4c + B_hypoallergenic)
+penalties = B0_moderate + B1 + B2 + B5 + B6
+```
+
+### B0: Immediate Safety Gate (Pre-Section)
+
+The B0 gate runs before scoring. It checks `contaminant_data.banned_substances.substances[]`.
+
+**Match-type semantics:**
+- Hard-fail eligible types: `exact`, `alias`
+- Non-hard-fail types: `token_bounded` and others -> review-only flag
+
+**Status-based logic (v5.0 schema):**
+
+| Status | Effect | Flag |
+|--------|--------|------|
+| `banned` + exact/alias | Immediate `UNSAFE` verdict | — |
+| `recalled` + exact/alias | Immediate `BLOCKED` verdict | — |
+| `high_risk` + exact/alias | -10 pt penalty, `CAUTION` verdict | `B0_HIGH_RISK_SUBSTANCE` |
+| `watchlist` + exact/alias | -5 pt penalty, `CAUTION` verdict | `B0_WATCHLIST_SUBSTANCE` |
+| Any non-exact/alias match | Review only | `BANNED_MATCH_REVIEW_NEEDED` |
+
+**Fallback for pre-5.0 enriched data (severity-based):**
+
+| severity_level | Effect | Flag |
+|----------------|--------|------|
+| `critical` / `high` | Immediate `UNSAFE` verdict | — |
+| `moderate` | -10 pt penalty | `B0_MODERATE_SUBSTANCE` |
+| `low` | Advisory only | `B0_LOW_SUBSTANCE` |
+
+If a hard fail fires (blocked/unsafe), all moderate/low/watchlist flags are stripped.
+
+---
 
 ### B1: Contaminants & Additives (Deductions Only)
 
-#### B1a: Banned/Recalled Substances
+#### B1a: Banned/Recalled Substances (status-based, v5.0)
 
-| Severity | Penalty | Effect |
+| Status | Penalty | Effect |
 |----------|---------|--------|
-| Critical | -20 pts | **IMMEDIATE FAIL** flag set |
-| High | -15 pts | |
-| Moderate | -10 pts | |
+| banned | **FAIL** | Immediate UNSAFE verdict |
+| recalled | **FAIL** | Immediate BLOCKED verdict |
+| high_risk | -10 pts | CAUTION verdict |
+| watchlist | -5 pts | CAUTION verdict |
 
-**Critical substances:** Ephedra, DMAA, BMPEA, phenolphthalein
+**Banned substances:** Ephedra, DMAA, BMPEA, phenolphthalein, sibutramine
 
 ---
 
@@ -167,13 +230,14 @@ Section B evaluates product safety through penalties and bonuses. **Starts at 45
 
 | Severity | Penalty per Additive |
 |----------|---------------------|
+| Critical | -3 pts |
 | High | -2 pts |
 | Moderate | -1 pt |
 | Low | -0.5 pts |
 
-**Total Cap:** -5 pts maximum (prevents over-penalization)
+**Total Cap:** -8 pts maximum (prevents over-penalization)
 
-**Deduplication Rule:** Additives with same `additive_id` only count once.
+**Deduplication Rule:** Additives with same `additive_id` only count once (highest severity wins).
 - Example: Magnesium Stearate + Stearic Acid = 1 penalty (same ADD_STEARIC_ACID)
 
 ---
@@ -190,90 +254,90 @@ Section B evaluates product safety through penalties and bonuses. **Starts at 45
 
 ---
 
-### B2: Allergen & Dietary Compliance (0-4 pts max)
+### B2: Allergen Presence (max penalty -2 pts)
+
+| Severity | Penalty |
+|----------|---------|
+| High | -2 pts |
+| Moderate | -1.5 pts |
+| Low | -1 pt |
+
+**Total Cap:** -2 pts maximum
+
+---
+
+### B3: Claim Compliance (bonus, feeds into shared bonus pool)
 
 | Certification | Points |
 |--------------|--------|
 | Allergen-Free Claim (verified) | +2 pts |
 | Gluten-Free Certified | +1 pt |
 | Vegan/Vegetarian | +1 pt |
-| "May Contain" Warning | -2 pts |
+
+**Contradiction detection:** "May contain" warnings invalidate allergen-free/gluten-free claims. Gelatin/bovine/porcine invalidates vegan claim. Adds `LABEL_CONTRADICTION_DETECTED` flag.
 
 ---
 
-### B3: Quality Certifications (0-16 pts max)
+### B4: Quality Certifications (bonus, feeds into shared bonus pool)
 
-#### Third-Party Testing (0-10 pts)
-
+#### B4a: Named Programs (max 15 pts)
 | Certification | Points | Max |
 |--------------|--------|-----|
-| Each recognized program | +5 pts | 2 programs max |
+| Each recognized program | +5 pts | 3 programs max |
 
-**Recognized Programs:**
-- NSF International
-- USP Verified
-- ConsumerLab Approved
-- BSCG Certified Drug Free
-- Informed Sport
+**Recognized Programs:** NSF, USP, ConsumerLab, BSCG, Informed Sport, IFOS (omega products only)
 
-**Example:** NSF + USP = 5 + 5 = 10 pts
-
----
-
-#### GMP Certified Facility (+4 pts)
-
+#### B4b: GMP (+4 pts max)
 | Condition | Points |
 |-----------|--------|
-| cGMP certified manufacturing | +4 pts |
+| NSF GMP certified or `gmp_level == "certified"` | +4 pts |
+| FDA registered or `gmp_level == "fda_registered"` | +2 pts |
 
----
-
-#### Batch Traceability / COA (+2 pts)
-
+#### B4c: Batch Traceability (+2 pts max)
 | Condition | Points |
 |-----------|--------|
-| COA publicly available, QR code, or lot lookup | +2 pts |
+| COA publicly available | +1 pt |
+| Batch lookup or QR code | +1 pt |
+
+**Shared bonus pool cap:** All B3 + B4 bonuses combined are capped at 5 pts total.
 
 ---
 
-### B4: Proprietary Blend Penalty (0 to -15 pts)
+### B5: Proprietary Blend Disclosure Penalty (0 to -10 pts)
 
-**Penalty scales based on hidden ingredient ratio**
+**Three-tier disclosure model (per 21 CFR 101.36):**
 
-| Hidden Ratio | Penalty |
-|-------------|---------|
-| 75%+ of ingredients hidden | -15 pts |
-| 50-74% hidden | -10 pts |
-| 25-49% hidden | -5 pts |
-| Under 25% hidden | -2 pts |
-| No proprietary blends | 0 pts |
+| Disclosure Level | Definition | Presence Penalty | Proportional Coef |
+|-----------------|-----------|-----------------|-------------------|
+| `full` | Every sub-ingredient has individual amount | 0 | 0 |
+| `partial` | Total declared + subs listed, no individual amounts | 1 | 3 |
+| `none` | Missing total, or missing sub-list | 2 | 5 |
 
-#### Clinical Evidence Mitigation
+**Per-blend penalty formula:**
+```
+hidden_mass_mg = max(blend_total_mg - disclosed_child_mg_sum, 0)
+impact = clamp(0, 1, hidden_mass_mg / total_active_mg)
+if hidden_mass_mg > 0 and impact < 0.1: impact = 0.1
 
-**Penalty reduction for clinically-validated blends:**
+blend_penalty = presence_penalty + proportional_coef * impact
+B5 = clamp(0, 10, sum(blend_penalty))
+```
 
-| Evidence Type | Penalty Multiplier |
-|--------------|-------------------|
-| Probiotic with clinical strains (K12, LGG, etc.) | × 0.5 (50% reduction) |
-| Herbal blend with Tier 1/2 clinical evidence | × 0.6 (40% reduction) |
-| Contains standardized botanical extracts | × 0.7 (30% reduction) |
+**Penalty ranges by disclosure level:**
 
-**Rationale:** Per Labdoor/ConsumerLab methodology - clinically-validated formulations are protecting IP, not deceiving consumers.
-
-**Example:**
-- Raw penalty: -10 pts (50% hidden)
-- Contains clinical probiotic strains
-- Reduced penalty: -10 × 0.5 = -5 pts
+| Disclosure | Min (tiny blend) | Max (100% of product) |
+|---|---|---|
+| none | 2.5 | 7.0 |
+| partial | 1.3 | 4.0 |
+| full | 0.0 | 0.0 |
 
 ---
 
-## Section C: Evidence & Research (0-15 pts)
-
-**v3.4.0 - Enhanced Evidence Hierarchy**
+## Section C: Evidence & Research (0-20 pts)
 
 Section C rewards clinical evidence supporting ingredient efficacy using a hierarchy aligned with industry best practices from EFSA, Natural Medicines (TRC), GRADE (NIH/WHO), and Examine.com.
 
-### Evidence Hierarchy (NEW in v3.4.0)
+### Evidence Hierarchy
 
 The key insight: **Product-level clinical trials are more valuable than ingredient-level studies.**
 
@@ -325,8 +389,8 @@ This rewards companies like Seed Health that invest in product-specific clinical
 
 ---
 
-#### Per-Ingredient Cap (5 pts max)
-No single ingredient can contribute more than 5 pts. Prevents one well-studied vitamin from maxing out the score.
+#### Per-Ingredient Cap (7 pts max)
+No single ingredient can contribute more than 7 pts. Prevents one well-studied vitamin from maxing out the score.
 
 ---
 
@@ -339,13 +403,13 @@ Per Examine.com methodology - inconsistent findings reduce confidence.
 
 ---
 
-### Unsubstantiated Claims Penalty
+### B6: Marketing Claims Penalty (max -5 pts)
 
 | Condition | Penalty |
 |-----------|---------|
-| Product has unsubstantiated health claims | -5 pts |
+| Product has unsubstantiated disease/health claims | -5 pts |
 
-**Applied once only** regardless of number of claims.
+**Applied once only** regardless of number of claims. Adds `DISEASE_CLAIM_DETECTED` flag.
 
 ---
 
@@ -369,136 +433,110 @@ Per Examine.com methodology - inconsistent findings reduce confidence.
 
 ---
 
-## Section D: Brand Trust (0-8 pts)
+## Section D: Brand Trust (0-5 pts)
 
 Section D evaluates manufacturer reputation and transparency.
 
-### D1: Top-Tier Manufacturer (+3 pts)
+```
+D = min(5, D1 + D2 + min(2.0, D3 + D4 + D5))
+```
+
+### D1: Trusted Manufacturer (+2 pts)
 
 | Condition | Points |
 |-----------|--------|
-| Matched to top manufacturers list | +3 pts |
-| Fuzzy match with confidence < 85% | 0 pts |
+| Exact match to trusted manufacturers list | +2 pts |
+| Middle-tier (gated, requires `enable_d1_middle_tier: true`) | +1 pt |
+| No match | 0 pts |
 
 **Top Manufacturers List includes:** Thorne, NOW Foods, Jarrow Formulas, Life Extension, Pure Encapsulations, Garden of Life, Nordic Naturals, etc.
 
 ---
 
-### D2: Physician/Formulator Credibility (+1 pt)
+### D2: Full Disclosure (+1 pt)
 
 | Condition | Points |
 |-----------|--------|
-| Physician-formulated or credentialed formulator | +1 pt |
+| All active ingredients have a dose AND no hidden/partial blends | +1 pt |
 
 ---
 
-### D3: High-Regulation Country (+1 pt)
+### D3: Physician/Formulator Credibility (+0.5 pts)
+
+| Condition | Points |
+|-----------|--------|
+| Physician-formulated or credentialed formulator | +0.5 pts |
+
+---
+
+### D4: High-Regulation Country (+1 pt)
 
 | Condition | Points |
 |-----------|--------|
 | Made in high-regulation country | +1 pt |
 
-**Qualifying Countries:** USA, EU, Canada, Australia, Japan, UK, Germany, Switzerland
+**Qualifying Countries:** USA, EU, UK, Germany, Switzerland, Japan, Canada, Australia, New Zealand, Norway, Sweden, Denmark
 
 ---
 
-### D4: Sustainable Packaging (+1 pt)
+### D5: Sustainable Packaging (+0.5 pts)
 
 | Condition | Points |
 |-----------|--------|
-| Sustainable/recyclable packaging claim | +1 pt |
+| Sustainable/recyclable packaging claim | +0.5 pts |
+
+**Note:** D3 + D4 + D5 combined are capped at 2.0. Total D capped at 5.
 
 ---
 
-### D5: Manufacturer Violations (Deductions)
+### Manufacturer Violation Penalty (Post-Section)
 
 | Condition | Penalty |
 |-----------|---------|
-| Violations in last 10 years | Sum of deductions |
-| **Cap** | -20 pts maximum |
+| Manufacturer has documented violations | Sum of deductions |
+| **Floor** | -25 pts maximum |
 
-**Violation Examples:**
-- FDA Warning Letter: -5 to -15 pts
-- Product Recall: -10 pts
-- Consent Decree: -20 pts
+Applied directly to `quality_raw` after section sum. Adds `MANUFACTURER_VIOLATION` flag.
 
 ---
 
-### Note on Full Disclosure
+## Probiotic Bonus (folded into Section A)
 
-**REMOVED from scoring (was +2 pts)** - Double-counting issue.
-- The absence of proprietary blends already rewards by NOT getting the -15 penalty in B4
-- Adding +2 for "full disclosure" would reward the same thing twice
+Applies when `supp_type == "probiotic"` or when non-probiotic products pass strict evidence gates (if `allow_non_probiotic_probiotic_bonus_with_strict_gate` enabled).
 
----
+### Default Mode (max 3 pts, current)
 
-## Probiotic Bonus (0-10 pts)
+Gate: `probiotic_extended_scoring: false` (current config)
 
-**Only applies if `is_probiotic_product = true`**
-
-### CFU Bonus (+4 pts)
-
-| Condition | Points |
-|-----------|--------|
-| ≥10 Billion CFU **guaranteed at expiration** | +4 pts |
-| ≥10 Billion at manufacture (not expiration) | 0 pts |
-
-**Important:** Must be guaranteed at EXPIRATION, not time of manufacture.
+| Component | Condition | Points |
+|-----------|-----------|--------|
+| CFU | total_billion > 1 | +1 pt |
+| Diversity | strain_count >= 3 | +1 pt |
+| Prebiotic | Contains inulin/FOS/GOS | +1 pt |
 
 ---
 
-### Strain Diversity (0-4 pts)
+### Extended Mode (max 10 pts, gated)
 
-| Distinct Strains | Points |
-|-----------------|--------|
-| 8+ strains | +4 pts |
-| 4-7 strains | +2 pts |
-| < 4 strains | 0 pts |
+Gate: `probiotic_extended_scoring: true`
 
----
+| Component | Condition | Points |
+|-----------|-----------|--------|
+| CFU | >= 50B | 4 |
+| CFU | >= 10B | 3 |
+| CFU | > 1B | 2 |
+| CFU | > 0 | 1 |
+| Diversity | >= 10 strains | 4 |
+| Diversity | >= 6 strains | 3 |
+| Diversity | >= 3 strains | 2 |
+| Diversity | > 0 strains | 1 |
+| Clinical strains | >= 5 known | 3 |
+| Clinical strains | >= 3 known | 2 |
+| Clinical strains | >= 1 known | 1 |
+| Prebiotic | count capped to 3 | up to 3 |
+| Survivability | delayed release / enteric / acid resistant | 2 |
 
-### Clinical Strains (+3 pts)
-
-| Condition | Points |
-|-----------|--------|
-| Contains clinically studied strain(s) | +3 pts |
-
-**Clinically Studied Strains Include:**
-- Lactobacillus rhamnosus GG (LGG)
-- Lactobacillus reuteri
-- Bifidobacterium BB-12
-- Lactobacillus acidophilus NCFM
-- Streptococcus salivarius K12 & M18
-- Bacillus coagulans GBI-30
-- Lactobacillus casei Shirota
-
----
-
-### Prebiotic Pairing (+3 pts)
-
-| Condition | Points |
-|-----------|--------|
-| Contains prebiotic fiber/compound | +3 pts |
-
-**Prebiotics Include:** Inulin, FOS, GOS, lactulose, resistant starch
-
----
-
-### Survivability Coating (+2 pts)
-
-| Condition | Points |
-|-----------|--------|
-| Delayed-release, enteric coating, or patented delivery | +2 pts |
-
-**Examples:** BIO-tract, DRcaps, MAKTrek 3-D
-
----
-
-### Probiotic Bonus Maximum
-
-| Total Possible | Cap |
-|----------------|-----|
-| 4 + 4 + 3 + 3 + 2 = 16 pts | Capped at 10 pts |
+**Known clinical strain tokens:** `lgg`, `bb-12`, `ncfm`, `reuteri`, `k12`, `m18`, `coagulans`, `shirota`
 
 ---
 
@@ -523,46 +561,38 @@ Section E personalizes scores based on user health goals and conditions.
 
 ```python
 # 1. Calculate raw sections
-raw_total = Section_A + Section_B + Section_C + Section_D
+quality_raw = Section_A + Section_B + Section_C + Section_D + violation_penalty
 
-# 2. Add probiotic bonus (if applicable)
-if is_probiotic:
-    raw_total += probiotic_bonus
+# 2. Clamp to [0, 80]
+quality_score = clamp(0, 80, quality_raw)
 
-# 3. Apply floor and ceiling
-final_score = max(min(raw_total, 80), 10)
-
-# 4. Convert to 100-point equivalent
-score_100 = (final_score / 80) * 100
+# 3. Convert to 100-point equivalent
+score_100_equivalent = (quality_score / 80) * 100
 ```
 
 ### Score Boundaries
 
 | Boundary | Value |
 |----------|-------|
-| Floor | 10/80 (no product below this) |
+| Floor | 0/80 |
 | Ceiling | 80/80 (server max) |
 | With Section E | 100/100 possible |
 
 ---
 
-### Letter Grade Scale
+### Grade Scale
 
-Based on 100-point equivalent:
+Based on 100-point equivalent. Not assigned for `BLOCKED`, `UNSAFE`, or `NOT_SCORED` verdicts.
 
-| Grade | Score Range | Description |
-|-------|-------------|-------------|
-| A+ | 90-100 | Exceptional |
-| A | 85-89 | Excellent |
-| A- | 80-84 | Very Good |
-| B+ | 77-79 | Good |
-| B | 73-76 | Above Average |
-| B- | 70-72 | Average |
-| C+ | 67-69 | Below Average |
-| C | 63-66 | Fair |
-| C- | 60-62 | Poor |
-| D | 50-59 | Very Poor |
-| F | 0-49 | Fail |
+| score_100_equivalent | Grade |
+|---------------------|-------|
+| >= 90 | Exceptional |
+| >= 80 | Excellent |
+| >= 70 | Good |
+| >= 60 | Fair |
+| >= 50 | Below Avg |
+| >= 32 | Low |
+| < 32 | Very Poor |
 
 ---
 
@@ -582,15 +612,18 @@ All subcategories appear in output, even if score is 0 or N/A.
 ### 4. Penalty Caps
 Caps prevent over-penalization from a single issue:
 - Harmful additives: max -5 pts
-- Undeclared allergens: max -2 pts
-- Proprietary blends: max -15 pts
-- Manufacturer violations: max -20 pts
+- Allergen presence: max -2 pts
+- Proprietary blend disclosure: max -10 pts
+- Disease/marketing claims: max -5 pts
+- Manufacturer violations: floor -25 pts
 
 ### 5. Deduplication
 Duplicate items (same ID) only count once for penalties.
 
-### 6. Immediate Fail Flag
-Critical banned substances set `immediate_fail = true`. Product still gets scored but flagged for review.
+### 6. Immediate Fail / Block
+- `banned` status -> `UNSAFE` verdict (score = 0)
+- `recalled` status -> `BLOCKED` verdict (score = null)
+- `high_risk` / `watchlist` -> `CAUTION` verdict with point penalty
 
 ---
 
@@ -604,42 +637,37 @@ Critical banned substances set `immediate_fail = true`. Product still gets score
 | A2 | Premium Forms | +3 |
 | A3 | Delivery System | +3 |
 | A4 | Absorption Enhancer | +3 |
-| A5a | USDA Organic | +2 |
-| A5b | Standardized Botanicals | +2 |
-| A5c | Synergy Clusters | +5 |
-| B2 | Allergen-Free Claim | +2 |
-| B2 | Gluten-Free | +1 |
-| B2 | Vegan/Vegetarian | +1 |
-| B3 | Third-Party Testing | +10 |
-| B3 | GMP Certified | +4 |
-| B3 | Batch Traceability | +2 |
-| C | Clinical Evidence | +15 |
-| D | Top Manufacturer | +3 |
-| D | Physician-Formulated | +1 |
-| D | High-Reg Country | +1 |
-| D | Sustainable Packaging | +1 |
-| Probiotic | CFU ≥10B at Expiration | +4 |
-| Probiotic | Strain Diversity | +4 |
-| Probiotic | Clinical Strains | +3 |
-| Probiotic | Prebiotic Pairing | +3 |
-| Probiotic | Survivability Coating | +2 |
+| A5 | Formulation Excellence (organic, botanical, synergy, non-GMO) | +3 |
+| A6 | Single-Ingredient Efficiency | +3 |
+| B3 | Claim Compliance (allergen-free, gluten-free, vegan) | +4 |
+| B4a | Named Cert Programs | +15 |
+| B4b | GMP Certified | +4 |
+| B4c | Batch Traceability | +2 |
+| B bonus pool cap | All B bonuses combined | capped at 5 |
+| C | Clinical Evidence | +20 |
+| D1 | Trusted Manufacturer | +2 |
+| D2 | Full Disclosure | +1 |
+| D3 | Physician-Formulated | +0.5 |
+| D4 | High-Reg Country | +1 |
+| D5 | Sustainable Packaging | +0.5 |
+| Probiotic (default) | CFU + Diversity + Prebiotic | +3 |
+| Probiotic (extended, gated) | Full probiotic module | +10 |
 
 ### Penalties (Negative Points)
 
 | Category | Item | Penalty |
 |----------|------|---------|
-| B1 | Critical Banned Substance | -20 + FAIL |
-| B1 | High Severity Banned | -15 |
-| B1 | Moderate Banned | -10 |
-| B1 | Harmful Additives | -0.5 to -2 each (cap -5) |
-| B1 | Undeclared Allergens | -1 to -2 each (cap -2) |
-| B2 | "May Contain" Warning | -2 |
-| B4 | Proprietary Blend 75%+ | -15 |
-| B4 | Proprietary Blend 50-74% | -10 |
-| B4 | Proprietary Blend 25-49% | -5 |
-| B4 | Proprietary Blend <25% | -2 |
-| C | Unsubstantiated Claims | -5 |
-| D | Manufacturer Violations | varies (cap -20) |
+| B0 | Banned substance | UNSAFE verdict |
+| B0 | Recalled substance | BLOCKED verdict |
+| B0 | High-risk substance | -10 pts + CAUTION |
+| B0 | Watchlist substance | -5 pts + CAUTION |
+| B1 | Harmful Additives | -0.5 to -3 each (cap -8) |
+| B2 | Allergen Presence | -1 to -2 each (cap -2) |
+| B5 | Proprietary Blend (none disclosure) | -2.5 to -7 each |
+| B5 | Proprietary Blend (partial disclosure) | -1.3 to -4 each |
+| B5 | Proprietary Blend total cap | -10 |
+| B6 | Disease/Marketing Claims | -5 |
+| Post | Manufacturer Violations | varies (floor -25) |
 
 ---
 
@@ -649,44 +677,58 @@ Critical banned substances set `immediate_fail = true`. Product still gets score
 
 ### Section A: Ingredient Quality
 - A1: Weighted avg bioavailability = 11.5/15
-- A2: 2 premium forms × 0.5 = 1.0/3
+- A2: 2 premium forms × 0.5 = 0.5/3
 - A3: Lozenge (Tier 2) = 2/3
 - A4: No absorption enhancer = 0/3
-- A5: USDA Organic (+2) + Synergy 3-cluster (+2) = 4/9
-- **Section A Total: 18.5/30**
+- A5: Organic (+1) + Synergy (+1) = 2/3
+- A6: Not single-ingredient = 0/3
+- Probiotic bonus (default): CFU (+1) + Diversity (+1) + Prebiotic (+1) = 3
+- **Section A Total: min(25, 19.0) = 19.0/25**
 
-### Section B: Safety & Purity (starts at 45)
-- B1: No banned, 1 moderate additive = -1 (capped)
-- B2: Gluten-free (+1), Vegan (+1) = +2
-- B3: NSF certified (+5), GMP (+4) = +9
-- B4: No proprietary blends = 0
-- **Section B Total: 45 - 1 + 2 + 9 = 55 → capped at 45/45**
+### Section B: Safety & Purity (base_score = 25)
+- B1: 1 moderate additive = -1
+- B2: No allergens = 0
+- Bonuses: Gluten-free (+1), Vegan (+1), NSF (+5), GMP (+4) = 11 → capped at 5
+- B5: No proprietary blends = 0
+- B6: No disease claims = 0
+- **Section B Total: clamp(0, 30, 25 + 5 - 1) = 29.0/30**
 
 ### Section C: Evidence & Research
-- 3 ingredients with RCTs = 3 × 3 = 9/15
-- **Section C Total: 9/15**
+- 3 ingredients with RCTs (ingredient-human level) = 3 × (4 × 0.65) = 7.8/20
+- **Section C Total: 7.8/20**
 
 ### Section D: Brand Trust
-- Top manufacturer (+3)
-- Made in USA (+1)
-- Sustainable packaging (+1)
-- **Section D Total: 5/8**
-
-### Probiotic Bonus
-- 12B CFU at expiration (+4)
-- 6 strains (+2)
-- Contains LGG (+3)
-- Prebiotic inulin (+3)
-- **Probiotic Bonus: 12 → capped at 10**
+- D1: Top manufacturer (+2)
+- D2: Full disclosure (+1)
+- D4: Made in USA (+1)
+- D5: Sustainable packaging (+0.5)
+- D3+D4+D5: min(2.0, 1.5) = 1.5
+- **Section D Total: min(5, 2 + 1 + 1.5) = 4.5/5**
 
 ### Final Calculation
 ```
-Raw: 18.5 + 45 + 9 + 5 + 10 = 87.5
-After ceiling: 80/80
-100-equivalent: 100/100
-Grade: A+
+quality_raw: 19.0 + 29.0 + 7.8 + 4.5 = 60.3
+quality_score: clamp(0, 80, 60.3) = 60.3
+score_100_equivalent: (60.3/80) * 100 = 75.4
+Grade: Good
+Verdict: SAFE
 ```
 
 ---
 
-*Document generated by PharmaGuide Scoring System v3.4.0*
+## Verdict Derivation
+
+Precedence (first match wins):
+
+| Priority | Verdict | Condition |
+|----------|---------|-----------|
+| 1 | `BLOCKED` | B0 blocked (recalled substance) |
+| 2 | `UNSAFE` | B0 unsafe (banned substance) |
+| 3 | `NOT_SCORED` | Mapping gate stopped |
+| 4 | `CAUTION` | `B0_HIGH_RISK_SUBSTANCE`, `B0_WATCHLIST_SUBSTANCE`, `B0_MODERATE_SUBSTANCE`, or `BANNED_MATCH_REVIEW_NEEDED` in flags |
+| 5 | `POOR` | `quality_score < 32` |
+| 6 | `SAFE` | Default |
+
+---
+
+*Document generated by PharmaGuide Scoring System v5.0.0*

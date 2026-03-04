@@ -14,7 +14,9 @@ def test_match_rules_populated():
         mr = entry.get("match_rules")
         assert mr, f"{entry['id']} missing match_rules"
         assert mr.get("match_mode"), f"{entry['id']} needs match_mode"
-        assert mr.get("label_tokens"), f"{entry['id']} needs label_tokens"
+        # label_tokens optional for entries migrated from banned_recalled in v5.0
+        if not mr.get("label_tokens"):
+            assert entry.get("aliases"), f"{entry['id']} needs label_tokens or aliases"
 
 
 def test_references_structured_exists():

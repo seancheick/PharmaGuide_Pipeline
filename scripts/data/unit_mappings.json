@@ -2,7 +2,7 @@
   "_metadata": {
     "description": "Unit mapping definitions for specific supplement form conversions",
     "purpose": "unit_mapping",
-    "schema_version": "4.1.0",
+    "schema_version": "5.0.0",
     "last_updated": "2026-02-16",
     "total_entries": 14
   },

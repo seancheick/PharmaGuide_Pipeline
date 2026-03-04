@@ -2,7 +2,7 @@
   "_metadata": {
     "description": "Context-aware indicators for distinguishing natural vs artificial colors in supplement ingredient mapping",
     "purpose": "scoring_classification",
-    "schema_version": "4.1.0",
+    "schema_version": "5.0.0",
     "last_updated": "2026-02-18",
     "total_natural": 140,
     "total_artificial": 120,

@@ -491,9 +491,10 @@ def check_banned(findings: List[Finding], data: Dict[str, Any], file: str) -> No
         if not isinstance(e, dict):
             findings.append(Finding("error", file, f"[{i}]", "entry_not_object", "dict", _type_name(e)))
             continue
-        _check_required(findings, file, e, i, [("id", str), ("standard_name", str), ("status", str), ("severity_level", str)])
+        _check_required(findings, file, e, i, [("id", str), ("standard_name", str), ("status", str), ("match_mode", str)])
         _check_list_of_strings(findings, file, e, i, "aliases", required=True)
-        _check_enum(findings, file, e, i, "severity_level", {"critical", "high", "moderate", "low"})
+        _check_enum(findings, file, e, i, "status", {"banned", "recalled", "high_risk", "watchlist"})
+        _check_enum(findings, file, e, i, "match_mode", {"active", "disabled", "historical"})
         _check_enum(findings, file, e, i, "legal_status_enum", legal_values)
 
 

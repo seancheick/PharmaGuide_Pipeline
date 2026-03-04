@@ -2,7 +2,7 @@
   "_metadata": {
     "description": "Therapeutic dosing ranges for clinical efficacy validation",
     "purpose": "Provide therapeutic dosing ranges for dietary supplement ingredients not covered by traditional RDA/UL standards.",
-    "schema_version": "4.1.0",
+    "schema_version": "5.0.0",
     "last_updated": "2026-02-16",
     "total_entries": 44,
     "data_source": "Clinical research, meta-analyses, standard therapeutic guidelines"

@@ -2,7 +2,7 @@
   "_metadata": {
     "description": "Migration report from schema upgrades",
     "purpose": "migration_audit",
-    "schema_version": "4.1.0",
+    "schema_version": "5.0.0",
     "last_updated": "2026-02-16",
     "migration_info": {
       "from_version": "2.0.0",

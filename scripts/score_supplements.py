@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""PharmaGuide scoring engine (v3.0 spec).
+"""PharmaGuide scoring engine (v3.1 spec, data schema v5.0).
 
 This scorer is arithmetic-only: matching and NLP are expected to be performed
 in cleaning/enrichment. The scorer consumes enriched canonical fields.
@@ -401,28 +401,43 @@ class SupplementScorer:
                 review_needed = True
                 continue
 
-            if status in {"recalled", "both"}:
+            # Status-based logic (v5.0 schema)
+            if status == "banned":
+                unsafe = True
+                reason = f"Banned substance ({name})"
+                matched_substance_name = name
+                break
+            elif status == "recalled":
                 blocked = True
                 reason = f"Product recalled ({name})"
                 matched_substance_name = name
                 break
-
-            if severity in {"critical", "high"}:
-                unsafe = True
-                reason = f"Banned/high-risk substance ({name})"
-                matched_substance_name = name
-                break
-
-            if severity == "moderate":
+            elif status == "high_risk":
                 moderate_penalty = 10
-                flags.append("B0_MODERATE_SUBSTANCE")
-            elif severity == "low":
-                flags.append("B0_LOW_SUBSTANCE")
+                flags.append("B0_HIGH_RISK_SUBSTANCE")
+            elif status == "watchlist":
+                moderate_penalty = 5
+                flags.append("B0_WATCHLIST_SUBSTANCE")
+            else:
+                # Fallback for pre-5.0 enriched data (severity-based)
+                if severity in {"critical", "high"}:
+                    unsafe = True
+                    reason = f"Banned/high-risk substance ({name})"
+                    matched_substance_name = name
+                    break
+                elif severity == "moderate":
+                    moderate_penalty = 10
+                    flags.append("B0_MODERATE_SUBSTANCE")
+                elif severity == "low":
+                    flags.append("B0_LOW_SUBSTANCE")
 
         # If a hard fail was triggered, moderate/low advisory flags are not relevant.
         if blocked or unsafe:
             moderate_penalty = 0
-            flags = [f for f in flags if f not in {"B0_MODERATE_SUBSTANCE", "B0_LOW_SUBSTANCE"}]
+            flags = [f for f in flags if f not in {
+                "B0_MODERATE_SUBSTANCE", "B0_LOW_SUBSTANCE",
+                "B0_HIGH_RISK_SUBSTANCE", "B0_WATCHLIST_SUBSTANCE"
+            }]
 
         if review_needed:
             flags.append("BANNED_MATCH_REVIEW_NEEDED")
@@ -745,6 +760,7 @@ class SupplementScorer:
         return allowed, details
 
     def _score_probiotic_bonus(self, product: Dict[str, Any], supp_type: str) -> Dict[str, float]:
+        pro_cfg = self.config.get("section_A_ingredient_quality", {}).get("probiotic_bonus", {})
         pdata = product.get("probiotic_data", {})
         probiotic_flag = bool(pdata.get("is_probiotic_product"))
 
@@ -862,7 +878,8 @@ class SupplementScorer:
             if any(term in searchable for term in survivability_terms):
                 survivability = 2.0
 
-            total = min(10.0, cfu + diversity + clinical_strains + prebiotic + survivability)
+            extended_cap = as_float(pro_cfg.get("extended_max"), 10.0)
+            total = min(extended_cap, cfu + diversity + clinical_strains + prebiotic + survivability)
             return {
                 "probiotic_bonus": total,
                 "cfu": cfu,
@@ -876,7 +893,8 @@ class SupplementScorer:
         cfu = 1.0 if total_billion > 1 else 0.0
         diversity = 1.0 if strain_count >= 3 else 0.0
         prebiotic = 1.0 if prebiotic_hits > 0 else 0.0
-        total = min(3.0, cfu + diversity + prebiotic)
+        default_cap = as_float(pro_cfg.get("default_max"), 3.0)
+        total = min(default_cap, cfu + diversity + prebiotic)
 
         return {
             "probiotic_bonus": total,
@@ -889,13 +907,15 @@ class SupplementScorer:
         }
 
     def _score_section_a(self, product: Dict[str, Any], supp_type: str) -> Dict[str, Any]:
+        a_cfg = self.config.get("section_A_ingredient_quality", {})
         section_max = self._section_max("a", 25.0)
         a1 = self._score_a1(product, supp_type)
         a2 = self._score_a2(product)
         a3 = self._score_a3(product)
         a4 = self._score_a4(product)
         a5_parts = self._score_a5(product)
-        a5 = min(3.0, sum(a5_parts.values()))
+        a5_cap = as_float(a_cfg.get("A5_formulation_excellence", {}).get("max"), 3.0)
+        a5 = min(a5_cap, sum(a5_parts.values()))
         a6 = self._score_a6(product, supp_type)
         probiotic = self._score_probiotic_bonus(product, supp_type)
         probiotic_bonus = probiotic["probiotic_bonus"]
@@ -922,39 +942,53 @@ class SupplementScorer:
     # Section B
     # ---------------------------------------------------------------------
 
-    def _score_b1(self, product: Dict[str, Any]) -> float:
+    def _score_b1(self, product: Dict[str, Any], b_cfg: Dict[str, Any] = None) -> float:
+        if b_cfg is None:
+            b_cfg = self.config.get("section_B_safety_purity", {})
+        b1_cfg = b_cfg.get("B1_harmful_additives", {})
         additives = safe_list(
             product.get("contaminant_data", {})
             .get("harmful_additives", {})
             .get("additives", product.get("harmful_additives", []))
         )
         risk_map = {"critical": 3.0, "high": 2.0, "moderate": 1.0, "low": 0.5, "none": 0.0}
-        config_risk = (
-            self.config.get("section_B_safety_purity", {})
-            .get("B1_harmful_additives", {})
-            .get("risk_points", {})
-        )
+        config_risk = b1_cfg.get("risk_points", {})
         if isinstance(config_risk, dict):
             for key, value in config_risk.items():
                 numeric = as_float(value, None)
                 if numeric is not None:
                     risk_map[norm_text(key)] = numeric
-        penalty = 0.0
+        # Deduplicate by additive_id — keep highest severity penalty per ID.
+        seen_ids: Dict[str, float] = {}
         for item in additives:
-            penalty += risk_map.get(norm_text(item.get("severity_level")), 0.0)
-        return clamp(0.0, 5.0, penalty)
+            aid = item.get("additive_id") or item.get("id") or f"_anon_{id(item)}"
+            sev = risk_map.get(norm_text(item.get("severity_level")), 0.0)
+            seen_ids[aid] = max(seen_ids.get(aid, 0.0), sev)
+        penalty = sum(seen_ids.values())
+        b1_cap = as_float(b1_cfg.get("cap"), 5.0)
+        return clamp(0.0, b1_cap, penalty)
 
-    def _score_b2(self, product: Dict[str, Any]) -> float:
+    def _score_b2(self, product: Dict[str, Any], b_cfg: Dict[str, Any] = None) -> float:
+        if b_cfg is None:
+            b_cfg = self.config.get("section_B_safety_purity", {})
+        b2_cfg = b_cfg.get("B2_allergen_presence", {})
         allergens = safe_list(
             product.get("contaminant_data", {})
             .get("allergens", {})
             .get("allergens", product.get("allergen_hits", []))
         )
         risk_map = {"high": 2.0, "moderate": 1.5, "low": 1.0}
+        config_sev = b2_cfg.get("severity_points", {})
+        if isinstance(config_sev, dict):
+            for key, value in config_sev.items():
+                numeric = as_float(value, None)
+                if numeric is not None:
+                    risk_map[norm_text(key)] = numeric
         penalty = 0.0
         for item in allergens:
             penalty += risk_map.get(norm_text(item.get("severity_level")), 0.0)
-        return clamp(0.0, 2.0, penalty)
+        b2_cap = as_float(b2_cfg.get("cap"), 2.0)
+        return clamp(0.0, b2_cap, penalty)
 
     def _derive_claim_validations(self, product: Dict[str, Any], b2_penalty: float) -> Tuple[bool, bool, bool, List[str]]:
         flags: List[str] = []
@@ -1239,7 +1273,10 @@ class SupplementScorer:
         )
         return (name_key, tuple(child_names), blend_total_key, source_path)
 
-    def _score_b5(self, product: Dict[str, Any], flags: List[str]) -> float:
+    def _score_b5(self, product: Dict[str, Any], flags: List[str], b_cfg: Dict[str, Any] = None) -> float:
+        if b_cfg is None:
+            b_cfg = self.config.get("section_B_safety_purity", {})
+        b5_cfg = b_cfg.get("B5_proprietary_blends", {})
         proprietary = product.get("proprietary_data", {})
         blends = safe_list(product.get("proprietary_blends"))
         if not blends:
@@ -1271,11 +1308,22 @@ class SupplementScorer:
             or 0
         )
 
+        cfg_presence = b5_cfg.get("presence_penalty", {})
+        cfg_prop_coef = b5_cfg.get("proportional_coef", {})
+        b5_base = {k: as_float(v, self._B5_BASE.get(k, 2.0)) for k, v in cfg_presence.items()} if cfg_presence else dict(self._B5_BASE)
+        for k, v in self._B5_BASE.items():
+            b5_base.setdefault(k, v)
+        b5_prop = {k: as_float(v, self._B5_PROP_COEF.get(k, 5.0)) for k, v in cfg_prop_coef.items()} if cfg_prop_coef else dict(self._B5_PROP_COEF)
+        for k, v in self._B5_PROP_COEF.items():
+            b5_prop.setdefault(k, v)
+        b5_cap = as_float(b5_cfg.get("cap"), self._B5_CAP)
+        count_denom_min = int(as_float(b5_cfg.get("count_share_min_denominator_constant"), 8))
+
         penalty_sum = 0.0
         for blend in deduped:
             level = norm_text(blend.get("disclosure_level"))
-            base = self._B5_BASE.get(level, self._B5_BASE["none"])
-            prop_coef = self._B5_PROP_COEF.get(level, self._B5_PROP_COEF["none"])
+            base = b5_base.get(level, b5_base["none"])
+            prop_coef = b5_prop.get(level, b5_prop["none"])
 
             children_with_amounts, children_without_amounts = self._blend_child_payload(blend)
 
@@ -1321,7 +1369,7 @@ class SupplementScorer:
                 if hidden_count <= 0:
                     hidden_count = int(as_float(blend.get("nested_count"), 0) or 0)
                 # Deterministic count-share denominator constant for small formulas.
-                denom = max(total_active_count, 8)
+                denom = max(total_active_count, count_denom_min)
                 impact = clamp(0.0, 1.0, hidden_count / max(denom, 1))
 
             blend_penalty = 0.0
@@ -1356,9 +1404,11 @@ class SupplementScorer:
             }
             self._last_b5_blend_evidence.append(evidence)
 
-        return clamp(0.0, self._B5_CAP, penalty_sum)
+        return clamp(0.0, b5_cap, penalty_sum)
 
-    def _score_b6(self, product: Dict[str, Any], flags: List[str]) -> float:
+    def _score_b6(self, product: Dict[str, Any], flags: List[str], b_cfg: Dict[str, Any] = None) -> float:
+        if b_cfg is None:
+            b_cfg = self.config.get("section_B_safety_purity", {})
         has_claims = bool(product.get("has_disease_claims", False))
         if not has_claims:
             has_claims = bool(product.get("product_signals", {}).get("has_disease_claims", False))
@@ -1370,7 +1420,8 @@ class SupplementScorer:
             )
         if has_claims:
             flags.append("DISEASE_CLAIM_DETECTED")
-            return 5.0
+            penalty = as_float(b_cfg.get("B6_marketing_penalty", {}).get("penalty"), 5.0)
+            return penalty
         return 0.0
 
     def _score_section_b(
@@ -1385,8 +1436,8 @@ class SupplementScorer:
         base_score = as_float(section_b_cfg.get("base_score"), 25.0) or 25.0
         bonus_pool_cap = as_float(section_b_cfg.get("bonus_pool_cap"), 5.0) or 5.0
 
-        b1 = self._score_b1(product)
-        b2 = self._score_b2(product)
+        b1 = self._score_b1(product, section_b_cfg)
+        b2 = self._score_b2(product, section_b_cfg)
 
         allergen_valid, gluten_valid, vegan_valid, claim_flags = self._derive_claim_validations(product, b2)
         for f in claim_flags:
@@ -1394,7 +1445,8 @@ class SupplementScorer:
                 flags.append(f)
 
         b3 = float((2 if allergen_valid else 0) + (1 if gluten_valid else 0) + (1 if vegan_valid else 0))
-        b3 = clamp(0.0, 4.0, b3)
+        b3_cap = as_float(section_b_cfg.get("B3_claim_compliance", {}).get("cap"), 4.0)
+        b3 = clamp(0.0, b3_cap, b3)
 
         b_hypoallergenic = 0.0
         if self._feature_on("enable_hypoallergenic_bonus", default=False):
@@ -1410,8 +1462,8 @@ class SupplementScorer:
         b4 = self._score_b4(product, supp_type)
         b4a, b4b, b4c = b4["B4a"], b4["B4b"], b4["B4c"]
 
-        b5 = self._score_b5(product, flags)
-        b6 = self._score_b6(product, flags)
+        b5 = self._score_b5(product, flags, section_b_cfg)
+        b6 = self._score_b6(product, flags, section_b_cfg)
 
         bonuses = min(bonus_pool_cap, b3 + b4a + b4b + b4c + b_hypoallergenic)
         penalties = b1 + b2 + b5 + b6 + b0_moderate_penalty
@@ -1958,7 +2010,8 @@ class SupplementScorer:
             return "UNSAFE"
         if mapping_gate.get("stop"):
             return "NOT_SCORED"
-        if "B0_MODERATE_SUBSTANCE" in flags or "BANNED_MATCH_REVIEW_NEEDED" in flags:
+        if any(f in flags for f in ("B0_MODERATE_SUBSTANCE", "B0_HIGH_RISK_SUBSTANCE",
+                                     "B0_WATCHLIST_SUBSTANCE")):
             return "CAUTION"
         if quality_score is not None and quality_score < 32:
             return "POOR"

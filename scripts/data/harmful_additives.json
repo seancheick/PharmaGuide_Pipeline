@@ -2,9 +2,9 @@
   "_metadata": {
     "description": "Comprehensive database of harmful additives, contaminants, and concerning ingredients found in dietary supplements. Used for scoring penalties and consumer warnings.",
     "purpose": "penalty_scoring",
-    "schema_version": "4.1.0",
+    "schema_version": "5.0.0",
     "last_updated": "2026-03-01",
-    "total_entries": 117,
+    "total_entries": 110,
     "scoring_rule": "Apply penalty points based on severity_level. Critical: -5, High: -3, Moderate: -1.5, Low: -0.5. Multiple additives are cumulative.",
     "severity_level_definitions": {
       "critical": "Immediate health hazard, should be avoided entirely (e.g., formaldehyde, colloidal silver)",
@@ -48,117 +48,6 @@
     ]
   },
   "harmful_additives": [
-    {
-      "id": "ADD_5A_HYDROXY_LAXOGENIN",
-      "standard_name": "5a-Hydroxy Laxogenin",
-      "aliases": [
-        "5a-hydroxy laxogenin",
-        "5-alpha hydroxy laxogenin",
-        "5 alpha hydroxy laxogenin",
-        "5a-hydroxy laxogenin acetate",
-        "laxosterone 5a-hydroxy laxogenin",
-        "alpha hydroxy laxogenin",
-        "laxogenin",
-        "alpha hydroxy laxogenine",
-        "5a hydroxy laxogenin",
-        "laxosterone",
-        "Laxogenin Acetate",
-        "5α-hydroxy laxogenin"
-      ],
-      "CUI": null,
-      "category": "steroidal_analog",
-      "mechanism_of_harm": "Synthetic/semisynthetic steroidal analog with claimed anabolic activity. Lacks human safety data; FDA does not recognize it as a lawful dietary ingredient.",
-      "regulatory_status": {
-        "US": "Not recognized as a lawful dietary ingredient; FDA Warning Letter 607248 (2020). No NDI notification on file.",
-        "WADA": "Steroid-like performance agents are prohibited in sport contexts."
-      },
-      "population_warnings": [
-        "People with endocrine disorders",
-        "Adolescents/young adults using muscle-building products",
-        "Pregnant or nursing women"
-      ],
-      "notes": "A steroidal plant compound marketed for muscle building. The FDA has not accepted it as a lawful dietary ingredient and has issued warning letters to manufacturers. No adequate human safety studies exist. Avoid, especially if you are an athlete subject to anti-doping testing (WADA prohibited class).",
-      "scientific_references": [
-        "FDA Warning Letter 607248 (2020)",
-        "FDA constituent update listing for 5-alpha-hydroxy-laxogenin"
-      ],
-      "last_updated": "2026-02-23",
-      "match_rules": {
-        "match_mode": "alias_and_fuzzy",
-        "label_tokens": [
-          "5a-hydroxy laxogenin",
-          "5-alpha hydroxy laxogenin",
-          "laxosterone",
-          "alpha hydroxy laxogenin",
-          "laxogenin",
-          "alpha hydroxy laxogenine",
-          "5a hydroxy laxogenin",
-          "Laxogenin Acetate",
-          "5α-hydroxy laxogenin"
-        ],
-        "regex": null,
-        "fuzzy_threshold": 0.75,
-        "case_sensitive": false,
-        "preferred_alias": "5a-Hydroxy Laxogenin"
-      },
-      "references_structured": [
-        {
-          "type": "regulatory_action",
-          "authority": "FDA",
-          "citation": "FDA Warning Letter 607248 (Andro Pharma LLC, 2020)",
-          "url": "https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/warning-letters/andro-pharma-llc-607248-11102020",
-          "published_date": null,
-          "evidence_grade": "R",
-          "confidence": "high"
-        },
-        {
-          "type": "regulatory_action",
-          "authority": "FDA",
-          "citation": "FDA dietary supplement constituent updates (5-alpha-hydroxy-laxogenin)",
-          "url": "https://www.fda.gov/food/dietary-supplement-products-ingredients/constituent-updates",
-          "published_date": null,
-          "evidence_grade": "R",
-          "confidence": "medium"
-        }
-      ],
-      "external_ids": {
-        "umls_cui": null,
-        "cas": null,
-        "pubchem": null
-      },
-      "jurisdictional_statuses": [
-        {
-          "authority": "US",
-          "jurisdiction": "US",
-          "status_code": "monitored",
-          "scope": "supplement",
-          "effective_range": {
-            "start": "2020-01-01",
-            "end": null
-          },
-          "source_ref": "FDA warning-letter enforcement context"
-        }
-      ],
-      "review": {
-        "status": "validated",
-        "last_reviewed_at": "2026-02-23",
-        "reviewed_by": "codex_p3_audit",
-        "next_review_due": "2026-08-23",
-        "change_log": [
-          {
-            "date": "2026-02-23",
-            "change": "Added from unmapped P3 prohormone routing pass",
-            "reason": "caps_tabs_unmapped_laxogenin"
-          }
-        ]
-      },
-      "confidence": "high",
-      "exposure_context": "supplement",
-      "entity_type": "ingredient",
-      "severity_level": "high",
-      "dose_thresholds": null,
-      "entity_relationships": null
-    },
     {
       "id": "ADD_ACESULFAME_K",
       "standard_name": "Acesulfame Potassium (Ace-K)",
@@ -3661,140 +3550,6 @@
       "entity_relationships": null
     },
     {
-      "id": "ADD_CASCARA_SAGRADA",
-      "standard_name": "Cascara Sagrada",
-      "aliases": [
-        "cascara sagrada",
-        "cascara",
-        "rhamnus purshiana",
-        "frangula purshiana",
-        "cascara sagrada bark",
-        "cascara bark",
-        "casanthranol",
-        "cascara extract",
-        "Cascara Sagrada P.E.",
-        "cascara sagrada pe"
-      ],
-      "CUI": "C0054749",
-      "category": "stimulant_laxative",
-      "mechanism_of_harm": "Contains hydroxyanthracene derivatives (HADs) including cascarosides. FDA formally ruled cascara sagrada 'not generally recognized as safe and effective' in 2002 (67 FR 31125). EFSA 2018/2024: HADs are genotoxic and carcinogenic concern. Same chronic risks as senna: laxative dependency, electrolyte imbalance (hypokalemia), melanosis coli, liver damage. NIH LiverTox documents acute liver failure cases.",
-      "regulatory_status": {
-        "US": "FDA stripped GRASE status in 2002 (67 FR 31125). Added to 21 CFR 310.545 (not safe/effective for OTC laxative use). Still sold in supplements under DSHEA regulatory gap.",
-        "EU": "EFSA 2018/2024: HADs genotoxic concern. Same regulatory trajectory as senna.",
-        "Canada": "Health Canada permits for max 7 days with mandatory warnings."
-      },
-      "population_warnings": [
-        "Pregnant women - Contraindicated",
-        "Children - Not recommended",
-        "People with inflammatory bowel disease - Contraindicated",
-        "People with electrolyte imbalances - Risk of hypokalemia",
-        "Chronic users - Laxative dependency and colonic atony risk"
-      ],
-      "notes": "FDA explicitly stripped GRASE status in 2002 after industry failed to submit required safety data. Only remains in supplements due to DSHEA regulatory gap, NOT because it was found safe. EFSA 2018/2024: HADs genotoxic and carcinogenic concern. NIH LiverTox documents liver injury cases including acute liver failure with portal hypertension. Stronger regulatory case against it than senna.",
-      "scientific_references": [
-        "Federal Register 67 FR 31125 (2002) - Status of certain additional OTC drug Category II and III active ingredients",
-        "EFSA Journal 2018;16(1):5090 - Safety of hydroxyanthracene derivatives",
-        "EFSA Journal 2024;22(5):e8766 - Re-evaluation including Rhamnus purshiana",
-        "NIH LiverTox - Cascara (NBK548113)"
-      ],
-      "last_updated": "2026-02-18",
-      "match_rules": {
-        "match_mode": "alias_and_fuzzy",
-        "label_tokens": [
-          "Cascara Sagrada",
-          "cascara sagrada",
-          "cascara",
-          "rhamnus purshiana",
-          "frangula purshiana",
-          "cascara sagrada bark",
-          "cascara bark",
-          "casanthranol",
-          "cascara extract"
-        ],
-        "regex": null,
-        "fuzzy_threshold": 0.72,
-        "case_sensitive": false,
-        "preferred_alias": "Cascara Sagrada"
-      },
-      "references_structured": [
-        {
-          "type": "regulatory_action",
-          "authority": "FDA",
-          "citation": "Federal Register 67 FR 31125 - FDA strips GRASE status from cascara sagrada",
-          "url": "https://www.federalregister.gov/documents/2002/05/09/02-11510/status-of-certain-additional-over-the-counter-drug-category-ii-and-iii-active-ingredients",
-          "published_date": "2002-05-09",
-          "evidence_grade": "A",
-          "confidence": "high"
-        },
-        {
-          "type": "monograph",
-          "authority": "EFSA",
-          "citation": "EFSA Journal 2018;16(1):5090 - Safety of hydroxyanthracene derivatives for use in food",
-          "url": "https://doi.org/10.2903/j.efsa.2018.5090",
-          "published_date": "2018-01-23",
-          "evidence_grade": "A",
-          "confidence": "high"
-        },
-        {
-          "type": "case_report",
-          "authority": "NIH",
-          "citation": "LiverTox: Cascara",
-          "url": "https://www.ncbi.nlm.nih.gov/books/NBK548113/",
-          "published_date": null,
-          "evidence_grade": "B",
-          "confidence": "high"
-        }
-      ],
-      "external_ids": {
-        "umls_cui": "C0054749",
-        "cas": "8047-27-6",
-        "pubchem": null
-      },
-      "jurisdictional_statuses": [
-        {
-          "authority": "US",
-          "jurisdiction": "US",
-          "status_code": "monitored",
-          "scope": "supplement",
-          "effective_range": {
-            "start": "2002-05-09",
-            "end": null
-          },
-          "source_ref": "https://www.federalregister.gov/documents/2002/05/09/02-11510"
-        },
-        {
-          "authority": "EU",
-          "jurisdiction": "EU",
-          "status_code": "monitored",
-          "scope": "supplement",
-          "effective_range": {
-            "start": "2018-01-23",
-            "end": null
-          },
-          "source_ref": "https://doi.org/10.2903/j.efsa.2018.5090"
-        }
-      ],
-      "review": {
-        "status": "validated",
-        "last_reviewed_at": "2026-02-18",
-        "reviewed_by": "data_pipeline_audit",
-        "next_review_due": "2026-08-18",
-        "change_log": [
-          {
-            "date": "2026-02-18",
-            "change": "Moved from botanical_ingredients to harmful_additives. FDA stripped GRASE 2002. EFSA 2018/2024: HADs genotoxic.",
-            "reason": "online_safety_audit"
-          }
-        ]
-      },
-      "confidence": "high",
-      "exposure_context": "supplement",
-      "entity_type": "ingredient",
-      "severity_level": "high",
-      "dose_thresholds": null,
-      "entity_relationships": null
-    },
-    {
       "id": "ADD_CASSAVA_DEXTRIN",
       "standard_name": "Cassava Dextrin (Tapioca Maltodextrin)",
       "aliases": [
@@ -4005,148 +3760,6 @@
           "scope": "supplement",
           "effective_range": {
             "start": "2025-11-14",
-            "end": null
-          },
-          "source_ref": "https://www.efsa.europa.eu/en/efsajournal"
-        }
-      ],
-      "review": {
-        "status": "validated",
-        "last_reviewed_at": "2026-02-16",
-        "reviewed_by": "codex_harmful_allergen_normalization",
-        "next_review_due": "2026-07-07",
-        "change_log": [
-          {
-            "date": "2026-01-08",
-            "change": "Backfilled credible references",
-            "reason": "Phase 3 evidence completion"
-          },
-          {
-            "date": "2026-01-08",
-            "change": "Updated reviewed_by to team:b_harmful_additives",
-            "reason": "Review metadata cleanup"
-          },
-          {
-            "date": "2026-01-08",
-            "change": "Confidence downgraded due to insufficient citations",
-            "reason": "Evidence gating"
-          },
-          {
-            "date": "2026-01-08",
-            "change": "No authoritative dose guidance identified; dose_thresholds not added",
-            "reason": "Dose threshold backfill"
-          },
-          {
-            "date": "2026-01-08",
-            "change": "Populated jurisdiction provenance fields (source_ref, effective_range.start)",
-            "reason": "Jurisdiction provenance"
-          },
-          {
-            "date": "2026-01-08",
-            "change": "Added authoritative references",
-            "reason": "Evidence backfill"
-          },
-          {
-            "date": "2026-01-08",
-            "change": "Validated after adding authoritative citations",
-            "reason": "Evidence backfill"
-          },
-          {
-            "date": "2026-02-16",
-            "change": "Normalized aliases/label_tokens and reduced overlap collisions for deterministic supplement matching",
-            "reason": "schema_consistency_and_precision"
-          }
-        ]
-      },
-      "confidence": "high",
-      "exposure_context": "supplement",
-      "entity_type": "ingredient",
-      "severity_level": "high",
-      "dose_thresholds": null,
-      "entity_relationships": null
-    },
-    {
-      "id": "ADD_COLLOIDAL_SILVER",
-      "standard_name": "Colloidal Silver",
-      "aliases": [
-        "colloidal silver",
-        "nano silver",
-        "silver nanoparticles",
-        "patented nano-silver solution",
-        "ionic silver",
-        "silver particles"
-      ],
-      "category": "heavy_metal",
-      "notes": "CRITICAL SAFETY WARNING: FDA has ruled colloidal silver products are not generally recognized as safe. Can cause permanent argyria (irreversible blue-gray skin discoloration), kidney damage, liver damage, neurological problems, and seizures. NO proven health benefits. AVOID internal use. [normalized_2026-02-16: risk_level critical mapped to high for scorer compatibility]",
-      "last_updated": "2026-02-16",
-      "CUI": "C0037125",
-      "mechanism_of_harm": "Mechanism requires further documentation.",
-      "regulatory_status": {
-        "US": "Status pending review",
-        "EU": "Status pending review"
-      },
-      "population_warnings": [
-        "General population - review specific concerns"
-      ],
-      "scientific_references": [],
-      "match_rules": {
-        "match_mode": "alias_and_fuzzy",
-        "label_tokens": [
-          "Colloidal Silver",
-          "nano silver",
-          "silver nanoparticles",
-          "patented nano-silver solution",
-          "ionic silver",
-          "silver particles"
-        ],
-        "regex": null,
-        "fuzzy_threshold": 0.72,
-        "case_sensitive": false,
-        "preferred_alias": "Colloidal Silver"
-      },
-      "references_structured": [
-        {
-          "type": "regulatory_action",
-          "authority": "FDA",
-          "citation": "FDA Consumer Update: Should you use colloidal silver products?",
-          "url": "https://www.fda.gov/consumers/consumer-updates/should-you-use-colloidal-silver-products",
-          "evidence_grade": "B",
-          "confidence": "high"
-        },
-        {
-          "type": "monograph",
-          "authority": "WHO",
-          "citation": "ICSC 0810 - Silver",
-          "url": "https://www.ilo.org/dyn/icsc/showcard.display?p_lang=en&p_card_id=0810",
-          "published_date": null,
-          "evidence_grade": "B",
-          "confidence": "high"
-        }
-      ],
-      "external_ids": {
-        "umls_cui": "C0037125",
-        "cas": null,
-        "pubchem": null
-      },
-      "jurisdictional_statuses": [
-        {
-          "authority": "US",
-          "jurisdiction": "US",
-          "status_code": "allowed",
-          "scope": "supplement",
-          "effective_range": {
-            "start": "2025-09-19",
-            "end": null
-          },
-          "source_ref": "https://www.fda.gov/consumers/consumer-updates/should-you-use-colloidal-silver-products"
-        },
-        {
-          "authority": "EU",
-          "jurisdiction": "EU",
-          "status_code": "allowed",
-          "scope": "supplement",
-          "effective_range": {
-            "start": "2025-09-19",
             "end": null
           },
           "source_ref": "https://www.efsa.europa.eu/en/efsajournal"
@@ -5067,118 +4680,6 @@
       "entity_relationships": null
     },
     {
-      "id": "ADD_DIIODOTHYRONINE_T2",
-      "standard_name": "3,5-Diiodo-L-Thyronine (T2)",
-      "aliases": [
-        "3,5-diiodo-l-thyronine",
-        "3,5 diiodo-l-thyronine",
-        "3,5 diiodo l thyronine",
-        "3,5-diiodothyronine",
-        "diiodo-l-thyronine",
-        "t2 3,5-diiodo-l-thyronine",
-        "s 3,5-diiodo-l-thyronine",
-        "3,5-diido-l-thyronine",
-        "3,3-diiodothyronine",
-        "3,3 diiodo l thyronine",
-        "3,5 diiodo l-thyronine"
-      ],
-      "CUI": null,
-      "category": "thyroid_hormone_analog",
-      "mechanism_of_harm": "Thyroid-hormone analog/metabolite with thyromimetic metabolic effects; may alter thyroid-axis signaling and cardiovascular parameters when used for weight-loss/performance purposes.",
-      "regulatory_status": {
-        "US": "Not an established lawful dietary ingredient with robust safety framework; appears in thyroid/weight-loss product risk contexts.",
-        "WADA": "Hormone and metabolic modulator classes include thyroid-hormone manipulation concerns in sport settings."
-      },
-      "population_warnings": [
-        "People with thyroid disorders - potential endocrine disruption",
-        "People with cardiovascular disease - potential tachycardia/palpitations",
-        "Pregnant or nursing women - avoid due to endocrine risk"
-      ],
-      "notes": "Added from recurrent unresolved T2/diiodothyronine label variants in P3 routing pass; treated as high-risk hormone analog.",
-      "scientific_references": [
-        "PMID: 25322465 (thyromimetic effects and cardiac concern in animal model)",
-        "PMID: 22217997 (small human pilot data, limited quality)"
-      ],
-      "last_updated": "2026-03-01",
-      "match_rules": {
-        "match_mode": "alias_and_fuzzy",
-        "label_tokens": [
-          "3,5-diiodo-l-thyronine",
-          "3,5-diiodothyronine",
-          "t2 3,5-diiodo-l-thyronine",
-          "diiodo-l-thyronine",
-          "3,3-diiodothyronine",
-          "3,5 diiodo l-thyronine"
-        ],
-        "regex": null,
-        "fuzzy_threshold": 0.74,
-        "case_sensitive": false,
-        "preferred_alias": "3,5-Diiodo-L-Thyronine (T2)"
-      },
-      "references_structured": [
-        {
-          "type": "review_article",
-          "authority": "OTHER",
-          "citation": "PMID: 25322465",
-          "url": "https://pubmed.ncbi.nlm.nih.gov/25322465/",
-          "published_date": "2014-10-16",
-          "evidence_grade": "B",
-          "confidence": "medium"
-        },
-        {
-          "type": "review_article",
-          "authority": "OTHER",
-          "citation": "PMID: 22217997",
-          "url": "https://pubmed.ncbi.nlm.nih.gov/22217997/",
-          "published_date": "2011-12-31",
-          "evidence_grade": "C",
-          "confidence": "low"
-        }
-      ],
-      "external_ids": {
-        "umls_cui": null,
-        "cas": "1041-01-6",
-        "pubchem": null
-      },
-      "jurisdictional_statuses": [
-        {
-          "authority": "US",
-          "jurisdiction": "US",
-          "status_code": "warning_required",
-          "scope": "supplement",
-          "effective_range": {
-            "start": "2018-01-01",
-            "end": null
-          },
-          "source_ref": "Risk-based endocrine/hormone analog monitoring context"
-        }
-      ],
-      "review": {
-        "status": "validated",
-        "last_reviewed_at": "2026-03-01",
-        "reviewed_by": "harmful_additives_audit",
-        "next_review_due": "2026-08-23",
-        "change_log": [
-          {
-            "date": "2026-02-23",
-            "change": "Added T2/diiodothyronine hormone-analog routing from recurrent unmapped list",
-            "reason": "caps_tabs_unmapped_thyroid_analog"
-          },
-          {
-            "date": "2026-03-01",
-            "change": "Removed duplicate aliases",
-            "reason": "harmful_additives_comprehensive_audit"
-          }
-        ]
-      },
-      "confidence": "medium",
-      "exposure_context": "supplement",
-      "entity_type": "ingredient",
-      "severity_level": "high",
-      "dose_thresholds": null,
-      "entity_relationships": null
-    },
-    {
       "id": "ADD_DISODIUM_EDTA",
       "standard_name": "Disodium EDTA",
       "aliases": [
@@ -5301,100 +4802,6 @@
       "severity_level": "moderate",
       "dose_thresholds": null,
       "entity_relationships": null
-    },
-    {
-      "id": "ADD_DOCUSATE_SODIUM",
-      "standard_name": "Docusate Sodium",
-      "aliases": [
-        "docusate sodium",
-        "docusate",
-        "dioctyl sodium sulfosuccinate",
-        "DSS",
-        "colace",
-        "docusate calcium",
-        "docusate potassium",
-        "sodium docusate",
-        "stool softener"
-      ],
-      "CUI": "C0012996",
-      "category": "pharmaceutical_contaminant",
-      "mechanism_of_harm": "OTC drug (stool softener) classified under FDA drug monograph, not a dietary supplement ingredient. Presence in a supplement indicates mislabeling or adulteration. Acts as surfactant that softens stool by lowering surface tension.",
-      "regulatory_status": {
-        "US": "FDA OTC drug monograph (not a dietary supplement ingredient)",
-        "EU": "Classified as pharmaceutical",
-        "Global": "Universally classified as a drug, not a supplement"
-      },
-      "population_warnings": [
-        "Not appropriate as supplement ingredient - pharmaceutical drug"
-      ],
-      "notes": "Docusate sodium is a well-established OTC stool softener drug. Its presence in a product labeled as a dietary supplement represents an FDA compliance violation (drug in supplement). Not inherently dangerous at therapeutic doses, but should not appear in supplements.",
-      "scientific_references": [
-        "FDA OTC Drug Monograph - Laxative Products"
-      ],
-      "last_updated": "2026-03-01",
-      "match_rules": {
-        "match_mode": "alias_and_fuzzy",
-        "label_tokens": [
-          "docusate sodium",
-          "docusate",
-          "dioctyl sodium sulfosuccinate",
-          "docusate calcium"
-        ],
-        "exclusions": [],
-        "case_sensitive": false,
-        "preferred_alias": "docusate sodium",
-        "fuzzy_threshold": 0.85
-      },
-      "references_structured": [
-        {
-          "type": "regulatory",
-          "title": "FDA OTC monograph - docusate sodium as stool softener",
-          "url": "",
-          "evidence_grade": "R",
-          "confidence": "medium",
-          "supports_claims": [
-            "mechanism_of_harm"
-          ]
-        }
-      ],
-      "external_ids": {
-        "CUI": "C0012996",
-        "CAS": "577-11-7",
-        "PubChem": "23673837"
-      },
-      "jurisdictional_statuses": [
-        {
-          "authority": "US",
-          "jurisdiction": "US",
-          "status_code": "monitored",
-          "scope": "supplement",
-          "effective_range": {
-            "start": "2026-03-01",
-            "end": null
-          },
-          "source_ref": "FDA OTC Drug Monograph - classified as pharmaceutical, not dietary supplement ingredient"
-        }
-      ],
-      "review": {
-        "status": "validated",
-        "cadence": "annual",
-        "reviewed_by": "harmful_additives_audit",
-        "last_reviewed_at": "2026-03-01",
-        "next_review_due": "2026-08-18",
-        "change_log": [
-          {
-            "date": "2026-03-01",
-            "change": "Added US jurisdictional status",
-            "reason": "harmful_additives_comprehensive_audit"
-          }
-        ]
-      },
-      "confidence": "high",
-      "exposure_context": "oral",
-      "entity_type": "ingredient",
-      "severity_level": "moderate",
-      "dose_thresholds": null,
-      "entity_relationships": []
     },
     {
       "id": "ADD_D_MANNOSE",
@@ -6067,108 +5474,6 @@
         ]
       },
       "confidence": "medium",
-      "exposure_context": "supplement",
-      "entity_type": "ingredient",
-      "severity_level": "moderate",
-      "dose_thresholds": null,
-      "entity_relationships": null
-    },
-    {
-      "id": "ADD_HORDENINE",
-      "standard_name": "Hordenine",
-      "aliases": [
-        "hordenine",
-        "hordenine hcl",
-        "hordenine hydrochloride",
-        "n,n-dimethyltyramine",
-        "hordenine sulfate",
-        "barley hordenine"
-      ],
-      "CUI": null,
-      "category": "stimulant_sympathomimetic",
-      "mechanism_of_harm": "Beta-2 adrenergic agonist and MAO-B inhibitor structurally related to ephedrine. Potentiates norepinephrine release, raising heart rate and blood pressure. FDA considers supplements containing hordenine potentially adulterated as it lacks NDI notification history.",
-      "regulatory_status": {
-        "US": "FDA considers potentially adulterated NDI (no pre-DSHEA history, no NDI notification)",
-        "EU": "Not authorized as novel food ingredient"
-      },
-      "population_warnings": [
-        "People with cardiovascular disease - Risk of tachycardia and hypertension",
-        "People taking MAO inhibitors - Dangerous interaction potential",
-        "Pregnant or nursing women - Insufficient safety data"
-      ],
-      "notes": "Naturally found in barley sprouts but concentrated in supplements at pharmacological doses. Frequently combined with other stimulants in weight-loss and pre-workout products, amplifying cardiovascular risk. FDA has issued warning letters to companies marketing hordenine-containing supplements.",
-      "scientific_references": [
-        "DOI: 10.1016/j.fct.2019.110676 - Hordenine toxicological review",
-        "FDA Warning Letters: Stimulant-containing dietary supplements (2019-2024)"
-      ],
-      "last_updated": "2026-02-22",
-      "match_rules": {
-        "match_mode": "alias_and_fuzzy",
-        "label_tokens": [
-          "hordenine",
-          "hordenine hcl",
-          "hordenine hydrochloride",
-          "n,n-dimethyltyramine",
-          "hordenine sulfate",
-          "barley hordenine"
-        ],
-        "regex": null,
-        "fuzzy_threshold": 0.72,
-        "case_sensitive": false,
-        "preferred_alias": "Hordenine"
-      },
-      "references_structured": [
-        {
-          "type": "regulatory_action",
-          "authority": "FDA",
-          "citation": "FDA considers hordenine-containing supplements potentially adulterated (NDI without notification)",
-          "url": "https://www.fda.gov/food/dietary-supplements",
-          "published_date": null,
-          "evidence_grade": "B",
-          "confidence": "high"
-        },
-        {
-          "type": "toxicological_review",
-          "authority": "OTHER",
-          "citation": "DOI: 10.1016/j.fct.2019.110676 - Hordenine toxicological review",
-          "url": "https://doi.org/10.1016/j.fct.2019.110676",
-          "published_date": null,
-          "evidence_grade": "B",
-          "confidence": "medium"
-        }
-      ],
-      "external_ids": {
-        "umls_cui": null,
-        "cas": "539-15-1",
-        "pubchem": null
-      },
-      "jurisdictional_statuses": [
-        {
-          "authority": "US",
-          "jurisdiction": "US",
-          "status_code": "monitored",
-          "scope": "supplement",
-          "effective_range": {
-            "start": "2019-01-01",
-            "end": null
-          },
-          "source_ref": "FDA NDI enforcement actions"
-        }
-      ],
-      "review": {
-        "status": "validated",
-        "last_reviewed_at": "2026-02-22",
-        "reviewed_by": "pipeline_audit",
-        "next_review_due": "2026-08-22",
-        "change_log": [
-          {
-            "date": "2026-02-22",
-            "change": "Initial entry created from capsules unmapped safety audit",
-            "reason": "capsules_clean_unmapped_safety"
-          }
-        ]
-      },
-      "confidence": "high",
       "exposure_context": "supplement",
       "entity_type": "ingredient",
       "severity_level": "moderate",
@@ -8479,134 +7784,6 @@
       "entity_relationships": null
     },
     {
-      "id": "ADD_N_PHENETHYL_DIMETHYLAMINE",
-      "standard_name": "N-Phenethyl Dimethylamine",
-      "severity_level": "moderate",
-      "description": "Substituted phenethylamine CNS stimulant (CAS 1126-71-2) from Eria jarensis orchid. Structurally similar to PEA, DMAA, and amphetamine. Banned by WADA. Zero clinical studies. Listed on BSCG Dietary Supplement Ingredient Advisory List.",
-      "aliases": [
-        "n-phenethyl dimethylamine",
-        "n,n-dimethylphenethylamine",
-        "eria jarensis extract",
-        "eria jarensis",
-        "n-phenethyldimethylamine",
-        "2-(dimethylamino)-1-phenylethanone",
-        "n-phenethyl dimethylamine citrate",
-        "n-phenethyl dimethylamine hydrochloride",
-        "n,n-dimethylphenethylamine citrate",
-        "n,n-dimethylphenethylamine hcl",
-        "n, n-dimethylphenethylamine"
-      ],
-      "match_tokens": [
-        "phenethyl dimethylamine",
-        "eria jarensis",
-        "dimethylphenethylamine"
-      ],
-      "regulatory_refs": [
-        "WADA Prohibited List S6b",
-        "BSCG Dietary Supplement Ingredient Advisory List"
-      ],
-      "last_updated": "2026-02-23",
-      "CUI": null,
-      "category": "stimulant_phenethylamine_analog",
-      "mechanism_of_harm": "Sympathomimetic phenethylamine analog with stimulant effects and uncertain safety profile in dietary supplements.",
-      "regulatory_status": {
-        "US": "Not an established lawful dietary ingredient; appears in enforcement/watch contexts for stimulant-adulterated products.",
-        "WADA": "Stimulant-class related compounds are prohibited in competition."
-      },
-      "population_warnings": [
-        "People with cardiovascular disease - possible sympathomimetic risk",
-        "People using stimulants/caffeine - additive stimulant burden",
-        "Pregnant or nursing women - insufficient safety evidence"
-      ],
-      "notes": "Substituted phenethylamine stimulant analog used in performance/weight-loss formulas.",
-      "scientific_references": [
-        "WADA Prohibited List S6 Stimulants",
-        "FDA warning letters on stimulant-adulterated supplements"
-      ],
-      "match_rules": {
-        "match_mode": "alias_and_fuzzy",
-        "label_tokens": [
-          "n-phenethyl dimethylamine",
-          "n,n-dimethylphenethylamine",
-          "eria jarensis",
-          "n-phenethyl dimethylamine citrate",
-          "n-phenethyl dimethylamine hydrochloride",
-          "n, n-dimethylphenethylamine"
-        ],
-        "regex": null,
-        "fuzzy_threshold": 0.72,
-        "case_sensitive": false,
-        "preferred_alias": "N-Phenethyl Dimethylamine"
-      },
-      "references_structured": [
-        {
-          "type": "regulatory_action",
-          "authority": "WADA",
-          "citation": "WADA Prohibited List S6 (stimulants category)",
-          "url": "https://www.wada-ama.org/en/resources/world-anti-doping-code-and-international-standards/prohibited-list",
-          "published_date": null,
-          "evidence_grade": "R",
-          "confidence": "medium"
-        },
-        {
-          "type": "regulatory_action",
-          "authority": "FDA",
-          "citation": "FDA warning letters addressing stimulant-adulterated products",
-          "url": "https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/warning-letters",
-          "published_date": null,
-          "evidence_grade": "R",
-          "confidence": "medium"
-        }
-      ],
-      "external_ids": {
-        "umls_cui": null,
-        "cas": null,
-        "pubchem": null
-      },
-      "jurisdictional_statuses": [
-        {
-          "authority": "US",
-          "jurisdiction": "US",
-          "status_code": "monitored",
-          "scope": "supplement",
-          "effective_range": {
-            "start": "2018-01-01",
-            "end": null
-          },
-          "source_ref": "FDA enforcement trend for stimulant analog adulterants"
-        },
-        {
-          "authority": "WADA",
-          "jurisdiction": "INTL",
-          "status_code": "warning_required",
-          "scope": "sport",
-          "effective_range": {
-            "start": "2015-01-01",
-            "end": null
-          },
-          "source_ref": "WADA stimulant category"
-        }
-      ],
-      "review": {
-        "status": "validated",
-        "last_reviewed_at": "2026-02-23",
-        "reviewed_by": "codex_p3_audit",
-        "next_review_due": "2026-08-23",
-        "change_log": [
-          {
-            "date": "2026-02-23",
-            "change": "Normalized legacy partial record to schema-complete harmful entry",
-            "reason": "schema_integrity_p3"
-          }
-        ]
-      },
-      "confidence": "medium",
-      "exposure_context": "supplement",
-      "entity_type": "ingredient",
-      "dose_thresholds": null,
-      "entity_relationships": null
-    },
-    {
       "id": "ADD_OCTOPAMINE",
       "standard_name": "Octopamine",
       "aliases": [
@@ -10259,120 +9436,6 @@
       "exposure_context": "supplement",
       "entity_type": "ingredient",
       "severity_level": "low",
-      "dose_thresholds": null,
-      "entity_relationships": null
-    },
-    {
-      "id": "ADD_RED3",
-      "standard_name": "FD&C Red No. 3",
-      "aliases": [
-        "Red 3",
-        "Erythrosine",
-        "FD&C Red #3",
-        "FD&C Red No. 3",
-        "Red 3 Lake",
-        "E127",
-        "Red #3",
-        "FD&C Red 3",
-        "FD and C Red 3",
-        "FD&C Red No 3",
-        "Erythrosine B"
-      ],
-      "CUI": null,
-      "category": "colorant_artificial",
-      "mechanism_of_harm": "Thyroid carcinogen in animal studies. FDA revoked authorization for use in foods and ingested drugs effective January 2027 (announced January 2025). Contains iodine which may affect thyroid function.",
-      "regulatory_status": {
-        "US": "FDA revoked authorization (January 2025); banned effective January 15, 2027 for foods, January 18, 2028 for ingested drugs",
-        "EU": "E127 approved with restrictions",
-        "WHO": "JECFA ADI 0.1 mg/kg body weight"
-      },
-      "population_warnings": [
-        "Everyone - Thyroid carcinogen in animals",
-        "Children - Higher exposure per body weight",
-        "Individuals with thyroid conditions"
-      ],
-      "notes": "FDA revoked FD&C Red No. 3 authorization on January 15, 2025 due to thyroid tumor evidence in animal studies. Compliance deadline: January 15, 2027 for foods/dietary supplements and January 18, 2028 for ingested drugs. Source: FDA Constituent Update (2025-01-15).",
-      "scientific_references": [
-        "FDA: Revocation of FD&C Red No. 3 (January 2025)",
-        "DOI: 10.1016/j.fct.2007.09.001 - Erythrosine thyroid effects",
-        "FDA Constituent Update (2025-01-15): FDA to Revoke Authorization for the Use of Red No. 3 in Food and Ingested Drugs"
-      ],
-      "last_updated": "2026-02-22",
-      "match_rules": {
-        "match_mode": "alias_and_fuzzy",
-        "label_tokens": [
-          "red 3",
-          "erythrosine",
-          "fd&c red #3",
-          "fd&c red no. 3",
-          "red 3 lake",
-          "e127",
-          "red #3",
-          "fd&c red 3",
-          "fd and c red 3",
-          "fd&c red no 3",
-          "erythrosine b"
-        ],
-        "regex": null,
-        "fuzzy_threshold": 0.72,
-        "case_sensitive": false,
-        "preferred_alias": "FD&C Red No. 3"
-      },
-      "references_structured": [
-        {
-          "type": "regulatory_action",
-          "authority": "FDA",
-          "citation": "FDA revocation of FD&C Red No. 3 listing (January 2025)",
-          "url": "https://www.fda.gov/food/hfp-constituent-updates/fda-revoke-authorization-use-red-no-3-food-and-ingested-drugs",
-          "published_date": "2025-01-15",
-          "evidence_grade": "R",
-          "confidence": "high"
-        },
-        {
-          "type": "research",
-          "authority": "peer-reviewed",
-          "citation": "DOI: 10.1016/j.fct.2007.09.001 - Erythrosine thyroid effects in animals",
-          "url": "https://doi.org/10.1016/j.fct.2007.09.001",
-          "published_date": null,
-          "evidence_grade": "B",
-          "confidence": "high"
-        }
-      ],
-      "external_ids": {
-        "umls_cui": null,
-        "cas": "16423-68-0",
-        "pubchem": null
-      },
-      "jurisdictional_statuses": [
-        {
-          "authority": "US",
-          "jurisdiction": "US",
-          "status_code": "monitored",
-          "scope": "supplement",
-          "effective_range": {
-            "start": "2025-01-15",
-            "end": null
-          },
-          "source_ref": "FDA revocation January 2025; compliance deadline Jan 2027 (foods), Jan 2028 (ingested drugs)"
-        }
-      ],
-      "review": {
-        "status": "validated",
-        "last_reviewed_at": "2026-02-22",
-        "reviewed_by": "pipeline_audit",
-        "next_review_due": "2026-08-22",
-        "change_log": [
-          {
-            "date": "2026-02-22",
-            "change": "Initial entry created — FDA-banned colorant",
-            "reason": "safety_routing_gap"
-          }
-        ]
-      },
-      "confidence": "high",
-      "exposure_context": "supplement",
-      "entity_type": "ingredient",
-      "severity_level": "high",
       "dose_thresholds": null,
       "entity_relationships": null
     },
@@ -15519,577 +14582,585 @@
       "cui_note": "CUI was incorrectly copied from ADD_RED40 (C0054436). Needs UMLS Metathesaurus verification."
     },
     {
-      "id": "ADD_DMSA_100MG",
-      "standard_name": "DMSA (Succimer) 100mg",
+      "id": "BANNED_ADD_BHA",
+      "standard_name": "Butylated Hydroxyanisole (BHA)",
       "aliases": [
-        "from 100 mg dmsa",
-        "100 mg dmsa",
-        "dmsa",
-        "succimer",
-        "dimercaptosuccinic acid"
+        "BHA",
+        "E320",
+        "2-tert-butyl-4-methoxyphenol",
+        "3-tert-butyl-4-methoxyphenol",
+        "butylhydroxyanisole",
+        "tert-butyl-4-hydroxyanisole",
+        "antioxidant 320",
+        "butylated hydroxyanisole",
+        "butylated hydroxyanisole (bha)"
       ],
-      "CUI": "C0038846",
-      "category": "prescription_chelation_drug",
-      "mechanism_of_harm": "Succimer (DMSA) is an FDA-approved prescription chelation agent for lead poisoning. Not a lawful dietary supplement ingredient. Oral chelation therapy without medical supervision risks essential mineral depletion (zinc, copper, iron) and renal toxicity.",
-      "regulatory_status": {
-        "US": "FDA-approved Rx drug (NDA 019998). Not a dietary ingredient under DSHEA.",
-        "EU": "Prescription-only medicinal product."
-      },
-      "population_warnings": [
-        "Children",
-        "Pregnant women",
-        "Patients with renal impairment"
-      ],
-      "notes": "DMSA 100mg found on supplement labels represents unlawful inclusion of a prescription chelation drug. FDA has issued warning letters to supplement companies marketing chelation products.",
-      "scientific_references": [
-        "doi:10.1016/j.toxlet.2018.01.015"
-      ],
-      "last_updated": "2026-03-01",
-      "severity_level": "high",
-      "confidence": "high",
-      "common_uses": [
-        "chelation therapy"
-      ],
-      "is_additive": false,
+      "category": "high_risk_ingredients",
+      "severity_level": "critical",
+      "reason": "A petroleum-derived antioxidant classified as a possible human carcinogen (IARC Group 2B). It is also an endocrine disruptor that can accumulate in body fat. 2024 research continues to raise concerns about long-term exposure effects.",
       "match_rules": {
+        "exclusions": [],
+        "case_sensitive": false,
+        "priority": 1,
+        "match_type": "normalized",
+        "confidence": "high",
+        "negative_match_terms": [],
         "match_mode": "alias_and_fuzzy",
         "label_tokens": [
-          "from 100 mg dmsa",
-          "100 mg dmsa",
-          "dmsa",
-          "succimer",
-          "dimercaptosuccinic acid"
-        ],
-        "regex": null,
-        "fuzzy_threshold": 0.75,
-        "case_sensitive": false,
-        "preferred_alias": "DMSA (Succimer) 100mg"
-      },
-      "references_structured": [
-        {
-          "type": "regulatory",
-          "authority": "FDA",
-          "citation": "FDA NDA 019998 - Chemet (succimer) approval for lead poisoning chelation",
-          "url": null,
-          "published_date": "1991-01-29",
-          "evidence_grade": "R",
-          "confidence": "high"
-        }
-      ],
-      "external_ids": {
-        "umls_cui": "C0038846",
-        "cas": "304-55-2",
-        "pubchem": "5765"
-      },
-      "jurisdictional_statuses": [
-        {
-          "authority": "US",
-          "jurisdiction": "US",
-          "status_code": "monitored",
-          "scope": "supplement",
-          "effective_range": {
-            "start": "1991-01-01",
-            "end": null
-          },
-          "source_ref": "FDA Rx drug, not dietary ingredient under DSHEA"
-        }
-      ],
-      "review": {
-        "status": "validated",
-        "last_reviewed_at": "2026-03-01",
-        "reviewed_by": "oi_audit_batch1",
-        "next_review_due": "2026-09-01",
-        "change_log": [
-          {
-            "date": "2026-03-01",
-            "change": "Moved from other_ingredients.json — does not belong in safe excipient DB",
-            "reason": "other_ingredients_deep_audit"
-          }
+          "BHA",
+          "E320",
+          "2-tert-butyl-4-methoxyphenol",
+          "3-tert-butyl-4-methoxyphenol",
+          "butylhydroxyanisole",
+          "tert-butyl-4-hydroxyanisole",
+          "antioxidant 320",
+          "butylated hydroxyanisole",
+          "butylated hydroxyanisole (bha)"
         ]
       },
-      "exposure_context": "supplement",
-      "entity_type": "ingredient",
-      "dose_thresholds": null,
-      "entity_relationships": null
-    },
-    {
-      "id": "ADD_DMSA_250MG",
-      "standard_name": "DMSA (Succimer) 250mg",
-      "aliases": [
-        "from 250 mg dmsa",
-        "250 mg dmsa",
-        "dmsa",
-        "succimer",
-        "dimercaptosuccinic acid"
-      ],
-      "CUI": "C0038846",
-      "category": "prescription_chelation_drug",
-      "mechanism_of_harm": "Succimer (DMSA) is an FDA-approved prescription chelation agent for lead poisoning. Not a lawful dietary supplement ingredient. Oral chelation therapy without medical supervision risks essential mineral depletion (zinc, copper, iron) and renal toxicity.",
-      "regulatory_status": {
-        "US": "FDA-approved Rx drug (NDA 019998). Not a dietary ingredient under DSHEA.",
-        "EU": "Prescription-only medicinal product."
-      },
-      "population_warnings": [
-        "Children",
-        "Pregnant women",
-        "Patients with renal impairment"
-      ],
-      "notes": "DMSA 250mg found on supplement labels represents unlawful inclusion of a prescription chelation drug. FDA has issued warning letters to supplement companies marketing chelation products.",
-      "scientific_references": [
-        "doi:10.1016/j.toxlet.2018.01.015"
-      ],
-      "last_updated": "2026-03-01",
-      "severity_level": "high",
-      "confidence": "high",
-      "common_uses": [
-        "chelation therapy"
-      ],
-      "is_additive": false,
-      "match_rules": {
-        "match_mode": "alias_and_fuzzy",
-        "label_tokens": [
-          "from 250 mg dmsa",
-          "250 mg dmsa",
-          "dmsa",
-          "succimer",
-          "dimercaptosuccinic acid"
-        ],
-        "regex": null,
-        "fuzzy_threshold": 0.75,
-        "case_sensitive": false,
-        "preferred_alias": "DMSA (Succimer) 250mg"
-      },
       "references_structured": [
         {
-          "type": "regulatory",
-          "authority": "FDA",
-          "citation": "FDA NDA 019998 - Chemet (succimer) approval for lead poisoning chelation",
-          "url": null,
-          "published_date": "1991-01-29",
-          "evidence_grade": "R",
-          "confidence": "high"
-        }
-      ],
-      "external_ids": {
-        "umls_cui": null,
-        "cas": "304-55-2",
-        "pubchem": "5765"
-      },
-      "jurisdictional_statuses": [
-        {
-          "authority": "US",
-          "jurisdiction": "US",
-          "status_code": "monitored",
-          "scope": "supplement",
-          "effective_range": {
-            "start": "1991-01-01",
-            "end": null
-          },
-          "source_ref": "FDA Rx drug, not dietary ingredient under DSHEA"
-        }
-      ],
-      "review": {
-        "status": "validated",
-        "last_reviewed_at": "2026-03-01",
-        "reviewed_by": "oi_audit_batch1",
-        "next_review_due": "2026-09-01",
-        "change_log": [
-          {
-            "date": "2026-03-01",
-            "change": "Moved from other_ingredients.json — does not belong in safe excipient DB",
-            "reason": "other_ingredients_deep_audit"
-          }
-        ]
-      },
-      "exposure_context": "supplement",
-      "entity_type": "ingredient",
-      "dose_thresholds": null,
-      "entity_relationships": null
-    },
-    {
-      "id": "ADD_SODIUM_TETRABORATE",
-      "standard_name": "Sodium Tetraborate (Borax)",
-      "aliases": [
-        "borax",
-        "sodium borate",
-        "sodium tetraborate",
-        "sodium tetraborate decahydrate",
-        "E285"
-      ],
-      "CUI": "C0142812",
-      "category": "banned_food_additive",
-      "mechanism_of_harm": "Reproductive and developmental toxicant. EU-banned as food additive (Regulation EC 1333/2008). Classified CMR Category 1B (H360FD). LD50 ~2.66 g/kg oral (rat). Chronic exposure causes testicular atrophy and reduced fertility in animal models.",
-      "regulatory_status": {
-        "US": "Not GRAS for internal use. FDA permits only in limited topical applications.",
-        "EU": "Banned as food additive. REACH SVHC (Substance of Very High Concern).",
-        "EFSA": "No safe level for food use established."
-      },
-      "population_warnings": [
-        "Pregnant women",
-        "Children",
-        "Individuals with renal impairment"
-      ],
-      "notes": "Borax (sodium tetraborate) is an EU-banned food additive classified as a reproductive toxicant (CMR 1B). Despite folk remedy claims, no dietary supplement use is warranted. ECHA SVHC listing under REACH since 2010.",
-      "scientific_references": [
-        "doi:10.2903/j.efsa.2013.3407",
-        "ECHA SVHC ED/61/2010"
-      ],
-      "last_updated": "2026-03-01",
-      "severity_level": "high",
-      "confidence": "high",
-      "common_uses": [
-        "buffering",
-        "preservative"
-      ],
-      "is_additive": true,
-      "match_rules": {
-        "match_mode": "alias_and_fuzzy",
-        "label_tokens": [
-          "borax",
-          "sodium borate",
-          "sodium tetraborate",
-          "sodium tetraborate decahydrate",
-          "E285"
-        ],
-        "regex": null,
-        "fuzzy_threshold": 0.75,
-        "case_sensitive": false,
-        "preferred_alias": "Sodium Tetraborate (Borax)"
-      },
-      "references_structured": [
-        {
-          "type": "regulatory",
-          "authority": "EFSA",
-          "citation": "EFSA Journal 2013;11(10):3407 — Scientific Opinion on boron compounds",
-          "url": "https://doi.org/10.2903/j.efsa.2013.3407",
-          "published_date": "2013-10-08",
-          "evidence_grade": "A",
-          "confidence": "high"
+          "type": "doi",
+          "id": "10.1093/jnci/djh184",
+          "title": "IARC carcinogenicity assessment",
+          "evidence_grade": "B",
+          "url": "https://doi.org/10.1093/jnci/djh184",
+          "supports_claims": [
+            "mechanism_of_harm",
+            "clinical_outcomes"
+          ],
+          "evidence_summary": "IARC carcinogenicity assessment"
         },
         {
-          "type": "regulatory",
-          "authority": "ECHA",
-          "citation": "ECHA SVHC identification ED/61/2010 — Sodium tetraborate decahydrate (borax)",
-          "url": null,
-          "published_date": "2010-06-18",
-          "evidence_grade": "R",
-          "confidence": "high"
-        }
-      ],
-      "external_ids": {
-        "umls_cui": "C0142812",
-        "cas": "1303-96-4",
-        "pubchem": "16211214"
-      },
-      "jurisdictional_statuses": [
-        {
-          "authority": "EU",
-          "jurisdiction": "EU",
-          "status_code": "monitored",
-          "scope": "food_additive",
-          "effective_range": {
-            "start": "2008-12-16",
-            "end": null
-          },
-          "source_ref": "EC 1333/2008 - banned as food additive; REACH SVHC since 2010"
+          "type": "doi",
+          "id": "10.1016/j.fct.2020.111535",
+          "title": "Toxicity mechanisms",
+          "evidence_grade": "B",
+          "url": "https://doi.org/10.1016/j.fct.2020.111535",
+          "supports_claims": [
+            "mechanism_of_harm",
+            "clinical_outcomes"
+          ],
+          "evidence_summary": "Toxicity mechanisms"
         }
       ],
       "review": {
         "status": "validated",
-        "last_reviewed_at": "2026-03-01",
-        "reviewed_by": "oi_audit_batch1",
-        "next_review_due": "2026-09-01",
+        "last_reviewed_at": "2026-02-16",
+        "next_review_due": "2026-07-07",
+        "reviewed_by": "migration_script",
         "change_log": [
           {
-            "date": "2026-03-01",
-            "change": "Moved from other_ingredients.json — does not belong in safe excipient DB",
-            "reason": "other_ingredients_deep_audit"
+            "date": "2026-01-08",
+            "change": "Migrated to schema v3.1 with standardized fields",
+            "by": "system"
           }
         ]
       },
-      "exposure_context": "supplement",
       "entity_type": "ingredient",
-      "dose_thresholds": null,
-      "entity_relationships": null
+      "class_tags": [
+        "high_risk_ingredients",
+        "preservative_artificial"
+      ]
     },
     {
-      "id": "ADD_THYROGEN",
-      "standard_name": "Thyrogen (Thyrotropin Alfa)",
+      "id": "BANNED_ADD_BHT",
+      "standard_name": "Butylated Hydroxytoluene (BHT)",
       "aliases": [
-        "thyrogen",
-        "thyrotropin alfa",
-        "thyrotropin alpha",
-        "recombinant tsh"
+        "BHT",
+        "E321",
+        "2,6-ditertiary-butyl-4-methylphenol",
+        "2,6-di-tert-butyl-4-methylphenol",
+        "butylhydroxytoluene",
+        "dibutylated hydroxytoluene",
+        "DBHT",
+        "antioxidant 321",
+        "2,6-di-tert-butyl-p-cresol",
+        "butylated hydroxytoluene (bht)"
       ],
-      "CUI": "C0728862",
-      "category": "prescription_biologic",
-      "mechanism_of_harm": "Thyrotropin alfa is an FDA-approved prescription recombinant human TSH biologic (Genzyme/Sanofi). Indicated only for thyroid cancer follow-up and radioiodine ablation. Unauthorized supplement inclusion risks thyroid storm, cardiac arrhythmias, and severe hyperthyroidism.",
-      "regulatory_status": {
-        "US": "FDA-approved Rx biologic (BLA 125104). Not a dietary ingredient under DSHEA.",
-        "EU": "Prescription-only medicinal product (EMA)."
-      },
-      "population_warnings": [
-        "Patients with cardiovascular disease",
-        "Elderly",
-        "Pregnant women"
-      ],
-      "notes": "Thyrogen is a prescription biologic for thyroid cancer management. Any supplement label containing this ingredient represents illegal drug inclusion. FDA has jurisdiction under FD&C Act §301.",
-      "scientific_references": [
-        "FDA BLA 125104"
-      ],
-      "last_updated": "2026-03-01",
-      "severity_level": "high",
-      "confidence": "high",
-      "common_uses": [
-        "thyroid cancer diagnosis"
-      ],
-      "is_additive": false,
+      "category": "high_risk_ingredients",
+      "severity_level": "critical",
+      "reason": "A petroleum-derived preservative that is a potential allergen and has been linked to liver, kidney, and thyroid issues in animal studies. Often used in combination with BHA for synergistic antioxidant effects. 2024 research continues to raise concerns about long-term exposure.",
       "match_rules": {
+        "exclusions": [],
+        "case_sensitive": false,
+        "priority": 1,
+        "match_type": "normalized",
+        "confidence": "high",
+        "negative_match_terms": [],
         "match_mode": "alias_and_fuzzy",
         "label_tokens": [
-          "thyrogen",
-          "thyrotropin alfa",
-          "thyrotropin alpha",
-          "recombinant tsh"
-        ],
-        "regex": null,
-        "fuzzy_threshold": 0.75,
-        "case_sensitive": false,
-        "preferred_alias": "Thyrogen (Thyrotropin Alfa)"
+          "BHT",
+          "E321",
+          "2,6-ditertiary-butyl-4-methylphenol",
+          "2,6-di-tert-butyl-4-methylphenol",
+          "butylhydroxytoluene",
+          "dibutylated hydroxytoluene",
+          "DBHT",
+          "antioxidant 321",
+          "2,6-di-tert-butyl-p-cresol",
+          "butylated hydroxytoluene (bht)"
+        ]
       },
       "references_structured": [
         {
-          "type": "regulatory",
-          "authority": "FDA",
-          "citation": "FDA BLA 125104 — Thyrogen (thyrotropin alfa) biologic approval",
-          "url": null,
-          "published_date": "1998-11-30",
-          "evidence_grade": "R",
-          "confidence": "high"
-        }
-      ],
-      "external_ids": {
-        "umls_cui": "C0728862",
-        "cas": null,
-        "pubchem": null
-      },
-      "jurisdictional_statuses": [
+          "type": "doi",
+          "id": "10.1016/j.fct.2020.111535",
+          "title": "Toxicity review",
+          "evidence_grade": "B",
+          "url": "https://doi.org/10.1016/j.fct.2020.111535",
+          "supports_claims": [
+            "mechanism_of_harm",
+            "clinical_outcomes"
+          ],
+          "evidence_summary": "Toxicity review"
+        },
         {
-          "authority": "US",
-          "jurisdiction": "US",
-          "status_code": "monitored",
-          "scope": "supplement",
-          "effective_range": {
-            "start": "1998-01-01",
-            "end": null
-          },
-          "source_ref": "FDA-approved Rx biologic, not a dietary ingredient under DSHEA"
+          "type": "doi",
+          "id": "10.1002/tcp.10162",
+          "title": "Tissue accumulation",
+          "evidence_grade": "B",
+          "url": "https://doi.org/10.1002/tcp.10162",
+          "supports_claims": [
+            "mechanism_of_harm",
+            "clinical_outcomes"
+          ],
+          "evidence_summary": "Tissue accumulation"
         }
       ],
       "review": {
         "status": "validated",
-        "last_reviewed_at": "2026-03-01",
-        "reviewed_by": "oi_audit_batch1",
-        "next_review_due": "2026-09-01",
+        "last_reviewed_at": "2026-02-16",
+        "next_review_due": "2026-07-07",
+        "reviewed_by": "migration_script",
         "change_log": [
           {
-            "date": "2026-03-01",
-            "change": "Moved from other_ingredients.json — does not belong in safe excipient DB",
-            "reason": "other_ingredients_deep_audit"
+            "date": "2026-01-08",
+            "change": "Migrated to schema v3.1 with standardized fields",
+            "by": "system"
           }
         ]
       },
-      "exposure_context": "supplement",
       "entity_type": "ingredient",
-      "dose_thresholds": null,
-      "entity_relationships": null
+      "class_tags": [
+        "high_risk_ingredients",
+        "preservative_artificial"
+      ]
     },
     {
-      "id": "ADD_SIMETHICONE",
-      "standard_name": "Simethicone",
+      "id": "BANNED_ADD_HYDROGENATED_COCONUT_OIL",
+      "standard_name": "Policy Watchlist: Hydrogenated Coconut Oil",
       "aliases": [
-        "activated dimethicone",
-        "gas-x",
-        "polydimethylsiloxane",
-        "simethicone",
-        "simeticone",
-        "E900"
+        "hydrogenated coconut oil",
+        "partially hydrogenated coconut oil",
+        "hardened coconut oil",
+        "trans fat coconut oil",
+        "coconut oil (hydrogenated)",
+        "coconut oil, hydrogenated",
+        "coconut oil hydrogenated",
+        "coconut oil (partially hydrogenated)"
       ],
-      "CUI": "C0037153",
-      "category": "otc_drug_ingredient",
-      "mechanism_of_harm": "Simethicone is an FDA-approved OTC drug active ingredient (anti-flatulent). Not a lawful dietary supplement ingredient under DSHEA as it was marketed as a drug prior to 1994. Silicone-based anti-foaming agent that reduces surface tension of gas bubbles.",
-      "regulatory_status": {
-        "US": "FDA OTC monograph drug (21 CFR 332). Not a dietary ingredient under DSHEA.",
-        "EU": "Authorized pharmaceutical excipient."
-      },
-      "population_warnings": [],
-      "notes": "Simethicone is an OTC drug active ingredient under FDA monograph. While generally safe, its presence in supplements indicates regulatory non-compliance. Not absorbed systemically; works mechanically on gas bubbles in GI tract.",
-      "scientific_references": [
-        "21 CFR 332.10"
-      ],
-      "last_updated": "2026-03-01",
+      "category": "high_risk_ingredients",
       "severity_level": "low",
-      "confidence": "high",
-      "common_uses": [
-        "anti-foaming",
-        "anti-flatulent"
-      ],
-      "is_additive": true,
+      "reason": "MODERATE RISK: Hydrogenation process creates trans fats in coconut oil. Unlike natural coconut oil, hydrogenated form contains harmful trans fatty acids that increase cardiovascular disease risk and inflammation. FDA has banned partially hydrogenated oils in foods.",
       "match_rules": {
+        "exclusions": [],
+        "case_sensitive": false,
+        "priority": 1,
+        "match_type": "normalized",
+        "confidence": "high",
+        "negative_match_terms": [
+          "non-hydrogenated",
+          "unhydrogenated",
+          "no hydrogenated",
+          "hydrogenation-free",
+          "not hydrogenated"
+        ],
         "match_mode": "alias_and_fuzzy",
         "label_tokens": [
-          "activated dimethicone",
-          "gas-x",
-          "polydimethylsiloxane",
-          "simethicone",
-          "simeticone",
-          "E900"
-        ],
-        "regex": null,
-        "fuzzy_threshold": 0.75,
-        "case_sensitive": false,
-        "preferred_alias": "Simethicone"
+          "hydrogenated coconut oil",
+          "partially hydrogenated coconut oil",
+          "hardened coconut oil",
+          "trans fat coconut oil",
+          "coconut oil (hydrogenated)",
+          "coconut oil, hydrogenated",
+          "coconut oil hydrogenated",
+          "coconut oil (partially hydrogenated)"
+        ]
       },
       "references_structured": [
         {
-          "type": "regulatory",
-          "authority": "FDA",
-          "citation": "21 CFR 332.10 — OTC antiflatulent drug products, simethicone monograph",
-          "url": null,
-          "published_date": null,
+          "type": "fda_action",
+          "title": "Final Determination Regarding Partially Hydrogenated Oils (Removing Trans Fat)",
           "evidence_grade": "R",
-          "confidence": "high"
-        }
-      ],
-      "external_ids": {
-        "umls_cui": "C0037153",
-        "cas": "8050-81-5",
-        "pubchem": null
-      },
-      "jurisdictional_statuses": [
+          "url": "https://www.fda.gov/food/food-additives-petitions/final-determination-regarding-partially-hydrogenated-oils-removing-trans-fat",
+          "supports_claims": [
+            "regulatory_action"
+          ],
+          "evidence_summary": "FDA determined PHOs are no longer GRAS and set compliance transitions for food supply removal."
+        },
         {
-          "authority": "US",
-          "jurisdiction": "US",
-          "status_code": "monitored",
-          "scope": "supplement",
-          "effective_range": {
-            "start": "1994-01-01",
-            "end": null
-          },
-          "source_ref": "FDA OTC drug monograph, pre-DSHEA drug ingredient"
+          "type": "fda_guidance",
+          "title": "Trans Fat",
+          "evidence_grade": "R",
+          "url": "https://www.fda.gov/food/food-additives-petitions/trans-fat",
+          "supports_claims": [
+            "regulatory_action"
+          ],
+          "evidence_summary": "FDA summary page documents compliance dates and regulatory context for PHO/trans fat removal."
         }
       ],
       "review": {
         "status": "validated",
-        "last_reviewed_at": "2026-03-01",
-        "reviewed_by": "oi_audit_batch1",
-        "next_review_due": "2026-09-01",
+        "last_reviewed_at": "2026-02-16",
+        "next_review_due": "2026-07-07",
+        "reviewed_by": "codex_alias_precision_pass",
         "change_log": [
           {
-            "date": "2026-03-01",
-            "change": "Moved from other_ingredients.json — does not belong in safe excipient DB",
-            "reason": "other_ingredients_deep_audit"
+            "date": "2026-01-08",
+            "change": "Migrated to schema v3.1 with standardized fields",
+            "by": "system"
+          },
+          {
+            "date": "2026-02-16",
+            "change": "Added authoritative regulatory/source citations and cleared source verification flag",
+            "by": "codex_citation_pass"
+          },
+          {
+            "date": "2026-02-16",
+            "change": "Alias precision hardening for supplement label matching (reduced ambiguous aliases; added hydrogenated coconut reverse-label variants)",
+            "by": "codex_alias_precision_pass"
           }
         ]
       },
-      "exposure_context": "supplement",
-      "entity_type": "ingredient",
-      "dose_thresholds": null,
-      "entity_relationships": null
+      "entity_type": "class",
+      "class_tags": [
+        "high_risk_ingredients",
+        "fat_trans"
+      ]
     },
     {
-      "id": "ADD_HEXADRONE",
-      "standard_name": "Hexadrone (6-Chloro-androst-4-ene-3-one-17b-ol)",
+      "id": "BANNED_ADD_METHYLPARABEN",
+      "standard_name": "Methylparaben",
       "aliases": [
-        "hexadrone",
-        "6-chloro-androst-4-ene-3-one-17b-ol",
-        "6-chloro-4-androstene-3-one-17b-ol",
-        "6-chloro androstene"
+        "methylparaben",
+        "methyl paraben",
+        "4-hydroxybenzoic acid methyl ester",
+        "methyl parahydroxybenzoate"
       ],
-      "CUI": null,
-      "category": "anabolic_steroid_prohormone",
-      "mechanism_of_harm": "Chlorinated anabolic steroid prohormone. Classified as a designer anabolic steroid under the Designer Anabolic Steroid Control Act (DASCA, 2014). Hepatotoxic, suppresses endogenous testosterone via HPTA suppression, associated with cholestatic liver injury and cardiovascular strain.",
-      "regulatory_status": {
-        "US": "Schedule III controlled substance under DASCA 2014. Banned by FDA as adulterated supplement.",
-        "WADA": "Prohibited at all times (S1.1 Anabolic Agents)."
-      },
-      "population_warnings": [
-        "All populations — controlled substance",
-        "Adolescents",
-        "Women (virilization risk)",
-        "Individuals with liver disease"
-      ],
-      "notes": "Hexadrone is a Schedule III controlled substance classified as a designer anabolic steroid. Supplement products containing this compound are adulterated under FD&C Act. Associated with liver toxicity (cholestatic pattern) and HPTA suppression.",
-      "scientific_references": [
-        "DASCA 2014 (Pub.L. 113-260)",
-        "doi:10.1016/j.cgh.2019.04.001"
-      ],
-      "last_updated": "2026-03-01",
+      "category": "high_risk_ingredients",
       "severity_level": "high",
-      "confidence": "high",
-      "common_uses": [
-        "muscle building (illegal)"
-      ],
-      "is_additive": false,
+      "reason": "Preservative with potential endocrine disruption concerns. Has weak estrogenic activity. While FDA considers it GRAS at low levels (0.1%), some individuals may experience allergic reactions. Banned in some organic certifications.",
       "match_rules": {
+        "exclusions": [],
+        "case_sensitive": false,
+        "priority": 1,
+        "match_type": "normalized",
+        "confidence": "high",
+        "negative_match_terms": [],
         "match_mode": "alias_and_fuzzy",
         "label_tokens": [
-          "hexadrone",
-          "6-chloro-androst-4-ene-3-one-17b-ol",
-          "6-chloro-4-androstene-3-one-17b-ol",
-          "6-chloro androstene"
-        ],
-        "regex": null,
-        "fuzzy_threshold": 0.75,
-        "case_sensitive": false,
-        "preferred_alias": "Hexadrone (6-Chloro-androst-4-ene-3-one-17b-ol)"
+          "methylparaben",
+          "methyl paraben",
+          "4-hydroxybenzoic acid methyl ester",
+          "methyl parahydroxybenzoate"
+        ]
       },
       "references_structured": [
         {
-          "type": "regulatory",
-          "authority": "US_Congress",
-          "citation": "Designer Anabolic Steroid Control Act of 2014, Pub.L. 113-260",
-          "url": null,
-          "published_date": "2014-12-18",
+          "type": "fda_inventory",
+          "title": "Substances Added to Food (formerly EAFUS) - Methyl p-hydroxybenzoate (Methylparaben)",
           "evidence_grade": "R",
-          "confidence": "high"
-        }
-      ],
-      "external_ids": {
-        "umls_cui": null,
-        "cas": null,
-        "pubchem": null
-      },
-      "jurisdictional_statuses": [
+          "url": "https://hfpappexternal.fda.gov/scripts/fdcc/index.cfm?id=METHYLHYDROXYBENZOATE&set=FoodSubstances",
+          "supports_claims": [
+            "regulatory_action"
+          ],
+          "evidence_summary": "FDA food-substance inventory entry with technical effects and applicable CFR citations."
+        },
         {
-          "authority": "US",
-          "jurisdiction": "US",
-          "status_code": "monitored",
-          "scope": "supplement",
-          "effective_range": {
-            "start": "2014-12-18",
-            "end": null
-          },
-          "source_ref": "DASCA 2014 — Schedule III controlled substance"
+          "type": "regulation",
+          "title": "21 CFR references for methylparaben uses",
+          "evidence_grade": "R",
+          "url": "https://www.ecfr.gov/current/title-21",
+          "supports_claims": [
+            "regulatory_action"
+          ],
+          "evidence_summary": "EAFUS entry links methylparaben-related regulations including 172.515 and 184.1490."
         }
       ],
       "review": {
         "status": "validated",
-        "last_reviewed_at": "2026-03-01",
-        "reviewed_by": "oi_audit_batch1",
-        "next_review_due": "2026-09-01",
+        "last_reviewed_at": "2026-02-16",
+        "next_review_due": "2026-07-07",
+        "reviewed_by": "codex_citation_pass",
         "change_log": [
           {
-            "date": "2026-03-01",
-            "change": "Moved from other_ingredients.json — does not belong in safe excipient DB",
-            "reason": "other_ingredients_deep_audit"
+            "date": "2026-01-08",
+            "change": "Migrated to schema v3.1 with standardized fields",
+            "by": "system"
+          },
+          {
+            "date": "2026-02-16",
+            "change": "Added authoritative regulatory/source citations and cleared source verification flag",
+            "by": "codex_citation_pass"
           }
         ]
       },
-      "exposure_context": "supplement",
       "entity_type": "ingredient",
-      "dose_thresholds": null,
-      "entity_relationships": null
+      "class_tags": [
+        "high_risk_ingredients",
+        "preservative_artificial"
+      ]
+    },
+    {
+      "id": "BANNED_ADD_PROPYLPARABEN",
+      "standard_name": "Propylparaben",
+      "aliases": [
+        "E216",
+        "propyl paraben",
+        "Propyl 4-hydroxybenzoate",
+        "propyl p-hydroxybenzoate",
+        "propylparaben sodium",
+        "nipasol P",
+        "propyl parahydroxybenzoate",
+        "4-hydroxybenzoic acid propyl ester",
+        "propyl butex",
+        "propylparaben"
+      ],
+      "category": "high_risk_ingredients",
+      "severity_level": "critical",
+      "reason": "A strong endocrine disruptor that mimics estrogen and has been shown to affect the reproductive system. BANNED for food use in the EU. Still permitted in US but increasingly avoided by manufacturers due to safety concerns.",
+      "match_rules": {
+        "exclusions": [],
+        "case_sensitive": false,
+        "priority": 1,
+        "match_type": "normalized",
+        "confidence": "high",
+        "negative_match_terms": [],
+        "match_mode": "alias_and_fuzzy",
+        "label_tokens": [
+          "E216",
+          "propyl paraben",
+          "Propyl 4-hydroxybenzoate",
+          "propyl p-hydroxybenzoate",
+          "propylparaben sodium",
+          "nipasol P",
+          "propyl parahydroxybenzoate",
+          "4-hydroxybenzoic acid propyl ester",
+          "propyl butex",
+          "propylparaben"
+        ]
+      },
+      "references_structured": [
+        {
+          "type": "doi",
+          "id": "10.1016/j.fct.2013.07.016",
+          "title": "Endocrine disruption",
+          "evidence_grade": "B",
+          "url": "https://doi.org/10.1016/j.fct.2013.07.016",
+          "supports_claims": [
+            "mechanism_of_harm",
+            "clinical_outcomes"
+          ],
+          "evidence_summary": "Endocrine disruption"
+        },
+        {
+          "type": "doi",
+          "id": "10.1093/humrep/det428",
+          "title": "Reproductive effects",
+          "evidence_grade": "B",
+          "url": "https://doi.org/10.1093/humrep/det428",
+          "supports_claims": [
+            "mechanism_of_harm",
+            "clinical_outcomes"
+          ],
+          "evidence_summary": "Reproductive effects"
+        }
+      ],
+      "review": {
+        "status": "validated",
+        "last_reviewed_at": "2026-02-16",
+        "next_review_due": "2026-07-07",
+        "reviewed_by": "migration_script",
+        "change_log": [
+          {
+            "date": "2026-01-08",
+            "change": "Migrated to schema v3.1 with standardized fields",
+            "by": "system"
+          }
+        ]
+      },
+      "entity_type": "ingredient",
+      "class_tags": [
+        "high_risk_ingredients",
+        "preservative_artificial"
+      ]
+    },
+    {
+      "id": "BANNED_ADD_SYNTHETIC_ANTIOXIDANTS",
+      "standard_name": "Synthetic Antioxidants",
+      "aliases": [
+        "ethoxyquin",
+        "E324",
+        "propyl gallate",
+        "E310",
+        "octyl gallate",
+        "E311",
+        "dodecyl gallate",
+        "E312",
+        "synthetic preservatives",
+        "artificial antioxidants",
+        "synthetic antioxidants"
+      ],
+      "category": "high_risk_ingredients",
+      "severity_level": "critical",
+      "reason": "Used to prevent oxidation but may have unintended biological effects. Some forms banned in certain countries due to safety concerns.",
+      "match_rules": {
+        "exclusions": [],
+        "case_sensitive": false,
+        "priority": 1,
+        "match_type": "normalized",
+        "confidence": "high",
+        "negative_match_terms": [],
+        "match_mode": "alias_and_fuzzy",
+        "label_tokens": [
+          "ethoxyquin",
+          "E324",
+          "propyl gallate",
+          "E310",
+          "octyl gallate",
+          "E311",
+          "dodecyl gallate",
+          "E312",
+          "synthetic preservatives",
+          "artificial antioxidants",
+          "synthetic antioxidants"
+        ]
+      },
+      "references_structured": [
+        {
+          "type": "doi",
+          "id": "10.1016/j.fct.2020.111535",
+          "title": "Toxicity mechanisms",
+          "evidence_grade": "B",
+          "url": "https://doi.org/10.1016/j.fct.2020.111535",
+          "supports_claims": [
+            "mechanism_of_harm",
+            "clinical_outcomes"
+          ],
+          "evidence_summary": "Toxicity mechanisms"
+        },
+        {
+          "type": "doi",
+          "id": "10.1002/tcp.10162",
+          "title": "Accumulation studies",
+          "evidence_grade": "B",
+          "url": "https://doi.org/10.1002/tcp.10162",
+          "supports_claims": [
+            "mechanism_of_harm",
+            "clinical_outcomes"
+          ],
+          "evidence_summary": "Accumulation studies"
+        }
+      ],
+      "review": {
+        "status": "validated",
+        "last_reviewed_at": "2026-02-26",
+        "next_review_due": "2026-07-07",
+        "reviewed_by": "source_verified_audit",
+        "change_log": [
+          {
+            "date": "2026-01-08",
+            "change": "Migrated to schema v3.1 with standardized fields",
+            "by": "system"
+          }
+        ]
+      },
+      "entity_type": "ingredient",
+      "class_tags": [
+        "high_risk_ingredients",
+        "preservative_artificial"
+      ]
+    },
+    {
+      "id": "BANNED_ADD_TBHQ",
+      "standard_name": "Tertiary Butylhydroquinone (TBHQ)",
+      "aliases": [
+        "TBHQ",
+        "E319",
+        "tert-butylhydroquinone",
+        "2-(1,1-dimethylethyl)-1,4-benzenediol",
+        "tertiary butylhydroquinone",
+        "t-butylhydroquinone",
+        "MTBHQ",
+        "tertiary butylhydroquinone (tbhq)"
+      ],
+      "category": "high_risk_ingredients",
+      "severity_level": "critical",
+      "reason": "A petroleum-derived preservative linked to vision disturbances, liver enlargement, and DNA damage in studies. May harm the immune system. Not approved in Japan. Increasingly avoided despite FDA approval.",
+      "match_rules": {
+        "exclusions": [],
+        "case_sensitive": false,
+        "priority": 1,
+        "match_type": "normalized",
+        "confidence": "high",
+        "negative_match_terms": [],
+        "match_mode": "alias_and_fuzzy",
+        "label_tokens": [
+          "TBHQ",
+          "E319",
+          "tert-butylhydroquinone",
+          "2-(1,1-dimethylethyl)-1,4-benzenediol",
+          "tertiary butylhydroquinone",
+          "t-butylhydroquinone",
+          "MTBHQ",
+          "tertiary butylhydroquinone (tbhq)"
+        ]
+      },
+      "references_structured": [
+        {
+          "type": "doi",
+          "id": "10.1016/j.fct.2018.09.045",
+          "title": "Genotoxicity studies",
+          "evidence_grade": "B",
+          "url": "https://doi.org/10.1016/j.fct.2018.09.045",
+          "supports_claims": [
+            "mechanism_of_harm",
+            "clinical_outcomes"
+          ],
+          "evidence_summary": "Genotoxicity studies"
+        },
+        {
+          "type": "doi",
+          "id": "10.1080/10408398.2019.1629524",
+          "title": "Safety review",
+          "evidence_grade": "B",
+          "url": "https://doi.org/10.1080/10408398.2019.1629524",
+          "supports_claims": [
+            "mechanism_of_harm",
+            "clinical_outcomes"
+          ],
+          "evidence_summary": "Safety review"
+        }
+      ],
+      "review": {
+        "status": "validated",
+        "last_reviewed_at": "2026-02-16",
+        "next_review_due": "2026-07-07",
+        "reviewed_by": "migration_script",
+        "change_log": [
+          {
+            "date": "2026-01-08",
+            "change": "Migrated to schema v3.1 with standardized fields",
+            "by": "system"
+          }
+        ]
+      },
+      "entity_type": "ingredient",
+      "class_tags": [
+        "high_risk_ingredients",
+        "preservative_artificial"
+      ]
     }
   ]
 }

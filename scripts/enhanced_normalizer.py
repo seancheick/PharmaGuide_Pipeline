@@ -977,10 +977,13 @@ class EnhancedDSLDNormalizer:
                         standard_name = banned.get("standard_name", "")
                         if standard_name:
                             processed_standard = self.matcher.preprocess_text(standard_name)
+                            # Derive severity from status (v5.0) with fallback
+                            _STATUS_SEV = {"banned": "critical", "recalled": "critical", "high_risk": "moderate", "watchlist": "low"}
+                            sev = _STATUS_SEV.get(banned.get("status", ""), "critical")
                             self._fast_exact_lookup[processed_standard] = {
                                 "type": "banned",
                                 "standard_name": standard_name,
-                                "severity": banned.get("severity_level", "critical"),
+                                "severity": sev,
                                 "reason": banned.get("reason", banned.get("recall_reason", "banned")),
                                 "mapped": True,
                                 "priority": 1
@@ -992,7 +995,7 @@ class EnhancedDSLDNormalizer:
                                 self._fast_exact_lookup[processed_alias] = {
                                     "type": "banned",
                                     "standard_name": standard_name,
-                                    "severity": banned.get("severity_level", "critical"),
+                                    "severity": sev,
                                     "reason": banned.get("reason", banned.get("recall_reason", "banned")),
                                     "mapped": True,
                                     "priority": 1

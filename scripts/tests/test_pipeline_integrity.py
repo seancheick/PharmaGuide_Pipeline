@@ -29,7 +29,7 @@ from constants import DATA_DIR, SCRIPTS_DIR
 # Shared helpers
 # ---------------------------------------------------------------------------
 
-REQUIRED_SCHEMA_VERSION = "4.1.0"
+REQUIRED_SCHEMA_VERSIONS = {"5.0.0"}
 
 # Required fields inside every _metadata block
 REQUIRED_METADATA_FIELDS = ("description", "purpose", "schema_version")
@@ -144,7 +144,7 @@ class TestDatabaseSchemaIntegrity:
     # 1b. schema_version must be uniform across all databases
     # ------------------------------------------------------------------
     def test_schema_version_uniform(self, db_files):
-        """All database files must declare schema_version == '{REQUIRED_SCHEMA_VERSION}'."""
+        """All database files must declare a recognized schema_version."""
         mismatches = []
         for fp in db_files:
             data = _load_json(fp)
@@ -154,10 +154,10 @@ class TestDatabaseSchemaIntegrity:
             sv = meta.get("schema_version")
             if sv is None:
                 mismatches.append(f"{fp.name}: schema_version not declared")
-            elif sv != REQUIRED_SCHEMA_VERSION:
+            elif sv not in REQUIRED_SCHEMA_VERSIONS:
                 mismatches.append(
                     f"{fp.name}: schema_version='{sv}'"
-                    f" (expected '{REQUIRED_SCHEMA_VERSION}')"
+                    f" (expected one of {REQUIRED_SCHEMA_VERSIONS})"
                 )
 
         assert not mismatches, (

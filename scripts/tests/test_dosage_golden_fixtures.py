@@ -935,7 +935,7 @@ class TestGlobalSafetyInvariants:
                 "banned_substances": {
                     "found": True,
                     "substances": [
-                        {"severity_level": "critical", "banned_name": "Ephedra"}
+                        {"status": "banned", "banned_name": "Ephedra"}
                     ]
                 }
             },
