@@ -442,10 +442,14 @@ class BatchProcessor:
             return None
     
     def save_state(self, state: BatchState):
-        """Save processing state"""
+        """Save processing state (atomic write: tmp + fsync + replace)"""
         try:
-            with open(self.state_file, 'w') as f:
+            tmp_path = self.state_file.with_suffix('.tmp')
+            with open(tmp_path, 'w', encoding='utf-8') as f:
                 json.dump(asdict(state), f, indent=2)
+                f.flush()
+                os.fsync(f.fileno())
+            os.replace(tmp_path, self.state_file)
         except Exception as e:
             logger.error(f"Failed to save state: {str(e)}")
     
@@ -655,16 +659,31 @@ class BatchProcessor:
                     continue
 
                 result = process_single_file(str(file_path), str(self.output_dir))
-                processed_files.append(str(file_path))  # FIX 1+2: Track processed
-                self._categorize_result(
-                    result,
-                    cleaned_products,
-                    needs_review_products,
-                    incomplete_products,
-                    errors,
-                    batch_unmapped,
-                    batch_mapped
-                )
+                try:
+                    self._categorize_result(
+                        result,
+                        cleaned_products,
+                        needs_review_products,
+                        incomplete_products,
+                        errors,
+                        batch_unmapped,
+                        batch_mapped
+                    )
+                    processed_files.append(str(file_path))  # Track AFTER successful categorization
+                except Exception as e:
+                    error_msg = f"Failed to categorize result for {file_path}: {str(e)}"
+                    errors.append(error_msg)
+                    batch_logger.error(error_msg)
+                    self._write_quarantine_file(
+                        str(file_path),
+                        StructuredError(
+                            file_path=str(file_path),
+                            exception_type=type(e).__name__,
+                            message=str(e),
+                            stage="categorize",
+                            traceback=traceback.format_exc()
+                        )
+                    )
         else:
             # Multi-threaded processing with worker initialization
             # PERFORMANCE FIX: Initialize normalizer once per worker, not per file
@@ -715,20 +734,12 @@ class BatchProcessor:
                     )
 
                 # Collect results
+                completed_results = {}
                 for future in futures_iterator:
                     file_path = future_to_file[future]
                     try:
                         result = future.result()
-                        processed_files.append(str(file_path))  # FIX 1+2: Track
-                        self._categorize_result(
-                            result,
-                            cleaned_products,
-                            needs_review_products,
-                            incomplete_products,
-                            errors,
-                            batch_unmapped,
-                            batch_mapped
-                        )
+                        completed_results[str(file_path)] = result
                     except Exception as e:
                         error_msg = f"Failed to process {file_path}: {str(e)}"
                         errors.append(error_msg)
@@ -741,6 +752,37 @@ class BatchProcessor:
                                 exception_type=type(e).__name__,
                                 message=str(e),
                                 stage="process",
+                                traceback=traceback.format_exc()
+                            )
+                        )
+
+                # Deterministic post-processing order: always follow input file order
+                for file_path in valid_files:
+                    result = completed_results.get(str(file_path))
+                    if result is None:
+                        continue
+                    try:
+                        self._categorize_result(
+                            result,
+                            cleaned_products,
+                            needs_review_products,
+                            incomplete_products,
+                            errors,
+                            batch_unmapped,
+                            batch_mapped
+                        )
+                        processed_files.append(str(file_path))  # Track AFTER successful categorization
+                    except Exception as e:
+                        error_msg = f"Failed to categorize result for {file_path}: {str(e)}"
+                        errors.append(error_msg)
+                        batch_logger.error(error_msg)
+                        self._write_quarantine_file(
+                            str(file_path),
+                            StructuredError(
+                                file_path=str(file_path),
+                                exception_type=type(e).__name__,
+                                message=str(e),
+                                stage="categorize",
                                 traceback=traceback.format_exc()
                             )
                         )

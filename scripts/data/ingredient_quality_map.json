@@ -30147,7 +30147,7 @@
       "vitamins"
     ],
     "cleanup_notes": "Resolved within-ingredient alias collisions; removed 63 redundant unspecified forms",
-    "total_entries": 530,
+    "total_entries": 531,
     "total_ingredients": 623,
     "data_quality": {
       "review_status": "stub"

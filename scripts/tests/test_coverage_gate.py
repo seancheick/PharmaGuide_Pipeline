@@ -168,16 +168,17 @@ class TestCorrectnessChecks:
                 "domains": {},
                 "summary": {"coverage_percent": 100.0}
             },
-            "claims_data": {
-                "claims": [
-                    {"claim": "Allergen-Free Product"}
-                ]
+            "compliance_data": {
+                "allergen_free_claims": ["allergen_free"]
             },
-            "allergen_data": {
-                "detected_allergens": [
-                    {"allergen_name": "milk"},
-                    {"allergen_name": "soy"}
-                ]
+            "contaminant_data": {
+                "allergens": {
+                    "found": True,
+                    "allergens": [
+                        {"allergen_name": "milk"},
+                        {"allergen_name": "soy"}
+                    ]
+                }
             }
         }
 
@@ -198,15 +199,16 @@ class TestCorrectnessChecks:
                 "domains": {},
                 "summary": {"coverage_percent": 100.0}
             },
-            "claims_data": {
-                "claims": [
-                    {"claim": "Certified Gluten-Free"}
-                ]
+            "compliance_data": {
+                "allergen_free_claims": ["gluten_free"]
             },
-            "allergen_data": {
-                "detected_allergens": [
-                    {"allergen_name": "wheat"}
-                ]
+            "contaminant_data": {
+                "allergens": {
+                    "found": True,
+                    "allergens": [
+                        {"allergen_name": "wheat"}
+                    ]
+                }
             }
         }
 
@@ -229,15 +231,16 @@ class TestCorrectnessChecks:
                 "domains": {},
                 "summary": {"coverage_percent": 100.0}
             },
-            "claims_data": {
-                "claims": [
-                    {"claim": "Dairy-Free Formula"}
-                ]
+            "compliance_data": {
+                "allergen_free_claims": ["dairy_free"]
             },
-            "allergen_data": {
-                "detected_allergens": [
-                    {"allergen_name": "milk protein"}
-                ]
+            "contaminant_data": {
+                "allergens": {
+                    "found": True,
+                    "allergens": [
+                        {"allergen_name": "milk protein"}
+                    ]
+                }
             }
         }
 
@@ -260,13 +263,14 @@ class TestCorrectnessChecks:
                 "domains": {},
                 "summary": {"coverage_percent": 100.0}
             },
-            "claims_data": {
-                "claims": [
-                    {"claim": "Allergen-Free Product"}
-                ]
+            "compliance_data": {
+                "allergen_free_claims": ["allergen_free"]
             },
-            "allergen_data": {
-                "detected_allergens": []
+            "contaminant_data": {
+                "allergens": {
+                    "found": False,
+                    "allergens": []
+                }
             }
         }
 
@@ -320,12 +324,10 @@ class TestCorrectnessChecks:
                 "domains": {},
                 "summary": {"coverage_percent": 100.0}
             },
-            "claims_data": {
-                "claims": [
-                    {"claim": "Cures joint pain"},
-                    {"claim": "Supports healthy joints"}  # This is OK
-                ]
-            }
+            "claims": [
+                {"claim": "Cures joint pain"},
+                {"claim": "Supports healthy joints"}  # This is OK
+            ]
         }
 
         result = gate.check_product(product)
@@ -337,6 +339,27 @@ class TestCorrectnessChecks:
         ]
         assert len(violations) > 0
         assert "cure" in violations[0].details.get("keyword", "")
+
+    def test_claim_scope_violation_detects_langual_description(self, gate):
+        """Detect scope violations when DSLD claims use langualCodeDescription."""
+        product = {
+            "dsld_id": 12345,
+            "match_ledger": {
+                "domains": {},
+                "summary": {"coverage_percent": 100.0}
+            },
+            "claims": [
+                {"langualCodeDescription": "Treats chronic inflammation"}
+            ]
+        }
+
+        result = gate.check_product(product)
+        violations = [
+            i for i in result.correctness_issues
+            if i.issue_type == "claim_violation"
+        ]
+        assert len(violations) > 0
+        assert "treat" in violations[0].details.get("keyword", "")
 
 
 class TestBatchProcessing:

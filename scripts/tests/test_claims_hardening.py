@@ -308,56 +308,13 @@ class TestFeatureGates:
             scorer.section_b_config = scorer.config.get('section_B_safety_purity', {})
             return scorer
 
-    @pytest.mark.skip(reason="Scorer rewritten: _score_b3_certifications removed in v3.0 scorer")
     def test_gates_off_uses_legacy(self, scorer_gates_off):
-        """When gates OFF, B3 scoring uses legacy detection."""
-        cert_data = {
-            "third_party_programs": {
-                "programs": [{"name": "USP Verified", "verified": True}],
-                "count": 1
-            },
-            "gmp": {"claimed": True},
-            "batch_traceability": {"qualifies": True},
-            "evidence_based": {
-                "third_party_programs": [{"score_eligible": True, "points_if_eligible": 5}],
-                "gmp_certifications": [],
-                "batch_traceability": []
-            }
-        }
-        b3_config = scorer_gates_off.section_b_config.get('B3_quality_certifications', {})
+        """Legacy B3 method was removed; scorer should expose only v3 API."""
+        assert not hasattr(scorer_gates_off, "_score_b3_certifications")
 
-        score, notes, tp_programs = scorer_gates_off._score_b3_certifications(cert_data, b3_config)
-
-        # Should use legacy data, not evidence-based
-        assert score > 0
-        assert any("Third-party" in n and "[evidence-based]" not in n for n in notes)
-
-    @pytest.mark.skip(reason="Scorer rewritten: _score_b3_certifications removed in v3.0 scorer")
     def test_gates_on_uses_evidence(self, scorer_gates_on):
-        """When gates ON, B3 scoring uses evidence-based detection."""
-        cert_data = {
-            "third_party_programs": {"programs": [], "count": 0},
-            "gmp": {"claimed": False},
-            "batch_traceability": {"qualifies": False},
-            "evidence_based": {
-                "third_party_programs": [{
-                    "score_eligible": True,
-                    "points_if_eligible": 5,
-                    "display_name": "USP Verified",
-                    "dedupe_key": "third_party_program:usp_verified",
-                    "rule_id": "CERT_USP_VERIFIED"
-                }],
-                "gmp_certifications": [],
-                "batch_traceability": []
-            }
-        }
-        b3_config = scorer_gates_on.section_b_config.get('B3_quality_certifications', {})
-
-        score, notes, tp_programs = scorer_gates_on._score_b3_certifications(cert_data, b3_config)
-
-        # Should use evidence-based data
-        assert score == 5
-        assert any("[evidence-based]" in n for n in notes)
+        """Legacy B3 method was removed; scorer should expose only v3 API."""
+        assert not hasattr(scorer_gates_on, "_score_b3_certifications")
 
 
 class TestContractValidation:

@@ -342,14 +342,16 @@ class TestBug1TierCCaseInsensitive:
 
     def test_same_ingredient_all_case_variants_skip_identically(self, normalizer):
         """Same ingredient with different casing should all skip identically"""
-        if not normalizer._enable_case_insensitive_skip:
-            pytest.skip("Tier C not enabled in config")
-
-        # "DELETE" is in skip_exact - all case variants should skip with Tier C
+        # "DELETE" is in skip_exact.
+        # With Tier C enabled: all case variants should skip.
+        # With Tier C disabled: only exact-case Tier A behavior is guaranteed.
         assert normalizer._should_skip_ingredient("DELETE") is True
-        assert normalizer._should_skip_ingredient("delete") is True
-        assert normalizer._should_skip_ingredient("Delete") is True
-        assert normalizer._should_skip_ingredient("DeLeTe") is True
+        if normalizer._enable_case_insensitive_skip:
+            assert normalizer._should_skip_ingredient("delete") is True
+            assert normalizer._should_skip_ingredient("Delete") is True
+            assert normalizer._should_skip_ingredient("DeLeTe") is True
+        else:
+            assert normalizer._should_skip_ingredient("delete") is False
 
     def test_multi_space_variants_skip(self, normalizer):
         """Multi-space variants should skip via Tier B normalization"""

@@ -45,7 +45,7 @@ try:
         SCORE_BASIS_SAFETY_BLOCK,
         SCORE_BASIS_SCORING_ERROR,
     )
-except Exception:
+except ImportError:
     SCORING_STATUS_BLOCKED = "blocked"
     SCORING_STATUS_NOT_APPLICABLE = "not_applicable"
     SCORING_STATUS_SCORED = "scored"
@@ -63,7 +63,10 @@ def as_float(value: Any, default: Optional[float] = 0.0) -> Optional[float]:
     if value is None:
         return default
     try:
-        return float(value)
+        result = float(value)
+        if not math.isfinite(result):
+            return default
+        return result
     except (TypeError, ValueError):
         return default
 
@@ -496,14 +499,26 @@ class SupplementScorer:
             return 0.0
 
         avg_raw = sum(s * w for s, w in weighted_values) / denom
+        a1_cfg = self.config.get("section_A_ingredient_quality", {}).get("A1_bioavailability_form", {})
         if supp_type == "multivitamin":
-            avg_raw = 0.7 * avg_raw + 0.3 * 9.0
+            smoothing = as_float(a1_cfg.get("multivitamin_smoothing_factor"), 0.7)
+            if smoothing is None or smoothing < 0.0 or smoothing > 1.0:
+                smoothing = 0.7
+            floor = as_float(a1_cfg.get("multivitamin_floor"), 9.0)
+            if floor is None:
+                floor = 9.0
+            avg_raw = smoothing * avg_raw + (1.0 - smoothing) * floor
 
         max_points = as_float(
-            self.config.get("section_A_ingredient_quality", {}).get("A1_bioavailability_form", {}).get("max"),
+            a1_cfg.get("max"),
             15.0,
         ) or 15.0
-        return clamp(0.0, max_points, (avg_raw / 18.0) * max_points)
+        range_score_field = str(a1_cfg.get("range_score_field", "0-18"))
+        range_match = re.search(r"(\d+(?:\.\d+)?)\s*$", range_score_field)
+        range_max = as_float(range_match.group(1), 18.0) if range_match else 18.0
+        if range_max is None or range_max <= 0:
+            range_max = 18.0
+        return clamp(0.0, max_points, (avg_raw / range_max) * max_points)
 
     def _score_a2(self, product: Dict[str, Any]) -> float:
         premium_keys = set()
@@ -2051,7 +2066,7 @@ class SupplementScorer:
             scoring_status = SCORING_STATUS_BLOCKED
             score_basis = SCORE_BASIS_SAFETY_BLOCK
         elif verdict == "NOT_SCORED":
-            scoring_status = "not_scored"
+            scoring_status = SCORING_STATUS_NOT_APPLICABLE
             score_basis = SCORE_BASIS_NO_SCORABLE
         else:
             scoring_status = SCORING_STATUS_SCORED
@@ -2385,9 +2400,22 @@ class SupplementScorer:
         scored_dir = os.path.join(output_dir, "scored")
         os.makedirs(scored_dir, exist_ok=True)
 
+        import tempfile
+
         output_file = os.path.join(scored_dir, f"scored_{base_name}.json")
-        with open(output_file, "w", encoding="utf-8") as f:
-            json.dump(scored_products, f, indent=2, ensure_ascii=False)
+        tmp_fd, tmp_path = tempfile.mkstemp(
+            dir=scored_dir, suffix='.tmp', prefix='scored_'
+        )
+        try:
+            with os.fdopen(tmp_fd, 'w', encoding='utf-8') as f:
+                json.dump(scored_products, f, indent=2, ensure_ascii=False)
+                f.flush()
+                os.fsync(f.fileno())
+            os.replace(tmp_path, output_file)
+        except Exception:
+            if os.path.exists(tmp_path):
+                os.unlink(tmp_path)
+            raise
 
         numeric_scores = [p["score_80"] for p in scored_products if p.get("score_80") is not None]
         avg_80 = sum(numeric_scores) / len(numeric_scores) if numeric_scores else 0.0
@@ -2427,9 +2455,9 @@ class SupplementScorer:
 
         start_time = datetime.now(timezone.utc)
 
-        all_scores: List[float] = []
         verdict_distribution: Dict[str, int] = defaultdict(int)
         total_products = 0
+        total_score_80 = 0.0
 
         use_progress = (
             self.config.get("processing", {}).get("show_progress_bar", True)
@@ -2441,12 +2469,12 @@ class SupplementScorer:
         for input_file in iterator:
             batch_stats = self.process_batch(input_file, output_dir)
             total_products += batch_stats["total_products"]
-            all_scores.append(batch_stats["average_score_80"])
+            total_score_80 += batch_stats["average_score_80"] * batch_stats["total_products"]
             for verdict, count in batch_stats.get("verdict_distribution", {}).items():
                 verdict_distribution[verdict] += count
 
-        overall_avg_80 = sum(all_scores) / len(all_scores) if all_scores else 0.0
-        overall_avg_100 = (overall_avg_80 / 80.0) * 100.0 if all_scores else 0.0
+        overall_avg_80 = total_score_80 / total_products if total_products else 0.0
+        overall_avg_100 = (overall_avg_80 / 80.0) * 100.0 if total_products else 0.0
 
         summary = {
             "processing_info": {

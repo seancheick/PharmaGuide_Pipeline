@@ -462,7 +462,7 @@ def migrate_file(dry_run: bool = False) -> Dict:
         print(f"New file saved to: {OUTPUT_FILE}")
         print("\nNext steps:")
         print("1. Review the migrated file")
-        print("2. Run validation: python validate_json_files.py")
+        print("2. Run validation: python validate_database.py")
         print("3. Run tests: pytest tests/test_banned_schema_v3.py -v")
         print("4. If satisfied, replace original: mv banned_recalled_ingredients_v3.json banned_recalled_ingredients.json")
 

@@ -142,7 +142,7 @@ class DSLDValidator:
         # Note: Discontinued status is informational only and should not trigger review
         # Products can still be sold/scanned even if discontinued by manufacturer
             
-        return list(set(issues))  # Remove duplicates
+        return sorted(set(issues))  # Remove duplicates, deterministic order
     
     @staticmethod
     def normalize_upc(upc_sku: str) -> Tuple[str, str]:
@@ -211,7 +211,7 @@ class DSLDValidator:
         try:
             datetime.fromisoformat(date_str.replace('Z', '+00:00'))
             return True
-        except:
+        except (ValueError, TypeError, AttributeError):
             return False
     
     @staticmethod

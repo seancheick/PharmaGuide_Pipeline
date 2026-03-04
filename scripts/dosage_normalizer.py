@@ -464,10 +464,11 @@ class DosageNormalizer:
             try:
                 if '/' in quantity:  # Handle fractions like "1/2"
                     parts = quantity.split('/')
-                    quantity = float(parts[0]) / float(parts[1])
+                    denom = float(parts[1])
+                    quantity = float(parts[0]) / denom if denom != 0 else 1
                 else:
                     quantity = float(quantity.replace(',', ''))
-            except ValueError:
+            except (ValueError, ZeroDivisionError):
                 quantity = 1
 
         return ServingBasis(

@@ -20,6 +20,7 @@ Version: 3.0.0
 """
 
 import copy
+import fnmatch
 import json
 import os
 import sys
@@ -288,6 +289,14 @@ class SupplementEnricherV3:
         """Initialize enrichment system with configuration"""
         self.logger = self._setup_logging()
         self.config = self._load_config(config_path)
+        self._apply_logging_config()
+        self.company_fuzzy_threshold = self._resolve_company_fuzzy_threshold()
+        # Per-product ephemeral cache for repeated text aggregation hot path.
+        self._product_text_cache_enabled = False
+        self._product_text_cache: Dict[int, str] = {}
+        self._product_text_lower_cache: Dict[int, str] = {}
+        # Per-quality-map cache: normalized context term -> preferred parent key.
+        self._quality_parent_context_index_cache: Dict[int, Dict[str, str]] = {}
         self.databases = {}
         self._load_all_databases()
         self._compile_patterns()
@@ -373,6 +382,40 @@ class SupplementEnricherV3:
         except (IOError, OSError) as e:
             self.logger.error(f"Failed to read config file {config_path}: {e}")
             return self._default_config()
+
+    def _resolve_company_fuzzy_threshold(self) -> float:
+        """Resolve company fuzzy threshold from config, normalizing to 0-1."""
+        raw_threshold = self.config.get("processing_config", {}).get("fuzzy_threshold", 90)
+        try:
+            threshold = float(raw_threshold)
+        except (TypeError, ValueError):
+            self.logger.warning(
+                "Invalid processing_config.fuzzy_threshold=%r; defaulting to 90",
+                raw_threshold,
+            )
+            threshold = 90.0
+
+        if threshold > 1.0:
+            threshold = threshold / 100.0
+
+        if threshold < 0.0 or threshold > 1.0:
+            self.logger.warning(
+                "Out-of-range fuzzy threshold %.3f; defaulting to 0.90", threshold
+            )
+            return 0.90
+
+        return threshold
+
+    def _apply_logging_config(self) -> None:
+        """Apply config-driven logging level controls."""
+        processing_cfg = self.config.get("processing_config", {})
+        if not processing_cfg.get("enable_logging", True):
+            self.logger.setLevel(logging.CRITICAL)
+            return
+
+        level_name = str(processing_cfg.get("log_level", "INFO")).upper()
+        level = getattr(logging, level_name, logging.INFO)
+        self.logger.setLevel(level)
 
     def _default_config(self) -> Dict:
         """Return default configuration"""
@@ -989,7 +1032,12 @@ class SupplementEnricherV3:
             'percent_share': percent_share
         }
 
-    def _fuzzy_company_match(self, name1: str, name2: str, threshold: float = 0.90) -> Tuple[bool, float]:
+    def _fuzzy_company_match(
+        self,
+        name1: str,
+        name2: str,
+        threshold: Optional[float] = None
+    ) -> Tuple[bool, float]:
         """
         Fuzzy match company names using best available method.
         Returns (is_match, similarity_score).
@@ -1001,6 +1049,14 @@ class SupplementEnricherV3:
         """
         if not name1 or not name2:
             return False, 0.0
+        if not self.config.get("processing_config", {}).get("enable_fuzzy_matching", True):
+            return False, 0.0
+
+        if threshold is None:
+            threshold = self.company_fuzzy_threshold
+        if threshold > 1.0:
+            threshold = threshold / 100.0
+        threshold = max(0.0, min(1.0, threshold))
 
         # Normalize company names (removes LLC, Inc, etc.)
         norm1 = self._normalize_company_name(name1)
@@ -1515,6 +1571,16 @@ class SupplementEnricherV3:
 
     def _get_all_product_text(self, product: Dict) -> str:
         """Combine all product text fields for pattern matching"""
+        cache_enabled = bool(getattr(self, "_product_text_cache_enabled", False))
+        if not hasattr(self, "_product_text_cache") or not isinstance(self._product_text_cache, dict):
+            self._product_text_cache = {}
+
+        cache_key = id(product)
+        if cache_enabled:
+            cached = self._product_text_cache.get(cache_key)
+            if cached is not None:
+                return cached
+
         texts = [
             product.get('fullName', '') or '',
             product.get('brandName', '') or '',
@@ -1557,7 +1623,27 @@ class SupplementEnricherV3:
             texts.append(ing.get('notes', '') or '')
             texts.append(ing.get('harvestMethod', '') or '')
 
-        return ' '.join(filter(None, texts))
+        combined = ' '.join(filter(None, texts))
+        if cache_enabled:
+            self._product_text_cache[cache_key] = combined
+        return combined
+
+    def _get_all_product_text_lower(self, product: Dict) -> str:
+        """Cached lowercase variant of combined product text."""
+        cache_enabled = bool(getattr(self, "_product_text_cache_enabled", False))
+        if not hasattr(self, "_product_text_lower_cache") or not isinstance(self._product_text_lower_cache, dict):
+            self._product_text_lower_cache = {}
+
+        cache_key = id(product)
+        if cache_enabled:
+            cached = self._product_text_lower_cache.get(cache_key)
+            if cached is not None:
+                return cached
+
+        lowered = self._get_all_product_text(product).lower()
+        if cache_enabled:
+            self._product_text_lower_cache[cache_key] = lowered
+        return lowered
 
     # =========================================================================
     # SECTION A: INGREDIENT QUALITY DATA COLLECTORS
@@ -2897,21 +2983,9 @@ class SupplementEnricherV3:
         preferred_parent = None
         base_name = form_info.get('base_name', '')
         if base_name:
-            base_norm = self._normalize_text(base_name)
-            for parent_key, parent_data in quality_map.items():
-                if parent_key.startswith('_') or not isinstance(parent_data, dict):
-                    continue
-                parent_std = self._normalize_text(parent_data.get('standard_name', ''))
-                if base_norm == parent_std or base_norm == parent_key:
-                    preferred_parent = parent_key
-                    break
-                # Also check parent aliases
-                for alias in parent_data.get('aliases', []):
-                    if base_norm == self._normalize_text(alias):
-                        preferred_parent = parent_key
-                        break
-                if preferred_parent:
-                    break
+            preferred_parent = self._infer_preferred_parent_from_context_cached(
+                base_name, quality_map
+            )
 
         matched_forms = []
         unmapped_forms = []
@@ -3005,8 +3079,12 @@ class SupplementEnricherV3:
                 f['score'] * f['percent_share'] for f in matched_forms
             ) / total_weight
         else:
-            final_bio_score = sum(f['bio_score'] for f in matched_forms) / len(matched_forms)
-            final_score = sum(f['score'] for f in matched_forms) / len(matched_forms)
+            if matched_forms:
+                final_bio_score = sum(f['bio_score'] for f in matched_forms) / len(matched_forms)
+                final_score = sum(f['score'] for f in matched_forms) / len(matched_forms)
+            else:
+                final_bio_score = 5.0  # Conservative fallback (unspecified)
+                final_score = 5.0
 
         # Round to 1 decimal place for consistency
         final_bio_score = round(final_bio_score, 1)
@@ -3329,22 +3407,6 @@ class SupplementEnricherV3:
                 if stripped and stripped != base_name:
                     base_name = stripped
 
-        def _infer_preferred_parent_from_context(context_name: Optional[str]) -> Optional[str]:
-            """Resolve parent key from contextual ingredient naming (std/base/raw)."""
-            context_norm = self._normalize_text(context_name or "")
-            if not context_norm:
-                return None
-            for parent_key, parent_data in quality_map.items():
-                if parent_key.startswith("_") or not isinstance(parent_data, dict):
-                    continue
-                parent_std = self._normalize_text(parent_data.get('standard_name', ''))
-                if context_norm == parent_std or context_norm == self._normalize_text(parent_key):
-                    return parent_key
-                for alias in parent_data.get('aliases', []):
-                    if context_norm == self._normalize_text(alias):
-                        return parent_key
-            return None
-
         def _resolve_compound_parent_override(
             ing_norm_value: str,
             std_norm_value: str,
@@ -3381,7 +3443,9 @@ class SupplementEnricherV3:
         # under multiple parents (e.g., calcium pantothenate under calcium and B5).
         if not preferred_parent:
             for context_name in (std_name, base_name, ing_name):
-                inferred_parent = _infer_preferred_parent_from_context(context_name)
+                inferred_parent = self._infer_preferred_parent_from_context_cached(
+                    context_name, quality_map
+                )
                 if inferred_parent:
                     preferred_parent = inferred_parent
                     break
@@ -4059,7 +4123,7 @@ class SupplementEnricherV3:
         Collect enhanced delivery system data for scoring Section A3.
         """
         delivery_db = self.databases.get('enhanced_delivery', {})
-        all_text = self._get_all_product_text(product).lower()
+        all_text = self._get_all_product_text_lower(product)
         physical_state = product.get('physicalState', {}).get('langualCodeDescription', '').lower()
 
         matched_systems = []
@@ -4171,7 +4235,7 @@ class SupplementEnricherV3:
         return {
             "enhancer_present": len(found_enhancers) > 0,
             "enhancers": found_enhancers,
-            "enhanced_nutrients_present": list(set(enhanced_nutrients_present)),
+            "enhanced_nutrients_present": sorted(set(enhanced_nutrients_present)),
             "qualifies_for_bonus": qualifies
         }
 
@@ -4676,10 +4740,11 @@ class SupplementEnricherV3:
                     candidate_ing_name = product_name or ing_name
                     candidate_std_name = brand_name or std_name
                 candidate_ing_name_lower = candidate_ing_name.lower()
+                candidate_std_name_lower = candidate_std_name.lower()
 
                 banned_name = banned_item.get('standard_name', '')
                 banned_aliases = banned_item.get('aliases', [])
-                all_aliases = list(set(banned_aliases))
+                all_aliases = sorted(set(banned_aliases))
 
                 banned_id = banned_item.get('id')
                 allowlist_for = allowlist_by_id.get(banned_id, [])
@@ -4694,7 +4759,10 @@ class SupplementEnricherV3:
                 # P0: Check negative_match_terms (reduces false positives)
                 match_rules = banned_item.get('match_rules', {})
                 negative_terms = match_rules.get('negative_match_terms', [])
-                if negative_terms and self._has_negative_match_term(candidate_ing_name_lower, negative_terms):
+                if negative_terms and (
+                    self._has_negative_match_term(candidate_ing_name_lower, negative_terms)
+                    or self._has_negative_match_term(candidate_std_name_lower, negative_terms)
+                ):
                     continue
 
                 match_method = None
@@ -4742,6 +4810,13 @@ class SupplementEnricherV3:
                         allowlist_id = allowlist_match.get("allowlist_id")
 
                 if match_method:
+                    # Guardrail: do not flag explicitly negated mentions like
+                    # "X-free" / "free from X" / "contains no X".
+                    negation_target = matched_variant or banned_name
+                    if self._is_negated_match_phrase(candidate_ing_name_lower, negation_target) or \
+                       self._is_negated_match_phrase(candidate_std_name_lower, negation_target):
+                        continue
+
                     match_type = match_method
                     if match_type not in {"exact", "alias", "token_bounded"}:
                         mm = str(match_method).lower()
@@ -4803,6 +4878,24 @@ class SupplementEnricherV3:
             if term.lower() in text_lower:
                 return True
         return False
+
+    def _is_negated_match_phrase(self, text: str, matched_term: str) -> bool:
+        """Detect explicit negation patterns around a matched term."""
+        term = (matched_term or "").strip().lower()
+        if not text or not term:
+            return False
+
+        text_lower = text.lower()
+        escaped_term = re.escape(term)
+        negation_patterns = (
+            rf"\b{escaped_term}\s*-\s*free\b",
+            rf"\bfree\s+from\s+{escaped_term}\b",
+            rf"\bcontains?\s+no\s+{escaped_term}\b",
+            rf"\bno\s+{escaped_term}\b",
+            rf"\bwithout\s+{escaped_term}\b",
+            rf"\bnon[-\s]+{escaped_term}\b",
+        )
+        return any(re.search(pattern, text_lower) for pattern in negation_patterns)
 
     @property
     def NATURAL_COLOR_INDICATORS(self) -> List[str]:
@@ -5199,7 +5292,7 @@ class SupplementEnricherV3:
         allergen_db = self.databases.get('allergens', {})
         allergen_list = allergen_db.get('common_allergens', allergen_db.get('allergens', []))
 
-        all_text = self._get_all_product_text(product).lower()
+        all_text = self._get_all_product_text_lower(product)
 
         # Collect allergens from all sources
         all_found = []
@@ -5319,7 +5412,7 @@ class SupplementEnricherV3:
             contaminant_data: Pre-collected contaminant data to avoid double-collection
         """
         target_groups = product.get('targetGroups', [])
-        all_text = self._get_all_product_text(product).lower()
+        all_text = self._get_all_product_text_lower(product)
 
         # Extract claims from target groups and text
         allergen_free_claims = []
@@ -6352,7 +6445,9 @@ class SupplementEnricherV3:
                     })
             except Exception as e:
                 self.logger.warning(
-                    f"ProprietaryBlendDetector failed: {e}"
+                    f"ProprietaryBlendDetector failed for product "
+                    f"{product.get('dsld_id', 'unknown')}: {e} — "
+                    f"B5 blend penalty will NOT be applied"
                 )
 
         # Step 2: Collect cleaning blends (indicator-based from proprietaryBlend flags)
@@ -7023,7 +7118,7 @@ class SupplementEnricherV3:
 
     def _brand_mentioned(self, study_name: str, aliases: List[str], product: Dict) -> bool:
         """Check if brand is explicitly mentioned in product"""
-        all_text = self._get_all_product_text(product).lower()
+        all_text = self._get_all_product_text_lower(product)
 
         terms = [study_name.lower()] + [a.lower() for a in aliases]
         return any(term in all_text for term in terms)
@@ -8428,7 +8523,7 @@ class SupplementEnricherV3:
                     found.append(ing.get('name', ''))
                     break
 
-        return list(set(found))
+        return sorted(set(found))
 
     def _find_sodium_in_ingredients(self, product: Dict) -> List[str]:
         """Find sodium-containing ingredients in the product."""
@@ -8465,7 +8560,7 @@ class SupplementEnricherV3:
                         found.append(f"{ing.get('name', '')} (trace)")
                         break
 
-        return list(set(found))
+        return sorted(set(found))
 
     def _check_problematic_sweeteners(self, product: Dict) -> Dict:
         """
@@ -8535,10 +8630,10 @@ class SupplementEnricherV3:
                     break
 
         return {
-            "high_glycemic": list(set(found_high_glycemic)),
-            "artificial": list(set(found_artificial)),
-            "sugar_alcohols": list(set(found_sugar_alcohols)),
-            "safer_alternatives": list(set(found_safer)),
+            "high_glycemic": sorted(set(found_high_glycemic)),
+            "artificial": sorted(set(found_artificial)),
+            "sugar_alcohols": sorted(set(found_sugar_alcohols)),
+            "safer_alternatives": sorted(set(found_safer)),
             "has_high_glycemic": len(found_high_glycemic) > 0,
             "has_artificial": len(found_artificial) > 0,
             "has_sugar_alcohols": len(found_sugar_alcohols) > 0,
@@ -8810,7 +8905,17 @@ class SupplementEnricherV3:
                     mass_from_conv = self._convert_mass(float(conv_value), conv_unit, tgt)
                     if mass_from_conv is not None:
                         return mass_from_conv, None
-            except Exception:
+            except Exception as e:
+                self.logger.warning(
+                    "Dosage conversion exception for ingredient='%s' standard='%s' "
+                    "amount=%s from_unit='%s' target_unit='%s': %s",
+                    ingredient_name,
+                    standard_name,
+                    amount,
+                    src,
+                    tgt,
+                    e,
+                )
                 return None, "conversion_exception"
 
         return None, "no_conversion_rule"
@@ -9558,9 +9663,18 @@ class SupplementEnricherV3:
             product["enrichment_error"] = "; ".join(validation_issues)
             return product, issues
 
+        self._product_text_cache_enabled = True
+        self._product_text_cache.clear()
+        self._product_text_lower_cache.clear()
+
         try:
             # Start with all cleaned data
             enriched = dict(product)
+
+            # Strip PII: contacts contain phone, address, email
+            # Manufacturer name is already extracted to manufacturer_data
+            if 'contacts' in enriched:
+                del enriched['contacts']
 
             # Map DSLD field names to scoring-expected names for consistency
             if 'id' in enriched and 'dsld_id' not in enriched:
@@ -9717,6 +9831,11 @@ class SupplementEnricherV3:
             product["enrichment_error"] = str(e)
 
             return product, issues
+        finally:
+            # Prevent cache growth across products and avoid stale reads outside this call.
+            self._product_text_cache_enabled = False
+            self._product_text_cache.clear()
+            self._product_text_lower_cache.clear()
 
     def _calculate_completeness(self, enriched: Dict) -> float:
         """Calculate data completeness percentage"""
@@ -9762,6 +9881,51 @@ class SupplementEnricherV3:
         entry['base_names'].add(base_name)
         if len(entry['example_labels']) < 3 and original_label not in entry['example_labels']:
             entry['example_labels'].append(original_label)
+
+    def _build_quality_parent_context_index(self, quality_map: Dict) -> Dict[str, str]:
+        """
+        Build deterministic lookup for parent inference from normalized context terms.
+        Uses first-seen parent to match existing loop-order tie behavior.
+        """
+        index: Dict[str, str] = {}
+        for parent_key, parent_data in quality_map.items():
+            if parent_key.startswith("_") or not isinstance(parent_data, dict):
+                continue
+
+            candidates = [parent_data.get("standard_name", ""), parent_key]
+            aliases = parent_data.get("aliases", []) or []
+            if isinstance(aliases, list):
+                candidates.extend(aliases)
+
+            for raw in candidates:
+                normed = self._normalize_text(raw)
+                if normed and normed not in index:
+                    index[normed] = parent_key
+        return index
+
+    def _infer_preferred_parent_from_context_cached(
+        self, context_name: Optional[str], quality_map: Dict
+    ) -> Optional[str]:
+        """Infer preferred parent via cached normalized context index."""
+        context_norm = self._normalize_text(context_name or "")
+        if not context_norm:
+            return None
+
+        # Cache only for the primary IQM map used in production.
+        # Custom/testing maps may be mutated between calls, so keep lookup fresh.
+        primary_quality_map = self.databases.get("ingredient_quality_map", {})
+        if quality_map is not primary_quality_map:
+            return self._build_quality_parent_context_index(quality_map).get(context_norm)
+
+        cache_key = id(quality_map)
+        index = self._quality_parent_context_index_cache.get(cache_key)
+        if index is None:
+            index = self._build_quality_parent_context_index(quality_map)
+            # Prevent unbounded growth from ad-hoc test maps.
+            if len(self._quality_parent_context_index_cache) > 16:
+                self._quality_parent_context_index_cache.clear()
+            self._quality_parent_context_index_cache[cache_key] = index
+        return index.get(context_norm)
 
     def get_unmapped_forms_report(self) -> Dict:
         """
@@ -10042,7 +10206,7 @@ class SupplementEnricherV3:
                 # Record as rejected regardless of confidence - this populates rejected_manufacturer_matches
                 # for auditability of why the product didn't get manufacturer bonus
                 rejection_reason = "fuzzy_match_rejected_for_scoring"
-                if confidence < 0.90:
+                if confidence < self.company_fuzzy_threshold:
                     rejection_reason = "fuzzy_below_threshold"
                 ledger.record_rejected(
                     domain=DOMAIN_MANUFACTURER,
@@ -10142,11 +10306,17 @@ class SupplementEnricherV3:
 
             # Save outputs
             base_name = os.path.splitext(os.path.basename(input_file))[0]
+            output_cfg = self.config.get("output_structure", {})
+            enriched_folder = str(output_cfg.get("enriched_folder", "enriched")).strip() or "enriched"
+            batch_prefix = str(output_cfg.get("batch_prefix", "enriched_")).strip() or "enriched_"
+            file_extension = str(output_cfg.get("file_extension", ".json")).strip() or ".json"
+            if not file_extension.startswith("."):
+                file_extension = f".{file_extension}"
 
-            enriched_dir = os.path.join(output_dir, "enriched")
+            enriched_dir = os.path.join(output_dir, enriched_folder)
             os.makedirs(enriched_dir, exist_ok=True)
 
-            output_file = os.path.join(enriched_dir, f"enriched_{base_name}.json")
+            output_file = os.path.join(enriched_dir, f"{batch_prefix}{base_name}{file_extension}")
 
             # Atomic write: prevents partial files on crash
             self._atomic_write_json(output_file, enriched_products)
@@ -10207,10 +10377,13 @@ class SupplementEnricherV3:
         if os.path.isfile(input_path):
             input_files = [str(input_path)]
         elif os.path.isdir(input_path):
+            input_pattern = str(
+                self.config.get("paths", {}).get("input_file_pattern", "*.json")
+            ).strip() or "*.json"
             input_files = [
                 os.path.join(input_path, f)
                 for f in os.listdir(input_path)
-                if f.endswith('.json')
+                if fnmatch.fnmatch(f, input_pattern)
             ]
         else:
             raise FileNotFoundError(f"Input path not found: {input_path}")
@@ -10254,42 +10427,53 @@ class SupplementEnricherV3:
             "unmapped_ingredients": dict(self.unmapped_tracker)
         }
 
-        # Save summary
-        reports_dir = os.path.join(output_dir, "reports")
-        os.makedirs(reports_dir, exist_ok=True)
+        output_cfg = self.config.get("output_structure", {})
+        reports_folder = str(output_cfg.get("reports_folder", "reports")).strip() or "reports"
+        report_prefix = str(output_cfg.get("report_prefix", "enrichment_summary")).strip() or "enrichment_summary"
+        generate_reports = bool(self.config.get("options", {}).get("generate_reports", True))
+        summary_file = None
 
-        summary_file = os.path.join(reports_dir, f"enrichment_summary_{datetime.utcnow().strftime('%Y%m%d_%H%M%S')}.json")
+        if generate_reports:
+            reports_dir = os.path.join(output_dir, reports_folder)
+            os.makedirs(reports_dir, exist_ok=True)
 
-        # Atomic write: prevents partial files on crash
-        self._atomic_write_json(summary_file, summary)
-
-        # Save parent fallback report (all details, not just first 10)
-        if self._parent_fallback_details:
-            # Deduplicate by ingredient_normalized + parent_key for cleaner report
-            seen_fallbacks = {}
-            for fb in self._parent_fallback_details:
-                key = (fb["ingredient_normalized"], fb["parent_key"])
-                if key not in seen_fallbacks:
-                    seen_fallbacks[key] = {**fb, "occurrence_count": 1}
-                else:
-                    seen_fallbacks[key]["occurrence_count"] += 1
-            fallback_report = {
-                "total_fallback_count": len(self._parent_fallback_details),
-                "unique_fallback_count": len(seen_fallbacks),
-                "note": "These ingredients matched an IQM parent but no specific form alias. "
-                        "They fell back to the (unspecified) form with conservative scoring. "
-                        "Adding form-level aliases in IQM would improve scoring accuracy.",
-                "fallbacks": sorted(
-                    seen_fallbacks.values(),
-                    key=lambda x: (-x["occurrence_count"], x["parent_key"])
-                ),
-            }
-            fallback_file = os.path.join(reports_dir, "parent_fallback_report.json")
-            self._atomic_write_json(fallback_file, fallback_report)
-            self.logger.info(
-                f"Parent fallback report saved: {fallback_file} "
-                f"({len(seen_fallbacks)} unique, {len(self._parent_fallback_details)} total)"
+            summary_file = os.path.join(
+                reports_dir,
+                f"{report_prefix}_{datetime.utcnow().strftime('%Y%m%d_%H%M%S')}.json",
             )
+
+            # Atomic write: prevents partial files on crash
+            self._atomic_write_json(summary_file, summary)
+
+            # Save parent fallback report (all details, not just first 10)
+            if self._parent_fallback_details:
+                # Deduplicate by ingredient_normalized + parent_key for cleaner report
+                seen_fallbacks = {}
+                for fb in self._parent_fallback_details:
+                    key = (fb["ingredient_normalized"], fb["parent_key"])
+                    if key not in seen_fallbacks:
+                        seen_fallbacks[key] = {**fb, "occurrence_count": 1}
+                    else:
+                        seen_fallbacks[key]["occurrence_count"] += 1
+                fallback_report = {
+                    "total_fallback_count": len(self._parent_fallback_details),
+                    "unique_fallback_count": len(seen_fallbacks),
+                    "note": "These ingredients matched an IQM parent but no specific form alias. "
+                            "They fell back to the (unspecified) form with conservative scoring. "
+                            "Adding form-level aliases in IQM would improve scoring accuracy.",
+                    "fallbacks": sorted(
+                        seen_fallbacks.values(),
+                        key=lambda x: (-x["occurrence_count"], x["parent_key"])
+                    ),
+                }
+                fallback_file = os.path.join(reports_dir, "parent_fallback_report.json")
+                self._atomic_write_json(fallback_file, fallback_report)
+                self.logger.info(
+                    f"Parent fallback report saved: {fallback_file} "
+                    f"({len(seen_fallbacks)} unique, {len(self._parent_fallback_details)} total)"
+                )
+        else:
+            self.logger.info("Report generation disabled by config option: options.generate_reports=false")
 
         self.logger.info("=" * 50)
         self.logger.info("ENRICHMENT COMPLETE")
@@ -10300,7 +10484,8 @@ class SupplementEnricherV3:
             f"Parent fallback count: {self.match_counters['parent_fallback_count']}"
         )
         self.logger.info(f"Duration: {duration:.2f}s")
-        self.logger.info(f"Summary saved: {summary_file}")
+        if summary_file:
+            self.logger.info(f"Summary saved: {summary_file}")
         self.logger.info("=" * 50)
 
         return summary

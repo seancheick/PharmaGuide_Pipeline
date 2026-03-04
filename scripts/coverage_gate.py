@@ -500,15 +500,18 @@ class CoverageGate:
         """Check for contradictions between claims and detected allergens."""
         issues = []
 
-        # Get claims
-        claim_data = product.get("claims_data", {})
-        claims = claim_data.get("claims", [])
-        claim_texts = [c.get("claim", "").lower() for c in claims if c.get("claim")]
+        # Get claims from enricher's compliance_data (not "claims_data")
+        compliance = product.get("compliance_data", {})
+        # allergen_free_claims is a list of strings (e.g. ["gluten_free", "dairy_free"])
+        allergen_free_claims = compliance.get("allergen_free_claims", [])
+        # Normalize identifiers: "allergen_free" → "allergen free" for pattern matching
+        claim_texts = [str(c).lower().replace('_', ' ').replace('-', ' ') for c in allergen_free_claims if c]
 
-        # Get allergens
-        allergen_data = product.get("allergen_data", {})
-        detected_allergens = allergen_data.get("detected_allergens", [])
-        allergen_names = [a.get("allergen_name", "").lower() for a in detected_allergens]
+        # Get allergens from enricher's contaminant_data (not "allergen_data")
+        contaminant = product.get("contaminant_data", {})
+        allergen_info = contaminant.get("allergens", {})
+        detected_allergens = allergen_info.get("allergens", [])
+        allergen_names = [a.get("allergen_name", "").lower() for a in detected_allergens if a.get("allergen_name")]
 
         # Check "allergen-free" claims when allergens detected
         for claim in claim_texts:
@@ -587,8 +590,13 @@ class CoverageGate:
         """Check for claims that exceed allowed scope."""
         issues = []
 
-        claim_data = product.get("claims_data", {})
-        claims = claim_data.get("claims", [])
+        # Check claims from multiple sources:
+        # 1. Root-level DSLD claims (structure/function claims from label)
+        # 2. Enricher's unsubstantiated_claims detection
+        claims = list(product.get("claims", []))
+        unsub = product.get("evidence_data", {}).get("unsubstantiated_claims", {})
+        if unsub.get("claims"):
+            claims.extend(unsub["claims"])
 
         # Check for structure/function claims that might be drug claims
         drug_claim_keywords = [
@@ -596,8 +604,28 @@ class CoverageGate:
             "mitigate", "therapeutic"
         ]
 
+        def _extract_claim_text(claim: Any) -> Tuple[str, Optional[str]]:
+            """Normalize heterogeneous claim payloads into text + type."""
+            if isinstance(claim, str):
+                return claim, None
+            if isinstance(claim, dict):
+                text = (
+                    claim.get("claim")
+                    or claim.get("text")
+                    or claim.get("langualCodeDescription")
+                    or claim.get("notes")
+                    or claim.get("type")
+                    or ""
+                )
+                claim_type = claim.get("claim_type") or claim.get("type")
+                return str(text), str(claim_type) if claim_type else None
+            return "", None
+
         for claim in claims:
-            claim_text = claim.get("claim", "").lower()
+            claim_text_raw, claim_type = _extract_claim_text(claim)
+            claim_text = claim_text_raw.lower()
+            if not claim_text:
+                continue
 
             for keyword in drug_claim_keywords:
                 if keyword in claim_text:
@@ -606,9 +634,9 @@ class CoverageGate:
                         severity="WARN",
                         description=f"Claim may exceed allowed scope (potential drug claim): '{keyword}' found",
                         details={
-                            "claim": claim.get("claim"),
+                            "claim": claim_text_raw,
                             "keyword": keyword,
-                            "claim_type": claim.get("claim_type")
+                            "claim_type": claim_type
                         }
                     ))
                     break  # One warning per claim

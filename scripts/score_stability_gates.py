@@ -182,6 +182,7 @@ def main() -> int:
         curr_count = current_trigger_counts.get(trigger, 0)
         drift = round(curr_rate - base_rate, 2)
         count_drift = curr_count - base_count
+        rate_applicable = base_count >= args.min_baseline_count_for_rate
         trigger_drift[trigger] = {
             "baseline_rate": base_rate,
             "current_rate": curr_rate,
@@ -191,7 +192,6 @@ def main() -> int:
             "count_drift": count_drift,
             "rate_applicable": rate_applicable,
         }
-        rate_applicable = base_count >= args.min_baseline_count_for_rate
         if rate_applicable:
             trigger_gate = (
                 abs(drift) > args.trigger_rate_threshold and

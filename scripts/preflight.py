@@ -129,8 +129,8 @@ DEPRECATED_FIELDS = {
     "published_support",
 }
 
-# Database files expected to have _metadata wrapper with schema_version 4.x
-SCHEMA_V4_DATABASES = [
+# Database files expected to have _metadata wrapper with schema_version 5.x
+SCHEMA_V5_DATABASES = [
     "absorption_enhancers.json",
     "allergens.json",
     "backed_clinical_studies.json",
@@ -167,10 +167,10 @@ SCHEMA_V4_DATABASES = [
 
 def validate_database_schema(data_dir: Path = DATA_DIR) -> Dict:
     """
-    Validate that JSON database files conform to v4.0.0 schema conventions.
+    Validate that JSON database files conform to v5.x schema conventions.
 
     Checks:
-    - _metadata wrapper present with schema_version starting with '4.'
+    - _metadata wrapper present with schema_version starting with '5.'
     - No deprecated fields (risk_level, synonyms, canonical_name, database_info, violation_severity, published_support)
     - Entity entries have standard_name where applicable
 
@@ -179,7 +179,7 @@ def validate_database_schema(data_dir: Path = DATA_DIR) -> Dict:
     """
     results = {"passed": [], "failed": [], "ok": True}
 
-    for filename in SCHEMA_V4_DATABASES:
+    for filename in SCHEMA_V5_DATABASES:
         path = data_dir / filename
         if not path.exists():
             continue  # File existence is checked separately
@@ -200,8 +200,8 @@ def validate_database_schema(data_dir: Path = DATA_DIR) -> Dict:
             issues.append("Missing _metadata wrapper")
         else:
             sv = metadata.get("schema_version", "")
-            if not str(sv).startswith("4."):
-                issues.append(f"schema_version '{sv}' does not start with '4.'")
+            if not str(sv).startswith("5."):
+                issues.append(f"schema_version '{sv}' does not start with '5.'")
 
         # Check for deprecated fields at root level
         for dep in DEPRECATED_FIELDS:
@@ -383,8 +383,10 @@ def run_preflight(verbose: bool = False, quick: bool = False) -> Dict:
         else:
             results["scripts"]["failed"].append(entry)
 
-    # Validate database schemas (v4.0.0 compliance)
+    # Validate database schemas (v5.x compliance)
     schema_results = validate_database_schema()
+    # Keep both keys for backward compatibility with existing consumers.
+    results["schema_v5"] = schema_results
     results["schema_v4"] = schema_results
 
     # Compute summary
@@ -409,6 +411,7 @@ def run_preflight(verbose: bool = False, quick: bool = False) -> Dict:
         "json_valid": json_ok,
         "configs_ok": configs_ok,
         "scripts_ok": scripts_ok,
+        "schema_v5_ok": schema_ok,
         "schema_v4_ok": schema_ok,
         "all_ok": all_ok,
         "exit_code": exit_code,
@@ -461,10 +464,10 @@ def print_results(results: Dict, verbose: bool = False):
             print(f"  [ERROR] {entry['file']}: {entry['error']}")
         print()
 
-    # Schema v4.0.0 validation
-    schema = results.get("schema_v4", {})
+    # Schema v5 validation
+    schema = results.get("schema_v5", results.get("schema_v4", {}))
     if schema.get("failed") or verbose:
-        print("SCHEMA v4.0.0 VALIDATION:")
+        print("SCHEMA v5 VALIDATION:")
         if verbose:
             for filename in schema.get("passed", []):
                 print(f"  [OK] {filename}")

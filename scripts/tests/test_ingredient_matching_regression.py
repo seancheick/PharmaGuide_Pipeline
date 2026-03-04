@@ -198,9 +198,6 @@ class TestCollisionAndSubstring:
     @pytest.mark.parametrize("label_text,should_not_match", FALSE_POSITIVE_TESTS)
     def test_no_false_positive_match(self, enricher, label_text, should_not_match):
         """Test that generic/substring terms don't cause false matches."""
-        if should_not_match is None:
-            pytest.skip("No specific ingredient to test against")
-
         product = {
             "id": "TEST_FP",
             "product_name": "Test Product",
@@ -215,9 +212,14 @@ class TestCollisionAndSubstring:
             if ing.get('canonical_id')
         ]
 
-        assert should_not_match not in matched_keys, (
-            f"'{label_text}' should NOT match '{should_not_match}' but it did!"
-        )
+        if should_not_match is None:
+            assert len(matched_keys) == 0, (
+                f"'{label_text}' should not map to any scorable canonical_id, got {matched_keys}"
+            )
+        else:
+            assert should_not_match not in matched_keys, (
+                f"'{label_text}' should NOT match '{should_not_match}' but it did!"
+            )
 
     # Substring priority tests - specific should win over generic
     PRIORITY_TESTS = [

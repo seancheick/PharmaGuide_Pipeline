@@ -29,7 +29,6 @@
     "output_directory": "output_Lozenges_enriched",
     "_output_help": "Output root; script writes enriched data under output_structure.enriched_folder",
     "reference_data": "data",
-    "log_directory": "logs",
     "input_file_pattern": "*.json"
   },
   "database_paths": {
@@ -67,7 +66,6 @@
     "_collect_rda_ul_data_help": "Set true only when you need device-side Section E reference payload in enriched output",
     "enable_fuzzy_matching": true,
     "fuzzy_threshold": 85,
-    "case_sensitive": false,
     "enable_logging": true,
     "log_level": "INFO"
   },
@@ -78,16 +76,12 @@
   "output_structure": {
     "enriched_folder": "enriched",
     "reports_folder": "reports",
-    "batch_prefix": "enriched_batch_",
+    "batch_prefix": "enriched_",
     "report_prefix": "enrichment_summary",
     "file_extension": ".json"
   },
   "options": {
-    "overwrite_existing": true,
-    "create_backups": false,
-    "skip_processed_files": false,
-    "generate_reports": true,
-    "dry_run": false
+    "generate_reports": true
   },
   "ui": {
     "show_progress_bar": true

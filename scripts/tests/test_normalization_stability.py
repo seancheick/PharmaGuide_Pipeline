@@ -242,8 +242,9 @@ class TestPreprocessTextGoldenFixtures:
 
         # Prefix removal (dl-/d- preserved before alpha/beta/gamma/delta tocopherol)
         ("DL-Alpha Tocopherol", "dl-alpha tocopherol"),
-        ("D-Calcium Pantothenate", "calcium pantothenate"),
-        ("L-Theanine", "theanine"),
+        # d-/l- prefixes are chemically meaningful for these compounds
+        ("D-Calcium Pantothenate", "d-calcium pantothenate"),
+        ("L-Theanine", "l-theanine"),
         ("Natural Vitamin E", "vitamin e"),
         ("Organic Turmeric", "turmeric"),
 

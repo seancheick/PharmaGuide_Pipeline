@@ -264,7 +264,17 @@ def preprocess_text(text: str) -> str:
     # vitamin E forms (d-alpha vs dl-alpha tocopherol) and some amino acids.
     # We guard against stripping them when followed by alpha/beta/gamma/delta
     # (tocopherol stereoisomers) to preserve matching fidelity.
-    _stereo_guard = re.compile(r'^[dl]l?-(alpha|beta|gamma|delta)\b')
+    # Guard stereoisomer prefixes for tocopherols AND amino acids/sugars
+    # d-/l-/dl- prefixes are chemically meaningful for these compounds
+    _stereo_guard = re.compile(
+        r'^[dl]l?-(alpha|beta|gamma|delta'
+        r'|mannose|ribose|theanine|carnitine|glutamine|glutathione'
+        r'|methionine|phenylalanine|tryptophan|tyrosine|leucine'
+        r'|isoleucine|valine|lysine|arginine|histidine|cysteine'
+        r'|serine|threonine|alanine|proline|asparagine|aspartate'
+        r'|limonene|pinitol|chiro|glucarate|pantothenate'
+        r'|calcium|malic|tartrate)\b'
+    )
     prefixes_to_remove = [
         'dl-', 'd-', 'l-',
         'natural ', 'synthetic ', 'organic ',

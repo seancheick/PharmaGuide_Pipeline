@@ -422,8 +422,8 @@ class TestScoreNeutrality:
             "drug_class_summary": {},
             "highest_severity": "monitor",
             "data_sources": ["https://example.com/ref"],
-            "rules_version": "4.1.0",
-            "taxonomy_version": "4.1.0"
+            "rules_version": "5.0.0",
+            "taxonomy_version": "5.0.0"
         }
 
         base_result = scorer.score_product(baseline)

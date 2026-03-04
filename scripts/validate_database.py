@@ -20,7 +20,7 @@ from constants import DATA_DIR
 # Helpers
 # ---------------------------------------------------------------------------
 ISO_DATE_RE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
-REQUIRED_SCHEMA_VERSION = "4.0.0"
+REQUIRED_SCHEMA_VERSION = "5.0.0"
 SEVERITY_LEVEL_VALUES = {"critical", "high", "moderate", "low"}
 DEPRECATED_FIELDS = {
     "canonical_name",

@@ -145,8 +145,6 @@ class TestTrueNegatives:
         assert banned_id_to_avoid not in _banned_ids(enricher, safe_ingredient)
 
     # Ephedra nevadensis (Mormon tea - legal, no ephedrine)
-    # NOTE: xfail - enricher needs negative_match_terms implementation
-    @pytest.mark.xfail(reason="Enricher does not yet implement negative_match_terms")
     @pytest.mark.parametrize("safe_ingredient", [
         "ephedra nevadensis",
         "mormon tea",
@@ -165,7 +163,6 @@ class TestTrueNegatives:
     def test_igf_binding_protein_safe(self, enricher, safe_ingredient):
         assert "BANNED_IGF1" not in _banned_ids(enricher, safe_ingredient)
 
-    @pytest.mark.xfail(reason="Enricher does not yet implement negative_match_terms")
     def test_igf_binding_protein_full_name(self, enricher):
         assert "BANNED_IGF1" not in _banned_ids(enricher, "insulin-like growth factor binding protein")
 
@@ -179,8 +176,7 @@ class TestTrueNegatives:
     def test_hemp_seed_safe(self, enricher, safe_ingredient):
         assert "BANNED_CBD_US" not in _banned_ids(enricher, safe_ingredient)
 
-    # PHO-free claims - xfail until negative matching implemented
-    @pytest.mark.xfail(reason="Enricher does not yet implement negative_match_terms")
+    # PHO-free claims should not trigger PHO banned hit.
     @pytest.mark.parametrize("safe_ingredient", [
         "PHO-free",
         "contains no partially hydrogenated oils",
@@ -189,8 +185,7 @@ class TestTrueNegatives:
     def test_pho_free_claims(self, enricher, safe_ingredient):
         assert "BANNED_PHO" not in _banned_ids(enricher, safe_ingredient)
 
-    # Kava-free claims - xfail until negative matching implemented
-    @pytest.mark.xfail(reason="Enricher does not yet implement negative_match_terms")
+    # Kava-free claims
     def test_kava_free_claim(self, enricher):
         assert "RISK_KAVA" not in _banned_ids(enricher, "kava-free formula")
 

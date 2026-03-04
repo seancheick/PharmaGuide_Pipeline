@@ -2012,3 +2012,72 @@ class TestSectionDSpec:
         section_d = scorer._score_section_d(product)
         # D1=2 + D2=1 + tail=2 = 5.0
         assert section_d["score"] == pytest.approx(5.0)
+
+
+class TestScoringAggregationAndConfig:
+    @pytest.fixture
+    def scorer(self):
+        return SupplementScorer()
+
+    def test_process_all_uses_weighted_average(self, scorer, monkeypatch, tmp_path):
+        """Overall average should be weighted by products, not mean-of-means."""
+        input_dir = tmp_path / "enriched"
+        output_dir = tmp_path / "scored"
+        input_dir.mkdir(parents=True, exist_ok=True)
+        output_dir.mkdir(parents=True, exist_ok=True)
+
+        # process_all discovers JSON files by name; contents are irrelevant with monkeypatch
+        (input_dir / "batch_a.json").write_text("[]", encoding="utf-8")
+        (input_dir / "batch_b.json").write_text("[]", encoding="utf-8")
+
+        def fake_process_batch(input_file, _output_dir):
+            name = Path(input_file).name
+            if name == "batch_a.json":
+                return {
+                    "total_products": 1,
+                    "successful": 1,
+                    "average_score_80": 80.0,
+                    "average_score_100": 100.0,
+                    "verdict_distribution": {"SAFE": 1},
+                    "output_file": str(output_dir / "scored_batch_a.json"),
+                }
+            return {
+                "total_products": 9,
+                "successful": 9,
+                "average_score_80": 40.0,
+                "average_score_100": 50.0,
+                "verdict_distribution": {"SAFE": 9},
+                "output_file": str(output_dir / "scored_batch_b.json"),
+            }
+
+        monkeypatch.setattr(scorer, "process_batch", fake_process_batch)
+
+        summary = scorer.process_all(str(input_dir), str(output_dir))
+
+        assert summary["stats"]["total_products"] == 10
+        # Weighted average: (80*1 + 40*9) / 10 = 44.0
+        assert summary["stats"]["average_score_80"] == pytest.approx(44.0, rel=1e-6)
+        assert summary["stats"]["average_score_100"] == pytest.approx(55.0, rel=1e-6)
+
+    def test_a1_uses_range_score_field_from_config(self, scorer):
+        """A1 denominator should come from config range_score_field."""
+        product = make_base_product()
+        product["supplement_type"] = {"type": "targeted", "active_count": 1}
+        product["ingredient_quality_data"]["ingredients"] = [
+            {
+                "name": "Custom Nutrient",
+                "standard_name": "Custom Nutrient",
+                "score": 9,
+                "dosage_importance": 1.0,
+                "mapped": True,
+                "quantity": 100,
+                "unit": "mg",
+                "has_dose": True,
+            }
+        ]
+        scorer.config["section_A_ingredient_quality"]["A1_bioavailability_form"]["range_score_field"] = "0-9"
+        scorer.config["section_A_ingredient_quality"]["A1_bioavailability_form"]["max"] = 15
+
+        a1 = scorer._score_a1(product, "targeted")
+        # avg_raw = 9 on a 0-9 scale => full A1 max.
+        assert a1 == pytest.approx(15.0, rel=1e-6)

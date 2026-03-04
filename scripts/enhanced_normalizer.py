@@ -291,7 +291,7 @@ class EnhancedIngredientMatcher:
             unspaced_num = re.sub(r'([a-z])\s(\d+)', r'\1\2', text)
             variations.append(unspaced_num)
         
-        return list(set(variations))  # Remove duplicates
+        return sorted(set(variations))  # Remove duplicates, deterministic order
 
     def is_safe_for_fuzzy_matching(self, query: str, category: str = None) -> bool:
         """
@@ -2954,19 +2954,19 @@ class EnhancedDSLDNormalizer:
                 "labelText": {
                     "raw": self._extract_original_label_text(raw_data),  # Full raw text
                     "parsed": {
-                        "certifications": list(set(all_certifications)),
-                        "testing": list(set(all_testing)),
+                        "certifications": sorted(set(all_certifications)),
+                        "testing": sorted(set(all_testing)),
                         "origin": self._extract_origin(self._extract_original_label_text(raw_data), raw_data.get("contacts", [])),
-                        "flavor": list(set(all_flavors)) if all_flavors else [],
-                        "probioticGuarantee": list(set(all_harvest_methods)) if all_harvest_methods else [],
+                        "flavor": sorted(set(all_flavors)) if all_flavors else [],
+                        "probioticGuarantee": sorted(set(all_harvest_methods)) if all_harvest_methods else [],
                         "cleanLabelClaims": self._extract_clean_claims(self._extract_original_label_text(raw_data), all_allergen_free),
-                        "allergens": list(set(all_allergens)) if all_allergens else [],  # Actual allergens present in product (things it CONTAINS)
-                        "allergenFree": list(set(all_allergen_free)) if all_allergen_free else [],  # Allergen-free claims (things it does NOT contain)
-                        "warnings": list(set(all_warnings)),
+                        "allergens": sorted(set(all_allergens)) if all_allergens else [],  # Actual allergens present in product (things it CONTAINS)
+                        "allergenFree": sorted(set(all_allergen_free)) if all_allergen_free else [],  # Allergen-free claims (things it does NOT contain)
+                        "warnings": sorted(set(all_warnings)),
                         "storage": self._extract_storage(statements),
                         "directions": self._extract_directions(statements),
-                        "marketingClaims": list(set(all_marketing_claims)) if all_marketing_claims else [],
-                        "qualityFeatures": list(set(all_quality_features)) if all_quality_features else [],
+                        "marketingClaims": sorted(set(all_marketing_claims)) if all_marketing_claims else [],
+                        "qualityFeatures": sorted(set(all_quality_features)) if all_quality_features else [],
                         "proprietaryBlendDisclosure": proprietary_blend_disclosure
                     },
                     "searchText": self._generate_label_text(active_ingredients, inactive_ingredients, statements)
@@ -4709,7 +4709,7 @@ class EnhancedDSLDNormalizer:
                     if country not in str(origins):  # Avoid duplicates
                         origins.append(f"Manufactured in {country}")
 
-        return list(set(origins))
+        return sorted(set(origins))
 
     def _extract_clean_claims(self, label_text: str, allergen_free_list: List[str] = None) -> List[str]:
         """Extract clean label claims from label text
@@ -4804,7 +4804,7 @@ class EnhancedDSLDNormalizer:
                     if claim not in claims:  # Avoid duplicates
                         claims.append(claim)
 
-        return list(set(claims))
+        return sorted(set(claims))
     def get_unmapped_snapshot(self) -> set:
         """Get a snapshot of current unmapped ingredient names for delta tracking.
 
