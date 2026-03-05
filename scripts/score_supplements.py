@@ -536,6 +536,8 @@ class SupplementScorer:
             # proprietary blend containers do not receive quality credit.
             if ing.get("is_proprietary_blend"):
                 continue
+            if ing.get("is_parent_total"):
+                continue
             if not self._has_usable_individual_dose(ing):
                 continue
             score = as_float(ing.get("score"), None)

@@ -1437,6 +1437,151 @@ class TestParentTotalFlagging:
         assert by_name["Mixed Carotenes"]["is_parent_total"] is False
         assert by_name["Retinyl Palmitate"]["is_parent_total"] is False
 
+    def test_collect_marks_parent_total_for_folate_with_normalized_parent_blend(self, enricher, monkeypatch):
+        def fake_match_quality_map(ing_name, std_name, quality_map, cleaned_forms=None):
+            return {
+                "standard_name": "Folate",
+                "canonical_id": "folate",
+                "form_id": "unspecified",
+                "form_name": "(unspecified)",
+                "match_tier": "exact",
+                "bio_score": 9,
+                "score": 9,
+                "natural": False,
+                "dosage_importance": 1.0,
+                "category": "vitamins",
+            }
+
+        monkeypatch.setattr(enricher, "_match_quality_map", fake_match_quality_map)
+
+        product = {
+            "id": "test-parent-total-folate",
+            "fullName": "Parent Total Folate Product",
+            "activeIngredients": [
+                {
+                    "name": "Folate\u2122 ",
+                    "standardName": "Folate",
+                    "quantity": 680,
+                    "unit": "mcg DFE",
+                    "isNestedIngredient": False,
+                },
+                {
+                    "name": "Folic Acid",
+                    "standardName": "Folic Acid",
+                    "quantity": 400,
+                    "unit": "mcg",
+                    "isNestedIngredient": True,
+                    "parentBlend": "  folate  ",
+                },
+            ],
+            "inactiveIngredients": [],
+        }
+
+        result = enricher._collect_ingredient_quality_data(product)
+        by_name = {ing["name"]: ing for ing in result["ingredients_scorable"]}
+        assert by_name["Folate\u2122 "]["is_parent_total"] is True
+        assert by_name["Folic Acid"]["is_parent_total"] is False
+
+    def test_collect_marks_parent_total_for_niacin_subforms(self, enricher, monkeypatch):
+        def fake_match_quality_map(ing_name, std_name, quality_map, cleaned_forms=None):
+            return {
+                "standard_name": "Niacin",
+                "canonical_id": "niacin",
+                "form_id": "unspecified",
+                "form_name": "(unspecified)",
+                "match_tier": "exact",
+                "bio_score": 9,
+                "score": 9,
+                "natural": False,
+                "dosage_importance": 1.0,
+                "category": "vitamins",
+            }
+
+        monkeypatch.setattr(enricher, "_match_quality_map", fake_match_quality_map)
+
+        product = {
+            "id": "test-parent-total-niacin",
+            "fullName": "Parent Total Niacin Product",
+            "activeIngredients": [
+                {
+                    "name": "Niacin",
+                    "standardName": "Niacin",
+                    "quantity": 40,
+                    "unit": "mg",
+                    "isNestedIngredient": False,
+                },
+                {
+                    "name": "Niacinamide",
+                    "standardName": "Niacinamide",
+                    "quantity": 30,
+                    "unit": "mg",
+                    "isNestedIngredient": True,
+                    "parentBlend": "niacin",
+                },
+                {
+                    "name": "Inositol Hexanicotinate",
+                    "standardName": "Inositol Hexanicotinate",
+                    "quantity": 10,
+                    "unit": "mg",
+                    "isNestedIngredient": True,
+                    "parentBlend": "NIACIN",
+                },
+            ],
+            "inactiveIngredients": [],
+        }
+
+        result = enricher._collect_ingredient_quality_data(product)
+        by_name = {ing["name"]: ing for ing in result["ingredients_scorable"]}
+        assert by_name["Niacin"]["is_parent_total"] is True
+        assert by_name["Niacinamide"]["is_parent_total"] is False
+        assert by_name["Inositol Hexanicotinate"]["is_parent_total"] is False
+
+    def test_collect_does_not_flag_parent_total_when_nested_parent_name_is_unrelated(self, enricher, monkeypatch):
+        def fake_match_quality_map(ing_name, std_name, quality_map, cleaned_forms=None):
+            # Force same canonical_id to validate that name linkage (not just canonical grouping)
+            # gates parent-total detection.
+            return {
+                "standard_name": "Vitamin A",
+                "canonical_id": "vitamin_a",
+                "form_id": "unspecified",
+                "form_name": "(unspecified)",
+                "match_tier": "exact",
+                "bio_score": 9,
+                "score": 9,
+                "natural": False,
+                "dosage_importance": 1.0,
+                "category": "vitamins",
+            }
+
+        monkeypatch.setattr(enricher, "_match_quality_map", fake_match_quality_map)
+
+        product = {
+            "id": "test-parent-total-false-positive",
+            "fullName": "Parent Total False Positive Guard",
+            "activeIngredients": [
+                {
+                    "name": "Vitamin A",
+                    "standardName": "Vitamin A",
+                    "quantity": 10000,
+                    "unit": "IU",
+                    "isNestedIngredient": False,
+                },
+                {
+                    "name": "Mixed Carotenes",
+                    "standardName": "Mixed Carotenes",
+                    "quantity": 8000,
+                    "unit": "IU",
+                    "isNestedIngredient": True,
+                    "parentBlend": "Vitamin C",
+                },
+            ],
+            "inactiveIngredients": [],
+        }
+
+        result = enricher._collect_ingredient_quality_data(product)
+        by_name = {ing["name"]: ing for ing in result["ingredients_scorable"]}
+        assert by_name["Vitamin A"]["is_parent_total"] is False
+
     def test_collect_does_not_flag_when_no_nested_children(self, enricher, monkeypatch):
         def fake_match_quality_map(ing_name, std_name, quality_map, cleaned_forms=None):
             return {

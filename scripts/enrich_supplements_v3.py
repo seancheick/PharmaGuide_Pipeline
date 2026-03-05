@@ -3242,6 +3242,10 @@ class SupplementEnricherV3:
         """
         canonical_groups: Dict[str, List[Dict[str, Any]]] = {}
         for ing in ingredients_scorable:
+            if ing.get("source_section") != "active":
+                continue
+            if not bool(ing.get("mapped", False)):
+                continue
             canonical_id = ing.get("canonical_id")
             if not canonical_id:
                 continue
@@ -3253,8 +3257,6 @@ class SupplementEnricherV3:
 
             parent_blend_names = set()
             for ing in group:
-                if ing.get("source_section") != "active":
-                    continue
                 if not bool(ing.get("is_nested_ingredient", False)):
                     continue
                 parent_blend = self._normalize_text(ing.get("parent_blend", "") or "")
@@ -3265,8 +3267,6 @@ class SupplementEnricherV3:
                 continue
 
             for ing in group:
-                if ing.get("source_section") != "active":
-                    continue
                 if bool(ing.get("is_nested_ingredient", False)):
                     continue
                 ing_name = self._normalize_text(ing.get("name", "") or "")

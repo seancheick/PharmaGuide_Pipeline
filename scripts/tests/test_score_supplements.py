@@ -1260,6 +1260,47 @@ class TestA1ParentTotalExclusion:
         expected_avg = (12.0 + 15.0) / 2.0
         assert a1 == pytest.approx((expected_avg / 18.0) * 15.0, abs=0.01)
 
+    def test_a2_skips_parent_total_rows(self, scorer):
+        p = make_base_product()
+        p["ingredient_quality_data"]["ingredients_scorable"] = [
+            {
+                "name": "Folate",
+                "standard_name": "Folate",
+                "canonical_id": "folate_total_row",
+                "score": 18,
+                "dosage_importance": 1.0,
+                "mapped": True,
+                "is_parent_total": True,
+                "quantity": 680,
+                "unit": "mcg DFE",
+                "has_dose": True,
+            },
+            {
+                "name": "Folic Acid",
+                "standard_name": "Folate",
+                "canonical_id": "folate",
+                "score": 13,
+                "dosage_importance": 1.0,
+                "mapped": True,
+                "quantity": 400,
+                "unit": "mcg",
+                "has_dose": True,
+            },
+            {
+                "name": "Vitamin D3",
+                "standard_name": "Vitamin D",
+                "canonical_id": "vitamin_d",
+                "score": 14,
+                "dosage_importance": 1.0,
+                "mapped": True,
+                "quantity": 1000,
+                "unit": "IU",
+                "has_dose": True,
+            },
+        ]
+        # Parent-total row is excluded; only vitamin_d is premium => no A2 bonus.
+        assert scorer._score_a2(p) == pytest.approx(0.0)
+
 
 class TestB5DisclosureTierEdgeCases:
     """Edge cases for the three-tier disclosure model (full/partial/none)
