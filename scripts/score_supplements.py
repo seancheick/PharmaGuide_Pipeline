@@ -114,6 +114,7 @@ class SupplementScorer:
 
         self.feature_gates = self.config.get("feature_gates", {})
         self.paths = self.config.get("paths", {})
+        self._parent_total_warned = False
 
     def _setup_logging(self) -> logging.Logger:
         logging.basicConfig(
@@ -474,6 +475,16 @@ class SupplementScorer:
         ingredients = self._get_active_ingredients(product)
         if not ingredients:
             return 0.0
+
+        # Warn once per scoring run when enriched data pre-dates parent-total dedup
+        if (not self._parent_total_warned
+                and ingredients
+                and "is_parent_total" not in ingredients[0]):
+            self.logger.warning(
+                "Enriched data missing 'is_parent_total' field — "
+                "parent-total dedup inactive. Re-enrich to enable A1/A2 dedup."
+            )
+            self._parent_total_warned = True
 
         is_single = supp_type in {"single", "single_nutrient"}
         weighted_values: List[Tuple[float, float]] = []

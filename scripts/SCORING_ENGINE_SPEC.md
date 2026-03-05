@@ -137,7 +137,14 @@ A1 entirely. Blend containers are opacity signals — their cost is captured by 
 them in A1 would double-penalise and contaminate the quality average with a meaningless stub
 score of 5.
 
-Per ingredient (non-blend):
+**Parent-total exclusion:** entries with `is_parent_total: true` are excluded from A1 and A2.
+When DSLD labels list a nutrient total alongside its sub-forms (e.g., "Vitamin A 10,000 IU"
+as total + "Mixed Carotenes 8,000 IU" + "Retinyl Palmitate 2,000 IU" as children), only the
+children are scored. The parent total is an informational/sum row that would double-count the
+nutrient. Detection uses cleaned-data structural fields (`is_nested_ingredient`, `parent_blend`)
+propagated through enrichment and resolved in a post-pass by `_mark_parent_total_rows()`.
+
+Per ingredient (non-blend, non-parent-total):
 - mapped: use `score` and `dosage_importance`
 - unmapped: fallback `score=9.0`, `weight=1.0`
 
@@ -154,6 +161,8 @@ A1 = clamp(0, 15, (weighted_avg / 18) * 15)
 
 Rule:
 - Count unique canonical ingredients with `score >= 14`
+- Excludes `is_proprietary_blend` and `is_parent_total` rows (consistent with A1)
+- Deduplicated by `canon_key(canonical_id)` via set
 - `A2 = clamp(0, 3, 0.5 * max(0, count - 1))`
 
 ### A3 Delivery System (max 3)
@@ -608,6 +617,33 @@ Section scores shorthand (`section_scores`):
 | `UNMAPPED_ACTIVE_INGREDIENT` | Mapping gate | Active ingredient(s) not in IQM; NOT_SCORED when `require_full_mapping=true` |
 | `UNMAPPED_BANNED_EXACT_ALIAS_GUARD` | Regression guard | Unmatched active overlaps a banned substance exact/alias match |
 | `UNMAPPED_INACTIVE_INGREDIENT` | Mapping gate | Inactive ingredient(s) not matched; advisory only, non-blocking |
+
+---
+
+## Enriched Ingredient Structural Fields
+
+These fields are set by the enricher on each `ingredients_scorable` entry and consumed
+by the scorer to prevent double-counting of parent nutrient totals.
+
+| Field | Type | Source | Description |
+|---|---|---|---|
+| `is_nested_ingredient` | `bool` | Cleaned data (`isNestedIngredient`) | `True` for sub-form rows listed under a parent nutrient total. Propagated directly from cleaned ingredient object. |
+| `parent_blend` | `str\|null` | Cleaned data (`parentBlend`) | Name of the parent nutrient this sub-form belongs to (e.g., `"Folate"` for a Folic Acid child row). `null` for top-level rows. |
+| `is_parent_total` | `bool` | Enricher post-pass (`_mark_parent_total_rows`) | `True` when a top-level active+mapped row shares a `canonical_id` with nested children whose `parent_blend` matches this row's name (via `_normalize_text`). Default `False`. |
+
+**Detection criteria** (all must be true to flag `is_parent_total`):
+1. `source_section == "active"` (not promoted-from-inactive)
+2. `mapped == True` and `canonical_id` is present
+3. `is_nested_ingredient == False` (top-level row)
+4. At least one sibling in the same `canonical_id` group has `is_nested_ingredient == True`
+5. That sibling's `parent_blend` matches this row's `name` after `_normalize_text()` normalization
+
+**Scorer behavior**: A1 and A2 skip rows with `is_parent_total == True`. B5 and other
+sections are unaffected. Old enriched files without these fields degrade gracefully
+(`.get("is_parent_total")` returns `None`/falsy, so no rows are skipped).
+
+**Migration note**: This fix only applies after re-enrichment. Old enriched files
+without `is_parent_total` retain old A1 behavior.
 
 ---
 

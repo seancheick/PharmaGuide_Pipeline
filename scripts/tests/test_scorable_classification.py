@@ -1612,6 +1612,63 @@ class TestParentTotalFlagging:
         result = enricher._collect_ingredient_quality_data(product)
         assert all(not ing["is_parent_total"] for ing in result["ingredients_scorable"])
 
+    def test_collect_does_not_flag_parent_total_when_children_have_no_dose(self, enricher, monkeypatch):
+        """Phytosome-style products: parent carries the dose, children have qty=0.
+        The parent must NOT be flagged as is_parent_total because excluding it
+        would leave zero dose-carrying rows in A1."""
+
+        def fake_match_quality_map(ing_name, std_name, quality_map, cleaned_forms=None):
+            return {
+                "standard_name": "Curcumin",
+                "canonical_id": "curcumin",
+                "form_id": "meriva_curcumin",
+                "form_name": "meriva curcumin",
+                "match_tier": "exact",
+                "bio_score": 13,
+                "score": 16,
+                "natural": True,
+                "dosage_importance": 1.5,
+                "category": "botanicals",
+            }
+
+        monkeypatch.setattr(enricher, "_match_quality_map", fake_match_quality_map)
+
+        product = {
+            "id": "test-phytosome-no-child-dose",
+            "fullName": "Meriva-500 Curcumin Phytosome",
+            "activeIngredients": [
+                {
+                    "name": "Curcumin Phytosome",
+                    "standardName": "Curcumin Phytosome",
+                    "quantity": 500,
+                    "unit": "mg",
+                    "isNestedIngredient": False,
+                },
+                {
+                    "name": "Curcuma longa extract",
+                    "standardName": "Curcuma longa",
+                    "quantity": 0,
+                    "unit": "NP",
+                    "isNestedIngredient": True,
+                    "parentBlend": "Curcumin Phytosome",
+                },
+                {
+                    "name": "Phosphatidylcholine Complex",
+                    "standardName": "Phosphatidylcholine",
+                    "quantity": 0,
+                    "unit": "NP",
+                    "isNestedIngredient": True,
+                    "parentBlend": "Curcumin Phytosome",
+                },
+            ],
+            "inactiveIngredients": [],
+        }
+
+        result = enricher._collect_ingredient_quality_data(product)
+        by_name = {ing["name"]: ing for ing in result["ingredients_scorable"]}
+        # Parent row must NOT be flagged — it's the sole dose source
+        assert by_name["Curcumin Phytosome"]["is_parent_total"] is False
+
 
 class TestCoverageIntegrity:
     """Test coverage metrics integrity and leak detection."""

@@ -3266,6 +3266,24 @@ class SupplementEnricherV3:
             if not parent_blend_names:
                 continue
 
+            # Guard: only flag parent-total when at least one nested child
+            # carries a usable individual dose.  Phytosome-style labels list
+            # sub-components with qty=0 / unit=NP — the parent row is the
+            # sole dose source and must NOT be excluded from A1.
+            _dose_units = {"mg", "mcg", "ug", "µg", "g", "iu", "cfu", "billion cfu", "ml"}
+            children_have_dose = False
+            for ing in group:
+                if not bool(ing.get("is_nested_ingredient", False)):
+                    continue
+                qty = ing.get("quantity", 0)
+                unit = (ing.get("unit_normalized") or ing.get("unit") or "").strip().lower()
+                if qty and float(qty) > 0 and unit in _dose_units:
+                    children_have_dose = True
+                    break
+
+            if not children_have_dose:
+                continue
+
             for ing in group:
                 if bool(ing.get("is_nested_ingredient", False)):
                     continue
