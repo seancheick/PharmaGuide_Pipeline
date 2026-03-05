@@ -5668,7 +5668,8 @@
           "zinc bisglycinate chelate supplement",
           "Albion Zinc Bisglycinate",
           "zinc bisglycinate supplement",
-          "zinc rice protein chelate"
+          "zinc rice protein chelate",
+          "zinc glycinate chelate"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -12010,8 +12011,7 @@
           "brain carnitine",
           "acetyl carnitine",
           "acetyl-l-carnitine supplement",
-          "n-acetyl l-carnitine hydrochloride",
-          "acetyl l-carnitine arginate di-hcl"
+          "n-acetyl l-carnitine hydrochloride"
         ],
         "dosage_importance": 0.5,
         "absorption_structured": {

@@ -1170,17 +1170,24 @@ class SupplementScorer:
             "mg",
             "milligram",
             "milligrams",
+            "milligram(s)",
             "mcg",
             "ug",
+            "µg",
             "microgram",
             "micrograms",
+            "microgram(s)",
             "g",
             "gram",
             "grams",
+            "gram(s)",
             "iu",
             "cfu",
             "billion cfu",
             "million cfu",
+            # FDA DFE (Dietary Folate Equivalents) units
+            "mcgdfe",
+            "mgdfe",
         }
 
     def _get_disclosure_blends(self, product: Dict[str, Any]) -> List[Dict[str, Any]]:

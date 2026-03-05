@@ -3508,19 +3508,40 @@ class SupplementEnricherV3:
         # Adding the source name as a high-priority match candidate lets the IQM
         # resolve the biologically-active compound rather than the salt/carrier.
         _FROM_PREFIXES = frozenset({'from', 'From', 'from '})
+
+        # Biological origin/culture prefixes: these describe the fermentation or
+        # growth substrate (e.g. "Lactobacillus bulgaricus" with prefix
+        # "from culture of").  They must be skipped entirely — do NOT promote
+        # their names as source candidates, because S. cerevisiae / L. bulgaricus
+        # would override the ingredient's correct canonical_id (e.g. whole-food
+        # vitamins → probiotics false mapping seen in Garden-of-Life products).
+        _CULTURE_PREFIXES = frozenset({
+            'from culture of',
+            'and culture of',
+            'culture of',
+            'naturally occurring from',
+            'derived from',
+        })
+
         from_source_map: Dict[int, str] = {}  # index → source name
         for i, form in enumerate(cleaned_forms):
-            if form.get('prefix', '') in _FROM_PREFIXES and i > 0:
+            prefix = (form.get('prefix') or '').strip()
+            if prefix in _FROM_PREFIXES and i > 0:
                 src = (form.get('name') or '').strip()
                 if src:
                     from_source_map[i - 1] = src
 
         extracted_forms = []
         for i, form in enumerate(cleaned_forms):
+            prefix = (form.get('prefix') or '').strip()
+            # Skip biological culture/origin descriptors entirely — these name
+            # the fermentation substrate or organism, not the ingredient's form.
+            if prefix in _CULTURE_PREFIXES:
+                continue
             # Skip forms that are source descriptors (prefix "from"):
             # their names are already inserted as priority candidates for the
             # preceding form via from_source_map.
-            if form.get('prefix', '') in _FROM_PREFIXES:
+            if prefix in _FROM_PREFIXES:
                 continue
 
             form_name = form.get('name', '')
