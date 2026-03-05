@@ -67,7 +67,7 @@ class TestDBIntegrity:
             "unit_conversions.json",
             "botanical_ingredients.json",
             "clinically_relevant_strains.json",
-            "proprietary_blends_penalty.json",
+            "proprietary_blends.json",
             "manufacturer_violations.json",
             "ingredient_classification.json",
             "enhanced_delivery.json",

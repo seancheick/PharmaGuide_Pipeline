@@ -77,7 +77,7 @@ Default DB set loaded by enrichment:
 - `other_ingredients.json`
 
 Additional detector-backed data used in enrichment:
-- `proprietary_blends_penalty.json` via `proprietary_blend_detector.py`
+- `proprietary_blends.json` via `proprietary_blend_detector.py`
 
 ### Stage 2.5: Coverage Gate (Optional but recommended)
 

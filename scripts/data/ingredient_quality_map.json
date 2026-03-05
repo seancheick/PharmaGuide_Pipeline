@@ -1884,7 +1884,11 @@
           "(6s)-5-methylfolate supplement",
           "L5-MTHF",
           "Levomefolate Calcium",
-          "L-5 Methyltetrahydrofolate Calcium Salt"
+          "L-5 Methyltetrahydrofolate Calcium Salt",
+          "(6S)-5-Methyltetrahydrofolate",
+          "(6S)-5-Methyltetrahydrofolate Calcium Salt",
+          "5-methyltetrahydrofolate",
+          "5-methyltetrahydrofolate calcium"
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
@@ -3510,7 +3514,9 @@
           "d-alpha-tocopheryl acetate supplement",
           "natural vitamin e acetate supplement",
           "natural vit e acetate",
-          "rrr-alpha-tocopheryl acetate supplement"
+          "rrr-alpha-tocopheryl acetate supplement",
+          "D-Alpha-Tocopherol Acetate",
+          "D-Alpha Tocopherol Acetate"
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
@@ -3534,7 +3540,10 @@
           "d-alpha-tocopheryl succinate supplement",
           "natural vitamin e succinate supplement",
           "natural vit e succinate",
-          "d-alpha tocopheryl succinate"
+          "d-alpha tocopheryl succinate",
+          "d-alpha-tocopheryl acid succinate",
+          "d-alpha tocopheryl acid succinate",
+          "d-alpha-tocopherol acid succinate"
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
@@ -4255,7 +4264,9 @@
           "TRAACS Calcium Bisglycinate Chelate supplement",
           "calcium bisglycinate chelate supplement",
           "TRAACS Calcium supplement",
-          "calcium glycinate"
+          "calcium glycinate",
+          "Calcium Chelate",
+          "calcium amino acid chelate"
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
@@ -4616,7 +4627,6 @@
         "notes": "The supplement label does not specify which calcium form is used. This matters significantly — calcium citrate and bisglycinate are far better absorbed than calcium carbonate, especially without food. Budget supplements overwhelmingly use the cheapest form (carbonate or phosphate).",
         "aliases": [
           "Calcium",
-          "calcium amino acid chelate",
           "calcium aspartate",
           "Calcium, Natural",
           "Calcium Formate"
@@ -4802,7 +4812,10 @@
           "magnesium bisglycinate chelate supplement",
           "TRAACS Magnesium supplement",
           "magnesium lysinate glycinate chelate",
-          "magnesium lysinate glycinate"
+          "magnesium lysinate glycinate",
+          "Magnesium Chelate",
+          "Magnesium Glycinate Buffered",
+          "Magnesium Bisglycinate Chelate Buffered"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -5196,7 +5209,10 @@
           "albion iron",
           "iron bisglycinate chelate",
           "ferrous bisglycinate chelate",
-          "ferrochel iron bisglycinate"
+          "ferrochel iron bisglycinate",
+          "Albion Ferrous Bisglycinate Chelate",
+          "Albion Ferrous Bisglycinate",
+          "Albion Iron Bisglycinate Chelate"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -5649,7 +5665,10 @@
           "zinc bisglycinate chelate",
           "albion zinc bisglycinate chelate",
           "TRAACS Zinc Bisglycinate Chelate supplement",
-          "zinc bisglycinate chelate supplement"
+          "zinc bisglycinate chelate supplement",
+          "Albion Zinc Bisglycinate",
+          "zinc bisglycinate supplement",
+          "zinc rice protein chelate"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -8157,7 +8176,8 @@
           "TRAACS Copper Bisglycinate Chelate",
           "Copper Bisglycinate Chelate supplement",
           "TRAACS Copper Bisglycinate Chelate supplement",
-          "TRAACS Copper supplement"
+          "TRAACS Copper supplement",
+          "copper rice protein chelate"
         ],
         "dosage_importance": 0.5,
         "absorption_structured": {
@@ -9204,8 +9224,10 @@
           "bororganic boron",
           "Bororganic Boron Glycinate Complex",
           "bororganic boron glycinate",
+          "bororganic glycine",
           "boron glycinate complex",
-          "boron diglycinate"
+          "boron diglycinate",
+          "boron rice protein chelate"
         ],
         "dosage_importance": 0.5,
         "absorption_structured": {
@@ -9302,9 +9324,7 @@
       "review_status": "validated",
       "last_reviewed_at": "2026-02-27"
     },
-    "aliases": [
-      "bororganic glycine"
-    ],
+    "aliases": [],
     "last_updated": "2026-02-18"
   },
   "potassium": {
@@ -9498,6 +9518,30 @@
           "quality": "unknown",
           "notes": "Data not available"
         }
+      },
+      "potassium glycinate": {
+        "bio_score": 13,
+        "natural": false,
+        "score": 13,
+        "absorption_structured": {
+          "value": 0.8,
+          "range_low": 0.75,
+          "range_high": 0.9,
+          "quality": "good",
+          "notes": "Amino acid chelated potassium shows enhanced absorption similar to other glycinate minerals. Chelation protects the mineral through GI transit and facilitates uptake via amino acid transporters."
+        },
+        "dosage_importance": 1.0,
+        "aliases": [
+          "potassium glycinate",
+          "potassium bisglycinate",
+          "potassium chelate",
+          "potassium amino acid chelate",
+          "chelated potassium",
+          "potassium glycinate chelate",
+          "potassium bisglycinate chelate"
+        ],
+        "cui_note": null,
+        "rxcui_note": null
       }
     },
     "match_rules": {
@@ -10309,7 +10353,8 @@
           "phospholipid curcumin",
           "meriva curcumin phytosome",
           "Meriva-SF",
-          "curcumin phytosome complex"
+          "curcumin phytosome complex",
+          "Curcumin Phytosome (Curcuma longa extract (root) / Phosphatidylcholine complex)"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -15660,7 +15705,6 @@
           "n-acetyl-5-methoxytryptamine",
           "n-acetyl-5-methotryptamine",
           "melatonin chemical name",
-          "MicroActive Melatonin",
           "melatonin, micronized",
           "micronized melatonin"
         ],
@@ -15712,7 +15756,8 @@
           "prolonged-release melatonin",
           "long-acting melatonin",
           "melatonin extended release",
-          "controlled-release melatonin"
+          "controlled-release melatonin",
+          "microactive melatonin"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -30003,10 +30048,12 @@
       }
     },
     "statistics": {
-      "total_ingredients": 623,
-      "total_forms": 1433,
-      "total_aliases": 12330,
-      "ingredients_with_relationships": 24
+      "total_parents": 531,
+      "total_forms": 1257,
+      "total_form_aliases": 10912,
+      "parents_with_parent_aliases": 30,
+      "parents_with_contains_aliases": 4,
+      "parents_with_pattern_aliases": 0
     },
     "categories": {
       "adaptogens": 10,

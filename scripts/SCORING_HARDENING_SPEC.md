@@ -345,7 +345,7 @@ if ul is None or ul == "not_established":
 ## P0-4: Proprietary Blend Disclosure Penalty
 
 **Priority:** P0
-**Reference File:** `data/proprietary_blends_penalty.json`
+**Reference File:** `data/proprietary_blends.json`
 **Why:** Penalty can swing scores heavily; must be consistent and explainable.
 
 ### Disclosure Levels
@@ -397,7 +397,7 @@ Enrichment must detect:
 }
 ```
 
-### Risk Categories (from proprietary_blends_penalty.json)
+### Risk Categories (from proprietary_blends.json)
 
 | Category | Severity | Concern |
 |----------|----------|---------|

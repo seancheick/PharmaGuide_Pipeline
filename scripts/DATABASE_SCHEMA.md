@@ -59,7 +59,7 @@ Every database file MUST include a `_metadata` object as its first key:
 | `bioavailability_bonuses` | absorption_enhancers.json | Enrichment |
 | `bonus_scoring` | enhanced_delivery.json | Enrichment |
 | `synergy_bonuses` | synergy_cluster.json | Enrichment |
-| `blend_penalty_scoring` | proprietary_blends_penalty.json | Enrichment |
+| `blend_detection` | proprietary_blends.json | Enrichment |
 | `dosing_validation` | rda_optimal_uls.json | Enrichment, Scoring |
 | `dosing_categories` | ingredient_weights.json | Enrichment |
 | `dosing_normalization` | unit_conversions.json | Enrichment |
@@ -398,8 +398,8 @@ Primary key: `other_ingredients` (array)
 
 ---
 
-### 21. proprietary_blends_penalty.json
-**Purpose:** `blend_penalty_scoring` | **Entries:** 18
+### 21. proprietary_blends.json
+**Purpose:** `blend_detection` | **Entries:** 18
 
 Primary key: `proprietary_blend_concerns` (array)
 
@@ -407,10 +407,9 @@ Primary key: `proprietary_blend_concerns` (array)
 |-------|------|----------|-------------|
 | `id` | string | YES | Unique ID |
 | `standard_name` | string | YES | Concern name |
-| `red_flag_terms` | string[] | YES | Detection patterns |
-| `severity_level` | string | YES | Severity classification |
-| `penalties` | object | YES | Scoring penalties |
-| `penalty_levels` | object | NO | Tiered penalties |
+| `blend_terms` | string[] | YES | Detection patterns |
+| `risk_factors` | object | YES | Risk classification and mapping |
+| `notes` | string | NO | Additional context |
 
 ---
 
@@ -477,9 +476,11 @@ Primary key: `synergy_clusters` (array)
 | `id` | string | YES | Unique ID (e.g., `SYN_CALCIUM_VD`) |
 | `standard_name` | string | YES | Cluster name |
 | `ingredients` | string[] | YES | Required ingredient set |
-| `min_effective_doses` | object | NO | Minimum doses per ingredient |
-| `evidence_tier` | string | YES | Evidence strength |
-| `synergy_mechanism` | string | YES | How synergy works |
+| `min_effective_doses` | object | YES | Minimum doses per ingredient (keys must be listed in `ingredients`) |
+| `evidence_tier` | int | YES | Evidence strength tier (`1`, `2`, or `3`) |
+| `synergy_mechanism` | string/null | NO | Mechanism summary (nullable during evidence curation) |
+| `note` | string | YES | User-facing explanation of why the cluster can earn bonus |
+| `sources` | object[] | YES | Evidence links (`source_type` in `pubmed|nih_ods|fda|nccih`, `label`, `url`; search-query placeholders not allowed) |
 
 ---
 

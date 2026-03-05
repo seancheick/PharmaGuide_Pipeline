@@ -1506,6 +1506,48 @@ class TestA5cSynergyDoseAnchoringRegression:
         assert enriched["synergy_cluster_qualified"] is True
 
 
+class TestSynergyExplainabilityFields:
+    """Synergy matches should carry note + sources for UI explainability."""
+
+    @pytest.fixture
+    def enricher(self):
+        return SupplementEnricherV3()
+
+    def test_collect_synergy_data_includes_note_and_sources(self, enricher):
+        enricher.databases["synergy_cluster"] = {
+            "synergy_clusters": [
+                {
+                    "id": "test_synergy",
+                    "standard_name": "Test Synergy",
+                    "ingredients": ["vitamin c", "zinc"],
+                    "min_effective_doses": {"vitamin c": 500, "zinc": 10},
+                    "evidence_tier": 1,
+                    "note": "Vitamin C and zinc immune support rationale.",
+                    "sources": [
+                        {
+                            "source_type": "nih_ods",
+                            "label": "Vitamin C Fact Sheet",
+                            "url": "https://ods.od.nih.gov/factsheets/VitaminC-HealthProfessional/",
+                        }
+                    ],
+                }
+            ]
+        }
+        product = {
+            "activeIngredients": [
+                {"name": "Vitamin C", "standardName": "vitamin c", "quantity": 1000, "unit": "mg"},
+                {"name": "Zinc", "standardName": "zinc", "quantity": 15, "unit": "mg"},
+            ]
+        }
+
+        clusters = enricher._collect_synergy_data(product)
+        assert len(clusters) == 1
+        assert clusters[0]["cluster_id"] == "test_synergy"
+        assert clusters[0]["note"] == "Vitamin C and zinc immune support rationale."
+        assert isinstance(clusters[0]["sources"], list)
+        assert clusters[0]["sources"][0]["source_type"] == "nih_ods"
+
+
 class TestDescriptorLeakageRegression:
     """Regression checks for descriptor/header leakage rows."""
 

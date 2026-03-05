@@ -31,7 +31,7 @@ You are auditing a supplement scoring pipeline that powers a consumer health app
   - `synergy_cluster.json` — synergy detection
   - `standardized_botanicals.json` — botanical standardization markers
   - `other_ingredients.json` — recognized non-scorable ingredients
-  - `proprietary_blends_penalty.json` — blend penalty rules
+  - `proprietary_blends.json` — blend recognition mapping
   - `manufacturer_violations.json` — brand deductions (cap -25)
 
 ## TASK 1: IQM 5-POINT AUDIT (PRIMARY — ~70% of effort)

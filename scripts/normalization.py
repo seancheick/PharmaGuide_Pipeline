@@ -16,8 +16,18 @@ from typing import Tuple
 
 VERSION = "1.0.0"
 
+# Pre-built translation table for smart quotes, primes, and apostrophe variants.
+# Built once at module load — used by normalize_text() on every uncached call.
+# Includes prime characters (U+2032/2033) for chemical nomenclature
+# (e.g., riboflavin-5'-phosphate) and modifier letter apostrophe (U+02BC).
+_QUOTE_TRANS = str.maketrans({
+    chr(cp): "'" for cp in (0x2018, 0x2019, 0x201A, 0x201B, 0x2032, 0x2033, 0x02BC)
+} | {
+    chr(cp): '"' for cp in (0x201C, 0x201D, 0x201E, 0x201F)
+})
 
-@lru_cache(maxsize=10000)
+
+@lru_cache(maxsize=65536)
 def normalize_text(raw: str) -> str:
     """
     Standard text normalization for display and fuzzy matching.
@@ -48,26 +58,33 @@ def normalize_text(raw: str) -> str:
     # Lowercase and strip
     text = text.lower().strip()
 
-    # Normalize smart quotes/apostrophes to ASCII equivalents
-    text = text.translate(str.maketrans({
-        "’": "'",
-        "‘": "'",
-        "‚": "'",
-        "‛": "'",
-        "“": '"',
-        "”": '"',
-        "„": '"',
-        "‟": '"',
-    }))
+    # Normalize smart quotes/apostrophes/primes to ASCII equivalents
+    text = text.translate(_QUOTE_TRANS)
 
-    # Normalize Greek beta: ONLY in known supplement compound patterns
-    # β-glucan, β-carotene, β-sitosterol, β-alanine, β-hydroxy, etc.
-    text = re.sub(r'β-(glucan|carotene|sitosterol|alanine|hydroxy|cryptoxanthin)',
+    # Normalize Greek letters (α, β, γ, δ) to Latin equivalents
+    # Used in vitamin forms: α-tocopherol, β-carotene, γ-tocopherol, δ-tocopherol
+    # and supplement compounds: β-glucan, β-sitosterol, β-alanine, etc.
+
+    # Alpha (U+03B1)
+    text = re.sub(r'α-(tocopherol|tocopheryl|lipoic|linolenic|lactalbumin|casein|galactosidase|amylase|ketoglutarate|gpc|cyclodextrin)',
+                  r'alpha-\1', text)
+    text = re.sub(r'\bα\b', 'alpha', text)
+
+    # Beta (U+03B2)
+    text = re.sub(r'β-(glucan|carotene|sitosterol|alanine|hydroxy|cryptoxanthin|elemene|caryophyllene|myrcene)',
                   r'beta-\1', text)
-    # Handle standalone β at word boundaries
     text = re.sub(r'\bβ\b', 'beta', text)
-    # Handle β glucan pattern
     text = re.sub(r'β glucan', 'beta glucan', text)
+
+    # Gamma (U+03B3)
+    text = re.sub(r'γ-(tocopherol|tocopheryl|linolenic|oryzanol|aminobutyric|butyrolactone)',
+                  r'gamma-\1', text)
+    text = re.sub(r'\bγ\b', 'gamma', text)
+
+    # Delta (U+03B4)
+    text = re.sub(r'δ-(tocopherol|tocopheryl|tocotrienol)',
+                  r'delta-\1', text)
+    text = re.sub(r'\bδ\b', 'delta', text)
 
     # Normalize micro sign: ONLY before gram units (µg, µgram)
     text = re.sub(r'µg\b', 'mcg', text)
@@ -93,7 +110,7 @@ def normalize_text(raw: str) -> str:
     return text.strip()
 
 
-@lru_cache(maxsize=10000)
+@lru_cache(maxsize=65536)
 def make_normalized_key(raw: str) -> str:
     """
     Generate a stable, deterministic key for deduplication and tracking.
@@ -273,7 +290,9 @@ def preprocess_text(text: str) -> str:
         r'|isoleucine|valine|lysine|arginine|histidine|cysteine'
         r'|serine|threonine|alanine|proline|asparagine|aspartate'
         r'|limonene|pinitol|chiro|glucarate|pantothenate'
-        r'|calcium|malic|tartrate)\b'
+        r'|calcium|malic|tartrate'
+        r'|biotin|selenomethionine|methylfolate|methyltetrahydro'
+        r'|saccharic|galactose|glucose|fructose|tagatose)\b'
     )
     prefixes_to_remove = [
         'dl-', 'd-', 'l-',

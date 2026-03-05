@@ -78,7 +78,7 @@ databases = [
     "synergy_cluster.json",
 
     # Group C: Got IDs + metadata
-    "proprietary_blends_penalty.json",
+    "proprietary_blends.json",
     "rda_optimal_uls.json",
     "rda_therapeutic_dosing.json",
     "user_goals_to_clusters.json",

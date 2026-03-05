@@ -259,7 +259,7 @@ class DSLDCleaningPipeline:
             "absorption_enhancers.json",
             "other_ingredients.json",
             "botanical_ingredients.json",
-            "proprietary_blends_penalty.json",
+            "proprietary_blends.json",
         ]
 
         missing_recommended = []

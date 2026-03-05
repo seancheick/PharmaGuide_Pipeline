@@ -279,8 +279,11 @@ class EnhancedIngredientMatcher:
         for full, abbrev in abbreviations.items():
             if full in text:
                 variations.append(text.replace(full, abbrev))
-            if abbrev in text:
-                variations.append(text.replace(abbrev, full))
+            # Reverse direction: only expand abbreviation at word boundaries
+            # to avoid nonsense like "vitamin d3" -> "vitamin delta3"
+            # or "riboflavin" -> "ribetaoflavin" (from 'b' -> 'beta')
+            if re.search(rf'\b{re.escape(abbrev)}\b', text):
+                variations.append(re.sub(rf'\b{re.escape(abbrev)}\b', full, text))
         
         # Add numeric variations (vitamin d3 -> vitamin d 3)
         if re.search(r'[a-z]\d+', text):
@@ -1120,19 +1123,19 @@ class EnhancedDSLDNormalizer:
                     self._fast_exact_lookup[processed_standard] = {
                         "type": "proprietary_blend",
                         "standard_name": standard_name,
-                        "category": concern.get("category", "blend"),
+                        "category": "blend",
                         "mapped": True,
                         "priority": 8
                     }
 
-                # Add red flag terms as aliases
-                for red_flag_term in concern.get("red_flag_terms", []) or []:
-                    processed_term = self.matcher.preprocess_text(red_flag_term)
+                # Add blend terms as aliases
+                for blend_term in concern.get("blend_terms") or []:
+                    processed_term = self.matcher.preprocess_text(blend_term)
                     if processed_term not in self._fast_exact_lookup:
                         self._fast_exact_lookup[processed_term] = {
                             "type": "proprietary_blend",
                             "standard_name": standard_name,
-                            "category": concern.get("category", "blend"),
+                            "category": "blend",
                             "mapped": True,
                             "priority": 8
                         }
@@ -3305,6 +3308,16 @@ class EnhancedDSLDNormalizer:
                 })
             elif isinstance(form, str):
                 forms_structured.append({"name": form})
+
+        # If DSLD source had no forms but we extracted them from the ingredient
+        # name (e.g., "Zinc (as Zinc Picolinate)" → "Zinc Picolinate"), write
+        # them to forms_structured so the enricher gets the form info.
+        if not forms_structured and forms:
+            for extracted_form in forms:
+                forms_structured.append({
+                    "name": extracted_form,
+                    "source": "name_extraction",  # provenance: not from DSLD forms field
+                })
 
         # Parse botanical details from notes (plantPart, genus, species, harvestMethod, form)
         botanical_details = self._parse_botanical_details(notes)

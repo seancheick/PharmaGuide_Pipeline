@@ -301,6 +301,14 @@ class SupplementEnricherV3:
         self._load_all_databases()
         self._compile_patterns()
 
+        # ── Performance indexes (built once, used per-ingredient) ──
+        # IQM alias indexes for O(1) lookups instead of O(n) parent scans
+        self._iqm_exact_index: Dict[str, List] = {}  # exact_norm → [(parent_key, form_key|None, alias_text, priority, match_mode)]
+        self._iqm_norm_index: Dict[str, List] = {}   # normalized → [(parent_key, form_key|None, alias_text, priority, match_mode)]
+        # Non-scorable DB index for O(1) recognition lookups
+        self._nonscorable_index: Dict[str, Dict] = {}  # normalized_variant → result_dict
+        self._build_performance_indexes()
+
         # Track unmapped ingredients across batch
         self.unmapped_tracker = {}
         self.match_counters = {
@@ -315,6 +323,7 @@ class SupplementEnricherV3:
         self._ambiguity_warning_count = 0
         self._parent_fallback_info_count = 0
         self._parent_fallback_details = []  # Collect ALL fallback details for report
+        self._form_fallback_details = []   # Collect FORM_UNMAPPED_FALLBACK details for audit
 
         # Initialize scoring hardening modules
         self._init_scoring_modules()
@@ -762,6 +771,139 @@ class SupplementEnricherV3:
             else:
                 # Log error for visibility in normal mode
                 self.logger.error(error_msg)
+
+    def _build_performance_indexes(self):
+        """
+        Build O(1) lookup indexes for IQM and non-scorable databases.
+
+        Called once at init. Converts the O(n) linear scans in
+        _match_quality_map() and _is_recognized_non_scorable() into
+        O(1) dict lookups, giving ~5-10x speedup on matching.
+        """
+        import time
+        t0 = time.monotonic()
+
+        quality_map = self.databases.get('ingredient_quality_map', {})
+
+        # ── IQM indexes: alias → [(parent_key, form_key|None, alias_text, priority, match_mode)] ──
+        exact_idx: Dict[str, list] = {}
+        norm_idx: Dict[str, list] = {}
+
+        for parent_key, parent_data in quality_map.items():
+            if parent_key.startswith("_") or not isinstance(parent_data, dict):
+                continue
+
+            match_rules = parent_data.get('match_rules', {})
+            priority = match_rules.get('priority', 1)
+            match_mode = match_rules.get('match_mode', 'alias_and_fuzzy')
+
+            parent_std = parent_data.get('standard_name', parent_key)
+            parent_aliases = parent_data.get('aliases', []) or []
+
+            # Index parent-level names
+            for alias_text in [parent_std] + list(parent_aliases):
+                if not alias_text:
+                    continue
+                exact_norm = norm_module.normalize_exact_text(alias_text)
+                if exact_norm:
+                    exact_idx.setdefault(exact_norm, []).append(
+                        (parent_key, None, alias_text, priority, match_mode)
+                    )
+                text_norm = norm_module.normalize_text(alias_text)
+                if text_norm:
+                    norm_idx.setdefault(text_norm, []).append(
+                        (parent_key, None, alias_text, priority, match_mode)
+                    )
+
+            # Index form-level names
+            forms = parent_data.get('forms', {})
+            for form_name, form_data in forms.items():
+                if not isinstance(form_data, dict):
+                    continue
+                form_aliases = form_data.get('aliases', []) or []
+                for alias_text in [form_name] + list(form_aliases):
+                    if not alias_text:
+                        continue
+                    exact_norm = norm_module.normalize_exact_text(alias_text)
+                    if exact_norm:
+                        exact_idx.setdefault(exact_norm, []).append(
+                            (parent_key, form_name, alias_text, priority, match_mode)
+                        )
+                    text_norm = norm_module.normalize_text(alias_text)
+                    if text_norm:
+                        norm_idx.setdefault(text_norm, []).append(
+                            (parent_key, form_name, alias_text, priority, match_mode)
+                        )
+
+        self._iqm_exact_index = exact_idx
+        self._iqm_norm_index = norm_idx
+
+        # ── Non-scorable DB index: normalized_name → result dict ──
+        nonscorable_idx: Dict[str, Dict] = {}
+
+        db_configs = [
+            ('other_ingredients', 'other_ingredients', 'non_scorable',
+             lambda e: e.get('category', 'other_ingredient')),
+            ('harmful_additives', 'harmful_additives', 'non_scorable',
+             lambda e: 'known_additive'),
+            ('botanical_ingredients', 'botanical_ingredients', 'botanical_unscored',
+             lambda e: e.get('category', 'botanical')),
+            ('standardized_botanicals', 'standardized_botanicals', 'botanical_unscored',
+             lambda e: 'botanical_identity'),
+        ]
+
+        for db_key, list_key, rec_type, reason_fn in db_configs:
+            db = self.databases.get(db_key, {})
+            entries = db.get(list_key, []) if isinstance(db, dict) else []
+            for entry in entries:
+                if not isinstance(entry, dict):
+                    continue
+                result = {
+                    "recognition_source": db_key,
+                    "recognition_reason": reason_fn(entry),
+                    "matched_entry_id": entry.get('id'),
+                    "matched_entry_name": entry.get('standard_name'),
+                    "recognition_type": rec_type,
+                }
+                # Index standard_name and all aliases
+                for name_text in [entry.get('standard_name', '')] + (entry.get('aliases', []) or []):
+                    if not name_text:
+                        continue
+                    text_norm = norm_module.normalize_text(name_text)
+                    if text_norm and text_norm not in nonscorable_idx:
+                        nonscorable_idx[text_norm] = result
+
+        # Index banned_recalled_ingredients separately (different structure)
+        banned_db = self.databases.get('banned_recalled_ingredients', {})
+        banned_list = banned_db.get('ingredients', []) if isinstance(banned_db, dict) else []
+        for entry in banned_list:
+            if not isinstance(entry, dict):
+                continue
+            entity_type = entry.get('entity_type', 'ingredient')
+            if entity_type not in {'ingredient', 'contaminant', None, ''}:
+                continue
+            result = {
+                "recognition_source": "banned_recalled_ingredients",
+                "recognition_reason": "banned",
+                "matched_entry_id": entry.get('id'),
+                "matched_entry_name": entry.get('standard_name'),
+                "recognition_type": "non_scorable",
+            }
+            for name_text in [entry.get('standard_name', '')] + (entry.get('aliases', []) or []):
+                if not name_text:
+                    continue
+                text_norm = norm_module.normalize_text(name_text)
+                if text_norm and text_norm not in nonscorable_idx:
+                    nonscorable_idx[text_norm] = result
+
+        self._nonscorable_index = nonscorable_idx
+
+        elapsed = time.monotonic() - t0
+        self.logger.info(
+            f"Performance indexes built in {elapsed:.2f}s: "
+            f"IQM exact={len(exact_idx)} norm={len(norm_idx)} entries, "
+            f"non-scorable={len(nonscorable_idx)} entries"
+        )
 
     def _compile_patterns(self):
         """Compile regex patterns for performance"""
@@ -1799,6 +1941,7 @@ class SupplementEnricherV3:
                     quality_entry['recognition_type'] = recognition.get('recognition_type')
                     quality_entry['matched_entry_id'] = recognition.get('matched_entry_id')
                     quality_entry['matched_entry_name'] = recognition.get('matched_entry_name')
+                    quality_entry['mapped'] = True
                     quality_entry['mapped_identity'] = True
                     quality_entry['scoreable_identity'] = False
                     quality_entry['role_classification'] = 'recognized_non_scorable'
@@ -1879,6 +2022,7 @@ class SupplementEnricherV3:
                         quality_entry['recognition_type'] = recognition.get('recognition_type')
                         quality_entry['matched_entry_id'] = recognition.get('matched_entry_id')
                         quality_entry['matched_entry_name'] = recognition.get('matched_entry_name')
+                        quality_entry['mapped'] = True
                         quality_entry['mapped_identity'] = True
                         quality_entry['scoreable_identity'] = False
                         quality_entry['role_classification'] = 'recognized_non_scorable'
@@ -1903,6 +2047,10 @@ class SupplementEnricherV3:
                     "promotion_confidence": promotion_confidence,
                     "dose_present": dose_present
                 })
+
+        # Mark top-level nutrient totals when nested child forms of the same
+        # canonical ingredient are present in active rows.
+        self._mark_parent_total_rows(ingredients_scorable)
 
         # =================================================================
         # BLEND-ONLY PRODUCT DETECTION
@@ -2387,14 +2535,16 @@ class SupplementEnricherV3:
             return None
 
         # HARD EXCLUSION: Known excipients
+        # P0 FIX: Only check ing_name (name_lower), NOT std_name (std_lower).
+        # DSLD assigns misleading standardNames (e.g., "natural colors" for elderberry).
+        # Checking std_name causes false negatives for real botanicals in inactiveIngredients.
+        # Consistent with the same guard in _compute_excipient_flags and _is_recognized_non_scorable.
         if name_lower in EXCIPIENT_NEVER_PROMOTE:
             return None
-        if std_lower in EXCIPIENT_NEVER_PROMOTE:
-            return None
 
-        # Check for partial matches in excipient list
+        # Check for partial matches in excipient list (ing_name only)
         for excipient in EXCIPIENT_NEVER_PROMOTE:
-            if excipient in name_lower or excipient in std_lower:
+            if excipient in name_lower:
                 return None
 
         # RULE A: Known therapeutic ingredient (single factor - high confidence)
@@ -2559,6 +2709,31 @@ class SupplementEnricherV3:
         Returns:
             Dict with recognition_source and reason if recognized, None otherwise.
         """
+        # ── FAST PATH: O(1) index lookup before expensive variant generation ──
+        if self._nonscorable_index:
+            # Check ing_name directly (most common hit)
+            ing_norm = self._normalize_text(ing_name)
+            if ing_norm in self._nonscorable_index:
+                return dict(self._nonscorable_index[ing_norm])
+
+            # Check std_name (unless it's an excipient descriptor)
+            std_name_norm = self._normalize_text(std_name)
+            if std_name_norm not in EXCIPIENT_NEVER_PROMOTE:
+                if std_name_norm in self._nonscorable_index:
+                    return dict(self._nonscorable_index[std_name_norm])
+
+            # Check preprocessed variants for quick wins
+            ing_pre = norm_module.preprocess_text(ing_name)
+            ing_pre_norm = self._normalize_text(ing_pre)
+            if ing_pre_norm and ing_pre_norm in self._nonscorable_index:
+                return dict(self._nonscorable_index[ing_pre_norm])
+
+            # Strip parenthetical groups (common pattern: "Oregano (Origanum vulgare)")
+            ing_no_parens = self._normalize_text(re.sub(r"\([^)]*\)", " ", ing_name))
+            if ing_no_parens and ing_no_parens in self._nonscorable_index:
+                return dict(self._nonscorable_index[ing_no_parens])
+        # ── END FAST PATH — fall through to full variant scan if no hit ──
+
         def _variants(value: str) -> List[str]:
             base = self._normalize_text(value)
             pre = norm_module.preprocess_text(value)
@@ -2777,6 +2952,73 @@ class SupplementEnricherV3:
         # (handled by caller with _has_therapeutic_signal)
         return False
 
+    # Category keyword map for unmapped ingredients (name-based inference)
+    _CATEGORY_KEYWORDS = {
+        "vitamins": [
+            "vitamin", "retinol", "thiamine", "riboflavin", "niacin", "pantothenic",
+            "pyridoxine", "biotin", "folate", "folic acid", "cobalamin", "ascorbic",
+            "cholecalciferol", "ergocalciferol", "tocopherol", "phylloquinone",
+            "menaquinone", "methylcobalamin", "methylfolate", "mthf",
+        ],
+        "minerals": [
+            "calcium", "magnesium", "zinc", "iron", "copper", "manganese",
+            "chromium", "selenium", "molybdenum", "potassium", "iodine", "boron",
+            "vanadium", "phosphorus", "silica", "silicon", "lithium",
+        ],
+        "probiotics": [
+            "probiotic", "lactobacillus", "bifidobacterium", "streptococcus",
+            "bacillus", "saccharomyces", "limosilactobacillus", "lacticaseibacillus",
+            "lactiplantibacillus", "cfu", "billion organisms",
+        ],
+        "amino_acids": [
+            "l-glutamine", "l-lysine", "l-arginine", "l-carnitine", "l-theanine",
+            "l-tryptophan", "l-tyrosine", "l-cysteine", "l-methionine", "l-leucine",
+            "l-isoleucine", "l-valine", "l-proline", "l-serine", "l-histidine",
+            "l-alanine", "l-glycine", "amino acid", "bcaa", "taurine", "creatine",
+            "beta-alanine", "citrulline", "ornithine", "glutathione",
+        ],
+        "herbs": [
+            "ashwagandha", "turmeric", "ginseng", "echinacea", "valerian",
+            "ginkgo", "milk thistle", "rhodiola", "elderberry", "saw palmetto",
+            "garlic", "oregano", "cinnamon", "ginger", "chamomile", "passionflower",
+            "holy basil", "fenugreek", "astragalus", "cat's claw", "boswellia",
+            "root extract", "leaf extract", "bark extract", "herb extract",
+            "herbal", "botanical", "plant extract",
+        ],
+        "fatty_acids": [
+            "omega-3", "omega-6", "omega 3", "omega 6", "fish oil", "dha",
+            "epa", "flaxseed oil", "evening primrose", "borage oil", "krill oil",
+            "cod liver oil", "cla", "conjugated linoleic",
+        ],
+        "enzymes": [
+            "enzyme", "protease", "lipase", "amylase", "cellulase", "lactase",
+            "bromelain", "papain", "serrapeptase", "nattokinase", "coq10",
+            "coenzyme q10", "ubiquinol", "ubiquinone",
+        ],
+        "antioxidants": [
+            "quercetin", "resveratrol", "lycopene", "lutein", "zeaxanthin",
+            "astaxanthin", "alpha lipoic acid", "pycnogenol", "grape seed extract",
+        ],
+        "fibers": [
+            "fiber", "fibre", "psyllium", "inulin", "fos", "prebiotic",
+            "pectin", "glucomannan",
+        ],
+    }
+
+    @staticmethod
+    def _infer_category_from_name(ing_name: str, std_name: str = "") -> str:
+        """Infer ingredient category from name when IQM match is unavailable.
+
+        Used for unmapped ingredients so that supplement type classification
+        (_classify_supplement_type) gets useful category data instead of 'unknown'.
+        """
+        text = f"{ing_name} {std_name}".lower()
+        for category, keywords in SupplementEnricherV3._CATEGORY_KEYWORDS.items():
+            for kw in keywords:
+                if kw in text:
+                    return category
+        return "unknown"
+
     def _build_quality_entry(self, ingredient: Dict, match_result: Optional[Dict],
                               hierarchy_type: Optional[str], source_section: str = "active",
                               promotion_reason: str = None, promotion_confidence: str = None,
@@ -2820,7 +3062,7 @@ class SupplementEnricherV3:
                 "absorption": None,
                 "notes": None,
                 "dosage_importance": 1.0,
-                "category": ingredient.get('category', 'unknown'),
+                "category": self._infer_category_from_name(ing_name, std_name),
                 "quantity": quantity,
                 "unit": unit,
                 "unit_normalized": unit_normalized,
@@ -2841,6 +3083,9 @@ class SupplementEnricherV3:
                 "safety_hits": [],
                 "hierarchyType": hierarchy_type,
                 "source_section": source_section,
+                "is_nested_ingredient": bool(ingredient.get("isNestedIngredient", False)),
+                "parent_blend": ingredient.get("parentBlend"),
+                "is_parent_total": False,
                 "form_extraction_used": True,
                 "is_dual_form": bool(match_result.get("is_dual_form")),
                 "original_label": match_result.get("original_label"),
@@ -2857,6 +3102,26 @@ class SupplementEnricherV3:
             natural = match_result.get('natural', False)
             score = match_result.get('score', bio_score + (3 if natural else 0))
             used_form_fallback = match_result.get('match_status') == 'FORM_UNMAPPED_FALLBACK'
+
+            # Track form fallbacks for audit report
+            if used_form_fallback:
+                unmapped_forms = match_result.get('unmapped_forms', [])
+                fallback_form_name = match_result.get('form_name', '(unspecified)')
+                self._form_fallback_details.append({
+                    "ingredient_label": ing_name,
+                    "raw_source_text": raw_source_text,
+                    "canonical_id": match_result.get('canonical_id', ''),
+                    "parent_name": match_result.get('standard_name', ''),
+                    "unmapped_form_text": ', '.join(unmapped_forms) if unmapped_forms else ing_name,
+                    "fallback_form": fallback_form_name,
+                    "fallback_bio_score": bio_score,
+                    "fallback_score": score,
+                    "forms_differ": bool(unmapped_forms and fallback_form_name not in [
+                        f.lower().strip() for f in unmapped_forms
+                    ]),
+                    "form_source": match_result.get('form_source', ''),
+                    "source_section": source_section,
+                })
 
             entry = {
                 # LABEL NAME PRESERVATION:
@@ -2897,6 +3162,9 @@ class SupplementEnricherV3:
                 "safety_hits": [],
                 "hierarchyType": hierarchy_type,
                 "source_section": source_section,
+                "is_nested_ingredient": bool(ingredient.get("isNestedIngredient", False)),
+                "parent_blend": ingredient.get("parentBlend"),
+                "is_parent_total": False,
                 # Multi-form contract fields (if present)
                 "form_extraction_used": match_result.get('form_extraction_used', False),
                 "is_dual_form": match_result.get('is_dual_form', False),
@@ -2929,7 +3197,7 @@ class SupplementEnricherV3:
                 "absorption": None,
                 "notes": None,
                 "dosage_importance": 1.0,
-                "category": ingredient.get('category', 'unknown'),
+                "category": self._infer_category_from_name(ing_name, std_name),
                 "quantity": quantity,
                 "unit": unit,
                 "unit_normalized": unit_normalized,
@@ -2949,7 +3217,10 @@ class SupplementEnricherV3:
                 "identity_decision_reason": "no_quality_map_match",
                 "safety_hits": [],
                 "hierarchyType": hierarchy_type,
-                "source_section": source_section
+                "source_section": source_section,
+                "is_nested_ingredient": bool(ingredient.get("isNestedIngredient", False)),
+                "parent_blend": ingredient.get("parentBlend"),
+                "is_parent_total": False,
             }
 
         # Add promotion metadata if applicable
@@ -2959,6 +3230,48 @@ class SupplementEnricherV3:
             entry["dose_present"] = dose_present
 
         return entry
+
+    def _mark_parent_total_rows(self, ingredients_scorable: List[Dict[str, Any]]) -> None:
+        """
+        Mark parent nutrient total rows to prevent A1 double-counting.
+
+        A parent total row is flagged when:
+        1) It is a top-level active row (is_nested_ingredient=False), and
+        2) A nested active child in the same canonical_id group points back to
+           this row via parent_blend.
+        """
+        canonical_groups: Dict[str, List[Dict[str, Any]]] = {}
+        for ing in ingredients_scorable:
+            canonical_id = ing.get("canonical_id")
+            if not canonical_id:
+                continue
+            canonical_groups.setdefault(str(canonical_id), []).append(ing)
+
+        for group in canonical_groups.values():
+            if len(group) <= 1:
+                continue
+
+            parent_blend_names = set()
+            for ing in group:
+                if ing.get("source_section") != "active":
+                    continue
+                if not bool(ing.get("is_nested_ingredient", False)):
+                    continue
+                parent_blend = self._normalize_text(ing.get("parent_blend", "") or "")
+                if parent_blend:
+                    parent_blend_names.add(parent_blend)
+
+            if not parent_blend_names:
+                continue
+
+            for ing in group:
+                if ing.get("source_section") != "active":
+                    continue
+                if bool(ing.get("is_nested_ingredient", False)):
+                    continue
+                ing_name = self._normalize_text(ing.get("name", "") or "")
+                if ing_name and ing_name in parent_blend_names:
+                    ing["is_parent_total"] = True
 
     def _match_multi_form(self, form_info: Dict, quality_map: Dict) -> Optional[Dict]:
         """
@@ -2993,7 +3306,7 @@ class SupplementEnricherV3:
 
         for form_data in extracted_forms:
             match_candidates = form_data.get('match_candidates', [])
-            percent_share = form_data.get('percent_share', 1.0 / len(extracted_forms))
+            percent_share = form_data.get('percent_share', 1.0 / max(1, len(extracted_forms)))
             raw_form_text = form_data.get('raw_form_text', '')
 
             # Try each match candidate until one succeeds
@@ -3220,6 +3533,18 @@ class SupplementEnricherV3:
             if unwrapped and unwrapped not in match_candidates:
                 match_candidates.append(unwrapped)
 
+            # BRANDED PREFIX RECONSTRUCTION: When the ingredient name is a bare
+            # branded prefix (e.g. "MicroActive") and the form is the actual
+            # compound (e.g. "Melatonin"), try "MicroActive Melatonin" as a
+            # combined candidate.  This enables IQM alias matching for branded
+            # delivery technologies whose label text was split by the cleaner.
+            combined = f"{ing_name} {form_name}".strip()
+            combined_lower = combined.lower()
+            if (combined_lower != form_name.lower().strip()
+                    and combined_lower != ing_name.lower().strip()
+                    and combined not in match_candidates):
+                match_candidates.append(combined)
+
             # Convert percent field: cleaning uses None or a float (0-100)
             percent_raw = form.get('percent')
             percent_share = None
@@ -3316,7 +3641,7 @@ class SupplementEnricherV3:
                     if form_info.get('has_form_evidence') and not (
                         multi_form_result and multi_form_result.get('all_forms_generic')
                     ):
-                        # Safe fallback: try parent/base matching so product can still score
+                        # Fallback: try parent/base matching so product can still score
                         # conservatively while preserving form-unmapped telemetry.
                         fallback_base = form_info.get('base_name') or ing_name
                         fallback_match = self._match_quality_map(
@@ -3781,8 +4106,40 @@ class SupplementEnricherV3:
                         })
             return matches
 
+        # ── PERFORMANCE: Pre-filter parents using index ──
+        # Instead of scanning all 498 parents, use the index to find only
+        # parents whose aliases match any of our candidate values.
+        # This reduces the inner loop from O(498) to O(matched_parents) (~1-5 typically).
+        _candidate_parent_keys = set()
+        _use_index_filter = (quality_map is self.databases.get('ingredient_quality_map', {}))
+        if _use_index_filter and self._iqm_exact_index:
+            for cand_val, _ in exact_candidates:
+                for entry in self._iqm_exact_index.get(cand_val, []):
+                    _candidate_parent_keys.add(entry[0])  # parent_key
+            for cand_val, _ in normalized_candidates:
+                for entry in self._iqm_norm_index.get(cand_val, []):
+                    _candidate_parent_keys.add(entry[0])  # parent_key
+            # Pattern/contains aliases can't be indexed, so if no exact/norm hits,
+            # fall back to full scan to allow pattern matches
+            if not _candidate_parent_keys:
+                _use_index_filter = False
+            else:
+                # SAFETY: Parents with contains_aliases or pattern_aliases must
+                # never be skipped by the index filter, since their matching
+                # paths use substring/regex which cannot be pre-indexed.
+                # (Only ~4 parents currently; negligible cost.)
+                for _pk, _pd in quality_map.items():
+                    if _pk.startswith("_") or not isinstance(_pd, dict):
+                        continue
+                    if _pd.get('contains_aliases') or _pd.get('pattern_aliases'):
+                        _candidate_parent_keys.add(_pk)
+
         for parent_key, parent_data in quality_map.items():
             if parent_key.startswith("_") or not isinstance(parent_data, dict):
+                continue
+
+            # Skip parents not in the pre-filtered set (index-accelerated path)
+            if _use_index_filter and parent_key not in _candidate_parent_keys:
                 continue
 
             # Extract match_rules for this parent
@@ -4036,7 +4393,7 @@ class SupplementEnricherV3:
                 "ingredient_normalized": ing_norm,
                 "candidates": [
                     {
-                        "parent_key": c["parent_key"],
+                        "canonical_id": c["parent_key"],
                         "form_key": c["form_key"],
                         "matched_alias": c["matched_alias"],
                         "matched_on": c["matched_on"],
@@ -4047,7 +4404,7 @@ class SupplementEnricherV3:
                     for c in winning_candidates
                 ],
                 "chosen": {
-                    "parent_key": best["parent_key"],
+                    "canonical_id": best["parent_key"],
                     "form_key": best["form_key"],
                     "matched_alias": best["matched_alias"],
                     "matched_on": best["matched_on"],
@@ -4099,7 +4456,7 @@ class SupplementEnricherV3:
             payload = {
                 "ingredient_raw": ing_name,
                 "ingredient_normalized": ing_norm,
-                "parent_key": best["parent_key"],
+                "canonical_id": best["parent_key"],
                 "fallback_form_name": best["fallback_form_name"],
                 "match_type": best["match_type"],
                 "tier": best["tier"],
@@ -4613,10 +4970,15 @@ class SupplementEnricherV3:
 
             # Need at least 2 ingredients for synergy
             if len(matched_ings) >= 2:
+                sources = cluster.get("sources", [])
+                if not isinstance(sources, list):
+                    sources = []
                 matched_clusters.append({
                     "cluster_id": cluster.get('id', ''),
                     "cluster_name": cluster.get('standard_name', ''),
                     "evidence_tier": cluster.get('evidence_tier', 3),
+                    "note": cluster.get("note") or cluster.get("synergy_mechanism") or "",
+                    "sources": sources,
                     "matched_ingredients": matched_ings,
                     "match_count": len(matched_ings),
                     "doses_adequate": doses_adequate,
@@ -5087,7 +5449,7 @@ class SupplementEnricherV3:
         Returns: List of {allergen_id, presence_type, evidence_text, matched_text}
         """
         allergen_db = self.databases.get('allergens', {})
-        allergen_list = allergen_db.get('common_allergens', allergen_db.get('allergens', []))
+        allergen_list = allergen_db.get('allergens', allergen_db.get('common_allergens', []))
 
         found = []
 
@@ -5290,7 +5652,7 @@ class SupplementEnricherV3:
         - If same allergen from multiple sources, highest precedence wins
         """
         allergen_db = self.databases.get('allergens', {})
-        allergen_list = allergen_db.get('common_allergens', allergen_db.get('allergens', []))
+        allergen_list = allergen_db.get('allergens', allergen_db.get('common_allergens', []))
 
         all_text = self._get_all_product_text_lower(product)
 
@@ -9790,7 +10152,7 @@ class SupplementEnricherV3:
                 "generated_at": datetime.utcnow().isoformat() + "Z",
                 "data_completeness": self._calculate_completeness(enriched),
                 "ready_for_scoring": True,
-                "unmapped_active_count": enriched["ingredient_quality_data"]["unmapped_count"]
+                "unmapped_active_count": enriched.get("ingredient_quality_data", {}).get("unmapped_count", 0)
             }
 
             # Build match ledger and unmatched lists (Pipeline Hardening Phase 3)
@@ -10401,6 +10763,7 @@ class SupplementEnricherV3:
         total_stats = {
             "total_products": 0,
             "successful": 0,
+            "failed": 0,
             "with_issues": 0
         }
 
@@ -10447,10 +10810,10 @@ class SupplementEnricherV3:
 
             # Save parent fallback report (all details, not just first 10)
             if self._parent_fallback_details:
-                # Deduplicate by ingredient_normalized + parent_key for cleaner report
+                # Deduplicate by ingredient_normalized + canonical_id for cleaner report
                 seen_fallbacks = {}
                 for fb in self._parent_fallback_details:
-                    key = (fb["ingredient_normalized"], fb["parent_key"])
+                    key = (fb.get("ingredient_normalized", ""), fb.get("canonical_id", ""))
                     if key not in seen_fallbacks:
                         seen_fallbacks[key] = {**fb, "occurrence_count": 1}
                     else:
@@ -10463,7 +10826,7 @@ class SupplementEnricherV3:
                             "Adding form-level aliases in IQM would improve scoring accuracy.",
                     "fallbacks": sorted(
                         seen_fallbacks.values(),
-                        key=lambda x: (-x["occurrence_count"], x["parent_key"])
+                        key=lambda x: (-x["occurrence_count"], x["canonical_id"])
                     ),
                 }
                 fallback_file = os.path.join(reports_dir, "parent_fallback_report.json")
@@ -10471,6 +10834,51 @@ class SupplementEnricherV3:
                 self.logger.info(
                     f"Parent fallback report saved: {fallback_file} "
                     f"({len(seen_fallbacks)} unique, {len(self._parent_fallback_details)} total)"
+                )
+
+            # Save FORM_UNMAPPED_FALLBACK audit report
+            if self._form_fallback_details:
+                # Deduplicate by (unmapped_form_text, canonical_id) and count occurrences
+                seen_form_fb = {}
+                for fb in self._form_fallback_details:
+                    key = ((fb.get("unmapped_form_text") or "").lower().strip(), fb.get("canonical_id", ""))
+                    if key not in seen_form_fb:
+                        seen_form_fb[key] = {**fb, "occurrence_count": 1}
+                    else:
+                        seen_form_fb[key]["occurrence_count"] += 1
+
+                # Separate into "differ" (needs alias) vs "same" (form matches fallback)
+                differs = [v for v in seen_form_fb.values() if v["forms_differ"]]
+                same = [v for v in seen_form_fb.values() if not v["forms_differ"]]
+
+                form_fallback_report = {
+                    "generated_at": datetime.utcnow().isoformat() + "Z",
+                    "total_form_fallback_count": len(self._form_fallback_details),
+                    "unique_form_fallback_count": len(seen_form_fb),
+                    "forms_differ_count": len(differs),
+                    "forms_same_count": len(same),
+                    "note": (
+                        "AUDIT THIS FILE: Each entry shows an ingredient where form evidence "
+                        "existed but no IQM alias matched. The ingredient scored using the "
+                        "parent's (unspecified) fallback. 'forms_differ=true' means the "
+                        "unmapped form text is DIFFERENT from the fallback form — these are "
+                        "the ones most likely to be scored wrong and need IQM alias additions."
+                    ),
+                    "action_needed_differs": sorted(
+                        differs,
+                        key=lambda x: (-x["occurrence_count"], x["canonical_id"]),
+                    ),
+                    "likely_ok_same": sorted(
+                        same,
+                        key=lambda x: (-x["occurrence_count"], x["canonical_id"]),
+                    ),
+                }
+                form_fb_file = os.path.join(reports_dir, "form_fallback_audit_report.json")
+                self._atomic_write_json(form_fb_file, form_fallback_report)
+                self.logger.info(
+                    f"Form fallback audit report saved: {form_fb_file} "
+                    f"({len(differs)} differ, {len(same)} same, "
+                    f"{len(self._form_fallback_details)} total occurrences)"
                 )
         else:
             self.logger.info("Report generation disabled by config option: options.generate_reports=false")

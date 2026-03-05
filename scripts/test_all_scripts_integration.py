@@ -25,7 +25,7 @@ databases_to_test = {
     'banned_recalled_ingredients.json': ('permanently_banned', True),  # Has multiple arrays, checking first one
     'harmful_additives.json': ('harmful_additives', True),
     'synergy_cluster.json': ('synergy_clusters', True),
-    'proprietary_blends_penalty.json': ('proprietary_blend_concerns', True),
+    'proprietary_blends.json': ('proprietary_blend_concerns', True),
     'rda_optimal_uls.json': ('nutrient_recommendations', True),
     'rda_therapeutic_dosing.json': ('therapeutic_dosing', True),
     'user_goals_to_clusters.json': ('user_goal_mappings', True),

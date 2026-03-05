@@ -166,10 +166,10 @@ def main():
     print("=" * 80)
 
     add_ids_and_metadata(
-        data_dir / 'proprietary_blends_penalty.json',
+        data_dir / 'proprietary_blends.json',
         'proprietary_blends',
-        "Proprietary blend penalties for undisclosed ingredient amounts",
-        "transparency_penalties",
+        "Proprietary blend recognition database for supplement label mapping",
+        "blend_recognition_mapping",
         "blend_type"
     )
 

@@ -16,6 +16,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import math
 import sys
 from dataclasses import dataclass
 from pathlib import Path
@@ -196,6 +197,7 @@ def check_absorption_enhancers(findings: List[Finding], data: Dict[str, Any], fi
 
 def check_synergy_cluster(findings: List[Finding], data: Dict[str, Any], file: str) -> None:
     raw = data.get("synergy_clusters")
+    allowed_source_types = {"pubmed", "nih_ods", "fda", "nccih"}
     if not isinstance(raw, list):
         findings.append(Finding("error", file, "synergy_clusters", "missing_or_non_list", "list", _type_name(raw)))
         return
@@ -204,7 +206,217 @@ def check_synergy_cluster(findings: List[Finding], data: Dict[str, Any], file: s
             findings.append(Finding("error", file, f"[{i}]", "entry_not_object", "dict", _type_name(e)))
             continue
         _check_required(findings, file, e, i, [("id", str), ("standard_name", str)])
+        ingredients = e.get("ingredients")
         _check_list_of_strings(findings, file, e, i, "ingredients", required=True, allow_empty=False)
+        normalized_ingredients = set()
+        if isinstance(ingredients, list):
+            for ing in ingredients:
+                if isinstance(ing, str):
+                    normalized = " ".join(ing.strip().lower().split())
+                    if normalized:
+                        normalized_ingredients.add(normalized)
+
+        evidence_tier = e.get("evidence_tier")
+        if evidence_tier is None:
+            findings.append(
+                Finding(
+                    "error",
+                    file,
+                    f"[{i}].evidence_tier",
+                    "missing_required_key",
+                    "int(1|2|3)",
+                    "missing",
+                )
+            )
+        elif not isinstance(evidence_tier, int):
+            findings.append(
+                Finding(
+                    "error",
+                    file,
+                    f"[{i}].evidence_tier",
+                    "type_mismatch",
+                    "int(1|2|3)",
+                    _type_name(evidence_tier),
+                )
+            )
+        elif evidence_tier not in {1, 2, 3}:
+            findings.append(
+                Finding(
+                    "error",
+                    file,
+                    f"[{i}].evidence_tier",
+                    "invalid_enum",
+                    "1|2|3",
+                    str(evidence_tier),
+                )
+            )
+
+        mechanism = e.get("synergy_mechanism")
+        if mechanism is not None and not isinstance(mechanism, str):
+            findings.append(
+                Finding(
+                    "error",
+                    file,
+                    f"[{i}].synergy_mechanism",
+                    "type_mismatch",
+                    "str|null",
+                    _type_name(mechanism),
+                )
+            )
+
+        note = e.get("note")
+        if note is None:
+            findings.append(
+                Finding(
+                    "error",
+                    file,
+                    f"[{i}].note",
+                    "missing_required_key",
+                    "str",
+                    "missing",
+                )
+            )
+        elif not isinstance(note, str):
+            findings.append(
+                Finding(
+                    "error",
+                    file,
+                    f"[{i}].note",
+                    "type_mismatch",
+                    "str",
+                    _type_name(note),
+                )
+            )
+        elif not note.strip():
+            findings.append(
+                Finding(
+                    "error",
+                    file,
+                    f"[{i}].note",
+                    "empty_string",
+                    "non-empty str",
+                    "empty",
+                )
+            )
+
+        sources = e.get("sources")
+        if sources is None:
+            findings.append(
+                Finding(
+                    "error",
+                    file,
+                    f"[{i}].sources",
+                    "missing_required_key",
+                    "list[object]",
+                    "missing",
+                )
+            )
+        elif not isinstance(sources, list):
+            findings.append(
+                Finding(
+                    "error",
+                    file,
+                    f"[{i}].sources",
+                    "type_mismatch",
+                    "list[object]",
+                    _type_name(sources),
+                )
+            )
+        else:
+            if len(sources) == 0:
+                findings.append(
+                    Finding(
+                        "error",
+                        file,
+                        f"[{i}].sources",
+                        "empty_list",
+                        "at least 1 source object",
+                        "0",
+                    )
+                )
+            for j, source in enumerate(sources):
+                if not isinstance(source, dict):
+                    findings.append(
+                        Finding(
+                            "error",
+                            file,
+                            f"[{i}].sources[{j}]",
+                            "entry_not_object",
+                            "dict",
+                            _type_name(source),
+                        )
+                    )
+                    continue
+                source_type = source.get("source_type")
+                label = source.get("label")
+                url = source.get("url")
+                if not isinstance(source_type, str) or not source_type.strip():
+                    findings.append(
+                        Finding(
+                            "error",
+                            file,
+                            f"[{i}].sources[{j}].source_type",
+                            "missing_or_empty",
+                            "non-empty str",
+                            _type_name(source_type),
+                        )
+                    )
+                elif source_type not in allowed_source_types:
+                    findings.append(
+                        Finding(
+                            "error",
+                            file,
+                            f"[{i}].sources[{j}].source_type",
+                            "invalid_enum",
+                            "|".join(sorted(allowed_source_types)),
+                            str(source_type),
+                        )
+                    )
+                if not isinstance(label, str) or not label.strip():
+                    findings.append(
+                        Finding(
+                            "error",
+                            file,
+                            f"[{i}].sources[{j}].label",
+                            "missing_or_empty",
+                            "non-empty str",
+                            _type_name(label),
+                        )
+                    )
+                if not isinstance(url, str) or not url.strip():
+                    findings.append(
+                        Finding(
+                            "error",
+                            file,
+                            f"[{i}].sources[{j}].url",
+                            "missing_or_empty",
+                            "non-empty str",
+                            _type_name(url),
+                        )
+                    )
+                elif not (url.startswith("http://") or url.startswith("https://")):
+                    findings.append(
+                        Finding(
+                            "error",
+                            file,
+                            f"[{i}].sources[{j}].url",
+                            "invalid_url_scheme",
+                            "http:// or https://",
+                            url,
+                        )
+                    )
+                elif "pubmed.ncbi.nlm.nih.gov/?term=" in url:
+                    findings.append(
+                        Finding(
+                            "error",
+                            file,
+                            f"[{i}].sources[{j}].url",
+                            "query_placeholder_not_allowed",
+                            "specific source URL (not search query)",
+                            url,
+                        )
+                    )
+
         med = e.get("min_effective_doses")
         if med is None:
             findings.append(Finding("error", file, f"[{i}].min_effective_doses", "null_map", "dict", "null"))
@@ -214,8 +426,32 @@ def check_synergy_cluster(findings: List[Finding], data: Dict[str, Any], file: s
             for k, v in med.items():
                 if not isinstance(k, str):
                     findings.append(Finding("error", file, f"[{i}].min_effective_doses", "non_string_key", "str", _type_name(k)))
+                    continue
+                normalized_key = " ".join(k.strip().lower().split())
+                if normalized_ingredients and normalized_key not in normalized_ingredients:
+                    findings.append(
+                        Finding(
+                            "error",
+                            file,
+                            f"[{i}].min_effective_doses.{k}",
+                            "key_not_in_ingredients",
+                            "must reference listed cluster ingredient",
+                            k,
+                        )
+                    )
                 if not isinstance(v, (int, float)):
                     findings.append(Finding("error", file, f"[{i}].min_effective_doses.{k}", "type_mismatch", "number", _type_name(v)))
+                elif not math.isfinite(float(v)) or float(v) <= 0:
+                    findings.append(
+                        Finding(
+                            "error",
+                            file,
+                            f"[{i}].min_effective_doses.{k}",
+                            "invalid_dose_value",
+                            "finite number > 0",
+                            str(v),
+                        )
+                    )
 
 
 def check_standardized_botanicals(findings: List[Finding], data: Dict[str, Any], file: str) -> None:
@@ -611,7 +847,7 @@ def check_clinically_relevant_strains(findings: List[Finding], data: Dict[str, A
         _check_enum(findings, file, e, i, "evidence_level", {"high", "moderate", "low"}, severity="warning")
 
 
-def check_proprietary_blends_penalty(findings: List[Finding], data: Dict[str, Any], file: str) -> None:
+def check_proprietary_blends(findings: List[Finding], data: Dict[str, Any], file: str) -> None:
     raw = data.get("proprietary_blend_concerns")
     if not isinstance(raw, list):
         findings.append(Finding("error", file, "proprietary_blend_concerns", "missing_or_non_list", "list", _type_name(raw)))
@@ -620,14 +856,13 @@ def check_proprietary_blends_penalty(findings: List[Finding], data: Dict[str, An
         if not isinstance(e, dict):
             findings.append(Finding("error", file, f"[{i}]", "entry_not_object", "dict", _type_name(e)))
             continue
-        _check_required(findings, file, e, i, [("id", str), ("standard_name", str), ("severity_level", str)])
-        aliases = e.get("aliases")
-        if aliases is not None and not isinstance(aliases, list):
-            findings.append(Finding("warning", file, f"[{i}].aliases", "type_fallback_risk", "list|null", _type_name(aliases)))
-        flags = e.get("red_flag_terms")
-        if flags is not None and not isinstance(flags, list):
-            findings.append(Finding("warning", file, f"[{i}].red_flag_terms", "type_fallback_risk", "list|null", _type_name(flags)))
-        _check_enum(findings, file, e, i, "severity_level", {"critical", "high", "moderate", "low"})
+        _check_required(findings, file, e, i, [("id", str), ("standard_name", str)])
+        terms = e.get("blend_terms")
+        if terms is not None and not isinstance(terms, list):
+            findings.append(Finding("warning", file, f"[{i}].blend_terms", "type_fallback_risk", "list|null", _type_name(terms)))
+        risks = e.get("risk_factors")
+        if risks is not None and not isinstance(risks, list):
+            findings.append(Finding("warning", file, f"[{i}].risk_factors", "type_fallback_risk", "list|null", _type_name(risks)))
 
 
 def check_manufacturer_violations(findings: List[Finding], data: Dict[str, Any], file: str) -> None:
@@ -1099,7 +1334,7 @@ def run_checks() -> List[Finding]:
         "unit_conversions.json": check_unit_conversions,
         "botanical_ingredients.json": check_botanical_ingredients,
         "clinically_relevant_strains.json": check_clinically_relevant_strains,
-        "proprietary_blends_penalty.json": check_proprietary_blends_penalty,
+        "proprietary_blends.json": check_proprietary_blends,
         "manufacturer_violations.json": check_manufacturer_violations,
         "ingredient_classification.json": check_ingredient_classification,
         "enhanced_delivery.json": check_enhanced_delivery,

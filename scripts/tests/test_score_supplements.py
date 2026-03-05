@@ -1177,6 +1177,90 @@ class TestA1BlendContainerExclusion:
         assert scorer._score_a1(p, "targeted") == pytest.approx(0.0)
 
 
+class TestA1ParentTotalExclusion:
+    """A1 must skip parent-total rows when nested child forms are present."""
+
+    @pytest.fixture
+    def scorer(self):
+        return SupplementScorer()
+
+    def test_a1_skips_parent_total_rows(self, scorer):
+        p = make_base_product()
+        p["ingredient_quality_data"]["ingredients_scorable"] = [
+            {
+                "name": "Vitamin A",
+                "standard_name": "Vitamin A",
+                "canonical_id": "vitamin_a",
+                "score": 9,
+                "dosage_importance": 1.0,
+                "mapped": True,
+                "is_parent_total": True,
+                "quantity": 10000,
+                "unit": "IU",
+                "has_dose": True,
+            },
+            {
+                "name": "Mixed Carotenes",
+                "standard_name": "Vitamin A",
+                "canonical_id": "vitamin_a",
+                "score": 11,
+                "dosage_importance": 1.0,
+                "mapped": True,
+                "quantity": 8000,
+                "unit": "IU",
+                "has_dose": True,
+            },
+            {
+                "name": "Retinyl Palmitate",
+                "standard_name": "Vitamin A",
+                "canonical_id": "vitamin_a",
+                "score": 13,
+                "dosage_importance": 1.0,
+                "mapped": True,
+                "quantity": 2000,
+                "unit": "IU",
+                "has_dose": True,
+            },
+        ]
+
+        a1 = scorer._score_a1(p, "targeted")
+        expected_avg = (11.0 + 13.0) / 2.0
+        assert a1 == pytest.approx((expected_avg / 18.0) * 15.0, abs=0.01)
+
+    def test_a1_keeps_non_nested_top_level_rows(self, scorer):
+        p = make_base_product()
+        p["ingredient_quality_data"]["ingredients_scorable"] = [
+            {
+                "name": "Vitamin K1",
+                "standard_name": "Vitamin K",
+                "canonical_id": "vitamin_k",
+                "score": 12,
+                "dosage_importance": 1.0,
+                "mapped": True,
+                "is_parent_total": False,
+                "quantity": 100,
+                "unit": "mcg",
+                "has_dose": True,
+            },
+            {
+                "name": "Vitamin K2",
+                "standard_name": "Vitamin K",
+                "canonical_id": "vitamin_k",
+                "score": 15,
+                "dosage_importance": 1.0,
+                "mapped": True,
+                "is_parent_total": False,
+                "quantity": 100,
+                "unit": "mcg",
+                "has_dose": True,
+            },
+        ]
+
+        a1 = scorer._score_a1(p, "targeted")
+        expected_avg = (12.0 + 15.0) / 2.0
+        assert a1 == pytest.approx((expected_avg / 18.0) * 15.0, abs=0.01)
+
+
 class TestB5DisclosureTierEdgeCases:
     """Edge cases for the three-tier disclosure model (full/partial/none)
     and the penalty sign convention."""
@@ -1818,8 +1902,8 @@ class TestSynergyClusterSpec:
         product["synergy_cluster_qualified"] = False
         assert scorer._synergy_cluster_qualified(product) is False
 
-    def test_synergy_two_ingredient_match_qualifies(self, scorer):
-        """Cluster with 2+ matched ingredients (no dose thresholds) qualifies."""
+    def test_synergy_two_ingredient_match_without_doses_does_not_qualify(self, scorer):
+        """Fallback path requires at least one dose-checkable ingredient."""
         product = make_base_product()
         product["formulation_data"] = {
             "synergy_clusters": [
@@ -1833,7 +1917,7 @@ class TestSynergyClusterSpec:
                 }
             ]
         }
-        assert scorer._synergy_cluster_qualified(product) is True
+        assert scorer._synergy_cluster_qualified(product) is False
 
     def test_synergy_single_match_does_not_qualify(self, scorer):
         """Cluster with only 1 matched ingredient does not qualify."""

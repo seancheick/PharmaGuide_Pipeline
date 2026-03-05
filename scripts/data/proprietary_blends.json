@@ -1,0 +1,413 @@
+{
+  "_metadata": {
+    "description": "Proprietary blend recognition database for supplement label mapping",
+    "purpose": "blend_recognition_mapping",
+    "schema_version": "5.0.0",
+    "last_updated": "2026-03-04",
+    "total_entries": 14,
+    "schema_notes": "This file is for MAPPING only. It identifies and categorizes proprietary blend names found on supplement labels. Penalty scoring is handled entirely by the scorer (B5 engine) based on disclosure_level (full/partial/none) — NOT by this file. Each entry has: id, standard_name, blend_terms (label text patterns), risk_factors (safety concerns for user-facing notes), notes (user-facing explanation shown in product detail view)."
+  },
+  "proprietary_blend_concerns": [
+    {
+      "id": "BLEND_STIMULANT",
+      "standard_name": "Stimulant Blends",
+      "blend_terms": [
+        "energy blend",
+        "thermogenic blend",
+        "focus blend",
+        "proprietary stimulant complex",
+        "energy complex",
+        "alertness blend",
+        "focus complex",
+        "pre-workout blend",
+        "pre-workout matrix",
+        "stimulant complex",
+        "energy booster blend",
+        "caffeine complex",
+        "invigorating matrix",
+        "adrenal drive complex",
+        "rush complex",
+        "explosive energy blend"
+      ],
+      "risk_factors": [
+        "Hidden caffeine doses may exceed safe daily limits (400mg/day FDA guideline)",
+        "Undisclosed stimulant combinations can cause synergistic cardiovascular stress",
+        "Yohimbine, synephrine, or DMAA may be present without labeling",
+        "Stimulant stacking increases risk of arrhythmia and hypertension"
+      ],
+      "notes": "Stimulant blends combine caffeine with other stimulants like synephrine, yohimbine, or theobromine. Without individual dosage disclosure, total stimulant load cannot be assessed. FDA has issued multiple warnings about undisclosed stimulants in pre-workout and energy supplements."
+    },
+    {
+      "id": "BLEND_TESTOSTERONE",
+      "standard_name": "Testosterone & Hormone Support Blends",
+      "blend_terms": [
+        "testo blend",
+        "anabolic matrix",
+        "muscle enhancement complex",
+        "natural testosterone booster",
+        "male enhancement blend",
+        "hormone support complex",
+        "anabolic activator",
+        "test booster matrix",
+        "virility blend",
+        "testosterone amplifier",
+        "androgenic support blend",
+        "hormonal balance blend",
+        "endocrine support blend",
+        "hormone complex"
+      ],
+      "risk_factors": [
+        "Hidden prohormones or SARMs found in FDA enforcement actions (2017-2024)",
+        "Undeclared anabolic steroids detected in third-party testing",
+        "Liver toxicity risk from undisclosed methylated compounds",
+        "Hormone disruption from unknown compound ratios"
+      ],
+      "notes": "Testosterone and hormone support blends carry the highest contamination risk of any supplement category. FDA and DOD testing consistently finds undeclared anabolic agents, SARMs, and prohormones. Products with undisclosed formulas in this category warrant particular caution."
+    },
+    {
+      "id": "BLEND_WEIGHT_LOSS",
+      "standard_name": "Weight Loss & Fat Burner Blends",
+      "blend_terms": [
+        "fat burner complex",
+        "lipotropic blend",
+        "thermogenic matrix",
+        "metabolic booster",
+        "appetite suppressant blend",
+        "carb blocker complex",
+        "fat metabolizer",
+        "slimming matrix",
+        "weight management blend",
+        "fat oxidizer complex",
+        "lean body matrix",
+        "cutting blend",
+        "shred matrix",
+        "weight cutter blend",
+        "Tone GT Adipoblast",
+        "Stim-Free Weight Control"
+      ],
+      "risk_factors": [
+        "Sibutramine (banned) is the most common adulterant in weight loss supplements",
+        "Phenolphthalein and other laxatives found undeclared in FDA testing",
+        "Hidden stimulants (DMAA, BMPEA) pose cardiovascular risk",
+        "Dangerous drug combinations undetectable without full disclosure"
+      ],
+      "notes": "Weight loss supplements have the highest rate of FDA enforcement actions. A 2018 JAMA study found 776 adulterated weight loss products over a decade, with sibutramine, phenolphthalein, and fluoxetine as top adulterants. Full ingredient disclosure is essential for safety in this category."
+    },
+    {
+      "id": "BLEND_NOOTROPIC",
+      "standard_name": "Cognitive & Nootropic Blends",
+      "blend_terms": [
+        "brain blend",
+        "cognitive matrix",
+        "nootropic complex",
+        "mental performance blend",
+        "focus enhancer blend",
+        "memory booster complex",
+        "neuro blend",
+        "cognitive support complex",
+        "mental clarity blend",
+        "brain health matrix",
+        "mind boost blend",
+        "neuro support complex",
+        "smart supplement matrix"
+      ],
+      "risk_factors": [
+        "Pharmaceutical nootropics (modafinil, piracetam) found undeclared",
+        "Unknown racetam-type compounds at uncontrolled doses",
+        "Serotonergic ingredients can interact with antidepressants",
+        "Neurological effects from undisclosed compound combinations"
+      ],
+      "notes": "Cognitive enhancement blends increasingly contain pharmaceutical-grade nootropics without disclosure. FDA has identified products containing undeclared prescription drugs including modafinil analogs. Consumers on psychiatric medications face interaction risks when blend contents are hidden."
+    },
+    {
+      "id": "BLEND_PUMP",
+      "standard_name": "Pump & Nitric Oxide Blends",
+      "blend_terms": [
+        "pump matrix",
+        "vaso blend",
+        "vasodilation complex",
+        "NO booster blend",
+        "nitric oxide blend",
+        "vascular support matrix",
+        "plasma expander complex",
+        "muscle volumizer matrix"
+      ],
+      "risk_factors": [
+        "Hidden vasodilators may cause hypotension in sensitive individuals",
+        "Excessive nitrate dosing risk without individual amounts",
+        "Sodium/fluid balance disruption from undisclosed electrolyte content"
+      ],
+      "notes": "Pump and nitric oxide blends combine L-citrulline, L-arginine, beetroot extract, and other vasodilators. Without individual dosing, users on blood pressure medications or PDE5 inhibitors cannot assess interaction risk. Excessive vasodilation can cause dangerous hypotension."
+    },
+    {
+      "id": "BLEND_ADAPTOGEN",
+      "standard_name": "Adaptogen & Stress Support Blends",
+      "blend_terms": [
+        "adaptogenic blend",
+        "stress support complex",
+        "anxiety relief blend",
+        "relaxation complex",
+        "Stress and Energy Support Blend",
+        "calm matrix",
+        "balance blend",
+        "mood support blend",
+        "resilience complex",
+        "anti-stress formula",
+        "Adaptogens"
+      ],
+      "risk_factors": [
+        "Adaptogen potency varies 10-100x between sources and extracts",
+        "Unknown ratios prevent assessment of herb-drug interactions",
+        "Ashwagandha, rhodiola, and holy basil can affect thyroid function",
+        "Sedative herbs in undisclosed amounts may impair alertness"
+      ],
+      "notes": "Adaptogen blends combine herbs like ashwagandha, rhodiola, and ginseng that modulate the HPA axis. Without individual doses, consumers cannot assess thyroid interactions (ashwagandha), MAO inhibition potential (rhodiola), or additive sedation. Clinical doses vary dramatically by extract standardization."
+    },
+    {
+      "id": "BLEND_SUPERFOOD",
+      "standard_name": "Superfood, Greens & Herbal Blends",
+      "blend_terms": [
+        "superfood blend",
+        "immune support blend",
+        "immunity blend",
+        "immune complex",
+        "detox blend",
+        "wellness matrix",
+        "plant blend",
+        "fruit and veggie complex",
+        "Fruit Blend",
+        "antioxidant matrix",
+        "Fruit Powder Blend",
+        "phytonutrient complex",
+        "Proprietary Herbal Blend",
+        "Trikatu Herbal Blend",
+        "organic Brown Rice Syrup Blend",
+        "Ear, Nose & Throat Support Herbal Blend",
+        "orchard fruits & garden veggies powder blend",
+        "Proprietary Full-Spectrum Premium Herbal Blend",
+        "daily greens blend",
+        "Dental Herbal Complex",
+        "Orchard Fruits & Garden Veggies Powder Blend",
+        "fruit phenolic blend",
+        "Herbal Immune Blend",
+        "mushroom mycelial & primordia biomass defense blend",
+        "Natural Defense Blend",
+        "green superfood blend",
+        "organic greens blend",
+        "Soothing Herbal Blend",
+        "garden blend",
+        "whole food matrix",
+        "organic fruit & vegetable blend",
+        "living nutrients complex",
+        "raw food blend",
+        "Proprietary mushroom blend",
+        "BotaniPlex",
+        "BotaniPlex Blend",
+        "fermented food matrix",
+        "sprouted seed complex",
+        "berry antioxidant blend",
+        "organic mushroom complex",
+        "nutrient-dense superfood complex",
+        "Green Food Supplement"
+      ],
+      "risk_factors": [
+        "Individual ingredient amounts unknown — therapeutic doses unlikely",
+        "Herbal adulterant risk in multi-herb blends (Botanical Adulterants Prevention Program)",
+        "Potential heavy metal accumulation from mixed botanical sources"
+      ],
+      "notes": "Superfood and herbal blends typically contain many ingredients in amounts too small for therapeutic effect. Without individual doses, it is impossible to determine whether any component reaches a clinically meaningful level. Multi-herb blends also carry higher contamination risk per the Botanical Adulterants Prevention Program."
+    },
+    {
+      "id": "BLEND_PROBIOTIC",
+      "standard_name": "Probiotic & Microbiome Blends",
+      "blend_terms": [
+        "probiotic blend",
+        "multi-strain complex",
+        "Oral Probiotic Blend",
+        "Super 5 Probiotic Blend",
+        "microflora matrix",
+        "gut health blend",
+        "digestive complex",
+        "intestinal support blend",
+        "bacterial support complex",
+        "microbiome support blend",
+        "gut flora complex",
+        "Mycrobiome Mouth & Throat Blend",
+        "intestinal health blend",
+        "gut microbiome blend",
+        "L. reuteri Prodentis Blend",
+        "intestinal flora complex",
+        "Digestive Support Blend",
+        "Oral & Sinus Probiotic Blend",
+        "Oral Prebiotic Blend"
+      ],
+      "risk_factors": [
+        "Individual strain CFU counts unknown — efficacy is strain-specific and dose-dependent",
+        "Total CFU may be dominated by one cheap filler strain",
+        "Strain ratios affect competitive exclusion and colonization success"
+      ],
+      "notes": "Probiotic efficacy is strain-specific and dose-dependent (e.g., L. rhamnosus GG requires ≥10B CFU). When blends disclose only total CFU without per-strain breakdown, it is impossible to verify whether any strain reaches its clinically studied dose. Some blends use high-count filler strains to inflate total CFU."
+    },
+    {
+      "id": "BLEND_ENZYME",
+      "standard_name": "Digestive Enzyme Blends",
+      "blend_terms": [
+        "enzymax",
+        "digestive enzyme blend",
+        "enzyme complex",
+        "concentrated enzymes",
+        "concentrated enzyme formula",
+        "acid comfort",
+        "acid comfort blend",
+        "digestive comfort blend",
+        "acid relief complex",
+        "digestive comfort complex",
+        "digestive support blend",
+        "enzyme matrix"
+      ],
+      "risk_factors": [
+        "Enzyme activity levels (FCC/USP units) not disclosed per enzyme",
+        "Unknown ratios of protease, lipase, amylase prevent dosing assessment",
+        "Enteric coating claims unverifiable without composition data"
+      ],
+      "notes": "Digestive enzyme blends should disclose individual enzyme activity levels in standardized units (FCC or USP). Without per-enzyme activity data, it is impossible to assess whether the blend provides clinically meaningful digestive support. Enzyme activity varies dramatically by source and processing."
+    },
+    {
+      "id": "BLEND_BEAUTY",
+      "standard_name": "Beauty & Collagen Blends",
+      "blend_terms": [
+        "beauty blend",
+        "collagen complex",
+        "skin renewal matrix",
+        "hair and nail complex",
+        "anti-aging formula",
+        "radiance blend",
+        "skin health complex",
+        "dermal support blend"
+      ],
+      "risk_factors": [
+        "Unknown collagen peptide dosages — clinical doses are 2.5-15g/day",
+        "Hidden hormones or growth factors in anti-aging formulas",
+        "Biotin mega-doses can interfere with lab test results"
+      ],
+      "notes": "Beauty blends combine collagen peptides, biotin, hyaluronic acid, and botanical extracts. Clinical evidence requires specific doses (e.g., 2.5g Verisol collagen peptides for skin elasticity). Without individual amounts, efficacy cannot be assessed and potential lab test interference from high-dose biotin goes undetected."
+    },
+    {
+      "id": "BLEND_HYDRATION",
+      "standard_name": "Hydration & Electrolyte Blends",
+      "blend_terms": [
+        "hydration blend",
+        "electrolyte matrix",
+        "recovery blend",
+        "hydration complex",
+        "recovery complex",
+        "hydration support blend",
+        "recovery support blend",
+        "fluid balance complex",
+        "performance hydration complex"
+      ],
+      "risk_factors": [
+        "Sodium/potassium ratios unknown — critical for cardiac and renal patients",
+        "Hidden stimulants in recovery products",
+        "Electrolyte imbalance risk without individual mineral amounts"
+      ],
+      "notes": "Electrolyte blends require individual mineral disclosure (sodium, potassium, magnesium, calcium) for safe use. Patients on ACE inhibitors, ARBs, or potassium-sparing diuretics need exact potassium content. WHO oral rehydration standards specify precise electrolyte ratios that cannot be verified without disclosure."
+    },
+    {
+      "id": "BLEND_DELIVERY",
+      "standard_name": "Delivery Technology Blends",
+      "blend_terms": [
+        "clean tablet technology blend",
+        "delivery system matrix",
+        "bioenhancement complex",
+        "absorption optimizer blend",
+        "clean tablet blend",
+        "clean capsule technology",
+        "bioavailability enhancer blend",
+        "clean manufacturing blend",
+        "nutrient delivery system",
+        "optimized absorption complex",
+        "Absorption Agent"
+      ],
+      "risk_factors": [
+        "Undisclosed excipients may include allergens (soy lecithin, shellac)",
+        "Processing aids and binding agents hidden under technology branding",
+        "Absorption enhancers (piperine, BioPerine) can affect drug metabolism"
+      ],
+      "notes": "Delivery technology blends wrap excipients, binders, and absorption enhancers under branded names. While generally low-risk, consumers with allergies need full excipient disclosure, and absorption enhancers like piperine can increase drug bioavailability and affect CYP3A4/P-gp substrates."
+    },
+    {
+      "id": "BLEND_GENERAL",
+      "standard_name": "General Proprietary Blends",
+      "blend_terms": [
+        "proprietary blend",
+        "exclusive formula",
+        "patent-pending complex",
+        "advanced matrix",
+        "breakthrough formula",
+        "clinical blend",
+        "synergistic complex",
+        "optimal matrix",
+        "enhanced formula",
+        "bioavailable complex",
+        "Whole Omega Complex",
+        "premium blend",
+        "specialized matrix",
+        "signature blend",
+        "Proprietary Complex",
+        "advanced formula",
+        "innovative complex",
+        "Eye Health Blend",
+        "B Complex Base Blend",
+        "Prostate Support Blend",
+        "Prostate Support Complex",
+        "Proprietary Formula",
+        "Prostate Support Matrix",
+        "Proprietary Enterolactone Precursors Blend",
+        "CLA Blend",
+        "Bioactive Liver Compound Complex",
+        "PrimaVie Shilajit Fulvic Acid Complex",
+        "Prostate Support Formula",
+        "Acti-Joint",
+        "Mitochondria/Plasma membrane",
+        "Healthy Oils",
+        "Membrane Factors",
+        "Metabolic GlycoPlex",
+        "Cardio Support Blend",
+        "Metabolism Support",
+        "proprietary blend™",
+        "exclusive formula®",
+        "patent-pending complex™",
+        "signature blend®",
+        "registered formula™",
+        "Proprietary Premium Herbal Blend"
+      ],
+      "risk_factors": [
+        "Complete lack of ingredient-level transparency",
+        "Unknown ratios make efficacy assessment impossible",
+        "Ineffective micro-dosing hidden behind blend totals"
+      ],
+      "notes": "General proprietary blends hide individual ingredient amounts behind a single total weight. This makes it impossible to verify whether any ingredient reaches a clinically effective dose or to assess safety for individuals with specific health conditions or medication interactions."
+    },
+    {
+      "id": "BLEND_PROTEIN",
+      "standard_name": "Protein & Amino Acid Blends",
+      "blend_terms": [
+        "Whey Protein Blend",
+        "protein matrix",
+        "amino acid complex",
+        "BCAA blend",
+        "protein complex",
+        "muscle support blend",
+        "amino blend",
+        "performance protein matrix"
+      ],
+      "risk_factors": [
+        "Protein spiking with cheap amino acids (glycine, taurine) to inflate protein content",
+        "Unknown whey/casein/soy ratios in multi-source blends",
+        "Amino acid profiles unverifiable without individual amounts"
+      ],
+      "notes": "Protein blends may use amino acid spiking (adding cheap free-form amino acids like glycine or taurine) to inflate nitrogen content and apparent protein percentage. Without individual protein source amounts, consumers cannot verify protein quality or detect spiking. Third-party tested products with full disclosure are preferred."
+    }
+  ]
+}

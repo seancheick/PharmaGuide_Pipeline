@@ -11,10 +11,11 @@
 
 ### Current baseline
 
-- Test status: `1900 passed` (`0 skipped`, `0 xfailed`, `0 xpassed`)
+- Test status: `1901 passed` (`3 skipped`, `0 xfailed`, `0 xpassed`)
 - Validation commands:
   - `pytest -q scripts/tests -ra`
   - `python scripts/db_integrity_sanity_check.py` (`0 findings`)
+- Skip detail: `test_pipeline_integrity.py` output-directory checks are conditionally skipped when local enriched/scored output folders are absent.
 - Patch state: all original 18 high-impact patches applied + additional hardening patches.
 
 ### Completed since initial audit
@@ -39,6 +40,27 @@
    - schema version checks unified at `5.0.0`,
    - stale `validate_json_files.py` moved to archive,
    - strict regression signal cleanup (removed stale skip/xfail noise).
+
+### Synergy deep audit addendum (2026-03-04)
+
+1. Contract/scoring alignment fixes are now applied:
+   - scorer fallback A5c logic now matches enrichment dose-anchoring behavior (no bonus when a cluster has no checkable minimum doses),
+   - two `synergy_cluster.json` entries fixed so all `min_effective_doses` keys exist in `ingredients`,
+   - integrity checker now enforces synergy tier/type/dose-key/dose-value constraints.
+   - `note` + `sources` fields are now present on all synergy clusters and carried into enrichment output for explainability.
+   - notes were upgraded to user-facing bonus explanations (rule + evidence tier + anchor doses), replacing generic placeholders.
+   - additional min-dose anchors were added for existing key ingredients (sleep/eye/iron clusters), and noisy ingredients were pruned in high-impact clusters to reduce false positives.
+2. Production-sample behavior check (6 enriched batches, 1,186 products):
+   - `synergy_cluster_qualified = true` on 389 products (`32.8%`),
+   - most frequent qualifying clusters: `magnesium_nervous_system`, `sleep_stack`, `immune_defense`, `hair_skin_nutrition`, `bone_health`.
+3. Evidence validation against primary sources (FDA/NIH/PubMed):
+   - Strong support for specific pairs: curcumin+piperine bioavailability (PMID: 9619120), iron+vitamin C absorption (NIH ODS Iron), calcium+vitamin D bone role (NIH ODS Vitamin D), AREDS2 carotenoid formula evidence (PMID: 23644932).
+   - Mixed/limited support for broad stacks: glucosamine/chondroitin (NCCIH notes mixed evidence), magnesium+B6 (benefit signal limited to stressed subgroup), melatonin/magnesium/zinc sleep combo (small older-adult trial).
+   - FDA position check: no FDA premarket approval for supplements, and FDA denied a vitamin K2 osteoporosis health-claim notification (no authorized K2-osteoporosis claim language).
+4. Remaining high-priority accuracy gap:
+   - Per-cluster `sources` coverage is complete (`54/54`) and integrity checks enforce non-empty source lists.
+   - Query-placeholder citations were removed in phase 3 (no `pubmed_query` / no search-term URLs).
+   - Remaining quality gap: several clusters still rely on broad NIH/FDA context links rather than cluster-specific clinical papers.
 
 ### Open items (still outstanding)
 

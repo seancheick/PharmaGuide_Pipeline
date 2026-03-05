@@ -212,11 +212,16 @@ class SupplementScorer:
     # ---------------------------------------------------------------------
 
     def _classify_supplement_type(self, product: Dict[str, Any]) -> str:
-        existing = norm_text(product.get("supplement_type", {}).get("type"))
+        st = product.get("supplement_type", {})
+        if isinstance(st, str):
+            return norm_text(st) or st
+        if not isinstance(st, dict):
+            st = {}
+        existing = norm_text(st.get("type"))
         if existing:
             return existing
 
-        active_count = int(as_float(product.get("supplement_type", {}).get("active_count"), 0) or 0)
+        active_count = int(as_float(st.get("active_count"), 0) or 0)
         if not active_count:
             active_count = len(safe_list(product.get("ingredient_quality_data", {}).get("ingredients")))
 
@@ -479,6 +484,10 @@ class SupplementScorer:
             # meaningless "unspecified form" score of 5.
             if ing.get("is_proprietary_blend"):
                 continue
+            # Parent nutrient totals are informational rows when nested forms
+            # are present; include child forms only to avoid double-counting.
+            if ing.get("is_parent_total"):
+                continue
             # A1 is dose-anchored quality. Rows without an individual usable
             # dose (common for opaque blend children) do not contribute.
             if not self._has_usable_individual_dose(ing):
@@ -570,7 +579,9 @@ class SupplementScorer:
                 if as_float(item.get("min_effective_dose"), 0.0) and as_float(item.get("min_effective_dose"), 0.0) > 0
             ]
             if not checkable:
-                return True
+                # Keep scorer fallback behavior aligned with enrichment projection:
+                # cluster matches without dose-anchored evidence do not qualify for A5c.
+                continue
 
             dosed = [item for item in checkable if bool(item.get("meets_minimum", False))]
             if len(dosed) >= math.ceil(len(checkable) / 2):

@@ -142,11 +142,11 @@ class ProprietaryBlendDetector:
         Initialize the detector.
 
         Args:
-            blend_db_path: Path to proprietary_blends_penalty.json.
+            blend_db_path: Path to proprietary_blends.json.
                           If None, uses default location.
         """
         if blend_db_path is None:
-            blend_db_path = Path(__file__).parent / "data" / "proprietary_blends_penalty.json"
+            blend_db_path = Path(__file__).parent / "data" / "proprietary_blends.json"
 
         self.blend_db = self._load_blend_db(blend_db_path)
         self.penalty_cap = self.blend_db.get("_metadata", {}).get("max_penalty_points", 10)
@@ -162,35 +162,34 @@ class ProprietaryBlendDetector:
             return {"proprietary_blend_concerns": [], "_metadata": {"max_penalty_points": 10}}
 
     def _compile_patterns(self):
-        """Compile all detection patterns for efficiency."""
+        """Compile all detection patterns for efficiency.
+
+        The blend DB (proprietary_blends.json) is mapping-only — it provides
+        blend_terms for recognition and risk_category inference.  Penalty
+        scoring is handled entirely by the scorer (B5 engine) based on
+        disclosure_level, NOT by values in this file.
+        """
         self.compiled_patterns = []
 
         for blend_def in self.blend_db.get("proprietary_blend_concerns", []):
             blend_id = blend_def.get("id", "UNKNOWN")
             standard_name = blend_def.get("standard_name", "Unknown Blend")
-            severity = blend_def.get("severity_level", "moderate")
 
-            # Get penalties
-            penalties = blend_def.get("penalties") or blend_def.get("penalty_levels") or []
+            # Infer severity from risk category (detector-side heuristic)
+            risk_category = self._infer_risk_category(blend_id, standard_name)
+            severity = self._severity_from_risk(risk_category)
+
+            # Default penalty values — scorer overrides these via B5 engine,
+            # but detector still emits them for evidence payloads.
             no_disclosure_penalty = -10
             partial_disclosure_penalty = -5
             no_disclosure_reason = "No ingredient amounts disclosed"
             partial_disclosure_reason = "Some ingredient amounts disclosed"
 
-            for p in penalties:
-                if p.get("type") == "no_disclosure":
-                    no_disclosure_penalty = p.get("penalty", -10)
-                    no_disclosure_reason = p.get("penalty_reason", no_disclosure_reason)
-                elif p.get("type") == "partial_disclosure":
-                    partial_disclosure_penalty = p.get("penalty", -5)
-                    partial_disclosure_reason = p.get("penalty_reason", partial_disclosure_reason)
+            # Compile patterns from blend_terms
+            terms = blend_def.get("blend_terms") or []
 
-            # Compile patterns from red_flag_terms
-            terms = blend_def.get("red_flag_terms") or []
-            aliases = blend_def.get("aliases") or []
-            all_terms = terms + aliases
-
-            for term in all_terms:
+            for term in terms:
                 # Escape special regex chars but allow matching
                 escaped = re.escape(term)
                 # Make matching case-insensitive and allow some flexibility
@@ -202,7 +201,7 @@ class ProprietaryBlendDetector:
                     "blend_id": blend_id,
                     "standard_name": standard_name,
                     "severity": severity,
-                    "risk_category": self._infer_risk_category(blend_id, standard_name),
+                    "risk_category": risk_category,
                     "no_disclosure_penalty": no_disclosure_penalty,
                     "partial_disclosure_penalty": partial_disclosure_penalty,
                     "no_disclosure_reason": no_disclosure_reason,
@@ -234,6 +233,23 @@ class ProprietaryBlendDetector:
             return "enzyme"
         else:
             return "general"
+
+    @staticmethod
+    def _severity_from_risk(risk_category: str) -> str:
+        """Derive severity from risk category (detector-side heuristic).
+
+        The blend DB no longer stores severity_level; the detector infers it
+        so the evidence payload still contains a meaningful value for
+        downstream consumers (enricher, scorer).
+        """
+        HIGH_RISK = {"stimulant", "testosterone", "weight_loss", "nootropic"}
+        MODERATE_RISK = {"adaptogen", "pump", "beauty", "hydration"}
+        # LOW_RISK = {"superfood", "probiotic", "enzyme", "general", "delivery", "protein"}
+        if risk_category in HIGH_RISK:
+            return "high"
+        elif risk_category in MODERATE_RISK:
+            return "moderate"
+        return "low"
 
     def analyze_product(self, product: Dict) -> BlendAnalysisResult:
         """

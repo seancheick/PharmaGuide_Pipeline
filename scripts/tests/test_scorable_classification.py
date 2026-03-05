@@ -1280,7 +1280,7 @@ class TestFormUnmappedFallbackRegression:
             "Vitamin E",
             "Vitamin E",
             quality_map,
-            cleaned_forms=[{"name": "D-Alpha-Tocopheryl Acid Succinate"}],
+            cleaned_forms=[{"name": "D-Alpha-Tocopheryl Phosphate Complex"}],
         )
         assert match is not None
         assert match.get("match_status") == "FORM_UNMAPPED_FALLBACK"
@@ -1346,6 +1346,126 @@ class TestFormUnmappedFallbackRegression:
         assert match.get("canonical_id") == "omega_3"
         assert "unspecified" in str(match.get("form_id", "")).lower()
         assert float(match.get("score", 0)) <= 11.0
+
+
+class TestParentTotalFlagging:
+    """Regression tests for parent-total flag propagation and detection."""
+
+    def test_build_quality_entry_propagates_structure_fields(self, enricher):
+        match_result = {
+            "standard_name": "Folate",
+            "canonical_id": "folate",
+            "form_id": "folic_acid",
+            "form_name": "folic acid",
+            "match_tier": "exact",
+            "bio_score": 12,
+            "score": 12,
+            "natural": False,
+            "dosage_importance": 1.0,
+            "category": "vitamins",
+        }
+        entry = enricher._build_quality_entry(
+            {
+                "name": "Folic Acid",
+                "standardName": "Folic Acid",
+                "quantity": 400,
+                "unit": "mcg",
+                "isNestedIngredient": True,
+                "parentBlend": "Folate",
+            },
+            match_result,
+            hierarchy_type=None,
+            source_section="active",
+        )
+        assert entry["is_nested_ingredient"] is True
+        assert entry["parent_blend"] == "Folate"
+        assert entry["is_parent_total"] is False
+
+    def test_collect_marks_parent_total_for_nested_same_canonical(self, enricher, monkeypatch):
+        def fake_match_quality_map(ing_name, std_name, quality_map, cleaned_forms=None):
+            return {
+                "standard_name": "Vitamin A",
+                "canonical_id": "vitamin_a",
+                "form_id": "unspecified",
+                "form_name": "(unspecified)",
+                "match_tier": "exact",
+                "bio_score": 9,
+                "score": 9,
+                "natural": False,
+                "dosage_importance": 1.0,
+                "category": "vitamins",
+            }
+
+        monkeypatch.setattr(enricher, "_match_quality_map", fake_match_quality_map)
+
+        product = {
+            "id": "test-parent-total",
+            "fullName": "Parent Total Product",
+            "activeIngredients": [
+                {
+                    "name": "Vitamin A",
+                    "standardName": "Vitamin A",
+                    "quantity": 10000,
+                    "unit": "IU",
+                    "isNestedIngredient": False,
+                },
+                {
+                    "name": "Mixed Carotenes",
+                    "standardName": "Mixed Carotenes",
+                    "quantity": 8000,
+                    "unit": "IU",
+                    "isNestedIngredient": True,
+                    "parentBlend": "Vitamin A",
+                },
+                {
+                    "name": "Retinyl Palmitate",
+                    "standardName": "Retinyl Palmitate",
+                    "quantity": 2000,
+                    "unit": "IU",
+                    "isNestedIngredient": True,
+                    "parentBlend": "Vitamin A",
+                },
+            ],
+            "inactiveIngredients": [],
+        }
+
+        result = enricher._collect_ingredient_quality_data(product)
+        scorable = result["ingredients_scorable"]
+        by_name = {ing["name"]: ing for ing in scorable}
+
+        assert by_name["Vitamin A"]["is_parent_total"] is True
+        assert by_name["Mixed Carotenes"]["is_parent_total"] is False
+        assert by_name["Retinyl Palmitate"]["is_parent_total"] is False
+
+    def test_collect_does_not_flag_when_no_nested_children(self, enricher, monkeypatch):
+        def fake_match_quality_map(ing_name, std_name, quality_map, cleaned_forms=None):
+            return {
+                "standard_name": "Vitamin K",
+                "canonical_id": "vitamin_k",
+                "form_id": "unspecified",
+                "form_name": "(unspecified)",
+                "match_tier": "exact",
+                "bio_score": 9,
+                "score": 9,
+                "natural": False,
+                "dosage_importance": 1.0,
+                "category": "vitamins",
+            }
+
+        monkeypatch.setattr(enricher, "_match_quality_map", fake_match_quality_map)
+
+        product = {
+            "id": "test-no-parent-total",
+            "fullName": "No Parent Total Product",
+            "activeIngredients": [
+                {"name": "Vitamin K1", "standardName": "Vitamin K1", "quantity": 100, "unit": "mcg"},
+                {"name": "Vitamin K2", "standardName": "Vitamin K2", "quantity": 100, "unit": "mcg"},
+            ],
+            "inactiveIngredients": [],
+        }
+
+        result = enricher._collect_ingredient_quality_data(product)
+        assert all(not ing["is_parent_total"] for ing in result["ingredients_scorable"])
 
 
 class TestCoverageIntegrity:

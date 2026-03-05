@@ -67,7 +67,7 @@ Audit EVERY parent in `ingredient_quality_map.json` in batches of 3-4 parents at
 - **Top Manufacturers:** Read `top_manufacturers_data.json`. Search for new GMP violations or FDA warning letters. Remove/flag violators.
 - **Clinical Studies:** Read `backed_clinical_studies.json`. Search PubMed for new systematic reviews.
 - **Absorption Enhancers:** Read `absorption_enhancers.json`. Verify pairings are clinically supported (e.g., piperine + curcumin).
-- **Proprietary Blends:** Review `proprietary_blends_penalty.json` to ensure the scoring engine accurately penalizes hidden ingredient weights based on label visibility.
+- **Proprietary Blends:** Review `proprietary_blends.json` to ensure the scoring engine accurately detects and maps proprietary blend patterns based on label visibility.
 
 ---
 

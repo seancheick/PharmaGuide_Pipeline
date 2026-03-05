@@ -32,7 +32,7 @@ class TestAllergenNegationPolicy:
         enricher = SupplementEnricherV3()
         # Minimal allergen database for testing
         enricher.databases['allergens'] = {
-            'common_allergens': [
+            'allergens': [
                 {
                     'id': 'ALG_MILK',
                     'standard_name': 'milk',
@@ -170,7 +170,7 @@ class TestAllergenDetectionEndToEnd:
         """Create enricher with allergen database loaded."""
         enricher = SupplementEnricherV3()
         enricher.databases['allergens'] = {
-            'common_allergens': [
+            'allergens': [
                 {
                     'id': 'ALG_MILK',
                     'standard_name': 'milk',

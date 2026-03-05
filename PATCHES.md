@@ -5,9 +5,9 @@
 
 ## Current validation baseline
 
-- Full suite: `1900 passed` (no skips, no xfails, no xpasses)
+- Full suite: `1901 passed, 3 skipped` (no xfails, no xpasses)
 - Last full run command: `pytest -q scripts/tests -ra`
-- Runtime: ~2m20s (expected for this repo and fixture size)
+- Runtime: ~2m22s to ~2m29s (expected for this repo and fixture size)
 
 ## Original 18 patches status
 
@@ -47,6 +47,49 @@
    - removed stale `xfail` markers that had become XPASS,
    - replaced avoidable skips with deterministic assertions,
    - suite now runs with strict clean status.
+
+## Synergy hardening (2026-03-04)
+
+1. `score_supplements.py` fallback logic for A5c now matches enrichment behavior:
+   - clusters with `match_count >= 2` but **no checkable `min_effective_dose > 0`** no longer qualify.
+   - prevents bonus drift when `synergy_cluster_qualified` is missing and scorer must evaluate raw `formulation_data`.
+2. `test_score_supplements.py` updated to lock the stricter fallback contract (no implicit bonus on dose-unanchored clusters).
+3. `synergy_cluster.json` contract fix:
+   - added missing `zinc` aliases to `respiratory_health_lung_support` and `prostate_health` ingredient lists so `min_effective_doses` keys are valid.
+4. `db_integrity_sanity_check.py` strengthened for `synergy_cluster.json`:
+   - `evidence_tier` required and constrained to `int` in `{1,2,3}`,
+   - `synergy_mechanism` type constrained to `str|null`,
+   - every `min_effective_doses` key must exist in `ingredients`,
+   - every dose must be finite and `> 0`.
+5. `DATABASE_SCHEMA.md` synchronized with actual/runtime contract for synergy clusters.
+6. Added explainability fields directly in `synergy_cluster.json`:
+   - `note` (user-facing rationale),
+   - `sources` (evidence link objects with `source_type`/`label`/`url`).
+7. Enricher now propagates `note` + `sources` into matched synergy cluster output for UI details.
+8. Added regression coverage for explainability propagation in enrichment (`TestSynergyExplainabilityFields`).
+9. Phase-1 citation seeding completed for 8 clusters, then phase-2 expanded to full coverage.
+10. Replaced generic synergy notes with user-facing explainability text:
+   - explicit bonus rule (`+1`, `>=2` matched ingredients),
+   - dose-qualification rule (at least half of dose-checkable ingredients),
+   - evidence tier label and anchor-dose summary.
+11. Added missing min-dose anchors for key ingredients already present in clusters:
+   - `sleep_stack`: `zinc >= 10` (+ `zinc` aliases),
+   - `eye_health`: `vitamin c >= 250`,
+   - `iron_absorption`: `copper >= 0.9`.
+12. Pruned noisy/non-specific terms likely to inflate false positives:
+   - removed `cbd` from `sleep_stack`,
+   - removed `anthocyanins` from `eye_health`,
+   - removed `osteocalcin` from `bone_health`.
+13. Citation coverage is now `54/54` clusters with non-empty `sources`.
+14. Validation gate hardened: `sources` must be non-empty for every synergy cluster (empty list now fails integrity checks).
+15. Phase-3 citation cleanup:
+   - removed all query-placeholder citations (`pubmed_query` and `...?term=` URLs),
+   - upgraded FDA link to current URL path,
+   - added NIH/NCCIH companion references for probiotic clusters,
+   - no clusters remain with FDA-only references.
+16. Validation gate tightened further:
+   - allowed synergy source types are now constrained to `pubmed|nih_ods|fda|nccih`,
+   - PubMed search-query URLs are explicitly rejected (must be source-page links).
 
 ## Remaining open items (not patched in this cycle)
 

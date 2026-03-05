@@ -19,7 +19,7 @@ JSON_FILES = {
     'backed_clinical_studies': os.path.join(DATA_DIR, 'backed_clinical_studies.json'),
     'banned_recalled_ingredients': os.path.join(DATA_DIR, 'banned_recalled_ingredients.json'),
     'ingredient_quality_map': os.path.join(DATA_DIR, 'ingredient_quality_map.json'),
-    'proprietary_blends_penalty': os.path.join(DATA_DIR, 'proprietary_blends_penalty.json'),
+    'proprietary_blends': os.path.join(DATA_DIR, 'proprietary_blends.json'),
     'rda_optimal_uls': os.path.join(DATA_DIR, 'rda_optimal_uls.json'),
     'standardized_botanicals': os.path.join(DATA_DIR, 'standardized_botanicals.json'),
     'top_manufacturers': os.path.join(DATA_DIR, 'top_manufacturers_data.json'),
@@ -106,7 +106,7 @@ SCHEMAS = {
             }
         }
     },
-    'proprietary_blends_penalty': {
+    'proprietary_blends': {
         'type': 'object',
         'properties': {
             'proprietary_blend_concerns': {
@@ -115,8 +115,10 @@ SCHEMAS = {
                     'type': 'object',
                     'properties': {
                         'id': {'type': 'string'},
-                        'red_flag_terms': {'type': 'array', 'items': {'type': 'string'}},
-                        'penalties': {'type': 'array', 'items': {'type': 'object'}}
+                        'standard_name': {'type': 'string'},
+                        'blend_terms': {'type': 'array', 'items': {'type': 'string'}},
+                        'risk_factors': {'type': 'array', 'items': {'type': 'string'}},
+                        'notes': {'type': 'string'}
                     }
                 }
             }

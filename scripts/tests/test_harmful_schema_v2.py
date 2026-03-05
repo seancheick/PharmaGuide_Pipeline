@@ -65,7 +65,16 @@ def test_entity_relationships_present():
         assert any(r.get("target_id") == target for r in rels), f"{eid} missing relation to {target}"
 
 
-def test_missing_match_tokens_report_empty():
-    path = Path(__file__).parent.parent / "reports" / "missing_match_tokens.json"
-    assert path.exists(), "Match token report not generated (run scripts/harmful_phase3_5.py)"
-    assert json.loads(path.read_text()) == [], "Match token report must be empty"
+def test_all_entries_have_match_tokens():
+    """Every harmful additive with match_mode requiring tokens must have label_tokens or aliases."""
+    missing = []
+    for entry in load_entries():
+        mr = entry.get("match_rules", {})
+        mode = mr.get("match_mode", "")
+        # Entries that rely on token matching need label_tokens or aliases
+        if mode in ("token", "token_any", "token_all", "exact"):
+            has_tokens = bool(mr.get("label_tokens"))
+            has_aliases = bool(entry.get("aliases"))
+            if not has_tokens and not has_aliases:
+                missing.append(entry["id"])
+    assert missing == [], f"Entries missing match tokens or aliases: {missing}"
