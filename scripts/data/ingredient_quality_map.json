@@ -2601,7 +2601,10 @@
           "standard vit c",
           "pure ascorbic acid supplement",
           "vit c supplement",
-          "vitc supplement"
+          "vitc supplement",
+          "Vitamin C, Natural",
+          "vitamin c, natural",
+          "natural vitamin c supplement"
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
@@ -13710,7 +13713,11 @@
           "marigold lutein",
           "lutein 20%",
           "Lutemax 2020 Lutein",
-          "aztec marigold extract"
+          "aztec marigold extract",
+          "Trans-Lutein",
+          "trans-lutein",
+          "all-trans lutein",
+          "All-Trans Lutein"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -13773,7 +13780,13 @@
           "OmniXan Zeaxanthin",
           "ZeaGold",
           "Zeaxanthin Esters",
-          "xanmax"
+          "xanmax",
+          "Zeaxanthin Isomer",
+          "zeaxanthin isomer",
+          "zeaxanthin isomer (rr)",
+          "zeaxanthin isomer (rs)",
+          "zeaxanthin (rr)",
+          "zeaxanthin (rs)"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -17151,7 +17164,14 @@
           "echinacea purpurea 4:1 extract",
           "cichoric acid",
           "dicaffeoyl tartaric acid",
-          "echinacea cichoric acid"
+          "echinacea cichoric acid",
+          "Echinacea (Echinacea purpurea) (aerial and root parts) 4:1 extract",
+          "echinacea (echinacea purpurea) (aerial and root parts) 4:1 extract",
+          "Echinacea purpurea aerial and root parts 4:1 extract",
+          "echinacea purpurea aerial and root 4:1 extract",
+          "Echinacea purpurea (aerial and root) extract",
+          "echinacea (aerial and root parts) extract",
+          "echinacea purpurea aerial parts and root extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -17952,7 +17972,20 @@
           "Sambucus nigra extract",
           "Anthocyanins, Sambucus nigra Berry Extract",
           "sambucus nigra berry extract anthocyanins",
-          "anthocyanins from sambucus nigra"
+          "anthocyanins from sambucus nigra",
+          "Black Elder (berry) extract",
+          "black elder (berry) extract",
+          "Black Elder Berry Extract",
+          "black elder berry extract",
+          "Black Elder Extract",
+          "black elder extract",
+          "Black Elder fruit extract",
+          "black elder fruit extract",
+          "Elderberry (Sambucus nigra) (berry) 36:1 extract",
+          "Elderberry (Sambucus nigra L.) fruit 30:1 extract",
+          "elderberry (sambucus nigra) berry extract",
+          "sambucus nigra berry 36:1 extract",
+          "sambucus nigra fruit 30:1 extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -18024,7 +18057,13 @@
           "elderberry juice syrup supplement",
           "pure elderberry syrup supplement",
           "natural elderberry liquid supplement",
-          "concentrated elderberry supplement"
+          "concentrated elderberry supplement",
+          "Elderberry Juice, Natural",
+          "elderberry juice, natural",
+          "elderberry juice natural",
+          "Natural Elderberry Juice",
+          "elderberry juice concentrate",
+          "elderberry fruit juice"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -25708,7 +25747,13 @@
           "Phyllostachys edulis silica",
           "Bambusa vulgaris silica",
           "bamboo leaf extract silica",
-          "Bamboo Extract"
+          "Bamboo Extract",
+          "Bamboo Leaf Extract",
+          "bamboo leaf extract",
+          "bamboo leaf",
+          "bamboo (leaf) extract",
+          "bamboo leaf silica extract",
+          "Equisetum arvense bamboo extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -32416,7 +32461,12 @@
           "st. john's wort whole herb extract",
           "st. john\u2019s wort",
           "st. john's wort flower, leaf extract",
-          "st. john's wort flower head extract"
+          "st. john's wort flower head extract",
+          "st. john's wort aerial parts extract",
+          "St. John's wort aerial parts extract",
+          "St. John's Wort aerial parts extract",
+          "hypericum aerial extract",
+          "Hypericum perforatum aerial parts extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -32850,7 +32900,15 @@
           "life's omega",
           "life'sdha dha",
           "life's dha dha",
-          "docosahexaenoic"
+          "docosahexaenoic",
+          "life'sDHA",
+          "life'sdha",
+          "life's dha",
+          "lifes dha",
+          "LifesDHA",
+          "life's DHA",
+          "DSM life's dha",
+          "life's algal dha"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -37591,7 +37649,17 @@
           "sea kelp",
           "north atlantic kelp",
           "pacific kelp",
-          "Japanese Kelp extract"
+          "Japanese Kelp extract",
+          "Bladder Wrack",
+          "bladder wrack",
+          "Bladderwrack",
+          "bladderwrack",
+          "Fucus vesiculosus",
+          "fucus vesiculosus",
+          "Fucus vesiculosus extract",
+          "bladder wrack extract",
+          "bladderwrack extract",
+          "rockweed"
         ],
         "dosage_importance": 0.8,
         "absorption_structured": {
@@ -38059,7 +38127,11 @@
           "phyllanthus emblica fruit extract",
           "capros",
           "Capros Amla extract",
-          "Capros Amla Water extract"
+          "Capros Amla Water extract",
+          "organic amla fruit extract",
+          "organic Amla fruit extract",
+          "organic Amla extract",
+          "Organic Amla Fruit Extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
