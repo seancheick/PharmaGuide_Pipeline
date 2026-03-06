@@ -1,11 +1,11 @@
-# PharmaGuide Scoring README (v3.1.0 / Data Schema 5.0.0)
+# PharmaGuide Scoring README (v3.2.0 / Data Schema 5.0.0)
 
 This document is the implementation-facing guide for the current scorer:
 
 - Code: `/Users/seancheick/.claude-worktrees/dsld_clean/peaceful-ritchie/scripts/score_supplements.py`
 - Config: `/Users/seancheick/.claude-worktrees/dsld_clean/peaceful-ritchie/scripts/config/scoring_config.json`
 
-It is aligned to the current `v3.1.0` behavior in code and config.
+It is aligned to the current `v3.2.0` behavior in code and config.
 
 ## 1) What The Scorer Does
 
@@ -20,7 +20,7 @@ It consumes enriched products and produces:
 - `badges` (including `FULL_DISCLOSURE` when applicable)
 - `category_percentile` (batch-cohort percentile context)
 - `percentile_category*` audit fields from enrichment (`category`, `label`, `source`, `confidence`, `signals`)
-- section breakdown (`A`, `B`, `C`, `D`)
+- section breakdown (`A`, `B`, `C`, `D`, `E`)
 - scoring flags and metadata
 
 ## 2) Run Commands
@@ -49,26 +49,34 @@ For each product:
 3. Run mapping gate (`require_full_mapping` behavior).
 4. Apply unmapped+banned exact/alias regression guard.
 5. Score sections A/B/C/D.
-6. Apply manufacturer violation penalty.
-7. Derive final verdict and output payload.
+6. Score section E (EPA+DHA dose adequacy — omega-3 products only).
+7. Apply manufacturer violation penalty.
+8. Derive final verdict and output payload.
 
-## 4) Score Model (v3.1)
+## 4) Score Model (v3.2)
 
 Final score:
 
 ```text
-quality_raw = A + B + C + D + violation_penalty
+quality_raw = A + B + C + D + E + violation_penalty
 quality_score = clamp(0, 80, quality_raw)
 score_100_equivalent = (quality_score / 80) * 100
 ```
 
 Section caps:
 
-- A: 25
-- B: 30
-- C: 20
-- D: 5
-- Total: 80
+| Section | Max | Notes |
+|---------|-----|-------|
+| A: Ingredient Quality | 25 | |
+| B: Safety & Purity | 30 | |
+| C: Evidence & Research | 20 | |
+| D: Brand Trust | 5 | |
+| E: Dose Adequacy | 2 | Omega-3 products only; additive bonus within the 80-pt ceiling |
+| **Total ceiling** | **80** | All sections clamped together at 80 |
+
+Section E is an additive bonus for omega-3 products that have explicit labelled EPA/DHA amounts.
+It helps qualifying products reach the 80-pt ceiling with slightly lower A/B/C/D scores rather
+than pushing the score beyond 80.
 
 ## 5) Section Details
 
@@ -81,12 +89,15 @@ A = min(25, A1 + A2 + A3 + A4 + A5 + A6 + probiotic_bonus)
 - A1 (max 15): weighted bioavailability score.
   - Excludes blend containers (`is_proprietary_blend=true`).
   - Excludes rows without usable individual dose.
+  - Excludes parent-total rows (`is_parent_total=true`) to prevent double-counting
+    when a label lists both a nutrient total and its sub-forms.
   - Mapped row uses `score` and `dosage_importance`.
   - Unmapped row fallback is score `9.0`, weight `1.0`.
   - `single` and `single_nutrient`: force all weights to `1.0`.
   - `multivitamin`: smoothing `avg = 0.7*avg + 0.3*9.0`.
 - A2 (max 3): premium forms bonus based on count of unique ingredients with score >= 14.
   - excludes blend containers (`is_proprietary_blend=true`)
+  - excludes parent-total rows (`is_parent_total=true`)
   - requires usable individual dose (same dose-anchored rule as A1/A6)
 - A3 (max 3): delivery tier points.
 - A4 (max 3): absorption enhancer paired boolean.
@@ -115,7 +126,7 @@ penalties = B0_moderate + B1 + B2 + B5 + B6
   - v5.0 status-based: `banned` -> UNSAFE, `recalled` -> BLOCKED, `high_risk` -> -10 + CAUTION, `watchlist` -> -5 + CAUTION.
   - Pre-5.0 severity fallback: `critical/high` -> UNSAFE, `moderate` -> -10 + CAUTION, `low` -> advisory.
   - Non-exact/alias matches -> review-only (`BANNED_MATCH_REVIEW_NEEDED`).
-- B1: harmful additives penalty (capped at 5).
+- B1: harmful additives penalty (capped at 8).
 - B2: allergen penalty (capped at 2).
 - B3: claim compliance bonus (max 4 inside shared bonus pool).
 - B4: quality certifications (computed internally, pooled under bonus cap).
@@ -164,6 +175,39 @@ D = min(5, D1 + D2 + min(2.0, D3 + D4 + D5))
 - D3: physician formulated.
 - D4: high-standard region contribution.
 - D5: sustainability.
+
+### Section E: Dose Adequacy — EPA+DHA (max 2.0, omega-3 products only)
+
+Section E rewards omega-3 products that label explicit per-unit EPA and/or DHA amounts.
+It is **not applicable** to products with no labelled EPA or DHA quantities (score and max both 0.0).
+
+```text
+per_day_mid = (per_day_min + per_day_max) / 2
+where:
+  per_day_min = (EPA_mg + DHA_mg) per unit × min_servings_per_day
+  per_day_max = (EPA_mg + DHA_mg) per unit × max_servings_per_day
+```
+
+Band table (highest matching threshold wins):
+
+| Threshold (mg/day EPA+DHA) | Score | Label | Clinical Anchor |
+|---|---|---|---|
+| ≥ 4000 | 2.0 | `prescription_dose` | AHA/ACC Rx dose for hypertriglyceridemia; also adds `PRESCRIPTION_DOSE_OMEGA3` flag |
+| ≥ 2000 | 2.0 | `high_clinical` | EFSA health claim for blood triglycerides |
+| ≥ 1000 | 1.5 | `aha_cvd` | AHA recommendation for CVD patients |
+| ≥  500 | 1.0 | `general_health` | FDA qualified health claim minimum |
+| ≥  250 | 0.5 | `efsa_ai_zone` | EFSA Adequate Intake for general population |
+| ≥    0 | 0.0 | `below_efsa_ai` | Below EFSA AI |
+
+Ingredient inclusion rules for the EPA+DHA sum:
+- canonical_ids `"epa"`, `"dha"`, or `"epa_dha"` (combined node contributes to both buckets)
+- Excludes `is_proprietary_blend`, `is_blend_header`, and `is_parent_total` rows
+- Only `mg`, `g`, or `mcg` units accepted; others skipped
+
+Serving basis resolution (in priority order):
+1. `product.serving_basis.min_servings_per_day` / `max_servings_per_day`
+2. `product.dosage_normalization.serving_basis.servings_per_day_min` / `_max`
+3. Default: 1.0
 
 ### Output badges
 
@@ -250,10 +294,37 @@ Core output fields include:
 - `badges`
 - `category_percentile`, `category_percentile_text`
 - `percentile_category`, `percentile_category_label`, `percentile_category_source`, `percentile_category_confidence`, `percentile_category_signals`
-- `breakdown` (A/B/C/D and penalties)
+- `breakdown` (A/B/C/D/E and penalties)
 - `section_scores` (with config-driven max values)
-- `flags`
+- `flags` (including `PRESCRIPTION_DOSE_OMEGA3` when applicable)
 - mapping KPI fields (`unmapped_actives_total`, `mapped_coverage`, etc.)
+
+Section E fields in `section_scores.E_dose_adequacy`:
+
+```json
+{
+  "score": 1.5,
+  "max": 2.0,
+  "applicable": true,
+  "dose_band": "aha_cvd",
+  "per_day_mid_mg": 1080.0,
+  "per_day_min_mg": 900.0,
+  "per_day_max_mg": 1260.0,
+  "epa_mg_per_unit": 180.0,
+  "dha_mg_per_unit": 120.0,
+  "prescription_dose": false
+}
+```
+
+When not applicable (no explicit EPA/DHA dose):
+
+```json
+{
+  "score": 0.0,
+  "max": 0.0,
+  "applicable": false
+}
+```
 
 ## 9) Backward Compatibility Notes
 
@@ -262,6 +333,11 @@ Core output fields include:
 - B5 exposes both signed and magnitude penalty fields in evidence:
   - `computed_blend_penalty` (signed)
   - `computed_blend_penalty_magnitude` (positive)
+- Section E (`E_dose_adequacy`) is new in v3.2.0. Older enriched files that lack explicit
+  EPA/DHA quantities will simply return `applicable: false` with `score: 0.0` — no breaking change.
+- `is_parent_total` field on ingredients is new in v3.2.0 (propagated by enricher post-pass).
+  Older enriched files without this field will have `is_parent_total` default to falsy via
+  `.get()`, retaining old A1 behavior with no crash.
 
 See detailed release notes:
 

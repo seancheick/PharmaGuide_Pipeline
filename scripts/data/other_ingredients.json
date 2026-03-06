@@ -1149,7 +1149,11 @@
         "hydrolyzed collagen peptides",
         "hydrolyzed Collagen Type 1",
         "Hydrolyzed Collagen Type I",
-        "Hydrolyzed Collagen Types 1 & 3"
+        "Hydrolyzed Collagen Types 1 & 3",
+        "Hydrolyzed Collagen Type II",
+        "Hydrolyzed Collagen Type 2",
+        "Type II Collagen Hydrolysate",
+        "hydrolyzed type II collagen"
       ],
       "category": "protein",
       "is_additive": false,
@@ -5392,7 +5396,9 @@
       "aliases": [
         "adrenal",
         "adrenal cortex",
-        "bovine adrenal cortex"
+        "adrenal tissue",
+        "bovine adrenal cortex",
+        "bovine adrenal tissue"
       ],
       "category": "glandular_tissue",
       "is_additive": false,
@@ -6211,7 +6217,9 @@
       "standard_name": "Spleen",
       "aliases": [
         "bovine spleen",
-        "spleen"
+        "spleen",
+        "spleen tissue",
+        "bovine spleen tissue"
       ],
       "category": "glandular_tissue",
       "is_additive": false,
@@ -6230,7 +6238,9 @@
       "standard_name": "Thymus",
       "aliases": [
         "bovine thymus",
-        "thymus"
+        "thymus",
+        "thymus tissue",
+        "bovine thymus tissue"
       ],
       "category": "glandular_tissue",
       "is_additive": false,
@@ -7778,7 +7788,9 @@
         "softgel shell",
         "Softgel Shell ingredients",
         "type a gelatin",
-        "type b gelatin"
+        "type b gelatin",
+        "Beef Gelatin",
+        "Beef gelatin capsule"
       ],
       "category": "capsule_material",
       "is_additive": true,
@@ -8069,7 +8081,10 @@
         "vegetarian capsule",
         "vegetarian cellulose capsule",
         "Vegetarian Softgel",
-        "veggie cap"
+        "veggie cap",
+        "100% Vegetarian Capsule",
+        "100% Vegetable Capsule",
+        "Vegetable Capsule"
       ],
       "category": "capsule_shell",
       "is_additive": true,

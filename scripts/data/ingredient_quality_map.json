@@ -48,7 +48,9 @@
           "beta carotene",
           "β-carotene",
           "natural source beta carotene",
-          "Betatene mixed carotenoids"
+          "Betatene mixed carotenoids",
+          "Betatene natural Beta-Carotene",
+          "Betatene Beta-Carotene"
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
@@ -697,7 +699,10 @@
           "riboflavin-5'-phosphate sodium supplement",
           "Riboflavin 5-Phosphate Sodium",
           "Riboflavin 5’-Phosphate Sodium",
-          "coenzyme vitamin b2"
+          "coenzyme vitamin b2",
+          "Riboflavin 5' Phosphate",
+          "Riboflavin 5'Phosphate",
+          "Riboflavin 5’ Phosphate"
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
@@ -1888,7 +1893,9 @@
           "(6S)-5-Methyltetrahydrofolate",
           "(6S)-5-Methyltetrahydrofolate Calcium Salt",
           "5-methyltetrahydrofolate",
-          "5-methyltetrahydrofolate calcium"
+          "5-methyltetrahydrofolate calcium",
+          "Methyltetrahydrofolate Calcium Salt",
+          "5-Methyltetrahydrofolate Calcium Salt"
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
@@ -2048,7 +2055,15 @@
           "folic acid pure",
           "folic acid, pure",
           "pteroylglutamic acid",
-          "Folic Acid, Natural"
+          "Folic Acid, Natural",
+          "Orgen-FA",
+          "Orgen FA",
+          "Lemon Extract",
+          "organic Lemon extract",
+          "lemon peel extract",
+          "organic lemon peel extract",
+          "folic acid from lemon peel",
+          "folic acid from organic lemon peel"
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
@@ -2644,7 +2659,10 @@
           "bioflavonoid vit c",
           "rose hips vitamin c supplement",
           "rose hips vit c",
-          "citrus bioflavonoid c supplement"
+          "citrus bioflavonoid c supplement",
+          "PureWay-C",
+          "PureWay C",
+          "PureWay-C vitamin C"
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
@@ -3415,7 +3433,9 @@
           "vit e natural",
           "D-Alpha-Tocopheryl",
           "RRR-Alpha Tocopherol",
-          "RRR Alpha Tocopherol"
+          "RRR Alpha Tocopherol",
+          "d-alpha tocopherol",
+          "D Alpha Tocopherol"
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
@@ -3866,7 +3886,10 @@
           "vit k2 mk4",
           "mk4 vitamin k2 supplement",
           "mk4 vit k2",
-          "short-chain k2 supplement"
+          "short-chain k2 supplement",
+          "Menatetrenone",
+          "MK4",
+          "menaquinone 4"
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
@@ -4230,7 +4253,9 @@
           "DimaCal Dicalcium Malate",
           "DimaCal",
           "DimaCal Dicalcium Malate supplement",
-          "DimaCal supplement"
+          "DimaCal supplement",
+          "DimaCal Di-Calcium Malate",
+          "Di-Calcium Malate"
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
@@ -4892,7 +4917,8 @@
           "muscle magnesium",
           "magnesium malic acid",
           "Albion DiMagnesium Malate",
-          "magnesium malate trihydrate"
+          "magnesium malate trihydrate",
+          "Di-Magnesium Malate"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -5212,7 +5238,9 @@
           "ferrochel iron bisglycinate",
           "Albion Ferrous Bisglycinate Chelate",
           "Albion Ferrous Bisglycinate",
-          "Albion Iron Bisglycinate Chelate"
+          "Albion Iron Bisglycinate Chelate",
+          "Iron Glycinate",
+          "ferrous glycinate"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -5574,6 +5602,28 @@
           "quality": "very_good",
           "notes": "Absorbed via M-cell endocytosis, bypassing DMT-1. Clinical trials show non-inferiority to IV iron."
         }
+      },
+      "iron picolinate": {
+        "bio_score": 12,
+        "natural": false,
+        "score": 12,
+        "absorption": "~25-30% elemental iron (high; comparable to ferrous ascorbate)",
+        "notes": "Iron(II) chelated with picolinic acid. Picolinate chelation employs the same intestinal mucosal carrier mechanism as zinc picolinate, reducing free iron exposure and associated GI irritation vs. inorganic ferrous salts. Bidentate coordination stabilizes Fe(II) through gastric transit. Limited specific RCT data vs. iron bisglycinate; absorption estimated 25–30% elemental iron — comparable to ferrous ascorbate and above ferrous sulfate (10–15%). Relevant for iron-deficiency supplementation where GI tolerance is key (Tolkien 2015 systematic review framework for iron form GI tolerability).",
+        "aliases": [
+          "iron picolinate",
+          "ferrous picolinate",
+          "iron(II) picolinate",
+          "Fe picolinate",
+          "iron picolinic acid chelate"
+        ],
+        "dosage_importance": 1.5,
+        "absorption_structured": {
+          "value": null,
+          "range_low": null,
+          "range_high": null,
+          "quality": "good",
+          "notes": "~25-30% elemental iron estimated; picolinate chelate class"
+        }
       }
     },
     "aliases": [
@@ -5668,8 +5718,8 @@
           "zinc bisglycinate chelate supplement",
           "Albion Zinc Bisglycinate",
           "zinc bisglycinate supplement",
-          "zinc rice protein chelate",
-          "zinc glycinate chelate"
+          "zinc glycinate chelate",
+          "zinc chelate"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -5867,6 +5917,29 @@
           "notes": "Higher FZA than zinc gluconate and zinc sulfate in double-blind crossover trial (PMID 37111104). Amino acid chelation mechanism.",
           "range_low": null,
           "range_high": null
+        }
+      },
+      "zinc brown rice chelate": {
+        "bio_score": 11,
+        "natural": false,
+        "score": 11,
+        "absorption": "60-70% (estimated; moderate-high, better than oxide/sulfate)",
+        "notes": "Zinc chelated to amino acids derived from brown rice protein hydrolysate. The rice protein amino acid matrix provides organic chelate bonding similar to generic amino acid chelates. Absorption estimated 60–70% — meaningfully better than inorganic forms (oxide, sulfate) but below specific picolinate and bisglycinate chelates. Often marketed as a hypoallergenic zinc alternative suitable for those avoiding soy or whey-derived chelates. Positioned within the amino acid chelate class per Anderson (1995) chelation framework.",
+        "aliases": [
+          "zinc brown rice chelate",
+          "zinc rice chelate",
+          "rice chelate zinc",
+          "zinc from rice protein chelate",
+          "Zinc Brown Rice Protein Chelate",
+          "zinc rice protein chelate"
+        ],
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": null,
+          "range_low": null,
+          "range_high": null,
+          "quality": "good",
+          "notes": "60-70% estimated; organic rice-amino acid chelate class"
         }
       }
     },
@@ -6484,7 +6557,10 @@
           "astapure arava astaxanthin",
           "astaxanthin ≥ 3%",
           "astaxanthin 3%",
-          "astaxanthin ≥3% extract"
+          "astaxanthin ≥3% extract",
+          "Haematococcus pluvialis",
+          "H. pluvialis",
+          "Haematococcus pluvialis algae"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -7368,7 +7444,11 @@
           "Japanese Knotweed (root) and whole Red Grape extracts",
           "Whole grape extract (Vitis vinifera) and Polygonum cuspidatum (root) extract",
           "BioVin",
-          "Veri-te resveratrol"
+          "Veri-te resveratrol",
+          "Polygonum cuspidatum",
+          "Reynoutria japonica",
+          "Reynoutria japonica root extract",
+          "Fallopia japonica"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -7699,7 +7779,9 @@
           "saw palmetto berries",
           "sabal serrulata",
           "Saw Palmetto 45% extract",
-          "Saw Palmetto (Serenoa repens) Fruit Extract 12:1"
+          "Saw Palmetto (Serenoa repens) Fruit Extract 12:1",
+          "Fatty Acids and Sterols",
+          "saw palmetto fatty acids and sterols"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -8041,6 +8123,49 @@
           "quality": "unknown",
           "notes": "Data not available"
         }
+      },
+      "vanadium aspartate": {
+        "bio_score": 10,
+        "natural": false,
+        "score": 10,
+        "absorption": "~3-8% (estimated; organic aspartate chelation improves over inorganic salts)",
+        "notes": "Vanadium(IV) chelated with L-aspartic acid. Aspartate chelation provides organic ligand coordination that protects vanadyl cation through gastric transit, improving absorption relative to inorganic vanadyl sulfate (~1–5%). The aspartate carrier mirrors insulin-mimetic V4+ mechanism: downstream insulin receptor phosphotyrosine phosphatase inhibition supports glucose uptake (Thompson 2009). Estimated absorption 3–8% — modest improvement over VOSO4 but well below organovanadium chelates like BMOV (~10–15%). Limited direct human RCT data for aspartate form specifically.",
+        "aliases": [
+          "vanadium aspartate",
+          "vanadyl aspartate",
+          "vanadium L-aspartate",
+          "vanadium aspartic acid chelate",
+          "vanadium aspartate chelate"
+        ],
+        "dosage_importance": 1.5,
+        "absorption_structured": {
+          "value": null,
+          "range_low": null,
+          "range_high": null,
+          "quality": "moderate",
+          "notes": "~3-8% estimated; organic aspartate chelate class"
+        }
+      },
+      "vanadium citrate": {
+        "bio_score": 9,
+        "natural": false,
+        "score": 9,
+        "absorption": "~2-5% (similar to vanadyl sulfate; citrate ligand provides modest stability)",
+        "notes": "Vanadium(IV/V) chelated with citric acid. Citrate is a weaker chelation ligand than amino acids or maltolate for transition metals — it confers modest gastric stability but does not markedly enhance mucosal transport vs. vanadyl sulfate. Oral absorption estimated 2–5%, comparable to VOSO4 baseline. Occasionally appears in multi-mineral products as a citrate chelate complex. Insulin-mimetic V4+ mechanism is preserved. Limited direct comparative pharmacokinetic data; score equals vanadyl sulfate given similar expected absorption class.",
+        "aliases": [
+          "vanadium citrate",
+          "vanadyl citrate",
+          "vanadium citric acid chelate",
+          "vanadium citrate chelate"
+        ],
+        "dosage_importance": 1.5,
+        "absorption_structured": {
+          "value": null,
+          "range_low": null,
+          "range_high": null,
+          "quality": "moderate",
+          "notes": "~2-5% estimated; citrate ligand provides modest stability"
+        }
       }
     },
     "match_rules": {
@@ -8327,6 +8452,28 @@
           "quality": "unknown",
           "notes": "Data not available"
         }
+      },
+      "copper picolinate": {
+        "bio_score": 12,
+        "natural": false,
+        "score": 12,
+        "absorption": "~40-60% (estimated; between bisglycinate and amino acid chelate)",
+        "notes": "Copper(II) chelated with picolinic acid. The picolinate carrier employs the same intestinal mucosal transport enhancement as zinc picolinate and chromium picolinate, with bidentate coordination protecting copper(II) through gastric transit. Animal model and in vitro data (Ashmead, Albion Research Notes series) indicate picolinate chelates improve mineral mucosal uptake vs. inorganic salts. Human copper picolinate RCT data are limited; estimated absorption 40–60% places it between bisglycinate (top) and generic amino acid chelate.",
+        "aliases": [
+          "copper picolinate",
+          "Cu picolinate",
+          "copper(II) picolinate",
+          "picolinate copper",
+          "Copper Picolinate Chelate"
+        ],
+        "dosage_importance": 0.5,
+        "absorption_structured": {
+          "value": null,
+          "range_low": null,
+          "range_high": null,
+          "quality": "good",
+          "notes": "~40-60% estimated"
+        }
       }
     },
     "match_rules": {
@@ -8487,7 +8634,8 @@
           "chromium nicotinate glycinate chelate",
           "TRAACS Chromium",
           "albion chromium",
-          "Albion chromium chelate"
+          "Albion chromium chelate",
+          "Albion Chromium Nicotinate Glycinate Chelate"
         ],
         "dosage_importance": 0.5,
         "absorption_structured": {
@@ -8520,6 +8668,49 @@
           "range_high": null,
           "quality": "unknown",
           "notes": "Data not available"
+        }
+      },
+      "crominex 3+ chromium complex": {
+        "bio_score": 13,
+        "natural": false,
+        "score": 13,
+        "absorption": "~2-4% (estimated, comparable to organic chromium chelates)",
+        "notes": "Patented complex (Natreon Inc.) combining trivalent chromium with Phyllanthus emblica (amla) extract and PrimaVie shilajit. RCT evidence shows comparable glucose and lipid effects to chromium picolinate with a potentially improved safety profile (reduced Cr(VI) conversion risk per Natreon in vitro data, 2010). Absorption estimated 2–4%, consistent with other organic chromium complexes. Used in branded products like Crominex 3+.",
+        "aliases": [
+          "Crominex 3+",
+          "crominex",
+          "crominex 3 plus",
+          "Crominex 3+ Chromium Complex",
+          "chromium crominex",
+          "chromium crominex 3+"
+        ],
+        "dosage_importance": 0.5,
+        "absorption_structured": {
+          "value": null,
+          "range_low": null,
+          "range_high": null,
+          "quality": "poor",
+          "notes": "~2-4% estimated; comparable to organic chromium chelates"
+        }
+      },
+      "chromium chelidamate arginate": {
+        "bio_score": 12,
+        "natural": false,
+        "score": 12,
+        "absorption": "~2-3% (estimated, similar to chromium nicotinate glycinate)",
+        "notes": "Chromium(III) chelated with chelidamic acid (2,6-pyridinedicarboxylic acid) and L-arginine. Chelidamic acid is structurally related to picolinic acid and provides strong bidentate coordination to chromium(III); the arginine component adds biological compatibility. A specialty Albion-class chelate; human clinical RCT data sparse but chelation chemistry predicts solid oral absorption (~2–3%), comparable to chromium nicotinate glycinate in mechanism and expected bioavailability.",
+        "aliases": [
+          "chromium chelidamate arginate",
+          "chromium chelidamate arginate chelate",
+          "chelidamic acid arginine chromium"
+        ],
+        "dosage_importance": 0.5,
+        "absorption_structured": {
+          "value": null,
+          "range_low": null,
+          "range_high": null,
+          "quality": "poor",
+          "notes": "~2-3% estimated"
         }
       }
     },
@@ -8709,7 +8900,8 @@
           "Albion Manganese Bisglycinate",
           "Mn bisglycinate",
           "Mn glycinate",
-          "manganese diglycinate"
+          "manganese diglycinate",
+          "Albion Manganese Bisglycinate Chelate"
         ],
         "dosage_importance": 0.5,
         "absorption_structured": {
@@ -9001,6 +9193,29 @@
           "quality": "unknown",
           "notes": "Data not available"
         }
+      },
+      "manganese brown rice chelate": {
+        "bio_score": 11,
+        "natural": false,
+        "score": 11,
+        "absorption": "moderate-high (estimated; organic rice amino acid chelate class)",
+        "notes": "Manganese chelated to amino acids derived from brown rice protein hydrolysate. Provides organic chelate bonding for improved mucosal uptake vs. inorganic manganese sulfate or oxide. Absorption estimated moderate-high; limited direct comparative clinical data vs. bisglycinate or amino acid chelate. Commonly used in hypoallergenic multivitamin formulations as an alternative to soy or whey protein-derived chelates. The rice amino acid matrix offers a gentle gastric profile analogous to zinc brown rice chelate.",
+        "aliases": [
+          "manganese brown rice chelate",
+          "manganese rice chelate",
+          "rice chelate manganese",
+          "manganese from rice protein chelate",
+          "Manganese Brown Rice Protein Chelate",
+          "manganese rice protein chelate"
+        ],
+        "dosage_importance": 0.5,
+        "absorption_structured": {
+          "value": null,
+          "range_low": null,
+          "range_high": null,
+          "quality": "good",
+          "notes": "moderate-high estimated; organic rice amino acid chelate class"
+        }
       }
     },
     "match_rules": {
@@ -9159,6 +9374,27 @@
           "quality": "unknown",
           "notes": "Data not available"
         }
+      },
+      "molybdenum aspartate": {
+        "bio_score": 12,
+        "natural": false,
+        "score": 12,
+        "absorption": "88-93% (estimated; high bioavailability class for soluble Mo chelates)",
+        "notes": "Molybdenum chelated to L-aspartic acid. Aspartate chelates provide adequate organic carrier for gastrointestinal protection and stability. Molybdenum absorption is characteristically high (88–93%) across soluble forms regardless of carrier ligand; aspartate chelation primarily ensures gastric tolerance. Scores slightly below glycinate where glycinate's lower molecular weight provides marginally more stable bidentate coordination. Used in specialty multi-mineral formulas requiring aspartate chelate systems.",
+        "aliases": [
+          "molybdenum aspartate",
+          "molybdenum aspartic acid chelate",
+          "molybdenum L-aspartate",
+          "Molybdenum Aspartate Chelate"
+        ],
+        "dosage_importance": 0.5,
+        "absorption_structured": {
+          "value": 0.905,
+          "range_low": 0.88,
+          "range_high": 0.93,
+          "quality": "excellent",
+          "notes": "88-93% estimated; high-class Mo chelate absorption"
+        }
       }
     },
     "match_rules": {
@@ -9228,7 +9464,9 @@
           "bororganic glycine",
           "boron glycinate complex",
           "boron diglycinate",
-          "boron rice protein chelate"
+          "boron rice protein chelate",
+          "Albion Bororganic Glycine",
+          "Albion Bororganic"
         ],
         "dosage_importance": 0.5,
         "absorption_structured": {
@@ -9308,6 +9546,27 @@
           "range_high": 1.0,
           "quality": "excellent",
           "notes": ">98% (NIH ODS: applies to all boron forms)"
+        }
+      },
+      "boron picolinate": {
+        "bio_score": 11,
+        "natural": false,
+        "score": 11,
+        "absorption": ">95% (boron is highly absorbed from most organic forms)",
+        "notes": "Boron chelated to picolinic acid. Boron is inherently well-absorbed from nearly all dietary forms (>90–98%), so the picolinate carrier provides minimal absorption advantage over glycinate or citrate. Tissue distribution follows similar patterns to other organic boron forms. Limited independent RCTs comparing picolinate vs. glycinate/citrate; quality tier matches boron glycinate and citrate. Preferred where picolinate-class chelation is formulatorically convenient.",
+        "aliases": [
+          "boron picolinate",
+          "boron picolinic acid chelate",
+          "picolinate boron",
+          "Boron Picolinate Chelate"
+        ],
+        "dosage_importance": 0.5,
+        "absorption_structured": {
+          "value": 0.95,
+          "range_low": 0.9,
+          "range_high": 1.0,
+          "quality": "excellent",
+          "notes": ">95% estimated; boron bioavailability class-high across organic forms"
         }
       }
     },
@@ -9609,7 +9868,11 @@
           "K-REAL",
           "Kreal Krill Oil",
           "Superba",
-          "Superba krill oil"
+          "Superba krill oil",
+          "Superba2 Krill Oil",
+          "Superba Boost",
+          "Superba2",
+          "Superba Antarctic Krill Oil"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -10038,7 +10301,13 @@
           "pure coenzyme q10",
           "pure coenzymeq10",
           "natural coenzyme q10",
-          "crystalline coenzyme q10"
+          "crystalline coenzyme q10",
+          "Ubidecarenone",
+          "Coenzyme Q-10",
+          "Co-Enzyme Q-10",
+          "CoQ-10",
+          "co-q10",
+          "Co Q-10"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -10355,7 +10624,15 @@
           "meriva curcumin phytosome",
           "Meriva-SF",
           "curcumin phytosome complex",
-          "Curcumin Phytosome (Curcuma longa extract (root) / Phosphatidylcholine complex)"
+          "Curcumin Phytosome (Curcuma longa extract (root) / Phosphatidylcholine complex)",
+          "Curcuma longa extract, Phospholipid Complex",
+          "Curcuma longa extract, Phosphatidylcholine Complex",
+          "curcumin phosphatidylcholine complex",
+          "curcumin phospholipid complex (Meriva)",
+          "Meriva Curcumin Phytosome Complex",
+          "Meriva turmeric phytosome",
+          "Meriva (Curcuma longa) Phytosome",
+          "Meriva Bioavailable Curcumin Phytosome"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -10430,7 +10707,15 @@
           "BCM-95 Bio-Curcumin 25:1 extract",
           "BCM-95 Bio-Curcumin (Curcuma longa) 25:1 extract",
           "BCM-95(R) Bio-Curcumin(R)",
-          "Rhuleave-K"
+          "Rhuleave-K",
+          "Curcuminoid Complex, Turmeric essential Oil",
+          "Curcuma longa rhizome extract, Curcuminoid Complex, Turmeric essential Oil",
+          "curcuminoid complex turmeric oil",
+          "BCM-95 curcuminoid complex",
+          "Bio-Curcumin",
+          "BCM-95 Bio-Curcumin Turmeric 25:1 extract",
+          "BCM-95 Bio-Curcumin Turmeric 25:1 extract Total Curcuminoids Complex",
+          "BCM-95 curcumin extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -11235,7 +11520,9 @@
           "xylo-oligosaccharides",
           "preticx",
           "preticx xos",
-          "xylooligosaccharide"
+          "xylooligosaccharide",
+          "PreticX XOS prebiotic",
+          "PreticX xylooligosaccharide"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -11645,7 +11932,12 @@
           "serinaid",
           "serinaid phosphatidylserine",
           "leci-ps phosphatidyl serine",
-          "leci-ps(r) phosphatidyl serine"
+          "leci-ps(r) phosphatidyl serine",
+          "Soy",
+          "Soybean",
+          "soy-derived",
+          "soy derived phosphatidylserine",
+          "soy lecithin phosphatidylserine"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -12316,7 +12608,11 @@
       "missing_fields": [],
       "review_status": "validated",
       "last_reviewed_at": "2026-02-27"
-    }
+    },
+    "aliases": [
+      "betaine",
+      "Betaine"
+    ]
   },
   "l_glutamine": {
     "standard_name": "L-Glutamine",
@@ -12455,7 +12751,8 @@
           "arginine hcl",
           "arginine hydrochloride",
           "hcl arginine",
-          "arginine hcl powder"
+          "arginine hcl powder",
+          "l-arginine hydrochloride"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -12570,7 +12867,10 @@
           "pure l-lysine",
           "lysine powder",
           "l-lysine monohydrochloride",
-          "l lysine monohydrochloride"
+          "l lysine monohydrochloride",
+          "L-Lysine Chloride",
+          "lysine chloride",
+          "l-lysine hydrochloride"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -12921,7 +13221,8 @@
           "l-histidine",
           "histidine",
           "l-histidine hcl",
-          "histidine hydrochloride"
+          "histidine hydrochloride",
+          "L-Histidine Hydrochloride Monohydrate"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -13432,7 +13733,13 @@
       "missing_fields": [],
       "review_status": "validated",
       "last_reviewed_at": "2026-02-28"
-    }
+    },
+    "aliases": [
+      "trans-lutein",
+      "Trans-Lutein",
+      "trans lutein",
+      "all-trans lutein"
+    ]
   },
   "zeaxanthin": {
     "standard_name": "Zeaxanthin",
@@ -14669,7 +14976,9 @@
           "sensoril ashwagandha withania somnifera root and leaf extract",
           "sensoril ashwagandha root & leaf extract",
           "sensoril ashwagandha (withania somnifera) root & leaf extract",
-          "ashwagandha (sensoril brand) root and leaf extract"
+          "ashwagandha (sensoril brand) root and leaf extract",
+          "Glycoside Conjugates, Oligosaccharides",
+          "ashwagandha glycoside conjugates and oligosaccharides"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -16012,7 +16321,9 @@
           "pure chondroitin sulfate",
           "marine chondroitin sulphate",
           "chondroitin sulfate a",
-          "chondriotin sulfate"
+          "chondriotin sulfate",
+          "chondroitin sulfate sodium",
+          "sodium chondroitin sulfate"
         ],
         "dosage_importance": 0.5,
         "absorption_structured": {
@@ -16087,7 +16398,10 @@
           "greenselect green tea",
           "teaslender green tea phytosome",
           "indena greenselect",
-          "GreenSelect Green Tea Phytosome"
+          "GreenSelect Green Tea Phytosome",
+          "Camellia sinensis extract, Phospholipid complex",
+          "Camellia sinensis, Phospholipid complex",
+          "camellia sinensis extract phospholipid complex"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -16189,7 +16503,10 @@
           "green tea leaf extract, aqueous",
           "Green Tea Leaf Extract, Dried",
           "4:1 {Green Tea} extract",
-          "organic green tea camellia sinensis leaf aqueous extract"
+          "organic green tea camellia sinensis leaf aqueous extract",
+          "Epigallocatechin Gallate, total Tea Catechins",
+          "EGCG, total Tea Catechins",
+          "total tea catechins"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -16265,7 +16582,12 @@
           "Leucoselect",
           "Leucoselect Phytosome",
           "Leucoselect Grape seed extract",
-          "leucoselect grape seed"
+          "leucoselect grape seed",
+          "Leucoselect Grape seed Proanthocyanidin extract",
+          "Leucoselect Grape extract",
+          "LeucoSelect Phytosome Grape Seed",
+          "LeucoSelect grape seed proanthocyanidin",
+          "Leucoselect Phytosome standardized Grape seed extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -16343,7 +16665,11 @@
           "unprocessed grape extract",
           "pure grape extract",
           "BioVin Grape extract",
-          "Red Wine Fruit Extract"
+          "Red Wine Fruit Extract",
+          "BioVin Grape Skin and Seed extract",
+          "BioVin Grape skin and seed",
+          "BioVin Advanced French Grape extract",
+          "BioVin grape polyphenol extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -17614,7 +17940,10 @@
           "elderberry sambucus nigra extract",
           "Black Elderberry 65:1 fruit extract",
           "Sambucus nigra Herb Extract",
-          "Sambucus nigra extract"
+          "Sambucus nigra extract",
+          "Anthocyanins, Sambucus nigra Berry Extract",
+          "sambucus nigra berry extract anthocyanins",
+          "anthocyanins from sambucus nigra"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -17857,6 +18186,12 @@
           "invertase",
           "maltase",
           "alpha-galactosidase",
+          "alpha galactosidase",
+          "alpha-galactosidase enzyme",
+          "alpha galactosidase enzyme",
+          "aspergillopepsin",
+          "aspergillopepsin enzyme",
+          "aspergillus acid protease",
           "peptidase",
           "phytase",
           "trypsin",
@@ -17900,8 +18235,10 @@
           "cellulase enzymes",
           "vegpeptase",
           "protease ii",
+          "protease 2",
           "protease iii",
           "protease 3",
+          "protease 1",
           "tolerase g prolyl endopeptidase",
           "serrazimes",
           "oxidase",
@@ -17993,6 +18330,7 @@
           "digestive enzymes",
           "dairy digestive enymes",
           "beta-glucanase",
+          "beta glucanase",
           "biocore dpp-iv",
           "protease 6",
           "protease, bacterial",
@@ -18860,7 +19198,9 @@
           "dmae supplement",
           "dimethylaminoethanol supplement",
           "dmae bitartrate supplement",
-          "deanol supplement"
+          "deanol supplement",
+          "dimethylaminoethanol bitartrate",
+          "DMAE bitartrate salt"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -19071,6 +19411,70 @@
       "missing_fields": [],
       "review_status": "validated",
       "last_reviewed_at": "2026-02-28"
+    }
+  },
+  "synephrine": {
+    "standard_name": "Synephrine",
+    "category": "other",
+    "cui": "C0075330",
+    "rxcui": null,
+    "forms": {
+      "synephrine hcl": {
+        "bio_score": 7,
+        "natural": false,
+        "score": 7,
+        "absorption": "moderate (~20-30% estimated oral bioavailability based on phenylethylamine class)",
+        "notes": "p-Synephrine is a protoalkaloid naturally occurring in Citrus aurantium (bitter orange) peel. The hydrochloride salt is the standard supplemental form. Acts as a beta-3 adrenergic agonist; used for thermogenesis, energy, and weight management. Unlike ephedrine, p-synephrine has minimal alpha-1/2 or beta-1/2 activity, resulting in a more favorable cardiovascular safety profile. Stohs et al. (2012, PMID 22176753) review of 30 studies: no significant adverse cardiovascular effects at standard doses (10-50 mg/day). Not to be confused with m-synephrine (phenylephrine) which has different pharmacology.",
+        "aliases": [
+          "synephrine hcl",
+          "synephrine hydrochloride",
+          "p-synephrine",
+          "p-synephrine hcl",
+          "p-synephrine hydrochloride",
+          "synephrine"
+        ],
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": 25.0,
+          "range_low": 20.0,
+          "range_high": 30.0,
+          "quality": "moderate",
+          "notes": "Estimated based on phenylethylamine class pharmacokinetics"
+        }
+      },
+      "synephrine (unspecified)": {
+        "bio_score": 5,
+        "natural": false,
+        "score": 5,
+        "absorption": "unknown",
+        "notes": "Form not specified; conservative scoring applied.",
+        "aliases": [
+          "synephrine alkaloids",
+          "citrus aurantium synephrine"
+        ],
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": null,
+          "quality": "unknown",
+          "notes": "Data not available",
+          "range_low": null,
+          "range_high": null
+        }
+      }
+    },
+    "match_rules": {
+      "priority": 0,
+      "match_mode": "alias_and_fuzzy",
+      "exclusions": ["methylsynephrine", "isopropylnorsynephrine", "n-isopropylnorsynephrine"],
+      "parent_id": null,
+      "confidence": "high"
+    },
+    "category_enum": "other",
+    "data_quality": {
+      "completeness": 0.9,
+      "missing_fields": [],
+      "review_status": "validated",
+      "last_reviewed_at": "2026-03-06"
     }
   },
   "same": {
@@ -21718,6 +22122,28 @@
           "chlorophyll a",
           "chlorophyll b"
         ]
+      },
+      "sodium magnesium chlorophyllin": {
+        "bio_score": 5,
+        "natural": false,
+        "score": 5,
+        "absorption": "low (micromolar serum levels, analogous to copper chlorophyllin)",
+        "notes": "Water-soluble chlorophyllin derivative in which the magnesium center is retained (unlike copper chlorophyllin where Mg is replaced by Cu). Saponification removes the phytol tail to confer water solubility. The Mg-porphyrin complex is less stable in aqueous media than Cu-chlorophyllin and is rarely used commercially. Limited human pharmacokinetic data; absorption is presumed low (micromolar serum levels) analogous to copper chlorophyllin. No distinguishing clinical benefits over other chlorophyllin forms have been demonstrated in peer-reviewed literature.",
+        "aliases": [
+          "sodium magnesium chlorophyllin",
+          "magnesium chlorophyllin",
+          "Mg chlorophyllin",
+          "chlorophyllin (magnesium)",
+          "Na Mg chlorophyllin"
+        ],
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": null,
+          "range_low": null,
+          "range_high": null,
+          "quality": "low",
+          "notes": "low; micromolar serum levels, analogous to copper chlorophyllin"
+        }
       }
     },
     "match_rules": {
@@ -23787,7 +24213,9 @@
           "flax lignan extract",
           "flax lignan seed extract",
           "flaxseed lignan extract",
-          "flaxseed lignans extract"
+          "flaxseed lignans extract",
+          "HMRlignan Norway Spruce lignan extract",
+          "hydroxymatairesinol"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -24408,7 +24836,12 @@
           "Certified Organic Black Pepper (Piper nigrum) supercritical extract",
           "bioperine nature's thermonutrient",
           "bioperine nature’s thermonutrient",
-          "1-piperoylpiperidine"
+          "1-piperoylpiperidine",
+          "Bioperine Piperine",
+          "BioPerine piperine extract",
+          "Black Pepper fruit Supercritical CO2 extract",
+          "Black Pepper (Piper nigrum) fruit supercritical CO2 extract",
+          "Black Pepper fruit supercritical extract"
         ],
         "dosage_importance": 0.5,
         "absorption_structured": {
@@ -25245,6 +25678,32 @@
           "range_high": 0.44,
           "quality": "moderate",
           "notes": "Amorphous dietary silica: 27-44% urinary Si recovery (PMID 19356271, PMC2744664)"
+        }
+      },
+      "bamboo silica": {
+        "bio_score": 9,
+        "natural": true,
+        "score": 12,
+        "absorption": "27-44% (plant-matrix organic silica; similar to horsetail-derived forms)",
+        "notes": "Silica (SiO2) derived from bamboo (Bambusa vulgaris, Phyllostachys edulis) stem or leaf extract — one of the richest botanical silica sources (~70% SiO2 by dry weight). Plant-matrix organic silica dissolves as orthosilicic acid (OSA) in gut fluid, with absorption estimated 27–44%, comparable to horsetail-derived stabilized orthosilicic acid (Jugdaohsingh 2002, J. Nutr.). Supports collagen synthesis, connective tissue, hair, and nail structural integrity. Natural designation reflects botanical plant origin.",
+        "aliases": [
+          "bamboo silica",
+          "bamboo extract silica",
+          "bamboo leaf silica",
+          "bamboo stem silica",
+          "Bamboo Silica Extract",
+          "Phyllostachys edulis silica",
+          "Bambusa vulgaris silica",
+          "bamboo leaf extract silica",
+          "Bamboo Extract"
+        ],
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": 0.35,
+          "range_low": 0.27,
+          "range_high": 0.44,
+          "quality": "moderate",
+          "notes": "27-44%; plant-matrix organic silica dissolves as orthosilicic acid"
         }
       }
     },
@@ -27007,7 +27466,10 @@
           "methionine",
           "l-methionine",
           "methionine amino acid",
-          "l-methionine supplement"
+          "l-methionine supplement",
+          "dl-methionine",
+          "d,l-methionine",
+          "racemic methionine"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -27279,7 +27741,9 @@
           "alcar hcl",
           "ArginoCarn Acetyl L-Carnitine Arginate Di-HCl",
           "Acetyl L-Carnitine Arginate Dihydrochloride",
-          "Acetyl L Carnitine Hydrochloride"
+          "Acetyl L Carnitine Hydrochloride",
+          "Acetyl-L-Carnitine Chloride",
+          "ALCAR Chloride"
         ],
         "score": 8,
         "dosage_importance": 1.0,
@@ -28770,7 +29234,12 @@
         "notes": "IFF/HOWARU strain in 50+ studies and 18 clinical trials. RCTs (paired with HN001) show reduced BV and VVC recurrence in women and restored healthy vaginal Nugent scores. Broad immune-modulating properties.",
         "aliases": [
           "lactobacillus acidophilus la-14",
-          "lactobacillus acidophilus"
+          "lactobacillus acidophilus",
+          "Lactobacillus acidophilus LA14",
+          "L. acidophilus LA-14",
+          "L. acidophilus LA14",
+          "acidophilus LA-14",
+          "acidophilus LA14"
         ],
         "score": 16,
         "dosage_importance": 1.0,
@@ -28810,7 +29279,6 @@
         "aliases": [
           "L. acidophilus",
           "acidophilus",
-          "LA-14",
           "NCFM",
           "DDS-1",
           "ATCC 4356",
@@ -28820,7 +29288,6 @@
           "L. acidophilus supplement",
           "lactobacillus acidophilus supplement",
           "acidophilus supplement",
-          "LA-14 supplement",
           "NCFM supplement",
           "DDS-1 supplement",
           "ATCC 4356 supplement",
@@ -28831,7 +29298,6 @@
           "lactobacillus acidophilus HA-122",
           "HA-122 supplement",
           "lactobacillus acidophilus HA-122 supplement",
-          "L. acidophilus La-14",
           "L. acidophilus DDS-1",
           "L. acidophilus CUL60",
           "L. acidophilus CUL21",
@@ -30596,7 +31062,11 @@
         "notes": "Omega-9 fatty acids (primarily oleic acid). Non-essential — the body can synthesize them. Abundant in olive oil, avocado, and macadamia nuts. Supplementation provides convenience for those with low dietary intake. Cardioprotective effects primarily from dietary sources rather than supplements.",
         "aliases": [
           "Omega-9 Fatty Acids",
-          "Omega-9"
+          "Omega-9",
+          "Oleic Acid",
+          "cis-9-octadecenoic acid",
+          "octadecenoic acid",
+          "18:1 omega-9"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -31084,7 +31554,12 @@
           "Boswellin Forte",
           "boswellic acids",
           "total boswellic acids",
-          "boswellic acid extract"
+          "boswellic acid extract",
+          "AKBA",
+          "Beta-Boswellic Acids",
+          "AKBA, Beta-Boswellic Acids, total organic and Boswellic Acid",
+          "acetyl-11-keto-beta-boswellic acid",
+          "AKBAs"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -33777,7 +34252,10 @@
           "Ultra Pure Tuna Oil",
           "AlaskOmega refined fish oil concentrate",
           "MaxSimil DHA Fish Oil concentrate",
-          "Omega Pure Fish Oil"
+          "Omega Pure Fish Oil",
+          "fish oil concentrate",
+          "concentrated fish oil",
+          "fish oil concentrate 18/12"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -35215,7 +35693,10 @@
           "18beta-glycyrrhetinic acid",
           "liquiritin",
           "liquiritin standardized extract",
-          "licorice liquiritin"
+          "licorice liquiritin",
+          "Gutgard Licorice extract",
+          "Gutgard DGL",
+          "Gutgard Glycyrrhiza glabra extract"
         ],
         "absorption_structured": {
           "value": 0.45,
@@ -37274,7 +37755,9 @@
         "notes": "Punica granatum fruit extract; contains punicalagins (ellagitannins) metabolized to urolithin A by gut microbiota. Evidence for cardiovascular and prostate health. Form unspecified.",
         "aliases": [
           "pomegranate",
-          "punica granatum"
+          "punica granatum",
+          "Punicosides",
+          "Punicoside"
         ],
         "dosage_importance": 0.8,
         "absorption_structured": {
@@ -38551,7 +39034,8 @@
           "raw apple cider vinegar",
           "apple cider vinegar with mother",
           "fermented apple cider",
-          "cider vinegar supplement"
+          "cider vinegar supplement",
+          "Acetic Acid"
         ]
       }
     },
@@ -38896,7 +39380,10 @@
           "crataegus laevigata",
           "hawthorn extract",
           "hawthorne extract",
-          "hawthorn leaf & flower extract"
+          "hawthorn leaf & flower extract",
+          "Vitexins",
+          "Vitexin",
+          "vitexin-2-O-rhamnoside"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -38939,7 +39426,11 @@
           "capsimax",
           "capsimax capsicum extract",
           "capsimax cayenne extract",
-          "omnibead capsicum"
+          "omnibead capsicum",
+          "Capsimax Capsicum annuum fruit extract",
+          "Capsimax fruit extract",
+          "Capsimax capsaicin beadlet",
+          "Capsimax OmniActive"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -38993,7 +39484,6 @@
           "hot pepper",
           "cayenne fruit extract",
           "capsinoids",
-          "Capsimax fruit extract",
           "Capsifen"
         ],
         "dosage_importance": 1.0,
@@ -39472,7 +39962,8 @@
           "harpagophytum procumbens 2% harpagoside",
           "devil's claw standardized harpagoside",
           "WS 1531",
-          "devil's claw 9% harpagoside"
+          "devil's claw 9% harpagoside",
+          "Harpagosides"
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {

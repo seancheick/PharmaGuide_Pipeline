@@ -200,6 +200,10 @@ class SupplementScorer:
                 self.config.get("section_D_brand_trust", {}).get("_max"),
                 section_maximums.get("D_brand_trust"),
             ),
+            "e": (
+                self.config.get("section_E_dose_adequacy", {}).get("_max"),
+                section_maximums.get("E_dose_adequacy"),
+            ),
         }
         candidates = mapping.get(section_key, ())
         for value in candidates:
@@ -1813,6 +1817,178 @@ class SupplementScorer:
             "D5": round(d5, 2),
         }
 
+    # ------------------------------------------------------------------
+    # Section E – EPA+DHA Dose Adequacy
+    # ------------------------------------------------------------------
+
+    _EPA_DHA_CANONICAL_IDS: frozenset = frozenset({"epa", "dha", "epa_dha"})
+
+    def _compute_epa_dha_per_day(self, product: Dict[str, Any]) -> Dict[str, Any]:
+        """Compute total EPA+DHA mg per day from labelled per-serving amounts × servings/day.
+
+        Amounts in ingredient_quality_data represent per-SERVING quantities as declared in
+        the Supplement Facts panel (e.g. 360 mg EPA per 2-softgel serving).  We multiply
+        by servings_per_day from serving_basis (enricher-computed) to get daily totals.
+        Note: "serving" here is the full serving size unit (may be multiple softgels),
+        not per individual pill.
+
+        Returns a dict with keys:
+          has_explicit_dose (bool)
+          per_day_min  (float | None) – conservative estimate (min servings/day)
+          per_day_max  (float | None) – liberal estimate    (max servings/day)
+          per_day_mid  (float | None) – midpoint used for band lookup
+          epa_mg_per_unit   (float)
+          dha_mg_per_unit   (float)
+          epa_dha_mg_per_unit (float)
+          servings_per_day_min (float | None)
+          servings_per_day_max (float | None)
+        """
+        ingredients = self._get_active_ingredients(product)
+        epa_mg = 0.0
+        dha_mg = 0.0
+        has_dose = False
+
+        for ing in ingredients:
+            cid = norm_text(ing.get("canonical_id") or "")
+            if cid not in self._EPA_DHA_CANONICAL_IDS:
+                continue
+            # Skip blend-level totals and parent-total duplicates
+            if ing.get("is_proprietary_blend") or ing.get("is_blend_header"):
+                continue
+            if ing.get("is_parent_total"):
+                continue
+
+            qty = as_float(ing.get("quantity"), None)
+            if qty is None or qty <= 0:
+                continue
+            unit = norm_text(ing.get("unit_normalized") or ing.get("unit") or "")
+
+            # Convert quantity to mg
+            if unit in {"mg", "milligram", "milligrams"}:
+                mg_val = qty
+            elif unit in {"g", "gram", "grams"}:
+                mg_val = qty * 1000.0
+            elif unit in {"mcg", "ug", "µg", "microgram", "micrograms"}:
+                mg_val = qty / 1000.0
+            else:
+                # Unknown unit – skip to avoid nonsensical values
+                continue
+
+            has_dose = True
+            # epa_dha combined node contributes to both
+            if cid in {"epa", "epa_dha"}:
+                epa_mg += mg_val
+            if cid in {"dha", "epa_dha"}:
+                dha_mg += mg_val
+
+        _empty = {
+            "has_explicit_dose": False,
+            "per_day_min": None,
+            "per_day_max": None,
+            "per_day_mid": None,
+            "epa_mg_per_unit": 0.0,
+            "dha_mg_per_unit": 0.0,
+            "epa_dha_mg_per_unit": 0.0,
+            "servings_per_day_min": None,
+            "servings_per_day_max": None,
+        }
+        if not has_dose:
+            return _empty
+
+        # -- Resolve servings-per-day --
+        # Primary: serving_basis (richer, enricher-computed)
+        sb = product.get("serving_basis") or {}
+        spd_min = as_float(sb.get("min_servings_per_day"), None)
+        spd_max = as_float(sb.get("max_servings_per_day"), None)
+
+        # Fallback: dosage_normalization.serving_basis
+        # Important: only fill in the *missing* value so we don't clobber a good value
+        # that was already resolved from serving_basis above (e.g. DSLD provides
+        # minDailyServings but not maxDailyServings → spd_min=3, spd_max=None).
+        if spd_min is None or spd_max is None:
+            dn_sb = ((product.get("dosage_normalization") or {}).get("serving_basis") or {})
+            if spd_min is None:
+                spd_min = as_float(dn_sb.get("servings_per_day_min"), None)
+            if spd_max is None:
+                spd_max = as_float(dn_sb.get("servings_per_day_max"), None)
+
+        # Guard: default to 1 serving/day if still missing or non-positive
+        if not spd_min or spd_min <= 0:
+            spd_min = 1.0
+        if not spd_max or spd_max <= 0:
+            spd_max = spd_min
+
+        total_per_unit = epa_mg + dha_mg
+        per_day_min = total_per_unit * spd_min
+        per_day_max = total_per_unit * spd_max
+        per_day_mid = (per_day_min + per_day_max) / 2.0
+
+        return {
+            "has_explicit_dose": True,
+            "per_day_min": round(per_day_min, 1),
+            "per_day_max": round(per_day_max, 1),
+            "per_day_mid": round(per_day_mid, 1),
+            "epa_mg_per_unit": round(epa_mg, 1),
+            "dha_mg_per_unit": round(dha_mg, 1),
+            "epa_dha_mg_per_unit": round(total_per_unit, 1),
+            "servings_per_day_min": spd_min,
+            "servings_per_day_max": spd_max,
+        }
+
+    def _score_section_e(self, product: Dict[str, Any], flags: List[str]) -> Dict[str, Any]:
+        """Section E – EPA+DHA Dose Adequacy (up to 2.0 bonus points).
+
+        Applicable only to products with explicit per-unit EPA and/or DHA amounts.
+        Band thresholds anchored to primary clinical sources (see scoring_config.json
+        section_E_dose_adequacy._band_sources).
+        """
+        section_max = self._section_max("e", 2.0)
+        e_cfg = self.config.get("section_E_dose_adequacy", {}) or {}
+        bands = list(e_cfg.get("bands", []) or [])
+
+        dose_data = self._compute_epa_dha_per_day(product)
+
+        if not dose_data.get("has_explicit_dose"):
+            return {
+                "score": 0.0,
+                "max": 0.0,       # 0 max signals "not applicable" to callers / display
+                "applicable": False,
+            }
+
+        # Use midpoint of min/max daily range for band lookup
+        per_day = as_float(dose_data.get("per_day_mid"), 0.0) or 0.0
+
+        e_score = 0.0
+        dose_band_label = "below_efsa_ai"
+        prescription_dose = False
+
+        # Evaluate bands highest-threshold first
+        sorted_bands = sorted(bands, key=lambda b: as_float(b.get("min_mg_day"), 0) or 0, reverse=True)
+        for band in sorted_bands:
+            threshold = as_float(band.get("min_mg_day"), 0) or 0.0
+            if per_day >= threshold:
+                e_score = min(section_max, as_float(band.get("score"), 0.0) or 0.0)
+                dose_band_label = band.get("label") or dose_band_label
+                band_flag = band.get("flag")
+                if band_flag:
+                    prescription_dose = True
+                    if band_flag not in flags:
+                        flags.append(band_flag)
+                break
+
+        return {
+            "score": round(e_score, 2),
+            "max": round(section_max, 2),
+            "applicable": True,
+            "dose_band": dose_band_label,
+            "per_day_mid_mg": dose_data.get("per_day_mid"),
+            "per_day_min_mg": dose_data.get("per_day_min"),
+            "per_day_max_mg": dose_data.get("per_day_max"),
+            "epa_mg_per_unit": dose_data.get("epa_mg_per_unit"),
+            "dha_mg_per_unit": dose_data.get("dha_mg_per_unit"),
+            "prescription_dose": prescription_dose,
+        }
+
     def _build_badges(self, product: Dict[str, Any], verdict: str) -> List[Dict[str, str]]:
         badges: List[Dict[str, str]] = []
         if verdict in {"BLOCKED", "UNSAFE", "NOT_SCORED"}:
@@ -2083,6 +2259,7 @@ class SupplementScorer:
         section_b_max = self._section_max("b", 30.0)
         section_c_max = self._section_max("c", 20.0)
         section_d_max = self._section_max("d", 5.0)
+        section_e_max = self._section_max("e", 2.0)
 
         if quality_score is None:
             score_100_equivalent = None
@@ -2177,6 +2354,13 @@ class SupplementScorer:
                     "score": breakdown.get("D", {}).get("score"),
                     "max": section_d_max,
                 },
+                "E_dose_adequacy": {
+                    "score": breakdown.get("E", {}).get("score", 0.0),
+                    # Report actual section max (2.0) so callers know potential,
+                    # but mark as applicable=False when no explicit EPA/DHA dose found.
+                    "max": section_e_max,
+                    "applicable": breakdown.get("E", {}).get("applicable", False),
+                },
             },
         }
 
@@ -2212,6 +2396,7 @@ class SupplementScorer:
             section_b_max = self._section_max("b", 30.0)
             section_c_max = self._section_max("c", 20.0)
             section_d_max = self._section_max("d", 5.0)
+            section_e_max = self._section_max("e", 2.0)
             for flag in b0.get("flags", []):
                 if flag not in flags:
                     flags.append(flag)
@@ -2239,6 +2424,7 @@ class SupplementScorer:
                     },
                     "C": {"score": 0.0, "max": section_c_max},
                     "D": {"score": 0.0, "max": section_d_max},
+                    "E": {"score": 0.0, "max": 0.0, "applicable": False},
                     "violation_penalty": 0.0,
                 }
                 return self._build_core_output(
@@ -2268,6 +2454,7 @@ class SupplementScorer:
                     },
                     "C": {"score": 0.0, "max": section_c_max},
                     "D": {"score": 0.0, "max": section_d_max},
+                    "E": {"score": 0.0, "max": 0.0, "applicable": False},
                     "violation_penalty": 0.0,
                 }
                 return self._build_core_output(
@@ -2298,6 +2485,7 @@ class SupplementScorer:
                     "B": {"score": 0.0, "max": section_b_max},
                     "C": {"score": 0.0, "max": section_c_max},
                     "D": {"score": 0.0, "max": section_d_max},
+                    "E": {"score": 0.0, "max": 0.0, "applicable": False},
                     "violation_penalty": 0.0,
                 }
                 return self._build_core_output(
@@ -2326,9 +2514,16 @@ class SupplementScorer:
             )
             section_c = self._score_section_c(product, flags)
             section_d = self._score_section_d(product)
+            # Section E must be computed after flags are partially populated
+            # (it may append PRESCRIPTION_DOSE_OMEGA3 flag)
+            section_e = self._score_section_e(product, flags)
 
             quality_raw = (
-                section_a["score"] + section_b["score"] + section_c["score"] + section_d["score"]
+                section_a["score"]
+                + section_b["score"]
+                + section_c["score"]
+                + section_d["score"]
+                + section_e["score"]
             )
 
             violation_penalty = self._manufacturer_violation_penalty(product)
@@ -2344,6 +2539,7 @@ class SupplementScorer:
                 "B": section_b,
                 "C": section_c,
                 "D": section_d,
+                "E": section_e,
                 "violation_penalty": round(violation_penalty, 2),
                 "quality_raw": round(quality_raw, 2),
             }

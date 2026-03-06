@@ -686,7 +686,10 @@
       "CUI": "C0004843",
       "aliases": [
         "Blue-Max Blueberry Concentrate",
-        "Blueberry, Natural"
+        "Blueberry, Natural",
+        "Wild Blueberry Anthocyanin extract",
+        "Wild Blueberry extract",
+        "Blueberry Anthocyanin extract"
       ],
       "category": "fruit",
       "notes": "Vaccinium corymbosum (Ericaceae) fruit. Rich in anthocyanins (especially malvidin glycosides) and pterostilbene. RCT evidence for cognitive function in older adults (PMID 28283823). Botanical powder.",
@@ -707,7 +710,10 @@
         "bluerich blueberry vaccinium corymbosum concentrate",
         "blueberry whole concentrate",
         "berryrich orac 300",
-        "blueberry 4:1 extract"
+        "blueberry 4:1 extract",
+        "Wild Blueberry Anthocyanin extract",
+        "Wild Blueberry extract",
+        "Blueberry Anthocyanin extract"
       ],
       "category": "fruit",
       "notes": "Vaccinium corymbosum (Ericaceae) whole fruit powder. Contains anthocyanins, flavonols, and phenolic acids. Used for antioxidant and cognitive support. Unstandardized botanical form.",
@@ -1602,7 +1608,9 @@
         "Cran-Max Cranberry concentrate",
         "Pacran SP Cranberry Vaccinium macrocarpon powder",
         "Pacran SP Cranberry powder",
-        "Flowens Cranberry fruit solids"
+        "Flowens Cranberry fruit solids",
+        "Cranberry Whole Fruit Concentrate",
+        "whole cranberry fruit concentrate"
       ],
       "category": "fruit",
       "notes": "Vaccinium macrocarpon (Ericaceae) fruit. Contains type-A proanthocyanidins (PACs) with anti-adhesion activity against E. coli uropathogenic strains. RCT evidence for UTI prevention (PMID 23440782).",
@@ -1617,7 +1625,9 @@
         "vaccinium macrocarpon fruit",
         "cranberry powder",
         "american cranberry",
-        "cranberry fruit solids"
+        "cranberry fruit solids",
+        "Cranberry Whole Fruit Concentrate",
+        "whole cranberry fruit concentrate"
       ],
       "category": "fruit",
       "notes": "Vaccinium macrocarpon (Ericaceae) whole fruit powder. Same species as cranberry entry; covers fruit-specific labels. Rich in type-A proanthocyanidins and hippuric acid. Botanical fruit form.",
@@ -3445,7 +3455,12 @@
         "organic Maqui",
         "macqui berry concentrate",
         "maquibright aristotelia chilensis berry standardized extract",
-        "aristotelia chilensis berry standardized extract"
+        "aristotelia chilensis berry standardized extract",
+        "Maqui berry (Aristotelia chilensis) Anthocyanin extract",
+        "maqui berry anthocyanin extract",
+        "Aristotelia chilensis anthocyanin extract",
+        "maqui berry extract",
+        "Maqui berry (Aristotelia chilensis) extract"
       ],
       "category": "fruit",
       "notes": "Aristotelia chilensis (Elaeocarpaceae) berry. Chilean Patagonian berry with highest known anthocyanin content (138 mg/g freeze-dried). Contains delphinidins. Potent antioxidant. Botanical berry powder.",
@@ -4209,7 +4224,9 @@
         "Pomegrante",
         "punica granatum fruit",
         "pomegranate powder",
-        "Pomegranate Fruit"
+        "Pomegranate Fruit",
+        "Pomegranate 5:1 extract",
+        "Pomegranate fruit 5:1 extract"
       ],
       "category": "fruit",
       "notes": "Punica granatum (Lythraceae) fruit. Rich in punicalagins, ellagitannins, and anthocyanins. RCT evidence for blood pressure and antioxidant status (PMID 22648174). Botanical fruit powder.",
@@ -4854,7 +4871,13 @@
         "sour cherry",
         "CherryPure Tart Cherry powder",
         "Tart Cherry",
-        "Tart Cherry, Powder"
+        "Tart Cherry, Powder",
+        "CherryPure Tart Cherry (Prunus cerasus) Proanthocyanidin extract",
+        "CherryPure Sour Cherry (Tart Cherry) Proanthocyanidin powder",
+        "CherryPure Sour Cherry (Tart Cherry) Proanthocyanidin extract",
+        "CherryPure Tart Cherry extract",
+        "CherryPure Sour Cherry extract",
+        "CherryPure tart cherry proanthocyanidin"
       ],
       "category": "fruit",
       "notes": "Prunus cerasus (Rosaceae) fruit. Montmorency tart cherry rich in anthocyanins and melatonin. RCT evidence for post-exercise recovery, sleep, and uric acid reduction (PMID 23075559).",
@@ -5244,7 +5267,10 @@
         "wild bilberry",
         "vaccinium myrtillus",
         "blueberry, wild",
-        "blueberry, powder, wild"
+        "blueberry, powder, wild",
+        "Wild Blueberry Anthocyanin extract",
+        "Wild Blueberry extract",
+        "Blueberry Anthocyanin extract"
       ],
       "category": "fruit",
       "notes": "Vaccinium angustifolium (Ericaceae) fruit. Lowbush wild blueberry with 2x anthocyanin content vs. cultivated. Rich in pterostilbene and chlorogenic acid. Superior antioxidant capacity.",

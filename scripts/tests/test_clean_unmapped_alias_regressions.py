@@ -377,7 +377,7 @@ def normalizer():
         ("Black Tea leaves extract", "Black Tea"),
         ("Calcium Glycerophosphate", "calcium glycerophosphate"),
         ("Calcium Caprylate", "calcium caprylate"),
-        ("Crominex 3+", "crominex 3+"),
+        ("Crominex 3+", "chromium"),  # Now maps via IQM alias → chromium parent
         ("Beta-Ecdysterone", "Ecdysterones"),
         ("Carotene, Natural", "carotene, natural"),
         ("Malate", "malate"),

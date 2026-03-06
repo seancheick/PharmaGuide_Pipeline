@@ -102,6 +102,10 @@ class TestAliasQuality:
             'proanthocyanidins',        # pac stub + proanthocyanidins
             'ginsenoside rg3',          # rg3 stub + ginsenosides
             'maquibright',              # delphinidin branded extract + maqui_berry
+            'akba',                     # AKBA primary marker for boswellia 5-Loxin/Aflapin + dedicated stub
+            'vitexin',                  # Vitexin primary marker for hawthorn extracts + dedicated stub
+            # Fish oil concentrate — shared between fish_oil/molecularly distilled + omega_3/ethyl ester
+            'concentrated fish oil',
         }
 
         alias_map = defaultdict(list)

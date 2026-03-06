@@ -2206,3 +2206,277 @@ class TestScoringAggregationAndConfig:
         a1 = scorer._score_a1(product, "targeted")
         # avg_raw = 9 on a 0-9 scale => full A1 max.
         assert a1 == pytest.approx(15.0, rel=1e-6)
+
+# =============================================================================
+# Section E – EPA+DHA Dose Adequacy Tests
+# =============================================================================
+
+def _make_omega_product(epa_mg: float, dha_mg: float, servings_per_day: float,
+                         epa_canonical: str = "epa", dha_canonical: str = "dha"):
+    """Helper: minimal product dict with explicit EPA/DHA amounts."""
+    ings = []
+    if epa_mg:
+        ings.append({
+            "name": "EPA", "canonical_id": epa_canonical,
+            "quantity": epa_mg, "unit_normalized": "mg", "unit": "mg",
+            "is_proprietary_blend": False, "is_blend_header": False, "is_parent_total": False,
+        })
+    if dha_mg:
+        ings.append({
+            "name": "DHA", "canonical_id": dha_canonical,
+            "quantity": dha_mg, "unit_normalized": "mg", "unit": "mg",
+            "is_proprietary_blend": False, "is_blend_header": False, "is_parent_total": False,
+        })
+    return {
+        "dsld_id": "OMEGA_TEST",
+        "product_name": "Fish Oil Test",
+        "ingredient_quality_data": {"ingredients": ings, "ingredients_scorable": ings},
+        "serving_basis": {
+            "min_servings_per_day": servings_per_day,
+            "max_servings_per_day": servings_per_day,
+        },
+    }
+
+
+class TestSectionEDoseAdequacy:
+    """Tests for _compute_epa_dha_per_day() and _score_section_e()."""
+
+    @pytest.fixture
+    def scorer(self):
+        return SupplementScorer()
+
+    # ---- _compute_epa_dha_per_day ----
+
+    def test_no_omega_ingredients_returns_no_dose(self, scorer):
+        """Product without EPA/DHA returns has_explicit_dose=False."""
+        prod = {
+            "dsld_id": "X", "product_name": "Vitamin C",
+            "ingredient_quality_data": {"ingredients": [
+                {"canonical_id": "vitamin_c", "quantity": 500, "unit_normalized": "mg",
+                 "is_proprietary_blend": False, "is_blend_header": False, "is_parent_total": False},
+            ]},
+            "serving_basis": {"min_servings_per_day": 1, "max_servings_per_day": 1},
+        }
+        result = scorer._compute_epa_dha_per_day(prod)
+        assert result["has_explicit_dose"] is False
+        assert result["per_day_min"] is None
+        assert result["per_day_mid"] is None
+
+    def test_epa_only(self, scorer):
+        """Only EPA present: DHA contributes 0, total = EPA × spd."""
+        prod = _make_omega_product(epa_mg=300.0, dha_mg=0.0, servings_per_day=2.0)
+        result = scorer._compute_epa_dha_per_day(prod)
+        assert result["has_explicit_dose"] is True
+        assert result["epa_mg_per_unit"] == pytest.approx(300.0)
+        assert result["dha_mg_per_unit"] == pytest.approx(0.0)
+        assert result["per_day_mid"] == pytest.approx(600.0)
+
+    def test_dha_only(self, scorer):
+        """Only DHA present."""
+        prod = _make_omega_product(epa_mg=0.0, dha_mg=200.0, servings_per_day=1.0)
+        result = scorer._compute_epa_dha_per_day(prod)
+        assert result["has_explicit_dose"] is True
+        assert result["per_day_mid"] == pytest.approx(200.0)
+
+    def test_combined_epa_dha_times_servings(self, scorer):
+        """EPA 180 + DHA 120 = 300 per unit × 3 servings = 900 mg/day."""
+        prod = _make_omega_product(epa_mg=180.0, dha_mg=120.0, servings_per_day=3.0)
+        result = scorer._compute_epa_dha_per_day(prod)
+        assert result["per_day_mid"] == pytest.approx(900.0)
+        assert result["epa_mg_per_unit"] == pytest.approx(180.0)
+        assert result["dha_mg_per_unit"] == pytest.approx(120.0)
+
+    def test_serving_range_min_max(self, scorer):
+        """min/max servings produce separate per_day estimates."""
+        prod = _make_omega_product(epa_mg=500.0, dha_mg=500.0, servings_per_day=1.0)
+        prod["serving_basis"]["min_servings_per_day"] = 1.0
+        prod["serving_basis"]["max_servings_per_day"] = 3.0
+        result = scorer._compute_epa_dha_per_day(prod)
+        assert result["per_day_min"] == pytest.approx(1000.0)
+        assert result["per_day_max"] == pytest.approx(3000.0)
+        assert result["per_day_mid"] == pytest.approx(2000.0)
+
+    def test_missing_serving_basis_defaults_to_1(self, scorer):
+        """No serving_basis → assumes 1 serving/day."""
+        prod = {
+            "dsld_id": "X", "product_name": "Test",
+            "ingredient_quality_data": {"ingredients": [
+                {"canonical_id": "epa", "quantity": 400, "unit_normalized": "mg",
+                 "is_proprietary_blend": False, "is_blend_header": False, "is_parent_total": False},
+            ]},
+        }
+        result = scorer._compute_epa_dha_per_day(prod)
+        assert result["has_explicit_dose"] is True
+        assert result["per_day_mid"] == pytest.approx(400.0)   # 400 × 1
+
+    def test_proprietary_blend_excluded(self, scorer):
+        """EPA/DHA inside a proprietary blend header should be skipped."""
+        prod = {
+            "dsld_id": "X", "product_name": "Test",
+            "ingredient_quality_data": {"ingredients": [
+                {"canonical_id": "epa", "quantity": 500, "unit_normalized": "mg",
+                 "is_proprietary_blend": True, "is_blend_header": False, "is_parent_total": False},
+            ]},
+            "serving_basis": {"min_servings_per_day": 1, "max_servings_per_day": 1},
+        }
+        result = scorer._compute_epa_dha_per_day(prod)
+        assert result["has_explicit_dose"] is False
+
+    def test_parent_total_excluded(self, scorer):
+        """EPA parent-total row is skipped; child rows would still count."""
+        prod = {
+            "dsld_id": "X", "product_name": "Test",
+            "ingredient_quality_data": {"ingredients": [
+                # Parent total — should be skipped
+                {"canonical_id": "epa", "quantity": 1000, "unit_normalized": "mg",
+                 "is_proprietary_blend": False, "is_blend_header": False, "is_parent_total": True},
+                # Child — should count
+                {"canonical_id": "epa", "quantity": 400, "unit_normalized": "mg",
+                 "is_proprietary_blend": False, "is_blend_header": False, "is_parent_total": False},
+            ]},
+            "serving_basis": {"min_servings_per_day": 1, "max_servings_per_day": 1},
+        }
+        result = scorer._compute_epa_dha_per_day(prod)
+        assert result["has_explicit_dose"] is True
+        assert result["epa_mg_per_unit"] == pytest.approx(400.0)  # parent total excluded
+
+    def test_epa_dha_combined_canonical_id(self, scorer):
+        """canonical_id='epa_dha' contributes to both EPA and DHA buckets."""
+        prod = {
+            "dsld_id": "X", "product_name": "Test",
+            "ingredient_quality_data": {"ingredients": [
+                {"canonical_id": "epa_dha", "quantity": 600, "unit_normalized": "mg",
+                 "is_proprietary_blend": False, "is_blend_header": False, "is_parent_total": False},
+            ]},
+            "serving_basis": {"min_servings_per_day": 1, "max_servings_per_day": 1},
+        }
+        result = scorer._compute_epa_dha_per_day(prod)
+        assert result["has_explicit_dose"] is True
+        assert result["epa_mg_per_unit"] == pytest.approx(600.0)
+        assert result["dha_mg_per_unit"] == pytest.approx(600.0)
+        assert result["epa_dha_mg_per_unit"] == pytest.approx(1200.0)
+        assert result["per_day_mid"] == pytest.approx(1200.0)
+
+    # ---- _score_section_e band boundaries ----
+
+    @pytest.mark.parametrize("per_day,exp_score,exp_band", [
+        (0,    0.0, "below_efsa_ai"),
+        (100,  0.0, "below_efsa_ai"),
+        (249,  0.0, "below_efsa_ai"),   # 1 below EFSA AI threshold
+        (250,  0.5, "efsa_ai_zone"),    # exactly EFSA AI 250 mg/day
+        (499,  0.5, "efsa_ai_zone"),
+        (500,  1.0, "general_health"),  # FDA QHC / general health
+        (999,  1.0, "general_health"),
+        (1000, 1.5, "aha_cvd"),         # AHA CVD recommendation
+        (1999, 1.5, "aha_cvd"),
+        (2000, 2.0, "high_clinical"),   # EFSA triglyceride claim
+        (3999, 2.0, "high_clinical"),
+        (4000, 2.0, "prescription_dose"),  # AHA/ACC prescription dose
+        (5000, 2.0, "prescription_dose"),
+    ])
+    def test_band_boundaries(self, scorer, per_day, exp_score, exp_band):
+        """Each dose boundary maps to the correct band and score."""
+        # Construct a product that yields exactly `per_day` mg/day at midpoint
+        prod = _make_omega_product(epa_mg=per_day, dha_mg=0.0, servings_per_day=1.0)
+        flags = []
+        result = scorer._score_section_e(prod, flags)
+        if per_day == 0:
+            assert result["applicable"] is False
+        else:
+            assert result["applicable"] is True
+            assert result["score"] == pytest.approx(exp_score, abs=0.001)
+            assert result["dose_band"] == exp_band
+
+    def test_prescription_dose_flag_appended(self, scorer):
+        """≥4000 mg/day adds PRESCRIPTION_DOSE_OMEGA3 to flags list."""
+        prod = _make_omega_product(epa_mg=2000.0, dha_mg=500.0, servings_per_day=2.0)
+        # per_day_mid = 2500 × 2 = 5000 mg/day
+        flags = []
+        result = scorer._score_section_e(prod, flags)
+        assert result["prescription_dose"] is True
+        assert "PRESCRIPTION_DOSE_OMEGA3" in flags
+
+    def test_not_applicable_returns_zero_max(self, scorer):
+        """Non-omega product: max=0.0 and applicable=False."""
+        prod = {
+            "dsld_id": "X", "product_name": "Vitamin D",
+            "ingredient_quality_data": {"ingredients": [
+                {"canonical_id": "vitamin_d3", "quantity": 5000, "unit_normalized": "iu",
+                 "is_proprietary_blend": False, "is_blend_header": False, "is_parent_total": False},
+            ]},
+        }
+        flags = []
+        result = scorer._score_section_e(prod, flags)
+        assert result["applicable"] is False
+        assert result["score"] == 0.0
+        assert result["max"] == 0.0
+        assert "PRESCRIPTION_DOSE_OMEGA3" not in flags
+
+    def test_section_e_in_score_product_output(self, scorer):
+        """score_product() includes E in section_scores and breakdown."""
+        from copy import deepcopy
+        base = make_base_product()
+        # Inject EPA/DHA into the base product
+        epa_ing = {
+            "name": "EPA", "standard_name": "EPA (Eicosapentaenoic Acid)",
+            "canonical_id": "epa", "quantity": 500, "unit": "mg", "unit_normalized": "mg",
+            "score": 13, "dosage_importance": 1.0, "mapped": True, "has_dose": True,
+            "is_proprietary_blend": False, "is_blend_header": False, "is_parent_total": False,
+            "bio_score": 10, "natural": True,
+        }
+        dha_ing = {
+            "name": "DHA", "standard_name": "DHA (Docosahexaenoic Acid)",
+            "canonical_id": "dha", "quantity": 250, "unit": "mg", "unit_normalized": "mg",
+            "score": 13, "dosage_importance": 1.0, "mapped": True, "has_dose": True,
+            "is_proprietary_blend": False, "is_blend_header": False, "is_parent_total": False,
+            "bio_score": 10, "natural": True,
+        }
+        prod = deepcopy(base)
+        prod["ingredient_quality_data"]["ingredients"].extend([epa_ing, dha_ing])
+        prod["ingredient_quality_data"]["ingredients_scorable"].extend([epa_ing, dha_ing])
+        prod["serving_basis"] = {"min_servings_per_day": 2, "max_servings_per_day": 2}
+        # per_day = (500+250) × 2 = 1500 mg/day → aha_cvd band → 1.5 pts
+
+        result = scorer.score_product(prod)
+        assert result["verdict"] in {"SAFE", "POOR", "CAUTION"}
+
+        section_scores = result.get("section_scores", {})
+        assert "E_dose_adequacy" in section_scores
+        e = section_scores["E_dose_adequacy"]
+        assert e["applicable"] is True
+        assert e["score"] == pytest.approx(1.5, abs=0.001)
+        assert e["max"] == pytest.approx(2.0, abs=0.001)
+
+        e_bd = result.get("breakdown", {}).get("E", {})
+        assert e_bd["dose_band"] == "aha_cvd"
+        assert e_bd["per_day_mid_mg"] == pytest.approx(1500.0)
+
+    def test_score_product_non_omega_no_e_contribution(self, scorer):
+        """Non-omega product: E score = 0, applicable = False in output."""
+        prod = make_base_product()
+        result = scorer.score_product(prod)
+        section_scores = result.get("section_scores", {})
+        if "E_dose_adequacy" in section_scores:
+            e = section_scores["E_dose_adequacy"]
+            assert e["applicable"] is False
+            assert e["score"] == 0.0
+
+    def test_dosage_normalization_fallback(self, scorer):
+        """Falls back to dosage_normalization.serving_basis when serving_basis absent."""
+        prod = {
+            "dsld_id": "X", "product_name": "Test",
+            "ingredient_quality_data": {"ingredients": [
+                {"canonical_id": "epa", "quantity": 300, "unit_normalized": "mg",
+                 "is_proprietary_blend": False, "is_blend_header": False, "is_parent_total": False},
+            ]},
+            # No top-level serving_basis; use dosage_normalization fallback
+            "dosage_normalization": {
+                "serving_basis": {
+                    "servings_per_day_min": 2.0,
+                    "servings_per_day_max": 2.0,
+                }
+            },
+        }
+        result = scorer._compute_epa_dha_per_day(prod)
+        assert result["has_explicit_dose"] is True
+        assert result["per_day_mid"] == pytest.approx(600.0)  # 300 × 2

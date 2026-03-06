@@ -172,41 +172,100 @@ The PharmaGuide supplement data pipeline transforms raw DSLD (Dietary Supplement
 
 ### What It Does
 
-Calculates a **0-80 point server-side score** (+ 20 points user profile on device = 100 total)
+Calculates a **0-80 point server-side quality score** (+ 20 points user-profile fit score on device = 100 total display score).
 
 ### Scoring Sections
 
 | Section | Max Points | What It Measures |
 |---------|------------|------------------|
-| **A: Ingredient Quality** | 30 | Form quality, bioavailability, dosing, delivery systems |
-| **B: Safety & Purity** | 25 | Contaminants, certifications, transparency |
-| **C: Evidence & Research** | 15 | Clinical studies, branded ingredients |
-| **D: Brand Trust** | 10 | Manufacturer reputation, violations |
-| **Probiotic Bonus** | +5 | (Only for probiotic products) |
+| **A: Ingredient Quality** | 25 | Form bioavailability, delivery systems, absorption enhancers, synergy, single-ingredient efficiency |
+| **B: Safety & Purity** | 30 | Base 25 + certifications bonus − additive/allergen/blend/marketing penalties |
+| **C: Evidence & Research** | 20 | Clinical match points weighted by study type and evidence level |
+| **D: Brand Trust** | 5 | Manufacturer reputation, disclosure quality, physician formulation, region, sustainability |
+| **E: Dose Adequacy** | +2 | EPA+DHA daily dose band bonus — omega-3 products only, additive within 80-pt ceiling |
+| **Total ceiling** | **80** | All sections clamped together at 80 |
 
-### Scoring Logic Example
+> **Section E** is new in v3.2.0. It is only applicable when a product has explicit labelled EPA and/or DHA
+> per-unit amounts. Non-omega-3 products receive E score = 0, E max = 0, applicable = false.
 
+### Scoring Formula
+
+```text
+quality_raw = A + B + C + D + E + violation_penalty
+quality_score = clamp(0, 80, quality_raw)
+score_100_equivalent = (quality_score / 80) × 100
 ```
-Section A (30 max):
-  A1: Ingredient Forms (15)  → avg quality score × 15/10
-  A2: Bioavailability (8)    → delivery system tier bonus
-  A3: Dosing Precision (5)   → RDA compliance
-  A4: Synergy (2)            → absorption enhancer pairs
 
-Section B (25 max):
-  B1: Contaminants (-20)     → banned ingredients penalty
-  B2: Harmful Additives (-8) → artificial colors, sweeteners
-  B3: Certifications (+10)   → NSF, USP, GMP bonuses
-  B4: Transparency (+5)      → no proprietary blends
+### Section A Detail (max 25)
 
-Section C (15 max):
-  C1: Product Evidence (8)   → product-specific RCTs
-  C2: Ingredient Evidence (5)→ ingredient-level studies
-  C3: Strain Evidence (2)    → probiotic strain studies
+```text
+A = min(25, A1 + A2 + A3 + A4 + A5 + A6 + probiotic_bonus)
 
-Section D (10 max):
-  D1: Manufacturer Rep (6)   → top manufacturer bonus
-  D2: Violations (-10)       → recalls, FDA warnings
+A1 (max 15): weighted average IQM bioavailability score across active ingredients
+A2 (max  3): premium forms bonus — count of unique ingredients with score ≥ 14
+A3 (max  3): delivery system tier (tier 1=3pts, tier 2=2pts, tier 3=1pt)
+A4 (max  3): absorption enhancer paired (+3 when absorption_enhancer_paired=true)
+A5 (max  3): organic + standardized botanical + synergy cluster flags
+A6 (max  3): single-ingredient efficiency bonus (supp_type = single/single_nutrient only)
+Probiotic bonus: max 3 (default) or max 10 (extended, gated)
+```
+
+### Section B Detail (max 30)
+
+```text
+B_raw = 25 (base) + min(5, bonuses) − penalties
+B = clamp(0, 30, B_raw)
+
+Bonuses (capped at 5 total):
+  B3: claim compliance (allergen-free / gluten-free / vegan claims)   max 4
+  B4a: named QA programs (NSF, USP, Informed Sport, etc.)            5 pts each, cap 15
+  B4b: GMP certified (+4) or FDA registered (+2)
+  B4c: CoA available (+1), batch lookup (+1)
+
+Penalties (subtracted):
+  B0: high_risk substance → −10; watchlist → −5
+  B1: harmful additives (per risk level × count)                      cap 8
+  B2: allergen penalty                                                cap 2
+  B5: proprietary blend hidden-mass penalty                           cap 10
+  B6: disease/marketing claim penalty                                 −5
+```
+
+### Section C Detail (max 20)
+
+```text
+Per clinical match: points = study_type_base_points × evidence_level_multiplier
+  Study types:  systematic_review_meta=6, rct_multiple=5, rct_single=4, observational=2, in_vitro=1
+  Multipliers:  product-human=1.0, branded-rct=0.8, ingredient-human=0.65, preclinical=0.3
+  Sub-clinical dose guard: multiply by 0.25 when product dose < min clinical dose
+Per-ingredient cap: 7 pts
+Section cap: 20 pts
+```
+
+### Section D Detail (max 5)
+
+```text
+D = min(5, D1 + D2 + min(2.0, D3 + D4 + D5))
+
+D1: trusted manufacturer exact match                       2 pts
+D2: full ingredient disclosure                             1 pt
+D3: physician formulated                                   0.5 pts
+D4: high-standard region (e.g. AU, EU GMP)                1.0 pt
+D5: sustainability commitment                              0.5 pts
+D3+D4+D5 combined cap: 2.0 pts
+```
+
+### Section E Detail (max 2.0, omega-3 products only)
+
+```text
+per_day_mid = avg(min_servings, max_servings) × (EPA_mg + DHA_mg) per unit
+
+Band thresholds (highest matching wins):
+  ≥ 4000 mg/day → 2.0 pts  + PRESCRIPTION_DOSE_OMEGA3 flag  (AHA/ACC Rx dose)
+  ≥ 2000 mg/day → 2.0 pts                                    (EFSA TG health claim)
+  ≥ 1000 mg/day → 1.5 pts                                    (AHA CVD recommendation)
+  ≥  500 mg/day → 1.0 pts                                    (FDA qualified health claim)
+  ≥  250 mg/day → 0.5 pts                                    (EFSA Adequate Intake)
+  <  250 mg/day → 0.0 pts
 ```
 
 ### Output Structure (Scored Product)
@@ -214,23 +273,28 @@ Section D (10 max):
 ```json
 {
   "...enriched fields...",
-  "scoring_version": "3.4.0",
-  "scored_date": "2025-12-08T16:00:00Z",
+  "scoring_version": "3.2.0",
+  "scored_date": "2026-03-05T16:00:00Z",
 
+  "quality_score": 62.5,
   "score_80": 62.5,
   "score_100_equivalent": 78.1,
-  "grade": "B+",
+  "verdict": "SAFE",
+  "grade": "Good",
 
   "section_scores": {
-    "A": {"score": 24.5, "max": 30, "details": {...}},
-    "B": {"score": 20.0, "max": 25, "details": {...}},
-    "C": {"score": 10.0, "max": 15, "details": {...}},
-    "D": {"score": 8.0, "max": 10, "details": {...}}
+    "A_ingredient_quality":  {"score": 21.0, "max": 25},
+    "B_safety_purity":       {"score": 24.0, "max": 30},
+    "C_evidence_research":   {"score": 10.0, "max": 20},
+    "D_brand_trust":         {"score":  4.0, "max":  5},
+    "E_dose_adequacy":       {"score":  1.5, "max":  2.0, "applicable": true,
+                              "dose_band": "aha_cvd", "per_day_mid_mg": 1080.0}
   },
 
-  "scoring_notes": ["Top manufacturer detected", "NSF certified"]
+  "flags": [],
+  "badges": [{"id": "FULL_DISCLOSURE", "label": "FULL DISCLOSURE"}],
+  "category_percentile": {"available": true, "percentile": 72, "top_percent": "Top 28%"}
 }
-```
 
 ---
 
@@ -238,7 +302,7 @@ Section D (10 max):
 
 All located in `scripts/data/`
 
-### 1. `ingredient_quality_map.json` (386 entries)
+### 1. `ingredient_quality_map.json` (498 parents)
 **Purpose:** Maps ingredients to quality forms with bioavailability scores
 
 ```json
@@ -606,5 +670,5 @@ Enhanced delivery systems boost scores:
 
 ---
 
-*Last Updated: 2025-12-08*
-*Pipeline Version: 3.0*
+*Last Updated: 2026-03-05*
+*Pipeline Version: 3.2*

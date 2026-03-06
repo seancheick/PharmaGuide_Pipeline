@@ -3523,6 +3523,29 @@ class SupplementEnricherV3:
             'derived from',
         })
 
+        # Chemical salt/chelate qualifier words: when DSLD forms[] provides only
+        # a bare qualifier (e.g., {name: "citrate"} from "Magnesium Citrate"),
+        # the full ingredient label IS the form descriptor.  Prepend ing_name as
+        # the first match candidate so IQM aliases like "magnesium citrate" resolve.
+        _SALT_QUALIFIERS = frozenset({
+            'acetate', 'anhydrous', 'arginate', 'ascorbate', 'aspartate',
+            'bisglycinate', 'bromide', 'butyrate', 'carbonate', 'chelate',
+            'chelated', 'chloride', 'citrate', 'dihydrate', 'fluoride',
+            'fumarate', 'gluconate', 'glycinate', 'hcl', 'hydrochloride',
+            'iodide', 'lactate', 'malate', 'maleate', 'monohydrate', 'nitrate',
+            'orotate', 'oxide', 'palmitate', 'phosphate', 'picolinate',
+            'propionate', 'stearate', 'succinate', 'sulfate', 'taurate',
+            'tartrate', 'threonate',
+        })
+
+        # Adjective/certification words that appear as bare form tokens: these are
+        # DSLD parsing artifacts (e.g., {name: "organic"} from "organic Maca").
+        # They carry no form information — skip entirely.
+        _ADJECTIVE_QUALIFIERS = frozenset({
+            'bioactive', 'bioactives', 'certified', 'deodorized', 'fermented',
+            'natural', 'non-gmo', 'organic', 'pure', 'raw', 'standardized', 'wild',
+        })
+
         from_source_map: Dict[int, str] = {}  # index → source name
         for i, form in enumerate(cleaned_forms):
             prefix = (form.get('prefix') or '').strip()
@@ -3548,6 +3571,12 @@ class SupplementEnricherV3:
             if not form_name or not form_name.strip():
                 continue
 
+            # Skip adjective/certification qualifiers — DSLD parsing artifacts
+            # (e.g., {name: "organic"} split from "organic Maca").  These carry
+            # no form information and would pollute match_candidates.
+            if form_name.strip().lower() in _ADJECTIVE_QUALIFIERS:
+                continue
+
             # Build match candidates.  If a "from"-source exists for this form,
             # prepend it so the biologically-active acid is tried before the
             # salt/carrier name.
@@ -3558,6 +3587,16 @@ class SupplementEnricherV3:
                 stripped_src = source_name.strip()
                 if stripped_src != source_name:
                     match_candidates.append(stripped_src)
+
+            # SALT QUALIFIER RESOLUTION: when DSLD forms[] provides only a bare
+            # chemical qualifier (e.g., "citrate" from "Magnesium Citrate"), the
+            # full ingredient label is the actual form descriptor.  Prepend it so
+            # IQM aliases like "magnesium citrate" are tried first.
+            form_name_lower = form_name.strip().lower()
+            if form_name_lower in _SALT_QUALIFIERS:
+                ing_stripped = ing_name.strip()
+                if ing_stripped and ing_stripped not in match_candidates:
+                    match_candidates.insert(0, ing_stripped)
 
             # Then try the form name itself + common variations
             match_candidates.append(form_name)
@@ -3577,12 +3616,21 @@ class SupplementEnricherV3:
             # compound (e.g. "Melatonin"), try "MicroActive Melatonin" as a
             # combined candidate.  This enables IQM alias matching for branded
             # delivery technologies whose label text was split by the cleaner.
-            combined = f"{ing_name} {form_name}".strip()
-            combined_lower = combined.lower()
-            if (combined_lower != form_name.lower().strip()
-                    and combined_lower != ing_name.lower().strip()
-                    and combined not in match_candidates):
-                match_candidates.append(combined)
+            #
+            # GUARD: Skip when form_name is already a word/suffix in ing_name.
+            # Prevents "Milk Thistle Extract" + "extract" → "Milk Thistle Extract extract".
+            form_name_norm = form_name_lower.strip()
+            ing_name_lower = ing_name.lower()
+            form_already_in_name = bool(
+                re.search(r'(?<![a-z])' + re.escape(form_name_norm) + r'(?![a-z])', ing_name_lower)
+            )
+            if not form_already_in_name:
+                combined = f"{ing_name} {form_name}".strip()
+                combined_lower = combined.lower()
+                if (combined_lower != form_name.lower().strip()
+                        and combined_lower != ing_name.lower().strip()
+                        and combined not in match_candidates):
+                    match_candidates.append(combined)
 
             # Convert percent field: cleaning uses None or a float (0-100)
             percent_raw = form.get('percent')
