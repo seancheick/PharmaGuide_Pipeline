@@ -792,6 +792,12 @@ class SupplementEnricherV3:
         exact_idx: Dict[str, list] = {}
         norm_idx: Dict[str, list] = {}
 
+        non_identity_form_names = {
+            "molecular distilled",
+            "triglyceride form",
+            "phospholipid form",
+        }
+
         for parent_key, parent_data in quality_map.items():
             if parent_key.startswith("_") or not isinstance(parent_data, dict):
                 continue
@@ -824,7 +830,10 @@ class SupplementEnricherV3:
                 if not isinstance(form_data, dict):
                     continue
                 form_aliases = form_data.get('aliases', []) or []
-                for alias_text in [form_name] + list(form_aliases):
+                name_texts = list(form_aliases)
+                if norm_module.normalize_text(form_name) not in non_identity_form_names:
+                    name_texts.insert(0, form_name)
+                for alias_text in name_texts:
                     if not alias_text:
                         continue
                     exact_norm = norm_module.normalize_exact_text(alias_text)
@@ -843,6 +852,17 @@ class SupplementEnricherV3:
 
         # ── Non-scorable DB index: normalized_name → result dict ──
         nonscorable_idx: Dict[str, Dict] = {}
+
+        def _recognition_priority(result: Dict) -> int:
+            source = (result or {}).get("recognition_source")
+            priorities = {
+                "other_ingredients": 1,
+                "botanical_ingredients": 1,
+                "standardized_botanicals": 1,
+                "harmful_additives": 2,
+                "banned_recalled_ingredients": 3,
+            }
+            return priorities.get(source, 0)
 
         db_configs = [
             ('other_ingredients', 'other_ingredients', 'non_scorable',
@@ -873,7 +893,10 @@ class SupplementEnricherV3:
                     if not name_text:
                         continue
                     text_norm = norm_module.normalize_text(name_text)
-                    if text_norm and text_norm not in nonscorable_idx:
+                    if not text_norm:
+                        continue
+                    existing = nonscorable_idx.get(text_norm)
+                    if existing is None or _recognition_priority(result) > _recognition_priority(existing):
                         nonscorable_idx[text_norm] = result
 
         # Index banned_recalled_ingredients separately (different structure)
@@ -896,7 +919,10 @@ class SupplementEnricherV3:
                 if not name_text:
                     continue
                 text_norm = norm_module.normalize_text(name_text)
-                if text_norm and text_norm not in nonscorable_idx:
+                if not text_norm:
+                    continue
+                existing = nonscorable_idx.get(text_norm)
+                if existing is None or _recognition_priority(result) > _recognition_priority(existing):
                     nonscorable_idx[text_norm] = result
 
         self._nonscorable_index = nonscorable_idx
@@ -907,6 +933,16 @@ class SupplementEnricherV3:
             f"IQM exact={len(exact_idx)} norm={len(norm_idx)} entries, "
             f"non-scorable={len(nonscorable_idx)} entries"
         )
+
+    @staticmethod
+    def _recognition_blocks_scoring(recognition: Optional[Dict]) -> bool:
+        """Penalty-bearing safety identities override nutrient scoring and promotion."""
+        if not recognition:
+            return False
+        return recognition.get("recognition_source") in {
+            "harmful_additives",
+            "banned_recalled_ingredients",
+        }
 
     def _compile_patterns(self):
         """Compile regex patterns for performance"""
@@ -2412,6 +2448,23 @@ class SupplementEnricherV3:
                 SKIP_REASON_BLEND_HEADER_WITH_WEIGHT if has_dose_pre
                 else SKIP_REASON_BLEND_HEADER_NO_DOSE
             )
+        if (
+            isinstance(nested_pre, list)
+            and nested_pre
+            and (
+                ingredient.get('proprietaryBlend', False)
+                or ingredient.get('isProprietaryBlend', False)
+            )
+        ):
+            has_dose_pre, _ = self._has_valid_therapeutic_dose(ingredient)
+            return (
+                SKIP_REASON_BLEND_HEADER_WITH_WEIGHT if has_dose_pre
+                else SKIP_REASON_BLEND_HEADER_NO_DOSE
+            )
+
+        recognized = self._is_recognized_non_scorable(ing_name, std_name)
+        if self._recognition_blocks_scoring(recognized):
+            return SKIP_REASON_RECOGNIZED_NON_SCORABLE
 
         # =================================================================
         # OVERRIDE CHECK: If known in quality map or botanicals, always score
@@ -2421,7 +2474,6 @@ class SupplementEnricherV3:
 
         # Deterministic role split: recognized non-scorable identities are skipped.
         # This prevents excipients/label technologies from inflating unmapped actives.
-        recognized = self._is_recognized_non_scorable(ing_name, std_name)
         if recognized:
             return SKIP_REASON_RECOGNIZED_NON_SCORABLE
 
@@ -2578,6 +2630,10 @@ class SupplementEnricherV3:
         for excipient in EXCIPIENT_NEVER_PROMOTE:
             if excipient in name_lower:
                 return None
+
+        recognized = self._is_recognized_non_scorable(ing_name, std_name)
+        if self._recognition_blocks_scoring(recognized):
+            return None
 
         # RULE A: Known therapeutic ingredient (single factor - high confidence)
         is_known = self._is_known_therapeutic(
@@ -3774,6 +3830,16 @@ class SupplementEnricherV3:
             resolved["original_label"] = ing_name
             return resolved
 
+        generic_form_only_descriptors = {
+            "molecular distilled",
+            "triglyceride form",
+            "phospholipid form",
+        }
+        ing_norm = self._normalize_text(ing_name)
+        std_norm = self._normalize_text(std_name)
+        if ing_norm in generic_form_only_descriptors and std_norm in generic_form_only_descriptors:
+            return None
+
         # MULTI-FORM MATCHING: Try structured cleaned_forms first, then fall back
         # to label text extraction. This fixes the "form loss" issue where cleaning
         # already parsed "Vitamin A (as Retinyl Palmitate)" into forms[] but the
@@ -3908,17 +3974,23 @@ class SupplementEnricherV3:
                 "nicotinamide ascorbate",
                 "ascorbate niacinamide",
             )
-            if not any(token in blob for token in compound_tokens):
-                return None
+            if any(token in blob for token in compound_tokens):
+                context_blob = " ".join(x for x in (std_norm_value, base_norm_value or "") if x)
+                if re.search(r"\b(niacin|vitamin b3)\b", context_blob):
+                    return "vitamin_b3_niacin"
+                if re.search(r"\b(vitamin c|ascorbic acid|ascorbate)\b", context_blob):
+                    return "vitamin_c"
 
-            context_blob = " ".join(x for x in (std_norm_value, base_norm_value or "") if x)
-            if re.search(r"\b(niacin|vitamin b3)\b", context_blob):
-                return "vitamin_b3_niacin"
-            if re.search(r"\b(vitamin c|ascorbic acid|ascorbate)\b", context_blob):
+                # Default when context is missing or mixed.
                 return "vitamin_c"
 
-            # Default when context is missing or mixed.
-            return "vitamin_c"
+            if "life's dha" in blob or "lifes dha" in blob:
+                return "dha"
+
+            if "concentrated fish oil" in blob:
+                return "fish_oil"
+
+            return None
 
         # If caller didn't pass a parent context, infer from standardized/base names.
         # This prevents deterministic-but-wrong alphabetical picks when one form exists
@@ -4480,6 +4552,9 @@ class SupplementEnricherV3:
                     })
 
         if not candidates:
+            branded_match = _try_branded_token_fallback()
+            if branded_match:
+                return branded_match
             return None
 
         def candidate_sort_key(candidate: Dict) -> Tuple:

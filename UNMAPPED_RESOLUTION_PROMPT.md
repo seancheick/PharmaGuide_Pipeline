@@ -1,845 +1,780 @@
-# PharmaGuide Unmapped Ingredient Resolution
+# Clinical-Grade Unmapped Ingredient Resolution SOP
 
 ## Role
 
-Act as the **PharmaGuide Lead Systems Architect**.
-Your mission is to resolve unmapped ingredients from DSLD supplement datasets with maximum accuracy, while protecting scoring integrity and schema integrity across the pipeline.
-You are running as a CLI coding agent with filesystem access in this repo.
+Act as the **PharmaGuide clinical data + pipeline resolution agent**.
+Your job is to resolve unmapped ingredients and form fallbacks with maximum identity accuracy while protecting:
+
+- clinical correctness
+- scoring integrity
+- database schema integrity
+- cleaner/enricher contract integrity
+- user-facing trust
+
+You are working inside this repo with filesystem access.
+You must use the actual pipeline outputs, actual database contents, and real raw DSLD source files.
+Do not guess. Do not improvise chemistry. Do not treat weak fallback matches as solved.
 
 ---
 
-## Context: Two-Stage Unmapped Problem + Form Fallbacks
+## Non-Negotiable Rules
 
-This pipeline has **two independent stages** that each produce unmapped ingredients, plus a **form fallback** category where ingredients matched a parent but fell back to a generic `(unspecified)` form. You MUST scan and resolve ALL THREE.
+### 1. Source of truth order
 
-### Stage 1: CLEANING (`enhanced_normalizer.py`)
+Use this order of truth:
 
-The cleaner maps ingredient names against **all reference databases** (IQM + botanical + other + harmful + allergen + banned + excipient lists). An ingredient is `mapped: false` in cleaned output if it's not found in **any** of these databases.
+1. Raw DSLD source file in `/Users/seancheick/Documents/DataSetDsld/...`
+2. Current cleaner output in `scripts/output_*/cleaned/`
+3. Current clean unmapped reports in `scripts/output_*/unmapped/`
+4. Current enriched output in `scripts/output_*_enriched/enriched/`
+5. Current fallback reports in `scripts/output_*_enriched/reports/`
+6. Current database files in `scripts/data/`
+7. Primary external sources for identity / safety / clinical claims
 
-**Unmapped reports live at:**
+If raw DSLD contradicts cleaned output, raw wins.
+If current code behavior contradicts stale documentation, code wins.
 
-```
-scripts/output_*/unmapped/unmapped_active_ingredients.json    ← active ingredient gaps
-scripts/output_*/unmapped/unmapped_inactive_ingredients.json  ← inactive ingredient gaps
-```
+### 2. No guessing
 
-These are `{name: count}` dicts under the `unmapped_ingredients` key.
+If identity is uncertain, do not add the alias or entry.
+Mark it `needs_verification` and explain exactly what evidence is missing.
 
-### Stage 2: ENRICHMENT (`enrich_supplements_v3.py`)
+### 3. Raw verification is mandatory for suspicious cases
 
-The enricher tries to match each active ingredient specifically to the **IQM** (ingredient_quality_map.json) for bioavailability scoring. If IQM match fails, it falls back to `_is_recognized_non_scorable()` which checks botanical_ingredients, banned_recalled, other_ingredients, etc.
+You MUST inspect the raw DSLD product file before proposing changes for:
 
-An ingredient shows `mapped: false` in enriched output when BOTH the IQM match AND the tier-2 recognition check fail.
+- weird active ingredients
+- blends / container rows / shell rows / section headers
+- ingredients that look like parser artifacts
+- cases where cleaning and enrichment disagree
+- cases where a term might be a brand, descriptor, source species, or form rather than the ingredient itself
+- ingredients that look misclassified as active vs inactive
 
-**Unmapped data lives inside enriched product files:**
+Raw files live under:
 
-```
-scripts/output_*_enriched/enriched/enriched_cleaned_batch_*.json
-→ each product → ingredient_quality_data → ingredients_scorable[] → mapped: false
-```
+`/Users/seancheick/Documents/DataSetDsld/<dataset>/<product_id>.json`
 
-### Stage 3: FORM FALLBACK (enrichment `parent_fallback_report.json`)
+### 4. Real-source verification is mandatory
 
-The enricher matched the ingredient to an IQM parent, but could NOT match a specific form alias. It fell back to the generic `(unspecified)` form, which uses a conservative stub score (typically bio_score=5). These are **scoring accuracy gaps** — the ingredient IS recognized but potentially under-scored.
+For any branded ingredient, clinical note, safety concern, or regulatory claim, verify with real sources.
+Preferred order:
 
-**Fallback reports live at:**
+1. FDA / NIH ODS / NCCIH / LactMed / ACOG / other authoritative regulator or government source
+2. PubMed / DOI-backed peer-reviewed source
+3. Official branded ingredient site only for identity confirmation, never as sole safety evidence
 
-```
-scripts/output_*_enriched/reports/parent_fallback_report.json
-```
+If a PMID exists, include it in the note.
+If a DOI exists, include it.
+If neither exists, say so explicitly.
 
-Each entry has: `ingredient_raw`, `ingredient_normalized`, `canonical_id`, `fallback_form_name`, `match_type`, `tier`, `occurrence_count`.
+### 5. Do not hide bugs with aliases
 
-**Why fallbacks matter**: A branded curcumin phytosome (Meriva) falling back to `curcumin (unspecified)` scores 8 instead of 15 — a 7-point penalty for what should be a premium form. These are pure IQM alias additions: add the label text as an alias to the correct existing form.
+If the root cause is a cleaner bug, enricher bug, precedence bug, structural-header bug, or normalization bug, fix the code first.
+Do not paper over a code bug by stuffing labels into a database.
 
-**Fallback resolution is always an alias addition to an existing IQM form** — never a new parent, never a new form (unless the ingredient truly represents a form not yet in the IQM). Check the IQM parent's existing forms and match to the best fit.
+### 6. JSON edits
 
-### Why the Two Stages Disagree
+Do not hand-edit JSON.
+Use Python only:
 
-| Scenario                                                                                     | Cleaning      | Enrichment    | Root Cause                                                                     |
-| -------------------------------------------------------------------------------------------- | ------------- | ------------- | ------------------------------------------------------------------------------ |
-| Ingredient in botanical_ingredients but enricher's `_is_recognized_non_scorable()` misses it | mapped: true  | mapped: false | **Code bug** — enricher recognition doesn't match what cleaning found          |
-| Ingredient in IQM but cleaning normalizer has different lookup logic                         | mapped: true  | mapped: true  | No issue (both agree)                                                          |
-| Ingredient in NO database                                                                    | mapped: false | mapped: false | **True data gap** — needs DB addition                                          |
-| Ingredient in cleaning's lookups but not in any enricher lookup                              | mapped: true  | mapped: false | **Enricher coverage gap** — enricher checks fewer DBs or has stricter matching |
-| Cleaning unmapped active ingredient never reaches enricher scorable                          | mapped: false | not present   | **Cleaning-only gap** — never gets a chance at enrichment                      |
+- `json.load()`
+- modify in memory
+- `json.dump(indent=2, ensure_ascii=False)`
 
-### Measured Baseline Numbers
+### 7. Shadow-run after code fixes
 
-**Before starting work, always run the dynamic scan script (Step 0 below) to get current numbers.** The numbers below are reference from March 2026 and will change as you resolve items:
-
-- Cleaning active unmapped: ~4,276 unique names, ~6,586 occurrences
-- Cleaning inactive unmapped: ~769 unique names, ~1,688 occurrences
-- Enrichment unmapped: ~2,041 unique names, ~4,357 occurrences
-- In BOTH stages: ~1,100 names (true gaps in all DBs)
-- Cleaning-only (enricher resolved): ~3,176 names
-- Enrichment-only (cleaning said mapped but enricher disagrees): ~941 names ← **code/alias bug category**
-
----
-
-## Operating Mode (Mandatory)
-
-Work in **2 phases**:
-
-### Phase 1: ANALYZE + PLAN (no writes)
-
-- Run the dynamic scan (Step 0)
-- Inspect data + code + schemas
-- Build a canonical lookup index across ALL routing target files
-- Detect systemic mismatch patterns (root cause analysis)
-- Produce root-cause analysis and proposed changes
-- **Wait for user approval before any writes**
-
-### Phase 2: APPLY (only after approval)
-
-- Apply approved changes
-- Run `python -m pytest scripts/tests/` — all tests must pass
-- Re-run the dynamic scan and compare before/after
-- Report exact impact
-
-**Do NOT write files in Phase 1.**
+If you change cleaner, normalizer, enricher, batch processor, scorer contract, or matching logic, you must run a small shadow verification on an affected dataset slice and compare before/after.
 
 ---
 
-## Step 0: Dynamic Scan (Run Every Session)
+## Operating Mode
 
-Always start by running this to get **current** numbers. This replaces hardcoded stats and makes the prompt reusable as you chip away at the unmapped list.
+Work in **2 phases**.
+
+### Phase 1: Analyze only
+
+Do not write anything.
+
+You must:
+
+1. run the dynamic scan
+2. inspect the relevant raw DSLD source files
+3. inspect current DB coverage across all routing targets
+4. classify each unmapped case by root cause
+5. identify code bugs separately from data gaps
+6. propose exact fixes
+7. stop and wait for approval
+
+### Phase 2: Apply only after approval
+
+After approval, you may:
+
+1. make approved JSON and code changes
+2. run targeted tests
+3. run integrity checks
+4. run a small shadow rerun for affected cases
+5. summarize exact impact
+
+---
+
+## What Counts as “Unmapped” in This Pipeline
+
+There are **3 distinct surfaces**. Do not mix them.
+
+### Surface A: Cleaning unmapped
+
+Files:
+
+- `scripts/output_*/unmapped/unmapped_active_ingredients.json`
+- `scripts/output_*/unmapped/unmapped_inactive_ingredients.json`
+
+Meaning:
+The cleaner could not map the ingredient against any known database or protection logic.
+
+This is the **primary backlog for database growth**.
+
+### Surface B: Enrichment unmapped
+
+Files:
+
+- `scripts/output_*_enriched/enriched/enriched_cleaned_batch_*.json`
+
+Path:
+
+- `product.ingredient_quality_data.ingredients_scorable[]`
+- `mapped: false`
+
+Meaning:
+The cleaner let the ingredient through as scorable, but enrichment failed to resolve it to IQM and failed to recognize it as non-scorable.
+
+This is often:
+
+- an IQM alias gap
+- an enricher routing bug
+- a precedence bug
+- a cleaner/enricher mismatch
+
+### Surface C: Form fallback
+
+Files:
+
+- `scripts/output_*_enriched/reports/parent_fallback_report.json`
+- `scripts/output_*_enriched/reports/form_fallback_audit_report.json`
+
+Meaning:
+The ingredient matched an IQM parent, but not the correct form alias, so it fell back to a conservative form.
+
+This is usually:
+
+- an IQM form alias gap
+- occasionally a branded-token or normalization bug
+
+It is **not** a new parent by default.
+
+---
+
+## Dynamic Scan — Run Every Session
+
+Run this first to get current counts.
 
 ```bash
-python3 << 'SCAN_EOF'
-import json, glob
+python3 <<'SCAN_EOF'
+import glob, json
 
-print("=" * 70)
-print("UNMAPPED INGREDIENT SCAN — CURRENT STATE")
-print("=" * 70)
+print('=' * 72)
+print('UNMAPPED / FALLBACK SCAN — CURRENT STATE')
+print('=' * 72)
 
-# ─── CLEANING STAGE ───
 active_files = sorted(glob.glob('scripts/output_*/unmapped/unmapped_active_ingredients.json'))
 inactive_files = sorted(glob.glob('scripts/output_*/unmapped/unmapped_inactive_ingredients.json'))
+enriched_files = sorted(glob.glob('scripts/output_*_enriched/enriched/enriched_cleaned_batch_*.json'))
+parent_fallback_files = sorted(glob.glob('scripts/output_*_enriched/reports/parent_fallback_report.json'))
+form_audit_files = sorted(glob.glob('scripts/output_*_enriched/reports/form_fallback_audit_report.json'))
 
-cleaning_active = {}
-cleaning_inactive = {}
+clean_active = {}
+clean_inactive = {}
 for fp in active_files:
     with open(fp) as f:
         data = json.load(f)
-    for name, count in data.get('unmapped_ingredients', {}).items():
-        cleaning_active[name] = cleaning_active.get(name, 0) + count
+    for k, v in data.get('unmapped_ingredients', {}).items():
+        clean_active[k] = clean_active.get(k, 0) + v
 for fp in inactive_files:
     with open(fp) as f:
         data = json.load(f)
-    for name, count in data.get('unmapped_ingredients', {}).items():
-        cleaning_inactive[name] = cleaning_inactive.get(name, 0) + count
+    for k, v in data.get('unmapped_ingredients', {}).items():
+        clean_inactive[k] = clean_inactive.get(k, 0) + v
 
-print(f"\n[CLEANING STAGE]")
-print(f"  Active unmapped:   {len(cleaning_active):,} unique, {sum(cleaning_active.values()):,} occurrences")
-print(f"  Inactive unmapped: {len(cleaning_inactive):,} unique, {sum(cleaning_inactive.values()):,} occurrences")
-
-# ─── ENRICHMENT STAGE ───
-enriched_files = sorted(glob.glob('scripts/output_*_enriched/enriched/enriched_cleaned_batch_*.json'))
-enrichment_unmapped = {}
-total_products = 0
-total_scorable = 0
+enrich_unmapped = {}
+products = 0
+scorable = 0
 for fp in enriched_files:
     with open(fp) as f:
-        data = json.load(f)
-    for p in data:
-        total_products += 1
-        iqd = p.get('ingredient_quality_data', {})
-        for ing in iqd.get('ingredients_scorable', []):
-            total_scorable += 1
+        batch = json.load(f)
+    for p in batch:
+        products += 1
+        for ing in p.get('ingredient_quality_data', {}).get('ingredients_scorable', []):
+            scorable += 1
             if not ing.get('mapped', True):
                 name = ing.get('name', 'UNKNOWN')
-                enrichment_unmapped[name] = enrichment_unmapped.get(name, 0) + 1
+                enrich_unmapped[name] = enrich_unmapped.get(name, 0) + 1
 
-pct = (sum(enrichment_unmapped.values()) / total_scorable * 100) if total_scorable else 0
-print(f"\n[ENRICHMENT STAGE]")
-print(f"  Products: {total_products:,}")
-print(f"  Scorable ingredients: {total_scorable:,}")
-print(f"  Unmapped: {len(enrichment_unmapped):,} unique, {sum(enrichment_unmapped.values()):,} occurrences ({pct:.1f}%)")
-
-# ─── OVERLAP ANALYSIS ───
-c_set = set(cleaning_active.keys())
-e_set = set(enrichment_unmapped.keys())
-both = c_set & e_set
-only_c = c_set - e_set
-only_e = e_set - c_set
-
-print(f"\n[OVERLAP]")
-print(f"  In BOTH stages: {len(both):,}  (true gaps — not in any DB)")
-print(f"  Cleaning-only:  {len(only_c):,}  (enricher resolved or ingredient dropped)")
-print(f"  Enrichment-only:{len(only_e):,}  (cleaning mapped but enricher disagrees — BUG CATEGORY)")
-
-# ─── TIERS ───
-tier1 = {k:v for k,v in enrichment_unmapped.items() if v >= 10}
-tier2 = {k:v for k,v in enrichment_unmapped.items() if 3 <= v < 10}
-tier3 = {k:v for k,v in enrichment_unmapped.items() if v < 3}
-print(f"\n[ENRICHMENT TIERS]")
-print(f"  Tier 1 (>=10 occ): {len(tier1):,} names, {sum(tier1.values()):,} occurrences")
-print(f"  Tier 2 (3-9 occ):  {len(tier2):,} names, {sum(tier2.values()):,} occurrences")
-print(f"  Tier 3 (1-2 occ):  {len(tier3):,} names, {sum(tier3.values()):,} occurrences")
-
-print(f"\n[TOP 50 ENRICHMENT UNMAPPED]")
-for name, count in sorted(enrichment_unmapped.items(), key=lambda x: -x[1])[:50]:
-    tag = " *** CLEANING MAPPED (bug)" if name not in c_set else ""
-    print(f"  {count:4d}x  {name}{tag}")
-
-print(f"\n[TOP 30 CLEANING-ONLY ACTIVE UNMAPPED]")
-for name in sorted(only_c, key=lambda x: -cleaning_active.get(x, 0))[:30]:
-    print(f"  {cleaning_active[name]:4d}x  {name}")
-
-print(f"\n[TOP 20 CLEANING INACTIVE UNMAPPED]")
-for name, count in sorted(cleaning_inactive.items(), key=lambda x: -x[1])[:20]:
-    print(f"  {count:4d}x  {name}")
-
-# ─── FORM FALLBACK STAGE ───
-fallback_reports = sorted(glob.glob('scripts/output_*_enriched/reports/parent_fallback_report.json'))
-all_fallbacks = {}  # normalized_name -> {canonical_id, fallback_form, total_count, raw_examples}
-total_fallback_occ = 0
-for fp in fallback_reports:
+fallbacks = {}
+for fp in parent_fallback_files:
     with open(fp) as f:
         data = json.load(f)
-    for fb in data.get('fallbacks', []):
-        key = fb.get('ingredient_normalized', '')
-        cid = fb.get('canonical_id', '')
-        count = fb.get('occurrence_count', 0)
-        total_fallback_occ += count
-        if key not in all_fallbacks:
-            all_fallbacks[key] = {
-                'canonical_id': cid,
-                'fallback_form': fb.get('fallback_form_name', ''),
-                'total_count': 0,
-                'raw_examples': set(),
-                'match_type': fb.get('match_type', ''),
-            }
-        all_fallbacks[key]['total_count'] += count
-        all_fallbacks[key]['raw_examples'].add(fb.get('ingredient_raw', ''))
+    for row in data.get('fallbacks', []):
+        key = row.get('ingredient_normalized') or row.get('ingredient_raw') or 'UNKNOWN'
+        fallbacks[key] = fallbacks.get(key, 0) + row.get('occurrence_count', 0)
 
-print(f"\n[FORM FALLBACK STAGE]")
-print(f"  Reports scanned: {len(fallback_reports)}")
-print(f"  Unique fallback ingredients: {len(all_fallbacks):,}")
-print(f"  Total fallback occurrences: {total_fallback_occ:,}")
+print('\n[CLEANING]')
+print(f"  Active unmapped:   {len(clean_active):,} unique / {sum(clean_active.values()):,} occ")
+print(f"  Inactive unmapped: {len(clean_inactive):,} unique / {sum(clean_inactive.values()):,} occ")
 
-# Load IQM to compute score delta
-iqm_path = 'scripts/data/ingredient_quality_map.json'
-try:
-    with open(iqm_path) as f:
-        iqm = json.load(f)
-except:
-    iqm = {}
+print('\n[ENRICHMENT]')
+print(f"  Products scanned:       {products:,}")
+print(f"  Scorable ingredients:   {scorable:,}")
+print(f"  Enrichment unmapped:    {len(enrich_unmapped):,} unique / {sum(enrich_unmapped.values()):,} occ")
 
-print(f"\n[FORM FALLBACK DETAILS — sorted by impact]")
-for name, info in sorted(all_fallbacks.items(), key=lambda x: -x[1]['total_count']):
-    cid = info['canonical_id']
-    fb_form = info['fallback_form']
-    count = info['total_count']
-    parent = iqm.get(cid, {})
-    forms = parent.get('forms', {})
-    fb_data = forms.get(fb_form, {})
-    fb_score = fb_data.get('score', '?')
-    best_score = max((fd.get('score', 0) for fd in forms.values() if isinstance(fd, dict)), default=0)
-    delta = f"delta={best_score - fb_score}" if isinstance(fb_score, (int, float)) else "?"
-    num_forms = len([k for k, v in forms.items() if isinstance(v, dict)])
-    print(f"  {count:4d}x  \"{name}\" → {cid}/{fb_form} (score={fb_score}, best={best_score}, {delta}, {num_forms} forms)")
+clean_active_set = set(clean_active)
+enrich_set = set(enrich_unmapped)
+print('\n[OVERLAP]')
+print(f"  In both:                {len(clean_active_set & enrich_set):,}")
+print(f"  Cleaning-only active:   {len(clean_active_set - enrich_set):,}")
+print(f"  Enrichment-only:        {len(enrich_set - clean_active_set):,}")
 
-print(f"\n{'=' * 70}")
-print("SCAN COMPLETE — Use these numbers for Phase 1 analysis")
-print(f"{'=' * 70}")
+print('\n[FALLBACK]')
+print(f"  Parent fallback files:  {len(parent_fallback_files)}")
+print(f"  Form audit files:       {len(form_audit_files)}")
+print(f"  Unique fallback labels: {len(fallbacks):,}")
+print(f"  Total fallback occ:     {sum(fallbacks.values()):,}")
+
+print('\n[TOP CLEAN ACTIVE UNMAPPED]')
+for name, count in sorted(clean_active.items(), key=lambda x: -x[1])[:25]:
+    print(f"  {count:4d}x  {name}")
+
+print('\n[TOP CLEAN INACTIVE UNMAPPED]')
+for name, count in sorted(clean_inactive.items(), key=lambda x: -x[1])[:25]:
+    print(f"  {count:4d}x  {name}")
+
+print('\n[TOP ENRICHMENT UNMAPPED]')
+for name, count in sorted(enrich_unmapped.items(), key=lambda x: -x[1])[:25]:
+    print(f"  {count:4d}x  {name}")
+
+print('\n[TOP FALLBACKS]')
+for name, count in sorted(fallbacks.items(), key=lambda x: -x[1])[:25]:
+    print(f"  {count:4d}x  {name}")
+
+print('\n' + '=' * 72)
+print('SCAN COMPLETE')
+print('=' * 72)
 SCAN_EOF
 ```
 
 ---
 
-## Repo Scope
+## Databases and Expected Routing
 
-| Component                  | Path                                                               |
-| -------------------------- | ------------------------------------------------------------------ |
-| Cleaner / Normalizer       | `scripts/enhanced_normalizer.py`                                   |
-| Enrichment engine          | `scripts/enrich_supplements_v3.py`                                 |
-| Scorer                     | `scripts/score_supplements.py`                                     |
-| IQM (scorable actives)     | `scripts/data/ingredient_quality_map.json`                         |
-| Botanical ingredients      | `scripts/data/botanical_ingredients.json`                          |
-| Other ingredients          | `scripts/data/other_ingredients.json`                              |
-| Harmful additives          | `scripts/data/harmful_additives.json`                              |
-| Banned/recalled            | `scripts/data/banned_recalled_ingredients.json`                    |
-| Standardized botanicals    | `scripts/data/standardized_botanicals.json`                        |
-| Allergens                  | `scripts/data/allergens.json`                                      |
-| Proprietary blends (mapping-only; scoring handled by B5 engine) | `scripts/data/proprietary_blends.json`                             |
-| Cross-DB allowlist         | `scripts/data/cross_db_overlap_allowlist.json`                     |
-| Integrity checker          | `scripts/db_integrity_sanity_check.py`                             |
-| Tests                      | `scripts/tests/`                                                   |
-| Cleaning unmapped reports  | `scripts/output_*/unmapped/unmapped_*.json`                        |
-| Enrichment summary reports | `scripts/output_*_enriched/reports/enrichment_summary_*.json`      |
-| Form fallback reports      | `scripts/output_*_enriched/reports/parent_fallback_report.json`    |
-| Enriched output            | `scripts/output_*_enriched/enriched/enriched_cleaned_batch_*.json` |
+### Primary routing targets
+
+- IQM / scorable actives: `scripts/data/ingredient_quality_map.json`
+- Other ingredients / neutral excipients / carriers / shell materials: `scripts/data/other_ingredients.json`
+- Harmful additives / penalty-bearing inactive ingredients: `scripts/data/harmful_additives.json`
+- Banned / recalled / high-risk / watchlist substances: `scripts/data/banned_recalled_ingredients.json`
+- Botanical identities: `scripts/data/botanical_ingredients.json`
+- Standardized branded botanicals / concentrated botanical systems: `scripts/data/standardized_botanicals.json`
+- Proprietary blends / mapping-only descriptors: `scripts/data/proprietary_blends.json`
+
+### Default routing rule
+
+- **Active unmapped** -> IQM first
+- **Inactive unmapped** -> other ingredients first
+
+### But override that default when evidence shows it is actually:
+
+- a harmful additive
+- a banned / recalled / high-risk ingredient
+- a botanical identity
+- a standardized botanical ingredient
+- a structural label / container / header / parser artifact
+- a therapeutic ingredient misclassified by the manufacturer into inactive section
 
 ---
 
-## Core Policy (Do Not Violate)
+## Classification Decision Tree
 
-### 1. Alias-First Policy
+Every candidate must be classified into exactly one of these buckets first.
+Do not jump straight to alias creation.
 
-Before proposing a **new** entry in ANY database, exhaustively check if the term already exists as:
+### Bucket 1: Structural / filter / header row
 
-- A canonical parent name or alias in IQM
-- A form name or form alias under any IQM parent
-- A standard_name or alias in botanical_ingredients, other_ingredients, harmful_additives, banned_recalled, allergens
-- A variant differing only by: case, hyphens, spaces, "organic" prefix, "extract"/"powder"/"root"/"leaf" suffix, parenthetical content, comma reordering
+Examples:
 
-If the same molecule/entity exists → propose **alias addition**, NOT a new entry.
+- `Soft Gel Shell`
+- `Shell Ingredients`
+- `May also contain`
+- `Other`
+- `Aqueous Coating Solution`
+- blend headers or container labels with child forms
 
-### 2. No Guessing
+Action:
 
-If uncertain about classification (active vs excipient, scorable vs non-scorable, safe vs harmful), put it in `review_required` with evidence and reasoning.
+- do not add to DB as an ingredient
+- fix cleaner/header logic if needed
+- preserve child shell materials or forms when appropriate
 
-### 3. Penalty Routing Guardrails
+### Bucket 2: Parser / normalizer bug
 
-- Any ingredient that deserves a scoring **penalty** → route to `harmful_additives.json` or `banned_recalled_ingredients.json`
-- `other_ingredients.json` and `botanical_ingredients.json` are **strict 0-penalty** files
-- Never inflate penalties by misrouting neutral ingredients to penalty files
-- Never deflate penalties by routing harmful ingredients to 0-penalty files
+Examples:
 
-### 4. Banned/Recalled Strictness
+- punctuation, apostrophe, hyphen, comma-modifier drift
+- bracket bleed
+- dosage text leaking into ingredient name
+- capitalization variant should map but does not
+- source species being mistaken for forms
 
-High-risk/banned/recalled classification requires real source verification:
+Action:
 
-- FDA warning letters, import alerts, or mandatory recalls
-- NIH/ODS/NCCIH safety advisories
-- Published case reports (PubMed) documenting harm
-- Do NOT rely on "general concern" or "traditional caution" without sources
+- patch code
+- add regression test
+- shadow-run small pipeline slice
 
-### 5. Standardization Guardrail
+### Bucket 3: Routing / precedence bug
 
-- Do **not** strip standardization markers (e.g., "95% curcuminoids", "50:1 extract") if relevant to `standardized_botanicals.json`
-- Preserve data needed for A5b threshold logic in the scorer
+Examples:
 
-### 6. IQM Schema Compliance
+- cleaner maps but enricher misses
+- IQM beats harmful when harmful should win
+- OI beats harmful when harmful should win
+- banned or harmful entry gets scored instead of flagged
 
-New IQM entries MUST include ALL required fields per the established schema:
+Action:
 
-```json
-{
-  "parent_key": {
-    "standard_name": "...",
-    "category": "...",
-    "cui": "..." or null,
-    "rxcui": "..." or null,
-    "cui_note": "reason if null",
-    "rxcui_note": "reason if null",
-    "aliases": [],
-    "forms": {
-      "(unspecified)": {
-        "bio_score": 5,
-        "natural": false,
-        "score": 5,
-        "absorption": "...",
-        "notes": "80+ char clinically informative note with RCT/mechanism/manufacturer references",
-        "aliases": [],
-        "dosage_importance": 1.0,
-        "absorption_structured": {
-          "value": 0.5,
-          "range_low": 0.3,
-          "range_high": 0.7,
-          "quality": "moderate",
-          "notes": "..."
-        }
-      }
-    },
-    "match_rules": {
-      "priority": "standard",
-      "match_mode": "exact_or_alias",
-      "exclusions": [],
-      "parent_id": "parent_key",
-      "confidence": 1.0
-    }
-  }
-}
-```
+- patch code
+- add regression test
+- shadow-run affected slice
 
-**Score formula**: `score = bio_score + (3 if natural else 0)` — checked by `db_integrity_sanity_check.py`.
-**dosage_importance**: Primary=1.5, Secondary=1.0, Trace=0.5.
-**Notes**: Every non-(unspecified) form needs ≥80 char clinically informative note.
+### Bucket 4: True alias gap
 
-### 7. Botanical/Other Ingredients Schema Compliance
+Meaning:
+The identity already exists in the correct DB, but the exact raw label text is not covered.
 
-New entries in `botanical_ingredients.json` need: id, standard_name, latin_name, aliases, category, notes, CUI.
-New entries in `other_ingredients.json` need: id, standard_name, aliases, category, is_additive, allergen, notes, CUI.
+Action:
 
-### 8. Test Suite Integrity
+- add alias only
+- same molecule / same ingredient / same marketed form only
+- do not add if it broadens identity incorrectly
 
-After ANY data file changes, run:
+### Bucket 5: True new canonical entry
+
+Meaning:
+The ingredient does not exist anywhere in the correct target DB and is a real, stable identity.
+
+Action:
+
+- add new entry with full schema
+- include clinically useful note
+- include PMID/DOI if available
+
+### Bucket 6: Form fallback gap
+
+Meaning:
+The parent is correct, but the form alias is missing.
+
+Action:
+
+- add alias to the correct existing IQM form
+- only add a new form if the label truly represents a distinct form absent from IQM
+
+### Bucket 7: Needs verification
+
+Meaning:
+Identity is still unclear after DB inspection and raw DSLD inspection.
+
+Action:
+
+- do not write
+- report exactly what must be verified
+
+---
+
+## Raw DSLD Verification Workflow
+
+For any suspicious item, inspect:
+
+1. raw DSLD row in `/Users/seancheick/Documents/DataSetDsld/...`
+2. cleaned row in `scripts/output_*/cleaned/cleaned_batch_*.json`
+3. enriched row in `scripts/output_*_enriched/enriched/enriched_cleaned_batch_*.json`
+
+You must compare:
+
+- `name`
+- `raw_source_text`
+- `ingredientGroup`
+- `forms`
+- `nestedIngredients`
+- active vs inactive placement
+- whether the parent label is structural and child forms are the real ingredients
+
+If raw shows a blend/container/header and cleaned surfaces it as unmapped ingredient text, treat that as a code issue first.
+
+---
+
+## Evidence Standards for New or Updated Entries
+
+### Identity evidence
+
+Use at least one of:
+
+- NIH ODS fact sheet
+- NCCIH monograph
+- FDA / USDA / other regulator identity source
+- official branded ingredient site for branded identity confirmation
+- PubChem / FDA UNII / NCBI / recognized reference identity source
+
+### Clinical note requirements
+
+If adding or updating a clinically meaningful IQM note:
+
+- include mechanism, form relevance, or bioavailability relevance
+- include PMID if available
+- include DOI if available
+- avoid vague filler text
+- do not invent effect sizes
+
+### Safety / harmful / banned evidence
+
+Use:
+
+- FDA / NIH / NCCIH first
+- PubMed or DOI-backed source second
+- official branded site never as sole safety evidence
+
+---
+
+## Routing Rules by Surface
+
+### A. Cleaning active unmapped
+
+Default assumption: route to IQM.
+
+But before adding anything:
+
+1. confirm it is not a structural row or parser artifact
+2. confirm it is not actually harmful / banned / recalled
+3. confirm it is not an excipient leak into actives
+4. confirm the same molecule does not already exist in IQM under another alias/form
+
+Typical destinations:
+
+- IQM alias addition
+- IQM new parent
+- standardized_botanicals alias/new entry
+- botanical_ingredients alias/new entry
+- harmful_additives or banned_recalled if safety evidence supports it
+- code fix if it is actually a leak/header/bug
+
+### B. Cleaning inactive unmapped
+
+Default assumption: route to `other_ingredients.json`.
+
+But first ask:
+
+1. is it structural/header/container text?
+2. is it a true excipient/carrier/shell material?
+3. is it actually a harmful additive?
+4. is it a botanical identity used as inactive flavor/color source?
+5. is it actually a therapeutic ingredient incorrectly placed in inactive section?
+
+Typical destinations:
+
+- other_ingredients alias/new entry
+- harmful_additives alias/new entry
+- botanical_ingredients alias/new entry
+- proprietary_blends mapping-only descriptor
+- IQM only if raw and context prove it is a therapeutic ingredient misplaced into inactive section
+- filter/header unwrap code fix
+
+### C. Enrichment unmapped
+
+Treat this as a QA surface.
+
+It usually means one of:
+
+- IQM alias gap
+- cleaner/enricher mismatch
+- precedence bug
+- non-scorable recognition bug
+- harmful/banned routing bug
+
+Do not assume it needs a new entry.
+
+### D. Form fallback
+
+Treat this as a scoring-accuracy surface.
+
+Default action:
+
+- add alias to the correct existing form
+
+Do not add a new parent just because a fallback exists.
+Do not add a new form unless the chemistry/form is truly distinct and supported.
+
+---
+
+## Specific Guardrails
+
+### Active ingredients mostly go to IQM
+
+This is the default.
+But do not force obvious excipients, shell materials, structural labels, or safety ingredients into IQM.
+
+### Inactive ingredients mostly go to other ingredients
+
+This is the default.
+But do not bury harmful / banned / recalled identities in other ingredients.
+
+### Structural labels are not ingredients
+
+Do not add these as ingredients unless they are true excipient concepts with user-facing value and stable identity.
+
+Examples that usually should be filter/header logic, not DB entries:
+
+- `Soft Gel Shell`
+- `Shell Ingredients`
+- `May also contain`
+- `Aqueous Coating Solution`
+- `Outer Shell`
+- `Other`
+
+### Shell materials should still be preserved
+
+If the raw row is a structural parent with real child forms like gelatin, glycerin, water, colorants, or fish gelatin, preserve those child ingredients in output.
+Do not preserve the structural parent as a fake ingredient.
+
+### ZMA-like labels
+
+Treat structural active blend labels as containers if raw DSLD shows child nutrients underneath them.
+Do not add the parent as a new ingredient if the children are the real actives.
+
+### Do not assume fallback means solved
+
+If enrich fallback resolves something weakly, it can still be a clean-stage alias gap or a code drift issue.
+
+Cleaning backlog is the primary truth for database coverage.
+Enrichment fallback is QA, not proof of correctness.
+
+---
+
+## Mandatory Investigation Checklist Per Candidate
+
+For each candidate, do all of the following:
+
+1. Search all routing DBs for the exact text and normalized variants.
+2. Decide whether it is:
+   - structural/filter
+   - code bug
+   - alias gap
+   - new canonical
+   - safety route
+   - fallback-only gap
+3. Inspect raw DSLD if suspicious or ambiguous.
+4. Confirm same-ingredient identity before adding any alias.
+5. Verify clinical / branded / safety claims with real sources.
+6. Decide the exact routing target.
+7. If code bug: write test first, then patch, then shadow-run.
+8. If JSON change: use Python only.
+
+---
+
+## Required Outputs in Phase 1
+
+Return these sections and then stop.
+
+### 1. Findings table
+
+| Label text | Surface | Classification | Proposed action | Target DB / file | Evidence | Confidence |
+
+### 2. Code bug list
+
+For each bug:
+
+- exact file and function
+- root cause
+- why alias/data edits would be wrong
+- proposed fix
+- proposed regression test
+- proposed shadow-run dataset
+
+### 3. Proposed alias additions
+
+For each alias:
+
+- raw text
+- canonical target
+- why it is the same ingredient
+- whether it is parent alias or form alias
+- supporting source if branded/clinical
+
+### 4. Proposed new entries
+
+For each new entry:
+
+- target file
+- full proposed JSON object
+- note with PMID/DOI if available
+- why no existing canonical matched
+
+### 5. Deferred / needs verification
+
+For each deferred item:
+
+- missing evidence
+- exact next verification step
+
+### 6. Impact estimate
+
+Summarize expected effect on:
+
+- clean active unmapped
+- clean inactive unmapped
+- enrichment unmapped
+- fallback counts
+- any scoring-sensitive forms
+
+Then stop and wait for approval.
+
+---
+
+## Required Outputs in Phase 2
+
+After approval, apply only the approved changes.
+
+Then return:
+
+### 1. Files changed
+
+Exact file list.
+
+### 2. Tests run
+
+At minimum:
 
 ```bash
-python -m pytest scripts/tests/ -x -q
+python3 scripts/db_integrity_sanity_check.py --strict
 ```
 
-If new cross-parent aliases are introduced, add them to `ALLOWED_CROSS_ALIASES` in `scripts/tests/test_ingredient_quality_map_schema.py`.
+Plus targeted pytest for changed logic/data.
+
+If JSON schema changed materially, also run:
+
+```bash
+PYTHONPATH=scripts python3 -m pytest scripts/tests/test_db_integrity.py -q
+```
+
+### 3. Shadow-run verification
+
+If code changed, run a small affected dataset verification.
+Use the smallest relevant dataset or a narrow product slice.
+
+Preferred options:
+
+```bash
+python3 scripts/clean_dsld_data.py --input-dir /Users/seancheick/Documents/DataSetDsld/<dataset>/ --output-dir scripts/output_<dataset> --config scripts/config/cleaning_config.json
+```
+
+```bash
+python3 scripts/enrich_supplements_v3.py --input-dir scripts/output_<dataset>/cleaned --output-dir scripts/output_<dataset>_enriched --config scripts/config/enrichment_config.json
+```
+
+Or use `scripts/run_pipeline.py` when an end-to-end shadow run is required.
+
+You must compare before/after for the affected labels.
+
+### 4. Before/after deltas
+
+Report:
+
+- clean active unmapped delta
+- clean inactive unmapped delta
+- enrichment unmapped delta
+- fallback delta
+- exact labels fixed
+
+### 5. Residual risk
+
+Anything still deferred or ambiguous.
 
 ---
 
-## Routing Rules — Active vs Inactive Source Section
+## JSON Writing Rule
 
-### CARDINAL RULE: Source section determines routing destination
+When changing JSON DB files, use Python only.
+Pattern:
 
-The unmapped reports already separate ingredients by **source section** — where they appeared on the FDA label:
+```python
+import json
+from pathlib import Path
 
-| Source Section | Report File | Primary Routing Destination | Rationale |
-|---|---|---|---|
-| **Active** (`activeIngredients` / Supplement Facts panel) | `unmapped_active_ingredients.json` | **IQM** (therapeutically scored) | Active ingredients are listed by the manufacturer as providing the supplement's intended health benefits. They belong in the IQM for bioavailability scoring. |
-| **Inactive** (`inactiveIngredients` / "Other Ingredients" on label) | `unmapped_inactive_ingredients.json` | **other_ingredients.json**, **botanical_ingredients.json**, **harmful_additives.json**, or **proprietary_blends.json** | Inactive ingredients are excipients, preservatives, binders, coatings, or flavoring agents. They are NOT bioactive therapeutics and should NOT go into the IQM. |
-
-**Why this matters**: Per FDA 21 CFR 101.36, dietary ingredients (actives) go inside the Supplement Facts panel with dosages. Non-dietary ingredients (excipients, preservatives, fillers) go in the "Other Ingredients" statement outside the panel — no doses required. This FDA-mandated separation IS the source of truth for routing:
-
-- **Active unmapped → IQM** (alias to existing parent, or new parent if clinical evidence supports it)
-- **Inactive unmapped → other files** (other_ingredients, botanical, harmful, blends — never IQM)
-
-**Exception — misclassified actives in inactive section**: Some manufacturers incorrectly list therapeutic ingredients (e.g., "Betaine Monohydrate") in the inactive section. The enricher's Pass 2 ("rescue therapeutic actives from inactiveIngredients") handles promotion. If you find a clearly therapeutic ingredient in the inactive unmapped report, note the misclassification but still route it to the appropriate DB (IQM if therapeutic). These cases are rare (<2% of inactive unmapped).
-
-**Exception — excipient leaks in active section**: Some manufacturers list capsule materials or fillers (e.g., "Rice Flour", "Vegetable Capsule") in the Supplement Facts panel. These are excipient leaks — the enricher already has `_should_skip_from_scoring()` logic to detect these. If an active unmapped ingredient is clearly an excipient, route it to other_ingredients.json AND note the excipient detection bug for code fix.
+path = Path('scripts/data/<file>.json')
+data = json.loads(path.read_text())
+# mutate data in memory
+path.write_text(json.dumps(data, indent=2, ensure_ascii=False) + '\n')
+```
 
 ---
 
-## Active Ingredient Routing Decision Tree — IQM vs Botanical vs Other
+## Practical Heuristics
 
-**Critical distinction**: Just because DSLD lists something as an "active ingredient" does NOT mean it belongs in the IQM. Manufacturers can (and do) list food powders, fillers, and non-therapeutic ingredients in the "Supplement Facts" panel. The routing decision is based on **what the ingredient actually is**, not where the manufacturer placed it on the label. However, the **default assumption** for active unmapped ingredients is IQM routing — you need specific evidence to override this.
+### Safe alias addition criteria
 
-### Decision flowchart for ACTIVE unmapped ingredients:
+Only add an alias when all are true:
 
-```
-UNMAPPED ACTIVE INGREDIENT
-│
-├─ Is it a recognized harmful/banned substance?
-│   YES → harmful_additives.json or banned_recalled_ingredients.json
-│   (requires source citation: FDA/NIH/PubMed)
-│
-├─ Is it an excipient/capsule material that leaked into actives?
-│   (e.g., "100% Vegetable Capsule", "Rice Flour", "Magnesium Stearate")
-│   YES → Code fix (excipient detection bug) + other_ingredients.json if missing
-│
-├─ Is it a salt/chelate/branded form of an EXISTING IQM parent?
-│   (e.g., "L-Lysine Hydrochloride" → l_lysine, "Meriva" → curcumin)
-│   YES → Add ALIAS to existing IQM parent/form
-│
-├─ Does it have ALL of these characteristics?
-│   ✓ Defined therapeutic mechanism (not just "nutritious")
-│   ✓ Evidence of dose-response relationship (RCTs, clinical studies)
-│   ✓ Specific bioavailability data available (absorption %, forms matter)
-│   ✓ Standardized dosing exists (mg/mcg per serving, not "proprietary amount")
-│   ✓ Used specifically for supplementation, not just as a food
-│   ALL YES → IQM (new parent entry with full schema)
-│
-├─ Is it a plant/fungus/botanical with therapeutic tradition BUT lacking
-│   strong bioavailability data or dose-response evidence?
-│   (e.g., most whole herb powders, food-grade botanicals)
-│   YES → botanical_ingredients.json (recognized, 0-penalty, NOT scored)
-│
-├─ Is it a non-botanical, non-therapeutic ingredient?
-│   (e.g., tissue extracts, bee products, mineral clays)
-│   YES → other_ingredients.json (recognized, 0-penalty, NOT scored)
-│
-└─ Uncertain? → review_required (defer with reasoning)
-```
+- same molecule, same ingredient, same botanical, or same branded ingredient
+- not broader than the canonical identity
+- not a source species, process descriptor, or formulation wrapper pretending to be identity
+- not likely to collide with another parent
 
-### Concrete examples by category:
+### Common things that are bugs, not DB gaps
 
-**→ IQM** (therapeutically scored — has bioavailability evidence):
-| Ingredient | Why IQM | Evidence |
-|-----------|---------|----------|
-| Marshmallow Root Extract (standardized) | Mucilage content with studied GI soothing effects | RCTs on gastric mucosa protection |
-| Chitosan | Studied fat-binding mechanism, dose-dependent effects | Clinical trials for lipid management |
-| D-Mannose | Specific urinary tract mechanism, dose-response data | RCTs vs placebo for UTI prevention |
-| Betaine (TMG) | Methylation donor, homocysteine reduction evidence | Clinical pharmacokinetic data available |
-| N-Acetyl-L-Cysteine | Well-characterized glutathione precursor | Extensive clinical data, specific bioavailability |
+- punctuation variants
+- curly apostrophes
+- comma-modifier order
+- shell/container parents
+- dosage text leaking into names
+- child forms lost under headers
+- harmful vs OI precedence bugs
+- enrich fallback masking a clean-stage alias gap
 
-**→ botanical_ingredients** (recognized but NOT scored — food/herb identity only):
-| Ingredient | Why NOT IQM | What it is |
-|-----------|-------------|------------|
-| Broccoli powder | Whole food, no standardized therapeutic dose | Vegetable powder in a capsule |
-| Carrot powder | Nutritional food ingredient, not a therapeutic supplement | Vegetable powder |
-| Kale powder | "Superfood" marketing, no specific bioavailability scoring | Vegetable powder |
-| Spinach powder | Food-grade, not dosed therapeutically | Vegetable powder |
-| Barley Grass powder | General "green food" ingredient | Grass juice powder |
-| Celery seed | Culinary herb, not standardized for therapy | Whole seed/powder |
-| Fennel (unstandardized) | Culinary herb, no specific extract standardization | Whole herb powder |
-| Bee Pollen | No standardized therapeutic dosing or bioavailability data | Apiary product |
-| Raw mushroom powder (generic) | Whole food form, no standardization or bio data | Ground dried mushroom |
+### Common things that are true alias gaps
 
-**→ other_ingredients** (non-botanical, non-scored):
-| Ingredient | What it is |
-|-----------|------------|
-| Adrenal Tissue | Bovine glandular extract, no standard scoring |
-| Thymus Tissue | Bovine glandular extract |
-| Spleen Tissue | Bovine glandular extract |
-| Vegetable Capsule variants | Capsule shell (excipient leak) |
-| Beef Gelatin | Capsule material |
+- branded ingredient exact label text already known clinically
+- exact salt form already represented under a parent
+- botanical binomial + plant part variant
+- clean raw label string differing only by validated wording, not identity
 
-### The mushroom question specifically:
+### Common things that are not safe aliases
 
-Mushrooms exist in **both** databases by design:
-
-| Mushroom    | IQM entry                     | botanical_ingredients entry                | When IQM is used                              | When botanical is used                                            |
-| ----------- | ----------------------------- | ------------------------------------------ | --------------------------------------------- | ----------------------------------------------------------------- |
-| Reishi      | `reishi` (3 scored forms)     | `reishi_mushroom` (recognition)            | "Reishi fruiting body extract 500mg" → scored | "organic reishi powder" with no standardization → recognized only |
-| Lion's Mane | `lions_mane` (3 scored forms) | `lions_mane_mushroom_powder` (recognition) | "Lion's Mane 10:1 extract" → scored           | "lion's mane mushroom" generic listing → recognized only          |
-| Cordyceps   | `cordyceps` (4 scored forms)  | `cordyceps_mushroom_powder` (recognition)  | "Cordyceps militaris extract 750mg" → scored  | "cordyceps powder" generic → recognized only                      |
-
-**Rule**: If the label specifies a standardized extract form with dose → IQM handles it (scored). If it's just "mushroom powder" without standardization → botanical_ingredients catches it (recognized, not scored). The enricher tries IQM first; if no form match, it falls back to botanical recognition.
-
-**For NEW mushroom entries**: Only create a new IQM parent if the mushroom has studied therapeutic compounds with bioavailability data (e.g., beta-glucan content, specific triterpenes). If it's an obscure mushroom with no clinical data, add to botanical_ingredients only.
-
-### Decision tree for INACTIVE unmapped ingredients:
-
-**Default destination: NOT IQM.** Inactive ingredients are excipients, preservatives, or additives — they are not bioactive therapeutics. Route them to other_ingredients.json, botanical_ingredients.json, harmful_additives.json, or proprietary_blends.json based on what they are.
-
-```
-UNMAPPED INACTIVE INGREDIENT
-│
-├─ Is it a harmful additive? (artificial colors, controversial preservatives)
-│   YES → harmful_additives.json (with severity level + source)
-│
-├─ Is it a banned substance somehow listed as inactive?
-│   YES → banned_recalled_ingredients.json (with FDA citation)
-│
-├─ Is it a proprietary blend name? (branded formula/complex)
-│   (e.g., "Metabolic GlycoPlex", "Acid Comfort Blend")
-│   YES → proprietary_blends.json (add to blend_terms)
-│         The scorer applies penalty based on disclosure level (see SCORING_ENGINE_SPEC.md §B5 for current values)
-│
-├─ Is it a misclassified active? (therapeutic ingredient in inactive row)
-│   (e.g., "Betaine Monohydrate" in inactive section — RARE, <2% of cases)
-│   YES → Note the misclassification, but still add to appropriate DB
-│         (IQM if therapeutic, botanical if herb, other if excipient)
-│
-├─ Is it a botanical/plant-derived excipient?
-│   (e.g., "Rice Bran", "Arrowroot Flour", "Rosemary Antioxidant Blend")
-│   YES → other_ingredients.json (it's an excipient, even if plant-derived)
-│         Set is_additive: true, category: appropriate type
-│         NOTE: "Rosemary Antioxidant Blend" in inactive = preservative,
-│         NOT therapeutic rosemary. Same compound, different intent/dose.
-│
-├─ Is it a capsule/coating/flow agent variant?
-│   (e.g., "Plantcap", "Serrateric", "Gelatin Capsules", "Carnauba Wax")
-│   YES → other_ingredients.json
-│
-├─ Is it a recognized allergen?
-│   YES → allergens.json
-│
-└─ Other non-botanical inactive → other_ingredients.json
-```
-
-**Key insight**: The same ingredient can appear in BOTH active and inactive sections across different products. Example: "Rosemary leaf extract" at 50mg in Supplement Facts = therapeutic (IQM alias). "Rosemary leaf Antioxidant Blend" in Other Ingredients with no dose = preservative (other_ingredients). The source section on the label determines routing, not the ingredient name alone.
+- vague descriptors
+- class labels
+- formula names with multiple ingredients
+- species/source-only labels when the canonical is a processed oil/extract/form
+- constituent names when the canonical is the whole botanical, unless the project deliberately maps that constituent to the parent
 
 ---
 
-## Phase 1 Execution Steps
+## Final Principle
 
-### Step 1: Run Dynamic Scan (Step 0 above)
+Do not optimize for “fewer unmapped names.”
+Optimize for **correct identity resolution**.
 
-Get current unmapped numbers. Record them as the "before" baseline.
+A smaller unmapped list produced by bad aliases is worse than a larger unmapped list with clean logic.
 
-### Step 2: Build Canonical Lookup Index
+The correct order is:
 
-Create an in-memory index of ALL existing names across ALL routing target files:
-
-```
-IQM parents: key, standard_name, all aliases
-IQM forms: form_key, all form aliases (under each parent)
-botanical_ingredients: id, standard_name, latin_name, all aliases
-other_ingredients: id, standard_name, all aliases
-harmful_additives: standard_name, all aliases
-banned_recalled: standard_name, all aliases
-standardized_botanicals: standard_name, all aliases
-allergens: all names/aliases
-```
-
-### Step 3: Root Cause Analysis (ALL THREE unmapped lists)
-
-Process these **three** unmapped lists in priority order:
-
-#### A. Enrichment-only unmapped (cleaning mapped, enricher disagrees) — BUG PRIORITY
-
-These ~941 items are the **highest priority** because they indicate a code or alias bug.
-The cleaner found them in a database, but the enricher's `_is_recognized_non_scorable()` missed them.
-
-For each:
-
-1. Search your canonical index — which DB did the cleaner match against?
-2. Check if the enricher's lookup uses the same DB and aliases
-3. If the alias exists in the DB but enricher can't find it → **code bug** (normalization mismatch, case sensitivity, prefix/suffix handling)
-4. If the alias doesn't exist in the enricher's version of the DB → **alias gap in enricher's lookup**
-
-#### B. Both-stages unmapped — TRUE DATA GAPS
-
-These ~1,100 items are not in any database at all. Classify each:
-
-- **Alias candidate**: same molecule exists under a different name → add alias
-- **New IQM entry**: therapeutically active, evidence-backed → create IQM parent
-- **New botanical entry**: plant-derived, non-scorable → add to botanical_ingredients
-- **New other entry**: excipient, additive, non-botanical → add to other_ingredients
-- **Harmful/banned**: requires source citation → add to appropriate penalty DB
-- **Excipient leak**: shouldn't be in active ingredients at all → code fix
-- **Review required**: uncertain → defer with reasoning
-
-#### C. Cleaning-only active unmapped (enricher resolved or dropped)
-
-These ~3,176 items were unmapped at cleaning but the enricher resolved them (or they were dropped from scorable). Lower priority, but scan for:
-
-- Items the enricher resolved via pattern/contains match → consider adding proper aliases so cleaning also matches
-- Items dropped from scorable → verify they were correctly dropped (not lost)
-
-#### D. Cleaning inactive unmapped
-
-These ~769 items are inactive ingredients not recognized by any DB. Most are excipients/capsule materials.
-
-- Route to `other_ingredients.json` (most common)
-- Check for misclassified actives that should be scorable
-- Check for harmful additives that need penalty routing
-
-#### E. Form fallbacks (parent matched, form missed) — SCORING ACCURACY
-
-These ingredients matched an IQM parent but fell back to the `(unspecified)` form because no form alias matched the label text. They score conservatively (usually bio_score=5) instead of getting credit for their actual form quality.
-
-For each fallback entry:
-
-1. Look up the parent in IQM and list all existing forms
-2. Determine which form the label text actually represents (e.g., "Bororganic Glycine" = boron glycinate, "Meriva Turmeric Phytosome" = curcumin phytosome)
-3. If an existing form matches → add the label text as an alias to that form
-4. If the ingredient represents a genuinely new form → create the form under the existing parent (with full schema: bio_score, natural, score, absorption_structured, dosage_importance, notes)
-5. If uncertain → review_required
-
-**Prioritize by score delta**: A fallback scoring 5 when the correct form scores 15 is a 10-point accuracy loss. Sort by `(best_form_score - fallback_score) * occurrence_count` for maximum impact.
-
-### Step 4: Categorize by Resolution Type
-
-Group all unmapped into these resolution buckets:
-
-| Bucket            | Action                                                      | Target                                                |
-| ----------------- | ----------------------------------------------------------- | ----------------------------------------------------- |
-| Code fix          | Fix enricher `_is_recognized_non_scorable()` matching       | `enrich_supplements_v3.py`                            |
-| Code fix          | Fix excipient leak detection                                | `enrich_supplements_v3.py` / `enhanced_normalizer.py` |
-| Form alias → IQM  | Add form alias to resolve fallback (highest scoring impact) | `ingredient_quality_map.json`                         |
-| Alias → IQM       | Add alias to existing IQM parent or form                    | `ingredient_quality_map.json`                         |
-| Alias → Botanical | Add alias to existing botanical entry                       | `botanical_ingredients.json`                          |
-| Alias → Other     | Add alias to existing other_ingredients entry               | `other_ingredients.json`                              |
-| New → IQM         | Create new IQM parent (therapeutically active)              | `ingredient_quality_map.json`                         |
-| New → Botanical   | Create new botanical entry (non-scorable plant)             | `botanical_ingredients.json`                          |
-| New → Other       | Create new other_ingredients entry (excipient)              | `other_ingredients.json`                              |
-| New → Harmful     | Create new harmful additive (penalty-bearing)               | `harmful_additives.json`                              |
-| New → Banned      | Create new banned entry (safety-critical)                   | `banned_recalled_ingredients.json`                    |
-| Review            | Uncertain — needs human decision                            | report only                                           |
-
----
-
-## Required Deliverable Format (Phase 1)
-
-### 1) Scan Results (paste dynamic scan output)
-
-### 2) Root Cause Analysis
-
-```
-ENRICHMENT-ONLY unmapped (bug category): N reviewed
-  - Code bugs in _is_recognized_non_scorable(): N
-  - Alias gaps (DB has entry but missing alias variant): N
-  - Normalization mismatches (case/prefix/suffix): N
-
-BOTH-STAGES unmapped (true data gaps): N reviewed
-  - Alias candidates (existing molecule, different name): N
-  - New IQM entries needed: N
-  - New botanical entries needed: N
-  - New other_ingredients entries needed: N
-  - Harmful/banned (requires source): N
-  - Excipient leaks (code fix): N
-  - Review required: N
-
-CLEANING-ONLY unmapped: N reviewed
-  - Properly resolved by enricher: N
-  - Need alias backfill to cleaning lookup: N
-
-CLEANING INACTIVE unmapped: N reviewed
-  - New other_ingredients entries: N
-  - Already recognized (alias gap): N
-  - Review required: N
-
-FORM FALLBACKS (parent matched, form missed): N reviewed
-  - Alias → existing IQM form: N (total score impact: +Npts across N products)
-  - New IQM form needed: N
-  - Correct fallback (truly unspecified): N
-  - Review required: N
-
-Top systemic patterns:
-  1. [pattern] — affects N ingredients — [example]
-  2. [pattern] — affects N ingredients — [example]
-```
-
-### 3) Proposed Code Fixes (No edits yet)
-
-For each fix:
-| Field | Value |
-|-------|-------|
-| File | path |
-| Function | name |
-| Failure mode | what breaks |
-| Fix | what to change |
-| Risk | Low/Medium/High |
-| Impact | N ingredients across N products |
-
-### 4) Proposed Data Changes (Grouped by JSON File)
-
-#### → ingredient_quality_map.json
-
-**Form fallback resolutions** (alias to existing form — highest scoring impact):
-| Raw Label Text | Parent | Target Form | Current Score | Correct Score | Delta | Occurrences | Confidence |
-|---------------|--------|-------------|:---:|:---:|:---:|:---:|:---:|
-
-**Alias candidates** (unmapped → existing parent/form):
-| Raw Name | Target Parent | Target Form | Confidence | Proof |
-|----------|---------------|-------------|------------|-------|
-
-**New entry candidates**:
-| Raw Name | Proposed Key | Category | Bio Score | Natural | Source |
-|----------|-------------|----------|-----------|---------|--------|
-
-#### → botanical_ingredients.json
-
-**Alias candidates**:
-| Raw Name | Target Entry ID | Confidence |
-|----------|----------------|------------|
-
-**New entry candidates**:
-| Raw Name | Proposed ID | Latin Name | Category | Source |
-|----------|------------|------------|----------|--------|
-
-#### → other_ingredients.json
-
-**Alias candidates**:
-| Raw Name | Target Entry ID | Confidence |
-|----------|----------------|------------|
-
-**New entry candidates**:
-| Raw Name | Proposed ID | Category | is_additive |
-|----------|------------|----------|-------------|
-
-#### → harmful_additives.json (penalty — requires source)
-
-| Raw Name | Severity | Mechanism | Source Citation |
-| -------- | -------- | --------- | --------------- |
-
-#### → banned_recalled_ingredients.json (safety-critical — requires citation)
-
-| Raw Name | Regulatory Status | Source Citation |
-| -------- | ----------------- | --------------- |
-
-#### → Review Required
-
-| Raw Name | Stage | Ambiguity Reason | Missing Evidence |
-| -------- | ----- | ---------------- | ---------------- |
-
-### 5) Safety/Scoring Guardrail Check
-
-- [ ] No penalty-worthy ingredient routed to `other_ingredients` or `botanical_ingredients`
-- [ ] All banned/recalled proposals have FDA/NIH/PubMed source citations
-- [ ] Standardization markers preserved for `standardized_botanicals` entries
-- [ ] Score formula `score = bio_score + (3 if natural else 0)` validated for all new IQM entries
-- [ ] `absorption_structured` has all 5 fields for every new IQM form
-- [ ] `dosage_importance` present on every new IQM form
-- [ ] No cross-parent alias conflicts introduced (or added to ALLOWED_CROSS_ALIASES)
-- [ ] Notes ≥80 chars with clinical/mechanistic content for every non-unspecified form
-- [ ] botanical_ingredients entries have latin_name and CUI
-- [ ] other_ingredients entries have is_additive and allergen flags
-
-### 6) Impact Estimate
-
-```
-Before (from dynamic scan):
-  Cleaning active unmapped:   N unique, N occurrences
-  Cleaning inactive unmapped: N unique, N occurrences
-  Enrichment unmapped:        N unique, N occurrences (X.X%)
-  Form fallbacks:             N unique, N occurrences
-
-After (estimated):
-  Cleaning active unmapped:   ~N unique, ~N occurrences
-  Cleaning inactive unmapped: ~N unique, ~N occurrences
-  Enrichment unmapped:        ~N unique, ~N occurrences (~X.X%)
-  Form fallbacks:             ~N unique, ~N occurrences
-
-Resolution breakdown:
-  Code fixes:                  N ingredients (N occurrences)
-  Form fallback aliases (IQM): N ingredients (N occurrences, +N avg score pts)
-  Alias additions (IQM):       N ingredients (N occurrences)
-  Alias additions (botanical):  N ingredients (N occurrences)
-  Alias additions (other):     N ingredients (N occurrences)
-  New IQM entries:             N ingredients (N occurrences)
-  New botanical entries:        N ingredients (N occurrences)
-  New other entries:            N ingredients (N occurrences)
-  Excipient fix:               N ingredients (N occurrences)
-  Review required (deferred):  N ingredients (N occurrences)
-```
-
-### 7) Approval Gate
-
-**"Phase 1 analysis complete. Awaiting approval before writing files."**
-
-List specific changes awaiting approval grouped by:
-
-1. Code fixes (with exact file:line ranges)
-2. Data file additions (with counts per file)
-3. Test updates needed (ALLOWED_CROSS_ALIASES etc.)
-4. Items deferred to next session (review_required)
-
----
-
-## Phase 2 Execution Checklist (After Approval)
-
-1. Apply code fixes
-2. Apply data file changes (IQM, botanicals, others, harmful, banned)
-3. Update `ALLOWED_CROSS_ALIASES` if needed
-4. Run `python -m pytest scripts/tests/ -x -q` — all tests must pass
-5. Run `python scripts/db_integrity_sanity_check.py` — all checks must pass
-6. Re-run the cleaning stage for affected datasets (to regenerate unmapped reports)
-7. Re-enrich a sample batch and verify:
-   - `unmapped_scorable_count` dropped as expected
-   - No regression in existing mapped ingredients
-   - No new test failures
-8. Re-run the dynamic scan (Step 0) and report before/after comparison
-9. Report final impact numbers and remaining unmapped for next session
-
----
-
-## Source Validation Rule
-
-If classification is uncertain or safety-impacting, validate with real references:
-
-- FDA (warning letters, import alerts, GRAS notices)
-- NIH/ODS/NCCIH (fact sheets, safety reports)
-- PubMed (RCTs, systematic reviews, case reports)
-
-Do **not** make high-risk recommendations (banned/recalled, harmful) without citation support.
-
----
-
-## Prioritization Order (Per Session)
-
-1. **Code bugs first** — fix `_is_recognized_non_scorable()` recognition gap (enrichment-only unmapped category)
-2. **Excipient leaks** — fix detection for items like "100% Vegetarian Capsule"
-3. **Form fallbacks with high score delta** — e.g., Bororganic Glycine→boron_glycinate (+11pts × 21 products). Pure alias additions, highest ROI
-4. **Enrichment Tier 1** (≥10 occurrences) — biggest impact per fix
-5. **Branded ingredients** — Meriva, Capsimax, Aquamin etc. → alias to base ingredient
-6. **Remaining form fallbacks** — lower delta or fewer occurrences
-7. **Cleaning inactive unmapped** — Vegetable Capsule variants, excipients
-8. **Enrichment Tier 2** (3-9 occurrences)
-9. **Cleaning active-only unmapped** — backfill aliases so both stages agree
-10. **Enrichment Tier 3** (1-2 occurrences) — batch in groups of 50
-
-After each session, re-run the dynamic scan. The numbers will decrease. Pick up where you left off using the same prioritization order.
-
----
-
-## Input
-
-Scan ALL datasets:
-
-```
-scripts/output_*/unmapped/                                         ← cleaning-stage unmapped
-scripts/output_*_enriched/enriched/enriched_cleaned_batch_*.json   ← enrichment-stage unmapped
-scripts/output_*_enriched/reports/parent_fallback_report.json      ← form fallback reports
-scripts/output_*_enriched/reports/enrichment_summary_*.json        ← enrichment summaries
-```
+1. classify
+2. inspect raw
+3. verify against current DBs
+4. verify with real sources
+5. decide whether it is a bug or data gap
+6. apply the smallest correct fix
+7. verify in pipeline

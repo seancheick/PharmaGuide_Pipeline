@@ -1897,7 +1897,6 @@
           "Methyltetrahydrofolate Calcium Salt",
           "5-Methyltetrahydrofolate Calcium Salt",
           "L-Methylfolate Calcium Salt",
-          "l-methylfolate calcium salt",
           "L-5-Methylfolate Glucosamine Salt"
         ],
         "dosage_importance": 1.5,
@@ -2605,9 +2604,7 @@
           "pure ascorbic acid supplement",
           "vit c supplement",
           "vitc supplement",
-          "Vitamin C, Natural",
-          "vitamin c, natural",
-          "natural vitamin c supplement"
+          "Vitamin C, Natural"
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
@@ -3519,7 +3516,9 @@
           "tocotrienols and tocopherols",
           "tocopherols and tocotrienols",
           "mixed tocopherols and tocotrienols",
-          "DeltaGold Tocotrienol"
+          "DeltaGold Tocotrienol",
+          "Mixed Tocotrienols/Tocopherols",
+          "mixed tocotrienols/tocopherols"
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
@@ -4585,28 +4584,6 @@
           "notes": "38%"
         }
       },
-      "calcium ascorbate": {
-        "bio_score": 10,
-        "natural": false,
-        "score": 10,
-        "absorption": "35%",
-        "notes": "The calcium salt of vitamin C (ascorbic acid). Primarily a buffered vitamin C delivery form — the calcium content is incidental (~10% by weight). Scored here for the calcium contribution, but this form is chosen for its vitamin C benefits, not calcium delivery.",
-        "aliases": [
-          "vitamin c calcium",
-          "ascorbic calcium",
-          "vitamin c calcium supplement",
-          "vit c calcium",
-          "ascorbic calcium supplement"
-        ],
-        "dosage_importance": 1.5,
-        "absorption_structured": {
-          "value": 0.35,
-          "range_low": 0.25,
-          "range_high": 0.45,
-          "quality": "moderate",
-          "notes": "35%"
-        }
-      },
       "calcium oxide": {
         "bio_score": 4,
         "natural": false,
@@ -4672,27 +4649,6 @@
           "notes": "Data not available",
           "range_low": null,
           "range_high": null
-        }
-      },
-      "calcium pantothenate": {
-        "bio_score": 8,
-        "natural": false,
-        "score": 8,
-        "absorption": "30%",
-        "notes": "The calcium salt of vitamin B5 (pantothenic acid). Primarily a B5 delivery form — the calcium content is incidental (~8-9% by weight). Scored here for the small calcium contribution, but this form exists for its B5 benefits.",
-        "aliases": [
-          "calcium from pantothenate",
-          "calcium d-pantothenate calcium",
-          "pantothenate calcium content",
-          "calcium from calcium pantothenate"
-        ],
-        "dosage_importance": 1.5,
-        "absorption_structured": {
-          "value": 0.3,
-          "range_low": 0.2,
-          "range_high": 0.4,
-          "quality": "moderate",
-          "notes": "30% - calcium content is incidental to vitamin B5 delivery"
         }
       }
     },
@@ -9928,7 +9884,6 @@
         "notes": "Omega-3 from microalgae (Schizochytrium or similar). The only vegan source of preformed DHA. High purity with no ocean contaminants. Traditionally DHA-dominant with limited EPA, though newer strains produce both. Sold as Life's DHA, OPTI-3, and Elantria. A great choice for vegetarians and vegans.",
         "aliases": [
           "algae omega-3",
-          "life's dha",
           "algal oil",
           "vegan dha",
           "vegetarian omega-3",
@@ -11093,7 +11048,6 @@
           "glutathione plus vit c",
           "protected glutathione",
           "Glutathione, Reduced",
-          "glutathione, reduced",
           "glutathione reduced"
         ],
         "dosage_importance": 1.0,
@@ -11704,6 +11658,31 @@
           "quality": "unknown",
           "notes": "Depends on type"
         }
+      },
+      "alpha-glucooligosaccharides (alpha-GOS)": {
+        "bio_score": 10,
+        "natural": true,
+        "score": 13,
+        "absorption": "good fermentation",
+        "notes": "Alpha-linked gluco-oligosaccharide prebiotic form. Includes branded alpha-GOS ingredients such as BioEcolians. Kept separate from GOS and XOS for identity accuracy.",
+        "aliases": [
+          "alpha-gos",
+          "alpha gos",
+          "alpha-glucooligosaccharide",
+          "alpha-glucooligosaccharides",
+          "a-glucooligosaccharide",
+          "bioecolians",
+          "bioecolians a-glucooligosaccharide",
+          "BioEcolians A-Glucooligosaccharide"
+        ],
+        "absorption_structured": {
+          "value": null,
+          "range_low": null,
+          "range_high": null,
+          "quality": "good",
+          "notes": "good fermentation"
+        },
+        "dosage_importance": 1.0
       }
     },
     "match_rules": {
@@ -13751,9 +13730,7 @@
           "Lutemax 2020 Lutein",
           "aztec marigold extract",
           "Trans-Lutein",
-          "trans-lutein",
-          "all-trans lutein",
-          "All-Trans Lutein"
+          "all-trans lutein"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -13818,7 +13795,6 @@
           "Zeaxanthin Esters",
           "xanmax",
           "Zeaxanthin Isomer",
-          "zeaxanthin isomer",
           "zeaxanthin isomer (rr)",
           "zeaxanthin isomer (rs)",
           "zeaxanthin (rr)",
@@ -16723,7 +16699,9 @@
           "BioVin Grape Skin and Seed extract",
           "BioVin Grape skin and seed",
           "BioVin Advanced French Grape extract",
-          "BioVin grape polyphenol extract"
+          "BioVin grape polyphenol extract",
+          "Grape Whole Fruit Extract",
+          "grape whole fruit extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -17107,11 +17085,8 @@
           "eleutheroside E",
           "syringin eleutheroside B",
           "eleuthero extract",
-          "Eleuthero extract",
-          "Eleuthero Extract",
           "eleutherococcus senticosus extract",
-          "eleuthero root extract",
-          "Eleutherococcus Senticosus extract"
+          "eleuthero root extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -17204,7 +17179,6 @@
           "dicaffeoyl tartaric acid",
           "echinacea cichoric acid",
           "Echinacea (Echinacea purpurea) (aerial and root parts) 4:1 extract",
-          "echinacea (echinacea purpurea) (aerial and root parts) 4:1 extract",
           "Echinacea purpurea aerial and root parts 4:1 extract",
           "echinacea purpurea aerial and root 4:1 extract",
           "Echinacea purpurea (aerial and root) extract",
@@ -18018,13 +17992,8 @@
           "sambucus nigra berry extract anthocyanins",
           "anthocyanins from sambucus nigra",
           "Black Elder (berry) extract",
-          "black elder (berry) extract",
           "Black Elder Berry Extract",
-          "black elder berry extract",
           "Black Elder Extract",
-          "black elder extract",
-          "Black Elder fruit extract",
-          "black elder fruit extract",
           "Elderberry (Sambucus nigra) (berry) 36:1 extract",
           "Elderberry (Sambucus nigra L.) fruit 30:1 extract",
           "elderberry (sambucus nigra) berry extract",
@@ -18103,7 +18072,6 @@
           "natural elderberry liquid supplement",
           "concentrated elderberry supplement",
           "Elderberry Juice, Natural",
-          "elderberry juice, natural",
           "elderberry juice natural",
           "Natural Elderberry Juice",
           "elderberry juice concentrate",
@@ -19579,7 +19547,8 @@
       "missing_fields": [],
       "review_status": "validated",
       "last_reviewed_at": "2026-03-06"
-    }
+    },
+    "rxcui_note": "No RxCUI assigned for this dietary ingredient / protoalkaloid identity."
   },
   "same": {
     "standard_name": "SAMe (S-Adenosyl-L-Methionine)",
@@ -22455,7 +22424,6 @@
           "delphinidins",
           "delphinol",
           "delphinol maqui berry extract",
-          "maquibright",
           "maqui berry delphinidin",
           "delphinidin 3-glucoside",
           "delphinidin 3-sambubioside"
@@ -25806,7 +25774,6 @@
           "bamboo leaf extract silica",
           "Bamboo Extract",
           "Bamboo Leaf Extract",
-          "bamboo leaf extract",
           "bamboo leaf",
           "bamboo (leaf) extract",
           "bamboo leaf silica extract",
@@ -29378,7 +29345,6 @@
           "acidophilus ncfm",
           "NCFM",
           "lactobacillus acidophilus ncfm",
-          "L. acidophilus NCFM",
           "NCFM supplement"
         ],
         "score": 18,
@@ -32678,8 +32644,6 @@
           "st. john's wort flower, leaf extract",
           "st. john's wort flower head extract",
           "st. john's wort aerial parts extract",
-          "St. John's wort aerial parts extract",
-          "St. John's Wort aerial parts extract",
           "hypericum aerial extract",
           "Hypericum perforatum aerial parts extract"
         ],
@@ -33118,11 +33082,9 @@
           "life's dha dha",
           "docosahexaenoic",
           "life'sDHA",
-          "life'sdha",
           "life's dha",
           "lifes dha",
           "LifesDHA",
-          "life's DHA",
           "DSM life's dha",
           "life's algal dha"
         ],
@@ -34472,7 +34434,6 @@
         "aliases": [
           "natural triglyceride",
           "deep-sea fish oil",
-          "deep sea fish oil",
           "supercritical deep-sea fish oil",
           "supercritical deep sea fish oil",
           "ultra pure high potency fish oil",
@@ -34939,7 +34900,9 @@
           "flaxseed particulates",
           "organic flaxseed particulate",
           "organic flaxseed particulates",
-          "Brown Flax"
+          "Brown Flax",
+          "Flax (Linum usitatissimum) powder",
+          "flax (linum usitatissimum) powder"
         ],
         "absorption_structured": {
           "value": null,
@@ -35930,7 +35893,9 @@
           "blackcurrant fruit 4:1 extract",
           "Black Currant Oil, Cold-Pressed",
           "blackcurrant freeze-dried extract",
-          "blackcurrant freeze dried extract"
+          "blackcurrant freeze dried extract",
+          "Black Currant (Ribes nigrum) oil",
+          "black currant (ribes nigrum) oil"
         ],
         "absorption_structured": {
           "value": 0.55,
@@ -37004,12 +36969,9 @@
           "hops chalcone",
           "prenylated flavonoid hops",
           "hops extract",
-          "Hops extract",
           "hops (humulus lupulus) extract",
           "humulus lupulus extract",
-          "Humulus lupulus extract",
-          "hop extract",
-          "Hop extract"
+          "hop extract"
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
@@ -37233,7 +37195,9 @@
           "egoma oil",
           "Benegut Perilla extract",
           "benegut perilla (perilla frutescens) extract",
-          "perilla (perilla frutescens) extract"
+          "perilla (perilla frutescens) extract",
+          "Perilla Seed Extract",
+          "perilla seed extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -37890,11 +37854,8 @@
           "pacific kelp",
           "Japanese Kelp extract",
           "Bladder Wrack",
-          "bladder wrack",
           "Bladderwrack",
-          "bladderwrack",
           "Fucus vesiculosus",
-          "fucus vesiculosus",
           "Fucus vesiculosus extract",
           "bladder wrack extract",
           "bladderwrack extract",
@@ -38368,9 +38329,7 @@
           "Capros Amla extract",
           "Capros Amla Water extract",
           "organic amla fruit extract",
-          "organic Amla fruit extract",
           "organic Amla extract",
-          "Organic Amla Fruit Extract",
           "amla berry fruit extract"
         ],
         "dosage_importance": 1.0,
@@ -39289,7 +39248,6 @@
           "algae dha",
           "plant-based dha",
           "vegetarian dha",
-          "lifes dha",
           "thraustochytrid oil",
           "algae oil dha",
           "algal dha",

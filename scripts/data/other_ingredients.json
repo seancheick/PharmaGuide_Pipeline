@@ -3234,7 +3234,8 @@
         "natural mint flavor",
         "natural peppermint flavor",
         "natural peppermint flavoring",
-        "peppermint flavor natural"
+        "peppermint flavor natural",
+        "natural mint oil"
       ],
       "category": "natural_flavor",
       "is_additive": false,
@@ -5958,7 +5959,8 @@
         "natural peppermint",
         "natural spearmint",
         "natural vanilla mint flavor",
-        "oil of peppermint"
+        "oil of peppermint",
+        "natural mint oil"
       ],
       "category": "flavor_natural",
       "is_additive": true,
@@ -8908,7 +8910,9 @@
       "aliases": [
         "digestive pepsin",
         "pepsin enzyme",
-        "pepsin powder"
+        "pepsin powder",
+        "pepsin, pure",
+        "pure pepsin"
       ],
       "category": "enzyme",
       "is_additive": false,
@@ -12270,6 +12274,48 @@
         "specialty nutrition"
       ],
       "last_updated": "2026-03-06"
+    },
+    {
+      "id": "OI_WHOLE_ADRENAL",
+      "standard_name": "Whole Adrenal",
+      "aliases": [
+        "whole adrenal",
+        "bovine whole adrenal",
+        "whole bovine adrenal",
+        "adrenal whole glandular"
+      ],
+      "category": "animal_glandular",
+      "is_additive": false,
+      "additive_type": "glandular_tissue",
+      "allergen": false,
+      "allergen_type": null,
+      "notes": "Whole adrenal glandular tissue ingredient mapped for identity traceability. Treated as non-scorable unless a dedicated glandular quality model is added.",
+      "CUI": null,
+      "common_uses": [
+        "glandular traceability"
+      ],
+      "last_updated": "2026-03-08"
+    },
+    {
+      "id": "PII_RICE_BRAN_OIL",
+      "standard_name": "Rice Bran Oil",
+      "aliases": [
+        "rice bran oil",
+        "rice oil",
+        "oryza sativa bran oil"
+      ],
+      "category": "oil_carrier",
+      "is_additive": false,
+      "additive_type": "vegetable_oil_carrier",
+      "allergen": false,
+      "allergen_type": null,
+      "notes": "Vegetable carrier oil derived from rice bran. Used in softgels and lipid-based supplement delivery systems as an inert oil carrier.",
+      "CUI": null,
+      "common_uses": [
+        "oil carrier",
+        "softgel excipient"
+      ],
+      "last_updated": "2026-03-08"
     }
   ]
 }

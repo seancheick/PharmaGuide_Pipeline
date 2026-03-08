@@ -312,8 +312,10 @@ def preprocess_text(text: str) -> str:
                 changed = True
                 break
 
-    # Loop suffix removal to handle multiple suffixes like "Extract, Powder"
-    suffixes_to_remove = [' extract', ' powder', ' oil', ' concentrate']
+    # Loop suffix removal to handle multiple suffixes like "Extract, Powder".
+    # Do not strip "oil": it is chemically meaningful for identities such as
+    # fish oil, cod liver oil, oregano oil, krill oil, and MCT oil.
+    suffixes_to_remove = [' extract', ' powder', ' concentrate']
     changed = True
     while changed:
         changed = False

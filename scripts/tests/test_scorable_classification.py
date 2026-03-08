@@ -1382,7 +1382,7 @@ class TestParentTotalFlagging:
         assert entry["is_parent_total"] is False
 
     def test_collect_marks_parent_total_for_nested_same_canonical(self, enricher, monkeypatch):
-        def fake_match_quality_map(ing_name, std_name, quality_map, cleaned_forms=None):
+        def fake_match_quality_map(ing_name, std_name, quality_map, cleaned_forms=None, branded_token=None):
             return {
                 "standard_name": "Vitamin A",
                 "canonical_id": "vitamin_a",
@@ -1438,7 +1438,7 @@ class TestParentTotalFlagging:
         assert by_name["Retinyl Palmitate"]["is_parent_total"] is False
 
     def test_collect_marks_parent_total_for_folate_with_normalized_parent_blend(self, enricher, monkeypatch):
-        def fake_match_quality_map(ing_name, std_name, quality_map, cleaned_forms=None):
+        def fake_match_quality_map(ing_name, std_name, quality_map, cleaned_forms=None, branded_token=None):
             return {
                 "standard_name": "Folate",
                 "canonical_id": "folate",
@@ -1459,19 +1459,19 @@ class TestParentTotalFlagging:
             "fullName": "Parent Total Folate Product",
             "activeIngredients": [
                 {
-                    "name": "Folate\u2122 ",
-                    "standardName": "Folate",
+                    "name": "Methylfolate\u2122 ",
+                    "standardName": "Methylfolate",
                     "quantity": 680,
                     "unit": "mcg DFE",
                     "isNestedIngredient": False,
                 },
                 {
-                    "name": "Folic Acid",
-                    "standardName": "Folic Acid",
+                    "name": "5-MTHF",
+                    "standardName": "5-MTHF",
                     "quantity": 400,
                     "unit": "mcg",
                     "isNestedIngredient": True,
-                    "parentBlend": "  folate  ",
+                    "parentBlend": "  methylfolate  ",
                 },
             ],
             "inactiveIngredients": [],
@@ -1479,11 +1479,11 @@ class TestParentTotalFlagging:
 
         result = enricher._collect_ingredient_quality_data(product)
         by_name = {ing["name"]: ing for ing in result["ingredients_scorable"]}
-        assert by_name["Folate\u2122 "]["is_parent_total"] is True
-        assert by_name["Folic Acid"]["is_parent_total"] is False
+        assert by_name["Methylfolate\u2122 "]["is_parent_total"] is True
+        assert by_name["5-MTHF"]["is_parent_total"] is False
 
     def test_collect_marks_parent_total_for_niacin_subforms(self, enricher, monkeypatch):
-        def fake_match_quality_map(ing_name, std_name, quality_map, cleaned_forms=None):
+        def fake_match_quality_map(ing_name, std_name, quality_map, cleaned_forms=None, branded_token=None):
             return {
                 "standard_name": "Niacin",
                 "canonical_id": "niacin",
@@ -1537,7 +1537,7 @@ class TestParentTotalFlagging:
         assert by_name["Inositol Hexanicotinate"]["is_parent_total"] is False
 
     def test_collect_does_not_flag_parent_total_when_nested_parent_name_is_unrelated(self, enricher, monkeypatch):
-        def fake_match_quality_map(ing_name, std_name, quality_map, cleaned_forms=None):
+        def fake_match_quality_map(ing_name, std_name, quality_map, cleaned_forms=None, branded_token=None):
             # Force same canonical_id to validate that name linkage (not just canonical grouping)
             # gates parent-total detection.
             return {
@@ -1583,7 +1583,7 @@ class TestParentTotalFlagging:
         assert by_name["Vitamin A"]["is_parent_total"] is False
 
     def test_collect_does_not_flag_when_no_nested_children(self, enricher, monkeypatch):
-        def fake_match_quality_map(ing_name, std_name, quality_map, cleaned_forms=None):
+        def fake_match_quality_map(ing_name, std_name, quality_map, cleaned_forms=None, branded_token=None):
             return {
                 "standard_name": "Vitamin K",
                 "canonical_id": "vitamin_k",
@@ -1617,7 +1617,7 @@ class TestParentTotalFlagging:
         The parent must NOT be flagged as is_parent_total because excluding it
         would leave zero dose-carrying rows in A1."""
 
-        def fake_match_quality_map(ing_name, std_name, quality_map, cleaned_forms=None):
+        def fake_match_quality_map(ing_name, std_name, quality_map, cleaned_forms=None, branded_token=None):
             return {
                 "standard_name": "Curcumin",
                 "canonical_id": "curcumin",

@@ -70,6 +70,27 @@ class TestSkipEnforcement:
         assert normalizer._should_skip_ingredient("epa") is False  # Component, not source/summary
 
 
+class TestPreprocessNormalizationRegression:
+    """Identity preprocessing must not strip chemically meaningful oil terms."""
+
+    @pytest.fixture
+    def normalizer(self):
+        return EnhancedDSLDNormalizer()
+
+    @pytest.mark.parametrize(
+        "raw_name,expected",
+        [
+            ("Fish Oil Concentrate", "fish oil"),
+            ("Cod Liver Oil", "cod liver oil"),
+            ("Oregano Oil", "oregano oil"),
+            ("Milk Thistle Extract", "milk thistle"),
+            ("Turmeric Powder", "turmeric"),
+        ],
+    )
+    def test_preprocess_text_preserves_meaningful_oil_identities(self, normalizer, raw_name, expected):
+        assert normalizer.matcher.preprocess_text(raw_name) == expected
+
+
 class TestLabelHeaderSymmetry:
     """Tests for label header handling (Task 3)"""
 

@@ -74,6 +74,7 @@ STRUCTURAL_OTHER_HEADER_NAMES = frozenset({
     "may also contain",
     "soft gel shell",
     "shell ingredients",
+    "gelatin caplique capsule",
     "fish gelatin caplique capsule",
     "gelatin softgel",
     "gel shell",

@@ -13,6 +13,7 @@ import os
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from enrich_supplements_v3 import SupplementEnricherV3
+from constants import SKIP_REASON_RECOGNIZED_NON_SCORABLE
 
 
 class TestAllergenPresenceType:
@@ -937,6 +938,41 @@ class TestCompoundParentDisambiguation:
         assert result["canonical_id"] == "vitamin_b3_niacin"
         assert result["form_id"] == "niacinamide ascorbate"
 
+    @pytest.mark.parametrize(
+        "label,expected_parent,expected_form",
+        [
+            ("Calcium Ascorbate", "vitamin_c", "calcium ascorbate"),
+            ("Calcium Pantothenate", "vitamin_b5_pantothenic", "calcium pantothenate"),
+            ("Nicotinamide Riboside", "nicotinamide_riboside", "nicotinamide riboside (unspecified)"),
+            ("Nicotinamide Mononucleotide", "nmn", "nicotinamide mononucleotide (unspecified)"),
+            ("MaquiBright", "maqui_berry", "maqui berry (unspecified)"),
+            ("Vitexin", "vitexin", "vitexin (unspecified)"),
+            ("Life's DHA", "dha", "algal triglyceride"),
+            ("Concentrated Fish Oil", "fish_oil", "molecularly distilled"),
+        ],
+    )
+    def test_dangerous_or_dual_identity_aliases_route_to_expected_parent(
+        self, enricher, quality_map, label, expected_parent, expected_form
+    ):
+        result = enricher._match_quality_map(label, label, quality_map)
+        assert result is not None
+        assert result["canonical_id"] == expected_parent
+        assert result["form_id"] == expected_form
+
+    @pytest.mark.parametrize(
+        "label",
+        [
+            "Molecular Distilled",
+            "Triglyceride Form",
+            "Phospholipid Form",
+        ],
+    )
+    def test_generic_form_descriptors_do_not_resolve_as_standalone_ingredients(
+        self, enricher, quality_map, label
+    ):
+        result = enricher._match_quality_map(label, label, quality_map)
+        assert result is None
+
 
 class TestP2AliasCoverageRegression:
     """High-confidence alias additions should map deterministically."""
@@ -1611,6 +1647,62 @@ class TestDescriptorLeakageRegression:
                 assert reason in expected, f"{text} expected one of {expected}, got {reason}"
             else:
                 assert reason == expected, f"{text} expected {expected}, got {reason}"
+
+
+class TestHarmfulPrecedenceRegression:
+    """Harmful identities must beat scorable or benign overlap paths."""
+
+    @pytest.fixture
+    def enricher(self):
+        return SupplementEnricherV3()
+
+    @pytest.fixture
+    def quality_map(self, enricher):
+        return enricher.databases.get("ingredient_quality_map", {})
+
+    @pytest.fixture
+    def botanicals_db(self, enricher):
+        return enricher.databases.get("standardized_botanicals", {})
+
+    @pytest.mark.parametrize(
+        "name",
+        [
+            "Senna",
+            "Silicon Dioxide",
+            "Copper Sulfate",
+            "synthetic folate",
+            "synthetic vitamin e",
+        ],
+    )
+    def test_harmful_overlap_is_skipped_before_active_quality_scoring(
+        self, enricher, quality_map, botanicals_db, name
+    ):
+        ingredient = {
+            "name": name,
+            "standardName": name,
+            "quantity": 100,
+            "unit": "mg",
+        }
+
+        skip_reason = enricher._should_skip_from_scoring(ingredient, quality_map, botanicals_db)
+
+        assert skip_reason == SKIP_REASON_RECOGNIZED_NON_SCORABLE
+
+    @pytest.mark.parametrize(
+        "name,expected_id",
+        [
+            ("Silicon Dioxide", "ADD_SILICON_DIOXIDE"),
+            ("caramel color", "ADD_CARAMEL_COLOR"),
+        ],
+    )
+    def test_nonscorable_index_prefers_harmful_additives_over_other_ingredients(
+        self, enricher, name, expected_id
+    ):
+        recognized = enricher._is_recognized_non_scorable(name, name)
+
+        assert recognized is not None
+        assert recognized.get("recognition_source") == "harmful_additives"
+        assert recognized.get("matched_entry_id") == expected_id
 
 
 if __name__ == '__main__':
