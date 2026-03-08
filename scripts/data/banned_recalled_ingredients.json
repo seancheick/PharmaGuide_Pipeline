@@ -3,15 +3,10 @@
     "description": "Banned and recalled ingredients database for regulatory compliance and safety (v3.0)",
     "purpose": "safety_disqualification_and_regulatory_compliance",
     "schema_version": "5.0.0",
-    "last_updated": "2026-03-03",
-    "total_entries": 130,
+    "last_updated": "2026-03-06",
+    "total_entries": 133,
     "data_source_metadata": {
-      "sources": [
-        "FDA",
-        "WADA",
-        "DEA",
-        "internal_curation"
-      ],
+      "sources": ["FDA", "WADA", "DEA", "internal_curation"],
       "update_frequency": "monthly"
     },
     "migration": {
@@ -71,10 +66,7 @@
         "match_rules.label_tokens",
         "match_rules.match_mode"
       ],
-      "v5_added_fields": [
-        "match_mode",
-        "recall_scope"
-      ],
+      "v5_added_fields": ["match_mode", "recall_scope"],
       "v5_repurposed_fields": {
         "status": "Changed from free-text to enum: banned|recalled|high_risk|watchlist"
       }
@@ -282,17 +274,14 @@
       ],
       "reason": "Prescription NSAID illegally added to dietary supplements",
       "status": "banned",
-      "class_tags": [
-        "pharmaceutical_adulterants",
-        "drug_nsaid"
-      ],
+      "class_tags": ["pharmaceutical_adulterants", "drug_nsaid"],
       "match_rules": {
         "exclusions": [],
         "case_sensitive": false,
         "priority": 1,
         "match_type": "exact",
         "confidence": "high",
-        "negative_match_terms": []
+        "negative_match_terms": ["1,3-butylene glycol", "1,3-butanediol"]
       },
       "legal_status_enum": "adulterant",
       "clinical_risk_enum": "critical",
@@ -317,9 +306,7 @@
           "type": "fda_advisory",
           "title": "FDA: Tainted Products - Undeclared NSAIDs in supplements",
           "evidence_grade": "R",
-          "supports_claims": [
-            "regulatory_action"
-          ],
+          "supports_claims": ["regulatory_action"],
           "evidence_summary": "FDA warning about undeclared prescription NSAIDs in dietary supplements"
         },
         {
@@ -327,9 +314,7 @@
           "title": "FDA Recall: Silintan - January 9, 2026",
           "evidence_grade": "R",
           "date": "2026-01-09",
-          "supports_claims": [
-            "regulatory_action"
-          ],
+          "supports_claims": ["regulatory_action"],
           "evidence_summary": "Meloxicam found undeclared in Silintan supplement"
         }
       ],
@@ -365,17 +350,14 @@
       ],
       "reason": "Prescription diabetes medication illegally added to weight loss supplements",
       "status": "banned",
-      "class_tags": [
-        "pharmaceutical_adulterants",
-        "drug_diabetes"
-      ],
+      "class_tags": ["pharmaceutical_adulterants", "drug_diabetes"],
       "match_rules": {
         "exclusions": [],
         "case_sensitive": false,
         "priority": 1,
         "match_type": "exact",
         "confidence": "high",
-        "negative_match_terms": []
+        "negative_match_terms": ["1,3-butylene glycol", "1,3-butanediol"]
       },
       "legal_status_enum": "adulterant",
       "clinical_risk_enum": "critical",
@@ -400,9 +382,7 @@
           "type": "fda_advisory",
           "title": "FDA: Tainted Weight Loss Products - Metformin",
           "evidence_grade": "R",
-          "supports_claims": [
-            "regulatory_action"
-          ],
+          "supports_claims": ["regulatory_action"],
           "evidence_summary": "FDA: Tainted Weight Loss Products - Metformin"
         }
       ],
@@ -439,10 +419,7 @@
       ],
       "reason": "Severe psychiatric side effects including depression, anxiety, and suicidal ideation",
       "status": "banned",
-      "class_tags": [
-        "pharmaceutical_adulterants",
-        "drug_weight_loss"
-      ],
+      "class_tags": ["pharmaceutical_adulterants", "drug_weight_loss"],
       "match_rules": {
         "exclusions": [],
         "case_sensitive": false,
@@ -483,10 +460,7 @@
           "title": "RIO trials showing psychiatric risks",
           "evidence_grade": "A",
           "url": "https://doi.org/10.1016/S0140-6736(07)61684-8",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
+          "supports_claims": ["mechanism_of_harm", "clinical_outcomes"],
           "evidence_summary": "RIO trials showing psychiatric risks"
         }
       ],
@@ -525,17 +499,14 @@
       ],
       "reason": "GHB precursor - metabolizes to date rape drug, causes overdose and death",
       "status": "banned",
-      "class_tags": [
-        "novel_peptides",
-        "research_chemical_precursor"
-      ],
+      "class_tags": ["novel_peptides", "research_chemical_precursor"],
       "match_rules": {
         "exclusions": [],
         "case_sensitive": false,
         "priority": 1,
         "match_type": "exact",
         "confidence": "high",
-        "negative_match_terms": []
+        "negative_match_terms": ["1,3-butylene glycol", "1,3-butanediol"]
       },
       "legal_status_enum": "not_lawful_as_supplement",
       "clinical_risk_enum": "critical",
@@ -584,19 +555,14 @@
           "title": "1,4-BD metabolism to GHB",
           "evidence_grade": "A",
           "url": "https://doi.org/10.1093/jat/24.2.83",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
+          "supports_claims": ["mechanism_of_harm", "clinical_outcomes"],
           "evidence_summary": "1,4-BD metabolism to GHB"
         },
         {
           "type": "fda_advisory",
           "title": "FDA: Warning - GHB-related products in dietary supplements",
           "evidence_grade": "R",
-          "supports_claims": [
-            "regulatory_action"
-          ],
+          "supports_claims": ["regulatory_action"],
           "evidence_summary": "FDA: Warning - GHB-related products in dietary supplements"
         },
         {
@@ -605,10 +571,7 @@
           "title": "1,4-BD deaths",
           "evidence_grade": "B",
           "url": "https://doi.org/10.1016/j.forsciint.2003.08.001",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
+          "supports_claims": ["mechanism_of_harm", "clinical_outcomes"],
           "evidence_summary": "1,4-BD deaths"
         }
       ],
@@ -646,10 +609,7 @@
       ],
       "reason": "Potent opioid activity, addiction potential",
       "status": "banned",
-      "class_tags": [
-        "permanently_banned",
-        "opioid"
-      ],
+      "class_tags": ["permanently_banned", "opioid"],
       "match_rules": {
         "exclusions": [],
         "case_sensitive": false,
@@ -713,10 +673,7 @@
           "title": "7-OH opioid activity",
           "evidence_grade": "B",
           "url": "https://doi.org/10.1124/jpet.116.232215",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
+          "supports_claims": ["mechanism_of_harm", "clinical_outcomes"],
           "evidence_summary": "7-OH opioid activity"
         },
         {
@@ -724,9 +681,7 @@
           "title": "FDA Warning Letters: July 15, 2025 and July 29, 2025",
           "evidence_grade": "R",
           "date": "2025",
-          "supports_claims": [
-            "regulatory_action"
-          ],
+          "supports_claims": ["regulatory_action"],
           "evidence_summary": "FDA Warning Letters: July 15, 2025 and July 29, 2025"
         },
         {
@@ -734,9 +689,7 @@
           "title": "FDA Press Announcement: July 29, 2025 - Intent to recommend Schedule I",
           "evidence_grade": "R",
           "date": "2025",
-          "supports_claims": [
-            "regulatory_action"
-          ],
+          "supports_claims": ["regulatory_action"],
           "evidence_summary": "FDA Press Announcement: July 29, 2025 - Intent to recommend Schedule I"
         },
         {
@@ -791,11 +744,7 @@
       ],
       "reason": "Classified as a controlled anabolic steroid precursor in multiple countries. Banned in UK, Canada, Australia, and New Zealand. Not approved as a dietary supplement outside the US.",
       "status": "high_risk",
-      "class_tags": [
-        "prohormone",
-        "controlled_substance",
-        "hormonal"
-      ],
+      "class_tags": ["prohormone", "controlled_substance", "hormonal"],
       "match_rules": {
         "exclusions": [],
         "case_sensitive": false,
@@ -885,9 +834,7 @@
           "title": "UK Misuse of Drugs Act - Anabolic steroid classification",
           "evidence_grade": "R",
           "date": null,
-          "supports_claims": [
-            "regulatory_action"
-          ],
+          "supports_claims": ["regulatory_action"],
           "evidence_summary": "7-Keto DHEA classified as anabolic steroid under UK law"
         }
       ],
@@ -928,9 +875,7 @@
           "title": "Information on Select Dietary Supplement Ingredients and Other Substances (Anatabine)",
           "evidence_grade": "R",
           "url": "https://www.fda.gov/food/dietary-supplements/dietary-supplement-ingredient-directory",
-          "supports_claims": [
-            "regulatory_action"
-          ],
+          "supports_claims": ["regulatory_action"],
           "evidence_summary": "FDA directory lists Anatabine with linked agency actions and legal/regulatory context."
         },
         {
@@ -938,9 +883,7 @@
           "title": "FDA Launches/Updates Supplement Ingredient Directory",
           "evidence_grade": "R",
           "url": "https://www.fda.gov/food/hfp-constituent-updates/fda-launches-new-directory-ingredients-used-products-marketed-dietary-supplements",
-          "supports_claims": [
-            "regulatory_action"
-          ],
+          "supports_claims": ["regulatory_action"],
           "evidence_summary": "FDA confirms ingredient directory methodology and update cadence."
         }
       ],
@@ -982,14 +925,9 @@
       ],
       "legal_status_enum": "high_risk",
       "clinical_risk_enum": "moderate",
-      "class_tags": [
-        "high_risk_ingredients",
-        "alkaloid_tobacco"
-      ],
+      "class_tags": ["high_risk_ingredients", "alkaloid_tobacco"],
       "source_category": "high_risk_ingredients",
-      "supersedes_ids": [
-        "ADD_ANATABINE"
-      ],
+      "supersedes_ids": ["ADD_ANATABINE"],
       "entity_type": "ingredient",
       "regulatory_date": "2013-11-18",
       "regulatory_date_label": "FDA warning letter issued",
@@ -1019,9 +957,7 @@
           "title": "21 CFR 74.302 - Citrus Red No. 2",
           "evidence_grade": "R",
           "url": "https://www.ecfr.gov/current/title-21/section-74.302",
-          "supports_claims": [
-            "regulatory_action"
-          ],
+          "supports_claims": ["regulatory_action"],
           "evidence_summary": "Restricts use to coloring skins of certain oranges with residue limits."
         },
         {
@@ -1029,9 +965,7 @@
           "title": "Color Additives History",
           "evidence_grade": "R",
           "url": "https://www.fda.gov/industry/color-additives/color-additives-history",
-          "supports_claims": [
-            "regulatory_action"
-          ],
+          "supports_claims": ["regulatory_action"],
           "evidence_summary": "FDA historical table shows Citrus Red No. 2 use is limited to orange skins."
         }
       ],
@@ -1073,14 +1007,9 @@
       ],
       "legal_status_enum": "high_risk",
       "clinical_risk_enum": "moderate",
-      "class_tags": [
-        "high_risk_ingredients",
-        "colorant_artificial"
-      ],
+      "class_tags": ["high_risk_ingredients", "colorant_artificial"],
       "source_category": "high_risk_ingredients",
-      "supersedes_ids": [
-        "ADD_CITRUS_RED_2"
-      ],
+      "supersedes_ids": ["ADD_CITRUS_RED_2"],
       "entity_type": "ingredient",
       "regulatory_date": "1963-01-01",
       "regulatory_date_label": "Regulatory restriction effective",
@@ -1112,9 +1041,7 @@
           "title": "Substances Added to Food (formerly EAFUS) - Formaldehyde",
           "evidence_grade": "R",
           "url": "https://hfpappexternal.fda.gov/scripts/fdcc/index.cfm?id=FORMALDEHYDE&set=FoodSubstances",
-          "supports_claims": [
-            "regulatory_action"
-          ],
+          "supports_claims": ["regulatory_action"],
           "evidence_summary": "Lists formaldehyde-related technical effects and CFR citations relevant to food-contact/processing uses."
         },
         {
@@ -1122,10 +1049,7 @@
           "title": "NIEHS Formaldehyde Overview",
           "evidence_grade": "B",
           "url": "https://www.niehs.nih.gov/health/topics/agents/formaldehyde",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
+          "supports_claims": ["mechanism_of_harm", "clinical_outcomes"],
           "evidence_summary": "Summarizes evidence and NTP listing context for carcinogenicity and exposure concerns."
         }
       ],
@@ -1167,14 +1091,9 @@
       ],
       "legal_status_enum": "high_risk",
       "clinical_risk_enum": "critical",
-      "class_tags": [
-        "high_risk_ingredients",
-        "preservative_artificial"
-      ],
+      "class_tags": ["high_risk_ingredients", "preservative_artificial"],
       "source_category": "high_risk_ingredients",
-      "supersedes_ids": [
-        "ADD_FORMALDEHYDE"
-      ],
+      "supersedes_ids": ["ADD_FORMALDEHYDE"],
       "entity_type": "ingredient",
       "regulatory_date": "2011-06-10",
       "regulatory_date_label": "Carcinogen classification effective",
@@ -1184,10 +1103,7 @@
     {
       "id": "BANNED_ADD_ORANGE_B",
       "standard_name": "Orange B",
-      "aliases": [
-        "orange b dye",
-        "orange b"
-      ],
+      "aliases": ["orange b dye", "orange b"],
       "match_rules": {
         "exclusions": [],
         "case_sensitive": false,
@@ -1202,9 +1118,7 @@
           "title": "21 CFR 74.250 - Orange B",
           "evidence_grade": "R",
           "url": "https://www.ecfr.gov/current/title-21/section-74.250",
-          "supports_claims": [
-            "regulatory_action"
-          ],
+          "supports_claims": ["regulatory_action"],
           "evidence_summary": "Limits Orange B use to coloring frankfurter/sausage casings under specified ppm restrictions."
         },
         {
@@ -1212,9 +1126,7 @@
           "title": "Color Additives History",
           "evidence_grade": "R",
           "url": "https://www.fda.gov/industry/color-additives/color-additives-history",
-          "supports_claims": [
-            "regulatory_action"
-          ],
+          "supports_claims": ["regulatory_action"],
           "evidence_summary": "FDA historical listing reflects Orange B’s narrow restricted use case."
         }
       ],
@@ -1256,14 +1168,9 @@
       ],
       "legal_status_enum": "high_risk",
       "clinical_risk_enum": "moderate",
-      "class_tags": [
-        "high_risk_ingredients",
-        "colorant_artificial"
-      ],
+      "class_tags": ["high_risk_ingredients", "colorant_artificial"],
       "source_category": "high_risk_ingredients",
-      "supersedes_ids": [
-        "ADD_ORANGE_B"
-      ],
+      "supersedes_ids": ["ADD_ORANGE_B"],
       "entity_type": "ingredient",
       "regulatory_date": "1978-01-01",
       "regulatory_date_label": "Regulatory restriction effective",
@@ -1303,10 +1210,7 @@
           "title": "Endocrine disruption",
           "evidence_grade": "B",
           "url": "https://doi.org/10.1016/j.envint.2020.105881",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
+          "supports_claims": ["mechanism_of_harm", "clinical_outcomes"],
           "evidence_summary": "Endocrine disruption"
         },
         {
@@ -1315,10 +1219,7 @@
           "title": "Reproductive effects",
           "evidence_grade": "B",
           "url": "https://doi.org/10.1289/EHP10857",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
+          "supports_claims": ["mechanism_of_harm", "clinical_outcomes"],
           "evidence_summary": "Reproductive effects"
         },
         {
@@ -1327,10 +1228,7 @@
           "title": "Supplement contamination 2024",
           "evidence_grade": "B",
           "url": "https://doi.org/10.1021/acs.est.4c01234",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
+          "supports_claims": ["mechanism_of_harm", "clinical_outcomes"],
           "evidence_summary": "Supplement contamination 2024"
         }
       ],
@@ -1382,14 +1280,9 @@
       ],
       "legal_status_enum": "high_risk",
       "clinical_risk_enum": "moderate",
-      "class_tags": [
-        "high_risk_ingredients",
-        "contaminant_packaging"
-      ],
+      "class_tags": ["high_risk_ingredients", "contaminant_packaging"],
       "source_category": "high_risk_ingredients",
-      "supersedes_ids": [
-        "ADD_PHTHALATES"
-      ],
+      "supersedes_ids": ["ADD_PHTHALATES"],
       "entity_type": "ingredient",
       "regulatory_date": "2008-08-14",
       "regulatory_date_label": "Federal restriction effective",
@@ -1421,9 +1314,7 @@
           "title": "Substances Added to Food (formerly EAFUS) - Potassium Bromate",
           "evidence_grade": "R",
           "url": "https://www.hfpappexternal.fda.gov/scripts/fdcc/index.cfm?id=POTASSIUMBROMATE&set=FoodSubstances",
-          "supports_claims": [
-            "regulatory_action"
-          ],
+          "supports_claims": ["regulatory_action"],
           "evidence_summary": "FDA inventory entry with technical effects and CFR references (including 172.730)."
         },
         {
@@ -1431,10 +1322,7 @@
           "title": "OEHHA Proposition 65 - Potassium Bromate",
           "evidence_grade": "R",
           "url": "https://oehha.ca.gov/chemicals/potassium-bromate",
-          "supports_claims": [
-            "regulatory_action",
-            "clinical_outcomes"
-          ],
+          "supports_claims": ["regulatory_action", "clinical_outcomes"],
           "evidence_summary": "California listing and cancer risk context for potassium bromate."
         }
       ],
@@ -1476,14 +1364,9 @@
       ],
       "legal_status_enum": "high_risk",
       "clinical_risk_enum": "moderate",
-      "class_tags": [
-        "high_risk_ingredients",
-        "processing_agent"
-      ],
+      "class_tags": ["high_risk_ingredients", "processing_agent"],
       "source_category": "high_risk_ingredients",
-      "supersedes_ids": [
-        "ADD_POTASSIUM_BROMATE"
-      ],
+      "supersedes_ids": ["ADD_POTASSIUM_BROMATE"],
       "entity_type": "ingredient",
       "regulatory_date": "1991-01-01",
       "regulatory_date_label": "EU/International ban effective",
@@ -1519,10 +1402,7 @@
           "title": "EDC effects on human health",
           "evidence_grade": "B",
           "url": "https://doi.org/10.1016/j.envint.2019.105267",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
+          "supports_claims": ["mechanism_of_harm", "clinical_outcomes"],
           "evidence_summary": "EDC effects on human health"
         },
         {
@@ -1531,10 +1411,7 @@
           "title": "Endocrine disrupting chemicals review",
           "evidence_grade": "B",
           "url": "https://doi.org/10.1210/er.2015-1010",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
+          "supports_claims": ["mechanism_of_harm", "clinical_outcomes"],
           "evidence_summary": "Endocrine disrupting chemicals review"
         }
       ],
@@ -1586,14 +1463,9 @@
       ],
       "legal_status_enum": "high_risk",
       "clinical_risk_enum": "high",
-      "class_tags": [
-        "high_risk_ingredients",
-        "hormone_synthetic"
-      ],
+      "class_tags": ["high_risk_ingredients", "hormone_synthetic"],
       "source_category": "high_risk_ingredients",
-      "supersedes_ids": [
-        "ADD_SYNTHETIC_ESTROGENS"
-      ],
+      "supersedes_ids": ["ADD_SYNTHETIC_ESTROGENS"],
       "entity_type": "ingredient",
       "regulatory_date": "1979-01-01",
       "regulatory_date_label": "FDA ban effective",
@@ -1634,10 +1506,7 @@
           "title": "Synthetic acids",
           "evidence_grade": "B",
           "url": "https://doi.org/10.1016/j.foodchem.2020.127556",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
+          "supports_claims": ["mechanism_of_harm", "clinical_outcomes"],
           "evidence_summary": "Synthetic acids"
         },
         {
@@ -1646,10 +1515,7 @@
           "title": "Health effects",
           "evidence_grade": "B",
           "url": "https://doi.org/10.3390/foods9020178",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
+          "supports_claims": ["mechanism_of_harm", "clinical_outcomes"],
           "evidence_summary": "Health effects"
         }
       ],
@@ -1686,14 +1552,9 @@
       ],
       "legal_status_enum": "restricted",
       "clinical_risk_enum": "dose_dependent",
-      "class_tags": [
-        "high_risk_ingredients",
-        "acidity_regulator"
-      ],
+      "class_tags": ["high_risk_ingredients", "acidity_regulator"],
       "source_category": "high_risk_ingredients",
-      "supersedes_ids": [
-        "ADD_SYNTHETIC_FOOD_ACIDS"
-      ],
+      "supersedes_ids": ["ADD_SYNTHETIC_FOOD_ACIDS"],
       "entity_type": "class",
       "regulatory_date": "1958-09-06",
       "regulatory_date_label": "Regulatory framework established",
@@ -1719,10 +1580,7 @@
       ],
       "reason": "Kidney failure, cancer, DNA damage - Class 1 carcinogen",
       "status": "banned",
-      "class_tags": [
-        "permanently_banned",
-        "botanical"
-      ],
+      "class_tags": ["permanently_banned", "botanical"],
       "match_rules": {
         "exclusions": [],
         "case_sensitive": false,
@@ -1756,10 +1614,7 @@
           "title": "Aristolochic acid carcinogenicity",
           "evidence_grade": "B",
           "url": "https://doi.org/10.1093/jnci/djr085",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
+          "supports_claims": ["mechanism_of_harm", "clinical_outcomes"],
           "evidence_summary": "Aristolochic acid carcinogenicity"
         },
         {
@@ -1768,10 +1623,7 @@
           "title": "DNA damage mechanisms",
           "evidence_grade": "B",
           "url": "https://doi.org/10.1073/pnas.1119920109",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
+          "supports_claims": ["mechanism_of_harm", "clinical_outcomes"],
           "evidence_summary": "DNA damage mechanisms"
         },
         {
@@ -1814,10 +1666,7 @@
       ],
       "reason": "Amphetamine-like stimulant, not naturally occurring",
       "status": "banned",
-      "class_tags": [
-        "permanently_banned",
-        "stimulant"
-      ],
+      "class_tags": ["permanently_banned", "stimulant"],
       "match_rules": {
         "exclusions": [],
         "case_sensitive": false,
@@ -1851,10 +1700,7 @@
           "title": "BMPEA not from Acacia",
           "evidence_grade": "B",
           "url": "https://doi.org/10.1016/j.drugalcdep.2015.01.027",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
+          "supports_claims": ["mechanism_of_harm", "clinical_outcomes"],
           "evidence_summary": "BMPEA not from Acacia"
         },
         {
@@ -1862,9 +1708,7 @@
           "title": "FDA: April 2015 - BMPEA warnings",
           "evidence_grade": "R",
           "date": "2015",
-          "supports_claims": [
-            "regulatory_action"
-          ],
+          "supports_claims": ["regulatory_action"],
           "evidence_summary": "FDA: April 2015 - BMPEA warnings"
         }
       ],
@@ -1906,10 +1750,7 @@
       ],
       "reason": "Flame retardant chemical with potential thyroid and reproductive health risks",
       "status": "banned",
-      "class_tags": [
-        "permanently_banned",
-        "food_additive_emulsifier"
-      ],
+      "class_tags": ["permanently_banned", "food_additive_emulsifier"],
       "match_rules": {
         "exclusions": [],
         "case_sensitive": false,
@@ -1988,10 +1829,7 @@
           "title": "BVO toxicity",
           "evidence_grade": "B",
           "url": "https://doi.org/10.1016/j.fct.2024.114567",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
+          "supports_claims": ["mechanism_of_harm", "clinical_outcomes"],
           "evidence_summary": "BVO toxicity"
         },
         {
@@ -1999,9 +1837,7 @@
           "title": "Federal Register: July 2, 2024 - FDA ban order",
           "evidence_grade": "R",
           "date": "2024",
-          "supports_claims": [
-            "regulatory_action"
-          ],
+          "supports_claims": ["regulatory_action"],
           "evidence_summary": "Federal Register: July 2, 2024 - FDA ban order"
         }
       ],
@@ -2060,10 +1896,7 @@
       ],
       "reason": "Drug ingredient exclusion rule - CBD is an approved drug ingredient (Epidiolex)",
       "status": "banned",
-      "class_tags": [
-        "permanently_banned",
-        "cannabinoid"
-      ],
+      "class_tags": ["permanently_banned", "cannabinoid"],
       "match_rules": {
         "exclusions": [],
         "case_sensitive": false,
@@ -2147,10 +1980,7 @@
           "title": "CBD hepatotoxicity",
           "evidence_grade": "B",
           "url": "https://doi.org/10.1002/hep.30525",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
+          "supports_claims": ["mechanism_of_harm", "clinical_outcomes"],
           "evidence_summary": "CBD hepatotoxicity"
         },
         {
@@ -2158,9 +1988,7 @@
           "title": "FDA: December 2018 - Drug exclusion determination",
           "evidence_grade": "R",
           "date": "2018",
-          "supports_claims": [
-            "regulatory_action"
-          ],
+          "supports_claims": ["regulatory_action"],
           "evidence_summary": "FDA: December 2018 - Drug exclusion determination"
         },
         {
@@ -2182,9 +2010,7 @@
           "title": "FDA Regulation of Cannabis and Cannabis-Derived Products, Including CBD",
           "evidence_grade": "R",
           "url": "https://www.fda.gov/news-events/public-health-focus/fda-regulation-cannabis-and-cannabis-derived-products-including-cannabidiol-cbd",
-          "supports_claims": [
-            "regulatory_status"
-          ],
+          "supports_claims": ["regulatory_status"],
           "evidence_summary": "FDA states THC/CBD products are excluded from dietary supplement definition under FD&C Act section 201(ff)(3)(B)."
         }
       ],
@@ -2227,10 +2053,7 @@
       ],
       "reason": "Liver damage, cancer risk from pyrrolizidine alkaloids",
       "status": "banned",
-      "class_tags": [
-        "permanently_banned",
-        "botanical"
-      ],
+      "class_tags": ["permanently_banned", "botanical"],
       "match_rules": {
         "exclusions": [],
         "case_sensitive": false,
@@ -2279,10 +2102,7 @@
           "title": "Comfrey hepatotoxicity",
           "evidence_grade": "B",
           "url": "https://doi.org/10.1002/hep.1840190107",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
+          "supports_claims": ["mechanism_of_harm", "clinical_outcomes"],
           "evidence_summary": "Comfrey hepatotoxicity"
         },
         {
@@ -2291,10 +2111,7 @@
           "title": "Pyrrolizidine alkaloid toxicity",
           "evidence_grade": "B",
           "url": "https://doi.org/10.1093/jat/25.6.456",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
+          "supports_claims": ["mechanism_of_harm", "clinical_outcomes"],
           "evidence_summary": "Pyrrolizidine alkaloid toxicity"
         },
         {
@@ -2344,10 +2161,7 @@
       ],
       "reason": "Lack of sterility assurance, potential bacterial contamination in compounded formulations",
       "status": "high_risk",
-      "class_tags": [
-        "high_risk_ingredients",
-        "contaminant_pharmaceutical"
-      ],
+      "class_tags": ["high_risk_ingredients", "contaminant_pharmaceutical"],
       "match_rules": {
         "exclusions": [],
         "case_sensitive": false,
@@ -2395,9 +2209,7 @@
           "title": "FDA: September 2024 - Warning on compounded semaglutide",
           "evidence_grade": "R",
           "date": "2024",
-          "supports_claims": [
-            "regulatory_action"
-          ],
+          "supports_claims": ["regulatory_action"],
           "evidence_summary": "FDA: September 2024 - Warning on compounded semaglutide"
         },
         {
@@ -2405,9 +2217,7 @@
           "title": "FDA Class II Recalls: 2024-2025 - Multiple compounding pharmacies",
           "evidence_grade": "R",
           "date": "2024",
-          "supports_claims": [
-            "regulatory_action"
-          ],
+          "supports_claims": ["regulatory_action"],
           "evidence_summary": "FDA Class II Recalls: 2024-2025 - Multiple compounding pharmacies"
         }
       ],
@@ -2449,13 +2259,8 @@
         "delta 8 distillate",
         "Delta 8"
       ],
-      "class_tags": [
-        "cannabinoid",
-        "state_regulated"
-      ],
-      "supersedes_ids": [
-        "STATE_DELTA8_THC"
-      ],
+      "class_tags": ["cannabinoid", "state_regulated"],
+      "supersedes_ids": ["STATE_DELTA8_THC"],
       "reason": "Psychoactive cannabinoid with safety concerns. Banned in many states.",
       "status": "high_risk",
       "match_rules": {
@@ -2560,19 +2365,14 @@
       ],
       "reason": "Cardiovascular risks and false marketing claims",
       "status": "banned",
-      "class_tags": [
-        "permanently_banned",
-        "stimulant"
-      ],
+      "class_tags": ["permanently_banned", "stimulant"],
       "match_rules": {
         "exclusions": [],
         "case_sensitive": false,
         "priority": 1,
         "match_type": "normalized",
         "confidence": "high",
-        "negative_match_terms": [
-          "dmaa-free"
-        ]
+        "negative_match_terms": ["dmaa-free"]
       },
       "legal_status_enum": "banned_federal",
       "clinical_risk_enum": "critical",
@@ -2673,10 +2473,7 @@
           "title": "DMAA cardiovascular effects",
           "evidence_grade": "B",
           "url": "https://doi.org/10.1016/j.drugalcdep.2012.12.011",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
+          "supports_claims": ["mechanism_of_harm", "clinical_outcomes"],
           "evidence_summary": "DMAA cardiovascular effects"
         },
         {
@@ -2685,10 +2482,7 @@
           "title": "DMAA not from geranium",
           "evidence_grade": "B",
           "url": "https://doi.org/10.1093/jat/bks078",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
+          "supports_claims": ["mechanism_of_harm", "clinical_outcomes"],
           "evidence_summary": "DMAA not from geranium"
         }
       ],
@@ -2712,9 +2506,7 @@
           }
         ]
       },
-      "supersedes_ids": [
-        "STATE_DMAA_CALIFORNIA"
-      ],
+      "supersedes_ids": ["STATE_DMAA_CALIFORNIA"],
       "regulatory_date": "2013-04-11",
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
@@ -2744,16 +2536,11 @@
           "title": "FDA Dietary Supplement Ingredient Directory - DMBA",
           "evidence_grade": "R",
           "url": "https://www.fda.gov/food/dietary-supplement-ingredient-directory",
-          "supports_claims": [
-            "regulatory_action"
-          ],
+          "supports_claims": ["regulatory_action"],
           "evidence_summary": "FDA lists DMBA and aliases under unlawful/noncompliant supplement ingredients."
         }
       ],
-      "class_tags": [
-        "stimulant",
-        "not_lawful_as_supplement"
-      ],
+      "class_tags": ["stimulant", "not_lawful_as_supplement"],
       "match_rules": {
         "exclusions": [],
         "case_sensitive": false,
@@ -2816,10 +2603,7 @@
       ],
       "reason": "Cardiovascular risks similar to DMAA",
       "status": "banned",
-      "class_tags": [
-        "permanently_banned",
-        "stimulant"
-      ],
+      "class_tags": ["permanently_banned", "stimulant"],
       "match_rules": {
         "exclusions": [],
         "case_sensitive": false,
@@ -2853,10 +2637,7 @@
           "title": "DMHA cardiovascular effects",
           "evidence_grade": "B",
           "url": "https://doi.org/10.1016/j.drugalcdep.2019.01.026",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
+          "supports_claims": ["mechanism_of_harm", "clinical_outcomes"],
           "evidence_summary": "DMHA cardiovascular effects"
         },
         {
@@ -2864,9 +2645,7 @@
           "title": "FDA: March 2023 - DMHA enforcement",
           "evidence_grade": "R",
           "date": "2023",
-          "supports_claims": [
-            "regulatory_action"
-          ],
+          "supports_claims": ["regulatory_action"],
           "evidence_summary": "FDA: March 2023 - DMHA enforcement"
         }
       ],
@@ -2911,21 +2690,14 @@
       ],
       "reason": "Cardiovascular risks including heart attack and stroke",
       "status": "banned",
-      "class_tags": [
-        "permanently_banned",
-        "stimulant"
-      ],
+      "class_tags": ["permanently_banned", "stimulant"],
       "match_rules": {
         "exclusions": [],
         "case_sensitive": false,
         "priority": 1,
         "match_type": "normalized",
         "confidence": "high",
-        "negative_match_terms": [
-          "ephedra nevadensis",
-          "mormon tea",
-          "ephedra-free"
-        ]
+        "negative_match_terms": ["ephedra nevadensis", "ephedra-free"]
       },
       "legal_status_enum": "banned_federal",
       "clinical_risk_enum": "critical",
@@ -2952,10 +2724,7 @@
           "title": "Ephedra adverse events",
           "evidence_grade": "B",
           "url": "https://doi.org/10.7326/0003-4819-140-8-200404200-00006",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
+          "supports_claims": ["mechanism_of_harm", "clinical_outcomes"],
           "evidence_summary": "Ephedra adverse events"
         },
         {
@@ -2964,10 +2733,7 @@
           "title": "Cardiovascular risks",
           "evidence_grade": "B",
           "url": "https://doi.org/10.1056/NEJMoa032648",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
+          "supports_claims": ["mechanism_of_harm", "clinical_outcomes"],
           "evidence_summary": "Cardiovascular risks"
         }
       ],
@@ -3003,10 +2769,7 @@
       ],
       "reason": "Unapproved new drug; failed clinical trials; not approved for supplements",
       "status": "banned",
-      "class_tags": [
-        "nootropic_banned",
-        "nootropic"
-      ],
+      "class_tags": ["nootropic_banned", "nootropic"],
       "match_rules": {
         "exclusions": [],
         "case_sensitive": false,
@@ -3039,9 +2802,7 @@
           "title": "FDA: November 25, 2019 - Not a dietary ingredient",
           "evidence_grade": "R",
           "date": "2019",
-          "supports_claims": [
-            "regulatory_action"
-          ],
+          "supports_claims": ["regulatory_action"],
           "evidence_summary": "FDA: November 25, 2019 - Not a dietary ingredient"
         },
         {
@@ -3050,10 +2811,7 @@
           "title": "Fasoracetam clinical trial failure",
           "evidence_grade": "A",
           "url": "https://doi.org/10.1177/2045125316672135",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
+          "supports_claims": ["mechanism_of_harm", "clinical_outcomes"],
           "evidence_summary": "Fasoracetam clinical trial failure"
         }
       ],
@@ -3099,10 +2857,7 @@
       ],
       "reason": "Potential carcinogenicity - inadequate safety data",
       "status": "banned",
-      "class_tags": [
-        "permanently_banned",
-        "food_additive_colorant"
-      ],
+      "class_tags": ["permanently_banned", "food_additive_colorant"],
       "match_rules": {
         "exclusions": [],
         "case_sensitive": false,
@@ -3180,9 +2935,7 @@
           "title": "FDA: 41 FR 41858 - Final rule banning FD&C Red No. 2 (1976)",
           "evidence_grade": "R",
           "date": "4185",
-          "supports_claims": [
-            "regulatory_action"
-          ],
+          "supports_claims": ["regulatory_action"],
           "evidence_summary": "FDA: 41 FR 41858 - Final rule banning FD&C Red No. 2 (1976)"
         },
         {
@@ -3191,10 +2944,7 @@
           "title": "Azo dye metabolism and toxicity",
           "evidence_grade": "A",
           "url": "https://doi.org/10.1016/0278-6915(94)90034-5",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
+          "supports_claims": ["mechanism_of_harm", "clinical_outcomes"],
           "evidence_summary": "Azo dye metabolism and toxicity"
         }
       ],
@@ -3239,11 +2989,7 @@
       ],
       "reason": "Severe hepatotoxicity. 1 death, 9 liver transplants, 200+ adverse liver events documented. FDA recalled Hydroxycut products (2009). France banned all GC supplements (2025). Australia mandated liver harm warnings (2025).",
       "status": "high_risk",
-      "class_tags": [
-        "hepatotoxic",
-        "high_risk_ingredients",
-        "weight_loss"
-      ],
+      "class_tags": ["hepatotoxic", "high_risk_ingredients", "weight_loss"],
       "match_rules": {
         "exclusions": [],
         "case_sensitive": false,
@@ -3348,10 +3094,7 @@
       ],
       "reason": "Beta-2 agonist with cardiovascular risks, WADA prohibited",
       "status": "banned",
-      "class_tags": [
-        "permanently_banned",
-        "stimulant"
-      ],
+      "class_tags": ["permanently_banned", "stimulant"],
       "match_rules": {
         "exclusions": [],
         "case_sensitive": false,
@@ -3385,10 +3128,7 @@
           "title": "Higenamine cardiovascular effects",
           "evidence_grade": "B",
           "url": "https://doi.org/10.1016/j.fct.2013.07.080",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
+          "supports_claims": ["mechanism_of_harm", "clinical_outcomes"],
           "evidence_summary": "Higenamine cardiovascular effects"
         },
         {
@@ -3441,10 +3181,7 @@
       ],
       "reason": "Unapproved drug ingredient; not lawfully marketed as dietary supplement ingredient",
       "status": "banned",
-      "class_tags": [
-        "ghrelin_agonist",
-        "growth_hormone_secretagogue"
-      ],
+      "class_tags": ["ghrelin_agonist", "growth_hormone_secretagogue"],
       "match_rules": {
         "exclusions": [],
         "case_sensitive": false,
@@ -3477,10 +3214,7 @@
           "title": "FDA Warning Letter 607248 (Andro Pharma LLC)",
           "evidence_grade": "R",
           "url": "https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/warning-letters/andro-pharma-llc-607248-11102020",
-          "supports_claims": [
-            "regulatory_action",
-            "legal_status"
-          ],
+          "supports_claims": ["regulatory_action", "legal_status"],
           "evidence_summary": "Identifies ibutamoren (MK-677) products as unapproved new drugs."
         },
         {
@@ -3488,9 +3222,7 @@
           "title": "WADA Prohibited List 2026",
           "evidence_grade": "R",
           "url": "https://www.wada-ama.org/en/resources/world-anti-doping-code-and-international-standards/prohibited-list",
-          "supports_claims": [
-            "sports_prohibition"
-          ],
+          "supports_claims": ["sports_prohibition"],
           "evidence_summary": "Hormone and metabolic modulators category includes growth hormone secretagogues."
         }
       ],
@@ -3530,10 +3262,7 @@
       ],
       "reason": "Unapproved SYNTHETIC drug ingredient, growth hormone-related compound, safety concerns",
       "status": "banned",
-      "class_tags": [
-        "permanently_banned",
-        "hormone"
-      ],
+      "class_tags": ["permanently_banned", "hormone"],
       "match_rules": {
         "exclusions": [],
         "case_sensitive": false,
@@ -3585,10 +3314,7 @@
           "title": "IGF-1 and cancer risk",
           "evidence_grade": "B",
           "url": "https://doi.org/10.1210/jc.2009-0491",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
+          "supports_claims": ["mechanism_of_harm", "clinical_outcomes"],
           "evidence_summary": "IGF-1 and cancer risk"
         },
         {
@@ -3596,9 +3322,7 @@
           "title": "FDA: 1997 - Dietary supplement ban",
           "evidence_grade": "R",
           "date": "1997",
-          "supports_claims": [
-            "regulatory_action"
-          ],
+          "supports_claims": ["regulatory_action"],
           "evidence_summary": "FDA: 1997 - Dietary supplement ban"
         }
       ],
@@ -3640,11 +3364,7 @@
         "long arginine 3 igf-1",
         "insulin-like growth factor 1 lr3"
       ],
-      "class_tags": [
-        "permanently_banned",
-        "peptide",
-        "hormone_analog"
-      ],
+      "class_tags": ["permanently_banned", "peptide", "hormone_analog"],
       "reason": "Unapproved synthetic peptide drug, modified IGF-1 with extended half-life",
       "status": "banned",
       "match_rules": {
@@ -3719,10 +3439,7 @@
       ],
       "reason": "Metal fibers can cause serious injury to digestive system, including perforation",
       "status": "high_risk",
-      "class_tags": [
-        "high_risk_ingredients",
-        "contaminant_manufacturing"
-      ],
+      "class_tags": ["high_risk_ingredients", "contaminant_manufacturing"],
       "match_rules": {
         "exclusions": [],
         "case_sensitive": false,
@@ -3796,10 +3513,7 @@
       ],
       "reason": "Potential harm to children's health, reassessment of risk-benefit profile",
       "status": "watchlist",
-      "class_tags": [
-        "high_risk_ingredients",
-        "supplement_pediatric"
-      ],
+      "class_tags": ["high_risk_ingredients", "supplement_pediatric"],
       "match_rules": {
         "exclusions": [],
         "case_sensitive": false,
@@ -3871,10 +3585,7 @@
           "title": "Fluoride and IQ",
           "evidence_grade": "B",
           "url": "https://doi.org/10.1001/jamapediatrics.2019.1729",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
+          "supports_claims": ["mechanism_of_harm", "clinical_outcomes"],
           "evidence_summary": "Fluoride and IQ"
         },
         {
@@ -3882,9 +3593,7 @@
           "title": "FDA: May 14, 2025 - Proposed removal announcement",
           "evidence_grade": "R",
           "date": "2025",
-          "supports_claims": [
-            "regulatory_action"
-          ],
+          "supports_claims": ["regulatory_action"],
           "evidence_summary": "FDA: May 14, 2025 - Proposed removal announcement"
         }
       ],
@@ -3923,19 +3632,14 @@
       ],
       "reason": "Dependence, severe withdrawal, benzodiazepine-like effects",
       "status": "banned",
-      "class_tags": [
-        "permanently_banned",
-        "nootropic"
-      ],
+      "class_tags": ["permanently_banned", "nootropic"],
       "match_rules": {
         "exclusions": [],
         "case_sensitive": false,
         "priority": 1,
         "match_type": "normalized",
         "confidence": "high",
-        "negative_match_terms": [
-          "phenibut-free"
-        ]
+        "negative_match_terms": ["phenibut-free"]
       },
       "legal_status_enum": "banned_federal",
       "clinical_risk_enum": "critical",
@@ -3992,10 +3696,7 @@
           "title": "Phenibut exposures reported to poison centers",
           "evidence_grade": "B",
           "year": 2019,
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
+          "supports_claims": ["mechanism_of_harm", "clinical_outcomes"],
           "evidence_summary": "Phenibut exposures reported to poison centers"
         },
         {
@@ -4004,10 +3705,7 @@
           "title": "Phenibut withdrawal syndrome",
           "evidence_grade": "C",
           "year": 2019,
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
+          "supports_claims": ["mechanism_of_harm", "clinical_outcomes"],
           "evidence_summary": "Phenibut withdrawal syndrome"
         },
         {
@@ -4015,9 +3713,7 @@
           "title": "FDA warns about phenibut risks",
           "date": "2019-04-10",
           "evidence_grade": "R",
-          "supports_claims": [
-            "regulatory_action"
-          ],
+          "supports_claims": ["regulatory_action"],
           "evidence_summary": "FDA warns about phenibut risks"
         }
       ],
@@ -4061,20 +3757,14 @@
       ],
       "reason": "Primary source of artificial trans fats, which increase cardiovascular disease risk",
       "status": "banned",
-      "class_tags": [
-        "permanently_banned",
-        "food_additive_fat"
-      ],
+      "class_tags": ["permanently_banned", "food_additive_fat"],
       "match_rules": {
         "exclusions": [],
         "case_sensitive": false,
         "priority": 1,
         "match_type": "normalized",
         "confidence": "high",
-        "negative_match_terms": [
-          "pho-free",
-          "no partially hydrogenated"
-        ]
+        "negative_match_terms": ["pho-free", "no partially hydrogenated"]
       },
       "legal_status_enum": "banned_federal",
       "clinical_risk_enum": "critical",
@@ -4116,10 +3806,7 @@
           "title": "Trans fats and cardiovascular disease",
           "evidence_grade": "B",
           "url": "https://doi.org/10.1056/NEJMoa1200303",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
+          "supports_claims": ["mechanism_of_harm", "clinical_outcomes"],
           "evidence_summary": "Trans fats and cardiovascular disease"
         },
         {
@@ -4128,10 +3815,7 @@
           "title": "AHA trans fat statement",
           "evidence_grade": "B",
           "url": "https://doi.org/10.1161/CIR.0000000000000510",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
+          "supports_claims": ["mechanism_of_harm", "clinical_outcomes"],
           "evidence_summary": "AHA trans fat statement"
         },
         {
@@ -4139,9 +3823,7 @@
           "title": "Federal Register: June 17, 2015 - FDA PHO ban",
           "evidence_grade": "R",
           "date": "2015",
-          "supports_claims": [
-            "regulatory_action"
-          ],
+          "supports_claims": ["regulatory_action"],
           "evidence_summary": "Federal Register: June 17, 2015 - FDA PHO ban"
         }
       ],
@@ -4177,10 +3859,7 @@
       ],
       "reason": "Unapproved drug, does not meet supplement definition",
       "status": "banned",
-      "class_tags": [
-        "permanently_banned",
-        "nootropic"
-      ],
+      "class_tags": ["permanently_banned", "nootropic"],
       "match_rules": {
         "exclusions": [],
         "case_sensitive": false,
@@ -4214,9 +3893,7 @@
           "date": "2015-11-30",
           "evidence_grade": "R",
           "url": "https://www.fda.gov/food/dietary-supplement-products-ingredients/picamilon-dietary-supplements",
-          "supports_claims": [
-            "regulatory_action"
-          ],
+          "supports_claims": ["regulatory_action"],
           "evidence_summary": "FDA warns consumers about picamilon in supplements"
         },
         {
@@ -4268,11 +3945,7 @@
       ],
       "reason": "Contains monacolin K (chemically identical to lovastatin, a prescription statin drug). FDA considers RYR with significant monacolin K an unapproved new drug. EFSA 2025: no safe daily intake level for monacolins can be established.",
       "status": "banned",
-      "class_tags": [
-        "unapproved_drug",
-        "hepatotoxic",
-        "high_risk_ingredients"
-      ],
+      "class_tags": ["unapproved_drug", "hepatotoxic", "high_risk_ingredients"],
       "match_rules": {
         "exclusions": [],
         "case_sensitive": false,
@@ -4373,17 +4046,10 @@
     {
       "id": "BANNED_S23",
       "standard_name": "S-23",
-      "aliases": [
-        "s23",
-        "S23 SARM",
-        "S-23"
-      ],
+      "aliases": ["s23", "S23 SARM", "S-23"],
       "reason": "Unapproved SARM; potential male contraceptive; not approved for supplements",
       "status": "banned",
-      "class_tags": [
-        "sarms_prohibited",
-        "sarm"
-      ],
+      "class_tags": ["sarms_prohibited", "sarm"],
       "match_rules": {
         "exclusions": [],
         "case_sensitive": false,
@@ -4432,10 +4098,7 @@
           "title": "S-23 as male contraceptive",
           "evidence_grade": "B",
           "url": "https://doi.org/10.1210/endo.140.12.7163",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
+          "supports_claims": ["mechanism_of_harm", "clinical_outcomes"],
           "evidence_summary": "S-23 as male contraceptive"
         },
         {
@@ -4443,9 +4106,7 @@
           "title": "FDA Warning: October 31, 2017",
           "evidence_grade": "R",
           "date": "2017",
-          "supports_claims": [
-            "regulatory_action"
-          ],
+          "supports_claims": ["regulatory_action"],
           "evidence_summary": "FDA Warning: October 31, 2017"
         }
       ],
@@ -4495,9 +4156,7 @@
         "priority": 1,
         "match_type": "normalized",
         "confidence": "high",
-        "negative_match_terms": [
-          "sibutramine-free"
-        ]
+        "negative_match_terms": ["sibutramine-free"]
       },
       "legal_status_enum": "banned_federal",
       "clinical_risk_enum": "critical",
@@ -4524,10 +4183,7 @@
           "title": "SCOUT trial cardiovascular risks",
           "evidence_grade": "A",
           "url": "https://doi.org/10.1056/NEJMoa1003114",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
+          "supports_claims": ["mechanism_of_harm", "clinical_outcomes"],
           "evidence_summary": "SCOUT trial cardiovascular risks"
         },
         {
@@ -4535,16 +4191,12 @@
           "title": "FDA: October 2010 - Market withdrawal",
           "evidence_grade": "R",
           "date": "2010",
-          "supports_claims": [
-            "regulatory_action"
-          ],
+          "supports_claims": ["regulatory_action"],
           "evidence_summary": "FDA: October 2010 - Market withdrawal"
         }
       ],
       "source_category": "permanently_banned",
-      "supersedes_ids": [
-        "SPIKE_SIBUTRAMINE"
-      ],
+      "supersedes_ids": ["SPIKE_SIBUTRAMINE"],
       "entity_type": "ingredient",
       "review": {
         "status": "validated",
@@ -4567,17 +4219,10 @@
     {
       "id": "BANNED_SR9009",
       "standard_name": "SR9009",
-      "aliases": [
-        "stenabolic",
-        "sr-9009",
-        "SR9009"
-      ],
+      "aliases": ["stenabolic", "sr-9009", "SR9009"],
       "reason": "Unapproved synthetic compound; Rev-ErbA agonist; not approved for human use",
       "status": "banned",
-      "class_tags": [
-        "sarms_prohibited",
-        "sarm"
-      ],
+      "class_tags": ["sarms_prohibited", "sarm"],
       "match_rules": {
         "exclusions": [],
         "case_sensitive": false,
@@ -4611,10 +4256,7 @@
           "title": "Rev-ErbA agonist effects",
           "evidence_grade": "B",
           "url": "https://doi.org/10.1038/nature11704",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
+          "supports_claims": ["mechanism_of_harm", "clinical_outcomes"],
           "evidence_summary": "Rev-ErbA agonist effects"
         },
         {
@@ -4622,9 +4264,7 @@
           "title": "FDA Warning: October 31, 2017",
           "evidence_grade": "R",
           "date": "2017",
-          "supports_claims": [
-            "regulatory_action"
-          ],
+          "supports_claims": ["regulatory_action"],
           "evidence_summary": "FDA Warning: October 31, 2017"
         }
       ],
@@ -4652,17 +4292,10 @@
     {
       "id": "BANNED_SUNIFIRAM",
       "standard_name": "Sunifiram",
-      "aliases": [
-        "DM-235",
-        "1-benzoyl-4-propanoylpiperazine",
-        "sunifiram"
-      ],
+      "aliases": ["DM-235", "1-benzoyl-4-propanoylpiperazine", "sunifiram"],
       "reason": "Unapproved synthetic compound; not approved for human consumption",
       "status": "banned",
-      "class_tags": [
-        "nootropic_banned",
-        "nootropic"
-      ],
+      "class_tags": ["nootropic_banned", "nootropic"],
       "match_rules": {
         "exclusions": [],
         "case_sensitive": false,
@@ -4695,9 +4328,7 @@
           "title": "FDA: November 25, 2019 - Not a dietary ingredient",
           "evidence_grade": "R",
           "date": "2019",
-          "supports_claims": [
-            "regulatory_action"
-          ],
+          "supports_claims": ["regulatory_action"],
           "evidence_summary": "FDA: November 25, 2019 - Not a dietary ingredient"
         }
       ],
@@ -4739,19 +4370,14 @@
       ],
       "reason": "Opioid-like effects, addiction potential, overdose risk",
       "status": "banned",
-      "class_tags": [
-        "permanently_banned",
-        "nootropic"
-      ],
+      "class_tags": ["permanently_banned", "nootropic"],
       "match_rules": {
         "exclusions": [],
         "case_sensitive": false,
         "priority": 1,
         "match_type": "normalized",
         "confidence": "high",
-        "negative_match_terms": [
-          "tianeptine-free"
-        ]
+        "negative_match_terms": ["tianeptine-free"]
       },
       "legal_status_enum": "banned_federal",
       "clinical_risk_enum": "critical",
@@ -4943,10 +4569,7 @@
           "title": "Tianeptine exposures",
           "evidence_grade": "B",
           "url": "https://doi.org/10.15585/mmwr.mm7316a4",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
+          "supports_claims": ["mechanism_of_harm", "clinical_outcomes"],
           "evidence_summary": "Tianeptine exposures"
         },
         {
@@ -4954,9 +4577,7 @@
           "title": "FDA Warning: May 8, 2025",
           "evidence_grade": "R",
           "date": "2025",
-          "supports_claims": [
-            "regulatory_action"
-          ],
+          "supports_claims": ["regulatory_action"],
           "evidence_summary": "FDA Warning: May 8, 2025"
         },
         {
@@ -4964,9 +4585,7 @@
           "title": "FDA Warning: February 15, 2024",
           "evidence_grade": "R",
           "date": "2024",
-          "supports_claims": [
-            "regulatory_action"
-          ],
+          "supports_claims": ["regulatory_action"],
           "evidence_summary": "FDA Warning: February 15, 2024"
         }
       ],
@@ -4995,6 +4614,7 @@
       "id": "BANNED_YELLOW_OLEANDER_RECENT",
       "standard_name": "Yellow Oleander (Recent Recalls 2025)",
       "aliases": [
+        "yellow oleander",
         "cascabela thevetia",
         "thevetia peruviana",
         "lucky nut",
@@ -5005,10 +4625,7 @@
       ],
       "reason": "Severe cardiotoxicity, substituted in tejocote root supplements",
       "status": "banned",
-      "class_tags": [
-        "permanently_banned",
-        "botanical_toxic"
-      ],
+      "class_tags": ["permanently_banned", "botanical_toxic"],
       "match_rules": {
         "exclusions": [],
         "case_sensitive": false,
@@ -5042,20 +4659,16 @@
           "title": "Yellow oleander cardiotoxicity",
           "evidence_grade": "B",
           "url": "https://doi.org/10.1016/j.toxicon.2018.11.434",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
+          "supports_claims": ["mechanism_of_harm", "clinical_outcomes"],
           "evidence_summary": "Yellow oleander cardiotoxicity"
         },
         {
           "type": "fda_advisory",
           "title": "FDA Alert: November 3, 2025 - Final testing results and complete adulterated product list",
           "evidence_grade": "R",
+          "url": "https://www.fda.gov/food/alerts-advisories-safety-information/fda-expands-warning-consumers-about-toxic-yellow-oleander-purported-be-nuez-de-la-india-certain",
           "date": "2025",
-          "supports_claims": [
-            "regulatory_action"
-          ],
+          "supports_claims": ["regulatory_action"],
           "evidence_summary": "FDA Alert: November 3, 2025 - Final testing results and complete adulterated product list"
         },
         {
@@ -5097,10 +4710,7 @@
       ],
       "reason": "Unapproved SARM; synthetic anabolic compound; not approved for human use",
       "status": "banned",
-      "class_tags": [
-        "sarms_prohibited",
-        "sarm"
-      ],
+      "class_tags": ["sarms_prohibited", "sarm"],
       "match_rules": {
         "exclusions": [],
         "case_sensitive": false,
@@ -5133,9 +4743,7 @@
           "title": "FDA Warning: October 31, 2017",
           "evidence_grade": "R",
           "date": "2017",
-          "supports_claims": [
-            "regulatory_action"
-          ],
+          "supports_claims": ["regulatory_action"],
           "evidence_summary": "FDA Warning: October 31, 2017"
         }
       ],
@@ -5173,10 +4781,7 @@
       ],
       "reason": "Severe liver damage; linked to hepatitis and liver failure",
       "status": "high_risk",
-      "class_tags": [
-        "high_risk_ingredients",
-        "botanical"
-      ],
+      "class_tags": ["high_risk_ingredients", "botanical"],
       "match_rules": {
         "exclusions": [],
         "case_sensitive": false,
@@ -5210,10 +4815,7 @@
           "title": "Chaparral hepatotoxicity",
           "evidence_grade": "B",
           "url": "https://doi.org/10.1001/jama.1992.03490220089034",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
+          "supports_claims": ["mechanism_of_harm", "clinical_outcomes"],
           "evidence_summary": "Chaparral hepatotoxicity"
         },
         {
@@ -5221,9 +4823,7 @@
           "title": "FDA: 1992 - Consumer advisory",
           "evidence_grade": "R",
           "date": "1992",
-          "supports_claims": [
-            "regulatory_action"
-          ],
+          "supports_claims": ["regulatory_action"],
           "evidence_summary": "FDA: 1992 - Consumer advisory"
         }
       ],
@@ -5260,10 +4860,7 @@
       ],
       "reason": "Hepatotoxicity; liver damage; multiple cases of acute hepatitis",
       "status": "high_risk",
-      "class_tags": [
-        "high_risk_ingredients",
-        "botanical"
-      ],
+      "class_tags": ["high_risk_ingredients", "botanical"],
       "match_rules": {
         "exclusions": [],
         "case_sensitive": false,
@@ -5327,10 +4924,7 @@
           "title": "Germander hepatotoxicity",
           "evidence_grade": "B",
           "url": "https://doi.org/10.7326/0003-4819-117-2-129",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
+          "supports_claims": ["mechanism_of_harm", "clinical_outcomes"],
           "evidence_summary": "Germander hepatotoxicity"
         },
         {
@@ -5338,9 +4932,7 @@
           "title": "FDA: 1992 - Warning on weight loss products",
           "evidence_grade": "R",
           "date": "1992",
-          "supports_claims": [
-            "regulatory_action"
-          ],
+          "supports_claims": ["regulatory_action"],
           "evidence_summary": "FDA: 1992 - Warning on weight loss products"
         }
       ],
@@ -5378,10 +4970,7 @@
       ],
       "reason": "Severe hepatotoxicity; can cause liver failure and death even in small doses",
       "status": "high_risk",
-      "class_tags": [
-        "high_risk_ingredients",
-        "botanical"
-      ],
+      "class_tags": ["high_risk_ingredients", "botanical"],
       "match_rules": {
         "exclusions": [],
         "case_sensitive": false,
@@ -5430,19 +5019,14 @@
           "title": "Pennyroyal oil fatality",
           "evidence_grade": "B",
           "url": "https://doi.org/10.1016/S0140-6736(96)01471-5",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
+          "supports_claims": ["mechanism_of_harm", "clinical_outcomes"],
           "evidence_summary": "Pennyroyal oil fatality"
         },
         {
           "type": "fda_advisory",
           "title": "FDA: Ongoing warnings",
           "evidence_grade": "R",
-          "supports_claims": [
-            "regulatory_action"
-          ],
+          "supports_claims": ["regulatory_action"],
           "evidence_summary": "FDA: Ongoing warnings"
         }
       ],
@@ -5479,10 +5063,7 @@
       ],
       "reason": "Carcinogenic; linked to skin, lung, and bladder cancer. FDA concern level varies by product type",
       "status": "high_risk",
-      "class_tags": [
-        "heavy_metal_limits",
-        "heavy_metal"
-      ],
+      "class_tags": ["heavy_metal_limits", "heavy_metal"],
       "match_rules": {
         "exclusions": [],
         "case_sensitive": false,
@@ -5568,10 +5149,7 @@
           "title": "Arsenic in rice",
           "evidence_grade": "B",
           "url": "https://doi.org/10.1289/ehp.1104494",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
+          "supports_claims": ["mechanism_of_harm", "clinical_outcomes"],
           "evidence_summary": "Arsenic in rice"
         },
         {
@@ -5579,9 +5157,7 @@
           "title": "FDA: Zaarah Herbals recall - March 13, 2025",
           "evidence_grade": "R",
           "date": "2025",
-          "supports_claims": [
-            "regulatory_action"
-          ],
+          "supports_claims": ["regulatory_action"],
           "evidence_summary": "FDA: Zaarah Herbals recall - March 13, 2025"
         }
       ],
@@ -5622,10 +5198,7 @@
       ],
       "reason": "Kidney damage; bone loss. California Prop 65 limit: 4.1 mcg/day",
       "status": "high_risk",
-      "class_tags": [
-        "heavy_metal_limits",
-        "heavy_metal"
-      ],
+      "class_tags": ["heavy_metal_limits", "heavy_metal"],
       "match_rules": {
         "exclusions": [],
         "case_sensitive": false,
@@ -5696,10 +5269,7 @@
           "title": "Cadmium in chocolate",
           "evidence_grade": "B",
           "url": "https://doi.org/10.1016/j.fct.2013.12.005",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
+          "supports_claims": ["mechanism_of_harm", "clinical_outcomes"],
           "evidence_summary": "Cadmium in chocolate"
         }
       ],
@@ -5741,10 +5311,7 @@
       ],
       "reason": "Neurotoxic; harmful to brain development and cognitive function. Prop 65 limit: 0.5 mcg/day",
       "status": "high_risk",
-      "class_tags": [
-        "heavy_metal_limits",
-        "heavy_metal"
-      ],
+      "class_tags": ["heavy_metal_limits", "heavy_metal"],
       "match_rules": {
         "exclusions": [],
         "case_sensitive": false,
@@ -5808,10 +5375,7 @@
           "title": "Lancet: Global burden of lead exposure",
           "evidence_grade": "B",
           "url": "https://doi.org/10.1016/S0140-6736(18)31310-2",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
+          "supports_claims": ["mechanism_of_harm", "clinical_outcomes"],
           "evidence_summary": "Lancet: Global burden of lead exposure"
         },
         {
@@ -5860,10 +5424,7 @@
       ],
       "reason": "Neurotoxic; harmful to developing fetuses and children. EPA reference dose: 0.1 mcg/kg/day",
       "status": "high_risk",
-      "class_tags": [
-        "heavy_metal_limits",
-        "heavy_metal"
-      ],
+      "class_tags": ["heavy_metal_limits", "heavy_metal"],
       "match_rules": {
         "exclusions": [],
         "case_sensitive": false,
@@ -5927,10 +5488,7 @@
           "title": "Mercury neurotoxicity",
           "evidence_grade": "B",
           "url": "https://doi.org/10.1289/ehp.1104494",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
+          "supports_claims": ["mechanism_of_harm", "clinical_outcomes"],
           "evidence_summary": "Mercury neurotoxicity"
         },
         {
@@ -5978,10 +5536,7 @@
       ],
       "reason": "Unapproved research chemical, neurotoxicity concerns",
       "status": "banned",
-      "class_tags": [
-        "nootropic_banned",
-        "nootropic"
-      ],
+      "class_tags": ["nootropic_banned", "nootropic"],
       "match_rules": {
         "exclusions": [],
         "case_sensitive": false,
@@ -6014,9 +5569,7 @@
           "title": "9-MeBC cognitive effects and dopamine modulation",
           "evidence_grade": "B",
           "date": "2012",
-          "supports_claims": [
-            "mechanism_of_harm"
-          ],
+          "supports_claims": ["mechanism_of_harm"],
           "evidence_summary": "PubMed 22380576 - 9-methyl-beta-carboline-induced cognitive enhancement is associated with elevated hippocampal dopamine levels"
         },
         {
@@ -6025,10 +5578,7 @@
           "title": "Beta-carboline neurotoxicity",
           "evidence_grade": "B",
           "url": "https://doi.org/10.1016/j.neuropharm.2015.08.025",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
+          "supports_claims": ["mechanism_of_harm", "clinical_outcomes"],
           "evidence_summary": "Beta-carboline neurotoxicity"
         }
       ],
@@ -6056,18 +5606,10 @@
     {
       "id": "NOOTROPIC_ADRAFINIL",
       "standard_name": "Adrafinil",
-      "aliases": [
-        "olmifon",
-        "noofon",
-        "CRL-40028",
-        "adrafinil"
-      ],
+      "aliases": ["olmifon", "noofon", "CRL-40028", "adrafinil"],
       "reason": "Unapproved drug, WADA prohibited",
       "status": "banned",
-      "class_tags": [
-        "nootropic_banned",
-        "nootropic"
-      ],
+      "class_tags": ["nootropic_banned", "nootropic"],
       "match_rules": {
         "exclusions": [],
         "case_sensitive": false,
@@ -6131,10 +5673,7 @@
           "title": "Adrafinil pharmacology",
           "evidence_grade": "B",
           "url": "https://doi.org/10.1016/S0149-2918(99)80048-1",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
+          "supports_claims": ["mechanism_of_harm", "clinical_outcomes"],
           "evidence_summary": "Adrafinil pharmacology"
         },
         {
@@ -6177,10 +5716,7 @@
       ],
       "reason": "Unapproved drug",
       "status": "banned",
-      "class_tags": [
-        "nootropic_banned",
-        "nootropic"
-      ],
+      "class_tags": ["nootropic_banned", "nootropic"],
       "match_rules": {
         "exclusions": [],
         "case_sensitive": false,
@@ -6258,9 +5794,7 @@
           "title": "FDA: November 25, 2019 - Not a dietary ingredient",
           "evidence_grade": "R",
           "date": "2019",
-          "supports_claims": [
-            "regulatory_action"
-          ],
+          "supports_claims": ["regulatory_action"],
           "evidence_summary": "FDA: November 25, 2019 - Not a dietary ingredient"
         },
         {
@@ -6269,10 +5803,7 @@
           "title": "Aniracetam pharmacology",
           "evidence_grade": "B",
           "url": "https://doi.org/10.1007/s002130050622",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
+          "supports_claims": ["mechanism_of_harm", "clinical_outcomes"],
           "evidence_summary": "Aniracetam pharmacology"
         }
       ],
@@ -6308,10 +5839,7 @@
       ],
       "reason": "Unapproved drug, stimulant properties",
       "status": "banned",
-      "class_tags": [
-        "nootropic_banned",
-        "nootropic"
-      ],
+      "class_tags": ["nootropic_banned", "nootropic"],
       "match_rules": {
         "exclusions": [],
         "case_sensitive": false,
@@ -6359,10 +5887,7 @@
           "title": "CFSRE Monograph - Bromantane pharmacology and detection",
           "evidence_grade": "B",
           "date": null,
-          "supports_claims": [
-            "mechanism_of_harm",
-            "regulatory_action"
-          ],
+          "supports_claims": ["mechanism_of_harm", "regulatory_action"],
           "evidence_summary": "Center for Forensic Science Research and Education monograph on bromantane"
         },
         {
@@ -6371,10 +5896,7 @@
           "title": "Bromantane effects",
           "evidence_grade": "B",
           "url": "https://doi.org/10.1007/s11055-013-9858-1",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
+          "supports_claims": ["mechanism_of_harm", "clinical_outcomes"],
           "evidence_summary": "Bromantane effects"
         }
       ],
@@ -6413,10 +5935,7 @@
       ],
       "reason": "Unapproved drug, stimulant properties",
       "status": "banned",
-      "class_tags": [
-        "nootropic_banned",
-        "nootropic"
-      ],
+      "class_tags": ["nootropic_banned", "nootropic"],
       "match_rules": {
         "exclusions": [],
         "case_sensitive": false,
@@ -6449,9 +5968,7 @@
           "title": "FDA: August 2025 - Warning letters",
           "evidence_grade": "R",
           "date": "2025",
-          "supports_claims": [
-            "regulatory_action"
-          ],
+          "supports_claims": ["regulatory_action"],
           "evidence_summary": "FDA: August 2025 - Warning letters"
         },
         {
@@ -6460,10 +5977,7 @@
           "title": "Flmodafinil pharmacology",
           "evidence_grade": "B",
           "url": "https://doi.org/10.1021/jm00346a004",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
+          "supports_claims": ["mechanism_of_harm", "clinical_outcomes"],
           "evidence_summary": "Flmodafinil pharmacology"
         }
       ],
@@ -6491,18 +6005,10 @@
     {
       "id": "NOOTROPIC_MODAFINIL",
       "standard_name": "Modafinil",
-      "aliases": [
-        "provigil",
-        "modalert",
-        "modvigil",
-        "modafinil"
-      ],
+      "aliases": ["provigil", "modalert", "modvigil", "modafinil"],
       "reason": "Prescription drug, WADA prohibited",
       "status": "banned",
-      "class_tags": [
-        "nootropic_banned",
-        "nootropic"
-      ],
+      "class_tags": ["nootropic_banned", "nootropic"],
       "match_rules": {
         "exclusions": [],
         "case_sensitive": false,
@@ -6551,10 +6057,7 @@
           "title": "Modafinil adverse effects",
           "evidence_grade": "B",
           "url": "https://doi.org/10.1001/jama.2017.3085",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
+          "supports_claims": ["mechanism_of_harm", "clinical_outcomes"],
           "evidence_summary": "Modafinil adverse effects"
         },
         {
@@ -6562,9 +6065,7 @@
           "title": "FDA: December 24, 1998 - Provigil approval",
           "evidence_grade": "R",
           "date": "1998",
-          "supports_claims": [
-            "regulatory_action"
-          ],
+          "supports_claims": ["regulatory_action"],
           "evidence_summary": "FDA: December 24, 1998 - Provigil approval"
         }
       ],
@@ -6600,10 +6101,7 @@
       ],
       "reason": "Unapproved drug",
       "status": "banned",
-      "class_tags": [
-        "nootropic_banned",
-        "nootropic"
-      ],
+      "class_tags": ["nootropic_banned", "nootropic"],
       "match_rules": {
         "exclusions": [],
         "case_sensitive": false,
@@ -6651,9 +6149,7 @@
           "title": "FDA: November 25, 2019 - Not a dietary ingredient",
           "evidence_grade": "R",
           "date": "2019",
-          "supports_claims": [
-            "regulatory_action"
-          ],
+          "supports_claims": ["regulatory_action"],
           "evidence_summary": "FDA: November 25, 2019 - Not a dietary ingredient"
         },
         {
@@ -6662,10 +6158,7 @@
           "title": "Noopept effects",
           "evidence_grade": "B",
           "url": "https://doi.org/10.1007/s11055-008-0025-6",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
+          "supports_claims": ["mechanism_of_harm", "clinical_outcomes"],
           "evidence_summary": "Noopept effects"
         }
       ],
@@ -6701,10 +6194,7 @@
       ],
       "reason": "Unapproved drug, WADA prohibited stimulant",
       "status": "banned",
-      "class_tags": [
-        "nootropic_banned",
-        "nootropic"
-      ],
+      "class_tags": ["nootropic_banned", "nootropic"],
       "match_rules": {
         "exclusions": [],
         "case_sensitive": false,
@@ -6775,10 +6265,7 @@
           "title": "Phenylpiracetam effects",
           "evidence_grade": "B",
           "url": "https://doi.org/10.1007/s11055-007-0078-x",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
+          "supports_claims": ["mechanism_of_harm", "clinical_outcomes"],
           "evidence_summary": "Phenylpiracetam effects"
         }
       ],
@@ -6814,10 +6301,7 @@
       ],
       "reason": "Unapproved drug, not dietary ingredient",
       "status": "banned",
-      "class_tags": [
-        "nootropic_banned",
-        "nootropic"
-      ],
+      "class_tags": ["nootropic_banned", "nootropic"],
       "match_rules": {
         "exclusions": [],
         "case_sensitive": false,
@@ -6865,9 +6349,7 @@
           "title": "FDA: November 25, 2019 - Not a dietary ingredient determination",
           "evidence_grade": "R",
           "date": "2019",
-          "supports_claims": [
-            "regulatory_action"
-          ],
+          "supports_claims": ["regulatory_action"],
           "evidence_summary": "FDA: November 25, 2019 - Not a dietary ingredient determination"
         },
         {
@@ -6876,10 +6358,7 @@
           "title": "Piracetam review",
           "evidence_grade": "B",
           "url": "https://doi.org/10.1002/hup.2656",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
+          "supports_claims": ["mechanism_of_harm", "clinical_outcomes"],
           "evidence_summary": "Piracetam review"
         }
       ],
@@ -6907,18 +6386,10 @@
     {
       "id": "NOOTROPIC_SULBUTIAMINE",
       "standard_name": "Sulbutiamine",
-      "aliases": [
-        "arcalion",
-        "bisibuthiamine",
-        "sulbutiamine",
-        "enerion"
-      ],
+      "aliases": ["arcalion", "bisibuthiamine", "sulbutiamine", "enerion"],
       "reason": "Not dietary ingredient, unapproved drug",
       "status": "banned",
-      "class_tags": [
-        "nootropic_banned",
-        "nootropic"
-      ],
+      "class_tags": ["nootropic_banned", "nootropic"],
       "match_rules": {
         "exclusions": [],
         "case_sensitive": false,
@@ -6981,9 +6452,7 @@
           "title": "FDA Warning Letter: April 15, 2025",
           "evidence_grade": "R",
           "date": "2025",
-          "supports_claims": [
-            "regulatory_action"
-          ],
+          "supports_claims": ["regulatory_action"],
           "evidence_summary": "FDA Warning Letter: April 15, 2025"
         },
         {
@@ -6992,10 +6461,7 @@
           "title": "Sulbutiamine pharmacology",
           "evidence_grade": "B",
           "url": "https://doi.org/10.1007/BF00426588",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
+          "supports_claims": ["mechanism_of_harm", "clinical_outcomes"],
           "evidence_summary": "Sulbutiamine pharmacology"
         }
       ],
@@ -7031,10 +6497,7 @@
       ],
       "reason": "Unapproved drug, birth defect risk",
       "status": "banned",
-      "class_tags": [
-        "nootropic_banned",
-        "nootropic"
-      ],
+      "class_tags": ["nootropic_banned", "nootropic"],
       "match_rules": {
         "exclusions": [],
         "case_sensitive": false,
@@ -7112,9 +6575,7 @@
           "title": "FDA: October 11, 2019 - Not a dietary ingredient determination",
           "evidence_grade": "R",
           "date": "2019",
-          "supports_claims": [
-            "regulatory_action"
-          ],
+          "supports_claims": ["regulatory_action"],
           "evidence_summary": "FDA: October 11, 2019 - Not a dietary ingredient determination"
         },
         {
@@ -7123,10 +6584,7 @@
           "title": "Vinpocetine reproductive toxicity",
           "evidence_grade": "B",
           "url": "https://doi.org/10.1016/j.reprotox.2008.09.007",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
+          "supports_claims": ["mechanism_of_harm", "clinical_outcomes"],
           "evidence_summary": "Vinpocetine reproductive toxicity"
         }
       ],
@@ -7163,10 +6621,7 @@
       ],
       "reason": "Unapproved research peptide",
       "status": "banned",
-      "class_tags": [
-        "novel_peptides",
-        "research_chemical_peptide"
-      ],
+      "class_tags": ["novel_peptides", "research_chemical_peptide"],
       "match_rules": {
         "exclusions": [],
         "case_sensitive": false,
@@ -7220,9 +6675,7 @@
           "type": "fda_advisory",
           "title": "FDA: Warning letters - BPC-157",
           "evidence_grade": "R",
-          "supports_claims": [
-            "regulatory_action"
-          ],
+          "supports_claims": ["regulatory_action"],
           "evidence_summary": "FDA: Warning letters - BPC-157"
         }
       ],
@@ -7262,10 +6715,7 @@
       ],
       "reason": "Unapproved drug with serious safety concerns including melanoma risk",
       "status": "banned",
-      "class_tags": [
-        "novel_peptides",
-        "research_chemical_peptide"
-      ],
+      "class_tags": ["novel_peptides", "research_chemical_peptide"],
       "match_rules": {
         "exclusions": [],
         "case_sensitive": false,
@@ -7312,9 +6762,7 @@
           "type": "fda_advisory",
           "title": "FDA Warning: Melanotan II - Unapproved tanning drug",
           "evidence_grade": "R",
-          "supports_claims": [
-            "regulatory_action"
-          ],
+          "supports_claims": ["regulatory_action"],
           "evidence_summary": "FDA Warning: Melanotan II - Unapproved tanning drug"
         },
         {
@@ -7323,10 +6771,7 @@
           "title": "Melanotan and melanoma risk",
           "evidence_grade": "B",
           "url": "https://doi.org/10.1111/bjd.13316",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
+          "supports_claims": ["mechanism_of_harm", "clinical_outcomes"],
           "evidence_summary": "Melanotan and melanoma risk"
         },
         {
@@ -7377,10 +6822,7 @@
       ],
       "reason": "Unapproved research peptide",
       "status": "banned",
-      "class_tags": [
-        "novel_peptides",
-        "research_chemical_peptide"
-      ],
+      "class_tags": ["novel_peptides", "research_chemical_peptide"],
       "match_rules": {
         "exclusions": [],
         "case_sensitive": false,
@@ -7434,9 +6876,7 @@
           "type": "fda_advisory",
           "title": "FDA: Warning letters - TB-500",
           "evidence_grade": "R",
-          "supports_claims": [
-            "regulatory_action"
-          ],
+          "supports_claims": ["regulatory_action"],
           "evidence_summary": "FDA: Warning letters - TB-500"
         }
       ],
@@ -7473,10 +6913,7 @@
       ],
       "reason": "Hidden prescription SSRI",
       "status": "banned",
-      "class_tags": [
-        "pharmaceutical_adulterants",
-        "drug_pharmaceutical"
-      ],
+      "class_tags": ["pharmaceutical_adulterants", "drug_pharmaceutical"],
       "match_rules": {
         "exclusions": [],
         "case_sensitive": false,
@@ -7508,9 +6945,7 @@
           "type": "fda_advisory",
           "title": "FDA: Tainted Sexual Enhancement Products",
           "evidence_grade": "R",
-          "supports_claims": [
-            "regulatory_action"
-          ],
+          "supports_claims": ["regulatory_action"],
           "evidence_summary": "FDA: Tainted Sexual Enhancement Products"
         }
       ],
@@ -7547,10 +6982,7 @@
       ],
       "reason": "Withdrawn drug (cancer risk)",
       "status": "banned",
-      "class_tags": [
-        "pharmaceutical_adulterants",
-        "drug_pharmaceutical"
-      ],
+      "class_tags": ["pharmaceutical_adulterants", "drug_pharmaceutical"],
       "match_rules": {
         "exclusions": [],
         "case_sensitive": false,
@@ -7583,9 +7015,7 @@
           "title": "FDA: Lorcaserin withdrawal request - February 13, 2020",
           "evidence_grade": "R",
           "date": "2020",
-          "supports_claims": [
-            "regulatory_action"
-          ],
+          "supports_claims": ["regulatory_action"],
           "evidence_summary": "FDA: Lorcaserin withdrawal request - February 13, 2020"
         },
         {
@@ -7594,10 +7024,7 @@
           "title": "CAMELLIA-TIMI 61 trial showing cancer risk",
           "evidence_grade": "A",
           "url": "https://doi.org/10.1056/NEJMoa1908681",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
+          "supports_claims": ["mechanism_of_harm", "clinical_outcomes"],
           "evidence_summary": "CAMELLIA-TIMI 61 trial showing cancer risk"
         }
       ],
@@ -7634,10 +7061,7 @@
       ],
       "reason": "Designer variants of banned substance",
       "status": "banned",
-      "class_tags": [
-        "research_chemicals",
-        "research_chemical"
-      ],
+      "class_tags": ["research_chemicals", "research_chemical"],
       "match_rules": {
         "exclusions": [],
         "case_sensitive": false,
@@ -7693,10 +7117,7 @@
           "title": "Cardarine carcinogenicity",
           "evidence_grade": "B",
           "url": "https://doi.org/10.1093/toxsci/kfm226",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
+          "supports_claims": ["mechanism_of_harm", "clinical_outcomes"],
           "evidence_summary": "Cardarine carcinogenicity"
         }
       ],
@@ -7724,17 +7145,10 @@
     {
       "id": "RECALLED_GE_LABS_YKARINE",
       "standard_name": "GE Labs Ykarine",
-      "aliases": [
-        "ge labs ykarine",
-        "ykarine",
-        "ge labs"
-      ],
+      "aliases": ["ge labs ykarine", "ykarine", "ge labs"],
       "reason": "Contains undeclared trendione (anabolic steroid); linked to consumer stroke",
       "status": "banned",
-      "class_tags": [
-        "recalled_supplement_brands",
-        "supplement_bodybuilding"
-      ],
+      "class_tags": ["recalled_supplement_brands", "supplement_bodybuilding"],
       "match_rules": {
         "exclusions": [],
         "case_sensitive": false,
@@ -7767,9 +7181,7 @@
           "title": "FDA Alert: December 2, 2025 - GE Labs Ykarine contains hidden drug",
           "evidence_grade": "R",
           "date": "2025",
-          "supports_claims": [
-            "regulatory_action"
-          ],
+          "supports_claims": ["regulatory_action"],
           "evidence_summary": "FDA Alert: December 2, 2025 - GE Labs Ykarine contains hidden drug",
           "fda_recall_url": "https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/warning-letters/musclepower-enterprise-ltd-dba-monster-king-and-ge-labs-719339-12122025"
         },
@@ -7805,16 +7217,10 @@
     {
       "id": "RECALLED_GOLD_STAR_DISTRIBUTION",
       "standard_name": "Gold Star Distribution Products",
-      "aliases": [
-        "gold star distribution",
-        "gold star distribution products"
-      ],
+      "aliases": ["gold star distribution", "gold star distribution products"],
       "reason": "Salmonella contamination, rodent/avian contamination, insanitary storage conditions",
       "status": "recalled",
-      "class_tags": [
-        "recalled_supplement_brands",
-        "supplement_general"
-      ],
+      "class_tags": ["recalled_supplement_brands", "supplement_general"],
       "match_rules": {
         "exclusions": [],
         "case_sensitive": false,
@@ -7847,9 +7253,7 @@
           "title": "FDA Recall: Gold Star Distribution - December 26, 2025",
           "evidence_grade": "R",
           "date": "2025-12-26",
-          "supports_claims": [
-            "regulatory_action"
-          ],
+          "supports_claims": ["regulatory_action"],
           "evidence_summary": "FDA facility-wide recall due to multiple contamination hazards",
           "fda_recall_url": "https://www.fda.gov/media/190382/download"
         }
@@ -7929,9 +7333,7 @@
           "title": "FDA Recall: Green Lumber - August 29, 2025",
           "evidence_grade": "R",
           "date": "2025-08-29",
-          "supports_claims": [
-            "regulatory_action"
-          ],
+          "supports_claims": ["regulatory_action"],
           "evidence_summary": "FDA recall due to undeclared prescription PDE5 inhibitor",
           "fda_recall_url": "https://www.fda.gov/safety/recalls-market-withdrawals-safety-alerts/gl-holdings-issues-voluntary-worldwide-recall-green-lumber-products-due-presence-undeclared"
         }
@@ -7967,17 +7369,10 @@
     {
       "id": "RECALLED_HYDROXYCUT",
       "standard_name": "Hydroxycut (Multiple Formulations)",
-      "aliases": [
-        "hydroxycut",
-        "hydroxycut hardcore",
-        "hydroxycut max"
-      ],
+      "aliases": ["hydroxycut", "hydroxycut hardcore", "hydroxycut max"],
       "reason": "Linked to liver damage, jaundice, and one death. Multiple recalls.",
       "status": "recalled",
-      "class_tags": [
-        "recalled_supplement_brands",
-        "supplement_weight_loss"
-      ],
+      "class_tags": ["recalled_supplement_brands", "supplement_weight_loss"],
       "match_rules": {
         "exclusions": [],
         "case_sensitive": false,
@@ -8025,9 +7420,7 @@
           "title": "FDA: Hydroxycut recall - May 1, 2009",
           "evidence_grade": "R",
           "date": "2009",
-          "supports_claims": [
-            "regulatory_action"
-          ],
+          "supports_claims": ["regulatory_action"],
           "evidence_summary": "FDA: Hydroxycut recall - May 1, 2009",
           "fda_recall_url": "https://www.fda.gov/consumers/consumer-updates/fda-101-dietary-supplements"
         },
@@ -8037,10 +7430,7 @@
           "title": "Hydroxycut hepatotoxicity",
           "evidence_grade": "B",
           "url": "https://doi.org/10.1002/hep.23393",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
+          "supports_claims": ["mechanism_of_harm", "clinical_outcomes"],
           "evidence_summary": "Hydroxycut hepatotoxicity"
         }
       ],
@@ -8075,17 +7465,10 @@
     {
       "id": "RECALLED_JACK3D",
       "standard_name": "Jack3d",
-      "aliases": [
-        "jack3d",
-        "usplabs jack3d",
-        "jack3d micro"
-      ],
+      "aliases": ["jack3d", "usplabs jack3d", "jack3d micro"],
       "reason": "Contained DMAA; linked to heart attacks and deaths in military personnel",
       "status": "recalled",
-      "class_tags": [
-        "recalled_supplement_brands",
-        "supplement_pre_workout"
-      ],
+      "class_tags": ["recalled_supplement_brands", "supplement_pre_workout"],
       "match_rules": {
         "exclusions": [],
         "case_sensitive": false,
@@ -8133,9 +7516,7 @@
           "title": "FDA: DMAA in Jack3d - 2012",
           "evidence_grade": "R",
           "date": "2012",
-          "supports_claims": [
-            "regulatory_action"
-          ],
+          "supports_claims": ["regulatory_action"],
           "evidence_summary": "FDA: DMAA in Jack3d - 2012",
           "fda_recall_url": "https://www.fda.gov/food/information-select-dietary-supplement-ingredients-and-other-substances/dmaa-products-marketed-dietary-supplements"
         },
@@ -8145,10 +7526,7 @@
           "title": "DMAA cardiovascular risks",
           "evidence_grade": "B",
           "url": "https://doi.org/10.1016/j.drugalcdep.2015.01.011",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
+          "supports_claims": ["mechanism_of_harm", "clinical_outcomes"],
           "evidence_summary": "DMAA cardiovascular risks"
         }
       ],
@@ -8191,10 +7569,7 @@
       ],
       "reason": "Potential Salmonella contamination",
       "status": "recalled",
-      "class_tags": [
-        "recalled_supplement_brands",
-        "supplement_general"
-      ],
+      "class_tags": ["recalled_supplement_brands", "supplement_general"],
       "match_rules": {
         "exclusions": [],
         "case_sensitive": false,
@@ -8235,9 +7610,7 @@
           "title": "FDA Recall: Live it Up Super Greens - January 20, 2026 - Salmonella",
           "evidence_grade": "R",
           "date": "2026-01-20",
-          "supports_claims": [
-            "regulatory_action"
-          ],
+          "supports_claims": ["regulatory_action"],
           "evidence_summary": "FDA recall due to potential Salmonella contamination",
           "fda_recall_url": "https://www.fda.gov/safety/recalls-market-withdrawals-safety-alerts/superfoods-inc-dba-live-it-recalls-live-it-super-greens-because-possible-health-risk"
         }
@@ -8317,9 +7690,7 @@
           "title": "FDA Recall: Modern Warrior - January 9, 2026 - Multiple undeclared drugs",
           "evidence_grade": "R",
           "date": "2026-01-09",
-          "supports_claims": [
-            "regulatory_action"
-          ],
+          "supports_claims": ["regulatory_action"],
           "evidence_summary": "FDA recall due to undeclared 1,4-DMAA, aniracetam, and tianeptine in supplement",
           "fda_recall_url": "https://www.fda.gov/safety/recalls-market-withdrawals-safety-alerts/modern-warrior-recalls-modern-warrior-ready-dietary-supplement-due-undeclared-14-dmaa-and-aniracetam"
         }
@@ -8355,11 +7726,7 @@
     {
       "id": "RECALLED_MR7_SUPER_700000",
       "standard_name": "MR.7 SUPER 700000",
-      "aliases": [
-        "mr.7 super 700000",
-        "mr7 super 700000",
-        "stuffbynainax mr7"
-      ],
+      "aliases": ["mr.7 super 700000", "mr7 super 700000", "stuffbynainax mr7"],
       "reason": "Contains undeclared sildenafil and tadalafil (prescription erectile dysfunction drugs)",
       "status": "recalled",
       "class_tags": [
@@ -8413,9 +7780,7 @@
           "title": "FDA Public Notification: November 21, 2025 - MR.7 SUPER 700000 hidden drugs",
           "evidence_grade": "R",
           "date": "2025",
-          "supports_claims": [
-            "regulatory_action"
-          ],
+          "supports_claims": ["regulatory_action"],
           "evidence_summary": "FDA Public Notification: November 21, 2025 - MR.7 SUPER 700000 hidden drugs",
           "fda_recall_url": "https://www.fda.gov/safety/recalls-market-withdrawals-safety-alerts/stuffbynainax-llc-issues-voluntary-nationwide-recall-mr7-super-700000-dietary-supplement-due"
         },
@@ -8423,9 +7788,7 @@
           "type": "fda_advisory",
           "title": "FDA Recall: StuffbyNainax LLC voluntary recall",
           "evidence_grade": "R",
-          "supports_claims": [
-            "regulatory_action"
-          ],
+          "supports_claims": ["regulatory_action"],
           "evidence_summary": "FDA Recall: StuffbyNainax LLC voluntary recall"
         }
       ],
@@ -8460,17 +7823,10 @@
     {
       "id": "RECALLED_OXYELITE_PRO",
       "standard_name": "OxyElite Pro",
-      "aliases": [
-        "oxyelite pro",
-        "oxyelite",
-        "usplabs oxyelite pro"
-      ],
+      "aliases": ["oxyelite pro", "oxyelite", "usplabs oxyelite pro"],
       "reason": "Acute liver failure; dozens of hospitalizations; one death; one liver transplant",
       "status": "recalled",
-      "class_tags": [
-        "recalled_supplement_brands",
-        "supplement_weight_loss"
-      ],
+      "class_tags": ["recalled_supplement_brands", "supplement_weight_loss"],
       "match_rules": {
         "exclusions": [],
         "case_sensitive": false,
@@ -8518,9 +7874,7 @@
           "title": "FDA: OxyElite Pro recall - November 8, 2013",
           "evidence_grade": "R",
           "date": "2013",
-          "supports_claims": [
-            "regulatory_action"
-          ],
+          "supports_claims": ["regulatory_action"],
           "evidence_summary": "FDA: OxyElite Pro recall - November 8, 2013",
           "fda_recall_url": "https://www.fda.gov/food/information-select-dietary-supplement-ingredients-and-other-substances/dmaa-products-marketed-dietary-supplements"
         },
@@ -8530,10 +7884,7 @@
           "title": "Hawaii hepatitis outbreak",
           "evidence_grade": "B",
           "url": "https://doi.org/10.1001/jama.2013.281632",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
+          "supports_claims": ["mechanism_of_harm", "clinical_outcomes"],
           "evidence_summary": "Hawaii hepatitis outbreak"
         },
         {
@@ -8575,28 +7926,17 @@
     {
       "id": "RECALLED_PURITY_PRODUCTS_MY_BLADDER",
       "standard_name": "Purity Products My Bladder",
-      "aliases": [
-        "my bladder",
-        "purity products my bladder",
-        "mybladder"
-      ],
+      "aliases": ["my bladder", "purity products my bladder", "mybladder"],
       "reason": "E. coli O7:K1 contamination",
       "status": "recalled",
-      "class_tags": [
-        "recalled_supplement_brands",
-        "supplement_bladder"
-      ],
+      "class_tags": ["recalled_supplement_brands", "supplement_bladder"],
       "match_rules": {
         "exclusions": [],
         "case_sensitive": false,
         "priority": 1,
         "match_type": "normalized",
         "confidence": "high",
-        "negative_match_terms": [
-          "azo",
-          "uqora",
-          "harmony"
-        ]
+        "negative_match_terms": ["azo", "uqora", "harmony"]
       },
       "legal_status_enum": "contaminant_risk",
       "clinical_risk_enum": "critical",
@@ -8622,9 +7962,7 @@
           "title": "FDA Recall: Purity Products My Bladder - October 28, 2025",
           "evidence_grade": "R",
           "date": "2025-10-28",
-          "supports_claims": [
-            "regulatory_action"
-          ],
+          "supports_claims": ["regulatory_action"],
           "evidence_summary": "FDA recall due to pathogenic E. coli contamination",
           "fda_recall_url": "https://www.fda.gov/safety/recalls-market-withdrawals-safety-alerts/purity-products-announces-recall-dietary-supplement-my-bladder-because-possible-health-risk"
         }
@@ -8669,10 +8007,7 @@
       ],
       "reason": "Yeast/mold and Achromobacter contamination",
       "status": "recalled",
-      "class_tags": [
-        "recalled_supplement_brands",
-        "otc_nasal"
-      ],
+      "class_tags": ["recalled_supplement_brands", "otc_nasal"],
       "match_rules": {
         "exclusions": [],
         "case_sensitive": false,
@@ -8711,9 +8046,7 @@
           "title": "FDA Recall: ReBoost/ClearLife Nasal Spray - December 2025",
           "evidence_grade": "R",
           "date": "2025-12-10",
-          "supports_claims": [
-            "regulatory_action"
-          ],
+          "supports_claims": ["regulatory_action"],
           "evidence_summary": "FDA recall due to microbial contamination in nasal spray products",
           "fda_recall_url": "https://www.fda.gov/safety/recalls-market-withdrawals-safety-alerts"
         }
@@ -8749,17 +8082,10 @@
     {
       "id": "RECALLED_RHEUMACARE_CAPSULES",
       "standard_name": "Rheumacare Capsules",
-      "aliases": [
-        "rheumacare",
-        "rheumacare capsules",
-        "navafresh rheumacare"
-      ],
+      "aliases": ["rheumacare", "rheumacare capsules", "navafresh rheumacare"],
       "reason": "Extreme lead contamination - up to 11,100 ppm lead",
       "status": "recalled",
-      "class_tags": [
-        "recalled_supplement_brands",
-        "supplement_joint"
-      ],
+      "class_tags": ["recalled_supplement_brands", "supplement_joint"],
       "match_rules": {
         "exclusions": [],
         "case_sensitive": false,
@@ -8807,9 +8133,7 @@
           "title": "FDA Recall: December 25-29, 2025 - Rheumacare Capsules lead contamination",
           "evidence_grade": "R",
           "date": "2025",
-          "supports_claims": [
-            "regulatory_action"
-          ],
+          "supports_claims": ["regulatory_action"],
           "evidence_summary": "FDA Recall: December 25-29, 2025 - Rheumacare Capsules lead contamination",
           "fda_recall_url": "https://www.fda.gov/safety/recalls-market-withdrawals-safety-alerts/handelnine-global-limited-dba-navafresh-issues-nationwide-recall-rheumacare-capsules-virgo-uap"
         }
@@ -8845,11 +8169,7 @@
     {
       "id": "RECALLED_SILINTAN",
       "standard_name": "Silintan Dietary Supplement",
-      "aliases": [
-        "silintan",
-        "silintan capsules",
-        "123herbals silintan"
-      ],
+      "aliases": ["silintan", "silintan capsules", "123herbals silintan"],
       "reason": "Unapproved new drug containing undeclared meloxicam",
       "status": "recalled",
       "class_tags": [
@@ -8889,9 +8209,7 @@
           "title": "FDA Recall: Silintan - January 9, 2026 - Undeclared meloxicam",
           "evidence_grade": "R",
           "date": "2026-01-09",
-          "supports_claims": [
-            "regulatory_action"
-          ],
+          "supports_claims": ["regulatory_action"],
           "evidence_summary": "FDA recall due to undeclared meloxicam in supplement marketed for joint pain",
           "fda_recall_url": "https://www.fda.gov/safety/recalls-market-withdrawals-safety-alerts/anthony-trinh-123herbals-llc-123herbalscom-issues-nationwide-recall-silintan-capsules-due-presence"
         }
@@ -8927,17 +8245,10 @@
     {
       "id": "RECALLED_TITAN_SARMS_LLC",
       "standard_name": "TITAN SARMS LLC Products",
-      "aliases": [
-        "titan sarms",
-        "titan sarms llc",
-        "titan sarms products"
-      ],
+      "aliases": ["titan sarms", "titan sarms llc", "titan sarms products"],
       "reason": "Illegally marketing products containing SARMs as dietary supplements",
       "status": "banned",
-      "class_tags": [
-        "recalled_supplement_brands",
-        "supplement_bodybuilding"
-      ],
+      "class_tags": ["recalled_supplement_brands", "supplement_bodybuilding"],
       "match_rules": {
         "exclusions": [],
         "case_sensitive": false,
@@ -8985,9 +8296,7 @@
           "title": "FDA Warning Letter: TITAN SARMS LLC - December 12, 2025 (719645)",
           "evidence_grade": "R",
           "date": "2025",
-          "supports_claims": [
-            "regulatory_action"
-          ],
+          "supports_claims": ["regulatory_action"],
           "evidence_summary": "FDA Warning Letter: TITAN SARMS LLC - December 12, 2025 (719645)",
           "fda_recall_url": "https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/warning-letters/titan-sarms-llc-719645-12122025"
         }
@@ -9028,10 +8337,7 @@
       ],
       "reason": "Ephedra-like cardiovascular effects",
       "status": "high_risk",
-      "class_tags": [
-        "high_risk_ingredients",
-        "stimulant"
-      ],
+      "class_tags": ["high_risk_ingredients", "stimulant"],
       "match_rules": {
         "exclusions": [],
         "case_sensitive": false,
@@ -9070,10 +8376,7 @@
           "title": "Bitter orange cardiovascular effects",
           "evidence_grade": "B",
           "url": "https://doi.org/10.1016/j.ijcard.2012.09.001",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
+          "supports_claims": ["mechanism_of_harm", "clinical_outcomes"],
           "evidence_summary": "Bitter orange cardiovascular effects"
         },
         {
@@ -9082,10 +8385,7 @@
           "title": "Synephrine safety review",
           "evidence_grade": "B",
           "url": "https://doi.org/10.1002/mnfr.201100409",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
+          "supports_claims": ["mechanism_of_harm", "clinical_outcomes"],
           "evidence_summary": "Synephrine safety review"
         }
       ],
@@ -9121,10 +8421,7 @@
       ],
       "reason": "Kidney damage, neurologic effects",
       "status": "high_risk",
-      "class_tags": [
-        "high_risk_ingredients",
-        "heavy_metal"
-      ],
+      "class_tags": ["high_risk_ingredients", "heavy_metal"],
       "match_rules": {
         "exclusions": [],
         "case_sensitive": false,
@@ -9188,19 +8485,14 @@
           "title": "Germanium nephrotoxicity",
           "evidence_grade": "B",
           "url": "https://doi.org/10.1093/ndt/13.10.2427",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
+          "supports_claims": ["mechanism_of_harm", "clinical_outcomes"],
           "evidence_summary": "Germanium nephrotoxicity"
         },
         {
           "type": "fda_advisory",
           "title": "FDA Import Alert: 54-07",
           "evidence_grade": "R",
-          "supports_claims": [
-            "regulatory_action"
-          ],
+          "supports_claims": ["regulatory_action"],
           "evidence_summary": "FDA Import Alert: 54-07"
         }
       ],
@@ -9235,10 +8527,7 @@
       ],
       "reason": "Liver damage at doses >800mg EGCG daily",
       "status": "watchlist",
-      "class_tags": [
-        "high_risk_ingredients",
-        "food_additive_antioxidant"
-      ],
+      "class_tags": ["high_risk_ingredients", "food_additive_antioxidant"],
       "match_rules": {
         "exclusions": [],
         "case_sensitive": false,
@@ -9290,10 +8579,7 @@
           "title": "Green tea extract hepatotoxicity",
           "evidence_grade": "B",
           "url": "https://doi.org/10.1016/j.fct.2016.12.033",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
+          "supports_claims": ["mechanism_of_harm", "clinical_outcomes"],
           "evidence_summary": "Green tea extract hepatotoxicity"
         },
         {
@@ -9338,20 +8624,14 @@
       ],
       "reason": "Severe liver damage, banned in multiple countries",
       "status": "high_risk",
-      "class_tags": [
-        "high_risk_ingredients",
-        "nootropic_anxiolytic"
-      ],
+      "class_tags": ["high_risk_ingredients", "nootropic_anxiolytic"],
       "match_rules": {
         "exclusions": [],
         "case_sensitive": false,
         "priority": 1,
         "match_type": "normalized",
         "confidence": "high",
-        "negative_match_terms": [
-          "kava-free",
-          "kavalactone-free"
-        ]
+        "negative_match_terms": ["kava-free", "kavalactone-free"]
       },
       "legal_status_enum": "restricted",
       "clinical_risk_enum": "high",
@@ -9486,10 +8766,7 @@
           "title": "Kava hepatotoxicity",
           "evidence_grade": "B",
           "url": "https://doi.org/10.1002/hep.20662",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
+          "supports_claims": ["mechanism_of_harm", "clinical_outcomes"],
           "evidence_summary": "Kava hepatotoxicity"
         },
         {
@@ -9498,10 +8775,7 @@
           "title": "Kava liver damage review",
           "evidence_grade": "B",
           "url": "https://doi.org/10.1111/j.1365-2125.2007.02958.x",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
+          "supports_claims": ["mechanism_of_harm", "clinical_outcomes"],
           "evidence_summary": "Kava liver damage review"
         },
         {
@@ -9509,9 +8783,7 @@
           "title": "FDA Consumer Advisory: March 2002",
           "evidence_grade": "R",
           "date": "2002",
-          "supports_claims": [
-            "regulatory_action"
-          ],
+          "supports_claims": ["regulatory_action"],
           "evidence_summary": "FDA Consumer Advisory: March 2002"
         }
       ],
@@ -9555,10 +8827,7 @@
       ],
       "reason": "Addiction potential, liver toxicity, seizures",
       "status": "banned",
-      "class_tags": [
-        "high_risk_ingredients",
-        "botanical"
-      ],
+      "class_tags": ["high_risk_ingredients", "botanical"],
       "match_rules": {
         "exclusions": [],
         "case_sensitive": false,
@@ -9636,10 +8905,7 @@
           "title": "Kratom-associated deaths",
           "evidence_grade": "B",
           "url": "https://doi.org/10.15585/mmwr.mm6814a2",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
+          "supports_claims": ["mechanism_of_harm", "clinical_outcomes"],
           "evidence_summary": "Kratom-associated deaths"
         },
         {
@@ -9648,10 +8914,7 @@
           "title": "Kratom hepatotoxicity",
           "evidence_grade": "B",
           "url": "https://doi.org/10.1002/hep.30612",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
+          "supports_claims": ["mechanism_of_harm", "clinical_outcomes"],
           "evidence_summary": "Kratom hepatotoxicity"
         },
         {
@@ -9659,9 +8922,7 @@
           "title": "FDA: November 2017 - Public health advisory",
           "evidence_grade": "R",
           "date": "2017",
-          "supports_claims": [
-            "regulatory_action"
-          ],
+          "supports_claims": ["regulatory_action"],
           "evidence_summary": "FDA: November 2017 - Public health advisory"
         }
       ],
@@ -9680,9 +8941,7 @@
           }
         ]
       },
-      "supersedes_ids": [
-        "STATE_KRATOM_BANS"
-      ],
+      "supersedes_ids": ["STATE_KRATOM_BANS"],
       "regulatory_date": "2017-01-01",
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
@@ -9721,20 +8980,14 @@
       ],
       "reason": "Anxiety, heart palpitations, dangerous blood pressure changes",
       "status": "high_risk",
-      "class_tags": [
-        "high_risk_ingredients",
-        "stimulant"
-      ],
+      "class_tags": ["high_risk_ingredients", "stimulant"],
       "match_rules": {
         "exclusions": [],
         "case_sensitive": false,
         "priority": 1,
         "match_type": "normalized",
         "confidence": "high",
-        "negative_match_terms": [
-          "yohimbe-free",
-          "yohimbine-free"
-        ]
+        "negative_match_terms": ["yohimbe-free", "yohimbine-free"]
       },
       "legal_status_enum": "high_risk",
       "clinical_risk_enum": "high",
@@ -9761,19 +9014,14 @@
           "title": "Yohimbine toxicity",
           "evidence_grade": "B",
           "url": "https://doi.org/10.1016/j.forsciint.2012.02.015",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
+          "supports_claims": ["mechanism_of_harm", "clinical_outcomes"],
           "evidence_summary": "Yohimbine toxicity"
         },
         {
           "type": "fda_advisory",
           "title": "FDA: Ongoing adverse event reports",
           "evidence_grade": "R",
-          "supports_claims": [
-            "regulatory_action"
-          ],
+          "supports_claims": ["regulatory_action"],
           "evidence_summary": "FDA: Ongoing adverse event reports"
         }
       ],
@@ -9801,18 +9049,10 @@
     {
       "id": "SARM_ANDARINE",
       "standard_name": "Andarine",
-      "aliases": [
-        "S4",
-        "GTx-007",
-        "andarine",
-        "S-4"
-      ],
+      "aliases": ["S4", "GTx-007", "andarine", "S-4"],
       "reason": "Unapproved drug, vision problems",
       "status": "banned",
-      "class_tags": [
-        "sarms_prohibited",
-        "sarm"
-      ],
+      "class_tags": ["sarms_prohibited", "sarm"],
       "match_rules": {
         "exclusions": [],
         "case_sensitive": false,
@@ -9861,10 +9101,7 @@
           "title": "Andarine vision effects",
           "evidence_grade": "B",
           "url": "https://doi.org/10.1210/en.2007-0814",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
+          "supports_claims": ["mechanism_of_harm", "clinical_outcomes"],
           "evidence_summary": "Andarine vision effects"
         },
         {
@@ -9872,9 +9109,7 @@
           "title": "FDA Warning: October 31, 2017",
           "evidence_grade": "R",
           "date": "2017",
-          "supports_claims": [
-            "regulatory_action"
-          ],
+          "supports_claims": ["regulatory_action"],
           "evidence_summary": "FDA Warning: October 31, 2017"
         }
       ],
@@ -9911,10 +9146,7 @@
       ],
       "reason": "Cancer risk in animal studies",
       "status": "banned",
-      "class_tags": [
-        "sarms_prohibited",
-        "sarm"
-      ],
+      "class_tags": ["sarms_prohibited", "sarm"],
       "match_rules": {
         "exclusions": [],
         "case_sensitive": false,
@@ -9948,10 +9180,7 @@
           "title": "Cardarine carcinogenicity",
           "evidence_grade": "B",
           "url": "https://doi.org/10.1093/toxsci/kfn160",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
+          "supports_claims": ["mechanism_of_harm", "clinical_outcomes"],
           "evidence_summary": "Cardarine carcinogenicity"
         },
         {
@@ -9959,9 +9188,7 @@
           "title": "FDA Warning: October 31, 2017",
           "evidence_grade": "R",
           "date": "2017",
-          "supports_claims": [
-            "regulatory_action"
-          ],
+          "supports_claims": ["regulatory_action"],
           "evidence_summary": "FDA Warning: October 31, 2017"
         }
       ],
@@ -10001,10 +9228,7 @@
       ],
       "reason": "Unapproved drug, cardiovascular risks",
       "status": "banned",
-      "class_tags": [
-        "sarms_prohibited",
-        "sarm"
-      ],
+      "class_tags": ["sarms_prohibited", "sarm"],
       "match_rules": {
         "exclusions": [],
         "case_sensitive": false,
@@ -10053,10 +9277,7 @@
           "title": "Ligandrol clinical trial",
           "evidence_grade": "A",
           "url": "https://doi.org/10.1210/jc.2013-2271",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
+          "supports_claims": ["mechanism_of_harm", "clinical_outcomes"],
           "evidence_summary": "Ligandrol clinical trial"
         },
         {
@@ -10064,9 +9285,7 @@
           "title": "FDA Warning: October 31, 2017",
           "evidence_grade": "R",
           "date": "2017",
-          "supports_claims": [
-            "regulatory_action"
-          ],
+          "supports_claims": ["regulatory_action"],
           "evidence_summary": "FDA Warning: October 31, 2017"
         }
       ],
@@ -10107,10 +9326,7 @@
       ],
       "reason": "Unapproved drug, serious safety concerns",
       "status": "banned",
-      "class_tags": [
-        "sarms_prohibited",
-        "sarm"
-      ],
+      "class_tags": ["sarms_prohibited", "sarm"],
       "match_rules": {
         "exclusions": [],
         "case_sensitive": false,
@@ -10159,10 +9375,7 @@
           "title": "Ostarine hepatotoxicity",
           "evidence_grade": "B",
           "url": "https://doi.org/10.1002/hep.29466",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
+          "supports_claims": ["mechanism_of_harm", "clinical_outcomes"],
           "evidence_summary": "Ostarine hepatotoxicity"
         },
         {
@@ -10170,9 +9383,7 @@
           "title": "FDA Warning: October 31, 2017",
           "evidence_grade": "R",
           "date": "2017",
-          "supports_claims": [
-            "regulatory_action"
-          ],
+          "supports_claims": ["regulatory_action"],
           "evidence_summary": "FDA Warning: October 31, 2017"
         }
       ],
@@ -10200,18 +9411,10 @@
     {
       "id": "SARM_RAD140",
       "standard_name": "RAD140",
-      "aliases": [
-        "testolone",
-        "RAD-140",
-        "RAD140",
-        "RAD 140"
-      ],
+      "aliases": ["testolone", "RAD-140", "RAD140", "RAD 140"],
       "reason": "Unapproved drug, liver toxicity",
       "status": "banned",
-      "class_tags": [
-        "sarms_prohibited",
-        "sarm"
-      ],
+      "class_tags": ["sarms_prohibited", "sarm"],
       "match_rules": {
         "exclusions": [],
         "case_sensitive": false,
@@ -10260,10 +9463,7 @@
           "title": "RAD140 liver injury case report",
           "evidence_grade": "B",
           "url": "https://doi.org/10.14309/crj.0000000000000518",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
+          "supports_claims": ["mechanism_of_harm", "clinical_outcomes"],
           "evidence_summary": "RAD140 liver injury case report"
         },
         {
@@ -10271,9 +9471,7 @@
           "title": "FDA Warning: October 31, 2017",
           "evidence_grade": "R",
           "date": "2017",
-          "supports_claims": [
-            "regulatory_action"
-          ],
+          "supports_claims": ["regulatory_action"],
           "evidence_summary": "FDA Warning: October 31, 2017"
         }
       ],
@@ -10316,10 +9514,7 @@
       ],
       "reason": "Toxic muscimol causing seizures, hospitalizations, and death - Diamond Shruumz recall 2024",
       "status": "banned",
-      "class_tags": [
-        "schedule_I_psychoactives",
-        "psychoactive_schedule_I"
-      ],
+      "class_tags": ["schedule_I_psychoactives", "psychoactive_schedule_I"],
       "match_rules": {
         "exclusions": [],
         "case_sensitive": false,
@@ -10382,9 +9577,7 @@
           "title": "FDA: Diamond Shruumz Class I Recall (2024)",
           "evidence_grade": "R",
           "date": "2024",
-          "supports_claims": [
-            "regulatory_action"
-          ],
+          "supports_claims": ["regulatory_action"],
           "evidence_summary": "FDA: Diamond Shruumz Class I Recall (2024)"
         },
         {
@@ -10400,10 +9593,7 @@
           "title": "Amanita muscaria toxicity",
           "evidence_grade": "B",
           "url": "https://doi.org/10.1016/j.toxlet.2021.08.012",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
+          "supports_claims": ["mechanism_of_harm", "clinical_outcomes"],
           "evidence_summary": "Amanita muscaria toxicity"
         }
       ],
@@ -10446,10 +9636,7 @@
       ],
       "reason": "DEA Schedule I controlled substance - high potential for abuse, no accepted medical use",
       "status": "banned",
-      "class_tags": [
-        "schedule_I_psychoactives",
-        "psychoactive_schedule_I"
-      ],
+      "class_tags": ["schedule_I_psychoactives", "psychoactive_schedule_I"],
       "match_rules": {
         "exclusions": [],
         "case_sensitive": false,
@@ -10519,9 +9706,7 @@
           "title": "FDA: Warning letters to psilocybin product sellers (2024-2025)",
           "evidence_grade": "R",
           "date": "2024",
-          "supports_claims": [
-            "regulatory_action"
-          ],
+          "supports_claims": ["regulatory_action"],
           "evidence_summary": "FDA: Warning letters to psilocybin product sellers (2024-2025)"
         },
         {
@@ -10530,10 +9715,7 @@
           "title": "Psilocybin adverse effects",
           "evidence_grade": "B",
           "url": "https://doi.org/10.1177/0269881118767697",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
+          "supports_claims": ["mechanism_of_harm", "clinical_outcomes"],
           "evidence_summary": "Psilocybin adverse effects"
         }
       ],
@@ -10609,10 +9791,7 @@
       ],
       "reason": "Illegal anabolic agents",
       "status": "banned",
-      "class_tags": [
-        "illegal_spiking_agents",
-        "steroid_anabolic"
-      ],
+      "class_tags": ["illegal_spiking_agents", "steroid_anabolic"],
       "match_rules": {
         "exclusions": [],
         "case_sensitive": false,
@@ -10646,19 +9825,14 @@
           "title": "Anabolic steroid hepatotoxicity",
           "evidence_grade": "B",
           "url": "https://doi.org/10.1002/hep.29466",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
+          "supports_claims": ["mechanism_of_harm", "clinical_outcomes"],
           "evidence_summary": "Anabolic steroid hepatotoxicity"
         },
         {
           "type": "fda_advisory",
           "title": "FDA: Tainted Bodybuilding Products",
           "evidence_grade": "R",
-          "supports_claims": [
-            "regulatory_action"
-          ],
+          "supports_claims": ["regulatory_action"],
           "evidence_summary": "FDA: Tainted Bodybuilding Products"
         }
       ],
@@ -10693,10 +9867,7 @@
       ],
       "reason": "Designer drug analog of banned tadalafil",
       "status": "banned",
-      "class_tags": [
-        "illegal_spiking_agents",
-        "drug_erectile_dysfunction"
-      ],
+      "class_tags": ["illegal_spiking_agents", "drug_erectile_dysfunction"],
       "match_rules": {
         "exclusions": [],
         "case_sensitive": false,
@@ -10729,9 +9900,7 @@
           "title": "FDA Warning: Health Fixer - April 29, 2025",
           "evidence_grade": "R",
           "date": "2025",
-          "supports_claims": [
-            "regulatory_action"
-          ],
+          "supports_claims": ["regulatory_action"],
           "evidence_summary": "FDA Warning: Health Fixer - April 29, 2025"
         }
       ],
@@ -10767,10 +9936,7 @@
       ],
       "reason": "Hidden prescription corticosteroid",
       "status": "banned",
-      "class_tags": [
-        "illegal_spiking_agents",
-        "drug_pharmaceutical"
-      ],
+      "class_tags": ["illegal_spiking_agents", "drug_pharmaceutical"],
       "match_rules": {
         "exclusions": [],
         "case_sensitive": false,
@@ -10803,9 +9969,7 @@
           "title": "FDA: Multiple recalls 2024",
           "evidence_grade": "R",
           "date": "2024",
-          "supports_claims": [
-            "regulatory_action"
-          ],
+          "supports_claims": ["regulatory_action"],
           "evidence_summary": "FDA: Multiple recalls 2024"
         }
       ],
@@ -10833,18 +9997,10 @@
     {
       "id": "SPIKE_DICLOFENAC",
       "standard_name": "Diclofenac",
-      "aliases": [
-        "voltaren",
-        "pennsaid",
-        "diclofenac sodium",
-        "diclofenac"
-      ],
+      "aliases": ["voltaren", "pennsaid", "diclofenac sodium", "diclofenac"],
       "reason": "Hidden prescription NSAID",
       "status": "banned",
-      "class_tags": [
-        "illegal_spiking_agents",
-        "drug_pharmaceutical"
-      ],
+      "class_tags": ["illegal_spiking_agents", "drug_pharmaceutical"],
       "match_rules": {
         "exclusions": [],
         "case_sensitive": false,
@@ -10891,9 +10047,7 @@
           "type": "fda_advisory",
           "title": "FDA: Black box warning - NSAIDs",
           "evidence_grade": "R",
-          "supports_claims": [
-            "regulatory_action"
-          ],
+          "supports_claims": ["regulatory_action"],
           "evidence_summary": "FDA: Black box warning - NSAIDs"
         }
       ],
@@ -10929,10 +10083,7 @@
       ],
       "reason": "Hidden prescription antidepressant",
       "status": "banned",
-      "class_tags": [
-        "illegal_spiking_agents",
-        "drug_pharmaceutical"
-      ],
+      "class_tags": ["illegal_spiking_agents", "drug_pharmaceutical"],
       "match_rules": {
         "exclusions": [],
         "case_sensitive": false,
@@ -10964,9 +10115,7 @@
           "type": "fda_advisory",
           "title": "FDA: Tainted Weight Loss Products",
           "evidence_grade": "R",
-          "supports_claims": [
-            "regulatory_action"
-          ],
+          "supports_claims": ["regulatory_action"],
           "evidence_summary": "FDA: Tainted Weight Loss Products"
         }
       ],
@@ -11003,10 +10152,7 @@
       ],
       "reason": "Semi-synthetic opioid, dangerous potency",
       "status": "banned",
-      "class_tags": [
-        "illegal_spiking_agents",
-        "stimulant_analog"
-      ],
+      "class_tags": ["illegal_spiking_agents", "stimulant_analog"],
       "match_rules": {
         "exclusions": [],
         "case_sensitive": false,
@@ -11039,9 +10185,7 @@
           "title": "FDA: 2025 warnings on synthetic kratom derivatives",
           "evidence_grade": "R",
           "date": "2025",
-          "supports_claims": [
-            "regulatory_action"
-          ],
+          "supports_claims": ["regulatory_action"],
           "evidence_summary": "FDA: 2025 warnings on synthetic kratom derivatives"
         }
       ],
@@ -11081,10 +10225,7 @@
       ],
       "reason": "Amphetamine-like stimulant, WADA prohibited",
       "status": "banned",
-      "class_tags": [
-        "illegal_spiking_agents",
-        "drug_pharmaceutical"
-      ],
+      "class_tags": ["illegal_spiking_agents", "drug_pharmaceutical"],
       "match_rules": {
         "exclusions": [],
         "case_sensitive": false,
@@ -11133,10 +10274,7 @@
           "title": "PEA-adulterated kratom stroke case",
           "evidence_grade": "B",
           "url": "https://doi.org/10.1016/j.annemergmed.2019.06.013",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
+          "supports_claims": ["mechanism_of_harm", "clinical_outcomes"],
           "evidence_summary": "PEA-adulterated kratom stroke case"
         }
       ],
@@ -11164,16 +10302,10 @@
     {
       "id": "SPIKE_PHENOLPHTHALEIN",
       "standard_name": "Phenolphthalein",
-      "aliases": [
-        "laxative compound",
-        "phenolphthalein"
-      ],
+      "aliases": ["laxative compound", "phenolphthalein"],
       "reason": "Carcinogenic compound, banned laxative",
       "status": "banned",
-      "class_tags": [
-        "illegal_spiking_agents",
-        "drug_weight_loss"
-      ],
+      "class_tags": ["illegal_spiking_agents", "drug_weight_loss"],
       "match_rules": {
         "exclusions": [],
         "case_sensitive": false,
@@ -11228,9 +10360,7 @@
           "title": "FDA: 1999 - Removal from OTC laxatives",
           "evidence_grade": "R",
           "date": "1999",
-          "supports_claims": [
-            "regulatory_action"
-          ],
+          "supports_claims": ["regulatory_action"],
           "evidence_summary": "FDA: 1999 - Removal from OTC laxatives"
         }
       ],
@@ -11266,10 +10396,7 @@
       ],
       "reason": "Designer drug analog of banned sildenafil",
       "status": "banned",
-      "class_tags": [
-        "illegal_spiking_agents",
-        "drug_erectile_dysfunction"
-      ],
+      "class_tags": ["illegal_spiking_agents", "drug_erectile_dysfunction"],
       "match_rules": {
         "exclusions": [],
         "case_sensitive": false,
@@ -11302,9 +10429,7 @@
           "title": "FDA Warning: Health Fixer - April 29, 2025",
           "evidence_grade": "R",
           "date": "2025",
-          "supports_claims": [
-            "regulatory_action"
-          ],
+          "supports_claims": ["regulatory_action"],
           "evidence_summary": "FDA Warning: Health Fixer - April 29, 2025"
         }
       ],
@@ -11341,10 +10466,7 @@
       ],
       "reason": "Hidden pharmaceutical drug (PDE5 inhibitor)",
       "status": "banned",
-      "class_tags": [
-        "illegal_spiking_agents",
-        "drug_erectile_dysfunction"
-      ],
+      "class_tags": ["illegal_spiking_agents", "drug_erectile_dysfunction"],
       "match_rules": {
         "exclusions": [],
         "case_sensitive": false,
@@ -11376,9 +10498,7 @@
           "type": "fda_advisory",
           "title": "FDA: Tainted Sexual Enhancement Products",
           "evidence_grade": "R",
-          "supports_claims": [
-            "regulatory_action"
-          ],
+          "supports_claims": ["regulatory_action"],
           "evidence_summary": "FDA: Tainted Sexual Enhancement Products"
         }
       ],
@@ -11406,18 +10526,10 @@
     {
       "id": "SPIKE_TADALAFIL",
       "standard_name": "Tadalafil",
-      "aliases": [
-        "cialis",
-        "adcirca",
-        "tadalafil citrate",
-        "tadalafil"
-      ],
+      "aliases": ["cialis", "adcirca", "tadalafil citrate", "tadalafil"],
       "reason": "Hidden pharmaceutical drug (PDE5 inhibitor)",
       "status": "banned",
-      "class_tags": [
-        "illegal_spiking_agents",
-        "drug_erectile_dysfunction"
-      ],
+      "class_tags": ["illegal_spiking_agents", "drug_erectile_dysfunction"],
       "match_rules": {
         "exclusions": [],
         "case_sensitive": false,
@@ -11449,9 +10561,7 @@
           "type": "fda_advisory",
           "title": "FDA: Tainted Sexual Enhancement Products",
           "evidence_grade": "R",
-          "supports_claims": [
-            "regulatory_action"
-          ],
+          "supports_claims": ["regulatory_action"],
           "evidence_summary": "FDA: Tainted Sexual Enhancement Products"
         }
       ],
@@ -11488,10 +10598,7 @@
       ],
       "reason": "Designer drug variants of banned tianeptine",
       "status": "banned",
-      "class_tags": [
-        "illegal_spiking_agents",
-        "stimulant_analog"
-      ],
+      "class_tags": ["illegal_spiking_agents", "stimulant_analog"],
       "match_rules": {
         "exclusions": [],
         "case_sensitive": false,
@@ -11539,9 +10646,7 @@
           "title": "FDA: 2025 warnings on tianeptine analogs",
           "evidence_grade": "R",
           "date": "2025",
-          "supports_claims": [
-            "regulatory_action"
-          ],
+          "supports_claims": ["regulatory_action"],
           "evidence_summary": "FDA: 2025 warnings on tianeptine analogs"
         }
       ],
@@ -11584,10 +10689,7 @@
       ],
       "reason": "Dangerous synthetic cathinone",
       "status": "banned",
-      "class_tags": [
-        "designer_stimulants",
-        "stimulant_designer"
-      ],
+      "class_tags": ["designer_stimulants", "stimulant_designer"],
       "match_rules": {
         "exclusions": [],
         "case_sensitive": false,
@@ -11628,10 +10730,7 @@
           "title": "α-PHP toxicity",
           "evidence_grade": "B",
           "url": "https://doi.org/10.1016/j.forsciint.2015.09.002",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
+          "supports_claims": ["mechanism_of_harm", "clinical_outcomes"],
           "evidence_summary": "α-PHP toxicity"
         }
       ],
@@ -11668,10 +10767,7 @@
       ],
       "reason": "Designer stimulant derivatives",
       "status": "banned",
-      "class_tags": [
-        "designer_stimulants",
-        "stimulant_designer"
-      ],
+      "class_tags": ["designer_stimulants", "stimulant_designer"],
       "match_rules": {
         "exclusions": [],
         "case_sensitive": false,
@@ -11733,9 +10829,7 @@
           "type": "fda_advisory",
           "title": "FDA: DMAA analogs not dietary ingredients",
           "evidence_grade": "R",
-          "supports_claims": [
-            "regulatory_action"
-          ],
+          "supports_claims": ["regulatory_action"],
           "evidence_summary": "FDA: DMAA analogs not dietary ingredients"
         },
         {
@@ -11744,10 +10838,7 @@
           "title": "DMAA cardiovascular risks",
           "evidence_grade": "B",
           "url": "https://doi.org/10.1016/j.drugalcdep.2015.01.011",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
+          "supports_claims": ["mechanism_of_harm", "clinical_outcomes"],
           "evidence_summary": "DMAA cardiovascular risks"
         }
       ],
@@ -11775,16 +10866,10 @@
     {
       "id": "SYNTH_CUMYL_PICA",
       "standard_name": "CUMYL-PICA",
-      "aliases": [
-        "SGT-263",
-        "cumyl-pica"
-      ],
+      "aliases": ["SGT-263", "cumyl-pica"],
       "reason": "Dangerous synthetic cannabinoid",
       "status": "banned",
-      "class_tags": [
-        "synthetic_cannabinoids",
-        "cannabinoid_synthetic"
-      ],
+      "class_tags": ["synthetic_cannabinoids", "cannabinoid_synthetic"],
       "match_rules": {
         "exclusions": [],
         "case_sensitive": false,
@@ -11825,10 +10910,7 @@
           "title": "CUMYL-PICA toxicity",
           "evidence_grade": "B",
           "url": "https://doi.org/10.1016/j.forsciint.2017.03.004",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
+          "supports_claims": ["mechanism_of_harm", "clinical_outcomes"],
           "evidence_summary": "CUMYL-PICA toxicity"
         }
       ],
@@ -11872,10 +10954,7 @@
       ],
       "reason": "Prohibited by World Anti-Doping Agency (WADA) for athletic competitions",
       "status": "banned",
-      "class_tags": [
-        "wada_prohibited_2024",
-        "cannabinoid"
-      ],
+      "class_tags": ["wada_prohibited_2024", "cannabinoid"],
       "match_rules": {
         "exclusions": [],
         "case_sensitive": false,
@@ -11959,10 +11038,7 @@
       ],
       "reason": "Prohibited by World Anti-Doping Agency (WADA) for athletic competitions",
       "status": "banned",
-      "class_tags": [
-        "wada_prohibited_2024",
-        "opioid"
-      ],
+      "class_tags": ["wada_prohibited_2024", "opioid"],
       "match_rules": {
         "exclusions": [],
         "case_sensitive": false,
@@ -12032,10 +11108,7 @@
       ],
       "reason": "Synthetic anabolic steroid / designer prohormone sold as dietary supplement",
       "status": "banned",
-      "class_tags": [
-        "permanently_banned",
-        "steroid"
-      ],
+      "class_tags": ["permanently_banned", "steroid"],
       "match_rules": {
         "exclusions": [],
         "case_sensitive": false,
@@ -12068,10 +11141,7 @@
           "title": "FDA Recall: Ultra Research & Development Laboratories - Ultra-Sten (D-Zine)",
           "evidence_grade": "R",
           "url": "https://www.fda.gov/safety/recalls-market-withdrawals-safety-alerts/ultra-research-development-laboratories-announces-voluntary-nationwide-recall-ultra-sten-d-zine",
-          "supports_claims": [
-            "regulatory_action",
-            "legal_status"
-          ],
+          "supports_claims": ["regulatory_action", "legal_status"],
           "evidence_summary": "Recall for undeclared/illegal steroid-like ingredient in supplement."
         },
         {
@@ -12079,10 +11149,7 @@
           "title": "USADA advisory on prohormone/designer steroid risk in supplements",
           "evidence_grade": "R",
           "url": "https://www.usada.org/spirit-of-sport/education/five-things-know-prohormones/",
-          "supports_claims": [
-            "clinical_outcomes",
-            "mechanism_of_harm"
-          ],
+          "supports_claims": ["clinical_outcomes", "mechanism_of_harm"],
           "evidence_summary": "Designer steroids/prohormones carry serious health and doping risks."
         }
       ],
@@ -12117,10 +11184,7 @@
       ],
       "reason": "Prescription muscle relaxant found as undeclared ingredient in dietary supplements",
       "status": "banned",
-      "class_tags": [
-        "illegal_spiking_agents",
-        "drug_muscle_relaxant"
-      ],
+      "class_tags": ["illegal_spiking_agents", "drug_muscle_relaxant"],
       "match_rules": {
         "exclusions": [],
         "case_sensitive": false,
@@ -12153,9 +11217,7 @@
           "title": "FDA Safety Alert: Undeclared drug ingredients in dietary supplements",
           "evidence_grade": "R",
           "date": "2025",
-          "supports_claims": [
-            "regulatory_action"
-          ],
+          "supports_claims": ["regulatory_action"],
           "evidence_summary": "FDA enforcement against supplements containing undeclared methocarbamol"
         }
       ],
@@ -12201,10 +11263,7 @@
         "priority": 1,
         "match_type": "normalized",
         "confidence": "high",
-        "negative_match_terms": [
-          "lobelia cardinalis",
-          "cardinal flower"
-        ]
+        "negative_match_terms": ["lobelia cardinalis", "cardinal flower"]
       },
       "references_structured": [
         {
@@ -12212,10 +11271,7 @@
           "title": "FDA Poisonous Plant Database — Lobelia inflata",
           "evidence_grade": "R",
           "url": "https://www.fda.gov/food/natural-toxins-food/poisonous-plant-database",
-          "supports_claims": [
-            "toxicity",
-            "regulatory_action"
-          ],
+          "supports_claims": ["toxicity", "regulatory_action"],
           "evidence_summary": "FDA lists Lobelia inflata as a poisonous plant with documented human toxicity cases."
         },
         {
@@ -12223,9 +11279,7 @@
           "title": "21 CFR 310.544 — Drug products containing lobeline as OTC smoking deterrent",
           "evidence_grade": "R",
           "url": "https://www.ecfr.gov/current/title-21/chapter-I/subchapter-D/part-310/subpart-E/section-310.544",
-          "supports_claims": [
-            "regulatory_action"
-          ],
+          "supports_claims": ["regulatory_action"],
           "evidence_summary": "FDA final rule (1993) declaring lobeline-containing OTC smoking deterrent drug products not GRASE."
         },
         {
@@ -12233,9 +11287,7 @@
           "title": "Lobeline for smoking cessation (Cochrane Review)",
           "evidence_grade": "A",
           "url": "https://pubmed.ncbi.nlm.nih.gov/24373424",
-          "supports_claims": [
-            "lack_of_efficacy"
-          ],
+          "supports_claims": ["lack_of_efficacy"],
           "evidence_summary": "PMID 24373424 — Cochrane review found no evidence that lobeline aids smoking cessation. Adverse effects noted."
         }
       ],
@@ -12272,10 +11324,7 @@
       ],
       "legal_status_enum": "restricted",
       "clinical_risk_enum": "moderate",
-      "class_tags": [
-        "toxic_botanical",
-        "alkaloid"
-      ],
+      "class_tags": ["toxic_botanical", "alkaloid"],
       "source_category": "toxic_botanical",
       "entity_type": "ingredient",
       "regulatory_date": "1993-12-29",
@@ -12655,9 +11704,7 @@
           "url": "",
           "evidence_grade": "R",
           "confidence": "medium",
-          "supports_claims": [
-            "mechanism_of_harm"
-          ]
+          "supports_claims": ["mechanism_of_harm"]
         }
       ],
       "recall_scope": null,
@@ -12918,19 +11965,21 @@
       }
     },
     {
-      "id": "ADD_DMSA_100MG",
-      "standard_name": "DMSA (Succimer) 100mg",
+      "id": "BANNED_DMSA_SUCCIMER",
+      "standard_name": "DMSA (Succimer)",
       "aliases": [
-        "from 100 mg dmsa",
-        "100 mg dmsa",
         "dmsa",
         "succimer",
-        "dimercaptosuccinic acid"
+        "dimercaptosuccinic acid",
+        "100 mg dmsa",
+        "250 mg dmsa",
+        "from 100 mg dmsa",
+        "from 250 mg dmsa"
       ],
       "entity_type": "ingredient",
       "match_mode": "active",
       "status": "banned",
-      "reason": "DMSA 100mg found on supplement labels represents unlawful inclusion of a prescription chelation drug. FDA has issued warning letters to supplement companies marketing chelation products.",
+      "reason": "DMSA (succimer) is a prescription chelation drug. Any supplement label listing DMSA, succimer, or dosage-form variants represents unlawful drug inclusion rather than a lawful dietary ingredient.",
       "legal_status_enum": "not_lawful_as_supplement",
       "clinical_risk_enum": "high",
       "source_category": "prescription_chelation_drug",
@@ -12941,7 +11990,7 @@
         "regex": null,
         "fuzzy_threshold": 0.75,
         "case_sensitive": false,
-        "preferred_alias": "DMSA (Succimer) 100mg",
+        "preferred_alias": "DMSA (Succimer)",
         "negative_match_terms": []
       },
       "jurisdictions": [],
@@ -12961,35 +12010,39 @@
       "supersedes_ids": null,
       "review": {
         "status": "validated",
-        "last_reviewed_at": "2026-03-01",
-        "reviewed_by": "oi_audit_batch1",
-        "next_review_due": "2026-09-01",
+        "last_reviewed_at": "2026-03-06",
+        "reviewed_by": "pipeline_followup_audit",
+        "next_review_due": "2026-09-06",
         "change_log": [
           {
             "date": "2026-03-01",
             "change": "Moved from other_ingredients.json — does not belong in safe excipient DB",
             "reason": "other_ingredients_deep_audit"
+          },
+          {
+            "date": "2026-03-06",
+            "change": "Merged duplicate 100 mg and 250 mg DMSA rows into one canonical banned ingredient",
+            "reason": "audit_false_duplicate_matching"
           }
         ]
       }
     },
     {
-      "id": "ADD_DMSA_250MG",
-      "standard_name": "DMSA (Succimer) 250mg",
+      "id": "BANNED_DNP",
+      "standard_name": "2,4-Dinitrophenol (DNP)",
       "aliases": [
-        "from 250 mg dmsa",
-        "250 mg dmsa",
-        "dmsa",
-        "succimer",
-        "dimercaptosuccinic acid"
+        "2,4-dinitrophenol",
+        "dnp",
+        "2 4 dinitrophenol",
+        "dinitrophenol"
       ],
       "entity_type": "ingredient",
       "match_mode": "active",
       "status": "banned",
-      "reason": "DMSA 250mg found on supplement labels represents unlawful inclusion of a prescription chelation drug. FDA has issued warning letters to supplement companies marketing chelation products.",
+      "reason": "2,4-Dinitrophenol is an industrial chemical misused for weight loss and bodybuilding. It has a narrow margin between intended effect and fatal hyperthermia, making it unsafe and not lawful as a supplement ingredient.",
       "legal_status_enum": "not_lawful_as_supplement",
-      "clinical_risk_enum": "high",
-      "source_category": "prescription_chelation_drug",
+      "clinical_risk_enum": "critical",
+      "source_category": "industrial_chemical",
       "class_tags": [],
       "regulatory_date": null,
       "regulatory_date_label": null,
@@ -12997,34 +12050,228 @@
         "regex": null,
         "fuzzy_threshold": 0.75,
         "case_sensitive": false,
-        "preferred_alias": "DMSA (Succimer) 250mg",
+        "preferred_alias": "2,4-Dinitrophenol (DNP)",
         "negative_match_terms": []
       },
       "jurisdictions": [],
       "references_structured": [
         {
-          "type": "regulatory",
-          "authority": "FDA",
-          "citation": "FDA NDA 019998 - Chemet (succimer) approval for lead poisoning chelation",
-          "url": null,
-          "published_date": "1991-01-29",
-          "evidence_grade": "R",
+          "type": "review_article",
+          "authority": "peer-reviewed",
+          "citation": "PubMed 32078021 - Dinitrophenol poisoning review",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/32078021/",
+          "published_date": "2020-02-20",
+          "evidence_grade": "A",
           "confidence": "high",
-          "title": "FDA NDA 019998 - Chemet (succimer) approval for lead poisoning chelation"
+          "title": "PubMed 32078021 - Dinitrophenol poisoning review"
+        },
+        {
+          "type": "case_report",
+          "authority": "peer-reviewed",
+          "citation": "PubMed 41392340 - Fatal 2,4-DNP toxicity report",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/41392340/",
+          "published_date": "2025-01-28",
+          "evidence_grade": "B",
+          "confidence": "high",
+          "title": "PubMed 41392340 - Fatal 2,4-DNP toxicity report"
         }
       ],
       "recall_scope": null,
       "supersedes_ids": null,
       "review": {
         "status": "validated",
-        "last_reviewed_at": "2026-03-01",
-        "reviewed_by": "oi_audit_batch1",
-        "next_review_due": "2026-09-01",
+        "last_reviewed_at": "2026-03-06",
+        "reviewed_by": "pipeline_followup_audit",
+        "next_review_due": "2026-09-06",
         "change_log": [
           {
-            "date": "2026-03-01",
-            "change": "Moved from other_ingredients.json — does not belong in safe excipient DB",
-            "reason": "other_ingredients_deep_audit"
+            "date": "2026-03-06",
+            "change": "Added canonical DNP entry for supplement adulteration and fatal toxicity coverage",
+            "reason": "audit_missing_high_risk_substance"
+          }
+        ]
+      }
+    },
+    {
+      "id": "BANNED_USNIC_ACID",
+      "standard_name": "Usnic Acid",
+      "aliases": ["usnic acid", "usnea extract", "usnea barbata extract"],
+      "entity_type": "ingredient",
+      "match_mode": "active",
+      "status": "banned",
+      "reason": "Usnic acid has been associated with severe liver injury in weight-loss and energy products. It is not a lawful dietary ingredient for this use profile and carries disproportionate hepatotoxic risk.",
+      "legal_status_enum": "high_risk",
+      "clinical_risk_enum": "critical",
+      "source_category": "hepatotoxic_botanical",
+      "class_tags": [],
+      "regulatory_date": null,
+      "regulatory_date_label": null,
+      "match_rules": {
+        "regex": null,
+        "fuzzy_threshold": 0.75,
+        "case_sensitive": false,
+        "preferred_alias": "Usnic Acid",
+        "negative_match_terms": []
+      },
+      "jurisdictions": [],
+      "references_structured": [
+        {
+          "type": "review_article",
+          "authority": "NCBI Bookshelf",
+          "citation": "LiverTox - Usnic Acid",
+          "url": "https://www.ncbi.nlm.nih.gov/books/NBK548493/",
+          "published_date": null,
+          "evidence_grade": "A",
+          "confidence": "high",
+          "title": "LiverTox - Usnic Acid"
+        },
+        {
+          "type": "case_report",
+          "authority": "peer-reviewed",
+          "citation": "PubMed 16610575 - Acute liver failure associated with a usnic acid-containing dietary supplement",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/16610575/",
+          "published_date": "2006-04-18",
+          "evidence_grade": "B",
+          "confidence": "high",
+          "title": "PubMed 16610575 - Acute liver failure associated with a usnic acid-containing dietary supplement"
+        }
+      ],
+      "recall_scope": null,
+      "supersedes_ids": null,
+      "review": {
+        "status": "validated",
+        "last_reviewed_at": "2026-03-06",
+        "reviewed_by": "pipeline_followup_audit",
+        "next_review_due": "2026-09-06",
+        "change_log": [
+          {
+            "date": "2026-03-06",
+            "change": "Added usnic acid entry to close hepatotoxic supplement-ingredient gap",
+            "reason": "audit_missing_high_risk_substance"
+          }
+        ]
+      }
+    },
+    {
+      "id": "BANNED_CLENBUTEROL",
+      "standard_name": "Clenbuterol",
+      "aliases": [
+        "clenbuterol",
+        "clen",
+        "clenbuterol hcl",
+        "clenbuterol hydrochloride"
+      ],
+      "entity_type": "ingredient",
+      "match_mode": "active",
+      "status": "banned",
+      "reason": "Clenbuterol is a beta-agonist drug used illicitly in performance and weight-loss products. It is not lawful as a supplement ingredient and can cause serious cardiovascular and neurologic toxicity.",
+      "legal_status_enum": "adulterant",
+      "clinical_risk_enum": "critical",
+      "source_category": "illegal_spiking_agents",
+      "class_tags": [],
+      "regulatory_date": null,
+      "regulatory_date_label": null,
+      "match_rules": {
+        "regex": null,
+        "fuzzy_threshold": 0.75,
+        "case_sensitive": false,
+        "preferred_alias": "Clenbuterol",
+        "negative_match_terms": []
+      },
+      "jurisdictions": [],
+      "references_structured": [
+        {
+          "type": "review_article",
+          "authority": "peer-reviewed",
+          "citation": "PubMed 40575216 - Clenbuterol review",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/40575216/",
+          "published_date": "2025-07-03",
+          "evidence_grade": "B",
+          "confidence": "high",
+          "title": "PubMed 40575216 - Clenbuterol review"
+        },
+        {
+          "type": "case_report",
+          "authority": "peer-reviewed",
+          "citation": "PubMed 31887249 - Clenbuterol use and human toxicity outcomes",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/31887249/",
+          "published_date": "2019-12-30",
+          "evidence_grade": "B",
+          "confidence": "medium",
+          "title": "PubMed 31887249 - Clenbuterol use and human toxicity outcomes"
+        }
+      ],
+      "recall_scope": null,
+      "supersedes_ids": null,
+      "review": {
+        "status": "validated",
+        "last_reviewed_at": "2026-03-06",
+        "reviewed_by": "pipeline_followup_audit",
+        "next_review_due": "2026-09-06",
+        "change_log": [
+          {
+            "date": "2026-03-06",
+            "change": "Added clenbuterol entry for stimulant/adulterant safety screening",
+            "reason": "audit_missing_high_risk_substance"
+          }
+        ]
+      }
+    },
+    {
+      "id": "BANNED_ACONITE",
+      "standard_name": "Aconite (Aconitum spp.)",
+      "aliases": [
+        "aconite",
+        "aconitum",
+        "aconitum napellus",
+        "aconitum carmichaelii",
+        "aconitum kusnezoffii",
+        "aconitine",
+        "fu zi",
+        "fuzi"
+      ],
+      "entity_type": "ingredient",
+      "match_mode": "active",
+      "status": "banned",
+      "reason": "Aconite and aconitine-containing Aconitum species can cause life-threatening ventricular arrhythmias and neurotoxicity. Raw or misprocessed forms are not appropriate for dietary supplement use.",
+      "legal_status_enum": "high_risk",
+      "clinical_risk_enum": "critical",
+      "source_category": "toxic_botanical",
+      "class_tags": [],
+      "regulatory_date": null,
+      "regulatory_date_label": null,
+      "match_rules": {
+        "regex": null,
+        "fuzzy_threshold": 0.75,
+        "case_sensitive": false,
+        "preferred_alias": "Aconite (Aconitum spp.)",
+        "negative_match_terms": []
+      },
+      "jurisdictions": [],
+      "references_structured": [
+        {
+          "type": "review_article",
+          "authority": "peer-reviewed",
+          "citation": "PubMed 40315779 - Aconitine poisoning forensic review",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/40315779/",
+          "published_date": "2025-05-15",
+          "evidence_grade": "B",
+          "confidence": "high",
+          "title": "PubMed 40315779 - Aconitine poisoning forensic review"
+        }
+      ],
+      "recall_scope": null,
+      "supersedes_ids": null,
+      "review": {
+        "status": "validated",
+        "last_reviewed_at": "2026-03-06",
+        "reviewed_by": "pipeline_followup_audit",
+        "next_review_due": "2026-09-06",
+        "change_log": [
+          {
+            "date": "2026-03-06",
+            "change": "Added aconite entry for toxic botanical screening",
+            "reason": "audit_missing_high_risk_substance"
           }
         ]
       }

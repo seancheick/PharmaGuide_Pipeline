@@ -757,6 +757,45 @@ class TestBrandedFormMatching:
             f"Expected matched_alias='KSM-66' (raw input match), got '{result.get('matched_alias')}'"
         )
 
+    def test_branded_token_fallback_runs_before_form_unmapped(self, enricher):
+        """When cleaned form evidence is unmapped, branded token should still resolve IQM match."""
+        custom_map = {
+            "synthetic_parent": {
+                "standard_name": "Synthetic Parent",
+                "category": "other",
+                "aliases": ["synthetic parent"],
+                "forms": {
+                    "brandx form": {
+                        "bio_score": 10,
+                        "natural": True,
+                        "score": 12,
+                        "aliases": ["brandx"],
+                        "dosage_importance": 1.0,
+                    }
+                },
+                "match_rules": {
+                    "priority": 0,
+                    "match_mode": "alias_and_fuzzy",
+                    "exclusions": [],
+                },
+                "data_quality": {"review_status": "validated"},
+            }
+        }
+
+        result = enricher._match_quality_map(
+            "Synthetic Label Blend",
+            "Unknown Standard",
+            custom_map,
+            cleaned_forms=[{"name": "95% Marker"}],
+            branded_token="brandx",
+        )
+
+        assert result is not None
+        assert result.get("match_status") != "FORM_UNMAPPED"
+        assert result.get("canonical_id") == "synthetic_parent"
+        assert result.get("form_id") == "brandx form"
+        assert result.get("branded_token_fallback_used") is True
+
 
 class TestMatchRulesBehavior:
     """Test that match_rules from ingredient_quality_map.json affect matching."""
@@ -1576,3 +1615,20 @@ class TestDescriptorLeakageRegression:
 
 if __name__ == '__main__':
     pytest.main([__file__, '-v'])
+
+
+def test_capsules_high_confidence_form_variants_map_after_alias_updates():
+    enricher = SupplementEnricherV3()
+    cases = [
+        ("Turmeric rhizome extract", "turmeric"),
+        ("Turmeric root extract Curcuminoids", "turmeric"),
+        ("St. John's Wort 0.3% extract", "st_johns_wort"),
+        ("Milk Thistle seed extract", "milk_thistle"),
+        ("BioPerine Black Pepper (fruit) extract", "piperine"),
+        ("Chaste Tree berry extract", "chasteberry"),
+    ]
+
+    for raw_name, expected_canonical in cases:
+        match = enricher._match_quality_map(raw_name, raw_name, enricher.databases["ingredient_quality_map"])
+        assert match.get("canonical_id") == expected_canonical, raw_name
+        assert not match.get("form_unmapped_fallback"), raw_name

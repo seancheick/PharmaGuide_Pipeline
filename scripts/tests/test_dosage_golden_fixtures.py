@@ -523,6 +523,47 @@ class TestOverULFlagging:
         assert result.over_ul is False
         assert result.over_ul_amount is None or result.over_ul_amount == 0
 
+    def test_folate_folic_acid_800mcg_does_not_exceed_dfe_ul(self, calculator):
+        """800 mcg folic acid converts to 1360 mcg DFE and should remain below the adult UL."""
+        converter = UnitConverter()
+        conversion = converter.convert_nutrient(
+            nutrient="Folate",
+            amount=800,
+            from_unit="mcg",
+            ingredient_name="Folic Acid",
+        )
+
+        assert conversion.success is True
+        assert conversion.converted_unit == "mcg DFE"
+        assert conversion.converted_value == pytest.approx(1360.0, rel=0.01)
+
+        result = calculator.compute_nutrient_adequacy(
+            nutrient="Folate",
+            amount=conversion.converted_value,
+            unit=conversion.converted_unit,
+            age_group="adult",
+        )
+
+        assert result.ul == pytest.approx(1700.0, rel=0.01)
+        assert result.pct_ul == pytest.approx(80.0, rel=0.01)
+        assert result.over_ul is False
+
+    def test_magnesium_over_ul_keeps_flag_but_adds_supplement_specific_caution_note(self, calculator):
+        """Supplemental magnesium above UL should warn clearly without pretending the UL equals toxicity."""
+        result = calculator.compute_nutrient_adequacy(
+            nutrient="Magnesium",
+            amount=400,
+            unit="mg",
+            age_group="adult",
+            sex="male",
+        )
+
+        assert result.over_ul is True
+        assert result.ul == pytest.approx(350, rel=0.01)
+        assert result.adequacy_band == "optimal"
+        joined_notes = " ".join(result.notes + result.warnings).lower()
+        assert "supplemental magnesium" in joined_notes
+
 
 class TestConversionEvidenceFields:
     """

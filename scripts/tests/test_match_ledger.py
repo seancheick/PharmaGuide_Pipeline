@@ -130,6 +130,23 @@ class TestMatchLedgerBuilder:
         assert builder.entries[0].decision == DECISION_SKIPPED
         assert builder.entries[0].decision_reason == "additive_type_sweetener"
 
+    def test_record_recognized_non_scorable_preserves_identity(self, builder):
+        """Recognized non-scorable entries should remain auditable to a canonical row."""
+        builder.record_recognized_non_scorable(
+            domain=DOMAIN_INGREDIENTS,
+            raw_source_text="Sunflower Oil",
+            raw_source_path="activeIngredients[0]",
+            recognition_source="other_ingredients",
+            recognition_reason="carrier_oil",
+            canonical_id="OI_SUNFLOWER_OIL",
+            matched_to_name="Sunflower Oil",
+        )
+
+        entry = builder.entries[0]
+        assert entry.decision == DECISION_RECOGNIZED_NON_SCORABLE
+        assert entry.canonical_id == "OI_SUNFLOWER_OIL"
+        assert entry.matched_to_name == "Sunflower Oil"
+
     def test_coverage_calculation(self, builder):
         """Test coverage percentage calculation."""
         # Add 3 matched and 1 unmatched

@@ -90,6 +90,103 @@ class TestLabelHeaderSymmetry:
         assert normalizer._is_label_header("Zinc Citrate") is False
         assert normalizer._is_label_header("2% Milk Thistle Extract") is False
 
+    @pytest.mark.parametrize(
+        "name",
+        [
+            "May also contain",
+            "Soft Gel Shell",
+            "Shell Ingredients",
+            "Fish Gelatin Caplique Capsule",
+            "Gelatin softgel",
+        ],
+    )
+    def test_structural_other_headers_detected(self, normalizer, name):
+        """Structural other-ingredient containers must unwrap forms, not surface as ingredients."""
+        assert normalizer._is_label_header(name) is True
+
+
+class TestStructuralContainerUnwrap:
+    """Regression tests for structural container rows with child forms/nested rows."""
+
+    @pytest.fixture
+    def normalizer(self):
+        return EnhancedDSLDNormalizer()
+
+    def test_inactive_structural_header_unwraps_child_forms(self, normalizer):
+        raw_other = {
+            "ingredients": [
+                {
+                    "order": 1,
+                    "name": "Soft Gel Shell",
+                    "ingredientGroup": "capsule",
+                    "forms": [
+                        {"order": 1, "name": "Beef Gelatin", "ingredientId": 1},
+                        {"order": 2, "name": "Glycerin", "ingredientId": 2},
+                        {"order": 3, "name": "Water", "ingredientId": 3},
+                    ],
+                }
+            ]
+        }
+
+        processed = normalizer._process_other_ingredients_enhanced(raw_other)
+        names = [ing.get("name") for ing in processed]
+
+        assert "Soft Gel Shell" not in names
+        assert "Beef Gelatin" in names
+        assert "Glycerin" in names
+        assert "Water" in names
+
+    def test_may_also_contain_unwraps_forms_without_emitting_header(self, normalizer):
+        raw_other = {
+            "ingredients": [
+                {
+                    "order": 1,
+                    "name": "May also contain",
+                    "ingredientGroup": "Header",
+                    "forms": [
+                        {"order": 1, "name": "Cellulose", "ingredientId": 10, "prefix": "and or"},
+                        {"order": 2, "name": "Silica", "ingredientId": 11},
+                    ],
+                }
+            ]
+        }
+
+        processed = normalizer._process_other_ingredients_enhanced(raw_other)
+        names = [ing.get("name") for ing in processed]
+
+        assert "May also contain" not in names
+        assert "Cellulose" in names
+        assert "Silica" in names
+
+    def test_active_structural_container_drops_parent_and_keeps_children(self, normalizer):
+        raw_product = {
+            "id": "zma-test",
+            "fullName": "ZMA",
+            "brandName": "Test Brand",
+            "ingredientRows": [
+                {
+                    "order": 1,
+                    "name": "ZMA",
+                    "ingredientGroup": "Proprietary Blend",
+                    "amount": 2500,
+                    "unit": "mg",
+                    "nestedRows": [
+                        {"order": 2, "name": "Vitamin B6", "ingredientGroup": "Vitamin B6", "amount": 10.5, "unit": "mg"},
+                        {"order": 3, "name": "Magnesium", "ingredientGroup": "Magnesium", "amount": 450, "unit": "mg"},
+                        {"order": 4, "name": "Zinc Mono-L-Methionine Sulfate", "ingredientGroup": "Zinc", "amount": 30, "unit": "mg"},
+                    ],
+                }
+            ],
+            "otheringredients": {"ingredients": []},
+        }
+
+        normalized = normalizer.normalize_product(raw_product)
+        active_names = [ing.get("name") for ing in normalized.get("activeIngredients", [])]
+
+        assert "ZMA" not in active_names
+        assert "Vitamin B6" in active_names
+        assert "Magnesium" in active_names
+
 
 class TestNutritionFactExclusion:
     """Tests for nutrition fact exclusion"""
@@ -222,6 +319,16 @@ class TestBannedIngredientDetection:
         result = normalizer._check_banned_recalled("EPHEDRA")
         assert result is True, "EPHEDRA (uppercase) should be detected"
 
+    def test_banned_delta8_shorthand_detected(self, normalizer):
+        """Unified banned DB lookup should still catch shorthand delta-8 labels."""
+        assert normalizer._check_banned_recalled("Delta-8") is True
+
+    def test_priority_classification_preserves_banned_bucket_severity(self, normalizer):
+        """Banned DB severity should not be collapsed to critical for non-fail buckets."""
+        classification = normalizer._priority_based_classification("Delta-8 THC", [])
+        assert classification["banned_info"]["is_banned"] is True
+        assert classification["banned_info"]["severity"] == "moderate"
+
 
 class TestSkipTierCConfig:
     """Tests for Tier C case-insensitive skip (config-controlled)"""
@@ -319,6 +426,38 @@ class TestEndToEndProductNormalization:
 
         # Regular ingredient SHOULD appear in active
         assert "vitamin c" in active_names
+
+    def test_unknown_zero_quantity_active_stays_unmapped(self, normalizer):
+        """Missing quantity alone must not auto-mark an active as proprietary/mapped."""
+        raw_product = {
+            "id": "test_unknown_zero_qty",
+            "fullName": "Test Product",
+            "brandName": "Test Brand",
+            "productVersionCode": "1",
+            "ingredientRows": [
+                {
+                    "name": "Completely New Active",
+                    "order": 1,
+                    "quantity": None,
+                    "unit": "",
+                    "ingredientGroup": "Other",
+                }
+            ],
+        }
+
+        cleaned = normalizer.normalize_product(raw_product)
+        active = cleaned["activeIngredients"][0]
+
+        assert active["name"] == "Completely New Active"
+        assert active["mapped"] is False
+        assert active["proprietaryBlend"] is False
+
+    def test_extract_nutritional_amount_reads_dsld_quantity_key(self, normalizer):
+        """Nutritional amount helper must read DSLD quantity objects, not stale amount-only schema."""
+        result = normalizer._extract_nutritional_amount(
+            {"quantity": [{"quantity": 5, "unit": "mg"}]}
+        )
+        assert result == {"amount": 5, "unit": "mg"}
 
 
 class TestBug1TierCCaseInsensitive:

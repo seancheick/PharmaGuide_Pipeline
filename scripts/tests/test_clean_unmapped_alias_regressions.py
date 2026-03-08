@@ -756,6 +756,24 @@ def test_descriptor_terms_map_via_other_ingredients_identity(normalizer, name):
 @pytest.mark.parametrize(
     "name,expected_substring",
     [
+        ("Cat’s Claw (Uncaria tomentosa) extract", "Cat"),
+        ("Deep Sea Fish Oil, Purified", "Fish Oil"),
+        ("Pumpkin Seed Oil, Cold-Pressed", "Pumpkin"),
+        ("St. John’s Bread", "carob"),
+        ("Brewer’s Yeast", "Brewer"),
+        ("L-Methylfolate Calcium Salt", "Folate"),
+        ("DL-Malic Acid", "Malic Acid"),
+    ],
+)
+def test_raw_validated_punctuation_and_form_variants_map(normalizer, name, expected_substring):
+    standard_name, mapped, _ = normalizer._enhanced_ingredient_mapping(name, [])
+    assert mapped is True
+    assert expected_substring.lower() in str(standard_name).lower()
+
+
+@pytest.mark.parametrize(
+    "name,expected_substring",
+    [
         ("ERr 731 Siberian Rhubarb (Rheum rhaponticum L.) extract", "Rhaponticin"),
         ("Capros Amla extract", "Amla"),
         ("Amla (Emblica officinalis) fruit 5:1 extract", "Amla"),
@@ -928,3 +946,30 @@ def test_high_confidence_botanical_alias_batch_maps(normalizer, name, expected_s
     standard_name, mapped, _ = normalizer._enhanced_ingredient_mapping(name, [])
     assert mapped is True
     assert expected_substring.lower() in str(standard_name).lower()
+
+
+@pytest.mark.parametrize(
+    "raw,expected",
+    [
+        ("Milk Thistle extract extract", "Milk Thistle extract"),
+        ("Turmeric Rhizome Extract extract", "Turmeric Rhizome Extract"),
+        ("organic Flaxseed Oil organic", "organic Flaxseed Oil"),
+        ("Organic High Lignan Flaxseed Oil organic", "Organic High Lignan Flaxseed Oil"),
+    ],
+)
+def test_cleaning_strips_duplicate_extract_and_organic_wrappers(normalizer, raw, expected):
+    assert normalizer._strip_duplicate_label_artifacts(raw) == expected
+
+
+def test_cleaning_uses_deduped_name_but_preserves_raw_source_text(normalizer):
+    ingredient = {
+        "name": "Milk Thistle extract extract",
+        "quantity": {"quantity": 500, "unit": "mg"},
+        "order": 1,
+    }
+
+    processed = normalizer._process_single_ingredient_enhanced(ingredient, is_active=True)
+    assert processed is not None
+    assert processed.get("name") == "Milk Thistle extract"
+    assert processed.get("raw_source_text") == "Milk Thistle extract extract"
+

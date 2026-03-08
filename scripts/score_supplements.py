@@ -426,10 +426,10 @@ class SupplementScorer:
                 matched_substance_name = name
                 break
             elif status == "high_risk":
-                moderate_penalty = 10
+                moderate_penalty = max(moderate_penalty, 10)
                 flags.append("B0_HIGH_RISK_SUBSTANCE")
             elif status == "watchlist":
-                moderate_penalty = 5
+                moderate_penalty = max(moderate_penalty, 5)
                 flags.append("B0_WATCHLIST_SUBSTANCE")
             else:
                 # Fallback for pre-5.0 enriched data (severity-based)
@@ -439,7 +439,7 @@ class SupplementScorer:
                     matched_substance_name = name
                     break
                 elif severity == "moderate":
-                    moderate_penalty = 10
+                    moderate_penalty = max(moderate_penalty, 10)
                     flags.append("B0_MODERATE_SUBSTANCE")
                 elif severity == "low":
                     flags.append("B0_LOW_SUBSTANCE")
@@ -452,6 +452,8 @@ class SupplementScorer:
                 "B0_HIGH_RISK_SUBSTANCE", "B0_WATCHLIST_SUBSTANCE"
             }]
 
+        if review_needed and not (blocked or unsafe):
+            moderate_penalty = max(moderate_penalty, 5)
         if review_needed:
             flags.append("BANNED_MATCH_REVIEW_NEEDED")
 
@@ -1027,9 +1029,22 @@ class SupplementScorer:
                 numeric = as_float(value, None)
                 if numeric is not None:
                     risk_map[norm_text(key)] = numeric
+        seen_allergens: Dict[str, float] = {}
         penalty = 0.0
         for item in allergens:
-            penalty += risk_map.get(norm_text(item.get("severity_level")), 0.0)
+            sev = risk_map.get(norm_text(item.get("severity_level")), 0.0)
+            allergen_key = norm_text(
+                item.get("allergen_id")
+                or item.get("allergen_type")
+                or item.get("allergen_name")
+                or item.get("allergen")
+                or item.get("name")
+            )
+            if allergen_key:
+                seen_allergens[allergen_key] = max(seen_allergens.get(allergen_key, 0.0), sev)
+            else:
+                penalty += sev
+        penalty += sum(seen_allergens.values())
         b2_cap = as_float(b2_cfg.get("cap"), 2.0)
         return clamp(0.0, b2_cap, penalty)
 
@@ -2232,6 +2247,8 @@ class SupplementScorer:
             return "UNSAFE"
         if mapping_gate.get("stop"):
             return "NOT_SCORED"
+        if "BANNED_MATCH_REVIEW_NEEDED" in flags:
+            return "CAUTION"
         if any(f in flags for f in ("B0_MODERATE_SUBSTANCE", "B0_HIGH_RISK_SUBSTANCE",
                                      "B0_WATCHLIST_SUBSTANCE")):
             return "CAUTION"
@@ -2311,7 +2328,7 @@ class SupplementScorer:
             "output_schema_version": self.OUTPUT_SCHEMA_VERSION,
             "scoring_status": scoring_status,
             "score_basis": score_basis,
-            "evaluation_stage": "scoring" if verdict != "BLOCKED" else "safety",
+            "evaluation_stage": "safety" if verdict in {"BLOCKED", "UNSAFE"} else "scoring",
             "breakdown": breakdown,
             "flags": sorted(set(flags)),
             "supp_type": supp_type,
@@ -2795,21 +2812,19 @@ def generate_impact_report(
 
         cur_score = current.get("score_80")
         base_score = baseline.get("score_80")
-        if cur_score is None or base_score is None:
-            continue
-
-        delta = cur_score - base_score
-        if abs(delta) >= threshold_score_change:
-            report["score_changes"].append(
-                {
-                    "product_id": product_id,
-                    "product_name": current.get("product_name", "Unknown"),
-                    "baseline_score": base_score,
-                    "current_score": cur_score,
-                    "change": round(delta, 2),
-                    "change_pct": round((delta / base_score) * 100.0, 2) if base_score else 0.0,
-                }
-            )
+        if cur_score is not None and base_score is not None:
+            delta = cur_score - base_score
+            if abs(delta) >= threshold_score_change:
+                report["score_changes"].append(
+                    {
+                        "product_id": product_id,
+                        "product_name": current.get("product_name", "Unknown"),
+                        "baseline_score": base_score,
+                        "current_score": cur_score,
+                        "change": round(delta, 2),
+                        "change_pct": round((delta / base_score) * 100.0, 2) if base_score else 0.0,
+                    }
+                )
 
         if threshold_verdict_change:
             cur_verdict = current.get("verdict") or current.get("safety_verdict", "SAFE")
@@ -2827,6 +2842,10 @@ def generate_impact_report(
                     report["gate_failures"].append(
                         f"Product {product_id} changed to UNSAFE from {base_verdict}"
                     )
+                if cur_verdict == "BLOCKED" and base_verdict != "BLOCKED":
+                    report["gate_failures"].append(
+                        f"Product {product_id} changed to BLOCKED from {base_verdict}"
+                    )
 
     changed_pct = (len(report["score_changes"]) / len(current_results) * 100.0) if current_results else 0.0
     if changed_pct >= threshold_pct_change:
@@ -2841,6 +2860,11 @@ def generate_impact_report(
             1
             for item in report["verdict_changes"]
             if item["current_verdict"] == "UNSAFE" and item["baseline_verdict"] != "UNSAFE"
+        ),
+        "new_blocked_verdicts": sum(
+            1
+            for item in report["verdict_changes"]
+            if item["current_verdict"] == "BLOCKED" and item["baseline_verdict"] != "BLOCKED"
         ),
     }
 

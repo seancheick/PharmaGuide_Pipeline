@@ -178,6 +178,7 @@ class TestV30Scoring:
         result = scorer.score_product(product)
         assert result["verdict"] == "BLOCKED"
         assert result["score_80"] is None
+        assert result["evaluation_stage"] == "safety"
 
     def test_b0_critical_unsafe(self, scorer):
         product = make_base_product()
@@ -194,6 +195,7 @@ class TestV30Scoring:
         result = scorer.score_product(product)
         assert result["verdict"] == "UNSAFE"
         assert result["score_80"] == 0
+        assert result["evaluation_stage"] == "safety"
 
     def test_b0_token_bounded_causes_caution_not_block(self, scorer):
         product = make_base_product()
@@ -208,11 +210,33 @@ class TestV30Scoring:
             ],
         }
         result = scorer.score_product(product)
-        # token_bounded matches set the review flag but do NOT override verdict.
-        # The flag is informational for human review; verdict respects the score.
-        assert result["verdict"] == "SAFE"
+        # token_bounded banned hits must never surface as SAFE.
+        # They remain non-hard-fail, but force human-visible CAUTION and a minimum B0 penalty.
+        assert result["verdict"] == "CAUTION"
         assert "BANNED_MATCH_REVIEW_NEEDED" in result["flags"]
-        assert result["score_80"] is not None
+        assert result["score_80"] == pytest.approx(35.0)
+        assert result["breakdown"]["B"]["B0_moderate_penalty"] == pytest.approx(5.0)
+
+    def test_b0_moderate_penalty_uses_max_not_last_write_wins(self, scorer):
+        product = make_base_product()
+        product["contaminant_data"]["banned_substances"] = {
+            "found": True,
+            "substances": [
+                {
+                    "ingredient": "High Risk First",
+                    "match_type": "exact",
+                    "status": "high_risk",
+                },
+                {
+                    "ingredient": "Watchlist Second",
+                    "match_type": "alias",
+                    "status": "watchlist",
+                },
+            ],
+        }
+
+        result = scorer._evaluate_b0(product)
+        assert result["moderate_penalty"] == pytest.approx(10.0)
 
     def test_mapping_gate_not_scored_when_full_mapping_required(self, scorer):
         product = make_base_product()
@@ -706,6 +730,30 @@ class TestV30Scoring:
         assert result["verdict"] == "POOR"
         assert result["safety_verdict"] == "SAFE"
         assert result["score_80"] is not None and result["score_80"] < 32
+
+    def test_b2_deduplicates_same_allergen_type(self, scorer):
+        product = make_base_product()
+        product["contaminant_data"]["allergens"] = {
+            "found": True,
+            "allergens": [
+                {"allergen_name": "Milk", "severity_level": "high"},
+                {"allergen_name": "Milk", "severity_level": "high"},
+                {"allergen_name": "Soy", "severity_level": "moderate"},
+            ],
+        }
+
+        b_cfg = {
+            "B2_allergen_presence": {
+                "cap": 10.0,
+                "severity_points": {
+                    "high": 2.0,
+                    "moderate": 1.5,
+                    "low": 1.0,
+                },
+            }
+        }
+
+        assert scorer._score_b2(product, b_cfg) == pytest.approx(3.5)
 
     def test_violation_penalty_prefers_total_deduction_applied(self, scorer):
         product = make_base_product()
@@ -1573,6 +1621,31 @@ class TestB5DisclosureTierEdgeCases:
         assert scorer._score_b5(p, []) == pytest.approx(2.5, abs=0.01)
 
 
+class TestBannedEnrichmentScorerContract:
+    def test_token_bounded_banned_hit_from_enricher_becomes_caution_with_penalty(self):
+        from enrich_supplements_v3 import SupplementEnricherV3
+
+        enricher = SupplementEnricherV3()
+        scorer = SupplementScorer()
+        product = make_base_product()
+        product_name = "contains phenibut analog"
+
+        banned = enricher._check_banned_substances(
+            [{"name": product_name, "standardName": product_name}],
+            {"product_name": product_name, "fullName": product_name, "brandName": ""},
+        )
+        assert banned["found"] is True
+        assert any(s.get("match_type") == "token_bounded" for s in banned["substances"])
+
+        product["contaminant_data"]["banned_substances"] = banned
+        result = scorer.score_product(product)
+
+        assert result["verdict"] == "CAUTION"
+        assert "BANNED_MATCH_REVIEW_NEEDED" in result["flags"]
+        assert result["score_80"] == pytest.approx(35.0)
+        assert result["breakdown"]["B"]["B0_moderate_penalty"] == pytest.approx(5.0)
+
+
 class TestImpactReport:
     def test_impact_report_fails_on_new_unsafe(self):
         current = [{"dsld_id": "p1", "score_80": 50, "verdict": "UNSAFE"}]
@@ -1587,6 +1660,20 @@ class TestImpactReport:
 
         assert report["pass_gate"] is False
         assert report["summary_statistics"]["changes"]["new_unsafe_verdicts"] == 1
+
+    def test_impact_report_fails_on_new_blocked(self):
+        current = [{"dsld_id": "p1", "score_80": None, "verdict": "BLOCKED"}]
+        baseline = [{"dsld_id": "p1", "score_80": 50, "verdict": "SAFE"}]
+
+        report = generate_impact_report(
+            current,
+            baseline_results=baseline,
+            threshold_score_change=99,
+            threshold_pct_change=99,
+        )
+
+        assert report["pass_gate"] is False
+        assert any("BLOCKED" in failure for failure in report["gate_failures"])
 
 
 class TestCategoryPercentiles:

@@ -603,8 +603,11 @@ class SupplementEnricherV3:
         # Log reference data versions for auditability
         self._log_reference_versions()
 
-        missing_critical = [db for db in critical_dbs
-                           if not self.databases.get(db) or len(self.databases.get(db, {})) == 0]
+        missing_critical = []
+        for db in critical_dbs:
+            db_data = self.databases.get(db, {})
+            if not db_data or len(db_data) == 0:
+                missing_critical.append(db)
         if missing_critical:
             raise RuntimeError(
                 f"CRITICAL: Required databases missing: {', '.join(missing_critical)}. "
@@ -1402,20 +1405,32 @@ class SupplementEnricherV3:
         ing_norm = self._normalize_text(ing_name) if ing_name else ""
         std_norm = self._normalize_text(std_name) if std_name else ""
         target_norm = self._normalize_text(target_name)
+        ing_key = norm_module.make_normalized_key(ing_name) if ing_name else ""
+        std_key = norm_module.make_normalized_key(std_name) if std_name else ""
+        target_key = norm_module.make_normalized_key(target_name)
 
         # Check direct match against canonical name
         if ing_norm and ing_norm == target_norm:
             return {"method": "exact", "matched_alias": None}
         if std_norm and std_norm == target_norm:
             return {"method": "exact_via_std", "matched_alias": None}
+        if ing_key and ing_key == target_key:
+            return {"method": "exact_key", "matched_alias": None}
+        if std_key and std_key == target_key:
+            return {"method": "exact_key_via_std", "matched_alias": None}
 
         # Check alias matches
         for alias in aliases:
             alias_norm = self._normalize_text(alias)
+            alias_key = norm_module.make_normalized_key(alias)
             if ing_norm and ing_norm == alias_norm:
                 return {"method": "alias", "matched_alias": alias}
             if std_norm and std_norm == alias_norm:
                 return {"method": "alias_via_std", "matched_alias": alias}
+            if ing_key and ing_key == alias_key:
+                return {"method": "alias_key", "matched_alias": alias}
+            if std_key and std_key == alias_key:
+                return {"method": "alias_key_via_std", "matched_alias": alias}
 
         return None
 
@@ -1599,7 +1614,17 @@ class SupplementEnricherV3:
             variants = entry.get("variants", []) or []
 
             if pattern:
-                if re.search(pattern, ing_norm):
+                try:
+                    matched = re.search(pattern, ing_norm)
+                except re.error as exc:
+                    self.logger.warning(
+                        "Skipping malformed banned denylist regex '%s' for denylist_id=%s: %s",
+                        pattern,
+                        entry.get("id", ""),
+                        exc,
+                    )
+                    continue
+                if matched:
                     return {
                         "denylist_id": entry.get("id", ""),
                         "matched_pattern": pattern,
@@ -1836,12 +1861,16 @@ class SupplementEnricherV3:
             # When branded_token_extracted == name the clean stage collapsed the full label
             # to just the brand prefix (e.g. "Albion" from "Albion Magnesium Bisglycinate Chelate").
             # In that case prefer raw_source_text so IQM alias matching can resolve the full form.
+            # Otherwise prefer cleaned `name` to avoid carrying known text artifacts from raw label.
             _bte = ingredient.get('branded_token_extracted', '')
             _raw = ingredient.get('name', '')
+            _raw_source = ingredient.get('raw_source_text') or _raw
             if _bte and _bte != _raw:
                 ing_name = _bte
+            elif _bte:
+                ing_name = _raw_source
             else:
-                ing_name = ingredient.get('raw_source_text') or _raw
+                ing_name = _raw or _raw_source
             std_name = ingredient.get('standardName', '') or ing_name
             quantity = ingredient.get('quantity', 0)
             unit = ingredient.get('unit', '')
@@ -1909,7 +1938,7 @@ class SupplementEnricherV3:
             # Pass cleaned forms[] to enable form-aware matching (P0 form-loss fix)
             ingredient_forms = ingredient.get('forms') or []
             match_result = self._match_quality_map(
-                ing_name, std_name, quality_map, cleaned_forms=ingredient_forms
+                ing_name, std_name, quality_map, cleaned_forms=ingredient_forms, branded_token=_bte
             )
             quality_entry = self._build_quality_entry(
                 ingredient, match_result, hierarchy_type, source_section="active"
@@ -1966,10 +1995,13 @@ class SupplementEnricherV3:
             # the token was collapsed to just the brand prefix (e.g., "Albion").
             _bte = ingredient.get('branded_token_extracted', '')
             _raw = ingredient.get('name', '')
+            _raw_source = ingredient.get('raw_source_text') or _raw
             if _bte and _bte != _raw:
                 ing_name = _bte
+            elif _bte:
+                ing_name = _raw_source
             else:
-                ing_name = ingredient.get('raw_source_text') or _raw
+                ing_name = _raw or _raw_source
             std_name = ingredient.get('standardName', '') or ing_name
             quantity = ingredient.get('quantity', 0)
             unit = ingredient.get('unit', '')
@@ -1987,7 +2019,7 @@ class SupplementEnricherV3:
 
                 ingredient_forms = ingredient.get('forms') or []
                 match_result = self._match_quality_map(
-                    ing_name, std_name, quality_map, cleaned_forms=ingredient_forms
+                    ing_name, std_name, quality_map, cleaned_forms=ingredient_forms, branded_token=_bte
                 )
                 quality_entry = self._build_quality_entry(
                     ingredient, match_result, hierarchy_type,
@@ -3674,7 +3706,8 @@ class SupplementEnricherV3:
     def _match_quality_map(self, ing_name: str, std_name: str, quality_map: Dict,
                            _form_extraction_attempt: bool = False,
                            cleaned_forms: Optional[List[Dict]] = None,
-                           preferred_parent: Optional[str] = None) -> Optional[Dict]:
+                           preferred_parent: Optional[str] = None,
+                           branded_token: Optional[str] = None) -> Optional[Dict]:
         """
         Match ingredient against quality map using explicit precedence rules.
 
@@ -3707,9 +3740,40 @@ class SupplementEnricherV3:
             _form_extraction_attempt: Internal flag to prevent recursion
             cleaned_forms: Pre-parsed forms[] from cleaning stage, e.g.
                            [{"name": "Retinyl Palmitate", "percent": None, ...}]
+            branded_token: Optional branded token extracted at cleaning stage
+                           (e.g., "KSM-66", "Leucoselect") used as final
+                           fallback when form extraction fails
 
         Logs structured warnings when multiple candidates exist in the winning tier.
         """
+        def _try_branded_token_fallback() -> Optional[Dict]:
+            """Last-resort fallback before returning FORM_UNMAPPED."""
+            if _form_extraction_attempt:
+                return None
+            if not branded_token or not isinstance(branded_token, str):
+                return None
+
+            token = branded_token.strip()
+            if not token:
+                return None
+
+            token_match = self._match_quality_map(
+                token,
+                std_name,
+                quality_map,
+                _form_extraction_attempt=True,
+            )
+            if not token_match:
+                return None
+            if isinstance(token_match, dict) and token_match.get("match_status") == "FORM_UNMAPPED":
+                return None
+
+            resolved = dict(token_match)
+            resolved["branded_token_fallback_used"] = True
+            resolved["branded_token"] = token
+            resolved["original_label"] = ing_name
+            return resolved
+
         # MULTI-FORM MATCHING: Try structured cleaned_forms first, then fall back
         # to label text extraction. This fixes the "form loss" issue where cleaning
         # already parsed "Vitamin A (as Retinyl Palmitate)" into forms[] but the
@@ -3745,6 +3809,9 @@ class SupplementEnricherV3:
                             fallback['form_source'] = 'cleaned_forms'
                             fallback['form_extraction_used'] = True
                             return fallback
+                        branded_match = _try_branded_token_fallback()
+                        if branded_match:
+                            return branded_match
                         return {
                             'match_status': 'FORM_UNMAPPED',
                             'has_form_evidence': True,
@@ -3782,6 +3849,9 @@ class SupplementEnricherV3:
                         fallback['form_source'] = 'label_extraction'
                         fallback['form_extraction_used'] = True
                         return fallback
+                    branded_match = _try_branded_token_fallback()
+                    if branded_match:
+                        return branded_match
                     return {
                         'match_status': 'FORM_UNMAPPED',
                         'has_form_evidence': True,
@@ -5093,7 +5163,7 @@ class SupplementEnricherV3:
             "allergens": self._check_allergens(all_ingredients, product)
         }
 
-    def _check_banned_substances(self, ingredients: List[Dict], product: Optional[Dict] = None) -> Dict:
+    def _check_banned_substances(self, ingredients: List[Dict], product: Optional[Dict] = None) -> Dict[str, Any]:
         """Check for banned/recalled substances.
 
         Supports both legacy (category-based) and v3 (ingredients[]) structures.
@@ -5175,7 +5245,8 @@ class SupplementEnricherV3:
                     continue
 
                 # P0b: Filter by match_mode - skip disabled/historical entries
-                match_mode = banned_item.get('match_mode', 'active')
+                match_rules = banned_item.get('match_rules', {}) or {}
+                match_mode = banned_item.get('match_mode') or match_rules.get('match_mode', 'active')
                 if match_mode in ('disabled', 'historical'):
                     continue
 
@@ -5183,11 +5254,24 @@ class SupplementEnricherV3:
                 # (full name / brand), not ingredient labels.
                 candidate_ing_name = ing_name
                 candidate_std_name = std_name
+                allow_product_token_bounded = True
                 if entity_type == 'product':
                     if ing_idx > 0:
                         continue
+                    recall_scope = banned_item.get('recall_scope')
+                    has_recall_scope = bool(recall_scope)
                     candidate_ing_name = product_name or ing_name
-                    candidate_std_name = brand_name or std_name
+                    # Precision guard: product-scoped recalls should match
+                    # product identity only (fullName/product_name), not brand.
+                    # Brand fallback remains allowed for unscoped brand-level
+                    # bans where recall_scope is absent.
+                    if has_recall_scope and product_name:
+                        candidate_std_name = ""
+                    else:
+                        candidate_std_name = brand_name or std_name
+                    # Product recalls are high-stakes; avoid token-bounded
+                    # product-name partial hits that can over-block.
+                    allow_product_token_bounded = False
                 candidate_ing_name_lower = candidate_ing_name.lower()
                 candidate_std_name_lower = candidate_std_name.lower()
 
@@ -5206,7 +5290,6 @@ class SupplementEnricherV3:
                     continue
 
                 # P0: Check negative_match_terms (reduces false positives)
-                match_rules = banned_item.get('match_rules', {})
                 negative_terms = match_rules.get('negative_match_terms', [])
                 if negative_terms and (
                     self._has_negative_match_term(candidate_ing_name_lower, negative_terms)
@@ -5233,7 +5316,7 @@ class SupplementEnricherV3:
                         match_method = "exact"
                         matched_variant = banned_name
 
-                if not match_method:
+                if not match_method and allow_product_token_bounded:
                     safe_token_aliases = self._filter_safe_token_aliases(banned_name, all_aliases)
                     matched, matched_variant = self._token_bounded_match(
                         candidate_ing_name, banned_name, safe_token_aliases
@@ -5282,14 +5365,7 @@ class SupplementEnricherV3:
                         "token_bounded": 0.7
                     }
 
-                    # Derive severity_level from status for backward compat with scorer
-                    _STATUS_TO_SEVERITY = {
-                        "banned": "critical", "recalled": "critical",
-                        "high_risk": "moderate", "watchlist": "low"
-                    }
-                    derived_severity = _STATUS_TO_SEVERITY.get(
-                        banned_item.get('status', ''), 'high'
-                    )
+                    derived_severity = self._derive_banned_severity(banned_item)
 
                     found.append({
                         "ingredient": candidate_ing_name,
@@ -5316,6 +5392,36 @@ class SupplementEnricherV3:
             "found": len(found) > 0,
             "substances": found
         }
+
+    def _derive_banned_severity(self, banned_item: Dict[str, Any]) -> str:
+        """Derive severity from current banned DB policy fields."""
+        status = banned_item.get("status")
+        if status in {"banned", "recalled"}:
+            return "critical"
+        if status == "high_risk":
+            legal_status = banned_item.get("legal_status_enum")
+            clinical_risk = banned_item.get("clinical_risk_enum")
+            if legal_status in {"banned_federal", "banned_state", "controlled_substance", "adulterant", "not_lawful_as_supplement"}:
+                if clinical_risk in {"critical", "high"}:
+                    return clinical_risk
+            return "moderate"
+        if status == "watchlist":
+            clinical_risk = banned_item.get("clinical_risk_enum")
+            return clinical_risk if clinical_risk in {"moderate", "high", "critical"} else "low"
+
+        legal_status = banned_item.get("legal_status_enum")
+        if legal_status in {"high_risk", "restricted", "under_review"}:
+            return {
+                "high_risk": "moderate",
+                "restricted": "moderate",
+                "under_review": "low",
+            }[legal_status]
+
+        clinical_risk = banned_item.get("clinical_risk_enum")
+        if clinical_risk:
+            return clinical_risk
+
+        return "critical"
 
     def _has_negative_match_term(self, text: str, negative_terms: List[str]) -> bool:
         """Check if text contains any negative match terms (case-insensitive).
@@ -6347,7 +6453,19 @@ class SupplementEnricherV3:
                 snippet = snippet + '...'
 
             return snippet.replace('\n', ' ').replace('\t', ' ')
-        except Exception:
+        except re.error as exc:
+            self.logger.warning(
+                "Failed to extract context snippet for matched_text=%r: %s",
+                matched_text,
+                exc,
+            )
+            return matched_text
+        except (AttributeError, TypeError, KeyError) as exc:
+            self.logger.warning(
+                "Failed to extract context snippet for matched_text=%r: %s",
+                matched_text,
+                exc,
+            )
             return matched_text
 
     def _deduplicate_evidence(self, evidence_list: List[Dict]) -> List[Dict]:
@@ -7716,15 +7834,17 @@ class SupplementEnricherV3:
 
     def _check_violations(self, brand: str, manufacturer: str) -> Dict:
         """
-        Check for manufacturer violations using fuzzy matching.
+        Check for manufacturer violations using deterministic company matching.
 
-        Handles variations like:
-        - "Healthy Directions" vs "Healthy Directions, LLC"
-        - "Dr. David Williams" vs "David Williams"
-        - "Natural Living" vs "Natural Living, Inc."
+        Safety policy:
+        - Violation penalties must NEVER be driven by fuzzy name similarity.
+        - Only exact matches (after company normalization) are eligible.
+        - Optional approved aliases can be supplied per violation record.
         """
         violations_db = self.databases.get('manufacturer_violations', {})
         violations_list = violations_db.get('manufacturer_violations', [])
+        brand_norm = self._normalize_company_name(brand)
+        manufacturer_norm = self._normalize_company_name(manufacturer)
 
         found = []
         for violation in violations_list:
@@ -7732,24 +7852,46 @@ class SupplementEnricherV3:
             if not mfr_name:
                 continue
 
-            # Check for match using fuzzy company name matching
-            brand_match, brand_score = self._fuzzy_company_match(brand, mfr_name)
-            mfr_match, mfr_score = self._fuzzy_company_match(manufacturer, mfr_name)
+            approved_aliases = []
+            for field in ("aliases", "manufacturer_aliases"):
+                value = violation.get(field)
+                if isinstance(value, list):
+                    approved_aliases.extend([str(alias).strip() for alias in value if str(alias).strip()])
 
-            if brand_match or mfr_match:
-                match_score = max(brand_score, mfr_score)
-                total_deduction_applied = violation.get('total_deduction_applied', 0.0)
-                found.append({
-                    "violation_id": violation.get('id', ''),
-                    "violation_type": violation.get('violation_type', ''),
-                    "severity_level": violation.get('severity_level', ''),
-                    "date": violation.get('date', ''),
-                    "total_deduction_applied": total_deduction_applied,
-                    # Backward-compatible alias for legacy consumers.
-                    "total_deduction": total_deduction_applied,
-                    "is_resolved": violation.get('is_resolved', False),
-                    "match_confidence": round(match_score, 3)
-                })
+            match_source = None
+            matched_candidate = None
+            for candidate in [mfr_name] + approved_aliases:
+                candidate_norm = self._normalize_company_name(candidate)
+                if not candidate_norm:
+                    continue
+                if manufacturer_norm and manufacturer_norm == candidate_norm:
+                    match_source = "manufacturer"
+                    matched_candidate = candidate
+                    break
+                if brand_norm and brand_norm == candidate_norm:
+                    match_source = "brandName"
+                    matched_candidate = candidate
+                    break
+
+            if not match_source:
+                continue
+
+            total_deduction_applied = violation.get('total_deduction_applied', 0.0)
+            found.append({
+                "violation_id": violation.get('id', ''),
+                "violation_type": violation.get('violation_type', ''),
+                "severity_level": violation.get('severity_level', ''),
+                "date": violation.get('date', ''),
+                "total_deduction_applied": total_deduction_applied,
+                # Backward-compatible alias for legacy consumers.
+                "total_deduction": total_deduction_applied,
+                "is_resolved": violation.get('is_resolved', False),
+                "match_confidence": 1.0,
+                "match_method": "exact_company_normalized",
+                "match_source": match_source,
+                "matched_manufacturer": mfr_name,
+                "matched_alias": matched_candidate if matched_candidate and matched_candidate != mfr_name else None,
+            })
 
         total_deduction_applied = 0.0
         for item in found:
@@ -10473,6 +10615,7 @@ class SupplementEnricherV3:
                         raw_source_path=source_path,
                         botanical_db_match=ing.get("matched_entry_name") or std_name or raw_text,
                         reason=ing.get("recognition_reason") or "botanical_unscored",
+                        canonical_id=ing.get("matched_entry_id"),
                         normalized_key=normalized_key,
                     )
                 elif ing.get("recognized_non_scorable"):
@@ -10482,6 +10625,8 @@ class SupplementEnricherV3:
                         raw_source_path=source_path,
                         recognition_source=ing.get("recognition_source") or "rule_based",
                         recognition_reason=ing.get("recognition_reason") or "recognized_non_scorable",
+                        canonical_id=ing.get("matched_entry_id"),
+                        matched_to_name=ing.get("matched_entry_name") or std_name or raw_text,
                         normalized_key=normalized_key,
                     )
                 else:
@@ -10513,6 +10658,7 @@ class SupplementEnricherV3:
                         raw_source_path=source_path,
                         botanical_db_match=recognized_entry_name,
                         reason=recognition_reason or "botanical_unscored",
+                        canonical_id=ing.get("recognized_entry_id") or ing.get("matched_entry_id"),
                         normalized_key=normalized_key,
                     )
                 else:
@@ -10522,6 +10668,8 @@ class SupplementEnricherV3:
                         raw_source_path=source_path,
                         recognition_source=recognition_source or "rule_based",
                         recognition_reason=recognition_reason or "recognized_non_scorable",
+                        canonical_id=ing.get("recognized_entry_id") or ing.get("matched_entry_id"),
+                        matched_to_name=recognized_entry_name,
                         normalized_key=normalized_key,
                     )
             else:

@@ -254,8 +254,9 @@ def preprocess_text(text: str) -> str:
     if not text:
         return ""
 
-    # Lowercase and strip
-    text = text.lower().strip()
+    # Start from the shared normalizer so punctuation and quote variants resolve
+    # consistently across clean and enrich stages.
+    text = normalize_text(text)
 
     # Remove common parenthetical information
     text = re.sub(r'\([^)]*\)', '', text)

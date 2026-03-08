@@ -3,8 +3,8 @@
     "description": "Other/inactive ingredients database for supplement excipients and additives",
     "purpose": "inactive_ingredient_classification",
     "schema_version": "5.0.0",
-    "last_updated": "2026-03-01",
-    "total_entries": 531
+    "last_updated": "2026-03-06",
+    "total_entries": 535
   },
   "other_ingredients": [
     {
@@ -115,7 +115,9 @@
         "Alcohol",
         "ethanol",
         "ethyl alcohol",
-        "grain alcohol"
+        "grain alcohol",
+        "distilled water, 35% alcohol",
+        "tincture base (water/alcohol)"
       ],
       "category": "solvent",
       "is_additive": true,
@@ -129,7 +131,7 @@
         "extraction",
         "preservative"
       ],
-      "last_updated": "2025-12-04"
+      "last_updated": "2026-03-06"
     },
     {
       "id": "NHA_ALLULOSE",
@@ -275,7 +277,8 @@
         "organic apple cider vinegar",
         "raw apple cider vinegar",
         "unfiltered apple cider vinegar",
-        "Vinegar"
+        "Vinegar",
+        "apple cider vinegar, raw"
       ],
       "category": "functional_ingredient",
       "is_additive": false,
@@ -288,7 +291,7 @@
         "functional ingredient",
         "flavor"
       ],
-      "last_updated": "2026-02-24"
+      "last_updated": "2026-03-06"
     },
     {
       "id": "NHA_APPLE_PUREE_CONCENTRATE",
@@ -833,7 +836,9 @@
         "organic cellulose",
         "plant cellulose",
         "plant fiber",
-        "wood pulp cellulose"
+        "wood pulp cellulose",
+        "non-gmo vegetable cellulose dual-layer capsules",
+        "non-gmo vegetable cellulose capsule"
       ],
       "category": "filler_fiber",
       "is_additive": false,
@@ -847,7 +852,7 @@
         "fiber addition",
         "texture improvement"
       ],
-      "last_updated": "2025-08-14"
+      "last_updated": "2026-03-06"
     },
     {
       "id": "NHA_CHAMOMILE_EXTRACT",
@@ -973,7 +978,12 @@
       "aliases": [
         "chocolate flavor",
         "chocolate flavor, natural",
-        "natural chocolate flavor"
+        "natural chocolate flavor",
+        "organic chocolate flavors",
+        "raw organic chocolate flavors",
+        "chocolate flavors",
+        "natural chocolate flavors",
+        "organic chocolate mint flavor"
       ],
       "category": "flavoring",
       "is_additive": true,
@@ -986,7 +996,7 @@
         "taste masking",
         "flavor enhancement"
       ],
-      "last_updated": "2026-03-01"
+      "last_updated": "2026-03-06"
     },
     {
       "id": "NHA_CITRIC_ACID",
@@ -1101,7 +1111,9 @@
         "natural coconut oil",
         "organic virgin coconut oil",
         "refined coconut oil",
-        "virgin coconut oil"
+        "virgin coconut oil",
+        "coconut cream",
+        "100% organic coconut"
       ],
       "category": "carrier_filler_natural",
       "is_additive": false,
@@ -1115,7 +1127,7 @@
         "texture improvement",
         "flavor enhancement"
       ],
-      "last_updated": "2025-08-14"
+      "last_updated": "2026-03-06"
     },
     {
       "id": "NHA_COCONUT_GRANULATED",
@@ -2306,7 +2318,9 @@
         "apple acid",
         "E296",
         "hydroxysuccinic acid",
-        "malic acid"
+        "malic acid",
+        "DL-Malic Acid",
+        "dl-malic acid"
       ],
       "category": "organic_acid_natural",
       "is_additive": false,
@@ -3093,7 +3107,26 @@
         "mango flavor, natural",
         "orange tangerine flavor, natural",
         "peppermint flavor, natural",
-        "peach, natural"
+        "peach, natural",
+        "organic vanilla flavors",
+        "natural vanilla flavors",
+        "vanilla flavors",
+        "organic coffee flavor",
+        "natural cafe latte flavor",
+        "coffee flavor",
+        "organic mint spice flavor",
+        "natural peppermint essence",
+        "natural lemon essence",
+        "organic cranberry-lime flavor",
+        "organic orange creme flavor",
+        "orange creme flavor",
+        "lemon rosemary flavor",
+        "organic chai flavor",
+        "lime flavor, natural",
+        "natural black berry flavor",
+        "strawberry banana flavor",
+        "blueberry muffin flavor",
+        "non-gmo strawberry flavor"
       ],
       "category": "flavor_natural",
       "is_additive": true,
@@ -3107,7 +3140,7 @@
         "taste masking",
         "aroma improvement"
       ],
-      "last_updated": "2026-02-23"
+      "last_updated": "2026-03-06"
     },
     {
       "id": "NHA_NATURAL_FLAVOR_VARIANTS",
@@ -3286,7 +3319,10 @@
         "rosemary extract",
         "tocopherol blend",
         "vitamin C ester",
-        "ascorbate palmitate"
+        "ascorbate palmitate",
+        "non-gmo rosemary extract",
+        "rosemary extract antioxidant",
+        "non-gmo citrus extract"
       ],
       "category": "preservative_natural",
       "is_additive": true,
@@ -3300,7 +3336,7 @@
         "shelf life extension",
         "rancidity prevention"
       ],
-      "last_updated": "2025-08-14"
+      "last_updated": "2026-03-06"
     },
     {
       "id": "NHA_NATURAL_SWEETENER",
@@ -4561,7 +4597,9 @@
         "steviol glycoside",
         "steviol glycosides",
         "stevioside",
-        "truvia"
+        "truvia",
+        "stevia rebaudioside a",
+        "stevia reb-a"
       ],
       "category": "sweetener_natural",
       "is_additive": true,
@@ -4576,7 +4614,7 @@
         "calorie reduction",
         "natural sweetening"
       ],
-      "last_updated": "2025-11-15"
+      "last_updated": "2026-03-06"
     },
     {
       "id": "NHA_STRAWBERRY_PUREE",
@@ -4606,7 +4644,9 @@
         "succanat honey",
         "sugar cane natural",
         "unrefined cane sugar",
-        "whole cane sugar"
+        "whole cane sugar",
+        "organic sucanat cane sugar",
+        "sucanat cane sugar"
       ],
       "category": "sweetener_natural",
       "is_additive": true,
@@ -4620,7 +4660,7 @@
         "clean label sweetener",
         "mineral content retention"
       ],
-      "last_updated": "2025-09-19"
+      "last_updated": "2026-03-06"
     },
     {
       "id": "NHA_SUCROSE_FATTY_ACID_ESTER",
@@ -5460,7 +5500,8 @@
         "ascorbic acid",
         "E300",
         "l-ascorbic acid antioxidant",
-        "vitamin c preservative"
+        "vitamin c preservative",
+        "non-gmo ascorbic acid"
       ],
       "category": "preservative_natural",
       "is_additive": true,
@@ -5474,7 +5515,7 @@
         "preservative",
         "pH control"
       ],
-      "last_updated": "2025-11-14"
+      "last_updated": "2026-03-06"
     },
     {
       "id": "OI_BEETROOT_POWDER",
@@ -6071,7 +6112,10 @@
         "pullulan capsule",
         "pullulan capsules",
         "tapioca pullulan",
-        "vegetable pullulan"
+        "vegetable pullulan",
+        "non-gmo vegetable pullulan",
+        "non-gmo pullulan",
+        "Plantcap"
       ],
       "category": "capsule_material",
       "is_additive": true,
@@ -6084,7 +6128,7 @@
         "vegan capsule shells",
         "film coating"
       ],
-      "last_updated": "2026-02-18"
+      "last_updated": "2026-03-06"
     },
     {
       "id": "OI_RIBONUCLEIC_ACID",
@@ -6280,7 +6324,10 @@
         "Vitamin E, Natural",
         "proprietary natural tocopherols",
         "natural alpha tocopherol",
-        "alpha tocopherol"
+        "alpha tocopherol",
+        "natural non-gmo soy tocopherols",
+        "natural non-gmo soy tocopherol",
+        "soy tocopherols"
       ],
       "category": "preservative_natural",
       "is_additive": true,
@@ -6294,7 +6341,7 @@
         "preservative",
         "oil stabilizer"
       ],
-      "last_updated": "2025-11-14"
+      "last_updated": "2026-03-06"
     },
     {
       "id": "OI_TOTAL_CULTURES",
@@ -7461,7 +7508,9 @@
         "organic olive oil",
         "organic, extra virgin Olive Oil",
         "pure Olive Oil",
-        "virgin olive oil"
+        "virgin olive oil",
+        "organic cold pressed extra virgin olive oil",
+        "cold-pressed extra virgin olive oil"
       ],
       "category": "oil_carrier",
       "is_additive": false,
@@ -7474,7 +7523,7 @@
         "lipid carrier",
         "fat-soluble vitamin vehicle"
       ],
-      "last_updated": "2025-08-04"
+      "last_updated": "2026-03-06"
     },
     {
       "id": "PII_CORN_OIL",
@@ -7790,7 +7839,8 @@
         "type a gelatin",
         "type b gelatin",
         "Beef Gelatin",
-        "Beef gelatin capsule"
+        "Beef gelatin capsule",
+        "Fish Gelatin Caplique Capsule"
       ],
       "category": "capsule_material",
       "is_additive": true,
@@ -8084,7 +8134,12 @@
         "veggie cap",
         "100% Vegetarian Capsule",
         "100% Vegetable Capsule",
-        "Vegetable Capsule"
+        "Vegetable Capsule",
+        "non-gmo plant softgel",
+        "vegagels",
+        "vegagels(r)",
+        "plantgel",
+        "Hypromellose, Natural"
       ],
       "category": "capsule_shell",
       "is_additive": true,
@@ -8098,7 +8153,7 @@
         "tablet coating",
         "controlled release"
       ],
-      "last_updated": "2026-03-01"
+      "last_updated": "2026-03-06"
     },
     {
       "id": "PII_HYDROXYPROPYL_CELLULOSE",
@@ -8421,7 +8476,10 @@
         "non-GMO medium chain triglycerides",
         "triglycerides",
         "c8vantage",
-        "c8vantage medium chain triglyceride c8 powder"
+        "c8vantage medium chain triglyceride c8 powder",
+        "organic coconut medium chain triglycerides",
+        "coconut medium chain triglycerides",
+        "non-gmo mct oil"
       ],
       "category": "oil_carrier",
       "is_additive": false,
@@ -8435,7 +8493,7 @@
         "rapid energy source",
         "solubilizer"
       ],
-      "last_updated": "2025-09-19"
+      "last_updated": "2026-03-06"
     },
     {
       "id": "PII_MICA_COLORANT",
@@ -9212,7 +9270,8 @@
         "white rice flour",
         "non-gmo rice protein",
         "certified organic brown rice",
-        "brown rice grain flour"
+        "brown rice grain flour",
+        "non-GMO Rice Flour"
       ],
       "category": "filler",
       "is_additive": true,
@@ -9296,7 +9355,9 @@
       "aliases": [
         "s cerevisiae",
         "S. cerevisiae",
-        "saccharomyces cerevisiae"
+        "saccharomyces cerevisiae",
+        "saccharomyces cereviseiae",
+        "Saccharomyces cerevisae"
       ],
       "category": "fermentation_yeast",
       "is_additive": false,
@@ -9310,7 +9371,7 @@
         "nutritional yeast",
         "probiotic yeast labeling"
       ],
-      "last_updated": "2026-02-23"
+      "last_updated": "2026-03-06"
     },
     {
       "id": "PII_SAFFLOWER_OIL",
@@ -11807,7 +11868,8 @@
       "aliases": [
         "Arrowroot",
         "arrowroot starch",
-        "maranta arundinacea starch"
+        "maranta arundinacea starch",
+        "Arrowroot Flour"
       ],
       "category": "filler_binder",
       "is_additive": false,
@@ -12123,6 +12185,91 @@
       ],
       "last_updated": "2026-03-01",
       "notes": "TruMask is a proprietary flavor-masking technology by Sensient Technologies. Used as liquid or powder coating to reduce bitter/metallic taste of active ingredients in oral supplements. Inert carrier system; no active pharmacological effects."
+    },
+    {
+      "id": "OI_MACADAMIA_NUT_OIL",
+      "standard_name": "Macadamia Nut Oil",
+      "aliases": [
+        "macadamia nut oil"
+      ],
+      "category": "oil_carrier",
+      "is_additive": false,
+      "additive_type": "nut_oil_carrier",
+      "allergen": true,
+      "allergen_type": "tree_nut",
+      "notes": "Macadamia-derived oil used as a carrier lipid in softgels and specialty oil blends.",
+      "CUI": null,
+      "common_uses": [
+        "carrier oil",
+        "softgel fill",
+        "lipid base"
+      ],
+      "last_updated": "2026-03-06"
+    },
+    {
+      "id": "OI_PEA_FIBER",
+      "standard_name": "Pea Fiber",
+      "aliases": [
+        "pea hull fiber",
+        "pea fiber",
+        "organic pea hull fiber"
+      ],
+      "category": "fiber_prebiotic",
+      "is_additive": false,
+      "additive_type": "natural_fiber",
+      "allergen": false,
+      "allergen_type": null,
+      "notes": "Pea-derived fiber used for bulking, texture, and fiber fortification in powder blends.",
+      "CUI": null,
+      "common_uses": [
+        "fiber source",
+        "texture improvement",
+        "bulking agent"
+      ],
+      "last_updated": "2026-03-06"
+    },
+    {
+      "id": "OI_RICE_PROTEIN_MAG_CHELATE",
+      "standard_name": "Brown Rice Protein Magnesium Chelate",
+      "aliases": [
+        "brown rice protein magnesium chelate",
+        "organic brown rice protein magnesium chelate"
+      ],
+      "category": "mineral_chelate_carrier",
+      "is_additive": false,
+      "additive_type": "mineral_delivery_matrix",
+      "allergen": false,
+      "allergen_type": null,
+      "notes": "Rice-protein chelate delivery form used to bind and carry magnesium in whole-food style mineral blends.",
+      "CUI": null,
+      "common_uses": [
+        "mineral carrier",
+        "chelated delivery matrix",
+        "protein-bound mineral"
+      ],
+      "last_updated": "2026-03-06"
+    },
+    {
+      "id": "OI_GOAT_MILK_PROTEIN",
+      "standard_name": "Goat Milk Protein",
+      "aliases": [
+        "goat milk protein concentrate",
+        "goat's milk protein concentrate",
+        "goat milk protein"
+      ],
+      "category": "protein_base",
+      "is_additive": false,
+      "additive_type": "dairy_protein",
+      "allergen": true,
+      "allergen_type": "dairy",
+      "notes": "Goat milk protein used as a dairy protein base in powders and specialty nutrition products.",
+      "CUI": null,
+      "common_uses": [
+        "protein base",
+        "dairy matrix",
+        "specialty nutrition"
+      ],
+      "last_updated": "2026-03-06"
     }
   ]
 }

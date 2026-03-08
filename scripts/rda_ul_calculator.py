@@ -291,8 +291,18 @@ class RDAULCalculator:
                 over_ul_amount = amount - ul
                 warnings.append(f"Exceeds UL by {over_ul_amount:.1f} {unit}")
 
-        # Determine adequacy band
-        adequacy_band = self._determine_adequacy_band(pct_rda, over_ul)
+        # Determine adequacy band. Magnesium is a special case because the UL
+        # applies to supplemental intake only while the RDA is total intake.
+        uses_supplement_only_ul = self._uses_supplement_only_ul_policy(nutrient_data)
+        if over_ul and uses_supplement_only_ul:
+            notes.append("Supplemental magnesium has a separate UL from the total-intake RDA.")
+            warnings.append(
+                f"Supplemental magnesium exceeds the adult supplemental UL by {over_ul_amount:.1f} {unit}"
+            )
+        adequacy_band = self._determine_adequacy_band(
+            pct_rda,
+            over_ul and not uses_supplement_only_ul
+        )
 
         # Handle "no UL" policy
         if ul_status == "not_determined":
@@ -475,6 +485,10 @@ class RDAULCalculator:
             return float(match.group(1)), float(match.group(2))
 
         return None, None
+
+    def _uses_supplement_only_ul_policy(self, nutrient_data: Dict) -> bool:
+        """Return True for nutrients whose UL applies only to supplemental intake."""
+        return nutrient_data.get("id") == "magnesium"
 
     def _determine_adequacy_band(
         self,

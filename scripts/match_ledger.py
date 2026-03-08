@@ -399,6 +399,8 @@ class MatchLedgerBuilder:
         raw_source_path: str,
         recognition_source: str,
         recognition_reason: str,
+        canonical_id: Optional[str] = None,
+        matched_to_name: Optional[str] = None,
         normalized_key: Optional[str] = None,
     ) -> None:
         """
@@ -428,10 +430,10 @@ class MatchLedgerBuilder:
             raw_source_text=raw_source_text,
             raw_source_path=raw_source_path,
             normalized_key=normalized_key,
-            canonical_id=None,
+            canonical_id=canonical_id,
             match_method=recognition_source,  # Reuse field to track source
             confidence=1.0,  # High confidence we recognized it
-            matched_to_name=None,
+            matched_to_name=matched_to_name,
             decision=DECISION_RECOGNIZED_NON_SCORABLE,
             decision_reason=recognition_reason,
             candidates_top3=[],
@@ -448,6 +450,7 @@ class MatchLedgerBuilder:
         raw_source_path: str,
         botanical_db_match: str,
         reason: str = "botanical_not_scored",
+        canonical_id: Optional[str] = None,
         normalized_key: Optional[str] = None,
     ) -> None:
         """
@@ -491,7 +494,7 @@ class MatchLedgerBuilder:
             raw_source_text=raw_source_text,
             raw_source_path=raw_source_path,
             normalized_key=normalized_key,
-            canonical_id=None,
+            canonical_id=canonical_id,
             match_method="standardized_botanicals",  # Track which DB recognized it
             confidence=0.8,  # High recognition confidence, but not full scoring
             matched_to_name=botanical_db_match,

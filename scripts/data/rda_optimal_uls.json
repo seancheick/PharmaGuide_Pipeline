@@ -531,7 +531,7 @@
       "unit": "mg alpha-tocopherol",
       "ul_note": "UL applies to synthetic alpha-tocopherol only",
       "optimal_range": "100-400",
-      "highest_ul": 1000,
+      "highest_ul": 1700,
       "warnings": [
         "May increase bleeding risk",
         "Avoid high doses with blood thinners"
@@ -556,7 +556,7 @@
           "group": "Male",
           "age_range": "14-18",
           "rda_ai": 15,
-          "ul": 800,
+          "ul": 1360,
           "rda_ai_status": null,
           "ul_status": null
         },
@@ -564,7 +564,7 @@
           "group": "Male",
           "age_range": "19-30",
           "rda_ai": 15,
-          "ul": 1000,
+          "ul": 1700,
           "rda_ai_status": null,
           "ul_status": null
         },
@@ -572,7 +572,7 @@
           "group": "Male",
           "age_range": "31-50",
           "rda_ai": 15,
-          "ul": 1000,
+          "ul": 1700,
           "rda_ai_status": null,
           "ul_status": null
         },
@@ -580,7 +580,7 @@
           "group": "Male",
           "age_range": "51-70",
           "rda_ai": 15,
-          "ul": 1000,
+          "ul": 1700,
           "rda_ai_status": null,
           "ul_status": null
         },
@@ -588,7 +588,7 @@
           "group": "Male",
           "age_range": "71+",
           "rda_ai": 15,
-          "ul": 1000,
+          "ul": 1700,
           "rda_ai_status": null,
           "ul_status": null
         },
@@ -1528,7 +1528,7 @@
       "unit": "mcg DFE",
       "ul_note": "UL applies to folic acid from supplements and fortified foods only",
       "optimal_range": "400-1000",
-      "highest_ul": 1000,
+      "highest_ul": 1700,
       "warnings": [
         "High doses may mask B12 deficiency",
         "May interfere with certain medications"
@@ -1555,7 +1555,7 @@
           "group": "Male",
           "age_range": "14-18",
           "rda_ai": 400,
-          "ul": 800,
+          "ul": 1360,
           "rda_ai_status": null,
           "ul_status": null
         },
@@ -1563,7 +1563,7 @@
           "group": "Male",
           "age_range": "19-30",
           "rda_ai": 400,
-          "ul": 1000,
+          "ul": 1700,
           "rda_ai_status": null,
           "ul_status": null
         },
@@ -1571,7 +1571,7 @@
           "group": "Male",
           "age_range": "31-50",
           "rda_ai": 400,
-          "ul": 1000,
+          "ul": 1700,
           "rda_ai_status": null,
           "ul_status": null
         },
@@ -1579,7 +1579,7 @@
           "group": "Male",
           "age_range": "51-70",
           "rda_ai": 400,
-          "ul": 1000,
+          "ul": 1700,
           "rda_ai_status": null,
           "ul_status": null
         },
@@ -1587,7 +1587,7 @@
           "group": "Male",
           "age_range": "71+",
           "rda_ai": 400,
-          "ul": 1000,
+          "ul": 1700,
           "rda_ai_status": null,
           "ul_status": null
         },
@@ -1595,7 +1595,7 @@
           "group": "Female",
           "age_range": "14-18",
           "rda_ai": 400,
-          "ul": 800,
+          "ul": 1360,
           "rda_ai_status": null,
           "ul_status": null
         },
@@ -1603,7 +1603,7 @@
           "group": "Female",
           "age_range": "19-30",
           "rda_ai": 400,
-          "ul": 1000,
+          "ul": 1700,
           "rda_ai_status": null,
           "ul_status": null
         },
@@ -1611,7 +1611,7 @@
           "group": "Female",
           "age_range": "31-50",
           "rda_ai": 400,
-          "ul": 1000,
+          "ul": 1700,
           "rda_ai_status": null,
           "ul_status": null
         },
@@ -1619,7 +1619,7 @@
           "group": "Female",
           "age_range": "51-70",
           "rda_ai": 400,
-          "ul": 1000,
+          "ul": 1700,
           "rda_ai_status": null,
           "ul_status": null
         },
@@ -1627,7 +1627,7 @@
           "group": "Female",
           "age_range": "71+",
           "rda_ai": 400,
-          "ul": 1000,
+          "ul": 1700,
           "rda_ai_status": null,
           "ul_status": null
         },
@@ -1635,7 +1635,7 @@
           "group": "Pregnancy",
           "age_range": "14-18",
           "rda_ai": 600,
-          "ul": 800,
+          "ul": 1360,
           "rda_ai_status": null,
           "ul_status": null
         },
@@ -1643,7 +1643,7 @@
           "group": "Pregnancy",
           "age_range": "19-30",
           "rda_ai": 600,
-          "ul": 1000,
+          "ul": 1700,
           "rda_ai_status": null,
           "ul_status": null
         },
@@ -1651,7 +1651,7 @@
           "group": "Pregnancy",
           "age_range": "31-50",
           "rda_ai": 600,
-          "ul": 1000,
+          "ul": 1700,
           "rda_ai_status": null,
           "ul_status": null
         },
@@ -1659,7 +1659,7 @@
           "group": "Lactation",
           "age_range": "14-18",
           "rda_ai": 500,
-          "ul": 800,
+          "ul": 1360,
           "rda_ai_status": null,
           "ul_status": null
         },
@@ -1667,7 +1667,7 @@
           "group": "Lactation",
           "age_range": "19-30",
           "rda_ai": 500,
-          "ul": 1000,
+          "ul": 1700,
           "rda_ai_status": null,
           "ul_status": null
         },
@@ -1675,7 +1675,7 @@
           "group": "Lactation",
           "age_range": "31-50",
           "rda_ai": 500,
-          "ul": 1000,
+          "ul": 1700,
           "rda_ai_status": null,
           "ul_status": null
         }

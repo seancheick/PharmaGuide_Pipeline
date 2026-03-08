@@ -547,6 +547,7 @@ class BatchProcessor:
 
         # FIX 1+2: Skip already-processed files on resume
         processed_set = set(state.processed_file_paths or [])
+        using_per_file_resume = False
         if resume and processed_set:
             original_count = len(files)
             files = [f for f in files if str(f) not in processed_set]
@@ -555,16 +556,24 @@ class BatchProcessor:
                 logger.info(f"Skipping {skipped_count} already-processed files on resume")
             # Recompute batches for remaining files
             state.total_batches = (len(files) + self.batch_size - 1) // self.batch_size
+            using_per_file_resume = True
 
         logger.info(f"Processing {len(files)} files in {state.total_batches} batches")
         logger.info(f"Batch size: {self.batch_size}, Max workers: {self.max_workers}")
 
         if resume and state.last_completed_batch >= 0:
-            logger.info(f"Resuming from batch {state.last_completed_batch + 1}")
+            if using_per_file_resume:
+                logger.info(
+                    "Resuming with per-file state: %d remaining files across %d batches",
+                    len(files),
+                    state.total_batches,
+                )
+            else:
+                logger.info(f"Resuming from batch {state.last_completed_batch + 1}")
         
         # Process batches
         batch_results = []
-        start_batch = state.last_completed_batch + 1
+        start_batch = 0 if using_per_file_resume else state.last_completed_batch + 1
         
         for batch_num in range(start_batch, state.total_batches):
             batch_start = batch_num * self.batch_size
@@ -579,7 +588,7 @@ class BatchProcessor:
             
             # Update state
             state.last_completed_batch = batch_num
-            state.processed_files += len(batch_files)
+            state.processed_files += len(batch_result.get("processed_files", []))
             state.last_updated = datetime.utcnow().isoformat() + "Z"
             state.errors.extend(batch_result.get("errors", []))
             # FIX 1+2: Track processed file paths for per-file resume
@@ -805,13 +814,13 @@ class BatchProcessor:
 
         summary = {
             "batch_num": batch_num + 1,
-            "processed": len(files),
+            "processed": len(processed_files),
             "cleaned": len(cleaned_products),
             "needs_review": len(needs_review_products),
             "incomplete": len(incomplete_products),
             "errors": len(errors),
             "processing_time": batch_time,
-            "avg_time_per_file": batch_time / len(files) if files else 0,
+            "avg_time_per_file": batch_time / len(processed_files) if processed_files else 0,
             "memory_mb": final_memory  # FIX 6: Already in MB from check_memory()
         }
 

@@ -111,6 +111,37 @@ def test_allowlist_requires_canonical_id():
         enricher._validate_banned_match_allowlist()
 
 
+@pytest.mark.parametrize(
+    ("variant", "expected_id"),
+    [
+        ("2,4-Dinitrophenol", "BANNED_DNP"),
+        ("DNP", "BANNED_DNP"),
+        ("Usnic Acid", "BANNED_USNIC_ACID"),
+        ("Clenbuterol", "BANNED_CLENBUTEROL"),
+        ("Aconite", "BANNED_ACONITE"),
+        ("Yellow Oleander", "BANNED_YELLOW_OLEANDER_RECENT"),
+    ],
+)
+def test_new_high_risk_banned_substances_match(enricher, variant, expected_id):
+    banned_ids = _banned_ids(enricher, variant)
+    assert expected_id in banned_ids
+
+
+@pytest.mark.parametrize("variant", ["Delta-8", "delta-8", "Delta 8"])
+def test_delta8_punctuation_variants_match(enricher, variant):
+    banned_ids = _banned_ids(enricher, variant)
+    assert "BANNED_DELTA8_THC" in banned_ids
+
+
+def test_delta8_preserves_policy_severity(enricher):
+    result = enricher._check_banned_substances([{"name": "Delta-8 THC", "standardName": "Delta-8 THC"}])
+    hits = result.get("substances", [])
+    delta8 = next(s for s in hits if s.get("banned_id") == "BANNED_DELTA8_THC")
+
+    assert delta8["status"] == "high_risk"
+    assert delta8["severity_level"] == "high"
+
+
 # =============================================================================
 # Product Recall False Positive Tests
 # =============================================================================
