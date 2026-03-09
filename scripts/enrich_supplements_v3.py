@@ -2417,6 +2417,16 @@ class SupplementEnricherV3:
         std_norm = self._normalize_exclusion_text(std_name)
         raw_source = ingredient.get('raw_source_text', '')
 
+        # Some branded delivery systems expose the true active as a single nested child
+        # with its own dose. In those cases the parent quantity is the delivery matrix,
+        # not the therapeutic dose, so only the child should score.
+        if self._is_single_child_wrapper_parent(ingredient):
+            has_dose_wrapper, _ = self._has_valid_therapeutic_dose(ingredient)
+            return (
+                SKIP_REASON_BLEND_HEADER_WITH_WEIGHT if has_dose_wrapper
+                else SKIP_REASON_BLEND_HEADER_NO_DOSE
+            )
+
         # =================================================================
         # GROUP Z: Unconditional skips — these are NEVER real ingredients.
         # No quality_map / potency override can rescue them.
@@ -2565,6 +2575,44 @@ class SupplementEnricherV3:
                     return SKIP_REASON_BLEND_HEADER_WITH_WEIGHT
 
         return None
+
+    def _is_single_child_wrapper_parent(self, ingredient: Dict) -> bool:
+        """Detect branded delivery-system parents that should defer to one nested active child."""
+        if ingredient.get('isNestedIngredient', False):
+            return False
+
+        nested = ingredient.get('nestedIngredients') or []
+        if not isinstance(nested, list) or len(nested) != 1 or not isinstance(nested[0], dict):
+            return False
+
+        child = nested[0]
+        parent_has_dose, _ = self._has_valid_therapeutic_dose(ingredient)
+        child_has_dose, _ = self._has_valid_therapeutic_dose(child)
+        if not parent_has_dose or not child_has_dose:
+            return False
+
+        parent_group_norm = self._normalize_exclusion_text(ingredient.get('ingredientGroup', ''))
+        child_group_norm = self._normalize_exclusion_text(child.get('ingredientGroup', ''))
+        child_name_norm = self._normalize_exclusion_text(
+            child.get('standardName') or child.get('name', '')
+        )
+        if not parent_group_norm or not (child_group_norm or child_name_norm):
+            return False
+
+        if parent_group_norm not in {child_group_norm, child_name_norm}:
+            return False
+
+        parent_name_norm = self._normalize_exclusion_text(ingredient.get('name', ''))
+        wrapper_tokens = (
+            'triglyceride',
+            'tri glyceride',
+            'liposomal',
+            'liposome',
+            'phytosome',
+            'microencapsulated',
+            'micro encapsulated',
+        )
+        return any(token in parent_name_norm for token in wrapper_tokens)
 
     def _should_promote_to_scorable(self, ingredient: Dict, quality_map: Dict,
                                      botanicals_db: Dict,
@@ -3195,6 +3243,12 @@ class SupplementEnricherV3:
             if used_form_fallback:
                 unmapped_forms = match_result.get('unmapped_forms', [])
                 fallback_form_name = match_result.get('form_name', '(unspecified)')
+                audit_classification = self._classify_form_fallback_audit(
+                    ing_name,
+                    match_result.get('standard_name', ''),
+                    unmapped_forms,
+                    fallback_form_name,
+                )
                 self._form_fallback_details.append({
                     "ingredient_label": ing_name,
                     "raw_source_text": raw_source_text,
@@ -3204,9 +3258,8 @@ class SupplementEnricherV3:
                     "fallback_form": fallback_form_name,
                     "fallback_bio_score": bio_score,
                     "fallback_score": score,
-                    "forms_differ": bool(unmapped_forms and fallback_form_name not in [
-                        f.lower().strip() for f in unmapped_forms
-                    ]),
+                    "forms_differ": audit_classification["forms_differ"],
+                    "audit_noise_reason": audit_classification["audit_noise_reason"],
                     "form_source": match_result.get('form_source', ''),
                     "source_section": source_section,
                 })
@@ -3318,6 +3371,110 @@ class SupplementEnricherV3:
             entry["dose_present"] = dose_present
 
         return entry
+
+    def _normalize_form_fallback_audit_text(self, value: Optional[str]) -> str:
+        """Normalize free-text form/source labels for fallback-audit comparison."""
+        if not value:
+            return ""
+
+        normalized = self._normalize_text(value)
+        normalized = normalized.replace("/", ",")
+        normalized = re.sub(r"\s+", " ", normalized).strip(" ,")
+        return normalized
+
+    def _is_source_material_descriptor_for_fallback_audit(self, normalized_text: str) -> bool:
+        """Return True when fallback text names a source material, not a missing IQM form."""
+        if not normalized_text:
+            return False
+
+        source_terms = {
+            "anchovy",
+            "anchovies",
+            "bamboo",
+            "bovine",
+            "chicken sternal cartilage",
+            "crab",
+            "herring",
+            "jack",
+            "mackerel",
+            "pineapple",
+            "salmon",
+            "sardine",
+            "sardines",
+            "shrimp",
+            "smelt",
+            "squid",
+            "tuna",
+        }
+        split_tokens = [part.strip() for part in normalized_text.split(",") if part.strip()]
+        if split_tokens and all(token in source_terms for token in split_tokens):
+            return True
+        return normalized_text in source_terms
+
+    def _is_standardization_marker_for_fallback_audit(self, normalized_text: str) -> bool:
+        """Return True for standardized active-marker text that is not itself an IQM form."""
+        if not normalized_text:
+            return False
+
+        marker_terms = {
+            "8-prenylnaringenin",
+            "8 prenylnaringenin",
+        }
+        return normalized_text in marker_terms
+
+    def _classify_form_fallback_audit(
+        self,
+        ing_name: str,
+        parent_name: str,
+        unmapped_forms: List[str],
+        fallback_form_name: str,
+    ) -> Dict[str, Optional[str]]:
+        """
+        Classify form-fallback telemetry into actionable alias gaps vs audit noise.
+
+        The report should surface unresolved chemical/form identities, not source
+        materials like "Shrimp" or generic tokens like "extract".
+        """
+        normalized_fallback = self._normalize_form_fallback_audit_text(fallback_form_name)
+        normalized_unmapped: List[str] = []
+        for form in unmapped_forms or []:
+            normalized = self._normalize_form_fallback_audit_text(form)
+            if normalized:
+                normalized_unmapped.append(normalized)
+
+        if not normalized_unmapped:
+            return {"forms_differ": False, "audit_noise_reason": "no_unmapped_form"}
+
+        ingredient_norm = self._normalize_form_fallback_audit_text(ing_name)
+        parent_norm = self._normalize_form_fallback_audit_text(parent_name)
+        substantive_forms: List[str] = []
+        audit_noise_reason: Optional[str] = None
+
+        for form in normalized_unmapped:
+            if form == "extract":
+                audit_noise_reason = audit_noise_reason or "generic_extract_token"
+                continue
+            if self._is_source_material_descriptor_for_fallback_audit(form):
+                audit_noise_reason = audit_noise_reason or "source_material_descriptor"
+                continue
+            if self._is_standardization_marker_for_fallback_audit(form):
+                audit_noise_reason = audit_noise_reason or "standardization_marker"
+                continue
+            if form in {ingredient_norm, parent_norm}:
+                audit_noise_reason = audit_noise_reason or "parent_label_restatement"
+                continue
+            substantive_forms.append(form)
+
+        if not substantive_forms:
+            return {
+                "forms_differ": False,
+                "audit_noise_reason": audit_noise_reason or "non_actionable_form_text",
+            }
+
+        return {
+            "forms_differ": normalized_fallback not in substantive_forms,
+            "audit_noise_reason": None,
+        }
 
     def _mark_parent_total_rows(self, ingredients_scorable: List[Dict[str, Any]]) -> None:
         """
@@ -3637,7 +3794,8 @@ class SupplementEnricherV3:
         from_source_map: Dict[int, str] = {}  # index → source name
         for i, form in enumerate(cleaned_forms):
             prefix = (form.get('prefix') or '').strip()
-            if prefix in _FROM_PREFIXES and i > 0:
+            keep_as_form = self._should_keep_from_prefixed_form_as_actual(form.get('name', ''))
+            if prefix in _FROM_PREFIXES and i > 0 and not keep_as_form:
                 src = (form.get('name') or '').strip()
                 if src:
                     from_source_map[i - 1] = src
@@ -3645,6 +3803,10 @@ class SupplementEnricherV3:
         extracted_forms = []
         for i, form in enumerate(cleaned_forms):
             prefix = (form.get('prefix') or '').strip()
+            keep_from_prefixed_form = (
+                prefix in _FROM_PREFIXES
+                and self._should_keep_from_prefixed_form_as_actual(form.get('name', ''))
+            )
             # Skip biological culture/origin descriptors entirely — these name
             # the fermentation substrate or organism, not the ingredient's form.
             if prefix in _CULTURE_PREFIXES:
@@ -3652,7 +3814,7 @@ class SupplementEnricherV3:
             # Skip forms that are source descriptors (prefix "from"):
             # their names are already inserted as priority candidates for the
             # preceding form via from_source_map.
-            if prefix in _FROM_PREFIXES:
+            if prefix in _FROM_PREFIXES and not keep_from_prefixed_form:
                 continue
 
             form_name = form.get('name', '')
@@ -3758,6 +3920,31 @@ class SupplementEnricherV3:
             'form_extraction_success': True,
             'has_form_evidence': True,
         }
+
+    def _should_keep_from_prefixed_form_as_actual(self, form_name: str) -> bool:
+        """
+        Some DSLD rows use prefix='from' for delivery systems rather than source materials.
+
+        Example: "Coenzyme Q10 (Form: from MicroActive Q10-Cyclodextrin Complex)".
+        Those should remain matchable forms; true provenance rows like "from Pineapple"
+        should continue to be skipped.
+        """
+        if not form_name:
+            return False
+
+        normalized = self._normalize_text(form_name)
+        delivery_tokens = (
+            'cyclodextrin',
+            'microactive',
+            'phytosome',
+            'liposome',
+            'liposomal',
+            'vesisorb',
+            'sustained release',
+            'sustained-release',
+            'phospholipid complex',
+        )
+        return any(token in normalized for token in delivery_tokens)
 
     def _match_quality_map(self, ing_name: str, std_name: str, quality_map: Dict,
                            _form_extraction_attempt: bool = False,

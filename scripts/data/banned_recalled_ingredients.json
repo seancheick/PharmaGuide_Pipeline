@@ -13490,7 +13490,8 @@
         "anatase",
         "rutile",
         "titanium white",
-        "titanium(iv) oxide"
+        "titanium(iv) oxide",
+        "Titanium Dioxide color"
       ],
       "reason": "In 2021, EFSA concluded that a concern for genotoxicity of titanium dioxide (E171) particles 'cannot be ruled out' and that E171 'can no longer be considered safe when used as a food additive,' so no ADI could be established (EFSA Journal 2021;19(5):e06585). On this basis, the European Commission adopted Commission Regulation (EU) 2022/63 banning E171 as a food additive; from August 7 2022 it may no longer be added to foods or food supplements in the EU. FDA still permits TiO2 at ≤1% of food weight (21 CFR 73.575) but initiated reassessment following the EFSA opinion. IARC Group 2B (possibly carcinogenic by inhalation). Nanoparticle form (<100nm) shows greater intestinal absorption and genotoxic concern.",
       "status": "high_risk",

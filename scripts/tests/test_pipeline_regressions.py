@@ -229,6 +229,122 @@ class TestNutritionFactExclusion:
         assert normalizer._is_nutrition_fact("Zinc", "Minerals", "mg") is False
 
 
+class TestCleaningUnmappedBatch1Regressions:
+    @pytest.fixture
+    def normalizer(self):
+        return EnhancedDSLDNormalizer()
+
+    def test_active_form_container_zma_unwraps_forms_without_parent(self, normalizer):
+        raw_product = {
+            "id": "test_zma_forms",
+            "fullName": "Test ZMA",
+            "brandName": "Test Brand",
+            "productVersionCode": "1",
+            "ingredientRows": [
+                {
+                    "name": "ZMA",
+                    "ingredientGroup": "Proprietary Blend (Mineral)",
+                    "order": 1,
+                    "forms": [
+                        {"name": "Magnesium Aspartate", "order": 1},
+                        {"name": "Pyridoxine Hydrochloride", "order": 2},
+                        {"name": "Zinc Mono-L-Methionine", "order": 3},
+                    ],
+                }
+            ],
+            "otheringredients": {"ingredients": []},
+        }
+
+        cleaned = normalizer.normalize_product(raw_product)
+        active_names = [ing.get("name") for ing in cleaned.get("activeIngredients", [])]
+
+        assert "ZMA" not in active_names
+        assert "Magnesium Aspartate" in active_names
+        assert "Pyridoxine Hydrochloride" in active_names
+        assert "Zinc Mono-L-Methionine" in active_names
+
+    def test_total_omega_summary_is_skipped(self, normalizer):
+        raw_product = {
+            "id": "test_total_omega",
+            "fullName": "Test Krill Oil",
+            "brandName": "Test Brand",
+            "productVersionCode": "1",
+            "ingredientRows": [
+                {"name": "Krill Oil", "order": 1},
+                {"name": "Total Omega-3 Fatty Acids", "order": 2},
+                {"name": "Total Omega-6 Fatty Acids", "order": 3},
+                {"name": "Total Omega", "order": 4},
+            ],
+            "otheringredients": {"ingredients": []},
+        }
+
+        cleaned = normalizer.normalize_product(raw_product)
+        active_names = [ing.get("name") for ing in cleaned.get("activeIngredients", [])]
+
+        assert "Total Omega" not in active_names
+        assert "Krill Oil" in active_names
+
+    @pytest.mark.parametrize(
+        ("container_name", "child_names"),
+        [
+            ("Enteripure Softgel", ["Gelatin", "Glycerin", "Pectin", "purified Water"]),
+            (
+                "Aqueous Coating Solution",
+                ["Ethylcellulose", "Medium Chain Triglycerides", "Sodium Alginate"],
+            ),
+            ("B.A.S.S.(TM)", ["Oregano", "organic Sunflower Oil", "Rosemary"]),
+        ],
+    )
+    def test_inactive_structural_container_unwraps_forms_without_parent(
+        self, normalizer, container_name, child_names
+    ):
+        raw_product = {
+            "id": f"test_{container_name}",
+            "fullName": "Test Product",
+            "brandName": "Test Brand",
+            "productVersionCode": "1",
+            "ingredientRows": [],
+            "otheringredients": {
+                "ingredients": [
+                    {
+                        "name": container_name,
+                        "ingredientGroup": "capsule",
+                        "order": 1,
+                        "forms": [{"name": child, "order": idx + 1} for idx, child in enumerate(child_names)],
+                    }
+                ]
+            },
+        }
+
+        cleaned = normalizer.normalize_product(raw_product)
+        inactive_names = [ing.get("name") for ing in cleaned.get("inactiveIngredients", [])]
+
+        assert container_name not in inactive_names
+        for child_name in child_names:
+            assert child_name in inactive_names
+
+    def test_inactive_soy_lecithin_prefers_other_ingredient_route(self, normalizer):
+        raw_product = {
+            "id": "test_soy_lecithin",
+            "fullName": "Test Product",
+            "brandName": "Test Brand",
+            "productVersionCode": "1",
+            "ingredientRows": [],
+            "otheringredients": {
+                "ingredients": [
+                    {"name": "Soy Lecithin", "order": 1},
+                    {"name": "Soy Lecithin Oil", "order": 2},
+                ]
+            },
+        }
+
+        cleaned = normalizer.normalize_product(raw_product)
+        inactive_by_name = {ing.get("name"): ing for ing in cleaned.get("inactiveIngredients", [])}
+
+        assert inactive_by_name["Soy Lecithin"]["standardName"] == "Soy Lecithin"
+        assert inactive_by_name["Soy Lecithin Oil"]["standardName"] == "Soy Lecithin"
+
+
 class TestValidatorPlaceholderDetection:
     """Tests for validator placeholder detection"""
 

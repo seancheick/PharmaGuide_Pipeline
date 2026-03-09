@@ -36,7 +36,8 @@
     "Total Phytocannabinoids",
     "Other Ingredients",
     "Inactive Ingredients",
-    "Active Ingredients"
+    "Active Ingredients",
+    "Total Omega"
   ],
   "classifications": {
     "Total EPA & DHA": {
@@ -58,6 +59,11 @@
       "hierarchy": "label_header",
       "scoring_rule": "skip_all",
       "note": "Drop header; extract forms[] as children when present."
+    },
+    "Total Omega": {
+      "hierarchy": "summary",
+      "scoring_rule": "skip_all",
+      "note": "Score specific omega subclasses instead."
     }
   }
 }

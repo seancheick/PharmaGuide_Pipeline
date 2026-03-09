@@ -8392,7 +8392,10 @@
         "hydroxylated Soy Lecithin",
         "lecithin (soy)",
         "non-GMO Soy Lecithin",
-        "soybean lecithin"
+        "soybean lecithin",
+        "Soy Lecithin Oil",
+        "Soy Lecithin Oil, Natural",
+        "Soy Lecithin Oil Natural"
       ],
       "category": "emulsifier",
       "is_additive": true,
@@ -8481,7 +8484,9 @@
         "c8vantage medium chain triglyceride c8 powder",
         "organic coconut medium chain triglycerides",
         "coconut medium chain triglycerides",
-        "non-gmo mct oil"
+        "non-gmo mct oil",
+        "Medium Chain Triglycerides Oil",
+        "Coconut Medium Chain Triglyceride Oil"
       ],
       "category": "oil_carrier",
       "is_additive": false,
@@ -12314,6 +12319,30 @@
       "common_uses": [
         "oil carrier",
         "softgel excipient"
+      ],
+      "last_updated": "2026-03-08"
+    },
+    {
+      "id": "NHA_D_LIMONENE",
+      "standard_name": "D-Limonene",
+      "aliases": [
+        "D-Limonene",
+        "D-Limonene Oil",
+        "d-Limonene Oil",
+        "d-limonene oil",
+        "D Limonene Oil"
+      ],
+      "category": "flavoring",
+      "is_additive": true,
+      "additive_type": "solvent_flavor_carrier",
+      "allergen": false,
+      "allergen_type": null,
+      "notes": "Monoterpene from citrus peel oils. Used in supplement softgels and liquids as a flavoring or solvent/carrier component. In inactive rows, this route should take precedence over active-compound inference.",
+      "CUI": null,
+      "common_uses": [
+        "flavoring",
+        "solvent",
+        "softgel carrier"
       ],
       "last_updated": "2026-03-08"
     }

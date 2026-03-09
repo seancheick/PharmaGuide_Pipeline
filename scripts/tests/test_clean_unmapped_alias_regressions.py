@@ -16,6 +16,23 @@ def normalizer():
 @pytest.mark.parametrize(
     "name,expected_substring",
     [
+        ("CalaMarine Oil concentrate", "Calamari Oil"),
+        ("Calamarine Oil concentrate", "Calamari Oil"),
+        ("NKO", "Omega-3"),
+        ("Titanium Dioxide color", "Titanium Dioxide"),
+        ("D-Limonene Oil", "D-Limonene"),
+    ],
+)
+def test_batch1_verified_cleaning_aliases_map(normalizer, name, expected_substring):
+    standard_name, mapped, _ = normalizer._enhanced_ingredient_mapping(name, [])
+
+    assert mapped is True
+    assert expected_substring.lower() in str(standard_name).lower()
+
+
+@pytest.mark.parametrize(
+    "name,expected_substring",
+    [
         ("Magtein Magnesium L-Threonate", "Magnesium"),
         ("NIAGEN Nicotinamide Riboside", "Nicotinamide Riboside"),
         ("N-Acetyl L-Cysteine", "N-Acetyl Cysteine"),
@@ -972,4 +989,3 @@ def test_cleaning_uses_deduped_name_but_preserves_raw_source_text(normalizer):
     assert processed is not None
     assert processed.get("name") == "Milk Thistle extract"
     assert processed.get("raw_source_text") == "Milk Thistle extract extract"
-

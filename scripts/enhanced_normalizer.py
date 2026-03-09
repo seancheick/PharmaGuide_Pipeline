@@ -85,6 +85,16 @@ STRUCTURAL_OTHER_HEADER_NAMES = frozenset({
     "soft gel shell:",
 })
 
+STRUCTURAL_OTHER_FORM_CONTAINER_NAMES = frozenset({
+    "enteripure softgel",
+    "aqueous coating",
+    "aqueous coating solution",
+    "b.a.s.s.(tm)",
+    "b.a.s.s",
+    "botanical antioxidant stability system(tm)",
+    "botanical antioxidant stability system",
+})
+
 STRUCTURAL_ACTIVE_CONTAINER_NAMES = frozenset({
     "zma",
     "mineral enzyme activators",
@@ -3193,6 +3203,23 @@ class EnhancedDSLDNormalizer:
         for ing in ingredient_rows:
             name = ing.get("name", "")
 
+            if self._is_structural_form_container(name, is_active=is_active):
+                forms = ing.get("forms", []) or []
+                if not forms:
+                    logger.debug(f"Skipping structural form container without forms: {name}")
+                    continue
+                for form_ing in self._expand_header_forms_for_processing(
+                    ing,
+                    source_path="activeIngredients" if is_active else "inactiveIngredients",
+                ):
+                    processed_form = self._process_single_ingredient_enhanced(form_ing, is_active=is_active)
+                    if processed_form is not None:
+                        if isinstance(processed_form, list):
+                            processed.extend(processed_form)
+                        else:
+                            processed.append(processed_form)
+                continue
+
             # A3: Handle "Less than 2% of:" headers with real ingredients in forms
             if self._is_label_header(name):
                 # Extract real ingredients from forms and process them as inactive ingredients
@@ -3560,6 +3587,12 @@ class EnhancedDSLDNormalizer:
         for ing in ingredients:
             name = ing.get("name", "")
 
+            if self._is_structural_form_container(name, is_active=False):
+                expanded_ingredients.extend(
+                    self._expand_header_forms_for_processing(ing, source_path="inactiveIngredients")
+                )
+                continue
+
             # LABEL HEADER SYMMETRY: Check for headers like "Less than 2% of:" BEFORE other processing
             # Drop header row, extract forms[] as child ingredients
             if self._is_label_header(name):
@@ -3676,6 +3709,9 @@ class EnhancedDSLDNormalizer:
         """
         name = ingredient_data.get("name", "")
 
+        if self._is_structural_form_container(name, is_active=False):
+            return (None, None)
+
         # SKIP ENFORCEMENT: Check skip list FIRST before any processing
         if self._should_skip_ingredient(name):
             logger.debug(f"Skipping other ingredient from skip list: {name}")
@@ -3693,8 +3729,8 @@ class EnhancedDSLDNormalizer:
             elif f:
                 forms.append(str(f))
 
-        # Enhanced mapping (pass forms for context-aware mapping)
-        standard_name, mapped, _ = self._enhanced_ingredient_mapping(name, forms)
+        # Exact inactive matches should prefer other_ingredients before active-canonical aliases.
+        standard_name, mapped, _ = self._map_inactive_name_prefer_other(name, forms)
 
         # Enhanced checks
         allergen_info = self._enhanced_allergen_check(name, forms)
@@ -3799,6 +3835,36 @@ class EnhancedDSLDNormalizer:
         for ing in ingredients:
             name = ing.get("name", "")
 
+            if self._is_structural_form_container(name, is_active=False):
+                for form_ing in self._expand_header_forms_for_processing(ing, source_path="inactiveIngredients"):
+                    form_name = form_ing.get("name", "")
+                    form_std_name, form_mapped, _ = self._map_inactive_name_prefer_other(form_name)
+                    form_allergen_info = self._enhanced_allergen_check(form_name)
+                    form_harmful_info = self._enhanced_harmful_check(form_name)
+                    form_is_proprietary = self._is_proprietary_blend_name(form_name)
+                    form_is_mapped = (
+                        form_mapped or
+                        form_harmful_info["category"] != "none" or
+                        form_allergen_info["is_allergen"] or
+                        form_is_proprietary
+                    )
+
+                    if not form_is_mapped and not self._is_nutrition_fact(form_name):
+                        form_processed_name = self.matcher.preprocess_text(form_name)
+                        self.unmapped_ingredients[form_name] += 1
+                        self.unmapped_details[form_name] = {
+                            "processed_name": form_processed_name,
+                            "forms": [],
+                            "variations_tried": self.matcher.generate_variations(form_processed_name),
+                            "is_active": False
+                        }
+
+                    form_ing["standardName"] = form_std_name
+                    form_ing["mapped"] = form_is_mapped
+                    form_ing["hierarchyType"] = self._classify_hierarchy_type(form_name)
+                    processed.append(form_ing)
+                continue
+
             # LABEL HEADER SYMMETRY: Check for headers like "Less than 2% of:"
             # Drop header row, extract forms[] as child ingredients
             if self._is_label_header(name):
@@ -3851,8 +3917,8 @@ class EnhancedDSLDNormalizer:
                 elif f:
                     forms.append(str(f))
 
-            # Enhanced mapping to get standardName (pass forms for context-aware mapping)
-            standard_name, mapped, _ = self._enhanced_ingredient_mapping(name, forms)
+            # Exact inactive matches should prefer other_ingredients before active-canonical aliases.
+            standard_name, mapped, _ = self._map_inactive_name_prefer_other(name, forms)
 
             # Enhanced checks ONLY for determining if ingredient is "mapped" (found in database)
             allergen_info = self._enhanced_allergen_check(name, forms)
@@ -5108,6 +5174,29 @@ class EnhancedDSLDNormalizer:
             return False
         processed_name = self.matcher.preprocess_text(name)
         return processed_name in STRUCTURAL_ACTIVE_CONTAINER_NAMES
+
+    def _is_structural_form_container(self, name: str, is_active: bool) -> bool:
+        """Identify structural container rows that should unwrap forms[] and drop the parent."""
+        if not name:
+            return False
+
+        processed_name = self.matcher.preprocess_text(name)
+        if is_active:
+            return processed_name in STRUCTURAL_ACTIVE_CONTAINER_NAMES
+        return processed_name in STRUCTURAL_OTHER_FORM_CONTAINER_NAMES
+
+    def _map_inactive_name_prefer_other(self, name: str, forms: Optional[List[str]] = None) -> Tuple[str, bool, List[str]]:
+        """
+        Exact inactive matches should prefer other_ingredients over active-canonical aliases.
+        This prevents rows like 'Soy Lecithin' from being re-routed to active choline forms.
+        """
+        processed_name = self.matcher.preprocess_text(name)
+        if processed_name in {"colors", "color", "coloring", "colorings", "color added", "colors added"}:
+            return self._enhanced_ingredient_mapping(name, forms)
+        other_ingredient = self.other_ingredients_lookup.get(processed_name)
+        if other_ingredient:
+            return other_ingredient.get("standard_name", name), True, forms or []
+        return self._enhanced_ingredient_mapping(name, forms)
     
     def _is_proprietary_blend_name(self, name: str) -> bool:
         """Check if ingredient name contains proprietary blend indicators"""
