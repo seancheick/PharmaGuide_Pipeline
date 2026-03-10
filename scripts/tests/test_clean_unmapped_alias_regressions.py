@@ -31,6 +31,552 @@ def test_batch1_verified_cleaning_aliases_map(normalizer, name, expected_substri
 
 
 @pytest.mark.parametrize(
+    "name,ingredient_group,expected_substring",
+    [
+        ("D-Limonene Oil", "Limonene", "Limonene"),
+        ("Lime Oil", "Lime", "Lime"),
+        ("Titanium Dioxide color", "Titanium Dioxide", "Titanium Dioxide"),
+    ],
+)
+def test_ingredient_group_fallback_maps_unmapped_labels(normalizer, name, ingredient_group, expected_substring):
+    standard_name, mapped, _ = normalizer._enhanced_ingredient_mapping(
+        name, [], ingredient_group=ingredient_group
+    )
+
+    assert mapped is True
+    assert expected_substring.lower() in str(standard_name).lower()
+
+
+def test_ingredient_group_fallback_does_not_override_direct_name_match(normalizer):
+    standard_name, mapped, _ = normalizer._enhanced_ingredient_mapping(
+        "D-Limonene Oil", [], ingredient_group="Orange"
+    )
+
+    assert mapped is True
+    assert "D-Limonene".lower() in str(standard_name).lower()
+
+
+def test_ingredient_group_fallback_uses_exact_normalized_lookup(normalizer):
+    standard_name, mapped, _ = normalizer._enhanced_ingredient_mapping(
+        "Unknown Carrier", [], ingredient_group="lecithin"
+    )
+
+    assert mapped is False
+    assert standard_name == "Unknown Carrier"
+
+
+@pytest.mark.parametrize(
+    "name,expected_substring",
+    [
+        ("Cold-Pressed Lemon Oil", "Lemon Oil"),
+        ("Coconut Oil, Extra Virgin", "Coconut Oil"),
+        ("pharmaceutical grade, molecularly distilled Fish Oil concentrate", "Fish Oil"),
+        ("Beeswax, Natural", "Beeswax"),
+    ],
+)
+def test_descriptor_fallback_maps_modifier_wrapped_labels(normalizer, name, expected_substring):
+    standard_name, mapped, _ = normalizer._enhanced_ingredient_mapping(name, [])
+
+    assert mapped is True
+    assert expected_substring.lower() in str(standard_name).lower()
+
+
+def test_descriptor_fallback_beats_ingredient_group_collision(normalizer):
+    standard_name, mapped, _ = normalizer._enhanced_ingredient_mapping(
+        "cold-pressed Lemon Oil", [], ingredient_group="Lemon"
+    )
+
+    assert mapped is True
+    assert "lemon oil" in str(standard_name).lower()
+    assert "vitamin b9" not in str(standard_name).lower()
+
+
+@pytest.mark.parametrize(
+    "name,ingredient_group,expected_substring",
+    [
+        ("Ceramosides Wheat seed extract", "Wheat", "Ceramides"),
+        ("TruFlex Chondroitin Sulfate", "Chondroitin Sulfate", "Chondroitin"),
+        ("Cococin Coconut Water powder", "Coconut", "Coconut Water"),
+        ("Coconut Water", "Coconut", "Coconut Water"),
+    ],
+)
+def test_batch2_aliases_and_new_canonical_beat_group_fallback(normalizer, name, ingredient_group, expected_substring):
+    standard_name, mapped, _ = normalizer._enhanced_ingredient_mapping(
+        name, [], ingredient_group=ingredient_group
+    )
+
+    assert mapped is True
+    assert expected_substring.lower() in str(standard_name).lower()
+
+
+@pytest.mark.parametrize(
+    "name,expected_substring",
+    [
+        ("Hydrogenated Vegetable Oil", "Hydrogenated Vegetable Oil"),
+        ("natural Rosemary flavor", "Natural Rosemary Flavor"),
+        ("Grapefruit Oil", "Grapefruit Oil"),
+    ],
+)
+def test_batch3_inactive_identity_gaps_map(normalizer, name, expected_substring):
+    standard_name, mapped, _ = normalizer._map_inactive_name_prefer_other(name)
+
+    assert mapped is True
+    assert expected_substring.lower() in str(standard_name).lower()
+
+
+@pytest.mark.parametrize(
+    "name,ingredient_group,expected_substring",
+    [
+        ("Sesame seed Oil", "Sesame Oil", "Sesame Seed Oil"),
+        ("Sesame Seed Oil", "Sesame Oil", "Sesame Seed Oil"),
+        ("Extra Virgin Olive Fruit Oil", "Olive Oil", "Extra Virgin Olive Oil"),
+    ],
+)
+def test_batch4_active_oils_map_to_iqm(normalizer, name, ingredient_group, expected_substring):
+    standard_name, mapped, _ = normalizer._enhanced_ingredient_mapping(
+        name, [], ingredient_group=ingredient_group
+    )
+
+    assert mapped is True
+    assert expected_substring.lower() in str(standard_name).lower()
+
+
+@pytest.mark.parametrize(
+    "name,expected_substring",
+    [
+        ("Sesame seed Oil", "Sesame Seed Oil"),
+        ("Extra Virgin Olive Fruit Oil", "Extra Virgin Olive Oil"),
+    ],
+)
+def test_batch4_inactive_oils_prefer_other_ingredients(normalizer, name, expected_substring):
+    standard_name, mapped, _ = normalizer._map_inactive_name_prefer_other(name)
+
+    assert mapped is True
+    assert expected_substring.lower() in str(standard_name).lower()
+
+
+def test_batch5_prickly_pear_leaf_extract_maps_to_existing_nopal(normalizer):
+    standard_name, mapped, _ = normalizer._enhanced_ingredient_mapping(
+        "Prickly Pear Cactus leaf extract", [], ingredient_group="Prickly Pear Cactus"
+    )
+
+    assert mapped is True
+    assert standard_name == "Nopal"
+
+
+def test_batch5_soluble_food_starch_maps_as_inactive_other_ingredient(normalizer):
+    standard_name, mapped, _ = normalizer._map_inactive_name_prefer_other("soluble Food Starch")
+
+    assert mapped is True
+    assert standard_name == "Soluble Food Starch"
+
+
+@pytest.mark.parametrize(
+    "name,ingredient_group,expected",
+    [
+        ("Anchovies", "Fish", "Fish"),
+        ("Sunflower", "sunflower", "Sunflower (Source Descriptor)"),
+        ("Algae", "Algae (unspecified)", "Algae (Source Descriptor)"),
+        ("Nonionic Surfactant", "Nonionic Surfactant", "Nonionic Surfactant (Descriptor)"),
+    ],
+)
+def test_batch6_source_and_descriptor_rows_map_without_overclaiming(normalizer, name, ingredient_group, expected):
+    standard_name, mapped, _ = normalizer._map_inactive_name_prefer_other(
+        name, ingredient_group=ingredient_group
+    )
+
+    assert mapped is True
+    assert standard_name == expected
+
+
+@pytest.mark.parametrize(
+    "name,ingredient_group,expected",
+    [
+        ("Palm", "Oil Palm", "Palm (Source Descriptor)"),
+        ("Canola", "Canola oil", "Canola (Source Descriptor)"),
+        ("Orange Cream", "Flavor", "Natural Flavors"),
+        ("Beet red", "Beet", "Beetroot Powder"),
+    ],
+)
+def test_batch7_source_color_and_flavor_rows_map_conservatively(normalizer, name, ingredient_group, expected):
+    standard_name, mapped, _ = normalizer._map_inactive_name_prefer_other(
+        name, ingredient_group=ingredient_group
+    )
+
+    assert mapped is True
+    assert standard_name == expected
+
+
+@pytest.mark.parametrize(
+    "name,ingredient_group,expected",
+    [
+        ("non-GMO Sunflower Vitamin E", "Vitamin E (unspecified)", "Tocopherol (Preservative)"),
+        ("Coconut", "Coconut", "Coconut (Source Descriptor)"),
+        ("Carob bean Gum", "Carob", "Natural Gums"),
+    ],
+)
+def test_batch8_inactive_rows_map_to_existing_preservative_gum_or_source_routes(normalizer, name, ingredient_group, expected):
+    standard_name, mapped, _ = normalizer._map_inactive_name_prefer_other(
+        name, ingredient_group=ingredient_group
+    )
+
+    assert mapped is True
+    assert standard_name == expected
+
+
+def test_batch9_inactive_lanolin_maps_to_conservative_source_identity(normalizer):
+    standard_name, mapped, _ = normalizer._map_inactive_name_prefer_other(
+        "Lanolin", ingredient_group="Lanolin"
+    )
+
+    assert mapped is True
+    assert standard_name == "Lanolin"
+
+
+@pytest.mark.parametrize(
+    "name,expected_substring",
+    [
+        ("D-Beta Tocotrienol", "Vitamin E"),
+        ("Zinc Mono-L-Methionine", "Zinc"),
+        ("Pectinase", "Digestive Enzymes"),
+    ],
+)
+def test_batch10_active_exact_aliases_map(normalizer, name, expected_substring):
+    standard_name, mapped, _ = normalizer._enhanced_ingredient_mapping(name, [])
+
+    assert mapped is True
+    assert expected_substring.lower() in str(standard_name).lower()
+
+
+@pytest.mark.parametrize(
+    "name,ingredient_group,expected",
+    [
+        ("Olive oil-extra virgin", "Olive Oil", "Extra Virgin Olive Oil"),
+        ("natural Lemon flavoring", "Flavor", "Natural Lemon Flavor"),
+        ("Carrot Oil", "Carrot oil", "Carrot Oil"),
+        ("Sorbitan", "Sorbitan", "Sorbitan"),
+        ("Sorbitol Anhydrides", "Header", "Sorbitol Anhydrides"),
+    ],
+)
+def test_batch10_inactive_exact_aliases_and_new_identities_map(normalizer, name, ingredient_group, expected):
+    standard_name, mapped, _ = normalizer._map_inactive_name_prefer_other(
+        name, ingredient_group=ingredient_group
+    )
+
+    assert mapped is True
+    assert standard_name == expected
+
+
+@pytest.mark.parametrize(
+    "name,ingredient_group,expected_substring",
+    [
+        ("Omega-3 Cod Liver Oil", "Fish Liver oil", "Cod Liver Oil"),
+        ("Marine Lipid Oil", "Marine oil (unspecified)", "Fish Oil"),
+        ("Romega 30", "Fish roe oil", "Herring Roe"),
+        ("stabilized L-Alpha-Glycerophosphatidylcholine", "Alpha-GPC", "Alpha GPC"),
+        ("wild crafted Red Raspberry", "Red Raspberry", "Red Raspberry"),
+        ("Carrot Seed Oil", "Carrot oil", "Carrot Seed Oil"),
+    ],
+)
+def test_batch11_active_aliases_and_new_botanical_identity_map(normalizer, name, ingredient_group, expected_substring):
+    standard_name, mapped, _ = normalizer._enhanced_ingredient_mapping(
+        name, [], ingredient_group=ingredient_group
+    )
+
+    assert mapped is True
+    assert expected_substring.lower() in str(standard_name).lower()
+
+
+def test_batch11_inactive_high_pc_soy_lecithin_maps_to_existing_soy_lecithin(normalizer):
+    standard_name, mapped, _ = normalizer._map_inactive_name_prefer_other(
+        "high PC Soy Lecithin", ingredient_group="lecithin"
+    )
+
+    assert mapped is True
+    assert standard_name == "Soy Lecithin"
+
+
+@pytest.mark.parametrize(
+    "name,ingredient_group,expected_substring",
+    [
+        ("AcaiRich", "Acai", "Acai"),
+    ],
+)
+def test_batch12_active_exact_brand_alias_maps(normalizer, name, ingredient_group, expected_substring):
+    standard_name, mapped, _ = normalizer._enhanced_ingredient_mapping(
+        name, [], ingredient_group=ingredient_group
+    )
+
+    assert mapped is True
+    assert expected_substring.lower() in str(standard_name).lower()
+
+
+@pytest.mark.parametrize(
+    "name,ingredient_group,expected",
+    [
+        ("Bone Gelatin", "Gelatin", "Gelatin Capsule"),
+        ("Clary Sage Oil", "Clary sage", "Clary Sage Oil"),
+        ("Curcuma Oil", "TBD", "Curcuma Oil"),
+        ("Rapeseed Vegetable Oil", "Rapeseed Oil", "Rapeseed Oil"),
+        ("Soya Oil", "Soybean Oil", "Soy Bean Oil"),
+        ("mountain spring Water", "Water", "Spring Water"),
+        ("natural Orange and Tangerine flavors", "Flavor", "Natural Citrus-Orange Flavor"),
+        ("organic Oat Bran oil", "Oat bran oil", "Oat Bran Oil"),
+        ("Carob fruit extract", "Carob", "Carob (St. John's Bread)"),
+    ],
+)
+def test_batch12_inactive_exact_aliases_and_new_identities_map(
+    normalizer, name, ingredient_group, expected
+):
+    standard_name, mapped, _ = normalizer._map_inactive_name_prefer_other(
+        name, ingredient_group=ingredient_group
+    )
+
+    assert mapped is True
+    assert standard_name == expected
+
+
+@pytest.mark.parametrize(
+    "name,ingredient_group,expected",
+    [
+        ("minor Glycolipids", "Blend (non-nutrient/non-botanical)", "Minor Glycolipids (Descriptor)"),
+        ("Diglycerol Monooleate", "Diglycerol monooleate", "Diglycerol Monooleate"),
+        ("Glycerol Monooleate", "TBD", "Glycerol Monooleate"),
+        ("Halal Gelatin", "Gelatin", "Gelatin Capsule"),
+        ("Middle Chain Triglycerides", "Medium chain triglycerides (MCT)", "Medium Chain Triglycerides"),
+        ("Modified Sunflower Lecithin", "lecithin", "Sunflower Lecithin"),
+        ("Natural creamy Orange flavor", "Orange (unspecified)", "Natural Orange Flavor"),
+        ("Palm fruit stearin", "Tristearate", "Palm Stearin"),
+        ("Roasted Carob powder", "Carob", "Carob (St. John's Bread)"),
+    ],
+)
+def test_batch13_inactive_exact_aliases_and_new_identities_map(
+    normalizer, name, ingredient_group, expected
+):
+    standard_name, mapped, _ = normalizer._map_inactive_name_prefer_other(
+        name, ingredient_group=ingredient_group
+    )
+
+    assert mapped is True
+    assert standard_name == expected
+
+
+@pytest.mark.parametrize(
+    "name,ingredient_group,expected_substring",
+    [
+        ("20:1 {Acai} extract", "Acai", "Acai"),
+        ("Acai 2:1 extract", "Acai", "Acai"),
+        ("Acai Berry 20:1 extract", "Acai", "Acai"),
+    ],
+)
+def test_batch14_active_exact_aliases_map(normalizer, name, ingredient_group, expected_substring):
+    standard_name, mapped, _ = normalizer._enhanced_ingredient_mapping(
+        name, [], ingredient_group=ingredient_group
+    )
+
+    assert mapped is True
+    assert expected_substring.lower() in str(standard_name).lower()
+
+
+@pytest.mark.parametrize(
+    "name,ingredient_group,expected",
+    [
+        ("White Edible Ink", "Color", "White Edible Ink (Descriptor)"),
+        ("natural Citrus flavoring", "Flavor", "Natural Citrus Flavor"),
+        ("Cochineal C175470", "Cochineal", "Cochineal"),
+        ("Cuprous Oxide", "Copper oxide", "Cuprous Oxide"),
+        ("Lecithin oil", "lecithin", "Lecithin Oil"),
+        ("Nonionic Surfacant", "Surfactant", "Nonionic Surfactant (Descriptor)"),
+        ("100% expeller pressed, organic, extra virgin Coconut Oil", "coconut oil", "Extra Virgin Coconut Oil"),
+        ("Black Sesame Seed Oil", "Sesame Oil", "Sesame Seed Oil"),
+        ("Carob liquid", "Carob", "Carob (St. John's Bread)"),
+        ("Sorbitan Monooleate NF", "Sorbitan Ester", "Sorbitan Monooleate"),
+        ("Tilapia Fish Gelatin", "Gelatin", "Gelatin Capsule"),
+        ("non-GMO modified Tapioca Starch", "Starch", "Modified Food Starch"),
+    ],
+)
+def test_batch14_inactive_exact_aliases_and_new_identities_map(
+    normalizer, name, ingredient_group, expected
+):
+    standard_name, mapped, _ = normalizer._map_inactive_name_prefer_other(
+        name, ingredient_group=ingredient_group
+    )
+
+    assert mapped is True
+    assert standard_name == expected
+
+
+@pytest.mark.parametrize(
+    "name,ingredient_group,expected_substring",
+    [
+        ("Chinese Goldthread", "Chinese Goldthread", "Coptis"),
+    ],
+)
+def test_batch15_active_exact_aliases_map(normalizer, name, ingredient_group, expected_substring):
+    standard_name, mapped, _ = normalizer._enhanced_ingredient_mapping(
+        name, [], ingredient_group=ingredient_group
+    )
+
+    assert mapped is True
+    assert expected_substring.lower() in str(standard_name).lower()
+
+
+@pytest.mark.parametrize(
+    "name,ingredient_group,expected",
+    [
+        ("and water", "Water", "Purified Water"),
+        ("Polymethylacrylate", "Header", "Polymethylacrylate"),
+        ("Metal Salts", "Metal Salt (unspecified)", "Metal Salts (Descriptor)"),
+        ("Oxalic Acid", "Oxalic Acid", "Oxalic Acid"),
+        ("Phosphatidylcholine lecithin", "phosphatidylcholine", "Sunflower Lecithin"),
+        ("Polyunsaturated Oils", "Polyunsaturated Fat", "Polyunsaturated Oils (Descriptor)"),
+        ("added Color", "Color", "Added Color (Descriptor)"),
+        ("Carob, Natural, Powder", "Carob", "Carob (St. John's Bread)"),
+        ("D-Delta Tocopherol", "Vitamin E (delta tocopherol)", "Tocopherol (Preservative)"),
+        ("DL-Alpha Tocopheryl", "Vitamin E (alpha-tocopherol)", "Tocopherol (Preservative)"),
+        ("Disodium Edetate", "EDTA", "Disodium Edetate"),
+        ("Sunflower Lecithin oil", "lecithin", "Sunflower Lecithin"),
+    ],
+)
+def test_batch15_inactive_exact_aliases_and_new_identities_map(
+    normalizer, name, ingredient_group, expected
+):
+    standard_name, mapped, _ = normalizer._map_inactive_name_prefer_other(
+        name, ingredient_group=ingredient_group
+    )
+
+    assert mapped is True
+    assert standard_name == expected
+
+
+@pytest.mark.parametrize(
+    "name,ingredient_group,expected",
+    [
+        ("Anchovies", "Fish", "Fish"),
+        ("Sardines", "Fish", "Fish"),
+        ("Shellac glaze", "Shellac", "Shellac"),
+        ("Isopropyl Alcohol", "Alcohol", "Isopropyl Alcohol"),
+        ("N-Butyl Alcohol", "Alcohol", "N-Butyl Alcohol"),
+        ("Natural Lemon flavor Oil", "Lemon", "Lemon Flavor Oil"),
+        ("natural Orange Citrus Oil", "Orange (unspecified)", "Natural Citrus-Orange Flavor"),
+        (
+            "Expeller-pressed Chia (Salvia hispanica L.) seed oil",
+            "Chia",
+            "Chia Seed Oil",
+        ),
+        ("Distilled Monoglycerides", "Monoglyceride", "Distilled Monoglycerides"),
+        ("Gelatin Bovine", "Bovine (unspecified)", "Gelatin Capsule"),
+        ("Glycerin Monooleate", "Glyceride", "Glycerol Monooleate"),
+        ("Glycerin Monostearate", "TBD", "Glycerol Monostearate"),
+        (
+            "High Oleic Safflower and/or Sunflower Oil",
+            "Blend (Fatty Acid or Fat/Oil Supplement)",
+            "High Oleic Safflower/Sunflower Oil",
+        ),
+        ("Lemon flavor Oil", "Lemon", "Lemon Flavor Oil"),
+        ("Medium Chain Fatty Acids", "Medium chain triglycerides (MCT)", "Medium Chain Fatty Acids"),
+        ("Mixed Carotene", "carotenoids", "Carotene, Natural"),
+        ("Annato seed extract", "Color", "Annatto (Variants)"),
+        ("Sodium Thiosulfate", "Sodium Thiosulfate", "Sodium Thiosulfate"),
+        ("White Rice Bran Oil", "Rice Bran", "Rice Bran Oil"),
+        ("Tapioca Gelatin", "Starch", "Tapioca Gelatin"),
+    ],
+)
+def test_batch16_inactive_exact_aliases_and_new_identities_map(
+    normalizer, name, ingredient_group, expected
+):
+    standard_name, mapped, _ = normalizer._map_inactive_name_prefer_other(
+        name, ingredient_group=ingredient_group
+    )
+
+    assert mapped is True
+    assert standard_name == expected
+
+
+@pytest.mark.parametrize(
+    "name,ingredient_group,expected",
+    [
+        ("all Natural Flavoring", "Flavor", "Natural Flavors"),
+        ("black edible Ink", "Edible ink", "Black Edible Ink (Descriptor)"),
+        ("highly refined Soybean Oil", "Soybean Oil", "Soy Bean Oil"),
+        ("pharmaceutical Gelatin", "Gelatin", "Gelatin Capsule"),
+        ("10 minims Norwegian cod liver oil", "Fish Liver oil", "Cod Liver Oil (as carrier)"),
+        ("Acetylated Monoglyceride", "Acetylated Monoglyceride", "Vegetable Acetoglycerides"),
+        ("Algae Omega-3 Oil", "Algal Oil", "Algal Oil (as carrier)"),
+        ("Ammonium Hydrogen Carbonate", "Ammonium carbonate", "Ammonium Hydrogen Carbonate"),
+        ("Aqueous Shellac", "Coating", "Shellac"),
+        ("Buffalo Gelatin", "Gelatin", "Gelatin Capsule"),
+        ("Citrus Peel Oil Extract", "Sweet Orange", "Citrus Peel Oil Extract"),
+        ("Coconut Oil MCT", "coconut oil", "Medium Chain Triglycerides"),
+        ("D-Alpha Tocopherols", "Vitamin E (alpha tocopherol)", "Tocopherol (Preservative)"),
+        ("Essential Oil of Orange", "Orange (unspecified)", "Natural Orange Flavor"),
+        ("FD&C Blue", "Color", "FD&C Blue (Descriptor)"),
+        ("natural food grade Citrus Oil", "Citrus (unspecified)", "Natural Citrus Flavor"),
+    ],
+)
+def test_batch17_inactive_exact_aliases_and_new_identities_map(
+    normalizer, name, ingredient_group, expected
+):
+    standard_name, mapped, _ = normalizer._map_inactive_name_prefer_other(
+        name, ingredient_group=ingredient_group
+    )
+
+    assert mapped is True
+    assert standard_name == expected
+
+
+def test_batch17_partially_hydrogenated_corn_oil_routes_to_harmful(normalizer):
+    standard_name, mapped, _ = normalizer._enhanced_ingredient_mapping(
+        "Partially Hydrogenated Corn Oil", [], ingredient_group="Hydrogenated Corn Oil"
+    )
+
+    assert mapped is True
+    assert standard_name == "Partially Hydrogenated Corn Oil"
+
+
+@pytest.mark.parametrize(
+    "name,ingredient_group,expected_substring",
+    [
+        ("High Choline Lecithin", "lecithin", "Choline"),
+        ("liquid Soy Lecithin", "lecithin", "Choline"),
+        ("Trimethylglycerine Hydrochloride", "Betaine", "TMG"),
+        ("Ascorbyl Palmitate and Ascorbate", "Blend (Combination)", "Vitamin C"),
+    ],
+)
+def test_batch18_active_exact_aliases_map(normalizer, name, ingredient_group, expected_substring):
+    standard_name, mapped, _ = normalizer._enhanced_ingredient_mapping(
+        name, [], ingredient_group=ingredient_group
+    )
+
+    assert mapped is True
+    assert expected_substring.lower() in str(standard_name).lower()
+
+
+@pytest.mark.parametrize(
+    "name,ingredient_group,expected",
+    [
+        ("DHA/EPA Algal Oil", "Algal Oil", "Algal Oil (as carrier)"),
+        ("Diglyceryl Monooleate", "Diglycerol monooleate", "Diglycerol Monooleate"),
+        ("Ethyl Acrylate Copolymer", "Polyacrylate", "Ethyl Acrylate Copolymer"),
+        ("FD&C Red", "Color", "FD&C Red (Descriptor)"),
+        ("Forest Fruits flavor", "Flavor", "Natural Flavors"),
+        ("Glycerin Fatty Ester", "Glycerol", "Glycerin Fatty Acid Esters"),
+        ("Glyceryl Oleate", "Glyceryl oleate", "Glycerol Monooleate"),
+        ("Halal Bovine Gelatin", "Gelatin", "Gelatin Capsule"),
+    ],
+)
+def test_batch18_inactive_exact_aliases_and_new_identities_map(
+    normalizer, name, ingredient_group, expected
+):
+    standard_name, mapped, _ = normalizer._map_inactive_name_prefer_other(
+        name, ingredient_group=ingredient_group
+    )
+
+    assert mapped is True
+    assert standard_name == expected
+
+
+@pytest.mark.parametrize(
     "name,expected_substring",
     [
         ("Magtein Magnesium L-Threonate", "Magnesium"),

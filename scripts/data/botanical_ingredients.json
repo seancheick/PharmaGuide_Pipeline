@@ -1519,7 +1519,8 @@
         "coptis extract",
         "huang lian",
         "Chinese Goldthread (Coptis chinensis) (root) aqueous extract",
-        "coptis (coptis chinensis) root & rhizome 12:1 extract"
+        "coptis (coptis chinensis) root & rhizome 12:1 extract",
+        "Chinese Goldthread"
       ],
       "category": "root",
       "notes": "Coptis chinensis (Ranunculaceae) rhizome. Huang Lian in TCM, one of the richest natural sources of berberine alkaloid (5-8%). Bitter cold herb used for heat-clearing and antimicrobial purposes.",
@@ -4445,11 +4446,13 @@
       "aliases": [
         "red raspberry rubus idaeus powder",
         "red raspberry rubus idaeus extract",
-        "rubus idaeus ssp powder"
+        "rubus idaeus ssp powder",
+        "wild crafted red raspberry",
+        "wild crafted Red Raspberry"
       ],
       "category": "fruit",
       "notes": "Rubus idaeus (Rosaceae) fruit. Rich in ellagitannins, anthocyanins (cyanidin-3-sophoroside), and dietary fiber. Traditional use of leaf for uterine toning. Botanical whole-fruit powder.",
-      "last_updated": "2026-03-01"
+      "last_updated": "2026-03-09"
     },
     {
       "id": "red_root",
@@ -5834,6 +5837,20 @@
       "category": "root",
       "notes": "Daucus carota subsp. sativus (Apiaceae) root. Rich in beta-carotene (provitamin A, 8-13 mg/100g), polyacetylenes (falcarinol), and dietary fiber. Used in whole-food supplement blends.",
       "last_updated": "2026-03-01"
+    },
+    {
+      "id": "carrot_seed_oil",
+      "standard_name": "Carrot Seed Oil",
+      "latin_name": "Daucus carota",
+      "CUI": "C0007788",
+      "aliases": [
+        "carrot seed oil",
+        "Carrot Seed Oil",
+        "daucus carota seed oil"
+      ],
+      "category": "seed",
+      "notes": "Daucus carota (Apiaceae) seed-derived oil. Preserve as a distinct carrot seed oil identity when the label declares the oil itself rather than carrot root, carrot extract, or beta-carotene.",
+      "last_updated": "2026-03-09"
     },
     {
       "id": "parsnip",

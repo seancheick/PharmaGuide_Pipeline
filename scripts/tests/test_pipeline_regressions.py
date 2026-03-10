@@ -208,6 +208,455 @@ class TestStructuralContainerUnwrap:
         assert "Vitamin B6" in active_names
         assert "Magnesium" in active_names
 
+    def test_active_structural_container_is_preserved_in_display_ledger(self, normalizer):
+        raw_product = {
+            "id": "zma-display-test",
+            "fullName": "ZMA Display",
+            "brandName": "Test Brand",
+            "ingredientRows": [
+                {
+                    "order": 1,
+                    "name": "ZMA",
+                    "ingredientGroup": "Proprietary Blend",
+                    "nestedRows": [
+                        {"order": 2, "name": "Vitamin B6", "ingredientGroup": "Vitamin B6"},
+                        {"order": 3, "name": "Magnesium", "ingredientGroup": "Magnesium"},
+                    ],
+                }
+            ],
+            "otheringredients": {"ingredients": []},
+        }
+
+        normalized = normalizer.normalize_product(raw_product)
+        display_by_raw = {
+            row.get("raw_source_text"): row for row in normalized.get("display_ingredients", [])
+        }
+
+        assert display_by_raw["ZMA"]["display_type"] == "structural_container"
+        assert display_by_raw["ZMA"]["score_included"] is False
+        assert display_by_raw["ZMA"]["children"] == ["Vitamin B6", "Magnesium"]
+
+
+class TestBatch2CleanActiveMapping:
+    @pytest.fixture
+    def normalizer(self):
+        return EnhancedDSLDNormalizer()
+
+    def test_batch2_active_labels_resolve_to_intended_canonicals(self, normalizer):
+        raw_product = {
+            "id": "batch2-active-mapping",
+            "fullName": "Batch 2 Active Mapping",
+            "brandName": "Test Brand",
+            "productVersionCode": "1",
+            "ingredientRows": [
+                {"order": 1, "name": "Ceramosides Wheat seed extract", "ingredientGroup": "Wheat"},
+                {"order": 2, "name": "TruFlex Chondroitin Sulfate", "ingredientGroup": "Chondroitin Sulfate"},
+                {"order": 3, "name": "Cococin Coconut Water powder", "ingredientGroup": "Coconut"},
+                {"order": 4, "name": "Coconut Water", "ingredientGroup": "Coconut"},
+            ],
+            "otheringredients": {"ingredients": []},
+        }
+
+        normalized = normalizer.normalize_product(raw_product)
+        active_by_name = {ing.get("name"): ing for ing in normalized.get("activeIngredients", [])}
+
+        assert active_by_name["Ceramosides Wheat seed extract"]["standardName"] == "Ceramides"
+        assert active_by_name["TruFlex Chondroitin Sulfate"]["standardName"] == "Chondroitin"
+        assert active_by_name["Cococin Coconut Water powder"]["standardName"] == "Coconut Water"
+        assert active_by_name["Coconut Water"]["standardName"] == "Coconut Water"
+
+
+class TestBatch3InactiveMapping:
+    @pytest.fixture
+    def normalizer(self):
+        return EnhancedDSLDNormalizer()
+
+    def test_batch3_inactive_labels_resolve_to_intended_canonicals(self, normalizer):
+        raw_product = {
+            "id": "batch3-inactive-mapping",
+            "fullName": "Batch 3 Inactive Mapping",
+            "brandName": "Test Brand",
+            "productVersionCode": "1",
+            "ingredientRows": [],
+            "otheringredients": {
+                "ingredients": [
+                    {"order": 1, "name": "Hydrogenated Vegetable Oil", "ingredientGroup": "Hydrogenated Vegetable Oil"},
+                    {"order": 2, "name": "natural Rosemary flavor", "ingredientGroup": "Flavor"},
+                    {"order": 3, "name": "Grapefruit Oil", "ingredientGroup": "Grapefruit"},
+                ]
+            },
+        }
+
+        normalized = normalizer.normalize_product(raw_product)
+        inactive_by_name = {ing.get("name"): ing for ing in normalized.get("inactiveIngredients", [])}
+
+        assert inactive_by_name["Hydrogenated Vegetable Oil"]["standardName"] == "Hydrogenated Vegetable Oil"
+        assert inactive_by_name["natural Rosemary flavor"]["standardName"] == "Natural Rosemary Flavor"
+        assert inactive_by_name["Grapefruit Oil"]["standardName"] == "Grapefruit Oil"
+
+
+class TestDisplayLedgerScaffold:
+    @pytest.fixture
+    def normalizer(self):
+        return EnhancedDSLDNormalizer()
+
+    def test_display_ledger_scaffold_emits_user_facing_rows_without_mutating_scoring_inputs(self, normalizer):
+        raw_product = {
+            "id": "display-ledger-scaffold",
+            "fullName": "Display Ledger Scaffold",
+            "brandName": "Test Brand",
+            "productVersionCode": "1",
+            "ingredientRows": [
+                {"order": 1, "name": "Vitamin C", "ingredientGroup": "Vitamin C (unspecified)"},
+                {"order": 2, "name": "Zinc", "ingredientGroup": "Zinc"},
+            ],
+            "otheringredients": {
+                "ingredients": [
+                    {"order": 1, "name": "Hypromellose", "ingredientGroup": "Hypromellose"}
+                ]
+            },
+        }
+
+        normalized = normalizer.normalize_product(raw_product)
+
+        assert "display_ingredients" in normalized
+        assert [ing.get("name") for ing in normalized.get("activeIngredients", [])] == ["Vitamin C", "Zinc"]
+        assert [ing.get("name") for ing in normalized.get("inactiveIngredients", [])] == ["Hypromellose"]
+
+        display_rows = normalized["display_ingredients"]
+        assert [row.get("raw_source_text") for row in display_rows] == ["Vitamin C", "Zinc", "Hypromellose"]
+        assert all("display_name" in row for row in display_rows)
+        assert all("score_included" in row for row in display_rows)
+
+    def test_display_ledger_classification_fields_are_explicit(self, normalizer):
+        raw_product = {
+            "id": "display-ledger-classification",
+            "fullName": "Display Ledger Classification",
+            "brandName": "Test Brand",
+            "productVersionCode": "1",
+            "ingredientRows": [
+                {"order": 1, "name": "Vitamin C", "ingredientGroup": "Vitamins"},
+                {
+                    "order": 2,
+                    "name": "Other Omega-3's",
+                    "ingredientGroup": "Omega-3",
+                    "nestedRows": [],
+                    "forms": [],
+                },
+                {
+                    "order": 3,
+                    "name": "ZMA",
+                    "ingredientGroup": "Proprietary Blend",
+                    "nestedRows": [
+                        {"order": 4, "name": "Magnesium", "ingredientGroup": "Magnesium"},
+                    ],
+                },
+            ],
+            "otheringredients": {
+                "ingredients": [
+                    {"order": 1, "name": "Hypromellose", "ingredientGroup": "Cellulose"},
+                ]
+            },
+        }
+
+        normalized = normalizer.normalize_product(raw_product)
+        display_by_raw = {
+            row.get("raw_source_text"): row for row in normalized.get("display_ingredients", [])
+        }
+
+        assert display_by_raw["Vitamin C"]["display_type"] == "mapped_ingredient"
+        assert display_by_raw["Vitamin C"]["resolution_type"] == "direct_mapped"
+        assert display_by_raw["Vitamin C"]["source_section"] == "activeIngredients"
+        assert display_by_raw["Vitamin C"]["score_included"] is True
+
+        assert display_by_raw["Other Omega-3's"]["display_type"] == "summary_wrapper"
+        assert display_by_raw["Other Omega-3's"]["resolution_type"] == "suppressed_parent"
+        assert display_by_raw["Other Omega-3's"]["score_included"] is False
+
+        assert display_by_raw["ZMA"]["display_type"] == "structural_container"
+        assert display_by_raw["ZMA"]["resolution_type"] == "structural_parent"
+        assert display_by_raw["ZMA"]["score_included"] is False
+
+        assert display_by_raw["Hypromellose"]["display_type"] == "inactive_ingredient"
+        assert display_by_raw["Hypromellose"]["resolution_type"] == "inactive_mapped"
+        assert display_by_raw["Hypromellose"]["source_section"] == "inactiveIngredients"
+        assert display_by_raw["Hypromellose"]["score_included"] is False
+
+
+class TestBatch4ActiveOilRouting:
+    @pytest.fixture
+    def normalizer(self):
+        return EnhancedDSLDNormalizer()
+
+    def test_batch4_active_oil_labels_route_to_iqm(self, normalizer):
+        raw_product = {
+            "id": "batch4-active-oils",
+            "fullName": "Batch 4 Active Oils",
+            "brandName": "Test Brand",
+            "productVersionCode": "1",
+            "ingredientRows": [
+                {"order": 1, "name": "Sesame seed Oil", "ingredientGroup": "Sesame Oil"},
+                {"order": 2, "name": "Extra Virgin Olive Fruit Oil", "ingredientGroup": "Olive Oil"},
+            ],
+            "otheringredients": {"ingredients": []},
+        }
+
+        normalized = normalizer.normalize_product(raw_product)
+        active_by_name = {ing.get("name"): ing for ing in normalized.get("activeIngredients", [])}
+
+        assert active_by_name["Sesame seed Oil"]["standardName"] == "Sesame Seed Oil"
+        assert active_by_name["Extra Virgin Olive Fruit Oil"]["standardName"] == "Extra Virgin Olive Oil"
+
+    def test_batch4_inactive_oil_labels_route_to_other_ingredients(self, normalizer):
+        raw_product = {
+            "id": "batch4-inactive-oils",
+            "fullName": "Batch 4 Inactive Oils",
+            "brandName": "Test Brand",
+            "productVersionCode": "1",
+            "ingredientRows": [],
+            "otheringredients": {
+                "ingredients": [
+                    {"order": 1, "name": "Sesame seed Oil", "ingredientGroup": "Sesame Oil"},
+                    {"order": 2, "name": "Extra Virgin Olive Fruit Oil", "ingredientGroup": "Olive Oil"},
+                ]
+            },
+        }
+
+        normalized = normalizer.normalize_product(raw_product)
+        inactive_by_name = {ing.get("name"): ing for ing in normalized.get("inactiveIngredients", [])}
+
+        assert inactive_by_name["Sesame seed Oil"]["standardName"] == "Sesame Seed Oil"
+        assert inactive_by_name["Extra Virgin Olive Fruit Oil"]["standardName"] == "Extra Virgin Olive Oil"
+
+
+class TestBatch5Mapping:
+    @pytest.fixture
+    def normalizer(self):
+        return EnhancedDSLDNormalizer()
+
+    def test_batch5_active_and_inactive_labels_route_cleanly(self, normalizer):
+        raw_product = {
+            "id": "batch5-mapping",
+            "fullName": "Batch 5 Mapping",
+            "brandName": "Test Brand",
+            "productVersionCode": "1",
+            "ingredientRows": [
+                {
+                    "order": 1,
+                    "name": "Prickly Pear Cactus leaf extract",
+                    "ingredientGroup": "Prickly Pear Cactus",
+                }
+            ],
+            "otheringredients": {
+                "ingredients": [
+                    {
+                        "order": 1,
+                        "name": "soluble Food Starch",
+                        "ingredientGroup": "Starch",
+                    }
+                ]
+            },
+        }
+
+        normalized = normalizer.normalize_product(raw_product)
+        active_by_name = {ing.get("name"): ing for ing in normalized.get("activeIngredients", [])}
+        inactive_by_name = {ing.get("name"): ing for ing in normalized.get("inactiveIngredients", [])}
+
+        assert active_by_name["Prickly Pear Cactus leaf extract"]["standardName"] == "Nopal"
+        assert inactive_by_name["soluble Food Starch"]["standardName"] == "Soluble Food Starch"
+
+    def test_batch5_vesisorb_wrapper_unwraps_forms(self, normalizer):
+        raw_product = {
+            "id": "batch5-vesisorb",
+            "fullName": "Batch 5 VESIsorb",
+            "brandName": "Test Brand",
+            "productVersionCode": "1",
+            "ingredientRows": [],
+            "otheringredients": {
+                "ingredients": [
+                    {
+                        "order": 1,
+                        "name": "VESIsorb Microemulsion preconcentrate",
+                        "ingredientGroup": "Proprietary Blend (Combination)",
+                        "forms": [
+                            {"order": 1, "name": "Medium Chain Triglycerides", "ingredientId": 5004},
+                            {"order": 2, "name": "Nonionic Surfactant", "ingredientId": 241841},
+                            {"order": 3, "name": "Sucrose Fatty Acid Esters", "ingredientId": 97095},
+                        ],
+                    }
+                ]
+            },
+        }
+
+        normalized = normalizer.normalize_product(raw_product)
+        inactive_names = [ing.get("name") for ing in normalized.get("inactiveIngredients", [])]
+
+        assert "VESIsorb Microemulsion preconcentrate" not in inactive_names
+        assert "Medium Chain Triglycerides" in inactive_names
+        assert "Nonionic Surfactant" in inactive_names
+        assert "Sucrose Fatty Acid Esters" in inactive_names
+
+
+class TestBatch6DescriptorRouting:
+    @pytest.fixture
+    def normalizer(self):
+        return EnhancedDSLDNormalizer()
+
+    def test_batch6_inactive_source_rows_route_to_descriptor_canonicals(self, normalizer):
+        raw_product = {
+            "id": "batch6-descriptor-routing",
+            "fullName": "Batch 6 Descriptor Routing",
+            "brandName": "Test Brand",
+            "productVersionCode": "1",
+            "ingredientRows": [],
+            "otheringredients": {
+                "ingredients": [
+                    {"order": 1, "name": "Anchovies", "ingredientGroup": "Fish"},
+                    {"order": 2, "name": "Sunflower", "ingredientGroup": "sunflower"},
+                    {"order": 3, "name": "Algae", "ingredientGroup": "Algae (unspecified)"},
+                    {"order": 4, "name": "Nonionic Surfactant", "ingredientGroup": "Nonionic Surfactant"},
+                ]
+            },
+        }
+
+        normalized = normalizer.normalize_product(raw_product)
+        inactive_by_name = {ing.get("name"): ing for ing in normalized.get("inactiveIngredients", [])}
+
+        assert inactive_by_name["Anchovies"]["standardName"] == "Fish"
+        assert inactive_by_name["Sunflower"]["standardName"] == "Sunflower (Source Descriptor)"
+        assert inactive_by_name["Algae"]["standardName"] == "Algae (Source Descriptor)"
+        assert inactive_by_name["Nonionic Surfactant"]["standardName"] == "Nonionic Surfactant (Descriptor)"
+
+
+class TestBatch7InactiveCleanup:
+    @pytest.fixture
+    def normalizer(self):
+        return EnhancedDSLDNormalizer()
+
+    def test_batch7_source_flavor_and_color_rows_route_conservatively(self, normalizer):
+        raw_product = {
+            "id": "batch7-inactive-routing",
+            "fullName": "Batch 7 Inactive Routing",
+            "brandName": "Test Brand",
+            "productVersionCode": "1",
+            "ingredientRows": [],
+            "otheringredients": {
+                "ingredients": [
+                    {"order": 1, "name": "Palm", "ingredientGroup": "Oil Palm"},
+                    {"order": 2, "name": "Canola", "ingredientGroup": "Canola oil"},
+                    {"order": 3, "name": "Orange Cream", "ingredientGroup": "Flavor"},
+                    {"order": 4, "name": "Beet red", "ingredientGroup": "Beet"},
+                ]
+            },
+        }
+
+        normalized = normalizer.normalize_product(raw_product)
+        inactive_by_name = {ing.get("name"): ing for ing in normalized.get("inactiveIngredients", [])}
+
+        assert inactive_by_name["Palm"]["standardName"] == "Palm (Source Descriptor)"
+        assert inactive_by_name["Canola"]["standardName"] == "Canola (Source Descriptor)"
+        assert inactive_by_name["Orange Cream"]["standardName"] == "Natural Flavors"
+        assert inactive_by_name["Beet red"]["standardName"] == "Beetroot Powder"
+
+    def test_batch7_acidity_regulator_parent_unwraps_child(self, normalizer):
+        raw_product = {
+            "id": "batch7-acidity-regulator",
+            "fullName": "Batch 7 Acidity Regulator",
+            "brandName": "Test Brand",
+            "productVersionCode": "1",
+            "ingredientRows": [],
+            "otheringredients": {
+                "ingredients": [
+                    {
+                        "order": 1,
+                        "name": "Acidity Regulator",
+                        "ingredientGroup": "Acidity regulator",
+                        "forms": [
+                            {"order": 1, "name": "Adipic Acid", "ingredientId": 83122}
+                        ],
+                    }
+                ]
+            },
+        }
+
+        normalized = normalizer.normalize_product(raw_product)
+        inactive_names = [ing.get("name") for ing in normalized.get("inactiveIngredients", [])]
+        inactive_by_name = {ing.get("name"): ing for ing in normalized.get("inactiveIngredients", [])}
+
+        assert "Acidity Regulator" not in inactive_names
+        assert inactive_by_name["Adipic Acid"]["standardName"] == "Adipic Acid"
+        display_by_raw = {
+            row.get("raw_source_text"): row for row in normalized.get("display_ingredients", [])
+        }
+
+        assert display_by_raw["Acidity Regulator"]["display_type"] == "structural_container"
+        assert display_by_raw["Acidity Regulator"]["score_included"] is False
+        assert display_by_raw["Acidity Regulator"]["children"] == ["Adipic Acid"]
+
+
+class TestBatch8InactiveCleanup:
+    @pytest.fixture
+    def normalizer(self):
+        return EnhancedDSLDNormalizer()
+
+    def test_batch8_inactive_rows_route_to_preservative_source_and_gum_targets(self, normalizer):
+        raw_product = {
+            "id": "batch8-inactive-routing",
+            "fullName": "Batch 8 Inactive Routing",
+            "brandName": "Test Brand",
+            "productVersionCode": "1",
+            "ingredientRows": [],
+            "otheringredients": {
+                "ingredients": [
+                    {"order": 1, "name": "non-GMO Sunflower Vitamin E", "ingredientGroup": "Vitamin E (unspecified)"},
+                    {"order": 2, "name": "Coconut", "ingredientGroup": "Coconut"},
+                    {"order": 3, "name": "Carob bean Gum", "ingredientGroup": "Carob"},
+                ]
+            },
+        }
+
+        normalized = normalizer.normalize_product(raw_product)
+        inactive_by_name = {ing.get("name"): ing for ing in normalized.get("inactiveIngredients", [])}
+
+        assert inactive_by_name["non-GMO Sunflower Vitamin E"]["standardName"] == "Tocopherol (Preservative)"
+        assert inactive_by_name["Coconut"]["standardName"] == "Coconut (Source Descriptor)"
+        assert inactive_by_name["Carob bean Gum"]["standardName"] == "Natural Gums"
+
+    def test_batch8_humectant_parent_unwraps_child(self, normalizer):
+        raw_product = {
+            "id": "batch8-humectant",
+            "fullName": "Batch 8 Humectant",
+            "brandName": "Test Brand",
+            "productVersionCode": "1",
+            "ingredientRows": [],
+            "otheringredients": {
+                "ingredients": [
+                    {
+                        "order": 1,
+                        "name": "Humectant",
+                        "ingredientGroup": "Humectant",
+                        "forms": [
+                            {"order": 1, "name": "Glycerin", "ingredientId": 3985}
+                        ],
+                    }
+                ]
+            },
+        }
+
+        normalized = normalizer.normalize_product(raw_product)
+        inactive_names = [ing.get("name") for ing in normalized.get("inactiveIngredients", [])]
+        inactive_by_name = {ing.get("name"): ing for ing in normalized.get("inactiveIngredients", [])}
+
+        assert "Humectant" not in inactive_names
+        assert inactive_by_name["Glycerin"]["standardName"] == "Vegetable Glycerin"
+        display_by_raw = {
+            row.get("raw_source_text"): row for row in normalized.get("display_ingredients", [])
+        }
+
+        assert display_by_raw["Humectant"]["display_type"] == "structural_container"
+        assert display_by_raw["Humectant"]["score_included"] is False
+        assert display_by_raw["Humectant"]["children"] == ["Glycerin"]
+
 
 class TestNutritionFactExclusion:
     """Tests for nutrition fact exclusion"""
@@ -227,6 +676,717 @@ class TestNutritionFactExclusion:
         """Test that real ingredients are NOT detected as nutrition facts"""
         assert normalizer._is_nutrition_fact("Vitamin C", "Vitamins", "mg") is False
         assert normalizer._is_nutrition_fact("Zinc", "Minerals", "mg") is False
+
+
+class TestBatch9StructuralAndBrandedWrappers:
+    @pytest.fixture
+    def normalizer(self):
+        return EnhancedDSLDNormalizer()
+
+    def test_batch9_stabilizer_parent_unwraps_child(self, normalizer):
+        raw_product = {
+            "id": "batch9-stabilizer",
+            "fullName": "Batch 9 Stabilizer",
+            "brandName": "Test Brand",
+            "productVersionCode": "1",
+            "ingredientRows": [],
+            "otheringredients": {
+                "ingredients": [
+                    {
+                        "order": 1,
+                        "name": "Stabilizer",
+                        "ingredientGroup": "Stabilizer",
+                        "forms": [
+                            {"order": 1, "name": "Croscarmellose Sodium", "ingredientId": 4312}
+                        ],
+                    }
+                ]
+            },
+        }
+
+        normalized = normalizer.normalize_product(raw_product)
+        inactive_names = [ing.get("name") for ing in normalized.get("inactiveIngredients", [])]
+        inactive_by_name = {ing.get("name"): ing for ing in normalized.get("inactiveIngredients", [])}
+
+        assert "Stabilizer" not in inactive_names
+        assert inactive_by_name["Croscarmellose Sodium"]["standardName"] == "Croscarmellose Sodium"
+
+    def test_batch9_thickener_parent_unwraps_children(self, normalizer):
+        raw_product = {
+            "id": "batch9-thickener",
+            "fullName": "Batch 9 Thickener",
+            "brandName": "Test Brand",
+            "productVersionCode": "1",
+            "ingredientRows": [],
+            "otheringredients": {
+                "ingredients": [
+                    {
+                        "order": 1,
+                        "name": "Thickener",
+                        "ingredientGroup": "Thickener",
+                        "forms": [
+                            {"order": 1, "name": "Hydroxypropyl Cellulose", "ingredientId": 6505},
+                            {"order": 2, "name": "Hypromellose", "ingredientId": 3721},
+                        ],
+                    }
+                ]
+            },
+        }
+
+        normalized = normalizer.normalize_product(raw_product)
+        inactive_names = [ing.get("name") for ing in normalized.get("inactiveIngredients", [])]
+        inactive_by_name = {ing.get("name"): ing for ing in normalized.get("inactiveIngredients", [])}
+
+        assert "Thickener" not in inactive_names
+        assert inactive_by_name["Hydroxypropyl Cellulose"]["standardName"] == "Hydroxypropyl Cellulose"
+        assert inactive_by_name["Hypromellose"]["standardName"] == "Hydroxypropyl Methylcellulose"
+
+    def test_batch13_preservatives_header_unwraps_children(self, normalizer):
+        raw_product = {
+            "id": "batch13-preservatives-header",
+            "fullName": "Batch 13 Preservatives Header",
+            "brandName": "Test Brand",
+            "productVersionCode": "1",
+            "ingredientRows": [],
+            "otheringredients": {
+                "ingredients": [
+                    {
+                        "order": 1,
+                        "name": "Preservatives to maintain freshness",
+                        "ingredientGroup": "Header",
+                        "forms": [
+                            {"order": 2, "name": "Ascorbyl Palmitate", "ingredientId": 278748},
+                            {"order": 3, "name": "Mixed Tocopherols", "ingredientId": 280625},
+                        ],
+                    }
+                ]
+            },
+        }
+
+        normalized = normalizer.normalize_product(raw_product)
+        inactive_names = [ing.get("name") for ing in normalized.get("inactiveIngredients", [])]
+        display_by_raw = {
+            row.get("raw_source_text"): row for row in normalized.get("display_ingredients", [])
+        }
+
+        assert "Preservatives to maintain freshness" not in inactive_names
+        assert "Ascorbyl Palmitate" in inactive_names
+        assert "Mixed Tocopherols" in inactive_names
+        assert display_by_raw["Preservatives to maintain freshness"]["display_type"] == "structural_container"
+        assert display_by_raw["Preservatives to maintain freshness"]["score_included"] is False
+        assert display_by_raw["Preservatives to maintain freshness"]["children"] == [
+            "Ascorbyl Palmitate",
+            "Mixed Tocopherols",
+        ]
+
+    @pytest.mark.parametrize(
+        ("container_name", "child_names"),
+        [
+            (
+                "Coating contains one or more of the following",
+                [
+                    "Ethylcellulose",
+                    "Medium Chain Triglycerides",
+                    "Oleic Acid",
+                    "PEG",
+                    "Polymethylacrylate",
+                    "Sodium Alginate",
+                    "Stearic Acid",
+                    "Talc",
+                ],
+            ),
+            (
+                "Excipients",
+                ["organic extra virgin Olive Oil", "Rice Bran Wax", "Sunflower Lecithin"],
+            ),
+            (
+                "Glycerides and Fatty Acids",
+                ["Safflower Oil Glyceride", "Sunflower seed Oil Glyceride"],
+            ),
+            (
+                "PlantGel Capsule",
+                ["Glycerin", "Tapioca Starch, Modified", "Water, Purified"],
+            ),
+        ],
+    )
+    def test_batch14_inactive_structural_wrappers_unwrap_forms_without_parent(
+        self, normalizer, container_name, child_names
+    ):
+        raw_product = {
+            "id": f"batch14-{container_name}",
+            "fullName": "Batch 14 Structural Wrapper",
+            "brandName": "Test Brand",
+            "productVersionCode": "1",
+            "ingredientRows": [],
+            "otheringredients": {
+                "ingredients": [
+                    {
+                        "order": 1,
+                        "name": container_name,
+                        "ingredientGroup": "Header",
+                        "forms": [{"order": idx + 2, "name": child} for idx, child in enumerate(child_names)],
+                    }
+                ]
+            },
+        }
+
+        normalized = normalizer.normalize_product(raw_product)
+        inactive_names = [ing.get("name") for ing in normalized.get("inactiveIngredients", [])]
+        display_by_raw = {
+            row.get("raw_source_text"): row for row in normalized.get("display_ingredients", [])
+        }
+
+        assert container_name not in inactive_names
+        for child_name in child_names:
+            assert child_name in inactive_names
+        assert display_by_raw[container_name]["display_type"] == "structural_container"
+        assert display_by_raw[container_name]["score_included"] is False
+
+    @pytest.mark.parametrize(
+        ("container_name", "nested_names"),
+        [
+            (
+                "Alpha & Omega",
+                [
+                    "Alpha-GPC",
+                    "Eicosapentaenoic Acid",
+                    "Docosahexaenoic Acid",
+                ],
+            ),
+            (
+                "Bergacyn",
+                [
+                    "Artichoke",
+                    "Bergamot",
+                ],
+            ),
+            (
+                "Supercritical Ultra-Purified Fish and Krill Oil",
+                ["Total Omega-3 Fatty Acids"],
+            ),
+        ],
+    )
+    def test_batch15_active_structural_wrappers_drop_parent_and_keep_nested_children(
+        self, normalizer, container_name, nested_names
+    ):
+        raw_product = {
+            "id": f"batch15-{container_name}",
+            "fullName": "Batch 15 Active Structural Wrapper",
+            "brandName": "Test Brand",
+            "productVersionCode": "1",
+            "ingredientRows": [
+                {
+                    "order": 1,
+                    "name": container_name,
+                    "ingredientGroup": "Blend",
+                    "nestedRows": [{"order": idx + 2, "name": child, "ingredientGroup": child} for idx, child in enumerate(nested_names)],
+                }
+            ],
+            "otheringredients": {"ingredients": []},
+        }
+
+        normalized = normalizer.normalize_product(raw_product)
+        active_names = [ing.get("name") for ing in normalized.get("activeIngredients", [])]
+        display_by_raw = {
+            row.get("raw_source_text"): row for row in normalized.get("display_ingredients", [])
+        }
+
+        assert container_name not in active_names
+        for child_name in nested_names:
+            if child_name in {"Other Omega-3 Fatty Acids", "Total Omega-3 Fatty Acids"}:
+                continue
+            assert child_name in active_names
+        assert display_by_raw[container_name]["display_type"] == "structural_container"
+        assert display_by_raw[container_name]["score_included"] is False
+
+    @pytest.mark.parametrize(
+        ("container_name", "child_names"),
+        [
+            (
+                "UHPO3 Omega-3 Fatty Acid Concentrate",
+                ["Anchovies", "Sardines", "Tuna"],
+            ),
+            (
+                "Proprietary Bio-Solv base",
+                ["Medium Chain Triglycerides", "Polysorbate 80", "Sorbitan Monooleate", "Sorbitol", "Soy Lecithin"],
+            ),
+            (
+                "FreshLok(TM) antioxidant",
+                ["Ascorbic Acid", "Ascorbyl Palmitate", "D-Alpha-Tocopherol", "Rosemary extract", "Soy Lecithin"],
+            ),
+            (
+                "White Ink",
+                ["Ammonium Hydroxide", "Isopropyl Alcohol", "N-Butyl Alcohol", "Propylene Glycol", "Shellac glaze", "Simethicone", "Titanium Dioxide"],
+            ),
+        ],
+    )
+    def test_batch15_inactive_structural_wrappers_unwrap_forms_without_parent(
+        self, normalizer, container_name, child_names
+    ):
+        raw_product = {
+            "id": f"batch15-{container_name}",
+            "fullName": "Batch 15 Structural Wrapper",
+            "brandName": "Test Brand",
+            "productVersionCode": "1",
+            "ingredientRows": [],
+            "otheringredients": {
+                "ingredients": [
+                    {
+                        "order": 1,
+                        "name": container_name,
+                        "ingredientGroup": "Header",
+                        "forms": [{"order": idx + 2, "name": child} for idx, child in enumerate(child_names)],
+                    }
+                ]
+            },
+        }
+
+        normalized = normalizer.normalize_product(raw_product)
+        inactive_names = [ing.get("name") for ing in normalized.get("inactiveIngredients", [])]
+        display_by_raw = {
+            row.get("raw_source_text"): row for row in normalized.get("display_ingredients", [])
+        }
+
+        assert container_name not in inactive_names
+        for child_name in child_names:
+            assert child_name in inactive_names
+        assert display_by_raw[container_name]["display_type"] == "structural_container"
+        assert display_by_raw[container_name]["score_included"] is False
+
+    def test_batch16_softgel_color_unwraps_children_without_parent(self, normalizer):
+        raw_product = {
+            "id": "batch16-softgel-color",
+            "fullName": "Batch 16 Softgel Color",
+            "brandName": "Test Brand",
+            "productVersionCode": "1",
+            "ingredientRows": [],
+            "otheringredients": {
+                "ingredients": [
+                    {
+                        "order": 1,
+                        "name": "Softgel Color",
+                        "ingredientGroup": "Color",
+                        "forms": [
+                            {"order": 2, "name": "Annatto"},
+                            {"order": 3, "name": "Titanium Dioxide", "prefix": "and"},
+                        ],
+                    }
+                ]
+            },
+        }
+
+        normalized = normalizer.normalize_product(raw_product)
+        inactive_names = [ing.get("name") for ing in normalized.get("inactiveIngredients", [])]
+        display_by_raw = {
+            row.get("raw_source_text"): row for row in normalized.get("display_ingredients", [])
+        }
+
+        assert "Softgel Color" not in inactive_names
+        assert "Annatto" in inactive_names
+        assert "Titanium Dioxide" in inactive_names
+        assert display_by_raw["Softgel Color"]["display_type"] == "structural_container"
+        assert display_by_raw["Softgel Color"]["score_included"] is False
+
+    @pytest.mark.parametrize(
+        ("container_name", "child_names"),
+        [
+            ("organic Flax particulate matter", ["Lignans"]),
+            ("contains naturally occurring Carotenoids", ["Beta-Carotene", "Canthaxanthin", "Lutein"]),
+            ("Antioxidant", ["Mixed Tocopherols"]),
+        ],
+    )
+    def test_batch17_inactive_structural_wrappers_unwrap_forms_without_parent(
+        self, normalizer, container_name, child_names
+    ):
+        raw_product = {
+            "id": f"batch17-{container_name}",
+            "fullName": "Batch 17 Structural Wrapper",
+            "brandName": "Test Brand",
+            "productVersionCode": "1",
+            "ingredientRows": [],
+            "otheringredients": {
+                "ingredients": [
+                    {
+                        "order": 1,
+                        "name": container_name,
+                        "ingredientGroup": "Header",
+                        "forms": [{"order": idx + 2, "name": child} for idx, child in enumerate(child_names)],
+                    }
+                ]
+            },
+        }
+
+        normalized = normalizer.normalize_product(raw_product)
+        inactive_names = [ing.get("name") for ing in normalized.get("inactiveIngredients", [])]
+        display_by_raw = {
+            row.get("raw_source_text"): row for row in normalized.get("display_ingredients", [])
+        }
+
+        assert container_name not in inactive_names
+        for child_name in child_names:
+            assert child_name in inactive_names
+        assert display_by_raw[container_name]["display_type"] == "structural_container"
+        assert display_by_raw[container_name]["score_included"] is False
+
+    @pytest.mark.parametrize(
+        ("container_name", "child_names"),
+        [
+            ("Palmitic Acid, Stearic Acid", ["Palmitic Acid", "Stearic Acid"]),
+            ("Safflower/Sunflower Oil concentrate", ["Conjugated Linoleic Acid", "Oleic Acid"]),
+        ],
+    )
+    def test_batch18_active_structural_form_wrappers_drop_parent_and_keep_children(
+        self, normalizer, container_name, child_names
+    ):
+        raw_product = {
+            "id": f"batch18-{container_name}",
+            "fullName": "Batch 18 Structural Active Wrapper",
+            "brandName": "Test Brand",
+            "productVersionCode": "1",
+            "ingredientRows": [
+                {
+                    "order": 1,
+                    "name": container_name,
+                    "ingredientGroup": "Blend (Fatty Acid or Fat/Oil Supplement)",
+                    "forms": [{"order": idx + 2, "name": child} for idx, child in enumerate(child_names)],
+                    "nestedRows": [],
+                }
+            ],
+            "otheringredients": {"ingredients": []},
+        }
+        if container_name == "Safflower/Sunflower Oil concentrate":
+            raw_product["ingredientRows"][0]["nestedRows"] = [
+                {"order": idx + 2, "name": child, "ingredientGroup": child, "nestedRows": [], "forms": []}
+                for idx, child in enumerate(child_names)
+            ]
+            raw_product["ingredientRows"][0]["forms"] = []
+
+        normalized = normalizer.normalize_product(raw_product)
+        active_names = [ing.get("name") for ing in normalized.get("activeIngredients", [])]
+        display_by_raw = {
+            row.get("raw_source_text"): row for row in normalized.get("display_ingredients", [])
+        }
+
+        assert container_name not in active_names
+        for child_name in child_names:
+            assert child_name in active_names
+        assert display_by_raw[container_name]["display_type"] == "structural_container"
+        assert display_by_raw[container_name]["score_included"] is False
+
+    @pytest.mark.parametrize(
+        "summary_name",
+        ["Total Omega-3-5-6-7-8-9-11", "Other Omega-3's"],
+    )
+    def test_batch18_active_summary_rows_are_skipped(self, normalizer, summary_name):
+        raw_product = {
+            "id": f"batch18-{summary_name}",
+            "fullName": "Batch 18 Summary Row",
+            "brandName": "Test Brand",
+            "productVersionCode": "1",
+            "ingredientRows": [
+                {
+                    "order": 1,
+                    "name": summary_name,
+                    "ingredientGroup": "Omega-3",
+                    "nestedRows": [],
+                    "forms": [],
+                }
+            ],
+            "otheringredients": {"ingredients": []},
+        }
+
+        normalized = normalizer.normalize_product(raw_product)
+        active_names = [ing.get("name") for ing in normalized.get("activeIngredients", [])]
+        display_by_raw = {
+            row.get("raw_source_text"): row for row in normalized.get("display_ingredients", [])
+        }
+
+        assert summary_name not in active_names
+        assert display_by_raw[summary_name]["display_type"] == "summary_wrapper"
+        assert display_by_raw[summary_name]["score_included"] is False
+
+    def test_batch9_menaq7_parent_is_dropped_in_favor_of_nested_vitamin_k2(self, normalizer):
+        raw_product = {
+            "id": "batch9-menaq7-natto",
+            "fullName": "Batch 9 MenaQ7",
+            "brandName": "Test Brand",
+            "productVersionCode": "1",
+            "ingredientRows": [
+                {
+                    "order": 1,
+                    "name": "MenaQ7 Natto",
+                    "ingredientGroup": "TBD",
+                    "nestedRows": [
+                        {
+                            "order": 2,
+                            "name": "Vitamin K2",
+                            "ingredientGroup": "Vitamin K (menaquinone)",
+                            "nestedRows": [],
+                            "forms": [],
+                        }
+                    ],
+                    "forms": [],
+                }
+            ],
+            "otheringredients": {"ingredients": []},
+        }
+
+        normalized = normalizer.normalize_product(raw_product)
+        active_names = [ing.get("name") for ing in normalized.get("activeIngredients", [])]
+        active_by_name = {ing.get("name"): ing for ing in normalized.get("activeIngredients", [])}
+
+        assert "MenaQ7 Natto" not in active_names
+        assert active_by_name["Vitamin K2"]["standardName"] == "Vitamin K"
+
+    def test_batch9_active_lanolin_wrapper_drops_parent_and_keeps_vitamin_d3(self, normalizer):
+        raw_product = {
+            "id": "batch9-lanolin-active",
+            "fullName": "Batch 9 Lanolin",
+            "brandName": "Test Brand",
+            "productVersionCode": "1",
+            "ingredientRows": [
+                {
+                    "order": 1,
+                    "name": "Lanolin",
+                    "ingredientGroup": "Lanolin",
+                    "forms": [
+                        {"order": 1, "name": "Vitamin D3", "prefix": "std. to", "ingredientId": 279014}
+                    ],
+                    "nestedRows": [],
+                }
+            ],
+            "otheringredients": {"ingredients": []},
+        }
+
+        normalized = normalizer.normalize_product(raw_product)
+        active_names = [ing.get("name") for ing in normalized.get("activeIngredients", [])]
+        active_by_name = {ing.get("name"): ing for ing in normalized.get("activeIngredients", [])}
+
+        assert "Lanolin" not in active_names
+        assert active_by_name["Vitamin D3"]["standardName"] == "Vitamin D"
+
+
+class TestBatch10OmegaAndFattyAcidSummaries:
+    @pytest.fixture
+    def normalizer(self):
+        return EnhancedDSLDNormalizer()
+
+    def test_batch10_total_omega_summary_drops_parent_and_keeps_nested_children(self, normalizer):
+        raw_product = {
+            "id": "batch10-total-omega",
+            "fullName": "Batch 10 Omega",
+            "brandName": "Test Brand",
+            "productVersionCode": "1",
+            "ingredientRows": [
+                {
+                    "order": 1,
+                    "name": "Total Omega-3-5-6-7-8-9-11",
+                    "ingredientGroup": "Blend (Fatty Acid or Fat/Oil Supplement)",
+                    "nestedRows": [
+                        {
+                            "order": 2,
+                            "name": "Eicosapentaenoic Acid",
+                            "ingredientGroup": "EPA (Eicosapentaenoic Acid)",
+                            "nestedRows": [],
+                            "forms": [],
+                        },
+                        {
+                            "order": 3,
+                            "name": "Docosahexaenoic Acid",
+                            "ingredientGroup": "DHA (Docosahexaenoic Acid)",
+                            "nestedRows": [],
+                            "forms": [],
+                        },
+                    ],
+                    "forms": [],
+                }
+            ],
+            "otheringredients": {"ingredients": []},
+        }
+
+        normalized = normalizer.normalize_product(raw_product)
+        active_names = [ing.get("name") for ing in normalized.get("activeIngredients", [])]
+
+        assert "Total Omega-3-5-6-7-8-9-11" not in active_names
+        assert "Eicosapentaenoic Acid" in active_names
+        assert "Docosahexaenoic Acid" in active_names
+
+    def test_batch10_palmitic_stearic_wrapper_drops_parent(self, normalizer):
+        raw_product = {
+            "id": "batch10-palmitic-stearic",
+            "fullName": "Batch 10 Fatty Acids",
+            "brandName": "Test Brand",
+            "productVersionCode": "1",
+            "ingredientRows": [
+                {
+                    "order": 1,
+                    "name": "Palmitic Acid, Stearic Acid",
+                    "ingredientGroup": "Blend (Fatty Acid or Fat/Oil Supplement)",
+                    "nestedRows": [
+                        {
+                            "order": 2,
+                            "name": "Palmitic Acid",
+                            "ingredientGroup": "Palmitic Acid",
+                            "nestedRows": [],
+                            "forms": [],
+                        },
+                        {
+                            "order": 3,
+                            "name": "Stearic Acid",
+                            "ingredientGroup": "Stearic Acid",
+                            "nestedRows": [],
+                            "forms": [],
+                        },
+                    ],
+                    "forms": [
+                        {"order": 1, "name": "Palmitic Acid"},
+                        {"order": 2, "name": "Stearic Acid"},
+                    ],
+                }
+            ],
+            "otheringredients": {"ingredients": []},
+        }
+
+        normalized = normalizer.normalize_product(raw_product)
+        active_names = [ing.get("name") for ing in normalized.get("activeIngredients", [])]
+
+        assert "Palmitic Acid, Stearic Acid" not in active_names
+
+
+class TestBatch11WrapperAndSummaryRows:
+    @pytest.fixture
+    def normalizer(self):
+        return EnhancedDSLDNormalizer()
+
+    def test_batch11_safflower_sunflower_wrapper_drops_parent_and_keeps_children(self, normalizer):
+        raw_product = {
+            "id": "batch11-safflower-sunflower",
+            "fullName": "Batch 11 CLA",
+            "brandName": "Test Brand",
+            "productVersionCode": "1",
+            "ingredientRows": [
+                {
+                    "order": 1,
+                    "name": "Safflower/Sunflower Oil concentrate",
+                    "ingredientGroup": "Blend (Fatty Acid or Fat/Oil Supplement)",
+                    "nestedRows": [
+                        {"order": 2, "name": "Conjugated Linoleic Acid", "ingredientGroup": "CLA"},
+                        {"order": 3, "name": "Oleic Acid", "ingredientGroup": "Oleic Acid"},
+                    ],
+                    "forms": [],
+                }
+            ],
+            "otheringredients": {"ingredients": []},
+        }
+
+        normalized = normalizer.normalize_product(raw_product)
+        active_names = [ing.get("name") for ing in normalized.get("activeIngredients", [])]
+        display_by_raw = {
+            row.get("raw_source_text"): row for row in normalized.get("display_ingredients", [])
+        }
+
+        assert "Safflower/Sunflower Oil concentrate" not in active_names
+        assert "Conjugated Linoleic Acid" in active_names
+        assert display_by_raw["Safflower/Sunflower Oil concentrate"]["score_included"] is False
+        assert display_by_raw["Safflower/Sunflower Oil concentrate"]["source_section"] == "activeIngredients"
+
+    def test_batch11_other_omega_summary_drops_parent(self, normalizer):
+        raw_product = {
+            "id": "batch11-other-omega",
+            "fullName": "Batch 11 Other Omega",
+            "brandName": "Test Brand",
+            "productVersionCode": "1",
+            "ingredientRows": [
+                {"order": 1, "name": "Total Omega-3 Fatty Acids", "ingredientGroup": "Omega-3"},
+                {"order": 2, "name": "Eicosapentaenoic Acid", "ingredientGroup": "EPA (Eicosapentaenoic Acid)"},
+                {"order": 3, "name": "Docosahexaenoic Acid", "ingredientGroup": "DHA (Docosahexaenoic Acid)"},
+                {"order": 4, "name": "Other Omega-3's", "ingredientGroup": "Omega-3"},
+            ],
+            "otheringredients": {"ingredients": []},
+        }
+
+        normalized = normalizer.normalize_product(raw_product)
+        active_names = [ing.get("name") for ing in normalized.get("activeIngredients", [])]
+        display_by_raw = {
+            row.get("raw_source_text"): row for row in normalized.get("display_ingredients", [])
+        }
+
+        assert "Other Omega-3's" not in active_names
+        assert "Eicosapentaenoic Acid" in active_names
+        assert "Docosahexaenoic Acid" in active_names
+        assert display_by_raw["Other Omega-3's"]["score_included"] is False
+        assert display_by_raw["Other Omega-3's"]["source_section"] == "activeIngredients"
+
+    def test_batch11_high_choline_lecithin_wrapper_drops_parent_and_keeps_phosphatidylcholine(self, normalizer):
+        raw_product = {
+            "id": "batch11-high-choline-lecithin",
+            "fullName": "Batch 11 Triple Lecithin",
+            "brandName": "Test Brand",
+            "productVersionCode": "1",
+            "ingredientRows": [
+                {
+                    "order": 1,
+                    "name": "High Choline Lecithin",
+                    "ingredientGroup": "lecithin",
+                    "nestedRows": [
+                        {"order": 2, "name": "Phosphatidyl Choline", "ingredientGroup": "phosphatidylcholine"}
+                    ],
+                    "forms": [],
+                }
+            ],
+            "otheringredients": {"ingredients": []},
+        }
+
+        normalized = normalizer.normalize_product(raw_product)
+        active_names = [ing.get("name") for ing in normalized.get("activeIngredients", [])]
+        active_by_name = {ing.get("name"): ing for ing in normalized.get("activeIngredients", [])}
+        display_by_raw = {
+            row.get("raw_source_text"): row for row in normalized.get("display_ingredients", [])
+        }
+
+        assert "High Choline Lecithin" not in active_names
+        assert active_by_name["Phosphatidyl Choline"]["standardName"] == "Choline"
+        assert display_by_raw["High Choline Lecithin"]["score_included"] is False
+        assert display_by_raw["High Choline Lecithin"]["source_section"] == "activeIngredients"
+
+    def test_display_ledger_keeps_wrappers_but_excludes_nutrition_facts(self, normalizer):
+        raw_product = {
+            "id": "display-ledger-no-nutrition",
+            "fullName": "Display Ledger Nutrition Guard",
+            "brandName": "Test Brand",
+            "productVersionCode": "1",
+            "ingredientRows": [
+                {
+                    "order": 1,
+                    "name": "Calories from Fat",
+                    "ingredientGroup": "Amount Per Serving",
+                    "nestedRows": [],
+                    "forms": [],
+                },
+                {
+                    "order": 2,
+                    "name": "Other Omega-3's",
+                    "ingredientGroup": "Omega-3",
+                    "nestedRows": [],
+                    "forms": [],
+                },
+                {
+                    "order": 3,
+                    "name": "Docosahexaenoic Acid",
+                    "ingredientGroup": "DHA (Docosahexaenoic Acid)",
+                    "nestedRows": [],
+                    "forms": [],
+                },
+            ],
+            "otheringredients": {"ingredients": []},
+        }
+
+        normalized = normalizer.normalize_product(raw_product)
+        display_rows = normalized.get("display_ingredients", [])
+        display_raw = [row.get("raw_source_text") for row in display_rows]
+
+        assert "Other Omega-3's" in display_raw
+        assert "Calories from Fat" not in display_raw
 
 
 class TestCleaningUnmappedBatch1Regressions:
@@ -343,6 +1503,80 @@ class TestCleaningUnmappedBatch1Regressions:
 
         assert inactive_by_name["Soy Lecithin"]["standardName"] == "Soy Lecithin"
         assert inactive_by_name["Soy Lecithin Oil"]["standardName"] == "Soy Lecithin"
+
+    def test_inactive_processing_uses_ingredient_group_fallback(self, normalizer):
+        raw_product = {
+            "id": "test_lime_oil_group_fallback",
+            "fullName": "Test Product",
+            "brandName": "Test Brand",
+            "productVersionCode": "1",
+            "ingredientRows": [],
+            "otheringredients": {
+                "ingredients": [
+                    {
+                        "name": "Lime Oil",
+                        "ingredientGroup": "Lime",
+                        "order": 1,
+                    }
+                ]
+            },
+        }
+
+        cleaned = normalizer.normalize_product(raw_product)
+        inactive_ingredients = cleaned.get("inactiveIngredients", [])
+
+        assert len(inactive_ingredients) == 1
+        assert inactive_ingredients[0]["mapped"] is True
+        assert "lime" in str(inactive_ingredients[0]["standardName"]).lower()
+
+    def test_inactive_processing_uses_descriptor_fallback_before_active_capture(self, normalizer):
+        raw_product = {
+            "id": "test_soy_lecithin_natural",
+            "fullName": "Test Product",
+            "brandName": "Test Brand",
+            "productVersionCode": "1",
+            "ingredientRows": [],
+            "otheringredients": {
+                "ingredients": [
+                    {"name": "Soy Lecithin, Natural", "order": 1},
+                    {"name": "Water, Deionized, Purified", "order": 2},
+                ]
+            },
+        }
+
+        cleaned = normalizer.normalize_product(raw_product)
+        inactive_by_name = {ing.get("name"): ing for ing in cleaned.get("inactiveIngredients", [])}
+
+        assert inactive_by_name["Soy Lecithin, Natural"]["mapped"] is True
+        assert inactive_by_name["Soy Lecithin, Natural"]["standardName"] == "Soy Lecithin"
+        assert inactive_by_name["Water, Deionized, Purified"]["mapped"] is True
+        assert "water" in str(inactive_by_name["Water, Deionized, Purified"]["standardName"]).lower()
+
+    def test_descriptor_fallback_runs_before_ingredient_group_fallback(self, normalizer):
+        raw_product = {
+            "id": "test_cold_pressed_lemon_oil",
+            "fullName": "Test Product",
+            "brandName": "Test Brand",
+            "productVersionCode": "1",
+            "ingredientRows": [],
+            "otheringredients": {
+                "ingredients": [
+                    {
+                        "name": "cold-pressed Lemon Oil",
+                        "ingredientGroup": "Lemon",
+                        "order": 1,
+                    }
+                ]
+            },
+        }
+
+        cleaned = normalizer.normalize_product(raw_product)
+        inactive = cleaned.get("inactiveIngredients", [])
+
+        assert len(inactive) == 1
+        assert inactive[0]["mapped"] is True
+        assert "lemon oil" in str(inactive[0]["standardName"]).lower()
+        assert "vitamin b9" not in str(inactive[0]["standardName"]).lower()
 
 
 class TestValidatorPlaceholderDetection:
@@ -1332,6 +2566,62 @@ class TestReferenceVersionsMetadata:
         """reference_versions should include last_updated for color_indicators"""
         color_vers = normalizer.reference_versions.get('color_indicators', {})
         assert 'last_updated' in color_vers
+
+
+class TestDisplayLedgerEnrichment:
+    def test_display_ledger_enrichment_keeps_wrappers_non_scoring(self):
+        from enrich_supplements_v3 import SupplementEnricherV3
+        import normalization as norm_module
+
+        enricher = SupplementEnricherV3()
+        product = {
+            "id": "display-ledger-enrichment-regression",
+            "fullName": "Display Ledger Enrichment Regression",
+            "brandName": "Test Brand",
+            "productVersionCode": "1",
+            "activeIngredients": [
+                {
+                    "name": "Docosahexaenoic Acid",
+                    "standardName": "Docosahexaenoic Acid",
+                    "raw_source_text": "Docosahexaenoic Acid",
+                    "raw_source_path": "activeIngredients",
+                    "normalized_key": norm_module.make_normalized_key("Docosahexaenoic Acid"),
+                    "quantity": 250,
+                    "unit": "mg",
+                    "mapped": True,
+                }
+            ],
+            "inactiveIngredients": [],
+            "display_ingredients": [
+                {
+                    "raw_source_text": "Other Omega-3's",
+                    "display_name": "Other Omega-3's",
+                    "source_section": "activeIngredients",
+                    "display_type": "summary_wrapper",
+                    "resolution_type": "suppressed_parent",
+                    "score_included": False,
+                },
+                {
+                    "raw_source_text": "Docosahexaenoic Acid",
+                    "display_name": "Docosahexaenoic Acid",
+                    "source_section": "activeIngredients",
+                    "display_type": "mapped_ingredient",
+                    "resolution_type": "direct_mapped",
+                    "score_included": True,
+                },
+            ],
+        }
+
+        enriched, issues = enricher.enrich_product(product)
+        assert not issues
+
+        display_by_raw = {
+            row.get("raw_source_text"): row for row in enriched.get("display_ingredients", [])
+        }
+
+        assert "mapped_to" not in display_by_raw["Other Omega-3's"]
+        assert display_by_raw["Other Omega-3's"]["score_included"] is False
+        assert display_by_raw["Docosahexaenoic Acid"]["mapped_to"]["standard_name"] == "Docosahexaenoic Acid"
 
 
 if __name__ == "__main__":

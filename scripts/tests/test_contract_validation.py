@@ -732,6 +732,108 @@ class TestMatchLedgerConsistencyContract:
         assert len(rule_violations) == 1
         assert "unmatched_ingredients" in rule_violations[0].message
 
+
+class TestDisplayLedgerContract:
+    """Rule H: display ledger additive contract validation."""
+
+    @pytest.fixture
+    def validator(self):
+        return EnrichmentContractValidator()
+
+    def test_H_display_ledger_optional_when_absent(self, validator):
+        product = {
+            "id": "test_display_optional",
+            "activeIngredients": [
+                {
+                    "name": "Vitamin C",
+                    "canonical_id": "ING_VITAMIN_C",
+                    "raw_source_text": "Vitamin C",
+                    "normalized_key": "vitamin_c",
+                }
+            ],
+        }
+
+        violations = validator.validate(product)
+        rule_violations = [v for v in violations if v.rule.startswith("H.")]
+        assert len(rule_violations) == 0
+
+    def test_H_valid_display_ledger_no_violations(self, validator):
+        product = {
+            "id": "test_display_valid",
+            "display_ingredients": [
+                {
+                    "raw_source_text": "Vitamin C",
+                    "display_name": "Vitamin C",
+                    "source_section": "activeIngredients",
+                    "display_type": "mapped_ingredient",
+                    "resolution_type": "direct_mapped",
+                    "score_included": True,
+                    "mapped_to": {
+                        "standard_name": "Vitamin C",
+                        "source_section": "active",
+                        "raw_source_path": "activeIngredients",
+                    },
+                },
+                {
+                    "raw_source_text": "Other Omega-3's",
+                    "display_name": "Other Omega-3's",
+                    "source_section": "activeIngredients",
+                    "display_type": "summary_wrapper",
+                    "resolution_type": "suppressed_parent",
+                    "score_included": False,
+                    "children": [],
+                },
+            ],
+        }
+
+        violations = validator.validate(product)
+        rule_violations = [v for v in violations if v.rule.startswith("H.")]
+        assert len(rule_violations) == 0
+
+    def test_H_invalid_display_row_missing_required_field(self, validator):
+        product = {
+            "id": "test_display_invalid_missing",
+            "display_ingredients": [
+                {
+                    "raw_source_text": "Vitamin C",
+                    "display_name": "Vitamin C",
+                    "source_section": "activeIngredients",
+                    "display_type": "mapped_ingredient",
+                    # resolution_type missing
+                    "score_included": True,
+                }
+            ],
+        }
+
+        violations = validator.validate(product)
+        rule_violations = [v for v in violations if v.rule == "H.1"]
+        assert len(rule_violations) == 1
+        assert "resolution_type" in rule_violations[0].message
+
+    def test_H_invalid_mapped_to_missing_standard_name(self, validator):
+        product = {
+            "id": "test_display_invalid_mapped_to",
+            "display_ingredients": [
+                {
+                    "raw_source_text": "Vitamin C",
+                    "display_name": "Vitamin C",
+                    "source_section": "activeIngredients",
+                    "display_type": "mapped_ingredient",
+                    "resolution_type": "direct_mapped",
+                    "score_included": True,
+                    "mapped_to": {
+                        "source_section": "active",
+                        "raw_source_path": "activeIngredients",
+                    },
+                }
+            ],
+        }
+
+        violations = validator.validate(product)
+        rule_violations = [v for v in violations if v.rule == "H.2"]
+        assert len(rule_violations) == 1
+        assert "standard_name" in rule_violations[0].message
+
     def test_G4_coverage_percent_calculation_error(self, validator):
         """G.4: coverage_percent != calculated value"""
         product = {

@@ -8004,6 +8004,52 @@ class SupplementEnricherV3:
             "bonus_features": self._collect_bonus_features(product)
         }
 
+    def _enrich_display_ingredients(self, enriched: Dict) -> List[Dict]:
+        """Attach canonical references to display rows without changing scoring behavior."""
+        display_rows = enriched.get("display_ingredients")
+        if not isinstance(display_rows, list):
+            return display_rows or []
+
+        ingredient_lookup: Dict[str, Dict[str, str]] = {}
+
+        def _register_lookup(ingredient: Dict, source_key: str) -> None:
+            raw_text = ingredient.get("raw_source_text") or ingredient.get("name")
+            standard_name = (
+                ingredient.get("standardName")
+                or ingredient.get("standard_name")
+                or ingredient.get("name")
+            )
+            if not raw_text or not standard_name:
+                return
+            ingredient_lookup.setdefault(
+                raw_text,
+                {
+                    "standard_name": standard_name,
+                    "source_section": "active" if source_key == "activeIngredients" else "inactive",
+                    "raw_source_path": ingredient.get("raw_source_path", source_key),
+                },
+            )
+
+        for source_key in ("activeIngredients", "inactiveIngredients"):
+            for ingredient in enriched.get(source_key, []) or []:
+                if isinstance(ingredient, dict):
+                    _register_lookup(ingredient, source_key)
+
+        annotated_rows: List[Dict] = []
+        for row in display_rows:
+            if not isinstance(row, dict):
+                annotated_rows.append(row)
+                continue
+            row_copy = dict(row)
+            if row_copy.get("display_type") in ("mapped_ingredient", "inactive_ingredient"):
+                raw_text = row_copy.get("raw_source_text")
+                mapped_target = ingredient_lookup.get(raw_text)
+                if mapped_target:
+                    row_copy["mapped_to"] = dict(mapped_target)
+            annotated_rows.append(row_copy)
+
+        return annotated_rows
+
     def _check_top_manufacturer(self, brand: str, manufacturer: str) -> Dict:
         """
         Check if manufacturer is in top manufacturers list.
@@ -10625,6 +10671,7 @@ class SupplementEnricherV3:
 
             # Project nested enrichment outputs into stable top-level scoring fields.
             self._project_scoring_fields(enriched)
+            enriched["display_ingredients"] = self._enrich_display_ingredients(enriched)
 
             # P0.2: Dosage normalization with unit conversion evidence
             if self.dosage_normalizer:

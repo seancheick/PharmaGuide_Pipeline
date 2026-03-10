@@ -89,16 +89,41 @@ STRUCTURAL_OTHER_FORM_CONTAINER_NAMES = frozenset({
     "enteripure softgel",
     "aqueous coating",
     "aqueous coating solution",
+    "acidity regulator",
+    "humectant",
+    "stabilizer",
+    "thickener",
     "b.a.s.s.(tm)",
     "b.a.s.s",
     "botanical antioxidant stability system(tm)",
     "botanical antioxidant stability system",
+    "preservatives to maintain freshness",
+    "vesisorb microemulsion preconcentrate",
+    "coating contains one or more of the following",
+    "excipients",
+    "glycerides and fatty acids",
+    "plantgel capsule",
+    "uhpo3 omega-3 fatty acid concentrate",
+    "uhpo3 omega 3 fatty acid concentrate",
+    "uhpo3 omega-3 fatty acid",
+    "proprietary bio-solv base",
+    "freshlok antioxidant",
+    "white ink",
+    "softgel color",
+    "organic flax particulate matter",
+    "flax particulate matter",
+    "contains naturally occurring carotenoids",
+    "antioxidant",
 })
 
 STRUCTURAL_ACTIVE_CONTAINER_NAMES = frozenset({
     "zma",
     "mineral enzyme activators",
     "mineral enzyme acivators",
+    "menaq7 natto",
+    "alpha & omega",
+    "bergacyn",
+    "supercritical ultra-purified fish and krill oil",
 })
 
 BANNED_STATUS_SEVERITY = {
@@ -1007,6 +1032,16 @@ class EnhancedDSLDNormalizer:
 
         # Build combined exact match lookup for all databases
         self._fast_exact_lookup = {}
+        self._group_exact_lookup = {}
+
+        def add_group_exact(key: str, payload: Dict[str, Any]) -> None:
+            normalized = norm_module.normalize_text(key)
+            if not normalized:
+                return
+            existing = self._group_exact_lookup.get(normalized)
+            if existing and existing.get("priority", 999) <= payload.get("priority", 999):
+                return
+            self._group_exact_lookup[normalized] = payload
 
         # PRIORITY 1: Add BANNED/RECALLED lookups (HIGHEST PRIORITY - safety first)
         # Iterate through ALL sections in banned_recalled database dynamically
@@ -1030,6 +1065,7 @@ class EnhancedDSLDNormalizer:
                                 "mapped": True,
                                 "priority": 1
                             }
+                            add_group_exact(standard_name, self._fast_exact_lookup[processed_standard])
 
                             # Add aliases
                             for alias in banned.get("aliases", []) or []:
@@ -1043,6 +1079,7 @@ class EnhancedDSLDNormalizer:
                                     "mapped": True,
                                     "priority": 1
                                 }
+                                add_group_exact(alias, self._fast_exact_lookup[processed_alias])
 
         # PRIORITY 2: Add allergen lookups (safety-critical)
         for key, value in self.allergen_lookup.items():
@@ -1060,6 +1097,7 @@ class EnhancedDSLDNormalizer:
                     "mapped": True,
                     "priority": 2
                 }
+                add_group_exact(standard_name, self._fast_exact_lookup[key])
 
         # PRIORITY 3: Add harmful additive lookups (safety-critical)
         for key, value in self.harmful_lookup.items():
@@ -1072,6 +1110,7 @@ class EnhancedDSLDNormalizer:
                     "mapped": True,
                     "priority": 3
                 }
+                add_group_exact(value.get("standard_name", key), self._fast_exact_lookup[key])
 
         # PRIORITY 4: Add ingredient lookups (active ingredients)
         for key, value in self.ingredient_alias_lookup.items():
@@ -1082,6 +1121,7 @@ class EnhancedDSLDNormalizer:
                     "mapped": True,
                     "priority": 4
                 }
+                add_group_exact(value, self._fast_exact_lookup[key])
 
         # PRIORITY 5: Add STANDARDIZED BOTANICALS lookups
         standardized_botanicals = self.standardized_botanicals.get("standardized_botanicals", [])
@@ -1098,6 +1138,7 @@ class EnhancedDSLDNormalizer:
                         "mapped": True,
                         "priority": 5
                     }
+                    add_group_exact(standard_name, self._fast_exact_lookup[processed_standard])
 
                 # Add aliases
                 for alias in std_botanical.get("aliases", []) or []:
@@ -1111,6 +1152,7 @@ class EnhancedDSLDNormalizer:
                             "mapped": True,
                             "priority": 5
                         }
+                        add_group_exact(alias, self._fast_exact_lookup[processed_alias])
 
         # PRIORITY 6: Add BOTANICAL INGREDIENTS lookups
         botanical_ingredients = self.botanical_ingredients.get("botanical_ingredients", [])
@@ -1127,6 +1169,7 @@ class EnhancedDSLDNormalizer:
                         "mapped": True,
                         "priority": 6
                     }
+                    add_group_exact(standard_name, self._fast_exact_lookup[processed_standard])
 
                 # Add aliases
                 for alias in botanical.get("aliases", []) or []:
@@ -1139,6 +1182,7 @@ class EnhancedDSLDNormalizer:
                             "mapped": True,
                             "priority": 6
                         }
+                        add_group_exact(alias, self._fast_exact_lookup[processed_alias])
 
         # PRIORITY 7: Add OTHER INGREDIENTS lookups (safe additives/excipients)
         for key, value in self.other_ingredients_lookup.items():
@@ -1152,6 +1196,7 @@ class EnhancedDSLDNormalizer:
                     "mapped": True,
                     "priority": 7
                 }
+                add_group_exact(value.get("standard_name", key), self._fast_exact_lookup[key])
 
         # PRIORITY 8: Add PROPRIETARY BLENDS lookups
         proprietary_blend_concerns = self.proprietary_blends.get("proprietary_blend_concerns", [])
@@ -1278,6 +1323,13 @@ class EnhancedDSLDNormalizer:
             "mapped": False
         }
 
+    def _exact_ingredient_group_lookup(self, ingredient_group: str) -> Dict[str, Any]:
+        """Exact normalized lookup for DSLD ingredientGroup fallback."""
+        normalized_group = norm_module.normalize_text(ingredient_group)
+        if not normalized_group:
+            return {"type": "none", "mapped": False}
+        return self._group_exact_lookup.get(normalized_group, {"type": "none", "mapped": False})
+
     def _derive_banned_severity(self, banned_item: Dict[str, Any]) -> str:
         """Derive cleaner severity from the current banned DB shape."""
         status = banned_item.get("status")
@@ -1318,7 +1370,11 @@ class EnhancedDSLDNormalizer:
                     forms.append(str(form_dict))
 
         # Enhanced mapping
-        standard_name, mapped, _ = self._enhanced_ingredient_mapping(name, forms)
+        standard_name, mapped, _ = self._enhanced_ingredient_mapping(
+            name,
+            forms,
+            ingredient_group=ingredient_data.get("ingredientGroup"),
+        )
 
         # Enhanced checks
         allergen_info = self._enhanced_allergen_check(name, forms)
@@ -1963,7 +2019,12 @@ class EnhancedDSLDNormalizer:
         # Build optimized fast lookups
         self._build_fast_lookups_impl()
     
-    def _enhanced_ingredient_mapping(self, name: str, forms: List[str] = None) -> Tuple[str, bool, List[str]]:
+    def _enhanced_ingredient_mapping(
+        self,
+        name: str,
+        forms: List[str] = None,
+        ingredient_group: Optional[str] = None,
+    ) -> Tuple[str, bool, List[str]]:
         """
         Enhanced ingredient mapping with comprehensive validation and thread-safe caching
         """
@@ -1971,6 +2032,10 @@ class EnhancedDSLDNormalizer:
         validated_name = self.matcher.validate_input(name, "ingredient_name")
         if not validated_name:
             return "", False, []
+
+        validated_group = self.matcher.validate_input(
+            ingredient_group or "", "ingredient_group"
+        ) if ingredient_group else ""
 
         # SAFETY: Validate and clean forms list
         validated_forms = []
@@ -2003,15 +2068,25 @@ class EnhancedDSLDNormalizer:
 
         # Use thread-safe @lru_cache - convert list to tuple for hashability
         forms_tuple = tuple(sorted(validated_forms)) if validated_forms else ()
-        return self._enhanced_ingredient_mapping_cached(validated_name, forms_tuple)
+        return self._enhanced_ingredient_mapping_cached(
+            validated_name, forms_tuple, validated_group
+        )
 
     @functools.lru_cache(maxsize=2000)  # PERFORMANCE: Reduced from 10000 to prevent memory bloat
-    def _enhanced_ingredient_mapping_cached(self, name: str, forms_tuple: tuple) -> Tuple[str, bool, List[str]]:
+    def _enhanced_ingredient_mapping_cached(
+        self, name: str, forms_tuple: tuple, ingredient_group: str
+    ) -> Tuple[str, bool, List[str]]:
         """Thread-safe cached ingredient mapping"""
         forms = list(forms_tuple) if forms_tuple else []
-        return self._perform_ingredient_mapping(name, forms)
+        return self._perform_ingredient_mapping(name, forms, ingredient_group)
 
-    def _perform_ingredient_mapping(self, name: str, forms: List[str] = None) -> Tuple[str, bool, List[str]]:
+    def _perform_ingredient_mapping(
+        self,
+        name: str,
+        forms: List[str] = None,
+        ingredient_group: str = "",
+        allow_descriptor_fallback: bool = True,
+    ) -> Tuple[str, bool, List[str]]:
         """Perform the actual ingredient mapping logic"""
         forms = forms or []
         name_lower = name.lower().strip()
@@ -2258,7 +2333,38 @@ class EnhancedDSLDNormalizer:
             standard_name = fast_result.get("standard_name", name)
             logger.debug(f"Found '{name}' in {result_type} database -> '{standard_name}' (priority: {fast_result.get('priority', 'N/A')})")
             return standard_name, True, forms
-        
+
+        if allow_descriptor_fallback:
+            for candidate in norm_module.descriptor_fallback_candidates(name):
+                candidate_standard_name, candidate_mapped, candidate_forms = self._perform_ingredient_mapping(
+                    candidate,
+                    forms,
+                    ingredient_group="",
+                    allow_descriptor_fallback=False,
+                )
+                if candidate_mapped:
+                    logger.debug(
+                        "descriptor fallback: '%s' -> '%s' -> '%s'",
+                        name, candidate, candidate_standard_name
+                    )
+                    return candidate_standard_name, True, candidate_forms
+
+        # Guarded late fallback to DSLD's ingredientGroup when the raw label text
+        # misses. Keep this exact-normalized only and only after descriptor fallback.
+        if ingredient_group:
+            normalized_group = norm_module.normalize_text(ingredient_group)
+            normalized_name = norm_module.normalize_text(name)
+            if normalized_group and normalized_group != normalized_name:
+                group_result = self._exact_ingredient_group_lookup(ingredient_group)
+                if group_result.get("mapped", False):
+                    result_type = group_result.get("type", "unknown")
+                    standard_name = group_result.get("standard_name", ingredient_group)
+                    logger.debug(
+                        "ingredientGroup fallback: '%s' via exact group '%s' -> '%s' (%s)",
+                        name, ingredient_group, standard_name, result_type
+                    )
+                    return standard_name, True, forms
+
         # Don't track as unmapped here - will be handled at higher level
         # after all database checks (harmful, allergen, etc.) are complete
         return name, False, forms
@@ -2560,6 +2666,13 @@ class EnhancedDSLDNormalizer:
             # surface as standalone actives in cleaned output.
             if self._is_structural_active_container(name, nested):
                 logger.debug(f"Flattening structural active container without parent: {name}")
+                self._queue_display_ingredient(
+                    raw_source_text=name,
+                    source_section="activeIngredients",
+                    display_type="structural_container",
+                    score_included=False,
+                    children=[nested_ing.get("name", "") for nested_ing in nested if nested_ing.get("name")],
+                )
                 for nested_ing in nested:
                     nested_name = nested_ing.get("name", "")
                     if self._should_skip_ingredient(nested_name):
@@ -2577,6 +2690,18 @@ class EnhancedDSLDNormalizer:
             # This runs after label header check so we don't skip headers with forms
             if self._should_skip_ingredient(name):
                 logger.debug(f"Skipping ingredient during flattening: {name}")
+                if not self._is_nutrition_fact(
+                    name,
+                    ing.get("ingredientGroup"),
+                    (ing.get("amount") or {}).get("unit"),
+                ):
+                    self._queue_display_ingredient(
+                        raw_source_text=name,
+                        source_section="activeIngredients",
+                        display_type="summary_wrapper",
+                        score_included=False,
+                        children=[nested_ing.get("name", "") for nested_ing in nested if nested_ing.get("name")],
+                    )
                 # BUT: Still extract nestedRows from skipped parents (e.g., "Total Omega Oil")
                 if nested:
                     logger.debug(f"Extracting {len(nested)} nestedRows from skipped parent: {name}")
@@ -2607,6 +2732,18 @@ class EnhancedDSLDNormalizer:
                     # SKIP ENFORCEMENT: Skip nested items from skip list
                     if self._should_skip_ingredient(nested_name):
                         logger.debug(f"Skipping nested ingredient: {nested_name}")
+                        if not self._is_nutrition_fact(
+                            nested_name,
+                            nested_ing.get("ingredientGroup"),
+                            (nested_ing.get("amount") or {}).get("unit"),
+                        ):
+                            self._queue_display_ingredient(
+                                raw_source_text=nested_name,
+                                source_section="activeIngredients",
+                                display_type="summary_wrapper",
+                                score_included=False,
+                                children=[child.get("name", "") for child in (nested_ing.get("nestedRows") or []) if child.get("name")],
+                            )
                         continue
 
                     # Mark as part of a blend
@@ -2627,6 +2764,7 @@ class EnhancedDSLDNormalizer:
         Enhanced product normalization with improved ingredient mapping
         """
         try:
+            self._display_ingredients_buffer = []
             # Extract basic product info
             product_id = str(raw_data.get("id", ""))
             
@@ -3052,6 +3190,7 @@ class EnhancedDSLDNormalizer:
                 # ========== INGREDIENTS (CLEANED) ==========
                 "activeIngredients": active_ingredients,
                 "inactiveIngredients": inactive_ingredients,
+                "display_ingredients": self._build_display_ingredients(active_ingredients, inactive_ingredients),
 
                 # ========== NUTRITIONAL INFORMATION ==========
                 "nutritionalInfo": nutritional_info,  # Calories, Carbs, Sugar, etc.
@@ -3203,11 +3342,31 @@ class EnhancedDSLDNormalizer:
         for ing in ingredient_rows:
             name = ing.get("name", "")
 
+            if is_active and self._is_active_source_form_wrapper(ing):
+                for form_ing in self._expand_header_forms_for_processing(
+                    ing,
+                    source_path="activeIngredients",
+                ):
+                    processed_form = self._process_single_ingredient_enhanced(form_ing, is_active=True)
+                    if processed_form is not None:
+                        if isinstance(processed_form, list):
+                            processed.extend(processed_form)
+                        else:
+                            processed.append(processed_form)
+                continue
+
             if self._is_structural_form_container(name, is_active=is_active):
                 forms = ing.get("forms", []) or []
                 if not forms:
                     logger.debug(f"Skipping structural form container without forms: {name}")
                     continue
+                self._queue_display_ingredient(
+                    raw_source_text=name,
+                    source_section="activeIngredients" if is_active else "inactiveIngredients",
+                    display_type="structural_container",
+                    score_included=False,
+                    children=[form.get("name", "") for form in forms if isinstance(form, dict) and form.get("name")],
+                )
                 for form_ing in self._expand_header_forms_for_processing(
                     ing,
                     source_path="activeIngredients" if is_active else "inactiveIngredients",
@@ -3274,6 +3433,18 @@ class EnhancedDSLDNormalizer:
         # Applies processing precedence: skip > empty > header > nutrition > normal
         if self._should_skip_ingredient(name):
             logger.debug(f"Skipping ingredient from skip list: {name}")
+            if not self._is_nutrition_fact(
+                name,
+                ing.get("ingredientGroup"),
+                ((ing.get("amount") or {}).get("unit") if isinstance(ing.get("amount"), dict) else None),
+            ):
+                self._queue_display_ingredient(
+                    raw_source_text=raw_name,
+                    source_section="activeIngredients" if is_active else "inactiveIngredients",
+                    display_type="summary_wrapper",
+                    score_included=False,
+                    children=[nested.get("name", "") for nested in nested_rows if nested.get("name")],
+                )
             # BUT: If parent has nestedRows, process those as standalone ingredients
             # (e.g., "Total Omega Oil" is skipped, but Omega-3/6/9 nested rows are real data)
             if nested_rows:
@@ -3343,7 +3514,11 @@ class EnhancedDSLDNormalizer:
             return None
         
         # Enhanced mapping with fuzzy matching
-        standard_name, mapped, mapped_forms = self._enhanced_ingredient_mapping(name, forms)
+        standard_name, mapped, mapped_forms = self._enhanced_ingredient_mapping(
+            name,
+            forms,
+            ingredient_group=ingredient_group,
+        )
 
         # Priority-based ingredient classification to handle overlaps
         classification = self._priority_based_classification(name, forms)
@@ -3588,6 +3763,14 @@ class EnhancedDSLDNormalizer:
             name = ing.get("name", "")
 
             if self._is_structural_form_container(name, is_active=False):
+                forms = ing.get("forms", []) or []
+                self._queue_display_ingredient(
+                    raw_source_text=name,
+                    source_section="inactiveIngredients",
+                    display_type="structural_container",
+                    score_included=False,
+                    children=[form.get("name", "") for form in forms if isinstance(form, dict) and form.get("name")],
+                )
                 expanded_ingredients.extend(
                     self._expand_header_forms_for_processing(ing, source_path="inactiveIngredients")
                 )
@@ -3730,7 +3913,11 @@ class EnhancedDSLDNormalizer:
                 forms.append(str(f))
 
         # Exact inactive matches should prefer other_ingredients before active-canonical aliases.
-        standard_name, mapped, _ = self._map_inactive_name_prefer_other(name, forms)
+        standard_name, mapped, _ = self._map_inactive_name_prefer_other(
+            name,
+            forms,
+            ingredient_group=ingredient_data.get("ingredientGroup"),
+        )
 
         # Enhanced checks
         allergen_info = self._enhanced_allergen_check(name, forms)
@@ -3836,6 +4023,14 @@ class EnhancedDSLDNormalizer:
             name = ing.get("name", "")
 
             if self._is_structural_form_container(name, is_active=False):
+                forms = ing.get("forms", []) or []
+                self._queue_display_ingredient(
+                    raw_source_text=name,
+                    source_section="inactiveIngredients",
+                    display_type="structural_container",
+                    score_included=False,
+                    children=[form.get("name", "") for form in forms if isinstance(form, dict) and form.get("name")],
+                )
                 for form_ing in self._expand_header_forms_for_processing(ing, source_path="inactiveIngredients"):
                     form_name = form_ing.get("name", "")
                     form_std_name, form_mapped, _ = self._map_inactive_name_prefer_other(form_name)
@@ -3918,7 +4113,11 @@ class EnhancedDSLDNormalizer:
                     forms.append(str(f))
 
             # Exact inactive matches should prefer other_ingredients before active-canonical aliases.
-            standard_name, mapped, _ = self._map_inactive_name_prefer_other(name, forms)
+            standard_name, mapped, _ = self._map_inactive_name_prefer_other(
+                name,
+                forms,
+                ingredient_group=ing.get("ingredientGroup"),
+            )
 
             # Enhanced checks ONLY for determining if ingredient is "mapped" (found in database)
             allergen_info = self._enhanced_allergen_check(name, forms)
@@ -4026,7 +4225,7 @@ class EnhancedDSLDNormalizer:
         for form in forms:
             if isinstance(form, dict):
                 form_name = form.get("name", "")
-                if form_name and not self._should_skip_ingredient(form_name):
+                if self._should_preserve_expanded_form(form_name, source_path):
                     expanded.append({
                         "ingredientId": form.get("ingredientId"),
                         "uniiCode": form.get("uniiCode"),
@@ -4041,7 +4240,7 @@ class EnhancedDSLDNormalizer:
                         "_fromLabelHeader": name,
                         "_transparency": "standard",
                     })
-            elif isinstance(form, str) and form and not self._should_skip_ingredient(form):
+            elif isinstance(form, str) and self._should_preserve_expanded_form(form, source_path):
                 expanded.append({
                     "order": ingredient.get("order", 0),
                     "raw_source_text": form,
@@ -4056,6 +4255,22 @@ class EnhancedDSLDNormalizer:
                 })
 
         return expanded
+
+    def _should_preserve_expanded_form(self, form_name: str, source_path: str) -> bool:
+        """Keep mapped child forms from structural wrappers even if generic skip logic would drop them."""
+        if not form_name:
+            return False
+        if not self._should_skip_ingredient(form_name):
+            return True
+
+        # Some legitimate child forms like "Water, Purified" can look nutrition-like.
+        # Preserve them only when they already resolve to a known ingredient route.
+        if source_path == "inactiveIngredients":
+            _, mapped, _ = self._map_inactive_name_prefer_other(form_name)
+            return mapped
+
+        _, mapped, _ = self._enhanced_ingredient_mapping(form_name, [])
+        return mapped
 
     def _dedupe_inactive_ingredients(
         self, active_ingredients: List[Dict], inactive_ingredients: List[Dict]
@@ -4791,6 +5006,68 @@ class EnhancedDSLDNormalizer:
             "transparencyScore": round(transparency_score, 1)
         }
 
+    def _queue_display_ingredient(
+        self,
+        raw_source_text: str,
+        source_section: str,
+        display_type: str,
+        score_included: bool,
+        children: Optional[List[str]] = None,
+        resolution_type: Optional[str] = None,
+    ) -> None:
+        """Queue a display-only ingredient row captured before scoring suppression."""
+        if not hasattr(self, "_display_ingredients_buffer"):
+            self._display_ingredients_buffer = []
+        self._display_ingredients_buffer.append(
+            {
+                "raw_source_text": raw_source_text,
+                "display_name": raw_source_text,
+                "source_section": source_section,
+                "display_type": display_type,
+                "resolution_type": resolution_type or self._default_display_resolution_type(display_type, score_included),
+                "score_included": score_included,
+                "children": children or [],
+            }
+        )
+
+    def _default_display_resolution_type(self, display_type: str, score_included: bool) -> str:
+        """Return a deterministic display-ledger resolution classification."""
+        if display_type == "summary_wrapper":
+            return "suppressed_parent"
+        if display_type == "structural_container":
+            return "structural_parent"
+        if display_type == "inactive_ingredient":
+            return "inactive_mapped"
+        if score_included:
+            return "direct_mapped"
+        return "display_only"
+
+    def _build_display_ingredients(self, active_ingredients: List[Dict], inactive_ingredients: List[Dict]) -> List[Dict]:
+        """Build a minimal user-facing ingredient ledger without changing scoring inputs."""
+        display_rows: List[Dict[str, Any]] = list(getattr(self, "_display_ingredients_buffer", []))
+
+        for section_name, ingredients, score_included in (
+            ("activeIngredients", active_ingredients, True),
+            ("inactiveIngredients", inactive_ingredients, False),
+        ):
+            for ing in ingredients:
+                raw_text = ing.get("raw_source_text") or ing.get("name") or ""
+                display_rows.append(
+                    {
+                        "raw_source_text": raw_text,
+                        "display_name": raw_text,
+                        "source_section": section_name,
+                        "display_type": "mapped_ingredient" if score_included else "inactive_ingredient",
+                        "resolution_type": self._default_display_resolution_type(
+                            "mapped_ingredient" if score_included else "inactive_ingredient",
+                            score_included,
+                        ),
+                        "score_included": score_included,
+                    }
+                )
+
+        return display_rows
+
     def _extract_storage(self, statements: List[Dict]) -> List[str]:
         """Extract storage instructions from statements"""
         storage = []
@@ -5185,18 +5462,49 @@ class EnhancedDSLDNormalizer:
             return processed_name in STRUCTURAL_ACTIVE_CONTAINER_NAMES
         return processed_name in STRUCTURAL_OTHER_FORM_CONTAINER_NAMES
 
-    def _map_inactive_name_prefer_other(self, name: str, forms: Optional[List[str]] = None) -> Tuple[str, bool, List[str]]:
+    def _is_active_source_form_wrapper(self, ing: Dict[str, Any]) -> bool:
+        """Unwrap source-material active rows when the real declared ingredient lives in forms[]."""
+        name = ing.get("name", "")
+        if not name:
+            return False
+
+        processed_name = self.matcher.preprocess_text(name)
+        if processed_name != "lanolin":
+            return False
+
+        forms = ing.get("forms", []) or []
+        for form in forms:
+            if not isinstance(form, dict):
+                continue
+            form_name = form.get("name", "")
+            if self.matcher.preprocess_text(form_name) == "vitamin d3":
+                return True
+        return False
+
+    def _map_inactive_name_prefer_other(
+        self,
+        name: str,
+        forms: Optional[List[str]] = None,
+        ingredient_group: Optional[str] = None,
+    ) -> Tuple[str, bool, List[str]]:
         """
         Exact inactive matches should prefer other_ingredients over active-canonical aliases.
         This prevents rows like 'Soy Lecithin' from being re-routed to active choline forms.
         """
         processed_name = self.matcher.preprocess_text(name)
         if processed_name in {"colors", "color", "coloring", "colorings", "color added", "colors added"}:
-            return self._enhanced_ingredient_mapping(name, forms)
+            return self._enhanced_ingredient_mapping(name, forms, ingredient_group=ingredient_group)
         other_ingredient = self.other_ingredients_lookup.get(processed_name)
         if other_ingredient:
             return other_ingredient.get("standard_name", name), True, forms or []
-        return self._enhanced_ingredient_mapping(name, forms)
+
+        for candidate in norm_module.descriptor_fallback_candidates(name):
+            candidate_processed = self.matcher.preprocess_text(candidate)
+            other_ingredient = self.other_ingredients_lookup.get(candidate_processed)
+            if other_ingredient:
+                return other_ingredient.get("standard_name", candidate), True, forms or []
+
+        return self._enhanced_ingredient_mapping(name, forms, ingredient_group=ingredient_group)
     
     def _is_proprietary_blend_name(self, name: str) -> bool:
         """Check if ingredient name contains proprietary blend indicators"""

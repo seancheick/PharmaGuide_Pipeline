@@ -3518,7 +3518,9 @@
           "mixed tocopherols and tocotrienols",
           "DeltaGold Tocotrienol",
           "Mixed Tocotrienols/Tocopherols",
-          "mixed tocotrienols/tocopherols"
+          "mixed tocotrienols/tocopherols",
+          "d-beta tocotrienol",
+          "D-Beta Tocotrienol"
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
@@ -5772,7 +5774,10 @@
           "zinc methionine",
           "l-optizinc",
           "zinc mono-l-methionine sulfate",
-          "zinc mono l methionine sulfate"
+          "zinc mono l methionine sulfate",
+          "zinc mono-l-methionine",
+          "zinc mono l methionine",
+          "Zinc Mono-L-Methionine"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -16380,7 +16385,9 @@
           "chondroitin sulfate a",
           "chondriotin sulfate",
           "chondroitin sulfate sodium",
-          "sodium chondroitin sulfate"
+          "sodium chondroitin sulfate",
+          "TruFlex Chondroitin Sulfate",
+          "truflex chondroitin sulfate"
         ],
         "dosage_importance": 0.5,
         "absorption_structured": {
@@ -18347,7 +18354,10 @@
           "endopeptidase",
           "exopeptidase",
           "endopeptidase, exopeptidase",
-          "exopeptidase, endopeptidase"
+          "exopeptidase, endopeptidase",
+          "pectinase",
+          "Pectinase",
+          "pectinase enzyme"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -30857,7 +30867,7 @@
       "vitamins": 17
     },
     "schema_version": "5.0.0",
-    "last_updated": "2026-03-06",
+    "last_updated": "2026-03-09",
     "pipeline_integration": "Used by enrichment script to assign quality scores to matched ingredient forms. Match ingredient name against forms aliases (case-insensitive). Use highest-scoring matched form.",
     "matching_notes": [
       "Match ingredient name + forms text against aliases array (case-insensitive)",
@@ -31070,7 +31080,10 @@
           "alphasize",
           "AlphaSize Alpha-Glyceryl Phosphoryl Choline",
           "Alpha Glycerylphosphorylcholine",
-          "L Alpha Glycerylphosphorylcholine"
+          "L Alpha Glycerylphosphorylcholine",
+          "stabilized l-alpha-glycerophosphatidylcholine",
+          "stabilized l alpha glycerophosphatidylcholine",
+          "stabilized L-Alpha-Glycerophosphatidylcholine"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -33439,7 +33452,9 @@
           "wheat-derived",
           "ceratiq wheat (triticum vulgare) oil extract",
           "Lipowheat Wheat (Triticum vulgare) Oil extract",
-          "Myoceram"
+          "Myoceram",
+          "Ceramosides Wheat seed extract",
+          "ceramosides wheat seed extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -34247,7 +34262,9 @@
           "ecOmega Norwegian Cod Liver Oil",
           "Cod Oil",
           "highly purified norwegian cod liver oil",
-          "norwegian arctic cod liver oil"
+          "norwegian arctic cod liver oil",
+          "omega-3 cod liver oil",
+          "Omega-3 Cod Liver Oil"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -34627,7 +34644,9 @@
           "salmon oil, natural, wild",
           "Aceite de Pescado",
           "Ocean Fish Oil, Natural",
-          "Fish Oil, Natural"
+          "Fish Oil, Natural",
+          "marine lipid oil",
+          "Marine Lipid Oil"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -36488,7 +36507,9 @@
           "herring roe oil",
           "herring roe phospholipid",
           "marine phospholipid extract",
-          "herring roe extract supplement"
+          "herring roe extract supplement",
+          "romega 30",
+          "Romega 30"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -42642,7 +42663,9 @@
           "opuntia extract",
           "nopal extract",
           "prickly pear cactus",
-          "nopal cactus powder"
+          "nopal cactus powder",
+          "prickly pear cactus leaf extract",
+          "prickly pear leaf extract"
         ],
         "notes": "Opuntia ficus-indica (prickly pear cactus pad); rich in fiber, polyphenols, and betalains. Evidence for postprandial glucose reduction and hangover prevention. Mexican traditional food/medicine.",
         "natural": true,
@@ -42672,7 +42695,7 @@
       "completeness": 0.6,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-03-09"
     }
   },
   "cocoa": {
@@ -43709,7 +43732,12 @@
           "euterpe oleracea extract",
           "assai palm (acai) (euterpe oleracea) extract",
           "assai palm extract",
-          "acai palm extract"
+          "acai palm extract",
+          "AcaiRich",
+          "acairich",
+          "20:1 {Acai} extract",
+          "Acai 2:1 extract",
+          "Acai Berry 20:1 extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -46949,6 +46977,51 @@
       "last_reviewed_at": "2026-03-03"
     }
   },
+  "sesame_seed_oil": {
+    "standard_name": "Sesame Seed Oil",
+    "category": "fatty_acids",
+    "description": "Sesamum indicum seed oil used as a dietary oil ingredient and lignan-bearing lipid source",
+    "dosage_importance": 1.0,
+    "forms": {
+      "sesame seed oil": {
+        "bio_score": 8,
+        "natural": true,
+        "score": 11,
+        "absorption": "good",
+        "notes": "Sesamum indicum seed oil providing oleic and linoleic acids plus native sesame lignans. Human supplementation studies and recent reviews support cardiometabolic relevance, though outcomes vary by population and comparator oils (PMID 17004907; PMID 27055965). Use this route when sesame oil itself is the declared active ingredient rather than a sesame-lignan extract.",
+        "aliases": [
+          "sesame seed oil",
+          "sesame oil",
+          "sesamum indicum seed oil",
+          "sesamum indicum oil"
+        ],
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": null,
+          "range_low": null,
+          "range_high": null,
+          "quality": "good",
+          "notes": "good"
+        }
+      }
+    },
+    "data_quality": {
+      "completeness": 1.0,
+      "missing_fields": [],
+      "review_status": "validated",
+      "last_reviewed_at": "2026-03-09"
+    },
+    "category_enum": "fatty_acids",
+    "cui_note": "",
+    "rxcui_note": "No RxNorm concept for supplement ingredient",
+    "match_rules": {
+      "priority": 0,
+      "match_mode": "alias_and_fuzzy",
+      "exclusions": [],
+      "parent_id": null,
+      "confidence": "high"
+    }
+  },
   "pumpkin_seed_oil": {
     "standard_name": "Pumpkin Seed Oil",
     "category": "fatty_acids",
@@ -46985,6 +47058,52 @@
       "missing_fields": [],
       "review_status": "validated",
       "last_reviewed_at": "2026-03-08"
+    },
+    "category_enum": "fatty_acids",
+    "cui_note": "",
+    "rxcui_note": "No RxNorm concept for supplement ingredient",
+    "match_rules": {
+      "priority": 0,
+      "match_mode": "alias_and_fuzzy",
+      "exclusions": [],
+      "parent_id": null,
+      "confidence": "high"
+    }
+  },
+  "extra_virgin_olive_oil": {
+    "standard_name": "Extra Virgin Olive Oil",
+    "category": "fatty_acids",
+    "description": "Extra-virgin olive oil used as an active dietary oil rather than a passive carrier",
+    "dosage_importance": 1.0,
+    "forms": {
+      "extra virgin olive oil": {
+        "bio_score": 8,
+        "natural": true,
+        "score": 11,
+        "absorption": "good",
+        "notes": "Extra-virgin olive oil rich in oleic acid and olive polyphenols. Randomized trials and meta-analyses support cardiometabolic and oxidative-stress benefits when EVOO is intentionally consumed as a dietary oil intervention (PMID 34716791; PMID 37977313; PMID 40749711). Use this active oil route when the declared identity is olive oil itself, not an olive fruit polyphenol extract.",
+        "aliases": [
+          "extra virgin olive oil",
+          "extra-virgin olive oil",
+          "extra virgin olive fruit oil",
+          "extra-virgin olive fruit oil",
+          "evoo"
+        ],
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": null,
+          "range_low": null,
+          "range_high": null,
+          "quality": "good",
+          "notes": "good"
+        }
+      }
+    },
+    "data_quality": {
+      "completeness": 1.0,
+      "missing_fields": [],
+      "review_status": "validated",
+      "last_reviewed_at": "2026-03-09"
     },
     "category_enum": "fatty_acids",
     "cui_note": "",
@@ -47065,6 +47184,77 @@
     },
     "category_enum": "herbs",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
+    "data_quality": {
+      "completeness": 1.0,
+      "missing_fields": [],
+      "review_status": "validated",
+      "last_reviewed_at": "2026-03-08"
+    }
+  },
+  "coconut_water": {
+    "standard_name": "Coconut Water",
+    "category": "other",
+    "aliases": [
+      "coconut water",
+      "coconut water solids",
+      "coconut liquid endosperm",
+      "cocos nucifera liquid endosperm"
+    ],
+    "forms": {
+      "coconut water powder": {
+        "bio_score": 8,
+        "natural": true,
+        "score": 11,
+        "absorption": "rapid oral hydration matrix; no special enhancement",
+        "notes": "Dehydrated coconut water / coconut liquid endosperm. Used in hydration and electrolyte formulas. Cococin is a branded coconut water ingredient. Human trials support coconut water as a reasonable oral rehydration ingredient in some exercise settings.",
+        "aliases": [
+          "coconut water powder",
+          "coconut water concentrate powder",
+          "cococin",
+          "cococin coconut water powder",
+          "Cococin Coconut Water powder",
+          "cococin ws",
+          "Cococin WS"
+        ],
+        "dosage_importance": 0.5,
+        "absorption_structured": {
+          "value": null,
+          "range_low": null,
+          "range_high": null,
+          "quality": "moderate",
+          "notes": "Hydration ingredient; no formal bioavailability fraction used"
+        }
+      },
+      "coconut water (unspecified)": {
+        "bio_score": 7,
+        "natural": true,
+        "score": 10,
+        "absorption": "rapid oral hydration matrix; no special enhancement",
+        "notes": "Coconut water ingredient without a specified powder or concentrate form. Conservative scoring.",
+        "aliases": [
+          "coconut water"
+        ],
+        "dosage_importance": 0.5,
+        "absorption_structured": {
+          "value": null,
+          "range_low": null,
+          "range_high": null,
+          "quality": "moderate",
+          "notes": "Hydration ingredient; no formal bioavailability fraction used"
+        }
+      }
+    },
+    "notes": "Potassium-rich coconut liquid endosperm used in hydration and electrolyte support products.",
+    "cui": null,
+    "rxcui": null,
+    "category_enum": "other",
+    "match_rules": {
+      "priority": 0,
+      "match_mode": "alias_and_fuzzy",
+      "exclusions": [],
+      "parent_id": null,
+      "confidence": "high"
+    },
     "data_quality": {
       "completeness": 1.0,
       "missing_fields": [],

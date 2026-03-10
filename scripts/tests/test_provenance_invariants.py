@@ -473,6 +473,81 @@ class TestEnrichmentIngredientProvenance:
                 assert 'raw_source_text' in ing, \
                     f"Unmapped ingredient missing raw_source_text: {ing.get('name')}"
 
+    def test_display_ledger_rows_preserve_label_text_and_gain_mapped_to(self, enricher):
+        """Display ledger rows should keep label text and receive canonical references only for real matches."""
+        product = {
+            "id": "display-ledger-enrichment",
+            "fullName": "Display Ledger Enrichment",
+            "brandName": "Test Brand",
+            "productVersionCode": "1",
+            "activeIngredients": [
+                {
+                    "name": "Vitamin C",
+                    "standardName": "Vitamin C",
+                    "raw_source_text": "Vitamin C",
+                    "raw_source_path": "activeIngredients",
+                    "normalized_key": norm_module.make_normalized_key("Vitamin C"),
+                    "quantity": 500,
+                    "unit": "mg",
+                    "mapped": True,
+                }
+            ],
+            "inactiveIngredients": [
+                {
+                    "name": "Hypromellose",
+                    "standardName": "Hydroxypropyl Methylcellulose",
+                    "raw_source_text": "Hypromellose",
+                    "raw_source_path": "inactiveIngredients",
+                    "normalized_key": norm_module.make_normalized_key("Hypromellose"),
+                    "mapped": True,
+                }
+            ],
+            "display_ingredients": [
+                {
+                    "raw_source_text": "Vitamin C",
+                    "display_name": "Vitamin C",
+                    "source_section": "activeIngredients",
+                    "display_type": "mapped_ingredient",
+                    "resolution_type": "direct_mapped",
+                    "score_included": True,
+                },
+                {
+                    "raw_source_text": "Other Omega-3's",
+                    "display_name": "Other Omega-3's",
+                    "source_section": "activeIngredients",
+                    "display_type": "summary_wrapper",
+                    "resolution_type": "suppressed_parent",
+                    "score_included": False,
+                    "children": [],
+                },
+                {
+                    "raw_source_text": "Hypromellose",
+                    "display_name": "Hypromellose",
+                    "source_section": "inactiveIngredients",
+                    "display_type": "inactive_ingredient",
+                    "resolution_type": "inactive_mapped",
+                    "score_included": False,
+                },
+            ],
+        }
+
+        enriched, issues = enricher.enrich_product(product)
+        assert not issues
+
+        display_by_raw = {
+            row.get("raw_source_text"): row for row in enriched.get("display_ingredients", [])
+        }
+
+        assert display_by_raw["Vitamin C"]["raw_source_text"] == "Vitamin C"
+        assert display_by_raw["Vitamin C"]["mapped_to"]["standard_name"] == "Vitamin C"
+        assert display_by_raw["Vitamin C"]["mapped_to"]["source_section"] == "active"
+
+        assert display_by_raw["Hypromellose"]["mapped_to"]["standard_name"] == "Hydroxypropyl Methylcellulose"
+        assert display_by_raw["Hypromellose"]["mapped_to"]["source_section"] == "inactive"
+
+        assert "mapped_to" not in display_by_raw["Other Omega-3's"]
+        assert display_by_raw["Other Omega-3's"]["score_included"] is False
+
 
 class TestEnrichmentDeliveryProvenance:
     """Invariant: All delivery system entries must have raw_source_text."""

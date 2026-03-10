@@ -3,7 +3,7 @@
     "description": "Ingredient classification rules for active/inactive categorization",
     "purpose": "ingredient_classification",
     "schema_version": "5.0.0",
-    "last_updated": "2026-02-16",
+    "last_updated": "2026-03-09",
     "version": "1.0.0",
     "total_entries": 20
   },
@@ -37,7 +37,12 @@
     "Other Ingredients",
     "Inactive Ingredients",
     "Active Ingredients",
-    "Total Omega"
+    "Total Omega",
+    "Total Omega-3-5-6-7-8-9-11",
+    "Palmitic Acid, Stearic Acid",
+    "Safflower/Sunflower Oil concentrate",
+    "Other Omega-3's",
+    "High Choline Lecithin"
   ],
   "classifications": {
     "Total EPA & DHA": {
@@ -64,6 +69,31 @@
       "hierarchy": "summary",
       "scoring_rule": "skip_all",
       "note": "Score specific omega subclasses instead."
+    },
+    "Total Omega-3-5-6-7-8-9-11": {
+      "hierarchy": "summary",
+      "scoring_rule": "skip_all",
+      "note": "Score specific nested omega subclasses instead."
+    },
+    "Palmitic Acid, Stearic Acid": {
+      "hierarchy": "summary",
+      "scoring_rule": "skip_all",
+      "note": "Score the explicit child fatty acids instead of the combined label wrapper."
+    },
+    "Safflower/Sunflower Oil concentrate": {
+      "hierarchy": "summary",
+      "scoring_rule": "skip_all",
+      "note": "Score explicit child fatty acids instead of the blended source-oil wrapper."
+    },
+    "Other Omega-3's": {
+      "hierarchy": "summary",
+      "scoring_rule": "skip_all",
+      "note": "Summary remainder row; score the explicit omega-3 components instead."
+    },
+    "High Choline Lecithin": {
+      "hierarchy": "summary",
+      "scoring_rule": "skip_all",
+      "note": "Wrapper/source row for phosphatidylcholine-rich lecithin; score explicit phosphatidylcholine child/paired row instead."
     }
   }
 }

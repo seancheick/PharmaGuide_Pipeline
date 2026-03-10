@@ -12,6 +12,7 @@ D. Serving Basis Integrity - form_factor and basis_unit must be consistent
 E. Claims Consistency - claims must have valid evidence and no scoring conflicts
 F. Provenance Integrity - raw_source_text and normalized_key must be present and immutable
 G. Match Ledger Consistency - match_ledger must be present and consistent with unmatched lists
+H. Display Ledger Contract - display_ingredients is optional, but must be well-formed when present
 
 Usage:
     validator = EnrichmentContractValidator()
@@ -124,6 +125,20 @@ class EnrichmentContractValidator:
         "gummy", "gummies", "gummy(ies)", "gummie", "gummie(s)"
     }
 
+    DISPLAY_LEDGER_REQUIRED_FIELDS = frozenset({
+        "raw_source_text",
+        "display_name",
+        "source_section",
+        "display_type",
+        "resolution_type",
+        "score_included",
+    })
+
+    DISPLAY_LEDGER_ALLOWED_SOURCE_SECTIONS = frozenset({
+        "activeIngredients",
+        "inactiveIngredients",
+    })
+
     def __init__(self, strict_mode: bool = False):
         """
         Initialize validator.
@@ -154,6 +169,7 @@ class EnrichmentContractValidator:
         violations.extend(self._validate_claims_consistency(product, product_id))
         violations.extend(self._validate_provenance_integrity(product, product_id))
         violations.extend(self._validate_match_ledger_consistency(product, product_id))
+        violations.extend(self._validate_display_ledger_contract(product, product_id))
 
         return violations
 
@@ -980,6 +996,128 @@ class EnrichmentContractValidator:
                 actual=reported_coverage,
                 evidence=evidence
             ))
+
+        return violations
+
+    # =========================================================================
+    # RULE H: Display Ledger Contract
+    # =========================================================================
+
+    def _validate_display_ledger_contract(self, product: Dict, product_id: str) -> List[ContractViolation]:
+        """
+        Rule H: display_ingredients is optional but must be valid when present.
+
+        H.1: Each display row must include the required display-ledger fields.
+        H.2: mapped_to, when present, must include standard_name and source_section.
+        """
+        violations = []
+        display_rows = product.get("display_ingredients")
+
+        if display_rows is None:
+            return violations
+
+        if not isinstance(display_rows, list):
+            violations.append(ContractViolation(
+                rule="H.1",
+                rule_name="Display Ledger Contract - structure",
+                severity="error",
+                message="display_ingredients must be a list when present",
+                product_id=product_id,
+                field_path="display_ingredients",
+                expected="list",
+                actual=type(display_rows).__name__,
+            ))
+            return violations
+
+        for index, row in enumerate(display_rows):
+            field_path = f"display_ingredients[{index}]"
+            if not isinstance(row, dict):
+                violations.append(ContractViolation(
+                    rule="H.1",
+                    rule_name="Display Ledger Contract - structure",
+                    severity="error",
+                    message=f"Display ledger row at index {index} must be an object",
+                    product_id=product_id,
+                    field_path=field_path,
+                    expected="object",
+                    actual=type(row).__name__,
+                ))
+                continue
+
+            missing_fields = [
+                field for field in self.DISPLAY_LEDGER_REQUIRED_FIELDS
+                if field not in row
+            ]
+            if missing_fields:
+                violations.append(ContractViolation(
+                    rule="H.1",
+                    rule_name="Display Ledger Contract - required fields",
+                    severity="error",
+                    message=f"Display ledger row missing required fields: {', '.join(sorted(missing_fields))}",
+                    product_id=product_id,
+                    field_path=field_path,
+                    expected=sorted(self.DISPLAY_LEDGER_REQUIRED_FIELDS),
+                    actual=sorted(row.keys()),
+                    evidence={"raw_source_text": row.get("raw_source_text")},
+                ))
+                continue
+
+            if row.get("source_section") not in self.DISPLAY_LEDGER_ALLOWED_SOURCE_SECTIONS:
+                violations.append(ContractViolation(
+                    rule="H.1",
+                    rule_name="Display Ledger Contract - source section",
+                    severity="error",
+                    message=f"Display ledger row has invalid source_section: {row.get('source_section')}",
+                    product_id=product_id,
+                    field_path=f"{field_path}.source_section",
+                    expected=sorted(self.DISPLAY_LEDGER_ALLOWED_SOURCE_SECTIONS),
+                    actual=row.get("source_section"),
+                    evidence={"raw_source_text": row.get("raw_source_text")},
+                ))
+
+            mapped_to = row.get("mapped_to")
+            if mapped_to is None:
+                continue
+
+            if not isinstance(mapped_to, dict):
+                violations.append(ContractViolation(
+                    rule="H.2",
+                    rule_name="Display Ledger Contract - mapped_to structure",
+                    severity="error",
+                    message="Display ledger mapped_to must be an object when present",
+                    product_id=product_id,
+                    field_path=f"{field_path}.mapped_to",
+                    expected="object",
+                    actual=type(mapped_to).__name__,
+                    evidence={"raw_source_text": row.get("raw_source_text")},
+                ))
+                continue
+
+            if not mapped_to.get("standard_name"):
+                violations.append(ContractViolation(
+                    rule="H.2",
+                    rule_name="Display Ledger Contract - mapped_to fields",
+                    severity="error",
+                    message="Display ledger mapped_to missing standard_name",
+                    product_id=product_id,
+                    field_path=f"{field_path}.mapped_to.standard_name",
+                    expected="non-empty string",
+                    actual=mapped_to.get("standard_name"),
+                    evidence={"raw_source_text": row.get("raw_source_text")},
+                ))
+
+            if not mapped_to.get("source_section"):
+                violations.append(ContractViolation(
+                    rule="H.2",
+                    rule_name="Display Ledger Contract - mapped_to fields",
+                    severity="error",
+                    message="Display ledger mapped_to missing source_section",
+                    product_id=product_id,
+                    field_path=f"{field_path}.mapped_to.source_section",
+                    expected="non-empty string",
+                    actual=mapped_to.get("source_section"),
+                    evidence={"raw_source_text": row.get("raw_source_text")},
+                ))
 
         return violations
 

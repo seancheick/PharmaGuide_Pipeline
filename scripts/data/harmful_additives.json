@@ -4,7 +4,7 @@
     "purpose": "penalty_scoring",
     "schema_version": "5.0.0",
     "last_updated": "2026-03-08",
-    "total_entries": 106,
+    "total_entries": 107,
     "scoring_rule": "Apply penalty points based on severity_level. Critical: -5, High: -3, Moderate: -1.5, Low: -0.5. Multiple additives are cumulative.",
     "severity_level_definitions": {
       "critical": "Immediate health hazard, should be avoided entirely (e.g., formaldehyde, colloidal silver)",
@@ -15020,6 +15020,88 @@
         "EWG ToxCast report — TBHQ immunotoxicity analysis"
       ],
       "last_updated": "2026-03-08"
+    },
+    {
+      "id": "BANNED_ADD_PARTIALLY_HYDROGENATED_CORN_OIL",
+      "standard_name": "Partially Hydrogenated Corn Oil",
+      "aliases": [
+        "partially hydrogenated corn oil",
+        "corn oil, partially hydrogenated",
+        "corn oil (partially hydrogenated)",
+        "hydrogenated corn oil"
+      ],
+      "category": "high_risk_ingredients",
+      "severity_level": "high",
+      "reason": "Moderate risk: partially hydrogenated oils are the major industrial source of artificial trans fat and are no longer GRAS for food use under FDA action.",
+      "match_rules": {
+        "exclusions": [],
+        "case_sensitive": false,
+        "priority": 1,
+        "match_type": "normalized",
+        "confidence": "high",
+        "negative_match_terms": [
+          "non-hydrogenated",
+          "unhydrogenated",
+          "not hydrogenated"
+        ],
+        "match_mode": "alias_and_fuzzy",
+        "label_tokens": [
+          "partially hydrogenated corn oil",
+          "corn oil, partially hydrogenated",
+          "corn oil (partially hydrogenated)",
+          "hydrogenated corn oil"
+        ]
+      },
+      "references_structured": [
+        {
+          "type": "fda_action",
+          "title": "Final Determination Regarding Partially Hydrogenated Oils (Removing Trans Fat)",
+          "evidence_grade": "R",
+          "url": "https://www.fda.gov/food/food-additives-petitions/final-determination-regarding-partially-hydrogenated-oils-removing-trans-fat",
+          "supports_claims": [
+            "regulatory_action"
+          ],
+          "evidence_summary": "FDA determined PHOs are not generally recognized as safe (GRAS)."
+        },
+        {
+          "type": "fda_guidance",
+          "title": "Trans Fat",
+          "evidence_grade": "R",
+          "url": "https://www.fda.gov/food/food-additives-petitions/trans-fat",
+          "supports_claims": [
+            "regulatory_action"
+          ],
+          "evidence_summary": "FDA states partially hydrogenated oils were the major source of artificial trans fat in the food supply."
+        }
+      ],
+      "review": {
+        "status": "validated",
+        "last_reviewed_at": "2026-03-09",
+        "next_review_due": "2026-09-09",
+        "reviewed_by": "codex_batch17_cleanup",
+        "change_log": [
+          {
+            "date": "2026-03-09",
+            "change": "Added exact PHO corn oil watchlist route for clean-stage accuracy.",
+            "by": "codex_batch17_cleanup"
+          }
+        ]
+      },
+      "entity_type": "class",
+      "class_tags": [
+        "high_risk_ingredients",
+        "fat_trans"
+      ],
+      "confidence": "high",
+      "regulatory_status": {
+        "US": "FDA determined partially hydrogenated oils are not GRAS; PHO use in foods was phased out with final compliance dates through 2021 and outdated references removed in 2023.",
+        "EU": "Industrially produced trans fat is restricted via maximum limits in foods.",
+        "WHO": "WHO recommends elimination of industrially produced trans fat."
+      },
+      "mechanism_of_harm": "Partial hydrogenation creates artificial trans fatty acids that raise LDL cholesterol and increase cardiovascular risk.",
+      "notes": "Exact route for inactive corn-oil disclosures that explicitly state partial hydrogenation. Kept separate from non-hydrogenated corn oil identities.",
+      "scientific_references": [],
+      "last_updated": "2026-03-09"
     }
   ]
 }

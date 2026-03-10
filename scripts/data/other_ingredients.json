@@ -3,8 +3,8 @@
     "description": "Other/inactive ingredients database for supplement excipients and additives",
     "purpose": "inactive_ingredient_classification",
     "schema_version": "5.0.0",
-    "last_updated": "2026-03-06",
-    "total_entries": 535
+    "last_updated": "2026-03-09",
+    "total_entries": 589
   },
   "other_ingredients": [
     {
@@ -228,7 +228,8 @@
         "annatto juice",
         "annatto seed extract",
         "annatto, natural",
-        "natural annatto color"
+        "natural annatto color",
+        "Annato seed extract"
       ],
       "category": "colorant_natural",
       "is_additive": true,
@@ -2122,7 +2123,10 @@
         "phosphatidylcholine",
         "sunflower lecithin",
         "Sunflower Glycerides",
-        "sunflower phospholipids"
+        "sunflower phospholipids",
+        "Modified Sunflower Lecithin",
+        "Phosphatidylcholine lecithin",
+        "Sunflower Lecithin oil"
       ],
       "category": "emulsifier",
       "is_additive": true,
@@ -2136,7 +2140,7 @@
         "texture improvement",
         "bioavailability enhancement"
       ],
-      "last_updated": "2025-11-17"
+      "last_updated": "2026-03-09"
     },
     {
       "id": "NHA_LEMON_BALM_EXTRACT",
@@ -2171,7 +2175,9 @@
         "lemon flavoring natural",
         "lemonade flavor, natural",
         "natural lemon flavor",
-        "natural lemonade flavor"
+        "natural lemonade flavor",
+        "natural Lemon flavoring",
+        "Natural Lemon flavor Oil"
       ],
       "category": "flavor_natural",
       "is_additive": true,
@@ -2609,7 +2615,9 @@
         "non-GMO modified Corn Starch",
         "Non-GMO modified cornstarch",
         "Tapioca Starch, Modified",
-        "Starch-modified"
+        "Starch-modified",
+        "non-GMO modified Tapioca Starch",
+        "Non-GMO modified Tapioca Starch"
       ],
       "category": "thickener_stabilizer",
       "is_additive": true,
@@ -3126,7 +3134,10 @@
         "natural black berry flavor",
         "strawberry banana flavor",
         "blueberry muffin flavor",
-        "non-gmo strawberry flavor"
+        "non-gmo strawberry flavor",
+        "orange cream",
+        "Orange Cream",
+        "all Natural Flavoring"
       ],
       "category": "flavor_natural",
       "is_additive": true,
@@ -3208,7 +3219,9 @@
         "organic locust",
         "xanthan gum",
         "hydrolyzed guar gum",
-        "sunfiber hydrolyzed guar gum"
+        "sunfiber hydrolyzed guar gum",
+        "carob bean gum",
+        "Carob bean Gum"
       ],
       "category": "thickener_stabilizer",
       "is_additive": true,
@@ -3261,7 +3274,9 @@
         "orange natural flavor",
         "Orange, Natural",
         "proprietary orange essence",
-        "sweet orange oil"
+        "sweet orange oil",
+        "Natural creamy Orange flavor",
+        "natural creamy orange flavor"
       ],
       "category": "flavor_natural",
       "is_additive": true,
@@ -3274,7 +3289,7 @@
         "flavoring",
         "taste enhancement"
       ],
-      "last_updated": "2026-03-01"
+      "last_updated": "2026-03-09"
     },
     {
       "id": "NHA_NATURAL_ORANGE_TANGERINE_FLAVOR",
@@ -3288,7 +3303,10 @@
         "natural orange flavor",
         "natural orange tangerine flavor",
         "natural tangerine flavor",
-        "orange tangerine flavor"
+        "orange tangerine flavor",
+        "natural Orange and Tangerine flavors",
+        "natural orange and tangerine flavors",
+        "natural Orange Citrus Oil"
       ],
       "category": "flavor_natural",
       "is_additive": true,
@@ -3303,7 +3321,7 @@
         "product palatability",
         "citrus profile development"
       ],
-      "last_updated": "2025-11-15"
+      "last_updated": "2026-03-09"
     },
     {
       "id": "NHA_NATURAL_PRESERVATIVES",
@@ -3562,7 +3580,8 @@
         "natural orange flavor",
         "natural orange flavoring",
         "orange flavor, natural",
-        "orange flavoring natural"
+        "orange flavoring natural",
+        "Essential Oil of Orange"
       ],
       "category": "flavor_natural",
       "is_additive": true,
@@ -5527,7 +5546,9 @@
         "beetroot color",
         "beetroot powder",
         "red beet powder",
-        "red beet root powder"
+        "red beet root powder",
+        "beet red",
+        "Beet red"
       ],
       "category": "colorant_natural",
       "is_additive": true,
@@ -6329,7 +6350,12 @@
         "alpha tocopherol",
         "natural non-gmo soy tocopherols",
         "natural non-gmo soy tocopherol",
-        "soy tocopherols"
+        "soy tocopherols",
+        "non-GMO Sunflower Vitamin E",
+        "non-gmo sunflower vitamin e",
+        "D-Delta Tocopherol",
+        "DL-Alpha Tocopheryl",
+        "D-Alpha Tocopherols"
       ],
       "category": "preservative_natural",
       "is_additive": true,
@@ -6901,7 +6927,13 @@
       "standard_name": "Carob (St. John's Bread)",
       "aliases": [
         "carob",
-        "st. john's bread"
+        "st. john's bread",
+        "carob fruit extract",
+        "Carob fruit extract",
+        "Roasted Carob powder",
+        "roasted carob powder",
+        "Carob liquid",
+        "Carob, Natural, Powder"
       ],
       "category": "flavor_carrier",
       "is_additive": true,
@@ -6914,7 +6946,7 @@
         "flavor base",
         "carrier"
       ],
-      "last_updated": "2026-02-18"
+      "last_updated": "2026-03-09"
     },
     {
       "id": "PII_CASTOR_OIL",
@@ -7512,7 +7544,10 @@
         "pure Olive Oil",
         "virgin olive oil",
         "organic cold pressed extra virgin olive oil",
-        "cold-pressed extra virgin olive oil"
+        "cold-pressed extra virgin olive oil",
+        "Extra Virgin Olive Fruit Oil",
+        "extra virgin olive fruit oil",
+        "Olive oil-extra virgin"
       ],
       "category": "oil_carrier",
       "is_additive": false,
@@ -7525,7 +7560,7 @@
         "lipid carrier",
         "fat-soluble vitamin vehicle"
       ],
-      "last_updated": "2026-03-06"
+      "last_updated": "2026-03-09"
     },
     {
       "id": "PII_CORN_OIL",
@@ -7842,7 +7877,13 @@
         "type b gelatin",
         "Beef Gelatin",
         "Beef gelatin capsule",
-        "Fish Gelatin Caplique Capsule"
+        "Fish Gelatin Caplique Capsule",
+        "Bone Gelatin",
+        "Halal Gelatin",
+        "Tilapia Fish Gelatin",
+        "Gelatin Bovine",
+        "pharmaceutical Gelatin",
+        "Buffalo Gelatin"
       ],
       "category": "capsule_material",
       "is_additive": true,
@@ -7855,7 +7896,7 @@
         "capsule shell",
         "softgel encapsulation"
       ],
-      "last_updated": "2025-11-17"
+      "last_updated": "2026-03-09"
     },
     {
       "id": "PII_GLUCODOX_MARKETING_DESCRIPTOR",
@@ -7884,7 +7925,8 @@
         "glycerol palmitostearate",
         "Glyceryl Stearate",
         "GMS",
-        "monostearin"
+        "monostearin",
+        "Glycerin Monostearate"
       ],
       "category": "emulsifier_stabilizer",
       "is_additive": true,
@@ -8395,7 +8437,9 @@
         "soybean lecithin",
         "Soy Lecithin Oil",
         "Soy Lecithin Oil, Natural",
-        "Soy Lecithin Oil Natural"
+        "Soy Lecithin Oil Natural",
+        "high PC Soy Lecithin",
+        "high pc soy lecithin"
       ],
       "category": "emulsifier",
       "is_additive": true,
@@ -8409,7 +8453,7 @@
         "wetting agent",
         "nutrient carrier"
       ],
-      "last_updated": "2025-11-17"
+      "last_updated": "2026-03-09"
     },
     {
       "id": "PII_LIQUID_LIVER_FRACTIONS",
@@ -8486,7 +8530,9 @@
         "coconut medium chain triglycerides",
         "non-gmo mct oil",
         "Medium Chain Triglycerides Oil",
-        "Coconut Medium Chain Triglyceride Oil"
+        "Coconut Medium Chain Triglyceride Oil",
+        "Middle Chain Triglycerides",
+        "Coconut Oil MCT"
       ],
       "category": "oil_carrier",
       "is_additive": false,
@@ -8500,7 +8546,7 @@
         "rapid energy source",
         "solubilizer"
       ],
-      "last_updated": "2026-03-06"
+      "last_updated": "2026-03-09"
     },
     {
       "id": "PII_MICA_COLORANT",
@@ -9230,7 +9276,8 @@
         "water",
         "water for injection",
         "water, filtered",
-        "water, purified"
+        "water, purified",
+        "and water"
       ],
       "category": "solvent",
       "is_additive": true,
@@ -9454,7 +9501,9 @@
         "food glaze shellac",
         "lac resin",
         "natural resin",
-        "pharmaceutical glaze"
+        "pharmaceutical glaze",
+        "Shellac glaze",
+        "Aqueous Shellac"
       ],
       "category": "coating_resin",
       "is_additive": true,
@@ -9625,7 +9674,8 @@
       "aliases": [
         "sorbitan monooleate",
         "sorbitol sorbitan solution",
-        "sorethytan monooleate"
+        "sorethytan monooleate",
+        "Sorbitan Monooleate NF"
       ],
       "category": "emulsifier",
       "is_additive": true,
@@ -9669,7 +9719,10 @@
         "soy bean oil",
         "soy oil",
         "soybeal oil",
-        "soybean oil"
+        "soybean oil",
+        "Soya Oil",
+        "soya oil",
+        "highly refined Soybean Oil"
       ],
       "category": "carrier_oil",
       "is_additive": true,
@@ -9681,7 +9734,7 @@
       "common_uses": [
         "identity_mapping"
       ],
-      "last_updated": "2026-02-18"
+      "last_updated": "2026-03-09"
     },
     {
       "id": "PII_SOY_POLYSACCHARIDES",
@@ -9967,7 +10020,8 @@
       "aliases": [
         "acetoglycerides",
         "acetylated monoglycerides",
-        "plant-based acetoglycerides"
+        "plant-based acetoglycerides",
+        "Acetylated Monoglyceride"
       ],
       "category": "plasticizer_emulsifier",
       "is_additive": true,
@@ -11563,7 +11617,8 @@
       "id": "NHA_CAROTENE_NATURAL",
       "standard_name": "Carotene, Natural",
       "aliases": [
-        "carotene, natural"
+        "carotene, natural",
+        "Mixed Carotene"
       ],
       "category": "carotenoid_descriptor",
       "is_additive": false,
@@ -12307,7 +12362,8 @@
       "aliases": [
         "rice bran oil",
         "rice oil",
-        "oryza sativa bran oil"
+        "oryza sativa bran oil",
+        "White Rice Bran Oil"
       ],
       "category": "oil_carrier",
       "is_additive": false,
@@ -12345,6 +12401,1044 @@
         "softgel carrier"
       ],
       "last_updated": "2026-03-08"
+    },
+    {
+      "id": "PII_HYDROGENATED_VEGETABLE_OIL",
+      "standard_name": "Hydrogenated Vegetable Oil",
+      "aliases": [
+        "Hydrogenated Vegetable Oil",
+        "hydrogenated vegetable oil",
+        "hydrogenated vegetable oils",
+        "vegetable oil, hydrogenated"
+      ],
+      "category": "oil_carrier",
+      "is_additive": true,
+      "additive_type": "processing_aid",
+      "allergen": false,
+      "allergen_type": null,
+      "notes": "Generic hydrogenated vegetable oil excipient used for texture, stability, and capsule/tablet processing. Non-discrete carrier identity; less desirable than unhydrogenated oils but primarily an inactive formulation component.",
+      "CUI": null,
+      "common_uses": [
+        "carrier",
+        "texture",
+        "stability"
+      ],
+      "last_updated": "2026-03-09"
+    },
+    {
+      "id": "NHA_ROSEMARY_NATURAL_FLAVOR",
+      "standard_name": "Natural Rosemary Flavor",
+      "aliases": [
+        "natural Rosemary flavor",
+        "natural rosemary flavor",
+        "rosemary flavor, natural",
+        "natural rosemary flavour"
+      ],
+      "category": "flavor_natural",
+      "is_additive": true,
+      "additive_type": "natural_flavor",
+      "allergen": false,
+      "allergen_type": null,
+      "notes": "Natural flavoring ingredient derived from rosemary aromatic compounds. Used in small amounts for flavor and odor masking in softgels and liquids.",
+      "CUI": null,
+      "common_uses": [
+        "flavor enhancement",
+        "odor masking",
+        "palatability improvement"
+      ],
+      "last_updated": "2026-03-09"
+    },
+    {
+      "id": "NHA_GRAPEFRUIT_OIL",
+      "standard_name": "Grapefruit Oil",
+      "aliases": [
+        "Grapefruit Oil",
+        "grapefruit oil",
+        "grapefruit peel oil",
+        "citrus paradisi oil",
+        "grapefruit essential oil"
+      ],
+      "category": "flavor_natural",
+      "is_additive": true,
+      "additive_type": "natural_flavor",
+      "allergen": false,
+      "allergen_type": null,
+      "notes": "Citrus paradisi peel oil used in small amounts as a flavoring component in gummies and softgels. In inactive sections it should route as a flavor identity rather than an active scored botanical.",
+      "CUI": null,
+      "common_uses": [
+        "flavor enhancement",
+        "citrus flavoring",
+        "aroma improvement"
+      ],
+      "last_updated": "2026-03-09"
+    },
+    {
+      "id": "PII_SESAME_SEED_OIL",
+      "standard_name": "Sesame Seed Oil",
+      "aliases": [
+        "sesame seed oil",
+        "Sesame seed Oil",
+        "Sesame Seed Oil",
+        "sesame oil",
+        "Sesame Oil",
+        "sesamum indicum seed oil",
+        "sesamum indicum oil",
+        "Black Sesame Seed Oil"
+      ],
+      "category": "oil_carrier",
+      "is_additive": false,
+      "additive_type": "vegetable_oil_carrier",
+      "allergen": true,
+      "allergen_type": "sesame",
+      "notes": "Sesame seed oil used in softgels and lipid-based formulas as a carrier oil. When the same identity appears in active sections it should route through the active oil IQM entry instead of being treated as a passive excipient.",
+      "CUI": null,
+      "common_uses": [
+        "lipid carrier",
+        "softgel excipient"
+      ],
+      "last_updated": "2026-03-09"
+    },
+    {
+      "id": "NHA_SOLUBLE_FOOD_STARCH",
+      "standard_name": "Soluble Food Starch",
+      "aliases": [
+        "soluble food starch",
+        "Soluble Food Starch"
+      ],
+      "category": "thickener_stabilizer",
+      "is_additive": true,
+      "additive_type": "texture_modifier",
+      "allergen": false,
+      "allergen_type": null,
+      "notes": "Generic soluble food starch used as a softgel or gummy texturizer, binder, or film-forming excipient when the source plant is not disclosed on the label.",
+      "CUI": null,
+      "common_uses": [
+        "thickening",
+        "binding",
+        "texture improvement"
+      ],
+      "last_updated": "2026-03-09"
+    },
+    {
+      "id": "PII_LANOLIN",
+      "standard_name": "Lanolin",
+      "aliases": [
+        "lanolin",
+        "Lanolin",
+        "wool wax",
+        "wool grease"
+      ],
+      "category": "animal_derived",
+      "is_additive": false,
+      "additive_type": "animal_wax_source",
+      "allergen": false,
+      "allergen_type": null,
+      "notes": "Animal-derived wool wax source material. In inactive sections, preserve as lanolin when the label discloses the source but does not declare a more specific derivative. When lanolin appears in active sections only as the source wrapper for std. to Vitamin D3, the cleaner should surface Vitamin D3 instead of treating lanolin as the active identity.",
+      "CUI": null,
+      "common_uses": [
+        "source disclosure",
+        "animal-derived excipient",
+        "vitamin D3 precursor source"
+      ],
+      "last_updated": "2026-03-09"
+    },
+    {
+      "id": "NHA_CARROT_OIL",
+      "standard_name": "Carrot Oil",
+      "aliases": [
+        "Carrot Oil",
+        "carrot oil"
+      ],
+      "category": "oil_carrier",
+      "is_additive": false,
+      "additive_type": "botanical_oil_carrier",
+      "allergen": false,
+      "allergen_type": null,
+      "notes": "Botanical carrot-derived oil used in softgel formulations as a passive carrier or source oil when the label does not specify a separate active carrot extract or carotenoid standardized ingredient.",
+      "CUI": null,
+      "common_uses": [
+        "lipid carrier",
+        "softgel excipient",
+        "source oil disclosure"
+      ],
+      "last_updated": "2026-03-09"
+    },
+    {
+      "id": "NHA_SORBITAN",
+      "standard_name": "Sorbitan",
+      "aliases": [
+        "Sorbitan",
+        "sorbitan"
+      ],
+      "category": "emulsifier",
+      "is_additive": true,
+      "additive_type": "emulsifier",
+      "allergen": false,
+      "allergen_type": null,
+      "notes": "Generic sorbitan excipient identity used when the label discloses sorbitan without specifying a fatty-acid ester such as sorbitan monooleate or sorbitan monostearate.",
+      "CUI": null,
+      "common_uses": [
+        "emulsification",
+        "stability",
+        "softgel excipient"
+      ],
+      "last_updated": "2026-03-09"
+    },
+    {
+      "id": "NHA_SORBITOL_ANHYDRIDES",
+      "standard_name": "Sorbitol Anhydrides",
+      "aliases": [
+        "Sorbitol Anhydrides",
+        "sorbitol anhydrides"
+      ],
+      "category": "emulsifier",
+      "is_additive": true,
+      "additive_type": "emulsifier_component",
+      "allergen": false,
+      "allergen_type": null,
+      "notes": "Sorbitol dehydration products used in emulsifier systems and softgel excipient blends. Preserved as a distinct label identity when the formulation discloses sorbitol anhydrides directly rather than a named sorbitan ester.",
+      "CUI": null,
+      "common_uses": [
+        "emulsifier system",
+        "stability",
+        "softgel excipient"
+      ],
+      "last_updated": "2026-03-09"
+    },
+    {
+      "id": "PII_SUNFLOWER_SOURCE_DESCRIPTOR",
+      "standard_name": "Sunflower (Source Descriptor)",
+      "aliases": [
+        "sunflower",
+        "Sunflower"
+      ],
+      "category": "source_descriptor",
+      "is_additive": false,
+      "additive_type": "source_descriptor",
+      "allergen": false,
+      "allergen_type": null,
+      "notes": "Generic sunflower source disclosure in inactive sections when the label does not specify oil, lecithin, wax, or seed material. Mapped conservatively as a source descriptor rather than collapsed into sunflower oil.",
+      "CUI": null,
+      "common_uses": [
+        "source disclosure",
+        "identity routing"
+      ],
+      "last_updated": "2026-03-09"
+    },
+    {
+      "id": "PII_ALGAE_SOURCE_DESCRIPTOR",
+      "standard_name": "Algae (Source Descriptor)",
+      "aliases": [
+        "algae",
+        "Algae",
+        "algae (unspecified)"
+      ],
+      "category": "source_descriptor",
+      "is_additive": false,
+      "additive_type": "source_descriptor",
+      "allergen": false,
+      "allergen_type": null,
+      "notes": "Generic algae source disclosure in inactive sections when the label does not specify oil, species, extract, or mineral matrix. Preserved as a non-specific source descriptor rather than forced into a particular algae ingredient.",
+      "CUI": null,
+      "common_uses": [
+        "source disclosure",
+        "identity routing"
+      ],
+      "last_updated": "2026-03-09"
+    },
+    {
+      "id": "NHA_NONIONIC_SURFACTANT_DESCRIPTOR",
+      "standard_name": "Nonionic Surfactant (Descriptor)",
+      "aliases": [
+        "nonionic surfactant",
+        "Nonionic Surfactant",
+        "Nonionic Surfacant"
+      ],
+      "category": "solubilizer_surfactant",
+      "is_additive": true,
+      "additive_type": "surfactant_descriptor",
+      "allergen": false,
+      "allergen_type": null,
+      "notes": "Generic nonionic surfactant disclosure used inside delivery systems such as microemulsions when the exact surfactant identity is not declared on the label.",
+      "CUI": null,
+      "common_uses": [
+        "solubilization",
+        "delivery system disclosure"
+      ],
+      "last_updated": "2026-03-09"
+    },
+    {
+      "id": "PII_PALM_SOURCE_DESCRIPTOR",
+      "standard_name": "Palm (Source Descriptor)",
+      "aliases": [
+        "palm",
+        "Palm"
+      ],
+      "category": "source_descriptor",
+      "is_additive": false,
+      "additive_type": "source_descriptor",
+      "allergen": false,
+      "allergen_type": null,
+      "notes": "Generic palm source disclosure in inactive sections when the label does not specify palm oil, palm kernel oil, stearin, or another defined palm derivative.",
+      "CUI": null,
+      "common_uses": [
+        "source disclosure",
+        "identity routing"
+      ],
+      "last_updated": "2026-03-09"
+    },
+    {
+      "id": "PII_CANOLA_SOURCE_DESCRIPTOR",
+      "standard_name": "Canola (Source Descriptor)",
+      "aliases": [
+        "canola",
+        "Canola"
+      ],
+      "category": "source_descriptor",
+      "is_additive": false,
+      "additive_type": "source_descriptor",
+      "allergen": false,
+      "allergen_type": null,
+      "notes": "Generic canola source disclosure in inactive sections when the label does not specify refined canola oil, lecithin, or another defined canola derivative.",
+      "CUI": null,
+      "common_uses": [
+        "source disclosure",
+        "identity routing"
+      ],
+      "last_updated": "2026-03-09"
+    },
+    {
+      "id": "PII_COCONUT_SOURCE_DESCRIPTOR",
+      "standard_name": "Coconut (Source Descriptor)",
+      "aliases": [
+        "coconut",
+        "Coconut"
+      ],
+      "category": "source_descriptor",
+      "is_additive": false,
+      "additive_type": "source_descriptor",
+      "allergen": true,
+      "allergen_type": "coconut",
+      "notes": "Generic coconut source disclosure in inactive sections when the label does not specify coconut oil, MCT, coconut flour, or another defined coconut derivative.",
+      "CUI": null,
+      "common_uses": [
+        "source disclosure",
+        "identity routing"
+      ],
+      "last_updated": "2026-03-09"
+    },
+    {
+      "id": "PII_CLARY_SAGE_OIL",
+      "standard_name": "Clary Sage Oil",
+      "aliases": [
+        "clary sage oil"
+      ],
+      "category": "botanical_oil",
+      "is_additive": true,
+      "additive_type": "aromatic_botanical_oil",
+      "allergen": false,
+      "allergen_type": null,
+      "notes": "Essential oil from clary sage used in softgels and specialty lipid formulas as an aromatic botanical oil rather than a scored active ingredient in this context.",
+      "CUI": null,
+      "common_uses": [
+        "aromatic oil",
+        "inactive botanical component"
+      ],
+      "last_updated": "2026-03-09"
+    },
+    {
+      "id": "PII_CURCUMA_OIL",
+      "standard_name": "Curcuma Oil",
+      "aliases": [
+        "curcuma oil"
+      ],
+      "category": "botanical_oil",
+      "is_additive": true,
+      "additive_type": "botanical_oil",
+      "allergen": false,
+      "allergen_type": null,
+      "notes": "Curcuma/turmeric-derived oil used in this inactive-label context as a botanical oil component, not as a separately scored curcumin active.",
+      "CUI": null,
+      "common_uses": [
+        "botanical oil",
+        "inactive aromatic component"
+      ],
+      "last_updated": "2026-03-09"
+    },
+    {
+      "id": "PII_RAPESEED_OIL",
+      "standard_name": "Rapeseed Oil",
+      "aliases": [
+        "rapeseed oil",
+        "rapeseed vegetable oil"
+      ],
+      "category": "carrier_oil",
+      "is_additive": true,
+      "additive_type": "carrier",
+      "allergen": false,
+      "allergen_type": null,
+      "notes": "Rapeseed-derived oil used as a carrier oil in softgel and botanical-oil formulations. Kept distinct from canola-specific naming to avoid over-collapsing cultivar-specific labels.",
+      "CUI": null,
+      "common_uses": [
+        "carrier oil",
+        "softgel excipient"
+      ],
+      "last_updated": "2026-03-09"
+    },
+    {
+      "id": "PII_SPRING_WATER",
+      "standard_name": "Spring Water",
+      "aliases": [
+        "mountain spring water",
+        "spring water"
+      ],
+      "category": "solvent",
+      "is_additive": true,
+      "additive_type": "solvent",
+      "allergen": false,
+      "allergen_type": null,
+      "notes": "Label-specific water source descriptor used as an inactive solvent or processing medium. Kept distinct from purified water for label-faithful mapping.",
+      "CUI": null,
+      "common_uses": [
+        "solvent",
+        "processing aid"
+      ],
+      "last_updated": "2026-03-09"
+    },
+    {
+      "id": "PII_OAT_BRAN_OIL",
+      "standard_name": "Oat Bran Oil",
+      "aliases": [
+        "oat bran oil",
+        "organic oat bran oil"
+      ],
+      "category": "carrier_oil",
+      "is_additive": true,
+      "additive_type": "carrier",
+      "allergen": false,
+      "allergen_type": null,
+      "notes": "Oat-bran-derived oil used in specialty lipid blends and softgel formulations as a carrier oil or inactive lipid component.",
+      "CUI": null,
+      "common_uses": [
+        "carrier oil",
+        "lipid excipient"
+      ],
+      "last_updated": "2026-03-09"
+    },
+    {
+      "id": "PII_MINOR_GLYCOLIPIDS_DESCRIPTOR",
+      "standard_name": "Minor Glycolipids (Descriptor)",
+      "aliases": [
+        "minor glycolipids"
+      ],
+      "category": "composition_descriptor",
+      "is_additive": true,
+      "additive_type": "composition_descriptor",
+      "allergen": false,
+      "allergen_type": null,
+      "notes": "Label-level composition descriptor for small glycolipid fractions in phospholipid or lipid-complex formulas. Kept as a conservative inactive descriptor rather than collapsed into a specific lipid class.",
+      "CUI": null,
+      "common_uses": [
+        "composition disclosure",
+        "inactive descriptor"
+      ],
+      "last_updated": "2026-03-09"
+    },
+    {
+      "id": "PII_DIGLYCEROL_MONOOLEATE",
+      "standard_name": "Diglycerol Monooleate",
+      "aliases": [
+        "diglycerol monooleate"
+      ],
+      "category": "emulsifier",
+      "is_additive": true,
+      "additive_type": "emulsifier",
+      "allergen": false,
+      "allergen_type": null,
+      "notes": "Polyglycerol fatty-acid ester used as an emulsifier in softgel and lipid formulations. Mapped conservatively as an inactive emulsifier identity.",
+      "CUI": null,
+      "common_uses": [
+        "emulsifier",
+        "lipid formulation aid"
+      ],
+      "last_updated": "2026-03-09"
+    },
+    {
+      "id": "PII_GLYCEROL_MONOOLEATE",
+      "standard_name": "Glycerol Monooleate",
+      "aliases": [
+        "glycerol monooleate",
+        "glyceryl monooleate",
+        "monoolein",
+        "Glycerin Monooleate"
+      ],
+      "category": "emulsifier",
+      "is_additive": true,
+      "additive_type": "emulsifier",
+      "allergen": false,
+      "allergen_type": null,
+      "notes": "Monoolein / glyceryl monooleate lipid excipient used as an emulsifier and self-emulsifying formulation component.",
+      "CUI": null,
+      "common_uses": [
+        "emulsifier",
+        "self-emulsifying system"
+      ],
+      "last_updated": "2026-03-09"
+    },
+    {
+      "id": "PII_PALM_STEARIN",
+      "standard_name": "Palm Stearin",
+      "aliases": [
+        "palm stearin",
+        "palm fruit stearin"
+      ],
+      "category": "fat_fraction",
+      "is_additive": true,
+      "additive_type": "lipid_fraction",
+      "allergen": false,
+      "allergen_type": null,
+      "notes": "Higher-melting solid fraction of palm oil used in softgels and lipid formulations as a structuring fat component.",
+      "CUI": null,
+      "common_uses": [
+        "structuring fat",
+        "lipid excipient"
+      ],
+      "last_updated": "2026-03-09"
+    },
+    {
+      "id": "NHA_WHITE_EDIBLE_INK_DESCRIPTOR",
+      "standard_name": "White Edible Ink (Descriptor)",
+      "aliases": [
+        "White Edible Ink",
+        "white edible ink"
+      ],
+      "category": "label_descriptor",
+      "is_additive": true,
+      "additive_type": "decorative_label_descriptor",
+      "allergen": false,
+      "allergen_type": null,
+      "notes": "Generic decorative ink disclosure used on capsules or tablets when the label does not identify the exact pigment system.",
+      "CUI": null,
+      "common_uses": [
+        "tablet imprint ink",
+        "capsule printing"
+      ],
+      "last_updated": "2026-03-09"
+    },
+    {
+      "id": "NHA_NATURAL_CITRUS_FLAVOR",
+      "standard_name": "Natural Citrus Flavor",
+      "aliases": [
+        "natural Citrus flavoring",
+        "natural citrus flavoring",
+        "citrus flavoring",
+        "natural food grade Citrus Oil"
+      ],
+      "category": "flavor_natural",
+      "is_additive": true,
+      "additive_type": "natural_flavor",
+      "allergen": false,
+      "allergen_type": null,
+      "notes": "Generic natural citrus flavor disclosure when the label does not specify orange, lemon, or tangerine.",
+      "CUI": null,
+      "common_uses": [
+        "flavor enhancement",
+        "taste masking"
+      ],
+      "last_updated": "2026-03-09"
+    },
+    {
+      "id": "NHA_COCHINEAL",
+      "standard_name": "Cochineal",
+      "aliases": [
+        "Cochineal C175470",
+        "cochineal c175470",
+        "cochineal"
+      ],
+      "category": "color_natural",
+      "is_additive": true,
+      "additive_type": "natural_color",
+      "allergen": false,
+      "allergen_type": null,
+      "notes": "Cochineal-derived natural red color additive; this entry is for inactive color disclosure routing.",
+      "CUI": null,
+      "common_uses": [
+        "color additive"
+      ],
+      "last_updated": "2026-03-09"
+    },
+    {
+      "id": "NHA_CUPROUS_OXIDE",
+      "standard_name": "Cuprous Oxide",
+      "aliases": [
+        "Cuprous Oxide",
+        "cuprous oxide"
+      ],
+      "category": "color_mineral",
+      "is_additive": true,
+      "additive_type": "mineral_color",
+      "allergen": false,
+      "allergen_type": null,
+      "notes": "Mineral copper oxide disclosure used in trace colorant or coating systems.",
+      "CUI": null,
+      "common_uses": [
+        "color additive",
+        "coating component"
+      ],
+      "last_updated": "2026-03-09"
+    },
+    {
+      "id": "PII_LECITHIN_OIL",
+      "standard_name": "Lecithin Oil",
+      "aliases": [
+        "Lecithin oil",
+        "lecithin oil"
+      ],
+      "category": "oil_carrier",
+      "is_additive": false,
+      "additive_type": "lecithin_lipid_carrier",
+      "allergen": false,
+      "allergen_type": null,
+      "notes": "Generic lecithin-rich oil disclosure when the source is not specified clearly enough to route to soy or sunflower lecithin.",
+      "CUI": null,
+      "common_uses": [
+        "lipid carrier",
+        "emulsifier base"
+      ],
+      "last_updated": "2026-03-09"
+    },
+    {
+      "id": "PII_EXTRA_VIRGIN_COCONUT_OIL",
+      "standard_name": "Extra Virgin Coconut Oil",
+      "aliases": [
+        "100% expeller pressed, organic, extra virgin Coconut Oil",
+        "100% expeller pressed organic extra virgin coconut oil",
+        "extra virgin coconut oil"
+      ],
+      "category": "oil_carrier",
+      "is_additive": false,
+      "additive_type": "vegetable_oil_carrier",
+      "allergen": false,
+      "allergen_type": null,
+      "notes": "Cold or expeller-processed extra virgin coconut oil used as a softgel lipid base or inactive carrier oil.",
+      "CUI": null,
+      "common_uses": [
+        "lipid carrier",
+        "softgel excipient"
+      ],
+      "last_updated": "2026-03-09"
+    },
+    {
+      "id": "NHA_POLYMETHYLACRYLATE",
+      "standard_name": "Polymethylacrylate",
+      "aliases": [
+        "Polymethylacrylate",
+        "polymethylacrylate"
+      ],
+      "category": "coating_polymer",
+      "is_additive": true,
+      "additive_type": "coating_polymer",
+      "allergen": false,
+      "allergen_type": null,
+      "notes": "Synthetic acrylic coating polymer disclosure used in tablet and softgel enteric or film-coating systems.",
+      "CUI": null,
+      "common_uses": [
+        "film coating",
+        "enteric coating"
+      ],
+      "last_updated": "2026-03-09"
+    },
+    {
+      "id": "NHA_METAL_SALTS_DESCRIPTOR",
+      "standard_name": "Metal Salts (Descriptor)",
+      "aliases": [
+        "Metal Salts",
+        "metal salts"
+      ],
+      "category": "label_descriptor",
+      "is_additive": true,
+      "additive_type": "mineral_descriptor",
+      "allergen": false,
+      "allergen_type": null,
+      "notes": "Generic metal-salt disclosure when the label does not specify the exact mineral salt identity.",
+      "CUI": null,
+      "common_uses": [
+        "label disclosure"
+      ],
+      "last_updated": "2026-03-09"
+    },
+    {
+      "id": "NHA_OXALIC_ACID",
+      "standard_name": "Oxalic Acid",
+      "aliases": [
+        "Oxalic Acid",
+        "oxalic acid"
+      ],
+      "category": "processing_acid",
+      "is_additive": true,
+      "additive_type": "processing_aid",
+      "allergen": false,
+      "allergen_type": null,
+      "notes": "Oxalic acid disclosure used in small amounts in processing or stabilization systems; kept as a conservative inactive identity when listed outside active ingredients.",
+      "CUI": null,
+      "common_uses": [
+        "processing aid",
+        "stabilization"
+      ],
+      "last_updated": "2026-03-09"
+    },
+    {
+      "id": "NHA_POLYUNSATURATED_OILS_DESCRIPTOR",
+      "standard_name": "Polyunsaturated Oils (Descriptor)",
+      "aliases": [
+        "Polyunsaturated Oils",
+        "polyunsaturated oils"
+      ],
+      "category": "oil_descriptor",
+      "is_additive": false,
+      "additive_type": "oil_source_descriptor",
+      "allergen": false,
+      "allergen_type": null,
+      "notes": "Generic disclosure for mixed polyunsaturated oils when the label does not specify the exact oil blend.",
+      "CUI": null,
+      "common_uses": [
+        "oil source disclosure"
+      ],
+      "last_updated": "2026-03-09"
+    },
+    {
+      "id": "NHA_ADDED_COLOR_DESCRIPTOR",
+      "standard_name": "Added Color (Descriptor)",
+      "aliases": [
+        "added Color",
+        "added color"
+      ],
+      "category": "color_descriptor",
+      "is_additive": true,
+      "additive_type": "color_descriptor",
+      "allergen": false,
+      "allergen_type": null,
+      "notes": "Generic label disclosure for added color when the exact pigment is not declared on the supplement facts panel.",
+      "CUI": null,
+      "common_uses": [
+        "color disclosure"
+      ],
+      "last_updated": "2026-03-09"
+    },
+    {
+      "id": "NHA_DISODIUM_EDETATE",
+      "standard_name": "Disodium Edetate",
+      "aliases": [
+        "Disodium Edetate",
+        "disodium edetate"
+      ],
+      "category": "chelating_agent",
+      "is_additive": true,
+      "additive_type": "chelating_agent",
+      "allergen": false,
+      "allergen_type": null,
+      "notes": "Chelating agent used to improve stability and prevent metal-catalyzed oxidation in formulations.",
+      "CUI": null,
+      "common_uses": [
+        "stabilizer",
+        "chelating agent"
+      ],
+      "last_updated": "2026-03-09"
+    },
+    {
+      "id": "NHA_ISOPROPYL_ALCOHOL",
+      "standard_name": "Isopropyl Alcohol",
+      "aliases": [
+        "isopropyl alcohol",
+        "2-propanol",
+        "propan-2-ol"
+      ],
+      "category": "solvent",
+      "is_additive": true,
+      "additive_type": "processing_aid",
+      "allergen": false,
+      "allergen_type": null,
+      "notes": "Volatile solvent used in ink, coating, and printing systems for supplement capsules and tablets. Not a nutritive ingredient; used as a manufacturing or coating excipient.",
+      "CUI": null,
+      "common_uses": [
+        "printing solvent",
+        "coating solvent"
+      ],
+      "last_updated": "2026-03-09"
+    },
+    {
+      "id": "NHA_N_BUTYL_ALCOHOL",
+      "standard_name": "N-Butyl Alcohol",
+      "aliases": [
+        "n-butyl alcohol",
+        "1-butanol",
+        "butan-1-ol"
+      ],
+      "category": "solvent",
+      "is_additive": true,
+      "additive_type": "processing_aid",
+      "allergen": false,
+      "allergen_type": null,
+      "notes": "Volatile alcohol used in printing inks and coating systems for capsule shell markings. Treated as a non-nutritive processing/coating excipient.",
+      "CUI": null,
+      "common_uses": [
+        "printing solvent",
+        "coating solvent"
+      ],
+      "last_updated": "2026-03-09"
+    },
+    {
+      "id": "PII_CHIA_SEED_OIL",
+      "standard_name": "Chia Seed Oil",
+      "aliases": [
+        "chia seed oil",
+        "expeller-pressed chia (salvia hispanica l.) seed oil",
+        "expeller-pressed chia seed oil",
+        "salvia hispanica seed oil"
+      ],
+      "category": "oil_carrier",
+      "is_additive": false,
+      "additive_type": "vegetable_oil_carrier",
+      "allergen": false,
+      "allergen_type": null,
+      "notes": "Chia seed-derived oil used in softgel fills and lipid carrier systems when disclosed in inactive sections. Maintained separately from active chia scoring routes.",
+      "CUI": null,
+      "common_uses": [
+        "oil carrier",
+        "softgel excipient"
+      ],
+      "last_updated": "2026-03-09"
+    },
+    {
+      "id": "NHA_DISTILLED_MONOGLYCERIDES",
+      "standard_name": "Distilled Monoglycerides",
+      "aliases": [
+        "distilled monoglycerides"
+      ],
+      "category": "emulsifier",
+      "is_additive": true,
+      "additive_type": "emulsifier",
+      "allergen": false,
+      "allergen_type": null,
+      "notes": "Predominantly monoglyceride emulsifier used to stabilize oil-water systems in supplement softgels and chewables.",
+      "CUI": null,
+      "common_uses": [
+        "emulsification",
+        "stability"
+      ],
+      "last_updated": "2026-03-09"
+    },
+    {
+      "id": "PII_HIGH_OLEIC_SAFFLOWER_SUNFLOWER_OIL",
+      "standard_name": "High Oleic Safflower/Sunflower Oil",
+      "aliases": [
+        "high oleic safflower and/or sunflower oil",
+        "high oleic safflower/sunflower oil"
+      ],
+      "category": "oil_carrier",
+      "is_additive": false,
+      "additive_type": "vegetable_oil_carrier",
+      "allergen": false,
+      "allergen_type": null,
+      "notes": "Blend disclosure for high-oleic safflower and sunflower oils used as neutral lipid carriers in supplement formulations.",
+      "CUI": null,
+      "common_uses": [
+        "oil carrier",
+        "softgel fill"
+      ],
+      "last_updated": "2026-03-09"
+    },
+    {
+      "id": "NHA_LEMON_FLAVOR_OIL",
+      "standard_name": "Lemon Flavor Oil",
+      "aliases": [
+        "lemon flavor oil"
+      ],
+      "category": "flavor",
+      "is_additive": true,
+      "additive_type": "flavoring",
+      "allergen": false,
+      "allergen_type": null,
+      "notes": "Generic lemon flavor oil disclosure used for taste and aroma in supplement softgels and chewables when the label does not specify a natural flavor system.",
+      "CUI": null,
+      "common_uses": [
+        "flavoring",
+        "palatability"
+      ],
+      "last_updated": "2026-03-09"
+    },
+    {
+      "id": "PII_MEDIUM_CHAIN_FATTY_ACIDS",
+      "standard_name": "Medium Chain Fatty Acids",
+      "aliases": [
+        "medium chain fatty acids"
+      ],
+      "category": "lipid_component",
+      "is_additive": false,
+      "additive_type": "lipid_carrier",
+      "allergen": false,
+      "allergen_type": null,
+      "notes": "Medium-chain fatty acid disclosure used in inactive sections for lipid carriers related to MCT systems when the label does not explicitly state triglycerides.",
+      "CUI": null,
+      "common_uses": [
+        "lipid carrier",
+        "softgel excipient"
+      ],
+      "last_updated": "2026-03-09"
+    },
+    {
+      "id": "NHA_SODIUM_THIOSULFATE",
+      "standard_name": "Sodium Thiosulfate",
+      "aliases": [
+        "sodium thiosulfate"
+      ],
+      "category": "stabilizer",
+      "is_additive": true,
+      "additive_type": "stabilizer",
+      "allergen": false,
+      "allergen_type": null,
+      "notes": "Stabilizing and reducing agent used in some supplement coating and color systems.",
+      "CUI": null,
+      "common_uses": [
+        "stabilizer",
+        "processing aid"
+      ],
+      "last_updated": "2026-03-09"
+    },
+    {
+      "id": "OI_TAPIOCA_GELATIN",
+      "standard_name": "Tapioca Gelatin",
+      "aliases": [
+        "tapioca gelatin"
+      ],
+      "category": "capsule_material",
+      "is_additive": true,
+      "additive_type": "capsule_shell",
+      "allergen": false,
+      "allergen_type": null,
+      "notes": "Plant-based tapioca capsule-shell material disclosure. Kept separate from animal gelatin because the label is indicating a tapioca-derived shell system.",
+      "CUI": null,
+      "common_uses": [
+        "capsule shell",
+        "softgel shell"
+      ],
+      "last_updated": "2026-03-09"
+    },
+    {
+      "id": "NHA_BLACK_EDIBLE_INK",
+      "standard_name": "Black Edible Ink (Descriptor)",
+      "aliases": [
+        "black edible ink"
+      ],
+      "category": "printing_ink_descriptor",
+      "is_additive": true,
+      "additive_type": "printing_ink",
+      "allergen": false,
+      "allergen_type": null,
+      "notes": "Generic edible-ink disclosure for black capsule or softgel printing when the exact pigment system is not separately declared.",
+      "CUI": null,
+      "common_uses": [
+        "capsule printing",
+        "softgel printing"
+      ],
+      "last_updated": "2026-03-09"
+    },
+    {
+      "id": "PII_COD_LIVER_OIL_CARRIER",
+      "standard_name": "Cod Liver Oil (as carrier)",
+      "aliases": [
+        "10 minims norwegian cod liver oil",
+        "norwegian cod liver oil"
+      ],
+      "category": "oil_carrier",
+      "is_additive": false,
+      "additive_type": "fish_oil_carrier",
+      "allergen": true,
+      "allergen_type": "fish",
+      "notes": "Cod liver oil disclosed in inactive sections as a softgel fill or carrier base rather than a scored active omega-3 ingredient.",
+      "CUI": null,
+      "common_uses": [
+        "softgel fill",
+        "oil carrier"
+      ],
+      "last_updated": "2026-03-09"
+    },
+    {
+      "id": "PII_ALGAL_OIL_CARRIER",
+      "standard_name": "Algal Oil (as carrier)",
+      "aliases": [
+        "algae omega-3 oil",
+        "algal omega-3 oil"
+      ],
+      "category": "oil_carrier",
+      "is_additive": false,
+      "additive_type": "algal_oil_carrier",
+      "allergen": false,
+      "allergen_type": null,
+      "notes": "Algal omega-3 oil disclosed in inactive sections as a carrier base rather than a scored active ingredient.",
+      "CUI": null,
+      "common_uses": [
+        "oil carrier",
+        "softgel fill"
+      ],
+      "last_updated": "2026-03-09"
+    },
+    {
+      "id": "NHA_AMMONIUM_HYDROGEN_CARBONATE",
+      "standard_name": "Ammonium Hydrogen Carbonate",
+      "aliases": [
+        "ammonium hydrogen carbonate",
+        "ammonium bicarbonate"
+      ],
+      "category": "processing_aid",
+      "is_additive": true,
+      "additive_type": "processing_aid",
+      "allergen": false,
+      "allergen_type": null,
+      "notes": "Processing and buffering salt used in some coating and manufacturing systems.",
+      "CUI": null,
+      "common_uses": [
+        "processing aid",
+        "buffering"
+      ],
+      "last_updated": "2026-03-09"
+    },
+    {
+      "id": "NHA_CITRUS_PEEL_OIL_EXTRACT",
+      "standard_name": "Citrus Peel Oil Extract",
+      "aliases": [
+        "citrus peel oil extract"
+      ],
+      "category": "flavor",
+      "is_additive": true,
+      "additive_type": "flavoring",
+      "allergen": false,
+      "allergen_type": null,
+      "notes": "Generic citrus peel oil extract disclosure used for flavoring in inactive sections.",
+      "CUI": null,
+      "common_uses": [
+        "flavoring",
+        "aroma"
+      ],
+      "last_updated": "2026-03-09"
+    },
+    {
+      "id": "NHA_FDC_BLUE_DESCRIPTOR",
+      "standard_name": "FD&C Blue (Descriptor)",
+      "aliases": [
+        "fd&c blue"
+      ],
+      "category": "color_descriptor",
+      "is_additive": true,
+      "additive_type": "color_descriptor",
+      "allergen": false,
+      "allergen_type": null,
+      "notes": "Generic label disclosure for an FD&C blue colorant when the exact lake or dye number is not specified.",
+      "CUI": null,
+      "common_uses": [
+        "color disclosure"
+      ],
+      "last_updated": "2026-03-09"
     }
   ]
 }

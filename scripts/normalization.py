@@ -334,6 +334,76 @@ def preprocess_text(text: str) -> str:
 
 
 @lru_cache(maxsize=5000)
+def descriptor_fallback_candidates(text: str) -> Tuple[str, ...]:
+    """
+    Generate late-stage fallback candidates by stripping common label descriptors.
+
+    This is intentionally narrower than preprocess_text(). It is used only after
+    exact/raw matching misses, so we can recover labels like:
+    - "Cold-Pressed Lemon Oil" -> "lemon oil"
+    - "Beeswax, Natural" -> "beeswax"
+    - "Coconut Oil, Extra Virgin" -> "coconut oil"
+    """
+    if not text:
+        return ()
+
+    base = normalize_text(text).strip(string.punctuation + string.whitespace)
+    if not base:
+        return ()
+
+    leading_descriptors = (
+        "100% ",
+        "cold-pressed ",
+        "cold pressed ",
+        "certified organic ",
+        "organic ",
+        "extra virgin ",
+        "pharmaceutical grade ",
+        "molecularly distilled ",
+        "highly purified and concentrated ",
+        "highly purified ",
+        "purified ",
+        "pure ",
+        "natural ",
+        "deionized ",
+    )
+    trailing_descriptors = (
+        " extra virgin",
+        " natural",
+        " purified",
+        " pure",
+        " deionized",
+    )
+
+    seen = {base}
+    queue = [base]
+    candidates = []
+
+    while queue:
+        current = queue.pop(0).strip(string.punctuation + string.whitespace)
+        if not current:
+            continue
+
+        for prefix in leading_descriptors:
+            if current.startswith(prefix):
+                candidate = current[len(prefix):].strip(string.punctuation + string.whitespace)
+                if candidate and candidate not in seen:
+                    seen.add(candidate)
+                    candidates.append(candidate)
+                    queue.append(candidate)
+
+        for suffix in trailing_descriptors:
+            if current.endswith(suffix):
+                candidate = current[: -len(suffix)].strip(string.punctuation + string.whitespace)
+                if candidate and candidate not in seen:
+                    seen.add(candidate)
+                    candidates.append(candidate)
+                    queue.append(candidate)
+
+    return tuple(candidates)
+
+
+@lru_cache(maxsize=5000)
 def strip_extraction_noise(text: str) -> str:
     """
     Strip extraction/dosage noise prefixes from ingredient names.
