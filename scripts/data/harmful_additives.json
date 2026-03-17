@@ -3,8 +3,8 @@
     "description": "Comprehensive database of harmful additives, contaminants, and concerning ingredients found in dietary supplements. Used for scoring penalties and consumer warnings.",
     "purpose": "penalty_scoring",
     "schema_version": "5.0.0",
-    "last_updated": "2026-03-08",
-    "total_entries": 107,
+    "last_updated": "2026-03-13",
+    "total_entries": 108,
     "scoring_rule": "Apply penalty points based on severity_level. Critical: -5, High: -3, Moderate: -1.5, Low: -0.5. Multiple additives are cumulative.",
     "severity_level_definitions": {
       "critical": "Immediate health hazard, should be avoided entirely (e.g., formaldehyde, colloidal silver)",
@@ -8255,7 +8255,8 @@
         "Alkest TW 80",
         "Polysorbate",
         "Polysorbate emulsifiers",
-        "polysorbate emulsifier"
+        "polysorbate emulsifier",
+        "emulsifier-Polysorbate 80"
       ],
       "CUI": "C0071190",
       "category": "emulsifier",
@@ -8281,7 +8282,7 @@
         "ADDapt Trial 2025 (Alimentary Pharmacol Ther 61:1276): emulsifier-free diet in Crohn's — mixed emulsifier intervention, P80 not isolated",
         "EMA background review CHMP/351898/2014 — Polysorbate 80 as excipient: no adverse reactions in oral tablet/capsule use"
       ],
-      "last_updated": "2026-03-08",
+      "last_updated": "2026-03-13",
       "match_rules": {
         "match_mode": "alias_and_fuzzy",
         "label_tokens": [
@@ -9951,7 +9952,8 @@
         "silica gel",
         "precipitated silica",
         "fumed silica",
-        "silicon dioxide nanoparticles"
+        "silicon dioxide nanoparticles",
+        "fumed Silicon Dioxide"
       ],
       "CUI": "C0037098",
       "category": "anticaking_agent",
@@ -9973,7 +9975,7 @@
         "DOI: 10.1016/j.fct.2020.111617 - Nanoparticle toxicity",
         "DOI: 10.3390/nano12030457 - Gut microbiome effects 2024"
       ],
-      "last_updated": "2026-02-16",
+      "last_updated": "2026-03-13",
       "match_rules": {
         "match_mode": "alias_and_fuzzy",
         "label_tokens": [
@@ -10585,11 +10587,12 @@
         "copper chlorophyllin",
         "SCC",
         "chlorophyllin",
-        "chlorophyll derivative"
+        "chlorophyll derivative",
+        "Sodium Copper Chlorophyll"
       ],
       "category": "colorant_semisynthetic",
       "notes": "SAFETY CONCERN: Semi-synthetic derivative of chlorophyll with copper substituted for magnesium. Limited long-term safety data for regular consumption. Potential copper accumulation concerns with chronic use. While over 50 years of use and FDA GRAS status, recent studies question safety of regular copper chlorophyllin consumption. May cause gastrointestinal upset in sensitive individuals. SEVERITY DOWNGRADED FROM MODERATE TO LOW (2026): EFSA 2015 re-evaluation (EFSA Journal 2015:4151) confirmed safety at authorized use levels. FDA permanently listed sodium copper chlorophyllin as a color additive in 2002 (21 CFR 73.125) with ADI calculated at 450 mg/person/day (with 200-fold safety factor). Acute toxicity: no toxicity observed up to 5000 mg/kg bw in animals. Copper content at typical colorant use levels is far below concerns for copper toxicity. Note: category corrected from 'colorant_artificial' to 'colorant_semisynthetic' — this pigment is derived from natural chlorophyll (saponification + copper replacement), not fully synthetic, and is exempt from FDA color certification.",
-      "last_updated": "2026-03-08",
+      "last_updated": "2026-03-13",
       "CUI": "C0951590",
       "mechanism_of_harm": "Mechanism requires further documentation.",
       "regulatory_status": {
@@ -12723,13 +12726,10 @@
       "id": "ADD_SYNTHETIC_VITAMINS",
       "standard_name": "Synthetic Vitamins",
       "aliases": [
-        "synthetic folic acid",
         "dl-alpha tocopherol",
-        "synthetic vitamin E",
         "pteroylmonoglutamic acid",
         "all-rac-α-tocopherol",
         "artificial vitamins",
-        "synthetic folate",
         "synthetic vitamin supplements"
       ],
       "category": "nutrient_synthetic",
@@ -14723,7 +14723,8 @@
         "propyl parahydroxybenzoate",
         "4-hydroxybenzoic acid propyl ester",
         "propyl butex",
-        "propylparaben"
+        "propylparaben",
+        "Propylparabens"
       ],
       "category": "high_risk_ingredients",
       "severity_level": "high",
@@ -15102,6 +15103,79 @@
       "notes": "Exact route for inactive corn-oil disclosures that explicitly state partial hydrogenation. Kept separate from non-hydrogenated corn oil identities.",
       "scientific_references": [],
       "last_updated": "2026-03-09"
+    },
+    {
+      "id": "ADD_POTASSIUM_BENZOATE",
+      "standard_name": "Potassium Benzoate",
+      "aliases": [
+        "potassium benzoate",
+        "Potassium Benzoate",
+        "E212",
+        "benzoic acid potassium salt",
+        "INS 212"
+      ],
+      "CUI": null,
+      "category": "preservative",
+      "mechanism_of_harm": "Benzoate preservative closely related to sodium benzoate. Used as an antimicrobial preservative and carries the same practical formulation concern in acidic vitamin-C-containing systems: potential benzene formation under heat/light exposure.",
+      "regulatory_status": {
+        "US": "Benzoate preservative; treated conservatively alongside sodium benzoate for supplement-risk routing.",
+        "EU": "E212 potassium benzoate preservative.",
+        "WHO": "Benzoate-class preservative; evaluate cumulative benzoate exposure."
+      },
+      "population_warnings": [
+        "Products combining potassium benzoate with vitamin C/ascorbic acid - benzene formation risk"
+      ],
+      "notes": "Conservative harmful-additive route for potassium benzoate based on benzoate preservative class behavior and supplement-formulation risk signaling.",
+      "scientific_references": [
+        "21 CFR Part 582 Subpart D - Chemical Preservatives",
+        "Benzoate preservative risk is handled conservatively alongside sodium benzoate in this pipeline"
+      ],
+      "last_updated": "2026-03-16",
+      "match_rules": {
+        "match_mode": "alias_and_fuzzy",
+        "label_tokens": [
+          "Potassium Benzoate",
+          "potassium benzoate",
+          "E212"
+        ],
+        "fuzzy_threshold": 0.85,
+        "preferred_alias": "Potassium Benzoate"
+      },
+      "references_structured": [
+        {
+          "type": "regulatory",
+          "title": "Regulatory status documentation for Potassium Benzoate",
+          "url": "",
+          "evidence_grade": "R",
+          "confidence": "low",
+          "supports_claims": [
+            "regulatory_status"
+          ]
+        }
+      ],
+      "external_ids": {
+        "CAS": "582-25-2"
+      },
+      "jurisdictional_statuses": [],
+      "review": {
+        "status": "validated",
+        "last_reviewed_at": "2026-03-16",
+        "reviewed_by": "softgels_unmapped_batch37",
+        "next_review_due": "2026-09-16",
+        "change_log": [
+          {
+            "date": "2026-03-16",
+            "change": "Added conservative harmful-additive route for potassium benzoate from live Softgels unmapped output",
+            "reason": "benzoate preservative exact identity"
+          }
+        ]
+      },
+      "confidence": "medium",
+      "exposure_context": "supplement",
+      "entity_type": "ingredient",
+      "severity_level": "moderate",
+      "dose_thresholds": null,
+      "entity_relationships": null
     }
   ]
 }

@@ -5,7 +5,7 @@
     "schema_version": "5.0.0",
     "last_updated": "2026-03-09",
     "version": "1.0.0",
-    "total_entries": 20
+    "total_entries": 34
   },
   "settings": {
     "enable_case_insensitive": true,
@@ -42,7 +42,15 @@
     "Palmitic Acid, Stearic Acid",
     "Safflower/Sunflower Oil concentrate",
     "Other Omega-3's",
-    "High Choline Lecithin"
+    "High Choline Lecithin",
+    "Softgels",
+    "Vsoftgel",
+    "In a base of",
+    "Tabletting Aids",
+    "LipiSperse",
+    "Shakleeguard",
+    "Delete",
+    "fatty acids and esters"
   ],
   "classifications": {
     "Total EPA & DHA": {

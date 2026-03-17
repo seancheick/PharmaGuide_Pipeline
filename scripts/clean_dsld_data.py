@@ -194,9 +194,14 @@ class DSLDCleaningPipeline:
         # Create logger
         logger = logging.getLogger("dsld_cleaner")
         logger.setLevel(log_level)
+        logger.propagate = False
         
         # Remove existing handlers
         for handler in logger.handlers[:]:
+            try:
+                handler.close()
+            except Exception:
+                pass
             logger.removeHandler(handler)
         
         # Create formatter

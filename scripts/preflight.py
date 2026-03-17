@@ -165,6 +165,118 @@ SCHEMA_V5_DATABASES = [
 ]
 
 
+def validate_iqm_br_collision(data_dir: Path = DATA_DIR) -> Dict:
+    """
+    Cross-DB safety check: verify no alias or standard_name that exists in
+    IQM (scorable actives) also appears in the Banned/Recalled DB.
+
+    A collision means a substance could be scored as beneficial AND flagged as
+    banned simultaneously — the banned route must always win, and the presence
+    of a collision indicates a data authoring error that must be fixed before
+    the pipeline runs.
+
+    Returns:
+        Dict with 'collisions' list and 'ok' bool.
+    """
+    result = {"collisions": [], "ok": True}
+
+    iqm_path = data_dir / "ingredient_quality_map.json"
+    br_path = data_dir / "banned_recalled_ingredients.json"
+
+    if not iqm_path.exists() or not br_path.exists():
+        return result  # File-existence checks handled separately
+
+    try:
+        with open(iqm_path, "r", encoding="utf-8") as f:
+            iqm_data = json.load(f)
+        with open(br_path, "r", encoding="utf-8") as f:
+            br_data = json.load(f)
+    except Exception:
+        return result  # JSON parse errors handled separately
+
+    def _norm(s: str) -> str:
+        return s.lower().strip()
+
+    # Build term → (br_id, br_status) index from BR
+    br_term_index: dict = {}
+    for key, value in br_data.items():
+        if key == "_metadata" or not isinstance(value, list):
+            continue
+        for entry in value:
+            if not isinstance(entry, dict):
+                continue
+            br_id = entry.get("id", "")
+            br_status = entry.get("status", "banned")
+            sn = entry.get("standard_name", "")
+            if sn:
+                br_term_index.setdefault(_norm(sn), (br_id, br_status))
+            for alias in entry.get("aliases", []) or []:
+                if alias:
+                    br_term_index.setdefault(_norm(alias), (br_id, br_status))
+
+    if not br_term_index:
+        return result
+
+    # Severity levels that constitute a HARD block vs a warning
+    HARD_BLOCK_STATUSES = {"banned", "recalled"}
+
+    # IQM keys that are intentionally present in BOTH IQM and BR with high_risk/watchlist
+    # status. These are real active identities that should still be recognized precisely,
+    # while the BR layer adds the safety penalty/risk messaging.
+    INTENTIONAL_DUAL_CLASSIFICATION = {
+        "yohimbe",           # RISK_YOHIMBE high_risk — legal stimulant, well-characterized risk
+        "kavalactones",      # RISK_KAVA high_risk — hepatotoxicity risk, legal in US
+        "synephrine",        # RISK_BITTER_ORANGE high_risk — cardiovascular risk
+        "garcinia_cambogia", # RISK_GARCINIA_CAMBOGIA high_risk — hepatotoxicity warning layer
+    }
+
+    # Walk IQM entries and check every standard_name + alias
+    seen: set = set()  # de-duplicate (iqm_key, colliding_term_norm)
+    for iqm_key, iqm_entry in iqm_data.items():
+        if iqm_key.startswith("_") or not isinstance(iqm_entry, dict):
+            continue
+        sn = iqm_entry.get("standard_name", iqm_key)
+        candidates = [sn, iqm_key]
+        for form_name, form_data in (iqm_entry.get("forms", {}) or {}).items():
+            candidates.append(form_name)
+            for alias in (form_data.get("aliases", []) or []) if isinstance(form_data, dict) else []:
+                candidates.append(alias)
+
+        for candidate in candidates:
+            if not candidate:
+                continue
+            norm_candidate = _norm(candidate)
+            dedup_key = (iqm_key, norm_candidate)
+            if dedup_key in seen:
+                continue
+            seen.add(dedup_key)
+            if norm_candidate in br_term_index:
+                br_id, br_status = br_term_index[norm_candidate]
+                is_critical = br_status in HARD_BLOCK_STATUSES
+                is_intentional = (
+                    iqm_key in INTENTIONAL_DUAL_CLASSIFICATION
+                    and not is_critical
+                )
+                if is_intentional:
+                    continue  # suppress — deliberate dual-classification, not an error
+                result["collisions"].append({
+                    "iqm_key": iqm_key,
+                    "colliding_term": candidate,
+                    "br_id": br_id,
+                    "br_status": br_status,
+                    "critical": is_critical,
+                    "note": (
+                        f"HARD BLOCK — term also in Banned/Recalled DB (status={br_status})"
+                        if is_critical else
+                        f"WARNING — term also in Banned/Recalled DB (status={br_status})"
+                    )
+                })
+                if is_critical:
+                    result["ok"] = False
+
+    return result
+
+
 def validate_database_schema(data_dir: Path = DATA_DIR) -> Dict:
     """
     Validate that JSON database files conform to v5.x schema conventions.
@@ -389,19 +501,28 @@ def run_preflight(verbose: bool = False, quick: bool = False) -> Dict:
     results["schema_v5"] = schema_results
     results["schema_v4"] = schema_results
 
+    # Safety cross-DB check: IQM ↔ Banned/Recalled collision guard
+    collision_results = validate_iqm_br_collision()
+    results["iqm_br_collision"] = collision_results
+
     # Compute summary
     critical_ok = len(results["critical"]["failed"]) == 0
     json_ok = len(results["json_valid"]["failed"]) == 0
     configs_ok = len(results["configs"]["failed"]) == 0
     scripts_ok = len(results["scripts"]["failed"]) == 0
     schema_ok = schema_results["ok"]
+    collision_ok = collision_results["ok"]
 
-    all_ok = critical_ok and json_ok and configs_ok and scripts_ok and schema_ok
+    all_ok = critical_ok and json_ok and configs_ok and scripts_ok and schema_ok and collision_ok
 
     # Exit code: 0=ok, 1=critical failure, 2=non-critical issues
+    # NOTE: IQM↔BR collisions are exit 2 (not exit 1) because banned routing wins
+    # at priority 1 in _fast_exact_lookup — no functional incorrect routing occurs.
+    # Collisions represent data authoring issues that need human review, not
+    # pipeline-breaking failures.
     if not critical_ok or not json_ok:
         exit_code = 1
-    elif len(results["important"]["failed"]) > 0:
+    elif not collision_ok or len(results["important"]["failed"]) > 0:
         exit_code = 2
     else:
         exit_code = 0
@@ -413,6 +534,7 @@ def run_preflight(verbose: bool = False, quick: bool = False) -> Dict:
         "scripts_ok": scripts_ok,
         "schema_v5_ok": schema_ok,
         "schema_v4_ok": schema_ok,
+        "iqm_br_collision_ok": collision_ok,
         "all_ok": all_ok,
         "exit_code": exit_code,
         "counts": {
@@ -462,6 +584,29 @@ def print_results(results: Dict, verbose: bool = False):
         print("JSON VALIDATION ERRORS:")
         for entry in results["json_valid"]["failed"]:
             print(f"  [ERROR] {entry['file']}: {entry['error']}")
+        print()
+
+    # IQM ↔ BR collision guard
+    collision = results.get("iqm_br_collision", {})
+    all_collisions = collision.get("collisions", [])
+    critical_collisions = [c for c in all_collisions if c.get("critical")]
+    warning_collisions = [c for c in all_collisions if not c.get("critical")]
+    if all_collisions or verbose:
+        print("IQM \u2194 BANNED/RECALLED COLLISION CHECK:")
+        if not all_collisions:
+            if verbose:
+                print("  [OK] No IQM \u2194 Banned/Recalled term collisions found")
+        else:
+            for c in critical_collisions:
+                print(f"  [CRITICAL] IQM '{c['iqm_key']}' / term '{c['colliding_term']}' "
+                      f"-> BR id={c.get('br_id','')} status={c.get('br_status','')}")
+            for c in warning_collisions:
+                print(f"  [WARN]     IQM '{c['iqm_key']}' / term '{c['colliding_term']}' "
+                      f"-> BR id={c.get('br_id','')} status={c.get('br_status','')}")
+            if critical_collisions:
+                print(f"  {len(critical_collisions)} CRITICAL collision(s) must be resolved before pipeline runs.")
+            if warning_collisions:
+                print(f"  {len(warning_collisions)} warning collision(s) — review recommended.")
         print()
 
     # Schema v5 validation

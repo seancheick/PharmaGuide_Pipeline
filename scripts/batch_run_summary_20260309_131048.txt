@@ -1,201 +1,0 @@
-==========================================
-BATCH PIPELINE RUN - Mon Mar  9 13:10:48 EDT 2026
-==========================================
-Dataset directory: /Users/seancheick/Documents/DataSetDsld
-Scripts directory: /Users/seancheick/.claude-worktrees/dsld_clean/peaceful-ritchie/scripts
-Stages: clean
-Target datasets: Thorne,Garden,Gummies,Nordic,Pure,Softgels
-==========================================
-
-/Users/seancheick/.claude-worktrees/dsld_clean/peaceful-ritchie/scripts/run_pipeline.py:391: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
-  start_time = datetime.utcnow()
-2026-03-09 13:10:51 - __main__ - INFO - ============================================================
-2026-03-09 13:10:51 - __main__ - INFO - DSLD SUPPLEMENT PIPELINE
-2026-03-09 13:10:51 - __main__ - INFO - ============================================================
-2026-03-09 13:10:51 - __main__ - INFO - Script directory: /Users/seancheick/.claude-worktrees/dsld_clean/peaceful-ritchie/scripts
-2026-03-09 13:10:51 - __main__ - INFO - Stages to run: clean
-2026-03-09 13:10:51 - __main__ - INFO - Raw data: /Users/seancheick/Documents/DataSetDsld/Nordic-Naturals-2-17-26-L511/
-2026-03-09 13:10:51 - __main__ - INFO - Cleaned output: output_Nordic-Naturals-2-17-26-L511/cleaned
-2026-03-09 13:10:51 - __main__ - INFO - Enriched output: output_Nordic-Naturals-2-17-26-L511_enriched/enriched
-2026-03-09 13:10:51 - __main__ - INFO - Scored output: output_Nordic-Naturals-2-17-26-L511_scored
-2026-03-09 13:10:51 - __main__ - INFO - ============================================================
-2026-03-09 13:10:51 - __main__ - INFO - Validated data directory: /Users/seancheick/.claude-worktrees/dsld_clean/peaceful-ritchie/scripts/data
-2026-03-09 13:10:51 - __main__ - INFO - ============================================================
-2026-03-09 13:10:51 - __main__ - INFO - STAGE 1: CLEANING
-2026-03-09 13:10:51 - __main__ - INFO - ============================================================
-2026-03-09 13:10:51 - __main__ - INFO - Executing: /Users/seancheick/.claude-worktrees/dsld_clean/peaceful-ritchie/.venv/bin/python /Users/seancheick/.claude-worktrees/dsld_clean/peaceful-ritchie/scripts/clean_dsld_data.py --input-dir /Users/seancheick/Documents/DataSetDsld/Nordic-Naturals-2-17-26-L511/ --output-dir output_Nordic-Naturals-2-17-26-L511 --config /Users/seancheick/.claude-worktrees/dsld_clean/peaceful-ritchie/scripts/config/cleaning_config.json
-2026-03-09 13:10:51 - root - INFO - Resolved paths:
-2026-03-09 13:10:51 - root - INFO -   input_directory: /Users/seancheick/Documents/DataSetDsld/Nordic-Naturals-2-17-26-L511/
-2026-03-09 13:10:51 - root - INFO -   output_directory: output_Nordic-Naturals-2-17-26-L511
-2026-03-09 13:10:51 - root - INFO -   reference_data: /Users/seancheick/.claude-worktrees/dsld_clean/peaceful-ritchie/scripts/data
-2026-03-09 13:10:51 - root - INFO -   color_indicators.json: v5.0.0 (updated: 2026-02-18)
-2026-03-09 13:10:51 - root - INFO -   ingredient_quality_map.json: v5.0.0 (updated: 2026-03-09)
-2026-03-09 13:10:51 - root - INFO -   harmful_additives.json: v5.0.0 (updated: 2026-03-08)
-2026-03-09 13:10:51 - root - INFO -   allergens.json: v5.0.0 (updated: 2026-03-01)
-⚠️ fuzzywuzzy not found. Install for better matching: pip install fuzzywuzzy python-levenshtein
-2026-03-09 13:10:51 - dsld_cleaner - INFO - ============================================================
-2026-03-09 13:10:51 - dsld_cleaner - INFO - ============================================================
-2026-03-09 13:10:51 - dsld_cleaner - INFO - DSLD Data Cleaning Pipeline Starting
-2026-03-09 13:10:51 - dsld_cleaner - INFO - DSLD Data Cleaning Pipeline Starting
-2026-03-09 13:10:51 - dsld_cleaner - INFO - ============================================================
-2026-03-09 13:10:51 - dsld_cleaner - INFO - ============================================================
-2026-03-09 13:10:51 - dsld_cleaner - INFO - Started at: 2026-03-09 13:10:51
-2026-03-09 13:10:51 - dsld_cleaner - INFO - Started at: 2026-03-09 13:10:51
-2026-03-09 13:10:51 - dsld_cleaner - INFO - Validating configuration...
-2026-03-09 13:10:51 - dsld_cleaner - INFO - Validating configuration...
-2026-03-09 13:10:51 - dsld_cleaner - INFO - Configuration validation passed
-2026-03-09 13:10:51 - dsld_cleaner - INFO - Configuration validation passed
-2026-03-09 13:10:51 - batch_processor - INFO - Found 510 input files
-2026-03-09 13:10:51 - batch_processor - INFO - Processing 510 files in 2 batches
-2026-03-09 13:10:51 - batch_processor - INFO - Batch size: 500, Max workers: 4
-2026-03-09 13:10:51 - batch_processor - INFO - Processing batch 1/2 (500 files)
-Processing Batch 1:   0%|          | 0/500 [00:00<?, ?file/s]Processing Batch 1:   0%|          | 1/500 [00:01<10:10,  1.22s/file]Processing Batch 1:   1%|          | 6/500 [00:01<01:32,  5.37file/s]Processing Batch 1:   4%|▎         | 18/500 [00:01<00:28, 17.11file/s]Processing Batch 1:   5%|▌         | 27/500 [00:01<00:17, 26.67file/s]Processing Batch 1:   7%|▋         | 35/500 [00:01<00:15, 29.74file/s]Processing Batch 1:  11%|█         | 53/500 [00:02<00:09, 48.48file/s]Processing Batch 1:  12%|█▏        | 60/500 [00:02<00:12, 36.20file/s]Processing Batch 1:  16%|█▌        | 78/500 [00:02<00:07, 56.94file/s]Processing Batch 1:  19%|█▉        | 94/500 [00:02<00:05, 73.87file/s]Processing Batch 1:  21%|██        | 106/500 [00:02<00:04, 80.79file/s]Processing Batch 1:  23%|██▎       | 117/500 [00:02<00:05, 74.41file/s]Processing Batch 1:  26%|██▌       | 128/500 [00:03<00:04, 79.33file/s]Processing Batch 1:  28%|██▊       | 138/500 [00:03<00:05, 71.75file/s]Processing Batch 1:  32%|███▏      | 158/500 [00:03<00:03, 85.76file/s]Processing Batch 1:  34%|███▎      | 168/500 [00:03<00:05, 60.18file/s]Processing Batch 1:  35%|███▌      | 176/500 [00:04<00:06, 49.98file/s]Processing Batch 1:  40%|████      | 201/500 [00:04<00:04, 66.69file/s]Processing Batch 1:  42%|████▏     | 209/500 [00:04<00:04, 62.59file/s]Processing Batch 1:  43%|████▎     | 217/500 [00:04<00:05, 56.00file/s]Processing Batch 1:  46%|████▌     | 229/500 [00:04<00:04, 63.99file/s]Processing Batch 1:  51%|█████     | 255/500 [00:04<00:02, 100.48file/s]Processing Batch 1:  58%|█████▊    | 288/500 [00:04<00:01, 148.49file/s]Processing Batch 1:  61%|██████▏   | 307/500 [00:05<00:01, 147.05file/s]Processing Batch 1:  65%|██████▌   | 325/500 [00:05<00:01, 97.65file/s] Processing Batch 1:  71%|███████   | 354/500 [00:05<00:01, 130.62file/s]Processing Batch 1:  75%|███████▍  | 373/500 [00:05<00:00, 142.33file/s]Processing Batch 1:  82%|████████▏ | 411/500 [00:05<00:00, 194.75file/s]Processing Batch 1:  87%|████████▋ | 436/500 [00:05<00:00, 193.09file/s]Processing Batch 1:  92%|█████████▏| 461/500 [00:05<00:00, 204.00file/s]Processing Batch 1:  97%|█████████▋| 484/500 [00:06<00:00, 146.35file/s]Processing Batch 1: 100%|██████████| 500/500 [00:06<00:00, 78.29file/s] 
-⚠️ fuzzywuzzy not found. Install for better matching: pip install fuzzywuzzy python-levenshtein
-⚠️ fuzzywuzzy not found. Install for better matching: pip install fuzzywuzzy python-levenshtein
-⚠️ fuzzywuzzy not found. Install for better matching: pip install fuzzywuzzy python-levenshtein
-⚠️ fuzzywuzzy not found. Install for better matching: pip install fuzzywuzzy python-levenshtein
-2026-03-09 13:10:57 - batch_processor - INFO - Batch 1 complete: {'batch_num': 1, 'processed': 500, 'cleaned': 500, 'needs_review': 0, 'incomplete': 0, 'errors': 0, 'processing_time': 6.7443320751190186, 'avg_time_per_file': 0.013488664150238036, 'memory_mb': 0}
-2026-03-09 13:10:57 - batch_processor - INFO - Processing batch 2/2 (10 files)
-Processing Batch 2:   0%|          | 0/10 [00:00<?, ?file/s]Processing Batch 2:  10%|█         | 1/10 [00:01<00:11,  1.31s/file]Processing Batch 2:  30%|███       | 3/10 [00:01<00:02,  2.62file/s]Processing Batch 2: 100%|██████████| 10/10 [00:02<00:00,  6.30file/s]Processing Batch 2: 100%|██████████| 10/10 [00:02<00:00,  4.73file/s]
-⚠️ fuzzywuzzy not found. Install for better matching: pip install fuzzywuzzy python-levenshtein
-⚠️ fuzzywuzzy not found. Install for better matching: pip install fuzzywuzzy python-levenshtein
-⚠️ fuzzywuzzy not found. Install for better matching: pip install fuzzywuzzy python-levenshtein
-⚠️ fuzzywuzzy not found. Install for better matching: pip install fuzzywuzzy python-levenshtein
-2026-03-09 13:11:00 - batch_processor - INFO - Batch 2 complete: {'batch_num': 2, 'processed': 10, 'cleaned': 10, 'needs_review': 0, 'incomplete': 0, 'errors': 0, 'processing_time': 2.2106380462646484, 'avg_time_per_file': 0.22106380462646485, 'memory_mb': 0}
-2026-03-09 13:11:00 - enhanced_normalizer - INFO - Reference data: color_indicators v5.0.0 (updated: 2026-02-18)
-2026-03-09 13:11:00 - enhanced_normalizer - INFO - Built skip sets: 26 exact, 26 normalized
-2026-03-09 13:11:00 - enhanced_normalizer - INFO - Built hierarchy lookup with 0 entries
-2026-03-09 13:11:00 - enhanced_normalizer - INFO - Building enhanced ingredient lookup indices...
-2026-03-09 13:11:00 - enhanced_normalizer - INFO - Built lookup indices with 32157 ingredient variations
-2026-03-09 13:11:00 - enhanced_normalizer - INFO - Built allergen index with 371 variations
-2026-03-09 13:11:00 - enhanced_normalizer - INFO - Built harmful additive index with 2175 variations
-2026-03-09 13:11:00 - enhanced_normalizer - INFO - Built other ingredients index with 6715 variations
-2026-03-09 13:11:00 - enhanced_normalizer - INFO - Building fast lookup indices...
-2026-03-09 13:11:00 - enhanced_normalizer - INFO - Built comprehensive fast lookup index with 40943 entries
-2026-03-09 13:11:00 - enhanced_normalizer - INFO -   - absorption_enhancer: 31 entries
-2026-03-09 13:11:00 - enhanced_normalizer - INFO -   - allergen: 371 entries
-2026-03-09 13:11:00 - enhanced_normalizer - INFO -   - banned: 921 entries
-2026-03-09 13:11:00 - enhanced_normalizer - INFO -   - botanical: 1134 entries
-2026-03-09 13:11:00 - enhanced_normalizer - INFO -   - enhanced_delivery: 50 entries
-2026-03-09 13:11:00 - enhanced_normalizer - INFO -   - harmful: 2156 entries
-2026-03-09 13:11:00 - enhanced_normalizer - INFO -   - ingredient: 31902 entries
-2026-03-09 13:11:00 - enhanced_normalizer - INFO -   - other_ingredient: 3690 entries
-2026-03-09 13:11:00 - enhanced_normalizer - INFO -   - proprietary_blend: 233 entries
-2026-03-09 13:11:00 - enhanced_normalizer - INFO -   - standardized_botanical: 455 entries
-2026-03-09 13:11:00 - enhanced_normalizer - INFO - Probiotic strain lookup: 223 keys for 42 strains
-2026-03-09 13:11:00 - enhanced_normalizer - INFO - Building fast lookup indices...
-2026-03-09 13:11:00 - enhanced_normalizer - INFO - Built comprehensive fast lookup index with 40943 entries
-2026-03-09 13:11:00 - enhanced_normalizer - INFO -   - absorption_enhancer: 31 entries
-2026-03-09 13:11:00 - enhanced_normalizer - INFO -   - allergen: 371 entries
-2026-03-09 13:11:00 - enhanced_normalizer - INFO -   - banned: 921 entries
-2026-03-09 13:11:00 - enhanced_normalizer - INFO -   - botanical: 1134 entries
-2026-03-09 13:11:00 - enhanced_normalizer - INFO -   - enhanced_delivery: 50 entries
-2026-03-09 13:11:00 - enhanced_normalizer - INFO -   - harmful: 2156 entries
-2026-03-09 13:11:00 - enhanced_normalizer - INFO -   - ingredient: 31902 entries
-2026-03-09 13:11:00 - enhanced_normalizer - INFO -   - other_ingredient: 3690 entries
-2026-03-09 13:11:00 - enhanced_normalizer - INFO -   - proprietary_blend: 233 entries
-2026-03-09 13:11:00 - enhanced_normalizer - INFO -   - standardized_botanical: 455 entries
-2026-03-09 13:11:00 - unmapped_ingredient_tracker - INFO - Initialized UnmappedIngredientTracker with output: output_Nordic-Naturals-2-17-26-L511/unmapped
-2026-03-09 13:11:00 - unmapped_ingredient_tracker - INFO - Saved unmapped tracking files:
-2026-03-09 13:11:00 - unmapped_ingredient_tracker - INFO -   - Active: 0 ingredients -> output_Nordic-Naturals-2-17-26-L511/unmapped/unmapped_active_ingredients.json
-2026-03-09 13:11:00 - unmapped_ingredient_tracker - INFO -   - Inactive: 1 ingredients -> output_Nordic-Naturals-2-17-26-L511/unmapped/unmapped_inactive_ingredients.json
-2026-03-09 13:11:00 - batch_processor - INFO - Saved enhanced unmapped tracking files: 1 total ingredients
-2026-03-09 13:11:00 - batch_processor - INFO -   Active: 0, Inactive: 1
-2026-03-09 13:11:00 - batch_processor - INFO - Processing report saved to output_Nordic-Naturals-2-17-26-L511/reports/processing_summary.txt
-2026-03-09 13:11:00 - batch_processor - INFO - No products need review - skipping detailed review report
-2026-03-09 13:11:00 - batch_processor - INFO - Processing complete! Total time: 8.97s
-2026-03-09 13:11:00 - dsld_cleaner - INFO - ============================================================
-2026-03-09 13:11:00 - dsld_cleaner - INFO - ============================================================
-2026-03-09 13:11:00 - dsld_cleaner - INFO - PROCESSING COMPLETE
-2026-03-09 13:11:00 - dsld_cleaner - INFO - PROCESSING COMPLETE
-2026-03-09 13:11:00 - dsld_cleaner - INFO - ============================================================
-2026-03-09 13:11:00 - dsld_cleaner - INFO - ============================================================
-2026-03-09 13:11:00 - dsld_cleaner - INFO - Ended at: 2026-03-09 13:11:00
-2026-03-09 13:11:00 - dsld_cleaner - INFO - Ended at: 2026-03-09 13:11:00
-2026-03-09 13:11:00 - dsld_cleaner - INFO - Total duration: 0:00:09.651210
-2026-03-09 13:11:00 - dsld_cleaner - INFO - Total duration: 0:00:09.651210
-2026-03-09 13:11:00 - dsld_cleaner - INFO - Files processed: 510
-2026-03-09 13:11:00 - dsld_cleaner - INFO - Files processed: 510
-2026-03-09 13:11:00 - dsld_cleaner - INFO - Success rate: 100.0%
-2026-03-09 13:11:00 - dsld_cleaner - INFO - Success rate: 100.0%
-2026-03-09 13:11:00 - dsld_cleaner - INFO - 
-2026-03-09 13:11:00 - dsld_cleaner - INFO - 
-2026-03-09 13:11:00 - dsld_cleaner - INFO - Results:
-2026-03-09 13:11:00 - dsld_cleaner - INFO - Results:
-2026-03-09 13:11:00 - dsld_cleaner - INFO -   - Cleaned: 510
-2026-03-09 13:11:00 - dsld_cleaner - INFO -   - Cleaned: 510
-2026-03-09 13:11:00 - dsld_cleaner - INFO -   - Needs review: 0
-2026-03-09 13:11:00 - dsld_cleaner - INFO -   - Needs review: 0
-2026-03-09 13:11:00 - dsld_cleaner - INFO -   - Incomplete: 0
-2026-03-09 13:11:00 - dsld_cleaner - INFO -   - Incomplete: 0
-2026-03-09 13:11:00 - dsld_cleaner - INFO -   - Errors: 0
-2026-03-09 13:11:00 - dsld_cleaner - INFO -   - Errors: 0
-2026-03-09 13:11:00 - dsld_cleaner - INFO -   - Unmapped ingredients: 1
-2026-03-09 13:11:00 - dsld_cleaner - INFO -   - Unmapped ingredients: 1
-2026-03-09 13:11:00 - dsld_cleaner - INFO - 
-2026-03-09 13:11:00 - dsld_cleaner - INFO - 
-2026-03-09 13:11:00 - dsld_cleaner - INFO - Output files saved to:
-2026-03-09 13:11:00 - dsld_cleaner - INFO - Output files saved to:
-2026-03-09 13:11:00 - dsld_cleaner - INFO -   - Cleaned products: output_Nordic-Naturals-2-17-26-L511/cleaned
-2026-03-09 13:11:00 - dsld_cleaner - INFO -   - Cleaned products: output_Nordic-Naturals-2-17-26-L511/cleaned
-2026-03-09 13:11:00 - dsld_cleaner - INFO -   - Needs review: output_Nordic-Naturals-2-17-26-L511/needs_review
-2026-03-09 13:11:00 - dsld_cleaner - INFO -   - Needs review: output_Nordic-Naturals-2-17-26-L511/needs_review
-2026-03-09 13:11:00 - dsld_cleaner - INFO -   - Incomplete: output_Nordic-Naturals-2-17-26-L511/incomplete
-2026-03-09 13:11:00 - dsld_cleaner - INFO -   - Incomplete: output_Nordic-Naturals-2-17-26-L511/incomplete
-2026-03-09 13:11:00 - dsld_cleaner - INFO -   - Unmapped ingredients: output_Nordic-Naturals-2-17-26-L511/unmapped
-2026-03-09 13:11:00 - dsld_cleaner - INFO -   - Unmapped ingredients: output_Nordic-Naturals-2-17-26-L511/unmapped
-2026-03-09 13:11:00 - dsld_cleaner - INFO -   - Processing report: output_Nordic-Naturals-2-17-26-L511/reports
-2026-03-09 13:11:00 - dsld_cleaner - INFO -   - Processing report: output_Nordic-Naturals-2-17-26-L511/reports
-/Users/seancheick/.claude-worktrees/dsld_clean/peaceful-ritchie/scripts/run_pipeline.py:498: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
-  end_time = datetime.utcnow()
-2026-03-09 13:11:00 - __main__ - INFO - 
-2026-03-09 13:11:00 - __main__ - INFO - ============================================================
-2026-03-09 13:11:00 - __main__ - INFO - PIPELINE COMPLETE
-2026-03-09 13:11:00 - __main__ - INFO - ============================================================
-2026-03-09 13:11:00 - __main__ - INFO - Stages completed: clean
-2026-03-09 13:11:00 - __main__ - INFO - Total duration: 9.80s
-2026-03-09 13:11:00 - __main__ - INFO - Success: True
-2026-03-09 13:11:00 - __main__ - INFO - ============================================================
-/Users/seancheick/.claude-worktrees/dsld_clean/peaceful-ritchie/scripts/run_pipeline.py:391: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
-  start_time = datetime.utcnow()
-2026-03-09 13:11:00 - __main__ - INFO - ============================================================
-2026-03-09 13:11:00 - __main__ - INFO - DSLD SUPPLEMENT PIPELINE
-2026-03-09 13:11:00 - __main__ - INFO - ============================================================
-2026-03-09 13:11:00 - __main__ - INFO - Script directory: /Users/seancheick/.claude-worktrees/dsld_clean/peaceful-ritchie/scripts
-2026-03-09 13:11:00 - __main__ - INFO - Stages to run: clean
-2026-03-09 13:11:00 - __main__ - INFO - Raw data: /Users/seancheick/Documents/DataSetDsld/Thorne-2-17-26/
-2026-03-09 13:11:00 - __main__ - INFO - Cleaned output: output_Thorne-2-17-26/cleaned
-2026-03-09 13:11:00 - __main__ - INFO - Enriched output: output_Thorne-2-17-26_enriched/enriched
-2026-03-09 13:11:00 - __main__ - INFO - Scored output: output_Thorne-2-17-26_scored
-2026-03-09 13:11:00 - __main__ - INFO - ============================================================
-2026-03-09 13:11:00 - __main__ - INFO - Validated data directory: /Users/seancheick/.claude-worktrees/dsld_clean/peaceful-ritchie/scripts/data
-2026-03-09 13:11:00 - __main__ - INFO - ============================================================
-2026-03-09 13:11:00 - __main__ - INFO - STAGE 1: CLEANING
-2026-03-09 13:11:00 - __main__ - INFO - ============================================================
-2026-03-09 13:11:00 - __main__ - INFO - Executing: /Users/seancheick/.claude-worktrees/dsld_clean/peaceful-ritchie/.venv/bin/python /Users/seancheick/.claude-worktrees/dsld_clean/peaceful-ritchie/scripts/clean_dsld_data.py --input-dir /Users/seancheick/Documents/DataSetDsld/Thorne-2-17-26/ --output-dir output_Thorne-2-17-26 --config /Users/seancheick/.claude-worktrees/dsld_clean/peaceful-ritchie/scripts/config/cleaning_config.json
-2026-03-09 13:11:01 - root - INFO - Resolved paths:
-2026-03-09 13:11:01 - root - INFO -   input_directory: /Users/seancheick/Documents/DataSetDsld/Thorne-2-17-26/
-2026-03-09 13:11:01 - root - INFO -   output_directory: output_Thorne-2-17-26
-2026-03-09 13:11:01 - root - INFO -   reference_data: /Users/seancheick/.claude-worktrees/dsld_clean/peaceful-ritchie/scripts/data
-2026-03-09 13:11:01 - root - INFO -   color_indicators.json: v5.0.0 (updated: 2026-02-18)
-2026-03-09 13:11:01 - root - INFO -   ingredient_quality_map.json: v5.0.0 (updated: 2026-03-09)
-2026-03-09 13:11:01 - root - INFO -   harmful_additives.json: v5.0.0 (updated: 2026-03-08)
-2026-03-09 13:11:01 - root - INFO -   allergens.json: v5.0.0 (updated: 2026-03-01)
-⚠️ fuzzywuzzy not found. Install for better matching: pip install fuzzywuzzy python-levenshtein
-2026-03-09 13:11:01 - dsld_cleaner - INFO - ============================================================
-2026-03-09 13:11:01 - dsld_cleaner - INFO - ============================================================
-2026-03-09 13:11:01 - dsld_cleaner - INFO - DSLD Data Cleaning Pipeline Starting
-2026-03-09 13:11:01 - dsld_cleaner - INFO - DSLD Data Cleaning Pipeline Starting
-2026-03-09 13:11:01 - dsld_cleaner - INFO - ============================================================
-2026-03-09 13:11:01 - dsld_cleaner - INFO - ============================================================
-2026-03-09 13:11:01 - dsld_cleaner - INFO - Started at: 2026-03-09 13:11:01
-2026-03-09 13:11:01 - dsld_cleaner - INFO - Started at: 2026-03-09 13:11:01
-2026-03-09 13:11:01 - dsld_cleaner - INFO - Validating configuration...
-2026-03-09 13:11:01 - dsld_cleaner - INFO - Validating configuration...
-2026-03-09 13:11:01 - dsld_cleaner - INFO - Configuration validation passed
-2026-03-09 13:11:01 - dsld_cleaner - INFO - Configuration validation passed
-2026-03-09 13:11:01 - batch_processor - INFO - Found 1715 input files
-2026-03-09 13:11:01 - batch_processor - INFO - Processing 1715 files in 4 batches
-2026-03-09 13:11:01 - batch_processor - INFO - Batch size: 500, Max workers: 4
-2026-03-09 13:11:01 - batch_processor - INFO - Processing batch 1/4 (500 files)
-Processing Batch 1:   0%|          | 0/500 [00:00<?, ?file/s]

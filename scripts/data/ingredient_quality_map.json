@@ -702,7 +702,8 @@
           "coenzyme vitamin b2",
           "Riboflavin 5' Phosphate",
           "Riboflavin 5'Phosphate",
-          "Riboflavin 5’ Phosphate"
+          "Riboflavin 5’ Phosphate",
+          "Vitamin B2, Riboflavin 5 Phosphate"
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
@@ -1782,7 +1783,8 @@
           "vitamin h",
           "vitamin h supplement",
           "vitamin b-7",
-          "vit b7"
+          "vit b7",
+          "Orgen-Bio"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -1897,7 +1899,8 @@
           "Methyltetrahydrofolate Calcium Salt",
           "5-Methyltetrahydrofolate Calcium Salt",
           "L-Methylfolate Calcium Salt",
-          "L-5-Methylfolate Glucosamine Salt"
+          "L-5-Methylfolate Glucosamine Salt",
+          "L-Methylfolate Magnesium, Molar"
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
@@ -1934,7 +1937,9 @@
           "active folinic acid supplement",
           "folinic acid B9 supplement",
           "methylation support folate supplement",
-          "folinic acid calcium supplement"
+          "folinic acid calcium supplement",
+          "calcium 5-formyltetrahydrofolate",
+          "5-formyl tetrahydrofolate"
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
@@ -1980,7 +1985,10 @@
           "quatrefolic 5-methyltetrahydrofolic acid glucosamine salt",
           "quatrefolic 5-methyltetrahydrofolate glucosamine salt",
           "quatrefolic (6s)-5-methyltetrahydrofolic acid glucosamine salt",
-          "quatrefolic (6s)-5-methyltetrahydrofolate glucosamine salt"
+          "quatrefolic (6s)-5-methyltetrahydrofolate glucosamine salt",
+          "Quatrefolic (6S)-5-Methyltetrahyrdofolic Acid, Glucosamine Salt",
+          "L-5 Methyltetrahydrofolic Acid, Glucosamine Salt",
+          "l-5 methyltetrahydrofolic acid, glucosamine salt"
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
@@ -2065,7 +2073,10 @@
           "lemon peel extract",
           "organic lemon peel extract",
           "folic acid from lemon peel",
-          "folic acid from organic lemon peel"
+          "folic acid from organic lemon peel",
+          "Poten-Zyme(R) Foiic Acid",
+          "Poten-Zyme Folic Acid",
+          "Poten-Zyme(R) Folic Acid"
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
@@ -2470,6 +2481,8 @@
           "ester-c complex",
           "vitamin c ester",
           "patented vitamin c",
+          "Ester-C Calcium Ascorbate",
+          "Proprietary Esterified Complex",
           "calcium ascorbate threonate",
           "metabolite-enhanced c",
           "ester-c supplement",
@@ -2631,7 +2644,8 @@
           "fat-soluble vit c",
           "vitamin c palmitate supplement",
           "vit c palmitate",
-          "lipid-bound c supplement"
+          "lipid-bound c supplement",
+          "ascorbyl palmitate and ascorbate"
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
@@ -3518,9 +3532,8 @@
           "mixed tocopherols and tocotrienols",
           "DeltaGold Tocotrienol",
           "Mixed Tocotrienols/Tocopherols",
-          "mixed tocotrienols/tocopherols",
           "d-beta tocotrienol",
-          "D-Beta Tocotrienol"
+          "Full Spectrum Palm Fruit Extract"
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
@@ -3602,7 +3615,8 @@
           "synthetic vit e",
           "all-rac-alpha-tocopherol supplement",
           "racemic vitamin e supplement",
-          "racemic vit e"
+          "racemic vit e",
+          "DL-Alpha-Tocopheryl"
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
@@ -3648,6 +3662,8 @@
           "dl-alpha-tocopheryl acetate supplement",
           "synthetic vitamin e acetate supplement",
           "synthetic vit e acetate",
+          "Ester-E d-Alpha Tocopheryl Acetate",
+          "Ester-E(R) d-Alpha Tocopheryl Acetate",
           "all-rac-alpha-tocopheryl acetate supplement",
           "dl-alpha tocopheryl acetate",
           "DL-Alpha-Tocopherol Acetate",
@@ -3862,6 +3878,7 @@
           "trans mk7",
           "active mk7",
           "all trans menaquinone-7",
+          "all-trans-Menaquinone-7",
           "bioactive mk7",
           "all-trans MK-7 supplement",
           "trans mk7 supplement",
@@ -4885,7 +4902,8 @@
           "magnesium malic acid",
           "Albion DiMagnesium Malate",
           "magnesium malate trihydrate",
-          "Di-Magnesium Malate"
+          "Di-Magnesium Malate",
+          "Albion Di-Magnesium Malate"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -5488,7 +5506,9 @@
           "iron polysaccharide",
           "niferex",
           "neo-plex concentrate",
-          "neo-plex"
+          "neo-plex",
+          "PIC",
+          "Polysaccharide Iron Complex"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -5776,8 +5796,7 @@
           "zinc mono-l-methionine sulfate",
           "zinc mono l methionine sulfate",
           "zinc mono-l-methionine",
-          "zinc mono l methionine",
-          "Zinc Mono-L-Methionine"
+          "zinc mono l methionine"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -6472,6 +6491,26 @@
           "quality": "good",
           "notes": "50%"
         }
+      },
+      "selenium picolinate": {
+        "bio_score": 10,
+        "natural": false,
+        "score": 10,
+        "absorption": "good",
+        "notes": "Selenium complexed with picolinic acid. Picolinate chelation likely improves transport versus unspecified inorganic selenium forms, but direct human PK data are limited compared with selenomethionine and selenized yeast. Scored conservatively above unspecified selenium and below premium organic forms.",
+        "aliases": [
+          "selenium picolinate",
+          "Selenium Picolinate",
+          "picolinate selenium"
+        ],
+        "dosage_importance": 0.5,
+        "absorption_structured": {
+          "value": null,
+          "range_low": null,
+          "range_high": null,
+          "quality": "good",
+          "notes": "good"
+        }
       }
     },
     "match_rules": {
@@ -6677,7 +6716,6 @@
           "lemon bioflavonoids",
           "lemon bioflavonoid complex",
           "bitter orange bioflavonoids",
-          "bitter orange citrus bioflavonoids",
           "mixed citrus bioflavonoids",
           "mixed bioflavonoids",
           "grapefruit bioflavonoids",
@@ -8297,7 +8335,9 @@
           "Copper Bisglycinate Chelate supplement",
           "TRAACS Copper Bisglycinate Chelate supplement",
           "TRAACS Copper supplement",
-          "copper rice protein chelate"
+          "copper rice protein chelate",
+          "Copper Bis-Glycinate",
+          "Albion Copper Bisglycinate Chelate"
         ],
         "dosage_importance": 0.5,
         "absorption_structured": {
@@ -9494,29 +9534,6 @@
           "notes": ">98% (NIH ODS: applies to all boron forms)"
         }
       },
-      "sodium borate": {
-        "bio_score": 9,
-        "natural": false,
-        "score": 9,
-        "absorption": "excellent (>98%)",
-        "notes": "Inorganic borate salt (borax). Absorbed at >98% like all boron forms, but can cause GI irritation at higher doses due to the sodium borate molecule itself. Used by some fringe health communities. Less well-tolerated than organic chelates — the low score reflects tolerability, not absorption.",
-        "aliases": [
-          "sodium borate",
-          "borax",
-          "Na₂B₄O₇",
-          "borate salt",
-          "sodium tetraborate",
-          "borax decahydrate"
-        ],
-        "dosage_importance": 0.5,
-        "absorption_structured": {
-          "value": 0.98,
-          "range_low": 0.98,
-          "range_high": 1.0,
-          "quality": "excellent",
-          "notes": ">98% (NIH ODS: applies to all boron forms)"
-        }
-      },
       "boron (unspecified)": {
         "bio_score": 5,
         "natural": false,
@@ -9824,62 +9841,6 @@
     "cui": "C0032908",
     "rxcui": "1004383",
     "forms": {
-      "omega-3 phospholipid (krill oil)": {
-        "bio_score": 14,
-        "natural": true,
-        "score": 17,
-        "absorption": "high",
-        "notes": "Krill oil delivers EPA and DHA bound to phospholipids, which your cells can absorb more readily than standard triglycerides. Studies show modestly better plasma EPA/DHA levels than regular fish oil (about 1.3-1.6x at equal doses per Ulven 2011 and Ramprasath 2013 — not the '2-3x' often claimed in marketing). Also contains astaxanthin, a potent antioxidant. Top-tier omega-3 form. Sold as Superba, Neptune, K-Real.",
-        "aliases": [
-          "krill oil",
-          "superba krill",
-          "neptune krill oil",
-          "phospholipid omega-3",
-          "krill omega-3",
-          "antarctic krill oil",
-          "omega-3 phospholipids",
-          "superba boost krill oil",
-          "superbaboost krill oil",
-          "100% pure superba2 krill oil",
-          "superba2 krill",
-          "ester-omega krill oil",
-          "nko krill oil",
-          "k-real krill oil",
-          "k real pure krill oil",
-          "almega pl",
-          "azantis krill oil",
-          "100% krill oil",
-          "pure krill oil",
-          "red krill oil",
-          "100% pure superba krill oil",
-          "100% pure neptune krill oil",
-          "krill-sci krill oil",
-          "krill oil - nko",
-          "nko neptune krill oil",
-          "phosphoboost krill oil",
-          "virgin krill oil",
-          "krill oil/fish oil concentrate",
-          "krill euphausia superba phospholipid-rich oil",
-          "Keto Krill Oil",
-          "K-REAL",
-          "Kreal Krill Oil",
-          "Superba",
-          "Superba krill oil",
-          "Superba2 Krill Oil",
-          "Superba Boost",
-          "Superba2",
-          "Superba Antarctic Krill Oil",
-          "NKO"
-        ],
-        "dosage_importance": 1.0,
-        "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "very_good",
-          "notes": "~1.3-1.6x better than standard TG fish oil at equal doses (Ulven 2011, Ramprasath 2013)"
-        }
-      },
       "omega-3 triglyceride (rTG)": {
         "bio_score": 14,
         "natural": true,
@@ -9986,6 +9947,8 @@
           "salmon oil",
           "wild fish oil",
           "omega-3 fish oil",
+          "Triglycerides",
+          "Triglyceride",
           "marine omega-3",
           "wild alaskan salmon oil",
           "wild alaskan sockeye salmon oil",
@@ -10040,7 +10003,8 @@
           "omega-3 concentrate ethyl esters",
           "fish oil ethyl ester concentrate",
           "omega-3 acid ethyl esters",
-          "Ester-Omega Fish Oil Ethyl Ester"
+          "Ester-Omega Fish Oil Ethyl Ester",
+          "Ethyl Esters"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -10122,6 +10086,26 @@
           "range_high": null,
           "quality": "good",
           "notes": "Identity recognized as an omega-3 fatty acid; direct human comparative PK data are limited."
+        }
+      },
+      "eicosatrienoic acid (20:3n-3)": {
+        "bio_score": 8,
+        "natural": true,
+        "score": 11,
+        "absorption": "good",
+        "notes": "Minor marine omega-3 fatty acid (C20:3n-3) found in wild salmon and cold-water fish oils. UNII PQB8MJD4RB. Structural precursor in the omega-3 elongation pathway; present in trace-to-moderate amounts in whole-fish oils like Dutch Harbor Omega and similar products. Limited direct human supplementation trials; activity inferred from its role in the EPA/DHA biosynthetic cascade.",
+        "aliases": [
+          "ESA",
+          "20:3n-3",
+          "C20:3n-3"
+        ],
+        "dosage_importance": 0.8,
+        "absorption_structured": {
+          "value": null,
+          "range_low": null,
+          "range_high": null,
+          "quality": "good",
+          "notes": "Absorbed as a fatty acid; no direct comparative PK data versus EPA/DHA."
         }
       }
     },
@@ -10327,6 +10311,7 @@
           "natural coenzyme q10",
           "crystalline coenzyme q10",
           "Ubidecarenone",
+          "Ubidicarenone",
           "Coenzyme Q-10",
           "Co-Enzyme Q-10",
           "CoQ-10",
@@ -10656,7 +10641,18 @@
           "Meriva Curcumin Phytosome Complex",
           "Meriva turmeric phytosome",
           "Meriva (Curcuma longa) Phytosome",
-          "Meriva Bioavailable Curcumin Phytosome"
+          "Meriva Bioavailable Curcumin Phytosome",
+          "Meriva Turmeric Phytosome",
+          "Meriva Turmeric Phytosome Complex",
+          "Meriva Turmeric Phytosome Complex Curcuminoids",
+          "Meriva Turmeric Phytosome Complex Sunflower Phospholipid",
+          "Meriva Turmeric Phytosome Sunflower Phospholipid Complex",
+          "Meriva Turmeric Phytosome Curcuminoids",
+          "Meriva Turmeric Phytosome Phospholipid Complex",
+          "Meriva Turmeric Phytosome Complex Curcuma longa extract",
+          "Meriva Turmeric Phytosome Complex Soy Phospholipid",
+          "Meriva Turmeric Phytosome Curcuma longa extract",
+          "Meriva Turmeric Phytosome Curcuma longa Root Extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -11704,8 +11700,7 @@
           "alpha-glucooligosaccharides",
           "a-glucooligosaccharide",
           "bioecolians",
-          "bioecolians a-glucooligosaccharide",
-          "BioEcolians A-Glucooligosaccharide"
+          "bioecolians a-glucooligosaccharide"
         ],
         "absorption_structured": {
           "value": null,
@@ -12663,7 +12658,8 @@
     },
     "aliases": [
       "betaine",
-      "Betaine"
+      "Betaine",
+      "trimethylglycerine hydrochloride"
     ]
   },
   "l_glutamine": {
@@ -12804,7 +12800,8 @@
           "arginine hydrochloride",
           "hcl arginine",
           "arginine hcl powder",
-          "l-arginine hydrochloride"
+          "l-arginine hydrochloride",
+          "L-Arginine Hydrochloride, Powder"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -12922,7 +12919,8 @@
           "l lysine monohydrochloride",
           "L-Lysine Chloride",
           "lysine chloride",
-          "l-lysine hydrochloride"
+          "l-lysine hydrochloride",
+          "L-Lysine Hydrochloride, Powder"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -13275,7 +13273,8 @@
           "l-histidine hcl",
           "histidine hydrochloride",
           "L-Histidine Hydrochloride Monohydrate",
-          "L-Histidine Hydrochloride"
+          "L-Histidine Hydrochloride",
+          "L-Histidine Hydrochloride, Powder"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -14130,7 +14129,8 @@
         "notes": "Spirulina form not specified on label. Scored conservatively. Human protein digestibility of dried spirulina is ~85% (PMC6179135). Spirulina has a peptidoglycan cell wall (more digestible than chlorella's cellulose wall).",
         "aliases": [
           "spirulina",
-          "blue-green algae spirulina"
+          "blue-green algae spirulina",
+          "earthrise"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -14725,7 +14725,8 @@
           "synthetic ALA",
           "racemic lipoic acid",
           "natural lipoic acid",
-          "natural ALA"
+          "natural ALA",
+          "Thiotic Acid"
         ],
         "context_include": [
           "lipoic",
@@ -15302,7 +15303,8 @@
         "notes": "Form not specified on the label. Rhodiola rosea is valued for rosavins and salidroside, but potency varies widely between raw root powder and standardized extracts. Scored conservatively until the exact form is identified.",
         "aliases": [
           "rhodiola",
-          "siberian rhodiola root extract"
+          "siberian rhodiola root extract",
+          "Rhodiola crenulata (root) Extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -16386,8 +16388,7 @@
           "chondriotin sulfate",
           "chondroitin sulfate sodium",
           "sodium chondroitin sulfate",
-          "TruFlex Chondroitin Sulfate",
-          "truflex chondroitin sulfate"
+          "TruFlex Chondroitin Sulfate"
         ],
         "dosage_importance": 0.5,
         "absorption_structured": {
@@ -16734,8 +16735,7 @@
           "BioVin Grape skin and seed",
           "BioVin Advanced French Grape extract",
           "BioVin grape polyphenol extract",
-          "Grape Whole Fruit Extract",
-          "grape whole fruit extract"
+          "Grape Whole Fruit Extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -17577,7 +17577,9 @@
           "garlicrich garlic",
           "garlicrich garlic powder",
           "thiosulfinates",
-          "allicin"
+          "allicin",
+          "allsure",
+          "Allsure(R)"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -18356,7 +18358,6 @@
           "endopeptidase, exopeptidase",
           "exopeptidase, endopeptidase",
           "pectinase",
-          "Pectinase",
           "pectinase enzyme"
         ],
         "dosage_importance": 1.0,
@@ -19374,14 +19375,7 @@
           "prasterone",
           "dehydroepiandrosterone supplement",
           "prasterone supplement",
-          "7-keto",
-          "7-keto dhea",
-          "7-keto-dhea",
-          "7-keto-dehydroepiandrosterone acetate",
-          "7-keto dehydroepiandrosterone acetate",
-          "epiandrosterone",
-          "dhea-acetate-7-one",
-          "dhea acetate 7-one"
+          "epiandrosterone"
         ],
         "context_include": [
           "hormone",
@@ -19419,8 +19413,7 @@
         "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
         "aliases": [
           "dhea (dehydroepiandrosterone)",
-          "dehydroepiandrosterone, micronized",
-          "7-Keto(R) - Dehydroepiandrosterone Acetate"
+          "dehydroepiandrosterone, micronized"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -19476,7 +19469,9 @@
           "organic extramel superoxide dismutase (sod) french melon fruit concentrate",
           "organic extramel sod",
           "extramel superoxide dismutase french melon concentrate",
-          "organic extramel french melon sod"
+          "organic extramel french melon sod",
+          "SOD B Dimpless",
+          "Dimpless"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -19926,7 +19921,8 @@
           "gamma linoleic",
           "gamma-linolenic",
           "omega-6 gla",
-          "gla supplement"
+          "gla supplement",
+          "Sonova-400"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -23881,6 +23877,7 @@
           "short-chain inulin supplement",
           "agave inulin supplement",
           "chicory inulin",
+          "Chicory",
           "Orafti",
           "Beneo inulin",
           "organic inulin"
@@ -23952,7 +23949,8 @@
           "standardized soy isoflavone extract",
           "Soy Isoflavones 40%",
           "Soynatto Fermented Soyfood",
-          "Soy Natto extract"
+          "Soy Natto extract",
+          "Isomax 30"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -24332,7 +24330,9 @@
           "flaxseed lignan extract",
           "flaxseed lignans extract",
           "HMRlignan Norway Spruce lignan extract",
-          "hydroxymatairesinol"
+          "hydroxymatairesinol",
+          "Norway Spruce extract",
+          "SDG Lignans Flaxseed Extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -24760,7 +24760,8 @@
           "Plant Sterol Ester",
           "Beta Sitosterols",
           "CardioAid-S Phytosterol Esters",
-          "Pine Tree Sterol Esters"
+          "Pine Tree Sterol Esters",
+          "Esters"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -29063,10 +29064,12 @@
           "c8 mct",
           "pure c8",
           "caprylic acid triglyceride",
+          "Caprylic Acid Triglycerides",
           "octanoic acid",
           "caprylic acid",
           "c8:0",
-          "brain octane oil"
+          "brain octane oil",
+          "Medium Chain Triglyceride C8, Powder"
         ],
         "score": 18,
         "dosage_importance": 1.0,
@@ -29156,7 +29159,9 @@
         "aliases": [
           "clarinol",
           "clarinol cla",
-          "patented cla"
+          "patented cla",
+          "CLA Oil",
+          "Conjugated Linolenic Acid"
         ],
         "score": 13,
         "dosage_importance": 1.0,
@@ -30867,7 +30872,7 @@
       "vitamins": 17
     },
     "schema_version": "5.0.0",
-    "last_updated": "2026-03-09",
+    "last_updated": "2026-03-17",
     "pipeline_integration": "Used by enrichment script to assign quality scores to matched ingredient forms. Match ingredient name against forms aliases (case-insensitive). Use highest-scoring matched form.",
     "matching_notes": [
       "Match ingredient name + forms text against aliases array (case-insensitive)",
@@ -30958,7 +30963,7 @@
       "vitamins"
     ],
     "cleanup_notes": "Resolved within-ingredient alias collisions; removed 63 redundant unspecified forms",
-    "total_entries": 531,
+    "total_entries": 550,
     "total_ingredients": 623,
     "data_quality": {
       "review_status": "stub"
@@ -31082,8 +31087,7 @@
           "Alpha Glycerylphosphorylcholine",
           "L Alpha Glycerylphosphorylcholine",
           "stabilized l-alpha-glycerophosphatidylcholine",
-          "stabilized l alpha glycerophosphatidylcholine",
-          "stabilized L-Alpha-Glycerophosphatidylcholine"
+          "stabilized l alpha glycerophosphatidylcholine"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -31410,7 +31414,8 @@
         "notes": "Omega-7 fatty acids (primarily palmitoleic acid, 16:1 n-7). Found in sea buckthorn oil and macadamia nuts. Emerging evidence for metabolic health — may improve insulin sensitivity and reduce inflammation. Purified palmitoleic acid supplements (Provinal) remove the pro-inflammatory palmitic acid co-contaminant.",
         "aliases": [
           "Omega-7 Fatty Acids",
-          "Omega-7"
+          "Omega-7",
+          "Omega 7"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -31679,75 +31684,6 @@
       "last_reviewed_at": "2026-02-28"
     }
   },
-  "cbd_full_spectrum": {
-    "standard_name": "CBD (Full Spectrum)",
-    "category": "herbs",
-    "cui": null,
-    "rxcui": null,
-    "aliases": [
-      "naturally-occurring cannabidiol"
-    ],
-    "forms": {
-      "standard": {
-        "bio_score": 10,
-        "natural": true,
-        "score": 13,
-        "absorption": "good",
-        "notes": "Full-spectrum CBD (cannabidiol) extract containing the complete range of hemp cannabinoids, terpenes, and flavonoids (<0.3% THC). 'Entourage effect' theory suggests full-spectrum is more effective than isolate. Oral bioavailability ~6-19% (lipophilic, extensive first-pass metabolism). 15-50 mg/day typical dose.",
-        "aliases": [
-          "Full Spectrum CBD Distillate",
-          "Hemp Extract, Pure",
-          "Hemp Aerial Parts Extract, Full Spectrum",
-          "Phytocannabinoid Hemp Oil",
-          "cannabinoid extract",
-          "Full Spectrum Cannabidiol",
-          "Broad Spectrum Cannabidiol",
-          "Hemp derived Crystalline Cannabidiol",
-          "Cannabidiol, Distillate",
-          "cannabidiol distillate",
-          "Full-Spectrum Hemp, Distillate",
-          "full-spectrum hemp distillate",
-          "Full Spectrum Hemp Distillate",
-          "Broad Spectrum Hemp Aerial Parts Extract",
-          "Hemp Aerial Parts Extract",
-          "naturally-occurring Cannabidiol",
-          "cannabis sativa oil extract",
-          "pure cannabidiol",
-          "hemp-derived cannabidiol",
-          "Cannabidiolic acid/Cannabidiol",
-          "Nano Cannabidiol",
-          "VESIsorb HEMPCHOICE PCR Hemp Oil extract",
-          "full spectrum cbd",
-          "full-spectrum cbd",
-          "cbd full spectrum"
-        ],
-        "dosage_importance": 1.0,
-        "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "good",
-          "notes": "good"
-        }
-      }
-    },
-    "match_rules": {
-      "priority": 0,
-      "match_mode": "alias_and_fuzzy",
-      "exclusions": [],
-      "parent_id": null,
-      "confidence": "high"
-    },
-    "category_enum": "herbs",
-    "cui_note": "No UMLS entry for botanical/novel compound",
-    "rxcui_note": "No RxNorm concept for supplement ingredient",
-    "data_quality": {
-      "completeness": 1.0,
-      "missing_fields": [],
-      "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
-    }
-  },
   "boswellia": {
     "standard_name": "Boswellia Serrata",
     "category": "herbs",
@@ -31773,7 +31709,11 @@
           "3-o-acetyl-11-keto beta-boswellic acid",
           "joint shield 5-loxin advanced boswellia serrata extract",
           "Joint Shield 5-Loxin Advanced",
-          "5-Loxin extract of Boswellia serrata"
+          "5-Loxin extract of Boswellia serrata",
+          "3-Acetyl-11-Keto-Beta Boswellic Acid",
+          "3-0-Acetyl-11-Keto Beta Boswellic Acid",
+          "Acetyl-Keto-Beta-Boswellic Acid",
+          "3-0-Acetyl-11-Keto-B-Boswellic Acid"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -33206,7 +33146,12 @@
         "absorption": "unknown",
         "notes": "DHA in natural fish oil triglyceride form. Standard bioavailability reference. Well-absorbed with fat-containing meals. Most standard DHA supplements use this form unless otherwise specified on label.",
         "aliases": [
-          "DHA fish oil triglyceride"
+          "DHA fish oil triglyceride",
+          "Triglycerides",
+          "Triglyceride",
+          "DHA Triglycerides",
+          "Triglycerides Natural",
+          "DHA Triglycerides Natural"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -33225,7 +33170,9 @@
         "notes": "DHA as ethyl ester — chemically modified form with lower bioavailability than TG or rTG (~27% less than natural TG, Dyerberg 2010). Synthetic ester bond requires cleavage before absorption. Found in prescription omega-3 concentrates (Lovaza). Less efficient than triglyceride forms.",
         "aliases": [
           "DHA fish oil ethyl ester",
-          "docosahexaenoic acid ethyl ester"
+          "docosahexaenoic acid ethyl ester",
+          "DHA Ethyl Esters",
+          "Ethyl Esters"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -33244,7 +33191,8 @@
         "notes": "DHA form not specified. Conservative scoring. DHA (docosahexaenoic acid, 22:6 n-3) is critical for brain, retina, and cardiovascular health. Form significantly affects absorption — check product label.",
         "aliases": [
           "dha (docosahexaenoic acid)",
-          "dha"
+          "dha",
+          "Docosahexaenoic Acid"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -33331,7 +33279,13 @@
         "absorption": "unknown",
         "notes": "EPA in natural fish oil triglyceride form. Standard bioavailability. Well-absorbed with dietary fat. Most standard EPA supplements unless label specifies otherwise. EPA is the direct precursor to anti-inflammatory resolvins and protectins.",
         "aliases": [
-          "EPA fish oil triglyceride"
+          "EPA fish oil triglyceride",
+          "Triglycerides",
+          "Triglyceride",
+          "EPA Triglycerides",
+          "Eicosapentaenoic Acid Triglyceride",
+          "EPA Triglycerides Natural",
+          "Triglycerides Natural"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -33351,7 +33305,9 @@
         "aliases": [
           "EPA fish oil ethyl ester",
           "eicosapentaenoic acid ethyl ester",
-          "Ethyl-EPA Concentrate"
+          "Ethyl-EPA Concentrate",
+          "EPA Ethyl Esters",
+          "Ethyl Esters"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -33371,7 +33327,8 @@
         "aliases": [
           "epa (eicosapentaenoic acid)",
           "epa",
-          "KD-Pur EPA"
+          "KD-Pur EPA",
+          "Eicosapentaenoic Acid"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -33453,8 +33410,7 @@
           "ceratiq wheat (triticum vulgare) oil extract",
           "Lipowheat Wheat (Triticum vulgare) Oil extract",
           "Myoceram",
-          "Ceramosides Wheat seed extract",
-          "ceramosides wheat seed extract"
+          "Ceramosides Wheat seed extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -34263,8 +34219,7 @@
           "Cod Oil",
           "highly purified norwegian cod liver oil",
           "norwegian arctic cod liver oil",
-          "omega-3 cod liver oil",
-          "Omega-3 Cod Liver Oil"
+          "omega-3 cod liver oil"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -34534,7 +34489,8 @@
           "fish oil ee",
           "fish oil ethyl ester",
           "docosapentaenoic acid ethyl ester",
-          "omega-7 fatty acid ethyl ester"
+          "omega-7 fatty acid ethyl ester",
+          "Ethyl Esters"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -34645,8 +34601,7 @@
           "Aceite de Pescado",
           "Ocean Fish Oil, Natural",
           "Fish Oil, Natural",
-          "marine lipid oil",
-          "Marine Lipid Oil"
+          "marine lipid oil"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -34666,7 +34621,8 @@
         "aliases": [
           "fish liver oil",
           "shark liver oil",
-          "halibut liver oil"
+          "halibut liver oil",
+          "ecoMarine Shark Liver Oil"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -34973,8 +34929,7 @@
           "organic flaxseed particulate",
           "organic flaxseed particulates",
           "Brown Flax",
-          "Flax (Linum usitatissimum) powder",
-          "flax (linum usitatissimum) powder"
+          "Flax (Linum usitatissimum) powder"
         ],
         "absorption_structured": {
           "value": null,
@@ -35213,8 +35168,6 @@
         "absorption": "~55% relative oral F in humans (PMID 19007325)",
         "notes": "Olive phenolic with EU health claim (EFSA 2011): >=5 mg/day protects LDL from oxidative damage — one of the strongest evidence-backed EU Article 13.1 supplement claims. RCT (n=40, PMID 19007325): 25 mg/day x 3 wk reduced LDL oxidation markers. Cardioprotective via SIRT1 activation, NF-kB suppression, direct radical scavenging. Rapidly absorbed: Tmax ~30 min, urinary recovery 35-55% as metabolites.",
         "aliases": [
-          "hydroxytyrosol",
-          "hydroxytyrosol extract",
           "hydroxytyrosol-glucoside",
           "hydroxytyrosol glucoside",
           "olive hydroxytyrosol",
@@ -35964,8 +35917,7 @@
           "Black Currant Oil, Cold-Pressed",
           "blackcurrant freeze-dried extract",
           "blackcurrant freeze dried extract",
-          "Black Currant (Ribes nigrum) oil",
-          "black currant (ribes nigrum) oil"
+          "Black Currant (Ribes nigrum) oil"
         ],
         "absorption_structured": {
           "value": 0.55,
@@ -36441,7 +36393,8 @@
           "borago officinalis oil",
           "starflower oil",
           "borage GLA",
-          "borage seed oil supplement"
+          "borage seed oil supplement",
+          "borage"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -36508,8 +36461,7 @@
           "herring roe phospholipid",
           "marine phospholipid extract",
           "herring roe extract supplement",
-          "romega 30",
-          "Romega 30"
+          "romega 30"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -37043,7 +36995,10 @@
           "hops extract",
           "hops (humulus lupulus) extract",
           "humulus lupulus extract",
-          "hop extract"
+          "hop extract",
+          "Perluxan Hops (Humulus lupulus) extract",
+          "Lifenol Hops (Humulus lupulus) extract",
+          "Lifenol Hops (Humulus lupulus L.) extract"
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
@@ -37268,8 +37223,7 @@
           "Benegut Perilla extract",
           "benegut perilla (perilla frutescens) extract",
           "perilla (perilla frutescens) extract",
-          "Perilla Seed Extract",
-          "perilla seed extract"
+          "Perilla Seed Extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -37705,7 +37659,8 @@
           "corn silk powder",
           "corn silk extract",
           "zea mays stigma extract",
-          "organic cornsilk zea mays (stigma and style) extract"
+          "organic cornsilk zea mays (stigma and style) extract",
+          "Cornsilk Zea mays Stigma and Style Extract"
         ],
         "dosage_importance": 0.8,
         "absorption_structured": {
@@ -42461,7 +42416,8 @@
           "daltonmax 700",
           "daltonmax",
           "dalton max 700",
-          "daltonmax 700 aloe vera"
+          "daltonmax 700 aloe vera",
+          "Aloe Vera leaf oil"
         ],
         "notes": "Aloe barbadensis inner leaf gel; contains acemannan (acetylated mannose polysaccharide), anthraquinones, and vitamins. Topical wound healing evidence strong; oral immune/GI data limited. Form unspecified.",
         "natural": true,
@@ -43485,7 +43441,9 @@
           "lycium barbarum extract",
           "lycium fruit",
           "goji berries",
-          "GojiRich"
+          "GojiRich",
+          "Lycium barbarum Fruit Extract",
+          "Lycium barbarum, Powder"
         ],
         "notes": "Lycium barbarum fruit. Rich in polysaccharides, zeaxanthin, and betaine. Traditional Chinese medicine tonic.",
         "natural": true,
@@ -43499,7 +43457,11 @@
           "range_high": 0.6
         }
       }
-    }
+    },
+    "aliases": [
+      "Goji Berry Fruit Extract",
+      "Goji Berry Juice, Powder"
+    ]
   },
   "african_mango": {
     "standard_name": "African Mango",
@@ -43734,7 +43696,6 @@
           "assai palm extract",
           "acai palm extract",
           "AcaiRich",
-          "acairich",
           "20:1 {Acai} extract",
           "Acai 2:1 extract",
           "Acai Berry 20:1 extract"
@@ -44163,7 +44124,8 @@
           "lactium casein hydrolysate",
           "lactium casein, hydrolysate",
           "alpha s1 casein hydrolysate",
-          "milk protein hydrolysate"
+          "milk protein hydrolysate",
+          "Casein Tryptic Hydrolysate"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -44673,7 +44635,8 @@
           "micronized purified flavonoid fraction",
           "mpff",
           "diosmin hesperidin",
-          "micronized diosmin"
+          "micronized diosmin",
+          "DiosVein"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -45648,7 +45611,9 @@
           "wood ear mushroom",
           "cloud ear mushroom",
           "auricularia auricula-judae",
-          "black fungus mushroom"
+          "black fungus mushroom",
+          "Aricularia auricula",
+          "Auricularia auricula"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -45953,58 +45918,6 @@
       "last_reviewed_at": "2026-02-25"
     }
   },
-  "red_yeast_rice": {
-    "standard_name": "Red Yeast Rice",
-    "severity_level": "none",
-    "category": "other",
-    "source": "fermented",
-    "priority": "medium",
-    "description": "Monascus purpureus fermented rice. Contains monacolin K (chemically identical to lovastatin). Clinically proven for LDL cholesterol reduction. FDA regulatory scrutiny on monacolin K content.",
-    "dosage_importance": 0.1,
-    "forms": {
-      "red yeast rice extract": {
-        "bio_score": 9,
-        "natural": true,
-        "score": 12,
-        "absorption": "unknown",
-        "notes": "Active compound monacolin K is identical to lovastatin. Meta-analyses show 15-25% LDL reduction. FDA warns products with significant monacolin K levels are unapproved drugs. Quality varies greatly between brands.",
-        "aliases": [
-          "red yeast rice",
-          "red yeast rice extract",
-          "red yeast rice seed extract",
-          "monascus purpureus",
-          "monascus purpureus extract",
-          "red yeast rice powder",
-          "red fermented rice"
-        ],
-        "dosage_importance": 1.0,
-        "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
-        }
-      }
-    },
-    "cui": null,
-    "cui_note": "No UMLS CUI for supplement ingredient",
-    "rxcui": null,
-    "match_rules": {
-      "priority": 0,
-      "match_mode": "alias_and_fuzzy",
-      "exclusions": [],
-      "parent_id": null,
-      "confidence": "high"
-    },
-    "category_enum": "other",
-    "rxcui_note": "No RxNorm concept for supplement ingredient",
-    "data_quality": {
-      "completeness": 0.2,
-      "review_status": "stub",
-      "last_reviewed_at": "2026-02-28"
-    }
-  },
   "phenylethylamine": {
     "standard_name": "Phenylethylamine",
     "category": "other",
@@ -46020,13 +45933,9 @@
         "aliases": [
           "phenylethylamine",
           "phenylethylamine alkaloids",
-          "beta-phenylethylamine",
           "phenylethylamine hcl",
-          "b-phenylethylamine",
           "Beta Phenylethylamine",
-          "pea supplement",
-          "2-phenylethylamine",
-          "phenethylamine"
+          "pea supplement"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -47012,7 +46921,7 @@
       "last_reviewed_at": "2026-03-09"
     },
     "category_enum": "fatty_acids",
-    "cui_note": "",
+    "cui_note": "No UMLS entry for botanical/novel compound",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "match_rules": {
       "priority": 0,
@@ -47060,7 +46969,7 @@
       "last_reviewed_at": "2026-03-08"
     },
     "category_enum": "fatty_acids",
-    "cui_note": "",
+    "cui_note": "No UMLS entry for botanical/novel compound",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "match_rules": {
       "priority": 0,
@@ -47106,7 +47015,7 @@
       "last_reviewed_at": "2026-03-09"
     },
     "category_enum": "fatty_acids",
-    "cui_note": "",
+    "cui_note": "No UMLS entry for botanical/novel compound",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "match_rules": {
       "priority": 0,
@@ -47189,7 +47098,8 @@
       "missing_fields": [],
       "review_status": "validated",
       "last_reviewed_at": "2026-03-08"
-    }
+    },
+    "cui_note": "No UMLS entry for botanical/novel compound"
   },
   "coconut_water": {
     "standard_name": "Coconut Water",
@@ -47212,9 +47122,7 @@
           "coconut water concentrate powder",
           "cococin",
           "cococin coconut water powder",
-          "Cococin Coconut Water powder",
-          "cococin ws",
-          "Cococin WS"
+          "cococin ws"
         ],
         "dosage_importance": 0.5,
         "absorption_structured": {
@@ -47260,6 +47168,588 @@
       "missing_fields": [],
       "review_status": "validated",
       "last_reviewed_at": "2026-03-08"
+    },
+    "cui_note": "No UMLS entry for botanical/novel compound",
+    "rxcui_note": "No RxNorm concept for supplement ingredient"
+  },
+  "d_phenylalanine": {
+    "standard_name": "D-Phenylalanine",
+    "category": "amino_acids",
+    "cui": null,
+    "rxcui": null,
+    "forms": {
+      "d-phenylalanine": {
+        "bio_score": 8,
+        "natural": false,
+        "score": 8,
+        "absorption": "good",
+        "notes": "D-phenylalanine stereoisomer used in pain-support supplements. Distinct from L-phenylalanine and DL-phenylalanine, so it is modeled separately to avoid collapsing stereochemistry.",
+        "aliases": [
+          "d-phenylalanine",
+          "d phenylalanine"
+        ],
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": null,
+          "range_low": null,
+          "range_high": null,
+          "quality": "good",
+          "notes": "No form-specific oral bioavailability dataset stored; treated as standard free-form amino acid absorption."
+        }
+      }
+    },
+    "match_rules": {
+      "priority": 0,
+      "match_mode": "alias_and_fuzzy",
+      "exclusions": [],
+      "parent_id": null,
+      "confidence": "medium"
+    },
+    "category_enum": "amino_acids",
+    "data_quality": {
+      "completeness": 0.7,
+      "missing_fields": [],
+      "review_status": "validated",
+      "last_reviewed_at": "2026-03-13"
+    },
+    "cui_note": "No dedicated UMLS entry used for supplement stereoisomer mapping",
+    "rxcui_note": "No RxNorm concept for supplement ingredient"
+  },
+  "sphingomyelin": {
+    "standard_name": "Sphingomyelin",
+    "severity_level": "none",
+    "category": "fatty_acids",
+    "cui": null,
+    "rxcui": null,
+    "source": "animal_lipid",
+    "priority": "medium",
+    "description": "Membrane sphingophospholipid found in milk fat globule membrane and marine phospholipid preparations",
+    "dosage_importance": 0.75,
+    "forms": {
+      "sphingomyelin (unspecified)": {
+        "bio_score": 8,
+        "natural": true,
+        "score": 11,
+        "absorption": "moderate oral digestion and reassembly into sphingolipid metabolites",
+        "notes": "Sphingomyelin is a phosphocholine-containing sphingolipid found in milk fat globule membrane, egg, and marine phospholipid preparations. Added for exact identity coverage when the label discloses sphingomyelin directly.",
+        "aliases": [
+          "sphingomyelin"
+        ],
+        "dosage_importance": 0.75,
+        "absorption_structured": {
+          "value": null,
+          "range_low": null,
+          "range_high": null,
+          "quality": "moderate",
+          "notes": "moderate oral digestion to ceramide/sphingosine metabolites"
+        }
+      }
+    },
+    "category_enum": "fatty_acids",
+    "cui_note": "No UMLS CUI for supplement ingredient",
+    "rxcui_note": "No RxNorm concept for supplement ingredient",
+    "match_rules": {
+      "priority": 0,
+      "match_mode": "alias_and_fuzzy",
+      "exclusions": [],
+      "parent_id": null,
+      "confidence": "medium"
+    },
+    "data_quality": {
+      "completeness": 0.7,
+      "missing_fields": [],
+      "review_status": "validated",
+      "last_reviewed_at": "2026-03-13"
+    }
+  },
+  "geranylgeraniol": {
+    "standard_name": "Geranylgeraniol",
+    "severity_level": "none",
+    "category": "other",
+    "category_enum": "other",
+    "source": "isoprenoid_compound",
+    "priority": "medium",
+    "description": "Acyclic diterpene alcohol used in niche mitochondrial and mevalonate-pathway supplements.",
+    "dosage_importance": 0.5,
+    "cui": null,
+    "cui_note": "No UMLS CUI confirmed for supplement ingredient",
+    "rxcui": null,
+    "rxcui_note": "No RxNorm concept for supplement ingredient",
+    "match_rules": {
+      "priority": 0,
+      "match_mode": "alias_and_fuzzy",
+      "exclusions": [],
+      "parent_id": null,
+      "confidence": "medium"
+    },
+    "data_quality": {
+      "completeness": 0.6,
+      "missing_fields": [],
+      "review_status": "validated",
+      "last_reviewed_at": "2026-03-13"
+    },
+    "forms": {
+      "trans-geranylgeraniol": {
+        "bio_score": 7,
+        "natural": false,
+        "score": 7,
+        "absorption": "unknown",
+        "notes": "Geranylgeraniol disclosed directly on the label. GG-Gold is a branded geranylgeraniol ingredient and trans-geranylgeraniol is the exact constituent disclosed in raw DSLD rows.",
+        "aliases": [
+          "GG-Gold",
+          "Trans-Geranylgeraniol",
+          "Geranylgeraniol"
+        ],
+        "dosage_importance": 0.5,
+        "absorption_structured": {
+          "value": null,
+          "range_low": null,
+          "range_high": null,
+          "quality": "unknown",
+          "notes": "Data not available"
+        }
+      }
+    }
+  },
+  "beef_tallow": {
+    "standard_name": "Beef Tallow",
+    "category": "fatty_acids",
+    "description": "Rendered bovine fat used as a declared dietary fat ingredient when listed in the active section",
+    "dosage_importance": 1.0,
+    "forms": {
+      "beef tallow": {
+        "bio_score": 3,
+        "natural": true,
+        "score": 6,
+        "absorption": "good",
+        "notes": "Rendered bovine adipose fat consisting mainly of oleic, palmitic, and stearic acids. This route is for labels that explicitly declare beef tallow itself as the active fat ingredient. Human supplement-specific efficacy data are lacking, so scoring is conservative and identity-focused.",
+        "aliases": [
+          "beef tallow"
+        ],
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": null,
+          "range_low": null,
+          "range_high": null,
+          "quality": "good",
+          "notes": "dietary fat absorption is generally good"
+        }
+      }
+    },
+    "data_quality": {
+      "completeness": 0.95,
+      "missing_fields": [],
+      "review_status": "validated",
+      "last_reviewed_at": "2026-03-16"
+    },
+    "category_enum": "fatty_acids",
+    "cui_note": "No UMLS concept linked in this DB entry",
+    "rxcui_note": "No RxNorm concept for supplement ingredient",
+    "match_rules": {
+      "priority": 0,
+      "match_mode": "alias_and_fuzzy",
+      "exclusions": [],
+      "parent_id": null,
+      "confidence": "high"
+    }
+  },
+  "shuddha_laksha": {
+    "standard_name": "Shuddha Laksha",
+    "category": "other",
+    "description": "Purified lac insect resin used in traditional Ayurvedic formulations",
+    "forms": {
+      "shuddha laksha": {
+        "bio_score": 2,
+        "natural": true,
+        "score": 5,
+        "absorption": "unknown",
+        "notes": "Purified lac resin derived from the lac insect (Kerria lacca). Added as an exact identity route for Ayurvedic label rows where DSLD explicitly groups the ingredient under lac insect. Supplement-specific human evidence is limited, so this entry is identity-focused and conservatively scored.",
+        "aliases": [
+          "shuddha laksha"
+        ],
+        "dosage_importance": 0.3,
+        "absorption_structured": {
+          "value": null,
+          "range_low": null,
+          "range_high": null,
+          "quality": "unknown",
+          "notes": "Data not available"
+        }
+      }
+    },
+    "data_quality": {
+      "completeness": 0.9,
+      "missing_fields": [],
+      "review_status": "validated",
+      "last_reviewed_at": "2026-03-16"
+    },
+    "category_enum": "other",
+    "cui_note": "No UMLS concept linked in this DB entry",
+    "rxcui_note": "No RxNorm concept for supplement ingredient",
+    "match_rules": {
+      "priority": 0,
+      "match_mode": "alias_and_fuzzy",
+      "exclusions": [],
+      "parent_id": null,
+      "confidence": "high"
+    }
+  },
+  "seal_oil": {
+    "standard_name": "Seal Oil",
+    "category": "fatty_acids",
+    "cui": null,
+    "rxcui": null,
+    "forms": {
+      "blubber oil": {
+        "bio_score": 10,
+        "natural": true,
+        "score": 13,
+        "absorption": "unknown",
+        "notes": "Marine mammal blubber oil that naturally provides EPA, DHA, and docosapentaenoic acid (DPA). Used as a specialty omega-3 supplement in some legacy softgel products. Clinical literature often distinguishes seal oil from fish oil because of its comparatively higher DPA content.",
+        "aliases": [
+          "seal oil",
+          "blubber oil"
+        ],
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": null,
+          "range_low": null,
+          "range_high": null,
+          "quality": "unknown",
+          "notes": "Data not available"
+        }
+      }
+    },
+    "match_rules": {
+      "priority": 0,
+      "match_mode": "alias_and_fuzzy",
+      "exclusions": [],
+      "parent_id": null,
+      "confidence": "medium"
+    },
+    "category_enum": "fatty_acids",
+    "cui_note": "No UMLS entry for supplement ingredient",
+    "rxcui_note": "No RxNorm concept for supplement ingredient",
+    "data_quality": {
+      "completeness": 0.7,
+      "missing_fields": [],
+      "review_status": "validated",
+      "last_reviewed_at": "2026-03-16"
+    }
+  },
+  "milk_basic_protein": {
+    "standard_name": "Milk Basic Protein",
+    "category": "proteins",
+    "cui": null,
+    "rxcui": null,
+    "forms": {
+      "milk basic protein (unspecified)": {
+        "bio_score": 7,
+        "natural": true,
+        "score": 10,
+        "absorption": "moderate",
+        "notes": "Milk basic protein (MBP) is a basic whey-protein fraction studied for bone health. Human and preclinical studies report support for bone formation markers and reduced bone resorption, so this is treated as a distinct dairy-derived active rather than generic whey protein.",
+        "aliases": [
+          "Milk Basic Protein",
+          "MBP"
+        ],
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": null,
+          "range_low": null,
+          "range_high": null,
+          "quality": "moderate",
+          "notes": "moderate"
+        }
+      }
+    },
+    "match_rules": {
+      "priority": 1,
+      "match_mode": "alias_and_fuzzy",
+      "exclusions": [],
+      "parent_id": null,
+      "confidence": "medium"
+    },
+    "category_enum": "proteins",
+    "cui_note": "No UMLS entry for supplement ingredient",
+    "rxcui_note": "No RxNorm concept for supplement ingredient",
+    "data_quality": {
+      "completeness": 0.7,
+      "missing_fields": [],
+      "review_status": "validated",
+      "last_reviewed_at": "2026-03-16"
+    }
+  },
+  "eicosatrienoic_acid": {
+    "standard_name": "Eicosatrienoic Acid",
+    "category": "fatty_acids",
+    "cui": null,
+    "rxcui": null,
+    "forms": {
+      "mead acid (20:3n-9)": {
+        "bio_score": 5,
+        "natural": true,
+        "score": 8,
+        "absorption": "unknown",
+        "notes": "Mead acid (20:3n-9) — the n-9 eicosatrienoic acid produced endogenously when essential fatty acids are deficient. Distinct from marine-derived ESA (20:3n-3). Conservative route for mead-acid label rows.",
+        "aliases": [
+          "Mead acid",
+          "20:3n-9",
+          "C20:3n-9"
+        ],
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": null,
+          "range_low": null,
+          "range_high": null,
+          "quality": "unknown",
+          "notes": "Data not available"
+        }
+      }
+    },
+    "match_rules": {
+      "priority": 0,
+      "match_mode": "alias_and_fuzzy",
+      "exclusions": [],
+      "parent_id": null,
+      "confidence": "medium"
+    },
+    "category_enum": "fatty_acids",
+    "cui_note": "No UMLS entry for supplement ingredient",
+    "rxcui_note": "No RxNorm concept for supplement ingredient",
+    "data_quality": {
+      "completeness": 0.7,
+      "missing_fields": [],
+      "review_status": "validated",
+      "last_reviewed_at": "2026-03-16"
+    }
+  },
+  "pine_nut_oil": {
+    "standard_name": "Pine Nut Oil",
+    "category": "fatty_acids",
+    "cui": null,
+    "rxcui": null,
+    "forms": {
+      "pine nut oil (unspecified)": {
+        "bio_score": 7,
+        "natural": true,
+        "score": 10,
+        "absorption": "good",
+        "notes": "Pine nut oil used as a standalone oil supplement. Clinical interest is usually tied to its pinolenic-acid content, but this route preserves the oil identity without over-claiming a specific standardized composition.",
+        "aliases": [
+          "Pine Nut Oil"
+        ],
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": null,
+          "range_low": null,
+          "range_high": null,
+          "quality": "good",
+          "notes": "oil-based fatty acid supplement"
+        }
+      }
+    },
+    "match_rules": {
+      "priority": 0,
+      "match_mode": "alias_and_fuzzy",
+      "exclusions": [],
+      "parent_id": null,
+      "confidence": "medium"
+    },
+    "category_enum": "fatty_acids",
+    "cui_note": "No UMLS entry for supplement ingredient",
+    "rxcui_note": "No RxNorm concept for supplement ingredient",
+    "data_quality": {
+      "completeness": 0.7,
+      "missing_fields": [],
+      "review_status": "validated",
+      "last_reviewed_at": "2026-03-16"
+    }
+  },
+  "krill_oil": {
+    "standard_name": "Krill Oil",
+    "category": "fatty_acids",
+    "category_enum": "fatty_acids",
+    "aliases": [
+      "krill oil",
+      "antarctic krill oil",
+      "euphausia superba oil",
+      "krill oil phospholipids",
+      "pure krill oil",
+      "red krill oil"
+    ],
+    "notes": "Omega-3 oil from Euphausia superba (Antarctic krill). EPA/DHA delivered in phospholipid form (~40%) rather than triglycerides, which may improve bioavailability (~33% higher AUC vs. fish oil TG, Schuchardt et al. 2011 PMC3168413). Contains natural astaxanthin (~0.1-0.2 mg/g) as antioxidant. Shellfish allergy warning required. Key brands: Neptune Krill Oil (NKO) and Superba Krill (Aker BioMarine, GRAS-notified).",
+    "cui": null,
+    "rxcui": null,
+    "cui_note": "No UMLS entry for botanical/novel compound",
+    "rxcui_note": "No RxNorm concept for supplement ingredient",
+    "match_rules": {
+      "priority": 0,
+      "match_mode": "alias_and_fuzzy",
+      "exclusions": [],
+      "parent_id": null,
+      "confidence": "high"
+    },
+    "data_quality": {
+      "completeness": 1.0,
+      "missing_fields": [],
+      "review_status": "validated",
+      "last_reviewed_at": "2026-03-17"
+    },
+    "forms": {
+      "standard krill oil": {
+        "bio_score": 13,
+        "natural": true,
+        "score": 16,
+        "absorption": "high",
+        "notes": "Standard phospholipid-bound krill oil. EPA/DHA in phospholipid form (~40% phospholipids). ~33% higher AUC than standard fish oil triglycerides (Schuchardt et al. 2011, PMC3168413). Natural astaxanthin provides antioxidant protection against lipid oxidation. Shellfish allergen.",
+        "aliases": [
+          "100% krill oil",
+          "krill oil concentrate",
+          "virgin krill oil",
+          "krill (shellfish) oil",
+          "krill oil blend",
+          "krill oil professional formula",
+          "krill OIl",
+          "premium krill oil blend",
+          "premium plus krill oil blend",
+          "antarctic krill oil blend",
+          "antarctic krill oil complex",
+          "enriched krill omega-3 blend",
+          "K Real Pure Krill Oil",
+          "Krill-Syl",
+          "PhosphoBoost Krill Oil",
+          "krill omega-3",
+          "antarctic krill oil",
+          "superba boost krill oil",
+          "ester-omega krill oil",
+          "k-real krill oil",
+          "pure krill oil",
+          "red krill oil",
+          "100% pure superba krill oil",
+          "krill-sci krill oil",
+          "krill oil - nko",
+          "krill oil/fish oil concentrate",
+          "krill euphausia superba phospholipid-rich oil",
+          "Keto Krill Oil",
+          "Kreal Krill Oil",
+          "Superba krill oil",
+          "Superba2 Krill Oil",
+          "Superba Antarctic Krill Oil",
+          "Superba Boost Krill"
+        ],
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": null,
+          "quality": "very_good",
+          "notes": "Phospholipid-bound omega-3s show ~33% higher AUC vs. fish oil TG (PMC3168413)",
+          "range_low": null,
+          "range_high": null
+        }
+      },
+      "Neptune Krill Oil (NKO)": {
+        "bio_score": 14,
+        "natural": true,
+        "score": 17,
+        "absorption": "high",
+        "notes": "Neptune Krill Oil (NKO) — original branded krill oil with FDA NDI notification acceptance. Standardized phospholipid-bound omega-3s with astaxanthin. Manufactured by Neptune Technologies (Canada). Well-studied clinically for cardiovascular and PMS support.",
+        "aliases": [
+          "NKO",
+          "NKO krill oil",
+          "NKO Neptune Krill Oil",
+          "NKO(TM) krill oil",
+          "100% Pure Neptune Krill Oil"
+        ],
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": null,
+          "quality": "very_good",
+          "notes": "Clinically studied phospholipid-bound form",
+          "range_low": null,
+          "range_high": null
+        }
+      },
+      "Superba Krill (Aker BioMarine)": {
+        "bio_score": 14,
+        "natural": true,
+        "score": 17,
+        "absorption": "high",
+        "notes": "Superba Krill Oil by Aker BioMarine (Norway) — GRAS-notified, MSC-certified sustainable harvest. Superba2 is a concentrated upgrade. SuperbaBoost targets higher EPA/DHA density. ArcticPure is a retail brand using Superba.",
+        "aliases": [
+          "Superba2 Krill",
+          "SuperbaBoost Krill Oil",
+          "100% pure Superba2 Krill Oil",
+          "Superbra Antarctic Krill Oil",
+          "ArcticPure Krill Oil Blend",
+          "Azantis Krill Oil"
+        ],
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": null,
+          "quality": "very_good",
+          "notes": "GRAS-notified, MSC-certified Aker BioMarine product",
+          "range_low": null,
+          "range_high": null
+        }
+      }
+    }
+  },
+  "optiberry": {
+    "standard_name": "OptiBerry",
+    "category": "antioxidants",
+    "category_enum": "antioxidants",
+    "aliases": [
+      "optiberry",
+      "optibery",
+      "opriberry",
+      "OpriBerry"
+    ],
+    "notes": "OptiBerry (originally InterHealth Nutraceuticals; now Lonza Group) is a standardized multi-berry anthocyanin blend combining wild blueberry (Vaccinium angustifolium), bilberry (V. myrtillus), cranberry (V. macrocarpon), elderberry (Sambucus nigra), raspberry seeds (Rubus idaeus), and strawberry (Fragaria × ananassa). ~60% anthocyanin phenolic content. In vitro/in vivo anti-angiogenic and antioxidant activity. 'OpriBerry' is a common OCR/label misread of OptiBerry.",
+    "cui": null,
+    "rxcui": null,
+    "cui_note": "Branded proprietary blend — no single UMLS concept",
+    "rxcui_note": "No RxNorm concept for branded botanical blend",
+    "match_rules": {
+      "priority": 0,
+      "match_mode": "alias_and_fuzzy",
+      "exclusions": [],
+      "parent_id": null,
+      "confidence": "high"
+    },
+    "data_quality": {
+      "completeness": 1.0,
+      "missing_fields": [],
+      "review_status": "validated",
+      "last_reviewed_at": "2026-03-17"
+    },
+    "forms": {
+      "OptiBerry IH141": {
+        "bio_score": 9,
+        "natural": true,
+        "score": 12,
+        "absorption": "moderate",
+        "notes": "OptiBerry IH141 — clinically studied formula. >50% tumor growth reduction in endothelioma model (PMID 14972022). Anthocyanin-rich with high ORAC. Preclinical anti-angiogenic evidence stronger than clinical RCT data. Standardized to ~60% total phenolics.",
+        "aliases": [
+          "OptiBerry",
+          "OptiBerry IH141",
+          "OptiBerry(TM)",
+          "OptiBerry™",
+          "OpriBerry",
+          "OpriBerry(R)",
+          "OpriBerry SB",
+          "multi-berry anthocyanin extract",
+          "interhealth berry blend",
+          "lonza optibery"
+        ],
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": null,
+          "quality": "moderate",
+          "notes": "Anthocyanin absorption is low (<5% intact) but gut metabolites are bioactive",
+          "range_low": null,
+          "range_high": null
+        }
+      }
     }
   }
 }

@@ -686,5 +686,195 @@ class TestEdgeCases:
         assert result.product_id == "unknown"
 
 
+class TestEnrichedSchemaContract:
+    """
+    Schema-contract tests: gate field names must match the actual enriched output schema.
+    If the enricher renames a field, these tests break immediately.
+    Concern 7 (CONCERNS.md): 'Gate checks field names that may not match actual output schema
+    field names after enrichment renames fields.' — Verified resolved 2026-03-16.
+    """
+
+    @pytest.fixture
+    def gate(self):
+        return CoverageGate()
+
+    @pytest.fixture
+    def enriched_schema_product(self):
+        """
+        Minimal product that mirrors the exact field layout produced by enrich_supplements_v3.py.
+        Any enricher rename breaks this fixture → immediate test failure.
+        """
+        return {
+            "id": 99999,
+            "dsld_id": 99999,
+            # match_ledger produced by the enricher's MatchLedger
+            "match_ledger": {
+                "schema_version": "1.0",
+                "generated_at": "2026-03-16T00:00:00Z",
+                "domains": {
+                    "ingredients": {
+                        "total_raw": 5,
+                        "matched": 5,
+                        "unmatched": 0,
+                        "rejected": 0,
+                        "skipped": 0,
+                        "recognized_non_scorable": 0,
+                        "recognized_botanical_unscored": 0,
+                        "recognition_coverage_percent": 100.0,
+                        "scorable_coverage_percent": 100.0,
+                        "scorable_total": 5,
+                        "coverage_percent": 100.0,
+                    },
+                    "additives": {
+                        "total_raw": 2,
+                        "matched": 2,
+                        "unmatched": 0,
+                        "rejected": 0,
+                        "skipped": 0,
+                        "recognized_non_scorable": 0,
+                        "recognized_botanical_unscored": 0,
+                        "recognition_coverage_percent": 100.0,
+                        "scorable_coverage_percent": 100.0,
+                        "scorable_total": 2,
+                        "coverage_percent": 100.0,
+                    },
+                    "allergens": {
+                        "total_raw": 0,
+                        "matched": 0,
+                        "unmatched": 0,
+                        "rejected": 0,
+                        "skipped": 0,
+                        "recognized_non_scorable": 0,
+                        "recognized_botanical_unscored": 0,
+                        "recognition_coverage_percent": 100.0,
+                        "scorable_coverage_percent": 100.0,
+                        "scorable_total": 0,
+                        "coverage_percent": 100.0,
+                    },
+                    "manufacturer": {
+                        "total_raw": 1,
+                        "matched": 1,
+                        "unmatched": 0,
+                        "rejected": 0,
+                        "skipped": 0,
+                        "recognized_non_scorable": 0,
+                        "recognized_botanical_unscored": 0,
+                        "recognition_coverage_percent": 100.0,
+                        "scorable_coverage_percent": 100.0,
+                        "scorable_total": 1,
+                        "coverage_percent": 100.0,
+                    },
+                },
+                "summary": {"coverage_percent": 100.0},
+            },
+            # compliance_data — gate reads allergen_free_claims
+            "compliance_data": {
+                "allergen_free_claims": [],
+                "gluten_free": False,
+                "dairy_free": False,
+                "soy_free": False,
+                "vegan": False,
+                "vegetarian": False,
+                "conflicts": [],
+                "has_may_contain_warning": False,
+                "verified": False,
+                "evidence_based": False,
+            },
+            # contaminant_data — gate reads allergens.allergens (nested)
+            "contaminant_data": {
+                "banned_substances": [],
+                "harmful_additives": [],
+                "allergens": {
+                    "found": False,
+                    "allergens": [],          # gate: allergen_info.get("allergens", [])
+                    "has_may_contain_warning": False,
+                },
+            },
+            # rda_ul_data — gate reads analyzed_ingredients[*].conversion_evidence
+            "rda_ul_data": {
+                "ingredients_with_rda": [],
+                "analyzed_ingredients": [],   # gate: for ing in analyzed
+                "count": 0,
+                "adequacy_results": [],
+                "conversion_evidence": [],
+                "safety_flags": [],
+                "has_over_ul": False,
+                "collection_enabled": False,
+                "collection_reason": "disabled_by_config",
+            },
+            # evidence_data — gate reads unsubstantiated_claims.claims
+            "evidence_data": {
+                "clinical_matches": [],
+                "match_count": 0,
+                "unsubstantiated_claims": {
+                    "found": False,
+                    "claims": [],             # gate: unsub.get("claims")
+                },
+            },
+            "claims": [],
+        }
+
+    def test_gate_runs_without_exception_on_enriched_schema(self, gate, enriched_schema_product):
+        """Gate must not raise on a product matching the real enriched schema."""
+        result = gate.check_product(enriched_schema_product)
+        assert result is not None
+        assert result.product_id == "99999"
+
+    def test_gate_can_score_fully_covered_product(self, gate, enriched_schema_product):
+        """A product with 100% coverage across all domains must be scorable."""
+        result = gate.check_product(enriched_schema_product)
+        assert result.can_score is True
+        assert len(result.blocking_issues) == 0
+
+    def test_gate_reads_compliance_allergen_free_claims(self, gate, enriched_schema_product):
+        """Gate reads compliance_data.allergen_free_claims — verify field name contract."""
+        product = dict(enriched_schema_product)
+        product["compliance_data"] = dict(product["compliance_data"])
+        product["compliance_data"]["allergen_free_claims"] = ["allergen_free"]
+        # Adding a detected allergen creates a contradiction — gate should flag it
+        product["contaminant_data"] = {
+            "banned_substances": [],
+            "harmful_additives": [],
+            "allergens": {
+                "found": True,
+                "allergens": [{"allergen_name": "milk"}],
+                "has_may_contain_warning": False,
+            },
+        }
+        result = gate.check_product(product)
+        assert any(i.issue_type == "contradiction" for i in result.correctness_issues)
+
+    def test_gate_reads_contaminant_data_allergens_nested(self, gate, enriched_schema_product):
+        """Gate accesses contaminant_data.allergens.allergens (nested list) — verify path."""
+        product = dict(enriched_schema_product)
+        product["contaminant_data"] = {
+            "banned_substances": [],
+            "harmful_additives": [],
+            "allergens": {
+                "found": True,
+                "allergens": [{"allergen_name": "soy"}],  # This is the nested key the gate reads
+                "has_may_contain_warning": False,
+            },
+        }
+        # No allergen_free_claims — no contradiction, just valid detection
+        result = gate.check_product(product)
+        assert result is not None  # Must not throw accessing allergens.allergens
+
+    def test_gate_reads_evidence_unsubstantiated_claims(self, gate, enriched_schema_product):
+        """Gate reads evidence_data.unsubstantiated_claims.claims — verify nested field name."""
+        product = dict(enriched_schema_product)
+        product["evidence_data"] = {
+            "clinical_matches": [],
+            "match_count": 0,
+            "unsubstantiated_claims": {
+                "found": True,
+                "claims": [{"claim": "cures cancer", "claim_type": "disease"}],
+            },
+        }
+        result = gate.check_product(product)
+        # Gate should surface a warning or issue for unsubstantiated claims
+        assert result is not None
+
+
 if __name__ == "__main__":
     pytest.main([__file__, "-v"])

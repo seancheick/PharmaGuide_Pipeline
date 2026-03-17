@@ -100,6 +100,7 @@ class ProcessingResult:
     processing_time: float = 0.0
     unmapped_ingredients: Optional[List[str]] = None
     unmapped_active: Optional[Set[str]] = None  # Track which unmapped ingredients are active
+    unmapped_details: Optional[Dict[str, Dict[str, Any]]] = None
     validation_errors: Optional[List[str]] = None  # Cleaned data structural validation errors
     raw_id: Optional[Any] = None  # Original ID from raw data for verify_output comparison
     error_stage: Optional[str] = None  # P2: Stage where error occurred (load, normalize, validate_cleaned, etc.)
@@ -170,6 +171,7 @@ class BatchProcessor:
         # Global counters for unmapped and mapped ingredients
         self.global_unmapped = Counter()
         self.global_unmapped_active = set()  # Track which unmapped ingredients are active
+        self.global_unmapped_details: Dict[str, Dict[str, Any]] = {}
         self.global_mapped = Counter()
 
         # Initialize performance tracker
@@ -558,6 +560,20 @@ class BatchProcessor:
             state.total_batches = (len(files) + self.batch_size - 1) // self.batch_size
             using_per_file_resume = True
 
+        # FIX C6: On per-file resume, batch_num resets to 0, which would overwrite
+        # previously-written output files (cleaned_batch_1.json, etc.).
+        # Count existing batch output files and use that as the naming offset so
+        # new batches are appended (batch_N+1, batch_N+2, ...) instead of overwriting.
+        output_batch_offset = 0
+        if using_per_file_resume:
+            existing_outputs = list((self.output_dir / "cleaned").glob("cleaned_batch_*.json"))
+            output_batch_offset = len(existing_outputs)
+            if output_batch_offset > 0:
+                logger.info(
+                    "Resume: %d existing batch output files found, new batches will start at batch_%d",
+                    output_batch_offset, output_batch_offset + 1
+                )
+
         logger.info(f"Processing {len(files)} files in {state.total_batches} batches")
         logger.info(f"Batch size: {self.batch_size}, Max workers: {self.max_workers}")
 
@@ -570,24 +586,28 @@ class BatchProcessor:
                 )
             else:
                 logger.info(f"Resuming from batch {state.last_completed_batch + 1}")
-        
+
         # Process batches
         batch_results = []
         start_batch = 0 if using_per_file_resume else state.last_completed_batch + 1
-        
+
         for batch_num in range(start_batch, state.total_batches):
             batch_start = batch_num * self.batch_size
             batch_end = min(batch_start + self.batch_size, len(files))
             batch_files = files[batch_start:batch_end]
-            
+
+            # FIX C6: Use output_batch_offset to produce non-colliding file names on resume
+            output_batch_num = output_batch_offset + (batch_num - start_batch)
+
             logger.info(f"Processing batch {batch_num + 1}/{state.total_batches} ({len(batch_files)} files)")
-            
+
             # Process batch
-            batch_result = self.process_batch(batch_num, batch_files)
+            batch_result = self.process_batch(batch_num, batch_files, output_batch_num=output_batch_num)
             batch_results.append(batch_result)
             
-            # Update state
-            state.last_completed_batch = batch_num
+            # Update state — only advance last_completed_batch if outputs were written successfully
+            if batch_result.get("write_success", True):
+                state.last_completed_batch = batch_num
             state.processed_files += len(batch_result.get("processed_files", []))
             state.last_updated = datetime.utcnow().isoformat() + "Z"
             state.errors.extend(batch_result.get("errors", []))
@@ -603,7 +623,7 @@ class BatchProcessor:
         summary = self._generate_final_summary(batch_results, total_time)
         
         # Save unmapped ingredients
-        self._save_unmapped_ingredients()
+        self._save_unmapped_ingredients(processed_count_override=state.processed_files)
         
         # Generate processing report
         self._generate_processing_report(summary, batch_results)
@@ -615,7 +635,7 @@ class BatchProcessor:
         
         return summary
     
-    def process_batch(self, batch_num: int, files: List[Path]) -> Dict[str, Any]:
+    def process_batch(self, batch_num: int, files: List[Path], output_batch_num: Optional[int] = None) -> Dict[str, Any]:
         """Process a single batch of files"""
         batch_start_time = time.time()
 
@@ -800,8 +820,11 @@ class BatchProcessor:
         self.global_unmapped.update(batch_unmapped)
         self.global_mapped.update(batch_mapped)
         
-        # Write batch outputs
-        self._write_batch_outputs(batch_num, cleaned_products, needs_review_products, incomplete_products)
+        # Write batch outputs — use output_batch_num if provided (resume offset), else batch_num
+        effective_output_num = output_batch_num if output_batch_num is not None else batch_num
+        write_ok = self._write_batch_outputs(effective_output_num, cleaned_products, needs_review_products, incomplete_products)
+        if not write_ok:
+            logger.error("Batch %d: one or more output files failed to write — batch will NOT be marked complete", batch_num + 1)
         
         # Log batch summary
         batch_time = time.time() - batch_start_time
@@ -839,7 +862,8 @@ class BatchProcessor:
             "summary": summary,
             "errors": errors,
             "unmapped_count": len(batch_unmapped),
-            "processed_files": processed_files
+            "processed_files": processed_files,
+            "write_success": write_ok,
         }
     
     def _categorize_result(self, result: ProcessingResult, cleaned: List,
@@ -872,6 +896,8 @@ class BatchProcessor:
         # Track which unmapped ingredients are active
         if result.unmapped_active:
             self.global_unmapped_active.update(result.unmapped_active)
+        if result.unmapped_details:
+            self.global_unmapped_details.update(result.unmapped_details)
 
         # Extract and count mapped ingredients from the processed data
         if batch_mapped is not None and result.data:
@@ -925,27 +951,34 @@ class BatchProcessor:
             if ingredient_name and ingredient.get('mapped', False):
                 batch_mapped[ingredient_name] += 1
     
-    def _write_batch_outputs(self, batch_num: int, cleaned: List, 
-                           needs_review: List, incomplete: List):
-        """Write batch outputs to JSON files"""
+    def _write_batch_outputs(self, batch_num: int, cleaned: List,
+                           needs_review: List, incomplete: List) -> bool:
+        """Write batch outputs to JSON files. Returns True if all writes succeeded."""
         batch_suffix = f"_batch_{batch_num + 1}"
         use_jsonl = self.config.get("output_format", {}).get("use_jsonl", False)
         file_extension = ".jsonl" if use_jsonl else ".json"
-        
+
+        all_ok = True
+
         # Write cleaned products
         if cleaned:
             output_file = self.output_dir / "cleaned" / f"cleaned{batch_suffix}{file_extension}"
-            self._write_json_output(output_file, cleaned, use_jsonl)
-        
+            if not self._write_json_output(output_file, cleaned, use_jsonl):
+                all_ok = False
+
         # Write needs review
         if needs_review:
             output_file = self.output_dir / "needs_review" / f"needs_review{batch_suffix}{file_extension}"
-            self._write_json_output(output_file, needs_review, use_jsonl)
-        
+            if not self._write_json_output(output_file, needs_review, use_jsonl):
+                all_ok = False
+
         # Write incomplete
         if incomplete:
             output_file = self.output_dir / "incomplete" / f"incomplete{batch_suffix}{file_extension}"
-            self._write_json_output(output_file, incomplete, use_jsonl)
+            if not self._write_json_output(output_file, incomplete, use_jsonl):
+                all_ok = False
+
+        return all_ok
     
     def _write_json_output(self, file_path: Path, data: List[Dict], use_jsonl: bool = False):
         """
@@ -972,6 +1005,7 @@ class BatchProcessor:
             # FIX 8: Atomic rename - if this fails, original file is untouched
             os.replace(tmp_path, file_path)
             logger.debug("Wrote %d items to %s", len(data), file_path)
+            return True
         except Exception as e:
             logger.error("Failed to write %s: %s", file_path, str(e))
             # Clean up temp file if it exists
@@ -980,8 +1014,9 @@ class BatchProcessor:
                     tmp_path.unlink()
                 except OSError:
                     pass
+            return False
     
-    def _save_unmapped_ingredients(self):
+    def _save_unmapped_ingredients(self, processed_count_override: Optional[int] = None):
         """Save cumulative unmapped ingredients using enhanced tracking"""
         # Create a temporary normalizer to process the global unmapped ingredients
         temp_normalizer = EnhancedDSLDNormalizer()
@@ -990,19 +1025,25 @@ class BatchProcessor:
         # Transfer global unmapped data to the normalizer
         temp_normalizer.unmapped_ingredients = self.global_unmapped.copy()
 
-        # Reconstruct details with correct is_active status from global tracking
+        # Preserve per-label details from worker normalization so reporting can
+        # distinguish ordinary unmapped rows from needs-verification cases.
         temp_normalizer.unmapped_details = {}
         for name, count in self.global_unmapped.items():
-            temp_normalizer.unmapped_details[name] = {
-                "processed_name": name.lower(),
-                "forms": [],
-                "variations_tried": [],
-                "is_active": name in self.global_unmapped_active  # Use tracked active status
-            }
+            detail = dict(self.global_unmapped_details.get(name, {}))
+            if not detail:
+                detail = {
+                    "processed_name": name.lower(),
+                    "forms": [],
+                    "variations_tried": [],
+                }
+            detail["is_active"] = name in self.global_unmapped_active
+            temp_normalizer.unmapped_details[name] = detail
         
         # Process and save with enhanced tracking
         try:
-            result = temp_normalizer.process_and_save_unmapped_tracking()
+            result = temp_normalizer.process_and_save_unmapped_tracking(
+                processed_count_override=processed_count_override
+            )
             logger.info(f"Saved enhanced unmapped tracking files: {result['total_count']} total ingredients")
             logger.info(f"  Active: {result['active_count']}, Inactive: {result['inactive_count']}")
         except Exception as e:
@@ -1615,6 +1656,10 @@ def process_single_file(file_path: str, output_dir: str = None) -> ProcessingRes
         unmapped_list = [item["name"] for item in unmapped_delta["unmapped"]]
         # Extract which unmapped ingredients are active (from ingredientRows, not otherIngredients)
         unmapped_active_set = {item["name"] for item in unmapped_delta["unmapped"] if item.get("isActive", False)}
+        unmapped_details = {
+            item["name"]: normalizer.unmapped_details.get(item["name"], {})
+            for item in unmapped_delta["unmapped"]
+        }
 
         # B1: Calculate mapping statistics from CLEANED ingredient objects directly
         # This ensures consistency - count mapped:true from actual cleaned data
@@ -1668,6 +1713,7 @@ def process_single_file(file_path: str, output_dir: str = None) -> ProcessingRes
             processing_time=processing_time,
             unmapped_ingredients=unmapped_list,
             unmapped_active=unmapped_active_set,  # Track which unmapped are active ingredients
+            unmapped_details=unmapped_details,
             validation_errors=cleaned_errors if cleaned_errors else None,
             raw_id=raw_data.get("id")  # For verify_output ID preservation check
         )

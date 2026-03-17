@@ -1,49 +1,0 @@
-==========================================
-BATCH PIPELINE RUN - Fri Mar  6 01:30:01 EST 2026
-==========================================
-Dataset directory: /Users/seancheick/Documents/DataSetDsld
-Scripts directory: /Users/seancheick/.claude-worktrees/dsld_clean/peaceful-ritchie/scripts
-Stages: clean,enrich,score
-Target datasets: Thorne,Olly,gummies,pure,lozenges,capsules
-==========================================
-
-2026-03-06 01:30:04 - __main__ - INFO - ============================================================
-2026-03-06 01:30:04 - __main__ - INFO - DSLD SUPPLEMENT PIPELINE
-2026-03-06 01:30:04 - __main__ - INFO - ============================================================
-2026-03-06 01:30:04 - __main__ - INFO - Script directory: /Users/seancheick/.claude-worktrees/dsld_clean/peaceful-ritchie/scripts
-2026-03-06 01:30:04 - __main__ - INFO - Stages to run: clean, enrich, score
-2026-03-06 01:30:04 - __main__ - INFO - Raw data: /Users/seancheick/Documents/DataSetDsld/Olly-2-17-26-L187/
-2026-03-06 01:30:04 - __main__ - INFO - Cleaned output: output_Olly-2-17-26-L187/cleaned
-2026-03-06 01:30:04 - __main__ - INFO - Enriched output: output_Olly-2-17-26-L187_enriched/enriched
-2026-03-06 01:30:04 - __main__ - INFO - Scored output: output_Olly-2-17-26-L187_scored
-2026-03-06 01:30:04 - __main__ - INFO - ============================================================
-2026-03-06 01:30:04 - __main__ - INFO - Validated data directory: /Users/seancheick/.claude-worktrees/dsld_clean/peaceful-ritchie/scripts/data
-2026-03-06 01:30:04 - __main__ - INFO - ============================================================
-2026-03-06 01:30:04 - __main__ - INFO - STAGE 1: CLEANING
-2026-03-06 01:30:04 - __main__ - INFO - ============================================================
-2026-03-06 01:30:04 - __main__ - INFO - Executing: /Users/seancheick/.pyenv/versions/3.9.22/bin/python /Users/seancheick/.claude-worktrees/dsld_clean/peaceful-ritchie/scripts/clean_dsld_data.py --input-dir /Users/seancheick/Documents/DataSetDsld/Olly-2-17-26-L187/ --output-dir output_Olly-2-17-26-L187 --config /Users/seancheick/.claude-worktrees/dsld_clean/peaceful-ritchie/scripts/config/cleaning_config.json
-2026-03-06 01:30:04 - root - INFO - Resolved paths:
-2026-03-06 01:30:04 - root - INFO -   input_directory: /Users/seancheick/Documents/DataSetDsld/Olly-2-17-26-L187/
-2026-03-06 01:30:04 - root - INFO -   output_directory: output_Olly-2-17-26-L187
-2026-03-06 01:30:04 - root - INFO -   reference_data: /Users/seancheick/.claude-worktrees/dsld_clean/peaceful-ritchie/scripts/data
-2026-03-06 01:30:04 - root - INFO -   color_indicators.json: v5.0.0 (updated: 2026-02-18)
-2026-03-06 01:30:04 - root - INFO -   ingredient_quality_map.json: v5.0.0 (updated: 2026-02-28)
-2026-03-06 01:30:04 - root - INFO -   harmful_additives.json: v5.0.0 (updated: 2026-03-01)
-2026-03-06 01:30:04 - root - INFO -   allergens.json: v5.0.0 (updated: 2026-03-01)
-2026-03-06 01:30:04 - dsld_cleaner - INFO - ============================================================
-2026-03-06 01:30:04 - dsld_cleaner - INFO - ============================================================
-2026-03-06 01:30:04 - dsld_cleaner - INFO - DSLD Data Cleaning Pipeline Starting
-2026-03-06 01:30:04 - dsld_cleaner - INFO - DSLD Data Cleaning Pipeline Starting
-2026-03-06 01:30:04 - dsld_cleaner - INFO - ============================================================
-2026-03-06 01:30:04 - dsld_cleaner - INFO - ============================================================
-2026-03-06 01:30:04 - dsld_cleaner - INFO - Started at: 2026-03-06 01:30:04
-2026-03-06 01:30:04 - dsld_cleaner - INFO - Started at: 2026-03-06 01:30:04
-2026-03-06 01:30:04 - dsld_cleaner - INFO - Validating configuration...
-2026-03-06 01:30:04 - dsld_cleaner - INFO - Validating configuration...
-2026-03-06 01:30:04 - dsld_cleaner - INFO - Configuration validation passed
-2026-03-06 01:30:04 - dsld_cleaner - INFO - Configuration validation passed
-2026-03-06 01:30:04 - batch_processor - INFO - Found 186 input files
-2026-03-06 01:30:04 - batch_processor - INFO - Processing 186 files in 1 batches
-2026-03-06 01:30:04 - batch_processor - INFO - Batch size: 500, Max workers: 4
-2026-03-06 01:30:04 - batch_processor - INFO - Processing batch 1/1 (186 files)
-Processing Batch 1:   0%|          | 0/186 [00:00<?, ?file/s]Processing Batch 1:   1%|          | 1/186 [00:02<07:55,  2.57s/file]Processing Batch 1:   1%|          | 2/186 [00:03<04:10,  1.36s/file]Processing Batch 1:   2%|▏         | 4/186 [00:03<02:12,  1.37file/s]Processing Batch 1:   3%|▎         | 6/186 [00:04<01:58,  1.52file/s]Processing Batch 1:   4%|▍         | 7/186 [00:05<01:41,  1.76file/s]Processing Batch 1:   4%|▍         | 8/186 [00:05<01:27,  2.03file/s]Processing Batch 1:   5%|▌         | 10/186 [00:05<01:05,  2.70file/s]Processing Batch 1:   6%|▌         | 11/186 [00:06<01:08,  2.54file/s]Processing Batch 1:   6%|▋         | 12/186 [00:06<01:07,  2.58file/s]Processing Batch 1:   7%|▋         | 13/186 [00:07<01:08,  2.53file/s]Processing Batch 1:   8%|▊         | 14/186 [00:07<00:57,  3.00file/s]Processing Batch 1:   8%|▊         | 15/186 [00:07<01:04,  2.64file/s]Processing Batch 1:   9%|▊         | 16/186 [00:08<01:12,  2.34file/s]Processing Batch 1:  10%|▉         | 18/186 [00:08<00:49,  3.39file/s]Processing Batch 1:  10%|█         | 19/186 [00:09<00:59,  2.79file/s]Processing Batch 1:  11%|█         | 20/186 [00:09<00:52,  3.14file/s]Processing Batch 1:  11%|█▏        | 21/186 [00:09<00:59,  2.78file/s]Processing Batch 1:  12%|█▏        | 22/186 [00:10<00:55,  2.94file/s]Processing Batch 1:  12%|█▏        | 23/186 [00:10<00:49,  3.29file/s]Processing Batch 1:  13%|█▎        | 24/186 [00:10<00:44,  3.64file/s]Processing Batch 1:  13%|█▎        | 25/186 [00:11<00:50,  3.16file/s]Processing Batch 1:  14%|█▍        | 26/186 [00:11<00:46,  3.42file/s]Processing Batch 1:  15%|█▍        | 27/186 [00:11<01:00,  2.61file/s]Processing Batch 1:  15%|█▌        | 28/186 [00:12<00:59,  2.65file/s]Processing Batch 1:  16%|█▌        | 29/186 [00:12<00:53,  2.91file/s]Processing Batch 1:  17%|█▋        | 31/186 [00:13<01:01,  2.52file/s]Processing Batch 1:  17%|█▋        | 32/186 [00:13<00:59,  2.61file/s]Processing Batch 1:  18%|█▊        | 33/186 [00:14<01:02,  2.45file/s]Processing Batch 1:  18%|█▊        | 34/186 [00:14<00:52,  2.90file/s]Processing Batch 1:  19%|█▉        | 35/186 [00:14<00:48,  3.13file/s]Processing Batch 1:  19%|█▉        | 36/186 [00:15<00:59,  2.51file/s]Processing Batch 1:  20%|█▉        | 37/186 [00:15<00:47,  3.12file/s]Processing Batch 1:  20%|██        | 38/186 [00:15<00:39,  3.73file/s]Processing Batch 1:  21%|██        | 39/186 [00:15<00:47,  3.08file/s]Processing Batch 1:  22%|██▏       | 40/186 [00:16<00:57,  2.56file/s]Processing Batch 1:  22%|██▏       | 41/186 [00:16<00:51,  2.84file/s]Processing Batch 1:  23%|██▎       | 42/186 [00:17<01:06,  2.18file/s]Processing Batch 1:  24%|██▎       | 44/186 [00:18<00:58,  2.44file/s]Processing Batch 1:  24%|██▍       | 45/186 [00:18<00:54,  2.60file/s]Processing Batch 1:  25%|██▍       | 46/186 [00:18<00:44,  3.11file/s]Processing Batch 1:  25%|██▌       | 47/186 [00:18<00:38,  3.60file/s]Processing Batch 1:  26%|██▌       | 48/186 [00:19<00:38,  3.62file/s]Processing Batch 1:  26%|██▋       | 49/186 [00:19<00:38,  3.59file/s]Processing Batch 1:  27%|██▋       | 50/186 [00:19<00:43,  3.15file/s]Processing Batch 1:  27%|██▋       | 51/186 [00:20<00:45,  2.99file/s]Processing Batch 1:  28%|██▊       | 53/186 [00:20<00:39,  3.38file/s]Processing Batch 1:  29%|██▉       | 54/186 [00:20<00:39,  3.38file/s]Processing Batch 1:  30%|███       | 56/186 [00:21<00:36,  3.60file/s]Processing Batch 1:  31%|███       | 57/186 [00:21<00:36,  3.52file/s]Processing Batch 1:  31%|███       | 58/186 [00:21<00:31,  4.02file/s]Processing Batch 1:  32%|███▏      | 59/186 [00:22<00:35,  3.56file/s]Processing Batch 1:  32%|███▏      | 60/186 [00:22<00:29,  4.22file/s]Processing Batch 1:  33%|███▎      | 61/186 [00:22<00:28,  4.39file/s]Processing Batch 1:  33%|███▎      | 62/186 [00:23<00:35,  3.54file/s]Processing Batch 1:  34%|███▍      | 64/186 [00:23<00:30,  4.00file/s]Processing Batch 1:  35%|███▍      | 65/186 [00:23<00:29,  4.10file/s]Processing Batch 1:  35%|███▌      | 66/186 [00:23<00:29,  4.00file/s]Processing Batch 1:  36%|███▌      | 67/186 [00:24<00:30,  3.88file/s]Processing Batch 1:  37%|███▋      | 68/186 [00:24<00:29,  3.95file/s]Processing Batch 1:  37%|███▋      | 69/186 [00:24<00:33,  3.52file/s]Processing Batch 1:  38%|███▊      | 70/186 [00:24<00:28,  4.01file/s]Processing Batch 1:  38%|███▊      | 71/186 [00:25<00:25,  4.52file/s]Processing Batch 1:  39%|███▉      | 73/186 [00:25<00:28,  3.94file/s]Processing Batch 1:  40%|███▉      | 74/186 [00:26<00:32,  3.41file/s]Processing Batch 1:  41%|████      | 76/186 [00:26<00:27,  4.00file/s]Processing Batch 1:  41%|████▏     | 77/186 [00:26<00:25,  4.33file/s]Processing Batch 1:  42%|████▏     | 78/186 [00:26<00:24,  4.34file/s]Processing Batch 1:  42%|████▏     | 79/186 [00:27<00:28,  3.72file/s]Processing Batch 1:  43%|████▎     | 80/186 [00:27<00:32,  3.30file/s]Processing Batch 1:  44%|████▎     | 81/186 [00:28<00:32,  3.27file/s]Processing Batch 1:  44%|████▍     | 82/186 [00:28<00:27,  3.81file/s]Processing Batch 1:  45%|████▍     | 83/186 [00:28<00:23,  4.31file/s]Processing Batch 1:  45%|████▌     | 84/186 [00:28<00:24,  4.18file/s]Processing Batch 1:  46%|████▌     | 85/186 [00:28<00:25,  3.97file/s]Processing Batch 1:  46%|████▌     | 86/186 [00:29<00:26,  3.72file/s]

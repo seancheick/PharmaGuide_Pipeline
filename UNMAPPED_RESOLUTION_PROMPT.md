@@ -85,6 +85,22 @@ Use Python only:
 
 If you change cleaner, normalizer, enricher, batch processor, scorer contract, or matching logic, you must run a small shadow verification on an affected dataset slice and compare before/after.
 
+### 8. Verification loop is mandatory
+
+For every approved batch, follow this exact order:
+
+1. add targeted failing tests first
+2. implement the narrowest correct fix
+3. run targeted tests
+4. run `python3 scripts/db_integrity_sanity_check.py --strict`
+5. run `PYTHONPATH=scripts python3 -m pytest scripts/tests/test_db_integrity.py -q`
+6. run a real shadow clean on the exact raw DSLD source files for the affected labels
+7. confirm the target labels are cleared from the intended unmapped surface
+8. confirm prior fixes did not regress
+
+Do not treat unit-test success alone as sufficient proof.
+Real shadow-clean verification is required.
+
 ---
 
 ## Operating Mode
@@ -563,6 +579,18 @@ If enrich fallback resolves something weakly, it can still be a clean-stage alia
 Cleaning backlog is the primary truth for database coverage.
 Enrichment fallback is QA, not proof of correctness.
 
+### Display ledger rule
+
+Do not reintroduce structural parents, wrappers, summary rows, or constituent leaves into scoring just because users need to see them.
+
+If a row is label-visible but should not score:
+
+- keep it in the display ledger
+- mark it non-scoring
+- preserve the real mapped/scorable children separately
+
+User-facing label fidelity and scoring-safe ingredient normalization are separate concerns.
+
 ---
 
 ## Mandatory Investigation Checklist Per Candidate
@@ -760,6 +788,14 @@ Only add an alias when all are true:
 - species/source-only labels when the canonical is a processed oil/extract/form
 - constituent names when the canonical is the whole botanical, unless the project deliberately maps that constituent to the parent
 
+### Common things that should become display-only, not mapped actives
+
+- constituent leaves under a real parent
+- standardization markers
+- summary rows
+- branded active wrappers whose children are the real ingredients
+- source/material disclosures that are not the actual scored ingredient
+
 ---
 
 ## Final Principle
@@ -778,3 +814,11 @@ The correct order is:
 5. decide whether it is a bug or data gap
 6. apply the smallest correct fix
 7. verify in pipeline
+
+### Regression protection
+
+Never replace a proven exact fix with a broader normalization rule unless raw verification shows the exact fix is insufficient.
+
+Never broaden matching just to reduce unmapped counts.
+
+A precise fix that resolves 10 labels is better than a broad fix that resolves 100 labels but silently mis-maps 3.

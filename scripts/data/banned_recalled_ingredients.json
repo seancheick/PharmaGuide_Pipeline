@@ -3,8 +3,8 @@
     "description": "Banned and recalled ingredients database for regulatory compliance and safety (v3.0)",
     "purpose": "safety_disqualification_and_regulatory_compliance",
     "schema_version": "5.0.0",
-    "last_updated": "2026-03-08",
-    "total_entries": 137,
+    "last_updated": "2026-03-16",
+    "total_entries": 139,
     "data_source_metadata": {
       "sources": [
         "FDA",
@@ -237,6 +237,20 @@
             "Updated enricher with match_mode gate and status-to-severity derivation",
             "Updated scorer with status-based B0 logic (4-bucket model)",
             "Total entries: 129 -> 130"
+          ]
+        },
+        {
+          "version": "5.0.1",
+          "date": "2026-03-16",
+          "auditor": "fda_weekly_sync_agent",
+          "changes": [
+            "No new entries added (openFDA returned 500 errors for week 2026-03-09 to 2026-03-16; 0 records fetched)",
+            "Updated 3 stale recalled entries:",
+            "  RECALLED_JACK3D: match_mode active → historical (original DMAA formula discontinued; DMAA tracked separately)",
+            "  RECALLED_OXYELITE_PRO: match_mode active → historical (openFDA F-137x-2014 recalls all Terminated)",
+            "  RECALLED_HYDROXYCUT: review dates updated (match_mode=historical already correct)",
+            "  BANNED_YELLOW_OLEANDER_RECENT: review dates updated (FDA alert active March 11, 2026)",
+            "Sources: openFDA food/enforcement (500 error this week), manual FDA verification via accessdata.fda.gov"
           ]
         }
       ],
@@ -796,7 +810,11 @@
         "dhea-acetate-7-one",
         "dhea acetate 7 one",
         "3-desoxy, 7-keto dhea",
-        "3-desoxy 7-keto dhea"
+        "3-desoxy 7-keto dhea",
+        "7-Keto-DHEA",
+        "7-Keto-Dehydroepiandrosterone Acetate",
+        "7-Keto(R) - Dehydroepiandrosterone Acetate",
+        "7 keto(r) dehydroepiandrosterone acetate"
       ],
       "reason": "Classified as a controlled anabolic steroid precursor in multiple countries. Banned in UK, Canada, Australia, and New Zealand. Not approved as a dietary supplement outside the US.",
       "status": "high_risk",
@@ -1618,8 +1636,6 @@
         "e297",
         "adipic acid",
         "e355",
-        "succinic acid",
-        "e363",
         "synthetic citric acid",
         "artificial food acids",
         "manufactured acids"
@@ -2039,33 +2055,45 @@
       "id": "BANNED_CBD_US",
       "standard_name": "CBD (Cannabidiol)",
       "aliases": [
+        "Broad Spectrum Cannabidiol",
+        "Broad Spectrum Hemp Aerial Parts Extract",
+        "CBD distillate",
+        "Cannabidiol, Distillate",
+        "Cannabidiolic acid/Cannabidiol",
+        "Full Spectrum CBD Distillate",
+        "Full Spectrum Cannabidiol",
+        "Full Spectrum Hemp Distillate",
+        "Full-Spectrum Hemp, Distillate",
+        "Hemp Aerial Parts Extract",
+        "Hemp Aerial Parts Extract, Full Spectrum",
+        "Hemp Extract, Pure",
+        "Hemp derived Crystalline Cannabidiol",
+        "Nano Cannabidiol",
+        "Phytocannabinoid Hemp Oil",
+        "VESIsorb HEMPCHOICE PCR Hemp Oil extract",
+        "broad spectrum cbd",
         "cannabidiol",
-        "cbd",
-        "pure cbd extract",
-        "cbd hemp extract",
+        "cannabidiol distillate",
         "cannabidiol hemp extract",
-        "hemp extract cbd",
+        "cannabinoid extract",
         "cannabis extract",
-        "hemp oil cbd",
+        "cannabis sativa oil extract",
+        "cbd",
+        "cbd (cannabidiol)",
+        "cbd full spectrum",
+        "cbd hemp extract",
         "cbd isolate",
         "full spectrum cbd",
-        "broad spectrum cbd",
-        "hemp-derived cbd",
-        "Full Spectrum Cannabidiol",
-        "Broad Spectrum Cannabidiol",
-        "Hemp derived Crystalline Cannabidiol",
-        "Cannabidiol, Distillate",
-        "cannabidiol distillate",
-        "CBD distillate",
-        "Full-Spectrum Hemp, Distillate",
+        "full-spectrum cbd",
         "full-spectrum hemp distillate",
-        "Full Spectrum Hemp Distillate",
-        "Broad Spectrum Hemp Aerial Parts Extract",
-        "Hemp Aerial Parts Extract",
-        "Full Spectrum CBD Distillate",
-        "Phytocannabinoid Hemp Oil",
-        "cannabinoid extract",
-        "cbd (cannabidiol)"
+        "hemp extract cbd",
+        "hemp oil cbd",
+        "hemp-derived cannabidiol",
+        "hemp-derived cbd",
+        "naturally-occurring Cannabidiol",
+        "naturally-occurring cannabidiol",
+        "pure cannabidiol",
+        "pure cbd extract"
       ],
       "reason": "Under the FD&C Act's drug exclusion rule, CBD (cannabidiol) cannot lawfully be marketed as a dietary supplement because it was first investigated as a drug (clinical trials pre-dated any supplement marketing) and is now an approved drug ingredient in Epidiolex (approved by FDA in 2018 for epilepsy). FDA has consistently stated that CBD is excluded from the dietary supplement definition under 21 U.S.C. §321(ff)(3)(B). Despite widespread US market presence, CBD supplement products are technically unlawful. FDA has exercised enforcement discretion but this legal status remains unchanged as of 2026.",
       "status": "banned",
@@ -2906,7 +2934,6 @@
       "aliases": [
         "ma huang",
         "ephedra sinica",
-        "mormon tea",
         "ephedrine alkaloids",
         "ephedra extract",
         "sida cordifolia",
@@ -3228,7 +3255,7 @@
       "recall_scope": null
     },
     {
-      "id": "BANNED_GARCINIA_CAMBOGIA",
+      "id": "RISK_GARCINIA_CAMBOGIA",
       "standard_name": "Garcinia Cambogia",
       "aliases": [
         "garcinia cambogia",
@@ -5037,11 +5064,11 @@
           "source": {
             "type": "fda_action",
             "citation": "FDA Class I recalls ongoing (2023-2025), Import Alert active",
-            "accessed_date": "2026-01-08"
+            "accessed_date": "2026-03-16"
           },
           "jurisdiction_type": "country",
           "jurisdiction_code": "US",
-          "last_verified_date": "2026-01-08"
+          "last_verified_date": "2026-03-16"
         }
       ],
       "references_structured": [
@@ -5080,14 +5107,19 @@
       "entity_type": "ingredient",
       "review": {
         "status": "validated",
-        "last_reviewed_at": "2026-02-16",
-        "next_review_due": "2026-07-07",
-        "reviewed_by": "migration_script",
+        "last_reviewed_at": "2026-03-16",
+        "next_review_due": "2026-09-16",
+        "reviewed_by": "fda_weekly_sync_agent",
         "change_log": [
           {
             "date": "2026-01-08",
             "change": "Migrated to schema v3.1 with standardized fields",
             "by": "system"
+          },
+          {
+            "date": "2026-03-16",
+            "change": "FDA safety alert confirmed still active as of March 11, 2026. Ongoing tejocote root adulteration investigation. match_mode=active retained.",
+            "by": "fda_weekly_sync"
           }
         ]
       },
@@ -8011,7 +8043,7 @@
           },
           "jurisdiction_type": "country",
           "jurisdiction_code": "US",
-          "last_verified_date": "2026-01-08"
+          "last_verified_date": "2026-03-16"
         },
         {
           "region": "US",
@@ -8026,7 +8058,7 @@
           },
           "jurisdiction_type": "country",
           "jurisdiction_code": "US",
-          "last_verified_date": "2026-01-08"
+          "last_verified_date": "2026-03-16"
         }
       ],
       "references_structured": [
@@ -8058,14 +8090,19 @@
       "entity_type": "product",
       "review": {
         "status": "validated",
-        "last_reviewed_at": "2026-02-26",
-        "next_review_due": "2026-07-07",
-        "reviewed_by": "source_verified_audit",
+        "last_reviewed_at": "2026-03-16",
+        "next_review_due": "2026-09-16",
+        "reviewed_by": "fda_weekly_sync_agent",
         "change_log": [
           {
             "date": "2026-01-08",
             "change": "Migrated to schema v3.1 with standardized fields",
             "by": "system"
+          },
+          {
+            "date": "2026-03-16",
+            "change": "Stale recall re-verified. match_mode=historical confirmed correct. 2009 product-specific recall was long terminated.",
+            "by": "fda_weekly_sync"
           }
         ]
       },
@@ -8119,7 +8156,7 @@
           },
           "jurisdiction_type": "country",
           "jurisdiction_code": "US",
-          "last_verified_date": "2026-01-08"
+          "last_verified_date": "2026-03-16"
         },
         {
           "region": "US",
@@ -8134,7 +8171,7 @@
           },
           "jurisdiction_type": "agency_scope",
           "jurisdiction_code": "US-DOD",
-          "last_verified_date": "2026-01-08"
+          "last_verified_date": "2026-03-16"
         }
       ],
       "references_structured": [
@@ -8166,21 +8203,26 @@
       "entity_type": "product",
       "review": {
         "status": "validated",
-        "last_reviewed_at": "2026-02-26",
-        "next_review_due": "2026-07-07",
-        "reviewed_by": "source_verified_audit",
+        "last_reviewed_at": "2026-03-16",
+        "next_review_due": "2026-09-16",
+        "reviewed_by": "fda_weekly_sync_agent",
         "change_log": [
           {
             "date": "2026-01-08",
             "change": "Migrated to schema v3.1 with standardized fields",
             "by": "system"
+          },
+          {
+            "date": "2026-03-16",
+            "change": "Set match_mode=historical. Original DMAA-containing formula removed from market 2012 via FDA warning letters; no formal enforcement recall record in openFDA. DMAA ingredient-level ban tracked separately.",
+            "by": "fda_weekly_sync"
           }
         ]
       },
       "supersedes_ids": null,
       "regulatory_date": "2012-01-01",
       "regulatory_date_label": "Regulatory limit established",
-      "match_mode": "active",
+      "match_mode": "historical",
       "recall_scope": {
         "brand": "Jack3d",
         "formulations": null,
@@ -8504,7 +8546,7 @@
           },
           "jurisdiction_type": "country",
           "jurisdiction_code": "US",
-          "last_verified_date": "2026-01-08"
+          "last_verified_date": "2026-03-16"
         },
         {
           "region": "US",
@@ -8519,7 +8561,7 @@
           },
           "jurisdiction_type": "country",
           "jurisdiction_code": "US",
-          "last_verified_date": "2026-01-08"
+          "last_verified_date": "2026-03-16"
         }
       ],
       "references_structured": [
@@ -8558,21 +8600,26 @@
       "entity_type": "product",
       "review": {
         "status": "validated",
-        "last_reviewed_at": "2026-02-26",
-        "next_review_due": "2026-07-07",
-        "reviewed_by": "source_verified_audit",
+        "last_reviewed_at": "2026-03-16",
+        "next_review_due": "2026-09-16",
+        "reviewed_by": "fda_weekly_sync_agent",
         "change_log": [
           {
             "date": "2026-01-08",
             "change": "Migrated to schema v3.1 with standardized fields",
             "by": "system"
+          },
+          {
+            "date": "2026-03-16",
+            "change": "Set match_mode=historical. openFDA confirms all recalls (F-1370/1372/1374/1375/1376-2014) status=Terminated. Product-specific recall for discontinued formula.",
+            "by": "fda_weekly_sync"
           }
         ]
       },
       "supersedes_ids": null,
       "regulatory_date": "2013-11-08",
       "regulatory_date_label": "Regulatory limit established",
-      "match_mode": "active",
+      "match_mode": "historical",
       "recall_scope": {
         "brand": "OxyElite Pro",
         "formulations": null,
@@ -11077,101 +11124,6 @@
       "recall_scope": null
     },
     {
-      "id": "SPIKE_PHENETHYLAMINE_PEA",
-      "standard_name": "Phenethylamine (PEA)",
-      "aliases": [
-        "β-phenylethylamine",
-        "beta-phenethylamine",
-        "B-PEA",
-        "2-phenylethylamine",
-        "microencapsulated phenethylamine hcl",
-        "methylphenethylamine tartrate",
-        "phenethylamine (pea)",
-        "phenethylamine hcl"
-      ],
-      "reason": "β-Phenylethylamine (PEA) is a naturally occurring trace amine with amphetamine-like stimulant activity. At doses used in supplements it raises blood pressure and heart rate via catecholamine release, with a very short half-life masking its cardiovascular effects. It is WADA-prohibited in competition as a stimulant. When found in products as an undeclared adulterant (often as a spiking agent to create noticeable 'buzz'), it creates cardiovascular risks particularly for users with hypertension, arrhythmia, or MAO inhibitor use.",
-      "status": "banned",
-      "class_tags": [
-        "illegal_spiking_agents",
-        "drug_pharmaceutical"
-      ],
-      "match_rules": {
-        "exclusions": [],
-        "case_sensitive": false,
-        "priority": 1,
-        "match_type": "exact",
-        "confidence": "high",
-        "negative_match_terms": []
-      },
-      "legal_status_enum": "adulterant",
-      "clinical_risk_enum": "high",
-      "jurisdictions": [
-        {
-          "region": "US",
-          "level": "federal",
-          "status": "banned",
-          "effective_date": null,
-          "source": {
-            "type": "fda_action",
-            "citation": "FDA warnings. Found adulterating kratom products.",
-            "accessed_date": "2026-01-08"
-          },
-          "jurisdiction_type": "country",
-          "jurisdiction_code": "US",
-          "last_verified_date": "2026-01-08"
-        },
-        {
-          "region": "US",
-          "level": "federal",
-          "name": "DoD",
-          "status": "banned",
-          "effective_date": null,
-          "source": {
-            "type": "state_statute",
-            "citation": "Prohibited for military personnel",
-            "accessed_date": "2026-01-08"
-          },
-          "jurisdiction_type": "agency_scope",
-          "jurisdiction_code": "US-DOD",
-          "last_verified_date": "2026-01-08"
-        }
-      ],
-      "references_structured": [
-        {
-          "type": "doi",
-          "id": "10.1016/j.annemergmed.2019.06.013",
-          "title": "PEA-adulterated kratom stroke case",
-          "evidence_grade": "B",
-          "url": "https://doi.org/10.1016/j.annemergmed.2019.06.013",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
-          "evidence_summary": "PEA-adulterated kratom stroke case"
-        }
-      ],
-      "source_category": "illegal_spiking_agents",
-      "entity_type": "contaminant",
-      "review": {
-        "status": "validated",
-        "last_reviewed_at": "2026-02-23",
-        "next_review_due": "2026-07-07",
-        "reviewed_by": "codex_p3_audit",
-        "change_log": [
-          {
-            "date": "2026-01-08",
-            "change": "Migrated to schema v3.1 with standardized fields",
-            "by": "system"
-          }
-        ]
-      },
-      "supersedes_ids": null,
-      "regulatory_date": "2014-01-01",
-      "regulatory_date_label": "First FDA enforcement action",
-      "match_mode": "active",
-      "recall_scope": null
-    },
-    {
       "id": "SPIKE_PHENOLPHTHALEIN",
       "standard_name": "Phenolphthalein",
       "aliases": [
@@ -13483,6 +13435,7 @@
         "titanium dioxide",
         "titanium dioxide (e171)",
         "e171",
+        "e 171",
         "tio2",
         "ci 77891",
         "c.i. 77891",
@@ -13491,7 +13444,12 @@
         "rutile",
         "titanium white",
         "titanium(iv) oxide",
-        "Titanium Dioxide color"
+        "Titanium Dioxide color",
+        "Titanium Dioxide colour",
+        "titanium dioxide nanoparticles",
+        "titanium dioxide nanoparticle",
+        "nano titanium dioxide",
+        "nano-tio2"
       ],
       "reason": "In 2021, EFSA concluded that a concern for genotoxicity of titanium dioxide (E171) particles 'cannot be ruled out' and that E171 'can no longer be considered safe when used as a food additive,' so no ADI could be established (EFSA Journal 2021;19(5):e06585). On this basis, the European Commission adopted Commission Regulation (EU) 2022/63 banning E171 as a food additive; from August 7 2022 it may no longer be added to foods or food supplements in the EU. FDA still permits TiO2 at ≤1% of food weight (21 CFR 73.575) but initiated reassessment following the EFSA opinion. IARC Group 2B (possibly carcinogenic by inhalation). Nanoparticle form (<100nm) shows greater intestinal absorption and genotoxic concern.",
       "status": "high_risk",
@@ -13521,7 +13479,7 @@
             "citation": "Commission Regulation (EU) 2022/63 amending Annexes II and III to Regulation (EC) No 1333/2008 — E171 removed from permitted food additives list",
             "accessed_date": "2026-03-08"
           },
-          "jurisdiction_type": "supranational",
+          "jurisdiction_type": "region",
           "jurisdiction_code": "EU",
           "last_verified_date": "2026-03-08"
         },
@@ -13663,7 +13621,7 @@
             "citation": "E553b permitted in EU with strict purity requirements (Commission Regulation (EU) No 231/2012) — must be asbestos-free.",
             "accessed_date": "2026-03-08"
           },
-          "jurisdiction_type": "supranational",
+          "jurisdiction_type": "region",
           "jurisdiction_code": "EU",
           "last_verified_date": "2026-03-08"
         },
@@ -13791,7 +13749,7 @@
             "citation": "E153 approved in limited EU food categories (certain cheeses, olive oil) under Regulation (EC) No 1333/2008 and Commission Regulation (EU) No 231/2012.",
             "accessed_date": "2026-03-08"
           },
-          "jurisdiction_type": "supranational",
+          "jurisdiction_type": "region",
           "jurisdiction_code": "EU",
           "last_verified_date": "2026-03-08"
         }
@@ -13937,6 +13895,134 @@
           }
         ]
       }
+    },
+    {
+      "id": "BANNED_DETERENOL_ISOPROPYLNORSYNEPHRINE",
+      "standard_name": "Isopropylnorsynephrine",
+      "aliases": [
+        "isopropylnorsynephrine",
+        "n-isopropylnorsynephrine",
+        "deterenol"
+      ],
+      "status": "banned",
+      "clinical_risk_enum": "critical",
+      "legal_status_enum": "not_lawful_as_supplement",
+      "entity_type": "ingredient",
+      "match_mode": "active",
+      "reason": "Isopropylnorsynephrine (also marketed as deterenol) is a beta-adrenergic stimulant found in dietary supplements. Peer-reviewed analyses have documented it in weight-loss and performance products, where it can cause clinically relevant increases in heart rate and blood pressure. Deterenol is prohibited in sport by WADA and is not a lawful dietary supplement ingredient.",
+      "source_category": "permanently_banned",
+      "match_confidence": null,
+      "match_rules": {
+        "exclusions": [],
+        "case_sensitive": false,
+        "priority": 1,
+        "match_type": "normalized",
+        "confidence": "high",
+        "negative_match_terms": []
+      },
+      "review": {
+        "status": "validated",
+        "last_reviewed_at": "2026-03-16",
+        "next_review_due": "2026-09-16",
+        "reviewed_by": "manual_entry",
+        "change_log": [
+          "2026-03-16: Initial entry added — deterenol confirmed not lawful supplement ingredient (WADA prohibited; stimulant risk)"
+        ]
+      },
+      "references": [
+        {
+          "title": "Deterenol and octodrine in sports and dietary supplements",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/32927348/",
+          "evidence_summary": "Deterenol present in supplements and associated with stimulant exposure concerns."
+        },
+        {
+          "title": "WADA prohibited list",
+          "url": "https://www.wada-ama.org/en/prohibited-list",
+          "evidence_summary": "Deterenol listed among prohibited beta-2 agonist / stimulant-related ingredients in sport policy context."
+        }
+      ]
+    },
+    {
+      "id": "BANNED_CALAMUS_ACORUS_CALAMUS",
+      "standard_name": "Calamus (Acorus calamus)",
+      "aliases": [
+        "Vacha",
+        "vacha",
+        "Acorus calamus",
+        "acorus calamus",
+        "Calamus",
+        "calamus",
+        "Sweet Flag",
+        "sweet flag"
+      ],
+      "reason": "Calamus (Acorus calamus) oil and extracts are prohibited in human food under 21 CFR 189.140 due to beta-asarone content, which was shown carcinogenic in animal studies (NTP, 1983). FDA banned calamus as a food additive in 1968. Because dietary supplements are regulated under the FD&C Act as foods, calamus-containing supplement ingredients are treated as adulterated and not lawful for use in this pipeline.",
+      "status": "banned",
+      "class_tags": [
+        "prohibited_botanical",
+        "beta_asarone"
+      ],
+      "match_rules": {
+        "exclusions": [],
+        "case_sensitive": false,
+        "priority": 1,
+        "match_type": "normalized",
+        "confidence": "high",
+        "negative_match_terms": []
+      },
+      "legal_status_enum": "banned_federal",
+      "clinical_risk_enum": "high",
+      "jurisdictions": [
+        {
+          "region": "US",
+          "level": "federal",
+          "status": "banned",
+          "effective_date": null,
+          "source": {
+            "type": "federal_regulation",
+            "citation": "21 CFR 189.140 prohibits oil of calamus and calamus-containing human food.",
+            "accessed_date": "2026-03-16"
+          },
+          "jurisdiction_type": "country",
+          "jurisdiction_code": "US",
+          "last_verified_date": "2026-03-16"
+        }
+      ],
+      "references_structured": [
+        {
+          "type": "federal_regulation",
+          "title": "21 CFR 189.140 — Oil of Calamus prohibited in human food",
+          "citation": "21 CFR 189.140 (Oil of Calamus). Prohibited in human food.",
+          "url": "https://www.ecfr.gov/current/title-21/chapter-I/subchapter-B/part-189/section-189.140",
+          "supports_claims": [
+            "legal_status"
+          ]
+        },
+        {
+          "type": "pubmed",
+          "title": "Beta-asarone carcinogenicity and safety in Acorus calamus (PubMed search)",
+          "citation": "PubMed evidence on beta-asarone carcinogenicity and safety concern in Acorus calamus.",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/?term=Acorus+calamus+beta-asarone",
+          "supports_claims": [
+            "clinical_risk"
+          ]
+        }
+      ],
+      "source_category": "banned_ingredients",
+      "entity_type": "ingredient",
+      "review": {
+        "status": "validated",
+        "last_reviewed_at": "2026-03-16",
+        "next_review_due": "2026-09-16",
+        "reviewed_by": "manual_entry",
+        "change_log": [
+          "2026-03-16: Initial entry added — Acorus calamus banned per 21 CFR 189.140 (beta-asarone carcinogen)"
+        ]
+      },
+      "supersedes_ids": [],
+      "regulatory_date": null,
+      "regulatory_date_label": "FDA prohibition in human food",
+      "match_mode": "active",
+      "recall_scope": null
     }
   ]
 }

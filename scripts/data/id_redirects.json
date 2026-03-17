@@ -5,7 +5,7 @@
     "schema_version": "5.0.0",
     "last_updated": "2026-03-03",
     "version": "2.0.0",
-    "total_entries": 12,
+    "total_entries": 16,
     "data_source": "banned_recalled_ingredients.json supersedes_ids field",
     "categories": {
       "ADD_": "Additive IDs merged into BANNED_ADD_ canonical entries",
@@ -73,6 +73,26 @@
       "deprecated_id": "STATE_KRATOM_BANS",
       "canonical_id": "RISK_KRATOM_NATURAL",
       "reason": "State-level ban merged into risk assessment entry"
+    },
+    {
+      "deprecated_id": "ADD_TITANIUM_DIOXIDE",
+      "canonical_id": "BANNED_ADD_TITANIUM_DIOXIDE",
+      "reason": "Additive entry merged into canonical banned entry"
+    },
+    {
+      "deprecated_id": "ADD_TALC",
+      "canonical_id": "BANNED_ADD_TALC",
+      "reason": "Additive entry merged into canonical banned entry"
+    },
+    {
+      "deprecated_id": "ADD_CAROB_COLOR",
+      "canonical_id": "BANNED_ADD_CAROB_COLOR",
+      "reason": "Additive entry merged into canonical banned entry"
+    },
+    {
+      "deprecated_id": "ADD_OCTOPAMINE",
+      "canonical_id": "BANNED_ADD_OCTOPAMINE",
+      "reason": "Additive entry merged into canonical banned entry"
     }
   ],
   "lookup": {
@@ -87,6 +107,10 @@
     "STATE_DELTA8_THC": "BANNED_DELTA8_THC",
     "STATE_DMAA_CALIFORNIA": "BANNED_DMAA",
     "SPIKE_SIBUTRAMINE": "BANNED_SIBUTRAMINE",
-    "STATE_KRATOM_BANS": "RISK_KRATOM_NATURAL"
+    "STATE_KRATOM_BANS": "RISK_KRATOM_NATURAL",
+    "ADD_TITANIUM_DIOXIDE": "BANNED_ADD_TITANIUM_DIOXIDE",
+    "ADD_TALC": "BANNED_ADD_TALC",
+    "ADD_CAROB_COLOR": "BANNED_ADD_CAROB_COLOR",
+    "ADD_OCTOPAMINE": "BANNED_ADD_OCTOPAMINE"
   }
 }

@@ -3,8 +3,8 @@
     "description": "Non-standardized whole herb powders and simple botanical extracts without guaranteed marker compounds. Used for basic ingredient mapping. For premium standardized extracts with marker compounds, see standardized_botanicals.json.",
     "purpose": "ingredient_mapping",
     "schema_version": "5.0.0",
-    "last_updated": "2026-03-01",
-    "total_entries": 399,
+    "last_updated": "2026-03-17",
+    "total_entries": 428,
     "quality_tier": "basic_raw_botanicals",
     "standardization": "none",
     "notes": "This database is separate from standardized_botanicals.json by design. Overlaps are intentional and allow the scoring system to reward standardized forms over raw powders."
@@ -76,6 +76,21 @@
       "category": "mushroom",
       "notes": "Laricifomes officinalis (Fomitopsidaceae) fruiting body. Ancient polypore mushroom traditionally used for respiratory infections. Contains agaric acid and beta-glucans. Rare in the wild; some cultivated sources available.",
       "last_updated": "2026-03-01"
+    },
+    {
+      "id": "akkalkara_root",
+      "standard_name": "Akkalkara Root",
+      "latin_name": "Anacyclus pyrethrum",
+      "CUI": null,
+      "aliases": [
+        "Akkalkara",
+        "akkalkara",
+        "Anacyclus pyrethrum",
+        "anacyclus pyrethrum root"
+      ],
+      "category": "root",
+      "notes": "Anacyclus pyrethrum (Asteraceae) root. Traditional Ayurvedic and Unani herb also sold as Akkalkara or Akarkara. Added for exact identity coverage.",
+      "last_updated": "2026-03-13"
     },
     {
       "id": "alfalfa_leaf",
@@ -233,11 +248,12 @@
         "apocynum venetum leaf extract",
         "Posinol",
         "Venetron",
-        "Venetron Rafuma leaf extract"
+        "Venetron Rafuma leaf extract",
+        "Rafuma leaf extract"
       ],
       "category": "leaf",
       "notes": "Apocynum venetum (Apocynaceae) leaf. Venetron® is a commercial extract used for mild anxiety and sleep support. Traditional Chinese herb (Luo-Bu-Ma). Contains hyperoside and isoquercitrin flavonoids.",
-      "last_updated": "2026-03-01"
+      "last_updated": "2026-03-13"
     },
     {
       "id": "apple_cider_vinegar",
@@ -293,6 +309,20 @@
       "category": "mushroom",
       "notes": "Ganoderma applanatum (Ganodermataceae) fruiting body. Bracket fungus related to reishi. Contains beta-glucans and triterpenes. Limited clinical research compared to G. lucidum; used in traditional medicine.",
       "last_updated": "2026-03-01"
+    },
+    {
+      "id": "ashoka",
+      "standard_name": "Ashoka",
+      "latin_name": "Saraca asoca",
+      "CUI": null,
+      "aliases": [
+        "Ashoka",
+        "ashoka",
+        "Saraca asoca"
+      ],
+      "category": "bark",
+      "notes": "Saraca asoca (Fabaceae/Caesalpinioideae), commonly called Ashoka. Ayurvedic botanical used in women’s health formulas. Added for exact identity coverage.",
+      "last_updated": "2026-03-13"
     },
     {
       "id": "ashwagandha",
@@ -362,6 +392,21 @@
       "category": "root",
       "notes": "Atractylodes macrocephala (Asteraceae) rhizome. Bai Zhu in TCM, used for spleen-qi deficiency and digestive support. Contains atractylon and atractylenolide sesquiterpenes. Botanical form, unstandardized.",
       "last_updated": "2026-03-01"
+    },
+    {
+      "id": "avocado_fruit",
+      "standard_name": "Avocado Fruit",
+      "latin_name": "Persea americana",
+      "CUI": null,
+      "aliases": [
+        "Avocado",
+        "avocado",
+        "avocado fruit",
+        "persea americana fruit"
+      ],
+      "category": "fruit",
+      "notes": "Persea americana fruit identity used for whole-fruit supplement disclosures distinct from avocado oil and avocado/soy unsaponifiables.",
+      "last_updated": "2026-03-13"
     },
     {
       "id": "avocado_oil",
@@ -497,6 +542,23 @@
       "last_updated": "2026-03-01"
     },
     {
+      "id": "bhringraj",
+      "standard_name": "Bhringraj",
+      "latin_name": "Eclipta prostrata",
+      "CUI": null,
+      "aliases": [
+        "Bhrungraj",
+        "bhrungraj",
+        "Bhringraj",
+        "bhringraj",
+        "Eclipta prostrata",
+        "Eclipta alba"
+      ],
+      "category": "herb",
+      "notes": "Eclipta prostrata (syn. Eclipta alba), commonly called Bhringraj. Ayurvedic herb used in liver and hair-support formulas. Added for exact identity coverage.",
+      "last_updated": "2026-03-13"
+    },
+    {
       "id": "bilberry",
       "standard_name": "Bilberry",
       "latin_name": "Vaccinium myrtillus",
@@ -565,6 +627,37 @@
       "category": "herb",
       "notes": "Allium sativum (Amaryllidaceae) aged/fermented bulb. Maillard reaction product with enhanced S-allyl cysteine (SAC) content compared to fresh garlic. Reduced allicin but increased antioxidant capacity.",
       "last_updated": "2026-03-01"
+    },
+    {
+      "id": "black_ginger",
+      "standard_name": "Black Ginger",
+      "latin_name": "Kaempferia parviflora",
+      "CUI": "C3178990",
+      "aliases": [
+        "black galingale",
+        "kaempferia parviflora",
+        "kaempferia parviflora root extract",
+        "sirtmax",
+        "sirtmax kaempferia parviflora root extract"
+      ],
+      "category": "root",
+      "notes": "Kaempferia parviflora (Zingiberaceae) rhizome. Thai black ginger (Krachai Dum). Contains polymethoxyflavones (5,7-dimethoxyflavone). RCT evidence for exercise performance and metabolic function.",
+      "last_updated": "2026-03-01"
+    },
+    {
+      "id": "black_gram",
+      "standard_name": "Black Gram",
+      "latin_name": "Vigna mungo",
+      "CUI": null,
+      "aliases": [
+        "Masha",
+        "masha",
+        "Black Gram",
+        "black gram"
+      ],
+      "category": "seed",
+      "notes": "Vigna mungo seed identity used for Ayurvedic masha label rows when raw DSLD classifies the ingredient under black gram.",
+      "last_updated": "2026-03-16"
     },
     {
       "id": "black_pepper",
@@ -681,6 +774,21 @@
       "last_updated": "2026-03-01"
     },
     {
+      "id": "blue_vervain",
+      "standard_name": "Blue Vervain",
+      "latin_name": "Verbena hastata",
+      "CUI": "C0949588",
+      "aliases": [
+        "verbena hastata",
+        "blue vervain extract",
+        "European Vervain",
+        "Vervain whole herb powder"
+      ],
+      "category": "herb",
+      "notes": "Verbena hastata (Verbenaceae) aerial parts. Native North American nervine and bitter tonic. Contains verbenalin iridoid glycoside and hastatoside. Traditional use for anxiety, tension, and liver support.",
+      "last_updated": "2026-03-01"
+    },
+    {
       "id": "blueberry",
       "standard_name": "Blueberry",
       "latin_name": "Vaccinium corymbosum",
@@ -766,6 +874,18 @@
       "last_updated": "2026-03-01"
     },
     {
+      "id": "brassaiopsis_glomerulata",
+      "standard_name": "Brassaiopsis glomerulata",
+      "latin_name": "Brassaiopsis glomerulata",
+      "CUI": null,
+      "aliases": [
+        "Brassaiopsis glomerulata extract"
+      ],
+      "category": "root",
+      "notes": "Brassaiopsis glomerulata (Araliaceae) stem bark. Vietnamese traditional medicine plant. Contains triterpene saponins. Marketed for testosterone and aromatase inhibition; very limited clinical evidence.",
+      "last_updated": "2026-03-01"
+    },
+    {
       "id": "broccoli",
       "standard_name": "Broccoli",
       "latin_name": "Brassica oleracea var. italica",
@@ -844,6 +964,16 @@
       ],
       "category": "seed",
       "notes": "Fagopyrum esculentum (Polygonaceae) seed. Pseudocereal rich in rutin (quercetin-3-rutinoside), resistant starch, and D-chiro-inositol. Gluten-free grain alternative with cardiovascular benefits.",
+      "last_updated": "2026-03-01"
+    },
+    {
+      "id": "bulbine_natalensis",
+      "standard_name": "Bulbine natalensis",
+      "latin_name": "Bulbine natalensis",
+      "CUI": null,
+      "aliases": [],
+      "category": "root",
+      "notes": "Bulbine natalensis (Asphodelaceae) root/stem. South African succulent marketed for testosterone support. Contains mesembrenone alkaloids and saponins. Limited human clinical evidence; mostly animal studies.",
       "last_updated": "2026-03-01"
     },
     {
@@ -945,6 +1075,21 @@
       "last_updated": "2026-03-01"
     },
     {
+      "id": "california_poppy",
+      "standard_name": "California Poppy",
+      "latin_name": "Eschscholzia californica",
+      "CUI": "C0949771",
+      "aliases": [
+        "california poppy extract",
+        "eschscholzia californica",
+        "eschscholzia californica extract",
+        "California Poppy [herb] 5:1 extract"
+      ],
+      "category": "flower",
+      "notes": "Eschscholzia californica (Papaveraceae) aerial parts. Contains protopine and californidine alkaloids. Non-opiate sedative with GABA receptor affinity. French HMPC-approved for mild anxiety and insomnia.",
+      "last_updated": "2026-03-01"
+    },
+    {
       "id": "caralluma",
       "standard_name": "Caralluma",
       "latin_name": "Caralluma fimbriata",
@@ -1001,6 +1146,34 @@
       "category": "seed",
       "notes": "Ceratonia siliqua (Fabaceae) pod. Contains galactomannan gum (locust bean gum), tannins, and D-pinitol. Traditional Mediterranean food used in supplements as thickener and mild antidiarrheal.",
       "last_updated": "2026-03-01"
+    },
+    {
+      "id": "carrot",
+      "standard_name": "Carrot",
+      "latin_name": "Daucus carota",
+      "CUI": "C0007788",
+      "aliases": [
+        "Daucus sativus",
+        "daucus carota",
+        "carrot root"
+      ],
+      "category": "root",
+      "notes": "Daucus carota subsp. sativus (Apiaceae) root. Rich in beta-carotene (provitamin A, 8-13 mg/100g), polyacetylenes (falcarinol), and dietary fiber. Used in whole-food supplement blends.",
+      "last_updated": "2026-03-01"
+    },
+    {
+      "id": "carrot_seed_oil",
+      "standard_name": "Carrot Seed Oil",
+      "latin_name": "Daucus carota",
+      "CUI": "C0007788",
+      "aliases": [
+        "carrot seed oil",
+        "Carrot Seed Oil",
+        "daucus carota seed oil"
+      ],
+      "category": "seed",
+      "notes": "Daucus carota (Apiaceae) seed-derived oil. Preserve as a distinct carrot seed oil identity when the label declares the oil itself rather than carrot root, carrot extract, or beta-carotene.",
+      "last_updated": "2026-03-09"
     },
     {
       "id": "cassava",
@@ -1106,21 +1279,6 @@
       "last_updated": "2026-03-01"
     },
     {
-      "id": "celandine",
-      "standard_name": "Greater Celandine",
-      "latin_name": "Chelidonium majus",
-      "CUI": "C0949680",
-      "aliases": [
-        "celandine",
-        "chelidonium majus",
-        "celandine extract",
-        "celandine herb"
-      ],
-      "category": "herb",
-      "notes": "Chelidonium majus (Papaveraceae) aerial parts. Greater celandine containing chelidonine and sanguinarine alkaloids. Traditional European choleretic. Hepatotoxicity cases reported (EMA/HMPC assessment). Use with caution.",
-      "last_updated": "2026-03-01"
-    },
-    {
       "id": "celastrus_paniculatus",
       "standard_name": "Celastrus paniculatus",
       "latin_name": "Celastrus paniculatus",
@@ -1205,11 +1363,13 @@
         "phyllanthus niruri",
         "phyllanthus niruri extract",
         "chanca piedra whole plant extract",
-        "chanca piedra 4:1 extract"
+        "chanca piedra 4:1 extract",
+        "Bhumiamalaki",
+        "Bhumyamalaki"
       ],
       "category": "herb",
       "notes": "Phyllanthus niruri (Phyllanthaceae) aerial parts. 'Stone breaker' used in Ayurveda and South American folk medicine for kidney stones and liver support. Contains lignans (phyllanthin, hypophyllanthin).",
-      "last_updated": "2026-03-01"
+      "last_updated": "2026-03-13"
     },
     {
       "id": "chaste_tree",
@@ -1236,11 +1396,29 @@
         "terminalia chebula",
         "haritaki",
         "he zi",
-        "black myrobalan"
+        "black myrobalan",
+        "Chebulic Myrobalan Fruit Extract"
       ],
       "category": "fruit",
       "notes": "Terminalia chebula (Combretaceae) fruit. Haritaki in Ayurveda, one of three Triphala fruits. Rich in chebulic acid, gallic acid, and ellagic acid. Traditional rejuvenation and digestive remedy.",
-      "last_updated": "2026-03-01"
+      "last_updated": "2026-03-13"
+    },
+    {
+      "id": "cherokee_rose_fruit",
+      "standard_name": "Cherokee Rose Fruit",
+      "latin_name": "Rosa laevigata",
+      "CUI": null,
+      "aliases": [
+        "Cherokee Rose",
+        "Cherokee Rose extract",
+        "Cherokee Rose 4:1 extract",
+        "cherokee rose",
+        "cherokee rose extract",
+        "cherokee rose 4:1 extract"
+      ],
+      "category": "fruit",
+      "notes": "Rosa laevigata fruit botanical identity. Used in traditional formulations and appears in supplement labels as Cherokee Rose fruit extract preparations.",
+      "last_updated": "2026-03-13"
     },
     {
       "id": "chia_seed",
@@ -1294,6 +1472,19 @@
       ],
       "category": "spice",
       "notes": "Capsicum annuum (Solanaceae) fruit. Contains capsaicinoids (capsaicin, dihydrocapsaicin) with thermogenic and analgesic properties. Covers generic chili/hot pepper label variants. Botanical powder form.",
+      "last_updated": "2026-03-01"
+    },
+    {
+      "id": "chinese_dodder_seed",
+      "standard_name": "Chinese Dodder Seed",
+      "latin_name": "Cuscuta chinensis",
+      "CUI": "C0949729",
+      "aliases": [
+        "Chinese Dodder Seed Extract",
+        "cuscuta chinensis seed"
+      ],
+      "category": "seed",
+      "notes": "Cuscuta chinensis (Convolvulaceae) seed. Tu Si Zi in TCM, used for kidney yang and liver-kidney deficiency patterns. Contains flavonoids (kaempferol, quercetin) and lignans. Parasitic plant seed.",
       "last_updated": "2026-03-01"
     },
     {
@@ -1365,6 +1556,22 @@
       "last_updated": "2026-03-01"
     },
     {
+      "id": "cissus_sicyoides",
+      "standard_name": "Cissus sicyoides",
+      "latin_name": "Cissus sicyoides",
+      "CUI": null,
+      "aliases": [
+        "Insulina (Cissus sicyoides) leaf extract",
+        "insulina (cissus sicyoides) leaf extract",
+        "Insulina",
+        "insulina",
+        "Cissus sicyoides leaf extract"
+      ],
+      "category": "leaf",
+      "notes": "Cissus sicyoides leaf, commonly marketed as Insulina. Added for exact identity coverage from raw DSLD label text.",
+      "last_updated": "2026-03-13"
+    },
+    {
       "id": "citrus_bergamot",
       "standard_name": "Citrus Bergamot",
       "latin_name": "Citrus bergamia",
@@ -1383,11 +1590,13 @@
       "CUI": null,
       "aliases": [
         "citrus extract",
-        "citrus bioflavonoids"
+        "citrus bioflavonoids",
+        "Citrus spp. Fruit Extract",
+        "Citrus spp Fruit Extract"
       ],
       "category": "fruit",
       "notes": "Generic citrus (Rutaceae) fruit extract covering multiple Citrus species. Contains bioflavonoids (hesperidin, naringin, rutin). Identity mapping for non-specific citrus extract labels. Not standardized.",
-      "last_updated": "2026-03-01"
+      "last_updated": "2026-03-16"
     },
     {
       "id": "cleavers_herb",
@@ -1490,11 +1699,13 @@
       "aliases": [
         "forskohlii extract",
         "coleus forskohlii extract",
-        "forskolin source"
+        "forskolin source",
+        "coleus root extract",
+        "Coleus root extract"
       ],
       "category": "root",
       "notes": "Coleus forskohlii (Lamiaceae) root. Contains forskolin diterpene that directly activates adenylate cyclase/cAMP pathway. RCT evidence for body composition (PMID 15947455). Botanical root form.",
-      "last_updated": "2026-03-01"
+      "last_updated": "2026-03-13"
     },
     {
       "id": "concord_grape",
@@ -1568,6 +1779,21 @@
       "last_updated": "2026-03-01"
     },
     {
+      "id": "corydalis_yanhusuo_root",
+      "standard_name": "Corydalis Root",
+      "latin_name": "Corydalis yanhusuo",
+      "CUI": null,
+      "aliases": [
+        "Corydalis yanhusuo root 10:1 extract",
+        "corydalis yanhusuo root 10:1 extract",
+        "Corydalis root extract",
+        "Corydalis"
+      ],
+      "category": "root",
+      "notes": "Corydalis yanhusuo root, a traditional East Asian botanical used in pain-support formulas. Added for exact Softgels label coverage.",
+      "last_updated": "2026-03-13"
+    },
+    {
       "id": "couch_grass",
       "standard_name": "Couch Grass",
       "latin_name": "Elymus repens",
@@ -1582,6 +1808,16 @@
       ],
       "category": "root",
       "notes": "Elymus repens (syn. Agropyron repens, Poaceae) rhizome. Traditional European diuretic and demulcent. Contains triticin polysaccharide and mucilage. Used for urinary tract inflammation.",
+      "last_updated": "2026-03-01"
+    },
+    {
+      "id": "cowslip",
+      "standard_name": "Cowslip",
+      "latin_name": "Primula veris",
+      "CUI": "C0949616",
+      "aliases": [],
+      "category": "flower",
+      "notes": "Primula veris (Primulaceae) flower. European traditional expectorant containing saponins (primulasaponin) and flavonoids. Component of Sinupret® for sinusitis. Botanical flower preparation.",
       "last_updated": "2026-03-01"
     },
     {
@@ -1669,11 +1905,13 @@
       "latin_name": "Cuminum cyminum",
       "CUI": "C0010481",
       "aliases": [
-        "cumin extract"
+        "cumin extract",
+        "Cormino seed extract",
+        "cormino seed extract"
       ],
       "category": "herb",
       "notes": "Cuminum cyminum (Apiaceae) seed. Contains cuminaldehyde and thymoquinone. Traditional carminative and digestive spice in Ayurveda and Middle Eastern medicine. Botanical seed powder.",
-      "last_updated": "2026-03-01"
+      "last_updated": "2026-03-13"
     },
     {
       "id": "cutch_tree",
@@ -1726,6 +1964,21 @@
       ],
       "category": "root",
       "notes": "Taraxacum officinale (Asteraceae) root. Root-specific preparation rich in inulin (up to 40% in autumn harvest) and sesquiterpene lactones. Traditional choleretic and prebiotic. Botanical root powder.",
+      "last_updated": "2026-03-01"
+    },
+    {
+      "id": "danshen",
+      "standard_name": "Danshen",
+      "latin_name": "Salvia miltiorrhiza",
+      "CUI": "C0036098",
+      "aliases": [
+        "chinese salvia",
+        "salvia miltiorrhiza",
+        "salvia miltiorrhiza root extract",
+        "Chinese Salvia Root Extract"
+      ],
+      "category": "root",
+      "notes": "Salvia miltiorrhiza (Lamiaceae) root. Dan Shen in TCM, primary blood-moving herb. Contains tanshinones (lipophilic) and salvianolic acids (hydrophilic). Drug interaction risk with warfarin. Botanical root form.",
       "last_updated": "2026-03-01"
     },
     {
@@ -2020,6 +2273,19 @@
       "last_updated": "2026-03-01"
     },
     {
+      "id": "european_ash_seed_fruit",
+      "standard_name": "European Ash Seed/Fruit",
+      "latin_name": "Fraxinus excelsior",
+      "CUI": "C0949800",
+      "aliases": [
+        "European Ash (seed, fruit) extract",
+        "fraxinus excelsior"
+      ],
+      "category": "seed",
+      "notes": "Fraxinus excelsior (Oleaceae) seed/fruit (samara). Contains secoiridoids (oleuropein analogs) and hydroxycoumarins. European traditional remedy for joint health. Botanical seed/fruit form.",
+      "last_updated": "2026-03-01"
+    },
+    {
       "id": "evening_primrose_seed_oil",
       "standard_name": "Evening Primrose Seed Oil",
       "latin_name": "Oenothera biennis",
@@ -2069,6 +2335,19 @@
       ],
       "category": "herb",
       "notes": "Euphrasia officinalis (Orobanchaceae) aerial parts. Traditional European herb for eye inflammation and hay fever. Contains aucubin iridoid, caffeic acid, and flavonoids. Limited clinical evidence.",
+      "last_updated": "2026-03-01"
+    },
+    {
+      "id": "false_unicorn",
+      "standard_name": "False Unicorn",
+      "latin_name": "Chamaelirium luteum",
+      "CUI": "C0949787",
+      "aliases": [
+        "false unicorn root",
+        "chamaelirium luteum"
+      ],
+      "category": "root",
+      "notes": "Chamaelirium luteum (Melanthiaceae) root. Contains chamaelirin (helonin) steroidal saponin. Traditional Eclectic medicine remedy for female reproductive complaints. Conservation concern due to overharvesting.",
       "last_updated": "2026-03-01"
     },
     {
@@ -2148,6 +2427,22 @@
       "category": "herb",
       "notes": "Forsythia suspensa (Oleaceae) fruit. Lian Qiao in TCM, paired with honeysuckle (Yin Qiao San). Contains forsythiaside and phillyrin lignans. Heat-clearing and detoxifying herb.",
       "last_updated": "2026-03-01"
+    },
+    {
+      "id": "fragrant_angelica_root",
+      "standard_name": "Fragrant Angelica Root",
+      "latin_name": "Angelica dahurica",
+      "CUI": null,
+      "aliases": [
+        "Angelica dahurica root 10:1 extract",
+        "angelica dahurica root 10:1 extract",
+        "fragrant angelica",
+        "fragrant angelica root",
+        "angelica dahurica"
+      ],
+      "category": "root",
+      "notes": "Angelica dahurica (Apiaceae) root. Also called fragrant angelica or Bai Zhi in traditional East Asian medicine. Added for exact identity coverage of Softgels label variants.",
+      "last_updated": "2026-03-13"
     },
     {
       "id": "frangula_bark",
@@ -2390,11 +2685,13 @@
         "Artichoke Aerial Parts Extract",
         "Artichoke aerial extract",
         "Artichoke (Cynara scolymus) aerial part extract",
-        "Artichoke fruit leaf extract"
+        "Artichoke fruit leaf extract",
+        "Artichoke Whole Extract",
+        "Artichoke (Cynara scolymus) (leaf) aqueous extract"
       ],
       "category": "leaf",
       "notes": "Cynara scolymus (Asteraceae) leaf. Contains cynarin and chlorogenic acid. European HMPC-approved for dyspepsia. RCT evidence for lipid reduction (PMID 18424099). Botanical leaf preparation.",
-      "last_updated": "2026-03-01"
+      "last_updated": "2026-03-13"
     },
     {
       "id": "goats_rue",
@@ -2548,6 +2845,38 @@
       "last_updated": "2026-03-01"
     },
     {
+      "id": "celandine",
+      "standard_name": "Greater Celandine",
+      "latin_name": "Chelidonium majus",
+      "CUI": "C0949680",
+      "aliases": [
+        "celandine",
+        "chelidonium majus",
+        "celandine extract",
+        "celandine herb"
+      ],
+      "category": "herb",
+      "notes": "Chelidonium majus (Papaveraceae) aerial parts. Greater celandine containing chelidonine and sanguinarine alkaloids. Traditional European choleretic. Hepatotoxicity cases reported (EMA/HMPC assessment). Use with caution.",
+      "last_updated": "2026-03-01"
+    },
+    {
+      "id": "greater_galangal",
+      "standard_name": "Greater Galangal",
+      "latin_name": "Alpinia galanga",
+      "CUI": null,
+      "aliases": [
+        "Galanga",
+        "galanga",
+        "Greater galangal",
+        "greater galangal",
+        "Galanga Supercritical extract",
+        "galanga supercritical extract"
+      ],
+      "category": "rhizome",
+      "notes": "Alpinia galanga rhizome, commonly called greater galangal or galanga. Added for exact identity coverage from raw DSLD label text.",
+      "last_updated": "2026-03-13"
+    },
+    {
       "id": "greek_mountain_tea_aerial_parts",
       "standard_name": "Greek Mountain Tea Aerial Parts",
       "latin_name": "Sideritis scardica",
@@ -2682,6 +3011,19 @@
       "last_updated": "2026-03-01"
     },
     {
+      "id": "gynostemma",
+      "standard_name": "Gynostemma",
+      "latin_name": "Gynostemma pentaphyllum",
+      "CUI": "C0949828",
+      "aliases": [
+        "activamp gynostemma pentaphyllum extract",
+        "gynostemma pentaphyllum extract"
+      ],
+      "category": "leaf",
+      "notes": "Gynostemma pentaphyllum (Cucurbitaceae) leaf. Jiaogulan, 'Southern ginseng.' Contains gypenosides (saponins structurally similar to ginsenosides). Adaptogenic and AMPK-activating. Botanical leaf form.",
+      "last_updated": "2026-03-01"
+    },
+    {
       "id": "hawthorn_flowering_tops",
       "standard_name": "Hawthorn Flowering Tops",
       "latin_name": "Crataegus monogyna",
@@ -2698,6 +3040,18 @@
       "category": "flower",
       "notes": "Crataegus monogyna (Rosaceae) flowering tops (leaf, flower, berry). Contains vitexin, hyperoside, and OPCs. European HMPC-approved for mild heart failure support (NYHA I-II). Well-studied cardiotonic.",
       "last_updated": "2026-03-01"
+    },
+    {
+      "id": "henbane",
+      "standard_name": "Henbane",
+      "latin_name": "Hyoscyamus niger",
+      "CUI": null,
+      "aliases": [
+        "Khurasani Ajwain"
+      ],
+      "category": "seed",
+      "notes": "Hyoscyamus niger seed identity used for khurasani ajwain label rows in Ayurvedic products.",
+      "last_updated": "2026-03-13"
     },
     {
       "id": "hesperidin",
@@ -2825,6 +3179,20 @@
       "category": "seed",
       "notes": "Aesculus hippocastanum (Sapindaceae) seed. Contains aescin (escin) triterpene saponin mixture. European HMPC-approved for chronic venous insufficiency. RCT evidence (PMID 22592684). Botanical seed form.",
       "last_updated": "2026-03-01"
+    },
+    {
+      "id": "horsemint_leaf",
+      "standard_name": "Horsemint Leaf",
+      "latin_name": "Mentha longifolia",
+      "CUI": null,
+      "aliases": [
+        "Horsemint leaf extract",
+        "horsemint leaf extract",
+        "mentha longifolia leaf extract"
+      ],
+      "category": "leaf",
+      "notes": "Mentha longifolia leaf botanical identity used in supplement labels as horsemint leaf extract.",
+      "last_updated": "2026-03-13"
     },
     {
       "id": "horseradish",
@@ -3031,6 +3399,18 @@
       "last_updated": "2026-03-01"
     },
     {
+      "id": "jatamasi",
+      "standard_name": "Jatamasi",
+      "latin_name": "Nardostachys jatamansi",
+      "CUI": null,
+      "aliases": [
+        "Jatamasi"
+      ],
+      "category": "root",
+      "notes": "Nardostachys jatamansi root/rhizome used in Ayurvedic formulations. Exact identity mapping for jatamasi label rows.",
+      "last_updated": "2026-03-13"
+    },
+    {
       "id": "java_tea",
       "standard_name": "Java Tea",
       "latin_name": "Orthosiphon stamineus",
@@ -3060,6 +3440,19 @@
       ],
       "category": "root",
       "notes": "Helianthus tuberosus (Asteraceae) tuber. Rich in inulin (76% of dry weight), the highest natural source. Prebiotic fructo-oligosaccharide. Used in supplements as inulin source and GI support.",
+      "last_updated": "2026-03-01"
+    },
+    {
+      "id": "jiaogulan_leaf",
+      "standard_name": "Jiaogulan Leaf",
+      "latin_name": "Gynostemma pentaphyllum",
+      "CUI": "C0949828",
+      "aliases": [
+        "Jiaogulan Leaf Extract",
+        "gynostemma pentaphyllum leaf"
+      ],
+      "category": "leaf",
+      "notes": "Gynostemma pentaphyllum (Cucurbitaceae) leaf. Jiaogulan from southern China, covers leaf-specific labels. Same species as gynostemma entry. Contains 80+ gypenoside saponins with adaptogenic activity.",
       "last_updated": "2026-03-01"
     },
     {
@@ -3107,6 +3500,21 @@
       "last_updated": "2026-03-01"
     },
     {
+      "id": "kanna_sceletium",
+      "standard_name": "Kanna (Sceletium tortuosum)",
+      "latin_name": "Sceletium tortuosum",
+      "CUI": null,
+      "aliases": [
+        "sceletium tortuosum",
+        "sceletium tortuosum extract",
+        "kanna",
+        "zembrin"
+      ],
+      "category": "herb",
+      "notes": "Sceletium tortuosum (Aizoaceae) aerial parts. South African succulent (Kanna) containing mesembrine alkaloids. SRI (serotonin reuptake inhibitor) and PDE4 inhibitor activity. Traditional mood-elevating herb.",
+      "last_updated": "2026-03-01"
+    },
+    {
       "id": "kawaratake",
       "standard_name": "Kawaratake",
       "latin_name": "Trametes versicolor",
@@ -3142,6 +3550,21 @@
       "last_updated": "2026-03-01"
     },
     {
+      "id": "khadeer",
+      "standard_name": "Khadeer",
+      "latin_name": "Acacia catechu",
+      "CUI": null,
+      "aliases": [
+        "Khadeer",
+        "khadeer",
+        "Catechu",
+        "catechu"
+      ],
+      "category": "heartwood",
+      "notes": "Ayurvedic common-name identity for Acacia catechu (catechu/khadir). Added for exact Softgels label coverage.",
+      "last_updated": "2026-03-13"
+    },
+    {
       "id": "kiwifruit",
       "standard_name": "Kiwifruit",
       "latin_name": "Actinidia deliciosa",
@@ -3149,11 +3572,24 @@
       "aliases": [
         "actazin kiwifruit powder",
         "kiwifruit powder",
-        "actazin"
+        "actazin",
+        "kiwi"
       ],
       "category": "fruit",
       "notes": "Actinidia deliciosa (Actinidiaceae) fruit. Rich in vitamin C (92 mg/100g), actinidin enzyme, and dietary fiber. RCT evidence for constipation relief and sleep quality (PMID 21669584). Botanical fruit powder.",
       "last_updated": "2026-03-01"
+    },
+    {
+      "id": "kokilaksha",
+      "standard_name": "Kokilaksha",
+      "latin_name": "Hygrophila auriculata",
+      "CUI": null,
+      "aliases": [
+        "Kokilaksha"
+      ],
+      "category": "whole_plant",
+      "notes": "Hygrophila auriculata identity mapping for kokilaksha Ayurvedic label rows.",
+      "last_updated": "2026-03-13"
     },
     {
       "id": "kola_nut",
@@ -3166,6 +3602,33 @@
       "category": "seed",
       "notes": "Cola nitida (Malvaceae) seed. Contains caffeine (2-3.5%) and theobromine. Traditional West African stimulant. Used in supplements as natural caffeine source. Botanical seed powder.",
       "last_updated": "2026-03-01"
+    },
+    {
+      "id": "korean_pine",
+      "standard_name": "Korean Pine",
+      "latin_name": "Pinus koraiensis",
+      "CUI": null,
+      "aliases": [
+        "Korean Pine nut seed Oil",
+        "Korean Pine Nut Seed Oil"
+      ],
+      "category": "seed",
+      "notes": "Pinus koraiensis seed oil identity mapping for Korean pine nut oil supplement labels.",
+      "last_updated": "2026-03-13"
+    },
+    {
+      "id": "ladys_mantle_leaf",
+      "standard_name": "Lady's Mantle Leaf",
+      "latin_name": "Alchemilla vulgaris",
+      "CUI": null,
+      "aliases": [
+        "Frauenmantle leaf extract",
+        "frauenmantle leaf extract",
+        "lady's mantle leaf extract"
+      ],
+      "category": "leaf",
+      "notes": "Alchemilla vulgaris leaf botanical identity used in supplement labels as women's-herb leaf extract preparations.",
+      "last_updated": "2026-03-13"
     },
     {
       "id": "lavender",
@@ -3200,24 +3663,6 @@
       ],
       "category": "fruit",
       "notes": "Citrus limon (Rutaceae) fruit. Rich in citric acid, vitamin C, and limonene. Contains eriocitrin and hesperidin flavonoids in peel. Botanical fruit powder, not standardized.",
-      "last_updated": "2026-03-01"
-    },
-    {
-      "id": "lemongrass",
-      "standard_name": "Lemongrass",
-      "latin_name": "Cymbopogon citratus",
-      "CUI": "C0330621",
-      "aliases": [
-        "lemon grass",
-        "cymbopogon citratus",
-        "cymbopogon flexuosus",
-        "lemongrass extract",
-        "lemongrass leaf extract",
-        "lemongrass powder",
-        "lemon grass extract"
-      ],
-      "category": "herb",
-      "notes": "Cymbopogon citratus (Poaceae) aerial parts. Contains citral (geranial + neral, 65-85% of essential oil). Traditional carminative, febrifuge, and antimicrobial herb. Botanical herb powder.",
       "last_updated": "2026-03-01"
     },
     {
@@ -3267,6 +3712,24 @@
       "last_updated": "2026-03-01"
     },
     {
+      "id": "lemongrass",
+      "standard_name": "Lemongrass",
+      "latin_name": "Cymbopogon citratus",
+      "CUI": "C0330621",
+      "aliases": [
+        "lemon grass",
+        "cymbopogon citratus",
+        "cymbopogon flexuosus",
+        "lemongrass extract",
+        "lemongrass leaf extract",
+        "lemongrass powder",
+        "lemon grass extract"
+      ],
+      "category": "herb",
+      "notes": "Cymbopogon citratus (Poaceae) aerial parts. Contains citral (geranial + neral, 65-85% of essential oil). Traditional carminative, febrifuge, and antimicrobial herb. Botanical herb powder.",
+      "last_updated": "2026-03-01"
+    },
+    {
       "id": "licorice_root",
       "standard_name": "Licorice Root",
       "latin_name": "Glycyrrhiza glabra",
@@ -3313,6 +3776,18 @@
       "last_updated": "2026-03-01"
     },
     {
+      "id": "linden",
+      "standard_name": "Linden",
+      "latin_name": "Tilia europaea",
+      "CUI": "C0040232",
+      "aliases": [
+        "tilia cordata"
+      ],
+      "category": "flower",
+      "notes": "Tilia europaea (Malvaceae) flower. Linden/lime blossom rich in mucilage, flavonoids (tiliroside), and volatile oils. European HMPC-approved for common cold symptoms. Traditional anxiolytic and diaphoretic.",
+      "last_updated": "2026-03-01"
+    },
+    {
       "id": "lingonberry",
       "standard_name": "Lingonberry",
       "latin_name": "Vaccinium vitis-idaea",
@@ -3337,6 +3812,21 @@
       "category": "mushroom",
       "notes": "Hericium erinaceus (Hericiaceae) fruiting body. Contains hericenones and erinacines that stimulate NGF synthesis. RCT evidence for cognitive function (PMID 18844328). Botanical mushroom powder.",
       "last_updated": "2026-03-01"
+    },
+    {
+      "id": "lodhra",
+      "standard_name": "Lodhra",
+      "latin_name": "Symplocos racemosa",
+      "CUI": null,
+      "aliases": [
+        "Lodhra",
+        "lodhra",
+        "Lodhtree",
+        "lodhtree"
+      ],
+      "category": "bark",
+      "notes": "Symplocos racemosa, commonly called Lodhra or Lodhtree. Ayurvedic botanical used in women's health and astringent formulas.",
+      "last_updated": "2026-03-13"
     },
     {
       "id": "long_pepper",
@@ -3368,6 +3858,18 @@
       "category": "root",
       "notes": "Lepidium meyenii (Brassicaceae) root. Peruvian adaptogen grown at 4,000+ m altitude. Contains macamides, macaenes, and glucosinolates. RCT evidence for libido and fertility (PMID 19781622).",
       "last_updated": "2026-03-01"
+    },
+    {
+      "id": "mace",
+      "standard_name": "Mace",
+      "latin_name": "Myristica fragrans",
+      "CUI": null,
+      "aliases": [
+        "Jatiphala"
+      ],
+      "category": "seed",
+      "notes": "Myristica fragrans aril/spice identity used for jatiphala label rows when DSLD groups the ingredient under mace.",
+      "last_updated": "2026-03-13"
     },
     {
       "id": "magnolia_phellodendron_blend",
@@ -3471,21 +3973,6 @@
       "last_updated": "2026-03-01"
     },
     {
-      "id": "kanna_sceletium",
-      "standard_name": "Kanna (Sceletium tortuosum)",
-      "latin_name": "Sceletium tortuosum",
-      "CUI": null,
-      "aliases": [
-        "sceletium tortuosum",
-        "sceletium tortuosum extract",
-        "kanna",
-        "zembrin"
-      ],
-      "category": "herb",
-      "notes": "Sceletium tortuosum (Aizoaceae) aerial parts. South African succulent (Kanna) containing mesembrine alkaloids. SRI (serotonin reuptake inhibitor) and PDE4 inhibitor activity. Traditional mood-elevating herb.",
-      "last_updated": "2026-03-01"
-    },
-    {
       "id": "marshmallow_root",
       "standard_name": "Marshmallow Root",
       "latin_name": "Althaea officinalis",
@@ -3504,6 +3991,22 @@
       "category": "root",
       "notes": "Althaea officinalis (Malvaceae) root. Contains mucilage polysaccharides (up to 35% dry weight). European HMPC-approved for dry cough and mild GI inflammation. Traditional demulcent herb.",
       "last_updated": "2026-03-01"
+    },
+    {
+      "id": "mashaparni",
+      "standard_name": "Mashaparni",
+      "latin_name": "Teramnus labialis",
+      "CUI": null,
+      "aliases": [
+        "Mashparnee",
+        "mashparnee",
+        "Mashaparni",
+        "mashaparni",
+        "Blue Wiss"
+      ],
+      "category": "herb",
+      "notes": "Teramnus labialis, commonly transliterated as Mashaparni/Mashparnee in Ayurvedic formulas. Added for exact identity coverage from raw DSLD label text.",
+      "last_updated": "2026-03-13"
     },
     {
       "id": "matcha_tea_powder",
@@ -3527,7 +4030,9 @@
       "aliases": [
         "meadowsweet filipendula ulmaria extract",
         "filipendula ulmaria extract",
-        "Meadowsweet (Filipendula ulmaria) extract"
+        "Meadowsweet (Filipendula ulmaria) extract",
+        "Meadowsweet extract salicylic acid derivatives",
+        "Meadowsweet extract salicyllic acid derivatives"
       ],
       "category": "herb",
       "notes": "Filipendula ulmaria (Rosaceae) aerial parts. Contains salicylaldehyde and salicin (natural aspirin precursors). European HMPC-approved for common cold and mild joint pain. Traditional anti-inflammatory.",
@@ -3603,6 +4108,18 @@
       "last_updated": "2026-03-01"
     },
     {
+      "id": "mimosa_pudica",
+      "standard_name": "Mimosa pudica",
+      "latin_name": "Mimosa pudica",
+      "CUI": null,
+      "aliases": [
+        "organic mimosa pudica"
+      ],
+      "category": "seed",
+      "notes": "Mimosa pudica (Fabaceae) seed/whole plant. Sensitive plant/touch-me-not. Contains mimosine and tannins. Used in Ayurveda for wound healing and as GI cleansing agent. Botanical seed/herb powder.",
+      "last_updated": "2026-03-01"
+    },
+    {
       "id": "moringa_leaf",
       "standard_name": "Moringa Leaf",
       "latin_name": "Moringa oleifera",
@@ -3645,10 +4162,45 @@
         "kaunch",
         "cowhage",
         "mucuna bean",
-        "Velvet Bean extract"
+        "Velvet Bean extract",
+        "Krounchabeej Ghana",
+        "krounchabeej ghana"
       ],
       "category": "seed",
       "notes": "Mucuna pruriens (Fabaceae) seed. Contains L-DOPA (3-6% in seeds), the direct dopamine precursor. Ayurvedic Kapikacchu for male fertility and Parkinson's symptoms (PMID 14737007). Botanical seed form.",
+      "last_updated": "2026-03-01"
+    },
+    {
+      "id": "mudgaparni",
+      "standard_name": "Mudgaparni",
+      "latin_name": "Vigna trilobata",
+      "CUI": null,
+      "aliases": [
+        "Mudgaparnee",
+        "mudgaparnee",
+        "Mudgaparni",
+        "mudgaparni",
+        "Jungli-bean"
+      ],
+      "category": "herb",
+      "notes": "Vigna trilobata, commonly transliterated as Mudgaparni/Mudgaparnee in Ayurvedic formulas. Added for exact identity coverage from raw DSLD label text.",
+      "last_updated": "2026-03-13"
+    },
+    {
+      "id": "mugwort",
+      "standard_name": "Mugwort",
+      "latin_name": "Artemisia vulgaris",
+      "CUI": "C0003764",
+      "aliases": [
+        "artemisia vulgaris",
+        "mugwort leaf",
+        "mugwort herb",
+        "mugwort extract",
+        "mugwort leaf extract",
+        "common mugwort"
+      ],
+      "category": "herb",
+      "notes": "Artemisia vulgaris (Asteraceae) aerial parts. Contains thujone (trace), flavonoids, and sesquiterpene lactones. Traditional European bitter tonic and emmenagogue. Used in moxibustion (TCM). Botanical herb.",
       "last_updated": "2026-03-01"
     },
     {
@@ -3686,6 +4238,19 @@
       "last_updated": "2026-03-01"
     },
     {
+      "id": "mung_bean",
+      "standard_name": "Mung Bean",
+      "latin_name": "Vigna radiata",
+      "CUI": null,
+      "aliases": [
+        "Cytokine Suppress Mung Bean extract",
+        "vigna radiata"
+      ],
+      "category": "seed",
+      "notes": "Vigna radiata (Fabaceae) seed. Mung bean rich in vitexin and isovitexin flavonoids. Contains protease inhibitors and phytoestrogens. Used in supplements for anti-inflammatory and antioxidant support.",
+      "last_updated": "2026-03-01"
+    },
+    {
       "id": "myrrh_resin",
       "standard_name": "Myrrh Resin",
       "latin_name": "Commiphora myrrha",
@@ -3718,6 +4283,22 @@
       "category": "resin",
       "notes": "Commiphora myrrha (Burseraceae) resin extract. Concentrated preparation of myrrh resin. Same species as myrrh_resin entry. Contains terpenoids and furanosesquiterpenes. Botanical extract form.",
       "last_updated": "2026-03-01"
+    },
+    {
+      "id": "nagkeshar",
+      "standard_name": "Nagkeshar",
+      "latin_name": "Mesua ferrea",
+      "CUI": null,
+      "aliases": [
+        "Nagkeshar",
+        "nagkeshar",
+        "Nagakesar",
+        "nagakesar",
+        "Mesua"
+      ],
+      "category": "flower",
+      "notes": "Mesua ferrea, commonly called Nagkeshar/Nagakesar. Ayurvedic floral botanical used in traditional gynecologic and digestive formulas.",
+      "last_updated": "2026-03-13"
     },
     {
       "id": "nettle_leaf",
@@ -3764,6 +4345,23 @@
       "last_updated": "2026-03-01"
     },
     {
+      "id": "nirgundi",
+      "standard_name": "Nirgundi",
+      "latin_name": "Vitex negundo",
+      "CUI": null,
+      "aliases": [
+        "Nirgundee",
+        "nirgundee",
+        "Nirgundi",
+        "nirgundi",
+        "Five-leaf Chastetree",
+        "five-leaf chastetree"
+      ],
+      "category": "leaf",
+      "notes": "Vitex negundo, commonly called Nirgundi/Nirgundee or five-leaf chaste tree. Ayurvedic botanical used in classical joint and women's health formulas.",
+      "last_updated": "2026-03-13"
+    },
+    {
       "id": "noni",
       "standard_name": "Noni",
       "latin_name": "Morinda citrifolia",
@@ -3775,6 +4373,34 @@
       ],
       "category": "fruit",
       "notes": "Morinda citrifolia (Rubiaceae) fruit. Noni juice rich in iridoids (deacetylasperulosidic acid) and scopoletin. Traditional Polynesian remedy. Novel food approved in EU (2003). Botanical fruit form.",
+      "last_updated": "2026-03-01"
+    },
+    {
+      "id": "nori",
+      "standard_name": "Nori",
+      "latin_name": "Pyropia yezoensis",
+      "CUI": null,
+      "aliases": [
+        "nori yaki",
+        "pyropia yezoensis",
+        "porphyra"
+      ],
+      "category": "seaweed",
+      "notes": "Pyropia yezoensis (syn. Porphyra yezoensis, Bangiaceae) thallus. Japanese edible red seaweed. Rich in protein (25-50%), vitamin B12 (bioavailable form debated), and porphyran polysaccharide.",
+      "last_updated": "2026-03-01"
+    },
+    {
+      "id": "oat_generic",
+      "standard_name": "Oat (Generic)",
+      "latin_name": "Avena sativa",
+      "CUI": "C0004756",
+      "aliases": [
+        "oat",
+        "avena sativa",
+        "organic oat grass juice extract"
+      ],
+      "category": "grain",
+      "notes": "Avena sativa (Poaceae) generic whole grain/plant. Covers non-specific oat supplement labels that don't specify bran, straw, or grass. Contains beta-glucan, avenanthramides, and avenacosides.",
       "last_updated": "2026-03-01"
     },
     {
@@ -3997,6 +4623,19 @@
       "last_updated": "2026-03-01"
     },
     {
+      "id": "parsnip",
+      "standard_name": "Parsnip",
+      "latin_name": "Pastinaca sativa",
+      "CUI": "C0030667",
+      "aliases": [
+        "parsnip root",
+        "pastinaca sativa"
+      ],
+      "category": "root",
+      "notes": "Pastinaca sativa (Apiaceae) root. Contains furanocoumarins (psoralen, bergapten) and falcarinol polyacetylene. Root vegetable rich in potassium and dietary fiber. Botanical root powder.",
+      "last_updated": "2026-03-01"
+    },
+    {
       "id": "passion_flower",
       "standard_name": "Passion Flower",
       "latin_name": "Passiflora incarnata",
@@ -4090,6 +4729,16 @@
       "last_updated": "2026-03-01"
     },
     {
+      "id": "peony",
+      "standard_name": "Peony",
+      "latin_name": "Paeonia lactiflora",
+      "CUI": "C0950031",
+      "aliases": [],
+      "category": "root",
+      "notes": "Paeonia lactiflora (Paeoniaceae) root. Generic peony entry covering non-specific labels. Contains paeoniflorin glycoside. TCM blood-nourishing and liver-softening herb. See also paeonia_lactiflora entry.",
+      "last_updated": "2026-03-01"
+    },
+    {
       "id": "peppermint",
       "standard_name": "Peppermint",
       "latin_name": "Mentha × piperita",
@@ -4118,6 +4767,18 @@
       "last_updated": "2026-03-01"
     },
     {
+      "id": "perilla_leaf",
+      "standard_name": "Perilla Leaf",
+      "latin_name": "Perilla frutescens",
+      "CUI": "C0950041",
+      "aliases": [
+        "benegut perilla leaf extract"
+      ],
+      "category": "leaf",
+      "notes": "Perilla frutescens (Lamiaceae) leaf. Shiso/Zi Su Ye in TCM. Contains rosmarinic acid and luteolin. Anti-allergic properties via lipoxygenase inhibition. Traditional respiratory and digestive herb.",
+      "last_updated": "2026-03-01"
+    },
+    {
       "id": "phellodendron_bark",
       "standard_name": "Phellodendron",
       "latin_name": "Phellodendron amurense",
@@ -4138,6 +4799,18 @@
       ],
       "category": "bark",
       "notes": "Phellodendron amurense (Rutaceae) bark. Huang Bai in TCM. Contains berberine (2-5%) and phellodendrine. Damp-heat clearing herb for lower jiao. Component of Er Miao San and Relora®.",
+      "last_updated": "2026-03-01"
+    },
+    {
+      "id": "picrorhiza_kurroa",
+      "standard_name": "Picrorhiza kurroa",
+      "latin_name": "Picrorhiza kurroa",
+      "CUI": "C0950050",
+      "aliases": [
+        "picrorhiza kurroa root extract"
+      ],
+      "category": "root",
+      "notes": "Picrorhiza kurroa (Plantaginaceae) rhizome. Same species as picrorhiza_root; covers binomial labels. Contains picrosides I/II with hepatoprotective and immune-modulating activity.",
       "last_updated": "2026-03-01"
     },
     {
@@ -4244,7 +4917,6 @@
       "aliases": [
         "poria cocos fungus",
         "fu ling",
-        "china root",
         "indian bread",
         "Poria (Poria cocos) sclerotium double extract"
       ],
@@ -4322,6 +4994,18 @@
       "last_updated": "2026-03-01"
     },
     {
+      "id": "pueraria_mirifica",
+      "standard_name": "Pueraria Mirifica",
+      "latin_name": "Pueraria mirifica",
+      "CUI": null,
+      "aliases": [
+        "pueraria mirifica extract"
+      ],
+      "category": "root",
+      "notes": "Pueraria mirifica (Fabaceae) root. Thai herb containing miroestrol and deoxymiroestrol, potent phytoestrogens. Traditional use for menopausal symptoms. Caution: strong estrogenic activity.",
+      "last_updated": "2026-03-01"
+    },
+    {
       "id": "pumpkin",
       "standard_name": "Pumpkin",
       "latin_name": "Cucurbita pepo",
@@ -4369,7 +5053,9 @@
       "aliases": [
         "Purple Willow (Salix purpurea) extract",
         "salix purpurea extract",
-        "purple willow extract"
+        "purple willow extract",
+        "Purple Willow (Salix purpurea) extract salicylic acid derivatives",
+        "Purple Willow (Salix purpurea) extract salicyllic acid derivatives"
       ],
       "category": "bark",
       "notes": "Salix purpurea (Salicaceae) bark. Contains salicin (natural aspirin precursor) and flavonoids. European HMPC-approved for mild pain and fever. Botanical bark form, distinct from white willow.",
@@ -4409,6 +5095,29 @@
       ],
       "category": "seed",
       "notes": "Rubus idaeus (Rosaceae) seed. Rich in ellagic acid, alpha-linolenic acid, and vitamin E. Seed oil has favorable omega-3:omega-6 ratio. Botanical seed powder, not standardized.",
+      "last_updated": "2026-03-01"
+    },
+    {
+      "id": "rauwolfia_vomitoria",
+      "standard_name": "Rauwolfia vomitoria",
+      "latin_name": "Rauvolfia vomitoria",
+      "CUI": "C0034551",
+      "aliases": [
+        "rauwolfia vomitoria root bark extract",
+        "rauwolfia vomitoria root bark"
+      ],
+      "category": "root",
+      "notes": "Rauvolfia vomitoria (Apocynaceae) root bark. Contains reserpine and other indole alkaloids. Reserpine is an FDA-approved antihypertensive. Root bark used in African traditional medicine.",
+      "last_updated": "2026-03-01"
+    },
+    {
+      "id": "red_algae",
+      "standard_name": "Red Algae",
+      "latin_name": null,
+      "CUI": null,
+      "aliases": [],
+      "category": "algae",
+      "notes": "Rhodophyta division covering non-specific red algae/seaweed labels. May include Chondrus, Lithothamnion, or Palmaria species. Natural calcium and mineral source. Identity mapping only.",
       "last_updated": "2026-03-01"
     },
     {
@@ -4500,6 +5209,19 @@
       "last_updated": "2026-03-01"
     },
     {
+      "id": "rhododendron_caucasicum",
+      "standard_name": "Rhododendron caucasicum",
+      "latin_name": "Rhododendron caucasicum",
+      "CUI": null,
+      "aliases": [
+        "Rhododendron caucasicum Extract",
+        "rhododendron caucasicum extract"
+      ],
+      "category": "unspecified",
+      "notes": "Rhododendron caucasicum botanical identity used on Garden of Life labels as an extract disclosure. Maintained conservatively without assuming a narrower plant part than the label provides.",
+      "last_updated": "2026-03-13"
+    },
+    {
       "id": "rhubarb",
       "standard_name": "Rhubarb",
       "latin_name": "Rheum palmatum",
@@ -4530,6 +5252,36 @@
       "last_updated": "2026-03-01"
     },
     {
+      "id": "rue",
+      "standard_name": "Rue",
+      "latin_name": "Ruta graveolens",
+      "CUI": "C0035944",
+      "aliases": [
+        "ruta graveolens",
+        "rue herb",
+        "rue extract",
+        "common rue",
+        "herb of grace",
+        "rue leaf",
+        "ruta graveolens extract"
+      ],
+      "category": "herb",
+      "notes": "Ruta graveolens (Rutaceae) aerial parts. Contains rutin flavonoid (named after this plant), furanocoumarins, and acridone alkaloids. Traditional emmenagogue. Phototoxic — handle with care.",
+      "last_updated": "2026-03-01"
+    },
+    {
+      "id": "safed_musli",
+      "standard_name": "Safed Musli",
+      "latin_name": "Chlorophytum borivilianum",
+      "CUI": null,
+      "aliases": [
+        "safed musli extract"
+      ],
+      "category": "root",
+      "notes": "Chlorophytum borivilianum (Asparagaceae) root. Safed Musli in Ayurveda, traditional aphrodisiac and adaptogenic tonic. Contains saponins (furostanol glycosides). Used for vitality and reproductive health.",
+      "last_updated": "2026-03-01"
+    },
+    {
       "id": "sage_leaf_extract",
       "standard_name": "Sage Leaf Extract",
       "latin_name": "Salvia officinalis",
@@ -4549,6 +5301,21 @@
       "last_updated": "2026-03-01"
     },
     {
+      "id": "sariva",
+      "standard_name": "Sariva",
+      "latin_name": "Hemidesmus indicus",
+      "CUI": null,
+      "aliases": [
+        "Sariva",
+        "sariva",
+        "Hemidesmus",
+        "hemidesmus"
+      ],
+      "category": "root",
+      "notes": "Ayurvedic common-name identity for Hemidesmus indicus, commonly called Sariva or Indian sarsaparilla. Added for exact Softgels label coverage.",
+      "last_updated": "2026-03-13"
+    },
+    {
       "id": "sarsaparilla",
       "standard_name": "Sarsaparilla",
       "latin_name": "Smilax ornata",
@@ -4557,7 +5324,9 @@
         "smilax officinalis",
         "smilax species",
         "sarsaparilla root",
-        "honduras sarsaparilla"
+        "honduras sarsaparilla",
+        "smilax officinalis root powder",
+        "Smilax officinalis root powder"
       ],
       "category": "root",
       "notes": "Smilax ornata (Smilacaceae) root. Contains sarsasapogenin steroidal saponins. Traditional blood purifier and adaptogenic root. Used in Eclectic and Unani medicine. Botanical root powder.",
@@ -4654,6 +5423,18 @@
       "last_updated": "2026-03-01"
     },
     {
+      "id": "shankhpushpi",
+      "standard_name": "Shankhpushpi",
+      "latin_name": "Convolvulus pluricaulis",
+      "CUI": null,
+      "aliases": [
+        "Convolvulus pluricaulis"
+      ],
+      "category": "herb",
+      "notes": "Convolvulus pluricaulis (Convolvulaceae) whole plant. Ayurvedic medhya rasayana (brain tonic). Contains shankhpushpine alkaloids and flavonoids. Traditional remedy for anxiety and cognitive enhancement.",
+      "last_updated": "2026-03-01"
+    },
+    {
       "id": "shatavari_root",
       "standard_name": "Shatavari Root",
       "latin_name": "Asparagus racemosus",
@@ -4664,6 +5445,19 @@
       ],
       "category": "root",
       "notes": "Asparagus racemosus (Asparagaceae) root. Shatavari in Ayurveda, premier female reproductive tonic. Contains shatavarins (steroidal saponins). Galactagogue and adaptogenic. Botanical root form.",
+      "last_updated": "2026-03-01"
+    },
+    {
+      "id": "sheep_sorrel",
+      "standard_name": "Sheep Sorrel",
+      "latin_name": "Rumex acetosella",
+      "CUI": "C0035943",
+      "aliases": [
+        "rumex acetosella",
+        "Sorrel"
+      ],
+      "category": "herb",
+      "notes": "Rumex acetosella (Polygonaceae) aerial parts. Contains anthraquinones and oxalic acid. Component of Essiac tea formula. Traditional folk remedy for cancer (limited evidence). Botanical herb form.",
       "last_updated": "2026-03-01"
     },
     {
@@ -4774,6 +5568,29 @@
       "last_updated": "2026-03-01"
     },
     {
+      "id": "squash",
+      "standard_name": "Squash",
+      "latin_name": "Cucurbita maxima",
+      "CUI": null,
+      "aliases": [],
+      "category": "fruit",
+      "notes": "Cucurbita maxima (Cucurbitaceae) fruit. Winter squash rich in beta-carotene, lutein, and zeaxanthin carotenoids. Used in whole-food supplement blends for antioxidant and vitamin A content.",
+      "last_updated": "2026-03-01"
+    },
+    {
+      "id": "squaw_vine",
+      "standard_name": "Squaw Vine",
+      "latin_name": "Mitchella repens",
+      "CUI": "C0949983",
+      "aliases": [
+        "squaw vine herb",
+        "mitchella repens"
+      ],
+      "category": "herb",
+      "notes": "Mitchella repens (Rubiaceae) aerial parts. Partridge berry. Traditional Native American and Eclectic parturient herb. Contains saponins and tannins. Used for uterine preparation in late pregnancy.",
+      "last_updated": "2026-03-01"
+    },
+    {
       "id": "st_john_s_wort",
       "standard_name": "St. John's Wort",
       "latin_name": "Hypericum perforatum",
@@ -4791,6 +5608,18 @@
       ],
       "category": "herb",
       "notes": "Hypericum perforatum (Hypericaceae) aerial parts. Contains hypericin and hyperforin. Extensive RCT evidence for mild-moderate depression (Cochrane). Drug interaction risk via CYP3A4 induction. Botanical form.",
+      "last_updated": "2026-03-01"
+    },
+    {
+      "id": "star_anise",
+      "standard_name": "Star Anise",
+      "latin_name": "Illicium verum",
+      "CUI": "C0038017",
+      "aliases": [
+        "star anise seed extract"
+      ],
+      "category": "seed",
+      "notes": "Illicium verum (Schisandraceae) fruit. Contains trans-anethole (80-90%) and shikimic acid (industrial source for oseltamivir/Tamiflu synthesis). Caution: distinguish from toxic I. anisatum.",
       "last_updated": "2026-03-01"
     },
     {
@@ -4819,10 +5648,24 @@
       "aliases": [
         "organic Strawberries",
         "Strawberry fruit powder",
-        "Strawberry Extract, Natural"
+        "Strawberry Extract, Natural",
+        "Non-GMO Strawberry extract",
+        "non-gmo strawberry extract"
       ],
       "category": "fruit",
       "notes": "Fragaria × ananassa (Rosaceae) fruit. Rich in pelargonidin-3-glucoside anthocyanin, ellagic acid, and vitamin C (59 mg/100g). Botanical fruit powder used in supplement blends.",
+      "last_updated": "2026-03-13"
+    },
+    {
+      "id": "suma_root",
+      "standard_name": "Suma Root",
+      "latin_name": "Pfaffia paniculata",
+      "CUI": null,
+      "aliases": [
+        "suma root 4:1 extract"
+      ],
+      "category": "root",
+      "notes": "Pfaffia paniculata (Amaranthaceae) root. Brazilian ginseng (Para Toda). Contains pfaffic acid and pfaffosides (ecdysteroid-like saponins). Traditional adaptogenic tonic. Botanical root form.",
       "last_updated": "2026-03-01"
     },
     {
@@ -4848,11 +5691,26 @@
       "aliases": [
         "sweet wormwood extract",
         "artemisia annua",
-        "sweet wormwood (artemisia annua) aerial parts extract"
+        "sweet wormwood (artemisia annua) aerial parts extract",
+        "sweet annie"
       ],
       "category": "herb",
       "notes": "Artemisia annua (Asteraceae) aerial parts. Source of artemisinin antimalarial compound (Nobel Prize 2015). Contains artemisinin, artemisinic acid, and flavonoids. Traditional Qing Hao in TCM.",
       "last_updated": "2026-03-01"
+    },
+    {
+      "id": "sweet_wormwood_leaf_oil",
+      "standard_name": "Sweet Wormwood Leaf Oil",
+      "latin_name": "Artemisia annua",
+      "CUI": "C0003763",
+      "aliases": [
+        "sweet wormwood (leaf) oil",
+        "sweet wormwood leaf oil",
+        "artemisia annua leaf oil"
+      ],
+      "category": "herb",
+      "notes": "Artemisia annua leaf essential oil / volatile oil identity. Kept distinct from the broader sweet wormwood herb canonical so oil labels are not collapsed into whole-herb extract labels.",
+      "last_updated": "2026-03-13"
     },
     {
       "id": "tangerine",
@@ -4889,6 +5747,18 @@
       ],
       "category": "fruit",
       "notes": "Prunus cerasus (Rosaceae) fruit. Montmorency tart cherry rich in anthocyanins and melatonin. RCT evidence for post-exercise recovery, sleep, and uric acid reduction (PMID 23075559).",
+      "last_updated": "2026-03-01"
+    },
+    {
+      "id": "tea_tree",
+      "standard_name": "Tea Tree",
+      "latin_name": "Melaleuca alternifolia",
+      "CUI": "C0032087",
+      "aliases": [
+        "tea tree oil"
+      ],
+      "category": "leaf",
+      "notes": "Melaleuca alternifolia (Myrtaceae) leaf. Essential oil rich in terpinen-4-ol (30-48%) with broad-spectrum antimicrobial activity. Australian TGA-listed for minor skin infections. Topical use primarily.",
       "last_updated": "2026-03-01"
     },
     {
@@ -5008,11 +5878,12 @@
       "CUI": null,
       "aliases": [
         "triphala",
-        "amalaki bibhitaki haritaki blend"
+        "amalaki bibhitaki haritaki blend",
+        "Triphala fruit extract"
       ],
       "category": "herb",
       "notes": "Ayurvedic formula of three fruits: Amalaki (Phyllanthus emblica), Bibhitaki (Terminalia bellirica), Haritaki (Terminalia chebula). Traditional rasayana and GI tonic. Equal parts blend.",
-      "last_updated": "2026-03-01"
+      "last_updated": "2026-03-13"
     },
     {
       "id": "turkey_rhubarb_root",
@@ -5071,6 +5942,20 @@
       ],
       "category": "leaf",
       "notes": "Tylophora indica (Apocynaceae) leaf. Contains tylophorine and tylophorinine alkaloids. Traditional Ayurvedic remedy for asthma and allergies. RCT evidence for bronchial asthma (PMID 18288292).",
+      "last_updated": "2026-03-01"
+    },
+    {
+      "id": "uva_ursi",
+      "standard_name": "Uva Ursi",
+      "latin_name": "Arctostaphylos uva-ursi",
+      "CUI": "C0003755",
+      "aliases": [
+        "uva ursi leaf 4:1 extract",
+        "uva ursi 4:1 extract",
+        "uva ursi 3:1 extract"
+      ],
+      "category": "leaf",
+      "notes": "Arctostaphylos uva-ursi (Ericaceae) leaf. Same species as uva_ursi_leaf; covers generic label variants. Contains arbutin urinary antiseptic. European HMPC-approved for uncomplicated UTI.",
       "last_updated": "2026-03-01"
     },
     {
@@ -5139,6 +6024,18 @@
       "last_updated": "2026-03-01"
     },
     {
+      "id": "wakame",
+      "standard_name": "Wakame",
+      "latin_name": "Undaria pinnatifida",
+      "CUI": null,
+      "aliases": [
+        "wakame powder"
+      ],
+      "category": "seaweed",
+      "notes": "Undaria pinnatifida (Alariaceae) thallus. Japanese edible brown seaweed containing fucoxanthin carotenoid and fucoidan polysaccharide. RCT evidence for metabolic support (PMID 19840063).",
+      "last_updated": "2026-03-01"
+    },
+    {
       "id": "wasabi_root",
       "standard_name": "Wasabi",
       "latin_name": "Eutrema japonicum",
@@ -5184,6 +6081,19 @@
       "last_updated": "2026-03-01"
     },
     {
+      "id": "wheat_germ",
+      "standard_name": "Wheat Germ",
+      "latin_name": "Triticum aestivum",
+      "CUI": "C0043178",
+      "aliases": [
+        "Wheat Germ Extract",
+        "fermented Wheat Germ extract"
+      ],
+      "category": "seed",
+      "notes": "Triticum aestivum (Poaceae) germ. Embryo portion rich in vitamin E (tocopherols), octacosanol, and policosanol. Contains wheat germ agglutinin lectin. Not suitable for celiac/gluten-sensitive.",
+      "last_updated": "2026-03-01"
+    },
+    {
       "id": "wheat_barley_grass_blend",
       "standard_name": "Wheat Grass/Barley Grass Blend",
       "latin_name": null,
@@ -5195,19 +6105,6 @@
       ],
       "category": "grass",
       "notes": "Blend of Triticum aestivum (wheat) and Hordeum vulgare (barley) young grass. Alkalizing green food supplement rich in chlorophyll, SOD, and trace minerals. Harvested before jointing (gluten-free).",
-      "last_updated": "2026-03-01"
-    },
-    {
-      "id": "wheat_germ",
-      "standard_name": "Wheat Germ",
-      "latin_name": "Triticum aestivum",
-      "CUI": "C0043178",
-      "aliases": [
-        "Wheat Germ Extract",
-        "fermented Wheat Germ extract"
-      ],
-      "category": "seed",
-      "notes": "Triticum aestivum (Poaceae) germ. Embryo portion rich in vitamin E (tocopherols), octacosanol, and policosanol. Contains wheat germ agglutinin lectin. Not suitable for celiac/gluten-sensitive.",
       "last_updated": "2026-03-01"
     },
     {
@@ -5248,6 +6145,32 @@
       "category": "leaf",
       "notes": "Morus alba (Moraceae) leaf. Contains 1-deoxynojirimycin (DNJ) alpha-glucosidase inhibitor. Traditional remedy for glycemic management in TCM and Unani medicine. Botanical leaf form.",
       "last_updated": "2026-03-01"
+    },
+    {
+      "id": "white_oak",
+      "standard_name": "White Oak",
+      "latin_name": "Quercus alba",
+      "CUI": "C0034499",
+      "aliases": [
+        "quercus alba bark",
+        "white oak bark"
+      ],
+      "category": "bark",
+      "notes": "Quercus alba (Fagaceae) bark. Rich in tannins (6-11%, mostly ellagitannins). Traditional astringent for diarrhea, sore throat, and hemorrhoids. European HMPC traditional use. Botanical bark powder.",
+      "last_updated": "2026-03-01"
+    },
+    {
+      "id": "white_sandalwood",
+      "standard_name": "White Sandalwood",
+      "latin_name": "Santalum album",
+      "CUI": null,
+      "aliases": [
+        "Sandalwood",
+        "White Sandalwood"
+      ],
+      "category": "heartwood",
+      "notes": "Santalum album identity for sandalwood label rows that DSLD classifies as White Sandalwood botanical.",
+      "last_updated": "2026-03-16"
     },
     {
       "id": "white_willow_bark",
@@ -5298,6 +6221,18 @@
       "last_updated": "2026-03-01"
     },
     {
+      "id": "wild_lettuce",
+      "standard_name": "Wild Lettuce",
+      "latin_name": "Lactuca virosa",
+      "CUI": "C0949875",
+      "aliases": [
+        "lactuca virosa"
+      ],
+      "category": "leaf",
+      "notes": "Lactuca virosa (Asteraceae) leaf/latex. Contains lactucin and lactucopicrin sesquiterpene lactones with mild sedative properties. Traditional pain-relieving herb ('lettuce opium'). Botanical leaf form.",
+      "last_updated": "2026-03-01"
+    },
+    {
       "id": "wild_yam_root",
       "standard_name": "Wild Yam Root",
       "latin_name": "Dioscorea villosa",
@@ -5335,7 +6270,11 @@
       "CUI": "C0017062",
       "aliases": [
         "wintergreen gaultheria procumbens extract",
-        "gaultheria procumbens extract"
+        "gaultheria procumbens extract",
+        "Wintergreen (Gaultheria procumbens) extract",
+        "Wintergreen extract salicyllic acid derivatives",
+        "Wintergreen (Gaultheria procumbens) extract salicyllic acid derivatives",
+        "Wintergreen extract salicylic acid derivatives"
       ],
       "category": "leaf",
       "notes": "Gaultheria procumbens (Ericaceae) leaf. Contains methyl salicylate (up to 98% of essential oil). Natural aspirin analog. Caution: methyl salicylate toxicity risk at high doses. Botanical leaf form.",
@@ -5404,6 +6343,28 @@
       ],
       "category": "leaf",
       "notes": "Artemisia absinthium (Asteraceae) leaf. Contains absinthin bitter sesquiterpene and thujone (neurotoxic at high doses). Traditional bitter digestive tonic. Component of absinthe spirit.",
+      "last_updated": "2026-03-01"
+    },
+    {
+      "id": "xanthoparmelia_scabrosa",
+      "standard_name": "Xanthoparmelia scabrosa",
+      "latin_name": "Xanthoparmelia scabrosa",
+      "CUI": null,
+      "aliases": [
+        "xanthoparmelia scabrosa extract"
+      ],
+      "category": "lichen",
+      "notes": "Xanthoparmelia scabrosa (Parmeliaceae) thallus. Lichen marketed for male sexual function enhancement. Contains salazinic acid. Very limited clinical evidence; safety profile poorly characterized.",
+      "last_updated": "2026-03-01"
+    },
+    {
+      "id": "yacon_root",
+      "standard_name": "Yacon",
+      "latin_name": "Smallanthus sonchifolius",
+      "CUI": null,
+      "aliases": [],
+      "category": "root",
+      "notes": "Smallanthus sonchifolius (Asteraceae) root. Andean tuber rich in fructo-oligosaccharides (FOS, 40-70% dry weight). Natural prebiotic with low glycemic index. Used for glycemic and gut health support.",
       "last_updated": "2026-03-01"
     },
     {
@@ -5486,63 +6447,6 @@
       "last_updated": "2026-03-01"
     },
     {
-      "id": "blue_vervain",
-      "standard_name": "Blue Vervain",
-      "latin_name": "Verbena hastata",
-      "CUI": "C0949588",
-      "aliases": [
-        "verbena hastata",
-        "blue vervain extract",
-        "European Vervain",
-        "Vervain whole herb powder"
-      ],
-      "category": "herb",
-      "notes": "Verbena hastata (Verbenaceae) aerial parts. Native North American nervine and bitter tonic. Contains verbenalin iridoid glycoside and hastatoside. Traditional use for anxiety, tension, and liver support.",
-      "last_updated": "2026-03-01"
-    },
-    {
-      "id": "california_poppy",
-      "standard_name": "California Poppy",
-      "latin_name": "Eschscholzia californica",
-      "CUI": "C0949771",
-      "aliases": [
-        "california poppy extract",
-        "eschscholzia californica",
-        "eschscholzia californica extract",
-        "California Poppy [herb] 5:1 extract"
-      ],
-      "category": "flower",
-      "notes": "Eschscholzia californica (Papaveraceae) aerial parts. Contains protopine and californidine alkaloids. Non-opiate sedative with GABA receptor affinity. French HMPC-approved for mild anxiety and insomnia.",
-      "last_updated": "2026-03-01"
-    },
-    {
-      "id": "danshen",
-      "standard_name": "Danshen",
-      "latin_name": "Salvia miltiorrhiza",
-      "CUI": "C0036098",
-      "aliases": [
-        "chinese salvia",
-        "salvia miltiorrhiza",
-        "salvia miltiorrhiza root extract",
-        "Chinese Salvia Root Extract"
-      ],
-      "category": "root",
-      "notes": "Salvia miltiorrhiza (Lamiaceae) root. Dan Shen in TCM, primary blood-moving herb. Contains tanshinones (lipophilic) and salvianolic acids (hydrophilic). Drug interaction risk with warfarin. Botanical root form.",
-      "last_updated": "2026-03-01"
-    },
-    {
-      "id": "xanthoparmelia_scabrosa",
-      "standard_name": "Xanthoparmelia scabrosa",
-      "latin_name": "Xanthoparmelia scabrosa",
-      "CUI": null,
-      "aliases": [
-        "xanthoparmelia scabrosa extract"
-      ],
-      "category": "lichen",
-      "notes": "Xanthoparmelia scabrosa (Parmeliaceae) thallus. Lichen marketed for male sexual function enhancement. Contains salazinic acid. Very limited clinical evidence; safety profile poorly characterized.",
-      "last_updated": "2026-03-01"
-    },
-    {
       "id": "zhu_ling",
       "standard_name": "Zhu Ling",
       "latin_name": "Polyporus umbellatus",
@@ -5557,484 +6461,31 @@
       "last_updated": "2026-03-01"
     },
     {
-      "id": "black_ginger",
-      "standard_name": "Black Ginger",
-      "latin_name": "Kaempferia parviflora",
-      "CUI": "C3178990",
-      "aliases": [
-        "black galingale",
-        "kaempferia parviflora",
-        "kaempferia parviflora root extract",
-        "sirtmax",
-        "sirtmax kaempferia parviflora root extract"
-      ],
-      "category": "root",
-      "notes": "Kaempferia parviflora (Zingiberaceae) rhizome. Thai black ginger (Krachai Dum). Contains polymethoxyflavones (5,7-dimethoxyflavone). RCT evidence for exercise performance and metabolic function.",
-      "last_updated": "2026-03-01"
-    },
-    {
-      "id": "oat_generic",
-      "standard_name": "Oat (Generic)",
-      "latin_name": "Avena sativa",
-      "CUI": "C0004756",
-      "aliases": [
-        "oat",
-        "avena sativa",
-        "organic oat grass juice extract"
-      ],
-      "category": "grain",
-      "notes": "Avena sativa (Poaceae) generic whole grain/plant. Covers non-specific oat supplement labels that don't specify bran, straw, or grass. Contains beta-glucan, avenanthramides, and avenacosides.",
-      "last_updated": "2026-03-01"
-    },
-    {
-      "id": "uva_ursi",
-      "standard_name": "Uva Ursi",
-      "latin_name": "Arctostaphylos uva-ursi",
-      "CUI": "C0003755",
-      "aliases": [
-        "uva ursi leaf 4:1 extract",
-        "uva ursi 4:1 extract",
-        "uva ursi 3:1 extract"
-      ],
-      "category": "leaf",
-      "notes": "Arctostaphylos uva-ursi (Ericaceae) leaf. Same species as uva_ursi_leaf; covers generic label variants. Contains arbutin urinary antiseptic. European HMPC-approved for uncomplicated UTI.",
-      "last_updated": "2026-03-01"
-    },
-    {
-      "id": "safed_musli",
-      "standard_name": "Safed Musli",
-      "latin_name": "Chlorophytum borivilianum",
+      "id": "chopchini",
+      "standard_name": "Chopchini (China Root)",
+      "latin_name": "Smilax china",
       "CUI": null,
       "aliases": [
-        "safed musli extract"
+        "chopchini",
+        "Chopchini",
+        "chopachini",
+        "chobchini",
+        "china root",
+        "china root extract",
+        "smilax china",
+        "Smilax china",
+        "smilax china root",
+        "smilax glabra",
+        "Smilax glabra",
+        "smilax glabra root",
+        "tu fuling",
+        "madhusnuhi",
+        "smilax china l.",
+        "smilax china l. root"
       ],
       "category": "root",
-      "notes": "Chlorophytum borivilianum (Asparagaceae) root. Safed Musli in Ayurveda, traditional aphrodisiac and adaptogenic tonic. Contains saponins (furostanol glycosides). Used for vitality and reproductive health.",
-      "last_updated": "2026-03-01"
-    },
-    {
-      "id": "wild_lettuce",
-      "standard_name": "Wild Lettuce",
-      "latin_name": "Lactuca virosa",
-      "CUI": "C0949875",
-      "aliases": [
-        "lactuca virosa"
-      ],
-      "category": "leaf",
-      "notes": "Lactuca virosa (Asteraceae) leaf/latex. Contains lactucin and lactucopicrin sesquiterpene lactones with mild sedative properties. Traditional pain-relieving herb ('lettuce opium'). Botanical leaf form.",
-      "last_updated": "2026-03-01"
-    },
-    {
-      "id": "white_oak",
-      "standard_name": "White Oak",
-      "latin_name": "Quercus alba",
-      "CUI": "C0034499",
-      "aliases": [
-        "quercus alba bark",
-        "white oak bark"
-      ],
-      "category": "bark",
-      "notes": "Quercus alba (Fagaceae) bark. Rich in tannins (6-11%, mostly ellagitannins). Traditional astringent for diarrhea, sore throat, and hemorrhoids. European HMPC traditional use. Botanical bark powder.",
-      "last_updated": "2026-03-01"
-    },
-    {
-      "id": "sheep_sorrel",
-      "standard_name": "Sheep Sorrel",
-      "latin_name": "Rumex acetosella",
-      "CUI": "C0035943",
-      "aliases": [
-        "rumex acetosella",
-        "Sorrel"
-      ],
-      "category": "herb",
-      "notes": "Rumex acetosella (Polygonaceae) aerial parts. Contains anthraquinones and oxalic acid. Component of Essiac tea formula. Traditional folk remedy for cancer (limited evidence). Botanical herb form.",
-      "last_updated": "2026-03-01"
-    },
-    {
-      "id": "rauwolfia_vomitoria",
-      "standard_name": "Rauwolfia vomitoria",
-      "latin_name": "Rauvolfia vomitoria",
-      "CUI": "C0034551",
-      "aliases": [
-        "rauwolfia vomitoria root bark extract",
-        "rauwolfia vomitoria root bark"
-      ],
-      "category": "root",
-      "notes": "Rauvolfia vomitoria (Apocynaceae) root bark. Contains reserpine and other indole alkaloids. Reserpine is an FDA-approved antihypertensive. Root bark used in African traditional medicine.",
-      "last_updated": "2026-03-01"
-    },
-    {
-      "id": "peony",
-      "standard_name": "Peony",
-      "latin_name": "Paeonia lactiflora",
-      "CUI": "C0950031",
-      "aliases": [],
-      "category": "root",
-      "notes": "Paeonia lactiflora (Paeoniaceae) root. Generic peony entry covering non-specific labels. Contains paeoniflorin glycoside. TCM blood-nourishing and liver-softening herb. See also paeonia_lactiflora entry.",
-      "last_updated": "2026-03-01"
-    },
-    {
-      "id": "picrorhiza_kurroa",
-      "standard_name": "Picrorhiza kurroa",
-      "latin_name": "Picrorhiza kurroa",
-      "CUI": "C0950050",
-      "aliases": [
-        "picrorhiza kurroa root extract"
-      ],
-      "category": "root",
-      "notes": "Picrorhiza kurroa (Plantaginaceae) rhizome. Same species as picrorhiza_root; covers binomial labels. Contains picrosides I/II with hepatoprotective and immune-modulating activity.",
-      "last_updated": "2026-03-01"
-    },
-    {
-      "id": "red_algae",
-      "standard_name": "Red Algae",
-      "latin_name": null,
-      "CUI": null,
-      "aliases": [],
-      "category": "algae",
-      "notes": "Rhodophyta division covering non-specific red algae/seaweed labels. May include Chondrus, Lithothamnion, or Palmaria species. Natural calcium and mineral source. Identity mapping only.",
-      "last_updated": "2026-03-01"
-    },
-    {
-      "id": "pueraria_mirifica",
-      "standard_name": "Pueraria Mirifica",
-      "latin_name": "Pueraria mirifica",
-      "CUI": null,
-      "aliases": [
-        "pueraria mirifica extract"
-      ],
-      "category": "root",
-      "notes": "Pueraria mirifica (Fabaceae) root. Thai herb containing miroestrol and deoxymiroestrol, potent phytoestrogens. Traditional use for menopausal symptoms. Caution: strong estrogenic activity.",
-      "last_updated": "2026-03-01"
-    },
-    {
-      "id": "linden",
-      "standard_name": "Linden",
-      "latin_name": "Tilia europaea",
-      "CUI": "C0040232",
-      "aliases": [
-        "tilia cordata"
-      ],
-      "category": "flower",
-      "notes": "Tilia europaea (Malvaceae) flower. Linden/lime blossom rich in mucilage, flavonoids (tiliroside), and volatile oils. European HMPC-approved for common cold symptoms. Traditional anxiolytic and diaphoretic.",
-      "last_updated": "2026-03-01"
-    },
-    {
-      "id": "cowslip",
-      "standard_name": "Cowslip",
-      "latin_name": "Primula veris",
-      "CUI": "C0949616",
-      "aliases": [],
-      "category": "flower",
-      "notes": "Primula veris (Primulaceae) flower. European traditional expectorant containing saponins (primulasaponin) and flavonoids. Component of Sinupret® for sinusitis. Botanical flower preparation.",
-      "last_updated": "2026-03-01"
-    },
-    {
-      "id": "gynostemma",
-      "standard_name": "Gynostemma",
-      "latin_name": "Gynostemma pentaphyllum",
-      "CUI": "C0949828",
-      "aliases": [
-        "activamp gynostemma pentaphyllum extract",
-        "gynostemma pentaphyllum extract"
-      ],
-      "category": "leaf",
-      "notes": "Gynostemma pentaphyllum (Cucurbitaceae) leaf. Jiaogulan, 'Southern ginseng.' Contains gypenosides (saponins structurally similar to ginsenosides). Adaptogenic and AMPK-activating. Botanical leaf form.",
-      "last_updated": "2026-03-01"
-    },
-    {
-      "id": "perilla_leaf",
-      "standard_name": "Perilla Leaf",
-      "latin_name": "Perilla frutescens",
-      "CUI": "C0950041",
-      "aliases": [
-        "benegut perilla leaf extract"
-      ],
-      "category": "leaf",
-      "notes": "Perilla frutescens (Lamiaceae) leaf. Shiso/Zi Su Ye in TCM. Contains rosmarinic acid and luteolin. Anti-allergic properties via lipoxygenase inhibition. Traditional respiratory and digestive herb.",
-      "last_updated": "2026-03-01"
-    },
-    {
-      "id": "yacon_root",
-      "standard_name": "Yacon",
-      "latin_name": "Smallanthus sonchifolius",
-      "CUI": null,
-      "aliases": [],
-      "category": "root",
-      "notes": "Smallanthus sonchifolius (Asteraceae) root. Andean tuber rich in fructo-oligosaccharides (FOS, 40-70% dry weight). Natural prebiotic with low glycemic index. Used for glycemic and gut health support.",
-      "last_updated": "2026-03-01"
-    },
-    {
-      "id": "mimosa_pudica",
-      "standard_name": "Mimosa pudica",
-      "latin_name": "Mimosa pudica",
-      "CUI": null,
-      "aliases": [
-        "organic mimosa pudica"
-      ],
-      "category": "seed",
-      "notes": "Mimosa pudica (Fabaceae) seed/whole plant. Sensitive plant/touch-me-not. Contains mimosine and tannins. Used in Ayurveda for wound healing and as GI cleansing agent. Botanical seed/herb powder.",
-      "last_updated": "2026-03-01"
-    },
-    {
-      "id": "wakame",
-      "standard_name": "Wakame",
-      "latin_name": "Undaria pinnatifida",
-      "CUI": null,
-      "aliases": [
-        "wakame powder"
-      ],
-      "category": "seaweed",
-      "notes": "Undaria pinnatifida (Alariaceae) thallus. Japanese edible brown seaweed containing fucoxanthin carotenoid and fucoidan polysaccharide. RCT evidence for metabolic support (PMID 19840063).",
-      "last_updated": "2026-03-01"
-    },
-    {
-      "id": "suma_root",
-      "standard_name": "Suma Root",
-      "latin_name": "Pfaffia paniculata",
-      "CUI": null,
-      "aliases": [
-        "suma root 4:1 extract"
-      ],
-      "category": "root",
-      "notes": "Pfaffia paniculata (Amaranthaceae) root. Brazilian ginseng (Para Toda). Contains pfaffic acid and pfaffosides (ecdysteroid-like saponins). Traditional adaptogenic tonic. Botanical root form.",
-      "last_updated": "2026-03-01"
-    },
-    {
-      "id": "star_anise",
-      "standard_name": "Star Anise",
-      "latin_name": "Illicium verum",
-      "CUI": "C0038017",
-      "aliases": [
-        "star anise seed extract"
-      ],
-      "category": "seed",
-      "notes": "Illicium verum (Schisandraceae) fruit. Contains trans-anethole (80-90%) and shikimic acid (industrial source for oseltamivir/Tamiflu synthesis). Caution: distinguish from toxic I. anisatum.",
-      "last_updated": "2026-03-01"
-    },
-    {
-      "id": "tea_tree",
-      "standard_name": "Tea Tree",
-      "latin_name": "Melaleuca alternifolia",
-      "CUI": "C0032087",
-      "aliases": [
-        "tea tree oil"
-      ],
-      "category": "leaf",
-      "notes": "Melaleuca alternifolia (Myrtaceae) leaf. Essential oil rich in terpinen-4-ol (30-48%) with broad-spectrum antimicrobial activity. Australian TGA-listed for minor skin infections. Topical use primarily.",
-      "last_updated": "2026-03-01"
-    },
-    {
-      "id": "carrot",
-      "standard_name": "Carrot",
-      "latin_name": "Daucus carota",
-      "CUI": "C0007788",
-      "aliases": [
-        "Daucus sativus",
-        "daucus carota",
-        "carrot root"
-      ],
-      "category": "root",
-      "notes": "Daucus carota subsp. sativus (Apiaceae) root. Rich in beta-carotene (provitamin A, 8-13 mg/100g), polyacetylenes (falcarinol), and dietary fiber. Used in whole-food supplement blends.",
-      "last_updated": "2026-03-01"
-    },
-    {
-      "id": "carrot_seed_oil",
-      "standard_name": "Carrot Seed Oil",
-      "latin_name": "Daucus carota",
-      "CUI": "C0007788",
-      "aliases": [
-        "carrot seed oil",
-        "Carrot Seed Oil",
-        "daucus carota seed oil"
-      ],
-      "category": "seed",
-      "notes": "Daucus carota (Apiaceae) seed-derived oil. Preserve as a distinct carrot seed oil identity when the label declares the oil itself rather than carrot root, carrot extract, or beta-carotene.",
-      "last_updated": "2026-03-09"
-    },
-    {
-      "id": "parsnip",
-      "standard_name": "Parsnip",
-      "latin_name": "Pastinaca sativa",
-      "CUI": "C0030667",
-      "aliases": [
-        "parsnip root",
-        "pastinaca sativa"
-      ],
-      "category": "root",
-      "notes": "Pastinaca sativa (Apiaceae) root. Contains furanocoumarins (psoralen, bergapten) and falcarinol polyacetylene. Root vegetable rich in potassium and dietary fiber. Botanical root powder.",
-      "last_updated": "2026-03-01"
-    },
-    {
-      "id": "nori",
-      "standard_name": "Nori",
-      "latin_name": "Pyropia yezoensis",
-      "CUI": null,
-      "aliases": [
-        "nori yaki",
-        "pyropia yezoensis",
-        "porphyra"
-      ],
-      "category": "seaweed",
-      "notes": "Pyropia yezoensis (syn. Porphyra yezoensis, Bangiaceae) thallus. Japanese edible red seaweed. Rich in protein (25-50%), vitamin B12 (bioavailable form debated), and porphyran polysaccharide.",
-      "last_updated": "2026-03-01"
-    },
-    {
-      "id": "chinese_dodder_seed",
-      "standard_name": "Chinese Dodder Seed",
-      "latin_name": "Cuscuta chinensis",
-      "CUI": "C0949729",
-      "aliases": [
-        "Chinese Dodder Seed Extract",
-        "cuscuta chinensis seed"
-      ],
-      "category": "seed",
-      "notes": "Cuscuta chinensis (Convolvulaceae) seed. Tu Si Zi in TCM, used for kidney yang and liver-kidney deficiency patterns. Contains flavonoids (kaempferol, quercetin) and lignans. Parasitic plant seed.",
-      "last_updated": "2026-03-01"
-    },
-    {
-      "id": "false_unicorn",
-      "standard_name": "False Unicorn",
-      "latin_name": "Chamaelirium luteum",
-      "CUI": "C0949787",
-      "aliases": [
-        "false unicorn root",
-        "chamaelirium luteum"
-      ],
-      "category": "root",
-      "notes": "Chamaelirium luteum (Melanthiaceae) root. Contains chamaelirin (helonin) steroidal saponin. Traditional Eclectic medicine remedy for female reproductive complaints. Conservation concern due to overharvesting.",
-      "last_updated": "2026-03-01"
-    },
-    {
-      "id": "squaw_vine",
-      "standard_name": "Squaw Vine",
-      "latin_name": "Mitchella repens",
-      "CUI": "C0949983",
-      "aliases": [
-        "squaw vine herb",
-        "mitchella repens"
-      ],
-      "category": "herb",
-      "notes": "Mitchella repens (Rubiaceae) aerial parts. Partridge berry. Traditional Native American and Eclectic parturient herb. Contains saponins and tannins. Used for uterine preparation in late pregnancy.",
-      "last_updated": "2026-03-01"
-    },
-    {
-      "id": "shankhpushpi",
-      "standard_name": "Shankhpushpi",
-      "latin_name": "Convolvulus pluricaulis",
-      "CUI": null,
-      "aliases": [
-        "Convolvulus pluricaulis"
-      ],
-      "category": "herb",
-      "notes": "Convolvulus pluricaulis (Convolvulaceae) whole plant. Ayurvedic medhya rasayana (brain tonic). Contains shankhpushpine alkaloids and flavonoids. Traditional remedy for anxiety and cognitive enhancement.",
-      "last_updated": "2026-03-01"
-    },
-    {
-      "id": "european_ash_seed_fruit",
-      "standard_name": "European Ash Seed/Fruit",
-      "latin_name": "Fraxinus excelsior",
-      "CUI": "C0949800",
-      "aliases": [
-        "European Ash (seed, fruit) extract",
-        "fraxinus excelsior"
-      ],
-      "category": "seed",
-      "notes": "Fraxinus excelsior (Oleaceae) seed/fruit (samara). Contains secoiridoids (oleuropein analogs) and hydroxycoumarins. European traditional remedy for joint health. Botanical seed/fruit form.",
-      "last_updated": "2026-03-01"
-    },
-    {
-      "id": "bulbine_natalensis",
-      "standard_name": "Bulbine natalensis",
-      "latin_name": "Bulbine natalensis",
-      "CUI": null,
-      "aliases": [],
-      "category": "root",
-      "notes": "Bulbine natalensis (Asphodelaceae) root/stem. South African succulent marketed for testosterone support. Contains mesembrenone alkaloids and saponins. Limited human clinical evidence; mostly animal studies.",
-      "last_updated": "2026-03-01"
-    },
-    {
-      "id": "brassaiopsis_glomerulata",
-      "standard_name": "Brassaiopsis glomerulata",
-      "latin_name": "Brassaiopsis glomerulata",
-      "CUI": null,
-      "aliases": [
-        "Brassaiopsis glomerulata extract"
-      ],
-      "category": "root",
-      "notes": "Brassaiopsis glomerulata (Araliaceae) stem bark. Vietnamese traditional medicine plant. Contains triterpene saponins. Marketed for testosterone and aromatase inhibition; very limited clinical evidence.",
-      "last_updated": "2026-03-01"
-    },
-    {
-      "id": "jiaogulan_leaf",
-      "standard_name": "Jiaogulan Leaf",
-      "latin_name": "Gynostemma pentaphyllum",
-      "CUI": "C0949828",
-      "aliases": [
-        "Jiaogulan Leaf Extract",
-        "gynostemma pentaphyllum leaf"
-      ],
-      "category": "leaf",
-      "notes": "Gynostemma pentaphyllum (Cucurbitaceae) leaf. Jiaogulan from southern China, covers leaf-specific labels. Same species as gynostemma entry. Contains 80+ gypenoside saponins with adaptogenic activity.",
-      "last_updated": "2026-03-01"
-    },
-    {
-      "id": "mung_bean",
-      "standard_name": "Mung Bean",
-      "latin_name": "Vigna radiata",
-      "CUI": null,
-      "aliases": [
-        "Cytokine Suppress Mung Bean extract",
-        "vigna radiata"
-      ],
-      "category": "seed",
-      "notes": "Vigna radiata (Fabaceae) seed. Mung bean rich in vitexin and isovitexin flavonoids. Contains protease inhibitors and phytoestrogens. Used in supplements for anti-inflammatory and antioxidant support.",
-      "last_updated": "2026-03-01"
-    },
-    {
-      "id": "squash",
-      "standard_name": "Squash",
-      "latin_name": "Cucurbita maxima",
-      "CUI": null,
-      "aliases": [],
-      "category": "fruit",
-      "notes": "Cucurbita maxima (Cucurbitaceae) fruit. Winter squash rich in beta-carotene, lutein, and zeaxanthin carotenoids. Used in whole-food supplement blends for antioxidant and vitamin A content.",
-      "last_updated": "2026-03-01"
-    },
-    {
-      "id": "mugwort",
-      "standard_name": "Mugwort",
-      "latin_name": "Artemisia vulgaris",
-      "CUI": "C0003764",
-      "aliases": [
-        "artemisia vulgaris",
-        "mugwort leaf",
-        "mugwort herb",
-        "mugwort extract",
-        "mugwort leaf extract",
-        "common mugwort"
-      ],
-      "category": "herb",
-      "notes": "Artemisia vulgaris (Asteraceae) aerial parts. Contains thujone (trace), flavonoids, and sesquiterpene lactones. Traditional European bitter tonic and emmenagogue. Used in moxibustion (TCM). Botanical herb.",
-      "last_updated": "2026-03-01"
-    },
-    {
-      "id": "rue",
-      "standard_name": "Rue",
-      "latin_name": "Ruta graveolens",
-      "CUI": "C0035944",
-      "aliases": [
-        "ruta graveolens",
-        "rue herb",
-        "rue extract",
-        "common rue",
-        "herb of grace",
-        "rue leaf",
-        "ruta graveolens extract"
-      ],
-      "category": "herb",
-      "notes": "Ruta graveolens (Rutaceae) aerial parts. Contains rutin flavonoid (named after this plant), furanocoumarins, and acridone alkaloids. Traditional emmenagogue. Phototoxic — handle with care.",
-      "last_updated": "2026-03-01"
+      "notes": "Smilax china L. (Smilacaceae) root — traditional Ayurvedic (madhusnuhi) and Chinese medicine (tu fuling) botanical. Contains steroidal saponins (sarsasaponin, smilasaponin), flavonoids, stilbenes, and polyphenols. Traditional uses: anti-inflammatory, diuretic, blood purification, rheumatoid arthritis support, and skin conditions (psoriasis, eczema). Distinct from Smilax ornata (sarsaparilla) and from Smilax regelii. Clinical evidence sparse — primarily in vitro and animal studies. High doses may cause GI irritation (saponin content). No FDA safety alerts.",
+      "last_updated": "2026-03-17"
     }
   ]
 }

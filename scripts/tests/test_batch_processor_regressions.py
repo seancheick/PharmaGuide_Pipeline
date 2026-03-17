@@ -55,7 +55,7 @@ def test_resume_does_not_skip_remaining_files(tmp_path, monkeypatch):
 
     observed = []
 
-    def fake_process_batch(batch_num, batch_files):
+    def fake_process_batch(batch_num, batch_files, output_batch_num=None):
         observed.append([p.name for p in batch_files])
         return {
             "summary": {
@@ -80,3 +80,44 @@ def test_resume_does_not_skip_remaining_files(tmp_path, monkeypatch):
 
     assert observed
     assert observed[0][0] == "020.json"
+
+
+def test_unmapped_tracker_save_receives_real_processed_file_count(tmp_path, monkeypatch):
+    cfg = _make_config(tmp_path)
+    processor = BatchProcessor(cfg)
+
+    files = []
+    for i in range(5):
+        path = tmp_path / f"{i:03d}.json"
+        path.write_text(json.dumps({"id": i, "ingredientRows": [{"name": "Vitamin C"}]}), encoding="utf-8")
+        files.append(path)
+
+    seen = {}
+
+    def fake_process_batch(batch_num, batch_files, output_batch_num=None):
+        return {
+            "summary": {
+                "processed": len(batch_files),
+                "cleaned": len(batch_files),
+                "needs_review": 0,
+                "incomplete": 0,
+                "errors": 0,
+            },
+            "errors": [],
+            "unmapped_count": 0,
+            "processed_files": [str(p) for p in batch_files],
+            "write_success": True,
+        }
+
+    def fake_save_unmapped_ingredients(processed_count_override=None):
+        seen["processed_count_override"] = processed_count_override
+
+    monkeypatch.setattr(processor, "process_batch", fake_process_batch)
+    monkeypatch.setattr(processor, "_generate_final_summary", lambda batch_results, total_time: {"ok": True})
+    monkeypatch.setattr(processor, "_save_unmapped_ingredients", fake_save_unmapped_ingredients)
+    monkeypatch.setattr(processor, "_generate_processing_report", lambda summary, batch_results: None)
+    monkeypatch.setattr(processor, "_generate_detailed_review_report", lambda: None)
+
+    processor.process_all_files(files, resume=False)
+
+    assert seen["processed_count_override"] == 5

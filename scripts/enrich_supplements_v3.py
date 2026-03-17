@@ -10459,7 +10459,8 @@ class SupplementEnricherV3:
                         "pct_rda": None if skip_ul_check else adequacy.pct_rda,
                         "adequacy_band": "unknown" if skip_ul_check else adequacy.adequacy_band,
                         "warnings": [] if skip_ul_check else adequacy.warnings,
-                        "data_by_group": []  # Deprecated in new format
+                        "data_by_group": [],  # Deprecated in new format
+                        "conversion_evidence": conv_evidence,  # Per-item evidence for coverage gate
                     })
 
                 return {

@@ -3,17 +3,12 @@
 ## Safety-Critical Issues (Fix First)
 
 ### 1. Vacha / Acorus calamus — Unresolved FDA Safety Routing
-- **File:** `scripts/data/botanical_ingredients.json`
-- **Issue:** Vacha (Acorus calamus) is absent from all reference DBs. FDA has banned beta-asarone-containing calamus preparations. If a label with Vacha routes to `needs_verification` instead of a restricted/banned bucket, safety signal is lost.
-- **Risk:** HIGH — consumer-facing safety classification failure
-- **Fix needed:** Add to BR or create a HA entry; add safety note; add test for routing
+- **Status:** RESOLVED (2026-03-17)
+- `BANNED_CALAMUS_ACORUS_CALAMUS` entry in `banned_recalled_ingredients.json` (aliases: Vacha, vacha, Acorus calamus, Calamus, Sweet Flag). Test coverage: `test_batch41_vacha_calamus_routes_to_banned` in `test_clean_unmapped_alias_regressions.py`.
 
 ### 2. IQM ↔ Banned/Recalled Collision — No Runtime Guard
-- **File:** `enhanced_normalizer.py`, DB loading
-- **Issue:** No runtime check prevents a canonical name from existing in both IQM (scorable) and BR (banned). If an entry is added to IQM and someone adds an alias that matches a BR entry, the IQM route wins silently.
-- **Risk:** HIGH — banned substance scored as beneficial
-- **Mitigation:** `test_cross_db_overlap_guard.py` and `test_banned_collision_corpus.py` catch this at test time, but no runtime guard in production path
-- **Fix needed:** Add collision check in DB loader or preflight
+- **Status:** RESOLVED (2026-03-17)
+- Added `_preflight_iqm_banned_collision_check()` to `EnhancedDSLDNormalizer.__init__`. Runs at startup after all indices are built; logs CRITICAL for each collision. Test-time guard unchanged (`test_cross_db_overlap_guard.py`, `test_banned_collision_corpus.py`).
 
 ### 3. Stereoisomer Identity Loss
 - **File:** `normalization.py`, `enhanced_normalizer.py`
@@ -30,19 +25,16 @@
 - **Status:** Open, needs investigation of raw DSLD structure for those 2 PIDs
 
 ### 5. Pre-Validation Marking in Batch Processor
-- **File:** `scripts/batch_processor.py`
-- **Issue:** Products can be marked as "validated" before the actual validation step completes if a batch is interrupted mid-run.
-- **Risk:** MEDIUM — silent validation skips on resume
+- **Status:** RESOLVED (2026-03-17)
+- `_write_batch_outputs` now returns `bool`; `_write_json_output` returns `True/False`. `process_batch` includes `"write_success"` in return dict. `process_all_files` gates `state.last_completed_batch = batch_num` on `batch_result.get("write_success", True)`.
 
 ### 6. Batch Counter Reset on Resume
-- **File:** `scripts/batch_processor.py`
-- **Issue:** Resuming a partial batch run can reset the internal batch counter, causing duplicate processing of already-cleaned products.
-- **Risk:** LOW-MEDIUM — output duplication, not data loss
+- **Status:** RESOLVED (prior session — FIX C6)
+- `output_batch_offset` counts existing output files and offsets new batch names. Per-file resume uses `processed_file_paths` not `last_completed_batch` as the authoritative source.
 
 ### 7. Coverage Gate Field Mismatch
-- **File:** `scripts/coverage_gate.py`
-- **Issue:** Gate checks field names that may not match actual output schema field names after enrichment renames fields. Historically caused false pass/fail on gate.
-- **Status:** Partially fixed; verify against current enrichment output schema.
+- **Status:** RESOLVED (2026-03-17)
+- `_collect_rda_ul_data` in `enrich_supplements_v3.py` now embeds `"conversion_evidence": conv_evidence` per `rda_data` item. `coverage_gate._check_missing_conversions` reads `ing.get("conversion_evidence", {})` per-item — now correctly populated.
 
 ---
 
@@ -110,11 +102,11 @@
 
 | Item | Risk | Owner |
 |------|------|-------|
-| Vacha / Acorus calamus safety routing | HIGH | Next sprint |
-| Eicosatrienoic Acid flat occurrence (2x) | MEDIUM | Next sprint |
-| Potassium Benzoate absent from HA | MEDIUM | Queued |
-| Krill Oil absent from OI | MEDIUM | Queued |
-| Titanium Dioxide alias variants (colour, compound) | LOW | Queued |
-| Chopchinee identity conflict (needs_verification) | LOW | Pending monograph |
-| Pyroxide HCL / Annine identity unknown | LOW | Pending research |
-| OpriBerry(R) SB entry construction | LOW | Queued |
+| Vacha / Acorus calamus safety routing | HIGH | DONE 2026-03-17 |
+| Eicosatrienoic Acid flat occurrence (2x) | MEDIUM | DONE (resolved by IQM additions) |
+| Potassium Benzoate absent from HA | MEDIUM | DONE 2026-03-17 |
+| Krill Oil absent from OI | MEDIUM | DONE 2026-03-17 (dedicated IQM entry) |
+| Titanium Dioxide alias variants (colour, compound) | LOW | DONE 2026-03-17 (nano+space variants added) |
+| Chopchinee identity conflict (needs_verification) | LOW | Open — pending authoritative monograph |
+| Pyroxide HCL / Annine identity unknown | LOW | Open — tracked in NEEDS_VERIFICATION_INACTIVE_INGREDIENTS |
+| OptiBerry(R) SB entry construction | LOW | DONE 2026-03-17 (optiberry IQM entry) |

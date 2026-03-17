@@ -129,15 +129,17 @@ def test_unscoped_brand_level_product_ban_can_match_brand_fallback(enricher):
     assert "BANNED_BRAND_LEVEL" in _banned_ids(result)
 
 
-def test_mormon_tea_alias_still_matches_ephedra(enricher):
-    """Ephedra common-name aliases must not self-suppress via negative terms."""
+def test_mormon_tea_does_not_false_positive_ephedra(enricher):
+    """Mormon tea (Ephedra nevadensis) is NOT the banned Ephedra sinica.
+    E. nevadensis has negligible alkaloid content and is not covered by the 2004 FDA
+    ephedrine-alkaloid ban (21 CFR Part 119). It must not trigger BANNED_EPHEDRA."""
     fresh_enricher = SupplementEnricherV3()
     result = fresh_enricher._check_banned_substances(
         [{"name": "Mormon Tea", "standardName": "Mormon Tea"}],
         {"fullName": "Test Product", "brandName": "Test Brand"},
     )
 
-    assert "BANNED_EPHEDRA" in _banned_ids(result)
+    assert "BANNED_EPHEDRA" not in _banned_ids(result)
 
 
 def test_safe_13_butylene_glycol_does_not_false_positive(enricher):

@@ -230,7 +230,7 @@ class TestDatabaseSchemaIntegrity:
             ))
             if total_declared not in candidates:
                 mismatches.append(
-                    f"{fp.name}: declared {total_declared}, primary={primary_len}, all_lists={all_lists_len}"
+                    f"{fp.name}: declared {total_declared}, primary={len(primary)}, all_lists={sum(data_lists.values())}"
                 )
 
         assert not mismatches, (

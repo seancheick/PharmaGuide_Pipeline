@@ -251,7 +251,7 @@ class TestPreprocessTextGoldenFixtures:
         # Suffix removal
         ("Turmeric Extract", "turmeric"),
         ("Green Tea Extract, Powder", "green tea"),
-        ("Fish Oil Concentrate", "fish"),
+        ("Fish Oil Concentrate", "fish oil"),
 
         # Trademark removal
         ("MegaFood™", "megafood"),

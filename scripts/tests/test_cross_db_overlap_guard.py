@@ -24,6 +24,13 @@ def _load_json(name: str):
 
 def _collect_iqm_terms(iqm: dict) -> set[str]:
     terms: set[str] = set()
+    for term in _collect_iqm_terms_by_parent(iqm):
+        terms.add(term)
+    return terms
+
+
+def _collect_iqm_terms_by_parent(iqm: dict) -> dict[str, set[str]]:
+    terms: dict[str, set[str]] = {}
     for key, entry in iqm.items():
         if key.startswith("_") or not isinstance(entry, dict):
             continue
@@ -38,7 +45,7 @@ def _collect_iqm_terms(iqm: dict) -> set[str]:
             for n in names:
                 nn = _norm(str(n))
                 if nn:
-                    terms.add(nn)
+                    terms.setdefault(nn, set()).add(key)
     return terms
 
 
@@ -203,3 +210,39 @@ def test_banned_terms_do_not_overlap_harmful_terms():
     overlap = banned_terms & harmful_terms
     unknown = overlap - allowlisted
     assert not unknown, f"Banned terms overlap harmful additive terms without allowlist: {sorted(unknown)}"
+
+
+def test_iqm_banned_overlap_set_is_only_intentional_high_risk_dual_classification():
+    banned_db = _load_json("banned_recalled_ingredients.json")
+    banned = banned_db.get("ingredients", banned_db.get("banned_recalled_ingredients", []))
+    iqm = _load_json("ingredient_quality_map.json")
+
+    iqm_terms_by_parent = _collect_iqm_terms_by_parent(iqm)
+    overlaps: set[tuple[str, str, str, str]] = set()
+    for entry in banned:
+        if not isinstance(entry, dict):
+            continue
+        status = str(entry.get("status", "banned"))
+        banned_id = str(entry.get("id", ""))
+        names = [entry.get("standard_name", "")]
+        aliases = entry.get("aliases")
+        if isinstance(aliases, list):
+            names.extend(aliases)
+        for name in names:
+            nn = _norm(str(name))
+            for parent in iqm_terms_by_parent.get(nn, set()):
+                overlaps.add((parent, banned_id, status, nn))
+
+    assert not [row for row in overlaps if row[2] in {"banned", "recalled"}], (
+        "IQM terms must not overlap banned/recalled identities at generic term space."
+    )
+
+    observed_parent_ids = {(parent, banned_id) for parent, banned_id, _, _ in overlaps}
+    assert observed_parent_ids == {
+        ("garcinia_cambogia", "RISK_GARCINIA_CAMBOGIA"),
+        ("kavalactones", "RISK_KAVA"),
+        ("synephrine", "RISK_BITTER_ORANGE"),
+        ("yohimbe", "RISK_YOHIMBE"),
+    }
+    assert ("citrus_bioflavonoids", "RISK_BITTER_ORANGE") not in observed_parent_ids
+    assert all(status in {"high_risk", "watchlist"} for _, _, status, _ in overlaps)

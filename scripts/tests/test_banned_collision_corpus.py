@@ -195,6 +195,9 @@ class TestTrueNegatives:
         ids = _banned_ids(enricher, "decaffeinated green tea extract")
         assert "RISK_GREEN_TEA_EXTRACT_HIGH" not in ids
 
+    def test_generic_phenylethylamine_not_banned(self, enricher):
+        assert "SPIKE_PHENETHYLAMINE_PEA" not in _banned_ids(enricher, "phenylethylamine")
+
 
 # =============================================================================
 # EDGE CASES - Tricky collisions that need careful handling
@@ -217,6 +220,9 @@ class TestEdgeCases:
         """Bitter orange (synephrine) should match, sweet orange should not."""
         assert "RISK_BITTER_ORANGE" in _banned_ids(enricher, "bitter orange extract")
         assert "RISK_BITTER_ORANGE" not in _banned_ids(enricher, "sweet orange flavor")
+
+    def test_bitter_orange_bioflavonoids_hit_risk_layer(self, enricher):
+        assert "RISK_BITTER_ORANGE" in _banned_ids(enricher, "bitter orange citrus bioflavonoids")
 
     # Yohimbe bark vs yohimbine HCL
     def test_yohimbe_forms(self, enricher):

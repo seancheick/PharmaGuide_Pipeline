@@ -991,7 +991,6 @@ class TestP2AliasCoverageRegression:
             ("MaxEPA(R) Fish Oil Concentrate", "fish_oil"),
             ("BioPureDHA(R) Fish Oil concentrate", "fish_oil"),
             ("ecOmega Norwegian Cod Liver Oil", "cod_liver_oil"),
-            ("naturally-occurring Cannabidiol", "cbd_full_spectrum"),
             ("(6S)-5-Methyltetrahydrofolate Calcium", "vitamin_b9_folate"),
             ("KD-Pur EPA", "epa"),
             ("Cryptozanthin", "cryptoxanthin"),
@@ -1461,6 +1460,15 @@ class TestFormFallbackPrecisionRegression:
         ids = {s.get("banned_id") for s in banned.get("substances", [])}
         assert "BANNED_CBD_US" in ids
 
+    def test_naturally_occurring_cannabidiol_hits_banned_cbd_us(self, enricher):
+        banned = enricher._check_banned_substances(
+            [{"name": "naturally-occurring Cannabidiol"}],
+            {},
+        )
+        assert banned.get("found") is True
+        ids = {s.get("banned_id") for s in banned.get("substances", [])}
+        assert "BANNED_CBD_US" in ids
+
     def test_medium_chain_triglyceride_oil_is_recognized_non_scorable(self, enricher):
         recognized = enricher._is_recognized_non_scorable(
             "Medium-Chain Triglyceride Oil",
@@ -1670,8 +1678,10 @@ class TestHarmfulPrecedenceRegression:
             "Senna",
             "Silicon Dioxide",
             "Copper Sulfate",
-            "synthetic folate",
-            "synthetic vitamin e",
+            # "synthetic folate" and "synthetic vitamin e" removed: preprocess_text strips
+            # "synthetic" prefix, leaving "folate"/"vitamin e" which falsely blocks real
+            # folate/vitamin E ingredients. Covered by specific aliases: dl-alpha tocopherol,
+            # pteroylmonoglutamic acid for the actual synthetic compound forms.
         ],
     )
     def test_harmful_overlap_is_skipped_before_active_quality_scoring(
@@ -1724,3 +1734,157 @@ def test_capsules_high_confidence_form_variants_map_after_alias_updates():
         match = enricher._match_quality_map(raw_name, raw_name, enricher.databases["ingredient_quality_map"])
         assert match.get("canonical_id") == expected_canonical, raw_name
         assert not match.get("form_unmapped_fallback"), raw_name
+
+
+def test_pure_encapsulations_form_fallback_aliases_map_without_fallback():
+    enricher = SupplementEnricherV3()
+    qm = enricher.databases["ingredient_quality_map"]
+    cases = [
+        (
+            "Folate",
+            "Folate",
+            [{"name": "Quatrefolic (6S)-5-Methyltetrahyrdofolic Acid, Glucosamine Salt"}],
+            "vitamin_b9_folate",
+            "quatrefolic",
+        ),
+        (
+            "Magnesium",
+            "Magnesium",
+            [{"name": "Albion Di-Magnesium Malate"}],
+            "magnesium",
+            "magnesium malate",
+        ),
+        (
+            "Copper",
+            "Copper",
+            [{"name": "Copper Bis-Glycinate"}],
+            "copper",
+            "copper bisglycinate",
+        ),
+        (
+            "Riboflavin",
+            "Riboflavin",
+            [{"name": "Vitamin B2, Riboflavin 5 Phosphate"}],
+            "vitamin_b2_riboflavin",
+            "riboflavin-5-phosphate",
+        ),
+        (
+            "Alpha-Lipoic Acid",
+            "Alpha-Lipoic Acid",
+            [{"name": "Thiotic Acid"}],
+            "alpha_lipoic_acid",
+            "racemic alpha-lipoic acid",
+        ),
+        (
+            "L-Arginine Hydrochloride, Powder",
+            "L-Arginine Hydrochloride, Powder",
+            [{"name": "hydrochloride"}],
+            "l_arginine",
+            "l-arginine hcl",
+        ),
+        (
+            "L-Histidine, Powder",
+            "L-Histidine, Powder",
+            [{"name": "L-Histidine Hydrochloride, Powder"}],
+            "l_histidine",
+            "l-histidine standard",
+        ),
+        (
+            "L-Lysine, Powder",
+            "L-Lysine, Powder",
+            [{"name": "L-Lysine Hydrochloride, Powder"}],
+            "l_lysine",
+            "l-lysine hcl",
+        ),
+        (
+            "C8Vantage",
+            "C8Vantage",
+            [{"name": "Medium Chain Triglyceride C8, Powder"}],
+            "mct_oil",
+            "c8 mct oil (pure caprylic)",
+        ),
+    ]
+
+    for label, std_name, cleaned_forms, expected_canonical, expected_form in cases:
+        match = enricher._match_quality_map(
+            label,
+            std_name,
+            qm,
+            cleaned_forms=cleaned_forms,
+        )
+        assert match is not None, label
+        assert match.get("canonical_id") == expected_canonical, label
+        assert match.get("form_id") == expected_form, label
+        assert not match.get("form_unmapped_fallback"), label
+
+
+def test_pure_encapsulations_branded_parent_fallbacks_map_to_specific_forms():
+    enricher = SupplementEnricherV3()
+    qm = enricher.databases["ingredient_quality_map"]
+    cases = [
+        ("Perluxan Hops (Humulus lupulus) extract", "hops", "hops extract (unspecified)"),
+        ("Lifenol Hops (Humulus lupulus) extract", "hops", "hops extract (unspecified)"),
+        ("Meriva Turmeric Phytosome Complex Curcuminoids", "curcumin", "meriva curcumin"),
+        ("Meriva Turmeric Phytosome Sunflower Phospholipid Complex", "curcumin", "meriva curcumin"),
+    ]
+
+    for label, expected_canonical, expected_form in cases:
+        match = enricher._match_quality_map(label, label, qm)
+        assert match is not None, label
+        assert match.get("canonical_id") == expected_canonical, label
+        assert match.get("form_id") == expected_form, label
+        assert not match.get("form_unmapped_fallback"), label
+
+
+def test_olly_nature_thorne_safe_form_gaps_map_without_fallback():
+    enricher = SupplementEnricherV3()
+    qm = enricher.databases["ingredient_quality_map"]
+    cases = [
+        (
+            "Goji Berry Fruit Extract",
+            "Goji Berry Fruit Extract",
+            [{"name": "Lycium barbarum Fruit Extract"}],
+            "goji_berry",
+            "goji berry (unspecified)",
+        ),
+        (
+            "Goji Berry Juice, Powder",
+            "Goji Berry Juice, Powder",
+            [{"name": "Lycium barbarum, Powder"}],
+            "goji_berry",
+            "goji berry (unspecified)",
+        ),
+        (
+            "Selenium",
+            "Selenium",
+            [{"name": "Selenium Picolinate"}],
+            "selenium",
+            "selenium picolinate",
+        ),
+        (
+            "Folate",
+            "Folate",
+            [{"name": "L-5 Methyltetrahydrofolic Acid, Glucosamine Salt"}],
+            "vitamin_b9_folate",
+            "quatrefolic",
+        ),
+        (
+            "Copper",
+            "Copper",
+            [{"name": "Albion Copper Bisglycinate Chelate"}],
+            "copper",
+            "copper bisglycinate",
+        ),
+    ]
+
+    for label, std_name, cleaned_forms, expected_canonical, expected_form in cases:
+        match = enricher._match_quality_map(
+            label,
+            std_name,
+            qm,
+            cleaned_forms=cleaned_forms,
+        )
+        assert match is not None, label
+        assert match.get("canonical_id") == expected_canonical, label
+        assert match.get("form_id") == expected_form, label
+        assert not match.get("form_unmapped_fallback"), label

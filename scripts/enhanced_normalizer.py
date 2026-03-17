@@ -67,7 +67,74 @@ from unmapped_ingredient_tracker import UnmappedIngredientTracker
 from functional_grouping_handler import FunctionalGroupingHandler
 import normalization as norm_module  # Single-source normalization
 
+
+# ---------------------------------------------------------------------------
+# PERFORMANCE: Module-level caches shared across ALL normalizer instances.
+# Using lru_cache on instance methods (with self as key) is wasteful:
+#   - one cache per instance, not shared
+#   - self reference prevents GC of the instance
+# Pure text functions (preprocess, variations) are deterministic on input
+# alone, so a module-level unbounded cache gives O(1) hits after warm-up.
+# ---------------------------------------------------------------------------
+@functools.lru_cache(maxsize=None)
+def _preprocess_text_module_cached(text: str) -> str:
+    """Shared module-level cache for text preprocessing (all instances)."""
+    return norm_module.preprocess_text(text)
+
+
+_VARIATION_ABBREVIATIONS = {
+    'vitamin': 'vit',
+    'alpha': 'a',
+    'beta': 'b',
+    'gamma': 'g',
+    'delta': 'd',
+    'tocopherol': 'toco',
+    'tocopheryl': 'toco',
+    'ascorbic acid': 'ascorbate',
+    'cholecalciferol': 'cholecal',
+    'cyanocobalamin': 'cyano',
+    'methylcobalamin': 'methyl',
+    'pyridoxine': 'pyr',
+    'riboflavin': 'ribo',
+    'thiamine': 'thia',
+    'phylloquinone': 'phyllo',
+}
+
+
+@functools.lru_cache(maxsize=None)
+def _generate_variations_module_cached(text: str) -> tuple:
+    """Shared module-level cache for ingredient name variation generation.
+    Returns a sorted tuple (hashable) of variation strings — same logic as
+    IngredientMatcher.generate_variations() but module-level for cache sharing.
+    """
+    variations = [text]
+    no_space = text.replace(' ', '')
+    if no_space != text:
+        variations.append(no_space)
+    hyphenated = text.replace(' ', '-')
+    if hyphenated != text:
+        variations.append(hyphenated)
+    for full, abbrev in _VARIATION_ABBREVIATIONS.items():
+        if full in text:
+            variations.append(text.replace(full, abbrev))
+        if re.search(rf'\b{re.escape(abbrev)}\b', text):
+            variations.append(re.sub(rf'\b{re.escape(abbrev)}\b', full, text))
+    if re.search(r'[a-z]\d+', text):
+        variations.append(re.sub(r'([a-z])(\d+)', r'\1 \2', text))
+    if re.search(r'[a-z]\s\d+', text):
+        variations.append(re.sub(r'([a-z])\s(\d+)', r'\1\2', text))
+    return tuple(sorted(set(variations)))
+
 logger = logging.getLogger(__name__)
+
+# These are deliberate active + high-risk overlaps:
+# keep the active identity for scoring/explanation, then apply the safety layer.
+INTENTIONAL_IQM_BR_DUAL_CLASSIFICATION = frozenset({
+    "yohimbe",
+    "kavalactones",
+    "synephrine",
+    "garcinia_cambogia",
+})
 
 
 STRUCTURAL_OTHER_HEADER_NAMES = frozenset({
@@ -110,10 +177,29 @@ STRUCTURAL_OTHER_FORM_CONTAINER_NAMES = frozenset({
     "freshlok antioxidant",
     "white ink",
     "softgel color",
+    "cellulose modified",
     "organic flax particulate matter",
     "flax particulate matter",
+    "plant derived antioxidants",
+    "plant-derived antioxidants",
     "contains naturally occurring carotenoids",
     "antioxidant",
+    "serrateric",
+    "non-gmo sunflower",
+    "organic dark chocolate chunks",
+    "dark chocolate chunks",
+    "xyliton",
+    "vsoftgels",
+    "may contain vegetable oil",
+    "additional ingredients",
+    "added to protect freshness",
+    "emulsifier",
+    "plant based emulsifier",
+    "efasorb",
+    "entering coating",
+    "lipid absorption support minerals",
+    "lipid-absorption-support minerals",
+    "isoflavones and saponins",
 })
 
 STRUCTURAL_ACTIVE_CONTAINER_NAMES = frozenset({
@@ -124,7 +210,90 @@ STRUCTURAL_ACTIVE_CONTAINER_NAMES = frozenset({
     "alpha & omega",
     "bergacyn",
     "supercritical ultra-purified fish and krill oil",
+    "absorption amplifier",
+    "absorption amplifiers",
+    "bladder xp-325",
+    "aqtiv",
+    "zantrex",
+    "organic neurophenol",
+    "neurophenol",
+    "cholesstrinol",
+    "essential vitality boost",
+    "inflam-arrest",
+    "marine oil and plant oil blend",
 })
+
+STRUCTURAL_ACTIVE_FORM_DISPLAY_ONLY_NAMES = frozenset({
+    "aquacelle",
+})
+
+STRUCTURAL_ACTIVE_BLEND_LEAF_NAMES = frozenset({
+    "dashmoola",
+    "dashmooladi",
+    "maharasnadi",
+    "selenium probiotic nutrients",
+    "selenium, probiotic nutrients",  # comma-punctuated label variant
+})
+
+STRUCTURAL_ACTIVE_DISPLAY_ONLY_LEAF_NAMES = frozenset({
+    "hydroxyanthracene derivatives",
+    "carvone",
+    "didymin",
+    "1 mg of ajoene and dithiins",
+    "e-guggulsterone isomer",
+    "z-guggulsterone isomer",
+    "hyperforin and hypericins combined",
+    "alkaloid",
+    "total alkaloids",
+    "antioxidative diterpene phenols",
+    "cod and fish liver oil",
+    "total capsaicinoids",
+    "methylxanthine isomers",
+    "narirutin",
+    "geraniol",
+    "omega 9",
+    "other fats and fatty acids",
+    "stearic, palmitic acids",
+    "stearic palmitic acids",
+    "omega-7 and -9 monounsaturated fatty acids",
+})
+
+STRUCTURAL_ACTIVE_CONTEXTUAL_DISPLAY_ONLY_LEAF_NAMES = frozenset({
+    "phenol",
+    "eicosatrienoic acid",
+    "essential fatty acid",
+    "other",
+    "pinolenic acid",
+    "triterpenoid saponins",
+    "zingiberene",
+})
+
+NEEDS_VERIFICATION_RULES = {
+    "chopchinee": {
+        "verification_reason": "identity_conflict",
+        "raw_ingredient_group": "Himalayan Rhubarb",
+        "conflicting_candidates": ["Himalayan Rhubarb", "Smilax china"],
+        "next_verification_step": "Obtain manufacturer or authoritative monograph confirmation for whether the label intends Rheum emodi or Smilax china.",
+    },
+    "vidarikanda": {
+        "verification_reason": "identity_conflict",
+        "raw_ingredient_group": "Finger Leaf Morning Glory",
+        "conflicting_candidates": ["Finger Leaf Morning Glory", "Pueraria tuberosa"],
+        "next_verification_step": "Obtain manufacturer or authoritative monograph confirmation for whether the label intends Pueraria tuberosa or the DSLD-listed finger leaf morning glory identity.",
+    },
+    "annine": {
+        "verification_reason": "identity_unknown",
+        "raw_ingredient_group": "None",
+        "conflicting_candidates": [],
+        "next_verification_step": "Confirm the original product label or manufacturer ingredient list because the DSLD row does not expose an identifiable ingredient.",
+    },
+    "pyroxide hcl": {
+        "verification_reason": "suspected_label_error",
+        "raw_ingredient_group": "Peroxide Hcl",
+        "conflicting_candidates": [],
+        "next_verification_step": "Confirm the original label text to determine whether this is a DSLD typo such as Pyridoxine HCl or another ingredient entirely.",
+    }
+}
 
 BANNED_STATUS_SEVERITY = {
     "banned": "critical",
@@ -290,75 +459,27 @@ class EnhancedIngredientMatcher:
             ("chromium", "vanadium"),       # Different trace minerals
         }
         
-    @functools.lru_cache(maxsize=2000)  # PERFORMANCE: Reduced from 10000 to prevent memory bloat
     def preprocess_text(self, text: str) -> str:
         """
         Comprehensive text preprocessing with enhanced validation.
 
-        Delegates to normalization module for consistent preprocessing across pipeline.
+        Delegates to module-level cached function for cross-instance sharing.
+        The lru_cache is on the module-level _preprocess_text_module_cached so
+        the cache is unbounded, shared across all instances, and never prevents
+        garbage-collection of this instance (no self reference in the cache key).
         """
         # SAFETY: Comprehensive input validation
         text = self.validate_input(text, "ingredient_name")
         if not text:
             return ""
 
-        # Delegate to single-source normalization module
-        return norm_module.preprocess_text(text)
+        # Module-level cache — shared, unbounded, no GC leak
+        return _preprocess_text_module_cached(text)
     
     def generate_variations(self, text: str) -> List[str]:
-        """
-        Generate common variations of ingredient names
-        """
-        variations = [text]
-        
-        # Add version without spaces
-        no_space = text.replace(' ', '')
-        if no_space != text:
-            variations.append(no_space)
-        
-        # Add version with hyphens instead of spaces
-        hyphenated = text.replace(' ', '-')
-        if hyphenated != text:
-            variations.append(hyphenated)
-        
-        # Add common abbreviations
-        abbreviations = {
-            'vitamin': 'vit',
-            'alpha': 'a',
-            'beta': 'b',
-            'gamma': 'g',
-            'delta': 'd',
-            'tocopherol': 'toco',
-            'tocopheryl': 'toco',
-            'ascorbic acid': 'ascorbate',
-            'cholecalciferol': 'cholecal',
-            'cyanocobalamin': 'cyano',
-            'methylcobalamin': 'methyl',
-            'pyridoxine': 'pyr',
-            'riboflavin': 'ribo',
-            'thiamine': 'thia',
-            'phylloquinone': 'phyllo'
-        }
-        
-        for full, abbrev in abbreviations.items():
-            if full in text:
-                variations.append(text.replace(full, abbrev))
-            # Reverse direction: only expand abbreviation at word boundaries
-            # to avoid nonsense like "vitamin d3" -> "vitamin delta3"
-            # or "riboflavin" -> "ribetaoflavin" (from 'b' -> 'beta')
-            if re.search(rf'\b{re.escape(abbrev)}\b', text):
-                variations.append(re.sub(rf'\b{re.escape(abbrev)}\b', full, text))
-        
-        # Add numeric variations (vitamin d3 -> vitamin d 3)
-        if re.search(r'[a-z]\d+', text):
-            spaced_num = re.sub(r'([a-z])(\d+)', r'\1 \2', text)
-            variations.append(spaced_num)
-        
-        if re.search(r'[a-z]\s\d+', text):
-            unspaced_num = re.sub(r'([a-z])\s(\d+)', r'\1\2', text)
-            variations.append(unspaced_num)
-        
-        return sorted(set(variations))  # Remove duplicates, deterministic order
+        """Generate common variations of ingredient names."""
+        # Delegate to module-level cached function (shared across all instances)
+        return list(_generate_variations_module_cached(text))
 
     def is_safe_for_fuzzy_matching(self, query: str, category: str = None) -> bool:
         """
@@ -472,7 +593,7 @@ class EnhancedIngredientMatcher:
         targets_tuple = tuple(targets)
         return self._safe_fuzzy_match_cached(query, targets_tuple, category)
 
-    @functools.lru_cache(maxsize=1000)  # PERFORMANCE: Reduced from 5000 to prevent memory bloat
+    @functools.lru_cache(maxsize=5000)
     def _safe_fuzzy_match_cached(self, query: str, targets_tuple: tuple, category: str = None) -> Tuple[Optional[str], int]:
         """Thread-safe cached version of fuzzy matching"""
         # Convert tuple back to list for processing
@@ -796,6 +917,7 @@ class EnhancedDSLDNormalizer:
         # Track unmapped ingredients with more detail
         self.unmapped_ingredients = Counter()
         self.unmapped_details = {}  # Store more context about unmapped ingredients
+        self._unmapped_keys_order: list = []  # Insertion-ordered unique keys (for O(1) snapshot)
 
         # Initialize the enhanced unmapped ingredient tracker for separate active/inactive files
         self.unmapped_tracker = None  # Will be initialized when output_dir is set
@@ -813,10 +935,98 @@ class EnhancedDSLDNormalizer:
         self._max_workers = min(8, (os.cpu_count() or 4))  # Adaptive worker count
         self._parallel_threshold = FUZZY_MATCHING_THRESHOLDS["parallel_threshold"]
 
-        # OPTIMIZATION: Fast lookup indices for common operations
-        self._fast_exact_lookup = {}  # Combined exact match lookup
+        # OPTIMIZATION: Fast lookup indices are already built inside
+        # _build_enhanced_indices(); do not rebuild them here.
         self._common_ingredients_cache = {}  # Cache for most common ingredients
-        self._build_fast_lookups()
+
+        # SAFETY GUARD: Detect IQM ↔ Banned alias collisions at startup
+        self._preflight_iqm_banned_collision_check()
+
+    def _preflight_iqm_banned_collision_check(self):
+        """
+        Runtime guard: log a critical warning if any IQM alias (scorable ingredient)
+        normalizes to the same key as a banned/recalled alias.
+
+        A collision means the IQM route could silently win over the banned route,
+        scoring a banned substance as beneficial. This check runs once at startup
+        so errors surface before any product is processed.
+
+        Note: test_cross_db_overlap_guard.py and test_banned_collision_corpus.py
+        already catch this at test time; this guard covers production code paths.
+        """
+        banned_term_index: dict[str, tuple[str, str]] = {}
+        for key, value in self.banned_recalled.items():
+            if key == "_metadata" or not isinstance(value, list):
+                continue
+            for entry in value:
+                if not isinstance(entry, dict):
+                    continue
+                br_id = entry.get("id", "")
+                br_status = entry.get("status", "banned")
+                standard_name = entry.get("standard_name", "")
+                if standard_name:
+                    norm_key = self.matcher.preprocess_text(standard_name)
+                    if norm_key:
+                        banned_term_index.setdefault(norm_key, (br_id, br_status))
+                for alias in entry.get("aliases", []) or []:
+                    norm_key = self.matcher.preprocess_text(alias)
+                    if norm_key:
+                        banned_term_index.setdefault(norm_key, (br_id, br_status))
+
+        if not banned_term_index:
+            return
+
+        critical_collisions = []
+        seen: set[tuple[str, str]] = set()
+        for iqm_key, iqm_entry in self.ingredient_map.items():
+            if iqm_key.startswith("_") or not isinstance(iqm_entry, dict):
+                continue
+
+            candidates = [iqm_entry.get("standard_name", iqm_key), iqm_key]
+            for form_name, form_data in (iqm_entry.get("forms", {}) or {}).items():
+                candidates.append(form_name)
+                if isinstance(form_data, dict):
+                    candidates.extend(form_data.get("aliases", []) or [])
+
+            for candidate in candidates:
+                if not candidate:
+                    continue
+                norm_candidate = self.matcher.preprocess_text(candidate)
+                if not norm_candidate:
+                    continue
+                dedupe_key = (iqm_key, norm_candidate)
+                if dedupe_key in seen:
+                    continue
+                seen.add(dedupe_key)
+                if norm_candidate not in banned_term_index:
+                    continue
+                br_id, br_status = banned_term_index[norm_candidate]
+                is_critical = br_status in {"banned", "recalled"}
+                if not is_critical and iqm_key in INTENTIONAL_IQM_BR_DUAL_CLASSIFICATION:
+                    continue
+                if is_critical:
+                    critical_collisions.append((candidate, iqm_entry.get("standard_name", iqm_key), br_id))
+
+        if not critical_collisions:
+            logger.debug("Preflight IQM<->Banned collision check passed — no critical collisions found.")
+            return
+
+        logger.critical(
+            "IQM<->BANNED collision check found %d critical collision(s).",
+            len(critical_collisions),
+        )
+        for alias, std_name, br_id in critical_collisions[:10]:
+            logger.critical(
+                "IQM<->BANNED COLLISION: alias %r maps to IQM entry %r and banned id %r. "
+                "The banned route may be bypassed. Fix immediately.",
+                alias,
+                std_name,
+                br_id,
+            )
+        if len(critical_collisions) > 10:
+            logger.critical(
+                "Additional IQM<->BANNED collisions suppressed after 10; fix the underlying DB overlaps."
+            )
 
     def set_output_directory(self, output_dir: Path):
         """Set the output directory and initialize the unmapped tracker"""
@@ -1138,7 +1348,7 @@ class EnhancedDSLDNormalizer:
                         "mapped": True,
                         "priority": 5
                     }
-                    add_group_exact(standard_name, self._fast_exact_lookup[processed_standard])
+                add_group_exact(standard_name, self._fast_exact_lookup[processed_standard])
 
                 # Add aliases
                 for alias in std_botanical.get("aliases", []) or []:
@@ -1169,7 +1379,7 @@ class EnhancedDSLDNormalizer:
                         "mapped": True,
                         "priority": 6
                     }
-                    add_group_exact(standard_name, self._fast_exact_lookup[processed_standard])
+                add_group_exact(standard_name, self._fast_exact_lookup[processed_standard])
 
                 # Add aliases
                 for alias in botanical.get("aliases", []) or []:
@@ -1196,7 +1406,8 @@ class EnhancedDSLDNormalizer:
                     "mapped": True,
                     "priority": 7
                 }
-                add_group_exact(value.get("standard_name", key), self._fast_exact_lookup[key])
+            add_group_exact(value.get("standard_name", key), self._fast_exact_lookup[key])
+            add_group_exact(key, self._fast_exact_lookup[key])
 
         # PRIORITY 8: Add PROPRIETARY BLENDS lookups
         proprietary_blend_concerns = self.proprietary_blends.get("proprietary_blend_concerns", [])
@@ -1238,9 +1449,10 @@ class EnhancedDSLDNormalizer:
                         "standard_name": standard_name,
                         "category": other_ing.get("category", "other"),
                         "is_additive": other_ing.get("is_additive", False),
-                        "mapped": True,
-                        "priority": 9
-                    }
+                            "mapped": True,
+                            "priority": 9
+                        }
+                add_group_exact(standard_name, self._fast_exact_lookup[processed_standard])
 
                 # Add aliases
                 for alias in other_ing.get("aliases", []) or []:
@@ -1254,6 +1466,7 @@ class EnhancedDSLDNormalizer:
                             "mapped": True,
                             "priority": 9
                         }
+                    add_group_exact(alias, self._fast_exact_lookup[processed_alias])
 
         # PRIORITY 10: Add ABSORPTION ENHANCERS lookups
         absorption_enhancers_list = self.absorption_enhancers.get("absorption_enhancers", [])
@@ -1389,19 +1602,16 @@ class EnhancedDSLDNormalizer:
                     allergen_info["is_allergen"] or
                     is_proprietary)
 
+        is_display_only_leaf = (
+            self._is_structural_active_blend_leaf(ingredient_data)
+            or self._is_structural_active_display_only_leaf(ingredient_data)
+        )
+
         # Track unmapped ingredients only if not found in any database
         # DATA INTEGRITY FIX: Filter out label phrases and nutrition facts
         # This prevents "None", "Contains < 2% of", etc. from appearing in unmapped list
-        if not is_mapped and not self._is_nutrition_fact(name):
-            processed_name = self.matcher.preprocess_text(name)
-            # Thread-safe tracking (Counter is thread-safe for basic operations)
-            self.unmapped_ingredients[name] += 1
-            self.unmapped_details[name] = {
-                "processed_name": processed_name,
-                "forms": forms,
-                "variations_tried": self.matcher.generate_variations(processed_name),
-                "is_active": True  # This method is for active ingredients from the context
-            }
+        if not is_mapped and not is_display_only_leaf and not self._is_nutrition_fact(name):
+            self._record_unmapped_ingredient(name, forms, is_active=True)
 
         # Check if this ingredient is an additive (add metadata flag for enrichment phase)
         processed_name = self.matcher.preprocess_text(name)
@@ -1976,8 +2186,12 @@ class EnhancedDSLDNormalizer:
         
         # Build enhanced other ingredients lookup (safe additives/excipients - FDA "Other Ingredients")
         self.other_ingredients_lookup = {}
+        self.other_ingredients_exact_lookup = {}
         for other_ing in self.other_ingredients.get("other_ingredients", []) or []:
             standard_name = other_ing["standard_name"]
+            exact_key = standard_name.strip().lower()
+            if exact_key not in self.other_ingredients_exact_lookup:
+                self.other_ingredients_exact_lookup[exact_key] = other_ing
             # Add standard name variations
             name_variations = self.matcher.generate_variations(
                 self.matcher.preprocess_text(standard_name)
@@ -1987,6 +2201,9 @@ class EnhancedDSLDNormalizer:
 
             # Add alias variations
             for alias in other_ing.get("aliases", []) or []:
+                alias_exact_key = alias.strip().lower()
+                if alias_exact_key not in self.other_ingredients_exact_lookup:
+                    self.other_ingredients_exact_lookup[alias_exact_key] = other_ing
                 alias_variations = self.matcher.generate_variations(
                     self.matcher.preprocess_text(alias)
                 )
@@ -2072,7 +2289,7 @@ class EnhancedDSLDNormalizer:
             validated_name, forms_tuple, validated_group
         )
 
-    @functools.lru_cache(maxsize=2000)  # PERFORMANCE: Reduced from 10000 to prevent memory bloat
+    @functools.lru_cache(maxsize=10000)
     def _enhanced_ingredient_mapping_cached(
         self, name: str, forms_tuple: tuple, ingredient_group: str
     ) -> Tuple[str, bool, List[str]]:
@@ -2379,7 +2596,7 @@ class EnhancedDSLDNormalizer:
         forms_tuple = tuple(sorted(forms)) if forms else ()
         return self._enhanced_allergen_check_cached(name, forms_tuple)
 
-    @functools.lru_cache(maxsize=1000)  # PERFORMANCE: Reduced from 5000 to prevent memory bloat
+    @functools.lru_cache(maxsize=5000)
     def _enhanced_allergen_check_cached(self, name: str, forms_tuple: tuple) -> Dict[str, Any]:
         """Thread-safe cached allergen checking"""
         forms = list(forms_tuple) if forms_tuple else []
@@ -2428,7 +2645,7 @@ class EnhancedDSLDNormalizer:
         self._cache_stats["harmful_calls"] += 1
         return self._enhanced_harmful_check_cached(name)
 
-    @functools.lru_cache(maxsize=1000)  # PERFORMANCE: Reduced from 5000 to prevent memory bloat
+    @functools.lru_cache(maxsize=5000)
     def _enhanced_harmful_check_cached(self, name: str) -> Dict[str, Any]:
         """Thread-safe cached harmful checking"""
         result = {
@@ -2461,7 +2678,7 @@ class EnhancedDSLDNormalizer:
         self._cache_stats["non_harmful_calls"] += 1
         return self._enhanced_non_harmful_check_cached(name)
 
-    @functools.lru_cache(maxsize=1000)  # PERFORMANCE: Reduced from 5000 to prevent memory bloat
+    @functools.lru_cache(maxsize=5000)
     def _enhanced_non_harmful_check_cached(self, name: str) -> Dict[str, Any]:
         """Thread-safe cached non-harmful checking"""
         result = {
@@ -2662,6 +2879,36 @@ class EnhancedDSLDNormalizer:
                 flattened.append(ing)
                 continue
 
+            # DSLD GROUP BLEND CONTAINER: detect by ingredientGroup + nestedRows.
+            # Catches named blends (WellBody 365, UAF1000+, etc.) that don't
+            # match STRUCTURAL_ACTIVE_CONTAINER_NAMES or PROPRIETARY_BLEND_INDICATORS
+            # by name alone. Structure decides if parent scores; DB decides identity.
+            if self._is_dsld_group_blend_container(ing):
+                logger.debug(
+                    "Flattening DSLD-group blend container without parent: %s", name
+                )
+                self._queue_display_ingredient(
+                    raw_source_text=name,
+                    source_section="activeIngredients",
+                    display_type="structural_container",
+                    score_included=False,
+                    children=[
+                        ni.get("name", "") for ni in nested if ni.get("name")
+                    ],
+                )
+                for nested_ing in nested:
+                    nested_name = nested_ing.get("name", "")
+                    if self._should_skip_ingredient(nested_name):
+                        continue
+                    nested_ing["parentBlend"] = name or "Unknown Blend"
+                    nested_ing["isNestedIngredient"] = True
+                    if nested_ing.get("nestedRows"):
+                        sub_flattened = self._flatten_nested_ingredients([nested_ing])
+                        flattened.extend(sub_flattened)
+                    else:
+                        flattened.append(nested_ing)
+                continue
+
             # Structural active containers carry child ingredients but should never
             # surface as standalone actives in cleaned output.
             if self._is_structural_active_container(name, nested):
@@ -2684,6 +2931,28 @@ class EnhancedDSLDNormalizer:
                         flattened.extend(sub_flattened)
                     else:
                         flattened.append(nested_ing)
+                continue
+
+            if self._is_structural_active_blend_leaf(ing):
+                logger.debug(f"Skipping structural active blend leaf: {name}")
+                self._queue_display_ingredient(
+                    raw_source_text=name,
+                    source_section="activeIngredients",
+                    display_type="structural_container",
+                    score_included=False,
+                    children=[],
+                )
+                continue
+
+            if self._is_structural_active_display_only_leaf(ing):
+                logger.debug(f"Skipping structural active display-only leaf: {name}")
+                self._queue_display_ingredient(
+                    raw_source_text=name,
+                    source_section="activeIngredients",
+                    display_type="structural_container",
+                    score_included=False,
+                    children=[],
+                )
                 continue
 
             # SKIP ENFORCEMENT: Skip items from skip list during flattening
@@ -2718,12 +2987,15 @@ class EnhancedDSLDNormalizer:
                             flattened.append(nested_ing)
                 continue
 
-            # Add the main ingredient
-            flattened.append(ing)
-
             # For proprietary blends, nested ingredients are already processed in the main ingredient
             # Only add nested ingredients to flattened list if they're not part of a proprietary blend
             is_proprietary_blend = self._is_proprietary_blend_name(name)
+            flattened_parent = dict(ing)
+            if nested and not is_proprietary_blend:
+                flattened_parent["_nested_rows_flattened"] = True
+
+            # Add the main ingredient
+            flattened.append(flattened_parent)
 
             if nested and not is_proprietary_blend:
                 for nested_ing in nested:
@@ -3355,6 +3627,36 @@ class EnhancedDSLDNormalizer:
                             processed.append(processed_form)
                 continue
 
+            if is_active and self._is_structural_active_blend_leaf(ing):
+                self._queue_display_ingredient(
+                    raw_source_text=name,
+                    source_section="activeIngredients",
+                    display_type="structural_container",
+                    score_included=False,
+                    children=[],
+                )
+                continue
+
+            if is_active and self._is_structural_active_form_display_only(ing):
+                self._queue_display_ingredient(
+                    raw_source_text=name,
+                    source_section="activeIngredients",
+                    display_type="structural_container",
+                    score_included=False,
+                    children=[form.get("name", "") for form in (ing.get("forms", []) or []) if isinstance(form, dict) and form.get("name")],
+                )
+                continue
+
+            if is_active and self._is_structural_active_display_only_leaf(ing):
+                self._queue_display_ingredient(
+                    raw_source_text=name,
+                    source_section="activeIngredients",
+                    display_type="structural_container",
+                    score_included=False,
+                    children=[],
+                )
+                continue
+
             if self._is_structural_form_container(name, is_active=is_active):
                 forms = ing.get("forms", []) or []
                 if not forms:
@@ -3425,7 +3727,7 @@ class EnhancedDSLDNormalizer:
             - List[Dict]: When parent is skipped but has nestedRows (returns nested ingredients)
             - None: When ingredient should be skipped entirely
         """
-        raw_name = ing.get("name", "") or ""
+        raw_name = (ing.get("name", "") or "").strip()
         name = self._strip_duplicate_label_artifacts(raw_name)
         nested_rows = ing.get("nestedRows", [])
 
@@ -3499,6 +3801,36 @@ class EnhancedDSLDNormalizer:
             logger.debug(f"Skipping label header: {name} (forms will be extracted separately)")
             return None
 
+        if is_active and self._is_structural_active_blend_leaf(ing):
+            self._queue_display_ingredient(
+                raw_source_text=raw_name,
+                source_section="activeIngredients",
+                display_type="structural_container",
+                score_included=False,
+                children=[],
+            )
+            return None
+
+        if is_active and self._is_structural_active_form_display_only(ing):
+            self._queue_display_ingredient(
+                raw_source_text=raw_name,
+                source_section="activeIngredients",
+                display_type="structural_container",
+                score_included=False,
+                children=[form.get("name", "") for form in (ing.get("forms", []) or []) if isinstance(form, dict) and form.get("name")],
+            )
+            return None
+
+        if is_active and self._is_structural_active_display_only_leaf(ing):
+            self._queue_display_ingredient(
+                raw_source_text=raw_name,
+                source_section="activeIngredients",
+                display_type="structural_container",
+                score_included=False,
+                children=[],
+            )
+            return None
+
         # Extract form information from ingredient name if no explicit forms provided
         if not forms and name:
             extracted_forms = self._extract_forms_from_ingredient_name(name)
@@ -3559,9 +3891,12 @@ class EnhancedDSLDNormalizer:
 
         # Process nested ingredients regardless of proprietary status
         # Non-blend parents (e.g., "Total Omega Oil") can have real sub-components (Omega-3, Omega-6, etc.)
-        if nested_rows:
+        if nested_rows and not ing.get("_nested_rows_flattened"):
             for nested_ing in nested_rows:
-                nested_processed = self._process_single_ingredient_enhanced(nested_ing, is_active)
+                nested_ing_for_processing = dict(nested_ing)
+                nested_ing_for_processing.setdefault("parentBlend", name)
+                nested_ing_for_processing.setdefault("isNestedIngredient", True)
+                nested_processed = self._process_single_ingredient_enhanced(nested_ing_for_processing, is_active)
                 if nested_processed:
                     # Handle list returns (from nested skipped parents with their own nestedRows)
                     if isinstance(nested_processed, list):
@@ -3594,14 +3929,7 @@ class EnhancedDSLDNormalizer:
         # Track unmapped ingredients only if not found in any database
         # AND not a nutrition fact/label phrase
         if not is_mapped and not self._is_nutrition_fact(name):
-            processed_name = self.matcher.preprocess_text(name)
-            self.unmapped_ingredients[name] += 1
-            self.unmapped_details[name] = {
-                "processed_name": processed_name,
-                "forms": forms,
-                "variations_tried": self.matcher.generate_variations(processed_name),
-                "is_active": is_active  # Track whether this is an active ingredient
-            }
+            self._record_unmapped_ingredient(name, forms, is_active=is_active)
 
         # Preserve forms with full structure (including IDs if available)
         forms_structured = []
@@ -3859,12 +4187,11 @@ class EnhancedDSLDNormalizer:
         for unmapped in collected_unmapped:
             name = unmapped["name"]
             self.unmapped_ingredients[name] += 1
-            self.unmapped_details[name] = {
-                "processed_name": unmapped["processed_name"],
-                "forms": unmapped["forms"],
-                "variations_tried": unmapped["variations_tried"],
-                "is_active": unmapped["is_active"]
-            }
+            self.unmapped_details[name] = self._build_unmapped_detail(
+                name,
+                unmapped["forms"],
+                unmapped["is_active"],
+            )
 
         # Sort by original order (with safe comparison)
         def safe_order_key(x):
@@ -4045,14 +4372,7 @@ class EnhancedDSLDNormalizer:
                     )
 
                     if not form_is_mapped and not self._is_nutrition_fact(form_name):
-                        form_processed_name = self.matcher.preprocess_text(form_name)
-                        self.unmapped_ingredients[form_name] += 1
-                        self.unmapped_details[form_name] = {
-                            "processed_name": form_processed_name,
-                            "forms": [],
-                            "variations_tried": self.matcher.generate_variations(form_processed_name),
-                            "is_active": False
-                        }
+                        self._record_unmapped_ingredient(form_name, [], is_active=False)
 
                     form_ing["standardName"] = form_std_name
                     form_ing["mapped"] = form_is_mapped
@@ -4077,14 +4397,7 @@ class EnhancedDSLDNormalizer:
                     )
 
                     if not form_is_mapped and not self._is_nutrition_fact(form_name):
-                        form_processed_name = self.matcher.preprocess_text(form_name)
-                        self.unmapped_ingredients[form_name] += 1
-                        self.unmapped_details[form_name] = {
-                            "processed_name": form_processed_name,
-                            "forms": [],
-                            "variations_tried": self.matcher.generate_variations(form_processed_name),
-                            "is_active": False
-                        }
+                        self._record_unmapped_ingredient(form_name, [], is_active=False)
 
                     form_ing["standardName"] = form_std_name
                     form_ing["mapped"] = form_is_mapped
@@ -4132,14 +4445,7 @@ class EnhancedDSLDNormalizer:
 
             # Track unmapped ingredients only if not found in any database
             if not is_mapped and not self._is_nutrition_fact(name):
-                processed_name = self.matcher.preprocess_text(name)
-                self.unmapped_ingredients[name] += 1
-                self.unmapped_details[name] = {
-                    "processed_name": processed_name,
-                    "forms": forms,
-                    "variations_tried": self.matcher.generate_variations(processed_name),
-                    "is_active": False  # Inactive ingredients
-                }
+                self._record_unmapped_ingredient(name, forms, is_active=False)
 
             # Preserve forms with full structure (including IDs if available)
             forms_structured = []
@@ -4225,6 +4531,34 @@ class EnhancedDSLDNormalizer:
         for form in forms:
             if isinstance(form, dict):
                 form_name = form.get("name", "")
+                expanded_names = self._expand_compound_inactive_form_name(form_name, source_path)
+                if expanded_names:
+                    for expanded_name in expanded_names:
+                        expanded.append({
+                            "ingredientId": form.get("ingredientId"),
+                            "uniiCode": form.get("uniiCode"),
+                            "order": form.get("order", ingredient.get("order", 0)),
+                            "raw_source_text": expanded_name,
+                            "raw_source_path": source_path,
+                            "normalized_key": norm_module.make_normalized_key(expanded_name),
+                            "name": expanded_name,
+                            "ingredientGroup": ingredient.get("ingredientGroup"),
+                            "forms": [],
+                            "alternateNames": [],
+                            "_fromLabelHeader": name,
+                            "_transparency": "standard",
+                        })
+                    continue
+                if self._is_label_header(form_name) or self._is_structural_form_container(
+                    form_name, is_active=(source_path == "activeIngredients")
+                ):
+                    self._queue_display_ingredient(
+                        raw_source_text=form_name,
+                        source_section=source_path,
+                        display_type="structural_container",
+                        score_included=False,
+                    )
+                    continue
                 if self._should_preserve_expanded_form(form_name, source_path):
                     expanded.append({
                         "ingredientId": form.get("ingredientId"),
@@ -4240,21 +4574,59 @@ class EnhancedDSLDNormalizer:
                         "_fromLabelHeader": name,
                         "_transparency": "standard",
                     })
-            elif isinstance(form, str) and self._should_preserve_expanded_form(form, source_path):
-                expanded.append({
-                    "order": ingredient.get("order", 0),
-                    "raw_source_text": form,
-                    "raw_source_path": source_path,
-                    "normalized_key": norm_module.make_normalized_key(form),
-                    "name": form,
-                    "ingredientGroup": ingredient.get("ingredientGroup"),
-                    "forms": [],
-                    "alternateNames": [],
-                    "_fromLabelHeader": name,
-                    "_transparency": "standard",
-                })
+            elif isinstance(form, str):
+                expanded_names = self._expand_compound_inactive_form_name(form, source_path)
+                if expanded_names:
+                    for expanded_name in expanded_names:
+                        expanded.append({
+                            "order": ingredient.get("order", 0),
+                            "raw_source_text": expanded_name,
+                            "raw_source_path": source_path,
+                            "normalized_key": norm_module.make_normalized_key(expanded_name),
+                            "name": expanded_name,
+                            "ingredientGroup": ingredient.get("ingredientGroup"),
+                            "forms": [],
+                            "alternateNames": [],
+                            "_fromLabelHeader": name,
+                            "_transparency": "standard",
+                        })
+                    continue
+                if self._is_label_header(form) or self._is_structural_form_container(
+                    form, is_active=(source_path == "activeIngredients")
+                ):
+                    self._queue_display_ingredient(
+                        raw_source_text=form,
+                        source_section=source_path,
+                        display_type="structural_container",
+                        score_included=False,
+                    )
+                    continue
+                if self._should_preserve_expanded_form(form, source_path):
+                    expanded.append({
+                        "order": ingredient.get("order", 0),
+                        "raw_source_text": form,
+                        "raw_source_path": source_path,
+                        "normalized_key": norm_module.make_normalized_key(form),
+                        "name": form,
+                        "ingredientGroup": ingredient.get("ingredientGroup"),
+                        "forms": [],
+                        "alternateNames": [],
+                        "_fromLabelHeader": name,
+                        "_transparency": "standard",
+                    })
 
         return expanded
+
+    def _expand_compound_inactive_form_name(self, form_name: str, source_path: str) -> List[str]:
+        """Split exact known concatenated inactive form labels into their real child ingredients."""
+        if source_path != "inactiveIngredients" or not form_name:
+            return []
+
+        processed_name = self.matcher.preprocess_text(form_name)
+        if processed_name == "rice bran oil titanium dioxide color":
+            return ["Rice Bran Oil", "Titanium Dioxide Color"]
+
+        return []
 
     def _should_preserve_expanded_form(self, form_name: str, source_path: str) -> bool:
         """Keep mapped child forms from structural wrappers even if generic skip logic would drop them."""
@@ -5239,25 +5611,23 @@ class EnhancedDSLDNormalizer:
                         claims.append(claim)
 
         return sorted(set(claims))
-    def get_unmapped_snapshot(self) -> set:
-        """Get a snapshot of current unmapped ingredient names for delta tracking.
+    def get_unmapped_snapshot(self) -> int:
+        """Return a generation counter (count of distinct unmapped names seen so far).
 
-        Returns:
-            Set of unmapped ingredient names currently tracked
+        O(1) — no set allocation.  Pass the returned int to get_unmapped_delta().
         """
-        return set(self.unmapped_ingredients.keys())
+        return len(self._unmapped_keys_order)
 
-    def get_unmapped_delta(self, previous_snapshot: set) -> Dict[str, Any]:
+    def get_unmapped_delta(self, previous_snapshot: int) -> Dict[str, Any]:
         """Get unmapped ingredients added since the previous snapshot.
 
         Args:
-            previous_snapshot: Set of ingredient names from previous snapshot
+            previous_snapshot: int returned by a prior get_unmapped_snapshot() call
 
         Returns:
             Dict with newly unmapped ingredients and their details
         """
-        current_snapshot = set(self.unmapped_ingredients.keys())
-        new_unmapped = current_snapshot - previous_snapshot
+        new_unmapped = self._unmapped_keys_order[previous_snapshot:]
 
         unmapped_with_details = []
         for name in new_unmapped:
@@ -5315,8 +5685,30 @@ class EnhancedDSLDNormalizer:
                 "fuzzyMatchingEnabled": FUZZY_AVAILABLE
             }
         }
+
+    def _build_unmapped_detail(self, name: str, forms: List[str], is_active: bool) -> Dict[str, Any]:
+        processed_name = self.matcher.preprocess_text(name)
+        detail = {
+            "processed_name": processed_name,
+            "forms": forms,
+            "variations_tried": self.matcher.generate_variations(processed_name),
+            "is_active": is_active,
+        }
+        verification_rule = NEEDS_VERIFICATION_RULES.get(processed_name)
+        if verification_rule:
+            detail.update({
+                "needs_verification": True,
+                **verification_rule,
+            })
+        return detail
+
+    def _record_unmapped_ingredient(self, name: str, forms: List[str], is_active: bool):
+        if name not in self.unmapped_ingredients:
+            self._unmapped_keys_order.append(name)
+        self.unmapped_ingredients[name] += 1
+        self.unmapped_details[name] = self._build_unmapped_detail(name, forms, is_active)
     
-    def process_and_save_unmapped_tracking(self):
+    def process_and_save_unmapped_tracking(self, processed_count_override: Optional[int] = None):
         """Process unmapped ingredients and save separate active/inactive tracking files"""
         if not self.unmapped_tracker:
             logger.warning("Unmapped tracker not initialized. Call set_output_directory() first.")
@@ -5336,7 +5728,12 @@ class EnhancedDSLDNormalizer:
             unmapped_data[name] = count
         
         # Process with the tracker
-        self.unmapped_tracker.process_unmapped_ingredients(unmapped_data, active_ingredients)
+        self.unmapped_tracker.process_unmapped_ingredients(
+            unmapped_data,
+            active_ingredients,
+            self.unmapped_details,
+            processed_count_override=processed_count_override,
+        )
         
         # Save the tracking files
         self.unmapped_tracker.save_tracking_files()
@@ -5431,12 +5828,14 @@ class EnhancedDSLDNormalizer:
         header_patterns = [
             r"^less\s+than\s+\d+%\s+of:?$",
             r"^contains?\s+less\s+than\s+\d+%\s+of:?$",
+            r"^contains?\s+less\s+than\s+\d+%\s+of\s+blend:?$",
             r"^contains?\s*<?\s*\d+%\s+of:?$",
             r"^<\s*\d+%\s+of:?$",
             r"^\d+%\s+or\s+less\s+of:?$",
             r"^contains?\s+\d+%\s+or\s+less\s+of:?$",
             r"^may\s+contain\s+one\s+or\s+more\s+of(\s+the\s+following)?:?$",
             r"^contains?\s+one\s+or\s+more\s+of(\s+the\s+following)?:?$",
+            r".*\b(shell|capsule)\s+ingredients:?$",
         ]
 
         for pattern in header_patterns:
@@ -5451,6 +5850,42 @@ class EnhancedDSLDNormalizer:
             return False
         processed_name = self.matcher.preprocess_text(name)
         return processed_name in STRUCTURAL_ACTIVE_CONTAINER_NAMES
+
+    def _is_structural_active_blend_leaf(self, ing: Dict[str, Any]) -> bool:
+        """Identify exact active blend leaf names that should stay display-only."""
+        name = ing.get("name", "")
+        if not name:
+            return False
+        if (ing.get("category") or "").lower() != "blend":
+            return False
+        if ing.get("nestedRows") or ing.get("forms"):
+            return False
+        processed_name = self.matcher.preprocess_text(name)
+        return processed_name in STRUCTURAL_ACTIVE_BLEND_LEAF_NAMES
+
+    def _is_structural_active_form_display_only(self, ing: Dict[str, Any]) -> bool:
+        """Identify exact active parent rows whose forms are delivery descriptors, not scored actives."""
+        name = ing.get("name", "")
+        if not name:
+            return False
+        if ing.get("nestedRows"):
+            return False
+        if not (ing.get("forms") or []):
+            return False
+        processed_name = self.matcher.preprocess_text(name)
+        return processed_name in STRUCTURAL_ACTIVE_FORM_DISPLAY_ONLY_NAMES
+
+    def _is_structural_active_display_only_leaf(self, ing: Dict[str, Any]) -> bool:
+        """Identify exact active leaf rows that should stay display-only."""
+        name = ing.get("name", "")
+        if not name:
+            return False
+        if ing.get("nestedRows"):
+            return False
+        processed_name = self.matcher.preprocess_text(name)
+        if processed_name in STRUCTURAL_ACTIVE_CONTEXTUAL_DISPLAY_ONLY_LEAF_NAMES:
+            return bool(ing.get("isNestedIngredient") or ing.get("parentBlend"))
+        return processed_name in STRUCTURAL_ACTIVE_DISPLAY_ONLY_LEAF_NAMES
 
     def _is_structural_form_container(self, name: str, is_active: bool) -> bool:
         """Identify structural container rows that should unwrap forms[] and drop the parent."""
@@ -5491,6 +5926,11 @@ class EnhancedDSLDNormalizer:
         Exact inactive matches should prefer other_ingredients over active-canonical aliases.
         This prevents rows like 'Soy Lecithin' from being re-routed to active choline forms.
         """
+        exact_name = name.strip().lower()
+        other_ingredient = self.other_ingredients_exact_lookup.get(exact_name)
+        if other_ingredient:
+            return other_ingredient.get("standard_name", name), True, forms or []
+
         processed_name = self.matcher.preprocess_text(name)
         if processed_name in {"colors", "color", "coloring", "colorings", "color added", "colors added"}:
             return self._enhanced_ingredient_mapping(name, forms, ingredient_group=ingredient_group)
@@ -5520,7 +5960,19 @@ class EnhancedDSLDNormalizer:
                 return True
 
         return False
-    
+
+    def _is_dsld_group_blend_container(self, ing: Dict[str, Any]) -> bool:
+        """Detect blend containers by DSLD ingredientGroup + nestedRows structure.
+
+        Catches named proprietary blends (WellBody 365, UAF1000+, NutraCosmetic
+        Oils, etc.) that won't match STRUCTURAL_ACTIVE_CONTAINER_NAMES or
+        PROPRIETARY_BLEND_INDICATORS by name alone.
+        """
+        group = (ing.get("ingredientGroup") or "").lower()
+        if not ing.get("nestedRows"):
+            return False
+        return "proprietary blend" in group or group.startswith("blend")
+
     def _determine_disclosure_level(self, name: str, quantity: float, unit: str, nested_ingredients: List[Dict]) -> Optional[str]:
         """
         Determine the disclosure level of a proprietary blend.
