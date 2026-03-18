@@ -19,3 +19,7 @@ scripts/reports/
 .DS_Store
 .vscode/
 .idea/
+.cursor/
+.qodo/
+.planning/
+.pytest_cache/
