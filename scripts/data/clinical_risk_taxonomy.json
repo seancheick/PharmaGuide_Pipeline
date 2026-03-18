@@ -2,8 +2,8 @@
   "_metadata": {
     "description": "Controlled clinical risk taxonomy for condition and medication-class interaction alerts",
     "purpose": "interaction_alert_taxonomy",
-    "schema_version": "5.0.0",
-    "last_updated": "2026-02-28",
+    "schema_version": "5.1.0",
+    "last_updated": "2026-03-17",
     "total_entries": 36
   },
   "conditions": [
@@ -44,51 +44,52 @@
       "display_priority": 6
     },
     {
-      "id": "diabetes_type2",
-      "label": "Type 2 Diabetes",
+      "id": "diabetes",
+      "label": "Diabetes",
       "category": "metabolic",
-      "display_priority": 7
-    },
-    {
-      "id": "diabetes_type1",
-      "label": "Type 1 Diabetes",
-      "category": "metabolic",
-      "display_priority": 8
+      "display_priority": 7,
+      "note": "Covers type 1 and type 2. Merged from diabetes_type1/diabetes_type2 — supplement interactions are the same for both types (blood sugar impact, hypoglycemic risk)."
     },
     {
       "id": "bleeding_disorders",
       "label": "Bleeding Disorders",
       "category": "hematologic",
-      "display_priority": 9
+      "display_priority": 8
     },
     {
       "id": "kidney_disease",
       "label": "Kidney Disease",
       "category": "renal",
-      "display_priority": 10
+      "display_priority": 9
     },
     {
       "id": "liver_disease",
       "label": "Liver Disease",
       "category": "hepatic",
-      "display_priority": 11
+      "display_priority": 10
     },
     {
       "id": "thyroid_disorder",
       "label": "Thyroid Condition",
       "category": "endocrine",
-      "display_priority": 12
+      "display_priority": 11
     },
     {
       "id": "autoimmune",
       "label": "Autoimmune Condition",
       "category": "immunologic",
-      "display_priority": 13
+      "display_priority": 12
     },
     {
       "id": "seizure_disorder",
       "label": "Epilepsy/Seizures",
       "category": "neurologic",
+      "display_priority": 13
+    },
+    {
+      "id": "high_cholesterol",
+      "label": "High Cholesterol",
+      "category": "cardiovascular",
       "display_priority": 14
     }
   ],

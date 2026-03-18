@@ -72,7 +72,7 @@ def test_resume_does_not_skip_remaining_files(tmp_path, monkeypatch):
 
     monkeypatch.setattr(processor, "process_batch", fake_process_batch)
     monkeypatch.setattr(processor, "_generate_final_summary", lambda batch_results, total_time: {"ok": True})
-    monkeypatch.setattr(processor, "_save_unmapped_ingredients", lambda: None)
+    monkeypatch.setattr(processor, "_save_unmapped_ingredients", lambda *a, **kw: None)
     monkeypatch.setattr(processor, "_generate_processing_report", lambda summary, batch_results: None)
     monkeypatch.setattr(processor, "_generate_detailed_review_report", lambda: None)
 

@@ -903,7 +903,7 @@ def test_nordic_softgels_inactive_unmapped_labels_map(
         ("Glucosamine Sulfate 2KCI", "Glucosamine"),
         ("Glucosamine Sulfate 2NaCl", "Glucosamine"),
         ("Pylopass Lactobacillus reuteri", "Lactobacillus Reuteri"),
-        ("Bitter Orange Citrus Bioflavonoids", "Citrus Bioflavonoids"),
+        ("Bitter Orange Citrus Bioflavonoids", "Bitter Orange"),  # routes to bitter orange risk territory, not generic citrus bioflavonoids
         ("Pancreatin 4X", "Digestive Enzymes"),
         ("Pancreatin 8X", "Digestive Enzymes"),
         ("Pancrelipase", "Digestive Enzymes"),

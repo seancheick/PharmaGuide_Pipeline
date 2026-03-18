@@ -135,6 +135,18 @@ class SupplementEnricherV3:
         'product_name': ['product_name', 'fullName'],
     }
     OPTIONAL_PRODUCT_FIELDS = ['brand_name', 'activeIngredients', 'otherIngredients', 'product_form']
+    EXPORT_REQUIRED_IQD_FIELDS = {
+        "raw_source_text",
+        "name",
+        "standard_name",
+        "bio_score",
+        "natural",
+        "score",
+        "notes",
+        "category",
+        "mapped",
+        "safety_hits",
+    }
 
     # Empty schema for validation failures - ensures consistent output structure
     EMPTY_ENRICHMENT_SCHEMA = {
@@ -237,6 +249,34 @@ class SupplementEnricherV3:
                         issues.append(f"activeIngredients[{i}] must be a dictionary")
 
         return len(issues) == 0, issues
+
+    def _validate_export_contract_fields(self, enriched: Dict) -> List[str]:
+        """
+        Validate the minimum field set required by final DB export.
+
+        Enrichment should not silently drift away from the export contract.
+        This validator surfaces issues in metadata and logs, while the export
+        builder remains responsible for failing the final build loudly.
+        """
+        issues = []
+
+        ingredient_quality_data = enriched.get("ingredient_quality_data", {}) or {}
+        ingredients = ingredient_quality_data.get("ingredients", []) or []
+
+        for idx, ingredient in enumerate(ingredients):
+            if not isinstance(ingredient, dict):
+                issues.append(f"ingredient_quality_data.ingredients[{idx}] is not an object")
+                continue
+            missing = sorted(
+                field for field in self.EXPORT_REQUIRED_IQD_FIELDS
+                if field not in ingredient
+            )
+            for field in missing:
+                issues.append(
+                    f"ingredient_quality_data.ingredients[{idx}].{field} missing"
+                )
+
+        return issues
 
     @staticmethod
     def _atomic_write_json(file_path: str, data: Any, indent: int = 2) -> None:
@@ -1941,7 +1981,15 @@ class SupplementEnricherV3:
                     "name": ing_name,  # Label-facing name
                     "raw_source_text": raw_source_text,  # Exact label text (provenance)
                     "standard_name": std_name,
+                    "matched_form": None,
+                    "matched_forms": [],
+                    "extracted_forms": [],
                     "skip_reason": skip_reason,
+                    "bio_score": None,
+                    "natural": None,
+                    "score": None,
+                    "notes": None,
+                    "category": self._infer_category_from_name(ing_name, std_name),
                     "quantity": quantity,
                     "unit": unit,
                     "unit_normalized": unit_normalized,
@@ -1965,7 +2013,15 @@ class SupplementEnricherV3:
                     "safety_hits": [],
                     "certificates": [],
                     "source_section": "active",
-                    "hierarchyType": hierarchy_type
+                    "hierarchyType": hierarchy_type,
+                    "form_extraction_used": False,
+                    "is_dual_form": False,
+                    "original_label": raw_source_text,
+                    "unmapped_forms": [],
+                    "aggregation_method": None,
+                    "final_form_bio_score": None,
+                    "additional_forms": [],
+                    "form_source": None,
                 })
                 # DO NOT track as unmapped - these are intentionally not scored
                 continue
@@ -2955,6 +3011,9 @@ class SupplementEnricherV3:
                     "matched_entry_id": entry.get('id'),
                     "matched_entry_name": entry.get('standard_name'),
                     "recognition_type": "non_scorable",
+                    "reference_notes": entry.get('notes', ''),
+                    "reference_common_uses": entry.get('common_uses', []),
+                    "reference_additive_type": entry.get('additive_type', ''),
                 }
 
         # Check harmful_additives DB for known additive identities.
@@ -3362,6 +3421,17 @@ class SupplementEnricherV3:
                 "is_nested_ingredient": bool(ingredient.get("isNestedIngredient", False)),
                 "parent_blend": ingredient.get("parentBlend"),
                 "is_parent_total": False,
+                "form_extraction_used": False,
+                "is_dual_form": False,
+                "original_label": raw_source_text,
+                "extracted_forms": [],
+                "matched_forms": [],
+                "unmapped_forms": [],
+                "aggregation_method": None,
+                "final_form_bio_score": None,
+                "additional_forms": [],
+                "form_source": None,
+                "form_unmapped": False,
             }
 
         # Add promotion metadata if applicable
@@ -5875,7 +5945,12 @@ class SupplementEnricherV3:
                         "severity_level": additive.get('severity_level', 'low'),
                         "category": additive_category,
                         "is_natural_color": is_natural_color if 'color' in ing_name_lower else None,
-                        "classification_evidence": classification_evidence if classification_evidence else None
+                        "classification_evidence": classification_evidence if classification_evidence else None,
+                        # Reference data for user-facing display
+                        "notes": additive.get('notes', ''),
+                        "mechanism_of_harm": additive.get('mechanism_of_harm', ''),
+                        "population_warnings": additive.get('population_warnings', []),
+                        "regulatory_status": additive.get('regulatory_status', {}),
                     })
 
         return {
@@ -5979,7 +6054,10 @@ class SupplementEnricherV3:
                             "matched_text": allergen_text,
                             "severity_level": allergen.get('severity_level', 'low'),
                             "regulatory_status": allergen.get('regulatory_status', ''),
-                            "general_handling": allergen.get('general_handling', 'flag_only')
+                            "general_handling": allergen.get('general_handling', 'flag_only'),
+                            "notes": allergen.get('notes', ''),
+                            "supplement_context": allergen.get('supplement_context', ''),
+                            "prevalence": allergen.get('prevalence', ''),
                         })
 
             # Source 2: labelText.parsed.warnings
@@ -6090,7 +6168,10 @@ class SupplementEnricherV3:
                     "matched_text": part,
                     "severity_level": allergen.get('severity_level', 'low'),
                     "regulatory_status": allergen.get('regulatory_status', ''),
-                    "general_handling": allergen.get('general_handling', 'flag_only')
+                    "general_handling": allergen.get('general_handling', 'flag_only'),
+                    "notes": allergen.get('notes', ''),
+                    "supplement_context": allergen.get('supplement_context', ''),
+                    "prevalence": allergen.get('prevalence', ''),
                 })
 
     def _check_allergens(self, ingredients: List[Dict], product: Dict) -> Dict:
@@ -6145,7 +6226,10 @@ class SupplementEnricherV3:
                         "severity_level": allergen.get('severity_level', 'low'),
                         "regulatory_status": allergen.get('regulatory_status', ''),
                         "general_handling": allergen.get('general_handling', 'flag_only'),
-                        "category": allergen.get('category', '')
+                        "category": allergen.get('category', ''),
+                        "notes": allergen.get('notes', ''),
+                        "supplement_context": allergen.get('supplement_context', ''),
+                        "prevalence": allergen.get('prevalence', '')
                     })
 
         # Deduplicate by allergen_id, keeping highest precedence
@@ -10683,6 +10767,15 @@ class SupplementEnricherV3:
                     self.logger.warning(f"Dosage normalization failed: {e}")
                     enriched["dosage_normalization"] = {"success": False, "error": str(e)}
 
+            export_contract_issues = self._validate_export_contract_fields(enriched)
+            if export_contract_issues:
+                issues.extend([f"export_contract: {issue}" for issue in export_contract_issues])
+                self.logger.error(
+                    "Product %s: export contract validation failed - %s",
+                    product_id,
+                    export_contract_issues[:10],
+                )
+
             # Enrichment metadata (version lock for scoring compatibility)
             enriched["enrichment_metadata"] = {
                 "enrichment_version": self.VERSION,
@@ -10691,7 +10784,9 @@ class SupplementEnricherV3:
                 "generated_at": datetime.utcnow().isoformat() + "Z",
                 "data_completeness": self._calculate_completeness(enriched),
                 "ready_for_scoring": True,
-                "unmapped_active_count": enriched.get("ingredient_quality_data", {}).get("unmapped_count", 0)
+                "unmapped_active_count": enriched.get("ingredient_quality_data", {}).get("unmapped_count", 0),
+                "export_contract_valid": len(export_contract_issues) == 0,
+                "export_contract_issues": export_contract_issues,
             }
 
             # Build match ledger and unmatched lists (Pipeline Hardening Phase 3)

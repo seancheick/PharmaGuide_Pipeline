@@ -1987,8 +1987,7 @@
           "quatrefolic (6s)-5-methyltetrahydrofolic acid glucosamine salt",
           "quatrefolic (6s)-5-methyltetrahydrofolate glucosamine salt",
           "Quatrefolic (6S)-5-Methyltetrahyrdofolic Acid, Glucosamine Salt",
-          "L-5 Methyltetrahydrofolic Acid, Glucosamine Salt",
-          "l-5 methyltetrahydrofolic acid, glucosamine salt"
+          "L-5 Methyltetrahydrofolic Acid, Glucosamine Salt"
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
@@ -6500,7 +6499,6 @@
         "notes": "Selenium complexed with picolinic acid. Picolinate chelation likely improves transport versus unspecified inorganic selenium forms, but direct human PK data are limited compared with selenomethionine and selenized yeast. Scored conservatively above unspecified selenium and below premium organic forms.",
         "aliases": [
           "selenium picolinate",
-          "Selenium Picolinate",
           "picolinate selenium"
         ],
         "dosage_importance": 0.5,
@@ -10639,7 +10637,6 @@
           "curcumin phosphatidylcholine complex",
           "curcumin phospholipid complex (Meriva)",
           "Meriva Curcumin Phytosome Complex",
-          "Meriva turmeric phytosome",
           "Meriva (Curcuma longa) Phytosome",
           "Meriva Bioavailable Curcumin Phytosome",
           "Meriva Turmeric Phytosome",

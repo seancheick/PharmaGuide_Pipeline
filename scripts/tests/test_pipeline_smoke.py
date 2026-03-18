@@ -119,7 +119,34 @@ class TestPipelineSmokeTest:
         # Verify key enrichment sections exist
         assert "dietary_sensitivity_data" in enriched
         assert "contaminant_data" in enriched
+        assert "enrichment_metadata" in enriched
+        assert enriched["enrichment_metadata"].get("export_contract_valid") is True
         # Note: ready_for_scoring added when all validations pass
+
+    def test_enrichment_exports_real_ingredient_contract_fields(self, enricher, normalizer, sample_raw_product):
+        """Enrichment should preserve the canonical IQD field names used by final export."""
+        cleaned = normalizer.normalize_product(sample_raw_product)
+        enriched, _ = enricher.enrich_product(cleaned)
+
+        ingredients = enriched.get("ingredient_quality_data", {}).get("ingredients", [])
+        assert ingredients, "ingredient_quality_data.ingredients should not be empty"
+
+        ingredient = ingredients[0]
+        for key in [
+            "raw_source_text",
+            "name",
+            "standard_name",
+            "bio_score",
+            "natural",
+            "score",
+            "notes",
+            "category",
+            "mapped",
+            "safety_hits",
+            "extracted_forms",
+            "matched_forms",
+        ]:
+            assert key in ingredient, f"Missing export contract field: {key}"
 
     def test_colors_classification_in_pipeline(self, normalizer, enricher, sample_raw_product):
         """Test that Colors from Fruits and Vegetables is classified correctly"""

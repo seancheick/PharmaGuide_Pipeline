@@ -29,7 +29,7 @@ from constants import DATA_DIR, SCRIPTS_DIR
 # Shared helpers
 # ---------------------------------------------------------------------------
 
-REQUIRED_SCHEMA_VERSIONS = {"5.0.0"}
+REQUIRED_SCHEMA_VERSIONS = {"5.0.0", "5.1.0"}
 
 # Required fields inside every _metadata block
 REQUIRED_METADATA_FIELDS = ("description", "purpose", "schema_version")
