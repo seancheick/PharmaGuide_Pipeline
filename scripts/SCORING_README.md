@@ -1,9 +1,12 @@
 # PharmaGuide Scoring README (v3.2.0 / Data Schema 5.0.0)
 
+> Last updated: 2026-03-18 | 2672 tests | 549 IQM parents | 33 data files
+
 This document is the implementation-facing guide for the current scorer:
 
-- Code: `/Users/seancheick/.claude-worktrees/dsld_clean/peaceful-ritchie/scripts/score_supplements.py`
-- Config: `/Users/seancheick/.claude-worktrees/dsld_clean/peaceful-ritchie/scripts/config/scoring_config.json`
+- Code: `scripts/score_supplements.py`
+- Config: `scripts/config/scoring_config.json`
+- Spec: `scripts/SCORING_ENGINE_SPEC.md`
 
 It is aligned to the current `v3.2.0` behavior in code and config.
 
@@ -339,13 +342,22 @@ When not applicable (no explicit EPA/DHA dose):
   Older enriched files without this field will have `is_parent_total` default to falsy via
   `.get()`, retaining old A1 behavior with no crash.
 
-See detailed release notes:
+## 10) Interaction Layer (Non-Scoring)
 
-- `/Users/seancheick/.claude-worktrees/dsld_clean/peaceful-ritchie/scripts/SCORING_V3_1_ROLLOUT_NOTES.md`
+The scorer does NOT apply interaction-based penalties. Interactions are handled separately:
 
-## 10) Validation Commands
+- **Enrichment:** `enrich_supplements_v3.py` evaluates `ingredient_interaction_rules.json` and emits `interaction_profile` per product
+- **Export:** `build_final_db.py` includes `condition_summary`, `drug_class_summary`, and per-ingredient interaction warnings in the detail blob
+- **App:** Section F "fit score" is computed on-device based on user's health profile + `reference_data.interaction_rules`
+
+This separation ensures the quality score (A/B/C/D/E) remains objective and context-free, while the interaction layer provides personalized safety warnings.
+
+## 11) Validation Commands
 
 ```bash
-python3 -m pytest scripts/tests/test_score_supplements.py -q
-python3 -m pytest scripts/tests -q
+# Score tests only
+cd scripts && python3 -m pytest tests/test_score_supplements.py -q
+
+# Full suite (2672+ tests)
+cd scripts && python3 -m pytest tests/ -q
 ```

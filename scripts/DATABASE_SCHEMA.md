@@ -1,6 +1,6 @@
 # DATABASE_SCHEMA.md — Master Schema Reference
 
-> Schema version: **4.0.0** | Last updated: 2026-02-16 | 29 database files
+> Schema version: **5.0.0** | Last updated: 2026-03-18 | 33 database files
 
 ## Metadata Contract
 
@@ -11,9 +11,9 @@ Every database file MUST include a `_metadata` object as its first key:
   "_metadata": {
     "description": "Human-readable description",
     "purpose": "machine_readable_purpose_tag",
-    "schema_version": "4.0.0",
+    "schema_version": "5.0.0",
     "last_updated": "YYYY-MM-DD",
-    "total_entries": <int|null>,
+    "total_entries": "<int|null>",
     "version": "<semver>",
     "data_source": "<string|null>"
   }
@@ -24,7 +24,7 @@ Every database file MUST include a `_metadata` object as its first key:
 |-------|----------|------|-------|
 | `description` | YES | string | Human-readable file description |
 | `purpose` | YES | string | Machine-readable purpose tag (see Purpose Tags below) |
-| `schema_version` | YES | string | Always `"4.0.0"` |
+| `schema_version` | YES | string | Always `"5.0.0"` (or `"5.1.0"` for clinical files) |
 | `last_updated` | YES | string | ISO date `YYYY-MM-DD` |
 | `total_entries` | NO | int/null | Count of primary data entries |
 | `version` | NO | string | File-level semver (e.g., `"2.1.0"`) |
@@ -70,6 +70,10 @@ Every database file MUST include a `_metadata` object as its first key:
 | `claims_scoring` | cert_claim_rules.json | Enrichment |
 | `goal_mapping` | user_goals_to_clusters.json | Enrichment |
 | `id_redirect` | id_redirects.json | Enrichment |
+| `clinical_risk_taxonomy` | clinical_risk_taxonomy.json | Enrichment, Export |
+| `interaction_rules` | ingredient_interaction_rules.json | Enrichment, Export |
+| `cross_db_overlap_guard` | cross_db_overlap_allowlist.json | Enrichment |
+| `percentile_categories` | percentile_categories.json | Scoring |
 | `migration_audit` | migration_report.json | Internal |
 
 ---
@@ -96,7 +100,7 @@ Primary key: `absorption_enhancers` (array)
 ---
 
 ### 2. allergens.json
-**Purpose:** `allergen_flagging` | **Entries:** 32
+**Purpose:** `allergen_flagging` | **Entries:** 17
 
 Primary key: `allergens` (array)
 
@@ -117,7 +121,7 @@ Primary key: `allergens` (array)
 ---
 
 ### 3. backed_clinical_studies.json
-**Purpose:** `evidence_scoring` | **Entries:** 137
+**Purpose:** `evidence_scoring` | **Entries:** 177
 
 Primary key: `backed_clinical_studies` (array)
 
@@ -142,7 +146,7 @@ Primary key: `backed_clinical_studies` (array)
 ---
 
 ### 4. banned_match_allowlist.json
-**Purpose:** `match_override` | **Version:** 1.0.0
+**Purpose:** `match_override` | **Entries:** 5
 
 Primary keys: `allowlist` (array), `denylist` (array)
 
@@ -161,7 +165,7 @@ Primary keys: `allowlist` (array), `denylist` (array)
 ---
 
 ### 5. banned_recalled_ingredients.json
-**Purpose:** `safety_disqualification_and_regulatory_compliance` | **Entries:** 140
+**Purpose:** `safety_disqualification_and_regulatory_compliance` | **Entries:** 138
 
 Primary key: `ingredients` (array)
 
@@ -179,11 +183,12 @@ Core fields (always present):
 | `jurisdictions` | object[] | Jurisdiction-specific rules |
 | `supersedes_ids` | string[]/null | IDs this entry replaced |
 | `match_rules` | object | Matching configuration |
+| `reason` | string | Why this ingredient is banned/recalled (shown to user) |
 
 ---
 
 ### 6. botanical_ingredients.json
-**Purpose:** `ingredient_mapping` | **Entries:** 237
+**Purpose:** `ingredient_mapping` | **Entries:** 428
 
 Primary key: `botanical_ingredients` (array)
 
@@ -199,7 +204,7 @@ Primary key: `botanical_ingredients` (array)
 ---
 
 ### 7. cert_claim_rules.json
-**Purpose:** `claims_scoring`
+**Purpose:** `claims_scoring` | **Entries:** 45
 
 Primary keys: `config` (object), `rules` (object)
 
@@ -209,7 +214,23 @@ Each rule entry contains pattern-matching criteria and scoring weights for claim
 
 ---
 
-### 8. clinically_relevant_strains.json
+### 8. clinical_risk_taxonomy.json
+**Purpose:** `clinical_risk_taxonomy` | **Entries:** 36 | **Schema:** 5.1.0
+
+Controlled enums for the interaction rule system:
+
+| Key | Count | Values |
+|-----|-------|--------|
+| `conditions` | 14 | `pregnancy`, `lactation`, `ttc`, `surgery_scheduled`, `hypertension`, `heart_disease`, `diabetes`, `bleeding_disorders`, `kidney_disease`, `liver_disease`, `thyroid_disorder`, `autoimmune`, `seizure_disorder`, `high_cholesterol` |
+| `drug_classes` | 9 | `anticoagulants`, `antiplatelets`, `nsaids`, `antihypertensives`, `hypoglycemics`, `thyroid_medications`, `sedatives`, `immunosuppressants`, `statins` |
+| `severity_levels` | 5 | `contraindicated`, `avoid`, `caution`, `monitor`, `info` |
+| `evidence_levels` | 4 | `established`, `probable`, `theoretical`, `insufficient` |
+
+Each condition and drug class includes `id`, `label`, `description`, `app_category`, and `sort_order`.
+
+---
+
+### 9. clinically_relevant_strains.json
 **Purpose:** `probiotic_strain_validation` | **Entries:** 42 | **Version:** 2.1.0
 
 Primary keys: `clinically_relevant_strains` (array), `prebiotics` (object)
@@ -225,8 +246,8 @@ Primary keys: `clinically_relevant_strains` (array), `prebiotics` (object)
 
 ---
 
-### 9. color_indicators.json
-**Purpose:** `scoring_classification`
+### 10. color_indicators.json
+**Purpose:** `scoring_classification` | **Entries:** 66
 
 Primary keys (all string arrays):
 - `natural_indicators` (66): Terms indicating natural color source
@@ -236,7 +257,14 @@ Primary keys (all string arrays):
 
 ---
 
-### 10. enhanced_delivery.json
+### 11. cross_db_overlap_allowlist.json
+**Purpose:** `cross_db_overlap_guard` | **Entries:** 23
+
+Allowlist for ingredients that legitimately appear in multiple databases (e.g., an ingredient in both IQM and botanical_ingredients). Prevents false-positive overlap warnings during enrichment.
+
+---
+
+### 12. enhanced_delivery.json
 **Purpose:** `bonus_scoring` | **Entries:** 78
 
 Structure: Object keyed by delivery system name (e.g., `liposomal`, `chelated`, `enteric-coated`)
@@ -249,8 +277,8 @@ Structure: Object keyed by delivery system name (e.g., `liposomal`, `chelated`, 
 
 ---
 
-### 11. functional_ingredient_groupings.json
-**Purpose:** transparency scoring
+### 13. functional_ingredient_groupings.json
+**Purpose:** transparency scoring | **Entries:** 8
 
 Primary keys: `functional_groupings` (array), `vague_terms_to_flag` (array), `transparency_bonuses` (array)
 
@@ -258,8 +286,8 @@ Used to detect and penalize vague supplement labeling (e.g., "proprietary blend"
 
 ---
 
-### 12. harmful_additives.json
-**Purpose:** `penalty_scoring` | **Entries:** 71
+### 14. harmful_additives.json
+**Purpose:** `penalty_scoring` | **Entries:** 108
 
 Primary key: `harmful_additives` (array)
 
@@ -274,11 +302,12 @@ Primary key: `harmful_additives` (array)
 | `mechanism_of_harm` | string | YES | How it causes harm |
 | `regulatory_status` | string | YES | Current regulatory status |
 | `match_rules` | object | YES | Matching configuration |
+| `notes` | string | NO | Reference notes shown in warnings |
 
 ---
 
-### 13. id_redirects.json
-**Purpose:** `id_redirect` | **Entries:** 38 | **Version:** 2.0.0
+### 15. id_redirects.json
+**Purpose:** `id_redirect` | **Entries:** 16
 
 Primary keys: `redirects` (array), `lookup` (object)
 
@@ -290,21 +319,42 @@ Primary keys: `redirects` (array), `lookup` (object)
 
 `lookup` provides O(1) access: `deprecated_id → canonical_id`
 
-ID prefix categories: `ADD_` (additives), `SPIKE_` (adulterants), `STATE_` (state-level bans)
-
 ---
 
-### 14. ingredient_classification.json
-**Purpose:** `ingredient_classification` | **Version:** 1.0.0
+### 16. ingredient_classification.json
+**Purpose:** `ingredient_classification` | **Entries:** 34
 
 Primary keys: `settings` (object), `skip_exact` (string array), `classifications` (object)
 
-Used to classify ingredients as active vs inactive. `skip_exact` contains 20 terms to skip during classification.
+Used to classify ingredients as active vs inactive.
 
 ---
 
-### 15. ingredient_quality_map.json
-**Purpose:** `quality_scoring` | **449 ingredient entries**
+### 17. ingredient_interaction_rules.json
+**Purpose:** `interaction_rules` | **Entries:** 45 | **Schema:** 5.1.0
+
+Primary key: `interaction_rules` (array)
+
+Each rule is keyed by `subject_ref: {db, canonical_id}` linking to one of the 5 ingredient databases.
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `id` | string | YES | Rule ID (e.g., `RULE_INGREDIENT_CAFFEINE`) |
+| `subject_ref` | object | YES | `{db, canonical_id}` — ingredient identity |
+| `condition_rules` | object[] | NO | Per-condition interaction details |
+| `drug_class_rules` | object[] | NO | Per-drug-class interaction details |
+| `dose_thresholds` | object[] | NO | Dose-dependent severity escalation |
+| `pregnancy_lactation` | object/null | NO | Pregnancy/lactation specific data |
+| `form_scope` | string/null | NO | Form-specific rule (e.g., "preformed" for vitamin A) |
+| `last_reviewed` | string | YES | ISO date |
+| `review_owner` | string | YES | Reviewer identity |
+
+Supported `subject_ref.db` values: `ingredient_quality_map`, `other_ingredients`, `harmful_additives`, `banned_recalled_ingredients`, `botanical_ingredients`
+
+---
+
+### 18. ingredient_quality_map.json
+**Purpose:** `quality_scoring` | **549 ingredient parents** | **~550 total entries**
 
 Structure: Object keyed by ingredient slug (e.g., `vitamin_a`, `omega_3`, `ashwagandha`)
 
@@ -326,7 +376,7 @@ Each **form** within `forms`:
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
 | `score` | float | YES | Quality score (1-18 scale) |
-| `bio_score` | float | YES | Bioavailability score (1-10) |
+| `bio_score` | float | YES | Bioavailability score (1-15) |
 | `natural` | bool | YES | Natural vs synthetic |
 | `absorption` | string | YES | Absorption characteristic |
 | `notes` | string | NO | Form-specific notes |
@@ -335,17 +385,17 @@ Each **form** within `forms`:
 
 ---
 
-### 16. ingredient_weights.json
-**Purpose:** `dosing_categories` | **Version:** 1.0.0
+### 19. ingredient_weights.json
+**Purpose:** `dosing_categories` | **Entries:** 4
 
 Primary keys: `category_weights`, `dosage_weights`, `ingredient_priorities`
 
-Defines weight categories for 10 ingredient classes, 4 dosage tiers, and 3 priority levels.
+Defines weight categories for ingredient classes, dosage tiers, and priority levels.
 
 ---
 
-### 17. manufacture_deduction_expl.json
-**Purpose:** `manufacturer_deduction_explanation` | **Version:** 2.0
+### 20. manufacture_deduction_expl.json
+**Purpose:** `manufacturer_deduction_explanation` | **Entries:** 5
 
 Primary keys: `total_deduction_cap`, `violation_categories`, `modifiers`, `calculation_rules`, `score_thresholds`
 
@@ -353,8 +403,8 @@ Documents the manufacturer penalty calculation framework. `total_deduction_cap` 
 
 ---
 
-### 18. manufacturer_violations.json
-**Purpose:** `manufacturer_penalties` | **Entries:** 49
+### 21. manufacturer_violations.json
+**Purpose:** `manufacturer_penalties` | **Entries:** 66
 
 Primary key: `manufacturer_violations` (array)
 
@@ -372,15 +422,15 @@ Primary key: `manufacturer_violations` (array)
 
 ---
 
-### 19. migration_report.json
-**Purpose:** `migration_audit`
+### 22. migration_report.json
+**Purpose:** `migration_audit` | **Entries:** 38
 
-Documents schema migration history. Contains counts, alias collision resolutions, relationship additions, and category normalizations applied during the v2→v4 migration.
+Documents schema migration history. Contains counts, alias collision resolutions, relationship additions, and category normalizations applied during schema migrations.
 
 ---
 
-### 20. other_ingredients.json
-**Purpose:** `inactive_ingredient_classification` | **Entries:** 254
+### 23. other_ingredients.json
+**Purpose:** `inactive_ingredient_classification` | **Entries:** 656
 
 Primary key: `other_ingredients` (array)
 
@@ -398,8 +448,15 @@ Primary key: `other_ingredients` (array)
 
 ---
 
-### 21. proprietary_blends.json
-**Purpose:** `blend_detection` | **Entries:** 18
+### 24. percentile_categories.json
+**Purpose:** `percentile_categories`
+
+Defines product category assignments for percentile ranking. Used by the scorer to group products into cohorts for relative scoring.
+
+---
+
+### 25. proprietary_blends.json
+**Purpose:** `blend_detection` | **Entries:** 14
 
 Primary key: `proprietary_blend_concerns` (array)
 
@@ -413,7 +470,7 @@ Primary key: `proprietary_blend_concerns` (array)
 
 ---
 
-### 22. rda_optimal_uls.json
+### 26. rda_optimal_uls.json
 **Purpose:** `dosing_validation` | **Entries:** 47
 
 Primary key: `nutrient_recommendations` (array)
@@ -430,7 +487,7 @@ Primary key: `nutrient_recommendations` (array)
 
 ---
 
-### 23. rda_therapeutic_dosing.json
+### 27. rda_therapeutic_dosing.json
 **Purpose:** non-RDA dosing | **Entries:** 44
 
 Primary key: `therapeutic_dosing` (array)
@@ -448,8 +505,8 @@ Primary key: `therapeutic_dosing` (array)
 
 ---
 
-### 24. standardized_botanicals.json
-**Purpose:** `ingredient_mapping_and_standardization` | **Entries:** 244
+### 28. standardized_botanicals.json
+**Purpose:** `ingredient_mapping_and_standardization` | **Entries:** 239
 
 Primary key: `standardized_botanicals` (array)
 
@@ -466,7 +523,7 @@ Primary key: `standardized_botanicals` (array)
 
 ---
 
-### 25. synergy_cluster.json
+### 29. synergy_cluster.json
 **Purpose:** `synergy_bonuses` | **Entries:** 54
 
 Primary key: `synergy_clusters` (array)
@@ -476,16 +533,16 @@ Primary key: `synergy_clusters` (array)
 | `id` | string | YES | Unique ID (e.g., `SYN_CALCIUM_VD`) |
 | `standard_name` | string | YES | Cluster name |
 | `ingredients` | string[] | YES | Required ingredient set |
-| `min_effective_doses` | object | YES | Minimum doses per ingredient (keys must be listed in `ingredients`) |
+| `min_effective_doses` | object | YES | Minimum doses per ingredient |
 | `evidence_tier` | int | YES | Evidence strength tier (`1`, `2`, or `3`) |
-| `synergy_mechanism` | string/null | NO | Mechanism summary (nullable during evidence curation) |
-| `note` | string | YES | User-facing explanation of why the cluster can earn bonus |
-| `sources` | object[] | YES | Evidence links (`source_type` in `pubmed|nih_ods|fda|nccih`, `label`, `url`; search-query placeholders not allowed) |
+| `synergy_mechanism` | string/null | NO | Mechanism summary |
+| `note` | string | YES | User-facing explanation |
+| `sources` | object[] | YES | Evidence links |
 
 ---
 
-### 26. top_manufacturers_data.json
-**Purpose:** `manufacturer_quality` | **Entries:** 61
+### 30. top_manufacturers_data.json
+**Purpose:** `manufacturer_quality` | **Entries:** 77
 
 Primary key: `top_manufacturers` (array)
 
@@ -500,16 +557,16 @@ Primary key: `top_manufacturers` (array)
 
 ---
 
-### 27. unit_conversions.json
-**Purpose:** `dosing_normalization` | **Version:** 1.0.0
+### 31. unit_conversions.json
+**Purpose:** `dosing_normalization` | **Entries:** 20
 
 Primary keys: `vitamin_conversions`, `mass_conversions`, `probiotic_conversions`, `form_detection_patterns`
 
-Defines conversion factors for IU→mcg, mg→g, CFU→billion, and vitamin-specific conversions (D3, E, A, K, folate, etc.).
+Defines conversion factors for IU→mcg, mg→g, CFU→billion, and vitamin-specific conversions.
 
 ---
 
-### 28. unit_mappings.json
+### 32. unit_mappings.json
 **Purpose:** `unit_mapping` | **Entries:** 14
 
 Structure: Object keyed by supplement type (e.g., `Vitamin D3`, `Omega-3 Fish Oil`, `Magnesium`)
@@ -518,7 +575,7 @@ Each entry maps dosage forms (capsule, softgel, tablet, powder) to `{amount, uni
 
 ---
 
-### 29. user_goals_to_clusters.json
+### 33. user_goals_to_clusters.json
 **Purpose:** `goal_mapping` | **Entries:** 16
 
 Primary key: `user_goal_mappings` (array)
@@ -550,6 +607,7 @@ Primary key: `user_goal_mappings` (array)
 | `SYN_` | synergy_cluster | `SYN_CALCIUM_VD` |
 | `STRAIN_` | clinically_relevant_strains | `STRAIN_LGG` |
 | `RDA_` | rda_optimal_uls | `RDA_VITAMIN_D` |
+| `RULE_` | ingredient_interaction_rules | `RULE_INGREDIENT_CAFFEINE` |
 | `ADD_` | id_redirects (deprecated) | `ADD_BHA` → `BANNED_ADD_BHA` |
 
 ---
@@ -557,22 +615,32 @@ Primary key: `user_goal_mappings` (array)
 ## Cross-File Relationships
 
 ```
-ingredient_quality_map.json (449 ingredients)
+ingredient_quality_map.json (549 parents)
   ├── forms[].aliases → enhanced_normalizer alias lookup
   ├── standard_name → enrichment ingredient matching
-  └── category → supplement type classification
+  ├── category → supplement type classification
+  └── canonical_id → ingredient_interaction_rules.json subject_ref
+
+clinical_risk_taxonomy.json (14 conditions, 9 drug classes)
+  └── enum definitions → ingredient_interaction_rules.json validation
+
+ingredient_interaction_rules.json (45 rules)
+  ├── subject_ref.canonical_id → IQM / botanical / banned / harmful / other
+  ├── condition_rules[].condition_id → clinical_risk_taxonomy.conditions
+  ├── drug_class_rules[].drug_class_id → clinical_risk_taxonomy.drug_classes
+  └── dose_thresholds → enrichment dose evaluation
 
 clinically_relevant_strains.json (42 strains)
   ├── aliases → enhanced_normalizer strain bypass
   └── evidence_level → scoring probiotic bonus
 
-banned_recalled_ingredients.json (140)
+banned_recalled_ingredients.json (138)
   ├── supersedes_ids → id_redirects.json
   ├── aliases → enrichment banned matching
   └── match_rules → banned_match_allowlist.json
 
-standardized_botanicals.json (244)
-  └── markers → enrichment A5b standardized botanical bonus
+standardized_botanicals.json (239)
+  └── markers → enrichment standardized botanical bonus
 
 synergy_cluster.json (54)
   ├── ingredients → enrichment synergy detection
@@ -581,9 +649,9 @@ synergy_cluster.json (54)
 rda_optimal_uls.json (47)
   └── data → scoring dosing validation
 
-manufacturer_violations.json (49)
+manufacturer_violations.json (66)
   └── manufacturer_id → enrichment manufacturer matching
 
-top_manufacturers_data.json (61)
+top_manufacturers_data.json (77)
   └── aliases → enrichment manufacturer matching
 ```

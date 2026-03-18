@@ -1,8 +1,0 @@
-deterministic_corpus=scripts/output_Thorne/cleaned/cleaned_batch_1.json
-products=500
-banned_product_hits=8
-banned_substance_hits=8
-blocked_count=0
-unsafe_count=8
-blocked_or_unsafe_count=8
-blocked_or_unsafe_ids=['16012', '16040', '16064', '16072', '16074', '182288', '182354', '182798']

@@ -11,7 +11,7 @@ You are auditing a supplement scoring pipeline that powers a consumer health app
 
 ## CODEBASE ORIENTATION
 
-- **IQM file:** `scripts/data/ingredient_quality_map.json` — the master ingredient database (~500+ parents, each with scored forms)
+- **IQM file:** `scripts/data/ingredient_quality_map.json` — the master ingredient database (549 parents, each with scored forms)
 - **Scoring range:** bio_score is 0-15. If natural=True, score = bio_score + 3 (max score = 18). If natural=False, score = bio_score (max score = 15). bio_score MUST NOT exceed 15.
 - **Scoring engine:** `scripts/score_supplements.py` — reads IQM scores to produce final product grades
 - **Enrichment pipeline:** `scripts/enrich_supplements_v3.py` — resolves raw labels → IQM parents/forms
@@ -19,20 +19,23 @@ You are auditing a supplement scoring pipeline that powers a consumer health app
 - **Scoring config:** `scripts/config/scoring_config.json` — caps, gates, coefficients
 - **Tests:** `python -m pytest scripts/tests/` — ALL tests must pass after every change
 - **Supporting data files (in `scripts/data/`):**
-  - `banned_recalled_ingredients.json` — hard-fail blocked substances (127 entries)
-  - `harmful_additives.json` — penalty substances (110 entries, severity: critical/high/moderate/low)
+  - `banned_recalled_ingredients.json` — hard-fail blocked substances (138 entries)
+  - `harmful_additives.json` — penalty substances (108 entries, severity: critical/high/moderate/low)
   - `top_manufacturers_data.json` — trusted brands (77 entries, fuzzy threshold 0.90)
-  - `allergens.json` — allergen detection
-  - `backed_clinical_studies.json` — evidence database
-  - `absorption_enhancers.json` — pairing bonuses (+3 pts)
-  - `enhanced_delivery.json` — delivery tier scoring
-  - `rda_optimal_uls.json` — RDA/UL reference values
-  - `clinically_relevant_strains.json` — probiotic strain bonuses
-  - `synergy_cluster.json` — synergy detection
-  - `standardized_botanicals.json` — botanical standardization markers
-  - `other_ingredients.json` — recognized non-scorable ingredients
-  - `proprietary_blends.json` — blend recognition mapping
-  - `manufacturer_violations.json` — brand deductions (cap -25)
+  - `allergens.json` — allergen detection (17 entries)
+  - `backed_clinical_studies.json` — evidence database (177 entries)
+  - `absorption_enhancers.json` — pairing bonuses (+3 pts, 23 entries)
+  - `enhanced_delivery.json` — delivery tier scoring (78 entries)
+  - `rda_optimal_uls.json` — RDA/UL reference values (47 entries)
+  - `clinically_relevant_strains.json` — probiotic strain bonuses (42 entries)
+  - `synergy_cluster.json` — synergy detection (54 entries)
+  - `standardized_botanicals.json` — botanical standardization markers (239 entries)
+  - `other_ingredients.json` — recognized non-scorable ingredients (656 entries)
+  - `botanical_ingredients.json` — botanical mapping (428 entries)
+  - `proprietary_blends.json` — blend recognition mapping (14 entries)
+  - `manufacturer_violations.json` — brand deductions (66 entries, cap -25)
+  - `clinical_risk_taxonomy.json` — interaction enum definitions (14 conditions, 9 drug classes)
+  - `ingredient_interaction_rules.json` — condition/drug interaction rules (45 rules)
 
 ## TASK 1: IQM 5-POINT AUDIT (PRIMARY — ~70% of effort)
 
@@ -170,14 +173,14 @@ Run ONCE at the start of the audit before batch work begins:
 ## TASK 4: SCHEMA & INFRASTRUCTURE (~5% of effort)
 
 ### 4A: Schema Version Consistency
-- All data files should have consistent schema versions (currently 4.1.0)
+- All data files should have consistent schema versions (currently 5.0.0, clinical files use 5.1.0)
 - Verify schema_version fields match across all JSON files
 
 ### 4B: Test Suite Health
 - Run full test suite: `python -m pytest scripts/tests/ -v`
 - Any skipped tests should be investigated — are they stale or blocked?
 - Any xfailed tests should be reviewed — can they be fixed?
-- Check test count hasn't decreased (currently 1828+)
+- Check test count hasn't decreased (currently 2672+)
 
 ### 4C: Constants Freshness
 - Review `scripts/constants.py` EXCLUDED_NUTRITION_FACTS list
@@ -241,3 +244,4 @@ Remember: This system directly affects health decisions. Every bio_score must be
 | Date | Auditor | Parents Audited | Key Changes |
 |------|---------|----------------|-------------|
 | 2026-02 | Claude + Sean | Vitamins A-K, Ca, P, Mg, Fe, Zn, Slippery Elm, Chromium-Glutathione, Choline-Taurine, PI-TMG, Probiotics/Prebiotics (architecture refactor), L-Glutamine through L-Ornithine | 498→508 parents, 10 species-level probiotic parents created, 37 strain forms migrated, 200+ bio_score corrections, 300+ notes rewritten with PubMed citations, 150+ suffix aliases removed, 8 phantom "from food" forms deleted, Nitrosigine form added |
+| 2026-03 | Claude + Sean | Interaction rules, clinical taxonomy, export hardening, project cleanup | 549 parents, 33 data files, 45 interaction rules (pregnancy/hypertension/diabetes), condition_summary + dose_threshold_evaluation in export, 2672 tests, schema 5.0/5.1 |
