@@ -3,8 +3,8 @@
     "description": "Banned and recalled ingredients database for regulatory compliance and safety (v3.0)",
     "purpose": "safety_disqualification_and_regulatory_compliance",
     "schema_version": "5.0.0",
-    "last_updated": "2026-03-16",
-    "total_entries": 138,
+    "last_updated": "2026-03-23",
+    "total_entries": 140,
     "data_source_metadata": {
       "sources": [
         "FDA",
@@ -252,6 +252,19 @@
             "  BANNED_YELLOW_OLEANDER_RECENT: review dates updated (FDA alert active March 11, 2026)",
             "Sources: openFDA food/enforcement (500 error this week), manual FDA verification via accessdata.fda.gov"
           ]
+        },
+        {
+          "version": "5.0.2",
+          "date": "2026-03-23",
+          "auditor": "fda_weekly_sync_agent",
+          "changes": [
+            "Added 1 new entry: RECALLED_ROSABELLA_MORINGA (Class I, Salmonella contamination, recall H-0546-2026)",
+            "Updated 3 stale recalled entries (review dates only, all already match_mode=historical):",
+            "  RECALLED_HYDROXYCUT: last_reviewed_at updated to 2026-03-23",
+            "  RECALLED_JACK3D: last_reviewed_at updated to 2026-03-23",
+            "  RECALLED_OXYELITE_PRO: last_reviewed_at updated to 2026-03-23",
+            "Total entries: 139 -> 140"
+          ]
         }
       ],
       "known_limitations": [
@@ -369,7 +382,8 @@
       "regulatory_date": "2026-01-09",
       "regulatory_date_label": "First FDA enforcement action",
       "match_mode": "active",
-      "recall_scope": null
+      "recall_scope": null,
+      "cui": "C0083381"
     },
     {
       "id": "ADULTERANT_METFORMIN",
@@ -445,7 +459,8 @@
       "regulatory_date": "2009-01-01",
       "regulatory_date_label": "First FDA enforcement action",
       "match_mode": "active",
-      "recall_scope": null
+      "recall_scope": null,
+      "cui": "C0025598"
     },
     {
       "id": "ADULTERANT_RIMONABANT",
@@ -529,7 +544,8 @@
       "regulatory_date": "2007-06-13",
       "regulatory_date_label": "First FDA enforcement action",
       "match_mode": "active",
-      "recall_scope": null
+      "recall_scope": null,
+      "cui": "C1142933"
     },
     {
       "id": "BANNED_14_BUTANEDIOL",
@@ -654,7 +670,8 @@
       "regulatory_date": "2000-02-01",
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
-      "recall_scope": null
+      "recall_scope": null,
+      "cui": "C0043992"
     },
     {
       "id": "BANNED_7_HYDROXYMITRAGYNINE",
@@ -789,7 +806,8 @@
       "regulatory_date": "2025-07-15",
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
-      "recall_scope": null
+      "recall_scope": null,
+      "cui": "C1435927"
     },
     {
       "id": "BANNED_7_KETO_DHEA",
@@ -930,7 +948,8 @@
       "regulatory_date": "2025-01-01",
       "regulatory_date_label": "Regulatory restriction effective",
       "match_mode": "active",
-      "recall_scope": null
+      "recall_scope": null,
+      "cui": "C5709714"
     },
     {
       "id": "BANNED_ADD_ANATABINE",
@@ -1021,7 +1040,8 @@
       "regulatory_date": "2013-11-18",
       "regulatory_date_label": "FDA warning letter issued",
       "match_mode": "active",
-      "recall_scope": null
+      "recall_scope": null,
+      "cui": "C0051816"
     },
     {
       "id": "BANNED_ADD_CITRUS_RED_2",
@@ -1112,7 +1132,8 @@
       "regulatory_date": "1963-01-01",
       "regulatory_date_label": "Regulatory restriction effective",
       "match_mode": "active",
-      "recall_scope": null
+      "recall_scope": null,
+      "cui": "C0602979"
     },
     {
       "id": "BANNED_ADD_FORMALDEHYDE",
@@ -1206,7 +1227,8 @@
       "regulatory_date": "2011-06-10",
       "regulatory_date_label": "Carcinogen classification effective",
       "match_mode": "active",
-      "recall_scope": null
+      "recall_scope": null,
+      "cui": "C0016564"
     },
     {
       "id": "BANNED_ADD_ORANGE_B",
@@ -1295,7 +1317,8 @@
       "regulatory_date": "1978-01-01",
       "regulatory_date_label": "Regulatory restriction effective",
       "match_mode": "active",
-      "recall_scope": null
+      "recall_scope": null,
+      "cui": "C0387837"
     },
     {
       "id": "BANNED_ADD_PHTHALATES",
@@ -1421,7 +1444,8 @@
       "regulatory_date": "2008-08-14",
       "regulatory_date_label": "Federal restriction effective",
       "match_mode": "active",
-      "recall_scope": null
+      "recall_scope": null,
+      "cui": "C0136960"
     },
     {
       "id": "BANNED_ADD_POTASSIUM_BROMATE",
@@ -1515,7 +1539,8 @@
       "regulatory_date": "1991-01-01",
       "regulatory_date_label": "EU/International ban effective",
       "match_mode": "active",
-      "recall_scope": null
+      "recall_scope": null,
+      "cui": "C0071753"
     },
     {
       "id": "BANNED_ADD_SYNTHETIC_ESTROGENS",
@@ -1625,7 +1650,8 @@
       "regulatory_date": "1979-01-01",
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
-      "recall_scope": null
+      "recall_scope": null,
+      "cui": "C0014941"
     },
     {
       "id": "BANNED_ADD_SYNTHETIC_FOOD_ACIDS",
@@ -1723,7 +1749,8 @@
       "regulatory_date": "1958-09-06",
       "regulatory_date_label": "Regulatory framework established",
       "match_mode": "disabled",
-      "recall_scope": null
+      "recall_scope": null,
+      "cui": null
     },
     {
       "id": "BANNED_ARISTOLOCHIC_ACID",
@@ -1826,7 +1853,8 @@
       "regulatory_date": "2001-04-09",
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
-      "recall_scope": null
+      "recall_scope": null,
+      "cui": "C0052377"
     },
     {
       "id": "BANNED_BMPEA",
@@ -1917,7 +1945,8 @@
       "regulatory_date": "2015-04-01",
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
-      "recall_scope": null
+      "recall_scope": null,
+      "cui": "C4041589"
     },
     {
       "id": "BANNED_BVO_2024",
@@ -2049,7 +2078,8 @@
       "regulatory_date": "2024-07-02",
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
-      "recall_scope": null
+      "recall_scope": null,
+      "cui": "C1654882"
     },
     {
       "id": "BANNED_CBD_US",
@@ -2244,7 +2274,8 @@
       "regulatory_date": "2018-12-20",
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
-      "recall_scope": null
+      "recall_scope": null,
+      "cui": "C4704022"
     },
     {
       "id": "BANNED_COMFREY_INTERNAL",
@@ -2361,7 +2392,8 @@
       "regulatory_date": "2001-07-06",
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
-      "recall_scope": null
+      "recall_scope": null,
+      "cui": null
     },
     {
       "id": "BANNED_CONTAMINATED_GLP1",
@@ -2467,7 +2499,8 @@
       "regulatory_date": "2024-01-01",
       "regulatory_date_label": "First regulatory safety alert",
       "match_mode": "active",
-      "recall_scope": null
+      "recall_scope": null,
+      "cui": null
     },
     {
       "id": "BANNED_DELTA8_THC",
@@ -2579,7 +2612,8 @@
       "regulatory_date": "2021-05-04",
       "regulatory_date_label": "FDA safety advisory published",
       "match_mode": "active",
-      "recall_scope": null
+      "recall_scope": null,
+      "cui": null
     },
     {
       "id": "BANNED_DMAA",
@@ -2755,7 +2789,8 @@
       "regulatory_date": "2013-04-11",
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
-      "recall_scope": null
+      "recall_scope": null,
+      "cui": "C0044981"
     },
     {
       "id": "BANNED_DMBA",
@@ -2833,7 +2868,8 @@
       "regulatory_date": "2015-04-01",
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
-      "recall_scope": null
+      "recall_scope": null,
+      "cui": "C0000677"
     },
     {
       "id": "BANNED_DMHA",
@@ -2926,7 +2962,8 @@
       "regulatory_date": "2019-10-01",
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
-      "recall_scope": null
+      "recall_scope": null,
+      "cui": "C0655222"
     },
     {
       "id": "BANNED_EPHEDRA",
@@ -3025,7 +3062,8 @@
       "regulatory_date": "2004-04-12",
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
-      "recall_scope": null
+      "recall_scope": null,
+      "cui": "C0885298"
     },
     {
       "id": "BANNED_FASORACETAM",
@@ -3111,7 +3149,8 @@
       "regulatory_date": "2019-11-25",
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
-      "recall_scope": null
+      "recall_scope": null,
+      "cui": "C1880737"
     },
     {
       "id": "BANNED_FDC_RED_2_AMARANTH",
@@ -3252,7 +3291,8 @@
       "regulatory_date": "1976-01-19",
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
-      "recall_scope": null
+      "recall_scope": null,
+      "cui": null
     },
     {
       "id": "RISK_GARCINIA_CAMBOGIA",
@@ -3366,7 +3406,8 @@
       "regulatory_date": "2025-04-15",
       "regulatory_date_label": "First regulatory safety alert",
       "match_mode": "active",
-      "recall_scope": null
+      "recall_scope": null,
+      "cui": "C0993598"
     },
     {
       "id": "BANNED_HIGENAMINE",
@@ -3458,7 +3499,8 @@
       "regulatory_date": "2019-04-01",
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
-      "recall_scope": null
+      "recall_scope": null,
+      "cui": "C0062705"
     },
     {
       "id": "BANNED_IBUTAMOREN_MK677",
@@ -3547,7 +3589,8 @@
       "regulatory_date": "2020-11-10",
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
-      "recall_scope": null
+      "recall_scope": null,
+      "cui": null
     },
     {
       "id": "BANNED_IGF1",
@@ -3656,7 +3699,8 @@
       "regulatory_date": "1997-01-01",
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
-      "recall_scope": null
+      "recall_scope": null,
+      "cui": "C5674892"
     },
     {
       "id": "BANNED_IGF1_LR3",
@@ -3735,7 +3779,8 @@
       "regulatory_date": "2000-01-01",
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
-      "recall_scope": null
+      "recall_scope": null,
+      "cui": null
     },
     {
       "id": "BANNED_METAL_FIBERS",
@@ -3812,7 +3857,8 @@
       "regulatory_date": "2024-07-25",
       "regulatory_date_label": "First regulatory safety alert",
       "match_mode": "active",
-      "recall_scope": null
+      "recall_scope": null,
+      "cui": null
     },
     {
       "id": "BANNED_PEDIATRIC_FLUORIDE",
@@ -3942,7 +3988,8 @@
       "regulatory_date": "2025-05-14",
       "regulatory_date_label": "First regulatory safety alert",
       "match_mode": "active",
-      "recall_scope": null
+      "recall_scope": null,
+      "cui": null
     },
     {
       "id": "BANNED_PHENIBUT",
@@ -4075,7 +4122,8 @@
       "regulatory_date": "2019-04-10",
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
-      "recall_scope": null
+      "recall_scope": null,
+      "cui": "C0048007"
     },
     {
       "id": "BANNED_PHO",
@@ -4199,7 +4247,8 @@
       "regulatory_date": "2015-06-16",
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
-      "recall_scope": null
+      "recall_scope": null,
+      "cui": null
     },
     {
       "id": "BANNED_PICAMILON",
@@ -4281,7 +4330,8 @@
       "regulatory_date": "2015-11-30",
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
-      "recall_scope": null
+      "recall_scope": null,
+      "cui": "C0137049"
     },
     {
       "id": "BANNED_RED_YEAST_RICE",
@@ -4403,7 +4453,8 @@
       "regulatory_date": "1998-05-20",
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
-      "recall_scope": null
+      "recall_scope": null,
+      "cui": null
     },
     {
       "id": "BANNED_S23",
@@ -4503,7 +4554,8 @@
       "regulatory_date": "2017-10-31",
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
-      "recall_scope": null
+      "recall_scope": null,
+      "cui": "C0163688"
     },
     {
       "id": "BANNED_SIBUTRAMINE",
@@ -4597,7 +4649,8 @@
       "regulatory_date": "2010-10-08",
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
-      "recall_scope": null
+      "recall_scope": null,
+      "cui": "C0074493"
     },
     {
       "id": "BANNED_SR9009",
@@ -4682,7 +4735,8 @@
       "regulatory_date": "2017-10-31",
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
-      "recall_scope": null
+      "recall_scope": null,
+      "cui": "C3492460"
     },
     {
       "id": "BANNED_SUNIFIRAM",
@@ -4755,7 +4809,8 @@
       "regulatory_date": "2019-11-25",
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
-      "recall_scope": null
+      "recall_scope": null,
+      "cui": "C4549780"
     },
     {
       "id": "BANNED_TIANEPTINE",
@@ -5024,7 +5079,8 @@
       "regulatory_date": "2025-01-01",
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
-      "recall_scope": null
+      "recall_scope": null,
+      "cui": "C0076652"
     },
     {
       "id": "BANNED_YELLOW_OLEANDER_RECENT",
@@ -5127,7 +5183,8 @@
       "regulatory_date": "2025-01-01",
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
-      "recall_scope": null
+      "recall_scope": null,
+      "cui": null
     },
     {
       "id": "BANNED_YK11",
@@ -5200,7 +5257,8 @@
       "regulatory_date": "2017-10-31",
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
-      "recall_scope": null
+      "recall_scope": null,
+      "cui": null
     },
     {
       "id": "HIGH_RISK_CHAPARRAL",
@@ -5288,7 +5346,8 @@
       "regulatory_date": "1992-01-01",
       "regulatory_date_label": "First regulatory safety alert",
       "match_mode": "active",
-      "recall_scope": null
+      "recall_scope": null,
+      "cui": "C1050700"
     },
     {
       "id": "HIGH_RISK_GERMANDER",
@@ -5405,7 +5464,8 @@
       "regulatory_date": "1992-01-01",
       "regulatory_date_label": "Regulatory restriction effective",
       "match_mode": "active",
-      "recall_scope": null
+      "recall_scope": null,
+      "cui": "C0522471"
     },
     {
       "id": "HIGH_RISK_PENNYROYAL",
@@ -5507,7 +5567,8 @@
       "regulatory_date": "1992-01-01",
       "regulatory_date_label": "First regulatory safety alert",
       "match_mode": "active",
-      "recall_scope": null
+      "recall_scope": null,
+      "cui": "C0070247"
     },
     {
       "id": "HM_ARSENIC",
@@ -5651,7 +5712,8 @@
       "regulatory_date": "2025-01-01",
       "regulatory_date_label": "Regulatory limit established",
       "match_mode": "active",
-      "recall_scope": null
+      "recall_scope": null,
+      "cui": "C0936225"
     },
     {
       "id": "HM_CADMIUM",
@@ -5769,7 +5831,8 @@
       "regulatory_date": "1986-01-01",
       "regulatory_date_label": "Regulatory limit established",
       "match_mode": "active",
-      "recall_scope": null
+      "recall_scope": null,
+      "cui": "C0373557"
     },
     {
       "id": "HM_LEAD",
@@ -5888,7 +5951,8 @@
       "regulatory_date": "1986-01-01",
       "regulatory_date_label": "Regulatory limit established",
       "match_mode": "active",
-      "recall_scope": null
+      "recall_scope": null,
+      "cui": "C0023175"
     },
     {
       "id": "HM_MERCURY",
@@ -6007,7 +6071,8 @@
       "regulatory_date": "1979-01-01",
       "regulatory_date_label": "Regulatory limit established",
       "match_mode": "active",
-      "recall_scope": null
+      "recall_scope": null,
+      "cui": "C0025424"
     },
     {
       "id": "NOOTROPIC_9MEBC",
@@ -6093,7 +6158,8 @@
       "regulatory_date": "2012-01-01",
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
-      "recall_scope": null
+      "recall_scope": null,
+      "cui": null
     },
     {
       "id": "NOOTROPIC_ADRAFINIL",
@@ -6206,7 +6272,8 @@
       "regulatory_date": "2017-01-01",
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
-      "recall_scope": null
+      "recall_scope": null,
+      "cui": "C0101700"
     },
     {
       "id": "NOOTROPIC_ANIRACETAM",
@@ -6337,7 +6404,8 @@
       "regulatory_date": "2019-11-25",
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
-      "recall_scope": null
+      "recall_scope": null,
+      "cui": "C0051917"
     },
     {
       "id": "NOOTROPIC_BROMANTANE",
@@ -6439,7 +6507,8 @@
       "regulatory_date": "1997-01-01",
       "regulatory_date_label": "WADA prohibition effective",
       "match_mode": "active",
-      "recall_scope": null
+      "recall_scope": null,
+      "cui": "C0252077"
     },
     {
       "id": "NOOTROPIC_FLMODAFINIL",
@@ -6528,7 +6597,8 @@
       "regulatory_date": "2025-08-15",
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
-      "recall_scope": null
+      "recall_scope": null,
+      "cui": null
     },
     {
       "id": "NOOTROPIC_MODAFINIL",
@@ -6629,7 +6699,8 @@
       "regulatory_date": "1998-12-24",
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
-      "recall_scope": null
+      "recall_scope": null,
+      "cui": "C0066677"
     },
     {
       "id": "NOOTROPIC_OMBERACETAM",
@@ -6730,7 +6801,8 @@
       "regulatory_date": "2019-11-25",
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
-      "recall_scope": null
+      "recall_scope": null,
+      "cui": "C5238120"
     },
     {
       "id": "NOOTROPIC_PHENYLPIRACETAM",
@@ -6843,7 +6915,8 @@
       "regulatory_date": "2017-01-01",
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
-      "recall_scope": null
+      "recall_scope": null,
+      "cui": "C0618539"
     },
     {
       "id": "NOOTROPIC_PIRACETAM",
@@ -6944,7 +7017,8 @@
       "regulatory_date": "2019-11-25",
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
-      "recall_scope": null
+      "recall_scope": null,
+      "cui": "C0031977"
     },
     {
       "id": "NOOTROPIC_SULBUTIAMINE",
@@ -7060,7 +7134,8 @@
       "regulatory_date": "2025-04-15",
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
-      "recall_scope": null
+      "recall_scope": null,
+      "cui": "C0075501"
     },
     {
       "id": "NOOTROPIC_VINPOCETINE",
@@ -7191,7 +7266,8 @@
       "regulatory_date": "2016-09-07",
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
-      "recall_scope": null
+      "recall_scope": null,
+      "cui": "C0059752"
     },
     {
       "id": "PEPTIDE_BPC157",
@@ -7287,7 +7363,8 @@
       "regulatory_date": "2022-01-01",
       "regulatory_date_label": "FDA enforcement action",
       "match_mode": "active",
-      "recall_scope": null
+      "recall_scope": null,
+      "cui": "C0248070"
     },
     {
       "id": "PEPTIDE_MELANOTAN_II",
@@ -7405,7 +7482,8 @@
       "regulatory_date": "2009-01-01",
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
-      "recall_scope": null
+      "recall_scope": null,
+      "cui": "C0212602"
     },
     {
       "id": "PEPTIDE_TB500",
@@ -7501,7 +7579,8 @@
       "regulatory_date": "2022-01-01",
       "regulatory_date_label": "FDA enforcement action",
       "match_mode": "active",
-      "recall_scope": null
+      "recall_scope": null,
+      "cui": null
     },
     {
       "id": "PHARMA_DAPOXETINE",
@@ -7575,7 +7654,8 @@
       "regulatory_date": "2012-01-01",
       "regulatory_date_label": "First FDA enforcement action",
       "match_mode": "active",
-      "recall_scope": null
+      "recall_scope": null,
+      "cui": "C0215087"
     },
     {
       "id": "PHARMA_LORCASERIN",
@@ -7662,7 +7742,8 @@
       "regulatory_date": "2020-02-13",
       "regulatory_date_label": "First FDA enforcement action",
       "match_mode": "active",
-      "recall_scope": null
+      "recall_scope": null,
+      "cui": "C2350948"
     },
     {
       "id": "RC_CARDARINE_ANALOGS",
@@ -7761,7 +7842,8 @@
       "regulatory_date": "2008-01-01",
       "regulatory_date_label": "WADA prohibition effective",
       "match_mode": "disabled",
-      "recall_scope": null
+      "recall_scope": null,
+      "cui": null
     },
     {
       "id": "RECALLED_GE_LABS_YKARINE",
@@ -7842,7 +7924,8 @@
       "regulatory_date": "2025-12-02",
       "regulatory_date_label": "First FDA enforcement action",
       "match_mode": "active",
-      "recall_scope": null
+      "recall_scope": null,
+      "cui": null
     },
     {
       "id": "RECALLED_GOLD_STAR_DISTRIBUTION",
@@ -7922,7 +8005,8 @@
         "effective_from": "2025-12-26",
         "effective_to": null,
         "note": null
-      }
+      },
+      "cui": null
     },
     {
       "id": "RECALLED_GREEN_LUMBER",
@@ -8004,7 +8088,8 @@
         "effective_from": "2025-08-29",
         "effective_to": null,
         "note": null
-      }
+      },
+      "cui": null
     },
     {
       "id": "RECALLED_HYDROXYCUT",
@@ -8090,8 +8175,8 @@
       "entity_type": "product",
       "review": {
         "status": "validated",
-        "last_reviewed_at": "2026-03-16",
-        "next_review_due": "2026-09-16",
+        "last_reviewed_at": "2026-03-23",
+        "next_review_due": "2026-09-23",
         "reviewed_by": "fda_weekly_sync_agent",
         "change_log": [
           {
@@ -8102,6 +8187,11 @@
           {
             "date": "2026-03-16",
             "change": "Stale recall re-verified. match_mode=historical confirmed correct. 2009 product-specific recall was long terminated.",
+            "by": "fda_weekly_sync"
+          },
+          {
+            "date": "2026-03-23",
+            "change": "Weekly re-verification: match_mode=historical still correct. No change.",
             "by": "fda_weekly_sync"
           }
         ]
@@ -8117,7 +8207,8 @@
         "effective_from": "2009-05-01",
         "effective_to": null,
         "note": null
-      }
+      },
+      "cui": null
     },
     {
       "id": "RECALLED_JACK3D",
@@ -8203,8 +8294,8 @@
       "entity_type": "product",
       "review": {
         "status": "validated",
-        "last_reviewed_at": "2026-03-16",
-        "next_review_due": "2026-09-16",
+        "last_reviewed_at": "2026-03-23",
+        "next_review_due": "2026-09-23",
         "reviewed_by": "fda_weekly_sync_agent",
         "change_log": [
           {
@@ -8215,6 +8306,11 @@
           {
             "date": "2026-03-16",
             "change": "Set match_mode=historical. Original DMAA-containing formula removed from market 2012 via FDA warning letters; no formal enforcement recall record in openFDA. DMAA ingredient-level ban tracked separately.",
+            "by": "fda_weekly_sync"
+          },
+          {
+            "date": "2026-03-23",
+            "change": "Weekly re-verification: match_mode=historical still correct. No change.",
             "by": "fda_weekly_sync"
           }
         ]
@@ -8230,7 +8326,8 @@
         "effective_from": "2012-01-01",
         "effective_to": null,
         "note": null
-      }
+      },
+      "cui": null
     },
     {
       "id": "RECALLED_LIVE_IT_UP_SUPER_GREENS",
@@ -8320,7 +8417,8 @@
         "effective_from": "2026-01-20",
         "effective_to": null,
         "note": null
-      }
+      },
+      "cui": null
     },
     {
       "id": "RECALLED_MODERN_WARRIOR",
@@ -8402,7 +8500,8 @@
         "effective_from": "2026-01-09",
         "effective_to": null,
         "note": null
-      }
+      },
+      "cui": null
     },
     {
       "id": "RECALLED_MR7_SUPER_700000",
@@ -8507,7 +8606,8 @@
         "effective_from": "2025-11-21",
         "effective_to": null,
         "note": null
-      }
+      },
+      "cui": null
     },
     {
       "id": "RECALLED_OXYELITE_PRO",
@@ -8600,8 +8700,8 @@
       "entity_type": "product",
       "review": {
         "status": "validated",
-        "last_reviewed_at": "2026-03-16",
-        "next_review_due": "2026-09-16",
+        "last_reviewed_at": "2026-03-23",
+        "next_review_due": "2026-09-23",
         "reviewed_by": "fda_weekly_sync_agent",
         "change_log": [
           {
@@ -8612,6 +8712,11 @@
           {
             "date": "2026-03-16",
             "change": "Set match_mode=historical. openFDA confirms all recalls (F-1370/1372/1374/1375/1376-2014) status=Terminated. Product-specific recall for discontinued formula.",
+            "by": "fda_weekly_sync"
+          },
+          {
+            "date": "2026-03-23",
+            "change": "Weekly re-verification: match_mode=historical still correct. No change.",
             "by": "fda_weekly_sync"
           }
         ]
@@ -8627,7 +8732,8 @@
         "effective_from": "2013-11-08",
         "effective_to": null,
         "note": null
-      }
+      },
+      "cui": null
     },
     {
       "id": "RECALLED_PURITY_PRODUCTS_MY_BLADDER",
@@ -8712,7 +8818,8 @@
         "effective_from": "2025-10-28",
         "effective_to": null,
         "note": null
-      }
+      },
+      "cui": null
     },
     {
       "id": "RECALLED_REBOOST_CLEARLIFE_NASAL_SPRAY",
@@ -8801,7 +8908,8 @@
         "effective_from": "2025-12-10",
         "effective_to": null,
         "note": null
-      }
+      },
+      "cui": null
     },
     {
       "id": "RECALLED_RHEUMACARE_CAPSULES",
@@ -8897,7 +9005,8 @@
         "effective_from": "2025-12-29",
         "effective_to": null,
         "note": null
-      }
+      },
+      "cui": null
     },
     {
       "id": "RECALLED_SILINTAN",
@@ -8979,7 +9088,8 @@
         "effective_from": "2026-01-09",
         "effective_to": null,
         "note": null
-      }
+      },
+      "cui": null
     },
     {
       "id": "RECALLED_TITAN_SARMS_LLC",
@@ -9068,7 +9178,8 @@
       "regulatory_date": "2025-12-12",
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
-      "recall_scope": null
+      "recall_scope": null,
+      "cui": null
     },
     {
       "id": "RISK_BITTER_ORANGE",
@@ -9165,7 +9276,8 @@
       "regulatory_date": "2004-01-01",
       "regulatory_date_label": "FDA safety advisory published",
       "match_mode": "active",
-      "recall_scope": null
+      "recall_scope": null,
+      "cui": "C0330922"
     },
     {
       "id": "RISK_GERMANIUM",
@@ -9280,7 +9392,8 @@
       "regulatory_date": "1993-01-01",
       "regulatory_date_label": "First regulatory safety alert",
       "match_mode": "active",
-      "recall_scope": null
+      "recall_scope": null,
+      "cui": null
     },
     {
       "id": "RISK_GREEN_TEA_EXTRACT_HIGH",
@@ -9380,7 +9493,8 @@
       "regulatory_date": "2008-01-01",
       "regulatory_date_label": "Safety advisory published",
       "match_mode": "active",
-      "recall_scope": null
+      "recall_scope": null,
+      "cui": null
     },
     {
       "id": "RISK_KAVA",
@@ -9596,7 +9710,8 @@
       "regulatory_date": "2002-01-01",
       "regulatory_date_label": "Regulatory restriction effective",
       "match_mode": "active",
-      "recall_scope": null
+      "recall_scope": null,
+      "cui": "C0939882"
     },
     {
       "id": "RISK_KRATOM_NATURAL",
@@ -9743,7 +9858,8 @@
       "regulatory_date": "2017-01-01",
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
-      "recall_scope": null
+      "recall_scope": null,
+      "cui": null
     },
     {
       "id": "RISK_YOHIMBE",
@@ -9853,7 +9969,8 @@
       "regulatory_date": "1993-01-01",
       "regulatory_date_label": "First regulatory safety alert",
       "match_mode": "active",
-      "recall_scope": null
+      "recall_scope": null,
+      "cui": "C1123032"
     },
     {
       "id": "SARM_ANDARINE",
@@ -9954,7 +10071,8 @@
       "regulatory_date": "2017-10-31",
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
-      "recall_scope": null
+      "recall_scope": null,
+      "cui": "C1528658"
     },
     {
       "id": "SARM_CARDARINE",
@@ -10041,7 +10159,8 @@
       "regulatory_date": "2017-10-31",
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
-      "recall_scope": null
+      "recall_scope": null,
+      "cui": "C4740822"
     },
     {
       "id": "SARM_LIGANDROL",
@@ -10146,7 +10265,8 @@
       "regulatory_date": "2017-10-31",
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
-      "recall_scope": null
+      "recall_scope": null,
+      "cui": "C4550372"
     },
     {
       "id": "SARM_OSTARINE",
@@ -10252,7 +10372,8 @@
       "regulatory_date": "2017-10-31",
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
-      "recall_scope": null
+      "recall_scope": null,
+      "cui": "C2742262"
     },
     {
       "id": "SARM_RAD140",
@@ -10353,7 +10474,8 @@
       "regulatory_date": "2017-10-31",
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
-      "recall_scope": null
+      "recall_scope": null,
+      "cui": "C0601132"
     },
     {
       "id": "SCHED_AMANITA_MUSCIMOL",
@@ -10483,7 +10605,8 @@
       "regulatory_date": "2024-01-01",
       "regulatory_date_label": "DEA scheduling effective",
       "match_mode": "active",
-      "recall_scope": null
+      "recall_scope": null,
+      "cui": null
     },
     {
       "id": "SCHED_PSILOCYBIN",
@@ -10613,7 +10736,8 @@
       "regulatory_date": "1970-10-27",
       "regulatory_date_label": "DEA scheduling effective",
       "match_mode": "active",
-      "recall_scope": null
+      "recall_scope": null,
+      "cui": "C0807537"
     },
     {
       "id": "SPIKE_ANABOLIC_STEROIDS",
@@ -10738,7 +10862,8 @@
       "regulatory_date": "1990-11-29",
       "regulatory_date_label": "Federal ban effective",
       "match_mode": "disabled",
-      "recall_scope": null
+      "recall_scope": null,
+      "cui": null
     },
     {
       "id": "SPIKE_CHLOROPRETADALAFIL",
@@ -10811,7 +10936,8 @@
       "regulatory_date": "2025-01-01",
       "regulatory_date_label": "First FDA enforcement action",
       "match_mode": "active",
-      "recall_scope": null
+      "recall_scope": null,
+      "cui": null
     },
     {
       "id": "SPIKE_DEXAMETHASONE",
@@ -10885,7 +11011,8 @@
       "regulatory_date": "2024-01-01",
       "regulatory_date_label": "First FDA enforcement action",
       "match_mode": "active",
-      "recall_scope": null
+      "recall_scope": null,
+      "cui": "C0011777"
     },
     {
       "id": "SPIKE_DICLOFENAC",
@@ -10973,7 +11100,8 @@
       "regulatory_date": "2013-01-01",
       "regulatory_date_label": "First FDA enforcement action",
       "match_mode": "active",
-      "recall_scope": null
+      "recall_scope": null,
+      "cui": "C0012091"
     },
     {
       "id": "SPIKE_FLUOXETINE",
@@ -11046,7 +11174,8 @@
       "regulatory_date": "2008-01-01",
       "regulatory_date_label": "First FDA enforcement action",
       "match_mode": "active",
-      "recall_scope": null
+      "recall_scope": null,
+      "cui": "C0016365"
     },
     {
       "id": "SPIKE_METHYL7K",
@@ -11121,7 +11250,8 @@
       "regulatory_date": "2025-01-01",
       "regulatory_date_label": "First FDA enforcement action",
       "match_mode": "active",
-      "recall_scope": null
+      "recall_scope": null,
+      "cui": null
     },
     {
       "id": "SPIKE_PHENOLPHTHALEIN",
@@ -11215,7 +11345,8 @@
       "regulatory_date": "1999-01-01",
       "regulatory_date_label": "First FDA enforcement action",
       "match_mode": "active",
-      "recall_scope": null
+      "recall_scope": null,
+      "cui": "C0600489"
     },
     {
       "id": "SPIKE_PROPOXYPHENYLSILDENAFIL",
@@ -11289,7 +11420,8 @@
       "regulatory_date": "2025-01-01",
       "regulatory_date_label": "First FDA enforcement action",
       "match_mode": "active",
-      "recall_scope": null
+      "recall_scope": null,
+      "cui": null
     },
     {
       "id": "SPIKE_SILDENAFIL",
@@ -11363,7 +11495,8 @@
       "regulatory_date": "2003-01-01",
       "regulatory_date_label": "First FDA enforcement action",
       "match_mode": "active",
-      "recall_scope": null
+      "recall_scope": null,
+      "cui": "C1318700"
     },
     {
       "id": "SPIKE_TADALAFIL",
@@ -11436,7 +11569,8 @@
       "regulatory_date": "2006-01-01",
       "regulatory_date_label": "First FDA enforcement action",
       "match_mode": "active",
-      "recall_scope": null
+      "recall_scope": null,
+      "cui": "C1176316"
     },
     {
       "id": "SPIKE_TIANEPTINE_ANALOGUES",
@@ -11531,7 +11665,8 @@
       "regulatory_date": "2025-01-01",
       "regulatory_date_label": "First FDA enforcement action",
       "match_mode": "disabled",
-      "recall_scope": null
+      "recall_scope": null,
+      "cui": null
     },
     {
       "id": "STIM_ALPHA_PHP",
@@ -11616,7 +11751,8 @@
       "regulatory_date": "2014-01-01",
       "regulatory_date_label": "DEA scheduling effective",
       "match_mode": "active",
-      "recall_scope": null
+      "recall_scope": null,
+      "cui": null
     },
     {
       "id": "STIM_METHYLHEXANAMINE_ANALOGS",
@@ -11732,7 +11868,8 @@
       "regulatory_date": "2013-04-11",
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "disabled",
-      "recall_scope": null
+      "recall_scope": null,
+      "cui": null
     },
     {
       "id": "SYNTH_CUMYL_PICA",
@@ -11813,7 +11950,8 @@
       "regulatory_date": "2017-01-01",
       "regulatory_date_label": "DEA scheduling effective",
       "match_mode": "active",
-      "recall_scope": null
+      "recall_scope": null,
+      "cui": "C5198249"
     },
     {
       "id": "WADA_CANNABIS",
@@ -11907,7 +12045,8 @@
       "regulatory_date": "2004-01-01",
       "regulatory_date_label": "WADA prohibition effective",
       "match_mode": "active",
-      "recall_scope": null
+      "recall_scope": null,
+      "cui": null
     },
     {
       "id": "WADA_TRAMADOL",
@@ -11979,7 +12118,8 @@
       "regulatory_date": "2024-01-01",
       "regulatory_date_label": "WADA prohibition effective",
       "match_mode": "active",
-      "recall_scope": null
+      "recall_scope": null,
+      "cui": "C0040610"
     },
     {
       "id": "BANNED_DYMETHAZINE",
@@ -12066,7 +12206,8 @@
       "regulatory_date": "2012-01-01",
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
-      "recall_scope": null
+      "recall_scope": null,
+      "cui": null
     },
     {
       "id": "SPIKE_METHOCARBAMOL",
@@ -12140,7 +12281,8 @@
       "regulatory_date": "2025-01-01",
       "regulatory_date_label": "First FDA enforcement action",
       "match_mode": "active",
-      "recall_scope": null
+      "recall_scope": null,
+      "cui": "C0025659"
     },
     {
       "id": "RISK_LOBELIA",
@@ -12244,7 +12386,8 @@
       "regulatory_date_label": "FDA lobeline OTC ban effective",
       "supersedes_ids": null,
       "match_mode": "active",
-      "recall_scope": null
+      "recall_scope": null,
+      "cui": "C0331296"
     },
     {
       "id": "ADD_5A_HYDROXY_LAXOGENIN",
@@ -12317,7 +12460,8 @@
             "reason": "caps_tabs_unmapped_laxogenin"
           }
         ]
-      }
+      },
+      "cui": null
     },
     {
       "id": "ADD_CASCARA_SAGRADA",
@@ -12398,7 +12542,8 @@
             "reason": "online_safety_audit"
           }
         ]
-      }
+      },
+      "cui": "C0205704"
     },
     {
       "id": "ADD_COLLOIDAL_SILVER",
@@ -12499,7 +12644,8 @@
             "reason": "schema_consistency_and_precision"
           }
         ]
-      }
+      },
+      "cui": "C0772313"
     },
     {
       "id": "ADD_DIIODOTHYRONINE_T2",
@@ -12576,7 +12722,8 @@
             "reason": "harmful_additives_comprehensive_audit"
           }
         ]
-      }
+      },
+      "cui": null
     },
     {
       "id": "ADD_DOCUSATE_SODIUM",
@@ -12637,7 +12784,8 @@
             "reason": "harmful_additives_comprehensive_audit"
           }
         ]
-      }
+      },
+      "cui": "C0243237"
     },
     {
       "id": "ADD_HORDENINE",
@@ -12704,7 +12852,8 @@
             "reason": "capsules_clean_unmapped_safety"
           }
         ]
-      }
+      },
+      "cui": "C0062970"
     },
     {
       "id": "ADD_N_PHENETHYL_DIMETHYLAMINE",
@@ -12776,7 +12925,8 @@
             "reason": "schema_integrity_p3"
           }
         ]
-      }
+      },
+      "cui": null
     },
     {
       "id": "ADD_RED3",
@@ -12877,7 +13027,8 @@
             "reason": "safety_routing_gap"
           }
         ]
-      }
+      },
+      "cui": "C0014824"
     },
     {
       "id": "BANNED_DMSA_SUCCIMER",
@@ -12940,7 +13091,8 @@
             "reason": "audit_false_duplicate_matching"
           }
         ]
-      }
+      },
+      "cui": null
     },
     {
       "id": "BANNED_DNP",
@@ -13005,7 +13157,8 @@
             "reason": "audit_missing_high_risk_substance"
           }
         ]
-      }
+      },
+      "cui": "C0045511"
     },
     {
       "id": "BANNED_USNIC_ACID",
@@ -13069,7 +13222,8 @@
             "reason": "audit_missing_high_risk_substance"
           }
         ]
-      }
+      },
+      "cui": "C0042118"
     },
     {
       "id": "BANNED_CLENBUTEROL",
@@ -13134,7 +13288,8 @@
             "reason": "audit_missing_high_risk_substance"
           }
         ]
-      }
+      },
+      "cui": "C0008932"
     },
     {
       "id": "BANNED_ACONITE",
@@ -13193,7 +13348,8 @@
             "reason": "audit_missing_high_risk_substance"
           }
         ]
-      }
+      },
+      "cui": null
     },
     {
       "id": "ADD_SODIUM_TETRABORATE",
@@ -13259,7 +13415,8 @@
             "reason": "other_ingredients_deep_audit"
           }
         ]
-      }
+      },
+      "cui": null
     },
     {
       "id": "ADD_THYROGEN",
@@ -13314,7 +13471,8 @@
             "reason": "other_ingredients_deep_audit"
           }
         ]
-      }
+      },
+      "cui": "C5136972"
     },
     {
       "id": "ADD_SIMETHICONE",
@@ -13371,7 +13529,8 @@
             "reason": "other_ingredients_deep_audit"
           }
         ]
-      }
+      },
+      "cui": "C0037138"
     },
     {
       "id": "ADD_HEXADRONE",
@@ -13426,7 +13585,8 @@
             "reason": "other_ingredients_deep_audit"
           }
         ]
-      }
+      },
+      "cui": null
     },
     {
       "id": "BANNED_ADD_TITANIUM_DIOXIDE",
@@ -13561,7 +13721,8 @@
             "by": "audit_march_2026_corrections"
           }
         ]
-      }
+      },
+      "cui": "C3256964"
     },
     {
       "id": "BANNED_ADD_TALC",
@@ -13689,7 +13850,8 @@
             "by": "audit_march_2026_corrections"
           }
         ]
-      }
+      },
+      "cui": "C0039267"
     },
     {
       "id": "BANNED_ADD_CAROB_COLOR",
@@ -13792,7 +13954,8 @@
             "by": "audit_march_2026_corrections"
           }
         ]
-      }
+      },
+      "cui": null
     },
     {
       "id": "BANNED_ADD_OCTOPAMINE",
@@ -13894,7 +14057,8 @@
             "by": "audit_march_2026_corrections"
           }
         ]
-      }
+      },
+      "cui": "C0028403"
     },
     {
       "id": "BANNED_DETERENOL_ISOPROPYLNORSYNEPHRINE",
@@ -13940,7 +14104,8 @@
           "url": "https://www.wada-ama.org/en/prohibited-list",
           "evidence_summary": "Deterenol listed among prohibited beta-2 agonist / stimulant-related ingredients in sport policy context."
         }
-      ]
+      ],
+      "cui": "C0131209"
     },
     {
       "id": "BANNED_CALAMUS_ACORUS_CALAMUS",
@@ -14022,7 +14187,221 @@
       "regulatory_date": null,
       "regulatory_date_label": "FDA prohibition in human food",
       "match_mode": "active",
-      "recall_scope": null
+      "recall_scope": null,
+      "cui": "C0949888"
+    },
+    {
+      "id": "HM_CHROMIUM_HEXAVALENT",
+      "standard_name": "Chromium (VI) — Hexavalent Chromium",
+      "aliases": [
+        "hexavalent chromium",
+        "chromium 6",
+        "Cr(VI)",
+        "chromium(6+)",
+        "chromate",
+        "chromium 6",
+        "CrVI",
+        "chromium hexavalent",
+        "hexavalent chromium compounds"
+      ],
+      "reason": "Chromium(VI) is an IARC Group 1 human carcinogen (inhalation — lung and nasal cancers). NTP 2008 TR-546 found clear evidence of oral carcinogenicity in rats (small intestine tumors). EU CLP Category 1A carcinogen AND 1A mutagen. EPA Group A carcinogen. Not a permitted food additive or supplement ingredient in any jurisdiction — it is a contaminant only. Any supplement containing Cr(VI) is adulterated. Mechanism: Cr(VI) crosses cell membranes via sulfate/phosphate anion transporters, undergoes intracellular reductive activation through Cr(V)/Cr(IV) to Cr(III), generating ROS, Cr-DNA adducts, DNA-protein crosslinks, and strand breaks. IMPORTANT: Chromium(III) (picolinate, polynicotinate, etc.) is the beneficial supplemental form — only Cr(VI) compounds are carcinogenic.",
+      "status": "high_risk",
+      "class_tags": [
+        "heavy_metal_limits",
+        "heavy_metal"
+      ],
+      "match_rules": {
+        "exclusions": [],
+        "case_sensitive": false,
+        "priority": 1,
+        "match_type": "normalized",
+        "confidence": "high",
+        "negative_match_terms": [
+          "chromium picolinate",
+          "chromium polynicotinate",
+          "chromium iii",
+          "chromium(III)",
+          "chromium(3+)",
+          "trivalent chromium",
+          "chromium gtf",
+          "chromium chelate",
+          "chromium nicotinate",
+          "chromium chloride",
+          "chromic chloride",
+          "chromium yeast"
+        ]
+      },
+      "match_mode": "active",
+      "legal_status_enum": "contaminant_risk",
+      "clinical_risk_enum": "critical",
+      "jurisdictions": [
+        {
+          "region": "US",
+          "level": "federal",
+          "status": "banned",
+          "effective_date": null,
+          "source": {
+            "type": "fda_action",
+            "citation": "Not a permitted food additive or dietary supplement ingredient. EPA Group A carcinogen. Any Cr(VI) in supplements constitutes adulteration.",
+            "accessed_date": "2026-03-22"
+          },
+          "jurisdiction_type": "country",
+          "jurisdiction_code": "US",
+          "last_verified_date": "2026-03-22"
+        },
+        {
+          "region": "EU",
+          "level": "federal",
+          "status": "banned",
+          "effective_date": null,
+          "source": {
+            "type": "national_regulation",
+            "citation": "EU CLP Regulation (EC) No 1272/2008: Category 1A carcinogen AND Category 1A mutagen. Not permitted in foods or dietary supplements.",
+            "accessed_date": "2026-03-22"
+          },
+          "jurisdiction_type": "region",
+          "jurisdiction_code": "EU",
+          "last_verified_date": "2026-03-22"
+        },
+        {
+          "region": "IARC",
+          "level": "international",
+          "status": "banned",
+          "effective_date": null,
+          "source": {
+            "type": "national_regulation",
+            "citation": "IARC Group 1: Known human carcinogen (sufficient evidence for lung cancer via inhalation). IARC Monographs Vol 100C (2012).",
+            "accessed_date": "2026-03-22"
+          },
+          "jurisdiction_type": "agency_scope",
+          "jurisdiction_code": "IARC",
+          "last_verified_date": "2026-03-22"
+        }
+      ],
+      "references_structured": [
+        {
+          "type": "monograph",
+          "title": "IARC Monographs Volume 100C — Chromium(VI) Compounds",
+          "evidence_grade": "A",
+          "supports_claims": [
+            "carcinogenicity",
+            "mechanism_of_harm"
+          ]
+        },
+        {
+          "type": "government_report",
+          "title": "NTP TR-546: Toxicology and Carcinogenesis Studies of Sodium Dichromate Dihydrate in F344/N Rats and B6C3F1 Mice (Drinking Water Studies), 2008",
+          "evidence_grade": "A",
+          "supports_claims": [
+            "oral_carcinogenicity"
+          ]
+        },
+        {
+          "type": "regulatory",
+          "title": "EPA IRIS Assessment: Chromium(VI) — Group A Human Carcinogen",
+          "evidence_grade": "A",
+          "supports_claims": [
+            "regulatory_status"
+          ]
+        }
+      ],
+      "regulatory_date": "2012-01-01",
+      "regulatory_date_label": "IARC Group 1 classification (Vol 100C, 2012)",
+      "review": {
+        "status": "validated",
+        "last_reviewed_at": "2026-03-22",
+        "reviewed_by": "chromium_vi_migration",
+        "change_log": [
+          {
+            "date": "2026-03-22",
+            "change": "Migrated from harmful_additives.json (was ADD_CHROMIUM_HEXAVALENT). IARC Group 1, EPA Group A, banned in all jurisdictions. Added negative_match_terms for Cr(III) supplement forms.",
+            "reason": "chromium_vi_migration_to_banned_recalled"
+          }
+        ]
+      },
+      "cui": "C1707393"
+    },
+    {
+      "id": "RECALLED_ROSABELLA_MORINGA",
+      "standard_name": "Rosabella Moringa Dietary Supplement Capsules",
+      "aliases": [
+        "rosabella moringa",
+        "rosabella brand moringa",
+        "ambrosia brands moringa"
+      ],
+      "reason": "Rosabella brand Moringa dietary supplement capsules recalled due to potential Salmonella contamination; Salmonella causes salmonellosis with risk of life-threatening infection in vulnerable populations.",
+      "status": "recalled",
+      "class_tags": [
+        "recalled_supplement_brands",
+        "supplement_general"
+      ],
+      "match_rules": {
+        "exclusions": [],
+        "case_sensitive": false,
+        "priority": 1,
+        "match_type": "normalized",
+        "confidence": "high",
+        "negative_match_terms": []
+      },
+      "match_mode": "active",
+      "legal_status_enum": "contaminant_risk",
+      "clinical_risk_enum": "moderate",
+      "jurisdictions": [
+        {
+          "region": "US",
+          "level": "federal",
+          "status": "recalled",
+          "effective_date": "2026-02-13",
+          "source": {
+            "type": "fda_enforcement",
+            "citation": "Recall H-0546-2026: Rosabella brand MORINGA Dietary Supplement Capsules, Class I, initiated 2026-02-13",
+            "accessed_date": "2026-03-23"
+          },
+          "jurisdiction_type": "country",
+          "jurisdiction_code": "US",
+          "last_verified_date": "2026-03-23"
+        }
+      ],
+      "references_structured": [
+        {
+          "type": "fda_enforcement",
+          "title": "FDA Recall H-0546-2026: Rosabella Moringa Dietary Supplement Capsules — Salmonella — 2026-02-13",
+          "url": "https://www.accessdata.fda.gov/scripts/ires/?action=Redirect&recall_number=H-0546-2026",
+          "evidence_grade": "R",
+          "date": "2026-03-23",
+          "supports_claims": [
+            "regulatory_action"
+          ],
+          "evidence_summary": "Class I recall of Rosabella brand MORINGA dietary supplement capsules (Ambrosia Brands LLC) for potential Salmonella contamination. Nationwide and international distribution."
+        }
+      ],
+      "source_category": "recalled_supplement_brands",
+      "entity_type": "product",
+      "review": {
+        "status": "validated",
+        "last_reviewed_at": "2026-03-23",
+        "next_review_due": "2026-09-23",
+        "reviewed_by": "fda_weekly_sync_agent",
+        "change_log": [
+          {
+            "date": "2026-03-23",
+            "change": "Added from FDA recall H-0546-2026 — Rosabella brand MORINGA dietary supplement capsules, potential Salmonella contamination",
+            "by": "fda_weekly_sync"
+          }
+        ]
+      },
+      "supersedes_ids": null,
+      "regulatory_date": "2026-02-13",
+      "regulatory_date_label": "FDA recall initiation date",
+      "recall_scope": {
+        "brand": "Rosabella Moringa Dietary Supplement Capsules",
+        "formulations": null,
+        "lots": null,
+        "effective_from": "2026-02-13",
+        "effective_to": null,
+        "note": "Ambrosia Brands LLC, 60 capsules/bottle, UPC 860012161720"
+      },
+      "cui": null
     }
   ]
 }
