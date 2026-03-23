@@ -5905,6 +5905,16 @@ class SupplementEnricherV3:
                 additive_id = additive.get('id', '')
                 additive_aliases = additive.get('aliases', [])
                 additive_category = additive.get('category', '')
+                additive_entity_type = additive.get('entity_type')
+                additive_match_mode = (
+                    additive.get('match_mode')
+                    or additive.get('match_rules', {}).get('match_mode', 'alias_and_fuzzy')
+                )
+
+                # Routing-only umbrella entries should remain available in the DB
+                # but must not score directly during enrichment.
+                if additive_entity_type == 'class' or additive_match_mode in {'disabled', 'historical'}:
+                    continue
 
                 # P0.5: Skip "Artificial Colors (General)" for natural colorants
                 # BUT always include if this is an explicit artificial dye

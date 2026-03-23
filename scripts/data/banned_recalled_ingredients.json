@@ -14,6 +14,29 @@
       ],
       "update_frequency": "monthly"
     },
+    "audit_runbook": {
+      "summary": "Run the strict audit before production use. Only keep cui null when the entry is multi-concept/class-level or there is still no confirmed exact UMLS concept after alias review.",
+      "quick_audit_command": ".venv/bin/python scripts/audit_banned_recalled_accuracy.py --fda-report-in scripts/fda_sync_report_latest.json",
+      "release_command": ".venv/bin/python scripts/audit_banned_recalled_accuracy.py --release --fda-report-in scripts/fda_sync_report_latest.json",
+      "release_strict_command": ".venv/bin/python scripts/audit_banned_recalled_accuracy.py --release-strict-cui --fda-report-in scripts/fda_sync_report_latest.json",
+      "run_fda_sync_then_audit_command": ".venv/bin/python scripts/audit_banned_recalled_accuracy.py --run-fda-sync --days 30 --fda-report-out scripts/fda_sync_report_latest.json",
+      "verify_cui_dry_run_command": ".venv/bin/python scripts/verify_cui.py --file scripts/data/banned_recalled_ingredients.json --list-key ingredients --id-field id --cui-field cui",
+      "verify_cui_manual_command": ".venv/bin/python scripts/verify_cui.py --search \"sildenafil\"",
+      "verify_single_cui_command": ".venv/bin/python scripts/verify_cui.py --cui C0529793",
+      "safe_apply_command": ".venv/bin/python scripts/verify_cui.py --file scripts/data/banned_recalled_ingredients.json --list-key ingredients --id-field id --cui-field cui --apply",
+      "mismatch_apply_command": ".venv/bin/python scripts/verify_cui.py --file scripts/data/banned_recalled_ingredients.json --list-key ingredients --id-field id --cui-field cui --apply --apply-mismatches"
+    },
+    "cui_audit_policy": {
+      "operator_note": "Before accepting a null CUI, confirm the standard name and aliases are already sufficient for exact matching. If a missing exact synonym is the blocker, add that alias and rerun verify_cui.py before keeping cui null.",
+      "approved_null_statuses": [
+        "no_confirmed_umls_match",
+        "no_single_umls_concept"
+      ],
+      "approved_null_status_meanings": {
+        "no_confirmed_umls_match": "Use when the entry is a specific ingredient or analogue but no confirmed exact UMLS concept exists even after alias review.",
+        "no_single_umls_concept": "Use when the entry is a class, policy, umbrella, or multi-substance record where one UMLS concept would be misleading."
+      }
+    },
     "migration": {
       "completed_migrations": [
         {
@@ -265,6 +288,17 @@
             "  RECALLED_OXYELITE_PRO: last_reviewed_at updated to 2026-03-23",
             "Total entries: 139 -> 140"
           ]
+        },
+        {
+          "version": "5.0.3",
+          "date": "2026-03-23",
+          "auditor": "Codex",
+          "changes": [
+            "Added audit_runbook and cui_audit_policy metadata with explicit local, release, and strict-release commands",
+            "Documented approved null-CUI statuses and the rule to add exact aliases before accepting a null CUI",
+            "Expanded alias normalization for eight intentional-null research-chemical entries to cover common spaced, hyphenated, and registry-style variants",
+            "Confirmed 25 intentional null-CUI records are documented rather than unresolved"
+          ]
         }
       ],
       "known_limitations": [
@@ -346,6 +380,7 @@
         {
           "type": "fda_advisory",
           "title": "FDA: Tainted Products - Undeclared NSAIDs in supplements",
+          "url": "https://www.fda.gov/drugs/medication-health-fraud/pain-and-arthritis-products-containing-hidden-ingredients",
           "evidence_grade": "R",
           "supports_claims": [
             "regulatory_action"
@@ -355,6 +390,7 @@
         {
           "type": "fda_advisory",
           "title": "FDA Recall: Silintan - January 9, 2026",
+          "url": "https://www.fda.gov/safety/recalls-market-withdrawals-safety-alerts/anthony-trinh-123herbals-llc-123herbalscom-issues-nationwide-recall-silintan-capsules-due-presence",
           "evidence_grade": "R",
           "date": "2026-01-09",
           "supports_claims": [
@@ -433,6 +469,7 @@
         {
           "type": "fda_advisory",
           "title": "FDA: Tainted Weight Loss Products - Metformin",
+          "url": "https://www.fda.gov/drugs/frequently-asked-questions-popular-topics/questions-and-answers-about-fdas-initiative-against-contaminated-weight-loss-products",
           "evidence_grade": "R",
           "supports_claims": [
             "regulatory_action"
@@ -928,6 +965,7 @@
         {
           "type": "regulatory",
           "title": "UK Misuse of Drugs Act - Anabolic steroid classification",
+          "url": "https://www.legislation.gov.uk/ukpga/1971/38/pdfs/ukpga_19710038_en.pdf",
           "evidence_grade": "R",
           "date": null,
           "supports_claims": [
@@ -936,20 +974,28 @@
           "evidence_summary": "7-Keto DHEA classified as anabolic steroid under UK law"
         }
       ],
-      "source_category": null,
+      "source_category": "high_risk_ingredients",
       "review": {
         "status": "validated",
         "date": "2026-02-18",
         "notes": "v4 schema migration completed. Legal in US, banned internationally.",
         "last_reviewed_at": "2026-02-26",
-        "reviewed_by": "source_verified_audit"
+        "reviewed_by": "source_verified_audit",
+        "next_review_due": "2026-08-26",
+        "change_log": [
+          {
+            "date": "2026-02-26",
+            "change": "Backfilled source category, review cadence, and regulatory reference during local banned/recalled accuracy cleanup.",
+            "by": "local_accuracy_audit"
+          }
+        ]
       },
       "supersedes_ids": null,
       "regulatory_date": "2025-01-01",
       "regulatory_date_label": "Regulatory restriction effective",
       "match_mode": "active",
       "recall_scope": null,
-      "cui": "C5709714"
+      "cui": "C0525091"
     },
     {
       "id": "BANNED_ADD_ANATABINE",
@@ -1554,7 +1600,8 @@
         "synthetic hormone",
         "artificial estrogen",
         "hormone mimics",
-        "synthetic estrogens"
+        "synthetic estrogens",
+        "Estrogens, Synthetic"
       ],
       "match_rules": {
         "exclusions": [],
@@ -1750,7 +1797,9 @@
       "regulatory_date_label": "Regulatory framework established",
       "match_mode": "disabled",
       "recall_scope": null,
-      "cui": null
+      "cui": null,
+      "cui_status": "no_single_umls_concept",
+      "cui_note": "Policy watchlist spans multiple synthetic food acids; no single ingredient-level UMLS concept is appropriate."
     },
     {
       "id": "BANNED_ARISTOLOCHIC_ACID",
@@ -1863,7 +1912,8 @@
         "β-methylphenylethylamine",
         "R-beta-methylphenylethylamine",
         "beta-methylphenylethylamine",
-        "BMPEA"
+        "BMPEA",
+        "beta-methylphenyl-ethylamine"
       ],
       "reason": "BMPEA (β-methylphenylethylamine, 4-amino-2-methylpentane) is a synthetic amphetamine-like compound found by FDA researchers as an undeclared ingredient in supplements labeled as containing 'Acacia rigidula extract' — a species in which BMPEA does not naturally occur. BMPEA has stimulant activity; it raises blood pressure and heart rate and has structural similarity to amphetamines. FDA confirmed its presence in 9 of 21 tested Acacia rigidula supplements (2015). It is not a lawful dietary ingredient. Products containing it are adulterated.",
       "status": "banned",
@@ -2393,7 +2443,7 @@
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
       "recall_scope": null,
-      "cui": null
+      "cui": "C1621344"
     },
     {
       "id": "BANNED_CONTAMINATED_GLP1",
@@ -2462,6 +2512,7 @@
         {
           "type": "fda_advisory",
           "title": "FDA: September 2024 - Warning on compounded semaglutide",
+          "url": "https://www.fda.gov/drugs/postmarket-drug-safety-information-patients-and-providers/fdas-concerns-unapproved-glp-1-drugs-used-weight-loss",
           "evidence_grade": "R",
           "date": "2024",
           "supports_claims": [
@@ -2472,6 +2523,7 @@
         {
           "type": "fda_advisory",
           "title": "FDA Class II Recalls: 2024-2025 - Multiple compounding pharmacies",
+          "url": "https://www.fda.gov/drugs/human-drug-compounding/understanding-risks-compounded-drugs",
           "evidence_grade": "R",
           "date": "2024",
           "supports_claims": [
@@ -2500,7 +2552,9 @@
       "regulatory_date_label": "First regulatory safety alert",
       "match_mode": "active",
       "recall_scope": null,
-      "cui": null
+      "cui": null,
+      "cui_status": "no_single_umls_concept",
+      "cui_note": "Contamination watchlist spans multiple GLP-1 compounds and quality defects; no single ingredient-level UMLS concept is appropriate."
     },
     {
       "id": "BANNED_DELTA8_THC",
@@ -2613,7 +2667,7 @@
       "regulatory_date_label": "FDA safety advisory published",
       "match_mode": "active",
       "recall_scope": null,
-      "cui": null
+      "cui": "C0057341"
     },
     {
       "id": "BANNED_DMAA",
@@ -2627,7 +2681,8 @@
         "1,3-DMAA",
         "geranamine",
         "dimethylamylamine",
-        "dmaa"
+        "dmaa",
+        "1,3-dimethylamylamine hydrochloride"
       ],
       "reason": "DMAA (1,3-dimethylamylamine) is a synthetic aliphatic amine marketed falsely as derived from geranium oil. FDA issued warning letters starting in 2012 and has stated that DMAA is not a lawful dietary ingredient. It has been linked to heart attacks, strokes, deaths (including military personnel), and psychiatric events. Several product recalls were issued. The FTC also acted against companies making false natural-source claims. DMAA is not a dietary ingredient under 21 U.S.C. §321(ff). Products containing it are adulterated and subject to seizure.",
       "status": "banned",
@@ -2790,7 +2845,7 @@
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
       "recall_scope": null,
-      "cui": "C0044981"
+      "cui": "C3492032"
     },
     {
       "id": "BANNED_DMBA",
@@ -2803,7 +2858,8 @@
         "amp citrate",
         "4-amp citrate",
         "4-methyl-2-pentanamine",
-        "dmba"
+        "dmba",
+        "1,3-dimethylbutylamine hydrochloride"
       ],
       "status": "banned",
       "legal_status_enum": "not_lawful_as_supplement",
@@ -2869,7 +2925,7 @@
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
       "recall_scope": null,
-      "cui": "C0000677"
+      "cui": "C4076845"
     },
     {
       "id": "BANNED_DMHA",
@@ -2885,7 +2941,8 @@
         "amidrine",
         "2-amino-5-methylhexane",
         "2 amino 5 methylhexane",
-        "2-amino-5 methylhexane"
+        "2-amino-5 methylhexane",
+        "octodrine hcl"
       ],
       "reason": "DMHA (2-amino-6-methylheptane, also called 2-aminoisoheptane or Octodrine) is a synthetic aliphatic amine with sympathomimetic stimulant effects similar to DMAA. FDA has issued warning letters stating that DMHA is not a lawful dietary ingredient and that products containing it are adulterated. Like DMAA, it raises blood pressure, heart rate, and has been linked to cardiovascular events. It was widely used as a DMAA replacement after FDA's DMAA enforcement actions began. None of the DMAA class analogs are lawful supplement ingredients.",
       "status": "banned",
@@ -2963,7 +3020,9 @@
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
       "recall_scope": null,
-      "cui": "C0655222"
+      "cui": null,
+      "cui_status": "no_confirmed_umls_match",
+      "cui_note": "No confirmed exact UMLS concept was found for this supplement-market stimulant name; null CUI is intentional."
     },
     {
       "id": "BANNED_EPHEDRA",
@@ -3110,6 +3169,7 @@
         {
           "type": "fda_advisory",
           "title": "FDA: November 25, 2019 - Not a dietary ingredient",
+          "url": "https://www.fda.gov/food/dietary-supplements/dietary-supplement-ingredient-directory",
           "evidence_grade": "R",
           "date": "2019",
           "supports_claims": [
@@ -3292,7 +3352,7 @@
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
       "recall_scope": null,
-      "cui": null
+      "cui": "C0002406"
     },
     {
       "id": "RISK_GARCINIA_CAMBOGIA",
@@ -3398,7 +3458,7 @@
           {
             "date": "2026-02-18",
             "change": "Added to banned list. France banned 2025. 1 death + 9 liver transplants. FDA recalled Hydroxycut 2009. Australia mandatory warnings 2025.",
-            "reason": "online_safety_audit"
+            "by": "online_safety_audit"
           }
         ]
       },
@@ -3590,7 +3650,7 @@
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
       "recall_scope": null,
-      "cui": null
+      "cui": "C0528358"
     },
     {
       "id": "BANNED_IGF1",
@@ -3780,7 +3840,9 @@
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
       "recall_scope": null,
-      "cui": null
+      "cui": null,
+      "cui_status": "no_confirmed_umls_match",
+      "cui_note": "No confirmed exact UMLS concept was found for this peptide analogue name; null CUI is intentional."
     },
     {
       "id": "BANNED_METAL_FIBERS",
@@ -3833,6 +3895,7 @@
         {
           "type": "other",
           "title": "Health Canada Recall: July 25, 2024 - RA-84584 through RA-84605",
+          "url": "https://recalls-rappels.canada.ca/en/alert-recall/certain-lots-il-critters-and-vitafusion-vitamins-recalled-due-metal-wire-fragments",
           "evidence_grade": "R",
           "supports_claims": [],
           "evidence_summary": "Health Canada Recall: July 25, 2024 - RA-84584 through RA-84605"
@@ -3858,7 +3921,9 @@
       "regulatory_date_label": "First regulatory safety alert",
       "match_mode": "active",
       "recall_scope": null,
-      "cui": null
+      "cui": null,
+      "cui_status": "no_single_umls_concept",
+      "cui_note": "Contamination category covers multiple metal fiber and particle variants; no single ingredient-level UMLS concept is appropriate."
     },
     {
       "id": "BANNED_PEDIATRIC_FLUORIDE",
@@ -3989,7 +4054,9 @@
       "regulatory_date_label": "First regulatory safety alert",
       "match_mode": "active",
       "recall_scope": null,
-      "cui": null
+      "cui": null,
+      "cui_status": "no_single_umls_concept",
+      "cui_note": "Pediatric fluoride supplement entry spans multiple salts and dosage forms; no single ingredient-level UMLS concept is appropriate."
     },
     {
       "id": "BANNED_PHENIBUT",
@@ -4095,6 +4162,7 @@
         {
           "type": "fda_advisory",
           "title": "FDA warns about phenibut risks",
+          "url": "https://www.fda.gov/food/dietary-supplements/dietary-supplement-ingredient-directory",
           "date": "2019-04-10",
           "evidence_grade": "R",
           "supports_claims": [
@@ -4248,7 +4316,9 @@
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
       "recall_scope": null,
-      "cui": null
+      "cui": null,
+      "cui_status": "no_single_umls_concept",
+      "cui_note": "Partially hydrogenated oils are a class entry and the PHO abbreviation is ambiguous; no single ingredient-level UMLS concept is appropriate."
     },
     {
       "id": "BANNED_PICAMILON",
@@ -4257,7 +4327,8 @@
         "nicotinoyl-GABA",
         "pycamilon",
         "N-nicotinoyl-GABA",
-        "picamilon"
+        "picamilon",
+        "Pikamilon"
       ],
       "reason": "Picamilon is a synthetic compound formed by combining niacin with GABA, developed in the Soviet Union as a prescription drug for neurological conditions. FDA issued warning letters in 2015 confirming that picamilon does not meet the definition of a dietary ingredient under 21 U.S.C. §321(ff) — it is a synthetic chemical not found in conventional foods and was first investigated as a drug. Products containing it are adulterated. FDA requested manufacturers to stop selling picamilon-containing supplements, and several companies complied after receiving warning letters.",
       "status": "banned",
@@ -4445,7 +4516,7 @@
           {
             "date": "2026-02-18",
             "change": "Added to banned list. FDA considers it unapproved drug since 1998. EFSA 2025: no safe dose. Banned in AU/CH. 120 deaths from Kobayashi scandal.",
-            "reason": "online_safety_audit"
+            "by": "online_safety_audit"
           }
         ]
       },
@@ -4454,7 +4525,7 @@
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
       "recall_scope": null,
-      "cui": null
+      "cui": "C0763533"
     },
     {
       "id": "BANNED_S23",
@@ -4527,6 +4598,7 @@
         {
           "type": "fda_advisory",
           "title": "FDA Warning: October 31, 2017",
+          "url": "https://www.fda.gov/consumers/consumer-updates/fda-warns-use-selective-androgen-receptor-modulators-sarms-among-teens-young-adults",
           "evidence_grade": "R",
           "date": "2017",
           "supports_claims": [
@@ -4782,6 +4854,7 @@
         {
           "type": "fda_advisory",
           "title": "FDA: November 25, 2019 - Not a dietary ingredient",
+          "url": "https://www.fda.gov/food/dietary-supplements/dietary-supplement-ingredient-directory",
           "evidence_grade": "R",
           "date": "2019",
           "supports_claims": [
@@ -5184,7 +5257,7 @@
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
       "recall_scope": null,
-      "cui": null
+      "cui": "C0331122"
     },
     {
       "id": "BANNED_YK11",
@@ -5192,6 +5265,7 @@
       "aliases": [
         "yk11",
         "YK-11",
+        "yk 11",
         "(17α,20E)-17,20-[(1-methoxyethylidene)bis(oxy)]-3-oxo-19-norpregna-4,20-diene-21-carboxylic acid methyl ester"
       ],
       "reason": "YK-11 is a synthetic steroidal SARM/myostatin inhibitor — structurally it is a DHT derivative that acts as a partial agonist of the androgen receptor. Because it has a steroidal structure, it may also qualify as a designer anabolic steroid under the Anabolic Steroid Control Act. It is not FDA-approved, not a lawful dietary ingredient, and no safety data in humans exists. Risks include androgenic side effects, endocrine suppression, and uncharacterized hepatotoxicity. WADA prohibits it. Products containing YK-11 are adulterated.",
@@ -5230,6 +5304,7 @@
         {
           "type": "fda_advisory",
           "title": "FDA Warning: October 31, 2017",
+          "url": "https://www.fda.gov/consumers/consumer-updates/fda-warns-use-selective-androgen-receptor-modulators-sarms-among-teens-young-adults",
           "evidence_grade": "R",
           "date": "2017",
           "supports_claims": [
@@ -5258,13 +5333,16 @@
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
       "recall_scope": null,
-      "cui": null
+      "cui": null,
+      "cui_status": "no_confirmed_umls_match",
+      "cui_note": "No confirmed exact UMLS concept was found for this investigational SARM name; null CUI is intentional."
     },
     {
       "id": "HIGH_RISK_CHAPARRAL",
       "standard_name": "Chaparral",
       "aliases": [
         "larrea tridentata",
+        "larrea divaricata",
         "creosote bush",
         "greasewood",
         "chaparral extract",
@@ -5578,7 +5656,8 @@
         "arsenite",
         "arsenate",
         "arsenic (inorganic)",
-        "as"
+        "as",
+        "inorganic arsenic"
       ],
       "reason": "Inorganic arsenic is an IARC Group 1 human carcinogen linked to skin, lung, bladder, and kidney cancers at chronic dietary exposure levels. It also causes peripheral neuropathy, cardiovascular disease, and diabetes. Organic arsenic (found in seafood) is less toxic. EPA MCL for arsenic in drinking water: 10 mcg/L. California Prop 65 NSRL: 10 mcg/day. FDA action level for rice-based infant cereal: 100 ppb inorganic arsenic. In supplements, arsenic contamination is most common in rice protein, kelp, spirulina, certain Ayurvedic preparations, and marine-sourced ingredients. Testing for organic vs. inorganic speciation is essential for accurate risk assessment.",
       "status": "high_risk",
@@ -6159,7 +6238,7 @@
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
       "recall_scope": null,
-      "cui": null
+      "cui": "C2354537"
     },
     {
       "id": "NOOTROPIC_ADRAFINIL",
@@ -6515,7 +6594,10 @@
       "standard_name": "Flmodafinil",
       "aliases": [
         "CRL-40,940",
+        "CRL 40,940",
+        "crl 40,940",
         "bisfluoromodafinil",
+        "fl-modafinil",
         "lauflumide",
         "fluoromodafinil",
         "4′-fluoromodafinil",
@@ -6598,7 +6680,9 @@
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
       "recall_scope": null,
-      "cui": null
+      "cui": null,
+      "cui_status": "no_confirmed_umls_match",
+      "cui_note": "No confirmed exact UMLS concept was found for this research-chemical nootropic name; null CUI is intentional."
     },
     {
       "id": "NOOTROPIC_MODAFINIL",
@@ -7330,6 +7414,7 @@
         {
           "type": "wada_list",
           "title": "WADA: Prohibited List - S0 Non-approved substances",
+          "url": "https://www.wada-ama.org/en/resources/world-anti-doping-program/prohibited-list",
           "evidence_grade": "R",
           "supports_claims": [],
           "evidence_summary": "WADA: Prohibited List - S0 Non-approved substances"
@@ -7337,6 +7422,7 @@
         {
           "type": "fda_advisory",
           "title": "FDA: Warning letters - BPC-157",
+          "url": "https://www.fda.gov/food/dietary-supplements/dietary-supplement-ingredient-directory",
           "evidence_grade": "R",
           "supports_claims": [
             "regulatory_action"
@@ -7363,7 +7449,14 @@
       "regulatory_date": "2022-01-01",
       "regulatory_date_label": "FDA enforcement action",
       "match_mode": "active",
-      "recall_scope": null,
+      "recall_scope": {
+        "brand": "GE Labs Ykarine",
+        "formulations": null,
+        "lots": null,
+        "effective_from": "2025-12-02",
+        "effective_to": null,
+        "note": "FDA warning-letter enforcement for supplement product containing undeclared trendione."
+      },
       "cui": "C0248070"
     },
     {
@@ -7377,7 +7470,8 @@
         "tanning peptide",
         "tanning injection",
         "afamelanotide precursor",
-        "melanotan ii"
+        "melanotan ii",
+        "melanotan-II"
       ],
       "reason": "Melanotan II is a synthetic analog of alpha-MSH (melanocyte-stimulating hormone) that stimulates melanogenesis, erection, and appetite suppression. It is not FDA-approved, not a dietary ingredient, and has no NDI notification. FDA has issued import alerts and warning letters. Serious safety concerns include: melanoma risk (promoting pre-existing melanocytic lesions), nausea and vomiting, spontaneous penile erections, and the near-universal practice of injection by users — creating sterility and contamination risks that do not apply to oral supplements.",
       "status": "banned",
@@ -7482,7 +7576,14 @@
       "regulatory_date": "2009-01-01",
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
-      "recall_scope": null,
+      "recall_scope": {
+        "brand": "TITAN SARMS LLC Products",
+        "formulations": null,
+        "lots": null,
+        "effective_from": "2025-12-12",
+        "effective_to": null,
+        "note": "FDA warning-letter enforcement covering SARMs products marketed as dietary supplements."
+      },
       "cui": "C0212602"
     },
     {
@@ -7490,6 +7591,9 @@
       "standard_name": "TB-500 (Thymosin Beta-4)",
       "aliases": [
         "thymosin β4",
+        "thymosin beta 4",
+        "tb-500",
+        "tb 500",
         "tb500",
         "repair peptide",
         "thymosin beta-4",
@@ -7546,6 +7650,7 @@
         {
           "type": "wada_list",
           "title": "WADA: Prohibited List - S0 Non-approved substances",
+          "url": "https://www.wada-ama.org/en/resources/world-anti-doping-program/prohibited-list",
           "evidence_grade": "R",
           "supports_claims": [],
           "evidence_summary": "WADA: Prohibited List - S0 Non-approved substances"
@@ -7553,6 +7658,7 @@
         {
           "type": "fda_advisory",
           "title": "FDA: Warning letters - TB-500",
+          "url": "https://precision.fda.gov/uniisearch/srs/unii/QHK6Z47GTG",
           "evidence_grade": "R",
           "supports_claims": [
             "regulatory_action"
@@ -7580,7 +7686,9 @@
       "regulatory_date_label": "FDA enforcement action",
       "match_mode": "active",
       "recall_scope": null,
-      "cui": null
+      "cui": null,
+      "cui_status": "no_confirmed_umls_match",
+      "cui_note": "No confirmed exact UMLS concept was found for this marketed peptide analogue name; null CUI is intentional."
     },
     {
       "id": "PHARMA_DAPOXETINE",
@@ -7628,6 +7736,7 @@
         {
           "type": "fda_advisory",
           "title": "FDA: Tainted Sexual Enhancement Products",
+          "url": "https://www.fda.gov/drugs/medication-health-fraud-notifications/sexual-enhancement-and-energy-product-notifications",
           "evidence_grade": "R",
           "supports_claims": [
             "regulatory_action"
@@ -7843,7 +7952,9 @@
       "regulatory_date_label": "WADA prohibition effective",
       "match_mode": "disabled",
       "recall_scope": null,
-      "cui": null
+      "cui": null,
+      "cui_status": "no_single_umls_concept",
+      "cui_note": "Analogue watchlist spans multiple cardarine derivatives; no single ingredient-level UMLS concept is appropriate."
     },
     {
       "id": "RECALLED_GE_LABS_YKARINE",
@@ -7924,7 +8035,14 @@
       "regulatory_date": "2025-12-02",
       "regulatory_date_label": "First FDA enforcement action",
       "match_mode": "active",
-      "recall_scope": null,
+      "recall_scope": {
+        "brand": "GE Labs Ykarine",
+        "formulations": null,
+        "lots": null,
+        "effective_from": "2025-12-02",
+        "effective_to": null,
+        "note": "FDA warning-letter enforcement for supplement product containing undeclared trendione."
+      },
       "cui": null
     },
     {
@@ -9178,7 +9296,14 @@
       "regulatory_date": "2025-12-12",
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
-      "recall_scope": null,
+      "recall_scope": {
+        "brand": "TITAN SARMS LLC Products",
+        "formulations": null,
+        "lots": null,
+        "effective_from": "2025-12-12",
+        "effective_to": null,
+        "note": "FDA warning-letter enforcement covering SARMs products marketed as dietary supplements."
+      },
       "cui": null
     },
     {
@@ -9393,7 +9518,9 @@
       "regulatory_date_label": "First regulatory safety alert",
       "match_mode": "active",
       "recall_scope": null,
-      "cui": null
+      "cui": null,
+      "cui_status": "no_single_umls_concept",
+      "cui_note": "Inorganic germanium entry spans multiple salts and oxides; no single ingredient-level UMLS concept is appropriate."
     },
     {
       "id": "RISK_GREEN_TEA_EXTRACT_HIGH",
@@ -9494,7 +9621,9 @@
       "regulatory_date_label": "Safety advisory published",
       "match_mode": "active",
       "recall_scope": null,
-      "cui": null
+      "cui": null,
+      "cui_status": "no_single_umls_concept",
+      "cui_note": "Dose-conditioned green tea extract risk entry is broader than one ingredient concept; no single ingredient-level UMLS concept is appropriate."
     },
     {
       "id": "RISK_KAVA",
@@ -9859,7 +9988,7 @@
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
       "recall_scope": null,
-      "cui": null
+      "cui": "C1197867"
     },
     {
       "id": "RISK_YOHIMBE",
@@ -10606,7 +10735,9 @@
       "regulatory_date_label": "DEA scheduling effective",
       "match_mode": "active",
       "recall_scope": null,
-      "cui": null
+      "cui": null,
+      "cui_status": "no_single_umls_concept",
+      "cui_note": "Entry combines mushroom species and active constituents; no single ingredient-level UMLS concept is appropriate."
     },
     {
       "id": "SCHED_PSILOCYBIN",
@@ -10863,13 +10994,17 @@
       "regulatory_date_label": "Federal ban effective",
       "match_mode": "disabled",
       "recall_scope": null,
-      "cui": null
+      "cui": null,
+      "cui_status": "no_single_umls_concept",
+      "cui_note": "Policy watchlist spans many synthetic anabolic steroids; no single ingredient-level UMLS concept is appropriate."
     },
     {
       "id": "SPIKE_CHLOROPRETADALAFIL",
       "standard_name": "Chloropretadalafil",
       "aliases": [
         "chloro-tadalafil",
+        "chloro pretadalafil",
+        "chloropre tadalafil",
         "designer tadalafil analog",
         "chloropretadalafil"
       ],
@@ -10909,6 +11044,7 @@
         {
           "type": "fda_advisory",
           "title": "FDA Warning: Health Fixer - April 29, 2025",
+          "url": "https://www.fda.gov/drugs/medication-health-fraud-notifications/health-fixer-and-health-fixer-plus-may-be-harmful-due-hidden-drug-ingredients",
           "evidence_grade": "R",
           "date": "2025",
           "supports_claims": [
@@ -10937,7 +11073,9 @@
       "regulatory_date_label": "First FDA enforcement action",
       "match_mode": "active",
       "recall_scope": null,
-      "cui": null
+      "cui": null,
+      "cui_status": "no_confirmed_umls_match",
+      "cui_note": "No confirmed exact UMLS concept was found for this undeclared PDE-5 analogue name; null CUI is intentional."
     },
     {
       "id": "SPIKE_DEXAMETHASONE",
@@ -10984,6 +11122,7 @@
         {
           "type": "fda_advisory",
           "title": "FDA: Multiple recalls 2024",
+          "url": "https://www.fda.gov/drugs/medication-health-fraud/avoiding-products-contaminated-hidden-ingredients",
           "evidence_grade": "R",
           "date": "2024",
           "supports_claims": [
@@ -11074,6 +11213,7 @@
         {
           "type": "fda_advisory",
           "title": "FDA: Black box warning - NSAIDs",
+          "url": "https://www.fda.gov/drugs/medication-health-fraud/pain-and-arthritis-products-containing-hidden-ingredients",
           "evidence_grade": "R",
           "supports_claims": [
             "regulatory_action"
@@ -11148,6 +11288,7 @@
         {
           "type": "fda_advisory",
           "title": "FDA: Tainted Weight Loss Products",
+          "url": "https://www.fda.gov/drugs/frequently-asked-questions-popular-topics/questions-and-answers-about-fdas-initiative-against-contaminated-weight-loss-products",
           "evidence_grade": "R",
           "supports_claims": [
             "regulatory_action"
@@ -11182,6 +11323,8 @@
       "standard_name": "7-Methylkratom",
       "aliases": [
         "7-MK",
+        "7 methylkratom",
+        "7-methyl kratom",
         "methylated kratom extract",
         "enhanced kratom",
         "7-methyl mitragynine",
@@ -11223,6 +11366,7 @@
         {
           "type": "fda_advisory",
           "title": "FDA: 2025 warnings on synthetic kratom derivatives",
+          "url": "https://www.fda.gov/news-events/press-announcements/fda-seizes-7-oh-opioids-protect-american-consumers",
           "evidence_grade": "R",
           "date": "2025",
           "supports_claims": [
@@ -11251,7 +11395,9 @@
       "regulatory_date_label": "First FDA enforcement action",
       "match_mode": "active",
       "recall_scope": null,
-      "cui": null
+      "cui": null,
+      "cui_status": "no_confirmed_umls_match",
+      "cui_note": "No confirmed exact UMLS concept was found for this kratom-derived analogue name; null CUI is intentional."
     },
     {
       "id": "SPIKE_PHENOLPHTHALEIN",
@@ -11311,6 +11457,7 @@
         {
           "type": "other",
           "title": "IARC: Group 2B classification",
+          "url": "https://monographs.iarc.who.int/iarc-monographs-volume-77/",
           "evidence_grade": "R",
           "supports_claims": [],
           "evidence_summary": "IARC: Group 2B classification"
@@ -11318,6 +11465,7 @@
         {
           "type": "fda_advisory",
           "title": "FDA: 1999 - Removal from OTC laxatives",
+          "url": "https://www.fda.gov/drugs/frequently-asked-questions-popular-topics/questions-and-answers-about-fdas-initiative-against-contaminated-weight-loss-products",
           "evidence_grade": "R",
           "date": "1999",
           "supports_claims": [
@@ -11354,6 +11502,7 @@
       "aliases": [
         "modified sildenafil",
         "designer sildenafil",
+        "propoxyphenyl-sildenafil",
         "propoxyphenyl sildenafil",
         "propoxyphenylsildenafil"
       ],
@@ -11393,6 +11542,7 @@
         {
           "type": "fda_advisory",
           "title": "FDA Warning: Health Fixer - April 29, 2025",
+          "url": "https://www.fda.gov/drugs/medication-health-fraud-notifications/health-fixer-and-health-fixer-plus-may-be-harmful-due-hidden-drug-ingredients",
           "evidence_grade": "R",
           "date": "2025",
           "supports_claims": [
@@ -11421,7 +11571,9 @@
       "regulatory_date_label": "First FDA enforcement action",
       "match_mode": "active",
       "recall_scope": null,
-      "cui": null
+      "cui": null,
+      "cui_status": "no_confirmed_umls_match",
+      "cui_note": "No confirmed exact UMLS concept was found for this undeclared PDE-5 analogue name; null CUI is intentional."
     },
     {
       "id": "SPIKE_SILDENAFIL",
@@ -11431,7 +11583,8 @@
         "revatio",
         "PDE5 inhibitor",
         "sildenafil citrate",
-        "sildenafil"
+        "sildenafil",
+        "Sildenafil Citrate"
       ],
       "reason": "Sildenafil (Viagra) is a prescription PDE5 inhibitor for erectile dysfunction. When added undeclared to supplements — typically sexual enhancement products — users can experience life-threatening hypotension if combined with nitrates (used for angina/heart disease), as well as vision loss and cardiovascular events. FDA operates a dedicated Sexual Enhancement Fraud program due to the prevalence of this adulterant. Products with undeclared sildenafil are adulterated with a prescription drug, regardless of marketing claims.",
       "status": "banned",
@@ -11469,6 +11622,7 @@
         {
           "type": "fda_advisory",
           "title": "FDA: Tainted Sexual Enhancement Products",
+          "url": "https://www.fda.gov/drugs/medication-health-fraud-notifications/sexual-enhancement-and-energy-product-notifications",
           "evidence_grade": "R",
           "supports_claims": [
             "regulatory_action"
@@ -11496,7 +11650,7 @@
       "regulatory_date_label": "First FDA enforcement action",
       "match_mode": "active",
       "recall_scope": null,
-      "cui": "C1318700"
+      "cui": "C0529793"
     },
     {
       "id": "SPIKE_TADALAFIL",
@@ -11543,6 +11697,7 @@
         {
           "type": "fda_advisory",
           "title": "FDA: Tainted Sexual Enhancement Products",
+          "url": "https://www.fda.gov/drugs/medication-health-fraud-notifications/sexual-enhancement-and-energy-product-notifications",
           "evidence_grade": "R",
           "supports_claims": [
             "regulatory_action"
@@ -11633,6 +11788,7 @@
         {
           "type": "fda_advisory",
           "title": "FDA: 2025 warnings on tianeptine analogs",
+          "url": "https://www.fda.gov/food/information-select-dietary-supplement-ingredients-and-other-substances/tianeptine-dietary-supplements",
           "evidence_grade": "R",
           "date": "2025",
           "supports_claims": [
@@ -11666,7 +11822,9 @@
       "regulatory_date_label": "First FDA enforcement action",
       "match_mode": "disabled",
       "recall_scope": null,
-      "cui": null
+      "cui": null,
+      "cui_status": "no_single_umls_concept",
+      "cui_note": "Policy watchlist spans multiple tianeptine analogues; no single ingredient-level UMLS concept is appropriate."
     },
     {
       "id": "STIM_ALPHA_PHP",
@@ -11752,7 +11910,7 @@
       "regulatory_date_label": "DEA scheduling effective",
       "match_mode": "active",
       "recall_scope": null,
-      "cui": null
+      "cui": "C4743057"
     },
     {
       "id": "STIM_METHYLHEXANAMINE_ANALOGS",
@@ -11869,7 +12027,9 @@
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "disabled",
       "recall_scope": null,
-      "cui": null
+      "cui": null,
+      "cui_status": "no_single_umls_concept",
+      "cui_note": "Policy watchlist spans multiple methylhexanamine analogues; no single ingredient-level UMLS concept is appropriate."
     },
     {
       "id": "SYNTH_CUMYL_PICA",
@@ -12021,6 +12181,7 @@
         {
           "type": "wada_list",
           "title": "WADA: Prohibited List - Cannabis",
+          "url": "https://www.wada-ama.org/en/resources/world-anti-doping-program/prohibited-list",
           "evidence_grade": "R",
           "supports_claims": [],
           "evidence_summary": "WADA: Prohibited List - Cannabis"
@@ -12046,7 +12207,9 @@
       "regulatory_date_label": "WADA prohibition effective",
       "match_mode": "active",
       "recall_scope": null,
-      "cui": null
+      "cui": null,
+      "cui_status": "no_single_umls_concept",
+      "cui_note": "Entry combines cannabis and THC policy coverage; no single ingredient-level UMLS concept is appropriate."
     },
     {
       "id": "WADA_TRAMADOL",
@@ -12094,6 +12257,7 @@
         {
           "type": "wada_list",
           "title": "WADA: 2024 Prohibited List - Tramadol added",
+          "url": "https://www.wada-ama.org/en/resources/world-anti-doping-program/prohibited-list",
           "evidence_grade": "R",
           "supports_claims": [],
           "evidence_summary": "WADA: 2024 Prohibited List - Tramadol added"
@@ -12207,7 +12371,7 @@
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
       "recall_scope": null,
-      "cui": null
+      "cui": "C0604275"
     },
     {
       "id": "SPIKE_METHOCARBAMOL",
@@ -12254,6 +12418,7 @@
         {
           "type": "fda_advisory",
           "title": "FDA Safety Alert: Undeclared drug ingredients in dietary supplements",
+          "url": "https://www.fda.gov/drugs/medication-health-fraud-notifications/ultra-advanc3-and-ultra-advanc3-gold-may-be-harmful-due-hidden-drug-ingredients",
           "evidence_grade": "R",
           "date": "2025",
           "supports_claims": [
@@ -12457,11 +12622,13 @@
           {
             "date": "2026-02-23",
             "change": "Added from unmapped P3 prohormone routing pass",
-            "reason": "caps_tabs_unmapped_laxogenin"
+            "by": "caps_tabs_unmapped_laxogenin"
           }
         ]
       },
-      "cui": null
+      "cui": null,
+      "cui_status": "no_confirmed_umls_match",
+      "cui_note": "No confirmed exact UMLS concept was found for this supplement-market steroid derivative name; null CUI is intentional."
     },
     {
       "id": "ADD_CASCARA_SAGRADA",
@@ -12539,7 +12706,7 @@
           {
             "date": "2026-02-18",
             "change": "Moved from botanical_ingredients to harmful_additives. FDA stripped GRASE 2002. EFSA 2018/2024: HADs genotoxic.",
-            "reason": "online_safety_audit"
+            "by": "online_safety_audit"
           }
         ]
       },
@@ -12606,42 +12773,42 @@
           {
             "date": "2026-01-08",
             "change": "Backfilled credible references",
-            "reason": "Phase 3 evidence completion"
+            "by": "Phase 3 evidence completion"
           },
           {
             "date": "2026-01-08",
             "change": "Updated reviewed_by to team:b_harmful_additives",
-            "reason": "Review metadata cleanup"
+            "by": "Review metadata cleanup"
           },
           {
             "date": "2026-01-08",
             "change": "Confidence downgraded due to insufficient citations",
-            "reason": "Evidence gating"
+            "by": "Evidence gating"
           },
           {
             "date": "2026-01-08",
             "change": "No authoritative dose guidance identified; dose_thresholds not added",
-            "reason": "Dose threshold backfill"
+            "by": "Dose threshold backfill"
           },
           {
             "date": "2026-01-08",
             "change": "Populated jurisdiction provenance fields (source_ref, effective_range.start)",
-            "reason": "Jurisdiction provenance"
+            "by": "Jurisdiction provenance"
           },
           {
             "date": "2026-01-08",
             "change": "Added authoritative references",
-            "reason": "Evidence backfill"
+            "by": "Evidence backfill"
           },
           {
             "date": "2026-01-08",
             "change": "Validated after adding authoritative citations",
-            "reason": "Evidence backfill"
+            "by": "Evidence backfill"
           },
           {
             "date": "2026-02-16",
             "change": "Normalized aliases/label_tokens and reduced overlap collisions for deterministic supplement matching",
-            "reason": "schema_consistency_and_precision"
+            "by": "schema_consistency_and_precision"
           }
         ]
       },
@@ -12714,16 +12881,16 @@
           {
             "date": "2026-02-23",
             "change": "Added T2/diiodothyronine hormone-analog routing from recurrent unmapped list",
-            "reason": "caps_tabs_unmapped_thyroid_analog"
+            "by": "caps_tabs_unmapped_thyroid_analog"
           },
           {
             "date": "2026-03-01",
             "change": "Removed duplicate aliases",
-            "reason": "harmful_additives_comprehensive_audit"
+            "by": "harmful_additives_comprehensive_audit"
           }
         ]
       },
-      "cui": null
+      "cui": "C0891893"
     },
     {
       "id": "ADD_DOCUSATE_SODIUM",
@@ -12761,7 +12928,7 @@
         {
           "type": "regulatory",
           "title": "FDA OTC monograph - docusate sodium as stool softener",
-          "url": "",
+          "url": "https://www.accessdata.fda.gov/scripts/cder/omuf/",
           "evidence_grade": "R",
           "confidence": "medium",
           "supports_claims": [
@@ -12781,7 +12948,7 @@
           {
             "date": "2026-03-01",
             "change": "Added US jurisdictional status",
-            "reason": "harmful_additives_comprehensive_audit"
+            "by": "harmful_additives_comprehensive_audit"
           }
         ]
       },
@@ -12849,7 +13016,7 @@
           {
             "date": "2026-02-22",
             "change": "Initial entry created from capsules unmapped safety audit",
-            "reason": "capsules_clean_unmapped_safety"
+            "by": "capsules_clean_unmapped_safety"
           }
         ]
       },
@@ -12860,7 +13027,9 @@
       "standard_name": "N-Phenethyl Dimethylamine",
       "aliases": [
         "n-phenethyl dimethylamine",
+        "n phenethyl dimethylamine",
         "n,n-dimethylphenethylamine",
+        "n,n dimethylphenethylamine",
         "eria jarensis extract",
         "eria jarensis",
         "n-phenethyldimethylamine",
@@ -12922,11 +13091,13 @@
           {
             "date": "2026-02-23",
             "change": "Normalized legacy partial record to schema-complete harmful entry",
-            "reason": "schema_integrity_p3"
+            "by": "schema_integrity_p3"
           }
         ]
       },
-      "cui": null
+      "cui": null,
+      "cui_status": "no_confirmed_umls_match",
+      "cui_note": "No confirmed exact UMLS concept was found for this stimulant analogue name; null CUI is intentional."
     },
     {
       "id": "ADD_RED3",
@@ -13024,7 +13195,7 @@
           {
             "date": "2026-02-22",
             "change": "Initial entry created — FDA-banned colorant",
-            "reason": "safety_routing_gap"
+            "by": "safety_routing_gap"
           }
         ]
       },
@@ -13065,7 +13236,7 @@
           "type": "regulatory",
           "authority": "FDA",
           "citation": "FDA NDA 019998 - Chemet (succimer) approval for lead poisoning chelation",
-          "url": null,
+          "url": "https://www.accessdata.fda.gov/drugsatfda_docs/label/2018/019998s021lbl.pdf",
           "published_date": "1991-01-29",
           "evidence_grade": "R",
           "confidence": "high",
@@ -13083,16 +13254,16 @@
           {
             "date": "2026-03-01",
             "change": "Moved from other_ingredients.json — does not belong in safe excipient DB",
-            "reason": "other_ingredients_deep_audit"
+            "by": "other_ingredients_deep_audit"
           },
           {
             "date": "2026-03-06",
             "change": "Merged duplicate 100 mg and 250 mg DMSA rows into one canonical banned ingredient",
-            "reason": "audit_false_duplicate_matching"
+            "by": "audit_false_duplicate_matching"
           }
         ]
       },
-      "cui": null
+      "cui": "C0012384"
     },
     {
       "id": "BANNED_DNP",
@@ -13154,7 +13325,7 @@
           {
             "date": "2026-03-06",
             "change": "Added canonical DNP entry for supplement adulteration and fatal toxicity coverage",
-            "reason": "audit_missing_high_risk_substance"
+            "by": "audit_missing_high_risk_substance"
           }
         ]
       },
@@ -13219,7 +13390,7 @@
           {
             "date": "2026-03-06",
             "change": "Added usnic acid entry to close hepatotoxic supplement-ingredient gap",
-            "reason": "audit_missing_high_risk_substance"
+            "by": "audit_missing_high_risk_substance"
           }
         ]
       },
@@ -13285,7 +13456,7 @@
           {
             "date": "2026-03-06",
             "change": "Added clenbuterol entry for stimulant/adulterant safety screening",
-            "reason": "audit_missing_high_risk_substance"
+            "by": "audit_missing_high_risk_substance"
           }
         ]
       },
@@ -13345,11 +13516,11 @@
           {
             "date": "2026-03-06",
             "change": "Added aconite entry for toxic botanical screening",
-            "reason": "audit_missing_high_risk_substance"
+            "by": "audit_missing_high_risk_substance"
           }
         ]
       },
-      "cui": null
+      "cui": "C0330240"
     },
     {
       "id": "ADD_SODIUM_TETRABORATE",
@@ -13394,7 +13565,7 @@
           "type": "regulatory",
           "authority": "ECHA",
           "citation": "ECHA SVHC identification ED/61/2010 — Sodium tetraborate decahydrate (borax)",
-          "url": null,
+          "url": "https://echa.europa.eu/substance-information/-/substanceinfo/100.028.801",
           "published_date": "2010-06-18",
           "evidence_grade": "R",
           "confidence": "high",
@@ -13412,11 +13583,11 @@
           {
             "date": "2026-03-01",
             "change": "Moved from other_ingredients.json — does not belong in safe excipient DB",
-            "reason": "other_ingredients_deep_audit"
+            "by": "other_ingredients_deep_audit"
           }
         ]
       },
-      "cui": null
+      "cui": "C0053942"
     },
     {
       "id": "ADD_THYROGEN",
@@ -13450,7 +13621,7 @@
           "type": "regulatory",
           "authority": "FDA",
           "citation": "FDA BLA 125104 — Thyrogen (thyrotropin alfa) biologic approval",
-          "url": null,
+          "url": "https://www.accessdata.fda.gov/drugsatfda_docs/nda/98/20898_Thyrogen.cfm",
           "published_date": "1998-11-30",
           "evidence_grade": "R",
           "confidence": "high",
@@ -13468,11 +13639,11 @@
           {
             "date": "2026-03-01",
             "change": "Moved from other_ingredients.json — does not belong in safe excipient DB",
-            "reason": "other_ingredients_deep_audit"
+            "by": "other_ingredients_deep_audit"
           }
         ]
       },
-      "cui": "C5136972"
+      "cui": "C2587204"
     },
     {
       "id": "ADD_SIMETHICONE",
@@ -13508,7 +13679,7 @@
           "type": "regulatory",
           "authority": "FDA",
           "citation": "21 CFR 332.10 — OTC antiflatulent drug products, simethicone monograph",
-          "url": null,
+          "url": "https://www.accessdata.fda.gov/scripts/cder/omuf/index.cfm?event=monographsearch&val=Simethicone",
           "published_date": null,
           "evidence_grade": "R",
           "confidence": "high",
@@ -13526,7 +13697,7 @@
           {
             "date": "2026-03-01",
             "change": "Moved from other_ingredients.json — does not belong in safe excipient DB",
-            "reason": "other_ingredients_deep_audit"
+            "by": "other_ingredients_deep_audit"
           }
         ]
       },
@@ -13537,8 +13708,10 @@
       "standard_name": "Hexadrone (6-Chloro-androst-4-ene-3-one-17b-ol)",
       "aliases": [
         "hexadrone",
+        "hexa-drone",
         "6-chloro-androst-4-ene-3-one-17b-ol",
         "6-chloro-4-androstene-3-one-17b-ol",
+        "6 chloro androst 4 ene 3 one 17b ol",
         "6-chloro androstene"
       ],
       "entity_type": "ingredient",
@@ -13564,7 +13737,7 @@
           "type": "regulatory",
           "authority": "US_Congress",
           "citation": "Designer Anabolic Steroid Control Act of 2014, Pub.L. 113-260",
-          "url": null,
+          "url": "https://www.congress.gov/bill/113th-congress/house-bill/4771/text/pl?overview=closed",
           "published_date": "2014-12-18",
           "evidence_grade": "R",
           "confidence": "high",
@@ -13582,11 +13755,13 @@
           {
             "date": "2026-03-01",
             "change": "Moved from other_ingredients.json — does not belong in safe excipient DB",
-            "reason": "other_ingredients_deep_audit"
+            "by": "other_ingredients_deep_audit"
           }
         ]
       },
-      "cui": null
+      "cui": null,
+      "cui_status": "no_confirmed_umls_match",
+      "cui_note": "No confirmed exact UMLS concept was found for this designer steroid name; null CUI is intentional."
     },
     {
       "id": "BANNED_ADD_TITANIUM_DIOXIDE",
@@ -13955,7 +14130,9 @@
           }
         ]
       },
-      "cui": null
+      "cui": null,
+      "cui_status": "no_single_umls_concept",
+      "cui_note": "Food-color entry spans formulation and coloring variants; no single ingredient-level UMLS concept is appropriate."
     },
     {
       "id": "BANNED_ADD_OCTOPAMINE",
@@ -14090,19 +14267,32 @@
         "next_review_due": "2026-09-16",
         "reviewed_by": "manual_entry",
         "change_log": [
-          "2026-03-16: Initial entry added — deterenol confirmed not lawful supplement ingredient (WADA prohibited; stimulant risk)"
+          {
+            "date": "2026-03-16",
+            "change": "Initial entry added — deterenol confirmed not lawful supplement ingredient (WADA prohibited; stimulant risk)",
+            "by": "manual_entry"
+          }
         ]
       },
-      "references": [
+      "references_structured": [
         {
+          "type": "pubmed",
           "title": "Deterenol and octodrine in sports and dietary supplements",
           "url": "https://pubmed.ncbi.nlm.nih.gov/32927348/",
-          "evidence_summary": "Deterenol present in supplements and associated with stimulant exposure concerns."
+          "evidence_summary": "Deterenol present in supplements and associated with stimulant exposure concerns.",
+          "supports_claims": [
+            "clinical_outcomes",
+            "regulatory_action"
+          ]
         },
         {
+          "type": "wada_list",
           "title": "WADA prohibited list",
-          "url": "https://www.wada-ama.org/en/prohibited-list",
-          "evidence_summary": "Deterenol listed among prohibited beta-2 agonist / stimulant-related ingredients in sport policy context."
+          "url": "https://www.wada-ama.org/en/resources/world-anti-doping-program/prohibited-list",
+          "evidence_summary": "Deterenol listed among prohibited beta-2 agonist / stimulant-related ingredients in sport policy context.",
+          "supports_claims": [
+            "regulatory_action"
+          ]
         }
       ],
       "cui": "C0131209"
@@ -14180,7 +14370,11 @@
         "next_review_due": "2026-09-16",
         "reviewed_by": "manual_entry",
         "change_log": [
-          "2026-03-16: Initial entry added — Acorus calamus banned per 21 CFR 189.140 (beta-asarone carcinogen)"
+          {
+            "date": "2026-03-16",
+            "change": "Initial entry added — Acorus calamus banned per 21 CFR 189.140 (beta-asarone carcinogen)",
+            "by": "manual_entry"
+          }
         ]
       },
       "supersedes_ids": [],
@@ -14282,6 +14476,7 @@
         {
           "type": "monograph",
           "title": "IARC Monographs Volume 100C — Chromium(VI) Compounds",
+          "url": "https://publications.iarc.who.int/_publications/media/download/5224/5637a4f4ad9cfd4e81ab40a8fa057015a3e8911b.pdf",
           "evidence_grade": "A",
           "supports_claims": [
             "carcinogenicity",
@@ -14291,6 +14486,7 @@
         {
           "type": "government_report",
           "title": "NTP TR-546: Toxicology and Carcinogenesis Studies of Sodium Dichromate Dihydrate in F344/N Rats and B6C3F1 Mice (Drinking Water Studies), 2008",
+          "url": "https://ntp.niehs.nih.gov/sites/default/files/ntp/htdocs/lt_rpts/tr546.pdf",
           "evidence_grade": "A",
           "supports_claims": [
             "oral_carcinogenicity"
@@ -14299,6 +14495,7 @@
         {
           "type": "regulatory",
           "title": "EPA IRIS Assessment: Chromium(VI) — Group A Human Carcinogen",
+          "url": "https://iris.epa.gov/Document/%26deid%3D51507",
           "evidence_grade": "A",
           "supports_claims": [
             "regulatory_status"
@@ -14307,15 +14504,18 @@
       ],
       "regulatory_date": "2012-01-01",
       "regulatory_date_label": "IARC Group 1 classification (Vol 100C, 2012)",
+      "source_category": "high_risk_ingredients",
+      "entity_type": "contaminant",
       "review": {
         "status": "validated",
         "last_reviewed_at": "2026-03-22",
+        "next_review_due": "2026-09-22",
         "reviewed_by": "chromium_vi_migration",
         "change_log": [
           {
             "date": "2026-03-22",
             "change": "Migrated from harmful_additives.json (was ADD_CHROMIUM_HEXAVALENT). IARC Group 1, EPA Group A, banned in all jurisdictions. Added negative_match_terms for Cr(III) supplement forms.",
-            "reason": "chromium_vi_migration_to_banned_recalled"
+            "by": "chromium_vi_migration_to_banned_recalled"
           }
         ]
       },
