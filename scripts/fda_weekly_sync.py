@@ -17,17 +17,25 @@ Usage:
 Options:
     --days N     Look back N days (default: 7)
     --output     Output report path (default: fda_sync_report_YYYYMMDD.json)
+    --api-key    openFDA API key (or set OPENFDA_API_KEY env var)
 """
 
 import argparse
 import json
+import os
 import re
 import sys
+import time
 import xml.etree.ElementTree as ET
 from datetime import datetime, timedelta, timezone
 from email.utils import parsedate_to_datetime
 from pathlib import Path
 
+SCRIPT_DIR = Path(__file__).resolve().parent
+if str(SCRIPT_DIR) not in sys.path:
+    sys.path.insert(0, str(SCRIPT_DIR))
+
+import env_loader  # noqa: F401 — loads .env into os.environ
 import requests
 
 
@@ -35,6 +43,12 @@ import requests
 
 DATA_FILE = Path(__file__).parent / "data" / "banned_recalled_ingredients.json"
 OPENFDA_BASE = "https://api.fda.gov"
+OPENFDA_API_KEY = os.environ.get("OPENFDA_API_KEY", "")
+MAX_RETRIES = 3
+RETRY_DELAY = 5  # seconds
+
+# WADA last update tracking — update this when WADA list is synced
+WADA_LAST_UPDATED = "2026-01-15"
 
 # ─── Supplement Detection ──────────────────────────────────────────────────────
 
@@ -268,6 +282,7 @@ KNOWN_SUBSTANCES = [
 SKIP_REASON_PATTERNS = [
     # Undeclared allergens with no dangerous substance
     r"undeclared\s+(milk|soy|wheat|peanut|tree nut|egg|fish|shellfish|sesame)\b(?!.*undeclared\s+(?:drug|pharmaceutical|ingredient|substance))",
+    r"\b(?:does\s+not\s+declare|fails?\s+to\s+declare|missing)\s+.*\b(milk|soy|wheat|peanut|tree nut|egg|fish|shellfish|sesame)\s+allergen\b",
     # Temperature / cold chain failures
     r"\btemperature\s+(?:abuse|excursion|control)\b",
     r"\bbroken\s+cold\s+chain\b",
@@ -275,6 +290,40 @@ SKIP_REASON_PATTERNS = [
     r"\b(wrong|incorrect|missing)\s+(label|labeling|package|packaging)\b(?!.*undeclared\s+(?:drug|pharmaceutical|ingredient))",
     # Underfill / product quantity
     r"\b(underfill|overfill|quantity|shortage)\b",
+]
+
+CONVENTIONAL_FOOD_INDICATORS = [
+    "tamale", "cheese", "salsa", "tortilla", "bread", "pizza", "soup",
+    "sauce", "frozen meal", "ice cream", "cookie", "chip", "cracker",
+    "cereal", "pasta", "salad", "hummus", "dip", "butter", "cream cheese",
+    "yogurt", "granola", "milk",
+]
+
+SUPPLEMENT_FORM_INDICATORS = [
+    "dietary supplement", "liquid dietary supplement", "capsule", "capsules",
+    "tablet", "tablets", "softgel", "softgels", "gummy", "gummies",
+    "powder", "powders", "drink shot", "shot", "veggie capsule",
+    "dropper", "tincture", "sachet",
+]
+
+DEVICE_INDICATORS = [
+    "pump", "cassette", "insufflation", "catheter", "device", "ventilator",
+    "infusion", "monitor", "stapler", "prep pad", "alcohol pad", "swab",
+    "needle", "syringe", "tubing", "heating pad", "cryoprobe", "implant",
+    "stent", "prosthesis", "dialysis", "dressing", "sterile barrier",
+    "anti-choking", "biosimilar", "drugs@fda", "drug safety communication",
+    "boxed warning", "faers", "aers", "user fee act", "fda-track",
+]
+
+RSS_RELEVANT_LINK_HINTS = [
+    "/food/dietary-supplements/",
+    "/drugs/medication-health-fraud",
+]
+
+RSS_RELEVANT_TEXT_HINTS = [
+    "hidden ingredient", "hidden drug ingredient", "tainted product",
+    "contaminated hidden ingredients", "medication health fraud",
+    "dietary supplement", "supplement", "herbal", "botanical",
 ]
 
 
@@ -286,37 +335,76 @@ def build_date_range(days_back: int) -> tuple:
     return start.strftime("%Y%m%d"), end.strftime("%Y%m%d")
 
 
-def fetch_enforcement(endpoint: str, date_start: str, date_end: str) -> list:
-    """Fetch recall records from an openFDA endpoint within a date range."""
-    url = f"{OPENFDA_BASE}/{endpoint}.json"
-    all_results = []
-    skip = 0
-
-    while skip < 500:  # hard cap per endpoint
-        params = {
-            "search": f"report_date:[{date_start}+TO+{date_end}]",
-            "limit": 100,
-            "skip": skip,
-        }
+def _api_get_with_retry(url: str, params: dict, retries: int = MAX_RETRIES) -> requests.Response | None:
+    """GET with retry + backoff. Returns response or None on exhausted retries."""
+    for attempt in range(1, retries + 1):
         try:
             resp = requests.get(url, params=params, timeout=30)
             if resp.status_code == 404:
-                break
+                return resp  # 404 is a valid "no data" response
+            if resp.status_code >= 500:
+                print(f"  [RETRY {attempt}/{retries}] Server error {resp.status_code}, "
+                      f"retrying in {RETRY_DELAY}s...", file=sys.stderr)
+                time.sleep(RETRY_DELAY * attempt)
+                continue
             resp.raise_for_status()
-            data = resp.json()
-            results = data.get("results", [])
-            if not results:
-                break
-            for r in results:
-                r["_source_type"] = "openfda_enforcement"
-                r["_fda_endpoint"] = endpoint
-            all_results.extend(results)
-            total = data.get("meta", {}).get("results", {}).get("total", 0)
-            skip += len(results)
-            if skip >= total:
-                break
+            return resp
+        except (requests.Timeout, requests.ConnectionError) as e:
+            print(f"  [RETRY {attempt}/{retries}] {e}, retrying in {RETRY_DELAY}s...",
+                  file=sys.stderr)
+            time.sleep(RETRY_DELAY * attempt)
         except requests.RequestException as e:
-            print(f"[WARN] {endpoint}: {e}", file=sys.stderr)
+            print(f"  [ERROR] {e}", file=sys.stderr)
+            return None
+    print(f"  [ERROR] Exhausted {retries} retries for {url}", file=sys.stderr)
+    return None
+
+
+def fetch_enforcement(endpoint: str, date_start: str, date_end: str,
+                      api_key: str = "", extra_search: str = "",
+                      max_skip: int = 1000) -> list:
+    """Fetch recall records from an openFDA endpoint within a date range.
+
+    Args:
+        extra_search: Additional search filters appended with +AND+ to narrow server-side.
+        max_skip: Pagination ceiling. Logs warning if results are truncated.
+    """
+    # Build search query directly in the URL — requests.get(params=) would
+    # URL-encode the '+' signs in openFDA syntax (e.g., +TO+, +AND+) breaking
+    # the query. Only limit/skip/api_key go through params.
+    search_query = f"report_date:[{date_start}+TO+{date_end}]"
+    if extra_search:
+        search_query += f"+AND+{extra_search}"
+    base_url = f"{OPENFDA_BASE}/{endpoint}.json?search={search_query}"
+
+    all_results = []
+    skip = 0
+
+    while True:
+        params = {"limit": 100, "skip": skip}
+        if api_key:
+            params["api_key"] = api_key
+
+        resp = _api_get_with_retry(base_url, params)
+        if resp is None or resp.status_code == 404:
+            break
+
+        data = resp.json()
+        results = data.get("results", [])
+        if not results:
+            break
+        for r in results:
+            r["_source_type"] = "openfda_enforcement"
+            r["_fda_endpoint"] = endpoint
+        all_results.extend(results)
+        total = data.get("meta", {}).get("results", {}).get("total", 0)
+        skip += len(results)
+        if skip >= total:
+            break
+        if skip >= max_skip:
+            print(f"  [WARN] {endpoint}: hit pagination cap ({max_skip}). "
+                  f"Total available: {total}. Results truncated.",
+                  file=sys.stderr)
             break
 
     return all_results
@@ -349,7 +437,7 @@ def fetch_fda_rss(rss_url: str, days_back: int) -> list:
                 "pub_date": pub_date_raw,
                 "product_description": (item.findtext("title") or "").strip(),
                 "reason_for_recall": (item.findtext("description") or "").strip(),
-                "product_type": "Dietary Supplement",  # default for supplement RSS
+                "product_type": "",
                 "recalling_firm": "",
                 "recall_number": "",
                 "classification": "",
@@ -436,6 +524,83 @@ def is_noise(recall: dict) -> bool:
     return False
 
 
+def _contains_phrase(text: str, phrases: list[str]) -> bool:
+    for phrase in phrases:
+        if re.search(r"(?<!\w)" + re.escape(phrase) + r"(?!\w)", text):
+            return True
+    return False
+
+
+def _is_relevant_rss_record(record: dict, combined: str) -> bool:
+    """Return True only for RSS items that plausibly target supplements."""
+    title = (record.get("title") or "").lower()
+    link = (record.get("link") or "").lower()
+
+    if _contains_phrase(combined, DEVICE_INDICATORS):
+        return False
+
+    if any(hint in link for hint in RSS_RELEVANT_LINK_HINTS):
+        return True
+
+    if _contains_phrase(title, RSS_RELEVANT_TEXT_HINTS):
+        return True
+
+    if _contains_phrase(combined, RSS_RELEVANT_TEXT_HINTS):
+        return True
+
+    return False
+
+
+def _looks_like_conventional_food(product_type: str, description: str, combined: str) -> bool:
+    """Filter conventional foods without blocking supplement products with food-like branding."""
+    if "food" not in product_type:
+        return False
+    if not _contains_phrase(description, CONVENTIONAL_FOOD_INDICATORS):
+        return False
+    return not _contains_phrase(combined, SUPPLEMENT_FORM_INDICATORS)
+
+
+def dedup_records(records: list) -> list:
+    """Deduplicate records across sources (openFDA + RSS can overlap).
+
+    Matches on recall_number if present, then falls back to normalized
+    product_description + recalling_firm.
+    """
+    seen = set()
+    deduped = []
+    for r in records:
+        recall_num = (r.get("recall_number") or "").strip()
+        if recall_num:
+            key = f"recall:{recall_num}"
+        else:
+            desc = (r.get("product_description") or "")[:80].lower().strip()
+            firm = (r.get("recalling_firm") or "")[:40].lower().strip()
+            key = f"desc:{desc}|{firm}"
+
+        if key in seen:
+            continue
+        seen.add(key)
+        deduped.append(r)
+    return deduped
+
+
+def check_wada_staleness() -> str | None:
+    """Return a warning string if WADA list is likely stale (>11 months old)."""
+    try:
+        last = datetime.strptime(WADA_LAST_UPDATED, "%Y-%m-%d")
+        age_days = (datetime.now() - last).days
+        if age_days > 335:  # ~11 months
+            return (
+                f"WADA prohibited list was last updated {WADA_LAST_UPDATED} "
+                f"({age_days} days ago). The WADA list updates annually in January. "
+                f"Check https://www.wada-ama.org/en/prohibited-list and update "
+                f"WADA entries in banned_recalled_ingredients.json."
+            )
+    except ValueError:
+        pass
+    return None
+
+
 def classify_record(record: dict) -> tuple:
     """
     Determine if a record is relevant and what signal categories it hits.
@@ -456,10 +621,20 @@ def classify_record(record: dict) -> tuple:
     if source_type == "dea_federal_register":
         return True, "schedule_I_psychoactive", ["manufacturing_violation"]
 
+    if source_type == "fda_rss" and not _is_relevant_rss_record(record, combined):
+        return False, "", []
+
     # Determine if supplement-related
+    # Use word-boundary matching for short keywords (<5 chars) to avoid
+    # false positives (e.g., "pea" matching "appear", "s4" matching "s400")
+    def _kw_match(kw, text):
+        if len(kw) < 5:
+            return bool(re.search(r"\b" + re.escape(kw) + r"\b", text))
+        return kw in text
+
     is_supplement = (
         any(pt in product_type for pt in SUPPLEMENT_PRODUCT_TYPES)
-        or any(kw in combined for kw in SUPPLEMENT_KEYWORDS)
+        or any(_kw_match(kw, combined) for kw in SUPPLEMENT_KEYWORDS)
     )
     is_drug = "drug" in product_type and not is_supplement
 
@@ -470,10 +645,16 @@ def classify_record(record: dict) -> tuple:
     if is_supplement and is_noise(record):
         return False, "", []
 
-    # Detect signal categories
+    # Skip medical devices and conventional foods that matched supplement keywords
+    if is_supplement and _contains_phrase(combined, DEVICE_INDICATORS):
+        return False, "", []
+    if is_supplement and _looks_like_conventional_food(product_type, description, combined):
+        return False, "", []
+
+    # Detect signal categories (same word-boundary logic for short keywords)
     detected = []
     for cat, keywords in SIGNAL_CATEGORIES.items():
-        if keywords and any(kw in combined for kw in keywords):
+        if keywords and any(_kw_match(kw, combined) for kw in keywords):
             detected.append(cat)
 
     # Determine primary category (priority order)
@@ -509,7 +690,14 @@ def classify_record(record: dict) -> tuple:
 # ─── Substance Extraction ─────────────────────────────────────────────────────
 
 def extract_substances(record: dict) -> list:
-    """Extract likely substance names from recall text."""
+    """Extract likely substance names from recall text.
+
+    Strategy: KNOWN_SUBSTANCES list match is the PRIMARY extractor — it catches
+    all substances we already track with exact word-boundary matching.
+    The regex patterns below are a FALLBACK for discovering NEW substances not
+    in our list (e.g., a novel adulterant FDA just found). Don't refactor the
+    regex to be the primary path — the known-list match is more reliable.
+    """
     text = " ".join([
         record.get("reason_for_recall") or "",
         record.get("product_description") or "",
@@ -537,9 +725,15 @@ def extract_substances(record: dict) -> list:
     for pat in patterns:
         for match in re.finditer(pat, text):
             candidate = match.group(1).strip().rstrip(",")
+            # Strip common prefixes that aren't part of the substance name
+            for prefix in ("undeclared ", "undisclosed ", "hidden "):
+                if candidate.startswith(prefix):
+                    candidate = candidate[len(prefix):]
+            candidate = candidate.strip()
             # Filter: reasonable name length, not a stop phrase
             if 3 <= len(candidate) <= 60 and candidate not in found:
-                stop_phrases = {"the product", "product", "this product", "supplement", "tablet"}
+                stop_phrases = {"the product", "product", "this product",
+                                "supplement", "tablet", "capsule", "ingredient"}
                 if candidate not in stop_phrases:
                     found.append(candidate)
 
@@ -656,76 +850,19 @@ def format_record_for_report(record: dict, primary_category: str,
     return entry
 
 
-# ─── Main ─────────────────────────────────────────────────────────────────────
+# ─── Classification & Cross-reference ─────────────────────────────────────────
 
-def main():
-    parser = argparse.ArgumentParser(
-        description="FDA Weekly Sync - generates multi-source recall report for Claude review"
-    )
-    parser.add_argument("--days", type=int, default=7,
-                        help="Days to look back (default: 7)")
-    parser.add_argument("--output", type=str, default=None,
-                        help="Output report path")
-    args = parser.parse_args()
+def _classify_and_crossref(records: list, existing_index: dict) -> tuple:
+    """Classify records and split into new vs tracked.
 
-    today_str = datetime.now().strftime("%Y%m%d")
-    date_start, date_end = build_date_range(args.days)
-    output_path = (
-        Path(args.output) if args.output
-        else Path(__file__).parent / f"fda_sync_report_{today_str}.json"
-    )
-
-    print(f"[FDA Sync] Period: {date_start} → {date_end} ({args.days} days)")
-
-    # ── 1. Fetch all sources ──────────────────────────────────────────────────
-
-    print("[FDA Sync] Fetching openFDA food/enforcement...")
-    food_records = fetch_enforcement("food/enforcement", date_start, date_end)
-    print(f"           {len(food_records)} records")
-
-    print("[FDA Sync] Fetching openFDA drug/enforcement...")
-    drug_records = fetch_enforcement("drug/enforcement", date_start, date_end)
-    print(f"           {len(drug_records)} records")
-
-    print("[FDA Sync] Fetching FDA dietary supplement safety alerts RSS...")
-    supp_rss = fetch_fda_rss(
-        "https://www.fda.gov/about-fda/contact-fda/stay-informed/rss-feeds/dietary-supplements/rss.xml",
-        args.days,
-    )
-    print(f"           {len(supp_rss)} items")
-
-    print("[FDA Sync] Fetching FDA MedWatch safety alerts RSS...")
-    medwatch_rss = fetch_fda_rss(
-        "https://www.fda.gov/about-fda/contact-fda/stay-informed/rss-feeds/medwatch-safety-alerts-human-medical-products/rss.xml",
-        args.days,
-    )
-    print(f"           {len(medwatch_rss)} items")
-
-    print("[FDA Sync] Fetching DEA Federal Register scheduling actions...")
-    dea_records = fetch_dea_federal_register(args.days)
-    print(f"           {len(dea_records)} items")
-
-    all_records = food_records + drug_records + supp_rss + medwatch_rss + dea_records
-    print(f"[FDA Sync] Total across all sources: {len(all_records)}")
-
-    # ── 2. Load existing DB ───────────────────────────────────────────────────
-
-    if not DATA_FILE.exists():
-        print(f"[ERROR] Database not found: {DATA_FILE}", file=sys.stderr)
-        return 1
-
-    db = load_database(DATA_FILE)
-    existing_index = build_existing_index(db)
-    print(f"[FDA Sync] Existing DB entries: {len(db.get('ingredients', []))}")
-
-    # ── 3. Classify and cross-reference ──────────────────────────────────────
-
-    new_records = []      # require Claude review (substances not in DB, or brand recalls)
-    tracked_records = []  # substances already tracked (informational)
+    Returns (new_records, tracked_records, skipped_count, category_counts).
+    """
+    new_records = []
+    tracked_records = []
     skipped_count = 0
     category_counts = {}
 
-    for record in all_records:
+    for record in records:
         relevant, primary_cat, signal_cats = classify_record(record)
         if not relevant:
             skipped_count += 1
@@ -741,8 +878,6 @@ def main():
             record, primary_cat, signal_cats, substances, known, unknown
         )
 
-        # Supplement brand recalls with no specific substance → still new
-        # (the brand itself may need a recalled_supplement_brands entry)
         is_brand_recall = (
             primary_cat in ("supplement_general", "microbial_contamination")
             and not substances
@@ -753,12 +888,129 @@ def main():
         elif substances:
             tracked_records.append(entry)
         else:
-            # No substances extracted but a meaningful signal category — still flag
-            entry["note"] = "Signal category detected but substance name not extracted — Claude review needed"
+            entry["note"] = (
+                "Signal category detected but substance name not extracted"
+                " — Claude review needed"
+            )
             new_records.append(entry)
 
-    # ── 4. Stale recall check ─────────────────────────────────────────────────
+    return new_records, tracked_records, skipped_count, category_counts
 
+
+# ─── Fetch Orchestration ──────────────────────────────────────────────────────
+
+def _fetch_all_sources(date_start: str, date_end: str,
+                       days_back: int, api_key: str) -> tuple[list, dict]:
+    """Fetch from all sources, dedup, and return (records, source_counts)."""
+
+    # Food enforcement — server-side filter for dietary supplements
+    print("[FDA Sync] Fetching openFDA food/enforcement...")
+    food_records = fetch_enforcement(
+        "food/enforcement", date_start, date_end,
+        api_key=api_key,
+    )
+    print(f"           {len(food_records)} records")
+
+    # Drug enforcement — broader query to catch supplement-related recalls
+    # Uses keyword expansion: supplement OR undeclared OR tainted OR adulterated
+    print("[FDA Sync] Fetching openFDA drug/enforcement...")
+    drug_records = fetch_enforcement(
+        "drug/enforcement", date_start, date_end,
+        api_key=api_key,
+        # openFDA: spaces = OR, + = AND. We want OR across these terms.
+        extra_search=(
+            "(product_description:supplement"
+            " product_description:dietary"
+            " reason_for_recall:undeclared"
+            " reason_for_recall:tainted"
+            " reason_for_recall:adulterated)"
+        ),
+    )
+    print(f"           {len(drug_records)} records")
+
+    # FDA moved some RSS URLs — use the working ones (verified 2026-03-23)
+    print("[FDA Sync] Fetching FDA MedWatch safety alerts RSS...")
+    medwatch_rss = fetch_fda_rss(
+        "https://www.fda.gov/about-fda/contact-fda/stay-informed/"
+        "rss-feeds/medwatch/rss.xml",
+        days_back,
+    )
+    print(f"           {len(medwatch_rss)} items")
+
+    print("[FDA Sync] Fetching FDA Drugs RSS (covers supplement-related drug actions)...")
+    drugs_rss = fetch_fda_rss(
+        "https://www.fda.gov/about-fda/contact-fda/stay-informed/"
+        "rss-feeds/drugs/rss.xml",
+        days_back,
+    )
+    print(f"           {len(drugs_rss)} items")
+
+    print("[FDA Sync] Fetching DEA Federal Register scheduling actions...")
+    dea_records = fetch_dea_federal_register(days_back)
+    print(f"           {len(dea_records)} items")
+
+    raw = food_records + drug_records + medwatch_rss + drugs_rss + dea_records
+    print(f"[FDA Sync] Raw total: {len(raw)}")
+
+    deduped = dedup_records(raw)
+    source_counts = {
+        "openfda_food_enforcement": len(food_records),
+        "openfda_drug_enforcement": len(drug_records),
+        "fda_medwatch_rss": len(medwatch_rss),
+        "fda_drugs_rss": len(drugs_rss),
+        "dea_federal_register": len(dea_records),
+        "duplicates_removed": len(raw) - len(deduped),
+    }
+    return deduped, source_counts
+
+
+# ─── Main ─────────────────────────────────────────────────────────────────────
+
+def main():
+    parser = argparse.ArgumentParser(
+        description="FDA Weekly Sync - generates multi-source recall report for Claude review"
+    )
+    parser.add_argument("--days", type=int, default=7,
+                        help="Days to look back (default: 7)")
+    parser.add_argument("--output", type=str, default=None,
+                        help="Output report path")
+    parser.add_argument("--api-key", type=str, default=OPENFDA_API_KEY,
+                        help="openFDA API key (or set OPENFDA_API_KEY)")
+    args = parser.parse_args()
+
+    today_str = datetime.now().strftime("%Y%m%d")
+    date_start, date_end = build_date_range(args.days)
+    output_path = (
+        Path(args.output) if args.output
+        else Path(__file__).parent / f"fda_sync_report_{today_str}.json"
+    )
+
+    print(f"[FDA Sync] Period: {date_start} → {date_end} ({args.days} days)")
+
+    # ── 1. Fetch all sources ──────────────────────────────────────────────────
+
+    api_key = args.api_key
+    all_records, source_counts = _fetch_all_sources(
+        date_start, date_end, args.days, api_key,
+    )
+    print(f"[FDA Sync] Total across all sources: {len(all_records)} "
+          f"(after dedup, {source_counts['duplicates_removed']} dupes removed)")
+
+    # ── 2. Load existing DB ───────────────────────────────────────────────────
+
+    if not DATA_FILE.exists():
+        print(f"[ERROR] Database not found: {DATA_FILE}", file=sys.stderr)
+        return 1
+
+    db = load_database(DATA_FILE)
+    existing_index = build_existing_index(db)
+    print(f"[FDA Sync] Existing DB entries: {len(db.get('ingredients', []))}")
+
+    # ── 3. Classify, cross-reference, and check stale recalls ────────────────
+
+    new_records, tracked_records, skipped_count, category_counts = (
+        _classify_and_crossref(all_records, existing_index)
+    )
     stale_recalls = check_stale_recalls(db)
 
     # ── 5. Build report ───────────────────────────────────────────────────────
@@ -772,18 +1024,11 @@ def main():
             "days_back": args.days,
         },
         "data_file": str(DATA_FILE),
-        "data_sources": {
-            "openfda_food_enforcement": len(food_records),
-            "openfda_drug_enforcement": len(drug_records),
-            "fda_supplement_rss": len(supp_rss),
-            "fda_medwatch_rss": len(medwatch_rss),
-            "dea_federal_register": len(dea_records),
+        "data_sources": source_counts,
+        "wada_status": {
+            "last_updated": WADA_LAST_UPDATED,
+            "warning": check_wada_staleness(),
         },
-        "wada_note": (
-            "WADA prohibited list is NOT fetched automatically — it is updated annually in January. "
-            "Check https://www.wada-ama.org/en/prohibited-list manually once per year and update "
-            "wada_prohibited_2024 entries accordingly."
-        ),
         "summary": {
             "total_fetched": len(all_records),
             "skipped_not_relevant": skipped_count,
@@ -822,8 +1067,12 @@ def main():
         print("  By category:")
         for cat, count in sorted(category_counts.items(), key=lambda x: -x[1]):
             print(f"    {cat:<40} {count}")
+    if source_counts.get("duplicates_removed"):
+        print(f"  Duplicates removed       : {source_counts['duplicates_removed']}")
     print(f"  Report saved             : {output_path}")
-    print("\n  NOTE: WADA list is manual — check annually in January.")
+    wada_warning = check_wada_staleness()
+    if wada_warning:
+        print(f"\n  ⚠️  WADA WARNING: {wada_warning}")
     print("[FDA Sync] Done. Run /fda-weekly-sync in Claude Code to apply.")
 
     return 0

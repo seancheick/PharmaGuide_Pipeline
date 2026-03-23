@@ -65,21 +65,21 @@ fi
 log "Report: $REPORT_FILE"
 
 # Check if there's anything to review
-NEW_COUNT=$(python3 -c "
+NEW_COUNT=$("$PYTHON" -c "
 import json
 with open('${REPORT_FILE}') as f:
     d = json.load(f)
-print(d['summary']['new_substances_requiring_review'])
+print(d['summary']['requiring_claude_review'])
 " 2>/dev/null || echo "?")
 
-STALE_COUNT=$(python3 -c "
+STALE_COUNT=$("$PYTHON" -c "
 import json
 with open('${REPORT_FILE}') as f:
     d = json.load(f)
 print(d['summary']['stale_recalled_entries_to_verify'])
 " 2>/dev/null || echo "?")
 
-log "New substances to review: ${NEW_COUNT}"
+log "Records requiring review: ${NEW_COUNT}"
 log "Stale recalls to verify:  ${STALE_COUNT}"
 
 if [ "$NEW_COUNT" = "0" ] && [ "$STALE_COUNT" = "0" ]; then
@@ -120,7 +120,7 @@ if [ "$DO_COMMIT" = true ]; then
     COMMIT_MSG="chore(fda-sync): weekly regulatory update $(date +%Y-%m-%d)
 
 - Reviewed FDA food/enforcement + drug/enforcement recalls (past ${DAYS} days)
-- New substances added: ${NEW_COUNT}
+- Records requiring review: ${NEW_COUNT}
 - Stale recalls verified: ${STALE_COUNT}
 - Source: openFDA API, report: $(basename $REPORT_FILE)"
 
