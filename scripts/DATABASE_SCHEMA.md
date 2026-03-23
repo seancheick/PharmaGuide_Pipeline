@@ -1,6 +1,6 @@
 # DATABASE_SCHEMA.md — Master Schema Reference
 
-> Schema version: **5.0.0** | Last updated: 2026-03-18 | 33 database files
+> Schema version: **5.0.0 / 5.1.0** | Last updated: 2026-03-22 | 33 database files
 
 ## Metadata Contract
 
@@ -165,25 +165,34 @@ Primary keys: `allowlist` (array), `denylist` (array)
 ---
 
 ### 5. banned_recalled_ingredients.json
-**Purpose:** `safety_disqualification_and_regulatory_compliance` | **Entries:** 138
+**Purpose:** `safety_disqualification_and_regulatory_compliance` | **Entries:** 139 | **Schema:** 5.0.0
 
 Primary key: `ingredients` (array)
+
+B0 safety gate — runs first in scoring. Status determines outcome:
+
+| Status | Outcome | Penalty |
+|--------|---------|---------|
+| `banned` (90) | PRODUCT FAIL (`UNSAFE`) | Disqualified |
+| `recalled` (12) | PRODUCT FAIL (`BLOCKED`) | Disqualified |
+| `high_risk` (26) | `CAUTION` | -10 pts |
+| `watchlist` (11) | `CAUTION` | -5 pts |
 
 Core fields (always present):
 
 | Field | Type | Description |
 |-------|------|-------------|
-| `id` | string | Unique ID with prefix: `BANNED_`, `SPIKE_`, `RISK_`, `STATE_` |
+| `id` | string | Unique ID with prefix: `BANNED_`, `SPIKE_`, `RISK_`, `HM_`, `RECALLED_` |
 | `standard_name` | string | Canonical substance name |
 | `aliases` | string[] | Alternative names and synonyms |
-| `category` | string | Substance category |
-| `severity_level` | string | `critical`, `high`, `moderate`, `low` |
-| `legal_status_enum` | string | `banned_federal`, `banned_state`, `controlled_substance`, `restricted`, `not_lawful_as_supplement` |
-| `clinical_risk_enum` | string | `lethal_risk`, `organ_damage`, `cardiovascular_event`, `endocrine_disruption`, `moderate_adverse`, `low_risk_high_dose` |
+| `cui` | string/null | UMLS Concept Unique Identifier (re-added 2026-03-22, populated via API) |
+| `status` | string | `banned`, `recalled`, `high_risk`, `watchlist` |
+| `legal_status_enum` | string | `banned_federal`, `banned_state`, `controlled_substance`, `restricted`, `not_lawful_as_supplement`, `adulterant`, `contaminant_risk`, `high_risk` |
+| `clinical_risk_enum` | string | `critical`, `high`, `moderate`, `low`, `dose_dependent` |
 | `jurisdictions` | object[] | Jurisdiction-specific rules |
-| `supersedes_ids` | string[]/null | IDs this entry replaced |
-| `match_rules` | object | Matching configuration |
+| `match_rules` | object | Matching configuration (includes `negative_match_terms`) |
 | `reason` | string | Why this ingredient is banned/recalled (shown to user) |
+| `review` | object | Governance metadata |
 
 ---
 
@@ -287,22 +296,44 @@ Used to detect and penalize vague supplement labeling (e.g., "proprietary blend"
 ---
 
 ### 14. harmful_additives.json
-**Purpose:** `penalty_scoring` | **Entries:** 108
+**Purpose:** `penalty_scoring` | **Entries:** 107 | **Schema:** 5.1.0
 
 Primary key: `harmful_additives` (array)
 
+B1 graduated penalty scoring — cumulative deductions:
+
+| Severity | B1 Penalty | Count | Examples |
+|----------|-----------|-------|----------|
+| `high` (18) | -2.0 pts | 18 | Trans fats, IARC 2A/2B carcinogens, heavy metals |
+| `moderate` (46) | -1.0 pt | 46 | Artificial sweeteners, synthetic colorants, emulsifiers |
+| `low` (43) | -0.5 pts | 43 | GRAS excipients, flow agents, natural thickeners |
+
+No `critical` tier — substances posing immediate hazards belong in `banned_recalled_ingredients.json` (B0 gate).
+
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
-| `id` | string | YES | Unique ID (e.g., `HA_TITANIUM_DIOXIDE`) |
+| `id` | string | YES | Unique ID with `ADD_` prefix |
 | `standard_name` | string | YES | Canonical name |
-| `aliases` | string[] | YES | Alternative names |
-| `category` | string | YES | Additive category |
-| `severity_level` | string | YES | `critical`, `high`, `moderate`, `low` |
-| `severity_score` | float | YES | Numeric severity (0-10) |
-| `mechanism_of_harm` | string | YES | How it causes harm |
-| `regulatory_status` | string | YES | Current regulatory status |
-| `match_rules` | object | YES | Matching configuration |
-| `notes` | string | NO | Reference notes shown in warnings |
+| `aliases` | string[] | YES | E-numbers, CAS, IUPAC, brand names |
+| `cui` | string/null | YES | UMLS Concept Unique Identifier |
+| `category` | string | YES | One of 20 values (see below) |
+| `severity_level` | string | YES | `high`, `moderate`, `low` |
+| `mechanism_of_harm` | string | YES | Biochemical/toxicological pathway |
+| `regulatory_status` | object | YES | `{US, EU}` with CFR/EFSA citations and ADI values |
+| `population_warnings` | string[] | NO | At-risk populations |
+| `notes` | string | NO | Consumer-readable summary |
+| `scientific_references` | string[] | NO | DOIs and citations |
+| `match_rules` | object | YES | `match_mode`, `fuzzy_threshold`, `case_sensitive`, `preferred_alias` |
+| `references_structured` | object[] | YES | Structured citations with `evidence_grade` |
+| `external_ids` | object | NO | `{cas, pubchem_cid}` — present only when non-null |
+| `jurisdictional_statuses` | object[] | NO | Per-jurisdiction status codes |
+| `review` | object | YES | Governance metadata with `change_log` |
+| `confidence` | string | YES | `high`, `medium`, `low` |
+| `dose_thresholds` | object/null | NO | ADI/TDI with value, unit, source |
+
+Category enum (20 values): `colorant`, `colorant_artificial`, `colorant_natural`, `contaminant`, `emulsifier`, `excipient`, `fat_oil`, `filler`, `flavor`, `mineral_compound`, `nutrient_synthetic`, `phosphate`, `preservative`, `preservative_antioxidant`, `processing_aid`, `stimulant_laxative`, `sweetener`, `sweetener_artificial`, `sweetener_natural`, `sweetener_sugar_alcohol`
+
+**Removed in v5.1:** `CUI` (top-level duplicate), `label_tokens`, `regex`, `exposure_context`, `entity_type` (when "ingredient"), `class_tags`, `severity_score`, `critical` severity tier.
 
 ---
 
@@ -593,12 +624,14 @@ Primary key: `user_goal_mappings` (array)
 
 | Prefix | Database | Example |
 |--------|----------|---------|
+| `ADD_` | harmful_additives | `ADD_ASPARTAME`, `ADD_BHA` |
 | `BANNED_` | banned_recalled_ingredients | `BANNED_SIBUTRAMINE` |
-| `BANNED_ADD_` | banned_recalled_ingredients (additives) | `BANNED_ADD_BHA` |
+| `BANNED_ADD_` | banned_recalled_ingredients (additives) | `BANNED_ADD_FORMALDEHYDE` |
+| `HM_` | banned_recalled_ingredients (heavy metals) | `HM_CHROMIUM_HEXAVALENT` |
 | `SPIKE_` | banned_recalled_ingredients (adulterants) | `SPIKE_SILDENAFIL` |
-| `STATE_` | banned_recalled_ingredients (state bans) | `STATE_DELTA8_THC` |
+| `RECALLED_` | banned_recalled_ingredients (products) | `RECALLED_OXYELITE_PRO` |
 | `RISK_` | banned_recalled_ingredients (risk items) | `RISK_KRATOM_NATURAL` |
-| `HA_` | harmful_additives | `HA_TITANIUM_DIOXIDE` |
+| `ADULTERANT_` | banned_recalled_ingredients (pharma adulterants) | `ADULTERANT_MELOXICAM` |
 | `OI_` | other_ingredients | `OI_GELATIN` |
 | `CS_` | backed_clinical_studies | `CS_VITAMIN_D` |
 | `ABS_` | absorption_enhancers | `ABS_PIPERINE` |
@@ -608,7 +641,6 @@ Primary key: `user_goal_mappings` (array)
 | `STRAIN_` | clinically_relevant_strains | `STRAIN_LGG` |
 | `RDA_` | rda_optimal_uls | `RDA_VITAMIN_D` |
 | `RULE_` | ingredient_interaction_rules | `RULE_INGREDIENT_CAFFEINE` |
-| `ADD_` | id_redirects (deprecated) | `ADD_BHA` → `BANNED_ADD_BHA` |
 
 ---
 
@@ -634,7 +666,7 @@ clinically_relevant_strains.json (42 strains)
   ├── aliases → enhanced_normalizer strain bypass
   └── evidence_level → scoring probiotic bonus
 
-banned_recalled_ingredients.json (138)
+banned_recalled_ingredients.json (139)
   ├── supersedes_ids → id_redirects.json
   ├── aliases → enrichment banned matching
   └── match_rules → banned_match_allowlist.json

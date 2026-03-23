@@ -1,6 +1,6 @@
 # SCORING_ENGINE_SPEC.md
 
-> Scoring version: **3.1.0** / Data schema: **5.0.0** — aligned to current `score_supplements.py` and `config/scoring_config.json`.
+> Scoring version: **3.2.0** / Data schema: **5.1.0** — aligned to current `score_supplements.py` and `config/scoring_config.json`.
 
 ## Scope
 
@@ -269,11 +269,14 @@ Input:
 - `contaminant_data.harmful_additives.additives[]`
 
 Severity map (config-overridable):
-- critical: 3.0
 - high: 2.0
 - moderate: 1.0
 - low: 0.5
 - none: 0.0
+
+Note: No `critical` tier in harmful_additives (schema 5.1.0). Substances posing immediate
+hazards are in `banned_recalled_ingredients.json` and handled by B0 gate instead.
+The code still accepts `critical: 3.0` for backward compatibility with pre-5.1 enriched data.
 
 Deduplicated by `additive_id` (highest severity wins per ID). Summed and capped at 8.
 
@@ -679,6 +682,24 @@ without `is_parent_total` retain old A1 behavior.
 | Enricher hit payload | `severity_level` from banned entry | `severity_level` derived from `status` via `_STATUS_TO_SEVERITY` map |
 | Banned entry `match_mode` | Not present | `active`/`disabled`/`historical` — enricher skips non-active |
 | Banned `severity_level` field | Present on entries | Removed; scorer falls back to severity-based logic only for pre-5.0 enriched data |
+
+---
+
+## Data Schema v5.1 Changes (affecting scorer)
+
+| Area | v5.0 | v5.1 |
+|---|---|---|
+| harmful_additives entries | 108 | 107 (Chromium VI migrated to banned_recalled) |
+| harmful_additives severity tiers | `critical`, `high`, `moderate`, `low` | `high`, `moderate`, `low` only |
+| harmful_additives categories | 43 (fragmented) | 20 (normalized enum) |
+| harmful_additives CUI field | Top-level `CUI` + `external_ids.umls_cui` (duplicate) | Top-level `cui` only (lowercase) |
+| harmful_additives `external_ids` | Always present (often all-null) | Present only when `cas` or `pubchem_cid` is non-null |
+| harmful_additives removed fields | — | `label_tokens`, `regex`, `exposure_context`, `entity_type`, `class_tags`, `severity_score` |
+| harmful_additives ID prefix | Mix of `ADD_` and `BANNED_ADD_` | `ADD_` only (8 entries renamed) |
+| banned_recalled entries | 138 | 139 (Chromium VI added as `HM_CHROMIUM_HEXAVALENT`) |
+| banned_recalled `cui` field | Removed in v5.0 | Re-added and populated via UMLS API (87/139 non-null) |
+| B1 risk_map `critical` | 3.0 (no entries used it) | Removed from data; code accepts for backward compat |
+| B1 scoring_rule metadata | "Critical: -5, High: -3" (stale) | "High: -2.0, Moderate: -1.0, Low: -0.5" (matches code) |
 
 ---
 
