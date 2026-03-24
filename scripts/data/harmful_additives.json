@@ -1678,7 +1678,6 @@
       "id": "ADD_CALCIUM_ALUMINUM_PHOSPHATE",
       "standard_name": "Calcium Aluminum Phosphate",
       "aliases": [
-        "E544",
         "calcium aluminophosphate",
         "aluminum calcium phosphate",
         "CAS 34767-10-7"
@@ -1688,8 +1687,8 @@
       "last_updated": "2026-02-26",
       "mechanism_of_harm": "Releases bioavailable aluminum ions (Al³⁺) during digestion. Aluminum accumulates in bone and brain tissue with chronic exposure. EFSA identified developmental neurotoxicity as the critical endpoint for aluminum compounds, establishing a TWI of 1 mg/kg bw/week. Animal studies show aluminum-induced oxidative stress, mitochondrial dysfunction, and interference with calcium/iron homeostasis.",
       "regulatory_status": {
-        "US": "FDA: No specific CFR section for calcium aluminum phosphate (21 CFR 172.620 is carrageenan — previously cited in error). Aluminum-containing additives monitored under general food safety authority.",
-        "EU": "E544 authorized. EFSA TWI for aluminum from all dietary sources: 1 mg/kg bw/week (2008, reconfirmed 2011)."
+        "US": "FDA: No specific CFR section for calcium aluminum phosphate. The related compound sodium aluminum phosphate is GRAS under 21 CFR 182.1781. Calcium aluminum phosphate monitored under general aluminum TWI framework.",
+        "EU": "No dedicated E-number for calcium aluminum phosphate (E544 is calcium polyphosphates, not this compound; E541 is sodium aluminium phosphate). EFSA TWI for aluminum from all dietary sources: 1 mg/kg bw/week (2008, reconfirmed 2011)."
       },
       "population_warnings": [
         "People with renal impairment — reduced aluminum clearance increases accumulation risk",
@@ -1710,8 +1709,8 @@
         {
           "type": "regulatory_action",
           "authority": "FDA",
-          "title": "FDA general food safety authority — aluminum-containing additives (NEEDS VERIFICATION: no specific CFR section found; 21 CFR 172.620 was carrageenan)",
-          "citation": "FDA general food safety authority — aluminum-containing additives (NEEDS VERIFICATION)",
+          "title": "FDA: No specific CFR for calcium aluminum phosphate. Related sodium aluminum phosphate is GRAS under 21 CFR 182.1781.",
+          "citation": "21 CFR 182.1781 (sodium aluminum phosphate, related compound). No dedicated CAP section.",
           "url": "https://www.fda.gov/food/food-additives-petitions/food-additive-status-list",
           "published_date": null,
           "evidence_grade": "R",
@@ -1758,10 +1757,15 @@
       ],
       "review": {
         "status": "validated",
-        "last_reviewed_at": "2026-02-16",
-        "reviewed_by": "codex_harmful_allergen_normalization",
-        "next_review_due": "2026-07-07",
+        "last_reviewed_at": "2026-03-24",
+        "reviewed_by": "harmful_additives_deep_audit_batch1",
+        "next_review_due": "2026-09-24",
         "change_log": [
+          {
+            "date": "2026-03-24",
+            "change": "Removed wrong E544 alias (E544=calcium polyphosphates, not this compound). Corrected regulatory_status: no dedicated CFR or E-number for calcium aluminum phosphate. Related compound sodium aluminum phosphate is 21 CFR 182.1781 / E541. Verified CAS 34767-10-7 and PubChem CID 161837 correct.",
+            "reason": "Deep audit batch 1 — E-number and CFR verification via WebSearch + PubChem + EFSA sources"
+          },
           {
             "date": "2026-01-08",
             "change": "Downgraded to needs_review (missing credible evidence)",
