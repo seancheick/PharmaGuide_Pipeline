@@ -34,9 +34,9 @@
       "entity_relationships": "Links to related entries or null"
     },
     "risk_breakdown": {
-      "moderate": 47,
+      "moderate": 45,
       "high": 22,
-      "low": 43
+      "low": 45
     },
     "categories_count": 20,
     "pipeline_integration": "Used by enrichment script to apply penalty points for harmful ingredients during scoring. Matches against ingredient names and other_ingredient forms.",
@@ -3494,22 +3494,22 @@
       "mechanism_of_harm": "Triggers gut inflammation and disrupts intestinal barrier function. Alters gut microbiota composition. 2024 clinical study shows it induces insulin resistance and inflammatory response in healthy humans. Can cause chronic low-grade intestinal inflammation. May promote inflammatory bowel disease.",
       "regulatory_status": {
         "US": "FDA GRAS status for food use (21 CFR 172.620). NOSB voted in 2016 to recommend removal from the National List for organic foods, but USDA issued a final rule in April 2018 RETAINING carrageenan on the National List — overriding the NOSB recommendation (only the second override in ~30 years). Carrageenan remains permitted in USDA-certified organic processed products as of 2026.",
-        "EU": "E407 and E407a approved",
-        "WHO": "JECFA acceptable but notes concerns about degraded forms"
+        "EU": "E407 and E407a approved. EFSA 2018 re-evaluation (EFSA Journal 2018;16(4):5238) set a temporary group ADI of 75 mg/kg bw/day pending further data.",
+        "WHO": "JECFA acceptable but notes concerns about degraded forms. No ADI established separately by JECFA for food-grade carrageenan."
       },
       "population_warnings": [
-        "People with IBD or Crohn's disease — may trigger flares and amplify inflammation",
+        "People with IBD or Crohn's disease — may trigger flares and amplify inflammation (Vissers et al. 2025)",
         "People with IBS — may worsen symptoms",
-        "People with diabetes or prediabetes — may induce insulin resistance",
-        "Everyone — 2024 research shows inflammatory effects in healthy individuals"
+        "People with diabetes or prediabetes — may induce insulin resistance (Wagner et al. 2024)",
+        "Overweight individuals — 2024 RCT showed inflammatory effects and reduced insulin sensitivity"
       ],
-      "notes": "A red seaweed extract (E407/E407a) widely used as a thickener and emulsifier. FDA GRAS and EU-approved (E407). A 2024 BMC Medicine trial found moderate carrageenan intake triggered gut inflammation and insulin resistance in healthy young men, and a separate 2024 study showed amplified inflammatory markers in IBD patients. However, all major regulators (FDA, EFSA, JECFA) continue to permit it. Classified as moderate because evidence is Tier 2 (emerging clinical research) rather than Tier 1 (regulatory action). People with IBD, IBS, or metabolic concerns should consider avoidance. USDA CORRECTION: NOSB voted 2016 to recommend removal; USDA's April 2018 final rule retained carrageenan on the National List for organic foods.",
+      "notes": "A red seaweed extract (E407/E407a) widely used as a thickener and emulsifier. FDA GRAS (21 CFR 172.620) and EU-approved (E407). A 2024 BMC Medicine RCT (Wagner et al.) found carrageenan triggered gut inflammation and insulin resistance in overweight young men, and a 2025 study (Vissers et al.) showed amplified inflammatory markers in Crohn's disease epithelial cells. EFSA set a temporary ADI of 75 mg/kg bw/day in 2018. Classified as moderate because evidence is Tier 2 (emerging clinical research) rather than Tier 1 (regulatory action). People with IBD, IBS, or metabolic concerns should consider avoidance.",
       "scientific_references": [
         "DOI: 10.1186/s12916-024-03771-8 - BMC Medicine 2024 clinical study on insulin resistance",
-        "DOI: 10.1093/ibdjournal/izae259 - IBD inflammatory effects 2024",
-        "DOI: 10.3389/fnut.2024.1387646 - Gut microbiota disruption 2024"
+        "DOI: 10.1093/ibd/izae306 - Vissers et al. 2025, Dietary carrageenan amplifies inflammatory profile in Crohn's disease intestinal epithelial cells",
+        "DOI: 10.3390/nu16111780 - Kimilu et al. 2024, Carrageenan in the diet: friend or foe for IBD?"
       ],
-      "last_updated": "2026-03-08",
+      "last_updated": "2026-03-24",
       "match_rules": {
         "match_mode": "alias_and_fuzzy",
         "fuzzy_threshold": 0.72,
@@ -3518,34 +3518,34 @@
       },
       "references_structured": [
         {
-          "type": "systematic_review",
+          "type": "clinical_trial",
           "authority": "OTHER",
-          "title": "DOI: 10.1186/s12916-024-03771-8 - BMC Medicine 2024 clinical study on insulin resistance",
-          "citation": "DOI: 10.1186/s12916-024-03771-8 - BMC Medicine 2024 clinical study on insulin resistance",
+          "title": "Wagner et al. 2024 - Carrageenan and insulin resistance in humans: a randomised double-blind cross-over trial",
+          "citation": "BMC Med. 2024;22(1):558",
           "url": "https://doi.org/10.1186/s12916-024-03771-8",
-          "published_date": null,
-          "evidence_grade": "B",
-          "supports_claims": []
+          "published_date": "2024-11-26",
+          "evidence_grade": "A",
+          "supports_claims": ["insulin_resistance", "gut_inflammation", "intestinal_permeability"]
         },
         {
-          "type": "systematic_review",
+          "type": "clinical_trial",
           "authority": "OTHER",
-          "title": "DOI: 10.1093/ibdjournal/izae259 - IBD inflammatory effects 2024",
-          "citation": "DOI: 10.1093/ibdjournal/izae259 - IBD inflammatory effects 2024",
-          "url": "https://doi.org/10.1093/ibdjournal/izae259",
-          "published_date": null,
+          "title": "Vissers et al. 2025 - Dietary Carrageenan Amplifies the Inflammatory Profile of Intestinal Epithelial Cells from Patients With Crohn's Disease",
+          "citation": "Inflamm Bowel Dis. 2025;31(5):1392-1403",
+          "url": "https://doi.org/10.1093/ibd/izae306",
+          "published_date": "2025-05-12",
           "evidence_grade": "B",
-          "supports_claims": []
+          "supports_claims": ["gut_inflammation", "IBD_exacerbation"]
         },
         {
-          "type": "systematic_review",
+          "type": "review",
           "authority": "OTHER",
-          "title": "DOI: 10.3389/fnut.2024.1387646 - Gut microbiota disruption 2024",
-          "citation": "DOI: 10.3389/fnut.2024.1387646 - Gut microbiota disruption 2024",
-          "url": "https://doi.org/10.3389/fnut.2024.1387646",
-          "published_date": null,
+          "title": "Kimilu et al. 2024 - Carrageenan in the Diet: Friend or Foe for Inflammatory Bowel Disease?",
+          "citation": "Nutrients. 2024;16(11):1780",
+          "url": "https://doi.org/10.3390/nu16111780",
+          "published_date": "2024-06-06",
           "evidence_grade": "B",
-          "supports_claims": []
+          "supports_claims": ["gut_microbiota_disruption", "intestinal_permeability"]
         },
         {
           "type": "monograph",
@@ -3658,12 +3658,23 @@
             "date": "2026-03-22",
             "change": "Schema v5.1 migration: removed top-level CUI (→ external_ids.umls_cui), removed label_tokens/regex from match_rules, normalized external_ids casing, standardized references_structured fields, mapped status_codes to canonical enum, removed exposure_context/entity_type(ingredient)/class_tags dead-weight fields.",
             "reason": "schema_v5.1_migration"
+          },
+          {
+            "date": "2026-03-24",
+            "change": "Deep audit: replaced 2 fabricated DOIs (izae259, fnut.2024.1387646) with verified references (Vissers 2025 10.1093/ibd/izae306, Kimilu 2024 10.3390/nu16111780). Added EFSA temporary ADI 75 mg/kg/day dose_thresholds. Upgraded confidence low->medium. Updated references_structured with proper citations.",
+            "reason": "batch_3_deep_audit"
           }
         ]
       },
-      "confidence": "low",
+      "confidence": "medium",
       "severity_level": "moderate",
-      "dose_thresholds": null,
+      "dose_thresholds": [
+        {
+          "value": 75,
+          "unit": "mg/kg/day",
+          "source": "EFSA 2018 temporary group ADI (EFSA Journal 2018;16(4):5238)"
+        }
+      ],
       "entity_relationships": null,
       "cui": "C0007289",
       "rxcui": "1368862",
@@ -3705,10 +3716,10 @@
       ],
       "notes": "MODERATE RISK: Maltodextrin derived from cassava. Despite being marketed as 'natural' or 'non-GMO' alternative, has the same high glycemic index and metabolic concerns as corn-based maltodextrin. Used as cheap filler in supplements.",
       "scientific_references": [
-        "DOI: 10.1038/s41586-018-0061-4 - Maltodextrin gut effects",
-        "DOI: 10.1093/ajcn/86.4.895 - Glycemic effects"
+        "REMOVED: DOI 10.1038/s41586-018-0061-4 was FABRICATED (resolves to unrelated Nature paper on bacterial respiratory systems)",
+        "REMOVED: DOI 10.1093/ajcn/86.4.895 was MISATTRIBUTED (resolves to fructose paper, not glycemic effects of maltodextrin)"
       ],
-      "last_updated": "2026-02-16",
+      "last_updated": "2026-03-24",
       "match_rules": {
         "match_mode": "alias_and_fuzzy",
         "fuzzy_threshold": 0.72,
@@ -3722,9 +3733,9 @@
           "title": "WHO guideline: Sugars intake for adults and children (2015)",
           "citation": "WHO guideline: Sugars intake for adults and children (2015)",
           "url": "https://www.who.int/publications/i/item/9789241549028",
-          "published_date": null,
+          "published_date": "2015-03-04",
           "evidence_grade": "A",
-          "supports_claims": []
+          "supports_claims": ["limit_free_sugars"]
         }
       ],
       "jurisdictional_statuses": [
@@ -3796,10 +3807,15 @@
             "date": "2026-03-22",
             "change": "Schema v5.1 migration: removed top-level CUI (→ external_ids.umls_cui), removed label_tokens/regex from match_rules, normalized external_ids casing, standardized references_structured fields, mapped status_codes to canonical enum, removed exposure_context/entity_type(ingredient)/class_tags dead-weight fields.",
             "reason": "schema_v5.1_migration"
+          },
+          {
+            "date": "2026-03-24",
+            "change": "Deep audit: removed 2 fabricated/misattributed DOIs (10.1038/s41586-018-0061-4 = bacterial ACIII, 10.1093/ajcn/86.4.895 = fructose paper). Downgraded confidence medium->low. Needs verified maltodextrin-specific references.",
+            "reason": "batch_3_deep_audit"
           }
         ]
       },
-      "confidence": "medium",
+      "confidence": "low",
       "severity_level": "moderate",
       "dose_thresholds": null,
       "entity_relationships": null,
@@ -3828,8 +3844,8 @@
         "corn oil refined"
       ],
       "category": "fat_oil",
-      "notes": "Highly refined oil with high omega-6 content. Often from GMO corn. Prone to oxidation. May contain pesticide residues. Prefer unrefined oils or avoid in supplements.",
-      "last_updated": "2026-03-08",
+      "notes": "Refined corn oil used as a carrier/filler in supplements. High omega-6 linoleic acid content (~55-60%) may contribute to pro-inflammatory eicosanoid production when omega-6/omega-3 ratio is elevated, but no direct toxicological mechanism at supplement carrier oil quantities. FDA GRAS (21 CFR 184.1245). Severity is low — this is a quality/formulation signal rather than a safety hazard.",
+      "last_updated": "2026-03-24",
       "mechanism_of_harm": "High omega-6 linoleic acid content (~55-60%) contributes to pro-inflammatory eicosanoid production when dietary omega-6/omega-3 ratio is already elevated. Refining process may generate trace lipid oxidation products. No direct toxicological mechanism at supplement carrier oil quantities. Quality/formulation signal rather than acute hazard.",
       "regulatory_status": {
         "US": "FDA GRAS (21 CFR 184.1245). Generally recognized as safe as salad/cooking oil and food-grade carrier.",
@@ -3938,11 +3954,16 @@
             "date": "2026-03-22",
             "change": "Replaced placeholder mechanism with verified biochemical pathway.",
             "reason": "mechanism_backfill"
+          },
+          {
+            "date": "2026-03-24",
+            "change": "Deep audit: severity moderate->low (quality signal, not toxicological hazard at supplement carrier oil quantities). Rewrote notes to reflect accurate risk level.",
+            "reason": "batch_3_deep_audit"
           }
         ]
       },
       "confidence": "medium",
-      "severity_level": "moderate",
+      "severity_level": "low",
       "dose_thresholds": null,
       "entity_relationships": null,
       "cui": "C0010029",
@@ -3987,10 +4008,10 @@
       ],
       "notes": "Corn syrup solids are dehydrated corn syrup — essentially pure glucose with a glycemic index near 100. FDA GRAS. In supplements, they serve as cheap fillers or binders adding empty calories and causing rapid blood-sugar spikes. While metabolically harmful in excess, this is a nutritional concern (like added sugar) rather than a toxicological hazard, so severity is moderate. Diabetics and those with metabolic syndrome should avoid products containing this ingredient.",
       "scientific_references": [
-        "DOI: 10.1093/ajcn/86.4.895 - Glycemic effects of glucose",
-        "DOI: 10.1016/j.numecd.2019.05.062 - High GI carbohydrates and metabolic disease"
+        "REMOVED: DOI 10.1093/ajcn/86.4.895 was MISATTRIBUTED (resolves to fructose paper, not glycemic effects of glucose)",
+        "REMOVED: DOI 10.1016/j.numecd.2019.05.062 was MISATTRIBUTED (resolves to alcohol/mortality paper, not GI carbohydrates)"
       ],
-      "last_updated": "2026-03-01",
+      "last_updated": "2026-03-24",
       "match_rules": {
         "match_mode": "alias_and_fuzzy",
         "fuzzy_threshold": 0.72,
@@ -3998,26 +4019,6 @@
         "preferred_alias": "Corn Syrup Solids"
       },
       "references_structured": [
-        {
-          "type": "systematic_review",
-          "authority": "OTHER",
-          "title": "DOI: 10.1093/ajcn/86.4.895 - Glycemic effects of glucose",
-          "citation": "DOI: 10.1093/ajcn/86.4.895 - Glycemic effects of glucose",
-          "url": "https://doi.org/10.1093/ajcn/86.4.895",
-          "published_date": null,
-          "evidence_grade": "B",
-          "supports_claims": []
-        },
-        {
-          "type": "systematic_review",
-          "authority": "OTHER",
-          "title": "DOI: 10.1016/j.numecd.2019.05.062 - High GI carbohydrates and metabolic disease",
-          "citation": "DOI: 10.1016/j.numecd.2019.05.062 - High GI carbohydrates and metabolic disease",
-          "url": "https://doi.org/10.1016/j.numecd.2019.05.062",
-          "published_date": null,
-          "evidence_grade": "B",
-          "supports_claims": []
-        },
         {
           "type": "regulatory_action",
           "authority": "FDA",
@@ -4118,10 +4119,15 @@
             "date": "2026-03-22",
             "change": "Schema v5.1 migration: removed top-level CUI (→ external_ids.umls_cui), removed label_tokens/regex from match_rules, normalized external_ids casing, standardized references_structured fields, mapped status_codes to canonical enum, removed exposure_context/entity_type(ingredient)/class_tags dead-weight fields.",
             "reason": "schema_v5.1_migration"
+          },
+          {
+            "date": "2026-03-24",
+            "change": "Deep audit: removed 2 misattributed DOIs (10.1093/ajcn/86.4.895 = fructose paper, 10.1016/j.numecd.2019.05.062 = alcohol/mortality paper). Downgraded confidence high->medium. CFR ref and WHO guideline retained as authoritative.",
+            "reason": "batch_3_deep_audit"
           }
         ]
       },
-      "confidence": "high",
+      "confidence": "medium",
       "severity_level": "moderate",
       "dose_thresholds": null,
       "entity_relationships": null,
@@ -4157,7 +4163,7 @@
         "crosslinked CMC",
         "croscamellose sodium"
       ],
-      "category": "filler",
+      "category": "excipient",
       "mechanism_of_harm": "Synthetic polymer (modified cellulose) that swells rapidly in water. Generally considered safe but may cause bloating, gas, or digestive discomfort in sensitive individuals. Not absorbed systemically.",
       "regulatory_status": {
         "US": "FDA approved as inactive ingredient",
@@ -4170,9 +4176,9 @@
       ],
       "notes": "A 'superdisintegrant' that swells rapidly in water to help tablets and capsules break apart in the digestive system. It is a synthetic polymer (modified cellulose) that may cause bloating or other digestive issues in sensitive individuals. Generally well-tolerated.",
       "scientific_references": [
-        "DOI: 10.1016/j.ijpharm.2016.11.018 - Disintegrant mechanisms"
+        "NEEDS_VERIFICATION: DOI 10.1016/j.ijpharm.2016.11.018 resolves to manufacturing technology paper, not disintegrant mechanisms"
       ],
-      "last_updated": "2026-02-18",
+      "last_updated": "2026-03-24",
       "match_rules": {
         "match_mode": "alias_and_fuzzy",
         "fuzzy_threshold": 0.72,
@@ -4271,6 +4277,11 @@
             "date": "2026-03-22",
             "change": "Schema v5.1 migration: removed top-level CUI (→ external_ids.umls_cui), removed label_tokens/regex from match_rules, normalized external_ids casing, standardized references_structured fields, mapped status_codes to canonical enum, removed exposure_context/entity_type(ingredient)/class_tags dead-weight fields.",
             "reason": "schema_v5.1_migration"
+          },
+          {
+            "date": "2026-03-24",
+            "change": "Deep audit: category filler->excipient (pharmaceutical superdisintegrant). Flagged DOI 10.1016/j.ijpharm.2016.11.018 as misattributed (manufacturing tech paper, not disintegrant review).",
+            "reason": "batch_3_deep_audit"
           }
         ]
       },
@@ -4310,22 +4321,22 @@
         "kollidon CL",
         "crosslinked PVP"
       ],
-      "category": "filler",
-      "mechanism_of_harm": "Synthetic polymer largely unabsorbed by the body. As a synthetic microplastic, theoretical concerns exist about potential accumulation in tissues with long-term exposure, though evidence is limited. May cause minor digestive effects in sensitive individuals.",
+      "category": "excipient",
+      "mechanism_of_harm": "Synthetic cross-linked polyvinylpyrrolidone polymer largely unabsorbed by the body. As a synthetic polymer, theoretical concerns exist about potential accumulation in tissues with long-term exposure, though evidence is limited. May cause minor digestive effects in sensitive individuals. Not absorbed systemically.",
       "regulatory_status": {
-        "US": "FDA approved as inactive ingredient",
-        "EU": "E1202 approved",
-        "WHO": "No ADI specified - considered safe"
+        "US": "FDA approved as inactive ingredient (21 CFR 172.375)",
+        "EU": "E1202 approved as food additive",
+        "WHO": "No ADI specified — considered safe as excipient"
       },
       "population_warnings": [
-        "People concerned about microplastics - Theoretical accumulation risk",
-        "People with digestive sensitivity - May cause minor effects"
+        "People with digestive sensitivity — may cause minor bloating",
+        "No significant safety concerns at typical excipient doses"
       ],
-      "notes": "A synthetic polymer and 'superdisintegrant' used to promote rapid tablet dissolution. It is largely unabsorbed, but as a synthetic microplastic, some concerns exist about potential accumulation in tissues with long-term exposure. Generally considered safe.",
+      "notes": "A synthetic polymer and 'superdisintegrant' (cross-linked PVP) used to promote rapid tablet dissolution. It is largely unabsorbed and generally considered safe. FDA-approved inactive ingredient (21 CFR 172.375). CAS 9003-39-8. Low severity because no systemic absorption or toxicological concern at excipient quantities.",
       "scientific_references": [
-        "DOI: 10.1016/j.ijpharm.2016.11.018 - Disintegrant review"
+        "NEEDS_VERIFICATION: DOI 10.1016/j.ijpharm.2016.11.018 resolves to manufacturing technology paper, not disintegrant review"
       ],
-      "last_updated": "2026-02-16",
+      "last_updated": "2026-03-24",
       "match_rules": {
         "match_mode": "alias_and_fuzzy",
         "fuzzy_threshold": 0.72,
@@ -4424,6 +4435,11 @@
             "date": "2026-03-22",
             "change": "Schema v5.1 migration: removed top-level CUI (→ external_ids.umls_cui), removed label_tokens/regex from match_rules, normalized external_ids casing, standardized references_structured fields, mapped status_codes to canonical enum, removed exposure_context/entity_type(ingredient)/class_tags dead-weight fields.",
             "reason": "schema_v5.1_migration"
+          },
+          {
+            "date": "2026-03-24",
+            "change": "CRITICAL FIX: CAS 128073-16-5 was WRONG (ethyl chloropyridine compound). Corrected to 9003-39-8 (GSRS verified). PubChem CID 22013558 was WRONG (different compound). Removed CID, added UNII 2S7830E561. Category filler->excipient. Flagged misattributed DOI.",
+            "reason": "batch_3_deep_audit"
           }
         ]
       },
@@ -4433,8 +4449,8 @@
       "entity_relationships": null,
       "cui": "C0728803",
       "external_ids": {
-        "cas": "128073-16-5",
-        "pubchem_cid": 22013558
+        "cas": "9003-39-8",
+        "unii": "2S7830E561"
       }
     },
     {
@@ -4464,10 +4480,10 @@
       ],
       "notes": "While copper is an essential mineral, cupric sulfate is a synthetic form. DOWNGRADED TO LOW RISK as copper is essential and toxicity only occurs at high doses far exceeding normal supplement use. Generally safe at recommended levels. Main concern is for people with Wilson's disease who cannot metabolize copper.",
       "scientific_references": [
-        "DOI: 10.3390/nu12020682 - Copper nutrition and toxicity",
-        "IOM Dietary Reference Intakes - Copper"
+        "DOI: 10.1016/j.jtemb.2016.02.006 - Bost et al. 2016, Dietary copper and human health: Current evidence and unresolved issues",
+        "IOM Dietary Reference Intakes for Vitamin A, Vitamin K, Arsenic, Boron, Chromium, Copper, Iodine, Iron, Manganese, Molybdenum, Nickel, Silicon, Vanadium, and Zinc (2001)"
       ],
-      "last_updated": "2026-02-16",
+      "last_updated": "2026-03-24",
       "match_rules": {
         "match_mode": "alias_and_fuzzy",
         "fuzzy_threshold": 0.72,
@@ -4484,6 +4500,16 @@
           "published_date": null,
           "evidence_grade": "B",
           "supports_claims": []
+        },
+        {
+          "type": "review",
+          "authority": "OTHER",
+          "title": "Bost et al. 2016 - Dietary copper and human health: Current evidence and unresolved issues",
+          "citation": "J Trace Elem Med Biol. 2016;35:107-115",
+          "url": "https://doi.org/10.1016/j.jtemb.2016.02.006",
+          "published_date": "2016-03-05",
+          "evidence_grade": "B",
+          "supports_claims": ["copper_nutrition", "copper_toxicity_threshold"]
         }
       ],
       "jurisdictional_statuses": [
@@ -4566,14 +4592,25 @@
             "date": "2026-03-22",
             "change": "Schema v5.1 migration: removed top-level CUI (→ external_ids.umls_cui), removed label_tokens/regex from match_rules, normalized external_ids casing, standardized references_structured fields, mapped status_codes to canonical enum, removed exposure_context/entity_type(ingredient)/class_tags dead-weight fields.",
             "reason": "schema_v5.1_migration"
+          },
+          {
+            "date": "2026-03-24",
+            "change": "Deep audit: CUI C0009968 (copper element) corrected to C0056301 (copper sulfate). Replaced fabricated DOI 10.3390/nu12020682 (404) with verified Bost 2016 (10.1016/j.jtemb.2016.02.006). Added dose_thresholds: copper UL 10 mg/day (IOM 2001).",
+            "reason": "batch_3_deep_audit"
           }
         ]
       },
       "confidence": "medium",
       "severity_level": "low",
-      "dose_thresholds": null,
+      "dose_thresholds": [
+        {
+          "value": 10,
+          "unit": "mg/day",
+          "source": "IOM Tolerable Upper Intake Level for copper in adults (2001)"
+        }
+      ],
       "entity_relationships": null,
-      "cui": "C0009968",
+      "cui": "C0056301",
       "external_ids": {
         "cas": "7758-98-7",
         "pubchem_cid": 24462,
@@ -4624,7 +4661,7 @@
       ],
       "notes": "Dextrose is pure glucose (GI ~100), the simplest sugar. In supplements it serves as a filler or binder, adding empty calories and causing rapid blood-sugar spikes. The WHO recommends limiting free sugars to <10% of daily energy. People with diabetes or insulin resistance should be especially cautious. Its presence often signals a lower-quality formulation that uses cheap excipients.",
       "scientific_references": [],
-      "last_updated": "2026-03-01",
+      "last_updated": "2026-03-24",
       "match_rules": {
         "match_mode": "alias_and_fuzzy",
         "fuzzy_threshold": 0.72,
@@ -4638,9 +4675,9 @@
           "title": "WHO guideline: Sugars intake for adults and children (2015)",
           "citation": "WHO guideline: Sugars intake for adults and children (2015)",
           "url": "https://www.who.int/publications/i/item/9789241549028",
-          "published_date": null,
+          "published_date": "2015-03-04",
           "evidence_grade": "A",
-          "supports_claims": []
+          "supports_claims": ["limit_free_sugars"]
         }
       ],
       "jurisdictional_statuses": [
@@ -4658,7 +4695,7 @@
       ],
       "review": {
         "status": "validated",
-        "last_reviewed_at": "2026-03-01",
+        "last_reviewed_at": "2026-03-24",
         "reviewed_by": "harmful_additives_audit",
         "next_review_due": "2026-07-07",
         "change_log": [
@@ -4706,11 +4743,16 @@
             "date": "2026-03-22",
             "change": "Schema v5.1 migration: removed top-level CUI (→ external_ids.umls_cui), removed label_tokens/regex from match_rules, normalized external_ids casing, standardized references_structured fields, mapped status_codes to canonical enum, removed exposure_context/entity_type(ingredient)/class_tags dead-weight fields.",
             "reason": "schema_v5.1_migration"
+          },
+          {
+            "date": "2026-03-24",
+            "change": "Deep audit: severity moderate->low (pure glucose is a nutritional concern, not toxicological — sugar filler in small supplement quantities). Verified CAS 50-99-7, CID 5793, UNII 5SL0G7R0OK, CUI C0017725 all correct.",
+            "reason": "batch_3_deep_audit"
           }
         ]
       },
       "confidence": "medium",
-      "severity_level": "moderate",
+      "severity_level": "low",
       "dose_thresholds": null,
       "entity_relationships": null,
       "cui": "C0017725",
@@ -4746,7 +4788,7 @@
       ],
       "category": "preservative",
       "notes": "Synthetic chelating agent and preservative. While FDA approved for food use, concerns about mineral depletion, potential heavy metal mobilization, and cellular membrane disruption. May interfere with nutrient absorption. Cross-reference: shares E385 regulatory identity with ADD_CALCIUM_DISODIUM_EDTA (calcium disodium EDTA).",
-      "last_updated": "2026-03-08",
+      "last_updated": "2026-03-24",
       "mechanism_of_harm": "Non-selective chelator binding divalent/trivalent metal ions (Zn²⁺, Fe²⁺/Fe³⁺, Cu²⁺, Ca²⁺). Mechanism identical to calcium disodium EDTA (ADD_CALCIUM_DISODIUM_EDTA). Poorly absorbed orally (~5%). GI-level mineral binding may reduce bioavailability of co-administered mineral supplements.",
       "regulatory_status": {
         "US": "FDA approved food additive (21 CFR 172.120). Approved uses are limited to specific food categories (dressings, sauces, mayonnaise, canned/bottled legumes). ADI: 2.5 mg/kg bw/day (JECFA).",
@@ -4754,7 +4796,9 @@
         "WHO": "JECFA ADI: 2.5 mg/kg bw/day (established 1973, reaffirmed)."
       },
       "population_warnings": [
-        "General population - review specific concerns"
+        "People taking mineral supplements — may chelate and reduce absorption of zinc, iron, copper, calcium",
+        "People with kidney disease — impaired excretion may increase accumulation risk",
+        "People with mineral deficiencies — chelation may worsen existing deficits"
       ],
       "scientific_references": [],
       "match_rules": {
@@ -4767,8 +4811,8 @@
         {
           "type": "regulatory_action",
           "authority": "FDA",
-          "title": "FDA Food Additive Status List - Disodium EDTA (21 CFR 173.165)",
-          "citation": "FDA Food Additive Status List - Disodium EDTA (21 CFR 173.165)",
+          "title": "FDA Food Additive Status List - Disodium EDTA (21 CFR 172.120)",
+          "citation": "FDA Food Additive Status List - Disodium EDTA (21 CFR 172.120)",
           "url": "https://www.fda.gov/food/food-additives-petitions/food-additive-status-list",
           "published_date": null,
           "evidence_grade": "B",
@@ -4855,12 +4899,23 @@
             "date": "2026-03-22",
             "change": "Replaced placeholder mechanism with verified biochemical pathway.",
             "reason": "mechanism_backfill"
+          },
+          {
+            "date": "2026-03-24",
+            "change": "Deep audit: added dose_thresholds (JECFA ADI 2.5 mg/kg/day). Improved population_warnings from placeholder to specific (mineral absorption, kidney disease). Fixed CFR citation 173.165->172.120. Verified CAS 139-33-3, CID 13020083, UNII 8NLQ36F6MM all correct for anhydrous form.",
+            "reason": "batch_3_deep_audit"
           }
         ]
       },
       "confidence": "medium",
       "severity_level": "moderate",
-      "dose_thresholds": null,
+      "dose_thresholds": [
+        {
+          "value": 2.5,
+          "unit": "mg/kg/day",
+          "source": "JECFA ADI (established 1973, reaffirmed)"
+        }
+      ],
       "entity_relationships": null,
       "cui": "C0012695",
       "external_ids": {
@@ -4903,8 +4958,8 @@
       ],
       "category": "sweetener",
       "notes": "D-Mannose is a natural simple sugar with evidence-based use for urinary tract health (prevents E. coli adhesion to bladder wall). As a supplement active it is legitimate and tracked in IQM. Penalized here only when used as a bulking sweetener in non-UTI products, where it adds empty sugar calories. Low severity because the sugar load per serving is typically small in supplement contexts.",
-      "last_updated": "2026-03-01",
-      "mechanism_of_harm": "D-Mannose is a naturally occurring simple sugar found in cranberries and other fruits. When used as a supplement active ingredient (e.g., for urinary tract health), it is legitimate. However, when used as a bulk sweetener or filler in other supplements, it adds unnecessary sugar calories with high glycemic impact.",
+      "last_updated": "2026-03-24",
+      "mechanism_of_harm": "D-Mannose is a naturally occurring simple sugar found in cranberries and other fruits. When used as a supplement active ingredient (e.g., for urinary tract health), it is legitimate — it prevents E. coli adhesion to bladder wall. However, when used as a bulk sweetener or filler in other supplements, it adds unnecessary sugar calories with high glycemic impact.",
       "regulatory_status": {
         "US": "Sold as dietary supplement; FDA GRAS for food use",
         "EU": "Permitted in supplements"
@@ -4913,7 +4968,9 @@
         "People with diabetes — simple sugar that raises blood glucose",
         "People taking blood thinners — theoretical interaction at very high doses"
       ],
-      "scientific_references": [],
+      "scientific_references": [
+        "DOI: 10.1007/s00345-013-1091-6 - Kranjcec et al. 2014, D-mannose powder for prophylaxis of recurrent UTIs in women: a randomized clinical trial"
+      ],
       "match_rules": {
         "match_mode": "alias_and_fuzzy",
         "fuzzy_threshold": 0.72,
@@ -4922,14 +4979,14 @@
       },
       "references_structured": [
         {
-          "type": "systematic_review",
+          "type": "clinical_trial",
           "authority": "OTHER",
-          "title": "BMC Infectious Diseases 2014;14:433 - D-mannose for recurrent urinary tract infections",
-          "citation": "BMC Infectious Diseases 2014;14:433 - D-mannose for recurrent urinary tract infections",
-          "url": "https://doi.org/10.1186/1471-2334-14-433",
-          "published_date": null,
+          "title": "Kranjcec et al. 2014 - D-mannose powder for prophylaxis of recurrent urinary tract infections in women: a randomized clinical trial",
+          "citation": "World J Urol. 2014;32(1):79-84",
+          "url": "https://doi.org/10.1007/s00345-013-1091-6",
+          "published_date": "2013-04-30",
           "evidence_grade": "A",
-          "supports_claims": []
+          "supports_claims": ["UTI_prevention", "therapeutic_use_as_active"]
         }
       ],
       "jurisdictional_statuses": [
@@ -5006,6 +5063,11 @@
             "date": "2026-03-22",
             "change": "Schema v5.1 migration: removed top-level CUI (→ external_ids.umls_cui), removed label_tokens/regex from match_rules, normalized external_ids casing, standardized references_structured fields, mapped status_codes to canonical enum, removed exposure_context/entity_type(ingredient)/class_tags dead-weight fields.",
             "reason": "schema_v5.1_migration"
+          },
+          {
+            "date": "2026-03-24",
+            "change": "Deep audit: replaced misattributed DOI 10.1186/1471-2334-14-433 (telemedicine paper) with verified Kranjcec 2014 RCT (10.1007/s00345-013-1091-6). Verified CAS 3458-28-4/530-26-7, CID 18950, UNII PHA4727WTP, CUI C0024742 all correct. Confirmed low severity appropriate — therapeutic active penalized only as filler.",
+            "reason": "batch_3_deep_audit"
           }
         ]
       },
