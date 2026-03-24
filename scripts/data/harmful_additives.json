@@ -1982,7 +1982,6 @@
       "id": "ADD_CALCIUM_DISODIUM_EDTA",
       "standard_name": "Calcium Disodium EDTA",
       "aliases": [
-        "EDTA",
         "E385",
         "calcium disodium ethylenediaminetetraacetate",
         "edetate calcium disodium",
@@ -1992,11 +1991,11 @@
       ],
       "category": "preservative",
       "notes": "A synthetic chelating agent used as a preservative in supplements to bind metal ions and prevent oxidation. Can deplete essential minerals (zinc, iron, copper) when consumed regularly. FDA limits use to 75 ppm in food. Not recommended in mineral-containing supplement formulations where it may reduce bioavailability of the active ingredients. Cross-reference: shares E385 regulatory identity with ADD_DISODIUM_EDTA (disodium EDTA).",
-      "last_updated": "2026-02-26",
+      "last_updated": "2026-03-24",
       "mechanism_of_harm": "Non-selective chelator that binds divalent and trivalent metal ions (Zn²⁺, Fe²⁺/Fe³⁺, Cu²⁺, Ca²⁺, Mn²⁺) with high affinity, forming stable complexes excreted renally. Chronic dietary exposure can deplete essential trace minerals. In supplements containing mineral ingredients, EDTA may chelate and reduce bioavailability of the intended active. Poorly absorbed orally (~5%), limiting systemic toxicity, but GI-level mineral binding still occurs.",
       "regulatory_status": {
         "US": "FDA approved food additive under 21 CFR 172.120. Limited to specific foods; max 75–500 ppm depending on application.",
-        "EU": "E385 authorized with ADI of 2.5 mg/kg bw/day as calcium disodium EDTA (EFSA, SCF 2003 re-evaluation)."
+        "EU": "E385 authorized with ADI of 2.5 mg/kg bw/day (SCF 1977, reconfirmed 1990). EFSA full re-evaluation pending (call for data issued 2024)."
       },
       "population_warnings": [
         "People taking mineral supplements — EDTA may chelate and reduce absorption of zinc, iron, copper, and calcium",
@@ -2005,7 +2004,7 @@
       ],
       "scientific_references": [
         "21 CFR 172.120 - FDA food additive listing for calcium disodium EDTA",
-        "DOI: 10.2903/j.efsa.2019.5747 - EFSA 2019 re-evaluation of calcium disodium EDTA (E385)"
+        "SCF 1977 opinion establishing ADI 2.5 mg/kg bw/day for calcium disodium EDTA (E385), reconfirmed 1990"
       ],
       "match_rules": {
         "match_mode": "alias_and_fuzzy",
@@ -2027,11 +2026,11 @@
         {
           "type": "regulatory_action",
           "authority": "EFSA",
-          "title": "EFSA 2019 re-evaluation of calcium disodium EDTA (E385) - ADI 2.5 mg/kg/day",
-          "citation": "EFSA 2019 re-evaluation of calcium disodium EDTA (E385) - ADI 2.5 mg/kg/day",
-          "url": "https://doi.org/10.2903/j.efsa.2019.5747",
-          "published_date": "2019-06-13",
-          "evidence_grade": "A",
+          "title": "SCF 1977/1990 opinion - ADI 2.5 mg/kg bw/day for calcium disodium EDTA (E385). EFSA full re-evaluation pending.",
+          "citation": "SCF 1977/1990 opinion - ADI 2.5 mg/kg bw/day for calcium disodium EDTA (E385). EFSA full re-evaluation pending.",
+          "url": "https://www.efsa.europa.eu/en/call/call-data-re-evaluation-calcium-disodium-edta-e-385-food-additive",
+          "published_date": null,
+          "evidence_grade": "R",
           "supports_claims": []
         }
       ],
@@ -2114,12 +2113,23 @@
             "date": "2026-03-22",
             "change": "Schema v5.1 migration: removed top-level CUI (→ external_ids.umls_cui), removed label_tokens/regex from match_rules, normalized external_ids casing, standardized references_structured fields, mapped status_codes to canonical enum, removed exposure_context/entity_type(ingredient)/class_tags dead-weight fields.",
             "reason": "schema_v5.1_migration"
+          },
+          {
+            "date": "2026-03-24",
+            "change": "CRITICAL: Removed fabricated DOI 10.2903/j.efsa.2019.5747 (resolves to quizalofop MRL paper, not EDTA). Corrected EU regulatory_status from 'SCF 2003' to 'SCF 1977/1990'. EFSA re-evaluation still pending (2024 call for data). Removed overly generic alias 'EDTA' (collision risk with disodium EDTA). Added dose_thresholds with SCF ADI 2.5 mg/kg/day.",
+            "reason": "batch_2_deep_audit"
           }
         ]
       },
       "confidence": "medium",
       "severity_level": "moderate",
-      "dose_thresholds": null,
+      "dose_thresholds": [
+        {
+          "value": 2.5,
+          "unit": "mg/kg/day",
+          "source": "SCF ADI (1977, reconfirmed 1990)"
+        }
+      ],
       "entity_relationships": null,
       "cui": "C0006692",
       "rxcui": "1371967",
@@ -2708,7 +2718,7 @@
       ],
       "external_ids": {
         "cas": "57-50-1",
-        "pubchem_cid": "5988",
+        "pubchem_cid": 5988,
         "unii": "C151H8M554"
       },
       "jurisdictional_statuses": [
@@ -2766,6 +2776,11 @@
             "date": "2026-03-22",
             "change": "Schema v5.1 migration: removed top-level CUI (→ external_ids.umls_cui), removed label_tokens/regex from match_rules, normalized external_ids casing, standardized references_structured fields, mapped status_codes to canonical enum, removed exposure_context/entity_type(ingredient)/class_tags dead-weight fields.",
             "reason": "schema_v5.1_migration"
+          },
+          {
+            "date": "2026-03-24",
+            "change": "Fixed pubchem_cid type: string '5988' -> integer 5988.",
+            "reason": "batch_2_deep_audit"
           }
         ]
       },
@@ -2811,11 +2826,11 @@
       ],
       "category": "fat_oil",
       "notes": "A highly refined vegetable oil used as a carrier or softgel fill in supplements. High-heat refining (deodorization at 200–270°C) may generate lipid oxidation products and trace trans fats. Predominantly omega-6 linoleic acid; chronic high intake may shift omega-6/omega-3 balance. Not banned anywhere. Quality concern rather than acute toxicity.",
-      "last_updated": "2026-03-08",
+      "last_updated": "2026-03-24",
       "mechanism_of_harm": "Refined canola oil undergoes high-heat processing (bleaching, deodorization at 200–270°C) that may generate lipid oxidation products (aldehydes, peroxides) and trace trans fatty acids. High omega-6 content (~20% linoleic acid) may contribute to pro-inflammatory eicosanoid pathways when dietary omega-6/omega-3 ratio is already elevated. Modern canola is bred for low erucic acid (<2%) to avoid cardiotoxicity concerns of traditional rapeseed. Primarily a quality/formulation signal rather than acute harm.",
       "regulatory_status": {
-        "US": "FDA GRAS. Qualified health claim allowed for reduced saturated fat (21 CFR 101.83).",
-        "EU": "Allowed. Low erucic acid rapeseed oil authorized; erucic acid limit 2% of total fatty acids (Reg 2019/649).",
+        "US": "FDA GRAS (21 CFR 184.1555). Qualified health claim allowed for reduced saturated fat.",
+        "EU": "Allowed. Low erucic acid rapeseed oil authorized; erucic acid max 20 g/kg in vegetable oils (Reg 2019/1870 amending Reg 1881/2006).",
         "WHO": "No specific ADI. WHO recommends balanced omega-6/omega-3 intake."
       },
       "population_warnings": [
@@ -2823,8 +2838,8 @@
         "People concerned about oxidation products — refined oils contain aldehydes from high-heat processing"
       ],
       "scientific_references": [
-        "DOI: 10.1016/j.fct.2017.07.055 - Aldehydes in heated cooking oils",
-        "EU Reg 2019/649 - Erucic acid limits in food"
+        "21 CFR 184.1555 - FDA GRAS listing for low erucic acid rapeseed (canola) oil",
+        "EU Reg 2019/1870 amending Reg 1881/2006 - Erucic acid max levels in food (max 20 g/kg vegetable oils)"
       ],
       "match_rules": {
         "match_mode": "alias_and_fuzzy",
@@ -2928,6 +2943,11 @@
             "date": "2026-03-22",
             "change": "Schema v5.1 migration: removed top-level CUI (→ external_ids.umls_cui), removed label_tokens/regex from match_rules, normalized external_ids casing, standardized references_structured fields, mapped status_codes to canonical enum, removed exposure_context/entity_type(ingredient)/class_tags dead-weight fields.",
             "reason": "schema_v5.1_migration"
+          },
+          {
+            "date": "2026-03-24",
+            "change": "CRITICAL: Removed fabricated DOI 10.1016/j.fct.2017.07.055 (resolves to wound healing paper, not cooking oil aldehydes). Fixed wrong EU regulation: 2019/649 (trans fats) -> 2019/1870 (erucic acid max levels). Added correct FDA GRAS CFR 184.1555. Updated US regulatory_status with correct CFR section.",
+            "reason": "batch_2_deep_audit"
           }
         ]
       },
@@ -2986,10 +3006,10 @@
       ],
       "notes": "A coloring agent with four classes (I–IV). Class III (E150c) and Class IV (E150d) are produced with ammonia and may contain 4-methylimidazole (4-MEI), classified as possibly carcinogenic. California Prop 65 requires warning labels for products with >29 μg 4-MEI/day. Not banned anywhere, but monitored. Class I (E150a) and II (E150b) are safer alternatives.",
       "scientific_references": [
-        "DOI: 10.1016/j.fct.2012.06.052 - 4-MEI carcinogenicity in rodents",
-        "DOI: 10.1021/jf204398u - 4-MEI levels in beverages"
+        "NTP Technical Report 535 (2007) - Toxicology and carcinogenesis studies of 4-methylimidazole in F344/N rats and B6C3F1 mice (PMID: 17342198)",
+        "DOI: 10.1021/jf304855u - Carcinogenic 4(5)-methylimidazole found in beverages, sauces, and caramel colors (J Agric Food Chem, 2013)"
       ],
-      "last_updated": "2026-02-26",
+      "last_updated": "2026-03-24",
       "match_rules": {
         "match_mode": "alias_and_fuzzy",
         "fuzzy_threshold": 0.72,
@@ -3000,10 +3020,30 @@
         {
           "type": "regulatory_action",
           "authority": "FDA",
-          "title": "FDA Food Additive Status List - Caramel color (21 CFR 73.100)",
-          "citation": "FDA Food Additive Status List - Caramel color (21 CFR 73.100)",
+          "title": "FDA Food Additive Status List - Caramel color (21 CFR 73.85)",
+          "citation": "FDA Food Additive Status List - Caramel color (21 CFR 73.85)",
           "url": "https://www.fda.gov/food/food-additives-petitions/food-additive-status-list",
           "published_date": null,
+          "evidence_grade": "R",
+          "supports_claims": []
+        },
+        {
+          "type": "clinical_study",
+          "authority": "NTP",
+          "title": "NTP TR-535: Toxicology and carcinogenesis studies of 4-methylimidazole (2007)",
+          "citation": "NTP Technical Report 535 - 4-methylimidazole carcinogenesis in F344/N rats and B6C3F1 mice",
+          "url": "https://ntp.niehs.nih.gov/sites/default/files/ntp/htdocs/lt_rpts/tr535.pdf",
+          "published_date": "2007-01-01",
+          "evidence_grade": "A",
+          "supports_claims": []
+        },
+        {
+          "type": "clinical_study",
+          "authority": "OTHER",
+          "title": "Carcinogenic 4(5)-methylimidazole found in beverages, sauces, and caramel colors (Hengel & Shibamoto, 2013)",
+          "citation": "DOI: 10.1021/jf304855u - J Agric Food Chem 2013",
+          "url": "https://doi.org/10.1021/jf304855u",
+          "published_date": "2013-01-30",
           "evidence_grade": "B",
           "supports_claims": []
         }
@@ -3093,12 +3133,23 @@
             "date": "2026-03-22",
             "change": "Schema v5.1 migration: removed top-level CUI (→ external_ids.umls_cui), removed label_tokens/regex from match_rules, normalized external_ids casing, standardized references_structured fields, mapped status_codes to canonical enum, removed exposure_context/entity_type(ingredient)/class_tags dead-weight fields.",
             "reason": "schema_v5.1_migration"
+          },
+          {
+            "date": "2026-03-24",
+            "change": "CRITICAL: Replaced both fabricated DOIs. DOI 10.1016/j.fct.2012.06.052 resolved to GMO soybean study; DOI 10.1021/jf204398u does not exist. Replaced with NTP TR-535 (PMID 17342198) and correct DOI 10.1021/jf304855u (Hengel & Shibamoto 2013). Updated references_structured with verified sources. Fixed CFR section from 73.100 to 73.85 (caramel, not cochineal). Added dose_thresholds for Prop 65 4-MEI limit.",
+            "reason": "batch_2_deep_audit"
           }
         ]
       },
       "confidence": "medium",
       "severity_level": "moderate",
-      "dose_thresholds": null,
+      "dose_thresholds": [
+        {
+          "value": 29,
+          "unit": "mcg/day",
+          "source": "California Prop 65 (4-MEI NSRL)"
+        }
+      ],
       "entity_relationships": null,
       "cui": "C0108509"
     },
@@ -3166,6 +3217,7 @@
       ],
       "external_ids": {
         "cas": "9004-32-4",
+        "pubchem_cid": 6328154,
         "unii": "K679OBS311"
       },
       "jurisdictional_statuses": [
@@ -3229,10 +3281,15 @@
             "date": "2026-03-22",
             "change": "Schema v5.1 migration: removed top-level CUI (→ external_ids.umls_cui), removed label_tokens/regex from match_rules, normalized external_ids casing, standardized references_structured fields, mapped status_codes to canonical enum, removed exposure_context/entity_type(ingredient)/class_tags dead-weight fields.",
             "reason": "schema_v5.1_migration"
+          },
+          {
+            "date": "2026-03-24",
+            "change": "Added PubChem CID 6328154 to external_ids. Upgraded confidence medium -> high (PMID 34774538 RCT verified, CFR 182.1745 verified). EFSA 2023 restricted E466 use in infant foods (categories 13.1.5.1/13.1.5.2).",
+            "reason": "batch_2_deep_audit"
           }
         ]
       },
-      "confidence": "medium",
+      "confidence": "high",
       "severity_level": "moderate",
       "dose_thresholds": null,
       "entity_relationships": null,
@@ -3271,7 +3328,7 @@
       ],
       "category": "colorant_natural",
       "notes": "A natural red colorant (E120) derived from dried female cochineal insects (*Dactylopius coccus*). Contains carminic acid, which can trigger IgE-mediated allergic reactions ranging from urticaria to anaphylaxis. ⚠️ FDA MANDATE: Since 2009, FDA requires explicit labeling of 'cochineal extract' or 'carmine' (21 CFR 73.100) due to severe allergic reactions. Not banned anywhere, but allergenic. Quality concern for sensitive individuals.",
-      "last_updated": "2026-02-26",
+      "last_updated": "2026-03-24",
       "mechanism_of_harm": "Carmine contains carminic acid and insect-derived proteins that can trigger IgE-mediated hypersensitivity reactions. Documented cases include urticaria, angioedema, bronchospasm, and anaphylaxis. Cross-reactivity with other insect allergens possible. FDA issued mandatory labeling rule in 2009 after multiple severe allergic reactions were reported. Allergenicity varies with processing quality and protein content.",
       "regulatory_status": {
         "US": "FDA approved as color additive (21 CFR 73.100). Mandatory allergen labeling required since 2009.",
@@ -3285,7 +3342,7 @@
       ],
       "scientific_references": [
         "21 CFR 73.100 - FDA mandatory labeling for cochineal extract/carmine (2009)",
-        "DOI: 10.1016/j.anai.2009.03.011 - Anaphylaxis to carmine colorant"
+        "EFSA Journal 2015;13(11):4288 - Re-evaluation of cochineal, carminic acid, carmines (E 120) as a food additive"
       ],
       "match_rules": {
         "match_mode": "alias_and_fuzzy",
@@ -3305,13 +3362,13 @@
           "supports_claims": []
         },
         {
-          "type": "clinical_trial",
-          "authority": "OTHER",
-          "title": "DOI: 10.1016/j.anai.2009.03.011 - Anaphylaxis to carmine colorant",
-          "citation": "DOI: 10.1016/j.anai.2009.03.011 - Anaphylaxis to carmine colorant",
-          "url": "https://doi.org/10.1016/j.anai.2009.03.011",
-          "published_date": null,
-          "evidence_grade": "C",
+          "type": "monograph",
+          "authority": "EFSA",
+          "title": "EFSA Journal 2015;13(11):4288 - Re-evaluation of cochineal, carminic acid, carmines (E 120) as food additive",
+          "citation": "EFSA Journal 2015;13(11):4288",
+          "url": "https://doi.org/10.2903/j.efsa.2015.4288",
+          "published_date": "2015-11-18",
+          "evidence_grade": "A",
           "supports_claims": []
         }
       ],
@@ -3393,12 +3450,23 @@
             "date": "2026-03-22",
             "change": "Schema v5.1 migration: removed top-level CUI (→ external_ids.umls_cui), removed label_tokens/regex from match_rules, normalized external_ids casing, standardized references_structured fields, mapped status_codes to canonical enum, removed exposure_context/entity_type(ingredient)/class_tags dead-weight fields.",
             "reason": "schema_v5.1_migration"
+          },
+          {
+            "date": "2026-03-24",
+            "change": "Replaced unverifiable DOI 10.1016/j.anai.2009.03.011 with EFSA 2015 re-evaluation (DOI: 10.2903/j.efsa.2015.4288). Added JECFA ADI dose_threshold (0-5 mg/kg bw as carmine). Updated references_structured with EFSA monograph.",
+            "reason": "batch_2_deep_audit"
           }
         ]
       },
       "confidence": "medium",
       "severity_level": "moderate",
-      "dose_thresholds": null,
+      "dose_thresholds": [
+        {
+          "value": 5,
+          "unit": "mg/kg/day",
+          "source": "JECFA ADI (26th meeting, as carmine)"
+        }
+      ],
       "entity_relationships": null,
       "cui": "C0007250"
     },
