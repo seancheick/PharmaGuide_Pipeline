@@ -64,6 +64,21 @@ def test_verify_cui_for_entry_uses_curated_none_override_for_policy_entries():
     assert report["match_source"] == "curated_override_none"
 
 
+def test_verify_cui_for_entry_uses_curated_none_override_for_iqm_pqq_entry():
+    report = verify_cui_for_entry(
+        AliasAwareClient(),
+        "IQM_PQQ",
+        "PQQ (Pyrroloquinoline Quinone)",
+        None,
+        ["pyrroloquinoline quinone"],
+        cui_status="no_confirmed_umls_match",
+    )
+
+    assert report["status"] == "ANNOTATED_NULL"
+    assert report["suggested_cui"] is None
+    assert report["match_source"] == "curated_override_none"
+
+
 def test_verify_cui_for_entry_accepts_existing_cui_when_exact_standard_resolves_same_concept():
     report = verify_cui_for_entry(
         AliasAwareClient(),
@@ -76,6 +91,38 @@ def test_verify_cui_for_entry_accepts_existing_cui_when_exact_standard_resolves_
     assert report["status"] == "VERIFIED"
     assert report["suggested_cui"] == "C_EXIST"
     assert report["match_source"] == "exact_standard"
+
+
+def test_verify_cui_for_entry_rejects_measurement_cui_even_when_name_overlaps():
+    class MeasurementClient:
+        def lookup_cui(self, cui):
+            assert cui == "C0202469"
+            return {
+                "cui": "C0202469",
+                "name": "Silica measurement",
+                "semantic_types": ["Laboratory Procedure"],
+            }
+
+        def search_exact(self, term):
+            return None
+
+        def search(self, term, max_results=3):
+            assert term == "Silica"
+            return [{"cui": "C0037098", "name": "silicon dioxide", "source": "TEST"}]
+
+    report = verify_cui_for_entry(
+        MeasurementClient(),
+        "IQM_SILICA",
+        "Silica",
+        "C0202469",
+        ["silicon dioxide"],
+    )
+
+    assert report["status"] == "MISMATCH"
+    assert report["umls_name"] == "Silica measurement"
+    assert report["suggested_cui"] == "C0037098"
+    assert report["suggested_name"] == "silicon dioxide"
+    assert report["match_source"] == "search"
 
 
 def test_verify_cui_for_entry_suppresses_broad_search_for_annotated_null():
@@ -110,6 +157,29 @@ def test_verify_cui_for_entry_flags_exact_match_for_annotated_null_review():
     assert "Annotated null should be reviewed" in report["action"]
 
 
+def test_verify_cui_for_product_entry_keeps_annotated_null_even_with_exact_alias_match():
+    class ProductClient(AliasAwareClient):
+        def search_exact(self, term):
+            if term == "hydroxycut":
+                return {"cui": "C1723542", "name": "hydroxycut", "source": "TEST"}
+            return super().search_exact(term)
+
+    report = verify_cui_for_entry(
+        ProductClient(),
+        "RECALLED_HYDROXYCUT",
+        "Hydroxycut (Multiple Formulations)",
+        None,
+        ["hydroxycut"],
+        cui_status="no_single_umls_concept",
+        entity_type="product",
+    )
+
+    assert report["status"] == "ANNOTATED_NULL"
+    assert report["suggested_cui"] == "C1723542"
+    assert report["match_source"] == "exact_alias"
+    assert report["action"] is None
+
+
 def test_should_apply_cui_fix_is_safe_by_default():
     exact_missing = {"status": "MISSING_CUI", "match_source": "exact_standard", "suggested_cui": "C1"}
     fuzzy_missing = {"status": "MISSING_CUI", "match_source": "search", "suggested_cui": "C2"}
@@ -119,6 +189,37 @@ def test_should_apply_cui_fix_is_safe_by_default():
     assert should_apply_cui_fix(fuzzy_missing, allow_mismatch_overwrite=False) is False
     assert should_apply_cui_fix(mismatch, allow_mismatch_overwrite=False) is False
     assert should_apply_cui_fix(mismatch, allow_mismatch_overwrite=True) is True
+
+
+def test_verify_cui_for_botanical_prefers_latin_name_over_extract_alias():
+    class BotanicalClient:
+        def lookup_cui(self, cui):
+            return None
+
+        def search_exact(self, term):
+            if term == "Acai Berry":
+                return None
+            if term == "acai berry extract":
+                return {"cui": "C2368977", "name": "acai extract", "source": "TEST"}
+            if term == "Euterpe oleracea":
+                return {"cui": "C1054955", "name": "Euterpe oleracea", "source": "TEST"}
+            return None
+
+        def search(self, term, max_results=3):
+            return []
+
+    report = verify_cui_for_entry(
+        BotanicalClient(),
+        "BOT_ACAI",
+        "Acai Berry",
+        None,
+        ["acai berry extract", "Euterpe oleracea"],
+        latin_name="Euterpe oleracea",
+    )
+
+    assert report["status"] == "MISSING_CUI"
+    assert report["suggested_cui"] == "C1054955"
+    assert report["suggested_name"] == "Euterpe oleracea"
 
 
 def test_umls_client_reuses_disk_cache(tmp_path, monkeypatch):
@@ -213,3 +314,31 @@ def test_verify_cui_module_docstring_includes_operator_runbook():
     assert "--apply-mismatches" in doc
     assert "leave cui null" in doc.lower()
     assert "exact alias" in doc.lower()
+
+
+def test_load_entries_supports_iqm_map_and_skips_metadata(tmp_path):
+    payload = {
+        "_metadata": {"version": "test"},
+        "ingredient_alpha": {
+            "standard_name": "Ingredient Alpha",
+            "cui": "C123",
+            "aliases": ["alpha"],
+            "cui_status": None,
+            "cui_note": "ok",
+        },
+        "ingredient_beta": {
+            "standard_name": "Ingredient Beta",
+            "cui": None,
+            "aliases": ["beta"],
+            "cui_status": "no_confirmed_umls_match",
+            "cui_note": "none",
+        },
+    }
+    path = tmp_path / "iqm.json"
+    path.write_text(json.dumps(payload))
+
+    entries = verify_cui.load_entries(path, "ingredient_quality_map", "id", "cui", mode="iqm")
+
+    assert [entry["id"] for entry in entries] == ["ingredient_alpha", "ingredient_beta"]
+    assert entries[0]["standard_name"] == "Ingredient Alpha"
+    assert entries[1]["cui_status"] == "no_confirmed_umls_match"

@@ -4,8 +4,8 @@
     "schema_version": "5.0.0",
     "purpose": "Explicitly allowed normalized term overlaps across routing databases. Any new overlap must be reviewed before scoring deployment.",
     "description": "Explicitly allowed normalized term overlaps across routing databases. Any new overlap must be reviewed before scoring deployment.",
-    "last_updated": "2026-03-01",
-    "total_entries": 23
+    "last_updated": "2026-03-25",
+    "total_entries": 27
   },
   "allowed_overlaps": [
     {
@@ -168,6 +168,34 @@
         "harmful:iqm"
       ],
       "reason": "Policy overlap between synthetic-form transparency and active vitamin E mapping."
+    },
+    {
+      "term_normalized": "xylitol",
+      "db_pairs": [
+        "harmful:iqm"
+      ],
+      "reason": "Sugar alcohol sweetener: active therapeutic ingredient in dental health products (IQM), inactive sweetener excipient with GI/CV penalty in other products (harmful_additives)."
+    },
+    {
+      "term_normalized": "birch sugar",
+      "db_pairs": [
+        "harmful:iqm"
+      ],
+      "reason": "Xylitol synonym 'birch sugar': active dental ingredient (IQM) and inactive sweetener penalty (harmful_additives)."
+    },
+    {
+      "term_normalized": "d xylitol",
+      "db_pairs": [
+        "harmful:iqm"
+      ],
+      "reason": "Xylitol synonym 'd xylitol': active dental ingredient (IQM) and inactive sweetener penalty (harmful_additives)."
+    },
+    {
+      "term_normalized": "wood sugar",
+      "db_pairs": [
+        "harmful:iqm"
+      ],
+      "reason": "Xylitol synonym 'wood sugar': active dental ingredient (IQM) and inactive sweetener penalty (harmful_additives)."
     }
   ]
 }

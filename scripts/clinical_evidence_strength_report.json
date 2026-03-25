@@ -1,0 +1,41 @@
+{
+  "summary": {
+    "entries": 180,
+    "mismatches": 5,
+    "issues": 0
+  },
+  "mismatches": [
+    {
+      "id": "BRAND_MEGASPORE_BIOTIC",
+      "claimed_study_type": "rct_single",
+      "recommended_study_type": "journal_article",
+      "recommended_evidence_level": "journal-article"
+    },
+    {
+      "id": "BRAND_CREAPURE",
+      "claimed_study_type": "rct_single",
+      "recommended_study_type": "journal_article",
+      "recommended_evidence_level": "journal-article"
+    },
+    {
+      "id": "BRAND_RELORA",
+      "claimed_study_type": "rct_single",
+      "recommended_study_type": "journal_article",
+      "recommended_evidence_level": "journal-article"
+    },
+    {
+      "id": "INGR_UBIQUINOL",
+      "claimed_study_type": "rct_multiple",
+      "recommended_study_type": "journal_article",
+      "recommended_evidence_level": "journal-article"
+    },
+    {
+      "id": "INGR_PANTETHINE",
+      "claimed_study_type": "rct_multiple",
+      "recommended_study_type": "journal_article",
+      "recommended_evidence_level": "journal-article"
+    }
+  ],
+  "issues": [],
+  "file": "scripts/data/backed_clinical_studies.json"
+}

@@ -32,7 +32,7 @@ LOG_FILE="${PROJECT_DIR}/scripts/fda_sync.log"
 echo "=== FDA Sync $(date) ===" >> "$LOG_FILE"
 
 # Step 1: Generate FDA report
-"$VENV_PYTHON" "${PROJECT_DIR}/scripts/fda_weekly_sync.py" --days 7 >> "$LOG_FILE" 2>&1
+"$VENV_PYTHON" "${PROJECT_DIR}/scripts/api_audit/fda_weekly_sync.py" --days 7 >> "$LOG_FILE" 2>&1
 
 # Step 2: Claude reviews report and updates JSON
 # Requires claude CLI to be installed and authenticated
@@ -153,7 +153,7 @@ jobs:
 
       - name: Run FDA sync script
         run: |
-          python scripts/fda_weekly_sync.py --days 7
+          python scripts/api_audit/fda_weekly_sync.py --days 7
 
       - name: Run Claude Code review
         env:
@@ -183,14 +183,14 @@ For on-demand runs:
 
 ```bash
 # Step 1: Generate FDA report
-python scripts/fda_weekly_sync.py --days 7
+python scripts/api_audit/fda_weekly_sync.py --days 7
 
 # Step 2: Open Claude Code and invoke the skill
 # In Claude Code terminal:
 /fda-weekly-sync
 
 # Or for a broader lookback window (e.g., first run ever):
-python scripts/fda_weekly_sync.py --days 30
+python scripts/api_audit/fda_weekly_sync.py --days 30
 ```
 
 ---

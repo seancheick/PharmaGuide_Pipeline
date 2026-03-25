@@ -131,17 +131,21 @@ Primary key: `backed_clinical_studies` (array)
 | `standard_name` | string | YES | Canonical ingredient name |
 | `aliases` | string[] | YES | Alternative names |
 | `category` | string | YES | Ingredient category |
-| `evidence_level` | string | YES | Evidence strength: `strong`, `moderate`, `emerging` |
-| `evidence_tier` | string | YES | Tier: `tier_1`, `tier_2`, `tier_3` |
-| `tier_points` | float | YES | Points awarded per tier |
+| `evidence_level` | string | YES | Evidence class: `ingredient-human`, `branded-rct`, `product-human`, `strain-clinical`, `preclinical` |
 | `study_type` | string | YES | Study design type |
-| `published_studies` | int | YES | Number of published studies |
-| `score_contribution` | float | YES | Base score contribution |
+| `published_studies` | string[] | YES | Evidence mix tags such as `RCT`, `meta-analysis`, `systematic_review`, `brand` |
+| `score_contribution` | string | YES | Scoring tier label such as `tier_1`, `tier_2`, `tier_3` |
 | `key_endpoints` | string[] | YES | Primary measured outcomes |
 | `health_goals_supported` | string[] | YES | Mapped health goals |
 | `notable_studies` | string | NO | Key study citations |
+| `references_structured` | object[] | NO | PubMed-backed structured citations with PMID, DOI, publication types, MeSH terms, and verification metadata. Curated non-PubMed references are also allowed for nutrient fact sheets or formulary/regulatory records when PubMed is not the right anchor |
 | `notes` | string | NO | Additional context |
 | `last_updated` | string | NO | ISO date |
+| `exclude_aliases` | string[] | NO | Explicitly denied aliases for matching safety |
+
+Clinical evidence notes:
+- `references_structured` is the normalized evidence layer. PubMed is the default evidence source, but curated non-PubMed refs are allowed when a nutrient, formulary, or regulatory source is the correct anchor.
+- `study_type` should use repo-native buckets such as `rct_single`, `rct_multiple`, `systematic_review_meta`, `observational`, `clinical_strain`, `animal_study`, and `in_vitro`.
 
 ---
 

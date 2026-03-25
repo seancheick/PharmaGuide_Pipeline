@@ -1,0 +1,313 @@
+{
+  "policy watchlist: synthetic food acids": {
+    "cui": null,
+    "name": null,
+    "note": "Curated override: policy/class entry spans multiple synthetic food acids, so no single ingredient-level UMLS concept is appropriate."
+  },
+  "synthetic food acids": {
+    "cui": null,
+    "name": null,
+    "note": "Curated override: policy/class entry spans multiple synthetic food acids, so no single ingredient-level UMLS concept is appropriate."
+  },
+  "antimony & antimony compounds": {
+    "cui": null,
+    "name": null,
+    "note": "Curated override: grouped contaminant entry spans elemental antimony plus multiple compounds, not one exact ingredient-level concept."
+  },
+  "tapioca filler": {
+    "cui": null,
+    "name": null,
+    "note": "Curated override: formulation/filler concern should not be auto-collapsed into the cassava plant concept alone."
+  },
+  "nitrites": {
+    "cui": "C0028137",
+    "name": "Nitrites"
+  },
+  "sodium nitrite/nitrate": {
+    "cui": "C0028137",
+    "name": "Nitrites"
+  },
+  "synthetic antioxidants": {
+    "cui": null,
+    "name": null,
+    "note": "Curated override: umbrella antioxidant record routes to BHA/BHT/TBHQ child entries and should not resolve to one compound like ethoxyquin."
+  },
+  "synthetic vitamins": {
+    "cui": null,
+    "name": null,
+    "note": "Curated override: grouped synthetic-vitamin record spans many vitamin compounds and should not resolve to one example such as alpha tocopherol."
+  },
+  "synthetic b vitamins": {
+    "cui": null,
+    "name": null,
+    "note": "Curated override: grouped B-vitamin record spans many compounds and should not resolve to one ingredient-level concept."
+  },
+  "pqq (pyrroloquinoline quinone)": {
+    "cui": null,
+    "name": null,
+    "note": "Curated override: generic PQQ entry should stay null unless a reviewed ingredient-level UMLS concept is chosen; current exact hits skew to cofactor or salt concepts."
+  },
+  "pyrroloquinoline quinone": {
+    "cui": null,
+    "name": null,
+    "note": "Curated override: generic PQQ entry should stay null unless a reviewed ingredient-level UMLS concept is chosen; current exact hits skew to cofactor or salt concepts."
+  },
+  "organ extracts": {
+    "cui": null,
+    "name": null,
+    "note": "Curated override: organ extract entry spans multiple glandular and organ-source substances, not one exact ingredient-level concept."
+  },
+  "organ extracts (glandulars)": {
+    "cui": null,
+    "name": null,
+    "note": "Curated override: organ extract entry spans multiple glandular and organ-source substances, not one exact ingredient-level concept."
+  },
+  "quassinoids": {
+    "cui": null,
+    "name": null,
+    "note": "Curated override: quassinoids are a class of related compounds and should not be collapsed to the narrower quassin concept."
+  },
+  "rhaponticin": {
+    "cui": "C0073169",
+    "name": "rhapontin"
+  },
+  "syrups": {
+    "cui": null,
+    "name": null,
+    "note": "Curated override: syrup record is a formulation class and should not be collapsed to one specific syrup concept such as corn syrup."
+  },
+  "sugar syrups": {
+    "cui": null,
+    "name": null,
+    "note": "Curated override: syrup record is a formulation class and should not be collapsed to one specific syrup concept such as corn syrup."
+  },
+  "unspecified colors": {
+    "cui": null,
+    "name": null,
+    "note": "Curated override: disclosure-quality category should not be mapped to one symptom or dye concept."
+  },
+  "tapioca (refined starch filler)": {
+    "cui": null,
+    "name": null,
+    "note": "Curated override: filler formulation concern should not be auto-collapsed into the cassava plant concept alone."
+  },
+  "7-keto dhea": {
+    "cui": "C0525091",
+    "name": "7-keto-dehydroepiandrosterone"
+  },
+  "7-keto dhea (7-oxodehydroepiandrosterone)": {
+    "cui": "C0525091",
+    "name": "7-keto-dehydroepiandrosterone"
+  },
+  "bmpea": {
+    "cui": "C4041589",
+    "name": "beta-methylphenyl-ethylamine"
+  },
+  "beta-methylphenyl-ethylamine": {
+    "cui": "C4041589",
+    "name": "beta-methylphenyl-ethylamine"
+  },
+  "contaminated glp-1 compounds": {
+    "cui": null,
+    "name": null,
+    "note": "Curated override: contamination watchlist entry spans multiple GLP-1 compounds and quality defects, not one ingredient concept."
+  },
+  "metal fiber contamination": {
+    "cui": null,
+    "name": null,
+    "note": "Curated override: contamination category covers multiple metal fiber/particle variants, not one ingredient-level concept."
+  },
+  "fluoride supplements (children)": {
+    "cui": null,
+    "name": null,
+    "note": "Curated override: pediatric fluoride supplement entry spans multiple product forms and salts, not one ingredient-level concept."
+  },
+  "pediatric fluoride supplements": {
+    "cui": null,
+    "name": null,
+    "note": "Curated override: pediatric fluoride supplement entry spans multiple product forms and salts, not one ingredient-level concept."
+  },
+  "partially hydrogenated oils (phos)": {
+    "cui": "C0982447",
+    "name": "VEGETABLE OIL,PARTIALLY HYDROGENATED"
+  },
+  "partially hydrogenated oils": {
+    "cui": "C0982447",
+    "name": "VEGETABLE OIL,PARTIALLY HYDROGENATED"
+  },
+  "pho": {
+    "cui": null,
+    "name": null,
+    "note": "Curated override: PHO is ambiguous and should not be auto-mapped without a specific oil/salt concept."
+  },
+  "phos": {
+    "cui": null,
+    "name": null,
+    "note": "Curated override: PHOs are a class entry and should not be auto-mapped to a single unrelated concept."
+  },
+  "dmaa": {
+    "cui": "C3492032",
+    "name": "1,3-dimethylamylamine"
+  },
+  "1,3-dimethylamylamine": {
+    "cui": "C3492032",
+    "name": "1,3-dimethylamylamine"
+  },
+  "dmba": {
+    "cui": "C4076845",
+    "name": "1,3-dimethylbutylamine"
+  },
+  "1,3-dimethylbutylamine": {
+    "cui": "C4076845",
+    "name": "1,3-dimethylbutylamine"
+  },
+  "dmsa (succimer)": {
+    "cui": "C0012384",
+    "name": "Succimer"
+  },
+  "succimer": {
+    "cui": "C0012384",
+    "name": "Succimer"
+  },
+  "sildenafil": {
+    "cui": "C0529793",
+    "name": "Sildenafil"
+  },
+  "sildenafil citrate": {
+    "cui": "C0529793",
+    "name": "Sildenafil"
+  },
+  "tb-500 (thymosin beta-4)": {
+    "cui": null,
+    "name": null,
+    "note": "Curated override: TB-500 is marketed as a peptide analogue/brand term and should not be auto-collapsed into thymosin beta-4 without explicit review."
+  },
+  "tb500": {
+    "cui": null,
+    "name": null,
+    "note": "Curated override: TB-500 is marketed as a peptide analogue/brand term and should not be auto-collapsed into thymosin beta-4 without explicit review."
+  },
+  "germanium (inorganic)": {
+    "cui": null,
+    "name": null,
+    "note": "Curated override: inorganic germanium entry spans multiple salts and oxides, not one exact ingredient-level UMLS concept."
+  },
+  "green tea extract (high dose)": {
+    "cui": null,
+    "name": null,
+    "note": "Curated override: dose-conditioned green tea extract risk entry is broader than a single UMLS ingredient concept."
+  },
+  "amanita muscaria / muscimol": {
+    "cui": null,
+    "name": null,
+    "note": "Curated override: entry combines mushroom species and active constituents, so no single UMLS concept is exact."
+  },
+  "policy watchlist: cardarine derivatives": {
+    "cui": null,
+    "name": null,
+    "note": "Curated override: derivative watchlist spans multiple analogues, not one ingredient-level UMLS concept."
+  },
+  "policy watchlist: synthetic anabolic steroids": {
+    "cui": null,
+    "name": null,
+    "note": "Curated override: steroid watchlist spans many different compounds, not one ingredient-level UMLS concept."
+  },
+  "synthetic anabolic steroids": {
+    "cui": null,
+    "name": null,
+    "note": "Curated override: steroid watchlist spans many different compounds, not one ingredient-level UMLS concept."
+  },
+  "policy watchlist: tianeptine analogues": {
+    "cui": null,
+    "name": null,
+    "note": "Curated override: analogue watchlist spans multiple compounds, not one ingredient-level UMLS concept."
+  },
+  "policy watchlist: dmaa analogs": {
+    "cui": null,
+    "name": null,
+    "note": "Curated override: stimulant analogue watchlist spans multiple compounds, not one ingredient-level UMLS concept."
+  },
+  "dmaa analogs": {
+    "cui": null,
+    "name": null,
+    "note": "Curated override: stimulant analogue watchlist spans multiple compounds, not one ingredient-level UMLS concept."
+  },
+  "cannabis/thc": {
+    "cui": null,
+    "name": null,
+    "note": "Curated override: combined cannabis/THC policy entry should not be forced into a single plant or constituent concept."
+  },
+  "thyrogen (thyrotropin alfa)": {
+    "cui": "C2587204",
+    "name": "thyrotropin alfa"
+  },
+  "thyrotropin alfa": {
+    "cui": "C2587204",
+    "name": "thyrotropin alfa"
+  },
+  "5a-hydroxy laxogenin": {
+    "cui": null,
+    "name": null,
+    "note": "Curated override: supplement-market derivative name does not have a confirmed exact UMLS concept distinct from broader laxogenin entries."
+  },
+  "igf-1 lr3": {
+    "cui": null,
+    "name": null,
+    "note": "Curated override: no confirmed exact UMLS concept was found for the marketed peptide analogue name IGF-1 LR3."
+  },
+  "igf-1 lr3 (long r3 insulin-like growth factor 1)": {
+    "cui": null,
+    "name": null,
+    "note": "Curated override: no confirmed exact UMLS concept was found for the marketed peptide analogue name IGF-1 LR3."
+  },
+  "yk-11": {
+    "cui": null,
+    "name": null,
+    "note": "Curated override: no confirmed exact UMLS concept was found for the investigational SARM name YK-11."
+  },
+  "flmodafinil": {
+    "cui": null,
+    "name": null,
+    "note": "Curated override: no confirmed exact UMLS concept was found for the research-chemical nootropic name flmodafinil."
+  },
+  "chloropretadalafil": {
+    "cui": null,
+    "name": null,
+    "note": "Curated override: no confirmed exact UMLS concept was found for the undeclared PDE-5 analogue chloropretadalafil."
+  },
+  "7-methylkratom": {
+    "cui": null,
+    "name": null,
+    "note": "Curated override: no confirmed exact UMLS concept was found for the kratom-derived analogue 7-methylkratom."
+  },
+  "propoxyphenylsildenafil": {
+    "cui": null,
+    "name": null,
+    "note": "Curated override: no confirmed exact UMLS concept was found for the undeclared PDE-5 analogue propoxyphenylsildenafil."
+  },
+  "n-phenethyl dimethylamine": {
+    "cui": null,
+    "name": null,
+    "note": "Curated override: no confirmed exact UMLS concept was found for the stimulant analogue N-phenethyl dimethylamine."
+  },
+  "hexadrone (6-chloro-androst-4-ene-3-one-17b-ol)": {
+    "cui": null,
+    "name": null,
+    "note": "Curated override: no confirmed exact UMLS concept was found for the designer steroid name Hexadrone."
+  },
+  "carob color (e153 / vegetable carbon)": {
+    "cui": null,
+    "name": null,
+    "note": "Curated override: food-color entry maps to a formulation/coloring class and should not be auto-collapsed into generic carbon black."
+  },
+  "dmha": {
+    "cui": null,
+    "name": null,
+    "note": "Curated override: no confirmed exact UMLS concept for the supplement stimulant synonym DMHA/2-aminoisoheptane."
+  },
+  "2-aminoisoheptane": {
+    "cui": null,
+    "name": null,
+    "note": "Curated override: no confirmed exact UMLS concept for the supplement stimulant synonym DMHA/2-aminoisoheptane."
+  }
+}

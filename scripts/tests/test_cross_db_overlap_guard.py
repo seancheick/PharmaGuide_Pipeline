@@ -246,3 +246,16 @@ def test_iqm_banned_overlap_set_is_only_intentional_high_risk_dual_classificatio
     }
     assert ("citrus_bioflavonoids", "RISK_BITTER_ORANGE") not in observed_parent_ids
     assert all(status in {"high_risk", "watchlist"} for _, _, status, _ in overlaps)
+
+
+def test_botanical_ashwagandha_uses_plant_cui():
+    botanicals = _load_json("botanical_ingredients.json").get("botanical_ingredients", [])
+    by_id = {entry.get("id"): entry for entry in botanicals}
+
+    assert by_id["ashwagandha"]["CUI"] == "C1061163"
+    assert by_id["aloe_vera"]["CUI"] == "C0718405"
+    assert by_id["andrographis"]["CUI"] == "C1256659"
+    assert by_id["bilberry"]["CUI"] == "C0795673"
+    assert by_id["blueberry"]["CUI"] == "C1027331"
+    assert by_id["chamomile"]["CUI"] == "C1510478"
+    assert by_id["citrus_bergamot"]["CUI"] == "C1258049"

@@ -1,0 +1,295 @@
+{
+  "_description": "Curated GSRS/UNII entry policies and skip names. Edit this file instead of verify_unii.py.",
+  "entry_policies": {
+    "Candurin Silver": {
+      "reason": "proprietary mica-based pearlescent pigment system; GSRS resolves to component materials rather than one exact ingredient identity"
+    },
+    "Calcium Aluminum Phosphate": {
+      "reason": "regulatory additive label does not currently resolve to an exact GSRS substance with the local CAS; GSRS falls back to aluminum phosphate"
+    },
+    "Carmine Red (Cochineal Extract)": {
+      "reason": "color-additive label spans extract/lake variants; GSRS falls back to pigment red 5 instead of the exact local ingredient concept"
+    },
+    "Crospovidone": {
+      "reason": "crosslinked polymer grade; GSRS returns an unspecified crospovidone variant with a different CAS lineage"
+    },
+    "Casein Hydrolysate": {
+      "reason": "GSRS search collapses the hydrolysate to parent casein; keep UNII null unless a reviewed exact hydrolysate identity is available."
+    },
+    "Soy Monoglycerides": {
+      "reason": "fatty-acid monoglyceride mixture; GSRS resolves to a narrower diacetylated monoglyceride substance instead of the local mixture concept"
+    },
+    "Fatty Acid Polyglycerol Esters": {
+      "reason": "mixture / emulsifier family with no single authoritative GSRS ingredient record"
+    },
+    "Isomaltooligosaccharide": {
+      "reason": "oligosaccharide mixture / syrup family with no single authoritative GSRS ingredient record"
+    },
+    "Maltotame": {
+      "reason": "no trustworthy GSRS match found for this sweetener label in the current registry"
+    },
+    "7-Keto DHEA (7-Oxodehydroepiandrosterone)": {
+      "reason": "current GSRS registry does not expose a trustworthy exact UNII record for this ingredient label"
+    },
+    "BMPEA": {
+      "reason": "current GSRS registry does not expose a trustworthy exact UNII record for this stimulant ingredient label"
+    },
+    "Delta-8 Tetrahydrocannabinol (Delta-8 THC)": {
+      "reason": "current GSRS registry does not expose a trustworthy exact UNII record for this cannabinoid label"
+    },
+    "DMAA": {
+      "reason": "current GSRS registry does not expose a trustworthy exact UNII record for this stimulant ingredient label"
+    },
+    "9-Methyl-β-carboline": {
+      "reason": "current GSRS registry does not expose a trustworthy exact UNII record for this research-chemical nootropic label"
+    },
+    "Flmodafinil": {
+      "reason": "current GSRS registry does not expose a trustworthy exact UNII record for this research-chemical nootropic label"
+    },
+    "Ligandrol": {
+      "reason": "current GSRS registry does not expose a trustworthy exact UNII record for this SARM label"
+    },
+    "RAD140": {
+      "reason": "current GSRS registry does not expose a trustworthy exact UNII record for this SARM label"
+    },
+    "7-Methylkratom": {
+      "reason": "current GSRS registry does not expose a trustworthy exact UNII record for this kratom-derived analogue label"
+    },
+    "α-PHP": {
+      "reason": "current GSRS registry does not expose a trustworthy exact UNII record for this stimulant analogue label"
+    },
+    "Dymethazine": {
+      "reason": "current GSRS registry does not expose a trustworthy exact UNII record for this anabolic-agent label"
+    },
+    "3,5-Diiodo-L-Thyronine (T2)": {
+      "reason": "current GSRS registry does not expose a trustworthy exact UNII record for this thyroid-hormone analogue label"
+    },
+    "Hexadrone (6-Chloro-androst-4-ene-3-one-17b-ol)": {
+      "reason": "current GSRS registry does not expose a trustworthy exact UNII record for this prohormone label"
+    },
+    "Alpha GPC": {
+      "reason": "current GSRS search collapses Alpha GPC to choline-related records rather than one reviewed exact alpha-glycerophosphocholine substance identity"
+    },
+    "Alpha-Carotene": {
+      "reason": "current GSRS registry does not expose a trustworthy exact UNII record for this carotenoid label"
+    },
+    "Apoaequorin": {
+      "reason": "proprietary jellyfish-derived protein ingredient does not currently have one reviewed exact GSRS substance identity in this workflow"
+    },
+    "Alkamides": {
+      "reason": "class entry spanning multiple alkamide compounds; no single GSRS substance is accurate"
+    },
+    "Bacillus Indicus": {
+      "reason": "current GSRS registry does not expose a trustworthy exact UNII record for this probiotic species/ingredient label"
+    },
+    "Birch Polypore": {
+      "reason": "mushroom ingredient label does not currently resolve to one reviewed exact GSRS substance identity"
+    },
+    "Bioflavonoids": {
+      "reason": "generic bioflavonoids entry spans multiple flavonoid families and plant sources; keep UNII null unless the record is split to a specific source such as citrus bioflavonoids."
+    },
+    "Butterbur (Petasites hybridus)": {
+      "reason": "GSRS resolves to isopetasin, a constituent, instead of the reviewed butterbur supplement ingredient"
+    },
+    "Calamari Oil": {
+      "reason": "marine oil ingredient does not have a trustworthy exact GSRS substance match beyond broader or adjacent lipid records"
+    },
+    "Calanus Oil": {
+      "reason": "marine oil ingredient does not have a trustworthy exact GSRS substance match in the current registry"
+    },
+    "Ceramides": {
+      "reason": "class entry spanning multiple plant- and wheat-derived ceramide systems; GSRS resolves to narrower source materials instead of one exact ingredient identity"
+    },
+    "CGF (Chlorella Growth Factor)": {
+      "reason": "proprietary chlorella fraction with no reviewed exact GSRS ingredient identity"
+    },
+    "Coenzymated Complex": {
+      "reason": "branded/co-formulated B-vitamin complex without one exact GSRS substance identity"
+    },
+    "Chromium (VI) — Hexavalent Chromium": {
+      "reason": "Cr(VI) entry spans multiple hazardous chromium compounds; keep UNII null unless the record is split into a specific compound such as chromium trioxide or sodium dichromate."
+    },
+    "Deer Antler Velvet": {
+      "reason": "animal tissue ingredient spans multiple proteins, lipids, and growth factors; no single GSRS substance is accurate"
+    },
+    "Diamine Oxidase": {
+      "reason": "enzyme supplement label does not currently resolve to one reviewed exact GSRS substance identity in the public registry"
+    },
+    "Digestive Enzymes": {
+      "reason": "class entry spanning multiple digestive enzyme blends; GSRS resolves to specific enzymes instead of one exact ingredient identity"
+    },
+    "EPA/DHA": {
+      "reason": "combined omega-3 pair spans two distinct fatty-acid substances and should not be collapsed to one GSRS identity"
+    },
+    "Fiber": {
+      "reason": "class entry spanning multiple fiber types; GSRS resolves to specific fibers instead of one exact ingredient identity"
+    },
+    "Flower Pollen Extract": {
+      "reason": "generic flower pollen extract entry spans mixed or unspecified botanical pollen sources; keep UNII null unless the record is split to a specific source such as Secale cereale pollen."
+    },
+    "Florastor": {
+      "reason": "brand row maps to Saccharomyces boulardii CNCM I-745 literature, not to one reviewed GSRS substance identity; keep UNII null."
+    },
+    "Flavones": {
+      "reason": "class entry spanning multiple flavone compounds; no single GSRS substance is accurate"
+    },
+    "Flavonols": {
+      "reason": "class entry spanning multiple flavonol compounds; no single GSRS substance is accurate"
+    },
+    "French Oak Wood Extract": {
+      "reason": "botanical extract label does not currently resolve to one reviewed exact GSRS ingredient identity"
+    },
+    "Ganoderic Acids": {
+      "reason": "ganoderic acids entry spans multiple reishi triterpenoid constituents; keep UNII null unless the record is split to a specific ganoderic acid molecule."
+    },
+    "Glutathione Peroxidase": {
+      "reason": "enzyme entry resolves to glutathione in GSRS; keep UNII null rather than collapsing the enzyme to its substrate."
+    },
+    "Glucosinolates": {
+      "reason": "glucosinolates entry spans many crucifer-derived precursor compounds; keep UNII null unless the record is split to a specific glucosinolate such as glucoraphanin."
+    },
+    "Vitamin K": {
+      "reason": "generic vitamin K entry spans K1 (phytonadione) and K2 menaquinones; keep UNII null unless the record is split to a specific vitamer."
+    },
+    "Galactolipids": {
+      "reason": "class entry spanning multiple galactolipid compounds; no single GSRS substance is accurate"
+    },
+    "Hawthorn (Crataegus)": {
+      "reason": "generic hawthorn entry spans berry, leaf, flower, and extract forms; keep UNII null unless the record is split to a specific botanical part or constituent."
+    },
+    "Herring Roe Extract": {
+      "reason": "marine extract label does not currently resolve to one reviewed exact GSRS ingredient identity"
+    },
+    "Horsetail": {
+      "reason": "supplement label spans equisetum species and plant parts while GSRS resolves to a narrower botanical record"
+    },
+    "Humic Acid": {
+      "reason": "broad humic-substance mixture with no single trustworthy exact GSRS ingredient identity"
+    },
+    "Isothiocyanates": {
+      "reason": "isothiocyanates entry spans many reactive glucosinolate-derived products; keep UNII null unless the record is split to a specific isothiocyanate such as sulforaphane or PEITC."
+    },
+    "Manuka Honey": {
+      "reason": "GSRS exposes generic honey but not one reviewed exact manuka-honey ingredient identity"
+    },
+    "Mucilage": {
+      "reason": "class entry spanning multiple mucilage polysaccharide systems; no single GSRS substance is accurate"
+    },
+    "Omega-7 Fatty Acids": {
+      "reason": "class entry spanning multiple omega-7 fatty acids and sources; no single GSRS substance is accurate"
+    },
+    "OptiBerry": {
+      "reason": "proprietary botanical blend with no single exact GSRS substance identity"
+    },
+    "Phosphatidylinositol": {
+      "reason": "generic phosphatidylinositol entry spans multiple lipid molecular species; keep UNII null unless the record is split to a specific phosphatidylinositol molecule."
+    },
+    "Phytosterols": {
+      "reason": "class entry spanning multiple plant sterols; GSRS resolves to individual sterols instead of one exact ingredient identity"
+    },
+    "Probiotic (Unspecified)": {
+      "reason": "class entry spanning multiple probiotic species and strain blends; no single GSRS substance is accurate"
+    },
+    "Purple Tea Extract": {
+      "reason": "botanical extract label does not currently resolve to one reviewed exact GSRS ingredient identity"
+    },
+    "Seal Oil": {
+      "reason": "marine oil ingredient does not have a trustworthy exact GSRS substance match in the current registry"
+    },
+    "Saccharomyces Boulardii": {
+      "reason": "GSRS collapses Saccharomyces boulardii to generic Saccharomyces cerevisiae / brewer's yeast; keep UNII null unless a reviewed exact probiotic strain identity is available."
+    },
+    "Sesquiterpenes": {
+      "reason": "class entry spanning multiple sesquiterpene compounds; no single GSRS substance is accurate"
+    },
+    "Shuddha Laksha": {
+      "reason": "Ayurvedic resin/preparation name does not currently resolve to one reviewed exact GSRS ingredient identity"
+    },
+    "Tannins": {
+      "reason": "class entry spanning multiple tannin compounds; no single GSRS substance is accurate"
+    },
+    "Triterpene Glycosides": {
+      "reason": "class entry spanning multiple triterpene glycosides; no single GSRS substance is accurate"
+    },
+    "Tuna Oil": {
+      "reason": "marine oil ingredient does not have a trustworthy exact GSRS substance match in the current registry"
+    },
+    "β-Hydroxy β-Methylbutyrate": {
+      "reason": "current GSRS registry does not expose one reviewed exact UNII record for the supplement-market HMB ingredient label without collapsing to constituent or salt variants"
+    },
+    "Fruit & Vegetable Powders": {
+      "reason": "class descriptor spanning multiple botanical powders; GSRS resolves to annatto, a single colorant, instead of the generic class"
+    },
+    "Glycerin Fatty Acid Ester": {
+      "reason": "mixture class; GSRS resolves to isopropyl behenate, a specific ester, instead of the generic mixture"
+    },
+    "Glycerin Fatty Acid Esters": {
+      "reason": "mixture class; GSRS resolves to polyglyceryl-10 oleate, a specific ester, instead of the generic mixture"
+    },
+    "Modified Starch": {
+      "reason": "class descriptor; GSRS resolves to starch, pea, a specific starch source, instead of the generic modified starch class"
+    },
+    "Natural Gums": {
+      "reason": "class descriptor; GSRS resolves to acacia, a single gum, instead of the generic gums class"
+    },
+    "Natural Preservatives": {
+      "reason": "class descriptor; GSRS resolves to ascorbyl palmitate, a single preservative, instead of the generic class"
+    },
+    "Natural Waxes": {
+      "reason": "class descriptor; GSRS resolves to candelilla wax, a single wax, instead of the generic class"
+    },
+    "Rice Flour": {
+      "reason": "GSRS resolves to brown rice, a broader botanical, instead of rice flour specifically; no exact rice flour GSRS entry exists"
+    },
+    "Sugar & Natural Sweeteners": {
+      "reason": "class descriptor; GSRS resolves to sucrose, a single sugar, instead of the generic sweetener class"
+    },
+    "Vegetable-Derived Stearates": {
+      "reason": "class descriptor; GSRS resolves to calcium stearate, a specific salt, instead of the generic vegetable stearate class"
+    },
+    "Sucanat (Natural Cane Sugar)": {
+      "reason": "GSRS resolves to honey, a completely different product; no exact sucanat GSRS entry exists"
+    },
+    "Natural Citrus-Orange Flavor": {
+      "reason": "flavor descriptor; GSRS resolves to orange (the fruit), not the flavor ingredient"
+    },
+    "Cyclodextrin": {
+      "reason": "GSRS resolves to hydroxypropyl alpha-cyclodextrin, a derivative, not generic cyclodextrin"
+    },
+    "L-Arabinose": {
+      "reason": "GSRS resolves to 2,5-di-O-methyl-L-arabinose, a methylated derivative, not L-arabinose"
+    },
+    "Xylanase": {
+      "reason": "GSRS resolves to endo-1,4-beta-xylanase from Trichoderma viride, a species-specific enzyme, not the generic xylanase"
+    },
+    "Polyethylene Glycol (PEG)": {
+      "reason": "GSRS resolves to ethylene glycol (monomer CAS 107-21-1), not polyethylene glycol (polymer CAS 25322-68-3); keep GSRS null"
+    }
+  },
+  "skip_names": [
+    "antimony & antimony compounds",
+    "artificial flavors",
+    "cannabis/thc",
+    "caramel color",
+    "contaminated glp-1 compounds",
+    "general probiotics",
+    "metal fiber contamination",
+    "nickel & nickel compounds",
+    "partially hydrogenated oils",
+    "partially hydrogenated oils (phos)",
+    "phthalates",
+    "purefruit select",
+    "slimsweet",
+    "sugar alcohols",
+    "sugar syrups",
+    "synthetic anabolic steroids",
+    "synthetic antioxidants",
+    "synthetic b vitamins",
+    "synthetic estrogens",
+    "synthetic vitamins",
+    "syrups",
+    "time-sorb",
+    "tin & tin compounds",
+    "unspecified colors"
+  ]
+}

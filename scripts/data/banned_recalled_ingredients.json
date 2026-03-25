@@ -4,7 +4,7 @@
     "purpose": "safety_disqualification_and_regulatory_compliance",
     "schema_version": "5.0.0",
     "last_updated": "2026-03-23",
-    "total_entries": 140,
+    "total_entries": 143,
     "data_source_metadata": {
       "sources": [
         "FDA",
@@ -16,15 +16,18 @@
     },
     "audit_runbook": {
       "summary": "Run the strict audit before production use. Only keep cui null when the entry is multi-concept/class-level or there is still no confirmed exact UMLS concept after alias review.",
-      "quick_audit_command": ".venv/bin/python scripts/audit_banned_recalled_accuracy.py --fda-report-in scripts/fda_sync_report_latest.json",
-      "release_command": ".venv/bin/python scripts/audit_banned_recalled_accuracy.py --release --fda-report-in scripts/fda_sync_report_latest.json",
-      "release_strict_command": ".venv/bin/python scripts/audit_banned_recalled_accuracy.py --release-strict-cui --fda-report-in scripts/fda_sync_report_latest.json",
-      "run_fda_sync_then_audit_command": ".venv/bin/python scripts/audit_banned_recalled_accuracy.py --run-fda-sync --days 30 --fda-report-out scripts/fda_sync_report_latest.json",
-      "verify_cui_dry_run_command": ".venv/bin/python scripts/verify_cui.py --file scripts/data/banned_recalled_ingredients.json --list-key ingredients --id-field id --cui-field cui",
-      "verify_cui_manual_command": ".venv/bin/python scripts/verify_cui.py --search \"sildenafil\"",
-      "verify_single_cui_command": ".venv/bin/python scripts/verify_cui.py --cui C0529793",
-      "safe_apply_command": ".venv/bin/python scripts/verify_cui.py --file scripts/data/banned_recalled_ingredients.json --list-key ingredients --id-field id --cui-field cui --apply",
-      "mismatch_apply_command": ".venv/bin/python scripts/verify_cui.py --file scripts/data/banned_recalled_ingredients.json --list-key ingredients --id-field id --cui-field cui --apply --apply-mismatches"
+      "quick_audit_command": ".venv/bin/python scripts/api_audit/audit_banned_recalled_accuracy.py --fda-report-in scripts/fda_sync_report_latest.json",
+      "release_command": ".venv/bin/python scripts/api_audit/audit_banned_recalled_accuracy.py --release --fda-report-in scripts/fda_sync_report_latest.json",
+      "release_strict_command": ".venv/bin/python scripts/api_audit/audit_banned_recalled_accuracy.py --release-strict-cui --fda-report-in scripts/fda_sync_report_latest.json",
+      "run_fda_sync_then_audit_command": ".venv/bin/python scripts/api_audit/audit_banned_recalled_accuracy.py --run-fda-sync --days 30 --fda-report-out scripts/fda_sync_report_latest.json",
+      "verify_cui_dry_run_command": ".venv/bin/python scripts/api_audit/verify_cui.py --file scripts/data/banned_recalled_ingredients.json --list-key ingredients --id-field id --cui-field cui",
+      "verify_cui_manual_command": ".venv/bin/python scripts/api_audit/verify_cui.py --search \"sildenafil\"",
+      "verify_single_cui_command": ".venv/bin/python scripts/api_audit/verify_cui.py --cui C0529793",
+      "safe_apply_command": ".venv/bin/python scripts/api_audit/verify_cui.py --file scripts/data/banned_recalled_ingredients.json --list-key ingredients --id-field id --cui-field cui --apply",
+      "mismatch_apply_command": ".venv/bin/python scripts/api_audit/verify_cui.py --file scripts/data/banned_recalled_ingredients.json --list-key ingredients --id-field id --cui-field cui --apply --apply-mismatches",
+      "verify_pubmed_command": ".venv/bin/python scripts/api_audit/verify_pubmed_references.py --file scripts/data/banned_recalled_ingredients.json --list-key ingredients --output /tmp/banned_recalled_pubmed_verify.json",
+      "verify_unii_dry_run_command": ".venv/bin/python scripts/api_audit/verify_unii.py --file scripts/data/banned_recalled_ingredients.json --list-key ingredients",
+      "verify_unii_safe_apply_command": ".venv/bin/python scripts/api_audit/verify_unii.py --file scripts/data/banned_recalled_ingredients.json --list-key ingredients --apply"
     },
     "cui_audit_policy": {
       "operator_note": "Before accepting a null CUI, confirm the standard name and aliases are already sufficient for exact matching. If a missing exact synonym is the blocker, add that alias and rerun verify_cui.py before keeping cui null.",
@@ -34,7 +37,15 @@
       ],
       "approved_null_status_meanings": {
         "no_confirmed_umls_match": "Use when the entry is a specific ingredient or analogue but no confirmed exact UMLS concept exists even after alias review.",
-        "no_single_umls_concept": "Use when the entry is a class, policy, umbrella, or multi-substance record where one UMLS concept would be misleading."
+        "no_single_umls_concept": "Use when the entry is a class, policy, umbrella, product recall, or multi-substance record where one UMLS concept would be misleading."
+      }
+    },
+    "unii_audit_policy": {
+      "operator_note": "Use GSRS/UNII for substance identity only. Product recalls and class/watchlist entries should stay non-UNII when one GSRS substance would misrepresent the record.",
+      "approved_governed_null_meanings": {
+        "product": "Branded recalled products are not single GSRS substances and should stay governed_null unless a human intentionally introduces a product-level identity strategy.",
+        "class": "Class/watchlist records span multiple substances and should not be collapsed to one GSRS ingredient.",
+        "no_single_umls_concept": "If the CUI layer already documents the record as multi-concept, GSRS should follow the same governed-null policy unless an exact reviewed substance exception exists."
       }
     },
     "migration": {
@@ -419,7 +430,31 @@
       "regulatory_date_label": "First FDA enforcement action",
       "match_mode": "active",
       "recall_scope": null,
-      "cui": "C0083381"
+      "cui": "C0083381",
+      "external_ids": {
+        "unii": "VG2QF83CGL"
+      },
+      "rxcui": "41493",
+      "gsrs": {
+        "substance_name": "Meloxicam",
+        "substance_class": "chemical",
+        "cfr_sections": [
+          "21 CFR 520.1367",
+          "21 CFR 522.1367"
+        ],
+        "dsld_count": null,
+        "dsld_info_raw": null,
+        "active_moiety": null,
+        "salt_parents": [
+          {
+            "type": "SALT/SOLVATE->PARENT",
+            "name": "MELOXICAM MEGLUMINE MONOHYDRATE",
+            "unii": "VBD44UY6G5"
+          }
+        ],
+        "metabolic_relationships": [],
+        "metabolites": []
+      }
     },
     {
       "id": "ADULTERANT_METFORMIN",
@@ -497,7 +532,43 @@
       "regulatory_date_label": "First FDA enforcement action",
       "match_mode": "active",
       "recall_scope": null,
-      "cui": "C0025598"
+      "cui": "C0025598",
+      "external_ids": {
+        "unii": "9100L32L2N"
+      },
+      "rxcui": "6809",
+      "gsrs": {
+        "substance_name": "Metformin",
+        "substance_class": "chemical",
+        "cfr_sections": [],
+        "dsld_count": null,
+        "dsld_info_raw": null,
+        "active_moiety": null,
+        "salt_parents": [
+          {
+            "type": "SALT/SOLVATE->PARENT",
+            "name": "Metformin hydrochloride",
+            "unii": "786Z46389E"
+          },
+          {
+            "type": "SALT/SOLVATE->PARENT",
+            "name": "METFORMIN OROTATE",
+            "unii": "KE1D8AP3J5"
+          },
+          {
+            "type": "SALT/SOLVATE->PARENT",
+            "name": "METFORMIN GLYCINATE",
+            "unii": "YEI21W005Y"
+          },
+          {
+            "type": "SALT/SOLVATE->PARENT",
+            "name": "METFORMIN P-CHLOROPHENOXYACETATE",
+            "unii": "ECS8EBF633"
+          }
+        ],
+        "metabolic_relationships": [],
+        "metabolites": []
+      }
     },
     {
       "id": "ADULTERANT_RIMONABANT",
@@ -582,7 +653,49 @@
       "regulatory_date_label": "First FDA enforcement action",
       "match_mode": "active",
       "recall_scope": null,
-      "cui": "C1142933"
+      "cui": "C1142933",
+      "external_ids": {
+        "unii": "RML78EN3XE"
+      },
+      "gsrs": {
+        "substance_name": "RIMONABANT",
+        "substance_class": "chemical",
+        "cfr_sections": [],
+        "dsld_count": null,
+        "dsld_info_raw": null,
+        "active_moiety": null,
+        "salt_parents": [
+          {
+            "type": "SALT/SOLVATE->PARENT",
+            "name": "RIMONABANT HYDROCHLORIDE",
+            "unii": "HL0V2LQZ09"
+          }
+        ],
+        "metabolic_relationships": [
+          {
+            "type": "METABOLIC ENZYME->INHIBITOR",
+            "name": "CYTOCHROME P450 3A4",
+            "unii": "PUO0521HZV"
+          },
+          {
+            "type": "TARGET->INHIBITOR",
+            "name": "CANNABINOID RECEPTOR 1",
+            "unii": "NJ1Q2Q7LO5"
+          }
+        ],
+        "metabolites": [
+          {
+            "type": "METABOLITE->PARENT",
+            "name": "5-(4-CHLOROPHENYL)-1-(2,4-DICHLOROPHENYL)-4-METHYLPYRAZOLE-3-CARBOXYLIC ACID",
+            "unii": "9Q6ZA9Y42R"
+          },
+          {
+            "type": "METABOLITE->PARENT",
+            "name": "RIMONABANT 2-HYDROXY METABOLITE",
+            "unii": "KT68RW59G8"
+          }
+        ]
+      }
     },
     {
       "id": "BANNED_14_BUTANEDIOL",
@@ -708,7 +821,21 @@
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
       "recall_scope": null,
-      "cui": "C0043992"
+      "cui": "C0043992",
+      "external_ids": {
+        "unii": "7XOO2LE6G3"
+      },
+      "gsrs": {
+        "substance_name": "1,4-Butanediol",
+        "substance_class": "chemical",
+        "cfr_sections": [],
+        "dsld_count": null,
+        "dsld_info_raw": null,
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      }
     },
     {
       "id": "BANNED_7_HYDROXYMITRAGYNINE",
@@ -844,7 +971,38 @@
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
       "recall_scope": null,
-      "cui": "C1435927"
+      "cui": "C1435927",
+      "external_ids": {
+        "unii": "2T3TWA75R0"
+      },
+      "gsrs": {
+        "substance_name": "7-Hydroxymitragynine",
+        "substance_class": "chemical",
+        "cfr_sections": [],
+        "dsld_count": null,
+        "dsld_info_raw": null,
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [
+          {
+            "type": "TARGET->AGONIST",
+            "name": "MU-TYPE OPIOID RECEPTOR",
+            "unii": "1PE72K8X46"
+          }
+        ],
+        "metabolites": [
+          {
+            "type": "METABOLITE ACTIVE->PARENT",
+            "name": "MITRAGYNINE PSEUDOINDOXYL",
+            "unii": "BKA67VHE3B"
+          },
+          {
+            "type": "PARENT->METABOLITE ACTIVE",
+            "name": "Mitragynine",
+            "unii": "EP479K822J"
+          }
+        ]
+      }
     },
     {
       "id": "BANNED_7_KETO_DHEA",
@@ -1087,7 +1245,27 @@
       "regulatory_date_label": "FDA warning letter issued",
       "match_mode": "active",
       "recall_scope": null,
-      "cui": "C0051816"
+      "cui": "C0051816",
+      "external_ids": {
+        "unii": "5PP654XB7D"
+      },
+      "gsrs": {
+        "substance_name": "ANATABINE",
+        "substance_class": "chemical",
+        "cfr_sections": [],
+        "dsld_count": 11,
+        "dsld_info_raw": "Dietary Supplement Label Database|Chemical|alkaloid | 213 (Number of products:11)",
+        "active_moiety": null,
+        "salt_parents": [
+          {
+            "type": "SALT/SOLVATE->PARENT",
+            "name": "ANATABINE CITRATE",
+            "unii": "MZE7Y8PB3F"
+          }
+        ],
+        "metabolic_relationships": [],
+        "metabolites": []
+      }
     },
     {
       "id": "BANNED_ADD_CITRUS_RED_2",
@@ -1179,7 +1357,21 @@
       "regulatory_date_label": "Regulatory restriction effective",
       "match_mode": "active",
       "recall_scope": null,
-      "cui": "C0602979"
+      "cui": "C0602979",
+      "external_ids": {
+        "unii": "2QE5Y68984"
+      },
+      "gsrs": {
+        "substance_name": "CITRUS RED NO. 2",
+        "substance_class": "chemical",
+        "cfr_sections": [],
+        "dsld_count": null,
+        "dsld_info_raw": null,
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      }
     },
     {
       "id": "BANNED_ADD_FORMALDEHYDE",
@@ -1274,7 +1466,26 @@
       "regulatory_date_label": "Carcinogen classification effective",
       "match_mode": "active",
       "recall_scope": null,
-      "cui": "C0016564"
+      "cui": "C0016564",
+      "external_ids": {
+        "unii": "1HG84L3525"
+      },
+      "rxcui": "4530",
+      "gsrs": {
+        "substance_name": "Formaldehyde",
+        "substance_class": "chemical",
+        "cfr_sections": [
+          "21 CFR 173.340",
+          "21 CFR 176.170",
+          "21 CFR 175.210"
+        ],
+        "dsld_count": null,
+        "dsld_info_raw": null,
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      }
     },
     {
       "id": "BANNED_ADD_ORANGE_B",
@@ -1364,7 +1575,29 @@
       "regulatory_date_label": "Regulatory restriction effective",
       "match_mode": "active",
       "recall_scope": null,
-      "cui": "C0387837"
+      "cui": "C0387837",
+      "external_ids": {
+        "unii": "RGU455OS50"
+      },
+      "gsrs": {
+        "substance_name": "ORANGE B",
+        "substance_class": "chemical",
+        "cfr_sections": [
+          "21 CFR 74.250"
+        ],
+        "dsld_count": null,
+        "dsld_info_raw": null,
+        "active_moiety": null,
+        "salt_parents": [
+          {
+            "type": "PARENT->SALT/SOLVATE",
+            "name": "ORANGE B FREE ACID",
+            "unii": "13D01Z5SBP"
+          }
+        ],
+        "metabolic_relationships": [],
+        "metabolites": []
+      }
     },
     {
       "id": "BANNED_ADD_PHTHALATES",
@@ -1444,7 +1677,7 @@
         ]
       },
       "status": "watchlist",
-      "reason": "Packaging contaminants that leach from plastic bottles and containers into supplements. Powerful endocrine disruptors linked to reproductive harm, developmental issues, and cancer. 2024-2025 research continues to find widespread contamination in supplements packaged in plastic. Choose glass packaging when possible. Not intentionally added but common contaminant.",
+      "reason": "Packaging contaminants that leach from plastic bottles and containers into supplements. Powerful endocrine disruptors linked to reproductive harm, developmental issues, and cancer (DEHP classified IARC Group 2B, possibly carcinogenic, Monograph Vol 101, 2013). 2024-2025 research continues to find widespread contamination in supplements packaged in plastic. Choose glass packaging when possible. Not intentionally added but common contaminant.",
       "jurisdictions": [
         {
           "region": "US",
@@ -1554,7 +1787,7 @@
         ]
       },
       "status": "watchlist",
-      "reason": "Carcinogenic flour treatment agent. Banned in EU, Canada, Brazil, and many other countries but still legal in US. Linked to kidney and thyroid tumors in animal studies.",
+      "reason": "Flour treatment agent classified as IARC Group 2B (possibly carcinogenic, Monograph Vol 73, 1999). Banned in EU, Canada, Brazil, and many other countries but still legal in US. Linked to kidney and thyroid tumors in animal studies.",
       "jurisdictions": [
         {
           "region": "US",
@@ -1586,7 +1819,24 @@
       "regulatory_date_label": "EU/International ban effective",
       "match_mode": "active",
       "recall_scope": null,
-      "cui": "C0071753"
+      "cui": "C0071753",
+      "external_ids": {
+        "unii": "04MB35W6ZA"
+      },
+      "rxcui": "34298",
+      "gsrs": {
+        "substance_name": "POTASSIUM BROMATE",
+        "substance_class": "chemical",
+        "cfr_sections": [
+          "21 CFR 172.730"
+        ],
+        "dsld_count": null,
+        "dsld_info_raw": null,
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      }
     },
     {
       "id": "BANNED_ADD_SYNTHETIC_ESTROGENS",
@@ -1903,7 +2153,27 @@
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
       "recall_scope": null,
-      "cui": "C0052377"
+      "cui": "C0052377",
+      "external_ids": {
+        "unii": "94218WFP5T"
+      },
+      "gsrs": {
+        "substance_name": "ARISTOLOCHIC ACID",
+        "substance_class": "chemical",
+        "cfr_sections": [],
+        "dsld_count": null,
+        "dsld_info_raw": null,
+        "active_moiety": null,
+        "salt_parents": [
+          {
+            "type": "SALT/SOLVATE->PARENT",
+            "name": "SODIUM ARISTOLOCHATE",
+            "unii": "KTM3D3H78E"
+          }
+        ],
+        "metabolic_relationships": [],
+        "metabolites": []
+      }
     },
     {
       "id": "BANNED_BMPEA",
@@ -2129,7 +2399,22 @@
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
       "recall_scope": null,
-      "cui": "C1654882"
+      "cui": "C1654882",
+      "external_ids": {
+        "unii": "241ATL177A"
+      },
+      "rxcui": "9949",
+      "gsrs": {
+        "substance_name": "SOYBEAN OIL",
+        "substance_class": "structurallyDiverse",
+        "cfr_sections": [],
+        "dsld_count": null,
+        "dsld_info_raw": null,
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      }
     },
     {
       "id": "BANNED_CBD_US",
@@ -2325,7 +2610,109 @@
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
       "recall_scope": null,
-      "cui": "C4704022"
+      "cui": "C4704022",
+      "external_ids": {
+        "unii": "19GBJ60SN5"
+      },
+      "rxcui": "2045371",
+      "gsrs": {
+        "substance_name": "Cannabidiol",
+        "substance_class": "chemical",
+        "cfr_sections": [],
+        "dsld_count": 162,
+        "dsld_info_raw": "Dietary Supplement Label Database|chemical|Cannabidiol | 3397 (Number of products:162)",
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [
+          {
+            "type": "TARGET->INHIBITOR",
+            "name": "G-PROTEIN COUPLED RECEPTOR 55",
+            "unii": "SL5292T581"
+          },
+          {
+            "type": "METABOLIC ENZYME->SUBSTRATE",
+            "name": "CYTOCHROME P450 2C19",
+            "unii": "081I12ZA58"
+          },
+          {
+            "type": "METABOLIC ENZYME->SUBSTRATE",
+            "name": "CYTOCHROME P450 3A4",
+            "unii": "PUO0521HZV"
+          },
+          {
+            "type": "METABOLIC ENZYME->SUBSTRATE",
+            "name": "URIDINE DIPHOSPHATE GLUCURONOSYLTRANSFERASE 1A7",
+            "unii": "HWT82Q8F2V"
+          },
+          {
+            "type": "METABOLIC ENZYME->SUBSTRATE",
+            "name": "URIDINE DIPHOSPHATE GLUCURONOSYLTRANSFERASE 1A9",
+            "unii": "3318TFY23Q"
+          },
+          {
+            "type": "METABOLIC ENZYME->SUBSTRATE",
+            "name": "URIDINE DIPHOSPHATE GLUCURONOSYLTRANSFERASE 2B7",
+            "unii": "0M77ZW789J"
+          },
+          {
+            "type": "METABOLIC ENZYME->SUBSTRATE",
+            "name": "CYTOCHROME P450 2C9",
+            "unii": "L9DP834D1P"
+          },
+          {
+            "type": "METABOLIC ENZYME->INHIBITOR",
+            "name": "CYTOCHROME P450 2C19",
+            "unii": "081I12ZA58"
+          }
+        ],
+        "metabolites": [
+          {
+            "type": "METABOLITE ACTIVE->PARENT",
+            "name": "7-HYDROXYCANNABIDIOL",
+            "unii": "N38G7JB3K2"
+          },
+          {
+            "type": "METABOLITE->PARENT",
+            "name": "6ALPHA-HYDROXYCANNABIDIOL",
+            "unii": "4JT5NXL2YQ"
+          },
+          {
+            "type": "METABOLITE->PARENT",
+            "name": "6.BETA.-HYDROXYCANNABIDIOL",
+            "unii": "8K6W2FVF4P"
+          },
+          {
+            "type": "METABOLITE->PARENT",
+            "name": "1''-HYDROXYCANNABIDIOL",
+            "unii": "U45CL3JN5E"
+          },
+          {
+            "type": "METABOLITE->PARENT",
+            "name": "2''-HYDROXYCANNABIDIOL",
+            "unii": "7V535ST6LR"
+          },
+          {
+            "type": "METABOLITE->PARENT",
+            "name": "3''-HYDROXYCANNABIDIOL",
+            "unii": "MA2QL6L4DH"
+          },
+          {
+            "type": "METABOLITE->PARENT",
+            "name": "4''-HYDROXYCANNABIDIOL",
+            "unii": "WA854NP548"
+          },
+          {
+            "type": "METABOLITE->PARENT",
+            "name": "5''-HYDROXYCANNABIDIOL",
+            "unii": "6NKR82GEW4"
+          },
+          {
+            "type": "METABOLITE->PARENT",
+            "name": "CANNABIDIOL DIMETHYL ETHER",
+            "unii": "MK7IHZ7MIM"
+          }
+        ]
+      }
     },
     {
       "id": "BANNED_COMFREY_INTERNAL",
@@ -2443,7 +2830,21 @@
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
       "recall_scope": null,
-      "cui": "C1621344"
+      "cui": "C1621344",
+      "external_ids": {
+        "unii": "9MGC702WRJ"
+      },
+      "gsrs": {
+        "substance_name": "SYMPHYTUM TUBEROSUM WHOLE",
+        "substance_class": "structurallyDiverse",
+        "cfr_sections": [],
+        "dsld_count": null,
+        "dsld_info_raw": null,
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      }
     },
     {
       "id": "BANNED_CONTAMINATED_GLP1",
@@ -2925,7 +3326,21 @@
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
       "recall_scope": null,
-      "cui": "C4076845"
+      "cui": "C4076845",
+      "external_ids": {
+        "unii": "KXP599H5R6"
+      },
+      "gsrs": {
+        "substance_name": "1,3-DIMETHYLBUTYLAMINE",
+        "substance_class": "chemical",
+        "cfr_sections": [],
+        "dsld_count": null,
+        "dsld_info_raw": null,
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      }
     },
     {
       "id": "BANNED_DMHA",
@@ -3022,7 +3437,33 @@
       "recall_scope": null,
       "cui": null,
       "cui_status": "no_confirmed_umls_match",
-      "cui_note": "No confirmed exact UMLS concept was found for this supplement-market stimulant name; null CUI is intentional."
+      "cui_note": "No confirmed exact UMLS concept was found for this supplement-market stimulant name; null CUI is intentional.",
+      "external_ids": {
+        "unii": "3GQ9E911BI"
+      },
+      "rxcui": "236867",
+      "gsrs": {
+        "substance_name": "OCTODRINE",
+        "substance_class": "chemical",
+        "cfr_sections": [],
+        "dsld_count": 13,
+        "dsld_info_raw": "Dietary Supplement Label Database|chemical|Octodrine | 3406 (Number of products:13)",
+        "active_moiety": null,
+        "salt_parents": [
+          {
+            "type": "SALT/SOLVATE->PARENT",
+            "name": "OCTODRINE PHOSPHATE",
+            "unii": "I254D74U8J"
+          },
+          {
+            "type": "SALT/SOLVATE->PARENT",
+            "name": "OCTODRINE HYDROCHLORIDE",
+            "unii": "08159ZHB8M"
+          }
+        ],
+        "metabolic_relationships": [],
+        "metabolites": []
+      }
     },
     {
       "id": "BANNED_EPHEDRA",
@@ -3122,7 +3563,21 @@
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
       "recall_scope": null,
-      "cui": "C0885298"
+      "cui": "C0885298",
+      "external_ids": {
+        "unii": "584L885IMR"
+      },
+      "gsrs": {
+        "substance_name": "EPHEDRA EQUISETINA STEM",
+        "substance_class": "structurallyDiverse",
+        "cfr_sections": [],
+        "dsld_count": null,
+        "dsld_info_raw": null,
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      }
     },
     {
       "id": "BANNED_FASORACETAM",
@@ -3210,7 +3665,27 @@
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
       "recall_scope": null,
-      "cui": "C1880737"
+      "cui": "C1880737",
+      "external_ids": {
+        "unii": "42O8UF5CJB"
+      },
+      "gsrs": {
+        "substance_name": "FASORACETAM",
+        "substance_class": "chemical",
+        "cfr_sections": [],
+        "dsld_count": null,
+        "dsld_info_raw": null,
+        "active_moiety": null,
+        "salt_parents": [
+          {
+            "type": "SALT/SOLVATE->PARENT",
+            "name": "FASORACETAM MONOHYDRATE",
+            "unii": "55BRM1BEZN"
+          }
+        ],
+        "metabolic_relationships": [],
+        "metabolites": []
+      }
     },
     {
       "id": "BANNED_FDC_RED_2_AMARANTH",
@@ -3352,7 +3827,25 @@
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
       "recall_scope": null,
-      "cui": "C0002406"
+      "cui": "C0002406",
+      "external_ids": {
+        "unii": "37RBV3X49K"
+      },
+      "rxcui": "1433189",
+      "gsrs": {
+        "substance_name": "AMARANTH",
+        "substance_class": "chemical",
+        "cfr_sections": [],
+        "dsld_count": 165,
+        "dsld_info_raw": "Dietary Supplement Label Database|Botanical|Amaranth | 265 (Number of products:165)",
+        "active_moiety": {
+          "name": "AMARANTH ACID",
+          "unii": "02J7X17ZUQ"
+        },
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      }
     },
     {
       "id": "RISK_GARCINIA_CAMBOGIA",
@@ -3467,7 +3960,22 @@
       "regulatory_date_label": "First regulatory safety alert",
       "match_mode": "active",
       "recall_scope": null,
-      "cui": "C0993598"
+      "cui": "C0993598",
+      "external_ids": {
+        "unii": "D0QJI8UQVR"
+      },
+      "rxcui": "1311595",
+      "gsrs": {
+        "substance_name": "GARCINIA GUMMI-GUTTA FRUIT",
+        "substance_class": "structurallyDiverse",
+        "cfr_sections": [],
+        "dsld_count": null,
+        "dsld_info_raw": null,
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      }
     },
     {
       "id": "BANNED_HIGENAMINE",
@@ -3560,7 +4068,27 @@
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
       "recall_scope": null,
-      "cui": "C0062705"
+      "cui": "C0062705",
+      "external_ids": {
+        "unii": "TBV5O16GAP"
+      },
+      "gsrs": {
+        "substance_name": "HIGENAMINE",
+        "substance_class": "chemical",
+        "cfr_sections": [],
+        "dsld_count": 121,
+        "dsld_info_raw": "Dietary Supplement Label Database|Chemical|Higenamine | 2067 (Number of products:121)",
+        "active_moiety": null,
+        "salt_parents": [
+          {
+            "type": "SALT/SOLVATE->PARENT",
+            "name": "HIGENAMINE HYDROCHLORIDE",
+            "unii": "PQ432PID6E"
+          }
+        ],
+        "metabolic_relationships": [],
+        "metabolites": []
+      }
     },
     {
       "id": "BANNED_IBUTAMOREN_MK677",
@@ -3650,7 +4178,34 @@
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
       "recall_scope": null,
-      "cui": "C0528358"
+      "cui": "C0528358",
+      "external_ids": {
+        "unii": "GJ0EGN38UL"
+      },
+      "rxcui": "1805438",
+      "gsrs": {
+        "substance_name": "IBUTAMOREN",
+        "substance_class": "chemical",
+        "cfr_sections": [],
+        "dsld_count": 8,
+        "dsld_info_raw": "Dietary Supplement Label Database|other|Ibutamoren | 3997 (Number of products:8)",
+        "active_moiety": null,
+        "salt_parents": [
+          {
+            "type": "SALT/SOLVATE->PARENT",
+            "name": "IBUTAMOREN MESYLATE",
+            "unii": "R90JB6QJ2B"
+          }
+        ],
+        "metabolic_relationships": [
+          {
+            "type": "TARGET->AGONIST",
+            "name": "GROWTH HORMONE SECRETAGOGUE RECEPTOR TYPE 1A",
+            "unii": "NUJ1I0OY8D"
+          }
+        ],
+        "metabolites": []
+      }
     },
     {
       "id": "BANNED_IGF1",
@@ -3760,7 +4315,21 @@
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
       "recall_scope": null,
-      "cui": "C5674892"
+      "cui": "C5674892",
+      "external_ids": {
+        "unii": "DK7PL4F3TT"
+      },
+      "gsrs": {
+        "substance_name": "INSULIN-LIKE GROWTH FACTOR 1 RECEPTOR",
+        "substance_class": "protein",
+        "cfr_sections": [],
+        "dsld_count": null,
+        "dsld_info_raw": null,
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      }
     },
     {
       "id": "BANNED_IGF1_LR3",
@@ -3842,7 +4411,22 @@
       "recall_scope": null,
       "cui": null,
       "cui_status": "no_confirmed_umls_match",
-      "cui_note": "No confirmed exact UMLS concept was found for this peptide analogue name; null CUI is intentional."
+      "cui_note": "No confirmed exact UMLS concept was found for this peptide analogue name; null CUI is intentional.",
+      "external_ids": {
+        "unii": "M9L22Y19H9"
+      },
+      "rxcui": "1809244",
+      "gsrs": {
+        "substance_name": "LONG-(ARG3)INSULIN-LIKE GROWTH FACTOR-I",
+        "substance_class": "protein",
+        "cfr_sections": [],
+        "dsld_count": null,
+        "dsld_info_raw": null,
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      }
     },
     {
       "id": "BANNED_METAL_FIBERS",
@@ -4191,7 +4775,33 @@
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
       "recall_scope": null,
-      "cui": "C0048007"
+      "cui": "C0048007",
+      "external_ids": {
+        "unii": "T2M58D6LA8"
+      },
+      "gsrs": {
+        "substance_name": "PHENIBUT",
+        "substance_class": "chemical",
+        "cfr_sections": [],
+        "dsld_count": 14,
+        "dsld_info_raw": "Dietary Supplement Label Database|chemical|Phenibut | 2945 (Number of products:14)",
+        "active_moiety": null,
+        "salt_parents": [
+          {
+            "type": "SALT/SOLVATE->PARENT",
+            "name": "4-AMINO-3-PHENYLBUTYRIC ACID HYDROCHLORIDE",
+            "unii": "625240H2LN"
+          }
+        ],
+        "metabolic_relationships": [
+          {
+            "type": "TARGET->AGONIST",
+            "name": "Gamma-aminobutyric acid type B receptor",
+            "unii": "EV7XZZ7BG9"
+          }
+        ],
+        "metabolites": []
+      }
     },
     {
       "id": "BANNED_PHO",
@@ -4261,18 +4871,6 @@
         }
       ],
       "references_structured": [
-        {
-          "type": "doi",
-          "id": "10.1056/NEJMoa1200303",
-          "title": "Trans fats and cardiovascular disease",
-          "evidence_grade": "B",
-          "url": "https://doi.org/10.1056/NEJMoa1200303",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
-          "evidence_summary": "Trans fats and cardiovascular disease"
-        },
         {
           "type": "doi",
           "id": "10.1161/CIR.0000000000000510",
@@ -4402,7 +5000,27 @@
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
       "recall_scope": null,
-      "cui": "C0137049"
+      "cui": "C0137049",
+      "external_ids": {
+        "unii": "0S5N9SEK4N"
+      },
+      "gsrs": {
+        "substance_name": "PICAMILON",
+        "substance_class": "chemical",
+        "cfr_sections": [],
+        "dsld_count": 99,
+        "dsld_info_raw": "Dietary Supplement Label Database|chemical|Picamilon | 2497 (Number of products:99)",
+        "active_moiety": null,
+        "salt_parents": [
+          {
+            "type": "SALT/SOLVATE->PARENT",
+            "name": "PICAMILON SODIUM",
+            "unii": "S4L664E11D"
+          }
+        ],
+        "metabolic_relationships": [],
+        "metabolites": []
+      }
     },
     {
       "id": "BANNED_RED_YEAST_RICE",
@@ -4525,7 +5143,21 @@
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
       "recall_scope": null,
-      "cui": "C0763533"
+      "cui": "C0763533",
+      "external_ids": {
+        "unii": "43CAU2Q6DY"
+      },
+      "gsrs": {
+        "substance_name": "Red yeast rice",
+        "substance_class": "structurallyDiverse",
+        "cfr_sections": [],
+        "dsld_count": null,
+        "dsld_info_raw": null,
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      }
     },
     {
       "id": "BANNED_S23",
@@ -4627,7 +5259,21 @@
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
       "recall_scope": null,
-      "cui": "C0163688"
+      "cui": "C0163688",
+      "external_ids": {
+        "unii": "XDK89456WM"
+      },
+      "gsrs": {
+        "substance_name": "S-23",
+        "substance_class": "chemical",
+        "cfr_sections": [],
+        "dsld_count": null,
+        "dsld_info_raw": null,
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      }
     },
     {
       "id": "BANNED_SIBUTRAMINE",
@@ -4722,7 +5368,61 @@
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
       "recall_scope": null,
-      "cui": "C0074493"
+      "cui": "C0074493",
+      "external_ids": {
+        "unii": "WV5EC51866"
+      },
+      "rxcui": "36514",
+      "gsrs": {
+        "substance_name": "SIBUTRAMINE",
+        "substance_class": "chemical",
+        "cfr_sections": [
+          "21 CFR 216.24"
+        ],
+        "dsld_count": null,
+        "dsld_info_raw": null,
+        "active_moiety": null,
+        "salt_parents": [
+          {
+            "type": "SALT/SOLVATE->PARENT",
+            "name": "SIBUTRAMINE HYDROCHLORIDE",
+            "unii": "OGM0YHD1WF"
+          },
+          {
+            "type": "SALT/SOLVATE->PARENT",
+            "name": "SIBUTRAMINE HYDROCHLORIDE ANHYDROUS",
+            "unii": "9GG866ZP1E"
+          },
+          {
+            "type": "SALT/SOLVATE->PARENT",
+            "name": "SIBUTRAMINE MESYLATE",
+            "unii": "NTF6Z4MEY2"
+          },
+          {
+            "type": "SALT/SOLVATE->PARENT",
+            "name": "SIBUTRAMINE MALEATE",
+            "unii": "FL7VAZ52GY"
+          },
+          {
+            "type": "SALT/SOLVATE->PARENT",
+            "name": "SIBUTRAMINE MESYLATE HEMIHYDRATE",
+            "unii": "F3BM7G49ET"
+          }
+        ],
+        "metabolic_relationships": [],
+        "metabolites": [
+          {
+            "type": "METABOLITE ACTIVE->PARENT",
+            "name": "DIDESMETHYLSIBUTRAMINE",
+            "unii": "987R943R3P"
+          },
+          {
+            "type": "METABOLITE->PARENT",
+            "name": "DESMETHYLSIBUTRAMINE",
+            "unii": "889I657R9P"
+          }
+        ]
+      }
     },
     {
       "id": "BANNED_SR9009",
@@ -4808,7 +5508,21 @@
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
       "recall_scope": null,
-      "cui": "C3492460"
+      "cui": "C3492460",
+      "external_ids": {
+        "unii": "X5DCA09N30"
+      },
+      "gsrs": {
+        "substance_name": "SR-9009",
+        "substance_class": "chemical",
+        "cfr_sections": [],
+        "dsld_count": null,
+        "dsld_info_raw": null,
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      }
     },
     {
       "id": "BANNED_SUNIFIRAM",
@@ -4883,7 +5597,21 @@
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
       "recall_scope": null,
-      "cui": "C4549780"
+      "cui": "C4549780",
+      "external_ids": {
+        "unii": "66924E735K"
+      },
+      "gsrs": {
+        "substance_name": "SUNIFIRAM",
+        "substance_class": "chemical",
+        "cfr_sections": [],
+        "dsld_count": null,
+        "dsld_info_raw": null,
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      }
     },
     {
       "id": "BANNED_TIANEPTINE",
@@ -5153,7 +5881,59 @@
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
       "recall_scope": null,
-      "cui": "C0076652"
+      "cui": "C0076652",
+      "external_ids": {
+        "unii": "0T493YFU8O"
+      },
+      "rxcui": "38252",
+      "gsrs": {
+        "substance_name": "Tianeptine",
+        "substance_class": "chemical",
+        "cfr_sections": [],
+        "dsld_count": null,
+        "dsld_info_raw": null,
+        "active_moiety": null,
+        "salt_parents": [
+          {
+            "type": "SALT/SOLVATE->PARENT",
+            "name": "Tianeptine sodium",
+            "unii": "YG0E19592I"
+          },
+          {
+            "type": "SALT/SOLVATE->PARENT",
+            "name": "TIANEPTINE HEMISULFATE MONOHYDRATE",
+            "unii": "4B136GSG9M"
+          },
+          {
+            "type": "SALT/SOLVATE->PARENT",
+            "name": "Tianeptine hydrochloride",
+            "unii": "2DUX8X079R"
+          },
+          {
+            "type": "SALT/SOLVATE->PARENT",
+            "name": "Tianeptine oxalate",
+            "unii": "8UDR73X2CR"
+          },
+          {
+            "type": "SALT/SOLVATE->PARENT",
+            "name": "Tianeptine hemioxalate",
+            "unii": "N8GG84TJ4J"
+          },
+          {
+            "type": "SALT/SOLVATE->PARENT",
+            "name": "Tianeptine sulfate",
+            "unii": "MS4R57MW7A"
+          }
+        ],
+        "metabolic_relationships": [
+          {
+            "type": "TARGET->AGONIST",
+            "name": "MU-TYPE OPIOID RECEPTOR",
+            "unii": "1PE72K8X46"
+          }
+        ],
+        "metabolites": []
+      }
     },
     {
       "id": "BANNED_YELLOW_OLEANDER_RECENT",
@@ -5257,7 +6037,21 @@
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
       "recall_scope": null,
-      "cui": "C0331122"
+      "cui": "C0331122",
+      "external_ids": {
+        "unii": "2XXV95X8GQ"
+      },
+      "gsrs": {
+        "substance_name": "CASCABELA THEVETIA ROOT",
+        "substance_class": "structurallyDiverse",
+        "cfr_sections": [],
+        "dsld_count": null,
+        "dsld_info_raw": null,
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      }
     },
     {
       "id": "BANNED_YK11",
@@ -5335,7 +6129,21 @@
       "recall_scope": null,
       "cui": null,
       "cui_status": "no_confirmed_umls_match",
-      "cui_note": "No confirmed exact UMLS concept was found for this investigational SARM name; null CUI is intentional."
+      "cui_note": "No confirmed exact UMLS concept was found for this investigational SARM name; null CUI is intentional.",
+      "external_ids": {
+        "unii": "Z9748J6B0R"
+      },
+      "gsrs": {
+        "substance_name": "YK-11",
+        "substance_class": "chemical",
+        "cfr_sections": [],
+        "dsld_count": null,
+        "dsld_info_raw": null,
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      }
     },
     {
       "id": "HIGH_RISK_CHAPARRAL",
@@ -5425,7 +6233,22 @@
       "regulatory_date_label": "First regulatory safety alert",
       "match_mode": "active",
       "recall_scope": null,
-      "cui": "C1050700"
+      "cui": "C1050700",
+      "external_ids": {
+        "unii": "PK0TXD049P"
+      },
+      "rxcui": "1311133",
+      "gsrs": {
+        "substance_name": "LARREA TRIDENTATA LEAF",
+        "substance_class": "structurallyDiverse",
+        "cfr_sections": [],
+        "dsld_count": null,
+        "dsld_info_raw": null,
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      }
     },
     {
       "id": "HIGH_RISK_GERMANDER",
@@ -5543,7 +6366,21 @@
       "regulatory_date_label": "Regulatory restriction effective",
       "match_mode": "active",
       "recall_scope": null,
-      "cui": "C0522471"
+      "cui": "C0522471",
+      "external_ids": {
+        "unii": "SQ131ED9QD"
+      },
+      "gsrs": {
+        "substance_name": "TEUCRIUM CHAMAEDRYS WHOLE",
+        "substance_class": "structurallyDiverse",
+        "cfr_sections": [],
+        "dsld_count": null,
+        "dsld_info_raw": null,
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      }
     },
     {
       "id": "HIGH_RISK_PENNYROYAL",
@@ -5646,7 +6483,22 @@
       "regulatory_date_label": "First regulatory safety alert",
       "match_mode": "active",
       "recall_scope": null,
-      "cui": "C0070247"
+      "cui": "C0070247",
+      "external_ids": {
+        "unii": "AK85U7Y3MV"
+      },
+      "rxcui": "1309213",
+      "gsrs": {
+        "substance_name": "PENNYROYAL OIL",
+        "substance_class": "structurallyDiverse",
+        "cfr_sections": [],
+        "dsld_count": null,
+        "dsld_info_raw": null,
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      }
     },
     {
       "id": "HM_ARSENIC",
@@ -5792,7 +6644,24 @@
       "regulatory_date_label": "Regulatory limit established",
       "match_mode": "active",
       "recall_scope": null,
-      "cui": "C0936225"
+      "cui": "C0936225",
+      "external_ids": {
+        "unii": "N712M78A8G"
+      },
+      "rxcui": "1111",
+      "gsrs": {
+        "substance_name": "Arsenic",
+        "substance_class": "chemical",
+        "cfr_sections": [
+          "21 CFR 862.3120"
+        ],
+        "dsld_count": null,
+        "dsld_info_raw": null,
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      }
     },
     {
       "id": "HM_CADMIUM",
@@ -5911,7 +6780,22 @@
       "regulatory_date_label": "Regulatory limit established",
       "match_mode": "active",
       "recall_scope": null,
-      "cui": "C0373557"
+      "cui": "C0373557",
+      "external_ids": {
+        "unii": "00BH33GNGH"
+      },
+      "rxcui": "1362694",
+      "gsrs": {
+        "substance_name": "CADMIUM",
+        "substance_class": "chemical",
+        "cfr_sections": [],
+        "dsld_count": 8,
+        "dsld_info_raw": "Dietary Supplement Label Database|Element|Cadmium | 544 (Number of products:8)",
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      }
     },
     {
       "id": "HM_LEAD",
@@ -6031,7 +6915,24 @@
       "regulatory_date_label": "Regulatory limit established",
       "match_mode": "active",
       "recall_scope": null,
-      "cui": "C0023175"
+      "cui": "C0023175",
+      "external_ids": {
+        "unii": "2P299V784P"
+      },
+      "rxcui": "6260",
+      "gsrs": {
+        "substance_name": "Lead",
+        "substance_class": "chemical",
+        "cfr_sections": [
+          "21 CFR 862.3550"
+        ],
+        "dsld_count": null,
+        "dsld_info_raw": null,
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      }
     },
     {
       "id": "HM_MERCURY",
@@ -6151,7 +7052,24 @@
       "regulatory_date_label": "Regulatory limit established",
       "match_mode": "active",
       "recall_scope": null,
-      "cui": "C0025424"
+      "cui": "C0025424",
+      "external_ids": {
+        "unii": "FXS1BY2PGL"
+      },
+      "rxcui": "6769",
+      "gsrs": {
+        "substance_name": "Mercury",
+        "substance_class": "chemical",
+        "cfr_sections": [
+          "21 CFR 862.3600"
+        ],
+        "dsld_count": 2,
+        "dsld_info_raw": "Dietary Supplement Label Database|mineral|Mercury | 3002 (Number of products:2)",
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      }
     },
     {
       "id": "NOOTROPIC_9MEBC",
@@ -6352,7 +7270,22 @@
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
       "recall_scope": null,
-      "cui": "C0101700"
+      "cui": "C0101700",
+      "external_ids": {
+        "unii": "BI81Z4542G"
+      },
+      "rxcui": "45938",
+      "gsrs": {
+        "substance_name": "ADRAFINIL",
+        "substance_class": "chemical",
+        "cfr_sections": [],
+        "dsld_count": 4,
+        "dsld_info_raw": "Dietary Supplement Label Database|other|Adrafinil | 3424 (Number of products:4)",
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      }
     },
     {
       "id": "NOOTROPIC_ANIRACETAM",
@@ -6484,7 +7417,22 @@
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
       "recall_scope": null,
-      "cui": "C0051917"
+      "cui": "C0051917",
+      "external_ids": {
+        "unii": "5L16LKN964"
+      },
+      "rxcui": "17939",
+      "gsrs": {
+        "substance_name": "ANIRACETAM",
+        "substance_class": "chemical",
+        "cfr_sections": [],
+        "dsld_count": 3,
+        "dsld_info_raw": "Dietary Supplement Label Database|Chemical|Aniracetam | 1888 (Number of products:3)",
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      }
     },
     {
       "id": "NOOTROPIC_BROMANTANE",
@@ -6587,7 +7535,21 @@
       "regulatory_date_label": "WADA prohibition effective",
       "match_mode": "active",
       "recall_scope": null,
-      "cui": "C0252077"
+      "cui": "C0252077",
+      "external_ids": {
+        "unii": "N1ILS53XWK"
+      },
+      "gsrs": {
+        "substance_name": "BROMANTANE",
+        "substance_class": "chemical",
+        "cfr_sections": [],
+        "dsld_count": null,
+        "dsld_info_raw": null,
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      }
     },
     {
       "id": "NOOTROPIC_FLMODAFINIL",
@@ -6784,7 +7746,45 @@
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
       "recall_scope": null,
-      "cui": "C0066677"
+      "cui": "C0066677",
+      "external_ids": {
+        "unii": "R3UK8X3U3D"
+      },
+      "rxcui": "30125",
+      "gsrs": {
+        "substance_name": "Modafinil",
+        "substance_class": "chemical",
+        "cfr_sections": [],
+        "dsld_count": null,
+        "dsld_info_raw": null,
+        "active_moiety": null,
+        "salt_parents": [
+          {
+            "type": "SALT/SOLVATE->PARENT",
+            "name": "Modafinil hydrochloride",
+            "unii": "S6YP288CET"
+          }
+        ],
+        "metabolic_relationships": [
+          {
+            "type": "TARGET->INHIBITOR",
+            "name": "SODIUM-DEPENDENT DOPAMINE TRANSPORTER",
+            "unii": "F202H3PMO2"
+          }
+        ],
+        "metabolites": [
+          {
+            "type": "METABOLITE->PARENT",
+            "name": "MODAFINIL SULFONE",
+            "unii": "946LME1J4S"
+          },
+          {
+            "type": "METABOLITE->PARENT",
+            "name": "MODAFINIL ACID",
+            "unii": "54N37HN7N4"
+          }
+        ]
+      }
     },
     {
       "id": "NOOTROPIC_OMBERACETAM",
@@ -6886,7 +7886,27 @@
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
       "recall_scope": null,
-      "cui": "C5238120"
+      "cui": "C5238120",
+      "external_ids": {
+        "unii": "4QBJ98683M"
+      },
+      "gsrs": {
+        "substance_name": "OMBERACETAM",
+        "substance_class": "chemical",
+        "cfr_sections": [],
+        "dsld_count": 17,
+        "dsld_info_raw": "Dietary Supplement Label Database|chemical|N-phenylacetyl-L-prolylglycine ethyl ester | 3380 (Number of products:17)",
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": [
+          {
+            "type": "METABOLITE ACTIVE->PARENT",
+            "name": "CYCLO(PROLYLGLYCYL)",
+            "unii": "W7O69J5F2B"
+          }
+        ]
+      }
     },
     {
       "id": "NOOTROPIC_PHENYLPIRACETAM",
@@ -7000,7 +8020,21 @@
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
       "recall_scope": null,
-      "cui": "C0618539"
+      "cui": "C0618539",
+      "external_ids": {
+        "unii": "289199VKN4"
+      },
+      "gsrs": {
+        "substance_name": "PHENYLPIRACETAM HYDRAZIDE",
+        "substance_class": "chemical",
+        "cfr_sections": [],
+        "dsld_count": null,
+        "dsld_info_raw": null,
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      }
     },
     {
       "id": "NOOTROPIC_PIRACETAM",
@@ -7102,7 +8136,22 @@
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
       "recall_scope": null,
-      "cui": "C0031977"
+      "cui": "C0031977",
+      "external_ids": {
+        "unii": "ZH516LNZ10"
+      },
+      "rxcui": "8351",
+      "gsrs": {
+        "substance_name": "Piracetam",
+        "substance_class": "chemical",
+        "cfr_sections": [],
+        "dsld_count": 5,
+        "dsld_info_raw": "Dietary Supplement Label Database|other|Piracetam | 4054 (Number of products:5)",
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      }
     },
     {
       "id": "NOOTROPIC_SULBUTIAMINE",
@@ -7219,7 +8268,22 @@
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
       "recall_scope": null,
-      "cui": "C0075501"
+      "cui": "C0075501",
+      "external_ids": {
+        "unii": "42NCM1BW43"
+      },
+      "rxcui": "37317",
+      "gsrs": {
+        "substance_name": "SULBUTIAMINE",
+        "substance_class": "chemical",
+        "cfr_sections": [],
+        "dsld_count": 20,
+        "dsld_info_raw": "Dietary Supplement Label Database|chemical|Sulbutiamine | 3147 (Number of products:20)",
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      }
     },
     {
       "id": "NOOTROPIC_VINPOCETINE",
@@ -7351,7 +8415,34 @@
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
       "recall_scope": null,
-      "cui": "C0059752"
+      "cui": "C0059752",
+      "external_ids": {
+        "unii": "543512OBTC"
+      },
+      "rxcui": "24506",
+      "gsrs": {
+        "substance_name": "VINPOCETINE",
+        "substance_class": "chemical",
+        "cfr_sections": [],
+        "dsld_count": 364,
+        "dsld_info_raw": "Dietary Supplement Label Database|Chemical|Vinpocetine | 724 (Number of products:364)",
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [
+          {
+            "type": "TARGET->INHIBITOR",
+            "name": "CALCIUM/CALMODULIN-DEPENDENT 3',5'-CYCLIC NUCLEOTIDE PHOSPHODIESTERASE 1A",
+            "unii": "ZTU32AE62N"
+          }
+        ],
+        "metabolites": [
+          {
+            "type": "METABOLITE ACTIVE->PARENT",
+            "name": "APOVINCAMINIC ACID",
+            "unii": "ZD6ZF4C86Q"
+          }
+        ]
+      }
     },
     {
       "id": "PEPTIDE_BPC157",
@@ -7457,7 +8548,27 @@
         "effective_to": null,
         "note": "FDA warning-letter enforcement for supplement product containing undeclared trendione."
       },
-      "cui": "C0248070"
+      "cui": "C0248070",
+      "external_ids": {
+        "unii": "8ED8NXK95P"
+      },
+      "gsrs": {
+        "substance_name": "BPC-157",
+        "substance_class": "protein",
+        "cfr_sections": [],
+        "dsld_count": null,
+        "dsld_info_raw": null,
+        "active_moiety": null,
+        "salt_parents": [
+          {
+            "type": "SALT/SOLVATE->PARENT",
+            "name": "BPC-157 acetate",
+            "unii": "PAR2FC72XP"
+          }
+        ],
+        "metabolic_relationships": [],
+        "metabolites": []
+      }
     },
     {
       "id": "PEPTIDE_MELANOTAN_II",
@@ -7584,7 +8695,48 @@
         "effective_to": null,
         "note": "FDA warning-letter enforcement covering SARMs products marketed as dietary supplements."
       },
-      "cui": "C0212602"
+      "cui": "C0212602",
+      "external_ids": {
+        "unii": "UPF5CJ93X7"
+      },
+      "gsrs": {
+        "substance_name": "MELANOTAN II",
+        "substance_class": "chemical",
+        "cfr_sections": [],
+        "dsld_count": null,
+        "dsld_info_raw": null,
+        "active_moiety": null,
+        "salt_parents": [
+          {
+            "type": "SALT/SOLVATE->PARENT",
+            "name": "MELANOTAN II ACETATE",
+            "unii": "WYE6CXB7CH"
+          }
+        ],
+        "metabolic_relationships": [
+          {
+            "type": "TARGET->AGONIST",
+            "name": "MELANOCORTIN RECEPTOR 1",
+            "unii": "810S9KV11R"
+          },
+          {
+            "type": "TARGET->AGONIST",
+            "name": "MELANOCORTIN RECEPTOR 5",
+            "unii": "93T4FL9FGD"
+          },
+          {
+            "type": "TARGET->AGONIST",
+            "name": "MELANOCORTIN RECEPTOR 4",
+            "unii": "KE3XSX7XYP"
+          },
+          {
+            "type": "TARGET->AGONIST",
+            "name": "MELANOCORTIN RECEPTOR 3",
+            "unii": "QV1Q1KK8LA"
+          }
+        ],
+        "metabolites": []
+      }
     },
     {
       "id": "PEPTIDE_TB500",
@@ -7688,7 +8840,21 @@
       "recall_scope": null,
       "cui": null,
       "cui_status": "no_confirmed_umls_match",
-      "cui_note": "No confirmed exact UMLS concept was found for this marketed peptide analogue name; null CUI is intentional."
+      "cui_note": "No confirmed exact UMLS concept was found for this marketed peptide analogue name; null CUI is intentional.",
+      "external_ids": {
+        "unii": "QHK6Z47GTG"
+      },
+      "gsrs": {
+        "substance_name": "TB-500",
+        "substance_class": "protein",
+        "cfr_sections": [],
+        "dsld_count": null,
+        "dsld_info_raw": null,
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      }
     },
     {
       "id": "PHARMA_DAPOXETINE",
@@ -7764,7 +8930,21 @@
       "regulatory_date_label": "First FDA enforcement action",
       "match_mode": "active",
       "recall_scope": null,
-      "cui": "C0215087"
+      "cui": "C0215087",
+      "external_ids": {
+        "unii": "GB2433A4M3"
+      },
+      "gsrs": {
+        "substance_name": "DAPOXETINE",
+        "substance_class": "chemical",
+        "cfr_sections": [],
+        "dsld_count": null,
+        "dsld_info_raw": null,
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      }
     },
     {
       "id": "PHARMA_LORCASERIN",
@@ -7852,7 +9032,165 @@
       "regulatory_date_label": "First FDA enforcement action",
       "match_mode": "active",
       "recall_scope": null,
-      "cui": "C2350948"
+      "cui": "C2350948",
+      "external_ids": {
+        "unii": "637E494O0Z"
+      },
+      "rxcui": "1300701",
+      "gsrs": {
+        "substance_name": "LORCASERIN",
+        "substance_class": "chemical",
+        "cfr_sections": [],
+        "dsld_count": null,
+        "dsld_info_raw": null,
+        "active_moiety": null,
+        "salt_parents": [
+          {
+            "type": "SALT/SOLVATE->PARENT",
+            "name": "LORCASERIN HYDROCHLORIDE, ADSORBED ON SILICON DIOXIDE (1:2 W/W)",
+            "unii": "3423KE0K4Y"
+          },
+          {
+            "type": "SALT/SOLVATE->PARENT",
+            "name": "LORCASERIN HYDROCHLORIDE HEMIHYDRATE",
+            "unii": "REV26SR2B4"
+          },
+          {
+            "type": "SALT/SOLVATE->PARENT",
+            "name": "LORCASERIN HYDROCHLORIDE ANHYDROUS",
+            "unii": "0QJF08GDPE"
+          }
+        ],
+        "metabolic_relationships": [
+          {
+            "type": "METABOLIC ENZYME->SUBSTRATE",
+            "name": "URIDINE DIPHOSPHATE GLUCURONOSYLTRANSFERASE 2B17",
+            "unii": "W80H4WI8LW"
+          },
+          {
+            "type": "METABOLIC ENZYME->SUBSTRATE",
+            "name": "CYTOCHROME P450 2C19",
+            "unii": "081I12ZA58"
+          },
+          {
+            "type": "TARGET->AGONIST",
+            "name": "5-HYDROXYTRYPTAMINE RECEPTOR 2C",
+            "unii": "W4BO00H6K6"
+          },
+          {
+            "type": "METABOLIC ENZYME->SUBSTRATE",
+            "name": "CYTOCHROME P450 1A2",
+            "unii": "VK4SQL11C0"
+          },
+          {
+            "type": "METABOLIC ENZYME->SUBSTRATE",
+            "name": "URIDINE DIPHOSPHATE GLUCURONOSYLTRANSFERASE 1A9",
+            "unii": "3318TFY23Q"
+          },
+          {
+            "type": "METABOLIC ENZYME->SUBSTRATE",
+            "name": "HUMAN SULFOTRANSFERASE 2A1",
+            "unii": "KU46H7INQ7"
+          },
+          {
+            "type": "METABOLIC ENZYME->SUBSTRATE",
+            "name": "ESTROGEN SULFOTRANSFERASE",
+            "unii": "8TFF8V1KJ2"
+          },
+          {
+            "type": "METABOLIC ENZYME->SUBSTRATE",
+            "name": "CYTOCHROME P450 2D6",
+            "unii": "8E4LAA4357"
+          },
+          {
+            "type": "METABOLIC ENZYME->SUBSTRATE",
+            "name": "CYTOCHROME P450 1A1",
+            "unii": "9DX651UO0D"
+          },
+          {
+            "type": "METABOLIC ENZYME->SUBSTRATE",
+            "name": "ARYL SULFOTRANSFERASE 2",
+            "unii": "VUZ865USG9"
+          },
+          {
+            "type": "METABOLIC ENZYME->SUBSTRATE",
+            "name": "CYTOCHROME P450 2A6",
+            "unii": "246D9TQ2XG"
+          },
+          {
+            "type": "METABOLIC ENZYME->SUBSTRATE",
+            "name": "CYTOCHROME P450 3A4",
+            "unii": "PUO0521HZV"
+          },
+          {
+            "type": "METABOLIC ENZYME->SUBSTRATE",
+            "name": "URIDINE DIPHOSPHATE GLUCURONOSYLTRANSFERASE 2B15",
+            "unii": "2Z5HW3OR67"
+          },
+          {
+            "type": "METABOLIC ENZYME->SUBSTRATE",
+            "name": "CYTOCHROME P450 2E1",
+            "unii": "03BYF220B6"
+          },
+          {
+            "type": "METABOLIC ENZYME->SUBSTRATE",
+            "name": "URIDINE DIPHOSPHATE GLUCURONOSYLTRANSFERASE 2B7",
+            "unii": "0M77ZW789J"
+          },
+          {
+            "type": "METABOLIC ENZYME->SUBSTRATE",
+            "name": "CYTOCHROME P450 2B6",
+            "unii": "0UY97CSG1T"
+          }
+        ],
+        "metabolites": [
+          {
+            "type": "METABOLITE->PARENT",
+            "name": "(2S,3S,4S,5R)-6-(((5R)-7-CHLORO-5-METHYL-2,3,4,5-TETRAHYDRO-1H-3-BENZAZEPIN-1-YL)OXY)-3,4,5-TRIHYDROXY-TETRAHYDROPYRAN-2-CARBOXYLIC ACID",
+            "unii": "8HFX2F4DWV"
+          },
+          {
+            "type": "METABOLITE->PARENT",
+            "name": "(2S,3S,4S,5R)-6-(((5R)-7-CHLORO-5-METHYL-2,3,4,5-TETRAHYDRO-1H-3-BENZAZEPIN-8-YL)OXY)-3,4,5-TRIHYDROXY-TETRAHYDROPYRAN-2-CARBOXYLIC ACID",
+            "unii": "TB5N3D6KCE"
+          },
+          {
+            "type": "METABOLITE->PARENT",
+            "name": "(2S,3S,4S,5R)-6-(((5R)-7-CHLORO-5-METHYL-2,3,4,5-TETRAHYDRO-1H-3-BENZAZEPIN-6-YL)OXY)-3,4,5-TRIHYDROXY-TETRAHYDROPYRAN-2-CARBOXYLIC ACID",
+            "unii": "WR2F7EU9VN"
+          },
+          {
+            "type": "METABOLITE->PARENT",
+            "name": "(2S,3S,4S,5R)-6-(((5R)-7-CHLORO-5-METHYL-2-OXO-4,5-DIHYDRO-1H-3-BENZAZEPIN-3-YL)OXY)-3,4,5-TRIHYDROXY-TETRAHYDROPYRAN-2-CARBOXYLIC ACID",
+            "unii": "D94D8M36Y4"
+          },
+          {
+            "type": "METABOLITE->PARENT",
+            "name": "((5R)-7-CHLORO-5-METHYL-2,3,4,5-TETRAHYDRO-1H-3-BENZAZEPIN-8-YL) HYDROGEN SULFATE",
+            "unii": "AN6SWP6BFC"
+          },
+          {
+            "type": "METABOLITE->PARENT",
+            "name": "LORCASERIN N-HYDROXY",
+            "unii": "7ZH44Z86BJ"
+          },
+          {
+            "type": "METABOLITE->PARENT",
+            "name": "(2S,3S,4S,5R)-6-(((5R)-7-CHLORO-5-METHYL-1,2,4,5-TETRAHYDRO-3-BENZAZEPIN-3-YL)OXY)-3,4,5-TRIHYDROXY-TETRAHYDROPYRAN-2-CARBOXYLIC ACID",
+            "unii": "CG962GN3VA"
+          },
+          {
+            "type": "METABOLITE->PARENT",
+            "name": "(5R)-7-CHLORO-2,3,4,5-TETRAHYDRO-5-METHYL-1H-3-BENZAZEPIN-1-OL",
+            "unii": "Q5ZY5ZLN9D"
+          },
+          {
+            "type": "METABOLITE->PARENT",
+            "name": "LORCASERIN 7-HYDROXY",
+            "unii": "NJZ27SG33S"
+          }
+        ]
+      }
     },
     {
       "id": "RC_CARDARINE_ANALOGS",
@@ -8043,7 +9381,9 @@
         "effective_to": null,
         "note": "FDA warning-letter enforcement for supplement product containing undeclared trendione."
       },
-      "cui": null
+      "cui": null,
+      "cui_status": "no_single_umls_concept",
+      "cui_note": "Product recall record is intentionally null-CUI because a single UMLS ingredient or product concept would misrepresent this recalled branded product/formulation."
     },
     {
       "id": "RECALLED_GOLD_STAR_DISTRIBUTION",
@@ -8124,7 +9464,9 @@
         "effective_to": null,
         "note": null
       },
-      "cui": null
+      "cui": null,
+      "cui_status": "no_single_umls_concept",
+      "cui_note": "Product recall record is intentionally null-CUI because a single UMLS ingredient or product concept would misrepresent this recalled branded product/formulation."
     },
     {
       "id": "RECALLED_GREEN_LUMBER",
@@ -8207,7 +9549,9 @@
         "effective_to": null,
         "note": null
       },
-      "cui": null
+      "cui": null,
+      "cui_status": "no_single_umls_concept",
+      "cui_note": "Product recall record is intentionally null-CUI because a single UMLS ingredient or product concept would misrepresent this recalled branded product/formulation."
     },
     {
       "id": "RECALLED_HYDROXYCUT",
@@ -8326,7 +9670,9 @@
         "effective_to": null,
         "note": null
       },
-      "cui": null
+      "cui": null,
+      "cui_status": "no_single_umls_concept",
+      "cui_note": "Product recall record is intentionally null-CUI because a single UMLS ingredient or product concept would misrepresent this recalled branded product/formulation."
     },
     {
       "id": "RECALLED_JACK3D",
@@ -8445,7 +9791,9 @@
         "effective_to": null,
         "note": null
       },
-      "cui": null
+      "cui": null,
+      "cui_status": "no_single_umls_concept",
+      "cui_note": "Product recall record is intentionally null-CUI because a single UMLS ingredient or product concept would misrepresent this recalled branded product/formulation."
     },
     {
       "id": "RECALLED_LIVE_IT_UP_SUPER_GREENS",
@@ -8536,7 +9884,9 @@
         "effective_to": null,
         "note": null
       },
-      "cui": null
+      "cui": null,
+      "cui_status": "no_single_umls_concept",
+      "cui_note": "Product recall record is intentionally null-CUI because a single UMLS ingredient or product concept would misrepresent this recalled branded product/formulation."
     },
     {
       "id": "RECALLED_MODERN_WARRIOR",
@@ -8619,7 +9969,9 @@
         "effective_to": null,
         "note": null
       },
-      "cui": null
+      "cui": null,
+      "cui_status": "no_single_umls_concept",
+      "cui_note": "Product recall record is intentionally null-CUI because a single UMLS ingredient or product concept would misrepresent this recalled branded product/formulation."
     },
     {
       "id": "RECALLED_MR7_SUPER_700000",
@@ -8725,7 +10077,9 @@
         "effective_to": null,
         "note": null
       },
-      "cui": null
+      "cui": null,
+      "cui_status": "no_single_umls_concept",
+      "cui_note": "Product recall record is intentionally null-CUI because a single UMLS ingredient or product concept would misrepresent this recalled branded product/formulation."
     },
     {
       "id": "RECALLED_OXYELITE_PRO",
@@ -8851,7 +10205,9 @@
         "effective_to": null,
         "note": null
       },
-      "cui": null
+      "cui": null,
+      "cui_status": "no_single_umls_concept",
+      "cui_note": "Product recall record is intentionally null-CUI because a single UMLS ingredient or product concept would misrepresent this recalled branded product/formulation."
     },
     {
       "id": "RECALLED_PURITY_PRODUCTS_MY_BLADDER",
@@ -8937,7 +10293,9 @@
         "effective_to": null,
         "note": null
       },
-      "cui": null
+      "cui": null,
+      "cui_status": "no_single_umls_concept",
+      "cui_note": "Product recall record is intentionally null-CUI because a single UMLS ingredient or product concept would misrepresent this recalled branded product/formulation."
     },
     {
       "id": "RECALLED_REBOOST_CLEARLIFE_NASAL_SPRAY",
@@ -9027,7 +10385,9 @@
         "effective_to": null,
         "note": null
       },
-      "cui": null
+      "cui": null,
+      "cui_status": "no_single_umls_concept",
+      "cui_note": "Product recall record is intentionally null-CUI because a single UMLS ingredient or product concept would misrepresent this recalled branded product/formulation."
     },
     {
       "id": "RECALLED_RHEUMACARE_CAPSULES",
@@ -9124,7 +10484,9 @@
         "effective_to": null,
         "note": null
       },
-      "cui": null
+      "cui": null,
+      "cui_status": "no_single_umls_concept",
+      "cui_note": "Product recall record is intentionally null-CUI because a single UMLS ingredient or product concept would misrepresent this recalled branded product/formulation."
     },
     {
       "id": "RECALLED_SILINTAN",
@@ -9207,7 +10569,9 @@
         "effective_to": null,
         "note": null
       },
-      "cui": null
+      "cui": null,
+      "cui_status": "no_single_umls_concept",
+      "cui_note": "Product recall record is intentionally null-CUI because a single UMLS ingredient or product concept would misrepresent this recalled branded product/formulation."
     },
     {
       "id": "RECALLED_TITAN_SARMS_LLC",
@@ -9304,7 +10668,9 @@
         "effective_to": null,
         "note": "FDA warning-letter enforcement covering SARMs products marketed as dietary supplements."
       },
-      "cui": null
+      "cui": null,
+      "cui_status": "no_single_umls_concept",
+      "cui_note": "Product recall record is intentionally null-CUI because a single UMLS ingredient or product concept would misrepresent this recalled branded product/formulation."
     },
     {
       "id": "RISK_BITTER_ORANGE",
@@ -9402,7 +10768,22 @@
       "regulatory_date_label": "FDA safety advisory published",
       "match_mode": "active",
       "recall_scope": null,
-      "cui": "C0330922"
+      "cui": "C0330922",
+      "external_ids": {
+        "unii": "DQD16J2B5O"
+      },
+      "rxcui": "1311573",
+      "gsrs": {
+        "substance_name": "BITTER ORANGE",
+        "substance_class": "structurallyDiverse",
+        "cfr_sections": [],
+        "dsld_count": 465,
+        "dsld_info_raw": "Dietary Supplement Label Database|Botanical|Bitter orange | 351 (Number of products:465)",
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      }
     },
     {
       "id": "RISK_GERMANIUM",
@@ -9840,7 +11221,22 @@
       "regulatory_date_label": "Regulatory restriction effective",
       "match_mode": "active",
       "recall_scope": null,
-      "cui": "C0939882"
+      "cui": "C0939882",
+      "external_ids": {
+        "unii": "BOW48C81XP"
+      },
+      "rxcui": "285228",
+      "gsrs": {
+        "substance_name": "PIPER METHYSTICUM ROOT",
+        "substance_class": "structurallyDiverse",
+        "cfr_sections": [],
+        "dsld_count": null,
+        "dsld_info_raw": null,
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      }
     },
     {
       "id": "RISK_KRATOM_NATURAL",
@@ -9988,7 +11384,21 @@
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
       "recall_scope": null,
-      "cui": "C1197867"
+      "cui": "C1197867",
+      "external_ids": {
+        "unii": "754HG7WK00"
+      },
+      "gsrs": {
+        "substance_name": "MITRAGYNA SPECIOSA LEAF",
+        "substance_class": "structurallyDiverse",
+        "cfr_sections": [],
+        "dsld_count": null,
+        "dsld_info_raw": null,
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      }
     },
     {
       "id": "RISK_YOHIMBE",
@@ -10099,7 +11509,22 @@
       "regulatory_date_label": "First regulatory safety alert",
       "match_mode": "active",
       "recall_scope": null,
-      "cui": "C1123032"
+      "cui": "C1123032",
+      "external_ids": {
+        "unii": "9M051HS3S5"
+      },
+      "rxcui": "236801",
+      "gsrs": {
+        "substance_name": "PAUSINYSTALIA YOHIMBE BARK",
+        "substance_class": "structurallyDiverse",
+        "cfr_sections": [],
+        "dsld_count": null,
+        "dsld_info_raw": null,
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      }
     },
     {
       "id": "SARM_ANDARINE",
@@ -10201,7 +11626,27 @@
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
       "recall_scope": null,
-      "cui": "C1528658"
+      "cui": "C1528658",
+      "external_ids": {
+        "unii": "7UT2HAH49H"
+      },
+      "gsrs": {
+        "substance_name": "ANDARINE",
+        "substance_class": "chemical",
+        "cfr_sections": [],
+        "dsld_count": 6,
+        "dsld_info_raw": "Dietary Supplement Label Database|chemical|Andarine | 4029 (Number of products:6)",
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [
+          {
+            "type": "TARGET->AGONIST",
+            "name": "ANDROGEN RECEPTOR",
+            "unii": "EJC4C3UYXH"
+          }
+        ],
+        "metabolites": []
+      }
     },
     {
       "id": "SARM_CARDARINE",
@@ -10289,7 +11734,27 @@
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
       "recall_scope": null,
-      "cui": "C4740822"
+      "cui": "C4740822",
+      "external_ids": {
+        "unii": "7I2HA1NU22"
+      },
+      "gsrs": {
+        "substance_name": "GW-501516",
+        "substance_class": "chemical",
+        "cfr_sections": [],
+        "dsld_count": 9,
+        "dsld_info_raw": "Dietary Supplement Label Database|other|Cardarine | 3989 (Number of products:9)",
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [
+          {
+            "type": "TARGET->AGONIST",
+            "name": "PEROXISOME PROLIFERATOR-ACTIVATED RECEPTOR DELTA",
+            "unii": "L1Q8TMD5IZ"
+          }
+        ],
+        "metabolites": []
+      }
     },
     {
       "id": "SARM_LIGANDROL",
@@ -10502,7 +11967,28 @@
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
       "recall_scope": null,
-      "cui": "C2742262"
+      "cui": "C2742262",
+      "external_ids": {
+        "unii": "O3571H3R8N"
+      },
+      "rxcui": "2168587",
+      "gsrs": {
+        "substance_name": "ENOBOSARM",
+        "substance_class": "chemical",
+        "cfr_sections": [],
+        "dsld_count": 13,
+        "dsld_info_raw": "Dietary Supplement Label Database|chemical|Ostarine | 3985 (Number of products:13)",
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [
+          {
+            "type": "TARGET->AGONIST",
+            "name": "ANDROGEN RECEPTOR",
+            "unii": "EJC4C3UYXH"
+          }
+        ],
+        "metabolites": []
+      }
     },
     {
       "id": "SARM_RAD140",
@@ -10607,22 +12093,19 @@
       "cui": "C0601132"
     },
     {
-      "id": "SCHED_AMANITA_MUSCIMOL",
-      "standard_name": "Amanita Muscaria / Muscimol",
+      "id": "SCHED_AMANITA_MUSCARIA",
+      "standard_name": "Amanita Muscaria",
       "aliases": [
         "amanita muscaria",
         "fly agaric",
-        "muscimol",
-        "ibotenic acid",
         "amanita extract",
         "amanita gummies",
-        "legal shrooms",
-        "muscimol gummies",
         "amanita pantherina",
         "panther cap",
-        "amanita muscaria / muscimol"
+        "legal shrooms",
+        "amanita muscaria extract"
       ],
-      "reason": "Amanita muscaria mushrooms contain muscimol and ibotenic acid — psychoactive GABA-A agonists distinct from psilocybin. In 2024, Diamond Shruumz brand gummies and products (containing Amanita muscaria extract) triggered a multistate outbreak with 70+ hospitalizations, seizures, loss of consciousness, and deaths. FDA issued urgent safety alerts and coordinated a recall. Muscimol's margin between intoxicating and toxic doses is narrow and highly variable. Amanita muscaria supplements are not lawful dietary ingredients and have caused documented serious harm.",
+      "reason": "Amanita muscaria is a psychoactive mushroom containing muscimol and ibotenic acid. In 2024, Diamond Shruumz brand gummies (containing Amanita muscaria extract) triggered a multistate outbreak with 70+ hospitalizations, seizures, loss of consciousness, and deaths. FDA issued urgent safety alerts and coordinated a Class I recall. Amanita muscaria supplements are not lawful dietary ingredients under DSHEA — the mushroom was never marketed as a supplement before 1994.",
       "status": "banned",
       "class_tags": [
         "schedule_I_psychoactives",
@@ -10727,6 +12210,11 @@
             "date": "2026-01-08",
             "change": "Migrated to schema v3.1 with standardized fields",
             "by": "system"
+          },
+          {
+            "date": "2026-03-23",
+            "change": "Decoupled from combined amanita/muscimol entry. CUI set to C0319647 (Fungus). Species entry — no CAS/CID.",
+            "by": "audit"
           }
         ]
       },
@@ -10735,27 +12223,43 @@
       "regulatory_date_label": "DEA scheduling effective",
       "match_mode": "active",
       "recall_scope": null,
-      "cui": null,
-      "cui_status": "no_single_umls_concept",
-      "cui_note": "Entry combines mushroom species and active constituents; no single ingredient-level UMLS concept is appropriate."
+      "cui": "C0319647",
+      "cui_status": null,
+      "cui_note": null,
+      "external_ids": {
+        "cas": null,
+        "pubchem_cid": null,
+        "unii": "RQ7YY49K9Q"
+      },
+      "gsrs": {
+        "substance_name": "AMANITA MUSCARIA WHOLE",
+        "substance_class": "structurallyDiverse",
+        "cfr_sections": [],
+        "dsld_count": null,
+        "dsld_info_raw": null,
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      }
     },
     {
       "id": "SCHED_PSILOCYBIN",
-      "standard_name": "Psilocybin/Psilocin",
+      "standard_name": "Psilocybin",
       "aliases": [
         "psilocybin",
-        "psilocin",
+        "4-phosphoryloxy-DMT",
+        "psilocybine",
+        "indocybin",
+        "O-phosphoryl-4-hydroxy-N,N-dimethyltryptamine",
         "magic mushrooms",
         "shrooms",
         "psilocybe cubensis",
         "psilocybe semilanceata",
         "liberty caps",
-        "psychedelic mushrooms",
-        "4-phosphoryloxy-DMT",
-        "4-HO-DMT",
-        "psilocybin/psilocin"
+        "psychedelic mushrooms"
       ],
-      "reason": "Psilocybin (and its active metabolite psilocin) are the psychoactive compounds in 'magic mushrooms.' Psilocybin is a DEA Schedule I controlled substance — classified as having high abuse potential and no currently accepted medical use in the United States. While FDA has granted Breakthrough Therapy designation for psilocybin in treatment-resistant depression (in supervised clinical settings), it remains Schedule I and cannot be marketed as a supplement. Any supplement containing psilocybin is an illegal controlled substance. Several cities and states have decriminalized but not legalized supplement sales.",
+      "reason": "Psilocybin is the primary psychoactive prodrug in 'magic mushrooms' (Psilocybe spp.). DEA Schedule I controlled substance since 1970. Dephosphorylated to psilocin (the active metabolite) by alkaline phosphatase. FDA granted Breakthrough Therapy designation for psilocybin in treatment-resistant depression (supervised clinical settings), but it remains Schedule I and cannot be marketed as a supplement. Any supplement containing psilocybin is an illegal controlled substance.",
       "status": "banned",
       "class_tags": [
         "schedule_I_psychoactives",
@@ -10860,6 +12364,11 @@
             "date": "2026-01-08",
             "change": "Migrated to schema v3.1 with standardized fields",
             "by": "system"
+          },
+          {
+            "date": "2026-03-23",
+            "change": "Decoupled from psilocybin/psilocin combined entry. Fixed CUI from retired C0807537 to C0033850. Added CAS and PubChem CID.",
+            "by": "audit"
           }
         ]
       },
@@ -10868,7 +12377,32 @@
       "regulatory_date_label": "DEA scheduling effective",
       "match_mode": "active",
       "recall_scope": null,
-      "cui": "C0807537"
+      "cui": "C0033850",
+      "external_ids": {
+        "cas": "520-52-5",
+        "pubchem_cid": 10624,
+        "unii": "2RV7212BP0"
+      },
+      "gsrs": {
+        "substance_name": "Psilocybin",
+        "substance_class": "chemical",
+        "cfr_sections": [],
+        "dsld_count": null,
+        "dsld_info_raw": null,
+        "active_moiety": {
+          "name": "PSILOCIN",
+          "unii": "CMS88KUW0G"
+        },
+        "salt_parents": [
+          {
+            "type": "SALT/SOLVATE->PARENT",
+            "name": "Psilocybin trihydrate",
+            "unii": "YG63V98ZDB"
+          }
+        ],
+        "metabolic_relationships": [],
+        "metabolites": []
+      }
     },
     {
       "id": "SPIKE_ANABOLIC_STEROIDS",
@@ -11075,7 +12609,27 @@
       "recall_scope": null,
       "cui": null,
       "cui_status": "no_confirmed_umls_match",
-      "cui_note": "No confirmed exact UMLS concept was found for this undeclared PDE-5 analogue name; null CUI is intentional."
+      "cui_note": "No confirmed exact UMLS concept was found for this undeclared PDE-5 analogue name; null CUI is intentional.",
+      "external_ids": {
+        "unii": "1P8ITA120M"
+      },
+      "gsrs": {
+        "substance_name": "CHLOROPRETADALAFIL",
+        "substance_class": "chemical",
+        "cfr_sections": [],
+        "dsld_count": null,
+        "dsld_info_raw": null,
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [
+          {
+            "type": "TARGET->INHIBITOR",
+            "name": "PHOSPHODIESTERASE 5A, HUMAN",
+            "unii": "KT6HT14BLU"
+          }
+        ],
+        "metabolites": []
+      }
     },
     {
       "id": "SPIKE_DEXAMETHASONE",
@@ -11151,7 +12705,68 @@
       "regulatory_date_label": "First FDA enforcement action",
       "match_mode": "active",
       "recall_scope": null,
-      "cui": "C0011777"
+      "cui": "C0011777",
+      "external_ids": {
+        "unii": "7S5I7G3JQL"
+      },
+      "rxcui": "3264",
+      "gsrs": {
+        "substance_name": "Dexamethasone",
+        "substance_class": "chemical",
+        "cfr_sections": [
+          "21 CFR 522.540",
+          "21 CFR 520.540",
+          "21 CFR 520.540A",
+          "21 CFR 520.540C",
+          "21 CFR 522.542",
+          "21 CFR 520.540B",
+          "21 CFR 524.1484G",
+          "21 CFR 520.563"
+        ],
+        "dsld_count": null,
+        "dsld_info_raw": null,
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [
+          {
+            "type": "TARGET->INHIBITOR",
+            "name": "GLUCOCORTICOID RECEPTOR",
+            "unii": "FZW85LW99M"
+          },
+          {
+            "type": "METABOLIC ENZYME->INDUCER",
+            "name": "CYTOCHROME P450 2A6",
+            "unii": "246D9TQ2XG"
+          },
+          {
+            "type": "TARGET->AGONIST",
+            "name": "GLUCOCORTICOID RECEPTOR",
+            "unii": "FZW85LW99M"
+          },
+          {
+            "type": "METABOLIC ENZYME->INDUCER",
+            "name": "CYTOCHROME P450 3A5",
+            "unii": "805SU96HKF"
+          },
+          {
+            "type": "METABOLIC ENZYME->INDUCER",
+            "name": "URIDINE DIPHOSPHATE GLUCURONOSYLTRANSFERASE 2B7",
+            "unii": "0M77ZW789J"
+          },
+          {
+            "type": "METABOLIC ENZYME->INDUCER",
+            "name": "CYTOCHROME P450 3A4",
+            "unii": "PUO0521HZV"
+          }
+        ],
+        "metabolites": [
+          {
+            "type": "METABOLITE->PARENT",
+            "name": "6.ALPHA.-HYDROXYDEXAMETHASONE",
+            "unii": "8S6G45GU49"
+          }
+        ]
+      }
     },
     {
       "id": "SPIKE_DICLOFENAC",
@@ -11241,7 +12856,107 @@
       "regulatory_date_label": "First FDA enforcement action",
       "match_mode": "active",
       "recall_scope": null,
-      "cui": "C0012091"
+      "cui": "C0012091",
+      "external_ids": {
+        "unii": "144O8QL0L1"
+      },
+      "rxcui": "3355",
+      "gsrs": {
+        "substance_name": "Diclofenac",
+        "substance_class": "chemical",
+        "cfr_sections": [
+          "21 CFR 524.590"
+        ],
+        "dsld_count": null,
+        "dsld_info_raw": null,
+        "active_moiety": null,
+        "salt_parents": [
+          {
+            "type": "SALT/SOLVATE->PARENT",
+            "name": "Diclofenac calcium",
+            "unii": "PU75M58TSF"
+          },
+          {
+            "type": "SALT/SOLVATE->PARENT",
+            "name": "Diclofenac diethylamine",
+            "unii": "6TGQ35Z71K"
+          },
+          {
+            "type": "SALT/SOLVATE->PARENT",
+            "name": "Diclofenac Potassium",
+            "unii": "L4D5UA6CB4"
+          },
+          {
+            "type": "SALT/SOLVATE->PARENT",
+            "name": "Diclofenac Sodium",
+            "unii": "QTG126297Q"
+          },
+          {
+            "type": "SALT/SOLVATE->PARENT",
+            "name": "Diclofenac epolamine",
+            "unii": "X5F8EKL9ZG"
+          }
+        ],
+        "metabolic_relationships": [
+          {
+            "type": "METABOLIC ENZYME->SUBSTRATE",
+            "name": "CYTOCHROME P450 2C9",
+            "unii": "L9DP834D1P"
+          },
+          {
+            "type": "TARGET->INHIBITOR",
+            "name": "COX-2",
+            "unii": "D8T754TT2I"
+          },
+          {
+            "type": "TARGET->INHIBITOR",
+            "name": "COX-1",
+            "unii": "E6HDG0QI46"
+          },
+          {
+            "type": "METABOLIC ENZYME->SUBSTRATE",
+            "name": "URIDINE DIPHOSPHATE GLUCURONOSYLTRANSFERASE 2B7",
+            "unii": "0M77ZW789J"
+          },
+          {
+            "type": "METABOLIC ENZYME->INHIBITOR",
+            "name": "URIDINE DIPHOSPHATE GLUCURONOSYLTRANSFERASE 2B7",
+            "unii": "0M77ZW789J"
+          }
+        ],
+        "metabolites": [
+          {
+            "type": "METABOLITE->PARENT",
+            "name": "4',5-DIHYDROXYDICLOFENAC",
+            "unii": "6US4Q8M8J7"
+          },
+          {
+            "type": "METABOLITE->PARENT",
+            "name": "5-HYDROXYDICLOFENAC",
+            "unii": "GS38436703"
+          },
+          {
+            "type": "METABOLITE->PARENT",
+            "name": "3'-HYDROXYDICLOFENAC",
+            "unii": "8489I2R79K"
+          },
+          {
+            "type": "METABOLITE->PARENT",
+            "name": "DICLOFENAC GLUCURONIDE",
+            "unii": "C8BEZ13XEN"
+          },
+          {
+            "type": "METABOLITE->PARENT",
+            "name": "3'-HYDROXY-4'-METHOXYDICLOFENAC",
+            "unii": "CY7817W711"
+          },
+          {
+            "type": "METABOLITE->PARENT",
+            "name": "Diclofenac-1',4'-quinone imine",
+            "unii": "FM2TC9S77N"
+          }
+        ]
+      }
     },
     {
       "id": "SPIKE_FLUOXETINE",
@@ -11316,7 +13031,77 @@
       "regulatory_date_label": "First FDA enforcement action",
       "match_mode": "active",
       "recall_scope": null,
-      "cui": "C0016365"
+      "cui": "C0016365",
+      "external_ids": {
+        "unii": "01K63SUP8D"
+      },
+      "rxcui": "4493",
+      "gsrs": {
+        "substance_name": "Fluoxetine",
+        "substance_class": "chemical",
+        "cfr_sections": [
+          "21 CFR 520.980"
+        ],
+        "dsld_count": null,
+        "dsld_info_raw": null,
+        "active_moiety": null,
+        "salt_parents": [
+          {
+            "type": "SALT/SOLVATE->PARENT",
+            "name": "Fluoxetine oxalate",
+            "unii": "640AZ74IZB"
+          },
+          {
+            "type": "SALT/SOLVATE->PARENT",
+            "name": "Fluoxetine Hydrochloride",
+            "unii": "I9W7N6B1KJ"
+          }
+        ],
+        "metabolic_relationships": [
+          {
+            "type": "METABOLIC ENZYME->SUBSTRATE",
+            "name": "CYTOCHROME P450 3A5",
+            "unii": "805SU96HKF"
+          },
+          {
+            "type": "METABOLIC ENZYME->INHIBITOR",
+            "name": "CYTOCHROME P450 2D6",
+            "unii": "8E4LAA4357"
+          },
+          {
+            "type": "METABOLIC ENZYME->INHIBITOR",
+            "name": "CYTOCHROME P450 2C9",
+            "unii": "L9DP834D1P"
+          },
+          {
+            "type": "METABOLIC ENZYME->INHIBITOR",
+            "name": "CYTOCHROME P450 2C19",
+            "unii": "081I12ZA58"
+          },
+          {
+            "type": "METABOLIC ENZYME->SUBSTRATE",
+            "name": "CYTOCHROME P450 2C19",
+            "unii": "081I12ZA58"
+          },
+          {
+            "type": "TARGET->INHIBITOR",
+            "name": "SODIUM-DEPENDENT SEROTONIN TRANSPORTER",
+            "unii": "CJZ26L1EGI"
+          }
+        ],
+        "metabolites": [
+          {
+            "type": "METABOLITE->PARENT",
+            "name": "4-TRIFLUOROMETHYLPHENOL",
+            "unii": "G8PMO13PO4"
+          },
+          {
+            "type": "METABOLITE ACTIVE->PARENT",
+            "name": "NORFLUOXETINE",
+            "unii": "K8D70XE2F4"
+          }
+        ]
+      }
     },
     {
       "id": "SPIKE_METHYL7K",
@@ -11494,7 +13279,22 @@
       "regulatory_date_label": "First FDA enforcement action",
       "match_mode": "active",
       "recall_scope": null,
-      "cui": "C0600489"
+      "cui": "C0600489",
+      "external_ids": {
+        "unii": "6QK969R2IF"
+      },
+      "rxcui": "155122",
+      "gsrs": {
+        "substance_name": "PHENOLPHTHALEIN",
+        "substance_class": "chemical",
+        "cfr_sections": [],
+        "dsld_count": null,
+        "dsld_info_raw": null,
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      }
     },
     {
       "id": "SPIKE_PROPOXYPHENYLSILDENAFIL",
@@ -11573,7 +13373,50 @@
       "recall_scope": null,
       "cui": null,
       "cui_status": "no_confirmed_umls_match",
-      "cui_note": "No confirmed exact UMLS concept was found for this undeclared PDE-5 analogue name; null CUI is intentional."
+      "cui_note": "No confirmed exact UMLS concept was found for this undeclared PDE-5 analogue name; null CUI is intentional.",
+      "external_ids": {
+        "unii": "3M7OB98Y7H"
+      },
+      "rxcui": "136411",
+      "gsrs": {
+        "substance_name": "SILDENAFIL",
+        "substance_class": "chemical",
+        "cfr_sections": [],
+        "dsld_count": null,
+        "dsld_info_raw": null,
+        "active_moiety": null,
+        "salt_parents": [
+          {
+            "type": "SALT/SOLVATE->PARENT",
+            "name": "Sildenafil Citrate",
+            "unii": "BW9B0ZE037"
+          }
+        ],
+        "metabolic_relationships": [
+          {
+            "type": "METABOLIC ENZYME->SUBSTRATE",
+            "name": "CYTOCHROME P450 3A5",
+            "unii": "805SU96HKF"
+          },
+          {
+            "type": "METABOLIC ENZYME->SUBSTRATE",
+            "name": "CYTOCHROME P450 3A4",
+            "unii": "PUO0521HZV"
+          }
+        ],
+        "metabolites": [
+          {
+            "type": "METABOLITE ACTIVE->PARENT",
+            "name": "DESMETHYLSILDENAFIL",
+            "unii": "L6WO34R9YG"
+          },
+          {
+            "type": "METABOLITE->PARENT",
+            "name": "UK-150564",
+            "unii": "3Q43L9B5T3"
+          }
+        ]
+      }
     },
     {
       "id": "SPIKE_SILDENAFIL",
@@ -11650,7 +13493,50 @@
       "regulatory_date_label": "First FDA enforcement action",
       "match_mode": "active",
       "recall_scope": null,
-      "cui": "C0529793"
+      "cui": "C0529793",
+      "external_ids": {
+        "unii": "3M7OB98Y7H"
+      },
+      "rxcui": "136411",
+      "gsrs": {
+        "substance_name": "SILDENAFIL",
+        "substance_class": "chemical",
+        "cfr_sections": [],
+        "dsld_count": null,
+        "dsld_info_raw": null,
+        "active_moiety": null,
+        "salt_parents": [
+          {
+            "type": "SALT/SOLVATE->PARENT",
+            "name": "Sildenafil Citrate",
+            "unii": "BW9B0ZE037"
+          }
+        ],
+        "metabolic_relationships": [
+          {
+            "type": "METABOLIC ENZYME->SUBSTRATE",
+            "name": "CYTOCHROME P450 3A5",
+            "unii": "805SU96HKF"
+          },
+          {
+            "type": "METABOLIC ENZYME->SUBSTRATE",
+            "name": "CYTOCHROME P450 3A4",
+            "unii": "PUO0521HZV"
+          }
+        ],
+        "metabolites": [
+          {
+            "type": "METABOLITE ACTIVE->PARENT",
+            "name": "DESMETHYLSILDENAFIL",
+            "unii": "L6WO34R9YG"
+          },
+          {
+            "type": "METABOLITE->PARENT",
+            "name": "UK-150564",
+            "unii": "3Q43L9B5T3"
+          }
+        ]
+      }
     },
     {
       "id": "SPIKE_TADALAFIL",
@@ -11725,7 +13611,39 @@
       "regulatory_date_label": "First FDA enforcement action",
       "match_mode": "active",
       "recall_scope": null,
-      "cui": "C1176316"
+      "cui": "C1176316",
+      "external_ids": {
+        "unii": "742SXX0ICT"
+      },
+      "rxcui": "358263",
+      "gsrs": {
+        "substance_name": "Tadalafil",
+        "substance_class": "chemical",
+        "cfr_sections": [],
+        "dsld_count": null,
+        "dsld_info_raw": null,
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [
+          {
+            "type": "METABOLIC ENZYME->SUBSTRATE",
+            "name": "CYTOCHROME P450 3A4",
+            "unii": "PUO0521HZV"
+          }
+        ],
+        "metabolites": [
+          {
+            "type": "METABOLITE->PARENT",
+            "name": "TADALAFIL 3-METHYL-4-GLUCURONIDE CATECHOL",
+            "unii": "4NY76TE82J"
+          },
+          {
+            "type": "METABOLITE->PARENT",
+            "name": "TADALAFIL 3-METHYL CATECHOL",
+            "unii": "58GD22EV9S"
+          }
+        ]
+      }
     },
     {
       "id": "SPIKE_TIANEPTINE_ANALOGUES",
@@ -12111,7 +14029,32 @@
       "regulatory_date_label": "DEA scheduling effective",
       "match_mode": "active",
       "recall_scope": null,
-      "cui": "C5198249"
+      "cui": "C5198249",
+      "external_ids": {
+        "unii": "H4APZ90T9U"
+      },
+      "gsrs": {
+        "substance_name": "CUMYL-PICA",
+        "substance_class": "chemical",
+        "cfr_sections": [],
+        "dsld_count": null,
+        "dsld_info_raw": null,
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [
+          {
+            "type": "TARGET->AGONIST",
+            "name": "CANNABINOID RECEPTOR 2",
+            "unii": "SKEU5X23RI"
+          },
+          {
+            "type": "TARGET->AGONIST",
+            "name": "CANNABINOID RECEPTOR 1",
+            "unii": "NJ1Q2Q7LO5"
+          }
+        ],
+        "metabolites": []
+      }
     },
     {
       "id": "WADA_CANNABIS",
@@ -12283,7 +14226,105 @@
       "regulatory_date_label": "WADA prohibition effective",
       "match_mode": "active",
       "recall_scope": null,
-      "cui": "C0040610"
+      "cui": "C0040610",
+      "external_ids": {
+        "unii": "39J1LGJ30J"
+      },
+      "rxcui": "10689",
+      "gsrs": {
+        "substance_name": "TRAMADOL",
+        "substance_class": "chemical",
+        "cfr_sections": [],
+        "dsld_count": null,
+        "dsld_info_raw": null,
+        "active_moiety": null,
+        "salt_parents": [
+          {
+            "type": "SALT/SOLVATE->PARENT",
+            "name": "CELECOXIB TRAMADOL HYDROBROMIDE CO-CRYSTAL",
+            "unii": "EFC42N2AU4"
+          },
+          {
+            "type": "SALT/SOLVATE->PARENT",
+            "name": "CELECOXIB TRAMADOL HYDROCHLORIDE CO-CRYSTAL",
+            "unii": "80FJ28572U"
+          },
+          {
+            "type": "SALT/SOLVATE->PARENT",
+            "name": "Tramadol Hydrochloride",
+            "unii": "9N7R477WCK"
+          }
+        ],
+        "metabolic_relationships": [
+          {
+            "type": "TARGET->INHIBITOR",
+            "name": "SODIUM-DEPENDENT NORADRENALINE TRANSPORTER",
+            "unii": "HN86OLH1NW"
+          },
+          {
+            "type": "METABOLIC ENZYME->SUBSTRATE",
+            "name": "CYTOCHROME P450 1A2",
+            "unii": "VK4SQL11C0"
+          },
+          {
+            "type": "TARGET->AGONIST",
+            "name": "MU-TYPE OPIOID RECEPTOR",
+            "unii": "1PE72K8X46"
+          },
+          {
+            "type": "METABOLIC ENZYME->SUBSTRATE",
+            "name": "CYTOCHROME P450 3A4",
+            "unii": "PUO0521HZV"
+          },
+          {
+            "type": "METABOLIC ENZYME->SUBSTRATE",
+            "name": "CYTOCHROME P450 2D6",
+            "unii": "8E4LAA4357"
+          },
+          {
+            "type": "TARGET->INHIBITOR",
+            "name": "SODIUM-DEPENDENT SEROTONIN TRANSPORTER",
+            "unii": "CJZ26L1EGI"
+          },
+          {
+            "type": "METABOLIC ENZYME->SUBSTRATE",
+            "name": "CYTOCHROME P450 2C19",
+            "unii": "081I12ZA58"
+          },
+          {
+            "type": "METABOLIC ENZYME->SUBSTRATE",
+            "name": "CYTOCHROME P450 2B6",
+            "unii": "0UY97CSG1T"
+          },
+          {
+            "type": "METABOLIC ENZYME->SUBSTRATE",
+            "name": "CYTOCHROME P450 2C9",
+            "unii": "L9DP834D1P"
+          },
+          {
+            "type": "METABOLIC ENZYME->INHIBITOR",
+            "name": "CYTOCHROME P450 3A4",
+            "unii": "PUO0521HZV"
+          }
+        ],
+        "metabolites": [
+          {
+            "type": "METABOLITE->PARENT",
+            "name": "N,N,O-TRIDEMETHYLTRAMADOL",
+            "unii": "SRZ6938M82"
+          },
+          {
+            "type": "METABOLITE->PARENT",
+            "name": "N-DESMETHYLTRAMADOL",
+            "unii": "8M7YSN2KII"
+          },
+          {
+            "type": "METABOLITE->PARENT",
+            "name": "CYCLOHEXANOL, 2-(AMINOMETHYL)-1-(3-METHOXYPHENYL)-, CIS-",
+            "unii": "XDX4ZNH4WE"
+          }
+        ]
+      }
     },
     {
       "id": "BANNED_DYMETHAZINE",
@@ -12447,7 +14488,36 @@
       "regulatory_date_label": "First FDA enforcement action",
       "match_mode": "active",
       "recall_scope": null,
-      "cui": "C0025659"
+      "cui": "C0025659",
+      "external_ids": {
+        "unii": "125OD7737X"
+      },
+      "rxcui": "6845",
+      "gsrs": {
+        "substance_name": "METHOCARBAMOL",
+        "substance_class": "chemical",
+        "cfr_sections": [
+          "21 CFR 522.1380",
+          "21 CFR 520.1380"
+        ],
+        "dsld_count": null,
+        "dsld_info_raw": null,
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": [
+          {
+            "type": "METABOLITE->PARENT",
+            "name": "3-(2-HYDROXYPHENOXY)-1,2-PROPANEDIOL 1-CARBAMATE",
+            "unii": "XK13H02419"
+          },
+          {
+            "type": "METABOLITE->PARENT",
+            "name": "3-(4-HYDROXY-2-METHOXYPHENOXY)-1,2-PROPANEDIOL 1-CARBAMATE",
+            "unii": "9P9G9DSF2I"
+          }
+        ]
+      }
     },
     {
       "id": "RISK_LOBELIA",
@@ -12552,7 +14622,21 @@
       "supersedes_ids": null,
       "match_mode": "active",
       "recall_scope": null,
-      "cui": "C0331296"
+      "cui": "C0331296",
+      "external_ids": {
+        "unii": "7QFT17RLRG"
+      },
+      "gsrs": {
+        "substance_name": "LOBELIA INFLATA LEAF",
+        "substance_class": "structurallyDiverse",
+        "cfr_sections": [],
+        "dsld_count": 143,
+        "dsld_info_raw": "Dietary Supplement Label Database|Botanical|Lobelia | 1512 (Number of products:143)",
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      }
     },
     {
       "id": "ADD_5A_HYDROXY_LAXOGENIN",
@@ -12628,7 +14712,21 @@
       },
       "cui": null,
       "cui_status": "no_confirmed_umls_match",
-      "cui_note": "No confirmed exact UMLS concept was found for this supplement-market steroid derivative name; null CUI is intentional."
+      "cui_note": "No confirmed exact UMLS concept was found for this supplement-market steroid derivative name; null CUI is intentional.",
+      "external_ids": {
+        "unii": "HT7W184YG4"
+      },
+      "gsrs": {
+        "substance_name": "LAXOGENIN",
+        "substance_class": "chemical",
+        "cfr_sections": [],
+        "dsld_count": 5,
+        "dsld_info_raw": "Dietary Supplement Label Database|TBD|Laxogenin | 3987 (Number of products:5)",
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      }
     },
     {
       "id": "ADD_CASCARA_SAGRADA",
@@ -12710,7 +14808,22 @@
           }
         ]
       },
-      "cui": "C0205704"
+      "cui": "C0205704",
+      "external_ids": {
+        "unii": "4VBP01X99F"
+      },
+      "rxcui": "1350209",
+      "gsrs": {
+        "substance_name": "FRANGULA PURSHIANA BARK",
+        "substance_class": "structurallyDiverse",
+        "cfr_sections": [],
+        "dsld_count": null,
+        "dsld_info_raw": null,
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      }
     },
     {
       "id": "ADD_COLLOIDAL_SILVER",
@@ -12812,7 +14925,24 @@
           }
         ]
       },
-      "cui": "C0772313"
+      "cui": "C0772313",
+      "external_ids": {
+        "unii": "3M4G523W1G"
+      },
+      "rxcui": "9785",
+      "gsrs": {
+        "substance_name": "SILVER",
+        "substance_class": "chemical",
+        "cfr_sections": [
+          "21 CFR 310.548"
+        ],
+        "dsld_count": 3,
+        "dsld_info_raw": "Dietary Supplement Label Database|Element|Silver (usp) | 599 (Number of products:3)",
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      }
     },
     {
       "id": "ADD_DIIODOTHYRONINE_T2",
@@ -12952,7 +15082,30 @@
           }
         ]
       },
-      "cui": "C0243237"
+      "cui": "C0243237",
+      "external_ids": {
+        "unii": "F05Q2T2JA0"
+      },
+      "rxcui": "71722",
+      "gsrs": {
+        "substance_name": "Docusate sodium",
+        "substance_class": "chemical",
+        "cfr_sections": [
+          "21 CFR 175.320",
+          "21 CFR 172.520",
+          "21 CFR 172.810",
+          "21 CFR 176.170"
+        ],
+        "dsld_count": 31,
+        "dsld_info_raw": "Dietary Supplement Label Database|chemical|Docusate Sodium | 3169 (Number of products:31)",
+        "active_moiety": {
+          "name": "DOCUSATE",
+          "unii": "M7P27195AG"
+        },
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      }
     },
     {
       "id": "ADD_HORDENINE",
@@ -13020,7 +15173,33 @@
           }
         ]
       },
-      "cui": "C0062970"
+      "cui": "C0062970",
+      "external_ids": {
+        "unii": "K3489CA082"
+      },
+      "rxcui": "27120",
+      "gsrs": {
+        "substance_name": "HORDENINE",
+        "substance_class": "chemical",
+        "cfr_sections": [],
+        "dsld_count": 143,
+        "dsld_info_raw": "Dietary Supplement Label Database|Chemical|N-methyl Tyramine | 1786 (Number of products:143)",
+        "active_moiety": null,
+        "salt_parents": [
+          {
+            "type": "SALT/SOLVATE->PARENT",
+            "name": "HORDENINE SULFATE",
+            "unii": "O6NSW8P8Y8"
+          },
+          {
+            "type": "SALT/SOLVATE->PARENT",
+            "name": "HORDENINE HYDROCHLORIDE",
+            "unii": "575FR6P9I9"
+          }
+        ],
+        "metabolic_relationships": [],
+        "metabolites": []
+      }
     },
     {
       "id": "ADD_N_PHENETHYL_DIMETHYLAMINE",
@@ -13097,7 +15276,38 @@
       },
       "cui": null,
       "cui_status": "no_confirmed_umls_match",
-      "cui_note": "No confirmed exact UMLS concept was found for this stimulant analogue name; null CUI is intentional."
+      "cui_note": "No confirmed exact UMLS concept was found for this stimulant analogue name; null CUI is intentional.",
+      "external_ids": {
+        "unii": "ARQ8157E0Q"
+      },
+      "rxcui": "1745413",
+      "gsrs": {
+        "substance_name": "Dimethylamine",
+        "substance_class": "chemical",
+        "cfr_sections": [],
+        "dsld_count": null,
+        "dsld_info_raw": null,
+        "active_moiety": null,
+        "salt_parents": [
+          {
+            "type": "SALT/SOLVATE->PARENT",
+            "name": "DIMETHYLAMINE MONOSULFATE",
+            "unii": "OTX81K3TGJ"
+          },
+          {
+            "type": "SALT/SOLVATE->PARENT",
+            "name": "Dimethylamine hydrochloride",
+            "unii": "7M4CWB6AOK"
+          },
+          {
+            "type": "SALT/SOLVATE->PARENT",
+            "name": "DICAMBA-DIMETHYLAMMONIUM",
+            "unii": "123F051HEM"
+          }
+        ],
+        "metabolic_relationships": [],
+        "metabolites": []
+      }
     },
     {
       "id": "ADD_RED3",
@@ -13199,7 +15409,34 @@
           }
         ]
       },
-      "cui": "C0014824"
+      "cui": "C0014824",
+      "external_ids": {
+        "unii": "PN2ZH5LOQY"
+      },
+      "rxcui": "1366961",
+      "gsrs": {
+        "substance_name": "FD&C RED NO. 3",
+        "substance_class": "chemical",
+        "cfr_sections": [
+          "21 CFR 74.303",
+          "21 CFR 74.1303"
+        ],
+        "dsld_count": null,
+        "dsld_info_raw": null,
+        "active_moiety": {
+          "name": "TETRAIODOFLUORESCEIN",
+          "unii": "1A878FZQ9B"
+        },
+        "salt_parents": [
+          {
+            "type": "PARENT->SALT/SOLVATE",
+            "name": "TETRAIODOFLUORESCEIN",
+            "unii": "1A878FZQ9B"
+          }
+        ],
+        "metabolic_relationships": [],
+        "metabolites": []
+      }
     },
     {
       "id": "BANNED_DMSA_SUCCIMER",
@@ -13263,7 +15500,33 @@
           }
         ]
       },
-      "cui": "C0012384"
+      "cui": "C0012384",
+      "external_ids": {
+        "unii": "DX1U2629QE"
+      },
+      "rxcui": "3446",
+      "gsrs": {
+        "substance_name": "SUCCIMER",
+        "substance_class": "chemical",
+        "cfr_sections": [],
+        "dsld_count": null,
+        "dsld_info_raw": null,
+        "active_moiety": null,
+        "salt_parents": [
+          {
+            "type": "SALT/SOLVATE->PARENT",
+            "name": "SUCCIMER MONOSODIUM",
+            "unii": "NVK8VER9YH"
+          },
+          {
+            "type": "SALT/SOLVATE->PARENT",
+            "name": "TECHNETIUM TC-99M SUCCIMER",
+            "unii": "494JNQ8L28"
+          }
+        ],
+        "metabolic_relationships": [],
+        "metabolites": []
+      }
     },
     {
       "id": "BANNED_DNP",
@@ -13329,7 +15592,27 @@
           }
         ]
       },
-      "cui": "C0045511"
+      "cui": "C0045511",
+      "external_ids": {
+        "unii": "Q13SKS21MN"
+      },
+      "gsrs": {
+        "substance_name": "2,4-DINITROPHENOL",
+        "substance_class": "chemical",
+        "cfr_sections": [],
+        "dsld_count": null,
+        "dsld_info_raw": null,
+        "active_moiety": null,
+        "salt_parents": [
+          {
+            "type": "SALT/SOLVATE->PARENT",
+            "name": "SODIUM 2,4-DINITROPHENOLATE",
+            "unii": "85D4S1GYRS"
+          }
+        ],
+        "metabolic_relationships": [],
+        "metabolites": []
+      }
     },
     {
       "id": "BANNED_USNIC_ACID",
@@ -13394,7 +15677,28 @@
           }
         ]
       },
-      "cui": "C0042118"
+      "cui": "C0042118",
+      "external_ids": {
+        "unii": "0W584PFJ77"
+      },
+      "rxcui": "1546707",
+      "gsrs": {
+        "substance_name": "USNIC ACID",
+        "substance_class": "chemical",
+        "cfr_sections": [],
+        "dsld_count": null,
+        "dsld_info_raw": null,
+        "active_moiety": null,
+        "salt_parents": [
+          {
+            "type": "SALT/SOLVATE->PARENT",
+            "name": "SODIUM USNATE",
+            "unii": "90CQX661TE"
+          }
+        ],
+        "metabolic_relationships": [],
+        "metabolites": []
+      }
     },
     {
       "id": "BANNED_CLENBUTEROL",
@@ -13460,7 +15764,43 @@
           }
         ]
       },
-      "cui": "C0008932"
+      "cui": "C0008932",
+      "external_ids": {
+        "unii": "XTZ6AXU7KN"
+      },
+      "rxcui": "2580",
+      "gsrs": {
+        "substance_name": "Clenbuterol",
+        "substance_class": "chemical",
+        "cfr_sections": [
+          "21 CFR 530.41",
+          "21 CFR 520.452"
+        ],
+        "dsld_count": null,
+        "dsld_info_raw": null,
+        "active_moiety": null,
+        "salt_parents": [
+          {
+            "type": "SALT/SOLVATE->PARENT",
+            "name": "Clenbuterol hydrochloride",
+            "unii": "GOR5747GWU"
+          }
+        ],
+        "metabolic_relationships": [
+          {
+            "type": "TARGET->AGONIST",
+            "name": "BETA-2 ADRENERGIC RECEPTOR",
+            "unii": "VZX139UJO5"
+          }
+        ],
+        "metabolites": [
+          {
+            "type": "METABOLITE->PARENT",
+            "name": "4-AMINO-3,5-DICHLOROBENZOIC ACID",
+            "unii": "BIK7NS3B2F"
+          }
+        ]
+      }
     },
     {
       "id": "BANNED_ACONITE",
@@ -13520,7 +15860,21 @@
           }
         ]
       },
-      "cui": "C0330240"
+      "cui": "C0330240",
+      "external_ids": {
+        "unii": "QU71159N2W"
+      },
+      "gsrs": {
+        "substance_name": "ACONITUM KUSNEZOFFII WHOLE",
+        "substance_class": "structurallyDiverse",
+        "cfr_sections": [],
+        "dsld_count": null,
+        "dsld_info_raw": null,
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      }
     },
     {
       "id": "ADD_SODIUM_TETRABORATE",
@@ -13587,7 +15941,27 @@
           }
         ]
       },
-      "cui": "C0053942"
+      "cui": "C0053942",
+      "external_ids": {
+        "unii": "91MBZ8H3QO"
+      },
+      "rxcui": "36680",
+      "gsrs": {
+        "substance_name": "Sodium Borate",
+        "substance_class": "chemical",
+        "cfr_sections": [
+          "21 CFR 175.210"
+        ],
+        "dsld_count": 8,
+        "dsld_info_raw": "Dietary Supplement Label Database|other|Borax | 2879 (Number of products:8)",
+        "active_moiety": {
+          "name": "BORATE ION",
+          "unii": "44OAE30D22"
+        },
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      }
     },
     {
       "id": "ADD_THYROGEN",
@@ -13643,7 +16017,22 @@
           }
         ]
       },
-      "cui": "C2587204"
+      "cui": "C2587204",
+      "external_ids": {
+        "unii": "AVX3D5A4LM"
+      },
+      "rxcui": "4952",
+      "gsrs": {
+        "substance_name": "THYROTROPIN ALFA",
+        "substance_class": "protein",
+        "cfr_sections": [],
+        "dsld_count": null,
+        "dsld_info_raw": null,
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      }
     },
     {
       "id": "ADD_SIMETHICONE",
@@ -13701,7 +16090,21 @@
           }
         ]
       },
-      "cui": "C0037138"
+      "cui": "C0037138",
+      "external_ids": {
+        "unii": "QU3C8D8GQY"
+      },
+      "gsrs": {
+        "substance_name": ".ALPHA.-BUTYLDIMETHYLSILYL-AND .OMEGA.-3-METHACRYLOXYPROPYLDIMETHYLSILYL-TERMINATED POLYDIMETHYLSILOXANE (1000 MW)",
+        "substance_class": "polymer",
+        "cfr_sections": [],
+        "dsld_count": null,
+        "dsld_info_raw": null,
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      }
     },
     {
       "id": "ADD_HEXADRONE",
@@ -13897,7 +16300,34 @@
           }
         ]
       },
-      "cui": "C3256964"
+      "cui": "C3256964",
+      "external_ids": {
+        "unii": "15FIX9V2JP"
+      },
+      "rxcui": "38323",
+      "gsrs": {
+        "substance_name": "TITANIUM DIOXIDE",
+        "substance_class": "chemical",
+        "cfr_sections": [
+          "21 CFR 178.3297",
+          "21 CFR 352.20",
+          "21 CFR 176.170",
+          "21 CFR 175.210",
+          "21 CFR 352.10"
+        ],
+        "dsld_count": 1,
+        "dsld_info_raw": "Dietary Supplement Label Database|Chemical|Titanium Dioxide | 1166 (Number of products:1)",
+        "active_moiety": null,
+        "salt_parents": [
+          {
+            "type": "PARENT->SALT/SOLVATE",
+            "name": "TITANIUM CATION (4+)",
+            "unii": "7R411EMJ0N"
+          }
+        ],
+        "metabolic_relationships": [],
+        "metabolites": []
+      }
     },
     {
       "id": "BANNED_ADD_TALC",
@@ -14026,7 +16456,22 @@
           }
         ]
       },
-      "cui": "C0039267"
+      "cui": "C0039267",
+      "external_ids": {
+        "unii": "7SEV7J4R1U"
+      },
+      "rxcui": "10323",
+      "gsrs": {
+        "substance_name": "TALC",
+        "substance_class": "chemical",
+        "cfr_sections": [],
+        "dsld_count": null,
+        "dsld_info_raw": null,
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      }
     },
     {
       "id": "BANNED_ADD_CAROB_COLOR",
@@ -14235,7 +16680,33 @@
           }
         ]
       },
-      "cui": "C0028403"
+      "cui": "C0028403",
+      "external_ids": {
+        "unii": "14O50WS8JD"
+      },
+      "rxcui": "1311141",
+      "gsrs": {
+        "substance_name": "OCTOPAMINE",
+        "substance_class": "chemical",
+        "cfr_sections": [],
+        "dsld_count": 99,
+        "dsld_info_raw": "Dietary Supplement Label Database|chemical|Octopamine | 2862 (Number of products:99)",
+        "active_moiety": null,
+        "salt_parents": [
+          {
+            "type": "SALT/SOLVATE->PARENT",
+            "name": "OCTOPAMINE HYDROCHLORIDE",
+            "unii": "37YAS5L9HQ"
+          },
+          {
+            "type": "SALT/SOLVATE->PARENT",
+            "name": "OCTOPAMINE TARTRATE",
+            "unii": "5GQV08V31D"
+          }
+        ],
+        "metabolic_relationships": [],
+        "metabolites": []
+      }
     },
     {
       "id": "BANNED_DETERENOL_ISOPROPYLNORSYNEPHRINE",
@@ -14295,7 +16766,42 @@
           ]
         }
       ],
-      "cui": "C0131209"
+      "cui": "C0131209",
+      "external_ids": {
+        "unii": "BR971OUC9M"
+      },
+      "gsrs": {
+        "substance_name": "DETERENOL",
+        "substance_class": "chemical",
+        "cfr_sections": [],
+        "dsld_count": 19,
+        "dsld_info_raw": "Dietary Supplement Label Database|chemical|Isopropylnorsynephrine | 3973 (Number of products:19)",
+        "active_moiety": null,
+        "salt_parents": [
+          {
+            "type": "SALT/SOLVATE->PARENT",
+            "name": "DETERENOL SULFATE",
+            "unii": "44HG434C0S"
+          },
+          {
+            "type": "SALT/SOLVATE->PARENT",
+            "name": "DETERENOL HYDROCHLORIDE",
+            "unii": "RCH64O2H56"
+          },
+          {
+            "type": "SALT/SOLVATE->PARENT",
+            "name": "DETERENOL ACETATE",
+            "unii": "BLO5PSU8OW"
+          },
+          {
+            "type": "SALT/SOLVATE->PARENT",
+            "name": "DETERENOL HYDROBROMIDE",
+            "unii": "2CH5GCM15K"
+          }
+        ],
+        "metabolic_relationships": [],
+        "metabolites": []
+      }
     },
     {
       "id": "BANNED_CALAMUS_ACORUS_CALAMUS",
@@ -14382,7 +16888,21 @@
       "regulatory_date_label": "FDA prohibition in human food",
       "match_mode": "active",
       "recall_scope": null,
-      "cui": "C0949888"
+      "cui": "C0949888",
+      "external_ids": {
+        "unii": "Q46A6NDR5C"
+      },
+      "gsrs": {
+        "substance_name": "Acorus calamus whole",
+        "substance_class": "structurallyDiverse",
+        "cfr_sections": [],
+        "dsld_count": null,
+        "dsld_info_raw": null,
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      }
     },
     {
       "id": "HM_CHROMIUM_HEXAVALENT",
@@ -14519,7 +17039,10 @@
           }
         ]
       },
-      "cui": "C1707393"
+      "cui": "C1707393",
+      "external_ids": {},
+      "rxcui": null,
+      "gsrs": null
     },
     {
       "id": "RECALLED_ROSABELLA_MORINGA",
@@ -14601,7 +17124,473 @@
         "effective_to": null,
         "note": "Ambrosia Brands LLC, 60 capsules/bottle, UPC 860012161720"
       },
-      "cui": null
+      "cui": null,
+      "cui_status": "no_single_umls_concept",
+      "cui_note": "Product recall record is intentionally null-CUI because a single UMLS ingredient or product concept would misrepresent this recalled branded product/formulation."
+    },
+    {
+      "id": "SCHED_PSILOCIN",
+      "standard_name": "Psilocin",
+      "aliases": [
+        "psilocin",
+        "psilocine",
+        "4-HO-DMT",
+        "4-hydroxy-DMT",
+        "4-hydroxy-N,N-dimethyltryptamine",
+        "psilotsin",
+        "N,N-dimethyl-4-hydroxytryptamine"
+      ],
+      "reason": "Psilocin is the pharmacologically active metabolite of psilocybin. It is a serotonin 5-HT2A receptor agonist responsible for the psychedelic effects of magic mushrooms. DEA Schedule I controlled substance. While psilocybin is the prodrug found in mushrooms, psilocin itself can also appear in supplement products (either as direct extract or synthetic). Any supplement containing psilocin is an illegal controlled substance.",
+      "status": "banned",
+      "class_tags": [
+        "schedule_I_psychoactives",
+        "psychoactive_schedule_I"
+      ],
+      "match_rules": {
+        "exclusions": [],
+        "case_sensitive": false,
+        "priority": 1,
+        "match_type": "normalized",
+        "confidence": "high",
+        "negative_match_terms": []
+      },
+      "legal_status_enum": "controlled_substance",
+      "clinical_risk_enum": "critical",
+      "jurisdictions": [
+        {
+          "region": "US",
+          "level": "federal",
+          "status": "banned",
+          "effective_date": "1970-10-27",
+          "source": {
+            "type": "fda_action",
+            "citation": "DEA Schedule I controlled substance. Illegal in dietary supplements. FDA issued 50+ warning letters ",
+            "accessed_date": "2026-01-08"
+          },
+          "jurisdiction_type": "country",
+          "jurisdiction_code": "US",
+          "last_verified_date": "2026-01-08"
+        },
+        {
+          "region": "US",
+          "level": "state",
+          "name": "Oregon",
+          "status": "banned",
+          "effective_date": null,
+          "source": {
+            "type": "state_statute",
+            "citation": "Legalized supervised use (2020), NOT legal in supplements.",
+            "accessed_date": "2026-01-08"
+          },
+          "jurisdiction_type": "state",
+          "jurisdiction_code": "US-OR",
+          "last_verified_date": "2026-01-08"
+        },
+        {
+          "region": "US",
+          "level": "state",
+          "name": "Colorado",
+          "status": "banned",
+          "effective_date": null,
+          "source": {
+            "type": "state_statute",
+            "citation": "Decriminalized personal use (2022), NOT legal in supplements.",
+            "accessed_date": "2026-01-08"
+          },
+          "jurisdiction_type": "state",
+          "jurisdiction_code": "US-CO",
+          "last_verified_date": "2026-01-08"
+        }
+      ],
+      "references_structured": [
+        {
+          "type": "other",
+          "title": "DEA: Psilocybin Schedule I classification (1970)",
+          "evidence_grade": "R",
+          "supports_claims": [],
+          "evidence_summary": "DEA: Psilocybin Schedule I classification (1970)"
+        },
+        {
+          "type": "fda_advisory",
+          "title": "FDA: Warning letters to psilocybin product sellers (2024-2025)",
+          "evidence_grade": "R",
+          "date": "2024",
+          "supports_claims": [
+            "regulatory_action"
+          ],
+          "evidence_summary": "FDA: Warning letters to psilocybin product sellers (2024-2025)"
+        },
+        {
+          "type": "doi",
+          "id": "10.1177/0269881118767697",
+          "title": "Psilocybin adverse effects",
+          "evidence_grade": "B",
+          "url": "https://doi.org/10.1177/0269881118767697",
+          "supports_claims": [
+            "mechanism_of_harm",
+            "clinical_outcomes"
+          ],
+          "evidence_summary": "Psilocybin adverse effects"
+        }
+      ],
+      "source_category": "schedule_I_psychoactives",
+      "entity_type": "ingredient",
+      "review": {
+        "status": "validated",
+        "last_reviewed_at": "2026-03-23",
+        "next_review_due": "2026-09-23",
+        "reviewed_by": "audit",
+        "change_log": [
+          {
+            "date": "2026-03-23",
+            "change": "Created by decoupling from SCHED_PSILOCYBIN. CUI, CAS, PubChem CID verified via live API.",
+            "by": "audit"
+          }
+        ]
+      },
+      "supersedes_ids": null,
+      "regulatory_date": "1970-10-27",
+      "regulatory_date_label": "DEA scheduling effective",
+      "match_mode": "active",
+      "recall_scope": null,
+      "cui": "C0033848",
+      "external_ids": {
+        "cas": "520-53-6",
+        "pubchem_cid": 4980,
+        "unii": "CMS88KUW0G"
+      },
+      "gsrs": {
+        "substance_name": "PSILOCIN",
+        "substance_class": "chemical",
+        "cfr_sections": [],
+        "dsld_count": null,
+        "dsld_info_raw": null,
+        "active_moiety": null,
+        "salt_parents": [
+          {
+            "type": "SALT/SOLVATE->PARENT",
+            "name": "Psilocin benzoate",
+            "unii": "HJ7JJ6TA4M"
+          }
+        ],
+        "metabolic_relationships": [
+          {
+            "type": "TARGET->AGONIST",
+            "name": "5-HYDROXYTRYPTAMINE RECEPTOR 2A",
+            "unii": "NQI5D806LC"
+          }
+        ],
+        "metabolites": []
+      }
+    },
+    {
+      "id": "BANNED_MUSCIMOL",
+      "standard_name": "Muscimol",
+      "aliases": [
+        "muscimol",
+        "agarin",
+        "pantherine",
+        "muscimol gummies",
+        "5-(aminomethyl)-3-isoxazolol",
+        "5-aminomethyl-3-hydroxyisoxazole"
+      ],
+      "reason": "Muscimol is the primary psychoactive compound in Amanita muscaria mushrooms. It is a potent GABA-A receptor agonist causing sedation, euphoria, altered perception, and at higher doses: seizures, loss of consciousness, and respiratory depression. The margin between psychoactive and toxic doses is narrow and highly variable. Muscimol itself (as isolated compound or concentrated extract) has been marketed in gummies and capsules, leading to the 2024 Diamond Shruumz mass poisoning event.",
+      "status": "banned",
+      "class_tags": [
+        "schedule_I_psychoactives",
+        "psychoactive_schedule_I"
+      ],
+      "match_rules": {
+        "exclusions": [],
+        "case_sensitive": false,
+        "priority": 1,
+        "match_type": "normalized",
+        "confidence": "high",
+        "negative_match_terms": []
+      },
+      "legal_status_enum": "controlled_substance",
+      "clinical_risk_enum": "critical",
+      "jurisdictions": [
+        {
+          "region": "US",
+          "level": "federal",
+          "status": "banned",
+          "effective_date": "2024-06-27",
+          "source": {
+            "type": "fda_action",
+            "citation": "FDA Class I recalls (2024-ongoing). Import alerts active. Not approved as dietary ingredient.",
+            "accessed_date": "2026-01-08"
+          },
+          "jurisdiction_type": "country",
+          "jurisdiction_code": "US",
+          "last_verified_date": "2026-01-08"
+        },
+        {
+          "region": "US",
+          "level": "state",
+          "name": "Louisiana",
+          "status": "banned",
+          "effective_date": null,
+          "source": {
+            "type": "state_statute",
+            "citation": "Banned effective August 1, 2025",
+            "accessed_date": "2026-01-08"
+          },
+          "jurisdiction_type": "state",
+          "jurisdiction_code": "US-LA",
+          "last_verified_date": "2026-01-08"
+        },
+        {
+          "region": "US",
+          "level": "federal",
+          "name": "FDA",
+          "status": "banned",
+          "effective_date": null,
+          "source": {
+            "type": "state_statute",
+            "citation": "Multiple warning letters. Not legal to sell as supplement.",
+            "accessed_date": "2026-01-08"
+          },
+          "jurisdiction_type": "country",
+          "jurisdiction_code": "US",
+          "last_verified_date": "2026-01-08"
+        }
+      ],
+      "references_structured": [
+        {
+          "type": "fda_advisory",
+          "title": "FDA: Diamond Shruumz Class I Recall (2024)",
+          "evidence_grade": "R",
+          "date": "2024",
+          "supports_claims": [
+            "regulatory_action"
+          ],
+          "evidence_summary": "FDA: Diamond Shruumz Class I Recall (2024)"
+        },
+        {
+          "type": "other",
+          "title": "CDC: Muscimol poisoning outbreak (2024)",
+          "evidence_grade": "R",
+          "supports_claims": [],
+          "evidence_summary": "CDC: Muscimol poisoning outbreak (2024)"
+        },
+        {
+          "type": "doi",
+          "id": "10.1016/j.toxlet.2021.08.012",
+          "title": "Amanita muscaria toxicity",
+          "evidence_grade": "B",
+          "url": "https://doi.org/10.1016/j.toxlet.2021.08.012",
+          "supports_claims": [
+            "mechanism_of_harm",
+            "clinical_outcomes"
+          ],
+          "evidence_summary": "Amanita muscaria toxicity"
+        }
+      ],
+      "source_category": "schedule_I_psychoactives",
+      "entity_type": "ingredient",
+      "review": {
+        "status": "validated",
+        "last_reviewed_at": "2026-03-23",
+        "next_review_due": "2026-09-23",
+        "reviewed_by": "audit",
+        "change_log": [
+          {
+            "date": "2026-03-23",
+            "change": "Created by decoupling from SCHED_AMANITA_MUSCIMOL. CUI C0026818, CAS 2763-96-4, CID 4266 verified via live API.",
+            "by": "audit"
+          }
+        ]
+      },
+      "supersedes_ids": null,
+      "regulatory_date": "2024-01-01",
+      "regulatory_date_label": "DEA scheduling effective",
+      "match_mode": "active",
+      "recall_scope": null,
+      "cui": "C0026818",
+      "cui_status": null,
+      "cui_note": null,
+      "external_ids": {
+        "cas": "2763-96-4",
+        "pubchem_cid": 4266,
+        "unii": "D5M179TY2E"
+      },
+      "gsrs": {
+        "substance_name": "MUSCIMOL",
+        "substance_class": "chemical",
+        "cfr_sections": [],
+        "dsld_count": null,
+        "dsld_info_raw": null,
+        "active_moiety": null,
+        "salt_parents": [
+          {
+            "type": "SALT/SOLVATE->PARENT",
+            "name": "Muscimol hydrobromide",
+            "unii": "GZZ5MBX4M3"
+          },
+          {
+            "type": "SALT/SOLVATE->PARENT",
+            "name": "Muscimol hydrochloride",
+            "unii": "SZB98SLL8P"
+          }
+        ],
+        "metabolic_relationships": [
+          {
+            "type": "TARGET->INHIBITOR",
+            "name": "GAMMA-AMINOBUTYRIC ACID RECEPTOR SUBUNIT ALPHA-1",
+            "unii": "FUG1HPD3DP"
+          }
+        ],
+        "metabolites": []
+      }
+    },
+    {
+      "id": "BANNED_IBOTENIC_ACID",
+      "standard_name": "Ibotenic Acid",
+      "aliases": [
+        "ibotenic acid",
+        "ibotenate",
+        "DL-ibotenic acid",
+        "alpha-amino-3-hydroxy-5-isoxazoleacetic acid"
+      ],
+      "reason": "Ibotenic acid is a neurotoxic amino acid found in Amanita muscaria alongside muscimol. It is an NMDA receptor agonist and glutamate analog that causes excitotoxicity. Decarboxylates to muscimol during drying/processing. The combination of ibotenic acid (excitotoxin) and muscimol (GABAergic sedative) creates an unpredictable and dangerous pharmacological profile. Ibotenic acid is used in neuroscience research to create brain lesions — its neurotoxicity is well-established.",
+      "status": "banned",
+      "class_tags": [
+        "schedule_I_psychoactives",
+        "psychoactive_schedule_I"
+      ],
+      "match_rules": {
+        "exclusions": [],
+        "case_sensitive": false,
+        "priority": 1,
+        "match_type": "normalized",
+        "confidence": "high",
+        "negative_match_terms": []
+      },
+      "legal_status_enum": "controlled_substance",
+      "clinical_risk_enum": "critical",
+      "jurisdictions": [
+        {
+          "region": "US",
+          "level": "federal",
+          "status": "banned",
+          "effective_date": "2024-06-27",
+          "source": {
+            "type": "fda_action",
+            "citation": "FDA Class I recalls (2024-ongoing). Import alerts active. Not approved as dietary ingredient.",
+            "accessed_date": "2026-01-08"
+          },
+          "jurisdiction_type": "country",
+          "jurisdiction_code": "US",
+          "last_verified_date": "2026-01-08"
+        },
+        {
+          "region": "US",
+          "level": "state",
+          "name": "Louisiana",
+          "status": "banned",
+          "effective_date": null,
+          "source": {
+            "type": "state_statute",
+            "citation": "Banned effective August 1, 2025",
+            "accessed_date": "2026-01-08"
+          },
+          "jurisdiction_type": "state",
+          "jurisdiction_code": "US-LA",
+          "last_verified_date": "2026-01-08"
+        },
+        {
+          "region": "US",
+          "level": "federal",
+          "name": "FDA",
+          "status": "banned",
+          "effective_date": null,
+          "source": {
+            "type": "state_statute",
+            "citation": "Multiple warning letters. Not legal to sell as supplement.",
+            "accessed_date": "2026-01-08"
+          },
+          "jurisdiction_type": "country",
+          "jurisdiction_code": "US",
+          "last_verified_date": "2026-01-08"
+        }
+      ],
+      "references_structured": [
+        {
+          "type": "fda_advisory",
+          "title": "FDA: Diamond Shruumz Class I Recall (2024)",
+          "evidence_grade": "R",
+          "date": "2024",
+          "supports_claims": [
+            "regulatory_action"
+          ],
+          "evidence_summary": "FDA: Diamond Shruumz Class I Recall (2024)"
+        },
+        {
+          "type": "other",
+          "title": "CDC: Muscimol poisoning outbreak (2024)",
+          "evidence_grade": "R",
+          "supports_claims": [],
+          "evidence_summary": "CDC: Muscimol poisoning outbreak (2024)"
+        },
+        {
+          "type": "doi",
+          "id": "10.1016/j.toxlet.2021.08.012",
+          "title": "Amanita muscaria toxicity",
+          "evidence_grade": "B",
+          "url": "https://doi.org/10.1016/j.toxlet.2021.08.012",
+          "supports_claims": [
+            "mechanism_of_harm",
+            "clinical_outcomes"
+          ],
+          "evidence_summary": "Amanita muscaria toxicity"
+        }
+      ],
+      "source_category": "schedule_I_psychoactives",
+      "entity_type": "ingredient",
+      "review": {
+        "status": "validated",
+        "last_reviewed_at": "2026-03-23",
+        "next_review_due": "2026-09-23",
+        "reviewed_by": "audit",
+        "change_log": [
+          {
+            "date": "2026-03-23",
+            "change": "Created by decoupling from SCHED_AMANITA_MUSCIMOL. CAS 2552-55-8, CID 1233 verified via PubChem.",
+            "by": "audit"
+          }
+        ]
+      },
+      "supersedes_ids": null,
+      "regulatory_date": "2024-01-01",
+      "regulatory_date_label": "DEA scheduling effective",
+      "match_mode": "active",
+      "recall_scope": null,
+      "cui": "C0020738",
+      "cui_status": null,
+      "cui_note": null,
+      "external_ids": {
+        "cas": "2552-55-8",
+        "pubchem_cid": 1233,
+        "unii": "44AS82FRSI"
+      },
+      "gsrs": {
+        "substance_name": "IBOTENIC ACID",
+        "substance_class": "chemical",
+        "cfr_sections": [],
+        "dsld_count": null,
+        "dsld_info_raw": null,
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [
+          {
+            "type": "TARGET->AGONIST",
+            "name": "AMPA-SELECTIVE GLUTAMATE RECEPTOR 2",
+            "unii": "P6W5IXV8V9"
+          }
+        ],
+        "metabolites": []
+      }
     }
   ]
 }

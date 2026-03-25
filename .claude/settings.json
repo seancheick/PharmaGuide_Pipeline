@@ -1,5 +1,12 @@
 {
+  "permissions": {
+    "allow": [
+      "Bash(grep -E \"\\(^/Users.*\\\\.md$\\)\" /tmp/md_files.txt)",
+      "Bash(find /Users/seancheick/.claude-worktrees/dsld_clean/peaceful-ritchie -type f \\\\\\(-name *.json -o -name *.csv \\\\\\) ! -path */scripts/data/* ! -path */.claude/* ! -path */output_* ! -path */__pycache__/* ! -path */.git/*)"
+    ]
+  },
   "enabledPlugins": {
-    "fullstack-dev-skills@fullstack-dev-skills": true
+    "fullstack-dev-skills@fullstack-dev-skills": true,
+    "claude-mem@thedotmack": true
   }
 }

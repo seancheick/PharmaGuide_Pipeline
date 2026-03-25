@@ -3,8 +3,8 @@
     "description": "Comprehensive database of harmful additives, contaminants, and concerning ingredients found in dietary supplements. Used for scoring penalties and consumer warnings.",
     "purpose": "penalty_scoring",
     "schema_version": "5.1.0",
-    "last_updated": "2026-03-24",
-    "total_entries": 112,
+    "last_updated": "2026-03-25",
+    "total_entries": 113,
     "scoring_rule": "Apply penalty points based on severity_level. High: -2.0, Moderate: -1.0, Low: -0.5. Multiple additives are cumulative. Scored in B1 section of score_supplements.py.",
     "severity_level_definitions": {
       "high": "Significant health concerns with strong evidence (e.g., IARC 2A/2B carcinogens, trans fats, heavy metal contaminants, endocrine disruptors)",
@@ -3525,7 +3525,11 @@
           "url": "https://doi.org/10.1186/s12916-024-03771-8",
           "published_date": "2024-11-26",
           "evidence_grade": "A",
-          "supports_claims": ["insulin_resistance", "gut_inflammation", "intestinal_permeability"]
+          "supports_claims": [
+            "insulin_resistance",
+            "gut_inflammation",
+            "intestinal_permeability"
+          ]
         },
         {
           "type": "clinical_trial",
@@ -3535,7 +3539,10 @@
           "url": "https://doi.org/10.1093/ibd/izae306",
           "published_date": "2025-05-12",
           "evidence_grade": "B",
-          "supports_claims": ["gut_inflammation", "IBD_exacerbation"]
+          "supports_claims": [
+            "gut_inflammation",
+            "IBD_exacerbation"
+          ]
         },
         {
           "type": "review",
@@ -3545,7 +3552,10 @@
           "url": "https://doi.org/10.3390/nu16111780",
           "published_date": "2024-06-06",
           "evidence_grade": "B",
-          "supports_claims": ["gut_microbiota_disruption", "intestinal_permeability"]
+          "supports_claims": [
+            "gut_microbiota_disruption",
+            "intestinal_permeability"
+          ]
         },
         {
           "type": "monograph",
@@ -3735,7 +3745,9 @@
           "url": "https://www.who.int/publications/i/item/9789241549028",
           "published_date": "2015-03-04",
           "evidence_grade": "A",
-          "supports_claims": ["limit_free_sugars"]
+          "supports_claims": [
+            "limit_free_sugars"
+          ]
         }
       ],
       "jurisdictional_statuses": [
@@ -4509,7 +4521,10 @@
           "url": "https://doi.org/10.1016/j.jtemb.2016.02.006",
           "published_date": "2016-03-05",
           "evidence_grade": "B",
-          "supports_claims": ["copper_nutrition", "copper_toxicity_threshold"]
+          "supports_claims": [
+            "copper_nutrition",
+            "copper_toxicity_threshold"
+          ]
         }
       ],
       "jurisdictional_statuses": [
@@ -4677,7 +4692,9 @@
           "url": "https://www.who.int/publications/i/item/9789241549028",
           "published_date": "2015-03-04",
           "evidence_grade": "A",
-          "supports_claims": ["limit_free_sugars"]
+          "supports_claims": [
+            "limit_free_sugars"
+          ]
         }
       ],
       "jurisdictional_statuses": [
@@ -4986,7 +5003,10 @@
           "url": "https://doi.org/10.1007/s00345-013-1091-6",
           "published_date": "2013-04-30",
           "evidence_grade": "A",
-          "supports_claims": ["UTI_prevention", "therapeutic_use_as_active"]
+          "supports_claims": [
+            "UTI_prevention",
+            "therapeutic_use_as_active"
+          ]
         }
       ],
       "jurisdictional_statuses": [
@@ -17213,6 +17233,120 @@
         "metabolic_relationships": [],
         "metabolites": []
       }
+    },
+    {
+      "id": "ADD_XYLITOL",
+      "standard_name": "Xylitol",
+      "aliases": [
+        "xylitol",
+        "E967",
+        "xylite",
+        "D-xylitol",
+        "birch sugar",
+        "wood sugar"
+      ],
+      "cui": "C0043369",
+      "rxcui": "11377",
+      "category": "sweetener_sugar_alcohol",
+      "mechanism_of_harm": "Sugar alcohol with dose-dependent osmotic laxative effect; ingestion above 20-30 g/day commonly causes bloating, gas, and diarrhea. A 2024 Cleveland Clinic study (PMID 38814334) found elevated circulating xylitol levels associated with increased platelet reactivity and major adverse cardiovascular events in a prospective cohort. Highly toxic to dogs at any dose (hepatic necrosis).",
+      "regulatory_status": {
+        "US": "FDA GRAS (21 CFR 172.395). Approved food additive. No established ADI; FDA advises labeling for laxative effect above 50 g/day.",
+        "EU": "E967 approved. EFSA 2023 sweeteners re-evaluation programme ongoing. Current ADI: not specified (acceptable at current use levels)."
+      },
+      "population_warnings": [
+        "People with IBS or sensitive digestion — osmotic diarrhea at >20-30 g/day",
+        "Children — more susceptible to GI effects from sugar alcohols at lower doses",
+        "People with cardiovascular risk factors — emerging 2024 data links elevated xylitol to platelet reactivity and MACE (PMID 38814334); caution advised pending confirmation",
+        "Dog owners — xylitol is acutely hepatotoxic to dogs; cross-contamination risk from supplement handling"
+      ],
+      "notes": "A 5-carbon sugar alcohol widely used as a sweetener in supplements, gummies, and chewables. Well-established anticariogenic properties (dental health). GI side effects are dose-dependent and generally mild. A 2024 Cleveland Clinic study raised cardiovascular safety questions but regulatory agencies have not yet changed the GRAS determination. Severity set to moderate based on GI effects at supplement-relevant doses plus the emerging CV signal.",
+      "scientific_references": [
+        "PMID: 38814334 — Witkowski M et al. Xylitol is prothrombotic and associated with cardiovascular risk. Eur Heart J. 2024."
+      ],
+      "last_updated": "2026-03-25",
+      "match_rules": {
+        "match_mode": "alias_and_fuzzy",
+        "fuzzy_threshold": 0.72,
+        "case_sensitive": false,
+        "preferred_alias": "Xylitol"
+      },
+      "references_structured": [
+        {
+          "type": "primary_study",
+          "authority": "OTHER",
+          "title": "Xylitol is prothrombotic and associated with cardiovascular risk",
+          "citation": "Witkowski M et al. Eur Heart J. 2024;45(31):2749-2762.",
+          "url": "https://doi.org/10.1093/eurheartj/ehae244",
+          "published_date": "2024-06-06",
+          "evidence_grade": "C",
+          "supports_claims": [
+            "mechanism_of_harm",
+            "population_warnings"
+          ]
+        },
+        {
+          "type": "regulatory",
+          "authority": "FDA",
+          "title": "21 CFR 172.395 — Xylitol",
+          "citation": "21 CFR 172.395",
+          "url": "https://www.ecfr.gov/current/title-21/chapter-I/subchapter-B/part-172/subpart-D/section-172.395",
+          "published_date": null,
+          "evidence_grade": "R",
+          "supports_claims": [
+            "regulatory_status"
+          ]
+        }
+      ],
+      "external_ids": {
+        "cas": "87-99-0",
+        "pubchem_cid": "6912",
+        "unii": "VCQ006KQ1E"
+      },
+      "jurisdictional_statuses": [
+        {
+          "authority": "US",
+          "jurisdiction": "US",
+          "status_code": "approved",
+          "scope": "both",
+          "effective_range": {
+            "start": "1986-01-01",
+            "end": null
+          },
+          "source_ref": "https://www.ecfr.gov/current/title-21/chapter-I/subchapter-B/part-172/subpart-D/section-172.395"
+        },
+        {
+          "authority": "EU",
+          "jurisdiction": "EU",
+          "status_code": "approved",
+          "scope": "both",
+          "effective_range": {
+            "start": "2012-01-01",
+            "end": null
+          },
+          "source_ref": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32012R0231"
+        }
+      ],
+      "review": {
+        "status": "validated",
+        "last_reviewed_at": "2026-03-25",
+        "reviewed_by": "unmapped_resolution_batch_1",
+        "next_review_due": "2026-09-25",
+        "change_log": [
+          {
+            "date": "2026-03-25",
+            "change": "New entry created",
+            "reason": "Unmapped in Olly/Nordic pipeline runs. Sugar alcohol sweetener needing penalty classification."
+          }
+        ]
+      },
+      "confidence": "high",
+      "severity_level": "moderate",
+      "dose_thresholds": {
+        "value": 20,
+        "unit": "g/day",
+        "source": "Literature consensus: GI effects threshold 20-30 g/day"
+      },
+      "entity_relationships": null
     }
   ]
 }

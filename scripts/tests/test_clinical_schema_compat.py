@@ -402,6 +402,21 @@ class TestAuditRegressionData:
             combined = f"{entry.get('notes', '')} {entry.get('notable_studies', '')}"
             assert any(marker in combined for marker in explicit_markers), entry_id
 
+    def test_chromium_picolinate_uses_compound_unii_not_elemental_chromium(self):
+        entry = self._clinical_entry("PRECLIN_CHROMIUM_PICOLINATE")
+
+        assert entry["external_ids"]["unii"] == "S71T8B8Z6P"
+
+    def test_s_boulardii_clinical_entry_does_not_borrow_generic_brewers_yeast_unii(self):
+        entry = self._clinical_entry("STRAIN_SBOULARDII")
+
+        assert (entry.get("external_ids") or {}).get("unii") in (None, "")
+
+    def test_florastor_brand_entry_does_not_borrow_generic_brewers_yeast_unii(self):
+        entry = self._clinical_entry("BRAND_FLORASTOR")
+
+        assert (entry.get("external_ids") or {}).get("unii") in (None, "")
+
     def test_batch16_human_evidence_entries_include_explicit_source_breadcrumbs(self):
         explicit_markers = ("PMID", "NIH ODS", "NCCIH", "PubMed", "FDA", "LiverTox", "EFSA", "ClinicalTrials.gov")
         for entry_id in [

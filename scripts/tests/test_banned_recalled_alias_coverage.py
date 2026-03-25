@@ -43,6 +43,7 @@ def test_metadata_includes_audit_runbook_and_cui_policy_notes():
     assert "release_strict_command" in runbook
     assert "--release-strict-cui" in runbook["release_strict_command"]
     assert "verify_cui_manual_command" in runbook
+    assert "scripts/api_audit/verify_cui.py" in runbook["verify_cui_manual_command"]
     assert "--search" in runbook["verify_cui_manual_command"]
     assert "approved_null_statuses" in cui_policy
     assert "no_confirmed_umls_match" in cui_policy["approved_null_statuses"]

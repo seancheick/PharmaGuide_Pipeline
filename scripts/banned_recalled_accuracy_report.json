@@ -1,0 +1,61 @@
+{
+  "generated_at": "2026-03-23T18:35:13.084905+00:00",
+  "file": "/Users/seancheick/.claude-worktrees/dsld_clean/peaceful-ritchie/scripts/data/banned_recalled_ingredients.json",
+  "status": "pass",
+  "integrity": {
+    "errors": 0,
+    "warnings": 0,
+    "findings": []
+  },
+  "entry_quality": {
+    "missing_source_category": [],
+    "missing_reference_urls": [],
+    "product_missing_recall_scope": [],
+    "review_gaps": {},
+    "missing_entity_type": [],
+    "missing_cui_annotations": [],
+    "legacy_reference_blocks": [],
+    "empty_reference_urls": [],
+    "malformed_change_log": {}
+  },
+  "cui_audit": {
+    "enabled": true,
+    "counts": {
+      "verified": 100,
+      "invalid_cui": 0,
+      "mismatched_cui": 0,
+      "name_variants": 0,
+      "annotated_no_cui": 25,
+      "missing_cui_non_product": 0,
+      "not_found": 0,
+      "safe_missing_exact_matches": 0
+    },
+    "invalid_cui": [],
+    "mismatched_cui": [],
+    "name_variants": [],
+    "missing_cui_non_product": [],
+    "safe_to_apply": [],
+    "skipped_reason": null
+  },
+  "applied_safe_cui_updates": 0,
+  "fda_sync": {
+    "enabled": false,
+    "command": null,
+    "returncode": 0,
+    "stdout_tail": "",
+    "stderr_tail": "",
+    "report_path": "scripts/fda_sync_report_latest.json",
+    "summary": {
+      "total_fetched": 102,
+      "skipped_not_relevant": 96,
+      "requiring_claude_review": 1,
+      "already_tracked": 5,
+      "stale_recalled_entries_to_verify": 3,
+      "by_category": {
+        "microbial_contamination": 1,
+        "supplement_adulterant": 5
+      }
+    },
+    "new_records_requiring_review_count": 1
+  }
+}

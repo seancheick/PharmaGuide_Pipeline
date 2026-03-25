@@ -1,0 +1,271 @@
+{
+  "generated_at": "2026-03-23T13:13:08.030176",
+  "generated_by": "fda_weekly_sync.py",
+  "scan_period": {
+    "start": "20260221",
+    "end": "20260323",
+    "days_back": 30
+  },
+  "data_file": "/Users/seancheick/.claude-worktrees/dsld_clean/peaceful-ritchie/scripts/data/banned_recalled_ingredients.json",
+  "data_sources": {
+    "openfda_food_enforcement": 61,
+    "openfda_drug_enforcement": 5,
+    "fda_medwatch_rss": 16,
+    "fda_drugs_rss": 20,
+    "dea_federal_register": 0,
+    "duplicates_removed": 0
+  },
+  "wada_status": {
+    "last_updated": "2026-01-15",
+    "warning": null
+  },
+  "summary": {
+    "total_fetched": 102,
+    "skipped_not_relevant": 96,
+    "requiring_claude_review": 1,
+    "already_tracked": 5,
+    "stale_recalled_entries_to_verify": 3,
+    "by_category": {
+      "microbial_contamination": 1,
+      "supplement_adulterant": 5
+    }
+  },
+  "new_records_requiring_review": [
+    {
+      "source_type": "openfda_enforcement",
+      "recall_number": "H-0546-2026",
+      "event_id": "98433",
+      "fda_endpoint": "food/enforcement",
+      "product_type": "Food",
+      "classification": "Class I",
+      "recall_status": "Ongoing",
+      "product_description": "Rosabella brand MORINGA; DIETARY SUPPLEMENT CAPSULES; 60 capsules per bottle; Distributed by: Ambrosia Brands, LLC, 625 Randall Ave, St. 100, Cheyenne, WY 82001; SUGGESTED USE: As a dietary supplement, take two (2) veggie capsules once a day. For best results, take 20-30 min before a meal with an 8oz. glass of water or as directed by your health professional; UPC: 8 60012 16172 0",
+      "recalling_firm": "Ambrosia Brands LLC",
+      "reason_for_recall": "Product may be contaminated with Salmonella",
+      "distribution_pattern": "Nationwide in the United States, including American Samoa, Northern Mariana Islands, Puerto Rico, and Virgin Islands.  International distribution to consumers in: Algeria, Anguilla, Australia, Austria, Bahrain, Belgium, Bosnia and Herzegovina, Brazil, Brunei, Bulgaria, Canada, Chile, Colombia, Croatia, Cyprus, Czech Republic, Denmark, Djibouti, Dominican Republic, Egypt, Estonia, Faroe Islands, Finland, France, French Polynesia,  Georgia, Germany, Gibraltar, Greece, Hong Kong, Hungary, Iceland, India, Indonesia, Ireland, Israel, Italy, Japan, Jordan, Kuwait, Latvia, Lithuania, Luxembourg, Malaysia, Malta, Marshall Islands, Mexico, Nauru, New Zealand, Netherlands,  Norway, Oman, Pakistan, Peru, Philippines, Poland, Portugal, Qatar, Romania, Saudi Arabia, Serbia, Singapore, Slovakia, Slovenia, South Africa, South Korea, Spain, Suriname, Sweden, Switzerland, Taiwan, Thailand, Trinidad and Tobago, Turkey, United Arab Emirates, United Kingdom, Venezuela, and Zimbabwe.",
+      "recall_initiation_date": "20260213",
+      "report_date": "20260318",
+      "termination_date": null,
+      "primary_category": "microbial_contamination",
+      "signal_categories": [
+        "microbial_contamination"
+      ],
+      "extracted_substances": [
+        "salmonella"
+      ],
+      "substances_already_tracked": [],
+      "substances_new": [
+        "salmonella"
+      ],
+      "fda_source_url": "https://www.accessdata.fda.gov/scripts/ires/?action=Redirect&recall_number=H-0546-2026"
+    }
+  ],
+  "records_for_tracked_substances": [
+    {
+      "source_type": "openfda_enforcement",
+      "recall_number": "D-0396-2026",
+      "event_id": "97796",
+      "fda_endpoint": "drug/enforcement",
+      "product_type": "Drugs",
+      "classification": "Class I",
+      "recall_status": "Ongoing",
+      "product_description": "Mojo Max Fusion XXX, 500 mg, one capsule per blister card, 20 count box, Distributed by: Max Nutrition Inc. UPC 6 78945 36675 0",
+      "recalling_firm": "Mohamed Hagar",
+      "reason_for_recall": "Marketed Without an Approved NDA/ANDA-FDA analysis revealed undeclared sildenafil (13.1 mg/capsule) and tadalafil (13.8 mg/capsule).",
+      "distribution_pattern": "U.S. Nationwide",
+      "recall_initiation_date": "20251008",
+      "report_date": "20260311",
+      "termination_date": null,
+      "primary_category": "supplement_adulterant",
+      "signal_categories": [
+        "supplement_adulterant",
+        "pharmaceutical_contaminant"
+      ],
+      "extracted_substances": [
+        "sildenafil",
+        "tadalafil"
+      ],
+      "substances_already_tracked": [
+        "sildenafil",
+        "tadalafil"
+      ],
+      "substances_new": [],
+      "fda_source_url": "https://www.accessdata.fda.gov/scripts/ires/?action=Redirect&recall_number=D-0396-2026"
+    },
+    {
+      "source_type": "openfda_enforcement",
+      "recall_number": "D-0397-2026",
+      "event_id": "98256",
+      "fda_endpoint": "drug/enforcement",
+      "product_type": "Drugs",
+      "classification": "Class I",
+      "recall_status": "Ongoing",
+      "product_description": "MR. 7 SUPER 700000 capsules, 1 capsule blister card, Distributed by mR. 7",
+      "recalling_firm": "StuffbyNainax",
+      "reason_for_recall": "Marketed Without an Approved NDA/ANDA: FDA analysis revealed the presence of undeclared sildenafil and tadalafil",
+      "distribution_pattern": "Product was distributed to 4 customers in the US.",
+      "recall_initiation_date": "20251215",
+      "report_date": "20260311",
+      "termination_date": null,
+      "primary_category": "supplement_adulterant",
+      "signal_categories": [
+        "supplement_adulterant",
+        "pharmaceutical_contaminant"
+      ],
+      "extracted_substances": [
+        "sildenafil",
+        "tadalafil"
+      ],
+      "substances_already_tracked": [
+        "sildenafil",
+        "tadalafil"
+      ],
+      "substances_new": [],
+      "fda_source_url": "https://www.accessdata.fda.gov/scripts/ires/?action=Redirect&recall_number=D-0397-2026"
+    },
+    {
+      "source_type": "openfda_enforcement",
+      "recall_number": "D-0345-2026",
+      "event_id": "98011",
+      "fda_endpoint": "drug/enforcement",
+      "product_type": "Drugs",
+      "classification": "Class II",
+      "recall_status": "Ongoing",
+      "product_description": "Agebox iKids-Growth (Night Formula), 60-count bottles, Manufactured Exclusively For: AGEBOX Inc., Wilmington, DE 19801 USA, UPC 850065597027",
+      "recalling_firm": "Agebox",
+      "reason_for_recall": "Marketed Without an Approved NDA/ANDA: presence of undeclared ibutamoren",
+      "distribution_pattern": "The product was distributed nationwide in the U.S. Agebox sells its U.S. products through Agebox.com (using Shopify) and Amazon.com. All orders are shipped to customers by Agebox itself; other parties are not involved in the distribution of the physical product.",
+      "recall_initiation_date": "20251028",
+      "report_date": "20260304",
+      "termination_date": null,
+      "primary_category": "supplement_adulterant",
+      "signal_categories": [
+        "supplement_adulterant",
+        "sarms_prohibited"
+      ],
+      "extracted_substances": [
+        "ibutamoren"
+      ],
+      "substances_already_tracked": [
+        "ibutamoren"
+      ],
+      "substances_new": [],
+      "fda_source_url": "https://www.accessdata.fda.gov/scripts/ires/?action=Redirect&recall_number=D-0345-2026"
+    },
+    {
+      "source_type": "openfda_enforcement",
+      "recall_number": "D-0344-2026",
+      "event_id": "98011",
+      "fda_endpoint": "drug/enforcement",
+      "product_type": "Drugs",
+      "classification": "Class II",
+      "recall_status": "Ongoing",
+      "product_description": "Agebox iKids-Growth (Day Formula) capsules, 60-count bottles, Manufactured Exclusively For: AGEBOX Inc., Wilmington, DE 19801 USA, UPC 8 50065 59701 0",
+      "recalling_firm": "Agebox",
+      "reason_for_recall": "Marketed Without an Approved NDA/ANDA: presence of undeclared ibutamoren",
+      "distribution_pattern": "The product was distributed nationwide in the U.S. Agebox sells its U.S. products through Agebox.com (using Shopify) and Amazon.com. All orders are shipped to customers by Agebox itself; other parties are not involved in the distribution of the physical product.",
+      "recall_initiation_date": "20251028",
+      "report_date": "20260304",
+      "termination_date": null,
+      "primary_category": "supplement_adulterant",
+      "signal_categories": [
+        "supplement_adulterant",
+        "sarms_prohibited"
+      ],
+      "extracted_substances": [
+        "ibutamoren"
+      ],
+      "substances_already_tracked": [
+        "ibutamoren"
+      ],
+      "substances_new": [],
+      "fda_source_url": "https://www.accessdata.fda.gov/scripts/ires/?action=Redirect&recall_number=D-0344-2026"
+    },
+    {
+      "source_type": "openfda_enforcement",
+      "recall_number": "D-0388-2026",
+      "event_id": "98258",
+      "fda_endpoint": "drug/enforcement",
+      "product_type": "Drugs",
+      "classification": "Class I",
+      "recall_status": "Ongoing",
+      "product_description": "SILINTAN 25/pills, packaged in a 25-count bottle, Shanghai Chinese Medical Works, Shanghai, China",
+      "recalling_firm": "ANTHONY TRINH, 123Herbals LLC",
+      "reason_for_recall": "Marketed Without an Approved NDA/ANDA: FDA analysis  revealed the presence of undeclared meloxicam.",
+      "distribution_pattern": "USA nationwide",
+      "recall_initiation_date": "20251020",
+      "report_date": "20260311",
+      "termination_date": null,
+      "primary_category": "supplement_adulterant",
+      "signal_categories": [
+        "supplement_adulterant",
+        "pharmaceutical_contaminant"
+      ],
+      "extracted_substances": [
+        "meloxicam"
+      ],
+      "substances_already_tracked": [
+        "meloxicam"
+      ],
+      "substances_new": [],
+      "fda_source_url": "https://www.accessdata.fda.gov/scripts/ires/?action=Redirect&recall_number=D-0388-2026"
+    }
+  ],
+  "stale_recalls_to_verify": [
+    {
+      "id": "RECALLED_HYDROXYCUT",
+      "standard_name": "Hydroxycut (Multiple Formulations)",
+      "regulatory_date": "2009-05-01",
+      "age_days": 6170,
+      "recall_scope": {
+        "brand": "Hydroxycut (Multiple Formulations)",
+        "formulations": null,
+        "lots": null,
+        "effective_from": "2009-05-01",
+        "effective_to": null,
+        "note": null
+      },
+      "match_mode": "historical",
+      "action": "verify_still_active",
+      "fda_search_url": "https://www.accessdata.fda.gov/scripts/ires/",
+      "note": "Entry is 6170 days old. Verify on FDA whether recall is terminated. If product-specific recall is terminated → set match_mode=historical. If ingredient-level ban → keep banned/active regardless of recall status."
+    },
+    {
+      "id": "RECALLED_JACK3D",
+      "standard_name": "Jack3d",
+      "regulatory_date": "2012-01-01",
+      "age_days": 5195,
+      "recall_scope": {
+        "brand": "Jack3d",
+        "formulations": null,
+        "lots": null,
+        "effective_from": "2012-01-01",
+        "effective_to": null,
+        "note": null
+      },
+      "match_mode": "historical",
+      "action": "verify_still_active",
+      "fda_search_url": "https://www.accessdata.fda.gov/scripts/ires/",
+      "note": "Entry is 5195 days old. Verify on FDA whether recall is terminated. If product-specific recall is terminated → set match_mode=historical. If ingredient-level ban → keep banned/active regardless of recall status."
+    },
+    {
+      "id": "RECALLED_OXYELITE_PRO",
+      "standard_name": "OxyElite Pro",
+      "regulatory_date": "2013-11-08",
+      "age_days": 4518,
+      "recall_scope": {
+        "brand": "OxyElite Pro",
+        "formulations": null,
+        "lots": null,
+        "effective_from": "2013-11-08",
+        "effective_to": null,
+        "note": null
+      },
+      "match_mode": "historical",
+      "action": "verify_still_active",
+      "fda_search_url": "https://www.accessdata.fda.gov/scripts/ires/",
+      "note": "Entry is 4518 days old. Verify on FDA whether recall is terminated. If product-specific recall is terminated → set match_mode=historical. If ingredient-level ban → keep banned/active regardless of recall status."
+    }
+  ],
+  "claude_instructions": "Review 'new_records_requiring_review'. Each entry has a 'primary_category' that maps to a source_category in banned_recalled_ingredients.json and 'signal_categories' listing all detected concern types. For supplement brand recalls with no extracted substance (primary_category=supplement_general or microbial_contamination): create a RECALLED_<BRAND_SNAKE> entry with entity_type=product and recall_scope=<product name>. For substance-level recalls: create full ingredient entries. Check stale_recalls_to_verify and set match_mode=historical for terminated product recalls. Update _metadata after all changes."
+}

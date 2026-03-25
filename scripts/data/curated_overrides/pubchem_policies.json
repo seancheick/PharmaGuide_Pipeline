@@ -1,0 +1,115 @@
+{
+  "_description": "Curated PubChem entry policies and skip names. Edit this file instead of verify_pubchem.py.",
+  "entry_policies": {
+    "High Fructose Corn Syrup": {
+      "reason": "processed mixture; no single authoritative PubChem compound",
+      "expected_cas": null,
+      "expected_cid": null
+    },
+    "Polyethylene Glycol (PEG)": {
+      "reason": "polymer / non-discrete PubChem substance; curated CAS only",
+      "expected_cas": "25322-68-3",
+      "expected_cid": null
+    },
+    "Polyvinylpyrrolidone (PVP)": {
+      "reason": "polymer / non-discrete PubChem substance; curated CAS only",
+      "expected_cas": "9003-39-8",
+      "expected_cid": null
+    },
+    "Polydextrose": {
+      "reason": "polymer mixture; no single authoritative PubChem compound",
+      "expected_cas": null,
+      "expected_cid": null
+    },
+    "Carrageenan": {
+      "reason": "complex polysaccharide mixture; keep curated CAS only",
+      "expected_cas": "9000-07-1",
+      "expected_cid": null
+    },
+    "Maltodextrin": {
+      "reason": "polysaccharide mixture; no single authoritative PubChem compound",
+      "expected_cas": null,
+      "expected_cid": null
+    },
+    "Carboxymethylcellulose (CMC)": {
+      "reason": "cellulose derivative mixture; keep curated CAS only",
+      "expected_cas": "9004-32-4",
+      "expected_cid": null
+    },
+    "Carboxymethyl Cellulose": {
+      "reason": "generic carboxymethyl cellulose row should not borrow sodium carboxymethylcellulose PubChem identifiers",
+      "expected_cas": null,
+      "expected_cid": null
+    },
+    "Casein Hydrolysate": {
+      "reason": "protein hydrolysate label does not have a trustworthy exact PubChem compound identity and should not inherit parent-casein or acrylamide identifiers",
+      "expected_cas": null,
+      "expected_cid": null
+    },
+    "Iron Oxide": {
+      "reason": "regulatory pigment class spans multiple iron oxide species; keep curated CAS only",
+      "expected_cas": "1309-37-1",
+      "expected_cid": null
+    },
+    "Mineral Oil": {
+      "reason": "petroleum mixture; keep curated CAS only",
+      "expected_cas": "8042-47-5",
+      "expected_cid": null
+    },
+    "Soy Monoglycerides": {
+      "reason": "fatty-acid monoglyceride mixture; keep curated CAS only",
+      "expected_cas": "68554-09-6",
+      "expected_cid": null
+    },
+    "Hydrogenated Starch Hydrolysate": {
+      "reason": "sugar-alcohol mixture; no single authoritative PubChem compound",
+      "expected_cas": null,
+      "expected_cid": null
+    },
+    "Isomaltooligosaccharide": {
+      "reason": "oligosaccharide mixture; no single authoritative PubChem compound",
+      "expected_cas": null,
+      "expected_cid": null
+    },
+    "Microcrystalline Cellulose": {
+      "reason": "cellulose material / non-discrete PubChem substance",
+      "expected_cas": null,
+      "expected_cid": null
+    },
+    "Cuprous Oxide": {
+      "reason": "PubChem primary CAS 1308-76-5 is beryllium oxide, not cuprous oxide; curated CAS 1317-39-1 is correct",
+      "expected_cas": "1317-39-1",
+      "expected_cid": null
+    },
+    "Xanthan Gum": {
+      "reason": "PubChem resolves to xanthene (CAS 92-83-1, CID 7107) instead of xanthan gum polysaccharide (CAS 11138-66-2)",
+      "expected_cas": "11138-66-2",
+      "expected_cid": null
+    }
+  },
+  "skip_names": [
+    "artificial flavors",
+    "cannabis/thc",
+    "caramel color",
+    "contaminated glp-1 compounds",
+    "general probiotics",
+    "metal fiber contamination",
+    "partially hydrogenated oils",
+    "partially hydrogenated oils (phos)",
+    "phthalates",
+    "polyethylene glycol",
+    "polyvinylpyrrolidone",
+    "purefruit select",
+    "slimsweet",
+    "sugar alcohols",
+    "sugar syrups",
+    "synthetic anabolic steroids",
+    "synthetic antioxidants",
+    "synthetic b vitamins",
+    "synthetic estrogens",
+    "synthetic vitamins",
+    "syrups",
+    "time-sorb",
+    "unspecified colors"
+  ]
+}

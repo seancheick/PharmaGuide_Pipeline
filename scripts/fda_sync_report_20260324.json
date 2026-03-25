@@ -1,0 +1,167 @@
+{
+  "generated_at": "2026-03-24T13:30:32.410943",
+  "generated_by": "fda_weekly_sync.py",
+  "scan_period": {
+    "start": "20260317",
+    "end": "20260324",
+    "days_back": 7
+  },
+  "data_file": "/Users/seancheick/.claude-worktrees/dsld_clean/peaceful-ritchie/scripts/data/banned_recalled_ingredients.json",
+  "data_sources": {
+    "openfda_food_enforcement": 27,
+    "openfda_drug_enforcement": 0,
+    "fda_medwatch_rss": 4,
+    "fda_drugs_rss": 20,
+    "dea_federal_register": 0,
+    "duplicates_removed": 0
+  },
+  "wada_status": {
+    "last_updated": "2026-01-15",
+    "warning": null
+  },
+  "summary": {
+    "total_fetched": 51,
+    "skipped_not_relevant": 48,
+    "requiring_claude_review": 3,
+    "already_tracked": 0,
+    "stale_recalled_entries_to_verify": 3,
+    "by_category": {
+      "microbial_contamination": 1,
+      "supplement_general": 2
+    }
+  },
+  "new_records_requiring_review": [
+    {
+      "source_type": "openfda_enforcement",
+      "recall_number": "H-0546-2026",
+      "event_id": "98433",
+      "fda_endpoint": "food/enforcement",
+      "product_type": "Food",
+      "classification": "Class I",
+      "recall_status": "Ongoing",
+      "product_description": "Rosabella brand MORINGA; DIETARY SUPPLEMENT CAPSULES; 60 capsules per bottle; Distributed by: Ambrosia Brands, LLC, 625 Randall Ave, St. 100, Cheyenne, WY 82001; SUGGESTED USE: As a dietary supplement, take two (2) veggie capsules once a day. For best results, take 20-30 min before a meal with an 8oz. glass of water or as directed by your health professional; UPC: 8 60012 16172 0",
+      "recalling_firm": "Ambrosia Brands LLC",
+      "reason_for_recall": "Product may be contaminated with Salmonella",
+      "distribution_pattern": "Nationwide in the United States, including American Samoa, Northern Mariana Islands, Puerto Rico, and Virgin Islands.  International distribution to consumers in: Algeria, Anguilla, Australia, Austria, Bahrain, Belgium, Bosnia and Herzegovina, Brazil, Brunei, Bulgaria, Canada, Chile, Colombia, Croatia, Cyprus, Czech Republic, Denmark, Djibouti, Dominican Republic, Egypt, Estonia, Faroe Islands, Finland, France, French Polynesia,  Georgia, Germany, Gibraltar, Greece, Hong Kong, Hungary, Iceland, India, Indonesia, Ireland, Israel, Italy, Japan, Jordan, Kuwait, Latvia, Lithuania, Luxembourg, Malaysia, Malta, Marshall Islands, Mexico, Nauru, New Zealand, Netherlands,  Norway, Oman, Pakistan, Peru, Philippines, Poland, Portugal, Qatar, Romania, Saudi Arabia, Serbia, Singapore, Slovakia, Slovenia, South Africa, South Korea, Spain, Suriname, Sweden, Switzerland, Taiwan, Thailand, Trinidad and Tobago, Turkey, United Arab Emirates, United Kingdom, Venezuela, and Zimbabwe.",
+      "recall_initiation_date": "20260213",
+      "report_date": "20260318",
+      "termination_date": null,
+      "primary_category": "microbial_contamination",
+      "signal_categories": [
+        "microbial_contamination"
+      ],
+      "extracted_substances": [
+        "salmonella"
+      ],
+      "substances_already_tracked": [],
+      "substances_new": [
+        "salmonella"
+      ],
+      "fda_source_url": "https://www.accessdata.fda.gov/scripts/ires/?action=Redirect&recall_number=H-0546-2026"
+    },
+    {
+      "source_type": "fda_rss",
+      "recall_number": "",
+      "event_id": null,
+      "fda_endpoint": null,
+      "product_type": "",
+      "classification": "",
+      "recall_status": "Ongoing",
+      "product_description": "Glass Syringes for Delivering Drug and Biological Products: Technical Information to Supplement International Organization for Standardization (ISO) Standard 11040-4",
+      "recalling_firm": "",
+      "reason_for_recall": "Guidance for Industry and FDA Staff: Glass Syringes for Delivering Drug and Biological Products: Technical Information to Supplement International Organization for Standardization (ISO) Standard 11040-4",
+      "distribution_pattern": "",
+      "recall_initiation_date": "",
+      "report_date": "Tue, 24 Mar 2026 08:01:39 EDT",
+      "termination_date": null,
+      "primary_category": "supplement_general",
+      "signal_categories": [],
+      "extracted_substances": [],
+      "substances_already_tracked": [],
+      "substances_new": [],
+      "fda_source_url": "http://www.fda.gov/regulatory-information/search-fda-guidance-documents/glass-syringes-delivering-drug-and-biological-products-technical-information-supplement",
+      "rss_source": "https://www.fda.gov/about-fda/contact-fda/stay-informed/rss-feeds/drugs/rss.xml"
+    },
+    {
+      "source_type": "fda_rss",
+      "recall_number": "",
+      "event_id": null,
+      "fda_endpoint": null,
+      "product_type": "",
+      "classification": "",
+      "recall_status": "Ongoing",
+      "product_description": "Over-The-Counter Monograph Drug User Fee Program (OMUFA)",
+      "recalling_firm": "",
+      "reason_for_recall": "A user fee program for nonprescription (over-the-counter or OTC) monograph drugs would be a potential funding mechanism to supplement congressional non user-fee appropriations.",
+      "distribution_pattern": "",
+      "recall_initiation_date": "",
+      "report_date": "Tue, 24 Mar 2026 07:33:37 EDT",
+      "termination_date": null,
+      "primary_category": "supplement_general",
+      "signal_categories": [],
+      "extracted_substances": [],
+      "substances_already_tracked": [],
+      "substances_new": [],
+      "fda_source_url": "http://www.fda.gov/industry/fda-user-fee-programs/over-counter-monograph-drug-user-fee-program-omufa",
+      "rss_source": "https://www.fda.gov/about-fda/contact-fda/stay-informed/rss-feeds/drugs/rss.xml"
+    }
+  ],
+  "records_for_tracked_substances": [],
+  "stale_recalls_to_verify": [
+    {
+      "id": "RECALLED_HYDROXYCUT",
+      "standard_name": "Hydroxycut (Multiple Formulations)",
+      "regulatory_date": "2009-05-01",
+      "age_days": 6171,
+      "recall_scope": {
+        "brand": "Hydroxycut (Multiple Formulations)",
+        "formulations": null,
+        "lots": null,
+        "effective_from": "2009-05-01",
+        "effective_to": null,
+        "note": null
+      },
+      "match_mode": "historical",
+      "action": "verify_still_active",
+      "fda_search_url": "https://www.accessdata.fda.gov/scripts/ires/",
+      "note": "Entry is 6171 days old. Verify on FDA whether recall is terminated. If product-specific recall is terminated → set match_mode=historical. If ingredient-level ban → keep banned/active regardless of recall status."
+    },
+    {
+      "id": "RECALLED_JACK3D",
+      "standard_name": "Jack3d",
+      "regulatory_date": "2012-01-01",
+      "age_days": 5196,
+      "recall_scope": {
+        "brand": "Jack3d",
+        "formulations": null,
+        "lots": null,
+        "effective_from": "2012-01-01",
+        "effective_to": null,
+        "note": null
+      },
+      "match_mode": "historical",
+      "action": "verify_still_active",
+      "fda_search_url": "https://www.accessdata.fda.gov/scripts/ires/",
+      "note": "Entry is 5196 days old. Verify on FDA whether recall is terminated. If product-specific recall is terminated → set match_mode=historical. If ingredient-level ban → keep banned/active regardless of recall status."
+    },
+    {
+      "id": "RECALLED_OXYELITE_PRO",
+      "standard_name": "OxyElite Pro",
+      "regulatory_date": "2013-11-08",
+      "age_days": 4519,
+      "recall_scope": {
+        "brand": "OxyElite Pro",
+        "formulations": null,
+        "lots": null,
+        "effective_from": "2013-11-08",
+        "effective_to": null,
+        "note": null
+      },
+      "match_mode": "historical",
+      "action": "verify_still_active",
+      "fda_search_url": "https://www.accessdata.fda.gov/scripts/ires/",
+      "note": "Entry is 4519 days old. Verify on FDA whether recall is terminated. If product-specific recall is terminated → set match_mode=historical. If ingredient-level ban → keep banned/active regardless of recall status."
+    }
+  ],
+  "claude_instructions": "Review 'new_records_requiring_review'. Each entry has a 'primary_category' that maps to a source_category in banned_recalled_ingredients.json and 'signal_categories' listing all detected concern types. For supplement brand recalls with no extracted substance (primary_category=supplement_general or microbial_contamination): create a RECALLED_<BRAND_SNAKE> entry with entity_type=product and recall_scope=<product name>. For substance-level recalls: create full ingredient entries. Check stale_recalls_to_verify and set match_mode=historical for terminated product recalls. Update _metadata after all changes."
+}

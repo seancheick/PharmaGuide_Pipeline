@@ -225,6 +225,20 @@ def test_load_fda_sync_report_reads_summary_and_new_record_count(tmp_path):
     assert report["report_path"] == str(report_path)
 
 
+def test_hexavalent_chromium_does_not_reuse_elemental_chromium_identifiers():
+    data_path = Path(__file__).resolve().parents[1] / "data" / "banned_recalled_ingredients.json"
+    data = json.loads(data_path.read_text())
+    entry = next(
+        row for row in data["ingredients"]
+        if row["id"] == "HM_CHROMIUM_HEXAVALENT"
+    )
+
+    assert entry["cui"] == "C1707393"
+    assert (entry.get("external_ids") or {}).get("unii") in (None, "")
+    assert entry.get("rxcui") in (None, "")
+    assert entry.get("gsrs") is None
+
+
 def test_determine_overall_status_prefers_fail_then_warn_then_pass():
     assert determine_overall_status(
         [Finding("error", "banned_recalled_ingredients.json", "$", "bad", "x", "y")],

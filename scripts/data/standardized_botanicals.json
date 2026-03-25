@@ -74,7 +74,23 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": "C1054955",
+      "external_ids": {
+        "unii": "46AM2VJ0AW"
+      },
+      "rxcui": "848929",
+      "gsrs": {
+        "substance_name": "ACAI",
+        "substance_class": "structurallyDiverse",
+        "cfr_sections": [],
+        "dsld_count": 1141,
+        "dsld_info_raw": "Dietary Supplement Label Database|Botanical|Acai | 1 (Number of products:1141)",
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      }
     },
     {
       "standard_name": "African Mango",
@@ -95,7 +111,11 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": "C1033652",
+      "external_ids": {},
+      "rxcui": null,
+      "gsrs": null
     },
     {
       "standard_name": "Agaricus Blazei",
@@ -119,7 +139,22 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": "C1086056",
+      "external_ids": {
+        "unii": "11MSQ4JG7G"
+      },
+      "gsrs": {
+        "substance_name": "AGARICUS BLAZEI WHOLE",
+        "substance_class": "structurallyDiverse",
+        "cfr_sections": [],
+        "dsld_count": null,
+        "dsld_info_raw": null,
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      }
     },
     {
       "standard_name": "Akarkara",
@@ -144,7 +179,11 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": "C1669961",
+      "external_ids": {},
+      "rxcui": null,
+      "gsrs": null
     },
     {
       "standard_name": "Alfalfa",
@@ -166,7 +205,22 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": "C2349204",
+      "external_ids": {
+        "unii": "HY3L927V6M"
+      },
+      "gsrs": {
+        "substance_name": "ALFALFA LEAF",
+        "substance_class": "structurallyDiverse",
+        "cfr_sections": [],
+        "dsld_count": null,
+        "dsld_info_raw": null,
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      }
     },
     {
       "standard_name": "Aloe Vera",
@@ -190,7 +244,25 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": "C0718405",
+      "external_ids": {
+        "unii": "ZY81Z83H0X"
+      },
+      "rxcui": "1306128",
+      "gsrs": {
+        "substance_name": "ALOE VERA LEAF",
+        "substance_class": "structurallyDiverse",
+        "cfr_sections": [
+          "21 CFR 172.510"
+        ],
+        "dsld_count": 348,
+        "dsld_info_raw": "Dietary Supplement Label Database|botanical|Aloe vera | 2535 (Number of products:348)",
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      }
     },
     {
       "standard_name": "AlphaWave L-Theanine",
@@ -208,7 +280,11 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "external_ids": {},
+      "rxcui": null,
+      "gsrs": null,
+      "CUI": null
     },
     {
       "standard_name": "American Ginseng",
@@ -230,7 +306,23 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "external_ids": {
+        "unii": "8W75VCV53Q"
+      },
+      "rxcui": "259473",
+      "gsrs": {
+        "substance_name": "AMERICAN GINSENG",
+        "substance_class": "structurallyDiverse",
+        "cfr_sections": [],
+        "dsld_count": 238,
+        "dsld_info_raw": "Dietary Supplement Label Database|botanical|American Ginseng | 2562 (Number of products:238)",
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      },
+      "CUI": "C1119918"
     },
     {
       "standard_name": "Amla",
@@ -259,7 +351,22 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": "C0969742",
+      "external_ids": {
+        "unii": "9B45E1E94Z"
+      },
+      "gsrs": {
+        "substance_name": "PHYLLANTHUS EMBLICA WHOLE",
+        "substance_class": "structurallyDiverse",
+        "cfr_sections": [],
+        "dsld_count": null,
+        "dsld_info_raw": null,
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      }
     },
     {
       "standard_name": "Andrographis",
@@ -282,7 +389,23 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": "C1256659",
+      "external_ids": {
+        "unii": "0P49L952WZ"
+      },
+      "rxcui": "1534766",
+      "gsrs": {
+        "substance_name": "ANDROGRAPHIS PANICULATA WHOLE",
+        "substance_class": "structurallyDiverse",
+        "cfr_sections": [],
+        "dsld_count": null,
+        "dsld_info_raw": null,
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      }
     },
     {
       "standard_name": "Arjuna",
@@ -306,7 +429,22 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "external_ids": {
+        "unii": "D468S54IV9"
+      },
+      "gsrs": {
+        "substance_name": "TERMINALIA ARJUNA BARK",
+        "substance_class": "structurallyDiverse",
+        "cfr_sections": [],
+        "dsld_count": null,
+        "dsld_info_raw": null,
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      },
+      "CUI": "C1950971"
     },
     {
       "standard_name": "Aronia",
@@ -329,7 +467,9 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": "C1215581",
+      "external_ids": {}
     },
     {
       "standard_name": "Artichoke",
@@ -352,7 +492,23 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": "C0453108",
+      "external_ids": {
+        "unii": "4F3W47PLBE"
+      },
+      "rxcui": "891776",
+      "gsrs": {
+        "substance_name": "ARTICHOKE",
+        "substance_class": "structurallyDiverse",
+        "cfr_sections": [],
+        "dsld_count": 521,
+        "dsld_info_raw": "Dietary Supplement Label Database|Botanical|Artichoke | 330 (Number of products:521)",
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      }
     },
     {
       "standard_name": "Ashwagandha",
@@ -382,7 +538,23 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": "C1061163",
+      "external_ids": {
+        "unii": "V038D626IF"
+      },
+      "rxcui": "1309279",
+      "gsrs": {
+        "substance_name": "WITHANIA SOMNIFERA ROOT",
+        "substance_class": "structurallyDiverse",
+        "cfr_sections": [],
+        "dsld_count": 1393,
+        "dsld_info_raw": "Dietary Supplement Label Database|Botanical|Ashwagandha | 11 (Number of products:1393)",
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      }
     },
     {
       "standard_name": "Astaxanthin",
@@ -403,7 +575,25 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "external_ids": {
+        "unii": "8XPW32PR7I",
+        "cas": "472-61-7",
+        "pubchem_cid": 5281224
+      },
+      "rxcui": "18451",
+      "gsrs": {
+        "substance_name": "ASTAXANTHIN",
+        "substance_class": "chemical",
+        "cfr_sections": [],
+        "dsld_count": 746,
+        "dsld_info_raw": "Dietary Supplement Label Database|Chemical|Astaxanthin | 12 (Number of products:746)",
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      },
+      "CUI": "C0052565"
     },
     {
       "standard_name": "Astaxanthin (Haematococcus pluvialis)",
@@ -429,7 +619,25 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "external_ids": {
+        "unii": "31T0FF0472",
+        "cas": "472-61-7",
+        "pubchem_cid": 5281224
+      },
+      "rxcui": "1426382",
+      "gsrs": {
+        "substance_name": "HAEMATOCOCCUS PLUVIALIS",
+        "substance_class": "structurallyDiverse",
+        "cfr_sections": [],
+        "dsld_count": 32,
+        "dsld_info_raw": "Dietary Supplement Label Database|other|Haematococcus pluvialis | 2266 (Number of products:32)",
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      },
+      "CUI": "C0052565"
     },
     {
       "standard_name": "AstaZine",
@@ -449,7 +657,9 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": null,
+      "external_ids": {}
     },
     {
       "standard_name": "Astragalus",
@@ -472,7 +682,9 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": "C0330845",
+      "external_ids": {}
     },
     {
       "standard_name": "Astragalus Extract",
@@ -494,7 +706,9 @@
       "min_threshold": null,
       "recommended_activity": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": "C1095897",
+      "external_ids": {}
     },
     {
       "standard_name": "Bacopa",
@@ -517,7 +731,9 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": "C1040526",
+      "external_ids": {}
     },
     {
       "standard_name": "Banaba Leaf",
@@ -538,7 +754,23 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "external_ids": {
+        "unii": "OUK5B3W9E4"
+      },
+      "rxcui": "2288179",
+      "gsrs": {
+        "substance_name": "LAGERSTROEMIA SPECIOSA LEAF",
+        "substance_class": "structurallyDiverse",
+        "cfr_sections": [],
+        "dsld_count": null,
+        "dsld_info_raw": null,
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      },
+      "CUI": "C1059156"
     },
     {
       "standard_name": "Baobab",
@@ -560,7 +792,9 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": "C1084996",
+      "external_ids": {}
     },
     {
       "standard_name": "Barley Grass",
@@ -581,7 +815,22 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": "C0004755",
+      "external_ids": {
+        "unii": "86507VZR9K"
+      },
+      "gsrs": {
+        "substance_name": "HORDEUM VULGARE TOP",
+        "substance_class": "structurallyDiverse",
+        "cfr_sections": [],
+        "dsld_count": null,
+        "dsld_info_raw": null,
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      }
     },
     {
       "standard_name": "Bee Pollen",
@@ -604,7 +853,23 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "external_ids": {
+        "unii": "3729L8MA2C"
+      },
+      "rxcui": "253157",
+      "gsrs": {
+        "substance_name": "BEE POLLEN",
+        "substance_class": "structurallyDiverse",
+        "cfr_sections": [],
+        "dsld_count": 273,
+        "dsld_info_raw": "Dietary Supplement Label Database|Botanical|Bee Pollen | 343 (Number of products:273)",
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      },
+      "CUI": "C0795585"
     },
     {
       "standard_name": "Beetroot",
@@ -629,7 +894,23 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": "C0453112",
+      "external_ids": {
+        "unii": "4G174V5051"
+      },
+      "rxcui": "1368205",
+      "gsrs": {
+        "substance_name": "BETA VULGARIS WHOLE",
+        "substance_class": "structurallyDiverse",
+        "cfr_sections": [],
+        "dsld_count": null,
+        "dsld_info_raw": null,
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      }
     },
     {
       "standard_name": "Berberine",
@@ -656,7 +937,92 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": "C0005117",
+      "external_ids": {
+        "unii": "0I8Y3P32UF",
+        "cas": "2086-83-1",
+        "pubchem_cid": 2353
+      },
+      "rxcui": "1437",
+      "gsrs": {
+        "substance_name": "Berberine",
+        "substance_class": "chemical",
+        "cfr_sections": [],
+        "dsld_count": 199,
+        "dsld_info_raw": "Dietary Supplement Label Database|Botanical|Berberine | 1060 (Number of products:199)",
+        "active_moiety": null,
+        "salt_parents": [
+          {
+            "type": "SALT/SOLVATE->PARENT",
+            "name": "BERBERINE CHLORIDE DIHYDRATE",
+            "unii": "266464AEJZ"
+          },
+          {
+            "type": "SALT/SOLVATE->PARENT",
+            "name": "BERBERINE SULFATE ANHYDROUS",
+            "unii": "FST3E667FF"
+          },
+          {
+            "type": "SALT/SOLVATE->PARENT",
+            "name": "BERBERINE SULFATE TRIHYDRATE",
+            "unii": "T3MQ0UO932"
+          },
+          {
+            "type": "SALT/SOLVATE->PARENT",
+            "name": "BERBERINE BISULFATE",
+            "unii": "69A4M9800W"
+          },
+          {
+            "type": "SALT/SOLVATE->PARENT",
+            "name": "Berberine ursodeoxycholate",
+            "unii": "VM8KQ3W8GM"
+          },
+          {
+            "type": "SALT/SOLVATE->PARENT",
+            "name": "BERBERINE CHLORIDE",
+            "unii": "UOT4O1BYV8"
+          }
+        ],
+        "metabolic_relationships": [],
+        "metabolites": [
+          {
+            "type": "METABOLITE->PARENT",
+            "name": "COLUMBAMINE-2-O-BETA-D-GLUCURONIDE",
+            "unii": "X052MG5M30"
+          },
+          {
+            "type": "METABOLITE->PARENT",
+            "name": "3,10-DEMETHYLPALMATINE-10-O-SULFATE",
+            "unii": "VG8PXK6SVI"
+          },
+          {
+            "type": "METABOLITE->PARENT",
+            "name": "DEMETHYLENEBERBERINE-2-O-SULFATE",
+            "unii": "M06BFD3MK4"
+          },
+          {
+            "type": "METABOLITE->PARENT",
+            "name": "JATRORRHIZINE O-GLUCURONIDE",
+            "unii": "SK9MBM5DJ5"
+          },
+          {
+            "type": "METABOLITE->PARENT",
+            "name": "BERBERRUBINE-9-O-.BETA.-D-GLUCURONIDE",
+            "unii": "O2TM3I3UOB"
+          },
+          {
+            "type": "METABOLITE->PARENT",
+            "name": "JATRORRHIZINE 3-O-SULFATE",
+            "unii": "AB869JA7NV"
+          },
+          {
+            "type": "METABOLITE->PARENT",
+            "name": "THALIFENDINE 10-O-.BETA.-D-GLUCURONIDE",
+            "unii": "H37Z9DX3IU"
+          }
+        ]
+      }
     },
     {
       "standard_name": "Beta-Glucans",
@@ -684,7 +1050,12 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": "C1134651",
+      "external_ids": {
+        "cas": "9041-22-9",
+        "pubchem_cid": 439262
+      }
     },
     {
       "standard_name": "Bil-Max",
@@ -703,7 +1074,9 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": null,
+      "external_ids": {}
     },
     {
       "standard_name": "Bilberry",
@@ -728,7 +1101,22 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": "C0795673",
+      "external_ids": {
+        "unii": "9P2U39H18W"
+      },
+      "gsrs": {
+        "substance_name": "BILBERRY",
+        "substance_class": "structurallyDiverse",
+        "cfr_sections": [],
+        "dsld_count": 6,
+        "dsld_info_raw": "Dietary Supplement Label Database|botanical|Dwarf Bilberry | 3184 (Number of products:6)",
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      }
     },
     {
       "standard_name": "Bitter Melon",
@@ -752,7 +1140,11 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": "C1509189",
+      "external_ids": {},
+      "rxcui": null,
+      "gsrs": null
     },
     {
       "standard_name": "Black Cohosh",
@@ -776,7 +1168,23 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "external_ids": {
+        "unii": "K73E24S6X9"
+      },
+      "rxcui": "259511",
+      "gsrs": {
+        "substance_name": "BLACK COHOSH",
+        "substance_class": "structurallyDiverse",
+        "cfr_sections": [],
+        "dsld_count": 476,
+        "dsld_info_raw": "Dietary Supplement Label Database|Botanical|Black Cohosh | 1068 (Number of products:476)",
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      },
+      "CUI": "C0885226"
     },
     {
       "standard_name": "Black Currant",
@@ -798,7 +1206,23 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": "C0771400",
+      "external_ids": {
+        "unii": "9755T40D11"
+      },
+      "rxcui": "236154",
+      "gsrs": {
+        "substance_name": "BLACK CURRANT",
+        "substance_class": "structurallyDiverse",
+        "cfr_sections": [],
+        "dsld_count": 413,
+        "dsld_info_raw": "Dietary Supplement Label Database|Botanical|Black Currant | 197 (Number of products:413)",
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      }
     },
     {
       "standard_name": "Black Musli",
@@ -823,7 +1247,22 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "external_ids": {
+        "unii": "715B59598O"
+      },
+      "gsrs": {
+        "substance_name": "CURCULIGO ORCHIOIDES WHOLE",
+        "substance_class": "structurallyDiverse",
+        "cfr_sections": [],
+        "dsld_count": null,
+        "dsld_info_raw": null,
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      },
+      "CUI": "C2800341"
     },
     {
       "standard_name": "Black Pepper Extract",
@@ -846,7 +1285,23 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": "C0939867",
+      "external_ids": {
+        "unii": "KM66971LVF"
+      },
+      "rxcui": "1306935",
+      "gsrs": {
+        "substance_name": "BLACK PEPPER",
+        "substance_class": "structurallyDiverse",
+        "cfr_sections": [],
+        "dsld_count": 1731,
+        "dsld_info_raw": "Dietary Supplement Label Database|Botanical|Black Pepper | 355 (Number of products:1731)",
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      }
     },
     {
       "standard_name": "Black Seed Oil",
@@ -870,7 +1325,24 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": "C2733644",
+      "external_ids": {
+        "unii": "CS4U38E731",
+        "cas": "90064-32-7"
+      },
+      "rxcui": "1431150",
+      "gsrs": {
+        "substance_name": "NIGELLA SATIVA SEED OIL",
+        "substance_class": "structurallyDiverse",
+        "cfr_sections": [],
+        "dsld_count": null,
+        "dsld_info_raw": null,
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      }
     },
     {
       "standard_name": "Black Sesame",
@@ -893,7 +1365,11 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "external_ids": {},
+      "rxcui": null,
+      "gsrs": null,
+      "CUI": "C0946894"
     },
     {
       "standard_name": "Blackberry",
@@ -918,7 +1394,22 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "external_ids": {
+        "unii": "8A6OMU3I8L"
+      },
+      "gsrs": {
+        "substance_name": "BLACKBERRY",
+        "substance_class": "structurallyDiverse",
+        "cfr_sections": [],
+        "dsld_count": 545,
+        "dsld_info_raw": "Dietary Supplement Label Database|Botanical|Blackberry | 1073 (Number of products:545)",
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      },
+      "CUI": "C2740597"
     },
     {
       "standard_name": "Bladderwrack",
@@ -941,7 +1432,23 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "external_ids": {
+        "unii": "535G2ABX9M"
+      },
+      "rxcui": "1334747",
+      "gsrs": {
+        "substance_name": "FUCUS VESICULOSUS",
+        "substance_class": "structurallyDiverse",
+        "cfr_sections": [],
+        "dsld_count": 156,
+        "dsld_info_raw": "Dietary Supplement Label Database|other|Bladderwrack | 2599 (Number of products:156)",
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      },
+      "CUI": "C1083174"
     },
     {
       "standard_name": "Blue-Green Algae",
@@ -963,7 +1470,23 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": "C0304057",
+      "external_ids": {
+        "unii": "49VG1X560X"
+      },
+      "rxcui": "1310848",
+      "gsrs": {
+        "substance_name": "APHANIZOMENON FLOSAQUAE",
+        "substance_class": "structurallyDiverse",
+        "cfr_sections": [],
+        "dsld_count": null,
+        "dsld_info_raw": null,
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      }
     },
     {
       "standard_name": "Blue-Max",
@@ -982,7 +1505,9 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": null,
+      "external_ids": {}
     },
     {
       "standard_name": "Blueberry",
@@ -1005,7 +1530,23 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": "C1027331",
+      "external_ids": {
+        "unii": "253RUG1X1A"
+      },
+      "rxcui": "1549329",
+      "gsrs": {
+        "substance_name": "BLUEBERRY",
+        "substance_class": "mixture",
+        "cfr_sections": [],
+        "dsld_count": 1647,
+        "dsld_info_raw": "Dietary Supplement Label Database|Botanical|Blueberry | 23 (Number of products:1647)",
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      }
     },
     {
       "standard_name": "Boswellia",
@@ -1038,7 +1579,9 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": "C0873038",
+      "external_ids": {}
     },
     {
       "standard_name": "Broccoli",
@@ -1062,7 +1605,23 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": "C0330498",
+      "external_ids": {
+        "unii": "UOI4FT57BZ"
+      },
+      "rxcui": "319808",
+      "gsrs": {
+        "substance_name": "BROCCOLI",
+        "substance_class": "structurallyDiverse",
+        "cfr_sections": [],
+        "dsld_count": 1625,
+        "dsld_info_raw": "Dietary Supplement Label Database|Botanical|Broccoli | 25 (Number of products:1625)",
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      }
     },
     {
       "standard_name": "Bromelain",
@@ -1084,7 +1643,9 @@
       "standardization_type": "activity",
       "standardization_unit": "GDU/g",
       "recommended_activity": 2400,
-      "standardization": null
+      "standardization": null,
+      "CUI": "C0006217",
+      "external_ids": {}
     },
     {
       "standard_name": "Burdock Root",
@@ -1105,7 +1666,23 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": "C0873127",
+      "external_ids": {
+        "unii": "597E9BI3Z3"
+      },
+      "rxcui": "236238",
+      "gsrs": {
+        "substance_name": "ARCTIUM LAPPA ROOT",
+        "substance_class": "structurallyDiverse",
+        "cfr_sections": [],
+        "dsld_count": null,
+        "dsld_info_raw": null,
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      }
     },
     {
       "standard_name": "Butcher's Broom",
@@ -1127,7 +1704,11 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": "C1021282",
+      "external_ids": {},
+      "rxcui": null,
+      "gsrs": null
     },
     {
       "standard_name": "Butterbur",
@@ -1149,7 +1730,23 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "external_ids": {
+        "unii": "8369GFM6LY"
+      },
+      "rxcui": "350530",
+      "gsrs": {
+        "substance_name": "PETASITES HYBRIDUS WHOLE",
+        "substance_class": "structurallyDiverse",
+        "cfr_sections": [],
+        "dsld_count": null,
+        "dsld_info_raw": null,
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      },
+      "CUI": "C1019150"
     },
     {
       "standard_name": "Camu Camu",
@@ -1170,7 +1767,11 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "external_ids": {},
+      "rxcui": null,
+      "gsrs": null,
+      "CUI": "C2293178"
     },
     {
       "standard_name": "Caraway",
@@ -1193,7 +1794,13 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "external_ids": {
+        "pubchem_cid": 320761
+      },
+      "rxcui": null,
+      "gsrs": null,
+      "CUI": "C0331053"
     },
     {
       "standard_name": "Carrot",
@@ -1217,7 +1824,23 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": "C1141640",
+      "external_ids": {
+        "unii": "L56Z1JK48B"
+      },
+      "rxcui": "1428866",
+      "gsrs": {
+        "substance_name": "CARROT",
+        "substance_class": "structurallyDiverse",
+        "cfr_sections": [],
+        "dsld_count": 1291,
+        "dsld_info_raw": "Dietary Supplement Label Database|Botanical|Carrot | 373 (Number of products:1291)",
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      }
     },
     {
       "standard_name": "Cat's Claw",
@@ -1243,7 +1866,23 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": "C0939876",
+      "external_ids": {
+        "unii": "9060PRM18Q"
+      },
+      "rxcui": "285223",
+      "gsrs": {
+        "substance_name": "CAT’S CLAW",
+        "substance_class": "structurallyDiverse",
+        "cfr_sections": [],
+        "dsld_count": 258,
+        "dsld_info_raw": "Dietary Supplement Label Database|Botanical|Cat's Claw | 376 (Number of products:258)",
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      }
     },
     {
       "standard_name": "Catuaba",
@@ -1266,7 +1905,11 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": "C0874042",
+      "external_ids": {},
+      "rxcui": null,
+      "gsrs": null
     },
     {
       "standard_name": "Celery",
@@ -1290,7 +1933,23 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": "C1365522",
+      "external_ids": {
+        "unii": "44IDY6DTKX"
+      },
+      "rxcui": "892372",
+      "gsrs": {
+        "substance_name": "CELERY",
+        "substance_class": "structurallyDiverse",
+        "cfr_sections": [],
+        "dsld_count": 509,
+        "dsld_info_raw": "Dietary Supplement Label Database|Botanical|celery | 631 (Number of products:509)",
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      }
     },
     {
       "standard_name": "Century Plant",
@@ -1312,7 +1971,22 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "external_ids": {
+        "unii": "024852X0VD"
+      },
+      "gsrs": {
+        "substance_name": "AGAVE AMERICANA WHOLE",
+        "substance_class": "structurallyDiverse",
+        "cfr_sections": [],
+        "dsld_count": null,
+        "dsld_info_raw": null,
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      },
+      "CUI": "C0331586"
     },
     {
       "standard_name": "Chaga",
@@ -1337,7 +2011,9 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": "C1079248",
+      "external_ids": {}
     },
     {
       "standard_name": "Chamomile",
@@ -1363,7 +2039,23 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": "C1510478",
+      "external_ids": {
+        "unii": "FGL3685T2X"
+      },
+      "rxcui": "221916",
+      "gsrs": {
+        "substance_name": "CHAMOMILE",
+        "substance_class": "structurallyDiverse",
+        "cfr_sections": [],
+        "dsld_count": 206,
+        "dsld_info_raw": "Dietary Supplement Label Database|botanical|Chamomile (unspecified) | 2257 (Number of products:206)",
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      }
     },
     {
       "standard_name": "Chasteberry",
@@ -1387,7 +2079,22 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": "C0752339",
+      "external_ids": {
+        "unii": "9HDT03PZ0N"
+      },
+      "gsrs": {
+        "substance_name": "VITEX AGNUS-CASTUS WHOLE",
+        "substance_class": "structurallyDiverse",
+        "cfr_sections": [],
+        "dsld_count": null,
+        "dsld_info_raw": null,
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      }
     },
     {
       "standard_name": "Chlorella",
@@ -1414,7 +2121,23 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": "C1964321",
+      "external_ids": {
+        "unii": "591BV50NV8"
+      },
+      "rxcui": "1591911",
+      "gsrs": {
+        "substance_name": "CHLORELLA PYRENOIDOSA",
+        "substance_class": "structurallyDiverse",
+        "cfr_sections": [],
+        "dsld_count": 1,
+        "dsld_info_raw": "Dietary Supplement Label Database|other|Chlorella Pyrenoidosa | 3541 (Number of products:1)",
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      }
     },
     {
       "standard_name": "Chromax",
@@ -1432,7 +2155,12 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "external_ids": {
+        "cas": "14639-25-9",
+        "pubchem_cid": 151932
+      },
+      "CUI": null
     },
     {
       "standard_name": "Cinnamon",
@@ -1455,7 +2183,23 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": "C0939899",
+      "external_ids": {
+        "unii": "5S29HWU6QB"
+      },
+      "rxcui": "285245",
+      "gsrs": {
+        "substance_name": "CINNAMON",
+        "substance_class": "structurallyDiverse",
+        "cfr_sections": [],
+        "dsld_count": 1035,
+        "dsld_info_raw": "Dietary Supplement Label Database|Botanical|Cinnamon | 1578 (Number of products:1035)",
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      }
     },
     {
       "standard_name": "Cinnamon Bark Essential Oil",
@@ -1479,7 +2223,23 @@
       "min_threshold": null,
       "recommended_activity": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "external_ids": {
+        "unii": "E5GY4I6YCZ"
+      },
+      "rxcui": "1309229",
+      "gsrs": {
+        "substance_name": "CINNAMON OIL",
+        "substance_class": "mixture",
+        "cfr_sections": [],
+        "dsld_count": null,
+        "dsld_info_raw": null,
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      },
+      "CUI": "C0301249"
     },
     {
       "standard_name": "Cissus Quadrangularis",
@@ -1500,7 +2260,22 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": "C1078516",
+      "external_ids": {
+        "unii": "3VMW64U790"
+      },
+      "gsrs": {
+        "substance_name": "CISSUS QUADRANGULARIS WHOLE",
+        "substance_class": "structurallyDiverse",
+        "cfr_sections": [],
+        "dsld_count": null,
+        "dsld_info_raw": null,
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      }
     },
     {
       "standard_name": "Cistanche",
@@ -1525,7 +2300,10 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "external_ids": {},
+      "gsrs": null,
+      "CUI": "C1038769"
     },
     {
       "standard_name": "Citrus Bergamot Extract",
@@ -1553,7 +2331,11 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": "C1258049",
+      "external_ids": {},
+      "rxcui": null,
+      "gsrs": null
     },
     {
       "standard_name": "Cocoa Flavanol Extract",
@@ -1580,7 +2362,11 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "external_ids": {},
+      "rxcui": null,
+      "gsrs": null,
+      "CUI": "C3651730"
     },
     {
       "standard_name": "Coffeeberry",
@@ -1602,7 +2388,10 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": "C1138610",
+      "external_ids": {},
+      "gsrs": null
     },
     {
       "standard_name": "Cognigrape",
@@ -1624,7 +2413,9 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": null,
+      "external_ids": {}
     },
     {
       "standard_name": "Cognizin Citicoline",
@@ -1641,7 +2432,11 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "external_ids": {},
+      "rxcui": null,
+      "gsrs": null,
+      "CUI": null
     },
     {
       "standard_name": "Coleus Forskohlii",
@@ -1662,7 +2457,22 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": "C1382883",
+      "external_ids": {
+        "unii": "Q86533SAQ7"
+      },
+      "gsrs": {
+        "substance_name": "COLEUS BARBATUS WHOLE",
+        "substance_class": "structurallyDiverse",
+        "cfr_sections": [],
+        "dsld_count": null,
+        "dsld_info_raw": null,
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      }
     },
     {
       "standard_name": "Cordyceps",
@@ -1690,7 +2500,9 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": "C1011843",
+      "external_ids": {}
     },
     {
       "standard_name": "Cran-Max",
@@ -1709,7 +2521,9 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": null,
+      "external_ids": {}
     },
     {
       "standard_name": "Cranberry",
@@ -1735,7 +2549,23 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": "C2740793",
+      "external_ids": {
+        "unii": "0MVO31Q3QS"
+      },
+      "rxcui": "125933",
+      "gsrs": {
+        "substance_name": "CRANBERRY",
+        "substance_class": "structurallyDiverse",
+        "cfr_sections": [],
+        "dsld_count": 1736,
+        "dsld_info_raw": "Dietary Supplement Label Database|Botanical|cranberry | 47 (Number of products:1736)",
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      }
     },
     {
       "standard_name": "CranRx",
@@ -1752,7 +2582,9 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": null,
+      "external_ids": {}
     },
     {
       "standard_name": "Cucumber",
@@ -1775,7 +2607,23 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": "C0973457",
+      "external_ids": {
+        "unii": "YY7C30VXJT"
+      },
+      "rxcui": "899738",
+      "gsrs": {
+        "substance_name": "CUCUMBER",
+        "substance_class": "structurallyDiverse",
+        "cfr_sections": [],
+        "dsld_count": 240,
+        "dsld_info_raw": "Dietary Supplement Label Database|Botanical|cucumber | 1325 (Number of products:240)",
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      }
     },
     {
       "id": "curcumin",
@@ -1804,7 +2652,71 @@
       "notes": "Anti-inflammatory compound standardized for 95% curcuminoids. C3 Complex is the most studied form.",
       "recommended_activity": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "external_ids": {
+        "unii": "IT942ZTH98",
+        "cas": "458-37-7",
+        "pubchem_cid": 969516
+      },
+      "rxcui": "2955",
+      "gsrs": {
+        "substance_name": "Curcumin",
+        "substance_class": "chemical",
+        "cfr_sections": [],
+        "dsld_count": 310,
+        "dsld_info_raw": "Dietary Supplement Label Database|chemical|Curcumin | 2377 (Number of products:310)",
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": [
+          {
+            "type": "METABOLITE->PARENT",
+            "name": "CURCUMIN GLUCURONIDE",
+            "unii": "BE1PK7RL4M"
+          },
+          {
+            "type": "METABOLITE->PARENT",
+            "name": "DEMETHOXYCURCUMIN GLUCURONIDE",
+            "unii": "S702I6I4FQ"
+          },
+          {
+            "type": "METABOLITE->PARENT",
+            "name": "DIHYDROCURCUMIN",
+            "unii": "4YU9OA673J"
+          },
+          {
+            "type": "METABOLITE->PARENT",
+            "name": "TETRAHYDRODIFERULOYLMETHANE",
+            "unii": "00U0645U03"
+          },
+          {
+            "type": "METABOLITE->PARENT",
+            "name": "CURCUMIN SULFATE",
+            "unii": "160DHE331M"
+          },
+          {
+            "type": "METABOLITE->PARENT",
+            "name": "TETRAHYDROCURCUMIN .BETA.-O-GLUCURONIDE",
+            "unii": "FA26VP94XR"
+          },
+          {
+            "type": "METABOLITE->PARENT",
+            "name": "HEXAHYDROCURCUMIN .BETA.-O-GLUCURONIDE",
+            "unii": "7K3QWL7KXP"
+          },
+          {
+            "type": "METABOLITE->PARENT",
+            "name": "OCTAHYDROCURCUMIN",
+            "unii": "YS2A8X6SX2"
+          },
+          {
+            "type": "METABOLITE->PARENT",
+            "name": "HEXAHYDROCURCUMIN",
+            "unii": "RNL5XJ2BA7"
+          }
+        ]
+      },
+      "CUI": "C0010467"
     },
     {
       "standard_name": "D-Mannose",
@@ -1824,7 +2736,25 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": "C0024742",
+      "external_ids": {
+        "cas": "530-26-7",
+        "pubchem_cid": 18950,
+        "unii": "PHA4727WTP"
+      },
+      "rxcui": "6633",
+      "gsrs": {
+        "substance_name": "Demannose",
+        "substance_class": "chemical",
+        "cfr_sections": [],
+        "dsld_count": 112,
+        "dsld_info_raw": "Dietary Supplement Label Database|carbohydrate|Mannose | 2627 (Number of products:112)",
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      }
     },
     {
       "standard_name": "Damiana",
@@ -1846,7 +2776,23 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "external_ids": {
+        "unii": "812R0W1I3K"
+      },
+      "rxcui": "1591919",
+      "gsrs": {
+        "substance_name": "TURNERA DIFFUSA LEAF",
+        "substance_class": "structurallyDiverse",
+        "cfr_sections": [],
+        "dsld_count": null,
+        "dsld_info_raw": null,
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      },
+      "CUI": "C0772118"
     },
     {
       "standard_name": "Dandelion",
@@ -1868,7 +2814,22 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": "C0440015",
+      "external_ids": {
+        "unii": "39981FM375"
+      },
+      "gsrs": {
+        "substance_name": "TARAXACUM OFFICINALE",
+        "substance_class": "structurallyDiverse",
+        "cfr_sections": [],
+        "dsld_count": 1460,
+        "dsld_info_raw": "Dietary Supplement Label Database|Botanical|Dandelion | 123 (Number of products:1460)",
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      }
     },
     {
       "standard_name": "Devil's Claw",
@@ -1892,7 +2853,10 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": "C0771537",
+      "external_ids": {},
+      "gsrs": null
     },
     {
       "standard_name": "Dong Quai",
@@ -1914,7 +2878,14 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": "C1122975",
+      "external_ids": {
+        "cas": "30655-48-2",
+        "pubchem_cid": 161671
+      },
+      "rxcui": null,
+      "gsrs": null
     },
     {
       "standard_name": "Echinacea Angustifolia",
@@ -1936,7 +2907,23 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": "C0697080",
+      "external_ids": {
+        "unii": "VB06AV5US8"
+      },
+      "rxcui": "236121",
+      "gsrs": {
+        "substance_name": "ECHINACEA ANGUSTIFOLIA WHOLE",
+        "substance_class": "structurallyDiverse",
+        "cfr_sections": [],
+        "dsld_count": 317,
+        "dsld_info_raw": "Dietary Supplement Label Database|botanical|Echinacea angustifolia | 2259 (Number of products:317)",
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      }
     },
     {
       "standard_name": "Echinacea Extract",
@@ -1958,7 +2945,9 @@
       "min_threshold": null,
       "recommended_activity": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": "C0752270",
+      "external_ids": {}
     },
     {
       "standard_name": "Echinacea Purpurea",
@@ -1983,7 +2972,23 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": "C0886513",
+      "external_ids": {
+        "unii": "QI7G114Y98"
+      },
+      "rxcui": "260025",
+      "gsrs": {
+        "substance_name": "ECHINACEA PURPUREA WHOLE",
+        "substance_class": "structurallyDiverse",
+        "cfr_sections": [],
+        "dsld_count": 551,
+        "dsld_info_raw": "Dietary Supplement Label Database|botanical|Echinacea purpurea | 2261 (Number of products:551)",
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      }
     },
     {
       "standard_name": "Elder Flower",
@@ -2004,7 +3009,23 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "external_ids": {
+        "unii": "07V4DX094T"
+      },
+      "rxcui": "317808",
+      "gsrs": {
+        "substance_name": "SAMBUCUS NIGRA FLOWER",
+        "substance_class": "structurallyDiverse",
+        "cfr_sections": [],
+        "dsld_count": 35,
+        "dsld_info_raw": "Dietary Supplement Label Database|Botanical|Elder Flower | 1723 (Number of products:35)",
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      },
+      "CUI": "C3486741"
     },
     {
       "standard_name": "Elderberry",
@@ -2036,7 +3057,10 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": "C0331059",
+      "external_ids": {},
+      "gsrs": null
     },
     {
       "standard_name": "Elderberry Extract",
@@ -2059,7 +3083,9 @@
       "min_threshold": 13,
       "recommended_activity": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": "C3486741",
+      "external_ids": {}
     },
     {
       "standard_name": "Enovita",
@@ -2076,7 +3102,9 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": null,
+      "external_ids": {}
     },
     {
       "standard_name": "EnXtra",
@@ -2093,7 +3121,9 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": null,
+      "external_ids": {}
     },
     {
       "standard_name": "EpiCor",
@@ -2110,7 +3140,9 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": null,
+      "external_ids": {}
     },
     {
       "standard_name": "EPs 7630",
@@ -2129,7 +3161,9 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": "C1310768",
+      "external_ids": {}
     },
     {
       "standard_name": "Eucalyptus",
@@ -2152,7 +3186,9 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": "C0015148",
+      "external_ids": {}
     },
     {
       "standard_name": "Evening Primrose",
@@ -2175,7 +3211,23 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": "C0996876",
+      "external_ids": {
+        "unii": "3Q9L08K71N"
+      },
+      "rxcui": "1437503",
+      "gsrs": {
+        "substance_name": "EVENING PRIMROSE OIL",
+        "substance_class": "structurallyDiverse",
+        "cfr_sections": [],
+        "dsld_count": 299,
+        "dsld_info_raw": "Dietary Supplement Label Database|Botanical|evening primrose oil | 431 (Number of products:299)",
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      }
     },
     {
       "standard_name": "Fadogia Agrestis",
@@ -2197,7 +3249,9 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": "C3728253",
+      "external_ids": {}
     },
     {
       "standard_name": "Fennel",
@@ -2220,7 +3274,25 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": "C0553175",
+      "external_ids": {
+        "unii": "557II4LLC3"
+      },
+      "rxcui": "1370467",
+      "gsrs": {
+        "substance_name": "SWEET FENNEL",
+        "substance_class": "structurallyDiverse",
+        "cfr_sections": [
+          "21 CFR 310.528"
+        ],
+        "dsld_count": 703,
+        "dsld_info_raw": "Dietary Supplement Label Database|Botanical|Fennel | 66 (Number of products:703)",
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      }
     },
     {
       "standard_name": "Fenugreek",
@@ -2247,7 +3319,23 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": "C0936126",
+      "external_ids": {
+        "unii": "654825W09Z"
+      },
+      "rxcui": "282436",
+      "gsrs": {
+        "substance_name": "FENUGREEK SEED",
+        "substance_class": "structurallyDiverse",
+        "cfr_sections": [],
+        "dsld_count": 851,
+        "dsld_info_raw": "Dietary Supplement Label Database|Botanical|Fenugreek | 253 (Number of products:851)",
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      }
     },
     {
       "standard_name": "Feverfew",
@@ -2270,7 +3358,22 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": "C0697198",
+      "external_ids": {
+        "unii": "Z64FK7P217"
+      },
+      "gsrs": {
+        "substance_name": "FEVERFEW",
+        "substance_class": "structurallyDiverse",
+        "cfr_sections": [],
+        "dsld_count": 132,
+        "dsld_info_raw": "Dietary Supplement Label Database|Botanical|Feverfew | 436 (Number of products:132)",
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      }
     },
     {
       "standard_name": "Flaxseed",
@@ -2293,7 +3396,10 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "external_ids": {},
+      "gsrs": null,
+      "CUI": "C0023753"
     },
     {
       "standard_name": "FloraGLO",
@@ -2312,7 +3418,25 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "external_ids": {
+        "cas": "127-40-2",
+        "pubchem_cid": 5281243,
+        "unii": "X72A60C9MT"
+      },
+      "rxcui": "11359",
+      "gsrs": {
+        "substance_name": "LUTEIN",
+        "substance_class": "chemical",
+        "cfr_sections": [],
+        "dsld_count": 2293,
+        "dsld_info_raw": "Dietary Supplement Label Database|Vitamin|Lutein | 166 (Number of products:2293)",
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      },
+      "CUI": null
     },
     {
       "standard_name": "Flowens",
@@ -2332,7 +3456,9 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": null,
+      "external_ids": {}
     },
     {
       "standard_name": "FruiteX-B Calcium Fructoborate",
@@ -2349,7 +3475,9 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": null,
+      "external_ids": {}
     },
     {
       "standard_name": "Galdieria",
@@ -2371,7 +3499,10 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "external_ids": {},
+      "gsrs": null,
+      "CUI": "C1086344"
     },
     {
       "standard_name": "Garlic",
@@ -2398,7 +3529,31 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": "C0017102",
+      "external_ids": {
+        "unii": "V1V998DC17"
+      },
+      "rxcui": "899414",
+      "gsrs": {
+        "substance_name": "GARLIC",
+        "substance_class": "structurallyDiverse",
+        "cfr_sections": [
+          "21 CFR 184.1317"
+        ],
+        "dsld_count": 1363,
+        "dsld_info_raw": "Dietary Supplement Label Database|Botanical|Garlic | 4 (Number of products:1363)",
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [
+          {
+            "type": "METABOLIC ENZYME->INHIBITOR",
+            "name": "AMINE OXIDASE (FLAVIN-CONTAINING) B",
+            "unii": "3OV8HVI592"
+          }
+        ],
+        "metabolites": []
+      }
     },
     {
       "standard_name": "Gentian",
@@ -2421,7 +3576,11 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "external_ids": {},
+      "rxcui": null,
+      "gsrs": null,
+      "CUI": "C0017439"
     },
     {
       "standard_name": "Ginger Extract",
@@ -2451,7 +3610,25 @@
       "notes": "Digestive and anti-nausea herb standardized for 5% gingerols. Higher concentrations (up to 20%) available.",
       "recommended_activity": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": "C1879327",
+      "external_ids": {
+        "unii": "C5529G5JPQ"
+      },
+      "rxcui": "125921",
+      "gsrs": {
+        "substance_name": "GINGER",
+        "substance_class": "structurallyDiverse",
+        "cfr_sections": [
+          "21 CFR 310.544"
+        ],
+        "dsld_count": 3297,
+        "dsld_info_raw": "Dietary Supplement Label Database|Botanical|Ginger | 70 (Number of products:3297)",
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      }
     },
     {
       "standard_name": "Gingerols",
@@ -2476,7 +3653,10 @@
       "min_threshold": null,
       "recommended_activity": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "external_ids": {},
+      "gsrs": null,
+      "CUI": "C0061267"
     },
     {
       "standard_name": "Ginkgo Biloba",
@@ -2504,7 +3684,23 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": "C0330206",
+      "external_ids": {
+        "unii": "19FUJ2C58T"
+      },
+      "rxcui": "259265",
+      "gsrs": {
+        "substance_name": "GINKGO",
+        "substance_class": "structurallyDiverse",
+        "cfr_sections": [],
+        "dsld_count": 1552,
+        "dsld_info_raw": "Dietary Supplement Label Database|Botanical|Ginkgo | 71 (Number of products:1552)",
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      }
     },
     {
       "standard_name": "Ginkgolides",
@@ -2529,7 +3725,11 @@
       "min_threshold": null,
       "recommended_activity": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "external_ids": {},
+      "rxcui": null,
+      "gsrs": null,
+      "CUI": "C0599524"
     },
     {
       "standard_name": "Goji Berry",
@@ -2551,7 +3751,10 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": "C4255019",
+      "external_ids": {},
+      "gsrs": null
     },
     {
       "standard_name": "Goldenseal",
@@ -2574,7 +3777,25 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": "C3500453",
+      "external_ids": {
+        "unii": "ZW3Z11D0JV"
+      },
+      "rxcui": "253171",
+      "gsrs": {
+        "substance_name": "GOLDENSEAL",
+        "substance_class": "structurallyDiverse",
+        "cfr_sections": [
+          "21 CFR 310.528"
+        ],
+        "dsld_count": 580,
+        "dsld_info_raw": "Dietary Supplement Label Database|Botanical|Goldenseal | 78 (Number of products:580)",
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      }
     },
     {
       "standard_name": "Gotu Kola",
@@ -2600,7 +3821,11 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": "C2948088",
+      "external_ids": {},
+      "rxcui": null,
+      "gsrs": null
     },
     {
       "standard_name": "Grains of Paradise",
@@ -2626,7 +3851,22 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "external_ids": {
+        "unii": "Q46FF3N01L"
+      },
+      "gsrs": {
+        "substance_name": "GRAINS OF PARADISE",
+        "substance_class": "structurallyDiverse",
+        "cfr_sections": [],
+        "dsld_count": 63,
+        "dsld_info_raw": "Dietary Supplement Label Database|Botanical|Grains of Paradise | 1025 (Number of products:63)",
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      },
+      "CUI": "C2776583"
     },
     {
       "standard_name": "Grape Seed",
@@ -2651,7 +3891,9 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": "C0772453",
+      "external_ids": {}
     },
     {
       "standard_name": "Grape Seed Extract",
@@ -2673,7 +3915,23 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": "C3256816",
+      "external_ids": {
+        "unii": "RDS2V6DVY5"
+      },
+      "rxcui": "237116",
+      "gsrs": {
+        "substance_name": "Vitis vinifera seed proanthocyanidins",
+        "substance_class": "polymer",
+        "cfr_sections": [],
+        "dsld_count": null,
+        "dsld_info_raw": null,
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      }
     },
     {
       "standard_name": "Grapefruit Seed",
@@ -2695,7 +3953,23 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "external_ids": {
+        "unii": "598D944HOL"
+      },
+      "rxcui": "1306130",
+      "gsrs": {
+        "substance_name": "GRAPEFRUIT SEED OIL",
+        "substance_class": "structurallyDiverse",
+        "cfr_sections": [],
+        "dsld_count": null,
+        "dsld_info_raw": null,
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      },
+      "CUI": "C0873113"
     },
     {
       "standard_name": "Graviola",
@@ -2716,7 +3990,22 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": "C1000635",
+      "external_ids": {
+        "unii": "AN924793RM"
+      },
+      "gsrs": {
+        "substance_name": "ANNONA MURICATA WHOLE",
+        "substance_class": "structurallyDiverse",
+        "cfr_sections": [],
+        "dsld_count": null,
+        "dsld_info_raw": null,
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      }
     },
     {
       "standard_name": "Green Coffee Bean",
@@ -2741,7 +4030,9 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": "C5769444",
+      "external_ids": {}
     },
     {
       "standard_name": "Green Tea",
@@ -2769,7 +4060,74 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": "C0039400",
+      "external_ids": {
+        "unii": "W2ZU1RY8B0"
+      },
+      "rxcui": "659476",
+      "gsrs": {
+        "substance_name": "GREEN TEA LEAF",
+        "substance_class": "structurallyDiverse",
+        "cfr_sections": [],
+        "dsld_count": 3408,
+        "dsld_info_raw": "Dietary Supplement Label Database|Botanical|Green Tea | 1173 (Number of products:3408)",
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": [
+          {
+            "type": "METABOLITE->PARENT",
+            "name": "4'-METHYL-EPIGALLOCATECHIN-7-GLUCURONIDE",
+            "unii": "P0PUY7ZN10"
+          },
+          {
+            "type": "METABOLITE ACTIVE->PARENT",
+            "name": "EPIGALLOCATECHIN-3'-GLUCURONIDE",
+            "unii": "2A0M9HOF8Z"
+          },
+          {
+            "type": "METABOLITE->PARENT",
+            "name": "4''-METHYLEPIGALLOCATECHIN GALLATE",
+            "unii": "CUX41G3911"
+          },
+          {
+            "type": "METABOLITE->PARENT",
+            "name": "(-)-5-(3',4',5'-TRIHYDROXYPHENYL)-.GAMMA.-VALEROLACTONE-3'-O-GLUCURONIDE",
+            "unii": "5V7UMP8U9N"
+          },
+          {
+            "type": "METABOLITE->PARENT",
+            "name": "4'-METHYLEPICATECHIN-7-SULFATE",
+            "unii": "K37MX49C8A"
+          },
+          {
+            "type": "METABOLITE->PARENT",
+            "name": "(-)-5-(3',4',5'-TRIHYDROXYPHENYL)-.GAMMA.-VALEROLACTONE-4'-O-GLUCURONIDE",
+            "unii": "F2SE234RYL"
+          },
+          {
+            "type": "METABOLITE->PARENT",
+            "name": "(-)-5-(3',4'-DIHYDROXYPHENYL)-.GAMMA.-VALEROLACTONE-3'-O-METHYL-4'-O-GLUCURONIDE",
+            "unii": "63YB4Q4ZT8"
+          },
+          {
+            "type": "METABOLITE->PARENT",
+            "name": "(-)-5-(3',4'-DIHYDROXYPHENYL)-.GAMMA.-VALEROLACTONE-4'-O-GLUCURONIDE",
+            "unii": "S7BDH68T3E"
+          },
+          {
+            "type": "METABOLITE ACTIVE->PARENT",
+            "name": "EPIGALLOCATECHIN-7-GLUCURONIDE",
+            "unii": "629O3H07D9"
+          },
+          {
+            "type": "METABOLITE->PARENT",
+            "name": "4-HYDROXY-5-(3',5'-DIHYDROXYPHENYL)-.GAMMA.-VALERIC ACID-3'-O-SULFATE",
+            "unii": "HBN8B5WQK9"
+          }
+        ]
+      }
     },
     {
       "standard_name": "Guarana",
@@ -2793,7 +4151,23 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "external_ids": {
+        "unii": "52U584F1CA"
+      },
+      "rxcui": "236953",
+      "gsrs": {
+        "substance_name": "GUARANA",
+        "substance_class": "structurallyDiverse",
+        "cfr_sections": [],
+        "dsld_count": 646,
+        "dsld_info_raw": "Dietary Supplement Label Database|Botanical|Guarana | 455 (Number of products:646)",
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      },
+      "CUI": "C0330979"
     },
     {
       "standard_name": "Gymnema Sylvestre",
@@ -2815,7 +4189,11 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": "C0937629",
+      "external_ids": {},
+      "rxcui": null,
+      "gsrs": null
     },
     {
       "standard_name": "Gynostemma",
@@ -2838,7 +4216,22 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": "C0950016",
+      "external_ids": {
+        "unii": "CHC1JS541R"
+      },
+      "gsrs": {
+        "substance_name": "GYNOSTEMMA PENTAPHYLLUM WHOLE",
+        "substance_class": "structurallyDiverse",
+        "cfr_sections": [],
+        "dsld_count": null,
+        "dsld_info_raw": null,
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      }
     },
     {
       "standard_name": "Hawthorn",
@@ -2865,7 +4258,9 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": "C0600416",
+      "external_ids": {}
     },
     {
       "standard_name": "He Shou Wu",
@@ -2889,7 +4284,10 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "external_ids": {},
+      "gsrs": null,
+      "CUI": "C1031603"
     },
     {
       "standard_name": "Hibiscus Extract",
@@ -2914,7 +4312,22 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "external_ids": {
+        "unii": "UH3Z91Y49Y"
+      },
+      "gsrs": {
+        "substance_name": "HIBISCUS SABDARIFFA WHOLE",
+        "substance_class": "structurallyDiverse",
+        "cfr_sections": [],
+        "dsld_count": null,
+        "dsld_info_raw": null,
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      },
+      "CUI": "C1207898"
     },
     {
       "standard_name": "Holy Basil",
@@ -2941,7 +4354,22 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": "C1483721",
+      "external_ids": {
+        "unii": "SCJ765569P"
+      },
+      "gsrs": {
+        "substance_name": "HOLY BASIL LEAF",
+        "substance_class": "structurallyDiverse",
+        "cfr_sections": [],
+        "dsld_count": 489,
+        "dsld_info_raw": "Dietary Supplement Label Database|Botanical|Holy Basil | 2220 (Number of products:489)",
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      }
     },
     {
       "standard_name": "Hops",
@@ -2965,7 +4393,23 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "external_ids": {
+        "unii": "01G73H6H83"
+      },
+      "rxcui": "259266",
+      "gsrs": {
+        "substance_name": "HOPS",
+        "substance_class": "structurallyDiverse",
+        "cfr_sections": [],
+        "dsld_count": 432,
+        "dsld_info_raw": "Dietary Supplement Label Database|Botanical|Hops | 466 (Number of products:432)",
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      },
+      "CUI": "C0330543"
     },
     {
       "standard_name": "Horny Goat Weed",
@@ -2987,7 +4431,9 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": "C3484548",
+      "external_ids": {}
     },
     {
       "standard_name": "Horsetail",
@@ -3009,7 +4455,9 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": "C0331745",
+      "external_ids": {}
     },
     {
       "standard_name": "Huperzine A",
@@ -3029,7 +4477,37 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "external_ids": {
+        "unii": "0111871I23",
+        "cas": "102518-79-6",
+        "pubchem_cid": 854026
+      },
+      "rxcui": "2267703",
+      "gsrs": {
+        "substance_name": "HUPERZINE A",
+        "substance_class": "chemical",
+        "cfr_sections": [],
+        "dsld_count": 266,
+        "dsld_info_raw": "Dietary Supplement Label Database|chemical|Huperzine | 3336 (Number of products:266)",
+        "active_moiety": null,
+        "salt_parents": [
+          {
+            "type": "SALT/SOLVATE->PARENT",
+            "name": "HUPERZINE A MONOHYDRATE",
+            "unii": "9F4GM58TAA"
+          }
+        ],
+        "metabolic_relationships": [
+          {
+            "type": "TARGET->INHIBITOR",
+            "name": "ACETYLCHOLINESTERASE HUMAN",
+            "unii": "EK71H4HC3N"
+          }
+        ],
+        "metabolites": []
+      },
+      "CUI": "C0063033"
     },
     {
       "standard_name": "Inulin",
@@ -3050,7 +4528,14 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "external_ids": {
+        "cas": "53188-23-1",
+        "pubchem_cid": 439709
+      },
+      "rxcui": null,
+      "gsrs": null,
+      "CUI": "C0021936"
     },
     {
       "standard_name": "Kale",
@@ -3074,7 +4559,22 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": "C3859186",
+      "external_ids": {
+        "unii": "0Y3L4J38H1"
+      },
+      "gsrs": {
+        "substance_name": "KALE",
+        "substance_class": "structurallyDiverse",
+        "cfr_sections": [],
+        "dsld_count": 871,
+        "dsld_info_raw": "Dietary Supplement Label Database|botanical|Kale | 2285 (Number of products:871)",
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      }
     },
     {
       "standard_name": "Kanna",
@@ -3096,7 +4596,22 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": "C1004696",
+      "external_ids": {
+        "unii": "U1F438235Z"
+      },
+      "gsrs": {
+        "substance_name": "CHANNA, UNSPECIFIED",
+        "substance_class": "mixture",
+        "cfr_sections": [],
+        "dsld_count": null,
+        "dsld_info_raw": null,
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      }
     },
     {
       "standard_name": "Kelp",
@@ -3117,7 +4632,12 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": "C0939804",
+      "external_ids": {
+        "cas": "68844-77-9",
+        "pubchem_cid": 2247
+      }
     },
     {
       "standard_name": "KeraGLO",
@@ -3134,7 +4654,9 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": null,
+      "external_ids": {}
     },
     {
       "standard_name": "Kola Nut",
@@ -3157,7 +4679,23 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": "C1572690",
+      "external_ids": {
+        "unii": "PQM9SA369U"
+      },
+      "rxcui": "1307946",
+      "gsrs": {
+        "substance_name": "COLA NUT",
+        "substance_class": "structurallyDiverse",
+        "cfr_sections": [],
+        "dsld_count": 46,
+        "dsld_info_raw": "Dietary Supplement Label Database|Botanical|cola nut | 446 (Number of products:46)",
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      }
     },
     {
       "standard_name": "KSM-66 Ashwagandha",
@@ -3178,7 +4716,9 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": null,
+      "external_ids": {}
     },
     {
       "standard_name": "Kudzu",
@@ -3201,7 +4741,9 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": "C5779733",
+      "external_ids": {}
     },
     {
       "standard_name": "L-Theanine",
@@ -3222,7 +4764,31 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "external_ids": {
+        "unii": "8021PR16QO",
+        "cas": "3081-61-6",
+        "pubchem_cid": 439378
+      },
+      "rxcui": "38022",
+      "gsrs": {
+        "substance_name": "THEANINE",
+        "substance_class": "chemical",
+        "cfr_sections": [],
+        "dsld_count": 983,
+        "dsld_info_raw": "Dietary Supplement Label Database|Amino Acid|Theanine | 607 (Number of products:983)",
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [
+          {
+            "type": "TARGET->INHIBITOR",
+            "name": "AMPA-SELECTIVE GLUTAMATE RECEPTOR 2",
+            "unii": "P6W5IXV8V9"
+          }
+        ],
+        "metabolites": []
+      },
+      "CUI": "C0076380"
     },
     {
       "standard_name": "Lavender",
@@ -3246,7 +4812,9 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": "C1623196",
+      "external_ids": {}
     },
     {
       "standard_name": "Lemon Balm",
@@ -3270,7 +4838,10 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": "C1008143",
+      "external_ids": {},
+      "gsrs": null
     },
     {
       "standard_name": "Levagen",
@@ -3287,7 +4858,25 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "external_ids": {
+        "cas": "544-31-0",
+        "pubchem_cid": 4671,
+        "unii": "6R8T1UDM3V"
+      },
+      "rxcui": "2001986",
+      "gsrs": {
+        "substance_name": "PALMIDROL",
+        "substance_class": "chemical",
+        "cfr_sections": [],
+        "dsld_count": 10,
+        "dsld_info_raw": "Dietary Supplement Label Database|TBD|Palmitoylethanolamide | 4007 (Number of products:10)",
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      },
+      "CUI": null
     },
     {
       "standard_name": "Licorice",
@@ -3316,7 +4905,26 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": "C0086555",
+      "external_ids": {
+        "unii": "61ZBX54883"
+      },
+      "rxcui": "42769",
+      "gsrs": {
+        "substance_name": "LICORICE",
+        "substance_class": "mixture",
+        "cfr_sections": [
+          "21 CFR 184.1408",
+          "21 CFR 310.528"
+        ],
+        "dsld_count": 1613,
+        "dsld_info_raw": "Dietary Supplement Label Database|Botanical|Licorice | 33 (Number of products:1613)",
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      }
     },
     {
       "standard_name": "Life's DHA",
@@ -3334,7 +4942,9 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": null,
+      "external_ids": {}
     },
     {
       "standard_name": "Linden Flower",
@@ -3356,7 +4966,23 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": "C0771627",
+      "external_ids": {
+        "unii": "CFN6G1F6YK"
+      },
+      "rxcui": "1307716",
+      "gsrs": {
+        "substance_name": "TILIA CORDATA FLOWER",
+        "substance_class": "structurallyDiverse",
+        "cfr_sections": [],
+        "dsld_count": null,
+        "dsld_info_raw": null,
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      }
     },
     {
       "standard_name": "Lion's Mane",
@@ -3384,7 +5010,10 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": "C1001731",
+      "external_ids": {},
+      "gsrs": null
     },
     {
       "standard_name": "Lutemax 2020",
@@ -3406,7 +5035,9 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": null,
+      "external_ids": {}
     },
     {
       "standard_name": "Maca",
@@ -3433,7 +5064,23 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": "C1095918",
+      "external_ids": {
+        "unii": "HP7119212T"
+      },
+      "rxcui": "1307638",
+      "gsrs": {
+        "substance_name": "LEPIDIUM MEYENII ROOT",
+        "substance_class": "structurallyDiverse",
+        "cfr_sections": [],
+        "dsld_count": 792,
+        "dsld_info_raw": "Dietary Supplement Label Database|Botanical|Maca | 163 (Number of products:792)",
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      }
     },
     {
       "standard_name": "Magnolia Bark",
@@ -3456,7 +5103,23 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "external_ids": {
+        "unii": "5M609NV974"
+      },
+      "rxcui": "1307853",
+      "gsrs": {
+        "substance_name": "MAGNOLIA OFFICINALIS BARK",
+        "substance_class": "structurallyDiverse",
+        "cfr_sections": [],
+        "dsld_count": null,
+        "dsld_info_raw": null,
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      },
+      "CUI": "C1572661"
     },
     {
       "standard_name": "Maitake",
@@ -3481,7 +5144,22 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": "C0319804",
+      "external_ids": {
+        "unii": "A1U5YJI0Z8"
+      },
+      "gsrs": {
+        "substance_name": "MAITAKE",
+        "substance_class": "structurallyDiverse",
+        "cfr_sections": [],
+        "dsld_count": null,
+        "dsld_info_raw": null,
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      }
     },
     {
       "standard_name": "Mallow",
@@ -3503,7 +5181,11 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "external_ids": {},
+      "rxcui": null,
+      "gsrs": null,
+      "CUI": "C1254223"
     },
     {
       "standard_name": "Maqui Berry",
@@ -3526,7 +5208,22 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": "C1067051",
+      "external_ids": {
+        "unii": "PSW0238Q5L"
+      },
+      "gsrs": {
+        "substance_name": "ARISTOTELIA CHILENSIS WHOLE",
+        "substance_class": "structurallyDiverse",
+        "cfr_sections": [],
+        "dsld_count": null,
+        "dsld_info_raw": null,
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      }
     },
     {
       "standard_name": "Marigold",
@@ -3549,7 +5246,23 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "external_ids": {
+        "unii": "18E7415PXQ"
+      },
+      "rxcui": "1309775",
+      "gsrs": {
+        "substance_name": "CALENDULA OFFICINALIS FLOWERING TOP",
+        "substance_class": "structurallyDiverse",
+        "cfr_sections": [],
+        "dsld_count": null,
+        "dsld_info_raw": null,
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      },
+      "CUI": "C1145747"
     },
     {
       "standard_name": "Marshmallow Root",
@@ -3572,7 +5285,23 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": "C0873109",
+      "external_ids": {
+        "unii": "TRW2FUF47H"
+      },
+      "rxcui": "1306165",
+      "gsrs": {
+        "substance_name": "ALTHAEA OFFICINALIS ROOT",
+        "substance_class": "structurallyDiverse",
+        "cfr_sections": [],
+        "dsld_count": null,
+        "dsld_info_raw": null,
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      }
     },
     {
       "standard_name": "MicroActive Melatonin",
@@ -3589,7 +5318,11 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "external_ids": {},
+      "rxcui": null,
+      "gsrs": null,
+      "CUI": null
     },
     {
       "standard_name": "Milk Thistle",
@@ -3616,7 +5349,23 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": "C0331428",
+      "external_ids": {
+        "unii": "U946SH95EE"
+      },
+      "rxcui": "350520",
+      "gsrs": {
+        "substance_name": "MILK THISTLE",
+        "substance_class": "structurallyDiverse",
+        "cfr_sections": [],
+        "dsld_count": 1563,
+        "dsld_info_raw": "Dietary Supplement Label Database|Botanical|Milk Thistle | 652 (Number of products:1563)",
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      }
     },
     {
       "standard_name": "Mistletoe",
@@ -3639,7 +5388,11 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "external_ids": {},
+      "rxcui": null,
+      "gsrs": null,
+      "CUI": "C0042785"
     },
     {
       "standard_name": "Moringa",
@@ -3661,7 +5414,11 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": "C5981468",
+      "external_ids": {},
+      "rxcui": null,
+      "gsrs": null
     },
     {
       "standard_name": "Morosil",
@@ -3678,7 +5435,11 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "external_ids": {},
+      "rxcui": null,
+      "gsrs": null,
+      "CUI": null
     },
     {
       "standard_name": "Mucuna Pruriens",
@@ -3702,7 +5463,22 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": "C1082338",
+      "external_ids": {
+        "unii": "2JN37DC03A"
+      },
+      "gsrs": {
+        "substance_name": "MUCUNA PRURIENS WHOLE",
+        "substance_class": "structurallyDiverse",
+        "cfr_sections": [],
+        "dsld_count": null,
+        "dsld_info_raw": null,
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      }
     },
     {
       "standard_name": "Muira Puama",
@@ -3725,7 +5501,10 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": "C1136294",
+      "external_ids": {},
+      "gsrs": null
     },
     {
       "standard_name": "Mulberry",
@@ -3748,7 +5527,22 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": "C0330540",
+      "external_ids": {
+        "unii": "MN25R0HH5A"
+      },
+      "gsrs": {
+        "substance_name": "WHITE MULBERRY",
+        "substance_class": "structurallyDiverse",
+        "cfr_sections": [],
+        "dsld_count": 86,
+        "dsld_info_raw": "Dietary Supplement Label Database|Botanical|White Mulberry | 1878 (Number of products:86)",
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      }
     },
     {
       "standard_name": "Mullein",
@@ -3771,7 +5565,10 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": "C0885014",
+      "external_ids": {},
+      "gsrs": null
     },
     {
       "standard_name": "Mulungu",
@@ -3793,7 +5590,22 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "external_ids": {
+        "unii": "NU815YHH1S"
+      },
+      "gsrs": {
+        "substance_name": "ERYTHRINA STRICTA WHOLE",
+        "substance_class": "structurallyDiverse",
+        "cfr_sections": [],
+        "dsld_count": null,
+        "dsld_info_raw": null,
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      },
+      "CUI": "C0996829"
     },
     {
       "standard_name": "Nettle",
@@ -3817,7 +5629,22 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": "C0600609",
+      "external_ids": {
+        "unii": "710FLW4U46"
+      },
+      "gsrs": {
+        "substance_name": "URTICA DIOICA WHOLE",
+        "substance_class": "structurallyDiverse",
+        "cfr_sections": [],
+        "dsld_count": null,
+        "dsld_info_raw": null,
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      }
     },
     {
       "standard_name": "NeuroFactor",
@@ -3841,7 +5668,9 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": "C5445257",
+      "external_ids": {}
     },
     {
       "standard_name": "Olive Fruit",
@@ -3863,7 +5692,9 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": "C1365464",
+      "external_ids": {}
     },
     {
       "standard_name": "Olive Leaf",
@@ -3886,7 +5717,11 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": "C3255786",
+      "external_ids": {},
+      "rxcui": null,
+      "gsrs": null
     },
     {
       "standard_name": "Olive Leaf Extract",
@@ -3910,7 +5745,11 @@
       "min_threshold": 20,
       "recommended_activity": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "external_ids": {},
+      "rxcui": null,
+      "gsrs": null,
+      "CUI": "C1364955"
     },
     {
       "standard_name": "Onion",
@@ -3933,7 +5772,25 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "external_ids": {
+        "unii": "492225Q21H"
+      },
+      "rxcui": "1370469",
+      "gsrs": {
+        "substance_name": "ONION",
+        "substance_class": "structurallyDiverse",
+        "cfr_sections": [
+          "21 CFR 102.39"
+        ],
+        "dsld_count": 324,
+        "dsld_info_raw": "Dietary Supplement Label Database|Botanical|onion | 62 (Number of products:324)",
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      },
+      "CUI": "C2740652"
     },
     {
       "standard_name": "OptiBerry",
@@ -3954,7 +5811,9 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": null,
+      "external_ids": {}
     },
     {
       "standard_name": "Oregano",
@@ -3978,7 +5837,23 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": "C0946715",
+      "external_ids": {
+        "unii": "0E5AT8T16U"
+      },
+      "rxcui": "1010965",
+      "gsrs": {
+        "substance_name": "OREGANO",
+        "substance_class": "structurallyDiverse",
+        "cfr_sections": [],
+        "dsld_count": 467,
+        "dsld_info_raw": "Dietary Supplement Label Database|Botanical|oregano | 312 (Number of products:467)",
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      }
     },
     {
       "standard_name": "Organic Gold Standard Potentiating Nutrients",
@@ -3995,7 +5870,9 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": null,
+      "external_ids": {}
     },
     {
       "standard_name": "Pacran",
@@ -4015,7 +5892,9 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": null,
+      "external_ids": {}
     },
     {
       "standard_name": "Panax Ginseng",
@@ -4044,7 +5923,10 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": "C1119918",
+      "external_ids": {},
+      "gsrs": null
     },
     {
       "standard_name": "Passionflower",
@@ -4070,7 +5952,22 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": "C3486840",
+      "external_ids": {
+        "unii": "CLF5YFS11O"
+      },
+      "gsrs": {
+        "substance_name": "PASSIFLORA INCARNATA FLOWERING TOP",
+        "substance_class": "structurallyDiverse",
+        "cfr_sections": [],
+        "dsld_count": null,
+        "dsld_info_raw": null,
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      }
     },
     {
       "standard_name": "Pelargonium Sidoides",
@@ -4094,7 +5991,11 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": "C3779996",
+      "external_ids": {},
+      "rxcui": null,
+      "gsrs": null
     },
     {
       "standard_name": "Peppermint",
@@ -4119,7 +6020,23 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": "C0697157",
+      "external_ids": {
+        "unii": "V95R5KMY2B"
+      },
+      "rxcui": "1010971",
+      "gsrs": {
+        "substance_name": "PEPPERMINT",
+        "substance_class": "structurallyDiverse",
+        "cfr_sections": [],
+        "dsld_count": 594,
+        "dsld_info_raw": "Dietary Supplement Label Database|Botanical|Peppermint | 2119 (Number of products:594)",
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      }
     },
     {
       "standard_name": "Peppermint Essential Oil",
@@ -4143,7 +6060,9 @@
       "min_threshold": null,
       "recommended_activity": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": "C0070325",
+      "external_ids": {}
     },
     {
       "standard_name": "Phosphatidylserine",
@@ -4165,7 +6084,25 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "external_ids": {
+        "unii": "394XK0IH40",
+        "cas": "1446756-47-3",
+        "pubchem_cid": 9547096
+      },
+      "rxcui": "89959",
+      "gsrs": {
+        "substance_name": "PHOSPHATIDYL SERINE",
+        "substance_class": "chemical",
+        "cfr_sections": [],
+        "dsld_count": 644,
+        "dsld_info_raw": "Dietary Supplement Label Database|fat|Phosphatidylserine | 91 (Number of products:644)",
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      },
+      "CUI": "C0301704"
     },
     {
       "standard_name": "Pine Bark Extract",
@@ -4189,7 +6126,23 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "external_ids": {
+        "unii": "50JZ5Z98QY"
+      },
+      "rxcui": "1368708",
+      "gsrs": {
+        "substance_name": "MARITIME PINE",
+        "substance_class": "structurallyDiverse",
+        "cfr_sections": [],
+        "dsld_count": 77,
+        "dsld_info_raw": "Dietary Supplement Label Database|Botanical|Pycnogenol | 104 (Number of products:77)",
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      },
+      "CUI": "C3255957"
     },
     {
       "standard_name": "Polygala",
@@ -4211,7 +6164,9 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": "C0997031",
+      "external_ids": {}
     },
     {
       "standard_name": "Pomegranate",
@@ -4235,7 +6190,23 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": "C1509685",
+      "external_ids": {
+        "unii": "56687D1Z4D"
+      },
+      "rxcui": "725206",
+      "gsrs": {
+        "substance_name": "POMEGRANATE",
+        "substance_class": "structurallyDiverse",
+        "cfr_sections": [],
+        "dsld_count": 1436,
+        "dsld_info_raw": "Dietary Supplement Label Database|Botanical|Pomegranate | 105 (Number of products:1436)",
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      }
     },
     {
       "standard_name": "Prickly Pear",
@@ -4258,7 +6229,9 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": "C0949996",
+      "external_ids": {}
     },
     {
       "standard_name": "Proanthoplex",
@@ -4275,7 +6248,9 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": null,
+      "external_ids": {}
     },
     {
       "standard_name": "Propolis",
@@ -4303,7 +6278,23 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "external_ids": {
+        "unii": "6Y8XYV2NOF"
+      },
+      "rxcui": "1311659",
+      "gsrs": {
+        "substance_name": "PROPOLIS WAX",
+        "substance_class": "structurallyDiverse",
+        "cfr_sections": [],
+        "dsld_count": 205,
+        "dsld_info_raw": "Dietary Supplement Label Database|Botanical|Propolis | 1666 (Number of products:205)",
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      },
+      "CUI": "C0033488"
     },
     {
       "standard_name": "Psyllium",
@@ -4324,7 +6315,13 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": "C0033979",
+      "external_ids": {
+        "cas": "38232-03-0",
+        "pubchem_cid": 181572
+      },
+      "gsrs": null
     },
     {
       "standard_name": "Pumpkin Seed",
@@ -4348,7 +6345,23 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": "C0487824",
+      "external_ids": {
+        "unii": "GH30P1VXK2"
+      },
+      "rxcui": "126291",
+      "gsrs": {
+        "substance_name": "PUMPKIN SEED",
+        "substance_class": "structurallyDiverse",
+        "cfr_sections": [],
+        "dsld_count": null,
+        "dsld_info_raw": null,
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      }
     },
     {
       "standard_name": "Pycnogenol",
@@ -4370,7 +6383,23 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "external_ids": {
+        "unii": "50JZ5Z98QY"
+      },
+      "rxcui": "1368708",
+      "gsrs": {
+        "substance_name": "MARITIME PINE",
+        "substance_class": "structurallyDiverse",
+        "cfr_sections": [],
+        "dsld_count": 77,
+        "dsld_info_raw": "Dietary Supplement Label Database|Botanical|Pycnogenol | 104 (Number of products:77)",
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      },
+      "CUI": "C0072642"
     },
     {
       "standard_name": "Pygeum",
@@ -4393,7 +6422,23 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "external_ids": {
+        "unii": "709HYI14M4"
+      },
+      "rxcui": "580117",
+      "gsrs": {
+        "substance_name": "PYGEUM",
+        "substance_class": "structurallyDiverse",
+        "cfr_sections": [],
+        "dsld_count": 306,
+        "dsld_info_raw": "Dietary Supplement Label Database|Botanical|Pygeum | 148 (Number of products:306)",
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      },
+      "CUI": "C1620942"
     },
     {
       "standard_name": "Quercetin",
@@ -4415,7 +6460,31 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "external_ids": {
+        "unii": "9IKM0I5T1E",
+        "cas": "117-39-5",
+        "pubchem_cid": 5280343
+      },
+      "rxcui": "9060",
+      "gsrs": {
+        "substance_name": "QUERCETIN",
+        "substance_class": "chemical",
+        "cfr_sections": [],
+        "dsld_count": 1551,
+        "dsld_info_raw": "Dietary Supplement Label Database|Botanical|Quercetin | 1099 (Number of products:1551)",
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": [
+          {
+            "type": "METABOLITE->PARENT",
+            "name": "QUERCETIN 3-SULFATE",
+            "unii": "XSS6HSA3AJ"
+          }
+        ]
+      },
+      "CUI": "C0034392"
     },
     {
       "standard_name": "Red Clover",
@@ -4439,7 +6508,22 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": "C0330783",
+      "external_ids": {
+        "unii": "L9153EKV2Y"
+      },
+      "gsrs": {
+        "substance_name": "RED CLOVER",
+        "substance_class": "structurallyDiverse",
+        "cfr_sections": [],
+        "dsld_count": 498,
+        "dsld_info_raw": "Dietary Supplement Label Database|Botanical|Red Clover | 112 (Number of products:498)",
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      }
     },
     {
       "standard_name": "Rehmannia",
@@ -4461,7 +6545,11 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "external_ids": {},
+      "rxcui": null,
+      "gsrs": null,
+      "CUI": "C1382907"
     },
     {
       "standard_name": "Reishi",
@@ -4489,7 +6577,22 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": "C1095914",
+      "external_ids": {
+        "unii": "TKD8LH0X2Z"
+      },
+      "gsrs": {
+        "substance_name": "REISHI",
+        "substance_class": "structurallyDiverse",
+        "cfr_sections": [],
+        "dsld_count": 860,
+        "dsld_info_raw": "Dietary Supplement Label Database|Botanical|Reishi mushroom | 327 (Number of products:860)",
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      }
     },
     {
       "standard_name": "Resveratrol",
@@ -4514,7 +6617,67 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "external_ids": {
+        "unii": "Q369O8926L",
+        "cas": "501-36-0",
+        "pubchem_cid": 445154
+      },
+      "rxcui": "1000492",
+      "gsrs": {
+        "substance_name": "Resveratrol",
+        "substance_class": "chemical",
+        "cfr_sections": [],
+        "dsld_count": 1077,
+        "dsld_info_raw": "Dietary Supplement Label Database|Chemical|Resveratrol | 438 (Number of products:1077)",
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [
+          {
+            "type": "TARGET->INHIBITOR",
+            "name": "CAMP-SPECIFIC 3',5'-CYCLIC PHOSPHODIESTERASE PDE4A1",
+            "unii": "0FY8X1RL72"
+          },
+          {
+            "type": "METABOLIC ENZYME->SUBSTRATE",
+            "name": "CYTOCHROME P450 1B1",
+            "unii": "0OZF0UI2AQ"
+          },
+          {
+            "type": "METABOLIC ENZYME->INHIBITOR",
+            "name": "CYTOCHROME P450 3A4",
+            "unii": "PUO0521HZV"
+          },
+          {
+            "type": "TARGET->INHIBITOR",
+            "name": "CALCIUM/CALMODULIN-DEPENDENT 3',5'-CYCLIC NUCLEOTIDE PHOSPHODIESTERASE 1A",
+            "unii": "ZTU32AE62N"
+          },
+          {
+            "type": "TARGET->INHIBITOR",
+            "name": "CGMP-INHIBITED 3',5'-CYCLIC PHOSPHODIESTERASE A",
+            "unii": "JOC85XIO65"
+          }
+        ],
+        "metabolites": [
+          {
+            "type": "METABOLITE->PARENT",
+            "name": "LUNULARIN",
+            "unii": "AXG9EP247C"
+          },
+          {
+            "type": "METABOLITE->PARENT",
+            "name": "RESVERATROL-3-SULFATE",
+            "unii": "HF1O6B8YOW"
+          },
+          {
+            "type": "METABOLITE->PARENT",
+            "name": "PICEATANNOL",
+            "unii": "6KS3LS0D4F"
+          }
+        ]
+      },
+      "CUI": "C0073096"
     },
     {
       "standard_name": "Rhodiola",
@@ -4541,7 +6704,9 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": "C0950013",
+      "external_ids": {}
     },
     {
       "standard_name": "Rooibos",
@@ -4563,7 +6728,23 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "external_ids": {
+        "unii": "O17JQA1A9Z"
+      },
+      "rxcui": "1653340",
+      "gsrs": {
+        "substance_name": "ASPALATHUS LINEARIS WHOLE",
+        "substance_class": "structurallyDiverse",
+        "cfr_sections": [],
+        "dsld_count": null,
+        "dsld_info_raw": null,
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      },
+      "CUI": "C1074162"
     },
     {
       "standard_name": "Rosehip",
@@ -4585,7 +6766,11 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": "C1030673",
+      "external_ids": {},
+      "rxcui": null,
+      "gsrs": null
     },
     {
       "standard_name": "Rosemary",
@@ -4609,7 +6794,23 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "external_ids": {
+        "unii": "IJ67X351P9"
+      },
+      "rxcui": "317702",
+      "gsrs": {
+        "substance_name": "ROSEMARY",
+        "substance_class": "structurallyDiverse",
+        "cfr_sections": [],
+        "dsld_count": 529,
+        "dsld_info_raw": "Dietary Supplement Label Database|Botanical|Rosemary | 1189 (Number of products:529)",
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      },
+      "CUI": "C0939869"
     },
     {
       "standard_name": "Saffron",
@@ -4636,7 +6837,22 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "external_ids": {
+        "unii": "E849G4X5YJ"
+      },
+      "gsrs": {
+        "substance_name": "SAFFRON",
+        "substance_class": "structurallyDiverse",
+        "cfr_sections": [],
+        "dsld_count": 112,
+        "dsld_info_raw": "Dietary Supplement Label Database|Botanical|Saffron | 460 (Number of products:112)",
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      },
+      "CUI": "C0376238"
     },
     {
       "standard_name": "Salvia Miltiorrhiza",
@@ -4658,7 +6874,24 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": "C0696940",
+      "external_ids": {
+        "unii": "714783Y9Z0",
+        "cas": "96574-01-5",
+        "pubchem_cid": 5281793
+      },
+      "gsrs": {
+        "substance_name": "SALVIA MILTIORRHIZA WHOLE",
+        "substance_class": "structurallyDiverse",
+        "cfr_sections": [],
+        "dsld_count": null,
+        "dsld_info_raw": null,
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      }
     },
     {
       "standard_name": "Sarsaparilla",
@@ -4683,7 +6916,9 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": "C1014795",
+      "external_ids": {}
     },
     {
       "standard_name": "Saw Palmetto",
@@ -4713,7 +6948,23 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": "C4082853",
+      "external_ids": {
+        "unii": "J7WWH9M8QS"
+      },
+      "rxcui": "350488",
+      "gsrs": {
+        "substance_name": "SAW PALMETTO",
+        "substance_class": "structurallyDiverse",
+        "cfr_sections": [],
+        "dsld_count": 1164,
+        "dsld_info_raw": "Dietary Supplement Label Database|Botanical|Saw Palmetto | 121 (Number of products:1164)",
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      }
     },
     {
       "standard_name": "Schisandra",
@@ -4735,7 +6986,9 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": "C1081320",
+      "external_ids": {}
     },
     {
       "standard_name": "Sea Buckthorn",
@@ -4764,7 +7017,10 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": "C1013835",
+      "external_ids": {},
+      "gsrs": null
     },
     {
       "standard_name": "Setria",
@@ -4781,7 +7037,9 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": null,
+      "external_ids": {}
     },
     {
       "standard_name": "Sharp-PS Green",
@@ -4800,7 +7058,9 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": null,
+      "external_ids": {}
     },
     {
       "standard_name": "Shatavari",
@@ -4823,7 +7083,22 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": "C3496584",
+      "external_ids": {
+        "unii": "Y8P1YR4920"
+      },
+      "gsrs": {
+        "substance_name": "ASPARAGUS RACEMOSUS ROOT",
+        "substance_class": "structurallyDiverse",
+        "cfr_sections": [],
+        "dsld_count": null,
+        "dsld_info_raw": null,
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      }
     },
     {
       "standard_name": "Shiitake",
@@ -4846,7 +7121,22 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": "C0752328",
+      "external_ids": {
+        "unii": "1A64QN2D2F"
+      },
+      "gsrs": {
+        "substance_name": "SHIITAKE MUSHROOM",
+        "substance_class": "structurallyDiverse",
+        "cfr_sections": [],
+        "dsld_count": 321,
+        "dsld_info_raw": "Dietary Supplement Label Database|other|Shiitake Mushroom | 2634 (Number of products:321)",
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      }
     },
     {
       "standard_name": "Shilajit",
@@ -4873,7 +7163,12 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": "C0066936",
+      "external_ids": {
+        "cas": "479-66-3",
+        "pubchem_cid": 5359407
+      }
     },
     {
       "standard_name": "Shogaols",
@@ -4898,7 +7193,10 @@
       "min_threshold": null,
       "recommended_activity": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "external_ids": {},
+      "gsrs": null,
+      "CUI": "C0074460"
     },
     {
       "standard_name": "Siberian Ginseng",
@@ -4921,7 +7219,10 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": "C1035215",
+      "external_ids": {},
+      "gsrs": null
     },
     {
       "standard_name": "Slendesta",
@@ -4943,7 +7244,9 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": "C1414370",
+      "external_ids": {}
     },
     {
       "standard_name": "Slimbione",
@@ -4960,7 +7263,9 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": null,
+      "external_ids": {}
     },
     {
       "standard_name": "Slippery Elm",
@@ -4982,7 +7287,22 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "external_ids": {
+        "unii": "63POE2M46Y"
+      },
+      "gsrs": {
+        "substance_name": "ELM",
+        "substance_class": "structurallyDiverse",
+        "cfr_sections": [],
+        "dsld_count": 528,
+        "dsld_info_raw": "Dietary Supplement Label Database|Botanical|Slippery Elm | 601 (Number of products:528)",
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      },
+      "CUI": "C0330532"
     },
     {
       "standard_name": "Soy Isoflavones",
@@ -5006,7 +7326,24 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": "C4076257",
+      "external_ids": {
+        "unii": "71B37NR06D",
+        "cas": "331752-69-3",
+        "pubchem_cid": 70267806
+      },
+      "gsrs": {
+        "substance_name": "SOY ISOFLAVONES",
+        "substance_class": "mixture",
+        "cfr_sections": [],
+        "dsld_count": 28,
+        "dsld_info_raw": "Dietary Supplement Label Database|Chemical|Soy Isoflavones | 1744 (Number of products:28)",
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      }
     },
     {
       "standard_name": "Spinach",
@@ -5030,7 +7367,23 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "external_ids": {
+        "unii": "6WO75C6WVB"
+      },
+      "rxcui": "901317",
+      "gsrs": {
+        "substance_name": "SPINACH",
+        "substance_class": "structurallyDiverse",
+        "cfr_sections": [],
+        "dsld_count": 1090,
+        "dsld_info_raw": "Dietary Supplement Label Database|Botanical|Spinach | 1609 (Number of products:1090)",
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      },
+      "CUI": "C2741499"
     },
     {
       "standard_name": "Spirulina",
@@ -5058,7 +7411,23 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": "C1005844",
+      "external_ids": {
+        "unii": "9L3TIH1UUE"
+      },
+      "rxcui": "1321355",
+      "gsrs": {
+        "substance_name": "ARTHROSPIRA PLATENSIS",
+        "substance_class": "structurallyDiverse",
+        "cfr_sections": [],
+        "dsld_count": null,
+        "dsld_info_raw": null,
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      }
     },
     {
       "standard_name": "St. John's Wort",
@@ -5082,7 +7451,14 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": "C0936242",
+      "external_ids": {
+        "cas": "548-04-9",
+        "pubchem_cid": 3663
+      },
+      "rxcui": null,
+      "gsrs": null
     },
     {
       "standard_name": "Suma",
@@ -5103,7 +7479,23 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": "C4025984",
+      "external_ids": {
+        "unii": "KYV09BQ2YN"
+      },
+      "rxcui": "1311512",
+      "gsrs": {
+        "substance_name": "HEBANTHE ERIANTHOS ROOT",
+        "substance_class": "structurallyDiverse",
+        "cfr_sections": [],
+        "dsld_count": null,
+        "dsld_info_raw": null,
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      }
     },
     {
       "standard_name": "SunActive Iron",
@@ -5120,7 +7512,9 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": null,
+      "external_ids": {}
     },
     {
       "standard_name": "Tart Cherry",
@@ -5142,7 +7536,10 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": "C0330657",
+      "external_ids": {},
+      "gsrs": null
     },
     {
       "standard_name": "Thermosil",
@@ -5159,7 +7556,9 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": null,
+      "external_ids": {}
     },
     {
       "standard_name": "Thyme",
@@ -5181,7 +7580,23 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": "C0697238",
+      "external_ids": {
+        "unii": "CW657OBU4N"
+      },
+      "rxcui": "974527",
+      "gsrs": {
+        "substance_name": "THYME",
+        "substance_class": "structurallyDiverse",
+        "cfr_sections": [],
+        "dsld_count": 203,
+        "dsld_info_raw": "Dietary Supplement Label Database|Botanical|Thyme | 1593 (Number of products:203)",
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      }
     },
     {
       "standard_name": "Tongkat Ali",
@@ -5205,7 +7620,22 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": "C1258069",
+      "external_ids": {
+        "unii": "8GOM182CI3"
+      },
+      "gsrs": {
+        "substance_name": "EURYCOMA LONGIFOLIA WHOLE",
+        "substance_class": "structurallyDiverse",
+        "cfr_sections": [],
+        "dsld_count": null,
+        "dsld_info_raw": null,
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      }
     },
     {
       "standard_name": "Tremella",
@@ -5229,7 +7659,11 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "external_ids": {},
+      "rxcui": null,
+      "gsrs": null,
+      "CUI": "C3832720"
     },
     {
       "standard_name": "Tribulus",
@@ -5253,7 +7687,25 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": "C0330897",
+      "external_ids": {
+        "unii": "4X4HLN92OT",
+        "cas": "90131-68-3",
+        "pubchem_cid": 10125785
+      },
+      "rxcui": "1370988",
+      "gsrs": {
+        "substance_name": "TRIBULUS TERRESTRIS WHOLE",
+        "substance_class": "structurallyDiverse",
+        "cfr_sections": [],
+        "dsld_count": 451,
+        "dsld_info_raw": "Dietary Supplement Label Database|Botanical|Tribulus | 2012 (Number of products:451)",
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      }
     },
     {
       "standard_name": "Turkey Tail",
@@ -5279,7 +7731,9 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": "C0319805",
+      "external_ids": {}
     },
     {
       "standard_name": "Turmeric",
@@ -5308,7 +7762,23 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": "C0077524",
+      "external_ids": {
+        "unii": "856YO1Z64F"
+      },
+      "rxcui": "1114883",
+      "gsrs": {
+        "substance_name": "TURMERIC",
+        "substance_class": "structurallyDiverse",
+        "cfr_sections": [],
+        "dsld_count": 2583,
+        "dsld_info_raw": "Dietary Supplement Label Database|Botanical|Turmeric | 48 (Number of products:2583)",
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      }
     },
     {
       "standard_name": "TurmiPure Gold",
@@ -5327,7 +7797,9 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": null,
+      "external_ids": {}
     },
     {
       "standard_name": "Uniflex",
@@ -5344,7 +7816,9 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": null,
+      "external_ids": {}
     },
     {
       "standard_name": "Uva Ursi",
@@ -5365,7 +7839,11 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": "C0770993",
+      "external_ids": {},
+      "rxcui": null,
+      "gsrs": null
     },
     {
       "standard_name": "Valerian",
@@ -5392,7 +7870,23 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": "C0042281",
+      "external_ids": {
+        "unii": "JWF5YAW3QW"
+      },
+      "rxcui": "253206",
+      "gsrs": {
+        "substance_name": "VALERIAN",
+        "substance_class": "structurallyDiverse",
+        "cfr_sections": [],
+        "dsld_count": 679,
+        "dsld_info_raw": "Dietary Supplement Label Database|Botanical|Valerian | 131 (Number of products:679)",
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      }
     },
     {
       "standard_name": "Wellmune",
@@ -5410,7 +7904,9 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": null,
+      "external_ids": {}
     },
     {
       "standard_name": "Wheatgrass",
@@ -5432,7 +7928,22 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": "C1123020",
+      "external_ids": {
+        "unii": "3C3Y389JBU"
+      },
+      "gsrs": {
+        "substance_name": "TRITICUM AESTIVUM WHOLE",
+        "substance_class": "structurallyDiverse",
+        "cfr_sections": [],
+        "dsld_count": null,
+        "dsld_info_raw": null,
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      }
     },
     {
       "standard_name": "White Willow Bark",
@@ -5455,7 +7966,22 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": "C2349151",
+      "external_ids": {
+        "unii": "205MXS71H7"
+      },
+      "gsrs": {
+        "substance_name": "SALIX ALBA BARK",
+        "substance_class": "structurallyDiverse",
+        "cfr_sections": [],
+        "dsld_count": null,
+        "dsld_info_raw": null,
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      }
     },
     {
       "standard_name": "Wild Yam",
@@ -5477,7 +8003,23 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": "C0697076",
+      "external_ids": {
+        "unii": "IWY3IWX2G8"
+      },
+      "rxcui": "1309690",
+      "gsrs": {
+        "substance_name": "DIOSCOREA VILLOSA TUBER",
+        "substance_class": "structurallyDiverse",
+        "cfr_sections": [],
+        "dsld_count": 356,
+        "dsld_info_raw": "Dietary Supplement Label Database|Botanical|Wild Yam | 646 (Number of products:356)",
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      }
     },
     {
       "standard_name": "Wormwood",
@@ -5501,7 +8043,23 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": "C0331308",
+      "external_ids": {
+        "unii": "F84709P2XV"
+      },
+      "rxcui": "1309324",
+      "gsrs": {
+        "substance_name": "WORMWOOD",
+        "substance_class": "structurallyDiverse",
+        "cfr_sections": [],
+        "dsld_count": 113,
+        "dsld_info_raw": "Dietary Supplement Label Database|Botanical|Wormwood | 425 (Number of products:113)",
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      }
     },
     {
       "standard_name": "Yellow Dock",
@@ -5523,7 +8081,22 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": "C1200905",
+      "external_ids": {
+        "unii": "S9T422Q956"
+      },
+      "gsrs": {
+        "substance_name": "RUMEX CRISPUS TOP",
+        "substance_class": "structurallyDiverse",
+        "cfr_sections": [],
+        "dsld_count": 275,
+        "dsld_info_raw": "Dietary Supplement Label Database|Botanical|Yellow Dock | 510 (Number of products:275)",
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      }
     },
     {
       "standard_name": "Yerba Mate",
@@ -5547,7 +8120,11 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": "C3256110",
+      "external_ids": {},
+      "rxcui": null,
+      "gsrs": null
     },
     {
       "standard_name": "Yucca",
@@ -5569,7 +8146,11 @@
       "recommended_activity": null,
       "standardization": null,
       "standardization_type": null,
-      "standardization_unit": null
+      "standardization_unit": null,
+      "CUI": "C0872917",
+      "external_ids": {},
+      "rxcui": null,
+      "gsrs": null
     }
   ]
 }

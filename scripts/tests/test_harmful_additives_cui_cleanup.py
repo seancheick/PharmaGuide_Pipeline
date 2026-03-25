@@ -22,11 +22,21 @@ def test_harmful_additives_metadata_includes_audit_runbook_and_cui_policy():
 
     assert "audit_runbook" in metadata
     assert "cui_audit_policy" in metadata
-    assert "verify_cui.py" in metadata["audit_runbook"]["release_strict_command"]
+    assert "unii_audit_policy" in metadata
+    assert "scripts/api_audit/verify_cui.py" in metadata["audit_runbook"]["release_strict_command"]
+    assert "scripts/api_audit/verify_unii.py" in metadata["audit_runbook"]["verify_unii_dry_run_command"]
+    assert "scripts/api_audit/verify_unii.py" in metadata["audit_runbook"]["verify_unii_safe_apply_command"]
     assert metadata["audit_runbook"]["release_gate_checklist"]
-    assert "verify_cui.py" in metadata["audit_runbook"]["verify_cui_dry_run_command"]
+    assert "scripts/api_audit/verify_cui.py" in metadata["audit_runbook"]["verify_cui_dry_run_command"]
     assert "no_confirmed_umls_match" in metadata["cui_audit_policy"]["approved_null_statuses"]
     assert "no_single_umls_concept" in metadata["cui_audit_policy"]["approved_null_statuses"]
+    assert "governed_null" in metadata["unii_audit_policy"]["governed_null_policy"]
+
+
+def test_canola_oil_includes_verified_botanical_gsrs_alias():
+    entries = _entries()
+
+    assert "Brassica rapa subsp. oleifera oil" in entries["ADD_CANOLA_OIL"]["aliases"]
 
 
 def test_known_wrong_cuis_are_corrected():
@@ -36,6 +46,7 @@ def test_known_wrong_cuis_are_corrected():
         "ADD_BLUE2": "C0021219",
         "ADD_CANOLA_OIL": "C0072982",
         "ADD_CARMINE_RED": "C0007250",
+        "ADD_SENNA": "C0330722",
         "ADD_NEOTAME": "C0912295",
         "ADD_POLYVINYLPYRROLIDONE": "C0032856",
         "ADD_SODIUM_BENZOATE": "C0142805",
@@ -60,17 +71,11 @@ def test_umbrella_entries_are_explicitly_structured():
     assert antioxidants["cui_status"] == "no_single_umls_concept"
     assert set(antioxidants["member_ids"]) >= {"ADD_BHA", "ADD_BHT", "ADD_TBHQ"}
 
-    nitrites = entries["ADD_NITRITES"]
-    assert nitrites["entity_type"] == "class"
-    assert nitrites["match_rules"]["match_mode"] == "disabled"
-    assert nitrites["cui"] is None
-    assert nitrites["cui_status"] == "no_single_umls_concept"
-    assert set(nitrites["member_ids"]) >= {
-        "ADD_SODIUM_NITRITE",
-        "ADD_SODIUM_NITRATE",
-        "ADD_POTASSIUM_NITRITE",
-        "ADD_POTASSIUM_NITRATE",
-    }
+    # ADD_NITRITES was decoupled into atomic entries (2026-03-23).
+    # Verify all 4 atomic children exist independently.
+    for child_id in ["ADD_SODIUM_NITRITE", "ADD_SODIUM_NITRATE",
+                     "ADD_POTASSIUM_NITRITE", "ADD_POTASSIUM_NITRATE"]:
+        assert child_id in entries, f"{child_id} missing after nitrite decoupling"
 
 
 def test_atomic_nitrite_children_exist():

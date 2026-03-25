@@ -35,7 +35,7 @@ You never guess substance identities. You verify every new entry against its FDA
 ### Step 1 — Run the FDA Sync Script
 
 ```bash
-python scripts/fda_weekly_sync.py --days 7
+python scripts/api_audit/fda_weekly_sync.py --days 7
 ```
 
 For broader scans: `--days 30` (monthly) or `--days 90` (quarterly audit).
@@ -208,7 +208,7 @@ For every substance marked ADD, construct a complete entry:
   - `heavy_metal_contamination` → `heavy_metals`
 
 #### `cui` field
-- Set to `null` for new entries. After adding, run `python scripts/verify_cui.py --file scripts/data/banned_recalled_ingredients.json --list-key ingredients --cui-field cui --apply` to populate CUIs automatically via the UMLS API.
+- Set to `null` for new entries. After adding, run `python scripts/api_audit/verify_cui.py --file scripts/data/banned_recalled_ingredients.json --list-key ingredients --cui-field cui --apply` to populate CUIs automatically via the UMLS API.
 
 #### `status` → B0 scoring impact
 | status | B0 outcome | Penalty |
@@ -301,7 +301,7 @@ PYTHON=.venv/bin/python
 "$PYTHON" -m pytest scripts/tests/test_cross_db_overlap_guard.py -v
 
 # 3. Populate CUIs for new entries
-"$PYTHON" scripts/verify_cui.py --file scripts/data/banned_recalled_ingredients.json --list-key ingredients --cui-field cui --apply
+"$PYTHON" scripts/api_audit/verify_cui.py --file scripts/data/banned_recalled_ingredients.json --list-key ingredients --cui-field cui --apply
 
 # 4. Full test suite (run when environment dependencies are installed)
 "$PYTHON" -m pytest scripts/tests/ -q

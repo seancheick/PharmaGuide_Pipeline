@@ -54,7 +54,7 @@ log "Python:  $PYTHON"
 # ─── Step 1: Generate FDA Report ──────────────────────────────────────────────
 
 log "Step 1: Fetching FDA recall data..."
-"$PYTHON" "${PROJECT_DIR}/scripts/fda_weekly_sync.py" --days "$DAYS" 2>&1 | tee -a "$LOG_FILE"
+"$PYTHON" "${PROJECT_DIR}/scripts/api_audit/fda_weekly_sync.py" --days "$DAYS" 2>&1 | tee -a "$LOG_FILE"
 
 # Find the report file just created
 REPORT_FILE=$(ls -t "${PROJECT_DIR}/scripts/fda_sync_report_"*.json 2>/dev/null | head -1)
