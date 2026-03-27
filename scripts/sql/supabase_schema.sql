@@ -62,6 +62,13 @@ CREATE INDEX IF NOT EXISTS idx_user_usage_user ON user_usage(user_id);
 CREATE UNIQUE INDEX IF NOT EXISTS idx_user_usage_daily ON user_usage(user_id, reset_date);
 CREATE INDEX IF NOT EXISTS idx_pending_products_user ON pending_products(user_id);
 
+-- Partial index on export_manifest: only indexes is_current=true rows.
+-- The app and sync script both query WHERE is_current = true on every launch.
+-- Table grows one row per pipeline run indefinitely, so this stays fast.
+CREATE INDEX IF NOT EXISTS idx_export_manifest_current
+  ON export_manifest(is_current)
+  WHERE is_current = true;
+
 -- =============================================================================
 -- 4. Row Level Security
 -- =============================================================================
@@ -120,8 +127,40 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
 
+-- Atomic usage increment with automatic day rollover.
+-- A new day means a new CURRENT_DATE — the unique index conflict never fires,
+-- so a fresh row gets inserted with count 1. No manual read-then-write needed.
+-- Flutter calls this RPC after a successful scan or AI message.
+CREATE OR REPLACE FUNCTION increment_usage(
+  p_user_id uuid,
+  p_type text  -- 'scan' or 'ai_message'
+) RETURNS TABLE(scans_today integer, ai_messages_today integer) AS $$
+BEGIN
+  INSERT INTO user_usage (user_id, scans_today, ai_messages_today, reset_date)
+  VALUES (
+    p_user_id,
+    CASE WHEN p_type = 'scan' THEN 1 ELSE 0 END,
+    CASE WHEN p_type = 'ai_message' THEN 1 ELSE 0 END,
+    CURRENT_DATE
+  )
+  ON CONFLICT (user_id, reset_date)
+  DO UPDATE SET
+    scans_today = CASE WHEN p_type = 'scan'
+      THEN user_usage.scans_today + 1
+      ELSE user_usage.scans_today END,
+    ai_messages_today = CASE WHEN p_type = 'ai_message'
+      THEN user_usage.ai_messages_today + 1
+      ELSE user_usage.ai_messages_today END;
+
+  RETURN QUERY
+    SELECT u.scans_today, u.ai_messages_today
+    FROM user_usage u
+    WHERE u.user_id = p_user_id AND u.reset_date = CURRENT_DATE;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
 -- =============================================================================
--- 6. Storage Bucket
+-- 7. Storage Bucket
 -- =============================================================================
 -- Create via Supabase Dashboard or API:
 --   Bucket name: pharmaguide
