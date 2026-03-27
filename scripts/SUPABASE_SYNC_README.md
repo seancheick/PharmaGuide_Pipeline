@@ -1,0 +1,80 @@
+# Supabase Sync Pipeline
+
+Uploads pipeline build output to Supabase for distribution to the Flutter app.
+
+## Prerequisites
+
+1. **Supabase Project:** Create at [supabase.com](https://supabase.com)
+2. **Run Schema:** Copy `scripts/sql/supabase_schema.sql` into the Supabase SQL Editor and execute
+3. **Create Storage Bucket:** In Supabase Dashboard > Storage, create bucket `pharmaguide` with public read access
+4. **Environment Variables:** Add to your `.env` file:
+
+```
+SUPABASE_URL=https://your-project.supabase.co
+SUPABASE_SERVICE_ROLE_KEY=eyJ...your-service-role-key
+```
+
+Get these from Supabase Dashboard > Settings > API.
+
+**IMPORTANT:** Use the **service role key** (not the anon key). The service role key bypasses RLS and is required for writing to the manifest table and storage bucket. Never commit this key to Git.
+
+## Usage
+
+### Run the full pipeline then sync
+
+```bash
+# 1. Run pipeline
+python scripts/run_pipeline.py <dataset_dir>
+
+# 2. Build Flutter export
+python scripts/build_final_db.py \
+  --enriched-dir output_Brand_enriched/enriched \
+  --scored-dir output_Brand_scored/scored \
+  --output-dir final_db_output
+
+# 3. Sync to Supabase
+python scripts/sync_to_supabase.py final_db_output
+```
+
+### Dry run (preview without uploading)
+
+```bash
+python scripts/sync_to_supabase.py <output_dir> --dry-run
+```
+
+### What gets uploaded
+
+| Local File | Supabase Location |
+|-----------|-------------------|
+| `pharmaguide_core.db` | Storage: `pharmaguide/v{version}/pharmaguide_core.db` |
+| `detail_blobs/*.json` | Storage: `pharmaguide/v{version}/details/{dsld_id}.json` |
+| `export_manifest.json` | PostgreSQL: `export_manifest` table (is_current=true) |
+
+### Version checking
+
+The script compares the local `export_manifest.json` to the current Supabase manifest:
+- If versions differ or no remote manifest exists: uploads everything
+- If versions and checksums match: skips (already synced)
+
+## Supabase Schema
+
+See `scripts/sql/supabase_schema.sql` for the complete schema including:
+- `export_manifest` (pipeline version tracking)
+- `user_stacks` (user supplement stacks)
+- `user_usage` (freemium scan/AI limits)
+- `pending_products` (user-submitted product requests)
+- RLS policies and indexes
+
+## Troubleshooting
+
+### "SUPABASE_URL environment variable is not set"
+Add `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` to your `.env` file.
+
+### "export_manifest.json not found"
+Run `build_final_db.py` before `sync_to_supabase.py`.
+
+### Partial upload (some blobs failed)
+Re-run `sync_to_supabase.py`. It uses upsert mode -- re-uploading is safe and idempotent. Failed blobs will be retried.
+
+### Version conflict
+If the Supabase manifest shows a newer version than your local build, re-run the pipeline to generate a fresh build before syncing.
