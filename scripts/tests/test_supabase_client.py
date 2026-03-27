@@ -108,3 +108,4 @@ def test_insert_manifest_coerces_types():
     assert captured["params"]["p_schema_version"] == "5"  # str coercion
     assert captured["params"]["p_product_count"] == 50000  # int coercion
     assert captured["params"]["p_db_version"] == "2026.03.27.5"
+    assert captured["params"]["p_min_app_version"] == "1.0.0"  # default

@@ -81,6 +81,7 @@ def insert_manifest(client, manifest_data):
         "p_product_count": int(manifest_data["product_count"]),
         "p_checksum": manifest_data["checksum"],
         "p_generated_at": manifest_data["generated_at"],
+        "p_min_app_version": manifest_data.get("min_app_version", "1.0.0"),
     }).execute()
     return response
 
@@ -89,13 +90,12 @@ def upload_file(client, bucket, remote_path, local_path,
                 content_type="application/octet-stream"):
     """Upload a file to Supabase Storage.
 
+    Streams the file to avoid loading large .db files into memory.
     Returns the storage response.
     """
     with open(local_path, "rb") as f:
-        data = f.read()
-
-    return client.storage.from_(bucket).upload(
-        path=remote_path,
-        file=data,
-        file_options={"content-type": content_type, "upsert": "true"},
-    )
+        return client.storage.from_(bucket).upload(
+            path=remote_path,
+            file=f,
+            file_options={"content-type": content_type, "upsert": "true"},
+        )

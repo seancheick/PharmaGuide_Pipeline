@@ -163,7 +163,21 @@ def sync(build_dir, dry_run=False):
     blob_time = time.time() - start
     print(f"  Done ({blob_count} blobs in {blob_time:.1f}s, {len(errors)} errors)")
 
-    # Insert manifest
+    # Abort manifest rotation if any blobs failed — prevents clients from
+    # seeing the new version and getting 404s on missing detail blobs.
+    if errors:
+        print(f"\nAborting manifest rotation: {len(errors)} blob uploads failed.")
+        print("Fix the errors and re-run. The DB file was uploaded (upsert safe).")
+        return {
+            "status": "partial_failure",
+            "version": version,
+            "product_count": int(product_count),
+            "blob_count": blob_count,
+            "error_count": len(errors),
+            "time_seconds": round(db_time + blob_time, 1),
+        }
+
+    # Insert manifest (only if all blobs uploaded successfully)
     print(f"\nUpdating manifest (version {version})...")
     insert_manifest(client, local)
     print("  Done")
@@ -217,11 +231,9 @@ def main():
 
     try:
         result = sync(build_dir, dry_run=dry_run)
-        if result["status"] == "synced":
-            sys.exit(0)
-        elif result["status"] == "up_to_date":
-            sys.exit(0)
-        elif result["status"] == "dry_run":
+        if result["status"] == "partial_failure":
+            sys.exit(2)
+        elif result["status"] in ("synced", "up_to_date", "dry_run"):
             sys.exit(0)
     except FileNotFoundError as e:
         print(f"Error: {e}")
