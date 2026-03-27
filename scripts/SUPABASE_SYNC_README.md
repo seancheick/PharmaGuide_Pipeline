@@ -76,5 +76,8 @@ Run `build_final_db.py` before `sync_to_supabase.py`.
 ### Partial upload (some blobs failed)
 Re-run `sync_to_supabase.py`. It uses upsert mode -- re-uploading is safe and idempotent. Failed blobs will be retried.
 
+### Crash during sync (DB uploaded, blobs partially done, manifest not rotated)
+This is safe. Supabase Storage has the new DB file but the manifest still points to the old version — the app won't see it. Re-run `sync_to_supabase.py` and it will re-upload the DB (upsert), retry all blobs, and then call `rotate_manifest`. No data is lost or corrupted.
+
 ### Version conflict
 If the Supabase manifest shows a newer version than your local build, re-run the pipeline to generate a fresh build before syncing.
