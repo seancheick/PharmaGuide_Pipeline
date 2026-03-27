@@ -5,11 +5,15 @@ Provides typed helpers for manifest queries and storage uploads.
 """
 
 import os
-import sys
 
-# Load .env the same way all pipeline scripts do
-sys.path.insert(0, os.path.dirname(__file__))
-import env_loader  # noqa: F401
+
+def _load_env():
+    """Load .env the same way all pipeline scripts do."""
+    import sys
+    scripts_dir = os.path.dirname(__file__)
+    if scripts_dir not in sys.path:
+        sys.path.insert(0, scripts_dir)
+    import env_loader  # noqa: F401
 
 
 def get_supabase_client():
@@ -17,6 +21,7 @@ def get_supabase_client():
 
     Raises ValueError if required environment variables are missing.
     """
+    _load_env()
     from supabase import create_client
 
     url = os.environ.get("SUPABASE_URL")
