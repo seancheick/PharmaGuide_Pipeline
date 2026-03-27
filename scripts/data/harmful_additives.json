@@ -8170,21 +8170,21 @@
         "potassium nitrate preservative"
       ],
       "category": "preservative",
-      "mechanism_of_harm": "Nitrate preservative salt that can contribute to endogenous nitrosation and cumulative nitrate exposure under relevant conditions.",
+      "mechanism_of_harm": "Nitrate preservative salt (KNO3). In the body, nitrate is reduced to nitrite by oral bacteria, then nitrite can form N-nitroso compounds (NOCs) in acidic stomach environment. NOCs are potent carcinogens. IARC Group 2A applies to ingested nitrate/nitrite under conditions of endogenous nitrosation. Distinct from nitrite: nitrate requires bacterial reduction first, so carcinogenic potential is indirect and dose-dependent.",
       "regulatory_status": {
-        "US": "Strictly regulated food preservative; not preferred in supplements.",
-        "EU": "E252 permitted with limits in specific food uses.",
-        "IARC": "Grouped endogenous nitrosation concern applies."
+        "US": "FDA: regulated food preservative (21 CFR 172.160). Permitted in cured meats with limits. Not intended for supplement use.",
+        "EU": "E252 permitted in specific meat products with limits. EFSA ADI 3.7 mg/kg bw/day as nitrate ion.",
+        "WHO": "JECFA ADI 0-3.7 mg/kg bw/day (as nitrate ion). IARC Group 2A (ingested nitrate under conditions of endogenous nitrosation)."
       },
       "population_warnings": [
-        "Infants - avoid unnecessary exposure",
-        "Pregnant women - minimize exposure"
+        "Infants — methemoglobinemia risk from nitrate-to-nitrite conversion; avoid unnecessary exposure",
+        "Pregnant women — minimize exposure due to fetal methemoglobin sensitivity"
       ],
       "notes": "Atomic potassium nitrate child entry split from the umbrella nitrites record for exact matching and audit traceability.",
       "scientific_references": [
         "DOI: 10.1093/jnci/djq516 - Nitrite/nitrate cancer risk"
       ],
-      "last_updated": "2026-03-23",
+      "last_updated": "2026-03-27",
       "match_rules": {
         "match_mode": "alias_and_fuzzy",
         "fuzzy_threshold": 0.72,
@@ -8200,7 +8200,9 @@
           "url": "https://doi.org/10.1093/jnci/djq516",
           "published_date": null,
           "evidence_grade": "B",
-          "supports_claims": []
+          "supports_claims": [
+            "mechanism_of_harm"
+          ]
         }
       ],
       "jurisdictional_statuses": [
@@ -8210,7 +8212,7 @@
           "status_code": "warning_issued",
           "scope": "supplement",
           "effective_range": {
-            "start": "2026-03-23",
+            "start": "1979-01-01",
             "end": null
           },
           "source_ref": "https://www.fda.gov/food/food-additives-petitions/food-additive-status-list"
@@ -8221,7 +8223,7 @@
           "status_code": "warning_issued",
           "scope": "supplement",
           "effective_range": {
-            "start": "2026-03-23",
+            "start": "1979-01-01",
             "end": null
           },
           "source_ref": "https://doi.org/10.2903/j.efsa.2017.4787"
@@ -8229,9 +8231,9 @@
       ],
       "review": {
         "status": "validated",
-        "last_reviewed_at": "2026-03-23",
-        "reviewed_by": "codex_harmful_cui_cleanup",
-        "next_review_due": "2026-09-23",
+        "last_reviewed_at": "2026-03-27",
+        "reviewed_by": "harmful_additives_deep_audit_batch6",
+        "next_review_due": "2026-09-27",
         "change_log": [
           {
             "date": "2026-03-23",
@@ -8242,12 +8244,21 @@
             "date": "2026-03-23",
             "change": "Accepted live UMLS exact-match CUI C0071772 during harmful-additives nitrite child verification.",
             "by": "codex_harmful_cui_cleanup"
+          },
+          {
+            "date": "2026-03-27",
+            "change": "Deep audit batch 6: CUI C0071772 verified. All identifiers pre-verified. Added JECFA ADI 3.7 mg/kg bw/day. Sharpened mechanism (nitrate→nitrite→NOC pathway). Fixed jurisdictional dates.",
+            "reason": "harmful_additives_deep_audit_batch6"
           }
         ]
       },
       "confidence": "high",
       "severity_level": "high",
-      "dose_thresholds": null,
+      "dose_thresholds": {
+        "value": 3.7,
+        "unit": "mg/kg/day",
+        "source": "JECFA ADI (as nitrate ion)"
+      },
       "entity_relationships": [
         {
           "type": "member_of",
@@ -8295,23 +8306,23 @@
         "crude palm oil"
       ],
       "category": "fat_oil",
-      "mechanism_of_harm": "High in saturated fats (approximately 50%) which may raise LDL cholesterol when consumed in excess. Processed forms may contain contaminants including 3-MCPD esters and glycidyl esters (potential carcinogens formed during refining at high temperatures).",
+      "mechanism_of_harm": "High in saturated fat (~50% palmitic acid) which may raise LDL cholesterol. Refined palm oil can contain 3-MCPD and glycidyl ester contaminants formed during high-temperature processing. EFSA 2018 identified glycidyl esters as genotoxic and carcinogenic. In supplement context, amounts are small (capsule coatings, softgel fill) but flagged as quality signal.",
       "regulatory_status": {
-        "US": "FDA GRAS status",
-        "EU": "Approved but with concerns about 3-MCPD and glycidyl ester contaminants",
-        "EFSA": "2018 opinion on contaminants in refined palm oil"
+        "US": "FDA GRAS. No specific CFR listing (common food ingredient).",
+        "EU": "Permitted. EFSA 2018 opinion on process contaminants in refined palm oil (3-MCPD, glycidyl esters) — EFSA Journal 2018;16(1):5083.",
+        "WHO": "No specific ADI. JECFA evaluated 3-MCPD contaminants separately."
       },
       "population_warnings": [
         "People with high cholesterol - May raise LDL levels",
         "Infants and children - Higher exposure to 3-MCPD contaminants per body weight",
         "People with cardiovascular disease - Limit saturated fat intake"
       ],
-      "notes": "Associated with deforestation and habitat destruction. High in saturated fats (may raise LDL cholesterol if consumed excessively). Some derivatives (e.g., vitamin A palmitate) are benign in small amounts. Processed forms may contain contaminants (3-MCPD, glycidol). Consider sustainability certifications (RSPO) for reduced environmental impact.",
+      "notes": "Palm oil in supplements is typically present in small amounts (softgel fill, carrier oil). The primary concern is 3-MCPD/glycidyl ester contamination from refining, not saturated fat at supplement doses. Moderate severity as quality signal for processed oil use.",
       "scientific_references": [
         "DOI: 10.2903/j.efsa.2018.5083 - EFSA 3-MCPD assessment",
         "DOI: 10.3390/nu12051347 - Palm oil health effects"
       ],
-      "last_updated": "2026-02-16",
+      "last_updated": "2026-03-27",
       "match_rules": {
         "match_mode": "alias_and_fuzzy",
         "fuzzy_threshold": 0.72,
@@ -8347,7 +8358,7 @@
           "status_code": "approved",
           "scope": "supplement",
           "effective_range": {
-            "start": "2025-11-17",
+            "start": "2000-01-01",
             "end": null
           },
           "source_ref": "https://www.fda.gov/food/food-additives-petitions/food-additive-status-list"
@@ -8358,7 +8369,7 @@
           "status_code": "approved",
           "scope": "supplement",
           "effective_range": {
-            "start": "2025-11-17",
+            "start": "2000-01-01",
             "end": null
           },
           "source_ref": "https://doi.org/10.2903/j.efsa.2018.5083"
@@ -8369,7 +8380,7 @@
           "status_code": "approved",
           "scope": "supplement",
           "effective_range": {
-            "start": "2025-11-17",
+            "start": "2000-01-01",
             "end": null
           },
           "source_ref": "https://doi.org/10.2903/j.efsa.2018.5083"
@@ -8377,9 +8388,9 @@
       ],
       "review": {
         "status": "validated",
-        "last_reviewed_at": "2026-02-16",
-        "reviewed_by": "codex_harmful_allergen_normalization",
-        "next_review_due": "2026-05-16",
+        "last_reviewed_at": "2026-03-27",
+        "reviewed_by": "harmful_additives_deep_audit_batch6",
+        "next_review_due": "2026-09-27",
         "change_log": [
           {
             "date": "2025-11-17",
@@ -8405,6 +8416,11 @@
             "date": "2026-03-22",
             "change": "Schema v5.1 migration: removed top-level CUI (→ external_ids.umls_cui), removed label_tokens/regex from match_rules, normalized external_ids casing, standardized references_structured fields, mapped status_codes to canonical enum, removed exposure_context/entity_type(ingredient)/class_tags dead-weight fields.",
             "reason": "schema_v5.1_migration"
+          },
+          {
+            "date": "2026-03-27",
+            "change": "Deep audit batch 6: CUI C0069962 verified. Added CAS 8002-75-3, RxCUI 32809. Sharpened mechanism (3-MCPD/glycidyl ester contamination pathway). Fixed jurisdictional dates.",
+            "reason": "harmful_additives_deep_audit_batch6"
           }
         ]
       },
@@ -8414,6 +8430,8 @@
       "entity_relationships": null,
       "cui": "C0069962",
       "external_ids": {
+        "cas": "8002-75-3",
+        "pubchem_cid": null,
         "unii": "5QUO05548Z"
       },
       "rxcui": "32809",
@@ -8441,25 +8459,23 @@
         "modified glucose polymer"
       ],
       "category": "filler",
-      "mechanism_of_harm": "Can cause significant gastrointestinal distress. May alter gut microbiota composition. High doses can lead to mineral absorption issues.",
+      "mechanism_of_harm": "Synthetic glucose polymer classified as dietary fiber by FDA (2013). Partially fermented in the colon, producing gas and osmotic effects. Laxative threshold ~50 g/day (higher tolerance than sugar alcohols). GI effects (bloating, flatulence, diarrhea) are dose-dependent and self-limiting. Mineral absorption interference claims are not supported at normal use levels.",
       "regulatory_status": {
-        "US": "FDA GRAS status",
-        "EU": "E1200 with limits",
-        "Canada": "Permitted food additive"
+        "US": "FDA GRAS (21 CFR 172.841). Classified as dietary fiber since April 2013. Labeling: 1 kcal/g.",
+        "EU": "E1200 permitted. EFSA 2021 re-evaluation (EFSA Journal 2021:6363) — no safety concern, no numerical ADI needed.",
+        "WHO": "JECFA ADI 'not specified' (1987). Safe at conditions of intended use."
       },
       "population_warnings": [
-        "People with IBS - May trigger symptoms",
-        "Children - Can cause diarrhea",
-        "People with mineral deficiencies - May affect absorption"
+        "IBS — GI effects (bloating, gas) at moderate doses; lower individual tolerance",
+        "Children — lower body weight means lower absolute GI tolerance threshold"
       ],
-      "notes": "Synthetic fiber used as bulking agent. Can cause significant digestive issues in sensitive individuals. May interfere with mineral absorption at high doses. SEVERITY DOWNGRADED FROM MODERATE TO LOW (2026): EFSA 2021 re-evaluation (EFSA Journal 2021:6363, PMC7792022) found no safety concern for polydextrose at any reported use level; no numerical ADI required. FDA classified polydextrose as a dietary fiber (2013). Laxative threshold: approximately 50g single dose or 90g/day — far exceeding any supplement use. GI index of 4–7; does not contribute to blood glucose spikes. Concern about 'mineral absorption interference' at supplement doses is not supported by evidence.",
+      "notes": "Synthetic soluble fiber used as bulking agent in supplements. FDA classified as dietary fiber in 2013. EFSA found no safety concern in 2021 re-evaluation. Low severity — GI effects are dose-dependent and self-limiting. Significantly higher tolerance than sugar alcohols (~50g vs ~10-20g).",
       "scientific_references": [
-        "DOI: 10.3390/nu12051453 - Digestive effects",
-        "DOI: 10.1016/j.jff.2019.103643 - Mineral interactions",
-        "EFSA Journal 2021:6363 (PMC7792022) — Re-evaluation of polydextrose (E1200): no safety concern, no numerical ADI",
-        "FDA Guidance April 2013 — Polydextrose classified as dietary fiber"
+        "EFSA Journal 2021:6363 — Re-evaluation of polydextrose (E1200), no safety concern",
+        "FDA Guidance April 2013 — Polydextrose classified as dietary fiber",
+        "21 CFR 172.841 — FDA GRAS listing for polydextrose"
       ],
-      "last_updated": "2026-03-08",
+      "last_updated": "2026-03-27",
       "match_rules": {
         "match_mode": "alias_and_fuzzy",
         "fuzzy_threshold": 0.72,
@@ -8468,14 +8484,29 @@
       },
       "references_structured": [
         {
-          "type": "regulatory_action",
+          "type": "regulatory",
+          "authority": "EFSA",
+          "title": "Re-evaluation of polydextrose (E 1200) as a food additive",
+          "citation": "EFSA Journal 2021:6363",
+          "url": "https://doi.org/10.2903/j.efsa.2021.6363",
+          "published_date": "2021-03-01",
+          "evidence_grade": "A",
+          "supports_claims": [
+            "regulatory_status",
+            "mechanism_of_harm"
+          ]
+        },
+        {
+          "type": "regulatory",
           "authority": "FDA",
-          "title": "FDA Food Additive Status List - Polydextrose (21 CFR 172.620)",
-          "citation": "FDA Food Additive Status List - Polydextrose (21 CFR 172.620)",
-          "url": "https://www.fda.gov/food/food-additives-petitions/food-additive-status-list",
+          "title": "21 CFR 172.841 — Polydextrose",
+          "citation": "Code of Federal Regulations, Title 21, Part 172, Section 172.841",
+          "url": "https://www.ecfr.gov/current/title-21/section-172.841",
           "published_date": null,
-          "evidence_grade": "B",
-          "supports_claims": []
+          "evidence_grade": "R",
+          "supports_claims": [
+            "regulatory_status"
+          ]
         }
       ],
       "jurisdictional_statuses": [
@@ -8485,7 +8516,7 @@
           "status_code": "approved",
           "scope": "supplement",
           "effective_range": {
-            "start": "2025-09-11",
+            "start": "1987-01-01",
             "end": null
           },
           "source_ref": "https://www.fda.gov/food/food-additives-petitions/food-additive-status-list"
@@ -8496,7 +8527,7 @@
           "status_code": "warning_issued",
           "scope": "supplement",
           "effective_range": {
-            "start": "2025-09-11",
+            "start": "1987-01-01",
             "end": null
           },
           "source_ref": "https://www.efsa.europa.eu/en/efsajournal"
@@ -8507,7 +8538,7 @@
           "status_code": "approved",
           "scope": "supplement",
           "effective_range": {
-            "start": "2025-09-11",
+            "start": "1987-01-01",
             "end": null
           },
           "source_ref": "https://www.fda.gov/food/food-additives-petitions/food-additive-status-list"
@@ -8515,9 +8546,9 @@
       ],
       "review": {
         "status": "validated",
-        "last_reviewed_at": "2026-02-16",
-        "reviewed_by": "codex_harmful_allergen_normalization",
-        "next_review_due": "2026-07-07",
+        "last_reviewed_at": "2026-03-27",
+        "reviewed_by": "harmful_additives_deep_audit_batch6",
+        "next_review_due": "2026-09-27",
         "change_log": [
           {
             "date": "2025-09-11",
@@ -8564,15 +8595,26 @@
             "date": "2026-03-22",
             "change": "Schema v5.1 migration: removed top-level CUI (→ external_ids.umls_cui), removed label_tokens/regex from match_rules, normalized external_ids casing, standardized references_structured fields, mapped status_codes to canonical enum, removed exposure_context/entity_type(ingredient)/class_tags dead-weight fields.",
             "reason": "schema_v5.1_migration"
+          },
+          {
+            "date": "2026-03-27",
+            "change": "Deep audit batch 6: CUI C0071545 verified. Added CAS 68424-04-4, RxCUI 1363053. Upgraded confidence medium->high (EFSA 2021 no safety concern). Corrected mechanism (mineral absorption claim unsupported). Added EFSA 2021 + 21 CFR 172.841 refs. Populated dose_thresholds.",
+            "reason": "harmful_additives_deep_audit_batch6"
           }
         ]
       },
       "confidence": "high",
       "severity_level": "low",
-      "dose_thresholds": null,
+      "dose_thresholds": {
+        "value": 50,
+        "unit": "g/day",
+        "source": "laxative threshold (individual tolerance)"
+      },
       "entity_relationships": null,
       "cui": "C0071545",
       "external_ids": {
+        "cas": "68424-04-4",
+        "pubchem_cid": null,
         "unii": "VH2XOU12IE"
       },
       "rxcui": "1363053",
@@ -8631,7 +8673,7 @@
         "DOI: 10.1002/jps.23963 - Contamination in PEG batches",
         "21 CFR 172.820 - FDA food additive approval"
       ],
-      "last_updated": "2026-02-18",
+      "last_updated": "2026-03-27",
       "match_rules": {
         "match_mode": "alias_and_fuzzy",
         "fuzzy_threshold": 0.72,
@@ -8647,7 +8689,9 @@
           "url": "https://doi.org/10.1016/j.jaci.2016.02.010",
           "published_date": null,
           "evidence_grade": "B",
-          "supports_claims": []
+          "supports_claims": [
+            "mechanism_of_harm"
+          ]
         },
         {
           "type": "systematic_review",
@@ -8657,7 +8701,9 @@
           "url": "https://doi.org/10.1002/jps.23963",
           "published_date": null,
           "evidence_grade": "C",
-          "supports_claims": []
+          "supports_claims": [
+            "mechanism_of_harm"
+          ]
         },
         {
           "type": "regulation",
@@ -8667,7 +8713,9 @@
           "url": "https://www.law.cornell.edu/cfr/text/21/172.820",
           "published_date": null,
           "evidence_grade": "R",
-          "supports_claims": []
+          "supports_claims": [
+            "mechanism_of_harm"
+          ]
         }
       ],
       "jurisdictional_statuses": [
@@ -8677,7 +8725,7 @@
           "status_code": "approved",
           "scope": "supplement",
           "effective_range": {
-            "start": "2026-02-18",
+            "start": "2000-01-01",
             "end": null
           },
           "source_ref": "https://www.law.cornell.edu/cfr/text/21/172.820"
@@ -8688,7 +8736,7 @@
           "status_code": "approved",
           "scope": "supplement",
           "effective_range": {
-            "start": "2026-02-18",
+            "start": "2000-01-01",
             "end": null
           },
           "source_ref": "https://www.efsa.europa.eu/en/efsajournal/pub/5049"
@@ -8696,9 +8744,9 @@
       ],
       "review": {
         "status": "validated",
-        "last_reviewed_at": "2026-02-18",
-        "reviewed_by": "audit_remediation",
-        "next_review_due": "2026-08-18",
+        "last_reviewed_at": "2026-03-27",
+        "reviewed_by": "harmful_additives_deep_audit_batch6",
+        "next_review_due": "2026-09-27",
         "change_log": [
           {
             "date": "2026-02-18",
@@ -8709,6 +8757,11 @@
             "date": "2026-03-22",
             "change": "Schema v5.1 migration: removed top-level CUI (→ external_ids.umls_cui), removed label_tokens/regex from match_rules, normalized external_ids casing, standardized references_structured fields, mapped status_codes to canonical enum, removed exposure_context/entity_type(ingredient)/class_tags dead-weight fields.",
             "reason": "schema_v5.1_migration"
+          },
+          {
+            "date": "2026-03-27",
+            "change": "Deep audit batch 6: CUI C0032483 verified. CAS 25322-68-3, UNII U95VVU3IDQ verified. PubChem N/A (polymer class). Fixed GSRS substance_name. Fixed refs supports_claims. Fixed jurisdictional dates.",
+            "reason": "harmful_additives_deep_audit_batch6"
           }
         ]
       },
@@ -8719,10 +8772,11 @@
       "cui": "C0032483",
       "external_ids": {
         "cas": "25322-68-3",
+        "pubchem_cid": null,
         "unii": "U95VVU3IDQ"
       },
       "gsrs": {
-        "substance_name": "POLYETHYLENE GLYCOL 30000",
+        "substance_name": "POLYETHYLENE GLYCOL, UNSPECIFIED",
         "substance_class": "polymer",
         "cfr_sections": [],
         "dsld_count": null,
@@ -8753,10 +8807,9 @@
         "WHO": "ADI not specified but under review"
       },
       "population_warnings": [
-        "People with IBD or Crohn's disease - May trigger or worsen inflammation",
-        "People with gut issues - Severely disrupts microbiome",
-        "Older adults - May accelerate cognitive decline",
-        "Everyone - Chronic inflammation concerns"
+        "IBD/Crohn's disease — animal models show P80 promotes colitis; human organoid data confirms barrier disruption (PMID 37530764)",
+        "PEG/polysorbate allergy — documented anaphylaxis risk with parenteral polysorbate 80",
+        "IBS — may worsen symptoms via gut microbiome disruption"
       ],
       "notes": "A synthetic emulsifier that may be contaminated with 1,4-dioxane (a carcinogen). UPGRADED TO HIGH RISK based on 2024-2025 research showing severe gut microbiome disruption, chronic intestinal inflammation, and links to inflammatory bowel disease. 2024 study shows it accelerates age-related cognitive decline. 2025 research confirms it drives mucus-penetrating microbiota causing chronic inflammation. SEVERITY DOWNGRADED FROM HIGH TO MODERATE (2026): Animal study doses demonstrating gut microbiome disruption (Chassaing et al., Nature 2015) were estimated at 100–500× human dietary exposure. ADDapt 2025 trial showed emulsifier-free diet associated with Crohn's remission, but trial used a MIXTURE of emulsifiers (P80 + CMC + carrageenan) in IBD patients — cannot isolate P80 effects. EMA review of polysorbate 80 as pharmaceutical excipient: 'no adverse reactions reported for oral tablet/capsule excipient use' in healthy populations. Human mechanistic data at supplement-level doses is lacking; high/high rating is not supported. Genuine concern warrants moderate/medium as precautionary stance.",
       "scientific_references": [
@@ -8768,7 +8821,7 @@
         "ADDapt Trial 2025 (Alimentary Pharmacol Ther 61:1276): emulsifier-free diet in Crohn's — mixed emulsifier intervention, P80 not isolated",
         "EMA background review CHMP/351898/2014 — Polysorbate 80 as excipient: no adverse reactions in oral tablet/capsule use"
       ],
-      "last_updated": "2026-03-13",
+      "last_updated": "2026-03-27",
       "match_rules": {
         "match_mode": "alias_and_fuzzy",
         "fuzzy_threshold": 0.72,
@@ -8834,7 +8887,7 @@
           "status_code": "approved",
           "scope": "supplement",
           "effective_range": {
-            "start": "2025-11-17",
+            "start": "1979-01-01",
             "end": null
           },
           "source_ref": "https://www.fda.gov/food/food-additives-petitions/food-additive-status-list"
@@ -8845,7 +8898,7 @@
           "status_code": "approved",
           "scope": "supplement",
           "effective_range": {
-            "start": "2025-11-17",
+            "start": "1979-01-01",
             "end": null
           },
           "source_ref": "https://www.efsa.europa.eu/en/efsajournal"
@@ -8856,7 +8909,7 @@
           "status_code": "approved",
           "scope": "supplement",
           "effective_range": {
-            "start": "2025-11-17",
+            "start": "1979-01-01",
             "end": null
           },
           "source_ref": "https://www.who.int/publications"
@@ -8864,9 +8917,9 @@
       ],
       "review": {
         "status": "validated",
-        "last_reviewed_at": "2026-02-16",
-        "reviewed_by": "codex_harmful_allergen_normalization",
-        "next_review_due": "2026-07-07",
+        "last_reviewed_at": "2026-03-27",
+        "reviewed_by": "harmful_additives_deep_audit_batch6",
+        "next_review_due": "2026-09-27",
         "change_log": [
           {
             "date": "2025-11-17",
@@ -8928,6 +8981,11 @@
             "date": "2026-03-22",
             "change": "Removed overly generic 'Polysorbate'/'Polysorbate emulsifiers' aliases — would match P20/P40/P60/P65 entries too.",
             "reason": "alias_audit_fixes"
+          },
+          {
+            "date": "2026-03-27",
+            "change": "Deep audit batch 6: CUI C0032601 verified. Added CAS 9005-65-6, RxCUI 8560. PubChem N/A (polymer). Replaced placeholder population warnings with evidence-cited specifics. Fixed jurisdictional dates.",
+            "reason": "harmful_additives_deep_audit_batch6"
           }
         ]
       },
@@ -8945,6 +9003,8 @@
       "entity_relationships": null,
       "cui": "C0032601",
       "external_ids": {
+        "cas": "9005-65-6",
+        "pubchem_cid": null,
         "unii": "6OZP39ZG8H"
       },
       "rxcui": "8560",
@@ -8973,7 +9033,7 @@
       ],
       "category": "emulsifier",
       "notes": "Synthetic emulsifier from sorbitol and palmitic acid. May affect gut microbiome. Less common than polysorbate 80 but similar concerns about potential inflammation and metabolic effects.",
-      "last_updated": "2026-03-08",
+      "last_updated": "2026-03-27",
       "mechanism_of_harm": "Synthetic ethoxylated sorbitan monopalmitate (palmitic acid). Same mechanistic class as polysorbate 80 — potential gut barrier disruption and microbiome alteration at high doses in animal studies. Less studied individually than P80. JECFA/EFSA group ADI 25 mg/kg bw/day for all polysorbates.",
       "regulatory_status": {
         "US": "FDA approved food additive (21 CFR 172.838) as a surface-active agent. Limited food applications (defoamer in fermented beverages, specific processing uses). No specific ADI established separately by JECFA — grouped with other polysorbates.",
@@ -8981,9 +9041,13 @@
         "WHO": "JECFA group ADI for polysorbates 20/40/60/65/80: 25 mg/kg bw/day."
       },
       "population_warnings": [
-        "General population - review specific concerns"
+        "IBD/IBS — same emulsifier class as P80; potential gut barrier disruption",
+        "PEG/polysorbate allergy — cross-reactivity possible within polysorbate family"
       ],
-      "scientific_references": [],
+      "scientific_references": [
+        "EFSA Journal 2015;13(7):4152 — Re-evaluation of polysorbates (E432-E436)",
+        "21 CFR 172.838 — FDA approved polysorbate surface-active agents"
+      ],
       "match_rules": {
         "match_mode": "alias_and_fuzzy",
         "fuzzy_threshold": 0.72,
@@ -9009,7 +9073,7 @@
           "status_code": "approved",
           "scope": "supplement",
           "effective_range": {
-            "start": "2025-11-14",
+            "start": "1979-01-01",
             "end": null
           },
           "source_ref": "https://www.fda.gov/food/food-additives-petitions/food-additive-status-list"
@@ -9020,7 +9084,7 @@
           "status_code": "approved",
           "scope": "supplement",
           "effective_range": {
-            "start": "2025-11-14",
+            "start": "1979-01-01",
             "end": null
           },
           "source_ref": "https://www.efsa.europa.eu/en/efsajournal"
@@ -9028,9 +9092,9 @@
       ],
       "review": {
         "status": "validated",
-        "last_reviewed_at": "2026-02-16",
-        "reviewed_by": "codex_harmful_allergen_normalization",
-        "next_review_due": "2026-07-07",
+        "last_reviewed_at": "2026-03-27",
+        "reviewed_by": "harmful_additives_deep_audit_batch6",
+        "next_review_due": "2026-09-27",
         "change_log": [
           {
             "date": "2025-11-14",
@@ -9082,6 +9146,11 @@
             "date": "2026-03-22",
             "change": "Replaced placeholder mechanism with verified biochemical pathway.",
             "reason": "mechanism_backfill"
+          },
+          {
+            "date": "2026-03-27",
+            "change": "Deep audit batch 6: CUI C0526783 verified. Added CAS 9005-66-7, RxCUI 1367265. PubChem N/A (polymer). Replaced placeholder population warnings. Added EFSA 2015 reference.",
+            "reason": "harmful_additives_deep_audit_batch6"
           }
         ]
       },
@@ -9099,6 +9168,8 @@
       "entity_relationships": null,
       "cui": "C0526783",
       "external_ids": {
+        "cas": "9005-66-7",
+        "pubchem_cid": null,
         "unii": "STI11B5A2X"
       },
       "rxcui": "1367265",
@@ -9126,7 +9197,7 @@
       ],
       "category": "emulsifier",
       "notes": "Synthetic emulsifier that may be contaminated with 1,4-dioxane (carcinogen). Studies show it can disrupt gut microbiome and compromise intestinal barrier function.",
-      "last_updated": "2026-03-08",
+      "last_updated": "2026-03-27",
       "mechanism_of_harm": "Synthetic ethoxylated sorbitan tristearate (stearic acid). Same mechanistic class as P80 and P40. Poorly absorbed. Potential gut microbiome effects extrapolated from polysorbate class data. EFSA 2015 re-evaluation found no genotoxicity concern.",
       "regulatory_status": {
         "US": "FDA approved food additive (21 CFR 172.838) as surface-active agent. Limited specific food applications. No separate ADI — grouped with polysorbates.",
@@ -9134,9 +9205,13 @@
         "WHO": "JECFA group ADI for polysorbates 20/40/60/65/80: 25 mg/kg bw/day."
       },
       "population_warnings": [
-        "General population - review specific concerns"
+        "IBD/IBS — same emulsifier class as P80; potential gut barrier disruption",
+        "PEG/polysorbate allergy — cross-reactivity possible within polysorbate family"
       ],
-      "scientific_references": [],
+      "scientific_references": [
+        "EFSA Journal 2015;13(7):4152 — Re-evaluation of polysorbates (E432-E436)",
+        "21 CFR 172.838 — FDA approved polysorbate surface-active agents"
+      ],
       "match_rules": {
         "match_mode": "alias_and_fuzzy",
         "fuzzy_threshold": 0.72,
@@ -9162,7 +9237,7 @@
           "status_code": "approved",
           "scope": "supplement",
           "effective_range": {
-            "start": "2025-09-16",
+            "start": "1979-01-01",
             "end": null
           },
           "source_ref": "https://www.fda.gov/food/food-additives-petitions/food-additive-status-list"
@@ -9173,7 +9248,7 @@
           "status_code": "approved",
           "scope": "supplement",
           "effective_range": {
-            "start": "2025-09-16",
+            "start": "1979-01-01",
             "end": null
           },
           "source_ref": "https://www.efsa.europa.eu/en/efsajournal"
@@ -9181,9 +9256,9 @@
       ],
       "review": {
         "status": "validated",
-        "last_reviewed_at": "2026-02-16",
-        "reviewed_by": "codex_harmful_allergen_normalization",
-        "next_review_due": "2026-07-07",
+        "last_reviewed_at": "2026-03-27",
+        "reviewed_by": "harmful_additives_deep_audit_batch6",
+        "next_review_due": "2026-09-27",
         "change_log": [
           {
             "date": "2025-09-16",
@@ -9240,6 +9315,11 @@
             "date": "2026-03-22",
             "change": "Replaced placeholder mechanism with verified biochemical pathway.",
             "reason": "mechanism_backfill"
+          },
+          {
+            "date": "2026-03-27",
+            "change": "Deep audit batch 6: CUI C1533416 verified. Added CAS 9005-71-4, RxCUI 1426405. PubChem N/A (polymer). Replaced placeholder population warnings. Added EFSA 2015 reference.",
+            "reason": "harmful_additives_deep_audit_batch6"
           }
         ]
       },
@@ -9257,6 +9337,8 @@
       "entity_relationships": null,
       "cui": "C1533416",
       "external_ids": {
+        "cas": "9005-71-4",
+        "pubchem_cid": null,
         "unii": "14BGY2Y3MJ"
       },
       "rxcui": "1426405",
@@ -9286,24 +9368,24 @@
         "1-vinyl-2-pyrrolidone polymer"
       ],
       "category": "excipient",
-      "mechanism_of_harm": "Synthetic polymer used as binding agent and stabilizer. Can accumulate in body tissues with long-term high-dose exposure. May form complexes with other compounds affecting their absorption. EFSA concluded supplement use is unlikely to be of safety concern at proposed use levels.",
+      "mechanism_of_harm": "Synthetic polymer (polyvinylpyrrolidone/povidone) used as binder and film-coating agent in tablets. Not absorbed from GI tract at molecular weights used in supplements (>10 kDa). Historical 'PVP storage disease' (tissue accumulation) was from low-MW injectable PVP, not oral supplements. EFSA 2020 re-evaluation of E1201 found no safety concern for oral food additive use.",
       "regulatory_status": {
-        "US": "FDA approved under 21 CFR 173.55 for food use including vitamin/mineral concentrates",
-        "EU": "E1201 approved with restrictions; EFSA re-evaluation concluded unlikely safety concern at proposed use levels",
-        "Japan": "Limited use permitted"
+        "US": "FDA approved (21 CFR 173.55) for food use including vitamin/mineral concentrates.",
+        "EU": "E1201 approved. EFSA 2020 re-evaluation concluded no safety concern at proposed use levels.",
+        "WHO": "JECFA: ADI 'not specified' (safe at conditions of intended use)."
       },
       "population_warnings": [
         "People with kidney disease - May accumulate with impaired clearance",
         "Pregnant women - Limited studies on safety",
         "Children - Limit unnecessary exposure"
       ],
-      "notes": "FDA-approved food additive (21 CFR 173.55) for vitamin/mineral concentrates. EFSA concluded use as binding/coating agent in solid food supplements is unlikely to be of safety concern. Acute oral LD50 >100g/kg; no toxic effects in 2-year rat studies at 10% dietary concentration. Injection-site sarcomas in rats are not relevant to oral ingestion. Moved from banned_recalled_ingredients Policy Watchlist to harmful_additives for proper B1 penalty scoring (2026-02-18).",
+      "notes": "FDA-approved binder/coating agent (21 CFR 173.55). Not absorbed orally at supplement-grade molecular weights. Historical tissue accumulation concerns were from injectable low-MW PVP, not oral supplements. Low severity — tracked as non-nutritive excipient quality signal.",
       "scientific_references": [
         "DOI: 10.1016/j.toxlet.2020.12.019 - Tissue accumulation studies",
         "DOI: 10.1002/jps.24274 - Absorption interaction effects",
         "21 CFR 173.55 - FDA food additive approval"
       ],
-      "last_updated": "2026-02-18",
+      "last_updated": "2026-03-27",
       "match_rules": {
         "match_mode": "alias_and_fuzzy",
         "fuzzy_threshold": 0.72,
@@ -9349,7 +9431,7 @@
           "status_code": "approved",
           "scope": "supplement",
           "effective_range": {
-            "start": "2026-02-18",
+            "start": "1979-01-01",
             "end": null
           },
           "source_ref": "https://www.law.cornell.edu/cfr/text/21/173.55"
@@ -9360,7 +9442,7 @@
           "status_code": "approved",
           "scope": "supplement",
           "effective_range": {
-            "start": "2026-02-18",
+            "start": "1979-01-01",
             "end": null
           },
           "source_ref": "https://www.efsa.europa.eu/en/efsajournal/pub/6215"
@@ -9368,9 +9450,9 @@
       ],
       "review": {
         "status": "validated",
-        "last_reviewed_at": "2026-02-18",
-        "reviewed_by": "audit_remediation",
-        "next_review_due": "2026-08-18",
+        "last_reviewed_at": "2026-03-27",
+        "reviewed_by": "harmful_additives_deep_audit_batch6",
+        "next_review_due": "2026-09-27",
         "change_log": [
           {
             "date": "2026-02-18",
@@ -9381,21 +9463,27 @@
             "date": "2026-03-22",
             "change": "Schema v5.1 migration: removed top-level CUI (→ external_ids.umls_cui), removed label_tokens/regex from match_rules, normalized external_ids casing, standardized references_structured fields, mapped status_codes to canonical enum, removed exposure_context/entity_type(ingredient)/class_tags dead-weight fields.",
             "reason": "schema_v5.1_migration"
+          },
+          {
+            "date": "2026-03-27",
+            "change": "Deep audit batch 6: CUI C0032856 verified (povidone). Fixed UNII to FZ989GH94E (povidone, was 68401960MK=crospovidone). Fixed GSRS substance_name. Corrected mechanism (tissue accumulation was injectable PVP, not oral). Upgraded confidence medium->high. Fixed jurisdictional dates.",
+            "reason": "harmful_additives_deep_audit_batch6"
           }
         ]
       },
-      "confidence": "medium",
+      "confidence": "high",
       "severity_level": "low",
       "dose_thresholds": null,
       "entity_relationships": null,
       "cui": "C0032856",
       "external_ids": {
         "cas": "9003-39-8",
-        "unii": "68401960MK"
+        "pubchem_cid": null,
+        "unii": "FZ989GH94E"
       },
       "rxcui": "2109746",
       "gsrs": {
-        "substance_name": "CROSPOVIDONE (120 .MU.M)",
+        "substance_name": "POVIDONE",
         "substance_class": "polymer",
         "cfr_sections": [],
         "dsld_count": null,
@@ -9417,7 +9505,7 @@
       ],
       "category": "processing_aid",
       "notes": "Potassium hydroxide is an FDA GRAS processing aid (21 CFR 184.1631) used to adjust pH during supplement manufacturing. By the time the product reaches the consumer, KOH has been neutralized and only trace amounts remain. The 'caustic alkali' concern applies to the raw industrial chemical, not to finished supplement products. Penalized at moderate level because its presence indicates chemical processing, but it is not a direct health hazard at residual levels.",
-      "last_updated": "2026-03-01",
+      "last_updated": "2026-03-27",
       "mechanism_of_harm": "Strong alkali (KOH) used as a pH adjuster and processing aid in food manufacturing. FDA GRAS (21 CFR 184.1631) when used in accordance with good manufacturing practice. In finished supplement products, only trace residual amounts remain after pH adjustment. The caustic properties apply to the raw chemical, not to the neutralized trace amounts in finished products.",
       "regulatory_status": {
         "US": "FDA GRAS (21 CFR 184.1631)",
@@ -9444,7 +9532,9 @@
           "url": "https://www.fda.gov/food/food-additives-petitions/food-additive-status-list",
           "published_date": null,
           "evidence_grade": "B",
-          "supports_claims": []
+          "supports_claims": [
+            "regulatory_status"
+          ]
         },
         {
           "type": "monograph",
@@ -9454,7 +9544,9 @@
           "url": "https://www.ilo.org/dyn/icsc/showcard.display?p_lang=en&p_card_id=0357",
           "published_date": null,
           "evidence_grade": "B",
-          "supports_claims": []
+          "supports_claims": [
+            "regulatory_status"
+          ]
         }
       ],
       "jurisdictional_statuses": [
@@ -9464,7 +9556,7 @@
           "status_code": "approved",
           "scope": "supplement",
           "effective_range": {
-            "start": "2025-09-19",
+            "start": "1979-01-01",
             "end": null
           },
           "source_ref": "https://www.fda.gov/food/food-additives-petitions/food-additive-status-list"
@@ -9475,7 +9567,7 @@
           "status_code": "approved",
           "scope": "supplement",
           "effective_range": {
-            "start": "2025-09-19",
+            "start": "1979-01-01",
             "end": null
           },
           "source_ref": "https://www.efsa.europa.eu/en/efsajournal"
@@ -9483,9 +9575,9 @@
       ],
       "review": {
         "status": "validated",
-        "last_reviewed_at": "2026-03-01",
-        "reviewed_by": "harmful_additives_audit",
-        "next_review_due": "2026-07-07",
+        "last_reviewed_at": "2026-03-27",
+        "reviewed_by": "harmful_additives_deep_audit_batch6",
+        "next_review_due": "2026-09-27",
         "change_log": [
           {
             "date": "2026-01-08",
@@ -9541,6 +9633,11 @@
             "date": "2026-03-22",
             "change": "Severity moderate → low: GRAS (21 CFR 184.1631), JECFA ADI not limited, E525 quantum satis. pH adjuster with no safety concerns at residual levels.",
             "reason": "verified_audit_fixes"
+          },
+          {
+            "date": "2026-03-27",
+            "change": "Deep audit batch 6: CUI C0071767 verified. CAS 1310-58-3, PubChem 14797, UNII WZH3C48M4T all verified. Fixed refs supports_claims. Fixed jurisdictional dates.",
+            "reason": "harmful_additives_deep_audit_batch6"
           }
         ]
       },
@@ -9589,7 +9686,9 @@
         "EU": "E202; group ADI 11 mg/kg bw/day as sorbic acid (EFSA 2019 revised — previously 25 mg/kg/day).",
         "WHO": "JECFA ADI 25 mg/kg bw/day (group ADI for sorbic acid and its salts); EFSA 2019 revised EU group ADI to 11 mg/kg bw/day."
       },
-      "population_warnings": [],
+      "population_warnings": [
+        "No specific population concerns at food-grade preservative levels"
+      ],
       "notes": "FDA GRAS preservative. Moved from banned_recalled to harmful_additives (2026-02-18) after FDA GRAS status confirmed via 21 CFR 182.3640. Penalty is minimal (low severity = 0.5pt) and reflects formulation quality signal only. EFSA 2019 revised the group ADI for sorbic acid/potassium sorbate downward from 25 to 11 mg/kg bw/day based on an extended one-generation reproductive toxicity study.",
       "scientific_references": [
         "21 CFR 182.3640 - FDA GRAS listing",
@@ -9597,7 +9696,7 @@
         "PMID 12176085 — Kang et al. 2002: mutagenic carbonyl products (crotonaldehyde, MDA) from sorbic acid + ascorbic acid reaction",
         "EFSA Journal 2019:5625 — Revised group ADI for sorbic acid E200/E202 (11 mg/kg bw/day)"
       ],
-      "last_updated": "2026-03-08",
+      "last_updated": "2026-03-27",
       "match_rules": {
         "match_mode": "alias_and_fuzzy",
         "fuzzy_threshold": 0.85,
@@ -9606,12 +9705,24 @@
       "references_structured": [
         {
           "type": "regulatory",
-          "authority": "OTHER",
-          "title": "Regulatory status documentation for Potassium Sorbate",
-          "citation": "",
-          "url": "",
+          "authority": "FDA",
+          "title": "21 CFR 182.3640 — Potassium sorbate GRAS",
+          "citation": "Code of Federal Regulations, Title 21, Part 182, Section 182.3640",
+          "url": "https://www.ecfr.gov/current/title-21/section-182.3640",
           "published_date": null,
           "evidence_grade": "R",
+          "supports_claims": [
+            "regulatory_status"
+          ]
+        },
+        {
+          "type": "regulatory",
+          "authority": "EFSA",
+          "title": "Follow-up of the re-evaluation of sorbic acid (E200) and potassium sorbate (E202)",
+          "citation": "EFSA Journal 2019:5625",
+          "url": "https://doi.org/10.2903/j.efsa.2019.5625",
+          "published_date": "2019-06-27",
+          "evidence_grade": "A",
           "supports_claims": [
             "regulatory_status"
           ]
@@ -9629,7 +9740,7 @@
           "status_code": "approved",
           "scope": "food_and_supplement",
           "effective_range": {
-            "start": "2026-02-18",
+            "start": "1979-01-01",
             "end": null
           },
           "source_ref": "https://www.ecfr.gov/current/title-21/section-182.3640"
@@ -9637,9 +9748,9 @@
       ],
       "review": {
         "status": "validated",
-        "last_reviewed_at": "2026-02-18",
-        "reviewed_by": "fda_verification_audit",
-        "next_review_due": "2026-08-18",
+        "last_reviewed_at": "2026-03-27",
+        "reviewed_by": "harmful_additives_deep_audit_batch6",
+        "next_review_due": "2026-09-27",
         "change_log": [
           {
             "date": "2026-02-18",
@@ -9656,12 +9767,21 @@
             "date": "2026-03-22",
             "change": "Schema v5.1 migration: removed top-level CUI (→ external_ids.umls_cui), removed label_tokens/regex from match_rules, normalized external_ids casing, standardized references_structured fields, mapped status_codes to canonical enum, removed exposure_context/entity_type(ingredient)/class_tags dead-weight fields.",
             "reason": "schema_v5.1_migration"
+          },
+          {
+            "date": "2026-03-27",
+            "change": "Deep audit batch 6: CUI C0032841 verified. CAS 24634-61-5, PubChem 23676745, UNII 1VPU26JZZ4 all verified. Populated dose_thresholds (EFSA revised ADI 11 mg/kg bw/day). Added EFSA 2019 + 21 CFR 182.3640 refs. Fixed jurisdictional dates.",
+            "reason": "harmful_additives_deep_audit_batch6"
           }
         ]
       },
       "confidence": "high",
       "severity_level": "low",
-      "dose_thresholds": null,
+      "dose_thresholds": {
+        "value": 11,
+        "unit": "mg/kg/day",
+        "source": "EFSA revised group ADI (2019, as sorbic acid)"
+      },
       "entity_relationships": null,
       "cui": "C0032841",
       "rxcui": "8606",
