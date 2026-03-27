@@ -31,6 +31,12 @@ python3 scripts/score_supplements.py <enriched_input> <output>
 # Build final DB export for Flutter
 python3 scripts/build_final_db.py <scored_input> <output>
 
+# Sync pipeline output to Supabase
+python3 scripts/sync_to_supabase.py <build_output_dir>
+
+# Dry run (preview without uploading)
+python3 scripts/sync_to_supabase.py <build_output_dir> --dry-run
+
 # FDA weekly sync (regulatory recall updates)
 bash scripts/run_fda_sync.sh
 

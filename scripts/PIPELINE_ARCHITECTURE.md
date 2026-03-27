@@ -194,6 +194,27 @@ Section caps:
 For detailed formulas and subcomponents, see:
 - `SCORING_ENGINE_SPEC.md`
 
+## Stage 4: Distribute (sync_to_supabase.py)
+
+**Input:** Build output from build_final_db.py (pharmaguide_core.db + detail_blobs/ + export_manifest.json)
+**Output:** Versioned artifacts in Supabase Storage + manifest row in PostgreSQL
+
+**Workflow:**
+1. Read export_manifest.json from build directory
+2. Compare version to current Supabase manifest (is_current=true)
+3. If newer: upload .db file and detail blobs to Supabase Storage
+4. Insert new manifest row, mark previous as not current
+
+**Environment:** Requires SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY in .env
+
+**CLI:**
+```bash
+python scripts/sync_to_supabase.py <build_output_dir>          # Full sync
+python scripts/sync_to_supabase.py <build_output_dir> --dry-run # Preview only
+```
+
+**Safety:** Uses upsert mode. Re-running is idempotent. The Flutter app reads the manifest to detect new versions and downloads in background — never blocks the user.
+
 ## CLI Quick Reference
 
 ```bash
