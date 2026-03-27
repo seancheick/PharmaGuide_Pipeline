@@ -119,7 +119,7 @@ CREATE POLICY "Users manage own submissions" ON pending_products
 -- =============================================================================
 
 -- 6a. Atomic manifest rotation (service_role only)
--- INSERT new row first, then UPDATE others — no window where zero are current.
+-- UPDATE old rows first, then INSERT new — all within a single PL/pgSQL transaction.
 CREATE OR REPLACE FUNCTION rotate_manifest(
   p_db_version text,
   p_pipeline_version text,

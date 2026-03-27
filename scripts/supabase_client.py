@@ -20,9 +20,10 @@ def get_supabase_client():
     """Create and return a Supabase client using service role credentials.
 
     Raises ValueError if required environment variables are missing.
+    Uses a 5-minute storage timeout for large .db file uploads.
     """
     _load_env()
-    from supabase import create_client
+    from supabase import create_client, ClientOptions
 
     url = os.environ.get("SUPABASE_URL")
     if not url:
@@ -38,7 +39,9 @@ def get_supabase_client():
             "Add it to your .env file."
         )
 
-    return create_client(url, key)
+    return create_client(url, key, options=ClientOptions(
+        storage_client_timeout=300,  # 5 minutes for large DB uploads
+    ))
 
 
 def parse_manifest_response(response):
