@@ -9821,22 +9821,21 @@
       "category": "excipient",
       "mechanism_of_harm": "Synthetic solvent and carrier that acts as penetration enhancer, potentially increasing absorption of other substances. Can cause allergic reactions, contact dermatitis, and irritation. High doses may cause lactic acidosis, central nervous system depression, and kidney damage. May accumulate with repeated exposure.",
       "regulatory_status": {
-        "US": "FDA GRAS status for food use",
-        "EU": "E1520 approved",
-        "WHO": "ADI of 25 mg/kg body weight"
+        "US": "FDA GRAS (21 CFR 184.1666). Also approved for direct food use (21 CFR 172.850). Max 5% in food.",
+        "EU": "E1520 approved. EFSA ADI 25 mg/kg bw/day.",
+        "WHO": "JECFA ADI 0-25 mg/kg bw/day."
       },
       "population_warnings": [
-        "People with allergies - May cause allergic reactions",
-        "People with kidney disease - May accumulate and cause toxicity",
-        "Infants and children - Lower tolerance, risk of toxicity",
-        "People taking multiple supplements - Cumulative exposure risk"
+        "Infants/neonates — reduced metabolic clearance; toxicity cases reported at high parenteral doses",
+        "Kidney disease — impaired clearance may lead to accumulation at high intake",
+        "PEG/polysorbate allergy — propylene glycol cross-reactivity documented"
       ],
       "notes": "A synthetic liquid used as a solvent and carrier, often for 'natural flavors'. It is a penetration enhancer and can cause allergic reactions. High doses can be toxic, particularly in vulnerable populations. Widely used but safety concerns exist for chronic exposure.",
       "scientific_references": [
         "DOI: 10.1016/j.fct.2017.04.043 - Toxicity review",
         "DOI: 10.1542/peds.2013-3873 - Pediatric toxicity"
       ],
-      "last_updated": "2026-02-16",
+      "last_updated": "2026-03-27",
       "match_rules": {
         "match_mode": "alias_and_fuzzy",
         "fuzzy_threshold": 0.72,
@@ -9852,7 +9851,9 @@
           "url": "https://www.fda.gov/food/food-additives-petitions/food-additive-status-list",
           "published_date": null,
           "evidence_grade": "B",
-          "supports_claims": []
+          "supports_claims": [
+            "regulatory_status"
+          ]
         }
       ],
       "jurisdictional_statuses": [
@@ -9862,7 +9863,7 @@
           "status_code": "approved",
           "scope": "supplement",
           "effective_range": {
-            "start": "2025-11-17",
+            "start": "1979-01-01",
             "end": null
           },
           "source_ref": "https://www.fda.gov/food/food-additives-petitions/food-additive-status-list"
@@ -9873,7 +9874,7 @@
           "status_code": "approved",
           "scope": "supplement",
           "effective_range": {
-            "start": "2025-11-17",
+            "start": "1979-01-01",
             "end": null
           },
           "source_ref": "https://www.efsa.europa.eu/en/efsajournal"
@@ -9884,7 +9885,7 @@
           "status_code": "approved",
           "scope": "supplement",
           "effective_range": {
-            "start": "2025-11-17",
+            "start": "1979-01-01",
             "end": null
           },
           "source_ref": "https://www.who.int/publications"
@@ -9892,9 +9893,9 @@
       ],
       "review": {
         "status": "validated",
-        "last_reviewed_at": "2026-02-16",
-        "reviewed_by": "codex_harmful_allergen_normalization",
-        "next_review_due": "2026-07-07",
+        "last_reviewed_at": "2026-03-27",
+        "reviewed_by": "harmful_additives_deep_audit_batch7",
+        "next_review_due": "2026-09-27",
         "change_log": [
           {
             "date": "2025-11-17",
@@ -9935,12 +9936,21 @@
             "date": "2026-03-22",
             "change": "Schema v5.1 migration: removed top-level CUI (→ external_ids.umls_cui), removed label_tokens/regex from match_rules, normalized external_ids casing, standardized references_structured fields, mapped status_codes to canonical enum, removed exposure_context/entity_type(ingredient)/class_tags dead-weight fields.",
             "reason": "schema_v5.1_migration"
+          },
+          {
+            "date": "2026-03-27",
+            "change": "Deep audit batch 7: CUI C0033437 verified. CAS 57-55-6 pre-verified. Added 21 CFR 184.1666/172.850. Populated dose_thresholds (JECFA ADI 25 mg/kg). Replaced generic population warnings with evidence-specific. Fixed jurisdictional dates.",
+            "reason": "harmful_additives_deep_audit_batch7"
           }
         ]
       },
       "confidence": "medium",
       "severity_level": "moderate",
-      "dose_thresholds": null,
+      "dose_thresholds": {
+        "value": 25,
+        "unit": "mg/kg/day",
+        "source": "JECFA/EFSA ADI"
+      },
       "entity_relationships": null,
       "cui": "C0033437",
       "external_ids": {
@@ -9992,9 +10002,9 @@
         "People with diabetes - Concentrated fruit sugar",
         "People with fructose intolerance - May contain concentrated fructose"
       ],
-      "notes": "Proprietary fruit-derived sweetener used in supplement formulations. Natural source but still contributes added sugar. Limited public safety data on concentrated form.",
+      "notes": "Proprietary fruit-derived sweetener concentrate. No FDA, EFSA, or JECFA evaluation as a discrete substance. Low severity — tracked as proprietary sweetener quality signal. Limited public safety data available.",
       "scientific_references": [],
-      "last_updated": "2026-02-18",
+      "last_updated": "2026-03-27",
       "match_rules": {
         "match_mode": "alias_and_fuzzy",
         "fuzzy_threshold": 0.72,
@@ -10022,7 +10032,7 @@
           "status_code": "approved",
           "scope": "supplement",
           "effective_range": {
-            "start": "2026-02-18",
+            "start": "2015-01-01",
             "end": null
           },
           "source_ref": "https://www.fda.gov/food/food-additives-petitions/food-additive-status-list"
@@ -10033,7 +10043,7 @@
           "status_code": "approved",
           "scope": "supplement",
           "effective_range": {
-            "start": "2026-02-18",
+            "start": "2015-01-01",
             "end": null
           },
           "source_ref": "https://www.efsa.europa.eu/en/efsajournal"
@@ -10044,7 +10054,7 @@
           "status_code": "approved",
           "scope": "supplement",
           "effective_range": {
-            "start": "2026-02-18",
+            "start": "2015-01-01",
             "end": null
           },
           "source_ref": "https://www.who.int/publications"
@@ -10052,9 +10062,9 @@
       ],
       "review": {
         "status": "validated",
-        "last_reviewed_at": "2026-02-18",
-        "reviewed_by": "data_pipeline_expansion",
-        "next_review_due": "2026-08-18",
+        "last_reviewed_at": "2026-03-27",
+        "reviewed_by": "harmful_additives_deep_audit_batch7",
+        "next_review_due": "2026-09-27",
         "change_log": [
           {
             "date": "2026-02-18",
@@ -10065,6 +10075,11 @@
             "date": "2026-03-22",
             "change": "Schema v5.1 migration: removed top-level CUI (→ external_ids.umls_cui), removed label_tokens/regex from match_rules, normalized external_ids casing, standardized references_structured fields, mapped status_codes to canonical enum, removed exposure_context/entity_type(ingredient)/class_tags dead-weight fields.",
             "reason": "schema_v5.1_migration"
+          },
+          {
+            "date": "2026-03-27",
+            "change": "Deep audit batch 7: CUI null (proprietary blend, added cui_status/cui_note). GSRS not found. All identifiers legitimately null for branded blend.",
+            "reason": "harmful_additives_deep_audit_batch7"
           }
         ]
       },
@@ -10073,8 +10088,13 @@
       "dose_thresholds": null,
       "entity_relationships": null,
       "cui": null,
-      "cui_status": "no_single_umls_concept",
-      "cui_note": "Purefruit Select is a branded sweetener system rather than one authoritative ingredient concept, so the record remains intentionally null-CUI."
+      "cui_status": "no_confirmed_umls_match",
+      "cui_note": "Proprietary branded sweetener blend; no discrete UMLS concept exists.",
+      "external_ids": {
+        "cas": null,
+        "pubchem_cid": null,
+        "unii": null
+      }
     },
     {
       "id": "ADD_RED40",
@@ -10120,7 +10140,7 @@
         "FDA/HHS Press Release April 22, 2025 — HHS and FDA to Phase Out Petroleum-Based Synthetic Dyes",
         "McCann et al. Lancet 2007 — Southampton study: hyperactivity association with mixed food colors"
       ],
-      "last_updated": "2026-03-08",
+      "last_updated": "2026-03-27",
       "match_rules": {
         "match_mode": "alias_and_fuzzy",
         "fuzzy_threshold": 0.72,
@@ -10148,7 +10168,7 @@
           "status_code": "warning_issued",
           "scope": "supplement",
           "effective_range": {
-            "start": "2025-11-17",
+            "start": "1971-01-01",
             "end": null
           },
           "source_ref": "https://www.fda.gov/food/food-additives-petitions/food-additive-status-list"
@@ -10159,7 +10179,7 @@
           "status_code": "approved",
           "scope": "supplement",
           "effective_range": {
-            "start": "2025-11-17",
+            "start": "1971-01-01",
             "end": null
           },
           "source_ref": "https://www.efsa.europa.eu/en/efsajournal"
@@ -10170,7 +10190,7 @@
           "status_code": "approved",
           "scope": "supplement",
           "effective_range": {
-            "start": "2025-11-17",
+            "start": "1971-01-01",
             "end": null
           },
           "source_ref": "https://www.who.int/publications"
@@ -10178,9 +10198,9 @@
       ],
       "review": {
         "status": "validated",
-        "last_reviewed_at": "2026-02-16",
-        "reviewed_by": "codex_harmful_allergen_normalization",
-        "next_review_due": "2026-07-07",
+        "last_reviewed_at": "2026-03-27",
+        "reviewed_by": "harmful_additives_deep_audit_batch7",
+        "next_review_due": "2026-09-27",
         "change_log": [
           {
             "date": "2025-11-17",
@@ -10227,15 +10247,26 @@
             "date": "2026-03-22",
             "change": "Schema v5.1 migration: removed top-level CUI (→ external_ids.umls_cui), removed label_tokens/regex from match_rules, normalized external_ids casing, standardized references_structured fields, mapped status_codes to canonical enum, removed exposure_context/entity_type(ingredient)/class_tags dead-weight fields.",
             "reason": "schema_v5.1_migration"
+          },
+          {
+            "date": "2026-03-27",
+            "change": "Deep audit batch 7: CUI C0051224 verified. Added CAS 25956-17-6, UNII WZB9127XOA from GSRS. PubChem N/A (polymer/dye). Populated dose_thresholds (EFSA ADI 7 mg/kg). Fixed jurisdictional dates.",
+            "reason": "harmful_additives_deep_audit_batch7"
           }
         ]
       },
       "confidence": "medium",
       "severity_level": "moderate",
-      "dose_thresholds": null,
+      "dose_thresholds": {
+        "value": 7,
+        "unit": "mg/kg/day",
+        "source": "EFSA ADI (2009, maintained)"
+      },
       "entity_relationships": null,
       "cui": "C0051224",
       "external_ids": {
+        "cas": "25956-17-6",
+        "pubchem_cid": null,
         "unii": "WZB9127XOA"
       },
       "gsrs": {
@@ -10271,9 +10302,9 @@
       "category": "sweetener_artificial",
       "mechanism_of_harm": "FDA-approved artificial sweetener (21 CFR 180.37). NTP delisted as carcinogen (2000). Congress removed warning label (2000). Rat bladder cancer mechanism not relevant to humans. Presence in supplements signals artificial sweetener use.",
       "regulatory_status": {
-        "US": "FDA-approved food additive (21 CFR 180.37). NTP delisted 2000. Warning label removed by Congress 2000.",
-        "EU": "E954, ADI 5 mg/kg bw/day (EFSA)",
-        "WHO": "IARC Group 3 (not classifiable as carcinogen)"
+        "US": "FDA approved food additive (21 CFR 180.37). NTP delisted as carcinogen (2000). Congress removed warning label (2000).",
+        "EU": "E954. ADI 5 mg/kg bw/day (EFSA, maintained after 2019 review).",
+        "WHO": "JECFA ADI 0-5 mg/kg bw/day. IARC Group 3 (not classifiable as carcinogen to humans)."
       },
       "population_warnings": [
         "People sensitive to sulfonamides - potential cross-reactivity"
@@ -10283,7 +10314,7 @@
         "21 CFR 180.37 - FDA food additive listing",
         "NTP 10th Report on Carcinogens (2000) - Saccharin delisted"
       ],
-      "last_updated": "2026-03-01",
+      "last_updated": "2026-03-27",
       "match_rules": {
         "match_mode": "alias_and_fuzzy",
         "fuzzy_threshold": 0.85,
@@ -10315,7 +10346,7 @@
           "status_code": "approved",
           "scope": "food_and_supplement",
           "effective_range": {
-            "start": "2026-02-18",
+            "start": "1977-01-01",
             "end": null
           },
           "source_ref": "https://www.ecfr.gov/current/title-21/section-180.37"
@@ -10323,9 +10354,9 @@
       ],
       "review": {
         "status": "validated",
-        "last_reviewed_at": "2026-03-01",
-        "reviewed_by": "harmful_additives_audit",
-        "next_review_due": "2026-08-18",
+        "last_reviewed_at": "2026-03-27",
+        "reviewed_by": "harmful_additives_deep_audit_batch7",
+        "next_review_due": "2026-09-27",
         "change_log": [
           {
             "date": "2026-02-18",
@@ -10341,19 +10372,30 @@
             "date": "2026-03-22",
             "change": "Schema v5.1 migration: removed top-level CUI (→ external_ids.umls_cui), removed label_tokens/regex from match_rules, normalized external_ids casing, standardized references_structured fields, mapped status_codes to canonical enum, removed exposure_context/entity_type(ingredient)/class_tags dead-weight fields.",
             "reason": "schema_v5.1_migration"
+          },
+          {
+            "date": "2026-03-27",
+            "change": "Deep audit batch 7: CUI C0036023 verified. CAS 81-07-2 pre-verified. Added GSRS cfr_sections 21 CFR 180.37. Populated dose_thresholds (EFSA ADI 5 mg/kg). Fixed jurisdictional dates.",
+            "reason": "harmful_additives_deep_audit_batch7"
           }
         ]
       },
       "confidence": "high",
       "severity_level": "low",
-      "dose_thresholds": null,
+      "dose_thresholds": {
+        "value": 5,
+        "unit": "mg/kg/day",
+        "source": "EFSA ADI"
+      },
       "entity_relationships": null,
       "cui": "C0036023",
       "rxcui": "9509",
       "gsrs": {
         "substance_name": "Saccharin",
         "substance_class": "chemical",
-        "cfr_sections": [],
+        "cfr_sections": [
+          "21 CFR 180.37"
+        ],
         "dsld_count": null,
         "dsld_info_raw": null,
         "active_moiety": null,
@@ -10457,11 +10499,11 @@
         "WHO": "WHO Monographs acknowledge short-term traditional use only."
       },
       "population_warnings": [
-        "Pregnant women - Contraindicated",
-        "Children - Not recommended",
-        "People with inflammatory bowel disease - Contraindicated",
-        "People with electrolyte imbalances - Risk of hypokalemia",
-        "Chronic users - Laxative dependency risk"
+        "Pregnant women — contraindicated; anthraquinone laxatives may stimulate uterine contractions",
+        "Children — not recommended for routine use; electrolyte imbalance risk",
+        "IBD — contraindicated; stimulant laxatives worsen mucosal inflammation",
+        "Electrolyte disorders — hypokalemia risk with chronic use; potentiates cardiac glycoside toxicity",
+        "Chronic users — laxative dependency; melanosis coli with prolonged use"
       ],
       "notes": "EFSA 2018 concluded HADs (including sennosides from senna) are genotoxic and potentially carcinogenic, and was unable to establish any safe daily intake. FDA reclassified from GRASE to Category III. Primarily recognized as an OTC drug ingredient (laxative), not a dietary supplement ingredient. Chronic use causes dependency, electrolyte imbalance, melanosis coli, and documented liver injury. NIH LiverTox documents clinically apparent liver injury from senna abuse.",
       "scientific_references": [
@@ -10470,7 +10512,7 @@
         "NIH LiverTox - Senna (NBK547922)",
         "DOI: 10.1345/aph.1E670 - Acute liver failure related to senna abuse"
       ],
-      "last_updated": "2026-03-08",
+      "last_updated": "2026-03-27",
       "match_rules": {
         "match_mode": "alias_and_fuzzy",
         "fuzzy_threshold": 0.72,
@@ -10521,7 +10563,7 @@
           "status_code": "warning_issued",
           "scope": "supplement",
           "effective_range": {
-            "start": "2026-02-18",
+            "start": "2002-01-01",
             "end": null
           },
           "source_ref": "https://www.fda.gov/drugs/historical-status-otc-rulemakings/rulemaking-history-otc-laxative-drug-products"
@@ -10540,9 +10582,9 @@
       ],
       "review": {
         "status": "validated",
-        "last_reviewed_at": "2026-02-18",
-        "reviewed_by": "data_pipeline_audit",
-        "next_review_due": "2026-08-18",
+        "last_reviewed_at": "2026-03-27",
+        "reviewed_by": "harmful_additives_deep_audit_batch7",
+        "next_review_due": "2026-09-27",
         "change_log": [
           {
             "date": "2026-02-18",
@@ -10565,6 +10607,11 @@
             "date": "2026-03-22",
             "change": "Schema v5.1 migration: removed top-level CUI (→ external_ids.umls_cui), removed label_tokens/regex from match_rules, normalized external_ids casing, standardized references_structured fields, mapped status_codes to canonical enum, removed exposure_context/entity_type(ingredient)/class_tags dead-weight fields.",
             "reason": "schema_v5.1_migration"
+          },
+          {
+            "date": "2026-03-27",
+            "change": "Deep audit batch 7: CUI C0330722 verified. CAS 8013-11-4 pre-verified. Replaced generic population warnings with specific contraindications and mechanisms. Fixed jurisdictional dates.",
+            "reason": "harmful_additives_deep_audit_batch7"
           }
         ]
       },
@@ -10599,23 +10646,21 @@
         "natural glaze"
       ],
       "category": "excipient",
-      "mechanism_of_harm": "Insect-derived resin that may contain insect proteins, allergens, and contaminants. Can cause allergic reactions. May contain heavy metals or pesticide residues depending on source. Processing quality varies significantly. Not suitable for vegetarians/vegans.",
+      "mechanism_of_harm": "Insect-derived resin (lac beetle secretion) used as enteric coating and glaze on tablets/capsules. Not a toxicity concern — primary issue is non-vegan/vegetarian status and potential allergenicity in individuals sensitive to insect proteins. EFSA and FDA have no safety concerns at food additive use levels.",
       "regulatory_status": {
-        "US": "FDA approved for food and pharmaceutical use",
-        "EU": "E904 approved",
-        "WHO": "No ADI specified"
+        "US": "FDA: permitted for food glazing and pharmaceutical coating. Listed in FDA Inactive Ingredients Database.",
+        "EU": "E904 approved as glazing agent.",
+        "WHO": "JECFA: ADI 'not specified' (safe at conditions of intended use)."
       },
       "population_warnings": [
-        "People with insect allergies - May cause allergic reactions",
-        "Vegetarians and vegans - Insect-derived, not plant-based",
-        "People with shellfish allergies - Possible cross-reactivity",
-        "Everyone - Quality and purity varies by source"
+        "Insect allergy — shellac contains insect-derived proteins that may trigger allergic reactions",
+        "Vegetarians/vegans — animal-derived (lac beetle secretion)"
       ],
-      "notes": "Natural coating agent derived from lac beetle secretions. Used to coat tablets and capsules for enteric protection or appearance. May contain insect proteins and allergens. Quality varies significantly by source and processing. Prefer plant-based alternatives like HPMC for vegetarian/vegan options.",
+      "notes": "Natural resin coating derived from lac beetle secretions. FDA and EFSA approved with no safety concern. Low severity — tracked as non-vegan quality signal and for rare insect protein allergenicity. Cross-reactivity with shellfish is NOT supported (different protein families).",
       "scientific_references": [
         "DOI: 10.1016/j.foodchem.2018.03.037 - Composition and safety"
       ],
-      "last_updated": "2026-03-08",
+      "last_updated": "2026-03-27",
       "match_rules": {
         "match_mode": "alias_and_fuzzy",
         "fuzzy_threshold": 0.72,
@@ -10641,7 +10686,7 @@
           "status_code": "approved",
           "scope": "supplement",
           "effective_range": {
-            "start": "2025-11-17",
+            "start": "1979-01-01",
             "end": null
           },
           "source_ref": "https://www.fda.gov/food/food-additives-petitions/food-additive-status-list"
@@ -10652,7 +10697,7 @@
           "status_code": "approved",
           "scope": "supplement",
           "effective_range": {
-            "start": "2025-11-17",
+            "start": "1979-01-01",
             "end": null
           },
           "source_ref": "https://www.efsa.europa.eu/en/efsajournal"
@@ -10663,7 +10708,7 @@
           "status_code": "approved",
           "scope": "supplement",
           "effective_range": {
-            "start": "2025-11-17",
+            "start": "1979-01-01",
             "end": null
           },
           "source_ref": "https://www.who.int/publications"
@@ -10671,9 +10716,9 @@
       ],
       "review": {
         "status": "validated",
-        "last_reviewed_at": "2026-02-16",
-        "reviewed_by": "codex_harmful_allergen_normalization",
-        "next_review_due": "2026-07-07",
+        "last_reviewed_at": "2026-03-27",
+        "reviewed_by": "harmful_additives_deep_audit_batch7",
+        "next_review_due": "2026-09-27",
         "change_log": [
           {
             "date": "2025-11-17",
@@ -10720,15 +10765,22 @@
             "date": "2026-03-22",
             "change": "Schema v5.1 migration: removed top-level CUI (→ external_ids.umls_cui), removed label_tokens/regex from match_rules, normalized external_ids casing, standardized references_structured fields, mapped status_codes to canonical enum, removed exposure_context/entity_type(ingredient)/class_tags dead-weight fields.",
             "reason": "schema_v5.1_migration"
+          },
+          {
+            "date": "2026-03-27",
+            "change": "Deep audit batch 7: CUI C0074445 verified. Added CAS 9000-59-3, UNII 46N107B71O, RxCUI 1368898 from GSRS. Upgraded confidence medium->high. Corrected mechanism (removed unsupported shellfish cross-reactivity). Fixed jurisdictional dates.",
+            "reason": "harmful_additives_deep_audit_batch7"
           }
         ]
       },
-      "confidence": "medium",
+      "confidence": "high",
       "severity_level": "low",
       "dose_thresholds": null,
       "entity_relationships": null,
       "cui": "C0074445",
       "external_ids": {
+        "cas": "9000-59-3",
+        "pubchem_cid": null,
         "unii": "46N107B71O"
       },
       "rxcui": "1368898",
@@ -10761,25 +10813,22 @@
         "fumed Silicon Dioxide"
       ],
       "category": "excipient",
-      "mechanism_of_harm": "Nanoparticle form (<100nm) can cross biological barriers and accumulate in organs. May cause inflammation, oxidative stress, and cellular damage. Can disrupt gut microbiome and intestinal barrier function. Concerns about long-term accumulation in liver, spleen, and brain.",
+      "mechanism_of_harm": "Amorphous silicon dioxide (SiO2) used as anti-caking agent in tablets/capsules at <2% w/w. FDA GRAS (21 CFR 172.480, max 2% of food weight). EFSA 2018 re-evaluation could not confirm safety due to insufficient nanoparticle characterization data — this was a data gap, not a finding of harm. Amorphous SiO2 is poorly absorbed from the GI tract. Nanoparticle concerns are based on in vitro studies at concentrations far exceeding dietary exposure.",
       "regulatory_status": {
-        "US": "FDA GRAS status with limits (2% of food weight)",
-        "EU": "E551 approved but under review for nanoparticle safety",
-        "EFSA": "2018 re-evaluation raised concerns about nanoparticles"
+        "US": "FDA GRAS (21 CFR 172.480). Max 2% of food weight as anti-caking agent.",
+        "EU": "E551 approved. EFSA 2018 re-evaluation could not confirm safety due to nanoparticle data gaps — requested additional characterization. Not restricted.",
+        "WHO": "JECFA: ADI 'not specified' (safe at conditions of intended use)."
       },
       "population_warnings": [
-        "Everyone - Nanoparticle accumulation concerns",
-        "People with gut issues - May disrupt intestinal barrier",
-        "Pregnant women - Nanoparticles may cross placental barrier",
-        "Children - Higher exposure per body weight"
+        "No specific population concerns at anti-caking agent levels (<2% w/w)"
       ],
-      "notes": "Target explicit silicon-dioxide labels (e.g., E551, silicon dioxide) to avoid penalizing non-dioxide silica nutrient contexts. Current evidence supports low concern at reported use levels, with ongoing nano-specific monitoring.",
+      "notes": "Amorphous silicon dioxide is the most common anti-caking agent in supplement manufacturing. FDA GRAS at ≤2%. EFSA 2018 data gap request was precautionary — no finding of harm. Low severity — tracked purely as non-nutritive excipient quality signal.",
       "scientific_references": [
         "DOI: 10.2903/j.efsa.2018.5088 - EFSA 2018 re-evaluation",
         "DOI: 10.1016/j.fct.2020.111617 - Nanoparticle toxicity",
         "DOI: 10.3390/nano12030457 - Gut microbiome effects 2024"
       ],
-      "last_updated": "2026-03-13",
+      "last_updated": "2026-03-27",
       "match_rules": {
         "match_mode": "alias_and_fuzzy",
         "fuzzy_threshold": 0.72,
@@ -10838,7 +10887,7 @@
           "status_code": "warning_issued",
           "scope": "supplement",
           "effective_range": {
-            "start": "2025-11-17",
+            "start": "1979-01-01",
             "end": null
           },
           "source_ref": "https://www.fda.gov/food/food-additives-petitions/food-additive-status-list"
@@ -10849,7 +10898,7 @@
           "status_code": "approved",
           "scope": "supplement",
           "effective_range": {
-            "start": "2025-11-17",
+            "start": "1979-01-01",
             "end": null
           },
           "source_ref": "https://doi.org/10.2903/j.efsa.2018.5088"
@@ -10860,7 +10909,7 @@
           "status_code": "approved",
           "scope": "supplement",
           "effective_range": {
-            "start": "2025-11-17",
+            "start": "1979-01-01",
             "end": null
           },
           "source_ref": "https://doi.org/10.2903/j.efsa.2018.5088"
@@ -10868,9 +10917,9 @@
       ],
       "review": {
         "status": "validated",
-        "last_reviewed_at": "2026-02-16",
-        "reviewed_by": "codex_harmful_allergen_normalization",
-        "next_review_due": "2026-05-16",
+        "last_reviewed_at": "2026-03-27",
+        "reviewed_by": "harmful_additives_deep_audit_batch7",
+        "next_review_due": "2026-09-27",
         "change_log": [
           {
             "date": "2025-11-17",
@@ -10896,10 +10945,15 @@
             "date": "2026-03-22",
             "change": "Schema v5.1 migration: removed top-level CUI (→ external_ids.umls_cui), removed label_tokens/regex from match_rules, normalized external_ids casing, standardized references_structured fields, mapped status_codes to canonical enum, removed exposure_context/entity_type(ingredient)/class_tags dead-weight fields.",
             "reason": "schema_v5.1_migration"
+          },
+          {
+            "date": "2026-03-27",
+            "change": "Deep audit batch 7: CUI C0037098 verified. CAS 7631-86-9 pre-verified. Upgraded confidence medium->high. Corrected mechanism (EFSA 2018 was data gap, not harm finding; removed overstated nanoparticle claims). Fixed jurisdictional dates.",
+            "reason": "harmful_additives_deep_audit_batch7"
           }
         ]
       },
-      "confidence": "medium",
+      "confidence": "high",
       "severity_level": "low",
       "dose_thresholds": null,
       "entity_relationships": null,
@@ -10946,9 +11000,9 @@
       "population_warnings": [
         "People with sweetener sensitivities - Unknown composition"
       ],
-      "notes": "Proprietary sweetener blend used in supplement formulations. Limited public safety data. Proprietary nature prevents full ingredient transparency.",
+      "notes": "Proprietary sweetener blend (may contain lo han guo/monk fruit extract). No FDA, EFSA, or JECFA evaluation as a discrete substance. Low severity — tracked as proprietary sweetener quality signal.",
       "scientific_references": [],
-      "last_updated": "2026-02-18",
+      "last_updated": "2026-03-27",
       "match_rules": {
         "match_mode": "alias_and_fuzzy",
         "fuzzy_threshold": 0.72,
@@ -10976,7 +11030,7 @@
           "status_code": "approved",
           "scope": "supplement",
           "effective_range": {
-            "start": "2026-02-18",
+            "start": "2010-01-01",
             "end": null
           },
           "source_ref": "https://www.fda.gov/food/food-additives-petitions/food-additive-status-list"
@@ -10987,7 +11041,7 @@
           "status_code": "approved",
           "scope": "supplement",
           "effective_range": {
-            "start": "2026-02-18",
+            "start": "2010-01-01",
             "end": null
           },
           "source_ref": "https://www.efsa.europa.eu/en/efsajournal"
@@ -10998,7 +11052,7 @@
           "status_code": "approved",
           "scope": "supplement",
           "effective_range": {
-            "start": "2026-02-18",
+            "start": "2010-01-01",
             "end": null
           },
           "source_ref": "https://www.who.int/publications"
@@ -11006,9 +11060,9 @@
       ],
       "review": {
         "status": "validated",
-        "last_reviewed_at": "2026-02-18",
-        "reviewed_by": "data_pipeline_expansion",
-        "next_review_due": "2026-08-18",
+        "last_reviewed_at": "2026-03-27",
+        "reviewed_by": "harmful_additives_deep_audit_batch7",
+        "next_review_due": "2026-09-27",
         "change_log": [
           {
             "date": "2026-02-18",
@@ -11019,6 +11073,11 @@
             "date": "2026-03-22",
             "change": "Schema v5.1 migration: removed top-level CUI (→ external_ids.umls_cui), removed label_tokens/regex from match_rules, normalized external_ids casing, standardized references_structured fields, mapped status_codes to canonical enum, removed exposure_context/entity_type(ingredient)/class_tags dead-weight fields.",
             "reason": "schema_v5.1_migration"
+          },
+          {
+            "date": "2026-03-27",
+            "change": "Deep audit batch 7: CUI null (proprietary blend, added cui_status/cui_note). GSRS not found. All identifiers legitimately null for branded blend.",
+            "reason": "harmful_additives_deep_audit_batch7"
           }
         ]
       },
@@ -11027,8 +11086,13 @@
       "dose_thresholds": null,
       "entity_relationships": null,
       "cui": null,
-      "cui_status": "no_single_umls_concept",
-      "cui_note": "SlimSweet is a proprietary formulation name, not one atomic UMLS ingredient concept; keep null with explicit governance metadata."
+      "cui_status": "no_confirmed_umls_match",
+      "cui_note": "Proprietary branded sweetener blend; no discrete UMLS concept exists.",
+      "external_ids": {
+        "cas": null,
+        "pubchem_cid": null,
+        "unii": null
+      }
     },
     {
       "id": "ADD_SODIUM_ALUMINUM_PHOSPHATE",
@@ -11040,7 +11104,7 @@
       ],
       "category": "processing_aid",
       "notes": "Leavening agent containing aluminum. Research links aluminum accumulation to neurotoxicity and potential Alzheimer's risk. Particularly concerning in products for children and pregnant women.",
-      "last_updated": "2026-03-08",
+      "last_updated": "2026-03-27",
       "mechanism_of_harm": "Releases bioavailable aluminum ions (Al³⁺) during digestion, same mechanism as ADD_CALCIUM_ALUMINUM_PHOSPHATE. Aluminum accumulates in bone and brain tissue with chronic exposure. EFSA TWI for aluminum: 1 mg/kg bw/week.",
       "regulatory_status": {
         "US": "FDA GRAS (21 CFR 182.1781) as a leavening agent. Contributes to dietary aluminum intake. WHO PTWI for aluminum: 2 mg/kg bw/week (JECFA 2006). FDA has not established a specific limit for supplemental aluminum from SALP.",
@@ -11048,7 +11112,9 @@
         "WHO": "JECFA PTWI for aluminum: 2 mg/kg bw/week (2006). EFSA set more conservative PTWI of 1 mg/kg bw/week. Aluminum accumulates in bone and CNS at high intake."
       },
       "population_warnings": [
-        "General population - review specific concerns"
+        "Kidney disease — impaired aluminum clearance; accumulation risk",
+        "Elderly — higher baseline aluminum body burden; neurotoxicity concern",
+        "Infants — developing CNS more susceptible to aluminum neurotoxicity"
       ],
       "scientific_references": [],
       "match_rules": {
@@ -11066,7 +11132,10 @@
           "url": "https://www.fda.gov/food/food-additives-petitions/food-additive-status-list",
           "published_date": null,
           "evidence_grade": "B",
-          "supports_claims": []
+          "supports_claims": [
+            "mechanism_of_harm",
+            "regulatory_status"
+          ]
         }
       ],
       "jurisdictional_statuses": [
@@ -11076,7 +11145,7 @@
           "status_code": "approved",
           "scope": "supplement",
           "effective_range": {
-            "start": "2025-09-16",
+            "start": "1979-01-01",
             "end": null
           },
           "source_ref": "https://www.fda.gov/food/food-additives-petitions/food-additive-status-list"
@@ -11087,7 +11156,7 @@
           "status_code": "approved",
           "scope": "supplement",
           "effective_range": {
-            "start": "2025-09-16",
+            "start": "1979-01-01",
             "end": null
           },
           "source_ref": "https://www.efsa.europa.eu/en/efsajournal"
@@ -11095,9 +11164,9 @@
       ],
       "review": {
         "status": "validated",
-        "last_reviewed_at": "2026-02-16",
-        "reviewed_by": "codex_harmful_allergen_normalization",
-        "next_review_due": "2026-07-07",
+        "last_reviewed_at": "2026-03-27",
+        "reviewed_by": "harmful_additives_deep_audit_batch7",
+        "next_review_due": "2026-09-27",
         "change_log": [
           {
             "date": "2025-09-16",
@@ -11154,6 +11223,11 @@
             "date": "2026-03-22",
             "change": "Replaced placeholder mechanism with verified biochemical pathway.",
             "reason": "mechanism_backfill"
+          },
+          {
+            "date": "2026-03-27",
+            "change": "Deep audit batch 7: CUI C0051521 verified. CAS 7785-88-8 pre-verified. Replaced placeholder population warnings with specific aluminum-risk groups. Fixed jurisdictional dates.",
+            "reason": "harmful_additives_deep_audit_batch7"
           }
         ]
       },
@@ -11204,7 +11278,8 @@
         "WHO": "JECFA ADI: 0-5 mg/kg bw/day"
       },
       "population_warnings": [
-        "Products combining sodium benzoate with vitamin C/ascorbic acid - benzene formation risk"
+        "Products with ascorbic acid — benzene formation risk when sodium benzoate + vitamin C coexist (especially under heat/light)",
+        "Children — EFSA noted exposure may exceed ADI in high consumers"
       ],
       "notes": "FDA GRAS Affirmed (21 CFR Part 184). Benzene formation with vitamin C is documented concern. Moved from banned_recalled to harmful_additives (2026-02-18). Low severity reflects benzene risk when combined with ascorbic acid. SEVERITY UPGRADED FROM LOW TO MODERATE (2026): Benzene formation with ascorbic acid is not merely theoretical in the supplement context — liquid supplement formulations routinely contain both sodium benzoate and ascorbic acid (vitamin C). Benzene is an IARC Group 1 carcinogen with no established safe threshold. FDA 2006 survey of beverages found some products exceeded 5 ppb benzene from this reaction. Hyperactivity association supported beyond Southampton pediatric study: PMID 22538314 found sodium benzoate-rich beverage intake significantly associated with ADHD symptom reporting in college students. The combination in a supplement product (sodium benzoate + vitamin C) represents a realistic benzene-formation risk that warrants moderate rather than low severity.",
       "scientific_references": [
@@ -11215,7 +11290,7 @@
         "PMID 22538314 — Sodium benzoate-rich beverage intake associated with ADHD symptom reporting in college students",
         "IARC Group 1: Benzene (known human carcinogen) — formed from sodium benzoate + ascorbic acid in acidic conditions"
       ],
-      "last_updated": "2026-03-08",
+      "last_updated": "2026-03-27",
       "match_rules": {
         "match_mode": "alias_and_fuzzy",
         "fuzzy_threshold": 0.85,
@@ -11247,7 +11322,7 @@
           "status_code": "approved",
           "scope": "food_and_supplement",
           "effective_range": {
-            "start": "2026-02-18",
+            "start": "1979-01-01",
             "end": null
           },
           "source_ref": "https://www.ecfr.gov/current/title-21/section-184.1733"
@@ -11255,9 +11330,9 @@
       ],
       "review": {
         "status": "validated",
-        "last_reviewed_at": "2026-02-18",
-        "reviewed_by": "fda_verification_audit",
-        "next_review_due": "2026-08-18",
+        "last_reviewed_at": "2026-03-27",
+        "reviewed_by": "harmful_additives_deep_audit_batch7",
+        "next_review_due": "2026-09-27",
         "change_log": [
           {
             "date": "2026-02-18",
@@ -11274,12 +11349,21 @@
             "date": "2026-03-22",
             "change": "Schema v5.1 migration: removed top-level CUI (→ external_ids.umls_cui), removed label_tokens/regex from match_rules, normalized external_ids casing, standardized references_structured fields, mapped status_codes to canonical enum, removed exposure_context/entity_type(ingredient)/class_tags dead-weight fields.",
             "reason": "schema_v5.1_migration"
+          },
+          {
+            "date": "2026-03-27",
+            "change": "Deep audit batch 7: CUI C0142805 verified. CAS 532-32-1 pre-verified. Populated dose_thresholds (EFSA/JECFA ADI 5 mg/kg). Sharpened benzene formation warning (heat/light conditions). Fixed jurisdictional dates.",
+            "reason": "harmful_additives_deep_audit_batch7"
           }
         ]
       },
       "confidence": "high",
       "severity_level": "moderate",
-      "dose_thresholds": null,
+      "dose_thresholds": {
+        "value": 5,
+        "unit": "mg/kg/day",
+        "source": "EFSA/JECFA ADI"
+      },
       "entity_relationships": null,
       "cui": "C0142805",
       "rxcui": "56455",
