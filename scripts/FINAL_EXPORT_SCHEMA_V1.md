@@ -329,7 +329,8 @@ Cached on-device in `product_detail_cache.detail_json` after first access.
   "harmful_severity": null,
   "harmful_notes": null,
   "is_banned": false,
-  "is_allergen": false
+  "is_allergen": false,
+  "identifiers": {"cui": "C0042839", "unii": "81G40H8B0T"}
 }
 ```
 
@@ -355,7 +356,8 @@ Cached on-device in `product_detail_cache.detail_json` after first access.
   "population_warnings": [],
   "is_harmful": false,
   "harmful_severity": null,
-  "harmful_notes": null
+  "harmful_notes": null,
+  "identifiers": {"cui": "C0041660", "unii": "K3D86KJ24N", "cas": "112-38-9", "pubchem_cid": 5634}
 }
 ```
 
@@ -472,6 +474,12 @@ additional fields are present:
 - `synergy_detail` is present when synergy clusters were matched. Includes cluster names,
   matched ingredients with their doses and minimum effective dose thresholds, and
   qualification status.
+- `identifiers` is present on both active and inactive ingredient entries when the source
+  data file has CUI, CAS, PubChem CID, or UNII. Active ingredients pull from IQM parent
+  entries; inactive ingredients pull from harmful_additives.json or other_ingredients.json.
+  Banned/recalled and harmful_additive warning entries also carry identifiers. Only non-null
+  fields are included to minimize blob size. The app can use CUI for UMLS lookups and
+  PubChem CID for compound detail pages.
 - Plain JSON TEXT in v1. Switch to compressed BLOB later if needed.
 
 ---

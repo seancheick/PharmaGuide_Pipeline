@@ -242,6 +242,50 @@ def validate_export_contract(enriched: Dict, scored: Dict) -> List[str]:
 
 
 HARMFUL_REFERENCE_INDEX: Optional[Dict[str, Dict]] = None
+IQM_REFERENCE_INDEX: Optional[Dict[str, Dict]] = None
+
+
+def extract_identifiers(entry: Dict) -> Optional[Dict]:
+    """Extract a compact identifiers block from a data file entry.
+
+    Returns None if no identifiers are present; otherwise returns only
+    non-null fields to keep blob size minimal.  Handles both lowercase
+    ``cui`` (IQM, harmful_additives) and uppercase ``CUI`` (other_ingredients).
+    """
+    if not isinstance(entry, dict):
+        return None
+    ids: Dict[str, Any] = {}
+    cui = entry.get("cui") or entry.get("CUI")
+    if cui:
+        ids["cui"] = cui
+    ext = entry.get("external_ids") or {}
+    if isinstance(ext, dict):
+        for key in ("cas", "pubchem_cid", "unii"):
+            val = ext.get(key)
+            if val is not None:
+                ids[key] = val
+    return ids if ids else None
+
+
+def load_iqm_reference_index() -> Dict[str, Dict]:
+    """Load ingredient_quality_map.json and build an index by parent key."""
+    global IQM_REFERENCE_INDEX
+    if IQM_REFERENCE_INDEX is not None:
+        return IQM_REFERENCE_INDEX
+
+    path = Path(__file__).parent / "data" / "ingredient_quality_map.json"
+    index: Dict[str, Dict] = {}
+    try:
+        with open(path, "r", encoding="utf-8") as f:
+            data = json.load(f)
+        for key, entry in data.items():
+            if key == "_metadata" or not isinstance(entry, dict):
+                continue
+            index[key] = entry
+    except Exception as exc:
+        logger.warning("Failed to load ingredient_quality_map reference data: %s", exc)
+    IQM_REFERENCE_INDEX = index
+    return IQM_REFERENCE_INDEX
 
 
 def load_harmful_reference_index() -> Dict[str, Dict]:
@@ -652,6 +696,7 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
     harmful_lookup = build_harmful_lookup(enriched)
     contaminant_lookup = build_contaminant_lookup(enriched)
     allergen_patterns = build_allergen_patterns(enriched)
+    iqm_index = load_iqm_reference_index()
 
     # Dosage normalization
     norm_raw = safe_dict(enriched.get("dosage_normalization")).get("normalized_ingredients", {})
@@ -731,6 +776,9 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
             ) if harmful_hit else None,
             "is_banned": any(normalize_text(hit.get("status")) == "banned" for hit in ingredient_hits),
             "is_allergen": bool(allergen_hits),
+            "identifiers": extract_identifiers(
+                iqm_index.get(safe_str(m.get("parent_key") or ing.get("normalized_key")), {})
+            ),
         })
 
     # Inactive ingredients
@@ -793,6 +841,7 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
                 or safe_str((harmful_hit or {}).get("classification_evidence"))
                 or safe_str((harmful_hit or {}).get("category"))
             ) if harmful_hit else None,
+            "identifiers": extract_identifiers(harmful_ref or other_ref),
         })
 
     # Warnings
@@ -826,6 +875,7 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
             "date": sub.get("regulatory_date"),
             "regulatory_date_label": safe_str(sub.get("regulatory_date_label")),
             "clinical_risk": safe_str(sub.get("clinical_risk_enum")),
+            "identifiers": extract_identifiers(sub),
         })
 
     for h in safe_list(enriched.get("harmful_additives")):
@@ -846,6 +896,7 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
             "population_warnings": safe_list(h_pop_warnings),
             "category": safe_str(h.get("category")),
             "source": "harmful_additives_db",
+            "identifiers": extract_identifiers(h_ref),
         })
 
     for a in safe_list(enriched.get("allergen_hits")):
