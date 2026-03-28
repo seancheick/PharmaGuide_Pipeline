@@ -255,6 +255,11 @@ Required rows:
 | `min_app_version` | `1.0.0` |
 | `schema_version` | `1` |
 
+The standalone `export_manifest.json` file also includes an `errors` array listing
+any products that failed during export (with `dsld_id` and error message). This field
+is **not** present in the SQLite `export_manifest` table — it is JSON-only, used for
+build diagnostics and CI gates.
+
 ---
 
 ## Detail Blob Contract
@@ -289,6 +294,29 @@ Cached on-device in `product_detail_cache.detail_json` after first access.
   "manufacturer_detail": {...},
   "probiotic_detail": {...},
   "synergy_detail": {...},
+  "interaction_summary": {
+    "highest_severity": "avoid",
+    "condition_summary": {
+      "<condition_id>": {
+        "label": "Pregnancy",
+        "highest_severity": "avoid",
+        "ingredient_count": 2,
+        "ingredients": ["Vitamin A", "Retinyl Palmitate"],
+        "rule_ids": ["R001"],
+        "actions": ["Do not use preformed Vitamin A above 3000 mcg RAE in pregnancy."]
+      }
+    },
+    "drug_class_summary": {
+      "<drug_class_id>": {
+        "label": "Retinoids",
+        "highest_severity": "avoid",
+        "ingredient_count": 1,
+        "ingredients": ["Vitamin A"],
+        "rule_ids": ["R002"],
+        "actions": ["Avoid use with retinoid medications."]
+      }
+    }
+  },
   "evidence_data": {...},
   "rda_ul_data": {...}
 }
@@ -411,8 +439,11 @@ additional fields are present:
   "title": "Vitamin A / pregnancy",
   "detail": "Retinoid exposure risk during pregnancy.",
   "action": "Do not use preformed Vitamin A above 3000 mcg RAE in pregnancy.",
+  "condition_id": "pregnancy",
+  "ingredient_name": "Vitamin A",
   "evidence_level": "established",
   "sources": ["https://ods.od.nih.gov/factsheets/VitaminA-HealthProfessional/"],
+  "dose_threshold_evaluation": {"status": "above", "threshold_mcg": 3000, "actual_mcg": 5000},
   "source": "interaction_rules"
 }
 
@@ -423,8 +454,11 @@ additional fields are present:
   "title": "Vitamin A / retinoids",
   "detail": "Overlapping retinoid exposure.",
   "action": "Avoid use with retinoid medications.",
+  "drug_class_id": "retinoids",
+  "ingredient_name": "Vitamin A",
   "evidence_level": "established",
   "sources": ["https://ods.od.nih.gov/factsheets/VitaminA-HealthProfessional/"],
+  "dose_threshold_evaluation": {"status": "above", "threshold_mcg": 3000, "actual_mcg": 5000},
   "source": "interaction_rules"
 }
 
@@ -459,11 +493,20 @@ additional fields are present:
 - `warnings` include banned/recalled/high-risk/watchlist ingredient hits, allergens, harmful
   additives, interaction warnings, drug interaction warnings, dietary warnings, and product
   status warnings. Each warning type carries specific provenance fields (see examples above).
-- `score_bonuses` lists every positive scoring factor with label and score. The app can
-  render these as a "What helped this score" section.
-- `score_penalties` lists every negative scoring factor with per-item detail (which ingredient
-  caused it, severity, reason). The app can render these as a "What hurt this score" section.
-  Point values are included where available so the app can optionally show them later.
+- `score_bonuses` lists every positive scoring factor. Each entry has:
+  `{id, label, score, detail?}`. The `id` is a section sub-score key (e.g. `"A2"`, `"A3"`,
+  `"B4a"`, `"probiotic"`). `detail` is optional and present only on A3 (delivery tier name).
+  The app can render these as a "What helped this score" section.
+- `score_penalties` lists every negative scoring factor. The `id` determines which fields
+  are present beyond the common `{id, label}`:
+  - `B0` (banned/recalled): `{id, label, status, reason}`
+  - `B1` (harmful additive): `{id, label, severity, reason}`
+  - `B2` (allergen): `{id, label, severity, presence}`
+  - `B3` (compliance claim): `{id, label, score}`
+  - `B5` (proprietary blend): `{id, label, score, blend_count}`
+  - `B6` (disease claims): `{id, label, score}`
+  - `violation` (scoring violation): `{id, label, score}`
+  The app can render these as a "What hurt this score" section.
 - `formulation_detail` carries the context behind A3/A4/A5 bonuses: delivery tier,
   absorption enhancers found, organic certification, standardized botanicals, synergy
   qualification, and non-GMO verification.
@@ -557,6 +600,46 @@ r = json.load(open('/tmp/final_db_all/export_audit_report.json'))
 assert r['counts']['export_contract_invalid'] == 0
 "
 ```
+
+---
+
+## Stage 4: Distribution (Supabase)
+
+After `build_final_db.py` produces the local build artifacts, `sync_to_supabase.py`
+uploads them to Supabase Storage and rotates the manifest.
+
+```bash
+# Upload build output to Supabase (requires SUPABASE_URL + SUPABASE_SERVICE_ROLE_KEY in .env)
+python3 scripts/sync_to_supabase.py <build_output_dir>
+
+# Preview what would be uploaded without actually uploading
+python3 scripts/sync_to_supabase.py <build_output_dir> --dry-run
+```
+
+### Storage paths
+
+All artifacts are versioned under the `pharmaguide` bucket:
+
+| Artifact | Remote path |
+|---|---|
+| SQLite database | `pharmaguide/v{db_version}/pharmaguide_core.db` |
+| Detail blobs | `pharmaguide/v{db_version}/details/{dsld_id}.json` |
+
+### Supabase RPCs
+
+| RPC | Called by | Purpose |
+|---|---|---|
+| `rotate_manifest` | `sync_to_supabase.py` via `supabase_client.insert_manifest()` | Atomically inserts a new manifest row and marks the previous row as not current. Prevents a window where no row has `is_current=true`. |
+| `increment_usage` | Flutter app (authenticated users) | Atomic usage increment with day rollover for freemium tracking. Accepts `p_user_id` and `p_type` (`'scan'` or `'ai_message'`), returns `scans_today`, `ai_messages_today`, `limit_exceeded`. |
+
+### Sync behavior
+
+- Compares local `db_version` and `checksum` against the remote manifest to skip
+  redundant uploads.
+- If any detail blob upload fails, manifest rotation is aborted to prevent clients from
+  seeing the new version and getting 404s on missing blobs. The DB file is safe to
+  re-upload (upsert).
+- Detail blobs are uploaded sequentially in MVP. For >10K products, add a thread pool.
 
 ---
 
