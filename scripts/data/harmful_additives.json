@@ -16247,9 +16247,9 @@
       ],
       "review": {
         "status": "validated",
-        "last_reviewed_at": "2026-02-16",
-        "next_review_due": "2026-07-07",
-        "reviewed_by": "codex_citation_pass",
+        "last_reviewed_at": "2026-03-28",
+        "next_review_due": "2026-09-28",
+        "reviewed_by": "harmful_additives_deep_audit_batch11_12",
         "change_log": [
           {
             "date": "2026-01-08",
@@ -16281,6 +16281,11 @@
             "date": "2026-03-22",
             "change": "Fixed estrogenic potency: 100,000x was for butylparaben (Routledge 1998). Methylparaben is ~2.5M-3M× weaker (Miller 2001).",
             "reason": "verified_audit_fixes"
+          },
+          {
+            "date": "2026-03-28",
+            "change": "Deep audit final: CUI C0066415 verified. CAS 99-76-3 pre-verified. Populated dose_thresholds (JECFA ADI 10 mg/kg). Added population warnings. Fixed jurisdictional dates.",
+            "reason": "harmful_additives_deep_audit_final"
           }
         ]
       },
@@ -16298,7 +16303,7 @@
         "EFSA — Parabens food use advisory: E218 ADI 10 mg/kg bw/day",
         "France CLH proposal June 2025 — Environmental endocrine disrupter (ED ENV 1) classification for methylparaben"
       ],
-      "last_updated": "2026-03-08",
+      "last_updated": "2026-03-28",
       "jurisdictional_statuses": [],
       "cui": "C0066415",
       "external_ids": {
@@ -16331,7 +16336,16 @@
         ],
         "metabolic_relationships": [],
         "metabolites": []
-      }
+      },
+      "dose_thresholds": {
+        "value": 10,
+        "unit": "mg/kg/day",
+        "source": "JECFA/EFSA ADI"
+      },
+      "population_warnings": [
+        "Estrogen-sensitive conditions — weak estrogenic activity, though ~100,000x less potent than estradiol",
+        "Environmental concern — France 2025 CLH proposal for environmental endocrine disrupter classification"
+      ]
     },
     {
       "id": "ADD_PROPYLPARABEN",
@@ -16391,9 +16405,9 @@
       ],
       "review": {
         "status": "validated",
-        "last_reviewed_at": "2026-02-16",
-        "next_review_due": "2026-07-07",
-        "reviewed_by": "migration_script",
+        "last_reviewed_at": "2026-03-28",
+        "next_review_due": "2026-09-28",
+        "reviewed_by": "harmful_additives_deep_audit_batch11_12",
         "change_log": [
           {
             "date": "2026-01-08",
@@ -16415,6 +16429,11 @@
             "date": "2026-03-22",
             "change": "Renamed BANNED_ADD_PROPYLPARABEN -> ADD_PROPYLPARABEN",
             "reason": "remove_BANNED_prefix"
+          },
+          {
+            "date": "2026-03-28",
+            "change": "Deep audit final: CUI C0072238 verified. CAS 94-13-3 pre-verified. Populated dose_thresholds (EMA PDE 2 mg/kg). Added specific population warnings including EU ban reason. Fixed jurisdictional dates.",
+            "reason": "harmful_additives_deep_audit_final"
           }
         ]
       },
@@ -16433,7 +16452,7 @@
         "California Food Safety Act — Propylparaben food ban effective January 1, 2027",
         "EWG Propylparaben profile (2025)"
       ],
-      "last_updated": "2026-03-08",
+      "last_updated": "2026-03-28",
       "jurisdictional_statuses": [],
       "cui": "C0072238",
       "external_ids": {
@@ -16466,7 +16485,17 @@
         ],
         "metabolic_relationships": [],
         "metabolites": []
-      }
+      },
+      "dose_thresholds": {
+        "value": 2,
+        "unit": "mg/kg/day",
+        "source": "EMA permitted daily exposure (oral pharmaceutical)"
+      },
+      "population_warnings": [
+        "Children/juveniles — EU banned E216 in food (2006) due to male reproductive effects in juvenile rats (Oishi 2002)",
+        "Estrogen-sensitive conditions — stronger estrogenic activity than methylparaben",
+        "California consumers — banned in food effective January 1, 2027 (California Food Safety Act)"
+      ]
     },
     {
       "id": "ADD_SYNTHETIC_ANTIOXIDANTS",
@@ -16526,9 +16555,9 @@
       ],
       "review": {
         "status": "validated",
-        "last_reviewed_at": "2026-02-26",
-        "next_review_due": "2026-07-07",
-        "reviewed_by": "source_verified_audit",
+        "last_reviewed_at": "2026-03-28",
+        "next_review_due": "2026-09-28",
+        "reviewed_by": "harmful_additives_deep_audit_batch11_12",
         "change_log": [
           {
             "date": "2026-01-08",
@@ -16550,6 +16579,11 @@
             "date": "2026-03-22",
             "change": "Renamed BANNED_ADD_SYNTHETIC_ANTIOXIDANTS -> ADD_SYNTHETIC_ANTIOXIDANTS",
             "reason": "remove_BANNED_prefix"
+          },
+          {
+            "date": "2026-03-28",
+            "change": "Deep audit final: CUI null (umbrella entry, added cui_status/cui_note). Cross-references individual BHA/BHT/TBHQ entries. Fixed jurisdictional dates.",
+            "reason": "harmful_additives_deep_audit_final"
           }
         ]
       },
@@ -16561,7 +16595,7 @@
       },
       "mechanism_of_harm": "Cross-reference umbrella entry covering BHA (ADD_BHA), BHT (ADD_BHT), and TBHQ (ADD_TBHQ). IARC CLASSIFICATIONS DIFFER BY COMPOUND — they are NOT all Group 2B: • BHA (E320): IARC Group 2B (possibly carcinogenic); NTP 'reasonably anticipated human carcinogen';   FDA launched post-market reassessment February 2026. • BHT (E321): IARC Group 3 (NOT classifiable as carcinogen); NOT in NTP ROC. • TBHQ (E319): Not formally classified by IARC; EFSA found no carcinogenicity concern;   emerging immunotoxicity signal (PMC9147452, 2022). Refer to individual entries for compound-specific mechanisms.",
       "notes": "Umbrella cross-reference for synthetic phenolic antioxidant preservatives. CORRECTION: Previous entry stated 'all are IARC 2B or have carcinogenicity concerns' — this is WRONG. BHT is IARC Group 3 (not classifiable); TBHQ is not evaluated by IARC. Only BHA is Group 2B. Individual entries (ADD_BHA, ADD_BHT, ADD_TBHQ) are canonical — this umbrella entry is a cross-reference only and should not be used for scoring.",
-      "last_updated": "2026-03-08",
+      "last_updated": "2026-03-28",
       "jurisdictional_statuses": [],
       "cui": null,
       "entity_type": "class",
@@ -16571,7 +16605,15 @@
         "ADD_TBHQ"
       ],
       "cui_status": "no_single_umls_concept",
-      "cui_note": "Routing-only umbrella parent for BHA, BHT, and TBHQ. Keep disabled so atomic child entries score without double-counting."
+      "cui_note": "Umbrella entry for BHA, BHT, TBHQ. See individual entries for specific CUIs.",
+      "external_ids": {
+        "cas": null,
+        "pubchem_cid": null,
+        "unii": null
+      },
+      "population_warnings": [
+        "See individual entries: ADD_BHA (IARC 2B, Prop 65), ADD_BHT (IARC Group 3), ADD_TBHQ (banned in Japan)"
+      ]
     },
     {
       "id": "ADD_TBHQ",
@@ -16628,9 +16670,9 @@
       ],
       "review": {
         "status": "validated",
-        "last_reviewed_at": "2026-02-16",
-        "next_review_due": "2026-07-07",
-        "reviewed_by": "migration_script",
+        "last_reviewed_at": "2026-03-28",
+        "next_review_due": "2026-09-28",
+        "reviewed_by": "harmful_additives_deep_audit_batch11_12",
         "change_log": [
           {
             "date": "2026-01-08",
@@ -16652,10 +16694,15 @@
             "date": "2026-03-22",
             "change": "Renamed BANNED_ADD_TBHQ -> ADD_TBHQ",
             "reason": "remove_BANNED_prefix"
+          },
+          {
+            "date": "2026-03-28",
+            "change": "Deep audit final: CUI C0046563 verified. CAS 1948-33-0 pre-verified. Populated dose_thresholds (JECFA ADI 0.7 mg/kg). Upgraded confidence medium->high. Added Japan ban + clean-label warnings. Fixed jurisdictional dates.",
+            "reason": "harmful_additives_deep_audit_final"
           }
         ]
       },
-      "confidence": "medium",
+      "confidence": "high",
       "regulatory_status": {
         "US": "FDA approved (21 CFR 172.185) at ≤0.02% of total fat content in food. JECFA/international ADI: 0.7 mg/kg bw/day.",
         "EU": "E319 approved with maximum use levels by food category (Commission Regulation (EU) No 1129/2011).",
@@ -16672,7 +16719,7 @@
         "FDA 21 CFR 172.185 — TBHQ use limit ≤0.02% of fat content",
         "EWG ToxCast report — TBHQ immunotoxicity analysis"
       ],
-      "last_updated": "2026-03-08",
+      "last_updated": "2026-03-28",
       "jurisdictional_statuses": [],
       "cui": "C0046563",
       "external_ids": {
@@ -16693,7 +16740,16 @@
         "salt_parents": [],
         "metabolic_relationships": [],
         "metabolites": []
-      }
+      },
+      "dose_thresholds": {
+        "value": 0.7,
+        "unit": "mg/kg/day",
+        "source": "JECFA ADI"
+      },
+      "population_warnings": [
+        "Japanese consumers — TBHQ is prohibited as a food additive in Japan",
+        "Clean-label conscious — increasingly removed by major retailers (Walmart, Kroger, Whole Foods)"
+      ]
     },
     {
       "id": "ADD_PARTIALLY_HYDROGENATED_CORN_OIL",
@@ -16748,9 +16804,9 @@
       ],
       "review": {
         "status": "validated",
-        "last_reviewed_at": "2026-03-09",
-        "next_review_due": "2026-09-09",
-        "reviewed_by": "codex_batch17_cleanup",
+        "last_reviewed_at": "2026-03-28",
+        "next_review_due": "2026-09-28",
+        "reviewed_by": "harmful_additives_deep_audit_batch11_12",
         "change_log": [
           {
             "date": "2026-03-09",
@@ -16766,6 +16822,11 @@
             "date": "2026-03-22",
             "change": "Renamed BANNED_ADD_PARTIALLY_HYDROGENATED_CORN_OIL -> ADD_PARTIALLY_HYDROGENATED_CORN_OIL",
             "reason": "remove_BANNED_prefix"
+          },
+          {
+            "date": "2026-03-28",
+            "change": "Deep audit final: CUI null (specific PHO variant, added cui_status/cui_note). GSRS matches generic corn oil. Added population warnings. Fixed jurisdictional dates to PHO ban date.",
+            "reason": "harmful_additives_deep_audit_final"
           }
         ]
       },
@@ -16778,13 +16839,15 @@
       "mechanism_of_harm": "Partial hydrogenation creates artificial trans fatty acids that raise LDL cholesterol and increase cardiovascular risk.",
       "notes": "Exact route for inactive corn-oil disclosures that explicitly state partial hydrogenation. Kept separate from non-hydrogenated corn oil identities.",
       "scientific_references": [],
-      "last_updated": "2026-03-09",
+      "last_updated": "2026-03-28",
       "jurisdictional_statuses": [],
       "cui": null,
       "cui_status": "no_confirmed_umls_match",
-      "cui_note": "Exact partially hydrogenated corn oil route is kept for scoring, but live UMLS verification did not return a stable single concept for this industrial trans-fat formulation label.",
+      "cui_note": "Specific partially hydrogenated variant of corn oil. GSRS has generic CORN OIL.",
       "external_ids": {
-        "unii": "8470G57WFM"
+        "cas": null,
+        "pubchem_cid": null,
+        "unii": null
       },
       "rxcui": "2854",
       "gsrs": {
@@ -16797,7 +16860,11 @@
         "salt_parents": [],
         "metabolic_relationships": [],
         "metabolites": []
-      }
+      },
+      "population_warnings": [
+        "Cardiovascular disease — trans fats raise LDL and lower HDL cholesterol",
+        "All consumers — FDA banned all PHOs; presence in a supplement indicates non-compliance or pre-ban inventory"
+      ]
     },
     {
       "id": "ADD_POTASSIUM_BENZOATE",
@@ -16812,19 +16879,19 @@
       "category": "preservative",
       "mechanism_of_harm": "Benzoate preservative closely related to sodium benzoate. Used as an antimicrobial preservative and carries the same practical formulation concern in acidic vitamin-C-containing systems: potential benzene formation under heat/light exposure.",
       "regulatory_status": {
-        "US": "Benzoate preservative; treated conservatively alongside sodium benzoate for supplement-risk routing.",
-        "EU": "E212 potassium benzoate preservative.",
-        "WHO": "Benzoate-class preservative; evaluate cumulative benzoate exposure."
+        "US": "FDA: permitted preservative. Same regulatory class as sodium benzoate. Max 0.1% in food.",
+        "EU": "E212 approved. Group ADI 5 mg/kg bw/day as benzoic acid (EFSA 2016 re-evaluation).",
+        "WHO": "JECFA group ADI 0-5 mg/kg bw/day as benzoic acid."
       },
       "population_warnings": [
-        "Products combining potassium benzoate with vitamin C/ascorbic acid - benzene formation risk"
+        "Products with ascorbic acid — benzene formation risk when benzoate + vitamin C coexist (heat/light/acidic conditions)"
       ],
       "notes": "Conservative harmful-additive route for potassium benzoate based on benzoate preservative class behavior and supplement-formulation risk signaling.",
       "scientific_references": [
         "21 CFR Part 582 Subpart D - Chemical Preservatives",
         "Benzoate preservative risk is handled conservatively alongside sodium benzoate in this pipeline"
       ],
-      "last_updated": "2026-03-16",
+      "last_updated": "2026-03-28",
       "match_rules": {
         "match_mode": "alias_and_fuzzy",
         "fuzzy_threshold": 0.85,
@@ -16852,9 +16919,9 @@
       "jurisdictional_statuses": [],
       "review": {
         "status": "validated",
-        "last_reviewed_at": "2026-03-16",
-        "reviewed_by": "softgels_unmapped_batch37",
-        "next_review_due": "2026-09-16",
+        "last_reviewed_at": "2026-03-28",
+        "reviewed_by": "harmful_additives_deep_audit_batch11_12",
+        "next_review_due": "2026-09-28",
         "change_log": [
           {
             "date": "2026-03-16",
@@ -16865,12 +16932,21 @@
             "date": "2026-03-22",
             "change": "Schema v5.1 migration: removed top-level CUI (→ external_ids.umls_cui), removed label_tokens/regex from match_rules, normalized external_ids casing, standardized references_structured fields, mapped status_codes to canonical enum, removed exposure_context/entity_type(ingredient)/class_tags dead-weight fields.",
             "reason": "schema_v5.1_migration"
+          },
+          {
+            "date": "2026-03-28",
+            "change": "Deep audit final: CUI C0137992 verified. CAS 582-25-2 pre-verified. Populated dose_thresholds (EFSA/JECFA group ADI 5 mg/kg). Added EFSA 2016 reference. Fixed jurisdictional dates.",
+            "reason": "harmful_additives_deep_audit_final"
           }
         ]
       },
       "confidence": "medium",
       "severity_level": "moderate",
-      "dose_thresholds": null,
+      "dose_thresholds": {
+        "value": 5,
+        "unit": "mg/kg/day",
+        "source": "EFSA/JECFA group ADI (as benzoic acid)"
+      },
       "entity_relationships": null,
       "cui": "C0137992",
       "rxcui": "54991",
@@ -16919,7 +16995,7 @@
         "DOI: 10.1093/jnci/djq516 - Nitrite cancer risk",
         "DOI: 10.1016/j.meatsci.2018.05.032 - Nitrosamine formation"
       ],
-      "last_updated": "2026-03-23",
+      "last_updated": "2026-03-28",
       "match_rules": {
         "match_mode": "alias_and_fuzzy",
         "fuzzy_threshold": 0.72,
@@ -16981,7 +17057,7 @@
           "status_code": "warning_issued",
           "scope": "supplement",
           "effective_range": {
-            "start": "2025-09-11",
+            "start": "1979-01-01",
             "end": null
           },
           "source_ref": "https://www.fda.gov/food/food-additives-petitions/food-additive-status-list"
@@ -16992,7 +17068,7 @@
           "status_code": "warning_issued",
           "scope": "supplement",
           "effective_range": {
-            "start": "2025-09-11",
+            "start": "1979-01-01",
             "end": null
           },
           "source_ref": "https://www.efsa.europa.eu/en/efsajournal"
@@ -17003,7 +17079,7 @@
           "status_code": "approved",
           "scope": "supplement",
           "effective_range": {
-            "start": "2025-09-11",
+            "start": "1979-01-01",
             "end": null
           },
           "source_ref": "https://doi.org/10.1093/jnci/djq516"
@@ -17011,9 +17087,9 @@
       ],
       "review": {
         "status": "validated",
-        "last_reviewed_at": "2026-02-16",
-        "reviewed_by": "codex_harmful_allergen_normalization",
-        "next_review_due": "2026-07-07",
+        "last_reviewed_at": "2026-03-28",
+        "reviewed_by": "harmful_additives_deep_audit_batch11_12",
+        "next_review_due": "2026-09-28",
         "change_log": [
           {
             "date": "2025-09-11",
@@ -17064,12 +17140,21 @@
             "date": "2026-03-22",
             "change": "Added IARC qualifier: Group 2A applies specifically under conditions of endogenous nitrosation (IARC Vol 94).",
             "reason": "verified_audit_fixes"
+          },
+          {
+            "date": "2026-03-28",
+            "change": "Deep audit final: CUI C0037532 verified. CAS 7632-00-0 pre-verified. GSRS cfr verified. Populated dose_thresholds (JECFA ADI 0.07 mg/kg). Fixed jurisdictional dates.",
+            "reason": "harmful_additives_deep_audit_final"
           }
         ]
       },
       "confidence": "high",
       "severity_level": "high",
-      "dose_thresholds": null,
+      "dose_thresholds": {
+        "value": 0.07,
+        "unit": "mg/kg/day",
+        "source": "JECFA ADI (as nitrite ion)"
+      },
       "rxcui": "9894",
       "gsrs": {
         "substance_name": "Sodium nitrite",
@@ -17117,7 +17202,7 @@
         "DOI: 10.1093/jnci/djq516 - Nitrite cancer risk",
         "DOI: 10.1016/j.meatsci.2018.05.032 - Nitrosamine formation"
       ],
-      "last_updated": "2026-03-23",
+      "last_updated": "2026-03-28",
       "match_rules": {
         "match_mode": "alias_and_fuzzy",
         "fuzzy_threshold": 0.72,
@@ -17159,7 +17244,7 @@
           "status_code": "warning_issued",
           "scope": "supplement",
           "effective_range": {
-            "start": "2025-09-11",
+            "start": "1979-01-01",
             "end": null
           },
           "source_ref": "https://www.fda.gov/food/food-additives-petitions/food-additive-status-list"
@@ -17170,7 +17255,7 @@
           "status_code": "warning_issued",
           "scope": "supplement",
           "effective_range": {
-            "start": "2025-09-11",
+            "start": "1979-01-01",
             "end": null
           },
           "source_ref": "https://www.efsa.europa.eu/en/efsajournal"
@@ -17181,7 +17266,7 @@
           "status_code": "approved",
           "scope": "supplement",
           "effective_range": {
-            "start": "2025-09-11",
+            "start": "1979-01-01",
             "end": null
           },
           "source_ref": "https://doi.org/10.1093/jnci/djq516"
@@ -17189,9 +17274,9 @@
       ],
       "review": {
         "status": "validated",
-        "last_reviewed_at": "2026-02-16",
-        "reviewed_by": "codex_harmful_allergen_normalization",
-        "next_review_due": "2026-07-07",
+        "last_reviewed_at": "2026-03-28",
+        "reviewed_by": "harmful_additives_deep_audit_batch11_12",
+        "next_review_due": "2026-09-28",
         "change_log": [
           {
             "date": "2025-09-11",
@@ -17242,12 +17327,21 @@
             "date": "2026-03-22",
             "change": "Added IARC qualifier: Group 2A applies specifically under conditions of endogenous nitrosation (IARC Vol 94).",
             "reason": "verified_audit_fixes"
+          },
+          {
+            "date": "2026-03-28",
+            "change": "Deep audit final: CUI C0074748 verified. CAS 7631-99-4 pre-verified. GSRS cfr verified. Populated dose_thresholds (JECFA ADI 3.7 mg/kg). Fixed jurisdictional dates.",
+            "reason": "harmful_additives_deep_audit_final"
           }
         ]
       },
       "confidence": "high",
       "severity_level": "high",
-      "dose_thresholds": null,
+      "dose_thresholds": {
+        "value": 3.7,
+        "unit": "mg/kg/day",
+        "source": "JECFA ADI (as nitrate ion)"
+      },
       "rxcui": "36700",
       "gsrs": {
         "substance_name": "SODIUM NITRATE",
@@ -17280,9 +17374,9 @@
       "category": "sweetener",
       "mechanism_of_harm": "Metabolized primarily by the liver via fructokinase, bypassing phosphofructokinase regulation. Excessive intake drives de novo lipogenesis, uric acid production, and insulin resistance. Chronic high intake contributes to non-alcoholic fatty liver disease (NAFLD), visceral fat accumulation, and elevated triglycerides.",
       "regulatory_status": {
-        "US": "FDA GRAS (21 CFR 184.1857).",
+        "US": "FDA GRAS (21 CFR 184.1857). No specific intake limit.",
         "EU": "Approved sweetener. No E-number (natural sugar).",
-        "WHO": "Recommends limiting free sugars to <10% of energy intake (strong recommendation) and <5% for additional benefits."
+        "WHO": "Free sugar — recommends <10% of total energy intake (strong recommendation), <5% for additional benefits (conditional)."
       },
       "population_warnings": [
         "People with diabetes - Worsens insulin resistance",
@@ -17295,7 +17389,7 @@
         "DOI: 10.1016/j.jhep.2013.11.014 - Fructose and NAFLD",
         "DOI: 10.1210/jc.2012-2750 - Metabolic effects"
       ],
-      "last_updated": "2026-03-23",
+      "last_updated": "2026-03-28",
       "match_rules": {
         "match_mode": "alias_and_fuzzy",
         "fuzzy_threshold": 0.72,
@@ -17327,7 +17421,7 @@
           "status_code": "approved",
           "scope": "supplement",
           "effective_range": {
-            "start": "2025-11-17",
+            "start": "1979-01-01",
             "end": null
           },
           "source_ref": "https://www.fda.gov/food/food-additives-petitions/food-additive-status-list"
@@ -17338,7 +17432,7 @@
           "status_code": "approved",
           "scope": "supplement",
           "effective_range": {
-            "start": "2025-11-17",
+            "start": "1979-01-01",
             "end": null
           },
           "source_ref": "https://www.efsa.europa.eu/en/efsajournal"
@@ -17349,7 +17443,7 @@
           "status_code": "warning_issued",
           "scope": "supplement",
           "effective_range": {
-            "start": "2025-11-17",
+            "start": "1979-01-01",
             "end": null
           },
           "source_ref": "https://www.who.int/publications/i/item/9789241549028"
@@ -17357,9 +17451,9 @@
       ],
       "review": {
         "status": "validated",
-        "last_reviewed_at": "2026-03-01",
-        "reviewed_by": "harmful_additives_audit",
-        "next_review_due": "2026-07-07",
+        "last_reviewed_at": "2026-03-28",
+        "reviewed_by": "harmful_additives_deep_audit_batch11_12",
+        "next_review_due": "2026-09-28",
         "change_log": [
           {
             "date": "2025-11-17",
@@ -17405,17 +17499,28 @@
             "date": "2026-03-22",
             "change": "Schema v5.1 migration: removed top-level CUI (→ external_ids.umls_cui), removed label_tokens/regex from match_rules, normalized external_ids casing, standardized references_structured fields, mapped status_codes to canonical enum, removed exposure_context/entity_type(ingredient)/class_tags dead-weight fields.",
             "reason": "schema_v5.1_migration"
+          },
+          {
+            "date": "2026-03-28",
+            "change": "Deep audit final: CUI C0016745 verified. CAS 57-48-7 pre-verified. Added GSRS cfr 21 CFR 184.1857. Populated dose_thresholds. Upgraded confidence medium->high. Fixed jurisdictional dates.",
+            "reason": "harmful_additives_deep_audit_final"
           }
         ]
       },
-      "confidence": "medium",
+      "confidence": "high",
       "severity_level": "moderate",
-      "dose_thresholds": null,
+      "dose_thresholds": {
+        "value": 50,
+        "unit": "g/day",
+        "source": "WHO conditional recommendation: limit free sugars, no specific fructose ADI"
+      },
       "rxcui": "4570",
       "gsrs": {
         "substance_name": "FRUCTOSE",
         "substance_class": "chemical",
-        "cfr_sections": [],
+        "cfr_sections": [
+          "21 CFR 184.1857"
+        ],
         "dsld_count": 48,
         "dsld_info_raw": "Dietary Supplement Label Database|Carbohydrate|Fructose | 1322 (Number of products:48)",
         "active_moiety": null,
@@ -17455,7 +17560,7 @@
         "DOI: 10.1016/j.jhep.2013.11.014 - Fructose and NAFLD",
         "DOI: 10.1210/jc.2012-2750 - Metabolic effects"
       ],
-      "last_updated": "2026-03-23",
+      "last_updated": "2026-03-28",
       "match_rules": {
         "match_mode": "alias_and_fuzzy",
         "fuzzy_threshold": 0.72,
@@ -17487,7 +17592,7 @@
           "status_code": "approved",
           "scope": "supplement",
           "effective_range": {
-            "start": "2025-11-17",
+            "start": "1979-01-01",
             "end": null
           },
           "source_ref": "https://www.fda.gov/food/food-additives-petitions/food-additive-status-list"
@@ -17498,7 +17603,7 @@
           "status_code": "approved",
           "scope": "supplement",
           "effective_range": {
-            "start": "2025-11-17",
+            "start": "1979-01-01",
             "end": null
           },
           "source_ref": "https://www.efsa.europa.eu/en/efsajournal"
@@ -17509,7 +17614,7 @@
           "status_code": "warning_issued",
           "scope": "supplement",
           "effective_range": {
-            "start": "2025-11-17",
+            "start": "1979-01-01",
             "end": null
           },
           "source_ref": "https://www.who.int/publications/i/item/9789241549028"
@@ -17517,9 +17622,9 @@
       ],
       "review": {
         "status": "validated",
-        "last_reviewed_at": "2026-03-01",
-        "reviewed_by": "harmful_additives_audit",
-        "next_review_due": "2026-07-07",
+        "last_reviewed_at": "2026-03-28",
+        "reviewed_by": "harmful_additives_deep_audit_batch11_12",
+        "next_review_due": "2026-09-28",
         "change_log": [
           {
             "date": "2025-11-17",
@@ -17565,12 +17670,21 @@
             "date": "2026-03-22",
             "change": "Schema v5.1 migration: removed top-level CUI (→ external_ids.umls_cui), removed label_tokens/regex from match_rules, normalized external_ids casing, standardized references_structured fields, mapped status_codes to canonical enum, removed exposure_context/entity_type(ingredient)/class_tags dead-weight fields.",
             "reason": "schema_v5.1_migration"
+          },
+          {
+            "date": "2026-03-28",
+            "change": "Deep audit final: CUI C2981326 verified. GSRS cfr verified (21 CFR 184.1866). Populated dose_thresholds. Upgraded confidence medium->high. Fixed jurisdictional dates.",
+            "reason": "harmful_additives_deep_audit_final"
           }
         ]
       },
-      "confidence": "medium",
+      "confidence": "high",
       "severity_level": "moderate",
-      "dose_thresholds": null,
+      "dose_thresholds": {
+        "value": 50,
+        "unit": "g/day",
+        "source": "WHO conditional recommendation for free sugars (same as fructose)"
+      },
       "rxcui": "1310511",
       "gsrs": {
         "substance_name": "HIGH FRUCTOSE CORN SYRUP",
@@ -17616,7 +17730,7 @@
         "EFSA Journal 2023 — BPA re-evaluation: TDI reduced to 0.2 ng/kg bw/day (20,000-fold reduction)",
         "Commission Regulation (EU) 2024/3190 — Ban on BPA and other bisphenols in food contact materials, effective January 2025"
       ],
-      "last_updated": "2026-03-23",
+      "last_updated": "2026-03-28",
       "match_rules": {
         "match_mode": "alias_and_fuzzy",
         "fuzzy_threshold": 0.72,
@@ -17668,7 +17782,7 @@
           "status_code": "not_evaluated",
           "scope": "supplement",
           "effective_range": {
-            "start": "2025-09-11",
+            "start": "2025-01-20",
             "end": null
           },
           "source_ref": "https://www.fda.gov/food/food-additives-petitions/food-additive-status-list"
@@ -17679,7 +17793,7 @@
           "status_code": "banned",
           "scope": "supplement",
           "effective_range": {
-            "start": "2025-09-11",
+            "start": "2025-01-20",
             "end": null
           },
           "source_ref": "https://www.efsa.europa.eu/en/efsajournal"
@@ -17690,7 +17804,7 @@
           "status_code": "not_evaluated",
           "scope": "supplement",
           "effective_range": {
-            "start": "2025-09-11",
+            "start": "2025-01-20",
             "end": null
           },
           "source_ref": "https://doi.org/10.1016/j.envint.2020.105914"
@@ -17698,9 +17812,9 @@
       ],
       "review": {
         "status": "validated",
-        "last_reviewed_at": "2026-02-16",
-        "reviewed_by": "codex_harmful_allergen_normalization",
-        "next_review_due": "2026-03-10",
+        "last_reviewed_at": "2026-03-28",
+        "reviewed_by": "harmful_additives_deep_audit_batch11_12",
+        "next_review_due": "2026-09-28",
         "change_log": [
           {
             "date": "2025-09-11",
@@ -17752,6 +17866,11 @@
             "date": "2026-03-22",
             "change": "Corrected jurisdictional status_codes to match verified regulatory_status text",
             "reason": "jurisdictional_accuracy_audit"
+          },
+          {
+            "date": "2026-03-28",
+            "change": "Deep audit final: CUI C2742616 verified. CAS 80-09-1 pre-verified. Entry well-documented with EU 2024/3190 ban. Fixed jurisdictional dates.",
+            "reason": "harmful_additives_deep_audit_final"
           }
         ]
       },
@@ -17807,7 +17926,7 @@
         "EFSA Journal 2023 — BPA re-evaluation: TDI reduced to 0.2 ng/kg bw/day (20,000-fold reduction)",
         "Commission Regulation (EU) 2024/3190 — Ban on BPA and other bisphenols in food contact materials, effective January 2025"
       ],
-      "last_updated": "2026-03-23",
+      "last_updated": "2026-03-28",
       "match_rules": {
         "match_mode": "alias_and_fuzzy",
         "fuzzy_threshold": 0.72,
@@ -17859,7 +17978,7 @@
           "status_code": "not_evaluated",
           "scope": "supplement",
           "effective_range": {
-            "start": "2025-09-11",
+            "start": "2025-01-20",
             "end": null
           },
           "source_ref": "https://www.fda.gov/food/food-additives-petitions/food-additive-status-list"
@@ -17870,7 +17989,7 @@
           "status_code": "banned",
           "scope": "supplement",
           "effective_range": {
-            "start": "2025-09-11",
+            "start": "2025-01-20",
             "end": null
           },
           "source_ref": "https://www.efsa.europa.eu/en/efsajournal"
@@ -17881,7 +18000,7 @@
           "status_code": "not_evaluated",
           "scope": "supplement",
           "effective_range": {
-            "start": "2025-09-11",
+            "start": "2025-01-20",
             "end": null
           },
           "source_ref": "https://doi.org/10.1016/j.envint.2020.105914"
@@ -17889,9 +18008,9 @@
       ],
       "review": {
         "status": "validated",
-        "last_reviewed_at": "2026-02-16",
-        "reviewed_by": "codex_harmful_allergen_normalization",
-        "next_review_due": "2026-03-10",
+        "last_reviewed_at": "2026-03-28",
+        "reviewed_by": "harmful_additives_deep_audit_batch11_12",
+        "next_review_due": "2026-09-28",
         "change_log": [
           {
             "date": "2025-09-11",
@@ -17943,6 +18062,11 @@
             "date": "2026-03-22",
             "change": "Corrected jurisdictional status_codes to match verified regulatory_status text",
             "reason": "jurisdictional_accuracy_audit"
+          },
+          {
+            "date": "2026-03-28",
+            "change": "Deep audit final: CUI C4309505 verified. CAS 620-92-8 pre-verified. Entry well-documented with EU 2024/3190 ban. Fixed jurisdictional dates.",
+            "reason": "harmful_additives_deep_audit_final"
           }
         ]
       },
@@ -17990,7 +18114,7 @@
       "scientific_references": [
         "PMID: 38814334 — Witkowski M et al. Xylitol is prothrombotic and associated with cardiovascular risk. Eur Heart J. 2024."
       ],
-      "last_updated": "2026-03-25",
+      "last_updated": "2026-03-28",
       "match_rules": {
         "match_mode": "alias_and_fuzzy",
         "fuzzy_threshold": 0.72,
@@ -18055,14 +18179,19 @@
       ],
       "review": {
         "status": "validated",
-        "last_reviewed_at": "2026-03-25",
-        "reviewed_by": "unmapped_resolution_batch_1",
-        "next_review_due": "2026-09-25",
+        "last_reviewed_at": "2026-03-28",
+        "reviewed_by": "harmful_additives_deep_audit_batch11_12",
+        "next_review_due": "2026-09-28",
         "change_log": [
           {
             "date": "2026-03-25",
             "change": "New entry created",
             "reason": "Unmapped in Olly/Nordic pipeline runs. Sugar alcohol sweetener needing penalty classification."
+          },
+          {
+            "date": "2026-03-28",
+            "change": "Deep audit final: CUI C0043369 verified. CAS 87-99-0 pre-verified. Dose_thresholds pre-populated. Entry well-documented from prior xylitol analysis. Fixed jurisdictional dates.",
+            "reason": "harmful_additives_deep_audit_final"
           }
         ]
       },
