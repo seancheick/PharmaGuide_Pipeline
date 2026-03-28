@@ -8,6 +8,9 @@ __pycache__/
 # Pipeline output (regenerable via clean → enrich → score)
 scripts/output_*/
 scripts/tmp_*/
+scripts/final_db_output/
+scripts/.cache/
+tmp/
 
 # Logs (regenerated each run)
 scripts/logs/
