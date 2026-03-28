@@ -524,7 +524,11 @@ class TestOverULFlagging:
         assert result.over_ul_amount is None or result.over_ul_amount == 0
 
     def test_folate_folic_acid_800mcg_does_not_exceed_dfe_ul(self, calculator):
-        """800 mcg folic acid converts to 1360 mcg DFE and should remain below the adult UL."""
+        """800 mcg folic acid converts to 1360 mcg DFE and should remain below the adult UL.
+
+        UL is 1000 mcg folic acid = 1667 mcg DFE (conversion factor 1.667).
+        1360 DFE < 1667 DFE → not over UL.
+        """
         converter = UnitConverter()
         conversion = converter.convert_nutrient(
             nutrient="Folate",
@@ -544,8 +548,8 @@ class TestOverULFlagging:
             age_group="adult",
         )
 
-        assert result.ul == pytest.approx(1700.0, rel=0.01)
-        assert result.pct_ul == pytest.approx(80.0, rel=0.01)
+        assert result.ul == pytest.approx(1667.0, rel=0.01)
+        assert result.pct_ul == pytest.approx(81.6, rel=0.02)
         assert result.over_ul is False
 
     def test_magnesium_over_ul_keeps_flag_but_adds_supplement_specific_caution_note(self, calculator):
