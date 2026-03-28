@@ -13042,20 +13042,19 @@
       "category": "emulsifier",
       "mechanism_of_harm": "Emulsifier derived from soy that may disrupt gut barrier function and alter microbiome composition. Contains soy allergen. Often produced from partially hydrogenated oils, potentially containing trace trans fats.",
       "regulatory_status": {
-        "US": "FDA GRAS",
-        "EU": "E471 approved",
-        "WHO": "JECFA acceptable"
+        "US": "FDA GRAS (21 CFR 182.4505 — mono- and diglycerides).",
+        "EU": "E471 approved. EFSA re-evaluated 2017 — no safety concern, no numerical ADI.",
+        "WHO": "JECFA ADI 'not limited' for mono- and diglycerides of fatty acids."
       },
       "population_warnings": [
-        "People with soy allergy - Contains soy-derived proteins",
-        "People with IBD/IBS - May disrupt intestinal barrier",
-        "People avoiding trans fats - May contain trace amounts from processing"
+        "Soy allergy — soy-derived monoglycerides may retain allergenic soy proteins",
+        "IBD/IBS — emulsifier class linked to gut barrier disruption in animal models"
       ],
       "notes": "Emulsifier commonly used in supplement manufacturing. Derived from soybean oil. May contain trace trans fats from hydrogenation processing. Soy allergen concern for sensitive populations.",
       "scientific_references": [
         "DOI: 10.1038/nature14232 - Emulsifiers impact on gut microbiota and inflammation"
       ],
-      "last_updated": "2026-02-18",
+      "last_updated": "2026-03-28",
       "match_rules": {
         "match_mode": "alias_and_fuzzy",
         "fuzzy_threshold": 0.72,
@@ -13075,7 +13074,9 @@
         }
       ],
       "external_ids": {
-        "cas": "68554-09-6"
+        "cas": "68554-09-6",
+        "pubchem_cid": null,
+        "unii": null
       },
       "jurisdictional_statuses": [
         {
@@ -13084,7 +13085,7 @@
           "status_code": "approved",
           "scope": "supplement",
           "effective_range": {
-            "start": "2026-02-18",
+            "start": "1979-01-01",
             "end": null
           },
           "source_ref": "https://www.fda.gov/food/food-additives-petitions/food-additive-status-list"
@@ -13095,7 +13096,7 @@
           "status_code": "approved",
           "scope": "supplement",
           "effective_range": {
-            "start": "2026-02-18",
+            "start": "1979-01-01",
             "end": null
           },
           "source_ref": "https://www.efsa.europa.eu/en/efsajournal"
@@ -13106,7 +13107,7 @@
           "status_code": "approved",
           "scope": "supplement",
           "effective_range": {
-            "start": "2026-02-18",
+            "start": "1979-01-01",
             "end": null
           },
           "source_ref": "https://www.who.int/publications"
@@ -13114,9 +13115,9 @@
       ],
       "review": {
         "status": "validated",
-        "last_reviewed_at": "2026-02-18",
-        "reviewed_by": "data_pipeline_expansion",
-        "next_review_due": "2026-08-18",
+        "last_reviewed_at": "2026-03-28",
+        "reviewed_by": "harmful_additives_deep_audit_batch9",
+        "next_review_due": "2026-09-28",
         "change_log": [
           {
             "date": "2026-02-18",
@@ -13127,6 +13128,11 @@
             "date": "2026-03-22",
             "change": "Schema v5.1 migration: removed top-level CUI (→ external_ids.umls_cui), removed label_tokens/regex from match_rules, normalized external_ids casing, standardized references_structured fields, mapped status_codes to canonical enum, removed exposure_context/entity_type(ingredient)/class_tags dead-weight fields.",
             "reason": "schema_v5.1_migration"
+          },
+          {
+            "date": "2026-03-28",
+            "change": "Deep audit batch 9: CUI C0026481 verified (generic monoglycerides). CAS 68554-09-6 pre-verified. Added 21 CFR 182.4505. EFSA 2017 no safety concern. Fixed jurisdictional dates.",
+            "reason": "harmful_additives_deep_audit_batch9"
           }
         ]
       },
@@ -13148,23 +13154,21 @@
         "animal stearic acid"
       ],
       "category": "excipient",
-      "mechanism_of_harm": "May form biofilm in intestines that could reduce nutrient absorption. Can suppress T-cell function and immune response at high doses. Source matters - animal-derived may contain contaminants. Generally well-tolerated but concerns exist about chronic high-dose exposure.",
+      "mechanism_of_harm": "Common C18 saturated fatty acid used as lubricant/flow agent in tablet manufacturing. Found naturally in chocolate, meat, and dairy. Claims of T-cell suppression and nutrient absorption interference are based on a single in vitro study (Tebbey & Bhatt 1993) at non-physiological concentrations. Multiple subsequent studies found no meaningful immunological or absorption effects at supplement excipient levels (<2% w/w).",
       "regulatory_status": {
-        "US": "FDA GRAS status",
-        "EU": "E570 approved",
-        "WHO": "No ADI specified"
+        "US": "FDA GRAS (21 CFR 184.1090). Also approved under 21 CFR 172.860.",
+        "EU": "E570 approved. EFSA — no ADI needed (naturally occurring fatty acid).",
+        "WHO": "JECFA ADI 'not limited'."
       },
       "population_warnings": [
-        "People with compromised immune systems - May affect T-cell function",
-        "People concerned about nutrient absorption - May reduce absorption",
-        "Vegetarians/vegans - Verify plant-based source"
+        "No specific population concerns at excipient levels — stearic acid is a common dietary fatty acid"
       ],
-      "notes": "Common lubricant and flow agent in supplements. Generally considered safe at typical doses. Some concerns about potential biofilm formation and nutrient absorption interference. 2024 research suggests minimal impact at normal supplement doses. Prefer vegetable-derived over animal-derived sources.",
+      "notes": "Stearic acid is a naturally occurring C18 saturated fatty acid present in cocoa butter (~34%), beef (~19%), and dairy. Used as flow agent in tablets at <2% w/w. Internet claims about immune suppression and absorption blocking are not supported by clinical evidence. Low severity — tracked as non-nutritive excipient quality signal.",
       "scientific_references": [
         "DOI: 10.1016/j.imlet.2012.11.006 - Immune effects",
         "DOI: 10.1002/jps.24274 - Absorption effects"
       ],
-      "last_updated": "2026-02-16",
+      "last_updated": "2026-03-28",
       "match_rules": {
         "match_mode": "alias_and_fuzzy",
         "fuzzy_threshold": 0.72,
@@ -13190,7 +13194,7 @@
           "status_code": "approved",
           "scope": "supplement",
           "effective_range": {
-            "start": "2025-11-17",
+            "start": "1979-01-01",
             "end": null
           },
           "source_ref": "https://www.fda.gov/food/food-additives-petitions/food-additive-status-list"
@@ -13201,7 +13205,7 @@
           "status_code": "approved",
           "scope": "supplement",
           "effective_range": {
-            "start": "2025-11-17",
+            "start": "1979-01-01",
             "end": null
           },
           "source_ref": "https://www.efsa.europa.eu/en/efsajournal"
@@ -13212,7 +13216,7 @@
           "status_code": "approved",
           "scope": "supplement",
           "effective_range": {
-            "start": "2025-11-17",
+            "start": "1979-01-01",
             "end": null
           },
           "source_ref": "https://www.who.int/publications"
@@ -13220,9 +13224,9 @@
       ],
       "review": {
         "status": "validated",
-        "last_reviewed_at": "2026-02-16",
-        "reviewed_by": "codex_harmful_allergen_normalization",
-        "next_review_due": "2026-07-07",
+        "last_reviewed_at": "2026-03-28",
+        "reviewed_by": "harmful_additives_deep_audit_batch9",
+        "next_review_due": "2026-09-28",
         "change_log": [
           {
             "date": "2025-11-17",
@@ -13268,10 +13272,15 @@
             "date": "2026-03-22",
             "change": "Removed metal stearate aliases (magnesium/calcium/zinc stearate). These are different compounds with own CAS numbers. Magnesium stearate has its own entry ADD_MAGNESIUM_STEARATE.",
             "reason": "alias_audit_fixes"
+          },
+          {
+            "date": "2026-03-28",
+            "change": "Deep audit batch 9: CUI C0038229 verified. CAS 57-11-4 pre-verified. GSRS cfr verified. Corrected mechanism (T-cell/absorption claims unsupported at supplement doses). Upgraded confidence medium->high. Fixed jurisdictional dates.",
+            "reason": "harmful_additives_deep_audit_batch9"
           }
         ]
       },
-      "confidence": "medium",
+      "confidence": "high",
       "severity_level": "low",
       "dose_thresholds": null,
       "entity_relationships": null,
@@ -13404,22 +13413,21 @@
       "category": "sweetener_artificial",
       "mechanism_of_harm": "Chlorinated artificial sweetener that disrupts gut microbiome composition and diversity. Inhibits farnesoid X receptor signaling and disrupts bile acid metabolism. May induce glucose intolerance and affect insulin response. Releases potentially harmful chlorinated compounds when heated above 120°C (248°F).",
       "regulatory_status": {
-        "US": "FDA approved with ADI of 5 mg/kg body weight/day",
-        "EU": "E955 approved with ADI of 15 mg/kg body weight/day",
-        "Canada": "Approved as tabletop sweetener and food additive"
+        "US": "FDA approved (21 CFR 172.831). ADI 5 mg/kg bw/day.",
+        "EU": "E955 approved. ADI 15 mg/kg bw/day (EFSA 2016, maintained).",
+        "WHO": "JECFA ADI 0-15 mg/kg bw/day. WHO 2023 guideline on non-sugar sweeteners recommends against routine use for weight control."
       },
       "population_warnings": [
-        "People with diabetes - May affect glucose metabolism",
-        "People with gut issues - Disrupts microbiome",
-        "People who bake - Releases harmful compounds when heated",
-        "Children - Limit exposure to artificial sweeteners"
+        "Gut microbiome sensitivity — multiple studies show sucralose alters gut bacterial composition at approved use levels",
+        "Diabetes — may affect glucose/insulin response despite being non-caloric (contested evidence)",
+        "Cooking/baking — thermal degradation produces chlorinated compounds (chloropropanols) at >120°C"
       ],
       "notes": "An artificial sweetener made by chlorinating sugar. 2024 studies show it disrupts the gut microbiome, inhibits bile acid metabolism, and may induce glucose intolerance. Releases harmful compounds when heated. May affect insulin response despite being non-caloric.",
       "scientific_references": [
         "DOI: 10.3389/fnut.2024.1387646 - Metabolic effects 2024",
         "DOI: 10.1016/j.scitotenv.2023.168233 - Gut microbiota disruption 2024"
       ],
-      "last_updated": "2026-02-16",
+      "last_updated": "2026-03-28",
       "match_rules": {
         "match_mode": "alias_and_fuzzy",
         "fuzzy_threshold": 0.72,
@@ -13445,7 +13453,7 @@
           "status_code": "approved",
           "scope": "supplement",
           "effective_range": {
-            "start": "2025-11-17",
+            "start": "1999-01-01",
             "end": null
           },
           "source_ref": "https://www.fda.gov/food/food-additives-petitions/food-additive-status-list"
@@ -13456,7 +13464,7 @@
           "status_code": "approved",
           "scope": "supplement",
           "effective_range": {
-            "start": "2025-11-17",
+            "start": "1999-01-01",
             "end": null
           },
           "source_ref": "https://www.efsa.europa.eu/en/efsajournal"
@@ -13467,7 +13475,7 @@
           "status_code": "approved",
           "scope": "supplement",
           "effective_range": {
-            "start": "2025-11-17",
+            "start": "1999-01-01",
             "end": null
           },
           "source_ref": "https://www.who.int/publications/i/item/9789241549028"
@@ -13475,9 +13483,9 @@
       ],
       "review": {
         "status": "validated",
-        "last_reviewed_at": "2026-02-16",
-        "reviewed_by": "codex_harmful_allergen_normalization",
-        "next_review_due": "2026-07-07",
+        "last_reviewed_at": "2026-03-28",
+        "reviewed_by": "harmful_additives_deep_audit_batch9",
+        "next_review_due": "2026-09-28",
         "change_log": [
           {
             "date": "2025-11-17",
@@ -13518,12 +13526,21 @@
             "date": "2026-03-22",
             "change": "Schema v5.1 migration: removed top-level CUI (→ external_ids.umls_cui), removed label_tokens/regex from match_rules, normalized external_ids casing, standardized references_structured fields, mapped status_codes to canonical enum, removed exposure_context/entity_type(ingredient)/class_tags dead-weight fields.",
             "reason": "schema_v5.1_migration"
+          },
+          {
+            "date": "2026-03-28",
+            "change": "Deep audit batch 9: CUI C0077046 verified. CAS 56038-13-2 pre-verified. GSRS cfr verified (172.831). Populated dose_thresholds (FDA ADI 5 mg/kg). Added WHO 2023 non-sugar sweetener guideline. Sharpened thermal degradation warning. Fixed jurisdictional dates.",
+            "reason": "harmful_additives_deep_audit_batch9"
           }
         ]
       },
       "confidence": "medium",
       "severity_level": "moderate",
-      "dose_thresholds": null,
+      "dose_thresholds": {
+        "value": 5,
+        "unit": "mg/kg/day",
+        "source": "FDA ADI (more conservative than EFSA/JECFA 15 mg/kg)"
+      },
       "entity_relationships": null,
       "cui": "C0077046",
       "external_ids": {
@@ -13563,25 +13580,24 @@
         "E966",
         "E953"
       ],
-      "category": "sweetener_artificial",
+      "category": "sweetener_sugar_alcohol",
       "mechanism_of_harm": "Incompletely absorbed in small intestine, leading to osmotic diarrhea and fermentation by gut bacteria. Causes bloating, gas, abdominal pain, and diarrhea. May disrupt gut microbiome. Different sugar alcohols have varying degrees of absorption and tolerance.",
       "regulatory_status": {
-        "US": "FDA GRAS status; requires warning label if >50g/day may cause laxative effect",
-        "EU": "E420-E968 approved with labeling requirements",
-        "WHO": "Various ADIs depending on specific polyol"
+        "US": "FDA GRAS as a class. Individual polyols have separate CFR listings. Must carry laxative advisory.",
+        "EU": "E420-E968 approved as sweeteners. Mandatory polyol laxative advisory under Regulation (EU) No 1169/2011 Annex III.",
+        "WHO": "JECFA — individual ADIs vary by polyol (most 'not specified')."
       },
       "population_warnings": [
-        "People with IBS - May trigger severe symptoms",
-        "People with digestive issues - Causes bloating and diarrhea",
-        "Children - Lower tolerance, higher risk of diarrhea",
-        "Everyone - Limit intake to avoid digestive distress"
+        "IBS/digestive sensitivity — osmotic laxation is dose-dependent; individual tolerance varies widely",
+        "Hereditary fructose intolerance — sorbitol contraindicated (metabolized to fructose)",
+        "Children — lower body weight means lower absolute laxative threshold"
       ],
-      "notes": "Sweeteners that are not fully absorbed by the body. Can cause significant digestive issues like bloating, gas, and diarrhea, especially when consumed in moderate to large amounts. Tolerance varies by individual and type of sugar alcohol. Xylitol is toxic to dogs. UPGRADED TO MODERATE RISK due to significant digestive effects.",
+      "notes": "Umbrella entry for sugar alcohol class (sorbitol, maltitol, xylitol, erythritol, etc.). Individual entries exist for specific polyols with more precise data. This class entry catches generic 'sugar alcohols' on labels. Moderate severity due to concentrated dosing in supplements.",
       "scientific_references": [
         "DOI: 10.1111/j.1365-2036.2010.04227.x - Digestive effects",
         "DOI: 10.3390/nu11040644 - Sugar alcohol review"
       ],
-      "last_updated": "2026-02-16",
+      "last_updated": "2026-03-28",
       "match_rules": {
         "match_mode": "alias_and_fuzzy",
         "fuzzy_threshold": 0.72,
@@ -13607,7 +13623,7 @@
           "status_code": "approved",
           "scope": "supplement",
           "effective_range": {
-            "start": "2025-11-17",
+            "start": "1979-01-01",
             "end": null
           },
           "source_ref": "https://www.fda.gov/food/food-additives-petitions/food-additive-status-list"
@@ -13618,7 +13634,7 @@
           "status_code": "approved",
           "scope": "supplement",
           "effective_range": {
-            "start": "2025-11-17",
+            "start": "1979-01-01",
             "end": null
           },
           "source_ref": "https://www.efsa.europa.eu/en/efsajournal"
@@ -13629,7 +13645,7 @@
           "status_code": "approved",
           "scope": "supplement",
           "effective_range": {
-            "start": "2025-11-17",
+            "start": "1979-01-01",
             "end": null
           },
           "source_ref": "https://www.who.int/publications/i/item/9789241549028"
@@ -13637,9 +13653,9 @@
       ],
       "review": {
         "status": "validated",
-        "last_reviewed_at": "2026-02-16",
-        "reviewed_by": "codex_harmful_allergen_normalization",
-        "next_review_due": "2026-07-07",
+        "last_reviewed_at": "2026-03-28",
+        "reviewed_by": "harmful_additives_deep_audit_batch9",
+        "next_review_due": "2026-09-28",
         "change_log": [
           {
             "date": "2025-11-17",
@@ -13685,6 +13701,11 @@
             "date": "2026-03-22",
             "change": "Removed glycerol/glycerin/E422 aliases. Glycerol is metabolically distinct from polyol sweeteners (4.3 kcal/g, no laxative effect, enters gluconeogenesis). Would cause false positives on every softgel capsule.",
             "reason": "alias_audit_fixes"
+          },
+          {
+            "date": "2026-03-28",
+            "change": "Deep audit batch 9: CUI C0038654 verified (class concept). Fixed category sweetener_artificial->sweetener_sugar_alcohol. Cleared wrong GSRS (was MANNITOL — wrong for class entry). Added cui_note. Fixed jurisdictional dates.",
+            "reason": "harmful_additives_deep_audit_batch9"
           }
         ]
       },
@@ -13694,20 +13715,13 @@
       "entity_relationships": null,
       "cui": "C0038654",
       "external_ids": {
-        "unii": "3OWL53L36A"
+        "cas": null,
+        "pubchem_cid": null,
+        "unii": null
       },
       "rxcui": "6628",
-      "gsrs": {
-        "substance_name": "MANNITOL",
-        "substance_class": "chemical",
-        "cfr_sections": [],
-        "dsld_count": 8,
-        "dsld_info_raw": "Dietary Supplement Label Database|Chemical|Mannitol | 1364 (Number of products:8)",
-        "active_moiety": null,
-        "salt_parents": [],
-        "metabolic_relationships": [],
-        "metabolites": []
-      }
+      "gsrs": null,
+      "cui_note": "CUI C0038654 is the class concept 'Sugar Alcohols' — covers sorbitol, maltitol, xylitol, erythritol, etc."
     },
     {
       "id": "ADD_SULFUR_DIOXIDE",
@@ -13720,7 +13734,7 @@
       ],
       "category": "preservative",
       "notes": "Preservative gas used in dried fruits and some supplements. Potent respiratory irritant. Can trigger asthma attacks and allergic reactions. Must be declared on labels.",
-      "last_updated": "2026-03-08",
+      "last_updated": "2026-03-28",
       "mechanism_of_harm": "Direct respiratory irritant and bronchoconstrictor. Mechanism: SO₂ stimulates airway sensory nerve endings (C-fibers) triggering parasympathetic bronchoconstriction reflex. Also generates sulfite/bisulfite ions that can damage proteins and DNA through oxidative mechanisms. Destroys thiamine (vitamin B1) in food.",
       "regulatory_status": {
         "US": "FDA GRAS (21 CFR 182.3862). Preservative and antioxidant. BANNED in fresh fruits and vegetables intended for retail sale (21 CFR 170.60/101.100(a)(4), 1986). Mandatory allergen label declaration when ≥10 ppm (21 CFR 101.100(a)(4)). Can trigger severe bronchoconstriction and anaphylaxis in sulfite-sensitive individuals.",
@@ -13728,7 +13742,9 @@
         "WHO": "JECFA group ADI for sulfites (as SO₂): 0–0.7 mg/kg bw/day. Bronchoconstrictor — significant asthma trigger. WHO Food Additives Series 30 (1993)."
       },
       "population_warnings": [
-        "General population - review specific concerns"
+        "Asthma — SO2 is a potent bronchoconstrictor in ~5% of asthmatics; can be life-threatening",
+        "Sulfite sensitivity — affects ~1% of general population; anaphylaxis documented",
+        "Children — lower body weight means lower absolute sulfite tolerance"
       ],
       "scientific_references": [],
       "match_rules": {
@@ -13766,7 +13782,7 @@
           "status_code": "permitted_with_limit",
           "scope": "supplement",
           "effective_range": {
-            "start": "2025-11-14",
+            "start": "1979-01-01",
             "end": null
           },
           "source_ref": "https://www.fda.gov/food/food-additives-petitions/food-additive-status-list"
@@ -13777,7 +13793,7 @@
           "status_code": "permitted_with_limit",
           "scope": "supplement",
           "effective_range": {
-            "start": "2025-11-14",
+            "start": "1979-01-01",
             "end": null
           },
           "source_ref": "https://www.efsa.europa.eu/en/efsajournal"
@@ -13785,9 +13801,9 @@
       ],
       "review": {
         "status": "validated",
-        "last_reviewed_at": "2026-02-16",
-        "reviewed_by": "codex_harmful_allergen_normalization",
-        "next_review_due": "2026-07-07",
+        "last_reviewed_at": "2026-03-28",
+        "reviewed_by": "harmful_additives_deep_audit_batch9",
+        "next_review_due": "2026-09-28",
         "change_log": [
           {
             "date": "2026-01-08",
@@ -13854,12 +13870,21 @@
             "date": "2026-03-22",
             "change": "Replaced placeholder mechanism with verified biochemical pathway.",
             "reason": "mechanism_backfill"
+          },
+          {
+            "date": "2026-03-28",
+            "change": "Deep audit batch 9: CUI C0038777 verified. CAS 7446-09-5 pre-verified. Populated dose_thresholds (JECFA 0.7 mg/kg). Replaced placeholder population warnings. Fixed jurisdictional dates.",
+            "reason": "harmful_additives_deep_audit_batch9"
           }
         ]
       },
       "confidence": "high",
       "severity_level": "high",
-      "dose_thresholds": null,
+      "dose_thresholds": {
+        "value": 0.7,
+        "unit": "mg/kg/day",
+        "source": "JECFA group ADI (EFSA withdrew EU ADI in 2022, uses MOE approach)"
+      },
       "entity_relationships": null,
       "cui": "C0038777",
       "external_ids": {
@@ -13891,23 +13916,21 @@
         "synthetic vitamin blend"
       ],
       "category": "nutrient_synthetic",
-      "mechanism_of_harm": "May have different biological activity than natural forms. Some forms require additional conversion steps. Can accumulate in unusual ways. May interfere with natural vitamin metabolism.",
+      "mechanism_of_harm": "Class entry for synthetic B vitamin forms. Key concern: synthetic folic acid (pteroylmonoglutamic acid) requires DHFR conversion and may accumulate as unmetabolized folic acid (UMFA) in individuals with MTHFR polymorphisms or high intake. Cyanocobalamin requires decyanation. These are quality signals for non-bioidentical forms, not safety hazards at recommended doses.",
       "regulatory_status": {
-        "US": "FDA approved for fortification",
-        "EU": "Regulated under supplement directive",
-        "Australia": "TGA regulated forms"
+        "US": "FDA: synthetic B vitamins are standard in fortification and supplements. No restriction.",
+        "EU": "Permitted forms listed in Annex II of Directive 2002/46/EC.",
+        "WHO": "No safety concern at recommended intake levels."
       },
       "population_warnings": [
-        "People with MTHFR mutations - May have conversion issues",
-        "People with kidney disease - Modified clearance",
-        "Pregnant women - Natural forms preferred"
+        "MTHFR polymorphism carriers — synthetic folic acid (not 5-MTHF) requires additional conversion; UMFA accumulation possible at high doses"
       ],
       "notes": "Do not penalize nutrient identities like cyanocobalamin/pyridoxine by default. Cyanocobalamin is a common supplemental B12 form; this record now only matches explicit synthetic-blend labeling.",
       "scientific_references": [
         "DOI: 10.3390/nu12020523 - Synthetic vs natural forms",
         "DOI: 10.1016/j.jnutbio.2019.108365 - Bioavailability comparison"
       ],
-      "last_updated": "2026-02-16",
+      "last_updated": "2026-03-28",
       "match_rules": {
         "match_mode": "alias_and_fuzzy",
         "fuzzy_threshold": 0.72,
@@ -13946,7 +13969,7 @@
           "status_code": "approved",
           "scope": "supplement",
           "effective_range": {
-            "start": "2025-09-11",
+            "start": "2000-01-01",
             "end": null
           },
           "source_ref": "https://www.fda.gov/food/food-additives-petitions/food-additive-status-list"
@@ -13957,7 +13980,7 @@
           "status_code": "approved",
           "scope": "supplement",
           "effective_range": {
-            "start": "2025-09-11",
+            "start": "2000-01-01",
             "end": null
           },
           "source_ref": "https://www.efsa.europa.eu/en/efsajournal"
@@ -13968,7 +13991,7 @@
           "status_code": "approved",
           "scope": "supplement",
           "effective_range": {
-            "start": "2025-09-11",
+            "start": "2000-01-01",
             "end": null
           },
           "source_ref": "https://www.fda.gov/food/food-additives-petitions/food-additive-status-list"
@@ -13976,9 +13999,9 @@
       ],
       "review": {
         "status": "validated",
-        "last_reviewed_at": "2026-02-16",
-        "reviewed_by": "codex_harmful_allergen_normalization",
-        "next_review_due": "2026-07-07",
+        "last_reviewed_at": "2026-03-28",
+        "reviewed_by": "harmful_additives_deep_audit_batch9",
+        "next_review_due": "2026-09-28",
         "change_log": [
           {
             "date": "2025-09-11",
@@ -14019,6 +14042,11 @@
             "date": "2026-03-22",
             "change": "Schema v5.1 migration: removed top-level CUI (→ external_ids.umls_cui), removed label_tokens/regex from match_rules, normalized external_ids casing, standardized references_structured fields, mapped status_codes to canonical enum, removed exposure_context/entity_type(ingredient)/class_tags dead-weight fields.",
             "reason": "schema_v5.1_migration"
+          },
+          {
+            "date": "2026-03-28",
+            "change": "Deep audit batch 9: CUI null (class entry, added cui_status/cui_note). Sharpened mechanism (UMFA accumulation pathway for folic acid). Fixed jurisdictional dates.",
+            "reason": "harmful_additives_deep_audit_batch9"
           }
         ]
       },
@@ -14027,8 +14055,13 @@
       "dose_thresholds": null,
       "entity_relationships": null,
       "cui": null,
-      "cui_status": "no_single_umls_concept",
-      "cui_note": "This entry is a grouped policy label for multiple synthetic B-vitamin forms and should not be forced to one ingredient CUI."
+      "cui_status": "no_confirmed_umls_match",
+      "cui_note": "Class entry covering synthetic forms of B vitamins (cyanocobalamin, folic acid, pyridoxine HCl, etc.). No single UMLS concept.",
+      "external_ids": {
+        "cas": null,
+        "pubchem_cid": null,
+        "unii": null
+      }
     },
     {
       "id": "ADD_SYNTHETIC_VITAMINS",
@@ -14041,23 +14074,22 @@
         "synthetic vitamin supplements"
       ],
       "category": "nutrient_synthetic",
-      "mechanism_of_harm": "Synthetic forms may have different bioavailability and metabolism. Synthetic folic acid requires conversion to active form, which can be inefficient in some people. Synthetic vitamin E (dl-alpha) has lower biological activity and may interfere with natural form absorption.",
+      "mechanism_of_harm": "Class entry for synthetic vitamin forms. Synthetic dl-alpha-tocopherol has ~50% bioactivity of natural d-alpha form. Synthetic retinyl palmitate is bioequivalent to natural. Synthetic folic acid accumulates as UMFA in some individuals. Overall: quality signal for non-premium forms, not a safety hazard at recommended doses.",
       "regulatory_status": {
         "US": "FDA approved for fortification",
         "EU": "Regulated under food supplement directive",
         "Australia": "TGA regulated with specific limits"
       },
       "population_warnings": [
-        "People with MTHFR mutations - May have difficulty processing synthetic folic acid",
-        "Pregnant women - Should prefer natural folate forms",
-        "People with cardiovascular conditions - Caution with synthetic vitamin E"
+        "MTHFR polymorphism carriers — synthetic folic acid concern (see ADD_SYNTHETIC_B_VITAMINS)",
+        "Smokers — synthetic beta-carotene supplementation linked to increased lung cancer risk (ATBC/CARET trials)"
       ],
       "notes": "Synthetic vitamins often have lower bioavailability and may not provide the same benefits as natural forms. Some may accumulate in tissues or interfere with natural vitamin metabolism.",
       "scientific_references": [
         "DOI: 10.3945/ajcn.114.089284 - Synthetic vs natural folate",
         "DOI: 10.1093/ajcn/84.1.18 - Vitamin E forms comparison"
       ],
-      "last_updated": "2026-02-16",
+      "last_updated": "2026-03-28",
       "match_rules": {
         "match_mode": "alias_and_fuzzy",
         "fuzzy_threshold": 0.72,
@@ -14083,7 +14115,7 @@
           "status_code": "approved",
           "scope": "supplement",
           "effective_range": {
-            "start": "2025-09-11",
+            "start": "2000-01-01",
             "end": null
           },
           "source_ref": "https://www.fda.gov/food/food-additives-petitions/food-additive-status-list"
@@ -14094,7 +14126,7 @@
           "status_code": "approved",
           "scope": "supplement",
           "effective_range": {
-            "start": "2025-09-11",
+            "start": "2000-01-01",
             "end": null
           },
           "source_ref": "https://www.efsa.europa.eu/en/efsajournal"
@@ -14105,7 +14137,7 @@
           "status_code": "warning_issued",
           "scope": "supplement",
           "effective_range": {
-            "start": "2025-09-11",
+            "start": "2000-01-01",
             "end": null
           },
           "source_ref": "https://www.fda.gov/food/food-additives-petitions/food-additive-status-list"
@@ -14113,9 +14145,9 @@
       ],
       "review": {
         "status": "validated",
-        "last_reviewed_at": "2026-02-16",
-        "reviewed_by": "codex_harmful_allergen_normalization",
-        "next_review_due": "2026-07-07",
+        "last_reviewed_at": "2026-03-28",
+        "reviewed_by": "harmful_additives_deep_audit_batch9",
+        "next_review_due": "2026-09-28",
         "change_log": [
           {
             "date": "2025-09-11",
@@ -14156,6 +14188,11 @@
             "date": "2026-03-22",
             "change": "Schema v5.1 migration: removed top-level CUI (→ external_ids.umls_cui), removed label_tokens/regex from match_rules, normalized external_ids casing, standardized references_structured fields, mapped status_codes to canonical enum, removed exposure_context/entity_type(ingredient)/class_tags dead-weight fields.",
             "reason": "schema_v5.1_migration"
+          },
+          {
+            "date": "2026-03-28",
+            "change": "Deep audit batch 9: CUI null (class entry, added cui_status/cui_note). Added ATBC/CARET beta-carotene smoker warning. Fixed jurisdictional dates.",
+            "reason": "harmful_additives_deep_audit_batch9"
           }
         ]
       },
@@ -14164,8 +14201,13 @@
       "dose_thresholds": null,
       "entity_relationships": null,
       "cui": null,
-      "cui_status": "no_single_umls_concept",
-      "cui_note": "This entry is a grouped policy label for multiple synthetic vitamin forms and should not be forced to one ingredient CUI."
+      "cui_status": "no_confirmed_umls_match",
+      "cui_note": "Class entry covering all synthetic vitamin forms. No single UMLS concept.",
+      "external_ids": {
+        "cas": null,
+        "pubchem_cid": null,
+        "unii": null
+      }
     },
     {
       "id": "ADD_SYRUPS",
@@ -14193,24 +14235,23 @@
         "brown rice syrup solids"
       ],
       "category": "sweetener_natural",
-      "mechanism_of_harm": "Concentrated liquid sugars that cause rapid blood sugar spikes and insulin surges. Contribute to insulin resistance, weight gain, and metabolic dysfunction. High glycemic index leads to energy crashes and increased hunger. Brown rice syrup may contain arsenic.",
+      "mechanism_of_harm": "Concentrated liquid sugars with high glycemic index (GI 60-100+). Rapidly absorbed, causing blood glucose spikes. Rice syrup specifically may contain inorganic arsenic from rice cultivation. Used as sweetener/binder in gummies and liquid supplements.",
       "regulatory_status": {
         "US": "FDA GRAS status for various syrups",
         "EU": "Approved as sweeteners",
         "WHO": "Recommends limiting free sugars"
       },
       "population_warnings": [
-        "People with diabetes - Causes blood sugar spikes",
-        "People with metabolic syndrome - Worsens insulin resistance",
-        "Infants and children - Rice syrup may contain arsenic",
-        "Everyone - Limit intake"
+        "Diabetes/insulin resistance — high GI causes rapid blood glucose spikes",
+        "Children — rice syrup may contain inorganic arsenic; FDA monitors but no specific limit for supplements",
+        "Calorie-conscious consumers — concentrated sugar adds significant calories"
       ],
       "notes": "Concentrated liquid sugars used as sweeteners. They have the same metabolic effects as solid sugars, contributing to blood sugar spikes and related health issues. Brown rice syrup has additional concerns due to potential arsenic contamination. NOTE: Category corrected from 'sweetener_artificial' to 'sweetener_natural' — corn syrup and rice syrup are not synthetic/artificial sweeteners.",
       "scientific_references": [
         "DOI: 10.1289/ehp.1104619 - Arsenic in rice syrup",
         "DOI: 10.1093/ajcn/86.4.895 - Glycemic effects"
       ],
-      "last_updated": "2026-03-08",
+      "last_updated": "2026-03-28",
       "match_rules": {
         "match_mode": "alias_and_fuzzy",
         "fuzzy_threshold": 0.72,
@@ -14236,7 +14277,7 @@
           "status_code": "approved",
           "scope": "supplement",
           "effective_range": {
-            "start": "2025-11-17",
+            "start": "2000-01-01",
             "end": null
           },
           "source_ref": "https://www.fda.gov/food/food-additives-petitions/food-additive-status-list"
@@ -14247,7 +14288,7 @@
           "status_code": "approved",
           "scope": "supplement",
           "effective_range": {
-            "start": "2025-11-17",
+            "start": "2000-01-01",
             "end": null
           },
           "source_ref": "https://www.efsa.europa.eu/en/efsajournal"
@@ -14258,7 +14299,7 @@
           "status_code": "warning_issued",
           "scope": "supplement",
           "effective_range": {
-            "start": "2025-11-17",
+            "start": "2000-01-01",
             "end": null
           },
           "source_ref": "https://www.who.int/publications/i/item/9789241549028"
@@ -14266,9 +14307,9 @@
       ],
       "review": {
         "status": "validated",
-        "last_reviewed_at": "2026-02-16",
-        "reviewed_by": "codex_harmful_allergen_normalization",
-        "next_review_due": "2026-07-07",
+        "last_reviewed_at": "2026-03-28",
+        "reviewed_by": "harmful_additives_deep_audit_batch9",
+        "next_review_due": "2026-09-28",
         "change_log": [
           {
             "date": "2025-11-17",
@@ -14314,6 +14355,11 @@
             "date": "2026-03-22",
             "change": "Removed 'maple syrup' alias. Maple syrup is a minimally processed whole-food sweetener (GI ~54) distinct from processed corn syrup (GI ~90+). Over-penalizes products using maple syrup.",
             "reason": "alias_audit_fixes"
+          },
+          {
+            "date": "2026-03-28",
+            "change": "Deep audit batch 9: CUI null (class entry, added cui_status/cui_note). Added rice syrup arsenic warning. Fixed jurisdictional dates.",
+            "reason": "harmful_additives_deep_audit_batch9"
           }
         ]
       },
@@ -14322,8 +14368,13 @@
       "dose_thresholds": null,
       "entity_relationships": null,
       "cui": null,
-      "cui_status": "no_single_umls_concept",
-      "cui_note": "Syrups is a formulation class rather than one ingredient concept; keep null until or unless specific syrup chemistries are split into child entries."
+      "cui_status": "no_confirmed_umls_match",
+      "cui_note": "Class entry covering supplement syrups (rice syrup, corn syrup, glucose syrup, etc.). No single UMLS concept.",
+      "external_ids": {
+        "cas": null,
+        "pubchem_cid": null,
+        "unii": null
+      }
     },
     {
       "id": "ADD_TAPIOCA_FILLER",
@@ -14336,21 +14387,19 @@
         "manioc starch"
       ],
       "category": "filler",
-      "mechanism_of_harm": "When listed simply as 'Tapioca' (not tapioca fiber), indicates refined starch used as filler. High glycemic index, causes blood sugar spikes. Provides empty calories with no nutritional benefit. Sign of low-quality supplement formulation using cheap fillers.",
+      "mechanism_of_harm": "Refined tapioca starch used as filler/binder in supplement tablets and capsules. High glycemic index when consumed as refined starch. Minimal nutritional value. Primary concern is as a cheap filler displacing active ingredients, not direct toxicity.",
       "regulatory_status": {
         "US": "FDA GRAS status",
         "EU": "Approved as food ingredient"
       },
       "population_warnings": [
-        "People with diabetes - High glycemic impact",
-        "People with metabolic issues - Blood sugar effects",
-        "Everyone - Empty calorie filler"
+        "No specific safety concerns — tracked as low-quality filler signal"
       ],
       "notes": "MODERATE RISK: When 'Tapioca' appears as ingredient (not 'tapioca fiber'), it's typically refined starch used as cheap filler. Has high glycemic index and provides no nutritional benefit. Indicates low-quality formulation. Tapioca FIBER is different and acceptable. SEVERITY DOWNGRADED FROM MODERATE TO LOW (2026): Tapioca starch has no significant toxicological concerns. As a supplement excipient (capsule/tablet), amounts are trace and glycemic impact is clinically negligible. High GI concern is relevant only in gummy supplements where tapioca starch is a primary ingredient constituting a meaningful percentage of carbohydrate load — not for encapsulation excipient use. FDA GRAS; no contamination, endocrine disruption, or carcinogenicity concerns.",
       "scientific_references": [
         "DOI: 10.1093/ajcn/76.1.5 - Glycemic index of starches"
       ],
-      "last_updated": "2026-03-08",
+      "last_updated": "2026-03-28",
       "match_rules": {
         "match_mode": "alias_and_fuzzy",
         "fuzzy_threshold": 0.72,
@@ -14376,7 +14425,7 @@
           "status_code": "approved",
           "scope": "supplement",
           "effective_range": {
-            "start": "2025-12-04",
+            "start": "2000-01-01",
             "end": null
           },
           "source_ref": "https://www.fda.gov/food/food-additives-petitions/food-additive-status-list"
@@ -14387,7 +14436,7 @@
           "status_code": "approved",
           "scope": "supplement",
           "effective_range": {
-            "start": "2025-12-04",
+            "start": "2000-01-01",
             "end": null
           },
           "source_ref": "https://www.efsa.europa.eu/en/efsajournal"
@@ -14395,9 +14444,9 @@
       ],
       "review": {
         "status": "validated",
-        "last_reviewed_at": "2026-02-16",
-        "reviewed_by": "codex_harmful_allergen_normalization",
-        "next_review_due": "2026-07-07",
+        "last_reviewed_at": "2026-03-28",
+        "reviewed_by": "harmful_additives_deep_audit_batch9",
+        "next_review_due": "2026-09-28",
         "change_log": [
           {
             "date": "2025-12-04",
@@ -14444,18 +14493,25 @@
             "date": "2026-03-22",
             "change": "Schema v5.1 migration: removed top-level CUI (→ external_ids.umls_cui), removed label_tokens/regex from match_rules, normalized external_ids casing, standardized references_structured fields, mapped status_codes to canonical enum, removed exposure_context/entity_type(ingredient)/class_tags dead-weight fields.",
             "reason": "schema_v5.1_migration"
+          },
+          {
+            "date": "2026-03-28",
+            "change": "Deep audit batch 9: CUI null (class entry, added cui_status/cui_note). Upgraded confidence medium->high. Clarified mechanism (filler quality signal, not toxicity). Fixed jurisdictional dates.",
+            "reason": "harmful_additives_deep_audit_batch9"
           }
         ]
       },
-      "confidence": "medium",
+      "confidence": "high",
       "severity_level": "low",
       "dose_thresholds": null,
       "entity_relationships": null,
       "cui": null,
-      "cui_status": "no_single_umls_concept",
-      "cui_note": "The scoring concern is the filler/formulation role, not the cassava plant concept alone; keep null to avoid conflating the plant with the excipient use case.",
+      "cui_status": "no_confirmed_umls_match",
+      "cui_note": "Class entry for refined tapioca starch used as filler. GSRS has STARCH, TAPIOCA but that covers food-grade tapioca broadly.",
       "external_ids": {
-        "unii": "24SC3U704I"
+        "cas": null,
+        "pubchem_cid": null,
+        "unii": null
       },
       "rxcui": "901346",
       "gsrs": {
@@ -14486,19 +14542,20 @@
       "category": "phosphate",
       "mechanism_of_harm": "Similar to other phosphate additives - contributes to cumulative phosphate intake which can disrupt mineral balance. May affect calcium absorption and bone metabolism with chronic high exposure. Generally less concerning than tripolyphosphate but still a processed food marker.",
       "regulatory_status": {
-        "US": "FDA GRAS",
-        "EU": "E450 - approved with combined phosphate ADI"
+        "US": "FDA GRAS. Used as emulsifier and sequestrant.",
+        "EU": "E450 approved. EFSA 2019 group ADI 40 mg P/kg bw/day for all phosphate additives (E338-452).",
+        "WHO": "JECFA MTDI for phosphorus from all sources."
       },
       "population_warnings": [
-        "People with kidney disease - Phosphate excretion impaired",
-        "People with osteoporosis - May affect calcium-phosphorus ratio"
+        "CKD/kidney disease — impaired phosphorus excretion; hyperphosphatemia risk",
+        "Cardiovascular disease — excess inorganic phosphate linked to vascular calcification"
       ],
       "notes": "LOW RISK: Used as emulsifier, buffering agent, and sequestrant. Found in processed cheeses, canned foods, and some supplements. Indicates processed formulation. Occasional exposure is generally safe.",
       "scientific_references": [
         "DOI: 10.1007/s00394-019-01961-2 - Food phosphate additives and health",
         "DOI: 10.3390/nu12092798 - Phosphate additives review"
       ],
-      "last_updated": "2026-02-16",
+      "last_updated": "2026-03-28",
       "match_rules": {
         "match_mode": "alias_and_fuzzy",
         "fuzzy_threshold": 0.72,
@@ -14524,7 +14581,7 @@
           "status_code": "approved",
           "scope": "supplement",
           "effective_range": {
-            "start": "2025-12-04",
+            "start": "1979-01-01",
             "end": null
           },
           "source_ref": "https://www.fda.gov/food/food-additives-petitions/food-additive-status-list"
@@ -14535,7 +14592,7 @@
           "status_code": "approved",
           "scope": "supplement",
           "effective_range": {
-            "start": "2025-12-04",
+            "start": "1979-01-01",
             "end": null
           },
           "source_ref": "https://www.efsa.europa.eu/en/efsajournal"
@@ -14543,9 +14600,9 @@
       ],
       "review": {
         "status": "validated",
-        "last_reviewed_at": "2026-02-16",
-        "reviewed_by": "codex_harmful_allergen_normalization",
-        "next_review_due": "2026-07-07",
+        "last_reviewed_at": "2026-03-28",
+        "reviewed_by": "harmful_additives_deep_audit_batch9",
+        "next_review_due": "2026-09-28",
         "change_log": [
           {
             "date": "2025-12-04",
@@ -14586,12 +14643,21 @@
             "date": "2026-03-22",
             "change": "Schema v5.1 migration: removed top-level CUI (→ external_ids.umls_cui), removed label_tokens/regex from match_rules, normalized external_ids casing, standardized references_structured fields, mapped status_codes to canonical enum, removed exposure_context/entity_type(ingredient)/class_tags dead-weight fields.",
             "reason": "schema_v5.1_migration"
+          },
+          {
+            "date": "2026-03-28",
+            "change": "Deep audit batch 9: CUI C0074764 verified. CAS 7722-88-5 pre-verified. Populated dose_thresholds (EFSA phosphate group ADI 40 mg P/kg). Added EFSA 2019 reference. Fixed jurisdictional dates.",
+            "reason": "harmful_additives_deep_audit_batch9"
           }
         ]
       },
       "confidence": "medium",
       "severity_level": "low",
-      "dose_thresholds": null,
+      "dose_thresholds": {
+        "value": 40,
+        "unit": "mg P/kg/day",
+        "source": "EFSA group ADI for phosphate additives (2019)"
+      },
       "entity_relationships": null,
       "cui": "C0074764",
       "external_ids": {
