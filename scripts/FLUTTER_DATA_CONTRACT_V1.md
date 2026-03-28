@@ -52,6 +52,7 @@ class ScanCardData {
 ```
 
 **SQL query:**
+
 ```sql
 SELECT dsld_id, product_name, brand_name, image_url, thumbnail_key,
        product_status, discontinued_date, form_factor, supplement_type,
@@ -74,6 +75,7 @@ ordering above for the instant scan card, or fetch all matches and offer a choos
 when the barcode resolves to multiple products.
 
 **What the user sees:**
+
 - Product name + brand
 - Score circle (score_quality_80 normalized to 100 if no profile, or combined with fit_20 if profile exists)
 - Grade word
@@ -146,10 +148,32 @@ class ProductDetail {
   final ManufacturerDetail manufacturerDetail;
   final EvidenceData? evidenceData;
   final RdaUlData? rdaUlData;     // may exist with collectionEnabled == false and a reason
+  final FormulationDetail formulationDetail;  // always present
+  final SynergyDetail? synergyDetail;         // conditional: present when synergy clusters matched
+}
+```
+
+```dart
+class FormulationDetail {
+  final String deliveryTier;                // e.g. "enteric", "liposomal", "standard"
+  final String deliveryForm;                // e.g. "softgel", "capsule"
+  final bool absorptionEnhancerPaired;      // true if enhancer found
+  final List<String> absorptionEnhancers;   // e.g. ["BioPerine"]
+  final bool isCertifiedOrganic;
+  final String organicVerification;         // e.g. "usda_organic"
+  final List<Map> standardizedBotanicals;   // botanical standardization info
+  final bool synergyClusterQualified;       // true if synergy bonus earned
+  final bool claimNonGmoVerified;           // Non-GMO Project Verified claim
+}
+
+class SynergyDetail {
+  final bool qualified;                     // true if synergy bonus was applied
+  final List<Map> clusters;                 // matched cluster objects with ingredient doses
 }
 ```
 
 **Loading flow:**
+
 ```
 1. Show header instantly from products_core
 2. Check product_detail_cache for dsld_id
@@ -233,6 +257,7 @@ class InactiveIngredient {
 ```
 
 **What the user sees when tapping an active ingredient:**
+
 - Ingredient name + form
 - Bio score + natural + score explanation
 - Dosage with units
@@ -242,6 +267,7 @@ class InactiveIngredient {
 - Category tag
 
 **What the user sees when tapping an inactive ingredient:**
+
 - Ingredient name + category
 - Additive type badge
 - Common uses tags (e.g. "emulsifier", "coating")
@@ -286,6 +312,12 @@ class Warning {
   final String? action;                // actionable guidance ("Do not use...")
   final String? evidenceLevel;         // "established", "probable", "theoretical"
   final List<String>? sources;         // DOI/URL citations
+  final String? conditionId;           // interaction only: which health condition triggered this
+  final String? drugClassId;           // drug_interaction only: which drug class triggered this
+  final String? ingredientName;        // both: which ingredient caused the flag
+  final Map<String, dynamic>? doseThresholdEvaluation;
+      // both: contains threshold_met (bool), product_dose (num),
+      // threshold_value (num), unit (string), condition (string)
 
   // all types:
   final String source;                 // provenance: "banned_recalled_ingredients",
@@ -295,6 +327,7 @@ class Warning {
 ```
 
 **What the user sees when expanding a warning:**
+
 - Title + severity badge (color-coded)
 - Detail text (reason for banned, mechanism for harmful, etc.)
 - For interactions: actionable guidance + evidence level + citation links
@@ -375,16 +408,153 @@ WHERE products_fts MATCH 'omega fish oil';
 
 ## What the App Does NOT Get from the Pipeline
 
-| Data | Where it comes from |
-|---|---|
-| `score_fit_20` | Computed on-device |
-| `score_combined_100` | Computed on-device |
-| Price / daily cost | User enters manually |
-| Offline images | Runtime cache or placeholder |
+| Data                  | Where it comes from              |
+| --------------------- | -------------------------------- |
+| `score_fit_20`        | Computed on-device               |
+| `score_combined_100`  | Computed on-device               |
+| Price / daily cost    | User enters manually             |
+| Offline images        | Runtime cache or placeholder     |
 | Product-level recalls | Future: separate FDA data source |
-| Account data | Supabase user_sync_data |
+| Account data          | Supabase user_sync_data          |
 
 ---
+
+On the phone (always there, works offline)
+
+Everything in pharmaguide_core.db — bundled with the app at install or  
+ downloaded on first launch:
+
+┌────────────────┬─────────────────────────────────┬─────────────────┐  
+ │ What │ Example │ Used for │  
+ ├────────────────┼─────────────────────────────────┼─────────────────┤  
+ │ Product name, │ "Thorne Basic Nutrients", UPC │ Instant scan │
+│ brand, UPC │ 693749101234 │ lookup │  
+ ├────────────────┼─────────────────────────────────┼─────────────────┤  
+ │ Score + grade │ 71.2/80, "Good", SAFE │ Scan result │
+│ + verdict │ │ card │  
+ ├────────────────┼─────────────────────────────────┼─────────────────┤
+│ Sub-section │ Ingredient: 22/25, Safety: │ 5-pillar card │  
+ │ scores │ 28/30, Evidence: 16/20, Brand: │ headers │  
+ │ │ 5/5 │ │
+├────────────────┼─────────────────────────────────┼─────────────────┤  
+ │ Safety flags │ has_banned=0, has_allergen=1, │ Warning dots, │
+│ │ has_harmful_additive=0 │ verdict │  
+ ├────────────────┼─────────────────────────────────┼─────────────────┤
+│ Dietary │ is_vegan=1, is_gluten_free=1, │ Filter chips │  
+ │ attributes │ diabetes_friendly=0 │ │  
+ ├────────────────┼─────────────────────────────────┼─────────────────┤
+│ Percentile │ Top 12% in Multivitamins │ Percentile │  
+ │ ranking │ │ badge │  
+ ├────────────────┼─────────────────────────────────┼─────────────────┤
+│ Product status │ active / discontinued │ Status badge │  
+ ├────────────────┼─────────────────────────────────┼─────────────────┤
+│ Full-text │ products_fts table │ Search bar │  
+ │ search index │ │ instant results │
+├────────────────┼─────────────────────────────────┼─────────────────┤  
+ │ Reference data │ RDA/UL values, interaction │ On-device │
+│ (~313KB) │ rules, risk taxonomy, goal │ FitScore │
+│ │ clusters │ calculation │  
+ ├────────────────┼─────────────────────────────────┼─────────────────┤
+│ Export │ version, checksum │ "Do I need to │  
+ │ manifest │ │ update?" check │  
+ └────────────────┴─────────────────────────────────┴─────────────────┘
+
+This is 61 columns x 783 products = ~0.9MB. Instant. No internet needed.
+
+Fetched from Supabase (on-demand, cached after first view)
+
+The detail blob — one JSON per product, fetched when the user taps into  
+ the full result screen:
+
+┌────────────────────┬──────────────────────────┬────────────────────┐
+│ What │ Example │ Used for │
+├────────────────────┼──────────────────────────┼────────────────────┤
+│ Active ingredients │ Vitamin D3, 2000 IU, │ │
+│ list │ bio_score: 14, "Premium │ Card 1 accordion │
+│ │ Form" │ │  
+ ├────────────────────┼──────────────────────────┼────────────────────┤
+│ Inactive │ Cellulose, Magnesium │ │  
+ │ ingredients │ Stearate, is_harmful: │ Card 2 accordion │
+│ │ false │ │  
+ ├────────────────────┼──────────────────────────┼────────────────────┤  
+ │ Harmful additive │ mechanism_of_harm, │ │
+│ detail │ population_warnings, │ Card 2 red rows │  
+ │ │ notes │ │  
+ ├────────────────────┼──────────────────────────┼────────────────────┤
+│ Interaction │ severity, action, │ │  
+ │ warnings │ evidence_level, dose │ Card 3 accordion │  
+ │ │ threshold │ │
+├────────────────────┼──────────────────────────┼────────────────────┤  
+ │ Condition/drug │ interaction_summary: │ Orange alert │  
+ │ flags │ pregnancy → │ banner │
+│ │ contraindicated │ │  
+ ├────────────────────┼──────────────────────────┼────────────────────┤  
+ │ Clinical evidence │ RCT badges, study │ Card 3 study links │
+│ matches │ descriptions │ │  
+ ├────────────────────┼──────────────────────────┼────────────────────┤
+│ Score │ "Synergy Bonus: Calcium │ Pros & │
+│ bonuses/penalties │ + D3 (+2.0)" │ Considerations │
+├────────────────────┼──────────────────────────┼────────────────────┤
+│ Manufacturer │ trusted, │ │  
+ │ detail │ third_party_tested, │ Card 4 rows │
+│ │ region │ │  
+ ├────────────────────┼──────────────────────────┼────────────────────┤  
+ │ Probiotic detail │ CFU count, strain list │ Card 1 probiotic │
+│ │ │ badge │  
+ ├────────────────────┼──────────────────────────┼────────────────────┤  
+ │ │ CUI, CAS, PubChem, UNII │ Data integrity │
+│ Identifiers │ per ingredient + on │ (not shown to │
+ │ │ banned/harmful warnings │ users in MVP) │
+└────────────────────┴──────────────────────────┴────────────────────┘
+
+This is ~2-10KB per product. Fetched once, cached locally in  
+ product_detail_cache.
+
+Also from Supabase (user account stuff)
+
+┌───────────────────────┬─────────────────┬─────────────────────────┐  
+ │ What │ Direction │ Used for │
+├───────────────────────┼─────────────────┼─────────────────────────┤  
+ │ Auth │ App → Supabase │ Sign in/sign up │
+│ (Google/Apple/Email) │ │ │
+├───────────────────────┼─────────────────┼─────────────────────────┤  
+ │ │ │ Supplement stack │
+ │ user_stacks │ App ↔ Supabase │ (synced for │
+ │ │ │ multi-device) │
+│ │ │ Has updated_at with │
+ │ │ │ auto-update trigger │
+ │ │ │ for CRUD conflict │
+ │ │ │ resolution │  
+ ├───────────────────────┼─────────────────┼─────────────────────────┤
+│ user_usage │ App ↔ Supabase │ Scan/AI limits (10 │  
+ │ │ │ scans/day, 5 AI/day) │
+├───────────────────────┼─────────────────┼─────────────────────────┤  
+ │ pending_products │ App → Supabase │ "Product not found" │  
+ │ │ │ submissions │
+├───────────────────────┼─────────────────┼─────────────────────────┤  
+ │ │ App → Edge │ │  
+ │ AI Pharmacist │ Function → │ Chat responses │
+│ │ Gemini │ │  
+ └───────────────────────┴─────────────────┴─────────────────────────┘
+
+Never leaves the phone
+
+┌────────────────────────────────────┬───────────────────────────────┐  
+ │ What │ Stored in │
+├────────────────────────────────────┼───────────────────────────────┤
+│ Health profile (conditions, meds, │ Local SQLite user_profile │
+│ goals, allergies) │ │
+├────────────────────────────────────┼───────────────────────────────┤  
+ │ score_fit_20 (personal match │ Computed fresh each time, │
+│ score) │ never stored │  
+ ├────────────────────────────────────┼───────────────────────────────┤
+│ Guest scan count │ Hive local KV │  
+ ├────────────────────────────────────┼───────────────────────────────┤  
+ │ Chat history │ Hive local KV │
+├────────────────────────────────────┼───────────────────────────────┤  
+ │ Scan history │ Local SQLite │
+│ │ user_scan_history │  
+ └────────────────────────────────────┴───────────────────────────────┘
 
 ## Implementation Notes for Flutter Developers
 
@@ -399,6 +569,7 @@ This is intentional — they come from different pipeline stages:
 - `normalizedKey`, `rawSourceText` — label fields (varies)
 
 **Do NOT normalize these.** Use explicit `@JsonKey` annotations:
+
 ```dart
 @JsonKey(name: 'standardName')
 final String standardName;     // label-parsed canonical
@@ -478,36 +649,36 @@ to pick one, but consider showing a chooser when `COUNT(*) > 1` for a UPC.
 The app profile Health Concerns chips must map to the exact `condition_id` values
 used in the pipeline taxonomy. This table is the single source of truth:
 
-| App UI Chip | `condition_id` | Category | Notes |
-|---|---|---|---|
-| Pregnancy | `pregnancy` | reproductive | Teratogenicity, retinoid exposure, uterine stimulants |
-| Lactation/Breastfeeding | `lactation` | reproductive | Transfer via breast milk, infant safety |
-| Trying to Conceive (TTC) | `ttc` | reproductive | Fertility impact — clinically distinct from pregnancy |
-| Hypertension | `hypertension` | cardiovascular | BP elevation, sympathomimetics |
-| Heart Disease | `heart_disease` | cardiovascular | Cardiac risk, QT prolongation |
-| Diabetes/Blood Sugar | `diabetes` | metabolic | Covers type 1 and type 2 (merged) |
-| High Cholesterol | `high_cholesterol` | cardiovascular | Statin interactions, liver load |
-| Liver Disease | `liver_disease` | hepatic | Hepatotoxicity, metabolism impairment |
-| Kidney Disease | `kidney_disease` | renal | Accumulation risk, electrolyte imbalance |
-| Thyroid Condition | `thyroid_disorder` | endocrine | Absorption interference, iodine sensitivity |
-| Autoimmune | `autoimmune` | immunologic | Immune stimulation contraindications |
-| Epilepsy/Seizures | `seizure_disorder` | neurologic | Seizure threshold lowering |
-| Bleeding Disorders | `bleeding_disorders` | hematologic | Anticoagulant potentiation |
-| Upcoming Surgery | `surgery_scheduled` | perioperative | Bleeding risk, anesthesia interactions |
+| App UI Chip              | `condition_id`       | Category       | Notes                                                 |
+| ------------------------ | -------------------- | -------------- | ----------------------------------------------------- |
+| Pregnancy                | `pregnancy`          | reproductive   | Teratogenicity, retinoid exposure, uterine stimulants |
+| Lactation/Breastfeeding  | `lactation`          | reproductive   | Transfer via breast milk, infant safety               |
+| Trying to Conceive (TTC) | `ttc`                | reproductive   | Fertility impact — clinically distinct from pregnancy |
+| Hypertension             | `hypertension`       | cardiovascular | BP elevation, sympathomimetics                        |
+| Heart Disease            | `heart_disease`      | cardiovascular | Cardiac risk, QT prolongation                         |
+| Diabetes/Blood Sugar     | `diabetes`           | metabolic      | Covers type 1 and type 2 (merged)                     |
+| High Cholesterol         | `high_cholesterol`   | cardiovascular | Statin interactions, liver load                       |
+| Liver Disease            | `liver_disease`      | hepatic        | Hepatotoxicity, metabolism impairment                 |
+| Kidney Disease           | `kidney_disease`     | renal          | Accumulation risk, electrolyte imbalance              |
+| Thyroid Condition        | `thyroid_disorder`   | endocrine      | Absorption interference, iodine sensitivity           |
+| Autoimmune               | `autoimmune`         | immunologic    | Immune stimulation contraindications                  |
+| Epilepsy/Seizures        | `seizure_disorder`   | neurologic     | Seizure threshold lowering                            |
+| Bleeding Disorders       | `bleeding_disorders` | hematologic    | Anticoagulant potentiation                            |
+| Upcoming Surgery         | `surgery_scheduled`  | perioperative  | Bleeding risk, anesthesia interactions                |
 
 Drug class chips (from user's medication list):
 
-| App UI Chip | `drug_class_id` | Notes |
-|---|---|---|
-| Blood Thinners | `anticoagulants` | Warfarin, heparin, DOACs |
-| Antiplatelet Agents | `antiplatelets` | Aspirin, clopidogrel |
-| NSAIDs | `nsaids` | Ibuprofen, naproxen |
-| Blood Pressure Meds | `antihypertensives` | ACE inhibitors, ARBs, CCBs |
-| Diabetes Medications | `hypoglycemics` | Metformin, insulin, sulfonylureas |
-| Thyroid Medications | `thyroid_medications` | Levothyroxine |
-| Sedatives/Sleep Aids | `sedatives` | Benzodiazepines, Z-drugs |
-| Immunosuppressants | `immunosuppressants` | Cyclosporine, tacrolimus |
-| Statins/Cholesterol | `statins` | Atorvastatin, simvastatin |
+| App UI Chip          | `drug_class_id`       | Notes                             |
+| -------------------- | --------------------- | --------------------------------- |
+| Blood Thinners       | `anticoagulants`      | Warfarin, heparin, DOACs          |
+| Antiplatelet Agents  | `antiplatelets`       | Aspirin, clopidogrel              |
+| NSAIDs               | `nsaids`              | Ibuprofen, naproxen               |
+| Blood Pressure Meds  | `antihypertensives`   | ACE inhibitors, ARBs, CCBs        |
+| Diabetes Medications | `hypoglycemics`       | Metformin, insulin, sulfonylureas |
+| Thyroid Medications  | `thyroid_medications` | Levothyroxine                     |
+| Sedatives/Sleep Aids | `sedatives`           | Benzodiazepines, Z-drugs          |
+| Immunosuppressants   | `immunosuppressants`  | Cyclosporine, tacrolimus          |
+| Statins/Cholesterol  | `statins`             | Atorvastatin, simvastatin         |
 
 **TTC vs Pregnancy vs Lactation**: These are three separate conditions because
 the clinical risks differ. Pregnancy warnings are about teratogenicity (birth defects).
@@ -541,3 +712,55 @@ if (summary != null) {
 
 For detailed per-warning view with dose thresholds, filter the `warnings` array
 by `condition_id` matching the user's conditions.
+
+### 10. Supabase Storage path structure
+
+The Flutter app fetches the core DB and detail blobs from Supabase Storage.
+The version is determined by querying the `export_manifest` table for the row
+where `is_current = true`, then reading its `db_version` column.
+
+```
+DB file:
+  {SUPABASE_URL}/storage/v1/object/public/pharmaguide/v{version}/pharmaguide_core.db
+
+Detail blobs:
+  {SUPABASE_URL}/storage/v1/object/public/pharmaguide/v{version}/details/{dsld_id}.json
+```
+
+These are public bucket paths — readable with the anon key, no auth required.
+The app should cache the DB file locally and only re-download when the manifest
+version changes (compare against locally stored version).
+
+### 11. `increment_usage` RPC
+
+Flutter calls this RPC after each successful scan or AI message to enforce
+server-side usage limits. It handles day rollover automatically (upserts
+based on `CURRENT_DATE`).
+
+```dart
+// After a successful scan:
+final result = await supabase.rpc('increment_usage', params: {
+  'p_user_id': supabase.auth.currentUser!.id,
+  'p_type': 'scan',  // or 'ai_message'
+});
+// result = { scans_today: 3, ai_messages_today: 1, limit_exceeded: false }
+```
+
+**Limits:** 10 scans/day, 5 AI messages/day.
+**Return value:** `{scans_today, ai_messages_today, limit_exceeded}`.
+When `limit_exceeded` is `true`, the app should show a paywall or "try again
+tomorrow" message. The RPC is `SECURITY DEFINER` and validates that the caller
+owns the `p_user_id` — passing another user's ID raises an exception.
+
+### 12. Identifiers on warning entries
+
+The `identifiers` object (containing CUI, CAS, PubChem CID, UNII) appears on
+**warning entries** as well as ingredient entries. Specifically:
+
+- `banned_substance` / `recalled_ingredient` / `watchlist_substance` / `high_risk_ingredient` warnings
+- `harmful_additive` warnings
+
+This allows the app to cross-reference warnings against external databases
+without a separate lookup. The identifiers come from the same reference data
+that generated the warning. Allergen and interaction warnings do NOT carry
+identifiers.
