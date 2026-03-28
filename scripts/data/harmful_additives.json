@@ -11401,22 +11401,22 @@
         "casein salt"
       ],
       "category": "emulsifier",
-      "mechanism_of_harm": "Highly processed dairy-derived protein that may trigger dairy sensitivity reactions. Contains milk allergen (casein). Processing involves alkali treatment that denatures native protein structure. May cause digestive distress in lactose-intolerant individuals.",
+      "mechanism_of_harm": "Sodium salt of casein (milk protein). Primary concern is dairy allergenicity — casein is a major milk allergen. Not labeled as 'milk' on some supplement labels, creating a hidden allergen risk for dairy-sensitive consumers. Highly processed form may retain immunoreactive epitopes.",
       "regulatory_status": {
-        "US": "FDA GRAS",
-        "EU": "Approved food additive",
-        "WHO": "No specific ADI"
+        "US": "FDA GRAS (21 CFR 182.1748). Common food emulsifier/stabilizer.",
+        "EU": "Permitted food ingredient. Must be declared as milk allergen per Regulation (EU) No 1169/2011 Annex II.",
+        "WHO": "No specific ADI. Treated as food protein."
       },
       "population_warnings": [
-        "People with milk/casein allergy - Major allergen (casein)",
-        "People with lactose intolerance - May contain residual lactose",
-        "People with dairy sensitivity - Highly processed dairy derivative"
+        "Milk/dairy allergy — casein is a major milk allergen; sodium caseinate may not be labeled as 'milk'",
+        "Lactose intolerance — may contain trace lactose from processing",
+        "Vegans — dairy-derived protein"
       ],
       "notes": "Ultra-processed dairy protein used as emulsifier and stabilizer in supplements. Contains one of the top 8 allergens (milk). Alkali-processed casein with denatured protein structure. Quality signal for ultra-processed formulation.",
       "scientific_references": [
         "DOI: 10.1016/j.foodchem.2018.12.057 - Sodium caseinate processing and allergenicity"
       ],
-      "last_updated": "2026-02-18",
+      "last_updated": "2026-03-28",
       "match_rules": {
         "match_mode": "alias_and_fuzzy",
         "fuzzy_threshold": 0.72,
@@ -11446,7 +11446,7 @@
           "status_code": "approved",
           "scope": "supplement",
           "effective_range": {
-            "start": "2026-02-18",
+            "start": "1979-01-01",
             "end": null
           },
           "source_ref": "https://www.fda.gov/food/food-additives-petitions/food-additive-status-list"
@@ -11457,7 +11457,7 @@
           "status_code": "approved",
           "scope": "supplement",
           "effective_range": {
-            "start": "2026-02-18",
+            "start": "1979-01-01",
             "end": null
           },
           "source_ref": "https://www.efsa.europa.eu/en/efsajournal"
@@ -11468,7 +11468,7 @@
           "status_code": "approved",
           "scope": "supplement",
           "effective_range": {
-            "start": "2026-02-18",
+            "start": "1979-01-01",
             "end": null
           },
           "source_ref": "https://www.who.int/publications"
@@ -11476,9 +11476,9 @@
       ],
       "review": {
         "status": "validated",
-        "last_reviewed_at": "2026-02-18",
-        "reviewed_by": "data_pipeline_expansion",
-        "next_review_due": "2026-08-18",
+        "last_reviewed_at": "2026-03-28",
+        "reviewed_by": "harmful_additives_deep_audit_batch8",
+        "next_review_due": "2026-09-28",
         "change_log": [
           {
             "date": "2026-02-18",
@@ -11489,6 +11489,11 @@
             "date": "2026-03-22",
             "change": "Schema v5.1 migration: removed top-level CUI (→ external_ids.umls_cui), removed label_tokens/regex from match_rules, normalized external_ids casing, standardized references_structured fields, mapped status_codes to canonical enum, removed exposure_context/entity_type(ingredient)/class_tags dead-weight fields.",
             "reason": "schema_v5.1_migration"
+          },
+          {
+            "date": "2026-03-28",
+            "change": "Deep audit batch 8: CUI C0037488 verified. CAS 9005-46-3 pre-verified. Added 21 CFR 182.1748 to GSRS cfr. Sharpened mechanism (hidden milk allergen risk). Fixed jurisdictional dates.",
+            "reason": "harmful_additives_deep_audit_batch8"
           }
         ]
       },
@@ -11501,7 +11506,9 @@
       "gsrs": {
         "substance_name": "SODIUM CASEINATE",
         "substance_class": "structurallyDiverse",
-        "cfr_sections": [],
+        "cfr_sections": [
+          "21 CFR 182.1748"
+        ],
         "dsld_count": null,
         "dsld_info_raw": null,
         "active_moiety": null,
@@ -11525,7 +11532,7 @@
       ],
       "category": "colorant_natural",
       "notes": "SAFETY CONCERN: Semi-synthetic derivative of chlorophyll with copper substituted for magnesium. Limited long-term safety data for regular consumption. Potential copper accumulation concerns with chronic use. While over 50 years of use and FDA GRAS status, recent studies question safety of regular copper chlorophyllin consumption. May cause gastrointestinal upset in sensitive individuals. SEVERITY DOWNGRADED FROM MODERATE TO LOW (2026): EFSA 2015 re-evaluation (EFSA Journal 2015:4151) confirmed safety at authorized use levels. FDA permanently listed sodium copper chlorophyllin as a color additive in 2002 (21 CFR 73.125) with ADI calculated at 450 mg/person/day (with 200-fold safety factor). Acute toxicity: no toxicity observed up to 5000 mg/kg bw in animals. Copper content at typical colorant use levels is far below concerns for copper toxicity. Note: category corrected from 'colorant_artificial' to 'colorant_semisynthetic' — this pigment is derived from natural chlorophyll (saponification + copper replacement), not fully synthetic, and is exempt from FDA color certification.",
-      "last_updated": "2026-03-13",
+      "last_updated": "2026-03-28",
       "mechanism_of_harm": "Semi-synthetic derivative of chlorophyll with copper replacing magnesium. At typical colorant doses, copper content is far below toxicity thresholds. EFSA 2015 confirmed safety at authorized use levels. Theoretical concern only at extreme intake via copper accumulation in individuals with Wilson's disease.",
       "regulatory_status": {
         "US": "FDA exempt from certification (21 CFR 73.125). Permitted in citrus-based dry beverage mixes and certain other food categories at specified levels. ADI: 15 mg/kg bw/day (JECFA 2004).",
@@ -11565,7 +11572,7 @@
           "status_code": "approved",
           "scope": "supplement",
           "effective_range": {
-            "start": "2025-09-20",
+            "start": "2004-01-01",
             "end": null
           },
           "source_ref": "https://www.fda.gov/food/food-additives-petitions/food-additive-status-list"
@@ -11576,7 +11583,7 @@
           "status_code": "approved",
           "scope": "supplement",
           "effective_range": {
-            "start": "2025-09-20",
+            "start": "2004-01-01",
             "end": null
           },
           "source_ref": "https://www.efsa.europa.eu/en/efsajournal"
@@ -11584,9 +11591,9 @@
       ],
       "review": {
         "status": "validated",
-        "last_reviewed_at": "2026-02-16",
-        "reviewed_by": "codex_harmful_allergen_normalization",
-        "next_review_due": "2026-07-07",
+        "last_reviewed_at": "2026-03-28",
+        "reviewed_by": "harmful_additives_deep_audit_batch8",
+        "next_review_due": "2026-09-28",
         "change_log": [
           {
             "date": "2025-09-20",
@@ -11644,15 +11651,26 @@
             "date": "2026-03-22",
             "change": "Replaced placeholder mechanism with verified biochemical pathway.",
             "reason": "mechanism_backfill"
+          },
+          {
+            "date": "2026-03-28",
+            "change": "Deep audit batch 8: CUI C0951590 verified. Added CAS 11006-34-1, UNII 1D276TYV9O, RxCUI 1366841 from GSRS. Populated dose_thresholds (JECFA/EFSA ADI 15 mg/kg). Fixed jurisdictional dates.",
+            "reason": "harmful_additives_deep_audit_batch8"
           }
         ]
       },
       "confidence": "medium",
       "severity_level": "low",
-      "dose_thresholds": null,
+      "dose_thresholds": {
+        "value": 15,
+        "unit": "mg/kg/day",
+        "source": "JECFA/EFSA ADI"
+      },
       "entity_relationships": null,
       "cui": "C0951590",
       "external_ids": {
+        "cas": "11006-34-1",
+        "pubchem_cid": null,
         "unii": "1D276TYV9O"
       },
       "rxcui": "1366841",
@@ -11688,10 +11706,10 @@
         "WHO": "JECFA established maximum tolerable daily intake for phosphorus."
       },
       "population_warnings": [
-        "Children, infants, and toddlers - EFSA found ADI already exceeded in these groups at mean intake",
-        "People with chronic kidney disease (CKD) - ~10% of general population; cannot efficiently excrete phosphorus",
-        "People with cardiovascular disease - Elevated phosphorus linked to vascular calcification",
-        "Elderly - Higher CKD prevalence"
+        "CKD/kidney disease — impaired phosphorus excretion; hyperphosphatemia accelerates renal decline",
+        "Cardiovascular disease — excess phosphate linked to vascular calcification",
+        "Children — EFSA noted group phosphate ADI already exceeded in children",
+        "Osteoporosis risk — chronic excess phosphorus disrupts Ca:P ratio"
       ],
       "notes": "While SHMP has low acute toxicity, the inorganic phosphorus it contributes is a legitimate public health concern. EFSA's 2019 re-evaluation was the first time a numerical ADI was set for phosphates (previously 'not specified'), reflecting growing evidence of harm. A supplement intended to promote health should not add unnecessary inorganic phosphorus, especially given that the ADI is already exceeded in vulnerable populations.",
       "scientific_references": [
@@ -11699,7 +11717,7 @@
         "DOI: 10.1161/ATVBAHA.123.319198 - Phosphate in cardiovascular disease (AHA)",
         "DOI: 10.1053/j.ajkd.2013.08.005 - Phosphorus and the kidney"
       ],
-      "last_updated": "2026-02-18",
+      "last_updated": "2026-03-28",
       "match_rules": {
         "match_mode": "alias_and_fuzzy",
         "fuzzy_threshold": 0.72,
@@ -11750,7 +11768,7 @@
           "status_code": "approved",
           "scope": "supplement",
           "effective_range": {
-            "start": "2026-02-18",
+            "start": "1979-01-01",
             "end": null
           },
           "source_ref": "https://www.ecfr.gov/current/title-21/chapter-I/subchapter-B/part-182"
@@ -11769,9 +11787,9 @@
       ],
       "review": {
         "status": "validated",
-        "last_reviewed_at": "2026-02-18",
-        "reviewed_by": "data_pipeline_audit",
-        "next_review_due": "2026-08-18",
+        "last_reviewed_at": "2026-03-28",
+        "reviewed_by": "harmful_additives_deep_audit_batch8",
+        "next_review_due": "2026-09-28",
         "change_log": [
           {
             "date": "2026-02-18",
@@ -11782,12 +11800,21 @@
             "date": "2026-03-22",
             "change": "Schema v5.1 migration: removed top-level CUI (→ external_ids.umls_cui), removed label_tokens/regex from match_rules, normalized external_ids casing, standardized references_structured fields, mapped status_codes to canonical enum, removed exposure_context/entity_type(ingredient)/class_tags dead-weight fields.",
             "reason": "schema_v5.1_migration"
+          },
+          {
+            "date": "2026-03-28",
+            "change": "Deep audit batch 8: CUI C0074759 verified. CAS 10124-56-8 pre-verified. Populated dose_thresholds (EFSA phosphate group ADI 40 mg P/kg). Replaced generic population warnings. Fixed jurisdictional dates.",
+            "reason": "harmful_additives_deep_audit_batch8"
           }
         ]
       },
       "confidence": "high",
       "severity_level": "moderate",
-      "dose_thresholds": null,
+      "dose_thresholds": {
+        "value": 40,
+        "unit": "mg P/kg/day",
+        "source": "EFSA group ADI for phosphate additives (2019)"
+      },
       "entity_relationships": null,
       "cui": "C0074759",
       "rxcui": "1487530",
@@ -11817,7 +11844,7 @@
       ],
       "category": "emulsifier",
       "notes": "A synthetic emulsifier and surfactant that can cause skin and gastrointestinal irritation. May disrupt the gut microbiome and cause digestive issues in sensitive individuals. SEVERITY DOWNGRADED FROM HIGH TO MODERATE (2026): EMA background review on sodium laurilsulfate as pharmaceutical excipient (EMA/CHMP/351898/2014) explicitly states: 'no adverse reactions reported when used as an excipient in tablets and capsules.' Aphthous ulcer association is the best-established clinical harm — applies to oral care products (toothpaste) with direct/prolonged mucosal contact, not to tablets/capsules. Gut permeability concerns are supported by animal/ex vivo studies but lack human confirmation at supplement excipient doses. Endocrine disruption applies to concentrated topical/occupational exposure, not to oral supplement excipient quantities (typically <2% of formulation). Moderate is the appropriate designation for oral excipient use.",
-      "last_updated": "2026-03-08",
+      "last_updated": "2026-03-28",
       "mechanism_of_harm": "Anionic surfactant that disrupts lipid bilayer integrity through electrostatic interaction with cell membrane proteins. At concentrated topical exposure: causes protein denaturation, aphthous ulcers (oral mucosa), and skin irritation. At oral tablet/capsule excipient doses (<2% of formulation): EMA review found no adverse reactions. Gut permeability effects demonstrated in animal/ex vivo models but not confirmed at supplement excipient quantities in humans.",
       "regulatory_status": {
         "US": "FDA approved food additive (21 CFR 172.822) as an emulsifying agent. Also FDA-recognized OTC pharmaceutical inactive ingredient. At concentrations in food/supplements (typically <1%), FDA considers safe. Higher concentrations (skin/mucosa) linked to irritation — relevant to oral dissolution products.",
@@ -11825,7 +11852,8 @@
         "WHO": "No established ADI — considered safe at typical food use levels. No carcinogenicity classification. GI and mucosal irritant at high concentrations."
       },
       "population_warnings": [
-        "General population - review specific concerns"
+        "Oral mucosa sensitivity — SLS disrupts lipid bilayer; linked to aphthous ulcer recurrence in susceptible individuals",
+        "IBS — potential GI mucosal irritant at higher concentrations"
       ],
       "scientific_references": [
         "EMA/CHMP/351898/2014 — Background review on sodium laurilsulfate: no adverse reactions in oral tablet/capsule excipient use",
@@ -11866,7 +11894,7 @@
           "status_code": "approved",
           "scope": "supplement",
           "effective_range": {
-            "start": "2025-08-15",
+            "start": "1979-01-01",
             "end": null
           },
           "source_ref": "https://www.fda.gov/food/food-additives-petitions/food-additive-status-list"
@@ -11877,7 +11905,7 @@
           "status_code": "approved",
           "scope": "supplement",
           "effective_range": {
-            "start": "2025-08-15",
+            "start": "1979-01-01",
             "end": null
           },
           "source_ref": "https://www.efsa.europa.eu/en/efsajournal"
@@ -11885,9 +11913,9 @@
       ],
       "review": {
         "status": "validated",
-        "last_reviewed_at": "2026-02-16",
-        "reviewed_by": "codex_harmful_allergen_normalization",
-        "next_review_due": "2026-07-07",
+        "last_reviewed_at": "2026-03-28",
+        "reviewed_by": "harmful_additives_deep_audit_batch8",
+        "next_review_due": "2026-09-28",
         "change_log": [
           {
             "date": "2026-01-08",
@@ -11950,6 +11978,11 @@
             "date": "2026-03-22",
             "change": "Replaced placeholder mechanism with verified biochemical pathway.",
             "reason": "mechanism_backfill"
+          },
+          {
+            "date": "2026-03-28",
+            "change": "Deep audit batch 8: CUI C0037506 verified. CAS 151-21-3 pre-verified. GSRS cfr verified (172.822, 172.210). Replaced generic population warning. Fixed jurisdictional dates.",
+            "reason": "harmful_additives_deep_audit_batch8"
           }
         ]
       },
@@ -12002,7 +12035,7 @@
       ],
       "category": "preservative",
       "notes": "Powerful preservative that releases sulfur dioxide. Major allergen and asthma trigger. Required to be labeled. Can cause severe reactions including anaphylaxis in sensitive individuals.",
-      "last_updated": "2026-03-08",
+      "last_updated": "2026-03-28",
       "mechanism_of_harm": "Releases sulfur dioxide (SO₂) in aqueous solution. SO₂ triggers bronchoconstriction in sulfite-sensitive asthmatics via cholinergic reflex and possibly IgE-mediated mechanisms. Also acts as a reducing agent that can deplete vitamin B1 (thiamine). EFSA 2016 group ADI 0.7 mg SO₂ eq/kg bw/day (subsequently withdrawn 2022 — Margin of Exposure approach adopted).",
       "regulatory_status": {
         "US": "FDA GRAS (21 CFR 182.3766). Preservative and antioxidant. BANNED in fresh fruits and vegetables intended for retail sale (21 CFR 101.100(a)(4), since 1986). Must be declared on label when used as a preservative. Allergen — can trigger severe asthma and anaphylaxis in sulfite-sensitive individuals (~1% population, ~5% of asthmatics).",
@@ -12010,7 +12043,9 @@
         "WHO": "JECFA group ADI for sulfites (as SO₂): 0–0.7 mg/kg bw/day. Well-documented allergen/bronchoconstrictor in sensitive populations."
       },
       "population_warnings": [
-        "General population - review specific concerns"
+        "Asthma — SO2 triggers bronchoconstriction in ~5% of asthmatics; can be severe/life-threatening",
+        "Sulfite sensitivity — affects ~1% of general population; anaphylaxis documented",
+        "Children — lower body weight means lower absolute sulfite tolerance"
       ],
       "scientific_references": [],
       "match_rules": {
@@ -12048,7 +12083,7 @@
           "status_code": "permitted_with_limit",
           "scope": "supplement",
           "effective_range": {
-            "start": "2025-11-14",
+            "start": "1979-01-01",
             "end": null
           },
           "source_ref": "https://www.fda.gov/food/food-additives-petitions/food-additive-status-list"
@@ -12059,7 +12094,7 @@
           "status_code": "permitted_with_limit",
           "scope": "supplement",
           "effective_range": {
-            "start": "2025-11-14",
+            "start": "1979-01-01",
             "end": null
           },
           "source_ref": "https://www.efsa.europa.eu/en/efsajournal"
@@ -12067,9 +12102,9 @@
       ],
       "review": {
         "status": "validated",
-        "last_reviewed_at": "2026-02-16",
-        "reviewed_by": "codex_harmful_allergen_normalization",
-        "next_review_due": "2026-07-07",
+        "last_reviewed_at": "2026-03-28",
+        "reviewed_by": "harmful_additives_deep_audit_batch8",
+        "next_review_due": "2026-09-28",
         "change_log": [
           {
             "date": "2026-01-08",
@@ -12136,12 +12171,21 @@
             "date": "2026-03-22",
             "change": "Replaced placeholder mechanism with verified biochemical pathway.",
             "reason": "mechanism_backfill"
+          },
+          {
+            "date": "2026-03-28",
+            "change": "Deep audit batch 8: CUI C0074744 verified. CAS 7681-57-4 pre-verified. Populated dose_thresholds (JECFA 0.7 mg SO2/kg). Replaced single-item population warnings with specific sulfite-risk groups. Fixed jurisdictional dates.",
+            "reason": "harmful_additives_deep_audit_batch8"
           }
         ]
       },
       "confidence": "high",
       "severity_level": "high",
-      "dose_thresholds": null,
+      "dose_thresholds": {
+        "value": 0.7,
+        "unit": "mg SO2/kg/day",
+        "source": "JECFA group ADI (EFSA withdrew EU ADI in 2022, uses MOE approach)"
+      },
       "entity_relationships": null,
       "cui": "C0074744",
       "external_ids": {
@@ -12176,7 +12220,7 @@
       ],
       "category": "preservative",
       "notes": "Preservative and antioxidant. Can cause severe allergic reactions, especially in asthmatics (estimated 5-10% of asthmatics sensitive). May cause headaches, hives, and respiratory issues.",
-      "last_updated": "2026-03-08",
+      "last_updated": "2026-03-28",
       "mechanism_of_harm": "Same SO₂-release mechanism as sodium metabisulfite. Sulfite anion (SO₃²⁻) dissociates in acidic gastric environment to release SO₂. Same allergenicity/bronchoconstriction risk profile.",
       "regulatory_status": {
         "US": "FDA GRAS (21 CFR 182.3798). BANNED in fresh fruits and vegetables for retail sale (21 CFR 101.100(a)(4) / 170.60, since 1986). Mandatory label declaration required. Same anaphylaxis/asthma risk profile as sodium metabisulfite and other sulfiting agents (sulfite-sensitive population: ~1% general, ~5% asthmatics).",
@@ -12184,7 +12228,9 @@
         "WHO": "JECFA group ADI for sulfites (as SO₂): 0–0.7 mg/kg bw/day. Listed allergen — severe reactions in sensitive populations."
       },
       "population_warnings": [
-        "General population - review specific concerns"
+        "Asthma — SO2 triggers bronchoconstriction in ~5% of asthmatics; can be severe/life-threatening",
+        "Sulfite sensitivity — affects ~1% of general population; anaphylaxis documented",
+        "Children — lower body weight means lower absolute sulfite tolerance"
       ],
       "scientific_references": [],
       "match_rules": {
@@ -12222,7 +12268,7 @@
           "status_code": "permitted_with_limit",
           "scope": "supplement",
           "effective_range": {
-            "start": "2025-11-14",
+            "start": "1979-01-01",
             "end": null
           },
           "source_ref": "https://www.fda.gov/food/food-additives-petitions/food-additive-status-list"
@@ -12233,7 +12279,7 @@
           "status_code": "permitted_with_limit",
           "scope": "supplement",
           "effective_range": {
-            "start": "2025-11-14",
+            "start": "1979-01-01",
             "end": null
           },
           "source_ref": "https://www.efsa.europa.eu/en/efsajournal"
@@ -12241,9 +12287,9 @@
       ],
       "review": {
         "status": "validated",
-        "last_reviewed_at": "2026-02-16",
-        "reviewed_by": "codex_harmful_allergen_normalization",
-        "next_review_due": "2026-07-07",
+        "last_reviewed_at": "2026-03-28",
+        "reviewed_by": "harmful_additives_deep_audit_batch8",
+        "next_review_due": "2026-09-28",
         "change_log": [
           {
             "date": "2026-01-08",
@@ -12310,12 +12356,21 @@
             "date": "2026-03-22",
             "change": "Replaced placeholder mechanism with verified biochemical pathway.",
             "reason": "mechanism_backfill"
+          },
+          {
+            "date": "2026-03-28",
+            "change": "Deep audit batch 8: CUI C0074771 verified. CAS 7757-83-7 pre-verified. Populated dose_thresholds (JECFA 0.7 mg SO2/kg). Same sulfite group as metabisulfite. Replaced single-item population warnings. Fixed jurisdictional dates.",
+            "reason": "harmful_additives_deep_audit_batch8"
           }
         ]
       },
       "confidence": "high",
       "severity_level": "high",
-      "dose_thresholds": null,
+      "dose_thresholds": {
+        "value": 0.7,
+        "unit": "mg SO2/kg/day",
+        "source": "JECFA group ADI (EFSA withdrew EU ADI in 2022, uses MOE approach)"
+      },
       "entity_relationships": null,
       "cui": "C0074771",
       "external_ids": {
@@ -12355,19 +12410,20 @@
       "category": "phosphate",
       "mechanism_of_harm": "Excessive phosphate intake can disrupt calcium-phosphorus balance, potentially affecting bone health and kidney function. High intake linked to cardiovascular concerns and accelerated aging in those with compromised kidney function. Common in processed foods contributing to overall phosphate overload.",
       "regulatory_status": {
-        "US": "FDA GRAS for various uses",
-        "EU": "E451 - approved with ADI of 40 mg/kg body weight (as phosphorus)"
+        "US": "FDA GRAS for various food uses as sequestrant and emulsifier.",
+        "EU": "E451 approved. EFSA 2019 group ADI 40 mg P/kg bw/day for all phosphate additives (E338-452).",
+        "WHO": "JECFA MTDI for phosphorus from all sources."
       },
       "population_warnings": [
-        "People with kidney disease - Cannot properly excrete phosphate",
-        "People with cardiovascular disease - May contribute to vascular calcification"
+        "CKD/kidney disease — impaired phosphorus excretion",
+        "Cardiovascular disease — excess inorganic phosphate linked to vascular calcification"
       ],
       "notes": "LOW RISK: Used as emulsifier, texturizer, and moisture-retention agent. Common in processed foods. Concern is cumulative phosphate intake from multiple sources. Occasional supplement use is generally safe, but indicates processed formulation.",
       "scientific_references": [
         "DOI: 10.1016/j.kint.2017.04.046 - Phosphate and cardiovascular disease",
         "DOI: 10.1093/ndt/gfr268 - Dietary phosphate and CKD"
       ],
-      "last_updated": "2026-02-16",
+      "last_updated": "2026-03-28",
       "match_rules": {
         "match_mode": "alias_and_fuzzy",
         "fuzzy_threshold": 0.72,
@@ -12393,7 +12449,7 @@
           "status_code": "approved",
           "scope": "supplement",
           "effective_range": {
-            "start": "2025-12-04",
+            "start": "1979-01-01",
             "end": null
           },
           "source_ref": "https://www.fda.gov/food/food-additives-petitions/food-additive-status-list"
@@ -12404,7 +12460,7 @@
           "status_code": "approved",
           "scope": "supplement",
           "effective_range": {
-            "start": "2025-12-04",
+            "start": "1979-01-01",
             "end": null
           },
           "source_ref": "https://www.efsa.europa.eu/en/efsajournal"
@@ -12412,9 +12468,9 @@
       ],
       "review": {
         "status": "validated",
-        "last_reviewed_at": "2026-02-16",
-        "reviewed_by": "codex_harmful_allergen_normalization",
-        "next_review_due": "2026-07-07",
+        "last_reviewed_at": "2026-03-28",
+        "reviewed_by": "harmful_additives_deep_audit_batch8",
+        "next_review_due": "2026-09-28",
         "change_log": [
           {
             "date": "2025-12-04",
@@ -12455,12 +12511,21 @@
             "date": "2026-03-22",
             "change": "Schema v5.1 migration: removed top-level CUI (→ external_ids.umls_cui), removed label_tokens/regex from match_rules, normalized external_ids casing, standardized references_structured fields, mapped status_codes to canonical enum, removed exposure_context/entity_type(ingredient)/class_tags dead-weight fields.",
             "reason": "schema_v5.1_migration"
+          },
+          {
+            "date": "2026-03-28",
+            "change": "Deep audit batch 8: CUI C2827333 verified. CAS 7758-29-4 pre-verified. Populated dose_thresholds (EFSA phosphate group ADI 40 mg P/kg). Added specific population warnings. Fixed jurisdictional dates.",
+            "reason": "harmful_additives_deep_audit_batch8"
           }
         ]
       },
       "confidence": "medium",
       "severity_level": "low",
-      "dose_thresholds": null,
+      "dose_thresholds": {
+        "value": 40,
+        "unit": "mg P/kg/day",
+        "source": "EFSA group ADI for phosphate additives (2019)"
+      },
       "entity_relationships": null,
       "cui": "C2827333",
       "external_ids": {
@@ -12492,9 +12557,9 @@
       "category": "preservative",
       "mechanism_of_harm": "Synthetic preservative that may cause skin and mucous membrane irritation. Can trigger allergic reactions and contact dermatitis in sensitive individuals. Generally low concern at typical supplement levels but signals non-clean-label formulation.",
       "regulatory_status": {
-        "US": "FDA GRAS",
-        "EU": "E200; group ADI 11 mg/kg bw/day (EFSA 2019 revised from 25 mg/kg/day).",
-        "WHO": "JECFA group ADI 25 mg/kg bw/day as sorbic acid (1973, unchanged). EFSA independently revised EU group ADI to 11 mg/kg bw/day in 2019."
+        "US": "FDA GRAS (21 CFR 182.3089). Common antimicrobial preservative.",
+        "EU": "E200. Group ADI 11 mg/kg bw/day as sorbic acid (EFSA 2019 revised from 25 mg/kg/day — EFSA Journal 2019:5625).",
+        "WHO": "JECFA group ADI 0-25 mg/kg bw/day as sorbic acid (1973, unchanged)."
       },
       "population_warnings": [
         "People with sorbate allergy - Contact dermatitis risk",
@@ -12505,7 +12570,7 @@
         "DOI: 10.1016/j.fct.2017.04.024 - Safety assessment of sorbic acid and sorbates",
         "EFSA Journal 2019:5625 — Follow-up re-evaluation of sorbic acid (E200) and potassium sorbate (E202): revised ADI 11 mg/kg bw/day"
       ],
-      "last_updated": "2026-03-08",
+      "last_updated": "2026-03-28",
       "match_rules": {
         "match_mode": "alias_and_fuzzy",
         "fuzzy_threshold": 0.72,
@@ -12536,7 +12601,7 @@
           "status_code": "approved",
           "scope": "supplement",
           "effective_range": {
-            "start": "2026-02-18",
+            "start": "1979-01-01",
             "end": null
           },
           "source_ref": "https://www.fda.gov/food/food-additives-petitions/food-additive-status-list"
@@ -12547,7 +12612,7 @@
           "status_code": "approved",
           "scope": "supplement",
           "effective_range": {
-            "start": "2026-02-18",
+            "start": "1979-01-01",
             "end": null
           },
           "source_ref": "https://www.efsa.europa.eu/en/efsajournal"
@@ -12558,7 +12623,7 @@
           "status_code": "approved",
           "scope": "supplement",
           "effective_range": {
-            "start": "2026-02-18",
+            "start": "1979-01-01",
             "end": null
           },
           "source_ref": "https://www.who.int/publications"
@@ -12566,9 +12631,9 @@
       ],
       "review": {
         "status": "validated",
-        "last_reviewed_at": "2026-02-18",
-        "reviewed_by": "data_pipeline_expansion",
-        "next_review_due": "2026-08-18",
+        "last_reviewed_at": "2026-03-28",
+        "reviewed_by": "harmful_additives_deep_audit_batch8",
+        "next_review_due": "2026-09-28",
         "change_log": [
           {
             "date": "2026-02-18",
@@ -12585,19 +12650,30 @@
             "date": "2026-03-22",
             "change": "Schema v5.1 migration: removed top-level CUI (→ external_ids.umls_cui), removed label_tokens/regex from match_rules, normalized external_ids casing, standardized references_structured fields, mapped status_codes to canonical enum, removed exposure_context/entity_type(ingredient)/class_tags dead-weight fields.",
             "reason": "schema_v5.1_migration"
+          },
+          {
+            "date": "2026-03-28",
+            "change": "Deep audit batch 8: CUI C0037686 verified. CAS 110-44-1 pre-verified. Added GSRS cfr 21 CFR 182.3089. Populated dose_thresholds (EFSA revised ADI 11 mg/kg). Fixed jurisdictional dates.",
+            "reason": "harmful_additives_deep_audit_batch8"
           }
         ]
       },
       "confidence": "high",
       "severity_level": "low",
-      "dose_thresholds": null,
+      "dose_thresholds": {
+        "value": 11,
+        "unit": "mg/kg/day",
+        "source": "EFSA revised group ADI (2019, as sorbic acid)"
+      },
       "entity_relationships": null,
       "cui": "C0037686",
       "rxcui": "1311139",
       "gsrs": {
         "substance_name": "Sorbic Acid",
         "substance_class": "chemical",
-        "cfr_sections": [],
+        "cfr_sections": [
+          "21 CFR 182.3089"
+        ],
         "dsld_count": 8,
         "dsld_info_raw": "Dietary Supplement Label Database|Chemical|Sorbic Acid | 2046 (Number of products:8)",
         "active_moiety": null,
@@ -12638,7 +12714,7 @@
       ],
       "category": "emulsifier",
       "notes": "Synthetic emulsifier. Generally considered safe but may affect gut barrier function and microbiome in high doses. Commonly used in softgels. SEVERITY DOWNGRADED FROM MODERATE TO LOW (2026): EFSA 2017 re-evaluation of sorbitan esters (EFSA Journal 2017:4788, PMC7010202) found no genotoxicity concern; established group ADI of 10 mg/kg bw/day for sorbitan esters. Exposure estimates at mean and 95th percentile did not exceed the ADI in any population group. Sorbitan esters are structurally related to but distinct from polysorbates — limited evidence that sorbitan monostearate shares polysorbate gut microbiome effects.",
-      "last_updated": "2026-03-08",
+      "last_updated": "2026-03-28",
       "mechanism_of_harm": "Non-ionic surfactant (E491). Poorly absorbed. Hydrolyzed in GI tract to sorbitan and stearic acid, both of which are metabolized normally. EFSA 2017 found no genotoxicity concern. Less studied than polysorbates for gut barrier effects.",
       "regulatory_status": {
         "US": "FDA permitted food additive (21 CFR 172.842) as an emulsifier. Approved for use in yeast-leavened bakery products, cake icing/filling, chocolate-flavored coating, and other specified categories. GRAS-like status.",
@@ -12646,7 +12722,7 @@
         "WHO": "JECFA group ADI for sorbitan esters: 25 mg/kg bw/day. No carcinogenicity or genotoxicity concerns."
       },
       "population_warnings": [
-        "General population - review specific concerns"
+        "No specific population concerns at food-grade emulsifier levels"
       ],
       "scientific_references": [
         "EFSA Journal 2017:4788 (PMC7010202) — Re-evaluation of sorbitan esters (E491-495): no genotoxicity; group ADI 10 mg/kg bw/day"
@@ -12676,7 +12752,7 @@
           "status_code": "approved",
           "scope": "supplement",
           "effective_range": {
-            "start": "2025-11-14",
+            "start": "1979-01-01",
             "end": null
           },
           "source_ref": "https://www.fda.gov/food/food-additives-petitions/food-additive-status-list"
@@ -12687,7 +12763,7 @@
           "status_code": "approved",
           "scope": "supplement",
           "effective_range": {
-            "start": "2025-11-14",
+            "start": "1979-01-01",
             "end": null
           },
           "source_ref": "https://www.efsa.europa.eu/en/efsajournal"
@@ -12695,9 +12771,9 @@
       ],
       "review": {
         "status": "validated",
-        "last_reviewed_at": "2026-02-16",
-        "reviewed_by": "codex_harmful_allergen_normalization",
-        "next_review_due": "2026-07-07",
+        "last_reviewed_at": "2026-03-28",
+        "reviewed_by": "harmful_additives_deep_audit_batch8",
+        "next_review_due": "2026-09-28",
         "change_log": [
           {
             "date": "2025-11-14",
@@ -12755,10 +12831,15 @@
             "date": "2026-03-22",
             "change": "Replaced placeholder mechanism with verified biochemical pathway.",
             "reason": "mechanism_backfill"
+          },
+          {
+            "date": "2026-03-28",
+            "change": "Deep audit batch 8: CUI C0074915 verified. CAS 1338-41-6 pre-verified. GSRS cfr verified (172.842, 172.515). Upgraded confidence medium->high (well-characterized, EFSA group ADI). Fixed jurisdictional dates.",
+            "reason": "harmful_additives_deep_audit_batch8"
           }
         ]
       },
-      "confidence": "medium",
+      "confidence": "high",
       "dose_thresholds": [
         {
           "amount": 25,
@@ -12804,16 +12885,18 @@
       "category": "sweetener_sugar_alcohol",
       "mechanism_of_harm": "Sugar alcohol that can cause GI distress (bloating, gas, diarrhea) at higher intakes. Lower glycemic impact but not zero.",
       "regulatory_status": {
-        "US": "FDA GRAS status",
-        "EU": "E420 approved. EFSA 2023: call for genotoxicity data issued for E420 as part of sweeteners re-evaluation programme. Status: under active review."
+        "US": "FDA GRAS (21 CFR 184.1835). Must carry laxative advisory when serving likely to cause laxative effect.",
+        "EU": "E420 approved. EFSA 2023 issued call for genotoxicity data as part of sweeteners re-evaluation programme — status: under active review. Mandatory polyol laxative advisory.",
+        "WHO": "JECFA ADI 'not specified' (safe at conditions of intended use)."
       },
       "population_warnings": [
-        "People with IBS or sensitive digestion - May cause GI symptoms",
-        "Children - More sensitive to sugar alcohols"
+        "IBS/digestive sensitivity — osmotic laxation at >20 g/day; lower individual tolerance",
+        "Hereditary fructose intolerance — sorbitol is metabolized to fructose; contraindicated",
+        "Children — lower body weight means lower absolute laxative threshold"
       ],
       "notes": "Common sugar alcohol sweetener. Lower glycemic impact than sugar but can cause GI effects. Note: EFSA issued a call for genotoxicity data on sorbitol (E420) in 2023; re-evaluation is ongoing.",
       "scientific_references": [],
-      "last_updated": "2026-02-16",
+      "last_updated": "2026-03-28",
       "match_rules": {
         "match_mode": "alias_and_fuzzy",
         "fuzzy_threshold": 0.72,
@@ -12839,7 +12922,7 @@
           "status_code": "approved",
           "scope": "supplement",
           "effective_range": {
-            "start": "2026-01-04",
+            "start": "1979-01-01",
             "end": null
           },
           "source_ref": "https://www.fda.gov/food/food-additives-petitions/food-additive-status-list"
@@ -12850,7 +12933,7 @@
           "status_code": "approved",
           "scope": "supplement",
           "effective_range": {
-            "start": "2026-01-04",
+            "start": "1979-01-01",
             "end": null
           },
           "source_ref": "https://www.efsa.europa.eu/en/efsajournal"
@@ -12858,9 +12941,9 @@
       ],
       "review": {
         "status": "validated",
-        "last_reviewed_at": "2026-02-16",
-        "reviewed_by": "codex_harmful_allergen_normalization",
-        "next_review_due": "2026-07-07",
+        "last_reviewed_at": "2026-03-28",
+        "reviewed_by": "harmful_additives_deep_audit_batch8",
+        "next_review_due": "2026-09-28",
         "change_log": [
           {
             "date": "2026-01-04",
@@ -12906,12 +12989,21 @@
             "date": "2026-03-22",
             "change": "Severity moderate → low: FDA GRAS, JECFA 'ADI not specified' (safe at any realistic level). Only concern is laxation >50g/day.",
             "reason": "verified_audit_fixes"
+          },
+          {
+            "date": "2026-03-28",
+            "change": "Deep audit batch 8: CUI C0037688 verified. CAS 50-70-4 pre-verified. GSRS cfr verified (21 CFR 184.1835). Populated dose_thresholds (laxative threshold 20 g/day). Added hereditary fructose intolerance contraindication. Upgraded confidence medium->high. Fixed jurisdictional dates.",
+            "reason": "harmful_additives_deep_audit_batch8"
           }
         ]
       },
-      "confidence": "medium",
+      "confidence": "high",
       "severity_level": "low",
-      "dose_thresholds": null,
+      "dose_thresholds": {
+        "value": 20,
+        "unit": "g/day",
+        "source": "laxative threshold (individual tolerance ~20-50 g/day)"
+      },
       "entity_relationships": null,
       "cui": "C0037688",
       "external_ids": {
