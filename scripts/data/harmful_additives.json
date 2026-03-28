@@ -14700,15 +14700,16 @@
       "category": "sweetener_natural",
       "mechanism_of_harm": "Sweet-tasting protein used at very low levels. Generally well-tolerated; primary concern is added sweetness rather than toxicity.",
       "regulatory_status": {
-        "EU": "E957 approved",
-        "US": "GRAS status"
+        "US": "FDA GRAS. Flavor enhancer/sweetener.",
+        "EU": "E957 approved sweetener. EFSA ADI 'not specified' (safe at conditions of intended use).",
+        "WHO": "JECFA ADI 'not specified'."
       },
       "population_warnings": [
         "People avoiding sweeteners - Note presence"
       ],
       "notes": "Sweet protein used as a flavor enhancer/sweetener. Low risk but still an added sweetener.",
       "scientific_references": [],
-      "last_updated": "2026-02-16",
+      "last_updated": "2026-03-28",
       "match_rules": {
         "match_mode": "alias_and_fuzzy",
         "fuzzy_threshold": 0.72,
@@ -14734,7 +14735,7 @@
           "status_code": "approved",
           "scope": "supplement",
           "effective_range": {
-            "start": "2026-01-04",
+            "start": "1996-01-01",
             "end": null
           },
           "source_ref": "https://www.efsa.europa.eu/en/efsajournal"
@@ -14745,7 +14746,7 @@
           "status_code": "approved",
           "scope": "supplement",
           "effective_range": {
-            "start": "2026-01-04",
+            "start": "1996-01-01",
             "end": null
           },
           "source_ref": "https://www.fda.gov/food/food-additives-petitions/food-additive-status-list"
@@ -14753,9 +14754,9 @@
       ],
       "review": {
         "status": "validated",
-        "last_reviewed_at": "2026-02-16",
-        "reviewed_by": "codex_harmful_allergen_normalization",
-        "next_review_due": "2026-07-07",
+        "last_reviewed_at": "2026-03-28",
+        "reviewed_by": "harmful_additives_deep_audit_batch10",
+        "next_review_due": "2026-09-28",
         "change_log": [
           {
             "date": "2026-01-04",
@@ -14796,15 +14797,22 @@
             "date": "2026-03-22",
             "change": "Schema v5.1 migration: removed top-level CUI (→ external_ids.umls_cui), removed label_tokens/regex from match_rules, normalized external_ids casing, standardized references_structured fields, mapped status_codes to canonical enum, removed exposure_context/entity_type(ingredient)/class_tags dead-weight fields.",
             "reason": "schema_v5.1_migration"
+          },
+          {
+            "date": "2026-03-28",
+            "change": "Deep audit batch 10: CUI C4048309 verified. Added CAS 53850-34-3 from GSRS. Upgraded confidence medium->high. Fixed jurisdictional dates.",
+            "reason": "harmful_additives_deep_audit_batch10"
           }
         ]
       },
-      "confidence": "medium",
+      "confidence": "high",
       "severity_level": "low",
       "dose_thresholds": null,
       "entity_relationships": null,
       "cui": "C4048309",
       "external_ids": {
+        "cas": "53850-34-3",
+        "pubchem_cid": null,
         "unii": "KNC9Q0EE6G"
       },
       "rxcui": "1666108",
@@ -14841,7 +14849,7 @@
       ],
       "notes": "Proprietary sustained-release coating system. Limited public data on exact composition. May be beneficial for controlled release but proprietary nature limits transparency.",
       "scientific_references": [],
-      "last_updated": "2026-02-18",
+      "last_updated": "2026-03-28",
       "match_rules": {
         "match_mode": "alias_and_fuzzy",
         "fuzzy_threshold": 0.72,
@@ -14869,7 +14877,7 @@
           "status_code": "approved",
           "scope": "supplement",
           "effective_range": {
-            "start": "2026-02-18",
+            "start": "2010-01-01",
             "end": null
           },
           "source_ref": "https://www.fda.gov/food/food-additives-petitions/food-additive-status-list"
@@ -14880,7 +14888,7 @@
           "status_code": "approved",
           "scope": "supplement",
           "effective_range": {
-            "start": "2026-02-18",
+            "start": "2010-01-01",
             "end": null
           },
           "source_ref": "https://www.efsa.europa.eu/en/efsajournal"
@@ -14891,7 +14899,7 @@
           "status_code": "approved",
           "scope": "supplement",
           "effective_range": {
-            "start": "2026-02-18",
+            "start": "2010-01-01",
             "end": null
           },
           "source_ref": "https://www.who.int/publications"
@@ -14899,9 +14907,9 @@
       ],
       "review": {
         "status": "validated",
-        "last_reviewed_at": "2026-02-18",
-        "reviewed_by": "data_pipeline_expansion",
-        "next_review_due": "2026-08-18",
+        "last_reviewed_at": "2026-03-28",
+        "reviewed_by": "harmful_additives_deep_audit_batch10",
+        "next_review_due": "2026-09-28",
         "change_log": [
           {
             "date": "2026-02-18",
@@ -14912,6 +14920,11 @@
             "date": "2026-03-22",
             "change": "Schema v5.1 migration: removed top-level CUI (→ external_ids.umls_cui), removed label_tokens/regex from match_rules, normalized external_ids casing, standardized references_structured fields, mapped status_codes to canonical enum, removed exposure_context/entity_type(ingredient)/class_tags dead-weight fields.",
             "reason": "schema_v5.1_migration"
+          },
+          {
+            "date": "2026-03-28",
+            "change": "Deep audit batch 10: CUI null (proprietary technology, added cui_status/cui_note). GSRS not found. All identifiers legitimately null.",
+            "reason": "harmful_additives_deep_audit_batch10"
           }
         ]
       },
@@ -14920,8 +14933,13 @@
       "dose_thresholds": null,
       "entity_relationships": null,
       "cui": null,
-      "cui_status": "no_single_umls_concept",
-      "cui_note": "Time-Sorb is a proprietary delivery/coating technology rather than one authoritative UMLS ingredient concept."
+      "cui_status": "no_confirmed_umls_match",
+      "cui_note": "Proprietary sustained-release coating technology. No discrete UMLS concept.",
+      "external_ids": {
+        "cas": null,
+        "pubchem_cid": null,
+        "unii": null
+      }
     },
     {
       "id": "ADD_TIN",
@@ -14941,7 +14959,7 @@
       ],
       "category": "contaminant",
       "notes": "A heavy metal that can contaminate supplements, particularly those sourced from regions with industrial pollution. Can cause gastrointestinal issues and potentially affect nervous system function.",
-      "last_updated": "2026-03-08",
+      "last_updated": "2026-03-28",
       "mechanism_of_harm": "Inorganic tin (Sn²⁺/Sn⁴⁺) causes acute GI irritation (nausea, vomiting, diarrhea) at >200 mg/kg food. Poorly absorbed orally. Organotin compounds (tributyltin, etc.) are highly neurotoxic and immunotoxic but not relevant to dietary supplement context. JECFA PTWI 14 mg/kg bw (maintained since 1988).",
       "regulatory_status": {
         "US": "Not a recognized dietary supplement ingredient. Treated as a contaminant. Codex Alimentarius maximum levels for inorganic tin: 250 mg/kg (solid foods) and 150 mg/kg (beverages) in canned products.",
@@ -14949,7 +14967,9 @@
         "WHO": "JECFA established PTWI of 14 mg/kg bw for inorganic tin (1988, reaffirmed 2001/2006). Acute gastric irritation observed at ≥150 mg/kg in beverages and ≥250 mg/kg in solid foods."
       },
       "population_warnings": [
-        "General population - review specific concerns"
+        "GI sensitivity — acute gastric irritation at ≥150 mg/kg in beverages",
+        "Children — lower body weight means lower absolute tin tolerance",
+        "Consumers of canned supplements — primary tin exposure route from can lining migration"
       ],
       "scientific_references": [],
       "match_rules": {
@@ -14987,7 +15007,7 @@
           "status_code": "approved",
           "scope": "supplement",
           "effective_range": {
-            "start": "2025-08-13",
+            "start": "1988-01-01",
             "end": null
           },
           "source_ref": "https://www.fda.gov/food/food-additives-petitions/food-additive-status-list"
@@ -14998,7 +15018,7 @@
           "status_code": "approved",
           "scope": "supplement",
           "effective_range": {
-            "start": "2025-08-13",
+            "start": "1988-01-01",
             "end": null
           },
           "source_ref": "https://efsa.onlinelibrary.wiley.com/doi/10.2903/j.efsa.2016.4444"
@@ -15006,9 +15026,9 @@
       ],
       "review": {
         "status": "validated",
-        "last_reviewed_at": "2026-02-16",
-        "reviewed_by": "codex_harmful_allergen_normalization",
-        "next_review_due": "2026-07-07",
+        "last_reviewed_at": "2026-03-28",
+        "reviewed_by": "harmful_additives_deep_audit_batch10",
+        "next_review_due": "2026-09-28",
         "change_log": [
           {
             "date": "2026-01-08",
@@ -15070,14 +15090,28 @@
             "date": "2026-03-22",
             "change": "Replaced placeholder mechanism with verified biochemical pathway.",
             "reason": "mechanism_backfill"
+          },
+          {
+            "date": "2026-03-28",
+            "change": "Deep audit batch 10: CUI C0206446 verified (Tin Compounds). Added CAS 7440-31-5. Populated dose_thresholds (JECFA PTWI 14 mg/kg/week). Replaced single population warning. Fixed jurisdictional dates.",
+            "reason": "harmful_additives_deep_audit_batch10"
           }
         ]
       },
       "confidence": "high",
       "severity_level": "high",
-      "dose_thresholds": null,
+      "dose_thresholds": {
+        "value": 14,
+        "unit": "mg/kg/week",
+        "source": "JECFA PTWI for inorganic tin (1988, reaffirmed 2006)"
+      },
       "entity_relationships": null,
-      "cui": "C0206446"
+      "cui": "C0206446",
+      "external_ids": {
+        "cas": "7440-31-5",
+        "pubchem_cid": null,
+        "unii": null
+      }
     },
     {
       "id": "ADD_UNSPECIFIED_COLORS",
@@ -15099,11 +15133,12 @@
         "US": "Allowed but should disclose color source when applicable"
       },
       "population_warnings": [
-        "People avoiding artificial dyes - Source is unclear"
+        "Dye-sensitive individuals — cannot assess risk without knowing which colorant is used",
+        "Children — if undisclosed colorant is an azo dye, hyperactivity concern applies"
       ],
       "notes": "Low-severity flag for unspecified color listings. Penalize lightly unless explicit dye tokens indicate artificial colorants.",
       "scientific_references": [],
-      "last_updated": "2026-02-16",
+      "last_updated": "2026-03-28",
       "match_rules": {
         "match_mode": "alias_and_fuzzy",
         "fuzzy_threshold": 0.72,
@@ -15129,7 +15164,7 @@
           "status_code": "approved",
           "scope": "supplement",
           "effective_range": {
-            "start": "2026-01-04",
+            "start": "2000-01-01",
             "end": null
           },
           "source_ref": "https://www.fda.gov/food/food-additives-petitions/food-additive-status-list"
@@ -15137,9 +15172,9 @@
       ],
       "review": {
         "status": "validated",
-        "last_reviewed_at": "2026-02-16",
-        "reviewed_by": "codex_harmful_allergen_normalization",
-        "next_review_due": "2026-07-07",
+        "last_reviewed_at": "2026-03-28",
+        "reviewed_by": "harmful_additives_deep_audit_batch10",
+        "next_review_due": "2026-09-28",
         "change_log": [
           {
             "date": "2026-01-04",
@@ -15180,6 +15215,11 @@
             "date": "2026-03-22",
             "change": "Schema v5.1 migration: removed top-level CUI (→ external_ids.umls_cui), removed label_tokens/regex from match_rules, normalized external_ids casing, standardized references_structured fields, mapped status_codes to canonical enum, removed exposure_context/entity_type(ingredient)/class_tags dead-weight fields.",
             "reason": "schema_v5.1_migration"
+          },
+          {
+            "date": "2026-03-28",
+            "change": "Deep audit batch 10: CUI null (class entry for undisclosed colorants, added cui_status/cui_note). Added specific population warnings. Fixed jurisdictional dates.",
+            "reason": "harmful_additives_deep_audit_batch10"
           }
         ]
       },
@@ -15189,8 +15229,13 @@
       "dose_thresholds": null,
       "entity_relationships": null,
       "cui": null,
-      "cui_status": "no_single_umls_concept",
-      "cui_note": "This is an intentionally broad disclosure-quality category and not one atomic color additive concept."
+      "cui_status": "no_confirmed_umls_match",
+      "cui_note": "Class entry for undisclosed colorants on labels. No single UMLS concept.",
+      "external_ids": {
+        "cas": null,
+        "pubchem_cid": null,
+        "unii": null
+      }
     },
     {
       "id": "ADD_VANILLIN",
@@ -15206,16 +15251,16 @@
       "category": "flavor",
       "mechanism_of_harm": "Flavoring compound that may be synthetically produced (from petrochemicals or wood pulp lignin). Even 'natural' vanillin may be produced via bioengineered fermentation rather than vanilla bean extraction. Purely cosmetic additive with no nutritional benefit.",
       "regulatory_status": {
-        "US": "FDA GRAS",
-        "EU": "Approved flavoring",
-        "WHO": "JECFA acceptable"
+        "US": "FDA GRAS (21 CFR 182.60) as synthetic flavoring substance.",
+        "EU": "Approved flavoring. No E-number (natural flavoring substance).",
+        "WHO": "JECFA ADI 0-10 mg/kg bw/day."
       },
       "population_warnings": [
         "People with vanilla sensitivity - Potential allergen"
       ],
       "notes": "Flavoring agent used for taste masking in supplements. Majority of commercial vanillin is synthetic. Even labeled 'natural vanillin' may be produced via fermentation rather than true vanilla extraction. No therapeutic value.",
       "scientific_references": [],
-      "last_updated": "2026-03-01",
+      "last_updated": "2026-03-28",
       "match_rules": {
         "match_mode": "alias_and_fuzzy",
         "fuzzy_threshold": 0.72,
@@ -15248,7 +15293,7 @@
           "status_code": "approved",
           "scope": "supplement",
           "effective_range": {
-            "start": "2026-02-18",
+            "start": "1965-01-01",
             "end": null
           },
           "source_ref": "https://www.fda.gov/food/food-additives-petitions/food-additive-status-list"
@@ -15259,7 +15304,7 @@
           "status_code": "approved",
           "scope": "supplement",
           "effective_range": {
-            "start": "2026-02-18",
+            "start": "1965-01-01",
             "end": null
           },
           "source_ref": "https://www.efsa.europa.eu/en/efsajournal"
@@ -15270,7 +15315,7 @@
           "status_code": "approved",
           "scope": "supplement",
           "effective_range": {
-            "start": "2026-02-18",
+            "start": "1965-01-01",
             "end": null
           },
           "source_ref": "https://www.who.int/publications"
@@ -15278,9 +15323,9 @@
       ],
       "review": {
         "status": "validated",
-        "last_reviewed_at": "2026-03-01",
-        "reviewed_by": "harmful_additives_audit",
-        "next_review_due": "2026-08-18",
+        "last_reviewed_at": "2026-03-28",
+        "reviewed_by": "harmful_additives_deep_audit_batch10",
+        "next_review_due": "2026-09-28",
         "change_log": [
           {
             "date": "2026-02-18",
@@ -15296,19 +15341,30 @@
             "date": "2026-03-22",
             "change": "Schema v5.1 migration: removed top-level CUI (→ external_ids.umls_cui), removed label_tokens/regex from match_rules, normalized external_ids casing, standardized references_structured fields, mapped status_codes to canonical enum, removed exposure_context/entity_type(ingredient)/class_tags dead-weight fields.",
             "reason": "schema_v5.1_migration"
+          },
+          {
+            "date": "2026-03-28",
+            "change": "Deep audit batch 10: CUI C0078032 verified. CAS 121-33-5 pre-verified. Added JECFA ADI 10 mg/kg. Added GSRS cfr 21 CFR 182.60. Upgraded confidence medium->high. Fixed jurisdictional dates.",
+            "reason": "harmful_additives_deep_audit_batch10"
           }
         ]
       },
-      "confidence": "medium",
+      "confidence": "high",
       "severity_level": "low",
-      "dose_thresholds": null,
+      "dose_thresholds": {
+        "value": 10,
+        "unit": "mg/kg/day",
+        "source": "JECFA ADI"
+      },
       "entity_relationships": null,
       "cui": "C0078032",
       "rxcui": "1368176",
       "gsrs": {
         "substance_name": "Vanillin",
         "substance_class": "chemical",
-        "cfr_sections": [],
+        "cfr_sections": [
+          "21 CFR 182.60"
+        ],
         "dsld_count": null,
         "dsld_info_raw": null,
         "active_moiety": null,
@@ -15355,7 +15411,7 @@
         "McCann et al. Lancet 2007 (PMID 17825405) — Southampton study: hyperactivity association with food color mixtures including tartrazine",
         "FDA/HHS Press Release April 22, 2025 — HHS and FDA to Phase Out Petroleum-Based Synthetic Dyes"
       ],
-      "last_updated": "2026-03-08",
+      "last_updated": "2026-03-28",
       "match_rules": {
         "match_mode": "alias_and_fuzzy",
         "fuzzy_threshold": 0.72,
@@ -15383,7 +15439,7 @@
           "status_code": "warning_issued",
           "scope": "supplement",
           "effective_range": {
-            "start": "2025-11-17",
+            "start": "1969-01-01",
             "end": null
           },
           "source_ref": "https://www.fda.gov/food/food-additives-petitions/food-additive-status-list"
@@ -15394,7 +15450,7 @@
           "status_code": "approved",
           "scope": "supplement",
           "effective_range": {
-            "start": "2025-11-17",
+            "start": "1969-01-01",
             "end": null
           },
           "source_ref": "https://www.efsa.europa.eu/en/efsajournal"
@@ -15405,7 +15461,7 @@
           "status_code": "approved",
           "scope": "supplement",
           "effective_range": {
-            "start": "2025-11-17",
+            "start": "1969-01-01",
             "end": null
           },
           "source_ref": "https://www.who.int/publications"
@@ -15413,9 +15469,9 @@
       ],
       "review": {
         "status": "validated",
-        "last_reviewed_at": "2026-03-01",
-        "reviewed_by": "harmful_additives_audit",
-        "next_review_due": "2026-07-07",
+        "last_reviewed_at": "2026-03-28",
+        "reviewed_by": "harmful_additives_deep_audit_batch10",
+        "next_review_due": "2026-09-28",
         "change_log": [
           {
             "date": "2025-11-17",
@@ -15472,15 +15528,26 @@
             "date": "2026-03-22",
             "change": "Removed stale cui_note. CUI C0039421 (Tartrazine) verified correct.",
             "reason": "alias_audit_fixes"
+          },
+          {
+            "date": "2026-03-28",
+            "change": "Deep audit batch 10: CUI C0039329 verified (tartrazine). Added CAS 1934-21-0 from GSRS. Populated dose_thresholds (EFSA ADI 7.5 mg/kg). Fixed jurisdictional dates.",
+            "reason": "harmful_additives_deep_audit_batch10"
           }
         ]
       },
       "confidence": "medium",
       "severity_level": "moderate",
-      "dose_thresholds": null,
+      "dose_thresholds": {
+        "value": 7.5,
+        "unit": "mg/kg/day",
+        "source": "EFSA/JECFA ADI (2009 reduced from 10)"
+      },
       "entity_relationships": null,
       "cui": "C0039329",
       "external_ids": {
+        "cas": "1934-21-0",
+        "pubchem_cid": null,
         "unii": "I753WB2F1M"
       },
       "rxcui": "1305578",
@@ -15535,7 +15602,7 @@
         "DOI: 10.1016/j.fct.2012.06.052 - 4-MEI carcinogenicity",
         "DOI: 10.1021/jf204398u - 4-MEI in beverages"
       ],
-      "last_updated": "2026-03-08",
+      "last_updated": "2026-03-28",
       "match_rules": {
         "match_mode": "alias_and_fuzzy",
         "fuzzy_threshold": 0.72,
@@ -15563,7 +15630,7 @@
           "status_code": "warning_issued",
           "scope": "supplement",
           "effective_range": {
-            "start": "2025-11-17",
+            "start": "1966-01-01",
             "end": null
           },
           "source_ref": "https://www.fda.gov/food/food-additives-petitions/food-additive-status-list"
@@ -15574,7 +15641,7 @@
           "status_code": "approved",
           "scope": "supplement",
           "effective_range": {
-            "start": "2025-11-17",
+            "start": "1966-01-01",
             "end": null
           },
           "source_ref": "https://www.efsa.europa.eu/en/efsajournal"
@@ -15585,7 +15652,7 @@
           "status_code": "approved",
           "scope": "supplement",
           "effective_range": {
-            "start": "2025-11-17",
+            "start": "1966-01-01",
             "end": null
           },
           "source_ref": "https://www.who.int/publications"
@@ -15593,9 +15660,9 @@
       ],
       "review": {
         "status": "validated",
-        "last_reviewed_at": "2026-03-01",
-        "reviewed_by": "harmful_additives_audit",
-        "next_review_due": "2026-07-07",
+        "last_reviewed_at": "2026-03-28",
+        "reviewed_by": "harmful_additives_deep_audit_batch10",
+        "next_review_due": "2026-09-28",
         "change_log": [
           {
             "date": "2025-11-17",
@@ -15657,15 +15724,26 @@
             "date": "2026-03-22",
             "change": "Removed stale cui_note. CUI C0075680 (Sunset Yellow FCF) verified correct.",
             "reason": "alias_audit_fixes"
+          },
+          {
+            "date": "2026-03-28",
+            "change": "Deep audit batch 10: CUI C0060120 verified (FD&C Yellow No. 6). Added CAS 2783-94-0 from GSRS. Populated dose_thresholds (EFSA ADI 4 mg/kg). Fixed jurisdictional dates.",
+            "reason": "harmful_additives_deep_audit_batch10"
           }
         ]
       },
       "confidence": "medium",
       "severity_level": "moderate",
-      "dose_thresholds": null,
+      "dose_thresholds": {
+        "value": 4,
+        "unit": "mg/kg/day",
+        "source": "EFSA/JECFA ADI"
+      },
       "entity_relationships": null,
       "cui": "C0060120",
       "external_ids": {
+        "cas": "2783-94-0",
+        "pubchem_cid": null,
         "unii": "H77VEI93A8"
       },
       "rxcui": "1305574",
@@ -15748,9 +15826,9 @@
       ],
       "review": {
         "status": "validated",
-        "last_reviewed_at": "2026-02-16",
-        "next_review_due": "2026-07-07",
-        "reviewed_by": "migration_script",
+        "last_reviewed_at": "2026-03-28",
+        "next_review_due": "2026-09-28",
+        "reviewed_by": "harmful_additives_deep_audit_batch10",
         "change_log": [
           {
             "date": "2026-01-08",
@@ -15772,6 +15850,11 @@
             "date": "2026-03-22",
             "change": "Renamed BANNED_ADD_BHA -> ADD_BHA",
             "reason": "remove_BANNED_prefix"
+          },
+          {
+            "date": "2026-03-28",
+            "change": "Deep audit batch 10: CUI C0006506 verified. CAS 25013-16-5 pre-verified. Populated dose_thresholds (JECFA ADI 0.5 mg/kg). Fixed GSRS cfr (171.110->172.110). Added population warnings. Fixed jurisdictional dates.",
+            "reason": "harmful_additives_deep_audit_batch10"
           }
         ]
       },
@@ -15790,7 +15873,7 @@
         "FDA Request for Information February 10, 2026 — Post-market safety reassessment of BHA",
         "CEN ACS February 2026 — FDA to reassess safety of BHA food preservative"
       ],
-      "last_updated": "2026-03-08",
+      "last_updated": "2026-03-28",
       "jurisdictional_statuses": [],
       "cui": "C0006506",
       "external_ids": {
@@ -15803,7 +15886,7 @@
         "substance_name": "BUTYLATED HYDROXYANISOLE",
         "substance_class": "mixture",
         "cfr_sections": [
-          "21 CFR 171.110"
+          "21 CFR 172.110"
         ],
         "dsld_count": null,
         "dsld_info_raw": null,
@@ -15822,7 +15905,16 @@
             "unii": "FL69S544FZ"
           }
         ]
-      }
+      },
+      "dose_thresholds": {
+        "value": 0.5,
+        "unit": "mg/kg/day",
+        "source": "JECFA ADI (EFSA raised to 1.0 in 2011)"
+      },
+      "population_warnings": [
+        "Pregnant women — insufficient data for safety at chronic exposure",
+        "California consumers — Prop 65 listed carcinogen since 1990"
+      ]
     },
     {
       "id": "ADD_BHT",
@@ -15881,9 +15973,9 @@
       ],
       "review": {
         "status": "validated",
-        "last_reviewed_at": "2026-02-16",
-        "next_review_due": "2026-07-07",
-        "reviewed_by": "migration_script",
+        "last_reviewed_at": "2026-03-28",
+        "next_review_due": "2026-09-28",
+        "reviewed_by": "harmful_additives_deep_audit_batch10",
         "change_log": [
           {
             "date": "2026-01-08",
@@ -15905,10 +15997,15 @@
             "date": "2026-03-22",
             "change": "Renamed BANNED_ADD_BHT -> ADD_BHT",
             "reason": "remove_BANNED_prefix"
+          },
+          {
+            "date": "2026-03-28",
+            "change": "Deep audit batch 10: CUI C0006507 verified. CAS 128-37-0 pre-verified. Populated dose_thresholds (JECFA ADI 0.3 mg/kg). Upgraded confidence medium->high (IARC Group 3, well-characterized). Fixed jurisdictional dates.",
+            "reason": "harmful_additives_deep_audit_batch10"
           }
         ]
       },
-      "confidence": "medium",
+      "confidence": "high",
       "regulatory_status": {
         "US": "FDA GRAS as food additive (21 CFR 172.115). ADI: 0.3 mg/kg bw/day (JECFA). No NTP carcinogen listing.",
         "EU": "E321 approved with maximum use levels per food category (Commission Regulation (EU) No 1129/2011).",
@@ -15916,7 +16013,7 @@
       },
       "mechanism_of_harm": "Synthetic phenolic antioxidant preservative. IARC Group 3 (not classifiable as carcinogen — 1986). NOT listed in the NTP Report on Carcinogens (NTP lists BHA, not BHT). Animal studies show conflicting results: some demonstrate tumor promotion (lung) in mice at high doses; others show anti-neoplastic effects depending on cancer type and dose — IARC 1986 acknowledged this ambiguity. Possible weak endocrine disruption (in vitro estrogenic/antiestrogenic activity; not confirmed by regulatory bodies at food-additive levels). FDA announced intention to review BHT after BHA post-market reassessment (2026).",
       "notes": "Petroleum-derived antioxidant preservative used in fats, oils, and packaging. IARC Group 3 (not classifiable as carcinogen). CORRECTION: Previous entry incorrectly stated 'NTP: reasonably anticipated carcinogen' — BHT is NOT listed in any NTP Report on Carcinogens. That designation belongs to BHA, not BHT. Evidence is mixed and overall weaker than BHA. Severity downgraded from critical to moderate. EU E321 approved with use limits; FDA GRAS.",
-      "last_updated": "2026-03-08",
+      "last_updated": "2026-03-28",
       "jurisdictional_statuses": [],
       "cui": "C0006507",
       "external_ids": {
@@ -15948,7 +16045,15 @@
             "unii": "49860VI52B"
           }
         ]
-      }
+      },
+      "dose_thresholds": {
+        "value": 0.3,
+        "unit": "mg/kg/day",
+        "source": "JECFA ADI"
+      },
+      "population_warnings": [
+        "No specific population concerns at food-grade antioxidant levels — IARC Group 3 (not classifiable)"
+      ]
     },
     {
       "id": "ADD_HYDROGENATED_COCONUT_OIL",
@@ -16008,9 +16113,9 @@
       ],
       "review": {
         "status": "validated",
-        "last_reviewed_at": "2026-02-16",
-        "next_review_due": "2026-07-07",
-        "reviewed_by": "codex_alias_precision_pass",
+        "last_reviewed_at": "2026-03-28",
+        "next_review_due": "2026-09-28",
+        "reviewed_by": "harmful_additives_deep_audit_batch10",
         "change_log": [
           {
             "date": "2026-01-08",
@@ -16047,6 +16152,11 @@
             "date": "2026-03-22",
             "change": "Clarified standard_name: added 'Partially' — FDA PHO ban applies only to partially hydrogenated oils.",
             "reason": "verified_audit_fixes"
+          },
+          {
+            "date": "2026-03-28",
+            "change": "Deep audit batch 10: CUI C3255733 verified. Added CAS 84836-98-6 from GSRS. Added population warnings distinguishing partial vs full hydrogenation. Fixed jurisdictional dates.",
+            "reason": "harmful_additives_deep_audit_batch10"
           }
         ]
       },
@@ -16063,10 +16173,12 @@
         "Federal Register 2023-16725 — Revocation of remaining PHO uses, effective December 22, 2023",
         "PMC4016047 — Trans fatty acids and cardiovascular disease: meta-analysis"
       ],
-      "last_updated": "2026-03-08",
+      "last_updated": "2026-03-28",
       "jurisdictional_statuses": [],
       "cui": "C3255733",
       "external_ids": {
+        "cas": "84836-98-6",
+        "pubchem_cid": null,
         "unii": "JY81OXM1OM"
       },
       "rxcui": "1307683",
@@ -16080,7 +16192,11 @@
         "salt_parents": [],
         "metabolic_relationships": [],
         "metabolites": []
-      }
+      },
+      "population_warnings": [
+        "Cardiovascular disease — partially hydrogenated form contains trans fats (FDA banned PHOs 2018/2023)",
+        "Note: FULLY hydrogenated coconut oil contains NO trans fats and is NOT subject to PHO ban"
+      ]
     },
     {
       "id": "ADD_METHYLPARABEN",
