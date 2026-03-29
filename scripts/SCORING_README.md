@@ -122,22 +122,23 @@ B_raw = base_score + bonuses - penalties
 B = clamp(0, 30, B_raw)
 base_score = 25
 bonuses = min(5, B3 + B4a + B4b + B4c + B_hypoallergenic)
-penalties = B0_moderate + B1 + B2 + B5 + B6
+penalties = B0_moderate + B1 + B2 + B5 + B6 + B7
 ```
 
 - B0: immediate safety gate logic.
   - v5.0 status-based: `banned` -> UNSAFE, `recalled` -> BLOCKED, `high_risk` -> -10 + CAUTION, `watchlist` -> -5 + CAUTION.
   - Pre-5.0 severity fallback: `critical/high` -> UNSAFE, `moderate` -> -10 + CAUTION, `low` -> advisory.
   - Non-exact/alias matches -> review-only (`BANNED_MATCH_REVIEW_NEEDED`).
-  - Source: `banned_recalled_ingredients.json` (139 entries, schema 5.0.0).
+  - Source: `banned_recalled_ingredients.json` (143 entries, schema 5.0.0).
 - B1: harmful additives penalty (capped at 8).
   - Risk points: `high` = 2.0, `moderate` = 1.0, `low` = 0.5 (no critical tier — critical hazards use B0 gate).
-  - Source: `harmful_additives.json` (107 entries, schema 5.1.0, 20 categories).
+  - Source: `harmful_additives.json` (113 entries, schema 5.1.0, 20 categories, 113/113 deep-audited).
 - B2: allergen penalty (capped at 2).
 - B3: claim compliance bonus (max 4 inside shared bonus pool).
 - B4: quality certifications (computed internally, pooled under bonus cap).
 - B5: proprietary blend transparency penalty (max 10).
-- B6: disease/marketing claim penalty.
+- B6: disease/marketing claim penalty (max 5).
+- B7: dose safety penalty (max 3). Penalises products with ingredients exceeding 150% of highest adult UL. Per ingredient: -2.0, capped at -3.0 total. Below 150%, UL enforcement is deferred to phone-side Section E1 (user-profile-aware). Source: `rda_ul_data.safety_flags` from enricher, verified against `rda_optimal_uls.json`.
 - Optional gated `B_hypoallergenic` contribution can be added to bonus pool.
 
 #### B5 proprietary blend model

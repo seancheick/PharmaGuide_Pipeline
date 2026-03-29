@@ -280,7 +280,7 @@ Cached on-device in `product_detail_cache.detail_json` after first access.
   "score_penalties": [...],
   "section_breakdown": {
     "ingredient_quality": {"score", "max", "sub": {..., "probiotic_breakdown": {...}}},
-    "safety_purity": {"score", "max", "sub": {..., "B5_blend_evidence": [...]}},
+    "safety_purity": {"score", "max", "sub": {..., "B5_blend_evidence": [...], "B7_penalty", "B7_dose_safety_evidence": [...]}},
     "evidence_research": {"score", "max", "matched_entries", "ingredient_points": {...}},
     "brand_trust": {"score", "max", "sub": {...}},
     "violation_penalty": 0.0
@@ -505,6 +505,7 @@ additional fields are present:
   - `B3` (compliance claim): `{id, label, score}`
   - `B5` (proprietary blend): `{id, label, score, blend_count}`
   - `B6` (disease claims): `{id, label, score}`
+  - `B7` (dose safety): `{id, label, severity, reason}` — one entry per ingredient exceeding 150% of highest adult UL. `severity` is `"critical"` at 200%+ or `"warning"` at 150-200%. `reason` includes nutrient name, amount, and UL value.
   - `violation` (scoring violation): `{id, label, score}`
   The app can render these as a "What hurt this score" section.
 - `formulation_detail` carries the context behind A3/A4/A5 bonuses: delivery tier,

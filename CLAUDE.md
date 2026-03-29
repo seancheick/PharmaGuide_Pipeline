@@ -103,6 +103,7 @@ Verification scripts that call external APIs to validate data accuracy:
 - `verify_cui.py` — UMLS CUI verification
 - `verify_pubchem.py` — PubChem CID + CAS verification
 - `verify_unii.py` — FDA UNII and CFR verification
+- `verify_rda_uls.py` — RDA/AI/UL verification against National Academies DRI tables + USDA FoodData Central API
 - `verify_efsa.py` — EU regulatory ADI/opinion validation
 - `verify_clinical_trials.py` — ClinicalTrials.gov NCT ID verification
 - `fda_weekly_sync.py` — FDA recall tracking (openFDA, RSS, DEA)
@@ -115,7 +116,7 @@ Verification scripts that call external APIs to validate data accuracy:
 80-point arithmetic model with section breakdown:
 
 - **Ingredient Quality** (max 25): bioavailability, premium forms, delivery, absorption
-- **Safety & Purity** (max 30): banned/recalled gate, contaminants, allergens
+- **Safety & Purity** (max 30): banned/recalled gate, contaminants, allergens, dose safety (B7: 150%+ UL)
 - **Evidence & Research** (max 20): clinical backing, strength of evidence
 - **Brand Trust** (max 5): manufacturer reputation, certifications
 - **Dose Adequacy** (max 2): EPA/DHA dosing for omega-3 (additive)

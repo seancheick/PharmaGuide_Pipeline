@@ -257,7 +257,7 @@ B = clamp(0, 30, B_raw)
 
 base_score = 25
 bonuses  = min(5, B3 + B4a + B4b + B4c + B_hypoallergenic)
-penalties = B0_moderate + B1 + B2 + B5 + B6
+penalties = B0_moderate + B1 + B2 + B5 + B6 + B7
 ```
 
 - `base_score` (25) and `bonus_pool_cap` (5) are read from config
@@ -427,6 +427,49 @@ Input paths (first true wins):
 3. `evidence_data.unsubstantiated_claims.found`
 
 If true: penalty = 5.0, adds flag `DISEASE_CLAIM_DETECTED`.
+
+### B7 Dose Safety Penalty (max penalty 3)
+
+**Design intent:** Products with any ingredient exceeding 150% of the most conservative
+adult UL (`highest_ul` from `rda_optimal_uls.json`) are objectively dangerous regardless
+of who takes them. Below 150%, UL enforcement is a personalisation concern handled on-device
+(Section E1 in the Flutter app, using the user's age/sex-specific UL).
+
+Input:
+- `rda_ul_data.safety_flags[]` — computed by the enricher, each flag has `pct_ul`, `nutrient`, `amount`, `ul`
+
+```text
+for each safety_flag where pct_ul >= threshold_pct (default 150):
+    ingredient_penalty = single_penalty (default 2.0)
+    add flag OVER_UL_{nutrient}
+
+B7 = min(cap, sum(ingredient_penalties))
+```
+
+Config defaults (scoring_config.json → B7_dose_safety):
+- `threshold_pct`: 150 — only penalise at 150%+ of highest_ul
+- `single_penalty`: 2.0 — per ingredient
+- `cap`: 3.0 — maximum total B7 penalty
+
+**Pipeline vs phone separation:**
+
+| Condition | Pipeline (B7) | Phone (E1) |
+|---|---|---|
+| Under all ULs | Nothing | Normal dosage scoring (0-7 pts) |
+| Over highest_ul by <150% | Warning in `top_warnings` only | -5 pt penalty (user's UL or highest_ul fallback) |
+| Over highest_ul by 150%+ | -2.0 penalty + warning | -5 pt penalty (intentional double-count — objectively dangerous) |
+| 2+ ingredients over 150%+ | -3.0 cap + warnings | -5 per ingredient |
+
+Evidence payload (per penalized ingredient):
+```json
+{
+  "nutrient": "Vitamin A",
+  "amount": 7500,
+  "ul": 3000,
+  "pct_ul": 250.0,
+  "penalty": 2.0
+}
+```
 
 ---
 
@@ -611,6 +654,7 @@ Section scores shorthand (`section_scores`):
 | `B0_LOW_SUBSTANCE` | B0 | Low-severity banned substance exact/alias hit (pre-5.0 fallback) |
 | `B0_MODERATE_SUBSTANCE` | B0 | Moderate-severity banned substance hit (pre-5.0 fallback); triggers CAUTION verdict + 10pt penalty |
 | `DISEASE_CLAIM_DETECTED` | B6 | Product makes unsubstantiated disease claims |
+| `OVER_UL_{nutrient}` | B7 | Ingredient exceeds 150% of highest adult UL (e.g. `OVER_UL_Vitamin A`) |
 | `LABEL_CONTRADICTION_DETECTED` | B3 | Compliance claims contradict other label text |
 | `MANUFACTURER_VIOLATION` | Post-section | Manufacturer has documented violations; deduction applied |
 | `NO_ACTIVES_DETECTED` | Mapping gate | Zero active ingredients found |
