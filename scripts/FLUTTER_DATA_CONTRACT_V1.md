@@ -227,6 +227,9 @@ class IngredientDetail {
   final String? harmfulNotes;     // mechanism or category
   final bool isBanned;            // exact/alias banned ingredient match
   final bool isAllergen;          // derived from allergen hit matching
+
+  // Identifiers (non-null fields only; from IQM parent entry)
+  final Map<String, dynamic>? identifiers; // {cui?, cas?, pubchem_cid?, unii?}
 }
 
 class InactiveIngredient {
@@ -253,6 +256,9 @@ class InactiveIngredient {
   final bool isHarmful;
   final String? harmfulSeverity;
   final String? harmfulNotes;     // mechanism > notes > classification_evidence > category
+
+  // Identifiers (non-null fields only; from harmful_additives or other_ingredients)
+  final Map<String, dynamic>? identifiers; // {cui?, cas?, pubchem_cid?, unii?}
 }
 ```
 
@@ -361,6 +367,35 @@ class FitScoreResult {
 
 **This is NEVER stored in the DB or pipeline output.** Always computed fresh on-device
 from the user's current profile state.
+
+### E1: Dosage Appropriateness (7 points)
+
+Source: `rda_optimal_uls.json` (bundled in `reference_data` table) + user age/sex.
+
+Compare each nutrient to age/sex-specific RDA and UL:
+- Optimal range (50-200% RDA): 7 pts
+- Adequate (25-50% RDA): 4 pts
+- Low dose (<25% RDA): 2 pts
+- Over UL: **-5 pts penalty**
+
+**UL penalty always runs**, even without a complete profile. When no age/sex is set, E1
+uses `highest_ul` from `rda_optimal_uls.json` as the fallback UL. The user doesn't get
+the full 7 points for dosage range (defaults to 4 pts baseline without age), but they DO
+get the -5 penalty if any nutrient exceeds the most conservative adult UL.
+
+**Pipeline B7 vs phone E1 separation:** The pipeline (B7) only penalises products
+exceeding 150%+ of highest_ul — those are objectively dangerous. E1 penalises any UL
+breach using the user's personal UL or highest_ul fallback. Products between 100-150% of
+UL are penalised ONLY by E1 on the phone, not by the pipeline.
+
+### Missing Profile Handling
+
+- No goals set: Score out of 98 (missing 2 pts)
+- No age set: Score out of 97 for RDA adequacy (missing 3 pts for age check), BUT E1 still
+  applies -5 UL penalty using highest_ul. Dosage range defaults to 4 pts baseline.
+- No conditions: User gets full 8 pts (no conditions = no conflicts)
+- Empty profile: Score out of ~91. E1 runs with highest_ul defaults (dangerous doses still
+  penalised), E2a drops (no goals = missing 2), E2b drops (missing 3), E2c gets full 8.
 
 ---
 
