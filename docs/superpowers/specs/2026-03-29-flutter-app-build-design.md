@@ -12,6 +12,7 @@
 ## Context
 
 The PharmaGuide data pipeline (dsld_clean repo) is complete:
+
 - 3-stage pipeline: Clean -> Enrich -> Score -> Build -> Sync
 - 783 products synced to Supabase (3 brands: Emerald Labs, Nordic Naturals, Olly)
 - Supabase v2.0.0 schema live: 4 tables, 2 RPCs, RLS, storage bucket
@@ -24,6 +25,7 @@ This design covers building the Flutter consumer app from scratch. The MVP spec 
 ## Architecture Summary
 
 **Two-layer data model:**
+
 - Layer 1 (Local SQLite via drift): `pharmaguide_core.db` bundled with app. 61 columns, instant offline scan/search.
 - Layer 2 (Supabase Remote): Detail blobs fetched on-demand per product view. Auth, stacks, usage tracking, AI proxy.
 
@@ -159,7 +161,14 @@ dev_dependencies:
 ### What gets built:
 
 1. **Project creation:** `flutter create PharmaGuide_ai`, configure pubspec.yaml with all packages
-2. **CLAUDE.md:** Project instructions for Claude Code (commands, conventions, hard rules)
+2. **CLAUDE.md:** Project instructions for Claude Code. Must contain:
+   - All 10 hard rules from spec Section 12
+   - Data contract field corrections (`notes` not `reference_notes`)
+   - The full condition_id mapping table (14 conditions) and drug_class_id mapping table (9 drug classes)
+   - drift-over-sqflite mandate with reasoning
+   - Supabase project URL and anon key
+   - Test commands (`flutter test`, `flutter analyze`)
+   - The `(SELECT auth.uid())` RLS pattern note for any future Supabase work
 3. **app_theme.dart:** Every color, text style, shadow, spacing constant from spec Section 2. Single source of truth.
 4. **drift database (database.dart):**
    - Table: `products_core` (61 columns matching pipeline schema exactly)
@@ -183,6 +192,7 @@ dev_dependencies:
 12. **Hive setup:** guest_scan_count box (freemium), chat_history box
 
 ### Testable outcome:
+
 App opens on iPhone. 5 tabs navigate. Theme colors match spec. Breakpoint shows product data loaded from SQLite. ScoreFitCalculator passes all unit tests.
 
 ---
@@ -254,8 +264,10 @@ App opens on iPhone. 5 tabs navigate. Theme colors match spec. Breakpoint shows 
     - Guest: Hive guest_scan_count, >= 3 -> upgrade sheet
     - Signed-in: increment_usage RPC, returns limit_exceeded boolean
     - Increment AFTER successful score fetch, not on barcode read
+    - **Network failure fallback:** If increment_usage RPC fails (network error mid-scan), fall back to client-side Hive count and ALLOW the scan. Never block the user on a network error.
 
 ### Testable outcome:
+
 Scan any supplement barcode on your iPhone. See a real score with full clinical breakdown from your pipeline data. Add it to your stack.
 
 ---
@@ -273,7 +285,7 @@ Scan any supplement barcode on your iPhone. See a real score with full clinical 
    - Swipe right to delete (red bg, trash icon, snackbar undo)
    - Tap to edit (bottom sheet: dosage, timing, supply count)
    - Empty state: illustration + "Scan a Product" CTA
-   - Supabase sync for signed-in users (user_stacks table)
+   - **Write-first to local SQLite** (`user_stacks_local`), then sync to Supabase (`user_stacks`) for signed-in users. Local is the source of truth — Supabase is the sync target. This ensures offline stack editing works. Never build it Supabase-first.
 
 2. **Home tab (home_screen.dart):**
    - Header: greeting + connectivity status (offline = grey cloud icon)
@@ -296,9 +308,11 @@ Scan any supplement barcode on your iPhone. See a real score with full clinical 
    - If newer + min_app_version satisfied: background download new .db file
    - Swap in when complete. Never block the user.
    - If download fails: continue with current DB silently
+   - **Must be tested explicitly:** version check must not block main thread, must handle network failure gracefully, must not corrupt the active DB during swap. Write integration test for: same version (skip), newer version (download + swap), network failure (silent continue), min_app_version gate (skip if app too old).
 
 ### Testable outcome:
-Full home screen, stack management, search works instantly, offline mode shows appropriate banners.
+
+Full home screen, stack management, search works instantly, offline mode shows appropriate banners. DB version checker tested against all 4 scenarios.
 
 ---
 
@@ -324,9 +338,11 @@ Full home screen, stack management, search works instantly, offline mode shows a
    - Offline state: "AI chat requires internet", previous chat viewable from Hive
 
 3. **System prompt builder:**
+
    ```dart
    String buildSystemPrompt(HealthProfile? profile, List<StackItem> stack)
    ```
+
    Reads user_profile + user_stacks, includes goals, conditions, allergies, current stack names
 
 4. **AI message limit:**
@@ -345,6 +361,7 @@ Full home screen, stack management, search works instantly, offline mode shows a
    - All health data stored in LOCAL SQLite user_profile only. Never synced to Supabase in MVP.
 
 ### Testable outcome:
+
 Chat with AI pharmacist about your supplements. Set up health profile with conditions and medications. See personalized condition alerts on product scans.
 
 ---
@@ -390,6 +407,7 @@ Chat with AI pharmacist about your supplements. Set up health profile with condi
    - Internal testing group
 
 ### Testable outcome:
+
 No crashes, no raw errors, smooth animations, dark mode works. Ready for TestFlight beta testers.
 
 ---
@@ -414,6 +432,7 @@ These are non-negotiable and must be enforced in every phase:
 ## Supabase Connectivity Requirements
 
 Before Phase 2 scan testing can begin:
+
 - Supabase project live with v2.0.0 schema applied
 - At least one export synced (783 products currently live)
 - Flutter app can read export_manifest via anon key
@@ -422,6 +441,7 @@ Before Phase 2 scan testing can begin:
 These are already satisfied — Supabase is live with data.
 
 **Storage URL patterns for Flutter:**
+
 - DB file: `https://omayamxacvacrnvdvzhr.supabase.co/storage/v1/object/public/pharmaguide/v{version}/pharmaguide_core.db`
 - Detail blob: `https://omayamxacvacrnvdvzhr.supabase.co/storage/v1/object/public/pharmaguide/v{version}/details/{dsld_id}.json`
 - Get `version` from: `export_manifest` table WHERE `is_current = true`, column `db_version`
@@ -431,6 +451,7 @@ These are already satisfied — Supabase is live with data.
 ## Data Contracts
 
 The Flutter app consumes data defined in these pipeline repo docs:
+
 - `scripts/FINAL_EXPORT_SCHEMA_V1.md` — SQLite schema + detail blob structure
 - `scripts/FLUTTER_DATA_CONTRACT_V1.md` — Screen-by-screen data mapping
 - `scripts/sql/supabase_schema.sql` — Supabase tables, RPCs, RLS
