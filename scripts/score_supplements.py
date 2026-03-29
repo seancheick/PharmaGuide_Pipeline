@@ -1489,6 +1489,54 @@ class SupplementScorer:
             return penalty
         return 0.0
 
+    def _score_b7(
+        self,
+        product: Dict[str, Any],
+        flags: List[str],
+        config: Optional[Dict[str, Any]] = None,
+    ) -> Tuple[float, List[Dict[str, Any]]]:
+        """B7: Dose safety penalty for products exceeding highest UL by 150%+.
+
+        Reads over_ul flags from rda_ul_data.safety_flags (computed by the
+        enricher).  Only penalises when pct_ul >= 150% — below that threshold,
+        UL enforcement is a personalisation concern handled on-device (Section
+        E1 in the Flutter app).
+
+        Returns (penalty, evidence_list).
+        """
+        b7_cfg = (config or {}).get("B7_dose_safety", {})
+        threshold_pct = as_float(b7_cfg.get("threshold_pct"), 150.0)
+        single_penalty = as_float(b7_cfg.get("single_penalty"), 2.0)
+        cap = as_float(b7_cfg.get("cap"), 3.0)
+
+        rda_ul = product.get("rda_ul_data") or {}
+        safety_flags = rda_ul.get("safety_flags") or []
+        if not safety_flags:
+            return 0.0, []
+
+        evidence: List[Dict[str, Any]] = []
+        total_penalty = 0.0
+
+        for sf in safety_flags:
+            pct = as_float(sf.get("pct_ul"), 0.0)
+            if pct >= threshold_pct:
+                nutrient = sf.get("nutrient", "unknown")
+                amount = sf.get("amount", 0)
+                ul = sf.get("ul", 0)
+                evidence.append({
+                    "nutrient": nutrient,
+                    "amount": amount,
+                    "ul": ul,
+                    "pct_ul": round(pct, 1),
+                    "penalty": single_penalty,
+                })
+                total_penalty += single_penalty
+                if f"OVER_UL_{nutrient}" not in flags:
+                    flags.append(f"OVER_UL_{nutrient}")
+
+        total_penalty = min(total_penalty, cap)
+        return total_penalty, evidence
+
     def _score_section_b(
         self,
         product: Dict[str, Any],
@@ -1529,9 +1577,10 @@ class SupplementScorer:
 
         b5 = self._score_b5(product, flags, section_b_cfg)
         b6 = self._score_b6(product, flags, section_b_cfg)
+        b7, b7_evidence = self._score_b7(product, flags, section_b_cfg)
 
         bonuses = min(bonus_pool_cap, b3 + b4a + b4b + b4c + b_hypoallergenic)
-        penalties = b1 + b2 + b5 + b6 + b0_moderate_penalty
+        penalties = b1 + b2 + b5 + b6 + b7 + b0_moderate_penalty
 
         b_raw = base_score + bonuses - penalties
         total = clamp(0.0, max_points, b_raw)
@@ -1550,6 +1599,8 @@ class SupplementScorer:
             "B5_penalty": round(b5, 2),
             "B5_blend_evidence": self._last_b5_blend_evidence,
             "B6_penalty": round(b6, 2),
+            "B7_penalty": round(b7, 2),
+            "B7_dose_safety_evidence": b7_evidence,
             "bonuses": round(bonuses, 2),
             "penalties": round(penalties, 2),
             "raw": round(b_raw, 2),

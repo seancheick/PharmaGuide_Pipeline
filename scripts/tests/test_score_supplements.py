@@ -2567,3 +2567,118 @@ class TestSectionEDoseAdequacy:
         result = scorer._compute_epa_dha_per_day(prod)
         assert result["has_explicit_dose"] is True
         assert result["per_day_mid"] == pytest.approx(600.0)  # 300 × 2
+
+
+# ── B7 dose safety penalty tests ──────────────────────────────────────────
+
+class TestB7DoseSafety:
+    """B7 penalises products with any ingredient exceeding 150% of highest UL."""
+
+    @pytest.fixture
+    def scorer(self):
+        return SupplementScorer()
+
+    def _product_with_safety_flags(self, flags):
+        p = make_base_product()
+        p["rda_ul_data"] = {
+            "safety_flags": flags,
+            "has_over_ul": len(flags) > 0,
+        }
+        return p
+
+    def test_no_safety_flags_no_penalty(self, scorer):
+        p = self._product_with_safety_flags([])
+        penalty, evidence = scorer._score_b7(p, [])
+        assert penalty == 0.0
+        assert evidence == []
+
+    def test_under_150pct_no_penalty(self, scorer):
+        """120% of UL should not trigger B7 (handled by phone E1)."""
+        p = self._product_with_safety_flags([{
+            "nutrient": "Vitamin A",
+            "amount": 3600,
+            "ul": 3000,
+            "pct_ul": 120.0,
+            "severity": "warning",
+        }])
+        penalty, evidence = scorer._score_b7(p, [])
+        assert penalty == 0.0
+        assert evidence == []
+
+    def test_150pct_triggers_penalty(self, scorer):
+        """Exactly 150% of UL triggers B7."""
+        p = self._product_with_safety_flags([{
+            "nutrient": "Vitamin A",
+            "amount": 4500,
+            "ul": 3000,
+            "pct_ul": 150.0,
+            "severity": "warning",
+        }])
+        penalty, evidence = scorer._score_b7(p, [])
+        assert penalty == pytest.approx(2.0)
+        assert len(evidence) == 1
+        assert evidence[0]["nutrient"] == "Vitamin A"
+
+    def test_200pct_same_single_penalty(self, scorer):
+        """200%+ still gets the single_penalty per nutrient (2.0)."""
+        p = self._product_with_safety_flags([{
+            "nutrient": "Vitamin E",
+            "amount": 2000,
+            "ul": 1000,
+            "pct_ul": 200.0,
+            "severity": "critical",
+        }])
+        penalty, evidence = scorer._score_b7(p, [])
+        assert penalty == pytest.approx(2.0)
+
+    def test_multiple_nutrients_capped_at_3(self, scorer):
+        """Multiple over-UL nutrients cap at 3.0."""
+        p = self._product_with_safety_flags([
+            {"nutrient": "Vitamin A", "amount": 4500, "ul": 3000, "pct_ul": 150.0, "severity": "warning"},
+            {"nutrient": "Vitamin E", "amount": 2000, "ul": 1000, "pct_ul": 200.0, "severity": "critical"},
+        ])
+        penalty, evidence = scorer._score_b7(p, [])
+        assert penalty == pytest.approx(3.0)  # 2.0 + 2.0 = 4.0, capped at 3.0
+        assert len(evidence) == 2
+
+    def test_b7_adds_flag(self, scorer):
+        flags = []
+        p = self._product_with_safety_flags([{
+            "nutrient": "Folate",
+            "amount": 2500,
+            "ul": 1667,
+            "pct_ul": 150.0,
+            "severity": "warning",
+        }])
+        scorer._score_b7(p, flags)
+        assert "OVER_UL_Folate" in flags
+
+    def test_b7_included_in_section_b_total(self, scorer):
+        """B7 penalty is subtracted from the section B score."""
+        p_safe = make_base_product()
+        p_safe["rda_ul_data"] = {"safety_flags": [], "has_over_ul": False}
+
+        p_danger = make_base_product()
+        p_danger["rda_ul_data"] = {
+            "safety_flags": [{
+                "nutrient": "Vitamin A",
+                "amount": 7500,
+                "ul": 3000,
+                "pct_ul": 250.0,
+                "severity": "critical",
+            }],
+            "has_over_ul": True,
+        }
+
+        b_safe = scorer._score_section_b(p_safe, "targeted", 0.0, [])
+        b_danger = scorer._score_section_b(p_danger, "targeted", 0.0, [])
+
+        assert b_danger["B7_penalty"] == pytest.approx(2.0)
+        assert b_danger["score"] < b_safe["score"]
+
+    def test_no_rda_ul_data_no_penalty(self, scorer):
+        """Products without rda_ul_data (e.g. no dosage info) get no B7 penalty."""
+        p = make_base_product()
+        # No rda_ul_data key at all
+        penalty, evidence = scorer._score_b7(p, [])
+        assert penalty == 0.0

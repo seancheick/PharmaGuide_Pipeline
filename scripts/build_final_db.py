@@ -1229,6 +1229,15 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
                           "blend_count": len(safe_list(b_sub.get("B5_blend_evidence")))})
     if safe_float(b_sub.get("B6_penalty"), 0) > 0:
         penalties.append({"id": "B6", "label": "Unsubstantiated disease claims", "score": b_sub["B6_penalty"]})
+    if safe_float(b_sub.get("B7_penalty"), 0) > 0:
+        b7_evidence = safe_list(b_sub.get("B7_dose_safety_evidence"))
+        for ev in b7_evidence:
+            penalties.append({
+                "id": "B7",
+                "label": f"Exceeds safe dose limit: {ev.get('nutrient', 'unknown')} at {ev.get('pct_ul', 0):.0f}% of UL",
+                "severity": "critical" if ev.get("pct_ul", 0) >= 200 else "warning",
+                "reason": f"{ev.get('nutrient')}: {ev.get('amount')} vs UL {ev.get('ul')}",
+            })
     vp = section_breakdown.get("violation_penalty", 0)
     if vp and safe_float(vp, 0) != 0:
         penalties.append({"id": "violation", "label": "Scoring violation penalty", "score": vp})

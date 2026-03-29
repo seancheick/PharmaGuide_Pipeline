@@ -202,6 +202,11 @@
     },
     "B6_marketing_penalty": {
       "penalty": 5
+    },
+    "B7_dose_safety": {
+      "threshold_pct": 150,
+      "single_penalty": 2.0,
+      "cap": 3.0
     }
   },
   "section_C_evidence_research": {
