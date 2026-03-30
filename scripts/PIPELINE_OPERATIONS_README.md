@@ -334,6 +334,8 @@ python3 clean_dsld_data.py \
 Note:
 
 - `clean_dsld_data.py` currently expects to be run from the `scripts/` directory because of relative-path assumptions in its config/reference-data handling
+- `sync-brand`, `sync-filter`, and `sync-delta` now paginate through all matching results by default
+- use `--limit N` only when you want to intentionally cap discovery for a test or partial run
 
 **refresh-ids** — Re-fetch specific label IDs (e.g., after an audit fix):
 
@@ -400,6 +402,8 @@ Important:
 
 - `sync-filter` updates canonical form folders when `--canonical-root` is provided
 - `--staging-dir` is optional and creates a flat review/work folder
+- no `--limit` means fetch all matching labels across paginated API results
+- `--limit N` means stop discovery after `N` labels
 - date windows are good for newly added labels, not all label changes
 
 **sync-delta** — Fetch only new or changed labels based on the shared state file:
@@ -431,6 +435,8 @@ Important:
 
 - with `--delta-output-dir`, changed/new labels are written there as a flat cleaner-ready set
 - without `--delta-output-dir`, canonical form folders and state are updated only
+- no `--limit` means fetch all matching labels across paginated API results
+- `--limit N` means stop discovery after `N` labels
 - off-market products are retained in canonical storage and continue through scoring/build
 - if the state file does not exist yet, the first `sync-delta` run behaves like an initial full seed for that discovery lane
 - after that first seed, later runs only write newly changed/new labels into the delta directory
@@ -448,6 +454,37 @@ Important:
   - skipped and failed IDs
   - off-market IDs seen in the run
   - resolved delta directory for that run
+
+**import-local** — Import local/manual DSLD raw JSON into the same canonical form/state/delta system:
+
+Use this when the API is unavailable or when you downloaded raw JSON manually from DSLD and still want to update:
+
+- `forms/`
+- `state/dsld_sync_state.json`
+- optional dated `delta/`
+- optional JSON `reports/`
+
+Example:
+
+```bash
+python3 scripts/dsld_api_sync.py import-local \
+  --input-dir /Users/seancheick/Documents/DataSetDsld/manual/softgels_batch_01 \
+  --canonical-root /Users/seancheick/Documents/DataSetDsld/forms \
+  --state-file /Users/seancheick/Documents/DataSetDsld/state/dsld_sync_state.json \
+  --delta-output-dir /Users/seancheick/Documents/DataSetDsld/delta/manual-softgels \
+  --dated-delta \
+  --report-dir /Users/seancheick/Documents/DataSetDsld/reports/manual-softgels
+```
+
+Important:
+
+- `import-local` does not use the DSLD API
+- it reads local JSON recursively, so both flat and nested folders work
+- it routes labels into canonical form buckets using the same form logic as API sync
+- it updates the same shared state file used by API sync
+- it can produce a delta folder and report just like `sync-delta`
+- API sync and local import stay independent operationally, but share the same canonical corpus/state model
+- payload change detection ignores provenance-only fields like `_source` and `src`, so importing the same label from API vs manual raw files does not create false diffs by itself
 
 ### Recommended operator workflows
 
@@ -507,7 +544,29 @@ python3 scripts/run_pipeline.py \
   --output-prefix /Users/seancheick/Documents/DataSetDsld/output_olly_2026-03-30T01-49-58
 ```
 
-#### Form/category, first time
+#### 2. First-time category/form seed without staging
+
+This is the simpler default for form/category pulls.
+
+Example: first-time gummies seed directly into the canonical form bucket:
+
+```bash
+python3 scripts/dsld_api_sync.py sync-filter \
+  --supplement-form e0176 \
+  --status 2 \
+  --canonical-root /Users/seancheick/Documents/DataSetDsld/forms \
+  --state-file /Users/seancheick/Documents/DataSetDsld/state/dsld_sync_state.json
+```
+
+Then run the pipeline directly on that canonical form bucket:
+
+```bash
+python3 scripts/run_pipeline.py \
+  --raw-dir /Users/seancheick/Documents/DataSetDsld/forms/gummies \
+  --output-prefix /Users/seancheick/Documents/DataSetDsld/output_gummies_seed
+```
+
+#### 2A. First-time category/form seed with staging
 
 If you want a flat first-time working set:
 
@@ -528,7 +587,7 @@ python3 scripts/run_pipeline.py \
   --output-prefix /Users/seancheick/Documents/DataSetDsld/output_gummies_seed
 ```
 
-#### Form/category, second time or later
+#### 2B. Form/category, second time or later
 
 Fetch only new/changed products:
 
@@ -551,103 +610,26 @@ python3 scripts/run_pipeline.py \
   --output-prefix /Users/seancheick/Documents/DataSetDsld/output_gummies_2026-03-30T01-49-58
 ```
 
-#### 1. First-time brand seed
+#### 3. Manual/local import fallback
 
-Use this when you want to add a brand into the canonical corpus for the first time and also get a flat brand-only folder to run through the pipeline immediately.
-
-This is one of the few cases where `staging/` is useful.
+Use this when the DSLD API is unavailable but you already downloaded raw DSLD JSON manually.
 
 ```bash
-python3 scripts/dsld_api_sync.py sync-brand \
-  --brand "Olly" \
-  --status 2 \
+python3 scripts/dsld_api_sync.py import-local \
+  --input-dir /Users/seancheick/Documents/DataSetDsld/manual/softgels_batch_01 \
   --canonical-root /Users/seancheick/Documents/DataSetDsld/forms \
   --state-file /Users/seancheick/Documents/DataSetDsld/state/dsld_sync_state.json \
-  --output-dir /Users/seancheick/Documents/DataSetDsld/staging/brands/olly
-```
-
-Run the pipeline on that first-time brand seed:
-
-```bash
-python3 scripts/run_pipeline.py \
-  --raw-dir /Users/seancheick/Documents/DataSetDsld/staging/brands/olly \
-  --output-prefix /Users/seancheick/Documents/DataSetDsld/output_olly_seed
-```
-
-#### 2. First-time category/form seed
-
-Use this when you want to seed a full category such as gummies, softgels, or capsules into the canonical corpus and also get a flat category folder to run through the pipeline.
-
-This is also an optional `staging/` workflow.
-
-Example: first-time gummies seed
-
-```bash
-python3 scripts/dsld_api_sync.py sync-filter \
-  --supplement-form e0176 \
-  --status 2 \
-  --canonical-root /Users/seancheick/Documents/DataSetDsld/forms \
-  --state-file /Users/seancheick/Documents/DataSetDsld/state/dsld_sync_state.json \
-  --staging-dir /Users/seancheick/Documents/DataSetDsld/staging/forms/gummies
-```
-
-Run the pipeline on that first-time category seed:
-
-```bash
-python3 scripts/run_pipeline.py \
-  --raw-dir /Users/seancheick/Documents/DataSetDsld/staging/forms/gummies \
-  --output-prefix /Users/seancheick/Documents/DataSetDsld/output_gummies_seed
-```
-
-#### 3. Update a brand later with only new/changed products
-
-Use this after the first seed when you want only the brand delta.
-
-```bash
-python3 scripts/dsld_api_sync.py sync-delta \
-  --brand "Olly" \
-  --status 2 \
-  --canonical-root /Users/seancheick/Documents/DataSetDsld/forms \
-  --state-file /Users/seancheick/Documents/DataSetDsld/state/dsld_sync_state.json \
-  --delta-output-dir /Users/seancheick/Documents/DataSetDsld/delta/olly \
+  --delta-output-dir /Users/seancheick/Documents/DataSetDsld/delta/manual-softgels \
   --dated-delta \
-  --report-dir /Users/seancheick/Documents/DataSetDsld/reports/olly
+  --report-dir /Users/seancheick/Documents/DataSetDsld/reports/manual-softgels
 ```
 
-What to run next:
-
-- read the printed `Delta directory:` path
-- run the pipeline on that exact dated folder
-
-Example:
+Then run pipeline on the printed dated delta folder:
 
 ```bash
 python3 scripts/run_pipeline.py \
-  --raw-dir /Users/seancheick/Documents/DataSetDsld/delta/olly/2026-03-30T01-49-58 \
-  --output-prefix /Users/seancheick/Documents/DataSetDsld/output_olly_2026-03-30T01-49-58
-```
-
-#### 4. Update a category/form later with only new/changed products
-
-Example: update capsules and process only the capsules delta
-
-```bash
-python3 scripts/dsld_api_sync.py sync-delta \
-  --supplement-form e0159 \
-  --status 2 \
-  --canonical-root /Users/seancheick/Documents/DataSetDsld/forms \
-  --state-file /Users/seancheick/Documents/DataSetDsld/state/dsld_sync_state.json \
-  --delta-output-dir /Users/seancheick/Documents/DataSetDsld/delta/capsules \
-  --dated-delta \
-  --report-dir /Users/seancheick/Documents/DataSetDsld/reports/capsules
-```
-
-Then run the pipeline on the printed dated delta folder:
-
-```bash
-python3 scripts/run_pipeline.py \
-  --raw-dir /Users/seancheick/Documents/DataSetDsld/delta/capsules/2026-03-30T01-49-58 \
-  --output-prefix /Users/seancheick/Documents/DataSetDsld/output_capsules_2026-03-30T01-49-58
+  --raw-dir /Users/seancheick/Documents/DataSetDsld/delta/manual-softgels/2026-03-30T01-49-58 \
+  --output-prefix /Users/seancheick/Documents/DataSetDsld/output_manual_softgels_2026-03-30T01-49-58
 ```
 
 #### 5. What to process after each kind of sync
@@ -656,11 +638,15 @@ python3 scripts/run_pipeline.py \
   - process the `--output-dir` folder
 - `sync-filter` with `--staging-dir`:
   - process the `--staging-dir` folder
+- `sync-filter` with only `--canonical-root` and no staging folder:
+  - process the specific canonical form bucket you just seeded, such as `/Users/seancheick/Documents/DataSetDsld/forms/gummies`
+- `import-local` with `--delta-output-dir --dated-delta`:
+  - process the printed `Delta directory:` dated folder
 - `sync-delta` with `--delta-output-dir --dated-delta`:
   - process the printed `Delta directory:` dated folder
-- `sync-brand` or `sync-filter` with only `--canonical-root` and no staging folder:
+- `sync-brand` with only `--canonical-root` and no staging folder:
   - this updates the canonical corpus only
-  - it does not create a clean brand-only or category-only pipeline input folder by itself
+  - it does not create a clean brand-only pipeline input folder by itself
 
 #### 6. How to read the result
 
@@ -672,6 +658,57 @@ python3 scripts/run_pipeline.py \
   - `unchanged_count`
   - `failed_ids`
   - `off_market_ids`
+
+### Batch runner with the new structure
+
+`batch_run_all_datasets.sh` can still be useful, but it works best when you point it at a subtree that contains only flat dataset folders you actually want to process.
+
+Recommended usage:
+
+- top-level legacy folders only:
+  - `bash batch_run_all_datasets.sh --targets Thorne,Olly`
+- first-time brand seeds in staging:
+  - `bash batch_run_all_datasets.sh --root "$HOME/Documents/DataSetDsld/staging/brands"`
+- first-time form seeds in staging:
+  - `bash batch_run_all_datasets.sh --root "$HOME/Documents/DataSetDsld/staging/forms"`
+- one brand's dated delta runs:
+  - `bash batch_run_all_datasets.sh --root "$HOME/Documents/DataSetDsld/delta/olly"`
+- all brand delta roots is not recommended directly because `delta/` contains brand folders, not dated run folders
+
+Important:
+
+- when run at top-level `DataSetDsld/`, the script now skips:
+  - `forms/`
+  - `state/`
+  - `delta/`
+  - `reports/`
+  - `staging/`
+- that makes top-level usage safer for your old legacy flat dataset folders
+- for the new workflow, `--root` is the clearer option
+
+Examples:
+
+Run all staged brand seeds:
+
+```bash
+bash batch_run_all_datasets.sh \
+  --root "$HOME/Documents/DataSetDsld/staging/brands"
+```
+
+Run all dated Olly delta folders:
+
+```bash
+bash batch_run_all_datasets.sh \
+  --root "$HOME/Documents/DataSetDsld/delta/olly"
+```
+
+Run only score for dated Olly deltas:
+
+```bash
+bash batch_run_all_datasets.sh \
+  --root "$HOME/Documents/DataSetDsld/delta/olly" \
+  --stages score
+```
 
 **verify-db** — Sample-verify existing raw files against the API (non-destructive, never overwrites):
 
@@ -721,10 +758,14 @@ python3 scripts/sync_to_supabase.py /Users/seancheick/Documents/DataSetDsld/fina
 
 ### How it works
 
-- `dsld_api_client.py` fetches labels from the API and runs `normalize_api_label()` to force the expected raw-label key contract
-- Each label is written as `{dsld_id}.json` in a flat directory (same as manual downloads)
-- The only difference: API-fetched files have `"_source": "api"` added as a provenance field
-- The pipeline ignores `_source` — it processes API and manual files identically
+- `dsld_api_sync.py` now supports two ingestion paths:
+  - API-driven sync via `sync-brand`, `sync-filter`, and `sync-delta`
+  - local/manual raw import via `import-local`
+- both paths normalize labels into the same raw-label contract and route them into the same canonical `forms/` corpus
+- both paths update the same shared `state/dsld_sync_state.json`
+- optional dated delta folders and JSON reports work for both `sync-delta` and `import-local`
+- payload change detection ignores provenance-only fields like `_source` and `src`, so API vs manual copies of the same label do not create false diffs by themselves
+- the pipeline processes the raw JSON the same way regardless of whether the files came from API sync or local import
 - Rate limited to ~6.6 requests/second (0.15s delay) to respect NIH API limits
 - Retries failed requests up to 4 times with exponential backoff
 - Circuit breaker trips after 3 consecutive failures

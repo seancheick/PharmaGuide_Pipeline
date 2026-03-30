@@ -3,20 +3,22 @@
 ###############################################################################
 # Batch Pipeline Runner for All DSLD Datasets
 ###############################################################################
-# Processes all folders in ~/Documents/DataSetDsld/ through the pipeline
+# Processes child dataset folders through the pipeline
 # Creates separate output directories for each dataset
 #
 # Usage:
-#   bash batch_run_all_datasets.sh                           # Full pipeline (all datasets)
-#   bash batch_run_all_datasets.sh score                     # Score only (all datasets)
-#   bash batch_run_all_datasets.sh --targets Thorne,Olly    # Only specific datasets
-#   bash batch_run_all_datasets.sh enrich,score --targets Nature-Made
+#   bash batch_run_all_datasets.sh
+#   bash batch_run_all_datasets.sh score
+#   bash batch_run_all_datasets.sh --targets Thorne,Olly
+#   bash batch_run_all_datasets.sh --stages enrich,score --targets Nature-Made
+#   bash batch_run_all_datasets.sh --root "$HOME/Documents/DataSetDsld/staging/brands"
+#   bash batch_run_all_datasets.sh --root "$HOME/Documents/DataSetDsld/delta/olly"
 ###############################################################################
 
 set -e  # Exit on error
 
 # Configuration
-DATASET_DIR="$HOME/Documents/DataSetDsld"
+DATASET_ROOT="$HOME/Documents/DataSetDsld"
 SCRIPTS_DIR="/Users/seancheick/.claude-worktrees/dsld_clean/peaceful-ritchie/scripts"
 STAGES="clean,enrich,score"  # Default: full pipeline
 TARGET_DATASETS=""  # Empty = all datasets
@@ -30,6 +32,10 @@ while [[ $# -gt 0 ]]; do
             ;;
         --stages)
             STAGES="$2"
+            shift 2
+            ;;
+        --root)
+            DATASET_ROOT="$2"
             shift 2
             ;;
         *)
@@ -47,8 +53,8 @@ BLUE='\033[0;34m'
 NC='\033[0m'  # No Color
 
 # Validate paths
-if [ ! -d "$DATASET_DIR" ]; then
-    echo -e "${RED}ERROR: Dataset directory not found: $DATASET_DIR${NC}"
+if [ ! -d "$DATASET_ROOT" ]; then
+    echo -e "${RED}ERROR: Dataset root not found: $DATASET_ROOT${NC}"
     exit 1
 fi
 
@@ -66,7 +72,7 @@ SUMMARY_FILE="batch_run_summary_$(date +%Y%m%d_%H%M%S).txt"
     echo "=========================================="
     echo "BATCH PIPELINE RUN - $(date)"
     echo "=========================================="
-    echo "Dataset directory: $DATASET_DIR"
+    echo "Dataset root: $DATASET_ROOT"
     echo "Scripts directory: $SCRIPTS_DIR"
     echo "Stages: $STAGES"
     if [ -n "$TARGET_DATASETS" ]; then
@@ -78,10 +84,6 @@ SUMMARY_FILE="batch_run_summary_$(date +%Y%m%d_%H%M%S).txt"
     echo ""
 } > "$SUMMARY_FILE"
 
-# Count directories
-TOTAL_DIRS=$(find "$DATASET_DIR" -maxdepth 1 -type d ! -name '.qodo' ! -name '.*' ! -path "$DATASET_DIR" | wc -l)
-CURRENT=0
-
 # Track results
 PASSED=()
 FAILED=()
@@ -92,7 +94,22 @@ FAILED=()
 sorted_folders=()
 while IFS= read -r dirpath; do
     sorted_folders+=("$dirpath")
-done < <(du -sk "$DATASET_DIR"/*/ 2>/dev/null | sort -n | awk '{print $2}')
+done < <(du -sk "$DATASET_ROOT"/*/ 2>/dev/null | sort -n | awk '{print $2}')
+
+# Skip infra folders when pointed at the top-level DataSetDsld root.
+if [[ "$DATASET_ROOT" == "$HOME/Documents/DataSetDsld" ]]; then
+    filtered_top_level=()
+    for folder in "${sorted_folders[@]}"; do
+        folder_name=$(basename "$folder")
+        case "$folder_name" in
+            forms|state|delta|reports|staging|.qodo)
+                continue
+                ;;
+        esac
+        filtered_top_level+=("$folder")
+    done
+    sorted_folders=("${filtered_top_level[@]}")
+fi
 
 # Filter by target datasets if specified
 if [ -n "$TARGET_DATASETS" ]; then
@@ -110,6 +127,8 @@ if [ -n "$TARGET_DATASETS" ]; then
     done
     sorted_folders=("${filtered_folders[@]}")
 fi
+
+CURRENT=0
 
 echo -e "${BLUE}Processing ${#sorted_folders[@]} dataset(s) with stages: $STAGES${NC}"
 echo ""
