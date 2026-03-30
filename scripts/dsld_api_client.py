@@ -28,7 +28,7 @@ def _load_env():
 # Constants
 # ---------------------------------------------------------------------------
 
-DEFAULT_BASE_URL = "https://dsld.od.nih.gov/api"
+DEFAULT_BASE_URL = "https://api.ods.od.nih.gov/dsld/v9"
 DEFAULT_TIMEOUT_SECONDS = 30.0
 DEFAULT_RATE_LIMIT_DELAY = 0.15  # ~6.6 req/sec
 DEFAULT_CACHE_TTL_SECONDS = 60 * 60 * 24 * 7  # 7 days
@@ -355,26 +355,45 @@ class DSLDApiClient:
         self,
         brand_name: str,
         *,
-        limit: int = 25,
-        offset: int = 0,
+        size: int = 1000,
+        from_: int = 0,
     ) -> Any:
-        """Search labels by brand name."""
+        """Search labels by brand name via /brand-products endpoint.
+
+        Returns raw API response with 'hits' list containing label summaries.
+        Each hit has a '_source' dict with at minimum 'id' (the DSLD label ID).
+        """
         return self._request(
-            "browse-labels",
-            params={"brandName": brand_name, "limit": limit, "offset": offset},
+            "brand-products",
+            params={"q": brand_name, "size": size, "from": from_},
         )
 
     def search_query(
         self,
         query: str,
         *,
-        limit: int = 25,
-        offset: int = 0,
+        size: int = 1000,
+        from_: int = 0,
+        status: int = 2,
     ) -> Any:
-        """Search labels by free-text query."""
+        """Search labels via /search-filter endpoint.
+
+        Parameters
+        ----------
+        query : str
+            Search term (searches all label fields).
+        size : int
+            Max results to return (default 1000).
+        from_ : int
+            Pagination offset.
+        status : int
+            Market status filter (2=all, 1=on market, 0=off market).
+
+        Returns raw API response with 'hits' list.
+        """
         return self._request(
-            "browse-labels",
-            params={"query": query, "limit": limit, "offset": offset},
+            "search-filter",
+            params={"q": query, "size": size, "from": from_, "status": status},
         )
 
 

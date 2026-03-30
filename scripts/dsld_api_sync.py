@@ -146,6 +146,40 @@ def parity_check(api_label: dict, reference_label: dict) -> dict:
 # ---------------------------------------------------------------------------
 
 
+def _extract_ids_from_response(response: Any) -> list[int]:
+    """Extract DSLD label IDs from an API search/browse response.
+
+    Handles multiple response shapes:
+    - ``{"hits": [{"_source": {"id": N}}, ...]}``  (search-filter, brand-products)
+    - ``{"data": [{"id": N}, ...]}``                (legacy/alternative)
+    - ``[{"id": N}, ...]``                          (plain list)
+    """
+    if isinstance(response, list):
+        return [item["id"] for item in response if "id" in item]
+
+    if not isinstance(response, dict):
+        return []
+
+    # search-filter and brand-products return {hits: [{_source: {id: ...}}]}
+    hits = response.get("hits", [])
+    if hits and isinstance(hits, list):
+        ids = []
+        for hit in hits:
+            if isinstance(hit, dict):
+                source = hit.get("_source", hit)
+                if "id" in source:
+                    ids.append(source["id"])
+        if ids:
+            return ids
+
+    # Fallback: {data: [{id: ...}]} or {list: [{id: ...}]}
+    items = response.get("data", response.get("list", []))
+    if isinstance(items, list):
+        return [item["id"] for item in items if isinstance(item, dict) and "id" in item]
+
+    return []
+
+
 def write_raw_label(label: dict, output_dir: str | Path, *, snapshot: bool = False) -> Path:
     """Write a normalized label to ``{output_dir}/{dsld_id}.json``.
 
@@ -240,13 +274,10 @@ def _cmd_sync_brand(args: argparse.Namespace) -> int:
     print(f"Searching brand: {args.brand} ...")
     results = client.search_brand(args.brand)
 
-    # The browse-labels endpoint may return a list or {"data": [...]}.
-    items: list = results if isinstance(results, list) else results.get("data", results.get("list", []))
-    if not items:
+    ids = _extract_ids_from_response(results)
+    if not ids:
         print("No labels found for that brand.")
         return 0
-
-    ids = [item["id"] for item in items if "id" in item]
     print(f"Found {len(ids)} label(s). Fetching ...")
     written = 0
     for dsld_id in ids:
@@ -343,14 +374,12 @@ def _cmd_sync_query(args: argparse.Namespace) -> int:
     """Handle the ``sync-query`` subcommand."""
     client = DSLDApiClient()
     print(f"Searching: {args.query} (limit={args.limit}) ...")
-    results = client.search_query(args.query, limit=args.limit)
+    results = client.search_query(args.query, size=args.limit)
 
-    items: list = results if isinstance(results, list) else results.get("data", results.get("list", []))
-    if not items:
+    ids = _extract_ids_from_response(results)
+    if not ids:
         print("No labels found for that query.")
         return 0
-
-    ids = [item["id"] for item in items if "id" in item]
     print(f"Found {len(ids)} label(s). Fetching ...")
     written = 0
     for dsld_id in ids:
