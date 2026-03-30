@@ -12,7 +12,7 @@
 PharmaGuide has a mature 3-stage data pipeline (Clean -> Enrich -> Score) producing:
 
 - `pharmaguide_core.db` (SQLite, 61 columns, ~50K products)
-- `detail_blobs/{dsld_id}.json` (per-product detail)
+- `detail_blobs/{dsld_id}.json` (local build output) plus `detail_index.json` for hashed remote detail fetch
 - `export_manifest.json` (version metadata)
 
 This roadmap covers the transition from data pipeline to production Flutter app via Supabase distribution.
@@ -54,7 +54,8 @@ No relational schema mapping is required for pipeline data. `build_final_db.py` 
 | Pipeline Output               | Supabase Location                                                  |
 | ----------------------------- | ------------------------------------------------------------------ |
 | `pharmaguide_core.db`         | `supabase-storage://pharmaguide/v{version}/pharmaguide_core.db`    |
-| `detail_blobs/{dsld_id}.json` | `supabase-storage://pharmaguide/v{version}/details/{dsld_id}.json` |
+| `detail_index.json` | `supabase-storage://pharmaguide/v{version}/detail_index.json` |
+| `detail_blobs/{dsld_id}.json` | `supabase-storage://pharmaguide/shared/details/sha256/{blob_sha256[0:2]}/{blob_sha256}.json` |
 | `export_manifest.json`        | PostgreSQL `export_manifest` table (single current row)            |
 
 ### 1.3 Identifiers in Detail Blobs
@@ -92,6 +93,7 @@ CREATE TABLE export_manifest (
   schema_version   text NOT NULL,
   product_count    integer NOT NULL,
   checksum         text NOT NULL,
+  min_app_version  text NOT NULL DEFAULT '1.0.0',
   generated_at     timestamptz NOT NULL,
   created_at       timestamptz DEFAULT now(),
   is_current       boolean DEFAULT true
@@ -151,15 +153,17 @@ ALTER TABLE user_stacks ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "Users manage own stacks" ON user_stacks
   FOR ALL USING (auth.uid() = user_id);
 
--- user_usage: users read/write own usage
+-- user_usage: users read their counters; writes go through increment_usage
 ALTER TABLE user_usage ENABLE ROW LEVEL SECURITY;
-CREATE POLICY "Users manage own usage" ON user_usage
-  FOR ALL USING (auth.uid() = user_id);
+CREATE POLICY "Users read own usage" ON user_usage
+  FOR SELECT USING (auth.uid() = user_id);
 
--- pending_products: users submit and view own submissions
+-- pending_products: users submit and view their requests; status is server-owned
 ALTER TABLE pending_products ENABLE ROW LEVEL SECURITY;
-CREATE POLICY "Users manage own submissions" ON pending_products
-  FOR ALL USING (auth.uid() = user_id);
+CREATE POLICY "Users read own submissions" ON pending_products
+  FOR SELECT USING (auth.uid() = user_id);
+CREATE POLICY "Users submit pending products" ON pending_products
+  FOR INSERT WITH CHECK (auth.uid() = user_id);
 ```
 
 #### RPC Functions (2 total)
@@ -174,17 +178,18 @@ CREATE OR REPLACE FUNCTION rotate_manifest(
   p_schema_version text,
   p_product_count integer,
   p_checksum text,
-  p_generated_at timestamptz
+  p_generated_at timestamptz,
+  p_min_app_version text DEFAULT '1.0.0'
 ) RETURNS uuid AS $$
 DECLARE
   new_id uuid;
 BEGIN
   INSERT INTO export_manifest (
     db_version, pipeline_version, scoring_version, schema_version,
-    product_count, checksum, generated_at, is_current
+    product_count, checksum, min_app_version, generated_at, is_current
   ) VALUES (
     p_db_version, p_pipeline_version, p_scoring_version, p_schema_version,
-    p_product_count, p_checksum, p_generated_at, true
+    p_product_count, p_checksum, p_min_app_version, p_generated_at, true
   ) RETURNING id INTO new_id;
 
   UPDATE export_manifest
@@ -196,20 +201,48 @@ END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
 
 -- 2. Atomic usage increment with automatic day rollover.
--- Flutter calls after successful scan or AI message. No read-then-write race.
+-- Flutter reads the returned object and blocks when limit_exceeded=true.
 CREATE OR REPLACE FUNCTION increment_usage(
   p_user_id uuid, p_type text  -- 'scan' or 'ai_message'
-) RETURNS TABLE(scans_today integer, ai_messages_today integer) AS $$
+) RETURNS jsonb AS $$
+DECLARE
+  v_usage user_usage%ROWTYPE;
+  v_scans integer := 0;
+  v_ai integer := 0;
+  v_exceeded boolean := false;
 BEGIN
   INSERT INTO user_usage (user_id, scans_today, ai_messages_today, reset_date)
-  VALUES (p_user_id,
-    CASE WHEN p_type = 'scan' THEN 1 ELSE 0 END,
-    CASE WHEN p_type = 'ai_message' THEN 1 ELSE 0 END, CURRENT_DATE)
-  ON CONFLICT (user_id, reset_date) DO UPDATE SET
-    scans_today = CASE WHEN p_type = 'scan' THEN user_usage.scans_today + 1 ELSE user_usage.scans_today END,
-    ai_messages_today = CASE WHEN p_type = 'ai_message' THEN user_usage.ai_messages_today + 1 ELSE user_usage.ai_messages_today END;
-  RETURN QUERY SELECT u.scans_today, u.ai_messages_today FROM user_usage u
-    WHERE u.user_id = p_user_id AND u.reset_date = CURRENT_DATE;
+  VALUES (p_user_id, 0, 0, CURRENT_DATE)
+  ON CONFLICT (user_id, reset_date) DO NOTHING;
+
+  SELECT * INTO v_usage
+  FROM user_usage
+  WHERE user_id = p_user_id AND reset_date = CURRENT_DATE
+  FOR UPDATE;
+
+  IF p_type = 'scan' AND v_usage.scans_today >= 10 THEN
+    v_exceeded := true;
+  ELSIF p_type = 'ai_message' AND v_usage.ai_messages_today >= 5 THEN
+    v_exceeded := true;
+  ELSE
+    UPDATE user_usage
+    SET
+      scans_today = CASE WHEN p_type = 'scan' THEN scans_today + 1 ELSE scans_today END,
+      ai_messages_today = CASE WHEN p_type = 'ai_message' THEN ai_messages_today + 1 ELSE ai_messages_today END
+    WHERE id = v_usage.id
+    RETURNING scans_today, ai_messages_today INTO v_scans, v_ai;
+  END IF;
+
+  IF v_exceeded THEN
+    v_scans := v_usage.scans_today;
+    v_ai := v_usage.ai_messages_today;
+  END IF;
+
+  RETURN jsonb_build_object(
+    'scans_today', v_scans,
+    'ai_messages_today', v_ai,
+    'limit_exceeded', v_exceeded
+  );
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
 ```
@@ -217,7 +250,7 @@ $$ LANGUAGE plpgsql SECURITY DEFINER;
 #### Storage
 
 - Bucket: `pharmaguide` (public read via anon key, write via service role)
-- Structure: `v{version}/pharmaguide_core.db`, `v{version}/details/{dsld_id}.json`
+- Structure: `v{version}/pharmaguide_core.db`, `v{version}/detail_index.json`, `shared/details/sha256/{blob_sha256[0:2]}/{blob_sha256}.json`
 
 ### 2.2 Manual Sync Script (Start Here)
 
@@ -232,9 +265,13 @@ Workflow:
 1. Read `export_manifest.json` from build output
 2. Compare version to Supabase `export_manifest` where `is_current = true`
 3. If newer: upload `pharmaguide_core.db` to Storage bucket
-4. Upload detail blob JSONs to Storage (sequential for MVP; concurrent for >10K products later)
+4. Upload `detail_index.json`, then upload only missing hashed detail blobs to Storage
 5. Call `rotate_manifest` RPC to atomically insert new row and mark previous as not current (no window where zero rows are current)
 6. Print summary: version, product count, blob count, upload duration
+
+The remote `checksum` is for artifact verification after upload/download. The
+local on-device SQLite manifest only needs `db_version`; it does not embed a
+self-referential checksum row.
 
 Auth: Supabase service role key from `.env` (`SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`). Never the anon key.
 

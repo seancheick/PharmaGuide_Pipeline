@@ -139,6 +139,8 @@ class ProductDetail {
   final List<IngredientDetail> ingredients;
   final List<InactiveIngredient> inactiveIngredients;
   final List<Warning> warnings;
+  final List<Map> scoreBonuses;          // @JsonKey(name: 'score_bonuses')
+  final List<Map> scorePenalties;        // @JsonKey(name: 'score_penalties')
   final SectionBreakdown sectionBreakdown;
   final ComplianceDetail complianceDetail;
   final CertificationDetail certificationDetail;
@@ -146,9 +148,11 @@ class ProductDetail {
   final DietarySensitivityDetail dietarySensitivityDetail;
   final ServingInfo servingInfo;
   final ManufacturerDetail manufacturerDetail;
+  final InteractionSummary? interactionSummary; // optional, only when rules matched
   final EvidenceData? evidenceData;
   final RdaUlData? rdaUlData;     // may exist with collectionEnabled == false and a reason
   final FormulationDetail formulationDetail;  // always present
+  final ProbioticDetail? probioticDetail;     // optional, probiotic products only
   final SynergyDetail? synergyDetail;         // conditional: present when synergy clusters matched
 }
 ```
@@ -235,15 +239,15 @@ class IngredientDetail {
 class InactiveIngredient {
   final String rawSourceText;
   final String name;
-  final String standardName;
-  final String normalizedKey;
+  final String standardName;      // label-facing standardName
+  final String normalizedKey;     // @JsonKey(name: 'normalized_key')
   final List<Map> forms;
   final String category;          // from enrichment or other_ingredients.json reference
-  final bool isAdditive;
-  final String? additiveType;     // from enrichment or other_ingredients.json reference
+  final bool isAdditive;          // @JsonKey(name: 'is_additive')
+  final String? additiveType;     // @JsonKey(name: 'additive_type')
 
   // Reference data (from harmful_additives.json or other_ingredients.json)
-  final String? standardName;     // canonical name from reference DB
+  final String? referenceStandardName; // @JsonKey(name: 'standard_name')
   final String? severityLevel;    // harmful additive severity (empty if not harmful)
   final String? matchMethod;
   final String? matchedAlias;
@@ -253,9 +257,9 @@ class InactiveIngredient {
   final List<String> populationWarnings; // at-risk groups from harmful_additives.json
 
   // Safety flags
-  final bool isHarmful;
-  final String? harmfulSeverity;
-  final String? harmfulNotes;     // mechanism > notes > classification_evidence > category
+  final bool isHarmful;           // @JsonKey(name: 'is_harmful')
+  final String? harmfulSeverity;  // @JsonKey(name: 'harmful_severity')
+  final String? harmfulNotes;     // @JsonKey(name: 'harmful_notes')
 
   // Identifiers (non-null fields only; from harmful_additives or other_ingredients)
   final Map<String, dynamic>? identifiers; // {cui?, cas?, pubchem_cid?, unii?}
@@ -292,7 +296,8 @@ class Warning {
   final String type;              // banned_substance, recalled_ingredient, watchlist_substance,
                                   // high_risk_ingredient, harmful_additive, allergen,
                                   // interaction, drug_interaction, dietary, status
-  final String severity;          // critical, high, moderate, low, info
+  final String severity;          // critical, high, moderate, low, info,
+                                  // avoid, contraindicated, caution, monitor
   final String title;             // short display title
   final String detail;            // primary explanation text
 
@@ -322,8 +327,12 @@ class Warning {
   final String? drugClassId;           // drug_interaction only: which drug class triggered this
   final String? ingredientName;        // both: which ingredient caused the flag
   final Map<String, dynamic>? doseThresholdEvaluation;
-      // both: contains threshold_met (bool), product_dose (num),
-      // threshold_value (num), unit (string), condition (string)
+      // @JsonKey(name: 'dose_threshold_evaluation')
+      // Raw rule evaluation payload:
+      // {evaluated, matched_threshold, thresholds_checked, selected_from, selected_severity}
+
+  // warning identifiers are present on banned/high-risk/watchlist/recalled and harmful_additive
+  final Map<String, dynamic>? identifiers;
 
   // all types:
   final String source;                 // provenance: "banned_recalled_ingredients",
@@ -450,7 +459,7 @@ WHERE products_fts MATCH 'omega fish oil';
 | Price / daily cost    | User enters manually             |
 | Offline images        | Runtime cache or placeholder     |
 | Product-level recalls | Future: separate FDA data source |
-| Account data          | Supabase user_sync_data          |
+| Account data          | Supabase Auth + app-local profile |
 
 ---
 
@@ -490,7 +499,7 @@ Everything in pharmaguide_core.db — bundled with the app at install or
 │ (~313KB) │ rules, risk taxonomy, goal │ FitScore │
 │ │ clusters │ calculation │  
  ├────────────────┼─────────────────────────────────┼─────────────────┤
-│ Export │ version, checksum │ "Do I need to │  
+│ Export │ local version + remote checksum │ "Do I need to │
  │ manifest │ │ update?" check │  
  └────────────────┴─────────────────────────────────┴─────────────────┘
 
@@ -750,7 +759,8 @@ by `condition_id` matching the user's conditions.
 
 ### 10. Supabase Storage path structure
 
-The Flutter app fetches the core DB and detail blobs from Supabase Storage.
+The Flutter app fetches the core DB, a versioned `detail_index.json`, and hashed
+detail blob payloads from Supabase Storage.
 The version is determined by querying the `export_manifest` table for the row
 where `is_current = true`, then reading its `db_version` column.
 
@@ -758,13 +768,18 @@ where `is_current = true`, then reading its `db_version` column.
 DB file:
   {SUPABASE_URL}/storage/v1/object/public/pharmaguide/v{version}/pharmaguide_core.db
 
-Detail blobs:
-  {SUPABASE_URL}/storage/v1/object/public/pharmaguide/v{version}/details/{dsld_id}.json
+Detail index:
+  {SUPABASE_URL}/storage/v1/object/public/pharmaguide/v{version}/detail_index.json
+
+Detail blob payload:
+  {SUPABASE_URL}/storage/v1/object/public/pharmaguide/shared/details/sha256/{blob_sha256[0:2]}/{blob_sha256}.json
 ```
 
 These are public bucket paths — readable with the anon key, no auth required.
 The app should cache the DB file locally and only re-download when the manifest
 version changes (compare against locally stored version).
+The app should also cache the `detail_index.json` for the active `db_version` and
+resolve `dsld_id` to `blob_sha256` before fetching a detail payload.
 
 ### 11. `increment_usage` RPC
 
@@ -777,15 +792,16 @@ based on `CURRENT_DATE`).
 final result = await supabase.rpc('increment_usage', params: {
   'p_user_id': supabase.auth.currentUser!.id,
   'p_type': 'scan',  // or 'ai_message'
-});
-// result = { scans_today: 3, ai_messages_today: 1, limit_exceeded: false }
+}) as Map<String, dynamic>;
+// result = {scans_today: 3, ai_messages_today: 1, limit_exceeded: false}
 ```
 
 **Limits:** 10 scans/day, 5 AI messages/day.
 **Return value:** `{scans_today, ai_messages_today, limit_exceeded}`.
 When `limit_exceeded` is `true`, the app should show a paywall or "try again
-tomorrow" message. The RPC is `SECURITY DEFINER` and validates that the caller
-owns the `p_user_id` — passing another user's ID raises an exception.
+tomorrow" message. The RPC is `SECURITY DEFINER`, validates that the caller
+owns the `p_user_id`, and returns the existing counters without incrementing
+when the limit has already been reached.
 
 ### 12. Identifiers on warning entries
 

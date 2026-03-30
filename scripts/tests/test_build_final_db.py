@@ -7,15 +7,24 @@ database and detail blobs stay aligned with the real clean -> enrich -> score
 pipeline outputs.
 """
 
+import json
+import sqlite3
+import tempfile
 from pathlib import Path
 import sys
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from build_final_db import (
+    build_final_db,
     build_core_row,
     build_detail_blob,
     build_top_warnings,
+    fetch_staged_product,
+    iter_json_products,
+    mark_staged_product_matched,
+    remote_blob_storage_path,
+    stage_products_by_id,
     validate_export_contract,
 )
 
@@ -87,6 +96,111 @@ PRODUCTS_CORE_COLUMNS = [
 
 def row_as_dict(row):
     return dict(zip(PRODUCTS_CORE_COLUMNS, row))
+
+
+def test_iter_json_products_yields_objects_from_mixed_json_files():
+    with tempfile.TemporaryDirectory() as tmp:
+        data_dir = Path(tmp) / "data"
+        data_dir.mkdir()
+
+        (data_dir / "single.json").write_text(json.dumps({"dsld_id": "1", "name": "single"}), encoding="utf-8")
+        (data_dir / "batch.json").write_text(
+            json.dumps([{"dsld_id": "2", "name": "a"}, {"dsld_id": "3", "name": "b"}]),
+            encoding="utf-8",
+        )
+
+        products = list(iter_json_products([str(data_dir)]))
+
+    assert [product["dsld_id"] for product in products] == ["2", "3", "1"]
+
+
+def test_stage_products_by_id_supports_lookup_and_unmatched_count():
+    with tempfile.TemporaryDirectory() as tmp:
+        data_dir = Path(tmp) / "scored"
+        data_dir.mkdir()
+        (data_dir / "batch.json").write_text(
+            json.dumps([
+                {"dsld_id": "100", "verdict": "SAFE"},
+                {"dsld_id": "200", "verdict": "CAUTION"},
+            ]),
+            encoding="utf-8",
+        )
+
+        conn = sqlite3.connect(":memory:")
+        try:
+            staged = stage_products_by_id(conn, "scored_stage", [str(data_dir)])
+            assert staged == 2
+
+            product = fetch_staged_product(conn, "scored_stage", "100")
+            assert product["verdict"] == "SAFE"
+
+            assert mark_staged_product_matched(conn, "scored_stage", "100") is True
+
+            unmatched = conn.execute(
+                "SELECT COUNT(*) FROM scored_stage WHERE matched = 0"
+            ).fetchone()[0]
+            assert unmatched == 1
+        finally:
+            conn.close()
+
+
+def test_build_final_db_streaming_path_preserves_last_write_wins_duplicates():
+    with tempfile.TemporaryDirectory() as tmp:
+        root = Path(tmp)
+        enriched_dir = root / "enriched"
+        scored_dir = root / "scored"
+        output_dir = root / "out"
+        enriched_dir.mkdir()
+        scored_dir.mkdir()
+
+        first = make_enriched()
+        first["product_name"] = "Older Name"
+        latest = make_enriched()
+        latest["product_name"] = "Newest Name"
+        scored = make_scored()
+        scored["dsld_id"] = "999"
+
+        (enriched_dir / "batch.json").write_text(
+            json.dumps([first, latest]),
+            encoding="utf-8",
+        )
+        (scored_dir / "batch.json").write_text(
+            json.dumps([scored]),
+            encoding="utf-8",
+        )
+
+        result = build_final_db(
+            [str(enriched_dir)],
+            [str(scored_dir)],
+            str(output_dir),
+            str(Path(__file__).parent.parent),
+        )
+
+        assert result["product_count"] == 1
+        assert result["error_count"] == 0
+        assert (output_dir / "detail_index.json").exists()
+
+        conn = sqlite3.connect(output_dir / "pharmaguide_core.db")
+        try:
+            row = conn.execute(
+                "SELECT product_name FROM products_core WHERE dsld_id = ?",
+                ("999",),
+            ).fetchone()
+        finally:
+            conn.close()
+
+        assert row == ("Newest Name",)
+
+        detail_index = json.loads((output_dir / "detail_index.json").read_text(encoding="utf-8"))
+        entry = detail_index["999"]
+        assert entry["storage_path"] == remote_blob_storage_path(entry["blob_sha256"])
+        assert entry["storage_path"].startswith("shared/details/sha256/")
+        assert len(entry["blob_sha256"]) == 64
+
+        manifest = json.loads((output_dir / "export_manifest.json").read_text(encoding="utf-8"))
+        assert manifest["detail_blob_count"] == 1
+        assert manifest["detail_blob_unique_count"] == 1
+        assert manifest["detail_index_checksum"].startswith("sha256:")
 
 
 def make_enriched():
@@ -212,6 +326,8 @@ def make_enriched():
             "ingredients": [
                 {
                     "raw_source_text": "Vitamin A Palmitate",
+                    "name": "Vitamin A Palmitate",
+                    "standard_name": "Retinyl Palmitate",
                     "parent_key": "vitamin_a",
                     "form": "retinyl palmitate",
                     "category": "vitamins",
@@ -227,6 +343,8 @@ def make_enriched():
                 },
                 {
                     "raw_source_text": "Soy Lecithin",
+                    "name": "Soy Lecithin",
+                    "standard_name": "Soy Lecithin",
                     "parent_key": "soy_lecithin",
                     "form": "lecithin",
                     "category": "other",

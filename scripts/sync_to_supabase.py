@@ -6,23 +6,36 @@ Usage:
 
 The build_output_dir should contain:
     - export_manifest.json
+    - detail_index.json
     - pharmaguide_core.db
-    - detail_blobs/{dsld_id}.json (one per product)
+    - detail_blobs/{dsld_id}.json (local per-product build output)
 
 Environment variables (from .env):
     - SUPABASE_URL
     - SUPABASE_SERVICE_ROLE_KEY
 """
 
+import argparse
+import glob
+import hashlib
 import json
 import os
 import sys
+import threading
 import time
-import glob
+from concurrent.futures import ThreadPoolExecutor, as_completed
+
+DEFAULT_MAX_WORKERS = 8
+DEFAULT_DISCOVERY_WORKERS = 8
+DEFAULT_UPLOAD_RETRIES = 3
+DEFAULT_RETRY_BASE_DELAY = 1.0
+DEFAULT_PROGRESS_EVERY = 500
 
 # Ensure scripts/ is on the path for sibling imports (supabase_client)
 sys.path.insert(0, os.path.dirname(__file__))
 import env_loader  # noqa: F401
+
+DETAIL_BLOB_STORAGE_PREFIX = "shared/details/sha256"
 
 
 # ---------------------------------------------------------------------------
@@ -44,19 +57,28 @@ def load_local_manifest(build_dir):
         return json.load(f)
 
 
+def load_detail_index(build_dir):
+    """Read detail_index.json from build output directory."""
+    detail_index_path = os.path.join(build_dir, "detail_index.json")
+    if not os.path.exists(detail_index_path):
+        raise FileNotFoundError(
+            f"detail_index.json not found in {build_dir}. "
+            "Run build_final_db.py first."
+        )
+    with open(detail_index_path) as f:
+        return json.load(f)
+
+
 def needs_update(local_manifest, remote_manifest):
     """Determine if Supabase needs updating.
 
     Returns True if:
     - remote_manifest is None (first push ever)
     - db_version differs
-    - checksum differs (same version but different content)
     """
     if remote_manifest is None:
         return True
     if local_manifest["db_version"] != remote_manifest["db_version"]:
-        return True
-    if local_manifest["checksum"] != remote_manifest["checksum"]:
         return True
     return False
 
@@ -70,11 +92,363 @@ def collect_detail_blobs(build_dir):
     return blobs
 
 
+def remote_blob_storage_path(blob_sha256):
+    shard = blob_sha256[:2]
+    return f"{DETAIL_BLOB_STORAGE_PREFIX}/{shard}/{blob_sha256}.json"
+
+
+def remote_blob_directory_for_path(remote_path):
+    return os.path.dirname(remote_path)
+
+
+def collect_unique_blob_uploads(build_dir, detail_index):
+    """Collapse product-keyed local blobs into unique hash-keyed remote uploads."""
+    uploads = {}
+    for dsld_id, entry in detail_index.items():
+        blob_sha256 = entry["blob_sha256"]
+        remote_path = entry["storage_path"]
+        local_path = os.path.join(build_dir, "detail_blobs", f"{dsld_id}.json")
+        if not os.path.exists(local_path):
+            raise FileNotFoundError(
+                f"Local detail blob missing for dsld_id={dsld_id}: {local_path}"
+            )
+        uploads.setdefault(blob_sha256, {
+            "blob_sha256": blob_sha256,
+            "remote_path": remote_path,
+            "local_path": local_path,
+        })
+    return [uploads[key] for key in sorted(uploads.keys())]
+
+
+def partition_remote_paths_by_directory(uploads):
+    grouped = {}
+    for upload in uploads:
+        grouped.setdefault(remote_blob_directory_for_path(upload["remote_path"]), set()).add(upload["remote_path"])
+    return grouped
+
+
+def filter_pending_blob_uploads(uploads, existing_remote_paths):
+    pending = [upload for upload in uploads if upload["remote_path"] not in existing_remote_paths]
+    skipped = len(uploads) - len(pending)
+    return pending, skipped
+
+
+def _discover_existing_remote_paths_for_directory(client, bucket, directory, expected_paths, list_fn, page_size):
+    existing = set()
+    offset = 0
+    while True:
+        page = list_fn(client, bucket, directory, limit=page_size, offset=offset)
+        if not page:
+            break
+        for item in page:
+            name = item.get("name")
+            if not name:
+                continue
+            remote_path = f"{directory}/{name}"
+            if remote_path in expected_paths:
+                existing.add(remote_path)
+        if len(page) < page_size:
+            break
+        offset += page_size
+    return existing
+
+
+def _discover_existing_remote_paths_for_directory_with_factory(
+    client_getter,
+    bucket,
+    directory,
+    expected_paths,
+    list_fn,
+    page_size,
+):
+    return _discover_existing_remote_paths_for_directory(
+        client_getter(),
+        bucket,
+        directory,
+        expected_paths,
+        list_fn,
+        page_size,
+    )
+
+
+def discover_existing_remote_blob_paths(
+    client,
+    bucket,
+    uploads,
+    list_fn,
+    page_size=1000,
+    max_workers=DEFAULT_DISCOVERY_WORKERS,
+    client_factory=None,
+):
+    """List existing remote blob objects in shard directories instead of per-blob exists() calls."""
+    grouped = partition_remote_paths_by_directory(uploads)
+    if not grouped:
+        return set()
+
+    if max_workers <= 1 or len(grouped) == 1:
+        existing = set()
+        for directory, expected_paths in grouped.items():
+            existing.update(
+                _discover_existing_remote_paths_for_directory(
+                    client,
+                    bucket,
+                    directory,
+                    expected_paths,
+                    list_fn,
+                    page_size,
+                )
+            )
+        return existing
+
+    client_getter = make_thread_local_client_factory(client_factory) if client_factory else (lambda: client)
+    existing = set()
+    with ThreadPoolExecutor(max_workers=min(max_workers, len(grouped))) as executor:
+        futures = [
+            executor.submit(
+                _discover_existing_remote_paths_for_directory_with_factory,
+                client_getter,
+                bucket,
+                directory,
+                expected_paths,
+                list_fn,
+                page_size,
+            )
+            for directory, expected_paths in grouped.items()
+        ]
+        for future in as_completed(futures):
+            existing.update(future.result())
+    return existing
+
+
+def _compute_file_sha256(path):
+    digest = hashlib.sha256()
+    with open(path, "rb") as f:
+        for chunk in iter(lambda: f.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
+
+
+def upload_with_retries(upload_operation, retries, base_delay, sleep_fn=time.sleep):
+    """Run an upload operation with exponential backoff."""
+    last_error = None
+    for attempt in range(retries + 1):
+        try:
+            return upload_operation()
+        except Exception as exc:  # pragma: no cover - exercised via tests
+            last_error = exc
+            if attempt >= retries:
+                raise
+            sleep_fn(base_delay * (2 ** attempt))
+    raise last_error  # pragma: no cover
+
+
+def write_failure_report(build_dir, version, errors):
+    """Persist failed uploads for resume/debugging."""
+    report_path = os.path.join(build_dir, f"sync_failures_{version}.json")
+    with open(report_path, "w", encoding="utf-8") as f:
+        json.dump(
+            {
+                "version": version,
+                "generated_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+                "error_count": len(errors),
+                "errors": errors,
+            },
+            f,
+            indent=2,
+        )
+    return report_path
+
+
+def _upload_blob_task(client, upload_fn, bucket, local_path, remote_blob_path, retries, base_delay, error_key):
+    try:
+        upload_with_retries(
+            lambda: upload_fn(
+                client,
+                bucket,
+                remote_blob_path,
+                local_path,
+                content_type="application/json",
+            ),
+            retries=retries,
+            base_delay=base_delay,
+        )
+        return None
+    except Exception as exc:
+        return {"blob_sha256": error_key, "error": str(exc)}
+
+
+def _upload_blob_task_with_factory(client_getter, upload_fn, bucket, local_path, remote_blob_path, retries, base_delay, error_key):
+    """Resolve the client inside the worker thread, then upload."""
+    return _upload_blob_task(
+        client_getter(),
+        upload_fn,
+        bucket,
+        local_path,
+        remote_blob_path,
+        retries,
+        base_delay,
+        error_key,
+    )
+
+
+def make_thread_local_client_factory(client_factory):
+    """Return a thread-local client getter for concurrent upload workers."""
+    local = threading.local()
+
+    def get_client():
+        client = getattr(local, "client", None)
+        if client is None:
+            client = client_factory()
+            local.client = client
+        return client
+
+    return get_client
+
+
+def upload_detail_blobs(
+    client,
+    bucket,
+    uploads,
+    upload_fn,
+    max_workers,
+    retries,
+    base_delay,
+    progress_every=DEFAULT_PROGRESS_EVERY,
+    client_factory=None,
+    preexisting_remote_paths=None,
+):
+    """Upload detail blobs with bounded concurrency and retry logic."""
+    start = time.time()
+    errors = []
+    completed = 0
+    pending_uploads, skipped = filter_pending_blob_uploads(uploads, preexisting_remote_paths or set())
+    total = len(uploads)
+
+    if max_workers <= 1:
+        for upload in pending_uploads:
+            error = _upload_blob_task(
+                client,
+                upload_fn,
+                bucket,
+                upload["local_path"],
+                upload["remote_path"],
+                retries,
+                base_delay,
+                upload["blob_sha256"],
+            )
+            completed += 1
+            if error:
+                errors.append(error)
+            if completed % progress_every == 0 or completed == total:
+                elapsed = time.time() - start
+                print(f"  {completed + skipped}/{total} ({elapsed:.1f}s)")
+    else:
+        client_getter = make_thread_local_client_factory(client_factory) if client_factory else (lambda: client)
+        with ThreadPoolExecutor(max_workers=max_workers) as executor:
+            futures = []
+            for upload in pending_uploads:
+                futures.append(
+                    executor.submit(
+                        _upload_blob_task_with_factory,
+                        client_getter,
+                        upload_fn,
+                        bucket,
+                        upload["local_path"],
+                        upload["remote_path"],
+                        retries,
+                        base_delay,
+                        upload["blob_sha256"],
+                    )
+                )
+            for future in as_completed(futures):
+                completed += 1
+                error = future.result()
+                if error:
+                    errors.append(error)
+                if (completed + skipped) % progress_every == 0 or (completed + skipped) == total:
+                    elapsed = time.time() - start
+                    print(f"  {completed + skipped}/{total} ({elapsed:.1f}s)")
+
+    return time.time() - start, errors, len(pending_uploads) - len(errors), skipped
+
+
+def validate_build_output(build_dir, manifest):
+    """Validate local build output before any upload begins."""
+    build_errors = manifest.get("errors") or []
+    if build_errors:
+        raise ValueError(
+            f"Build output contains {len(build_errors)} export errors; refusing to sync partial artifact"
+        )
+
+    db_path = os.path.join(build_dir, "pharmaguide_core.db")
+    if not os.path.exists(db_path):
+        raise FileNotFoundError(f"pharmaguide_core.db not found in {build_dir}")
+
+    detail_index_path = os.path.join(build_dir, "detail_index.json")
+    if not os.path.exists(detail_index_path):
+        raise FileNotFoundError(f"detail_index.json not found in {build_dir}")
+
+    expected_checksum = manifest.get("checksum")
+    actual_checksum = f"sha256:{_compute_file_sha256(db_path)}"
+    if expected_checksum != actual_checksum:
+        raise ValueError(
+            "Build output checksum mismatch: "
+            f"manifest={expected_checksum}, actual={actual_checksum}"
+        )
+
+    blobs = collect_detail_blobs(build_dir)
+    detail_index = load_detail_index(build_dir)
+    expected_products = int(manifest["product_count"])
+    if len(blobs) != expected_products:
+        raise ValueError(
+            "Build output blob mismatch: "
+            f"manifest product_count={expected_products}, blobs={len(blobs)}"
+        )
+    if len(detail_index) != expected_products:
+        raise ValueError(
+            "Build output detail index mismatch: "
+            f"manifest product_count={expected_products}, detail_index={len(detail_index)}"
+        )
+    unique_blob_uploads = collect_unique_blob_uploads(build_dir, detail_index)
+
+    expected_unique = manifest.get("detail_blob_unique_count")
+    if expected_unique is not None and len(unique_blob_uploads) != int(expected_unique):
+        raise ValueError(
+            "Build output unique blob mismatch: "
+            f"manifest detail_blob_unique_count={expected_unique}, unique_blobs={len(unique_blob_uploads)}"
+        )
+
+    expected_detail_index_checksum = manifest.get("detail_index_checksum")
+    if expected_detail_index_checksum:
+        actual_detail_index_checksum = f"sha256:{_compute_file_sha256(detail_index_path)}"
+        if expected_detail_index_checksum != actual_detail_index_checksum:
+            raise ValueError(
+                "Build output detail index checksum mismatch: "
+                f"manifest={expected_detail_index_checksum}, actual={actual_detail_index_checksum}"
+            )
+
+    return {
+        "db_path": db_path,
+        "detail_index_path": detail_index_path,
+        "blob_count": len(blobs),
+        "unique_blob_count": len(unique_blob_uploads),
+        "detail_index": detail_index,
+        "unique_blob_uploads": unique_blob_uploads,
+        "db_size_mb": os.path.getsize(db_path) / (1024 * 1024),
+    }
+
+
 # ---------------------------------------------------------------------------
 # Supabase operations (require real client)
 # ---------------------------------------------------------------------------
 
-def sync(build_dir, dry_run=False):
+def sync(
+    build_dir,
+    dry_run=False,
+    max_workers=DEFAULT_MAX_WORKERS,
+    retry_count=DEFAULT_UPLOAD_RETRIES,
+    retry_base_delay=DEFAULT_RETRY_BASE_DELAY,
+):
     """Main sync workflow.
 
     1. Load local manifest
@@ -87,6 +461,7 @@ def sync(build_dir, dry_run=False):
         get_supabase_client,
         fetch_current_manifest,
         insert_manifest,
+        list_storage_paths,
         upload_file,
     )
 
@@ -95,20 +470,19 @@ def sync(build_dir, dry_run=False):
     version = local["db_version"]
     product_count = local["product_count"]
     checksum = local["checksum"]
+    build_stats = validate_build_output(build_dir, local)
 
     print(f"  Version:  {version}")
     print(f"  Products: {product_count}")
     print(f"  Checksum: {checksum[:20]}...")
 
     if dry_run:
-        blobs = collect_detail_blobs(build_dir)
-        db_path = os.path.join(build_dir, "pharmaguide_core.db")
-        db_size = os.path.getsize(db_path) / (1024 * 1024) if os.path.exists(db_path) else 0
         print(f"\n[DRY RUN] Would upload:")
-        print(f"  - pharmaguide_core.db ({db_size:.1f} MB)")
-        print(f"  - {len(blobs)} detail blobs")
+        print(f"  - pharmaguide_core.db ({build_stats['db_size_mb']:.1f} MB)")
+        print(f"  - detail_index.json")
+        print(f"  - {build_stats['unique_blob_count']} unique detail blobs ({build_stats['blob_count']} product mappings)")
         print(f"  - New manifest row (version {version})")
-        return {"status": "dry_run", "version": version, "blob_count": len(blobs)}
+        return {"status": "dry_run", "version": version, "blob_count": build_stats["blob_count"]}
 
     client = get_supabase_client()
     print("Checking Supabase for current version...")
@@ -124,9 +498,7 @@ def sync(build_dir, dry_run=False):
         return {"status": "up_to_date", "version": version}
 
     # Upload SQLite DB
-    db_path = os.path.join(build_dir, "pharmaguide_core.db")
-    if not os.path.exists(db_path):
-        raise FileNotFoundError(f"pharmaguide_core.db not found in {build_dir}")
+    db_path = build_stats["db_path"]
 
     bucket = "pharmaguide"
     remote_db_path = f"v{version}/pharmaguide_core.db"
@@ -134,47 +506,72 @@ def sync(build_dir, dry_run=False):
     start = time.time()
     upload_file(client, bucket, remote_db_path, db_path)
     db_time = time.time() - start
-    db_size_mb = os.path.getsize(db_path) / (1024 * 1024)
+    db_size_mb = build_stats["db_size_mb"]
     print(f"  Done ({db_size_mb:.1f} MB in {db_time:.1f}s)")
 
-    # Upload detail blobs
-    # NOTE: Sequential uploads are fine for MVP (<10K products, ~15 min).
-    # When product count exceeds ~10K, add concurrent.futures.ThreadPoolExecutor
-    # with max_workers=10 to parallelize uploads (~10x speedup).
-    blobs = collect_detail_blobs(build_dir)
-    blob_count = len(blobs)
-    print(f"\nUploading {blob_count} detail blobs...")
+    detail_index_path = build_stats["detail_index_path"]
+    remote_detail_index_path = f"v{version}/detail_index.json"
+    print(f"\nUploading {remote_detail_index_path}...")
     start = time.time()
-    errors = []
-    for i, blob_path in enumerate(blobs, 1):
-        dsld_id = os.path.splitext(os.path.basename(blob_path))[0]
-        remote_blob_path = f"v{version}/details/{dsld_id}.json"
-        try:
-            upload_file(
-                client, bucket, remote_blob_path, blob_path,
-                content_type="application/json",
-            )
-        except Exception as e:
-            errors.append({"dsld_id": dsld_id, "error": str(e)})
-        if i % 500 == 0 or i == blob_count:
-            elapsed = time.time() - start
-            print(f"  {i}/{blob_count} ({elapsed:.1f}s)")
+    upload_file(client, bucket, remote_detail_index_path, detail_index_path, content_type="application/json")
+    detail_index_time = time.time() - start
+    print(f"  Done ({detail_index_time:.1f}s)")
 
-    blob_time = time.time() - start
-    print(f"  Done ({blob_count} blobs in {blob_time:.1f}s, {len(errors)} errors)")
+    # Upload unique detail blobs with bounded concurrency, retry logic, and remote dedupe.
+    uploads = build_stats["unique_blob_uploads"]
+    blob_count = build_stats["blob_count"]
+    unique_blob_count = build_stats["unique_blob_count"]
+    print("\nDiscovering existing remote hashed blobs...")
+    start = time.time()
+    existing_remote_paths = discover_existing_remote_blob_paths(
+        client,
+        bucket,
+        uploads,
+        list_storage_paths,
+        max_workers=min(max_workers, DEFAULT_DISCOVERY_WORKERS),
+        client_factory=get_supabase_client,
+    )
+    discover_time = time.time() - start
+    print(f"  Found {len(existing_remote_paths)} existing hashed blobs in {discover_time:.1f}s")
+    print(
+        f"\nUploading {unique_blob_count} unique detail blobs "
+        f"(from {blob_count} product mappings) with max_workers={max_workers}, retries={retry_count}..."
+    )
+    blob_time, errors, uploaded_count, skipped_count = upload_detail_blobs(
+        client=client,
+        bucket=bucket,
+        uploads=uploads,
+        upload_fn=upload_file,
+        max_workers=max_workers,
+        retries=retry_count,
+        base_delay=retry_base_delay,
+        client_factory=get_supabase_client,
+        preexisting_remote_paths=existing_remote_paths,
+    )
+    print(
+        f"  Done ({unique_blob_count} unique blobs in {blob_time:.1f}s, "
+        f"{uploaded_count} uploaded, {skipped_count} skipped, {len(errors)} errors)"
+    )
 
     # Abort manifest rotation if any blobs failed — prevents clients from
     # seeing the new version and getting 404s on missing detail blobs.
     if errors:
-        print(f"\nAborting manifest rotation: {len(errors)} blob uploads failed.")
+        failure_report = write_failure_report(build_dir, version, errors)
+        print(f"\nAborting manifest rotation: {len(errors)} unique blob uploads failed.")
+        for err in errors[:10]:
+            print(f"  - {err['blob_sha256']}: {err['error']}")
+        if len(errors) > 10:
+            print(f"  ... and {len(errors) - 10} more")
+        print(f"Failure report: {failure_report}")
         print("Fix the errors and re-run. The DB file was uploaded (upsert safe).")
         return {
             "status": "partial_failure",
             "version": version,
             "product_count": int(product_count),
             "blob_count": blob_count,
+            "unique_blob_count": unique_blob_count,
             "error_count": len(errors),
-            "time_seconds": round(db_time + blob_time, 1),
+            "time_seconds": round(db_time + detail_index_time + discover_time + blob_time, 1),
         }
 
     # Insert manifest (only if all blobs uploaded successfully)
@@ -183,12 +580,13 @@ def sync(build_dir, dry_run=False):
     print("  Done")
 
     # Summary
-    total_time = db_time + blob_time
+    total_time = db_time + detail_index_time + discover_time + blob_time
     print(f"\n{'=' * 50}")
     print(f"Sync complete: v{version}")
     print(f"  Products:    {product_count}")
     print(f"  DB size:     {db_size_mb:.1f} MB")
-    print(f"  Blobs:       {blob_count}")
+    print(f"  Blob refs:   {blob_count}")
+    print(f"  Unique blobs:{unique_blob_count} ({uploaded_count} uploaded, {skipped_count} skipped)")
     print(f"  Errors:      {len(errors)}")
     print(f"  Total time:  {total_time:.1f}s")
     print(f"{'=' * 50}")
@@ -196,7 +594,7 @@ def sync(build_dir, dry_run=False):
     if errors:
         print(f"\nFailed uploads ({len(errors)}):")
         for err in errors[:10]:
-            print(f"  - {err['dsld_id']}: {err['error']}")
+            print(f"  - {err['blob_sha256']}: {err['error']}")
         if len(errors) > 10:
             print(f"  ... and {len(errors) - 10} more")
 
@@ -214,23 +612,36 @@ def sync(build_dir, dry_run=False):
 # CLI
 # ---------------------------------------------------------------------------
 
-def main():
-    if len(sys.argv) < 2:
-        print("Usage: python scripts/sync_to_supabase.py <build_output_dir> [--dry-run]")
-        print()
-        print("Options:")
-        print("  --dry-run    Show what would be uploaded without actually uploading")
-        sys.exit(1)
+def parse_args(argv=None):
+    parser = argparse.ArgumentParser(
+        description="Sync PharmaGuide build output to Supabase Storage and manifest."
+    )
+    parser.add_argument("build_dir", help="Build output directory containing manifest, DB, and detail_blobs")
+    parser.add_argument("--dry-run", action="store_true", help="Show what would be uploaded without uploading")
+    parser.add_argument("--max-workers", type=int, default=DEFAULT_MAX_WORKERS,
+                        help=f"Max concurrent detail-blob uploads (default: {DEFAULT_MAX_WORKERS})")
+    parser.add_argument("--retry-count", type=int, default=DEFAULT_UPLOAD_RETRIES,
+                        help=f"Retries per upload after the first attempt (default: {DEFAULT_UPLOAD_RETRIES})")
+    parser.add_argument("--retry-base-delay", type=float, default=DEFAULT_RETRY_BASE_DELAY,
+                        help=f"Base seconds for exponential retry backoff (default: {DEFAULT_RETRY_BASE_DELAY})")
+    return parser.parse_args(argv)
 
-    build_dir = sys.argv[1]
-    dry_run = "--dry-run" in sys.argv
 
-    if not os.path.isdir(build_dir):
-        print(f"Error: {build_dir} is not a directory")
+def main(argv=None):
+    args = parse_args(argv)
+
+    if not os.path.isdir(args.build_dir):
+        print(f"Error: {args.build_dir} is not a directory")
         sys.exit(1)
 
     try:
-        result = sync(build_dir, dry_run=dry_run)
+        result = sync(
+            args.build_dir,
+            dry_run=args.dry_run,
+            max_workers=args.max_workers,
+            retry_count=args.retry_count,
+            retry_base_delay=args.retry_base_delay,
+        )
         if result["status"] == "partial_failure":
             sys.exit(2)
         elif result["status"] in ("synced", "up_to_date", "dry_run"):

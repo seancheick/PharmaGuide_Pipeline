@@ -166,6 +166,73 @@ def test_client_html_detection_logic():
     assert "html" not in "application/json; charset=utf-8".lower()
 
 
+def test_form_code_mapping_contains_expected_codes():
+    from dsld_api_client import SUPPLEMENT_FORM_CODE_TO_BUCKET
+
+    assert SUPPLEMENT_FORM_CODE_TO_BUCKET["e0176"] == "gummies"
+    assert SUPPLEMENT_FORM_CODE_TO_BUCKET["e0161"] == "softgels"
+    assert SUPPLEMENT_FORM_CODE_TO_BUCKET["e0164"] == "bars"
+    assert SUPPLEMENT_FORM_CODE_TO_BUCKET["e0174"] == "lozenges"
+    assert SUPPLEMENT_FORM_CODE_TO_BUCKET["e0172"] == "other"
+    assert SUPPLEMENT_FORM_CODE_TO_BUCKET["e0177"] == "other"
+
+
+def test_search_filter_drops_none_params(monkeypatch):
+    import dsld_api_client
+
+    captured = {}
+
+    def fake_request(self, endpoint, *, params=None, method="GET"):
+        captured["endpoint"] = endpoint
+        captured["params"] = params
+        return {"hits": []}
+
+    monkeypatch.setattr(dsld_api_client.DSLDApiClient, "_request", fake_request)
+
+    client = dsld_api_client.DSLDApiClient(config=dsld_api_client.DSLDApiConfig(api_key="x"))
+    client.search_filter(
+        size=25,
+        from_=0,
+        brand="Olly",
+        ingredient_name=None,
+        supplement_form="e0176",
+        status=2,
+    )
+
+    assert captured["endpoint"] == "search-filter"
+    assert captured["params"]["q"] == "*"
+    assert captured["params"]["brand"] == "Olly"
+    assert captured["params"]["supplement_form"] == "e0176"
+    assert captured["params"]["status"] == 2
+    assert "ingredient_name" not in captured["params"]
+
+
+def test_get_version_uses_unversioned_service_root(monkeypatch):
+    import dsld_api_client
+
+    captured = {}
+
+    def fake_request(self, endpoint, *, params=None, method="GET"):
+        captured["base_url"] = self.config.base_url
+        captured["endpoint"] = endpoint
+        return {"version": "9.4.0"}
+
+    monkeypatch.setattr(dsld_api_client.DSLDApiClient, "_request", fake_request)
+
+    client = dsld_api_client.DSLDApiClient(
+        config=dsld_api_client.DSLDApiConfig(
+            api_key="x",
+            base_url="https://api.ods.od.nih.gov/dsld/v9",
+        )
+    )
+    payload = client.get_version()
+
+    assert payload["version"] == "9.4.0"
+    assert captured["base_url"] == "https://api.ods.od.nih.gov/dsld"
+    assert captured["endpoint"] == "version"
+    assert client.config.base_url == "https://api.ods.od.nih.gov/dsld/v9"
+
+
 # ---------------------------------------------------------------------------
 # Parity-check tests (imported from dsld_api_sync)
 # ---------------------------------------------------------------------------

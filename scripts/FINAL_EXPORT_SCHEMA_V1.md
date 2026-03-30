@@ -30,11 +30,12 @@ Pipeline repo (dsld-clean)
         │     ├── products_core       ← one row per product
         │     ├── products_fts        ← full-text search
         │     ├── reference_data      ← small rule tables for offline scoring
-        │     └── export_manifest     ← version/checksum metadata
-        ├── detail_blobs/             ← one JSON per product, uploaded to Supabase
+        │     └── export_manifest     ← local build/version metadata
+        ├── detail_blobs/             ← local one JSON per product build output
         │     ├── 15123.json
         │     ├── 37323.json
         │     └── ...
+        ├── detail_index.json         ← dsld_id → hashed remote blob path map
         ├── export_manifest.json      ← top-level manifest for Supabase
         └── export_audit_report.json  ← safety-category counts and per-build audit
 ```
@@ -246,19 +247,29 @@ Required rows:
 
 | Key | Example value |
 |---|---|
-| `db_version` | `2026.03.17.1` |
+| `db_version` | `2026.03.29.232343` |
 | `pipeline_version` | `3.1.0` |
 | `scoring_version` | `3.1.0` |
-| `generated_at` | `2026-03-17T18:34:59Z` |
+| `generated_at` | `2026-03-29T22:33:24Z` |
 | `product_count` | `180423` |
-| `checksum` | `sha256:abc123...` |
 | `min_app_version` | `1.0.0` |
 | `schema_version` | `1` |
 
-The standalone `export_manifest.json` file also includes an `errors` array listing
-any products that failed during export (with `dsld_id` and error message). This field
-is **not** present in the SQLite `export_manifest` table — it is JSON-only, used for
-build diagnostics and CI gates.
+`db_version` is generated from the UTC build timestamp as `YYYY.MM.DD.HHMMSS`.
+The SQLite `export_manifest` table intentionally omits `checksum`, because the
+checksum describes the final DB file bytes and would otherwise become
+self-referential.
+
+The standalone `export_manifest.json` file also includes:
+
+- `checksum`: SHA-256 of the final `pharmaguide_core.db` artifact
+- `detail_blob_count`: total product-keyed local detail blobs in the build output
+- `detail_blob_unique_count`: unique hashed detail payloads that may need remote upload
+- `detail_index_checksum`: SHA-256 of the versioned `detail_index.json`
+- `errors`: an array of failed products with `dsld_id` and `error`
+
+These fields are JSON-only and are used for distribution verification, CI gates,
+and the remote Supabase manifest.
 
 ---
 
@@ -292,8 +303,8 @@ Cached on-device in `product_detail_cache.detail_json` after first access.
   "formulation_detail": {...},
   "serving_info": {...},
   "manufacturer_detail": {...},
-  "probiotic_detail": {...},
-  "synergy_detail": {...},
+  "probiotic_detail": {...}, // optional
+  "synergy_detail": {...},   // optional
   "interaction_summary": {
     "highest_severity": "avoid",
     "condition_summary": {
@@ -443,7 +454,24 @@ additional fields are present:
   "ingredient_name": "Vitamin A",
   "evidence_level": "established",
   "sources": ["https://ods.od.nih.gov/factsheets/VitaminA-HealthProfessional/"],
-  "dose_threshold_evaluation": {"status": "above", "threshold_mcg": 3000, "actual_mcg": 5000},
+  "dose_threshold_evaluation": {
+    "evaluated": true,
+    "matched_threshold": true,
+    "thresholds_checked": [
+      {
+        "evaluated": true,
+        "basis": "per_day",
+        "computed_amount": 5000,
+        "computed_unit": "mcg RAE",
+        "threshold_value": 3000,
+        "threshold_unit": "mcg RAE",
+        "comparator": ">",
+        "matched": true
+      }
+    ],
+    "selected_from": "matched_threshold",
+    "selected_severity": "avoid"
+  },
   "source": "interaction_rules"
 }
 
@@ -458,7 +486,13 @@ additional fields are present:
   "ingredient_name": "Vitamin A",
   "evidence_level": "established",
   "sources": ["https://ods.od.nih.gov/factsheets/VitaminA-HealthProfessional/"],
-  "dose_threshold_evaluation": {"status": "above", "threshold_mcg": 3000, "actual_mcg": 5000},
+  "dose_threshold_evaluation": {
+    "evaluated": true,
+    "matched_threshold": true,
+    "thresholds_checked": [...],
+    "selected_from": "matched_threshold",
+    "selected_severity": "avoid"
+  },
   "source": "interaction_rules"
 }
 
@@ -493,6 +527,9 @@ additional fields are present:
 - `warnings` include banned/recalled/high-risk/watchlist ingredient hits, allergens, harmful
   additives, interaction warnings, drug interaction warnings, dietary warnings, and product
   status warnings. Each warning type carries specific provenance fields (see examples above).
+- `dose_threshold_evaluation` is the raw interaction-rule evaluation payload emitted by the
+  pipeline. The app should treat it as structured diagnostic data, not as a fixed
+  `{threshold_mcg, actual_mcg}` shape.
 - `score_bonuses` lists every positive scoring factor. Each entry has:
   `{id, label, score, detail?}`. The `id` is a section sub-score key (e.g. `"A2"`, `"A3"`,
   `"B4a"`, `"probiotic"`). `detail` is optional and present only on A3 (delivery tier name).
@@ -619,28 +656,33 @@ python3 scripts/sync_to_supabase.py <build_output_dir> --dry-run
 
 ### Storage paths
 
-All artifacts are versioned under the `pharmaguide` bucket:
+The DB artifact and index are versioned. Detail JSON blobs are content-addressed
+and shared across versions so unchanged products do not get re-uploaded.
 
 | Artifact | Remote path |
 |---|---|
 | SQLite database | `pharmaguide/v{db_version}/pharmaguide_core.db` |
-| Detail blobs | `pharmaguide/v{db_version}/details/{dsld_id}.json` |
+| Detail index | `pharmaguide/v{db_version}/detail_index.json` |
+| Detail blob payloads | `pharmaguide/shared/details/sha256/{blob_sha256[0:2]}/{blob_sha256}.json` |
 
 ### Supabase RPCs
 
 | RPC | Called by | Purpose |
 |---|---|---|
 | `rotate_manifest` | `sync_to_supabase.py` via `supabase_client.insert_manifest()` | Atomically inserts a new manifest row and marks the previous row as not current. Prevents a window where no row has `is_current=true`. |
-| `increment_usage` | Flutter app (authenticated users) | Atomic usage increment with day rollover for freemium tracking. Accepts `p_user_id` and `p_type` (`'scan'` or `'ai_message'`), returns `scans_today`, `ai_messages_today`, `limit_exceeded`. |
+| `increment_usage` | Flutter app (authenticated users) | Atomic usage increment with day rollover for freemium tracking. Accepts `p_user_id` and `p_type` (`'scan'` or `'ai_message'`), returns a JSON object with `scans_today`, `ai_messages_today`, and `limit_exceeded`. |
 
 ### Sync behavior
 
-- Compares local `db_version` and `checksum` against the remote manifest to skip
-  redundant uploads.
-- If any detail blob upload fails, manifest rotation is aborted to prevent clients from
-  seeing the new version and getting 404s on missing blobs. The DB file is safe to
-  re-upload (upsert).
-- Detail blobs are uploaded sequentially in MVP. For >10K products, add a thread pool.
+- Compares local `db_version` against the remote manifest to decide whether a new
+  artifact should be uploaded or downloaded.
+- Uses the remote `checksum` to verify the downloaded SQLite artifact before swap-in.
+- Uses `detail_index.json` to resolve `dsld_id` to a hashed shared blob path.
+- If any unique detail blob upload fails, manifest rotation is aborted to prevent clients
+  from seeing the new version and getting broken detail fetches. The DB file and detail
+  index are safe to re-upload (upsert).
+- Detail blob sync uses bounded concurrency and skips hashed blobs that already exist
+  remotely, so unchanged product details are not re-uploaded on every DB version.
 
 ---
 

@@ -109,3 +109,61 @@ def test_insert_manifest_coerces_types():
     assert captured["params"]["p_product_count"] == 50000  # int coercion
     assert captured["params"]["p_db_version"] == "2026.03.27.5"
     assert captured["params"]["p_min_app_version"] == "1.0.0"  # default
+
+
+def test_storage_object_exists_delegates_to_bucket_exists():
+    """storage_object_exists delegates to the storage bucket exists() method."""
+    from supabase_client import storage_object_exists
+
+    captured = {}
+
+    class MockBucket:
+        def exists(self, path):
+            captured["path"] = path
+            return True
+
+    class MockStorage:
+        def from_(self, bucket):
+            captured["bucket"] = bucket
+            return MockBucket()
+
+    class MockClient:
+        storage = MockStorage()
+
+    assert storage_object_exists(MockClient(), "pharmaguide", "shared/details/sha256/abc.json") is True
+    assert captured["bucket"] == "pharmaguide"
+    assert captured["path"] == "shared/details/sha256/abc.json"
+
+
+def test_list_storage_paths_delegates_with_prefix_and_options():
+    """list_storage_paths delegates to bucket.list() with paging options."""
+    from supabase_client import list_storage_paths
+
+    captured = {}
+
+    class MockBucket:
+        def list(self, path=None, options=None):
+            captured["path"] = path
+            captured["options"] = options
+            return [{"name": "abc.json"}, {"name": "def.json"}]
+
+    class MockStorage:
+        def from_(self, bucket):
+            captured["bucket"] = bucket
+            return MockBucket()
+
+    class MockClient:
+        storage = MockStorage()
+
+    result = list_storage_paths(
+        MockClient(),
+        "pharmaguide",
+        "shared/details/sha256/ab",
+        limit=500,
+        offset=1000,
+    )
+
+    assert result == [{"name": "abc.json"}, {"name": "def.json"}]
+    assert captured["bucket"] == "pharmaguide"
+    assert captured["path"] == "shared/details/sha256/ab"
+    assert captured["options"] == {"limit": 500, "offset": 1000}

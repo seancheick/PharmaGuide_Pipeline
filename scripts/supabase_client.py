@@ -90,7 +90,8 @@ def insert_manifest(client, manifest_data):
 
 
 def upload_file(client, bucket, remote_path, local_path,
-                content_type="application/octet-stream"):
+                content_type="application/octet-stream",
+                upsert=True):
     """Upload a file to Supabase Storage.
 
     Streams the file to avoid loading large .db files into memory.
@@ -100,5 +101,18 @@ def upload_file(client, bucket, remote_path, local_path,
         return client.storage.from_(bucket).upload(
             path=remote_path,
             file=f,
-            file_options={"content-type": content_type, "upsert": "true"},
+            file_options={"content-type": content_type, "upsert": "true" if upsert else "false"},
         )
+
+
+def storage_object_exists(client, bucket, remote_path):
+    """Return True when a storage object already exists at the given path."""
+    return client.storage.from_(bucket).exists(remote_path)
+
+
+def list_storage_paths(client, bucket, prefix, limit=1000, offset=0):
+    """List storage objects under a prefix using paged bucket.list()."""
+    return client.storage.from_(bucket).list(
+        path=prefix,
+        options={"limit": limit, "offset": offset},
+    )

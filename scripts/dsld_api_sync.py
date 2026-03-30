@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import logging
 import os
@@ -17,7 +18,12 @@ SCRIPT_DIR = Path(__file__).resolve().parent
 if str(SCRIPT_DIR) not in sys.path:
     sys.path.insert(0, str(SCRIPT_DIR))
 
-from dsld_api_client import DSLDApiClient, load_dsld_config, normalize_api_label  # noqa: F401
+from dsld_api_client import (
+    DSLDApiClient,
+    SUPPLEMENT_FORM_CODE_TO_BUCKET,
+    load_dsld_config,
+    normalize_api_label,
+)  # noqa: F401
 
 logger = logging.getLogger(__name__)
 
@@ -29,6 +35,21 @@ __version__ = "0.1.0"
 
 # Keys excluded from parity comparison (provenance differs by design).
 _PARITY_IGNORE_KEYS = frozenset({"_source", "src"})
+_STATE_VERSION = "1.0"
+_CANONICAL_HASH_EXCLUDE_KEYS = frozenset({"_source"})
+_FORM_DESCRIPTION_HINTS = (
+    ("gummy", "gummies"),
+    ("jelly", "gummies"),
+    ("softgel", "softgels"),
+    ("capsule", "capsules"),
+    ("bar", "bars"),
+    ("powder", "powders"),
+    ("lozenge", "lozenges"),
+    ("tablet", "tablets-pills"),
+    ("pill", "tablets-pills"),
+    ("liquid", "liquids"),
+)
+_SAFE_PRODUCT_TYPE_TO_FORM: dict[str, str] = {}
 
 
 # ---------------------------------------------------------------------------
@@ -169,6 +190,11 @@ def _extract_ids_from_response(response: Any) -> list[int]:
                 source = hit.get("_source", hit)
                 if "id" in source:
                     ids.append(source["id"])
+                elif "_id" in hit:
+                    try:
+                        ids.append(int(hit["_id"]))
+                    except (TypeError, ValueError):
+                        continue
         if ids:
             return ids
 
@@ -178,6 +204,307 @@ def _extract_ids_from_response(response: Any) -> list[int]:
         return [item["id"] for item in items if isinstance(item, dict) and "id" in item]
 
     return []
+
+
+def canonical_payload_sha256(label: dict) -> str:
+    """Hash the canonical raw label payload, excluding adapter metadata."""
+    payload = {key: value for key, value in label.items() if key not in _CANONICAL_HASH_EXCLUDE_KEYS}
+    serialized = json.dumps(payload, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
+    return hashlib.sha256(serialized.encode("utf-8")).hexdigest()
+
+
+def route_label_to_form(label: dict, filter_form_code: str | None = None) -> str:
+    """Route a normalized DSLD label into a canonical form bucket."""
+    physical_state = label.get("physicalState") or {}
+    code = str(physical_state.get("langualCode", "")).strip().lower()
+    if code in SUPPLEMENT_FORM_CODE_TO_BUCKET:
+        return SUPPLEMENT_FORM_CODE_TO_BUCKET[code]
+
+    description = str(physical_state.get("langualCodeDescription", "")).strip().lower()
+    for term, bucket in _FORM_DESCRIPTION_HINTS:
+        if term in description:
+            return bucket
+
+    product_type = label.get("productType") or {}
+    product_code = str(product_type.get("langualCode", "")).strip().lower()
+    if product_code in _SAFE_PRODUCT_TYPE_TO_FORM:
+        return _SAFE_PRODUCT_TYPE_TO_FORM[product_code]
+    product_desc = str(product_type.get("langualCodeDescription", "")).strip().lower()
+    if product_desc in _SAFE_PRODUCT_TYPE_TO_FORM:
+        return _SAFE_PRODUCT_TYPE_TO_FORM[product_desc]
+
+    filter_code = str(filter_form_code or "").strip().lower()
+    if filter_code in SUPPLEMENT_FORM_CODE_TO_BUCKET:
+        return SUPPLEMENT_FORM_CODE_TO_BUCKET[filter_code]
+
+    return "other"
+
+
+def classify_label_change(
+    label: dict,
+    *,
+    existing_state: dict | None,
+    canonical_form: str,
+) -> dict[str, Any]:
+    """Classify a fetched label as new, changed, or unchanged."""
+    payload_sha256 = canonical_payload_sha256(label)
+    if not existing_state:
+        return {"status": "new", "payload_sha256": payload_sha256, "changed_fields": ["new_label"]}
+
+    changed_fields: list[str] = []
+    if existing_state.get("product_version_code") != label.get("productVersionCode"):
+        changed_fields.append("productVersionCode")
+    if bool(existing_state.get("off_market")) != bool(label.get("offMarket")):
+        changed_fields.append("offMarket")
+    if existing_state.get("canonical_form") != canonical_form:
+        changed_fields.append("canonical_form")
+    if existing_state.get("payload_sha256") != payload_sha256:
+        changed_fields.append("payload_sha256")
+
+    if changed_fields:
+        return {"status": "changed", "payload_sha256": payload_sha256, "changed_fields": changed_fields}
+    return {"status": "unchanged", "payload_sha256": payload_sha256, "changed_fields": []}
+
+
+def load_sync_state(path: str | Path | None) -> dict[str, dict]:
+    """Load a shared DSLD sync state file."""
+    if not path:
+        return {}
+    state_path = Path(path)
+    if not state_path.exists():
+        return {}
+    data = json.loads(state_path.read_text(encoding="utf-8"))
+    if isinstance(data, dict) and isinstance(data.get("labels"), dict):
+        return data["labels"]
+    return data if isinstance(data, dict) else {}
+
+
+def save_sync_state(path: str | Path | None, labels: dict[str, dict]) -> None:
+    """Persist the shared DSLD sync state file."""
+    if not path:
+        return
+    state_path = Path(path)
+    state_path.parent.mkdir(parents=True, exist_ok=True)
+    state_path.write_text(
+        json.dumps(
+            {
+                "_metadata": {
+                    "version": _STATE_VERSION,
+                    "updated_at": datetime.now(timezone.utc).isoformat(),
+                    "total_labels": len(labels),
+                },
+                "labels": dict(sorted(labels.items(), key=lambda item: item[0])),
+            },
+            indent=2,
+            ensure_ascii=False,
+            sort_keys=True,
+        ),
+        encoding="utf-8",
+    )
+
+
+def _build_state_record(
+    label: dict,
+    *,
+    canonical_form: str,
+    payload_sha256: str,
+    current_raw_path: str | None,
+    last_sync_source: str,
+    last_status_filter: int | None = None,
+    last_query_context: dict[str, Any] | None = None,
+    existing_state: dict | None = None,
+) -> dict[str, Any]:
+    now = datetime.now(timezone.utc).isoformat()
+    first_seen_at = (existing_state or {}).get("first_seen_at", now)
+    return {
+        "id": label.get("id"),
+        "brand_name": label.get("brandName"),
+        "product_version_code": label.get("productVersionCode"),
+        "off_market": bool(label.get("offMarket")),
+        "entry_date": label.get("entryDate"),
+        "canonical_form": canonical_form,
+        "payload_sha256": payload_sha256,
+        "current_raw_path": current_raw_path or (existing_state or {}).get("current_raw_path"),
+        "first_seen_at": first_seen_at,
+        "last_seen_at": now,
+        "last_sync_source": last_sync_source,
+        "last_status_filter": last_status_filter,
+        "last_query_context": last_query_context or {},
+    }
+
+
+def _write_canonical_label(label: dict, canonical_root: str | Path, canonical_form: str) -> Path:
+    bucket_dir = Path(canonical_root) / canonical_form
+    return write_raw_label(label, bucket_dir, snapshot=False)
+
+
+def _make_run_stamp() -> str:
+    """Return a filesystem-safe run timestamp."""
+    return datetime.now().strftime("%Y-%m-%dT%H-%M-%S")
+
+
+def _resolve_delta_output_dir(base_dir: str | Path | None, *, dated_delta: bool, run_stamp: str | None = None) -> str | None:
+    """Resolve the effective delta output directory for a sync run."""
+    if not base_dir:
+        return None
+    if not dated_delta:
+        return str(base_dir)
+    stamp = run_stamp or _make_run_stamp()
+    return str(Path(base_dir) / stamp)
+
+
+def _resolve_report_path(report_dir: str | Path | None, *, run_stamp: str) -> Path | None:
+    """Resolve the report file path for a sync run."""
+    if not report_dir:
+        return None
+    return Path(report_dir) / f"{run_stamp}.json"
+
+
+def _write_sync_report(
+    report_path: str | Path | None,
+    *,
+    command: str,
+    filters: dict[str, Any],
+    counts: dict[str, Any],
+    candidate_ids: list[int],
+    canonical_root: str | None,
+    state_file: str | None,
+    delta_output_dir: str | None,
+) -> Path | None:
+    """Write a JSON sync report for operator review and auditing."""
+    if not report_path:
+        return None
+    path = Path(report_path)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    payload = {
+        "generated_at": datetime.now(timezone.utc).isoformat(),
+        "command": command,
+        "filters": filters,
+        "canonical_root": canonical_root,
+        "state_file": state_file,
+        "delta_output_dir": delta_output_dir,
+        "summary": {
+            "candidate_count": len(candidate_ids),
+            "written": counts["written"],
+            "canonical_written": counts["canonical_written"],
+            "delta_written": counts["delta_written"],
+            "staging_written": counts["staging_written"],
+            "skipped": counts["skipped"],
+            "failed": len(counts["failed_ids"]),
+            "new_count": len(counts["new_ids"]),
+            "changed_count": len(counts["changed_ids"]),
+            "unchanged_count": len(counts["unchanged_ids"]),
+            "off_market_count": len(counts["off_market_ids"]),
+        },
+        "candidate_ids": candidate_ids,
+        "new_ids": counts["new_ids"],
+        "changed_ids": counts["changed_ids"],
+        "unchanged_ids": counts["unchanged_ids"],
+        "skipped_ids": counts["skipped_ids"],
+        "failed_ids": counts["failed_ids"],
+        "off_market_ids": counts["off_market_ids"],
+    }
+    path.write_text(json.dumps(payload, indent=2, ensure_ascii=False, sort_keys=True), encoding="utf-8")
+    return path
+
+
+def _discover_filter_ids(client: DSLDApiClient, *, limit: int = 1000, **filters: Any) -> list[int]:
+    response = client.search_filter(size=limit, **filters)
+    ids = _extract_ids_from_response(response)
+    return list(dict.fromkeys(ids))
+
+
+def _sync_labels(
+    ids: list[int],
+    *,
+    client: DSLDApiClient,
+    canonical_root: str | None = None,
+    staging_dir: str | None = None,
+    snapshot: bool = False,
+    state_file: str | None = None,
+    filter_form_code: str | None = None,
+    sync_source: str,
+    status_filter: int | None = None,
+    query_context: dict[str, Any] | None = None,
+    delta_output_dir: str | None = None,
+    delta_only: bool = False,
+    force_refetch: bool = False,
+) -> dict[str, int]:
+    state = load_sync_state(state_file)
+    counts = {
+        "written": 0,
+        "canonical_written": 0,
+        "delta_written": 0,
+        "staging_written": 0,
+        "skipped": 0,
+        "new_ids": [],
+        "changed_ids": [],
+        "unchanged_ids": [],
+        "skipped_ids": [],
+        "failed_ids": [],
+        "off_market_ids": [],
+    }
+
+    for dsld_id in ids:
+        try:
+            label = client.fetch_label(dsld_id)
+            canonical_form = route_label_to_form(label, filter_form_code=filter_form_code)
+            existing_state = state.get(str(dsld_id))
+            classification = classify_label_change(
+                label,
+                existing_state=existing_state,
+                canonical_form=canonical_form,
+            )
+            if classification["status"] == "new":
+                counts["new_ids"].append(dsld_id)
+            elif classification["status"] == "changed":
+                counts["changed_ids"].append(dsld_id)
+            else:
+                counts["unchanged_ids"].append(dsld_id)
+            if bool(label.get("offMarket")):
+                counts["off_market_ids"].append(dsld_id)
+            is_changed = force_refetch or classification["status"] in {"new", "changed"}
+
+            canonical_path: Path | None = None
+            if staging_dir:
+                path = write_raw_label(label, staging_dir, snapshot=snapshot)
+                logger.info("wrote staging label %s", path)
+                counts["staging_written"] += 1
+                counts["written"] += 1
+
+            if canonical_root and (is_changed or not existing_state):
+                canonical_path = _write_canonical_label(label, canonical_root, canonical_form)
+                logger.info("wrote canonical label %s", canonical_path)
+                counts["canonical_written"] += 1
+                counts["written"] += 1
+            elif canonical_root and not is_changed:
+                counts["skipped"] += 1
+                counts["skipped_ids"].append(dsld_id)
+
+            if delta_output_dir and is_changed:
+                delta_path = write_raw_label(label, delta_output_dir, snapshot=False)
+                logger.info("wrote delta label %s", delta_path)
+                counts["delta_written"] += 1
+                counts["written"] += 1
+
+            if not delta_only or canonical_root or is_changed:
+                state[str(dsld_id)] = _build_state_record(
+                    label,
+                    canonical_form=canonical_form,
+                    payload_sha256=classification["payload_sha256"],
+                    current_raw_path=str(canonical_path) if canonical_path else None,
+                    last_sync_source=sync_source,
+                    last_status_filter=status_filter,
+                    last_query_context=query_context,
+                    existing_state=existing_state,
+                )
+        except Exception as exc:
+            logger.warning("Failed to fetch label %s: %s", dsld_id, exc)
+            print(f"  SKIP {dsld_id}: {exc}", file=sys.stderr)
+            counts["failed_ids"].append(dsld_id)
+
+    save_sync_state(state_file, state)
+    return counts
 
 
 def write_raw_label(label: dict, output_dir: str | Path, *, snapshot: bool = False) -> Path:
@@ -270,27 +597,38 @@ def _cmd_probe(args: argparse.Namespace) -> int:
 
 def _cmd_sync_brand(args: argparse.Namespace) -> int:
     """Handle the ``sync-brand`` subcommand."""
+    if not args.output_dir and not args.canonical_root:
+        print("ERROR: sync-brand requires --output-dir and/or --canonical-root", file=sys.stderr)
+        return 1
     client = DSLDApiClient()
     print(f"Searching brand: {args.brand} ...")
-    results = client.search_brand(args.brand)
-
-    ids = _extract_ids_from_response(results)
+    if args.status != 2:
+        ids = _discover_filter_ids(
+            client,
+            brand=args.brand,
+            status=args.status,
+            limit=args.limit,
+        )
+    else:
+        results = client.search_brand(args.brand, size=args.limit)
+        ids = _extract_ids_from_response(results)
     if not ids:
         print("No labels found for that brand.")
         return 0
     print(f"Found {len(ids)} label(s). Fetching ...")
-    written = 0
-    for dsld_id in ids:
-        try:
-            label = client.fetch_label(dsld_id)
-            path = write_raw_label(label, args.output_dir, snapshot=args.snapshot)
-            print(f"  wrote {path}")
-            written += 1
-        except Exception as exc:
-            logger.warning("Failed to fetch label %s: %s", dsld_id, exc)
-            print(f"  SKIP {dsld_id}: {exc}", file=sys.stderr)
-
-    print(f"\nDone. Wrote {written}/{len(ids)} labels to {args.output_dir}")
+    counts = _sync_labels(
+        ids,
+        client=client,
+        canonical_root=args.canonical_root,
+        staging_dir=args.output_dir,
+        snapshot=args.snapshot,
+        state_file=args.state_file,
+        sync_source="sync-brand",
+        status_filter=args.status,
+        query_context={"brand": args.brand},
+    )
+    destination = args.canonical_root or args.output_dir
+    print(f"\nDone. Wrote {counts['written']} artifacts for {len(ids)} labels to {destination}")
     return 0
 
 
@@ -396,14 +734,123 @@ def _cmd_sync_query(args: argparse.Namespace) -> int:
     return 0
 
 
+def _cmd_sync_filter(args: argparse.Namespace) -> int:
+    """Handle the ``sync-filter`` subcommand."""
+    if not args.canonical_root and not args.staging_dir:
+        print("ERROR: sync-filter requires --canonical-root and/or --staging-dir", file=sys.stderr)
+        return 1
+
+    client = DSLDApiClient()
+    filters = {
+        "supplement_form": args.supplement_form,
+        "ingredient_name": args.ingredient_name,
+        "ingredient_category": args.ingredient_category,
+        "brand": args.brand,
+        "status": args.status,
+        "date_start": args.date_start,
+        "date_end": args.date_end,
+    }
+    print(f"Searching filtered labels (limit={args.limit}) ...")
+    ids = _discover_filter_ids(client, limit=args.limit, **filters)
+    if not ids:
+        print("No labels found for those filters.")
+        return 0
+    print(f"Found {len(ids)} label(s). Fetching ...")
+    counts = _sync_labels(
+        ids,
+        client=client,
+        canonical_root=args.canonical_root,
+        staging_dir=args.staging_dir,
+        snapshot=args.snapshot,
+        state_file=args.state_file,
+        filter_form_code=args.supplement_form,
+        sync_source="sync-filter",
+        status_filter=args.status,
+        query_context=filters,
+    )
+    print(
+        f"\nDone. Wrote {counts['written']} artifacts "
+        f"(canonical={counts['canonical_written']}, staging={counts['staging_written']})."
+    )
+    return 0
+
+
+def _cmd_sync_delta(args: argparse.Namespace) -> int:
+    """Handle the ``sync-delta`` subcommand."""
+    if not args.canonical_root:
+        print("ERROR: sync-delta requires --canonical-root", file=sys.stderr)
+        return 1
+    if not args.state_file:
+        print("ERROR: sync-delta requires --state-file", file=sys.stderr)
+        return 1
+
+    client = DSLDApiClient()
+    filters = {
+        "supplement_form": args.supplement_form,
+        "ingredient_name": args.ingredient_name,
+        "ingredient_category": args.ingredient_category,
+        "brand": args.brand,
+        "status": args.status,
+        "date_start": args.date_start,
+        "date_end": args.date_end,
+    }
+    print("Discovering delta candidates ...")
+    ids = _discover_filter_ids(client, limit=args.limit, **filters)
+    if not ids:
+        print("No labels found for those filters.")
+        return 0
+    run_stamp = _make_run_stamp()
+    delta_output_dir = _resolve_delta_output_dir(args.delta_output_dir, dated_delta=args.dated_delta, run_stamp=run_stamp)
+    print(f"Found {len(ids)} candidate label(s). Fetching changed/new labels ...")
+    counts = _sync_labels(
+        ids,
+        client=client,
+        canonical_root=args.canonical_root,
+        staging_dir=None,
+        snapshot=False,
+        state_file=args.state_file,
+        filter_form_code=args.supplement_form,
+        sync_source="sync-delta",
+        status_filter=args.status,
+        query_context=filters,
+        delta_output_dir=delta_output_dir,
+        delta_only=True,
+        force_refetch=args.force_refetch,
+    )
+    print(
+        f"\nDone. canonical={counts['canonical_written']} "
+        f"delta={counts['delta_written']} skipped={counts['skipped']}"
+    )
+    if delta_output_dir:
+        print(f"Delta directory: {delta_output_dir}")
+    report_path = _resolve_report_path(getattr(args, "report_dir", None), run_stamp=run_stamp)
+    written_report = _write_sync_report(
+        report_path,
+        command="sync-delta",
+        filters=filters,
+        counts=counts,
+        candidate_ids=ids,
+        canonical_root=args.canonical_root,
+        state_file=args.state_file,
+        delta_output_dir=delta_output_dir,
+    )
+    if written_report:
+        print(f"Report: {written_report}")
+    return 0
+
+
 def _cmd_check_version(args: argparse.Namespace) -> int:
     """Handle the ``check-version`` subcommand."""
     print(f"dsld_api_sync v{__version__}")
-    print("Testing DSLD API connectivity ...")
+    print("Checking DSLD API version ...")
     try:
         client = DSLDApiClient()
-        label = client.fetch_label(13418)
-        print(f"  OK — fetched label 13418: {label.get('fullName', '?')}")
+        version_info = client.get_version()
+        print("  OK")
+        for key in ("title", "config", "version", "versionTimeStamp", "esIndexProcessed"):
+            value = version_info.get(key)
+            if value is not None:
+                print(f"  {key}: {value}")
         return 0
     except Exception as exc:
         print(f"  FAILED — {exc}", file=sys.stderr)
@@ -432,7 +879,11 @@ def build_parser() -> argparse.ArgumentParser:
     # -- sync-brand ----------------------------------------------------------
     p_brand = subparsers.add_parser("sync-brand", help="Sync all labels for a brand")
     p_brand.add_argument("--brand", required=True, help="Brand name to search")
-    p_brand.add_argument("--output-dir", required=True, help="Directory to write labels")
+    p_brand.add_argument("--output-dir", help="Directory to write flat staging labels")
+    p_brand.add_argument("--canonical-root", help="Canonical raw root to route labels by form")
+    p_brand.add_argument("--state-file", help="Shared DSLD sync state file")
+    p_brand.add_argument("--status", type=int, choices=[0, 1, 2], default=2, help="Market status filter (default 2=all)")
+    p_brand.add_argument("--limit", type=int, default=1000, help="Max discovery results (default 1000)")
     p_brand.add_argument("--snapshot", action="store_true", help="Write to timestamped snapshot subdir")
 
     # -- refresh-ids ---------------------------------------------------------
@@ -453,8 +904,44 @@ def build_parser() -> argparse.ArgumentParser:
     p_query.add_argument("--limit", type=int, default=100, help="Max results (default 100)")
     p_query.add_argument("--snapshot", action="store_true", help="Write to timestamped snapshot subdir")
 
+    # -- sync-filter ---------------------------------------------------------
+    p_filter = subparsers.add_parser("sync-filter", help="Sync labels using DSLD search filters")
+    p_filter.add_argument("--supplement-form", help="DSLD supplement_form code (e.g. e0176)")
+    p_filter.add_argument("--ingredient-name", help="Ingredient name filter")
+    p_filter.add_argument("--ingredient-category", help="Ingredient category filter")
+    p_filter.add_argument("--brand", help="Brand filter")
+    p_filter.add_argument("--status", type=int, choices=[0, 1, 2], default=2, help="Market status filter (default 2=all)")
+    p_filter.add_argument("--date-start", help="Entry date start (YYYY-MM-DD)")
+    p_filter.add_argument("--date-end", help="Entry date end (YYYY-MM-DD)")
+    p_filter.add_argument("--limit", type=int, default=1000, help="Max discovery results (default 1000)")
+    p_filter.add_argument("--snapshot", action="store_true", help="Write staging labels to timestamped snapshot subdir")
+    p_filter.add_argument("--staging-dir", help="Optional flat staging directory")
+    p_filter.add_argument("--canonical-root", help="Canonical raw root to route labels by form")
+    p_filter.add_argument("--state-file", help="Shared DSLD sync state file")
+
+    # -- sync-delta ----------------------------------------------------------
+    p_delta = subparsers.add_parser("sync-delta", help="Sync only new/changed labels from DSLD search filters")
+    p_delta.add_argument("--supplement-form", help="DSLD supplement_form code (e.g. e0176)")
+    p_delta.add_argument("--ingredient-name", help="Ingredient name filter")
+    p_delta.add_argument("--ingredient-category", help="Ingredient category filter")
+    p_delta.add_argument("--brand", help="Brand filter")
+    p_delta.add_argument("--status", type=int, choices=[0, 1, 2], default=2, help="Market status filter (default 2=all)")
+    p_delta.add_argument("--date-start", help="Entry date start (YYYY-MM-DD)")
+    p_delta.add_argument("--date-end", help="Entry date end (YYYY-MM-DD)")
+    p_delta.add_argument("--limit", type=int, default=1000, help="Max discovery results (default 1000)")
+    p_delta.add_argument("--canonical-root", required=True, help="Canonical raw root to route labels by form")
+    p_delta.add_argument("--state-file", required=True, help="Shared DSLD sync state file")
+    p_delta.add_argument("--delta-output-dir", help="Optional flat delta directory for downstream incremental runs")
+    p_delta.add_argument(
+        "--dated-delta",
+        action="store_true",
+        help="Write delta files into a fresh timestamped subdirectory under --delta-output-dir",
+    )
+    p_delta.add_argument("--report-dir", help="Optional directory to write a JSON sync report for this run")
+    p_delta.add_argument("--force-refetch", action="store_true", help="Write labels even when unchanged in state")
+
     # -- check-version -------------------------------------------------------
-    subparsers.add_parser("check-version", help="Print version and test API connectivity")
+    subparsers.add_parser("check-version", help="Print structured DSLD API version metadata")
 
     return parser
 
@@ -475,6 +962,8 @@ def main(argv: list[str] | None = None) -> int:
         "refresh-ids": _cmd_refresh_ids,
         "verify-db": _cmd_verify_db,
         "sync-query": _cmd_sync_query,
+        "sync-filter": _cmd_sync_filter,
+        "sync-delta": _cmd_sync_delta,
         "check-version": _cmd_check_version,
     }
 

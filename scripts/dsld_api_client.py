@@ -6,6 +6,7 @@ from __future__ import annotations
 import json
 import logging
 import os
+import re
 import time
 from dataclasses import dataclass
 from pathlib import Path
@@ -34,6 +35,19 @@ DEFAULT_RATE_LIMIT_DELAY = 0.15  # ~6.6 req/sec
 DEFAULT_CACHE_TTL_SECONDS = 60 * 60 * 24 * 7  # 7 days
 MAX_RETRIES = 4
 DEFAULT_FAILURE_LIMIT = 3
+
+SUPPLEMENT_FORM_CODE_TO_BUCKET = {
+    "e0176": "gummies",
+    "e0161": "softgels",
+    "e0159": "capsules",
+    "e0164": "bars",
+    "e0162": "powders",
+    "e0174": "lozenges",
+    "e0155": "tablets-pills",
+    "e0165": "liquids",
+    "e0172": "other",
+    "e0177": "other",
+}
 
 # Every key present in a raw DSLD label file (from manual download).
 # The normalizer guarantees exactly these keys appear in output.
@@ -266,6 +280,17 @@ class DSLDApiClient:
         if elapsed < self.config.rate_limit_delay:
             time.sleep(self.config.rate_limit_delay - elapsed)
 
+    def _service_root_url(self) -> str:
+        """Return the DSLD service root without the API version path.
+
+        Example:
+        ``https://api.ods.od.nih.gov/dsld/v9`` -> ``https://api.ods.od.nih.gov/dsld``
+        """
+        base_url = self.config.base_url.rstrip("/")
+        if re.search(r"/v\d+(?:\.\d+)?$", base_url):
+            return base_url.rsplit("/", 1)[0]
+        return base_url
+
     # -- core request --------------------------------------------------------
 
     def _request(
@@ -396,6 +421,37 @@ class DSLDApiClient:
             params={"q": query, "size": size, "from": from_, "status": status},
         )
 
+    def search_filter(self, *, size: int = 1000, from_: int = 0, **filters: Any) -> Any:
+        """Search labels via /search-filter with arbitrary DSLD filter params.
+
+        None values are dropped before making the request.
+        DSLD requires a query term, so filter-only searches default to ``q="*"``.
+        """
+        params = {"size": size, "from": from_}
+        for key, value in filters.items():
+            if value is None:
+                continue
+            params[key] = value
+        params.setdefault("q", "*")
+        return self._request("search-filter", params=params)
+
+    def get_version(self) -> dict[str, Any]:
+        """Fetch structured DSLD service version metadata.
+
+        The deployed DSLD service exposes version JSON at ``/dsld/version``,
+        not under the versioned ``/v9`` path.
+        """
+        service_root = self._service_root_url()
+        original_base = self.config.base_url
+        self.config.base_url = service_root
+        try:
+            payload = self._request("version")
+        finally:
+            self.config.base_url = original_base
+        if not isinstance(payload, dict):
+            raise RuntimeError("DSLD version endpoint returned a non-object payload")
+        return payload
+
 
 __all__ = [
     "DEFAULT_BASE_URL",
@@ -407,6 +463,7 @@ __all__ = [
     "DSLDApiConfig",
     "MAX_RETRIES",
     "RAW_LABEL_KEYS",
+    "SUPPLEMENT_FORM_CODE_TO_BUCKET",
     "load_dsld_config",
     "normalize_api_label",
 ]

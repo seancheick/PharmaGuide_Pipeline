@@ -240,7 +240,7 @@ App opens on iPhone. 5 tabs navigate. Theme colors match spec. Breakpoint shows 
 
 6. **Detail blob loading (detail_blob_service.dart):**
    - Check product_detail_cache first
-   - If not cached + online: fetch `{dsld_id}.json` from Supabase Storage
+   - If not cached + online: fetch versioned `detail_index.json`, resolve `dsld_id` to `blob_sha256`, then fetch the hashed detail payload from Supabase Storage
    - Cache in SQLite product_detail_cache
    - Show shimmer on accordion cards while loading
    - If offline: show header only, "Detail unavailable offline" banner
@@ -257,13 +257,13 @@ App opens on iPhone. 5 tabs navigate. Theme colors match spec. Breakpoint shows 
 
 9. **Manual entry + not found:**
    - Text field search sheet -> SQLite lookup
-   - If not found in SQLite: try Supabase search
-   - If still not found: "Product Not Found" sheet -> submit to pending_products
+   - If not found in SQLite: show "Product Not Found" sheet -> submit to pending_products
+   - No remote product search in v1; Supabase only hosts manifests, blobs, and app-facing user tables
 
 10. **Scan limit enforcement (scan_limit_service.dart):**
     - Guest: Hive guest_scan_count, >= 3 -> upgrade sheet
-    - Signed-in: increment_usage RPC, returns limit_exceeded boolean
-    - Increment AFTER successful score fetch, not on barcode read
+    - Signed-in: increment_usage RPC, returns `{scans_today, ai_messages_today, limit_exceeded}`
+    - Call after barcode resolution but before final result render so `limit_exceeded=true` can block the over-limit experience
     - **Network failure fallback:** If increment_usage RPC fails (network error mid-scan), fall back to client-side Hive count and ALLOW the scan. Never block the user on a network error.
 
 ### Testable outcome:
@@ -306,6 +306,7 @@ Scan any supplement barcode on your iPhone. See a real score with full clinical 
    - App launch: read local export_manifest
    - If online: check Supabase export_manifest (is_current=true)
    - If newer + min_app_version satisfied: background download new .db file
+   - Verify the downloaded file against remote `checksum` before swap-in
    - Swap in when complete. Never block the user.
    - If download fails: continue with current DB silently
    - **Must be tested explicitly:** version check must not block main thread, must handle network failure gracefully, must not corrupt the active DB during swap. Write integration test for: same version (skip), newer version (download + swap), network failure (silent continue), min_app_version gate (skip if app too old).
@@ -443,8 +444,9 @@ These are already satisfied — Supabase is live with data.
 **Storage URL patterns for Flutter:**
 
 - DB file: `https://omayamxacvacrnvdvzhr.supabase.co/storage/v1/object/public/pharmaguide/v{version}/pharmaguide_core.db`
-- Detail blob: `https://omayamxacvacrnvdvzhr.supabase.co/storage/v1/object/public/pharmaguide/v{version}/details/{dsld_id}.json`
-- Get `version` from: `export_manifest` table WHERE `is_current = true`, column `db_version`
+- Detail index: `https://omayamxacvacrnvdvzhr.supabase.co/storage/v1/object/public/pharmaguide/v{version}/detail_index.json`
+- Detail blob payload: `https://omayamxacvacrnvdvzhr.supabase.co/storage/v1/object/public/pharmaguide/shared/details/sha256/{blob_sha256[0:2]}/{blob_sha256}.json`
+- Get `version` and `checksum` from: `export_manifest` table WHERE `is_current = true`
 
 ---
 

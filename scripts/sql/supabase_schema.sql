@@ -104,15 +104,17 @@ ALTER TABLE user_stacks ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "Users manage own stacks" ON user_stacks
   FOR ALL USING ((SELECT auth.uid()) = user_id);
 
--- user_usage: users read/write own usage
+-- user_usage: users can read their counters, but writes go through increment_usage
 ALTER TABLE user_usage ENABLE ROW LEVEL SECURITY;
-CREATE POLICY "Users manage own usage" ON user_usage
-  FOR ALL USING ((SELECT auth.uid()) = user_id);
+CREATE POLICY "Users read own usage" ON user_usage
+  FOR SELECT USING ((SELECT auth.uid()) = user_id);
 
--- pending_products: users submit and view own submissions
+-- pending_products: users can submit and read their requests; status is server-owned
 ALTER TABLE pending_products ENABLE ROW LEVEL SECURITY;
-CREATE POLICY "Users manage own submissions" ON pending_products
-  FOR ALL USING ((SELECT auth.uid()) = user_id);
+CREATE POLICY "Users read own submissions" ON pending_products
+  FOR SELECT USING ((SELECT auth.uid()) = user_id);
+CREATE POLICY "Users submit pending products" ON pending_products
+  FOR INSERT WITH CHECK ((SELECT auth.uid()) = user_id);
 
 -- =============================================================================
 -- 6. RPC Functions
@@ -167,15 +169,19 @@ REVOKE EXECUTE ON FUNCTION rotate_manifest(text, text, text, text, integer, text
 GRANT EXECUTE ON FUNCTION rotate_manifest(text, text, text, text, integer, text, timestamptz, text) TO service_role;
 
 -- 6b. Atomic usage increment with day rollover and server-side enforcement
--- Flutter calls after a successful scan or AI message.
+-- Flutter calls this once a scan/AI action is ready to be committed, before
+-- rendering an over-limit experience to the user.
 CREATE OR REPLACE FUNCTION increment_usage(
   p_user_id uuid,
   p_type text  -- 'scan' or 'ai_message'
-) RETURNS TABLE(scans_today integer, ai_messages_today integer, limit_exceeded boolean) AS $$
+) RETURNS jsonb AS $$
 DECLARE
-  v_scans integer;
-  v_ai integer;
+  v_usage user_usage%ROWTYPE;
+  v_scans integer := 0;
+  v_ai integer := 0;
   v_exceeded boolean := false;
+  v_scan_limit constant integer := 10;
+  v_ai_limit constant integer := 5;
 BEGIN
   -- Guard: caller must own the user_id
   IF p_user_id IS DISTINCT FROM auth.uid() THEN
@@ -191,35 +197,49 @@ BEGIN
   INSERT INTO user_usage (user_id, scans_today, ai_messages_today, reset_date)
   VALUES (
     p_user_id,
-    CASE WHEN p_type = 'scan' THEN 1 ELSE 0 END,
-    CASE WHEN p_type = 'ai_message' THEN 1 ELSE 0 END,
+    0,
+    0,
     CURRENT_DATE
   )
   ON CONFLICT (user_id, reset_date)
-  DO UPDATE SET
-    scans_today = CASE WHEN p_type = 'scan'
-      THEN user_usage.scans_today + 1
-      ELSE user_usage.scans_today END,
-    ai_messages_today = CASE WHEN p_type = 'ai_message'
-      THEN user_usage.ai_messages_today + 1
-      ELSE user_usage.ai_messages_today END;
+  DO NOTHING;
 
-  -- Read back current values
-  SELECT u.scans_today, u.ai_messages_today
-  INTO v_scans, v_ai
-  FROM user_usage u
-  WHERE u.user_id = p_user_id AND u.reset_date = CURRENT_DATE;
+  SELECT *
+  INTO v_usage
+  FROM user_usage
+  WHERE user_id = p_user_id AND reset_date = CURRENT_DATE
+  FOR UPDATE;
 
-  -- Server-side limit enforcement (10 scans/day, 5 AI messages/day)
-  IF (p_type = 'scan' AND v_scans > 10) OR (p_type = 'ai_message' AND v_ai > 5) THEN
+  IF p_type = 'scan' AND v_usage.scans_today >= v_scan_limit THEN
     v_exceeded := true;
+  ELSIF p_type = 'ai_message' AND v_usage.ai_messages_today >= v_ai_limit THEN
+    v_exceeded := true;
+  ELSE
+    UPDATE user_usage
+    SET
+      scans_today = CASE WHEN p_type = 'scan' THEN scans_today + 1 ELSE scans_today END,
+      ai_messages_today = CASE WHEN p_type = 'ai_message' THEN ai_messages_today + 1 ELSE ai_messages_today END
+    WHERE id = v_usage.id
+    RETURNING scans_today, ai_messages_today
+    INTO v_scans, v_ai;
   END IF;
 
-  RETURN QUERY SELECT v_scans, v_ai, v_exceeded;
+  IF v_exceeded THEN
+    v_scans := v_usage.scans_today;
+    v_ai := v_usage.ai_messages_today;
+  END IF;
+
+  RETURN jsonb_build_object(
+    'scans_today', v_scans,
+    'ai_messages_today', v_ai,
+    'limit_exceeded', v_exceeded
+  );
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
 
 -- Grant increment_usage to authenticated users only (not anon)
+REVOKE EXECUTE ON FUNCTION increment_usage(uuid, text) FROM PUBLIC;
+REVOKE EXECUTE ON FUNCTION increment_usage(uuid, text) FROM anon;
 GRANT EXECUTE ON FUNCTION increment_usage(uuid, text) TO authenticated;
 
 -- =============================================================================
@@ -228,8 +248,9 @@ GRANT EXECUTE ON FUNCTION increment_usage(uuid, text) TO authenticated;
 -- Create via Supabase Dashboard or API:
 --   Bucket name: pharmaguide
 --   Public: true (read via anon key)
---   File size limit: 100MB (for the SQLite DB file)
+--   File size limit: 50MB (for the SQLite DB file) (free 50MB on Supabase)
 --
 -- Folder structure:
 --   pharmaguide/v{version}/pharmaguide_core.db
---   pharmaguide/v{version}/details/{dsld_id}.json
+--   pharmaguide/v{version}/detail_index.json
+--   pharmaguide/shared/details/sha256/{blob_sha256[0:2]}/{blob_sha256}.json

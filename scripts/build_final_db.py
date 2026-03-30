@@ -30,6 +30,7 @@ import math as _math
 import os
 import sqlite3
 import sys
+import tempfile
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, List, Optional
@@ -40,6 +41,9 @@ logger = logging.getLogger(__name__)
 EXPORT_SCHEMA_VERSION = 1
 PIPELINE_VERSION = "3.1.0"
 TOP_WARNINGS_MAX = 5
+MIN_APP_VERSION = "1.0.0"
+EXPORT_COMMIT_EVERY = 2000
+DETAIL_BLOB_STORAGE_PREFIX = "shared/details/sha256"
 
 # ─── Warning priority for top_warnings ───
 WARNING_PRIORITY = {
@@ -62,6 +66,25 @@ SEVERITY_PRIORITY = {
     "low": 4,
     "info": 5,
 }
+
+
+def build_db_version(now: datetime) -> str:
+    """Return a UTC build version that changes on every export."""
+    return now.astimezone(timezone.utc).strftime("%Y.%m.%d.%H%M%S")
+
+
+def compute_file_sha256(path: str) -> str:
+    digest = hashlib.sha256()
+    with open(path, "rb") as f:
+        for chunk in iter(lambda: f.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
+
+
+def remote_blob_storage_path(blob_sha256: str) -> str:
+    """Return the shared remote storage path for a hashed detail blob."""
+    shard = blob_sha256[:2]
+    return f"{DETAIL_BLOB_STORAGE_PREFIX}/{shard}/{blob_sha256}.json"
 
 
 def safe_bool(value: Any) -> int:
@@ -500,7 +523,9 @@ CREATE TABLE IF NOT EXISTS export_manifest (
     key   TEXT PRIMARY KEY,
     value TEXT NOT NULL
 );
+"""
 
+CORE_INDEX_SQL = """
 CREATE INDEX IF NOT EXISTS idx_core_upc ON products_core(upc_sku);
 CREATE INDEX IF NOT EXISTS idx_core_name ON products_core(product_name);
 CREATE INDEX IF NOT EXISTS idx_core_brand ON products_core(brand_name);
@@ -521,9 +546,8 @@ CREATE VIRTUAL TABLE IF NOT EXISTS products_fts USING fts5(
 
 # ─── Data Loading ───
 
-def load_json_files(directories: List[str]) -> List[Dict]:
-    """Load all JSON files from given directories, return flat list of product dicts."""
-    products = []
+def iter_json_products(directories: List[str]):
+    """Yield product dicts from JSON files without materializing whole corpora."""
     for dir_path in directories:
         if not os.path.isdir(dir_path):
             logger.warning("Directory not found: %s", dir_path)
@@ -536,12 +560,18 @@ def load_json_files(directories: List[str]) -> List[Dict]:
                 with open(fpath, "r", encoding="utf-8") as f:
                     data = json.load(f)
                 if isinstance(data, list):
-                    products.extend(data)
+                    for item in data:
+                        if isinstance(item, dict):
+                            yield item
                 elif isinstance(data, dict):
-                    products.append(data)
+                    yield data
             except (json.JSONDecodeError, OSError) as e:
                 logger.error("Failed to load %s: %s", fpath, e)
-    return products
+
+
+def load_json_files(directories: List[str]) -> List[Dict]:
+    """Load all JSON files from given directories, return flat list of product dicts."""
+    return list(iter_json_products(directories))
 
 
 def index_by_id(products: List[Dict], id_field: str = "dsld_id") -> Dict[str, Dict]:
@@ -552,6 +582,71 @@ def index_by_id(products: List[Dict], id_field: str = "dsld_id") -> Dict[str, Di
         if pid:
             index[pid] = p
     return index
+
+
+def initialize_stage_table(conn: sqlite3.Connection, table_name: str) -> None:
+    conn.execute(
+        f"""
+        CREATE TABLE IF NOT EXISTS {table_name} (
+            dsld_id TEXT PRIMARY KEY,
+            payload TEXT NOT NULL,
+            matched INTEGER NOT NULL DEFAULT 0
+        )
+        """
+    )
+
+
+def stage_products_by_id(conn: sqlite3.Connection, table_name: str, directories: List[str]) -> int:
+    """Stage products in SQLite so the main export can stream lookups by dsld_id."""
+    initialize_stage_table(conn, table_name)
+    staged = 0
+    for product in iter_json_products(directories):
+        dsld_id = safe_str(product.get("dsld_id"))
+        if not dsld_id:
+            continue
+        conn.execute(
+            f"INSERT OR REPLACE INTO {table_name} (dsld_id, payload, matched) VALUES (?, ?, 0)",
+            (dsld_id, json.dumps(product, ensure_ascii=False, separators=(",", ":"))),
+        )
+        staged += 1
+    conn.commit()
+    return staged
+
+
+def fetch_staged_product(conn: sqlite3.Connection, table_name: str, dsld_id: str) -> Optional[Dict]:
+    row = conn.execute(
+        f"SELECT payload FROM {table_name} WHERE dsld_id = ?",
+        (str(dsld_id),),
+    ).fetchone()
+    if not row:
+        return None
+    return json.loads(row[0])
+
+
+def mark_staged_product_matched(conn: sqlite3.Connection, table_name: str, dsld_id: str) -> bool:
+    cursor = conn.execute(
+        f"UPDATE {table_name} SET matched = 1 WHERE dsld_id = ?",
+        (str(dsld_id),),
+    )
+    return cursor.rowcount > 0
+
+
+def iter_staged_products(conn: sqlite3.Connection, table_name: str):
+    """Yield staged products in stable dsld_id order."""
+    cursor = conn.execute(
+        f"SELECT dsld_id, payload FROM {table_name} ORDER BY dsld_id"
+    )
+    for dsld_id, payload in cursor:
+        yield dsld_id, json.loads(payload)
+
+
+def apply_sqlite_build_pragmas(conn: sqlite3.Connection) -> None:
+    """Tune SQLite for large one-writer export builds."""
+    conn.execute("PRAGMA foreign_keys = ON")
+    conn.execute("PRAGMA temp_store = MEMORY")
+    conn.execute("PRAGMA cache_size = -200000")
+    conn.execute("PRAGMA synchronous = NORMAL")
+    conn.execute("PRAGMA journal_mode = MEMORY")
 
 
 # ─── Warning Builder ───
@@ -1375,23 +1470,12 @@ def load_reference_data(script_dir: str) -> List[tuple]:
 
 # ─── Audit Report ───
 
-def build_audit_report(
-    enriched_index: Dict[str, Dict],
-    scored_index: Dict[str, Dict],
-    common_ids: set,
-    errors: int,
-    inserted: int,
-    enriched_only: set,
-    scored_only: set,
-    output_dir: str,
-    exported_at: str,
-) -> Dict:
-    """Generate per-build audit report with safety-category counts and warnings."""
-    counts = {
-        "total_exported": inserted,
-        "total_errors": errors,
-        "enriched_only": len(enriched_only),
-        "scored_only": len(scored_only),
+def init_audit_counts() -> Dict[str, int]:
+    return {
+        "total_exported": 0,
+        "total_errors": 0,
+        "enriched_only": 0,
+        "scored_only": 0,
         "has_banned_substance": 0,
         "has_recalled_ingredient": 0,
         "has_harmful_additives": 0,
@@ -1404,55 +1488,61 @@ def build_audit_report(
         "verdict_caution": 0,
         "verdict_not_scored": 0,
     }
-    products_with_warnings = []
-    contract_failures = []
 
-    for pid in sorted(common_ids):
-        enriched = enriched_index[pid]
-        scored = scored_index[pid]
 
-        # Contract validity
-        issues = validate_export_contract(enriched, scored)
-        if issues:
-            counts["export_contract_invalid"] += 1
-            contract_failures.append({"dsld_id": pid, "issues": issues[:5]})
+def update_audit_state(
+    counts: Dict[str, int],
+    products_with_warnings_sample: List[Dict],
+    contract_failures_sample: List[Dict],
+    products_with_warnings_count: int,
+    contract_failures_count: int,
+    pid: str,
+    enriched: Dict,
+    scored: Dict,
+) -> tuple[int, int]:
+    """Update audit counters incrementally for a matched enriched/scored product."""
+    issues = validate_export_contract(enriched, scored)
+    if issues:
+        counts["export_contract_invalid"] += 1
+        contract_failures_count += 1
+        if len(contract_failures_sample) < 50:
+            contract_failures_sample.append({"dsld_id": pid, "issues": issues[:5]})
 
-        # Safety flags
-        if has_banned_substance(enriched):
-            counts["has_banned_substance"] += 1
-        if has_recalled_ingredient(enriched):
-            counts["has_recalled_ingredient"] += 1
-        if safe_list(enriched.get("harmful_additives")):
-            counts["has_harmful_additives"] += 1
-        if safe_list(enriched.get("allergen_hits")):
-            counts["has_allergen_risks"] += 1
+    if has_banned_substance(enriched):
+        counts["has_banned_substance"] += 1
+    if has_recalled_ingredient(enriched):
+        counts["has_recalled_ingredient"] += 1
+    if safe_list(enriched.get("harmful_additives")):
+        counts["has_harmful_additives"] += 1
+    if safe_list(enriched.get("allergen_hits")):
+        counts["has_allergen_risks"] += 1
 
-        for sub in contaminant_matches(enriched):
-            status = normalize_text(sub.get("status"))
-            if status == "watchlist":
-                counts["has_watchlist_hit"] += 1
-                break
-        for sub in contaminant_matches(enriched):
-            status = normalize_text(sub.get("status"))
-            if status == "high_risk":
-                counts["has_high_risk_hit"] += 1
-                break
+    for sub in contaminant_matches(enriched):
+        status = normalize_text(sub.get("status"))
+        if status == "watchlist":
+            counts["has_watchlist_hit"] += 1
+            break
+    for sub in contaminant_matches(enriched):
+        status = normalize_text(sub.get("status"))
+        if status == "high_risk":
+            counts["has_high_risk_hit"] += 1
+            break
 
-        # Verdict counts
-        verdict = safe_str(scored.get("verdict")).upper()
-        if verdict == "BLOCKED":
-            counts["verdict_blocked"] += 1
-        elif verdict == "UNSAFE":
-            counts["verdict_unsafe"] += 1
-        elif verdict == "CAUTION":
-            counts["verdict_caution"] += 1
-        elif verdict == "NOT_SCORED":
-            counts["verdict_not_scored"] += 1
+    verdict = safe_str(scored.get("verdict")).upper()
+    if verdict == "BLOCKED":
+        counts["verdict_blocked"] += 1
+    elif verdict == "UNSAFE":
+        counts["verdict_unsafe"] += 1
+    elif verdict == "CAUTION":
+        counts["verdict_caution"] += 1
+    elif verdict == "NOT_SCORED":
+        counts["verdict_not_scored"] += 1
 
-        # Products with warnings
-        top = build_top_warnings(enriched)
-        if top:
-            products_with_warnings.append({
+    top = build_top_warnings(enriched)
+    if top:
+        products_with_warnings_count += 1
+        if len(products_with_warnings_sample) < 100:
+            products_with_warnings_sample.append({
                 "dsld_id": pid,
                 "product_name": safe_str(enriched.get("product_name")),
                 "brand": safe_str(enriched.get("brandName")),
@@ -1460,21 +1550,38 @@ def build_audit_report(
                 "warnings": top,
             })
 
+    return products_with_warnings_count, contract_failures_count
+
+
+def write_audit_report(
+    output_dir: str,
+    exported_at: str,
+    counts: Dict[str, int],
+    contract_failures_sample: List[Dict],
+    contract_failures_count: int,
+    products_with_warnings_count: int,
+    products_with_warnings_sample: List[Dict],
+) -> Dict:
+    """Write the final audit report from incremental state."""
+    counts = {
+        **counts,
+    }
+
     report = {
         "exported_at": exported_at,
         "pipeline_version": PIPELINE_VERSION,
         "export_schema_version": EXPORT_SCHEMA_VERSION,
         "counts": counts,
-        "contract_failures": contract_failures[:50],
-        "products_with_warnings_count": len(products_with_warnings),
-        "products_with_warnings_sample": products_with_warnings[:100],
+        "contract_failures": contract_failures_sample[:50],
+        "products_with_warnings_count": products_with_warnings_count,
+        "products_with_warnings_sample": products_with_warnings_sample[:100],
     }
 
     audit_path = os.path.join(output_dir, "export_audit_report.json")
     with open(audit_path, "w", encoding="utf-8") as f:
         json.dump(report, f, indent=2, ensure_ascii=False)
     logger.info("Audit report: %s (%d products with warnings, %d contract failures)",
-                audit_path, len(products_with_warnings), len(contract_failures))
+                audit_path, products_with_warnings_count, contract_failures_count)
 
     return {"audit_path": audit_path, "report": report}
 
@@ -1490,33 +1597,9 @@ def build_final_db(
     os.makedirs(output_dir, exist_ok=True)
     detail_dir = os.path.join(output_dir, "detail_blobs")
     os.makedirs(detail_dir, exist_ok=True)
-
-    # Load all data
-    logger.info("Loading enriched products...")
-    enriched_products = load_json_files(enriched_dirs)
-    logger.info("Loaded %d enriched products", len(enriched_products))
-
-    logger.info("Loading scored products...")
-    scored_products = load_json_files(scored_dirs)
-    logger.info("Loaded %d scored products", len(scored_products))
-
-    # Index by dsld_id
-    enriched_index = index_by_id(enriched_products, "dsld_id")
-    scored_index = index_by_id(scored_products, "dsld_id")
-
-    # Find products that exist in both enriched and scored
-    common_ids = set(enriched_index.keys()) & set(scored_index.keys())
-    enriched_only = set(enriched_index.keys()) - set(scored_index.keys())
-    scored_only = set(scored_index.keys()) - set(enriched_index.keys())
-
-    if enriched_only:
-        logger.warning("%d products in enriched but not scored: %s",
-                       len(enriched_only), list(enriched_only)[:5])
-    if scored_only:
-        logger.warning("%d products in scored but not enriched: %s",
-                       len(scored_only), list(scored_only)[:5])
-
-    logger.info("Building DB for %d products with both enriched + scored data", len(common_ids))
+    for entry in os.scandir(detail_dir):
+        if entry.is_file() and entry.name.endswith((".json", ".tmp")):
+            os.remove(entry.path)
 
     # Create SQLite DB
     db_path = os.path.join(output_dir, "pharmaguide_core.db")
@@ -1524,46 +1607,154 @@ def build_final_db(
         os.remove(db_path)
 
     conn = sqlite3.connect(db_path)
+    apply_sqlite_build_pragmas(conn)
     c = conn.cursor()
     c.executescript(SCHEMA_SQL)
-    c.executescript(FTS_SQL)
 
-    # Insert products
-    placeholders = ",".join(["?"] * CORE_COLUMN_COUNT)
-    insert_sql = f"INSERT OR REPLACE INTO products_core VALUES ({placeholders})"
+    stage_fd, stage_db_path = tempfile.mkstemp(prefix="pg_stage_", suffix=".sqlite3", dir=output_dir)
+    os.close(stage_fd)
+    stage_conn = sqlite3.connect(stage_db_path)
+    try:
+        logger.info("Staging enriched products...")
+        staged_enriched = stage_products_by_id(stage_conn, "enriched_stage", enriched_dirs)
+        logger.info("Staged %d enriched products", staged_enriched)
 
-    inserted = 0
-    errors = 0
-    exported_at = datetime.now(timezone.utc).isoformat()
-    for pid in sorted(common_ids):
-        enriched = enriched_index[pid]
-        scored = scored_index[pid]
-        try:
-            contract_issues = validate_export_contract(enriched, scored)
-            if contract_issues:
-                raise ValueError("; ".join(contract_issues[:10]))
-            row = build_core_row(enriched, scored, exported_at)
-            if len(row) != CORE_COLUMN_COUNT:
-                logger.error("Product %s: row has %d columns, expected %d",
-                             pid, len(row), CORE_COLUMN_COUNT)
-                errors += 1
+        logger.info("Staging scored products...")
+        staged_scored = stage_products_by_id(stage_conn, "scored_stage", scored_dirs)
+        logger.info("Staged %d scored products", staged_scored)
+
+        enriched_unique = stage_conn.execute("SELECT COUNT(*) FROM enriched_stage").fetchone()[0]
+        scored_unique = stage_conn.execute("SELECT COUNT(*) FROM scored_stage").fetchone()[0]
+        logger.info(
+            "Building DB from staged products (%d enriched unique, %d scored unique)",
+            enriched_unique,
+            scored_unique,
+        )
+
+        placeholders = ",".join(["?"] * CORE_COLUMN_COUNT)
+        insert_sql = f"INSERT OR REPLACE INTO products_core VALUES ({placeholders})"
+
+        inserted = 0
+        errors = 0
+        error_details: List[Dict[str, str]] = []
+        detail_index: Dict[str, Dict[str, Any]] = {}
+        unique_blob_hashes = set()
+        since_commit = 0
+        exported_at = datetime.now(timezone.utc).isoformat()
+        audit_counts = init_audit_counts()
+        products_with_warnings_sample: List[Dict] = []
+        contract_failures_sample: List[Dict] = []
+        products_with_warnings_count = 0
+        contract_failures_count = 0
+        enriched_only_samples: List[str] = []
+
+        for pid, enriched in iter_staged_products(stage_conn, "enriched_stage"):
+            scored = fetch_staged_product(stage_conn, "scored_stage", pid)
+            if scored is None:
+                audit_counts["enriched_only"] += 1
+                if len(enriched_only_samples) < 5:
+                    enriched_only_samples.append(pid)
                 continue
-            c.execute(insert_sql, row)
 
-            # Build and write detail blob
-            blob = build_detail_blob(enriched, scored)
+            mark_staged_product_matched(stage_conn, "scored_stage", pid)
+            products_with_warnings_count, contract_failures_count = update_audit_state(
+                audit_counts,
+                products_with_warnings_sample,
+                contract_failures_sample,
+                products_with_warnings_count,
+                contract_failures_count,
+                pid,
+                enriched,
+                scored,
+            )
+
             blob_path = os.path.join(detail_dir, f"{pid}.json")
-            with open(blob_path, "w", encoding="utf-8") as f:
-                json.dump(blob, f, ensure_ascii=False, separators=(",", ":"))
+            tmp_blob_path = f"{blob_path}.tmp"
+            try:
+                contract_issues = validate_export_contract(enriched, scored)
+                if contract_issues:
+                    raise ValueError("; ".join(contract_issues[:10]))
+                row = build_core_row(enriched, scored, exported_at)
+                if len(row) != CORE_COLUMN_COUNT:
+                    logger.error(
+                        "Product %s: row has %d columns, expected %d",
+                        pid,
+                        len(row),
+                        CORE_COLUMN_COUNT,
+                    )
+                    errors += 1
+                    error_details.append({
+                        "dsld_id": str(pid),
+                        "error": f"row has {len(row)} columns, expected {CORE_COLUMN_COUNT}",
+                    })
+                    continue
 
-            inserted += 1
-        except Exception as e:
-            logger.error("Product %s failed: %s", pid, e, exc_info=True)
-            errors += 1
+                blob = build_detail_blob(enriched, scored)
+                blob_json = json.dumps(blob, ensure_ascii=False, separators=(",", ":"))
+                blob_sha256 = hashlib.sha256(blob_json.encode("utf-8")).hexdigest()
+                with open(tmp_blob_path, "w", encoding="utf-8") as f:
+                    f.write(blob_json)
+                c.execute(insert_sql, row)
+                os.replace(tmp_blob_path, blob_path)
+                detail_index[str(pid)] = {
+                    "blob_sha256": blob_sha256,
+                    "storage_path": remote_blob_storage_path(blob_sha256),
+                    "blob_version": int(blob.get("blob_version", 1)),
+                }
+                unique_blob_hashes.add(blob_sha256)
 
-    logger.info("Inserted %d products, %d errors", inserted, errors)
+                inserted += 1
+                since_commit += 1
+                if since_commit >= EXPORT_COMMIT_EVERY:
+                    conn.commit()
+                    since_commit = 0
+            except Exception as e:
+                if os.path.exists(tmp_blob_path):
+                    os.remove(tmp_blob_path)
+                if os.path.exists(blob_path):
+                    os.remove(blob_path)
+                c.execute("DELETE FROM products_core WHERE dsld_id = ?", (str(pid),))
+                logger.error("Product %s failed: %s", pid, e, exc_info=True)
+                errors += 1
+                error_details.append({
+                    "dsld_id": str(pid),
+                    "error": str(e),
+                })
+
+        scored_only_rows = stage_conn.execute(
+            "SELECT dsld_id FROM scored_stage WHERE matched = 0 ORDER BY dsld_id LIMIT 5"
+        ).fetchall()
+        scored_only_count = stage_conn.execute(
+            "SELECT COUNT(*) FROM scored_stage WHERE matched = 0"
+        ).fetchone()[0]
+        audit_counts["scored_only"] = scored_only_count
+        audit_counts["total_exported"] = inserted
+        audit_counts["total_errors"] = errors
+
+        if enriched_only_samples:
+            logger.warning(
+                "%d products in enriched but not scored: %s",
+                audit_counts["enriched_only"],
+                enriched_only_samples,
+            )
+        if scored_only_count:
+            logger.warning(
+                "%d products in scored but not enriched: %s",
+                scored_only_count,
+                [row[0] for row in scored_only_rows],
+            )
+
+        logger.info("Inserted %d products, %d errors", inserted, errors)
+    finally:
+        stage_conn.close()
+        if os.path.exists(stage_db_path):
+            os.remove(stage_db_path)
+
+    # Create read-path indexes after bulk insert to avoid incremental index churn.
+    c.executescript(CORE_INDEX_SQL)
 
     # FTS sync
+    c.executescript(FTS_SQL)
     c.execute("INSERT INTO products_fts(products_fts) VALUES ('rebuild')")
 
     # Reference data
@@ -1572,54 +1763,72 @@ def build_final_db(
         c.execute("INSERT OR REPLACE INTO reference_data VALUES (?,?,?,?)", row)
     logger.info("Loaded %d reference data entries", len(ref_rows))
 
-    # Export manifest
-    conn.commit()
-
-    # Compute checksum
-    conn.close()
-    with open(db_path, "rb") as f:
-        db_checksum = hashlib.sha256(f.read()).hexdigest()
-    conn = sqlite3.connect(db_path)
-    c = conn.cursor()
-
-    now = datetime.now(timezone.utc).isoformat()
-    manifest_rows = [
-        ("db_version", f"2026.03.17.{EXPORT_SCHEMA_VERSION}"),
+    # Local export manifest for on-device metadata. Keep checksum out of SQLite to
+    # avoid a self-referential hash problem; the standalone JSON manifest carries
+    # the final artifact checksum used for distribution verification.
+    manifest_now = datetime.now(timezone.utc)
+    db_version = build_db_version(manifest_now)
+    local_manifest_rows = [
+        ("db_version", db_version),
         ("pipeline_version", PIPELINE_VERSION),
         ("scoring_version", PIPELINE_VERSION),
-        ("generated_at", now),
+        ("generated_at", manifest_now.isoformat()),
         ("product_count", str(inserted)),
-        ("checksum", f"sha256:{db_checksum}"),
-        ("min_app_version", "1.0.0"),
+        ("min_app_version", MIN_APP_VERSION),
         ("schema_version", str(EXPORT_SCHEMA_VERSION)),
     ]
-    for key, value in manifest_rows:
+    for key, value in local_manifest_rows:
         c.execute("INSERT OR REPLACE INTO export_manifest VALUES (?,?)", (key, value))
+    conn.commit()
+    conn.close()
+
+    db_checksum = compute_file_sha256(db_path)
+
+    detail_index_path = os.path.join(output_dir, "detail_index.json")
+    with open(detail_index_path, "w", encoding="utf-8") as f:
+        json.dump(detail_index, f, indent=2, sort_keys=True)
+    detail_index_checksum = compute_file_sha256(detail_index_path)
 
     # Also write manifest as standalone JSON
-    manifest_dict = dict(manifest_rows)
-    manifest_dict["errors"] = errors
+    manifest_dict = {
+        "db_version": db_version,
+        "pipeline_version": PIPELINE_VERSION,
+        "scoring_version": PIPELINE_VERSION,
+        "generated_at": manifest_now.isoformat(),
+        "product_count": inserted,
+        "checksum": f"sha256:{db_checksum}",
+        "detail_blob_count": inserted,
+        "detail_blob_unique_count": len(unique_blob_hashes),
+        "detail_index_checksum": f"sha256:{detail_index_checksum}",
+        "min_app_version": MIN_APP_VERSION,
+        "schema_version": EXPORT_SCHEMA_VERSION,
+        "errors": error_details,
+    }
     manifest_path = os.path.join(output_dir, "export_manifest.json")
     with open(manifest_path, "w", encoding="utf-8") as f:
         json.dump(manifest_dict, f, indent=2)
 
-    conn.commit()
-    conn.close()
-
     db_size_mb = os.path.getsize(db_path) / (1024 * 1024)
     logger.info("Final DB: %s (%.2f MB, %d products)", db_path, db_size_mb, inserted)
     logger.info("Detail blobs: %s (%d files)", detail_dir, inserted)
+    logger.info("Detail index: %s", detail_index_path)
     logger.info("Manifest: %s", manifest_path)
 
     # Build audit report
-    audit = build_audit_report(
-        enriched_index, scored_index, common_ids, errors, inserted,
-        enriched_only, scored_only, output_dir, exported_at,
+    audit = write_audit_report(
+        output_dir=output_dir,
+        exported_at=exported_at,
+        counts=audit_counts,
+        contract_failures_sample=contract_failures_sample,
+        contract_failures_count=contract_failures_count,
+        products_with_warnings_count=products_with_warnings_count,
+        products_with_warnings_sample=products_with_warnings_sample,
     )
 
     return {
         "db_path": db_path,
         "detail_dir": detail_dir,
+        "detail_index_path": detail_index_path,
         "manifest_path": manifest_path,
         "product_count": inserted,
         "error_count": errors,

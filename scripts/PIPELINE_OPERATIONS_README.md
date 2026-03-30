@@ -1,6 +1,6 @@
 # Pipeline Operations README
 
-Updated: 2026-03-29
+Updated: 2026-03-30
 Owner: Sean Cheick Baradji
 
 This file is a practical command guide for the pipeline work added and updated today.
@@ -20,9 +20,9 @@ Build one final release artifact directly:
 
 ```bash
 python3 scripts/build_final_db.py \
-  --enriched-dir output_Emerald-Labs-2-17-26-L88_enriched/enriched \
-  --scored-dir output_Emerald-Labs-2-17-26-L88_scored/scored \
-  --output-dir scripts/final_db_output_review_final
+  --enriched-dir /Users/seancheick/Documents/DataSetDsld/output_olly_2026-03-30T01-49-58_enriched/enriched \
+  --scored-dir /Users/seancheick/Documents/DataSetDsld/output_olly_2026-03-30T01-49-58_scored/scored \
+  --output-dir /Users/seancheick/Documents/DataSetDsld/final_db_output_olly_2026-03-30T01-49-58
 ```
 
 Output includes:
@@ -70,9 +70,9 @@ Use fingerprint state:
 ```bash
 python3 scripts/build_all_final_dbs.py \
   --scan-dir scripts \
-  --state-file /tmp/pg_pair_state.json \
+  --state-file /Users/seancheick/Documents/DataSetDsld/builds/pair_state.json \
   --changed-only \
-  --per-pair-output-root /tmp/pg_pair_outputs
+  --per-pair-output-root /Users/seancheick/Documents/DataSetDsld/builds/pair_outputs
 ```
 
 Use upstream change journal:
@@ -80,8 +80,8 @@ Use upstream change journal:
 ```bash
 python3 scripts/build_all_final_dbs.py \
   --scan-dir scripts \
-  --change-journal /tmp/pair_change_journal.json \
-  --per-pair-output-root /tmp/pg_pair_outputs
+  --change-journal /Users/seancheick/Documents/DataSetDsld/builds/pair_change_journal.json \
+  --per-pair-output-root /Users/seancheick/Documents/DataSetDsld/builds/pair_outputs
 ```
 
 Important:
@@ -96,8 +96,8 @@ Create a journal from discovered enriched/scored outputs:
 ```bash
 python3 scripts/generate_pair_change_journal.py \
   --scan-dir scripts \
-  --journal-path /tmp/pair_change_journal.json \
-  --state-file /tmp/pair_source_state.json
+  --journal-path /Users/seancheick/Documents/DataSetDsld/builds/pair_change_journal.json \
+  --state-file /Users/seancheick/Documents/DataSetDsld/builds/pair_source_state.json
 ```
 
 This writes:
@@ -111,17 +111,17 @@ Assemble from a root of per-pair build outputs:
 
 ```bash
 python3 scripts/assemble_final_db_release.py \
-  --input-root /tmp/pg_pair_outputs \
-  --output-dir /tmp/pg_release_output
+  --input-root /Users/seancheick/Documents/DataSetDsld/builds/pair_outputs \
+  --output-dir /Users/seancheick/Documents/DataSetDsld/builds/release_output
 ```
 
 Assemble from one or more explicit per-pair dirs:
 
 ```bash
 python3 scripts/assemble_final_db_release.py \
-  --input-dir /tmp/pg_pair_outputs/Nordic-Naturals-2-17-26-L511 \
-  --input-dir /tmp/pg_pair_outputs/Olly-2-17-26-L187 \
-  --output-dir /tmp/pg_release_output
+  --input-dir /Users/seancheick/Documents/DataSetDsld/builds/pair_outputs/Nordic-Naturals-2-17-26-L511 \
+  --input-dir /Users/seancheick/Documents/DataSetDsld/builds/pair_outputs/Olly-2-17-26-L187 \
+  --output-dir /Users/seancheick/Documents/DataSetDsld/builds/release_output
 ```
 
 ## 6. Integrated per-pair build + release assembly
@@ -131,9 +131,9 @@ Run per-pair builds and assemble a release in one workflow:
 ```bash
 python3 scripts/build_all_final_dbs.py \
   --scan-dir scripts \
-  --change-journal /tmp/pair_change_journal.json \
-  --per-pair-output-root /tmp/pg_pair_outputs \
-  --assemble-release-output /tmp/pg_release_output
+  --change-journal /Users/seancheick/Documents/DataSetDsld/builds/pair_change_journal.json \
+  --per-pair-output-root /Users/seancheick/Documents/DataSetDsld/builds/pair_outputs \
+  --assemble-release-output /Users/seancheick/Documents/DataSetDsld/builds/release_output
 ```
 
 ## 7. Sync build output to Supabase
@@ -141,19 +141,19 @@ python3 scripts/build_all_final_dbs.py \
 Dry run:
 
 ```bash
-python3 scripts/sync_to_supabase.py scripts/final_db_output_review_final --dry-run
+python3 scripts/sync_to_supabase.py /Users/seancheick/Documents/DataSetDsld/final_db_output_olly_2026-03-30T01-49-58 --dry-run
 ```
 
 Real sync:
 
 ```bash
-python3 scripts/sync_to_supabase.py scripts/final_db_output_review_final
+python3 scripts/sync_to_supabase.py /Users/seancheick/Documents/DataSetDsld/final_db_output_olly_2026-03-30T01-49-58
 ```
 
 Tune upload concurrency and retries:
 
 ```bash
-python3 scripts/sync_to_supabase.py scripts/final_db_output_review_final \
+python3 scripts/sync_to_supabase.py /Users/seancheick/Documents/DataSetDsld/final_db_output_olly_2026-03-30T01-49-58 \
   --max-workers 8 \
   --retry-count 3 \
   --retry-base-delay 1.0
@@ -171,30 +171,121 @@ Current sync behavior:
 
 ### What it does
 
-Fetches supplement labels from the NIH DSLD API and writes them as raw JSON files in the **exact same format** as manual downloads. The existing pipeline (clean -> enrich -> score) works identically on both sources.
+Fetches supplement labels from the NIH DSLD API and writes them into the same raw-label contract used by manual downloads. The goal is for the existing pipeline (clean -> enrich -> score) to process API-fetched labels without a separate downstream path.
 
 ### Status: Live and verified
 
 - API base URL: `https://api.ods.od.nih.gov/dsld/v9`
-- API version: 9.4.0 (January 2026)
-- No authentication required for label fetches
-- Live probe passed: **100% parity** between API and manual download (label 13418)
-- 15 unit tests passing
-- Brand sync tested: 186 Olly labels fetched successfully
+- Live structured version check passed from your machine
+- Live probe passed: **100% parity** between API output and one known manual download (`13418`)
+- `sync-brand --brand "Olly"` fetched and wrote `186/186` labels successfully
+- API test coverage currently passing:
+  - `18` tests in `scripts/tests/test_dsld_api_client.py`
+  - `20` tests in `scripts/tests/test_dsld_api_sync.py`
 
 ### Files
 
 - `scripts/dsld_api_client.py` — Low-level API client (retry, rate limit, circuit breaker, disk cache)
 - `scripts/dsld_api_sync.py` — CLI with 6 subcommands
-- `scripts/tests/test_dsld_api_client.py` — 15 tests
+- `scripts/tests/test_dsld_api_client.py` — client and normalization tests
+- `scripts/tests/test_dsld_api_sync.py` — sync CLI and parity helper tests
 
 ### Quick start
 
-Check API connectivity:
+Check structured API version metadata:
 
 ```bash
 python3 scripts/dsld_api_sync.py check-version
 ```
+
+This calls the real deployed DSLD version endpoint:
+
+- `https://api.ods.od.nih.gov/dsld/version`
+
+### Canonical form corpus
+
+The long-term recommended DSLD raw corpus is now canonical-by-form:
+
+```text
+/Users/seancheick/Documents/DataSetDsld/forms/gummies/*.json
+/Users/seancheick/Documents/DataSetDsld/forms/softgels/*.json
+/Users/seancheick/Documents/DataSetDsld/forms/capsules/*.json
+/Users/seancheick/Documents/DataSetDsld/forms/bars/*.json
+/Users/seancheick/Documents/DataSetDsld/forms/powders/*.json
+/Users/seancheick/Documents/DataSetDsld/forms/lozenges/*.json
+/Users/seancheick/Documents/DataSetDsld/forms/tablets-pills/*.json
+/Users/seancheick/Documents/DataSetDsld/forms/liquids/*.json
+/Users/seancheick/Documents/DataSetDsld/forms/other/*.json
+```
+
+Identity rule:
+
+- `dsld_id` is the only product identity key
+- if a label is discovered through both a brand pull and a form pull, it is still one product
+- overlap is deduped by `dsld_id`
+
+Recommended permanent layout if you want this outside the repo and under your existing dataset root:
+
+```text
+/Users/seancheick/Documents/DataSetDsld/
+/Users/seancheick/Documents/DataSetDsld/forms/
+/Users/seancheick/Documents/DataSetDsld/state/dsld_sync_state.json
+/Users/seancheick/Documents/DataSetDsld/delta/<brand>/<timestamp>/
+/Users/seancheick/Documents/DataSetDsld/reports/<brand>/<timestamp>.json
+/Users/seancheick/Documents/DataSetDsld/staging/
+```
+
+Example:
+
+```text
+/Users/seancheick/Documents/DataSetDsld/
+/Users/seancheick/Documents/DataSetDsld/forms/gummies/*.json
+/Users/seancheick/Documents/DataSetDsld/forms/softgels/*.json
+/Users/seancheick/Documents/DataSetDsld/state/dsld_sync_state.json
+/Users/seancheick/Documents/DataSetDsld/delta/olly/2026-03-30T15-04-05/*.json
+/Users/seancheick/Documents/DataSetDsld/reports/olly/2026-03-30T15-04-05.json
+/Users/seancheick/Documents/DataSetDsld/staging/
+```
+
+Meaning:
+
+- `forms/` = canonical raw source of truth
+- `state/` = shared sync memory
+- `delta/` = dated new/changed raw sets for each run
+- `reports/` = dated sync audit reports
+- `staging/` = optional temporary seed/review folders
+
+Migration note:
+
+- your existing manually downloaded flat brand folders still work as raw input for the cleaner
+- they already match the raw DSLD contract closely enough for the downstream pipeline
+- but they are not the best long-term home for the new `sync-delta` workflow
+- for long-term maintenance, use canonical-by-form storage plus one shared state file
+- use brand folders only as legacy inputs, snapshots, or temporary review sets
+- `staging/` is optional and should not be treated as long-term truth
+
+Recommended market status values:
+
+- `--status 0` = off market only
+- `--status 1` = on market only
+- `--status 2` = all
+
+Recommended default:
+
+- use `--status 2` for canonical corpus syncs so discontinued products remain available for scans
+
+### Form code table
+
+- `e0176` = gummies
+- `e0161` = softgels
+- `e0159` = capsules
+- `e0164` = bars
+- `e0162` = powders
+- `e0174` = lozenges
+- `e0155` = tablets-pills
+- `e0165` = liquids
+- `e0172` = other
+- `e0177` = other
 
 ### Commands
 
@@ -215,21 +306,41 @@ python3 scripts/dsld_api_sync.py probe \
 ```bash
 python3 scripts/dsld_api_sync.py sync-brand \
   --brand "Nordic Naturals" \
-  --output-dir raw_data/Nordic-Naturals-2026-03-29
+  --canonical-root /Users/seancheick/Documents/DataSetDsld/forms \
+  --state-file /Users/seancheick/Documents/DataSetDsld/state/dsld_sync_state.json
 ```
 
-The output directory can then be fed directly to the pipeline:
+If you also want a flat staging copy for review:
 
 ```bash
-python3 scripts/clean_dsld_data.py raw_data/Nordic-Naturals-2026-03-29 output_Nordic-cleaned
+python3 scripts/dsld_api_sync.py sync-brand \
+  --brand "Nordic Naturals" \
+  --status 2 \
+  --canonical-root /Users/seancheick/Documents/DataSetDsld/forms \
+  --state-file /Users/seancheick/Documents/DataSetDsld/state/dsld_sync_state.json \
+  --output-dir /Users/seancheick/Documents/DataSetDsld/staging/brands/nordic-naturals
 ```
+
+The canonical form corpus or any staging directory can then be fed directly to the pipeline:
+
+```bash
+cd scripts
+python3 clean_dsld_data.py \
+  --input-dir /Users/seancheick/Documents/DataSetDsld/staging/brands/nordic-naturals \
+  --output-dir /Users/seancheick/Documents/DataSetDsld/output_nordic_seed_cleaned \
+  --config config/cleaning_config.json
+```
+
+Note:
+
+- `clean_dsld_data.py` currently expects to be run from the `scripts/` directory because of relative-path assumptions in its config/reference-data handling
 
 **refresh-ids** — Re-fetch specific label IDs (e.g., after an audit fix):
 
 ```bash
 python3 scripts/dsld_api_sync.py refresh-ids \
   --ids 13418 241695 182215 \
-  --output-dir raw_data/refresh-2026-03-29
+  --output-dir /Users/seancheick/Documents/DataSetDsld/staging/refresh-ids
 ```
 
 **sync-query** — Fetch labels matching a search query:
@@ -237,9 +348,330 @@ python3 scripts/dsld_api_sync.py refresh-ids \
 ```bash
 python3 scripts/dsld_api_sync.py sync-query \
   --query "vitamin d" \
-  --output-dir raw_data/query-vitamin-d \
+  --output-dir /Users/seancheick/Documents/DataSetDsld/staging/query-vitamin-d \
   --limit 50
 ```
+
+**sync-filter** — Fetch labels through DSLD filter fields and route them into the canonical form corpus:
+
+Pull all gummies into the canonical form corpus:
+
+```bash
+python3 scripts/dsld_api_sync.py sync-filter \
+  --supplement-form e0176 \
+  --status 2 \
+  --canonical-root /Users/seancheick/Documents/DataSetDsld/forms \
+  --state-file /Users/seancheick/Documents/DataSetDsld/state/dsld_sync_state.json
+```
+
+Pull only on-market softgels and keep a staging copy:
+
+```bash
+python3 scripts/dsld_api_sync.py sync-filter \
+  --supplement-form e0161 \
+  --status 1 \
+  --canonical-root /Users/seancheick/Documents/DataSetDsld/forms \
+  --state-file /Users/seancheick/Documents/DataSetDsld/state/dsld_sync_state.json \
+  --staging-dir /Users/seancheick/Documents/DataSetDsld/staging/forms/softgels
+```
+
+Pull products containing melatonin:
+
+```bash
+python3 scripts/dsld_api_sync.py sync-filter \
+  --ingredient-name melatonin \
+  --status 2 \
+  --canonical-root /Users/seancheick/Documents/DataSetDsld/forms \
+  --state-file /Users/seancheick/Documents/DataSetDsld/state/dsld_sync_state.json
+```
+
+Pull a recent date window:
+
+```bash
+python3 scripts/dsld_api_sync.py sync-filter \
+  --date-start 2026-01-01 \
+  --date-end 2026-03-30 \
+  --status 2 \
+  --canonical-root /Users/seancheick/Documents/DataSetDsld/forms \
+  --state-file /Users/seancheick/Documents/DataSetDsld/state/dsld_sync_state.json
+```
+
+Important:
+
+- `sync-filter` updates canonical form folders when `--canonical-root` is provided
+- `--staging-dir` is optional and creates a flat review/work folder
+- date windows are good for newly added labels, not all label changes
+
+**sync-delta** — Fetch only new or changed labels based on the shared state file:
+
+Delta-sync a brand and write a cleaner-ready delta set:
+
+```bash
+python3 scripts/dsld_api_sync.py sync-delta \
+  --brand "Olly" \
+  --status 2 \
+  --canonical-root /Users/seancheick/Documents/DataSetDsld/forms \
+  --state-file /Users/seancheick/Documents/DataSetDsld/state/dsld_sync_state.json \
+  --delta-output-dir /Users/seancheick/Documents/DataSetDsld/delta/olly \
+  --dated-delta \
+  --report-dir /Users/seancheick/Documents/DataSetDsld/reports/olly
+```
+
+Delta-sync gummies without producing a pipeline-ready delta folder:
+
+```bash
+python3 scripts/dsld_api_sync.py sync-delta \
+  --supplement-form e0176 \
+  --status 2 \
+  --canonical-root /Users/seancheick/Documents/DataSetDsld/forms \
+  --state-file /Users/seancheick/Documents/DataSetDsld/state/dsld_sync_state.json
+```
+
+Important:
+
+- with `--delta-output-dir`, changed/new labels are written there as a flat cleaner-ready set
+- without `--delta-output-dir`, canonical form folders and state are updated only
+- off-market products are retained in canonical storage and continue through scoring/build
+- if the state file does not exist yet, the first `sync-delta` run behaves like an initial full seed for that discovery lane
+- after that first seed, later runs only write newly changed/new labels into the delta directory
+- if you already have an old flat folder like `/Users/seancheick/Documents/DataSetDsld/Olly`, that does not break anything, but it does not replace the shared sync state
+- `--dated-delta` is the recommended mode: it writes each run into a fresh timestamped subdirectory under `--delta-output-dir`
+- example resolved path:
+  - `/Users/seancheick/Documents/DataSetDsld/delta/olly/2026-03-30T15-04-05/`
+- this avoids stale files from previous runs making a no-change delta look non-empty
+- `--report-dir` writes a JSON run report for auditing and review
+- example report path:
+  - `/Users/seancheick/Documents/DataSetDsld/reports/olly/2026-03-30T15-04-05.json`
+- the report includes:
+  - candidate count
+  - new / changed / unchanged counts
+  - skipped and failed IDs
+  - off-market IDs seen in the run
+  - resolved delta directory for that run
+
+### Recommended operator workflows
+
+Use these as the default day-to-day commands.
+
+Standard workflow:
+
+- keep `forms/`, `state/`, `delta/`, and `reports/`
+- use `staging/` only when you explicitly want a temporary flat seed/review folder
+- after initial seeding, most ongoing maintenance should be `sync-delta`
+
+### Operator cheat sheet
+
+Use this section when you just want the exact commands.
+
+#### Brand, first time
+
+Seed the canonical corpus and create a flat working folder:
+
+```bash
+python3 scripts/dsld_api_sync.py sync-brand \
+  --brand "Olly" \
+  --status 2 \
+  --canonical-root /Users/seancheick/Documents/DataSetDsld/forms \
+  --state-file /Users/seancheick/Documents/DataSetDsld/state/dsld_sync_state.json \
+  --output-dir /Users/seancheick/Documents/DataSetDsld/staging/brands/olly
+```
+
+Run pipeline on that first-time brand folder:
+
+```bash
+python3 scripts/run_pipeline.py \
+  --raw-dir /Users/seancheick/Documents/DataSetDsld/staging/brands/olly \
+  --output-prefix /Users/seancheick/Documents/DataSetDsld/output_olly_seed
+```
+
+#### Brand, second time or later
+
+Fetch only new/changed products:
+
+```bash
+python3 scripts/dsld_api_sync.py sync-delta \
+  --brand "Olly" \
+  --status 2 \
+  --canonical-root /Users/seancheick/Documents/DataSetDsld/forms \
+  --state-file /Users/seancheick/Documents/DataSetDsld/state/dsld_sync_state.json \
+  --delta-output-dir /Users/seancheick/Documents/DataSetDsld/delta/olly \
+  --dated-delta \
+  --report-dir /Users/seancheick/Documents/DataSetDsld/reports/olly
+```
+
+Then run pipeline on the printed dated delta folder:
+
+```bash
+python3 scripts/run_pipeline.py \
+  --raw-dir /Users/seancheick/Documents/DataSetDsld/delta/olly/2026-03-30T01-49-58 \
+  --output-prefix /Users/seancheick/Documents/DataSetDsld/output_olly_2026-03-30T01-49-58
+```
+
+#### Form/category, first time
+
+If you want a flat first-time working set:
+
+```bash
+python3 scripts/dsld_api_sync.py sync-filter \
+  --supplement-form e0176 \
+  --status 2 \
+  --canonical-root /Users/seancheick/Documents/DataSetDsld/forms \
+  --state-file /Users/seancheick/Documents/DataSetDsld/state/dsld_sync_state.json \
+  --staging-dir /Users/seancheick/Documents/DataSetDsld/staging/forms/gummies
+```
+
+Run pipeline on that first-time form folder:
+
+```bash
+python3 scripts/run_pipeline.py \
+  --raw-dir /Users/seancheick/Documents/DataSetDsld/staging/forms/gummies \
+  --output-prefix /Users/seancheick/Documents/DataSetDsld/output_gummies_seed
+```
+
+#### Form/category, second time or later
+
+Fetch only new/changed products:
+
+```bash
+python3 scripts/dsld_api_sync.py sync-delta \
+  --supplement-form e0176 \
+  --status 2 \
+  --canonical-root /Users/seancheick/Documents/DataSetDsld/forms \
+  --state-file /Users/seancheick/Documents/DataSetDsld/state/dsld_sync_state.json \
+  --delta-output-dir /Users/seancheick/Documents/DataSetDsld/delta/gummies \
+  --dated-delta \
+  --report-dir /Users/seancheick/Documents/DataSetDsld/reports/gummies
+```
+
+Then run pipeline on the printed dated delta folder:
+
+```bash
+python3 scripts/run_pipeline.py \
+  --raw-dir /Users/seancheick/Documents/DataSetDsld/delta/gummies/2026-03-30T01-49-58 \
+  --output-prefix /Users/seancheick/Documents/DataSetDsld/output_gummies_2026-03-30T01-49-58
+```
+
+#### 1. First-time brand seed
+
+Use this when you want to add a brand into the canonical corpus for the first time and also get a flat brand-only folder to run through the pipeline immediately.
+
+This is one of the few cases where `staging/` is useful.
+
+```bash
+python3 scripts/dsld_api_sync.py sync-brand \
+  --brand "Olly" \
+  --status 2 \
+  --canonical-root /Users/seancheick/Documents/DataSetDsld/forms \
+  --state-file /Users/seancheick/Documents/DataSetDsld/state/dsld_sync_state.json \
+  --output-dir /Users/seancheick/Documents/DataSetDsld/staging/brands/olly
+```
+
+Run the pipeline on that first-time brand seed:
+
+```bash
+python3 scripts/run_pipeline.py \
+  --raw-dir /Users/seancheick/Documents/DataSetDsld/staging/brands/olly \
+  --output-prefix /Users/seancheick/Documents/DataSetDsld/output_olly_seed
+```
+
+#### 2. First-time category/form seed
+
+Use this when you want to seed a full category such as gummies, softgels, or capsules into the canonical corpus and also get a flat category folder to run through the pipeline.
+
+This is also an optional `staging/` workflow.
+
+Example: first-time gummies seed
+
+```bash
+python3 scripts/dsld_api_sync.py sync-filter \
+  --supplement-form e0176 \
+  --status 2 \
+  --canonical-root /Users/seancheick/Documents/DataSetDsld/forms \
+  --state-file /Users/seancheick/Documents/DataSetDsld/state/dsld_sync_state.json \
+  --staging-dir /Users/seancheick/Documents/DataSetDsld/staging/forms/gummies
+```
+
+Run the pipeline on that first-time category seed:
+
+```bash
+python3 scripts/run_pipeline.py \
+  --raw-dir /Users/seancheick/Documents/DataSetDsld/staging/forms/gummies \
+  --output-prefix /Users/seancheick/Documents/DataSetDsld/output_gummies_seed
+```
+
+#### 3. Update a brand later with only new/changed products
+
+Use this after the first seed when you want only the brand delta.
+
+```bash
+python3 scripts/dsld_api_sync.py sync-delta \
+  --brand "Olly" \
+  --status 2 \
+  --canonical-root /Users/seancheick/Documents/DataSetDsld/forms \
+  --state-file /Users/seancheick/Documents/DataSetDsld/state/dsld_sync_state.json \
+  --delta-output-dir /Users/seancheick/Documents/DataSetDsld/delta/olly \
+  --dated-delta \
+  --report-dir /Users/seancheick/Documents/DataSetDsld/reports/olly
+```
+
+What to run next:
+
+- read the printed `Delta directory:` path
+- run the pipeline on that exact dated folder
+
+Example:
+
+```bash
+python3 scripts/run_pipeline.py \
+  --raw-dir /Users/seancheick/Documents/DataSetDsld/delta/olly/2026-03-30T01-49-58 \
+  --output-prefix /Users/seancheick/Documents/DataSetDsld/output_olly_2026-03-30T01-49-58
+```
+
+#### 4. Update a category/form later with only new/changed products
+
+Example: update capsules and process only the capsules delta
+
+```bash
+python3 scripts/dsld_api_sync.py sync-delta \
+  --supplement-form e0159 \
+  --status 2 \
+  --canonical-root /Users/seancheick/Documents/DataSetDsld/forms \
+  --state-file /Users/seancheick/Documents/DataSetDsld/state/dsld_sync_state.json \
+  --delta-output-dir /Users/seancheick/Documents/DataSetDsld/delta/capsules \
+  --dated-delta \
+  --report-dir /Users/seancheick/Documents/DataSetDsld/reports/capsules
+```
+
+Then run the pipeline on the printed dated delta folder:
+
+```bash
+python3 scripts/run_pipeline.py \
+  --raw-dir /Users/seancheick/Documents/DataSetDsld/delta/capsules/2026-03-30T01-49-58 \
+  --output-prefix /Users/seancheick/Documents/DataSetDsld/output_capsules_2026-03-30T01-49-58
+```
+
+#### 5. What to process after each kind of sync
+
+- `sync-brand` with `--output-dir`:
+  - process the `--output-dir` folder
+- `sync-filter` with `--staging-dir`:
+  - process the `--staging-dir` folder
+- `sync-delta` with `--delta-output-dir --dated-delta`:
+  - process the printed `Delta directory:` dated folder
+- `sync-brand` or `sync-filter` with only `--canonical-root` and no staging folder:
+  - this updates the canonical corpus only
+  - it does not create a clean brand-only or category-only pipeline input folder by itself
+
+#### 6. How to read the result
+
+- if a later `sync-delta` run prints `delta=0`, there were no new/changed labels for that run
+- the dated delta folder for that run may still exist as an empty or near-empty audit artifact
+- the JSON report in `--report-dir` is the clean place to check:
+  - `new_count`
+  - `changed_count`
+  - `unchanged_count`
+  - `failed_ids`
+  - `off_market_ids`
 
 **verify-db** — Sample-verify existing raw files against the API (non-destructive, never overwrites):
 
@@ -254,35 +686,42 @@ python3 scripts/dsld_api_sync.py verify-db \
 ```bash
 python3 scripts/dsld_api_sync.py sync-brand \
   --brand "Olly" \
-  --output-dir raw_data/Olly \
+  --output-dir /Users/seancheick/Documents/DataSetDsld/staging/brands/olly \
   --snapshot
-# Writes to: raw_data/Olly/_snapshots/20260329_143000/
+# Writes to: /Users/seancheick/Documents/DataSetDsld/staging/brands/olly/_snapshots/20260329_143000/
 ```
 
-### End-to-end workflow: API fetch -> pipeline -> Supabase
+### End-to-end workflow: recommended delta path
 
 ```bash
-# 1. Fetch a brand via API
-python3 scripts/dsld_api_sync.py sync-brand \
+# 1. Update a brand and create a dated delta folder + report
+python3 scripts/dsld_api_sync.py sync-delta \
   --brand "Thorne" \
-  --output-dir raw_data/Thorne-2026-03-29
+  --status 2 \
+  --canonical-root /Users/seancheick/Documents/DataSetDsld/forms \
+  --state-file /Users/seancheick/Documents/DataSetDsld/state/dsld_sync_state.json \
+  --delta-output-dir /Users/seancheick/Documents/DataSetDsld/delta/thorne \
+  --dated-delta \
+  --report-dir /Users/seancheick/Documents/DataSetDsld/reports/thorne
 
-# 2. Run the pipeline on fetched data
-python3 scripts/run_pipeline.py raw_data/Thorne-2026-03-29
+# 2. Run the pipeline on the printed dated delta folder
+python3 scripts/run_pipeline.py \
+  --raw-dir /Users/seancheick/Documents/DataSetDsld/delta/thorne/2026-03-30T01-49-58 \
+  --output-prefix /Users/seancheick/Documents/DataSetDsld/output_thorne_2026-03-30T01-49-58
 
 # 3. Build final DB
 python3 scripts/build_final_db.py \
-  --enriched-dir output_Thorne-2026-03-29_enriched/enriched \
-  --scored-dir output_Thorne-2026-03-29_scored/scored \
-  --output-dir final_db_output
+  --enriched-dir /Users/seancheick/Documents/DataSetDsld/output_thorne_2026-03-30T01-49-58_enriched/enriched \
+  --scored-dir /Users/seancheick/Documents/DataSetDsld/output_thorne_2026-03-30T01-49-58_scored/scored \
+  --output-dir /Users/seancheick/Documents/DataSetDsld/final_db_output_thorne_2026-03-30T01-49-58
 
 # 4. Sync to Supabase
-python3 scripts/sync_to_supabase.py final_db_output
+python3 scripts/sync_to_supabase.py /Users/seancheick/Documents/DataSetDsld/final_db_output_thorne_2026-03-30T01-49-58
 ```
 
 ### How it works
 
-- `dsld_api_client.py` fetches labels from the API and runs `normalize_api_label()` to ensure the output matches manual downloads exactly
+- `dsld_api_client.py` fetches labels from the API and runs `normalize_api_label()` to force the expected raw-label key contract
 - Each label is written as `{dsld_id}.json` in a flat directory (same as manual downloads)
 - The only difference: API-fetched files have `"_source": "api"` added as a provenance field
 - The pipeline ignores `_source` — it processes API and manual files identically
@@ -302,7 +741,8 @@ pytest \
   scripts/tests/test_supabase_client.py \
   scripts/tests/test_assemble_final_db_release.py \
   scripts/tests/test_generate_pair_change_journal.py \
-  scripts/tests/test_dsld_api_client.py -q
+  scripts/tests/test_dsld_api_client.py \
+  scripts/tests/test_dsld_api_sync.py -q
 ```
 
 Syntax verification:
@@ -330,5 +770,9 @@ python3 -m py_compile \
 - The Flutter-related docs and Supabase schema were updated to match the corrected export/sync model.
 - The DSLD API path is additive, not a replacement:
   - manual raw JSON still works
-  - API-fetched raw JSON feeds the same downstream pipeline (100% parity verified)
-  - use `probe --reference` to verify parity any time the API might have changed
+  - API-fetched raw JSON now has:
+    - live connectivity verification
+    - one successful parity probe against a real manual label
+    - one successful live brand sync for `Olly`
+  - broader parity confidence should come from more real-label probes over time, not one label
+  - use `probe --reference` any time the API response shape might have changed

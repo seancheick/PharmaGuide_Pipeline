@@ -96,6 +96,7 @@ CREATE TABLE IF NOT EXISTS export_manifest (
   schema_version   text NOT NULL,
   product_count    integer NOT NULL,
   checksum         text NOT NULL,
+  min_app_version  text NOT NULL DEFAULT '1.0.0',
   generated_at     timestamptz NOT NULL,
   created_at       timestamptz DEFAULT now(),
   is_current       boolean DEFAULT true
@@ -157,15 +158,17 @@ ALTER TABLE user_stacks ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "Users manage own stacks" ON user_stacks
   FOR ALL USING (auth.uid() = user_id);
 
--- user_usage: users read/write own usage
+-- user_usage: users read their counters; writes go through increment_usage
 ALTER TABLE user_usage ENABLE ROW LEVEL SECURITY;
-CREATE POLICY "Users manage own usage" ON user_usage
-  FOR ALL USING (auth.uid() = user_id);
+CREATE POLICY "Users read own usage" ON user_usage
+  FOR SELECT USING (auth.uid() = user_id);
 
--- pending_products: users submit and view own submissions
+-- pending_products: users submit and view their requests; status is server-owned
 ALTER TABLE pending_products ENABLE ROW LEVEL SECURITY;
-CREATE POLICY "Users manage own submissions" ON pending_products
-  FOR ALL USING (auth.uid() = user_id);
+CREATE POLICY "Users read own submissions" ON pending_products
+  FOR SELECT USING (auth.uid() = user_id);
+CREATE POLICY "Users submit pending products" ON pending_products
+  FOR INSERT WITH CHECK (auth.uid() = user_id);
 
 -- =============================================================================
 -- 5. RPC Functions
@@ -180,7 +183,8 @@ CREATE OR REPLACE FUNCTION rotate_manifest(
   p_schema_version text,
   p_product_count integer,
   p_checksum text,
-  p_generated_at timestamptz
+  p_generated_at timestamptz,
+  p_min_app_version text DEFAULT '1.0.0'
 ) RETURNS uuid AS $$
 DECLARE
   new_id uuid;
@@ -188,10 +192,10 @@ BEGIN
   -- Insert new row first (so there's always at least one current)
   INSERT INTO export_manifest (
     db_version, pipeline_version, scoring_version, schema_version,
-    product_count, checksum, generated_at, is_current
+    product_count, checksum, min_app_version, generated_at, is_current
   ) VALUES (
     p_db_version, p_pipeline_version, p_scoring_version, p_schema_version,
-    p_product_count, p_checksum, p_generated_at, true
+    p_product_count, p_checksum, p_min_app_version, p_generated_at, true
   ) RETURNING id INTO new_id;
 
   -- Then mark all others as not current
@@ -515,7 +519,7 @@ def test_needs_update_true_when_versions_differ():
 
 
 def test_needs_update_false_when_same():
-    """needs_update returns False when versions and checksums match."""
+    """needs_update returns False when versions match."""
     from scripts.sync_to_supabase import needs_update
 
     local = {"db_version": "2026.03.27.5", "checksum": "sha256:same"}
@@ -607,13 +611,10 @@ def needs_update(local_manifest, remote_manifest):
     Returns True if:
     - remote_manifest is None (first push ever)
     - db_version differs
-    - checksum differs (same version but different content)
     """
     if remote_manifest is None:
         return True
     if local_manifest["db_version"] != remote_manifest["db_version"]:
-        return True
-    if local_manifest["checksum"] != remote_manifest["checksum"]:
         return True
     return False
 
