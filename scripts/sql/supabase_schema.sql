@@ -180,7 +180,7 @@ DECLARE
   v_scans integer := 0;
   v_ai integer := 0;
   v_exceeded boolean := false;
-  v_scan_limit constant integer := 10;
+  v_scan_limit constant integer := 20;
   v_ai_limit constant integer := 5;
 BEGIN
   -- Guard: caller must own the user_id

@@ -261,8 +261,9 @@ App opens on iPhone. 5 tabs navigate. Theme colors match spec. Breakpoint shows 
    - No remote product search in v1; Supabase only hosts manifests, blobs, and app-facing user tables
 
 10. **Scan limit enforcement (scan_limit_service.dart):**
-    - Guest: Hive guest_scan_count, >= 3 -> upgrade sheet
+    - Guest: Hive guest_scan_count, >= 10 -> upgrade sheet
     - Signed-in: increment_usage RPC, returns `{scans_today, ai_messages_today, limit_exceeded}`
+    - Signed-in free limit: If scans_today >= 20 for the current day, show the over-limit sheet
     - Call after barcode resolution but before final result render so `limit_exceeded=true` can block the over-limit experience
     - **Network failure fallback:** If increment_usage RPC fails (network error mid-scan), fall back to client-side Hive count and ALLOW the scan. Never block the user on a network error.
 

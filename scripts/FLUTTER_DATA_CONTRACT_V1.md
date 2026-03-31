@@ -1,8 +1,8 @@
 # Flutter Data Contract v1
 
-> Version: 1.2.0 — 2026-03-18
+> Version: 1.2.1 — 2026-03-30
 > How the Flutter app reads data from the final DB at each screen level.
-> Updated: interaction_summary, dose_threshold_evaluation, condition/drug_class mapping, 45 interaction rules (pregnancy+hypertension+diabetes), diabetes merged, high_cholesterol added
+> Updated: launch free-tier limits (20/5 signed-in, 10/3 guest), omega-3 scoring/export alignment, interaction_summary, dose_threshold_evaluation, condition/drug_class mapping
 
 ---
 
@@ -422,7 +422,8 @@ LIMIT 1;
 -- Fallback: FTS search
 SELECT p.* FROM products_core p
 JOIN products_fts f ON p.rowid = f.rowid
-WHERE products_fts MATCH ?;
+WHERE products_fts MATCH ?
+LIMIT 50;
 ```
 
 ---
@@ -445,8 +446,14 @@ WHERE is_gluten_free = 1 AND supplement_type = 'multivitamin';
 -- Text search
 SELECT p.* FROM products_core p
 JOIN products_fts f ON p.rowid = f.rowid
-WHERE products_fts MATCH 'omega fish oil';
+WHERE products_fts MATCH 'omega fish oil'
+LIMIT 50;
 ```
+
+Client behavior:
+- debounce text search input by ~300ms
+- never materialize unbounded FTS results into Dart memory
+- use virtualized rendering for result lists
 
 ---
 
@@ -570,7 +577,7 @@ Also from Supabase (user account stuff)
  │ │ │ for CRUD conflict │
  │ │ │ resolution │  
  ├───────────────────────┼─────────────────┼─────────────────────────┤
-│ user_usage │ App ↔ Supabase │ Scan/AI limits (10 │  
+│ user_usage │ App ↔ Supabase │ Scan/AI limits (20 │
  │ │ │ scans/day, 5 AI/day) │
 ├───────────────────────┼─────────────────┼─────────────────────────┤  
  │ pending_products │ App → Supabase │ "Product not found" │  
@@ -592,7 +599,7 @@ Never leaves the phone
  │ score_fit_20 (personal match │ Computed fresh each time, │
 │ score) │ never stored │  
  ├────────────────────────────────────┼───────────────────────────────┤
-│ Guest scan count │ Hive local KV │  
+│ Guest scan / AI counters │ Hive local KV │
  ├────────────────────────────────────┼───────────────────────────────┤  
  │ Chat history │ Hive local KV │
 ├────────────────────────────────────┼───────────────────────────────┤  
@@ -778,8 +785,22 @@ Detail blob payload:
 These are public bucket paths — readable with the anon key, no auth required.
 The app should cache the DB file locally and only re-download when the manifest
 version changes (compare against locally stored version).
+`min_app_version` is a hard client gate. If the remote manifest requires a newer
+app build, the client must force an app-store update before attempting to parse
+or promote the new DB release.
+DB update flow must be staged and verified:
+- download to a staging path
+- verify checksum using remote `export_manifest.json`
+- perform a minimal SQLite open/readability check
+- atomically swap in only after verification passes
+- keep the previous DB on any failure
 The app should also cache the `detail_index.json` for the active `db_version` and
 resolve `dsld_id` to `blob_sha256` before fetching a detail payload.
+`product_detail_cache` requires explicit cache policy:
+- release-version-aware invalidation
+- bounded size
+- LRU eviction
+- O(1) lookup by `dsld_id`
 
 ### 11. `increment_usage` RPC
 
@@ -796,7 +817,8 @@ final result = await supabase.rpc('increment_usage', params: {
 // result = {scans_today: 3, ai_messages_today: 1, limit_exceeded: false}
 ```
 
-**Limits:** 10 scans/day, 5 AI messages/day.
+**Limits:** 20 scans/day, 5 AI messages/day for signed-in free users.
+Guest policy is app-side: 10 lifetime scans, 3 AI messages/day.
 **Return value:** `{scans_today, ai_messages_today, limit_exceeded}`.
 When `limit_exceeded` is `true`, the app should show a paywall or "try again
 tomorrow" message. The RPC is `SECURITY DEFINER`, validates that the caller

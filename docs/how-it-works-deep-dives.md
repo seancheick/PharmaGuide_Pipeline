@@ -94,7 +94,7 @@ Here's where we go further than anyone. We take your **daily EPA+DHA total** and
 **The "Proprietary Blend Fish Oil" Case:**
 > Product: "Omega Performance Blend 800mg"
 > - EPA and DHA listed inside a proprietary blend with no individual amounts
-> - We **refuse to award Section E dose bonus** — because we can't verify the actual EPA+DHA
+> - We **refuse to award the omega-3 dose bonus** — because we can't verify the actual EPA+DHA
 > - Blend flagged separately with disclosure penalty
 
 **The "Flaxseed Omega-3" Mislead:**
@@ -140,7 +140,7 @@ Section C — Evidence (max 20 pts)
 
 Section D — Brand Trust (max 5 pts)
 
-Section E — EPA+DHA Dose Adequacy (up to +2.0 bonus)
+Omega-3 Dose Bonus — folded into Ingredient Quality (up to +2.0 in current config)
   └── Based on daily EPA+DHA total vs clinical thresholds
 ```
 

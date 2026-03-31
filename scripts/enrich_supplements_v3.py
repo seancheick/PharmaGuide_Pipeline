@@ -2508,6 +2508,8 @@ class SupplementEnricherV3:
         # =================================================================
         nested_pre = ingredient.get('nestedIngredients') or []
         ingredient_group_pre = (ingredient.get('ingredientGroup', '') or '').lower()
+        if ingredient_group_pre == 'header':
+            return SKIP_REASON_BLEND_HEADER_NO_DOSE
         if isinstance(nested_pre, list) and nested_pre and 'blend' in ingredient_group_pre:
             has_dose_pre, _ = self._has_valid_therapeutic_dose(ingredient)
             return (

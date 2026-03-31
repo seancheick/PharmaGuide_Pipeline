@@ -3,8 +3,8 @@
     "description": "Other/inactive ingredients database for supplement excipients and additives",
     "purpose": "inactive_ingredient_classification",
     "schema_version": "5.0.0",
-    "last_updated": "2026-03-13",
-    "total_entries": 656
+    "last_updated": "2026-03-30",
+    "total_entries": 661
   },
   "other_ingredients": [
     {
@@ -2372,7 +2372,12 @@
         "beef bone broth, powder",
         "beef bone broth powder",
         "bone broth powder",
-        "bone broth"
+        "bone broth",
+        "beef bone broth protein powder",
+        "beef bone broth protein",
+        "chicken bone broth protein powder",
+        "bone broth protein powder",
+        "bone broth protein"
       ],
       "category": "protein_source",
       "is_additive": true,
@@ -8909,7 +8914,9 @@
       "id": "OI_INK_DESCRIPTOR",
       "standard_name": "Ink (Descriptor)",
       "aliases": [
-        "Ink"
+        "Ink",
+        "edible ink",
+        "edible Ink"
       ],
       "category": "printing_ink_descriptor",
       "is_additive": true,
@@ -8984,7 +8991,10 @@
       "standard_name": "Inulin",
       "aliases": [
         "inulin fiber",
-        "inulin syrup"
+        "inulin syrup",
+        "inulin/fos",
+        "inulin and fos",
+        "fos/inulin"
       ],
       "category": "fiber_prebiotic",
       "is_additive": false,
@@ -10796,7 +10806,11 @@
       "aliases": [
         "micellar casein",
         "micellar casein protein",
-        "casein micellar"
+        "casein micellar",
+        "non-GMO Micellar Casein Protein",
+        "Micellar Casein, Instantized",
+        "instantized micellar casein",
+        "non-gmo micellar casein"
       ],
       "category": "protein_source",
       "is_additive": true,
@@ -12744,7 +12758,9 @@
         "vanilla oleoresin",
         "vanilla powder",
         "Vanillin Crystals",
-        "vegan creamy flavor natural"
+        "vegan creamy flavor natural",
+        "natural and artificial vanilla flavor",
+        "vanilla flavor"
       ],
       "category": "flavor_natural",
       "is_additive": true,
@@ -14798,6 +14814,28 @@
       "external_ids": {}
     },
     {
+      "id": "NHA_POLYALDITOL",
+      "standard_name": "Polyalditol",
+      "aliases": [
+        "polyalditol",
+        "hydrogenated starch hydrolysate",
+        "HSH",
+        "hydrogenated starch hydrolyzate"
+      ],
+      "category": "sugar_alcohol",
+      "is_additive": true,
+      "additive_type": "sugar_alcohol_excipient",
+      "notes": "Hydrogenated starch hydrolysate (HSH) — a mixture of sugar alcohols (sorbitol, maltitol, longer-chain polyols) produced by partial hydrolysis and hydrogenation of starch. UNII: 27F77DSJ5V, CAS: 68425-17-2. Used as a tableting excipient, binder, and mild sweetener in dietary supplements. Generally recognized as safe; low glycemic impact. Not a harmful additive.",
+      "identifiers": {
+        "CUI": null,
+        "UNII": "27F77DSJ5V",
+        "CAS": "68425-17-2"
+      },
+      "external_ids": {
+        "unii": "27F77DSJ5V"
+      }
+    },
+    {
       "id": "NHA_POLYMETHACRYLATE",
       "standard_name": "Polymethacrylate",
       "aliases": [
@@ -15270,7 +15308,9 @@
         "protein film",
         "protein glaze",
         "zein protein",
-        "zein protein coating"
+        "zein protein coating",
+        "corn zein",
+        "zein"
       ],
       "category": "coating",
       "is_additive": true,
@@ -15987,7 +16027,9 @@
         "saccharomyces cerevisiae",
         "saccharomyces cereviseiae",
         "Saccharomyces cerevisae",
-        "nutritional yeast"
+        "nutritional yeast",
+        "yeast extract",
+        "yeast extracts"
       ],
       "category": "fermentation_yeast",
       "is_additive": false,
@@ -16102,7 +16144,10 @@
         "salt",
         "sea salt",
         "sodium chloride",
-        "table salt"
+        "table salt",
+        "himalayan rock salt",
+        "himalayan pink salt",
+        "himalayan salt"
       ],
       "category": "flavor_enhancer",
       "is_additive": true,
@@ -17141,6 +17186,30 @@
       }
     },
     {
+      "id": "NHA_SODIUM_STARCH_GLYCOLATE",
+      "standard_name": "Sodium Starch Glycolate",
+      "aliases": [
+        "sodium starch glycolate",
+        "carboxymethyl starch sodium",
+        "sodium carboxymethyl starch",
+        "sodium starch glycolate type a",
+        "explotab",
+        "primojel"
+      ],
+      "category": "disintegrant",
+      "is_additive": true,
+      "additive_type": "superdisintegrant",
+      "notes": "Crosslinked sodium carboxymethyl starch — a superdisintegrant used in tablets and capsules to promote rapid disintegration and drug release. UNII: H8AV0SQX4D, CAS: 9063-38-1. Distinct from croscarmellose sodium (crosslinked CMC). Generally recognized as safe excipient. Not a harmful additive.",
+      "identifiers": {
+        "CUI": null,
+        "UNII": "H8AV0SQX4D",
+        "CAS": "9063-38-1"
+      },
+      "external_ids": {
+        "unii": "H8AV0SQX4D"
+      }
+    },
+    {
       "id": "NHA_SODIUM_STEARYL_FUMARATE",
       "standard_name": "Sodium Stearyl Fumarate",
       "aliases": [
@@ -17666,7 +17735,8 @@
         "soy fiber",
         "soy-derived polysaccharides",
         "soybean polysaccharides",
-        "organic soy bean fiber"
+        "organic soy bean fiber",
+        "soy polysaccharide"
       ],
       "category": "stabilizer_thickener",
       "is_additive": true,
@@ -18051,7 +18121,10 @@
         "stevioside",
         "truvia",
         "stevia rebaudioside a",
-        "stevia reb-a"
+        "stevia reb-a",
+        "enliten",
+        "enliten high intensity sweetener",
+        "ovasweet"
       ],
       "category": "sweetener_natural",
       "is_additive": true,
@@ -20368,7 +20441,8 @@
       "aliases": [
         "cellulose coating",
         "plant cellulose coating",
-        "vegetable cellulose coating"
+        "vegetable cellulose coating",
+        "cellulose coatiing"
       ],
       "category": "coating",
       "is_additive": true,
@@ -22083,6 +22157,52 @@
         "stability enhancement"
       ],
       "last_updated": "2026-03-17",
+      "external_ids": {}
+    },
+    {
+      "id": "NHA_BEADLETS",
+      "standard_name": "Beadlets (Delivery Form)",
+      "aliases": [
+        "beadlets",
+        "beadlet",
+        "micro-beadlets",
+        "microbeadlets"
+      ],
+      "category": "delivery_form_descriptor",
+      "is_additive": true,
+      "additive_type": "delivery_descriptor",
+      "notes": "Beadlets are small spherical pellets used as a delivery form for vitamins, minerals, or other actives. Not an ingredient but a structural descriptor for encapsulated particles.",
+      "identifiers": {},
+      "external_ids": {}
+    },
+    {
+      "id": "NHA_NUTMEG",
+      "standard_name": "Nutmeg",
+      "aliases": [
+        "nutmeg",
+        "myristica fragrans",
+        "nutmeg powder",
+        "nutmeg extract"
+      ],
+      "category": "flavoring_spice",
+      "is_additive": true,
+      "additive_type": "natural_flavoring",
+      "notes": "Myristica fragrans seed. Used as a natural flavoring agent in supplements. Contains myristicin. Generally safe at flavoring doses.",
+      "identifiers": {},
+      "external_ids": {}
+    },
+    {
+      "id": "NHA_TICALOID",
+      "standard_name": "Ticaloid",
+      "aliases": [
+        "ticaloid",
+        "ticaloid powder"
+      ],
+      "category": "emulsifier",
+      "is_additive": true,
+      "additive_type": "emulsifier_stabilizer",
+      "notes": "Ticaloid is a branded hydrocolloid/emulsifier system by TIC Gums (now Ingredion). Typically a blend of gum arabic and xanthan or other hydrocolloids. Used as stabilizer in liquid supplements.",
+      "identifiers": {},
       "external_ids": {}
     }
   ]

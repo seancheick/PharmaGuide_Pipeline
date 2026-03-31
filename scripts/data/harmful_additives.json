@@ -3,8 +3,8 @@
     "description": "Comprehensive database of harmful additives, contaminants, and concerning ingredients found in dietary supplements. Used for scoring penalties and consumer warnings.",
     "purpose": "penalty_scoring",
     "schema_version": "5.1.0",
-    "last_updated": "2026-03-25",
-    "total_entries": 113,
+    "last_updated": "2026-03-30",
+    "total_entries": 115,
     "scoring_rule": "Apply penalty points based on severity_level. High: -2.0, Moderate: -1.0, Low: -0.5. Multiple additives are cumulative. Scored in B1 section of score_supplements.py.",
     "severity_level_definitions": {
       "high": "Significant health concerns with strong evidence (e.g., IARC 2A/2B carcinogens, trans fats, heavy metal contaminants, endocrine disruptors)",
@@ -5124,7 +5124,10 @@
         "erythrite",
         "1,2,3,4-butanetetrol",
         "mesoerythritol",
-        "phycitol"
+        "phycitol",
+        "swerve",
+        "swerve natural sweetener",
+        "swerve sweetener"
       ],
       "category": "sweetener_sugar_alcohol",
       "mechanism_of_harm": "Elevated circulating erythritol enhances platelet reactivity via increased intracellular calcium signaling, promoting thrombosis. Prospective cohorts link highest-quartile plasma erythritol to 1.8-2.2x increased MACE risk. At supplement doses (>20 g), osmotic laxation occurs via unabsorbed sugar alcohol drawing water into the intestinal lumen.",
@@ -8653,7 +8656,8 @@
         "PEG-4000",
         "PEG-6000",
         "polyethylene oxide",
-        "polyoxyethylene"
+        "polyoxyethylene",
+        "polyethyene glycol"
       ],
       "category": "excipient",
       "mechanism_of_harm": "Synthetic polymer used as solvent/carrier and excipient in liquids and softgels. Trace contaminants (ethylene glycol, diethylene glycol) found in tested lots. Rare but documented IgE-mediated allergic reactions and anaphylaxis, with potential cross-reactivity to polysorbates. Generally poorly absorbed orally but can cause hypersensitivity in sensitive individuals.",
@@ -8797,7 +8801,8 @@
         "polyoxyethylene (20) sorbitan monooleate",
         "PS80",
         "Tween 80 NF",
-        "emulsifier-Polysorbate 80"
+        "emulsifier-Polysorbate 80",
+        "polysorbate"
       ],
       "category": "emulsifier",
       "mechanism_of_harm": "Severely disrupts gut microbiome composition and diversity. Promotes chronic low-grade intestinal inflammation and compromises intestinal barrier function. May be contaminated with 1,4-dioxane (a carcinogen). 2024-2025 studies show it accelerates age-related cognitive decline via gut-brain axis disruption and drives mucus-penetrating bacteria that cause inflammation.",
@@ -18203,6 +18208,115 @@
         "source": "Literature consensus: GI effects threshold 20-30 g/day"
       },
       "entity_relationships": null
+    },
+    {
+      "id": "ADD_ALUMINUM_LAKE_GENERIC",
+      "standard_name": "Aluminum Lake (Unspecified Color)",
+      "aliases": [
+        "aluminum lake",
+        "aluminium lake"
+      ],
+      "severity_level": "moderate",
+      "penalty_points": -1.0,
+      "category": "artificial_color",
+      "notes": "Generic FD&C aluminum lake without specific color identification. Aluminum lakes are water-insoluble forms of FD&C dyes adsorbed onto alumina substrate. All specific FD&C aluminum lakes carry moderate severity. When the specific color is not labeled, the generic penalty applies.",
+      "entity_type": "ingredient",
+      "cui": null,
+      "external_ids": {},
+      "regulatory": {
+        "fda_status": "approved_with_limits",
+        "eu_status": "varies_by_color"
+      },
+      "match_rules": {
+        "match_mode": "alias_and_fuzzy",
+        "fuzzy_threshold": 0.72,
+        "case_sensitive": false,
+        "preferred_alias": "Aluminum Lake"
+      },
+      "references_structured": [
+        {
+          "type": "regulation",
+          "authority": "FDA",
+          "title": "21 CFR Part 74 - FD&C Color Additives (Lakes)",
+          "citation": "21 CFR Part 74 - Listing of color additives exempt from certification",
+          "url": "https://www.law.cornell.edu/cfr/text/21/part-74",
+          "published_date": null,
+          "evidence_grade": "R",
+          "supports_claims": []
+        }
+      ],
+      "review": {
+        "status": "validated",
+        "last_reviewed_at": "2026-03-30",
+        "reviewed_by": "unmapped_resolution_batch",
+        "next_review_due": "2026-09-30",
+        "change_log": [
+          {
+            "date": "2026-03-30",
+            "change": "Created generic Aluminum Lake entry for labels missing specific FD&C color",
+            "reason": "unmapped_resolution_equate_batch"
+          }
+        ]
+      }
+    },
+    {
+      "id": "ADD_POLYSORBATE_20",
+      "standard_name": "Polysorbate 20",
+      "aliases": [
+        "polysorbate 20",
+        "tween 20",
+        "polyoxyethylene 20 sorbitan monolaurate",
+        "E432"
+      ],
+      "category": "emulsifier",
+      "mechanism_of_harm": "Non-ionic surfactant (polyoxyethylene sorbitan monolaurate / E432). Like other polysorbates, may disrupt gut epithelial barrier integrity at high doses (Chassaing et al., Nature 2015 PMID:25731862). Generally lower concern than Polysorbate 80 due to shorter fatty acid chain (lauric vs oleic). Used as an emulsifier/solubilizer in softgels and liquid supplements.",
+      "regulatory_status": {
+        "US": "GRAS. FDA approved as food additive under 21 CFR 172.840",
+        "EU": "E432 approved with group ADI of 25 mg/kg bw/day for polysorbates (EFSA 2015 re-evaluation)"
+      },
+      "population_warnings": [
+        "Individuals with IBD or compromised gut barrier — surfactant-induced epithelial disruption"
+      ],
+      "notes": "Polyoxyethylene 20 sorbitan monolaurate. Non-ionic surfactant/emulsifier used in supplement softgels and liquids. Lower molecular weight than Polysorbate 80. GRAS status; FDA approved under 21 CFR 172.840. EU E432 with group ADI 25 mg/kg/day. Low severity — included for label transparency.",
+      "severity_level": "low",
+      "penalty_points": -0.5,
+      "entity_type": "ingredient",
+      "cui": null,
+      "external_ids": {
+        "unii": "4R0MI3KBZF",
+        "cas": "9005-64-5"
+      },
+      "match_rules": {
+        "match_mode": "alias_and_fuzzy",
+        "fuzzy_threshold": 0.72,
+        "case_sensitive": false,
+        "preferred_alias": "Polysorbate 20"
+      },
+      "references_structured": [
+        {
+          "type": "regulation",
+          "authority": "FDA",
+          "title": "21 CFR 172.840 - Polysorbate 20",
+          "citation": "21 CFR 172.840",
+          "url": "https://www.law.cornell.edu/cfr/text/21/172.840",
+          "published_date": null,
+          "evidence_grade": "R",
+          "supports_claims": []
+        }
+      ],
+      "review": {
+        "status": "validated",
+        "last_reviewed_at": "2026-03-30",
+        "reviewed_by": "unmapped_resolution_batch",
+        "next_review_due": "2026-09-30",
+        "change_log": [
+          {
+            "date": "2026-03-30",
+            "change": "Created Polysorbate 20 entry matching schema of Polysorbate 40/65/80",
+            "reason": "unmapped_resolution_remaining_brands_batch"
+          }
+        ]
+      }
     }
   ]
 }

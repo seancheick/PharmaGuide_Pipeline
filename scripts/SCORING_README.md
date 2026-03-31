@@ -1,6 +1,6 @@
-# PharmaGuide Scoring README (v3.2.0 / Data Schema 5.1.0)
+# PharmaGuide Scoring README (v3.3.0 / Data Schema 5.1.0)
 
-> Last updated: 2026-03-22 | 2678 tests | 549 IQM parents | 33 data files
+> Last updated: 2026-03-30
 
 This document is the implementation-facing guide for the current scorer:
 
@@ -8,7 +8,7 @@ This document is the implementation-facing guide for the current scorer:
 - Config: `scripts/config/scoring_config.json`
 - Spec: `scripts/SCORING_ENGINE_SPEC.md`
 
-It is aligned to the current `v3.2.0` behavior in code and config.
+It is aligned to the current `v3.3.0` behavior in code and config.
 
 ## 1) What The Scorer Does
 
@@ -52,41 +52,43 @@ For each product:
 3. Run mapping gate (`require_full_mapping` behavior).
 4. Apply unmapped+banned exact/alias regression guard.
 5. Score sections A/B/C/D.
-6. Score section E (EPA+DHA dose adequacy — omega-3 products only).
+6. Compute omega-3 dose adequacy inside Section A when applicable, then emit legacy `E_dose_adequacy` output for backward compatibility.
 7. Apply manufacturer violation penalty.
 8. Derive final verdict and output payload.
 
-## 4) Score Model (v3.2)
+## 4) Score Model (v3.3)
 
 Final score:
 
 ```text
-quality_raw = A + B + C + D + E + violation_penalty
+quality_raw = A + B + C + D + violation_penalty
 quality_score = clamp(0, 80, quality_raw)
 score_100_equivalent = (quality_score / 80) * 100
 ```
 
 Section caps:
 
-| Section | Max | Notes |
-|---------|-----|-------|
-| A: Ingredient Quality | 25 | |
-| B: Safety & Purity | 30 | |
-| C: Evidence & Research | 20 | |
-| D: Brand Trust | 5 | |
-| E: Dose Adequacy | 2 | Omega-3 products only; additive bonus within the 80-pt ceiling |
-| **Total ceiling** | **80** | All sections clamped together at 80 |
+| Section                | Max    | Notes                                                               |
+| ---------------------- | ------ | ------------------------------------------------------------------- |
+| A: Ingredient Quality  | 25     |                                                                     |
+| B: Safety & Purity     | 30     |                                                                     |
+| C: Evidence & Research | 20     |                                                                     |
+| D: Brand Trust         | 5      |                                                                     |
+| E: Dose Adequacy       | 2      | Legacy output only; score contribution is now folded into Section A |
+| **Total ceiling**      | **80** | All sections clamped together at 80                                 |
 
-Section E is an additive bonus for omega-3 products that have explicit labelled EPA/DHA amounts.
-It helps qualifying products reach the 80-pt ceiling with slightly lower A/B/C/D scores rather
-than pushing the score beyond 80.
+Omega-3 dose adequacy is now a category bonus inside Section A. `E_dose_adequacy`
+is still emitted in `breakdown`/`section_scores` so existing consumers do not break,
+but it is no longer added as a standalone term in `quality_raw`.
 
 ## 5) Section Details
 
 ### Section A: Ingredient Quality (max 25)
 
 ```text
-A = min(25, A1 + A2 + A3 + A4 + A5 + A6 + probiotic_bonus)
+core_quality = A1 + A2 + A3 + A4 + A5 + A6
+category_bonus_total = min(5, probiotic_bonus + omega3_dose_bonus + future_bonus_terms...)
+A = min(25, core_quality + category_bonus_total)
 ```
 
 - A1 (max 15): weighted bioavailability score.
@@ -108,10 +110,17 @@ A = min(25, A1 + A2 + A3 + A4 + A5 + A6 + probiotic_bonus)
 - A6 (max 3): single-ingredient efficiency bonus for `supp_type in {single, single_nutrient}` using IQM form score tiers:
   - uses `score` as primary value
   - falls back to `bio_score` only when `score` is missing
+- Category bonus pool:
+  - current cap: `5`
+  - prevents stacked niche bonuses from dominating core ingredient quality
 - Probiotic bonus:
   - default mode max 3
   - extended mode max 10 (gated)
   - non-probiotic strict-gate path enabled by config.
+- Omega-3 dose bonus:
+  - current config max 2
+  - only for products with explicit labelled EPA/DHA amounts
+  - contributes through the Section A category bonus pool
 
 ### Section B: Safety & Purity (max 30)
 
@@ -183,10 +192,14 @@ D = min(5, D1 + D2 + min(2.0, D3 + D4 + D5))
 - D4: high-standard region contribution.
 - D5: sustainability.
 
-### Section E: Dose Adequacy — EPA+DHA (max 2.0, omega-3 products only)
+### Legacy Section E Output: Dose Adequacy — EPA+DHA
 
-Section E rewards omega-3 products that label explicit per-unit EPA and/or DHA amounts.
-It is **not applicable** to products with no labelled EPA or DHA quantities (score and max both 0.0).
+`E_dose_adequacy` is now a backward-compatibility output only. The same EPA/DHA
+math still runs, but the actual score contribution is stored in `A.omega3_dose_bonus`
+and included in Section A through the category bonus pool.
+
+Legacy E is **not applicable** to products with no labelled EPA or DHA quantities
+(`score=0.0`, `max=0.0`, `applicable=false`).
 
 ```text
 per_day_mid = (per_day_min + per_day_max) / 2
@@ -197,21 +210,23 @@ where:
 
 Band table (highest matching threshold wins):
 
-| Threshold (mg/day EPA+DHA) | Score | Label | Clinical Anchor |
-|---|---|---|---|
-| ≥ 4000 | 2.0 | `prescription_dose` | AHA/ACC Rx dose for hypertriglyceridemia; also adds `PRESCRIPTION_DOSE_OMEGA3` flag |
-| ≥ 2000 | 2.0 | `high_clinical` | EFSA health claim for blood triglycerides |
-| ≥ 1000 | 1.5 | `aha_cvd` | AHA recommendation for CVD patients |
-| ≥  500 | 1.0 | `general_health` | FDA qualified health claim minimum |
-| ≥  250 | 0.5 | `efsa_ai_zone` | EFSA Adequate Intake for general population |
-| ≥    0 | 0.0 | `below_efsa_ai` | Below EFSA AI |
+| Threshold (mg/day EPA+DHA) | Score | Label               | Clinical Anchor                                                                     |
+| -------------------------- | ----- | ------------------- | ----------------------------------------------------------------------------------- |
+| ≥ 4000                     | 2.0   | `prescription_dose` | AHA/ACC Rx dose for hypertriglyceridemia; also adds `PRESCRIPTION_DOSE_OMEGA3` flag |
+| ≥ 2000                     | 2.0   | `high_clinical`     | EFSA health claim for blood triglycerides                                           |
+| ≥ 1000                     | 1.5   | `aha_cvd`           | AHA recommendation for CVD patients                                                 |
+| ≥ 500                      | 1.0   | `general_health`    | FDA qualified health claim minimum                                                  |
+| ≥ 250                      | 0.5   | `efsa_ai_zone`      | EFSA Adequate Intake for general population                                         |
+| ≥ 0                        | 0.0   | `below_efsa_ai`     | Below EFSA AI                                                                       |
 
 Ingredient inclusion rules for the EPA+DHA sum:
+
 - canonical_ids `"epa"`, `"dha"`, or `"epa_dha"` (combined node contributes to both buckets)
 - Excludes `is_proprietary_blend`, `is_blend_header`, and `is_parent_total` rows
 - Only `mg`, `g`, or `mcg` units accepted; others skipped
 
 Serving basis resolution (in priority order):
+
 1. `product.serving_basis.min_servings_per_day` / `max_servings_per_day`
 2. `product.dosage_normalization.serving_basis.servings_per_day_min` / `_max`
 3. Default: 1.0
@@ -260,6 +275,7 @@ From current config:
 - `enable_non_gmo_bonus = false`
 - `enable_hypoallergenic_bonus = false`
 - `enable_d1_middle_tier = false`
+- `category_bonus_pool.max_contribution = 5`
 
 ## 7) Verdicts
 
@@ -274,12 +290,12 @@ Precedence:
 
 Grade words (only for non-blocked, non-unsafe, non-not_scored):
 
-- >= 90: Exceptional
-- >= 80: Excellent
-- >= 70: Good
-- >= 60: Fair
-- >= 50: Below Avg
-- >= 32: Low
+- > = 90: Exceptional
+- > = 80: Excellent
+- > = 70: Good
+- > = 60: Fair
+- > = 50: Below Avg
+- > = 32: Low
 - < 32: Very Poor
 
 ## 8) Output Structure
@@ -301,12 +317,12 @@ Core output fields include:
 - `badges`
 - `category_percentile`, `category_percentile_text`
 - `percentile_category`, `percentile_category_label`, `percentile_category_source`, `percentile_category_confidence`, `percentile_category_signals`
-- `breakdown` (A/B/C/D/E and penalties)
+- `breakdown` (A/B/C/D plus legacy E compatibility output and penalties)
 - `section_scores` (with config-driven max values)
 - `flags` (including `PRESCRIPTION_DOSE_OMEGA3` when applicable)
 - mapping KPI fields (`unmapped_actives_total`, `mapped_coverage`, etc.)
 
-Section E fields in `section_scores.E_dose_adequacy`:
+Legacy Section E fields in `section_scores.E_dose_adequacy`:
 
 ```json
 {
@@ -340,8 +356,8 @@ When not applicable (no explicit EPA/DHA dose):
 - B5 exposes both signed and magnitude penalty fields in evidence:
   - `computed_blend_penalty` (signed)
   - `computed_blend_penalty_magnitude` (positive)
-- Section E (`E_dose_adequacy`) is new in v3.2.0. Older enriched files that lack explicit
-  EPA/DHA quantities will simply return `applicable: false` with `score: 0.0` — no breaking change.
+- `E_dose_adequacy` remains exported for backward compatibility, but its score now comes from
+  `A.omega3_dose_bonus` rather than a standalone scoring term.
 - `is_parent_total` field on ingredients is new in v3.2.0 (propagated by enricher post-pass).
   Older enriched files without this field will have `is_parent_total` default to falsy via
   `.get()`, retaining old A1 behavior with no crash.
@@ -354,7 +370,7 @@ The scorer does NOT apply interaction-based penalties. Interactions are handled 
 - **Export:** `build_final_db.py` includes `condition_summary`, `drug_class_summary`, and per-ingredient interaction warnings in the detail blob
 - **App:** Section F "fit score" is computed on-device based on user's health profile + `reference_data.interaction_rules`
 
-This separation ensures the quality score (A/B/C/D/E) remains objective and context-free, while the interaction layer provides personalized safety warnings.
+This separation ensures the quality score (A/B/C/D plus legacy E compatibility output) remains objective and context-free, while the interaction layer provides personalized safety warnings.
 
 ## 11) Validation Commands
 

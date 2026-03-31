@@ -9,10 +9,15 @@
 # Usage:
 #   bash batch_run_all_datasets.sh
 #   bash batch_run_all_datasets.sh score
+#   bash batch_run_all_datasets.sh --stages clean,enrich,score
 #   bash batch_run_all_datasets.sh --targets Thorne,Olly
 #   bash batch_run_all_datasets.sh --stages enrich,score --targets Nature-Made
 #   bash batch_run_all_datasets.sh --root "$HOME/Documents/DataSetDsld/staging/brands"
+#   bash batch_run_all_datasets.sh --root "$HOME/Documents/DataSetDsld/staging/brands" --targets Olly,Thorne
+#   bash batch_run_all_datasets.sh --root "$HOME/Documents/DataSetDsld/staging/forms"
 #   bash batch_run_all_datasets.sh --root "$HOME/Documents/DataSetDsld/delta/olly"
+#   bash batch_run_all_datasets.sh --root "$HOME/Documents/DataSetDsld/delta/olly" --stages score
+#   bash batch_run_all_datasets.sh --root "$HOME/Documents/DataSetDsld/delta/gummies"
 ###############################################################################
 
 set -e  # Exit on error

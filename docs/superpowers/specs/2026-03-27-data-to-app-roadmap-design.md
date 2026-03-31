@@ -220,7 +220,7 @@ BEGIN
   WHERE user_id = p_user_id AND reset_date = CURRENT_DATE
   FOR UPDATE;
 
-  IF p_type = 'scan' AND v_usage.scans_today >= 10 THEN
+  IF p_type = 'scan' AND v_usage.scans_today >= 20 THEN
     v_exceeded := true;
   ELSIF p_type = 'ai_message' AND v_usage.ai_messages_today >= 5 THEN
     v_exceeded := true;

@@ -8,7 +8,7 @@ Your job is to resolve unmapped ingredients and form fallbacks with maximum iden
 - clinical correctness
 - scoring integrity
 - database schema integrity (no duplicate entries across files)
-- identifier accuracy (CUI, UNII, CAS, PubChem CID must be API-verified)
+- identifier accuracy (exact identifiers must be API-verified; governed-null cases must be documented)
 - cleaner/enricher contract integrity
 - user-facing trust
 
@@ -22,28 +22,39 @@ Do not guess. Do not improvise chemistry. Do not treat weak fallback matches as 
 
 ### 1. Source of truth order
 
-1. Raw DSLD source file
-2. Current cleaner output in `scripts/output_*/cleaned/`
-3. Current unmapped reports in `scripts/output_*/unmapped/`
-4. Current enriched output in `scripts/output_*_enriched/enriched/`
-5. Current fallback reports in `scripts/output_*_enriched/reports/`
-6. Current database files in `scripts/data/`
-7. Primary external sources for identity / safety / clinical claims
-8. API verification tools (UMLS, GSRS, PubChem) for identifier validation
+1. Exact raw DSLD files for the current working set:
+   - dated delta folder in `/Users/seancheick/Documents/DataSetDsld/delta/...`
+   - or staging folder in `/Users/seancheick/Documents/DataSetDsld/staging/...`
+   - or manual import folder used with `python3 scripts/dsld_api_sync.py import-local ...`
+2. Canonical raw corpus in `/Users/seancheick/Documents/DataSetDsld/forms/`
+3. Current cleaner output in `scripts/output_*/cleaned/`
+4. Current unmapped reports in `scripts/output_*/unmapped/`
+5. Current enriched output in `scripts/output_*_enriched/enriched/`
+6. Current fallback reports in `scripts/output_*_enriched/reports/`
+7. Current database files in `scripts/data/`
+8. Primary external sources for identity / safety / clinical claims
+9. API verification tools in `scripts/api_audit/`
 
+If the exact run folder contradicts canonical corpus, inspect both and explain why.
 If raw DSLD contradicts cleaned output, raw wins.
 If current code behavior contradicts stale documentation, code wins.
 
-### 2. No guessing — verify everything with APIs
+### 2. No guessing — verify exact identity with APIs when the schema expects it
 
 If identity is uncertain, do not add the alias or entry.
 Mark it `needs_verification` and explain exactly what evidence is missing.
 
-**Every identifier must be API-verified before writing to a data file:**
+Use API verification whenever adding or changing:
 
 - CUI → `python3 scripts/api_audit/verify_cui.py --search "<name>"` or `--cui <CUI>`
 - UNII → `python3 scripts/api_audit/verify_unii.py --search "<name>"`
 - CAS → `python3 scripts/api_audit/verify_pubchem.py --search "<name>"` or `--cid <CID>`
+
+Important:
+
+- Do not force a bad identifier into a record just to satisfy completeness.
+- Some files allow governed-null or missing identifiers when no exact authoritative match exists.
+- Exact atomic identities should be API-verified; governed-null identity must be documented, not guessed.
 
 ### 3. Raw verification is mandatory for suspicious cases
 
@@ -74,21 +85,25 @@ If neither exists, say so explicitly.
 If the root cause is a cleaner bug, enricher bug, precedence bug, structural-header bug, or normalization bug, fix the code first.
 Do not paper over a code bug by stuffing labels into a database.
 
-### 6. No batch fixes on data files
+### 6. No blind batch edits on data files
 
-Fix entries one at a time. Verify each change. Run targeted tests after each edit.
-Batch operations skip entries and introduce errors. This is a medical-grade product.
+You may ANALYZE large batches and group them by confidence level, but do not apply JSON or code edits blindly in bulk.
+Apply only highly confident approved changes, and verify each changed entry or tightly related micro-batch with tests and integrity checks.
+This is a medical-grade product.
 
 ### 7. No duplicate entries across files
 
 Before adding ANY alias or new entry, search ALL routing databases:
 
-- `ingredient_quality_map.json` (549 parents)
-- `other_ingredients.json` (656 entries)
-- `harmful_additives.json` (112 entries)
-- `banned_recalled_ingredients.json` (~850 entries)
-- `botanical_ingredients.json` (428 entries)
-- `standardized_botanicals.json` (239 entries)
+- `ingredient_quality_map.json`
+- `other_ingredients.json`
+- `harmful_additives.json`
+- `banned_recalled_ingredients.json`
+- `botanical_ingredients.json`
+- `standardized_botanicals.json`
+- `proprietary_blends.json` when descriptor-level mapping is relevant
+
+Do not rely on hard-coded entry counts in this prompt; counts may change as the databases evolve.
 
 If the ingredient already exists in another file, do NOT create a duplicate. Either:
 
@@ -142,6 +157,33 @@ Do not treat unit-test success alone as sufficient proof.
 
 Work in **2 phases** with **batches of 8-12 items**.
 
+### Fast-but-safe triage lane
+
+The goal is maximum accuracy without turning obvious work into unnecessary bottlenecks.
+
+Use this confidence ladder:
+
+- **Lane A: High-confidence alias / typo / form-alias cases**
+  - exact current DB parent exists
+  - raw DSLD clearly matches that identity
+  - API verification agrees or current repo-governed identity already supports the mapping
+  - no cross-DB collision
+  - no code bug suspected
+- **Lane B: Probable but not yet production-safe**
+  - likely same identity, but API evidence is incomplete or mixed
+  - or the alias appears to collide with another DB/file
+  - or active vs inactive routing needs careful review
+- **Lane C: Likely bug / structural issue**
+  - parser artifact, blend header, shell/container row, normalization drift, precedence mismatch, or cleaner/enricher disagreement
+
+Allowed speed strategy:
+
+- Start with Lane A cases first
+- Keep Lane B in `needs_verification`
+- Escalate Lane C to code review / bug-fix workflow
+
+Never promote Lane B or Lane C items into production data just to clear backlog counts.
+
 ### Phase 1: Analyze only (do NOT write anything)
 
 1. Run the dynamic scan
@@ -182,6 +224,8 @@ Files:
 
 - `scripts/output_*/unmapped/unmapped_active_ingredients.json`
 - `scripts/output_*/unmapped/unmapped_inactive_ingredients.json`
+- `scripts/output_*/unmapped/needs_verification_active_ingredients.json`
+- `scripts/output_*/unmapped/needs_verification_inactive_ingredients.json`
 
 Meaning: The cleaner could not map the ingredient against any known database or protection logic.
 This is the **primary backlog for database growth**.
@@ -204,6 +248,28 @@ Files:
 Meaning: The ingredient matched an IQM parent, but not the correct form alias, so it fell back to a conservative form.
 Usually: IQM form alias gap, branded-token or normalization bug.
 
+### Surface C validation rule
+
+For every fallback case, do not only check that a fallback occurred.
+Also verify whether the fallback-selected form is actually the correct conservative form.
+
+Required check:
+
+1. Inspect raw DSLD label text and any explicit form wording
+2. Compare the raw form wording to the matched IQM parent and all existing IQM forms
+3. Decide whether:
+   - the fallback form is correct and acceptable
+   - the parent is correct but the specific form alias is missing
+   - the fallback chose the wrong form
+   - the parent match itself may be wrong
+
+If the fallback-selected form is wrong, do not treat the case as resolved.
+Classify it as either:
+
+- IQM form alias gap
+- enricher/scoring form-selection bug
+- parent-match bug
+
 ---
 
 ## Dynamic Scan — Run Every Session
@@ -218,12 +284,16 @@ print('=' * 72)
 
 active_files = sorted(glob.glob('scripts/output_*/unmapped/unmapped_active_ingredients.json'))
 inactive_files = sorted(glob.glob('scripts/output_*/unmapped/unmapped_inactive_ingredients.json'))
+needs_active_files = sorted(glob.glob('scripts/output_*/unmapped/needs_verification_active_ingredients.json'))
+needs_inactive_files = sorted(glob.glob('scripts/output_*/unmapped/needs_verification_inactive_ingredients.json'))
 enriched_files = sorted(glob.glob('scripts/output_*_enriched/enriched/enriched_cleaned_batch_*.json'))
 parent_fallback_files = sorted(glob.glob('scripts/output_*_enriched/reports/parent_fallback_report.json'))
 form_audit_files = sorted(glob.glob('scripts/output_*_enriched/reports/form_fallback_audit_report.json'))
 
 clean_active = {}
 clean_inactive = {}
+needs_active = {}
+needs_inactive = {}
 for fp in active_files:
     with open(fp) as f:
         data = json.load(f)
@@ -234,6 +304,18 @@ for fp in inactive_files:
         data = json.load(f)
     for k, v in data.get('unmapped_ingredients', {}).items():
         clean_inactive[k] = clean_inactive.get(k, 0) + v
+for fp in needs_active_files:
+    with open(fp) as f:
+        data = json.load(f)
+    for row in data.get('ingredients', []):
+        name = row.get('label_text', 'UNKNOWN')
+        needs_active[name] = needs_active.get(name, 0) + row.get('occurrences', 0)
+for fp in needs_inactive_files:
+    with open(fp) as f:
+        data = json.load(f)
+    for row in data.get('ingredients', []):
+        name = row.get('label_text', 'UNKNOWN')
+        needs_inactive[name] = needs_inactive.get(name, 0) + row.get('occurrences', 0)
 
 enrich_unmapped = {}
 products = 0
@@ -260,6 +342,8 @@ for fp in parent_fallback_files:
 print('\n[CLEANING]')
 print(f"  Active unmapped:   {len(clean_active):,} unique / {sum(clean_active.values()):,} occ")
 print(f"  Inactive unmapped: {len(clean_inactive):,} unique / {sum(clean_inactive.values()):,} occ")
+print(f"  Needs verify act:  {len(needs_active):,} unique / {sum(needs_active.values()):,} occ")
+print(f"  Needs verify ina:  {len(needs_inactive):,} unique / {sum(needs_inactive.values()):,} occ")
 
 print('\n[ENRICHMENT]')
 print(f"  Products scanned:       {products:,}")
@@ -287,6 +371,14 @@ print('\n[TOP CLEAN INACTIVE UNMAPPED]')
 for name, count in sorted(clean_inactive.items(), key=lambda x: -x[1])[:25]:
     print(f"  {count:4d}x  {name}")
 
+print('\n[TOP NEEDS VERIFICATION ACTIVE]')
+for name, count in sorted(needs_active.items(), key=lambda x: -x[1])[:25]:
+    print(f"  {count:4d}x  {name}")
+
+print('\n[TOP NEEDS VERIFICATION INACTIVE]')
+for name, count in sorted(needs_inactive.items(), key=lambda x: -x[1])[:25]:
+    print(f"  {count:4d}x  {name}")
+
 print('\n[TOP ENRICHMENT UNMAPPED]')
 for name, count in sorted(enrich_unmapped.items(), key=lambda x: -x[1])[:25]:
     print(f"  {count:4d}x  {name}")
@@ -301,21 +393,49 @@ print('=' * 72)
 SCAN_EOF
 ```
 
----
+## Path Conventions
 
-## Databases and Expected Routing
+Assume the operator uses this dataset root unless explicitly told otherwise:
+
+`/Users/seancheick/Documents/DataSetDsld`
+
+Important subpaths:
+
+- canonical raw: `/Users/seancheick/Documents/DataSetDsld/forms`
+- sync state: `/Users/seancheick/Documents/DataSetDsld/state/dsld_sync_state.json`
+- dated deltas: `/Users/seancheick/Documents/DataSetDsld/delta`
+- sync reports: `/Users/seancheick/Documents/DataSetDsld/reports`
+- temporary seed / review folders: `/Users/seancheick/Documents/DataSetDsld/staging`
+
+Do not assume legacy flat brand folders are canonical unless the operator explicitly says they are using a legacy folder.
+
+## Raw Intake Paths
+
+Raw DSLD data may enter the system in 4 ways:
+
+1. API first-time brand seed:
+   - `python3 scripts/dsld_api_sync.py sync-brand ... --output-dir /Users/seancheick/Documents/DataSetDsld/staging/brands/<brand>`
+2. API first-time form/category seed:
+   - `python3 scripts/dsld_api_sync.py sync-filter ...`
+   - optionally with `--staging-dir /Users/seancheick/Documents/DataSetDsld/staging/forms/<form>`
+3. API delta update:
+   - `python3 scripts/dsld_api_sync.py sync-delta ... --delta-output-dir /Users/seancheick/Documents/DataSetDsld/delta/<target> --dated-delta --report-dir /Users/seancheick/Documents/DataSetDsld/reports/<target>`
+4. Manual local import when the API is unavailable:
+   - `python3 scripts/dsld_api_sync.py import-local --input-dir ... --canonical-root ... --state-file ... --delta-output-dir ... --dated-delta --report-dir ...`
+
+The prompt must inspect the exact raw folder used for the current run whenever possible, not just the final canonical corpus.
 
 ### Primary routing targets
 
-| Database               | File                               | Purpose                                                                                            | Entry count |
-| ---------------------- | ---------------------------------- | -------------------------------------------------------------------------------------------------- | ----------- |
-| IQM                    | `ingredient_quality_map.json`      | Scorable actives                                                                                   | 549 parents |
-| Other Ingredients      | `other_ingredients.json`           | Neutral excipients / carriers / shell                                                              | 656         |
-| Harmful Additives      | `harmful_additives.json`           | Penalty-bearing inactive ingredients                                                               | 112         |
-| Banned/Recalled        | `banned_recalled_ingredients.json` | Disqualification gate and penalty (watchlist and high_risk)                                        | ~850        |
-| Botanical              | `botanical_ingredients.json`       | Basic botanical mapping                                                                            | 428         |
-| Standardized Botanical | `standardized_botanicals.json`     | Standardized botanical extracts (bonus file if map meets threshold and standardization is present) | 239         |
-| Proprietary Blends     | `proprietary_blends.json`          | Mapping-only descriptors - the enricher does not score these, the scorer handles penalty           | 14          |
+| Database               | File                               | Purpose                                                                                            |
+| ---------------------- | ---------------------------------- | -------------------------------------------------------------------------------------------------- |
+| IQM                    | `ingredient_quality_map.json`      | Scorable actives                                                                                   |
+| Other Ingredients      | `other_ingredients.json`           | Neutral excipients / carriers / shell                                                              |
+| Harmful Additives      | `harmful_additives.json`           | Penalty-bearing inactive ingredients                                                               |
+| Banned/Recalled        | `banned_recalled_ingredients.json` | Disqualification gate and penalty (watchlist and high_risk)                                        |
+| Botanical              | `botanical_ingredients.json`       | Basic botanical mapping                                                                            |
+| Standardized Botanical | `standardized_botanicals.json`     | Standardized botanical extracts (bonus file if map meets threshold and standardization is present) |
+| Proprietary Blends     | `proprietary_blends.json`          | Mapping-only descriptors - the enricher does not score these, the scorer handles penalty           |
 
 ### Default routing rule
 
@@ -343,7 +463,7 @@ Some ingredients appear as BOTH active and inactive depending on the product:
 
 When an ingredient needs entries in both IQM and harmful_additives:
 
-1. Create both entries with consistent identifiers (same CUI, UNII, CAS)
+1. Create both entries with consistent verified identifiers when exact cross-file identity is supported
 2. Add the ingredient to `cross_db_overlap_allowlist.json`
 
 ### Override defaults when evidence shows it is actually:
@@ -384,7 +504,7 @@ Action: Add alias only — **after identifier verification confirms same compoun
 ### Bucket 5: True new canonical entry
 
 Meaning: Ingredient does not exist anywhere in any target DB.
-Action: Add new entry with full schema + API-verified identifiers.
+Action: Add new entry with full schema + verified identifiers where exact identity is available.
 
 **IQM new entry requirements (critical — tests will fail if missing):**
 
@@ -393,6 +513,7 @@ Action: Add new entry with full schema + API-verified identifiers.
 - Parent-level must have: `standard_name`, `category`, `cui`, `rxcui`, `forms`, `match_rules`, `category_enum`, `data_quality`, `aliases`, `external_ids`, `gsrs`
 - If ingredient appears in both IQM and harmful_additives, must add to `cross_db_overlap_allowlist.json` — and add ALL shared alias terms, not just the entry name
 - Update `_metadata.total_entries` and `_metadata.last_updated`
+- If an exact UMLS concept does not exist, use reviewed null-governance fields instead of forcing a wrong CUI
 
 **harmful_additives new entry requirements:**
 
@@ -403,7 +524,13 @@ Action: Add new entry with full schema + API-verified identifiers.
 ### Bucket 6: Form fallback gap
 
 Meaning: Parent is correct, but form alias is missing.
-Action: Add alias to the correct existing IQM form.
+Action: Add alias to the correct existing IQM form only after confirming the fallback-selected form is not already the correct conservative match.
+
+If the fallback-selected form itself is wrong, do not treat this as alias-only.
+Escalate to:
+
+- enricher/scoring form-selection bug
+- or parent-match bug
 
 ### Bucket 7: Misspelling / typo
 
@@ -479,7 +606,7 @@ python3 scripts/api_audit/verify_pubchem.py --search "<alias_text>"
 | Same CUI      | Different UNII | —              | Investigate: may be different form/salt                                     |
 | Different CUI | Same UNII      | —              | Investigate: UMLS may have separate concepts for form vs parent             |
 | Different CUI | Different UNII | Different CAS  | **DO NOT add alias** — different compound                                   |
-| No result     | No result      | No result      | Add alias only if strong textual evidence (brand name for known ingredient) |
+| No result     | No result      | No result      | Keep in `needs_verification` unless current repo-governed identity already proves exact equivalence |
 
 ### Step 4: Check for cross-DB collisions
 
@@ -504,19 +631,61 @@ If alias exists in another file → do NOT duplicate. Either:
 
 For any suspicious item, compare across the full pipeline:
 
-1. **Raw DSLD**: What does the original label say?
-2. **Cleaned output**: How did the cleaner normalize it?
-3. **Enriched output**: Did enrichment resolve it? To what?
-4. **Unmapped report**: Why is it unmapped?
+1. **Exact raw working-set file**:
+   - dated delta folder for update runs
+   - staging folder for first-time seed runs
+   - manual import folder for local-import runs
+2. **Canonical raw file** in `/Users/seancheick/Documents/DataSetDsld/forms/`
+3. **Cleaned output**: How did the cleaner normalize it?
+4. **Enriched output**: Did enrichment resolve it? To what?
+5. **Unmapped / needs-verification / fallback reports**: Why is it unresolved?
 
 Key fields to compare:
 
 - `name` / `raw_source_text` / `ingredientGroup`
 - `forms` / `nestedIngredients`
 - Active vs inactive placement
+- fallback-selected form vs expected correct form
 - Whether the parent label is structural and child forms are the real ingredients
 
 If raw shows a blend/container/header and cleaned surfaces it as unmapped ingredient text → code issue first.
+Prefer the exact current run folder first, because that is the operator's working set. Use canonical `forms/` as the long-term reference copy.
+
+---
+
+## Best-Practice Answer Format
+
+When answering from this prompt, structure the response like this:
+
+1. **Current batch summary**
+   - Which raw source folder was inspected
+   - Which pipeline output folders were inspected
+   - Counts for unmapped, needs-verification, and fallback surfaces
+2. **High-confidence fixes (Lane A)**
+   - exact aliases, misspellings, form aliases, or obvious DB-entry gaps
+   - each with raw evidence, DB target, and identifier evidence
+3. **Needs verification (Lane B)**
+   - ambiguous identity, mixed API evidence, or cross-DB collision risk
+4. **Likely code bugs (Lane C)**
+   - parser/header/precedence/normalization/routing issues
+5. **Recommended next actions**
+   - approved JSON edits
+   - required tests
+   - shadow-run target
+
+Always separate:
+
+- safe alias/data fixes
+- true new canonical entries
+- likely code bugs
+- unresolved items that should stay in `needs_verification`
+
+For each fallback item, report:
+
+- raw form text
+- fallback-selected form
+- expected correct form
+- whether this is alias-only or code-bug risk
 
 ---
 
@@ -595,6 +764,11 @@ Curated override files (prevent known bad auto-matches):
 
 | #   | Raw label (misspelled) | Correct form | Target entry | Verified same CUI/UNII? |
 | --- | ---------------------- | ------------ | ------------ | ----------------------- |
+
+#### TABLE 7: Fallback Form Validation
+
+| #   | Ingredient | Raw form text | Fallback-selected form | Expected correct form | Alias-only or bug? | Confidence |
+| --- | ---------- | ------------- | ---------------------- | --------------------- | ------------------ | ---------- |
 
 #### BATCH SUMMARY
 

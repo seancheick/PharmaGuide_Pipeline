@@ -794,7 +794,9 @@
       "aliases": [
         "organic barley juice",
         "sprouted barley juice",
-        "Hordeum vulgare"
+        "Hordeum vulgare",
+        "barley grass juice concentrate",
+        "organic barley grass juice concentrate"
       ],
       "category": "grass",
       "notes": "Hordeum vulgare (Poaceae) grass juice powder. Concentrated form of young barley grass juice, dried at low temperature. Contains chlorophyll, enzymes, and trace minerals. More concentrated than grass powder.",
@@ -4986,7 +4988,14 @@
         "organic green bell pepper",
         "green pepper powder",
         "bell pepper",
-        "green peppers"
+        "green peppers",
+        "organic green bell pepper juice",
+        "green bell pepper juice",
+        "green bell pepper fruit juice",
+        "green bell pepper raw",
+        "green bell pepper",
+        "red bell pepper",
+        "red bell pepper raw"
       ],
       "category": "vegetable",
       "notes": "Capsicum annuum (Solanaceae) unripe fruit. Sweet pepper variety (no capsaicin). Rich in vitamin C and chlorophyll. Used in whole-food supplement blends for nutrient density.",
@@ -7121,7 +7130,9 @@
       "CUI": "C0330829",
       "aliases": [
         "organic mimosa pudica",
-        "Mimosa pudica"
+        "Mimosa pudica",
+        "mimosa pudica seed extract",
+        "mimosa pudica seed"
       ],
       "category": "seed",
       "notes": "Mimosa pudica (Fabaceae) seed/whole plant. Sensitive plant/touch-me-not. Contains mimosine and tannins. Used in Ayurveda for wound healing and as GI cleansing agent. Botanical seed/herb powder.",

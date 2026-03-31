@@ -5422,6 +5422,30 @@
           "notes": "high"
         }
       },
+      "magnesium acetyl-taurate": {
+        "bio_score": 13,
+        "natural": false,
+        "score": 13,
+        "absorption": "high (preclinical, limited human PK)",
+        "notes": "Magnesium chelated with N-acetyltaurine. UNII TPU6QLA66F, CAS 75350-40-2. Distinct from magnesium taurate (RCM1N3D968). Marketed primarily as a nootropic magnesium form with enhanced brain penetration via the acetylated taurine moiety. Preclinical data suggests good BBB permeability; human pharmacokinetic data is limited. Sometimes referred to as MgAT or Magtein-adjacent (though Magtein is L-threonate, not acetyl-taurate). Note the raw DSLD label may contain a typo: 'Acetyl-Tuarate'.",
+        "aliases": [
+          "magnesium acetyl-taurate",
+          "magnesium acetyl taurate",
+          "magnesium acetyltaurate",
+          "mag acetyl taurate",
+          "magnesium n-acetyltaurate",
+          "MgAT",
+          "magnesium acetyl-tuarate"
+        ],
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": null,
+          "range_low": null,
+          "range_high": null,
+          "quality": "moderate",
+          "notes": "Preclinical BBB permeability data only; no published human PK"
+        }
+      },
       "magnesium malate": {
         "bio_score": 12,
         "natural": false,
@@ -7508,7 +7532,8 @@
           "creapure supplement",
           "creatine powder supplement",
           "micronized creatine supplement",
-          "Creapure Creatine Monohydrate supplement"
+          "Creapure Creatine Monohydrate supplement",
+          "Creatine Monohydrate, Micronized"
         ],
         "dosage_importance": 0.5,
         "absorption_structured": {
@@ -7770,7 +7795,9 @@
           "calcium beta-hydroxy-beta-methylbutyrate monohydrate",
           "hmb-ca monohydrate",
           "calcium hydroxymethyl butyrate monohydrate",
-          "Calcium Beta-Hydroxy Beta-Methylbutyrate Monohydrate"
+          "Calcium Beta-Hydroxy Beta-Methylbutyrate Monohydrate",
+          "Calcium B-hydroxy-B-methylbutyrate",
+          "calcium beta-hydroxy-beta-methylbutyrate"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -7817,7 +7844,10 @@
           "hmb softgels supplement",
           "hmb clear supplement",
           "free form hmb supplement",
-          "3-hydroxy-3-methylbutyrate free acid supplement"
+          "3-hydroxy-3-methylbutyrate free acid supplement",
+          "Beta-Hydroxy Beta-Methylbutyric",
+          "beta-hydroxy beta-methylbutyric acid",
+          "Beta-Hydroxy Beta-Methylbutyrate Monohydrate"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -13002,7 +13032,8 @@
           "citicoline cognizin brand",
           "citicoline cognizin",
           "cognizin brand",
-          "Cognizin CDP Choline"
+          "Cognizin CDP Choline",
+          "CDP Choline"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -14036,7 +14067,10 @@
           "pure betaine",
           "oxyneurine",
           "trimethylglycine powder",
-          "pure TMG"
+          "pure TMG",
+          "BetaPure",
+          "BetaPure Betaine Anhydrous",
+          "betapure betaine"
         ],
         "context_include": [
           "betaine",
@@ -15371,7 +15405,8 @@
         "notes": "Non-essential amino acid; primary substrate for hepatic gluconeogenesis via the glucose-alanine cycle. Despite complete intestinal absorption, ~69% is extracted by the splanchnic bed on first pass (Van der Schoor et al., 1999 isotope tracer), leaving only ~30-31% reaching systemic circulation. Commonly included in amino acid complex supplements. Limited clinical significance as standalone supplement given extensive hepatic metabolism.",
         "aliases": [
           "l-alanine",
-          "l-alanine powder"
+          "l-alanine powder",
+          "alanine"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -16627,6 +16662,95 @@
         }
       ]
     }
+  },
+  "spermidine": {
+    "standard_name": "Spermidine",
+    "category": "other",
+    "cui": "C0037871",
+    "rxcui": "1483262",
+    "forms": {
+      "spermidine (free base)": {
+        "bio_score": 7,
+        "natural": true,
+        "score": 10,
+        "absorption": "~15-25% oral bioavailability (rodent PK; human data limited)",
+        "notes": "Endogenous polyamine (1,8-diamino-4-azaoctane). CUI C0037871, UNII U87FK77H25, CAS 124-20-9, PubChem CID 1102. Key autophagy inducer — promotes cellular self-cleaning via mTOR-independent pathways (PMID:19801973, Eisenberg 2009). Found naturally in wheat germ, soybeans, aged cheese, and natto. Emerging longevity research: 0.9 mmol/day dietary spermidine associated with reduced all-cause mortality (Kiechl 2018, PMID:30094136). Rodent studies show improved cardiac function and neuroprotection. Human clinical trials underway (SmartAge, NCT03094546). Typical supplement dose: 1-10 mg/day, often from wheat germ extract.",
+        "aliases": [
+          "spermidine",
+          "wheat germ spermidine",
+          "wheat germ extract spermidine",
+          "spermidine from wheat germ",
+          "spermidineLIFE",
+          "primeadine"
+        ],
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": 0.2,
+          "range_low": 0.1,
+          "range_high": 0.3,
+          "quality": "low",
+          "notes": "Rodent PK only; human oral bioavailability not established. Rapid first-pass metabolism by polyamine oxidase."
+        }
+      },
+      "spermidine trihydrochloride": {
+        "bio_score": 7,
+        "natural": false,
+        "score": 7,
+        "absorption": "similar to free base (salt dissociates in GI)",
+        "notes": "Trihydrochloride salt form of spermidine (3 HCl per molecule for 3 nitrogen centers). GSRS parent: SPERMIDINE HYDROCHLORIDE (UNII 1O14BED398). Used in synthetic/purified spermidine supplements. Functionally equivalent to free base after GI dissolution; salt form improves stability and hygroscopic properties.",
+        "aliases": [
+          "spermidine trihydrochloride",
+          "spermidine 3HCl",
+          "spermidine hydrochloride",
+          "spermidine HCl",
+          "synthetic spermidine"
+        ],
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": 0.2,
+          "range_low": 0.1,
+          "range_high": 0.3,
+          "quality": "low",
+          "notes": "Salt dissociates; same polyamine absorption as free base"
+        }
+      }
+    },
+    "match_rules": {
+      "priority": 0,
+      "match_mode": "alias_and_fuzzy",
+      "exclusions": [],
+      "parent_id": null,
+      "confidence": "high"
+    },
+    "category_enum": "other",
+    "rxcui_note": null,
+    "data_quality": {
+      "completeness": 1.0,
+      "missing_fields": [],
+      "review_status": "validated",
+      "last_reviewed_at": "2026-03-30"
+    },
+    "external_ids": {
+      "unii": "U87FK77H25"
+    },
+    "gsrs": {
+      "substance_name": "SPERMIDINE",
+      "substance_class": "chemical",
+      "cfr_sections": [],
+      "dsld_count": null,
+      "dsld_info_raw": null,
+      "active_moiety": null,
+      "salt_parents": [
+        {
+          "type": "SALT/SOLVATE->PARENT",
+          "name": "SPERMIDINE HYDROCHLORIDE",
+          "unii": "1O14BED398"
+        }
+      ],
+      "metabolic_relationships": [],
+      "metabolites": []
+    },
+    "aliases": []
   },
   "spirulina": {
     "standard_name": "Spirulina",
@@ -18038,7 +18162,9 @@
         "aliases": [
           "rhodiola",
           "siberian rhodiola root extract",
-          "Rhodiola crenulata (root) Extract"
+          "Rhodiola crenulata (root) Extract",
+          "Rhodiola sp.",
+          "rhodiola species"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -19934,7 +20060,9 @@
           "organic fenoprolic pine bark extract",
           "fenoprolic pine bark",
           "pine bark OPC extract",
-          "oligomeric procyanidins pine bark"
+          "oligomeric procyanidins pine bark",
+          "Pinus pinaster Bark Extract",
+          "pinus pinaster extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -20077,7 +20205,9 @@
           "asian ginseng extract",
           "hrg80",
           "hrg80 red ginseng",
-          "panax ginseng 7% extract"
+          "panax ginseng 7% extract",
+          "korean red panax ginseng extract",
+          "Asian Ginseng root (Panax Ginseng) standardized extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -20424,7 +20554,17 @@
           "meriva phytosome turmeric root extract",
           "meriva turmeric root extract curcuminoids",
           "meriva phytosome turmeric root extract curcuminoids",
-          "meriva phytosome turmeric root extract sunflower-based phosphatidyl choline"
+          "meriva phytosome turmeric root extract sunflower-based phosphatidyl choline",
+          "organic turmeric root extract",
+          "organic turmeric curcuminoids",
+          "organic turmeric root extract curcuminoids",
+          "organic turmeric (root) extract",
+          "organic turmeric (root) extract curcuminoids",
+          "organic fermented turmeric curcuminoids",
+          "turmeric curcuminoids",
+          "turmeric rhizome root extract",
+          "essence of organic turmeric (root) oil",
+          "organic turmeric blend organic turmeric root extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -20451,7 +20591,10 @@
           "turmeric spice",
           "pure turmeric powder",
           "natural turmeric",
-          "curcuma longa powder"
+          "curcuma longa powder",
+          "organic fermented turmeric",
+          "turmeric fermented",
+          "organic turmeric blend organic fermented turmeric"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -20526,7 +20669,9 @@
           "turmeric",
           "tumeric root extract",
           "turmacin",
-          "curcumin"
+          "curcumin",
+          "organic turmeric",
+          "organic turmeric blend"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -21499,7 +21644,10 @@
           "endopeptidase, exopeptidase",
           "exopeptidase, endopeptidase",
           "pectinase",
-          "pectinase enzyme"
+          "pectinase enzyme",
+          "Lactase, Fungal",
+          "fungal lactase",
+          "lactase fungal"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -22295,7 +22443,9 @@
           "bcaa leucine supplement",
           "vegetarian leucine",
           "vegan leucine",
-          "L-Leucine, Micronized"
+          "L-Leucine, Micronized",
+          "L-Leucine, Instantized",
+          "instantized l-leucine"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -22378,7 +22528,9 @@
           "l-valine powder supplement",
           "pure valine supplement",
           "bcaa valine supplement",
-          "L-Valine, Micronized"
+          "L-Valine, Micronized",
+          "L-Valine, Instantized",
+          "instantized l-valine"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -22456,7 +22608,9 @@
           "l-isoleucine powder supplement",
           "pure isoleucine supplement",
           "bcaa isoleucine supplement",
-          "L-Isoleucine, Micronized"
+          "L-Isoleucine, Micronized",
+          "L-Isoleucine, Instantized",
+          "instantized l-isoleucine"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -26986,7 +27140,8 @@
           "ecdysterone",
           "ajuga turkestanica",
           "phytoecdysteroids",
-          "spinach extract ecdysterone"
+          "spinach extract ecdysterone",
+          "ajuga turkestanica whole herb extract"
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
@@ -30066,7 +30221,12 @@
           "Black Pepper fruit Supercritical CO2 extract",
           "Black Pepper (Piper nigrum) fruit supercritical CO2 extract",
           "Black Pepper fruit supercritical extract",
-          "BioPerine Black Pepper (fruit) extract"
+          "BioPerine Black Pepper (fruit) extract",
+          "essence of pure black pepper (fruit) oil",
+          "organic black pepper fruit extract",
+          "organic black pepper",
+          "essence of pure black pepper oil extract",
+          "organic black pepper (fruit) extract"
         ],
         "dosage_importance": 0.5,
         "absorption_structured": {
@@ -30772,7 +30932,8 @@
           "schisandrin b",
           "schisandrin c",
           "gomisin",
-          "schisandra berry extract"
+          "schisandra berry extract",
+          "organic schisandra (schisandra chinensis) berry extract"
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
@@ -35405,7 +35566,8 @@
         "aliases": [
           "psyllium fiber",
           "ispaghula",
-          "Psyllium Husks"
+          "Psyllium Husks",
+          "psyllium hydrophilic mucilloid"
         ],
         "score": 14,
         "dosage_importance": 1.0,
@@ -35446,7 +35608,8 @@
         "aliases": [
           "psyllium",
           "psyllium husk fiber",
-          "Psyllium seed husk powder"
+          "Psyllium seed husk powder",
+          "psylium"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -35529,7 +35692,10 @@
           "Beta Glucan 3/6/9",
           "Beta Glucan 1,3",
           "beta-1,3/1,6-d-glucan",
-          "beta 1,3/1,6 d-glucan"
+          "beta 1,3/1,6 d-glucan",
+          "Mushroom Beta Glucan",
+          "mushroom beta-glucan",
+          "mushroom beta glucans"
         ],
         "absorption_structured": {
           "value": 0.45,
@@ -35867,7 +36033,8 @@
           "W52 supplement",
           "BL-G101 supplement",
           "DN-173 010 supplement",
-          "Bifidus regularis supplement"
+          "Bifidus regularis supplement",
+          "Bifidobacterium lactis SD-5674"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -37238,7 +37405,7 @@
       "vitamins": 17
     },
     "schema_version": "5.0.0",
-    "last_updated": "2026-03-25",
+    "last_updated": "2026-03-30",
     "pipeline_integration": "Used by enrichment script to assign quality scores to matched ingredient forms. Match ingredient name against forms aliases (case-insensitive). Use highest-scoring matched form.",
     "matching_notes": [
       "Match ingredient name + forms text against aliases array (case-insensitive)",
@@ -37329,7 +37496,7 @@
       "vitamins"
     ],
     "cleanup_notes": "Resolved within-ingredient alias collisions; removed 63 redundant unspecified forms",
-    "total_entries": 550,
+    "total_entries": 551,
     "total_ingredients": 623,
     "data_quality": {
       "review_status": "stub"
@@ -37507,7 +37674,9 @@
           "Alpha Glycerylphosphorylcholine",
           "L Alpha Glycerylphosphorylcholine",
           "stabilized l-alpha-glycerophosphatidylcholine",
-          "stabilized l alpha glycerophosphatidylcholine"
+          "stabilized l alpha glycerophosphatidylcholine",
+          "AlphaSize Alpha GPC",
+          "alpha size alpha gpc"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -37633,7 +37802,8 @@
           "instantized bcaas supplement",
           "bcaa instant supplement",
           "instant bcaa supplement",
-          "instantized amino acids supplement"
+          "instantized amino acids supplement",
+          "Branched-Chain Amino Acids, Instantized"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -38148,7 +38318,9 @@
           "potassium beta-hydroxybutyrate",
           "calcium bhb",
           "sodium bhb",
-          "bhb salts"
+          "bhb salts",
+          "goBHB",
+          "go bhb"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -38343,7 +38515,8 @@
           "3-Acetyl-11-Keto-Beta Boswellic Acid",
           "3-0-Acetyl-11-Keto Beta Boswellic Acid",
           "Acetyl-Keto-Beta-Boswellic Acid",
-          "3-0-Acetyl-11-Keto-B-Boswellic Acid"
+          "3-0-Acetyl-11-Keto-B-Boswellic Acid",
+          "Acetyl-11-Keto-Beta Boswellic Acid"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -39511,7 +39684,8 @@
           "casticin",
           "vitex casticin",
           "3,5-dihydroxy-3',4',6,7-tetramethoxyflavone",
-          "Chaste Tree berry extract"
+          "Chaste Tree berry extract",
+          "Chaste berry Vitex extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -39565,7 +39739,8 @@
           "vitex agnus castus extract",
           "Chasteberry concentrated powder",
           "chastetree fruit extract",
-          "chastetree fruit"
+          "chastetree fruit",
+          "organic vitex"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -41837,7 +42012,8 @@
           "HiOmega",
           "vegan cold-pressed omega-rich flax seed oil",
           "cold-pressed flax seed oil",
-          "cold pressed flaxseed oil"
+          "cold pressed flaxseed oil",
+          "flaxseed oil extract"
         ],
         "absorption_structured": {
           "value": 0.55,
@@ -41866,7 +42042,18 @@
           "organic flaxseed particulate",
           "organic flaxseed particulates",
           "Brown Flax",
-          "Flax (Linum usitatissimum) powder"
+          "Flax (Linum usitatissimum) powder",
+          "flax",
+          "organic flax meal and sprout",
+          "organic flax seed fiber",
+          "organic flax seed meal",
+          "flaxseed fermented",
+          "flax seed fiber",
+          "flaxseed sprout",
+          "organic defatted flax seed",
+          "flax seed meal",
+          "flaxseed defatted",
+          "flaxseed fiber"
         ],
         "absorption_structured": {
           "value": null,
@@ -42910,7 +43097,8 @@
           "cinnamon bark extract dried",
           "cinnamaldehyde",
           "cinnamon cinnamaldehyde",
-          "trans-cinnamaldehyde"
+          "trans-cinnamaldehyde",
+          "cinnammon"
         ],
         "absorption_structured": {
           "value": 0.55,
@@ -43216,7 +43404,8 @@
           "strontium carbonate",
           "strontium, natural",
           "natural strontium",
-          "elemental strontium"
+          "elemental strontium",
+          "strontium"
         ],
         "dosage_importance": 0.5
       }
@@ -43852,7 +44041,8 @@
           "Purple Butterbur (Petasites hybridus) (Petadolex brand) root extract",
           "Purple Butterbur (Petasites hybridus) (Petadolex(R) brand) Root Extract",
           "butterbur stem extract",
-          "petasites hybridus stem extract"
+          "petasites hybridus stem extract",
+          "wild crafted butterbur extract"
         ],
         "dosage_importance": 2.0,
         "absorption_structured": {
@@ -45573,7 +45763,10 @@
           "Fucus vesiculosus extract",
           "bladder wrack extract",
           "bladderwrack extract",
-          "rockweed"
+          "rockweed",
+          "organic sea kelp",
+          "brown seaweed extract",
+          "brown seaweed concentrate"
         ],
         "dosage_importance": 0.8,
         "absorption_structured": {
@@ -46212,7 +46405,9 @@
           "Capros Amla Water extract",
           "organic amla fruit extract",
           "organic Amla extract",
-          "amla berry fruit extract"
+          "amla berry fruit extract",
+          "organic amla berry extract",
+          "organic amla berry (fruit) extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -46264,7 +46459,12 @@
           "amla fruit",
           "certified organic amla",
           "Amla (Emblica officinalis) fruit 5:1 extract",
-          "Amla 4:1 extract"
+          "Amla 4:1 extract",
+          "organic amla berry",
+          "organic amla",
+          "raw amla",
+          "raw organic amla",
+          "raw amla berry"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -47941,7 +48141,9 @@
           "cayenne fruit extract",
           "capsinoids",
           "Capsifen",
-          "cayenne, powder"
+          "cayenne, powder",
+          "organic cayenne",
+          "wild crafted cayenne"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -48379,7 +48581,8 @@
           "star anise",
           "illicium verum",
           "Anise 4:1 extract",
-          "Anise seed 4:1 extract"
+          "Anise seed 4:1 extract",
+          "organic anise"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -51430,7 +51633,10 @@
           "daltonmax",
           "dalton max 700",
           "daltonmax 700 aloe vera",
-          "Aloe Vera leaf oil"
+          "Aloe Vera leaf oil",
+          "organic Aloe vera inner leaf gel 200:1 concentrate",
+          "aloe vera inner leaf gel concentrate",
+          "aloe vera inner leaf gel 200:1"
         ],
         "notes": "Aloe barbadensis inner leaf gel; contains acemannan (acetylated mannose polysaccharide), anthraquinones, and vitamins. Topical wound healing evidence strong; oral immune/GI data limited. Form unspecified.",
         "natural": true,
@@ -53486,7 +53692,9 @@
           "cynatine keratin",
           "lustriva",
           "lustriva keratin",
-          "solubilized keratin"
+          "solubilized keratin",
+          "keratin peptides, hydrolyzed",
+          "keratin peptides hydrolyzed"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -55125,7 +55333,9 @@
           "prunus cerasus",
           "montmorency tart cherry",
           "tart cherry fruit",
-          "tart cherry berry"
+          "tart cherry berry",
+          "Tart Cherry Whole Concentrate",
+          "CherryPURE"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {

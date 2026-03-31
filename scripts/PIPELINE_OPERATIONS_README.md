@@ -167,6 +167,57 @@ Current sync behavior:
 - skips unchanged hashed blobs when already present remotely
 - uses retry/backoff for uploads
 
+## 7A. Recommended release pattern
+
+For local QA, it is fine to build dataset-specific final DB outputs such as:
+
+- `final_db_output_hum_...`
+- `final_db_output_gummies_...`
+
+These are useful for:
+
+- reviewing one brand or one form/category in isolation
+- validating one new batch before release
+- debugging export issues without rebuilding everything
+
+For the actual app-facing Supabase release, the recommended default is:
+
+1. Build per-pair outputs for the brand(s) or form/category set you want to review
+2. QA those per-pair outputs
+3. Assemble one combined release artifact
+4. Sync that one combined release artifact to Supabase
+
+Reason:
+
+- `sync_to_supabase.py` pushes one build directory and one active manifest/version at a time
+- the app should usually read one coherent product universe, not a rotating slice like only one brand or only one form
+- hashed detail blobs are still deduped remotely, so merged releases do not lose the blob-sync efficiency improvements
+
+Example production flow:
+
+```bash
+# 1. Build per-pair outputs for selected datasets
+python3 scripts/build_all_final_dbs.py \
+  --scan-dir scripts \
+  --include-prefix Transparent_Labs \
+  --include-prefix gummies \
+  --per-pair-output-root /Users/seancheick/Documents/DataSetDsld/builds/pair_outputs
+
+# 2. Assemble one combined release artifact
+python3 scripts/assemble_final_db_release.py \
+  --input-root /Users/seancheick/Documents/DataSetDsld/builds/pair_outputs \
+  --output-dir /Users/seancheick/Documents/DataSetDsld/builds/release_output_2026-03-30T18-30-00
+
+# 3. Dry-run the Supabase sync
+python3 scripts/sync_to_supabase.py \
+  /Users/seancheick/Documents/DataSetDsld/builds/release_output_2026-03-30T18-30-00 \
+  --dry-run
+
+# 4. Real sync
+python3 scripts/sync_to_supabase.py \
+  /Users/seancheick/Documents/DataSetDsld/builds/release_output_2026-03-30T18-30-00
+```
+
 ## 8. DSLD API tooling
 
 ### What it does
@@ -517,7 +568,7 @@ Run pipeline on that first-time brand folder:
 
 ```bash
 python3 scripts/run_pipeline.py \
-  --raw-dir /Users/seancheick/Documents/DataSetDsld/staging/brands/olly \
+  --raw-dir /Users/seancheick/Documents/DataSetDsld/staging/brands/Olly \
   --output-prefix /Users/seancheick/Documents/DataSetDsld/output_olly_seed
 ```
 

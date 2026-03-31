@@ -1,46 +1,0 @@
-==========================================
-BATCH PIPELINE RUN - Wed Mar 25 14:16:03 EDT 2026
-==========================================
-Dataset directory: /Users/seancheick/Documents/DataSetDsld
-Scripts directory: /Users/seancheick/.claude-worktrees/dsld_clean/peaceful-ritchie/scripts
-Stages: clean,enrich,score
-Target datasets: Olly,Nordic,Emerald
-==========================================
-
-/Users/seancheick/.claude-worktrees/dsld_clean/peaceful-ritchie/scripts/run_pipeline.py:391: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
-  start_time = datetime.utcnow()
-2026-03-25 14:16:06 - __main__ - INFO - ============================================================
-2026-03-25 14:16:06 - __main__ - INFO - DSLD SUPPLEMENT PIPELINE
-2026-03-25 14:16:06 - __main__ - INFO - ============================================================
-2026-03-25 14:16:06 - __main__ - INFO - Script directory: /Users/seancheick/.claude-worktrees/dsld_clean/peaceful-ritchie/scripts
-2026-03-25 14:16:06 - __main__ - INFO - Stages to run: clean, enrich, score
-2026-03-25 14:16:06 - __main__ - INFO - Raw data: /Users/seancheick/Documents/DataSetDsld/Emerald-Labs-2-17-26-L88/
-2026-03-25 14:16:06 - __main__ - INFO - Cleaned output: output_Emerald-Labs-2-17-26-L88/cleaned
-2026-03-25 14:16:06 - __main__ - INFO - Enriched output: output_Emerald-Labs-2-17-26-L88_enriched/enriched
-2026-03-25 14:16:06 - __main__ - INFO - Scored output: output_Emerald-Labs-2-17-26-L88_scored
-2026-03-25 14:16:06 - __main__ - INFO - ============================================================
-2026-03-25 14:16:06 - __main__ - INFO - Validated data directory: /Users/seancheick/.claude-worktrees/dsld_clean/peaceful-ritchie/scripts/data
-2026-03-25 14:16:06 - __main__ - INFO - ============================================================
-2026-03-25 14:16:06 - __main__ - INFO - STAGE 1: CLEANING
-2026-03-25 14:16:06 - __main__ - INFO - ============================================================
-2026-03-25 14:16:06 - __main__ - INFO - Executing: /Users/seancheick/.claude-worktrees/dsld_clean/peaceful-ritchie/.venv/bin/python /Users/seancheick/.claude-worktrees/dsld_clean/peaceful-ritchie/scripts/clean_dsld_data.py --input-dir /Users/seancheick/Documents/DataSetDsld/Emerald-Labs-2-17-26-L88/ --output-dir output_Emerald-Labs-2-17-26-L88 --config /Users/seancheick/.claude-worktrees/dsld_clean/peaceful-ritchie/scripts/config/cleaning_config.json
-2026-03-25 14:16:06 - root - INFO - Resolved paths:
-2026-03-25 14:16:06 - root - INFO -   input_directory: /Users/seancheick/Documents/DataSetDsld/Emerald-Labs-2-17-26-L88/
-2026-03-25 14:16:06 - root - INFO -   output_directory: output_Emerald-Labs-2-17-26-L88
-2026-03-25 14:16:06 - root - INFO -   reference_data: /Users/seancheick/.claude-worktrees/dsld_clean/peaceful-ritchie/scripts/data
-2026-03-25 14:16:06 - root - INFO -   color_indicators.json: v5.0.0 (updated: 2026-02-18)
-2026-03-25 14:16:06 - root - INFO -   ingredient_quality_map.json: v5.0.0 (updated: 2026-03-24)
-2026-03-25 14:16:06 - root - INFO -   harmful_additives.json: v5.1.0 (updated: 2026-03-24)
-2026-03-25 14:16:06 - root - INFO -   allergens.json: v5.0.0 (updated: 2026-03-01)
-⚠️ fuzzywuzzy not found. Install for better matching: pip install fuzzywuzzy python-levenshtein
-2026-03-25 14:16:06 - dsld_cleaner - INFO - ============================================================
-2026-03-25 14:16:06 - dsld_cleaner - INFO - DSLD Data Cleaning Pipeline Starting
-2026-03-25 14:16:06 - dsld_cleaner - INFO - ============================================================
-2026-03-25 14:16:06 - dsld_cleaner - INFO - Started at: 2026-03-25 14:16:06
-2026-03-25 14:16:06 - dsld_cleaner - INFO - Validating configuration...
-2026-03-25 14:16:06 - dsld_cleaner - INFO - Configuration validation passed
-2026-03-25 14:16:06 - batch_processor - INFO - Found 87 input files
-2026-03-25 14:16:06 - batch_processor - INFO - Processing 87 files in 1 batches
-2026-03-25 14:16:06 - batch_processor - INFO - Batch size: 500, Max workers: 4
-2026-03-25 14:16:06 - batch_processor - INFO - Processing batch 1/1 (87 files)
-Processing Batch 1:   0%|          | 0/87 [00:00<?, ?file/s]Processing Batch 1:   1%|          | 1/87 [00:02<03:07,  2.18s/file]Processing Batch 1:   2%|▏         | 2/87 [00:02<01:30,  1.07s/file]Processing Batch 1:   3%|▎         | 3/87 [00:02<01:04,  1.31file/s]Processing Batch 1:   5%|▍         | 4/87 [00:03<01:03,  1.31file/s]Processing Batch 1:   6%|▌         | 5/87 [00:03<00:48,  1.67file/s]Processing Batch 1:   7%|▋         | 6/87 [00:04<00:47,  1.72file/s]Processing Batch 1:   9%|▉         | 8/87 [00:05<00:36,  2.14file/s]Processing Batch 1:  10%|█         | 9/87 [00:05<00:38,  2.05file/s]Processing Batch 1:  11%|█▏        | 10/87 [00:06<00:46,  1.67file/s]Processing Batch 1:  13%|█▎        | 11/87 [00:06<00:38,  1.99file/s]Processing Batch 1:  14%|█▍        | 12/87 [00:06<00:29,  2.57file/s]Processing Batch 1:  15%|█▍        | 13/87 [00:07<00:27,  2.69file/s]Processing Batch 1:  16%|█▌        | 14/87 [00:07<00:33,  2.17file/s]Processing Batch 1:  17%|█▋        | 15/87 [00:08<00:27,  2.66file/s]Processing Batch 1:  20%|█▉        | 17/87 [00:08<00:23,  3.02file/s]Processing Batch 1:  21%|██        | 18/87 [00:08<00:20,  3.37file/s]Processing Batch 1:  22%|██▏       | 19/87 [00:09<00:18,  3.59file/s]Processing Batch 1:  23%|██▎       | 20/87 [00:09<00:18,  3.58file/s]Processing Batch 1:  25%|██▌       | 22/87 [00:09<00:15,  4.14file/s]Processing Batch 1:  26%|██▋       | 23/87 [00:10<00:19,  3.27file/s]Processing Batch 1:  29%|██▊       | 25/87 [00:10<00:16,  3.71file/s]Processing Batch 1:  30%|██▉       | 26/87 [00:10<00:15,  3.87file/s]Processing Batch 1:  32%|███▏      | 28/87 [00:11<00:15,  3.91file/s]Processing Batch 1:  34%|███▍      | 30/87 [00:11<00:10,  5.35file/s]

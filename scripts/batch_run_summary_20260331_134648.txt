@@ -1,0 +1,435 @@
+==========================================
+BATCH PIPELINE RUN - Tue Mar 31 13:46:48 EDT 2026
+==========================================
+Dataset root: /Users/seancheick/Documents/DataSetDsld/staging/brands
+Scripts directory: /Users/seancheick/.claude-worktrees/dsld_clean/peaceful-ritchie/scripts
+Stages: enrich
+Target datasets: CVS,Double_Wood_Supplements,Equate,Garden_of_life,Goli,Hum
+==========================================
+
+/Users/seancheick/.claude-worktrees/dsld_clean/peaceful-ritchie/scripts/run_pipeline.py:391: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  start_time = datetime.utcnow()
+2026-03-31 13:46:48 - __main__ - INFO - ============================================================
+2026-03-31 13:46:48 - __main__ - INFO - DSLD SUPPLEMENT PIPELINE
+2026-03-31 13:46:48 - __main__ - INFO - ============================================================
+2026-03-31 13:46:48 - __main__ - INFO - Script directory: /Users/seancheick/.claude-worktrees/dsld_clean/peaceful-ritchie/scripts
+2026-03-31 13:46:48 - __main__ - INFO - Stages to run: enrich
+2026-03-31 13:46:48 - __main__ - INFO - Raw data: /Users/seancheick/Documents/DataSetDsld/staging/brands/Goli/
+2026-03-31 13:46:48 - __main__ - INFO - Cleaned output: output_Goli/cleaned
+2026-03-31 13:46:48 - __main__ - INFO - Enriched output: output_Goli_enriched/enriched
+2026-03-31 13:46:48 - __main__ - INFO - Scored output: output_Goli_scored
+2026-03-31 13:46:48 - __main__ - INFO - ============================================================
+2026-03-31 13:46:48 - __main__ - INFO - Validated data directory: /Users/seancheick/.claude-worktrees/dsld_clean/peaceful-ritchie/scripts/data
+2026-03-31 13:46:48 - __main__ - INFO - [ENRICH] Validated input: /Users/seancheick/.claude-worktrees/dsld_clean/peaceful-ritchie/scripts/output_Goli/cleaned (1 JSON files)
+2026-03-31 13:46:48 - __main__ - INFO - ============================================================
+2026-03-31 13:46:48 - __main__ - INFO - STAGE 2: ENRICHMENT
+2026-03-31 13:46:48 - __main__ - INFO - ============================================================
+2026-03-31 13:46:48 - __main__ - INFO - Executing: /Users/seancheick/.pyenv/versions/3.13.3/bin/python /Users/seancheick/.claude-worktrees/dsld_clean/peaceful-ritchie/scripts/enrich_supplements_v3.py --input-dir output_Goli/cleaned --output-dir output_Goli_enriched --config /Users/seancheick/.claude-worktrees/dsld_clean/peaceful-ritchie/scripts/config/enrichment_config.json
+2026-03-31 13:46:48 - __main__ - INFO - Configuration loaded from /Users/seancheick/.claude-worktrees/dsld_clean/peaceful-ritchie/scripts/config/enrichment_config.json
+2026-03-31 13:46:48 - __main__ - INFO - Loaded absorption_enhancers: 23 entries
+2026-03-31 13:46:48 - __main__ - INFO - Loaded allergens: 17 entries
+2026-03-31 13:46:48 - __main__ - INFO - Loaded backed_clinical_studies: 180 entries
+2026-03-31 13:46:48 - __main__ - INFO - Loaded banned_recalled_ingredients: 143 entries
+2026-03-31 13:46:48 - __main__ - INFO - Loaded banned_match_allowlist: 5 entries
+2026-03-31 13:46:48 - __main__ - INFO - Loaded botanical_ingredients: 428 entries
+2026-03-31 13:46:48 - __main__ - INFO - Loaded cert_claim_rules: 3 entries
+2026-03-31 13:46:48 - __main__ - INFO - Loaded clinical_risk_taxonomy: 14 entries
+2026-03-31 13:46:48 - __main__ - INFO - Loaded clinically_relevant_strains: 42 entries
+2026-03-31 13:46:48 - __main__ - INFO - Loaded color_indicators: 5 entries
+2026-03-31 13:46:48 - __main__ - INFO - Loaded enhanced_delivery: 79 entries
+2026-03-31 13:46:48 - __main__ - INFO - Loaded harmful_additives: 115 entries
+2026-03-31 13:46:48 - __main__ - INFO - Loaded ingredient_quality_map: 552 entries
+2026-03-31 13:46:48 - __main__ - INFO - Loaded ingredient_interaction_rules: 45 entries
+2026-03-31 13:46:48 - __main__ - INFO - Loaded ingredient_weights: 4 entries
+2026-03-31 13:46:48 - __main__ - INFO - Loaded manufacturer_violations: 66 entries
+2026-03-31 13:46:48 - __main__ - INFO - Loaded other_ingredients: 661 entries
+2026-03-31 13:46:48 - __main__ - INFO - Loaded percentile_categories: 3 entries
+2026-03-31 13:46:48 - __main__ - INFO - Loaded proprietary_blends: 14 entries
+2026-03-31 13:46:48 - __main__ - INFO - Loaded rda_optimal_uls: 47 entries
+2026-03-31 13:46:48 - __main__ - INFO - Loaded rda_therapeutic_dosing: 44 entries
+2026-03-31 13:46:49 - __main__ - INFO - Loaded standardized_botanicals: 239 entries
+2026-03-31 13:46:49 - __main__ - INFO - Loaded synergy_cluster: 54 entries
+2026-03-31 13:46:49 - __main__ - INFO - Loaded top_manufacturers_data: 77 entries
+2026-03-31 13:46:49 - __main__ - INFO - Loaded unit_conversions: 5 entries
+2026-03-31 13:46:49 - __main__ - INFO - Loaded user_goals_to_clusters: 2 entries
+2026-03-31 13:46:49 - __main__ - INFO - Reference data: color_indicators v5.0.0 (updated: 2026-02-18)
+2026-03-31 13:46:49 - __main__ - INFO - Reference data: cert_claim_rules v5.0.0 (updated: 2026-02-25)
+2026-03-31 13:46:49 - __main__ - INFO - Enrichment system initialized with 26 databases
+2026-03-31 13:46:49 - __main__ - INFO - Performance indexes built in 0.22s: IQM exact=12414 norm=12316 entries, non-scorable=7811 entries
+2026-03-31 13:46:49 - unit_converter - INFO - Loaded unit_conversions.json v1.0.0 with 20 vitamin rules
+2026-03-31 13:46:49 - __main__ - INFO - UnitConverter initialized
+2026-03-31 13:46:49 - __main__ - INFO - DosageNormalizer initialized
+2026-03-31 13:46:49 - __main__ - INFO - ProprietaryBlendDetector initialized
+2026-03-31 13:46:49 - __main__ - INFO - RDAULCalculator initialized
+2026-03-31 13:46:49 - __main__ - INFO - Found 1 files to process
+/Users/seancheick/.claude-worktrees/dsld_clean/peaceful-ritchie/scripts/enrich_supplements_v3.py:11414: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  start_time = datetime.utcnow()
+2026-03-31 13:46:49 - __main__ - INFO - Processing: cleaned_batch_1.json
+2026-03-31 13:46:49 - __main__ - INFO - Processing batch: 10 products from cleaned_batch_1.json
+/Users/seancheick/.claude-worktrees/dsld_clean/peaceful-ritchie/scripts/enrich_supplements_v3.py:10684: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  enriched["enriched_date"] = datetime.utcnow().isoformat() + "Z"
+/Users/seancheick/.claude-worktrees/dsld_clean/peaceful-ritchie/scripts/enrich_supplements_v3.py:10796: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  "generated_at": datetime.utcnow().isoformat() + "Z",
+2026-03-31 13:47:00 - __main__ - INFO - Saved 10 enriched products to /Users/seancheick/.claude-worktrees/dsld_clean/peaceful-ritchie/scripts/output_Goli_enriched/enriched/enriched_cleaned_batch_1.json
+/Users/seancheick/.claude-worktrees/dsld_clean/peaceful-ritchie/scripts/enrich_supplements_v3.py:11430: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  end_time = datetime.utcnow()
+/Users/seancheick/.claude-worktrees/dsld_clean/peaceful-ritchie/scripts/enrich_supplements_v3.py:11457: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  f"{report_prefix}_{datetime.utcnow().strftime('%Y%m%d_%H%M%S')}.json",
+/Users/seancheick/.claude-worktrees/dsld_clean/peaceful-ritchie/scripts/enrich_supplements_v3.py:11507: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  "generated_at": datetime.utcnow().isoformat() + "Z",
+2026-03-31 13:47:00 - __main__ - INFO - Form fallback audit report saved: /Users/seancheick/.claude-worktrees/dsld_clean/peaceful-ritchie/scripts/output_Goli_enriched/reports/form_fallback_audit_report.json (2 differ, 2 same, 5 total occurrences)
+2026-03-31 13:47:00 - __main__ - INFO - ==================================================
+2026-03-31 13:47:00 - __main__ - INFO - ENRICHMENT COMPLETE
+2026-03-31 13:47:00 - __main__ - INFO - Total products: 10
+2026-03-31 13:47:00 - __main__ - INFO - Pattern match wins: 0; Contains match wins: 0; Parent fallback count: 0
+2026-03-31 13:47:00 - __main__ - INFO - Duration: 10.86s
+2026-03-31 13:47:00 - __main__ - INFO - Summary saved: /Users/seancheick/.claude-worktrees/dsld_clean/peaceful-ritchie/scripts/output_Goli_enriched/reports/enrichment_summary_20260331_174700.json
+2026-03-31 13:47:00 - __main__ - INFO - ==================================================
+/Users/seancheick/.claude-worktrees/dsld_clean/peaceful-ritchie/scripts/run_pipeline.py:498: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  end_time = datetime.utcnow()
+2026-03-31 13:47:00 - __main__ - INFO - 
+2026-03-31 13:47:00 - __main__ - INFO - ============================================================
+2026-03-31 13:47:00 - __main__ - INFO - PIPELINE COMPLETE
+2026-03-31 13:47:00 - __main__ - INFO - ============================================================
+2026-03-31 13:47:00 - __main__ - INFO - Stages completed: enrich
+2026-03-31 13:47:00 - __main__ - INFO - Total duration: 11.28s
+2026-03-31 13:47:00 - __main__ - INFO - Success: True
+2026-03-31 13:47:00 - __main__ - INFO - ============================================================
+/Users/seancheick/.claude-worktrees/dsld_clean/peaceful-ritchie/scripts/run_pipeline.py:391: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  start_time = datetime.utcnow()
+2026-03-31 13:47:00 - __main__ - INFO - ============================================================
+2026-03-31 13:47:00 - __main__ - INFO - DSLD SUPPLEMENT PIPELINE
+2026-03-31 13:47:00 - __main__ - INFO - ============================================================
+2026-03-31 13:47:00 - __main__ - INFO - Script directory: /Users/seancheick/.claude-worktrees/dsld_clean/peaceful-ritchie/scripts
+2026-03-31 13:47:00 - __main__ - INFO - Stages to run: enrich
+2026-03-31 13:47:00 - __main__ - INFO - Raw data: /Users/seancheick/Documents/DataSetDsld/staging/brands/Hum/
+2026-03-31 13:47:00 - __main__ - INFO - Cleaned output: output_Hum/cleaned
+2026-03-31 13:47:00 - __main__ - INFO - Enriched output: output_Hum_enriched/enriched
+2026-03-31 13:47:00 - __main__ - INFO - Scored output: output_Hum_scored
+2026-03-31 13:47:00 - __main__ - INFO - ============================================================
+2026-03-31 13:47:00 - __main__ - INFO - Validated data directory: /Users/seancheick/.claude-worktrees/dsld_clean/peaceful-ritchie/scripts/data
+2026-03-31 13:47:00 - __main__ - INFO - [ENRICH] Validated input: /Users/seancheick/.claude-worktrees/dsld_clean/peaceful-ritchie/scripts/output_Hum/cleaned (1 JSON files)
+2026-03-31 13:47:00 - __main__ - INFO - ============================================================
+2026-03-31 13:47:00 - __main__ - INFO - STAGE 2: ENRICHMENT
+2026-03-31 13:47:00 - __main__ - INFO - ============================================================
+2026-03-31 13:47:00 - __main__ - INFO - Executing: /Users/seancheick/.pyenv/versions/3.13.3/bin/python /Users/seancheick/.claude-worktrees/dsld_clean/peaceful-ritchie/scripts/enrich_supplements_v3.py --input-dir output_Hum/cleaned --output-dir output_Hum_enriched --config /Users/seancheick/.claude-worktrees/dsld_clean/peaceful-ritchie/scripts/config/enrichment_config.json
+2026-03-31 13:47:00 - __main__ - INFO - Configuration loaded from /Users/seancheick/.claude-worktrees/dsld_clean/peaceful-ritchie/scripts/config/enrichment_config.json
+2026-03-31 13:47:00 - __main__ - INFO - Loaded absorption_enhancers: 23 entries
+2026-03-31 13:47:00 - __main__ - INFO - Loaded allergens: 17 entries
+2026-03-31 13:47:00 - __main__ - INFO - Loaded backed_clinical_studies: 180 entries
+2026-03-31 13:47:00 - __main__ - INFO - Loaded banned_recalled_ingredients: 143 entries
+2026-03-31 13:47:00 - __main__ - INFO - Loaded banned_match_allowlist: 5 entries
+2026-03-31 13:47:00 - __main__ - INFO - Loaded botanical_ingredients: 428 entries
+2026-03-31 13:47:00 - __main__ - INFO - Loaded cert_claim_rules: 3 entries
+2026-03-31 13:47:00 - __main__ - INFO - Loaded clinical_risk_taxonomy: 14 entries
+2026-03-31 13:47:00 - __main__ - INFO - Loaded clinically_relevant_strains: 42 entries
+2026-03-31 13:47:00 - __main__ - INFO - Loaded color_indicators: 5 entries
+2026-03-31 13:47:00 - __main__ - INFO - Loaded enhanced_delivery: 79 entries
+2026-03-31 13:47:00 - __main__ - INFO - Loaded harmful_additives: 115 entries
+2026-03-31 13:47:00 - __main__ - INFO - Loaded ingredient_quality_map: 552 entries
+2026-03-31 13:47:00 - __main__ - INFO - Loaded ingredient_interaction_rules: 45 entries
+2026-03-31 13:47:00 - __main__ - INFO - Loaded ingredient_weights: 4 entries
+2026-03-31 13:47:00 - __main__ - INFO - Loaded manufacturer_violations: 66 entries
+2026-03-31 13:47:00 - __main__ - INFO - Loaded other_ingredients: 661 entries
+2026-03-31 13:47:00 - __main__ - INFO - Loaded percentile_categories: 3 entries
+2026-03-31 13:47:00 - __main__ - INFO - Loaded proprietary_blends: 14 entries
+2026-03-31 13:47:00 - __main__ - INFO - Loaded rda_optimal_uls: 47 entries
+2026-03-31 13:47:00 - __main__ - INFO - Loaded rda_therapeutic_dosing: 44 entries
+2026-03-31 13:47:00 - __main__ - INFO - Loaded standardized_botanicals: 239 entries
+2026-03-31 13:47:00 - __main__ - INFO - Loaded synergy_cluster: 54 entries
+2026-03-31 13:47:00 - __main__ - INFO - Loaded top_manufacturers_data: 77 entries
+2026-03-31 13:47:00 - __main__ - INFO - Loaded unit_conversions: 5 entries
+2026-03-31 13:47:00 - __main__ - INFO - Loaded user_goals_to_clusters: 2 entries
+2026-03-31 13:47:00 - __main__ - INFO - Reference data: color_indicators v5.0.0 (updated: 2026-02-18)
+2026-03-31 13:47:00 - __main__ - INFO - Reference data: cert_claim_rules v5.0.0 (updated: 2026-02-25)
+2026-03-31 13:47:00 - __main__ - INFO - Enrichment system initialized with 26 databases
+2026-03-31 13:47:00 - __main__ - INFO - Performance indexes built in 0.23s: IQM exact=12414 norm=12316 entries, non-scorable=7811 entries
+2026-03-31 13:47:00 - unit_converter - INFO - Loaded unit_conversions.json v1.0.0 with 20 vitamin rules
+2026-03-31 13:47:00 - __main__ - INFO - UnitConverter initialized
+2026-03-31 13:47:00 - __main__ - INFO - DosageNormalizer initialized
+2026-03-31 13:47:00 - __main__ - INFO - ProprietaryBlendDetector initialized
+2026-03-31 13:47:00 - __main__ - INFO - RDAULCalculator initialized
+2026-03-31 13:47:00 - __main__ - INFO - Found 1 files to process
+/Users/seancheick/.claude-worktrees/dsld_clean/peaceful-ritchie/scripts/enrich_supplements_v3.py:11414: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  start_time = datetime.utcnow()
+2026-03-31 13:47:00 - __main__ - INFO - Processing: cleaned_batch_1.json
+2026-03-31 13:47:00 - __main__ - INFO - Processing batch: 22 products from cleaned_batch_1.json
+Enriching:   0%|          | 0/22 [00:00<?, ?product/s]/Users/seancheick/.claude-worktrees/dsld_clean/peaceful-ritchie/scripts/enrich_supplements_v3.py:10684: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  enriched["enriched_date"] = datetime.utcnow().isoformat() + "Z"
+/Users/seancheick/.claude-worktrees/dsld_clean/peaceful-ritchie/scripts/enrich_supplements_v3.py:10796: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  "generated_at": datetime.utcnow().isoformat() + "Z",
+Enriching:   5%|▍         | 1/22 [00:00<00:15,  1.37product/s]Enriching:   9%|▉         | 2/22 [00:01<00:12,  1.67product/s]Enriching:  14%|█▎        | 3/22 [00:04<00:36,  1.92s/product]Enriching:  18%|█▊        | 4/22 [00:04<00:22,  1.22s/product]Enriching:  23%|██▎       | 5/22 [00:05<00:17,  1.05s/product]Enriching:  27%|██▋       | 6/22 [00:06<00:16,  1.01s/product]Enriching:  32%|███▏      | 7/22 [00:08<00:21,  1.43s/product]Enriching:  36%|███▋      | 8/22 [00:09<00:16,  1.21s/product]Enriching:  41%|████      | 9/22 [00:10<00:15,  1.21s/product]Enriching:  45%|████▌     | 10/22 [00:11<00:10,  1.11product/s]Enriching:  50%|█████     | 11/22 [00:11<00:07,  1.40product/s]Enriching:  55%|█████▍    | 12/22 [00:12<00:07,  1.35product/s]Enriching:  59%|█████▉    | 13/22 [00:12<00:05,  1.74product/s]Enriching:  64%|██████▎   | 14/22 [00:12<00:04,  1.86product/s]Enriching:  68%|██████▊   | 15/22 [00:16<00:10,  1.57s/product]Enriching:  73%|███████▎  | 16/22 [00:20<00:14,  2.34s/product]Enriching:  77%|███████▋  | 17/22 [00:21<00:09,  1.81s/product]Enriching:  82%|████████▏ | 18/22 [00:22<00:06,  1.69s/product]Enriching:  86%|████████▋ | 19/22 [00:23<00:03,  1.27s/product]Enriching:  91%|█████████ | 20/22 [00:23<00:02,  1.05s/product]Enriching:  95%|█████████▌| 21/22 [00:26<00:01,  1.73s/product]Enriching: 100%|██████████| 22/22 [00:28<00:00,  1.64s/product]Enriching: 100%|██████████| 22/22 [00:28<00:00,  1.29s/product]
+2026-03-31 13:47:29 - __main__ - INFO - Saved 22 enriched products to /Users/seancheick/.claude-worktrees/dsld_clean/peaceful-ritchie/scripts/output_Hum_enriched/enriched/enriched_cleaned_batch_1.json
+/Users/seancheick/.claude-worktrees/dsld_clean/peaceful-ritchie/scripts/enrich_supplements_v3.py:11430: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  end_time = datetime.utcnow()
+/Users/seancheick/.claude-worktrees/dsld_clean/peaceful-ritchie/scripts/enrich_supplements_v3.py:11457: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  f"{report_prefix}_{datetime.utcnow().strftime('%Y%m%d_%H%M%S')}.json",
+/Users/seancheick/.claude-worktrees/dsld_clean/peaceful-ritchie/scripts/enrich_supplements_v3.py:11507: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  "generated_at": datetime.utcnow().isoformat() + "Z",
+2026-03-31 13:47:29 - __main__ - INFO - Form fallback audit report saved: /Users/seancheick/.claude-worktrees/dsld_clean/peaceful-ritchie/scripts/output_Hum_enriched/reports/form_fallback_audit_report.json (3 differ, 12 same, 24 total occurrences)
+2026-03-31 13:47:29 - __main__ - INFO - ==================================================
+2026-03-31 13:47:29 - __main__ - INFO - ENRICHMENT COMPLETE
+2026-03-31 13:47:29 - __main__ - INFO - Total products: 22
+2026-03-31 13:47:29 - __main__ - INFO - Pattern match wins: 0; Contains match wins: 0; Parent fallback count: 0
+2026-03-31 13:47:29 - __main__ - INFO - Duration: 28.48s
+2026-03-31 13:47:29 - __main__ - INFO - Summary saved: /Users/seancheick/.claude-worktrees/dsld_clean/peaceful-ritchie/scripts/output_Hum_enriched/reports/enrichment_summary_20260331_174729.json
+2026-03-31 13:47:29 - __main__ - INFO - ==================================================
+/Users/seancheick/.claude-worktrees/dsld_clean/peaceful-ritchie/scripts/run_pipeline.py:498: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  end_time = datetime.utcnow()
+2026-03-31 13:47:29 - __main__ - INFO - 
+2026-03-31 13:47:29 - __main__ - INFO - ============================================================
+2026-03-31 13:47:29 - __main__ - INFO - PIPELINE COMPLETE
+2026-03-31 13:47:29 - __main__ - INFO - ============================================================
+2026-03-31 13:47:29 - __main__ - INFO - Stages completed: enrich
+2026-03-31 13:47:29 - __main__ - INFO - Total duration: 28.93s
+2026-03-31 13:47:29 - __main__ - INFO - Success: True
+2026-03-31 13:47:29 - __main__ - INFO - ============================================================
+/Users/seancheick/.claude-worktrees/dsld_clean/peaceful-ritchie/scripts/run_pipeline.py:391: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  start_time = datetime.utcnow()
+2026-03-31 13:47:29 - __main__ - INFO - ============================================================
+2026-03-31 13:47:29 - __main__ - INFO - DSLD SUPPLEMENT PIPELINE
+2026-03-31 13:47:29 - __main__ - INFO - ============================================================
+2026-03-31 13:47:29 - __main__ - INFO - Script directory: /Users/seancheick/.claude-worktrees/dsld_clean/peaceful-ritchie/scripts
+2026-03-31 13:47:29 - __main__ - INFO - Stages to run: enrich
+2026-03-31 13:47:29 - __main__ - INFO - Raw data: /Users/seancheick/Documents/DataSetDsld/staging/brands/Double_Wood_Supplements/
+2026-03-31 13:47:29 - __main__ - INFO - Cleaned output: output_Double_Wood_Supplements/cleaned
+2026-03-31 13:47:29 - __main__ - INFO - Enriched output: output_Double_Wood_Supplements_enriched/enriched
+2026-03-31 13:47:29 - __main__ - INFO - Scored output: output_Double_Wood_Supplements_scored
+2026-03-31 13:47:29 - __main__ - INFO - ============================================================
+2026-03-31 13:47:29 - __main__ - INFO - Validated data directory: /Users/seancheick/.claude-worktrees/dsld_clean/peaceful-ritchie/scripts/data
+2026-03-31 13:47:29 - __main__ - INFO - [ENRICH] Validated input: /Users/seancheick/.claude-worktrees/dsld_clean/peaceful-ritchie/scripts/output_Double_Wood_Supplements/cleaned (1 JSON files)
+2026-03-31 13:47:29 - __main__ - INFO - ============================================================
+2026-03-31 13:47:29 - __main__ - INFO - STAGE 2: ENRICHMENT
+2026-03-31 13:47:29 - __main__ - INFO - ============================================================
+2026-03-31 13:47:29 - __main__ - INFO - Executing: /Users/seancheick/.pyenv/versions/3.13.3/bin/python /Users/seancheick/.claude-worktrees/dsld_clean/peaceful-ritchie/scripts/enrich_supplements_v3.py --input-dir output_Double_Wood_Supplements/cleaned --output-dir output_Double_Wood_Supplements_enriched --config /Users/seancheick/.claude-worktrees/dsld_clean/peaceful-ritchie/scripts/config/enrichment_config.json
+2026-03-31 13:47:29 - __main__ - INFO - Configuration loaded from /Users/seancheick/.claude-worktrees/dsld_clean/peaceful-ritchie/scripts/config/enrichment_config.json
+2026-03-31 13:47:29 - __main__ - INFO - Loaded absorption_enhancers: 23 entries
+2026-03-31 13:47:29 - __main__ - INFO - Loaded allergens: 17 entries
+2026-03-31 13:47:29 - __main__ - INFO - Loaded backed_clinical_studies: 180 entries
+2026-03-31 13:47:29 - __main__ - INFO - Loaded banned_recalled_ingredients: 143 entries
+2026-03-31 13:47:29 - __main__ - INFO - Loaded banned_match_allowlist: 5 entries
+2026-03-31 13:47:29 - __main__ - INFO - Loaded botanical_ingredients: 428 entries
+2026-03-31 13:47:29 - __main__ - INFO - Loaded cert_claim_rules: 3 entries
+2026-03-31 13:47:29 - __main__ - INFO - Loaded clinical_risk_taxonomy: 14 entries
+2026-03-31 13:47:29 - __main__ - INFO - Loaded clinically_relevant_strains: 42 entries
+2026-03-31 13:47:29 - __main__ - INFO - Loaded color_indicators: 5 entries
+2026-03-31 13:47:29 - __main__ - INFO - Loaded enhanced_delivery: 79 entries
+2026-03-31 13:47:29 - __main__ - INFO - Loaded harmful_additives: 115 entries
+2026-03-31 13:47:29 - __main__ - INFO - Loaded ingredient_quality_map: 552 entries
+2026-03-31 13:47:29 - __main__ - INFO - Loaded ingredient_interaction_rules: 45 entries
+2026-03-31 13:47:29 - __main__ - INFO - Loaded ingredient_weights: 4 entries
+2026-03-31 13:47:29 - __main__ - INFO - Loaded manufacturer_violations: 66 entries
+2026-03-31 13:47:29 - __main__ - INFO - Loaded other_ingredients: 661 entries
+2026-03-31 13:47:29 - __main__ - INFO - Loaded percentile_categories: 3 entries
+2026-03-31 13:47:29 - __main__ - INFO - Loaded proprietary_blends: 14 entries
+2026-03-31 13:47:29 - __main__ - INFO - Loaded rda_optimal_uls: 47 entries
+2026-03-31 13:47:29 - __main__ - INFO - Loaded rda_therapeutic_dosing: 44 entries
+2026-03-31 13:47:29 - __main__ - INFO - Loaded standardized_botanicals: 239 entries
+2026-03-31 13:47:29 - __main__ - INFO - Loaded synergy_cluster: 54 entries
+2026-03-31 13:47:29 - __main__ - INFO - Loaded top_manufacturers_data: 77 entries
+2026-03-31 13:47:29 - __main__ - INFO - Loaded unit_conversions: 5 entries
+2026-03-31 13:47:29 - __main__ - INFO - Loaded user_goals_to_clusters: 2 entries
+2026-03-31 13:47:29 - __main__ - INFO - Reference data: color_indicators v5.0.0 (updated: 2026-02-18)
+2026-03-31 13:47:29 - __main__ - INFO - Reference data: cert_claim_rules v5.0.0 (updated: 2026-02-25)
+2026-03-31 13:47:29 - __main__ - INFO - Enrichment system initialized with 26 databases
+2026-03-31 13:47:29 - __main__ - INFO - Performance indexes built in 0.22s: IQM exact=12414 norm=12316 entries, non-scorable=7811 entries
+2026-03-31 13:47:29 - unit_converter - INFO - Loaded unit_conversions.json v1.0.0 with 20 vitamin rules
+2026-03-31 13:47:29 - __main__ - INFO - UnitConverter initialized
+2026-03-31 13:47:29 - __main__ - INFO - DosageNormalizer initialized
+2026-03-31 13:47:29 - __main__ - INFO - ProprietaryBlendDetector initialized
+2026-03-31 13:47:29 - __main__ - INFO - RDAULCalculator initialized
+2026-03-31 13:47:29 - __main__ - INFO - Found 1 files to process
+/Users/seancheick/.claude-worktrees/dsld_clean/peaceful-ritchie/scripts/enrich_supplements_v3.py:11414: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  start_time = datetime.utcnow()
+2026-03-31 13:47:29 - __main__ - INFO - Processing: cleaned_batch_1.json
+2026-03-31 13:47:29 - __main__ - INFO - Processing batch: 151 products from cleaned_batch_1.json
+Enriching:   0%|          | 0/151 [00:00<?, ?product/s]/Users/seancheick/.claude-worktrees/dsld_clean/peaceful-ritchie/scripts/enrich_supplements_v3.py:10684: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  enriched["enriched_date"] = datetime.utcnow().isoformat() + "Z"
+/Users/seancheick/.claude-worktrees/dsld_clean/peaceful-ritchie/scripts/enrich_supplements_v3.py:10796: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  "generated_at": datetime.utcnow().isoformat() + "Z",
+Enriching:   1%|          | 1/151 [00:00<00:27,  5.55product/s]Enriching:   1%|▏         | 2/151 [00:00<00:35,  4.21product/s]Enriching:   2%|▏         | 3/151 [00:00<00:32,  4.62product/s]Enriching:   3%|▎         | 4/151 [00:00<00:26,  5.62product/s]Enriching:   3%|▎         | 5/151 [00:00<00:24,  5.90product/s]Enriching:   4%|▍         | 6/151 [00:02<01:13,  1.98product/s]Enriching:   5%|▍         | 7/151 [00:02<00:54,  2.64product/s]Enriching:   5%|▌         | 8/151 [00:02<00:42,  3.36product/s]Enriching:   6%|▌         | 9/151 [00:02<00:35,  4.01product/s]Enriching:   7%|▋         | 10/151 [00:02<00:35,  3.98product/s]Enriching:   7%|▋         | 11/151 [00:02<00:32,  4.28product/s]Enriching:   8%|▊         | 12/151 [00:03<00:28,  4.82product/s]Enriching:   9%|▊         | 13/151 [00:03<00:32,  4.21product/s]Enriching:   9%|▉         | 14/151 [00:03<00:29,  4.66product/s]Enriching:  11%|█         | 16/151 [00:03<00:21,  6.24product/s]Enriching:  11%|█▏        | 17/151 [00:03<00:23,  5.66product/s]Enriching:  12%|█▏        | 18/151 [00:04<00:26,  4.99product/s]Enriching:  13%|█▎        | 19/151 [00:04<00:36,  3.64product/s]Enriching:  13%|█▎        | 20/151 [00:06<01:16,  1.71product/s]Enriching:  14%|█▍        | 21/151 [00:06<01:03,  2.03product/s]Enriching:  15%|█▍        | 22/151 [00:06<00:53,  2.41product/s]Enriching:  15%|█▌        | 23/151 [00:06<00:48,  2.65product/s]Enriching:  16%|█▌        | 24/151 [00:07<00:44,  2.84product/s]Enriching:  17%|█▋        | 25/151 [00:07<00:40,  3.09product/s]Enriching:  17%|█▋        | 26/151 [00:07<00:36,  3.40product/s]Enriching:  18%|█▊        | 27/151 [00:07<00:29,  4.15product/s]Enriching:  19%|█▊        | 28/151 [00:07<00:28,  4.26product/s]Enriching:  19%|█▉        | 29/151 [00:08<00:24,  5.04product/s]Enriching:  20%|█▉        | 30/151 [00:08<00:20,  5.79product/s]Enriching:  21%|██        | 31/151 [00:08<00:27,  4.30product/s]Enriching:  21%|██        | 32/151 [00:08<00:32,  3.64product/s]Enriching:  22%|██▏       | 33/151 [00:09<00:35,  3.30product/s]2026-03-31 13:47:39 - __main__ - WARNING - Ambiguous quality-map match: {"candidates": [{"alias_len": 17, "canonical_id": "magnesium", "form_key": "magnesium taurate", "match_type": "exact", "matched_alias": "magnesium taurate", "matched_on": "form_name", "tier": 1}, {"alias_len": 17, "canonical_id": "taurine", "form_key": "magnesium taurate", "match_type": "exact", "matched_alias": "magnesium taurate", "matched_on": "form_name", "tier": 1}], "chosen": {"alias_len": 17, "canonical_id": "magnesium", "form_key": "magnesium taurate", "match_type": "exact", "matched_alias": "magnesium taurate", "matched_on": "form_name", "tier": 1}, "ingredient_normalized": "magnesium taurate", "ingredient_raw": "Magnesium Taurate", "preferred_parent": null, "reason": ["tier", "alphabetical_parent_key"]}
+Enriching:  23%|██▎       | 34/151 [00:09<00:36,  3.21product/s]Enriching:  23%|██▎       | 35/151 [00:09<00:29,  3.91product/s]Enriching:  24%|██▍       | 36/151 [00:09<00:24,  4.67product/s]Enriching:  25%|██▍       | 37/151 [00:10<00:24,  4.61product/s]Enriching:  25%|██▌       | 38/151 [00:10<00:21,  5.29product/s]Enriching:  26%|██▌       | 39/151 [00:10<00:21,  5.24product/s]Enriching:  26%|██▋       | 40/151 [00:10<00:22,  4.97product/s]Enriching:  27%|██▋       | 41/151 [00:10<00:20,  5.26product/s]Enriching:  28%|██▊       | 42/151 [00:10<00:20,  5.26product/s]Enriching:  28%|██▊       | 43/151 [00:11<00:19,  5.64product/s]Enriching:  29%|██▉       | 44/151 [00:11<00:16,  6.32product/s]Enriching:  30%|██▉       | 45/151 [00:11<00:18,  5.63product/s]Enriching:  30%|███       | 46/151 [00:11<00:20,  5.23product/s]Enriching:  31%|███       | 47/151 [00:11<00:21,  4.76product/s]Enriching:  32%|███▏      | 48/151 [00:12<00:20,  5.06product/s]Enriching:  32%|███▏      | 49/151 [00:12<00:17,  5.75product/s]Enriching:  33%|███▎      | 50/151 [00:12<00:18,  5.60product/s]Enriching:  34%|███▍      | 51/151 [00:12<00:19,  5.22product/s]Enriching:  34%|███▍      | 52/151 [00:12<00:17,  5.56product/s]Enriching:  35%|███▌      | 53/151 [00:13<00:19,  5.14product/s]Enriching:  36%|███▌      | 54/151 [00:13<00:17,  5.63product/s]Enriching:  36%|███▋      | 55/151 [00:13<00:18,  5.22product/s]Enriching:  37%|███▋      | 56/151 [00:13<00:16,  5.92product/s]Enriching:  38%|███▊      | 57/151 [00:13<00:18,  5.13product/s]Enriching:  38%|███▊      | 58/151 [00:14<00:32,  2.86product/s]Enriching:  39%|███▉      | 59/151 [00:14<00:33,  2.75product/s]Enriching:  40%|███▉      | 60/151 [00:15<00:27,  3.34product/s]Enriching:  40%|████      | 61/151 [00:15<00:25,  3.59product/s]Enriching:  41%|████      | 62/151 [00:15<00:20,  4.38product/s]Enriching:  42%|████▏     | 63/151 [00:15<00:20,  4.24product/s]Enriching:  42%|████▏     | 64/151 [00:15<00:21,  4.14product/s]Enriching:  43%|████▎     | 65/151 [00:16<00:19,  4.36product/s]Enriching:  44%|████▎     | 66/151 [00:16<00:22,  3.84product/s]Enriching:  44%|████▍     | 67/151 [00:16<00:20,  4.02product/s]Enriching:  45%|████▌     | 68/151 [00:17<00:33,  2.46product/s]Enriching:  46%|████▌     | 69/151 [00:18<00:54,  1.50product/s]Enriching:  46%|████▋     | 70/151 [00:18<00:42,  1.90product/s]Enriching:  47%|████▋     | 71/151 [00:19<00:42,  1.86product/s]Enriching:  48%|████▊     | 72/151 [00:19<00:35,  2.22product/s]Enriching:  48%|████▊     | 73/151 [00:19<00:27,  2.87product/s]Enriching:  49%|████▉     | 74/151 [00:19<00:21,  3.61product/s]Enriching:  50%|████▉     | 75/151 [00:20<00:23,  3.19product/s]Enriching:  50%|█████     | 76/151 [00:20<00:22,  3.34product/s]Enriching:  51%|█████     | 77/151 [00:20<00:19,  3.82product/s]Enriching:  52%|█████▏    | 78/151 [00:20<00:15,  4.62product/s]Enriching:  52%|█████▏    | 79/151 [00:21<00:16,  4.40product/s]Enriching:  53%|█████▎    | 80/151 [00:21<00:15,  4.45product/s]Enriching:  54%|█████▎    | 81/151 [00:21<00:16,  4.31product/s]Enriching:  54%|█████▍    | 82/151 [00:22<00:30,  2.24product/s]Enriching:  55%|█████▍    | 83/151 [00:23<00:38,  1.75product/s]Enriching:  56%|█████▌    | 84/151 [00:23<00:33,  2.00product/s]Enriching:  56%|█████▋    | 85/151 [00:23<00:25,  2.60product/s]Enriching:  57%|█████▋    | 86/151 [00:24<00:27,  2.41product/s]Enriching:  58%|█████▊    | 87/151 [00:24<00:25,  2.49product/s]2026-03-31 13:47:54 - __main__ - WARNING - Ambiguous quality-map match: {"candidates": [{"alias_len": 17, "canonical_id": "magnesium", "form_key": "magnesium taurate", "match_type": "exact", "matched_alias": "magnesium taurate", "matched_on": "form_name", "tier": 1}, {"alias_len": 17, "canonical_id": "taurine", "form_key": "magnesium taurate", "match_type": "exact", "matched_alias": "magnesium taurate", "matched_on": "form_name", "tier": 1}], "chosen": {"alias_len": 17, "canonical_id": "magnesium", "form_key": "magnesium taurate", "match_type": "exact", "matched_alias": "magnesium taurate", "matched_on": "form_name", "tier": 1}, "ingredient_normalized": "magnesium taurate", "ingredient_raw": "Magnesium Taurate", "preferred_parent": null, "reason": ["tier", "alphabetical_parent_key"]}
+Enriching:  58%|█████▊    | 88/151 [00:25<00:24,  2.56product/s]Enriching:  59%|█████▉    | 89/151 [00:25<00:21,  2.86product/s]Enriching:  60%|█████▉    | 90/151 [00:25<00:24,  2.54product/s]Enriching:  60%|██████    | 91/151 [00:26<00:20,  2.92product/s]Enriching:  61%|██████    | 92/151 [00:26<00:28,  2.09product/s]Enriching:  62%|██████▏   | 94/151 [00:27<00:22,  2.58product/s]Enriching:  63%|██████▎   | 95/151 [00:27<00:19,  2.84product/s]Enriching:  64%|██████▎   | 96/151 [00:27<00:16,  3.27product/s]Enriching:  65%|██████▍   | 98/151 [00:28<00:13,  3.89product/s]Enriching:  66%|██████▌   | 99/151 [00:28<00:12,  4.02product/s]Enriching:  66%|██████▌   | 100/151 [00:28<00:10,  4.66product/s]Enriching:  67%|██████▋   | 101/151 [00:28<00:11,  4.43product/s]Enriching:  68%|██████▊   | 102/151 [00:28<00:09,  5.13product/s]Enriching:  69%|██████▉   | 104/151 [00:29<00:07,  6.32product/s]Enriching:  70%|██████▉   | 105/151 [00:29<00:07,  6.37product/s]Enriching:  70%|███████   | 106/151 [00:29<00:07,  6.34product/s]Enriching:  71%|███████   | 107/151 [00:29<00:07,  5.68product/s]Enriching:  72%|███████▏  | 108/151 [00:29<00:08,  5.31product/s]Enriching:  72%|███████▏  | 109/151 [00:30<00:07,  5.55product/s]Enriching:  73%|███████▎  | 110/151 [00:30<00:07,  5.20product/s]Enriching:  74%|███████▎  | 111/151 [00:30<00:07,  5.07product/s]Enriching:  75%|███████▍  | 113/151 [00:30<00:06,  5.52product/s]Enriching:  75%|███████▌  | 114/151 [00:30<00:06,  5.39product/s]Enriching:  76%|███████▌  | 115/151 [00:31<00:07,  4.73product/s]Enriching:  77%|███████▋  | 116/151 [00:31<00:07,  4.81product/s]Enriching:  77%|███████▋  | 117/151 [00:31<00:07,  4.31product/s]Enriching:  78%|███████▊  | 118/151 [00:31<00:06,  5.08product/s]Enriching:  79%|███████▉  | 119/151 [00:31<00:05,  5.79product/s]Enriching:  79%|███████▉  | 120/151 [00:32<00:05,  5.61product/s]Enriching:  80%|████████  | 121/151 [00:32<00:06,  4.98product/s]Enriching:  81%|████████  | 122/151 [00:32<00:08,  3.51product/s]Enriching:  81%|████████▏ | 123/151 [00:33<00:08,  3.28product/s]Enriching:  82%|████████▏ | 124/151 [00:33<00:09,  2.99product/s]Enriching:  83%|████████▎ | 125/151 [00:34<00:08,  2.92product/s]Enriching:  83%|████████▎ | 126/151 [00:34<00:08,  2.88product/s]2026-03-31 13:48:04 - __main__ - WARNING - Ambiguous quality-map match: {"candidates": [{"alias_len": 17, "canonical_id": "magnesium", "form_key": "magnesium taurate", "match_type": "exact", "matched_alias": "magnesium taurate", "matched_on": "form_name", "tier": 1}, {"alias_len": 17, "canonical_id": "taurine", "form_key": "magnesium taurate", "match_type": "exact", "matched_alias": "magnesium taurate", "matched_on": "form_name", "tier": 1}], "chosen": {"alias_len": 17, "canonical_id": "magnesium", "form_key": "magnesium taurate", "match_type": "exact", "matched_alias": "magnesium taurate", "matched_on": "form_name", "tier": 1}, "ingredient_normalized": "magnesium taurate", "ingredient_raw": "Magnesium Taurate", "preferred_parent": null, "reason": ["tier", "alphabetical_parent_key"]}
+Enriching:  84%|████████▍ | 127/151 [00:34<00:08,  2.81product/s]Enriching:  85%|████████▍ | 128/151 [00:35<00:07,  2.91product/s]Enriching:  85%|████████▌ | 129/151 [00:35<00:06,  3.34product/s]Enriching:  87%|████████▋ | 131/151 [00:35<00:06,  3.22product/s]Enriching:  87%|████████▋ | 132/151 [00:36<00:05,  3.47product/s]Enriching:  88%|████████▊ | 133/151 [00:36<00:05,  3.57product/s]Enriching:  89%|████████▊ | 134/151 [00:36<00:04,  3.78product/s]Enriching:  89%|████████▉ | 135/151 [00:36<00:03,  4.31product/s]Enriching:  90%|█████████ | 136/151 [00:36<00:02,  5.06product/s]Enriching:  91%|█████████ | 137/151 [00:37<00:03,  4.29product/s]Enriching:  91%|█████████▏| 138/151 [00:37<00:02,  5.05product/s]Enriching:  92%|█████████▏| 139/151 [00:37<00:02,  5.47product/s]Enriching:  93%|█████████▎| 140/151 [00:38<00:03,  3.19product/s]Enriching:  93%|█████████▎| 141/151 [00:38<00:03,  3.26product/s]Enriching:  95%|█████████▍| 143/151 [00:38<00:01,  4.26product/s]Enriching:  95%|█████████▌| 144/151 [00:39<00:02,  2.86product/s]Enriching:  96%|█████████▌| 145/151 [00:39<00:01,  3.17product/s]Enriching:  97%|█████████▋| 146/151 [00:40<00:02,  1.68product/s]Enriching:  97%|█████████▋| 147/151 [00:41<00:01,  2.16product/s]Enriching:  98%|█████████▊| 148/151 [00:41<00:01,  2.46product/s]Enriching:  99%|█████████▊| 149/151 [00:41<00:00,  2.28product/s]Enriching:  99%|█████████▉| 150/151 [00:41<00:00,  2.90product/s]Enriching: 100%|██████████| 151/151 [00:43<00:00,  1.63product/s]Enriching: 100%|██████████| 151/151 [00:43<00:00,  3.49product/s]
+2026-03-31 13:48:13 - __main__ - INFO - Saved 151 enriched products to /Users/seancheick/.claude-worktrees/dsld_clean/peaceful-ritchie/scripts/output_Double_Wood_Supplements_enriched/enriched/enriched_cleaned_batch_1.json
+/Users/seancheick/.claude-worktrees/dsld_clean/peaceful-ritchie/scripts/enrich_supplements_v3.py:11430: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  end_time = datetime.utcnow()
+/Users/seancheick/.claude-worktrees/dsld_clean/peaceful-ritchie/scripts/enrich_supplements_v3.py:11457: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  f"{report_prefix}_{datetime.utcnow().strftime('%Y%m%d_%H%M%S')}.json",
+/Users/seancheick/.claude-worktrees/dsld_clean/peaceful-ritchie/scripts/enrich_supplements_v3.py:11507: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  "generated_at": datetime.utcnow().isoformat() + "Z",
+2026-03-31 13:48:13 - __main__ - INFO - Form fallback audit report saved: /Users/seancheick/.claude-worktrees/dsld_clean/peaceful-ritchie/scripts/output_Double_Wood_Supplements_enriched/reports/form_fallback_audit_report.json (4 differ, 15 same, 24 total occurrences)
+2026-03-31 13:48:13 - __main__ - INFO - ==================================================
+2026-03-31 13:48:13 - __main__ - INFO - ENRICHMENT COMPLETE
+2026-03-31 13:48:13 - __main__ - INFO - Total products: 151
+2026-03-31 13:48:13 - __main__ - INFO - Pattern match wins: 0; Contains match wins: 0; Parent fallback count: 0
+2026-03-31 13:48:13 - __main__ - INFO - Duration: 43.42s
+2026-03-31 13:48:13 - __main__ - INFO - Summary saved: /Users/seancheick/.claude-worktrees/dsld_clean/peaceful-ritchie/scripts/output_Double_Wood_Supplements_enriched/reports/enrichment_summary_20260331_174813.json
+2026-03-31 13:48:13 - __main__ - INFO - ==================================================
+/Users/seancheick/.claude-worktrees/dsld_clean/peaceful-ritchie/scripts/run_pipeline.py:498: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  end_time = datetime.utcnow()
+2026-03-31 13:48:13 - __main__ - INFO - 
+2026-03-31 13:48:13 - __main__ - INFO - ============================================================
+2026-03-31 13:48:13 - __main__ - INFO - PIPELINE COMPLETE
+2026-03-31 13:48:13 - __main__ - INFO - ============================================================
+2026-03-31 13:48:13 - __main__ - INFO - Stages completed: enrich
+2026-03-31 13:48:13 - __main__ - INFO - Total duration: 43.85s
+2026-03-31 13:48:13 - __main__ - INFO - Success: True
+2026-03-31 13:48:13 - __main__ - INFO - ============================================================
+/Users/seancheick/.claude-worktrees/dsld_clean/peaceful-ritchie/scripts/run_pipeline.py:391: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  start_time = datetime.utcnow()
+2026-03-31 13:48:13 - __main__ - INFO - ============================================================
+2026-03-31 13:48:13 - __main__ - INFO - DSLD SUPPLEMENT PIPELINE
+2026-03-31 13:48:13 - __main__ - INFO - ============================================================
+2026-03-31 13:48:13 - __main__ - INFO - Script directory: /Users/seancheick/.claude-worktrees/dsld_clean/peaceful-ritchie/scripts
+2026-03-31 13:48:13 - __main__ - INFO - Stages to run: enrich
+2026-03-31 13:48:13 - __main__ - INFO - Raw data: /Users/seancheick/Documents/DataSetDsld/staging/brands/Equate/
+2026-03-31 13:48:13 - __main__ - INFO - Cleaned output: output_Equate/cleaned
+2026-03-31 13:48:13 - __main__ - INFO - Enriched output: output_Equate_enriched/enriched
+2026-03-31 13:48:13 - __main__ - INFO - Scored output: output_Equate_scored
+2026-03-31 13:48:13 - __main__ - INFO - ============================================================
+2026-03-31 13:48:13 - __main__ - INFO - Validated data directory: /Users/seancheick/.claude-worktrees/dsld_clean/peaceful-ritchie/scripts/data
+2026-03-31 13:48:13 - __main__ - INFO - [ENRICH] Validated input: /Users/seancheick/.claude-worktrees/dsld_clean/peaceful-ritchie/scripts/output_Equate/cleaned (1 JSON files)
+2026-03-31 13:48:13 - __main__ - INFO - ============================================================
+2026-03-31 13:48:13 - __main__ - INFO - STAGE 2: ENRICHMENT
+2026-03-31 13:48:13 - __main__ - INFO - ============================================================
+2026-03-31 13:48:13 - __main__ - INFO - Executing: /Users/seancheick/.pyenv/versions/3.13.3/bin/python /Users/seancheick/.claude-worktrees/dsld_clean/peaceful-ritchie/scripts/enrich_supplements_v3.py --input-dir output_Equate/cleaned --output-dir output_Equate_enriched --config /Users/seancheick/.claude-worktrees/dsld_clean/peaceful-ritchie/scripts/config/enrichment_config.json
+2026-03-31 13:48:13 - __main__ - INFO - Configuration loaded from /Users/seancheick/.claude-worktrees/dsld_clean/peaceful-ritchie/scripts/config/enrichment_config.json
+2026-03-31 13:48:13 - __main__ - INFO - Loaded absorption_enhancers: 23 entries
+2026-03-31 13:48:13 - __main__ - INFO - Loaded allergens: 17 entries
+2026-03-31 13:48:13 - __main__ - INFO - Loaded backed_clinical_studies: 180 entries
+2026-03-31 13:48:13 - __main__ - INFO - Loaded banned_recalled_ingredients: 143 entries
+2026-03-31 13:48:13 - __main__ - INFO - Loaded banned_match_allowlist: 5 entries
+2026-03-31 13:48:13 - __main__ - INFO - Loaded botanical_ingredients: 428 entries
+2026-03-31 13:48:13 - __main__ - INFO - Loaded cert_claim_rules: 3 entries
+2026-03-31 13:48:13 - __main__ - INFO - Loaded clinical_risk_taxonomy: 14 entries
+2026-03-31 13:48:13 - __main__ - INFO - Loaded clinically_relevant_strains: 42 entries
+2026-03-31 13:48:13 - __main__ - INFO - Loaded color_indicators: 5 entries
+2026-03-31 13:48:13 - __main__ - INFO - Loaded enhanced_delivery: 79 entries
+2026-03-31 13:48:13 - __main__ - INFO - Loaded harmful_additives: 115 entries
+2026-03-31 13:48:13 - __main__ - INFO - Loaded ingredient_quality_map: 552 entries
+2026-03-31 13:48:13 - __main__ - INFO - Loaded ingredient_interaction_rules: 45 entries
+2026-03-31 13:48:13 - __main__ - INFO - Loaded ingredient_weights: 4 entries
+2026-03-31 13:48:13 - __main__ - INFO - Loaded manufacturer_violations: 66 entries
+2026-03-31 13:48:13 - __main__ - INFO - Loaded other_ingredients: 661 entries
+2026-03-31 13:48:13 - __main__ - INFO - Loaded percentile_categories: 3 entries
+2026-03-31 13:48:13 - __main__ - INFO - Loaded proprietary_blends: 14 entries
+2026-03-31 13:48:13 - __main__ - INFO - Loaded rda_optimal_uls: 47 entries
+2026-03-31 13:48:13 - __main__ - INFO - Loaded rda_therapeutic_dosing: 44 entries
+2026-03-31 13:48:13 - __main__ - INFO - Loaded standardized_botanicals: 239 entries
+2026-03-31 13:48:13 - __main__ - INFO - Loaded synergy_cluster: 54 entries
+2026-03-31 13:48:13 - __main__ - INFO - Loaded top_manufacturers_data: 77 entries
+2026-03-31 13:48:13 - __main__ - INFO - Loaded unit_conversions: 5 entries
+2026-03-31 13:48:13 - __main__ - INFO - Loaded user_goals_to_clusters: 2 entries
+2026-03-31 13:48:13 - __main__ - INFO - Reference data: color_indicators v5.0.0 (updated: 2026-02-18)
+2026-03-31 13:48:13 - __main__ - INFO - Reference data: cert_claim_rules v5.0.0 (updated: 2026-02-25)
+2026-03-31 13:48:13 - __main__ - INFO - Enrichment system initialized with 26 databases
+2026-03-31 13:48:13 - __main__ - INFO - Performance indexes built in 0.24s: IQM exact=12414 norm=12316 entries, non-scorable=7811 entries
+2026-03-31 13:48:13 - unit_converter - INFO - Loaded unit_conversions.json v1.0.0 with 20 vitamin rules
+2026-03-31 13:48:13 - __main__ - INFO - UnitConverter initialized
+2026-03-31 13:48:13 - __main__ - INFO - DosageNormalizer initialized
+2026-03-31 13:48:13 - __main__ - INFO - ProprietaryBlendDetector initialized
+2026-03-31 13:48:13 - __main__ - INFO - RDAULCalculator initialized
+2026-03-31 13:48:13 - __main__ - INFO - Found 1 files to process
+/Users/seancheick/.claude-worktrees/dsld_clean/peaceful-ritchie/scripts/enrich_supplements_v3.py:11414: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  start_time = datetime.utcnow()
+2026-03-31 13:48:13 - __main__ - INFO - Processing: cleaned_batch_1.json
+2026-03-31 13:48:13 - __main__ - INFO - Processing batch: 143 products from cleaned_batch_1.json
+Enriching:   0%|          | 0/143 [00:00<?, ?product/s]/Users/seancheick/.claude-worktrees/dsld_clean/peaceful-ritchie/scripts/enrich_supplements_v3.py:10684: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  enriched["enriched_date"] = datetime.utcnow().isoformat() + "Z"
+/Users/seancheick/.claude-worktrees/dsld_clean/peaceful-ritchie/scripts/enrich_supplements_v3.py:10796: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  "generated_at": datetime.utcnow().isoformat() + "Z",
+Enriching:   1%|          | 1/143 [00:01<04:32,  1.92s/product]Enriching:   1%|▏         | 2/143 [00:04<04:46,  2.03s/product]Enriching:   2%|▏         | 3/143 [00:04<03:00,  1.29s/product]Enriching:   3%|▎         | 4/143 [00:05<02:43,  1.17s/product]Enriching:   3%|▎         | 5/143 [00:06<02:12,  1.04product/s]Enriching:   4%|▍         | 6/143 [00:06<02:00,  1.14product/s]Enriching:   5%|▍         | 7/143 [00:08<02:39,  1.17s/product]Enriching:   6%|▌         | 8/143 [00:13<05:35,  2.48s/product]Enriching:   6%|▋         | 9/143 [00:19<07:29,  3.36s/product]Enriching:   7%|▋         | 10/143 [00:19<05:21,  2.42s/product]Enriching:   8%|▊         | 11/143 [00:19<03:54,  1.78s/product]Enriching:   8%|▊         | 12/143 [00:20<02:58,  1.36s/product]Enriching:   9%|▉         | 13/143 [00:20<02:21,  1.09s/product]Enriching:  10%|▉         | 14/143 [00:21<02:05,  1.02product/s]2026-03-31 13:48:35 - __main__ - WARNING - Ambiguous quality-map match: {"candidates": [{"alias_len": 26, "canonical_id": "lactobacillus_rhamnosus", "form_key": "lactobacillus rhamnosus gg", "match_type": "exact", "matched_alias": "lactobacillus rhamnosus gg", "matched_on": "form_name", "tier": 1}, {"alias_len": 26, "canonical_id": "lactobacillus_rhamnosus", "form_key": "lactobacillus rhamnosus gg", "match_type": "exact", "matched_alias": "lactobacillus rhamnosus GG", "matched_on": "form_alias", "tier": 1}], "chosen": {"alias_len": 26, "canonical_id": "lactobacillus_rhamnosus", "form_key": "lactobacillus rhamnosus gg", "match_type": "exact", "matched_alias": "lactobacillus rhamnosus gg", "matched_on": "form_name", "tier": 1}, "ingredient_normalized": "lactobacillus rhamnosus gg", "ingredient_raw": "Lactobacillus rhamnosus GG", "preferred_parent": null, "reason": ["tier", "alphabetical_fallback"]}
+2026-03-31 13:48:35 - __main__ - WARNING - Ambiguous quality-map match: {"candidates": [{"alias_len": 26, "canonical_id": "lactobacillus_rhamnosus", "form_key": "lactobacillus rhamnosus gg", "match_type": "exact", "matched_alias": "lactobacillus rhamnosus gg", "matched_on": "form_name", "tier": 1}, {"alias_len": 26, "canonical_id": "lactobacillus_rhamnosus", "form_key": "lactobacillus rhamnosus gg", "match_type": "exact", "matched_alias": "lactobacillus rhamnosus GG", "matched_on": "form_alias", "tier": 1}], "chosen": {"alias_len": 26, "canonical_id": "lactobacillus_rhamnosus", "form_key": "lactobacillus rhamnosus gg", "match_type": "exact", "matched_alias": "lactobacillus rhamnosus gg", "matched_on": "form_name", "tier": 1}, "ingredient_normalized": "lactobacillus rhamnosus gg", "ingredient_raw": "Lactobacillus rhamnosus GG", "preferred_parent": null, "reason": ["tier", "alphabetical_fallback"]}
+Enriching:  10%|█         | 15/143 [00:21<01:46,  1.20product/s]Enriching:  11%|█         | 16/143 [00:22<01:49,  1.16product/s]Enriching:  12%|█▏        | 17/143 [00:23<01:31,  1.37product/s]Enriching:  13%|█▎        | 18/143 [00:23<01:21,  1.54product/s]Enriching:  13%|█▎        | 19/143 [00:24<01:13,  1.68product/s]Enriching:  14%|█▍        | 20/143 [00:24<01:04,  1.89product/s]Enriching:  15%|█▍        | 21/143 [00:24<01:02,  1.96product/s]Enriching:  15%|█▌        | 22/143 [00:25<01:00,  2.01product/s]Enriching:  16%|█▌        | 23/143 [00:25<01:00,  1.97product/s]Enriching:  17%|█▋        | 24/143 [00:26<01:01,  1.95product/s]Enriching:  17%|█▋        | 25/143 [00:26<01:00,  1.94product/s]Enriching:  18%|█▊        | 26/143 [00:27<01:00,  1.92product/s]Enriching:  19%|█▉        | 27/143 [00:28<01:00,  1.91product/s]Enriching:  20%|█▉        | 28/143 [00:28<01:04,  1.78product/s]Enriching:  20%|██        | 29/143 [00:29<01:17,  1.48product/s]Enriching:  21%|██        | 30/143 [00:31<01:53,  1.00s/product]Enriching:  22%|██▏       | 31/143 [00:31<01:35,  1.17product/s]Enriching:  22%|██▏       | 32/143 [00:34<02:46,  1.50s/product]Enriching:  23%|██▎       | 33/143 [00:37<03:07,  1.71s/product]Enriching:  24%|██▍       | 34/143 [00:39<03:21,  1.85s/product]Enriching:  24%|██▍       | 35/143 [00:42<03:54,  2.17s/product]Enriching:  25%|██▌       | 36/143 [00:44<03:44,  2.10s/product]Enriching:  26%|██▌       | 37/143 [00:45<03:32,  2.00s/product]Enriching:  27%|██▋       | 38/143 [00:47<03:24,  1.94s/product]Enriching:  27%|██▋       | 39/143 [00:49<03:03,  1.77s/product]Enriching:  28%|██▊       | 40/143 [00:50<02:49,  1.65s/product]Enriching:  29%|██▊       | 41/143 [00:51<02:15,  1.33s/product]Enriching:  29%|██▉       | 42/143 [00:51<01:52,  1.11s/product]Enriching:  30%|███       | 43/143 [00:52<01:32,  1.09product/s]Enriching:  31%|███       | 44/143 [00:52<01:19,  1.24product/s]Enriching:  31%|███▏      | 45/143 [00:53<01:23,  1.18product/s]Enriching:  32%|███▏      | 46/143 [00:55<01:48,  1.12s/product]Enriching:  33%|███▎      | 47/143 [00:55<01:26,  1.12product/s]Enriching:  34%|███▎      | 48/143 [00:57<01:54,  1.21s/product]Enriching:  34%|███▍      | 49/143 [01:00<02:43,  1.74s/product]Enriching:  35%|███▍      | 50/143 [01:03<03:17,  2.12s/product]Enriching:  36%|███▌      | 51/143 [01:05<03:16,  2.14s/product]Enriching:  36%|███▋      | 52/143 [01:07<03:04,  2.02s/product]Enriching:  37%|███▋      | 53/143 [01:12<04:13,  2.82s/product]Enriching:  38%|███▊      | 54/143 [01:17<05:07,  3.45s/product]Enriching:  38%|███▊      | 55/143 [01:21<05:14,  3.57s/product]Enriching:  39%|███▉      | 56/143 [01:22<04:24,  3.04s/product]Enriching:  40%|███▉      | 57/143 [01:25<04:09,  2.90s/product]Enriching:  41%|████      | 58/143 [01:27<03:45,  2.65s/product]Enriching:  41%|████▏     | 59/143 [01:31<04:07,  2.95s/product]Enriching:  42%|████▏     | 60/143 [01:34<04:26,  3.21s/product]Enriching:  43%|████▎     | 61/143 [01:39<04:59,  3.65s/product]Enriching:  43%|████▎     | 62/143 [01:43<04:58,  3.69s/product]Enriching:  44%|████▍     | 63/143 [01:47<05:08,  3.85s/product]Enriching:  45%|████▍     | 64/143 [01:52<05:31,  4.20s/product]Enriching:  45%|████▌     | 65/143 [01:57<05:42,  4.40s/product]Enriching:  46%|████▌     | 66/143 [01:58<04:14,  3.31s/product]Enriching:  47%|████▋     | 67/143 [02:01<04:04,  3.22s/product]Enriching:  48%|████▊     | 68/143 [02:05<04:18,  3.45s/product]Enriching:  48%|████▊     | 69/143 [02:05<03:09,  2.56s/product]Enriching:  49%|████▉     | 70/143 [02:07<02:47,  2.30s/product]Enriching:  50%|████▉     | 71/143 [02:08<02:16,  1.90s/product]2026-03-31 13:50:22 - __main__ - WARNING - Ambiguous quality-map match: {"candidates": [{"alias_len": 30, "canonical_id": "bacillus_coagulans", "form_key": "bacillus coagulans unique is-2", "match_type": "exact", "matched_alias": "bacillus coagulans unique is-2", "matched_on": "form_name", "tier": 1}, {"alias_len": 30, "canonical_id": "bacillus_coagulans", "form_key": "bacillus coagulans unique is-2", "match_type": "exact", "matched_alias": "Bacillus coagulans Unique IS-2", "matched_on": "form_alias", "tier": 1}], "chosen": {"alias_len": 30, "canonical_id": "bacillus_coagulans", "form_key": "bacillus coagulans unique is-2", "match_type": "exact", "matched_alias": "bacillus coagulans unique is-2", "matched_on": "form_name", "tier": 1}, "ingredient_normalized": "bacillus coagulans is-2", "ingredient_raw": "Bacillus coagulans IS-2", "preferred_parent": null, "reason": ["tier", "alphabetical_fallback"]}
+2026-03-31 13:50:22 - __main__ - WARNING - Ambiguous quality-map match: {"candidates": [{"alias_len": 30, "canonical_id": "bacillus_coagulans", "form_key": "bacillus coagulans unique is-2", "match_type": "exact", "matched_alias": "bacillus coagulans unique is-2", "matched_on": "form_name", "tier": 1}, {"alias_len": 30, "canonical_id": "bacillus_coagulans", "form_key": "bacillus coagulans unique is-2", "match_type": "exact", "matched_alias": "Bacillus coagulans Unique IS-2", "matched_on": "form_alias", "tier": 1}], "chosen": {"alias_len": 30, "canonical_id": "bacillus_coagulans", "form_key": "bacillus coagulans unique is-2", "match_type": "exact", "matched_alias": "bacillus coagulans unique is-2", "matched_on": "form_name", "tier": 1}, "ingredient_normalized": "bacillus coagulans is-2", "ingredient_raw": "Bacillus coagulans IS-2", "preferred_parent": null, "reason": ["tier", "alphabetical_fallback"]}
+Enriching:  50%|█████     | 72/143 [02:08<01:42,  1.45s/product]Enriching:  51%|█████     | 73/143 [02:09<01:26,  1.24s/product]Enriching:  52%|█████▏    | 74/143 [02:12<02:02,  1.78s/product]Enriching:  52%|█████▏    | 75/143 [02:16<02:43,  2.40s/product]Enriching:  53%|█████▎    | 76/143 [02:22<04:00,  3.58s/product]Enriching:  54%|█████▍    | 77/143 [02:24<03:16,  2.98s/product]Enriching:  55%|█████▍    | 78/143 [02:26<02:53,  2.66s/product]Enriching:  56%|█████▌    | 80/143 [02:27<01:54,  1.82s/product]Enriching:  57%|█████▋    | 81/143 [02:29<01:47,  1.73s/product]Enriching:  57%|█████▋    | 82/143 [02:31<01:45,  1.73s/product]Enriching:  58%|█████▊    | 83/143 [02:31<01:24,  1.41s/product]Enriching:  59%|█████▊    | 84/143 [02:32<01:11,  1.20s/product]Enriching:  59%|█████▉    | 85/143 [02:33<01:01,  1.07s/product]Enriching:  60%|██████    | 86/143 [02:33<00:52,  1.09product/s]Enriching:  61%|██████    | 87/143 [02:37<01:32,  1.65s/product]Enriching:  62%|██████▏   | 88/143 [02:40<02:05,  2.28s/product]Enriching:  62%|██████▏   | 89/143 [02:45<02:44,  3.05s/product]Enriching:  63%|██████▎   | 90/143 [02:51<03:21,  3.81s/product]Enriching:  64%|██████▎   | 91/143 [02:52<02:41,  3.11s/product]Enriching:  64%|██████▍   | 92/143 [02:56<02:49,  3.32s/product]Enriching:  65%|██████▌   | 93/143 [03:00<02:56,  3.54s/product]Enriching:  66%|██████▌   | 94/143 [03:04<03:01,  3.71s/product]Enriching:  66%|██████▋   | 95/143 [03:10<03:22,  4.22s/product]Enriching:  67%|██████▋   | 96/143 [03:11<02:41,  3.44s/product]Enriching:  68%|██████▊   | 97/143 [03:12<02:03,  2.69s/product]Enriching:  69%|██████▊   | 98/143 [03:13<01:33,  2.08s/product]Enriching:  69%|██████▉   | 99/143 [03:14<01:12,  1.65s/product]Enriching:  70%|██████▉   | 100/143 [03:15<01:13,  1.70s/product]Enriching:  71%|███████   | 101/143 [03:19<01:35,  2.27s/product]Enriching:  71%|███████▏  | 102/143 [03:21<01:35,  2.34s/product]Enriching:  72%|███████▏  | 103/143 [03:24<01:30,  2.27s/product]Enriching:  73%|███████▎  | 104/143 [03:29<02:03,  3.17s/product]Enriching:  73%|███████▎  | 105/143 [03:35<02:32,  4.01s/product]Enriching:  74%|███████▍  | 106/143 [03:41<02:51,  4.64s/product]Enriching:  75%|███████▍  | 107/143 [03:45<02:40,  4.45s/product]Enriching:  76%|███████▌  | 108/143 [03:46<01:55,  3.31s/product]Enriching:  76%|███████▌  | 109/143 [03:50<02:01,  3.57s/product]Enriching:  77%|███████▋  | 110/143 [03:54<02:08,  3.88s/product]Enriching:  78%|███████▊  | 111/143 [03:59<02:07,  3.99s/product]Enriching:  78%|███████▊  | 112/143 [03:59<01:30,  2.92s/product]Enriching:  79%|███████▉  | 113/143 [04:00<01:12,  2.41s/product]Enriching:  80%|███████▉  | 114/143 [04:01<00:56,  1.95s/product]Enriching:  80%|████████  | 115/143 [04:02<00:44,  1.58s/product]Enriching:  81%|████████  | 116/143 [04:05<00:58,  2.18s/product]Enriching:  82%|████████▏ | 117/143 [04:11<01:21,  3.15s/product]Enriching:  83%|████████▎ | 118/143 [04:16<01:30,  3.60s/product]Enriching:  83%|████████▎ | 119/143 [04:17<01:12,  3.00s/product]Enriching:  84%|████████▍ | 120/143 [04:18<00:53,  2.32s/product]Enriching:  85%|████████▍ | 121/143 [04:19<00:42,  1.95s/product]Enriching:  85%|████████▌ | 122/143 [04:21<00:40,  1.91s/product]Enriching:  86%|████████▌ | 123/143 [04:21<00:31,  1.55s/product]Enriching:  87%|████████▋ | 124/143 [04:24<00:32,  1.71s/product]Enriching:  87%|████████▋ | 125/143 [04:27<00:42,  2.37s/product]Enriching:  88%|████████▊ | 126/143 [04:30<00:39,  2.31s/product]Enriching:  89%|████████▉ | 127/143 [04:30<00:30,  1.88s/product]Enriching:  90%|████████▉ | 128/143 [04:36<00:43,  2.90s/product]Enriching:  90%|█████████ | 129/143 [04:40<00:47,  3.40s/product]Enriching:  91%|█████████ | 130/143 [04:44<00:46,  3.60s/product]Enriching:  92%|█████████▏| 131/143 [04:45<00:33,  2.78s/product]Enriching:  92%|█████████▏| 132/143 [04:47<00:27,  2.49s/product]Enriching:  93%|█████████▎| 133/143 [04:51<00:29,  2.98s/product]Enriching:  94%|█████████▎| 134/143 [04:56<00:32,  3.61s/product]Enriching:  94%|█████████▍| 135/143 [04:57<00:21,  2.73s/product]Enriching:  95%|█████████▌| 136/143 [04:58<00:14,  2.11s/product]Enriching:  96%|█████████▌| 137/143 [04:59<00:11,  1.98s/product]Enriching:  97%|█████████▋| 138/143 [05:00<00:07,  1.50s/product]Enriching:  97%|█████████▋| 139/143 [05:01<00:05,  1.33s/product]Enriching:  98%|█████████▊| 140/143 [05:05<00:06,  2.11s/product]Enriching:  99%|█████████▊| 141/143 [05:06<00:03,  1.77s/product]Enriching:  99%|█████████▉| 142/143 [05:07<00:01,  1.71s/product]Enriching: 100%|██████████| 143/143 [05:08<00:00,  1.35s/product]Enriching: 100%|██████████| 143/143 [05:08<00:00,  2.15s/product]
+2026-03-31 13:53:22 - __main__ - INFO - Saved 143 enriched products to /Users/seancheick/.claude-worktrees/dsld_clean/peaceful-ritchie/scripts/output_Equate_enriched/enriched/enriched_cleaned_batch_1.json
+/Users/seancheick/.claude-worktrees/dsld_clean/peaceful-ritchie/scripts/enrich_supplements_v3.py:11430: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  end_time = datetime.utcnow()
+/Users/seancheick/.claude-worktrees/dsld_clean/peaceful-ritchie/scripts/enrich_supplements_v3.py:11457: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  f"{report_prefix}_{datetime.utcnow().strftime('%Y%m%d_%H%M%S')}.json",
+/Users/seancheick/.claude-worktrees/dsld_clean/peaceful-ritchie/scripts/enrich_supplements_v3.py:11507: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  "generated_at": datetime.utcnow().isoformat() + "Z",
+2026-03-31 13:53:22 - __main__ - INFO - Form fallback audit report saved: /Users/seancheick/.claude-worktrees/dsld_clean/peaceful-ritchie/scripts/output_Equate_enriched/reports/form_fallback_audit_report.json (10 differ, 6 same, 31 total occurrences)
+2026-03-31 13:53:22 - __main__ - INFO - ==================================================
+2026-03-31 13:53:22 - __main__ - INFO - ENRICHMENT COMPLETE
+2026-03-31 13:53:22 - __main__ - INFO - Total products: 143
+2026-03-31 13:53:22 - __main__ - INFO - Pattern match wins: 0; Contains match wins: 0; Parent fallback count: 0
+2026-03-31 13:53:22 - __main__ - INFO - Duration: 308.81s
+2026-03-31 13:53:22 - __main__ - INFO - Summary saved: /Users/seancheick/.claude-worktrees/dsld_clean/peaceful-ritchie/scripts/output_Equate_enriched/reports/enrichment_summary_20260331_175322.json
+2026-03-31 13:53:22 - __main__ - INFO - ==================================================
+/Users/seancheick/.claude-worktrees/dsld_clean/peaceful-ritchie/scripts/run_pipeline.py:498: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  end_time = datetime.utcnow()
+2026-03-31 13:53:22 - __main__ - INFO - 
+2026-03-31 13:53:22 - __main__ - INFO - ============================================================
+2026-03-31 13:53:22 - __main__ - INFO - PIPELINE COMPLETE
+2026-03-31 13:53:22 - __main__ - INFO - ============================================================
+2026-03-31 13:53:22 - __main__ - INFO - Stages completed: enrich
+2026-03-31 13:53:22 - __main__ - INFO - Total duration: 309.28s
+2026-03-31 13:53:22 - __main__ - INFO - Success: True
+2026-03-31 13:53:22 - __main__ - INFO - ============================================================
+/Users/seancheick/.claude-worktrees/dsld_clean/peaceful-ritchie/scripts/run_pipeline.py:391: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  start_time = datetime.utcnow()
+2026-03-31 13:53:22 - __main__ - INFO - ============================================================
+2026-03-31 13:53:22 - __main__ - INFO - DSLD SUPPLEMENT PIPELINE
+2026-03-31 13:53:22 - __main__ - INFO - ============================================================
+2026-03-31 13:53:22 - __main__ - INFO - Script directory: /Users/seancheick/.claude-worktrees/dsld_clean/peaceful-ritchie/scripts
+2026-03-31 13:53:22 - __main__ - INFO - Stages to run: enrich
+2026-03-31 13:53:22 - __main__ - INFO - Raw data: /Users/seancheick/Documents/DataSetDsld/staging/brands/CVS/
+2026-03-31 13:53:22 - __main__ - INFO - Cleaned output: output_CVS/cleaned
+2026-03-31 13:53:22 - __main__ - INFO - Enriched output: output_CVS_enriched/enriched
+2026-03-31 13:53:22 - __main__ - INFO - Scored output: output_CVS_scored
+2026-03-31 13:53:22 - __main__ - INFO - ============================================================
+2026-03-31 13:53:22 - __main__ - INFO - Validated data directory: /Users/seancheick/.claude-worktrees/dsld_clean/peaceful-ritchie/scripts/data
+2026-03-31 13:53:22 - __main__ - INFO - [ENRICH] Validated input: /Users/seancheick/.claude-worktrees/dsld_clean/peaceful-ritchie/scripts/output_CVS/cleaned (1 JSON files)
+2026-03-31 13:53:22 - __main__ - INFO - ============================================================
+2026-03-31 13:53:22 - __main__ - INFO - STAGE 2: ENRICHMENT
+2026-03-31 13:53:22 - __main__ - INFO - ============================================================
+2026-03-31 13:53:22 - __main__ - INFO - Executing: /Users/seancheick/.pyenv/versions/3.13.3/bin/python /Users/seancheick/.claude-worktrees/dsld_clean/peaceful-ritchie/scripts/enrich_supplements_v3.py --input-dir output_CVS/cleaned --output-dir output_CVS_enriched --config /Users/seancheick/.claude-worktrees/dsld_clean/peaceful-ritchie/scripts/config/enrichment_config.json
+2026-03-31 13:53:22 - __main__ - INFO - Configuration loaded from /Users/seancheick/.claude-worktrees/dsld_clean/peaceful-ritchie/scripts/config/enrichment_config.json
+2026-03-31 13:53:22 - __main__ - INFO - Loaded absorption_enhancers: 23 entries
+2026-03-31 13:53:22 - __main__ - INFO - Loaded allergens: 17 entries
+2026-03-31 13:53:22 - __main__ - INFO - Loaded backed_clinical_studies: 180 entries
+2026-03-31 13:53:22 - __main__ - INFO - Loaded banned_recalled_ingredients: 143 entries
+2026-03-31 13:53:22 - __main__ - INFO - Loaded banned_match_allowlist: 5 entries
+2026-03-31 13:53:22 - __main__ - INFO - Loaded botanical_ingredients: 428 entries
+2026-03-31 13:53:22 - __main__ - INFO - Loaded cert_claim_rules: 3 entries
+2026-03-31 13:53:22 - __main__ - INFO - Loaded clinical_risk_taxonomy: 14 entries
+2026-03-31 13:53:22 - __main__ - INFO - Loaded clinically_relevant_strains: 42 entries
+2026-03-31 13:53:22 - __main__ - INFO - Loaded color_indicators: 5 entries
+2026-03-31 13:53:22 - __main__ - INFO - Loaded enhanced_delivery: 79 entries
+2026-03-31 13:53:22 - __main__ - INFO - Loaded harmful_additives: 115 entries
+2026-03-31 13:53:22 - __main__ - INFO - Loaded ingredient_quality_map: 552 entries
+2026-03-31 13:53:22 - __main__ - INFO - Loaded ingredient_interaction_rules: 45 entries
+2026-03-31 13:53:22 - __main__ - INFO - Loaded ingredient_weights: 4 entries
+2026-03-31 13:53:22 - __main__ - INFO - Loaded manufacturer_violations: 66 entries
+2026-03-31 13:53:22 - __main__ - INFO - Loaded other_ingredients: 661 entries
+2026-03-31 13:53:22 - __main__ - INFO - Loaded percentile_categories: 3 entries
+2026-03-31 13:53:22 - __main__ - INFO - Loaded proprietary_blends: 14 entries
+2026-03-31 13:53:22 - __main__ - INFO - Loaded rda_optimal_uls: 47 entries
+2026-03-31 13:53:22 - __main__ - INFO - Loaded rda_therapeutic_dosing: 44 entries
+2026-03-31 13:53:22 - __main__ - INFO - Loaded standardized_botanicals: 239 entries
+2026-03-31 13:53:22 - __main__ - INFO - Loaded synergy_cluster: 54 entries
+2026-03-31 13:53:22 - __main__ - INFO - Loaded top_manufacturers_data: 77 entries
+2026-03-31 13:53:22 - __main__ - INFO - Loaded unit_conversions: 5 entries
+2026-03-31 13:53:22 - __main__ - INFO - Loaded user_goals_to_clusters: 2 entries
+2026-03-31 13:53:22 - __main__ - INFO - Reference data: color_indicators v5.0.0 (updated: 2026-02-18)
+2026-03-31 13:53:22 - __main__ - INFO - Reference data: cert_claim_rules v5.0.0 (updated: 2026-02-25)
+2026-03-31 13:53:22 - __main__ - INFO - Enrichment system initialized with 26 databases
+2026-03-31 13:53:23 - __main__ - INFO - Performance indexes built in 0.23s: IQM exact=12414 norm=12316 entries, non-scorable=7811 entries
+2026-03-31 13:53:23 - unit_converter - INFO - Loaded unit_conversions.json v1.0.0 with 20 vitamin rules
+2026-03-31 13:53:23 - __main__ - INFO - UnitConverter initialized
+2026-03-31 13:53:23 - __main__ - INFO - DosageNormalizer initialized
+2026-03-31 13:53:23 - __main__ - INFO - ProprietaryBlendDetector initialized
+2026-03-31 13:53:23 - __main__ - INFO - RDAULCalculator initialized
+2026-03-31 13:53:23 - __main__ - INFO - Found 1 files to process
+/Users/seancheick/.claude-worktrees/dsld_clean/peaceful-ritchie/scripts/enrich_supplements_v3.py:11414: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  start_time = datetime.utcnow()
+2026-03-31 13:53:23 - __main__ - INFO - Processing: cleaned_batch_1.json
+2026-03-31 13:53:23 - __main__ - INFO - Processing batch: 280 products from cleaned_batch_1.json
+Enriching:   0%|          | 0/280 [00:00<?, ?product/s]/Users/seancheick/.claude-worktrees/dsld_clean/peaceful-ritchie/scripts/enrich_supplements_v3.py:10684: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  enriched["enriched_date"] = datetime.utcnow().isoformat() + "Z"
+/Users/seancheick/.claude-worktrees/dsld_clean/peaceful-ritchie/scripts/enrich_supplements_v3.py:10796: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  "generated_at": datetime.utcnow().isoformat() + "Z",
+Enriching:   0%|          | 1/280 [00:00<01:22,  3.39product/s]Enriching:   1%|          | 2/280 [00:01<02:32,  1.82product/s]Enriching:   1%|          | 3/280 [00:05<11:17,  2.45s/product]Enriching:   1%|▏         | 4/280 [00:06<07:29,  1.63s/product]Enriching:   2%|▏         | 5/280 [00:06<05:15,  1.15s/product]Enriching:   2%|▏         | 6/280 [00:07<04:32,  1.00product/s]Enriching:   2%|▎         | 7/280 [00:07<03:32,  1.29product/s]Enriching:   3%|▎         | 8/280 [00:11<08:16,  1.82s/product]Enriching:   3%|▎         | 9/280 [00:11<06:17,  1.39s/product]Enriching:   4%|▎         | 10/280 [00:12<04:48,  1.07s/product]Enriching:   4%|▍         | 11/280 [00:13<04:31,  1.01s/product]Enriching:   4%|▍         | 12/280 [00:16<08:01,  1.80s/product]Enriching:   5%|▍         | 13/280 [00:17<06:11,  1.39s/product]Enriching:   5%|▌         | 14/280 [00:18<05:46,  1.30s/product]Enriching:   5%|▌         | 15/280 [00:18<04:36,  1.05s/product]Enriching:   6%|▌         | 16/280 [00:20<06:03,  1.38s/product]Enriching:   6%|▌         | 17/280 [00:24<09:08,  2.08s/product]Enriching:   6%|▋         | 18/280 [00:28<11:40,  2.68s/product]Enriching:   7%|▋         | 19/280 [00:32<12:52,  2.96s/product]Enriching:   7%|▋         | 20/280 [00:35<13:43,  3.17s/product]Enriching:   8%|▊         | 21/280 [00:37<11:42,  2.71s/product]Enriching:   8%|▊         | 22/280 [00:38<09:38,  2.24s/product]Enriching:   8%|▊         | 23/280 [00:39<08:01,  1.87s/product]Enriching:   9%|▊         | 24/280 [00:40<06:15,  1.47s/product]Enriching:   9%|▉         | 25/280 [00:42<07:03,  1.66s/product]Enriching:   9%|▉         | 26/280 [00:46<09:47,  2.31s/product]Enriching:  10%|▉         | 27/280 [00:49<11:27,  2.72s/product]Enriching:  10%|█         | 28/280 [00:50<08:21,  1.99s/product]Enriching:  10%|█         | 29/280 [00:50<06:20,  1.52s/product]Enriching:  11%|█         | 30/280 [00:50<04:38,  1.11s/product]Enriching:  11%|█         | 31/280 [00:52<05:14,  1.26s/product]Enriching:  11%|█▏        | 32/280 [00:53<04:49,  1.17s/product]Enriching:  12%|█▏        | 33/280 [00:58<09:41,  2.35s/product]Enriching:  12%|█▏        | 34/280 [01:00<08:44,  2.13s/product]Enriching:  12%|█▎        | 35/280 [01:01<07:36,  1.86s/product]Enriching:  13%|█▎        | 36/280 [01:02<06:41,  1.65s/product]Enriching:  13%|█▎        | 37/280 [01:03<06:06,  1.51s/product]Enriching:  14%|█▎        | 38/280 [01:04<05:42,  1.41s/product]Enriching:  14%|█▍        | 39/280 [01:05<04:27,  1.11s/product]Enriching:  14%|█▍        | 40/280 [01:05<03:31,  1.14product/s]Enriching:  15%|█▍        | 41/280 [01:05<02:52,  1.39product/s]Enriching:  15%|█▌        | 42/280 [01:07<03:56,  1.01product/s]Enriching:  15%|█▌        | 43/280 [01:09<05:29,  1.39s/product]Enriching:  16%|█▌        | 44/280 [01:11<05:49,  1.48s/product]Enriching:  16%|█▌        | 45/280 [01:13<06:27,  1.65s/product]Enriching:  16%|█▋        | 46/280 [01:15<06:56,  1.78s/product]Enriching:  17%|█▋        | 47/280 [01:16<05:19,  1.37s/product]Enriching:  17%|█▋        | 48/280 [01:16<04:10,  1.08s/product]Enriching:  18%|█▊        | 49/280 [01:18<04:44,  1.23s/product]Enriching:  18%|█▊        | 50/280 [01:18<03:48,  1.01product/s]Enriching:  18%|█▊        | 51/280 [01:18<03:05,  1.23product/s]Enriching:  19%|█▊        | 52/280 [01:19<02:34,  1.48product/s]Enriching:  19%|█▉        | 53/280 [01:19<02:11,  1.73product/s]Enriching:  19%|█▉        | 54/280 [01:19<01:54,  1.98product/s]Enriching:  20%|█▉        | 55/280 [01:20<01:43,  2.17product/s]Enriching:  20%|██        | 56/280 [01:20<01:43,  2.17product/s]Enriching:  20%|██        | 57/280 [01:21<01:33,  2.38product/s]Enriching:  21%|██        | 58/280 [01:22<02:11,  1.69product/s]Enriching:  21%|██        | 59/280 [01:23<03:27,  1.06product/s]Enriching:  21%|██▏       | 60/280 [01:29<08:09,  2.22s/product]Enriching:  22%|██▏       | 61/280 [01:29<06:06,  1.67s/product]Enriching:  22%|██▏       | 62/280 [01:29<04:36,  1.27s/product]Enriching:  22%|██▎       | 63/280 [01:30<03:52,  1.07s/product]Enriching:  23%|██▎       | 64/280 [01:30<03:05,  1.16product/s]Enriching:  23%|██▎       | 65/280 [01:31<02:44,  1.31product/s]Enriching:  24%|██▎       | 66/280 [01:31<02:31,  1.41product/s]Enriching:  24%|██▍       | 67/280 [01:36<07:08,  2.01s/product]Enriching:  24%|██▍       | 68/280 [01:42<10:43,  3.04s/product]Enriching:  25%|██▍       | 69/280 [01:44<09:40,  2.75s/product]Enriching:  25%|██▌       | 70/280 [01:46<08:26,  2.41s/product]Enriching:  25%|██▌       | 71/280 [01:46<06:48,  1.95s/product]Enriching:  26%|██▌       | 72/280 [01:48<06:28,  1.87s/product]Enriching:  26%|██▌       | 73/280 [01:49<05:15,  1.52s/product]Enriching:  26%|██▋       | 74/280 [01:55<09:53,  2.88s/product]Enriching:  27%|██▋       | 75/280 [01:57<09:10,  2.69s/product]Enriching:  27%|██▋       | 76/280 [02:03<12:52,  3.79s/product]Enriching:  28%|██▊       | 77/280 [02:05<10:58,  3.25s/product]

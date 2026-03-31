@@ -1,9 +1,9 @@
 # FINAL EXPORT SCHEMA V1
 
-> Version: 1.2.0 — 2026-03-18
-> Consumes: scoring v3.1.0, enrichment v3.1.0, data schema v5.1.0
+> Version: 1.2.1 — 2026-03-30
+> Consumes: current scorer output (v3.3.0 as of 2026-03-30), enrichment schema v5.1.0
 > Status: FROZEN — approved by team review
-> Updated: interaction_summary, dose_threshold_evaluation, condition/drug_class mapping, 45 interaction rules
+> Updated: scoring v3.3 alignment, omega-3 bonus export note, interaction_summary, dose_threshold_evaluation, condition/drug_class mapping
 
 ## Purpose
 
@@ -15,6 +15,7 @@ This contract is frozen. Field renames after the app ships are expensive.
 
 Assumptions:
 - Omega-3 dose adequacy is folded into ingredient quality in pipeline scoring.
+- Detail blobs expose omega-3 scoring context under `section_breakdown.ingredient_quality.sub.omega3_breakdown`.
 - User personalization (`score_fit_20`) is computed locally on the phone.
 - V1 does not claim true product-level recall support; only ingredient-level
   recalled/banned safety logic is exported.
@@ -290,7 +291,7 @@ Cached on-device in `product_detail_cache.detail_json` after first access.
   "score_bonuses": [...],
   "score_penalties": [...],
   "section_breakdown": {
-    "ingredient_quality": {"score", "max", "sub": {..., "probiotic_breakdown": {...}}},
+    "ingredient_quality": {"score", "max", "sub": {..., "probiotic_breakdown": {...}, "omega3_breakdown": {...}}},
     "safety_purity": {"score", "max", "sub": {..., "B5_blend_evidence": [...], "B7_penalty", "B7_dose_safety_evidence": [...]}},
     "evidence_research": {"score", "max", "matched_entries", "ingredient_points": {...}},
     "brand_trust": {"score", "max", "sub": {...}},
@@ -552,6 +553,10 @@ additional fields are present:
   CFU data, clinical strain matches with evidence levels, prebiotic pairing, and survivability
   coating. The `probiotic_breakdown` in `section_breakdown.ingredient_quality.sub` carries
   the scoring sub-components (CFU, diversity, clinical strains, prebiotic, survivability).
+- `omega3_breakdown` lives in `section_breakdown.ingredient_quality.sub` when the product
+  has explicit EPA/DHA label amounts. This is the app-facing export for omega-3 dose context;
+  the pipeline's legacy `E_dose_adequacy` compatibility output is not a separate final-export
+  section.
 - `synergy_detail` is present when synergy clusters were matched. Includes cluster names,
   matched ingredients with their doses and minimum effective dose thresholds, and
   qualification status.
@@ -589,7 +594,11 @@ App Launch
   -> Open local SQLite
   -> Read export_manifest
   -> If online: check Supabase for newer version
-  -> If newer: download delta or full artifact, apply in background
+  -> If remote min_app_version is higher than local app version: force app update before parsing new release
+  -> If newer: download full artifact to staging path in background (no binary diffing required in v1)
+  -> Verify checksum from remote export_manifest.json
+  -> Open/test staged DB
+  -> Atomically swap only after verification passes
   -> Continue with local DB even if update fails
 
 Barcode Scan
@@ -603,7 +612,8 @@ Barcode Scan
   -> If not cached + offline: show core only, mark detail unavailable
 
 Search
-  -> Query local FTS index
+  -> Debounce input (~300ms)
+  -> Query local FTS index with LIMIT 50
   -> Return results instantly
   -> Open product from products_core
   -> Hydrate detail via cache/server as needed
@@ -677,12 +687,14 @@ and shared across versions so unchanged products do not get re-uploaded.
 - Compares local `db_version` against the remote manifest to decide whether a new
   artifact should be uploaded or downloaded.
 - Uses the remote `checksum` to verify the downloaded SQLite artifact before swap-in.
+- The client should treat `min_app_version` as a hard compatibility gate before promoting a downloaded release.
 - Uses `detail_index.json` to resolve `dsld_id` to a hashed shared blob path.
 - If any unique detail blob upload fails, manifest rotation is aborted to prevent clients
   from seeing the new version and getting broken detail fetches. The DB file and detail
   index are safe to re-upload (upsert).
 - Detail blob sync uses bounded concurrency and skips hashed blobs that already exist
   remotely, so unchanged product details are not re-uploaded on every DB version.
+- App-side `product_detail_cache` should use release-version-aware invalidation and bounded LRU eviction.
 
 ---
 

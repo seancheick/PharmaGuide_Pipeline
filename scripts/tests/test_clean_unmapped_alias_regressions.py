@@ -2385,3 +2385,128 @@ def test_batch43_softgels_inactive_exact_aliases_and_new_entry_map(normalizer, n
 
     assert mapped is True
     assert expected == standard_name
+
+
+# ── Batch 44: CVS / Double Wood / Equate / Garden of Life unmapped resolution ──
+
+
+@pytest.mark.parametrize(
+    "name,expected_substring",
+    [
+        ("CDP Choline", "Choline"),
+        ("Alanine", "Alanine"),
+        ("Ajuga turkestanica whole herb extract", "Ecdysterone"),
+        ("Korean Red Panax Ginseng Extract", "Ginseng"),
+        ("Asian Ginseng root (Panax Ginseng) standardized extract", "Ginseng"),
+        ("Keratin Peptides, Hydrolyzed", "Keratin"),
+        ("Psyllium Hydrophilic Mucilloid", "Psyllium"),
+        ("Mimosa pudica seed extract", "Mimosa"),
+    ],
+)
+def test_batch44_active_exact_aliases_map(normalizer, name, expected_substring):
+    standard_name, mapped, _ = normalizer._enhanced_ingredient_mapping(name, [])
+
+    assert mapped is True, f"{name!r} should map but did not"
+    assert expected_substring.lower() in str(standard_name).lower()
+
+
+@pytest.mark.parametrize(
+    "name,ingredient_group,expected_substring",
+    [
+        ("Cellulose Coatiing", None, "Cellulose"),
+        ("edible Ink", None, "Ink"),
+        ("Soy Polysaccharide", None, "Soy Polysaccharide"),
+        ("Enliten High Intensity Sweetener", None, "Stevia"),
+    ],
+)
+def test_batch44_inactive_exact_aliases_map(normalizer, name, ingredient_group, expected_substring):
+    standard_name, mapped, _ = normalizer._map_inactive_name_prefer_other(
+        name, ingredient_group=ingredient_group
+    )
+
+    assert mapped is True, f"{name!r} should map but did not"
+    assert expected_substring.lower() in str(standard_name).lower()
+
+
+# ── Batch 45: API-verified new entries and aliases (CVS/DW/Equate/GoL) ──
+
+
+@pytest.mark.parametrize(
+    "name,expected_substring",
+    [
+        ("Silver", "Silver"),
+        ("Magnesium Acetyl-Taurate", "Magnesium"),
+        ("Spermidine", "Spermidine"),
+        ("Spermidine Trihydrochloride", "Spermidine"),
+        ("Organic Barley Grass Juice Concentrate", "Barley"),
+    ],
+)
+def test_batch45_active_exact_aliases_map(normalizer, name, expected_substring):
+    standard_name, mapped, _ = normalizer._enhanced_ingredient_mapping(name, [])
+
+    assert mapped is True, f"{name!r} should map but did not"
+    assert expected_substring.lower() in str(standard_name).lower()
+
+
+@pytest.mark.parametrize(
+    "name,ingredient_group,expected_substring",
+    [
+        ("Polyalditol", None, "Polyalditol"),
+        ("Carboxymethyl Starch Sodium", None, "Sodium Starch Glycolate"),
+    ],
+)
+def test_batch45_inactive_exact_aliases_map(normalizer, name, ingredient_group, expected_substring):
+    standard_name, mapped, _ = normalizer._map_inactive_name_prefer_other(
+        name, ingredient_group=ingredient_group
+    )
+
+    assert mapped is True, f"{name!r} should map but did not"
+    assert expected_substring.lower() in str(standard_name).lower()
+
+
+# ── Batch 46: Garden of Life fallback form aliases ──
+
+
+@pytest.mark.parametrize(
+    "name,expected_substring",
+    [
+        # Turmeric cluster — cleaner routes to natural colors (OI precedence);
+        # IQM form aliases fix enricher fallback separately
+        ("organic turmeric", "natural colors"),
+        ("organic turmeric root extract", "natural colors"),
+        ("organic fermented turmeric", "natural colors"),
+        ("turmeric curcuminoids", "natural colors"),
+        ("turmeric rhizome root extract", "natural colors"),
+        # Amla cluster
+        ("organic amla berry", "Amla"),
+        ("raw amla", "Amla"),
+        ("organic amla berry extract", "Amla"),
+        # Kelp/seaweed
+        ("organic sea kelp", "Kelp"),
+        ("brown seaweed extract", "Kelp"),
+        # Flax
+        ("flax", "Flaxseed"),
+        ("organic flax seed fiber", "Flaxseed"),
+        ("flaxseed fermented", "Flaxseed"),
+        # Flaxseed oil extract — cleaner routes to Omega-3 (IQM precedence);
+        # IQM flaxseed oil form alias fixes enricher fallback
+        ("flaxseed oil extract", "Omega-3"),
+        # Piperine / Black pepper
+        ("organic black pepper", "Piperine"),
+        ("essence of pure black pepper (fruit) oil", "Piperine"),
+        # Strontium
+        ("strontium", "Strontium"),
+        # Cayenne
+        ("organic cayenne", "Capsaicin"),
+        # Other
+        ("organic anise", "Anise"),
+        ("organic schisandra (schisandra chinensis) berry extract", "Schisandrin"),
+        ("wild crafted butterbur extract", "Butterbur"),
+        ("organic vitex", "Chasteberry"),
+    ],
+)
+def test_batch46_garden_of_life_fallback_form_aliases_map(normalizer, name, expected_substring):
+    standard_name, mapped, _ = normalizer._enhanced_ingredient_mapping(name, [])
+
+    assert mapped is True, f"{name!r} should map but did not"
+    assert expected_substring.lower() in str(standard_name).lower()

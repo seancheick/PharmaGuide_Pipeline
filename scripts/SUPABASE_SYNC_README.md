@@ -47,7 +47,8 @@ python scripts/sync_to_supabase.py <output_dir> --dry-run
 | Local File | Supabase Location |
 |-----------|-------------------|
 | `pharmaguide_core.db` | Storage: `pharmaguide/v{version}/pharmaguide_core.db` |
-| `detail_blobs/*.json` | Storage: `pharmaguide/v{version}/details/{dsld_id}.json` |
+| `detail_index.json` | Storage: `pharmaguide/v{version}/detail_index.json` |
+| `detail_blobs/*.json` | Storage: `pharmaguide/shared/details/sha256/{blob_sha256[0:2]}/{blob_sha256}.json` |
 | `export_manifest.json` | PostgreSQL: `export_manifest` table (is_current=true) |
 
 ### Version checking
@@ -55,6 +56,16 @@ python scripts/sync_to_supabase.py <output_dir> --dry-run
 The script compares the local `export_manifest.json` to the current Supabase manifest:
 - If versions differ or no remote manifest exists: uploads everything
 - If versions and checksums match: skips (already synced)
+
+## Client-side safety expectations
+
+The Flutter client should not promote a downloaded DB artifact just because it exists remotely.
+Required client behavior:
+- download the new DB to a staging path
+- verify it against the remote `export_manifest.json` checksum
+- respect `min_app_version` as a hard compatibility gate
+- atomically swap in only after checksum + open/readability validation pass
+- keep using the previous known-good DB if any step fails
 
 ## Supabase Schema
 
