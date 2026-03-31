@@ -381,7 +381,7 @@ class SupplementScorer:
             return "token_bounded"
         return text
 
-    def _evaluate_b0(self, product: Dict[str, Any]) -> Dict[str, Any]:
+    def _evaluate_safety_gate(self, product: Dict[str, Any]) -> Dict[str, Any]:
         substances = safe_list(
             product.get("contaminant_data", {})
             .get("banned_substances", {})
@@ -477,7 +477,7 @@ class SupplementScorer:
             ingredients = safe_list(iqd.get("ingredients"))
         return ingredients
 
-    def _score_a1(self, product: Dict[str, Any], supp_type: str) -> float:
+    def _compute_bioavailability_score(self, product: Dict[str, Any], supp_type: str) -> float:
         ingredients = self._get_active_ingredients(product)
         if not ingredients:
             return 0.0
@@ -546,7 +546,7 @@ class SupplementScorer:
             range_max = 18.0
         return clamp(0.0, max_points, (avg_raw / range_max) * max_points)
 
-    def _score_a2(self, product: Dict[str, Any]) -> float:
+    def _compute_premium_forms_bonus(self, product: Dict[str, Any]) -> float:
         premium_keys = set()
         for ing in self._get_active_ingredients(product):
             # Keep A2 aligned with A1/A6 dose-anchored separation:
@@ -568,14 +568,14 @@ class SupplementScorer:
         count_premium = len(premium_keys)
         return clamp(0.0, 3.0, 0.5 * max(0, count_premium - 1))
 
-    def _score_a3(self, product: Dict[str, Any]) -> float:
+    def _compute_delivery_score(self, product: Dict[str, Any]) -> float:
         tier = product.get("delivery_tier")
         if tier is None:
             tier = product.get("delivery_data", {}).get("highest_tier")
         tier_int = int(as_float(tier, 0) or 0)
         return {1: 3.0, 2: 2.0, 3: 1.0}.get(tier_int, 0.0)
 
-    def _score_a4(self, product: Dict[str, Any]) -> float:
+    def _compute_absorption_bonus(self, product: Dict[str, Any]) -> float:
         if "absorption_enhancer_paired" in product:
             return 3.0 if bool(product.get("absorption_enhancer_paired")) else 0.0
         qualifies = bool(product.get("absorption_data", {}).get("qualifies_for_bonus", False))
@@ -608,7 +608,7 @@ class SupplementScorer:
 
         return False
 
-    def _score_a5(self, product: Dict[str, Any]) -> Dict[str, float]:
+    def _compute_formulation_bonus(self, product: Dict[str, Any]) -> Dict[str, float]:
         formulation = product.get("formulation_data", {})
 
         organic_data = formulation.get("organic")
@@ -658,7 +658,7 @@ class SupplementScorer:
             "A5d_non_gmo_verified": a5d,
         }
 
-    def _score_a6(self, product: Dict[str, Any], supp_type: str) -> float:
+    def _compute_single_efficiency_bonus(self, product: Dict[str, Any], supp_type: str) -> float:
         if supp_type not in {"single", "single_nutrient"}:
             return 0.0
 
@@ -804,7 +804,7 @@ class SupplementScorer:
         }
         return allowed, details
 
-    def _score_probiotic_bonus(self, product: Dict[str, Any], supp_type: str) -> Dict[str, float]:
+    def _compute_probiotic_category_bonus(self, product: Dict[str, Any], supp_type: str) -> Dict[str, float]:
         pro_cfg = self.config.get("section_A_ingredient_quality", {}).get("probiotic_bonus", {})
         pdata = product.get("probiotic_data", {})
         probiotic_flag = bool(pdata.get("is_probiotic_product"))
@@ -951,24 +951,92 @@ class SupplementScorer:
             "eligibility": eligibility,
         }
 
-    def _score_section_a(self, product: Dict[str, Any], supp_type: str) -> Dict[str, Any]:
+    def _compute_omega3_dose_bonus(self, product: Dict[str, Any], flags: List[str]) -> Dict[str, Any]:
+        """Omega-3 dose adequacy category bonus (max 2.0).
+
+        Applicable only to products with explicit per-unit EPA and/or DHA amounts.
+        Formerly standalone Section E, now a category bonus inside Ingredient Quality.
+        """
+        a_cfg = self.config.get("section_A_ingredient_quality", {})
+        o3_cfg = a_cfg.get("omega3_dose_bonus", {}) or {}
+
+        # Fallback to legacy section_E_dose_adequacy config for backward compat
+        if not o3_cfg.get("bands"):
+            o3_cfg = self.config.get("section_E_dose_adequacy", {}) or {}
+
+        bonus_max = as_float(o3_cfg.get("max"), 2.0)
+        bands = list(o3_cfg.get("bands", []) or [])
+
+        dose_data = self._compute_epa_dha_per_day(product)
+
+        if not dose_data.get("has_explicit_dose"):
+            return {
+                "omega3_dose_bonus": 0.0,
+                "applicable": False,
+            }
+
+        per_day = as_float(dose_data.get("per_day_mid"), 0.0) or 0.0
+        bonus_score = 0.0
+        dose_band_label = "below_efsa_ai"
+        prescription_dose = False
+
+        sorted_bands = sorted(bands, key=lambda b: as_float(b.get("min_mg_day"), 0) or 0, reverse=True)
+        for band in sorted_bands:
+            threshold = as_float(band.get("min_mg_day"), 0) or 0.0
+            if per_day >= threshold:
+                bonus_score = min(bonus_max, as_float(band.get("score"), 0.0) or 0.0)
+                dose_band_label = band.get("label") or dose_band_label
+                band_flag = band.get("flag")
+                if band_flag:
+                    prescription_dose = True
+                    if band_flag not in flags:
+                        flags.append(band_flag)
+                break
+
+        return {
+            "omega3_dose_bonus": round(bonus_score, 2),
+            "applicable": True,
+            "dose_band": dose_band_label,
+            "per_day_mid_mg": dose_data.get("per_day_mid"),
+            "per_day_min_mg": dose_data.get("per_day_min"),
+            "per_day_max_mg": dose_data.get("per_day_max"),
+            "epa_mg_per_unit": dose_data.get("epa_mg_per_unit"),
+            "dha_mg_per_unit": dose_data.get("dha_mg_per_unit"),
+            "prescription_dose": prescription_dose,
+        }
+
+    def _compute_ingredient_quality_score(self, product: Dict[str, Any], supp_type: str,
+                         flags: Optional[List[str]] = None) -> Dict[str, Any]:
         a_cfg = self.config.get("section_A_ingredient_quality", {})
         section_max = self._section_max("a", 25.0)
-        a1 = self._score_a1(product, supp_type)
-        a2 = self._score_a2(product)
-        a3 = self._score_a3(product)
-        a4 = self._score_a4(product)
-        a5_parts = self._score_a5(product)
+        a1 = self._compute_bioavailability_score(product, supp_type)
+        a2 = self._compute_premium_forms_bonus(product)
+        a3 = self._compute_delivery_score(product)
+        a4 = self._compute_absorption_bonus(product)
+        a5_parts = self._compute_formulation_bonus(product)
         a5_cap = as_float(a_cfg.get("A5_formulation_excellence", {}).get("max"), 3.0)
         a5 = min(a5_cap, sum(a5_parts.values()))
-        a6 = self._score_a6(product, supp_type)
-        probiotic = self._score_probiotic_bonus(product, supp_type)
+        a6 = self._compute_single_efficiency_bonus(product, supp_type)
+        probiotic = self._compute_probiotic_category_bonus(product, supp_type)
         probiotic_bonus = probiotic["probiotic_bonus"]
 
-        total = min(section_max, a1 + a2 + a3 + a4 + a5 + a6 + probiotic_bonus)
+        # Category bonus pool: bonuses enhance, not define quality.
+        # Core quality components always dominate.
+        omega3_result = self._compute_omega3_dose_bonus(product, flags if flags is not None else [])
+        omega3_bonus = omega3_result["omega3_dose_bonus"]
+
+        pool_cfg = a_cfg.get("category_bonus_pool", {})
+        max_bonus_contribution = as_float(pool_cfg.get("max_contribution"), 5.0)
+        category_bonus_total = min(max_bonus_contribution, probiotic_bonus + omega3_bonus)
+
+        core_quality = a1 + a2 + a3 + a4 + a5 + a6
+        total = min(section_max, core_quality + category_bonus_total)
         return {
             "score": round(total, 2),
             "max": round(section_max, 2),
+            "core_quality": round(core_quality, 2),
+            "category_bonus_total": round(category_bonus_total, 2),
+            "category_bonus_pool_cap": round(max_bonus_contribution, 2),
             "A1": round(a1, 2),
             "A2": round(a2, 2),
             "A3": round(a3, 2),
@@ -981,13 +1049,15 @@ class SupplementScorer:
             "A6": round(a6, 2),
             "probiotic_bonus": round(probiotic_bonus, 2),
             "probiotic_breakdown": probiotic,
+            "omega3_dose_bonus": round(omega3_bonus, 2),
+            "omega3_breakdown": omega3_result,
         }
 
     # ---------------------------------------------------------------------
     # Section B
     # ---------------------------------------------------------------------
 
-    def _score_b1(self, product: Dict[str, Any], b_cfg: Dict[str, Any] = None) -> float:
+    def _compute_harmful_additives_penalty(self, product: Dict[str, Any], b_cfg: Dict[str, Any] = None) -> float:
         if b_cfg is None:
             b_cfg = self.config.get("section_B_safety_purity", {})
         b1_cfg = b_cfg.get("B1_harmful_additives", {})
@@ -1013,7 +1083,7 @@ class SupplementScorer:
         b1_cap = as_float(b1_cfg.get("cap"), 5.0)
         return clamp(0.0, b1_cap, penalty)
 
-    def _score_b2(self, product: Dict[str, Any], b_cfg: Dict[str, Any] = None) -> float:
+    def _compute_allergen_penalty(self, product: Dict[str, Any], b_cfg: Dict[str, Any] = None) -> float:
         if b_cfg is None:
             b_cfg = self.config.get("section_B_safety_purity", {})
         b2_cfg = b_cfg.get("B2_allergen_presence", {})
@@ -1095,7 +1165,7 @@ class SupplementScorer:
 
         return allergen_valid, gluten_valid, vegan_valid, flags
 
-    def _score_b4(self, product: Dict[str, Any], supp_type: str) -> Dict[str, float]:
+    def _compute_certifications_bonus(self, product: Dict[str, Any], supp_type: str) -> Dict[str, float]:
         cert = product.get("certification_data", {})
         b4_cfg = self.config.get("section_B_safety_purity", {}).get("B4_quality_certifications", {})
         b4a_cfg = b4_cfg.get("B4a_named_programs", {}) if isinstance(b4_cfg, dict) else {}
@@ -1338,7 +1408,7 @@ class SupplementScorer:
         )
         return (name_key, tuple(child_names), blend_total_key, source_path)
 
-    def _score_b5(self, product: Dict[str, Any], flags: List[str], b_cfg: Dict[str, Any] = None) -> float:
+    def _compute_proprietary_blend_penalty(self, product: Dict[str, Any], flags: List[str], b_cfg: Dict[str, Any] = None) -> float:
         if b_cfg is None:
             b_cfg = self.config.get("section_B_safety_purity", {})
         b5_cfg = b_cfg.get("B5_proprietary_blends", {})
@@ -1471,7 +1541,7 @@ class SupplementScorer:
 
         return clamp(0.0, b5_cap, penalty_sum)
 
-    def _score_b6(self, product: Dict[str, Any], flags: List[str], b_cfg: Dict[str, Any] = None) -> float:
+    def _compute_disease_claims_penalty(self, product: Dict[str, Any], flags: List[str], b_cfg: Dict[str, Any] = None) -> float:
         if b_cfg is None:
             b_cfg = self.config.get("section_B_safety_purity", {})
         has_claims = bool(product.get("has_disease_claims", False))
@@ -1489,7 +1559,7 @@ class SupplementScorer:
             return penalty
         return 0.0
 
-    def _score_b7(
+    def _compute_dose_safety_penalty(
         self,
         product: Dict[str, Any],
         flags: List[str],
@@ -1537,7 +1607,7 @@ class SupplementScorer:
         total_penalty = min(total_penalty, cap)
         return total_penalty, evidence
 
-    def _score_section_b(
+    def _compute_safety_purity_score(
         self,
         product: Dict[str, Any],
         supp_type: str,
@@ -1549,8 +1619,8 @@ class SupplementScorer:
         base_score = as_float(section_b_cfg.get("base_score"), 25.0) or 25.0
         bonus_pool_cap = as_float(section_b_cfg.get("bonus_pool_cap"), 5.0) or 5.0
 
-        b1 = self._score_b1(product, section_b_cfg)
-        b2 = self._score_b2(product, section_b_cfg)
+        b1 = self._compute_harmful_additives_penalty(product, section_b_cfg)
+        b2 = self._compute_allergen_penalty(product, section_b_cfg)
 
         allergen_valid, gluten_valid, vegan_valid, claim_flags = self._derive_claim_validations(product, b2)
         for f in claim_flags:
@@ -1572,12 +1642,12 @@ class SupplementScorer:
             if hypo_flag and b2 == 0.0 and not has_may_contain and not contradiction and (allergen_valid or gluten_valid):
                 b_hypoallergenic = 0.5
 
-        b4 = self._score_b4(product, supp_type)
+        b4 = self._compute_certifications_bonus(product, supp_type)
         b4a, b4b, b4c = b4["B4a"], b4["B4b"], b4["B4c"]
 
-        b5 = self._score_b5(product, flags, section_b_cfg)
-        b6 = self._score_b6(product, flags, section_b_cfg)
-        b7, b7_evidence = self._score_b7(product, flags, section_b_cfg)
+        b5 = self._compute_proprietary_blend_penalty(product, flags, section_b_cfg)
+        b6 = self._compute_disease_claims_penalty(product, flags, section_b_cfg)
+        b7, b7_evidence = self._compute_dose_safety_penalty(product, flags, section_b_cfg)
 
         bonuses = min(bonus_pool_cap, b3 + b4a + b4b + b4c + b_hypoallergenic)
         penalties = b1 + b2 + b5 + b6 + b7 + b0_moderate_penalty
@@ -1617,7 +1687,7 @@ class SupplementScorer:
         tmp_product = dict(product)
         if proprietary_data is not None:
             tmp_product["proprietary_data"] = proprietary_data
-        penalty = self._score_b5(tmp_product, flags)
+        penalty = self._compute_proprietary_blend_penalty(tmp_product, flags)
         notes = [f"B5 proprietary blend penalty magnitude={round(penalty, 2)}"]
         details = {
             "blends_detected_count": len(
@@ -1728,7 +1798,7 @@ class SupplementScorer:
         # IU and CFU are not safely convertible to mass without nutrient-specific rules.
         return None
 
-    def _score_section_c(self, product: Dict[str, Any], flags: List[str]) -> Dict[str, Any]:
+    def _compute_evidence_score(self, product: Dict[str, Any], flags: List[str]) -> Dict[str, Any]:
         section_c_cfg = self.config.get("section_C_evidence_research", {}) or {}
         cap_per_ingredient = as_float(section_c_cfg.get("cap_per_ingredient"), 7.0) or 7.0
         cap_total = as_float(section_c_cfg.get("cap_total"), 20.0) or 20.0
@@ -1818,7 +1888,7 @@ class SupplementScorer:
     # Section D + violations
     # ---------------------------------------------------------------------
 
-    def _score_section_d(self, product: Dict[str, Any]) -> Dict[str, Any]:
+    def _compute_brand_trust_score(self, product: Dict[str, Any]) -> Dict[str, Any]:
         section_max = self._section_max("d", 5.0)
         md = product.get("manufacturer_data", {})
 
@@ -2001,7 +2071,7 @@ class SupplementScorer:
             "servings_per_day_max": spd_max,
         }
 
-    def _score_section_e(self, product: Dict[str, Any], flags: List[str]) -> Dict[str, Any]:
+    def _compute_legacy_section_e(self, product: Dict[str, Any], flags: List[str]) -> Dict[str, Any]:
         """Section E – EPA+DHA Dose Adequacy (up to 2.0 bonus points).
 
         Applicable only to products with explicit per-unit EPA and/or DHA amounts.
@@ -2054,6 +2124,111 @@ class SupplementScorer:
             "dha_mg_per_unit": dose_data.get("dha_mg_per_unit"),
             "prescription_dose": prescription_dose,
         }
+
+    @staticmethod
+    def _build_legacy_section_e(section_a: Dict[str, Any]) -> Dict[str, Any]:
+        """Build backward-compatible Section E breakdown from the omega3 category bonus.
+
+        Downstream consumers (tests, Flutter, exports) that read breakdown["E"]
+        get the same shape they expect, but the score now comes from A's
+        omega3_dose_bonus rather than a standalone section.
+        """
+        o3 = section_a.get("omega3_breakdown", {})
+        applicable = o3.get("applicable", False)
+        result: Dict[str, Any] = {
+            "score": section_a.get("omega3_dose_bonus", 0.0),
+            "max": 2.0 if applicable else 0.0,
+            "applicable": applicable,
+            "_note": "Legacy compat — omega-3 dose is now a category bonus inside Ingredient Quality",
+        }
+        if applicable:
+            for key in ("dose_band", "per_day_mid_mg", "per_day_min_mg", "per_day_max_mg",
+                        "epa_mg_per_unit", "dha_mg_per_unit", "prescription_dose"):
+                if key in o3:
+                    result[key] = o3[key]
+        return result
+
+    # ---------------------------------------------------------------------
+    # Legacy scorer method aliases
+    # ---------------------------------------------------------------------
+
+    # Keep the old private method surface during the semantic rename rollout.
+    # Several tests and downstream utilities still call these methods directly.
+    def _evaluate_b0(self, product: Dict[str, Any]) -> Dict[str, Any]:
+        return self._evaluate_safety_gate(product)
+
+    def _score_a1(self, product: Dict[str, Any], supp_type: str) -> float:
+        return self._compute_bioavailability_score(product, supp_type)
+
+    def _score_a2(self, product: Dict[str, Any]) -> float:
+        return self._compute_premium_forms_bonus(product)
+
+    def _score_a3(self, product: Dict[str, Any]) -> float:
+        return self._compute_delivery_score(product)
+
+    def _score_a4(self, product: Dict[str, Any]) -> float:
+        return self._compute_absorption_bonus(product)
+
+    def _score_a5(self, product: Dict[str, Any]) -> Dict[str, float]:
+        return self._compute_formulation_bonus(product)
+
+    def _score_a6(self, product: Dict[str, Any], supp_type: str) -> float:
+        return self._compute_single_efficiency_bonus(product, supp_type)
+
+    def _score_probiotic_bonus(self, product: Dict[str, Any], supp_type: str) -> Dict[str, float]:
+        return self._compute_probiotic_category_bonus(product, supp_type)
+
+    def _score_section_a(
+        self,
+        product: Dict[str, Any],
+        supp_type: str,
+        flags: Optional[List[str]] = None,
+    ) -> Dict[str, Any]:
+        return self._compute_ingredient_quality_score(product, supp_type, flags=flags)
+
+    def _score_b1(self, product: Dict[str, Any], b_cfg: Dict[str, Any] = None) -> float:
+        return self._compute_harmful_additives_penalty(product, b_cfg)
+
+    def _score_b2(self, product: Dict[str, Any], b_cfg: Dict[str, Any] = None) -> float:
+        return self._compute_allergen_penalty(product, b_cfg)
+
+    def _score_b4(self, product: Dict[str, Any], supp_type: str) -> Dict[str, float]:
+        return self._compute_certifications_bonus(product, supp_type)
+
+    def _score_b5(self, product: Dict[str, Any], flags: List[str], b_cfg: Dict[str, Any] = None) -> float:
+        return self._compute_proprietary_blend_penalty(product, flags, b_cfg)
+
+    def _score_b6(self, product: Dict[str, Any], flags: List[str], b_cfg: Dict[str, Any] = None) -> float:
+        return self._compute_disease_claims_penalty(product, flags, b_cfg)
+
+    def _score_b7(
+        self,
+        product: Dict[str, Any],
+        flags: List[str],
+        b_cfg: Dict[str, Any] = None,
+    ) -> Tuple[float, List[Dict[str, Any]]]:
+        return self._compute_dose_safety_penalty(product, flags, b_cfg)
+
+    def _score_section_b(
+        self,
+        product: Dict[str, Any],
+        supp_type: str,
+        b0_moderate_penalty: float,
+        flags: List[str],
+    ) -> Dict[str, Any]:
+        return self._compute_safety_purity_score(product, supp_type, b0_moderate_penalty, flags)
+
+    def _score_section_c(self, product: Dict[str, Any], flags: List[str]) -> Dict[str, Any]:
+        return self._compute_evidence_score(product, flags)
+
+    def _score_section_d(self, product: Dict[str, Any]) -> Dict[str, Any]:
+        return self._compute_brand_trust_score(product)
+
+    def _score_section_e(self, product: Dict[str, Any], flags: List[str]) -> Dict[str, Any]:
+        return self._compute_legacy_section_e(product, flags)
+
+    def _manufacturer_violation_penalty(self, product: Dict[str, Any]) -> float:
+        return self._compute_manufacturer_violation_penalty(product)
 
     def _build_badges(self, product: Dict[str, Any], verdict: str) -> List[Dict[str, str]]:
         badges: List[Dict[str, str]] = []
@@ -2227,7 +2402,7 @@ class SupplementScorer:
 
         return False
 
-    def _manufacturer_violation_penalty(self, product: Dict[str, Any]) -> float:
+    def _compute_manufacturer_violation_penalty(self, product: Dict[str, Any]) -> float:
         violations = product.get("manufacturer_data", {}).get("violations", {})
 
         deduction: Optional[float] = None
@@ -2409,6 +2584,9 @@ class SupplementScorer:
                 "A_ingredient_quality": {
                     "score": breakdown.get("A", {}).get("score"),
                     "max": section_a_max,
+                    "core_quality": breakdown.get("A", {}).get("core_quality"),
+                    "category_bonus_total": breakdown.get("A", {}).get("category_bonus_total"),
+                    "category_bonus_pool_cap": breakdown.get("A", {}).get("category_bonus_pool_cap"),
                 },
                 "B_safety_purity": {
                     "score": breakdown.get("B", {}).get("score"),
@@ -2422,12 +2600,13 @@ class SupplementScorer:
                     "score": breakdown.get("D", {}).get("score"),
                     "max": section_d_max,
                 },
+                # Legacy E_dose_adequacy kept for backward compatibility with existing consumers.
+                # Score contribution now comes from A's omega3_dose_bonus category bonus.
                 "E_dose_adequacy": {
                     "score": breakdown.get("E", {}).get("score", 0.0),
-                    # Report actual section max (2.0) so callers know potential,
-                    # but mark as applicable=False when no explicit EPA/DHA dose found.
                     "max": section_e_max,
                     "applicable": breakdown.get("E", {}).get("applicable", False),
+                    "_deprecated": "Moved to A_ingredient_quality.omega3_dose_bonus in v3.3",
                 },
             },
         }
@@ -2459,7 +2638,7 @@ class SupplementScorer:
             supp_type = self._classify_supplement_type(product)
 
             # Step 1: B0 immediate fail
-            b0 = self._evaluate_b0(product)
+            b0 = self._evaluate_safety_gate(product)
             section_a_max = self._section_max("a", 25.0)
             section_b_max = self._section_max("b", 30.0)
             section_c_max = self._section_max("c", 20.0)
@@ -2573,28 +2752,30 @@ class SupplementScorer:
                 )
 
             # Step 4: sections
-            section_a = self._score_section_a(product, supp_type)
-            section_b = self._score_section_b(
+            # Note: Section A now includes category bonuses (probiotic, omega-3 dose)
+            # so it needs access to flags for the PRESCRIPTION_DOSE_OMEGA3 flag.
+            section_a = self._compute_ingredient_quality_score(product, supp_type, flags=flags)
+            section_b = self._compute_safety_purity_score(
                 product,
                 supp_type,
                 b0_moderate_penalty=float(b0.get("moderate_penalty", 0.0) or 0.0),
                 flags=flags,
             )
-            section_c = self._score_section_c(product, flags)
-            section_d = self._score_section_d(product)
-            # Section E must be computed after flags are partially populated
-            # (it may append PRESCRIPTION_DOSE_OMEGA3 flag)
-            section_e = self._score_section_e(product, flags)
+            section_c = self._compute_evidence_score(product, flags)
+            section_d = self._compute_brand_trust_score(product)
+
+            # Legacy Section E call kept for shadow comparison / backward compat output.
+            # The actual scoring contribution now comes from section_a's omega3_dose_bonus.
+            section_e_legacy = self._compute_legacy_section_e(product, [])  # isolated flags list
 
             quality_raw = (
                 section_a["score"]
                 + section_b["score"]
                 + section_c["score"]
                 + section_d["score"]
-                + section_e["score"]
             )
 
-            violation_penalty = self._manufacturer_violation_penalty(product)
+            violation_penalty = self._compute_manufacturer_violation_penalty(product)
             if violation_penalty < 0:
                 flags.append("MANUFACTURER_VIOLATION")
             quality_raw += violation_penalty
@@ -2607,7 +2788,8 @@ class SupplementScorer:
                 "B": section_b,
                 "C": section_c,
                 "D": section_d,
-                "E": section_e,
+                # E kept for backward compat — score contribution now comes from A's omega3_dose_bonus
+                "E": self._build_legacy_section_e(section_a),
                 "violation_penalty": round(violation_penalty, 2),
                 "quality_raw": round(quality_raw, 2),
             }

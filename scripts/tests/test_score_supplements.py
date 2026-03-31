@@ -235,7 +235,7 @@ class TestV30Scoring:
             ],
         }
 
-        result = scorer._evaluate_b0(product)
+        result = scorer._evaluate_safety_gate(product)
         assert result["moderate_penalty"] == pytest.approx(10.0)
 
     def test_mapping_gate_not_scored_when_full_mapping_required(self, scorer):
@@ -350,7 +350,7 @@ class TestV30Scoring:
         ]
         product["ingredient_quality_data"]["ingredients"] = deepcopy(product["ingredient_quality_data"]["ingredients_scorable"])
 
-        section_a = scorer._score_section_a(product, "single")
+        section_a = scorer._compute_ingredient_quality_score(product, "single")
         assert section_a["A1"] == pytest.approx(15.0, rel=1e-6)
 
     def test_a1_treats_single_nutrient_as_single(self, scorer):
@@ -372,8 +372,8 @@ class TestV30Scoring:
             product["ingredient_quality_data"]["ingredients_scorable"]
         )
 
-        section_single = scorer._score_section_a(product, "single")
-        section_single_nutrient = scorer._score_section_a(product, "single_nutrient")
+        section_single = scorer._compute_ingredient_quality_score(product, "single")
+        section_single_nutrient = scorer._compute_ingredient_quality_score(product, "single_nutrient")
 
         assert section_single_nutrient["A1"] == pytest.approx(section_single["A1"], rel=1e-6)
 
@@ -396,7 +396,7 @@ class TestV30Scoring:
         product["ingredient_quality_data"]["ingredients"] = deepcopy(
             product["ingredient_quality_data"]["ingredients_scorable"]
         )
-        assert scorer._score_a6(product, "single") == pytest.approx(3.0)
+        assert scorer._compute_single_efficiency_bonus(product, "single") == pytest.approx(3.0)
 
     def test_a6_falls_back_to_bio_score_when_score_missing(self, scorer):
         product = make_base_product()
@@ -416,7 +416,7 @@ class TestV30Scoring:
         product["ingredient_quality_data"]["ingredients"] = deepcopy(
             product["ingredient_quality_data"]["ingredients_scorable"]
         )
-        assert scorer._score_a6(product, "single") == pytest.approx(2.0)
+        assert scorer._compute_single_efficiency_bonus(product, "single") == pytest.approx(2.0)
 
     def test_a6_only_applies_to_single_types(self, scorer):
         product = make_base_product()
@@ -436,7 +436,7 @@ class TestV30Scoring:
         product["ingredient_quality_data"]["ingredients"] = deepcopy(
             product["ingredient_quality_data"]["ingredients_scorable"]
         )
-        assert scorer._score_a6(product, "targeted") == pytest.approx(0.0)
+        assert scorer._compute_single_efficiency_bonus(product, "targeted") == pytest.approx(0.0)
 
     def test_a2_excludes_blend_containers(self, scorer):
         product = make_base_product()
@@ -480,7 +480,7 @@ class TestV30Scoring:
         )
 
         # Two premium disclosed ingredients -> 0.5 points (count-1).
-        assert scorer._score_a2(product) == pytest.approx(0.5)
+        assert scorer._compute_premium_forms_bonus(product) == pytest.approx(0.5)
 
     def test_a2_requires_usable_individual_dose(self, scorer):
         product = make_base_product()
@@ -524,7 +524,7 @@ class TestV30Scoring:
         )
 
         # Undosed premium ingredient should not count toward A2.
-        assert scorer._score_a2(product) == pytest.approx(0.5)
+        assert scorer._compute_premium_forms_bonus(product) == pytest.approx(0.5)
 
     def test_non_probiotic_prebiotic_only_gets_no_probiotic_bonus(self, scorer):
         product = make_base_product()
@@ -551,7 +551,7 @@ class TestV30Scoring:
             "guarantee_type": None,
         }
 
-        probiotic = scorer._score_probiotic_bonus(product, "specialty")
+        probiotic = scorer._compute_probiotic_category_bonus(product, "specialty")
         assert probiotic["probiotic_bonus"] == 0.0
         assert probiotic["eligibility"]["mode"] == "non_probiotic"
         assert probiotic["eligibility"]["eligible"] is False
@@ -582,7 +582,7 @@ class TestV30Scoring:
             "guarantee_type": "at_expiration",
         }
 
-        probiotic = scorer._score_probiotic_bonus(product, "specialty")
+        probiotic = scorer._compute_probiotic_category_bonus(product, "specialty")
         assert probiotic["eligibility"]["mode"] == "non_probiotic"
         assert probiotic["eligibility"]["eligible"] is True
         assert probiotic["probiotic_bonus"] > 0.0
@@ -599,7 +599,7 @@ class TestV30Scoring:
             "guarantee_type": "at_manufacture",
         }
 
-        probiotic = scorer._score_probiotic_bonus(product, "probiotic")
+        probiotic = scorer._compute_probiotic_category_bonus(product, "probiotic")
         assert probiotic["eligibility"]["mode"] == "probiotic"
         assert probiotic["eligibility"]["eligible"] is True
         assert probiotic["probiotic_bonus"] == pytest.approx(2.0)
@@ -613,7 +613,7 @@ class TestV30Scoring:
             "name": "Example Top Manufacturer",
         }
 
-        section_d = scorer._score_section_d(product)
+        section_d = scorer._compute_brand_trust_score(product)
         assert section_d["D1"] == 0.0
 
     def test_b_penalties_are_positive_magnitudes_subtracted(self, scorer):
@@ -622,7 +622,7 @@ class TestV30Scoring:
             "found": True,
             "additives": [{"severity_level": "high"}],
         }
-        section_b = scorer._score_section_b(product, "targeted", 0.0, [])
+        section_b = scorer._compute_safety_purity_score(product, "targeted", 0.0, [])
         assert section_b["B1_penalty"] == pytest.approx(2.0)
         assert section_b["score"] == pytest.approx(23.0)
 
@@ -636,7 +636,7 @@ class TestV30Scoring:
                 {"additive_id": "ADD_BHA", "severity_level": "critical"},
             ],
         }
-        section_b = scorer._score_section_b(product, "targeted", 0.0, [])
+        section_b = scorer._compute_safety_purity_score(product, "targeted", 0.0, [])
         # Only the critical penalty (3.0) should apply, not moderate+critical (1+3=4)
         assert section_b["B1_penalty"] == pytest.approx(3.0)
 
@@ -650,7 +650,7 @@ class TestV30Scoring:
                 {"additive_id": "ADD_BHA", "severity_level": "critical"},
             ],
         }
-        section_b = scorer._score_section_b(product, "targeted", 0.0, [])
+        section_b = scorer._compute_safety_purity_score(product, "targeted", 0.0, [])
         # high (2.0) + critical (3.0) = 5.0
         assert section_b["B1_penalty"] == pytest.approx(5.0)
 
@@ -665,7 +665,7 @@ class TestV30Scoring:
                 {"additive_id": "ADD_TBHQ", "severity_level": "critical"},
             ],
         }
-        section_b = scorer._score_section_b(product, "targeted", 0.0, [])
+        section_b = scorer._compute_safety_purity_score(product, "targeted", 0.0, [])
         # 3 critical = 9.0, capped at config cap of 8
         assert section_b["B1_penalty"] == pytest.approx(8.0)
 
@@ -687,7 +687,7 @@ class TestV30Scoring:
                 },
             ]
         }
-        section_c = scorer._score_section_c(product, [])
+        section_c = scorer._compute_evidence_score(product, [])
         assert section_c["score"] == pytest.approx(7.0)
 
     def test_low_quality_is_poor_not_unsafe(self, scorer):
@@ -753,7 +753,7 @@ class TestV30Scoring:
             }
         }
 
-        assert scorer._score_b2(product, b_cfg) == pytest.approx(3.5)
+        assert scorer._compute_allergen_penalty(product, b_cfg) == pytest.approx(3.5)
 
     def test_violation_penalty_prefers_total_deduction_applied(self, scorer):
         product = make_base_product()
@@ -765,7 +765,7 @@ class TestV30Scoring:
             ],
         }
 
-        assert scorer._manufacturer_violation_penalty(product) == pytest.approx(-7.5)
+        assert scorer._compute_manufacturer_violation_penalty(product) == pytest.approx(-7.5)
 
     def test_violation_penalty_sums_item_level_total_deduction_applied(self, scorer):
         product = make_base_product()
@@ -777,7 +777,7 @@ class TestV30Scoring:
             ],
         }
 
-        assert scorer._manufacturer_violation_penalty(product) == pytest.approx(-11.5)
+        assert scorer._compute_manufacturer_violation_penalty(product) == pytest.approx(-11.5)
 
 
 def _make_blend(
@@ -828,7 +828,7 @@ class TestB5ProprietaryBlendRedesign:
 
     def test_no_blends_b5_is_zero(self, scorer):
         p = make_base_product()
-        assert scorer._score_b5(p, []) == pytest.approx(0.0)
+        assert scorer._compute_proprietary_blend_penalty(p, []) == pytest.approx(0.0)
 
     def test_none_disclosure_full_formula_penalty_near_seven(self, scorer):
         p = make_base_product()
@@ -857,8 +857,8 @@ class TestB5ProprietaryBlendRedesign:
         p["proprietary_data"]["total_active_mg"] = 2000
         p["proprietary_data"]["total_active_ingredients"] = 1
 
-        assert scorer._score_b5(p, []) == pytest.approx(7.0, abs=0.01)
-        assert scorer._score_a1(p, "targeted") == pytest.approx(0.0)
+        assert scorer._compute_proprietary_blend_penalty(p, []) == pytest.approx(7.0, abs=0.01)
+        assert scorer._compute_bioavailability_score(p, "targeted") == pytest.approx(0.0)
 
     def test_partial_hidden_mass_subtracts_disclosed_children_and_a1_scores_them(self, scorer):
         p = make_base_product()
@@ -910,12 +910,12 @@ class TestB5ProprietaryBlendRedesign:
         p["proprietary_data"]["total_active_mg"] = 2000
         p["proprietary_data"]["total_active_ingredients"] = 3
         flags = []
-        penalty = scorer._score_b5(p, flags)
+        penalty = scorer._compute_proprietary_blend_penalty(p, flags)
         # hidden_mass = 1000 - (200 + 300) = 500; impact = 500 / 2000 = 0.25
         # partial penalty = 1 + 3*0.25 = 1.75
         assert penalty == pytest.approx(1.75, abs=0.01)
         expected_avg = (14 + 12) / 2.0
-        assert scorer._score_a1(p, "targeted") == pytest.approx((expected_avg / 18.0) * 15.0, abs=0.01)
+        assert scorer._compute_bioavailability_score(p, "targeted") == pytest.approx((expected_avg / 18.0) * 15.0, abs=0.01)
         assert "PROPRIETARY_BLEND_PRESENT" in flags
 
     def test_partial_child_without_amount_not_counted_for_a1_or_disclosed_mass(self, scorer):
@@ -962,11 +962,11 @@ class TestB5ProprietaryBlendRedesign:
             )
         ]
         p["proprietary_data"]["total_active_mg"] = 1000
-        penalty = scorer._score_b5(p, [])
+        penalty = scorer._compute_proprietary_blend_penalty(p, [])
         # hidden_mass = 800; impact = 0.8 => partial = 1 + 2.4 = 3.4
         assert penalty == pytest.approx(3.4, abs=0.01)
         # Only Caffeine contributes (Rhodiola has no usable dose, blend container excluded)
-        assert scorer._score_a1(p, "targeted") == pytest.approx((14.0 / 18.0) * 15.0, abs=0.01)
+        assert scorer._compute_bioavailability_score(p, "targeted") == pytest.approx((14.0 / 18.0) * 15.0, abs=0.01)
 
     def test_duplicate_blends_deduped_once(self, scorer):
         p = make_base_product()
@@ -979,7 +979,7 @@ class TestB5ProprietaryBlendRedesign:
         )
         p["proprietary_blends"] = [blend, deepcopy(blend)]
         p["proprietary_data"]["total_active_mg"] = 1000
-        assert scorer._score_b5(p, []) == pytest.approx(7.0, abs=0.01)
+        assert scorer._compute_proprietary_blend_penalty(p, []) == pytest.approx(7.0, abs=0.01)
 
     def test_two_distinct_blends_cap_at_ten(self, scorer):
         p = make_base_product()
@@ -1000,7 +1000,7 @@ class TestB5ProprietaryBlendRedesign:
             ),
         ]
         p["proprietary_data"]["total_active_mg"] = 1000
-        assert scorer._score_b5(p, []) == pytest.approx(10.0, abs=0.01)
+        assert scorer._compute_proprietary_blend_penalty(p, []) == pytest.approx(10.0, abs=0.01)
 
     def test_tiny_none_blend_uses_impact_floor(self, scorer):
         p = make_base_product()
@@ -1014,7 +1014,7 @@ class TestB5ProprietaryBlendRedesign:
         ]
         p["proprietary_data"]["total_active_mg"] = 2000
         # raw impact = 0.025, floored to 0.1 -> 2 + 5*0.1 = 2.5
-        assert scorer._score_b5(p, []) == pytest.approx(2.5, abs=0.01)
+        assert scorer._compute_proprietary_blend_penalty(p, []) == pytest.approx(2.5, abs=0.01)
 
     def test_full_disclosure_blend_zero_penalty_children_score_normally(self, scorer):
         p = make_base_product()
@@ -1062,9 +1062,9 @@ class TestB5ProprietaryBlendRedesign:
                 ingredients_without_amounts=[],
             )
         ]
-        assert scorer._score_b5(p, []) == pytest.approx(0.0, abs=0.01)
+        assert scorer._compute_proprietary_blend_penalty(p, []) == pytest.approx(0.0, abs=0.01)
         expected_avg = (14 + 12) / 2.0
-        assert scorer._score_a1(p, "targeted") == pytest.approx((expected_avg / 18.0) * 15.0, abs=0.01)
+        assert scorer._compute_bioavailability_score(p, "targeted") == pytest.approx((expected_avg / 18.0) * 15.0, abs=0.01)
 
     def test_no_mg_data_uses_count_share_fallback(self, scorer):
         p = make_base_product()
@@ -1081,7 +1081,7 @@ class TestB5ProprietaryBlendRedesign:
         p["proprietary_data"]["total_active_mg"] = None
         p["proprietary_data"]["total_active_ingredients"] = 8
         # count share impact = 4/8 = 0.5 -> 2 + 5*0.5 = 4.5
-        assert scorer._score_b5(p, []) == pytest.approx(4.5, abs=0.01)
+        assert scorer._compute_proprietary_blend_penalty(p, []) == pytest.approx(4.5, abs=0.01)
 
     def test_mixed_units_convert_correctly_for_hidden_mass(self, scorer):
         p = make_base_product()
@@ -1100,7 +1100,7 @@ class TestB5ProprietaryBlendRedesign:
         ]
         p["proprietary_data"]["total_active_mg"] = 2000
         # blend=1000mg, disclosed=400mg, hidden=600mg, impact=0.3 -> 1+0.9=1.9
-        assert scorer._score_b5(p, []) == pytest.approx(1.9, abs=0.01)
+        assert scorer._compute_proprietary_blend_penalty(p, []) == pytest.approx(1.9, abs=0.01)
 
     def test_disclosed_sum_clamped_when_exceeds_blend_total(self, scorer):
         p = make_base_product()
@@ -1119,7 +1119,7 @@ class TestB5ProprietaryBlendRedesign:
         ]
         p["proprietary_data"]["total_active_mg"] = 1000
         # disclosed clamps to blend total (300), hidden=0 -> partial base only
-        assert scorer._score_b5(p, []) == pytest.approx(1.0, abs=0.01)
+        assert scorer._compute_proprietary_blend_penalty(p, []) == pytest.approx(1.0, abs=0.01)
 
     def test_zero_total_active_mg_falls_back_to_count_share(self, scorer):
         p = make_base_product()
@@ -1136,7 +1136,7 @@ class TestB5ProprietaryBlendRedesign:
         p["proprietary_data"]["total_active_mg"] = 0
         p["proprietary_data"]["total_active_ingredients"] = 4
         # count share impact = 2/max(4,8) = 0.25
-        assert scorer._score_b5(p, []) == pytest.approx(3.25, abs=0.01)
+        assert scorer._compute_proprietary_blend_penalty(p, []) == pytest.approx(3.25, abs=0.01)
 
 
 class TestA1BlendContainerExclusion:
@@ -1180,7 +1180,7 @@ class TestA1BlendContainerExclusion:
         """A1 should only see Vitamin C (score=15), not the blend container."""
         p = self._product_with_blend_container(blend_score=5)
         supp_type = "targeted"
-        score_with = scorer._score_a1(p, supp_type)
+        score_with = scorer._compute_bioavailability_score(p, supp_type)
 
         # For reference: what it would be if blend IS included
         # (15×1 + 5×1) / 2 = 10  →  (10/18)×15 ≈ 8.33
@@ -1191,7 +1191,7 @@ class TestA1BlendContainerExclusion:
         """Blend container with stub score=5 must not drag A1 below the
         disclosed-only average."""
         p = self._product_with_blend_container(blend_score=5)
-        a1_score = scorer._score_a1(p, "targeted")
+        a1_score = scorer._compute_bioavailability_score(p, "targeted")
         # Score from disclosed ingredients only (score=15): 12.5
         disclosed_only = (15.0 / 18.0) * 15.0
         # Score if blend were included (score average 10): ≈8.33
@@ -1209,7 +1209,7 @@ class TestA1BlendContainerExclusion:
             {"name": "Vitamin D3", "score": 15, "dosage_importance": 1.5,
              "mapped": True, "is_proprietary_blend": False, "quantity": 1000, "unit": "IU", "has_dose": True},
         ]
-        score = scorer._score_a1(p, "targeted")
+        score = scorer._compute_bioavailability_score(p, "targeted")
         expected_avg = (18 * 1.0 + 15 * 1.5) / (1.0 + 1.5)
         assert score == pytest.approx((expected_avg / 18.0) * 15.0, abs=0.1)
 
@@ -1222,7 +1222,7 @@ class TestA1BlendContainerExclusion:
             {"name": "Blend B", "score": 5, "dosage_importance": 1.0,
              "mapped": False, "is_proprietary_blend": True},
         ]
-        assert scorer._score_a1(p, "targeted") == pytest.approx(0.0)
+        assert scorer._compute_bioavailability_score(p, "targeted") == pytest.approx(0.0)
 
 
 class TestA1ParentTotalExclusion:
@@ -1271,7 +1271,7 @@ class TestA1ParentTotalExclusion:
             },
         ]
 
-        a1 = scorer._score_a1(p, "targeted")
+        a1 = scorer._compute_bioavailability_score(p, "targeted")
         expected_avg = (11.0 + 13.0) / 2.0
         assert a1 == pytest.approx((expected_avg / 18.0) * 15.0, abs=0.01)
 
@@ -1304,7 +1304,7 @@ class TestA1ParentTotalExclusion:
             },
         ]
 
-        a1 = scorer._score_a1(p, "targeted")
+        a1 = scorer._compute_bioavailability_score(p, "targeted")
         expected_avg = (12.0 + 15.0) / 2.0
         assert a1 == pytest.approx((expected_avg / 18.0) * 15.0, abs=0.01)
 
@@ -1347,7 +1347,7 @@ class TestA1ParentTotalExclusion:
             },
         ]
         # Parent-total row is excluded; only vitamin_d is premium => no A2 bonus.
-        assert scorer._score_a2(p) == pytest.approx(0.0)
+        assert scorer._compute_premium_forms_bonus(p) == pytest.approx(0.0)
 
 
 class TestB5DisclosureTierEdgeCases:
@@ -1371,7 +1371,7 @@ class TestB5DisclosureTierEdgeCases:
             )
         ]
         p["proprietary_data"]["total_active_ingredients"] = 4
-        penalty = scorer._score_b5(p, [])
+        penalty = scorer._compute_proprietary_blend_penalty(p, [])
         assert penalty == pytest.approx(2.0, abs=0.01)
 
     # ── Partial: total declared + subs listed, no individual amounts ──
@@ -1390,7 +1390,7 @@ class TestB5DisclosureTierEdgeCases:
         ]
         p["proprietary_data"]["total_active_mg"] = 2000
         p["proprietary_data"]["total_active_ingredients"] = 5
-        penalty = scorer._score_b5(p, [])
+        penalty = scorer._compute_proprietary_blend_penalty(p, [])
         # hidden_mass = 500, impact = 500/2000 = 0.25 → 1 + 3*0.25 = 1.75
         assert penalty == pytest.approx(1.75, abs=0.01)
 
@@ -1406,10 +1406,10 @@ class TestB5DisclosureTierEdgeCases:
         p["proprietary_data"]["total_active_mg"] = 2000
 
         p["proprietary_blends"] = [_make_blend("B", "none", **blend_args)]
-        none_penalty = scorer._score_b5(p, [])
+        none_penalty = scorer._compute_proprietary_blend_penalty(p, [])
 
         p["proprietary_blends"] = [_make_blend("B", "partial", **blend_args)]
-        partial_penalty = scorer._score_b5(p, [])
+        partial_penalty = scorer._compute_proprietary_blend_penalty(p, [])
 
         # none: 2 + 5*0.25 = 3.25;  partial: 1 + 3*0.25 = 1.75;  diff = 1.5
         assert none_penalty - partial_penalty == pytest.approx(1.5, abs=0.01)
@@ -1428,7 +1428,7 @@ class TestB5DisclosureTierEdgeCases:
             )
         ]
         p["proprietary_data"]["total_active_mg"] = 500
-        penalty = scorer._score_b5(p, [])
+        penalty = scorer._compute_proprietary_blend_penalty(p, [])
         # impact = 500/500 = 1.0 → 1 + 3*1.0 = 4.0
         assert penalty == pytest.approx(4.0, abs=0.01)
 
@@ -1445,7 +1445,7 @@ class TestB5DisclosureTierEdgeCases:
             )
         ]
         p["proprietary_data"]["total_active_mg"] = 500
-        penalty = scorer._score_b5(p, [])
+        penalty = scorer._compute_proprietary_blend_penalty(p, [])
         # impact = 500/500 = 1.0 → 2 + 5*1.0 = 7.0
         assert penalty == pytest.approx(7.0, abs=0.01)
 
@@ -1465,7 +1465,7 @@ class TestB5DisclosureTierEdgeCases:
         ]
         p["proprietary_data"]["total_active_mg"] = 1000
         p["proprietary_data"]["total_active_ingredients"] = 8
-        penalty = scorer._score_b5(p, [])
+        penalty = scorer._compute_proprietary_blend_penalty(p, [])
         # count-share: 2/8 = 0.25 → 2 + 5*0.25 = 3.25
         assert penalty == pytest.approx(3.25, abs=0.01)
         evidence = scorer._last_b5_blend_evidence[0]
@@ -1487,7 +1487,7 @@ class TestB5DisclosureTierEdgeCases:
             )
         ]
         p["proprietary_data"]["total_active_mg"] = 3000
-        penalty = scorer._score_b5(p, [])
+        penalty = scorer._compute_proprietary_blend_penalty(p, [])
         # blend_total_mg=1500, hidden=1500, impact=1500/3000=0.5 → 2+5*0.5=4.5
         assert penalty == pytest.approx(4.5, abs=0.01)
 
@@ -1496,7 +1496,7 @@ class TestB5DisclosureTierEdgeCases:
         """Verify B5 is a positive magnitude subtracted in B formula."""
         p = make_base_product()
         # No blends → full B score as baseline
-        b_no_blend = scorer._score_section_b(p, "targeted", 0.0, [])
+        b_no_blend = scorer._compute_safety_purity_score(p, "targeted", 0.0, [])
 
         # Add a blend
         p["proprietary_blends"] = [
@@ -1509,7 +1509,7 @@ class TestB5DisclosureTierEdgeCases:
             )
         ]
         p["proprietary_data"]["total_active_mg"] = 2000
-        b_with_blend = scorer._score_section_b(p, "targeted", 0.0, [])
+        b_with_blend = scorer._compute_safety_purity_score(p, "targeted", 0.0, [])
 
         # B5 penalty should be positive
         assert b_with_blend["B5_penalty"] > 0
@@ -1537,7 +1537,7 @@ class TestB5DisclosureTierEdgeCases:
                         ingredients_without_amounts=["E"]),
         ]
         p["proprietary_data"]["total_active_mg"] = 2000
-        penalty = scorer._score_b5(p, [])
+        penalty = scorer._compute_proprietary_blend_penalty(p, [])
         # full: 0
         # partial: hidden=400, impact=0.2 → 1+3*0.2 = 1.6
         # none: hidden=600, impact=0.3 → 2+5*0.3 = 3.5
@@ -1553,7 +1553,7 @@ class TestB5DisclosureTierEdgeCases:
                         ingredients_without_amounts=["A", "B"])
         ]
         p["proprietary_data"]["total_active_mg"] = 1000
-        scorer._score_b5(p, [])
+        scorer._compute_proprietary_blend_penalty(p, [])
         ev = scorer._last_b5_blend_evidence[0]
         required_fields = [
             "blend_name", "disclosure_tier", "blend_total_mg",
@@ -1582,7 +1582,7 @@ class TestB5DisclosureTierEdgeCases:
         ]
         p["proprietary_data"]["total_active_mg"] = 2000
         # impact = 400/2000 = 0.2 → 1+3*0.2 = 1.6
-        assert scorer._score_b5(p, []) == pytest.approx(1.6, abs=0.01)
+        assert scorer._compute_proprietary_blend_penalty(p, []) == pytest.approx(1.6, abs=0.01)
 
     def test_spec_example_none_1200mg(self, scorer):
         """Spec: None 1200mg, total_active=2000 → penalty 5.0."""
@@ -1593,7 +1593,7 @@ class TestB5DisclosureTierEdgeCases:
         ]
         p["proprietary_data"]["total_active_mg"] = 2000
         # impact = 0.6 → 2+5*0.6 = 5.0
-        assert scorer._score_b5(p, []) == pytest.approx(5.0, abs=0.01)
+        assert scorer._compute_proprietary_blend_penalty(p, []) == pytest.approx(5.0, abs=0.01)
 
     def test_spec_example_partial_1200mg_800mg_disclosed(self, scorer):
         """Spec: Partial 1200mg, 800mg children disclosed → penalty 1.6."""
@@ -1608,7 +1608,7 @@ class TestB5DisclosureTierEdgeCases:
         ]
         p["proprietary_data"]["total_active_mg"] = 2000
         # hidden = 1200-800 = 400, impact = 0.2 → 1+3*0.2 = 1.6
-        assert scorer._score_b5(p, []) == pytest.approx(1.6, abs=0.01)
+        assert scorer._compute_proprietary_blend_penalty(p, []) == pytest.approx(1.6, abs=0.01)
 
     def test_spec_example_tiny_none_50mg_floored(self, scorer):
         """Spec: Tiny none 50mg, total=2000 → raw impact 0.025, floored to 0.1, penalty 2.5."""
@@ -1618,7 +1618,7 @@ class TestB5DisclosureTierEdgeCases:
                         ingredients_without_amounts=["A"])
         ]
         p["proprietary_data"]["total_active_mg"] = 2000
-        assert scorer._score_b5(p, []) == pytest.approx(2.5, abs=0.01)
+        assert scorer._compute_proprietary_blend_penalty(p, []) == pytest.approx(2.5, abs=0.01)
 
 
 class TestBannedEnrichmentScorerContract:
@@ -1796,7 +1796,7 @@ class TestSectionCEvidenceScoring:
                 },
             ]
         }
-        section_c = scorer._score_section_c(product, [])
+        section_c = scorer._compute_evidence_score(product, [])
         # Magnesium: 6 * 1.0 = 6.0; Vitamin D: 5 * 0.65 = 3.25
         assert section_c["score"] == pytest.approx(9.25)
         assert section_c["matched_entries"] == 2
@@ -1820,7 +1820,7 @@ class TestSectionCEvidenceScoring:
                 },
             ]
         }
-        section_c = scorer._score_section_c(product, [])
+        section_c = scorer._compute_evidence_score(product, [])
         # 6 + 5 = 11 raw for Magnesium, capped at 7
         assert section_c["score"] == pytest.approx(7.0)
 
@@ -1843,7 +1843,7 @@ class TestSectionCEvidenceScoring:
                 },
             ]
         }
-        section_c = scorer._score_section_c(product, [])
+        section_c = scorer._compute_evidence_score(product, [])
         assert section_c["score"] == pytest.approx(6.0)
         assert section_c["matched_entries"] == 1
 
@@ -1859,7 +1859,7 @@ class TestSectionCEvidenceScoring:
                 "evidence_level": "product-human",
             })
         product["evidence_data"] = {"clinical_matches": matches}
-        section_c = scorer._score_section_c(product, [])
+        section_c = scorer._compute_evidence_score(product, [])
         # Each: 6*1.0=6.0, 4 ingredients = 24 raw, capped at 20
         assert section_c["score"] == pytest.approx(20.0)
 
@@ -1879,7 +1879,7 @@ class TestSectionCEvidenceScoring:
             ]
         }
         flags = []
-        section_c = scorer._score_section_c(product, flags)
+        section_c = scorer._compute_evidence_score(product, flags)
         # Product has 200mg Mg, min_clinical_dose=400mg → 5*1.0*0.25 = 1.25
         assert section_c["score"] == pytest.approx(1.25)
         assert "SUB_CLINICAL_DOSE_DETECTED" in flags
@@ -1908,7 +1908,7 @@ class TestSectionCEvidenceScoring:
             ]
         }
         flags = []
-        section_c = scorer._score_section_c(product, flags)
+        section_c = scorer._compute_evidence_score(product, flags)
         # 5000mg > 3*1000mg → supra flag; 4*0.65 = 2.6 (no dose reduction)
         assert section_c["score"] == pytest.approx(2.6)
         assert "SUPRA_CLINICAL_DOSE" in flags
@@ -1926,7 +1926,7 @@ class TestSectionCEvidenceScoring:
                 },
             ]
         }
-        section_c = scorer._score_section_c(product, [])
+        section_c = scorer._compute_evidence_score(product, [])
         # 5 * 0.8 = 4.0
         assert section_c["score"] == pytest.approx(4.0)
 
@@ -1943,7 +1943,7 @@ class TestSectionCEvidenceScoring:
                 },
             ]
         }
-        section_c = scorer._score_section_c(product, [])
+        section_c = scorer._compute_evidence_score(product, [])
         # 4 * 0.3 = 1.2
         assert section_c["score"] == pytest.approx(1.2)
 
@@ -1951,7 +1951,7 @@ class TestSectionCEvidenceScoring:
         """Products with no clinical matches score 0."""
         product = make_base_product()
         product["evidence_data"] = {"clinical_matches": []}
-        section_c = scorer._score_section_c(product, [])
+        section_c = scorer._compute_evidence_score(product, [])
         assert section_c["score"] == pytest.approx(0.0)
         assert section_c["matched_entries"] == 0
 
@@ -1979,20 +1979,21 @@ class TestProbioticScoringSpec:
             ],
         }
         if prebiotic:
+            product["probiotic_data"]["prebiotic_present"] = True
             product["probiotic_data"]["prebiotic_fiber_detected"] = True
         return product
 
     def test_probiotic_default_mode_cfu_threshold(self, scorer):
         """Default mode: total_billion > 1 gives 1pt CFU."""
         product = self._make_probiotic_product(total_billion=2.0, strain_count=1)
-        bonus = scorer._score_probiotic_bonus(product, "probiotic")
+        bonus = scorer._compute_probiotic_category_bonus(product, "probiotic")
         assert bonus["cfu"] == pytest.approx(1.0)
         assert bonus["diversity"] == pytest.approx(0.0)  # < 3 strains
 
     def test_probiotic_default_mode_diversity_threshold(self, scorer):
         """Default mode: strain_count >= 3 gives 1pt diversity."""
         product = self._make_probiotic_product(total_billion=0.5, strain_count=4)
-        bonus = scorer._score_probiotic_bonus(product, "probiotic")
+        bonus = scorer._compute_probiotic_category_bonus(product, "probiotic")
         assert bonus["cfu"] == pytest.approx(0.0)  # <= 1 billion
         assert bonus["diversity"] == pytest.approx(1.0)
 
@@ -2000,15 +2001,88 @@ class TestProbioticScoringSpec:
         """Default mode caps at 3 points (config-driven)."""
         product = self._make_probiotic_product(total_billion=5.0, strain_count=5)
         product["probiotic_data"]["prebiotic_present"] = True
-        bonus = scorer._score_probiotic_bonus(product, "probiotic")
+        bonus = scorer._compute_probiotic_category_bonus(product, "probiotic")
         # cfu=1 + diversity=1 + prebiotic=1 = 3, capped at 3
         assert bonus["probiotic_bonus"] == pytest.approx(3.0)
 
     def test_probiotic_below_all_thresholds_zero(self, scorer):
         """Below all thresholds gives 0 bonus."""
         product = self._make_probiotic_product(total_billion=0.5, strain_count=1)
-        bonus = scorer._score_probiotic_bonus(product, "probiotic")
+        bonus = scorer._compute_probiotic_category_bonus(product, "probiotic")
         assert bonus["probiotic_bonus"] == pytest.approx(0.0)
+
+    def test_category_bonus_pool_caps_combined_bonus(self, scorer):
+        """Combined category bonuses cannot exceed the pool cap."""
+        product = self._make_probiotic_product(total_billion=5.0, strain_count=5, prebiotic=True)
+        product["ingredient_quality_data"]["ingredients"].extend([
+            {
+                "name": "EPA",
+                "canonical_id": "epa",
+                "quantity": 2000,
+                "unit_normalized": "mg",
+                "is_proprietary_blend": False,
+                "is_blend_header": False,
+                "is_parent_total": False,
+            },
+            {
+                "name": "DHA",
+                "canonical_id": "dha",
+                "quantity": 500,
+                "unit_normalized": "mg",
+                "is_proprietary_blend": False,
+                "is_blend_header": False,
+                "is_parent_total": False,
+            },
+        ])
+        product["ingredient_quality_data"]["ingredients_scorable"].extend([
+            {
+                "name": "EPA",
+                "canonical_id": "epa",
+                "quantity": 2000,
+                "unit_normalized": "mg",
+                "is_proprietary_blend": False,
+                "is_blend_header": False,
+                "is_parent_total": False,
+            },
+            {
+                "name": "DHA",
+                "canonical_id": "dha",
+                "quantity": 500,
+                "unit_normalized": "mg",
+                "is_proprietary_blend": False,
+                "is_blend_header": False,
+                "is_parent_total": False,
+            },
+        ])
+        product["serving_basis"] = {"min_servings_per_day": 2, "max_servings_per_day": 2}
+
+        scorer.config["section_A_ingredient_quality"]["omega3_dose_bonus"]["max"] = 4.0
+        for band in scorer.config["section_A_ingredient_quality"]["omega3_dose_bonus"]["bands"]:
+            if band["label"] == "prescription_dose":
+                band["score"] = 4.0
+
+        section_a = scorer._compute_ingredient_quality_score(product, "probiotic", flags=[])
+        assert section_a["probiotic_bonus"] == pytest.approx(3.0)
+        assert section_a["omega3_dose_bonus"] == pytest.approx(4.0)
+        assert section_a["category_bonus_pool_cap"] == pytest.approx(5.0)
+        assert section_a["category_bonus_total"] == pytest.approx(5.0)
+
+    def test_legacy_section_c_alias_still_routes_to_new_method(self, scorer):
+        product = make_base_product()
+        product["evidence_data"] = {
+            "clinical_matches": [
+                {
+                    "id": "E_TEST",
+                    "standard_name": "Magnesium",
+                    "study_type": "rct_single",
+                    "evidence_level": "ingredient-human",
+                    "base_points": 7.0,
+                    "multiplier": 1.0,
+                }
+            ]
+        }
+        section_c = scorer._score_section_c(product, [])
+        assert section_c["score"] == pytest.approx(7.0)
 
 
 class TestSynergyClusterSpec:
@@ -2107,7 +2181,7 @@ class TestManufacturerViolationsSpec:
     def test_violation_no_data_zero_penalty(self, scorer):
         """No violation data → 0 penalty."""
         product = make_base_product()
-        penalty = scorer._manufacturer_violation_penalty(product)
+        penalty = scorer._compute_manufacturer_violation_penalty(product)
         assert penalty == pytest.approx(0.0)
 
     def test_violation_total_deduction_applied_preferred(self, scorer):
@@ -2121,7 +2195,7 @@ class TestManufacturerViolationsSpec:
                 ],
             }
         }
-        penalty = scorer._manufacturer_violation_penalty(product)
+        penalty = scorer._compute_manufacturer_violation_penalty(product)
         assert penalty == pytest.approx(-8.0)
 
     def test_violation_cap_at_minus_25(self, scorer):
@@ -2132,7 +2206,7 @@ class TestManufacturerViolationsSpec:
                 "total_deduction_applied": -30.0,
             }
         }
-        penalty = scorer._manufacturer_violation_penalty(product)
+        penalty = scorer._compute_manufacturer_violation_penalty(product)
         assert penalty == pytest.approx(-25.0)
 
     def test_violation_sum_multiple_items(self, scorer):
@@ -2146,7 +2220,7 @@ class TestManufacturerViolationsSpec:
                 ],
             }
         }
-        penalty = scorer._manufacturer_violation_penalty(product)
+        penalty = scorer._compute_manufacturer_violation_penalty(product)
         assert penalty == pytest.approx(-8.0)
 
     def test_violation_list_format_backward_compat(self, scorer):
@@ -2158,7 +2232,7 @@ class TestManufacturerViolationsSpec:
                 {"total_deduction": -6.0},
             ]
         }
-        penalty = scorer._manufacturer_violation_penalty(product)
+        penalty = scorer._compute_manufacturer_violation_penalty(product)
         assert penalty == pytest.approx(-10.0)
 
     def test_violation_list_format_capped(self, scorer):
@@ -2170,7 +2244,7 @@ class TestManufacturerViolationsSpec:
                 {"total_deduction": -15.0},
             ]
         }
-        penalty = scorer._manufacturer_violation_penalty(product)
+        penalty = scorer._compute_manufacturer_violation_penalty(product)
         assert penalty == pytest.approx(-25.0)
 
 
@@ -2185,7 +2259,7 @@ class TestSectionDSpec:
         """is_trusted_manufacturer flag gives D1 = 2."""
         product = make_base_product()
         product["is_trusted_manufacturer"] = True
-        section_d = scorer._score_section_d(product)
+        section_d = scorer._compute_brand_trust_score(product)
         assert section_d["D1"] == pytest.approx(2.0)
 
     def test_d2_full_disclosure_gives_one(self, scorer):
@@ -2193,14 +2267,14 @@ class TestSectionDSpec:
         product = make_base_product()
         product["is_trusted_manufacturer"] = True
         # No proprietary blends → full disclosure
-        section_d = scorer._score_section_d(product)
+        section_d = scorer._compute_brand_trust_score(product)
         assert section_d["D2"] == pytest.approx(1.0)
 
     def test_d4_high_standard_region(self, scorer):
         """Manufacturing in high-regulation country gives D4 points."""
         product = make_base_product()
         product["manufacturing_region"] = "USA"
-        section_d = scorer._score_section_d(product)
+        section_d = scorer._compute_brand_trust_score(product)
         assert section_d["D4"] == pytest.approx(1.0)
 
     def test_d3_d4_d5_combined_cap(self, scorer):
@@ -2209,7 +2283,7 @@ class TestSectionDSpec:
         product["claim_physician_formulated"] = True  # D3 = 0.5
         product["manufacturing_region"] = "USA"  # D4 = 1.0
         product["has_sustainable_packaging"] = True  # D5 = 0.5
-        section_d = scorer._score_section_d(product)
+        section_d = scorer._compute_brand_trust_score(product)
         tail = section_d["D3"] + section_d["D4"] + section_d["D5"]
         # 0.5 + 1.0 + 0.5 = 2.0, capped at 2.0
         assert tail == pytest.approx(2.0)
@@ -2221,7 +2295,7 @@ class TestSectionDSpec:
         product["claim_physician_formulated"] = True  # D3 = 0.5
         product["manufacturing_region"] = "USA"  # D4 = 1.0
         product["has_sustainable_packaging"] = True  # D5 = 0.5
-        section_d = scorer._score_section_d(product)
+        section_d = scorer._compute_brand_trust_score(product)
         # D1=2 + D2=1 + tail=2 = 5.0
         assert section_d["score"] == pytest.approx(5.0)
 
@@ -2290,7 +2364,7 @@ class TestScoringAggregationAndConfig:
         scorer.config["section_A_ingredient_quality"]["A1_bioavailability_form"]["range_score_field"] = "0-9"
         scorer.config["section_A_ingredient_quality"]["A1_bioavailability_form"]["max"] = 15
 
-        a1 = scorer._score_a1(product, "targeted")
+        a1 = scorer._compute_bioavailability_score(product, "targeted")
         # avg_raw = 9 on a 0-9 scale => full A1 max.
         assert a1 == pytest.approx(15.0, rel=1e-6)
 
@@ -2326,7 +2400,7 @@ def _make_omega_product(epa_mg: float, dha_mg: float, servings_per_day: float,
 
 
 class TestSectionEDoseAdequacy:
-    """Tests for _compute_epa_dha_per_day() and _score_section_e()."""
+    """Tests for _compute_epa_dha_per_day() and _compute_legacy_section_e()."""
 
     @pytest.fixture
     def scorer(self):
@@ -2444,7 +2518,7 @@ class TestSectionEDoseAdequacy:
         assert result["epa_dha_mg_per_unit"] == pytest.approx(1200.0)
         assert result["per_day_mid"] == pytest.approx(1200.0)
 
-    # ---- _score_section_e band boundaries ----
+    # ---- _compute_legacy_section_e band boundaries ----
 
     @pytest.mark.parametrize("per_day,exp_score,exp_band", [
         (0,    0.0, "below_efsa_ai"),
@@ -2466,7 +2540,7 @@ class TestSectionEDoseAdequacy:
         # Construct a product that yields exactly `per_day` mg/day at midpoint
         prod = _make_omega_product(epa_mg=per_day, dha_mg=0.0, servings_per_day=1.0)
         flags = []
-        result = scorer._score_section_e(prod, flags)
+        result = scorer._compute_legacy_section_e(prod, flags)
         if per_day == 0:
             assert result["applicable"] is False
         else:
@@ -2479,7 +2553,7 @@ class TestSectionEDoseAdequacy:
         prod = _make_omega_product(epa_mg=2000.0, dha_mg=500.0, servings_per_day=2.0)
         # per_day_mid = 2500 × 2 = 5000 mg/day
         flags = []
-        result = scorer._score_section_e(prod, flags)
+        result = scorer._compute_legacy_section_e(prod, flags)
         assert result["prescription_dose"] is True
         assert "PRESCRIPTION_DOSE_OMEGA3" in flags
 
@@ -2493,7 +2567,7 @@ class TestSectionEDoseAdequacy:
             ]},
         }
         flags = []
-        result = scorer._score_section_e(prod, flags)
+        result = scorer._compute_legacy_section_e(prod, flags)
         assert result["applicable"] is False
         assert result["score"] == 0.0
         assert result["max"] == 0.0
@@ -2588,7 +2662,7 @@ class TestB7DoseSafety:
 
     def test_no_safety_flags_no_penalty(self, scorer):
         p = self._product_with_safety_flags([])
-        penalty, evidence = scorer._score_b7(p, [])
+        penalty, evidence = scorer._compute_dose_safety_penalty(p, [])
         assert penalty == 0.0
         assert evidence == []
 
@@ -2601,7 +2675,7 @@ class TestB7DoseSafety:
             "pct_ul": 120.0,
             "severity": "warning",
         }])
-        penalty, evidence = scorer._score_b7(p, [])
+        penalty, evidence = scorer._compute_dose_safety_penalty(p, [])
         assert penalty == 0.0
         assert evidence == []
 
@@ -2614,7 +2688,7 @@ class TestB7DoseSafety:
             "pct_ul": 150.0,
             "severity": "warning",
         }])
-        penalty, evidence = scorer._score_b7(p, [])
+        penalty, evidence = scorer._compute_dose_safety_penalty(p, [])
         assert penalty == pytest.approx(2.0)
         assert len(evidence) == 1
         assert evidence[0]["nutrient"] == "Vitamin A"
@@ -2628,7 +2702,7 @@ class TestB7DoseSafety:
             "pct_ul": 200.0,
             "severity": "critical",
         }])
-        penalty, evidence = scorer._score_b7(p, [])
+        penalty, evidence = scorer._compute_dose_safety_penalty(p, [])
         assert penalty == pytest.approx(2.0)
 
     def test_multiple_nutrients_capped_at_3(self, scorer):
@@ -2637,7 +2711,7 @@ class TestB7DoseSafety:
             {"nutrient": "Vitamin A", "amount": 4500, "ul": 3000, "pct_ul": 150.0, "severity": "warning"},
             {"nutrient": "Vitamin E", "amount": 2000, "ul": 1000, "pct_ul": 200.0, "severity": "critical"},
         ])
-        penalty, evidence = scorer._score_b7(p, [])
+        penalty, evidence = scorer._compute_dose_safety_penalty(p, [])
         assert penalty == pytest.approx(3.0)  # 2.0 + 2.0 = 4.0, capped at 3.0
         assert len(evidence) == 2
 
@@ -2650,7 +2724,7 @@ class TestB7DoseSafety:
             "pct_ul": 150.0,
             "severity": "warning",
         }])
-        scorer._score_b7(p, flags)
+        scorer._compute_dose_safety_penalty(p, flags)
         assert "OVER_UL_Folate" in flags
 
     def test_b7_included_in_section_b_total(self, scorer):
@@ -2670,8 +2744,8 @@ class TestB7DoseSafety:
             "has_over_ul": True,
         }
 
-        b_safe = scorer._score_section_b(p_safe, "targeted", 0.0, [])
-        b_danger = scorer._score_section_b(p_danger, "targeted", 0.0, [])
+        b_safe = scorer._compute_safety_purity_score(p_safe, "targeted", 0.0, [])
+        b_danger = scorer._compute_safety_purity_score(p_danger, "targeted", 0.0, [])
 
         assert b_danger["B7_penalty"] == pytest.approx(2.0)
         assert b_danger["score"] < b_safe["score"]
@@ -2680,5 +2754,5 @@ class TestB7DoseSafety:
         """Products without rda_ul_data (e.g. no dosage info) get no B7 penalty."""
         p = make_base_product()
         # No rda_ul_data key at all
-        penalty, evidence = scorer._score_b7(p, [])
+        penalty, evidence = scorer._compute_dose_safety_penalty(p, [])
         assert penalty == 0.0
