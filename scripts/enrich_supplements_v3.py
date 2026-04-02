@@ -8036,6 +8036,7 @@ class SupplementEnricherV3:
                         "endpoint_relevance_tags",
                         "notes",
                         "notable_studies",
+                        "references_structured",
                     ]
                     for field in optional_fields:
                         if field in study and study.get(field) is not None:
