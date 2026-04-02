@@ -152,7 +152,8 @@ def _base_scored(**overrides):
 
 
 COLUMNS = [
-    "dsld_id", "product_name", "brand_name", "upc_sku", "image_url", "thumbnail_key",
+    "dsld_id", "product_name", "brand_name", "upc_sku", "image_url", "image_is_pdf", "thumbnail_key",
+    "detail_blob_sha256", "interaction_summary_hint", "decision_highlights",
     "product_status", "discontinued_date", "form_factor", "supplement_type",
     "score_quality_80", "score_display_80", "score_display_100_equivalent",
     "score_100_equivalent", "grade", "verdict", "safety_verdict", "mapped_coverage",

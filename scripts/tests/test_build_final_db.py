@@ -35,7 +35,11 @@ PRODUCTS_CORE_COLUMNS = [
     "brand_name",
     "upc_sku",
     "image_url",
+    "image_is_pdf",
     "thumbnail_key",
+    "detail_blob_sha256",
+    "interaction_summary_hint",
+    "decision_highlights",
     "product_status",
     "discontinued_date",
     "form_factor",
@@ -201,6 +205,28 @@ def test_build_final_db_streaming_path_preserves_last_write_wins_duplicates():
         assert manifest["detail_blob_count"] == 1
         assert manifest["detail_blob_unique_count"] == 1
         assert manifest["detail_index_checksum"].startswith("sha256:")
+
+
+def test_build_core_row_includes_flutter_convenience_fields():
+    enriched = make_enriched()
+    scored = make_scored()
+
+    row = row_as_dict(build_core_row(enriched, scored, "2026-04-02T12:00:00Z"))
+
+    assert row["image_is_pdf"] == 1
+    assert row["detail_blob_sha256"] is None
+
+    interaction_hint = json.loads(row["interaction_summary_hint"])
+    assert interaction_hint["has_any"] is True
+    assert interaction_hint["highest_severity"] == "avoid"
+    assert interaction_hint["condition_ids"] == ["pregnancy"]
+    assert interaction_hint["drug_class_ids"] == ["retinoids"]
+
+    decision_highlights = json.loads(row["decision_highlights"])
+    assert set(decision_highlights.keys()) == {"positive", "caution", "trust"}
+    assert isinstance(decision_highlights["positive"], str)
+    assert isinstance(decision_highlights["caution"], str)
+    assert isinstance(decision_highlights["trust"], str)
 
 
 def make_enriched():

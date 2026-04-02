@@ -34,6 +34,7 @@ import tempfile
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, List, Optional
+from urllib.parse import urlparse
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 logger = logging.getLogger(__name__)
@@ -444,7 +445,11 @@ CREATE TABLE IF NOT EXISTS products_core (
     brand_name                    TEXT,
     upc_sku                       TEXT,
     image_url                     TEXT,
+    image_is_pdf                  INTEGER DEFAULT 0,
     thumbnail_key                 TEXT,
+    detail_blob_sha256            TEXT,
+    interaction_summary_hint      TEXT,
+    decision_highlights           TEXT,
 
     product_status                TEXT,
     discontinued_date             TEXT,
@@ -542,6 +547,114 @@ CREATE VIRTUAL TABLE IF NOT EXISTS products_fts USING fts5(
     tokenize='porter unicode61'
 );
 """
+
+
+def image_url_is_pdf(image_url: Any) -> int:
+    """Return 1 when the image URL points to a PDF, else 0."""
+    value = safe_str(image_url)
+    if not value:
+        return 0
+    parsed = urlparse(value)
+    path = parsed.path or value
+    return 1 if path.lower().endswith(".pdf") else 0
+
+
+def build_interaction_summary_hint(enriched: Dict) -> Dict[str, Any]:
+    """Build a compact interaction hint for instant result-card decisions."""
+    interaction_profile = safe_dict(enriched.get("interaction_profile"))
+    condition_summary = safe_dict(interaction_profile.get("condition_summary"))
+    drug_class_summary = safe_dict(interaction_profile.get("drug_class_summary"))
+    ingredient_alerts = safe_list(interaction_profile.get("ingredient_alerts"))
+
+    condition_ids = {safe_str(key) for key in condition_summary.keys() if safe_str(key)}
+    drug_class_ids = {safe_str(key) for key in drug_class_summary.keys() if safe_str(key)}
+    severity_candidates = [safe_str(interaction_profile.get("highest_severity"))]
+
+    for alert in ingredient_alerts:
+        if not isinstance(alert, dict):
+            continue
+        for hit in safe_list(alert.get("condition_hits")):
+            if isinstance(hit, dict):
+                condition_id = safe_str(hit.get("condition_id"))
+                if condition_id:
+                    condition_ids.add(condition_id)
+                severity_candidates.append(safe_str(hit.get("severity")))
+        for hit in safe_list(alert.get("drug_class_hits")):
+            if isinstance(hit, dict):
+                drug_class_id = safe_str(hit.get("drug_class_id"))
+                if drug_class_id:
+                    drug_class_ids.add(drug_class_id)
+                severity_candidates.append(safe_str(hit.get("severity")))
+
+    severity_rank = {
+        "contraindicated": 6,
+        "avoid": 5,
+        "high": 4,
+        "caution": 3,
+        "moderate": 2,
+        "monitor": 1,
+        "low": 0,
+    }
+    highest_severity = ""
+    for severity in severity_candidates:
+        if not severity:
+            continue
+        if severity_rank.get(severity, -1) > severity_rank.get(highest_severity, -1):
+            highest_severity = severity
+
+    return {
+        "has_any": bool(condition_ids or drug_class_ids),
+        "highest_severity": highest_severity,
+        "condition_ids": sorted(condition_ids),
+        "drug_class_ids": sorted(drug_class_ids),
+    }
+
+
+def build_decision_highlights(enriched: Dict, scored: Dict, blocking_reason: Optional[str]) -> Dict[str, str]:
+    """Build concise hero highlights so Flutter doesn't need to improvise them."""
+    named_programs = safe_list(enriched.get("named_cert_programs"))
+    section_scores = safe_dict(scored.get("section_scores"))
+    verdict = safe_str(scored.get("verdict")).upper()
+    score_80 = safe_float(scored.get("score_80"), 0) or 0
+
+    if safe_bool(enriched.get("is_trusted_manufacturer")) and safe_bool(enriched.get("has_full_disclosure")):
+        positive = "Trusted manufacturer with full label disclosure."
+    elif safe_float(safe_dict(section_scores.get("C_evidence_research")).get("score"), 0) >= 12:
+        positive = "Backed by meaningful clinical evidence."
+    elif score_80 >= 60:
+        positive = "Strong overall quality profile."
+    else:
+        positive = "Some quality signals are present, but this product needs a closer look."
+
+    if blocking_reason == "banned_substance":
+        caution = "Contains a banned substance match."
+    elif blocking_reason == "recalled_ingredient":
+        caution = "Contains a recalled ingredient match."
+    elif blocking_reason == "high_risk_ingredient":
+        caution = "Contains an ingredient flagged as high risk."
+    elif safe_list(enriched.get("harmful_additives")):
+        caution = "Includes additives with known safety concerns."
+    elif safe_list(enriched.get("allergen_hits")):
+        caution = "Contains allergen risks that may matter for sensitive users."
+    elif verdict in {"CAUTION", "POOR", "UNSAFE", "BLOCKED"}:
+        caution = "Safety or quality signals lower confidence in this product."
+    else:
+        caution = "No major caution signal surfaced in the quick review."
+
+    if named_programs:
+        trust = f"Third-party programs listed: {', '.join(str(program) for program in named_programs[:2])}."
+    elif safe_bool(enriched.get("has_full_disclosure")):
+        trust = "Formula is fully disclosed for easier review."
+    elif safe_bool(enriched.get("is_trusted_manufacturer")):
+        trust = "Manufacturer reputation supports baseline trust."
+    else:
+        trust = "Trust signals are limited in the current export."
+
+    return {
+        "positive": positive,
+        "caution": caution,
+        "trust": trust,
+    }
 
 
 # ─── Data Loading ───
@@ -1345,7 +1458,12 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
 
 # ─── Core Row Builder ───
 
-def build_core_row(enriched: Dict, scored: Dict, exported_at: str) -> tuple:
+def build_core_row(
+    enriched: Dict,
+    scored: Dict,
+    exported_at: str,
+    detail_blob_sha256: Optional[str] = None,
+) -> tuple:
     """Build a products_core row tuple from enriched + scored product data."""
     comp = safe_dict(enriched.get("compliance_data"))
     ds = safe_dict(enriched.get("dietary_sensitivity_data"))
@@ -1361,6 +1479,8 @@ def build_core_row(enriched: Dict, scored: Dict, exported_at: str) -> tuple:
 
     top_warnings = build_top_warnings(enriched)
     blocking = derive_blocking_reason(enriched, scored)
+    interaction_hint = build_interaction_summary_hint(enriched)
+    decision_highlights = build_decision_highlights(enriched, scored, blocking)
 
     return (
         safe_str(enriched.get("dsld_id")),
@@ -1368,7 +1488,11 @@ def build_core_row(enriched: Dict, scored: Dict, exported_at: str) -> tuple:
         safe_str(enriched.get("brandName")),
         safe_str(enriched.get("upcSku")),
         safe_str(enriched.get("imageUrl")),
+        image_url_is_pdf(enriched.get("imageUrl")),
         None,  # thumbnail_key — populated at runtime
+        detail_blob_sha256,
+        json.dumps(interaction_hint, ensure_ascii=False),
+        json.dumps(decision_highlights, ensure_ascii=False),
         # Product status
         safe_str(enriched.get("status")),
         disc_date,
@@ -1436,7 +1560,7 @@ def build_core_row(enriched: Dict, scored: Dict, exported_at: str) -> tuple:
     )
 
 
-CORE_COLUMN_COUNT = 61  # Must match the tuple above and SCHEMA_SQL
+CORE_COLUMN_COUNT = 65  # Must match the tuple above and SCHEMA_SQL
 
 
 # ─── Reference Data Loader ───
@@ -1674,7 +1798,10 @@ def build_final_db(
                 contract_issues = validate_export_contract(enriched, scored)
                 if contract_issues:
                     raise ValueError("; ".join(contract_issues[:10]))
-                row = build_core_row(enriched, scored, exported_at)
+                blob = build_detail_blob(enriched, scored)
+                blob_json = json.dumps(blob, ensure_ascii=False, separators=(",", ":"))
+                blob_sha256 = hashlib.sha256(blob_json.encode("utf-8")).hexdigest()
+                row = build_core_row(enriched, scored, exported_at, detail_blob_sha256=blob_sha256)
                 if len(row) != CORE_COLUMN_COUNT:
                     logger.error(
                         "Product %s: row has %d columns, expected %d",
@@ -1688,10 +1815,6 @@ def build_final_db(
                         "error": f"row has {len(row)} columns, expected {CORE_COLUMN_COUNT}",
                     })
                     continue
-
-                blob = build_detail_blob(enriched, scored)
-                blob_json = json.dumps(blob, ensure_ascii=False, separators=(",", ":"))
-                blob_sha256 = hashlib.sha256(blob_json.encode("utf-8")).hexdigest()
                 with open(tmp_blob_path, "w", encoding="utf-8") as f:
                     f.write(blob_json)
                 c.execute(insert_sql, row)

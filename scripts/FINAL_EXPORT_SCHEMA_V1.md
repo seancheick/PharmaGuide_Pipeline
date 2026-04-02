@@ -1,9 +1,9 @@
 # FINAL EXPORT SCHEMA V1
 
-> Version: 1.2.1 — 2026-03-30
+> Version: 1.2.2 — 2026-04-02
 > Consumes: current scorer output (v3.3.0 as of 2026-03-30), enrichment schema v5.1.0
 > Status: FROZEN — approved by team review
-> Updated: scoring v3.3 alignment, omega-3 bonus export note, interaction_summary, dose_threshold_evaluation, condition/drug_class mapping
+> Updated: scoring v3.3 alignment, omega-3 bonus export note, interaction_summary, dose_threshold_evaluation, condition/drug_class mapping, and Flutter convenience fields (`detail_blob_sha256`, `image_is_pdf`, `interaction_summary_hint`, `decision_highlights`)
 
 ## Purpose
 
@@ -36,17 +36,16 @@ Pipeline repo (dsld-clean)
         │     ├── 15123.json
         │     ├── 37323.json
         │     └── ...
-        ├── detail_index.json         ← dsld_id → hashed remote blob path map
+        ├── detail_index.json         ← compatibility/audit map for hashed remote blob paths
         ├── export_manifest.json      ← top-level manifest for Supabase
         └── export_audit_report.json  ← safety-category counts and per-build audit
 ```
 
-On the phone, the app adds local-only tables:
-- `product_detail_cache` — cached detail JSON (plain TEXT in v1)
-- `user_profile`
-- `user_favorites`
-- `user_scan_history`
-- `user_stacks` / `stack_products`
+On the phone, the app uses two local Drift databases:
+- `pharmaguide_core.db` — read-only bundled/exported reference DB from the pipeline
+- `user_data.db` — app-created read/write DB that contains `product_detail_cache`,
+  `user_profile`, `user_favorites`, `user_scan_history`, and `user_stacks_local`
+  so OTA swaps never overwrite user-generated state
 
 ---
 
@@ -59,7 +58,11 @@ CREATE TABLE products_core (
     brand_name                    TEXT,
     upc_sku                       TEXT,
     image_url                     TEXT,    -- remote source URL; not guaranteed offline
+    image_is_pdf                  INTEGER DEFAULT 0,
     thumbnail_key                 TEXT,    -- optional runtime/cache key, not a device path
+    detail_blob_sha256            TEXT,    -- primary app resolver for hashed detail payload fetch
+    interaction_summary_hint      TEXT,    -- compact JSON for instant condition/drug flagging
+    decision_highlights           TEXT,    -- compact JSON: positive/caution/trust hero copy
 
     product_status                TEXT,    -- active, discontinued, off_market
     discontinued_date             TEXT,    -- ISO-8601
@@ -145,7 +148,11 @@ CREATE INDEX idx_products_core_status ON products_core(product_status);
 | `brand_name` | `enriched.brandName` | |
 | `upc_sku` | `enriched.upcSku` | Barcode lookup |
 | `image_url` | `enriched.imageUrl` | May be PDF, not a real image. Not offline. |
+| `image_is_pdf` | Derived from `imageUrl` | Lets Flutter skip PDF URLs before image widget load |
 | `thumbnail_key` | NULL at export | Populated by app at runtime |
+| `detail_blob_sha256` | SHA-256 of exported detail blob JSON | Primary runtime resolver for hashed shared payload fetch |
+| `interaction_summary_hint` | Derived from `interaction_profile` | Compact JSON for instant condition/drug banners before detail hydration |
+| `decision_highlights` | Derived from enriched/scored safety + trust signals | Compact JSON for hero summary copy (`positive`, `caution`, `trust`) |
 | `product_status` | `enriched.status` | DSLD lifecycle, NOT safety |
 | `discontinued_date` | `enriched.discontinuedDate` | ISO date or NULL |
 | `form_factor` | `enriched.form_factor` | |
@@ -184,6 +191,20 @@ CREATE INDEX idx_products_core_status ON products_core(product_status);
 | Product-level recall | No data source yet |
 | Offline image data | Runtime concern |
 
+### Detail payload resolution
+
+`products_core.detail_blob_sha256` is now the primary runtime key for detail hydration.
+The app can derive the storage path directly:
+
+```text
+shared/details/sha256/{blob_sha256[0:2]}/{blob_sha256}.json
+```
+
+`detail_index.json` is still exported and uploaded for:
+- compatibility with older clients/tooling
+- audit/debug workflows
+- release verification
+
 ---
 
 ## Table: `products_fts`
@@ -198,7 +219,7 @@ CREATE VIRTUAL TABLE products_fts USING fts5(
 
 ---
 
-## Table: `product_detail_cache` (app-side)
+## Table: `product_detail_cache` (app-side, stored in `user_data.db`)
 
 ```sql
 CREATE TABLE product_detail_cache (
@@ -276,8 +297,12 @@ and the remote Supabase manifest.
 
 ## Detail Blob Contract
 
-One JSON file per product, named `{dsld_id}.json`. Uploaded to Supabase.
-Cached on-device in `product_detail_cache.detail_json` after first access.
+One local JSON file per product is emitted during build as `{dsld_id}.json`.
+Remote distribution does not use that filename directly: the Flutter app reads
+`products_core.detail_blob_sha256`, derives the hashed payload path, then fetches
+the payload from shared storage. `detail_index.json` remains available as a
+compatibility/audit fallback. The payload is cached on-device in
+`product_detail_cache.detail_json` after first access.
 
 ### Structure
 
@@ -688,7 +713,8 @@ and shared across versions so unchanged products do not get re-uploaded.
   artifact should be uploaded or downloaded.
 - Uses the remote `checksum` to verify the downloaded SQLite artifact before swap-in.
 - The client should treat `min_app_version` as a hard compatibility gate before promoting a downloaded release.
-- Uses `detail_index.json` to resolve `dsld_id` to a hashed shared blob path.
+- Primary runtime path: use `products_core.detail_blob_sha256` to derive the hashed shared blob path directly.
+- `detail_index.json` remains available for compatibility and audit workflows.
 - If any unique detail blob upload fails, manifest rotation is aborted to prevent clients
   from seeing the new version and getting broken detail fetches. The DB file and detail
   index are safe to re-upload (upsert).

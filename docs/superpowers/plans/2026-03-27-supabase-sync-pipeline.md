@@ -6,28 +6,37 @@
 
 **Architecture:** `build_final_db.py` output -> `sync_to_supabase.py` -> Supabase Storage (versioned .db + JSON blobs) + PostgreSQL export_manifest table. Manual script first, CI/CD later. Service role key for writes, anon key for app reads.
 
+Current distribution contract note:
+
+- Local build output still contains `detail_blobs/{dsld_id}.json`
+- Remote distribution uses `detail_index.json` plus shared hashed payloads under
+  `pharmaguide/shared/details/sha256/{blob_sha256[0:2]}/{blob_sha256}.json`
+- Any older examples below that show `v{version}/details/{dsld_id}.json` should
+  be read as historical implementation scaffolding, not the current storage contract
+
 **Tech Stack:** Python 3.13, supabase-py (Supabase Python client), existing env_loader.py pattern, pytest 9
 
 ---
 
 ## File Structure
 
-| File | Responsibility |
-|------|---------------|
-| `scripts/sync_to_supabase.py` | Main sync script: reads build output, compares versions, uploads to Supabase |
-| `scripts/supabase_client.py` | Thin wrapper: initializes Supabase client from env vars, exposes typed helpers |
-| `scripts/tests/test_sync_to_supabase.py` | Tests for sync logic (version comparison, manifest parsing, upload orchestration) |
-| `scripts/tests/test_supabase_client.py` | Tests for client wrapper (env loading, error handling) |
-| `scripts/sql/supabase_schema.sql` | Full Supabase schema: tables, indexes, RLS policies (reference, not executed by Python) |
-| `scripts/SUPABASE_SYNC_README.md` | Setup guide: project creation, env vars, usage, troubleshooting |
-| `requirements-dev.txt` | Add supabase dependency |
-| `.env.example` | Add Supabase env var placeholders |
+| File                                     | Responsibility                                                                          |
+| ---------------------------------------- | --------------------------------------------------------------------------------------- |
+| `scripts/sync_to_supabase.py`            | Main sync script: reads build output, compares versions, uploads to Supabase            |
+| `scripts/supabase_client.py`             | Thin wrapper: initializes Supabase client from env vars, exposes typed helpers          |
+| `scripts/tests/test_sync_to_supabase.py` | Tests for sync logic (version comparison, manifest parsing, upload orchestration)       |
+| `scripts/tests/test_supabase_client.py`  | Tests for client wrapper (env loading, error handling)                                  |
+| `scripts/sql/supabase_schema.sql`        | Full Supabase schema: tables, indexes, RLS policies (reference, not executed by Python) |
+| `scripts/SUPABASE_SYNC_README.md`        | Setup guide: project creation, env vars, usage, troubleshooting                         |
+| `requirements-dev.txt`                   | Add supabase dependency                                                                 |
+| `.env.example`                           | Add Supabase env var placeholders                                                       |
 
 ---
 
 ### Task 1: Add Supabase Dependency and Environment Variables
 
 **Files:**
+
 - Modify: `requirements-dev.txt`
 - Modify or Create: `.env.example`
 
@@ -72,6 +81,7 @@ git commit -m "chore: add supabase dependency and env var placeholders"
 ### Task 2: Write Supabase Schema SQL Reference
 
 **Files:**
+
 - Create: `scripts/sql/supabase_schema.sql`
 
 This file is a reference document. You run it manually in the Supabase SQL Editor to set up the project. The Python code does NOT execute this file.
@@ -121,17 +131,22 @@ CREATE TABLE IF NOT EXISTS user_usage (
   user_id           uuid REFERENCES auth.users NOT NULL,
   scans_today       integer DEFAULT 0,
   ai_messages_today integer DEFAULT 0,
-  reset_date        date DEFAULT CURRENT_DATE
+  reset_day_utc     date DEFAULT ((now() AT TIME ZONE 'UTC')::date)
 );
 
 CREATE TABLE IF NOT EXISTS pending_products (
   id           uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id      uuid REFERENCES auth.users NOT NULL,
   upc          text NOT NULL,
+  normalized_upc text,
   product_name text,
   brand        text,
   image_url    text,
+  submitter_note text,
   status       text DEFAULT 'pending',
+  review_notes text,
+  reviewed_at timestamptz,
+  reviewed_by text,
   submitted_at timestamptz DEFAULT now()
 );
 
@@ -141,8 +156,11 @@ CREATE TABLE IF NOT EXISTS pending_products (
 
 CREATE INDEX IF NOT EXISTS idx_user_stacks_user ON user_stacks(user_id);
 CREATE INDEX IF NOT EXISTS idx_user_usage_user ON user_usage(user_id);
-CREATE UNIQUE INDEX IF NOT EXISTS idx_user_usage_daily ON user_usage(user_id, reset_date);
+CREATE UNIQUE INDEX IF NOT EXISTS idx_user_usage_daily ON user_usage(user_id, reset_day_utc);
 CREATE INDEX IF NOT EXISTS idx_pending_products_user ON pending_products(user_id);
+CREATE UNIQUE INDEX IF NOT EXISTS idx_pending_products_user_normalized_upc_pending
+  ON pending_products(user_id, normalized_upc)
+  WHERE status = 'pending' AND normalized_upc IS NOT NULL;
 
 -- =============================================================================
 -- 4. Row Level Security
@@ -174,8 +192,8 @@ CREATE POLICY "Users submit pending products" ON pending_products
 -- 5. RPC Functions
 -- =============================================================================
 
--- Atomic manifest rotation: ensures there is always exactly one current row.
--- INSERT first, then UPDATE — no window where zero rows are current.
+-- Atomic manifest rotation: callers treat this as one transaction.
+-- The SQL function owns the exact insert/update order.
 CREATE OR REPLACE FUNCTION rotate_manifest(
   p_db_version text,
   p_pipeline_version text,
@@ -189,7 +207,7 @@ CREATE OR REPLACE FUNCTION rotate_manifest(
 DECLARE
   new_id uuid;
 BEGIN
-  -- Insert new row first (so there's always at least one current)
+  -- Insert the new row
   INSERT INTO export_manifest (
     db_version, pipeline_version, scoring_version, schema_version,
     product_count, checksum, min_app_version, generated_at, is_current
@@ -198,7 +216,7 @@ BEGIN
     p_product_count, p_checksum, p_min_app_version, p_generated_at, true
   ) RETURNING id INTO new_id;
 
-  -- Then mark all others as not current
+  -- Mark all others as not current
   UPDATE export_manifest
   SET is_current = false
   WHERE is_current = true AND id != new_id;
@@ -217,7 +235,8 @@ $$ LANGUAGE plpgsql SECURITY DEFINER;
 --
 -- Folder structure:
 --   pharmaguide/v{version}/pharmaguide_core.db
---   pharmaguide/v{version}/details/{dsld_id}.json
+--   pharmaguide/v{version}/detail_index.json
+--   pharmaguide/shared/details/sha256/{blob_sha256[0:2]}/{blob_sha256}.json
 ```
 
 - [ ] **Step 2: Commit**
@@ -233,6 +252,7 @@ git commit -m "docs: add Supabase schema SQL reference for project setup"
 ### Task 3: Write Supabase Client Wrapper
 
 **Files:**
+
 - Create: `scripts/supabase_client.py`
 - Create: `scripts/tests/test_supabase_client.py`
 
@@ -434,6 +454,7 @@ git commit -m "feat: add Supabase client wrapper with manifest helpers"
 ### Task 4: Write Sync Script Core Logic
 
 **Files:**
+
 - Create: `scripts/sync_to_supabase.py`
 - Create: `scripts/tests/test_sync_to_supabase.py`
 
@@ -568,7 +589,8 @@ Usage:
 The build_output_dir should contain:
     - export_manifest.json
     - pharmaguide_core.db
-    - detail_blobs/{dsld_id}.json (one per product)
+    - detail_index.json
+    - detail_blobs/{dsld_id}.json (local per-product build output before hashing)
 
 Environment variables (from .env):
     - SUPABASE_URL
@@ -638,7 +660,7 @@ def sync(build_dir, dry_run=False):
     1. Load local manifest
     2. Compare to remote manifest
     3. Upload .db file to Storage
-    4. Upload detail blobs to Storage
+    4. Upload detail_index.json and unique hashed detail blobs to Storage
     5. Insert new manifest row
     """
     from supabase_client import (
@@ -664,7 +686,8 @@ def sync(build_dir, dry_run=False):
         db_size = os.path.getsize(db_path) / (1024 * 1024) if os.path.exists(db_path) else 0
         print(f"\n[DRY RUN] Would upload:")
         print(f"  - pharmaguide_core.db ({db_size:.1f} MB)")
-        print(f"  - {len(blobs)} detail blobs")
+        print(f"  - detail_index.json")
+        print(f"  - {len(blobs)} local detail blobs (deduped to hashed remote payloads)")
         print(f"  - New manifest row (version {version})")
         return {"status": "dry_run", "version": version, "blob_count": len(blobs)}
 
@@ -695,18 +718,21 @@ def sync(build_dir, dry_run=False):
     db_size_mb = os.path.getsize(db_path) / (1024 * 1024)
     print(f"  Done ({db_size_mb:.1f} MB in {db_time:.1f}s)")
 
-    # Upload detail blobs
+    # Upload detail index + hashed detail blobs
     # NOTE: Sequential uploads are fine for MVP (<10K products, ~15 min).
     # When product count exceeds ~10K, add concurrent.futures.ThreadPoolExecutor
     # with max_workers=10 to parallelize uploads (~10x speedup).
     blobs = collect_detail_blobs(build_dir)
     blob_count = len(blobs)
-    print(f"\nUploading {blob_count} detail blobs...")
+    print(f"\nUploading {blob_count} local detail blobs (hashed remote payloads)...")
     start = time.time()
     errors = []
     for i, blob_path in enumerate(blobs, 1):
         dsld_id = os.path.splitext(os.path.basename(blob_path))[0]
-        remote_blob_path = f"v{version}/details/{dsld_id}.json"
+        # Historical scaffold note: the current contract resolves local {dsld_id}.json
+        # files into shared hashed payload paths via detail_index.json, using:
+        # shared/details/sha256/{blob_sha256[0:2]}/{blob_sha256}.json
+        remote_blob_path = f"shared/details/sha256/{{blob_sha256[0:2]}}/{{blob_sha256}}.json"
         try:
             upload_file(
                 client, bucket, remote_blob_path, blob_path,
@@ -818,6 +844,7 @@ git commit -m "feat: add sync_to_supabase.py with version comparison and upload 
 ### Task 5: Write Supabase Sync Documentation
 
 **Files:**
+
 - Create: `scripts/SUPABASE_SYNC_README.md`
 
 - [ ] **Step 1: Write the documentation**
@@ -835,11 +862,12 @@ Uploads pipeline build output to Supabase for distribution to the Flutter app.
 2. **Run Schema:** Copy `scripts/sql/supabase_schema.sql` into the Supabase SQL Editor and execute
 3. **Create Storage Bucket:** In Supabase Dashboard > Storage, create bucket `pharmaguide` with public read access
 4. **Environment Variables:** Add to your `.env` file:
-
 ```
+
 SUPABASE_URL=https://your-project.supabase.co
 SUPABASE_SERVICE_ROLE_KEY=eyJ...your-service-role-key
-```
+
+````
 
 Get these from Supabase Dashboard > Settings > API.
 
@@ -861,7 +889,7 @@ python scripts/build_final_db.py \
 
 # 3. Sync to Supabase
 python scripts/sync_to_supabase.py final_db_output
-```
+````
 
 ### Dry run (preview without uploading)
 
@@ -871,21 +899,24 @@ python scripts/sync_to_supabase.py <output_dir> --dry-run
 
 ### What gets uploaded
 
-| Local File | Supabase Location |
-|-----------|-------------------|
-| `pharmaguide_core.db` | Storage: `pharmaguide/v{version}/pharmaguide_core.db` |
-| `detail_blobs/*.json` | Storage: `pharmaguide/v{version}/details/{dsld_id}.json` |
-| `export_manifest.json` | PostgreSQL: `export_manifest` table (is_current=true) |
+| Local File             | Supabase Location                                                                  |
+| ---------------------- | ---------------------------------------------------------------------------------- |
+| `pharmaguide_core.db`  | Storage: `pharmaguide/v{version}/pharmaguide_core.db`                              |
+| `detail_index.json`    | Storage: `pharmaguide/v{version}/detail_index.json`                                |
+| `detail_blobs/*.json`  | Storage: `pharmaguide/shared/details/sha256/{blob_sha256[0:2]}/{blob_sha256}.json` |
+| `export_manifest.json` | PostgreSQL: `export_manifest` table (is_current=true)                              |
 
 ### Version checking
 
 The script compares the local `export_manifest.json` to the current Supabase manifest:
+
 - If versions differ or no remote manifest exists: uploads everything
 - If versions and checksums match: skips (already synced)
 
 ## Supabase Schema
 
 See `scripts/sql/supabase_schema.sql` for the complete schema including:
+
 - `export_manifest` (pipeline version tracking)
 - `user_stacks` (user supplement stacks)
 - `user_usage` (freemium scan/AI limits)
@@ -895,30 +926,36 @@ See `scripts/sql/supabase_schema.sql` for the complete schema including:
 ## Troubleshooting
 
 ### "SUPABASE_URL environment variable is not set"
+
 Add `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` to your `.env` file.
 
 ### "export_manifest.json not found"
+
 Run `build_final_db.py` before `sync_to_supabase.py`.
 
 ### Partial upload (some blobs failed)
+
 Re-run `sync_to_supabase.py`. It uses upsert mode -- re-uploading is safe and idempotent. Failed blobs will be retried.
 
 ### Version conflict
+
 If the Supabase manifest shows a newer version than your local build, re-run the pipeline to generate a fresh build before syncing.
-```
+
+````
 
 - [ ] **Step 2: Commit**
 
 ```bash
 git add scripts/SUPABASE_SYNC_README.md
 git commit -m "docs: add Supabase sync pipeline setup and usage guide"
-```
+````
 
 ---
 
 ### Task 6: Update Project Documentation
 
 **Files:**
+
 - Modify: `CLAUDE.md`
 - Modify: `scripts/PIPELINE_ARCHITECTURE.md`
 
@@ -928,9 +965,11 @@ Open `CLAUDE.md` and add this row to the Commands section, after the `build_fina
 
 ```markdown
 # Sync pipeline output to Supabase
+
 python3 scripts/sync_to_supabase.py <build_output_dir>
 
 # Dry run (preview without uploading)
+
 python3 scripts/sync_to_supabase.py <build_output_dir> --dry-run
 ```
 
@@ -938,13 +977,14 @@ python3 scripts/sync_to_supabase.py <build_output_dir> --dry-run
 
 Open `scripts/PIPELINE_ARCHITECTURE.md` and add a new section after the Score stage:
 
-```markdown
+````markdown
 ## Stage 4: Distribute (sync_to_supabase.py)
 
 **Input:** Build output from build_final_db.py (pharmaguide_core.db + detail_blobs/ + export_manifest.json)
 **Output:** Versioned artifacts in Supabase Storage + manifest row in PostgreSQL
 
 **Workflow:**
+
 1. Read export_manifest.json from build directory
 2. Compare version to current Supabase manifest (is_current=true)
 3. If newer: upload .db file and detail blobs to Supabase Storage
@@ -953,26 +993,30 @@ Open `scripts/PIPELINE_ARCHITECTURE.md` and add a new section after the Score st
 **Environment:** Requires SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY in .env
 
 **CLI:**
+
 ```bash
 python scripts/sync_to_supabase.py <build_output_dir>          # Full sync
 python scripts/sync_to_supabase.py <build_output_dir> --dry-run # Preview only
 ```
+````
 
 **Safety:** Uses upsert mode. Re-running is idempotent. The Flutter app reads the manifest to detect new versions and downloads in background -- never blocks the user.
-```
+
+````
 
 - [ ] **Step 3: Commit**
 
 ```bash
 git add CLAUDE.md scripts/PIPELINE_ARCHITECTURE.md
 git commit -m "docs: add sync stage to pipeline architecture and CLAUDE.md commands"
-```
+````
 
 ---
 
 ### Task 7: Integration Test with Dry Run
 
 **Files:**
+
 - No new files (manual verification)
 
 This task verifies the full flow works end-to-end before you have a real Supabase project.
@@ -1040,6 +1084,7 @@ rm -rf /tmp/pharma_test_build
 After creating the Supabase project and running the schema SQL:
 
 1. Add credentials to `.env`:
+
    ```
    SUPABASE_URL=https://your-project.supabase.co
    SUPABASE_SERVICE_ROLE_KEY=eyJ...
@@ -1048,6 +1093,7 @@ After creating the Supabase project and running the schema SQL:
 2. Create the storage bucket in Supabase Dashboard (name: `pharmaguide`, public read)
 
 3. Run a real pipeline build and sync:
+
    ```bash
    python3 scripts/sync_to_supabase.py <real_build_output>
    ```

@@ -13,7 +13,7 @@ Date	Change	Impact
 2026-03-18	score_bonuses/score_penalties enriched with type, source, category, mechanism	Enables richer Pros and Considerations UI. See Section 6.10.
 2026-03-18	reference_data.interaction_rules grew to ~95KB (45 rules)	Adjust memory budget for startup parse. Still well within limits.
 2026-03-18	clinical_risk_taxonomy: 14 conditions, 9 drug classes	Profile chips must map exactly to these IDs. Any mismatch breaks interaction flagging.
-2026-03-18	harmful_additive warnings now carry reference_notes and mechanism	Card 2 can show richer additive detail (why it's harmful, not just that it is).
+2026-03-18	harmful_additive warnings now carry notes and mechanism	Card 2 can show richer additive detail (why it's harmful, not just that it is).
 2026-03-30	Omega-3 dose adequacy export moved to ingredient_quality.sub.omega3_breakdown	Still folded into quality score. Show as sub-row in Card 1 when omega3_breakdown.applicable = true.
 2026-03-30	v5.3 UX/Accessibility Audit: 7 color contrast failures fixed (WCAG AA), full accessibility section added, dark mode tokens defined	All score badge colors darkened. Primary brand adjusted for text use. See Section 2.
 2026-03-30	v5.3 New pipeline data surfaced: formulation_detail, synergy_detail, serving_info, dietary_sensitivity_detail, certification_detail, B7/B5 evidence, probiotic clinical strains, rda_ul_data	Richer accordion card content. See Section 6.6.
@@ -38,19 +38,20 @@ Interaction summary added to scan result for instant condition flagging (MVP: ba
 
 Tech Stack
 Frontend	Flutter (iOS + Android) — Impeller rendering engine enabled
-Local DB	SQLite via drift (RECOMMENDED over raw sqflite) — pharmaguide_core.db ships with app. Primary data source.
-Local Cache DB	Same SQLite file: product_detail_cache, user_profile, user_stacks, scan_history tables
+Local DB	SQLite via drift (RECOMMENDED over raw sqflite) — split into pharmaguide_core.db (bundled/read-only) and user_data.db (local/read-write). Primary data source.
+User / Cache DB	user_data.db stores product_detail_cache, user_profile, user_stacks_local, user_favorites, user_scan_history. Never overwritten by OTA DB swaps.
 Remote Auth/Data	Supabase Auth (Google, Apple, Email, Anon) + detail blob storage + limited structured user data
 State Mgmt	Riverpod 2.0+ with @riverpod generator. Mandatory. No Bloc.
+Local Form State	For Profile and Stack edit flows, standardize on flutter_hooks + Form/validators (or an equivalent single explicit pattern). Do not let each screen invent its own local form state model.
 Scoring	score_quality_80 from SQLite. score_fit_20 computed on-device via ScoreFitCalculator.
 AI Chat	Gemini 2.5 Flash-Lite via Supabase Edge Function proxy. Verify current free tier limits before launch.
-Animations	Rive — scanner bracket, score ring, success states.
+Animations	MVP ships with Flutter-native animations first (AnimationController / Animated widgets). Rive is optional post-MVP enhancement once the core scan loop is stable.
 Fonts	Inter (Google Fonts package)
 Images	cached_network_image for product images with automatic disk caching.
 Icons	Lucide Icons (lucide_icons package). Never use emojis as structural icons.
 
 App Identity
-Splash Screen	Brand color (#0A7D6F) full background. Centered white PharmaGuide logo + tagline "Know What You Take". 1.5s max, animated fade to home. Use flutter_native_splash for native splash, then animated Rive transition.
+Splash Screen	Brand color (#0A7D6F) full background. Centered white PharmaGuide logo + tagline "Know What You Take". 1.5s max, animated fade to home. Use flutter_native_splash for native splash, then a lightweight Flutter fade/scale transition.
 App Icon	Teal shield with white checkmark/pill motif. Rounded corners per platform (iOS: superellipse, Android: adaptive icon with teal background layer + white foreground).
 
 Data Architecture — Hybrid SQLite + Supabase
@@ -62,13 +63,14 @@ Layer 1 — Local SQLite (pharmaguide_core.db):
   Updated in background when pipeline produces a new export version via full-file replacement in v1. No binary diffing in v1.
 
 Layer 2 — Supabase (remote):
-  Detail blobs: one JSON per product ({dsld_id}.json). Fetched on first product view, cached locally.
+  Detail blobs: app reads `products_core.detail_blob_sha256`, derives the hashed shared payload path, and fetches it on demand. `detail_index.json` remains a compatibility/audit fallback if a row-level hash is absent.
   User data: Supabase Auth plus structured Supabase tables only where required in MVP:
     user_stacks, user_usage, pending_products.
   Health profile / fit inputs remain local-only in SQLite user_profile for MVP. No generic user_sync_data blob table.
   AI proxy: Supabase Edge Function wrapping Gemini API.
   DB version check: app reads export_manifest on launch, compares to Supabase manifest.
   Crash / error observability: use Firebase Crashlytics or Sentry, not a generic Supabase error_logs table.
+  Signed-in offline availability comes from user_data.db: stack, favorites, scan history, and profile remain usable offline. Supabase is sync target, not runtime dependency.
 
 Technical Decisions & Risk Mitigation
 Accepted principles:
@@ -82,6 +84,7 @@ Execution decisions:
   OTA updates: use full-file background replacement in v1. Do not introduce binary diffing (for example bsdiff) in v1.
   Guest limits: Hive guest counters are accepted as soft limits. Server-side enforcement remains strict for authenticated users.
   Edge Functions: do not prioritize warm-up pings in v1. Focus first on timeout handling, retry UX, and token/cost controls.
+  Animation implementation: treat Rive references in older UX notes as motion intent only. Ship Flutter-native motion first to reduce build risk.
 
 Hard requirements:
   DB swap safety: always download to a staging file, verify checksum against the remote export_manifest.json, then atomically swap in. Never overwrite the current DB in place.
@@ -89,6 +92,9 @@ Hard requirements:
   Version gate: treat min_app_version as a hard client gate. If the app version is below the manifest requirement, force an app-store update before parsing the new release.
   Detail blob cache policy: product_detail_cache must have explicit max size, LRU eviction, and release-version-driven invalidation rules.
   Search throttling: all text search must be debounced (300ms) and query results must be strictly capped (LIMIT 50) to avoid UI jank on broad terms.
+  Search result correctness: implement latest-query-wins behavior so an older slower search cannot overwrite a newer query result in the UI.
+  Taxonomy integrity: load clinical_risk_taxonomy from reference_data at app startup and validate all UI chip mappings against exact pipeline IDs in debug builds.
+  AI proxy hardening: enforce input validation, rate limiting, and request timeout handling on the Edge Function.
   Observability: minimal Crashlytics or Sentry integration is required from day 1 to capture DB swap, JSON parsing, and runtime contract failures.
 
 Scoring Architecture
@@ -127,9 +133,9 @@ Guest AI: 3 messages/day. Tracked locally in Hive.
 Client check (Hive/Riverpod) gates UI. Supabase enforces server-side for signed-in users.
 
 Supabase Tables (Remote Only)
-user_stacks	id, user_id, dsld_id, dosage, timing, supply_count, added_at
-user_usage	id, user_id, scans_today, ai_messages_today, reset_date
-pending_products	id, user_id, upc, product_name, brand, image_url, status, submitted_at
+user_stacks	id, user_id, dsld_id, dosage, timing, supply_count, source_device_id, client_updated_at, deleted_at, added_at, updated_at
+user_usage	id, user_id, scans_today, ai_messages_today, reset_day_utc
+pending_products	id, user_id, upc, normalized_upc, product_name, brand, image_url, submitter_note, status, review_notes, reviewed_at, reviewed_by, submitted_at
 user_profiles is NOT a Supabase table. Health/fit data lives in local SQLite user_profile table. Never synced to cloud in MVP.
 
 Section 2 — Global Design System
@@ -207,8 +213,8 @@ BoxShadow(
 // Dark mode: reduce shadow opacity to 0x0D or use elevation-based tonal surfaces.
 
 Motion & Haptics
-  Score ring: Rive animation, count-up from 0 to final score, 650ms ease-out-back (NOTE: reduced from 900ms — premium apps use 600-700ms for count-up).
-  Scanner bracket: Rive, 3 states — idle (static), scanning (pulse), success (green fill + checkmark).
+  Score ring: Flutter-native count-up/ring animation from 0 to final score, 650ms ease-out-back (NOTE: reduced from 900ms — premium apps use 600-700ms for count-up).
+  Scanner bracket: Flutter-native 3-state animation — idle (static), scanning (pulse), success (green fill + checkmark).
   Bottom sheets: slide up 280ms ease-out.
   Accordion cards: AnimatedSize for expand/collapse, 250ms. Chevron rotates 180deg with Curves.easeOutBack (spring feel).
   Page transitions: Shared element / hero transition for product image between scan card and result screen.
@@ -218,7 +224,7 @@ Motion & Haptics
   Primary button tap: HapticFeedback.lightImpact().
   Accordion expand: HapticFeedback.selectionClick().
   Swipe-to-delete confirm: HapticFeedback.mediumImpact().
-  Reduced Motion: When MediaQuery.disableAnimations is true, skip all Rive animations (show static final frame), disable stagger, set all durations to 0. Score ring shows final score immediately without count-up.
+  Reduced Motion: When MediaQuery.disableAnimations is true, skip all non-essential animations (show static final state), disable stagger, set all durations to 0. Score ring shows final score immediately without count-up.
 
 Modal / Sheet Rules
   NEVER use showDialog() or AlertDialog for any user-facing interaction.
@@ -227,11 +233,11 @@ Modal / Sheet Rules
   Sticky action buttons inside sheets fixed to bottom with safe area padding.
   Sheets with unsaved changes: confirm before dismiss ("Discard changes?" bottom sheet).
 
-Animations — Rive
-  Use Rive for: scanner bracket, score ring, success checkmarks, empty state illustrations.
-  For simple transitions (sheet open, tab switch): Flutter AnimationController.
-  Do NOT use Lottie. Rive is faster on Flutter Impeller.
-  Provide static fallback frames for all Rive animations when Reduce Motion is enabled.
+Animations — MVP Implementation
+  Use Flutter AnimationController / implicit animations for: scanner bracket, score ring, success checkmarks, empty state illustrations, and simple transitions.
+  Rive is an optional post-MVP enhancement after the core scan/result loop is stable.
+  Do NOT use Lottie in MVP.
+  Provide static fallback states for all animations when Reduce Motion is enabled.
 
 State Management — Riverpod 2.0+
 // All providers use @riverpod annotation.
@@ -273,8 +279,8 @@ Freemium Enforcement
 Scan Limit Logic
 Guest: Hive guest_scan_count. If >= 10 show upgrade sheet.
 Do NOT use SharedPreferences. Hive is the only local KV store.
-Free user: query Supabase user_usage (scans_today, reset_date).
-If scans_today >= 20 AND reset_date = today: show upgrade sheet.
+Free user: query Supabase user_usage (scans_today, reset_day_utc).
+If scans_today >= 20 AND reset_day_utc = current UTC day: show upgrade sheet.
 Increment AFTER successful score fetch, not on barcode read.
 Supabase RLS validates server-side for signed-in users.
 
@@ -341,7 +347,7 @@ Pull-to-refresh: RefreshIndicator wrapping the scroll view. On pull: refresh AI 
 5.1 — Header
 Top Left	"Good morning," — Inter Regular 14sp, grey. "[First Name]" — Inter Bold 28sp, charcoal.
 Top Right	Connectivity: online = hidden. Offline = grey cloud-off icon 20dp.
-Offline tap	Bottom sheet: "You're offline. Scanning and AI chat require internet. Your stack is available."
+Offline tap	Bottom sheet: "You're offline. Scanning and AI chat require internet. Your stack, favorites, scan history, and profile are available locally."
 Greeting logic: "Good morning" (5-11), "Good afternoon" (12-16), "Good evening" (17-4). Guest: "Hello there".
 
 5.2 — Search Bar
@@ -361,7 +367,7 @@ CTA button (white, brand text): "Scan First Product" — navigates to Scan tab.
 
 State B: Active User
 Active Hero Card
-Same gradient. 80dp Rive score ring left. Right column white text:
+Same gradient. 80dp animated score ring left. Right column white text:
   "X products in stack"
   "Interaction risk: Low / Moderate / High"
   "X meds scheduled today"
@@ -390,6 +396,7 @@ Search screen opens on tap of home search bar. Full-screen with back button.
 Search Input	Auto-focused, 48dp height, same style as home bar. Clear button appears when text is present.
 Debounce	300ms debounce on text input before querying FTS. Instant feel without over-querying.
 FTS Limit	Every search query must include LIMIT 50. Broad terms like "vitamin" must never materialize thousands of rows into Dart memory.
+Result ordering correctness	Latest-query-wins. If an older slower search finishes after a newer query, discard the stale result instead of overwriting the current UI.
 
 Empty State (no query entered):
   "Recent Searches" section: last 5 searches from Hive recent_searches box. Tap re-executes. Swipe to remove.
@@ -412,9 +419,9 @@ Section 6 — Scan Tab
 
 6.1 — Camera View
 Package	mobile_scanner
-Overlay	Rive bracket: 3 states — idle (white static), scanning (pulse), success (green + checkmark).
+Overlay	Animated scanner bracket: 3 states — idle (white static), scanning (pulse), success (green + checkmark).
 Controls	Top-left: back/close (44x44dp touch target). Top-right: flash toggle (44x44dp). Bottom-center: "Enter Code Manually" text btn.
-No lasers	No animated scan lines. Rive bracket only.
+No lasers	No animated scan lines. Bracket animation only.
 
 6.2 — Permission Handling
 State	Trigger	Design / Content	Dev Notes
@@ -424,7 +431,7 @@ Denied	User denies	Bottom sheet: lock icon + "Camera access needed." + "Enable i
 
 6.3 — Scan Flow (Happy Path)
 1.	Camera detects UPC/EAN barcode.
-2.	Haptic: HapticFeedback.mediumImpact(). Rive bracket success state.
+2.	Haptic: HapticFeedback.mediumImpact(). Trigger scanner success state.
 3.	Pause camera.
 4.	Green banner slides from top: "Product Identified" — auto-dismiss 1.5s.
 5.	Check scan limit (Section 3). If over limit: show limit sheet. Stop.
@@ -434,7 +441,7 @@ Denied	User denies	Bottom sheet: lock icon + "Camera access needed." + "Enable i
 9.	If user_profile has health data: run ScoreFitCalculator.calculate() locally.
 10.	Run instant condition check via interaction_summary from detail blob IF already cached. Show condition banner if flagged (Section 6.5.4).
 11.	Slide up full Result Screen.
-12.	In background: check product_detail_cache. If not cached and online: fetch {dsld_id}.json from Supabase, cache, then hydrate accordion cards.
+12.	In background: check product_detail_cache. If not cached and online: read `detail_blob_sha256` from `products_core`, derive the hashed detail payload path, fetch from Supabase, cache it, then hydrate accordion cards. Fall back to active `detail_index.json` only if the row-level hash is missing.
 13.	Log analytics event: scan_completed (Section 14).
 
 6.4 — B0 Gate: Critical Warning Screen
@@ -474,7 +481,7 @@ Form factor + supplement type pills below brand: e.g. "Capsule" pill + "Multivit
 Serving info line: "2 capsules per serving" from serving_info (if available).
 Verified checkmark (green, if verdict = SAFE and has_banned_substance = false).
 
-Rive Score Ring (100dp):
+Animated Score Ring (100dp):
   NOT_SCORED: show "Not Scored" text, no ring. Semantics: "Product not scored — insufficient data."
   No profile: count-up to score_100_equivalent. Label "Base Quality Score" grey.
   Profile exists: count-up to score_combined_100. Label "Your Match Score" brand color.
@@ -727,20 +734,19 @@ Share	Share icon button (24dp, top-right of hero section, not in sticky bar).
 B0 state	"Report This Product" (red filled) + "Scan Another" (outline).
 
 6.8 — Post-Scan: Add to Stack Flow
-1.	"Add to Stack" tapped. Rive success checkmark + "Added to Stack" banner.
+1.	"Add to Stack" tapped. Animated success checkmark + "Added to Stack" banner.
 2.	Single bottom sheet: "Set a Schedule?" — AM / PM / Custom chips.
 3.	Same sheet animates to: "Track your supply?" — 30 / 60 / 90 / 120 chips.
-4.	"All Set!" Rive checkmark. Sheet auto-dismisses after 1s.
+4.	"All Set!" success checkmark animation. Sheet auto-dismisses after 1s.
 One sheet. Animated transitions. Not multiple sheets.
 
 6.9 — Manual Entry & Not Found
   Manual: bottom sheet, text field, search. Triggers same SQLite lookup + B0 + result flow.
-  Not found in SQLite: try Supabase search. Still not found: "Product Not Found" sheet.
+  Not found in SQLite: show "Product Not Found" sheet.
   "Submit Product" form writes to Supabase pending_products table.
 
 6.10 — Payload Reference (Detail Blob)
-The detail blob {dsld_id}.json maps to the 5 cards as follows. If a key is absent or null, hide that UI element — never render empty rows.
-// Fetch from Supabase, cache in product_detail_cache SQLite table.
+The local build output detail blob `{dsld_id}.json` maps to the 5 cards as follows. At runtime the app prefers `products_core.detail_blob_sha256`, derives the hashed shared payload path, then fetches/caches it in `product_detail_cache`. If a key is absent or null, hide that UI element — never render empty rows.
 // blob_version field — compare to local to decide re-fetch.
 {
   "dsld_id": string,
@@ -948,7 +954,7 @@ Three large prompt buttons (stacked, 16dp gap, full-width, 56dp, card style):
     "Tips for better energy"
     "Understanding interaction risks"
 
-  Stack data exists: dynamic stack-aware prompts (read from user_stacks):
+  Stack data exists: dynamic stack-aware prompts (read from local stack provider / user_stacks_local sync state):
     e.g. "Analyze my Magnesium timing"
     e.g. "Is my Omega-3 safe with NSAIDs?"
 
@@ -963,7 +969,7 @@ Input	Rounded input, grey BG, send icon (brand color, active only when text pres
 
 7.3 — Quick Prompt Chips
   Horizontal scroll row above keyboard.
-  Context-aware from user_stacks. Generic if no stack.
+  Context-aware from local stack provider. Generic if no stack.
   Tap sends immediately — no confirm step.
 
 7.4 — AI Message Limit
@@ -983,6 +989,7 @@ Model: gemini-2.5-flash-lite.
 NOTE: Google AI free tier limits change frequently. Verify current limits before launch.
 Proxy is a Supabase Edge Function. API key server-side only. Never in app binary.
 Proxy receives: { messages: [...], system_prompt: string }.
+Edge Function must enforce rate limiting, input validation, and explicit request timeouts. Stable request/response behavior ships first; streaming is optional after the core scan/result flow is solid.
 Upgrade path: route complex queries to Pro later via model routing layer.
 
 7.7 — System Prompt Builder
@@ -1008,7 +1015,7 @@ Section 8 — My Stack Tab
 8.1 — Stack Summary Card
 Design
 Same teal gradient as Home Hero.
-70dp Rive score ring + grade label.
+70dp animated score ring + grade label.
 Headline: "[Low/Moderate/High] Interaction Risk".
 Subtext: "X products  ·  X interactions found".
 "View Alerts" button (white outlined): filters list to show only flagged items.
@@ -1029,7 +1036,7 @@ Swipe left	Delete — red BG, trash icon. Snackbar undo (5s timeout).
 Tap	Opens edit sheet: dosage, timing, supply count.
 
 8.4 — Empty Stack State
-  Rive illustration: empty pillbox.
+  Empty-state illustration: pillbox (static or lightly animated, but must respect Reduce Motion).
   "Your stack is empty." + "Add supplements to track interactions."
   CTA: "Scan a Product" navigates to Scan tab.
 
@@ -1085,6 +1092,7 @@ Immunosuppressants	drug_class_id: immunosuppressants
 Statins / Cholesterol	drug_class_id: statins
 
 Pregnancy, TTC, and Lactation are THREE separate conditions with distinct clinical risks. Do not merge them. Users may select more than one.
+Taxonomy loading rule: parse clinical_risk_taxonomy from reference_data once at app startup via a dedicated TaxonomyService/provider. In debug builds, assert that every UI chip ID exactly matches a taxonomy ID before rendering Profile or interaction-dependent UI.
 
 9.4 — Health Goals
 Goals map to user_goals_to_clusters.json in reference_data. Standard chips: Energy, Sleep, Immunity, Weight, Heart Health, Athletic Performance, Stress Relief.
@@ -1121,12 +1129,12 @@ export_manifest   — db_version, pipeline_version, generated_at, min_app_versio
                     Local SQLite export_manifest does NOT store the artifact checksum.
                     Checksum lives in top-level export_manifest.json from Supabase and is used for safe swap verification.
 
-App-side tables (added locally, never in pipeline export):
+user_data.db — local read/write DB created by the app and never replaced during OTA updates.
 product_detail_cache — dsld_id PK, detail_json TEXT, cached_at, source, detail_version.
 user_profile          — goals, conditions, drug_classes, allergies, age, sex.
 user_favorites        — dsld_id, added_at.
 user_scan_history     — dsld_id, scanned_at.
-user_stacks           — dsld_id, dosage, timing, supply_count, added_at.
+user_stacks_local     — dsld_id, dosage, timing, supply_count, added_at.
 
 10.2 — SQLite Queries
 Barcode Lookup
@@ -1169,7 +1177,7 @@ LIMIT 5;
 1.	Show product header instantly from products_core (SQLite).
 2.	Check product_detail_cache for dsld_id.
 3.	If cached: parse detail_json, check blob_version vs cached detail_version. If version mismatch, re-fetch.
-4.	If not cached + online: fetch {dsld_id}.json from Supabase -> save to product_detail_cache -> render.
+4.	If not cached + online: read `detail_blob_sha256`, derive the hashed detail payload path, fetch from Supabase, then save to product_detail_cache -> render. Fall back to active `detail_index.json` only if the row-level hash is missing.
 5.	If not cached + offline: show header only. "Detail unavailable offline" banner.
 Show shimmer skeleton for accordion cards while detail loads. Never block the hero section.
 
@@ -1187,7 +1195,12 @@ Skeleton detail: 5 shimmer rectangles (card-shaped, 56dp height each) stacked ve
 4.	If newer version available: download the new DB to a staging file in background. Never block the user.
 5.	Verify downloaded file checksum against remote export_manifest.json before swap.
 6.	Open the staged DB and perform a minimal integrity/readability check before promotion.
-7.	Atomically swap staged DB into place only after checksum + open/parse validation pass.
+7.	Atomically swap staged DB into place only after checksum + open/parse validation pass:
+    a. Close the active pharmaguide_core.db connection.
+    b. Rename the current DB to pharmaguide_core.db.bak.
+    c. Rename the staged validated DB into the live pharmaguide_core.db path.
+    d. Re-open the DB connection and run a smoke query.
+    e. Delete the .bak file only after the reopen succeeds.
 8.	If any step fails: keep current DB, log to Crashlytics/Sentry, and surface only a subtle retryable update state.
 9.	Show subtle "Update available" dot on Profile tab icon if pending.
 
@@ -1279,7 +1292,7 @@ State	Trigger	Design / Content	Dev Notes
 Slow detail load	Detail fetch > 3s	Shimmer skeleton on accordion cards. Hero shows from SQLite immediately.	shimmer package.
 Fetch timeout	No response > 8s	Dismiss shimmer. Toast: "Unable to fetch product details." Show header only. Retry button.	Retry fetches blob again.
 Damaged barcode	Partial scan	Camera continues. No feedback until clean read.	mobile_scanner handles.
-Not in SQLite	No UPC match	Try Supabase product search. If still not found: "Product Not Found" sheet.	—
+Not in SQLite	No UPC match	Show "Product Not Found" sheet and allow submission to pending_products. No remote product search in v1.	—
 Supabase fetch fails	Network error	Toast: "Unable to fetch product details." Show header from SQLite. Score from products_core still displays. Retry button.	—
 NOT_SCORED	verdict = NOT_SCORED	Show "Not Scored" badge + question mark icon. No ring animation. Accordion cards hidden with "Insufficient data" message.	Never show 0.
 PDF image	image_url ends .pdf	Show placeholder illustration (pill icon on light grey bg). Do not attempt to render PDF as image.	—
@@ -1328,27 +1341,31 @@ Phase 1 — Foundation (Week 1-2)
   flutter_native_splash setup with brand color + logo.
   App icon generation (adaptive icon for Android, standard for iOS).
   SQLite setup: drift (required). pharmaguide_core.db bundled with app for day 1.
-  App-side SQLite tables: product_detail_cache, user_profile, user_scan_history, user_stacks, user_favorites.
+  user_data.db created on first launch and never overwritten by DB updates.
+  App-side SQLite tables: product_detail_cache, user_profile, user_scan_history, user_stacks_local, user_favorites.
   Hive setup: guest_scan_count, chat_history, recent_searches, has_seen_score_explainer boxes.
   Supabase client: Auth providers (Google, Apple, Email, Anon).
   Riverpod 2.0+ with @riverpod generator. All providers established.
+  Local forms: use flutter_hooks + Form/validators (or one equivalent explicit pattern) for Profile and Stack edit flows.
   Parse ALL reference_data JSON at app startup. Hold in memory via singleton provider.
+  TaxonomyService validates clinical_risk_taxonomy and chip mappings at startup.
   ScoreFitCalculator written and unit-tested before UI work.
+  Parser smoke tests built from real exported fixtures: SAFE, BLOCKED/B0, NOT_SCORED, PDF image, interaction_summary.
   DB update manager written: staged download, checksum verification, rollback, hard min_app_version gate.
   Floating tab bar built (labels on all icons). All 5 tabs scaffold with state preservation.
-  Reusable widget library: PrimaryButton, OutlineButton, AppCard, ScoreRing (Rive with static fallback), ScoreBadge (WCAG colors), ShimmerCard, ProductImage (handles PDF + error), VerdictBanner (with icons).
+  Reusable widget library: PrimaryButton, OutlineButton, AppCard, ScoreRing (Flutter-native animation with static fallback), ScoreBadge (WCAG colors), ShimmerCard, ProductImage (handles PDF + error), VerdictBanner (with icons).
   Accessibility foundation: Semantics wrappers, Dynamic Type support verified, Reduce Motion checks.
   Analytics setup (Section 14) + Crashlytics/Sentry setup.
   Deep link routing setup (Section 15).
 
 Phase 2 — Core Scan Loop (Week 2-4)
 Budget 2 full weeks is optimistic. De-risk by prioritizing scan loop, B0 gate, and top-of-screen product rendering first.
-  Scan tab: camera, permission handling, Rive bracket (3 states, with static fallback).
+  Scan tab: camera, permission handling, animated scanner bracket (3 states, with static fallback).
   Barcode -> SQLite lookup. Handle UPC collisions. Handle NOT_SCORED.
   B0 Gate: if verdict = BLOCKED/UNSAFE, render Critical Warning screen (Section 6.4).
   Debounced/limited FTS search working (300ms debounce, LIMIT 50).
   ScoreFitCalculator.calculate() called after SQLite fetch + detail hydration.
-  Hero section: Rive score ring (650ms). Sticky. Handles NOT_SCORED, PDF image_url, percentile chip.
+  Hero section: animated score ring (650ms). Sticky. Handles NOT_SCORED, PDF image_url, percentile chip.
   Score Education overlay (Section 6.12). First-scan trigger + score ring tap.
   Verdict banner: maps verdict to colors + icons (Section 6.5.3).
   Condition Alert Banner: interaction_summary intersection with user conditions (Section 6.5.4).
@@ -1417,7 +1434,7 @@ Tab bar labels: scale up to a cap (max 1.3x) to prevent bar overflow.
 
 13.4 — Motion Sensitivity
 Check MediaQuery.disableAnimations (or MediaQuery.of(context).disableAnimations).
-When true: all Rive animations show static final frame, score ring shows final score immediately, stagger is disabled, bottom sheets appear instantly (no slide), accordion opens without animation.
+When true: all animations show static final state, score ring shows final score immediately, stagger is disabled, bottom sheets appear instantly (no slide), accordion opens without animation.
 Card 3 border highlight: use static colored border, not pulsing animation.
 
 13.5 — Touch Targets
@@ -1432,20 +1449,20 @@ Track via Firebase Analytics (or Mixpanel). Log locally when offline, flush on r
 
 Core Events:
 app_opened	{user_state: guest/free/premium, has_profile: bool}
-scan_completed	{dsld_id, verdict, score_100, source: camera/manual, had_profile: bool}
-scan_blocked	{dsld_id, blocking_reason, verdict}
-product_viewed	{dsld_id, had_cached_detail: bool, detail_load_ms: int}
-card_expanded	{dsld_id, card_name: string, card_number: 1-5}
-stack_added	{dsld_id, timing, supply_count}
-stack_removed	{dsld_id, days_in_stack: int}
-profile_updated	{fields_filled: [string], missing_fields: [string], condition_count: int}
-ai_message_sent	{had_stack_context: bool, prompt_type: custom/suggested}
+scan_completed	{user_state: guest/free/premium, dsld_id, verdict, score_100, source: camera/manual, had_profile: bool}
+scan_blocked	{user_state: guest/free/premium, dsld_id, blocking_reason, verdict}
+product_viewed	{user_state: guest/free/premium, dsld_id, had_cached_detail: bool, detail_load_ms: int}
+card_expanded	{user_state: guest/free/premium, dsld_id, card_name: string, card_number: 1-5}
+stack_added	{user_state: guest/free/premium, dsld_id, timing, supply_count}
+stack_removed	{user_state: guest/free/premium, dsld_id, days_in_stack: int}
+profile_updated	{user_state: guest/free/premium, fields_filled: [string], missing_fields: [string], condition_count: int}
+ai_message_sent	{user_state: guest/free/premium, had_stack_context: bool, prompt_type: custom/suggested}
 limit_hit	{type: scan/ai, user_state: guest/free}
 upgrade_shown	{trigger: scan_limit/ai_limit/profile_tease, user_state}
-search_performed	{query, result_count, selected_position: int?, filter_used: string?}
-share_tapped	{dsld_id, score_100, verdict}
-score_explainer_viewed	{trigger: first_scan/ring_tap}
-condition_alert_shown	{dsld_id, conditions_flagged: [string], highest_severity}
+search_performed	{user_state: guest/free/premium, query, result_count, selected_position: int?, filter_used: string?}
+share_tapped	{user_state: guest/free/premium, dsld_id, score_100, verdict}
+score_explainer_viewed	{user_state: guest/free/premium, trigger: first_scan/ring_tap}
+condition_alert_shown	{user_state: guest/free/premium, dsld_id, conditions_flagged: [string], highest_severity}
 
 Conversion Funnels to Track:
   Scan -> View Result -> Add to Stack (primary)
@@ -1474,7 +1491,11 @@ Future: generate image share card for richer social previews.
 15.3 — Implementation
 Use app_links package for Android, universal links for iOS.
 Register routes in GoRouter (or auto_route).
-On deep link received: check if dsld_id exists in local SQLite. If yes: render. If no: show "Product not found" with option to search.
+On deep link received:
+  Validate the route shape first. Malformed routes should redirect to Home with a generic "Unable to open link" message.
+  Validate dsld_id format before querying SQLite. Invalid IDs should not attempt a DB lookup.
+  If dsld_id exists in local SQLite: render.
+  If not: show "Product not found" with option to search.
 
 Section 16 — Performance Requirements
 

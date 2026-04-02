@@ -1,8 +1,13 @@
 # Flutter Data Contract v1
 
-> Version: 1.2.1 — 2026-03-30
+> Version: 1.2.2 — 2026-04-02
 > How the Flutter app reads data from the final DB at each screen level.
-> Updated: launch free-tier limits (20/5 signed-in, 10/3 guest), omega-3 scoring/export alignment, interaction_summary, dose_threshold_evaluation, condition/drug_class mapping
+> Updated: launch free-tier limits (20/5 signed-in, 10/3 guest), omega-3 scoring/export alignment, interaction_summary, dose_threshold_evaluation, condition/drug_class mapping, direct detail hash resolver, UTC usage reset policy, and stack sync tombstones
+
+App persistence layout for v1:
+- `pharmaguide_core.db` — bundled/read-only reference DB from pipeline export
+- `user_data.db` — local read/write DB for `product_detail_cache`, `user_profile`,
+  `user_scan_history`, `user_stacks_local`, and `user_favorites`
 
 ---
 
@@ -16,7 +21,11 @@ class ScanCardData {
   final String productName;
   final String brandName;
   final String? imageUrl;         // May be PDF — use placeholder if not a real image
+  final bool imageIsPdf;          // exported convenience flag
   final String? thumbnailKey;     // runtime cache key, not a device path
+  final String? detailBlobSha256; // primary hashed detail payload resolver
+  final Map<String, dynamic> interactionSummaryHint; // compact banner signal
+  final Map<String, String> decisionHighlights;      // positive/caution/trust hero copy
 
   // Status
   final String productStatus;     // active, discontinued, off_market
@@ -54,7 +63,8 @@ class ScanCardData {
 **SQL query:**
 
 ```sql
-SELECT dsld_id, product_name, brand_name, image_url, thumbnail_key,
+SELECT dsld_id, product_name, brand_name, image_url, image_is_pdf, thumbnail_key,
+       detail_blob_sha256, interaction_summary_hint, decision_highlights,
        product_status, discontinued_date, form_factor, supplement_type,
        score_quality_80, score_display_80, score_display_100_equivalent,
        score_100_equivalent, grade, verdict, safety_verdict,
@@ -182,7 +192,8 @@ class SynergyDetail {
 1. Show header instantly from products_core
 2. Check product_detail_cache for dsld_id
 3. If cached -> parse JSON -> render detail sections
-4. If not cached + online -> fetch from Supabase -> save to cache -> render
+4. If not cached + online -> read `detail_blob_sha256` from `products_core`, derive the hashed payload path, fetch from Supabase -> save to cache -> render
+5. If `detail_blob_sha256` is missing on an older export -> fall back to active `detail_index.json`
 5. If not cached + offline -> show header only, "Detail unavailable offline"
 ```
 
@@ -457,6 +468,7 @@ Client behavior:
 - execute FTS queries asynchronously (via drift streams/Futures) to prevent UI thread blocking
 - never materialize unbounded FTS results into Dart memory (always use `LIMIT 50`)
 - use virtualized rendering for result lists
+- implement latest-query-wins behavior so an older slower result can never overwrite a newer query in the UI
 
 ---
 
@@ -474,6 +486,9 @@ Client behavior:
 ---
 
 On the phone (always there, works offline)
+
+Reference data lives in `pharmaguide_core.db`. App-created offline/user state
+lives in `user_data.db`, which is never replaced during DB updates.
 
 Everything in pharmaguide_core.db — bundled with the app at install or  
  downloaded on first launch:
@@ -513,7 +528,7 @@ Everything in pharmaguide_core.db — bundled with the app at install or
 │ manifest │ │ update?" check │  
  └────────────────┴─────────────────────────────────┴─────────────────┘
 
-This is 61 columns x 783 products = ~0.9MB. Instant. No internet needed.
+This is 61 columns across the full `products_core` export (~180K products, roughly tens of MB on-device depending on release). Instant at runtime once bundled/installed. No internet needed.
 
 Fetched from Supabase (on-demand, cached after first view)
 
@@ -562,7 +577,7 @@ The detail blob — one JSON per product, fetched when the user taps into
 └────────────────────┴──────────────────────────┴────────────────────┘
 
 This is ~2-10KB per product. Fetched once, cached locally in  
- product_detail_cache.
+ `user_data.db.product_detail_cache`.
 
 Also from Supabase (user account stuff)
 
@@ -575,16 +590,20 @@ Also from Supabase (user account stuff)
  │ │ │ Supplement stack │
 │ user_stacks │ App ↔ Supabase │ (synced for │
 │ │ │ multi-device) │
-│ │ │ Has updated_at with │
-│ │ │ auto-update trigger │
-│ │ │ for CRUD conflict │
-│ │ │ resolution │  
+│ │ │ Last-write-wins with │
+│ │ │ tombstones (`deleted_at`) │
+│ │ │ and `client_updated_at` │
+│ │ │ as the conflict clock │
+│ │ │ for MVP │
  ├───────────────────────┼─────────────────┼─────────────────────────┤
 │ user_usage │ App ↔ Supabase │ Scan/AI limits (20 │
 │ │ │ scans/day, 5 AI/day) │
+│ │ │ reset on UTC day │
+│ │ │ boundaries │
 ├───────────────────────┼─────────────────┼─────────────────────────┤  
  │ pending_products │ App → Supabase │ "Product not found" │  
- │ │ │ submissions │
+ │ │ │ submissions with │
+ │ │ │ normalized UPC dedupe │
 ├───────────────────────┼─────────────────┼─────────────────────────┤  
  │ │ App → Edge │ │  
  │ AI Pharmacist │ Function → │ Chat responses │
@@ -740,6 +759,10 @@ TTC warnings are about fertility impact (e.g., high-dose vitamin A reducing
 fertility). Lactation warnings are about transfer through breast milk. The user
 can select one or more. The app should match against all selected conditions.
 
+Implementation recommendation: load `clinical_risk_taxonomy` once at startup via
+a dedicated `TaxonomyService`/provider and validate the app-side chip mappings
+in debug builds. Fail fast if the app IDs drift from the pipeline taxonomy.
+
 ### 9. Instant condition flagging on scan
 
 When a user scans a product, use `interaction_summary` from the detail blob
@@ -769,17 +792,15 @@ by `condition_id` matching the user's conditions.
 
 ### 10. Supabase Storage path structure
 
-The Flutter app fetches the core DB, a versioned `detail_index.json`, and hashed
-detail blob payloads from Supabase Storage.
+The Flutter app fetches the core DB and hashed detail blob payloads from
+Supabase Storage. `detail_index.json` remains a compatibility/audit artifact and
+fallback resolver for older exports.
 The version is determined by querying the `export_manifest` table for the row
 where `is_current = true`, then reading its `db_version` column.
 
 ```
 DB file:
   {SUPABASE_URL}/storage/v1/object/public/pharmaguide/v{version}/pharmaguide_core.db
-
-Detail index:
-  {SUPABASE_URL}/storage/v1/object/public/pharmaguide/v{version}/detail_index.json
 
 Detail blob payload:
   {SUPABASE_URL}/storage/v1/object/public/pharmaguide/shared/details/sha256/{blob_sha256[0:2]}/{blob_sha256}.json
@@ -798,8 +819,8 @@ DB update flow must be staged and verified:
 - perform a minimal SQLite open/readability check
 - atomically swap in only after verification passes
 - keep the previous DB on any failure
-  The app should also cache the `detail_index.json` for the active `db_version` and
-  resolve `dsld_id` to `blob_sha256` before fetching a detail payload.
+  The app should prefer `products_core.detail_blob_sha256` at runtime and only
+  fall back to the active `detail_index.json` if the hash is absent.
   `product_detail_cache` requires explicit cache policy:
 - release-version-aware invalidation
 - bounded size
@@ -809,8 +830,8 @@ DB update flow must be staged and verified:
 ### 11. `increment_usage` RPC
 
 Flutter calls this RPC after each successful scan or AI message to enforce
-server-side usage limits. It handles day rollover automatically (upserts
-based on `CURRENT_DATE`).
+server-side usage limits. It handles day rollover automatically using UTC day
+boundaries (`reset_day_utc`).
 
 ```dart
 // After a successful scan:
@@ -818,12 +839,12 @@ final result = await supabase.rpc('increment_usage', params: {
   'p_user_id': supabase.auth.currentUser!.id,
   'p_type': 'scan',  // or 'ai_message'
 }) as Map<String, dynamic>;
-// result = {scans_today: 3, ai_messages_today: 1, limit_exceeded: false}
+// result = {scans_today: 3, ai_messages_today: 1, limit_exceeded: false, reset_day_utc: '2026-04-02'}
 ```
 
 **Limits:** 20 scans/day, 5 AI messages/day for signed-in free users.
 Guest policy is app-side: 10 lifetime scans, 3 AI messages/day.
-**Return value:** `{scans_today, ai_messages_today, limit_exceeded}`.
+**Return value:** `{scans_today, ai_messages_today, limit_exceeded, reset_day_utc}`.
 When `limit_exceeded` is `true`, the app should show a paywall or "try again
 tomorrow" message. The RPC is `SECURITY DEFINER`, validates that the caller
 owns the `p_user_id`, and returns the existing counters without incrementing

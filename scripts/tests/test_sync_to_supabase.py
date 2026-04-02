@@ -108,7 +108,7 @@ def test_needs_update_false_when_same():
     from sync_to_supabase import needs_update
 
     local = {"db_version": "2026.03.27.5", "checksum": "sha256:new"}
-    remote = {"db_version": "2026.03.27.5", "checksum": "sha256:old"}
+    remote = {"db_version": "2026.03.27.5", "checksum": "sha256:new"}
     assert needs_update(local, remote) is False
 
 
@@ -118,6 +118,24 @@ def test_needs_update_true_when_no_remote():
 
     local = {"db_version": "2026.03.27.5", "checksum": "sha256:new"}
     assert needs_update(local, None) is True
+
+
+def test_needs_update_true_when_checksum_differs_same_version():
+    """needs_update returns True when checksum differs, even if db_version matches."""
+    from sync_to_supabase import needs_update
+
+    local = {"db_version": "2026.03.27.5", "checksum": "sha256:new"}
+    remote = {"db_version": "2026.03.27.5", "checksum": "sha256:old"}
+    assert needs_update(local, remote) is True
+
+
+def test_needs_update_true_when_forced():
+    """needs_update returns True when force is enabled."""
+    from sync_to_supabase import needs_update
+
+    local = {"db_version": "2026.03.27.5", "checksum": "sha256:new"}
+    remote = {"db_version": "2026.03.27.5", "checksum": "sha256:new"}
+    assert needs_update(local, remote, force=True) is True
 
 
 def test_collect_detail_blobs():

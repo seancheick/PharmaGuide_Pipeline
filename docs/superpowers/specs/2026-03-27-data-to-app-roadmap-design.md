@@ -1,7 +1,7 @@
 # PharmaGuide: Data Enrichment to Application Development Roadmap
 
-**Version:** 1.0.0
-**Date:** 2026-03-27
+**Version:** 1.0.1
+**Date:** 2026-04-02
 **Aligned with:** PharmaGuide Flutter MVP Spec v5.3 (Pipeline Contract Aligned)
 **Architecture:** Approach A — SQLite-Core + Supabase-Detail (Hybrid Offline+Online)
 
@@ -11,8 +11,8 @@
 
 PharmaGuide has a mature 3-stage data pipeline (Clean -> Enrich -> Score) producing:
 
-- `pharmaguide_core.db` (SQLite, 61 columns, ~180K products)
-- `detail_blobs/{dsld_id}.json` (local build output) plus `detail_index.json` for hashed remote detail fetch
+- `pharmaguide_core.db` (SQLite, 65 columns, ~180K products)
+- `detail_blobs/{dsld_id}.json` (local build output) plus `detail_index.json` for compatibility/audit; runtime can prefer `products_core.detail_blob_sha256`
 - `export_manifest.json` (version metadata)
 
 This roadmap covers the transition from data pipeline to production Flutter app via Supabase distribution.
@@ -107,7 +107,11 @@ CREATE TABLE user_stacks (
   dosage       text,
   timing       text,
   supply_count integer,
-  added_at     timestamptz DEFAULT now()
+  source_device_id text,
+  client_updated_at timestamptz,
+  deleted_at timestamptz,
+  added_at     timestamptz DEFAULT now(),
+  updated_at   timestamptz DEFAULT now()
 );
 
 CREATE TABLE user_usage (
@@ -115,31 +119,39 @@ CREATE TABLE user_usage (
   user_id           uuid REFERENCES auth.users NOT NULL,
   scans_today       integer DEFAULT 0,
   ai_messages_today integer DEFAULT 0,
-  reset_date        date DEFAULT CURRENT_DATE
+  reset_day_utc     date DEFAULT ((now() AT TIME ZONE 'UTC')::date)
 );
 
 CREATE TABLE pending_products (
-  id           uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-  user_id      uuid REFERENCES auth.users NOT NULL,
-  upc          text NOT NULL,
-  product_name text,
-  brand        text,
-  image_url    text,
-  status       text DEFAULT 'pending',
-  submitted_at timestamptz DEFAULT now()
+  id             uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id        uuid REFERENCES auth.users NOT NULL,
+  upc            text NOT NULL,
+  normalized_upc text,
+  product_name   text,
+  brand          text,
+  image_url      text,
+  submitter_note text,
+  status         text DEFAULT 'pending',
+  review_notes   text,
+  reviewed_at    timestamptz,
+  reviewed_by    text,
+  submitted_at   timestamptz DEFAULT now()
 );
 
 -- Indexes
 CREATE INDEX idx_user_stacks_user ON user_stacks(user_id);
 CREATE INDEX idx_user_usage_user ON user_usage(user_id);
-CREATE UNIQUE INDEX idx_user_usage_daily ON user_usage(user_id, reset_date);
+CREATE UNIQUE INDEX idx_user_usage_daily ON user_usage(user_id, reset_day_utc);
 CREATE INDEX idx_pending_products_user ON pending_products(user_id);
+CREATE UNIQUE INDEX idx_pending_products_user_normalized_upc_pending
+  ON pending_products(user_id, normalized_upc)
+  WHERE status = 'pending' AND normalized_upc IS NOT NULL;
 
 -- Partial index: only is_current=true rows (one row, queried every app launch)
 CREATE INDEX idx_export_manifest_current ON export_manifest(is_current) WHERE is_current = true;
 ```
 
-The unique index on `user_usage(user_id, reset_date)` prevents duplicate rows per day, which is critical for accurate scan/AI message limit enforcement. The partial index on `export_manifest(is_current)` keeps version checks fast as the table grows.
+The unique index on `user_usage(user_id, reset_day_utc)` prevents duplicate rows per UTC day, which is critical for accurate scan/AI message limit enforcement. The partial index on `export_manifest(is_current)` keeps version checks fast as the table grows.
 
 #### RLS Policies
 
@@ -169,8 +181,8 @@ CREATE POLICY "Users submit pending products" ON pending_products
 #### RPC Functions (2 total)
 
 ```sql
--- 1. Atomic manifest rotation: INSERT new row first, then UPDATE others.
--- Ensures there is always at least one current row (no window where zero are current).
+-- 1. Atomic manifest rotation.
+-- The SQL function owns the update/insert order, but callers treat it as one transaction.
 CREATE OR REPLACE FUNCTION rotate_manifest(
   p_db_version text,
   p_pipeline_version text,
@@ -200,7 +212,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
 
--- 2. Atomic usage increment with automatic day rollover.
+-- 2. Atomic usage increment with UTC day rollover.
 -- Flutter reads the returned object and blocks when limit_exceeded=true.
 CREATE OR REPLACE FUNCTION increment_usage(
   p_user_id uuid, p_type text  -- 'scan' or 'ai_message'
@@ -211,13 +223,13 @@ DECLARE
   v_ai integer := 0;
   v_exceeded boolean := false;
 BEGIN
-  INSERT INTO user_usage (user_id, scans_today, ai_messages_today, reset_date)
-  VALUES (p_user_id, 0, 0, CURRENT_DATE)
-  ON CONFLICT (user_id, reset_date) DO NOTHING;
+  INSERT INTO user_usage (user_id, scans_today, ai_messages_today, reset_day_utc)
+  VALUES (p_user_id, 0, 0, (now() AT TIME ZONE 'UTC')::date)
+  ON CONFLICT (user_id, reset_day_utc) DO NOTHING;
 
   SELECT * INTO v_usage
   FROM user_usage
-  WHERE user_id = p_user_id AND reset_date = CURRENT_DATE
+  WHERE user_id = p_user_id AND reset_day_utc = (now() AT TIME ZONE 'UTC')::date
   FOR UPDATE;
 
   IF p_type = 'scan' AND v_usage.scans_today >= 20 THEN
@@ -302,7 +314,7 @@ Why manual first: Still auditing data. Manual gives inspection control before pr
 **Layer 2 -- Supabase (Remote):**
 
 - Detail blobs: one JSON per product, fetched on first product view, cached locally in `product_detail_cache`
-- User data: Supabase Auth + `user_stacks` + `user_usage`
+- User data: Supabase Auth + `user_stacks` + `user_usage` + `pending_products`
 - AI proxy: Supabase Edge Function wrapping Gemini 2.5 Flash-Lite
 - DB version check: app reads `export_manifest` on launch, compares to Supabase
 
@@ -324,7 +336,8 @@ Product scan:
   1. Query products_core (local SQLite, async to prevent UI block) -- instant header + score
   2. Check product_detail_cache for dsld_id
   3. If cached + version matches: render from cache
-  4. If not cached + online: fetch {dsld_id}.json from Supabase -> cache -> render
+  4. If not cached + online: read `products_core.detail_blob_sha256`, derive the hashed detail path, fetch the payload from Supabase -> cache -> render
+  5. Fall back to versioned `detail_index.json` only if the row-level hash is missing
   5. If not cached + offline: show header only, "Detail unavailable offline" banner
 ```
 
@@ -366,15 +379,19 @@ CUI, CAS, PubChem, UNII are data integrity tools:
 - Available in detail blobs for future "Sources" or "Learn More" deep-dive screen
 - NOT displayed directly to consumers in MVP (too technical)
 
-### 4.3 Implementation Notes (From Spec v5.1)
+### 4.3 Implementation Notes (From Spec v5.3)
 
 - Export field is `notes` on both active and inactive ingredients, and `mechanism_of_harm` on harmful additive entries
-- The Flutter spec v5.1 references `reference_notes` but the actual detail blob field is `notes`. **The export wins** -- it's the frozen pipeline contract, validated by tests. The Flutter spec should be corrected to say `notes`, not the other way around. Do NOT add a `@JsonKey` rename in Flutter to paper over this -- that creates a hidden translation layer
+- The older Flutter spec referenced `reference_notes` in one place, but the actual detail blob field is `notes`. **The export wins** -- it's the frozen pipeline contract, validated by tests. Do NOT add a `@JsonKey` rename in Flutter to paper over this -- that creates a hidden translation layer
 - Warnings use sealed class hierarchy: `BannedSubstanceWarning`, `HarmfulAdditiveWarning`, `AllergenWarning`, `InteractionWarning`, `DrugInteractionWarning`, `DietaryWarning`, `StatusWarning`
 - `score_quality_80` can be NULL: every display path needs null guard, never show 0
 - Condition/drug chips MUST map exactly to `condition_id`/`drug_class_id` from pipeline taxonomy
 - Parse reference_data JSON ONCE at startup, hold in memory via singleton provider
 - Use drift (NOT raw sqflite) for compile-time type safety on medical data
+- Validate the clinical risk taxonomy at startup via a dedicated service/provider so condition and drug-class chips cannot silently drift from pipeline IDs.
+- Use a consistent local form-state strategy for Profile and Stack edit flows (`flutter_hooks` + `Form`/validators, or an equivalent explicit pattern). Do not let each screen invent its own form state management.
+- Search needs “latest query wins” behavior in addition to the 300ms debounce. A slower older query must never overwrite a newer result set in the UI.
+- Add parser smoke tests before UI work starts: one SAFE product, one BLOCKED/B0 product, one NOT_SCORED product, one PDF image URL, and one interaction_summary payload from real export fixtures.
 
 ---
 
@@ -400,7 +417,7 @@ One new file: `scripts/SUPABASE_SYNC_README.md`
 
 ### 5.3 Documents That Do NOT Need Changes
 
-- **PharmaGuide Flutter MVP Spec v5.1** -- Already complete and pipeline-contract-aligned
+- **PharmaGuide Flutter MVP Spec v5.3** -- Already complete and pipeline-contract-aligned
 - **SCORING_ENGINE_SPEC.md** -- Scoring logic unchanged by Supabase integration
 - **Data file schemas** -- Already documented in DATABASE_SCHEMA.md
 - **API audit tools** -- Unaffected by distribution layer
@@ -429,7 +446,6 @@ The spec already defines a 7-week Flutter build schedule. This roadmap's phases 
 
 ### Future Enhancements (Do Not Build Now)
 
-- **`--force` flag:** Re-push the same version after an audit fix (skip `needs_update` check). Easy to add when needed.
 - **Concurrent uploads:** `concurrent.futures.ThreadPoolExecutor` for >10K products. Sequential is fine for MVP.
 - **CI/CD pipeline:** GitHub Action on merge to main. Build after manual workflow is trusted.
 

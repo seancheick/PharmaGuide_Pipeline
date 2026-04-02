@@ -47,7 +47,7 @@ python scripts/sync_to_supabase.py <output_dir> --dry-run
 | Local File | Supabase Location |
 |-----------|-------------------|
 | `pharmaguide_core.db` | Storage: `pharmaguide/v{version}/pharmaguide_core.db` |
-| `detail_index.json` | Storage: `pharmaguide/v{version}/detail_index.json` |
+| `detail_index.json` | Storage: `pharmaguide/v{version}/detail_index.json` (compatibility/audit map; app can now prefer `products_core.detail_blob_sha256`) |
 | `detail_blobs/*.json` | Storage: `pharmaguide/shared/details/sha256/{blob_sha256[0:2]}/{blob_sha256}.json` |
 | `export_manifest.json` | PostgreSQL: `export_manifest` table (is_current=true) |
 
@@ -62,9 +62,11 @@ The script compares the local `export_manifest.json` to the current Supabase man
 The Flutter client should not promote a downloaded DB artifact just because it exists remotely.
 Required client behavior:
 - download the new DB to a staging path
+- use a native/background downloader for large DB artifacts so the OS can complete the transfer if the app is backgrounded
 - verify it against the remote `export_manifest.json` checksum
 - respect `min_app_version` as a hard compatibility gate
 - atomically swap in only after checksum + open/readability validation pass
+- never overwrite `user_data.db` or any app-local user tables during the swap
 - keep using the previous known-good DB if any step fails
 
 ## Supabase Schema
@@ -74,6 +76,16 @@ See `scripts/sql/supabase_schema.sql` for the complete schema including:
 - `user_stacks` (user supplement stacks)
 - `user_usage` (freemium scan/AI limits)
 - `pending_products` (user-submitted product requests)
+
+Current remote user-data contract notes:
+- `user_stacks` uses last-write-wins with tombstones for MVP (`deleted_at`, `client_updated_at`, `source_device_id`)
+- `user_usage` resets on UTC day boundaries via `reset_day_utc`
+- `pending_products` includes normalized UPC dedupe and review metadata
+
+Sync decision logic:
+- push when `db_version` changes
+- push when checksum changes even if `db_version` did not
+- use `--force` for controlled repushes
 - RLS policies and indexes
 
 ## Troubleshooting

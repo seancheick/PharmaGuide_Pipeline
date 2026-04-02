@@ -27,33 +27,41 @@ CREATE TABLE IF NOT EXISTS export_manifest (
 -- =============================================================================
 
 CREATE TABLE IF NOT EXISTS user_stacks (
-  id           uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-  user_id      uuid REFERENCES auth.users NOT NULL,
-  dsld_id      text NOT NULL,
-  dosage       text,
-  timing       text,
-  supply_count integer,
-  added_at     timestamptz DEFAULT now(),
-  updated_at   timestamptz DEFAULT now()
+  id                uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id           uuid REFERENCES auth.users NOT NULL,
+  dsld_id           text NOT NULL,
+  dosage            text,
+  timing            text,
+  supply_count      integer,
+  source_device_id  text,
+  client_updated_at timestamptz,
+  deleted_at        timestamptz,
+  added_at          timestamptz DEFAULT now(),
+  updated_at        timestamptz DEFAULT now()
 );
 
 CREATE TABLE IF NOT EXISTS user_usage (
-  id                uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-  user_id           uuid REFERENCES auth.users NOT NULL,
-  scans_today       integer DEFAULT 0 CHECK (scans_today >= 0),
-  ai_messages_today integer DEFAULT 0 CHECK (ai_messages_today >= 0),
-  reset_date        date DEFAULT CURRENT_DATE
+    id                uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id           uuid REFERENCES auth.users NOT NULL,
+    scans_today       integer DEFAULT 0 CHECK (scans_today >= 0),
+    ai_messages_today integer DEFAULT 0 CHECK (ai_messages_today >= 0),
+    reset_day_utc     date DEFAULT ((now() AT TIME ZONE 'UTC')::date)
 );
 
 CREATE TABLE IF NOT EXISTS pending_products (
-  id           uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-  user_id      uuid REFERENCES auth.users NOT NULL,
-  upc          text NOT NULL,
-  product_name text,
-  brand        text,
-  image_url    text,
-  status       text DEFAULT 'pending' CHECK (status IN ('pending', 'processing', 'approved', 'rejected', 'duplicate')),
-  submitted_at timestamptz DEFAULT now()
+  id             uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id        uuid REFERENCES auth.users NOT NULL,
+  upc            text NOT NULL,
+  normalized_upc text,
+  product_name   text,
+  brand          text,
+  image_url      text,
+  submitter_note text,
+  status         text DEFAULT 'pending' CHECK (status IN ('pending', 'processing', 'approved', 'rejected', 'duplicate')),
+  review_notes   text,
+  reviewed_at    timestamptz,
+  reviewed_by    text,
+  submitted_at   timestamptz DEFAULT now()
 );
 
 -- =============================================================================
@@ -61,11 +69,16 @@ CREATE TABLE IF NOT EXISTS pending_products (
 -- =============================================================================
 
 CREATE INDEX IF NOT EXISTS idx_user_stacks_user ON user_stacks(user_id);
-CREATE UNIQUE INDEX IF NOT EXISTS idx_user_stacks_user_dsld ON user_stacks(user_id, dsld_id);
+CREATE UNIQUE INDEX IF NOT EXISTS idx_user_stacks_user_dsld_active
+  ON user_stacks(user_id, dsld_id)
+  WHERE deleted_at IS NULL;
 CREATE INDEX IF NOT EXISTS idx_user_usage_user ON user_usage(user_id);
-CREATE UNIQUE INDEX IF NOT EXISTS idx_user_usage_daily ON user_usage(user_id, reset_date);
+CREATE UNIQUE INDEX IF NOT EXISTS idx_user_usage_daily ON user_usage(user_id, reset_day_utc);
 CREATE INDEX IF NOT EXISTS idx_pending_products_user ON pending_products(user_id);
 CREATE INDEX IF NOT EXISTS idx_pending_products_status ON pending_products(status) WHERE status = 'pending';
+CREATE UNIQUE INDEX IF NOT EXISTS idx_pending_products_user_normalized_upc_pending
+  ON pending_products(user_id, normalized_upc)
+  WHERE status = 'pending' AND normalized_upc IS NOT NULL;
 
 -- Partial unique index: enforces exactly one is_current=true row at any time.
 -- Prevents split-brain if rotate_manifest is called concurrently.
@@ -168,9 +181,10 @@ REVOKE EXECUTE ON FUNCTION rotate_manifest(text, text, text, text, integer, text
 REVOKE EXECUTE ON FUNCTION rotate_manifest(text, text, text, text, integer, text, timestamptz, text) FROM authenticated;
 GRANT EXECUTE ON FUNCTION rotate_manifest(text, text, text, text, integer, text, timestamptz, text) TO service_role;
 
--- 6b. Atomic usage increment with day rollover and server-side enforcement
+-- 6b. Atomic usage increment with UTC day rollover and server-side enforcement
 -- Flutter calls this once a scan/AI action is ready to be committed, before
 -- rendering an over-limit experience to the user.
+-- Daily freemium limits reset on UTC day boundaries. Surface that policy in the app.
 CREATE OR REPLACE FUNCTION increment_usage(
   p_user_id uuid,
   p_type text  -- 'scan' or 'ai_message'
@@ -182,6 +196,7 @@ DECLARE
   v_exceeded boolean := false;
   v_scan_limit constant integer := 20;
   v_ai_limit constant integer := 5;
+  v_reset_day_utc date := (now() AT TIME ZONE 'UTC')::date;
 BEGIN
   -- Guard: caller must own the user_id
   IF p_user_id IS DISTINCT FROM auth.uid() THEN
@@ -194,20 +209,20 @@ BEGIN
   END IF;
 
   -- Upsert with automatic day rollover
-  INSERT INTO user_usage (user_id, scans_today, ai_messages_today, reset_date)
+  INSERT INTO user_usage (user_id, scans_today, ai_messages_today, reset_day_utc)
   VALUES (
     p_user_id,
     0,
     0,
-    CURRENT_DATE
+    v_reset_day_utc
   )
-  ON CONFLICT (user_id, reset_date)
+  ON CONFLICT (user_id, reset_day_utc)
   DO NOTHING;
 
   SELECT *
   INTO v_usage
   FROM user_usage
-  WHERE user_id = p_user_id AND reset_date = CURRENT_DATE
+  WHERE user_id = p_user_id AND reset_day_utc = v_reset_day_utc
   FOR UPDATE;
 
   IF p_type = 'scan' AND v_usage.scans_today >= v_scan_limit THEN
@@ -232,7 +247,8 @@ BEGIN
   RETURN jsonb_build_object(
     'scans_today', v_scans,
     'ai_messages_today', v_ai,
-    'limit_exceeded', v_exceeded
+    'limit_exceeded', v_exceeded,
+    'reset_day_utc', v_reset_day_utc
   );
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
@@ -248,7 +264,8 @@ GRANT EXECUTE ON FUNCTION increment_usage(uuid, text) TO authenticated;
 -- Create via Supabase Dashboard or API:
 --   Bucket name: pharmaguide
 --   Public: true (read via anon key)
---   File size limit: 50MB (for the SQLite DB file) (free 50MB on Supabase)
+--   File size limit: choose a plan/limit that supports the real pharmaguide_core.db size.
+--   The historical 50MB note is no longer a safe assumption for the full export.
 --
 -- Folder structure:
 --   pharmaguide/v{version}/pharmaguide_core.db

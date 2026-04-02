@@ -73,8 +73,9 @@ def fetch_current_manifest(client):
 def insert_manifest(client, manifest_data):
     """Atomically insert a new manifest and mark previous as not current.
 
-    Uses the rotate_manifest RPC function to avoid a window where
-    no row has is_current=true (INSERT first, then UPDATE others).
+    Uses the rotate_manifest RPC function so manifest rotation stays inside a
+    single database transaction. The SQL function owns the exact update/insert
+    order; callers should treat it as atomic.
     """
     response = client.rpc("rotate_manifest", {
         "p_db_version": manifest_data["db_version"],

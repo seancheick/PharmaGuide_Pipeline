@@ -1,7 +1,7 @@
 # PharmaGuide Flutter App — Build Design
 
-**Version:** 1.0.0
-**Date:** 2026-03-29
+**Version:** 1.0.1
+**Date:** 2026-04-02
 **Source of truth:** PharmaGuide Flutter MVP Spec v5.3 (33 pages, frozen)
 **Repo:** PharmaGuide_ai (new repo, greenfield)
 **Builder:** Owner with Claude Code (new to Flutter)
@@ -14,11 +14,11 @@
 The PharmaGuide data pipeline (dsld_clean repo) is complete:
 
 - 3-stage pipeline: Clean -> Enrich -> Score -> Build -> Sync
-- 783 products synced to Supabase (3 brands: Emerald Labs, Nordic Naturals, Olly)
+- The current distribution architecture targets the full `products_core` export (~180K products in `pharmaguide_core.db`). Live Supabase seed counts may be smaller during staged rollout/testing.
 - Supabase v2.0.0 schema live: 4 tables, 2 RPCs, RLS, storage bucket
 - All data contracts documented and audited
 
-This design covers building the Flutter consumer app from scratch. The MVP spec v5.1 defines every screen, interaction, and data field. This document defines the build sequence and file structure.
+This design covers building the Flutter consumer app from scratch. The MVP spec v5.3 defines every screen, interaction, and data field. This document defines the build sequence and file structure.
 
 ---
 
@@ -31,7 +31,7 @@ This design covers building the Flutter consumer app from scratch. The MVP spec 
 
 **On-device scoring:** `score_fit_20` computed by ScoreFitCalculator from local health profile + reference_data. Never stored remotely.
 
-**Deviation from spec:** Rive animations deferred. Using simple Flutter AnimationController for score ring, scanner bracket, and success states. Rive assets can be dropped in later without code changes.
+**Animation implementation:** Ship Flutter-native animations first (`AnimationController`, implicit animations, AnimatedSwitcher). Rive assets are explicitly deferred until the core scan/result flow is stable. Any Rive references in older UX notes should be interpreted as motion intent, not an MVP library requirement.
 
 ---
 
@@ -184,19 +184,21 @@ dev_dependencies:
    - Code generation via `build_runner`
 5. **Bundle pharmaguide_core.db:** Copy from pipeline output to `assets/db/`. Load at app startup, copy to writable directory.
 6. **Reference data parsing:** Load 4 JSON tables from SQLite reference_data at startup. Hold in memory via `referenceDataProvider` singleton. Never re-parse per view.
-7. **Supabase client init (supabase_service.dart):**
+7. **Taxonomy validation service:** Load `clinical_risk_taxonomy` from `reference_data` at startup and validate that all condition/drug-class UI chips map exactly to pipeline IDs. Fail fast in debug builds if drift is detected.
+8. **Supabase client init (supabase_service.dart):**
    - Initialize with project URL + anon key
    - Auth providers: Google, Apple, Email
    - Auto-create anonymous session on first launch (no prompt)
-8. **Floating tab bar (floating_tab_bar.dart):** 5 tabs, frosted glass, scan button elevated, labels on active tab only
-9. **GoRouter setup:** 5 tab routes + placeholder screens
-10. **Reusable widgets:** PrimaryButton, OutlineButton, ScoreBadge, ShimmerCard, AppBottomSheet, ScoreRing (animated count-up, color by score)
-11. **ScoreFitCalculator (score_fit_calculator.dart):**
+9. **Floating tab bar (floating_tab_bar.dart):** 5 tabs, frosted glass, scan button elevated, labels on all tabs for discoverability and accessibility
+10. **GoRouter setup:** 5 tab routes + placeholder screens, plus deep-link validation. Malformed routes should redirect to Home with a generic error state instead of attempting invalid DB lookups.
+11. **Reusable widgets:** PrimaryButton, OutlineButton, ScoreBadge, ShimmerCard, AppBottomSheet, ScoreRing (animated count-up, color by score)
+12. **ScoreFitCalculator (score_fit_calculator.dart):**
     - Inputs: score_quality_80, breakdown, HealthProfile, reference_data
     - Outputs: FitScoreResult (scoreFit20, scoreCombined100, chips, missingFields)
     - Sub-scores: E1 dosage (0-7), E2a goal (0-2), E2b age (0-3), E2c medical (0-8)
     - Unit tested before any UI work
-12. **Hive setup:** guest_scan_count box (freemium), chat_history box
+13. **Hive setup:** guest_scan_count box (freemium), chat_history box
+14. **Parser smoke tests:** Add fixture-driven tests that parse a real `products_core` row, one `SAFE` detail blob, one `BLOCKED`/B0 detail blob, one `NOT_SCORED` row, one PDF image URL, and one interaction_summary payload before UI work starts.
 
 ### Testable outcome:
 
@@ -247,7 +249,8 @@ App opens on iPhone. 5 tabs navigate. Theme colors match spec. Breakpoint shows 
 
 6. **Detail blob loading (detail_blob_service.dart):**
    - Check product_detail_cache first
-   - If not cached + online: fetch versioned `detail_index.json`, resolve `dsld_id` to `blob_sha256`, then fetch the hashed detail payload from Supabase Storage
+   - If not cached + online: read `detail_blob_sha256` from `products_core`, derive the hashed detail payload path, then fetch from Supabase Storage
+   - Fall back to versioned `detail_index.json` only if `detail_blob_sha256` is absent on an older export
    - Cache in SQLite product_detail_cache
    - Show shimmer on accordion cards while loading
    - If offline: show header only, "Detail unavailable offline" banner
@@ -294,10 +297,12 @@ Scan any supplement barcode on your iPhone. See a real score with full clinical 
    - Tap to edit (bottom sheet: dosage, timing, supply count)
    - Empty state: illustration + "Scan a Product" CTA
    - **Write-first to local SQLite** (`user_stacks_local`), then sync to Supabase (`user_stacks`) for signed-in users. Local is the source of truth — Supabase is the sync target. This ensures offline stack editing works. Never build it Supabase-first.
+   - Remote stack sync semantics: last-write-wins using `client_updated_at`, with soft deletes represented by `deleted_at` tombstones. Preserve `source_device_id` for diagnostics.
 
 2. **Home tab (home_screen.dart):**
    - Header: greeting + connectivity status (offline = grey cloud icon)
    - Search bar: full-width, 48dp, FTS5 instant results from products_fts
+   - Search state must be latest-query-wins. A slower older search result must never overwrite a newer query in the UI.
    - Hero card state A (zero stack): onboarding gradient, "Scan First Product" CTA
    - Hero card state B (active): score ring, product count, interaction risk, "X meds scheduled"
    - Recent scans carousel: horizontal ListView, 140dp cards, score badge, PDF image placeholder
@@ -309,13 +314,14 @@ Scan any supplement barcode on your iPhone. See a real score with full clinical 
    - SQLite always works offline
    - Scan works offline (products_core is local)
    - Detail blobs + AI chat require internet
+   - Signed-in local data remains available offline from `user_data.db`: stack, favorites, scan history, and health profile. Supabase is sync target, not runtime dependency.
 
 4. **DB version update (db_version_checker.dart):**
    - App launch: read local export_manifest
    - If online: check Supabase export_manifest (is_current=true)
    - If newer + min_app_version satisfied: use a background downloader package to fetch the ~90MB+ `.db` file, ensuring the OS doesn't kill it.
    - Verify the downloaded file against remote `checksum` before swap-in
-   - Swap in when complete via atomic swap: 1) Close active DB connection. 2) Rename old `pharmaguide_core.db` to `.bak`. 3) Rename new staging DB to `pharmaguide_core.db`. 4) Re-open DB connection. 5) Delete `.bak`. Never block the user.
+   - Swap in when complete via atomic swap: 1) Close active DB connection. 2) Rename old `pharmaguide_core.db` to `.bak`. 3) Rename new staging DB to `pharmaguide_core.db`. 4) Re-open DB connection. 5) Delete `.bak`. Never block the user. Never overwrite `user_data.db`.
    - If download fails: continue with current DB silently
    - **Must be tested explicitly:** version check must not block main thread, must handle network failure gracefully, must not corrupt the active DB during swap.
 
@@ -335,7 +341,7 @@ Full home screen, stack management, search works instantly, offline mode shows a
    - TypeScript Edge Function wrapping Gemini 2.5 Flash-Lite
    - Receives: `{ messages: [...], system_prompt: string }`
    - API key server-side only (never in app binary)
-   - Implement strict rate limiting and input validation to prevent abuse and control token costs.
+   - Implement strict rate limiting, input validation, and request timeout handling to prevent abuse and control token costs.
    - NOTE: Verify Gemini free tier limits before launch (~1000 RPD / 15 RPM as of March 2026)
 
 2. **AI chat screen (chat_screen.dart):**
@@ -368,7 +374,7 @@ Full home screen, stack management, search works instantly, offline mode shows a
      - Medication chips: 9 drug classes with EXACT drug_class_id mapping
      - Health goal chips: from user_goals_to_clusters reference data
    - Settings: notifications toggle, theme (light/dark/system), help, privacy policy, app version
-   - State Management: Use `flutter_hooks` (e.g., `useTextEditingController`) or `Form` with `GlobalKey` alongside Riverpod for local form state validation.
+   - State Management: Use `flutter_hooks` (e.g., `useTextEditingController`) or `Form` with `GlobalKey` alongside Riverpod for local form state validation. Do not let profile/stack forms invent their own patterns screen by screen.
    - All health data stored in LOCAL SQLite user_profile only. Never synced to Supabase in MVP.
 
 ### Testable outcome:
@@ -387,7 +393,7 @@ Chat with AI pharmacist about your supplements. Set up health profile with condi
    - Slow detail load (>3s): shimmer on cards, hero from SQLite
    - Fetch timeout (>8s): dismiss shimmer, toast "Unable to fetch product details"
    - Damaged barcode: camera continues, no feedback until clean read
-   - Not in SQLite: try Supabase, then "Product Not Found" sheet
+   - Not in SQLite: show "Product Not Found" sheet and offer submission to `pending_products`. No remote product search in v1.
    - Supabase fetch fails: toast, show header from SQLite
    - NOT_SCORED: "Not Scored" badge, no ring animation, hide accordion cards with "Insufficient data" but still display basic product hero info.
    - PDF image_url: Explicitly check string extension _before_ passing to `CachedNetworkImage` to avoid internal crash. Show placeholder illustration.
@@ -445,7 +451,7 @@ These are non-negotiable and must be enforced in every phase:
 Before Phase 2 scan testing can begin:
 
 - Supabase project live with v2.0.0 schema applied
-- At least one export synced (783 products currently live)
+- At least one export synced (staging/live count may vary; the app architecture targets the full `products_core` export scale)
 - Flutter app can read export_manifest via anon key
 - Flutter app can download a detail blob from Storage
 
@@ -454,7 +460,7 @@ These are already satisfied — Supabase is live with data.
 **Storage URL patterns for Flutter:**
 
 - DB file: `https://omayamxacvacrnvdvzhr.supabase.co/storage/v1/object/public/pharmaguide/v{version}/pharmaguide_core.db`
-- Detail index: `https://omayamxacvacrnvdvzhr.supabase.co/storage/v1/object/public/pharmaguide/v{version}/detail_index.json`
+- Detail index (fallback / audit): `https://omayamxacvacrnvdvzhr.supabase.co/storage/v1/object/public/pharmaguide/v{version}/detail_index.json`
 - Detail blob payload: `https://omayamxacvacrnvdvzhr.supabase.co/storage/v1/object/public/pharmaguide/shared/details/sha256/{blob_sha256[0:2]}/{blob_sha256}.json`
 - Get `version` and `checksum` from: `export_manifest` table WHERE `is_current = true`
 
@@ -467,6 +473,6 @@ The Flutter app consumes data defined in these pipeline repo docs:
 - `scripts/FINAL_EXPORT_SCHEMA_V1.md` — SQLite schema + detail blob structure
 - `scripts/FLUTTER_DATA_CONTRACT_V1.md` — Screen-by-screen data mapping
 - `scripts/sql/supabase_schema.sql` — Supabase tables, RPCs, RLS
-- `PharmaGuide_Flutter_MVP_Spec_v5_1.pdf` — Complete UI/UX specification
+- `scripts/PharmaGuide Flutter MVP Dev.md` — Complete UI/UX specification (v5.3)
 
-The pipeline export field `notes` (not `reference_notes`) is the correct field name for ingredient/additive detail text. The Flutter spec v5.1 references `reference_notes` in one place — use `notes` to match the actual export.
+The pipeline export field `notes` (not `reference_notes`) is the correct field name for ingredient/additive detail text. Use `notes` to match the actual export.

@@ -69,16 +69,22 @@ def load_detail_index(build_dir):
         return json.load(f)
 
 
-def needs_update(local_manifest, remote_manifest):
+def needs_update(local_manifest, remote_manifest, force=False):
     """Determine if Supabase needs updating.
 
     Returns True if:
     - remote_manifest is None (first push ever)
     - db_version differs
+    - checksum differs
+    - force is explicitly enabled
     """
+    if force:
+        return True
     if remote_manifest is None:
         return True
     if local_manifest["db_version"] != remote_manifest["db_version"]:
+        return True
+    if local_manifest.get("checksum") != remote_manifest.get("checksum"):
         return True
     return False
 
@@ -445,6 +451,7 @@ def validate_build_output(build_dir, manifest):
 def sync(
     build_dir,
     dry_run=False,
+    force=False,
     max_workers=DEFAULT_MAX_WORKERS,
     retry_count=DEFAULT_UPLOAD_RETRIES,
     retry_base_delay=DEFAULT_RETRY_BASE_DELAY,
@@ -493,7 +500,7 @@ def sync(
     else:
         print("  No remote version found (first push)")
 
-    if not needs_update(local, remote):
+    if not needs_update(local, remote, force=force):
         print("Already up to date. Nothing to do.")
         return {"status": "up_to_date", "version": version}
 
@@ -618,6 +625,7 @@ def parse_args(argv=None):
     )
     parser.add_argument("build_dir", help="Build output directory containing manifest, DB, and detail_blobs")
     parser.add_argument("--dry-run", action="store_true", help="Show what would be uploaded without uploading")
+    parser.add_argument("--force", action="store_true", help="Upload and rotate manifest even if version/checksum match")
     parser.add_argument("--max-workers", type=int, default=DEFAULT_MAX_WORKERS,
                         help=f"Max concurrent detail-blob uploads (default: {DEFAULT_MAX_WORKERS})")
     parser.add_argument("--retry-count", type=int, default=DEFAULT_UPLOAD_RETRIES,
@@ -638,6 +646,7 @@ def main(argv=None):
         result = sync(
             args.build_dir,
             dry_run=args.dry_run,
+            force=args.force,
             max_workers=args.max_workers,
             retry_count=args.retry_count,
             retry_base_delay=args.retry_base_delay,

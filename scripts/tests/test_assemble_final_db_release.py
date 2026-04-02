@@ -12,7 +12,7 @@ if _scripts_dir not in sys.path:
 
 
 def _write_pair_output(root: Path, name: str, dsld_id: str, product_name: str):
-    from build_final_db import SCHEMA_SQL
+    from build_final_db import CORE_COLUMN_COUNT, SCHEMA_SQL
 
     pair_dir = root / name
     pair_dir.mkdir(parents=True, exist_ok=True)
@@ -24,9 +24,9 @@ def _write_pair_output(root: Path, name: str, dsld_id: str, product_name: str):
     try:
         conn.executescript(SCHEMA_SQL)
         conn.execute(
-            "INSERT INTO products_core VALUES ({})".format(",".join(["?"] * 61)),
+            "INSERT INTO products_core VALUES ({})".format(",".join(["?"] * CORE_COLUMN_COUNT)),
             (
-                dsld_id, product_name, "Brand", None, None, None,
+                dsld_id, product_name, "Brand", None, None, 0, None, None, '{"has_any": false, "highest_severity": "", "condition_ids": [], "drug_class_ids": []}', '{"positive": "", "caution": "", "trust": ""}',
                 "active", None, "capsule", "targeted",
                 70.0, "70/80", "88/100", 88.0, "Good", "SAFE", "SAFE", 1.0,
                 20.0, 25.0, 20.0, 30.0, 15.0, 20.0, 4.0, 5.0,
