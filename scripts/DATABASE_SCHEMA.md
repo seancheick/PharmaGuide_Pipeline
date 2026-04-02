@@ -121,31 +121,48 @@ Primary key: `allergens` (array)
 ---
 
 ### 3. backed_clinical_studies.json
-**Purpose:** `evidence_scoring` | **Entries:** 177
+**Purpose:** `evidence_scoring` | **Entries:** 197
 
 Primary key: `backed_clinical_studies` (array)
 
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
-| `id` | string | YES | Unique ID (e.g., `CS_VITAMIN_D`) |
+| `id` | string | YES | Unique ID. Prefix: `INGR_` (ingredient-human), `BRAND_` (branded-rct), `PRECLIN_` (preclinical) |
 | `standard_name` | string | YES | Canonical ingredient name |
-| `aliases` | string[] | YES | Alternative names |
-| `category` | string | YES | Ingredient category |
+| `aliases` | string[] | YES | Alternative names for matching |
+| `category` | string | YES | IQM category enum (vitamins, minerals, herbs, amino_acids, probiotics, etc.) |
 | `evidence_level` | string | YES | Evidence class: `ingredient-human`, `branded-rct`, `product-human`, `strain-clinical`, `preclinical` |
-| `study_type` | string | YES | Study design type |
-| `published_studies` | string[] | YES | Evidence mix tags such as `RCT`, `meta-analysis`, `systematic_review`, `brand` |
-| `score_contribution` | string | YES | Scoring tier label such as `tier_1`, `tier_2`, `tier_3` |
-| `key_endpoints` | string[] | YES | Primary measured outcomes |
+| `study_type` | string | YES | Study design: `systematic_review_meta`, `rct_multiple`, `rct_single`, `clinical_strain`, `observational`, `animal_study`, `in_vitro` |
+| `published_studies` | string[] | YES | Human-readable evidence mix tags (e.g. `["RCT"]`, `["systematic review", "meta-analysis"]`) |
+| `published_studies_count` | int | NO | Numeric study-count field used for scoring depth bonus when a trustworthy count is available |
+| `published_rct_count` | int | NO | Curated count of published randomized human trials when known |
+| `published_meta_review_count` | int | NO | Curated count of published systematic reviews / meta-analyses when known |
+| `registry_completed_trials_count` | int | NO | ClinicalTrials.gov completed-trial count captured by discovery/enrichment tooling |
+| `score_contribution` | string | YES | Scoring tier: `tier_1` (≥3.0 pts), `tier_2` (≥1.5 pts), `tier_3` (<1.5 pts) |
+| `key_endpoints` | string[] | YES | Primary measured outcomes with PMID citations (e.g., `"Reduced LDL by 15% (PMID: 12345678)"`) |
 | `health_goals_supported` | string[] | YES | Mapped health goals |
-| `notable_studies` | string | NO | Key study citations |
-| `references_structured` | object[] | NO | PubMed-backed structured citations with PMID, DOI, publication types, MeSH terms, and verification metadata. Curated non-PubMed references are also allowed for nutrient fact sheets or formulary/regulatory records when PubMed is not the right anchor |
-| `notes` | string | NO | Additional context |
+| `primary_outcome` | string | NO | Primary health outcome category |
+| `endpoint_relevance_tags` | string[] | NO | Coarse operator-facing endpoint tags derived from trial outcome text or curated manually |
+| `effect_direction` | string | YES | 5-tier classification: `positive_strong`, `positive_weak`, `mixed`, `null`, `negative` |
+| `effect_direction_confidence` | string | NO | Auditability label for effect-direction certainty (`high`, `medium`, `low`) |
+| `effect_direction_rationale` | string | NO | Short evidence rationale supporting the current `effect_direction` classification |
+| `total_enrollment` | int | NO | Largest trial enrollment from ClinicalTrials.gov |
+| `notable_studies` | string | NO | Key study citations with NCT IDs and enrollment |
+| `references_structured` | object[] | NO | PubMed-backed structured citations with PMID, DOI, publication types, MeSH terms, and verification metadata. Also accepts ClinicalTrials.gov and ChEMBL references |
+| `notes` | string | NO | Clinical context — auto-populated for discovered entries, manually curated for legacy |
 | `last_updated` | string | NO | ISO date |
 | `exclude_aliases` | string[] | NO | Explicitly denied aliases for matching safety |
 
 Clinical evidence notes:
-- `references_structured` is the normalized evidence layer. PubMed is the default evidence source, but curated non-PubMed refs are allowed when a nutrient, formulary, or regulatory source is the correct anchor.
-- `study_type` should use repo-native buckets such as `rct_single`, `rct_multiple`, `systematic_review_meta`, `observational`, `clinical_strain`, `animal_study`, and `in_vitro`.
+- All 197 entries have PMID-backed `key_endpoints` — no empty endpoints remain.
+- `references_structured` supports three reference types: `clinical_trial` (NCT ID), `pubmed` (PMID/DOI), and `chembl` (ChEMBL ID + max_phase).
+- `effect_direction` is classified for all entries: 128 positive_strong, 40 positive_weak, 25 mixed, 4 null.
+- `published_studies_count` is the dedicated numeric field for Section C depth bonus. Entries without a reliable count omit it; scoring does not infer counts from the human-readable `published_studies` tags.
+- `registry_completed_trials_count` is discovery/enrichment metadata, not a substitute for published study counts. Keep it separate from `published_studies_count`.
+- `effect_direction_rationale`, `effect_direction_confidence`, and `endpoint_relevance_tags` are auditability fields. They improve reviewability and operator trust; they are not direct scoring inputs in the current model.
+- Auto-discovery (`discover_clinical_evidence.py discover --apply`) now auto-populates `key_endpoints` from ClinicalTrials.gov primary outcome measures with PubMed PMID cross-references via E-utilities.
+- `study_type` should use repo-native buckets: `rct_single`, `rct_multiple`, `systematic_review_meta`, `observational`, `clinical_strain`, `animal_study`, `in_vitro`.
+- `score_contribution` tier is computed from `study_base_points(study_type) * evidence_multiplier(evidence_level)`: tier_1 ≥ 3.0, tier_2 ≥ 1.5, tier_3 < 1.5.
 
 ---
 
@@ -169,7 +186,7 @@ Primary keys: `allowlist` (array), `denylist` (array)
 ---
 
 ### 5. banned_recalled_ingredients.json
-**Purpose:** `safety_disqualification_and_regulatory_compliance` | **Entries:** 139 | **Schema:** 5.0.0
+**Purpose:** `safety_disqualification_and_regulatory_compliance` | **Entries:** 143 | **Schema:** 5.0.0
 
 Primary key: `ingredients` (array)
 
@@ -300,7 +317,7 @@ Used to detect and penalize vague supplement labeling (e.g., "proprietary blend"
 ---
 
 ### 14. harmful_additives.json
-**Purpose:** `penalty_scoring` | **Entries:** 107 | **Schema:** 5.1.0
+**Purpose:** `penalty_scoring` | **Entries:** 115 | **Schema:** 5.1.0
 
 Primary key: `harmful_additives` (array)
 
@@ -465,7 +482,7 @@ Documents schema migration history. Contains counts, alias collision resolutions
 ---
 
 ### 23. other_ingredients.json
-**Purpose:** `inactive_ingredient_classification` | **Entries:** 656
+**Purpose:** `inactive_ingredient_classification` | **Entries:** 662
 
 Primary key: `other_ingredients` (array)
 

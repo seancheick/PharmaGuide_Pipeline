@@ -1,11 +1,12 @@
 {
   "_documentation": {
-    "version": "3.3.0",
+    "version": "3.4.0",
     "description": "PharmaGuide scoring configuration — modular category bonus architecture",
     "total_points": "80 calculated server-side (A+B+C+D), 20 fit score computed on device",
     "last_updated": "2026-02-26",
     "author": "PharmaGuide Team",
     "changelog": [
+      "3.4.0: Section C evidence scoring overhaul — Top-N diminishing returns aggregation (configurable weights, default [1.0, 0.5, 0.25]) to prevent multivitamin inflation. Added effect_direction multipliers (positive_strong/positive_weak/mixed/null/negative) to distinguish well-studied-effective from well-studied-ineffective.",
       "3.3.0: Moved Section E (EPA/DHA dose adequacy) into Ingredient Quality as omega3_dose_bonus category bonus. Added category_bonus_pool.max_contribution=5 cap to prevent bonus stacking. Semantic naming convention: compute_*_score(), compute_*_bonus(), compute_*_penalty().",
       "3.2.0: Added Section E dose adequacy (EPA+DHA, max 2.0 pts). Bands anchored to EFSA AI 250 mg, FDA QHC 500 mg, AHA CVD 1 g, EFSA TG claim 2 g, AHA/ACC Rx 4 g. PRESCRIPTION_DOSE_OMEGA3 flag at ≥4000 mg/day. A1/A2 parent-total dedup via is_parent_total field.",
       "3.1.1: B1 cap raised from 5 to 8, B1 additive_id deduplication, all subsection caps now config-driven",
@@ -143,16 +144,46 @@
       "_applicable": "Products where ingredient_quality_data contains ingredients with canonical_id 'epa', 'dha', or 'epa_dha' and a usable quantity field.",
       "_band_lookup": "Uses per_day_mid = (min_serving/day + max_serving/day) / 2 x EPA+DHA mg per unit. Highest matching threshold wins.",
       "bands": [
-        {"min_mg_day": 4000, "score": 2.0, "label": "prescription_dose",   "flag": "PRESCRIPTION_DOSE_OMEGA3"},
-        {"min_mg_day": 2000, "score": 2.0, "label": "high_clinical",       "flag": null},
-        {"min_mg_day": 1000, "score": 1.5, "label": "aha_cvd",             "flag": null},
-        {"min_mg_day":  500, "score": 1.0, "label": "general_health",      "flag": null},
-        {"min_mg_day":  250, "score": 0.5, "label": "efsa_ai_zone",        "flag": null},
-        {"min_mg_day":    0, "score": 0.0, "label": "below_efsa_ai",       "flag": null}
+        {
+          "min_mg_day": 4000,
+          "score": 2.0,
+          "label": "prescription_dose",
+          "flag": "PRESCRIPTION_DOSE_OMEGA3"
+        },
+        {
+          "min_mg_day": 2000,
+          "score": 2.0,
+          "label": "high_clinical",
+          "flag": null
+        },
+        {
+          "min_mg_day": 1000,
+          "score": 1.5,
+          "label": "aha_cvd",
+          "flag": null
+        },
+        {
+          "min_mg_day": 500,
+          "score": 1.0,
+          "label": "general_health",
+          "flag": null
+        },
+        {
+          "min_mg_day": 250,
+          "score": 0.5,
+          "label": "efsa_ai_zone",
+          "flag": null
+        },
+        {
+          "min_mg_day": 0,
+          "score": 0.0,
+          "label": "below_efsa_ai",
+          "flag": null
+        }
       ],
       "_band_sources": {
-        "250":  "EFSA (2012) AI for EPA+DHA: 250 mg/day general population",
-        "500":  "FDA qualified health claim minimum for combined EPA+DHA",
+        "250": "EFSA (2012) AI for EPA+DHA: 250 mg/day general population",
+        "500": "FDA qualified health claim minimum for combined EPA+DHA",
         "1000": "AHA recommendation for CVD patients: ~1 g/day EPA+DHA",
         "2000": "EFSA approved health claim for blood triglycerides: >= 2 g/day",
         "4000": "AHA/ACC prescription dose for hypertriglyceridemia"
@@ -258,7 +289,51 @@
     },
     "sub_clinical_dose_guard_multiplier": 0.25,
     "supra_clinical_multiple": 3.0,
-    "_canonical_key": "entry.standard_name"
+    "_canonical_key": "entry.standard_name",
+    "top_n_weights": [
+      1.0,
+      0.5,
+      0.25
+    ],
+    "_top_n_weights_doc": "Diminishing returns: best ingredient at 100%, 2nd at 50%, 3rd at 25%. Prevents multivitamin inflation.",
+    "effect_direction_multipliers": {
+      "positive_strong": 1.0,
+      "positive_weak": 0.85,
+      "mixed": 0.6,
+      "null": 0.25,
+      "negative": 0.0
+    },
+    "_effect_direction_doc": "Scales evidence score by whether studies show benefit. Entries without effect_direction default to positive_strong (1.0x) for backward compatibility.",
+    "enrollment_quality_bands": [
+      [
+        50,
+        0.6
+      ],
+      [
+        200,
+        0.8
+      ],
+      [
+        500,
+        1.0
+      ],
+      [
+        1000,
+        1.1
+      ]
+    ],
+    "_enrollment_quality_doc": "Bands: [threshold, multiplier]. <50 -> 0.6x, 50-199 -> 0.8x, 200-499 -> 1.0x, 500-999 -> 1.1x, >=1000 -> 1.2x (default). Only applies to RCTs and meta-analyses, not observational or preclinical.",
+    "depth_bonus_bands": [
+      [
+        20,
+        0.25
+      ],
+      [
+        40,
+        0.5
+      ]
+    ],
+    "_depth_bonus_doc": "Discrete bands: [threshold, bonus]. 0-19 trials +0.0, 20-39 +0.25, 40+ +0.5. Uses published_studies count from matched entry. Added after top-N aggregation, before section cap."
   },
   "section_D_brand_trust": {
     "_max": 5,
@@ -275,16 +350,46 @@
     "_applicable": "Products where ingredient_quality_data contains ingredients with canonical_id 'epa', 'dha', or 'epa_dha' and a usable quantity field.",
     "_band_lookup": "Uses per_day_mid = (min_serving/day + max_serving/day) / 2 × EPA+DHA mg per unit. Highest matching threshold wins.",
     "bands": [
-      {"min_mg_day": 4000, "score": 2.0, "label": "prescription_dose",   "flag": "PRESCRIPTION_DOSE_OMEGA3"},
-      {"min_mg_day": 2000, "score": 2.0, "label": "high_clinical",       "flag": null},
-      {"min_mg_day": 1000, "score": 1.5, "label": "aha_cvd",             "flag": null},
-      {"min_mg_day":  500, "score": 1.0, "label": "general_health",      "flag": null},
-      {"min_mg_day":  250, "score": 0.5, "label": "efsa_ai_zone",        "flag": null},
-      {"min_mg_day":    0, "score": 0.0, "label": "below_efsa_ai",       "flag": null}
+      {
+        "min_mg_day": 4000,
+        "score": 2.0,
+        "label": "prescription_dose",
+        "flag": "PRESCRIPTION_DOSE_OMEGA3"
+      },
+      {
+        "min_mg_day": 2000,
+        "score": 2.0,
+        "label": "high_clinical",
+        "flag": null
+      },
+      {
+        "min_mg_day": 1000,
+        "score": 1.5,
+        "label": "aha_cvd",
+        "flag": null
+      },
+      {
+        "min_mg_day": 500,
+        "score": 1.0,
+        "label": "general_health",
+        "flag": null
+      },
+      {
+        "min_mg_day": 250,
+        "score": 0.5,
+        "label": "efsa_ai_zone",
+        "flag": null
+      },
+      {
+        "min_mg_day": 0,
+        "score": 0.0,
+        "label": "below_efsa_ai",
+        "flag": null
+      }
     ],
     "_band_sources": {
-      "250":  "EFSA (2012) AI for EPA+DHA: 250 mg/day general population",
-      "500":  "FDA qualified health claim minimum for combined EPA+DHA",
+      "250": "EFSA (2012) AI for EPA+DHA: 250 mg/day general population",
+      "500": "FDA qualified health claim minimum for combined EPA+DHA",
       "1000": "AHA recommendation for CVD patients: ~1 g/day EPA+DHA",
       "2000": "EFSA approved health claim for blood triglycerides: ≥2 g/day",
       "4000": "AHA/ACC prescription dose for hypertriglyceridemia (Lovaza/Vascepa); AF risk threshold confirmed in REDUCE-IT, STRENGTH, ASCEND, VITAL trials"

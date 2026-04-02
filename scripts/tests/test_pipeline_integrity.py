@@ -29,7 +29,7 @@ from constants import DATA_DIR, SCRIPTS_DIR
 # Shared helpers
 # ---------------------------------------------------------------------------
 
-REQUIRED_SCHEMA_VERSIONS = {"5.0.0", "5.1.0"}
+REQUIRED_SCHEMA_VERSIONS = {"5.0.0", "5.1.0", "5.2.0", "5.3.0"}
 
 # Required fields inside every _metadata block
 REQUIRED_METADATA_FIELDS = ("description", "purpose", "schema_version")
@@ -98,6 +98,17 @@ def _collect_all_scored_products() -> list[dict]:
 def _all_database_files() -> list[Path]:
     """Return all .json files in DATA_DIR, sorted by name."""
     return sorted(DATA_DIR.glob("*.json"))
+
+
+def _clinical_entry_map() -> dict[str, dict]:
+    """Return backed_clinical_studies entries keyed by id."""
+    data = _load_json(DATA_DIR / "backed_clinical_studies.json") or {}
+    entries = data.get("backed_clinical_studies", [])
+    return {
+        entry["id"]: entry
+        for entry in entries
+        if isinstance(entry, dict) and entry.get("id")
+    }
 
 
 # ===================================================================
@@ -394,6 +405,57 @@ class TestPipelineDataFlow:
         assert len(versions) == 1, (
             f"Expected 1 enrichment_version across all products,"
             f" found {len(versions)}: {versions}"
+        )
+
+    @pytest.mark.skipif(
+        not ENRICHED_DIR_EXISTS,
+        reason="No enriched output directories found; skipping clinical passthrough test",
+    )
+    def test_enriched_clinical_matches_carry_current_optional_fields(self):
+        """Enriched outputs should not contradict current clinical passthrough values.
+
+        The checked-in enriched snapshots are not regenerated on every clinical
+        DB metadata backfill. Runtime passthrough coverage for volatile fields
+        such as enrollment, registry counts, auditability text, and endpoint
+        tags is enforced by targeted schema/unit tests. This integrity check
+        only guards against stale snapshots carrying conflicting values for the
+        comparatively stable passthrough fields. Curated evidence-judgment
+        fields such as effect_direction are intentionally allowed to drift
+        ahead of checked-in enriched snapshots until those snapshots are
+        regenerated.
+        """
+        products = _collect_all_enriched_products()
+        assert products, "Enriched output directories exist but contain no products"
+
+        source_by_id = _clinical_entry_map()
+        failures = []
+
+        for idx, product in enumerate(products):
+            pid = product.get("dsld_id") or product.get("id") or f"index-{idx}"
+            matches = ((product.get("evidence_data") or {}).get("clinical_matches") or [])
+            for match in matches:
+                study_id = match.get("id") or match.get("study_id")
+                source = source_by_id.get(study_id)
+                if not source:
+                    continue
+                for field in (
+                    "published_studies_count",
+                    "published_rct_count",
+                    "published_meta_review_count",
+                    "primary_outcome",
+                ):
+                    if source.get(field) is not None and match.get(field) is not None and match.get(field) != source.get(field):
+                        failures.append(
+                            f"Product {pid} clinical match {study_id}: conflicting {field} "
+                            f"(enriched={match.get(field)!r}, source={source.get(field)!r})"
+                        )
+                        break
+            if len(failures) >= 20:
+                break
+
+        assert not failures, (
+            "Enriched clinical matches conflict with current passthrough fields:\n  "
+            + "\n  ".join(failures[:20])
         )
 
 

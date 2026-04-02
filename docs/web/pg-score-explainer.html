@@ -1,0 +1,1347 @@
+<!--
+  PharmaGuide Score Explainer — WordPress/Elementor Embed
+  Drop this into an Elementor HTML widget on pharmaguide.io
+  Self-contained: all CSS + JS inline. No external deps.
+  Version: 3.3.0 | Last updated: 2026-03-31
+-->
+
+<style>
+  /* ── Reset & Tokens ─────────────────────────────────── */
+  .pg-explainer *,
+  .pg-explainer *::before,
+  .pg-explainer *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  .pg-explainer {
+    --pg-bg: #FAFBFD;
+    --pg-surface: #FFFFFF;
+    --pg-surface-alt: #F4F6FA;
+    --pg-border: #E2E6EF;
+    --pg-border-light: #EEF1F6;
+    --pg-text: #1A1D26;
+    --pg-text-secondary: #5A6178;
+    --pg-text-muted: #8B92A8;
+    --pg-accent: #2563EB;
+    --pg-accent-light: #EFF6FF;
+    --pg-accent-hover: #1D4ED8;
+    --pg-green: #059669;
+    --pg-green-light: #ECFDF5;
+    --pg-amber: #D97706;
+    --pg-amber-light: #FFFBEB;
+    --pg-red: #DC2626;
+    --pg-red-light: #FEF2F2;
+    --pg-purple: #7C3AED;
+    --pg-purple-light: #F5F3FF;
+    --pg-teal: #0D9488;
+    --pg-teal-light: #F0FDFA;
+    --pg-radius: 12px;
+    --pg-radius-sm: 8px;
+    --pg-radius-xs: 6px;
+    --pg-shadow-sm: 0 1px 3px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.03);
+    --pg-shadow-md: 0 4px 16px rgba(0,0,0,0.06), 0 2px 4px rgba(0,0,0,0.04);
+    --pg-shadow-lg: 0 8px 30px rgba(0,0,0,0.08), 0 4px 8px rgba(0,0,0,0.04);
+    --pg-font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --pg-font-mono: 'SF Mono', 'Fira Code', 'JetBrains Mono', monospace;
+    --pg-transition: 220ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    --pg-spring: 300ms cubic-bezier(0.34, 1.56, 0.64, 1);
+
+    font-family: var(--pg-font);
+    color: var(--pg-text);
+    background: var(--pg-bg);
+    line-height: 1.6;
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 48px 24px 64px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    .pg-explainer {
+      --pg-bg: #0F1117;
+      --pg-surface: #1A1D28;
+      --pg-surface-alt: #22263A;
+      --pg-border: #2D3348;
+      --pg-border-light: #252A3D;
+      --pg-text: #E8EAF0;
+      --pg-text-secondary: #A0A6BA;
+      --pg-text-muted: #6B7290;
+      --pg-accent-light: #1E2A4A;
+      --pg-green-light: #0C2D22;
+      --pg-amber-light: #2D1F0A;
+      --pg-red-light: #2D1212;
+      --pg-purple-light: #1F1535;
+      --pg-teal-light: #0C2926;
+      --pg-shadow-sm: 0 1px 3px rgba(0,0,0,0.2);
+      --pg-shadow-md: 0 4px 16px rgba(0,0,0,0.3);
+      --pg-shadow-lg: 0 8px 30px rgba(0,0,0,0.4);
+    }
+  }
+
+  /* ── Hero Section ───────────────────────────────────── */
+  .pg-hero {
+    text-align: center;
+    margin-bottom: 56px;
+  }
+
+  .pg-hero__badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    background: var(--pg-accent-light);
+    color: var(--pg-accent);
+    border-radius: 100px;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    margin-bottom: 20px;
+  }
+
+  .pg-hero__badge svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  .pg-hero__title {
+    font-size: clamp(28px, 5vw, 40px);
+    font-weight: 750;
+    letter-spacing: -0.025em;
+    line-height: 1.15;
+    margin-bottom: 16px;
+  }
+
+  .pg-hero__subtitle {
+    font-size: clamp(16px, 2.5vw, 19px);
+    color: var(--pg-text-secondary);
+    max-width: 620px;
+    margin: 0 auto;
+    line-height: 1.65;
+  }
+
+  /* ── Score Ring ──────────────────────────────────────── */
+  .pg-ring-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 40px;
+    margin-bottom: 64px;
+  }
+
+  @media (min-width: 680px) {
+    .pg-ring-section {
+      flex-direction: row;
+      justify-content: center;
+      gap: 56px;
+    }
+  }
+
+  .pg-ring-wrap {
+    position: relative;
+    width: 200px;
+    height: 200px;
+    flex-shrink: 0;
+  }
+
+  .pg-ring-svg {
+    width: 200px;
+    height: 200px;
+    transform: rotate(-90deg);
+  }
+
+  .pg-ring-svg circle {
+    fill: none;
+    stroke-width: 12;
+    stroke-linecap: round;
+  }
+
+  .pg-ring-bg {
+    stroke: var(--pg-border);
+  }
+
+  .pg-ring-fill {
+    stroke-dasharray: 502;
+    stroke-dashoffset: 502;
+    transition: stroke-dashoffset 1200ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .pg-ring-fill--quality { stroke: var(--pg-accent); }
+  .pg-ring-fill--fit { stroke: var(--pg-teal); stroke-dasharray: 502; }
+
+  .pg-ring-label {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+  }
+
+  .pg-ring-label__number {
+    display: block;
+    font-size: 44px;
+    font-weight: 750;
+    letter-spacing: -0.03em;
+    line-height: 1;
+    color: var(--pg-text);
+  }
+
+  .pg-ring-label__of {
+    display: block;
+    font-size: 14px;
+    color: var(--pg-text-muted);
+    margin-top: 4px;
+    font-weight: 500;
+  }
+
+  .pg-ring-legend {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    max-width: 380px;
+  }
+
+  .pg-ring-legend__item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 14px 16px;
+    background: var(--pg-surface);
+    border: 1px solid var(--pg-border-light);
+    border-radius: var(--pg-radius-sm);
+    transition: box-shadow var(--pg-transition), transform var(--pg-transition);
+  }
+
+  .pg-ring-legend__item:hover {
+    box-shadow: var(--pg-shadow-sm);
+    transform: translateY(-1px);
+  }
+
+  .pg-ring-legend__dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    margin-top: 5px;
+  }
+
+  .pg-ring-legend__dot--quality { background: var(--pg-accent); }
+  .pg-ring-legend__dot--fit { background: var(--pg-teal); }
+
+  .pg-ring-legend__text {
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  .pg-ring-legend__label {
+    font-weight: 650;
+    display: block;
+    margin-bottom: 2px;
+  }
+
+  .pg-ring-legend__desc {
+    color: var(--pg-text-secondary);
+    font-size: 13px;
+  }
+
+  /* ── Section Cards ──────────────────────────────────── */
+  .pg-sections {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+    margin-bottom: 64px;
+  }
+
+  @media (min-width: 680px) {
+    .pg-sections {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  .pg-card {
+    background: var(--pg-surface);
+    border: 1px solid var(--pg-border-light);
+    border-radius: var(--pg-radius);
+    padding: 0;
+    overflow: hidden;
+    transition: box-shadow var(--pg-transition), transform var(--pg-transition);
+    cursor: default;
+  }
+
+  .pg-card:hover {
+    box-shadow: var(--pg-shadow-md);
+    transform: translateY(-2px);
+  }
+
+  .pg-card__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 24px;
+    cursor: pointer;
+    user-select: none;
+    -webkit-user-select: none;
+    min-height: 44px;
+  }
+
+  .pg-card__header:focus-visible {
+    outline: 2px solid var(--pg-accent);
+    outline-offset: -2px;
+    border-radius: var(--pg-radius);
+  }
+
+  .pg-card__header-left {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .pg-card__icon {
+    width: 40px;
+    height: 40px;
+    border-radius: var(--pg-radius-xs);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .pg-card__icon svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .pg-card__icon--blue { background: var(--pg-accent-light); color: var(--pg-accent); }
+  .pg-card__icon--green { background: var(--pg-green-light); color: var(--pg-green); }
+  .pg-card__icon--purple { background: var(--pg-purple-light); color: var(--pg-purple); }
+  .pg-card__icon--amber { background: var(--pg-amber-light); color: var(--pg-amber); }
+  .pg-card__icon--teal { background: var(--pg-teal-light); color: var(--pg-teal); }
+
+  .pg-card__title {
+    font-size: 16px;
+    font-weight: 650;
+    letter-spacing: -0.01em;
+  }
+
+  .pg-card__pts {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--pg-text-muted);
+    white-space: nowrap;
+    padding: 4px 10px;
+    background: var(--pg-surface-alt);
+    border-radius: 100px;
+  }
+
+  .pg-card__chevron {
+    width: 20px;
+    height: 20px;
+    color: var(--pg-text-muted);
+    transition: transform var(--pg-transition);
+    flex-shrink: 0;
+    margin-left: 12px;
+  }
+
+  .pg-card--open .pg-card__chevron {
+    transform: rotate(180deg);
+  }
+
+  .pg-card__body {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 350ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  .pg-card--open .pg-card__body {
+    max-height: 2000px;
+  }
+
+  .pg-card__content {
+    padding: 0 24px 24px;
+    border-top: 1px solid var(--pg-border-light);
+  }
+
+  .pg-card__content p {
+    margin-top: 16px;
+    font-size: 14px;
+    color: var(--pg-text-secondary);
+    line-height: 1.65;
+  }
+
+  /* ── Sub-items inside card body ─────────────────────── */
+  .pg-sub-list {
+    list-style: none;
+    margin-top: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .pg-sub-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 14px;
+    color: var(--pg-text-secondary);
+    padding: 10px 12px;
+    background: var(--pg-surface-alt);
+    border-radius: var(--pg-radius-xs);
+    line-height: 1.5;
+  }
+
+  .pg-sub-item__label {
+    font-weight: 600;
+    color: var(--pg-text);
+    white-space: nowrap;
+  }
+
+  .pg-sub-item__pts {
+    font-family: var(--pg-font-mono);
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--pg-accent);
+    background: var(--pg-accent-light);
+    padding: 2px 7px;
+    border-radius: 4px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .pg-sub-item__pts--penalty {
+    color: var(--pg-red);
+    background: var(--pg-red-light);
+  }
+
+  .pg-sub-item__pts--bonus {
+    color: var(--pg-green);
+    background: var(--pg-green-light);
+  }
+
+  /* ── Progress Bar ───────────────────────────────────── */
+  .pg-bar-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 16px;
+  }
+
+  .pg-bar-track {
+    flex: 1;
+    height: 8px;
+    background: var(--pg-surface-alt);
+    border-radius: 100px;
+    overflow: hidden;
+  }
+
+  .pg-bar-fill {
+    height: 100%;
+    border-radius: 100px;
+    width: 0;
+    transition: width 900ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .pg-bar-fill--blue { background: var(--pg-accent); }
+  .pg-bar-fill--green { background: var(--pg-green); }
+  .pg-bar-fill--purple { background: var(--pg-purple); }
+  .pg-bar-fill--amber { background: var(--pg-amber); }
+
+  .pg-bar-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--pg-text-muted);
+    min-width: 40px;
+    text-align: right;
+  }
+
+  /* ── Safety Gates ───────────────────────────────────── */
+  .pg-gates {
+    margin-bottom: 64px;
+  }
+
+  .pg-gates__title {
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: 8px;
+  }
+
+  .pg-gates__subtitle {
+    font-size: 15px;
+    color: var(--pg-text-secondary);
+    margin-bottom: 24px;
+    line-height: 1.6;
+  }
+
+  .pg-gate-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .pg-gate {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 20px;
+    background: var(--pg-surface);
+    border: 1px solid var(--pg-border-light);
+    border-radius: var(--pg-radius);
+    transition: box-shadow var(--pg-transition);
+  }
+
+  .pg-gate:hover {
+    box-shadow: var(--pg-shadow-sm);
+  }
+
+  .pg-gate__number {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--pg-red-light);
+    color: var(--pg-red);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  .pg-gate__content {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .pg-gate__name {
+    font-size: 15px;
+    font-weight: 650;
+    margin-bottom: 4px;
+  }
+
+  .pg-gate__desc {
+    font-size: 14px;
+    color: var(--pg-text-secondary);
+    line-height: 1.55;
+  }
+
+  /* ── Verdict & Grade ────────────────────────────────── */
+  .pg-verdict-section {
+    margin-bottom: 64px;
+  }
+
+  .pg-verdict-section__title {
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: 20px;
+  }
+
+  .pg-verdict-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 10px;
+    margin-bottom: 36px;
+  }
+
+  .pg-verdict-chip {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 16px 12px;
+    border-radius: var(--pg-radius-sm);
+    border: 1px solid var(--pg-border-light);
+    background: var(--pg-surface);
+    text-align: center;
+    transition: transform var(--pg-transition), box-shadow var(--pg-transition);
+  }
+
+  .pg-verdict-chip:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--pg-shadow-sm);
+  }
+
+  .pg-verdict-chip__label {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  .pg-verdict-chip__desc {
+    font-size: 12px;
+    color: var(--pg-text-muted);
+    line-height: 1.4;
+  }
+
+  .pg-verdict-chip--blocked .pg-verdict-chip__label { color: #B91C1C; }
+  .pg-verdict-chip--unsafe .pg-verdict-chip__label { color: var(--pg-red); }
+  .pg-verdict-chip--not-scored .pg-verdict-chip__label { color: var(--pg-text-muted); }
+  .pg-verdict-chip--caution .pg-verdict-chip__label { color: var(--pg-amber); }
+  .pg-verdict-chip--poor .pg-verdict-chip__label { color: #92400E; }
+  .pg-verdict-chip--safe .pg-verdict-chip__label { color: var(--pg-green); }
+
+  /* ── Grade Scale ────────────────────────────────────── */
+  .pg-grade-strip {
+    display: flex;
+    border-radius: var(--pg-radius-sm);
+    overflow: hidden;
+    height: 44px;
+    margin-bottom: 8px;
+  }
+
+  .pg-grade-segment {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 700;
+    color: white;
+    text-align: center;
+    line-height: 1.2;
+    letter-spacing: 0.01em;
+    min-width: 0;
+    padding: 0 2px;
+  }
+
+  .pg-grade-labels {
+    display: flex;
+    margin-bottom: 4px;
+  }
+
+  .pg-grade-labels span {
+    flex: 1;
+    text-align: center;
+    font-size: 10px;
+    color: var(--pg-text-muted);
+    font-weight: 500;
+  }
+
+  /* ── Personal Fit Section ───────────────────────────── */
+  .pg-fit-section {
+    margin-bottom: 64px;
+  }
+
+  .pg-fit-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 8px;
+  }
+
+  .pg-fit-header__icon {
+    width: 44px;
+    height: 44px;
+    border-radius: var(--pg-radius-sm);
+    background: var(--pg-teal-light);
+    color: var(--pg-teal);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .pg-fit-header__icon svg {
+    width: 22px;
+    height: 22px;
+  }
+
+  .pg-fit-header__title {
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+
+  .pg-fit-header__subtitle {
+    font-size: 15px;
+    color: var(--pg-text-secondary);
+    margin-bottom: 24px;
+    line-height: 1.6;
+  }
+
+  .pg-fit-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 12px;
+  }
+
+  .pg-fit-card {
+    padding: 20px;
+    background: var(--pg-surface);
+    border: 1px solid var(--pg-border-light);
+    border-radius: var(--pg-radius);
+    transition: box-shadow var(--pg-transition), transform var(--pg-transition);
+  }
+
+  .pg-fit-card:hover {
+    box-shadow: var(--pg-shadow-sm);
+    transform: translateY(-1px);
+  }
+
+  .pg-fit-card__pts {
+    font-family: var(--pg-font-mono);
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--pg-teal);
+    margin-bottom: 6px;
+  }
+
+  .pg-fit-card__name {
+    font-size: 14px;
+    font-weight: 650;
+    margin-bottom: 4px;
+  }
+
+  .pg-fit-card__desc {
+    font-size: 13px;
+    color: var(--pg-text-secondary);
+    line-height: 1.5;
+  }
+
+  /* ── Privacy Banner ─────────────────────────────────── */
+  .pg-privacy {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 20px 24px;
+    background: var(--pg-green-light);
+    border: 1px solid rgba(5, 150, 105, 0.15);
+    border-radius: var(--pg-radius);
+    margin-bottom: 64px;
+  }
+
+  .pg-privacy__icon {
+    width: 36px;
+    height: 36px;
+    flex-shrink: 0;
+    color: var(--pg-green);
+  }
+
+  .pg-privacy__title {
+    font-size: 15px;
+    font-weight: 650;
+    margin-bottom: 4px;
+  }
+
+  .pg-privacy__text {
+    font-size: 14px;
+    color: var(--pg-text-secondary);
+    line-height: 1.55;
+  }
+
+  /* ── Trust Footer ───────────────────────────────────── */
+  .pg-trust {
+    text-align: center;
+    padding: 40px 24px;
+    background: var(--pg-surface);
+    border: 1px solid var(--pg-border-light);
+    border-radius: var(--pg-radius);
+  }
+
+  .pg-trust__title {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 24px;
+    letter-spacing: -0.01em;
+  }
+
+  .pg-trust-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 20px;
+    max-width: 640px;
+    margin: 0 auto;
+  }
+
+  .pg-trust-stat__number {
+    font-size: 28px;
+    font-weight: 750;
+    color: var(--pg-accent);
+    letter-spacing: -0.03em;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .pg-trust-stat__label {
+    font-size: 13px;
+    color: var(--pg-text-secondary);
+    line-height: 1.4;
+  }
+
+  /* ── Animations ─────────────────────────────────────── */
+  .pg-fade-up {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 500ms cubic-bezier(0.25, 0.46, 0.45, 0.94),
+                transform 500ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  .pg-fade-up--visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .pg-fade-up {
+      opacity: 1;
+      transform: none;
+      transition: none;
+    }
+    .pg-ring-fill,
+    .pg-bar-fill,
+    .pg-card__body,
+    .pg-card__chevron {
+      transition: none;
+    }
+  }
+
+  /* ── Print ──────────────────────────────────────────── */
+  @media print {
+    .pg-explainer { padding: 0; }
+    .pg-card__body { max-height: none !important; }
+    .pg-card__chevron { display: none; }
+  }
+</style>
+
+<div class="pg-explainer" role="main" aria-label="PharmaGuide Score Explainer">
+
+  <!-- ── Hero ──────────────────────────────────────────── -->
+  <section class="pg-hero pg-fade-up">
+    <div class="pg-hero__badge" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      Scoring v3.3
+    </div>
+    <h2 class="pg-hero__title">How Your Supplement Score Works</h2>
+    <p class="pg-hero__subtitle">
+      No black boxes. No paid placements. Every point earned or lost has a documented reason you can verify.
+    </p>
+  </section>
+
+  <!-- ── Score Ring ─────────────────────────────────────── -->
+  <section class="pg-ring-section pg-fade-up" aria-label="Score breakdown overview">
+    <div class="pg-ring-wrap">
+      <svg class="pg-ring-svg" viewBox="0 0 180 180" aria-hidden="true">
+        <circle class="pg-ring-bg" cx="90" cy="90" r="80"/>
+        <circle class="pg-ring-fill pg-ring-fill--fit" cx="90" cy="90" r="80" data-pct="20"/>
+        <circle class="pg-ring-fill pg-ring-fill--quality" cx="90" cy="90" r="80" data-pct="80"/>
+      </svg>
+      <div class="pg-ring-label">
+        <span class="pg-ring-label__number" aria-label="Score example: 100">100</span>
+        <span class="pg-ring-label__of">out of 100</span>
+      </div>
+    </div>
+
+    <div class="pg-ring-legend" role="list">
+      <div class="pg-ring-legend__item" role="listitem">
+        <span class="pg-ring-legend__dot pg-ring-legend__dot--quality" aria-hidden="true"></span>
+        <div class="pg-ring-legend__text">
+          <span class="pg-ring-legend__label">Quality Score — 80 pts</span>
+          <span class="pg-ring-legend__desc">Objective product quality. Same product, same data, same score. Computed on our servers.</span>
+        </div>
+      </div>
+      <div class="pg-ring-legend__item" role="listitem">
+        <span class="pg-ring-legend__dot pg-ring-legend__dot--fit" aria-hidden="true"></span>
+        <div class="pg-ring-legend__text">
+          <span class="pg-ring-legend__label">Personal Fit Score — 20 pts</span>
+          <span class="pg-ring-legend__desc">Personalized to you. Computed fresh on your phone — never stored, never shared.</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Safety Gates ──────────────────────────────────── -->
+  <section class="pg-gates pg-fade-up" aria-label="Safety gates">
+    <h3 class="pg-gates__title">Before Scoring: 3 Safety Gates</h3>
+    <p class="pg-gates__subtitle">
+      Every product must pass through three mandatory checks before any points are calculated. A failure stops scoring entirely.
+    </p>
+    <div class="pg-gate-list" role="list">
+      <div class="pg-gate" role="listitem">
+        <div class="pg-gate__number" aria-label="Gate 1">1</div>
+        <div class="pg-gate__content">
+          <div class="pg-gate__name">Banned &amp; Recalled Substance Check</div>
+          <div class="pg-gate__desc">Every ingredient is scanned against FDA, DEA, and international regulatory databases. Recalled or banned substances block scoring entirely.</div>
+        </div>
+      </div>
+      <div class="pg-gate" role="listitem">
+        <div class="pg-gate__number" aria-label="Gate 2">2</div>
+        <div class="pg-gate__content">
+          <div class="pg-gate__name">Ingredient Mapping Verification</div>
+          <div class="pg-gate__desc">Every active ingredient must be recognized in our database. Unmatched ingredients mean the product is marked NOT_SCORED — we never guess.</div>
+        </div>
+      </div>
+      <div class="pg-gate" role="listitem">
+        <div class="pg-gate__number" aria-label="Gate 3">3</div>
+        <div class="pg-gate__content">
+          <div class="pg-gate__name">Regression Guard</div>
+          <div class="pg-gate__desc">Prevents dangerous substances from slipping through as "mapping misses." If an unmatched ingredient matches a banned substance, scoring is halted.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Quality Score Sections ────────────────────────── -->
+  <section class="pg-fade-up" aria-label="Quality score sections">
+    <h3 class="pg-gates__title" style="margin-bottom: 20px;">Quality Score Breakdown</h3>
+    <div class="pg-sections" role="list">
+
+      <!-- Ingredient Quality -->
+      <div class="pg-card" role="listitem" data-card>
+        <div class="pg-card__header" tabindex="0" role="button" aria-expanded="false" aria-label="Ingredient Quality, 25 points maximum">
+          <div class="pg-card__header-left">
+            <div class="pg-card__icon pg-card__icon--blue">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v18m0 0h10a2 2 0 002-2V9M9 21H5a2 2 0 01-2-2V9m0 0h18"/></svg>
+            </div>
+            <span class="pg-card__title">Ingredient Quality</span>
+          </div>
+          <span class="pg-card__pts">max 25</span>
+          <svg class="pg-card__chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="pg-card__body" aria-hidden="true">
+          <div class="pg-card__content">
+            <p>How good are the ingredient forms? Core quality always dominates — bonuses enhance, never define.</p>
+            <div class="pg-bar-row">
+              <span style="font-size:13px;font-weight:600;min-width:50px">25 pts</span>
+              <div class="pg-bar-track"><div class="pg-bar-fill pg-bar-fill--blue" data-width="31"></div></div>
+              <span class="pg-bar-label">31%</span>
+            </div>
+            <ul class="pg-sub-list">
+              <li class="pg-sub-item">
+                <span class="pg-sub-item__pts">15 pts</span>
+                <div><span class="pg-sub-item__label">Bioavailability</span> — How well your body absorbs each ingredient form</div>
+              </li>
+              <li class="pg-sub-item">
+                <span class="pg-sub-item__pts">3 pts</span>
+                <div><span class="pg-sub-item__label">Premium Forms</span> — Bonus for top-tier ingredient forms (score 14+/18)</div>
+              </li>
+              <li class="pg-sub-item">
+                <span class="pg-sub-item__pts">3 pts</span>
+                <div><span class="pg-sub-item__label">Delivery System</span> — Liposomal, enteric-coated, or advanced delivery</div>
+              </li>
+              <li class="pg-sub-item">
+                <span class="pg-sub-item__pts">3 pts</span>
+                <div><span class="pg-sub-item__label">Absorption Enhancer</span> — Paired enhancers like BioPerine with a target</div>
+              </li>
+              <li class="pg-sub-item">
+                <span class="pg-sub-item__pts">3 pts</span>
+                <div><span class="pg-sub-item__label">Formulation Excellence</span> — Organic, standardized botanical, synergy</div>
+              </li>
+              <li class="pg-sub-item">
+                <span class="pg-sub-item__pts">3 pts</span>
+                <div><span class="pg-sub-item__label">Single-Ingredient Efficiency</span> — Uses the best form for single ingredients</div>
+              </li>
+              <li class="pg-sub-item">
+                <span class="pg-sub-item__pts pg-sub-item__pts--bonus">+5 cap</span>
+                <div><span class="pg-sub-item__label">Category Bonuses</span> — Probiotic bonus (3 pts), Omega-3 dose bonus (2 pts). Pooled under a 5-point cap</div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Safety & Purity -->
+      <div class="pg-card" role="listitem" data-card>
+        <div class="pg-card__header" tabindex="0" role="button" aria-expanded="false" aria-label="Safety and Purity, 30 points maximum">
+          <div class="pg-card__header-left">
+            <div class="pg-card__icon pg-card__icon--green">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            </div>
+            <span class="pg-card__title">Safety &amp; Purity</span>
+          </div>
+          <span class="pg-card__pts">max 30</span>
+          <svg class="pg-card__chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="pg-card__body" aria-hidden="true">
+          <div class="pg-card__content">
+            <p>The largest section — because safety matters most. Starts at 25 base points. Earn up to 5 bonus points or lose points from penalties.</p>
+            <div class="pg-bar-row">
+              <span style="font-size:13px;font-weight:600;min-width:50px">30 pts</span>
+              <div class="pg-bar-track"><div class="pg-bar-fill pg-bar-fill--green" data-width="38"></div></div>
+              <span class="pg-bar-label">38%</span>
+            </div>
+            <ul class="pg-sub-list">
+              <li class="pg-sub-item">
+                <span class="pg-sub-item__pts pg-sub-item__pts--penalty">-8 max</span>
+                <div><span class="pg-sub-item__label">Harmful Additives</span> — Penalized by risk level (high -2, moderate -1, low -0.5)</div>
+              </li>
+              <li class="pg-sub-item">
+                <span class="pg-sub-item__pts pg-sub-item__pts--penalty">-10 max</span>
+                <div><span class="pg-sub-item__label">Proprietary Blends</span> — The cost of opacity. Hidden ingredients = hidden risks</div>
+              </li>
+              <li class="pg-sub-item">
+                <span class="pg-sub-item__pts pg-sub-item__pts--penalty">-3 max</span>
+                <div><span class="pg-sub-item__label">Dose Safety</span> — Any ingredient over 150% of safe upper limit</div>
+              </li>
+              <li class="pg-sub-item">
+                <span class="pg-sub-item__pts pg-sub-item__pts--bonus">+4 max</span>
+                <div><span class="pg-sub-item__label">Claim Compliance</span> — Verified allergen-free, gluten-free, vegan claims</div>
+              </li>
+              <li class="pg-sub-item">
+                <span class="pg-sub-item__pts pg-sub-item__pts--bonus">+5 max</span>
+                <div><span class="pg-sub-item__label">Quality Certifications</span> — USP, NSF, ConsumerLab, GMP, batch traceability</div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Evidence & Research -->
+      <div class="pg-card" role="listitem" data-card>
+        <div class="pg-card__header" tabindex="0" role="button" aria-expanded="false" aria-label="Evidence and Research, 20 points maximum">
+          <div class="pg-card__header-left">
+            <div class="pg-card__icon pg-card__icon--purple">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>
+            </div>
+            <span class="pg-card__title">Evidence &amp; Research</span>
+          </div>
+          <span class="pg-card__pts">max 20</span>
+          <svg class="pg-card__chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="pg-card__body" aria-hidden="true">
+          <div class="pg-card__content">
+            <p>Points based on clinical evidence backing each ingredient — from meta-analyses to lab studies. Closer evidence to the actual product scores higher.</p>
+            <div class="pg-bar-row">
+              <span style="font-size:13px;font-weight:600;min-width:50px">20 pts</span>
+              <div class="pg-bar-track"><div class="pg-bar-fill pg-bar-fill--purple" data-width="25"></div></div>
+              <span class="pg-bar-label">25%</span>
+            </div>
+            <ul class="pg-sub-list">
+              <li class="pg-sub-item">
+                <span class="pg-sub-item__pts">6 pts</span>
+                <div><span class="pg-sub-item__label">Systematic Review</span> — Gold standard: meta-analysis of multiple studies</div>
+              </li>
+              <li class="pg-sub-item">
+                <span class="pg-sub-item__pts">4–5 pts</span>
+                <div><span class="pg-sub-item__label">RCTs</span> — Randomized controlled trials (single or multiple)</div>
+              </li>
+              <li class="pg-sub-item">
+                <span class="pg-sub-item__pts">1–2 pts</span>
+                <div><span class="pg-sub-item__label">Preclinical</span> — Observational, animal, or in vitro studies</div>
+              </li>
+              <li class="pg-sub-item">
+                <span class="pg-sub-item__pts pg-sub-item__pts--penalty">0.25x</span>
+                <div><span class="pg-sub-item__label">Sub-Clinical Dose</span> — Evidence points drop 75% if dose is below studied minimum</div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Brand Trust -->
+      <div class="pg-card" role="listitem" data-card>
+        <div class="pg-card__header" tabindex="0" role="button" aria-expanded="false" aria-label="Brand Trust, 5 points maximum">
+          <div class="pg-card__header-left">
+            <div class="pg-card__icon pg-card__icon--amber">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            </div>
+            <span class="pg-card__title">Brand Trust</span>
+          </div>
+          <span class="pg-card__pts">max 5</span>
+          <svg class="pg-card__chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="pg-card__body" aria-hidden="true">
+          <div class="pg-card__content">
+            <p>Is the manufacturer reputable? Rewards trusted brands, full disclosure, and verifiable quality claims.</p>
+            <div class="pg-bar-row">
+              <span style="font-size:13px;font-weight:600;min-width:50px">5 pts</span>
+              <div class="pg-bar-track"><div class="pg-bar-fill pg-bar-fill--amber" data-width="6"></div></div>
+              <span class="pg-bar-label">6%</span>
+            </div>
+            <ul class="pg-sub-list">
+              <li class="pg-sub-item">
+                <span class="pg-sub-item__pts pg-sub-item__pts--bonus">+2</span>
+                <div><span class="pg-sub-item__label">Trusted Manufacturer</span> — Verified in our trusted manufacturer database</div>
+              </li>
+              <li class="pg-sub-item">
+                <span class="pg-sub-item__pts pg-sub-item__pts--bonus">+1</span>
+                <div><span class="pg-sub-item__label">Full Disclosure</span> — All ingredients have individual doses listed</div>
+              </li>
+              <li class="pg-sub-item">
+                <span class="pg-sub-item__pts pg-sub-item__pts--bonus">+2 cap</span>
+                <div><span class="pg-sub-item__label">Physician + Region + Sustainability</span> — Verified claims, collectively capped</div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── Verdicts ──────────────────────────────────────── -->
+  <section class="pg-verdict-section pg-fade-up" aria-label="Verdict system">
+    <h3 class="pg-verdict-section__title">Verdicts</h3>
+    <p class="pg-gates__subtitle">Every product receives a verdict. First match wins — strict precedence order.</p>
+    <div class="pg-verdict-grid" role="list">
+      <div class="pg-verdict-chip pg-verdict-chip--blocked" role="listitem">
+        <span class="pg-verdict-chip__label">Blocked</span>
+        <span class="pg-verdict-chip__desc">Recalled substance found</span>
+      </div>
+      <div class="pg-verdict-chip pg-verdict-chip--unsafe" role="listitem">
+        <span class="pg-verdict-chip__label">Unsafe</span>
+        <span class="pg-verdict-chip__desc">Banned substance found</span>
+      </div>
+      <div class="pg-verdict-chip pg-verdict-chip--not-scored" role="listitem">
+        <span class="pg-verdict-chip__label">Not Scored</span>
+        <span class="pg-verdict-chip__desc">Can't verify ingredients</span>
+      </div>
+      <div class="pg-verdict-chip pg-verdict-chip--caution" role="listitem">
+        <span class="pg-verdict-chip__label">Caution</span>
+        <span class="pg-verdict-chip__desc">High-risk substance</span>
+      </div>
+      <div class="pg-verdict-chip pg-verdict-chip--poor" role="listitem">
+        <span class="pg-verdict-chip__label">Poor</span>
+        <span class="pg-verdict-chip__desc">Score below 32/100</span>
+      </div>
+      <div class="pg-verdict-chip pg-verdict-chip--safe" role="listitem">
+        <span class="pg-verdict-chip__label">Safe</span>
+        <span class="pg-verdict-chip__desc">Scored normally</span>
+      </div>
+    </div>
+
+    <!-- Grade Scale -->
+    <h4 style="font-size:15px;font-weight:650;margin-bottom:12px;">Grade Scale</h4>
+    <div class="pg-grade-strip" role="img" aria-label="Grade scale from Very Poor (0) to Exceptional (90-100)">
+      <div class="pg-grade-segment" style="background:#991B1B;flex:3.2">Very Poor</div>
+      <div class="pg-grade-segment" style="background:#B45309;flex:1.8">Low</div>
+      <div class="pg-grade-segment" style="background:#CA8A04;flex:1">Below Avg</div>
+      <div class="pg-grade-segment" style="background:#65A30D;flex:1">Fair</div>
+      <div class="pg-grade-segment" style="background:#16A34A;flex:1">Good</div>
+      <div class="pg-grade-segment" style="background:#059669;flex:1">Excellent</div>
+      <div class="pg-grade-segment" style="background:#0D9488;flex:1">Exceptional</div>
+    </div>
+    <div class="pg-grade-labels" aria-hidden="true">
+      <span style="flex:3.2">0–31</span>
+      <span style="flex:1.8">32–49</span>
+      <span style="flex:1">50–59</span>
+      <span style="flex:1">60–69</span>
+      <span style="flex:1">70–79</span>
+      <span style="flex:1">80–89</span>
+      <span style="flex:1">90–100</span>
+    </div>
+  </section>
+
+  <!-- ── Personal Fit Score ────────────────────────────── -->
+  <section class="pg-fit-section pg-fade-up" aria-label="Personal Fit Score">
+    <div class="pg-fit-header">
+      <div class="pg-fit-header__icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      </div>
+      <h3 class="pg-fit-header__title">Personal Fit Score</h3>
+    </div>
+    <p class="pg-fit-header__subtitle">
+      20 personalized points computed fresh on your phone every time you view a product. Uses your health profile — age, goals, conditions, medications. Never stored, never leaves your device.
+    </p>
+
+    <div class="pg-fit-cards" role="list">
+      <div class="pg-fit-card" role="listitem">
+        <div class="pg-fit-card__pts">7 pts</div>
+        <div class="pg-fit-card__name">Dosage Appropriateness</div>
+        <div class="pg-fit-card__desc">Compares each nutrient against your age/sex-specific RDA and safe upper limits</div>
+      </div>
+      <div class="pg-fit-card" role="listitem">
+        <div class="pg-fit-card__pts">8 pts</div>
+        <div class="pg-fit-card__name">Medical Compatibility</div>
+        <div class="pg-fit-card__desc">Evaluates against your conditions, medications, and 45+ interaction rules</div>
+      </div>
+      <div class="pg-fit-card" role="listitem">
+        <div class="pg-fit-card__pts">3 pts</div>
+        <div class="pg-fit-card__name">Age Appropriateness</div>
+        <div class="pg-fit-card__desc">Is this product formulated for your age group?</div>
+      </div>
+      <div class="pg-fit-card" role="listitem">
+        <div class="pg-fit-card__pts">2 pts</div>
+        <div class="pg-fit-card__name">Goal Match</div>
+        <div class="pg-fit-card__desc">Does this align with your stated health goals?</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Privacy Banner ────────────────────────────────── -->
+  <div class="pg-privacy pg-fade-up" role="note" aria-label="Privacy guarantee">
+    <svg class="pg-privacy__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+    <div>
+      <div class="pg-privacy__title">Your health data never leaves your phone</div>
+      <div class="pg-privacy__text">
+        Health profile, personal fit scores, scan history, and chat history are stored only in local encrypted storage. The Personal Fit Score is computed fresh each time — it is never stored in any database or transmitted to our servers.
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Trust Footer ──────────────────────────────────── -->
+  <div class="pg-trust pg-fade-up" role="complementary" aria-label="Trust statistics">
+    <div class="pg-trust__title">Built on Verified Data</div>
+    <div class="pg-trust-stats">
+      <div class="pg-trust-stat">
+        <div class="pg-trust-stat__number">550+</div>
+        <div class="pg-trust-stat__label">Verified ingredient forms</div>
+      </div>
+      <div class="pg-trust-stat">
+        <div class="pg-trust-stat__number">2,600+</div>
+        <div class="pg-trust-stat__label">Automated tests</div>
+      </div>
+      <div class="pg-trust-stat">
+        <div class="pg-trust-stat__number">34</div>
+        <div class="pg-trust-stat__label">Reference databases</div>
+      </div>
+      <div class="pg-trust-stat">
+        <div class="pg-trust-stat__number">100+</div>
+        <div class="pg-trust-stat__label">Configurable parameters</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+(function() {
+  'use strict';
+
+  /* ── Accordion Cards ─────────────────────────────── */
+  var cards = document.querySelectorAll('[data-card]');
+  cards.forEach(function(card) {
+    var header = card.querySelector('.pg-card__header');
+    if (!header) return;
+
+    function toggle() {
+      var isOpen = card.classList.contains('pg-card--open');
+      card.classList.toggle('pg-card--open');
+      header.setAttribute('aria-expanded', String(!isOpen));
+      var body = card.querySelector('.pg-card__body');
+      if (body) body.setAttribute('aria-hidden', String(isOpen));
+    }
+
+    header.addEventListener('click', toggle);
+    header.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        toggle();
+      }
+    });
+  });
+
+  /* ── Intersection Observer — fade-up + bars ──────── */
+  var prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  if ('IntersectionObserver' in window && !prefersReducedMotion) {
+    var observer = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('pg-fade-up--visible');
+
+          // Animate bars inside
+          var bars = entry.target.querySelectorAll('.pg-bar-fill[data-width]');
+          bars.forEach(function(bar, i) {
+            setTimeout(function() {
+              bar.style.width = bar.getAttribute('data-width') + '%';
+            }, 200 + i * 100);
+          });
+
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+
+    document.querySelectorAll('.pg-fade-up').forEach(function(el) {
+      observer.observe(el);
+    });
+  } else {
+    // No animation — show everything immediately
+    document.querySelectorAll('.pg-fade-up').forEach(function(el) {
+      el.classList.add('pg-fade-up--visible');
+    });
+    document.querySelectorAll('.pg-bar-fill[data-width]').forEach(function(bar) {
+      bar.style.width = bar.getAttribute('data-width') + '%';
+    });
+  }
+
+  /* ── Score Ring Animation ─────────────────────────── */
+  var circumference = 2 * Math.PI * 80; // r=80
+  var ringFills = document.querySelectorAll('.pg-ring-fill');
+
+  function animateRings() {
+    ringFills.forEach(function(ring) {
+      var pct = parseFloat(ring.getAttribute('data-pct')) || 0;
+      var offset = circumference - (pct / 100) * circumference;
+      ring.style.strokeDasharray = circumference;
+      ring.style.strokeDashoffset = circumference;
+
+      requestAnimationFrame(function() {
+        requestAnimationFrame(function() {
+          ring.style.strokeDashoffset = offset;
+        });
+      });
+    });
+  }
+
+  if ('IntersectionObserver' in window && !prefersReducedMotion) {
+    var ringWrap = document.querySelector('.pg-ring-wrap');
+    if (ringWrap) {
+      var ringObserver = new IntersectionObserver(function(entries) {
+        if (entries[0].isIntersecting) {
+          animateRings();
+          ringObserver.unobserve(ringWrap);
+        }
+      }, { threshold: 0.3 });
+      ringObserver.observe(ringWrap);
+    }
+  } else {
+    animateRings();
+  }
+
+  /* ── Counter Animation ───────────────────────────── */
+  function animateCounters() {
+    var stats = document.querySelectorAll('.pg-trust-stat__number');
+    stats.forEach(function(el) {
+      var raw = el.textContent.trim();
+      var suffix = raw.replace(/[\d,\.]/g, '');
+      var target = parseFloat(raw.replace(/[^\d\.]/g, ''));
+      if (isNaN(target)) return;
+
+      var duration = 1200;
+      var start = performance.now();
+      var hasComma = raw.indexOf(',') !== -1;
+
+      function step(now) {
+        var elapsed = now - start;
+        var progress = Math.min(elapsed / duration, 1);
+        // ease-out cubic
+        var eased = 1 - Math.pow(1 - progress, 3);
+        var current = Math.round(eased * target);
+
+        if (hasComma) {
+          el.textContent = current.toLocaleString() + suffix;
+        } else {
+          el.textContent = current + suffix;
+        }
+
+        if (progress < 1) {
+          requestAnimationFrame(step);
+        } else {
+          el.textContent = raw; // restore exact original
+        }
+      }
+
+      if (!prefersReducedMotion) {
+        el.textContent = '0' + suffix;
+        requestAnimationFrame(step);
+      }
+    });
+  }
+
+  if ('IntersectionObserver' in window && !prefersReducedMotion) {
+    var trustSection = document.querySelector('.pg-trust');
+    if (trustSection) {
+      var counterObserver = new IntersectionObserver(function(entries) {
+        if (entries[0].isIntersecting) {
+          animateCounters();
+          counterObserver.unobserve(trustSection);
+        }
+      }, { threshold: 0.3 });
+      counterObserver.observe(trustSection);
+    }
+  }
+})();
+</script>

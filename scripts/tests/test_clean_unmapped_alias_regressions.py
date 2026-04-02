@@ -987,7 +987,7 @@ def test_nordic_softgels_inactive_unmapped_labels_map(
         ("Artist's Conk", "Artist's Conk"),
         ("Fringe Tree (Chionanthus virginicus) bark extract", "Fringe Tree"),
         ("Lobelia", "Lobelia"),
-        ("Quassia", "Quassinoids"),
+        ("Quassia", "Quassia"),
         ("Horseradish", "Horseradish"),
         ("Actazin Kiwifruit Powder", "Kiwifruit"),
         ("Tillandsia", "Tillandsia"),
@@ -2470,13 +2470,13 @@ def test_batch45_inactive_exact_aliases_map(normalizer, name, ingredient_group, 
 @pytest.mark.parametrize(
     "name,expected_substring",
     [
-        # Turmeric cluster — cleaner routes to natural colors (OI precedence);
-        # IQM form aliases fix enricher fallback separately
-        ("organic turmeric", "natural colors"),
-        ("organic turmeric root extract", "natural colors"),
-        ("organic fermented turmeric", "natural colors"),
-        ("turmeric curcuminoids", "natural colors"),
-        ("turmeric rhizome root extract", "natural colors"),
+        # Turmeric cluster — now correctly routes to IQM Curcumin/Turmeric
+        # (fixed: removed turmeric from explicit_natural_dyes to prevent dye interception)
+        ("organic turmeric", "Curcumin"),
+        ("organic turmeric root extract", "Turmeric"),
+        ("organic fermented turmeric", "Turmeric"),
+        ("turmeric curcuminoids", "Turmeric"),
+        ("turmeric rhizome root extract", "Turmeric"),
         # Amla cluster
         ("organic amla berry", "Amla"),
         ("raw amla", "Amla"),
@@ -2491,8 +2491,9 @@ def test_batch45_inactive_exact_aliases_map(normalizer, name, ingredient_group, 
         # Flaxseed oil extract — cleaner routes to Omega-3 (IQM precedence);
         # IQM flaxseed oil form alias fixes enricher fallback
         ("flaxseed oil extract", "Omega-3"),
-        # Piperine / Black pepper
-        ("organic black pepper", "Piperine"),
+        # Piperine / Black pepper — "organic black pepper" now routes to botanical
+        # (genus contamination fix: bare plant names → botanical, not compound IQM)
+        ("organic black pepper", "Black Pepper"),
         ("essence of pure black pepper (fruit) oil", "Piperine"),
         # Strontium
         ("strontium", "Strontium"),
@@ -2506,6 +2507,32 @@ def test_batch45_inactive_exact_aliases_map(normalizer, name, ingredient_group, 
     ],
 )
 def test_batch46_garden_of_life_fallback_form_aliases_map(normalizer, name, expected_substring):
+    standard_name, mapped, _ = normalizer._enhanced_ingredient_mapping(name, [])
+
+    assert mapped is True, f"{name!r} should map but did not"
+    assert expected_substring.lower() in str(standard_name).lower()
+
+
+# ── Batch 47: Enrichment-unmapped form aliases (2026-04-01) ──────────────
+@pytest.mark.parametrize(
+    "name,expected_substring",
+    [
+        # Elderberry — Sports Research (DSLD 268441)
+        ("Black Elderberry juice concentrate", "Elderberry"),
+        # Lutein — Spring Valley (DSLD 178523)
+        ("organic Lutein", "Lutein"),
+        # Zeaxanthin — Pure Encapsulations (DSLD 293949)
+        ("Optisharp Zeaxanthin", "Zeaxanthin"),
+        # Oat Straw — Nutricost
+        ("Avena sativa 10:1 extract", "Oat"),
+        ("Oats Straw", "Oat"),
+        # Ginseng — Transparent Labs
+        ("Seneactiv", "Ginseng"),
+        # GOS prebiotic — Pure Encapsulations
+        ("BiMuno B-Galactooligosaccharides", "Prebiotics"),
+    ],
+)
+def test_batch47_enrichment_unmapped_form_aliases_map(normalizer, name, expected_substring):
     standard_name, mapped, _ = normalizer._enhanced_ingredient_mapping(name, [])
 
     assert mapped is True, f"{name!r} should map but did not"

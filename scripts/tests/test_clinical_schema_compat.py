@@ -39,6 +39,14 @@ class TestClinicalSchemaCompatibility:
                     "base_points": 4,
                     "multiplier": 0.65,
                     "computed_score": 2.6,
+                    "published_studies_count": 42,
+                    "published_rct_count": 12,
+                    "published_meta_review_count": 3,
+                    "registry_completed_trials_count": 18,
+                    "primary_outcome": "Immune Support",
+                    "effect_direction_rationale": "Three meta-analyses and multiple human RCTs support benefit.",
+                    "effect_direction_confidence": "high",
+                    "endpoint_relevance_tags": ["immune_support", "fatigue"],
                 }
             ]
         }
@@ -59,6 +67,14 @@ class TestClinicalSchemaCompatibility:
         assert match["base_points"] == 4
         assert match["multiplier"] == 0.65
         assert match["computed_score"] == 2.6
+        assert match["published_studies_count"] == 42
+        assert match["published_rct_count"] == 12
+        assert match["published_meta_review_count"] == 3
+        assert match["registry_completed_trials_count"] == 18
+        assert match["primary_outcome"] == "Immune Support"
+        assert match["effect_direction_rationale"].startswith("Three meta-analyses")
+        assert match["effect_direction_confidence"] == "high"
+        assert match["endpoint_relevance_tags"] == ["immune_support", "fatigue"]
 
     def test_enrichment_respects_exclude_aliases(self, enricher):
         enricher.databases["backed_clinical_studies"] = {
@@ -109,6 +125,26 @@ class TestClinicalSchemaCompatibility:
         assert section_c["score"] == pytest.approx(7.0)
         assert section_c["max"] == pytest.approx(20.0)
 
+    def test_scorer_depth_bonus_uses_published_studies_count(self, scorer):
+        product = {
+            "activeIngredients": [{"name": "Test", "quantity": 1, "unit": "mg"}],
+            "evidence_data": {
+                "clinical_matches": [
+                    {
+                        "id": "E_TEST",
+                        "standard_name": "Test",
+                        "study_type": "rct_single",
+                        "evidence_level": "ingredient-human",
+                        "published_studies": ["RCT", "meta-analysis"],
+                        "published_studies_count": 68,
+                    }
+                ]
+            },
+        }
+        section_c = scorer._score_section_c(product, [])
+        assert section_c["depth_bonus"] == pytest.approx(0.5)
+        assert section_c["score"] == pytest.approx(3.1, abs=0.01)
+
 
 class TestAuditRegressionData:
     def _clinical_entry(self, entry_id: str):
@@ -137,12 +173,44 @@ class TestAuditRegressionData:
         assert "RCT" in iodine.get("published_studies", [])
         assert iodine["study_type"] == "rct_multiple"
 
+    def test_clinical_db_schema_version_is_current_for_new_fields(self):
+        data = json.loads((DATA_DIR / "backed_clinical_studies.json").read_text())
+        assert data["_metadata"]["schema_version"] == "5.3.0"
+
+    def test_numeric_study_count_uses_dedicated_field(self):
+        data = json.loads((DATA_DIR / "backed_clinical_studies.json").read_text())
+        entries = data["backed_clinical_studies"]
+
+        assert all(not isinstance(entry.get("published_studies"), int) for entry in entries)
+
+        numeric_count_entries = [entry for entry in entries if entry.get("published_studies_count") is not None]
+        assert numeric_count_entries, "Expected at least one clinical entry with published_studies_count"
+        assert all(isinstance(entry["published_studies_count"], int) for entry in numeric_count_entries)
+
     def test_curcumin_clinical_notes_do_not_preserve_debunked_bioavailability_claims(self):
         longvida = self._clinical_entry("BRAND_LONGVIDA")
         assert "65x" not in longvida.get("notable_studies", "")
 
         bioperine = self._clinical_entry("BRAND_BIOPERINE")
         assert "Verhoeven 2025" in bioperine.get("notable_studies", "")
+
+    def test_priority_audit_cleanup_entries_hold_current_classification(self):
+        data = json.loads((DATA_DIR / "backed_clinical_studies.json").read_text())
+        entries = {entry["id"]: entry for entry in data["backed_clinical_studies"]}
+
+        assert entries["PRECLIN_AKG"]["evidence_level"] == "preclinical"
+        assert "placebo-controlled" not in entries["PRECLIN_AKG"]["notes"].lower()
+        assert "randomized" not in entries["PRECLIN_AKG"]["notable_studies"].lower()
+
+        assert entries["PRECLIN_APIGENIN"]["evidence_level"] == "preclinical"
+        assert "rct" not in entries["PRECLIN_APIGENIN"]["notable_studies"].lower()
+        assert entries["PRECLIN_APIGENIN"]["registry_completed_trials_count"] == 10
+
+        assert entries["PRECLIN_LUTEOLIN"]["evidence_level"] == "preclinical"
+        assert "22492777" not in json.dumps(entries["PRECLIN_LUTEOLIN"])
+        assert entries["PRECLIN_LUTEOLIN"]["registry_completed_trials_count"] == 10
+
+        assert entries["INGR_BLACK_COHOSH"]["effect_direction"] == "mixed"
 
     def test_clinical_risk_taxonomy_metadata_count_matches_arrays(self):
         data = json.loads((DATA_DIR / "clinical_risk_taxonomy.json").read_text())

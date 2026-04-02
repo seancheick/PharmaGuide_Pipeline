@@ -1,6 +1,6 @@
 # PharmaGuide Pipeline Operator Dashboard — Design Spec
 
-> Version: 1.1.0 | Date: 2026-03-31
+> Version: 1.2.0 | Date: 2026-03-31
 > Status: Verified against actual files — pending final review
 > Stack: Python 3.13 + Streamlit + Pandas + Plotly
 > Scope: Read-only internal operator dashboard, local-only, no auth
@@ -12,9 +12,10 @@
 An internal Streamlit dashboard for the PharmaGuide pipeline operator to:
 
 1. **Inspect any product** from the final export, with best-effort links to enriched/scored source files when resolvable
-2. **Check pipeline health**: did the last run succeed, what's the current release, are release artifacts ready
+2. **Check pipeline health**: did the last run succeed, what's the current release, are release artifacts ready, which stage failed
 3. **Triage data quality**: unmapped ingredients, fallbacks, not-scored products, coverage gaps
-4. **Compare releases** (phase 2): score shifts, verdict changes, added/removed products
+4. **Explain scores**: show pillar totals plus a trace-lite of how the exported score was assembled from section breakdown, bonuses, and penalties
+5. **Compare releases** (phase 2): score shifts, verdict changes, added/removed products
 
 This is a read-only tool. It never writes to the database, pipeline outputs, or Supabase. It reads existing JSON reports and SQLite files that the pipeline already produces.
 
@@ -37,9 +38,11 @@ scripts/dashboard/
   components/
     metric_cards.py         # KPI card row (count + label + color)
     score_breakdown.py      # 4-pillar horizontal bar display
+    score_trace.py          # Trace-lite view of exported score components
     product_header.py       # Name/brand/verdict/grade/score header block
     status_badge.py         # Pass/fail/warning status badges
     data_table.py           # Styled dataframe wrapper with sorting/filtering
+    data_dictionary.py      # Field/tool-tip dictionary used across metrics and tables
 ```
 
 ### 2.2 Run Command
@@ -89,6 +92,14 @@ The loader cleanly separates two categories:
 
 **Resilience rule**: if any file is missing, that section shows "No data available" with the expected path. The dashboard never crashes on missing data.
 
+### 2.5 Implementation Rules
+
+- **SQLite is the compute layer.** Use SQL for counts, distributions, grouping, and filters whenever the data originates in `products_core`.
+- **Pandas is the rendering layer.** Use DataFrames only after query results have already been narrowed.
+- **Manual refresh is the default.** Auto-refresh is optional and opt-in.
+- **Deep-link state is first-class.** Product Inspector must support URL query params such as `?dsld_id=12345`.
+- **Trace-lite, not synthetic exactness.** The score trace should explain exported score structure from actual artifacts (`section_breakdown`, `score_bonuses`, `score_penalties`), but should not claim to be a line-by-line replay of scorer internals unless the scorer exports a canonical trace in the future.
+
 ---
 
 ## 3. Navigation
@@ -122,6 +133,11 @@ The loader cleanly separates two categories:
 - "Some sections may mix release-wide and dataset-scoped data"
 - Lists any missing expected files
 
+**Refresh controls**:
+- Manual refresh button always visible in the sidebar
+- Optional "Live mode" toggle enables timed auto-refresh for active monitoring sessions
+- Refresh action clears Streamlit caches and reloads discovery metadata
+
 **View navigation:**
 1. Product Inspector (default)
 2. Pipeline Health
@@ -142,10 +158,11 @@ The primary view. Search for any product and see its full pipeline lineage.
 **Progressive fallback search logic**:
 1. If input is numeric-only or matches dsld_id pattern: exact `WHERE dsld_id = ?`
 2. If input matches UPC pattern (10-14 digits): exact `WHERE upc_sku = ?`
-3. If `products_fts` table exists: `WHERE products_fts MATCH ?`
+3. If `products_fts` table exists: `WHERE products_fts MATCH ? LIMIT 50`
 4. Fallback: `WHERE product_name LIKE '%?%' OR brand_name LIKE '%?%'`
 
 This ensures the search works across different release DBs, even if FTS wasn't built.
+Search input should be debounced by ~300ms to avoid query-per-keystroke load.
 
 ### 4.2 Results Table
 
@@ -156,6 +173,11 @@ Columns: dsld_id, product_name, brand_name, score_100_equivalent, grade, verdict
 - Max 100 results displayed. If more: show "Showing 100 of X results. Refine your search."
 
 Click a row to expand the drill-down below the table.
+
+**Deep linking**:
+- When a product is selected, update URL state with `?dsld_id=<id>`
+- On app load, if `dsld_id` is present in query params, load that product directly
+- Shared URLs should reproduce the exact product-inspector state without additional clicks
 
 ### 4.3 Product Drill-Down
 
@@ -220,6 +242,34 @@ Click a row to expand the drill-down below the table.
 - Full detail blob JSON rendered in a code block
 - Full products_core row as JSON
 
+### 4.4 Score Trace Lite
+
+Add a collapsed section below the pillar bars:
+
+- **Ingredient Quality trace**
+- **Safety & Purity trace**
+- **Evidence & Research trace**
+- **Brand Trust trace**
+
+Each trace block should show:
+- exported section total
+- key subsection values when present in `section_breakdown`
+- bonuses from `score_bonuses`
+- penalties from `score_penalties`
+
+Example:
+
+```text
+Ingredient Quality
+  Bioavailability / forms / delivery: 12.4
+  Category bonuses: +2.0
+  Final exported total: 14.4 / 25
+```
+
+Important:
+- this is an **explainability layer built from exported artifacts**
+- it must not imply a mathematically exact replay of every scorer branch unless the scorer later emits a formal trace payload
+
 ---
 
 ## 5. View 2 — Pipeline Health
@@ -259,6 +309,22 @@ Display:
 - Per-dataset row: dataset name, status (green pass / red fail badge), last stage reached
 - Error summary: count of ERROR-level lines, expandable to show them
 - Overall: "X/Y datasets completed all stages"
+
+### 5.3A Pipeline Stage Visualization
+
+For each dataset in the latest batch, render a simple stage rail:
+
+```text
+CLEAN -> ENRICH -> SCORE -> EXPORT
+  ✓        ✓        ✗        -
+```
+
+Status inference comes from parsed batch summary and processing-state artifacts:
+- completed stage markers
+- first failure point
+- "not reached" stages after failure
+
+This is an operator aid, not a source of truth beyond the logs being parsed.
 
 ### 5.4 Processing State
 
@@ -371,6 +437,24 @@ Source: `scoring_config.json`.
 - Key tunable parameters: bio_score_weight, harmful_additive_penalties, omega-3 dose bands
 - Displayed as a clean key-value table, not raw JSON
 
+### 6.9 Data Dictionary Tooltips
+
+The dashboard should centralize operator-facing field definitions in one helper:
+
+```python
+DATA_DICT = {
+    "bio_score": "Ingredient bioavailability score from the quality map/exported ingredient detail.",
+    "mapped_coverage": "Fraction of active ingredients mapped to supported reference data.",
+    "blocking_reason": "Primary reason the product was marked BLOCKED/UNSAFE/NOT_SCORED.",
+}
+```
+
+Use these definitions as `help=` tooltips on:
+- KPI cards
+- table headers where supported
+- section labels
+- config snapshot fields
+
 ---
 
 ## 7. View 4 — Release Diff (Phase 2)
@@ -443,6 +527,15 @@ def data_table(df: pd.DataFrame, color_columns: dict = None, max_rows: int = 100
     """Styled dataframe with optional column coloring and row limit."""
 ```
 
+### 8.5 Data Dictionary Helper
+
+```python
+DATA_DICT: dict[str, str]
+
+def field_help(key: str) -> str | None:
+    """Return operator-facing help text for a field when defined."""
+```
+
 ---
 
 ## 9. Data Loader Contract
@@ -484,9 +577,11 @@ class DashboardData:
     discovered_datasets: list[str]          # ["Thorne", "NOW", ...]
     missing_artifacts: dict[str, list[str]] # {"Thorne": ["coverage_report"], ...}
     warnings: list[str]                     # loader warnings for sidebar display
+    latest_batch_summary: dict | None       # parsed latest batch run summary
+    release_artifact_status: dict[str, Any] # presence/health of DB, manifest, index, blob dir
 ```
 
-**Caching**: `@st.cache_data` on JSON file reads, `@st.cache_resource` on SQLite connection. TTL: 5 minutes (auto-refresh without manual reload).
+**Caching**: `@st.cache_data` on JSON file reads, `@st.cache_resource` on SQLite connection. TTL: 5 minutes by default. Manual refresh clears caches immediately. Auto-refresh, when enabled, should reuse the same TTL rules instead of bypassing them.
 
 **SQLite access**: opened with `sqlite3.connect(db_path, uri=True)` in read-only mode (`?mode=ro`). Never writes.
 
@@ -521,6 +616,9 @@ No other dependencies. Uses stdlib `sqlite3`, `json`, `pathlib`, `datetime`, `gl
 - No open-in-editor/finder links (display copyable paths only)
 - No visualization of every scoring sub-field (pillar totals + bonuses/penalties only)
 - No mobile/responsive layout (desktop browser only)
+- No synthetic confidence score in v1. A confidence layer is deferred until backed by formal pipeline/export signals instead of invented heuristics.
+- No anomaly detection engine in v1. Defer until Release Diff and trace-lite are stable enough to reduce false positives.
+- No separate Operator Mode / Analyst Mode in v1. Sidebar views already provide sufficient separation at this stage.
 
 ---
 
@@ -531,12 +629,16 @@ No other dependencies. Uses stdlib `sqlite3`, `json`, `pathlib`, `datetime`, `gl
 - `data_loader.py`: auto-discovery, JSON readers, SQLite connection, `DashboardData` dataclass
 - `app.py`: sidebar layout (release summary, freshness, dataset filter, warnings, nav)
 - `views/inspector.py`: search, results table, product drill-down
-- Components: `metric_cards.py`, `score_breakdown.py`, `product_header.py`, `data_table.py`
+- Deep linking via query params
+- Manual refresh button + optional live mode
+- SQL-backed aggregations and capped FTS queries
+- Components: `metric_cards.py`, `score_breakdown.py`, `product_header.py`, `data_table.py`, `data_dictionary.py`
 
 ### Phase 2: Health + Quality
-- `views/health.py`: release card, batch run, processing state, missing artifacts, batch history
+- `views/health.py`: release card, batch run, stage visualization, processing state, missing artifacts, batch history
 - `views/quality.py`: not-scored queue, unmapped hotspots, fallback hotspots, verdict/score distributions, coverage gate, safety summary, config snapshot
-- Component: `status_badge.py`
+- Score trace-lite in Product Inspector
+- Component: `status_badge.py`, `score_trace.py`
 
 ### Phase 3: Release Diff
 - `views/diff.py`: comparison setup, score shifts, verdict changes, new warnings

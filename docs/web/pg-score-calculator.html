@@ -1,0 +1,1705 @@
+<!-- ═══════════════════════════════════════════════════════════════════════════
+     PHARMAGUIDE — INTERACTIVE SCORE CALCULATOR
+     Brand-native embed — lets visitors explore how PG Score is built
+     ═══════════════════════════════════════════════════════════════════════════ -->
+
+<section class="pg-calc" aria-labelledby="pg-calc-title" data-pg-calc>
+  <div class="pg-calc__container">
+    <header class="pg-calc__header">
+      <span class="pg-calc__eyebrow">
+        <svg
+          width="14"
+          height="14"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <path d="M12 20h9"></path>
+          <path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"></path>
+        </svg>
+        Interactive Demo
+      </span>
+      <h2 class="pg-calc__title" id="pg-calc-title">
+        See how PG Score is <em>built</em>.
+      </h2>
+      <p class="pg-calc__subtitle">
+        Drag the sliders to explore how each category shapes the final score and
+        verdict. Toggle the safety gate to see how one flag can override
+        everything.
+      </p>
+    </header>
+
+    <div class="pg-calc__grid">
+      <!-- ── Slider controls ──────────────────────────────────────────── -->
+      <div class="pg-calc__controls">
+        <div class="pg-calc__section-label">Quality score components</div>
+
+        <div class="pg-calc__group pg-calc__group--quality">
+          <div class="pg-calc__group-head">
+            <label class="pg-calc__group-label" for="pg-calc-ingredient"
+              >Ingredient Quality</label
+            >
+            <span class="pg-calc__group-value"
+              ><strong data-pg-calc-val="ingredient">18</strong
+              ><span class="pg-calc__group-max"> / 25</span></span
+            >
+          </div>
+          <div class="pg-calc__slider-wrap">
+            <input
+              type="range"
+              class="pg-calc__slider"
+              id="pg-calc-ingredient"
+              min="0"
+              max="25"
+              value="18"
+              data-pg-calc-input="ingredient"
+              aria-label="Ingredient Quality score, 0 to 25"
+            />
+          </div>
+        </div>
+
+        <div class="pg-calc__group pg-calc__group--quality">
+          <div class="pg-calc__group-head">
+            <label class="pg-calc__group-label" for="pg-calc-safety"
+              >Safety &amp; Purity</label
+            >
+            <span class="pg-calc__group-value"
+              ><strong data-pg-calc-val="safety">24</strong
+              ><span class="pg-calc__group-max"> / 30</span></span
+            >
+          </div>
+          <div class="pg-calc__slider-wrap">
+            <input
+              type="range"
+              class="pg-calc__slider"
+              id="pg-calc-safety"
+              min="0"
+              max="30"
+              value="24"
+              data-pg-calc-input="safety"
+              aria-label="Safety and Purity score, 0 to 30"
+            />
+          </div>
+        </div>
+
+        <div class="pg-calc__group pg-calc__group--quality">
+          <div class="pg-calc__group-head">
+            <label class="pg-calc__group-label" for="pg-calc-evidence"
+              >Evidence &amp; Research</label
+            >
+            <span class="pg-calc__group-value"
+              ><strong data-pg-calc-val="evidence">16</strong
+              ><span class="pg-calc__group-max"> / 25</span></span
+            >
+          </div>
+          <div class="pg-calc__slider-wrap">
+            <input
+              type="range"
+              class="pg-calc__slider"
+              id="pg-calc-evidence"
+              min="0"
+              max="25"
+              value="16"
+              data-pg-calc-input="evidence"
+              aria-label="Evidence and Research score, 0 to 25"
+            />
+          </div>
+        </div>
+
+        <div class="pg-calc__divider"></div>
+        <div class="pg-calc__section-label">Personal adjustment</div>
+
+        <div class="pg-calc__group pg-calc__group--fit">
+          <div class="pg-calc__group-head">
+            <label class="pg-calc__group-label" for="pg-calc-fit"
+              >Personal Fit</label
+            >
+            <span class="pg-calc__group-value"
+              ><strong data-pg-calc-val="fit">14</strong
+              ><span class="pg-calc__group-max"> / 20</span></span
+            >
+          </div>
+          <div class="pg-calc__slider-wrap">
+            <input
+              type="range"
+              class="pg-calc__slider"
+              id="pg-calc-fit"
+              min="0"
+              max="20"
+              value="14"
+              data-pg-calc-input="fit"
+              aria-label="Personal Fit score, 0 to 20"
+            />
+          </div>
+        </div>
+
+        <div class="pg-calc__divider"></div>
+        <div class="pg-calc__section-label">Safety gates</div>
+
+        <!-- Banned substance toggle -->
+        <div class="pg-calc__gate" data-pg-calc-gate-wrap="banned">
+          <label class="pg-calc__gate-label" for="pg-calc-gate-banned">
+            <span class="pg-calc__gate-switch-wrap">
+              <input
+                type="checkbox"
+                id="pg-calc-gate-banned"
+                class="pg-calc__gate-input"
+                data-pg-calc-gate="banned"
+              />
+              <span class="pg-calc__gate-switch" aria-hidden="true"></span>
+            </span>
+            <span class="pg-calc__gate-text">
+              <strong>Contains a banned substance</strong>
+              <span>e.g. DMAA, ephedra, phenibut — prohibited by FDA</span>
+            </span>
+          </label>
+        </div>
+
+        <!-- Recalled ingredient toggle -->
+        <div
+          class="pg-calc__gate pg-calc__gate--recall"
+          data-pg-calc-gate-wrap="recalled"
+        >
+          <label class="pg-calc__gate-label" for="pg-calc-gate-recalled">
+            <span class="pg-calc__gate-switch-wrap">
+              <input
+                type="checkbox"
+                id="pg-calc-gate-recalled"
+                class="pg-calc__gate-input"
+                data-pg-calc-gate="recalled"
+              />
+              <span
+                class="pg-calc__gate-switch pg-calc__gate-switch--recall"
+                aria-hidden="true"
+              ></span>
+            </span>
+            <span class="pg-calc__gate-text">
+              <strong>Contains a recalled ingredient</strong>
+              <span
+                >e.g. high-lead batch, undeclared drug — flagged by FDA
+                recall</span
+              >
+            </span>
+          </label>
+        </div>
+
+        <!-- Gate explainer banner (hidden by default, shown when a gate is active) -->
+        <div class="pg-calc__gate-banner" data-pg-calc-gate-banner hidden>
+          <div class="pg-calc__gate-banner-icon" aria-hidden="true">
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path
+                d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"
+              ></path>
+              <line x1="12" y1="9" x2="12" y2="13"></line>
+              <line x1="12" y1="17" x2="12.01" y2="17"></line>
+            </svg>
+          </div>
+          <div class="pg-calc__gate-banner-body">
+            <strong data-pg-calc-gate-banner-title>Score overridden</strong>
+            <p data-pg-calc-gate-banner-desc>
+              When a product contains a banned or recalled ingredient, the score
+              no longer matters. PG Score immediately blocks the product — no
+              matter how high the other categories scored. This is how real
+              safety gates work: one critical flag overrides everything.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── Result display ───────────────────────────────────────────── -->
+      <div class="pg-calc__result" data-pg-calc-result>
+        <div
+          class="pg-calc__result-accent"
+          data-pg-calc-accent
+          aria-hidden="true"
+        ></div>
+
+        <div class="pg-calc__ring-area">
+          <div class="pg-calc__ring" aria-hidden="true">
+            <svg viewBox="0 0 120 120" class="pg-calc__ring-svg">
+              <circle
+                class="pg-calc__ring-track"
+                cx="60"
+                cy="60"
+                r="52"
+                pathLength="100"
+              ></circle>
+              <circle
+                class="pg-calc__ring-progress"
+                cx="60"
+                cy="60"
+                r="52"
+                pathLength="100"
+                data-pg-calc-ring
+              ></circle>
+            </svg>
+            <div class="pg-calc__ring-center">
+              <div class="pg-calc__ring-number" data-pg-calc-score>72</div>
+              <div class="pg-calc__ring-total">/ 100</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="pg-calc__verdict-area">
+          <div class="pg-calc__verdict" data-pg-calc-verdict>
+            <span class="pg-calc__verdict-dot" aria-hidden="true"></span>
+            <span data-pg-calc-verdict-label>Review</span>
+          </div>
+          <p class="pg-calc__verdict-desc" data-pg-calc-verdict-desc>
+            Solid overall with areas to improve.
+          </p>
+        </div>
+
+        <div class="pg-calc__formula" data-pg-calc-formula>
+          <strong class="pg-calc__formula-title">Score breakdown</strong>
+          <p class="pg-calc__formula-text" data-pg-calc-formula-text>
+            Ingredient Quality <strong>18</strong> + Safety
+            <strong>24</strong> + Evidence <strong>16</strong> + Personal Fit
+            <strong>14</strong> = <strong>72 / 100</strong>
+          </p>
+        </div>
+
+        <button
+          class="pg-calc__reset"
+          type="button"
+          data-pg-calc-reset
+          aria-label="Reset sliders to default values"
+        >
+          <svg
+            width="14"
+            height="14"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
+            <path d="M3 3v5h5"></path>
+          </svg>
+          Reset to defaults
+        </button>
+
+        <p class="pg-calc__disclaimer">
+          Simplified illustration. The actual PG Score uses additional rules and
+          section-level safety gates.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sticky mobile bar (visible only on small screens while scrolling) -->
+  <div class="pg-calc__mobile-bar" data-pg-calc-mobile-bar aria-hidden="true">
+    <div class="pg-calc__mobile-bar-inner">
+      <div class="pg-calc__mobile-bar-score">
+        <svg
+          viewBox="0 0 120 120"
+          class="pg-calc__mobile-bar-ring"
+          aria-hidden="true"
+        >
+          <circle
+            cx="60"
+            cy="60"
+            r="52"
+            pathLength="100"
+            fill="none"
+            stroke-width="10"
+            stroke-linecap="round"
+            class="pg-calc__mobile-bar-track"
+          ></circle>
+          <circle
+            cx="60"
+            cy="60"
+            r="52"
+            pathLength="100"
+            fill="none"
+            stroke-width="10"
+            stroke-linecap="round"
+            class="pg-calc__mobile-bar-progress"
+            data-pg-calc-mobile-ring
+          ></circle>
+        </svg>
+        <span class="pg-calc__mobile-bar-number" data-pg-calc-mobile-score
+          >72</span
+        >
+      </div>
+      <div class="pg-calc__mobile-bar-verdict" data-pg-calc-mobile-verdict>
+        <span class="pg-calc__mobile-bar-dot"></span>
+        <span data-pg-calc-mobile-verdict-label>Review</span>
+      </div>
+      <span class="pg-calc__mobile-bar-hint">/ 100</span>
+    </div>
+  </div>
+</section>
+
+<style>
+  /* ── Tokens (inherits from pg-score section if present) ────────────── */
+  .pg-calc {
+    --pg-calc-bg: var(--pg-slate-50, #f8fafc);
+    --pg-calc-card: var(--pg-bg-card, #ffffff);
+    --pg-calc-line: color-mix(
+      in srgb,
+      var(--pg-slate-300, #cbd5e1) 68%,
+      transparent
+    );
+    --pg-calc-line-strong: color-mix(
+      in srgb,
+      var(--pg-slate-400, #94a3b8) 42%,
+      transparent
+    );
+    --pg-calc-quality: var(--pg-emerald-600, #059669);
+    --pg-calc-quality-soft: var(--pg-emerald-50, #ecfdf5);
+    --pg-calc-fit: var(--pg-teal-600, #0d9488);
+    --pg-calc-fit-soft: var(--pg-teal-50, #f0fdfa);
+    --pg-calc-track: color-mix(
+      in srgb,
+      var(--pg-slate-200, #e2e8f0) 86%,
+      white 14%
+    );
+    --pg-calc-review: #0d9488;
+    --pg-calc-moderate: #d97706;
+    --pg-calc-unsafe: #ea580c;
+    --pg-calc-blocked: #dc2626;
+    --pg-ease: cubic-bezier(0.22, 1, 0.36, 1);
+    width: 100%;
+    padding: clamp(2rem, 4vw, 3rem) clamp(1rem, 2vw, 1.5rem);
+    background: linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--pg-calc-bg) 90%, white 10%) 0%,
+      var(--pg-calc-bg) 100%
+    );
+  }
+
+  .pg-calc *,
+  .pg-calc *::before,
+  .pg-calc *::after {
+    box-sizing: border-box;
+  }
+
+  /* ── Container ─────────────────────────────────────────────────────── */
+  .pg-calc__container {
+    max-width: min(1120px, calc(100% - 2rem));
+    margin: 0 auto;
+  }
+
+  /* ── Header ────────────────────────────────────────────────────────── */
+  .pg-calc__header {
+    max-width: 680px;
+    margin: 0 auto clamp(1.25rem, 3vw, 2rem);
+    text-align: center;
+  }
+
+  .pg-calc__eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 0.875rem;
+    margin-bottom: 1rem;
+    border-radius: 9999px;
+    border: 1px solid
+      color-mix(in srgb, var(--pg-teal-500, #14b8a6) 16%, transparent);
+    background: color-mix(in srgb, var(--pg-teal-50, #f0fdfa) 82%, white 18%);
+    color: var(--pg-teal-700, #0f766e);
+    font-family: var(--pg-font-body, Inter, sans-serif);
+    font-size: var(--pg-text-eyebrow, 0.6875rem);
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    line-height: 1;
+  }
+
+  .pg-calc__title {
+    margin: 0 0 0.65rem;
+    font-family: var(--pg-font-heading, "Source Serif 4", serif);
+    font-size: clamp(1.5rem, 1.1rem + 1.3vw, 2.25rem);
+    font-weight: 700;
+    line-height: 1.12;
+    letter-spacing: -0.02em;
+    color: var(--pg-text-primary, #0f172a);
+  }
+
+  .pg-calc__title em {
+    font-style: normal;
+    color: var(--pg-teal-600, #0d9488);
+  }
+
+  .pg-calc__subtitle {
+    margin: 0 auto;
+    max-width: 560px;
+    font-family: var(--pg-font-body, Inter, sans-serif);
+    font-size: var(--pg-text-sm, 0.95rem);
+    line-height: 1.65;
+    color: var(--pg-text-secondary, #475569);
+  }
+
+  /* ── Grid ───────────────────────────────────────────────────────────── */
+  .pg-calc__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(16rem, 0.9fr);
+    gap: clamp(1.25rem, 2.5vw, 2rem);
+    align-items: start;
+  }
+
+  /* ── Controls column ────────────────────────────────────────────────── */
+  .pg-calc__controls {
+    display: grid;
+    gap: 0.4rem;
+    padding: clamp(1rem, 2vw, 1.35rem);
+    background: var(--pg-calc-card);
+    border: 1px solid var(--pg-calc-line);
+    border-radius: 2rem;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.04);
+  }
+
+  .pg-calc__section-label {
+    color: var(--pg-text-muted, #64748b);
+    font-family: var(--pg-font-body, Inter, sans-serif);
+    font-size: var(--pg-text-eyebrow, 0.6875rem);
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding-top: 0.25rem;
+  }
+
+  .pg-calc__divider {
+    height: 1px;
+    background: var(--pg-calc-line);
+    margin: 0.25rem 0;
+  }
+
+  /* ── Slider group ───────────────────────────────────────────────────── */
+  .pg-calc__group {
+    display: grid;
+    gap: 0.35rem;
+    padding: 0.6rem 0.8rem;
+    border: 1px solid var(--pg-calc-line);
+    border-radius: 1rem;
+    background: color-mix(
+      in srgb,
+      var(--pg-calc-bg) 50%,
+      var(--pg-calc-card) 50%
+    );
+    transition: border-color 0.2s ease;
+  }
+
+  .pg-calc__group:hover {
+    border-color: var(--pg-calc-line-strong);
+  }
+
+  .pg-calc__group--quality {
+    --pg-calc-accent: var(--pg-calc-quality);
+  }
+  .pg-calc__group--fit {
+    --pg-calc-accent: var(--pg-calc-fit);
+  }
+
+  .pg-calc__group-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .pg-calc__group-label {
+    font-family: var(--pg-font-display, "Plus Jakarta Sans", sans-serif);
+    font-size: var(--pg-text-sm, 0.95rem);
+    font-weight: 600;
+    color: var(--pg-text-primary, #0f172a);
+    cursor: pointer;
+  }
+
+  .pg-calc__group-value {
+    font-family: var(--pg-font-body, Inter, sans-serif);
+    font-size: var(--pg-text-sm, 0.95rem);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+
+  .pg-calc__group-value strong {
+    color: var(--pg-calc-accent);
+    font-weight: 800;
+  }
+
+  .pg-calc__group-max {
+    color: var(--pg-text-muted, #64748b);
+    font-weight: 400;
+  }
+
+  /* ── Range slider ───────────────────────────────────────────────────── */
+  .pg-calc__slider-wrap {
+    padding: 0.25rem 0 0.15rem;
+  }
+
+  .pg-calc__slider {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 8px;
+    border-radius: 9999px;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    background: linear-gradient(
+      to right,
+      var(--pg-calc-accent) 0%,
+      var(--pg-calc-accent) var(--pg-fill, 0%),
+      var(--pg-calc-track) var(--pg-fill, 0%),
+      var(--pg-calc-track) 100%
+    );
+    touch-action: manipulation;
+  }
+
+  /* WebKit thumb */
+  .pg-calc__slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: var(--pg-calc-card, #ffffff);
+    border: 3px solid var(--pg-calc-accent);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
+    cursor: grab;
+    transition:
+      transform 0.15s ease,
+      box-shadow 0.15s ease;
+  }
+
+  .pg-calc__slider::-webkit-slider-thumb:hover {
+    transform: scale(1.15);
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.18);
+  }
+
+  .pg-calc__slider::-webkit-slider-thumb:active {
+    cursor: grabbing;
+    transform: scale(1.05);
+  }
+
+  /* Firefox thumb */
+  .pg-calc__slider::-moz-range-thumb {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: var(--pg-calc-card, #ffffff);
+    border: 3px solid var(--pg-calc-accent);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
+    cursor: grab;
+  }
+
+  /* Firefox track + progress */
+  .pg-calc__slider::-moz-range-track {
+    height: 8px;
+    border-radius: 9999px;
+    background: var(--pg-calc-track);
+    border: none;
+  }
+
+  .pg-calc__slider::-moz-range-progress {
+    height: 8px;
+    border-radius: 9999px;
+    background: var(--pg-calc-accent);
+  }
+
+  .pg-calc__slider:focus-visible {
+    outline: 2px solid var(--pg-teal-500, #14b8a6);
+    outline-offset: 4px;
+    border-radius: 9999px;
+  }
+
+  /* ── Gate toggle ────────────────────────────────────────────────────── */
+  .pg-calc__gate {
+    padding: 0.6rem 0.8rem;
+    border: 1px solid var(--pg-calc-line);
+    border-radius: 1rem;
+    background: color-mix(
+      in srgb,
+      var(--pg-calc-bg) 50%,
+      var(--pg-calc-card) 50%
+    );
+    transition:
+      border-color 0.25s ease,
+      background-color 0.25s ease;
+  }
+
+  .pg-calc__gate.is-active {
+    border-color: color-mix(in srgb, var(--pg-calc-blocked) 30%, transparent);
+    background: color-mix(in srgb, #fef2f2 70%, var(--pg-calc-card) 30%);
+  }
+
+  .pg-calc__gate-label {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 0.75rem;
+    align-items: center;
+    cursor: pointer;
+  }
+
+  .pg-calc__gate-input {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+
+  .pg-calc__gate-switch-wrap {
+    display: inline-flex;
+  }
+
+  .pg-calc__gate-switch {
+    position: relative;
+    width: 44px;
+    height: 24px;
+    border-radius: 12px;
+    background: var(--pg-calc-track);
+    border: 1px solid var(--pg-calc-line);
+    transition:
+      background-color 0.25s ease,
+      border-color 0.25s ease;
+    flex-shrink: 0;
+  }
+
+  .pg-calc__gate-switch::after {
+    content: "";
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: white;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+    transition: transform 0.25s var(--pg-ease);
+  }
+
+  .pg-calc__gate-input:checked + .pg-calc__gate-switch {
+    background: var(--pg-calc-blocked);
+    border-color: var(--pg-calc-blocked);
+  }
+
+  .pg-calc__gate-input:checked + .pg-calc__gate-switch::after {
+    transform: translateX(20px);
+  }
+
+  .pg-calc__gate-input:focus-visible + .pg-calc__gate-switch {
+    outline: 2px solid var(--pg-teal-500, #14b8a6);
+    outline-offset: 3px;
+  }
+
+  .pg-calc__gate-text {
+    display: grid;
+    gap: 0.15rem;
+  }
+
+  .pg-calc__gate-text strong {
+    font-family: var(--pg-font-display, "Plus Jakarta Sans", sans-serif);
+    font-size: var(--pg-text-sm, 0.95rem);
+    color: var(--pg-text-primary, #0f172a);
+    line-height: 1.3;
+  }
+
+  .pg-calc__gate-text span {
+    font-size: 0.8rem;
+    color: var(--pg-text-muted, #64748b);
+    line-height: 1.4;
+  }
+
+  /* ── Recall switch variant ───────────────────────────────────────────── */
+  .pg-calc__gate-input:checked + .pg-calc__gate-switch--recall {
+    background: #b45309;
+    border-color: #b45309;
+  }
+
+  .pg-calc__gate--recall.is-active {
+    border-color: color-mix(in srgb, #b45309 30%, transparent);
+    background: color-mix(in srgb, #fff7ed 70%, var(--pg-calc-card) 30%);
+  }
+
+  /* ── Gate explainer banner ──────────────────────────────────────────── */
+  .pg-calc__gate-banner {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 0.75rem;
+    padding: 0.85rem 1rem;
+    border-radius: 1rem;
+    border: 1px solid
+      color-mix(in srgb, var(--pg-calc-blocked) 25%, transparent);
+    background: linear-gradient(
+      135deg,
+      color-mix(in srgb, #fef2f2 85%, white 15%) 0%,
+      color-mix(in srgb, #fff7ed 85%, white 15%) 100%
+    );
+    animation: pg-calc-banner-in 0.35s var(--pg-ease) both;
+  }
+
+  @keyframes pg-calc-banner-in {
+    from {
+      opacity: 0;
+      transform: translateY(-8px) scale(0.98);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+
+  .pg-calc__gate-banner-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: 0.75rem;
+    background: color-mix(in srgb, var(--pg-calc-blocked) 12%, transparent);
+    color: var(--pg-calc-blocked);
+    flex-shrink: 0;
+  }
+
+  .pg-calc__gate-banner-body {
+    display: grid;
+    gap: 0.3rem;
+  }
+
+  .pg-calc__gate-banner-body strong {
+    font-family: var(--pg-font-display, "Plus Jakarta Sans", sans-serif);
+    font-size: var(--pg-text-sm, 0.95rem);
+    color: var(--pg-calc-blocked);
+    line-height: 1.3;
+  }
+
+  .pg-calc__gate-banner-body p {
+    margin: 0;
+    font-size: 0.8rem;
+    line-height: 1.55;
+    color: var(--pg-text-secondary, #475569);
+  }
+
+  /* ── Result card ────────────────────────────────────────────────────── */
+  .pg-calc__result {
+    position: sticky;
+    top: 2rem;
+    display: grid;
+    gap: 0.75rem;
+    justify-items: center;
+    padding: clamp(1rem, 2vw, 1.35rem);
+    background: var(--pg-calc-card);
+    border: 1px solid var(--pg-calc-line);
+    border-radius: 2rem;
+    box-shadow: 0 16px 32px rgba(0, 0, 0, 0.06);
+    overflow: clip;
+    text-align: center;
+  }
+
+  .pg-calc__result-accent {
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: 0.375rem;
+    background: linear-gradient(
+      90deg,
+      var(--pg-calc-quality) 0%,
+      var(--pg-calc-review) 100%
+    );
+    transition: background 0.4s ease;
+  }
+
+  /* Accent stripe colors by verdict */
+  [data-pg-verdict="recommended"] .pg-calc__result-accent {
+    background: linear-gradient(
+      90deg,
+      var(--pg-calc-quality) 0%,
+      color-mix(in srgb, var(--pg-calc-quality) 70%, white 30%) 100%
+    );
+  }
+  [data-pg-verdict="review"] .pg-calc__result-accent {
+    background: linear-gradient(
+      90deg,
+      var(--pg-calc-review) 0%,
+      color-mix(in srgb, var(--pg-calc-review) 70%, white 30%) 100%
+    );
+  }
+  [data-pg-verdict="moderate"] .pg-calc__result-accent {
+    background: linear-gradient(
+      90deg,
+      var(--pg-calc-moderate) 0%,
+      color-mix(in srgb, var(--pg-calc-moderate) 70%, white 30%) 100%
+    );
+  }
+  [data-pg-verdict="unsafe"] .pg-calc__result-accent {
+    background: linear-gradient(
+      90deg,
+      var(--pg-calc-unsafe) 0%,
+      color-mix(in srgb, var(--pg-calc-unsafe) 60%, #fbbf24 40%) 100%
+    );
+  }
+  [data-pg-verdict="blocked"] .pg-calc__result-accent {
+    background: linear-gradient(
+      90deg,
+      var(--pg-calc-blocked) 0%,
+      color-mix(in srgb, var(--pg-calc-blocked) 70%, #991b1b 30%) 100%
+    );
+  }
+
+  /* ── Score ring ─────────────────────────────────────────────────────── */
+  .pg-calc__ring-area {
+    padding-top: 0.25rem;
+  }
+
+  .pg-calc__ring {
+    position: relative;
+    width: clamp(6rem, 5.5rem + 2.5vw, 7.5rem);
+    aspect-ratio: 1;
+    padding: 0.35rem;
+    border-radius: 50%;
+    background: color-mix(in srgb, var(--pg-calc-bg) 88%, white 12%);
+    box-shadow:
+      inset 0 0 0 1px var(--pg-calc-line),
+      0 8px 18px rgba(15, 23, 42, 0.05);
+  }
+
+  .pg-calc__ring-svg {
+    width: 100%;
+    height: 100%;
+    transform: rotate(-90deg);
+    overflow: hidden;
+  }
+
+  .pg-calc__ring-track,
+  .pg-calc__ring-progress {
+    fill: none;
+    stroke-width: 8;
+    stroke-linecap: round;
+  }
+
+  .pg-calc__ring-track {
+    stroke: var(--pg-calc-track);
+  }
+
+  .pg-calc__ring-progress {
+    stroke: var(--pg-calc-quality);
+    stroke-dasharray: 100;
+    stroke-dashoffset: 100;
+    transition:
+      stroke-dashoffset 0.15s ease-out,
+      stroke 0.3s ease;
+  }
+
+  /* Ring stroke color by verdict */
+  [data-pg-verdict="recommended"] .pg-calc__ring-progress {
+    stroke: var(--pg-calc-quality);
+  }
+  [data-pg-verdict="review"] .pg-calc__ring-progress {
+    stroke: var(--pg-calc-review);
+  }
+  [data-pg-verdict="moderate"] .pg-calc__ring-progress {
+    stroke: var(--pg-calc-moderate);
+  }
+  [data-pg-verdict="unsafe"] .pg-calc__ring-progress {
+    stroke: var(--pg-calc-unsafe);
+  }
+  [data-pg-verdict="blocked"] .pg-calc__ring-progress {
+    stroke: var(--pg-calc-blocked);
+  }
+
+  .pg-calc__ring-center {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .pg-calc__ring-number {
+    font-family: var(--pg-font-heading, "Source Serif 4", serif);
+    font-size: clamp(2rem, 1.7rem + 1vw, 2.6rem);
+    line-height: 0.88;
+    letter-spacing: -0.05em;
+    font-variant-numeric: tabular-nums;
+    color: var(--pg-calc-quality);
+    transition: color 0.3s ease;
+  }
+
+  /* Number color by verdict */
+  [data-pg-verdict="recommended"] .pg-calc__ring-number {
+    color: var(--pg-calc-quality);
+  }
+  [data-pg-verdict="review"] .pg-calc__ring-number {
+    color: var(--pg-calc-review);
+  }
+  [data-pg-verdict="moderate"] .pg-calc__ring-number {
+    color: var(--pg-calc-moderate);
+  }
+  [data-pg-verdict="unsafe"] .pg-calc__ring-number {
+    color: var(--pg-calc-unsafe);
+  }
+  [data-pg-verdict="blocked"] .pg-calc__ring-number {
+    color: var(--pg-calc-blocked);
+  }
+
+  .pg-calc__ring-total {
+    margin-top: 0.1rem;
+    color: var(--pg-text-muted, #64748b);
+    font-size: var(--pg-text-xs, 0.875rem);
+    font-weight: 700;
+    letter-spacing: 0.08em;
+  }
+
+  /* ── Verdict badge ──────────────────────────────────────────────────── */
+  .pg-calc__verdict-area {
+    display: grid;
+    gap: 0.35rem;
+    justify-items: center;
+  }
+
+  .pg-calc__verdict {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.55rem 1rem;
+    border-radius: 9999px;
+    font-family: var(--pg-font-display, "Plus Jakarta Sans", sans-serif);
+    font-size: var(--pg-text-sm, 0.95rem);
+    font-weight: 700;
+    white-space: nowrap;
+    transition:
+      background-color 0.3s ease,
+      color 0.3s ease;
+  }
+
+  .pg-calc__verdict-dot {
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    background: currentColor;
+  }
+
+  /* Verdict badge colors */
+  [data-pg-verdict="recommended"] .pg-calc__verdict {
+    background: var(--pg-calc-quality-soft);
+    color: var(--pg-calc-quality);
+  }
+  [data-pg-verdict="review"] .pg-calc__verdict {
+    background: var(--pg-calc-fit-soft);
+    color: var(--pg-calc-review);
+  }
+  [data-pg-verdict="moderate"] .pg-calc__verdict {
+    background: color-mix(in srgb, #fef3c7 80%, white 20%);
+    color: var(--pg-calc-moderate);
+  }
+  [data-pg-verdict="unsafe"] .pg-calc__verdict {
+    background: #fff7ed;
+    color: var(--pg-calc-unsafe);
+  }
+  [data-pg-verdict="blocked"] .pg-calc__verdict {
+    background: #fef2f2;
+    color: var(--pg-calc-blocked);
+  }
+
+  .pg-calc__verdict-desc {
+    margin: 0;
+    font-size: 0.8rem;
+    color: var(--pg-text-muted, #64748b);
+    line-height: 1.4;
+    max-width: 22rem;
+  }
+
+  /* ── Formula ────────────────────────────────────────────────────────── */
+  .pg-calc__formula {
+    display: grid;
+    gap: 0.35rem;
+    width: 100%;
+    padding: 0.75rem 0.9rem;
+    border: 1px solid var(--pg-calc-line);
+    border-radius: 1rem;
+    background: color-mix(in srgb, var(--pg-calc-bg) 88%, white 12%);
+    text-align: left;
+  }
+
+  .pg-calc__formula-title {
+    color: var(--pg-text-primary, #0f172a);
+    font-size: var(--pg-text-eyebrow, 0.6875rem);
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .pg-calc__formula-text {
+    margin: 0;
+    color: var(--pg-text-muted, #64748b);
+    font-size: var(--pg-text-xs, 0.875rem);
+    line-height: 1.45;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .pg-calc__formula-text strong {
+    color: var(--pg-text-primary, #0f172a);
+  }
+
+  /* ── Reset button ───────────────────────────────────────────────────── */
+  .pg-calc__reset {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.45rem 0.8rem;
+    border: 1px solid var(--pg-calc-line);
+    border-radius: 9999px;
+    background: transparent;
+    color: var(--pg-text-muted, #64748b);
+    font-family: var(--pg-font-body, Inter, sans-serif);
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition:
+      color 0.2s ease,
+      border-color 0.2s ease;
+  }
+
+  .pg-calc__reset:hover {
+    color: var(--pg-teal-700, #0f766e);
+    border-color: var(--pg-calc-line-strong);
+  }
+
+  .pg-calc__reset:active {
+    transform: scale(0.97);
+  }
+
+  .pg-calc__reset:focus-visible {
+    outline: 2px solid var(--pg-teal-500, #14b8a6);
+    outline-offset: 3px;
+  }
+
+  /* ── Disclaimer ─────────────────────────────────────────────────────── */
+  .pg-calc__disclaimer {
+    margin: 0;
+    color: var(--pg-text-muted, #64748b);
+    font-size: 0.75rem;
+    line-height: 1.4;
+    opacity: 0.7;
+    max-width: 20rem;
+  }
+
+  /* ── Mobile sticky bar (hidden on desktop) ──────────────────────────── */
+  .pg-calc__mobile-bar {
+    display: none;
+  }
+
+  /* ── Responsive ─────────────────────────────────────────────────────── */
+  @media (max-width: 820px) {
+    .pg-calc__grid {
+      grid-template-columns: 1fr;
+    }
+
+    .pg-calc__result {
+      position: static;
+    }
+
+    /* Show mobile bar */
+    .pg-calc__mobile-bar {
+      display: block;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 900;
+      padding: 0.6rem 1rem calc(0.6rem + env(safe-area-inset-bottom, 0px));
+      background: color-mix(
+        in srgb,
+        var(--pg-calc-card, #ffffff) 95%,
+        transparent
+      );
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-top: 1px solid var(--pg-calc-line);
+      box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.08);
+      opacity: 0;
+      transform: translateY(100%);
+      transition:
+        opacity 0.3s ease,
+        transform 0.3s ease;
+      pointer-events: none;
+    }
+
+    .pg-calc__mobile-bar.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+
+    .pg-calc__mobile-bar-inner {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .pg-calc__mobile-bar-score {
+      position: relative;
+      width: 40px;
+      height: 40px;
+      flex-shrink: 0;
+    }
+
+    .pg-calc__mobile-bar-ring {
+      width: 100%;
+      height: 100%;
+      transform: rotate(-90deg);
+    }
+
+    .pg-calc__mobile-bar-track {
+      stroke: var(--pg-calc-track);
+    }
+
+    .pg-calc__mobile-bar-progress {
+      stroke: var(--pg-calc-quality);
+      stroke-dasharray: 100;
+      stroke-dashoffset: 100;
+      transition:
+        stroke-dashoffset 0.15s ease-out,
+        stroke 0.3s ease;
+    }
+
+    /* Ring color by verdict */
+    [data-pg-verdict="recommended"] .pg-calc__mobile-bar-progress {
+      stroke: var(--pg-calc-quality);
+    }
+    [data-pg-verdict="review"] .pg-calc__mobile-bar-progress {
+      stroke: var(--pg-calc-review);
+    }
+    [data-pg-verdict="moderate"] .pg-calc__mobile-bar-progress {
+      stroke: var(--pg-calc-moderate);
+    }
+    [data-pg-verdict="unsafe"] .pg-calc__mobile-bar-progress {
+      stroke: var(--pg-calc-unsafe);
+    }
+    [data-pg-verdict="blocked"] .pg-calc__mobile-bar-progress {
+      stroke: var(--pg-calc-blocked);
+    }
+
+    .pg-calc__mobile-bar-number {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--pg-font-heading, "Source Serif 4", serif);
+      font-size: 0.95rem;
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+      letter-spacing: -0.03em;
+      color: var(--pg-calc-quality);
+      transition: color 0.3s ease;
+    }
+
+    [data-pg-verdict="recommended"] .pg-calc__mobile-bar-number {
+      color: var(--pg-calc-quality);
+    }
+    [data-pg-verdict="review"] .pg-calc__mobile-bar-number {
+      color: var(--pg-calc-review);
+    }
+    [data-pg-verdict="moderate"] .pg-calc__mobile-bar-number {
+      color: var(--pg-calc-moderate);
+    }
+    [data-pg-verdict="unsafe"] .pg-calc__mobile-bar-number {
+      color: var(--pg-calc-unsafe);
+    }
+    [data-pg-verdict="blocked"] .pg-calc__mobile-bar-number {
+      color: var(--pg-calc-blocked);
+    }
+
+    .pg-calc__mobile-bar-verdict {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.35rem 0.7rem;
+      border-radius: 9999px;
+      font-family: var(--pg-font-display, "Plus Jakarta Sans", sans-serif);
+      font-size: 0.8rem;
+      font-weight: 700;
+      white-space: nowrap;
+      transition:
+        background-color 0.3s ease,
+        color 0.3s ease;
+    }
+
+    [data-pg-verdict="recommended"] .pg-calc__mobile-bar-verdict {
+      background: var(--pg-calc-quality-soft);
+      color: var(--pg-calc-quality);
+    }
+    [data-pg-verdict="review"] .pg-calc__mobile-bar-verdict {
+      background: var(--pg-calc-fit-soft);
+      color: var(--pg-calc-review);
+    }
+    [data-pg-verdict="moderate"] .pg-calc__mobile-bar-verdict {
+      background: color-mix(in srgb, #fef3c7 80%, white 20%);
+      color: var(--pg-calc-moderate);
+    }
+    [data-pg-verdict="unsafe"] .pg-calc__mobile-bar-verdict {
+      background: #fff7ed;
+      color: var(--pg-calc-unsafe);
+    }
+    [data-pg-verdict="blocked"] .pg-calc__mobile-bar-verdict {
+      background: #fef2f2;
+      color: var(--pg-calc-blocked);
+    }
+
+    .pg-calc__mobile-bar-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: currentColor;
+    }
+
+    .pg-calc__mobile-bar-hint {
+      color: var(--pg-text-muted, #64748b);
+      font-size: 0.75rem;
+      font-weight: 600;
+      margin-left: auto;
+    }
+
+    /* Add bottom padding to section so content isn't hidden behind bar */
+    .pg-calc {
+      padding-bottom: calc(4rem + env(safe-area-inset-bottom, 0px));
+    }
+  }
+
+  @media (max-width: 560px) {
+    .pg-calc {
+      padding-block-start: var(--pg-section-py-mobile, 2.5rem);
+    }
+
+    .pg-calc__container {
+      max-width: calc(100% - 1rem);
+    }
+
+    .pg-calc__controls,
+    .pg-calc__result {
+      border-radius: 1.5rem;
+    }
+  }
+
+  /* ── Dark mode ──────────────────────────────────────────────────────── */
+  @media (prefers-color-scheme: dark) {
+    .pg-calc {
+      --pg-calc-bg: #0f172a;
+      --pg-calc-card: rgba(15, 23, 42, 0.88);
+      --pg-calc-line: rgba(148, 163, 184, 0.18);
+      --pg-calc-line-strong: rgba(148, 163, 184, 0.28);
+      --pg-calc-track: rgba(148, 163, 184, 0.16);
+      --pg-calc-quality-soft: rgba(16, 185, 129, 0.12);
+      --pg-calc-fit-soft: rgba(20, 184, 166, 0.12);
+      background: linear-gradient(180deg, #0f172a 0%, #111827 100%);
+    }
+
+    .pg-calc__title,
+    .pg-calc__group-label,
+    .pg-calc__gate-text strong,
+    .pg-calc__formula-title,
+    .pg-calc__formula-text strong {
+      color: var(--pg-slate-50, #f8fafc);
+    }
+
+    .pg-calc__subtitle,
+    .pg-calc__group-max {
+      color: var(--pg-slate-300, #cbd5e1);
+    }
+
+    .pg-calc__section-label,
+    .pg-calc__gate-text span,
+    .pg-calc__verdict-desc,
+    .pg-calc__reset,
+    .pg-calc__disclaimer,
+    .pg-calc__ring-total {
+      color: var(--pg-slate-400, #94a3b8);
+    }
+
+    .pg-calc__eyebrow {
+      background: rgba(20, 184, 166, 0.12);
+      border-color: rgba(94, 234, 212, 0.16);
+      color: var(--pg-teal-300, #5eead4);
+    }
+
+    .pg-calc__group,
+    .pg-calc__gate,
+    .pg-calc__formula {
+      background: rgba(30, 41, 59, 0.5);
+      border-color: var(--pg-calc-line);
+    }
+
+    .pg-calc__gate.is-active {
+      background: rgba(127, 29, 29, 0.15);
+      border-color: rgba(220, 38, 38, 0.25);
+    }
+
+    .pg-calc__gate--recall.is-active {
+      background: rgba(120, 53, 15, 0.15);
+      border-color: rgba(180, 83, 9, 0.25);
+    }
+
+    .pg-calc__gate-banner {
+      background: linear-gradient(
+        135deg,
+        rgba(127, 29, 29, 0.15) 0%,
+        rgba(120, 53, 15, 0.12) 100%
+      );
+      border-color: rgba(220, 38, 38, 0.2);
+    }
+
+    .pg-calc__gate-banner-body strong {
+      color: #fca5a5;
+    }
+
+    .pg-calc__gate-banner-body p {
+      color: var(--pg-slate-300, #cbd5e1);
+    }
+
+    .pg-calc__gate-banner-icon {
+      background: rgba(220, 38, 38, 0.15);
+      color: #fca5a5;
+    }
+
+    .pg-calc__ring {
+      background: rgba(30, 41, 59, 0.7);
+      box-shadow:
+        inset 0 0 0 1px var(--pg-calc-line),
+        0 10px 22px rgba(0, 0, 0, 0.18);
+    }
+
+    .pg-calc__slider::-webkit-slider-thumb {
+      background: #1e293b;
+    }
+
+    .pg-calc__slider::-moz-range-thumb {
+      background: #1e293b;
+    }
+
+    .pg-calc__gate-switch {
+      background: rgba(148, 163, 184, 0.2);
+      border-color: var(--pg-calc-line);
+    }
+
+    .pg-calc__gate-switch::after {
+      background: var(--pg-slate-300, #cbd5e1);
+    }
+
+    /* Dark verdict badge backgrounds */
+    [data-pg-verdict="moderate"] .pg-calc__verdict {
+      background: rgba(217, 119, 6, 0.12);
+    }
+    [data-pg-verdict="unsafe"] .pg-calc__verdict {
+      background: rgba(234, 88, 12, 0.12);
+    }
+    [data-pg-verdict="blocked"] .pg-calc__verdict {
+      background: rgba(220, 38, 38, 0.12);
+    }
+
+    .pg-calc__reset:hover {
+      color: var(--pg-teal-300, #5eead4);
+    }
+
+    .pg-calc__mobile-bar {
+      background: color-mix(in srgb, #0f172a 92%, transparent) !important;
+      border-top-color: rgba(148, 163, 184, 0.15);
+      box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.25);
+    }
+
+    [data-pg-verdict="moderate"] .pg-calc__mobile-bar-verdict {
+      background: rgba(217, 119, 6, 0.12);
+    }
+    [data-pg-verdict="unsafe"] .pg-calc__mobile-bar-verdict {
+      background: rgba(234, 88, 12, 0.12);
+    }
+    [data-pg-verdict="blocked"] .pg-calc__mobile-bar-verdict {
+      background: rgba(220, 38, 38, 0.12);
+    }
+  }
+
+  /* ── Reduced motion ─────────────────────────────────────────────────── */
+  @media (prefers-reduced-motion: reduce) {
+    .pg-calc__ring-progress,
+    .pg-calc__verdict,
+    .pg-calc__result-accent,
+    .pg-calc__ring-number,
+    .pg-calc__gate,
+    .pg-calc__gate-switch,
+    .pg-calc__gate-switch::after,
+    .pg-calc__slider::-webkit-slider-thumb {
+      transition: none;
+    }
+
+    .pg-calc__gate-banner {
+      animation: none;
+    }
+  }
+</style>
+
+<script>
+  (function () {
+    "use strict";
+
+    var root = document.querySelector("[data-pg-calc]");
+    if (!root) return;
+
+    /* ── DOM refs ──────────────────────────────────────────────────── */
+    var sliders = root.querySelectorAll("[data-pg-calc-input]");
+    var gateBanned = root.querySelector('[data-pg-calc-gate="banned"]');
+    var gateRecalled = root.querySelector('[data-pg-calc-gate="recalled"]');
+    var gateBannedWrap = root.querySelector(
+      '[data-pg-calc-gate-wrap="banned"]',
+    );
+    var gateRecalledWrap = root.querySelector(
+      '[data-pg-calc-gate-wrap="recalled"]',
+    );
+    var gateBanner = root.querySelector("[data-pg-calc-gate-banner]");
+    var gateBannerTitle = root.querySelector(
+      "[data-pg-calc-gate-banner-title]",
+    );
+    var gateBannerDesc = root.querySelector("[data-pg-calc-gate-banner-desc]");
+    var ring = root.querySelector("[data-pg-calc-ring]");
+    var scoreEl = root.querySelector("[data-pg-calc-score]");
+    var verdictLabel = root.querySelector("[data-pg-calc-verdict-label]");
+    var verdictDesc = root.querySelector("[data-pg-calc-verdict-desc]");
+    var formulaText = root.querySelector("[data-pg-calc-formula-text]");
+    var resetBtn = root.querySelector("[data-pg-calc-reset]");
+    var resultEl = root.querySelector("[data-pg-calc-result]");
+
+    /* Mobile bar refs */
+    var mobileBar = root.querySelector("[data-pg-calc-mobile-bar]");
+    var mobileRing = root.querySelector("[data-pg-calc-mobile-ring]");
+    var mobileScore = root.querySelector("[data-pg-calc-mobile-score]");
+    var mobileVerdictLabel = root.querySelector(
+      "[data-pg-calc-mobile-verdict-label]",
+    );
+
+    /* ── Defaults ──────────────────────────────────────────────────── */
+    var defaults = { ingredient: 18, safety: 24, evidence: 16, fit: 14 };
+
+    /* ── Verdict config ────────────────────────────────────────────── */
+    var verdicts = [
+      {
+        key: "recommended",
+        min: 75,
+        label: "Recommended",
+        desc: "Strong across all scoring categories.",
+      },
+      {
+        key: "review",
+        min: 55,
+        label: "Review",
+        desc: "Solid overall with areas to improve.",
+      },
+      {
+        key: "moderate",
+        min: 35,
+        label: "Moderate",
+        desc: "Mixed signals across categories.",
+      },
+      {
+        key: "unsafe",
+        min: 0,
+        label: "Unsafe",
+        desc: "Significant quality or safety concerns.",
+      },
+    ];
+    var blockedVerdict = {
+      key: "blocked",
+      label: "Blocked",
+      desc: "Safety gate triggered — score is overridden.",
+    };
+
+    /* ── Update slider fill ────────────────────────────────────────── */
+    function updateSliderFill(slider) {
+      var min = parseFloat(slider.min);
+      var max = parseFloat(slider.max);
+      var val = parseFloat(slider.value);
+      var pct = ((val - min) / (max - min)) * 100;
+      slider.style.setProperty("--pg-fill", pct + "%");
+
+      /* Update value display */
+      var name = slider.getAttribute("data-pg-calc-input");
+      var valEl = root.querySelector('[data-pg-calc-val="' + name + '"]');
+      if (valEl) valEl.textContent = Math.round(val);
+    }
+
+    /* ── Gate banner messages ──────────────────────────────────────── */
+    var gateMessages = {
+      banned: {
+        title: "Banned substance — score overridden",
+        desc: "This product contains an ingredient the FDA has prohibited (like DMAA, ephedra, or phenibut). No matter how high the other categories score, PG Score immediately blocks the product. The score is still calculated, but the verdict is locked to Blocked.",
+      },
+      recalled: {
+        title: "Recalled ingredient — score overridden",
+        desc: "This product contains an ingredient tied to an FDA recall — for example, a batch with elevated lead levels or an undeclared pharmaceutical drug. Even if the formulation scores well in every other area, one recalled ingredient is enough to block the product.",
+      },
+      both: {
+        title: "Banned + recalled — score overridden",
+        desc: "This product contains both a banned substance and a recalled ingredient. Either one alone would block the product. PG Score treats safety gates as non-negotiable: the score is still calculated so you can see the breakdown, but the verdict is permanently Blocked until the flagged ingredients are removed.",
+      },
+    };
+
+    /* ── Recalculate ───────────────────────────────────────────────── */
+    function recalculate() {
+      var ingredient = parseInt(
+        root.querySelector('[data-pg-calc-input="ingredient"]').value,
+        10,
+      );
+      var safety = parseInt(
+        root.querySelector('[data-pg-calc-input="safety"]').value,
+        10,
+      );
+      var evidence = parseInt(
+        root.querySelector('[data-pg-calc-input="evidence"]').value,
+        10,
+      );
+      var fit = parseInt(
+        root.querySelector('[data-pg-calc-input="fit"]').value,
+        10,
+      );
+      var isBanned = gateBanned && gateBanned.checked;
+      var isRecalled = gateRecalled && gateRecalled.checked;
+      var isBlocked = isBanned || isRecalled;
+
+      var total = Math.min(
+        100,
+        Math.max(0, ingredient + safety + evidence + fit),
+      );
+
+      /* Update score display */
+      scoreEl.textContent = total;
+
+      /* Update ring */
+      if (ring) {
+        ring.style.strokeDashoffset = 100 - total;
+      }
+
+      /* Determine verdict */
+      var verdict = blockedVerdict;
+      if (!isBlocked) {
+        for (var i = 0; i < verdicts.length; i++) {
+          if (total >= verdicts[i].min) {
+            verdict = verdicts[i];
+            break;
+          }
+        }
+      }
+
+      /* Update verdict display */
+      verdictLabel.textContent = verdict.label;
+      verdictDesc.textContent = verdict.desc;
+      root.setAttribute("data-pg-verdict", verdict.key);
+
+      /* Update gate visuals */
+      if (gateBannedWrap) {
+        gateBannedWrap.classList.toggle("is-active", isBanned);
+      }
+      if (gateRecalledWrap) {
+        gateRecalledWrap.classList.toggle("is-active", isRecalled);
+      }
+
+      /* Update gate banner */
+      if (gateBanner) {
+        if (isBlocked) {
+          var msgKey =
+            isBanned && isRecalled ? "both" : isBanned ? "banned" : "recalled";
+          gateBannerTitle.textContent = gateMessages[msgKey].title;
+          gateBannerDesc.textContent = gateMessages[msgKey].desc;
+          gateBanner.hidden = false;
+        } else {
+          gateBanner.hidden = true;
+        }
+      }
+
+      /* Update formula */
+      formulaText.innerHTML =
+        "Ingredient Quality <strong>" +
+        ingredient +
+        "</strong>" +
+        " + Safety <strong>" +
+        safety +
+        "</strong>" +
+        " + Evidence <strong>" +
+        evidence +
+        "</strong>" +
+        " + Personal Fit <strong>" +
+        fit +
+        "</strong>" +
+        " = <strong>" +
+        total +
+        " / 100</strong>";
+
+      /* Sync mobile bar */
+      if (mobileScore) mobileScore.textContent = total;
+      if (mobileRing) mobileRing.style.strokeDashoffset = 100 - total;
+      if (mobileVerdictLabel) mobileVerdictLabel.textContent = verdict.label;
+    }
+
+    /* ── Reset ─────────────────────────────────────────────────────── */
+    function reset() {
+      Object.keys(defaults).forEach(function (name) {
+        var slider = root.querySelector('[data-pg-calc-input="' + name + '"]');
+        if (slider) {
+          slider.value = defaults[name];
+          updateSliderFill(slider);
+        }
+      });
+      if (gateBanned) gateBanned.checked = false;
+      if (gateRecalled) gateRecalled.checked = false;
+      recalculate();
+    }
+
+    /* ── Bind events ───────────────────────────────────────────────── */
+    sliders.forEach(function (slider) {
+      updateSliderFill(slider);
+      slider.addEventListener("input", function () {
+        updateSliderFill(slider);
+        recalculate();
+      });
+    });
+
+    if (gateBanned) {
+      gateBanned.addEventListener("change", recalculate);
+    }
+    if (gateRecalled) {
+      gateRecalled.addEventListener("change", recalculate);
+    }
+
+    if (resetBtn) {
+      resetBtn.addEventListener("click", reset);
+    }
+
+    /* ── Initial calculation ────────────────────────────────────────── */
+    recalculate();
+
+    /* ── Mobile bar visibility (show when result card is off-screen) ── */
+    if (mobileBar && resultEl && "IntersectionObserver" in window) {
+      var barObserver = new IntersectionObserver(
+        function (entries) {
+          entries.forEach(function (entry) {
+            /* Show bar when result card is NOT visible */
+            if (entry.isIntersecting) {
+              mobileBar.classList.remove("is-visible");
+            } else {
+              mobileBar.classList.add("is-visible");
+            }
+          });
+        },
+        { threshold: 0.15 },
+      );
+      barObserver.observe(resultEl);
+    }
+  })();
+</script>

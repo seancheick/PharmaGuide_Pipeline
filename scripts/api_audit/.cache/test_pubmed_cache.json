@@ -1,0 +1,150 @@
+{
+  "{\"endpoint\": \"esearch.fcgi\", \"method\": \"GET\", \"params\": {\"api_key\": \"cb741b87b6c19c3b9dce4dd57e3b34068508\", \"db\": \"pubmed\", \"retmax\": \"3\", \"retmode\": \"json\", \"term\": \"\\\"NCT04744545\\\"[si]\", \"tool\": \"pharmaguide-audit\"}}": {
+    "stored_at": 1775155664.715316,
+    "expires_at": 1776365264.715316,
+    "payload": {
+      "header": {
+        "type": "esearch",
+        "version": "0.3"
+      },
+      "esearchresult": {
+        "count": "0",
+        "retmax": "0",
+        "retstart": "0",
+        "idlist": [],
+        "translationset": [],
+        "querytranslation": "\"NCT04744545\"[si]",
+        "warninglist": {
+          "phrasesignored": [],
+          "quotedphrasesnotfound": [
+            "\"NCT04744545\"[si]"
+          ],
+          "outputmessages": [
+            "No items found."
+          ]
+        }
+      }
+    }
+  },
+  "{\"endpoint\": \"esearch.fcgi\", \"method\": \"GET\", \"params\": {\"api_key\": \"cb741b87b6c19c3b9dce4dd57e3b34068508\", \"db\": \"pubmed\", \"retmax\": \"3\", \"retmode\": \"json\", \"term\": \"\\\"NCT02404701\\\"[si]\", \"tool\": \"pharmaguide-audit\"}}": {
+    "stored_at": 1775155664.978836,
+    "expires_at": 1776365264.978836,
+    "payload": {
+      "header": {
+        "type": "esearch",
+        "version": "0.3"
+      },
+      "esearchresult": {
+        "count": "0",
+        "retmax": "0",
+        "retstart": "0",
+        "idlist": [],
+        "translationset": [],
+        "querytranslation": "\"NCT02404701\"[si]",
+        "warninglist": {
+          "phrasesignored": [],
+          "quotedphrasesnotfound": [
+            "\"NCT02404701\"[si]"
+          ],
+          "outputmessages": [
+            "No items found."
+          ]
+        }
+      }
+    }
+  },
+  "{\"endpoint\": \"esearch.fcgi\", \"method\": \"GET\", \"params\": {\"api_key\": \"cb741b87b6c19c3b9dce4dd57e3b34068508\", \"db\": \"pubmed\", \"retmax\": \"3\", \"retmode\": \"json\", \"term\": \"\\\"NCT02152475\\\"[si]\", \"tool\": \"pharmaguide-audit\"}}": {
+    "stored_at": 1775155665.250386,
+    "expires_at": 1776365265.250387,
+    "payload": {
+      "header": {
+        "type": "esearch",
+        "version": "0.3"
+      },
+      "esearchresult": {
+        "count": "0",
+        "retmax": "0",
+        "retstart": "0",
+        "idlist": [],
+        "translationset": [],
+        "querytranslation": "\"NCT02152475\"[si]",
+        "warninglist": {
+          "phrasesignored": [],
+          "quotedphrasesnotfound": [
+            "\"NCT02152475\"[si]"
+          ],
+          "outputmessages": [
+            "No items found."
+          ]
+        }
+      }
+    }
+  },
+  "{\"endpoint\": \"esearch.fcgi\", \"method\": \"GET\", \"params\": {\"api_key\": \"cb741b87b6c19c3b9dce4dd57e3b34068508\", \"db\": \"pubmed\", \"retmax\": \"3\", \"retmode\": \"json\", \"term\": \"\\\"NCT00299364\\\"[si]\", \"tool\": \"pharmaguide-audit\"}}": {
+    "stored_at": 1775155676.957938,
+    "expires_at": 1776365276.957938,
+    "payload": {
+      "header": {
+        "type": "esearch",
+        "version": "0.3"
+      },
+      "esearchresult": {
+        "count": "0",
+        "retmax": "0",
+        "retstart": "0",
+        "idlist": [],
+        "translationset": [],
+        "querytranslation": "\"NCT00299364\"[si]",
+        "warninglist": {
+          "phrasesignored": [],
+          "quotedphrasesnotfound": [
+            "\"NCT00299364\"[si]"
+          ],
+          "outputmessages": [
+            "No items found."
+          ]
+        }
+      }
+    }
+  },
+  "{\"endpoint\": \"esearch.fcgi\", \"method\": \"GET\", \"params\": {\"api_key\": \"cb741b87b6c19c3b9dce4dd57e3b34068508\", \"db\": \"pubmed\", \"retmax\": \"3\", \"retmode\": \"json\", \"term\": \"\\\"NCT01709825\\\"[si]\", \"tool\": \"pharmaguide-audit\"}}": {
+    "stored_at": 1775155677.190621,
+    "expires_at": 1776365277.190621,
+    "payload": {
+      "header": {
+        "type": "esearch",
+        "version": "0.3"
+      },
+      "esearchresult": {
+        "count": "1",
+        "retmax": "1",
+        "retstart": "0",
+        "idlist": [
+          "26839075"
+        ],
+        "translationset": [],
+        "querytranslation": "\"NCT01709825\"[Secondary Source ID]"
+      }
+    }
+  },
+  "{\"endpoint\": \"esearch.fcgi\", \"method\": \"GET\", \"params\": {\"api_key\": \"cb741b87b6c19c3b9dce4dd57e3b34068508\", \"db\": \"pubmed\", \"retmax\": \"3\", \"retmode\": \"json\", \"term\": \"\\\"NCT03415503\\\"[si]\", \"tool\": \"pharmaguide-audit\"}}": {
+    "stored_at": 1775155677.468381,
+    "expires_at": 1776365277.468381,
+    "payload": {
+      "header": {
+        "type": "esearch",
+        "version": "0.3"
+      },
+      "esearchresult": {
+        "count": "1",
+        "retmax": "1",
+        "retstart": "0",
+        "idlist": [
+          "33131908"
+        ],
+        "translationset": [],
+        "querytranslation": "\"NCT03415503\"[Secondary Source ID]"
+      }
+    }
+  }
+}

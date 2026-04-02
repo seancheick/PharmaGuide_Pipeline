@@ -744,7 +744,8 @@
           "Riboflavin 5' Phosphate",
           "Riboflavin 5'Phosphate",
           "Riboflavin 5’ Phosphate",
-          "Vitamin B2, Riboflavin 5 Phosphate"
+          "Vitamin B2, Riboflavin 5 Phosphate",
+          "Riboflavin 5’-Phosphate"
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
@@ -8277,20 +8278,17 @@
           "hu zhang root extract",
           "hu zhang hydroethanolic extract",
           "japanese knotweed extract",
-          "japanese knotweed root extract",
-          "japanese knotweed",
           "polygonum cuspidatum extract",
           "polygonum cuspidatum root extract",
           "chinese knotweed extract",
           "Asian Knotweed Root Extract",
           "Japanese Knotweed (root) and whole Red Grape extracts",
           "Whole grape extract (Vitis vinifera) and Polygonum cuspidatum (root) extract",
-          "BioVin",
           "Veri-te resveratrol",
           "Polygonum cuspidatum",
-          "Reynoutria japonica",
           "Reynoutria japonica root extract",
-          "Fallopia japonica"
+          "Fallopia japonica",
+          "BioVin"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -12766,7 +12764,11 @@
           "GOS",
           "galactooligosaccharides",
           "trans-galactooligosaccharides",
-          "TOS"
+          "TOS",
+          "BiMuno B-Galactooligosaccharides",
+          "B-Galactooligosaccharides",
+          "B-GOS",
+          "bimuno"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -16357,7 +16359,8 @@
           "Lutemax 2020 Lutein",
           "aztec marigold extract",
           "Trans-Lutein",
-          "all-trans lutein"
+          "all-trans lutein",
+          "organic Lutein"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -16439,7 +16442,9 @@
           "zeaxanthin isomer (rr)",
           "zeaxanthin isomer (rs)",
           "zeaxanthin (rr)",
-          "zeaxanthin (rs)"
+          "zeaxanthin (rs)",
+          "Optisharp Zeaxanthin",
+          "optisharp"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -19544,7 +19549,6 @@
           "50% EGCG",
           "decaffeinated green tea",
           "green tea leaf extract, decaffeinated",
-          "camellia sinensis",
           "green tea polyphenol blend",
           "standardized green tea",
           "green tea 50% EGCG",
@@ -19559,10 +19563,8 @@
           "green tea whole leaf extract",
           "green tea leaf extract",
           "camellia sinensis leaf extract",
-          "green tea leaf",
           "green tea aqueous extract",
           "camellia sinensis aqueous extract",
-          "organic green tea (camellia sinensis) (leaf) aqueous extract",
           "decaffeinated green tea leaf extract",
           "green tea 50% extract",
           "green tea 5:1 extract",
@@ -19588,12 +19590,9 @@
         "absorption": "moderate (~40–60%)",
         "notes": "Whole-leaf green tea powder. Contains ~137x more EGCG per gram vs brewed tea (PMID:14518774, Weiss 2003), but whole-leaf matrix (fiber, protein) may alter absorption kinetics vs isolated extracts. No direct human PK comparison vs standardized extract exists. Variable catechin content depending on grade and preparation.",
         "aliases": [
-          "matcha",
           "matcha powder",
           "stone-ground green tea",
-          "ceremonial matcha",
           "whole leaf green tea",
-          "matcha green tea",
           "ground matcha",
           "pure matcha powder",
           "traditional matcha"
@@ -19771,10 +19770,10 @@
           "Leucoselect Grape seed extract",
           "leucoselect grape seed",
           "Leucoselect Grape seed Proanthocyanidin extract",
-          "Leucoselect Grape extract",
           "LeucoSelect Phytosome Grape Seed",
           "LeucoSelect grape seed proanthocyanidin",
-          "Leucoselect Phytosome standardized Grape seed extract"
+          "Leucoselect Phytosome standardized Grape seed extract",
+          "Leucoselect Grape extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -19793,14 +19792,12 @@
         "notes": "Standardized to ≥95% proanthocyanidins (OPCs). Only monomers (catechin/epicatechin, 5-10% of extract) are well-absorbed (~10-30%). Dimers detectable at trace nmol/L (PMID:12834296, Sano 2003 — first intact dimer B1 in human serum). Oligomers/polymers NOT absorbed intact — undergo colonic microbial degradation to valerolactones and phenolic acids (PMID:15315398). Effective clinical benefits may be mediated by microbial catabolites.",
         "aliases": [
           "95% proanthocyanidins",
-          "vitis vinifera",
           "grape seed polyphenols",
           "standardized grape seed",
           "grape seed OPC extract",
           "powergrape grape vitis vinifera extract",
           "proanthocyanidin grape seed",
           "high-potency grape seed",
-          "French Grape (Vitis vinifera) seed extract",
           "grape seed ext.",
           "grape seed ext",
           "european grapeseed extract",
@@ -19816,7 +19813,6 @@
           "vincare grape extract",
           "MegaNatural BP Grape seed extract",
           "Grape Seed, Skin Extract",
-          "MegaNatural-BP Grape Seed Extract",
           "MegaNatural-BP Grape seed Non-GMO extract",
           "MegaNatural(R)-BP Grape Seed (Vitis vinifera) Non-GMO Extract",
           "european grapeseed fruit extract",
@@ -19824,7 +19820,9 @@
           "oligomeric procyanidins",
           "OPC grape seed",
           "proanthocyanidin oligomers",
-          "grape OPCs"
+          "grape OPCs",
+          "MegaNatural-BP Grape Seed Extract",
+          "French Grape (Vitis vinifera) seed extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -20299,7 +20297,8 @@
           "standardized american ginseng extract",
           "Asian Ginseng (4:1) - Manchurian",
           "senactiv",
-          "senactiv panax notoginseng"
+          "senactiv panax notoginseng",
+          "Seneactiv"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -20564,7 +20563,17 @@
           "turmeric curcuminoids",
           "turmeric rhizome root extract",
           "essence of organic turmeric (root) oil",
-          "organic turmeric blend organic turmeric root extract"
+          "organic turmeric blend organic turmeric root extract",
+          "curcumin c3 complex turmeric (curcuma longa) extract",
+          "curcumin c3 complex turmeric (curcuma longa) extract curcuminoids",
+          "turmeric rhizome extract curcuminoids",
+          "turmeric concentrate",
+          "turmeric concentrate curcuminoids",
+          "organic turmeric extract",
+          "organic turmeric extract curcuminoids",
+          "turmeric complex curcuma longa rhizome extract",
+          "curcuwin turmeric extract curcuminoids",
+          "curcuwin turmeric extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -20618,7 +20627,12 @@
           "liposomal turmeric",
           "advanced delivery curcumin",
           "lipid-bound curcumin",
-          "high-absorption curcumin"
+          "high-absorption curcumin",
+          "turmeric phytosome",
+          "mervia turmeric phytosome",
+          "microactive turmeric (curcuma longa) extract",
+          "microactive turmeric curcuma longa extract",
+          "curcuminoids microactive turmeric (curcuma longa) extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -20671,7 +20685,12 @@
           "turmacin",
           "curcumin",
           "organic turmeric",
-          "organic turmeric blend"
+          "organic turmeric blend",
+          "turmeric gelcap",
+          "lycopene and turmeric",
+          "lycopene and turmeric (color) gelcap",
+          "turmeric complex",
+          "turmeric complex quillaja wood extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -21379,7 +21398,8 @@
           "elderberry juice natural",
           "Natural Elderberry Juice",
           "elderberry juice concentrate",
-          "elderberry fruit juice"
+          "elderberry fruit juice",
+          "Black Elderberry juice concentrate"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -28466,14 +28486,13 @@
         "notes": "Gynostemma pentaphyllum leaf saponins (ActivAMP/Actiponin standardized to 50% gypenosides). AMPK pathway activator — same mechanism as metformin. 12-week RCT (n=80, PMID 26920064): ActivAMP reduced body weight -4.4 kg and improved insulin sensitivity vs placebo. Anti-diabetic pilot RCT: reduced fasting glucose and HbA1c in T2DM (PMID 21193004).",
         "aliases": [
           "gypenosides",
-          "ActivAMP Gynostemma pentaphyllum Extract",
           "ActivAMP Gynostemma extract",
           "Actiponin Gynostemma extract",
           "gynostemma extract",
-          "gynostemma pentaphyllum",
           "jiaogulan extract",
           "jiaogulan",
-          "AMPK activator gynostemma"
+          "AMPK activator gynostemma",
+          "ActivAMP Gynostemma pentaphyllum Extract"
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
@@ -28615,15 +28634,7 @@
         "notes": "Prenylated flavonol glycoside from Epimedium (horny goat weed). PDE5 inhibitor (IC50 ~0.4 uM, ~100x less potent than sildenafil). Intact oral F very low (undetectable at most doses, Brown 2019 DB-RCT); gut/hepatic deglycosylation generates icariside II (Tmax ~4h) and desmethylicaritin (PMID 30522143). Bone RCT: 60 mg/day Epimedium flavonoids x 24 mo increased BMD vs placebo. ERbeta agonist; NF-kB inhibitor. No human RCT for erectile dysfunction.",
         "aliases": [
           "icariin",
-          "epimedium",
-          "epimedium extract",
-          "epimedium aerial parts extract",
-          "horny goat weed",
-          "horny goat weed extract",
-          "horny goat weed aerial parts extract",
-          "epimedium stem and leaf extract",
           "icariins",
-          "yin yang huo",
           "horny goat weed aerial plant extract",
           "horny goat weed herb extract",
           "epimedium leaf extract",
@@ -28775,7 +28786,6 @@
           "short-chain inulin supplement",
           "agave inulin supplement",
           "chicory inulin",
-          "Chicory",
           "Orafti",
           "Beneo inulin",
           "organic inulin"
@@ -29047,10 +29057,7 @@
         "notes": "Cissus quadrangularis standardization marker (plant phytosterols). Per PMID 27279709, ketosteroids may not be the true active fraction — iridoids and flavonoids likely drive bone/joint benefits. Human trials show joint pain reduction at 300-1200 mg/day. Anabolic/bodybuilding marketing claims lack clinical support.",
         "aliases": [
           "ketosteroids",
-          "cissus quadrangularis",
-          "cissus quadrangularis extract",
           "cissus extract",
-          "cissus",
           "hadjod",
           "bone setter plant extract",
           "3-ketosteroids"
@@ -29506,15 +29513,9 @@
         "notes": "Monoterpene comprising ~25-40% of lavender essential oil. Primary constituent of Silexan (oral lavender oil capsule), with 5 Phase III RCTs (524+ participants) showing significant anxiolytic effects vs. placebo for generalized anxiety (Scientific Reports 2019 meta-analysis). Mechanism: VGCC inhibition + serotonin 5-HT1A + GABA potentiation. Oral Tmax ~1 h, half-life ~3.9 h (PMC10538094 2023 human PK).",
         "aliases": [
           "linalool",
-          "lavender oil",
-          "lavender essential oil",
           "lavandula angustifolia oil",
           "lavandula oil",
           "silexan",
-          "lavender extract",
-          "lavender flower oil",
-          "lavender",
-          "lavandula angustifolia",
           "lavandula angustifolia extract",
           "linalyl acetate",
           "lavender linalyl acetate"
@@ -29767,16 +29768,12 @@
         "notes": "Primary alkaloid of Sceletium tortuosum (Kanna). Dual mechanism: SSRI + PDE4 inhibitor (PMID 21130846, Harvey 2011). Zembrin (25 mg/day) reduced amygdala threat-reactivity vs placebo in crossover RCT n=16 (PMID 23428430, Terburg 2013). Executive function improvement at 8 weeks (PMID 25029945). No hepatotoxicity signals; no MAOIs. Traditional San/Khoikhoi use for mood and anxiety.",
         "aliases": [
           "mesembrine",
-          "Zembrin",
-          "sceletium tortuosum extract",
           "sceletium tortuosum alkaloids",
           "kanna extract",
-          "kanna",
           "Sceletium",
           "sceletium alkaloids",
           "mesembrenone",
-          "sceletium tortuosum",
-          "kanna herb"
+          "Zembrin"
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
@@ -30195,8 +30192,6 @@
           "BioPerine",
           "piper nigrum extract",
           "black pepper extract",
-          "black pepper",
-          "piper nigrum",
           "black pepper alkaloid",
           "piperine 95%",
           "black pepper piperine",
@@ -30226,7 +30221,8 @@
           "organic black pepper fruit extract",
           "organic black pepper",
           "essence of pure black pepper oil extract",
-          "organic black pepper (fruit) extract"
+          "organic black pepper (fruit) extract",
+          "organic black pepper extract"
         ],
         "dosage_importance": 0.5,
         "absorption_structured": {
@@ -30601,8 +30597,6 @@
         "aliases": [
           "quassinoids",
           "quassia amara extract",
-          "quassia extract",
-          "quassia",
           "bitter wood extract",
           "simalikalactone"
         ],
@@ -30715,11 +30709,8 @@
           "ruscogenin",
           "ruscogenins",
           "neoruscogenin",
-          "butcher's broom",
           "butcher's broom extract",
-          "butchers broom",
           "butchers broom extract",
-          "ruscus aculeatus",
           "ruscus aculeatus extract",
           "butcher's broom root extract",
           "ruscus extract"
@@ -30920,14 +30911,9 @@
         "notes": "Signature lignan of Schisandra chinensis (Wu Wei Zi). Oral F ~15.6% for schisandrin A (PMID 29342955); schisandrin B F 19-55% sex-dependent with enterohepatic recirculation (PMID 28833320). Hepatoprotective via CYP modulation and antioxidant defense upregulation. TCM adaptogen with 2000-year use history (PMC11984061). Extract bioavailability exceeds isolated compound.",
         "aliases": [
           "schisandrin",
-          "schisandra",
-          "schisandra chinensis",
           "schisandra chinensis extract",
           "wu wei zi",
           "five flavor berry",
-          "schizandra",
-          "schisandra extract",
-          "schisandra berry",
           "schisandrin a",
           "schisandrin b",
           "schisandrin c",
@@ -31176,7 +31162,6 @@
         "aliases": [
           "shatavarin iv",
           "shatavari",
-          "asparagus racemosus",
           "shatavari extract",
           "asparagus racemosus extract",
           "asparagus racemosus root extract",
@@ -37343,6 +37328,66 @@
     },
     "cui_status": "no_confirmed_umls_match"
   },
+  "gamma_butyrobetaine_ethyl_ester": {
+    "standard_name": "Gamma-Butyrobetaine Ethyl Ester (GBB)",
+    "category": "amino_acids",
+    "cui": null,
+    "cui_note": "No exact UMLS concept for gamma-butyrobetaine ethyl ester; parent GBB is C0061030 but this is the ester prodrug form.",
+    "rxcui": null,
+    "rxcui_note": "No RxNorm concept; not an approved drug substance.",
+    "forms": {
+      "gbb ethyl ester hcl": {
+        "bio_score": 6,
+        "natural": false,
+        "score": 6,
+        "absorption": "prodrug; ethyl ester cleaved to release GBB, then hydroxylated to L-carnitine",
+        "notes": "Gamma-butyrobetaine ethyl ester HCl (GBB-EXT) — prodrug ester of gamma-butyrobetaine. Substrate for gamma-butyrobetaine hydroxylase (BBOX1), the final enzyme in endogenous L-carnitine biosynthesis. Used in pre-workout supplements to increase carnitine production and induce sweating (thermogenic effect). Limited human clinical data; mechanism extrapolated from carnitine biosynthesis pathway biochemistry. CAS for parent GBB: 6249-56-5, PubChem CID: 22620.",
+        "aliases": [
+          "Gamma Butyrobetaine Ethyl Ester Hcl",
+          "gamma-butyrobetaine ethyl ester hcl",
+          "GBB ethyl ester",
+          "GBB-EXT",
+          "gamma butyrobetaine ethyl ester",
+          "gamma-butyrobetaine ethyl ester"
+        ],
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": 0.5,
+          "range_low": 0.3,
+          "range_high": 0.7,
+          "quality": "moderate",
+          "notes": "Prodrug mechanism; ethyl ester improves GI absorption vs parent GBB HCl. No published human PK data."
+        }
+      }
+    },
+    "match_rules": {
+      "priority": 0,
+      "match_mode": "alias_and_fuzzy",
+      "exclusions": [],
+      "parent_id": null,
+      "confidence": "moderate"
+    },
+    "category_enum": "amino_acids",
+    "data_quality": {
+      "completeness": 0.6,
+      "has_clinical_data": false,
+      "missing_fields": [
+        "rxcui"
+      ],
+      "review_status": "pending",
+      "last_reviewed_at": "2026-03-31"
+    },
+    "aliases": [],
+    "external_ids": {
+      "cas": "16630-27-6",
+      "pubchem_cid": 30902,
+      "unii": "G7BMF1URO9",
+      "cas_parent_gbb": "6249-56-5",
+      "pubchem_cid_parent_gbb": 22620
+    },
+    "gsrs": null,
+    "cui_status": "no_confirmed_umls_match"
+  },
   "_metadata": {
     "name": "Ingredient Quality Map",
     "description": "Comprehensive quality mapping database for all active ingredients found in dietary supplements and medications. Each ingredient form is scored based on bioavailability, absorption rate, clinical evidence, and manufacturing quality.",
@@ -37496,7 +37541,7 @@
       "vitamins"
     ],
     "cleanup_notes": "Resolved within-ingredient alias collisions; removed 63 redundant unspecified forms",
-    "total_entries": 551,
+    "total_entries": 552,
     "total_ingredients": 623,
     "data_quality": {
       "review_status": "stub"
@@ -37752,7 +37797,8 @@
           "leucine:isoleucine:valine 2:1:1 supplement",
           "bcaa powder supplement",
           "amino acids supplement",
-          "essential amino acids supplement"
+          "essential amino acids supplement",
+          "2:1:1 BCAA"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -39456,7 +39502,8 @@
           "hypericins",
           "hyperforin",
           "hypericin",
-          "St. John's Wort 0.3% extract"
+          "St. John's Wort 0.3% extract",
+          "st. john's wort (hypericum perforatum) extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -39506,12 +39553,13 @@
           "St John’s Wort extract",
           "st. john's wort extract",
           "st. john's wort whole herb extract",
-          "st. john’s wort",
+          "st. john's wort",
           "st. john's wort flower, leaf extract",
           "st. john's wort flower head extract",
           "st. john's wort aerial parts extract",
           "hypericum aerial extract",
-          "Hypericum perforatum aerial parts extract"
+          "Hypericum perforatum aerial parts extract",
+          "st. john's wort (aerial part) extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -39685,7 +39733,8 @@
           "vitex casticin",
           "3,5-dihydroxy-3',4',6,7-tetramethoxyflavone",
           "Chaste Tree berry extract",
-          "Chaste berry Vitex extract"
+          "Chaste berry Vitex extract",
+          "chaste tree (vitex agnus-castus) extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -40379,7 +40428,8 @@
           "Oryza Ceramide-PCD",
           "Ceramide-PCD",
           "organic lipowheat phytoceramides",
-          "lipowheat phytoceramides"
+          "lipowheat phytoceramides",
+          "phytoceramides"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -44590,7 +44640,8 @@
           "hop extract",
           "Perluxan Hops (Humulus lupulus) extract",
           "Lifenol Hops (Humulus lupulus) extract",
-          "Lifenol Hops (Humulus lupulus L.) extract"
+          "Lifenol Hops (Humulus lupulus L.) extract",
+          "hops"
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
@@ -45431,7 +45482,8 @@
           "white kidney bean extract",
           "phaseolus vulgaris extract",
           "phase 2 carb controller",
-          "phase 2"
+          "phase 2",
+          "White Kidney Bean Seed Extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -46138,7 +46190,8 @@
           "mustard seed powder",
           "sinapis alba powder",
           "white mustard seed",
-          "yellow mustard powder"
+          "yellow mustard powder",
+          "organic mustard extract"
         ],
         "dosage_importance": 0.8,
         "absorption_structured": {
@@ -46646,7 +46699,8 @@
           "angelica root extract",
           "ligustilide",
           "z-ligustilide",
-          "ligustilide standardized dong quai"
+          "ligustilide standardized dong quai",
+          "dong quai root plant extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -48032,7 +48086,11 @@
           "crataegus laevigata",
           "hawthorn extract",
           "hawthorne extract",
-          "hawthorn leaf & flower extract"
+          "hawthorn leaf & flower extract",
+          "organic hawthorn powder",
+          "hawthorn (crataegus spp.) extract",
+          "hawthorn (crataegus oxyacantha) extract",
+          "hawthorn (crataegus oxycantha) extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -48130,10 +48188,8 @@
         "absorption": "unknown",
         "notes": "Vanilloid alkaloid from Capsicum peppers; TRPV1 agonist with analgesic, thermogenic, and metabolic effects. Topical FDA-approved (Qutenza). Oral capsaicin for weight management. Form unspecified.",
         "aliases": [
-          "capsicum",
           "cayenne",
           "cayenne pepper",
-          "capsicum annuum",
           "capsicum frutescens",
           "cayenne pepper powder",
           "cayenne powder",
@@ -48158,7 +48214,9 @@
     "match_rules": {
       "priority": 1,
       "match_mode": "alias_and_fuzzy",
-      "exclusions": [],
+      "exclusions": [
+        "bell pepper"
+      ],
       "parent_id": null,
       "confidence": "medium"
     },
@@ -48170,9 +48228,7 @@
     },
     "category_enum": "herbs",
     "cui_note": "Corrected from topical cream product concept to capsaicin ingredient concept.",
-    "aliases": [
-      "Capsicum"
-    ],
+    "aliases": [],
     "external_ids": {
       "unii": "S07O44R1ZM"
     },
@@ -48745,7 +48801,8 @@
           "harpagophytum procumbens extract",
           "harpagophytum root extract",
           "Devil's Claw 5% extract",
-          "Devil's Claw Herb Extract"
+          "Devil's Claw Herb Extract",
+          "devil's claw (harpagophytum procumbens and harpagophytum zeyheri) extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -54993,7 +55050,9 @@
           "neuravena",
           "neuravena wild green oat extract",
           "avena sativa green oat",
-          "oat herb extract"
+          "oat herb extract",
+          "Avena sativa 10:1 extract",
+          "Oats Straw"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {

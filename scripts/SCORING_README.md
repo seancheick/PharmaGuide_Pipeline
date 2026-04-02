@@ -172,11 +172,22 @@ The scorer also emits per-blend evidence payloads used for explainability.
 ### Section C: Evidence & Research (max 20)
 
 - Match source: `evidence_data.clinical_matches[]`
+- Reference DB: `backed_clinical_studies.json` (197 entries, 100% with PMID-backed key endpoints)
 - Per-match points: `study_type_base_points * evidence_level_multiplier`
 - Sub-clinical dose guard: multiply by `0.25` when below minimum clinical dose.
 - Supra-clinical flag: adds `SUPRA_CLINICAL_DOSE` when product dose > `3x` max studied dose (informational only).
 - Per-ingredient cap: `7`
 - Section cap: `20`
+
+Evidence DB coverage (as of 2026-04-02):
+- 197 entries: 132 ingredient-human, 38 branded-rct, 17 product-human, 6 strain-clinical, 4 preclinical
+- All 197 entries have `key_endpoints` populated with PubMed PMID-backed clinical outcome data
+- All 197 entries have `references_structured` with verified citations
+- All 197 entries have `effect_direction` classified (128 positive_strong, 40 positive_weak, 25 mixed, 4 null)
+- Section C depth bonus reads numeric counts from `published_studies_count` when present. Legacy `published_studies` remains a human-readable evidence-tag field and is not parsed as a count.
+- Discovery/enrichment tooling now keeps `registry_completed_trials_count` separate from `published_studies_count` and can carry `effect_direction_rationale`, `effect_direction_confidence`, and `endpoint_relevance_tags` for operator auditability.
+- Auto-discovery via `discover_clinical_evidence.py` now auto-populates `key_endpoints` from
+  ClinicalTrials.gov outcome measures with PubMed PMID cross-references (no manual review needed for endpoints)
 
 ### Section D: Brand Trust (max 5)
 

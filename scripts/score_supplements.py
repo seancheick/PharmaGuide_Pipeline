@@ -1192,15 +1192,17 @@ class SupplementScorer:
             if text:
                 canonical_programs.append(text)
 
-        # IFOS is omega-3 specific; keep only when product appears omega-focused.
+        # Marine/omega-specific certs: only count when product contains omega-3 / marine ingredients.
+        _MARINE_CERTS = {"ifos", "friend of the sea", "msc", "marine stewardship", "goed"}
         if canonical_programs:
             omega_like = supp_type == "specialty" or any(
-                "omega" in norm_text(i.get("name") or i.get("standard_name"))
+                any(term in norm_text(i.get("name") or i.get("standard_name"))
+                    for term in ("omega", "fish oil", "krill", "cod liver", "marine", "dha", "epa"))
                 for i in self._get_active_ingredients(product)
             )
             filtered = []
             for p in canonical_programs:
-                if "ifos" in p and not omega_like:
+                if any(mc in p for mc in _MARINE_CERTS) and not omega_like:
                     continue
                 filtered.append(p)
             canonical_programs = sorted(set(filtered))
@@ -1798,12 +1800,43 @@ class SupplementScorer:
         # IU and CFU are not safely convertible to mass without nutrient-specific rules.
         return None
 
+    def _published_study_count(self, entry: Dict[str, Any]) -> Optional[float]:
+        """Return the numeric clinical-study count used for depth bonus when available."""
+        explicit_count = as_float(entry.get("published_studies_count"), None)
+        if explicit_count is not None:
+            return explicit_count
+
+        legacy_value = entry.get("published_studies")
+        if isinstance(legacy_value, (int, float)):
+            return as_float(legacy_value, None)
+
+        return None
+
     def _compute_evidence_score(self, product: Dict[str, Any], flags: List[str]) -> Dict[str, Any]:
         section_c_cfg = self.config.get("section_C_evidence_research", {}) or {}
         cap_per_ingredient = as_float(section_c_cfg.get("cap_per_ingredient"), 7.0) or 7.0
         cap_total = as_float(section_c_cfg.get("cap_total"), 20.0) or 20.0
         supra_multiple = as_float(section_c_cfg.get("supra_clinical_multiple"), 3.0) or 3.0
         matches = safe_list(product.get("evidence_data", {}).get("clinical_matches", []))
+
+        # Top-N diminishing returns weights: best match at 100%, second at 50%, third at 25%.
+        # Configurable via scoring_config.json.  Remaining matches beyond top-N are ignored.
+        top_n_weights = section_c_cfg.get("top_n_weights", [1.0, 0.5, 0.25])
+        if not isinstance(top_n_weights, list) or not top_n_weights:
+            top_n_weights = [1.0, 0.5, 0.25]
+
+        # Effect direction multipliers: scale score by whether the evidence is positive or null.
+        effect_direction_multipliers = section_c_cfg.get("effect_direction_multipliers", {}) or {}
+        _default_effect_dir = {
+            "positive_strong": 1.0,
+            "positive_weak": 0.85,
+            "mixed": 0.6,
+            "null": 0.25,
+            "negative": 0.0,
+        }
+        for k, v in _default_effect_dir.items():
+            if k not in effect_direction_multipliers:
+                effect_direction_multipliers[k] = v
 
         ingredient_points: Dict[str, float] = defaultdict(float)
         matched_entry_ids = set()
@@ -1833,6 +1866,34 @@ class SupplementScorer:
             raw = base_points * multiplier
             if raw <= 0:
                 continue
+
+            # Effect direction multiplier (defaults to positive_strong=1.0 if absent).
+            effect_dir = norm_text(entry.get("effect_direction") or "positive_strong")
+            effect_dir_mult = as_float(
+                effect_direction_multipliers.get(effect_dir),
+                1.0,
+            )
+            raw *= effect_dir_mult
+            if raw <= 0:
+                continue
+
+            # Enrollment quality multiplier — only for RCTs and meta-analyses.
+            # Larger, well-powered trials get a modest boost; pilots get a penalty.
+            # Bands: <50 → 0.6x, 50-199 → 0.8x, 200-499 → 1.0x, 500-999 → 1.1x, 1000+ → 1.2x
+            enrollment = as_float(entry.get("total_enrollment"), None)
+            enrollment_eligible_types = {
+                "systematic_review_meta", "rct_multiple", "rct_single",
+            }
+            if enrollment is not None and norm_text(study_type) in enrollment_eligible_types:
+                enrollment_bands = section_c_cfg.get("enrollment_quality_bands", [
+                    [50, 0.6], [200, 0.8], [500, 1.0], [1000, 1.1],
+                ])
+                enroll_mult = 1.2  # default for 1000+
+                for threshold, mult in enrollment_bands:
+                    if enrollment < threshold:
+                        enroll_mult = mult
+                        break
+                raw *= enroll_mult
 
             # Clinical dose guard (optional field).
             min_clinical_dose = as_float(entry.get("min_clinical_dose"), None)
@@ -1873,15 +1934,40 @@ class SupplementScorer:
             if canonical:
                 ingredient_points[canonical] += raw
 
+        # Top-N aggregation with diminishing returns.
+        # Cap each ingredient, sort descending, then apply positional weights.
+        capped_scores = sorted(
+            (min(cap_per_ingredient, pts) for pts in ingredient_points.values()),
+            reverse=True,
+        )
         total = 0.0
-        for _, pts in ingredient_points.items():
-            total += min(cap_per_ingredient, pts)
+        for i, pts in enumerate(capped_scores):
+            if i >= len(top_n_weights):
+                break
+            total += pts * top_n_weights[i]
+
+        # Depth bonus: reward large evidence bodies (many completed trials).
+        # Uses the highest published_studies count from any matched entry.
+        # Discrete bands: 0-19 trials → +0.0, 20-39 → +0.25, 40+ → +0.5
+        depth_bands = section_c_cfg.get("depth_bonus_bands", [[20, 0.25], [40, 0.5]])
+        max_trial_count = 0
+        for entry in matches:
+            tc = self._published_study_count(entry)
+            if tc is not None and tc > max_trial_count:
+                max_trial_count = tc
+        depth = 0.0
+        for threshold, bonus in sorted(depth_bands, key=lambda x: x[0]):
+            if max_trial_count >= threshold:
+                depth = bonus
+        total += depth
 
         return {
             "score": round(clamp(0.0, cap_total, total), 2),
             "max": cap_total,
             "ingredient_points": {k: round(v, 2) for k, v in ingredient_points.items()},
             "matched_entries": len(matched_entry_ids),
+            "top_n_applied": min(len(capped_scores), len(top_n_weights)),
+            "depth_bonus": round(depth, 2),
         }
 
     # ---------------------------------------------------------------------

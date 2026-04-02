@@ -3,8 +3,8 @@
     "description": "Other/inactive ingredients database for supplement excipients and additives",
     "purpose": "inactive_ingredient_classification",
     "schema_version": "5.0.0",
-    "last_updated": "2026-03-30",
-    "total_entries": 661
+    "last_updated": "2026-03-31",
+    "total_entries": 662
   },
   "other_ingredients": [
     {
@@ -4595,7 +4595,13 @@
       "standard_name": "Contains <2% of (ingredient list indicator)",
       "aliases": [
         "contains <2% of:",
-        "contains less than 2% of:"
+        "contains less than 2% of:",
+        "Contains <0.5%:",
+        "contains <0.5%:",
+        "Contains: <2% of:",
+        "contains: <2% of:",
+        "contains <1% of:",
+        "Contains <1% of:"
       ],
       "category": "labeling_indicator",
       "is_additive": false,
@@ -10710,7 +10716,8 @@
         "mct vegetable oil",
         "caprylic/capric triglycerides",
         "medium-chain glycerides oil",
-        "middle chained Triglycerides"
+        "middle chained Triglycerides",
+        "<1% MCT Oil"
       ],
       "category": "oil_carrier",
       "is_additive": false,
@@ -13014,6 +13021,29 @@
         "carrier base"
       ],
       "last_updated": "2026-03-01",
+      "external_ids": {}
+    },
+    {
+      "id": "PII_OAT_FLOUR",
+      "standard_name": "Oat Flour",
+      "aliases": [
+        "oat flour",
+        "whole oat flour",
+        "organic oat flour"
+      ],
+      "category": "food_ingredient",
+      "is_additive": false,
+      "additive_type": "food_base",
+      "allergen": true,
+      "allergen_type": "wheat_gluten",
+      "notes": "Whole oat flour (Avena sativa) used as a base or filler in supplement formulations, especially protein bars and powdered supplements. May contain gluten through cross-contamination unless certified gluten-free.",
+      "CUI": null,
+      "common_uses": [
+        "food base",
+        "filler",
+        "carbohydrate source"
+      ],
+      "last_updated": "2026-03-31",
       "external_ids": {}
     },
     {
@@ -19620,7 +19650,8 @@
         "Sunflower Vitamin E Tocopherols",
         "Tocopherol rich extract",
         "vitamin E mixed tocopherol concentrate",
-        "natural D-Alpha Tocopheryl"
+        "natural D-Alpha Tocopheryl",
+        "non-GMO Mixed Tocopherols"
       ],
       "category": "preservative_natural",
       "is_additive": true,

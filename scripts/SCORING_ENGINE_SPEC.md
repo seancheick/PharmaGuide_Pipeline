@@ -478,6 +478,26 @@ Evidence payload (per penalized ingredient):
 Input:
 - `evidence_data.clinical_matches[]`
 
+Reference database: `backed_clinical_studies.json` — 197 entries (as of 2026-04-02).
+All entries carry PMID-backed `key_endpoints`, `references_structured` citations,
+`effect_direction` classification, and `notable_studies` text. Numeric study-count
+signals for depth bonus are read from `published_studies_count` when available;
+the human-readable `published_studies` tags are not interpreted as counts.
+Operator-facing auditability fields such as `effect_direction_rationale`,
+`effect_direction_confidence`, `registry_completed_trials_count`, and
+`endpoint_relevance_tags` travel through enrichment for explainability, but are
+not direct scoring inputs in the current Section C formula.
+
+Auto-discovery pipeline (`discover_clinical_evidence.py discover --apply`):
+- Queries ClinicalTrials.gov API v2 for completed trials, enrollment, phases,
+  and primary/secondary outcome measures
+- Cross-references each NCT ID against PubMed via E-utilities (`"{NCT_ID}"[si]`)
+  to resolve published PMIDs
+- Auto-populates `key_endpoints` with formatted outcome measure strings including
+  NCT ID, enrollment, and PMID when available
+- Queries ChEMBL for compound safety flags (withdrawn, black_box_warning)
+- Only adds entries with >= `--min-trials` completed trials and no safety flags
+
 Deduplication: entries deduplicated by `id` / `study_id` / composite key before scoring.
 
 Per match:

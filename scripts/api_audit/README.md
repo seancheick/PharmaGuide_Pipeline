@@ -27,6 +27,11 @@ Keep these utilities here so they stay separate from the cleaning, enrichment, a
    - Run `normalize_clinical_pubmed.py` on `backed_clinical_studies.json`.
    - Run `audit_clinical_evidence_strength.py` after normalization.
    - Run `verify_clinical_trials.py` on `backed_clinical_studies.json` (NCT ID verification).
+   - Run `discover_clinical_evidence.py audit` to check all entries for internal consistency.
+   - Run `discover_clinical_evidence.py discover --limit 20` to find missing high-value compounds.
+   - Run `discover_clinical_evidence.py discover --limit 50 --apply` to add qualifying compounds with auto-populated key_endpoints and PubMed PMIDs.
+   - Run `discover_clinical_evidence.py enrich --apply` to update enrollment data and registry completed-trial counts from ClinicalTrials.gov.
+   - Run `discover_clinical_evidence.py backfill-auditability --limit 50 --apply` to add rationale/confidence/tags on the highest-impact entries first.
 4. Bioactivity validation
    - Run `enrich_chembl_bioactivity.py` on `banned_recalled_ingredients.json` (mechanism of action confirmation).
 5. EU regulatory validation
@@ -323,6 +328,44 @@ Key behavior:
 - rejects unsafe short-alias matches instead of auto-filling them
 - skips known polymer / umbrella / mixed entries such as PEG, PVP, nitrite+nitrate buckets, and IQM formulation placeholders
 - classifies known polymer/mixture edge cases such as HFCS, PEG, PVP, carrageenan, maltodextrin, polydextrose, and CMC under curated `governed_null` policy instead of noisy `not_found`
+
+### `fda_manufacturer_violations_sync.py`
+
+Purpose:
+
+- Automatically sync manufacturer violation entries from FDA/openFDA feeds into `scripts/data/manufacturer_violations.json`.
+- Includes attention to supplement-specific substance signal detection and existing DB deduplication.
+- Calculates derived fields (recency, deduction, manufacturer scoring flags) to keep the manual penalties table fresh.
+- Emits a structured report with full new-entry details.
+
+Inputs:
+
+- `scripts/data/manufacturer_violations.json` (current DB)
+- openFDA feed data from `food/enforcement` and `drug/enforcement`
+- optionally FDA RSS (via `--include-rss`)
+- `.env` openFDA API key (`OPENFDA_API_KEY`) or `--api-key`
+
+Outputs:
+
+- Updated `scripts/data/manufacturer_violations.json` (appended with new entries, metadata updated)
+- JSON report at `scripts/fda_manufacturer_violations_sync_report_<YYYYMMDD>.json` (or `--report` custom path)
+
+Common commands:
+
+```bash
+.venv/bin/python scripts/api_audit/fda_manufacturer_violations_sync.py --days 30 --dry-run
+.venv/bin/python scripts/api_audit/fda_manufacturer_violations_sync.py --days 30 --include-rss --dry-run
+.venv/bin/python scripts/api_audit/fda_manufacturer_violations_sync.py --days 30 --include-rss --confirm
+.venv/bin/python scripts/api_audit/fda_manufacturer_violations_sync.py --days 30 --include-rss
+.venv/bin/python scripts/api_audit/fda_manufacturer_violations_sync.py --days 30 --report scripts/api_audit/my_mfr_sync_report.json
+```
+
+Use it when:
+
+- you want to keep `manufacturer_violations.json` synchronized with the latest FDA recall activity
+- you need a proactive manufacturer-risk signal pipeline for review
+- you want traceable evidence in a per-run report for audit and PR chain of custody
+
 - IQM mode uses the form name first and only one non-ambiguous alias fallback to keep first-run latency bounded
 - CAS mismatches are reported but NOT auto-fixed (require manual review)
 - CID mismatches are reported but NOT auto-fixed
@@ -486,6 +529,85 @@ Key behavior:
 - Caches responses for 30 days in `.cache/chembl_cache.json`
 - Circuit breaker after 3 consecutive failures
 - Only processes pharmacologically active entries (adulterants, SARMs, steroids, stimulants)
+
+### `discover_clinical_evidence.py`
+
+Purpose:
+
+- **Three-in-one tool** for clinical evidence discovery, auditing, and enrichment.
+- **DISCOVER**: Finds IQM compounds missing from `backed_clinical_studies.json`, queries ClinicalTrials.gov and ChEMBL for trial count, enrollment, phase data, safety flags, and **primary/secondary outcome measures**, then generates candidate entries. With `--apply`, auto-populates `key_endpoints` from registered outcome measures, records `registry_completed_trials_count`, derives coarse `endpoint_relevance_tags`, and carries conservative `effect_direction` auditability fields for human review.
+- **AUDIT**: Cross-references ALL existing entries for internal consistency — catches notes-vs-classification contradictions, enrollment plausibility issues, BRAND* misclassification, PRECLIN* entries with human trial data.
+- **ENRICH**: Populates `total_enrollment` for entries with missing or low values and refreshes `registry_completed_trials_count` broadly by querying ClinicalTrials.gov for the completed trial set per compound.
+- **BACKFILL-AUDITABILITY**: Prioritizes the highest-impact entries missing auditability fields, queries ClinicalTrials.gov for outcome text and completed-trial counts, and writes `effect_direction_rationale`, `effect_direction_confidence`, and `endpoint_relevance_tags` without changing score math.
+
+APIs used:
+
+- ClinicalTrials.gov API v2 (free, no key) — trial search, outcome measures, enrollment
+- ChEMBL REST API (free, no key) — compound safety flags, max_phase
+- NCBI PubMed E-utilities (requires `NCBI_API_KEY` in `.env`) — NCT-to-PMID cross-referencing
+
+Inputs:
+
+- `scripts/data/backed_clinical_studies.json`
+- `scripts/data/ingredient_quality_map.json` (for discover mode gap detection)
+
+Outputs:
+
+- JSON reports auto-saved to `scripts/api_audit/reports/` (timestamped, no `--output` needed).
+- Optional in-file updates when `--apply` is used (discover adds entries with auto-populated `key_endpoints`, enrich updates enrollment).
+- Entries with auto-populated endpoints note "Key endpoints auto-populated from registered outcome measures with PubMed cross-references."
+- Entries where no outcome measures were found note "Requires human review for key_endpoints."
+
+Common commands:
+
+```bash
+# Discover top 20 missing compounds (dry-run — report only)
+python3 scripts/api_audit/discover_clinical_evidence.py discover --limit 20
+
+# Discover and auto-add qualifying compounds (>= 5 completed trials)
+# Key endpoints auto-populated with PubMed PMIDs when available
+python3 scripts/api_audit/discover_clinical_evidence.py discover --limit 50 --apply --min-trials 5
+
+# Discover a single compound
+python3 scripts/api_audit/discover_clinical_evidence.py discover --compound "spirulina"
+
+# Audit entire clinical DB for consistency issues
+python3 scripts/api_audit/discover_clinical_evidence.py audit
+
+# Enrich enrollment data (dry-run)
+python3 scripts/api_audit/discover_clinical_evidence.py enrich
+
+# Enrich enrollment data (apply changes)
+python3 scripts/api_audit/discover_clinical_evidence.py enrich --apply
+
+# Backfill auditability on the top 50 highest-impact entries
+python3 scripts/api_audit/discover_clinical_evidence.py backfill-auditability --limit 50 --apply
+
+# Save report to custom path
+python3 scripts/api_audit/discover_clinical_evidence.py audit --output scripts/reports/my_audit.json
+```
+
+Use it when:
+
+- you want to grow the clinical evidence DB by finding well-studied compounds not yet covered
+- you need a health check on all existing entries (run after any manual edits)
+- you want to improve enrollment accuracy for the enrollment quality multiplier
+- you added new entries manually and want to verify internal consistency
+- you want `key_endpoints` auto-filled instead of empty arrays (the `--apply` flag now handles this)
+
+Key behavior:
+
+- Free APIs, no keys needed (ClinicalTrials.gov v2 + ChEMBL REST)
+- Rate-limited to ~2.8 req/s
+- 30-day disk cache in `.cache/` (avoids redundant API calls)
+- Circuit breaker after 3 consecutive failures
+- Dry-run by default — `--apply` required to write changes
+- `--min-trials` (default 3) controls the quality floor for auto-added entries
+- Auto-added entries include: `id`, `standard_name`, `aliases`, `evidence_level`, `study_type`, `effect_direction`, `effect_direction_confidence`, `effect_direction_rationale`, `registry_completed_trials_count`, `total_enrollment`, `primary_outcome`, `endpoint_relevance_tags`, `references_structured`, `notable_studies`
+- `backfill-auditability` is intentionally explainability-only: it does not change score math, verdicts, or the curated `effect_direction` label itself
+- Metadata (`total_entries`, `last_updated`, `changelog`) updated automatically on `--apply`
+- Reports always saved to `scripts/api_audit/reports/` (never just printed to stdout)
+- Compounds with ChEMBL `withdrawn_flag` or `black_box_warning` are skipped by `--apply` (require manual review)
 
 ### `verify_efsa.py`
 
@@ -698,21 +820,22 @@ Interpretation:
 
 Each script validates a specific slice of the data against an authoritative external source:
 
-| Tool | What it verifies | External source |
-|------|-----------------|-----------------|
-| `verify_cui.py` | CUI identity — does this UMLS concept ID resolve to the intended substance? | UMLS REST API |
-| `verify_unii.py` | UNII codes, 21 CFR sections, salt/parent/moiety relationships, metabolic data | FDA GSRS API |
-| `verify_pubchem.py` | CAS numbers, PubChem CIDs — is the chemical identity correct? | PubChem PUG REST |
-| `verify_pubmed_references.py` | PMIDs/DOIs exist, papers are not retracted, metadata is fetchable | PubMed E-utilities |
-| `verify_clinical_trials.py` | NCT IDs exist, trial design matches claimed study_type | ClinicalTrials.gov API v2 |
-| `enrich_chembl_bioactivity.py` | Mechanism of action and pharmacological targets for drug-like adulterants | ChEMBL REST API |
-| `verify_efsa.py` | ADI values, genotoxicity, EFSA opinion currency, EU/US regulatory divergence | Curated EFSA OpenFoodTox reference |
-| `fda_weekly_sync.py` | Recall and safety signal truth — new FDA/DEA actions affecting our DB | openFDA, FDA RSS, DEA Federal Register |
-| `audit_clinical_evidence_strength.py` | study_type claims match PubMed publication type metadata | PubMed publication types |
-| `audit_banned_recalled_accuracy.py` | Schema integrity, FDA report alignment, CUI governance for banned/recalled DB | Internal + UMLS + FDA report |
-| `verify_comptox.py` | NOAEL/LOAEL/RfD dose thresholds, genotoxicity assays, cancer slope factors, ADI cross-validation | EPA CompTox ToxValDB (249K records, 51 sources) |
-| `audit_alias_accuracy.py` | Wrong-molecule aliases, alias collisions across entries, duplicate aliases | GSRS names + PubChem synonyms cross-reference |
-| `audit_notes_alignment.py` | Prose-vs-structured contradictions, overstatements, stale claims, numeric mismatches, unsupported claims | Pattern matching against own structured fields |
+| Tool                                  | What it verifies                                                                                               | External source                                                  |
+| ------------------------------------- | -------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------- |
+| `verify_cui.py`                       | CUI identity — does this UMLS concept ID resolve to the intended substance?                                    | UMLS REST API                                                    |
+| `verify_unii.py`                      | UNII codes, 21 CFR sections, salt/parent/moiety relationships, metabolic data                                  | FDA GSRS API                                                     |
+| `verify_pubchem.py`                   | CAS numbers, PubChem CIDs — is the chemical identity correct?                                                  | PubChem PUG REST                                                 |
+| `verify_pubmed_references.py`         | PMIDs/DOIs exist, papers are not retracted, metadata is fetchable                                              | PubMed E-utilities                                               |
+| `verify_clinical_trials.py`           | NCT IDs exist, trial design matches claimed study_type                                                         | ClinicalTrials.gov API v2                                        |
+| `enrich_chembl_bioactivity.py`        | Mechanism of action and pharmacological targets for drug-like adulterants                                      | ChEMBL REST API                                                  |
+| `discover_clinical_evidence.py`       | Clinical evidence gaps, entry consistency, enrollment accuracy, auto-populated key_endpoints with PubMed PMIDs | ClinicalTrials.gov API v2 + ChEMBL REST API + PubMed E-utilities |
+| `verify_efsa.py`                      | ADI values, genotoxicity, EFSA opinion currency, EU/US regulatory divergence                                   | Curated EFSA OpenFoodTox reference                               |
+| `fda_weekly_sync.py`                  | Recall and safety signal truth — new FDA/DEA actions affecting our DB                                          | openFDA, FDA RSS, DEA Federal Register                           |
+| `audit_clinical_evidence_strength.py` | study_type claims match PubMed publication type metadata                                                       | PubMed publication types                                         |
+| `audit_banned_recalled_accuracy.py`   | Schema integrity, FDA report alignment, CUI governance for banned/recalled DB                                  | Internal + UMLS + FDA report                                     |
+| `verify_comptox.py`                   | NOAEL/LOAEL/RfD dose thresholds, genotoxicity assays, cancer slope factors, ADI cross-validation               | EPA CompTox ToxValDB (249K records, 51 sources)                  |
+| `audit_alias_accuracy.py`             | Wrong-molecule aliases, alias collisions across entries, duplicate aliases                                     | GSRS names + PubChem synonyms cross-reference                    |
+| `audit_notes_alignment.py`            | Prose-vs-structured contradictions, overstatements, stale claims, numeric mismatches, unsupported claims       | Pattern matching against own structured fields                   |
 
 ### What these tools do NOT verify
 

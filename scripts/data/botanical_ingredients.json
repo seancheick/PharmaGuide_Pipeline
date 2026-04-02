@@ -1150,7 +1150,8 @@
       "CUI": "C0030934",
       "aliases": [
         "pepper",
-        "piper nigrum"
+        "piper nigrum",
+        "black pepper"
       ],
       "category": "spice",
       "notes": "Piper nigrum (Piperaceae) fruit. Contains piperine alkaloid (5-9%) which enhances nutrient bioavailability via CYP3A4/P-gp inhibition. Whole-pepper powder form, distinct from standardized piperine extracts.",
@@ -5529,7 +5530,8 @@
         "epimedium stem and leaf extract",
         "epimedium grandiflorum",
         "epimedium sagittatum",
-        "Epimedium brevicornu"
+        "Epimedium brevicornu",
+        "horny goat weed"
       ],
       "category": "herb",
       "notes": "Epimedium spp. (Berberidaceae) aerial parts. Yin Yang Huo in TCM. Contains icariin prenylated flavonol with PDE5-inhibitory activity. Traditional kidney yang tonic. Several Epimedium species used.",
@@ -5926,7 +5928,8 @@
       "CUI": "C0331260",
       "aliases": [
         "Japanese Knotweed Root Extract",
-        "Reynoutria japonica"
+        "Reynoutria japonica",
+        "japanese knotweed"
       ],
       "category": "root",
       "notes": "Reynoutria japonica (syn. Polygonum cuspidatum, Polygonaceae) root. Hu Zhang in TCM. Richest dietary source of trans-resveratrol (not standardized in botanical form). Also contains emodin anthraquinone.",
@@ -6346,7 +6349,8 @@
         "lavender flower essential oil",
         "english lavender flower essential oil",
         "english lavender aerial extract",
-        "lavender flower"
+        "lavender flower",
+        "lavender"
       ],
       "category": "herb",
       "notes": "Lavandula angustifolia (Lamiaceae) flower/aerial parts. Contains linalool and linalyl acetate. RCT evidence for anxiolytic effects (Silexan/Lavela WS 1265, PMID 19962288). Botanical herb form.",
@@ -8801,7 +8805,8 @@
       "latin_name": "Quassia amara",
       "CUI": "C0949614",
       "aliases": [
-        "Quassia amara"
+        "Quassia amara",
+        "quassia"
       ],
       "category": "bark",
       "notes": "Quassia amara (Simaroubaceae) wood. Most bitter natural substance known (quassin). Traditional antimalarial, digestive bitter, and antiparasitic. Contains quassinoids. Botanical wood chip form.",

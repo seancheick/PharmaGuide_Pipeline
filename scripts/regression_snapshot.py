@@ -19,7 +19,7 @@ import json
 import os
 import argparse
 import hashlib
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Dict, List, Tuple, Optional
 from collections import Counter, defaultdict
 from pathlib import Path
@@ -156,7 +156,7 @@ class RegressionSnapshotGenerator:
 
         return {
             "schema_version": self.SCHEMA_VERSION,
-            "generated_at": datetime.utcnow().isoformat() + "Z",
+            "generated_at": datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ'),
             "total_products": len(self.products),
             # Dual coverage metrics
             "domain_scorable_coverage": coverage_scorable,
@@ -193,7 +193,7 @@ class RegressionSnapshotGenerator:
 
         return {
             "schema_version": self.SCHEMA_VERSION,
-            "generated_at": datetime.utcnow().isoformat() + "Z",
+            "generated_at": datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ'),
             "total_products": len(self.products),
             "top_50_by_domain": top50,
         }
@@ -227,7 +227,7 @@ class RegressionSnapshotGenerator:
 
         return {
             "schema_version": self.SCHEMA_VERSION,
-            "generated_at": datetime.utcnow().isoformat() + "Z",
+            "generated_at": datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ'),
             "total_products": len(self.products),
             "total_scored": len(scores),
             "histogram": histogram,
@@ -275,7 +275,7 @@ class RegressionSnapshotGenerator:
 
         return {
             "schema_version": self.SCHEMA_VERSION,
-            "generated_at": datetime.utcnow().isoformat() + "Z",
+            "generated_at": datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ'),
             "total_products": len(self.products),
             "total_contradictions": sum(contradictions.values()),
             "top_20": contradictions.most_common(20),
@@ -328,7 +328,7 @@ class RegressionSnapshotGenerator:
 
         return {
             "schema_version": self.SCHEMA_VERSION,
-            "generated_at": datetime.utcnow().isoformat() + "Z",
+            "generated_at": datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ'),
             "total_products": len(self.products),
             "file_hashes": hashes,
         }
@@ -358,7 +358,7 @@ class RegressionSnapshotGenerator:
 
         comparison = {
             "schema_version": "4.0.0",
-            "compared_at": datetime.utcnow().isoformat() + "Z",
+            "compared_at": datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ'),
             "baseline": str(path1),
             "current": str(path2),
             "deltas": {},

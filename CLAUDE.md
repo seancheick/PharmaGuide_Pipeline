@@ -88,7 +88,7 @@ docs/                         # Technical deep-dives and infographics
 | `ingredient_quality_map.json`      | Quality scoring for 550+ IQM parents (largest file)             |
 | `banned_recalled_ingredients.json` | Regulatory safety disqualifications or penalties (~850 entries) |
 | `harmful_additives.json`           | Penalty scoring for harmful additives (~1200 entries)           |
-| `backed_clinical_studies.json`     | Clinical evidence bonus points (PubMed/RCT data)                |
+| `backed_clinical_studies.json`     | Clinical evidence bonus points (197 entries, all PMID-backed)    |
 | `allergens.json`                   | Allergen classification (Big 8 types)                           |
 | `rda_optimal_uls.json`             | Dosing adequacy benchmarks                                      |
 | `manufacturer_violations.json`     | Brand trust penalties                                           |

@@ -23,7 +23,7 @@ You are auditing a supplement scoring pipeline that powers a consumer health app
   - `harmful_additives.json` — penalty substances (108 entries, severity: critical/high/moderate/low)
   - `top_manufacturers_data.json` — trusted brands (77 entries, fuzzy threshold 0.90)
   - `allergens.json` — allergen detection (17 entries)
-  - `backed_clinical_studies.json` — evidence database (177 entries)
+  - `backed_clinical_studies.json` — evidence database (197 entries, all PMID-backed)
   - `absorption_enhancers.json` — pairing bonuses (+3 pts, 23 entries)
   - `enhanced_delivery.json` — delivery tier scoring (78 entries)
   - `rda_optimal_uls.json` — RDA/UL reference values (47 entries)

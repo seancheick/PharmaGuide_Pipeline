@@ -1,0 +1,55 @@
+{
+  "mode": "audit",
+  "timestamp": "2026-04-02T18:10:04.674722+00:00",
+  "total_entries": 197,
+  "total_issues": 5,
+  "by_severity": {
+    "MEDIUM": 5
+  },
+  "by_check": {
+    "preclinical_with_human_data": 3,
+    "enrollment_plausibility": 2
+  },
+  "issues": [
+    {
+      "id": "PRECLIN_AKG",
+      "name": "Alpha-Ketoglutarate",
+      "check": "preclinical_with_human_data",
+      "severity": "MEDIUM",
+      "detail": "preclinical classification but notes mention human trials",
+      "suggested_fix": "verify if evidence_level should be ingredient-human"
+    },
+    {
+      "id": "PRECLIN_APIGENIN",
+      "name": "Apigenin",
+      "check": "preclinical_with_human_data",
+      "severity": "MEDIUM",
+      "detail": "preclinical classification but notes mention human trials",
+      "suggested_fix": "verify if evidence_level should be ingredient-human"
+    },
+    {
+      "id": "PRECLIN_LUTEOLIN",
+      "name": "Luteolin",
+      "check": "preclinical_with_human_data",
+      "severity": "MEDIUM",
+      "detail": "preclinical classification but notes mention human trials",
+      "suggested_fix": "verify if evidence_level should be ingredient-human"
+    },
+    {
+      "id": "PRECLIN_ZINC_CARNOSINE",
+      "name": "Zinc Carnosine",
+      "check": "enrollment_plausibility",
+      "severity": "MEDIUM",
+      "detail": "enrollment=60 seems low for well-known compound",
+      "suggested_fix": "verify total_enrollment via ClinicalTrials.gov"
+    },
+    {
+      "id": "BRAND_MAGTEIN",
+      "name": "Magtein Magnesium L-Threonate",
+      "check": "enrollment_plausibility",
+      "severity": "MEDIUM",
+      "detail": "enrollment=44 seems low for well-known compound",
+      "suggested_fix": "verify total_enrollment via ClinicalTrials.gov"
+    }
+  ]
+}

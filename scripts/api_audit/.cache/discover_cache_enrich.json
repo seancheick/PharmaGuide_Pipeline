@@ -1,0 +1,4771 @@
+{
+ "https://clinicaltrials.gov/api/v2/studies?query.intr=Meriva%20Curcumin%20Phytosome&filter.overallStatus=COMPLETED&countTotal=true&pageSize=10&fields=NCTId,BriefTitle,EnrollmentCount,Phase,StudyType,StartDate": {
+  "payload": {
+   "totalCount": 11,
+   "studies": [
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT03584724",
+       "briefTitle": "Assessment of the Anti-inflammatory Effects of Norflo Oro in Acute Relapses of HLA-B27 Associated Autoimmune Uveitis"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2018-12-19"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "EARLY_PHASE1"
+       ],
+       "enrollmentInfo": {
+        "count": 49
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT03621865",
+       "briefTitle": "A Comparative Pharmacokinetic Study to Evaluate the Ability of a New Formulation to Enhance Curcuminoids Bioavailability"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2018-07-26"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "NA"
+       ],
+       "enrollmentInfo": {
+        "count": 30
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT02017353",
+       "briefTitle": "Effect of Curcumin Addition to Standard Treatment on Tumour-induced Inflammation in Endometrial Carcinoma"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2013-10"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "PHASE2"
+       ],
+       "enrollmentInfo": {
+        "count": 7
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT03289832",
+       "briefTitle": "Effect of Orally Delivered Phytochemicals on Aging and Inflammation in the Skin"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2017-09-25"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "NA"
+       ],
+       "enrollmentInfo": {
+        "count": 25
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT04705220",
+       "briefTitle": "Effect of Nutritional Supplementation With Turmeric on the Cognitive Performance of Subjects With Metabolic Syndrome"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2022-04-08"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "NA"
+       ],
+       "enrollmentInfo": {
+        "count": 85
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT01740323",
+       "briefTitle": "Phase II Study of Curcumin vs Placebo for Chemotherapy-Treated Breast Cancer Patients Undergoing Radiotherapy"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2015-05"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "PHASE2"
+       ],
+       "enrollmentInfo": {
+        "count": 30
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT01330810",
+       "briefTitle": "Curcumin Pharmacokinetics"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2011-03"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "PHASE1"
+       ],
+       "enrollmentInfo": {
+        "count": 12
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT01859858",
+       "briefTitle": "Effect of Curcumin on Dose Limiting Toxicity and Pharmacokinetics of Irinotecan in Patients With Solid Tumors"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2013-06"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "PHASE1"
+       ],
+       "enrollmentInfo": {
+        "count": 23
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT03864783",
+       "briefTitle": "The Effect of Curcumin on Liver Fat Content in Obese Subjects"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2019-03-05"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "NA"
+       ],
+       "enrollmentInfo": {
+        "count": 39
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT01948661",
+       "briefTitle": "Anthocyanin Extract and Phospholipid Curcumin in Colorectal Adenoma"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2014-03"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "NA"
+       ],
+       "enrollmentInfo": {
+        "count": 45
+       }
+      }
+     }
+    }
+   ],
+   "nextPageToken": "ZVJj7o2Elu8o3lprVIG-pb72mpOQJJxsZvSt1fwekA"
+  },
+  "expires_at": "2026-05-02T17:26:14.971072+00:00"
+ },
+ "https://clinicaltrials.gov/api/v2/studies?query.intr=BCM-95%20Curcumin&filter.overallStatus=COMPLETED&countTotal=true&pageSize=10&fields=NCTId,BriefTitle,EnrollmentCount,Phase,StudyType,StartDate": {
+  "payload": {
+   "totalCount": 4,
+   "studies": [
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT02978339",
+       "briefTitle": "A Study Evaluating the Safety and Efficacy of Curcumin in Patients With Primary Sclerosing Cholangitis (PSC)"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2017-06-09"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "PHASE1",
+        "PHASE2"
+       ],
+       "enrollmentInfo": {
+        "count": 15
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT01514370",
+       "briefTitle": "Dietary Supplement of Curcumin in Subjects With Active Relapsing Multiple Sclerosis Treated With Subcutaneous Interferon Beta 1a"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2012-04-30"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "PHASE2"
+       ],
+       "enrollmentInfo": {
+        "count": 80
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT03329781",
+       "briefTitle": "ENDOCUR - Modulation of Endotoxaemia Via Curcumin Intake in Healthy Overweight Adults"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2015-02"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "NA"
+       ],
+       "enrollmentInfo": {
+        "count": 16
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT01917890",
+       "briefTitle": "Radiosensitizing and Radioprotectve Effects of Curcumin in Prostate Cancer"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2011-03"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "NA"
+       ],
+       "enrollmentInfo": {
+        "count": 40
+       }
+      }
+     }
+    }
+   ]
+  },
+  "expires_at": "2026-05-02T17:26:15.390921+00:00"
+ },
+ "https://clinicaltrials.gov/api/v2/studies?query.intr=Super%20Bio-Curcumin%20%28BCM-95%29&filter.overallStatus=COMPLETED&countTotal=true&pageSize=10&fields=NCTId,BriefTitle,EnrollmentCount,Phase,StudyType,StartDate": {
+  "payload": {
+   "totalCount": 0,
+   "studies": []
+  },
+  "expires_at": "2026-05-02T17:26:15.825889+00:00"
+ },
+ "https://clinicaltrials.gov/api/v2/studies?query.intr=AstaReal%20Astaxanthin&filter.overallStatus=COMPLETED&countTotal=true&pageSize=10&fields=NCTId,BriefTitle,EnrollmentCount,Phase,StudyType,StartDate": {
+  "payload": {
+   "totalCount": 1,
+   "studies": [
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT03368872",
+       "briefTitle": "Clinical Trial of Astaxanthin Formulation With Exercise in Sarcopenia Elderly"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2015-10"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "NA"
+       ],
+       "enrollmentInfo": {
+        "count": 41
+       }
+      }
+     }
+    }
+   ]
+  },
+  "expires_at": "2026-05-02T17:26:16.332110+00:00"
+ },
+ "https://clinicaltrials.gov/api/v2/studies?query.intr=Creapure%20Creatine%20Monohydrate&filter.overallStatus=COMPLETED&countTotal=true&pageSize=10&fields=NCTId,BriefTitle,EnrollmentCount,Phase,StudyType,StartDate": {
+  "payload": {
+   "totalCount": 5,
+   "studies": [
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT05877417",
+       "briefTitle": "Blood Flow Restriction and Creatine Supplementation in Women"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2023-05-17"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "NA"
+       ],
+       "enrollmentInfo": {
+        "count": 68
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT07225335",
+       "briefTitle": "Impact of OptiCreatine on Plasma Creatine and Gastrointestinal Effects in Males and Females"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2025-11-05"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "NA"
+       ],
+       "enrollmentInfo": {
+        "count": 17
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT06482619",
+       "briefTitle": "Effects of Creatine and Rehabilitation Programin Athletes With Patellar Tendinopathy"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2021-01-01"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "NA"
+       ],
+       "enrollmentInfo": {
+        "count": 26
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT00851006",
+       "briefTitle": "Creatine Treatment for Female Adolescents With Depression Who Are Non-Responders to Fluoxetine or Escitalopram"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2009-04"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "PHASE2"
+       ],
+       "enrollmentInfo": {
+        "count": 13
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT02267005",
+       "briefTitle": "The Effect of Creatine Supplementation on Muscle Function in Childhood Myositis"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2015-03"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "NA"
+       ],
+       "enrollmentInfo": {
+        "count": 13
+       }
+      }
+     }
+    }
+   ]
+  },
+  "expires_at": "2026-05-02T17:26:16.821932+00:00"
+ },
+ "https://clinicaltrials.gov/api/v2/studies?query.intr=SeaKelp%20Natural%20Iodine&filter.overallStatus=COMPLETED&countTotal=true&pageSize=10&fields=NCTId,BriefTitle,EnrollmentCount,Phase,StudyType,StartDate": {
+  "payload": {
+   "totalCount": 0,
+   "studies": []
+  },
+  "expires_at": "2026-05-02T17:26:17.239882+00:00"
+ },
+ "https://clinicaltrials.gov/api/v2/studies?query.intr=MitoQ&filter.overallStatus=COMPLETED&countTotal=true&pageSize=10&fields=NCTId,BriefTitle,EnrollmentCount,Phase,StudyType,StartDate": {
+  "payload": {
+   "totalCount": 13,
+   "studies": [
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT02597023",
+       "briefTitle": "The Efficacy of Oral Mitoquinone (MitoQ) Supplementation for Improving Physiological in Middle-aged and Older Adults"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2015-09"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "NA"
+       ],
+       "enrollmentInfo": {
+        "count": 55
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT05410873",
+       "briefTitle": "Examining the Effects of Mitochondrial Oxidative Stress in DCM"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2022-07-26"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "PHASE2"
+       ],
+       "enrollmentInfo": {
+        "count": 53
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT05381454",
+       "briefTitle": "An Open Label Study in Adults to Test the Efficacy of Mitoquinone/Mitoquinol Mesylate to Prevent Severe Viral Illness"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2022-04-28"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "PHASE1",
+        "PHASE2"
+       ],
+       "enrollmentInfo": {
+        "count": 80
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT06429059",
+       "briefTitle": "ROAR-DIGAP: A Widely Inclusive, Largely Virtual Pilot Trial Utilizing DIGAP (Deep Integrated Genomics Analysis Platform) To Personalize Treatments"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2024-06-12"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "PHASE2"
+       ],
+       "enrollmentInfo": {
+        "count": 50
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT00329056",
+       "briefTitle": "A Trial of MitoQ for the Treatment of People With Parkinson's Disease"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2006-05"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "PHASE2"
+       ],
+       "enrollmentInfo": {
+        "count": 128
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT00433108",
+       "briefTitle": "Trial of MitoQ for Raised Liver Enzymes Due to Hepatitis C"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2007-03"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "PHASE2"
+       ],
+       "enrollmentInfo": {
+        "count": 30
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT04026711",
+       "briefTitle": "MitoQ for the Treatment of Metabolic Dysfunction in Asthma"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2020-01-01"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "PHASE1"
+       ],
+       "enrollmentInfo": {
+        "count": 47
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT04558190",
+       "briefTitle": "Mitochondrial Dysfunction and Insulin Resistance in Skeletal Muscle"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2020-09-02"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "NA"
+       ],
+       "enrollmentInfo": {
+        "count": 10
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT03506633",
+       "briefTitle": "Impacts of Mitochondrial-targeted Antioxidant on Peripheral Artery Disease Patients"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2018-09-05"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "NA"
+       ],
+       "enrollmentInfo": {
+        "count": 14
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT06069245",
+       "briefTitle": "MitoQ & Cardiopulmonary Responses During Exercise"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2022-09-14"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "NA"
+       ],
+       "enrollmentInfo": {
+        "count": 9
+       }
+      }
+     }
+    }
+   ],
+   "nextPageToken": "ZVJj7o2Elu8o3lprVIG-pb72mpOQJJxtYfOs1fUdkA"
+  },
+  "expires_at": "2026-05-02T17:26:17.658363+00:00"
+ },
+ "https://clinicaltrials.gov/api/v2/studies?query.intr=Suntheanine&filter.overallStatus=COMPLETED&countTotal=true&pageSize=10&fields=NCTId,BriefTitle,EnrollmentCount,Phase,StudyType,StartDate": {
+  "payload": {
+   "totalCount": 38,
+   "studies": [
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT02857829",
+       "briefTitle": "The Effects of a Combination of Nootropic Ingredients on Cognition in Healthy Young Volunteers"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2017-03-01"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "NA"
+       ],
+       "enrollmentInfo": {
+        "count": 21
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT04790188",
+       "briefTitle": "Effect of a Nootropic on the Cognitive Performance in Young Adults"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2021-04-01"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "NA"
+       ],
+       "enrollmentInfo": {
+        "count": 25
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT02770105",
+       "briefTitle": "Theanine and Caffeine on Neurophysiology of Attention"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2016-05"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "NA"
+       ],
+       "enrollmentInfo": {
+        "count": 9
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT06785142",
+       "briefTitle": "Investigation of a Dietary Supplement Liquid Shot Product on Aspects of Mood Both At Rest and During a Laboratory Stressor Task."
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2023-01-14"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "NA"
+       ],
+       "enrollmentInfo": {
+        "count": 48
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT05300594",
+       "briefTitle": "Effect of Audistim\u00ae Day/Night on Hearing Comfort and Patient Quality of Life of Patients With Chronic Tinnitus."
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2022-03-01"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "NA"
+       ],
+       "enrollmentInfo": {
+        "count": 110
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT03965819",
+       "briefTitle": "A Study to Investigate the Efficacy of Pain Bloc-R in Healthy Participants With Non-pathological Aches and Discomfort"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2019-05-30"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "NA"
+       ],
+       "enrollmentInfo": {
+        "count": 27
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT05543811",
+       "briefTitle": "The Influence of Food for Special Dietary Use - Spread Enriched With 5-hydroxytryptophan, Theanine and Gamma-aminobutyric Acid on Psychophysiological Functions of Subjects Without Meaningful Organic and Cognitive Pathology"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2022-09-15"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "NA"
+       ],
+       "enrollmentInfo": {
+        "count": 140
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT07225608",
+       "briefTitle": "The Acute Effects of Liquid IV's Pre-Workout Supplement on Muscle Endurance & Strength, Energy, and Cognition"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2025-12-01"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "NA"
+       ],
+       "enrollmentInfo": {
+        "count": 27
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT06889584",
+       "briefTitle": "Supplement Combination on Stress and Sleep"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2025-02-15"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "NA"
+       ],
+       "enrollmentInfo": {
+        "count": 115
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT07207252",
+       "briefTitle": "Research on Sleep and Emotion Testing of Tea Theanine Casein Hydrolysate Pressed Candy"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2024-10-28"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "NA"
+       ],
+       "enrollmentInfo": {
+        "count": 171
+       }
+      }
+     }
+    }
+   ],
+   "nextPageToken": "ZVJj7o2Elu8o3lprVIG-pb72mpOQJJxmZfan2_AW"
+  },
+  "expires_at": "2026-05-02T17:26:18.086223+00:00"
+ },
+ "https://clinicaltrials.gov/api/v2/studies?query.intr=BioPerine%20Black%20Pepper%20Extract&filter.overallStatus=COMPLETED&countTotal=true&pageSize=10&fields=NCTId,BriefTitle,EnrollmentCount,Phase,StudyType,StartDate": {
+  "payload": {
+   "totalCount": 1,
+   "studies": [
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT03066791",
+       "briefTitle": "Turmeric and Curcumin on Sebum Production"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2016-11-30"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "NA"
+       ],
+       "enrollmentInfo": {
+        "count": 30
+       }
+      }
+     }
+    }
+   ]
+  },
+  "expires_at": "2026-05-02T17:26:18.516138+00:00"
+ },
+ "https://clinicaltrials.gov/api/v2/studies?query.intr=Aquamin%20Marine%20Minerals&filter.overallStatus=COMPLETED&countTotal=true&pageSize=10&fields=NCTId,BriefTitle,EnrollmentCount,Phase,StudyType,StartDate": {
+  "payload": {
+   "totalCount": 2,
+   "studies": [
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT02913287",
+       "briefTitle": "Seaweed-Derived Mineral-Rich Nutraceuticals in Cognition"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2015-10-15"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "NA"
+       ],
+       "enrollmentInfo": {
+        "count": 30
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT05533502",
+       "briefTitle": "Combination Plant-Based Protein and Marine-Based Multi-Mineral Supplement and Bone Remodeling in Young Adults"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2022-09-01"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "NA"
+       ],
+       "enrollmentInfo": {
+        "count": 10
+       }
+      }
+     }
+    }
+   ]
+  },
+  "expires_at": "2026-05-02T17:26:18.967890+00:00"
+ },
+ "https://clinicaltrials.gov/api/v2/studies?query.intr=Curcumin%20C3%20Complex&filter.overallStatus=COMPLETED&countTotal=true&pageSize=10&fields=NCTId,BriefTitle,EnrollmentCount,Phase,StudyType,StartDate": {
+  "payload": {
+   "totalCount": 11,
+   "studies": [
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT03621865",
+       "briefTitle": "A Comparative Pharmacokinetic Study to Evaluate the Ability of a New Formulation to Enhance Curcuminoids Bioavailability"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2018-07-26"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "NA"
+       ],
+       "enrollmentInfo": {
+        "count": 30
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT01875822",
+       "briefTitle": "Open-label Study of Curcumin C-3 Complex in Schizophrenia"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2009-06"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "PHASE1",
+        "PHASE2"
+       ],
+       "enrollmentInfo": {
+        "count": 17
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT00525421",
+       "briefTitle": "A Clinical Study of Curcuminoids in the Treatment of Oral Lichen Planus"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2007-10"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "PHASE2"
+       ],
+       "enrollmentInfo": {
+        "count": 20
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT00099710",
+       "briefTitle": "Curcumin in Patients With Mild to Moderate Alzheimer's Disease"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2003-07"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "PHASE2"
+       ],
+       "enrollmentInfo": {
+        "count": 33
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT00235625",
+       "briefTitle": "Curcuminoids for the Treatment of Chronic Psoriasis Vulgaris"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2005-10"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "PHASE2"
+       ],
+       "enrollmentInfo": {
+        "count": 12
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT01160302",
+       "briefTitle": "Curcumin Biomarker Trial in Head and Neck Cancer"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2010-06"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "EARLY_PHASE1"
+       ],
+       "enrollmentInfo": {
+        "count": 33
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT01042938",
+       "briefTitle": "Curcumin for the Prevention of Radiation-induced Dermatitis in Breast Cancer Patients"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2008-01"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "PHASE2"
+       ],
+       "enrollmentInfo": {
+        "count": 35
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT03085680",
+       "briefTitle": "Curcumin and Function in Older Adults"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2017-08-11"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "PHASE2",
+        "PHASE3"
+       ],
+       "enrollmentInfo": {
+        "count": 17
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT01490996",
+       "briefTitle": "Combining Curcumin With FOLFOX Chemotherapy in Patients With Inoperable Colorectal Cancer"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2012-02"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "PHASE1",
+        "PHASE2"
+       ],
+       "enrollmentInfo": {
+        "count": 41
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT01246973",
+       "briefTitle": "Oral Curcumin for Radiation Dermatitis"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2011-02"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "PHASE2",
+        "PHASE3"
+       ],
+       "enrollmentInfo": {
+        "count": 686
+       }
+      }
+     }
+    }
+   ],
+   "nextPageToken": "ZVJj7o2Elu8o3lprVIG-pb72mpOQJJxsYvOs2vITkA"
+  },
+  "expires_at": "2026-05-02T17:26:19.474489+00:00"
+ },
+ "https://clinicaltrials.gov/api/v2/studies?query.intr=Relora&filter.overallStatus=COMPLETED&countTotal=true&pageSize=10&fields=NCTId,BriefTitle,EnrollmentCount,Phase,StudyType,StartDate": {
+  "payload": {
+   "totalCount": 1,
+   "studies": [
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT02734251",
+       "briefTitle": "Effect of Relora Supplement on Anxiety, Cognitive Performance & Mood Tested After Induced Stress"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2016-02"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "NA"
+       ],
+       "enrollmentInfo": {
+        "count": 36
+       }
+      }
+     }
+    }
+   ]
+  },
+  "expires_at": "2026-05-02T17:26:19.967814+00:00"
+ },
+ "https://clinicaltrials.gov/api/v2/studies?query.intr=Epicatechin&filter.overallStatus=COMPLETED&countTotal=true&pageSize=10&fields=NCTId,BriefTitle,EnrollmentCount,Phase,StudyType,StartDate": {
+  "payload": {
+   "totalCount": 97,
+   "studies": [
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT03382067",
+       "briefTitle": "Influence of Chocolate With Plant Additives on Episodic Memory in Healthy Subjects Experiencing Test Anxiety"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2017-12-04"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "NA"
+       ],
+       "enrollmentInfo": {
+        "count": 128
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT01856868",
+       "briefTitle": "Use of (-)-Epicatechin in the Treatment of Becker Muscular Dystrophy (Pilot Study)"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2013-05"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "PHASE1",
+        "PHASE2"
+       ],
+       "enrollmentInfo": {
+        "count": 7
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT00448513",
+       "briefTitle": "Effects of Tea Catechin Extracts on Oxidative Damage"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2007-06"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "NA"
+       ],
+       "enrollmentInfo": {
+        "count": 40
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT01018615",
+       "briefTitle": "Safety, Metabolism, and Antioxidant Activity of Silymarin and Green Tea Extract in Patients With Chronic Hepatitis C"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2009-11"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "PHASE1"
+       ],
+       "enrollmentInfo": {
+        "count": 28
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT02964377",
+       "briefTitle": "Plus Epicatechin Duchenne Muscular Dystrophy in Non-ambulatory Adolescents"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2016-11"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "PHASE1",
+        "PHASE2"
+       ],
+       "enrollmentInfo": {
+        "count": 15
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT02660112",
+       "briefTitle": "(+) Epicatechin to Treat Friedreich's Ataxia"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2016-09"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "PHASE2"
+       ],
+       "enrollmentInfo": {
+        "count": 10
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT00233935",
+       "briefTitle": "Defined Green Tea Catechin Extract in Preventing Esophageal Cancer in Patients With Barrett's Esophagus"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2005-11"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "PHASE1"
+       ],
+       "enrollmentInfo": {
+        "count": 55
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT01659060",
+       "briefTitle": "Chocolate Consumption in Healthy Pregnant Women Trial"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2008-07"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "PHASE2"
+       ],
+       "enrollmentInfo": {
+        "count": 44
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT07265869",
+       "briefTitle": "Can Cocoa Flavanols Protect Endothelial Function During Prolonged Sitting in Healthy Older Adults?"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2022-08-02"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "NA"
+       ],
+       "enrollmentInfo": {
+        "count": 20
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT01363869",
+       "briefTitle": "Effects of Green Tea on Level of Serum Uric Acid in Healthy Individuals"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2011-06"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "NA"
+       ],
+       "enrollmentInfo": {
+        "count": 30
+       }
+      }
+     }
+    }
+   ],
+   "nextPageToken": "ZVJj7o2Elu8o3lprVIG-pb72mpOQJJxtZPan3PwW"
+  },
+  "expires_at": "2026-05-02T17:26:20.534780+00:00"
+ },
+ "https://clinicaltrials.gov/api/v2/studies?query.intr=L-Theanine&filter.overallStatus=COMPLETED&countTotal=true&pageSize=10&fields=NCTId,BriefTitle,EnrollmentCount,Phase,StudyType,StartDate": {
+  "payload": {
+   "totalCount": 38,
+   "studies": [
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT02857829",
+       "briefTitle": "The Effects of a Combination of Nootropic Ingredients on Cognition in Healthy Young Volunteers"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2017-03-01"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "NA"
+       ],
+       "enrollmentInfo": {
+        "count": 21
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT04790188",
+       "briefTitle": "Effect of a Nootropic on the Cognitive Performance in Young Adults"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2021-04-01"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "NA"
+       ],
+       "enrollmentInfo": {
+        "count": 25
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT02770105",
+       "briefTitle": "Theanine and Caffeine on Neurophysiology of Attention"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2016-05"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "NA"
+       ],
+       "enrollmentInfo": {
+        "count": 9
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT06785142",
+       "briefTitle": "Investigation of a Dietary Supplement Liquid Shot Product on Aspects of Mood Both At Rest and During a Laboratory Stressor Task."
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2023-01-14"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "NA"
+       ],
+       "enrollmentInfo": {
+        "count": 48
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT05300594",
+       "briefTitle": "Effect of Audistim\u00ae Day/Night on Hearing Comfort and Patient Quality of Life of Patients With Chronic Tinnitus."
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2022-03-01"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "NA"
+       ],
+       "enrollmentInfo": {
+        "count": 110
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT03965819",
+       "briefTitle": "A Study to Investigate the Efficacy of Pain Bloc-R in Healthy Participants With Non-pathological Aches and Discomfort"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2019-05-30"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "NA"
+       ],
+       "enrollmentInfo": {
+        "count": 27
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT05543811",
+       "briefTitle": "The Influence of Food for Special Dietary Use - Spread Enriched With 5-hydroxytryptophan, Theanine and Gamma-aminobutyric Acid on Psychophysiological Functions of Subjects Without Meaningful Organic and Cognitive Pathology"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2022-09-15"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "NA"
+       ],
+       "enrollmentInfo": {
+        "count": 140
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT07225608",
+       "briefTitle": "The Acute Effects of Liquid IV's Pre-Workout Supplement on Muscle Endurance & Strength, Energy, and Cognition"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2025-12-01"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "NA"
+       ],
+       "enrollmentInfo": {
+        "count": 27
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT06889584",
+       "briefTitle": "Supplement Combination on Stress and Sleep"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2025-02-15"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "NA"
+       ],
+       "enrollmentInfo": {
+        "count": 115
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT07207252",
+       "briefTitle": "Research on Sleep and Emotion Testing of Tea Theanine Casein Hydrolysate Pressed Candy"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2024-10-28"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "NA"
+       ],
+       "enrollmentInfo": {
+        "count": 171
+       }
+      }
+     }
+    }
+   ],
+   "nextPageToken": "ZVJj7o2Elu8o3lprVIG-pb72mpOQJJxmZfan2_AW"
+  },
+  "expires_at": "2026-05-02T17:26:21.019508+00:00"
+ },
+ "https://clinicaltrials.gov/api/v2/studies?query.intr=Biotin&filter.overallStatus=COMPLETED&countTotal=true&pageSize=10&fields=NCTId,BriefTitle,EnrollmentCount,Phase,StudyType,StartDate": {
+  "payload": {
+   "totalCount": 60,
+   "studies": [
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT00289354",
+       "briefTitle": "Efficacy and Safety Study of Chromium Picolinate + Biotin on Glucose and Cholesterol Control in T2DM"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2003-03"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "NA"
+       ],
+       "enrollmentInfo": {
+        "count": 600
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT00731588",
+       "briefTitle": "Red Blood Cell (RBC) Survival Following Transfusion in Infants"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2008-06"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "PHASE2"
+       ],
+       "enrollmentInfo": {
+        "count": 140
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT02302729",
+       "briefTitle": "Early Child Development and Nutrition in Guatemala"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2015-02-16"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "NA"
+       ],
+       "enrollmentInfo": {
+        "count": 1730
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT03114215",
+       "briefTitle": "Effect of MD1003 in Amyotrophic Lateral Sclerosis"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2016-06-29"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "PHASE2"
+       ],
+       "enrollmentInfo": {
+        "count": 30
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT03215433",
+       "briefTitle": "Study of Biomarkers of the Response to Biotine"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2016-12-08"
+       }
+      },
+      "designModule": {
+       "studyType": "OBSERVATIONAL",
+       "enrollmentInfo": {
+        "count": 25
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT01473914",
+       "briefTitle": "Trace Element Replenishment Study in Hemodialysis Patients"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2012-11"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "PHASE3"
+       ],
+       "enrollmentInfo": {
+        "count": 150
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT02757898",
+       "briefTitle": "Transfusion of Biotinylated Red Blood Cells"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2017-01-11"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "PHASE1"
+       ],
+       "enrollmentInfo": {
+        "count": 5
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT03563664",
+       "briefTitle": "Effect of Danazol on Endometrial \u03b1v\u03b23 Integrin Expression in Patients With Unexplained Recurrent Implantation Failure"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2015-08-01"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "PHASE3"
+       ],
+       "enrollmentInfo": {
+        "count": 38
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT05523115",
+       "briefTitle": "An Exploratory Investigation of a Supplement to Promote Cognitive Health Benefits"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2022-06-15"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "NA"
+       ],
+       "enrollmentInfo": {
+        "count": 34
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT06174441",
+       "briefTitle": "The Effect of 24-week Dietary Intake of Food Supplements on Hair"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2024-01-08"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "NA"
+       ],
+       "enrollmentInfo": {
+        "count": 89
+       }
+      }
+     }
+    }
+   ],
+   "nextPageToken": "ZVJj7o2Elu8o3lprVIG-pb72mpOQJJxmZPih2PMW"
+  },
+  "expires_at": "2026-05-02T17:26:21.439541+00:00"
+ },
+ "https://clinicaltrials.gov/api/v2/studies?query.intr=Lion%27s%20Mane%20Mushroom&filter.overallStatus=COMPLETED&countTotal=true&pageSize=10&fields=NCTId,BriefTitle,EnrollmentCount,Phase,StudyType,StartDate": {
+  "payload": {
+   "totalCount": 2,
+   "studies": [
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT07405632",
+       "briefTitle": "The Impact of Supplementation With Hericium Erinaceus (Lion's Mane) Extract on Cognitive Functioning"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2025-01-13"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "NA"
+       ],
+       "enrollmentInfo": {
+        "count": 85
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT07027462",
+       "briefTitle": "Effects of a Mushroom Blend on Gastrointestinal Symptoms and the Microbiome"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2025-06-16"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "NA"
+       ],
+       "enrollmentInfo": {
+        "count": 40
+       }
+      }
+     }
+    }
+   ]
+  },
+  "expires_at": "2026-05-02T17:26:21.857769+00:00"
+ },
+ "https://clinicaltrials.gov/api/v2/studies?query.intr=Tart%20Cherry%20Extract&filter.overallStatus=COMPLETED&countTotal=true&pageSize=10&fields=NCTId,BriefTitle,EnrollmentCount,Phase,StudyType,StartDate": {
+  "payload": {
+   "totalCount": 6,
+   "studies": [
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT04177238",
+       "briefTitle": "Effects of Oral Fruit Concentrate Supplementation on Cardiometabolic Parameters."
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2020-01-21"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "NA"
+       ],
+       "enrollmentInfo": {
+        "count": 45
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT06299488",
+       "briefTitle": "Combined Effects of Prunus Cerasus and Apocynum Venetum On Sleep and Anxiety in Adults With Insomnia"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2023-04-05"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "NA"
+       ],
+       "enrollmentInfo": {
+        "count": 77
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT04312022",
+       "briefTitle": "Impacts of a Combined Berry Extract Supplement on Vascular Function and Oxygen Utility Capacity in Young Adults"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2018-11-04"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "NA"
+       ],
+       "enrollmentInfo": {
+        "count": 18
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT06122038",
+       "briefTitle": "Impact of Powdered Tart Cherries on Recovery From Repeated Sprints"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2023-04-25"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "NA"
+       ],
+       "enrollmentInfo": {
+        "count": 40
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT05008549",
+       "briefTitle": "A Study to Assess the Synergistic Effects of a Cranberry Beverage on Cognitive Function"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2021-07-26"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "NA"
+       ],
+       "enrollmentInfo": {
+        "count": 25
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT03650140",
+       "briefTitle": "Pharmacokinetics and Pharmacodynamics of Anthocyanins"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2019-02-01"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "NA"
+       ],
+       "enrollmentInfo": {
+        "count": 10
+       }
+      }
+     }
+    }
+   ]
+  },
+  "expires_at": "2026-05-02T17:26:22.274404+00:00"
+ },
+ "https://clinicaltrials.gov/api/v2/studies?query.intr=Bitter%20Melon%20Extract&filter.overallStatus=COMPLETED&countTotal=true&pageSize=10&fields=NCTId,BriefTitle,EnrollmentCount,Phase,StudyType,StartDate": {
+  "payload": {
+   "totalCount": 11,
+   "studies": [
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT03151837",
+       "briefTitle": "Hypoglycemic Efficacy of Greenyn Momordica Charantia Extracts in Diabetic Subjects"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2017-05-10"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "NA"
+       ],
+       "enrollmentInfo": {
+        "count": 40
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT03785821",
+       "briefTitle": "Effect of Bitter Melon Seed Oil on Body Weight"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2016-04-01"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "NA"
+       ],
+       "enrollmentInfo": {
+        "count": 56
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT07303127",
+       "briefTitle": "Combination of Bitter Melon Extract and Snakehead Fish Powder to Reduce Glycaemia in Type 2 Diabetes Mellitus"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2021-06-01"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "NA"
+       ],
+       "enrollmentInfo": {
+        "count": 80
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT06224803",
+       "briefTitle": "Evaluation of Effects of Dibifree\u00ae on Regulation of Blood Sugar and HbA1c in Patients With Type II Diabetes"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2020-08-26"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "NA"
+       ],
+       "enrollmentInfo": {
+        "count": 56
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT07233460",
+       "briefTitle": "Effect of Using Bitter Melon, Blueberries and Cranberries on HbA1c and Diabetes Symptom Levels"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2024-02-06"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "NA"
+       ],
+       "enrollmentInfo": {
+        "count": 120
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT05540405",
+       "briefTitle": "Effects of Bitter Melon on Cardiometabolic Health"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2023-01-24"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "NA"
+       ],
+       "enrollmentInfo": {
+        "count": 75
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT04268212",
+       "briefTitle": "An Alternative Approach to Improve Hyperglycemia Among Type 2 Diabetes Patients"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2016-04-15"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "NA"
+       ],
+       "enrollmentInfo": {
+        "count": 8
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT01120873",
+       "briefTitle": "The Effect of Metamin 3D on the Lipid and Glucose in Subjects With Metabolic Syndrome"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2007-03"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "PHASE3"
+       ],
+       "enrollmentInfo": {
+        "count": 110
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT04661267",
+       "briefTitle": "Randomized Trial of Regenexx Stem Cell Support Formula"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2021-02-03"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "NA"
+       ],
+       "enrollmentInfo": {
+        "count": 80
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT05829187",
+       "briefTitle": "Momordica Charantia and Dihydroartemisinin-piperaquined-primaquine for Uncomplicated Plasmodium Falciparum Malaria Patients in Southwest Sumba Regency"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2022-11-01"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "PHASE2"
+       ],
+       "enrollmentInfo": {
+        "count": 36
+       }
+      }
+     }
+    }
+   ],
+   "nextPageToken": "ZVJj7o2Elu8o3lprVIG-pb72mpOQJJxsYfmh3vAbkA"
+  },
+  "expires_at": "2026-05-02T17:26:22.718233+00:00"
+ },
+ "https://clinicaltrials.gov/api/v2/studies?query.intr=Digestive%20Enzyme%20Complex&filter.overallStatus=COMPLETED&countTotal=true&pageSize=10&fields=NCTId,BriefTitle,EnrollmentCount,Phase,StudyType,StartDate": {
+  "payload": {
+   "totalCount": 7,
+   "studies": [
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT02231723",
+       "briefTitle": "A Study of BBI608 in Combination With Standard Chemotherapies in Adult Patients With Pancreatic Cancer"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2014-08"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "PHASE1"
+       ],
+       "enrollmentInfo": {
+        "count": 139
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT00153998",
+       "briefTitle": "Cetuximab in Neoadjuvant Treatment of Non-Resectable Colorectal Liver Metastases (CELIM)"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2004-11"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "PHASE2"
+       ],
+       "enrollmentInfo": {
+        "count": 135
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT01427712",
+       "briefTitle": "Special Investigation (All Cases) of LipaCreon in Patients With Pancreatic Exocrine Insufficiency Due to Cystic Fibrosis"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2011-08"
+       }
+      },
+      "designModule": {
+       "studyType": "OBSERVATIONAL",
+       "enrollmentInfo": {
+        "count": 24
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT00957151",
+       "briefTitle": "Evaluation of the Digestive and Metabolic Utilisation of Dietary Protein in Patients With Chronic Pancreatitis"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2004-04"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "PHASE4"
+       ],
+       "enrollmentInfo": {
+        "count": 12
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT00510744",
+       "briefTitle": "Pancreatic Enzymes to Restore Digestive Function in Malnourished Gastric Bypass Patients"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2007-08"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "NA"
+       ],
+       "enrollmentInfo": {
+        "count": 5
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT02137382",
+       "briefTitle": "A Double-blind, Randomized, Multicenter, Cross-over Study to Compare the Effect of Creon N and Creon\u00ae on Fat Digestion in Subjects \u2265 12 Years of Age With Pancreatic Exocrine Insufficiency Due to Cystic Fibrosis"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2014-01"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "PHASE3"
+       ],
+       "enrollmentInfo": {
+        "count": 41
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT06192394",
+       "briefTitle": "Effect of Gum Chewing or Walking on Bowel Prep Quality and Patient Satisfaction Before Colonoscopy"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2024-07-05"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "NA"
+       ],
+       "enrollmentInfo": {
+        "count": 168
+       }
+      }
+     }
+    }
+   ]
+  },
+  "expires_at": "2026-05-02T17:26:23.174485+00:00"
+ },
+ "https://clinicaltrials.gov/api/v2/studies?query.intr=Passionflower%20Extract&filter.overallStatus=COMPLETED&countTotal=true&pageSize=10&fields=NCTId,BriefTitle,EnrollmentCount,Phase,StudyType,StartDate": {
+  "payload": {
+   "totalCount": 2,
+   "studies": [
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT00794456",
+       "briefTitle": "Association of Passiflora Incarnata L; Crataegus Oxyacantha L and Salix Alba L. on Mild and Moderate Anxiety"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2009-09"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "PHASE3"
+       ],
+       "enrollmentInfo": {
+        "count": 150
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT00997256",
+       "briefTitle": "Study to Investigate Effects of a Herbal Drug Compared to Placebo on Sleep"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2004-12"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "PHASE1"
+       ],
+       "enrollmentInfo": {
+        "count": 20
+       }
+      }
+     }
+    }
+   ]
+  },
+  "expires_at": "2026-05-02T17:26:23.675076+00:00"
+ },
+ "https://clinicaltrials.gov/api/v2/studies?query.intr=Lemon%20Balm%20Extract&filter.overallStatus=COMPLETED&countTotal=true&pageSize=10&fields=NCTId,BriefTitle,EnrollmentCount,Phase,StudyType,StartDate": {
+  "payload": {
+   "totalCount": 12,
+   "studies": [
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT05609890",
+       "briefTitle": "Novel Formulation for Sleep Among People With Poor Sleep Quality"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2023-01-15"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "NA"
+       ],
+       "enrollmentInfo": {
+        "count": 58
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT05300594",
+       "briefTitle": "Effect of Audistim\u00ae Day/Night on Hearing Comfort and Patient Quality of Life of Patients With Chronic Tinnitus."
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2022-03-01"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "NA"
+       ],
+       "enrollmentInfo": {
+        "count": 110
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT05197413",
+       "briefTitle": "Study to Evaluate the Efficacy of Arrae's Bloat & Calm Alchemy Capsules to Reduce Bloating, Heartburn and Gas, and Alleviate the Intensity of IBS Symptoms"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2021-09-01"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "NA"
+       ],
+       "enrollmentInfo": {
+        "count": 35
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT05422599",
+       "briefTitle": "Enhancement of Sleep Quality and Mood Following Supplementation With Lemon Balm in an Adult Population (Lemslp)"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2022-05-05"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "NA"
+       ],
+       "enrollmentInfo": {
+        "count": 99
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT06672965",
+       "briefTitle": "A Clinical Study to Evaluate the Efficacy of Dietary Supplement to Alleviate Stress Versus Placebo in Subjects with Mild to Moderate Levels of Stress"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2023-06-19"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "NA"
+       ],
+       "enrollmentInfo": {
+        "count": 60
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT05520424",
+       "briefTitle": "An Exploratory Investigation of a Supplement to Promote Brain Health"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2022-06-15"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "NA"
+       ],
+       "enrollmentInfo": {
+        "count": 40
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT02422576",
+       "briefTitle": "Efficacy of Natural Ingredient to Improve the Swallowing Response of Patients With Oropharyngeal Dysphagia"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2015-03"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "NA"
+       ],
+       "enrollmentInfo": {
+        "count": 104
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT06183372",
+       "briefTitle": "Enhancement of Calmness and Mood Following Acute Lemon Balm Supplementation During Cognitive Demand in Adults"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2023-12-02"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "NA"
+       ],
+       "enrollmentInfo": {
+        "count": 123
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT05748574",
+       "briefTitle": "Sleep Well Observation Study"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2023-03-14"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "NA"
+       ],
+       "enrollmentInfo": {
+        "count": 50
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT05008549",
+       "briefTitle": "A Study to Assess the Synergistic Effects of a Cranberry Beverage on Cognitive Function"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2021-07-26"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "NA"
+       ],
+       "enrollmentInfo": {
+        "count": 25
+       }
+      }
+     }
+    }
+   ],
+   "nextPageToken": "ZVJj7o2Elu8o3lprVIG-pb72mpOQJJxsZPKt1PYYkA"
+  },
+  "expires_at": "2026-05-02T17:26:24.162217+00:00"
+ },
+ "https://clinicaltrials.gov/api/v2/studies?query.intr=Spermidine&filter.overallStatus=COMPLETED&countTotal=true&pageSize=10&fields=NCTId,BriefTitle,EnrollmentCount,Phase,StudyType,StartDate": {
+  "payload": {
+   "totalCount": 8,
+   "studies": [
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT03378843",
+       "briefTitle": "Spermidine Intake and All-cause Mortality"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "1995-10"
+       }
+      },
+      "designModule": {
+       "studyType": "OBSERVATIONAL",
+       "enrollmentInfo": {
+        "count": 829
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT04004091",
+       "briefTitle": "Prenatal Administration of Spermine Promotes Maturation of Premature Fetal Gut Epithelial Tight Junction: Experimental Study on Fetal Rabbit"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2019-03-01"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "EARLY_PHASE1"
+       ],
+       "enrollmentInfo": {
+        "count": 42
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT06445569",
+       "briefTitle": "Safety and Efficacy of KH-1 for Stimulating Autophagy in Non-diabetic Adults With Elevated Blood Glucose Concentration"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2021-12-20"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "NA"
+       ],
+       "enrollmentInfo": {
+        "count": 42
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT05017428",
+       "briefTitle": "Absorption and Digestion Kinetics of Human Metabolites"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2021-04-08"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "NA"
+       ],
+       "enrollmentInfo": {
+        "count": 5
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT06249620",
+       "briefTitle": "Oral Supplementation With AM3, Hesperidin and Spermidine Supplementation on Immunity Response and Biological Age."
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2022-04-19"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "NA"
+       ],
+       "enrollmentInfo": {
+        "count": 41
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT05421546",
+       "briefTitle": "Improving Vaccination in Older Adults by Inducing Autophagy With Spermidine"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2022-08-01"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "NA"
+       ],
+       "enrollmentInfo": {
+        "count": 40
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT06790407",
+       "briefTitle": "Observational Metabolic Health Study"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2024-08-26"
+       }
+      },
+      "designModule": {
+       "studyType": "OBSERVATIONAL",
+       "enrollmentInfo": {
+        "count": 96
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT01095731",
+       "briefTitle": "The Effects of Tiopronin on 3-Aminopropanal Level & Neurologic Outcome After Aneurysmal Subarachnoid Hemorrhage"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2010-04"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "PHASE2"
+       ],
+       "enrollmentInfo": {
+        "count": 60
+       }
+      }
+     }
+    }
+   ]
+  },
+  "expires_at": "2026-05-02T17:26:24.593143+00:00"
+ },
+ "https://clinicaltrials.gov/api/v2/studies?query.intr=NADH&filter.overallStatus=COMPLETED&countTotal=true&pageSize=10&fields=NCTId,BriefTitle,EnrollmentCount,Phase,StudyType,StartDate": {
+  "payload": {
+   "totalCount": 121,
+   "studies": [
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT02412878",
+       "briefTitle": "Once-weekly Versus Twice-weekly Carfilzomib in Combination With Dexamethasone in Adults With Relapsed and Refractory Multiple Myeloma"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2015-09-09"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "PHASE3"
+       ],
+       "enrollmentInfo": {
+        "count": 478
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT04180683",
+       "briefTitle": "Comparison Study of the Different Abbreviated Versions of the Geriatric Depression Scale"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2020-03-01"
+       }
+      },
+      "designModule": {
+       "studyType": "OBSERVATIONAL",
+       "enrollmentInfo": {
+        "count": 331
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT02721537",
+       "briefTitle": "Use of 31P MRS to Assess Brain NAD+ in Healthy Current and Former Collegiate Athletes"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2016-09"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "NA"
+       ],
+       "enrollmentInfo": {
+        "count": 30
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT03448016",
+       "briefTitle": "[C-11]NOP-1A and Alcohol Use Disorder"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2016-05-27"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "EARLY_PHASE1"
+       ],
+       "enrollmentInfo": {
+        "count": 54
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT02291159",
+       "briefTitle": "Effects of DNHS Technique in the Treatment of Upper Limb Spasticity and Function in Stroke"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2014-11"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "NA"
+       ],
+       "enrollmentInfo": {
+        "count": 10
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT02143323",
+       "briefTitle": "A Clinical Study to Explore Biomarkers for Drug-induced Liver Injury (DILI)"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2013-12"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "PHASE1"
+       ],
+       "enrollmentInfo": {
+        "count": 32
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT03789175",
+       "briefTitle": "Nicotinamide Riboside on Mitochondrial Function in Li-Fraumeni Syndrome"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2019-03-25"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "PHASE1",
+        "PHASE2"
+       ],
+       "enrollmentInfo": {
+        "count": 1
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT03799705",
+       "briefTitle": "Genetic Variants in Nicotinamide Adenine Dinucleotide (NAD) Synthesis Pathway"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2019-12-01"
+       }
+      },
+      "designModule": {
+       "studyType": "OBSERVATIONAL",
+       "enrollmentInfo": {
+        "count": 132
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT00128427",
+       "briefTitle": "Study of Colchicine to Prevent the Postpericardiotomy Syndrome"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2005-06"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "PHASE3"
+       ],
+       "enrollmentInfo": {
+        "count": 360
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT00063713",
+       "briefTitle": "VELCADE in Subjects With Relapsed or Refractory Mantle Cell Lymphoma"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2003-06"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "PHASE2"
+       ],
+       "enrollmentInfo": {
+        "count": 152
+       }
+      }
+     }
+    }
+   ],
+   "nextPageToken": "ZVJj7o2Elu8o3lprVIG-pb72mpOQJJxsYfCi3PcW"
+  },
+  "expires_at": "2026-05-02T17:26:25.024632+00:00"
+ },
+ "https://clinicaltrials.gov/api/v2/studies?query.intr=Astaxanthin%20%28Generic%29&filter.overallStatus=COMPLETED&countTotal=true&pageSize=10&fields=NCTId,BriefTitle,EnrollmentCount,Phase,StudyType,StartDate": {
+  "payload": {
+   "totalCount": 0,
+   "studies": []
+  },
+  "expires_at": "2026-05-02T17:26:25.444951+00:00"
+ },
+ "https://clinicaltrials.gov/api/v2/studies?query.intr=Pterostilbene&filter.overallStatus=COMPLETED&countTotal=true&pageSize=10&fields=NCTId,BriefTitle,EnrollmentCount,Phase,StudyType,StartDate": {
+  "payload": {
+   "totalCount": 10,
+   "studies": [
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT05561075",
+       "briefTitle": "Oral Bioavailability of Pterostilbene Cocrystal Compared to Its Free Form (BIOPTERO)"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2022-10-20"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "NA"
+       ],
+       "enrollmentInfo": {
+        "count": 6
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT02819219",
+       "briefTitle": "Effects of ElevATP on Body Composition and Athletic Performance"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2014-08"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "NA"
+       ],
+       "enrollmentInfo": {
+        "count": 51
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT01267227",
+       "briefTitle": "Effect of Pterostilbene on Cholesterol, Blood Pressure and Oxidative Stress"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2010-12"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "PHASE2",
+        "PHASE3"
+       ],
+       "enrollmentInfo": {
+        "count": 80
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT03754842",
+       "briefTitle": "Effect of Nicotinamide Riboside and Pterostilbene Supplementation on Muscle Regeneration in Elderly Humans"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2019-02-12"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "NA"
+       ],
+       "enrollmentInfo": {
+        "count": 32
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT04841499",
+       "briefTitle": "Effects of a Seven-day BASIS\u2122 Supplementation on Menopausal Syndromes and Measurements of the Urinary Vitamin B3 and Estradiol Levels in Pre-, Peri- and Post-menopause"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2021-04-05"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "NA"
+       ],
+       "enrollmentInfo": {
+        "count": 40
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT06289140",
+       "briefTitle": "Oral Bioavailability of a New Formulation of Pterostilbene Cocrystal in Comparison With Its Free Form (BIOPTERO2)"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2024-03-11"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "NA"
+       ],
+       "enrollmentInfo": {
+        "count": 6
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT04342975",
+       "briefTitle": "Protection From Acute Kidney Injury (AKI) With Basis\u2122 Treatment"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2020-12-01"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "PHASE2"
+       ],
+       "enrollmentInfo": {
+        "count": 54
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT03176628",
+       "briefTitle": "Pharmacokinetics, Pharmacodynamics and Safety of Basis in Acute Kidney Injury Study"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2017-11-01"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "NA"
+       ],
+       "enrollmentInfo": {
+        "count": 24
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT02998918",
+       "briefTitle": "Effects of Short-term Curcumin and Multi-polyphenol Supplementation on the Anti-inflammatory Properties of HDL"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2016-09"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "NA"
+       ],
+       "enrollmentInfo": {
+        "count": 21
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT02678611",
+       "briefTitle": "A Study to Evaluate Safety and Health Benefits of Basis\u2122 Among Elderly Subjects."
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2016-01"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "PHASE1"
+       ],
+       "enrollmentInfo": {
+        "count": 120
+       }
+      }
+     }
+    }
+   ],
+   "nextPageToken": "ZVJj7o2Elu8o3lprVIG-pb72mpOQJJxsbPCi2_0akA"
+  },
+  "expires_at": "2026-05-02T17:26:25.868587+00:00"
+ },
+ "https://clinicaltrials.gov/api/v2/studies?query.intr=Deglycyrrhizinated%20Licorice&filter.overallStatus=COMPLETED&countTotal=true&pageSize=10&fields=NCTId,BriefTitle,EnrollmentCount,Phase,StudyType,StartDate": {
+  "payload": {
+   "totalCount": 3,
+   "studies": [
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT04553705",
+       "briefTitle": "Omega-3, Nigella Sativa, Indian Costus, Quinine, Anise Seed, Deglycyrrhizinated Licorice, Artemisinin, Febrifugine on Immunity of Patients With (COVID-19)"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2020-09-20"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "PHASE2",
+        "PHASE3"
+       ],
+       "enrollmentInfo": {
+        "count": 150
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT07117942",
+       "briefTitle": "FDGL Dose-Finding Study for Diabetic Neuropathy"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2020-02-12"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "PHASE2"
+       ],
+       "enrollmentInfo": {
+        "count": 485
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT07148804",
+       "briefTitle": "A Double-Blind, Placebo-Controlled Study of Fermented Deglycyrrhizinated Licorice Extract"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2023-01-10"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "PHASE2"
+       ],
+       "enrollmentInfo": {
+        "count": 83
+       }
+      }
+     }
+    }
+   ]
+  },
+  "expires_at": "2026-05-02T17:26:26.312110+00:00"
+ },
+ "https://clinicaltrials.gov/api/v2/studies?query.intr=Cordyceps%20Mushroom&filter.overallStatus=COMPLETED&countTotal=true&pageSize=10&fields=NCTId,BriefTitle,EnrollmentCount,Phase,StudyType,StartDate": {
+  "payload": {
+   "totalCount": 3,
+   "studies": [
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT05130905",
+       "briefTitle": "RiteStart Personal Nutritional Dietary Study"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2017-09-01"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "NA"
+       ],
+       "enrollmentInfo": {
+        "count": 20
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT07027462",
+       "briefTitle": "Effects of a Mushroom Blend on Gastrointestinal Symptoms and the Microbiome"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2025-06-16"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "NA"
+       ],
+       "enrollmentInfo": {
+        "count": 40
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT02075892",
+       "briefTitle": "Mushroom Blend on Oxygen Kinetics"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2014-08"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "NA"
+       ],
+       "enrollmentInfo": {
+        "count": 28
+       }
+      }
+     }
+    }
+   ]
+  },
+  "expires_at": "2026-05-02T17:26:26.819888+00:00"
+ },
+ "https://clinicaltrials.gov/api/v2/studies?query.intr=Betaine%20HCl&filter.overallStatus=COMPLETED&countTotal=true&pageSize=10&fields=NCTId,BriefTitle,EnrollmentCount,Phase,StudyType,StartDate": {
+  "payload": {
+   "totalCount": 46,
+   "studies": [
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT01939145",
+       "briefTitle": "Comparing Outcomes for Prontosan Versus Normal Saline for Negative Pressure Wound Therapy With Instillation"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2013-09"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "PHASE4"
+       ],
+       "enrollmentInfo": {
+        "count": 100
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT01981343",
+       "briefTitle": "A Parallel Study Evaluating the Effect of A-F Betafood\u00ae on Gallbladder and Liver Function."
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2013-11-11"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "PHASE2"
+       ],
+       "enrollmentInfo": {
+        "count": 50
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT01950039",
+       "briefTitle": "Metabolic Effects of Betaine Supplementation"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2014-01"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "PHASE2"
+       ],
+       "enrollmentInfo": {
+        "count": 28
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT05790070",
+       "briefTitle": "Potential Synergistic Effect of Combined Blood Flow Restriction Training and Betaine Supplementation on Skeletal Muscle"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2021-02-01"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "NA"
+       ],
+       "enrollmentInfo": {
+        "count": 20
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT01237353",
+       "briefTitle": "Study of the Ability of Betaine Hydrochloride to Increase Stomach Acid in Healthy Volunteers"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2011-03"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "NA"
+       ],
+       "enrollmentInfo": {
+        "count": 6
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT01287403",
+       "briefTitle": "Response of Alkylresorcinols to Different Cereals"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2011-01"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "NA"
+       ],
+       "enrollmentInfo": {
+        "count": 14
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT00102843",
+       "briefTitle": "Effect of Betaine and Folic Acid on Vascular Function in Healthy Humans"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2002-10"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "NA"
+       ],
+       "enrollmentInfo": {
+        "count": 40
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT01759875",
+       "briefTitle": "Effects of Gastric pH on the Pharmacokinetics of Atazanavir"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2013-01"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "PHASE1"
+       ],
+       "enrollmentInfo": {
+        "count": 8
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT00283387",
+       "briefTitle": "Efficacy of Betaine for Reduction of Urine Oxalate in Patients With Type 1 Primary Hyperoxaluria"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2007-02"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "PHASE2"
+       ],
+       "enrollmentInfo": {
+        "count": 15
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT06018168",
+       "briefTitle": "An RCT Evaluating the Efficacy of a Skincare Routine and Acne Supplement on Improving Acne and Other Symptoms of PMS"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2023-06-30"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "NA"
+       ],
+       "enrollmentInfo": {
+        "count": 60
+       }
+      }
+     }
+    }
+   ],
+   "nextPageToken": "ZVJj7o2Elu8o3lprVIG-pb72mpOQJJxuZfGs1PcYkA"
+  },
+  "expires_at": "2026-05-02T17:26:27.309004+00:00"
+ },
+ "https://clinicaltrials.gov/api/v2/studies?query.intr=Pyrroloquinoline%20Quinone&filter.overallStatus=COMPLETED&countTotal=true&pageSize=10&fields=NCTId,BriefTitle,EnrollmentCount,Phase,StudyType,StartDate": {
+  "payload": {
+   "totalCount": 6,
+   "studies": [
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT07148726",
+       "briefTitle": "EFFECTS OF PYRROLOQUINOLINE QUINONE (PQQ) SUPPLEMENTATION ON NON-ENDURANCE TRAINED ATHLETES"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2024-09-01"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "NA"
+       ],
+       "enrollmentInfo": {
+        "count": 24
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT06431113",
+       "briefTitle": "Effect of Fixed Combination Citicoline Homotaurine and Pyrroloquinoline Quinone on Pattern-electroretinogram in Glaucoma"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2024-01-27"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "PHASE3"
+       ],
+       "enrollmentInfo": {
+        "count": 40
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT05910047",
+       "briefTitle": "Supplemental Hydrogen Plus PQQ for Mitochondrial Biomarkers and Brain Function in Elderly With Mild Cognitive Impairment"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2023-09-01"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "NA"
+       ],
+       "enrollmentInfo": {
+        "count": 34
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT05589051",
+       "briefTitle": "Effect of Alpha Hope Dietary Supplement on Health and Cognitive Performance"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2022-03-21"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "NA"
+       ],
+       "enrollmentInfo": {
+        "count": 14
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT05548595",
+       "briefTitle": "A Study to Evaluate the Impact of a Nutritional Product on Cognition in Healthy Teenagers"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2022-01-29"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "NA"
+       ],
+       "enrollmentInfo": {
+        "count": 22
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT06548503",
+       "briefTitle": "Sylimarin, Pyrroloquinoline, Quinone Sodium Salt and Myricetin Assumption Effects"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2023-11-01"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "NA"
+       ],
+       "enrollmentInfo": {
+        "count": 20
+       }
+      }
+     }
+    }
+   ]
+  },
+  "expires_at": "2026-05-02T17:26:27.727908+00:00"
+ },
+ "https://clinicaltrials.gov/api/v2/studies?query.intr=Magtein%20Magnesium%20L-Threonate&filter.overallStatus=COMPLETED&countTotal=true&pageSize=10&fields=NCTId,BriefTitle,EnrollmentCount,Phase,StudyType,StartDate": {
+  "payload": {
+   "totalCount": 1,
+   "studies": [
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT02210286",
+       "briefTitle": "Magnesium L-Threonate for the Enhancement of Learning and Memory in People With Dementia"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2014-07"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "NA"
+       ],
+       "enrollmentInfo": {
+        "count": 17
+       }
+      }
+     }
+    }
+   ]
+  },
+  "expires_at": "2026-05-02T17:26:28.155175+00:00"
+ },
+ "https://clinicaltrials.gov/api/v2/studies?query.intr=Cynatine%20HNS%20Keratin&filter.overallStatus=COMPLETED&countTotal=true&pageSize=10&fields=NCTId,BriefTitle,EnrollmentCount,Phase,StudyType,StartDate": {
+  "payload": {
+   "totalCount": 2,
+   "studies": [
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT05339958",
+       "briefTitle": "Nutraceutical Supplement With Standardized Botanicals in Males With Thinning Hair"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2021-07-19"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "NA"
+       ],
+       "enrollmentInfo": {
+        "count": 112
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT03206567",
+       "briefTitle": "Efficacy and Safety of a Nutraceutical Supplement With Standardized Botanicals in Women With Thinning Hair"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2017-05-04"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "NA"
+       ],
+       "enrollmentInfo": {
+        "count": 40
+       }
+      }
+     }
+    }
+   ]
+  },
+  "expires_at": "2026-05-02T17:26:28.576193+00:00"
+ },
+ "https://clinicaltrials.gov/api/v2/studies?query.intr=PureWay-C&filter.overallStatus=COMPLETED&countTotal=true&pageSize=10&fields=NCTId,BriefTitle,EnrollmentCount,Phase,StudyType,StartDate": {
+  "payload": {
+   "totalCount": 0,
+   "studies": []
+  },
+  "expires_at": "2026-05-02T17:26:28.985717+00:00"
+ },
+ "https://clinicaltrials.gov/api/v2/studies?query.intr=Bromelain&filter.overallStatus=COMPLETED&countTotal=true&pageSize=10&fields=NCTId,BriefTitle,EnrollmentCount,Phase,StudyType,StartDate": {
+  "payload": {
+   "totalCount": 22,
+   "studies": [
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT04664712",
+       "briefTitle": "Efficacy of Focused Shock Waves Combined With Adjuvant Therapy With Tendon Supplement"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2019-09-11"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "NA"
+       ],
+       "enrollmentInfo": {
+        "count": 44
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT07088042",
+       "briefTitle": "Assessment of Different Medications in Modifying the Efficacy of Anesthesia in Mandibular Molars With Acute Irreversible Pulpitis"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2024-09-15"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "PHASE4"
+       ],
+       "enrollmentInfo": {
+        "count": 60
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT04312022",
+       "briefTitle": "Impacts of a Combined Berry Extract Supplement on Vascular Function and Oxygen Utility Capacity in Young Adults"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2018-11-04"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "NA"
+       ],
+       "enrollmentInfo": {
+        "count": 18
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT05522179",
+       "briefTitle": "Nutritional Supplements and Foot Surgery"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2022-08-29"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "NA"
+       ],
+       "enrollmentInfo": {
+        "count": 46
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT05197413",
+       "briefTitle": "Study to Evaluate the Efficacy of Arrae's Bloat & Calm Alchemy Capsules to Reduce Bloating, Heartburn and Gas, and Alleviate the Intensity of IBS Symptoms"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2021-09-01"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "NA"
+       ],
+       "enrollmentInfo": {
+        "count": 35
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT06524271",
+       "briefTitle": "Effect of Fermented Soybean (FSB) Supplementation on Gas-troesophageal Reflux Disease (GERD)"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2023-11-01"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "NA"
+       ],
+       "enrollmentInfo": {
+        "count": 110
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT05038410",
+       "briefTitle": "Study to Investigate the Mechanism of Action of an Oral Enzyme Treatment With Bromelain, Trypsin and Rutoside Versus Placebo in Subjects With OsTeoarthritis"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2021-04-30"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "NA"
+       ],
+       "enrollmentInfo": {
+        "count": 40
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT00898521",
+       "briefTitle": "Feasibility Study: Enzymatic Debridement in Patients With Partial Thickness Burns"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2009-12-20"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "PHASE2"
+       ],
+       "enrollmentInfo": {
+        "count": 36
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT04161833",
+       "briefTitle": "Opera\u00ae for Aromatase Inhibitor-related Arthralgia Management (AIA)"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2018-11-01"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "NA"
+       ],
+       "enrollmentInfo": {
+        "count": 53
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT05220605",
+       "briefTitle": "Nebulised BromAc in Healthy Volunteers"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2022-07-27"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "PHASE1"
+       ],
+       "enrollmentInfo": {
+        "count": 12
+       }
+      }
+     }
+    }
+   ],
+   "nextPageToken": "ZVJj7o2Elu8o3lprVIG-pb72mpOQJJxuZPOh3_UYkA"
+  },
+  "expires_at": "2026-05-02T17:26:29.460048+00:00"
+ },
+ "https://clinicaltrials.gov/api/v2/studies?query.intr=Diindolylmethane%20%28DIM%29&filter.overallStatus=COMPLETED&countTotal=true&pageSize=10&fields=NCTId,BriefTitle,EnrollmentCount,Phase,StudyType,StartDate": {
+  "payload": {
+   "totalCount": 15,
+   "studies": [
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT00784394",
+       "briefTitle": "Diindolylmethane in Preventing Cancer in Healthy Volunteers"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2004-04"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "PHASE1"
+       ],
+       "enrollmentInfo": {
+        "count": 20
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT00392652",
+       "briefTitle": "Diindolylmethane in Healthy Volunteers"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2006-11"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "PHASE1"
+       ],
+       "enrollmentInfo": {
+        "count": 14
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT00212381",
+       "briefTitle": "Oral Diindolylmethane (DIM) for the Treatment of Cervical Dysplasia"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2000-09"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "PHASE3"
+       ],
+       "enrollmentInfo": {
+        "count": 62
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT07491835",
+       "briefTitle": "Effect of Lower Doses of Colonic Nutrient Supplementation on Appetite Hormones and Food Intake in Obese Adults"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2023-10-18"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "NA"
+       ],
+       "enrollmentInfo": {
+        "count": 16
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT00450229",
+       "briefTitle": "Diindolylmethane in Treating Patients Undergoing Surgery for Stage I or Stage II Prostate Cancer"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2007-02"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "PHASE1"
+       ],
+       "enrollmentInfo": {
+        "count": 45
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT06535698",
+       "briefTitle": "Evaluating the Effect of a Supplement on Symptoms of Hormonal Imbalance."
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2024-02-19"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "NA"
+       ],
+       "enrollmentInfo": {
+        "count": 35
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT02525159",
+       "briefTitle": "Effectiveness of DIM Supplements to Increase 2-OHE1/16 Ratio"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2006-08"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "PHASE3"
+       ],
+       "enrollmentInfo": {
+        "count": 60
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT03152097",
+       "briefTitle": "Targeting FMO-Mediated TMAO Formation in Kidney Disease (TMAO) Study"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2018-03-30"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "NA"
+       ],
+       "enrollmentInfo": {
+        "count": 13
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT03802721",
+       "briefTitle": "Pharmacokinetics of Benzo[a]Pyrene: Impact of Diet"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2019-01-24"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "EARLY_PHASE1"
+       ],
+       "enrollmentInfo": {
+        "count": 7
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT02197000",
+       "briefTitle": "A Nutritional Intervention to Decrease Breast Density Among Female BRCA (BReast CAncer Susceptibility Gene) Carriers"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2014-11-11"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "NA"
+       ],
+       "enrollmentInfo": {
+        "count": 23
+       }
+      }
+     }
+    }
+   ],
+   "nextPageToken": "ZVJj7o2Elu8o3lprVIG-pb72mpOQJJxubPCn2PUdkA"
+  },
+  "expires_at": "2026-05-02T17:26:29.983030+00:00"
+ },
+ "https://clinicaltrials.gov/api/v2/studies?query.intr=Gamma-Aminobutyric%20Acid%20%28GABA%29&filter.overallStatus=COMPLETED&countTotal=true&pageSize=10&fields=NCTId,BriefTitle,EnrollmentCount,Phase,StudyType,StartDate": {
+  "payload": {
+   "totalCount": 670,
+   "studies": [
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT02103686",
+       "briefTitle": "Study for Comparing The Pharmacokinetics of A Pregabalin Controlled Release Tablet 300mg With Immediate Release Formulation and to Assess the Effect of High Fat Diet in Healthy Male Subjects"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2012-11"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "PHASE1"
+       ],
+       "enrollmentInfo": {
+        "count": 30
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT00852683",
+       "briefTitle": "The Effects of Peri-Operative Pregabalin on Post-Operative Pain Following Breast Cancer Surgery With Axillary Node Dissection: A Pilot Study"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2008-05"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "PHASE3"
+       ],
+       "enrollmentInfo": {
+        "count": 70
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT01278173",
+       "briefTitle": "A Study of the Structure and Function of the Retina in Adult Patients With Refractory Complex Partial Seizures Treated With Vigabatrin (Sabril\u00ae)"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2010-12"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "PHASE4"
+       ],
+       "enrollmentInfo": {
+        "count": 65
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT01719705",
+       "briefTitle": "Effects of Pregabalin on Post-cesarean Pain"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2012-11"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "PHASE1"
+       ],
+       "enrollmentInfo": {
+        "count": 135
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT01678586",
+       "briefTitle": "Effect of Acupuncture and Pain Medication on Radicular Pain Using QST"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2012-12"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "NA"
+       ],
+       "enrollmentInfo": {
+        "count": 56
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT01314222",
+       "briefTitle": "Diabetic Peripheral Neuropathic Pain (DPNP)"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2011-03"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "PHASE2"
+       ],
+       "enrollmentInfo": {
+        "count": 178
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT00313820",
+       "briefTitle": "Efficacy Of Pregabalin In Subjects With Post-Stroke Central Neuropathic Pain"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2006-08"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "PHASE4"
+       ],
+       "enrollmentInfo": {
+        "count": 220
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT00667121",
+       "briefTitle": "Tamoxifen in Women With Breast Cancer and in Women at High-Risk of Breast Cancer Who Are Receiving Venlafaxine, Citalopram, Escitalopram, Gabapentin, or Sertraline"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2011-03-16"
+       }
+      },
+      "designModule": {
+       "studyType": "OBSERVATIONAL",
+       "enrollmentInfo": {
+        "count": 88
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT01202435",
+       "briefTitle": "An Investigation Of The Absorption And Pharmacokinetics Of Multiple Doses Of A Controlled Release Pregabalin Tablet As Compared To Multiple Doses Of The Immediate Release Pregabalin Capsule"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2010-10"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "PHASE1"
+       ],
+       "enrollmentInfo": {
+        "count": 18
+       }
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT00141375",
+       "briefTitle": "To Evaluate Long-Term Safety and Efficacy of Pregabalin in the Treatment of Neuropathic Pain After Spinal Cord Injury."
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2002-08"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "PHASE3"
+       ],
+       "enrollmentInfo": {
+        "count": 132
+       }
+      }
+     }
+    }
+   ],
+   "nextPageToken": "ZVJj7o2Elu8o3lprVIG-pb72mpOQJJxpYfil1fg"
+  },
+  "expires_at": "2026-05-02T17:26:30.490470+00:00"
+ }
+}

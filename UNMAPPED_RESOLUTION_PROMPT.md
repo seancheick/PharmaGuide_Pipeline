@@ -600,12 +600,12 @@ python3 scripts/api_audit/verify_pubchem.py --search "<alias_text>"
 
 ### Step 3: Decision matrix
 
-| UMLS match?   | GSRS match?    | PubChem match? | Action                                                                      |
-| ------------- | -------------- | -------------- | --------------------------------------------------------------------------- |
-| Same CUI      | Same UNII      | Same CAS       | **Safe to add alias**                                                       |
-| Same CUI      | Different UNII | —              | Investigate: may be different form/salt                                     |
-| Different CUI | Same UNII      | —              | Investigate: UMLS may have separate concepts for form vs parent             |
-| Different CUI | Different UNII | Different CAS  | **DO NOT add alias** — different compound                                   |
+| UMLS match?   | GSRS match?    | PubChem match? | Action                                                                                              |
+| ------------- | -------------- | -------------- | --------------------------------------------------------------------------------------------------- |
+| Same CUI      | Same UNII      | Same CAS       | **Safe to add alias**                                                                               |
+| Same CUI      | Different UNII | —              | Investigate: may be different form/salt                                                             |
+| Different CUI | Same UNII      | —              | Investigate: UMLS may have separate concepts for form vs parent                                     |
+| Different CUI | Different UNII | Different CAS  | **DO NOT add alias** — different compound                                                           |
 | No result     | No result      | No result      | Keep in `needs_verification` unless current repo-governed identity already proves exact equivalence |
 
 ### Step 4: Check for cross-DB collisions

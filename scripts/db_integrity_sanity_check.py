@@ -985,12 +985,96 @@ def check_user_goals_to_clusters(findings: List[Finding], data: Dict[str, Any], 
     if not isinstance(raw, list):
         findings.append(Finding("error", file, "user_goal_mappings", "missing_or_non_list", "list", _type_name(raw)))
         return
+
+    # Load valid cluster IDs for cross-reference validation
+    valid_cluster_ids: set = set()
+    synergy_path = DATA_DIR / "synergy_cluster.json"
+    if synergy_path.exists():
+        try:
+            synergy_data = json.loads(synergy_path.read_text(encoding="utf-8"))
+            valid_cluster_ids = {c["id"] for c in synergy_data.get("synergy_clusters", []) if isinstance(c, dict)}
+        except Exception:
+            pass
+
+    all_goal_ids = {e["id"] for e in raw if isinstance(e, dict) and "id" in e}
+
+    _VALID_GOAL_PRIORITIES = {"high", "medium", "low"}
+    _VALID_GOAL_CATEGORIES = {
+        "mental", "metabolic", "cardiovascular", "fitness",
+        "hormonal", "immune", "longevity", "aesthetic", "sensory", "reproductive",
+    }
+
     for i, e in enumerate(raw):
         if not isinstance(e, dict):
             findings.append(Finding("error", file, f"user_goal_mappings[{i}]", "entry_not_object", "dict", _type_name(e)))
             continue
-        _check_required(findings, file, e, i, [("id", str), ("user_facing_goal", str)])
-        _check_list_of_strings(findings, file, e, i, "primary_clusters", required=True, allow_empty=False)
+
+        _check_required(findings, file, e, i, [
+            ("id", str),
+            ("user_facing_goal", str),
+            ("goal_category", str),
+            ("goal_priority", str),
+            ("cluster_weights", dict),
+            ("core_clusters", list),
+            ("anti_clusters", list),
+            ("cluster_limits", dict),
+            ("confidence_threshold", float),
+            ("conflicting_goals", list),
+            ("synergy_goals", list),
+        ])
+
+        _check_enum(findings, file, e, i, "goal_priority", _VALID_GOAL_PRIORITIES)
+        _check_enum(findings, file, e, i, "goal_category", _VALID_GOAL_CATEGORIES)
+
+        # cluster_weights: values must be floats in [0.0, 1.0] and keys must be valid cluster IDs
+        cw = e.get("cluster_weights")
+        if isinstance(cw, dict):
+            if not cw:
+                findings.append(Finding("error", file, f"[{i}].cluster_weights", "empty_dict", "non-empty dict", "{}"))
+            for cid, weight in cw.items():
+                if valid_cluster_ids and cid not in valid_cluster_ids:
+                    findings.append(Finding("error", file, f"[{i}].cluster_weights.{cid}", "unknown_cluster_id", "valid synergy cluster id", cid))
+                if not isinstance(weight, (int, float)) or not (0.0 <= float(weight) <= 1.0):
+                    findings.append(Finding("error", file, f"[{i}].cluster_weights.{cid}", "weight_out_of_range", "float 0.0-1.0", str(weight)))
+
+        # core_clusters: must be non-empty and reference keys in cluster_weights
+        core = e.get("core_clusters")
+        if isinstance(core, list):
+            if not core:
+                findings.append(Finding("error", file, f"[{i}].core_clusters", "empty_list", "non-empty list[str]", "[]"))
+            for cid in core:
+                if not isinstance(cid, str):
+                    continue
+                if valid_cluster_ids and cid not in valid_cluster_ids:
+                    findings.append(Finding("error", file, f"[{i}].core_clusters", "unknown_cluster_id", "valid synergy cluster id", cid))
+                if isinstance(cw, dict) and cid not in cw:
+                    findings.append(Finding("error", file, f"[{i}].core_clusters", "core_not_in_cluster_weights", "key in cluster_weights", cid))
+
+        # anti_clusters: must reference valid cluster IDs
+        anti = e.get("anti_clusters")
+        if isinstance(anti, list):
+            for cid in anti:
+                if not isinstance(cid, str):
+                    continue
+                if valid_cluster_ids and cid not in valid_cluster_ids:
+                    findings.append(Finding("error", file, f"[{i}].anti_clusters", "unknown_cluster_id", "valid synergy cluster id", cid))
+
+        # cluster_limits: keys must be valid cluster IDs, values must be positive ints
+        cl = e.get("cluster_limits")
+        if isinstance(cl, dict):
+            for cid, limit in cl.items():
+                if valid_cluster_ids and cid not in valid_cluster_ids:
+                    findings.append(Finding("error", file, f"[{i}].cluster_limits.{cid}", "unknown_cluster_id", "valid synergy cluster id", cid))
+                if not isinstance(limit, int) or limit < 1:
+                    findings.append(Finding("error", file, f"[{i}].cluster_limits.{cid}", "invalid_limit", "positive int", str(limit)))
+
+        # cross-goal references must resolve within this file
+        for ref_field in ("conflicting_goals", "synergy_goals"):
+            refs = e.get(ref_field)
+            if isinstance(refs, list):
+                for gid in refs:
+                    if isinstance(gid, str) and gid not in all_goal_ids:
+                        findings.append(Finding("error", file, f"[{i}].{ref_field}", "unknown_goal_id", "valid goal id", gid))
 
 
 def check_overlap_allowlist(findings: List[Finding], data: Dict[str, Any], file: str) -> None:

@@ -2975,11 +2975,11 @@ class TestExplicitDyePriority:
         assert standard_name == "natural colors", \
             f"Annatto (explicit natural dye) should map to 'natural colors', got: {standard_name}"
 
-    def test_explicit_natural_dye_turmeric(self, normalizer):
-        """Explicit natural dye: 'Turmeric' maps to 'natural colors'"""
+    def test_turmeric_maps_to_iqm_not_natural_colors(self, normalizer):
+        """Turmeric has IQM therapeutic entry — should NOT be intercepted by dye matcher"""
         standard_name, mapped, forms = normalizer._enhanced_ingredient_mapping("Turmeric", [])
-        assert standard_name == "natural colors", \
-            f"Turmeric should map to 'natural colors', got: {standard_name}"
+        assert "curcumin" in standard_name.lower() or "turmeric" in standard_name.lower(), \
+            f"Turmeric should map to IQM (Curcumin/Turmeric), got: {standard_name}"
 
     def test_explicit_natural_dye_beet_juice(self, normalizer):
         """Explicit natural dye: 'Beet Juice' maps to 'natural colors'"""
@@ -2987,11 +2987,11 @@ class TestExplicitDyePriority:
         assert standard_name == "natural colors", \
             f"Beet Juice should map to 'natural colors', got: {standard_name}"
 
-    def test_explicit_natural_dye_beta_carotene(self, normalizer):
-        """Explicit natural dye: 'Beta-Carotene' maps to 'natural colors'"""
+    def test_beta_carotene_maps_to_iqm_not_natural_colors(self, normalizer):
+        """Beta-Carotene has IQM therapeutic entry — should NOT be intercepted by dye matcher"""
         standard_name, mapped, forms = normalizer._enhanced_ingredient_mapping("Beta-Carotene", [])
-        assert standard_name == "natural colors", \
-            f"Beta-Carotene should map to 'natural colors', got: {standard_name}"
+        assert "beta" in standard_name.lower() or "carotene" in standard_name.lower() or "vitamin a" in standard_name.lower(), \
+            f"Beta-Carotene should map to IQM, got: {standard_name}"
 
     def test_ambiguous_colors_no_context(self, normalizer):
         """Ambiguous 'Colors' with no forms → 'colors (unspecified)'"""

@@ -29,7 +29,7 @@ import math
 import logging
 import argparse
 import traceback
-from datetime import datetime
+from datetime import datetime, timezone
 from difflib import SequenceMatcher
 from typing import Dict, List, Any, Optional, Tuple
 from pathlib import Path
@@ -313,7 +313,7 @@ class SupplementEnricherV3:
             "error_type": error_type,
             "error_message": message,
             "stage": stage,
-            "timestamp": datetime.utcnow().isoformat() + "Z",
+            "timestamp": datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ'),
             "enrichment_version": self.VERSION,
         }
         if traceback_str:
@@ -8023,6 +8023,19 @@ class SupplementEnricherV3:
                         "base_points",
                         "multiplier",
                         "computed_score",
+                        "effect_direction",
+                        "effect_direction_rationale",
+                        "effect_direction_confidence",
+                        "total_enrollment",
+                        "published_studies",
+                        "published_studies_count",
+                        "published_rct_count",
+                        "published_meta_review_count",
+                        "registry_completed_trials_count",
+                        "primary_outcome",
+                        "endpoint_relevance_tags",
+                        "notes",
+                        "notable_studies",
                     ]
                     for field in optional_fields:
                         if field in study and study.get(field) is not None:
@@ -10681,7 +10694,7 @@ class SupplementEnricherV3:
             # Add enrichment metadata
             enriched["enrichment_version"] = self.VERSION
             enriched["compatible_scoring_versions"] = self.COMPATIBLE_SCORING_VERSIONS
-            enriched["enriched_date"] = datetime.utcnow().isoformat() + "Z"
+            enriched["enriched_date"] = datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')
             enriched["reference_versions"] = self.reference_versions  # Track data file versions for auditability
 
             # Classify supplement type (determines scoring adjustments)
@@ -10793,7 +10806,7 @@ class SupplementEnricherV3:
                 "enrichment_version": self.VERSION,
                 "scoring_compatibility": self.COMPATIBLE_SCORING_VERSIONS,
                 "generated_by": "SupplementEnricherV3",
-                "generated_at": datetime.utcnow().isoformat() + "Z",
+                "generated_at": datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ'),
                 "data_completeness": self._calculate_completeness(enriched),
                 "ready_for_scoring": True,
                 "unmapped_active_count": enriched.get("ingredient_quality_data", {}).get("unmapped_count", 0),
@@ -10834,7 +10847,7 @@ class SupplementEnricherV3:
 
             # Return product with minimal enrichment
             product["enrichment_version"] = self.VERSION
-            product["enriched_date"] = datetime.utcnow().isoformat() + "Z"
+            product["enriched_date"] = datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')
             product["enrichment_status"] = "failed"
             product["enrichment_error"] = str(e)
 
@@ -11411,7 +11424,7 @@ class SupplementEnricherV3:
         self.logger.info(f"Found {len(input_files)} files to process")
 
         # Process all files
-        start_time = datetime.utcnow()
+        start_time = datetime.now(timezone.utc)
         total_stats = {
             "total_products": 0,
             "successful": 0,
@@ -11427,7 +11440,7 @@ class SupplementEnricherV3:
                 total_stats[key] += batch_stats.get(key, 0)
 
         # Generate summary
-        end_time = datetime.utcnow()
+        end_time = datetime.now(timezone.utc)
         duration = (end_time - start_time).total_seconds()
 
         summary = {
@@ -11454,13 +11467,14 @@ class SupplementEnricherV3:
 
             summary_file = os.path.join(
                 reports_dir,
-                f"{report_prefix}_{datetime.utcnow().strftime('%Y%m%d_%H%M%S')}.json",
+                f"{report_prefix}_{datetime.now(timezone.utc).strftime('%Y%m%d_%H%M%S')}.json",
             )
 
             # Atomic write: prevents partial files on crash
             self._atomic_write_json(summary_file, summary)
 
-            # Save parent fallback report (all details, not just first 10)
+            # Save parent fallback report — always overwrite to prevent stale files
+            fallback_file = os.path.join(reports_dir, "parent_fallback_report.json")
             if self._parent_fallback_details:
                 # Deduplicate by ingredient_normalized + canonical_id for cleaner report
                 seen_fallbacks = {}
@@ -11481,14 +11495,23 @@ class SupplementEnricherV3:
                         key=lambda x: (-x["occurrence_count"], x["canonical_id"])
                     ),
                 }
-                fallback_file = os.path.join(reports_dir, "parent_fallback_report.json")
                 self._atomic_write_json(fallback_file, fallback_report)
                 self.logger.info(
                     f"Parent fallback report saved: {fallback_file} "
                     f"({len(seen_fallbacks)} unique, {len(self._parent_fallback_details)} total)"
                 )
+            else:
+                fallback_report = {
+                    "total_fallback_count": 0,
+                    "unique_fallback_count": 0,
+                    "note": "No parent fallback issues — all ingredients matched specific form aliases.",
+                    "fallbacks": [],
+                }
+                self._atomic_write_json(fallback_file, fallback_report)
+                self.logger.info(f"Parent fallback report: 0 fallbacks ({fallback_file})")
 
-            # Save FORM_UNMAPPED_FALLBACK audit report
+            # Save FORM_UNMAPPED_FALLBACK audit report — always overwrite to prevent stale files
+            form_fb_file = os.path.join(reports_dir, "form_fallback_audit_report.json")
             if self._form_fallback_details:
                 # Deduplicate by (unmapped_form_text, canonical_id) and count occurrences
                 seen_form_fb = {}
@@ -11504,7 +11527,7 @@ class SupplementEnricherV3:
                 same = [v for v in seen_form_fb.values() if not v["forms_differ"]]
 
                 form_fallback_report = {
-                    "generated_at": datetime.utcnow().isoformat() + "Z",
+                    "generated_at": datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ'),
                     "total_form_fallback_count": len(self._form_fallback_details),
                     "unique_form_fallback_count": len(seen_form_fb),
                     "forms_differ_count": len(differs),
@@ -11525,13 +11548,25 @@ class SupplementEnricherV3:
                         key=lambda x: (-x["occurrence_count"], x["canonical_id"]),
                     ),
                 }
-                form_fb_file = os.path.join(reports_dir, "form_fallback_audit_report.json")
                 self._atomic_write_json(form_fb_file, form_fallback_report)
                 self.logger.info(
                     f"Form fallback audit report saved: {form_fb_file} "
                     f"({len(differs)} differ, {len(same)} same, "
                     f"{len(self._form_fallback_details)} total occurrences)"
                 )
+            else:
+                form_fallback_report = {
+                    "generated_at": datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ'),
+                    "total_form_fallback_count": 0,
+                    "unique_form_fallback_count": 0,
+                    "forms_differ_count": 0,
+                    "forms_same_count": 0,
+                    "note": "No form fallback issues — all ingredients matched specific form aliases.",
+                    "action_needed_differs": [],
+                    "likely_ok_same": [],
+                }
+                self._atomic_write_json(form_fb_file, form_fallback_report)
+                self.logger.info(f"Form fallback audit report: 0 fallbacks ({form_fb_file})")
         else:
             self.logger.info("Report generation disabled by config option: options.generate_reports=false")
 

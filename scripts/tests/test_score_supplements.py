@@ -1778,7 +1778,7 @@ class TestSectionCEvidenceScoring:
         return SupplementScorer()
 
     def test_c_multi_ingredient_aggregation(self, scorer):
-        """Multiple ingredients each contribute independently, capped per ingredient."""
+        """Multiple ingredients use top-N diminishing returns (default: [1.0, 0.5, 0.25])."""
         product = make_base_product()
         product["evidence_data"] = {
             "clinical_matches": [
@@ -1797,9 +1797,12 @@ class TestSectionCEvidenceScoring:
             ]
         }
         section_c = scorer._compute_evidence_score(product, [])
-        # Magnesium: 6 * 1.0 = 6.0; Vitamin D: 5 * 0.65 = 3.25
-        assert section_c["score"] == pytest.approx(9.25)
+        # Magnesium: 6 * 1.0 = 6.0 (best, weight 1.0)
+        # Vitamin D: 5 * 0.65 = 3.25 (2nd, weight 0.5)
+        # Total: 6.0*1.0 + 3.25*0.5 = 7.625
+        assert section_c["score"] == pytest.approx(7.62, abs=0.01)
         assert section_c["matched_entries"] == 2
+        assert section_c["top_n_applied"] == 2
 
     def test_c_per_ingredient_cap_enforced(self, scorer):
         """Multiple studies for same canonical ingredient are capped at 7."""
@@ -1848,7 +1851,7 @@ class TestSectionCEvidenceScoring:
         assert section_c["matched_entries"] == 1
 
     def test_c_total_cap_at_20(self, scorer):
-        """Section C total is capped at 20 even with many ingredients."""
+        """Section C total is capped at 20; top-N with diminishing returns limits inflation."""
         product = make_base_product()
         matches = []
         for i, name in enumerate(["Magnesium", "Vitamin D", "Zinc", "Iron"]):
@@ -1860,8 +1863,228 @@ class TestSectionCEvidenceScoring:
             })
         product["evidence_data"] = {"clinical_matches": matches}
         section_c = scorer._compute_evidence_score(product, [])
-        # Each: 6*1.0=6.0, 4 ingredients = 24 raw, capped at 20
-        assert section_c["score"] == pytest.approx(20.0)
+        # Each: 6*1.0=6.0.  Top-N weights [1.0, 0.5, 0.25]:
+        # 6.0*1.0 + 6.0*0.5 + 6.0*0.25 = 10.5 (4th ingredient ignored)
+        assert section_c["score"] == pytest.approx(10.5)
+        assert section_c["top_n_applied"] == 3
+
+    def test_c_effect_direction_null_penalizes(self, scorer):
+        """Entries with effect_direction=null get 0.25x multiplier (well-studied but ineffective)."""
+        product = make_base_product()
+        product["evidence_data"] = {
+            "clinical_matches": [
+                {
+                    "id": "SAW_PALMETTO",
+                    "standard_name": "Saw Palmetto",
+                    "study_type": "rct_multiple",
+                    "evidence_level": "ingredient-human",
+                    "effect_direction": "null",
+                },
+            ]
+        }
+        section_c = scorer._compute_evidence_score(product, [])
+        # 5 * 0.65 * 0.25 = 0.8125
+        assert section_c["score"] == pytest.approx(0.81, abs=0.01)
+
+    def test_c_effect_direction_positive_weak(self, scorer):
+        """Entries with effect_direction=positive_weak get 0.85x multiplier."""
+        product = make_base_product()
+        product["evidence_data"] = {
+            "clinical_matches": [
+                {
+                    "id": "VIT_C",
+                    "standard_name": "Vitamin C",
+                    "study_type": "systematic_review_meta",
+                    "evidence_level": "ingredient-human",
+                    "effect_direction": "positive_weak",
+                },
+            ]
+        }
+        section_c = scorer._compute_evidence_score(product, [])
+        # 6 * 0.65 * 0.85 = 3.315
+        assert section_c["score"] == pytest.approx(3.32, abs=0.01)
+
+    def test_c_effect_direction_negative_zeroes(self, scorer):
+        """Entries with effect_direction=negative contribute 0 points."""
+        product = make_base_product()
+        product["evidence_data"] = {
+            "clinical_matches": [
+                {
+                    "id": "HARM",
+                    "standard_name": "Harmful X",
+                    "study_type": "rct_multiple",
+                    "evidence_level": "product-human",
+                    "effect_direction": "negative",
+                },
+            ]
+        }
+        section_c = scorer._compute_evidence_score(product, [])
+        assert section_c["score"] == pytest.approx(0.0)
+
+    def test_c_missing_effect_direction_defaults_positive_strong(self, scorer):
+        """Entries without effect_direction default to positive_strong (1.0x) for backward compat."""
+        product = make_base_product()
+        product["evidence_data"] = {
+            "clinical_matches": [
+                {
+                    "id": "E1",
+                    "standard_name": "Zinc",
+                    "study_type": "rct_multiple",
+                    "evidence_level": "ingredient-human",
+                    # no effect_direction field
+                },
+            ]
+        }
+        section_c = scorer._compute_evidence_score(product, [])
+        # 5 * 0.65 * 1.0 = 3.25 (same as before the change)
+        assert section_c["score"] == pytest.approx(3.25)
+
+    def test_c_top_n_single_ingredient_unchanged(self, scorer):
+        """Single ingredient products score the same with top-N (weight 1.0)."""
+        product = make_base_product()
+        product["evidence_data"] = {
+            "clinical_matches": [
+                {
+                    "id": "KSM66",
+                    "standard_name": "KSM-66",
+                    "study_type": "rct_multiple",
+                    "evidence_level": "branded-rct",
+                },
+            ]
+        }
+        section_c = scorer._compute_evidence_score(product, [])
+        # 5 * 0.8 * 1.0 = 4.0 — unchanged from old model
+        assert section_c["score"] == pytest.approx(4.0)
+        assert section_c["top_n_applied"] == 1
+
+    def test_c_enrollment_boosts_large_rct(self, scorer):
+        """Large enrollment (1000+) on RCT gets 1.2x enrollment multiplier."""
+        product = make_base_product()
+        product["evidence_data"] = {
+            "clinical_matches": [
+                {
+                    "id": "BIG_RCT",
+                    "standard_name": "Berberine",
+                    "study_type": "rct_multiple",
+                    "evidence_level": "ingredient-human",
+                    "total_enrollment": 1000,
+                },
+            ]
+        }
+        section_c = scorer._compute_evidence_score(product, [])
+        # 5 * 0.65 * 1.0 (positive_strong) * 1.2 (enrollment 1000+) = 3.9
+        assert section_c["score"] == pytest.approx(3.9)
+
+    def test_c_enrollment_penalizes_small_pilot(self, scorer):
+        """Small enrollment (<50) on RCT gets 0.6x enrollment multiplier."""
+        product = make_base_product()
+        product["evidence_data"] = {
+            "clinical_matches": [
+                {
+                    "id": "SMALL_PILOT",
+                    "standard_name": "Novel Compound",
+                    "study_type": "rct_single",
+                    "evidence_level": "ingredient-human",
+                    "total_enrollment": 19,
+                },
+            ]
+        }
+        section_c = scorer._compute_evidence_score(product, [])
+        # 4 * 0.65 * 1.0 * 0.6 (enrollment <50) = 1.56
+        assert section_c["score"] == pytest.approx(1.56)
+
+    def test_c_enrollment_ignored_for_observational(self, scorer):
+        """Enrollment multiplier does NOT apply to observational studies."""
+        product = make_base_product()
+        product["evidence_data"] = {
+            "clinical_matches": [
+                {
+                    "id": "OBS",
+                    "standard_name": "Boron",
+                    "study_type": "observational",
+                    "evidence_level": "ingredient-human",
+                    "total_enrollment": 5000,
+                },
+            ]
+        }
+        section_c = scorer._compute_evidence_score(product, [])
+        # 2 * 0.65 * 1.0 = 1.3 (no enrollment boost for observational)
+        assert section_c["score"] == pytest.approx(1.3)
+
+    def test_c_enrollment_ignored_when_absent(self, scorer):
+        """No total_enrollment field = no enrollment multiplier (backward compat)."""
+        product = make_base_product()
+        product["evidence_data"] = {
+            "clinical_matches": [
+                {
+                    "id": "NO_ENROLL",
+                    "standard_name": "Zinc",
+                    "study_type": "rct_multiple",
+                    "evidence_level": "ingredient-human",
+                    # no total_enrollment field
+                },
+            ]
+        }
+        section_c = scorer._compute_evidence_score(product, [])
+        # 5 * 0.65 = 3.25 (no enrollment adjustment)
+        assert section_c["score"] == pytest.approx(3.25)
+
+    def test_c_depth_bonus_40_plus_trials(self, scorer):
+        """Ingredients with 40+ published studies get +0.5 depth bonus."""
+        product = make_base_product()
+        product["evidence_data"] = {
+            "clinical_matches": [
+                {
+                    "id": "BERB",
+                    "standard_name": "Berberine",
+                    "study_type": "rct_multiple",
+                    "evidence_level": "ingredient-human",
+                    "published_studies": 68,
+                },
+            ]
+        }
+        section_c = scorer._compute_evidence_score(product, [])
+        # 5 * 0.65 = 3.25 + 0.5 depth bonus = 3.75
+        assert section_c["score"] == pytest.approx(3.75)
+        assert section_c["depth_bonus"] == pytest.approx(0.5)
+
+    def test_c_depth_bonus_20_trials(self, scorer):
+        """Ingredients with 20-39 published studies get +0.25 depth bonus."""
+        product = make_base_product()
+        product["evidence_data"] = {
+            "clinical_matches": [
+                {
+                    "id": "SP",
+                    "standard_name": "Saw Palmetto",
+                    "study_type": "rct_multiple",
+                    "evidence_level": "ingredient-human",
+                    "published_studies": 21,
+                },
+            ]
+        }
+        section_c = scorer._compute_evidence_score(product, [])
+        # 5 * 0.65 = 3.25 + 0.25 depth bonus = 3.5
+        assert section_c["score"] == pytest.approx(3.5)
+        assert section_c["depth_bonus"] == pytest.approx(0.25)
+
+    def test_c_depth_bonus_zero_when_few_trials(self, scorer):
+        """Ingredients with <20 published studies get no depth bonus."""
+        product = make_base_product()
+        product["evidence_data"] = {
+            "clinical_matches": [
+                {
+                    "id": "SMALL",
+                    "standard_name": "Niche Compound",
+                    "study_type": "rct_single",
+                    "evidence_level": "ingredient-human",
+                    "published_studies": 5,
+                },
+            ]
+        }
+        section_c = scorer._compute_evidence_score(product, [])
+        # 4 * 0.65 = 2.6 + 0.0 depth bonus
+        assert section_c["score"] == pytest.approx(2.6)
+        assert section_c["depth_bonus"] == pytest.approx(0.0)
 
     def test_c_sub_clinical_dose_guard(self, scorer):
         """Sub-clinical dose applies 0.25x multiplier and sets flag."""

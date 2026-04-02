@@ -36,7 +36,7 @@ import json
 import logging
 import argparse
 import subprocess
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple
 
@@ -388,7 +388,7 @@ class PipelineRunner:
         Returns:
             Summary dict with timing and status
         """
-        start_time = datetime.utcnow()
+        start_time = datetime.now(timezone.utc)
 
         # Use defaults if not provided
         stages = stages or self.config["stages"]
@@ -495,7 +495,7 @@ class PipelineRunner:
                 results["stages_failed"].append("score")
 
         # Summary
-        end_time = datetime.utcnow()
+        end_time = datetime.now(timezone.utc)
         duration = (end_time - start_time).total_seconds()
 
         results["duration_seconds"] = round(duration, 2)

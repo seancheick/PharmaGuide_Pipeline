@@ -1,0 +1,121 @@
+{
+ "https://clinicaltrials.gov/api/v2/studies?query.intr=curcumin&filter.overallStatus=COMPLETED&countTotal=true&pageSize=3&fields=NCTId,BriefTitle,EnrollmentCount,Phase,StudyType,StartDate,PrimaryOutcomeMeasure,SecondaryOutcomeMeasure": {
+  "payload": {
+   "totalCount": 216,
+   "studies": [
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT02404701",
+       "briefTitle": "Effect of Over-the-counter Dietary Supplements on Kidney Stone Risk"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2015-02"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "NA"
+       ],
+       "enrollmentInfo": {
+        "count": 45
+       }
+      },
+      "outcomesModule": {
+       "primaryOutcomes": [
+        {
+         "measure": "Within-subject change in 24-hour urinary oxalate excretion from before and after supplementation"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT02152475",
+       "briefTitle": "Photodynamic Therapy (PDT) for Oral Disinfection"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2013-05"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "PHASE1"
+       ],
+       "enrollmentInfo": {
+        "count": 30
+       }
+      },
+      "outcomesModule": {
+       "primaryOutcomes": [
+        {
+         "measure": "Microbiological analysis by the total number of colony-forming units (CFU)."
+        }
+       ]
+      }
+     }
+    },
+    {
+     "protocolSection": {
+      "identificationModule": {
+       "nctId": "NCT04744545",
+       "briefTitle": "RCT of Adjunctive Curcumin and the Meru Health Program"
+      },
+      "statusModule": {
+       "startDateStruct": {
+        "date": "2021-02-01"
+       }
+      },
+      "designModule": {
+       "studyType": "INTERVENTIONAL",
+       "phases": [
+        "NA"
+       ],
+       "enrollmentInfo": {
+        "count": 60
+       }
+      },
+      "outcomesModule": {
+       "primaryOutcomes": [
+        {
+         "measure": "Depression"
+        },
+        {
+         "measure": "Patient-reported adverse events"
+        }
+       ],
+       "secondaryOutcomes": [
+        {
+         "measure": "Anxiety"
+        },
+        {
+         "measure": "Burnout"
+        },
+        {
+         "measure": "Worker productivity and activity impairment"
+        },
+        {
+         "measure": "Therapist rating"
+        },
+        {
+         "measure": "Interleukin-6"
+        },
+        {
+         "measure": "High Sensitivity C Reactive Protein"
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "nextPageToken": "ZVJj7o2Elu8o3lprVIG-pb72mpOQJJxnYfWk1fg"
+  },
+  "expires_at": "2026-05-02T18:47:44.494057+00:00"
+ }
+}
