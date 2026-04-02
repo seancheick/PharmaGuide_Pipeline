@@ -1,0 +1,40 @@
+{
+  "generated_at": "2026-04-02T18:45:31.281602",
+  "generated_by": "fda_manufacturer_violations_sync.py",
+  "lookback_days": 7,
+  "include_rss": true,
+  "data_file": "scripts/data/manufacturer_violations.json",
+  "report_file": "scripts/api_audit/reports/fda_manufacturer_violations_sync_report_latest.json",
+  "total_candidates": 21,
+  "added_count": 0,
+  "skipped_count": 21,
+  "skip_reasons": {
+    "not_supplement": 19,
+    "weak_rss_signal": 1,
+    "existing_recall_id": 0,
+    "batch_duplicate_recall_id": 0,
+    "existing_source_identifier": 1,
+    "batch_duplicate_source": 0,
+    "noise_filtered": 0
+  },
+  "existing_total": 67,
+  "existing_recall_id_total": 31,
+  "added_ids": [],
+  "recalculated_entry_count": 2,
+  "source_counts": {
+    "food_enforcement": 0,
+    "drug_enforcement": 0,
+    "rss": 21
+  },
+  "statistics": {
+    "critical_violations": 51,
+    "high_violations": 14,
+    "moderate_violations": 2,
+    "low_violations": 0,
+    "unresolved_count": 44,
+    "resolved_count": 23,
+    "repeat_offenders": 3,
+    "active_outbreaks": 2
+  },
+  "new_entries": []
+}

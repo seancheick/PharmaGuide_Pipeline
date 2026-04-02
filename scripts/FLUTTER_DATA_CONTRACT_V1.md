@@ -382,6 +382,7 @@ from the user's current profile state.
 Source: `rda_optimal_uls.json` (bundled in `reference_data` table) + user age/sex.
 
 Compare each nutrient to age/sex-specific RDA and UL:
+
 - Optimal range (50-200% RDA): 7 pts
 - Adequate (25-50% RDA): 4 pts
 - Low dose (<25% RDA): 2 pts
@@ -451,21 +452,23 @@ LIMIT 50;
 ```
 
 Client behavior:
-- debounce text search input by ~300ms
-- never materialize unbounded FTS results into Dart memory
+
+- debounce text search input by ~300ms to avoid query-per-keystroke load
+- execute FTS queries asynchronously (via drift streams/Futures) to prevent UI thread blocking
+- never materialize unbounded FTS results into Dart memory (always use `LIMIT 50`)
 - use virtualized rendering for result lists
 
 ---
 
 ## What the App Does NOT Get from the Pipeline
 
-| Data                  | Where it comes from              |
-| --------------------- | -------------------------------- |
-| `score_fit_20`        | Computed on-device               |
-| `score_combined_100`  | Computed on-device               |
-| Price / daily cost    | User enters manually             |
-| Offline images        | Runtime cache or placeholder     |
-| Product-level recalls | Future: separate FDA data source |
+| Data                  | Where it comes from               |
+| --------------------- | --------------------------------- |
+| `score_fit_20`        | Computed on-device                |
+| `score_combined_100`  | Computed on-device                |
+| Price / daily cost    | User enters manually              |
+| Offline images        | Runtime cache or placeholder      |
+| Product-level recalls | Future: separate FDA data source  |
 | Account data          | Supabase Auth + app-local profile |
 
 ---
@@ -507,7 +510,7 @@ Everything in pharmaguide_core.db — bundled with the app at install or
 │ │ clusters │ calculation │  
  ├────────────────┼─────────────────────────────────┼─────────────────┤
 │ Export │ local version + remote checksum │ "Do I need to │
- │ manifest │ │ update?" check │  
+│ manifest │ │ update?" check │  
  └────────────────┴─────────────────────────────────┴─────────────────┘
 
 This is 61 columns x 783 products = ~0.9MB. Instant. No internet needed.
@@ -555,7 +558,7 @@ The detail blob — one JSON per product, fetched when the user taps into
  ├────────────────────┼──────────────────────────┼────────────────────┤  
  │ │ CUI, CAS, PubChem, UNII │ Data integrity │
 │ Identifiers │ per ingredient + on │ (not shown to │
- │ │ banned/harmful warnings │ users in MVP) │
+│ │ banned/harmful warnings │ users in MVP) │
 └────────────────────┴──────────────────────────┴────────────────────┘
 
 This is ~2-10KB per product. Fetched once, cached locally in  
@@ -570,15 +573,15 @@ Also from Supabase (user account stuff)
 │ (Google/Apple/Email) │ │ │
 ├───────────────────────┼─────────────────┼─────────────────────────┤  
  │ │ │ Supplement stack │
- │ user_stacks │ App ↔ Supabase │ (synced for │
- │ │ │ multi-device) │
+│ user_stacks │ App ↔ Supabase │ (synced for │
+│ │ │ multi-device) │
 │ │ │ Has updated_at with │
- │ │ │ auto-update trigger │
- │ │ │ for CRUD conflict │
- │ │ │ resolution │  
+│ │ │ auto-update trigger │
+│ │ │ for CRUD conflict │
+│ │ │ resolution │  
  ├───────────────────────┼─────────────────┼─────────────────────────┤
 │ user_usage │ App ↔ Supabase │ Scan/AI limits (20 │
- │ │ │ scans/day, 5 AI/day) │
+│ │ │ scans/day, 5 AI/day) │
 ├───────────────────────┼─────────────────┼─────────────────────────┤  
  │ pending_products │ App → Supabase │ "Product not found" │  
  │ │ │ submissions │
@@ -600,7 +603,7 @@ Never leaves the phone
 │ score) │ never stored │  
  ├────────────────────────────────────┼───────────────────────────────┤
 │ Guest scan / AI counters │ Hive local KV │
- ├────────────────────────────────────┼───────────────────────────────┤  
+├────────────────────────────────────┼───────────────────────────────┤  
  │ Chat history │ Hive local KV │
 ├────────────────────────────────────┼───────────────────────────────┤  
  │ Scan history │ Local SQLite │
@@ -663,7 +666,7 @@ needs a null guard. Show "Not Scored" or equivalent — never show 0.
 ### 4. image_url may be a PDF link
 
 Many DSLD products have label PDF URLs, not actual image URLs.
-Check for `.pdf` extension and show a placeholder image instead.
+Explicitly check for a `.pdf` extension _before_ passing to the image cache to prevent internal crashes. Show a placeholder image instead.
 The `thumbnail_key` field is NULL at export — the app populates it
 at runtime when it caches a real image.
 
@@ -691,9 +694,9 @@ detail blob.
 
 ### 7. UPC collisions
 
-Multiple products can share the same `upc_sku`. The barcode scan query
+Multiple products can share the same `upc_sku` (1:N relationship). The barcode scan query
 uses deterministic ordering (active first, highest score, lowest dsld_id)
-to pick one, but consider showing a chooser when `COUNT(*) > 1` for a UPC.
+to pick one, but consider showing a chooser when `COUNT(*) > 1` for a UPC and the top two scores differ by less than 5 points.
 
 ### 8. User condition ID mapping
 
@@ -789,14 +792,15 @@ version changes (compare against locally stored version).
 app build, the client must force an app-store update before attempting to parse
 or promote the new DB release.
 DB update flow must be staged and verified:
+
 - download to a staging path
 - verify checksum using remote `export_manifest.json`
 - perform a minimal SQLite open/readability check
 - atomically swap in only after verification passes
 - keep the previous DB on any failure
-The app should also cache the `detail_index.json` for the active `db_version` and
-resolve `dsld_id` to `blob_sha256` before fetching a detail payload.
-`product_detail_cache` requires explicit cache policy:
+  The app should also cache the `detail_index.json` for the active `db_version` and
+  resolve `dsld_id` to `blob_sha256` before fetching a detail payload.
+  `product_detail_cache` requires explicit cache policy:
 - release-version-aware invalidation
 - bounded size
 - LRU eviction

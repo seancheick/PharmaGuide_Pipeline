@@ -10,6 +10,7 @@ from api_audit.discover_clinical_evidence import (
     audit_all_entries,
     backfill_auditability_metadata,
     candidate_to_clinical_entry,
+    derive_endpoint_relevance_tags,
     discover_candidates,
     enrich_enrollment,
 )
@@ -133,6 +134,13 @@ def test_audit_enrollment_plausibility_skips_live_verified_well_known_entry():
 
     checks = {(issue["id"], issue["check"]) for issue in issues}
     assert ("BRAND_MAGTEIN", "enrollment_plausibility") not in checks
+
+
+def test_derive_endpoint_relevance_tags_uses_expanded_primary_outcome_fallbacks():
+    assert derive_endpoint_relevance_tags([], primary_outcome="Increase Energy") == ["energy_metabolism"]
+    assert derive_endpoint_relevance_tags([], primary_outcome="Joint & Bone Health") == ["joint_health"]
+    assert derive_endpoint_relevance_tags([], primary_outcome="Eye & Vision") == ["eye_vision"]
+    assert derive_endpoint_relevance_tags([], primary_outcome="Hormone Balance") == ["hormone_balance"]
 
 
 def test_enrich_enrollment_refreshes_registry_counts_broadly(monkeypatch):

@@ -336,6 +336,8 @@ Purpose:
 - Automatically sync manufacturer violation entries from FDA/openFDA feeds into `scripts/data/manufacturer_violations.json`.
 - Includes attention to supplement-specific substance signal detection and existing DB deduplication.
 - Calculates derived fields (recency, deduction, manufacturer scoring flags) to keep the manual penalties table fresh.
+- Recalculates existing entries against the deduction framework on each run (`days_since_violation`, recency, repeat flags, total deduction).
+- Preserves curated `manufacturer_family_*` score-bearing fields and non-scoring `related_brand_cluster_*` fields when present.
 - Emits a structured report with full new-entry details.
 
 Inputs:
@@ -348,7 +350,12 @@ Inputs:
 Outputs:
 
 - Updated `scripts/data/manufacturer_violations.json` (appended with new entries, metadata updated)
-- JSON report at `scripts/fda_manufacturer_violations_sync_report_<YYYYMMDD>.json` (or `--report` custom path)
+- JSON report at `scripts/api_audit/reports/fda_manufacturer_violations_sync_report_<YYYYMMDD>.json` (or `--report` custom path)
+
+Notes:
+
+- `manufacturer_family_id` is score-bearing and only for explicit, high-confidence family relationships.
+- `related_brand_cluster_id` is non-scoring metadata for operator review and explainability; it should not drive repeat penalties by itself.
 
 Common commands:
 

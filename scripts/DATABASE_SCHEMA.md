@@ -456,7 +456,7 @@ Documents the manufacturer penalty calculation framework. `total_deduction_cap` 
 ---
 
 ### 21. manufacturer_violations.json
-**Purpose:** `manufacturer_penalties` | **Entries:** 66
+**Purpose:** `manufacturer_penalties` | **Entries:** 67
 
 Primary key: `manufacturer_violations` (array)
 
@@ -465,6 +465,12 @@ Primary key: `manufacturer_violations` (array)
 | `id` | string | YES | Unique violation ID |
 | `manufacturer` | string | YES | Company name |
 | `manufacturer_id` | string | YES | Canonical manufacturer ID |
+| `manufacturer_family_id` | string | NO | Curated score-bearing manufacturer family ID used for repeat-violation grouping when explicitly present |
+| `manufacturer_family_name` | string | NO | Human-readable family label for curated manufacturer families |
+| `manufacturer_family_aliases` | string[] | NO | Optional curated aliases that describe the manufacturer family |
+| `related_brand_cluster_id` | string | NO | Non-scoring related brand/product cluster ID for operator review and explainability |
+| `related_brand_cluster_name` | string | NO | Human-readable label for the non-scoring related cluster |
+| `related_brand_cluster_aliases` | string[] | NO | Optional aliases for the related brand/product cluster |
 | `violation_type` | string | YES | Violation category |
 | `severity_level` | string | YES | `critical`, `high`, `moderate`, `low` |
 | `base_deduction` | float | YES | Points deducted |
@@ -702,8 +708,10 @@ synergy_cluster.json (54)
 rda_optimal_uls.json (47)
   └── data → scoring dosing validation
 
-manufacturer_violations.json (66)
+manufacturer_violations.json (67)
   └── manufacturer_id → enrichment manufacturer matching
+  └── manufacturer_family_id → repeat-violation grouping in sync/recalculation
+  └── related_brand_cluster_id → non-scoring operator/explainability metadata
 
 top_manufacturers_data.json (77)
   └── aliases → enrichment manufacturer matching

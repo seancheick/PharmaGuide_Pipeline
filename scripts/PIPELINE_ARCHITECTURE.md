@@ -69,7 +69,7 @@ Default DB set loaded by enrichment:
 - `allergens.json`
 - `backed_clinical_studies.json`
 - `top_manufacturers_data.json`
-- `manufacturer_violations.json`
+- `manufacturer_violations.json` (exact-match penalties plus curated `manufacturer_family_*` and non-scoring `related_brand_cluster_*` metadata)
 - `rda_optimal_uls.json`
 - `clinically_relevant_strains.json`
 - `color_indicators.json`
@@ -230,4 +230,3 @@ python run_pipeline.py --stages score
 # Skip coverage gate
 python run_pipeline.py --skip-coverage-gate
 ```
-

@@ -879,6 +879,20 @@ def check_manufacturer_violations(findings: List[Finding], data: Dict[str, Any],
         tda = e.get("total_deduction_applied")
         if tda is not None and not isinstance(tda, (int, float)):
             findings.append(Finding("warning", file, f"[{i}].total_deduction_applied", "type_fallback_risk", "number", _type_name(tda)))
+        for field in (
+            "manufacturer_id",
+            "manufacturer_family_id",
+            "manufacturer_family_name",
+            "related_brand_cluster_id",
+            "related_brand_cluster_name",
+        ):
+            value = e.get(field)
+            if value is not None and not isinstance(value, str):
+                findings.append(Finding("warning", file, f"[{i}].{field}", "type_fallback_risk", "string|null", _type_name(value)))
+        for field in ("manufacturer_family_aliases", "related_brand_cluster_aliases"):
+            value = e.get(field)
+            if value is not None and not isinstance(value, list):
+                findings.append(Finding("warning", file, f"[{i}].{field}", "type_fallback_risk", "list|null", _type_name(value)))
 
 
 def check_ingredient_classification(findings: List[Finding], data: Dict[str, Any], file: str) -> None:

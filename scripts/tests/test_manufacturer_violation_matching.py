@@ -110,6 +110,42 @@ def test_violation_match_accepts_approved_alias_only(enricher):
     assert result["violations"][0]["matched_alias"] == "PreCon Health"
 
 
+def test_violation_match_surfaces_family_and_related_cluster_metadata(enricher):
+    _set_violations_db(
+        enricher,
+        [
+            {
+                "id": "V103",
+                "manufacturer": "Neptune Resources, LLC",
+                "manufacturer_id": "mfg_neptune",
+                "manufacturer_family_id": "",
+                "manufacturer_family_name": "",
+                "manufacturer_family_aliases": [],
+                "related_brand_cluster_id": "cluster_neptunes_fix_supply_chain",
+                "related_brand_cluster_name": "Neptune's Fix Supply Chain",
+                "related_brand_cluster_aliases": ["Neptune's Fix"],
+                "violation_type": "Class I Recall",
+                "severity_level": "critical",
+                "total_deduction_applied": -13.0,
+                "is_resolved": False,
+                "date": "2026-01-28",
+            }
+        ],
+    )
+
+    result = enricher._check_violations(
+        brand="",
+        manufacturer="Neptune Resources, LLC",
+    )
+
+    assert result["found"] is True
+    violation = result["violations"][0]
+    assert violation["manufacturer_id"] == "mfg_neptune"
+    assert violation["related_brand_cluster_id"] == "cluster_neptunes_fix_supply_chain"
+    assert violation["related_brand_cluster_name"] == "Neptune's Fix Supply Chain"
+    assert violation["related_brand_cluster_aliases"] == ["Neptune's Fix"]
+
+
 def test_violation_match_rejects_shared_token_only(enricher):
     """Shared token overlap is insufficient without exact normalized equality."""
     _set_violations_db(

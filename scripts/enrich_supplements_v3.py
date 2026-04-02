@@ -8308,6 +8308,13 @@ class SupplementEnricherV3:
                 "match_source": match_source,
                 "matched_manufacturer": mfr_name,
                 "matched_alias": matched_candidate if matched_candidate and matched_candidate != mfr_name else None,
+                "manufacturer_id": violation.get('manufacturer_id', ''),
+                "manufacturer_family_id": violation.get('manufacturer_family_id', ''),
+                "manufacturer_family_name": violation.get('manufacturer_family_name', ''),
+                "manufacturer_family_aliases": violation.get('manufacturer_family_aliases', []),
+                "related_brand_cluster_id": violation.get('related_brand_cluster_id', ''),
+                "related_brand_cluster_name": violation.get('related_brand_cluster_name', ''),
+                "related_brand_cluster_aliases": violation.get('related_brand_cluster_aliases', []),
             })
 
         total_deduction_applied = 0.0

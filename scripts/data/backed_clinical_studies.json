@@ -1721,7 +1721,10 @@
       "total_enrollment": 110,
       "effect_direction_confidence": "medium",
       "effect_direction_rationale": "Retained positive_strong classification; study_type=rct_multiple; evidence_level=branded-rct; primary_outcome=Increase Energy; published_tags=RCT,ingredient,meta-analysis; total_enrollment=80; notes/citations contain no automated downgrade signals.",
-      "registry_completed_trials_count": 1
+      "registry_completed_trials_count": 1,
+      "endpoint_relevance_tags": [
+        "energy_metabolism"
+      ]
     },
     {
       "id": "BRAND_QUATREFOLIC",
@@ -2074,7 +2077,10 @@
       "total_enrollment": 500,
       "effect_direction_confidence": "high",
       "effect_direction_rationale": "Retained positive_strong classification; study_type=systematic_review_meta; evidence_level=branded-rct; primary_outcome=Increase Energy; published_tags=systematic_review,meta-analysis; total_enrollment=500; notes/citations contain no automated downgrade signals.",
-      "registry_completed_trials_count": 10
+      "registry_completed_trials_count": 10,
+      "endpoint_relevance_tags": [
+        "energy_metabolism"
+      ]
     },
     {
       "id": "BRAND_CARNIPURE",
@@ -2271,7 +2277,10 @@
       "primary_outcome": "Increase Energy",
       "total_enrollment": 40,
       "effect_direction_confidence": "medium",
-      "effect_direction_rationale": "Retained positive_strong classification; study_type=rct_single; evidence_level=branded-rct; primary_outcome=Increase Energy; published_tags=brand,RCT; total_enrollment=40; notes/citations contain no automated downgrade signals."
+      "effect_direction_rationale": "Retained positive_strong classification; study_type=rct_single; evidence_level=branded-rct; primary_outcome=Increase Energy; published_tags=brand,RCT; total_enrollment=40; notes/citations contain no automated downgrade signals.",
+      "endpoint_relevance_tags": [
+        "energy_metabolism"
+      ]
     },
     {
       "id": "BRAND_PHOSPHATIDYLSERINE",
@@ -15492,7 +15501,10 @@
       "primary_outcome": "Joint & Bone Health",
       "total_enrollment": 60,
       "effect_direction_confidence": "medium",
-      "effect_direction_rationale": "Retained positive_strong classification; study_type=rct_multiple; evidence_level=branded-rct; primary_outcome=Joint & Bone Health; published_tags=RCT,human trial; total_enrollment=60; notes/citations contain no automated downgrade signals."
+      "effect_direction_rationale": "Retained positive_strong classification; study_type=rct_multiple; evidence_level=branded-rct; primary_outcome=Joint & Bone Health; published_tags=RCT,human trial; total_enrollment=60; notes/citations contain no automated downgrade signals.",
+      "endpoint_relevance_tags": [
+        "joint_health"
+      ]
     },
     {
       "id": "BRAND_HMB",
@@ -16063,7 +16075,10 @@
       "total_enrollment": 120,
       "registry_completed_trials_count": 1,
       "effect_direction_confidence": "medium",
-      "effect_direction_rationale": "Retained positive_strong classification; study_type=rct_multiple; evidence_level=branded-rct; primary_outcome=Eye & Vision; published_tags=RCT,double-blind,placebo-controlled,ingredient; registry_completed_trials_count=1; total_enrollment=120; notes/citations contain no automated downgrade signals."
+      "effect_direction_rationale": "Retained positive_strong classification; study_type=rct_multiple; evidence_level=branded-rct; primary_outcome=Eye & Vision; published_tags=RCT,double-blind,placebo-controlled,ingredient; registry_completed_trials_count=1; total_enrollment=120; notes/citations contain no automated downgrade signals.",
+      "endpoint_relevance_tags": [
+        "eye_vision"
+      ]
     },
     {
       "id": "BRAND_PRIMAVIE_SHILAJIT",
@@ -18107,7 +18122,10 @@
       "total_enrollment": 30,
       "registry_completed_trials_count": 526,
       "effect_direction_confidence": "medium",
-      "effect_direction_rationale": "Retained null classification; study_type=observational; evidence_level=ingredient-human; primary_outcome=Joint & Bone Health; published_tags=RCT,human study; registry_completed_trials_count=526; total_enrollment=30; notes/citations include null-effect language."
+      "effect_direction_rationale": "Retained null classification; study_type=observational; evidence_level=ingredient-human; primary_outcome=Joint & Bone Health; published_tags=RCT,human study; registry_completed_trials_count=526; total_enrollment=30; notes/citations include null-effect language.",
+      "endpoint_relevance_tags": [
+        "joint_health"
+      ]
     },
     {
       "id": "INGR_ASTRAGALUS",
@@ -20414,7 +20432,10 @@
       "published_studies_count": 21,
       "registry_completed_trials_count": 19,
       "effect_direction_confidence": "medium",
-      "effect_direction_rationale": "Retained null classification; study_type=rct_multiple; evidence_level=ingredient-human; primary_outcome=Hormone Balance; published_tags=RCT; published_studies_count=21; registry_completed_trials_count=19; total_enrollment=833; notes/citations include null-effect language."
+      "effect_direction_rationale": "Retained null classification; study_type=rct_multiple; evidence_level=ingredient-human; primary_outcome=Hormone Balance; published_tags=RCT; published_studies_count=21; registry_completed_trials_count=19; total_enrollment=833; notes/citations include null-effect language.",
+      "endpoint_relevance_tags": [
+        "hormone_balance"
+      ]
     },
     {
       "id": "INGR_GRAPE_SEED_EXTRACT",

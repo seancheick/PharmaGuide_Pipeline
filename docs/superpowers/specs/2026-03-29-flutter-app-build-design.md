@@ -2,7 +2,7 @@
 
 **Version:** 1.0.0
 **Date:** 2026-03-29
-**Source of truth:** PharmaGuide Flutter MVP Spec v5.1 (33 pages, frozen)
+**Source of truth:** PharmaGuide Flutter MVP Spec v5.3 (33 pages, frozen)
 **Repo:** PharmaGuide_ai (new repo, greenfield)
 **Builder:** Owner with Claude Code (new to Flutter)
 **Platform:** iOS first (TestFlight), same code runs on Android
@@ -26,7 +26,7 @@ This design covers building the Flutter consumer app from scratch. The MVP spec 
 
 **Two-layer data model:**
 
-- Layer 1 (Local SQLite via drift): `pharmaguide_core.db` bundled with app. 61 columns, instant offline scan/search.
+- Layer 1 (Local SQLite via drift): Split into `pharmaguide_core.db` (read-only reference tables, overwritten OTA) and `user_data.db` (read-write user tables, available offline, never overwritten). ~180k products, instant offline scan/search.
 - Layer 2 (Supabase Remote): Detail blobs fetched on-demand per product view. Auth, stacks, usage tracking, AI proxy.
 
 **On-device scoring:** `score_fit_20` computed by ScoreFitCalculator from local health profile + reference_data. Never stored remotely.
@@ -46,7 +46,8 @@ PharmaGuide_ai/
 │   │   └── app_theme.dart                 # ALL colors, text styles, shadows
 │   ├── data/
 │   │   ├── local/
-│   │   │   ├── database.dart              # drift DB (products_core + app tables)
+│   │   │   ├── reference_database.dart    # drift DB (products_core, fts, reference_data)
+│   │   │   ├── user_database.dart         # drift DB (user_profile, user_stacks_local, etc.)
 │   │   │   ├── database.g.dart            # drift generated
 │   │   │   └── db_version_checker.dart    # Supabase manifest version check
 │   │   ├── remote/
@@ -63,6 +64,7 @@ PharmaGuide_ai/
 │   │   ├── score_fit_calculator.dart      # On-device FitScore (E1/E2)
 │   │   ├── scan_limit_service.dart        # Freemium enforcement
 │   │   └── interaction_checker.dart       # Condition/drug intersection
+│   │   └── taxonomy_service.dart          # Validates clinical_risk_taxonomy at startup
 │   ├── providers/
 │   │   ├── auth_provider.dart             # Supabase auth state
 │   │   ├── product_provider.dart          # Product lookup + detail loading
@@ -104,7 +106,8 @@ PharmaGuide_ai/
 ├── assets/
 │   ├── fonts/                             # Inter font files
 │   └── db/
-│       └── pharmaguide_core.db            # Bundled from pipeline output
+│       ├── pharmaguide_core.db            # Bundled from pipeline output
+│       └── user_data.db                   # Local user data (created on launch)
 ├── test/
 │   ├── services/
 │   │   └── score_fit_calculator_test.dart
@@ -130,6 +133,7 @@ dependencies:
   drift: ^2.18.0
   sqlite3_flutter_libs: ^0.5.0
   supabase_flutter: ^2.5.0
+  freezed_annotation: ^2.4.1
   mobile_scanner: ^5.0.0
   hive_flutter: ^1.1.0
   go_router: ^14.0.0
@@ -140,6 +144,8 @@ dependencies:
   path_provider: ^2.1.0
   permission_handler: ^11.3.0
   flutter_local_notifications: ^17.0.0
+  flutter_downloader: ^1.11.6
+  flutter_hooks: ^0.20.5
   url_launcher: ^6.3.0
 
 dev_dependencies:
@@ -149,6 +155,7 @@ dev_dependencies:
   drift_dev: ^2.18.0
   riverpod_generator: ^2.4.0
   json_serializable: ^6.8.0
+  freezed: ^2.4.1
   flutter_lints: ^4.0.0
 ```
 
@@ -213,8 +220,8 @@ App opens on iPhone. 5 tabs navigate. Theme colors match spec. Breakpoint shows 
    - Barcode detected -> haptic -> bracket success -> pause camera
    - Green banner "Product Identified" (auto-dismiss 1.5s)
    - Check scan limit (guest: Hive, signed-in: increment_usage RPC)
-   - Query products_core WHERE upc_sku = ? (instant, local)
-   - Handle UPC collision (deterministic ordering: active first, highest score, lowest dsld_id)
+   - Query products_core WHERE upc_sku = ? asynchronously via drift Future to prevent UI block.
+   - Handle UPC collision (1:N relationship). Use deterministic ordering: active first, highest score, lowest dsld_id. Show a chooser UI if the top two scores differ by < 5 points.
    - If BLOCKED/UNSAFE -> B0 warning screen
    - If user_profile has data -> run ScoreFitCalculator
    - Slide up result screen
@@ -226,7 +233,7 @@ App opens on iPhone. 5 tabs navigate. Theme colors match spec. Breakpoint shows 
    - "Report This Product" + "Scan Another Product" buttons
 
 4. **Result screen (result_screen.dart):**
-   - Hero: product image, name, brand, score ring (animated count-up), grade, percentile chip
+   - Hero: product image (explicitly verify not `.pdf` before CachedNetworkImage), name, brand, score ring, grade, percentile chip. (Even for NOT_SCORED products, display this basic product info).
    - Profile tease banner (if no profile)
    - Verdict banner (SAFE/CAUTION/POOR/UNSAFE/NOT_SCORED colors)
    - Condition alert banner (if interaction_summary intersects user conditions/meds)
@@ -247,7 +254,7 @@ App opens on iPhone. 5 tabs navigate. Theme colors match spec. Breakpoint shows 
 
 7. **Detail blob model (detail_blob.dart):**
    - @JsonKey annotations for mixed camelCase/snake_case fields
-   - Sealed Warning class with 7 subtypes
+   - Use `freezed` or `json_serializable` with a discriminator/type field (e.g. `@Freezed(unionKey: 'type')`) for safe polymorphic JSON deserialization of the sealed Warning class.
    - Score bonus/penalty models with type-specific fields
 
 8. **"Add to Stack" flow:**
@@ -306,11 +313,11 @@ Scan any supplement barcode on your iPhone. See a real score with full clinical 
 4. **DB version update (db_version_checker.dart):**
    - App launch: read local export_manifest
    - If online: check Supabase export_manifest (is_current=true)
-   - If newer + min_app_version satisfied: background download new .db file
+   - If newer + min_app_version satisfied: use a background downloader package to fetch the ~90MB+ `.db` file, ensuring the OS doesn't kill it.
    - Verify the downloaded file against remote `checksum` before swap-in
-   - Swap in when complete. Never block the user.
+   - Swap in when complete via atomic swap: 1) Close active DB connection. 2) Rename old `pharmaguide_core.db` to `.bak`. 3) Rename new staging DB to `pharmaguide_core.db`. 4) Re-open DB connection. 5) Delete `.bak`. Never block the user.
    - If download fails: continue with current DB silently
-   - **Must be tested explicitly:** version check must not block main thread, must handle network failure gracefully, must not corrupt the active DB during swap. Write integration test for: same version (skip), newer version (download + swap), network failure (silent continue), min_app_version gate (skip if app too old).
+   - **Must be tested explicitly:** version check must not block main thread, must handle network failure gracefully, must not corrupt the active DB during swap.
 
 ### Testable outcome:
 
@@ -328,6 +335,7 @@ Full home screen, stack management, search works instantly, offline mode shows a
    - TypeScript Edge Function wrapping Gemini 2.5 Flash-Lite
    - Receives: `{ messages: [...], system_prompt: string }`
    - API key server-side only (never in app binary)
+   - Implement strict rate limiting and input validation to prevent abuse and control token costs.
    - NOTE: Verify Gemini free tier limits before launch (~1000 RPD / 15 RPM as of March 2026)
 
 2. **AI chat screen (chat_screen.dart):**
@@ -360,6 +368,7 @@ Full home screen, stack management, search works instantly, offline mode shows a
      - Medication chips: 9 drug classes with EXACT drug_class_id mapping
      - Health goal chips: from user_goals_to_clusters reference data
    - Settings: notifications toggle, theme (light/dark/system), help, privacy policy, app version
+   - State Management: Use `flutter_hooks` (e.g., `useTextEditingController`) or `Form` with `GlobalKey` alongside Riverpod for local form state validation.
    - All health data stored in LOCAL SQLite user_profile only. Never synced to Supabase in MVP.
 
 ### Testable outcome:
@@ -380,8 +389,8 @@ Chat with AI pharmacist about your supplements. Set up health profile with condi
    - Damaged barcode: camera continues, no feedback until clean read
    - Not in SQLite: try Supabase, then "Product Not Found" sheet
    - Supabase fetch fails: toast, show header from SQLite
-   - NOT_SCORED: "Not Scored" badge, no ring animation
-   - PDF image_url: placeholder illustration
+   - NOT_SCORED: "Not Scored" badge, no ring animation, hide accordion cards with "Insufficient data" but still display basic product hero info.
+   - PDF image_url: Explicitly check string extension _before_ passing to `CachedNetworkImage` to avoid internal crash. Show placeholder illustration.
    - UPC collision: deterministic ordering, chooser if ambiguous
    - Auth errors: toast for sign-in failure, silent token refresh, email exists handling
    - General rule: NEVER show raw error codes. Minor = toast. Actionable = bottom sheet.

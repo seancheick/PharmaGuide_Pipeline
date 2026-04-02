@@ -178,6 +178,9 @@ OUTCOME_TAG_KEYWORDS = {
     "stress_mood": ("stress", "anxiety", "cortisol", "perceived stress"),
     "sleep": ("sleep", "insomnia", "sleep latency", "sleep quality"),
     "focus_memory": ("cognition", "memory", "attention", "mental clarity", "focus"),
+    "energy_metabolism": ("fatigue", "energy", "vitality", "physical function", "tiredness"),
+    "eye_vision": ("visual acuity", "contrast sensitivity", "eye strain", "macular", "retina", "vision"),
+    "hormone_balance": ("testosterone", "estradiol", "hormone", "androgen", "prostate symptom"),
     "cardiovascular": ("cholesterol", "ldl", "hdl", "triglyceride", "blood pressure"),
     "glycemic_control": ("glucose", "hba1c", "insulin", "glycemic"),
     "digestive_health": ("bloating", "stool", "bowel", "digestive", "gut"),
@@ -191,6 +194,10 @@ PRIMARY_OUTCOME_TAGS = {
     "Digestive Health": ["digestive_health"],
     "Cardiovascular/Heart Health": ["cardiovascular"],
     "Focus & Mental Clarity": ["focus_memory"],
+    "Increase Energy": ["energy_metabolism"],
+    "Joint & Bone Health": ["joint_health"],
+    "Eye & Vision": ["eye_vision"],
+    "Hormone Balance": ["hormone_balance"],
 }
 
 # Enrollment quality bands (used for candidate generation)

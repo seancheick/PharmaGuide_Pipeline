@@ -1,0 +1,555 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+      PharmaGuide Clinical Evidence Scoring - Interactive Whiteboard
+    </title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family:
+          -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu,
+          Cantarell, sans-serif;
+        background: #fafafa;
+        color: #333;
+        overflow: hidden;
+      }
+
+      .container {
+        display: flex;
+        height: 100vh;
+      }
+
+      .left-panel {
+        width: 350px;
+        background: #fff;
+        border-right: 1px solid #e0e0e0;
+        overflow-y: auto;
+        padding: 20px;
+        box-shadow: inset -2px 0 6px rgba(0, 0, 0, 0.05);
+      }
+
+      .canvas-area {
+        flex: 1;
+        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        position: relative;
+        overflow: auto;
+      }
+
+      .canvas {
+        position: absolute;
+        top: 20px;
+        left: 20px;
+      }
+
+      .title {
+        font-size: 18px;
+        font-weight: 700;
+        margin-bottom: 20px;
+        color: #01579b;
+        border-bottom: 2px solid #01579b;
+        padding-bottom: 10px;
+      }
+
+      .section {
+        margin-bottom: 20px;
+      }
+
+      .section-title {
+        font-size: 13px;
+        font-weight: 600;
+        text-transform: uppercase;
+        color: #666;
+        letter-spacing: 0.5px;
+        margin-bottom: 12px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .section-icon {
+        display: inline-block;
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        text-align: center;
+        line-height: 24px;
+        font-size: 11px;
+        font-weight: Bold;
+        color: white;
+      }
+
+      .step1 {
+        background: #ff9800;
+      }
+      .step2 {
+        background: #c2185b;
+      }
+      .step3 {
+        background: #7b1fa2;
+      }
+      .step4 {
+        background: #2e7d32;
+      }
+      .step5 {
+        background: #1565c0;
+      }
+      .step6 {
+        background: #d32f2f;
+      }
+
+      .box {
+        background: white;
+        border-left: 4px solid #01579b;
+        padding: 12px;
+        margin-bottom: 10px;
+        border-radius: 4px;
+        font-size: 12px;
+        line-height: 1.5;
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+
+      .box:hover {
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+        transform: translateX(2px);
+      }
+
+      .box.active {
+        background: #e3f2fd;
+        border-left-color: #1565c0;
+      }
+
+      .box-title {
+        font-weight: 600;
+        color: #01579b;
+        margin-bottom: 4px;
+      }
+
+      .box-content {
+        color: #555;
+        font-size: 11px;
+      }
+
+      .formula {
+        background: #f0f4ff;
+        border: 1px solid #c5cae9;
+        border-radius: 3px;
+        padding: 8px;
+        margin: 8px 0;
+        font-family: "Monaco", "Courier New", monospace;
+        font-size: 11px;
+        color: #283593;
+      }
+
+      .controls {
+        margin-top: 20px;
+        padding-top: 20px;
+        border-top: 1px solid #e0e0e0;
+      }
+
+      button {
+        width: 100%;
+        padding: 10px;
+        background: #1565c0;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-weight: 600;
+        font-size: 12px;
+        transition: background 0.2s;
+        margin-bottom: 8px;
+      }
+
+      button:hover {
+        background: #0d47a1;
+      }
+
+      .color-tool {
+        display: flex;
+        gap: 6px;
+        margin-bottom: 10px;
+      }
+
+      .color-btn {
+        width: 30px;
+        height: 30px;
+        border-radius: 4px;
+        border: 2px solid transparent;
+        cursor: pointer;
+        transition: border-color 0.2s;
+      }
+
+      .color-btn.active {
+        border-color: #333;
+      }
+
+      canvas {
+        cursor: crosshair;
+        background: white;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        border-radius: 4px;
+      }
+
+      .legend {
+        background: white;
+        border-radius: 4px;
+        padding: 12px;
+        margin-top: 20px;
+      }
+
+      .legend-item {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 11px;
+        margin-bottom: 6px;
+      }
+
+      .legend-color {
+        width: 20px;
+        height: 20px;
+        border-radius: 2px;
+      }
+
+      .info-box {
+        background: #e3f2fd;
+        border: 1px solid #90caf9;
+        border-radius: 4px;
+        padding: 10px;
+        font-size: 12px;
+        margin-top: 15px;
+        line-height: 1.5;
+      }
+
+      @media (max-width: 1024px) {
+        .left-panel {
+          width: 280px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <!-- Left Panel -->
+      <div class="left-panel">
+        <div class="title">📊 Clinical Scoring Pipeline</div>
+
+        <!-- Input Section -->
+        <div class="section">
+          <div class="section-title">
+            <div class="section-icon step1">📥</div>
+            Input Matching
+          </div>
+          <div class="box active">
+            <div class="box-title">Clinical Studies Matched</div>
+            <div class="box-content">
+              From backed_clinical_studies.json<br />197 total entries (100%
+              PMID-backed)
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 1 -->
+        <div class="section">
+          <div class="section-title">
+            <div class="section-icon step1">1️⃣</div>
+            Base × Multiplier
+          </div>
+          <div class="box">
+            <div class="box-title">Study Type Base Points</div>
+            <div class="box-content">
+              • Systematic Review/Meta = 6 pts<br />
+              • RCT Multiple = 5 pts<br />
+              • RCT Single = 4 pts<br />
+              • Observational = 2 pts
+            </div>
+          </div>
+          <div class="box">
+            <div class="box-title">Evidence Level Multiplier</div>
+            <div class="box-content">
+              • Product-Human = 1.0x ✓<br />
+              • Branded-RCT = 0.8x<br />
+              • Ingredient-Human = 0.65x<br />
+              • Preclinical = 0.3x
+            </div>
+          </div>
+          <div class="formula">Raw = Base × Multiplier</div>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="section">
+          <div class="section-title">
+            <div class="section-icon step2">2️⃣</div>
+            Effect Direction
+          </div>
+          <div class="box">
+            <div class="box-title">5-Tier Classification</div>
+            <div class="box-content">
+              • Positive Strong = 1.0x (136)<br />
+              • Positive Weak = 0.85x (29)<br />
+              • Mixed = 0.6x (17)<br />
+              • Null = 0.25x (1)<br />
+              • Negative = 0.0x (blocks)
+            </div>
+          </div>
+          <div class="formula">Score = Raw × Effect_Dir_Mult</div>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="section">
+          <div class="section-title">
+            <div class="section-icon step3">3️⃣</div>
+            Enrollment Quality
+          </div>
+          <div class="box">
+            <div class="box-title">Quality Bands (RCT/Meta only)</div>
+            <div class="box-content">
+              • &lt;50 = 0.6x 📉<br />
+              • 50-199 = 0.8x<br />
+              • 200-499 = 1.0x ⭐<br />
+              • 500-999 = 1.1x 📈<br />
+              • 1000+ = 1.2x 🔥
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 4 -->
+        <div class="section">
+          <div class="section-title">
+            <div class="section-icon step4">4️⃣</div>
+            Dose Guard
+          </div>
+          <div class="box">
+            <div class="box-title">Sub-Clinical Check</div>
+            <div class="box-content">
+              If Product Dose&lt; min_clinical:<br />
+              Score × 0.25<br /><br />
+              If Product&gt; 3× max_studied:<br />
+              Flag: SUPRA_CLINICAL_DOSE
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 5 -->
+        <div class="section">
+          <div class="section-title">
+            <div class="section-icon step5">5️⃣</div>
+            Top-N Diminishing
+          </div>
+          <div class="box">
+            <div class="box-title">Weights & Aggregation</div>
+            <div class="box-content">
+              1st Ingredient = 100%<br />
+              2nd Ingredient = 50%<br />
+              3rd Ingredient = 25%<br />
+              4th+ = Ignored
+            </div>
+          </div>
+          <div class="box">
+            <div class="box-title">Per-Ingredient Cap</div>
+            <div class="box-content">Each ingredient ≤ 7.0 pts</div>
+          </div>
+        </div>
+
+        <!-- Step 6 -->
+        <div class="section">
+          <div class="section-title">
+            <div class="section-icon step6">6️⃣</div>
+            Final Cap
+          </div>
+          <div class="box">
+            <div class="box-title">Section C Maximum</div>
+            <div class="box-content">
+              Total ≤ 20 pts<br />
+              (Hard cap, never exceeds)<br /><br />
+              + Depth bonus (20+ trials: +0.25, 40+: +0.5)
+            </div>
+          </div>
+        </div>
+
+        <!-- Legend -->
+        <div class="legend">
+          <div class="section-title">Color Key</div>
+          <div class="legend-item">
+            <div
+              class="legend-color"
+              style="background: #e1f5ff; border: 1px solid #01579b"
+            ></div>
+            <span>Input Data</span>
+          </div>
+          <div class="legend-item">
+            <div class="legend-color" style="background: #fff3e0"></div>
+            <span>Calculations</span>
+          </div>
+          <div class="legend-item">
+            <div class="legend-color" style="background: #fce4ec"></div>
+            <span>Evidence Factors</span>
+          </div>
+          <div class="legend-item">
+            <div class="legend-color" style="background: #ffccbc"></div>
+            <span>Aggregation</span>
+          </div>
+          <div class="legend-item">
+            <div class="legend-color" style="background: #b3e5fc"></div>
+            <span>Output</span>
+          </div>
+        </div>
+
+        <!-- Info -->
+        <div class="info-box">
+          ℹ️ <strong>How to use:</strong> Click on stages in the left panel,
+          then draw and annotate on the canvas to the right. The pipeline shows
+          all 8 scoring transformation steps.
+        </div>
+      </div>
+
+      <!-- Canvas Area -->
+      <div class="canvas-area">
+        <canvas id="whiteboard"></canvas>
+      </div>
+    </div>
+
+    <script>
+      const canvas = document.getElementById("whiteboard");
+      const ctx = canvas.getContext("2d");
+
+      // Resize canvas to fill container
+      const resizeCanvas = () => {
+        const rect = canvas.parentElement.getBoundingClientRect();
+        canvas.width = rect.width;
+        canvas.height = rect.height;
+        redrawGrid();
+      };
+
+      // Draw grid background
+      const redrawGrid = () => {
+        ctx.fillStyle = "#ffffff";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        ctx.strokeStyle = "#f0f0f0";
+        ctx.lineWidth = 0.5;
+        const gridSize = 20;
+
+        for (let i = 0; i < canvas.width; i += gridSize) {
+          ctx.beginPath();
+          ctx.moveTo(i, 0);
+          ctx.lineTo(i, canvas.height);
+          ctx.stroke();
+        }
+
+        for (let i = 0; i < canvas.height; i += gridSize) {
+          ctx.beginPath();
+          ctx.moveTo(0, i);
+          ctx.lineTo(canvas.width, i);
+          ctx.stroke();
+        }
+      };
+
+      let isDrawing = false;
+      let currentColor = "#333";
+
+      // Drawing canvas controls
+      canvas.addEventListener("mousedown", (e) => {
+        isDrawing = true;
+        const rect = canvas.getBoundingClientRect();
+        ctx.beginPath();
+        ctx.moveTo(e.clientX - rect.left, e.clientY - rect.top);
+      });
+
+      canvas.addEventListener("mousemove", (e) => {
+        if (!isDrawing) return;
+        const rect = canvas.getBoundingClientRect();
+        ctx.strokeStyle = currentColor;
+        ctx.lineWidth = 2;
+        ctx.lineCap = "round";
+        ctx.lineJoin = "round";
+        ctx.lineTo(e.clientX - rect.left, e.clientY - rect.top);
+        ctx.stroke();
+      });
+
+      canvas.addEventListener("mouseup", () => {
+        isDrawing = false;
+      });
+
+      canvas.addEventListener("mouseleave", () => {
+        isDrawing = false;
+      });
+
+      // Draw example pipeline on load
+      const drawExamplePipeline = () => {
+        ctx.fillStyle = "#fafafa";
+        ctx.font = "bold 14px sans-serif";
+        ctx.fillStyle = "#333";
+        ctx.fillText("📊 Clinical Evidence Scoring Pipeline", 30, 50);
+
+        ctx.font = "12px sans-serif";
+        ctx.fillStyle = "#666";
+
+        const stages = [
+          { y: 100, title: "1. Matched Studies", color: "#ff9800" },
+          { y: 150, title: "2. Base × Multiplier", color: "#ff9800" },
+          { y: 200, title: "3. Effect Direction", color: "#c2185b" },
+          { y: 250, title: "4. Enrollment Quality", color: "#7b1fa2" },
+          { y: 300, title: "5. Dose Guard", color: "#2e7d32" },
+          { y: 350, title: "6. Aggregation + Cap", color: "#d32f2f" },
+          { y: 400, title: "7. Top-N Weights", color: "#d32f2f" },
+          { y: 450, title: "8. Final Score ≤ 20", color: "#1565c0" },
+        ];
+
+        stages.forEach((stage, i) => {
+          // Draw box
+          ctx.fillStyle = stage.color;
+          ctx.fillRect(30, stage.y - 15, 30, 20);
+
+          // Draw arrow
+          if (i < stages.length - 1) {
+            ctx.strokeStyle = "#999";
+            ctx.lineWidth = 1.5;
+            ctx.beginPath();
+            ctx.moveTo(45, stage.y + 10);
+            ctx.lineTo(45, stages[i + 1].y - 25);
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.moveTo(45, stages[i + 1].y - 25);
+            ctx.lineTo(42, stages[i + 1].y - 18);
+            ctx.lineTo(48, stages[i + 1].y - 18);
+            ctx.fill();
+          }
+
+          // Draw text
+          ctx.fillStyle = "#333";
+          ctx.fillText(stage.title, 75, stage.y + 5);
+        });
+
+        // Add formula box
+        ctx.fillStyle = "#eceff1";
+        ctx.fillRect(30, 520, 400, 120);
+        ctx.fillStyle = "#1a237e";
+        ctx.font = "bold 13px monospace";
+        ctx.fillText("FINAL CALCULATION:", 40, 540);
+        ctx.font = "12px monospace";
+        ctx.fillText("Total = Σ(capped_ingredient × weight)", 40, 560);
+        ctx.fillText("       where weight = [1.0, 0.5, 0.25, ...]", 40, 575);
+        ctx.fillText("       + depth_bonus (for 20+ trials)", 40, 590);
+        ctx.fillText("       Final = min(20.0, Total)", 40, 605);
+        ctx.fillText("max Section C contribution to 80-pt score", 40, 625);
+      };
+
+      // Initialize
+      resizeCanvas();
+      drawExamplePipeline();
+
+      window.addEventListener("resize", resizeCanvas);
+    </script>
+  </body>
+</html>

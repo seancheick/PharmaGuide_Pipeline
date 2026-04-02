@@ -2,7 +2,7 @@
 
 **Version:** 1.0.0
 **Date:** 2026-03-27
-**Aligned with:** PharmaGuide Flutter MVP Spec v5.1 (Pipeline Contract Aligned)
+**Aligned with:** PharmaGuide Flutter MVP Spec v5.3 (Pipeline Contract Aligned)
 **Architecture:** Approach A — SQLite-Core + Supabase-Detail (Hybrid Offline+Online)
 
 ---
@@ -11,7 +11,7 @@
 
 PharmaGuide has a mature 3-stage data pipeline (Clean -> Enrich -> Score) producing:
 
-- `pharmaguide_core.db` (SQLite, 61 columns, ~50K products)
+- `pharmaguide_core.db` (SQLite, 61 columns, ~180K products)
 - `detail_blobs/{dsld_id}.json` (local build output) plus `detail_index.json` for hashed remote detail fetch
 - `export_manifest.json` (version metadata)
 
@@ -51,12 +51,12 @@ Data is treated as ready. The pipeline audit is complete for the initial product
 
 No relational schema mapping is required for pipeline data. `build_final_db.py` already produces the correct output format. The mapping is:
 
-| Pipeline Output               | Supabase Location                                                  |
-| ----------------------------- | ------------------------------------------------------------------ |
-| `pharmaguide_core.db`         | `supabase-storage://pharmaguide/v{version}/pharmaguide_core.db`    |
-| `detail_index.json` | `supabase-storage://pharmaguide/v{version}/detail_index.json` |
+| Pipeline Output               | Supabase Location                                                                            |
+| ----------------------------- | -------------------------------------------------------------------------------------------- |
+| `pharmaguide_core.db`         | `supabase-storage://pharmaguide/v{version}/pharmaguide_core.db`                              |
+| `detail_index.json`           | `supabase-storage://pharmaguide/v{version}/detail_index.json`                                |
 | `detail_blobs/{dsld_id}.json` | `supabase-storage://pharmaguide/shared/details/sha256/{blob_sha256[0:2]}/{blob_sha256}.json` |
-| `export_manifest.json`        | PostgreSQL `export_manifest` table (single current row)            |
+| `export_manifest.json`        | PostgreSQL `export_manifest` table (single current row)                                      |
 
 ### 1.3 Identifiers in Detail Blobs
 
@@ -290,14 +290,14 @@ Why manual first: Still auditing data. Manual gives inspection control before pr
 
 ## Phase 3: Flutter Data Consumption Architecture
 
-### 3.1 Two-Layer Data Model (From Spec v5.1)
+### 3.1 Two-Layer Data Model (From Spec v5.3)
 
-**Layer 1 -- Local SQLite (`pharmaguide_core.db`):**
+**Layer 1 -- Local SQLite (`pharmaguide_core.db` and `user_data.db`):**
 
-- Ships bundled with the app
-- Contains: `products_core` (~50K products), `products_fts`, `reference_data`, `export_manifest`
-- Instant offline access for scan lookups and search
-- Updated in background when pipeline produces a new export version
+- **Reference DB (`pharmaguide_core.db`)**: Ships bundled with the app. Contains `products_core` (~180K products), `products_fts`, `reference_data`, `export_manifest`. Read-only, overwritten OTA during updates.
+- **User DB (`user_data.db`)**: Created on first launch. Contains `user_profile`, `user_stacks_local`, `user_favorites`, etc. Read-write, never overwritten.
+- Instant offline access for scan lookups and search.
+- Reference DB updated in background using a background downloader when pipeline produces a new export version.
 
 **Layer 2 -- Supabase (Remote):**
 
@@ -317,11 +317,11 @@ Pipeline repo (Git)
 App launch:
   1. Read local export_manifest from bundled SQLite
   2. If online: check Supabase export_manifest for newer version
-  3. If newer: background-download new .db file, swap in when complete
+  3. If newer: background-download new `.db` file via native OS downloader, atomically swap in when complete (leaving `user_data.db` untouched)
   4. Never block the user during update
       |
 Product scan:
-  1. Query products_core (local SQLite) -- instant header + score
+  1. Query products_core (local SQLite, async to prevent UI block) -- instant header + score
   2. Check product_detail_cache for dsld_id
   3. If cached + version matches: render from cache
   4. If not cached + online: fetch {dsld_id}.json from Supabase -> cache -> render
@@ -330,7 +330,7 @@ Product scan:
 
 ### 3.3 Bundle Size
 
-- 50K products x ~500 bytes/row = ~25MB SQLite file (compressed in app bundle)
+- 180K products x ~500 bytes/row = ~90MB SQLite file (compressed in app bundle)
 - Reference data: ~313KB total (parsed once at startup, held in memory)
 - Detail blobs: fetched on-demand (only viewed products)
 

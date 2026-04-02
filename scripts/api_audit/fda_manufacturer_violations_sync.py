@@ -41,10 +41,9 @@ from api_audit.fda_weekly_sync import (
     classify_record,
 )
 
-WORKSPACE_DIR = Path(__file__).resolve().parent.parent
-DATA_PATH = WORKSPACE_DIR / "scripts" / "data" / "manufacturer_violations.json"
-DEDUCTION_EXPL_PATH = WORKSPACE_DIR / "scripts" / "data" / "manufacture_deduction_expl.json"
-REPORT_DIR = WORKSPACE_DIR / "scripts" / "api_audit" / "reports"
+DATA_PATH = REPO_ROOT / "scripts" / "data" / "manufacturer_violations.json"
+DEDUCTION_EXPL_PATH = REPO_ROOT / "scripts" / "data" / "manufacture_deduction_expl.json"
+REPORT_DIR = REPO_ROOT / "scripts" / "api_audit" / "reports"
 
 RECENCY_BUCKETS = [
     (365, 1.0),
@@ -52,6 +51,7 @@ RECENCY_BUCKETS = [
     (5 * 365, 0.25),
     (float("inf"), 0.0),
 ]
+DEFAULT_REPEAT_LOOKBACK_DAYS = 3 * 365
 
 VIOLATION_CODE_MAP = {
     "CRI_TOXIC": -20,
@@ -73,6 +73,36 @@ SUPPLEMENT_KEYWORDS = [
     "sarm", "cbd", "kava", "kratom", "testosterone booster",
 ]
 
+SUPPLEMENT_FORM_TERMS = [
+    "capsule", "capsules", "tablet", "tablets", "softgel", "softgels",
+    "gummy", "gummies", "powder", "drink mix", "drops", "extract",
+    "tea", "tincture",
+]
+
+EXPLICIT_SUPPLEMENT_TERMS = [
+    "dietary supplement",
+    "supplement",
+    "nutraceutical",
+    "vitamin",
+    "mineral",
+    "multivitamin",
+    "fat burner",
+    "weight loss",
+    "pre-workout",
+    "testosterone booster",
+    "cbd",
+    "kava",
+    "kratom",
+    "sarm",
+]
+
+GENERIC_DRUG_ONLY_TERMS = [
+    " drugs ",
+    " medicines ",
+    " medication ",
+    " pharmaceutical ",
+]
+
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Sync manufacturer_violations.json from FDA openFDA data")
@@ -91,30 +121,132 @@ def is_supplement_record(record: dict) -> bool:
     return relevant
 
 
+def _has_strong_supplement_signal(record: dict) -> bool:
+    """Require a concrete supplement/product signal for RSS-only additions.
+
+    Generic "herbal medicines/drugs" FDA alerts are too broad for the
+    manufacturer violations DB unless they also identify a supplement-like
+    product form or an explicit dietary-supplement term.
+    """
+    text = " ".join(
+        [
+            record.get("product_description") or "",
+            record.get("reason_for_recall") or "",
+            record.get("title") or "",
+            record.get("description") or "",
+        ]
+    ).lower()
+    normalized = f" {re.sub(r'\s+', ' ', text)} "
+
+    if any(term in normalized for term in SUPPLEMENT_FORM_TERMS):
+        return True
+    if any(term in normalized for term in EXPLICIT_SUPPLEMENT_TERMS):
+        return True
+    return False
+
+
+def is_eligible_manufacturer_record(record: dict) -> tuple[bool, str]:
+    """Apply an additional conservative filter before manufacturer ingestion."""
+    relevant, primary_category, signals = classify_record(record)
+    if not relevant:
+        return False, "not_supplement"
+
+    if record.get("_source_type") != "fda_rss":
+        return True, ""
+
+    if primary_category != "supplement_general" or signals:
+        return True, ""
+
+    text = " ".join(
+        [
+            record.get("product_description") or "",
+            record.get("reason_for_recall") or "",
+            record.get("title") or "",
+            record.get("description") or "",
+        ]
+    ).lower()
+    normalized = f" {re.sub(r'\s+', ' ', text)} "
+
+    if _has_strong_supplement_signal(record):
+        return True, ""
+
+    if any(term in normalized for term in GENERIC_DRUG_ONLY_TERMS):
+        return False, "weak_rss_signal"
+
+    return False, "weak_rss_signal"
+
+
 def extract_manufacturer_from_text(record: dict) -> str | None:
     """Extract manufacturer from RSS title or text if structured field is missing."""
+    def _clean_entity(value: str) -> str | None:
+        value = re.sub(r"\s+", " ", (value or "").strip(" ,.-"))
+        value = re.sub(r"\(\s*ebay seller id\s*\)", "", value, flags=re.IGNORECASE).strip(" ,.-")
+        if "," in value:
+            parts = [part.strip(" ,.-") for part in value.split(",") if part.strip(" ,.-")]
+            if parts:
+                domain_like = [part for part in parts if "." in part]
+                value = domain_like[-1] if domain_like else parts[-1]
+        if not value:
+            return None
+        if len(value) < 3 or len(value) > 120:
+            return None
+        if value.lower() in {"fda", "patients", "consumers"}:
+            return None
+        return value
+
     # Check RSS title for company names
     title = (record.get("title") or "").strip()
     if title:
         # Pattern: "Company Name Issues Recall..."; extract "Company Name"
-        match = re.match(r"^([A-Za-z\s&.,'-]+?)\s+(?:Issues|Recalls?|Advises|Announces)", title)
+        match = re.match(r"^([A-Za-z0-9\s&.,'()/-]+?)\s+(?:Issues|Recalls?|Advises|Announces)", title)
         if match:
-            return match.group(1).strip()
+            company = _clean_entity(match.group(1))
+            if company:
+                return company
     
     # Check RSS description/reason for addresses or entity names
     reason = (record.get("reason_for_recall") or record.get("description") or "").strip()
     if reason:
-        # Look for patterns like "Company Name, City, State" or "... by Company Name"
-        match = re.search(r"(?:by|manufactured by|from)\s+([A-Za-z\s&.,'-]+?)(?:,|\s+(?:of|located|in|california|new york|texas))", reason, re.IGNORECASE)
+        # Pattern: "... X is recalling ..." often appears in FDA recall prose.
+        match = re.search(
+            r"([A-Za-z0-9][A-Za-z0-9\s&.'()/-]*(?:,\s*[A-Za-z0-9][A-Za-z0-9\s&.'()/-]*)?)\s+is recalling\b",
+            reason,
+            re.IGNORECASE,
+        )
         if match:
-            company = match.group(1).strip()
-            if len(company) > 2 and len(company) < 100:  # sanity check
+            company = _clean_entity(match.group(1))
+            if company:
+                return company
+
+        # Look for patterns like "Company Name, City, State" or "... by Company Name"
+        match = re.search(
+            r"(?:by|manufactured by|from)\s+([A-Za-z0-9\s&.,'()/-]+?)(?:,|\s+(?:of|located|in|california|new york|texas))",
+            reason,
+            re.IGNORECASE,
+        )
+        if match:
+            company = _clean_entity(match.group(1))
+            if company:
                 return company
     
     return None
 
 
-def recency_multiplier(days_since: int) -> float:
+def recency_multiplier(days_since: int, deduction_expl: dict | None = None) -> float:
+    if deduction_expl:
+        ranges = (
+            deduction_expl.get("modifiers", {})
+            .get("RECENCY", {})
+            .get("ranges", {})
+        )
+        if ranges:
+            if days_since <= 365:
+                return float(ranges.get("less_than_1_year", {}).get("multiplier", 1.0))
+            if days_since <= 3 * 365:
+                return float(ranges.get("1_to_3_years", {}).get("multiplier", 0.5))
+            if days_since <= 5 * 365:
+                return float(ranges.get("3_to_5_years", {}).get("multiplier", 0.25))
+            return float(ranges.get("over_5_years", {}).get("multiplier", 0.0))
     for max_days, multiplier in RECENCY_BUCKETS:
         if days_since <= max_days:
             return multiplier
@@ -123,6 +255,34 @@ def recency_multiplier(days_since: int) -> float:
 
 def normalize_company_name(name: str) -> str:
     return re.sub(r"[^a-z0-9]+", "", (name or "").strip().lower())
+
+
+def build_source_identifier(
+    *,
+    recall_number: str = "",
+    source_type: str = "",
+    manufacturer: str = "",
+    product: str = "",
+    reason: str = "",
+    link: str = "",
+    date_value: str = "",
+) -> str:
+    """Build a deterministic fallback identifier for records without recall IDs."""
+    recall_number = (recall_number or "").strip().upper()
+    if recall_number:
+        return f"recall::{recall_number}"
+
+    if link:
+        return f"link::{link.strip().lower()}"
+
+    parts = [
+        source_type.strip().lower(),
+        normalize_company_name(manufacturer),
+        re.sub(r"\s+", " ", (product or "").strip().lower()),
+        re.sub(r"\s+", " ", (reason or "").strip().lower())[:160],
+        (date_value or "").strip(),
+    ]
+    return "fallback::" + "|".join(parts)
 
 
 def infer_violation_code(reason: str, classification: str, status: str) -> str:
@@ -135,10 +295,10 @@ def infer_violation_code(reason: str, classification: str, status: str) -> str:
         return "CRI_CONTA"
     if any(tok in r for tok in ["toxic", "poison", "death", "hospital", "serious"]):
         return "CRI_TOXIC"
-    if "class i" in (classification or "").lower():
-        return "CRI_TOXIC"
     if "class ii" in (classification or "").lower():
         return "HIGH_CII"
+    if "class i" in (classification or "").lower():
+        return "CRI_TOXIC"
     if "class iii" in (classification or "").lower():
         return "MOD_CIII_SING"
     if status.lower() in ["ongoing", "open", "active"]:
@@ -173,14 +333,22 @@ def date_from_openfda(value: str) -> str | None:
         return None
 
 
-def compute_total_deduction(base: int, unresolved: bool, repeat: bool, multi_line: bool, recency_mult: float) -> float:
+def compute_total_deduction(
+    base: int,
+    unresolved: bool,
+    repeat: bool,
+    multi_line: bool,
+    recency_mult: float,
+    deduction_expl: dict | None = None,
+) -> float:
+    modifiers = deduction_expl.get("modifiers", {}) if deduction_expl else {}
     extra = 0
     if unresolved:
-        extra -= 3
+        extra += int(modifiers.get("UNRESOLVED_VIOLATIONS", {}).get("additional_deduction", -3))
     if repeat:
-        extra -= 5
+        extra += int(modifiers.get("REPEAT_VIOLATIONS", {}).get("additional_deduction", -5))
     if multi_line:
-        extra -= 3
+        extra += int(modifiers.get("MULTIPLE_PRODUCT_LINES", {}).get("additional_deduction", -3))
     out = (base + extra) * recency_mult
     out = float(round(out, 2))
     return out
@@ -194,14 +362,192 @@ def load_deduction_expl() -> dict:
         return {}
 
 
+def lookup_base_deduction(code: str, deduction_expl: dict | None = None) -> int:
+    if deduction_expl:
+        categories = deduction_expl.get("violation_categories", {})
+        for category in categories.values():
+            for subcategory in category.get("subcategories", {}).values():
+                if subcategory.get("code") == code:
+                    return int(subcategory.get("base_deduction", VIOLATION_CODE_MAP.get(code, -10)))
+    return int(VIOLATION_CODE_MAP.get(code, -10))
+
+
+def parse_entry_date(value: str | None) -> tuple[str, date]:
+    normalized = date_from_openfda(value or "")
+    if normalized is None:
+        normalized = date.today().isoformat()
+    return normalized, datetime.fromisoformat(normalized).date()
+
+
+def build_repeat_violation_lookup(entries: list[dict], deduction_expl: dict | None = None) -> dict[str, bool]:
+    lookback_days = DEFAULT_REPEAT_LOOKBACK_DAYS
+    if deduction_expl:
+        trigger = (
+            deduction_expl.get("modifiers", {})
+            .get("REPEAT_VIOLATIONS", {})
+            .get("trigger", "")
+            .lower()
+        )
+        if "3 years" in trigger:
+            lookback_days = 3 * 365
+
+    counts: dict[str, int] = {}
+    for entry in entries:
+        manufacturer_key = (
+            (entry.get("manufacturer_family_id") or "").strip()
+            or (entry.get("manufacturer_id") or "").strip()
+            or normalize_company_name(entry.get("manufacturer", ""))
+        )
+        if not manufacturer_key:
+            continue
+        _, entry_date = parse_entry_date(entry.get("date"))
+        days_since = (date.today() - entry_date).days
+        if days_since <= lookback_days:
+            counts[manufacturer_key] = counts.get(manufacturer_key, 0) + 1
+
+    return {manufacturer_key: count > 1 for manufacturer_key, count in counts.items()}
+
+
+def get_entry_grouping_key(entry: dict) -> str:
+    return (
+        (entry.get("manufacturer_family_id") or "").strip()
+        or (entry.get("manufacturer_id") or "").strip()
+        or normalize_company_name(entry.get("manufacturer", ""))
+    )
+
+
+def get_new_record_grouping_key(manufacturer: str, manufacturer_id: str) -> str:
+    return manufacturer_id or normalize_company_name(manufacturer)
+
+
+def _ensure_alias_list(value) -> list[str]:
+    if isinstance(value, list):
+        return [str(item).strip() for item in value if str(item).strip()]
+    return []
+
+
+def _maybe_seed_family_metadata(entry: dict) -> None:
+    """Preserve curated family fields when present; otherwise keep structure explicit.
+
+    We do not auto-invent manufacturer families. This just guarantees the schema
+    can carry them once curated.
+    """
+    if "manufacturer_family_id" in entry and entry.get("manufacturer_family_id"):
+        entry["manufacturer_family_id"] = str(entry["manufacturer_family_id"]).strip()
+    if "manufacturer_family_name" in entry and entry.get("manufacturer_family_name"):
+        entry["manufacturer_family_name"] = str(entry["manufacturer_family_name"]).strip()
+    family_aliases = _ensure_alias_list(entry.get("manufacturer_family_aliases"))
+    if family_aliases:
+        entry["manufacturer_family_aliases"] = family_aliases
+
+
+def _maybe_seed_related_cluster_metadata(entry: dict) -> None:
+    """Preserve non-scoring related-cluster metadata when present."""
+    if "related_brand_cluster_id" in entry and entry.get("related_brand_cluster_id"):
+        entry["related_brand_cluster_id"] = str(entry["related_brand_cluster_id"]).strip()
+    if "related_brand_cluster_name" in entry and entry.get("related_brand_cluster_name"):
+        entry["related_brand_cluster_name"] = str(entry["related_brand_cluster_name"]).strip()
+    cluster_aliases = _ensure_alias_list(entry.get("related_brand_cluster_aliases"))
+    if cluster_aliases:
+        entry["related_brand_cluster_aliases"] = cluster_aliases
+
+
+def recalculate_all_entries(data: dict, deduction_expl: dict | None = None) -> int:
+    entries = data.get("manufacturer_violations", [])
+    repeat_lookup = build_repeat_violation_lookup(entries, deduction_expl)
+    multi_line_threshold = (
+        deduction_expl.get("modifiers", {})
+        .get("MULTIPLE_PRODUCT_LINES", {})
+        .get("product_line_threshold", 3)
+        if deduction_expl
+        else 3
+    )
+    total_deduction_cap = int(deduction_expl.get("total_deduction_cap", -25)) if deduction_expl else -25
+
+    changed = 0
+    for entry in entries:
+        before = json.dumps(entry, sort_keys=True, default=str)
+
+        normalized_date, entry_date = parse_entry_date(entry.get("date"))
+        days_since = (date.today() - entry_date).days
+        manufacturer = (entry.get("manufacturer") or "").strip() or "Unknown Manufacturer"
+        manufacturer_id = (
+            (entry.get("manufacturer_id") or "").strip()
+            or normalize_company_name(manufacturer)
+            or "unknownmanufacturer"
+        )
+        violation_code = entry.get("violation_code") or infer_violation_code(
+            entry.get("reason", ""),
+            entry.get("violation_type", ""),
+            "resolved" if entry.get("is_resolved") else "open",
+        )
+        base_deduction = lookup_base_deduction(violation_code, deduction_expl)
+        severity_level = severity_level_from_code(violation_code)
+        recency = recency_multiplier(days_since, deduction_expl)
+        product_lines_affected = int(entry.get("product_lines_affected") or 1)
+        multiple_product_lines = product_lines_affected >= int(multi_line_threshold)
+        grouping_key = get_entry_grouping_key(entry)
+        repeat_violation = repeat_lookup.get(grouping_key, False)
+        is_resolved = bool(entry.get("is_resolved"))
+        total_deduction_applied = compute_total_deduction(
+            base_deduction,
+            not is_resolved,
+            repeat_violation,
+            multiple_product_lines,
+            recency,
+            deduction_expl,
+        )
+        if total_deduction_applied < total_deduction_cap:
+            total_deduction_applied = float(total_deduction_cap)
+
+        entry["manufacturer"] = manufacturer
+        entry["manufacturer_id"] = manufacturer_id
+        _maybe_seed_family_metadata(entry)
+        _maybe_seed_related_cluster_metadata(entry)
+        entry["date"] = normalized_date
+        entry["days_since_violation"] = days_since
+        entry["recency_multiplier"] = recency
+        entry["violation_code"] = violation_code
+        entry["severity_level"] = severity_level
+        entry["base_deduction"] = base_deduction
+        entry["multiple_product_lines"] = multiple_product_lines
+        entry["repeat_violation"] = repeat_violation
+        entry["total_deduction_applied"] = total_deduction_applied
+        if not entry.get("source_identifier"):
+            entry["source_identifier"] = build_source_identifier(
+                recall_number=entry.get("fda_recall_id", ""),
+                source_type=entry.get("source_type", ""),
+                manufacturer=manufacturer,
+                product=entry.get("product", ""),
+                reason=entry.get("reason", ""),
+                link=entry.get("fda_source_url", ""),
+                date_value=normalized_date,
+            )
+        entry["user_facing_note"] = (
+            f"⚠️ FDA Recall {entry.get('fda_recall_id') or ''} by {manufacturer} for "
+            f"{(entry.get('product') or 'Unknown').strip()}: "
+            f"{(entry.get('reason') or '').strip()} "
+            f"(classification {entry.get('violation_type') or 'Recall'}). "
+            f"Penalty: {total_deduction_applied} pts."
+        )
+
+        after = json.dumps(entry, sort_keys=True, default=str)
+        if before != after:
+            changed += 1
+
+    return changed
+
+
 def main() -> int:
     args = parse_args()
+    output_path = Path(args.output)
+    deduction_expl = load_deduction_expl()
 
     date_end = datetime.now().strftime("%Y%m%d")
     date_start = (datetime.now() - timedelta(days=args.days)).strftime("%Y%m%d")
     report_filename = args.report or f"fda_manufacturer_violations_sync_report_{date_end}.json"
-    os.makedirs(REPORT_DIR, exist_ok=True)
     report_path = Path(report_filename) if args.report else REPORT_DIR / report_filename
+    report_path.parent.mkdir(parents=True, exist_ok=True)
 
     # Fetch data from FDAs.
     food_records = fetch_enforcement("food/enforcement", date_start, date_end, api_key=args.api_key)
@@ -234,12 +580,22 @@ def main() -> int:
     }
     data = {}
     try:
-        with open(DATA_PATH, "r", encoding="utf-8") as f:
+        with open(output_path, "r", encoding="utf-8") as f:
             data = json.load(f)
         for violations in data.get("manufacturer_violations", []):
             rid = str(violations.get("fda_recall_id", "")).strip().upper()
             if rid:
                 existing["by_recall_id"][rid] = violations
+            source_identifier = build_source_identifier(
+                recall_number=rid,
+                source_type=violations.get("source_type", ""),
+                manufacturer=violations.get("manufacturer", ""),
+                product=violations.get("product", ""),
+                reason=violations.get("reason", ""),
+                link=violations.get("fda_source_url", ""),
+                date_value=violations.get("date", ""),
+            )
+            existing["by_identifier"][source_identifier] = violations
     except FileNotFoundError:
         data = {
             "_metadata": {
@@ -256,6 +612,8 @@ def main() -> int:
         print(f"ERROR: cannot parse existing manufacturer violations data: {e}", file=sys.stderr)
         return 1
 
+    existing_total_entries = len(data.get("manufacturer_violations", []))
+
     existing_ids = [int(re.sub(r"\D", "", item.get("id", "V0"))) for item in data.get("manufacturer_violations", []) if re.search(r"\d+", item.get("id", ""))]
     next_id = max(existing_ids, default=0) + 1
 
@@ -263,22 +621,37 @@ def main() -> int:
     skipped = 0
     skip_reasons = {
         "not_supplement": 0,
+        "weak_rss_signal": 0,
         "existing_recall_id": 0,
+        "batch_duplicate_recall_id": 0,
+        "existing_source_identifier": 0,
+        "batch_duplicate_source": 0,
         "noise_filtered": 0,
     }
+    seen_batch_recall_ids: set[str] = set()
+    seen_batch_source_identifiers: set[str] = set()
 
     # if source contains 2+ recalls from same firm => repeat_violation handles 1. We derive later.
     manufacturer_event_counts = {}
+    for entry in data.get("manufacturer_violations", []):
+        key = get_entry_grouping_key(entry)
+        if key:
+            manufacturer_event_counts[key] = manufacturer_event_counts.get(key, 0) + 1
     for record in raw_candidates:
-        if not is_supplement_record(record):
+        eligible, skip_reason = is_eligible_manufacturer_record(record)
+        if not eligible:
             skipped += 1
-            skip_reasons["not_supplement"] += 1
+            skip_reasons[skip_reason] += 1
             continue
 
         recall_number = (record.get("recall_number") or "").strip().upper()
         if recall_number and recall_number in existing["by_recall_id"]:
             skipped += 1
             skip_reasons["existing_recall_id"] += 1
+            continue
+        if recall_number and recall_number in seen_batch_recall_ids:
+            skipped += 1
+            skip_reasons["batch_duplicate_recall_id"] += 1
             continue
 
         # Try structured field first, then fall back to text extraction
@@ -298,14 +671,34 @@ def main() -> int:
             d = date.today().isoformat()
         date_obj = datetime.fromisoformat(d).date() if isinstance(d, str) else d
         days_since = (date.today() - date_obj).days
-        recency = recency_multiplier(days_since)
+        recency = recency_multiplier(days_since, deduction_expl)
+        source_type = record.get("_source_type", "openfda_enforcement")
+        product_text = (record.get("product_description") or record.get("product_quantity") or "Unknown").strip()
+        reason_text = (record.get("reason_for_recall") or "").strip()
+        source_identifier = build_source_identifier(
+            recall_number=recall_number,
+            source_type=source_type,
+            manufacturer=mfr,
+            product=product_text,
+            reason=reason_text,
+            link=record.get("link", ""),
+            date_value=d,
+        )
+        if not recall_number and source_identifier in existing["by_identifier"]:
+            skipped += 1
+            skip_reasons["existing_source_identifier"] += 1
+            continue
+        if not recall_number and source_identifier in seen_batch_source_identifiers:
+            skipped += 1
+            skip_reasons["batch_duplicate_source"] += 1
+            continue
 
         # Look for hint of repeated or unresolved
-        key = normalize_company_name(mfr)
+        key = get_new_record_grouping_key(mfr, normalize_company_name(mfr))
         manufacturer_event_counts[key] = manufacturer_event_counts.get(key, 0) + 1
 
         code = infer_violation_code(record.get("reason_for_recall"), record.get("classification"), record.get("status"))
-        base_deduction = VIOLATION_CODE_MAP.get(code, -10)
+        base_deduction = lookup_base_deduction(code, deduction_expl)
         severity_level = severity_level_from_code(code)
 
         is_resolved = str(record.get("status") or "").lower() in ["terminated", "completed", "closed", "resolved"]
@@ -313,11 +706,18 @@ def main() -> int:
         repeat = manufacturer_event_counts[key] > 1
         multiple_product_lines = False
 
-        total_deduction_applied = compute_total_deduction(base_deduction, not is_resolved, repeat, multiple_product_lines, recency)
-        if total_deduction_applied < -25:
-            total_deduction_applied = -25.0
+        total_deduction_applied = compute_total_deduction(
+            base_deduction,
+            not is_resolved,
+            repeat,
+            multiple_product_lines,
+            recency,
+            deduction_expl,
+        )
+        total_deduction_cap = int(deduction_expl.get("total_deduction_cap", -25)) if deduction_expl else -25
+        if total_deduction_applied < total_deduction_cap:
+            total_deduction_applied = float(total_deduction_cap)
 
-        source_type = record.get("_source_type", "openfda_enforcement")
         fda_source_url = ""
         if recall_number:
             fda_source_url = (
@@ -331,15 +731,22 @@ def main() -> int:
             "id": f"V{next_id:03d}",
             "source_type": source_type,
             "fda_source_url": fda_source_url,
+            "source_identifier": source_identifier,
             "manufacturer": mfr,
             "manufacturer_id": key or normalize_company_name(mfr),
-            "product": (record.get("product_description") or record.get("product_quantity") or "Unknown").strip(),
+            "manufacturer_family_id": None,
+            "manufacturer_family_name": None,
+            "manufacturer_family_aliases": [],
+            "related_brand_cluster_id": None,
+            "related_brand_cluster_name": None,
+            "related_brand_cluster_aliases": [],
+            "product": product_text,
             "product_category": "supplement",
             "violation_type": record.get("classification") or "Recall",
             "severity_level": severity_level,
             "violation_code": code,
             "base_deduction": base_deduction,
-            "reason": (record.get("reason_for_recall") or "").strip(),
+            "reason": reason_text,
             "contamination_type": code.lower(),
             "date": d,
             "days_since_violation": days_since,
@@ -373,11 +780,16 @@ def main() -> int:
         }
 
         added.append(entry)
+        if recall_number:
+            seen_batch_recall_ids.add(recall_number)
+        seen_batch_source_identifiers.add(source_identifier)
         next_id += 1
 
     # Append new entries and update metadata
     if added:
         data.setdefault("manufacturer_violations", []).extend(added)
+
+    recalculated_count = recalculate_all_entries(data, deduction_expl)
 
     # recompute meta counters
     stats = {
@@ -394,16 +806,19 @@ def main() -> int:
     manufacturer_total = {}
     for entry in data.get("manufacturer_violations", []):
         lvl = (entry.get("severity_level") or "").lower()
-        if lvl in stats:
-            stats[f"{lvl}_violations"] = stats.get(f"{lvl}_violations", 0) + 1
+        stat_key = f"{lvl}_violations"
+        if stat_key in stats:
+            stats[stat_key] += 1
         if entry.get("is_resolved"):
             stats["resolved_count"] += 1
         else:
             stats["unresolved_count"] += 1
-        mn = normalize_company_name(entry.get("manufacturer", ""))
-        manufacturer_total[mn] = manufacturer_total.get(mn, 0) + 1
+        manufacturer_key = get_entry_grouping_key(entry)
+        manufacturer_total[manufacturer_key] = manufacturer_total.get(manufacturer_key, 0) + 1
+        if entry.get("cdc_outbreak_investigation"):
+            stats["active_outbreaks"] += 1
 
-    stats["repeat_offenders"] = sum(1 for nm, c in manufacturer_total.items() if c > 1)
+    stats["repeat_offenders"] = sum(1 for _, c in manufacturer_total.items() if c > 1)
 
     data.setdefault("_metadata", {})["last_updated"] = date.today().isoformat()
     data["_metadata"]["total_entries"] = len(data.get("manufacturer_violations", []))
@@ -431,8 +846,10 @@ def main() -> int:
             "added_count": len(added),
             "skipped_count": skipped,
             "skip_reasons": skip_reasons,
-            "existing_total": len(existing["by_recall_id"]),
+            "existing_total": existing_total_entries,
+            "existing_recall_id_total": len(existing["by_recall_id"]),
             "added_ids": [e["id"] for e in added],
+            "recalculated_entry_count": recalculated_count,
             "source_counts": {
                 "food_enforcement": len(food_records),
                 "drug_enforcement": len(drug_records),
@@ -442,13 +859,13 @@ def main() -> int:
             "new_entries": added,
             "dry_run": True,
         }
-        os.makedirs(REPORT_DIR, exist_ok=True)
         with open(report_path, "w", encoding="utf-8") as f:
             json.dump(report, f, indent=2, ensure_ascii=False)
         print(f"Report saved: {report_path}")
         return 0
 
-    with open(args.output, "w", encoding="utf-8") as f:
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    with open(output_path, "w", encoding="utf-8") as f:
         json.dump(data, f, indent=2, ensure_ascii=False)
 
     report = {
@@ -462,8 +879,10 @@ def main() -> int:
         "added_count": len(added),
         "skipped_count": skipped,
         "skip_reasons": skip_reasons,
-        "existing_total": len(existing["by_recall_id"]),
+        "existing_total": existing_total_entries,
+        "existing_recall_id_total": len(existing["by_recall_id"]),
         "added_ids": [e["id"] for e in added],
+        "recalculated_entry_count": recalculated_count,
         "source_counts": {
             "food_enforcement": len(food_records),
             "drug_enforcement": len(drug_records),
