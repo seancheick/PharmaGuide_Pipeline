@@ -1491,7 +1491,8 @@
           "pro-vitamin b5 supplement",
           "pro-vit b5",
           "pantothenyl alcohol supplement",
-          "dl-panthenol supplement"
+          "dl-panthenol supplement",
+          "d-panthenol"
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
@@ -4045,7 +4046,9 @@
           "natural vit e acetate",
           "rrr-alpha-tocopheryl acetate supplement",
           "D-Alpha-Tocopherol Acetate",
-          "D-Alpha Tocopherol Acetate"
+          "D-Alpha Tocopherol Acetate",
+          "vitamin e acetate",
+          "d-alpha-tocopheryl acetate, natural"
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
@@ -4921,7 +4924,8 @@
           "lactic acid calcium",
           "calcium lactate supplement",
           "cal lactate supplement",
-          "lactic acid calcium supplement"
+          "lactic acid calcium supplement",
+          "calcium lactate gluconate"
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
@@ -5163,7 +5167,8 @@
           "Calcium",
           "calcium aspartate",
           "Calcium, Natural",
-          "Calcium Formate"
+          "Calcium Formate",
+          "calcium potassium phosphate citrate"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -6066,7 +6071,9 @@
         "aliases": [
           "iron chelate",
           "iron amino acid complex",
-          "iron aminoate"
+          "iron aminoate",
+          "hydrolyzed protein iron chelate",
+          "iron protein chelate"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -6482,7 +6489,8 @@
           "zn",
           "zinc supplement",
           "zinc amino acid chelate",
-          "zinmax"
+          "zinmax",
+          "zinc arginate"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -6881,7 +6889,8 @@
           "sodium selenate supplement",
           "selenic acid sodium supplement",
           "selenate supplement",
-          "Na₂SeO₄ supplement"
+          "Na₂SeO₄ supplement",
+          "selenium selenate"
         ],
         "dosage_importance": 0.5,
         "absorption_structured": {
@@ -7096,7 +7105,9 @@
           "yeast free selenium amino acid chelate",
           "Lalmin Se1000",
           "se",
-          "selenium supplement"
+          "selenium supplement",
+          "selenium hydrolyzed rice protein chelate",
+          "{selenium} hydrolyzed rice protein chelate"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -7424,7 +7435,11 @@
           "hesperidin methylchalcone",
           "hesperetin",
           "hesperidin bioflavonoid extract",
-          "hesperidin bioflavonoids extract"
+          "hesperidin bioflavonoids extract",
+          "peakforce watts'up",
+          "watts'up",
+          "watts up",
+          "wattsup"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -8631,7 +8646,8 @@
           "lauric acid saw palmetto supplement",
           "myristic acid saw palmetto supplement",
           "oleic acid saw palmetto supplement",
-          "palmitic acid saw palmetto supplement"
+          "palmitic acid saw palmetto supplement",
+          "serenoa repens berry extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -8718,7 +8734,9 @@
           "Saw Palmetto 45% extract",
           "Saw Palmetto (Serenoa repens) Fruit Extract 12:1",
           "Fatty Acids and Sterols",
-          "saw palmetto fatty acids and sterols"
+          "saw palmetto fatty acids and sterols",
+          "mytosterone(r) saw palmetto berries (serenoa repens) and astaxanthin",
+          "mytosterone saw palmetto"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -9989,7 +10007,9 @@
           "chelated manganese",
           "manganese proteinate",
           "protein-bound manganese",
-          "manganese amino acid complex"
+          "manganese amino acid complex",
+          "hydrolyzed protein manganese chelate",
+          "manganese protein chelate"
         ],
         "dosage_importance": 0.5,
         "absorption_structured": {
@@ -10448,7 +10468,11 @@
           "Molybdenum",
           "molybdenum citrate",
           "Molybdendum",
-          "molibdeno"
+          "molibdeno",
+          "molybdenum yeast",
+          "yeast-bound molybdenum",
+          "{molybdenum} hydrolyzed protein chelate",
+          "molybdenum hydrolyzed protein chelate"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -10633,7 +10657,12 @@
           "boron aspartate",
           "boron proteinate",
           "boric acid",
-          "boron acid"
+          "boron acid",
+          "boron hydrolyzed protein chelate",
+          "boron protein chelate",
+          "boron gluconate",
+          "boron hydrolyzed vegetable protein",
+          "boron chelate"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -10878,7 +10907,8 @@
           "natural potassium",
           "Potassium Malate",
           "cream of tartar",
-          "potassium bitartrate"
+          "potassium bitartrate",
+          "potassium sulfate"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -20648,7 +20678,15 @@
           "organic turmeric extract curcuminoids",
           "turmeric complex curcuma longa rhizome extract",
           "curcuwin turmeric extract curcuminoids",
-          "curcuwin turmeric extract"
+          "curcuwin turmeric extract",
+          "turmeric root extract curcumin",
+          "turmeric root extract 20% curcuminoids",
+          "curcuwin turmeric root extract curcuminoids",
+          "curcuwin turmeric root extract 20% curcuminoids",
+          "turmeric root and rhizome extract curcuminoids",
+          "turmeric root extract (curcuma longa) blend curcuminoids",
+          "turmeric rhizome extract curcumin",
+          "turmeric polysaccharides"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -30325,7 +30363,11 @@
           "organic black pepper",
           "essence of pure black pepper oil extract",
           "organic black pepper (fruit) extract",
-          "organic black pepper extract"
+          "organic black pepper extract",
+          "piperine beadlets",
+          "piperine extract",
+          "bioperine(r) black pepper extract",
+          "black pepper"
         ],
         "dosage_importance": 0.5,
         "absorption_structured": {
@@ -30818,7 +30860,9 @@
           "butchers broom extract",
           "ruscus aculeatus extract",
           "butcher's broom root extract",
-          "ruscus extract"
+          "ruscus extract",
+          "butcher's broom root powder",
+          "ruscus aculeatus root powder"
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
@@ -35550,7 +35594,8 @@
           "CLA80 Femme",
           "c9-t11:t10-c12",
           "Cis-9, Trans 11 Isomer",
-          "Trans-10, Cis-12 Isomer"
+          "Trans-10, Cis-12 Isomer",
+          "safflower oil"
         ],
         "score": 11,
         "dosage_importance": 1.0,
@@ -37655,7 +37700,7 @@
       "vitamins"
     ],
     "cleanup_notes": "Resolved within-ingredient alias collisions; removed 63 redundant unspecified forms",
-    "total_entries": 561,
+    "total_entries": 563,
     "total_ingredients": 623,
     "data_quality": {
       "review_status": "stub"
@@ -39217,7 +39262,11 @@
           "fulvic acid",
           "fulvic minerals",
           "humic fulvic acid",
-          "fulvic trace minerals"
+          "fulvic trace minerals",
+          "ancient peat & apple extract",
+          "ancient peat and apple extract",
+          "elevATP",
+          "elevatp ancient peat"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -39325,7 +39374,8 @@
           "testofen fenugreek",
           "fenuside 50%",
           "testofen fenugreek seed extract",
-          "furanomax fenugreek extract"
+          "furanomax fenugreek extract",
+          "fenuside"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -42177,7 +42227,9 @@
           "vegan cold-pressed omega-rich flax seed oil",
           "cold-pressed flax seed oil",
           "cold pressed flaxseed oil",
-          "flaxseed oil extract"
+          "flaxseed oil extract",
+          "flaxseed oil powder",
+          "organic cold-milled flax seed"
         ],
         "absorption_structured": {
           "value": 0.55,
@@ -42222,7 +42274,9 @@
           "flax seed hull extract",
           "flaxseed hull extract",
           "flaxseed hulls extract",
-          "flaxseed protein"
+          "flaxseed protein",
+          "ground flax",
+          "flax seed particulate lignans"
         ],
         "absorption_structured": {
           "value": null,
@@ -44614,7 +44668,8 @@
           "lactoferrin",
           "bovine lactoferrin",
           "activ-ferrin lactoferrin",
-          "bioferrin"
+          "bioferrin",
+          "milk peptides"
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
@@ -44766,7 +44821,9 @@
           "Perluxan Hops (Humulus lupulus) extract",
           "Lifenol Hops (Humulus lupulus) extract",
           "Lifenol Hops (Humulus lupulus L.) extract",
-          "hops"
+          "hops",
+          "hops cones extract",
+          "hops flowers extract"
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
@@ -45609,7 +45666,9 @@
           "phase 2 carb controller",
           "phase 2",
           "White Kidney Bean Seed Extract",
-          "phase 2 carb controller white kidney bean extract"
+          "phase 2 carb controller white kidney bean extract",
+          "kidney bean powder",
+          "kidney bean, powder"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -45670,7 +45729,9 @@
           "corn silk extract",
           "zea mays stigma extract",
           "organic cornsilk zea mays (stigma and style) extract",
-          "Cornsilk Zea mays Stigma and Style Extract"
+          "Cornsilk Zea mays Stigma and Style Extract",
+          "corn silk",
+          "corn silk (zea mays) extract"
         ],
         "dosage_importance": 0.8,
         "absorption_structured": {
@@ -45944,7 +46005,8 @@
           "rockweed",
           "organic sea kelp",
           "brown seaweed extract",
-          "brown seaweed concentrate"
+          "brown seaweed concentrate",
+          "brown seaweed"
         ],
         "dosage_importance": 0.8,
         "absorption_structured": {
@@ -47779,7 +47841,11 @@
         "aliases": [
           "palmitoylethanolamide",
           "n-palmitoylethanolamide",
-          "palmitoyl ethanolamide"
+          "palmitoyl ethanolamide",
+          "levagen palmitic acid monoethanolamide",
+          "levagen",
+          "levagen+",
+          "palmitic acid monoethanolamide"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -48217,7 +48283,13 @@
           "organic hawthorn powder",
           "hawthorn (crataegus spp.) extract",
           "hawthorn (crataegus oxyacantha) extract",
-          "hawthorn (crataegus oxycantha) extract"
+          "hawthorn (crataegus oxycantha) extract",
+          "hawthorn powder",
+          "hawthorn leaves & flowers extract",
+          "hawthorn leaves and flowers extract",
+          "hawthorne leaf & flower extract",
+          "hawthorne leaf and flower extract",
+          "hawthorn (crataegus pinnatifida) leaf extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -48271,7 +48343,16 @@
           "Capsimax Capsicum annuum fruit extract",
           "Capsimax fruit extract",
           "Capsimax capsaicin beadlet",
-          "Capsimax OmniActive"
+          "Capsimax OmniActive",
+          "capsimax capsicum fruit extract",
+          "capsimax(tm) capsicum fruit extract",
+          "capsimax capsicum seed extract",
+          "capsicum seed extract",
+          "capsimax red pepper extract",
+          "capsimax(tm) fruit extract",
+          "capsimax cayenne pepper fruit extract",
+          "capsimax(tm) capsicum extract",
+          "capsimax capsicum (capsicum annuum) fruit extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -48297,7 +48378,10 @@
           "capsicum annuum extract",
           "capsicum frutescens extract",
           "hot pepper extract",
-          "chili fruit, seed extract"
+          "chili fruit, seed extract",
+          "capsicum fruit extract",
+          "cayenne pepper fruit powder",
+          "capsaicinoids"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -48837,7 +48921,8 @@
           "guggulipid",
           "guggulipid extract",
           "guggul lipids powder",
-          "guggulipid gum extract"
+          "guggulipid gum extract",
+          "commiphora mukul resin extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -55512,7 +55597,9 @@
           "tart cherry juice concentrate",
           "montmorency tart cherry juice concentrate",
           "tart cherry powder",
-          "tart cherry fruit powder"
+          "tart cherry fruit powder",
+          "cherrypure tart cherry fruit & skin powder",
+          "cherrypure tart cherry"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -58605,7 +58692,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "cui_status": "no_confirmed_umls_match"
   },
   "oat_bran": {
     "standard_name": "Oat Bran",
@@ -59098,6 +59186,146 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
+    },
+    "cui_status": "no_confirmed_umls_match"
+  },
+  "chitosan": {
+    "standard_name": "Chitosan",
+    "severity_level": "none",
+    "category": "fibers",
+    "description": "Deacetylated chitin polymer from crustacean shells. Used as fat binder/weight management fiber. Also used in wound healing and drug delivery.",
+    "dosage_importance": 1.0,
+    "forms": {
+      "chitosan (unspecified)": {
+        "bio_score": 5,
+        "natural": true,
+        "score": 8,
+        "absorption": "not systemically absorbed — acts in gut lumen",
+        "notes": "Chitosan (poly-D-glucosamine), MW varies (50-1000 kDa). Derived from deacetylation of chitin from crustacean shells. Cochrane review (PMID 18254091, Jull 2008) found modest short-term weight loss effects (1.7 kg over placebo). Mechanism: binds dietary fat in gut lumen via electrostatic interaction, reducing absorption. Clinical dose: 1-3 g/day before meals. Allergen concern: shellfish-derived.",
+        "aliases": [
+          "chitosan",
+          "chitin",
+          "deacetylated chitin",
+          "poly-d-glucosamine",
+          "chitosan fiber"
+        ],
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": null,
+          "range_low": null,
+          "range_high": null,
+          "quality": "unknown",
+          "notes": "Polymer — not systemically absorbed. Acts as fat binder in GI tract."
+        }
+      }
+    },
+    "cui": "C0162969",
+    "rxcui": null,
+    "match_rules": {
+      "priority": 0,
+      "match_mode": "alias_and_fuzzy",
+      "exclusions": [],
+      "parent_id": null,
+      "confidence": "high"
+    },
+    "category_enum": "fibers",
+    "cui_note": "UMLS C0162969 — chitosan (Organic Chemical, Pharmacologic Substance)",
+    "rxcui_note": "No RxNorm concept",
+    "data_quality": {
+      "completeness": 0.9,
+      "missing_fields": [],
+      "review_status": "validated",
+      "last_reviewed_at": "2026-04-03"
+    },
+    "aliases": [],
+    "external_ids": {
+      "unii": null,
+      "pubchem_cid": null,
+      "cas": null
+    },
+    "gsrs": {
+      "substance_name": null,
+      "substance_class": "polymer",
+      "cfr_sections": [],
+      "dsld_count": null,
+      "dsld_info_raw": null,
+      "active_moiety": null,
+      "salt_parents": [],
+      "metabolic_relationships": [],
+      "metabolites": []
     }
+  },
+  "barley_grass": {
+    "standard_name": "Barley Grass",
+    "severity_level": "none",
+    "category": "herbs",
+    "description": "Young Hordeum vulgare grass/leaf. Rich in chlorophyll, superoxide dismutase (SOD), vitamins, and flavonoids. Used in greens supplements.",
+    "dosage_importance": 1.0,
+    "forms": {
+      "barley grass (unspecified)": {
+        "bio_score": 5,
+        "natural": true,
+        "score": 8,
+        "absorption": "moderate (nutrient matrix)",
+        "notes": "Young barley grass (Hordeum vulgare) harvested before grain formation. Rich in chlorophyll, SOD, beta-carotene, and flavonoids. Review (PMID 29949890, Zeng 2018) summarized evidence for antioxidant, anti-inflammatory, and lipid-lowering properties. Limited high-quality human RCTs as standalone ingredient. Commonly found in greens blends and superfood powders.",
+        "aliases": [
+          "barley grass",
+          "barley grass powder",
+          "green barley grass powder",
+          "hordeum vulgare powder",
+          "young barley grass",
+          "barley grass extract",
+          "barley grass juice powder",
+          "organic barley grass"
+        ],
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": 0.4,
+          "range_low": 0.2,
+          "range_high": 0.6,
+          "quality": "moderate",
+          "notes": "Nutrient-dense plant matrix; fat-soluble vitamins have good F, water-soluble polyphenols variable"
+        }
+      }
+    },
+    "cui": null,
+    "rxcui": null,
+    "match_rules": {
+      "priority": 0,
+      "match_mode": "alias_and_fuzzy",
+      "exclusions": [],
+      "parent_id": null,
+      "confidence": "high"
+    },
+    "category_enum": "herbs",
+    "cui_note": "No specific UMLS concept for barley grass supplement",
+    "rxcui_note": "No RxNorm concept",
+    "data_quality": {
+      "completeness": 0.8,
+      "missing_fields": [
+        "cui",
+        "unii"
+      ],
+      "review_status": "validated",
+      "last_reviewed_at": "2026-04-03"
+    },
+    "aliases": [],
+    "external_ids": {
+      "unii": null,
+      "pubchem_cid": null,
+      "cas": null
+    },
+    "gsrs": {
+      "substance_name": null,
+      "substance_class": "structurallyDiverse",
+      "cfr_sections": [],
+      "dsld_count": null,
+      "dsld_info_raw": null,
+      "active_moiety": null,
+      "salt_parents": [],
+      "metabolic_relationships": [],
+      "metabolites": []
+    },
+    "cui_status": "no_confirmed_umls_match"
   }
 }

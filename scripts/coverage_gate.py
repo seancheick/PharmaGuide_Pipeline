@@ -27,7 +27,7 @@ Usage:
 import json
 import logging
 from dataclasses import dataclass, field
-from datetime import datetime
+from datetime import datetime, UTC
 from pathlib import Path
 from typing import Dict, List, Optional, Any, Tuple
 
@@ -736,7 +736,7 @@ class CoverageGate:
         output_dir = Path(output_dir)
         output_dir.mkdir(parents=True, exist_ok=True)
 
-        timestamp = datetime.utcnow().strftime("%Y%m%d_%H%M%S")
+        timestamp = datetime.now(UTC).strftime("%Y%m%d_%H%M%S")
 
         # Generate JSON report
         json_report = self._build_json_report(batch_result)
@@ -852,7 +852,7 @@ class CoverageGate:
         """Build JSON report structure."""
         return {
             "schema_version": "4.0.0",
-            "generated_at": datetime.utcnow().isoformat() + "Z",
+            "generated_at": datetime.now(UTC).isoformat().replace("+00:00", "Z"),
             "summary": {
                 "total_products": result.total_products,
                 "products_can_score": result.products_can_score,
@@ -900,7 +900,7 @@ class CoverageGate:
         lines = [
             "# Coverage Gate Report",
             "",
-            f"Generated: {datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')} UTC",
+            f"Generated: {datetime.now(UTC).strftime('%Y-%m-%d %H:%M:%S')} UTC",
             "",
             "## Summary",
             "",

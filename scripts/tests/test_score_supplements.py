@@ -1667,6 +1667,7 @@ class TestB5EligibilityGating:
             "impact_source", "impact_floor_applied", "presence_penalty",
             "proportional_coef", "computed_blend_penalty",
             "computed_blend_penalty_magnitude", "dedupe_fingerprint",
+            "source_field", "source_path",
         ]
         for field in required_fields:
             assert field in ev, f"Missing field: {field}"
@@ -1677,6 +1678,8 @@ class TestB5EligibilityGating:
         assert ev["computed_blend_penalty"] == pytest.approx(
             -ev["computed_blend_penalty_magnitude"], abs=0.0001
         )
+        assert ev["source_field"] == "activeIngredients"
+        assert ev["source_path"] == "activeIngredients[0]"
 
     # ── Sanity-check examples from the spec ──
     def test_spec_example_partial_400mg_no_children(self, scorer):

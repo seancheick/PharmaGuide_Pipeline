@@ -681,12 +681,6 @@ def iter_json_products(directories: List[str]):
             except (json.JSONDecodeError, OSError) as e:
                 logger.error("Failed to load %s: %s", fpath, e)
 
-
-def load_json_files(directories: List[str]) -> List[Dict]:
-    """Load all JSON files from given directories, return flat list of product dicts."""
-    return list(iter_json_products(directories))
-
-
 def index_by_id(products: List[Dict], id_field: str = "dsld_id") -> Dict[str, Dict]:
     """Index a list of product dicts by dsld_id."""
     index = {}

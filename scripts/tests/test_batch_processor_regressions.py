@@ -121,3 +121,46 @@ def test_unmapped_tracker_save_receives_real_processed_file_count(tmp_path, monk
     processor.process_all_files(files, resume=False)
 
     assert seen["processed_count_override"] == 5
+
+
+def test_manifest_checksum_changes_when_same_size_and_mtime_content_changes(tmp_path):
+    cfg = _make_config(tmp_path)
+    processor = BatchProcessor(cfg)
+
+    path = tmp_path / "same.json"
+    original = {"id": 1, "ingredientRows": [{"name": "AAAA"}]}
+    updated = {"id": 1, "ingredientRows": [{"name": "BBBB"}]}
+
+    path.write_text(json.dumps(original, separators=(",", ":")), encoding="utf-8")
+    fixed_mtime = 1_700_000_000
+    os.utime(path, (fixed_mtime, fixed_mtime))
+    before = processor._get_file_manifest_checksum([path])
+
+    replacement = json.dumps(updated, separators=(",", ":"))
+    assert len(replacement) == len(path.read_text(encoding="utf-8"))
+    path.write_text(replacement, encoding="utf-8")
+    os.utime(path, (fixed_mtime, fixed_mtime))
+    after = processor._get_file_manifest_checksum([path])
+
+    assert before != after
+
+
+def test_reference_data_memory_estimate_sums_json_payloads(tmp_path):
+    cfg = _make_config(tmp_path)
+    cfg["processing"]["max_workers"] = 3
+    processor = BatchProcessor(cfg)
+
+    data_dir = tmp_path / "refdata"
+    data_dir.mkdir()
+    (data_dir / "a.json").write_text("{}", encoding="utf-8")
+    (data_dir / "b.json").write_text('{"k":"value"}', encoding="utf-8")
+
+    diagnostics = processor._estimate_reference_data_memory(data_dir=data_dir)
+
+    assert diagnostics["reference_json_count"] == 2
+    assert diagnostics["reference_payload_bytes"] == (
+        (data_dir / "a.json").stat().st_size + (data_dir / "b.json").stat().st_size
+    )
+    assert diagnostics["estimated_total_worker_payload_bytes"] == (
+        diagnostics["reference_payload_bytes"] * 3
+    )

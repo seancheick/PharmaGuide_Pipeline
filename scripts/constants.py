@@ -911,6 +911,22 @@ BLEND_HEADER_EXACT_NAMES = {
     "mineral enzyme activators",
     "ionic plant based minerals",
     "ionic plant-based minerals",
+    # GNC structural blend headers / marketing names (unmapped resolution 2026-04-03)
+    "micronized amino acids",
+    "n.o. vasodilation amplifier",
+    "atp optimizing creatine module",
+    "thermo energy intensifier",
+    "micronized creatine precursors",
+    "liver health",
+    "total bcaa",
+    "pump maximizer with ot2(tm)",
+    "pump maximizer with ot2",
+    "peg-creatine system",
+    "arginine, peg-micronized system",
+    "fruit & vegetable juice blend",
+    "fruit and vegetable juice blend",
+    "72 naturally occurring trace minerals",
+    "nas",
 }
 
 # LOW-CONFIDENCE blend headers - only skip if NO DOSE present

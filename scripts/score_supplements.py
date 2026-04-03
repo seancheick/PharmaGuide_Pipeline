@@ -1508,6 +1508,11 @@ class SupplementScorer:
             level = norm_text(blend.get("disclosure_level"))
             base = b5_base.get(level, b5_base["none"])
             prop_coef = b5_prop.get(level, b5_prop["none"])
+            evidence_payload = blend.get("evidence")
+            evidence_dict = evidence_payload if isinstance(evidence_payload, dict) else {}
+            source_raw = blend.get("source_field") or evidence_dict.get("source_field") or ""
+            source_path = str(source_raw).strip() if source_raw is not None else ""
+            source_field = source_path.split("[", 1)[0] if source_path else ""
 
             children_with_amounts, children_without_amounts = self._blend_child_payload(blend)
 
@@ -1582,6 +1587,8 @@ class SupplementScorer:
                 "dedupe_fingerprint": (
                     lambda fp: f"{fp[0]}|{','.join(fp[1])}|{fp[2]}|{fp[3]}"
                 )(self._blend_dedupe_fingerprint(blend)),
+                "source_field": source_field,
+                "source_path": source_path,
                 "unit_conversion_failed": bool(unit_conversion_failed),
                 "children_with_amount_count": len(children_with_amounts),
                 "children_without_amount_count": len(children_without_amounts),

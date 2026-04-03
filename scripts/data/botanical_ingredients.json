@@ -4,7 +4,7 @@
     "purpose": "ingredient_mapping",
     "schema_version": "5.0.0",
     "last_updated": "2026-04-03",
-    "total_entries": 432,
+    "total_entries": 433,
     "quality_tier": "basic_raw_botanicals",
     "standardization": "none",
     "notes": "This database is separate from standardized_botanicals.json by design. Overlaps are intentional and allow the scoring system to reward standardized forms over raw powders."
@@ -1584,7 +1584,8 @@
         "buchu 4:1 extract",
         "buchu leaf extract",
         "buchu leaves 4:1 extract",
-        "Buchu leaf 4:1 extract"
+        "Buchu leaf 4:1 extract",
+        "buchu leaves extract"
       ],
       "category": "leaf",
       "notes": "Agathosma betulina (Rutaceae) leaf. South African traditional medicine for urinary tract infections and inflammation. Contains diosphenol and pulegone terpenoids. Botanical leaf powder.",
@@ -11460,6 +11461,25 @@
       ],
       "category": "herb",
       "notes": "Artemisia dracunculus (Asteraceae) herb. Some evidence for glucose management (PMID 22034519). Used in GNC sports nutrition products.",
+      "last_updated": "2026-04-03",
+      "data_quality": {
+        "completeness": 0.7,
+        "review_status": "validated"
+      }
+    },
+    {
+      "id": "sweet_clover",
+      "standard_name": "Sweet Clover",
+      "latin_name": "Melilotus officinalis",
+      "CUI": null,
+      "aliases": [
+        "sweet clover extract",
+        "melilotus officinalis",
+        "yellow sweet clover",
+        "melilot"
+      ],
+      "category": "herb",
+      "notes": "Melilotus officinalis (Fabaceae). Contains coumarin and melilotin. Traditional use for venous insufficiency. Only 1 GNC occurrence.",
       "last_updated": "2026-04-03",
       "data_quality": {
         "completeness": 0.7,

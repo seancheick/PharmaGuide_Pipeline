@@ -7,7 +7,7 @@ import logging
 import time
 from pathlib import Path
 from typing import Dict, List, Tuple, Any, Optional, Set
-from datetime import datetime
+from datetime import datetime, UTC
 from concurrent.futures import ProcessPoolExecutor, as_completed
 from collections import Counter
 from dataclasses import dataclass, asdict
@@ -177,6 +177,10 @@ class BatchProcessor:
         # Initialize performance tracker
         self.performance_tracker = PerformanceTracker()
 
+        # Startup guardrail: estimate duplicated reference-data payload per worker.
+        self.reference_data_memory = self._estimate_reference_data_memory()
+        self._log_worker_memory_guardrail()
+
         # Remove shared normalizer instance for thread safety
         # Each process will create its own normalizer instance
         
@@ -208,7 +212,7 @@ class BatchProcessor:
             "error_type": error.exception_type,
             "error_message": error.message,
             "processing_stage": error.stage,
-            "timestamp": datetime.utcnow().isoformat() + "Z",
+            "timestamp": datetime.now(UTC).isoformat().replace("+00:00", "Z"),
             "traceback": error.traceback
         }
 
@@ -244,7 +248,7 @@ class BatchProcessor:
             "top_level_keys": list(result.data.keys()) if result.data else [],
             "pipeline_version": self.config.get("pipeline_version", "unknown"),
             "config_checksum": self.config.get("config_checksum"),
-            "timestamp": datetime.utcnow().isoformat() + "Z"
+            "timestamp": datetime.now(UTC).isoformat().replace("+00:00", "Z")
         }
 
         try:
@@ -466,8 +470,8 @@ class BatchProcessor:
         last_file = sorted_files[-1] if sorted_files else ""
 
         return BatchState(
-            started=datetime.utcnow().isoformat() + "Z",
-            last_updated=datetime.utcnow().isoformat() + "Z",
+            started=datetime.now(UTC).isoformat().replace("+00:00", "Z"),
+            last_updated=datetime.now(UTC).isoformat().replace("+00:00", "Z"),
             last_completed_batch=-1,  # -1 means no batches completed yet
             total_batches=total_batches,
             processed_files=0,
@@ -491,15 +495,14 @@ class BatchProcessor:
         A7: Get checksum of file manifest for resume validation.
         This ensures resume won't skip/reprocess wrong files if file list changes.
 
-        Includes: path, size, mtime (integer seconds for network filesystem safety)
+        Includes: path, size, and a fast content fingerprint (head/tail chunks)
         This is a best-effort integrity check, not cryptographic.
         """
         manifest_entries = []
         for f in sorted(files, key=str):
             try:
                 stat_info = os.stat(f)
-                # Use integer seconds for mtime - network filesystems have varying precision
-                entry = f"{f}|{stat_info.st_size}|{int(stat_info.st_mtime)}"
+                entry = f"{f}|{stat_info.st_size}|{self._fast_file_fingerprint(Path(f))}"
                 manifest_entries.append(entry)
             except OSError as e:
                 # File doesn't exist or is inaccessible - include error marker
@@ -508,6 +511,70 @@ class BatchProcessor:
 
         manifest_str = "\n".join(manifest_entries)
         return hashlib.md5(manifest_str.encode()).hexdigest()
+
+    def _fast_file_fingerprint(self, path: Path, sample_size: int = 4096) -> str:
+        """Cheap content fingerprint for resume safety without hashing whole files."""
+        digest = hashlib.md5()
+        with open(path, "rb") as handle:
+            head = handle.read(sample_size)
+            digest.update(head)
+
+            file_size = path.stat().st_size
+            if file_size > sample_size:
+                tail_offset = max(file_size - sample_size, 0)
+                handle.seek(tail_offset)
+                tail = handle.read(sample_size)
+                digest.update(tail)
+
+        return digest.hexdigest()
+
+    def _estimate_reference_data_memory(self, data_dir: Optional[Path] = None) -> Dict[str, Any]:
+        """Estimate on-disk JSON payload duplicated across worker processes."""
+        if data_dir is None:
+            data_dir = Path(__file__).parent / "data"
+
+        json_files = []
+        total_bytes = 0
+        if data_dir.exists():
+            for path in sorted(data_dir.glob("*.json")):
+                try:
+                    size = path.stat().st_size
+                except OSError:
+                    continue
+                json_files.append(path)
+                total_bytes += size
+
+        return {
+            "reference_data_dir": str(data_dir),
+            "reference_json_count": len(json_files),
+            "reference_payload_bytes": total_bytes,
+            "reference_payload_mb": round(total_bytes / (1024 * 1024), 2),
+            "estimated_worker_payload_bytes": total_bytes,
+            "estimated_worker_payload_mb": round(total_bytes / (1024 * 1024), 2),
+            "estimated_total_worker_payload_bytes": total_bytes * max(self.max_workers, 1),
+            "estimated_total_worker_payload_mb": round((total_bytes * max(self.max_workers, 1)) / (1024 * 1024), 2),
+        }
+
+    def _log_worker_memory_guardrail(self) -> None:
+        diagnostics = self.reference_data_memory
+        if diagnostics["reference_json_count"] == 0:
+            logger.info("Reference data footprint estimate unavailable: no JSON files found in %s", diagnostics["reference_data_dir"])
+            return
+
+        logger.info(
+            "Reference data footprint: %d JSON files, %.2fMB on disk; estimated duplicated worker payload %.2fMB at max_workers=%d",
+            diagnostics["reference_json_count"],
+            diagnostics["reference_payload_mb"],
+            diagnostics["estimated_total_worker_payload_mb"],
+            self.max_workers,
+        )
+        if self.max_workers > 4 or diagnostics["estimated_total_worker_payload_mb"] >= 128:
+            logger.warning(
+                "Worker memory guardrail: max_workers=%d with %.2fMB duplicated reference payload estimate. "
+                "Reduce workers on low-memory hosts before scaling batch size.",
+                self.max_workers,
+                diagnostics["estimated_total_worker_payload_mb"],
+            )
     
     def process_all_files(self, files: List[Path], resume: bool = False) -> Dict[str, Any]:
         """Process all files in batches"""
@@ -609,7 +676,7 @@ class BatchProcessor:
             if batch_result.get("write_success", True):
                 state.last_completed_batch = batch_num
             state.processed_files += len(batch_result.get("processed_files", []))
-            state.last_updated = datetime.utcnow().isoformat() + "Z"
+            state.last_updated = datetime.now(UTC).isoformat().replace("+00:00", "Z")
             state.errors.extend(batch_result.get("errors", []))
             # FIX 1+2: Track processed file paths for per-file resume
             state.processed_file_paths.extend(batch_result.get("processed_files", []))
@@ -1056,14 +1123,14 @@ class BatchProcessor:
                     {
                         "name": name,
                         "occurrences": count,
-                        "firstSeen": datetime.utcnow().isoformat() + "Z"
+                        "firstSeen": datetime.now(UTC).isoformat().replace("+00:00", "Z")
                     }
                     for name, count in self._sort_counter_deterministic(self.global_unmapped)
                 ],
                 "stats": {
                     "totalUnmapped": len(self.global_unmapped),
                     "totalOccurrences": sum(self.global_unmapped.values()),
-                    "generatedAt": datetime.utcnow().isoformat() + "Z"
+                    "generatedAt": datetime.now(UTC).isoformat().replace("+00:00", "Z")
                 }
             }
             

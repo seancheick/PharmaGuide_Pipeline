@@ -9,7 +9,7 @@ import string
 import os
 import functools
 from typing import Dict, List, Tuple, Optional, Any, Set, Union
-from datetime import datetime
+from datetime import datetime, UTC
 from pathlib import Path
 from collections import Counter
 from concurrent.futures import ThreadPoolExecutor, as_completed
@@ -221,6 +221,8 @@ STRUCTURAL_ACTIVE_CONTAINER_NAMES = frozenset({
     "essential vitality boost",
     "inflam-arrest",
     "marine oil and plant oil blend",
+    # GNC blend containers with child ingredients (unmapped resolution 2026-04-03)
+    "100% whey protein blend",
 })
 
 STRUCTURAL_ACTIVE_FORM_DISPLAY_ONLY_NAMES = frozenset({
@@ -256,6 +258,10 @@ STRUCTURAL_ACTIVE_DISPLAY_ONLY_LEAF_NAMES = frozenset({
     "stearic, palmitic acids",
     "stearic palmitic acids",
     "omega-7 and -9 monounsaturated fatty acids",
+    # GNC category/nutritional display labels (unmapped resolution 2026-04-03)
+    "other fats",
+    "animal proteins",
+    "whole grains",
 })
 
 STRUCTURAL_ACTIVE_CONTEXTUAL_DISPLAY_ONLY_LEAF_NAMES = frozenset({
@@ -3530,7 +3536,7 @@ class EnhancedDSLDNormalizer:
 
                 # ========== METADATA (CLEANING ONLY) ==========
                 "metadata": {
-                    "lastCleaned": datetime.utcnow().isoformat() + "Z",
+                    "lastCleaned": datetime.now(UTC).isoformat().replace("+00:00", "Z"),
                     "cleaningVersion": "2.1.0",  # Updated version - NO ENRICHMENT
                     "reference_versions": self.reference_versions,  # Track data file versions for auditability
                     "mappingStats": {

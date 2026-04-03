@@ -23,7 +23,7 @@ import json
 import sys
 import argparse
 from pathlib import Path
-from datetime import datetime
+from datetime import datetime, UTC
 from typing import Dict, List, Tuple
 
 
@@ -363,7 +363,7 @@ def run_preflight(verbose: bool = False, quick: bool = False) -> Dict:
         Results dictionary with status and details
     """
     results = {
-        "timestamp": datetime.utcnow().isoformat() + "Z",
+        "timestamp": datetime.now(UTC).isoformat().replace("+00:00", "Z"),
         "scripts_dir": str(SCRIPTS_DIR),
         "critical": {"passed": [], "failed": []},
         "important": {"passed": [], "failed": []},
