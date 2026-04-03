@@ -6,7 +6,7 @@ Clinical evidence discovery and audit tool for PharmaGuide.
 QUICK START — copy-paste these commands from the repo root
 ===========================================================================
 
-  # 1. AUDIT — check all 183 clinical entries for data bugs
+  # 1. AUDIT — check all clinical entries for data bugs
   #    (notes vs classification contradictions, enrollment plausibility,
   #     BRAND_ misclassification, PRECLIN_ with human trial data)
   python3 scripts/api_audit/discover_clinical_evidence.py audit

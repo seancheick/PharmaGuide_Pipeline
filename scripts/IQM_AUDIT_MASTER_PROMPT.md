@@ -19,8 +19,8 @@ You are auditing a supplement scoring pipeline that powers a consumer health app
 - **Scoring config:** `scripts/config/scoring_config.json` — caps, gates, coefficients
 - **Tests:** `python -m pytest scripts/tests/` — ALL tests must pass after every change
 - **Supporting data files (in `scripts/data/`):**
-  - `banned_recalled_ingredients.json` — hard-fail blocked substances (138 entries)
-  - `harmful_additives.json` — penalty substances (108 entries, severity: critical/high/moderate/low)
+  - `banned_recalled_ingredients.json` — hard-fail blocked substances (143 entries)
+  - `harmful_additives.json` — penalty substances (115 entries, severity: critical/high/moderate/low)
   - `top_manufacturers_data.json` — trusted brands (77 entries, fuzzy threshold 0.90)
   - `allergens.json` — allergen detection (17 entries)
   - `backed_clinical_studies.json` — evidence database (197 entries, all PMID-backed)

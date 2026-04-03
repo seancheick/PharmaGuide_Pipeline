@@ -4356,7 +4356,8 @@
           "active vit k2",
           "bioactive k2 supplement",
           "all-trans vitamin K2 supplement",
-          "all-trans vit K2"
+          "all-trans vit K2",
+          "menaq7 vitamin k-2"
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
@@ -5705,7 +5706,9 @@
           "Magnesium Creatine Chelate",
           "as Magnesium Creatine Chelate",
           "elemental magnesium",
-          "magnesio"
+          "magnesio",
+          "tri-mg",
+          "tri-mg(tm)"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -7451,7 +7454,9 @@
           "rutoside supplement",
           "rutin (sophora japonica) flower bud extract",
           "rutin sophora japonica flower bud extract",
-          "Rutin NF"
+          "Rutin NF",
+          "omniflavone sophora japonica fruit extract",
+          "omniflavone(tm) sophora japonica fruit extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -7534,7 +7539,9 @@
           "creatine powder supplement",
           "micronized creatine supplement",
           "Creapure Creatine Monohydrate supplement",
-          "Creatine Monohydrate, Micronized"
+          "Creatine Monohydrate, Micronized",
+          "creatine, micronized",
+          "creatin monohydrate"
         ],
         "dosage_importance": 0.5,
         "absorption_structured": {
@@ -7606,7 +7613,8 @@
           "creatine HCl supplement",
           "creatine hydrochloride supplement",
           "HCl creatine supplement",
-          "con-cret supplement"
+          "con-cret supplement",
+          "micronized creatine hydrochloride"
         ],
         "dosage_importance": 0.5,
         "absorption_structured": {
@@ -7629,7 +7637,9 @@
           "ethyl creatine",
           "creatine ethyl ester supplement",
           "CEE supplement",
-          "ethyl creatine supplement"
+          "ethyl creatine supplement",
+          "creatine ethyl ester hcl",
+          "creatine ethyl ester hydrochloride"
         ],
         "dosage_importance": 0.5,
         "absorption_structured": {
@@ -7671,7 +7681,9 @@
           "magnapower",
           "MagnaPower Creatine",
           "magnesium creatine chelate",
-          "creatine magnesium chelate supplement"
+          "creatine magnesium chelate supplement",
+          "creatine magnapower",
+          "creatine magna power"
         ],
         "dosage_importance": 0.5,
         "absorption_structured": {
@@ -7693,7 +7705,12 @@
           "creatine pyruvate",
           "Creatine Alpha-Ketoglutarate",
           "creatine akg",
-          "creatine pyruvate supplement"
+          "creatine pyruvate supplement",
+          "ot2 creatine monohydrate",
+          "ot2 creatine",
+          "ot2(tm) creatine",
+          "micronized alpha-ketogluarate",
+          "micronized alpha-ketoglutarate"
         ],
         "dosage_importance": 0.5,
         "absorption_structured": {
@@ -7702,6 +7719,26 @@
           "range_high": null,
           "quality": "unknown",
           "notes": "Data not available"
+        }
+      },
+      "dicreatine malate": {
+        "bio_score": 6,
+        "natural": false,
+        "score": 6,
+        "absorption": "~moderate (estimated from creatine class)",
+        "notes": "Di-creatine malate — 2 creatine molecules bound to 1 malic acid molecule. Theoretically combines creatine benefit with malic acid's role in Krebs cycle. Limited human PK data specific to this form; scored conservatively relative to creatine monohydrate. Found in GNC AMP branded products.",
+        "aliases": [
+          "dicreatine malate",
+          "di-creatine malate",
+          "creatine malate"
+        ],
+        "dosage_importance": 0.5,
+        "absorption_structured": {
+          "value": null,
+          "range_low": null,
+          "range_high": null,
+          "quality": "unknown",
+          "notes": "No human PK data for dicreatine malate specifically; assumed similar to creatine monohydrate"
         }
       }
     },
@@ -7986,7 +8023,10 @@
           "cellular energy supplement",
           "energy currency supplement",
           "Peak ATP",
-          "Peak ATP Adenosine 5'-Triphosphate Disodium"
+          "Peak ATP Adenosine 5'-Triphosphate Disodium",
+          "adenosine 5' triphosphate disodium",
+          "adenosine 5'-triphosphate disodium",
+          "adenosine 5'triphosphate disodium"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -8206,7 +8246,8 @@
           "l3c",
           "indole 3 carbinol",
           "i3c supplement",
-          "indole-3-carbinol supplement"
+          "indole-3-carbinol supplement",
+          "indole-3 carbinol"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -11099,7 +11140,8 @@
           "plant omega-3 ala",
           "Omega-3 Alpha Linolenic Acid",
           "Alpha Linoleic Acid",
-          "ALA from flax"
+          "ALA from flax",
+          "english walnut oil"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -11526,7 +11568,8 @@
           "Providing Pyrroloquinoline quinone",
           "pqq acid",
           "pyrroloquinoline quinone acid",
-          "free acid pqq"
+          "free acid pqq",
+          "pureqq pyrroloquinoline quinone"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -12657,7 +12700,11 @@
           "lactococcus lactis strain plasma",
           "l. lactis",
           "lactococcus lactis",
-          "l lactis"
+          "l lactis",
+          "lab4 probiotics",
+          "l acidophilus la-5(r) and bifidobacterium bb-12(r)",
+          "l-acidophilus la-5(r) and bifidobacterium bb-12(r)",
+          "ultra probiotics"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -12768,7 +12815,10 @@
           "BiMuno B-Galactooligosaccharides",
           "B-Galactooligosaccharides",
           "B-GOS",
-          "bimuno"
+          "bimuno",
+          "galacto-oligosaccharides",
+          "bimuno b-gos galactooligosaccharides",
+          "bimuno galactooligosaccharides"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -12793,7 +12843,8 @@
           "preticx xos",
           "xylooligosaccharide",
           "PreticX XOS prebiotic",
-          "PreticX xylooligosaccharide"
+          "PreticX xylooligosaccharide",
+          "prebiotic xylooligosaccharides"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -14072,7 +14123,9 @@
           "pure TMG",
           "BetaPure",
           "BetaPure Betaine Anhydrous",
-          "betapure betaine"
+          "betapure betaine",
+          "betapower betaine anhydrous",
+          "betapower"
         ],
         "context_include": [
           "betaine",
@@ -14257,7 +14310,11 @@
           "micronized glutamine",
           "l-glutamine powder",
           "l-glutamine hydrochloride",
-          "l-glutamine hcl"
+          "l-glutamine hcl",
+          "l-glutamine, micronized",
+          "glutamine, micronized",
+          "glutamic acid and glutamine",
+          "glutamic acid & glutamine"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -14281,7 +14338,10 @@
           "glutamine peptides",
           "sustamine glutamine",
           "l-alanine-l-glutamine",
-          "stable glutamine"
+          "stable glutamine",
+          "l-alanyl-l-glutamine dipeptide",
+          "sustamine l-alanyl-l-glutamine",
+          "sustamine(tm) l-alanyl-l-glutamine"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -14416,7 +14476,8 @@
           "arginine powder",
           "l-arginine pyroglutamate",
           "arginine pyroglutamate",
-          "l-arginine l-pyroglutamate"
+          "l-arginine l-pyroglutamate",
+          "l-arginine, micronized"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -15216,7 +15277,8 @@
           "glycine",
           "pure glycine",
           "free-form glycine",
-          "aminoacetic acid"
+          "aminoacetic acid",
+          "glycine, micronized"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -17926,7 +17988,8 @@
           "withanolides",
           "total withanolides",
           "withanolide content",
-          "withanolide glycosides"
+          "withanolide glycosides",
+          "glycowithanolides"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -18287,7 +18350,10 @@
           "ginkgolide A",
           "ginkgolide B",
           "ginkgolide C",
-          "terpene lactones"
+          "terpene lactones",
+          "ginkgo flavonol glycosides",
+          "ginkgo flavone glycoside",
+          "terpene lactone"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -18522,7 +18588,8 @@
           "milk thistle",
           "silymarins",
           "biosorb",
-          "Milk Thistle Extract, Natural"
+          "Milk Thistle Extract, Natural",
+          "milk thistle polysaccharides"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -18818,7 +18885,8 @@
           "calcium collagen chelate",
           "collagen, hydrolysate",
           "hydrolysed collagen",
-          "hydrolysed fish collagen"
+          "hydrolysed fish collagen",
+          "biocell collagen proprietary sternal cartilage extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -19436,7 +19504,8 @@
           "chondriotin sulfate",
           "chondroitin sulfate sodium",
           "sodium chondroitin sulfate",
-          "TruFlex Chondroitin Sulfate"
+          "TruFlex Chondroitin Sulfate",
+          "20% chondroitin sulfate"
         ],
         "dosage_importance": 0.5,
         "absorption_structured": {
@@ -19822,7 +19891,9 @@
           "proanthocyanidin oligomers",
           "grape OPCs",
           "MegaNatural-BP Grape Seed Extract",
-          "French Grape (Vitis vinifera) seed extract"
+          "French Grape (Vitis vinifera) seed extract",
+          "meganatural grape seed extract",
+          "meganatural(r) grape seed extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -20272,7 +20343,11 @@
           "syringin eleutheroside B",
           "eleuthero extract",
           "eleutherococcus senticosus extract",
-          "eleuthero root extract"
+          "eleuthero root extract",
+          "siberian ginseng root extract",
+          "siberian eleutherococcus",
+          "siberian root & rhizome powder",
+          "siberian root and rhizome powder"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -20844,7 +20919,9 @@
           "unprocessed garlic powder",
           "garlic spice powder",
           "alliin",
-          "S-allyl-L-cysteine sulfoxide"
+          "S-allyl-L-cysteine sulfoxide",
+          "new-gar deodorized garlic bulb powder",
+          "new-gar(tm)deodorized garlic bulb powder"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -21506,6 +21583,14 @@
           "vegan enzyme complex supplement",
           "enzyme complex supplement",
           "multi-enzyme complex supplement",
+          "rhizopus enzyme",
+          "aspergillus niger",
+          "aspergillus oryzae",
+          "aspergillus niger enzyme",
+          "aspergillus oryzae enzyme",
+          "biocore edge",
+          "biocore edge(tm)",
+          "biocore(r) edge",
           "biocore dairy",
           "dairy digestive enzymes",
           "Lactase Enzyme",
@@ -21812,7 +21897,9 @@
           "subtilisin nat",
           "natto extract",
           "natto nsp-2",
-          "Cardiokinase"
+          "Cardiokinase",
+          "fermented soybean powder",
+          "fermented soy powder"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -22788,7 +22875,9 @@
           "citrulline supplement",
           "pure citrulline supplement",
           "l-citrulline powder supplement",
-          "l-citrulline hydrochloride"
+          "l-citrulline hydrochloride",
+          "l-citrulline, micronized",
+          "citrulline, micronized"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -23141,7 +23230,10 @@
           "extramel superoxide dismutase french melon concentrate",
           "organic extramel french melon sod",
           "SOD B Dimpless",
-          "Dimpless"
+          "Dimpless",
+          "melon juice concentrate",
+          "melon extract",
+          "melon fruit pulp concentrate, powder"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -24382,7 +24474,9 @@
           "1 deoxynojirimycin",
           "dnj",
           "deoxynojirimycin",
-          "mulberry dnj"
+          "mulberry dnj",
+          "reducose",
+          "reducose mulberry extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -26634,7 +26728,12 @@
           "high-cga",
           "high cga",
           "high chlorogenic acid",
-          "coffee extract high-cga"
+          "coffee extract high-cga",
+          "svetol green coffee extract",
+          "coffee bean extract",
+          "coffea robusta seed extract",
+          "coffee, powder",
+          "coffee powder"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -28492,7 +28591,9 @@
           "jiaogulan extract",
           "jiaogulan",
           "AMPK activator gynostemma",
-          "ActivAMP Gynostemma pentaphyllum Extract"
+          "ActivAMP Gynostemma pentaphyllum Extract",
+          "activamp(tm) gynostemma pentaphyllum leaf extract",
+          "activamp gynostemma pentaphyllum leaf extract"
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
@@ -28560,7 +28661,8 @@
           "huperzia serrata extract",
           "chinese club moss extract",
           "toothed clubmoss extract",
-          "huperzine A 1%"
+          "huperzine A 1%",
+          "huperzia leaf extract"
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
@@ -29773,7 +29875,8 @@
           "Sceletium",
           "sceletium alkaloids",
           "mesembrenone",
-          "Zembrin"
+          "Zembrin",
+          "zembrin sceletium tortuosum extract"
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
@@ -30469,7 +30572,9 @@
           "soy protein isolate supplement",
           "soy protein isolate powder",
           "isolated soy protein",
-          "soy protein isolate protein"
+          "soy protein isolate protein",
+          "soy peptide",
+          "soy peptides"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -32958,7 +33063,9 @@
           "velvet antler powder supplement",
           "velvet elk antler powder",
           "Deer Antler horn powder",
-          "Deer Antler"
+          "Deer Antler",
+          "antler horn powder",
+          "antler horn"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -33540,7 +33647,8 @@
           "l-methionine supplement",
           "dl-methionine",
           "d,l-methionine",
-          "racemic methionine"
+          "racemic methionine",
+          "l-methionine, micronized"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -34619,7 +34727,8 @@
           "maitake fruiting body supplement",
           "Maitake mushroom fruiting body extract",
           "maitake (grifola frondosa) fruiting body proprietary extract",
-          "maitake (grifola frondosa) fruit body powder"
+          "maitake (grifola frondosa) fruit body powder",
+          "maitake mushroom mycelia powder"
         ],
         "score": 11,
         "dosage_importance": 1.0,
@@ -35463,7 +35572,10 @@
           "clarinol cla",
           "patented cla",
           "CLA Oil",
-          "Conjugated Linolenic Acid"
+          "Conjugated Linolenic Acid",
+          "clarinol cla isomers",
+          "conjugated linoleic acid isomers",
+          "clarinol(r) cla isomers"
         ],
         "score": 13,
         "dosage_importance": 1.0,
@@ -35594,7 +35706,8 @@
           "psyllium",
           "psyllium husk fiber",
           "Psyllium seed husk powder",
-          "psylium"
+          "psylium",
+          "psyllium seed husks powder"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -35680,7 +35793,8 @@
           "beta 1,3/1,6 d-glucan",
           "Mushroom Beta Glucan",
           "mushroom beta-glucan",
-          "mushroom beta glucans"
+          "mushroom beta glucans",
+          "wellmune baker's yeast beta glucans"
         ],
         "absorption_structured": {
           "value": 0.45,
@@ -37450,7 +37564,7 @@
       "vitamins": 17
     },
     "schema_version": "5.0.0",
-    "last_updated": "2026-03-30",
+    "last_updated": "2026-04-03",
     "pipeline_integration": "Used by enrichment script to assign quality scores to matched ingredient forms. Match ingredient name against forms aliases (case-insensitive). Use highest-scoring matched form.",
     "matching_notes": [
       "Match ingredient name + forms text against aliases array (case-insensitive)",
@@ -37541,7 +37655,7 @@
       "vitamins"
     ],
     "cleanup_notes": "Resolved within-ingredient alias collisions; removed 63 redundant unspecified forms",
-    "total_entries": 552,
+    "total_entries": 561,
     "total_ingredients": 623,
     "data_quality": {
       "review_status": "stub"
@@ -42103,7 +42217,12 @@
           "organic defatted flax seed",
           "flax seed meal",
           "flaxseed defatted",
-          "flaxseed fiber"
+          "flaxseed fiber",
+          "flax seed hulls",
+          "flax seed hull extract",
+          "flaxseed hull extract",
+          "flaxseed hulls extract",
+          "flaxseed protein"
         ],
         "absorption_structured": {
           "value": null,
@@ -42188,7 +42307,10 @@
           "chamomile tops extract",
           "chamazulene",
           "chamomile chamazulene",
-          "matricin"
+          "matricin",
+          "chamomille flower",
+          "chamomille flower powder",
+          "chomomile flower powder"
         ],
         "absorption_structured": {
           "value": 0.55,
@@ -42685,7 +42807,8 @@
           "willow bark 15% salicin",
           "white willow 120mg salicin",
           "salicin",
-          "salicin standardized"
+          "salicin standardized",
+          "15% salicin"
         ],
         "absorption_structured": {
           "value": null,
@@ -44255,7 +44378,9 @@
           "beta caryophyllene",
           "b-caryophyllene",
           "bcp",
-          "trans-caryophyllene"
+          "trans-caryophyllene",
+          "rephyll",
+          "rephyll beta-caryophyllene"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -45483,7 +45608,8 @@
           "phaseolus vulgaris extract",
           "phase 2 carb controller",
           "phase 2",
-          "White Kidney Bean Seed Extract"
+          "White Kidney Bean Seed Extract",
+          "phase 2 carb controller white kidney bean extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -46517,7 +46643,8 @@
           "organic amla",
           "raw amla",
           "raw organic amla",
-          "raw amla berry"
+          "raw amla berry",
+          "indian gooseberry fruit extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -49264,7 +49391,10 @@
           "mastic gum extract",
           "mastic gum powder",
           "mastic tree",
-          "Pistacia lentiscus var. Chia"
+          "Pistacia lentiscus var. Chia",
+          "chios mastiha gum powder",
+          "chios mastiha shrub extract, powder",
+          "chios mastiha shrub extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -50599,7 +50729,8 @@
         "aliases": [
           "oleanolic acid",
           "oleanic acid",
-          "caryophyllin"
+          "caryophyllin",
+          "maslinic acid"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -50920,7 +51051,9 @@
           "Rejuna Arjuna (Terminalia arjuna) 10:1 extract",
           "Rejuna",
           "arjunolic acid",
-          "arjunic acid"
+          "arjunic acid",
+          "oxyjun",
+          "oxyjun terminalia arjuna bark extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -51955,7 +52088,12 @@
           "prickly pear cactus",
           "nopal cactus powder",
           "prickly pear cactus leaf extract",
-          "prickly pear leaf extract"
+          "prickly pear leaf extract",
+          "insuspike prickly pear cactus extract",
+          "prickly pear fruit & pad extract",
+          "prickly pear fruit and pad extract",
+          "prickly pear fruit extract",
+          "prickly pear pad & fruit skins extract"
         ],
         "notes": "Opuntia ficus-indica (prickly pear cactus pad); rich in fiber, polyphenols, and betalains. Evidence for postprandial glucose reduction and hangover prevention. Mexican traditional food/medicine.",
         "natural": true,
@@ -53939,7 +54077,11 @@
           "coffeeberry coffee",
           "coffee cherry extract",
           "coffea arabica fruit extract",
-          "neurofactor coffee fruit extract"
+          "neurofactor coffee fruit extract",
+          "neuro-factor coffee fruit extract",
+          "neuro-factor(tm) coffee fruit extract",
+          "neurofactor coffea arabica fruit extract",
+          "neurofactor dried whole coffee fruit concentrate"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -54068,7 +54210,9 @@
           "picroprotect",
           "picroprotect picrorhiza kurroa extract",
           "kutkin",
-          "picrorhiza kurroa root extract"
+          "picrorhiza kurroa root extract",
+          "picrorhiza kurrooa root extract",
+          "picorhiza root extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -58313,6 +58457,643 @@
       ],
       "dsld_count": 166,
       "dsld_info_raw": "Dietary Supplement Label Database|TBD|Xylitol | 2243 (Number of products:166)",
+      "active_moiety": null,
+      "salt_parents": [],
+      "metabolic_relationships": [],
+      "metabolites": []
+    }
+  },
+  "guanidinoacetate": {
+    "standard_name": "Guanidinoacetate (GAA)",
+    "severity_level": "none",
+    "category": "amino_acids",
+    "description": "Guanidinoacetic acid (glycocyamine) — endogenous creatine precursor synthesized from arginine and glycine in the kidney. Supplemental GAA increases whole-body creatine stores; emerging sports-nutrition and clinical ingredient.",
+    "dosage_importance": 1.0,
+    "forms": {
+      "guanidinoacetate (unspecified)": {
+        "bio_score": 7,
+        "natural": false,
+        "score": 7,
+        "absorption": "~high (small MW amino acid derivative)",
+        "notes": "Guanidinoacetic acid (GAA, glycocyamine), MW 117.1, CAS 352-97-6. Direct creatine precursor: GAA + SAMe → creatine via GAMT. Meta-analysis of 7 RCTs (PMID 31553717, Ostojic 2019) showed GAA at 1.2-3 g/day significantly increased muscle creatine in healthy adults. Subsequent RCT (PMID 34474639, Ostojic 2021) confirmed lean mass and anaerobic power improvement vs placebo at 3 g/day for 8 weeks. May deplete methyl donors (SAMe), so typically combined with betaine or methylation cofactors. Classified as amino acid derivative.",
+        "aliases": [
+          "guanidinoacetate",
+          "guanidinoacetic acid",
+          "glycocyamine",
+          "gaa",
+          "micronized guanidinoacetate",
+          "n-amidinoglycine"
+        ],
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": 0.8,
+          "range_low": 0.7,
+          "range_high": 0.9,
+          "quality": "good",
+          "notes": "Small molecule (MW 117), amino acid derivative; high predicted oral absorption by BCS class analogy"
+        }
+      }
+    },
+    "cui": "C0120451",
+    "rxcui": null,
+    "match_rules": {
+      "priority": 0,
+      "match_mode": "alias_and_fuzzy",
+      "exclusions": [],
+      "parent_id": null,
+      "confidence": "high"
+    },
+    "category_enum": "amino_acids",
+    "cui_note": "UMLS C0120451 — guanidinoacetate (Organic Chemical)",
+    "rxcui_note": "No RxNorm concept for supplement ingredient",
+    "data_quality": {
+      "completeness": 0.9,
+      "missing_fields": [
+        "unii"
+      ],
+      "review_status": "validated",
+      "last_reviewed_at": "2026-04-03"
+    },
+    "aliases": [],
+    "external_ids": {
+      "unii": null,
+      "pubchem_cid": "763",
+      "cas": "352-97-6"
+    },
+    "gsrs": {
+      "substance_name": null,
+      "substance_class": "chemical",
+      "cfr_sections": [],
+      "dsld_count": null,
+      "dsld_info_raw": null,
+      "active_moiety": null,
+      "salt_parents": [],
+      "metabolic_relationships": [],
+      "metabolites": []
+    }
+  },
+  "blood_orange_extract": {
+    "standard_name": "Blood Orange Extract",
+    "severity_level": "none",
+    "category": "antioxidants",
+    "description": "Standardized extract of Sicilian blood orange (Citrus sinensis var. Moro) fruit and peel, rich in anthocyanins (cyanidin-3-glucoside). Morosil is the most studied branded form. Evidence for body composition support.",
+    "dosage_importance": 1.0,
+    "forms": {
+      "blood orange extract (unspecified)": {
+        "bio_score": 7,
+        "natural": true,
+        "score": 10,
+        "absorption": "~moderate (anthocyanin bioavailability 1-5%, PMID 17177405)",
+        "notes": "Sicilian blood orange (Citrus sinensis var. Moro) extract standardized to anthocyanins. Morosil 400 mg/day RCT (n=60, 12 wks, PMID 26400477, Cardile 2015) reduced BMI, waist circumference, hip circumference vs placebo in overweight subjects. Anthocyanins (primarily cyanidin-3-glucoside, CAS 7084-24-4) activate AMPK and upregulate adiponectin in vitro. Also contains hydroxycinnamic acids and flavanones. Marketed as Morosil by Bionap.",
+        "aliases": [
+          "blood orange extract",
+          "sicilian blood orange fruit & peel extract",
+          "sicilian blood orange fruit and peel extract",
+          "sicilian blood orange fruit, peel extract",
+          "sicilian blood orange extract",
+          "red orange fruit and peel extract",
+          "red orange extract",
+          "morosil",
+          "morosil sicilian red orange extract",
+          "morosil sicilian red orange (citrus sinensis l. osbeck) (fruit juice) extract",
+          "citrus sinensis var. moro extract"
+        ],
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": 0.03,
+          "range_low": 0.01,
+          "range_high": 0.05,
+          "quality": "poor",
+          "notes": "Anthocyanin oral bioavailability is 1-5% (PMID 17177405); extensive phase II conjugation in gut and liver. Efficacy may depend on gut microbial metabolism."
+        }
+      }
+    },
+    "cui": null,
+    "rxcui": null,
+    "match_rules": {
+      "priority": 0,
+      "match_mode": "alias_and_fuzzy",
+      "exclusions": [],
+      "parent_id": null,
+      "confidence": "high"
+    },
+    "category_enum": "antioxidants",
+    "cui_note": "No specific UMLS concept for blood orange extract",
+    "rxcui_note": "No RxNorm concept for supplement ingredient",
+    "data_quality": {
+      "completeness": 0.8,
+      "missing_fields": [
+        "cui",
+        "unii"
+      ],
+      "review_status": "validated",
+      "last_reviewed_at": "2026-04-03"
+    },
+    "aliases": [],
+    "external_ids": {
+      "unii": null,
+      "pubchem_cid": null,
+      "cas": null
+    },
+    "gsrs": {
+      "substance_name": null,
+      "substance_class": "mixture",
+      "cfr_sections": [],
+      "dsld_count": null,
+      "dsld_info_raw": null,
+      "active_moiety": null,
+      "salt_parents": [],
+      "metabolic_relationships": [],
+      "metabolites": []
+    }
+  },
+  "oat_bran": {
+    "standard_name": "Oat Bran",
+    "severity_level": "none",
+    "category": "fibers",
+    "description": "Oat bran (Avena sativa) — outer layer of the oat groat, rich in soluble beta-glucan fiber. FDA-approved heart health claim at 3g/day. Distinct from oat straw (aerial parts).",
+    "dosage_importance": 1.0,
+    "forms": {
+      "oat bran (unspecified)": {
+        "bio_score": 6,
+        "natural": true,
+        "score": 9,
+        "absorption": "fiber — not absorbed systemically; acts in gut lumen",
+        "notes": "Oat bran contains 5-8% beta-glucan (soluble fiber). FDA health claim: 3g/day oat beta-glucan may reduce risk of coronary heart disease (21 CFR 101.81). Meta-analysis (PMID 25411276, Whitehead 2014) confirmed cholesterol-lowering effect. Mechanism: viscosity in small intestine reduces bile acid reabsorption, increases hepatic LDL receptor expression. Also supports glycemic control via delayed gastric emptying.",
+        "aliases": [
+          "oat bran",
+          "oat bran flour",
+          "oat bran powder",
+          "avena sativa bran",
+          "oat bran fiber"
+        ],
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": null,
+          "range_low": null,
+          "range_high": null,
+          "quality": "unknown",
+          "notes": "Soluble fiber — not systemically absorbed. Biological effect occurs in gut lumen via viscosity-dependent mechanism."
+        }
+      }
+    },
+    "cui": "C0795649",
+    "rxcui": null,
+    "match_rules": {
+      "priority": 0,
+      "match_mode": "alias_and_fuzzy",
+      "exclusions": [],
+      "parent_id": null,
+      "confidence": "high"
+    },
+    "category_enum": "fibers",
+    "cui_note": "UMLS C0795649 — oat bran (Organic Chemical, Pharmacologic Substance)",
+    "rxcui_note": "No RxNorm concept",
+    "data_quality": {
+      "completeness": 0.85,
+      "missing_fields": [
+        "unii",
+        "cas"
+      ],
+      "review_status": "validated",
+      "last_reviewed_at": "2026-04-03"
+    },
+    "aliases": [],
+    "external_ids": {
+      "unii": null,
+      "pubchem_cid": null,
+      "cas": null
+    },
+    "gsrs": {
+      "substance_name": null,
+      "substance_class": "structurallyDiverse",
+      "cfr_sections": [
+        "21 CFR 101.81"
+      ],
+      "dsld_count": null,
+      "dsld_info_raw": null,
+      "active_moiety": null,
+      "salt_parents": [],
+      "metabolic_relationships": [],
+      "metabolites": []
+    }
+  },
+  "epigallocatechin": {
+    "standard_name": "Epigallocatechin (EGC)",
+    "severity_level": "none",
+    "category": "antioxidants",
+    "description": "(-)-Epigallocatechin, minor catechin of green tea. C-3 epimer; <5% of total catechin fraction. Distinct from EGCG (epigallocatechin gallate).",
+    "dosage_importance": 1.0,
+    "forms": {
+      "epigallocatechin (unspecified)": {
+        "bio_score": 5,
+        "natural": true,
+        "score": 8,
+        "absorption": "low (<5%)",
+        "notes": "(-)-Epigallocatechin (EGC), MW 306.3, CAS 970-74-1. Minor catechin of Camellia sinensis, typically <5% of total catechins. Low oral bioavailability shared with catechin class (<5%, PMID 29069445). Weaker antioxidant than EGCG. No standalone clinical trials; bioactivity derives from green tea mixtures. Scored conservatively.",
+        "aliases": [
+          "epigallocatechin",
+          "(-)-epigallocatechin",
+          "l-epigallocatechin",
+          "epi-gallocatechin",
+          "egc"
+        ],
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": 0.04,
+          "range_low": 0.02,
+          "range_high": 0.05,
+          "quality": "poor",
+          "notes": "Catechin class bioavailability <5% (PMID 29069445). Extensive phase II conjugation."
+        }
+      }
+    },
+    "cui": "C2348459",
+    "rxcui": null,
+    "match_rules": {
+      "priority": 0,
+      "match_mode": "alias_and_fuzzy",
+      "exclusions": [
+        "epigallocatechin gallate",
+        "egcg"
+      ],
+      "parent_id": null,
+      "confidence": "high"
+    },
+    "category_enum": "antioxidants",
+    "cui_note": "UMLS C2348459 — Epigallocatechin (Organic Chemical). Distinct from EGCG C0059438.",
+    "rxcui_note": "No RxNorm concept",
+    "data_quality": {
+      "completeness": 0.95,
+      "missing_fields": [],
+      "review_status": "validated",
+      "last_reviewed_at": "2026-04-03"
+    },
+    "aliases": [],
+    "external_ids": {
+      "unii": null,
+      "pubchem_cid": "72277",
+      "cas": "970-74-1"
+    },
+    "gsrs": {
+      "substance_name": null,
+      "substance_class": "chemical",
+      "cfr_sections": [],
+      "dsld_count": null,
+      "dsld_info_raw": null,
+      "active_moiety": null,
+      "salt_parents": [],
+      "metabolic_relationships": [],
+      "metabolites": []
+    }
+  },
+  "l_aspartic_acid": {
+    "standard_name": "L-Aspartic Acid",
+    "severity_level": "none",
+    "category": "amino_acids",
+    "description": "L-Aspartic acid — standard proteinogenic amino acid. Distinct from D-aspartic acid (testosterone-related supplement). Used as mineral chelation carrier and in amino acid blends.",
+    "dosage_importance": 0.5,
+    "forms": {
+      "l-aspartic acid (unspecified)": {
+        "bio_score": 5,
+        "natural": true,
+        "score": 8,
+        "absorption": "good (~80% for free amino acids)",
+        "notes": "L-Aspartic acid (L-Asp), MW 133.1, CAS 56-84-8. Standard proteinogenic amino acid, non-essential. Found in protein hydrolysates and amino acid blends. Distinct from D-aspartic acid (DAA, used for testosterone support). As a standalone supplement, limited clinical evidence — primarily functional as mineral chelation carrier (magnesium aspartate, zinc aspartate). PMID 6131674 (1984) showed aspartate salts improved fatigue resistance in animal models.",
+        "aliases": [
+          "l-aspartate",
+          "l-aspartic acid",
+          "aspartic acid",
+          "l-asp",
+          "aminosuccinic acid"
+        ],
+        "dosage_importance": 0.5,
+        "absorption_structured": {
+          "value": 0.8,
+          "range_low": 0.7,
+          "range_high": 0.9,
+          "quality": "good",
+          "notes": "Standard amino acid; high oral absorption via intestinal amino acid transporters"
+        }
+      }
+    },
+    "cui": "C0004015",
+    "rxcui": null,
+    "match_rules": {
+      "priority": 0,
+      "match_mode": "alias_and_fuzzy",
+      "exclusions": [
+        "d-aspartic acid",
+        "daa",
+        "d-asp"
+      ],
+      "parent_id": null,
+      "confidence": "high"
+    },
+    "category_enum": "amino_acids",
+    "cui_note": "UMLS C0004015 — aspartic acid. Note: IQM d_aspartic_acid is the D-form used for testosterone; this is L-form.",
+    "rxcui_note": "No RxNorm concept",
+    "data_quality": {
+      "completeness": 0.95,
+      "missing_fields": [],
+      "review_status": "validated",
+      "last_reviewed_at": "2026-04-03"
+    },
+    "aliases": [],
+    "external_ids": {
+      "unii": null,
+      "pubchem_cid": "5960",
+      "cas": "56-84-8"
+    },
+    "gsrs": {
+      "substance_name": null,
+      "substance_class": "chemical",
+      "cfr_sections": [],
+      "dsld_count": null,
+      "dsld_info_raw": null,
+      "active_moiety": null,
+      "salt_parents": [],
+      "metabolic_relationships": [],
+      "metabolites": []
+    }
+  },
+  "yerba_mate": {
+    "standard_name": "Yerba Mate",
+    "severity_level": "none",
+    "category": "herbs",
+    "description": "Ilex paraguariensis leaf extract — South American caffeinated herb. Contains caffeine, theobromine, chlorogenic acids, and saponins. Used for energy, weight management, antioxidant support.",
+    "dosage_importance": 1.0,
+    "forms": {
+      "yerba mate (unspecified)": {
+        "bio_score": 7,
+        "natural": true,
+        "score": 10,
+        "absorption": "moderate (caffeine/theobromine well-absorbed; polyphenol F low)",
+        "notes": "Ilex paraguariensis leaf. Contains caffeine (1-2%), theobromine (0.3-0.5%), and chlorogenic acids. Systematic review (PMID 25732350, Gambero 2015) found evidence for anti-obesity effects via lipid metabolism modulation. RCT (PMID 25538068, Kim 2015, n=30) showed mate supplementation reduced body fat mass vs placebo. Caffeine component has high oral F (~99%); polyphenol component has low F (<5%). Traditional South American beverage.",
+        "aliases": [
+          "yerba mate",
+          "yerba mate extract",
+          "yerba mate leaves extract",
+          "ilex paraguariensis",
+          "ilex paraguariensis extract",
+          "mate extract",
+          "mate tea extract"
+        ],
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": 0.5,
+          "range_low": 0.3,
+          "range_high": 0.7,
+          "quality": "moderate",
+          "notes": "Composite: caffeine ~99% F, polyphenols <5% F. Weighted estimate ~50% for bioactive fraction."
+        }
+      }
+    },
+    "cui": "C1536546",
+    "rxcui": null,
+    "match_rules": {
+      "priority": 0,
+      "match_mode": "alias_and_fuzzy",
+      "exclusions": [],
+      "parent_id": null,
+      "confidence": "high"
+    },
+    "category_enum": "herbs",
+    "cui_note": "UMLS C1536546 — Yerba mate preparation (Organic Chemical, Pharmacologic Substance)",
+    "rxcui_note": "No RxNorm concept",
+    "data_quality": {
+      "completeness": 0.85,
+      "missing_fields": [
+        "unii"
+      ],
+      "review_status": "validated",
+      "last_reviewed_at": "2026-04-03"
+    },
+    "aliases": [],
+    "external_ids": {
+      "unii": null,
+      "pubchem_cid": null,
+      "cas": null
+    },
+    "gsrs": {
+      "substance_name": null,
+      "substance_class": "structurallyDiverse",
+      "cfr_sections": [],
+      "dsld_count": null,
+      "dsld_info_raw": null,
+      "active_moiety": null,
+      "salt_parents": [],
+      "metabolic_relationships": [],
+      "metabolites": []
+    }
+  },
+  "dill": {
+    "standard_name": "Dill",
+    "severity_level": "none",
+    "category": "herbs",
+    "description": "Anethum graveolens — aromatic herb. Contains carvone, limonene, and apiol. Traditional digestive and antispasmodic use. Used in supplements for digestive support and women's health.",
+    "dosage_importance": 1.0,
+    "forms": {
+      "dill (unspecified)": {
+        "bio_score": 5,
+        "natural": true,
+        "score": 8,
+        "absorption": "moderate (volatile terpenoids)",
+        "notes": "Anethum graveolens herb/seed. Active compounds: carvone (up to 60% in seed oil), limonene, apiol. Traditional carminative and digestive herb. Preliminary evidence for lipid-lowering (PMID 24847471, Sahib 2014, n=150) and antispasmodic effects. Limited high-quality human RCT data for most claims. Used in GNC products as aerial parts extract and flower/leaf/stem preparations.",
+        "aliases": [
+          "dill",
+          "dill extract",
+          "dill weed",
+          "dill weed extract",
+          "anethum graveolens",
+          "dill seed extract",
+          "dill flower, leaf, stem extract",
+          "dill aerial parts extract",
+          "dill herb extract"
+        ],
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": 0.5,
+          "range_low": 0.3,
+          "range_high": 0.7,
+          "quality": "moderate",
+          "notes": "Volatile terpenoids (carvone, limonene) have moderate-good oral absorption; polyphenol fraction has lower F."
+        }
+      }
+    },
+    "cui": "C2713414",
+    "rxcui": null,
+    "match_rules": {
+      "priority": 0,
+      "match_mode": "alias_and_fuzzy",
+      "exclusions": [],
+      "parent_id": null,
+      "confidence": "high"
+    },
+    "category_enum": "herbs",
+    "cui_note": "UMLS C2713414 — Dill Weed (Plant)",
+    "rxcui_note": "No RxNorm concept",
+    "data_quality": {
+      "completeness": 0.85,
+      "missing_fields": [
+        "unii",
+        "cas"
+      ],
+      "review_status": "validated",
+      "last_reviewed_at": "2026-04-03"
+    },
+    "aliases": [],
+    "external_ids": {
+      "unii": null,
+      "pubchem_cid": null,
+      "cas": null
+    },
+    "gsrs": {
+      "substance_name": null,
+      "substance_class": "structurallyDiverse",
+      "cfr_sections": [],
+      "dsld_count": null,
+      "dsld_info_raw": null,
+      "active_moiety": null,
+      "salt_parents": [],
+      "metabolic_relationships": [],
+      "metabolites": []
+    }
+  },
+  "salacia": {
+    "standard_name": "Salacia",
+    "severity_level": "none",
+    "category": "herbs",
+    "description": "Salacia reticulata/chinensis root/stem extract — Ayurvedic herb for blood sugar management. Contains salacinol, kotalanol, and other alpha-glucosidase inhibitors.",
+    "dosage_importance": 1.0,
+    "forms": {
+      "salacia (unspecified)": {
+        "bio_score": 7,
+        "natural": true,
+        "score": 10,
+        "absorption": "moderate",
+        "notes": "Salacia reticulata/chinensis extract. Active compounds: salacinol (CAS 231588-02-4) and kotalanol — potent alpha-glucosidase inhibitors. Meta-analysis (PMID 29656413, Huang 2018) of 5 RCTs found significant reduction in postprandial glucose. Indian Ayurvedic herb (Saptrangi). MetaVive (OmniActive) is the main branded form with GRAS status.",
+        "aliases": [
+          "salacia",
+          "salacia reticulata",
+          "salacia reticulata extract",
+          "salacia chinensis",
+          "salacia chinensis extract",
+          "salacia extract",
+          "saptrangi",
+          "metavive",
+          "salacinol"
+        ],
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": 0.4,
+          "range_low": 0.2,
+          "range_high": 0.6,
+          "quality": "moderate",
+          "notes": "Salacinol MW 334; moderate oral absorption estimated from structure-activity relationships"
+        }
+      }
+    },
+    "cui": "C1337406",
+    "rxcui": null,
+    "match_rules": {
+      "priority": 0,
+      "match_mode": "alias_and_fuzzy",
+      "exclusions": [],
+      "parent_id": null,
+      "confidence": "high"
+    },
+    "category_enum": "herbs",
+    "cui_note": "UMLS C1337406 — salacia reticulata extract (Pharmacologic Substance)",
+    "rxcui_note": "No RxNorm concept",
+    "data_quality": {
+      "completeness": 0.85,
+      "missing_fields": [
+        "unii"
+      ],
+      "review_status": "validated",
+      "last_reviewed_at": "2026-04-03"
+    },
+    "aliases": [],
+    "external_ids": {
+      "unii": null,
+      "pubchem_cid": null,
+      "cas": null
+    },
+    "gsrs": {
+      "substance_name": null,
+      "substance_class": "structurallyDiverse",
+      "cfr_sections": [],
+      "dsld_count": null,
+      "dsld_info_raw": null,
+      "active_moiety": null,
+      "salt_parents": [],
+      "metabolic_relationships": [],
+      "metabolites": []
+    }
+  },
+  "touchi_extract": {
+    "standard_name": "Touchi Extract",
+    "severity_level": "none",
+    "category": "other",
+    "description": "Fermented soybean (Glycine max) extract from Aspergillus oryzae fermentation. Contains alpha-glucosidase inhibitors. Japanese traditional food derivative for blood sugar management.",
+    "dosage_importance": 1.0,
+    "forms": {
+      "touchi extract (unspecified)": {
+        "bio_score": 5,
+        "natural": true,
+        "score": 8,
+        "absorption": "moderate",
+        "notes": "Touchi extract — water-soluble fraction of soybeans fermented with Aspergillus oryzae. Alpha-glucosidase inhibitor. RCT (PMID 15199382, Fujita 2004, n=60) showed 300 mg/meal significantly reduced postprandial glucose AUC vs placebo. Produced by Nippon Supplement Inc. (Japan). Has EFSA Novel Food evaluation. 300 mg/meal is typical dose.",
+        "aliases": [
+          "touchi extract",
+          "touchi",
+          "fermented soybean extract",
+          "aspergillus oryzae fermented soybean extract"
+        ],
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": 0.4,
+          "range_low": 0.2,
+          "range_high": 0.6,
+          "quality": "moderate",
+          "notes": "Protein-derived alpha-glucosidase inhibitors; moderate oral absorption"
+        }
+      }
+    },
+    "cui": null,
+    "rxcui": null,
+    "match_rules": {
+      "priority": 0,
+      "match_mode": "alias_and_fuzzy",
+      "exclusions": [],
+      "parent_id": null,
+      "confidence": "high"
+    },
+    "category_enum": "other",
+    "cui_note": "No UMLS concept for touchi extract specifically",
+    "rxcui_note": "No RxNorm concept",
+    "data_quality": {
+      "completeness": 0.8,
+      "missing_fields": [
+        "cui",
+        "unii"
+      ],
+      "review_status": "validated",
+      "last_reviewed_at": "2026-04-03"
+    },
+    "aliases": [],
+    "external_ids": {
+      "unii": null,
+      "pubchem_cid": null,
+      "cas": null
+    },
+    "gsrs": {
+      "substance_name": null,
+      "substance_class": "structurallyDiverse",
+      "cfr_sections": [],
+      "dsld_count": null,
+      "dsld_info_raw": null,
       "active_moiety": null,
       "salt_parents": [],
       "metabolic_relationships": [],

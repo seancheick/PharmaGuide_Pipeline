@@ -215,7 +215,7 @@ Each harmful additive found is penalized by risk level. Deduplicated by additive
 | Moderate   | -1.0                 |
 | Low        | -0.5                 |
 
-Source: `harmful_additives.json` (113 entries, 20 categories, all deep-audited). Substances posing immediate hazard are handled by the Safety Gate (Gate 1) instead.
+Source: `harmful_additives.json` (115 entries, 20 categories, all deep-audited). Substances posing immediate hazard are handled by the Safety Gate (Gate 1) instead.
 
 #### Allergen Presence (max -2)
 

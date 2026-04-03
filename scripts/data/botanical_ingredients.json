@@ -3,8 +3,8 @@
     "description": "Non-standardized whole herb powders and simple botanical extracts without guaranteed marker compounds. Used for basic ingredient mapping. For premium standardized extracts with marker compounds, see standardized_botanicals.json.",
     "purpose": "ingredient_mapping",
     "schema_version": "5.0.0",
-    "last_updated": "2026-03-17",
-    "total_entries": 428,
+    "last_updated": "2026-04-03",
+    "total_entries": 432,
     "quality_tier": "basic_raw_botanicals",
     "standardization": "none",
     "notes": "This database is separate from standardized_botanicals.json by design. Overlaps are intentional and allow the scoring system to reward standardized forms over raw powders."
@@ -6267,7 +6267,8 @@
       "CUI": "C0022651",
       "aliases": [
         "Kola Nut Fruit Extract",
-        "Cola nitida"
+        "Cola nitida",
+        "kola nute"
       ],
       "category": "seed",
       "notes": "Cola nitida (Malvaceae) seed. Contains caffeine (2-3.5%) and theobromine. Traditional West African stimulant. Used in supplements as natural caffeine source. Botanical seed powder.",
@@ -11387,6 +11388,83 @@
       "notes": "Smilax china L. (Smilacaceae) root — traditional Ayurvedic (madhusnuhi) and Chinese medicine (tu fuling) botanical. Contains steroidal saponins (sarsasaponin, smilasaponin), flavonoids, stilbenes, and polyphenols. Traditional uses: anti-inflammatory, diuretic, blood purification, rheumatoid arthritis support, and skin conditions (psoriasis, eczema). Distinct from Smilax ornata (sarsaparilla) and from Smilax regelii. Clinical evidence sparse — primarily in vitro and animal studies. High doses may cause GI irritation (saponin content). No FDA safety alerts.",
       "last_updated": "2026-03-17",
       "external_ids": {}
+    },
+    {
+      "id": "zucchini",
+      "standard_name": "Zucchini",
+      "latin_name": "Cucurbita pepo",
+      "CUI": null,
+      "aliases": [
+        "zucchini powder",
+        "zucchini",
+        "courgette powder",
+        "cucurbita pepo"
+      ],
+      "category": "fruit",
+      "notes": "Cucurbita pepo (Cucurbitaceae) fruit. Nutrient-rich vegetable powder used in greens blends. No therapeutic scoring rationale.",
+      "last_updated": "2026-04-03",
+      "data_quality": {
+        "completeness": 0.7,
+        "review_status": "validated"
+      }
+    },
+    {
+      "id": "garbanzo_bean",
+      "standard_name": "Garbanzo Bean",
+      "latin_name": "Cicer arietinum",
+      "CUI": null,
+      "aliases": [
+        "garbanzo bean powder",
+        "garbanzo bean",
+        "chickpea powder",
+        "chickpea",
+        "cicer arietinum"
+      ],
+      "category": "seed",
+      "notes": "Cicer arietinum (Fabaceae) seed powder. Plant protein source in superfood blends.",
+      "last_updated": "2026-04-03",
+      "data_quality": {
+        "completeness": 0.7,
+        "review_status": "validated"
+      }
+    },
+    {
+      "id": "black_bean",
+      "standard_name": "Black Bean",
+      "latin_name": "Phaseolus vulgaris",
+      "CUI": null,
+      "aliases": [
+        "black bean powder",
+        "black bean, powder",
+        "black bean",
+        "phaseolus vulgaris"
+      ],
+      "category": "seed",
+      "notes": "Phaseolus vulgaris (Fabaceae) black variety. Plant protein/fiber source in blends.",
+      "last_updated": "2026-04-03",
+      "data_quality": {
+        "completeness": 0.7,
+        "review_status": "validated"
+      }
+    },
+    {
+      "id": "russian_tarragon",
+      "standard_name": "Russian Tarragon",
+      "latin_name": "Artemisia dracunculus",
+      "CUI": null,
+      "aliases": [
+        "russian tarragon",
+        "artemisia dracunculus",
+        "tarragon extract",
+        "tarragon"
+      ],
+      "category": "herb",
+      "notes": "Artemisia dracunculus (Asteraceae) herb. Some evidence for glucose management (PMID 22034519). Used in GNC sports nutrition products.",
+      "last_updated": "2026-04-03",
+      "data_quality": {
+        "completeness": 0.7,
+        "review_status": "validated"
+      }
     }
   ]
 }

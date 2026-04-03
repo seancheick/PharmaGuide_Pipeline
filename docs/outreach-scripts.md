@@ -24,10 +24,10 @@ SuppCo raised over $4M to build... a supplement comparison tool. They rate produ
 **What PharmaGuide actually does — by the numbers:**
 
 - **541 ingredients scored by specific chemical form** — not just "Vitamin D" but Cholecalciferol vs. Ergocalciferol vs. Calcifediol, each with different bioavailability scores
-- **137 banned & recalled substances detected** — including analog matching (we catch DMHA whether it's listed as 2-Amino-5-Methylheptane, Octodrine, or any of its 6 aliases)
-- **107 harmful additives flagged** with severity levels (critical/high/moderate/low), regulatory status across US, EU, and WHO jurisdictions, and mechanism of harm
+- **143 banned & recalled substances detected** — including analog matching (we catch DMHA whether it's listed as 2-Amino-5-Methylheptane, Octodrine, or any of its 6 aliases)
+- **115 harmful additives flagged** with severity levels (critical/high/moderate/low), regulatory status across US, EU, and WHO jurisdictions, and mechanism of harm
 - **28 clinically-verified interaction rules** covering drug classes and health conditions — not AI-generated guesses, deterministic rules with literature backing
-- **177 ingredients linked to peer-reviewed clinical studies** with PubMed IDs, evidence grades (A through R), and clinical dosage ranges
+- **197 ingredients linked to peer-reviewed clinical studies** with PubMed IDs, evidence grades, and clinical dosage ranges
 - **14 proprietary blend categories detected** with 3-level disclosure scoring (full/partial/none) — we're the only system that quantifies how much a brand is hiding
 - **45 certification verification rules** — we detect USP, NSF Sport, Informed Choice, IFOS, ConsumerLab, cGMP, and 10+ other third-party testing claims
 
@@ -58,7 +58,7 @@ Quick ask. You know how you work with a bunch of clinicians? I've been building 
 
 Here's the 30-second version:
 
-**PharmaGuide** (pharmaguide.io) is a supplement scoring engine. Not a dispensary like Fullscript. Not a comparison site. It's a system that takes any supplement product and breaks it down to the molecular level — what form of each ingredient, how bioavailable it actually is, whether it contains any of 137 banned substances, 107 harmful additives, and whether anything interacts with the patient's medications or conditions.
+**PharmaGuide** (pharmaguide.io) is a supplement scoring engine. Not a dispensary like Fullscript. Not a comparison site. It's a system that takes any supplement product and breaks it down to the molecular level — what form of each ingredient, how bioavailable it actually is, whether it contains any of 143 banned substances, 115 harmful additives, and whether anything interacts with the patient's medications or conditions.
 
 The thing that makes it different from everything else out there:
 
@@ -105,10 +105,10 @@ Here's why I built it: every time I've asked about supplements — whether it's 
 So I built a system that does it automatically. A few things it does that I think you'd find interesting:
 
 - **It distinguishes between forms** — not just "Vitamin D" but D3 vs D2 vs calcifediol, each scored differently based on actual absorption data
-- **It flags harmful stuff** — 137 banned substances, 107 harmful additives, with real regulatory citations (US, EU, WHO)
+- **It flags harmful stuff** — 143 banned substances, 115 harmful additives, with real regulatory citations (US, EU, WHO)
 - **It checks drug interactions** — 28 rules covering specific conditions and drug classes
 - **It translates the label** — "Pyridoxine HCl" → "Vitamin B6", "Croscarmellose Sodium" → "Disintegrant (helps pill dissolve)"
-- **Every claim links to PubMed** — 177 ingredients backed by peer-reviewed studies with evidence grades
+- **Every claim links to PubMed** — 197 ingredients backed by peer-reviewed studies with evidence grades
 
 I'm not trying to replace clinical advice. I'm trying to make it so that when a patient asks "is this supplement okay?" — there's actually a tool that gives you a real, evidence-based answer in seconds instead of a shrug.
 
@@ -127,7 +127,7 @@ For reaching out to clinicians on social media:
 
 Hey [Name] — I've been following your content on [supplements/integrative medicine/nutrition].
 
-I built something I think you'd find interesting: a supplement scoring engine that checks bioavailability by chemical form, detects proprietary blend deception, flags 137 banned substances, and checks drug interactions — all backed by peer-reviewed studies.
+I built something I think you'd find interesting: a supplement scoring engine that checks bioavailability by chemical form, detects proprietary blend deception, flags 143 banned substances, and checks drug interactions — all backed by peer-reviewed studies.
 
 Not a dispensary. Not an affiliate play. Just transparency.
 

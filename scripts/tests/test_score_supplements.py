@@ -1472,6 +1472,112 @@ class TestB5DisclosureTierEdgeCases:
         assert evidence["impact_source"] == "count_share"
         assert evidence["blend_total_mg"] is None
 
+
+class TestB5EligibilityGating:
+    @pytest.fixture
+    def scorer(self):
+        return SupplementScorer()
+
+    def test_detector_only_statement_placeholder_is_not_scoreable(self, scorer):
+        p = make_base_product()
+        p["proprietary_blends"] = [
+            {
+                **_make_blend(
+                    "General Proprietary Blends",
+                    "none",
+                    total_weight=None,
+                    unit="",
+                    source_field="statements[0]",
+                    ingredients_with_amounts=[],
+                    ingredients_without_amounts=[],
+                    nested_count=0,
+                ),
+                "sources": ["detector"],
+                "detector_group": "General Proprietary Blends",
+                "evidence": {
+                    "source_field": "statements[0]",
+                    "matched_text": "Metabolism support",
+                    "ingredients_with_amounts": [],
+                    "ingredients_without_amounts": [],
+                },
+            }
+        ]
+
+        assert scorer._compute_proprietary_blend_penalty(p, []) == pytest.approx(0.0)
+
+    def test_detector_only_inactive_placeholder_is_not_scoreable(self, scorer):
+        p = make_base_product()
+        p["proprietary_blends"] = [
+            {
+                **_make_blend(
+                    "Delivery Technology Blends",
+                    "none",
+                    total_weight=None,
+                    unit="",
+                    source_field="inactiveIngredients[0]",
+                    ingredients_with_amounts=[],
+                    ingredients_without_amounts=[],
+                    nested_count=0,
+                ),
+                "sources": ["detector"],
+                "detector_group": "Delivery Technology Blends",
+                "evidence": {
+                    "source_field": "inactiveIngredients[0]",
+                    "matched_text": "Clean Tablet Technology Blend",
+                    "ingredients_with_amounts": [],
+                    "ingredients_without_amounts": [],
+                },
+            }
+        ]
+
+        assert scorer._compute_proprietary_blend_penalty(p, []) == pytest.approx(0.0)
+
+    def test_active_ingredient_blend_container_with_zero_children_still_scores(self, scorer):
+        p = make_base_product()
+        p["proprietary_blends"] = [
+            _make_blend(
+                "Energy Complex",
+                "none",
+                total_weight=None,
+                unit="",
+                source_field="activeIngredients[0]",
+                ingredients_with_amounts=[],
+                ingredients_without_amounts=[],
+                nested_count=0,
+            )
+        ]
+
+        assert scorer._compute_proprietary_blend_penalty(p, []) == pytest.approx(2.0)
+
+    def test_detector_only_statement_with_total_amount_remains_scoreable(self, scorer):
+        p = make_base_product()
+        p["proprietary_blends"] = [
+            {
+                **_make_blend(
+                    "Energy Blend 500 mg",
+                    "none",
+                    total_weight=500,
+                    unit="mg",
+                    source_field="statements[0]",
+                    ingredients_with_amounts=[],
+                    ingredients_without_amounts=[],
+                    nested_count=0,
+                    blend_total_mg=500.0,
+                ),
+                "sources": ["detector"],
+                "detector_group": "Stimulant Blends",
+                "evidence": {
+                    "source_field": "statements[0]",
+                    "matched_text": "Energy Blend 500 mg",
+                    "ingredients_with_amounts": [],
+                    "ingredients_without_amounts": [],
+                },
+            }
+        ]
+        p["proprietary_data"]["total_active_mg"] = 1000
+
+        assert scorer._compute_proprietary_blend_penalty(p, []) == pytest.approx(4.5)
+
     # ── blend_total_mg field preferred over total_weight ──
     def test_blend_total_mg_preferred_over_total_weight(self, scorer):
         """When both blend_total_mg and total_weight exist, blend_total_mg wins."""

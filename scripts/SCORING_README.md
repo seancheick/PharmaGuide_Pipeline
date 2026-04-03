@@ -141,7 +141,7 @@ penalties = B0_moderate + B1 + B2 + B5 + B6 + B7
   - Source: `banned_recalled_ingredients.json` (143 entries, schema 5.0.0).
 - B1: harmful additives penalty (capped at 8).
   - Risk points: `high` = 2.0, `moderate` = 1.0, `low` = 0.5 (no critical tier — critical hazards use B0 gate).
-  - Source: `harmful_additives.json` (113 entries, schema 5.1.0, 20 categories, 113/113 deep-audited).
+  - Source: `harmful_additives.json` (115 entries, schema 5.1.0, 20 categories, all deep-audited).
 - B2: allergen penalty (capped at 2).
 - B3: claim compliance bonus (max 4 inside shared bonus pool).
 - B4: quality certifications (computed internally, pooled under bonus cap).

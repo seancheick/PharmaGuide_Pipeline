@@ -175,7 +175,7 @@
 > - Analog detection (DMHA and all its chemical aliases)
 
 ### Gate 2: HARMFUL ADDITIVES ⚠️
-> **110 harmful additives** — each audit-verified March 2026
+> **115 harmful additives** — each audit-verified March 2026
 > - Severity levels: Critical / High / Moderate / Low
 > - Real regulatory status per country (US, EU, WHO)
 > - Mechanism of harm + scientific references with DOI links
@@ -332,7 +332,7 @@
 **Title:** "What YOU See"
 
 **Copy:**
-> All of that — 47,000 lines of code, 33 reference databases, 500+ ingredient forms, 137 banned substance checks, 110 harmful additive audits — distilled into one clean, simple screen:
+> All of that — 47,000 lines of code, 33 reference databases, 500+ ingredient forms, 143 banned substance checks, 115 harmful additive audits — distilled into one clean, simple screen:
 
 **Visual:** A beautiful phone mockup showing:
 1. **Overall Score** (e.g., 82/100) with color badge
@@ -421,7 +421,7 @@ For a 10-slide carousel, use these panels:
 **LinkedIn post:**
 > Most supplement apps scan a barcode and show you the label you already have.
 >
-> We reverse-engineer every ingredient — identifying the exact chemical form, scoring bioavailability, detecting proprietary blend deception, cross-referencing 137 banned substances and 110 harmful additives, checking drug interactions, and backing every claim with peer-reviewed clinical studies.
+> We reverse-engineer every ingredient — identifying the exact chemical form, scoring bioavailability, detecting proprietary blend deception, cross-referencing 143 banned substances and 115 harmful additives, checking drug interactions, and backing every claim with peer-reviewed clinical studies.
 >
 > 130,000+ products. 33 reference databases. 3,571 clinical study references.
 >

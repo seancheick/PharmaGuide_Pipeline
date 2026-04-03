@@ -131,6 +131,18 @@ class ProprietaryBlendDetector:
         r'\d+\s*(?:mg|g|mcg)\s*(?:blend|complex|matrix|formula)',
     ]
 
+    EXPLICIT_OPACITY_MARKERS = (
+        "proprietary blend",
+        "proprietary complex",
+        "proprietary formula",
+        "proprietary matrix",
+        "proprietary",
+        "exclusive formula",
+        "patent-pending complex",
+        "signature blend",
+        "registered formula",
+    )
+
     # Patterns to detect total amount declaration
     TOTAL_AMOUNT_PATTERN = re.compile(
         r'(\d+(?:[.,]\d+)?)\s*(mg|g|mcg|μg|iu|billion\s*cfu|cfu)',
@@ -316,6 +328,14 @@ class ProprietaryBlendDetector:
             warnings=warnings
         )
 
+    def _source_scope_allows_match(self, source_field: str, text_to_search: str) -> bool:
+        source_prefix = (source_field or "").split("[", 1)[0].strip().lower()
+        if source_prefix not in {"statements", "inactiveingredients"}:
+            return True
+
+        haystack = (text_to_search or "").strip().lower()
+        return any(marker in haystack for marker in self.EXPLICIT_OPACITY_MARKERS)
+
     def _analyze_ingredient_for_blend(
         self,
         ingredient: Any,
@@ -346,6 +366,9 @@ class ProprietaryBlendDetector:
             match = pattern_info["pattern"].search(text_to_search)
             if match:
                 matched_text = match.group(0)
+
+                if not self._source_scope_allows_match(source_field, text_to_search):
+                    continue
 
                 # Skip if already seen
                 if matched_text.lower() in seen_blends:

@@ -117,6 +117,53 @@ class TestBlendMergePipeline:
         # Key assertion: cleaning_raw_count should be 0
         assert result['blend_sources']['cleaning_raw_count'] == 0
 
+    def test_statement_only_category_marketing_match_is_ignored(self, enricher):
+        product = {
+            'id': 'test_statement_marketing_only',
+            'product_name': 'Statement Marketing Only',
+            'activeIngredients': [],
+            'inactiveIngredients': [],
+            'statements': [
+                {'notes': '- 6 superfood blends\n- metabolism support'}
+            ],
+        }
+
+        result = enricher._collect_proprietary_data(product)
+
+        assert result['has_proprietary_blends'] is False
+        assert result['blend_count'] == 0
+
+    def test_statement_with_explicit_proprietary_opacity_still_detected(self, enricher):
+        product = {
+            'id': 'test_statement_explicit_proprietary',
+            'product_name': 'Statement Explicit Proprietary',
+            'activeIngredients': [],
+            'inactiveIngredients': [],
+            'statements': [
+                {'notes': 'n-zimes are a proprietary blend of digestive enzymes with proven bioactivity.'}
+            ],
+        }
+
+        result = enricher._collect_proprietary_data(product)
+
+        assert result['has_proprietary_blends'] is True
+        assert result['blend_count'] >= 1
+
+    def test_inactive_delivery_marketing_match_is_ignored(self, enricher):
+        product = {
+            'id': 'test_inactive_delivery_marketing_only',
+            'product_name': 'Inactive Delivery Marketing Only',
+            'activeIngredients': [],
+            'inactiveIngredients': [
+                {'name': 'Clean Tablet Technology Blend'}
+            ],
+        }
+
+        result = enricher._collect_proprietary_data(product)
+
+        assert result['has_proprietary_blends'] is False
+        assert result['blend_count'] == 0
+
     def test_both_agree_single_record(self, enricher):
         """
         SCENARIO: both_agree

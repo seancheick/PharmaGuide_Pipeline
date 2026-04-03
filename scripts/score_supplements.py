@@ -1410,6 +1410,48 @@ class SupplementScorer:
         )
         return (name_key, tuple(child_names), blend_total_key, source_path)
 
+    def _looks_like_blend_container_name(self, value: Any) -> bool:
+        text = norm_text(value)
+        if not text:
+            return False
+        return any(token in text for token in ("blend", "complex", "matrix", "formula", "proprietary"))
+
+    def _is_b5_scoreable_blend(self, blend: Dict[str, Any]) -> bool:
+        source_path = norm_text(blend.get("source_path") or blend.get("source_field") or "")
+        source_prefix = source_path.split("[", 1)[0]
+        sources = {norm_text(item) for item in safe_list(blend.get("sources")) if norm_text(item)}
+        detector_only = bool(sources) and sources == {"detector"}
+
+        children_with_amounts, children_without_amounts = self._blend_child_payload(blend)
+        has_child_evidence = bool(children_with_amounts or children_without_amounts)
+        hidden_count = int(as_float(blend.get("hidden_count"), 0) or 0)
+        nested_count = int(as_float(blend.get("nested_count"), 0) or 0)
+
+        blend_total_raw = (
+            blend.get("blend_total_mg")
+            if blend.get("blend_total_mg") is not None
+            else blend.get("total_weight")
+        )
+        if blend_total_raw is not None and (not isinstance(blend_total_raw, (int, float)) or blend_total_raw <= 0):
+            blend_total_raw = None
+        blend_total_unit = "mg" if blend.get("blend_total_mg") is not None else blend.get("unit")
+        blend_total_mg, _ = self._blend_quantity_to_mg(blend_total_raw, blend_total_unit)
+        has_total_amount = blend_total_mg is not None and blend_total_mg > 0
+
+        if source_prefix == "activeingredients":
+            return (
+                self._looks_like_blend_container_name(blend.get("name"))
+                or has_total_amount
+                or has_child_evidence
+                or hidden_count > 0
+                or nested_count > 0
+            )
+
+        if detector_only and source_prefix in {"statements", "inactiveingredients"}:
+            return has_total_amount or has_child_evidence
+
+        return True
+
     def _compute_proprietary_blend_penalty(self, product: Dict[str, Any], flags: List[str], b_cfg: Dict[str, Any] = None) -> float:
         if b_cfg is None:
             b_cfg = self.config.get("section_B_safety_purity", {})
@@ -1428,11 +1470,16 @@ class SupplementScorer:
         dedup_keys: set[Tuple[str, Tuple[str, ...], str, str]] = set()
         deduped: List[Dict[str, Any]] = []
         for blend in blends:
+            if not self._is_b5_scoreable_blend(blend):
+                continue
             key = self._blend_dedupe_fingerprint(blend)
             if key in dedup_keys:
                 continue
             dedup_keys.add(key)
             deduped.append(blend)
+
+        if not deduped:
+            return 0.0
 
         total_active_mg = as_float(proprietary.get("total_active_mg"), None)
         if total_active_mg is None:

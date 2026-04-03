@@ -1,0 +1,9 @@
+==========================================
+BATCH PIPELINE RUN - Fri Apr  3 02:18:00 EDT 2026
+==========================================
+Dataset root: /Users/seancheick/Documents/DataSetDsld/staging/brands
+Scripts directory: /Users/seancheick/.claude-worktrees/dsld_clean/peaceful-ritchie/scripts
+Stages: clean,enrich,score
+Target datasets: gnc
+==========================================
+

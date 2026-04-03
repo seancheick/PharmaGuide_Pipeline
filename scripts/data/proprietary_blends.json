@@ -3,8 +3,8 @@
     "description": "Proprietary blend recognition database for supplement label mapping",
     "purpose": "blend_recognition_mapping",
     "schema_version": "5.0.0",
-    "last_updated": "2026-03-04",
-    "total_entries": 14,
+    "last_updated": "2026-04-03",
+    "total_entries": 19,
     "schema_notes": "This file is for MAPPING only. It identifies and categorizes proprietary blend names found on supplement labels. Penalty scoring is handled entirely by the scorer (B5 engine) based on disclosure_level (full/partial/none) — NOT by this file. Each entry has: id, standard_name, blend_terms (label text patterns), risk_factors (safety concerns for user-facing notes), notes (user-facing explanation shown in product detail view)."
   },
   "proprietary_blend_concerns": [
@@ -408,6 +408,113 @@
         "Amino acid profiles unverifiable without individual amounts"
       ],
       "notes": "Protein blends may use amino acid spiking (adding cheap free-form amino acids like glycine or taurine) to inflate nitrogen content and apparent protein percentage. Without individual protein source amounts, consumers cannot verify protein quality or detect spiking. Third-party tested products with full disclosure are preferred."
+    },
+    {
+      "id": "BLEND_VELOSITOL",
+      "standard_name": "Velositol (Amylopectin-Chromium Complex)",
+      "blend_terms": [
+        "velositol",
+        "myovera"
+      ],
+      "risk_factors": [
+        "Amylopectin + chromium picolinate/histidinate complex",
+        "Chromium component is separately scorable via IQM",
+        "Proprietary ratio — individual amounts undisclosed"
+      ],
+      "severity_level": "low",
+      "category": "sports_performance",
+      "manufacturer": "Nutrition21 / Everwell Health",
+      "known_components": [
+        "amylopectin (waxy maize)",
+        "chromium picolinate",
+        "chromium histidinate"
+      ],
+      "disclosure_level": "partial",
+      "notes": "Patented complex. 2g dose delivers ~500mcg chromium. Multiple patents (US 6,809,115 etc). GRAS status."
+    },
+    {
+      "id": "BLEND_MYOTOR",
+      "standard_name": "MyoTOR (Sphaeranthus-Mango Blend)",
+      "blend_terms": [
+        "myotor",
+        "ripfactor"
+      ],
+      "risk_factors": [
+        "Dual botanical extract — individual amounts undisclosed",
+        "Sphaeranthus indicus + Mangifera indica bark extract",
+        "Mechanism: mTOR pathway activation"
+      ],
+      "severity_level": "low",
+      "category": "sports_performance",
+      "manufacturer": "PLT Health Solutions / Laila Nutraceuticals",
+      "known_components": [
+        "sphaeranthus indicus flower head extract",
+        "mangifera indica stem bark extract"
+      ],
+      "disclosure_level": "partial",
+      "notes": "Standardized to 7-hydroxyfrullanolide + mangiferin. Also marketed as RipFACTOR."
+    },
+    {
+      "id": "BLEND_FITNOX",
+      "standard_name": "FitNox (Moringa-Pomegranate-Black Ginger Blend)",
+      "blend_terms": [
+        "fitnox",
+        "fit-nox"
+      ],
+      "risk_factors": [
+        "Triple botanical extract — individual amounts undisclosed",
+        "Moringa oleifera + Punica granatum + Kaempferia parviflora"
+      ],
+      "severity_level": "low",
+      "category": "sports_performance",
+      "manufacturer": "Aurea Biolabs / Glanbia Nutritionals",
+      "known_components": [
+        "moringa oleifera leaf extract",
+        "pomegranate extract",
+        "kaempferia parviflora extract"
+      ],
+      "disclosure_level": "partial",
+      "notes": "250 mg dose. Nitric oxide production support. Patented PNS technology."
+    },
+    {
+      "id": "BLEND_TESNOR",
+      "standard_name": "Tesnor (Pomegranate-Cocoa Blend)",
+      "blend_terms": [
+        "tesnor"
+      ],
+      "risk_factors": [
+        "Dual botanical extract — individual amounts undisclosed",
+        "Pomegranate rind + cocoa bean (4:1 ratio)"
+      ],
+      "severity_level": "low",
+      "category": "testosterone_support",
+      "manufacturer": "Laila Nutraceuticals / Gencor",
+      "known_components": [
+        "punica granatum fruit rind extract",
+        "theobroma cacao seed extract"
+      ],
+      "disclosure_level": "partial",
+      "notes": "Standardized to ≥3.5% punicalagins + ≥0.5% theobromine. Testosterone support claim."
+    },
+    {
+      "id": "BLEND_METABOLAID",
+      "standard_name": "Metabolaid (Lemon Verbena-Hibiscus Blend)",
+      "blend_terms": [
+        "metabolaid"
+      ],
+      "risk_factors": [
+        "Dual botanical extract — individual amounts undisclosed",
+        "Lemon verbena + hibiscus (65:35 ratio)"
+      ],
+      "severity_level": "low",
+      "category": "weight_management",
+      "manufacturer": "Monteloeder SL (Spain)",
+      "known_components": [
+        "lippia citriodora leaf extract",
+        "hibiscus sabdariffa flower extract"
+      ],
+      "disclosure_level": "partial",
+      "notes": "500 mg dose. Standardized to ≥25% verbascosides + ≥10% anthocyanins. AMPK activation."
     }
   ]
 }

@@ -282,7 +282,7 @@ Most apps skip this section entirely. **We audit every single line.**
 
 ## What We Track
 
-**107 harmful additives**, each verified in our March 2026 audit:
+**115 harmful additives**, each verified in our April 2026 audit:
 
 - **25 HIGH severity** — artificial dyes, trans fats, acrylamide, BHA/BHT
 - **54 MODERATE severity** — artificial sweeteners, certain preservatives
@@ -562,9 +562,9 @@ Every database in our system is versioned (currently **Schema v5.0**) and active
 | Database | Entries | Last Updated | Update Frequency |
 |---|---|---|---|
 | Ingredient Quality Map | 541 ingredients, 32,157 variations | March 2026 | Continuous |
-| Banned & Recalled | 137 entries | March 2026 | As FDA acts |
-| Harmful Additives | 107 entries (audit-verified) | March 2026 | Quarterly audit |
-| Clinical Studies | 177 ingredients backed | March 2026 | Monthly |
+| Banned & Recalled | 143 entries | April 2026 | As FDA acts |
+| Harmful Additives | 115 entries (audit-verified) | April 2026 | Quarterly audit |
+| Clinical Studies | 197 ingredients backed | April 2026 | Monthly |
 | Certifications | 45 rules (USP, NSF, GMP, etc.) | February 2026 | As programs update |
 | Color Indicators | 260 terms (140 natural, 120 artificial) | February 2026 | As needed |
 | Interaction Rules | 28 deterministic rules | Active | As literature publishes |
@@ -582,9 +582,9 @@ Every database in our system is versioned (currently **Schema v5.0**) and active
 ```
 33 reference databases
 541 scored ingredients across multiple bioavailability forms
-137 banned substances with analog + punctuation matching
-107 harmful additives (hand-audited, 11 critical errors corrected)
-177 clinically-backed ingredients with PubMed references
+143 banned substances with analog + punctuation matching
+115 harmful additives (hand-audited, deep-audited)
+197 clinically-backed ingredients with PubMed references
 45 certification detection rules
 28 drug/condition interaction rules
 14 proprietary blend categories with 3-level disclosure scoring
