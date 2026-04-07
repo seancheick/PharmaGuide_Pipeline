@@ -1,11 +1,20 @@
 #!/usr/bin/env python3
 """
-PharmaGuide Final DB Builder v1.0.0
+PharmaGuide Final DB Builder v1.1.0
 ====================================
 Reads enriched + scored pipeline outputs and produces:
   1. pharmaguide_core.db  — SQLite database for the phone
   2. detail_blobs/        — per-product JSON files for Supabase
   3. export_manifest.json — version/checksum metadata
+
+v1.1.0 Changelog (2026-04-07):
+  - Added ingredient_fingerprint for stack interaction checking
+  - Added social sharing metadata (share_title, share_description, share_highlights)
+  - Added search/filter optimization (primary_category, contains_* flags, key_ingredient_tags)
+  - Added goal matching preview (goal_matches, goal_match_confidence)
+  - Added dosing summary (dosing_summary, servings_per_container)
+  - Added allergen summary string
+  - Schema now has 88 columns (up from 65)
 
 Usage:
     python build_final_db.py --enriched-dir output_Brand_enriched/enriched \
@@ -19,7 +28,7 @@ Usage:
                                             output_Olly_scored/scored \
                              --output-dir final_db_output
 
-Follows: FINAL_EXPORT_SCHEMA_V1.md
+Follows: FINAL_EXPORT_SCHEMA_V1.md (v1.1.0)
 """
 
 import argparse
@@ -29,7 +38,6 @@ import logging
 import math as _math
 import os
 import sqlite3
-import sys
 import tempfile
 from datetime import datetime, timezone
 from pathlib import Path
@@ -39,7 +47,7 @@ from urllib.parse import urlparse
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 logger = logging.getLogger(__name__)
 
-EXPORT_SCHEMA_VERSION = 1
+EXPORT_SCHEMA_VERSION = "1.1.0"  # Updated for v1.1.0 enhancements
 PIPELINE_VERSION = "3.1.0"
 TOP_WARNINGS_MAX = 5
 MIN_APP_VERSION = "1.0.0"
@@ -509,6 +517,53 @@ CREATE TABLE IF NOT EXISTS products_core (
     top_warnings                  TEXT,
     flags                         TEXT,
 
+    -- ====================================================================
+    -- EXPORT SCHEMA V1.1.0 ADDITIONS (2026-04-07)
+    -- Enhancement 1: Stack Interaction Checking
+    -- ====================================================================
+    ingredient_fingerprint        TEXT,  -- JSON: compact ingredient dose map
+    key_nutrients_summary         TEXT,  -- JSON: top 5-10 nutrients with doses
+    contains_stimulants           INTEGER DEFAULT 0,
+    contains_sedatives            INTEGER DEFAULT 0,
+    contains_blood_thinners       INTEGER DEFAULT 0,
+
+    -- ====================================================================
+    -- Enhancement 2: Social Sharing Metadata
+    -- ====================================================================
+    share_title                   TEXT,  -- Pre-formatted share title
+    share_description             TEXT,  -- Pre-formatted 2-3 sentence summary
+    share_highlights              TEXT,  -- JSON array: 3-4 key positive attributes
+    share_og_image_url            TEXT,  -- Open Graph optimized image URL
+
+    -- ====================================================================
+    -- Enhancement 3: Search & Filter Optimization
+    -- ====================================================================
+    primary_category              TEXT,  -- omega-3, probiotic, multivitamin, etc.
+    secondary_categories          TEXT,  -- JSON array: anti-inflammatory, heart-health
+    contains_omega3               INTEGER DEFAULT 0,
+    contains_probiotics           INTEGER DEFAULT 0,
+    contains_collagen             INTEGER DEFAULT 0,
+    contains_adaptogens           INTEGER DEFAULT 0,
+    contains_nootropics           INTEGER DEFAULT 0,
+    key_ingredient_tags           TEXT,  -- JSON array: top 5 priority ingredients
+
+    -- ====================================================================
+    -- Enhancement 4: Goal Matching Preview
+    -- ====================================================================
+    goal_matches                  TEXT,  -- JSON array: matched goal IDs
+    goal_match_confidence         REAL,  -- 0.0-1.0: average cluster weight
+
+    -- ====================================================================
+    -- Enhancement 5: Dosing Guidance
+    -- ====================================================================
+    dosing_summary                TEXT,  -- "Take 2 capsules daily with food"
+    servings_per_container        INTEGER,  -- 60
+
+    -- ====================================================================
+    -- Enhancement 6: Allergen Summary
+    -- ====================================================================
+    allergen_summary              TEXT,  -- "Contains: Soy, Tree Nuts"
+
     scoring_version               TEXT,
     output_schema_version         TEXT,
     enrichment_version            TEXT,
@@ -538,6 +593,13 @@ CREATE INDEX IF NOT EXISTS idx_core_verdict ON products_core(verdict);
 CREATE INDEX IF NOT EXISTS idx_core_score ON products_core(score_quality_80);
 CREATE INDEX IF NOT EXISTS idx_core_status ON products_core(product_status);
 CREATE INDEX IF NOT EXISTS idx_core_type ON products_core(supplement_type);
+-- New indexes for v1.1.0 enhancements
+CREATE INDEX IF NOT EXISTS idx_core_primary_category ON products_core(primary_category);
+CREATE INDEX IF NOT EXISTS idx_core_contains_omega3 ON products_core(contains_omega3) WHERE contains_omega3 = 1;
+CREATE INDEX IF NOT EXISTS idx_core_contains_probiotics ON products_core(contains_probiotics) WHERE contains_probiotics = 1;
+CREATE INDEX IF NOT EXISTS idx_core_contains_collagen ON products_core(contains_collagen) WHERE contains_collagen = 1;
+CREATE INDEX IF NOT EXISTS idx_core_contains_adaptogens ON products_core(contains_adaptogens) WHERE contains_adaptogens = 1;
+CREATE INDEX IF NOT EXISTS idx_core_contains_nootropics ON products_core(contains_nootropics) WHERE contains_nootropics = 1;
 """
 
 FTS_SQL = """
@@ -1068,6 +1130,18 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
             "high_risk": "High-risk ingredient",
             "watchlist": "Watchlist ingredient",
         }.get(status, "Safety issue")
+        # Build references list from references_structured (FDA URLs, etc.)
+        refs = sub.get("references_structured")
+        source_urls = []
+        if isinstance(refs, list):
+            for ref in refs:
+                if isinstance(ref, dict) and ref.get("url"):
+                    source_urls.append({
+                        "url": ref["url"],
+                        "title": ref.get("title", ""),
+                        "type": ref.get("type", ""),
+                        "evidence_grade": ref.get("evidence_grade", ""),
+                    })
         warnings.append({
             "type": warning_type,
             "severity": severity,
@@ -1078,6 +1152,7 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
             "regulatory_date_label": safe_str(sub.get("regulatory_date_label")),
             "clinical_risk": safe_str(sub.get("clinical_risk_enum")),
             "identifiers": extract_identifiers(sub),
+            "source_urls": source_urls,
         })
 
     for h in safe_list(enriched.get("harmful_additives")):
@@ -1452,6 +1527,431 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
 
 # ─── Core Row Builder ───
 
+# ─── Export Schema v1.1.0 Enhancement Functions ───
+
+
+def generate_ingredient_fingerprint(enriched: Dict) -> Dict:
+    """Generate compact ingredient fingerprint for stack checking.
+
+    Returns JSON-serializable dict with:
+    - nutrients: {name: {amount, unit}}
+    - herbs: [standard_names]
+    - categories: [unique categories]
+    - pharmacological_flags: {stimulant, sedative, blood_thinner, hormone_modulator}
+    """
+    fingerprint = {
+        "nutrients": {},
+        "herbs": [],
+        "categories": set(),
+        "pharmacological_flags": {
+            "stimulant": False,
+            "sedative": False,
+            "blood_thinner": False,
+            "hormone_modulator": False,
+        }
+    }
+
+    iqd = safe_dict(enriched.get("ingredient_quality_data"))
+    ingredients = safe_list(iqd.get("ingredients"))
+
+    # Track pharmacological classes
+    stimulants = {"caffeine", "synephrine", "bitter orange", "yohimbine", "dmaa", "ephedra"}
+    sedatives = {"melatonin", "valerian", "passionflower", "lemon balm", "gaba", "5-htp"}
+    blood_thinners = {"omega-3", "fish oil", "garlic", "ginkgo", "turmeric", "curcumin", "ginger", "vitamin e"}
+    hormone_modulators = {"dhea", "pregnenolone", "ashwagandha", "tribulus", "maca", "fenugreek"}
+
+    all_ingredient_names = set()
+
+    for ing in ingredients:
+        if not isinstance(ing, dict):
+            continue
+
+        standard_name = safe_str(ing.get("standard_name")).lower()
+        category = safe_str(ing.get("category")).lower()
+
+        if not standard_name:
+            continue
+
+        all_ingredient_names.add(standard_name.replace(" ", "_"))
+
+        # Extract nutrients with doses
+        if category in ["vitamins", "minerals", "amino_acids", "fatty_acids"]:
+            normalized_amount = ing.get("normalized_amount") or ing.get("dosage")
+            normalized_unit = safe_str(ing.get("normalized_unit") or ing.get("dosage_unit"))
+
+            if normalized_amount is not None:
+                fingerprint["nutrients"][standard_name.replace(" ", "_")] = {
+                    "amount": float(normalized_amount),
+                    "unit": normalized_unit,
+                }
+
+        # Track herbs
+        if category in ["botanicals", "herbs", "plant_extracts"]:
+            fingerprint["herbs"].append(standard_name)
+
+        # Track categories
+        if category:
+            fingerprint["categories"].add(category)
+
+    # Set pharmacological flags
+    fingerprint["pharmacological_flags"]["stimulant"] = bool(all_ingredient_names & stimulants)
+    fingerprint["pharmacological_flags"]["sedative"] = bool(all_ingredient_names & sedatives)
+    fingerprint["pharmacological_flags"]["blood_thinner"] = bool(all_ingredient_names & blood_thinners)
+    fingerprint["pharmacological_flags"]["hormone_modulator"] = bool(all_ingredient_names & hormone_modulators)
+
+    # Convert set to list for JSON serialization
+    fingerprint["categories"] = list(fingerprint["categories"])
+
+    return fingerprint
+
+
+def generate_key_nutrients_summary(enriched: Dict) -> List[Dict]:
+    """Extract top 5-10 key nutrients with doses for quick display."""
+    nutrients = []
+    iqd = safe_dict(enriched.get("ingredient_quality_data"))
+    ingredients = safe_list(iqd.get("ingredients"))
+
+    # Priority order for display
+    priority_nutrients = [
+        "vitamin d", "vitamin c", "vitamin b12", "magnesium", "zinc",
+        "omega-3", "iron", "calcium", "vitamin a", "vitamin e",
+    ]
+
+    for ing in ingredients:
+        if not isinstance(ing, dict):
+            continue
+
+        standard_name = safe_str(ing.get("standard_name")).lower()
+        category = safe_str(ing.get("category")).lower()
+
+        if category not in ["vitamins", "minerals", "amino_acids", "fatty_acids"]:
+            continue
+
+        normalized_amount = ing.get("normalized_amount") or ing.get("dosage")
+        normalized_unit = safe_str(ing.get("normalized_unit") or ing.get("dosage_unit"))
+
+        if normalized_amount is not None:
+            priority_idx = priority_nutrients.index(standard_name) if standard_name in priority_nutrients else 999
+            nutrients.append({
+                "name": safe_str(ing.get("standard_name")),
+                "amount": float(normalized_amount),
+                "unit": normalized_unit,
+                "priority": priority_idx
+            })
+
+    # Sort by priority, then limit to top 10
+    nutrients.sort(key=lambda x: (x["priority"], -x["amount"]))
+    top_nutrients = nutrients[:10]
+
+    # Remove priority key before export
+    for n in top_nutrients:
+        n.pop("priority", None)
+
+    return top_nutrients
+
+
+def generate_share_metadata(enriched: Dict, scored: Dict) -> Dict:
+    """Generate social sharing metadata.
+
+    Returns dict with keys: share_title, share_description, share_highlights, share_og_image_url
+    """
+    product_name = safe_str(enriched.get("product_name"))
+    brand_name = safe_str(enriched.get("brandName"))
+    score_100 = safe_float(scored.get("score_100_equivalent"))
+    grade = safe_str(scored.get("grade"))
+    verdict = safe_str(scored.get("verdict")).upper()
+    section_scores = safe_dict(scored.get("section_scores"))
+
+    # Title with score emoji
+    score_emoji = ""
+    if score_100:
+        if score_100 >= 90:
+            score_emoji = "⭐"
+        elif score_100 >= 75:
+            score_emoji = "✓"
+
+    share_title = f"{brand_name} {product_name}"
+    if score_100:
+        share_title += f" - {int(score_100)}/100 {score_emoji}"
+
+    # Limit title length for social platforms
+    if len(share_title) > 200:
+        share_title = share_title[:197] + "..."
+
+    # Description
+    positive_signals = []
+    if safe_float(safe_dict(section_scores.get("C_evidence_research")).get("score"), 0) >= 15:
+        positive_signals.append("clinically-backed")
+    if safe_list(enriched.get("named_cert_programs")):
+        positive_signals.append("third-party tested")
+    if safe_dict(enriched.get("dietary_sensitivity_data")).get("vegan"):
+        positive_signals.append("vegan")
+
+    share_description = f"A {grade.lower()} quality supplement"
+    if positive_signals:
+        share_description += f" with {', '.join(positive_signals[:2])}"
+    share_description += ". Analyzed by PharmaGuide for safety, purity, and evidence."
+
+    if len(share_description) > 300:
+        share_description = share_description[:297] + "..."
+
+    # Highlights (top 3-4 positive attributes)
+    highlights = []
+
+    # Top ingredient quality insight
+    formulation = safe_dict(enriched.get("formulation_detail"))
+    delivery_tier = safe_str(formulation.get("delivery_tier"))
+    if delivery_tier in ["premium", "enhanced"]:
+        highlights.append(f"Premium {delivery_tier} formulation")
+
+    # Clinical evidence
+    evidence_matched = safe_dict(section_scores.get("C_evidence_research")).get("matched_entries", 0)
+    if evidence_matched > 0:
+        highlights.append("Clinically-backed ingredients")
+
+    # Certifications
+    certs = safe_list(enriched.get("named_cert_programs"))
+    if certs:
+        highlights.append(" • ".join(str(c) for c in certs[:3]))
+
+    # Dietary
+    dietary_flags = []
+    ds = safe_dict(enriched.get("dietary_sensitivity_data"))
+    if ds.get("vegan"):
+        dietary_flags.append("Vegan")
+    if ds.get("gluten_free") or safe_dict(enriched.get("compliance_data")).get("gluten_free"):
+        dietary_flags.append("Gluten-Free")
+    if dietary_flags:
+        highlights.append(" • ".join(dietary_flags))
+
+    # Safety
+    if not safe_list(enriched.get("harmful_additives")):
+        highlights.append("No harmful additives")
+
+    return {
+        "share_title": share_title,
+        "share_description": share_description,
+        "share_highlights": highlights[:4],  # Max 4 highlights
+        "share_og_image_url": safe_str(enriched.get("imageUrl")),  # Use product image for now
+    }
+
+
+def classify_product_categories(enriched: Dict) -> Dict:
+    """Classify product into primary/secondary categories and set boolean flags.
+
+    Returns dict with keys: primary_category, secondary_categories, contains_*, key_ingredient_tags
+    """
+    iqd = safe_dict(enriched.get("ingredient_quality_data"))
+    ingredients = safe_list(iqd.get("ingredients"))
+
+    # Extract ingredient names
+    ingredient_names = set()
+    for ing in ingredients:
+        if isinstance(ing, dict):
+            name = safe_str(ing.get("standard_name")).lower().replace(" ", "_")
+            if name:
+                ingredient_names.add(name)
+
+    # Primary category detection
+    primary_category = None
+    supplement_type = safe_dict(enriched.get("supplement_type"))
+    if isinstance(supplement_type, dict):
+        supp_type = supplement_type.get("type")
+    else:
+        supp_type = safe_str(supplement_type)
+
+    if supp_type == "probiotic":
+        primary_category = "probiotic"
+    elif any(name in ingredient_names for name in ["omega-3", "fish_oil", "epa", "dha"]):
+        primary_category = "omega-3"
+    elif any(name in ingredient_names for name in ["collagen", "collagen_peptides"]):
+        primary_category = "collagen"
+    elif len(ingredients) >= 10:  # Heuristic for multivitamin
+        primary_category = "multivitamin"
+    elif any(name in ingredient_names for name in ["protein", "whey_protein", "casein"]):
+        primary_category = "protein"
+
+    # Secondary categories
+    secondary_categories = []
+
+    adaptogens = {"ashwagandha", "rhodiola", "holy_basil", "ginseng", "maca", "reishi"}
+    nootropics = {"lion's_mane", "bacopa", "ginkgo", "alpha-gpc", "l-theanine", "citicoline"}
+
+    if ingredient_names & adaptogens:
+        secondary_categories.append("adaptogen")
+    if ingredient_names & nootropics:
+        secondary_categories.append("nootropic")
+
+    # Check synergy clusters for more categories
+    synergy_detail = safe_dict(enriched.get("synergy_detail"))
+    clusters_matched = safe_list(synergy_detail.get("clusters_matched"))
+    for cluster in clusters_matched:
+        cluster_str = safe_str(cluster).lower()
+        if "inflammation" in cluster_str or "joint" in cluster_str:
+            secondary_categories.append("anti-inflammatory")
+        if "cardiovascular" in cluster_str or "heart" in cluster_str:
+            secondary_categories.append("heart-health")
+        if "immune" in cluster_str:
+            secondary_categories.append("immune-support")
+
+    # Boolean flags
+    contains_omega3 = any(name in ingredient_names for name in ["omega-3", "fish_oil", "epa", "dha"])
+    contains_probiotics = supp_type == "probiotic"
+    contains_collagen = any(name in ingredient_names for name in ["collagen", "collagen_peptides"])
+    contains_adaptogens = bool(ingredient_names & adaptogens)
+    contains_nootropics = bool(ingredient_names & nootropics)
+
+    # Key ingredient tags (top 5 most important)
+    key_tags = []
+    priority_ingredients = [
+        "ashwagandha", "magnesium", "vitamin_d", "omega-3", "curcumin",
+        "probiotics", "collagen", "vitamin_c", "zinc", "ginkgo"
+    ]
+    for priority in priority_ingredients:
+        if priority in ingredient_names:
+            key_tags.append(priority)
+        if len(key_tags) >= 5:
+            break
+
+    return {
+        "primary_category": primary_category,
+        "secondary_categories": list(set(secondary_categories)),
+        "contains_omega3": contains_omega3,
+        "contains_probiotics": contains_probiotics,
+        "contains_collagen": contains_collagen,
+        "contains_adaptogens": contains_adaptogens,
+        "contains_nootropics": contains_nootropics,
+        "key_ingredient_tags": key_tags,
+    }
+
+
+def compute_goal_matches(enriched: Dict) -> Dict:
+    """Pre-compute which goals this product matches based on synergy clusters.
+
+    Returns dict with keys: goal_matches, goal_match_confidence
+    """
+    # Load user_goals_to_clusters data
+    try:
+        goals_path = Path(__file__).parent / "data" / "user_goals_to_clusters.json"
+        with open(goals_path, "r", encoding="utf-8") as f:
+            goals_data = json.load(f)
+    except Exception as exc:
+        logger.warning("Failed to load user_goals_to_clusters.json: %s", exc)
+        return {"goal_matches": [], "goal_match_confidence": 0.0}
+
+    synergy_detail = safe_dict(enriched.get("synergy_detail"))
+    product_clusters = safe_list(synergy_detail.get("clusters_matched"))
+
+    if not product_clusters:
+        return {"goal_matches": [], "goal_match_confidence": 0.0}
+
+    matched_goals = []
+    total_confidence = 0.0
+
+    # Check each goal
+    for goal_mapping in safe_list(goals_data.get("user_goal_mappings")):
+        if not isinstance(goal_mapping, dict):
+            continue
+
+        goal_id = safe_str(goal_mapping.get("id"))
+        cluster_weights = safe_dict(goal_mapping.get("cluster_weights"))
+
+        # Calculate weighted match
+        match_weight = 0.0
+        for cluster in product_clusters:
+            cluster_str = safe_str(cluster)
+            if cluster_str in cluster_weights:
+                match_weight += safe_float(cluster_weights[cluster_str], 0)
+
+        # Threshold: include goal if match weight >= 0.5
+        if match_weight >= 0.5 and goal_id:
+            matched_goals.append(goal_id)
+            total_confidence += match_weight
+
+    avg_confidence = total_confidence / len(matched_goals) if matched_goals else 0.0
+
+    return {
+        "goal_matches": matched_goals,
+        "goal_match_confidence": round(avg_confidence, 2),
+    }
+
+
+def generate_dosing_summary(enriched: Dict) -> Dict:
+    """Generate user-friendly dosing summary and servings per container.
+
+    Returns dict with keys: dosing_summary, servings_per_container
+    """
+    serving_info = safe_dict(enriched.get("serving_info"))
+    form_factor = safe_str(enriched.get("form_factor")).lower()
+    serving_size = safe_str(serving_info.get("serving_size"))
+    servings_per = serving_info.get("servings_per_container")
+
+    # Parse serving size
+    summary = ""
+    if "capsule" in serving_size.lower():
+        parts = serving_size.split()
+        count = parts[0] if parts else "1"
+        plural = "s" if count not in ["1", "one"] else ""
+        summary = f"Take {count} capsule{plural} daily"
+    elif "tablet" in serving_size.lower():
+        parts = serving_size.split()
+        count = parts[0] if parts else "1"
+        plural = "s" if count not in ["1", "one"] else ""
+        summary = f"Take {count} tablet{plural} daily"
+    elif "scoop" in serving_size.lower() or "powder" in form_factor:
+        summary = f"Mix {serving_size} with water daily"
+    elif "gummy" in serving_size.lower() or "gummies" in serving_size.lower():
+        parts = serving_size.split()
+        count = parts[0] if parts else "2"
+        summary = f"Chew {count} gummies daily"
+    elif "softgel" in serving_size.lower():
+        parts = serving_size.split()
+        count = parts[0] if parts else "1"
+        plural = "s" if count not in ["1", "one"] else ""
+        summary = f"Take {count} softgel{plural} daily"
+    else:
+        summary = f"Serving size: {serving_size}" if serving_size else "See product label"
+
+    # Add timing if available
+    timing = safe_str(serving_info.get("timing_notes"))
+    if timing:
+        summary += f" {timing}"
+    elif "with food" in serving_size.lower():
+        summary += " with food"
+
+    # Limit length
+    if len(summary) > 150:
+        summary = summary[:147] + "..."
+
+    return {
+        "dosing_summary": summary,
+        "servings_per_container": int(servings_per) if servings_per else None,
+    }
+
+
+def generate_allergen_summary(enriched: Dict) -> str:
+    """Generate allergen summary string.
+
+    Returns: "Contains: Soy, Tree Nuts" or None
+    """
+    allergen_hits = safe_list(enriched.get("allergen_hits"))
+
+    if not allergen_hits:
+        return None
+
+    allergen_names = []
+    for hit in allergen_hits:
+        if isinstance(hit, dict):
+            name = safe_str(hit.get("standard_name"))
+            if name:
+                allergen_names.append(name)
+
+    if not allergen_names:
+        return None
+
+    return f"Contains: {', '.join(allergen_names)}"
+
+
 def build_core_row(
     enriched: Dict,
     scored: Dict,
@@ -1475,6 +1975,15 @@ def build_core_row(
     blocking = derive_blocking_reason(enriched, scored)
     interaction_hint = build_interaction_summary_hint(enriched)
     decision_highlights = build_decision_highlights(enriched, scored, blocking)
+
+    # ─── v1.1.0 Enhancements ───
+    fingerprint = generate_ingredient_fingerprint(enriched)
+    key_nutrients = generate_key_nutrients_summary(enriched)
+    share_meta = generate_share_metadata(enriched, scored)
+    categories = classify_product_categories(enriched)
+    goal_data = compute_goal_matches(enriched)
+    dosing = generate_dosing_summary(enriched)
+    allergen_summ = generate_allergen_summary(enriched)
 
     return (
         safe_str(enriched.get("dsld_id")),
@@ -1544,6 +2053,35 @@ def build_core_row(
         json.dumps(scored.get("badges", []), ensure_ascii=False),
         json.dumps(top_warnings, ensure_ascii=False),
         json.dumps(scored.get("flags", []), ensure_ascii=False),
+        # ── v1.1.0 Additions ──
+        # Enhancement 1: Stack Interaction
+        json.dumps(fingerprint, ensure_ascii=False),
+        json.dumps(key_nutrients, ensure_ascii=False),
+        safe_bool(fingerprint["pharmacological_flags"]["stimulant"]),
+        safe_bool(fingerprint["pharmacological_flags"]["sedative"]),
+        safe_bool(fingerprint["pharmacological_flags"]["blood_thinner"]),
+        # Enhancement 2: Social Sharing
+        share_meta["share_title"],
+        share_meta["share_description"],
+        json.dumps(share_meta["share_highlights"], ensure_ascii=False),
+        share_meta["share_og_image_url"] or None,
+        # Enhancement 3: Search & Filter
+        categories["primary_category"],
+        json.dumps(categories["secondary_categories"], ensure_ascii=False),
+        safe_bool(categories["contains_omega3"]),
+        safe_bool(categories["contains_probiotics"]),
+        safe_bool(categories["contains_collagen"]),
+        safe_bool(categories["contains_adaptogens"]),
+        safe_bool(categories["contains_nootropics"]),
+        json.dumps(categories["key_ingredient_tags"], ensure_ascii=False),
+        # Enhancement 4: Goal Matching
+        json.dumps(goal_data["goal_matches"], ensure_ascii=False),
+        goal_data["goal_match_confidence"],
+        # Enhancement 5: Dosing
+        dosing["dosing_summary"],
+        dosing["servings_per_container"],
+        # Enhancement 6: Allergen
+        allergen_summ,
         # Metadata
         safe_str(sm.get("scoring_version")),
         safe_str(sm.get("output_schema_version", scored.get("output_schema_version"))),
@@ -1554,7 +2092,7 @@ def build_core_row(
     )
 
 
-CORE_COLUMN_COUNT = 65  # Must match the tuple above and SCHEMA_SQL
+CORE_COLUMN_COUNT = 87  # Must match the tuple above and SCHEMA_SQL (65 + 22 new cols)
 
 
 # ─── Reference Data Loader ───

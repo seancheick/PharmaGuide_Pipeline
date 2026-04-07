@@ -5720,6 +5720,7 @@ class SupplementEnricherV3:
                         "clinical_risk_enum": banned_item.get('clinical_risk_enum'),
                         "regulatory_date": banned_item.get('regulatory_date'),
                         "regulatory_date_label": banned_item.get('regulatory_date_label'),
+                        "references_structured": banned_item.get('references_structured'),
                     })
 
         return {

@@ -89,6 +89,30 @@ PRODUCTS_CORE_COLUMNS = [
     "badges",
     "top_warnings",
     "flags",
+    # v1.3.0 additions (22 new columns)
+    "ingredient_fingerprint",
+    "key_nutrients_summary",
+    "contains_stimulants",
+    "contains_sedatives",
+    "contains_blood_thinners",
+    "share_title",
+    "share_description",
+    "share_highlights",
+    "share_og_image_url",
+    "primary_category",
+    "secondary_categories",
+    "contains_omega3",
+    "contains_probiotics",
+    "contains_collagen",
+    "contains_adaptogens",
+    "contains_nootropics",
+    "key_ingredient_tags",
+    "goal_matches",
+    "goal_match_confidence",
+    "dosing_summary",
+    "servings_per_container",
+    "allergen_summary",
+    # metadata
     "scoring_version",
     "output_schema_version",
     "enrichment_version",
@@ -679,6 +703,49 @@ def test_export_contract_validator_fails_loudly_when_real_upstream_field_is_miss
     issues = validate_export_contract(enriched, make_scored())
 
     assert any("ingredient_quality_data.ingredients[0].score" in issue for issue in issues)
+
+
+def test_banned_warning_includes_source_urls_from_references_structured():
+    enriched = make_enriched()
+    enriched["contaminant_data"]["banned_substances"]["substances"] = [
+        {
+            "ingredient": "Ephedra",
+            "banned_name": "Ephedra",
+            "status": "banned",
+            "match_type": "exact",
+            "reason": "FDA-banned stimulant.",
+            "regulatory_date": "2004-04-12",
+            "regulatory_date_label": "FDA ban effective",
+            "clinical_risk_enum": "critical",
+            "references_structured": [
+                {
+                    "type": "fda_advisory",
+                    "title": "FDA Bans Ephedra",
+                    "url": "https://www.fda.gov/ephedra-ban",
+                    "evidence_grade": "R",
+                },
+                {
+                    "type": "clinical_review",
+                    "title": "Ephedra safety review",
+                    "url": "https://pubmed.ncbi.nlm.nih.gov/99999999/",
+                    "evidence_grade": "A",
+                },
+            ],
+        }
+    ]
+
+    blob = build_detail_blob(enriched, make_scored())
+    banned_warnings = [w for w in blob["warnings"] if w["type"] == "banned_substance"]
+    assert len(banned_warnings) == 1
+
+    warning = banned_warnings[0]
+    assert "source_urls" in warning
+    assert len(warning["source_urls"]) == 2
+    assert warning["source_urls"][0]["url"] == "https://www.fda.gov/ephedra-ban"
+    assert warning["source_urls"][0]["title"] == "FDA Bans Ephedra"
+    assert warning["source_urls"][1]["evidence_grade"] == "A"
+    assert warning["date"] == "2004-04-12"
+    assert warning["regulatory_date_label"] == "FDA ban effective"
 
 
 def test_export_contract_validator_allows_optional_form_tracking_fields_to_default():
