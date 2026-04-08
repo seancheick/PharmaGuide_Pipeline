@@ -187,8 +187,8 @@ quality_score = clamp(0, 80, quality_raw)
 
 Section caps:
 - A: 25
-- B: 35
-- C: 15
+- B: 30
+- C: 20
 - D: 5
 
 For detailed formulas and subcomponents, see:

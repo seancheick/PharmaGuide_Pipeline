@@ -2,7 +2,19 @@
   "permissions": {
     "allow": [
       "Bash(grep -E \"\\(^/Users.*\\\\.md$\\)\" /tmp/md_files.txt)",
-      "Bash(find /Users/seancheick/.claude-worktrees/dsld_clean/peaceful-ritchie -type f \\\\\\(-name *.json -o -name *.csv \\\\\\) ! -path */scripts/data/* ! -path */.claude/* ! -path */output_* ! -path */__pycache__/* ! -path */.git/*)"
+      "Bash(find /Users/seancheick/.claude-worktrees/dsld_clean/peaceful-ritchie -type f \\\\\\(-name *.json -o -name *.csv \\\\\\) ! -path */scripts/data/* ! -path */.claude/* ! -path */output_* ! -path */__pycache__/* ! -path */.git/*)",
+      "Bash(claude plugin:*)",
+      "Bash(mkdir -p \"/Users/seancheick/PharmaGuide ai/android/app/src/main/kotlin/com/pharmaguide/app\")",
+      "Bash(mv \"/Users/seancheick/PharmaGuide ai/android/app/src/main/kotlin/com/example/pharmaguide/MainActivity.kt\" \"/Users/seancheick/PharmaGuide ai/android/app/src/main/kotlin/com/pharmaguide/app/MainActivity.kt\")",
+      "Bash(rm -rf \"/Users/seancheick/PharmaGuide ai/android/app/src/main/kotlin/com/example\")",
+      "Bash(flutter analyze:*)",
+      "Bash(du -sh \"/Users/seancheick/PharmaGuide ai/SPRINT_TRACKER.md\" \"/Users/seancheick/PharmaGuide ai/knowledge/\"*)",
+      "Bash(flutter pub:*)",
+      "Bash(flutter test:*)"
+    ],
+    "additionalDirectories": [
+      "/Users/seancheick/PharmaGuide ai/ios/Runner.xcodeproj",
+      "/Users/seancheick/PharmaGuide ai"
     ]
   },
   "enabledPlugins": {

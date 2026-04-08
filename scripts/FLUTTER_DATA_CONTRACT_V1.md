@@ -528,7 +528,7 @@ Everything in pharmaguide_core.db — bundled with the app at install or
 │ manifest │ │ update?" check │  
  └────────────────┴─────────────────────────────────┴─────────────────┘
 
-This is 61 columns across the full `products_core` export (~180K products, roughly tens of MB on-device depending on release). Instant at runtime once bundled/installed. No internet needed.
+This is 65 columns across the full `products_core` export (~180K products, roughly tens of MB on-device depending on release). Instant at runtime once bundled/installed. No internet needed.
 
 Fetched from Supabase (on-demand, cached after first view)
 

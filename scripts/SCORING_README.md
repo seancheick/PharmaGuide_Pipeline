@@ -1,4 +1,4 @@
-# PharmaGuide Scoring README (v3.3.0 / Data Schema 5.1.0)
+# PharmaGuide Scoring README (v3.4.0 / Data Schema 5.1.0)
 
 > Last updated: 2026-03-30
 
@@ -8,7 +8,7 @@ This document is the implementation-facing guide for the current scorer:
 - Config: `scripts/config/scoring_config.json`
 - Spec: `scripts/SCORING_ENGINE_SPEC.md`
 
-It is aligned to the current `v3.3.0` behavior in code and config.
+It is aligned to the current `v3.4.0` behavior in code and config.
 
 ## 1) What The Scorer Does
 
@@ -56,7 +56,7 @@ For each product:
 7. Apply manufacturer violation penalty.
 8. Derive final verdict and output payload.
 
-## 4) Score Model (v3.3)
+## 4) Score Model (v3.4)
 
 Final score:
 
@@ -389,6 +389,6 @@ This separation ensures the quality score (A/B/C/D plus legacy E compatibility o
 # Score tests only
 cd scripts && python3 -m pytest tests/test_score_supplements.py -q
 
-# Full suite (2678+ tests)
+# Full suite (3065+ tests)
 cd scripts && python3 -m pytest tests/ -q
 ```
