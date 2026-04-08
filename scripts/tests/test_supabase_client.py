@@ -82,9 +82,12 @@ def test_insert_manifest_coerces_types():
 
     captured = {}
 
+    class MockRpcResponse:
+        data = "fake-uuid-returned-by-rotate-manifest"
+
     class MockRpcChain:
         def execute(self):
-            return {"data": None}
+            return MockRpcResponse()
 
     class MockClient:
         def rpc(self, name, params):

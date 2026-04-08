@@ -44,8 +44,8 @@ Data is treated as ready. The pipeline audit is complete for the initial product
 
 - harmful_additives.json: 115 entries, schema v5.1.0, all tests passing
 - banned_recalled_ingredients.json: 143 entries, FDA sync active
-- ingredient_quality_map.json: 550 parents, all stubs resolved
-- Total test suite: 2844 tests passing
+- ingredient_quality_map.json: 563 parents, all stubs resolved
+- Total test suite: 3065 tests passing
 
 ### 1.2 Schema Mapping (JSON to Supabase)
 

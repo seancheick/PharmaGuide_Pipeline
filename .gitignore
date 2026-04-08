@@ -7,6 +7,7 @@ __pycache__/
 
 # Pipeline output (regenerable via clean → enrich → score)
 scripts/output_*/
+scripts/products/
 scripts/tmp_*/
 scripts/final_db_output/
 scripts/.cache/

@@ -395,7 +395,7 @@ class PipelineRunner:
         paths = self.config["paths"]
 
         raw_dir = raw_dir or paths.get("raw_directory", "raw_data")
-        output_prefix = output_prefix or paths.get("output_prefix", "output")
+        output_prefix = output_prefix or paths.get("output_prefix", "products/output")
 
         # Build paths
         cleaned_dir = f"{output_prefix}/{paths['cleaned_suffix']}"

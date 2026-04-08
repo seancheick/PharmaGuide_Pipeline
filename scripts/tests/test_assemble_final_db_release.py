@@ -36,7 +36,14 @@ def _write_pair_output(root: Path, name: str, dsld_id: str, product_name: str):
                 0, 0, 0, 0, 0,
                 1, 1, 1,
                 "[]", "[]", "[]", "[]",
-                "3.1.0", "5.0.0", "3.1.0", "2026-03-29T00:00:00Z", "1", "2026-03-29T00:00:00Z",
+                # v1.1.0+ additions (22 columns)
+                '{}', '[]', 0, 0, 0,  # fingerprint, key_nutrients, stimulants, sedatives, blood_thinners
+                None, None, '[]', None,  # share_title, share_description, share_highlights, share_og_image_url
+                None, '[]', 0, 0, 0, 0, 0, '[]',  # primary_category, secondary_categories, contains_* flags, key_ingredient_tags
+                '[]', None,  # goal_matches, goal_match_confidence
+                None, None,  # dosing_summary, servings_per_container
+                None,  # allergen_summary
+                "3.4.0", "5.0.0", "3.4.0", "2026-03-29T00:00:00Z", "1.3.0", "2026-03-29T00:00:00Z",
             ),
         )
         conn.execute(

@@ -12,6 +12,7 @@ import sqlite3
 import tempfile
 from pathlib import Path
 import sys
+import pytest
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
@@ -757,3 +758,78 @@ def test_export_contract_validator_allows_optional_form_tracking_fields_to_defau
 
     assert not any("extracted_forms" in issue for issue in issues)
     assert not any("matched_forms" in issue for issue in issues)
+
+
+def test_build_final_db_strict_mode_raises_on_enriched_scored_mismatch():
+    """strict=True raises ValueError when enriched products have no matching scored output."""
+    with tempfile.TemporaryDirectory() as tmp:
+        root = Path(tmp)
+        enriched_dir = root / "enriched"
+        scored_dir = root / "scored"
+        output_dir = root / "out"
+        enriched_dir.mkdir()
+        scored_dir.mkdir()
+
+        # Create 2 enriched products but only 1 scored
+        enriched1 = make_enriched()  # dsld_id = "999"
+        enriched2 = make_enriched()
+        enriched2["dsld_id"] = "888"
+        enriched2["product_name"] = "Unscored Product"
+
+        scored1 = make_scored()
+        scored1["dsld_id"] = "999"  # matches enriched1 only; enriched2 ("888") has no scored pair
+
+        (enriched_dir / "batch.json").write_text(
+            json.dumps([enriched1, enriched2]), encoding="utf-8"
+        )
+        (scored_dir / "batch.json").write_text(
+            json.dumps([scored1]), encoding="utf-8"
+        )
+
+        # strict=True should raise
+        with pytest.raises(ValueError, match="Strict mode"):
+            build_final_db(
+                [str(enriched_dir)], [str(scored_dir)], str(output_dir),
+                str(Path(__file__).parent.parent),
+                strict=True,
+            )
+
+
+def test_build_final_db_default_mode_allows_enriched_scored_mismatch():
+    """Default (non-strict) mode exports matched products without raising."""
+    with tempfile.TemporaryDirectory() as tmp:
+        root = Path(tmp)
+        enriched_dir = root / "enriched"
+        scored_dir = root / "scored"
+        output_dir = root / "out"
+        enriched_dir.mkdir()
+        scored_dir.mkdir()
+
+        enriched1 = make_enriched()
+        enriched2 = make_enriched()
+        enriched2["dsld_id"] = "888"
+        enriched2["product_name"] = "Unscored Product"
+
+        scored1 = make_scored()
+        scored1["dsld_id"] = "999"  # matches enriched1 only; enriched2 ("888") has no scored pair
+
+        (enriched_dir / "batch.json").write_text(
+            json.dumps([enriched1, enriched2]), encoding="utf-8"
+        )
+        (scored_dir / "batch.json").write_text(
+            json.dumps([scored1]), encoding="utf-8"
+        )
+
+        # Default mode should NOT raise
+        result = build_final_db(
+            [str(enriched_dir)], [str(scored_dir)], str(output_dir),
+            str(Path(__file__).parent.parent),
+        )
+        assert result["product_count"] == 1  # only the matched one exported
+
+        # Verify integrity block in manifest
+        manifest = json.loads((output_dir / "export_manifest.json").read_text(encoding="utf-8"))
+        integrity = manifest["integrity"]
+        assert integrity["enriched_only_count"] == 1
+        assert integrity["exported_count"] == 1
+        assert integrity["strict_mode"] is False

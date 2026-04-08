@@ -11,7 +11,7 @@ PharmaGuide is a 3-stage data pipeline (Clean → Enrich → Score) that process
 ## Commands
 
 ```bash
-# Run all tests (1300+ tests, ~65 files)
+# Run all tests (3065+ tests, ~81 files)
 python3 -m pytest scripts/tests/
 
 # Run a single test file
@@ -59,7 +59,7 @@ scripts/
   config/                     # cleaning_config.json, enrichment_config.json, scoring_config.json
   data/                       # 34 reference JSON databases (schema v5.0/5.1)
   data/curated_overrides/     # Manual CUI/PubChem/GSRS policy overrides
-  tests/                      # 65+ test files, 1300+ test functions
+  tests/                      # 81 test files, 3065+ test functions
   logs/                       # Runtime logs
   reports/                    # Generated audit reports
 docs/                         # Technical deep-dives and infographics
@@ -85,9 +85,9 @@ docs/                         # Technical deep-dives and infographics
 
 | File                               | Purpose                                                         |
 | ---------------------------------- | --------------------------------------------------------------- |
-| `ingredient_quality_map.json`      | Quality scoring for 550+ IQM parents (largest file)             |
-| `banned_recalled_ingredients.json` | Regulatory safety disqualifications or penalties (~850 entries) |
-| `harmful_additives.json`           | Penalty scoring for harmful additives (~1200 entries)           |
+| `ingredient_quality_map.json`      | Quality scoring for 563 IQM parents (largest file)              |
+| `banned_recalled_ingredients.json` | Regulatory safety disqualifications or penalties (143 entries)  |
+| `harmful_additives.json`           | Penalty scoring for harmful additives (115 entries)             |
 | `backed_clinical_studies.json`     | Clinical evidence bonus points (197 entries, all PMID-backed)    |
 | `allergens.json`                   | Allergen classification (Big 8 types)                           |
 | `rda_optimal_uls.json`             | Dosing adequacy benchmarks                                      |

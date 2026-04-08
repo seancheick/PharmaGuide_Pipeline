@@ -1,9 +1,11 @@
 # FINAL EXPORT SCHEMA V1
 
-> Version: 1.2.2 — 2026-04-02
-> Consumes: current scorer output (v3.3.0 as of 2026-03-30), enrichment schema v5.1.0
-> Status: FROZEN — approved by team review
-> Updated: scoring v3.3 alignment, omega-3 bonus export note, interaction_summary, dose_threshold_evaluation, condition/drug_class mapping, and Flutter convenience fields (`detail_blob_sha256`, `image_is_pdf`, `interaction_summary_hint`, `decision_highlights`)
+> Version: 1.3.0 — 2026-04-07
+> Consumes: current scorer output (v3.4.0 as of 2026-04-05), enrichment schema v5.1.0
+> Status: ACTIVE — v1.3.0 enhancements approved
+> Updated: **v1.3.0 adds 23 new columns for stack interaction checking, social sharing, search/filter optimization, goal matching, dosing guidance, and allergen summary. Schema now has 88 columns (up from 65).**
+>
+> Previous updates: scoring v3.4 alignment, omega-3 bonus export note, interaction_summary, dose_threshold_evaluation, condition/drug_class mapping, and Flutter convenience fields (`detail_blob_sha256`, `image_is_pdf`, `interaction_summary_hint`, `decision_highlights`)
 
 ## Purpose
 
@@ -14,6 +16,7 @@ detail blobs. The app consumes them.
 This contract is frozen. Field renames after the app ships are expensive.
 
 Assumptions:
+
 - Omega-3 dose adequacy is folded into ingredient quality in pipeline scoring.
 - Detail blobs expose omega-3 scoring context under `section_breakdown.ingredient_quality.sub.omega3_breakdown`.
 - User personalization (`score_fit_20`) is computed locally on the phone.
@@ -42,6 +45,7 @@ Pipeline repo (dsld-clean)
 ```
 
 On the phone, the app uses two local Drift databases:
+
 - `pharmaguide_core.db` — read-only bundled/exported reference DB from the pipeline
 - `user_data.db` — app-created read/write DB that contains `product_detail_cache`,
   `user_profile`, `user_favorites`, `user_scan_history`, and `user_stacks_local`
@@ -122,6 +126,44 @@ CREATE TABLE products_core (
     top_warnings                  TEXT,    -- JSON array, max 5
     flags                         TEXT,    -- JSON array
 
+    -- ===============================================================================
+    -- v1.3.0 ENHANCEMENTS (2026-04-07) — 23 new columns
+    -- ===============================================================================
+
+    -- Enhancement 1: Stack Interaction Checking
+    ingredient_fingerprint        TEXT,    -- JSON: compact ingredient dose map for stack checking
+    key_nutrients_summary         TEXT,    -- JSON: top 5-10 nutrients with doses
+    contains_stimulants           INTEGER DEFAULT 0,  -- caffeine, synephrine, etc.
+    contains_sedatives            INTEGER DEFAULT 0,  -- melatonin, valerian, etc.
+    contains_blood_thinners       INTEGER DEFAULT 0,  -- omega-3, garlic, ginkgo, etc.
+
+    -- Enhancement 2: Social Sharing Metadata
+    share_title                   TEXT,    -- Pre-formatted share title with score
+    share_description             TEXT,    -- Pre-formatted 2-3 sentence summary
+    share_highlights              TEXT,    -- JSON array: 3-4 key positive attributes
+    share_og_image_url            TEXT,    -- Open Graph optimized image URL
+
+    -- Enhancement 3: Search & Filter Optimization
+    primary_category              TEXT,    -- omega-3, probiotic, multivitamin, collagen, protein, etc.
+    secondary_categories          TEXT,    -- JSON array: adaptogen, nootropic, anti-inflammatory, etc.
+    contains_omega3               INTEGER DEFAULT 0,
+    contains_probiotics           INTEGER DEFAULT 0,
+    contains_collagen             INTEGER DEFAULT 0,
+    contains_adaptogens           INTEGER DEFAULT 0,
+    contains_nootropics           INTEGER DEFAULT 0,
+    key_ingredient_tags           TEXT,    -- JSON array: top 5 priority ingredients
+
+    -- Enhancement 4: Goal Matching Preview
+    goal_matches                  TEXT,    -- JSON array: matched goal IDs (e.g. ["GOAL_SLEEP_QUALITY"])
+    goal_match_confidence         REAL,    -- 0.0-1.0: average cluster weight
+
+    -- Enhancement 5: Dosing Guidance
+    dosing_summary                TEXT,    -- "Take 2 capsules daily with food"
+    servings_per_container        INTEGER, -- 60
+
+    -- Enhancement 6: Allergen Summary
+    allergen_summary              TEXT,    -- "Contains: Soy, Tree Nuts"
+
     scoring_version               TEXT,
     output_schema_version         TEXT,
     enrichment_version            TEXT,
@@ -137,59 +179,90 @@ CREATE INDEX idx_products_core_verdict ON products_core(verdict);
 CREATE INDEX idx_products_core_score ON products_core(score_quality_80);
 CREATE INDEX idx_products_core_type ON products_core(supplement_type);
 CREATE INDEX idx_products_core_status ON products_core(product_status);
+
+-- v1.3.0 Indexes (partial indexes for better performance)
+CREATE INDEX idx_products_core_primary_category ON products_core(primary_category);
+CREATE INDEX idx_products_core_contains_omega3 ON products_core(contains_omega3) WHERE contains_omega3 = 1;
+CREATE INDEX idx_products_core_contains_probiotics ON products_core(contains_probiotics) WHERE contains_probiotics = 1;
+CREATE INDEX idx_products_core_contains_collagen ON products_core(contains_collagen) WHERE contains_collagen = 1;
+CREATE INDEX idx_products_core_contains_adaptogens ON products_core(contains_adaptogens) WHERE contains_adaptogens = 1;
+CREATE INDEX idx_products_core_contains_nootropics ON products_core(contains_nootropics) WHERE contains_nootropics = 1;
 ```
 
 ### Column Sources
 
-| Column | Source | Notes |
-|---|---|---|
-| `dsld_id` | `enriched.dsld_id` | |
-| `product_name` | `enriched.product_name` | |
-| `brand_name` | `enriched.brandName` | |
-| `upc_sku` | `enriched.upcSku` | Barcode lookup |
-| `image_url` | `enriched.imageUrl` | May be PDF, not a real image. Not offline. |
-| `image_is_pdf` | Derived from `imageUrl` | Lets Flutter skip PDF URLs before image widget load |
-| `thumbnail_key` | NULL at export | Populated by app at runtime |
-| `detail_blob_sha256` | SHA-256 of exported detail blob JSON | Primary runtime resolver for hashed shared payload fetch |
-| `interaction_summary_hint` | Derived from `interaction_profile` | Compact JSON for instant condition/drug banners before detail hydration |
-| `decision_highlights` | Derived from enriched/scored safety + trust signals | Compact JSON for hero summary copy (`positive`, `caution`, `trust`) |
-| `product_status` | `enriched.status` | DSLD lifecycle, NOT safety |
-| `discontinued_date` | `enriched.discontinuedDate` | ISO date or NULL |
-| `form_factor` | `enriched.form_factor` | |
-| `supplement_type` | `enriched.supplement_type.type` | Current observed values include `single_nutrient`, `targeted`, `specialty`, `probiotic` |
-| `score_quality_80` | `scored.score_80` | NULL if not scored |
-| `score_display_80` | `scored.display` | Pre-formatted: "71.1/80" |
-| `score_display_100_equivalent` | `scored.display_100` | Pre-formatted: "88.8/100" |
-| `score_100_equivalent` | `scored.score_100_equivalent` | Display convenience |
-| `grade` | `scored.grade` | |
-| `verdict` | `scored.verdict` | SAFE/CAUTION/POOR/UNSAFE/BLOCKED/NOT_SCORED |
-| `safety_verdict` | `scored.safety_verdict` | Backward-compat |
-| `mapped_coverage` | `scored.mapped_coverage` | 0.0-1.0 |
-| `score_ingredient_quality` | `scored.section_scores.A_ingredient_quality.score` | max 25 |
-| `score_safety_purity` | `scored.section_scores.B_safety_purity.score` | max 30 |
-| `score_evidence_research` | `scored.section_scores.C_evidence_research.score` | max 20 |
-| `score_brand_trust` | `scored.section_scores.D_brand_trust.score` | max 5 |
-| `has_banned_substance` | `contaminant_data.banned_substances.substances` | exact/alias match with `status == "banned"` only |
-| `has_recalled_ingredient` | Same source, `status == "recalled"` | Ingredient recalled, NOT product |
-| `blocking_reason` | Derived from exact/alias contaminant matches + verdict | Used for `CAUTION`/`UNSAFE`/`BLOCKED` safety explanation |
-| `diabetes_friendly` | `enriched.dietary_sensitivity_data.diabetes_friendly` | Defaults to 0 (cautious) when absent |
-| `hypertension_friendly` | `enriched.dietary_sensitivity_data.hypertension_friendly` | Defaults to 0 (cautious) when absent |
-| `scoring_version` | `scored.scoring_metadata.scoring_version` | |
-| `output_schema_version` | `scored.output_schema_version` | |
-| `enrichment_version` | `enriched.enrichment_version` | |
-| `export_version` | Build parameter | Semver TEXT, e.g. "1" |
-| `exported_at` | Build timestamp | ISO-8601 |
+| Column                         | Source                                                    | Notes                                                                                   |
+| ------------------------------ | --------------------------------------------------------- | --------------------------------------------------------------------------------------- |
+| `dsld_id`                      | `enriched.dsld_id`                                        |                                                                                         |
+| `product_name`                 | `enriched.product_name`                                   |                                                                                         |
+| `brand_name`                   | `enriched.brandName`                                      |                                                                                         |
+| `upc_sku`                      | `enriched.upcSku`                                         | Barcode lookup                                                                          |
+| `image_url`                    | `enriched.imageUrl`                                       | May be PDF, not a real image. Not offline.                                              |
+| `image_is_pdf`                 | Derived from `imageUrl`                                   | Lets Flutter skip PDF URLs before image widget load                                     |
+| `thumbnail_key`                | NULL at export                                            | Populated by app at runtime                                                             |
+| `detail_blob_sha256`           | SHA-256 of exported detail blob JSON                      | Primary runtime resolver for hashed shared payload fetch                                |
+| `interaction_summary_hint`     | Derived from `interaction_profile`                        | Compact JSON for instant condition/drug banners before detail hydration                 |
+| `decision_highlights`          | Derived from enriched/scored safety + trust signals       | Compact JSON for hero summary copy (`positive`, `caution`, `trust`)                     |
+| `product_status`               | `enriched.status`                                         | DSLD lifecycle, NOT safety                                                              |
+| `discontinued_date`            | `enriched.discontinuedDate`                               | ISO date or NULL                                                                        |
+| `form_factor`                  | `enriched.form_factor`                                    |                                                                                         |
+| `supplement_type`              | `enriched.supplement_type.type`                           | Current observed values include `single_nutrient`, `targeted`, `specialty`, `probiotic` |
+| `score_quality_80`             | `scored.score_80`                                         | NULL if not scored                                                                      |
+| `score_display_80`             | `scored.display`                                          | Pre-formatted: "71.1/80"                                                                |
+| `score_display_100_equivalent` | `scored.display_100`                                      | Pre-formatted: "88.8/100"                                                               |
+| `score_100_equivalent`         | `scored.score_100_equivalent`                             | Display convenience                                                                     |
+| `grade`                        | `scored.grade`                                            |                                                                                         |
+| `verdict`                      | `scored.verdict`                                          | SAFE/CAUTION/POOR/UNSAFE/BLOCKED/NOT_SCORED                                             |
+| `safety_verdict`               | `scored.safety_verdict`                                   | Backward-compat                                                                         |
+| `mapped_coverage`              | `scored.mapped_coverage`                                  | 0.0-1.0                                                                                 |
+| `score_ingredient_quality`     | `scored.section_scores.A_ingredient_quality.score`        | max 25                                                                                  |
+| `score_safety_purity`          | `scored.section_scores.B_safety_purity.score`             | max 30                                                                                  |
+| `score_evidence_research`      | `scored.section_scores.C_evidence_research.score`         | max 20                                                                                  |
+| `score_brand_trust`            | `scored.section_scores.D_brand_trust.score`               | max 5                                                                                   |
+| `has_banned_substance`         | `contaminant_data.banned_substances.substances`           | exact/alias match with `status == "banned"` only                                        |
+| `has_recalled_ingredient`      | Same source, `status == "recalled"`                       | Ingredient recalled, NOT product                                                        |
+| `blocking_reason`              | Derived from exact/alias contaminant matches + verdict    | Used for `CAUTION`/`UNSAFE`/`BLOCKED` safety explanation                                |
+| `diabetes_friendly`            | `enriched.dietary_sensitivity_data.diabetes_friendly`     | Defaults to 0 (cautious) when absent                                                    |
+| `hypertension_friendly`        | `enriched.dietary_sensitivity_data.hypertension_friendly` | Defaults to 0 (cautious) when absent                                                    |
+| `scoring_version`              | `scored.scoring_metadata.scoring_version`                 |                                                                                         |
+| `output_schema_version`        | `scored.output_schema_version`                            |                                                                                         |
+| `enrichment_version`           | `enriched.enrichment_version`                             |                                                                                         |
+| `export_version`               | Build parameter                                           | Semver TEXT, e.g. "1.3.0"                                                               |
+| `exported_at`                  | Build timestamp                                           | ISO-8601                                                                                |
+| **v1.3.0 Additions**           |                                                           |                                                                                         |
+| `ingredient_fingerprint`       | Generated from `ingredient_quality_data.ingredients`      | JSON with nutrients{}, herbs[], pharmacological_flags{}                                 |
+| `key_nutrients_summary`        | Generated from `ingredient_quality_data.ingredients`      | JSON array of top 5-10 nutrients with amounts                                           |
+| `contains_stimulants`          | Derived from ingredient names                             | Boolean: caffeine, synephrine, bitter orange, yohimbine, etc.                           |
+| `contains_sedatives`           | Derived from ingredient names                             | Boolean: melatonin, valerian, passionflower, lemon balm, GABA                           |
+| `contains_blood_thinners`      | Derived from ingredient names                             | Boolean: omega-3, garlic, ginkgo, turmeric, curcumin, vitamin E                         |
+| `share_title`                  | Generated from product_name, brandName, score_100         | Pre-formatted: "Nature's Bounty Magnesium - 92/100 ⭐"                                  |
+| `share_description`            | Generated from grade, evidence, certs, dietary flags      | Pre-formatted 2-3 sentence summary                                                      |
+| `share_highlights`             | Generated from formulation_detail, certs, dietary flags   | JSON array of 3-4 positive attributes                                                   |
+| `share_og_image_url`           | `enriched.imageUrl`                                       | Product image URL (OG image generation future enhancement)                              |
+| `primary_category`             | Classified from ingredients + supplement_type             | omega-3, probiotic, multivitamin, collagen, protein, etc.                               |
+| `secondary_categories`         | Classified from ingredients + synergy_detail              | JSON array: adaptogen, nootropic, anti-inflammatory, heart-health, immune-support       |
+| `contains_omega3`              | Derived from ingredient names                             | Boolean: omega-3, fish oil, EPA, DHA                                                    |
+| `contains_probiotics`          | `supplement_type.type == "probiotic"`                     | Boolean                                                                                 |
+| `contains_collagen`            | Derived from ingredient names                             | Boolean: collagen, collagen peptides                                                    |
+| `contains_adaptogens`          | Derived from ingredient names                             | Boolean: ashwagandha, rhodiola, holy basil, ginseng, maca, reishi                       |
+| `contains_nootropics`          | Derived from ingredient names                             | Boolean: lion's mane, bacopa, ginkgo, alpha-GPC, L-theanine, citicoline                 |
+| `key_ingredient_tags`          | Top 5 priority ingredients                                | JSON array: ["ashwagandha", "magnesium", "vitamin_d"]                                   |
+| `goal_matches`                 | Matched against `user_goals_to_clusters.json`             | JSON array of goal IDs, e.g. ["GOAL_SLEEP_QUALITY", "GOAL_REDUCE_STRESS_ANXIETY"]       |
+| `goal_match_confidence`        | Average cluster weight for matched goals                  | 0.0-1.0 float                                                                           |
+| `dosing_summary`               | Generated from `serving_info.serving_size`                | Pre-formatted: "Take 2 capsules daily with food"                                        |
+| `servings_per_container`       | `serving_info.servings_per_container`                     | Integer                                                                                 |
+| `allergen_summary`             | Generated from `allergen_hits`                            | "Contains: Soy, Tree Nuts" or NULL                                                      |
 
 ### What Is NOT Stored
 
-| Data | Reason |
-|---|---|
-| `score_fit_20` | Computed on-device per user |
-| `score_combined_100` | Computed on-device per user |
-| `off_market` | Redundant with `product_status` |
-| Price / daily cost | User-entered |
-| Product-level recall | No data source yet |
-| Offline image data | Runtime concern |
+| Data                 | Reason                          |
+| -------------------- | ------------------------------- |
+| `score_fit_20`       | Computed on-device per user     |
+| `score_combined_100` | Computed on-device per user     |
+| `off_market`         | Redundant with `product_status` |
+| Price / daily cost   | User-entered                    |
+| Product-level recall | No data source yet              |
+| Offline image data   | Runtime concern                 |
 
 ### Detail payload resolution
 
@@ -201,6 +274,7 @@ shared/details/sha256/{blob_sha256[0:2]}/{blob_sha256}.json
 ```
 
 `detail_index.json` is still exported and uploaded for:
+
 - compatibility with older clients/tooling
 - audit/debug workflows
 - release verification
@@ -238,12 +312,12 @@ CREATE TABLE product_detail_cache (
 
 Small rule tables for offline Section F (user fit) scoring.
 
-| Key | Source file | Size | Purpose |
-|---|---|---|---|
-| `rda_optimal_uls` | rda_optimal_uls.json | ~199KB | Dosage vs age/sex-specific RDA/UL |
-| `interaction_rules` | ingredient_interaction_rules.json | ~75KB | Medical compatibility (45 rules, 14 conditions, 9 drug classes) |
-| `clinical_risk_taxonomy` | clinical_risk_taxonomy.json | ~5KB | Severity classification (14 conditions incl. diabetes merged, high_cholesterol added) |
-| `user_goals_clusters` | user_goals_to_clusters.json | ~11KB | Goal matching |
+| Key                      | Source file                       | Size   | Purpose                                                                               |
+| ------------------------ | --------------------------------- | ------ | ------------------------------------------------------------------------------------- |
+| `rda_optimal_uls`        | rda_optimal_uls.json              | ~199KB | Dosage vs age/sex-specific RDA/UL                                                     |
+| `interaction_rules`      | ingredient_interaction_rules.json | ~75KB  | Medical compatibility (45 rules, 14 conditions, 9 drug classes)                       |
+| `clinical_risk_taxonomy` | clinical_risk_taxonomy.json       | ~5KB   | Severity classification (14 conditions incl. diabetes merged, high_cholesterol added) |
+| `user_goals_clusters`    | user_goals_to_clusters.json       | ~11KB  | Goal matching                                                                         |
 
 ```sql
 CREATE TABLE reference_data (
@@ -267,15 +341,15 @@ CREATE TABLE export_manifest (
 
 Required rows:
 
-| Key | Example value |
-|---|---|
-| `db_version` | `2026.03.29.232343` |
-| `pipeline_version` | `3.1.0` |
-| `scoring_version` | `3.1.0` |
-| `generated_at` | `2026-03-29T22:33:24Z` |
-| `product_count` | `180423` |
-| `min_app_version` | `1.0.0` |
-| `schema_version` | `1` |
+| Key                | Example value          |
+| ------------------ | ---------------------- |
+| `db_version`       | `2026.03.29.232343`    |
+| `pipeline_version` | `3.1.0`                |
+| `scoring_version`  | `3.1.0`                |
+| `generated_at`     | `2026-03-29T22:33:24Z` |
+| `product_count`    | `180423`               |
+| `min_app_version`  | `1.0.0`                |
+| `schema_version`   | `1`                    |
 
 `db_version` is generated from the UTC build timestamp as `YYYY.MM.DD.HHMMSS`.
 The SQLite `export_manifest` table intentionally omits `checksum`, because the
@@ -422,7 +496,12 @@ compatibility/audit fallback. The payload is cached on-device in
   "is_harmful": false,
   "harmful_severity": null,
   "harmful_notes": null,
-  "identifiers": {"cui": "C0041660", "unii": "K3D86KJ24N", "cas": "112-38-9", "pubchem_cid": 5634}
+  "identifiers": {
+    "cui": "C0041660",
+    "unii": "K3D86KJ24N",
+    "cas": "112-38-9",
+    "pubchem_cid": 5634
+  }
 }
 ```
 
@@ -542,6 +621,7 @@ additional fields are present:
 ```
 
 ### Notes on detail blob
+
 - Active ingredient `notes` come from IQM form notes. These are polished educational text.
 - Inactive ingredient `notes` now come from `other_ingredients.json` reference data.
   `additive_type` and `common_uses` are reliable. If the ingredient matched
@@ -570,7 +650,7 @@ additional fields are present:
   - `B6` (disease claims): `{id, label, score}`
   - `B7` (dose safety): `{id, label, severity, reason}` — one entry per ingredient exceeding 150% of highest adult UL. `severity` is `"critical"` at 200%+ or `"warning"` at 150-200%. `reason` includes nutrient name, amount, and UL value.
   - `violation` (scoring violation): `{id, label, score}`
-  The app can render these as a "What hurt this score" section.
+    The app can render these as a "What hurt this score" section.
 - `formulation_detail` carries the context behind A3/A4/A5 bonuses: delivery tier,
   absorption enhancers found, organic certification, standardized botanicals, synergy
   qualification, and non-GMO verification.
@@ -649,6 +729,7 @@ Search
 ## Build Tooling
 
 ### Single brand export
+
 ```bash
 python3 scripts/build_final_db.py \
   --enriched-dir output_Thorne_enriched/enriched \
@@ -657,6 +738,7 @@ python3 scripts/build_final_db.py \
 ```
 
 ### Multi-brand auto-discovery
+
 ```bash
 python3 scripts/build_all_final_dbs.py \
   --scan-dir scripts/ \
@@ -664,6 +746,7 @@ python3 scripts/build_all_final_dbs.py \
 ```
 
 ### CI validation
+
 ```bash
 pytest scripts/tests/test_export_gate.py -q --tb=short
 # Check audit report for contract failures:
@@ -694,18 +777,18 @@ python3 scripts/sync_to_supabase.py <build_output_dir> --dry-run
 The DB artifact and index are versioned. Detail JSON blobs are content-addressed
 and shared across versions so unchanged products do not get re-uploaded.
 
-| Artifact | Remote path |
-|---|---|
-| SQLite database | `pharmaguide/v{db_version}/pharmaguide_core.db` |
-| Detail index | `pharmaguide/v{db_version}/detail_index.json` |
+| Artifact             | Remote path                                                               |
+| -------------------- | ------------------------------------------------------------------------- |
+| SQLite database      | `pharmaguide/v{db_version}/pharmaguide_core.db`                           |
+| Detail index         | `pharmaguide/v{db_version}/detail_index.json`                             |
 | Detail blob payloads | `pharmaguide/shared/details/sha256/{blob_sha256[0:2]}/{blob_sha256}.json` |
 
 ### Supabase RPCs
 
-| RPC | Called by | Purpose |
-|---|---|---|
-| `rotate_manifest` | `sync_to_supabase.py` via `supabase_client.insert_manifest()` | Atomically inserts a new manifest row and marks the previous row as not current. Prevents a window where no row has `is_current=true`. |
-| `increment_usage` | Flutter app (authenticated users) | Atomic usage increment with day rollover for freemium tracking. Accepts `p_user_id` and `p_type` (`'scan'` or `'ai_message'`), returns a JSON object with `scans_today`, `ai_messages_today`, and `limit_exceeded`. |
+| RPC               | Called by                                                     | Purpose                                                                                                                                                                                                             |
+| ----------------- | ------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `rotate_manifest` | `sync_to_supabase.py` via `supabase_client.insert_manifest()` | Atomically inserts a new manifest row and marks the previous row as not current. Prevents a window where no row has `is_current=true`.                                                                              |
+| `increment_usage` | Flutter app (authenticated users)                             | Atomic usage increment with day rollover for freemium tracking. Accepts `p_user_id` and `p_type` (`'scan'` or `'ai_message'`), returns a JSON object with `scans_today`, `ai_messages_today`, and `limit_exceeded`. |
 
 ### Sync behavior
 
@@ -726,9 +809,9 @@ and shared across versions so unchanged products do not get re-uploaded.
 
 ## V1 Gaps
 
-| Gap | Status |
-|---|---|
-| `is_non_gmo` | Evidence exists in label text, needs normalized boolean extraction |
-| Product-level recalls | Needs product/UPC-keyed FDA data source. Not faked in v1. |
-| Offline images | `image_url` may be PDF. V1 uses placeholder + runtime cache. |
-| `rda_ul_data` enforcement | Must decide: always collect, or treat as optional in detail blob |
+| Gap                       | Status                                                             |
+| ------------------------- | ------------------------------------------------------------------ |
+| `is_non_gmo`              | Evidence exists in label text, needs normalized boolean extraction |
+| Product-level recalls     | Needs product/UPC-keyed FDA data source. Not faked in v1.          |
+| Offline images            | `image_url` may be PDF. V1 uses placeholder + runtime cache.       |
+| `rda_ul_data` enforcement | Must decide: always collect, or treat as optional in detail blob   |

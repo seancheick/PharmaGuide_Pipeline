@@ -1,6 +1,6 @@
 # PharmaGuide Pipeline Operator Dashboard — Design Spec
 
-> Version: 1.2.0 | Date: 2026-03-31
+> Version: 2.0.0 | Date: 2026-04-08
 > Status: Verified against actual files — pending final review
 > Stack: Python 3.13 + Streamlit + Pandas + Plotly
 > Scope: Read-only internal operator dashboard, local-only, no auth
@@ -49,7 +49,7 @@ scripts/dashboard/
 
 ```bash
 streamlit run scripts/dashboard/app.py -- \
-  --scan-dir scripts/ \
+  --scan-dir scripts/products/ \
   --build-root scripts/final_db_output/ \
   --dataset-root /Users/seancheick/Documents/DataSetDsld/
 ```
@@ -60,7 +60,7 @@ All args have sensible defaults so `streamlit run scripts/dashboard/app.py` work
 
 | Arg | Default | Purpose |
 |-----|---------|---------|
-| `--scan-dir` | `scripts/` | Where to find `output_*` directories, `batch_run_summary_*.txt`, `logs/`, `config/` |
+| `--scan-dir` | `scripts/products/` | Where to find `output_*` directories, `reports/`, `logs/`, and pipeline outputs |
 | `--build-root` | `scripts/final_db_output/` | Where the release artifacts live (SQLite DB, detail blobs, export manifest, audit report) |
 | `--dataset-root` | None (optional) | External dataset location (e.g. `Documents/DataSetDsld/`) for newer flow builds |
 
@@ -493,6 +493,159 @@ Two dropdowns:
 
 ---
 
+## 7B. View 5 — Pipeline Observability (Quality Control Panel)
+
+This is the comprehensive data health dashboard. It surfaces pipeline integrity, product flow, safety signals, sync state, and build history in one place.
+
+### 7B.1 Pipeline Integrity Summary
+
+KPI cards sourced from `export_manifest.json`'s `integrity` block:
+
+| Card | Value | Color Rule |
+|------|-------|------------|
+| Enriched Input Count | `integrity.enriched_input_count` | neutral |
+| Scored Input Count | `integrity.scored_input_count` | neutral |
+| Exported Count | `integrity.exported_count` | neutral |
+| Skipped Count | `integrity.enriched_only + integrity.scored_only + integrity.errors` | yellow if >0 |
+| Coverage % | `exported_count / enriched_input_count * 100` | green >=99%, yellow 95-99%, red <95% |
+| Error Count | `integrity.errors` | red if >0, green if 0 |
+| Strict Mode | `integrity.strict_mode` | green "ON" / yellow "OFF" |
+
+### 7B.2 Product Flow Sankey
+
+Plotly Sankey diagram showing how products flow through the pipeline:
+
+- **Left node**: Total enriched products
+- **Middle nodes**: Matched (present in both enriched + scored), Enriched-only, Scored-only
+- **Right nodes**: Exported, Contract failures, Errors
+- Color coding: green for the happy path (Enriched → Matched → Exported), red for any drop-off path
+- Source: `integrity` block values + `export_audit_report.json`
+
+If Plotly Sankey is unavailable, degrade gracefully to a text-based flow summary table.
+
+### 7B.3 Enriched vs Scored Mismatch Tracker
+
+Two tables and a trend chart:
+
+**Enriched-only products** (products enriched but never scored — source: audit report):
+- Columns: dsld_id, product_name, brand_name, reason_not_scored
+- Sorted by brand
+
+**Scored-only products** (products scored but no matching enriched file):
+- Columns: dsld_id, reason_not_enriched
+- These are anomalies — flag in orange
+
+**Historical mismatch trend** (line chart):
+- X-axis: batch run date (from `batch_run_summary_*.txt` filenames)
+- Y-axis: enriched-only count, scored-only count, error count
+- Shows whether mismatch rate is improving or degrading over time
+
+### 7B.4 Safety & Regulatory Dashboard
+
+Real-time safety signal counts from the `integrity` block and `products_core`:
+
+| Signal | Source | Drill-down |
+|--------|--------|-----------|
+| Banned substances count | `integrity` / `export_audit` | Link to product inspector filtered by `has_banned_substance = true` |
+| Recalled ingredients count | `integrity` / `export_audit` | Link to product inspector filtered by `has_recalled_ingredient = true` |
+| BLOCKED verdict count | `products_core` | List of affected products |
+| UNSAFE verdict count | `products_core` | List of affected products |
+| Harmful additives flagged | `export_audit` | Count + drill-down |
+| Allergen risks flagged | `export_audit` | Count + drill-down |
+| Watchlist hits count | `export_audit` | Count + drill-down |
+
+All counts are clickable — clicking a count opens the Product Inspector pre-filtered to that cohort.
+
+### 7B.5 Supabase Sync Status
+
+Checks remote Supabase state. Requires credentials from `.env` to be present; if not available, shows a graceful "Credentials not configured — showing local status only" message.
+
+| Field | Source | Status Color |
+|-------|--------|-------------|
+| Remote manifest version | Fetched from Supabase storage | green if matches local, yellow if outdated, red if never synced |
+| Local manifest version | `export_manifest.db_version` | — |
+| Last sync timestamp | `export_manifest.generated_at` vs remote | — |
+| Storage bucket usage | Supabase Storage API (total size, file count) | yellow if >80% quota |
+| Old version count | Versions in bucket minus current | yellow if >3 |
+| Sync failure history | `sync_failures_*.json` files | red if any failures in last 7 days |
+
+Status summary badge: **Synced** (green) / **Outdated** (yellow) / **Never synced** (red).
+
+Graceful degradation: if Supabase credentials are absent or the request times out (>5s), show last-known local state with a "Remote check unavailable" warning.
+
+### 7B.6 Storage Health Monitor
+
+Summarizes versioned storage on disk for the build root:
+
+- Total versioned directories in `--build-root` (or `--dataset-root/builds/`)
+- Size per version directory (sorted newest first)
+- Orphaned blob estimate: blobs in `detail_blobs/` not referenced by current `detail_index.json`
+- Cleanup recommendation: "X versions can be cleaned up, saving ~Y MB" (any version that is not the current release and older than 30 days)
+- One-click cleanup trigger button: runs `python3 scripts/cleanup_old_versions.py --execute` via `subprocess` (operator confirms in a Streamlit modal before execution)
+
+Note: cleanup trigger is the only write action in the dashboard. It only deletes old build artifacts, never pipeline inputs or Supabase data.
+
+### 7B.7 Score Distribution Analytics
+
+Enhanced version of the existing 6.5 histogram. Adds:
+
+- Score histogram (10-point bins) with grade threshold overlay (90, 80, 70, 60, 50, 32)
+- **Per-brand score distribution**: box plots for the top 10 brands by product count
+- **Score shift heatmap**: if two or more builds are available, show a grid of score-range transitions (from build N-1 to build N)
+- **Percentile distribution by category**: bar chart showing median score per supplement type
+- **Top improvers / top decliners**: table of products with the largest score delta vs previous build (if prior build manifest is discoverable)
+
+Source: `products_core` SQLite + cross-build comparison when prior `export_manifest.json` history is available.
+
+### 7B.8 Ingredient Coverage Health
+
+- Total unique ingredients across all products (from `products_core` ingredient arrays or enrichment summaries)
+- Mapped vs unmapped ratio (pie chart)
+- Coverage trend over time (line chart, X = batch run date, Y = mapped %)
+- Top 20 unmapped ingredients by frequency (table: name, occurrence count, affected brands)
+- Ingredients with the lowest `bio_score` across all products — quality improvement candidates
+- IQM coverage gaps: ingredients present in products that have no entry in `scripts/data/ingredient_quality_map.json`
+
+Source: enrichment summaries + `ingredient_quality_map.json` key set.
+
+### 7B.9 Build History Timeline
+
+- Timeline visualization of all discovered builds (from `export_manifest.json` history files or versioned build dirs)
+- Each build node shows: version label, product count, coverage %, error count, generated_at timestamp
+- Click any node to open a comparison between that build and the current release (links to Release Diff view, View 4)
+- Trend lines overlay: product count growth, coverage % improvement, error count reduction
+- If only one build exists: show a single node with a "No prior builds to compare" note
+
+### 7B.10 Alerting Rules (Configurable)
+
+Operator-defined thresholds stored in `scripts/dashboard/dashboard_alerts.json`. Alerts render as colored banners at the top of the observability view.
+
+| Condition | Default Threshold | Banner Color |
+|-----------|-------------------|-------------|
+| Coverage drops below X% | 95% | Red |
+| Error count exceeds N | 0 | Red |
+| Banned substance count increases vs prior build | any increase | Red |
+| Unmapped ingredients exceed N | 100 | Yellow |
+| Build age exceeds N days | 7 days | Yellow |
+| Supabase out of sync for N+ hours | 24 hours | Yellow |
+
+All thresholds are configurable. The `dashboard_alerts.json` schema:
+
+```json
+{
+  "coverage_min_pct": 95,
+  "max_errors": 0,
+  "ban_increase_alert": true,
+  "max_unmapped": 100,
+  "max_build_age_days": 7,
+  "max_sync_lag_hours": 24
+}
+```
+
+If `dashboard_alerts.json` does not exist, defaults are used and a one-time notice is shown: "Using default alert thresholds. Create `scripts/dashboard/dashboard_alerts.json` to customize."
+
+---
+
 ## 8. Components
 
 Reusable Streamlit components shared across views.
@@ -579,6 +732,14 @@ class DashboardData:
     warnings: list[str]                     # loader warnings for sidebar display
     latest_batch_summary: dict | None       # parsed latest batch run summary
     release_artifact_status: dict[str, Any] # presence/health of DB, manifest, index, blob dir
+
+    # Pipeline integrity (from manifest)
+    integrity_data: dict | None             # export_manifest.integrity block
+
+    # Supabase sync state (optional, requires credentials)
+    remote_manifest: dict | None            # fetched from Supabase if credentials available
+    sync_failures: list[dict]               # from sync_failures_*.json files
+    storage_health: dict | None             # bucket stats if available
 ```
 
 **Caching**: `@st.cache_data` on JSON file reads, `@st.cache_resource` on SQLite connection. TTL: 5 minutes by default. Manual refresh clears caches immediately. Auto-refresh, when enabled, should reuse the same TTL rules instead of bypassing them.
@@ -610,7 +771,6 @@ No other dependencies. Uses stdlib `sqlite3`, `json`, `pathlib`, `datetime`, `gl
 
 - No editing/writing to any data source
 - No ingredient-wide search (needs enriched output index — phase 2)
-- No Supabase remote status check (local artifact status only)
 - No auth, hosting, or deployment
 - No Release Diff view (designed above, built in phase 2)
 - No open-in-editor/finder links (display copyable paths only)
@@ -644,6 +804,11 @@ No other dependencies. Uses stdlib `sqlite3`, `json`, `pathlib`, `datetime`, `gl
 - `views/diff.py`: comparison setup, score shifts, verdict changes, new warnings
 - Requires loading two scored output directories and computing deltas
 
+### Phase 4: Pipeline Observability
+- `views/observability.py`: integrity summary, product flow sankey, mismatch tracker, safety dashboard, sync status, storage health, score distribution analytics, ingredient coverage health, build history timeline, alerting rules
+- Components: `sankey_chart.py`, `alert_banner.py`, `timeline.py`
+- Requires: `export_manifest.json` integrity block for most panels; Supabase client access for sync status (optional — graceful degradation if credentials absent)
+
 ---
 
 ## 13. Success Criteria
@@ -653,3 +818,7 @@ The dashboard is useful when:
 2. You can see at a glance whether the last pipeline run succeeded
 3. You can find the top unmapped ingredients across all brands in one table
 4. You can spot NOT_SCORED products without running a SQL query
+5. You can see at a glance how many products were lost between enrichment and export
+6. You can track Supabase sync freshness without logging into the Supabase dashboard
+7. You get visual alerts when data quality drops below thresholds
+8. You can compare any two builds and see exactly what changed

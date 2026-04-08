@@ -1,6 +1,6 @@
 # SCORING_ENGINE_SPEC.md
 
-> Scoring version: **3.2.0** / Data schema: **5.1.0** — aligned to current `score_supplements.py` and `config/scoring_config.json`.
+> Scoring version: **3.4.0** / Data schema: **5.1.0** — aligned to current `score_supplements.py` and `config/scoring_config.json`.
 
 ## Scope
 
@@ -33,7 +33,7 @@ score_80 = quality_score
 score_100_equivalent = (quality_score / 80) * 100
 ```
 
-Section caps (v3.1):
+Section caps (v3.4):
 - A max 25
 - B max 30
 - C max 20
