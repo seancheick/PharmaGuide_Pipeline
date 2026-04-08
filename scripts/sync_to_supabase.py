@@ -632,6 +632,10 @@ def parse_args(argv=None):
                         help=f"Retries per upload after the first attempt (default: {DEFAULT_UPLOAD_RETRIES})")
     parser.add_argument("--retry-base-delay", type=float, default=DEFAULT_RETRY_BASE_DELAY,
                         help=f"Base seconds for exponential retry backoff (default: {DEFAULT_RETRY_BASE_DELAY})")
+    parser.add_argument("--cleanup", action="store_true",
+                        help="After successful sync, clean up old versions (keep last 2)")
+    parser.add_argument("--cleanup-keep", type=int, default=2,
+                        help="Number of versions to keep during cleanup (default: 2)")
     return parser.parse_args(argv)
 
 
@@ -654,6 +658,10 @@ def main(argv=None):
         if result["status"] == "partial_failure":
             sys.exit(2)
         elif result["status"] in ("synced", "up_to_date", "dry_run"):
+            if args.cleanup and result["status"] == "synced":
+                print(f"\nRunning post-sync cleanup (keeping last {args.cleanup_keep} versions)...")
+                from cleanup_old_versions import main as cleanup_main
+                cleanup_main(["--keep", str(args.cleanup_keep), "--execute", "--cleanup-orphan-blobs"])
             sys.exit(0)
     except FileNotFoundError as e:
         print(f"Error: {e}")

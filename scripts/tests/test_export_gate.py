@@ -168,6 +168,16 @@ COLUMNS = [
     "is_probiotic", "contains_sugar", "contains_sodium", "diabetes_friendly", "hypertension_friendly",
     "is_trusted_manufacturer", "has_third_party_testing", "has_full_disclosure",
     "cert_programs", "badges", "top_warnings", "flags",
+    # v1.1.0+ additions
+    "ingredient_fingerprint", "key_nutrients_summary",
+    "contains_stimulants", "contains_sedatives", "contains_blood_thinners",
+    "share_title", "share_description", "share_highlights", "share_og_image_url",
+    "primary_category", "secondary_categories",
+    "contains_omega3", "contains_probiotics", "contains_collagen",
+    "contains_adaptogens", "contains_nootropics", "key_ingredient_tags",
+    "goal_matches", "goal_match_confidence",
+    "dosing_summary", "servings_per_container",
+    "allergen_summary",
     "scoring_version", "output_schema_version", "enrichment_version", "scored_date",
     "export_version", "exported_at",
 ]

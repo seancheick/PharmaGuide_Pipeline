@@ -14,7 +14,7 @@
     "input_directory": "/Users/seancheick/Documents/DataSetDsld/Lozenges-978labels-11-11-25",
     "output_directory": "output_Lozenges/cleaned",
     "reference_data": "data",
-    "log_directory": "logs"
+    "log_directory": "products/logs"
   },
   "processing": {
     "_comment": "batch_size controls files per batch, max_workers controls parallel processes",

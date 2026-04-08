@@ -14,7 +14,7 @@ v1.1.0 Changelog (2026-04-07):
   - Added goal matching preview (goal_matches, goal_match_confidence)
   - Added dosing summary (dosing_summary, servings_per_container)
   - Added allergen summary string
-  - Schema now has 88 columns (up from 65)
+  - Schema now has 87 columns (up from 65)
 
 Usage:
     python build_final_db.py --enriched-dir output_Brand_enriched/enriched \
@@ -47,8 +47,8 @@ from urllib.parse import urlparse
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 logger = logging.getLogger(__name__)
 
-EXPORT_SCHEMA_VERSION = "1.1.0"  # Updated for v1.1.0 enhancements
-PIPELINE_VERSION = "3.1.0"
+EXPORT_SCHEMA_VERSION = "1.3.0"  # Aligned to FINAL_EXPORT_SCHEMA_V1.md v1.3.0
+PIPELINE_VERSION = "3.4.0"
 TOP_WARNINGS_MAX = 5
 MIN_APP_VERSION = "1.0.0"
 EXPORT_COMMIT_EVERY = 2000
@@ -2032,7 +2032,7 @@ def build_core_row(
         safe_bool(comp.get("vegan")),
         safe_bool(comp.get("vegetarian")),
         safe_bool(enriched.get("is_certified_organic")),
-        0,  # is_non_gmo — gap, not yet normalized
+        safe_bool(enriched.get("claim_non_gmo_project_verified")),
         # Safety outcomes
         safe_bool(has_banned_substance(enriched)),
         safe_bool(has_recalled_ingredient(enriched)),
@@ -2092,7 +2092,7 @@ def build_core_row(
     )
 
 
-CORE_COLUMN_COUNT = 87  # Must match the tuple above and SCHEMA_SQL (65 + 22 new cols)
+CORE_COLUMN_COUNT = 87  # Must match the tuple above and SCHEMA_SQL
 
 
 # ─── Reference Data Loader ───
@@ -2249,6 +2249,7 @@ def build_final_db(
     scored_dirs: List[str],
     output_dir: str,
     script_dir: str,
+    strict: bool = False,
 ):
     os.makedirs(output_dir, exist_ok=True)
     detail_dir = os.path.join(output_dir, "detail_blobs")
@@ -2399,7 +2400,23 @@ def build_final_db(
                 [row[0] for row in scored_only_rows],
             )
 
-        logger.info("Inserted %d products, %d errors", inserted, errors)
+        # ── Pipeline integrity gate ──
+        enriched_only_count = audit_counts["enriched_only"]
+        total_input = enriched_unique
+        total_skipped = enriched_only_count + scored_only_count + errors
+        coverage_pct = (inserted / total_input * 100) if total_input else 0
+
+        if strict and (enriched_only_count > 0 or scored_only_count > 0):
+            raise ValueError(
+                f"Strict mode: pipeline mismatch detected. "
+                f"{enriched_only_count} enriched-only, {scored_only_count} scored-only. "
+                f"All products must be both enriched AND scored before shipping."
+            )
+
+        logger.info(
+            "Inserted %d products, %d errors, %d skipped (%.1f%% coverage)",
+            inserted, errors, total_skipped, coverage_pct,
+        )
     finally:
         stage_conn.close()
         if os.path.exists(stage_db_path):
@@ -2414,6 +2431,13 @@ def build_final_db(
 
     # Reference data
     ref_rows = load_reference_data(script_dir)
+
+    # Scoring config fingerprint for build reproducibility
+    scoring_config_path = os.path.join(script_dir, "config", "scoring_config.json")
+    scoring_config_checksum = None
+    if os.path.exists(scoring_config_path):
+        scoring_config_checksum = f"sha256:{compute_file_sha256(scoring_config_path)}"
+
     for row in ref_rows:
         c.execute("INSERT OR REPLACE INTO reference_data VALUES (?,?,?,?)", row)
     logger.info("Loaded %d reference data entries", len(ref_rows))
@@ -2457,6 +2481,26 @@ def build_final_db(
         "detail_index_checksum": f"sha256:{detail_index_checksum}",
         "min_app_version": MIN_APP_VERSION,
         "schema_version": EXPORT_SCHEMA_VERSION,
+        "scoring_config_checksum": scoring_config_checksum,
+        # Pipeline integrity signals
+        "integrity": {
+            "enriched_input_count": enriched_unique,
+            "scored_input_count": scored_unique,
+            "exported_count": inserted,
+            "error_count": errors,
+            "enriched_only_count": audit_counts.get("enriched_only", 0),
+            "scored_only_count": audit_counts.get("scored_only", 0),
+            "skipped_count": audit_counts.get("enriched_only", 0) + audit_counts.get("scored_only", 0) + errors,
+            "coverage_pct": round((inserted / enriched_unique * 100) if enriched_unique else 0, 2),
+            "strict_mode": strict,
+            "verdict_blocked": audit_counts.get("verdict_blocked", 0),
+            "verdict_unsafe": audit_counts.get("verdict_unsafe", 0),
+            "verdict_not_scored": audit_counts.get("verdict_not_scored", 0),
+            "has_banned_substance": audit_counts.get("has_banned_substance", 0),
+            "has_recalled_ingredient": audit_counts.get("has_recalled_ingredient", 0),
+            "contract_failures": audit_counts.get("export_contract_invalid", 0),
+            "scoring_config_checksum": scoring_config_checksum,
+        },
         "errors": error_details,
     }
     manifest_path = os.path.join(output_dir, "export_manifest.json")
@@ -2500,10 +2544,15 @@ def main():
                         help="Directories containing scored JSON files")
     parser.add_argument("--output-dir", default="final_db_output",
                         help="Output directory for DB + blobs + manifest")
+    parser.add_argument("--strict", action="store_true",
+                        help="Fail build if any enriched/scored mismatch (production mode)")
     args = parser.parse_args()
 
     script_dir = str(Path(__file__).parent)
-    result = build_final_db(args.enriched_dir, args.scored_dir, args.output_dir, script_dir)
+    result = build_final_db(
+        args.enriched_dir, args.scored_dir, args.output_dir, script_dir,
+        strict=args.strict,
+    )
 
     print(f"\nDone. {result['product_count']} products, {result['error_count']} errors.")
     print(f"DB: {result['db_path']} ({result['db_size_mb']} MB)")

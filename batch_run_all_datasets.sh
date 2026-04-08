@@ -71,8 +71,9 @@ fi
 # Change to scripts directory
 cd "$SCRIPTS_DIR"
 
-# Create summary file
-SUMMARY_FILE="batch_run_summary_$(date +%Y%m%d_%H%M%S).txt"
+# Create summary file in products/reports/
+mkdir -p products/reports
+SUMMARY_FILE="products/reports/batch_run_summary_$(date +%Y%m%d_%H%M%S).txt"
 {
     echo "=========================================="
     echo "BATCH PIPELINE RUN - $(date)"
@@ -150,11 +151,11 @@ for folder in "${sorted_folders[@]}"; do
     
     echo -e "${YELLOW}${PROGRESS} Processing: ${folder_name}${NC}"
     echo "  Path: $folder"
-    echo "  Output prefix: output_${folder_name}"
+    echo "  Output prefix: products/output_${folder_name}"
     echo ""
-    
+
     # Run pipeline
-    if python run_pipeline.py --raw-dir "$folder" --output-prefix "output_${folder_name}" --stages "$STAGES" 2>&1 | tee -a "$SUMMARY_FILE"; then
+    if python run_pipeline.py --raw-dir "$folder" --output-prefix "products/output_${folder_name}" --stages "$STAGES" 2>&1 | tee -a "$SUMMARY_FILE"; then
         echo -e "${GREEN}${PROGRESS} ✓ SUCCESS: ${folder_name}${NC}"
         PASSED+=("$folder_name")
     else
