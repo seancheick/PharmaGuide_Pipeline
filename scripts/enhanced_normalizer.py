@@ -1721,12 +1721,31 @@ class EnhancedDSLDNormalizer:
             self._botanical_variations_cache = [term for term in all_botanical_terms if term]
         return self._botanical_variations_cache
 
+    # Reference databases whose absence means the pipeline CANNOT produce safe results.
+    # If any of these fail to load, the pipeline must abort rather than silently degrade.
+    CRITICAL_DATABASES = {
+        "ingredient_quality_map.json",
+        "banned_recalled_ingredients.json",
+        "harmful_additives.json",
+        "allergens.json",
+        "rda_optimal_uls.json",
+    }
+
     def _load_json(self, filepath: Path) -> Dict:
-        """Load JSON reference file with error handling"""
+        """Load JSON reference file. Raises on critical DB failures."""
+        is_critical = filepath.name in self.CRITICAL_DATABASES
         try:
             with open(filepath, 'r', encoding='utf-8') as f:
-                return json.load(f)
+                data = json.load(f)
+            if is_critical and not data:
+                raise ValueError(f"Critical database {filepath.name} loaded but is empty")
+            return data
         except Exception as e:
+            if is_critical:
+                raise RuntimeError(
+                    f"FATAL: Failed to load critical reference database {filepath}: {e}. "
+                    f"Pipeline cannot produce safe results without this file."
+                ) from e
             logger.error(f"Failed to load {filepath}: {str(e)}")
             return {}
 
@@ -2658,20 +2677,19 @@ class EnhancedDSLDNormalizer:
                     result["severity"] = allergen.get("severity_level", "low")
                     break
 
-            # NOTE: Fuzzy matching for allergens is INTENTIONALLY DISABLED.
-            # "allergen" is NOT in safe_fuzzy_categories, so this always returns (None, 0).
-            # Allergen detection relies on EXACT matching only for safety.
-            fuzzy_match, score = self.matcher.fuzzy_match(processed_term, self.allergen_variations, "allergen")
-            if fuzzy_match:  # Dead code path - fuzzy_match is always None
-                allergen = self.allergen_lookup[fuzzy_match]
-                # SAFETY: Ensure standard_name exists
-                standard_name = allergen.get("standard_name", "")
-                if standard_name:
-                    result["is_allergen"] = True
-                    result["type"] = standard_name.lower()
-                    result["severity"] = allergen.get("severity_level", "low")
-                    logger.debug(f"Fuzzy allergen match '{term}' -> '{fuzzy_match}' (score: {score})")
-                    break
+            # NOTE: Fuzzy matching for allergens is INTENTIONALLY DISABLED for safety.
+            # "allergen" is NOT in safe_fuzzy_categories, so matcher.fuzzy_match returns (None, 0).
+            # The code below is preserved but commented out to prevent unintended execution.
+            # fuzzy_match, score = self.matcher.fuzzy_match(processed_term, self.allergen_variations, "allergen")
+            # if fuzzy_match:
+            #     allergen = self.allergen_lookup[fuzzy_match]
+            #     standard_name = allergen.get("standard_name", "")
+            #     if standard_name:
+            #         result["is_allergen"] = True
+            #         result["type"] = standard_name.lower()
+            #         result["severity"] = allergen.get("severity_level", "low")
+            #         logger.debug(f"Fuzzy allergen match '{term}' -> '{fuzzy_match}' (score: {score})")
+            #         break
 
         return result
     
@@ -2696,15 +2714,16 @@ class EnhancedDSLDNormalizer:
             result["category"] = harmful.get("category", "other")
             result["severity_level"] = harmful.get("severity_level", "low")
         else:
-            # NOTE: Fuzzy matching for harmful additives is INTENTIONALLY DISABLED.
-            # "harmful" is NOT in safe_fuzzy_categories, so this always returns (None, 0).
-            # Harmful detection relies on EXACT matching only for safety.
-            fuzzy_match, score = self.matcher.fuzzy_match(processed_name, self.harmful_variations, "harmful")
-            if fuzzy_match:  # Dead code path - fuzzy_match is always None
-                harmful = self.harmful_lookup[fuzzy_match]
-                result["category"] = harmful.get("category", "other")
-                result["severity_level"] = harmful.get("severity_level", "low")
-                logger.debug(f"Fuzzy harmful match '{name}' -> '{fuzzy_match}' (score: {score})")
+            # NOTE: Fuzzy matching for harmful additives is INTENTIONALLY DISABLED for safety.
+            # "harmful" is NOT in safe_fuzzy_categories, so matcher.fuzzy_match returns (None, 0).
+            # The code below is preserved but commented out.
+            # fuzzy_match, score = self.matcher.fuzzy_match(processed_name, self.harmful_variations, "harmful")
+            # if fuzzy_match:
+            #     harmful = self.harmful_lookup[fuzzy_match]
+            #     result["category"] = harmful.get("category", "other")
+            #     result["severity_level"] = harmful.get("severity_level", "low")
+            #     logger.debug(f"Fuzzy harmful match '{name}' -> '{fuzzy_match}' (score: {score})")
+            pass
 
         return result
 
@@ -2898,8 +2917,15 @@ class EnhancedDSLDNormalizer:
             }
         }
     
-    def _flatten_nested_ingredients(self, ingredient_rows: List[Dict]) -> List[Dict]:
+    def _flatten_nested_ingredients(self, ingredient_rows: List[Dict], _depth: int = 0) -> List[Dict]:
         """Flatten nested ingredients from blends for better scoring, preserving blend structure"""
+        MAX_FLATTEN_DEPTH = 5
+        if _depth > MAX_FLATTEN_DEPTH:
+            logger.warning(
+                "Max flatten depth (%d) exceeded, returning ingredients as-is",
+                MAX_FLATTEN_DEPTH,
+            )
+            return list(ingredient_rows)
         flattened = []
 
         for ing in ingredient_rows:
@@ -2938,7 +2964,7 @@ class EnhancedDSLDNormalizer:
                     nested_ing["parentBlend"] = name or "Unknown Blend"
                     nested_ing["isNestedIngredient"] = True
                     if nested_ing.get("nestedRows"):
-                        sub_flattened = self._flatten_nested_ingredients([nested_ing])
+                        sub_flattened = self._flatten_nested_ingredients([nested_ing], _depth=_depth + 1)
                         flattened.extend(sub_flattened)
                     else:
                         flattened.append(nested_ing)
@@ -2962,7 +2988,7 @@ class EnhancedDSLDNormalizer:
                     nested_ing["parentBlend"] = name or "Unknown Blend"
                     nested_ing["isNestedIngredient"] = True
                     if nested_ing.get("nestedRows"):
-                        sub_flattened = self._flatten_nested_ingredients([nested_ing])
+                        sub_flattened = self._flatten_nested_ingredients([nested_ing], _depth=_depth + 1)
                         flattened.extend(sub_flattened)
                     else:
                         flattened.append(nested_ing)
@@ -3091,8 +3117,12 @@ class EnhancedDSLDNormalizer:
             flattened_ingredients = self._flatten_nested_ingredients(raw_ingredients)
 
             # Extract nutritional info BEFORE filtering out nutrition facts
-            # Handle both "otherIngredients" and "otheringredients" keys
-            other_ing_data = raw_data.get("otherIngredients", raw_data.get("otheringredients", {})) or {}
+            # DSLD keys can vary: otherIngredients, otheringredients, OtherIngredients
+            other_ing_data = {}
+            for key in ["otherIngredients", "otheringredients", "OtherIngredients"]:
+                if key in raw_data:
+                    other_ing_data = raw_data[key] or {}
+                    break
             other_ingredients_raw = other_ing_data.get("ingredients", [])
             # Handle None values from DSLD data
             if other_ingredients_raw is None:
@@ -4199,9 +4229,19 @@ class EnhancedDSLDNormalizer:
                             collected_unmapped.append(unmapped_info)
                 except Exception as e:
                     ingredient = future_to_ingredient[future]
-                    logger.error(f"Error processing ingredient '{ingredient.get('name', 'unknown')}': {e}")
-                    # Add a basic result for failed processing (CLEANING ONLY - NO ENRICHMENT)
                     ing_name = ingredient.get("name", "")
+                    logger.error(f"Error processing ingredient '{ing_name}': {e}")
+                    
+                    # Ensure unmapped info is still recorded for failures if not nutrition fact
+                    if not self._is_nutrition_fact(ing_name):
+                        collected_unmapped.append({
+                            "name": ing_name,
+                            "processed_name": self.matcher.preprocess_text(ing_name),
+                            "forms": [],
+                            "is_active": False  # Conservative assumption for failures
+                        })
+
+                    # Add a basic result for failed processing (CLEANING ONLY - NO ENRICHMENT)
                     processed.append({
                         "order": ingredient.get("order", 0),
                         "ingredientId": ingredient.get("ingredientId"),
@@ -4750,7 +4790,8 @@ class EnhancedDSLDNormalizer:
 
     def _safe_int(self, value: Any, field_name: str = "value", default: int = 0) -> int:
         """
-        Safely convert value to integer with comprehensive error handling
+        Safely convert value to integer with comprehensive error handling.
+        Returns (int, bool) if with_flag=True via _safe_int_flagged.
         """
         # Handle None explicitly
         if value is None:
@@ -4773,7 +4814,7 @@ class EnhancedDSLDNormalizer:
 
     def _safe_float(self, value: Any, field_name: str = "value", default: float = 0.0) -> float:
         """
-        Safely convert value to float with comprehensive error handling
+        Safely convert value to float with comprehensive error handling.
         """
         # Handle None explicitly
         if value is None:
@@ -4793,6 +4834,16 @@ class EnhancedDSLDNormalizer:
         except (ValueError, TypeError) as e:
             logger.warning(f"Failed to convert {field_name} '{value}' to float: {e}. Using {default}")
             return default
+
+    def _safe_float_flagged(self, value: Any, field_name: str = "value", default: float = 0.0):
+        """Like _safe_float but returns (value, parsed_ok) so callers can flag synthetic data."""
+        if value is None or (isinstance(value, str) and (not value.strip() or value.strip().lower() == "none")):
+            return default, False
+        try:
+            return float(value), True
+        except (ValueError, TypeError):
+            logger.warning(f"Failed to convert {field_name} '{value}' to float: using {default}")
+            return default, False
     
     def _extract_field_value(self, field_data: Any) -> str:
         """Extract string value from field that can be either string or dict with langualCodeDescription"""
@@ -5068,7 +5119,8 @@ class EnhancedDSLDNormalizer:
 
         # Case 3: Single dict object
         if isinstance(quantities, dict):
-            quantity = self._safe_float(quantities.get("quantity", quantities.get("value", 0)))
+            raw_qty = quantities.get("quantity", quantities.get("value", 0))
+            quantity, qty_parsed = self._safe_float_flagged(raw_qty, "quantity")
             unit = quantities.get("unit", "unspecified")
 
             # Get daily value if available
@@ -5081,7 +5133,8 @@ class EnhancedDSLDNormalizer:
             variant = {
                 "quantity": quantity,
                 "unit": unit,
-                "context": "single_dict"
+                "context": "single_dict",
+                "quantity_parsed": qty_parsed,
             }
             if daily_value:
                 variant["daily_value"] = daily_value
@@ -5095,7 +5148,8 @@ class EnhancedDSLDNormalizer:
 
             for idx, q in enumerate(quantities):
                 if isinstance(q, dict):
-                    qty = self._safe_float(q.get("quantity", q.get("value", 0)))
+                    raw_q = q.get("quantity", q.get("value", 0))
+                    qty, qty_parsed = self._safe_float_flagged(raw_q, "quantity")
                     u = q.get("unit", "unspecified")
 
                     # Get daily value if available
@@ -5120,7 +5174,8 @@ class EnhancedDSLDNormalizer:
                     variant = {
                         "quantity": qty,
                         "unit": u,
-                        "index": idx
+                        "index": idx,
+                        "quantity_parsed": qty_parsed,
                     }
                     if dv:
                         variant["daily_value"] = dv
@@ -5247,16 +5302,27 @@ class EnhancedDSLDNormalizer:
         processed = []
         
         for serving in serving_sizes:
-            min_qty = self._safe_float(serving.get("minQuantity", DEFAULT_SERVING_SIZE))
-            max_qty = self._safe_float(serving.get("maxQuantity", min_qty))
-            
+            raw_min_qty = serving.get("minQuantity")
+            raw_max_qty = serving.get("maxQuantity")
+            raw_min_daily = serving.get("minDailyServings")
+            raw_max_daily = serving.get("maxDailyServings")
+
+            min_qty = self._safe_float(raw_min_qty if raw_min_qty is not None else DEFAULT_SERVING_SIZE)
+            max_qty = self._safe_float(raw_max_qty if raw_max_qty is not None else min_qty)
+
+            # Track whether serving data came from the label or was fabricated
+            qty_from_label = raw_min_qty is not None or raw_max_qty is not None
+            daily_from_label = raw_min_daily is not None or raw_max_daily is not None
+
             processed.append({
                 "minQuantity": min_qty,
                 "maxQuantity": max_qty,
                 "unit": serving.get("unit", "serving"),
-                "minDailyServings": self._safe_int(serving.get("minDailyServings", DEFAULT_DAILY_SERVINGS)),
-                "maxDailyServings": self._safe_int(serving.get("maxDailyServings", DEFAULT_DAILY_SERVINGS)),
-                "normalizedServing": max_qty  # Use max as normalized
+                "minDailyServings": self._safe_int(raw_min_daily if raw_min_daily is not None else DEFAULT_DAILY_SERVINGS),
+                "maxDailyServings": self._safe_int(raw_max_daily if raw_max_daily is not None else DEFAULT_DAILY_SERVINGS),
+                "normalizedServing": max_qty,  # Use max as normalized
+                "servingQuantitySource": "label" if qty_from_label else "default",
+                "dailyServingsSource": "label" if daily_from_label else "default",
             })
 
         return processed
@@ -5939,7 +6005,7 @@ class EnhancedDSLDNormalizer:
             return False
 
         processed_name = self.matcher.preprocess_text(name)
-        if processed_name != "lanolin":
+        if processed_name not in SOURCE_WRAPPER_NAMES:
             return False
 
         forms = ing.get("forms", []) or []
@@ -5947,7 +6013,9 @@ class EnhancedDSLDNormalizer:
             if not isinstance(form, dict):
                 continue
             form_name = form.get("name", "")
-            if self.matcher.preprocess_text(form_name) == "vitamin d3":
+            # Check for common actives wrapped in source materials
+            form_processed = self.matcher.preprocess_text(form_name)
+            if form_processed in {"vitamin d3", "vitamin d2", "vitamin a", "retinyl palmitate"}:
                 return True
         return False
 

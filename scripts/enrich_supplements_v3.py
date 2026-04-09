@@ -397,9 +397,16 @@ class SupplementEnricherV3:
             self.rda_calculator = RDAULCalculator()
             self.logger.info("RDAULCalculator initialized")
 
-        except Exception as e:
+        except (RuntimeError, ValueError, KeyError) as e:
+            # Critical failures: missing/corrupt reference data or config.
+            # RuntimeError = DB file missing, ValueError = empty/invalid data,
+            # KeyError = malformed config. All indicate the pipeline cannot
+            # produce safe results — abort rather than silently degrade.
+            raise
+        except ImportError as e:
+            # Optional dependency missing (e.g., psutil). Degrade gracefully.
             self.logger.warning(
-                f"Failed to initialize scoring modules: {e}. "
+                f"Optional scoring module dependency missing: {e}. "
                 "Evidence collection will use fallback methods."
             )
             self.unit_converter = None
@@ -3156,6 +3163,7 @@ class SupplementEnricherV3:
             "pyridoxine", "biotin", "folate", "folic acid", "cobalamin", "ascorbic",
             "cholecalciferol", "ergocalciferol", "tocopherol", "phylloquinone",
             "menaquinone", "methylcobalamin", "methylfolate", "mthf",
+            "b1", "b2", "b3", "b5", "b6", "b7", "b9", "b12",
         ],
         "minerals": [
             "calcium", "magnesium", "zinc", "iron", "copper", "manganese",
@@ -6224,9 +6232,10 @@ class SupplementEnricherV3:
                 if self._exact_match(ing_name, allergen_name, allergen_aliases) or \
                    self._exact_match(std_name, allergen_name, allergen_aliases):
 
-                    # Check for negation context
-                    if self._is_negated(allergen_name, allergen_aliases, all_text):
-                        continue
+                    # NEVER apply negation to structured ingredient-list matches.
+                    # If "Milk Protein" is in the ingredient list, it IS an allergen
+                    # regardless of any "dairy-free" claim in marketing text.
+                    # See _is_negated() docstring for the safety contract.
 
                     all_found.append({
                         "allergen_id": allergen.get('id', ''),
@@ -6250,7 +6259,10 @@ class SupplementEnricherV3:
         for item in all_found:
             allergen_id = item.get('allergen_id', '')
             if not allergen_id:
-                continue
+                # Use allergen_name as fallback key so entries without id aren't dropped
+                allergen_id = item.get('allergen_name', '').lower().strip()
+                if not allergen_id:
+                    continue
 
             existing = deduplicated.get(allergen_id)
             if existing:
@@ -6311,7 +6323,10 @@ class SupplementEnricherV3:
 
         for term in terms:
             for pattern in negation_patterns:
-                if re.search(pattern + r'.*?' + re.escape(term), text):
+                # Limit to 60 chars between negation word and allergen term
+                # to prevent cross-sentence false matches like:
+                # "No artificial flavors. ... soy lecithin" matching as negated soy
+                if re.search(pattern + r'.{0,60}' + re.escape(term), text):
                     return True
 
         return False
@@ -7986,6 +8001,7 @@ class SupplementEnricherV3:
                 std_name,
                 ingredient.get("raw_source_text", ""),
             ]
+            seen_study_ids = set()
 
             for study in studies:
                 study_name = study.get('standard_name', '')
@@ -7999,6 +8015,10 @@ class SupplementEnricherV3:
                     if study_id.startswith('BRAND_'):
                         if not self._brand_mentioned(study_name, study_aliases, product):
                             continue
+
+                    if study_id in seen_study_ids:
+                        continue
+                    seen_study_ids.add(study_id)
 
                     match_payload = {
                         "ingredient": ing_name,
@@ -8044,7 +8064,6 @@ class SupplementEnricherV3:
                             match_payload[field] = study.get(field)
 
                     matches.append(match_payload)
-                    break  # One match per ingredient
 
         # Check for unsubstantiated claims
         all_text = self._get_all_product_text(product)
@@ -8438,6 +8457,14 @@ class SupplementEnricherV3:
         active_ingredients = product.get('activeIngredients', [])
         all_ingredients = active_ingredients + product.get('inactiveIngredients', [])
 
+        # Extract product-level CFU statement ONCE to avoid per-strain overcounting
+        product_statements_text = ' '.join([
+            s.get('notes', '') or s.get('text', '') or str(s)
+            for s in product.get('statements', [])
+            if isinstance(s, dict) or isinstance(s, str)
+        ])
+        product_level_cfu = self._extract_cfu(product_statements_text)
+
         # Check if this is a probiotic product
         probiotic_blends = []
         total_strains = 0
@@ -8470,14 +8497,9 @@ class SupplementEnricherV3:
                 harvest = ingredient.get('harvestMethod', '') or ''
                 notes = ingredient.get('notes', '') or ''
 
-                # P1.1: Extract CFU from text AND from quantity/unit
-                # Also include product statements for guarantee type (e.g., "At the time of manufacture.")
-                statements_text = ' '.join([
-                    s.get('notes', '') or s.get('text', '') or str(s)
-                    for s in product.get('statements', [])
-                    if isinstance(s, dict) or isinstance(s, str)
-                ])
-                cfu_text = harvest + ' ' + notes + ' ' + statements_text
+                # P1.1: Extract CFU from per-strain text only (not product statements)
+                # to avoid overcounting when a product-level total is applied to each strain
+                cfu_text = harvest + ' ' + notes
                 cfu_data = self._extract_cfu(cfu_text, ingredient=ingredient)
 
                 probiotic_blends.append({
@@ -8587,6 +8609,19 @@ class SupplementEnricherV3:
             # Take first non-None guarantee_type
             if not guarantee_type and cfu_data.get('guarantee_type'):
                 guarantee_type = cfu_data.get('guarantee_type')
+
+        # Use product-level CFU if it's a total claim and exceeds per-strain sum
+        # (prevents overcounting when "50 Billion CFU" is a product total, not per-strain)
+        if product_level_cfu.get('has_cfu'):
+            product_billion = product_level_cfu.get('billion_count', 0)
+            if product_billion > total_billion_count and total_billion_count > 0:
+                total_cfu = product_level_cfu['cfu_count']
+                total_billion_count = product_billion
+            elif not has_cfu:
+                has_cfu = True
+                total_cfu = product_level_cfu['cfu_count']
+                total_billion_count = product_billion
+                guarantee_type = product_level_cfu.get('guarantee_type') or guarantee_type
 
         return {
             "is_probiotic": True,  # Top-level flag for quick filtering
@@ -8963,8 +8998,22 @@ class SupplementEnricherV3:
         active_ingredients = product.get('activeIngredients', [])
         inactive_ingredients = product.get('inactiveIngredients', [])
 
-        active_count = len(active_ingredients)
-        total_count = active_count + len(inactive_ingredients)
+        # Filter to scorable actives only — exclude blend headers, excipients,
+        # and non-therapeutic items that inflate the count and cause
+        # misclassification (e.g., single-ingredient product with 5 blend
+        # headers classified as "multivitamin").
+        _non_scorable_categories = {
+            'excipient', 'additive', 'inactive', 'other',
+            'blend_header', 'non_therapeutic',
+        }
+        scorable_actives = [
+            ing for ing in active_ingredients
+            if ing.get('category', 'other').lower() not in _non_scorable_categories
+        ]
+
+        active_count = len(scorable_actives)
+        raw_active_count = len(active_ingredients)
+        total_count = raw_active_count + len(inactive_ingredients)
 
         # Count categories AND detect probiotic ingredients by name
         category_counts = {}
@@ -8975,7 +9024,7 @@ class SupplementEnricherV3:
             'limosilactobacillus', 'lacticaseibacillus',
         )
         _probiotic_cats = {'probiotic', 'bacteria'}
-        for ing in active_ingredients:
+        for ing in scorable_actives:
             cat = ing.get('category', 'other').lower()
             category_counts[cat] = category_counts.get(cat, 0) + 1
             # Name-based detection only for ingredients NOT already
@@ -9012,7 +9061,7 @@ class SupplementEnricherV3:
         if probiotic_total > 0 and (
             active_count == 1
             or probiotic_total >= active_count * 0.5
-            or probiotic_name_signal
+            or (probiotic_name_signal and probiotic_total >= active_count * 0.25)
         ):
             supplement_type = "probiotic"
 
@@ -9041,6 +9090,7 @@ class SupplementEnricherV3:
         return {
             "type": supplement_type,
             "active_count": active_count,
+            "raw_active_count": raw_active_count,
             "total_count": total_count,
             "category_breakdown": category_counts
         }
@@ -10437,8 +10487,10 @@ class SupplementEnricherV3:
         except (TypeError, ValueError):
             servings_max = None
 
+        servings_estimated = False
         if servings_min is None or servings_min <= 0:
             servings_min = 1
+            servings_estimated = True
         if servings_max is None or servings_max <= 0:
             servings_max = servings_min
 
@@ -10540,6 +10592,7 @@ class SupplementEnricherV3:
                     adequacy_dict["per_day_max"] = per_day_max
                     adequacy_dict["servings_per_day_min"] = servings_min
                     adequacy_dict["servings_per_day_max"] = servings_max
+                    adequacy_dict["is_servings_estimated"] = servings_estimated
                     adequacy_results.append(adequacy_dict)
 
                     # Collect safety flags
@@ -10579,6 +10632,7 @@ class SupplementEnricherV3:
                         "warnings": [] if skip_ul_check else adequacy.warnings,
                         "data_by_group": [],  # Deprecated in new format
                         "conversion_evidence": conv_evidence,  # Per-item evidence for coverage gate
+                        "is_servings_estimated": servings_estimated,
                     })
 
                 return {
@@ -10589,7 +10643,8 @@ class SupplementEnricherV3:
                     "adequacy_results": adequacy_results,
                     "conversion_evidence": conversion_evidence,
                     "safety_flags": safety_flags,
-                    "has_over_ul": len(safety_flags) > 0
+                    "has_over_ul": len(safety_flags) > 0,
+                    "is_servings_estimated": servings_estimated,
                 }
 
             except Exception as e:
@@ -10653,7 +10708,8 @@ class SupplementEnricherV3:
         return {
             "ingredients_with_rda": rda_data,
             "analyzed_ingredients": rda_data,  # AC3: Canonical field name for scoring
-            "count": len(rda_data)
+            "count": len(rda_data),
+            "is_servings_estimated": servings_estimated,
         }
 
     # =========================================================================
@@ -10854,7 +10910,11 @@ class SupplementEnricherV3:
             self.logger.error(f"Product {product_id}: Unexpected enrichment error: {e}", exc_info=True)
             issues.append(f"Enrichment error: {str(e)}")
 
-            # Return product with minimal enrichment
+            # Zero out all enrichment sections to prevent partial data from leaking
+            # to the scorer. Without this, a crash mid-enrichment could leave
+            # ingredient_quality_data populated but compliance_data missing,
+            # causing the scorer to produce scores without safety checks.
+            product.update(copy.deepcopy(self.EMPTY_ENRICHMENT_SCHEMA))
             product["enrichment_version"] = self.VERSION
             product["enriched_date"] = datetime.now(UTC).strftime('%Y-%m-%dT%H:%M:%SZ')
             product["enrichment_status"] = "failed"

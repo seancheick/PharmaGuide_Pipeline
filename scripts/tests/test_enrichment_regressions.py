@@ -1888,3 +1888,170 @@ def test_olly_nature_thorne_safe_form_gaps_map_without_fallback():
         assert match.get("canonical_id") == expected_canonical, label
         assert match.get("form_id") == expected_form, label
         assert not match.get("form_unmapped_fallback"), label
+
+
+class TestEvidenceMultiMatch:
+    """T7: Clinical study multi-match — break removal regression tests"""
+
+    @pytest.fixture
+    def enricher(self):
+        return SupplementEnricherV3()
+
+    def test_evidence_collects_multiple_studies_per_ingredient(self, enricher):
+        """An ingredient matching multiple clinical studies should collect all matches."""
+        study_a = {
+            "id": "VIT_D_BONE",
+            "standard_name": "Vitamin D",
+            "aliases": [],
+            "evidence_level": "ingredient-human",
+            "study_type": "rct_single",
+            "score_contribution": "tier_2",
+            "health_goals_supported": ["bone health"],
+            "key_endpoints": [],
+        }
+        study_b = {
+            "id": "VIT_D_IMMUNE",
+            "standard_name": "Vitamin D",
+            "aliases": [],
+            "evidence_level": "ingredient-human",
+            "study_type": "rct_single",
+            "score_contribution": "tier_2",
+            "health_goals_supported": ["immune support"],
+            "key_endpoints": [],
+        }
+
+        original_db = enricher.databases.get('backed_clinical_studies', {})
+        enricher.databases['backed_clinical_studies'] = {
+            'backed_clinical_studies': [study_a, study_b]
+        }
+
+        product = {
+            'id': 'test_multi_evidence',
+            'statements': [],
+            'activeIngredients': [
+                {'name': 'Vitamin D', 'standardName': 'Vitamin D'}
+            ],
+            'inactiveIngredients': [],
+        }
+
+        result = enricher._collect_evidence_data(product)
+        enricher.databases['backed_clinical_studies'] = original_db
+
+        assert result['match_count'] == 2, (
+            f"Expected 2 study matches for Vitamin D, got {result['match_count']}"
+        )
+        matched_ids = {m['id'] for m in result['clinical_matches']}
+        assert 'VIT_D_BONE' in matched_ids
+        assert 'VIT_D_IMMUNE' in matched_ids
+
+    def test_evidence_no_duplicate_study_ids_per_ingredient(self, enricher):
+        """The same study ID should not appear twice for the same ingredient."""
+        study = {
+            "id": "VIT_D_BONE",
+            "standard_name": "Vitamin D",
+            "aliases": ["cholecalciferol"],
+            "evidence_level": "ingredient-human",
+            "study_type": "rct_single",
+            "score_contribution": "tier_2",
+            "health_goals_supported": ["bone health"],
+            "key_endpoints": [],
+        }
+
+        original_db = enricher.databases.get('backed_clinical_studies', {})
+        enricher.databases['backed_clinical_studies'] = {
+            'backed_clinical_studies': [study, study]  # intentional duplicate
+        }
+
+        product = {
+            'id': 'test_dedup_evidence',
+            'statements': [],
+            'activeIngredients': [
+                {'name': 'Vitamin D', 'standardName': 'Vitamin D'}
+            ],
+            'inactiveIngredients': [],
+        }
+
+        result = enricher._collect_evidence_data(product)
+        enricher.databases['backed_clinical_studies'] = original_db
+
+        ids = [m['id'] for m in result['clinical_matches']]
+        assert len(ids) == len(set(ids)), "Duplicate study IDs found for the same ingredient"
+
+
+class TestProbioticClassificationHijack:
+    """T8: Probiotic name-signal hijacking regression tests"""
+
+    @pytest.fixture
+    def enricher(self):
+        return SupplementEnricherV3()
+
+    def _make_multivitamin_with_one_probiotic(self, probiotic_name_in_product=True):
+        """25 vitamin/mineral ingredients + 1 probiotic strain."""
+        vitamin_names = [
+            "Vitamin A", "Vitamin C", "Vitamin D3", "Vitamin E", "Vitamin K",
+            "Thiamine", "Riboflavin", "Niacin", "Pantothenic Acid", "Pyridoxine",
+            "Biotin", "Folate", "Vitamin B12", "Calcium", "Magnesium",
+            "Zinc", "Iron", "Selenium", "Chromium", "Copper",
+            "Manganese", "Iodine", "Molybdenum", "Potassium", "Phosphorus",
+        ]
+        active = [{'name': v, 'standardName': v, 'category': 'vitamin'} for v in vitamin_names]
+        active.append({
+            'name': 'Lactobacillus acidophilus',
+            'standardName': 'Lactobacillus acidophilus',
+            'category': 'probiotic',
+        })
+        product_name = "Probiotic Multivitamin Complete" if probiotic_name_in_product else "Daily Multivitamin Complete"
+        return {
+            'id': 'test_multivit_probiotic',
+            'product_name': product_name,
+            'fullName': product_name,
+            'bundleName': '',
+            'statements': [],
+            'activeIngredients': active,
+            'inactiveIngredients': [],
+        }
+
+    def test_multivitamin_with_probiotic_name_not_hijacked(self, enricher):
+        """25-ingredient multivitamin with 1 probiotic strain and 'probiotic' in name
+        should NOT be classified as 'probiotic' (1/26 = 3.8% < 25% threshold)."""
+        product = self._make_multivitamin_with_one_probiotic(probiotic_name_in_product=True)
+        result = enricher._classify_supplement_type(product)
+        assert result['type'] != 'probiotic', (
+            f"Multivitamin with 1/26 probiotic ingredient should not be classified as 'probiotic', got '{result['type']}'"
+        )
+
+    def test_majority_probiotic_still_classified(self, enricher):
+        """A product with >=50% probiotic ingredients should still be classified as probiotic."""
+        product = {
+            'id': 'test_majority_probiotic',
+            'product_name': 'Multi-Strain Probiotic',
+            'fullName': 'Multi-Strain Probiotic',
+            'bundleName': '',
+            'statements': [],
+            'activeIngredients': [
+                {'name': 'Lactobacillus acidophilus', 'standardName': 'Lactobacillus acidophilus', 'category': 'probiotic'},
+                {'name': 'Bifidobacterium lactis', 'standardName': 'Bifidobacterium lactis', 'category': 'probiotic'},
+                {'name': 'Vitamin C', 'standardName': 'Vitamin C', 'category': 'vitamin'},
+            ],
+            'inactiveIngredients': [],
+        }
+        result = enricher._classify_supplement_type(product)
+        assert result['type'] == 'probiotic', (
+            f"2/3 probiotic ingredients should be classified as 'probiotic', got '{result['type']}'"
+        )
+
+
+class TestBVitaminKeywords:
+    """T9: B-vitamin shorthand keyword categorization"""
+
+    @pytest.fixture
+    def enricher(self):
+        return SupplementEnricherV3()
+
+    def test_b_vitamin_shorthand_categorized(self, enricher):
+        """B12, B6, B1, etc. should match the vitamins category keyword list."""
+        vitamins_keywords = enricher._CATEGORY_KEYWORDS.get('vitamins', [])
+        for shorthand in ['b1', 'b2', 'b3', 'b5', 'b6', 'b7', 'b9', 'b12']:
+            assert shorthand in vitamins_keywords, (
+                f"'{shorthand}' not found in vitamins keyword list"
+            )

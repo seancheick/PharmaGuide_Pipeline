@@ -64,6 +64,15 @@ UNIT_CONVERSIONS = {
     "pound": {"g": 453.6, "mg": 453600}
 }
 
+# Ingredient names that typically serve as wrappers/carriers for actual actives
+# Used to unwrap forms[] when the parent is just a source material
+SOURCE_WRAPPER_NAMES = {
+    "lanolin",
+    "sheep's wool",
+    "wool fat",
+    "fish liver oil",  # Sometimes wraps Vitamin A/D
+}
+
 # Nutritional facts that should NOT be treated as supplement ingredients
 # These are macro/nutritional components reported on food labels, not active ingredients
 # NOTE: These are label math/rollups, not discrete scorable ingredients

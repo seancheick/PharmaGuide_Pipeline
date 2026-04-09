@@ -4131,5 +4131,66 @@ def test_batch33_nested_active_artifact_leaves_stay_display_only(leaf_name, pare
     assert display_by_raw[leaf_name]["score_included"] is False
 
 
+class TestFlattenNestedIngredientsDepthGuard:
+    """Tests for recursion depth guard in _flatten_nested_ingredients (T3)"""
+
+    @pytest.fixture
+    def normalizer(self):
+        return EnhancedDSLDNormalizer()
+
+    def test_depth_guard_no_recursion_error(self, normalizer):
+        """Deeply nested ingredients (depth > 5) must not raise RecursionError."""
+        innermost = {"name": "Vitamin C", "nestedRows": [], "ingredientGroup": "blend"}
+        current = innermost
+        for i in range(10):
+            current = {
+                "name": f"Blend Level {i}",
+                "nestedRows": [current],
+                "ingredientGroup": "blend",
+            }
+
+        result = normalizer._flatten_nested_ingredients([current])
+        assert isinstance(result, list)
+
+    def test_depth_guard_returns_results(self, normalizer):
+        """Result must be non-empty when depth guard fires on a deeply nested structure."""
+        innermost = {"name": "Magnesium", "nestedRows": [], "ingredientGroup": "blend"}
+        current = innermost
+        for i in range(10):
+            current = {
+                "name": f"Wrapper {i}",
+                "nestedRows": [current],
+                "ingredientGroup": "blend",
+            }
+
+        result = normalizer._flatten_nested_ingredients([current])
+        assert len(result) >= 1
+
+    def test_depth_guard_warning_logged(self, normalizer, caplog):
+        """A warning must be logged when max flatten depth is exceeded."""
+        import logging
+        innermost = {"name": "Zinc", "nestedRows": [], "ingredientGroup": "blend"}
+        current = innermost
+        for i in range(10):
+            current = {
+                "name": f"Deep Blend {i}",
+                "nestedRows": [current],
+                "ingredientGroup": "blend",
+            }
+
+        with caplog.at_level(logging.WARNING, logger="enhanced_normalizer"):
+            normalizer._flatten_nested_ingredients([current])
+
+        assert any("Max flatten depth" in r.message for r in caplog.records)
+
+    def test_shallow_nesting_unaffected(self, normalizer):
+        """Normal shallow nesting (depth <= 5) must work without triggering the guard."""
+        child = {"name": "Vitamin D3", "nestedRows": [], "ingredientGroup": "blend"}
+        parent = {"name": "Bone Support Blend", "nestedRows": [child], "ingredientGroup": "blend"}
+
+        result = normalizer._flatten_nested_ingredients([parent])
+        assert isinstance(result, list)
+
+
 if __name__ == "__main__":
     pytest.main([__file__, "-v"])

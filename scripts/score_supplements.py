@@ -175,6 +175,16 @@ class SupplementScorer:
         if not (product.get("enrichment_version") or product.get("enriched_date")):
             issues.append("Missing enrichment version metadata")
 
+        # Reject products where enrichment failed — safety data is unreliable.
+        # Without this gate, a product with a banned substance whose enrichment
+        # crashed would appear SAFE (empty contaminant_data passes B0 gate).
+        enrichment_status = product.get("enrichment_status")
+        if enrichment_status in {"failed", "error", "validation_failed"}:
+            return False, [
+                f"Enrichment status is '{enrichment_status}' — "
+                f"cannot score safely: {product.get('enrichment_error', 'unknown error')}"
+            ]
+
         return len([i for i in issues if "Missing product" in i]) == 0, issues
 
     def _feature_on(self, key: str, default: bool = False) -> bool:
@@ -382,8 +392,9 @@ class SupplementScorer:
         return text
 
     def _evaluate_safety_gate(self, product: Dict[str, Any]) -> Dict[str, Any]:
+        contaminant_data = product.get("contaminant_data") or {}
         substances = safe_list(
-            product.get("contaminant_data", {})
+            contaminant_data
             .get("banned_substances", {})
             .get("substances", [])
         )
@@ -415,21 +426,21 @@ class SupplementScorer:
                 continue
 
             # Status-based logic (v5.0 schema)
+            # BLOCKED = banned (harshest: score=None, product must never be shown)
+            # UNSAFE = recalled (score=0, shown with strong warning)
             if status == "banned":
-                unsafe = True
+                blocked = True
                 reason = f"Banned substance ({name})"
                 matched_substance_name = name
-                break
             elif status == "recalled":
-                blocked = True
-                reason = f"Product recalled ({name})"
+                unsafe = True
+                reason = f"Recalled ingredient ({name})"
                 matched_substance_name = name
-                break
             elif status == "high_risk":
-                moderate_penalty = max(moderate_penalty, 10)
+                moderate_penalty += 10
                 flags.append("B0_HIGH_RISK_SUBSTANCE")
             elif status == "watchlist":
-                moderate_penalty = max(moderate_penalty, 5)
+                moderate_penalty += 5
                 flags.append("B0_WATCHLIST_SUBSTANCE")
             else:
                 # Fallback for pre-5.0 enriched data (severity-based)
@@ -439,7 +450,7 @@ class SupplementScorer:
                     matched_substance_name = name
                     break
                 elif severity == "moderate":
-                    moderate_penalty = max(moderate_penalty, 10)
+                    moderate_penalty += 10
                     flags.append("B0_MODERATE_SUBSTANCE")
                 elif severity == "low":
                     flags.append("B0_LOW_SUBSTANCE")
@@ -453,7 +464,8 @@ class SupplementScorer:
             }]
 
         if review_needed and not (blocked or unsafe):
-            moderate_penalty = max(moderate_penalty, 5)
+            moderate_penalty += 5
+        moderate_penalty = min(moderate_penalty, 25)
         if review_needed:
             flags.append("BANNED_MATCH_REVIEW_NEEDED")
 
@@ -474,7 +486,11 @@ class SupplementScorer:
         iqd = product.get("ingredient_quality_data", {})
         ingredients = safe_list(iqd.get("ingredients_scorable"))
         if not ingredients:
-            ingredients = safe_list(iqd.get("ingredients"))
+            # Only fall back if the full list contains genuine mapped actives,
+            # not just fillers/excipients that enrichment couldn't classify.
+            fallback = safe_list(iqd.get("ingredients"))
+            if any((ing.get("mapped") or ing.get("canonical_id")) and not ing.get("is_filler") for ing in fallback):
+                ingredients = fallback
         return ingredients
 
     def _compute_bioavailability_score(self, product: Dict[str, Any], supp_type: str) -> float:
@@ -511,8 +527,10 @@ class SupplementScorer:
                 continue
             mapped = bool(ing.get("mapped", False))
             if mapped:
-                s_i = as_float(ing.get("score"), 9.0) or 9.0
-                w_i = as_float(ing.get("dosage_importance"), 1.0) or 1.0
+                raw_score = as_float(ing.get("score"), None)
+                s_i = raw_score if raw_score is not None else 9.0
+                raw_weight = as_float(ing.get("dosage_importance"), None)
+                w_i = raw_weight if raw_weight is not None else 1.0
             else:
                 s_i = 9.0
                 w_i = 1.0
@@ -2151,11 +2169,16 @@ class SupplementScorer:
                 continue
 
             has_dose = True
-            # epa_dha combined node contributes to both
-            if cid in {"epa", "epa_dha"}:
+            if cid == "epa":
                 epa_mg += mg_val
-            if cid in {"dha", "epa_dha"}:
+            elif cid == "dha":
                 dha_mg += mg_val
+            elif cid == "epa_dha":
+                # Combined EPA/DHA row: the mg_val is the TOTAL of both.
+                # Split evenly to avoid double-counting (500mg total → 250 EPA + 250 DHA).
+                # Products listing EPA and DHA separately will hit the branches above.
+                epa_mg += mg_val * 0.5
+                dha_mg += mg_val * 0.5
 
         _empty = {
             "has_explicit_dose": False,
@@ -2954,9 +2977,23 @@ class SupplementScorer:
             return self._create_failed_score(product_id, product_name, str(exc))
 
     def _create_failed_score(self, product_id: str, product_name: str, error_msg: str) -> Dict[str, Any]:
+        """Create a failed score output with the SAME field set as _build_core_output.
+
+        This ensures downstream consumers (build_final_db.py, Flutter) never crash
+        on KeyError when accessing fields like section_scores or breakdown.
+        """
+        empty_breakdown = {
+            "A": {"score": 0.0, "max": self._section_max("a", 25.0)},
+            "B": {"score": 0.0, "max": self._section_max("b", 30.0)},
+            "C": {"score": 0.0, "max": self._section_max("c", 20.0)},
+            "D": {"score": 0.0, "max": self._section_max("d", 5.0)},
+            "E": {"score": 0.0, "max": 0.0, "applicable": False},
+            "violation_penalty": 0.0,
+        }
         return {
             "dsld_id": product_id,
             "product_name": product_name,
+            "brand_name": "",
             "quality_score": None,
             "score_80": None,
             "score_100_equivalent": None,
@@ -2977,8 +3014,20 @@ class SupplementScorer:
             "scoring_status": "error",
             "score_basis": SCORE_BASIS_SCORING_ERROR,
             "evaluation_stage": "scoring",
-            "error": error_msg,
+            "breakdown": empty_breakdown,
             "flags": ["SCORING_ERROR"],
+            "supp_type": "unknown",
+            "unmapped_actives": [],
+            "unmapped_actives_total": 0,
+            "unmapped_actives_excluding_banned_exact_alias": 0,
+            "mapped_coverage": 0.0,
+            "error": error_msg,
+            "section_scores": {
+                "A_ingredient_quality": {"score": 0.0, "max": self._section_max("a", 25.0)},
+                "B_safety_purity": {"score": 0.0, "max": self._section_max("b", 30.0)},
+                "C_evidence_research": {"score": 0.0, "max": self._section_max("c", 20.0)},
+                "D_brand_trust": {"score": 0.0, "max": self._section_max("d", 5.0)},
+            },
             "scoring_metadata": {
                 "scoring_version": self.VERSION,
                 "output_schema_version": self.OUTPUT_SCHEMA_VERSION,
@@ -3036,10 +3085,13 @@ class SupplementScorer:
 
         numeric_scores = [p["score_80"] for p in scored_products if p.get("score_80") is not None]
         avg_80 = sum(numeric_scores) / len(numeric_scores) if numeric_scores else 0.0
+        error_count = sum(1 for p in scored_products if p.get("scoring_status") == "error")
 
         return {
             "total_products": len(products),
-            "successful": len(scored_products),
+            "scored": len(numeric_scores),
+            "errors": error_count,
+            "blocked_or_not_scored": len(products) - len(numeric_scores) - error_count,
             "average_score_80": round(avg_80, 2),
             "average_score_100": round((avg_80 / 80.0) * 100.0, 2) if numeric_scores else 0.0,
             "verdict_distribution": dict(verdict_distribution),
@@ -3083,14 +3135,19 @@ class SupplementScorer:
         )
         iterator = tqdm(input_files, desc="Scoring files", unit="file") if use_progress else input_files
 
+        total_scored = 0
         for input_file in iterator:
             batch_stats = self.process_batch(input_file, output_dir)
             total_products += batch_stats["total_products"]
-            total_score_80 += batch_stats["average_score_80"] * batch_stats["total_products"]
+            batch_scored = batch_stats.get("scored", batch_stats["total_products"])
+            total_scored += batch_scored
+            # Weight average by actually-scored products, not total (avoids inflating
+            # the average when batches contain BLOCKED/NOT_SCORED products with None scores)
+            total_score_80 += batch_stats["average_score_80"] * batch_scored
             for verdict, count in batch_stats.get("verdict_distribution", {}).items():
                 verdict_distribution[verdict] += count
 
-        overall_avg_80 = total_score_80 / total_products if total_products else 0.0
+        overall_avg_80 = total_score_80 / total_scored if total_scored else 0.0
         overall_avg_100 = (overall_avg_80 / 80.0) * 100.0 if total_products else 0.0
 
         summary = {
@@ -3102,6 +3159,8 @@ class SupplementScorer:
             },
             "stats": {
                 "total_products": total_products,
+                "total_scored": total_scored,
+                "scorable_ratio": round(total_scored / total_products, 4) if total_products else 0.0,
                 "average_score_80": round(overall_avg_80, 2),
                 "average_score_100": round(overall_avg_100, 2),
                 "verdict_distribution": dict(verdict_distribution),

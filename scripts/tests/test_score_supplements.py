@@ -163,7 +163,8 @@ class TestV30Scoring:
         badge_ids = {badge.get("id") for badge in result.get("badges", [])}
         assert "FULL_DISCLOSURE" not in badge_ids
 
-    def test_b0_recall_blocks(self, scorer):
+    def test_b0_recall_is_unsafe(self, scorer):
+        """Recalled ingredients get UNSAFE verdict (score=0, shown with warning)."""
         product = make_base_product()
         product["contaminant_data"]["banned_substances"] = {
             "found": True,
@@ -176,11 +177,12 @@ class TestV30Scoring:
             ],
         }
         result = scorer.score_product(product)
-        assert result["verdict"] == "BLOCKED"
-        assert result["score_80"] is None
+        assert result["verdict"] == "UNSAFE"
+        assert result["score_80"] == 0
         assert result["evaluation_stage"] == "safety"
 
-    def test_b0_critical_unsafe(self, scorer):
+    def test_b0_banned_is_blocked(self, scorer):
+        """Banned substances get BLOCKED verdict (score=None, harshest)."""
         product = make_base_product()
         product["contaminant_data"]["banned_substances"] = {
             "found": True,
@@ -193,8 +195,8 @@ class TestV30Scoring:
             ],
         }
         result = scorer.score_product(product)
-        assert result["verdict"] == "UNSAFE"
-        assert result["score_80"] == 0
+        assert result["verdict"] == "BLOCKED"
+        assert result["score_80"] is None
         assert result["evaluation_stage"] == "safety"
 
     def test_b0_token_bounded_causes_caution_not_block(self, scorer):
@@ -217,7 +219,7 @@ class TestV30Scoring:
         assert result["score_80"] == pytest.approx(35.0)
         assert result["breakdown"]["B"]["B0_moderate_penalty"] == pytest.approx(5.0)
 
-    def test_b0_moderate_penalty_uses_max_not_last_write_wins(self, scorer):
+    def test_b0_moderate_penalty_stacks_additively(self, scorer):
         product = make_base_product()
         product["contaminant_data"]["banned_substances"] = {
             "found": True,
@@ -236,7 +238,57 @@ class TestV30Scoring:
         }
 
         result = scorer._evaluate_safety_gate(product)
-        assert result["moderate_penalty"] == pytest.approx(10.0)
+        assert result["moderate_penalty"] == pytest.approx(15.0)
+
+    def test_b0_moderate_penalties_stack_additively(self, scorer):
+        """Multiple moderate-severity substances should stack penalties, not just take max."""
+        product = make_base_product()
+        product["contaminant_data"]["banned_substances"] = {
+            "found": True,
+            "substances": [
+                {"ingredient": "High Risk A", "match_type": "exact", "status": "high_risk"},
+                {"ingredient": "High Risk B", "match_type": "exact", "status": "high_risk"},
+                {"ingredient": "Watchlist C", "match_type": "alias", "status": "watchlist"},
+            ],
+        }
+        result = scorer._evaluate_safety_gate(product)
+        # 10 + 10 + 5 = 25 (stacked, not max'd at 10)
+        assert result["moderate_penalty"] == pytest.approx(25.0)
+
+    def test_b0_moderate_penalty_capped_at_25(self, scorer):
+        """Stacked moderate penalties should be capped at 25."""
+        product = make_base_product()
+        product["contaminant_data"]["banned_substances"] = {
+            "found": True,
+            "substances": [
+                {"ingredient": f"High Risk {i}", "match_type": "exact", "status": "high_risk"}
+                for i in range(5)  # 5 * 10 = 50, should clamp to 25
+            ],
+        }
+        result = scorer._evaluate_safety_gate(product)
+        assert result["moderate_penalty"] == pytest.approx(25.0)
+
+    def test_filler_only_fallback_returns_empty(self, scorer):
+        """When ingredients_scorable is empty and ingredients has only fillers, return empty."""
+        product = make_base_product()
+        product["ingredient_quality_data"]["ingredients_scorable"] = []
+        product["ingredient_quality_data"]["ingredients"] = [
+            {"name": "Magnesium Stearate", "mapped": False, "is_filler": True, "score": 0},
+            {"name": "Silicon Dioxide", "mapped": False, "is_filler": True, "score": 0},
+        ]
+        result = scorer._get_active_ingredients(product)
+        assert result == []
+
+    def test_fallback_with_mapped_actives_works(self, scorer):
+        """When ingredients_scorable is empty but ingredients has mapped actives, fallback works."""
+        product = make_base_product()
+        product["ingredient_quality_data"]["ingredients_scorable"] = []
+        product["ingredient_quality_data"]["ingredients"] = [
+            {"name": "Magnesium Glycinate", "mapped": True, "score": 18},
+            {"name": "Silicon Dioxide", "mapped": False, "is_filler": True, "score": 0},
+        ]
+        result = scorer._get_active_ingredients(product)
+        assert len(result) == 2  # Returns full list including filler
 
     def test_mapping_gate_not_scored_when_full_mapping_required(self, scorer):
         product = make_base_product()
@@ -2834,7 +2886,7 @@ class TestSectionEDoseAdequacy:
         assert result["epa_mg_per_unit"] == pytest.approx(400.0)  # parent total excluded
 
     def test_epa_dha_combined_canonical_id(self, scorer):
-        """canonical_id='epa_dha' contributes to both EPA and DHA buckets."""
+        """canonical_id='epa_dha' splits evenly between EPA and DHA (no double-counting)."""
         prod = {
             "dsld_id": "X", "product_name": "Test",
             "ingredient_quality_data": {"ingredients": [
@@ -2845,10 +2897,11 @@ class TestSectionEDoseAdequacy:
         }
         result = scorer._compute_epa_dha_per_day(prod)
         assert result["has_explicit_dose"] is True
-        assert result["epa_mg_per_unit"] == pytest.approx(600.0)
-        assert result["dha_mg_per_unit"] == pytest.approx(600.0)
-        assert result["epa_dha_mg_per_unit"] == pytest.approx(1200.0)
-        assert result["per_day_mid"] == pytest.approx(1200.0)
+        # 600mg total split evenly: 300 EPA + 300 DHA
+        assert result["epa_mg_per_unit"] == pytest.approx(300.0)
+        assert result["dha_mg_per_unit"] == pytest.approx(300.0)
+        assert result["epa_dha_mg_per_unit"] == pytest.approx(600.0)
+        assert result["per_day_mid"] == pytest.approx(600.0)
 
     # ---- _compute_legacy_section_e band boundaries ----
 
