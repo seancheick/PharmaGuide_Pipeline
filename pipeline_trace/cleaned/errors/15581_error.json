@@ -1,0 +1,8 @@
+{
+  "original_file": "../test_thorne/15581.json",
+  "error_type": "InputValidationError",
+  "error_message": "Missing required fields: ['id']",
+  "processing_stage": "validate",
+  "timestamp": "2026-04-09T20:04:22.691373Z",
+  "traceback": null
+}

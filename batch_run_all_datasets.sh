@@ -20,7 +20,7 @@
 #   bash batch_run_all_datasets.sh --root "$HOME/Documents/DataSetDsld/delta/gummies"
 ###############################################################################
 
-set -e  # Exit on error
+set -e -o pipefail  # Exit on error and fail pipelines when any segment fails
 
 # Configuration
 DATASET_ROOT="$HOME/Documents/DataSetDsld"
@@ -100,7 +100,7 @@ FAILED=()
 sorted_folders=()
 while IFS= read -r dirpath; do
     sorted_folders+=("$dirpath")
-done < <(du -sk "$DATASET_ROOT"/*/ 2>/dev/null | sort -n | awk '{print $2}')
+done < <(ls -d "$DATASET_ROOT"/*/ 2>/dev/null)
 
 # Skip infra folders when pointed at the top-level DataSetDsld root.
 if [[ "$DATASET_ROOT" == "$HOME/Documents/DataSetDsld" ]]; then
@@ -146,7 +146,7 @@ for folder in "${sorted_folders[@]}"; do
         continue
     fi
     
-    ((CURRENT++))
+    CURRENT=$((CURRENT + 1))
     PROGRESS="[$CURRENT/${#sorted_folders[@]}]"
     
     echo -e "${YELLOW}${PROGRESS} Processing: ${folder_name}${NC}"

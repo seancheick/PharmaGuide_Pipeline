@@ -219,6 +219,33 @@ class TestProbioticCFU:
         assert result['cfu_count'] == 500000000
         assert result['billion_count'] == 0.5
 
+    def test_classifier_uses_iqd_categories_when_active_categories_missing(self, enricher):
+        product = {
+            "product_name": "Restore",
+            "fullName": "Thorne Performance Restore",
+            "activeIngredients": [
+                {"name": "Lactobacillus gasseri", "standardName": "Lactobacillus Gasseri", "category": None},
+                {"name": "Bifidobacterium longum", "standardName": "Bifidobacterium Longum", "category": None},
+                {"name": "Bifidobacterium bifidum", "standardName": "Bifidobacterium Bifidum", "category": None},
+            ],
+            "inactiveIngredients": [{"name": "Rice Flour"}],
+            "ingredient_quality_data": {
+                "ingredients": [
+                    {"name": "Lactobacillus gasseri", "standard_name": "Lactobacillus Gasseri", "category": "probiotics"},
+                    {"name": "Bifidobacterium longum", "standard_name": "Bifidobacterium Longum", "category": "probiotics"},
+                    {"name": "Bifidobacterium bifidum", "standard_name": "Bifidobacterium Bifidum", "category": "probiotics"},
+                ]
+            },
+            "probiotic_data": {"is_probiotic_product": True},
+        }
+
+        result = enricher._classify_supplement_type(product)
+
+        assert result["type"] == "probiotic"
+        assert result["active_count"] == 3
+        assert result["source"] == "ingredient_quality_data"
+        assert result["category_breakdown"]["probiotic"] == 3
+
     def test_guarantee_at_manufacture(self, enricher):
         """'At the time of manufacture.' sets guarantee_type"""
         result = enricher._extract_guarantee_type("Contains 500 million CFU at the time of manufacture.")
@@ -230,6 +257,27 @@ class TestProbioticCFU:
         result = enricher._extract_guarantee_type("Contains 500 million CFU until expiration.")
 
         assert result == "at_expiration"
+
+    def test_probiotic_type_classification_does_not_drop_missing_category_actives(self, enricher):
+        """Missing category metadata must not suppress probiotic classification."""
+        product = {
+            'id': 'test_probiotic_missing_category',
+            'product_name': 'Restore',
+            'fullName': 'Thorne Performance Restore',
+            'activeIngredients': [
+                {'name': 'Lactobacillus gasseri', 'standardName': 'Lactobacillus Gasseri'},
+                {'name': 'Bifidobacterium longum', 'standardName': 'Bifidobacterium Longum'},
+                {'name': 'Bifidobacterium bifidum', 'standardName': 'Bifidobacterium Bifidum'},
+            ],
+            'inactiveIngredients': [
+                {'name': 'Hypromellose Capsule'},
+            ],
+        }
+
+        result = enricher._classify_supplement_type(product)
+
+        assert result['type'] == 'probiotic'
+        assert result['active_count'] == 3
 
 
 class TestServingBasis:

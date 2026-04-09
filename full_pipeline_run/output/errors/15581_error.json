@@ -1,0 +1,8 @@
+{
+  "original_file": "../full_pipeline_run/raw_data/15581.json",
+  "error_type": "InputValidationError",
+  "error_message": "Missing required fields: ['id']",
+  "processing_stage": "validate",
+  "timestamp": "2026-04-09T20:07:00.513498Z",
+  "traceback": null
+}

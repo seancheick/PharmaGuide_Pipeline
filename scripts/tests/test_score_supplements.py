@@ -639,6 +639,45 @@ class TestV30Scoring:
         assert probiotic["eligibility"]["eligible"] is True
         assert probiotic["probiotic_bonus"] > 0.0
 
+    def test_probiotic_dominant_formula_is_promoted_even_without_guarantee(self, scorer):
+        product = make_base_product()
+        product["supplement_type"]["type"] = "specialty"
+        product["product_name"] = "Restore"
+        product["fullName"] = "Thorne Performance Restore"
+        product["ingredient_quality_data"]["ingredients"] = [
+            {"name": "Lactobacillus gasseri", "standard_name": "Lactobacillus Gasseri", "mapped": True},
+            {"name": "Bifidobacterium longum", "standard_name": "Bifidobacterium Longum", "mapped": True},
+            {"name": "Bifidobacterium bifidum", "standard_name": "Bifidobacterium Bifidum", "mapped": True},
+        ]
+        product["ingredient_quality_data"]["ingredients_scorable"] = deepcopy(
+            product["ingredient_quality_data"]["ingredients"]
+        )
+        product["product_signals"] = {
+            "label_disclosure_signals": {
+                "strain_id_count": 0,
+                "clinical_strain_count": 2,
+                "total_strain_count": 3,
+            }
+        }
+        product["probiotic_data"] = {
+            "is_probiotic_product": True,
+            "has_cfu": True,
+            "total_billion_count": 5.0,
+            "total_strain_count": 3,
+            "clinical_strain_count": 2,
+            "guarantee_type": None,
+            "probiotic_blends": [
+                {"strains": ["Lactobacillus gasseri"], "cfu_data": {"billion_count": 2.5}},
+                {"strains": ["Bifidobacterium longum"], "cfu_data": {"billion_count": 1.25}},
+                {"strains": ["Bifidobacterium bifidum"], "cfu_data": {"billion_count": 1.25}},
+            ],
+        }
+
+        probiotic = scorer._compute_probiotic_category_bonus(product, "specialty")
+        assert probiotic["eligibility"]["eligible"] is True
+        assert probiotic["eligibility"]["reason"] in {"promoted_probiotic_dominant", "supplement_type_probiotic"}
+        assert probiotic["probiotic_bonus"] > 0.0
+
     def test_probiotic_type_keeps_bonus_path(self, scorer):
         product = make_base_product()
         product["supplement_type"]["type"] = "probiotic"
@@ -655,6 +694,36 @@ class TestV30Scoring:
         assert probiotic["eligibility"]["mode"] == "probiotic"
         assert probiotic["eligibility"]["eligible"] is True
         assert probiotic["probiotic_bonus"] == pytest.approx(2.0)
+
+    def test_classifier_reinfers_probiotic_from_iqd_when_enriched_type_is_generic(self, scorer):
+        product = make_base_product()
+        product["supplement_type"] = {"type": "specialty", "active_count": 0}
+        product["product_name"] = "Restore"
+        product["fullName"] = "Thorne Performance Restore"
+        product["activeIngredients"] = [
+            {"name": "Lactobacillus gasseri", "standardName": "Lactobacillus Gasseri", "category": None},
+            {"name": "Bifidobacterium longum", "standardName": "Bifidobacterium Longum", "category": None},
+            {"name": "Bifidobacterium bifidum", "standardName": "Bifidobacterium Bifidum", "category": None},
+        ]
+        product["ingredient_quality_data"]["ingredients"] = [
+            {"name": "Lactobacillus gasseri", "standard_name": "Lactobacillus Gasseri", "category": "probiotics", "mapped": True},
+            {"name": "Bifidobacterium longum", "standard_name": "Bifidobacterium Longum", "category": "probiotics", "mapped": True},
+            {"name": "Bifidobacterium bifidum", "standard_name": "Bifidobacterium Bifidum", "category": "probiotics", "mapped": True},
+        ]
+        product["probiotic_data"] = {
+            "is_probiotic_product": True,
+            "has_cfu": True,
+            "total_billion_count": 5.0,
+            "total_strain_count": 3,
+            "clinical_strain_count": 2,
+            "guarantee_type": None,
+        }
+
+        assert scorer._classify_supplement_type(product) == "probiotic"
+
+        scored = scorer.score_product(product)
+        assert scored["supp_type"] == "probiotic"
+        assert "SUPPLEMENT_TYPE_REINFERRED" in scored["flags"]
 
     def test_d1_does_not_award_fuzzy_manufacturer_match(self, scorer):
         product = make_base_product()

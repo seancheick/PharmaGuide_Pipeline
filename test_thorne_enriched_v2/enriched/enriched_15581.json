@@ -1,0 +1,1088 @@
+[
+  {
+    "dsld_id": "15581",
+    "blob_version": 1,
+    "ingredients": [
+      {
+        "raw_source_text": "Lactobacillus gasseri",
+        "name": "Lactobacillus gasseri",
+        "standardName": "Lactobacillus Gasseri",
+        "normalized_key": "lactobacillus_gasseri",
+        "forms": [],
+        "quantity": 2500000000.0,
+        "unit": "Live Cell(s)",
+        "standard_name": "Lactobacillus Gasseri",
+        "form": "",
+        "matched_form": "lactobacillus gasseri (unspecified)",
+        "matched_forms": [],
+        "extracted_forms": [],
+        "category": "probiotics",
+        "bio_score": 13.0,
+        "natural": true,
+        "score": 16.0,
+        "notes": "A probiotic strain that may help with weight management and metabolic health in addition to digestive benefits.",
+        "mapped": 1,
+        "safety_hits": [],
+        "normalized_amount": null,
+        "normalized_unit": "",
+        "role": "active",
+        "parent_key": "lactobacillus_gasseri",
+        "dosage": 2500000000.0,
+        "dosage_unit": "Live Cell(s)",
+        "normalized_value": null,
+        "is_mapped": 1,
+        "is_harmful": false,
+        "harmful_severity": null,
+        "harmful_notes": null,
+        "is_banned": false,
+        "is_allergen": false,
+        "identifiers": {
+          "cui": "C0317620",
+          "unii": "Q66E0D2443"
+        }
+      },
+      {
+        "raw_source_text": "Bifidobacterium longum",
+        "name": "Bifidobacterium longum",
+        "standardName": "Bifidobacterium Longum",
+        "normalized_key": "bifidobacterium_longum",
+        "forms": [],
+        "quantity": 1250000000.0,
+        "unit": "Live Cell(s)",
+        "standard_name": "Bifidobacterium Longum",
+        "form": "",
+        "matched_form": "bifidobacterium longum (unspecified)",
+        "matched_forms": [],
+        "extracted_forms": [],
+        "category": "probiotics",
+        "bio_score": 12.0,
+        "natural": true,
+        "score": 15.0,
+        "notes": "A key probiotic strain that colonizes the colon, supporting immune and digestive health. Often included in comprehensive probiotic formulations.",
+        "mapped": 1,
+        "safety_hits": [],
+        "normalized_amount": null,
+        "normalized_unit": "",
+        "role": "active",
+        "parent_key": "bifidobacterium_longum",
+        "dosage": 1250000000.0,
+        "dosage_unit": "Live Cell(s)",
+        "normalized_value": null,
+        "is_mapped": 1,
+        "is_harmful": false,
+        "harmful_severity": null,
+        "harmful_notes": null,
+        "is_banned": false,
+        "is_allergen": false,
+        "identifiers": {
+          "cui": "C0314977",
+          "unii": "831AQW699W"
+        }
+      },
+      {
+        "raw_source_text": "Bifidobacterium bifidum",
+        "name": "Bifidobacterium bifidum",
+        "standardName": "Bifidobacterium Bifidum",
+        "normalized_key": "bifidobacterium_bifidum",
+        "forms": [],
+        "quantity": 1250000000.0,
+        "unit": "Live Cell(s)",
+        "standard_name": "Bifidobacterium Bifidum",
+        "form": "",
+        "matched_form": "bifidobacterium bifidum (unspecified)",
+        "matched_forms": [],
+        "extracted_forms": [],
+        "category": "probiotics",
+        "bio_score": 12.0,
+        "natural": true,
+        "score": 15.0,
+        "notes": "A beneficial probiotic strain naturally present in the human gut microbiome, supporting digestive health and immune function. Known for its ability to help maintain healthy gut barrier function.",
+        "mapped": 1,
+        "safety_hits": [],
+        "normalized_amount": null,
+        "normalized_unit": "",
+        "role": "active",
+        "parent_key": "bifidobacterium_bifidum",
+        "dosage": 1250000000.0,
+        "dosage_unit": "Live Cell(s)",
+        "normalized_value": null,
+        "is_mapped": 1,
+        "is_harmful": false,
+        "harmful_severity": null,
+        "harmful_notes": null,
+        "is_banned": false,
+        "is_allergen": false,
+        "identifiers": {
+          "cui": "C0314974",
+          "unii": "WN5C16297P"
+        }
+      }
+    ],
+    "inactive_ingredients": [
+      {
+        "raw_source_text": "Hypromellose (derived from Cellulose) Capsule",
+        "name": "Hypromellose (derived from Cellulose) Capsule",
+        "standardName": "Hydroxypropyl Methylcellulose",
+        "normalized_key": "hypromellose_derived_from_cellulose_capsule",
+        "forms": [
+          {
+            "name": "Cellulose",
+            "ingredientId": 9747,
+            "order": 1,
+            "prefix": "derived from",
+            "percent": null
+          }
+        ],
+        "category": "capsule_material",
+        "is_additive": 1,
+        "additive_type": "capsule_coating",
+        "standard_name": "Capsule",
+        "severity_level": "",
+        "match_method": "",
+        "matched_alias": "",
+        "notes": "Generic capsule delivery format descriptor. Not a specific ingredient but a formulation type. Classified as non-active to prevent unmapped inflation.",
+        "mechanism_of_harm": "",
+        "common_uses": [
+          "delivery format"
+        ],
+        "population_warnings": [],
+        "is_harmful": false,
+        "harmful_severity": null,
+        "harmful_notes": null,
+        "identifiers": {
+          "cui": "C1704652",
+          "pubchem_cid": 57503849
+        }
+      },
+      {
+        "raw_source_text": "Potato Starch",
+        "name": "Potato Starch",
+        "standardName": "Potato Starch",
+        "normalized_key": "potato_starch",
+        "forms": [],
+        "category": "filler_binder",
+        "is_additive": 1,
+        "additive_type": "starch_filler",
+        "standard_name": "Potato Starch",
+        "severity_level": "",
+        "match_method": "",
+        "matched_alias": "",
+        "notes": "Natural starch from potatoes, used as a binder and thickener. Gluten-free and generally hypoallergenic.",
+        "mechanism_of_harm": "",
+        "common_uses": [
+          "filler",
+          "binder",
+          "disintegrant"
+        ],
+        "population_warnings": [],
+        "is_harmful": false,
+        "harmful_severity": null,
+        "harmful_notes": null,
+        "identifiers": {
+          "cui": "C0772411"
+        }
+      },
+      {
+        "raw_source_text": "Silica",
+        "name": "Silica",
+        "standardName": "Silicon Dioxide",
+        "normalized_key": "silica",
+        "forms": [],
+        "category": "flow_agent_anticaking",
+        "is_additive": 1,
+        "additive_type": "anti_caking_agent",
+        "standard_name": "Silicon Dioxide (E551)",
+        "severity_level": "low",
+        "match_method": "alias_via_std",
+        "matched_alias": "silicon dioxide",
+        "notes": "Amorphous silicon dioxide is the most common anti-caking agent in supplement manufacturing. FDA GRAS at ≤2%. EFSA 2018 data gap request was precautionary — no finding of harm. Low severity — tracked purely as non-nutritive excipient quality signal.",
+        "mechanism_of_harm": "Amorphous silicon dioxide (SiO2) used as anti-caking agent in tablets/capsules at <2% w/w. FDA GRAS (21 CFR 172.480, max 2% of food weight). EFSA 2018 re-evaluation could not confirm safety due to insufficient nanoparticle characterization data — this was a data gap, not a finding of harm. Amorphous SiO2 is poorly absorbed from the GI tract. Nanoparticle concerns are based on in vitro studies at concentrations far exceeding dietary exposure.",
+        "common_uses": [
+          "flow agent",
+          "anti-caking",
+          "tablet glidant"
+        ],
+        "population_warnings": [
+          "No specific population concerns at anti-caking agent levels (<2% w/w)"
+        ],
+        "is_harmful": true,
+        "harmful_severity": "low",
+        "harmful_notes": "Amorphous silicon dioxide (SiO2) used as anti-caking agent in tablets/capsules at <2% w/w. FDA GRAS (21 CFR 172.480, max 2% of food weight). EFSA 2018 re-evaluation could not confirm safety due to insufficient nanoparticle characterization data — this was a data gap, not a finding of harm. Amorphous SiO2 is poorly absorbed from the GI tract. Nanoparticle concerns are based on in vitro studies at concentrations far exceeding dietary exposure.",
+        "identifiers": {
+          "cui": "C0037098",
+          "cas": "7631-86-9",
+          "pubchem_cid": 24261,
+          "unii": "ETJ7Z6XBU4"
+        }
+      }
+    ],
+    "warnings": [
+      {
+        "type": "harmful_additive",
+        "severity": "low",
+        "title": "Contains Silicon Dioxide (E551)",
+        "detail": "Amorphous silicon dioxide (SiO2) used as anti-caking agent in tablets/capsules at <2% w/w. FDA GRAS (21 CFR 172.480, max 2% of food weight). EFSA 2018 re-evaluation could not confirm safety due to insufficient nanoparticle characterization data — this was a data gap, not a finding of harm. Amorphous SiO2 is poorly absorbed from the GI tract. Nanoparticle concerns are based on in vitro studies at concentrations far exceeding dietary exposure.",
+        "notes": "Amorphous silicon dioxide is the most common anti-caking agent in supplement manufacturing. FDA GRAS at ≤2%. EFSA 2018 data gap request was precautionary — no finding of harm. Low severity — tracked purely as non-nutritive excipient quality signal.",
+        "mechanism_of_harm": "Amorphous silicon dioxide (SiO2) used as anti-caking agent in tablets/capsules at <2% w/w. FDA GRAS (21 CFR 172.480, max 2% of food weight). EFSA 2018 re-evaluation could not confirm safety due to insufficient nanoparticle characterization data — this was a data gap, not a finding of harm. Amorphous SiO2 is poorly absorbed from the GI tract. Nanoparticle concerns are based on in vitro studies at concentrations far exceeding dietary exposure.",
+        "population_warnings": [
+          "No specific population concerns at anti-caking agent levels (<2% w/w)"
+        ],
+        "category": "excipient",
+        "source": "harmful_additives_db",
+        "identifiers": {
+          "cui": "C0037098",
+          "cas": "7631-86-9",
+          "pubchem_cid": 24261,
+          "unii": "ETJ7Z6XBU4"
+        }
+      },
+      {
+        "type": "status",
+        "severity": "info",
+        "title": "Discontinued Product",
+        "detail": "2019-12-18",
+        "source": "dsld"
+      }
+    ],
+    "section_breakdown": {
+      "ingredient_quality": {
+        "score": 0.0,
+        "max": 25.0,
+        "sub": {
+          "core_quality": 0.0,
+          "category_bonus_total": 0.0,
+          "category_bonus_pool_cap": 5.0,
+          "A1": 0.0,
+          "A2": 0.0,
+          "A3": 0.0,
+          "A4": 0.0,
+          "A5": 0.0,
+          "A5a": 0.0,
+          "A5b": 0.0,
+          "A5c": 0.0,
+          "A5d": 0.0,
+          "A6": 0.0,
+          "probiotic_bonus": 0.0,
+          "probiotic_breakdown": {
+            "probiotic_bonus": 0.0,
+            "cfu": 0.0,
+            "diversity": 0.0,
+            "prebiotic": 0.0,
+            "clinical_strains": 0.0,
+            "survivability": 0.0,
+            "eligibility": {
+              "mode": "non_probiotic",
+              "eligible": false,
+              "reason": "strict_gate_failed",
+              "strict_gate_checks": {
+                "require_viable_cfu": false,
+                "dose_context": false,
+                "strain_identity": true,
+                "cfu_guarantee": false,
+                "explicit_intent": true
+              },
+              "strict_gate_inputs": {
+                "supp_type": "specialty",
+                "is_probiotic_product": true,
+                "total_billion_count": 0.0,
+                "total_strain_count": 3,
+                "clinical_strain_count": 2,
+                "strain_id_count": 0,
+                "guarantee_type": null
+              }
+            }
+          },
+          "omega3_dose_bonus": 0.0,
+          "omega3_breakdown": {
+            "omega3_dose_bonus": 0.0,
+            "applicable": false
+          }
+        }
+      },
+      "safety_purity": {
+        "score": 29.5,
+        "max": 30.0,
+        "sub": {
+          "B0_moderate_penalty": 0.0,
+          "B1_penalty": 0.5,
+          "B2_penalty": 0.0,
+          "B3": 0.0,
+          "B4a": 10.0,
+          "B4b": 0.0,
+          "B4c": 0.0,
+          "B_hypoallergenic": 0.0,
+          "B5_penalty": 0.0,
+          "B5_blend_evidence": [],
+          "B6_penalty": 0.0,
+          "B7_penalty": 0.0,
+          "B7_dose_safety_evidence": [],
+          "bonuses": 5.0,
+          "penalties": 0.5
+        }
+      },
+      "evidence_research": {
+        "score": 5.51,
+        "max": 20.0,
+        "matched_entries": 2,
+        "ingredient_points": {
+          "bifidobacterium longum": 2.86,
+          "bifidobacterium bifidum": 3.58
+        }
+      },
+      "brand_trust": {
+        "score": 4.0,
+        "max": 5.0,
+        "sub": {
+          "D1": 2.0,
+          "D2": 1.0,
+          "D3": 0.0,
+          "D4": 1.0,
+          "D5": 0.0
+        }
+      },
+      "violation_penalty": 0.0
+    },
+    "compliance_detail": {
+      "allergen_free_claims": [],
+      "gluten_free": false,
+      "dairy_free": false,
+      "soy_free": false,
+      "vegan": false,
+      "vegetarian": false,
+      "conflicts": [],
+      "has_may_contain_warning": false,
+      "verified": true,
+      "evidence_based": {
+        "allergen_free_claims": [],
+        "rules_db_version": "5.0.0"
+      }
+    },
+    "certification_detail": {
+      "third_party_programs": {
+        "programs": [
+          {
+            "name": "NSF Sport",
+            "verified": true,
+            "source": "manufacturer_evidence"
+          },
+          {
+            "name": "USP Verified",
+            "verified": true,
+            "source": "manufacturer_evidence"
+          }
+        ],
+        "count": 2,
+        "has_generic_claim_only": false
+      },
+      "gmp": {
+        "claimed": false,
+        "nsf_gmp": false,
+        "fda_registered": false,
+        "text_matched": ""
+      },
+      "purity_verified": 1,
+      "heavy_metal_tested": 1,
+      "label_accuracy_verified": 1
+    },
+    "proprietary_blend_detail": {
+      "has_proprietary_blends": 0,
+      "blends": []
+    },
+    "dietary_sensitivity_detail": {
+      "sugar": {
+        "amount_g": 0.0,
+        "unit": "g",
+        "level": "sugar_free",
+        "level_display": "Sugar-Free",
+        "contains_sugar": false,
+        "exceeds_diabetic_threshold": false,
+        "sugar_sources": [],
+        "has_added_sugar": false
+      },
+      "sodium": {
+        "amount_mg": 0.0,
+        "unit": "mg",
+        "level": "sodium_free",
+        "level_display": "Sodium-Free",
+        "exceeds_aha_threshold": false,
+        "percent_daily_value": 0,
+        "sodium_sources": []
+      },
+      "sweeteners": {
+        "high_glycemic": [],
+        "artificial": [],
+        "sugar_alcohols": [],
+        "safer_alternatives": [],
+        "has_high_glycemic": false,
+        "has_artificial": false,
+        "has_sugar_alcohols": false,
+        "uses_safer_alternatives": false
+      }
+    },
+    "serving_info": {
+      "basis_count": 1.0,
+      "basis_unit": "capsule",
+      "min_servings_per_day": 1,
+      "max_servings_per_day": 1
+    },
+    "manufacturer_detail": {
+      "brand_name": "Thorne Performance",
+      "is_trusted": 1,
+      "manufacturing_region": "USA",
+      "violations": {
+        "found": false,
+        "total_deduction_applied": 0.0,
+        "violations": []
+      }
+    },
+    "evidence_data": {
+      "clinical_matches": [],
+      "match_count": 0,
+      "unsubstantiated_claims": {
+        "found": false,
+        "claims": []
+      }
+    },
+    "rda_ul_data": {
+      "ingredients_with_rda": [],
+      "analyzed_ingredients": [],
+      "count": 0,
+      "adequacy_results": [],
+      "conversion_evidence": [],
+      "safety_flags": [],
+      "has_over_ul": false,
+      "collection_enabled": false,
+      "collection_reason": "disabled_by_config"
+    },
+    "probiotic_detail": {
+      "is_probiotic": true,
+      "total_strain_count": 3,
+      "total_cfu": 0,
+      "total_billion_count": 0.0,
+      "guarantee_type": null,
+      "has_cfu": false,
+      "clinical_strains": [
+        {
+          "strain": "Lactobacillus gasseri",
+          "clinical_id": "STRAIN_GASSERI_SBT2055",
+          "evidence_level": "high"
+        },
+        {
+          "strain": "Bifidobacterium longum",
+          "clinical_id": "STRAIN_INFANTIS_35624",
+          "evidence_level": "high"
+        }
+      ],
+      "clinical_strain_count": 2,
+      "prebiotic_present": false,
+      "prebiotic_name": "",
+      "has_survivability_coating": false,
+      "survivability_reason": "",
+      "probiotic_blends": [
+        {
+          "name": "Lactobacillus gasseri",
+          "strain_count": 1,
+          "strains": [
+            "Lactobacillus gasseri"
+          ],
+          "cfu_data": {
+            "has_cfu": false,
+            "cfu_count": 0,
+            "billion_count": 0,
+            "guarantee_type": null
+          }
+        },
+        {
+          "name": "Bifidobacterium longum",
+          "strain_count": 1,
+          "strains": [
+            "Bifidobacterium longum"
+          ],
+          "cfu_data": {
+            "has_cfu": false,
+            "cfu_count": 0,
+            "billion_count": 0,
+            "guarantee_type": null
+          }
+        },
+        {
+          "name": "Bifidobacterium bifidum",
+          "strain_count": 1,
+          "strains": [
+            "Bifidobacterium bifidum"
+          ],
+          "cfu_data": {
+            "has_cfu": false,
+            "cfu_count": 0,
+            "billion_count": 0,
+            "guarantee_type": null
+          }
+        }
+      ]
+    },
+    "synergy_detail": {
+      "qualified": 0,
+      "clusters": [
+        {
+          "cluster_id": "probiotic_and_gut_health",
+          "cluster_name": "Probiotic and Gut Health",
+          "evidence_tier": 1,
+          "note": "+1 synergy bonus applies when at least 2 ingredients from 'Probiotic and Gut Health' are matched and at least half of dose-checkable ingredients meet minimum effective doses. Evidence strength: Tier 1 (strong). Anchor dose checks: probiotics >= 1e+09, saccharomyces boulardii >= 5e+09, inulin >= 5000. See sources for supporting references.",
+          "sources": [
+            {
+              "source_type": "nccih",
+              "label": "NIH NCCIH Probiotics Overview",
+              "url": "https://www.nccih.nih.gov/health/probiotics-what-you-need-to-know"
+            },
+            {
+              "source_type": "nih_ods",
+              "label": "NIH ODS Probiotics Fact Sheet (Consumer)",
+              "url": "https://ods.od.nih.gov/factsheets/Probiotics-Consumer/"
+            },
+            {
+              "source_type": "nccih",
+              "label": "NCCIH Probiotics: Usefulness and Safety",
+              "url": "https://www.nccih.nih.gov/health/probiotics-usefulness-and-safety"
+            }
+          ],
+          "matched_ingredients": [
+            {
+              "ingredient": "Lactobacillus gasseri",
+              "cluster_ingredient": "lactobacillus",
+              "quantity": 2500000000.0,
+              "unit": "Live Cell(s)",
+              "min_effective_dose": 0,
+              "meets_minimum": true
+            },
+            {
+              "ingredient": "Bifidobacterium longum",
+              "cluster_ingredient": "bifidobacterium",
+              "quantity": 1250000000.0,
+              "unit": "Live Cell(s)",
+              "min_effective_dose": 0,
+              "meets_minimum": true
+            }
+          ],
+          "match_count": 2,
+          "doses_adequate": [
+            true,
+            true
+          ],
+          "all_adequate": true
+        }
+      ]
+    },
+    "formulation_detail": {
+      "delivery_tier": "",
+      "delivery_form": "",
+      "absorption_enhancer_paired": 0,
+      "absorption_enhancers": [],
+      "is_certified_organic": 0,
+      "organic_verification": "",
+      "standardized_botanicals": [],
+      "synergy_cluster_qualified": 0,
+      "claim_non_gmo_verified": 0
+    },
+    "score_bonuses": [
+      {
+        "id": "B4a",
+        "label": "Third-party purity testing",
+        "score": 10.0
+      }
+    ],
+    "score_penalties": [
+      {
+        "id": "B1",
+        "label": "Harmful additive: Silicon Dioxide (E551)",
+        "severity": "low",
+        "reason": "Amorphous silicon dioxide (SiO2) used as anti-caking agent in tablets/capsules at <2% w/w. FDA GRAS (21 CFR 172.480, max 2% of food weight). EFSA 2018 re-evaluation could not confirm safety due to ins"
+      }
+    ],
+    "product_name": "Thorne Performance Restore",
+    "brand_name": "Thorne",
+    "enrichment_version": "3.1.0",
+    "compatible_scoring_versions": [
+      "3.0.0",
+      "3.0.1",
+      "3.1.0",
+      "3.2.0",
+      "3.3.0"
+    ],
+    "enriched_date": "2026-04-09T19:00:55Z",
+    "reference_versions": {
+      "color_indicators": {
+        "version": "5.0.0",
+        "last_updated": "2026-02-18"
+      },
+      "cert_claim_rules": {
+        "version": "5.0.0",
+        "last_updated": "2026-04-01"
+      },
+      "harmful_additives": {
+        "version": "5.1.0"
+      },
+      "allergens": {
+        "version": "5.0.0"
+      },
+      "ingredient_quality_map": {
+        "version": "5.0.0"
+      },
+      "banned_match_allowlist": {
+        "version": "1.0.0"
+      },
+      "percentile_categories": {
+        "version": "1.0.0"
+      },
+      "clinical_risk_taxonomy": {
+        "version": "5.1.0"
+      },
+      "ingredient_interaction_rules": {
+        "version": "5.1.0"
+      }
+    },
+    "supplement_type": {
+      "type": "specialty",
+      "active_count": 0,
+      "raw_active_count": 0,
+      "total_count": 0,
+      "category_breakdown": {}
+    },
+    "ingredient_quality_data": {
+      "quality_data_schema_version": 2,
+      "ingredients": [],
+      "premium_form_count": 0,
+      "unmapped_count": 0,
+      "total_active": 0,
+      "ingredients_scorable": [],
+      "ingredients_skipped": [],
+      "unmapped_scorable_count": 0,
+      "total_scorable_active_count": 0,
+      "skipped_non_scorable_count": 0,
+      "skipped_reasons_breakdown": {},
+      "promoted_from_inactive": [],
+      "blend_only_product": false,
+      "blend_header_rows": [],
+      "total_records_seen": 0,
+      "total_ingredients_evaluated": 0,
+      "unevaluated_records": 0,
+      "pattern_match_wins_count": 0,
+      "contains_match_wins_count": 0,
+      "parent_fallback_count": 0,
+      "scorable_ingredient_names_normalized": []
+    },
+    "delivery_data": {
+      "matched": false,
+      "systems": [],
+      "highest_tier": null
+    },
+    "absorption_data": {
+      "enhancer_present": false,
+      "enhancers": [],
+      "enhanced_nutrients_present": [],
+      "qualifies_for_bonus": false
+    },
+    "formulation_data": {
+      "organic": {
+        "claimed": false,
+        "usda_verified": false,
+        "claim_text": "",
+        "exclusion_matched": false,
+        "evidence_based": {
+          "organic_certifications": [],
+          "rules_db_version": "5.0.0"
+        }
+      },
+      "standardized_botanicals": [],
+      "synergy_clusters": []
+    },
+    "contaminant_data": {
+      "banned_substances": {
+        "found": false,
+        "substances": []
+      },
+      "harmful_additives": {
+        "found": false,
+        "additives": []
+      },
+      "allergens": {
+        "found": false,
+        "allergens": [],
+        "has_may_contain_warning": false
+      }
+    },
+    "compliance_data": {
+      "allergen_free_claims": [],
+      "gluten_free": false,
+      "dairy_free": false,
+      "soy_free": false,
+      "vegan": false,
+      "vegetarian": false,
+      "conflicts": [],
+      "has_may_contain_warning": false,
+      "verified": true,
+      "evidence_based": {
+        "allergen_free_claims": [],
+        "rules_db_version": "5.0.0"
+      }
+    },
+    "certification_data": {
+      "third_party_programs": {
+        "programs": [],
+        "count": 0,
+        "has_generic_claim_only": false
+      },
+      "gmp": {
+        "claimed": false,
+        "nsf_gmp": false,
+        "fda_registered": false,
+        "text_matched": ""
+      },
+      "batch_traceability": {
+        "has_coa": false,
+        "has_qr_code": false,
+        "has_batch_lookup": false,
+        "qualifies": false
+      },
+      "purity_verified": false,
+      "heavy_metal_tested": false,
+      "label_accuracy_verified": false,
+      "category_contamination_risk": {
+        "has_elevated_risk": false,
+        "category": null,
+        "severity_level": "standard",
+        "concerns": [],
+        "note": null
+      },
+      "evidence_based": {
+        "third_party_programs": [],
+        "gmp_certifications": [],
+        "batch_traceability": [],
+        "rules_db_version": "5.0.0"
+      }
+    },
+    "proprietary_data": {
+      "has_proprietary_blends": false,
+      "blends": [],
+      "blend_count": 0,
+      "total_active_ingredients": 0,
+      "total_active_mg": 0.0,
+      "blend_sources": {
+        "detector_raw_count": 0,
+        "cleaning_raw_count": 0,
+        "raw_total": 0,
+        "merged_count": 0,
+        "dedup_count": 0,
+        "dedup_rate": 0.0,
+        "blend_loss_rate": 0.0
+      }
+    },
+    "manufacturer_data": {
+      "brand_name": "",
+      "manufacturer": "",
+      "top_manufacturer": {
+        "found": false,
+        "product_manufacturer_raw": "",
+        "product_manufacturer_normalized": "",
+        "source_path": "brandName"
+      },
+      "violations": {
+        "found": false,
+        "total_deduction_applied": 0.0,
+        "violations": []
+      },
+      "country_of_origin": {
+        "detected": false,
+        "country": "",
+        "high_regulation_country": false
+      },
+      "bonus_features": {
+        "physician_formulated": false,
+        "sustainability_claim": false,
+        "sustainability_text": ""
+      }
+    },
+    "manufacturer_normalized": "",
+    "serving_basis": {
+      "basis_count": null,
+      "basis_unit": null,
+      "basis_reason": "default",
+      "min_recommended": null,
+      "max_recommended": null,
+      "min_servings_per_day": null,
+      "max_servings_per_day": null,
+      "servings_per_day_source": "default",
+      "parsed_from_directions": false,
+      "selection_policy": "first_serving",
+      "selected_from": "servingSizes",
+      "canonical_serving_size_quantity": null
+    },
+    "form_factor": null,
+    "percentile_category": "general_supplement",
+    "percentile_category_label": "General Supplements",
+    "percentile_category_source": "fallback",
+    "percentile_category_confidence": 0.0,
+    "percentile_category_signals": [],
+    "probiotic_data": {
+      "is_probiotic_product": false
+    },
+    "dietary_sensitivity_data": {
+      "sugar": {
+        "amount_g": 0.0,
+        "unit": "g",
+        "level": "sugar_free",
+        "level_display": "Sugar-Free",
+        "contains_sugar": false,
+        "exceeds_diabetic_threshold": false,
+        "sugar_sources": [],
+        "has_added_sugar": false
+      },
+      "sodium": {
+        "amount_mg": 0.0,
+        "unit": "mg",
+        "level": "sodium_free",
+        "level_display": "Sodium-Free",
+        "exceeds_aha_threshold": false,
+        "percent_daily_value": 0,
+        "sodium_sources": []
+      },
+      "sweeteners": {
+        "high_glycemic": [],
+        "artificial": [],
+        "sugar_alcohols": [],
+        "safer_alternatives": [],
+        "has_high_glycemic": false,
+        "has_artificial": false,
+        "has_sugar_alcohols": false,
+        "uses_safer_alternatives": false
+      },
+      "warnings": [],
+      "contains_sugar": false,
+      "contains_sodium": false,
+      "diabetes_friendly": true,
+      "hypertension_friendly": true
+    },
+    "interaction_profile": {
+      "ingredient_alerts": [],
+      "condition_summary": {},
+      "drug_class_summary": {},
+      "highest_severity": null,
+      "data_sources": [],
+      "rules_version": "5.1.0",
+      "taxonomy_version": "5.1.0",
+      "user_condition_alerts": {
+        "enabled": false,
+        "conditions_checked": [],
+        "drug_classes_checked": [],
+        "alerts": [],
+        "highest_severity": null
+      }
+    },
+    "user_condition_alerts": {
+      "enabled": false,
+      "conditions_checked": [],
+      "drug_classes_checked": [],
+      "alerts": [],
+      "highest_severity": null
+    },
+    "product_signals": {
+      "coverage": {
+        "total_records_seen": 0,
+        "total_ingredients_evaluated": 0,
+        "unevaluated_records": 0,
+        "pattern_match_wins_count": 0,
+        "contains_match_wins_count": 0,
+        "parent_fallback_count": 0
+      },
+      "certificates_present": false,
+      "certificate_types": [],
+      "label_disclosure_signals": {
+        "standardized_botanicals_count": 0,
+        "standardized_botanicals": [],
+        "strain_ids": [],
+        "strain_id_count": 0,
+        "total_strain_count": 0,
+        "clinical_strain_count": 0,
+        "has_trademarked_forms": false
+      }
+    },
+    "delivery_tier": null,
+    "absorption_enhancer_paired": false,
+    "is_certified_organic": false,
+    "has_standardized_botanical": false,
+    "synergy_cluster_qualified": false,
+    "harmful_additives": [],
+    "allergen_hits": [],
+    "claim_allergen_free_validated": false,
+    "claim_gluten_free_validated": false,
+    "claim_vegan_validated": false,
+    "named_cert_programs": [],
+    "gmp_level": null,
+    "has_coa": false,
+    "has_batch_lookup": false,
+    "proprietary_blends": [],
+    "has_disease_claims": false,
+    "is_trusted_manufacturer": false,
+    "has_full_disclosure": true,
+    "claim_physician_formulated": false,
+    "has_sustainable_packaging": false,
+    "manufacturing_region": "",
+    "display_ingredients": [],
+    "dosage_normalization": {
+      "success": false,
+      "serving_basis": null,
+      "normalized_ingredients": [],
+      "warnings": [],
+      "errors": [
+        "Could not determine serving basis"
+      ]
+    },
+    "enrichment_metadata": {
+      "enrichment_version": "3.1.0",
+      "scoring_compatibility": [
+        "3.0.0",
+        "3.0.1",
+        "3.1.0",
+        "3.2.0",
+        "3.3.0"
+      ],
+      "generated_by": "SupplementEnricherV3",
+      "generated_at": "2026-04-09T19:00:55Z",
+      "data_completeness": 60.0,
+      "ready_for_scoring": true,
+      "unmapped_active_count": 0,
+      "export_contract_valid": true,
+      "export_contract_issues": []
+    },
+    "match_ledger": {
+      "schema_version": "1.1.0",
+      "generated_at": "2026-04-09T19:00:55.788336Z",
+      "domains": {
+        "ingredients": {
+          "total_raw": 0,
+          "matched": 0,
+          "unmatched": 0,
+          "rejected": 0,
+          "skipped": 0,
+          "recognized_non_scorable": 0,
+          "recognized_botanical_unscored": 0,
+          "recognition_coverage_percent": 0.0,
+          "scorable_coverage_percent": 100.0,
+          "scorable_total": 0,
+          "coverage_percent": 100.0,
+          "entries": [],
+          "records": []
+        },
+        "additives": {
+          "total_raw": 0,
+          "matched": 0,
+          "unmatched": 0,
+          "rejected": 0,
+          "skipped": 0,
+          "recognized_non_scorable": 0,
+          "recognized_botanical_unscored": 0,
+          "recognition_coverage_percent": 0.0,
+          "scorable_coverage_percent": 100.0,
+          "scorable_total": 0,
+          "coverage_percent": 100.0,
+          "entries": [],
+          "records": []
+        },
+        "allergens": {
+          "total_raw": 0,
+          "matched": 0,
+          "unmatched": 0,
+          "rejected": 0,
+          "skipped": 0,
+          "recognized_non_scorable": 0,
+          "recognized_botanical_unscored": 0,
+          "recognition_coverage_percent": 0.0,
+          "scorable_coverage_percent": 100.0,
+          "scorable_total": 0,
+          "coverage_percent": 100.0,
+          "entries": [],
+          "records": []
+        },
+        "manufacturer": {
+          "total_raw": 0,
+          "matched": 0,
+          "unmatched": 0,
+          "rejected": 0,
+          "skipped": 0,
+          "recognized_non_scorable": 0,
+          "recognized_botanical_unscored": 0,
+          "recognition_coverage_percent": 0.0,
+          "scorable_coverage_percent": 100.0,
+          "scorable_total": 0,
+          "coverage_percent": 100.0,
+          "entries": [],
+          "records": []
+        },
+        "delivery": {
+          "total_raw": 0,
+          "matched": 0,
+          "unmatched": 0,
+          "rejected": 0,
+          "skipped": 0,
+          "recognized_non_scorable": 0,
+          "recognized_botanical_unscored": 0,
+          "recognition_coverage_percent": 0.0,
+          "scorable_coverage_percent": 100.0,
+          "scorable_total": 0,
+          "coverage_percent": 100.0,
+          "entries": [],
+          "records": []
+        },
+        "claims": {
+          "total_raw": 0,
+          "matched": 0,
+          "unmatched": 0,
+          "rejected": 0,
+          "skipped": 0,
+          "recognized_non_scorable": 0,
+          "recognized_botanical_unscored": 0,
+          "recognition_coverage_percent": 0.0,
+          "scorable_coverage_percent": 100.0,
+          "scorable_total": 0,
+          "coverage_percent": 100.0,
+          "entries": [],
+          "records": []
+        }
+      },
+      "summary": {
+        "total_entities": 0,
+        "total_matched": 0,
+        "total_skipped": 0,
+        "total_recognized_non_scorable": 0,
+        "total_recognized_botanical_unscored": 0,
+        "total_unmatched": 0,
+        "total_rejected": 0,
+        "recognition_coverage_percent": 0.0,
+        "scorable_coverage_percent": 100.0,
+        "scorable_total": 0,
+        "coverage_percent": 100.0,
+        "coverage_by_domain": {
+          "ingredients": 100.0,
+          "additives": 100.0,
+          "allergens": 100.0,
+          "manufacturer": 100.0,
+          "delivery": 100.0,
+          "claims": 100.0
+        },
+        "recognition_by_domain": {
+          "ingredients": 0.0,
+          "additives": 0.0,
+          "allergens": 0.0,
+          "manufacturer": 0.0,
+          "delivery": 0.0,
+          "claims": 0.0
+        }
+      }
+    },
+    "unmatched_ingredients": [],
+    "unmatched_additives": [],
+    "unmatched_allergens": [],
+    "unmatched_delivery_systems": [],
+    "rejected_manufacturer_matches": [],
+    "rejected_claim_matches": []
+  }
+]

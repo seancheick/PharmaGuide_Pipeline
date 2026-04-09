@@ -90,6 +90,7 @@ from constants import (
     PROMOTE_REASON_PRODUCT_TYPE_RESCUE,
     PROMOTE_REASON_ABSORPTION_ENHANCER,
 )
+from supplement_type_utils import infer_supplement_type
 
 # Import scoring hardening modules
 from unit_converter import UnitConverter, ConversionResult
@@ -8498,9 +8499,10 @@ class SupplementEnricherV3:
                 notes = ingredient.get('notes', '') or ''
 
                 # P1.1: Extract CFU from per-strain text only (not product statements)
-                # to avoid overcounting when a product-level total is applied to each strain
                 cfu_text = harvest + ' ' + notes
                 cfu_data = self._extract_cfu(cfu_text, ingredient=ingredient)
+
+                print(f"DEBUG: For ingredient {ingredient.get('name', '')}, cfu_data = {cfu_data}")  # DEBUG
 
                 probiotic_blends.append({
                     "name": ingredient.get('name', ''),
@@ -8623,6 +8625,8 @@ class SupplementEnricherV3:
                 total_billion_count = product_billion
                 guarantee_type = product_level_cfu.get('guarantee_type') or guarantee_type
 
+        print(f"DEBUG: Returning probiotic_data with has_cfu={has_cfu}, probiotic_blends[0] cfu_data={probiotic_blends[0]['cfu_data'] if probiotic_blends else 'None'}")  # DEBUG
+
         return {
             "is_probiotic": True,  # Top-level flag for quick filtering
             "is_probiotic_product": True,
@@ -8642,11 +8646,37 @@ class SupplementEnricherV3:
             "survivability_reason": survivability_reason
         }
 
-    # P1.1: CFU-equivalent units
-    CFU_EQUIVALENT_UNITS = [
-        'viable cell(s)', 'viable cells', 'cells', 'cfu',
-        'colony forming units', 'live cells', 'active cells'
+    # P1.1: CFU-equivalent units - comprehensive patterns for case-insensitive matching
+    CFU_EQUIVALENT_PATTERNS = [
+        r'\bviable\s+cell(?:s)?(?:\([^)]*\))?',  # viable cell(s), viable cells, viable cell(s)
+        r'\blive\s+cell(?:s)?(?:\([^)]*\))?',    # live cell(s), live cells, live cell(s)
+        r'\bactive\s+cell(?:s)?(?:\([^)]*\))?',  # active cell(s), active cells, active cell(s)
+        r'\bcell(?:s)?(?:\([^)]*\))?',           # cell(s), cells, cell(s)
+        r'\bcfu(?:s)?(?:\([^)]*\))?',            # cfu(s), cfus, cfu(s)
+        r'\bcolony\s+forming\s+unit(?:s)?(?:\([^)]*\))?',  # colony forming unit(s)
+        r'\borganism(?:s)?(?:\([^)]*\))?',        # organism(s), organisms, organism(s)
+        r'\bbacteria(?:\([^)]*\))?',              # bacteria, bacteria(s)
+        r'\bprobiotic(?:s)?(?:\([^)]*\))?',       # probiotic(s), probiotics, probiotic(s)
     ]
+
+    def _is_cfu_equivalent_unit(self, unit: str) -> bool:
+        """
+        Check if a unit string represents CFU-equivalent measurement using regex patterns.
+
+        Handles case-insensitive matching and pluralization patterns like (s).
+        """
+        if not unit:
+            return False
+
+        unit_lower = unit.lower().strip()
+
+        # Check against comprehensive regex patterns
+        import re
+        for pattern in self.CFU_EQUIVALENT_PATTERNS:
+            if re.search(pattern, unit_lower, re.IGNORECASE):
+                return True
+
+        return False
 
     def _extract_cfu(self, text: str, ingredient: Optional[Dict] = None) -> Dict:
         """
@@ -8661,16 +8691,18 @@ class SupplementEnricherV3:
             "guarantee_type": None  # 'at_manufacture' or 'at_expiration'
         }
 
-        # P1.1: First check ingredient quantity/unit for CFU-equivalent units
+        print(f"DEBUG _extract_cfu: text='{text}', ingredient={bool(ingredient)}")  # DEBUG
         if ingredient:
             quantity = ingredient.get('quantity', 0)
-            unit = (ingredient.get('unit', '') or '').lower()
+            unit = (ingredient.get('unit', '') or '')
 
-            if unit and any(cfu_unit in unit for cfu_unit in self.CFU_EQUIVALENT_UNITS):
+            if unit and self._is_cfu_equivalent_unit(unit):
                 if quantity and quantity > 0:
                     result["has_cfu"] = True
                     result["cfu_count"] = quantity
                     result["billion_count"] = quantity / 1e9
+
+        print(f"DEBUG _extract_cfu result: {result}")  # DEBUG
 
         # Also check text for CFU mentions
         if text:
@@ -8993,107 +9025,10 @@ class SupplementEnricherV3:
     def _classify_supplement_type(self, product: Dict) -> Dict:
         """
         Classify supplement type for context-aware scoring.
-        Types: single_nutrient, targeted, multivitamin, herbal_blend, probiotic, prebiotic, specialty
+        Uses the richer ingredient_quality_data projection when present so
+        missing raw active categories do not collapse the product to specialty.
         """
-        active_ingredients = product.get('activeIngredients', [])
-        inactive_ingredients = product.get('inactiveIngredients', [])
-
-        # Filter to scorable actives only — exclude blend headers, excipients,
-        # and non-therapeutic items that inflate the count and cause
-        # misclassification (e.g., single-ingredient product with 5 blend
-        # headers classified as "multivitamin").
-        _non_scorable_categories = {
-            'excipient', 'additive', 'inactive', 'other',
-            'blend_header', 'non_therapeutic',
-        }
-        scorable_actives = [
-            ing for ing in active_ingredients
-            if ing.get('category', 'other').lower() not in _non_scorable_categories
-        ]
-
-        active_count = len(scorable_actives)
-        raw_active_count = len(active_ingredients)
-        total_count = raw_active_count + len(inactive_ingredients)
-
-        # Count categories AND detect probiotic ingredients by name
-        category_counts = {}
-        probiotic_name_count = 0
-        _probiotic_terms = (
-            'probiotic', 'lactobacillus', 'bifidobacterium',
-            'streptococcus', 'bacillus', 'saccharomyces',
-            'limosilactobacillus', 'lacticaseibacillus',
-        )
-        _probiotic_cats = {'probiotic', 'bacteria'}
-        for ing in scorable_actives:
-            cat = ing.get('category', 'other').lower()
-            category_counts[cat] = category_counts.get(cat, 0) + 1
-            # Name-based detection only for ingredients NOT already
-            # counted by their category (avoids double-counting)
-            if cat not in _probiotic_cats:
-                ing_name = (
-                    ing.get('name', '') or ''
-                ).lower()
-                std_name = (
-                    ing.get('standardName', '') or ''
-                ).lower()
-                if any(t in ing_name or t in std_name
-                       for t in _probiotic_terms):
-                    probiotic_name_count += 1
-
-        # Determine type
-        supplement_type = "unknown"
-
-        # Probiotic detection: category + ingredient names (deduplicated)
-        probiotic_total = (
-            category_counts.get('probiotic', 0)
-            + category_counts.get('bacteria', 0)
-            + probiotic_name_count
-        )
-        product_name_text = " ".join([
-            str(product.get('product_name', '') or ''),
-            str(product.get('fullName', '') or ''),
-            str(product.get('bundleName', '') or ''),
-        ]).lower()
-        probiotic_name_signal = any(term in product_name_text for term in _probiotic_terms)
-
-        # Probiotic — check first so single-strain products
-        # are classified correctly
-        if probiotic_total > 0 and (
-            active_count == 1
-            or probiotic_total >= active_count * 0.5
-            or (probiotic_name_signal and probiotic_total >= active_count * 0.25)
-        ):
-            supplement_type = "probiotic"
-
-        # Single nutrient (non-probiotic)
-        elif active_count == 1:
-            supplement_type = "single_nutrient"
-
-        # Herbal blend (>60% botanicals)
-        elif category_counts.get('botanical', 0) + category_counts.get('herb', 0) > active_count * 0.6:
-            supplement_type = "herbal_blend"
-
-        # Multivitamin (6+ actives, mixed categories)
-        elif active_count >= 6 and len(category_counts) >= 3:
-            supplement_type = "multivitamin"
-
-        # Targeted (2-5 actives, same category)
-        elif 2 <= active_count <= 5:
-            if len(category_counts) <= 2:
-                supplement_type = "targeted"
-            else:
-                supplement_type = "specialty"
-
-        else:
-            supplement_type = "specialty"
-
-        return {
-            "type": supplement_type,
-            "active_count": active_count,
-            "raw_active_count": raw_active_count,
-            "total_count": total_count,
-            "category_breakdown": category_counts
-        }
+        return infer_supplement_type(product)
 
     # =========================================================================
     # DIETARY SENSITIVITY DATA COLLECTOR (Sugar/Sodium for Diabetes/Hypertension)

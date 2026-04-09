@@ -44,6 +44,8 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional
 from urllib.parse import urlparse
 
+from supplement_type_utils import infer_supplement_type
+
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 logger = logging.getLogger(__name__)
 
@@ -128,6 +130,31 @@ def safe_dict(value: Any) -> dict:
 def normalize_text(value: Any) -> str:
     """Normalize free text for tolerant cross-structure matching."""
     return safe_str(value).lower()
+
+
+def resolve_export_supplement_type(enriched: Dict, scored: Optional[Dict] = None) -> str:
+    enriched_type = ""
+    supplement_type = enriched.get("supplement_type")
+    if isinstance(supplement_type, dict):
+        enriched_type = normalize_text(supplement_type.get("type"))
+    elif supplement_type is not None:
+        enriched_type = normalize_text(supplement_type)
+
+    scored_type = normalize_text((scored or {}).get("supp_type"))
+    inferred_type = normalize_text(infer_supplement_type(enriched).get("type"))
+
+    if enriched_type and enriched_type not in {"unknown"}:
+        if enriched_type == "specialty" and scored_type not in {"", "unknown", "specialty"}:
+            return scored_type
+        if enriched_type == "specialty" and inferred_type not in {"", "unknown", "specialty"}:
+            return inferred_type
+        return enriched_type
+
+    if scored_type and scored_type != "unknown":
+        return scored_type
+    if inferred_type and inferred_type != "unknown":
+        return inferred_type
+    return enriched_type or scored_type or inferred_type or "unknown"
 
 
 def contaminant_matches(enriched: Dict) -> List[Dict]:
@@ -1736,7 +1763,7 @@ def generate_share_metadata(enriched: Dict, scored: Dict) -> Dict:
     }
 
 
-def classify_product_categories(enriched: Dict) -> Dict:
+def classify_product_categories(enriched: Dict, scored: Optional[Dict] = None) -> Dict:
     """Classify product into primary/secondary categories and set boolean flags.
 
     Returns dict with keys: primary_category, secondary_categories, contains_*, key_ingredient_tags
@@ -1754,11 +1781,7 @@ def classify_product_categories(enriched: Dict) -> Dict:
 
     # Primary category detection
     primary_category = None
-    supplement_type = safe_dict(enriched.get("supplement_type"))
-    if isinstance(supplement_type, dict):
-        supp_type = supplement_type.get("type")
-    else:
-        supp_type = safe_str(supplement_type)
+    supp_type = resolve_export_supplement_type(enriched, scored)
 
     if supp_type == "probiotic":
         primary_category = "probiotic"
@@ -1796,7 +1819,9 @@ def classify_product_categories(enriched: Dict) -> Dict:
 
     # Boolean flags
     contains_omega3 = any(name in ingredient_names for name in ["omega-3", "fish_oil", "epa", "dha"])
-    contains_probiotics = supp_type == "probiotic"
+    contains_probiotics = supp_type == "probiotic" or bool(
+        safe_dict(enriched.get("probiotic_data")).get("is_probiotic_product")
+    )
     contains_collagen = any(name in ingredient_names for name in ["collagen", "collagen_peptides"])
     contains_adaptogens = bool(ingredient_names & adaptogens)
     contains_nootropics = bool(ingredient_names & nootropics)
@@ -1963,8 +1988,7 @@ def build_core_row(
     ds = safe_dict(enriched.get("dietary_sensitivity_data"))
     ss = safe_dict(scored.get("section_scores"))
     cp = safe_dict(scored.get("category_percentile"))
-    st = enriched.get("supplement_type")
-    st_str = st.get("type", "") if isinstance(st, dict) else safe_str(st)
+    st_str = resolve_export_supplement_type(enriched, scored)
     sm = safe_dict(scored.get("scoring_metadata"))
 
     disc_date = safe_str(enriched.get("discontinuedDate"))[:10] or None
@@ -1980,7 +2004,7 @@ def build_core_row(
     fingerprint = generate_ingredient_fingerprint(enriched)
     key_nutrients = generate_key_nutrients_summary(enriched)
     share_meta = generate_share_metadata(enriched, scored)
-    categories = classify_product_categories(enriched)
+    categories = classify_product_categories(enriched, scored)
     goal_data = compute_goal_matches(enriched)
     dosing = generate_dosing_summary(enriched)
     allergen_summ = generate_allergen_summary(enriched)

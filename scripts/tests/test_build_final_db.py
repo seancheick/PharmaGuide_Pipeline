@@ -25,6 +25,7 @@ from build_final_db import (
     iter_json_products,
     mark_staged_product_matched,
     remote_blob_storage_path,
+    resolve_export_supplement_type,
     stage_products_by_id,
     validate_export_contract,
 )
@@ -252,6 +253,45 @@ def test_build_core_row_includes_flutter_convenience_fields():
     assert isinstance(decision_highlights["positive"], str)
     assert isinstance(decision_highlights["caution"], str)
     assert isinstance(decision_highlights["trust"], str)
+
+
+def test_export_prefers_resolved_supplement_type_over_stale_specialty():
+    enriched = make_enriched()
+    enriched["supplement_type"] = {"type": "specialty", "active_count": 0}
+    enriched["product_name"] = "Restore"
+    enriched["probiotic_data"] = {
+        "is_probiotic_product": True,
+        "has_cfu": True,
+        "total_billion_count": 5.0,
+        "total_strain_count": 3,
+    }
+    enriched["ingredient_quality_data"]["ingredients"] = [
+        {
+            "raw_source_text": "Lactobacillus gasseri",
+            "name": "Lactobacillus gasseri",
+            "parent_key": "lactobacillus_gasseri",
+            "form": "",
+            "category": "probiotics",
+            "bio_score": 10,
+            "natural": True,
+            "score": 10.0,
+            "mapped": True,
+            "standard_name": "Lactobacillus Gasseri",
+            "notes": "",
+            "matched_form": "",
+            "matched_forms": [],
+            "extracted_forms": [],
+            "safety_hits": [],
+        }
+    ]
+    scored = make_scored(supp_type="probiotic")
+
+    assert resolve_export_supplement_type(enriched, scored) == "probiotic"
+
+    row = row_as_dict(build_core_row(enriched, scored, "2026-04-09T00:00:00Z"))
+    assert row["supplement_type"] == "probiotic"
+    assert row["primary_category"] == "probiotic"
+    assert row["contains_probiotics"] == 1
 
 
 def make_enriched():

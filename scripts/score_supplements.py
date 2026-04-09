@@ -34,6 +34,7 @@ except Exception:
 sys.path.insert(0, str(Path(__file__).parent))
 
 from constants import LOG_DATE_FORMAT, LOG_FORMAT
+from supplement_type_utils import infer_supplement_type
 
 try:
     from match_ledger import (
@@ -229,19 +230,38 @@ class SupplementScorer:
     def _classify_supplement_type(self, product: Dict[str, Any]) -> str:
         st = product.get("supplement_type", {})
         if isinstance(st, str):
-            return norm_text(st) or st
+            existing = norm_text(st) or st
+        elif isinstance(st, dict):
+            existing = norm_text(st.get("type"))
+        else:
+            existing = ""
+
+        inferred = infer_supplement_type(product)
+        inferred_type = norm_text(inferred.get("type")) or "unknown"
+
+        if existing:
+            if existing == "single":
+                return "single"
+            if existing not in {"unknown", "specialty"}:
+                return existing
+            if inferred_type not in {"unknown", "specialty"}:
+                return inferred_type
+            return existing
+
+        if inferred_type:
+            return inferred_type
+
+        if isinstance(st, str):
+            return st
         if not isinstance(st, dict):
             st = {}
-        existing = norm_text(st.get("type"))
-        if existing:
-            return existing
 
         active_count = int(as_float(st.get("active_count"), 0) or 0)
         if not active_count:
             active_count = len(safe_list(product.get("ingredient_quality_data", {}).get("ingredients")))
 
         if active_count == 1:
-            return "single"
+            return "single_nutrient"
         if active_count >= 6:
             return "multivitamin"
         if 2 <= active_count <= 5:
@@ -822,6 +842,53 @@ class SupplementScorer:
         }
         return allowed, details
 
+    def _should_promote_probiotic_dominant_formula(
+        self,
+        product: Dict[str, Any],
+        pdata: Dict[str, Any],
+        ingredient_names: List[str],
+        gate_details: Dict[str, Any],
+    ) -> bool:
+        if not pdata.get("is_probiotic_product"):
+            return False
+
+        checks = gate_details.get("strict_gate_checks", {})
+        if not (
+            checks.get("require_viable_cfu")
+            and checks.get("dose_context")
+            and checks.get("strain_identity")
+        ):
+            return False
+
+        probiotic_terms = (
+            "probiotic", "lactobacillus", "bifidobacterium",
+            "streptococcus", "bacillus", "saccharomyces",
+            "limosilactobacillus", "lacticaseibacillus",
+        )
+        probiotic_like_count = sum(
+            1 for ing_name in ingredient_names
+            if any(term in ing_name for term in probiotic_terms)
+        )
+        ingredient_count = max(len([name for name in ingredient_names if name]), 1)
+        dominant_formula = probiotic_like_count >= max(2, ingredient_count)
+
+        supp_type_payload = product.get("supplement_type", {})
+        active_count = (
+            supp_type_payload.get("active_count")
+            if isinstance(supp_type_payload, dict)
+            else None
+        )
+        if active_count in (0, None):
+            active_count = ingredient_count
+
+        composition_dominant = dominant_formula or probiotic_like_count >= max(2, int(active_count * 0.6))
+        explicit_intent = bool(checks.get("explicit_intent"))
+
+        # Promotion exists to prevent silent false negatives when product naming
+        # or guarantee metadata is weak but the ingredient composition clearly
+        # describes a probiotic-dominant formula.
+        return composition_dominant or explicit_intent
+
     def _compute_probiotic_category_bonus(self, product: Dict[str, Any], supp_type: str) -> Dict[str, float]:
         pro_cfg = self.config.get("section_A_ingredient_quality", {}).get("probiotic_bonus", {})
         pdata = product.get("probiotic_data", {})
@@ -843,6 +910,8 @@ class SupplementScorer:
                 for strain in safe_list(blend.get("strains")):
                     strains.add(canon_key(strain))
             strain_count = len([s for s in strains if s])
+
+        eligibility: Optional[Dict[str, Any]] = None
 
         if supp_type != "probiotic":
             if not probiotic_flag:
@@ -869,6 +938,19 @@ class SupplementScorer:
                 strain_count=strain_count,
                 ingredient_names=ingredient_names,
             )
+            if not allowed and self._should_promote_probiotic_dominant_formula(
+                product=product,
+                pdata=pdata,
+                ingredient_names=ingredient_names,
+                gate_details=gate_details,
+            ):
+                eligibility = {
+                    "mode": "probiotic",
+                    "eligible": True,
+                    "reason": "promoted_probiotic_dominant",
+                    **gate_details,
+                }
+                allowed = True
             if not allowed:
                 return self._probiotic_bonus_zero(
                     {
@@ -878,12 +960,13 @@ class SupplementScorer:
                         **gate_details,
                     }
                 )
-            eligibility = {
-                "mode": "non_probiotic",
-                "eligible": True,
-                "reason": "strict_gate_passed",
-                **gate_details,
-            }
+            if eligibility is None:
+                eligibility = {
+                    "mode": "non_probiotic",
+                    "eligible": True,
+                    "reason": "strict_gate_passed",
+                    **gate_details,
+                }
         else:
             eligibility = {
                 "mode": "probiotic",
@@ -2798,7 +2881,15 @@ class SupplementScorer:
 
         try:
             flags: List[str] = []
+            existing_supp_type = ""
+            raw_supp_type = product.get("supplement_type", {})
+            if isinstance(raw_supp_type, dict):
+                existing_supp_type = norm_text(raw_supp_type.get("type"))
+            elif isinstance(raw_supp_type, str):
+                existing_supp_type = norm_text(raw_supp_type)
             supp_type = self._classify_supplement_type(product)
+            if existing_supp_type and existing_supp_type != norm_text(supp_type):
+                flags.append("SUPPLEMENT_TYPE_REINFERRED")
 
             # Step 1: B0 immediate fail
             b0 = self._evaluate_safety_gate(product)

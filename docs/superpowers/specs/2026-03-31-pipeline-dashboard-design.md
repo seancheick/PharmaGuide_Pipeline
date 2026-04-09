@@ -1,7 +1,7 @@
 # PharmaGuide Pipeline Operator Dashboard — Design Spec
 
-> Version: 3.0.0 | Date: 2026-04-08
-> Status: Verified against actual files + external review feedback integrated
+> Version: 3.1.0 | Date: 2026-04-09
+> Status: Updated after correction sprint implementation
 > Stack: Python 3.13 + Streamlit + Pandas + Plotly
 > Scope: Read-only internal operator dashboard, local-only, no auth
 
@@ -95,6 +95,14 @@ The loader cleanly separates two categories:
 - `logs/processing_state.json` — latest run state
 - `config/scoring_config.json` — current scoring parameters
 
+**Implemented fallback discovery**:
+- `output_*/cleaned/*.json`
+- `output_*/errors/*_error.json`
+- `output_*/unmapped/*.json`
+- `logs/batch_*_log.txt`
+
+The current workspace uses the fallback discovery paths heavily, so the loader supports both the ideal report layout and the real `output_*` / log structure present on disk.
+
 **Resilience rule**: if any file is missing, that section shows "No data available" with the expected path. The dashboard never crashes on missing data.
 
 ### 2.5 Implementation Rules
@@ -147,10 +155,18 @@ The loader cleanly separates two categories:
 1. Product Inspector (default)
 2. Pipeline Health (includes Release Gate)
 3. Data Quality
-4. Release Diff (phase 2 — greyed out in v1, shows "Coming soon")
-5. Pipeline Observability (phase 4)
-6. Intelligence (phase 3 — greyed out until phase 4 is stable)
-7. Batch Run Comparison (phase 2 — greyed out in v1)
+4. Pipeline Observability
+5. Release Diff
+6. Batch Run Comparison
+7. Intelligence
+
+All seven views are now wired in the app shell. Advanced sections are strongest when multiple builds and richer dataset artifacts are available, but they are no longer navigation stubs.
+
+### 3.2 Implementation Notes (2026-04-09)
+
+- The loader now provides a normalized `build_history` abstraction that powers release comparison, drift checks, and monitoring.
+- Health, Quality, and Observability now consume shared loader metrics rather than recomputing release counts independently.
+- The dashboard test suite now includes view smoke coverage and empty-export verification in addition to loader and graceful-degradation tests.
 
 ---
 

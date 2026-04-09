@@ -1,0 +1,386 @@
+[
+  {
+    "dsld_id": "15581",
+    "product_name": "Thorne Performance Restore",
+    "brand_name": "",
+    "quality_score": 33.5,
+    "score_80": 33.5,
+    "score_100_equivalent": 41.9,
+    "display": "33.5/80",
+    "display_100": "41.9/100",
+    "grade": "Low",
+    "verdict": "SAFE",
+    "safety_verdict": "SAFE",
+    "badges": [
+      {
+        "id": "FULL_DISCLOSURE",
+        "label": "FULL DISCLOSURE",
+        "description": "This product lists exact amounts for every active ingredient."
+      }
+    ],
+    "category_percentile": {
+      "available": false,
+      "reason": "insufficient_cohort_size",
+      "category_key": "general_supplement",
+      "category_label": "General Supplements",
+      "category_source": "fallback",
+      "category_confidence": 0.33,
+      "category_signals": [
+        "supp_type:probiotic",
+        "low_confidence"
+      ],
+      "cohort_size": 1
+    },
+    "category_percentile_text": null,
+    "percentile_category": "general_supplement",
+    "percentile_category_label": "General Supplements",
+    "percentile_category_source": "fallback",
+    "percentile_category_confidence": 0.33,
+    "percentile_category_signals": [
+      "supp_type:probiotic",
+      "low_confidence"
+    ],
+    "output_schema_version": "3.4.0",
+    "scoring_status": "scored",
+    "score_basis": "bioactives_scored",
+    "evaluation_stage": "scoring",
+    "breakdown": {
+      "A": {
+        "score": 2.0,
+        "max": 25.0,
+        "core_quality": 0.0,
+        "category_bonus_total": 2.0,
+        "category_bonus_pool_cap": 5.0,
+        "A1": 0.0,
+        "A2": 0.0,
+        "A3": 0.0,
+        "A4": 0.0,
+        "A5": 0.0,
+        "A5a": 0.0,
+        "A5b": 0.0,
+        "A5c": 0.0,
+        "A5d": 0.0,
+        "A6": 0.0,
+        "probiotic_bonus": 2.0,
+        "probiotic_breakdown": {
+          "probiotic_bonus": 2.0,
+          "cfu": 1.0,
+          "diversity": 1.0,
+          "prebiotic": 0.0,
+          "clinical_strains": 0.0,
+          "survivability": 0.0,
+          "eligibility": {
+            "mode": "probiotic",
+            "eligible": true,
+            "reason": "supplement_type_probiotic"
+          }
+        },
+        "omega3_dose_bonus": 0.0,
+        "omega3_breakdown": {
+          "omega3_dose_bonus": 0.0,
+          "applicable": false
+        }
+      },
+      "B": {
+        "score": 25.0,
+        "max": 30.0,
+        "B0_moderate_penalty": 0.0,
+        "B1_penalty": 0.0,
+        "B2_penalty": 0.0,
+        "B3": 0.0,
+        "B4a": 0.0,
+        "B4b": 0.0,
+        "B4c": 0.0,
+        "B_hypoallergenic": 0.0,
+        "B5_penalty": 0.0,
+        "B5_blend_evidence": [],
+        "B6_penalty": 0.0,
+        "B7_penalty": 0.0,
+        "B7_dose_safety_evidence": [],
+        "bonuses": 0.0,
+        "penalties": 0.0,
+        "raw": 25.0
+      },
+      "C": {
+        "score": 5.51,
+        "max": 20.0,
+        "ingredient_points": {
+          "bifidobacterium longum": 2.86,
+          "bifidobacterium bifidum": 3.58
+        },
+        "matched_entries": 2,
+        "top_n_applied": 2,
+        "depth_bonus": 0.5
+      },
+      "D": {
+        "score": 1.0,
+        "max": 5.0,
+        "D1": 0.0,
+        "D2": 1.0,
+        "D3": 0.0,
+        "D4": 0.0,
+        "D5": 0.0
+      },
+      "E": {
+        "score": 0.0,
+        "max": 0.0,
+        "applicable": false,
+        "_note": "Legacy compat — omega-3 dose is now a category bonus inside Ingredient Quality"
+      },
+      "violation_penalty": 0.0,
+      "quality_raw": 33.51
+    },
+    "flags": [],
+    "supp_type": "probiotic",
+    "unmapped_actives": [],
+    "unmapped_actives_total": 0,
+    "unmapped_actives_excluding_banned_exact_alias": 0,
+    "mapped_coverage": 1.0,
+    "scoring_metadata": {
+      "scoring_version": "3.4.0",
+      "output_schema_version": "3.4.0",
+      "scored_date": "2026-04-09T20:05:41.327004+00:00",
+      "enrichment_version": "3.1.0",
+      "scoring_status": "scored",
+      "score_basis": "bioactives_scored",
+      "verdict": "SAFE",
+      "flags": [],
+      "unmapped_actives_total": 0,
+      "unmapped_actives_excluding_banned_exact_alias": 0,
+      "mapped_coverage": 1.0,
+      "reason": null
+    },
+    "section_scores": {
+      "A_ingredient_quality": {
+        "score": 2.0,
+        "max": 25.0,
+        "core_quality": 0.0,
+        "category_bonus_total": 2.0,
+        "category_bonus_pool_cap": 5.0
+      },
+      "B_safety_purity": {
+        "score": 25.0,
+        "max": 30.0
+      },
+      "C_evidence_research": {
+        "score": 5.51,
+        "max": 20.0
+      },
+      "D_brand_trust": {
+        "score": 1.0,
+        "max": 5.0
+      },
+      "E_dose_adequacy": {
+        "score": 0.0,
+        "max": 2.0,
+        "applicable": false,
+        "_deprecated": "Moved to A_ingredient_quality.omega3_dose_bonus in v3.3"
+      }
+    },
+    "match_ledger": {
+      "schema_version": "1.1.0",
+      "generated_at": "2026-04-09T20:04:36.222174Z",
+      "domains": {
+        "ingredients": {
+          "total_raw": 3,
+          "matched": 3,
+          "unmatched": 0,
+          "rejected": 0,
+          "skipped": 0,
+          "recognized_non_scorable": 0,
+          "recognized_botanical_unscored": 0,
+          "recognition_coverage_percent": 100.0,
+          "scorable_coverage_percent": 100.0,
+          "scorable_total": 3,
+          "coverage_percent": 100.0,
+          "entries": [
+            {
+              "domain": "ingredients",
+              "raw_source_text": "Lactobacillus gasseri",
+              "raw_source_path": "activeIngredients",
+              "normalized_key": "lactobacillus_gasseri",
+              "canonical_id": "lactobacillus_gasseri",
+              "match_method": "exact",
+              "confidence": 1.0,
+              "matched_to_name": "Lactobacillus Gasseri",
+              "decision": "matched",
+              "decision_reason": null,
+              "candidates_top3": []
+            },
+            {
+              "domain": "ingredients",
+              "raw_source_text": "Bifidobacterium longum",
+              "raw_source_path": "activeIngredients",
+              "normalized_key": "bifidobacterium_longum",
+              "canonical_id": "bifidobacterium_longum",
+              "match_method": "exact",
+              "confidence": 1.0,
+              "matched_to_name": "Bifidobacterium Longum",
+              "decision": "matched",
+              "decision_reason": null,
+              "candidates_top3": []
+            },
+            {
+              "domain": "ingredients",
+              "raw_source_text": "Bifidobacterium bifidum",
+              "raw_source_path": "activeIngredients",
+              "normalized_key": "bifidobacterium_bifidum",
+              "canonical_id": "bifidobacterium_bifidum",
+              "match_method": "exact",
+              "confidence": 1.0,
+              "matched_to_name": "Bifidobacterium Bifidum",
+              "decision": "matched",
+              "decision_reason": null,
+              "candidates_top3": []
+            }
+          ],
+          "records": [
+            {
+              "domain": "ingredients",
+              "raw_source_text": "Lactobacillus gasseri",
+              "raw_source_path": "activeIngredients",
+              "normalized_key": "lactobacillus_gasseri",
+              "canonical_id": "lactobacillus_gasseri",
+              "match_method": "exact",
+              "confidence": 1.0,
+              "matched_to_name": "Lactobacillus Gasseri",
+              "decision": "matched",
+              "decision_reason": null,
+              "candidates_top3": []
+            },
+            {
+              "domain": "ingredients",
+              "raw_source_text": "Bifidobacterium longum",
+              "raw_source_path": "activeIngredients",
+              "normalized_key": "bifidobacterium_longum",
+              "canonical_id": "bifidobacterium_longum",
+              "match_method": "exact",
+              "confidence": 1.0,
+              "matched_to_name": "Bifidobacterium Longum",
+              "decision": "matched",
+              "decision_reason": null,
+              "candidates_top3": []
+            },
+            {
+              "domain": "ingredients",
+              "raw_source_text": "Bifidobacterium bifidum",
+              "raw_source_path": "activeIngredients",
+              "normalized_key": "bifidobacterium_bifidum",
+              "canonical_id": "bifidobacterium_bifidum",
+              "match_method": "exact",
+              "confidence": 1.0,
+              "matched_to_name": "Bifidobacterium Bifidum",
+              "decision": "matched",
+              "decision_reason": null,
+              "candidates_top3": []
+            }
+          ]
+        },
+        "additives": {
+          "total_raw": 0,
+          "matched": 0,
+          "unmatched": 0,
+          "rejected": 0,
+          "skipped": 0,
+          "recognized_non_scorable": 0,
+          "recognized_botanical_unscored": 0,
+          "recognition_coverage_percent": 0.0,
+          "scorable_coverage_percent": 100.0,
+          "scorable_total": 0,
+          "coverage_percent": 100.0,
+          "entries": [],
+          "records": []
+        },
+        "allergens": {
+          "total_raw": 0,
+          "matched": 0,
+          "unmatched": 0,
+          "rejected": 0,
+          "skipped": 0,
+          "recognized_non_scorable": 0,
+          "recognized_botanical_unscored": 0,
+          "recognition_coverage_percent": 0.0,
+          "scorable_coverage_percent": 100.0,
+          "scorable_total": 0,
+          "coverage_percent": 100.0,
+          "entries": [],
+          "records": []
+        },
+        "manufacturer": {
+          "total_raw": 0,
+          "matched": 0,
+          "unmatched": 0,
+          "rejected": 0,
+          "skipped": 0,
+          "recognized_non_scorable": 0,
+          "recognized_botanical_unscored": 0,
+          "recognition_coverage_percent": 0.0,
+          "scorable_coverage_percent": 100.0,
+          "scorable_total": 0,
+          "coverage_percent": 100.0,
+          "entries": [],
+          "records": []
+        },
+        "delivery": {
+          "total_raw": 0,
+          "matched": 0,
+          "unmatched": 0,
+          "rejected": 0,
+          "skipped": 0,
+          "recognized_non_scorable": 0,
+          "recognized_botanical_unscored": 0,
+          "recognition_coverage_percent": 0.0,
+          "scorable_coverage_percent": 100.0,
+          "scorable_total": 0,
+          "coverage_percent": 100.0,
+          "entries": [],
+          "records": []
+        },
+        "claims": {
+          "total_raw": 0,
+          "matched": 0,
+          "unmatched": 0,
+          "rejected": 0,
+          "skipped": 0,
+          "recognized_non_scorable": 0,
+          "recognized_botanical_unscored": 0,
+          "recognition_coverage_percent": 0.0,
+          "scorable_coverage_percent": 100.0,
+          "scorable_total": 0,
+          "coverage_percent": 100.0,
+          "entries": [],
+          "records": []
+        }
+      },
+      "summary": {
+        "total_entities": 3,
+        "total_matched": 3,
+        "total_skipped": 0,
+        "total_recognized_non_scorable": 0,
+        "total_recognized_botanical_unscored": 0,
+        "total_unmatched": 0,
+        "total_rejected": 0,
+        "recognition_coverage_percent": 100.0,
+        "scorable_coverage_percent": 100.0,
+        "scorable_total": 3,
+        "coverage_percent": 100.0,
+        "coverage_by_domain": {
+          "ingredients": 100.0,
+          "additives": 100.0,
+          "allergens": 100.0,
+          "manufacturer": 100.0,
+          "delivery": 100.0,
+          "claims": 100.0
+        },
+        "recognition_by_domain": {
+          "ingredients": 100.0,
+          "additives": 0.0,
+          "allergens": 0.0,
+          "manufacturer": 0.0,
+          "delivery": 0.0,
+          "claims": 0.0
+        }
+      }
+    }
+  }
+]
