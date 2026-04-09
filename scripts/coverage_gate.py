@@ -1057,6 +1057,7 @@ if __name__ == "__main__":
 
     # Load enriched products
     products = []
+    skipped_files = []
     for json_file in input_dir.glob("*.json"):
         try:
             with open(json_file, 'r') as f:
@@ -1067,6 +1068,11 @@ if __name__ == "__main__":
                     products.append(data)
         except Exception as e:
             logger.error(f"Failed to load {json_file}: {e}")
+            skipped_files.append(str(json_file))
+
+    if skipped_files:
+        print(f"ERROR: {len(skipped_files)} file(s) failed to load: {skipped_files}", file=sys.stderr)
+        sys.exit(1)
 
     if not products:
         print(f"No products found in {input_dir}")

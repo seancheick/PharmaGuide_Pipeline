@@ -161,13 +161,21 @@ class RDAULCalculator:
         self._build_nutrient_lookup()
 
     def _load_rda_db(self, path: Path) -> Dict:
-        """Load the RDA/UL database."""
+        """Load the RDA/UL database. Raises on failure — UL safety checks depend on this."""
         try:
             with open(path, 'r', encoding='utf-8') as f:
-                return json.load(f)
+                data = json.load(f)
         except Exception as e:
-            logger.error(f"Failed to load RDA database: {e}")
-            return {"nutrient_recommendations": [], "_metadata": {}}
+            raise RuntimeError(
+                f"FATAL: Failed to load RDA/UL database from {path}: {e}. "
+                f"Upper-limit safety checks cannot run without this file."
+            ) from e
+        if not data.get("nutrient_recommendations"):
+            raise ValueError(
+                f"RDA database at {path} has no nutrient_recommendations — "
+                f"UL violation detection will be completely disabled."
+            )
+        return data
 
     def _build_nutrient_lookup(self):
         """Build fast lookup for nutrients by name."""

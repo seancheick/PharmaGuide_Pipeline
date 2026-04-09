@@ -7,8 +7,11 @@ Implements FDA labeling best practices and transparency scoring
 
 import re
 import json
+import logging
 from pathlib import Path
 from typing import Dict, List, Tuple, Optional
+
+logger = logging.getLogger(__name__)
 
 class FunctionalGroupingHandler:
     """Handle functional ingredient groupings and transparency scoring"""
@@ -18,32 +21,31 @@ class FunctionalGroupingHandler:
         self.load_patterns()
 
     def load_patterns(self):
-        """Load functional grouping patterns from database"""
+        """Load functional grouping patterns from database. Raises on failure."""
+        config_path = Path(__file__).parent / 'data' / 'functional_ingredient_groupings.json'
         try:
-            config_path = Path(__file__).parent / 'data' / 'functional_ingredient_groupings.json'
             with open(config_path, 'r', encoding='utf-8') as f:
                 data = json.load(f)
+        except (FileNotFoundError, json.JSONDecodeError) as e:
+            raise RuntimeError(
+                f"FATAL: Failed to load functional grouping patterns from {config_path}: {e}. "
+                f"Transparency scoring will be completely disabled without this file."
+            ) from e
 
-            self.groupings = data.get('functional_groupings', [])
-            self.vague_terms = data.get('vague_terms_to_flag', [])
-            self.bonuses = data.get('transparency_bonuses', [])
+        self.groupings = data.get('functional_groupings', [])
+        self.vague_terms = data.get('vague_terms_to_flag', [])
+        self.bonuses = data.get('transparency_bonuses', [])
 
-            # Build pattern matchers
-            self.grouping_patterns = []
-            for group in self.groupings:
-                pattern = group.get('pattern', '')
-                compiled = re.compile(pattern, re.IGNORECASE)
-                self.grouping_patterns.append({
-                    'compiled': compiled,
-                    'config': group
-                })
-
-        except Exception as e:
-            print(f"Warning: Could not load functional grouping patterns: {e}")
-            self.groupings = []
-            self.vague_terms = []
-            self.bonuses = []
-            self.grouping_patterns = []
+        # Build pattern matchers
+        self.grouping_patterns = []
+        for group in self.groupings:
+            pattern = group.get('pattern', '')
+            compiled = re.compile(pattern, re.IGNORECASE)
+            self.grouping_patterns.append({
+                'compiled': compiled,
+                'config': group
+            })
+        logger.info("Loaded %d functional grouping patterns", len(self.grouping_patterns))
 
     def detect_functional_grouping(self, ingredient_text: str) -> Optional[Dict]:
         """

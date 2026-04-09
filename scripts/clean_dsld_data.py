@@ -407,7 +407,23 @@ class DSLDCleaningPipeline:
             self.logger.info(f"  - Incomplete: {output_dir / 'incomplete'}")
             self.logger.info(f"  - Unmapped ingredients: {output_dir / 'unmapped'}")
             self.logger.info(f"  - Processing report: {output_dir / 'reports'}")
-            
+
+            # Fail if error rate exceeds safety threshold.
+            # A medical-grade pipeline must not silently report success
+            # when significant data loss has occurred.
+            error_count = summary['results']['errors']
+            total_files = summary['total_files']
+            success_rate = summary['success_rate']
+            min_success_rate = self.config.get("validation", {}).get("min_success_rate", 95.0)
+
+            if total_files > 0 and success_rate < min_success_rate:
+                self.logger.error(
+                    f"PIPELINE FAILED: success rate {success_rate:.1f}% is below "
+                    f"minimum threshold {min_success_rate}% "
+                    f"({error_count}/{total_files} files had errors)"
+                )
+                return False
+
             return True
             
         except KeyboardInterrupt:

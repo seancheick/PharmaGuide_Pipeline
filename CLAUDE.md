@@ -122,7 +122,7 @@ Verification scripts that call external APIs to validate data accuracy:
 - **Dose Adequacy** (max 2): EPA/DHA dosing for omega-3 (additive)
 
 Final: `score_100_equivalent = (quality_score / 80) * 100`
-Verdicts: BLOCKED > UNSAFE > MODERATE > REVIEW > RECOMMENDED (deterministic precedence)
+Verdicts: BLOCKED > UNSAFE > NOT_SCORED > CAUTION > POOR > SAFE (deterministic precedence)
 
 Config: `scripts/config/scoring_config.json` (100+ tunable parameters)
 

@@ -10,7 +10,9 @@
       "Bash(flutter analyze:*)",
       "Bash(du -sh \"/Users/seancheick/PharmaGuide ai/SPRINT_TRACKER.md\" \"/Users/seancheick/PharmaGuide ai/knowledge/\"*)",
       "Bash(flutter pub:*)",
-      "Bash(flutter test:*)"
+      "Bash(flutter test:*)",
+      "mcp__claude_ai_PubMed__convert_article_ids",
+      "mcp__claude_ai_PubMed__find_related_articles"
     ],
     "additionalDirectories": [
       "/Users/seancheick/PharmaGuide ai/ios/Runner.xcodeproj",

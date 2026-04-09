@@ -160,7 +160,8 @@ def fetch_current_detail_index(client, current_version):
         index = json.loads(data)
         return {entry["storage_path"] for entry in index.values()}
     except Exception as exc:
-        print(f"  [WARN] Could not download detail_index.json for v{current_version}: {exc}")
+        print(f"  [ERROR] Could not download detail_index.json for v{current_version}: {exc}")
+        print(f"  Orphan blob cleanup will be SKIPPED — cannot determine which blobs are active.")
         return None
 
 
@@ -188,7 +189,9 @@ def list_blobs_in_shard(client, shard):
                 path=prefix,
                 options={"limit": 1000, "offset": offset},
             )
-        except Exception:
+        except Exception as exc:
+            print(f"  [WARN] Blob listing failed at offset {offset} in shard {shard}: {exc}")
+            print(f"  Returning {len(paths)} blobs found so far (listing may be incomplete).")
             break
         if not items:
             break

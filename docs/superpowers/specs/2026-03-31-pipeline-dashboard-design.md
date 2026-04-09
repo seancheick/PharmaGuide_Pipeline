@@ -1,7 +1,7 @@
 # PharmaGuide Pipeline Operator Dashboard — Design Spec
 
-> Version: 2.0.0 | Date: 2026-04-08
-> Status: Verified against actual files — pending final review
+> Version: 3.0.0 | Date: 2026-04-08
+> Status: Verified against actual files + external review feedback integrated
 > Stack: Python 3.13 + Streamlit + Pandas + Plotly
 > Scope: Read-only internal operator dashboard, local-only, no auth
 
@@ -9,15 +9,20 @@
 
 ## 1. Purpose
 
-An internal Streamlit dashboard for the PharmaGuide pipeline operator to:
+An internal Streamlit dashboard that serves as PharmaGuide's **data observability + QA + release validation system**. Not just analytics — an operator control plane for the entire data engine.
+
+Core capabilities:
 
 1. **Inspect any product** from the final export, with best-effort links to enriched/scored source files when resolvable
 2. **Check pipeline health**: did the last run succeed, what's the current release, are release artifacts ready, which stage failed
 3. **Triage data quality**: unmapped ingredients, fallbacks, not-scored products, coverage gaps
 4. **Explain scores**: show pillar totals plus a trace-lite of how the exported score was assembled from section breakdown, bonuses, and penalties
-5. **Compare releases** (phase 2): score shifts, verdict changes, added/removed products
+5. **Gate releases**: GO/NO-GO decision engine that blocks bad releases before they reach users
+6. **Compare releases** (phase 2): score shifts, verdict changes, added/removed products
+7. **Surface intelligence**: market insights, brand rankings, ingredient analytics, and scoring sensitivity that feed the app, AI layer, and content engine
+8. **Detect drift**: automatic alerts when scores, safety signals, or coverage regress between builds
 
-This is a read-only tool. It never writes to the database, pipeline outputs, or Supabase. It reads existing JSON reports and SQLite files that the pipeline already produces.
+This is a read-only tool (except for the storage cleanup action, which requires operator confirmation). It never writes to the database, pipeline outputs, or Supabase. It reads existing JSON reports and SQLite files that the pipeline already produces.
 
 ---
 
@@ -140,9 +145,12 @@ The loader cleanly separates two categories:
 
 **View navigation:**
 1. Product Inspector (default)
-2. Pipeline Health
+2. Pipeline Health (includes Release Gate)
 3. Data Quality
 4. Release Diff (phase 2 — greyed out in v1, shows "Coming soon")
+5. Pipeline Observability (phase 4)
+6. Intelligence (phase 3 — greyed out until phase 4 is stable)
+7. Batch Run Comparison (phase 2 — greyed out in v1)
 
 ---
 
@@ -294,7 +302,42 @@ Local file presence check only — does not query Supabase.
 - None found: red "No release found at `{build_root}`"
 - If `sync_failures_*.json` exists: orange warning card with error count and failed blob list
 
-### 5.3 Latest Batch Run
+### 5.3 Release Gate (GO / NO-GO Decision Engine)
+
+A prominent card at the top of Pipeline Health that turns the dashboard from visibility into a **decision engine**. This prevents bad releases from reaching users.
+
+**Release Status Card**:
+
+```text
+Release Status: GO / NO-GO / BLOCKED
+
+Reasons (when blocked):
+- 142 enriched but not scored
+- Coverage dropped to 93%
+- 3 banned substances detected
+- 12 export errors
+```
+
+**Blocking rules** (any triggers NO-GO):
+
+| Condition | Threshold | Severity |
+|-----------|-----------|----------|
+| `enriched_only > 0` | 0 (in strict mode) | BLOCK |
+| Coverage < threshold | configurable, default 95% | BLOCK |
+| Error count > 0 | 0 | BLOCK |
+| Banned substances detected | any new vs prior build | BLOCK |
+| BLOCKED verdict count increased | any increase vs prior build | WARN |
+| Build age > N days | configurable, default 7 | WARN |
+
+**Display**:
+- Large colored badge: green "GO" / red "BLOCKED" / yellow "REVIEW"
+- Below: bullet list of all triggered conditions with severity
+- "Override" button (requires typing "CONFIRM" — logged to audit trail)
+- Source: `export_manifest.integrity`, `export_audit_report.json`, prior build manifest for delta checks
+
+**Gate thresholds** are configurable via `dashboard_alerts.json` (same file as 7B.10 alerting rules).
+
+### 5.4 Latest Batch Run
 
 Source: newest `batch_run_summary_*.txt` file.
 
@@ -310,7 +353,7 @@ Display:
 - Error summary: count of ERROR-level lines, expandable to show them
 - Overall: "X/Y datasets completed all stages"
 
-### 5.3A Pipeline Stage Visualization
+### 5.4A Pipeline Stage Visualization
 
 For each dataset in the latest batch, render a simple stage rail:
 
@@ -326,7 +369,7 @@ Status inference comes from parsed batch summary and processing-state artifacts:
 
 This is an operator aid, not a source of truth beyond the logs being parsed.
 
-### 5.4 Processing State
+### 5.5 Processing State
 
 Source: `logs/processing_state.json`
 
@@ -335,7 +378,7 @@ Source: `logs/processing_state.json`
 - Can resume: yes/no badge
 - Error list (if any)
 
-### 5.5 Missing Artifact Detector
+### 5.6 Missing Artifact Detector
 
 For each discovered `output_*` directory, check for expected files:
 - `reports/enrichment_summary_*.json` — present/missing
@@ -345,7 +388,7 @@ For each discovered `output_*` directory, check for expected files:
 
 Table with dataset name, and red/green status per artifact type. Red rows sorted to top.
 
-### 5.6 Batch History
+### 5.7 Batch History
 
 Table of all discovered `batch_run_summary_*.txt` files:
 - Filename, date (parsed from filename), file size
@@ -361,9 +404,28 @@ Table of all discovered `batch_run_summary_*.txt` files:
 Source: `products_core` SQLite table, `WHERE verdict = 'NOT_SCORED'`.
 
 - KPI card: total count of NOT_SCORED products
-- Table: dsld_id, product_name, brand_name, mapped_coverage
+- Table: dsld_id, product_name, brand_name, mapped_coverage, **not_scored_reason**
 - Sorted by brand (group similar products)
 - This is the highest-value QA list in the dashboard
+
+**Root cause explanation per product** (saves hours of debugging):
+
+Each NOT_SCORED product should display a reason derived from available data:
+
+```text
+NOT SCORED — Reason:
+- Missing ingredient mapping (2 of 8 ingredients unmapped)
+- Coverage below threshold (92% < 95% gate)
+```
+
+Reason inference logic (check in order):
+1. If `mapped_coverage < coverage_threshold` → "Coverage below threshold (X% < Y%)"
+2. If product has unmapped ingredients → "Missing ingredient mapping (N ingredients)"
+3. If product failed enrichment → "Enrichment failure" (from enrichment summary errors)
+4. If product has no scored output file → "Scoring stage not reached"
+5. Fallback: "Reason unknown — check pipeline logs"
+
+Source: cross-reference `coverage_report`, `enrichment_summary`, and `products_core` fields.
 
 ### 6.2 Unmapped Hotspot Table
 
@@ -519,9 +581,16 @@ Plotly Sankey diagram showing how products flow through the pipeline:
 - **Middle nodes**: Matched (present in both enriched + scored), Enriched-only, Scored-only
 - **Right nodes**: Exported, Contract failures, Errors
 - Color coding: green for the happy path (Enriched → Matched → Exported), red for any drop-off path
+- **% loss labels on every edge** — operators need percentages more than raw counts:
+  ```text
+  Enriched → Matched: 98.2% (4,820 / 4,908)
+  Matched → Exported: 95.6% (4,608 / 4,820)
+  Total pipeline yield: 93.9%
+  Total loss: 6.1% (300 products)
+  ```
 - Source: `integrity` block values + `export_audit_report.json`
 
-If Plotly Sankey is unavailable, degrade gracefully to a text-based flow summary table.
+If Plotly Sankey is unavailable, degrade gracefully to a text-based flow summary table with the same percentage labels.
 
 ### 7B.3 Enriched vs Scored Mismatch Tracker
 
@@ -540,7 +609,38 @@ Two tables and a trend chart:
 - Y-axis: enriched-only count, scored-only count, error count
 - Shows whether mismatch rate is improving or degrading over time
 
-### 7B.4 Safety & Regulatory Dashboard
+### 7B.4 Export Error Drill-Down
+
+The `integrity.errors` list contains `{dsld_id, error}` pairs, but the dashboard needs a dedicated view to browse them — not just a count.
+
+- Table: dsld_id, product_name, brand_name, error_message, stage (inferred from error text)
+- Sortable and filterable by error type
+- Click any row to jump to Product Inspector for that dsld_id
+- Error classification: group errors by pattern (e.g., "missing field", "contract violation", "scoring exception")
+- KPI card: "X errors out of Y products (Z%)"
+
+Source: `export_manifest.integrity.errors` array + cross-reference `products_core` for product names.
+
+### 7B.5 Top Failure Reasons Aggregation
+
+Aggregates WHY products fail at scale — drives pipeline improvements.
+
+**Failure Breakdown Table**:
+
+| Reason | Count | % of Total Failures |
+|--------|-------|---------------------|
+| Missing ingredient mapping | 120 | 42% |
+| Coverage gate fail | 45 | 16% |
+| Scoring exception | 12 | 4% |
+| Unknown ingredient | 8 | 3% |
+| Enrichment timeout | 5 | 2% |
+
+- Source: cross-reference NOT_SCORED reasons (6.1), `integrity.errors`, enrichment summary `unmapped_ingredients`, coverage report failures
+- Bar chart visualization (horizontal bars, sorted by count)
+- Trend: if prior build data is available, show count delta ("+12 vs last build" / "-5 vs last build")
+- This table directly informs which pipeline improvements to prioritize
+
+### 7B.6 Safety & Regulatory Dashboard
 
 Real-time safety signal counts from the `integrity` block and `products_core`:
 
@@ -556,7 +656,7 @@ Real-time safety signal counts from the `integrity` block and `products_core`:
 
 All counts are clickable — clicking a count opens the Product Inspector pre-filtered to that cohort.
 
-### 7B.5 Supabase Sync Status
+### 7B.7 Supabase Sync Status
 
 Checks remote Supabase state. Requires credentials from `.env` to be present; if not available, shows a graceful "Credentials not configured — showing local status only" message.
 
@@ -573,7 +673,12 @@ Status summary badge: **Synced** (green) / **Outdated** (yellow) / **Never synce
 
 Graceful degradation: if Supabase credentials are absent or the request times out (>5s), show last-known local state with a "Remote check unavailable" warning.
 
-### 7B.6 Storage Health Monitor
+**Client adoption tracking** (phase 3 — requires app telemetry):
+- "% users on latest DB version" — sync success does not mean users updated
+- Requires the Flutter app to report its local DB version to Supabase (via an analytics event or metadata table)
+- Until app telemetry is wired: show placeholder "Client adoption: awaiting app telemetry" with a link to the implementation ticket
+
+### 7B.8 Storage Health Monitor
 
 Summarizes versioned storage on disk for the build root:
 
@@ -581,11 +686,17 @@ Summarizes versioned storage on disk for the build root:
 - Size per version directory (sorted newest first)
 - Orphaned blob estimate: blobs in `detail_blobs/` not referenced by current `detail_index.json`
 - Cleanup recommendation: "X versions can be cleaned up, saving ~Y MB" (any version that is not the current release and older than 30 days)
-- One-click cleanup trigger button: runs `python3 scripts/cleanup_old_versions.py --execute` via `subprocess` (operator confirms in a Streamlit modal before execution)
+
+**Safe cleanup flow** (no accidental deletion):
+1. Click "Preview Cleanup" → runs dry-run first
+2. Shows: files to delete, size to be freed, versions affected
+3. Operator reviews the list
+4. Click "Confirm Cleanup" to execute (`python3 scripts/cleanup_old_versions.py --execute`)
+5. Never a single "one-click delete" — always preview → confirm
 
 Note: cleanup trigger is the only write action in the dashboard. It only deletes old build artifacts, never pipeline inputs or Supabase data.
 
-### 7B.7 Score Distribution Analytics
+### 7B.9 Score Distribution Analytics
 
 Enhanced version of the existing 6.5 histogram. Adds:
 
@@ -597,7 +708,13 @@ Enhanced version of the existing 6.5 histogram. Adds:
 
 Source: `products_core` SQLite + cross-build comparison when prior `export_manifest.json` history is available.
 
-### 7B.8 Ingredient Coverage Health
+**Score vs Coverage correlation** (reveals scoring bias and data gaps):
+- Scatter plot: X = `mapped_coverage`, Y = `score_100_equivalent`
+- Reveals whether low coverage systematically produces low scores
+- Helps identify if the scoring system unfairly penalizes products with missing data vs genuinely poor products
+- Color dots by verdict for additional insight
+
+### 7B.10 Ingredient Coverage Health
 
 - Total unique ingredients across all products (from `products_core` ingredient arrays or enrichment summaries)
 - Mapped vs unmapped ratio (pie chart)
@@ -608,7 +725,7 @@ Source: `products_core` SQLite + cross-build comparison when prior `export_manif
 
 Source: enrichment summaries + `ingredient_quality_map.json` key set.
 
-### 7B.9 Build History Timeline
+### 7B.11 Build History Timeline
 
 - Timeline visualization of all discovered builds (from `export_manifest.json` history files or versioned build dirs)
 - Each build node shows: version label, product count, coverage %, error count, generated_at timestamp
@@ -616,7 +733,7 @@ Source: enrichment summaries + `ingredient_quality_map.json` key set.
 - Trend lines overlay: product count growth, coverage % improvement, error count reduction
 - If only one build exists: show a single node with a "No prior builds to compare" note
 
-### 7B.10 Alerting Rules (Configurable)
+### 7B.12 Alerting Rules (Configurable)
 
 Operator-defined thresholds stored in `scripts/dashboard/dashboard_alerts.json`. Alerts render as colored banners at the top of the observability view.
 
@@ -643,6 +760,322 @@ All thresholds are configurable. The `dashboard_alerts.json` schema:
 ```
 
 If `dashboard_alerts.json` does not exist, defaults are used and a one-time notice is shown: "Using default alert thresholds. Create `scripts/dashboard/dashboard_alerts.json` to customize."
+
+### 7B.13 Drift Detection (Automatic Regression Alerts)
+
+Automatic alerts when key metrics regress between builds. This is how you catch regressions instantly without manually comparing builds.
+
+**Drift alerts** (rendered as colored banners at top of observability view):
+
+```text
+⚠️ ALERT: Average score dropped by 6.2 pts vs last build (68.4 → 62.2)
+⚠️ ALERT: SAFE products decreased by 18% (2,400 → 1,968)
+⚠️ ALERT: Banned substance count increased by 3 (was 12, now 15)
+⚠️ ALERT: Coverage dropped from 98.1% to 94.3%
+```
+
+**Drift metrics tracked** (all require prior build manifest for comparison):
+
+| Metric | Alert Condition | Severity |
+|--------|----------------|----------|
+| Average score | Drops > 3 pts | Red |
+| SAFE verdict count | Decreases > 5% | Red |
+| Banned/recalled count | Any increase | Red |
+| Coverage % | Drops > 1% | Red |
+| Error count | Any increase | Yellow |
+| Unmapped ingredient count | Increases > 10% | Yellow |
+| NOT_SCORED count | Increases > 10% | Yellow |
+
+- If no prior build exists: show "Drift detection requires 2+ builds — no prior build found"
+- Source: current `export_manifest.json` vs most recent prior `export_manifest.json` (discovered from versioned build dirs or build history)
+- Drift thresholds are configurable in `dashboard_alerts.json`
+
+### 7B.14 Pipeline Bottleneck Analyzer
+
+Shows where time is spent in each pipeline stage — helps optimize and scale.
+
+```text
+CLEAN:   2 min   ██░░░░░░░░░░░░░░
+ENRICH: 18 min   ████████████████  ⚠️ bottleneck
+SCORE:   4 min   ████░░░░░░░░░░░░
+EXPORT:  1 min   █░░░░░░░░░░░░░░░
+```
+
+- Source: parse timestamps from batch run summary log (stage start/end markers)
+- Horizontal bar chart with time labels
+- Highlight the longest stage with a "bottleneck" badge
+- If timestamps aren't parseable from logs: show "Timing data unavailable — add stage timestamps to batch runner for bottleneck analysis"
+- History: if multiple batch runs are available, show stage duration trends over time
+
+### 7B.15 Data Completeness Score
+
+Not a confidence score (that's deferred) — this is honest **data completeness** per product.
+
+```text
+Product Data Completeness: 92%
+
+Breakdown:
+- Ingredients mapped: 100% ✓
+- Manufacturer data: missing ✗
+- Clinical evidence: partial (2 of 5 ingredients)
+- Allergen screening: complete ✓
+- Dosage info: complete ✓
+```
+
+**Aggregate completeness** (KPI card row on observability view):
+- Average data completeness across all products
+- Distribution histogram (how many products at 100%, 90-99%, 80-89%, etc.)
+- Products with <80% completeness: table with dsld_id, product_name, missing fields
+
+**Per-product completeness** (shown in Product Inspector drill-down):
+- Completeness % based on: ingredients mapped, manufacturer present, clinical evidence count, allergen screening done, dosage extracted, form factor identified
+- Missing fields highlighted in red
+
+Source: `products_core` fields + detail blob field presence checks.
+
+### 7B.16 Edge Case / Outlier Detector
+
+Automatically catches weird scoring outcomes that could be bugs, scoring inconsistencies, or trust breakers.
+
+**Outlier rules**:
+
+| Pattern | What It Catches | Severity |
+|---------|----------------|----------|
+| Score ≥ 80 AND has harmful additive | High score despite safety flag | Red |
+| Score ≤ 40 AND zero penalties | Low score with no clear reason | Orange |
+| SAFE verdict AND has high-risk ingredient | Verdict may not match content | Red |
+| Score delta > 20 pts vs prior build | Suspicious large swing | Yellow |
+| BLOCKED verdict but score > 60 | Blocking reason may be wrong | Orange |
+| Bio_score = 0 for mapped ingredient | Quality map data may be incomplete | Yellow |
+
+- Table: dsld_id, product_name, outlier_type, details, severity
+- Click any row to jump to Product Inspector
+- KPI card: "X outliers detected across Y products"
+- Source: `products_core` SQL queries + detail blob field checks
+
+### 7B.17 Trend Over Time (Long-Term Health)
+
+Shows system improvement, data quality growth, and regression detection across all builds.
+
+**A. Average Score Trend**:
+- Line chart: X = build date, Y = average `score_100_equivalent`
+- Shows whether the pipeline is producing better scores over time
+
+**B. Coverage Trend**:
+- Line chart: X = build date, Y = coverage %
+- Shows whether data completeness is improving
+
+**C. Safety Issues Trend**:
+- Line chart: X = build date, Y = banned count, recalled count, harmful additive count
+- Shows whether safety detection is catching more or fewer issues
+
+**D. Verdict Distribution Trend**:
+- Stacked area chart: X = build date, Y = count per verdict (SAFE, CAUTION, POOR, UNSAFE, BLOCKED, NOT_SCORED)
+- Shows how the product health landscape evolves
+
+Source: requires `export_manifest.json` + `export_audit_report.json` from multiple builds. Stored in versioned build directories or a lightweight `build_history.json` cache.
+
+---
+
+## 7C. View 6 — Intelligence Dashboard (Phase 3)
+
+Strategic analytics that transform internal data into competitive advantage. These feed the app, AI layer, and content engine.
+
+### 7C.1 Market Intelligence — Top Products
+
+**A. Top Products by Category**:
+
+```text
+Omega-3
+1. Brand X — Score: 92 — SAFE
+2. Brand Y — Score: 88 — SAFE
+
+Multivitamins
+1. Brand A — Score: 85 — SAFE
+2. Brand B — Score: 82 — SAFE
+```
+
+- Source: `products_core` grouped by `supplement_type`, sorted by `score_100_equivalent` DESC
+- Top 10 per category, expandable
+
+**B. Top Products by Ingredient**:
+
+```text
+Magnesium (all forms)
+1. Magnesium Glycinate — Brand A — 90
+2. Magnesium Threonate — Brand B — 87
+```
+
+- Source: `products_core` ingredient arrays, grouped by primary active ingredient
+- Top 10 per ingredient
+
+**C. Best Form per Ingredient** (high value):
+
+```text
+Magnesium:
+- Glycinate → avg score: 84 (120 products)
+- Threonate → avg score: 78 (45 products)
+- Citrate → avg score: 62 (200 products)
+- Oxide → avg score: 42 (310 products)
+```
+
+- Source: cross-reference ingredient form data with product scores
+- Validates the scoring system (better forms should score higher)
+- Becomes future user-facing content
+
+**D. Why Top Products Rank High** (per-product explainer):
+
+```text
+Top Omega-3 Product: Brand X Ultra Omega
+Why it ranks high:
+  + High EPA/DHA dose (1200mg combined)
+  + Triglyceride form (+bioavailability)
+  + Third-party tested (NSF certified)
+  - Minor additive penalty (-2 pts)
+```
+
+- Source: detail blob `score_bonuses` and `score_penalties` for top-ranked products
+- This is the bridge from internal scoring to user-facing explanations
+
+### 7C.2 Ingredient Intelligence Dashboard
+
+Ingredient-level analytics across the entire product catalog.
+
+**A. Most Used Ingredients**:
+- Table: ingredient name, product count, average bio_score
+- Sorted by product count descending
+- Top 50, expandable
+
+**B. Lowest Quality Ingredients** (improvement candidates):
+- Table: ingredient name, form, average bio_score, product count
+- Sorted by bio_score ascending
+- Highlights ingredients where form upgrades would improve scores
+
+**C. High-Risk Ingredients**:
+- Table: ingredient name, risk_flags (banned/recalled/watchlist/harmful), product count, severity
+- Sorted by product count descending
+- Flags ingredients that appear in many products despite safety concerns
+
+**D. Ingredient-Level Search** (phase 2 prerequisite — #1 operator request):
+
+Search across ALL products by ingredient name:
+- "Does any product contain Yohimbine?" → list of products with that ingredient
+- "Which products have Magnesium Glycinate?" → filtered product list with scores
+- Requires building an ingredient index from enriched output or `products_core` ingredient arrays
+- Search: `WHERE ingredient_name LIKE '%?%'` across the ingredient arrays (may need a denormalized ingredient table)
+
+Source: `products_core` ingredient arrays, enrichment summaries, `ingredient_quality_map.json`.
+
+### 7C.3 Brand Intelligence
+
+**A. Brand Leaderboard**:
+
+```text
+Top Brands (avg score across all products)
+1. Thorne — avg: 87 — 45 products — SAFE: 93%
+2. Pure Encapsulations — avg: 85 — 62 products — SAFE: 89%
+3. NOW Foods — avg: 72 — 180 products — SAFE: 71%
+```
+
+- Source: `products_core` grouped by `brand_name`, aggregated
+- Sortable by avg score, product count, or SAFE %
+
+**B. Worst Brands**:
+- Same table, sorted ascending by avg score
+- Highlights brands with high additive penalties or violation flags
+
+**C. Brand Consistency Score**:
+
+```text
+Thorne:
+  Avg score: 87 | Std dev: 4.2 | Variance: LOW (consistent quality)
+
+Garden of Life:
+  Avg score: 70 | Std dev: 18.5 | Variance: HIGH (inconsistent)
+```
+
+- Low variance = brand is consistently good (or bad)
+- High variance = brand quality depends heavily on the specific product
+- Source: standard deviation of `score_100_equivalent` per brand
+
+### 7C.4 Scoring Sensitivity — What Moves Scores
+
+Impact analysis: which scoring factors have the biggest effect?
+
+**Top positive score drivers** (across all products):
+
+| Factor | Avg Impact | Products Affected |
+|--------|-----------|-------------------|
+| High bioavailability forms | +8 avg | 2,400 |
+| Third-party testing | +6 avg | 1,800 |
+| Clinical evidence backing | +5 avg | 1,200 |
+| Synergy cluster bonus | +3 avg | 800 |
+
+**Top negative score drivers**:
+
+| Factor | Avg Impact | Products Affected |
+|--------|-----------|-------------------|
+| Harmful additives | -10 avg | 3,100 |
+| Proprietary blends | -6 avg | 1,500 |
+| Manufacturer violations | -4 avg | 600 |
+| Disease claims | -3 avg | 400 |
+
+- Source: aggregate `score_bonuses` and `score_penalties` across all detail blobs
+- Reveals if the scoring system is balanced or if something is overweighted
+- Bar chart visualization with positive (green, right) and negative (red, left) bars
+
+### 7C.5 User Impact Simulation (Phase 3 — Requires Personalization Logic)
+
+Internal simulation of how personalization filters affect the product catalog.
+
+```text
+If user has diabetes:
+  → 12% of products become CAUTION/UNSAFE (148 products)
+  → 3 currently SAFE products would be flagged
+
+If user avoids allergens (gluten-free):
+  → 18% filtered out (220 products)
+  → Top remaining: Brand X, Brand Y
+
+If user takes blood thinners:
+  → 8% get interaction warnings (98 products)
+```
+
+- Source: `products_core` warnings + interaction_summary data in detail blobs
+- Prepares the AI personalization layer
+- Validates that personalization logic doesn't over-filter or under-filter
+- Deferred until interaction/condition data is stable in the export
+
+---
+
+## 7D. View 7 — Batch Run Comparison (Phase 2)
+
+Compares batch runs **within the same release** to catch regressions during iterative pipeline improvements. This is distinct from Release Diff (View 4) which compares different releases.
+
+### 7D.1 Comparison Setup
+
+Two dropdowns:
+- **Run A** (baseline): select from discovered `batch_run_summary_*.txt` files
+- **Run B** (candidate): same list, default to latest
+
+"Compare Runs" button triggers the diff.
+
+### 7D.2 Run Comparison Output
+
+**Summary cards**:
+- Datasets processed in A / in B
+- Datasets that changed status (pass → fail or fail → pass)
+- Error count delta
+- Stage completion delta
+
+**Per-dataset comparison table**:
+- Columns: dataset_name, status_A, status_B, last_stage_A, last_stage_B, error_count_A, error_count_B
+- Highlight rows where status changed
+- Sorted with regressions (pass → fail) at top
+
+**Error diff**:
+- New errors in B not present in A
+- Errors resolved in B that were present in A
 
 ---
 
@@ -769,15 +1202,19 @@ No other dependencies. Uses stdlib `sqlite3`, `json`, `pathlib`, `datetime`, `gl
 
 ## 11. What Is NOT in v1
 
-- No editing/writing to any data source
-- No ingredient-wide search (needs enriched output index — phase 2)
+- No editing/writing to any data source (except storage cleanup with confirmation)
+- No ingredient-wide search (needs enriched output index — phase 2, highest priority)
 - No auth, hosting, or deployment
 - No Release Diff view (designed above, built in phase 2)
+- No Batch Run Comparison (designed above, built in phase 2)
 - No open-in-editor/finder links (display copyable paths only)
 - No visualization of every scoring sub-field (pillar totals + bonuses/penalties only)
 - No mobile/responsive layout (desktop browser only)
-- No synthetic confidence score in v1. A confidence layer is deferred until backed by formal pipeline/export signals instead of invented heuristics.
-- No anomaly detection engine in v1. Defer until Release Diff and trace-lite are stable enough to reduce false positives.
+- No synthetic confidence score in v1. Data completeness (7B.15) replaces this with honest field-presence checks instead of invented heuristics.
+- No outlier detection engine in v1. Designed in 7B.16 — defer until Release Diff and trace-lite are stable enough to reduce false positives.
+- No Intelligence Dashboard (View 6) in v1. Designed in 7C — deferred to phase 5 after observability is stable.
+- No User Impact Simulation in v1. Requires personalization logic to be stable in the export.
+- No client adoption tracking in v1. Requires Flutter app telemetry (DB version reporting).
 - No separate Operator Mode / Analyst Mode in v1. Sidebar views already provide sufficient separation at this stage.
 
 ---
@@ -795,19 +1232,33 @@ No other dependencies. Uses stdlib `sqlite3`, `json`, `pathlib`, `datetime`, `gl
 - Components: `metric_cards.py`, `score_breakdown.py`, `product_header.py`, `data_table.py`, `data_dictionary.py`
 
 ### Phase 2: Health + Quality
-- `views/health.py`: release card, batch run, stage visualization, processing state, missing artifacts, batch history
-- `views/quality.py`: not-scored queue, unmapped hotspots, fallback hotspots, verdict/score distributions, coverage gate, safety summary, config snapshot
+- `views/health.py`: release card, **release gate (GO/NO-GO)**, batch run, stage visualization, processing state, missing artifacts, batch history
+- `views/quality.py`: not-scored queue **(with root cause reasons)**, unmapped hotspots, fallback hotspots, verdict/score distributions, coverage gate, safety summary, config snapshot
 - Score trace-lite in Product Inspector
+- Data completeness score in Product Inspector drill-down
 - Component: `status_badge.py`, `score_trace.py`
 
-### Phase 3: Release Diff
-- `views/diff.py`: comparison setup, score shifts, verdict changes, new warnings
+### Phase 3: Release Diff + Batch Run Comparison
+- `views/diff.py`: release comparison setup, score shifts, verdict changes, new warnings
+- `views/batch_diff.py`: batch run comparison within same release (7D)
+- Ingredient-level search (cross-product ingredient index)
 - Requires loading two scored output directories and computing deltas
 
 ### Phase 4: Pipeline Observability
-- `views/observability.py`: integrity summary, product flow sankey, mismatch tracker, safety dashboard, sync status, storage health, score distribution analytics, ingredient coverage health, build history timeline, alerting rules
-- Components: `sankey_chart.py`, `alert_banner.py`, `timeline.py`
+- `views/observability.py`: integrity summary, product flow sankey **(with % loss labels)**, mismatch tracker, **export error drill-down**, **top failure reasons**, safety dashboard, sync status, storage health **(with safe cleanup flow)**, score distribution analytics **(with score vs coverage correlation)**, ingredient coverage health, build history timeline, alerting rules, **drift detection**, **pipeline bottleneck analyzer**, **outlier detector**, **trend over time**
+- Components: `sankey_chart.py`, `alert_banner.py`, `timeline.py`, `outlier_table.py`
 - Requires: `export_manifest.json` integrity block for most panels; Supabase client access for sync status (optional — graceful degradation if credentials absent)
+
+### Phase 5: Intelligence Dashboard
+- `views/intelligence.py`: market intelligence (top products, best forms, why-top explainer), ingredient intelligence (most used, lowest quality, high-risk, ingredient search), brand intelligence (leaderboard, consistency scores), scoring sensitivity (impact analysis)
+- Components: `leaderboard.py`, `form_comparison.py`
+- Source: aggregations from `products_core` + detail blobs
+- This view bridges internal data → user-facing content, AI answers, and competitive intelligence
+
+### Phase 6: User Impact Simulation + Client Adoption
+- User impact simulation (requires stable personalization/interaction data in export)
+- Client adoption tracking (requires Flutter app DB version telemetry)
+- These are deferred until app-side telemetry is wired
 
 ---
 
@@ -817,8 +1268,17 @@ The dashboard is useful when:
 1. You can type a dsld_id and see why it got its score in under 5 seconds
 2. You can see at a glance whether the last pipeline run succeeded
 3. You can find the top unmapped ingredients across all brands in one table
-4. You can spot NOT_SCORED products without running a SQL query
-5. You can see at a glance how many products were lost between enrichment and export
+4. You can spot NOT_SCORED products **and why they weren't scored** without running a SQL query
+5. You can see at a glance how many products were lost between enrichment and export **with exact % at each stage**
 6. You can track Supabase sync freshness without logging into the Supabase dashboard
 7. You get visual alerts when data quality drops below thresholds
 8. You can compare any two builds and see exactly what changed
+9. **A bad release is automatically blocked** — the Release Gate shows GO/NO-GO before any sync
+10. **You see drift alerts instantly** when scores, safety signals, or coverage regress between builds
+11. You can browse individual export errors (not just a count) and see which products failed and why
+12. You can see the top failure reasons driving pipeline losses and prioritize fixes
+13. You can identify scoring outliers (high score + safety flag, low score + no penalties)
+14. You can answer "what's the best magnesium supplement?" from internal data
+15. You can see which brands are consistently high-quality vs inconsistent
+16. You can search for any ingredient across all products (phase 2)
+17. You can compare batch runs within the same release to catch iterative regressions (phase 2)

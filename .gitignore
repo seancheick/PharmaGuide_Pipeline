@@ -5,6 +5,7 @@ __pycache__/
 .venv/
 .env
 
+
 # Pipeline output (regenerable via clean → enrich → score)
 scripts/output_*/
 scripts/products/
@@ -28,3 +29,4 @@ scripts/reports/
 .planning/
 .pytest_cache/
 .gstack/
+.kilo/

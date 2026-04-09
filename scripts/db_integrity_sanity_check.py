@@ -1007,8 +1007,11 @@ def check_user_goals_to_clusters(findings: List[Finding], data: Dict[str, Any], 
         try:
             synergy_data = json.loads(synergy_path.read_text(encoding="utf-8"))
             valid_cluster_ids = {c["id"] for c in synergy_data.get("synergy_clusters", []) if isinstance(c, dict)}
-        except Exception:
-            pass
+        except Exception as exc:
+            findings.append(Finding(
+                "warning", "synergy_cluster.json", "_root",
+                "load_failed", "parseable JSON", str(exc),
+            ))
 
     all_goal_ids = {e["id"] for e in raw if isinstance(e, dict) and "id" in e}
 

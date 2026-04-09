@@ -61,7 +61,10 @@ class PerformanceTracker:
             self.memory_samples.append(memory_mb)
             return memory_mb
         except Exception:
-            return 0
+            # Return high value so memory throttling triggers conservatively
+            # rather than assuming unlimited memory is available.
+            # Do NOT append to memory_samples — inf would corrupt stats.
+            return 8192.0
 
     def get_stats(self) -> Dict[str, Any]:
         """Get performance statistics"""
@@ -173,6 +176,9 @@ class BatchProcessor:
         self.global_unmapped_active = set()  # Track which unmapped ingredients are active
         self.global_unmapped_details: Dict[str, Dict[str, Any]] = {}
         self.global_mapped = Counter()
+
+        # Track seen dsld_ids to detect duplicates across input files
+        self.seen_dsld_ids: Dict[str, str] = {}  # dsld_id -> first file_path
 
         # Initialize performance tracker
         self.performance_tracker = PerformanceTracker()
@@ -310,8 +316,9 @@ class BatchProcessor:
 
             return True, process_memory_mb
         except Exception as e:
-            logger.debug("Memory check failed: %s", e)
-            return True, 0
+            logger.warning("Memory check failed (assuming pressure): %s", e)
+            # Conservative: assume memory pressure so batch slows down rather than OOM
+            return False, 0
 
     def validate_input_file(self, file_path: Path) -> Tuple[bool, Optional[str]]:
         """
@@ -444,7 +451,10 @@ class BatchProcessor:
                 state_data = json.load(f)
             return BatchState(**state_data)
         except Exception as e:
-            logger.error(f"Failed to load state: {str(e)}")
+            logger.warning(
+                "Corrupt resume state file %s: %s — reprocessing from scratch",
+                self.state_file, e,
+            )
             return None
     
     def save_state(self, state: BatchState):
@@ -991,6 +1001,19 @@ class BatchProcessor:
         # VALIDATION QUARANTINE: Write quarantine artifact if validation errors exist
         if result.validation_errors:
             self._write_validation_quarantine(result)
+
+        # Dedup check: skip products with dsld_ids we've already seen
+        if result.data:
+            dsld_id = str(result.data.get('id', result.data.get('dsld_id', '')))
+            if dsld_id and dsld_id in self.seen_dsld_ids:
+                first_file = self.seen_dsld_ids[dsld_id]
+                logger.warning(
+                    "Duplicate dsld_id %s from %s (first seen in %s) — skipping duplicate",
+                    dsld_id, result.file_path, first_file,
+                )
+                return
+            if dsld_id:
+                self.seen_dsld_ids[dsld_id] = str(result.file_path)
 
         # Categorize by status
         if result.status == STATUS_SUCCESS:

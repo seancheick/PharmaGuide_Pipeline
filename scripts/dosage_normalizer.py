@@ -239,12 +239,14 @@ class DosageNormalizer:
                         return numerator / denominator
             except (ValueError, ZeroDivisionError):
                 pass
+            logger.warning("Unparseable fraction quantity '%s', defaulting to 1.0", qty_str)
             return 1.0
 
         # Handle regular numbers
         try:
             return float(qty_str.replace(',', ''))
         except ValueError:
+            logger.warning("Unparseable quantity '%s', defaulting to 1.0", qty_str)
             return 1.0
 
     def normalize_product_dosages(self, product: Dict) -> DosageNormalizationResult:

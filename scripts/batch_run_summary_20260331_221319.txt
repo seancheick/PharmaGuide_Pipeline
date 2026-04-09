@@ -1,312 +1,0 @@
-==========================================
-BATCH PIPELINE RUN - Tue Mar 31 22:13:19 EDT 2026
-==========================================
-Dataset root: /Users/seancheick/Documents/DataSetDsld/staging/brands
-Scripts directory: /Users/seancheick/.claude-worktrees/dsld_clean/peaceful-ritchie/scripts
-Stages: clean
-Target datasets: Legion,Nutricost,Spring_Valley
-==========================================
-
-/Users/seancheick/.claude-worktrees/dsld_clean/peaceful-ritchie/scripts/run_pipeline.py:391: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
-  start_time = datetime.utcnow()
-2026-03-31 22:13:20 - __main__ - INFO - ============================================================
-2026-03-31 22:13:20 - __main__ - INFO - DSLD SUPPLEMENT PIPELINE
-2026-03-31 22:13:20 - __main__ - INFO - ============================================================
-2026-03-31 22:13:20 - __main__ - INFO - Script directory: /Users/seancheick/.claude-worktrees/dsld_clean/peaceful-ritchie/scripts
-2026-03-31 22:13:20 - __main__ - INFO - Stages to run: clean
-2026-03-31 22:13:20 - __main__ - INFO - Raw data: /Users/seancheick/Documents/DataSetDsld/staging/brands/Legion/
-2026-03-31 22:13:20 - __main__ - INFO - Cleaned output: output_Legion/cleaned
-2026-03-31 22:13:20 - __main__ - INFO - Enriched output: output_Legion_enriched/enriched
-2026-03-31 22:13:20 - __main__ - INFO - Scored output: output_Legion_scored
-2026-03-31 22:13:20 - __main__ - INFO - ============================================================
-2026-03-31 22:13:20 - __main__ - INFO - Validated data directory: /Users/seancheick/.claude-worktrees/dsld_clean/peaceful-ritchie/scripts/data
-2026-03-31 22:13:20 - __main__ - INFO - ============================================================
-2026-03-31 22:13:20 - __main__ - INFO - STAGE 1: CLEANING
-2026-03-31 22:13:20 - __main__ - INFO - ============================================================
-2026-03-31 22:13:20 - __main__ - INFO - Executing: /Users/seancheick/.pyenv/versions/3.13.3/bin/python /Users/seancheick/.claude-worktrees/dsld_clean/peaceful-ritchie/scripts/clean_dsld_data.py --input-dir /Users/seancheick/Documents/DataSetDsld/staging/brands/Legion/ --output-dir output_Legion --config /Users/seancheick/.claude-worktrees/dsld_clean/peaceful-ritchie/scripts/config/cleaning_config.json
-2026-03-31 22:13:21 - root - INFO - Resolved paths:
-2026-03-31 22:13:21 - root - INFO -   input_directory: /Users/seancheick/Documents/DataSetDsld/staging/brands/Legion/
-2026-03-31 22:13:21 - root - INFO -   output_directory: output_Legion
-2026-03-31 22:13:21 - root - INFO -   reference_data: /Users/seancheick/.claude-worktrees/dsld_clean/peaceful-ritchie/scripts/data
-2026-03-31 22:13:21 - root - INFO -   color_indicators.json: v5.0.0 (updated: 2026-02-18)
-2026-03-31 22:13:21 - root - INFO -   ingredient_quality_map.json: v5.0.0 (updated: 2026-03-30)
-2026-03-31 22:13:21 - root - INFO -   harmful_additives.json: v5.1.0 (updated: 2026-03-30)
-2026-03-31 22:13:21 - root - INFO -   allergens.json: v5.0.0 (updated: 2026-03-01)
-2026-03-31 22:13:21 - dsld_cleaner - INFO - ============================================================
-2026-03-31 22:13:21 - dsld_cleaner - INFO - DSLD Data Cleaning Pipeline Starting
-2026-03-31 22:13:21 - dsld_cleaner - INFO - ============================================================
-2026-03-31 22:13:21 - dsld_cleaner - INFO - Started at: 2026-03-31 22:13:21
-2026-03-31 22:13:21 - dsld_cleaner - INFO - Validating configuration...
-2026-03-31 22:13:21 - dsld_cleaner - INFO - Configuration validation passed
-2026-03-31 22:13:21 - batch_processor - INFO - Found 45 input files
-2026-03-31 22:13:21 - batch_processor - INFO - Processing 45 files in 1 batches
-2026-03-31 22:13:21 - batch_processor - INFO - Batch size: 500, Max workers: 4
-2026-03-31 22:13:21 - batch_processor - INFO - Processing batch 1/1 (45 files)
-Processing Batch 1:   0%|          | 0/45 [00:00<?, ?file/s]Processing Batch 1:   2%|▏         | 1/45 [00:01<00:50,  1.15s/file]Processing Batch 1:   4%|▍         | 2/45 [00:01<00:26,  1.65file/s]Processing Batch 1:   9%|▉         | 4/45 [00:01<00:11,  3.48file/s]Processing Batch 1:  11%|█         | 5/45 [00:01<00:09,  4.06file/s]Processing Batch 1:  13%|█▎        | 6/45 [00:01<00:08,  4.69file/s]Processing Batch 1:  18%|█▊        | 8/45 [00:02<00:05,  6.57file/s]Processing Batch 1:  22%|██▏       | 10/45 [00:02<00:04,  8.40file/s]Processing Batch 1:  27%|██▋       | 12/45 [00:02<00:05,  6.43file/s]Processing Batch 1:  31%|███       | 14/45 [00:02<00:04,  6.95file/s]Processing Batch 1:  36%|███▌      | 16/45 [00:03<00:03,  7.93file/s]Processing Batch 1:  44%|████▍     | 20/45 [00:03<00:02, 12.16file/s]Processing Batch 1:  51%|█████     | 23/45 [00:03<00:01, 13.39file/s]Processing Batch 1:  56%|█████▌    | 25/45 [00:03<00:01, 13.62file/s]Processing Batch 1:  60%|██████    | 27/45 [00:03<00:01, 10.39file/s]Processing Batch 1:  67%|██████▋   | 30/45 [00:04<00:01, 11.59file/s]Processing Batch 1:  76%|███████▌  | 34/45 [00:04<00:00, 15.25file/s]Processing Batch 1:  87%|████████▋ | 39/45 [00:04<00:00, 18.57file/s]Processing Batch 1:  98%|█████████▊| 44/45 [00:04<00:00, 21.96file/s]Processing Batch 1: 100%|██████████| 45/45 [00:04<00:00,  9.61file/s]
-2026-03-31 22:13:25 - batch_processor - INFO - Batch 1 complete: {'batch_num': 1, 'processed': 45, 'cleaned': 45, 'needs_review': 0, 'incomplete': 0, 'errors': 0, 'processing_time': 4.827668190002441, 'avg_time_per_file': 0.10728151533338759, 'memory_mb': 0}
-2026-03-31 22:13:26 - enhanced_normalizer - INFO - Reference data: color_indicators v5.0.0 (updated: 2026-02-18)
-2026-03-31 22:13:26 - enhanced_normalizer - INFO - Built skip sets: 34 exact, 34 normalized
-2026-03-31 22:13:26 - enhanced_normalizer - INFO - Built hierarchy lookup with 0 entries
-2026-03-31 22:13:26 - enhanced_normalizer - INFO - Building enhanced ingredient lookup indices...
-2026-03-31 22:13:26 - enhanced_normalizer - INFO - Built lookup indices with 32863 ingredient variations
-2026-03-31 22:13:26 - enhanced_normalizer - INFO - Built allergen index with 371 variations
-2026-03-31 22:13:26 - enhanced_normalizer - INFO - Built harmful additive index with 2089 variations
-2026-03-31 22:13:26 - enhanced_normalizer - INFO - Built other ingredients index with 7304 variations
-2026-03-31 22:13:26 - enhanced_normalizer - INFO - Building fast lookup indices...
-2026-03-31 22:13:26 - enhanced_normalizer - INFO - Built comprehensive fast lookup index with 42209 entries
-2026-03-31 22:13:26 - enhanced_normalizer - INFO -   - absorption_enhancer: 31 entries
-2026-03-31 22:13:26 - enhanced_normalizer - INFO -   - allergen: 371 entries
-2026-03-31 22:13:26 - enhanced_normalizer - INFO -   - banned: 993 entries
-2026-03-31 22:13:26 - enhanced_normalizer - INFO -   - botanical: 1316 entries
-2026-03-31 22:13:26 - enhanced_normalizer - INFO -   - enhanced_delivery: 49 entries
-2026-03-31 22:13:26 - enhanced_normalizer - INFO -   - harmful: 2070 entries
-2026-03-31 22:13:26 - enhanced_normalizer - INFO -   - ingredient: 32636 entries
-2026-03-31 22:13:26 - enhanced_normalizer - INFO -   - other_ingredient: 4052 entries
-2026-03-31 22:13:26 - enhanced_normalizer - INFO -   - proprietary_blend: 233 entries
-2026-03-31 22:13:26 - enhanced_normalizer - INFO -   - standardized_botanical: 458 entries
-2026-03-31 22:13:26 - enhanced_normalizer - INFO - Probiotic strain lookup: 223 keys for 42 strains
-2026-03-31 22:13:26 - unmapped_ingredient_tracker - INFO - Initialized UnmappedIngredientTracker with output: output_Legion/unmapped
-2026-03-31 22:13:26 - unmapped_ingredient_tracker - INFO - Saved unmapped tracking files:
-2026-03-31 22:13:26 - unmapped_ingredient_tracker - INFO -   - Active: 0 ingredients -> output_Legion/unmapped/unmapped_active_ingredients.json
-2026-03-31 22:13:26 - unmapped_ingredient_tracker - INFO -   - Inactive: 0 ingredients -> output_Legion/unmapped/unmapped_inactive_ingredients.json
-2026-03-31 22:13:26 - unmapped_ingredient_tracker - INFO -   - Needs verification active: 0 ingredients -> output_Legion/unmapped/needs_verification_active_ingredients.json
-2026-03-31 22:13:26 - unmapped_ingredient_tracker - INFO -   - Needs verification inactive: 0 ingredients -> output_Legion/unmapped/needs_verification_inactive_ingredients.json
-2026-03-31 22:13:26 - batch_processor - INFO - Saved enhanced unmapped tracking files: 0 total ingredients
-2026-03-31 22:13:26 - batch_processor - INFO -   Active: 0, Inactive: 0
-2026-03-31 22:13:26 - batch_processor - INFO - Processing report saved to output_Legion/reports/processing_summary.txt
-2026-03-31 22:13:26 - batch_processor - INFO - No products need review - skipping detailed review report
-2026-03-31 22:13:26 - batch_processor - INFO - Processing complete! Total time: 4.83s
-2026-03-31 22:13:26 - dsld_cleaner - INFO - ============================================================
-2026-03-31 22:13:26 - dsld_cleaner - INFO - PROCESSING COMPLETE
-2026-03-31 22:13:26 - dsld_cleaner - INFO - ============================================================
-2026-03-31 22:13:26 - dsld_cleaner - INFO - Ended at: 2026-03-31 22:13:26
-2026-03-31 22:13:26 - dsld_cleaner - INFO - Total duration: 0:00:05.576092
-2026-03-31 22:13:26 - dsld_cleaner - INFO - Files processed: 45
-2026-03-31 22:13:26 - dsld_cleaner - INFO - Success rate: 100.0%
-2026-03-31 22:13:26 - dsld_cleaner - INFO - 
-2026-03-31 22:13:26 - dsld_cleaner - INFO - Results:
-2026-03-31 22:13:26 - dsld_cleaner - INFO -   - Cleaned: 45
-2026-03-31 22:13:26 - dsld_cleaner - INFO -   - Needs review: 0
-2026-03-31 22:13:26 - dsld_cleaner - INFO -   - Incomplete: 0
-2026-03-31 22:13:26 - dsld_cleaner - INFO -   - Errors: 0
-2026-03-31 22:13:26 - dsld_cleaner - INFO -   - Unmapped ingredients: 0
-2026-03-31 22:13:26 - dsld_cleaner - INFO - 
-2026-03-31 22:13:26 - dsld_cleaner - INFO - Output files saved to:
-2026-03-31 22:13:26 - dsld_cleaner - INFO -   - Cleaned products: output_Legion/cleaned
-2026-03-31 22:13:26 - dsld_cleaner - INFO -   - Needs review: output_Legion/needs_review
-2026-03-31 22:13:26 - dsld_cleaner - INFO -   - Incomplete: output_Legion/incomplete
-2026-03-31 22:13:26 - dsld_cleaner - INFO -   - Unmapped ingredients: output_Legion/unmapped
-2026-03-31 22:13:26 - dsld_cleaner - INFO -   - Processing report: output_Legion/reports
-/Users/seancheick/.claude-worktrees/dsld_clean/peaceful-ritchie/scripts/run_pipeline.py:498: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
-  end_time = datetime.utcnow()
-2026-03-31 22:13:26 - __main__ - INFO - 
-2026-03-31 22:13:26 - __main__ - INFO - ============================================================
-2026-03-31 22:13:26 - __main__ - INFO - PIPELINE COMPLETE
-2026-03-31 22:13:26 - __main__ - INFO - ============================================================
-2026-03-31 22:13:26 - __main__ - INFO - Stages completed: clean
-2026-03-31 22:13:26 - __main__ - INFO - Total duration: 5.79s
-2026-03-31 22:13:26 - __main__ - INFO - Success: True
-2026-03-31 22:13:26 - __main__ - INFO - ============================================================
-/Users/seancheick/.claude-worktrees/dsld_clean/peaceful-ritchie/scripts/run_pipeline.py:391: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
-  start_time = datetime.utcnow()
-2026-03-31 22:13:26 - __main__ - INFO - ============================================================
-2026-03-31 22:13:26 - __main__ - INFO - DSLD SUPPLEMENT PIPELINE
-2026-03-31 22:13:26 - __main__ - INFO - ============================================================
-2026-03-31 22:13:26 - __main__ - INFO - Script directory: /Users/seancheick/.claude-worktrees/dsld_clean/peaceful-ritchie/scripts
-2026-03-31 22:13:26 - __main__ - INFO - Stages to run: clean
-2026-03-31 22:13:26 - __main__ - INFO - Raw data: /Users/seancheick/Documents/DataSetDsld/staging/brands/Spring_Valley/
-2026-03-31 22:13:26 - __main__ - INFO - Cleaned output: output_Spring_Valley/cleaned
-2026-03-31 22:13:26 - __main__ - INFO - Enriched output: output_Spring_Valley_enriched/enriched
-2026-03-31 22:13:26 - __main__ - INFO - Scored output: output_Spring_Valley_scored
-2026-03-31 22:13:26 - __main__ - INFO - ============================================================
-2026-03-31 22:13:26 - __main__ - INFO - Validated data directory: /Users/seancheick/.claude-worktrees/dsld_clean/peaceful-ritchie/scripts/data
-2026-03-31 22:13:26 - __main__ - INFO - ============================================================
-2026-03-31 22:13:26 - __main__ - INFO - STAGE 1: CLEANING
-2026-03-31 22:13:26 - __main__ - INFO - ============================================================
-2026-03-31 22:13:26 - __main__ - INFO - Executing: /Users/seancheick/.pyenv/versions/3.13.3/bin/python /Users/seancheick/.claude-worktrees/dsld_clean/peaceful-ritchie/scripts/clean_dsld_data.py --input-dir /Users/seancheick/Documents/DataSetDsld/staging/brands/Spring_Valley/ --output-dir output_Spring_Valley --config /Users/seancheick/.claude-worktrees/dsld_clean/peaceful-ritchie/scripts/config/cleaning_config.json
-2026-03-31 22:13:26 - root - INFO - Resolved paths:
-2026-03-31 22:13:26 - root - INFO -   input_directory: /Users/seancheick/Documents/DataSetDsld/staging/brands/Spring_Valley/
-2026-03-31 22:13:26 - root - INFO -   output_directory: output_Spring_Valley
-2026-03-31 22:13:26 - root - INFO -   reference_data: /Users/seancheick/.claude-worktrees/dsld_clean/peaceful-ritchie/scripts/data
-2026-03-31 22:13:26 - root - INFO -   color_indicators.json: v5.0.0 (updated: 2026-02-18)
-2026-03-31 22:13:26 - root - INFO -   ingredient_quality_map.json: v5.0.0 (updated: 2026-03-30)
-2026-03-31 22:13:26 - root - INFO -   harmful_additives.json: v5.1.0 (updated: 2026-03-30)
-2026-03-31 22:13:26 - root - INFO -   allergens.json: v5.0.0 (updated: 2026-03-01)
-2026-03-31 22:13:26 - dsld_cleaner - INFO - ============================================================
-2026-03-31 22:13:26 - dsld_cleaner - INFO - DSLD Data Cleaning Pipeline Starting
-2026-03-31 22:13:26 - dsld_cleaner - INFO - ============================================================
-2026-03-31 22:13:26 - dsld_cleaner - INFO - Started at: 2026-03-31 22:13:26
-2026-03-31 22:13:26 - dsld_cleaner - INFO - Validating configuration...
-2026-03-31 22:13:26 - dsld_cleaner - INFO - Configuration validation passed
-2026-03-31 22:13:26 - batch_processor - INFO - Found 443 input files
-2026-03-31 22:13:26 - batch_processor - INFO - Processing 443 files in 1 batches
-2026-03-31 22:13:26 - batch_processor - INFO - Batch size: 500, Max workers: 4
-2026-03-31 22:13:26 - batch_processor - INFO - Processing batch 1/1 (443 files)
-Processing Batch 1:   0%|          | 0/443 [00:00<?, ?file/s]Processing Batch 1:   0%|          | 1/443 [00:01<07:29,  1.02s/file]Processing Batch 1:   2%|▏         | 7/443 [00:01<00:56,  7.77file/s]Processing Batch 1:   2%|▏         | 11/443 [00:01<00:36, 11.87file/s]Processing Batch 1:   4%|▎         | 16/443 [00:01<00:24, 17.72file/s]Processing Batch 1:   5%|▍         | 21/443 [00:01<00:18, 23.41file/s]Processing Batch 1:   7%|▋         | 30/443 [00:01<00:12, 33.94file/s]Processing Batch 1:   8%|▊         | 35/443 [00:01<00:12, 33.16file/s]Processing Batch 1:   9%|▉         | 40/443 [00:02<00:22, 17.63file/s]Processing Batch 1:  10%|█         | 45/443 [00:02<00:19, 20.35file/s]Processing Batch 1:  11%|█         | 49/443 [00:02<00:18, 21.80file/s]Processing Batch 1:  12%|█▏        | 53/443 [00:03<00:26, 14.63file/s]Processing Batch 1:  13%|█▎        | 56/443 [00:03<00:25, 15.43file/s]Processing Batch 1:  14%|█▎        | 60/443 [00:03<00:22, 16.68file/s]Processing Batch 1:  16%|█▋        | 72/443 [00:03<00:11, 31.80file/s]Processing Batch 1:  17%|█▋        | 77/443 [00:03<00:11, 33.22file/s]Processing Batch 1:  19%|█▉        | 85/443 [00:03<00:09, 38.54file/s]Processing Batch 1:  20%|██        | 90/443 [00:04<00:08, 40.63file/s]Processing Batch 1:  21%|██▏       | 95/443 [00:04<00:09, 35.76file/s]Processing Batch 1:  23%|██▎       | 100/443 [00:04<00:10, 32.89file/s]Processing Batch 1:  24%|██▎       | 105/443 [00:04<00:09, 35.02file/s]Processing Batch 1:  26%|██▌       | 114/443 [00:04<00:07, 43.03file/s]Processing Batch 1:  27%|██▋       | 121/443 [00:04<00:06, 47.54file/s]Processing Batch 1:  29%|██▊       | 127/443 [00:05<00:10, 29.46file/s]Processing Batch 1:  30%|███       | 133/443 [00:05<00:09, 32.30file/s]Processing Batch 1:  36%|███▌      | 160/443 [00:05<00:03, 73.16file/s]Processing Batch 1:  39%|███▉      | 172/443 [00:05<00:03, 80.88file/s]Processing Batch 1:  42%|████▏     | 186/443 [00:05<00:03, 85.45file/s]Processing Batch 1:  44%|████▍     | 197/443 [00:05<00:02, 82.60file/s]Processing Batch 1:  49%|████▊     | 215/443 [00:06<00:02, 103.82file/s]Processing Batch 1:  52%|█████▏    | 229/443 [00:06<00:01, 107.96file/s]Processing Batch 1:  54%|█████▍    | 241/443 [00:06<00:02, 90.58file/s] Processing Batch 1:  58%|█████▊    | 255/443 [00:06<00:02, 93.15file/s]Processing Batch 1:  60%|██████    | 266/443 [00:06<00:02, 67.48file/s]Processing Batch 1:  63%|██████▎   | 278/443 [00:06<00:02, 77.05file/s]Processing Batch 1:  65%|██████▌   | 288/443 [00:06<00:01, 78.78file/s]Processing Batch 1:  68%|██████▊   | 302/443 [00:07<00:01, 92.19file/s]Processing Batch 1:  71%|███████   | 313/443 [00:07<00:01, 86.35file/s]Processing Batch 1:  73%|███████▎  | 323/443 [00:07<00:02, 59.37file/s]Processing Batch 1:  77%|███████▋  | 342/443 [00:07<00:01, 80.52file/s]Processing Batch 1:  83%|████████▎ | 368/443 [00:07<00:00, 116.07file/s]Processing Batch 1:  87%|████████▋ | 385/443 [00:07<00:00, 119.13file/s]Processing Batch 1:  90%|█████████ | 400/443 [00:08<00:00, 105.87file/s]Processing Batch 1:  93%|█████████▎| 413/443 [00:08<00:00, 88.54file/s] Processing Batch 1:  96%|█████████▌| 424/443 [00:08<00:00, 82.26file/s]Processing Batch 1:  98%|█████████▊| 434/443 [00:08<00:00, 80.88file/s]Processing Batch 1: 100%|██████████| 443/443 [00:08<00:00, 51.14file/s]
-2026-03-31 22:13:35 - batch_processor - INFO - Batch 1 complete: {'batch_num': 1, 'processed': 443, 'cleaned': 443, 'needs_review': 0, 'incomplete': 0, 'errors': 0, 'processing_time': 8.990564107894897, 'avg_time_per_file': 0.020294727105857557, 'memory_mb': 0}
-2026-03-31 22:13:36 - enhanced_normalizer - INFO - Reference data: color_indicators v5.0.0 (updated: 2026-02-18)
-2026-03-31 22:13:36 - enhanced_normalizer - INFO - Built skip sets: 34 exact, 34 normalized
-2026-03-31 22:13:36 - enhanced_normalizer - INFO - Built hierarchy lookup with 0 entries
-2026-03-31 22:13:36 - enhanced_normalizer - INFO - Building enhanced ingredient lookup indices...
-2026-03-31 22:13:36 - enhanced_normalizer - INFO - Built lookup indices with 32863 ingredient variations
-2026-03-31 22:13:36 - enhanced_normalizer - INFO - Built allergen index with 371 variations
-2026-03-31 22:13:36 - enhanced_normalizer - INFO - Built harmful additive index with 2089 variations
-2026-03-31 22:13:36 - enhanced_normalizer - INFO - Built other ingredients index with 7304 variations
-2026-03-31 22:13:36 - enhanced_normalizer - INFO - Building fast lookup indices...
-2026-03-31 22:13:36 - enhanced_normalizer - INFO - Built comprehensive fast lookup index with 42209 entries
-2026-03-31 22:13:36 - enhanced_normalizer - INFO -   - absorption_enhancer: 31 entries
-2026-03-31 22:13:36 - enhanced_normalizer - INFO -   - allergen: 371 entries
-2026-03-31 22:13:36 - enhanced_normalizer - INFO -   - banned: 993 entries
-2026-03-31 22:13:36 - enhanced_normalizer - INFO -   - botanical: 1316 entries
-2026-03-31 22:13:36 - enhanced_normalizer - INFO -   - enhanced_delivery: 49 entries
-2026-03-31 22:13:36 - enhanced_normalizer - INFO -   - harmful: 2070 entries
-2026-03-31 22:13:36 - enhanced_normalizer - INFO -   - ingredient: 32636 entries
-2026-03-31 22:13:36 - enhanced_normalizer - INFO -   - other_ingredient: 4052 entries
-2026-03-31 22:13:36 - enhanced_normalizer - INFO -   - proprietary_blend: 233 entries
-2026-03-31 22:13:36 - enhanced_normalizer - INFO -   - standardized_botanical: 458 entries
-2026-03-31 22:13:36 - enhanced_normalizer - INFO - Probiotic strain lookup: 223 keys for 42 strains
-2026-03-31 22:13:36 - unmapped_ingredient_tracker - INFO - Initialized UnmappedIngredientTracker with output: output_Spring_Valley/unmapped
-2026-03-31 22:13:36 - unmapped_ingredient_tracker - INFO - Saved unmapped tracking files:
-2026-03-31 22:13:36 - unmapped_ingredient_tracker - INFO -   - Active: 0 ingredients -> output_Spring_Valley/unmapped/unmapped_active_ingredients.json
-2026-03-31 22:13:36 - unmapped_ingredient_tracker - INFO -   - Inactive: 0 ingredients -> output_Spring_Valley/unmapped/unmapped_inactive_ingredients.json
-2026-03-31 22:13:36 - unmapped_ingredient_tracker - INFO -   - Needs verification active: 0 ingredients -> output_Spring_Valley/unmapped/needs_verification_active_ingredients.json
-2026-03-31 22:13:36 - unmapped_ingredient_tracker - INFO -   - Needs verification inactive: 0 ingredients -> output_Spring_Valley/unmapped/needs_verification_inactive_ingredients.json
-2026-03-31 22:13:36 - batch_processor - INFO - Saved enhanced unmapped tracking files: 0 total ingredients
-2026-03-31 22:13:36 - batch_processor - INFO -   Active: 0, Inactive: 0
-2026-03-31 22:13:36 - batch_processor - INFO - Processing report saved to output_Spring_Valley/reports/processing_summary.txt
-2026-03-31 22:13:36 - batch_processor - INFO - No products need review - skipping detailed review report
-2026-03-31 22:13:36 - batch_processor - INFO - Processing complete! Total time: 9.00s
-2026-03-31 22:13:36 - dsld_cleaner - INFO - ============================================================
-2026-03-31 22:13:36 - dsld_cleaner - INFO - PROCESSING COMPLETE
-2026-03-31 22:13:36 - dsld_cleaner - INFO - ============================================================
-2026-03-31 22:13:36 - dsld_cleaner - INFO - Ended at: 2026-03-31 22:13:36
-2026-03-31 22:13:36 - dsld_cleaner - INFO - Total duration: 0:00:09.714274
-2026-03-31 22:13:36 - dsld_cleaner - INFO - Files processed: 443
-2026-03-31 22:13:36 - dsld_cleaner - INFO - Success rate: 100.0%
-2026-03-31 22:13:36 - dsld_cleaner - INFO - 
-2026-03-31 22:13:36 - dsld_cleaner - INFO - Results:
-2026-03-31 22:13:36 - dsld_cleaner - INFO -   - Cleaned: 443
-2026-03-31 22:13:36 - dsld_cleaner - INFO -   - Needs review: 0
-2026-03-31 22:13:36 - dsld_cleaner - INFO -   - Incomplete: 0
-2026-03-31 22:13:36 - dsld_cleaner - INFO -   - Errors: 0
-2026-03-31 22:13:36 - dsld_cleaner - INFO -   - Unmapped ingredients: 0
-2026-03-31 22:13:36 - dsld_cleaner - INFO - 
-2026-03-31 22:13:36 - dsld_cleaner - INFO - Output files saved to:
-2026-03-31 22:13:36 - dsld_cleaner - INFO -   - Cleaned products: output_Spring_Valley/cleaned
-2026-03-31 22:13:36 - dsld_cleaner - INFO -   - Needs review: output_Spring_Valley/needs_review
-2026-03-31 22:13:36 - dsld_cleaner - INFO -   - Incomplete: output_Spring_Valley/incomplete
-2026-03-31 22:13:36 - dsld_cleaner - INFO -   - Unmapped ingredients: output_Spring_Valley/unmapped
-2026-03-31 22:13:36 - dsld_cleaner - INFO -   - Processing report: output_Spring_Valley/reports
-/Users/seancheick/.claude-worktrees/dsld_clean/peaceful-ritchie/scripts/run_pipeline.py:498: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
-  end_time = datetime.utcnow()
-2026-03-31 22:13:36 - __main__ - INFO - 
-2026-03-31 22:13:36 - __main__ - INFO - ============================================================
-2026-03-31 22:13:36 - __main__ - INFO - PIPELINE COMPLETE
-2026-03-31 22:13:36 - __main__ - INFO - ============================================================
-2026-03-31 22:13:36 - __main__ - INFO - Stages completed: clean
-2026-03-31 22:13:36 - __main__ - INFO - Total duration: 9.84s
-2026-03-31 22:13:36 - __main__ - INFO - Success: True
-2026-03-31 22:13:36 - __main__ - INFO - ============================================================
-/Users/seancheick/.claude-worktrees/dsld_clean/peaceful-ritchie/scripts/run_pipeline.py:391: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
-  start_time = datetime.utcnow()
-2026-03-31 22:13:36 - __main__ - INFO - ============================================================
-2026-03-31 22:13:36 - __main__ - INFO - DSLD SUPPLEMENT PIPELINE
-2026-03-31 22:13:36 - __main__ - INFO - ============================================================
-2026-03-31 22:13:36 - __main__ - INFO - Script directory: /Users/seancheick/.claude-worktrees/dsld_clean/peaceful-ritchie/scripts
-2026-03-31 22:13:36 - __main__ - INFO - Stages to run: clean
-2026-03-31 22:13:36 - __main__ - INFO - Raw data: /Users/seancheick/Documents/DataSetDsld/staging/brands/Nutricost/
-2026-03-31 22:13:36 - __main__ - INFO - Cleaned output: output_Nutricost/cleaned
-2026-03-31 22:13:36 - __main__ - INFO - Enriched output: output_Nutricost_enriched/enriched
-2026-03-31 22:13:36 - __main__ - INFO - Scored output: output_Nutricost_scored
-2026-03-31 22:13:36 - __main__ - INFO - ============================================================
-2026-03-31 22:13:36 - __main__ - INFO - Validated data directory: /Users/seancheick/.claude-worktrees/dsld_clean/peaceful-ritchie/scripts/data
-2026-03-31 22:13:36 - __main__ - INFO - ============================================================
-2026-03-31 22:13:36 - __main__ - INFO - STAGE 1: CLEANING
-2026-03-31 22:13:36 - __main__ - INFO - ============================================================
-2026-03-31 22:13:36 - __main__ - INFO - Executing: /Users/seancheick/.pyenv/versions/3.13.3/bin/python /Users/seancheick/.claude-worktrees/dsld_clean/peaceful-ritchie/scripts/clean_dsld_data.py --input-dir /Users/seancheick/Documents/DataSetDsld/staging/brands/Nutricost/ --output-dir output_Nutricost --config /Users/seancheick/.claude-worktrees/dsld_clean/peaceful-ritchie/scripts/config/cleaning_config.json
-2026-03-31 22:13:36 - root - INFO - Resolved paths:
-2026-03-31 22:13:36 - root - INFO -   input_directory: /Users/seancheick/Documents/DataSetDsld/staging/brands/Nutricost/
-2026-03-31 22:13:36 - root - INFO -   output_directory: output_Nutricost
-2026-03-31 22:13:36 - root - INFO -   reference_data: /Users/seancheick/.claude-worktrees/dsld_clean/peaceful-ritchie/scripts/data
-2026-03-31 22:13:36 - root - INFO -   color_indicators.json: v5.0.0 (updated: 2026-02-18)
-2026-03-31 22:13:36 - root - INFO -   ingredient_quality_map.json: v5.0.0 (updated: 2026-03-30)
-2026-03-31 22:13:36 - root - INFO -   harmful_additives.json: v5.1.0 (updated: 2026-03-30)
-2026-03-31 22:13:36 - root - INFO -   allergens.json: v5.0.0 (updated: 2026-03-01)
-2026-03-31 22:13:36 - dsld_cleaner - INFO - ============================================================
-2026-03-31 22:13:36 - dsld_cleaner - INFO - DSLD Data Cleaning Pipeline Starting
-2026-03-31 22:13:36 - dsld_cleaner - INFO - ============================================================
-2026-03-31 22:13:36 - dsld_cleaner - INFO - Started at: 2026-03-31 22:13:36
-2026-03-31 22:13:36 - dsld_cleaner - INFO - Validating configuration...
-2026-03-31 22:13:36 - dsld_cleaner - INFO - Configuration validation passed
-2026-03-31 22:13:36 - batch_processor - INFO - Found 795 input files
-2026-03-31 22:13:37 - batch_processor - INFO - Processing 795 files in 2 batches
-2026-03-31 22:13:37 - batch_processor - INFO - Batch size: 500, Max workers: 4
-2026-03-31 22:13:37 - batch_processor - INFO - Processing batch 1/2 (500 files)
-Processing Batch 1:   0%|          | 0/500 [00:00<?, ?file/s]Processing Batch 1:   0%|          | 1/500 [00:00<08:15,  1.01file/s]Processing Batch 1:   2%|▏         | 9/500 [00:01<00:45, 10.69file/s]Processing Batch 1:   4%|▎         | 18/500 [00:01<00:22, 21.80file/s]Processing Batch 1:   5%|▍         | 24/500 [00:01<00:17, 26.98file/s]Processing Batch 1:   6%|▌         | 30/500 [00:01<00:15, 30.48file/s]Processing Batch 1:   7%|▋         | 35/500 [00:01<00:13, 33.48file/s]Processing Batch 1:   8%|▊         | 40/500 [00:01<00:12, 35.65file/s]Processing Batch 1:   9%|▉         | 45/500 [00:01<00:13, 33.41file/s]Processing Batch 1:  10%|█         | 51/500 [00:02<00:11, 39.02file/s]Processing Batch 1:  12%|█▏        | 61/500 [00:02<00:08, 52.15file/s]Processing Batch 1:  13%|█▎        | 67/500 [00:02<00:08, 49.92file/s]Processing Batch 1:  15%|█▍        | 74/500 [00:02<00:07, 53.53file/s]Processing Batch 1:  16%|█▌        | 80/500 [00:02<00:07, 52.84file/s]Processing Batch 1:  17%|█▋        | 86/500 [00:02<00:07, 53.37file/s]Processing Batch 1:  18%|█▊        | 92/500 [00:02<00:08, 50.39file/s]Processing Batch 1:  20%|█▉        | 99/500 [00:02<00:07, 52.65file/s]Processing Batch 1:  21%|██        | 106/500 [00:02<00:07, 54.87file/s]Processing Batch 1:  23%|██▎       | 114/500 [00:03<00:06, 59.05file/s]Processing Batch 1:  25%|██▍       | 124/500 [00:03<00:05, 66.14file/s]Processing Batch 1:  27%|██▋       | 133/500 [00:03<00:05, 68.52file/s]Processing Batch 1:  28%|██▊       | 140/500 [00:04<00:13, 27.25file/s]Processing Batch 1:  30%|██▉       | 148/500 [00:04<00:10, 34.03file/s]Processing Batch 1:  31%|███       | 156/500 [00:04<00:08, 41.07file/s]Processing Batch 1:  35%|███▍      | 173/500 [00:04<00:05, 62.57file/s]Processing Batch 1:  36%|███▋      | 182/500 [00:04<00:04, 65.01file/s]Processing Batch 1:  38%|███▊      | 191/500 [00:04<00:05, 61.15file/s]Processing Batch 1:  40%|███▉      | 199/500 [00:04<00:04, 60.68file/s]Processing Batch 1:  42%|████▏     | 211/500 [00:04<00:04, 70.90file/s]Processing Batch 1:  44%|████▍     | 220/500 [00:04<00:03, 71.85file/s]Processing Batch 1:  46%|████▌     | 228/500 [00:05<00:03, 69.31file/s]Processing Batch 1:  48%|████▊     | 239/500 [00:05<00:03, 76.21file/s]Processing Batch 1:  49%|████▉     | 247/500 [00:05<00:03, 76.20file/s]Processing Batch 1:  51%|█████▏    | 257/500 [00:05<00:03, 77.23file/s]Processing Batch 1:  53%|█████▎    | 266/500 [00:05<00:03, 76.62file/s]Processing Batch 1:  56%|█████▌    | 278/500 [00:05<00:02, 87.70file/s]Processing Batch 1:  58%|█████▊    | 290/500 [00:05<00:02, 94.34file/s]Processing Batch 1:  60%|██████    | 300/500 [00:05<00:02, 78.91file/s]Processing Batch 1:  62%|██████▏   | 309/500 [00:06<00:02, 81.09file/s]Processing Batch 1:  64%|██████▎   | 318/500 [00:06<00:02, 79.58file/s]Processing Batch 1:  67%|██████▋   | 336/500 [00:06<00:01, 105.61file/s]Processing Batch 1:  70%|██████▉   | 348/500 [00:06<00:01, 98.34file/s] Processing Batch 1:  72%|███████▏  | 359/500 [00:06<00:01, 96.04file/s]Processing Batch 1:  75%|███████▍  | 373/500 [00:06<00:01, 99.80file/s]Processing Batch 1:  77%|███████▋  | 384/500 [00:06<00:01, 90.92file/s]Processing Batch 1:  79%|███████▉  | 396/500 [00:06<00:01, 93.25file/s]Processing Batch 1:  82%|████████▏ | 411/500 [00:07<00:00, 99.99file/s]Processing Batch 1:  84%|████████▍ | 422/500 [00:07<00:00, 97.45file/s]Processing Batch 1:  86%|████████▋ | 432/500 [00:07<00:00, 75.36file/s]Processing Batch 1:  88%|████████▊ | 442/500 [00:07<00:00, 77.45file/s]Processing Batch 1:  91%|█████████ | 453/500 [00:07<00:00, 79.21file/s]Processing Batch 1:  93%|█████████▎| 464/500 [00:07<00:00, 78.87file/s]Processing Batch 1:  95%|█████████▍| 473/500 [00:07<00:00, 80.03file/s]Processing Batch 1:  96%|█████████▋| 482/500 [00:08<00:00, 72.51file/s]Processing Batch 1:  98%|█████████▊| 492/500 [00:08<00:00, 69.56file/s]Processing Batch 1: 100%|██████████| 500/500 [00:08<00:00, 60.15file/s]
-2026-03-31 22:13:45 - batch_processor - INFO - Batch 1 complete: {'batch_num': 1, 'processed': 500, 'cleaned': 500, 'needs_review': 0, 'incomplete': 0, 'errors': 0, 'processing_time': 8.648494005203247, 'avg_time_per_file': 0.017296988010406494, 'memory_mb': 0}
-2026-03-31 22:13:45 - batch_processor - INFO - Processing batch 2/2 (295 files)
-Processing Batch 2:   0%|          | 0/295 [00:00<?, ?file/s]Processing Batch 2:   0%|          | 1/295 [00:01<05:20,  1.09s/file]Processing Batch 2:   3%|▎         | 10/295 [00:01<00:25, 11.04file/s]Processing Batch 2:   5%|▌         | 15/295 [00:01<00:17, 16.13file/s]Processing Batch 2:   7%|▋         | 20/295 [00:01<00:15, 17.95file/s]Processing Batch 2:   8%|▊         | 24/295 [00:01<00:17, 15.92file/s]Processing Batch 2:   9%|▉         | 27/295 [00:02<00:17, 15.12file/s]Processing Batch 2:  10%|█         | 30/295 [00:02<00:15, 16.91file/s]Processing Batch 2:  11%|█         | 33/295 [00:02<00:14, 18.09file/s]Processing Batch 2:  12%|█▏        | 36/295 [00:02<00:22, 11.44file/s]Processing Batch 2:  13%|█▎        | 38/295 [00:03<00:30,  8.47file/s]Processing Batch 2:  14%|█▎        | 40/295 [00:03<00:33,  7.66file/s]Processing Batch 2:  15%|█▍        | 43/295 [00:03<00:24, 10.11file/s]Processing Batch 2:  17%|█▋        | 50/295 [00:03<00:13, 17.63file/s]Processing Batch 2:  18%|█▊        | 53/295 [00:04<00:12, 19.29file/s]Processing Batch 2:  24%|██▎       | 70/295 [00:04<00:04, 46.38file/s]Processing Batch 2:  26%|██▌       | 77/295 [00:04<00:04, 50.38file/s]Processing Batch 2:  28%|██▊       | 84/295 [00:04<00:08, 24.06file/s]Processing Batch 2:  31%|███       | 90/295 [00:05<00:07, 28.20file/s]Processing Batch 2:  33%|███▎      | 98/295 [00:05<00:05, 35.82file/s]Processing Batch 2:  38%|███▊      | 111/295 [00:05<00:03, 50.94file/s]Processing Batch 2:  41%|████      | 120/295 [00:05<00:03, 52.94file/s]Processing Batch 2:  43%|████▎     | 128/295 [00:05<00:03, 49.45file/s]Processing Batch 2:  46%|████▌     | 135/295 [00:05<00:03, 44.74file/s]Processing Batch 2:  53%|█████▎    | 156/295 [00:05<00:01, 74.99file/s]Processing Batch 2:  57%|█████▋    | 168/295 [00:06<00:01, 78.46file/s]Processing Batch 2:  61%|██████▏   | 181/295 [00:06<00:01, 89.05file/s]Processing Batch 2:  65%|██████▌   | 192/295 [00:06<00:01, 91.77file/s]Processing Batch 2:  69%|██████▉   | 203/295 [00:06<00:01, 85.67file/s]Processing Batch 2:  74%|███████▎  | 217/295 [00:06<00:00, 95.20file/s]Processing Batch 2:  77%|███████▋  | 228/295 [00:06<00:01, 65.86file/s]Processing Batch 2:  81%|████████▏ | 240/295 [00:06<00:00, 65.16file/s]Processing Batch 2:  84%|████████▍ | 248/295 [00:07<00:01, 35.57file/s]Processing Batch 2:  86%|████████▌ | 254/295 [00:07<00:01, 36.41file/s]Processing Batch 2:  88%|████████▊ | 260/295 [00:08<00:01, 27.10file/s]Processing Batch 2:  90%|█████████ | 266/295 [00:08<00:00, 29.91file/s]Processing Batch 2:  93%|█████████▎| 273/295 [00:08<00:00, 32.38file/s]Processing Batch 2:  96%|█████████▋| 284/295 [00:08<00:00, 39.92file/s]Processing Batch 2:  98%|█████████▊| 289/295 [00:08<00:00, 37.57file/s]Processing Batch 2: 100%|█████████▉| 294/295 [00:08<00:00, 34.46file/s]Processing Batch 2: 100%|██████████| 295/295 [00:09<00:00, 31.73file/s]
-2026-03-31 22:13:55 - batch_processor - INFO - Batch 2 complete: {'batch_num': 2, 'processed': 295, 'cleaned': 295, 'needs_review': 0, 'incomplete': 0, 'errors': 0, 'processing_time': 9.663223028182983, 'avg_time_per_file': 0.032756688231128754, 'memory_mb': 0}
-2026-03-31 22:13:55 - enhanced_normalizer - INFO - Reference data: color_indicators v5.0.0 (updated: 2026-02-18)
-2026-03-31 22:13:55 - enhanced_normalizer - INFO - Built skip sets: 34 exact, 34 normalized
-2026-03-31 22:13:55 - enhanced_normalizer - INFO - Built hierarchy lookup with 0 entries
-2026-03-31 22:13:55 - enhanced_normalizer - INFO - Building enhanced ingredient lookup indices...
-2026-03-31 22:13:55 - enhanced_normalizer - INFO - Built lookup indices with 32863 ingredient variations
-2026-03-31 22:13:55 - enhanced_normalizer - INFO - Built allergen index with 371 variations
-2026-03-31 22:13:55 - enhanced_normalizer - INFO - Built harmful additive index with 2089 variations
-2026-03-31 22:13:55 - enhanced_normalizer - INFO - Built other ingredients index with 7304 variations
-2026-03-31 22:13:55 - enhanced_normalizer - INFO - Building fast lookup indices...
-2026-03-31 22:13:56 - enhanced_normalizer - INFO - Built comprehensive fast lookup index with 42209 entries
-2026-03-31 22:13:56 - enhanced_normalizer - INFO -   - absorption_enhancer: 31 entries
-2026-03-31 22:13:56 - enhanced_normalizer - INFO -   - allergen: 371 entries
-2026-03-31 22:13:56 - enhanced_normalizer - INFO -   - banned: 993 entries
-2026-03-31 22:13:56 - enhanced_normalizer - INFO -   - botanical: 1316 entries
-2026-03-31 22:13:56 - enhanced_normalizer - INFO -   - enhanced_delivery: 49 entries
-2026-03-31 22:13:56 - enhanced_normalizer - INFO -   - harmful: 2070 entries
-2026-03-31 22:13:56 - enhanced_normalizer - INFO -   - ingredient: 32636 entries
-2026-03-31 22:13:56 - enhanced_normalizer - INFO -   - other_ingredient: 4052 entries
-2026-03-31 22:13:56 - enhanced_normalizer - INFO -   - proprietary_blend: 233 entries
-2026-03-31 22:13:56 - enhanced_normalizer - INFO -   - standardized_botanical: 458 entries
-2026-03-31 22:13:56 - enhanced_normalizer - INFO - Probiotic strain lookup: 223 keys for 42 strains
-2026-03-31 22:13:56 - unmapped_ingredient_tracker - INFO - Initialized UnmappedIngredientTracker with output: output_Nutricost/unmapped
-2026-03-31 22:13:56 - unmapped_ingredient_tracker - INFO - Saved unmapped tracking files:
-2026-03-31 22:13:56 - unmapped_ingredient_tracker - INFO -   - Active: 0 ingredients -> output_Nutricost/unmapped/unmapped_active_ingredients.json
-2026-03-31 22:13:56 - unmapped_ingredient_tracker - INFO -   - Inactive: 0 ingredients -> output_Nutricost/unmapped/unmapped_inactive_ingredients.json
-2026-03-31 22:13:56 - unmapped_ingredient_tracker - INFO -   - Needs verification active: 0 ingredients -> output_Nutricost/unmapped/needs_verification_active_ingredients.json
-2026-03-31 22:13:56 - unmapped_ingredient_tracker - INFO -   - Needs verification inactive: 0 ingredients -> output_Nutricost/unmapped/needs_verification_inactive_ingredients.json
-2026-03-31 22:13:56 - batch_processor - INFO - Saved enhanced unmapped tracking files: 0 total ingredients
-2026-03-31 22:13:56 - batch_processor - INFO -   Active: 0, Inactive: 0
-2026-03-31 22:13:56 - batch_processor - INFO - Processing report saved to output_Nutricost/reports/processing_summary.txt
-2026-03-31 22:13:56 - batch_processor - INFO - No products need review - skipping detailed review report
-2026-03-31 22:13:56 - batch_processor - INFO - Processing complete! Total time: 18.34s
-2026-03-31 22:13:56 - dsld_cleaner - INFO - ============================================================
-2026-03-31 22:13:56 - dsld_cleaner - INFO - PROCESSING COMPLETE
-2026-03-31 22:13:56 - dsld_cleaner - INFO - ============================================================
-2026-03-31 22:13:56 - dsld_cleaner - INFO - Ended at: 2026-03-31 22:13:56
-2026-03-31 22:13:56 - dsld_cleaner - INFO - Total duration: 0:00:19.153134
-2026-03-31 22:13:56 - dsld_cleaner - INFO - Files processed: 795
-2026-03-31 22:13:56 - dsld_cleaner - INFO - Success rate: 100.0%
-2026-03-31 22:13:56 - dsld_cleaner - INFO - 
-2026-03-31 22:13:56 - dsld_cleaner - INFO - Results:
-2026-03-31 22:13:56 - dsld_cleaner - INFO -   - Cleaned: 795
-2026-03-31 22:13:56 - dsld_cleaner - INFO -   - Needs review: 0
-2026-03-31 22:13:56 - dsld_cleaner - INFO -   - Incomplete: 0
-2026-03-31 22:13:56 - dsld_cleaner - INFO -   - Errors: 0
-2026-03-31 22:13:56 - dsld_cleaner - INFO -   - Unmapped ingredients: 0
-2026-03-31 22:13:56 - dsld_cleaner - INFO - 
-2026-03-31 22:13:56 - dsld_cleaner - INFO - Output files saved to:
-2026-03-31 22:13:56 - dsld_cleaner - INFO -   - Cleaned products: output_Nutricost/cleaned
-2026-03-31 22:13:56 - dsld_cleaner - INFO -   - Needs review: output_Nutricost/needs_review
-2026-03-31 22:13:56 - dsld_cleaner - INFO -   - Incomplete: output_Nutricost/incomplete
-2026-03-31 22:13:56 - dsld_cleaner - INFO -   - Unmapped ingredients: output_Nutricost/unmapped
-2026-03-31 22:13:56 - dsld_cleaner - INFO -   - Processing report: output_Nutricost/reports
-/Users/seancheick/.claude-worktrees/dsld_clean/peaceful-ritchie/scripts/run_pipeline.py:498: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
-  end_time = datetime.utcnow()
-2026-03-31 22:13:56 - __main__ - INFO - 
-2026-03-31 22:13:56 - __main__ - INFO - ============================================================
-2026-03-31 22:13:56 - __main__ - INFO - PIPELINE COMPLETE
-2026-03-31 22:13:56 - __main__ - INFO - ============================================================
-2026-03-31 22:13:56 - __main__ - INFO - Stages completed: clean
-2026-03-31 22:13:56 - __main__ - INFO - Total duration: 19.29s
-2026-03-31 22:13:56 - __main__ - INFO - Success: True
-2026-03-31 22:13:56 - __main__ - INFO - ============================================================

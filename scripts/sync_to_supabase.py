@@ -660,8 +660,14 @@ def main(argv=None):
         elif result["status"] in ("synced", "up_to_date", "dry_run"):
             if args.cleanup and result["status"] == "synced":
                 print(f"\nRunning post-sync cleanup (keeping last {args.cleanup_keep} versions)...")
-                from cleanup_old_versions import main as cleanup_main
-                cleanup_main(["--keep", str(args.cleanup_keep), "--execute", "--cleanup-orphan-blobs"])
+                import importlib, sys as _sys
+                from pathlib import Path as _Path
+                # Ensure cleanup_old_versions is importable regardless of cwd
+                _script_dir = str(_Path(__file__).parent)
+                if _script_dir not in _sys.path:
+                    _sys.path.insert(0, _script_dir)
+                cleanup_mod = importlib.import_module("cleanup_old_versions")
+                cleanup_mod.main(["--keep", str(args.cleanup_keep), "--execute", "--cleanup-orphan-blobs"])
             sys.exit(0)
     except FileNotFoundError as e:
         print(f"Error: {e}")

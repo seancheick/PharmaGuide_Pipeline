@@ -34,6 +34,9 @@
   },
   "validation": {
     "_comment": "Required fields are defined in constants.py (REQUIRED_FIELDS). This section is for reference only.",
+    "check_input_integrity": true,
+    "verify_output": true,
+    "min_success_rate": 95.0,
     "_reference_only": {
       "critical": ["id", "fullName", "brandName", "ingredientRows"],
       "important": ["upcSku", "productType", "physicalState"],
