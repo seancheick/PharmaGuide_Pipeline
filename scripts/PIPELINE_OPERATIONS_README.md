@@ -53,6 +53,105 @@ What actually moves:
 3. Dry-run sync: `python3 scripts/sync_to_supabase.py <build_dir> --dry-run`
 4. Verify no Flutter consumer is pinned to `schema_version < 1.3.2` in the app — bumping the minor version is non-breaking for older apps (new columns are `.nullable()`) but the Flutter Drift regen is still needed for the app to READ the new columns.
 
+## Release playbook — bundling the catalog into the Flutter app
+
+The offline-first contract the mobile app depends on is: every fresh install, even with no network, lands on a fully populated catalog. That means the Flutter repo (`seancheick/Pharmaguide.ai`) must bundle the exact SQLite file this pipeline produces, not a sample and not an OTA-only download. The bridge between the two repos is two scripts plus Git LFS. The flow below is the canonical release path.
+
+### One-time setup (first release only)
+
+In the Flutter repo:
+
+```bash
+# 1. Install Git LFS (macOS)
+brew install git-lfs
+git lfs install
+
+# 2. Enable LFS tracking for the bundled SQLite
+git lfs track "assets/db/*.db"
+git add .gitattributes
+```
+
+`assets/db/*.db filter=lfs` should appear in `.gitattributes`. Verify with `git lfs track`.
+
+### Every release
+
+```bash
+# Pipeline side (this repo):
+# 1. Build the latest final DB from the current enriched + scored outputs.
+python3 scripts/build_final_db.py \
+  --enriched-dir scripts/products/output_Thorne_enriched/enriched ... \
+  --scored-dir   scripts/products/output_Thorne_scored/scored   ... \
+  --output-dir   scripts/final_db_output
+
+# 2. Run full parity + regression suite.
+python3 -m pytest scripts/tests/ -q
+
+# 3. Stage the release artifact. This validates the final DB + manifest,
+#    bumps checksum formats, writes RELEASE_NOTES.md, and produces a clean
+#    scripts/dist/ directory atomically.
+python3 scripts/release_catalog_artifact.py
+
+# Exit 0 means dist/ is ready. Any validation failure aborts with a clear
+# error; dist/ is left untouched so a bad build never replaces a good one.
+
+# Flutter side (the PharmaGuide-ai repo):
+# 4. Run the bridge script with the pipeline dist/ path. It re-validates
+#    every gate locally (SHA-256, integrity, row count, version alignment)
+#    before copying artifacts into assets/db/.
+cd "/path/to/PharmaGuide ai"
+./scripts/import_catalog_artifact.sh \
+  /path/to/dsld_clean/peaceful-ritchie/scripts/dist
+
+# 5. Verify the bundled DB shows as an LFS pointer (not a 5 MiB blob).
+git lfs ls-files | grep pharmaguide_core
+
+# 6. Run the release gate test — this opens the bundled SQLite via the
+#    production CoreDatabase wrapper and asserts every invariant:
+#      - asset declared in pubspec.yaml and loadable
+#      - bundle size ≥ 1 MiB (catches fixture-accidentally-shipped)
+#      - PRAGMA integrity_check = ok
+#      - product count ≥ 2000
+#      - at least one row has export_version populated
+#      - embedded export_manifest.db_version matches JSON manifest
+#      - validateCatalogSnapshot() returns db_version (freshness contract)
+flutter test test/release_gate/bundled_catalog_test.dart
+
+# 7. Regenerate Drift + Riverpod code if the schema changed since last build.
+dart run build_runner build --delete-conflicting-outputs
+
+# 8. Commit the new bundle and push.
+git add .gitattributes pubspec.yaml assets/db/ scripts/import_catalog_artifact.sh
+git commit -m "chore(catalog): bundle v<db_version> (schema <schema_version>, <product_count> products)"
+git push origin main
+```
+
+### Validation gates enforced at each step
+
+| Step                  | Gate                                                               | Where                                                       |
+| --------------------- | ------------------------------------------------------------------ | ----------------------------------------------------------- |
+| Pipeline validation   | SQLite integrity + row count + embedded manifest + checksum        | `release_catalog_artifact.py::validate_release_candidate`   |
+| Flutter bridge        | SHA-256 match, schema allowlist, split-brain check                 | `scripts/import_catalog_artifact.sh`                        |
+| Flutter release gate  | Bundle-load via rootBundle, CoreDatabase open, version cross-check | `test/release_gate/bundled_catalog_test.dart`               |
+
+Any failure at any step aborts the release with a clear error. The Flutter bridge script intentionally leaves `assets/db/` untouched on failure so a broken build never replaces a good bundled DB.
+
+### Git LFS quota notes
+
+The SQLite file currently ships at ~5.5 MiB (2284 products, schema v1.3.2). Free GitHub LFS quota is 1 GB storage + 1 GB/month bandwidth, which easily accommodates thousands of releases. If the DB grows past ~50 MiB, plan for an LFS quota bump on the Flutter repo before the release that ships it.
+
+### Rollback
+
+The bridge script automatically moves the previous bundled DB aside as `assets/db/pharmaguide_core.db.previous` before replacing it. If a post-release issue surfaces, roll back with:
+
+```bash
+cd "/path/to/PharmaGuide ai"
+mv assets/db/pharmaguide_core.db.previous assets/db/pharmaguide_core.db
+mv assets/db/export_manifest.json.previous assets/db/export_manifest.json
+git commit -am "rollback: revert catalog to previous bundled version"
+```
+
+The `.previous` files are overwritten on every successful import, so the rollback window is exactly one release back.
+
 ## 1. Build a final DB from enriched + scored outputs
 
 Build one final release artifact directly:

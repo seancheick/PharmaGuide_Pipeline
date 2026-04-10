@@ -14,6 +14,12 @@ scripts/final_db_output/
 scripts/.cache/
 tmp/
 
+# Release artifact staging (output of scripts/release_catalog_artifact.py).
+# Regenerable from scripts/final_db_output/ — never commit the SQLite blob here;
+# the Flutter repo owns the committed copy via Git LFS.
+scripts/dist/
+dist/
+
 # Local smoke-test artifacts (ephemeral session output)
 scripts/smoke/
 scripts/smoke_enriched/
