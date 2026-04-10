@@ -34,6 +34,7 @@ except Exception:
 sys.path.insert(0, str(Path(__file__).parent))
 
 from constants import LOG_DATE_FORMAT, LOG_FORMAT
+from audit_evidence_utils import derive_non_gmo_audit
 from supplement_type_utils import infer_supplement_type
 
 try:
@@ -670,22 +671,8 @@ class SupplementScorer:
 
         has_synergy = self._synergy_cluster_qualified(product)
 
-        non_gmo_verified = bool(product.get("claim_non_gmo_project_verified", False))
-        if not non_gmo_verified:
-            named_programs = safe_list(product.get("named_cert_programs"))
-            if not named_programs:
-                programs = (
-                    product.get("certification_data", {})
-                    .get("third_party_programs", {})
-                    .get("programs", [])
-                )
-                if isinstance(programs, list):
-                    named_programs = [p.get("name") if isinstance(p, dict) else p for p in programs]
-            for program in named_programs:
-                text = norm_text(program)
-                if "non gmo project" in text or "non-gmo project" in text:
-                    non_gmo_verified = True
-                    break
+        non_gmo_audit = derive_non_gmo_audit(product)
+        non_gmo_verified = bool(non_gmo_audit.get("project_verified"))
 
         a5d = 0.5 if (self._feature_on("enable_non_gmo_bonus", default=False) and non_gmo_verified) else 0.0
 
@@ -981,6 +968,14 @@ class SupplementScorer:
         if pdata.get("prebiotic_present"):
             prebiotic_hits = max(prebiotic_hits, 1)
 
+        # Bug C fix: source clinical strains and survivability from the
+        # enricher (pdata) rather than hardcoding 0.0 in default mode or
+        # using a duplicate hardcoded substring list in extended mode.
+        # Single source of truth is clinically_relevant_strains.json, matched
+        # by the enricher in _collect_probiotic_data.
+        clinical_strain_count = int(as_float(pdata.get("clinical_strain_count"), 0) or 0)
+        has_survivability = bool(pdata.get("has_survivability_coating"))
+
         if self._feature_on("probiotic_extended_scoring", default=False):
             if total_billion >= 50:
                 cfu = 4.0
@@ -1004,25 +999,18 @@ class SupplementScorer:
             else:
                 diversity = 0.0
 
-            known_clinical = ["lgg", "bb-12", "ncfm", "reuteri", "k12", "m18", "coagulans", "shirota"]
-            strain_tokens = " ".join(ingredient_names)
-            clinical_hits = sum(1 for s in known_clinical if s in strain_tokens)
-            if clinical_hits >= 5:
+            if clinical_strain_count >= 5:
                 clinical_strains = 3.0
-            elif clinical_hits >= 3:
+            elif clinical_strain_count >= 3:
                 clinical_strains = 2.0
-            elif clinical_hits >= 1:
+            elif clinical_strain_count >= 1:
                 clinical_strains = 1.0
             else:
                 clinical_strains = 0.0
 
             prebiotic = float(min(3, prebiotic_hits))
 
-            survivability = 0.0
-            survivability_terms = ["delayed release", "enteric", "acid resistant", "microencapsulated"]
-            searchable = norm_text(json.dumps(pdata, ensure_ascii=False))
-            if any(term in searchable for term in survivability_terms):
-                survivability = 2.0
+            survivability = 2.0 if has_survivability else 0.0
 
             extended_cap = as_float(pro_cfg.get("extended_max"), 10.0)
             total = min(extended_cap, cfu + diversity + clinical_strains + prebiotic + survivability)
@@ -1039,16 +1027,18 @@ class SupplementScorer:
         cfu = 1.0 if total_billion > 1 else 0.0
         diversity = 1.0 if strain_count >= 3 else 0.0
         prebiotic = 1.0 if prebiotic_hits > 0 else 0.0
+        clinical_strains = 1.0 if clinical_strain_count >= 1 else 0.0
+        survivability = 1.0 if has_survivability else 0.0
         default_cap = as_float(pro_cfg.get("default_max"), 3.0)
-        total = min(default_cap, cfu + diversity + prebiotic)
+        total = min(default_cap, cfu + diversity + prebiotic + clinical_strains + survivability)
 
         return {
             "probiotic_bonus": total,
             "cfu": cfu,
             "diversity": diversity,
             "prebiotic": prebiotic,
-            "clinical_strains": 0.0,
-            "survivability": 0.0,
+            "clinical_strains": clinical_strains,
+            "survivability": survivability,
             "eligibility": eligibility,
         }
 
@@ -1358,7 +1348,12 @@ class SupplementScorer:
         unit = norm_text(ingredient.get("unit_normalized") or ingredient.get("unit"))
         if not unit:
             return bool(ingredient.get("has_dose", False))
-        return unit in {
+        # Enricher emits unit_normalized with whitespace stripped ("livecell(s)"),
+        # but raw unit fields normalize via norm_text to the spaced form
+        # ("live cell(s)"). Check both against the whitelist so either source
+        # matches.
+        unit_compact = unit.replace(" ", "")
+        whitelist = {
             "mg",
             "milligram",
             "milligrams",
@@ -1375,12 +1370,44 @@ class SupplementScorer:
             "gram(s)",
             "iu",
             "cfu",
+            "cfu(s)",
+            "cfus",
             "billion cfu",
             "million cfu",
+            "colony forming unit",
+            "colony forming units",
+            "colony forming unit(s)",
+            "colonyformingunit",
+            "colonyformingunits",
+            "colonyformingunit(s)",
+            # Probiotic CFU-equivalent unit labels seen in DSLD. The enricher
+            # treats these as CFU-equivalent; the scorer must accept them so
+            # IQM quality scores on probiotic rows flow into Section A. Include
+            # both spaced and compact forms — enricher's unit_normalized strips
+            # whitespace, raw unit goes through norm_text which keeps it.
+            "live cell",
+            "live cells",
+            "live cell(s)",
+            "livecell",
+            "livecells",
+            "livecell(s)",
+            "viable cell",
+            "viable cells",
+            "viable cell(s)",
+            "viablecell",
+            "viablecells",
+            "viablecell(s)",
+            "active cell",
+            "active cells",
+            "active cell(s)",
+            "activecell",
+            "activecells",
+            "activecell(s)",
             # FDA DFE (Dietary Folate Equivalents) units
             "mcgdfe",
             "mgdfe",
         }
+        return unit in whitelist or unit_compact in whitelist
 
     def _get_disclosure_blends(self, product: Dict[str, Any]) -> List[Dict[str, Any]]:
         blends = safe_list(product.get("proprietary_blends"))

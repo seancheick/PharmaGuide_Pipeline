@@ -44,6 +44,11 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional
 from urllib.parse import urlparse
 
+from audit_evidence_utils import (
+    derive_non_gmo_audit,
+    derive_omega3_audit,
+    derive_proprietary_blend_audit,
+)
 from supplement_type_utils import infer_supplement_type
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
@@ -132,6 +137,26 @@ def normalize_text(value: Any) -> str:
     return safe_str(value).lower()
 
 
+def build_supplement_type_audit(enriched: Dict, scored: Optional[Dict] = None) -> Dict[str, Any]:
+    supplement_type = enriched.get("supplement_type")
+    enriched_type = ""
+    if isinstance(supplement_type, dict):
+        enriched_type = safe_str(supplement_type.get("type"))
+    elif supplement_type is not None:
+        enriched_type = safe_str(supplement_type)
+    inferred = infer_supplement_type(enriched)
+    return {
+        "enriched_type": enriched_type,
+        "scored_type": safe_str((scored or {}).get("supp_type")),
+        "inferred_type": safe_str(inferred.get("type")),
+        "export_type": resolve_export_supplement_type(enriched, scored),
+        "active_count": inferred.get("active_count"),
+        "source": safe_str(inferred.get("source")),
+        "category_breakdown": safe_dict(inferred.get("category_breakdown")),
+        "probiotic_signal": safe_bool(inferred.get("probiotic_signal")),
+    }
+
+
 def resolve_export_supplement_type(enriched: Dict, scored: Optional[Dict] = None) -> str:
     enriched_type = ""
     supplement_type = enriched.get("supplement_type")
@@ -184,8 +209,29 @@ def has_banned_substance(enriched: Dict) -> bool:
     return bool(contaminant_status_matches(enriched, "banned"))
 
 
-def collect_match_terms(*values: Any) -> set:
-    return {normalize_text(value) for value in values if normalize_text(value)}
+def collect_match_terms(*values: Any) -> list[str]:
+    """Collect normalized match terms in stable first-seen order."""
+    terms: list[str] = []
+    seen: set[str] = set()
+    for value in values:
+        term = normalize_text(value)
+        if not term or term in seen:
+            continue
+        seen.add(term)
+        terms.append(term)
+    return terms
+
+
+def iter_match_terms(*values: Any) -> list[str]:
+    ordered: list[str] = []
+    seen: set[str] = set()
+    for value in values:
+        term = normalize_text(value)
+        if not term or term in seen:
+            continue
+        seen.add(term)
+        ordered.append(term)
+    return ordered
 
 
 def build_harmful_lookup(enriched: Dict) -> Dict[str, Dict]:
@@ -361,8 +407,16 @@ def load_harmful_reference_index() -> Dict[str, Dict]:
         for entry in entries:
             if not isinstance(entry, dict):
                 continue
-            for term in collect_match_terms(entry.get("standard_name"), *safe_list(entry.get("aliases"))):
-                index.setdefault(term, entry)
+            standard_term = normalize_text(entry.get("standard_name"))
+            if standard_term:
+                index[standard_term] = entry
+        for entry in entries:
+            if not isinstance(entry, dict):
+                continue
+            for alias in safe_list(entry.get("aliases")):
+                alias_term = normalize_text(alias)
+                if alias_term and alias_term not in index:
+                    index[alias_term] = entry
     except Exception as exc:
         logger.warning("Failed to load harmful_additives reference data: %s", exc)
     HARMFUL_REFERENCE_INDEX = index
@@ -373,7 +427,7 @@ def resolve_harmful_reference(hit: Optional[Dict]) -> Dict:
     if not isinstance(hit, dict):
         return {}
     index = load_harmful_reference_index()
-    for term in collect_match_terms(
+    for term in iter_match_terms(
         hit.get("canonical_name"),
         hit.get("additive_name"),
         hit.get("ingredient"),
@@ -401,8 +455,16 @@ def load_other_ingredients_index() -> Dict[str, Dict]:
         for entry in entries:
             if not isinstance(entry, dict):
                 continue
-            for term in collect_match_terms(entry.get("standard_name"), *safe_list(entry.get("aliases"))):
-                index.setdefault(term, entry)
+            standard_term = normalize_text(entry.get("standard_name"))
+            if standard_term:
+                index[standard_term] = entry
+        for entry in entries:
+            if not isinstance(entry, dict):
+                continue
+            for alias in safe_list(entry.get("aliases")):
+                alias_term = normalize_text(alias)
+                if alias_term and alias_term not in index:
+                    index[alias_term] = entry
     except Exception as exc:
         logger.warning("Failed to load other_ingredients reference data: %s", exc)
     OTHER_INGREDIENTS_INDEX = index
@@ -411,7 +473,7 @@ def load_other_ingredients_index() -> Dict[str, Dict]:
 
 def resolve_other_ingredient_reference(name: str, standard_name: str = "") -> Dict:
     index = load_other_ingredients_index()
-    for term in collect_match_terms(name, standard_name):
+    for term in iter_match_terms(standard_name, name):
         if term in index:
             return index[term]
     return {}
@@ -969,6 +1031,11 @@ def has_recalled_ingredient(enriched: Dict) -> bool:
 
 def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
     """Build the per-product detail blob for caching/Supabase."""
+    non_gmo_audit = derive_non_gmo_audit(enriched)
+    omega3_audit = derive_omega3_audit(enriched, scored)
+    proprietary_blend_audit = derive_proprietary_blend_audit(enriched, scored)
+    supplement_type_audit = build_supplement_type_audit(enriched, scored)
+
     # Active ingredients
     iqd = safe_dict(enriched.get("ingredient_quality_data"))
     iqd_by_raw = {}
@@ -1342,6 +1409,8 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
 
     blob = {
         "dsld_id": safe_str(enriched.get("dsld_id")),
+        "product_name": safe_str(enriched.get("product_name")),
+        "brand_name": safe_str(enriched.get("brandName")),
         "blob_version": 1,
         "ingredients": ingredients,
         "inactive_ingredients": inactive,
@@ -1376,6 +1445,10 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
             "manufacturing_region": safe_str(enriched.get("manufacturing_region")),
             "violations": safe_dict(safe_dict(enriched.get("manufacturer_data")).get("violations")),
         },
+        "non_gmo_audit": non_gmo_audit,
+        "omega3_audit": omega3_audit,
+        "proprietary_blend_audit": proprietary_blend_audit,
+        "supplement_type_audit": supplement_type_audit,
     }
     if evidence_data:
         blob["evidence_data"] = {
@@ -1461,7 +1534,8 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
         ),
         "standardized_botanicals": safe_list(formulation_data.get("standardized_botanicals")),
         "synergy_cluster_qualified": safe_bool(enriched.get("synergy_cluster_qualified")),
-        "claim_non_gmo_verified": safe_bool(enriched.get("claim_non_gmo_project_verified")),
+        "claim_non_gmo_verified": bool(non_gmo_audit.get("project_verified")),
+        "claim_non_gmo_present": bool(non_gmo_audit.get("claim_present")),
     }
 
     # Score reasons — structured bonus/penalty lists for the app
@@ -1487,6 +1561,15 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
         bonuses.append({"id": "A6", "label": "Single-nutrient premium form", "score": a_sub["A6"]})
     if safe_float(a_sub.get("probiotic_bonus"), 0) > 0:
         bonuses.append({"id": "probiotic", "label": "Probiotic quality bonus", "score": a_sub["probiotic_bonus"]})
+    if safe_float(a_sub.get("omega3_dose_bonus"), 0) > 0:
+        bonuses.append(
+            {
+                "id": "omega3",
+                "label": "Omega-3 dose bonus",
+                "score": a_sub["omega3_dose_bonus"],
+                "detail": safe_str(omega3_audit.get("dose_band")).replace("_", " "),
+            }
+        )
     b_sub = section_breakdown.get("safety_purity", {}).get("sub", {})
     if safe_float(b_sub.get("B4a"), 0) > 0:
         bonuses.append({"id": "B4a", "label": "Third-party purity testing", "score": b_sub["B4a"]})
@@ -1514,6 +1597,7 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
             if isinstance(h, dict):
                 penalties.append({
                     "id": "B1", "label": f"Harmful additive: {safe_str(h.get('additive_name') or h.get('ingredient'))}",
+                    "score": b_sub["B1_penalty"],
                     "severity": safe_str(h.get("severity_level")),
                     "reason": safe_str(h.get("mechanism_of_harm") or h.get("notes") or h.get("category"))[:200],
                 })
@@ -1548,6 +1632,27 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
 
     blob["score_bonuses"] = bonuses
     blob["score_penalties"] = penalties
+    blob["audit"] = {
+        "non_gmo": non_gmo_audit,
+        "omega3": omega3_audit,
+        "proprietary_blend": proprietary_blend_audit,
+        "supplement_type": supplement_type_audit,
+        "gate_audit": {
+            "blocking_reason": derive_blocking_reason(enriched, scored),
+            "verdict": safe_str(scored.get("verdict")),
+            "probiotic_eligibility": safe_dict(a_sub.get("probiotic_breakdown")).get("eligibility"),
+        },
+        "section_a_audit": {
+            "score": safe_float(section_breakdown.get("ingredient_quality", {}).get("score"), 0),
+            "max": safe_float(section_breakdown.get("ingredient_quality", {}).get("max"), 25),
+            "ceiling_hit": (
+                safe_float(section_breakdown.get("ingredient_quality", {}).get("score"), 0)
+                >= safe_float(section_breakdown.get("ingredient_quality", {}).get("max"), 25)
+            ),
+            "core_quality": safe_float(a_sub.get("core_quality"), 0),
+            "category_bonus_total": safe_float(a_sub.get("category_bonus_total"), 0),
+        },
+    }
 
     return blob
 
@@ -1771,13 +1876,18 @@ def classify_product_categories(enriched: Dict, scored: Optional[Dict] = None) -
     iqd = safe_dict(enriched.get("ingredient_quality_data"))
     ingredients = safe_list(iqd.get("ingredients"))
 
+    omega3_audit = derive_omega3_audit(enriched, scored)
+
     # Extract ingredient names
     ingredient_names = set()
     for ing in ingredients:
         if isinstance(ing, dict):
-            name = safe_str(ing.get("standard_name")).lower().replace(" ", "_")
+            name = safe_str(ing.get("standard_name") or ing.get("name")).lower().replace(" ", "_")
             if name:
                 ingredient_names.add(name)
+            canonical_id = safe_str(ing.get("canonical_id") or ing.get("parent_key")).lower().replace(" ", "_")
+            if canonical_id:
+                ingredient_names.add(canonical_id)
 
     # Primary category detection
     primary_category = None
@@ -1785,7 +1895,7 @@ def classify_product_categories(enriched: Dict, scored: Optional[Dict] = None) -
 
     if supp_type == "probiotic":
         primary_category = "probiotic"
-    elif any(name in ingredient_names for name in ["omega-3", "fish_oil", "epa", "dha"]):
+    elif omega3_audit["contains_omega3"]:
         primary_category = "omega-3"
     elif any(name in ingredient_names for name in ["collagen", "collagen_peptides"]):
         primary_category = "collagen"
@@ -1818,7 +1928,7 @@ def classify_product_categories(enriched: Dict, scored: Optional[Dict] = None) -
             secondary_categories.append("immune-support")
 
     # Boolean flags
-    contains_omega3 = any(name in ingredient_names for name in ["omega-3", "fish_oil", "epa", "dha"])
+    contains_omega3 = omega3_audit["contains_omega3"]
     contains_probiotics = supp_type == "probiotic" or bool(
         safe_dict(enriched.get("probiotic_data")).get("is_probiotic_product")
     )
@@ -1847,6 +1957,7 @@ def classify_product_categories(enriched: Dict, scored: Optional[Dict] = None) -
         "contains_adaptogens": contains_adaptogens,
         "contains_nootropics": contains_nootropics,
         "key_ingredient_tags": key_tags,
+        "omega3_audit": omega3_audit,
     }
 
 
@@ -2008,6 +2119,7 @@ def build_core_row(
     goal_data = compute_goal_matches(enriched)
     dosing = generate_dosing_summary(enriched)
     allergen_summ = generate_allergen_summary(enriched)
+    non_gmo_audit = derive_non_gmo_audit(enriched)
 
     return (
         safe_str(enriched.get("dsld_id")),
@@ -2056,7 +2168,7 @@ def build_core_row(
         safe_bool(comp.get("vegan")),
         safe_bool(comp.get("vegetarian")),
         safe_bool(enriched.get("is_certified_organic")),
-        safe_bool(enriched.get("claim_non_gmo_project_verified")),
+        safe_bool(non_gmo_audit["project_verified"]),
         # Safety outcomes
         safe_bool(has_banned_substance(enriched)),
         safe_bool(has_recalled_ingredient(enriched)),

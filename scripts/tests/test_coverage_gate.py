@@ -876,5 +876,117 @@ class TestEnrichedSchemaContract:
         assert result is not None
 
 
+# ---------------------------------------------------------------------------
+# Phase 0 failing test — HIGH #4: coverage gate CLI hard-exits on any single
+# corrupt file load failure. Should use a threshold (matching the
+# min_success_rate pattern in clean_dsld_data.py) so a single bad file does
+# not block the whole gate run.
+# ---------------------------------------------------------------------------
+
+
+class TestCoverageGateCliPartialLoadTolerance:
+    """CLI path at coverage_gate.py:1073-1075 calls sys.exit(1) as soon as ANY
+    file fails to load. For a medical-grade pipeline processing thousands of
+    enriched JSONs, one interrupted write (partial file, truncated JSON)
+    should not kill the gate. The gate should log the bad file, skip it,
+    and fail only if the fraction exceeds a threshold."""
+
+    def _write_valid_enriched(self, path):
+        """Minimal valid enriched product the gate can process without error."""
+        import json as _json
+        payload = {
+            "dsld_id": 99999,
+            "product_name": "Valid Test Product",
+            "match_ledger": {
+                "domains": {
+                    "ingredients": {
+                        "total_raw": 1, "matched": 1, "unmatched": 0,
+                        "rejected": 0, "skipped": 0, "coverage_percent": 100.0
+                    }
+                },
+                "summary": {"coverage_percent": 100.0}
+            },
+            "ingredient_quality_data": {
+                "ingredients": [], "ingredients_scorable": [],
+                "total_active": 0, "unmapped_count": 0,
+            },
+            "contaminant_data": {
+                "banned_substances": {"found": False, "substances": []},
+                "harmful_additives": {"found": False, "additives": []},
+                "allergens": {"found": False, "allergens": []},
+            },
+        }
+        with open(path, "w") as fp:
+            _json.dump(payload, fp)
+
+    def test_cli_tolerates_single_corrupt_file_above_threshold(self, tmp_path):
+        """Given a directory with 20 valid enriched JSONs and 1 corrupt one
+        (95.2% load success rate, above the 95% threshold), the CLI must
+        process the valid ones and not hard-exit on the corrupt file. Used
+        to unconditionally exit(1) on any load failure (HIGH #4)."""
+        import subprocess
+        import sys as _sys
+        from pathlib import Path as _P
+
+        input_dir = tmp_path / "enriched"
+        output_dir = tmp_path / "reports"
+        input_dir.mkdir()
+        output_dir.mkdir()
+
+        # 20 valid enriched files — load success rate will be 20/21 = 95.2% ≥ 95%
+        for i in range(20):
+            self._write_valid_enriched(input_dir / f"valid_{90000 + i}.json")
+        # Corrupt file: truncated JSON (simulates interrupted write)
+        (input_dir / "corrupt_88888.json").write_text('{"dsld_id": 88888, "match_ledger": ',
+                                                      encoding="utf-8")
+
+        script = _P(__file__).parent.parent / "coverage_gate.py"
+        proc = subprocess.run(
+            [_sys.executable, str(script), str(input_dir), str(output_dir)],
+            capture_output=True, text=True, timeout=60,
+        )
+
+        assert proc.returncode != 1, (
+            f"coverage_gate CLI exited with code 1 despite the load success "
+            f"rate (20/21 = 95.2%) being above the 95% threshold. A single "
+            f"corrupt file must not abort the gate run. "
+            f"stderr: {proc.stderr[-500:]}"
+        )
+
+    def test_cli_aborts_when_load_failures_exceed_threshold(self, tmp_path):
+        """Regression lock: the tolerance must still hard-fail when the
+        load success rate drops below the threshold (prevents silently
+        processing a corrupted directory)."""
+        import subprocess
+        import sys as _sys
+        from pathlib import Path as _P
+
+        input_dir = tmp_path / "enriched"
+        output_dir = tmp_path / "reports"
+        input_dir.mkdir()
+        output_dir.mkdir()
+
+        # 5 valid + 5 corrupt → 50% success rate, must abort
+        for i in range(5):
+            self._write_valid_enriched(input_dir / f"valid_{70000 + i}.json")
+        for i in range(5):
+            (input_dir / f"corrupt_{60000 + i}.json").write_text(
+                '{"dsld_id": ' + str(60000 + i) + ', "match_ledger": ',
+                encoding="utf-8",
+            )
+
+        script = _P(__file__).parent.parent / "coverage_gate.py"
+        proc = subprocess.run(
+            [_sys.executable, str(script), str(input_dir), str(output_dir)],
+            capture_output=True, text=True, timeout=60,
+        )
+
+        assert proc.returncode == 1, (
+            f"coverage_gate CLI must abort when load success rate (50%) is "
+            f"below the 95% threshold. returncode={proc.returncode}, "
+            f"stderr: {proc.stderr[-300:]}"
+        )
+
+
 if __name__ == "__main__":
     pytest.main([__file__, "-v"])

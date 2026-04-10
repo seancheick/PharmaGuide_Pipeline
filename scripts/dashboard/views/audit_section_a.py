@@ -18,16 +18,19 @@ import streamlit as st
 from scripts.dashboard.components.data_dictionary import field_help
 from scripts.dashboard.components.data_table import data_table
 from scripts.dashboard.components.metric_cards import metric_row
+from scripts.dashboard.data_loader import filter_product_catalog
 
 
 def render_audit_section_a(data):
     """Main rendering function for Section A audit dashboard."""
     dataset_scope = st.session_state.get("dataset_filter", "All Datasets")
-    st.caption(f"Dataset scope: {dataset_scope}")
+    filtered_catalog = filter_product_catalog(data)
+    allowed_ids = set(filtered_catalog["dsld_id"].astype(str)) if not filtered_catalog.empty else None
+    st.caption(f"Dataset scope: {dataset_scope} | Release rows in scope: {0 if filtered_catalog.empty else len(filtered_catalog)}")
 
     # Extract Section A data from database
-    section_a_data = _extract_section_a_data(data)
-    probiotic_issues = _extract_probiotic_cfu_issues(data)
+    section_a_data = _extract_section_a_data(data, allowed_ids=allowed_ids)
+    probiotic_issues = _extract_probiotic_cfu_issues(data, allowed_ids=allowed_ids)
 
     # Summary metrics
     _render_section_a_summary(section_a_data, probiotic_issues)
@@ -38,12 +41,15 @@ def render_audit_section_a(data):
     st.divider()
 
     # Main tabs for different views
-    tab_below_threshold, tab_probiotics, tab_details = st.tabs(
-        ["Products Below Threshold", "Probiotic CFU Issues", "Detailed Analysis"]
+    tab_below_threshold, tab_ceiling, tab_probiotics, tab_details = st.tabs(
+        ["Products Below Threshold", "Ceiling Hits", "Probiotic CFU Issues", "Detailed Analysis"]
     )
 
     with tab_below_threshold:
         _render_below_threshold(section_a_data)
+
+    with tab_ceiling:
+        _render_ceiling_hits(section_a_data)
 
     with tab_probiotics:
         _render_probiotic_issues(probiotic_issues, section_a_data)
@@ -52,7 +58,7 @@ def render_audit_section_a(data):
         _render_detailed_analysis(section_a_data, probiotic_issues)
 
 
-def _extract_section_a_data(data) -> dict:
+def _extract_section_a_data(data, allowed_ids: set[str] | None = None) -> dict:
     """Extract Section A scoring data from database."""
     section_a_data = {
         "products": [],
@@ -61,63 +67,43 @@ def _extract_section_a_data(data) -> dict:
         "probiotic_flags": [],
     }
 
-    if not data.db_conn:
-        st.warning("No database connection available")
+    if data.product_catalog.empty:
+        st.warning("No release product catalog available")
         return section_a_data
 
-    try:
-        cursor = data.db_conn.cursor()
-        # Query products with Section A scores
-        cursor.execute("""
-            SELECT 
-                dsld_id,
-                product_name,
-                brand_name,
-                supplement_type,
-                json_extract(score_basis, '$.A.total') as section_a_score,
-                verdict,
-                json_extract(blob, '$.probiotic_detail.is_probiotic') as is_probiotic,
-                json_extract(blob, '$.probiotic_detail.has_cfu') as has_cfu,
-                json_extract(blob, '$.probiotic_detail.total_strain_count') as strain_count,
-                json_extract(blob, '$.score_100_equivalent') as score_100
-            FROM products
-            ORDER BY section_a_score ASC
-            LIMIT 10000
-        """)
-
-        for row in cursor.fetchall():
+    for _, row in data.product_catalog.sort_values("section_a_score", ascending=True).iterrows():
+        dsld_id = str(row["dsld_id"])
+        if allowed_ids is not None and dsld_id not in allowed_ids:
+            continue
+        blob = {}
+        blob_path = data.detail_blobs_dir / f"{dsld_id}.json" if data.detail_blobs_dir else None
+        if blob_path and blob_path.exists():
             try:
-                dsld_id, product_name, brand_name, supp_type, sec_a_score, verdict, \
-                    is_probiotic, has_cfu, strain_count, score_100 = row
-
-                # Parse scores
-                sec_a = float(sec_a_score) if sec_a_score else 0.0
-                score_100_eq = float(score_100) if score_100 else 0.0
-
-                section_a_data["products"].append({
-                    "dsld_id": dsld_id,
-                    "product_name": product_name,
-                    "brand_name": brand_name,
-                    "supplement_type": supp_type,
-                    "section_a_score": sec_a,
-                    "score_100": score_100_eq,
-                    "verdict": verdict,
-                    "is_probiotic": bool(is_probiotic),
-                    "has_cfu": bool(has_cfu),
-                    "strain_count": int(strain_count) if strain_count else 0,
-                })
-                section_a_data["scores"].append(sec_a)
-
-            except (TypeError, ValueError):
-                continue
-
-    except Exception as e:
-        st.error(f"Error querying database: {e}")
+                blob = json.loads(blob_path.read_text())
+            except Exception:
+                blob = {}
+        probiotic_detail = blob.get("probiotic_detail") or {}
+        sec_a = float(row["section_a_score"]) if row["section_a_score"] is not None else 0.0
+        score_100_eq = float(row["score"]) if row["score"] is not None else 0.0
+        section_a_data["products"].append({
+            "dsld_id": dsld_id,
+            "product_name": row["product_name"],
+            "brand_name": row["brand_name"],
+            "supplement_type": row["supplement_type"],
+            "section_a_score": sec_a,
+            "score_100": score_100_eq,
+            "verdict": row["verdict"],
+            "is_probiotic": bool(probiotic_detail.get("is_probiotic") or row["supplement_type"] == "probiotic"),
+            "has_cfu": bool(probiotic_detail.get("has_cfu")),
+            "strain_count": int(probiotic_detail.get("total_strain_count") or 0),
+            "section_a_max": float(row["section_a_max"]) if row["section_a_max"] is not None else 25.0,
+        })
+        section_a_data["scores"].append(sec_a)
 
     return section_a_data
 
 
-def _extract_probiotic_cfu_issues(data) -> dict:
+def _extract_probiotic_cfu_issues(data, allowed_ids: set[str] | None = None) -> dict:
     """Extract probiotic products with CFU detection issues."""
     issues = {
         "missing_cfu": [],  # Probiotics without CFU detected
@@ -125,68 +111,41 @@ def _extract_probiotic_cfu_issues(data) -> dict:
         "multiple_strains": [],  # Multi-strain probiotics
     }
 
-    if not data.db_conn:
+    if data.product_catalog.empty:
         return issues
 
-    try:
-        cursor = data.db_conn.cursor()
-        cursor.execute("""
-            SELECT 
-                dsld_id,
-                product_name,
-                brand_name,
-                json_extract(blob, '$.probiotic_detail.is_probiotic') as is_probiotic,
-                json_extract(blob, '$.probiotic_detail.has_cfu') as has_cfu,
-                json_extract(blob, '$.probiotic_detail.total_cfu') as total_cfu,
-                json_extract(blob, '$.probiotic_detail.total_billion_count') as billion_count,
-                json_extract(blob, '$.probiotic_detail.total_strain_count') as strain_count,
-                json_extract(score_basis, '$.A.total') as section_a_score,
-                json_extract(blob, '$.activeIngredients') as active_ings
-            FROM products
-            WHERE json_extract(blob, '$.probiotic_detail.is_probiotic') = 1
-            ORDER BY json_extract(score_basis, '$.A.total') ASC
-            LIMIT 5000
-        """)
-
-        for row in cursor.fetchall():
+    for product in _extract_section_a_data(data, allowed_ids=allowed_ids)["products"]:
+        if not product["is_probiotic"]:
+            continue
+        blob_path = data.detail_blobs_dir / f"{product['dsld_id']}.json" if data.detail_blobs_dir else None
+        blob = {}
+        if blob_path and blob_path.exists():
             try:
-                dsld_id, product_name, brand_name, is_probiotic, has_cfu, total_cfu, \
-                    billion_count, strain_count, section_a, active_ings_json = row
+                blob = json.loads(blob_path.read_text())
+            except Exception:
+                blob = {}
+        probiotic_detail = blob.get("probiotic_detail") or {}
+        has_cfu_val = bool(probiotic_detail.get("has_cfu"))
+        cfu_count = float(probiotic_detail.get("total_cfu") or 0.0)
+        strain_cnt = int(probiotic_detail.get("total_strain_count") or 0)
+        product_info = {
+            "dsld_id": product["dsld_id"],
+            "product_name": product["product_name"],
+            "brand_name": product["brand_name"],
+            "has_cfu": has_cfu_val,
+            "cfu_count": cfu_count,
+            "billion_count": float(probiotic_detail.get("total_billion_count") or 0.0),
+            "strain_count": strain_cnt,
+            "section_a_score": product["section_a_score"],
+        }
 
-                if not is_probiotic:
-                    continue
+        if not has_cfu_val and strain_cnt > 0:
+            issues["missing_cfu"].append(product_info)
+        elif cfu_count > 0 and cfu_count < 1e9:
+            issues["low_cfu"].append(product_info)
 
-                has_cfu_val = bool(has_cfu)
-                cfu_count = float(total_cfu) if total_cfu else 0.0
-                sect_a = float(section_a) if section_a else 0.0
-                strain_cnt = int(strain_count) if strain_count else 0
-
-                product_info = {
-                    "dsld_id": dsld_id,
-                    "product_name": product_name,
-                    "brand_name": brand_name,
-                    "has_cfu": has_cfu_val,
-                    "cfu_count": cfu_count,
-                    "billion_count": float(billion_count) if billion_count else 0.0,
-                    "strain_count": strain_cnt,
-                    "section_a_score": sect_a,
-                }
-
-                if not has_cfu_val and strain_cnt > 0:
-                    # Has probiotic strains but CFU not detected
-                    issues["missing_cfu"].append(product_info)
-                elif cfu_count > 0 and cfu_count < 1e9:
-                    # Very low CFU (< 1 billion)
-                    issues["low_cfu"].append(product_info)
-
-                if strain_cnt >= 2:
-                    issues["multiple_strains"].append(product_info)
-
-            except (TypeError, ValueError):
-                continue
-
-    except Exception as e:
-        st.warning(f"Could not extract probiotic issues: {e}")
+        if strain_cnt >= 2:
+            issues["multiple_strains"].append(product_info)
 
     return issues
 
@@ -201,12 +160,13 @@ def _render_section_a_summary(section_a_data: dict, probiotic_issues: dict):
 
     total_products = len(section_a_data["products"])
     avg_score = sum(section_a_data["scores"]) / len(section_a_data["scores"]) if section_a_data["scores"] else 0
+    section_a_max = max((p.get("section_a_max", 25.0) for p in section_a_data["products"]), default=25.0)
     probiotic_products = sum(1 for p in section_a_data["products"] if p["is_probiotic"])
     probiotic_with_cfu = sum(1 for p in section_a_data["products"] if p["is_probiotic"] and p["has_cfu"])
 
     metrics = [
         ("Total Products", total_products),
-        ("Avg Section A", f"{avg_score:.1f}/25"),
+        ("Avg Section A", f"{avg_score:.1f}/{max(25.0, section_a_max):.1f}"),
         ("Probiotic Products", probiotic_products),
         ("With CFU Detected", probiotic_with_cfu),
         ("CFU Detection Rate", f"{(probiotic_with_cfu/probiotic_products*100):.0f}%" if probiotic_products > 0 else "N/A"),
@@ -321,6 +281,38 @@ def _render_below_threshold(section_a_data: dict):
             file_name="section_a_audit.csv",
             mime="text/csv",
         )
+
+
+def _render_ceiling_hits(section_a_data: dict):
+    st.write("### Highest Section A Scores")
+    if not section_a_data["products"]:
+        st.info("No data available")
+        return
+
+    threshold = st.slider("Ceiling proximity", min_value=0.0, max_value=25.0, value=20.0, step=0.5)
+    rows = [
+        p for p in sorted(section_a_data["products"], key=lambda item: (item["section_a_score"], item["score_100"]), reverse=True)
+        if p["section_a_score"] >= threshold
+    ]
+    st.metric("Products at or above threshold", len(rows))
+    if not rows:
+        st.info("No products match the current ceiling threshold.")
+        return
+    frame = pd.DataFrame(
+        [
+            {
+                "DSLD ID": p["dsld_id"],
+                "Brand": p["brand_name"],
+                "Product": p["product_name"],
+                "Type": p["supplement_type"],
+                "Section A": round(p["section_a_score"], 2),
+                "Score 100": round(p["score_100"], 1),
+                "Verdict": p["verdict"],
+            }
+            for p in rows[:500]
+        ]
+    )
+    st.dataframe(frame, use_container_width=True, height=380, hide_index=True)
 
 
 def _render_probiotic_issues(probiotic_issues: dict, section_a_data: dict):

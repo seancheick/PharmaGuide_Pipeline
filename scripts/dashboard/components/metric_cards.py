@@ -40,7 +40,12 @@ def metric_card(label: str, value: Any, color: str = "#14b8a6"):
 
 def metric_row(metrics: list[tuple[str, Any]]):
     """Renders a row of metric cards."""
-    cols = st.columns(len(metrics))
+    try:
+        cols = st.columns(len(metrics))
+        if not isinstance(cols, (list, tuple)) or len(cols) < len(metrics):
+            raise ValueError("columns unavailable")
+    except Exception:
+        cols = [st for _ in metrics]
     for i, (label, value) in enumerate(metrics):
         with cols[i]:
             metric_card(label, value)

@@ -12,11 +12,33 @@ from scripts.dashboard.components.metric_cards import metric_card, metric_row
 from scripts.dashboard.time_format import format_dashboard_datetime
 
 
+def _safe_columns(spec):
+    try:
+        columns = st.columns(spec)
+        expected = spec if isinstance(spec, int) else len(spec)
+        if not isinstance(columns, (list, tuple)) or len(columns) < expected:
+            raise ValueError("columns unavailable")
+        return list(columns[:expected])
+    except Exception:
+        fallback_count = spec if isinstance(spec, int) else len(spec)
+        return [st for _ in range(fallback_count)]
+
+
+def _safe_tabs(labels):
+    try:
+        tabs = st.tabs(labels)
+        if not isinstance(tabs, (list, tuple)) or len(tabs) < len(labels):
+            raise ValueError("tabs unavailable")
+        return list(tabs[: len(labels)])
+    except Exception:
+        return [st for _ in labels]
+
+
 def render_observability(data):
     _render_alerts(data)
     st.divider()
 
-    tab_integrity, tab_safety, tab_analytics, tab_monitoring, tab_ops = st.tabs(
+    tab_integrity, tab_safety, tab_analytics, tab_monitoring, tab_ops = _safe_tabs(
         ["Integrity", "Safety", "Analytics", "Monitoring", "Operations"]
     )
     with tab_integrity:
@@ -202,7 +224,7 @@ def _render_export_errors(data):
         .sort_values("count", ascending=False)
         .head(12)
     )
-    col1, col2 = st.columns([1.1, 1])
+    col1, col2 = _safe_columns([1.1, 1])
     with col1:
         fig = px.bar(top_reasons, x="count", y="classification", color="dataset", orientation="h", title="Top failure reasons")
         fig.update_layout(height=360, yaxis={"categoryorder": "total ascending"})
@@ -220,7 +242,7 @@ def _render_export_errors(data):
 
 def _render_safety_dashboard(data):
     safety = data.shared_metrics.get("safety_counts", {})
-    cols = st.columns(6)
+    cols = _safe_columns(6)
     labels = [
         ("Banned", "has_banned_substance"),
         ("Recalled", "has_recalled_ingredient"),
@@ -249,7 +271,7 @@ def _render_analytics(data):
         """,
         data.db_conn,
     )
-    col1, col2 = st.columns(2)
+    col1, col2 = _safe_columns(2)
     with col1:
         top_brands = df["brand_name"].value_counts().nlargest(10).index
         fig = px.box(df[df["brand_name"].isin(top_brands)], x="brand_name", y="score", color="brand_name")
@@ -273,7 +295,7 @@ def _render_analytics(data):
         )
     if coverage_rows:
         coverage_df = pd.DataFrame(coverage_rows)
-        left, right = st.columns(2)
+        left, right = _safe_columns(2)
         with left:
             fig = px.pie(
                 coverage_df,

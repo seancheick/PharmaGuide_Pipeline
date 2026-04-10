@@ -2538,6 +2538,39 @@ class TestProbioticScoringSpec:
         assert section_c["score"] == pytest.approx(7.0)
 
 
+class TestNonGmoScoringAudit:
+    @pytest.fixture
+    def scorer(self):
+        return SupplementScorer()
+
+    def test_non_gmo_project_verified_claim_can_award_a5d(self, scorer):
+        product = make_base_product()
+        product["labelText"] = {
+            "parsed": {
+                "certifications": ["Non-GMO-Project"],
+                "cleanLabelClaims": ["Non-GMO Project Verified"],
+            }
+        }
+        product["named_cert_programs"] = []
+
+        a5 = scorer._compute_formulation_bonus(product)
+
+        assert a5["A5d_non_gmo_verified"] == pytest.approx(0.5)
+
+    def test_generic_non_gmo_claim_does_not_award_a5d(self, scorer):
+        product = make_base_product()
+        product["labelText"] = {
+            "parsed": {
+                "certifications": ["Non-GMO-General"],
+                "cleanLabelClaims": ["Non-GMO"],
+            }
+        }
+
+        a5 = scorer._compute_formulation_bonus(product)
+
+        assert a5["A5d_non_gmo_verified"] == pytest.approx(0.0)
+
+
 class TestSynergyClusterSpec:
     """P2-1: Synergy cluster qualification tests."""
 
@@ -3210,3 +3243,336 @@ class TestB7DoseSafety:
         # No rda_ul_data key at all
         penalty, evidence = scorer._compute_dose_safety_penalty(p, [])
         assert penalty == 0.0
+
+
+# ---------------------------------------------------------------------------
+# Phase 0 Regression Locks — fix #2 (banned→BLOCKED, recalled→UNSAFE) and
+# probiotic core_quality + clinical strain wiring. These tests lock correct
+# behavior and must never regress.
+# ---------------------------------------------------------------------------
+
+
+class TestBannedRecalledVerdictLock:
+    """Lock the correct verdict mapping after commit 8e7ed8a fix #2.
+
+    Previously: banned status set UNSAFE, recalled status set BLOCKED (inverted).
+    Fixed to: banned → BLOCKED (score_80 is None), recalled → UNSAFE (score_80 is 0).
+    These tests ensure the mapping never flips back.
+    """
+
+    @pytest.fixture
+    def scorer(self):
+        return SupplementScorer()
+
+    def test_banned_substance_exact_match_yields_blocked_verdict(self, scorer):
+        product = make_base_product()
+        product["contaminant_data"]["banned_substances"] = {
+            "found": True,
+            "substances": [
+                {
+                    "status": "banned",
+                    "match_type": "exact",
+                    "name": "Phenibut",
+                    "banned_name": "Phenibut",
+                    "ingredient": "Phenibut",
+                }
+            ],
+        }
+        result = scorer.score_product(product)
+        assert result["verdict"] == "BLOCKED"
+        assert result["score_80"] is None
+        assert result["score_100_equivalent"] is None
+        assert result["breakdown"]["B"]["B0"] == "BLOCKED"
+        assert "Phenibut" in (result["breakdown"]["B"].get("reason") or "")
+
+    def test_banned_substance_alias_match_yields_blocked_verdict(self, scorer):
+        product = make_base_product()
+        product["contaminant_data"]["banned_substances"] = {
+            "found": True,
+            "substances": [
+                {
+                    "status": "banned",
+                    "match_type": "alias",
+                    "name": "BMPEA",
+                    "banned_name": "Beta-methylphenethylamine",
+                }
+            ],
+        }
+        result = scorer.score_product(product)
+        assert result["verdict"] == "BLOCKED"
+        assert result["score_80"] is None
+
+    def test_recalled_substance_exact_match_yields_unsafe_verdict(self, scorer):
+        product = make_base_product()
+        product["contaminant_data"]["banned_substances"] = {
+            "found": True,
+            "substances": [
+                {
+                    "status": "recalled",
+                    "match_type": "exact",
+                    "name": "Comfrey Root",
+                    "banned_name": "Comfrey Root",
+                    "ingredient": "Comfrey Root",
+                }
+            ],
+        }
+        result = scorer.score_product(product)
+        assert result["verdict"] == "UNSAFE"
+        assert result["score_80"] == 0.0
+        assert result["breakdown"]["B"]["B0"] == "UNSAFE"
+
+    def test_recalled_substance_alias_match_yields_unsafe_verdict(self, scorer):
+        product = make_base_product()
+        product["contaminant_data"]["banned_substances"] = {
+            "found": True,
+            "substances": [
+                {
+                    "status": "recalled",
+                    "match_type": "alias",
+                    "name": "Red Yeast Rice Recalled Batch",
+                    "banned_name": "Red Yeast Rice",
+                }
+            ],
+        }
+        result = scorer.score_product(product)
+        assert result["verdict"] == "UNSAFE"
+        assert result["score_80"] == 0.0
+
+    def test_banned_takes_precedence_over_recalled(self, scorer):
+        """If a product has both banned AND recalled substances, BLOCKED wins."""
+        product = make_base_product()
+        product["contaminant_data"]["banned_substances"] = {
+            "found": True,
+            "substances": [
+                {
+                    "status": "recalled",
+                    "match_type": "exact",
+                    "name": "Comfrey Root",
+                    "banned_name": "Comfrey Root",
+                },
+                {
+                    "status": "banned",
+                    "match_type": "exact",
+                    "name": "Phenibut",
+                    "banned_name": "Phenibut",
+                },
+            ],
+        }
+        result = scorer.score_product(product)
+        assert result["verdict"] == "BLOCKED"
+        assert result["score_80"] is None
+
+
+class TestProbioticCoreQualityRegression:
+    """Phase 0 failing tests pinning real probiotic scoring bugs seen on Thorne 15581.
+
+    Bug A: probiotic ingredients use unit 'Live Cell(s)' which enricher normalizes
+           to 'livecell(s)'. Scorer's _has_usable_individual_dose whitelist does NOT
+           include 'livecell(s)', so every probiotic row is skipped from A1/A2/A6
+           and Section A core_quality stays at 0 even when IQM matched the rows
+           with quality scores of 15-18.
+
+    Bug C: In default mode (_feature_on probiotic_extended_scoring = False),
+           _compute_probiotic_category_bonus hardcodes clinical_strains=0.0 and
+           survivability=0.0, completely ignoring the enricher's correctly-
+           extracted pdata['clinical_strain_count'] and
+           pdata['has_survivability_coating']. Extended mode has a parallel bug
+           using a hardcoded substring list instead of reading the enricher field.
+    """
+
+    @pytest.fixture
+    def scorer(self):
+        return SupplementScorer()
+
+    def _make_thorne_restore_like_product(self):
+        """Mirror the Thorne Restore (dsld_id 15581) smoke fixture:
+        3 probiotic strains, unit 'Live Cell(s)', total 5B CFU."""
+        product = make_base_product()
+        product["supplement_type"] = {"type": "probiotic", "active_count": 3}
+        product["ingredient_quality_data"] = {
+            "total_active": 3,
+            "unmapped_count": 0,
+            "ingredients": [
+                {
+                    "name": "Lactobacillus gasseri",
+                    "standard_name": "Lactobacillus Gasseri",
+                    "canonical_id": "lactobacillus_gasseri",
+                    "category": "probiotics",
+                    "score": 16.0,
+                    "dosage_importance": 1.0,
+                    "mapped": True,
+                    "quantity": 2500000000.0,
+                    "unit": "Live Cell(s)",
+                    "unit_normalized": "livecell(s)",
+                    "has_dose": True,
+                    "is_proprietary_blend": False,
+                    "is_parent_total": False,
+                    "is_blend_header": False,
+                    "role_classification": "active_scorable",
+                },
+                {
+                    "name": "Bifidobacterium longum",
+                    "standard_name": "Bifidobacterium Longum",
+                    "canonical_id": "bifidobacterium_longum",
+                    "category": "probiotics",
+                    "score": 15.0,
+                    "dosage_importance": 1.0,
+                    "mapped": True,
+                    "quantity": 1250000000.0,
+                    "unit": "Live Cell(s)",
+                    "unit_normalized": "livecell(s)",
+                    "has_dose": True,
+                    "is_proprietary_blend": False,
+                    "is_parent_total": False,
+                    "is_blend_header": False,
+                    "role_classification": "active_scorable",
+                },
+                {
+                    "name": "Bifidobacterium bifidum",
+                    "standard_name": "Bifidobacterium Bifidum",
+                    "canonical_id": "bifidobacterium_bifidum",
+                    "category": "probiotics",
+                    "score": 15.0,
+                    "dosage_importance": 1.0,
+                    "mapped": True,
+                    "quantity": 1250000000.0,
+                    "unit": "Live Cell(s)",
+                    "unit_normalized": "livecell(s)",
+                    "has_dose": True,
+                    "is_proprietary_blend": False,
+                    "is_parent_total": False,
+                    "is_blend_header": False,
+                    "role_classification": "active_scorable",
+                },
+            ],
+        }
+        product["ingredient_quality_data"]["ingredients_scorable"] = list(
+            product["ingredient_quality_data"]["ingredients"]
+        )
+        product["probiotic_data"] = {
+            "is_probiotic": True,
+            "is_probiotic_product": True,
+            "has_cfu": True,
+            "total_cfu": 5_000_000_000.0,
+            "total_billion_count": 5.0,
+            "total_strain_count": 3,
+            "guarantee_type": None,
+            "probiotic_blends": [
+                {"name": "Lactobacillus gasseri", "strain_count": 1,
+                 "strains": ["Lactobacillus gasseri"],
+                 "cfu_data": {"has_cfu": True, "cfu_count": 2500000000.0, "billion_count": 2.5}},
+                {"name": "Bifidobacterium longum", "strain_count": 1,
+                 "strains": ["Bifidobacterium longum"],
+                 "cfu_data": {"has_cfu": True, "cfu_count": 1250000000.0, "billion_count": 1.25}},
+                {"name": "Bifidobacterium bifidum", "strain_count": 1,
+                 "strains": ["Bifidobacterium bifidum"],
+                 "cfu_data": {"has_cfu": True, "cfu_count": 1250000000.0, "billion_count": 1.25}},
+            ],
+            "clinical_strains": [
+                {"strain": "Lactobacillus gasseri", "clinical_id": "STRAIN_GASSERI_SBT2055",
+                 "evidence_level": "high"},
+                {"strain": "Bifidobacterium longum", "clinical_id": "STRAIN_BLONGUM_BB536",
+                 "evidence_level": "high"},
+            ],
+            "clinical_strain_count": 2,
+            "prebiotic_present": False,
+            "prebiotic_name": "",
+            "has_survivability_coating": False,
+            "survivability_reason": "",
+        }
+        return product
+
+    def test_bugA_probiotic_livecell_unit_contributes_to_core_quality(self, scorer):
+        """Bug A lock: probiotic ingredients with unit_normalized='livecell(s)' must
+        not be skipped by _has_usable_individual_dose; their IQM quality scores
+        (15-16) must flow into Section A core_quality. Currently FAILS because
+        'livecell(s)' is not in the usable-dose unit whitelist."""
+        product = self._make_thorne_restore_like_product()
+        section_a = scorer._compute_ingredient_quality_score(product, "probiotic", flags=[])
+        assert section_a["core_quality"] > 0, (
+            "Section A core_quality must be > 0 for a 3-strain probiotic with "
+            f"IQM-matched ingredients (scores 15-16); got {section_a['core_quality']}. "
+            "Root cause: unit_normalized='livecell(s)' not in _has_usable_individual_dose whitelist."
+        )
+        # With 3 ingredients averaging quality score ~15.3 and dosage_importance 1.0,
+        # A1 should contribute meaningfully — at least 8 points out of 15 max.
+        assert section_a["A1"] >= 8.0, (
+            f"A1 (bioavailability) for probiotic should be >= 8.0 given 3 strains "
+            f"with avg quality_score ~15.3; got {section_a['A1']}"
+        )
+
+    def test_bugA_livecell_unit_recognized_as_usable_dose(self, scorer):
+        """Unit-level lock: _has_usable_individual_dose must return True for a
+        probiotic ingredient with unit_normalized='livecell(s)' and positive
+        CFU quantity. Currently FAILS."""
+        probiotic_row = {
+            "name": "Lactobacillus gasseri",
+            "quantity": 2500000000.0,
+            "unit": "Live Cell(s)",
+            "unit_normalized": "livecell(s)",
+            "has_dose": True,
+        }
+        assert scorer._has_usable_individual_dose(probiotic_row) is True, (
+            "'livecell(s)' must be recognized as a usable CFU-equivalent unit"
+        )
+
+    def test_bugC_default_mode_reads_clinical_strains_from_enricher(self, scorer):
+        """Bug C lock: in default probiotic scoring mode, clinical_strains bonus
+        must come from pdata['clinical_strain_count'] (the enricher's field),
+        not be hardcoded to 0.0. Currently FAILS — line 1035 returns a dict with
+        'clinical_strains': 0.0 regardless of input."""
+        product = self._make_thorne_restore_like_product()
+        bonus = scorer._compute_probiotic_category_bonus(product, "probiotic")
+        assert bonus["clinical_strains"] > 0.0, (
+            "Enricher found 2 clinically-relevant strains "
+            "(STRAIN_GASSERI_SBT2055, STRAIN_BLONGUM_BB536). "
+            f"Scorer returned clinical_strains={bonus['clinical_strains']}. "
+            "Root cause: default-mode probiotic bonus hardcodes clinical_strains=0.0."
+        )
+
+    def test_bugC_default_mode_reads_survivability_from_enricher(self, scorer):
+        """Bug C lock: survivability bonus must come from
+        pdata['has_survivability_coating'] in default mode. Currently hardcoded
+        to 0.0 even when the enricher sets has_survivability_coating=True."""
+        product = self._make_thorne_restore_like_product()
+        product["probiotic_data"]["has_survivability_coating"] = True
+        product["probiotic_data"]["survivability_reason"] = "enteric coating"
+        bonus = scorer._compute_probiotic_category_bonus(product, "probiotic")
+        assert bonus["survivability"] > 0.0, (
+            "When enricher sets has_survivability_coating=True, scorer must award "
+            f"survivability bonus > 0; got {bonus['survivability']}. "
+            "Root cause: default-mode probiotic bonus hardcodes survivability=0.0."
+        )
+
+    def test_bugC_extended_mode_uses_enricher_clinical_strain_count(self, scorer):
+        """Bug C lock, extended mode variant: even with probiotic_extended_scoring
+        enabled, clinical_strains should come from the enricher's
+        clinical_strain_count field, not from a hardcoded substring list. Without
+        this the enricher's clinically_relevant_strains.json (42 entries) is
+        duplicated and drifts."""
+        product = self._make_thorne_restore_like_product()
+        # _feature_on reads self.feature_gates (snapshot of config['feature_gates']
+        # taken in __init__), so toggle the live attribute directly.
+        scorer.feature_gates["probiotic_extended_scoring"] = True
+        try:
+            bonus = scorer._compute_probiotic_category_bonus(product, "probiotic")
+        finally:
+            scorer.feature_gates.pop("probiotic_extended_scoring", None)
+        assert bonus["clinical_strains"] > 0.0, (
+            "Extended mode must credit clinical_strains based on enricher's "
+            "clinical_strain_count (2 for this product); got "
+            f"{bonus['clinical_strains']}"
+        )
+
+    def test_thorne_restore_realistic_section_a_target(self, scorer):
+        """End-to-end section A lock for the Thorne 15581 fixture. Currently
+        fails because of Bugs A and C. After fixes, Section A should be in the
+        15-20 range for a 3-strain quality probiotic with clinical matches."""
+        product = self._make_thorne_restore_like_product()
+        section_a = scorer._compute_ingredient_quality_score(product, "probiotic", flags=[])
+        assert section_a["score"] >= 12.0, (
+            f"Section A for Thorne Restore (3 strains @ quality 15-16, 5B CFU, "
+            f"2 clinical matches) should be >= 12.0 out of 25; "
+            f"got {section_a['score']}. Breakdown: core_quality={section_a['core_quality']}, "
+            f"probiotic_bonus={section_a.get('probiotic_bonus')}"
+        )

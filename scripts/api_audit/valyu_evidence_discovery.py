@@ -1,195 +1,216 @@
 #!/usr/bin/env python3
 """
-Valyu Clinical Evidence Discovery & Audit Tool
-==============================================
-Uses the Valyu API to find 2025-2026 clinical evidence for ingredients,
-auditing existing records for staleness and discovering new high-tier evidence.
+Review-only Valyu evidence watchtower for PharmaGuide.
 
-Outputs:
-    - scripts/reports/valyu_discovery_report.json (Human-readable audit)
-    - scripts/data/quarantine/valyu_pending_updates.json (Ready to merge)
+This tool scans selected canonical source domains and emits review reports.
+It never mutates production source-of-truth JSON.
 """
 
-import json
+from __future__ import annotations
+
+import argparse
 import os
 import sys
-import logging
-from datetime import datetime
+from datetime import datetime, UTC
 from pathlib import Path
-from typing import Dict, List, Any, Optional
+from typing import Any
 
-# Add project root and scripts directory to path
 SCRIPT_DIR = Path(__file__).resolve().parent
-SCRIPTS_DIR = SCRIPT_DIR.parent
-PROJECT_ROOT = SCRIPTS_DIR.parent
-if str(SCRIPTS_DIR) not in sys.path:
-    sys.path.insert(0, str(SCRIPTS_DIR))
-if str(PROJECT_ROOT) not in sys.path:
-    sys.path.insert(0, str(PROJECT_ROOT))
+SCRIPTS_ROOT = SCRIPT_DIR.parent
+PROJECT_ROOT = SCRIPTS_ROOT.parent
+if str(SCRIPTS_ROOT) not in sys.path:
+    sys.path.insert(0, str(SCRIPTS_ROOT))
 
-import env_loader  # noqa: F401 - Loads .env
-try:
-    from valyu import Valyu
-except ImportError:
-    print("[ERROR] Valyu SDK not found. Install with: pip install valyu")
-    sys.exit(1)
+import env_loader  # noqa: F401
+from api_audit.valyu_domain_targets import load_targets
+from api_audit.valyu_query_planner import build_search_plan
+from api_audit.valyu_report_types import normalize_signal_row
+from api_audit.valyu_report_writer import write_reports
 
-# Config
-VALYU_API_KEY = os.environ.get("VALYU_API_KEY")
-CLINICAL_DB_PATH = PROJECT_ROOT / "scripts/data/backed_clinical_studies.json"
-REPORT_OUTPUT = PROJECT_ROOT / "scripts/reports/valyu_discovery_report.json"
-QUARANTINE_PATH = PROJECT_ROOT / "scripts/data/quarantine/valyu_pending_updates.json"
 
-# Setup Logging
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(levelname)s - %(message)s'
+VALID_MODES = (
+    "clinical-refresh",
+    "iqm-gap-scan",
+    "harmful-refresh",
+    "recall-refresh",
+    "all",
 )
-logger = logging.getLogger("valyu_audit")
 
-class ValyuEvidenceAuditor:
-    def __init__(self):
-        if not VALYU_API_KEY:
-            logger.error("VALYU_API_KEY not found in environment.")
-            sys.exit(1)
-        self.client = Valyu(api_key=VALYU_API_KEY)
-        self.clinical_db = self._load_db()
-        self.results = {
-            "metadata": {
-                "audit_date": datetime.now().isoformat(),
-                "valyu_sources": ["valyu/valyu-pubmed", "valyu/valyu-clinical-trials", "valyu/valyu-chembl"]
-            },
-            "new_discoveries": [],
-            "stale_audits": [],
-            "errors": []
-        }
 
-    def _load_db(self) -> Dict:
-        with open(CLINICAL_DB_PATH, 'r') as f:
-            return json.load(f)
+def _require_valyu_api_key() -> str:
+    api_key = os.environ.get("VALYU_API_KEY")
+    if not api_key:
+        raise SystemExit("VALYU_API_KEY is required for Valyu watchtower runs.")
+    return api_key
 
-    def audit_ingredient(self, ingredient_name: str, current_record: Optional[Dict] = None):
-        """
-        Search for 2025-2026 evidence for an ingredient.
-        """
-        logger.info(f"Auditing: {ingredient_name}...")
-        
-        # 1. Construct Targeted Query
-        # We look for Systematic Reviews or RCTs in the last 18 months (2025-2026)
-        query = f"latest 2025 2026 clinical trials systematic review meta-analysis for {ingredient_name} supplement"
-        
-        try:
-            # Use Answer API for a grounded, cited response
-            answer_response = self.client.answer(
-                query=query,
-                search_type="proprietary",
-                included_sources=["valyu/valyu-pubmed", "valyu/valyu-clinical-trials"]
-            )
-            
-            # Extract content and references
-            answer_text = str(getattr(answer_response, 'contents', ""))
-            search_results = getattr(answer_response, 'search_results', [])
-            
-            # 2. Extract structured citations for DB merging
-            extracted_refs = []
-            for res in search_results:
-                # Only pull from PubMed/ClinicalTrials sources
-                url = str(getattr(res, 'url', ""))
-                if "pubmed" in url or "clinicaltrials.gov" in url:
-                    ref = {
-                        "type": "pubmed" if "pubmed" in url else "clinical_trials_gov",
-                        "title": getattr(res, 'title', ""),
-                        "url": url,
-                        "published_date": getattr(res, 'publication_date', ""),
-                        "doi": getattr(res, 'doi', None)
-                    }
-                    # Extract PMID from URL if possible
-                    if "pubmed.ncbi.nlm.nih.gov/" in url:
-                        ref["pmid"] = url.split("/")[-2] if url.endswith("/") else url.split("/")[-1]
-                    extracted_refs.append(ref)
 
-            # 2. Analyze the result
-            audit_entry = {
-                "name": ingredient_name,
-                "timestamp": datetime.now().isoformat(),
-                "valyu_summary": answer_text,
-                "top_citations": extracted_refs[:3],  # Keep top 3 for review
-                "status": "reviewed",
-                "current_tier": current_record.get("score_contribution") if current_record else "none"
+def _load_valyu_class():
+    try:
+        from valyu import Valyu
+    except ImportError as exc:  # pragma: no cover - exercised via tests
+        raise SystemExit("Valyu SDK not found. Install with: pip install valyu") from exc
+    return Valyu
+
+
+def create_valyu_client():
+    api_key = _require_valyu_api_key()
+    valyu_class = _load_valyu_class()
+    return valyu_class(api_key=api_key)
+
+
+def execute_search(client: Any, plan: dict[str, Any]) -> dict[str, Any]:
+    response = client.search(
+        query=plan["query_used"],
+        included_sources=plan["included_sources"],
+        start_date=plan["start_date"],
+        end_date=plan["end_date"],
+    )
+    success = getattr(response, "success", True)
+    if isinstance(response, dict):
+        success = response.get("success", success)
+    if not success:
+        error = getattr(response, "error", None)
+        if isinstance(response, dict):
+            error = response.get("error", error)
+        return {"search_results": [], "error": error or "Valyu search failed"}
+
+    results = getattr(response, "results", None)
+    if results is None:
+        results = getattr(response, "search_results", None)
+    if results is None and isinstance(response, dict):
+        results = response.get("results")
+    if results is None and isinstance(response, dict):
+        results = response.get("search_results", [])
+    results = results or []
+
+    normalized_results = []
+    for item in results:
+        if isinstance(item, dict):
+            normalized_results.append(item)
+            continue
+        normalized_results.append(
+            {
+                "title": getattr(item, "title", ""),
+                "url": getattr(item, "url", ""),
+                "published_date": getattr(item, "publication_date", ""),
+                "source": getattr(item, "source", ""),
             }
+        )
+    return {"search_results": normalized_results}
 
-            # Simple logic to flag staleness/discovery
-            text = answer_text.lower()
-            if "contradicts" in text or "no effect" in text or "null results" in text:
-                audit_entry["status"] = "STALE_CONTRADICTION"
-                audit_entry["recommendation"] = "Review for evidence downgrade"
-            elif "2026" in text or "2025" in text:
-                if current_record:
-                    audit_entry["status"] = "STALE_UPGRADE"
-                    audit_entry["recommendation"] = "New 2025/2026 evidence found - Update record"
-                else:
-                    audit_entry["status"] = "NEW_DISCOVERY"
-                    audit_entry["recommendation"] = "Add new ingredient to clinical DB"
 
-            if current_record:
-                self.results["stale_audits"].append(audit_entry)
-            else:
-                self.results["new_discoveries"].append(audit_entry)
+def classify_signal(target: dict[str, Any], search_payload: dict[str, Any]) -> dict[str, Any] | None:
+    results = search_payload.get("search_results", [])
+    if not results:
+        return None
 
-        except Exception as e:
-            logger.error(f"Valyu API error for {ingredient_name}: {e}")
-            self.results["errors"].append({"name": ingredient_name, "error": str(e)})
+    domain_key = str(target["domain"]).replace("-", "_")
+    if domain_key == "clinical_refresh":
+        signal_type = "possible_upgrade"
+    elif domain_key == "iqm_gap_scan":
+        signal_type = "missing_evidence"
+    elif domain_key == "harmful_refresh":
+        signal_type = "possible_safety_change"
+    else:
+        signal_type = "possible_recall_change"
 
-    def run_batch_audit(self, limit: int = 5, discovery_limit: int = 5):
-        """
-        Audit existing DB + discover new high-priority ingredients.
-        """
-        # 1. Audit high-tier existing items for staleness/upgrades
-        top_existing = [
-            item for item in self.clinical_db.get("backed_clinical_studies", [])
-            if item.get("score_contribution") == "tier_1"
-        ][:limit]
-        
-        for item in top_existing:
-            self.audit_ingredient(item["standard_name"], item)
+    references = []
+    sources = []
+    seen_refs: set[tuple[str, str]] = set()
+    for item in results[:5]:
+        source = str(item.get("source") or item.get("url") or "")
+        if source:
+            sources.append(source)
+        reference = {
+            "title": str(item.get("title") or ""),
+            "url": str(item.get("url") or ""),
+            "published_date": str(item.get("published_date") or ""),
+            "source": str(item.get("source") or ""),
+        }
+        dedupe_key = (reference["url"], reference["title"])
+        if dedupe_key in seen_refs:
+            continue
+        seen_refs.add(dedupe_key)
+        references.append(reference)
 
-        # 2. Discovery: Scan unmapped ingredients from high-volume brands (e.g. GNC)
-        # This acts as the 'discovery layer' for ingredients not yet in your DB
-        gnc_unmapped = PROJECT_ROOT / "scripts/output_GNC/unmapped/unmapped_inactive_ingredients.json"
-        if gnc_unmapped.exists():
-            with open(gnc_unmapped, 'r') as f:
-                data = json.load(f)
-                unmapped_list = data.get("unmapped_ingredients", {})
-                # Sort by occurrence (high-impact first)
-                sorted_unmapped = sorted(unmapped_list.items(), key=lambda x: x[1], reverse=True)
-                
-                # Check top N unmapped for clinical significance
-                for name, count in sorted_unmapped[:discovery_limit]:
-                    # Skip if already in clinical DB
-                    if any(item["standard_name"].lower() == name.lower() for item in self.clinical_db.get("backed_clinical_studies", [])):
-                        continue
-                    self.audit_ingredient(name, None)
+    return normalize_signal_row(
+        {
+            "domain": domain_key,
+            "target_file": target.get("target_file"),
+            "entity_type": target.get("entity_type"),
+            "entity_id": target.get("entity_id"),
+            "entity_name": target.get("entity_name"),
+            "signal_type": signal_type,
+            "signal_strength": "medium",
+            "reason": f"Valyu returned {len(results)} result(s) for review.",
+            "query_used": target.get("query_used", ""),
+            "date_window": {
+                "start_date": target.get("start_date"),
+                "end_date": target.get("end_date"),
+            },
+            "candidate_sources": list(dict.fromkeys(sources)),
+            "candidate_references": references,
+            "suggested_action": "Review citations before deciding whether canonical data should change.",
+            "supporting_summary": "",
+        }
+    )
 
-        # 3. Save Report
-        self._save_results()
 
-    def _save_results(self):
-        # Create directories if missing
-        REPORT_OUTPUT.parent.mkdir(parents=True, exist_ok=True)
-        QUARANTINE_PATH.parent.mkdir(parents=True, exist_ok=True)
+def run_mode(mode: str, *, limit: int | None = None, client: Any | None = None) -> tuple[dict[str, Any], list[dict[str, Any]]]:
+    active_client = client or create_valyu_client()
+    targets = []
+    if mode == "all":
+        for submode in VALID_MODES[:-1]:
+            targets.extend(load_targets(submode, limit=limit))
+    else:
+        targets = load_targets(mode, limit=limit)
 
-        with open(REPORT_OUTPUT, 'w') as f:
-            json.dump(self.results, f, indent=2)
-        
-        logger.info(f"Audit report saved to {REPORT_OUTPUT}")
+    raw_rows: list[dict[str, Any]] = []
+    review_rows: list[dict[str, Any]] = []
+    for target in targets:
+        plan = build_search_plan(target["domain"], target["entity_name"])
+        target["query_used"] = plan["query_used"]
+        target["start_date"] = plan["start_date"]
+        target["end_date"] = plan["end_date"]
+        payload = execute_search(active_client, plan)
+        raw_rows.append({"target": target, "search": payload})
+        classified = classify_signal(target, payload)
+        if classified:
+            review_rows.append(classified)
+
+    metadata = {
+        "timestamp": datetime.now(UTC).isoformat(),
+        "mode": mode,
+        "targets_scanned": len(targets),
+    }
+    raw_report = {
+        "metadata": metadata,
+        "raw_results": raw_rows,
+    }
+    return raw_report, review_rows
+
+
+def build_parser() -> argparse.ArgumentParser:
+    parser = argparse.ArgumentParser(
+        description="Review-only Valyu evidence watchtower for PharmaGuide",
+    )
+    parser.add_argument("mode", choices=VALID_MODES)
+    parser.add_argument("--limit", type=int, default=None, help="Optional target limit per selected mode")
+    parser.add_argument("--output-dir", type=str, default=None, help="Optional report output directory")
+    return parser
+
+
+def main(argv: list[str] | None = None) -> int:
+    parser = build_parser()
+    args = parser.parse_args(argv)
+    raw_report, review_rows = run_mode(args.mode, limit=args.limit)
+    metadata = raw_report["metadata"]
+    output_dir = Path(args.output_dir) if args.output_dir else None
+    paths = write_reports(metadata, raw_report, review_rows, output_dir=output_dir)
+    print(f"Scanned {metadata['targets_scanned']} target(s); queued {len(review_rows)} review row(s).")
+    print(f"Summary: {paths['summary']}")
+    return 0
+
 
 if __name__ == "__main__":
-    # Ensure VALYU_API_KEY is available or prompt user
-    if not os.environ.get("VALYU_API_KEY"):
-        print("\n[!] VALYU_API_KEY not found in .env")
-        print("Please add VALYU_API_KEY=your_key to your .env file or export it.")
-        sys.exit(1)
-
-    auditor = ValyuEvidenceAuditor()
-    # For demo, we audit the first 5 Tier-1 ingredients
-    auditor.run_batch_audit(limit=5)
+    raise SystemExit(main())

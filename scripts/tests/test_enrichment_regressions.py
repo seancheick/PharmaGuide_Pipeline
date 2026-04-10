@@ -246,6 +246,48 @@ class TestProbioticCFU:
         assert result["source"] == "ingredient_quality_data"
         assert result["category_breakdown"]["probiotic"] == 3
 
+    def test_classifier_keeps_scorable_proprietary_blend_members(self, enricher):
+        product = {
+            "product_name": "Quick Melt Probiotic Sticks Crisp Apple",
+            "activeIngredients": [
+                {"name": "Bifidobacterium lactis HN019", "standardName": "Bifidobacterium lactis HN019", "category": None},
+                {"name": "Lactobacillus acidophilus NCFM", "standardName": "Lactobacillus acidophilus NCFM", "category": None},
+                {"name": "Lactobacillus rhamnosus GG", "standardName": "Lactobacillus rhamnosus GG", "category": None},
+            ],
+            "ingredient_quality_data": {
+                "ingredients": [
+                    {
+                        "name": "Bifidobacterium lactis HN019",
+                        "standard_name": "Bifidobacterium Lactis",
+                        "category": "probiotics",
+                        "is_proprietary_blend": True,
+                        "role_classification": "active_scorable",
+                    },
+                    {
+                        "name": "Lactobacillus acidophilus NCFM",
+                        "standard_name": "Lactobacillus Acidophilus",
+                        "category": "probiotics",
+                        "is_proprietary_blend": True,
+                        "role_classification": "active_scorable",
+                    },
+                    {
+                        "name": "Lactobacillus rhamnosus GG",
+                        "standard_name": "Lactobacillus Rhamnosus",
+                        "category": "probiotics",
+                        "is_proprietary_blend": True,
+                        "role_classification": "active_scorable",
+                    },
+                ]
+            },
+            "probiotic_data": {"is_probiotic_product": True},
+            "inactiveIngredients": [],
+        }
+
+        result = enricher._classify_supplement_type(product)
+
+        assert result["type"] == "probiotic"
+        assert result["active_count"] == 3
+
     def test_guarantee_at_manufacture(self, enricher):
         """'At the time of manufacture.' sets guarantee_type"""
         result = enricher._extract_guarantee_type("Contains 500 million CFU at the time of manufacture.")
@@ -2103,3 +2145,283 @@ class TestBVitaminKeywords:
             assert shorthand in vitamins_keywords, (
                 f"'{shorthand}' not found in vitamins keyword list"
             )
+
+
+# ---------------------------------------------------------------------------
+# Phase 0 Regression Locks — strain extraction, narrow-exception safety,
+# CFU regex precision, probiotic classification boundary.
+# ---------------------------------------------------------------------------
+
+
+class TestProbioticDataStructureRegressionLock:
+    """Regression lock: enricher must populate probiotic_data with the exact
+    field shape the scorer reads. Currently passes — must not regress."""
+
+    @pytest.fixture
+    def enricher(self):
+        return SupplementEnricherV3()
+
+    def test_probiotic_data_populates_expected_scorer_fields(self, enricher):
+        """For a realistic 3-strain probiotic product, probiotic_data must
+        contain the exact keys the scorer queries: is_probiotic_product,
+        has_cfu, total_billion_count, total_strain_count, clinical_strain_count,
+        prebiotic_present, has_survivability_coating, probiotic_blends."""
+        product = {
+            'id': 'test_strain_extraction',
+            'product_name': 'Restore',
+            'fullName': 'Thorne Performance Restore',
+            'bundleName': '',
+            'statements': [
+                {'notes': 'Contains 5 billion CFU per capsule.'}
+            ],
+            'activeIngredients': [
+                {
+                    'name': 'Lactobacillus gasseri',
+                    'standardName': 'Lactobacillus Gasseri',
+                    'category': 'probiotic',
+                    'quantity': 2500000000,
+                    'unit': 'Live Cell(s)',
+                    'nestedIngredients': [],
+                    'harvestMethod': '',
+                    'notes': '',
+                },
+                {
+                    'name': 'Bifidobacterium longum',
+                    'standardName': 'Bifidobacterium Longum',
+                    'category': 'probiotic',
+                    'quantity': 1250000000,
+                    'unit': 'Live Cell(s)',
+                    'nestedIngredients': [],
+                    'harvestMethod': '',
+                    'notes': '',
+                },
+                {
+                    'name': 'Bifidobacterium bifidum',
+                    'standardName': 'Bifidobacterium Bifidum',
+                    'category': 'probiotic',
+                    'quantity': 1250000000,
+                    'unit': 'Live Cell(s)',
+                    'nestedIngredients': [],
+                    'harvestMethod': '',
+                    'notes': '',
+                },
+            ],
+            'inactiveIngredients': [],
+        }
+        pd = enricher._collect_probiotic_data(product)
+        assert pd['is_probiotic_product'] is True
+        assert pd['has_cfu'] is True
+        assert pd['total_strain_count'] == 3
+        assert pd['total_billion_count'] == pytest.approx(5.0)
+        assert len(pd['probiotic_blends']) == 3
+        # Fields the scorer reads for bonuses — must exist even if 0/False
+        for key in ('clinical_strain_count', 'prebiotic_present', 'has_survivability_coating'):
+            assert key in pd, f"probiotic_data missing scorer-critical key '{key}'"
+
+    def test_probiotic_data_clinical_strain_lookup_matches_db(self, enricher):
+        """Lactobacillus gasseri and Bifidobacterium longum should match the
+        clinically_relevant_strains.json database. This locks the strain match
+        logic — if the clinical strain DB is ever restructured, this flags it."""
+        product = {
+            'id': 'test_clinical_strain_match',
+            'product_name': 'Gasseri + Longum Combo',
+            'fullName': 'Gasseri + Longum Combo',
+            'bundleName': '',
+            'statements': [],
+            'activeIngredients': [
+                {'name': 'Lactobacillus gasseri',
+                 'standardName': 'Lactobacillus Gasseri',
+                 'category': 'probiotic',
+                 'quantity': 2500000000, 'unit': 'Live Cell(s)',
+                 'nestedIngredients': [], 'harvestMethod': '', 'notes': ''},
+                {'name': 'Bifidobacterium longum',
+                 'standardName': 'Bifidobacterium Longum',
+                 'category': 'probiotic',
+                 'quantity': 2500000000, 'unit': 'Live Cell(s)',
+                 'nestedIngredients': [], 'harvestMethod': '', 'notes': ''},
+            ],
+            'inactiveIngredients': [],
+        }
+        pd = enricher._collect_probiotic_data(product)
+        assert pd['clinical_strain_count'] >= 1, (
+            f"At least Lactobacillus gasseri or Bifidobacterium longum should "
+            f"match clinically_relevant_strains.json; got "
+            f"clinical_strain_count={pd['clinical_strain_count']}"
+        )
+
+
+class TestNarrowExceptionEmptyEnrichmentSchema:
+    """Phase 0 failing test for HIGH #1: the two narrow exception handlers
+    at enrich_supplements_v3.py lines 10837-10849 do NOT apply
+    EMPTY_ENRICHMENT_SCHEMA before returning the failed product. This causes
+    partial enrichment leakage — scorer may receive a product with
+    ingredient_quality_data populated but compliance_data empty, producing a
+    score without safety checks. The broad Exception handler at line ~10860
+    does apply the schema; the narrow handlers must too."""
+
+    @pytest.fixture
+    def enricher(self):
+        return SupplementEnricherV3()
+
+    def _make_minimal_valid_product(self):
+        return {
+            'id': 'narrow_exc_test',
+            'product_name': 'Test Product',
+            'fullName': 'Test Product',
+            'bundleName': '',
+            'statements': [],
+            'activeIngredients': [
+                {'name': 'Vitamin C', 'standardName': 'Vitamin C',
+                 'quantity': 500, 'unit': 'mg', 'category': 'vitamin'}
+            ],
+            'inactiveIngredients': [],
+        }
+
+    def test_key_error_midway_applies_empty_schema(self, enricher, monkeypatch):
+        """Force a KeyError inside the enrichment try block. The narrow
+        (KeyError, TypeError) handler must apply EMPTY_ENRICHMENT_SCHEMA so
+        downstream consumers cannot read partial state as if enrichment
+        succeeded. Currently FAILS — handler returns product unchanged."""
+        def _raise_key_error(*args, **kwargs):
+            raise KeyError("simulated mid-enrichment key error")
+        monkeypatch.setattr(enricher, '_validate_export_contract_fields', _raise_key_error)
+
+        product = self._make_minimal_valid_product()
+        result, issues = enricher.enrich_product(product)
+
+        assert result.get('enrichment_status') == 'failed'
+        # After an EMPTY_ENRICHMENT_SCHEMA application, safety-critical sections
+        # must be at their empty-schema defaults.
+        expected_empty = enricher.EMPTY_ENRICHMENT_SCHEMA
+        assert 'contaminant_data' in expected_empty, "EMPTY_ENRICHMENT_SCHEMA must define contaminant_data"
+        assert result.get('contaminant_data') == expected_empty['contaminant_data'], (
+            "After a narrow (KeyError) exception mid-enrichment, contaminant_data "
+            "must be reset to EMPTY_ENRICHMENT_SCHEMA defaults to prevent partial "
+            "state from leaking to the scorer. Current narrow handler at lines "
+            "10837-10843 does not apply the schema — this is the HIGH #1 bug."
+        )
+
+    def test_value_error_midway_applies_empty_schema(self, enricher, monkeypatch):
+        """Same lock for the (ValueError, AttributeError) handler."""
+        def _raise_value_error(*args, **kwargs):
+            raise ValueError("simulated mid-enrichment value error")
+        monkeypatch.setattr(enricher, '_validate_export_contract_fields', _raise_value_error)
+
+        product = self._make_minimal_valid_product()
+        result, issues = enricher.enrich_product(product)
+
+        assert result.get('enrichment_status') == 'failed'
+        expected_empty = enricher.EMPTY_ENRICHMENT_SCHEMA
+        assert result.get('contaminant_data') == expected_empty['contaminant_data'], (
+            "After a narrow (ValueError) exception mid-enrichment, contaminant_data "
+            "must be reset to EMPTY_ENRICHMENT_SCHEMA defaults (HIGH #1 bug)."
+        )
+
+
+class TestCfuEquivalentUnitPrecision:
+    """Phase 0 failing tests for MED #5: CFU_EQUIVALENT_PATTERNS is overly
+    broad. Patterns like \\bprobiotic, \\borganism, \\bbacteria will match
+    unit strings that contain those tokens but are not CFU quantities. A
+    product with quantity=200 and unit='probiotic blend' would be treated as
+    200 CFU. Must reject unit strings that are descriptive, not measurement."""
+
+    @pytest.fixture
+    def enricher(self):
+        return SupplementEnricherV3()
+
+    def test_unit_probiotic_blend_is_not_cfu_equivalent(self, enricher):
+        """'probiotic blend' is a descriptive label, not a CFU unit."""
+        assert enricher._is_cfu_equivalent_unit("probiotic blend") is False, (
+            "Unit 'probiotic blend' must not be treated as CFU-equivalent. "
+            "A 200 mg proprietary blend with this unit would be mis-parsed "
+            "as 200 CFU. Root cause: CFU_EQUIVALENT_PATTERNS includes "
+            r"\bprobiotic(?:s)? which matches any string containing 'probiotic'."
+        )
+
+    def test_unit_bacteria_count_is_not_cfu_equivalent(self, enricher):
+        """'bacteria count' is a label, not a measurement unit."""
+        assert enricher._is_cfu_equivalent_unit("bacteria count") is False
+
+    def test_unit_organism_based_is_not_cfu_equivalent(self, enricher):
+        """'organism-based' is a claim, not a measurement unit."""
+        assert enricher._is_cfu_equivalent_unit("organism-based") is False
+
+    def test_real_cfu_units_still_recognized(self, enricher):
+        """Regression lock: the tightening must NOT break real CFU units."""
+        assert enricher._is_cfu_equivalent_unit("CFU") is True
+        assert enricher._is_cfu_equivalent_unit("cfu(s)") is True
+        assert enricher._is_cfu_equivalent_unit("Live Cell(s)") is True
+        assert enricher._is_cfu_equivalent_unit("Viable Cell(s)") is True
+        assert enricher._is_cfu_equivalent_unit("Colony Forming Units") is True
+        assert enricher._is_cfu_equivalent_unit("active cells") is True
+
+
+class TestProbioticClassificationBoundaryStrict:
+    """Phase 0 failing test for MED #6: working-tree change broadens
+    probiotic classification so that probiotic_name_signal alone (e.g. a
+    product named 'Probiotic Support') can trigger the probiotic branch.
+    Combined with threshold = ceil(active_count * 0.25), boundary products
+    can silently misclassify. Lock the strict boundary."""
+
+    @pytest.fixture
+    def enricher(self):
+        return SupplementEnricherV3()
+
+    def test_nine_ingredients_with_two_probiotics_and_name_signal_not_probiotic(self, enricher):
+        """9-ingredient product with 2 probiotic strains and 'Probiotic'
+        in the product name. ceil(9 * 0.25) = 3 required; 2 is below
+        threshold. Must NOT classify as probiotic."""
+        product = {
+            'id': 'boundary_2_of_9',
+            'product_name': 'Probiotic Support Complex',
+            'fullName': 'Probiotic Support Complex',
+            'bundleName': '',
+            'statements': [],
+            'activeIngredients': [
+                {'name': 'Lactobacillus acidophilus', 'standardName': 'Lactobacillus acidophilus', 'category': 'probiotic'},
+                {'name': 'Bifidobacterium lactis', 'standardName': 'Bifidobacterium lactis', 'category': 'probiotic'},
+                {'name': 'Vitamin C', 'standardName': 'Vitamin C', 'category': 'vitamin'},
+                {'name': 'Vitamin D3', 'standardName': 'Vitamin D', 'category': 'vitamin'},
+                {'name': 'Zinc', 'standardName': 'Zinc', 'category': 'mineral'},
+                {'name': 'Selenium', 'standardName': 'Selenium', 'category': 'mineral'},
+                {'name': 'Magnesium', 'standardName': 'Magnesium', 'category': 'mineral'},
+                {'name': 'Vitamin E', 'standardName': 'Vitamin E', 'category': 'vitamin'},
+                {'name': 'Vitamin A', 'standardName': 'Vitamin A', 'category': 'vitamin'},
+            ],
+            'inactiveIngredients': [],
+        }
+        result = enricher._classify_supplement_type(product)
+        assert result['type'] != 'probiotic', (
+            f"9-ingredient supplement with 2/9 = 22% probiotics (below 25% "
+            f"threshold) and 'Probiotic' in the name must not be classified "
+            f"as 'probiotic'; got '{result['type']}'"
+        )
+
+    def test_nine_ingredients_with_three_probiotics_is_probiotic(self, enricher):
+        """Same shape, 3/9 = 33% — at/above threshold. Must classify as probiotic.
+        Boundary locks the decision at the 25% threshold."""
+        product = {
+            'id': 'boundary_3_of_9',
+            'product_name': 'Probiotic Support Complex',
+            'fullName': 'Probiotic Support Complex',
+            'bundleName': '',
+            'statements': [],
+            'activeIngredients': [
+                {'name': 'Lactobacillus acidophilus', 'standardName': 'Lactobacillus acidophilus', 'category': 'probiotic'},
+                {'name': 'Bifidobacterium lactis', 'standardName': 'Bifidobacterium lactis', 'category': 'probiotic'},
+                {'name': 'Lactobacillus rhamnosus', 'standardName': 'Lactobacillus rhamnosus', 'category': 'probiotic'},
+                {'name': 'Vitamin C', 'standardName': 'Vitamin C', 'category': 'vitamin'},
+                {'name': 'Vitamin D3', 'standardName': 'Vitamin D', 'category': 'vitamin'},
+                {'name': 'Zinc', 'standardName': 'Zinc', 'category': 'mineral'},
+                {'name': 'Selenium', 'standardName': 'Selenium', 'category': 'mineral'},
+                {'name': 'Magnesium', 'standardName': 'Magnesium', 'category': 'mineral'},
+                {'name': 'Vitamin E', 'standardName': 'Vitamin E', 'category': 'vitamin'},
+            ],
+            'inactiveIngredients': [],
+        }
+        result = enricher._classify_supplement_type(product)
+        assert result['type'] == 'probiotic', (
+            f"9-ingredient supplement with 3/9 = 33% probiotics (at threshold) "
+            f"and 'Probiotic' in the name should classify as probiotic; got "
+            f"'{result['type']}'"
+        )

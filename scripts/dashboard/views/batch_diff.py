@@ -4,6 +4,18 @@ import pandas as pd
 import streamlit as st
 
 
+def _safe_columns(spec):
+    try:
+        columns = st.columns(spec)
+        expected = spec if isinstance(spec, int) else len(spec)
+        if isinstance(columns, (list, tuple)) and len(columns) >= expected:
+            return list(columns[:expected])
+    except Exception:
+        pass
+    fallback_count = spec if isinstance(spec, int) else len(spec)
+    return [st for _ in range(fallback_count)]
+
+
 def render_batch_diff(data):
     if len(data.batch_history) < 2:
         st.info("At least two batch logs are required for comparison.")
@@ -11,7 +23,7 @@ def render_batch_diff(data):
 
     labels = [entry["name"] for entry in data.batch_history]
     history_map = {entry["name"]: entry for entry in data.batch_history}
-    col1, col2 = st.columns(2)
+    col1, col2 = _safe_columns(2)
     with col1:
         base_name = st.selectbox("Batch A", labels, index=1)
     with col2:

@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from math import ceil
 from typing import Any
 
 
@@ -107,8 +108,6 @@ def infer_supplement_type(product: dict[str, Any]) -> dict[str, Any]:
             continue
         if role in {"recognized_non_scorable", "inactive_non_scorable"}:
             continue
-        if bool(row.get("is_proprietary_blend")):
-            continue
         if bool(row.get("is_blend_header")) or bool(row.get("blend_total_weight_only")):
             continue
 
@@ -140,12 +139,15 @@ def infer_supplement_type(product: dict[str, Any]) -> dict[str, Any]:
         + category_counts.get("bacteria", 0)
         + probiotic_name_count
     )
+    probiotic_evidence = probiotic_flag or probiotic_total > 0 or probiotic_name_signal
+    probiotic_majority_threshold = max(1, ceil(active_count * 0.5)) if active_count else 1
+    probiotic_signal_threshold = max(1, ceil(active_count * 0.25)) if active_count else 1
 
     supplement_type = "unknown"
-    if probiotic_flag and active_count > 0 and (
+    if probiotic_evidence and active_count > 0 and (
         active_count == 1
-        or probiotic_total >= max(1, active_count * 0.5)
-        or (probiotic_name_signal and probiotic_total >= 1)
+        or probiotic_total >= probiotic_majority_threshold
+        or ((probiotic_name_signal or probiotic_flag) and probiotic_total >= probiotic_signal_threshold)
     ):
         supplement_type = "probiotic"
     elif active_count == 1:

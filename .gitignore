@@ -14,6 +14,14 @@ scripts/final_db_output/
 scripts/.cache/
 tmp/
 
+# Local smoke-test artifacts (ephemeral session output)
+scripts/smoke/
+scripts/smoke_enriched/
+scripts/smoke_scored/
+
+# Accidentally-captured browser profile state (no actual screenshots)
+docs/plans/dashboard-screenshots/
+
 # Logs (regenerated each run)
 scripts/logs/
 

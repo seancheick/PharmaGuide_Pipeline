@@ -10,7 +10,7 @@ if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
 from scripts.dashboard.config import get_config
-from scripts.dashboard.data_loader import load_dashboard_data
+from scripts.dashboard.data_loader import filter_product_catalog, load_dashboard_data
 from scripts.dashboard.app_shell import build_initial_shell_state
 from scripts.dashboard.components import inject_dashboard_theme, render_command_center, render_page_frame
 from scripts.dashboard.navigation import (
@@ -75,6 +75,31 @@ st.sidebar.selectbox(
     dataset_options,
     key="dataset_filter"
 )
+
+catalog = data.product_catalog
+score_cap = float(catalog["score"].max()) if not catalog.empty else 100.0
+section_a_cap = float(catalog["section_a_max"].fillna(catalog["section_a_score"]).max()) if not catalog.empty else 25.0
+
+st.sidebar.divider()
+st.sidebar.caption("Audit filters")
+
+brand_options = sorted([value for value in catalog.get("brand_name", []).dropna().unique().tolist()]) if not catalog.empty else []
+supplement_type_options = sorted([value for value in catalog.get("supplement_type", []).dropna().unique().tolist()]) if not catalog.empty else []
+primary_category_options = sorted([value for value in catalog.get("primary_category", []).dropna().unique().tolist()]) if not catalog.empty else []
+verdict_options = [value for value in ["SAFE", "CAUTION", "POOR", "UNSAFE", "BLOCKED", "NOT_SCORED"] if not catalog.empty and value in set(catalog["verdict"].dropna().tolist())]
+
+st.sidebar.multiselect("Brand", brand_options, key="brand_filter")
+st.sidebar.multiselect("Supplement Type", supplement_type_options, key="supplement_type_filter")
+st.sidebar.multiselect("Primary Category", primary_category_options, key="primary_category_filter")
+st.sidebar.multiselect("Verdict", verdict_options, key="verdict_filter")
+st.sidebar.slider("Minimum Score", 0.0, max(score_cap, 100.0), 0.0, 1.0, key="min_score_filter")
+st.sidebar.slider("Minimum Section A", 0.0, max(section_a_cap, 25.0), 0.0, 0.5, key="min_section_a_filter")
+st.sidebar.checkbox("Section A ceiling only", key="only_section_a_ceiling")
+st.sidebar.checkbox("Only harmful findings", key="only_harmful_flags")
+st.sidebar.checkbox("Only omega-3 products", key="only_omega_bonus_candidates")
+st.sidebar.checkbox("Only verified Non-GMO", key="only_non_gmo_verified")
+filtered_catalog = filter_product_catalog(data)
+st.sidebar.caption(f"Filtered products: {len(filtered_catalog)} / {len(catalog)}")
 
 # Refresh Button
 if st.sidebar.button("🔄 Force Data Refresh"):

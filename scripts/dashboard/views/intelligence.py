@@ -6,8 +6,30 @@ import streamlit as st
 from scripts.dashboard.components.data_table import data_table
 
 
+def _safe_columns(spec):
+    try:
+        columns = st.columns(spec)
+        expected = spec if isinstance(spec, int) else len(spec)
+        if isinstance(columns, (list, tuple)) and len(columns) >= expected:
+            return list(columns[:expected])
+    except Exception:
+        pass
+    fallback_count = spec if isinstance(spec, int) else len(spec)
+    return [st for _ in range(fallback_count)]
+
+
+def _safe_tabs(labels):
+    try:
+        tabs = st.tabs(labels)
+        if isinstance(tabs, (list, tuple)) and len(tabs) >= len(labels):
+            return list(tabs[: len(labels)])
+    except Exception:
+        pass
+    return [st for _ in labels]
+
+
 def render_intelligence(data):
-    tab_market, tab_ingredients, tab_brands, tab_scoring = st.tabs(
+    tab_market, tab_ingredients, tab_brands, tab_scoring = _safe_tabs(
         ["Market Intelligence", "Ingredient Intelligence", "Brand Leaderboard", "Scoring Sensitivity"]
     )
     with tab_market:
@@ -70,6 +92,7 @@ def _render_market_intel(data):
 def _render_ingredient_intel(data):
     analytics = data.blob_analytics
     query = st.text_input("Ingredient search", placeholder="Search ingredient name")
+    query = query.strip() if isinstance(query, str) else ""
     if query:
         query_lower = query.lower().strip()
         matches = []
@@ -89,7 +112,7 @@ def _render_ingredient_intel(data):
         else:
             st.info(f"No ingredient matches found for '{query}'.")
 
-    left, right = st.columns(2)
+    left, right = _safe_columns(2)
     with left:
         st.write("### Most Used Ingredients")
         usage_df = pd.DataFrame(analytics.get("ingredient_usage", []))
@@ -153,7 +176,7 @@ def _render_brand_leaderboard(data):
 
 def _render_scoring_sensitivity(data):
     analytics = data.blob_analytics
-    left, right = st.columns(2)
+    left, right = _safe_columns(2)
     with left:
         st.write("### Most Common Bonuses")
         bonus_df = pd.DataFrame(analytics.get("bonus_frequency", []))

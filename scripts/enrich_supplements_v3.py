@@ -8502,7 +8502,11 @@ class SupplementEnricherV3:
                 cfu_text = harvest + ' ' + notes
                 cfu_data = self._extract_cfu(cfu_text, ingredient=ingredient)
 
-                print(f"DEBUG: For ingredient {ingredient.get('name', '')}, cfu_data = {cfu_data}")  # DEBUG
+                self.logger.debug(
+                    "CFU extraction for ingredient %s -> %s",
+                    ingredient.get('name', ''),
+                    cfu_data,
+                )
 
                 probiotic_blends.append({
                     "name": ingredient.get('name', ''),
@@ -8625,7 +8629,11 @@ class SupplementEnricherV3:
                 total_billion_count = product_billion
                 guarantee_type = product_level_cfu.get('guarantee_type') or guarantee_type
 
-        print(f"DEBUG: Returning probiotic_data with has_cfu={has_cfu}, probiotic_blends[0] cfu_data={probiotic_blends[0]['cfu_data'] if probiotic_blends else 'None'}")  # DEBUG
+        self.logger.debug(
+            "Returning probiotic_data with has_cfu=%s, first_blend_cfu_data=%s",
+            has_cfu,
+            probiotic_blends[0]['cfu_data'] if probiotic_blends else None,
+        )
 
         return {
             "is_probiotic": True,  # Top-level flag for quick filtering
@@ -8646,34 +8654,37 @@ class SupplementEnricherV3:
             "survivability_reason": survivability_reason
         }
 
-    # P1.1: CFU-equivalent units - comprehensive patterns for case-insensitive matching
+    # CFU-equivalent unit patterns — must match the ENTIRE unit string
+    # (re.fullmatch). Earlier version used re.search with generic patterns
+    # like \bprobiotic, \bbacteria, \borganism and \bcell(s)?, which caused
+    # label strings such as "probiotic blend", "bacteria count", or
+    # "organism-based" to be misread as CFU measurement units. Patterns here
+    # are tight: they only describe actual measurement units used on
+    # supplement labels. \s* allows both spaced ("live cell(s)") and compact
+    # ("livecell(s)") forms.
     CFU_EQUIVALENT_PATTERNS = [
-        r'\bviable\s+cell(?:s)?(?:\([^)]*\))?',  # viable cell(s), viable cells, viable cell(s)
-        r'\blive\s+cell(?:s)?(?:\([^)]*\))?',    # live cell(s), live cells, live cell(s)
-        r'\bactive\s+cell(?:s)?(?:\([^)]*\))?',  # active cell(s), active cells, active cell(s)
-        r'\bcell(?:s)?(?:\([^)]*\))?',           # cell(s), cells, cell(s)
-        r'\bcfu(?:s)?(?:\([^)]*\))?',            # cfu(s), cfus, cfu(s)
-        r'\bcolony\s+forming\s+unit(?:s)?(?:\([^)]*\))?',  # colony forming unit(s)
-        r'\borganism(?:s)?(?:\([^)]*\))?',        # organism(s), organisms, organism(s)
-        r'\bbacteria(?:\([^)]*\))?',              # bacteria, bacteria(s)
-        r'\bprobiotic(?:s)?(?:\([^)]*\))?',       # probiotic(s), probiotics, probiotic(s)
+        r'viable\s*cell(?:s)?(?:\([^)]*\))?',
+        r'live\s*cell(?:s)?(?:\([^)]*\))?',
+        r'active\s*cell(?:s)?(?:\([^)]*\))?',
+        r'cfu(?:s)?(?:\([^)]*\))?',
+        r'colony\s*forming\s*unit(?:s)?(?:\([^)]*\))?',
     ]
 
     def _is_cfu_equivalent_unit(self, unit: str) -> bool:
         """
-        Check if a unit string represents CFU-equivalent measurement using regex patterns.
-
-        Handles case-insensitive matching and pluralization patterns like (s).
+        Check if a unit string represents CFU-equivalent measurement using
+        anchored regex patterns. Full-string match only — descriptive
+        labels that merely contain CFU-related words (e.g. "probiotic blend")
+        must NOT match.
         """
         if not unit:
             return False
 
         unit_lower = unit.lower().strip()
 
-        # Check against comprehensive regex patterns
         import re
         for pattern in self.CFU_EQUIVALENT_PATTERNS:
-            if re.search(pattern, unit_lower, re.IGNORECASE):
+            if re.fullmatch(pattern, unit_lower, re.IGNORECASE):
                 return True
 
         return False
@@ -8691,7 +8702,7 @@ class SupplementEnricherV3:
             "guarantee_type": None  # 'at_manufacture' or 'at_expiration'
         }
 
-        print(f"DEBUG _extract_cfu: text='{text}', ingredient={bool(ingredient)}")  # DEBUG
+        self.logger.debug("Extracting CFU data from text; ingredient_present=%s", bool(ingredient))
         if ingredient:
             quantity = ingredient.get('quantity', 0)
             unit = (ingredient.get('unit', '') or '')
@@ -8702,7 +8713,7 @@ class SupplementEnricherV3:
                     result["cfu_count"] = quantity
                     result["billion_count"] = quantity / 1e9
 
-        print(f"DEBUG _extract_cfu result: {result}")  # DEBUG
+        self.logger.debug("CFU extraction result: %s", result)
 
         # Also check text for CFU mentions
         if text:
@@ -10827,16 +10838,27 @@ class SupplementEnricherV3:
             return enriched, issues
 
         except (KeyError, TypeError) as e:
-            # Data structure issues - log and continue
+            # Data structure issues - log and zero out all enrichment sections
+            # BEFORE returning. Without this, a mid-enrichment KeyError could
+            # leave ingredient_quality_data populated but compliance_data or
+            # contaminant_data missing, causing the scorer to produce scores
+            # without safety checks. Matches the broad Exception handler below.
             self.logger.error(f"Product {product_id}: Data structure error: {e}")
             issues.append(f"Data structure error: {str(e)}")
+            product.update(copy.deepcopy(self.EMPTY_ENRICHMENT_SCHEMA))
+            product["enrichment_version"] = self.VERSION
+            product["enriched_date"] = datetime.now(UTC).strftime('%Y-%m-%dT%H:%M:%SZ')
             product["enrichment_status"] = "failed"
             product["enrichment_error"] = f"Data structure error: {str(e)}"
             return product, issues
         except (ValueError, AttributeError) as e:
-            # Value/attribute issues - log and continue
+            # Value/attribute issues - log and zero out all enrichment sections
+            # BEFORE returning. See note in (KeyError, TypeError) handler above.
             self.logger.error(f"Product {product_id}: Value error: {e}")
             issues.append(f"Value error: {str(e)}")
+            product.update(copy.deepcopy(self.EMPTY_ENRICHMENT_SCHEMA))
+            product["enrichment_version"] = self.VERSION
+            product["enriched_date"] = datetime.now(UTC).strftime('%Y-%m-%dT%H:%M:%SZ')
             product["enrichment_status"] = "failed"
             product["enrichment_error"] = f"Value error: {str(e)}"
             return product, issues

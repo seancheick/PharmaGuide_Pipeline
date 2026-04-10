@@ -213,6 +213,26 @@ def canonical_payload_sha256(label: dict) -> str:
     return hashlib.sha256(serialized.encode("utf-8")).hexdigest()
 
 
+def _current_raw_matches_label(label: dict, existing_state: dict | None) -> bool:
+    """Best-effort fallback when state hash is stale but on-disk canonical raw matches."""
+    if not existing_state:
+        return False
+    current_raw_path = existing_state.get("current_raw_path")
+    if not current_raw_path:
+        return False
+
+    path = Path(current_raw_path)
+    if not path.exists() or not path.is_file():
+        return False
+
+    try:
+        local_label = json.loads(path.read_text(encoding="utf-8"))
+    except Exception:
+        return False
+
+    return canonical_payload_sha256(local_label) == canonical_payload_sha256(label)
+
+
 def route_label_to_form(label: dict, filter_form_code: str | None = None) -> str:
     """Route a normalized DSLD label into a canonical form bucket."""
     physical_state = label.get("physicalState") or {}
@@ -260,6 +280,9 @@ def classify_label_change(
         changed_fields.append("canonical_form")
     if existing_state.get("payload_sha256") != payload_sha256:
         changed_fields.append("payload_sha256")
+
+    if changed_fields == ["payload_sha256"] and _current_raw_matches_label(label, existing_state):
+        return {"status": "unchanged", "payload_sha256": payload_sha256, "changed_fields": []}
 
     if changed_fields:
         return {"status": "changed", "payload_sha256": payload_sha256, "changed_fields": changed_fields}

@@ -10,6 +10,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
+import pandas as pd
 import streamlit as st
 
 
@@ -77,6 +78,7 @@ class DashboardData:
     alert_thresholds: dict[str, Any] = field(default_factory=dict)
     shared_metrics: dict[str, Any] = field(default_factory=dict)
     blob_analytics: dict[str, Any] = field(default_factory=dict)
+    product_catalog: pd.DataFrame = field(default_factory=pd.DataFrame)
 
 
 def _parse_datetime(value: str | None) -> datetime | None:
@@ -432,8 +434,9 @@ def _db_lookup(db_conn: sqlite3.Connection | None) -> dict[str, dict[str, Any]]:
         for row in db_conn.execute("PRAGMA table_info(products_core)").fetchall()
     }
 
-    def select_expr(column: str) -> str:
-        return column if column in columns else f"NULL AS {column}"
+    def select_expr(column: str, alias: str | None = None) -> str:
+        target = alias or column
+        return f"{column} AS {target}" if column in columns else f"NULL AS {target}"
 
     query = f"""
         SELECT
@@ -469,6 +472,115 @@ def _db_lookup(db_conn: sqlite3.Connection | None) -> dict[str, dict[str, Any]]:
         }
         for row in rows
     }
+
+
+def _load_product_catalog(db_conn: sqlite3.Connection | None) -> pd.DataFrame:
+    if db_conn is None:
+        return pd.DataFrame()
+
+    columns = {
+        row["name"]
+        for row in db_conn.execute("PRAGMA table_info(products_core)").fetchall()
+    }
+
+    def select_expr(column: str, alias: str | None = None) -> str:
+        target = alias or column
+        return f"{column} AS {target}" if column in columns else f"NULL AS {target}"
+
+    query = """
+        SELECT
+            {dsld_id},
+            {product_name},
+            {brand_name},
+            {supplement_type},
+            {primary_category},
+            {verdict},
+            {score_100_equivalent},
+            {score_ingredient_quality},
+            {score_ingredient_quality_max},
+            {mapped_coverage},
+            {is_non_gmo},
+            {contains_omega3},
+            {contains_probiotics},
+            {has_banned_substance},
+            {has_recalled_ingredient},
+            {has_harmful_additives},
+            {has_allergen_risks}
+        FROM products_core
+    """.format(
+        dsld_id=select_expr("dsld_id"),
+        product_name=select_expr("product_name"),
+        brand_name=select_expr("brand_name"),
+        supplement_type=select_expr("supplement_type"),
+        primary_category=select_expr("primary_category"),
+        verdict=select_expr("verdict"),
+        score_100_equivalent=select_expr("score_100_equivalent", "score"),
+        score_ingredient_quality=select_expr("score_ingredient_quality", "section_a_score"),
+        score_ingredient_quality_max=select_expr("score_ingredient_quality_max", "section_a_max"),
+        mapped_coverage=select_expr("mapped_coverage"),
+        is_non_gmo=select_expr("is_non_gmo"),
+        contains_omega3=select_expr("contains_omega3"),
+        contains_probiotics=select_expr("contains_probiotics"),
+        has_banned_substance=select_expr("has_banned_substance"),
+        has_recalled_ingredient=select_expr("has_recalled_ingredient"),
+        has_harmful_additives=select_expr("has_harmful_additives"),
+        has_allergen_risks=select_expr("has_allergen_risks"),
+    )
+    frame = pd.read_sql_query(query, db_conn)
+    if frame.empty:
+        return frame
+    frame["dsld_id"] = frame["dsld_id"].astype(str)
+    return frame
+
+
+def filter_product_catalog(data: DashboardData) -> pd.DataFrame:
+    frame = data.product_catalog.copy()
+    if frame.empty:
+        return frame
+
+    dataset_scope = st.session_state.get("dataset_filter", "All Datasets")
+    if dataset_scope != "All Datasets":
+        frame = frame[
+            frame["brand_name"].fillna("").str.contains(str(dataset_scope), case=False, na=False)
+        ]
+
+    brand_filter = st.session_state.get("brand_filter") or []
+    if brand_filter:
+        frame = frame[frame["brand_name"].isin(brand_filter)]
+
+    supp_type_filter = st.session_state.get("supplement_type_filter") or []
+    if supp_type_filter:
+        frame = frame[frame["supplement_type"].isin(supp_type_filter)]
+
+    primary_category_filter = st.session_state.get("primary_category_filter") or []
+    if primary_category_filter:
+        frame = frame[frame["primary_category"].isin(primary_category_filter)]
+
+    verdict_filter = st.session_state.get("verdict_filter") or []
+    if verdict_filter:
+        frame = frame[frame["verdict"].isin(verdict_filter)]
+
+    min_score = float(st.session_state.get("min_score_filter", 0.0) or 0.0)
+    frame = frame[frame["score"].fillna(0.0) >= min_score]
+
+    min_section_a = float(st.session_state.get("min_section_a_filter", 0.0) or 0.0)
+    frame = frame[frame["section_a_score"].fillna(0.0) >= min_section_a]
+
+    if st.session_state.get("only_section_a_ceiling", False):
+        frame = frame[
+            frame["section_a_score"].fillna(0.0) >= frame["section_a_max"].fillna(0.0)
+        ]
+
+    if st.session_state.get("only_harmful_flags", False):
+        frame = frame[frame["has_harmful_additives"] == 1]
+
+    if st.session_state.get("only_omega_bonus_candidates", False):
+        frame = frame[frame["contains_omega3"] == 1]
+
+    if st.session_state.get("only_non_gmo_verified", False):
+        frame = frame[frame["is_non_gmo"] == 1]
+
+    return frame.reset_index(drop=True)
 
 
 def _compute_blob_analytics(detail_blobs_dir: Path | None, db_conn: sqlite3.Connection | None) -> dict[str, Any]:
@@ -871,5 +983,6 @@ def load_dashboard_data(config: Any) -> DashboardData:
 
     data.shared_metrics = _compute_shared_metrics(data.db_conn, data.export_manifest, data.export_audit, data.integrity_data)
     data.blob_analytics = _compute_blob_analytics(data.detail_blobs_dir, data.db_conn)
+    data.product_catalog = _load_product_catalog(data.db_conn)
 
     return data

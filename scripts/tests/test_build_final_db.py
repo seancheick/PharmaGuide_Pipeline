@@ -25,6 +25,7 @@ from build_final_db import (
     iter_json_products,
     mark_staged_product_matched,
     remote_blob_storage_path,
+    resolve_other_ingredient_reference,
     resolve_export_supplement_type,
     stage_products_by_id,
     validate_export_contract,
@@ -284,14 +285,99 @@ def test_export_prefers_resolved_supplement_type_over_stale_specialty():
             "safety_hits": [],
         }
     ]
-    scored = make_scored(supp_type="probiotic")
+    scored = make_scored()
+    scored["supp_type"] = "probiotic"
 
     assert resolve_export_supplement_type(enriched, scored) == "probiotic"
-
     row = row_as_dict(build_core_row(enriched, scored, "2026-04-09T00:00:00Z"))
     assert row["supplement_type"] == "probiotic"
     assert row["primary_category"] == "probiotic"
     assert row["contains_probiotics"] == 1
+
+
+def test_other_ingredient_reference_prefers_standard_name_over_generic_alias():
+    ref = resolve_other_ingredient_reference("Hypromellose", "Hydroxypropyl Methylcellulose")
+
+    assert ref["standard_name"] == "Hydroxypropyl Methylcellulose"
+    assert ref["category"] == "capsule_shell"
+
+
+def test_non_gmo_project_verified_flows_to_core_row_and_blob_audit():
+    enriched = make_enriched()
+    enriched["labelText"] = {
+        "parsed": {
+            "certifications": ["Non-GMO-Project"],
+            "cleanLabelClaims": ["Non-GMO Project Verified"],
+        }
+    }
+    scored = make_scored()
+    scored["breakdown"]["A"]["A5d"] = 0.5
+
+    row = row_as_dict(build_core_row(enriched, scored, "2026-04-10T12:00:00Z"))
+    blob = build_detail_blob(enriched, scored)
+
+    assert row["is_non_gmo"] == 1
+    assert blob["non_gmo_audit"]["project_verified"] is True
+    assert blob["non_gmo_audit"]["score_eligible"] is True
+    assert blob["formulation_detail"]["claim_non_gmo_verified"] is True
+    assert any(bonus["id"] == "A5d" for bonus in blob["score_bonuses"])
+
+
+def test_generic_non_gmo_claim_does_not_silently_become_verified():
+    enriched = make_enriched()
+    enriched["labelText"] = {
+        "parsed": {
+            "certifications": ["Non-GMO-General"],
+            "cleanLabelClaims": ["Non-GMO"],
+        }
+    }
+
+    row = row_as_dict(build_core_row(enriched, make_scored(), "2026-04-10T12:00:00Z"))
+    blob = build_detail_blob(enriched, make_scored())
+
+    assert row["is_non_gmo"] == 0
+    assert blob["non_gmo_audit"]["claim_present"] is True
+    assert blob["non_gmo_audit"]["project_verified"] is False
+    assert blob["non_gmo_audit"]["reason"] == "generic_claim_only"
+
+
+def test_omega3_export_flags_follow_canonical_epa_dha_signals():
+    enriched = make_enriched()
+    enriched["ingredient_quality_data"]["ingredients"] = [
+        {
+            "raw_source_text": "Eicosapentaenoic Acid",
+            "name": "Eicosapentaenoic Acid",
+            "standard_name": "EPA (Eicosapentaenoic Acid)",
+            "canonical_id": "epa",
+            "category": "fatty_acids",
+            "mapped": True,
+        },
+        {
+            "raw_source_text": "Docosahexaenoic Acid",
+            "name": "Docosahexaenoic Acid",
+            "standard_name": "DHA (Docosahexaenoic Acid)",
+            "canonical_id": "dha",
+            "category": "fatty_acids",
+            "mapped": True,
+        },
+    ]
+    scored = make_scored()
+    scored["breakdown"]["A"]["omega3_dose_bonus"] = 1.5
+    scored["breakdown"]["A"]["omega3_breakdown"] = {
+        "applicable": True,
+        "omega3_dose_bonus": 1.5,
+        "dose_band": "aha_cvd",
+        "per_day_mid_mg": 1000.0,
+    }
+
+    row = row_as_dict(build_core_row(enriched, scored, "2026-04-10T12:00:00Z"))
+    blob = build_detail_blob(enriched, scored)
+
+    assert row["primary_category"] == "omega-3"
+    assert row["contains_omega3"] == 1
+    assert blob["omega3_audit"]["contains_omega3"] is True
+    assert blob["omega3_audit"]["bonus_score"] == 1.5
+    assert any(bonus["id"] == "omega3" for bonus in blob["score_bonuses"])
 
 
 def make_enriched():

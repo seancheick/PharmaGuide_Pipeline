@@ -589,6 +589,7 @@ class BatchProcessor:
     def process_all_files(self, files: List[Path], resume: bool = False) -> Dict[str, Any]:
         """Process all files in batches"""
         start_time = time.time()
+        logger.info("Preparing processing state for %d files", len(files))
 
         # Load or create state
         state = None
@@ -611,7 +612,13 @@ class BatchProcessor:
                     state = None
                 # A7: Validate file manifest hasn't changed (now includes size+mtime)
                 elif state.file_manifest_checksum:
+                    logger.info("Validating file manifest fingerprint for resume safety...")
+                    manifest_check_start = time.time()
                     current_manifest = self._get_file_manifest_checksum(files)
+                    logger.info(
+                        "Resume file manifest fingerprint completed in %.2fs",
+                        time.time() - manifest_check_start,
+                    )
                     if state.file_manifest_checksum != current_manifest:
                         logger.warning(
                             "File manifest changed since last run (files added/removed/modified). "
@@ -622,7 +629,13 @@ class BatchProcessor:
                         logger.info("File manifest validated - safe to resume")
 
         if not state:
+            logger.info("Building file manifest fingerprint for fresh run...")
+            manifest_build_start = time.time()
             state = self.create_initial_state(files)
+            logger.info(
+                "Initial processing state ready in %.2fs",
+                time.time() - manifest_build_start,
+            )
 
         # FIX 1+2: Skip already-processed files on resume
         processed_set = set(state.processed_file_paths or [])
@@ -1002,18 +1015,38 @@ class BatchProcessor:
         if result.validation_errors:
             self._write_validation_quarantine(result)
 
-        # Dedup check: skip products with dsld_ids we've already seen
+        # Dedup check: skip products with dsld_ids we've already seen.
+        # Empty-string or None dsld_id is treated as a hard validation error —
+        # without a canonical id we cannot dedup safely, and two empty-id
+        # records would otherwise both slip through.
         if result.data:
-            dsld_id = str(result.data.get('id', result.data.get('dsld_id', '')))
-            if dsld_id and dsld_id in self.seen_dsld_ids:
+            raw_id = result.data.get('id')
+            if raw_id is None or (isinstance(raw_id, str) and raw_id.strip() == ''):
+                raw_id = result.data.get('dsld_id')
+            dsld_id = (
+                str(raw_id).strip()
+                if raw_id is not None and (not isinstance(raw_id, str) or raw_id.strip() != '')
+                else ''
+            )
+
+            if not dsld_id:
+                logger.error(
+                    "Missing/empty dsld_id in %s — rejecting (dedup requires a canonical id)",
+                    result.file_path,
+                )
+                errors.append(
+                    f"{result.file_path}: missing or empty dsld_id (dedup requires canonical id)"
+                )
+                return
+
+            if dsld_id in self.seen_dsld_ids:
                 first_file = self.seen_dsld_ids[dsld_id]
                 logger.warning(
                     "Duplicate dsld_id %s from %s (first seen in %s) — skipping duplicate",
                     dsld_id, result.file_path, first_file,
                 )
                 return
-            if dsld_id:
-                self.seen_dsld_ids[dsld_id] = str(result.file_path)
+            self.seen_dsld_ids[dsld_id] = str(result.file_path)
 
         # Categorize by status
         if result.status == STATUS_SUCCESS:

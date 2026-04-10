@@ -218,6 +218,28 @@ python3 scripts/sync_to_supabase.py \
   /Users/seancheick/Documents/DataSetDsld/builds/release_output_2026-03-30T18-30-00
 ```
 
+So the flow is:
+
+python3 scripts/build_all_final_dbs.py ...
+python3 scripts/assemble_final_db_release.py ...
+python3 scripts/sync_to_supabase.py ...
+Or in one integrated step for build + assemble:
+
+python3 scripts/build_all_final_dbs.py \
+ --scan-dir scripts/products \
+ --per-pair-output-root /path/to/pair_outputs \
+ --assemble-release-output /path/to/release_output
+Then:
+
+python3 scripts/sync_to_supabase.py /path/to/release_output --dry-run
+python3 scripts/sync_to_supabase.py /path/to/release_output --cleanup
+Why:
+
+the app should read one coherent release
+Supabase sync rotates one active manifest/version at a time
+unchanged pair outputs are reused during assembly
+unchanged hashed detail blobs are skipped during upload when already present remotely
+
 ## 8. DSLD API tooling
 
 ### What it does
@@ -231,8 +253,73 @@ Fetches supplement labels from the NIH DSLD API and writes them into the same ra
 - Live probe passed: **100% parity** between API output and one known manual download (`13418`)
 - `sync-brand --brand "Olly"` fetched and wrote `186/186` labels successfully
 - API test coverage currently passing:
-  - `18` tests in `scripts/tests/test_dsld_api_client.py`
-  - `20` tests in `scripts/tests/test_dsld_api_sync.py`
+- `18` tests in `scripts/tests/test_dsld_api_client.py`
+- `20` tests in `scripts/tests/test_dsld_api_sync.py`
+
+## 9. Valyu evidence watchtower
+
+### What it is
+
+A separate, review-only evidence discovery tool for curator workflows.
+
+It helps scan:
+
+- `backed_clinical_studies.json`
+- `ingredient_quality_map.json` gaps
+- `harmful_additives.json`
+- `banned_recalled_ingredients.json`
+
+It writes report files only. It does **not** change production source files and does **not** affect scoring directly.
+
+### What it is not
+
+- not part of `clean -> enrich -> score`
+- not a canonical evidence writer
+- not allowed to auto-apply updates
+
+### Commands
+
+Run one domain:
+
+```bash
+.venv/bin/python scripts/api_audit/valyu_evidence_discovery.py clinical-refresh
+.venv/bin/python scripts/api_audit/valyu_evidence_discovery.py iqm-gap-scan
+.venv/bin/python scripts/api_audit/valyu_evidence_discovery.py harmful-refresh
+.venv/bin/python scripts/api_audit/valyu_evidence_discovery.py recall-refresh
+```
+
+Run all domains:
+
+```bash
+.venv/bin/python scripts/api_audit/valyu_evidence_discovery.py all
+```
+
+Optional target cap:
+
+```bash
+.venv/bin/python scripts/api_audit/valyu_evidence_discovery.py clinical-refresh --limit 10
+```
+
+Optional output dir override:
+
+```bash
+.venv/bin/python scripts/api_audit/valyu_evidence_discovery.py clinical-refresh \
+  --output-dir /tmp/valyu-watchtower
+```
+
+### Outputs
+
+Default report location:
+
+- `scripts/api_audit/reports/valyu/`
+
+Each run writes:
+
+- `*-raw-search-report.json`
+- `*-review-queue.json`
+- `*-summary.md`
+
+Use this tool to find review candidates, then manually promote approved findings into canonical source files through the normal audited workflow.
 
 ### Files
 

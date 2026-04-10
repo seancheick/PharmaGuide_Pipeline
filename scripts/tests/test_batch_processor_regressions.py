@@ -164,3 +164,106 @@ def test_reference_data_memory_estimate_sums_json_payloads(tmp_path):
     assert diagnostics["estimated_total_worker_payload_bytes"] == (
         diagnostics["reference_payload_bytes"] * 3
     )
+
+
+# ---------------------------------------------------------------------------
+# Phase 0 failing test — HIGH #3: dedup key fragility on empty-string id.
+# ---------------------------------------------------------------------------
+
+
+from collections import Counter
+from batch_processor import ProcessingResult
+
+
+def _make_processing_result(product_id, file_name="test.json"):
+    """Helper: build a minimal successful ProcessingResult carrying a cleaned product."""
+    return ProcessingResult(
+        success=True,
+        status="success",
+        data={"id": product_id, "dsld_id": product_id, "product_name": "Test"},
+        file_path=file_name,
+        processing_time=0.01,
+        unmapped_ingredients=[],
+    )
+
+
+def test_dedup_rejects_or_tracks_empty_string_id(tmp_path, monkeypatch):
+    """HIGH #3: if a cleaned record carries id=''/None/missing, the dedup
+    chain at batch_processor.py:1017-1027 computes an empty dsld_id and
+    skips registration. A second record with the same empty id bypasses
+    the duplicate check and both are added to 'cleaned[]' silently. For a
+    medical-grade pipeline, empty/None IDs must either be rejected OR
+    stably tracked — never silently allowed through."""
+    cfg = _make_config(tmp_path)
+    processor = BatchProcessor(cfg)
+    # Ensure verify_output does not reject these synthetic records.
+    monkeypatch.setattr(processor, "verify_output", lambda data, raw=None: (True, {}))
+
+    cleaned, needs_review, incomplete, errors = [], [], [], []
+    batch_unmapped = Counter()
+
+    first = _make_processing_result("", file_name="first.json")
+    second = _make_processing_result("", file_name="second.json")
+
+    processor._categorize_result(first, cleaned, needs_review, incomplete, errors, batch_unmapped)
+    processor._categorize_result(second, cleaned, needs_review, incomplete, errors, batch_unmapped)
+
+    # Correct behavior: either reject empty-id records to errors/quarantine,
+    # or register them under a stable key so the second one is detected as
+    # a duplicate. In either case, 'cleaned' must NOT contain both.
+    assert len(cleaned) <= 1, (
+        f"Two cleaned records with empty id='' both landed in cleaned[]. "
+        f"Root cause: batch_processor dedup uses "
+        f"str(result.data.get('id', result.data.get('dsld_id', ''))); "
+        f"an empty-string fallback evaluates falsy and skips both "
+        f"registration and lookup. cleaned len={len(cleaned)}, "
+        f"errors len={len(errors)}."
+    )
+
+
+def test_dedup_rejects_or_tracks_none_id(tmp_path, monkeypatch):
+    """Same defense for id=None (missing key path)."""
+    cfg = _make_config(tmp_path)
+    processor = BatchProcessor(cfg)
+    monkeypatch.setattr(processor, "verify_output", lambda data, raw=None: (True, {}))
+
+    cleaned, needs_review, incomplete, errors = [], [], [], []
+    batch_unmapped = Counter()
+
+    # Build results with id=None explicitly (also no dsld_id present)
+    first = ProcessingResult(
+        success=True, status="success",
+        data={"id": None, "product_name": "No-id product A"},
+        file_path="a.json", processing_time=0.01,
+    )
+    second = ProcessingResult(
+        success=True, status="success",
+        data={"id": None, "product_name": "No-id product B"},
+        file_path="b.json", processing_time=0.01,
+    )
+
+    processor._categorize_result(first, cleaned, needs_review, incomplete, errors, batch_unmapped)
+    processor._categorize_result(second, cleaned, needs_review, incomplete, errors, batch_unmapped)
+
+    assert len(cleaned) <= 1, (
+        "Two records with id=None both landed in cleaned[]. Dedup "
+        "must reject or canonicalize missing IDs."
+    )
+
+
+def test_dedup_still_blocks_real_duplicate_ids(tmp_path, monkeypatch):
+    """Regression lock: the fix must not break the existing real-id dedup."""
+    cfg = _make_config(tmp_path)
+    processor = BatchProcessor(cfg)
+    monkeypatch.setattr(processor, "verify_output", lambda data, raw=None: (True, {}))
+
+    cleaned, needs_review, incomplete, errors = [], [], [], []
+    batch_unmapped = Counter()
+
+    first = _make_processing_result("12345", file_name="first.json")
+    dupe = _make_processing_result("12345", file_name="dupe.json")
+
+    processor._categorize_result(first, cleaned, needs_review, incomplete, errors, batch_unmapped)
+    processor._categorize_result(dupe, cleaned, needs_review, incomplete, errors, batch_unmapped)
+
+    assert len(cleaned) == 1, f"Expected one kept, got {len(cleaned)}"

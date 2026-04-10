@@ -8,6 +8,29 @@ from scripts.dashboard.components.product_header import product_header
 from scripts.dashboard.components.score_breakdown import score_breakdown
 from scripts.dashboard.components.score_trace import score_trace
 
+
+def _safe_columns(spec):
+    try:
+        columns = st.columns(spec)
+        expected = spec if isinstance(spec, int) else len(spec)
+        if isinstance(columns, (list, tuple)) and len(columns) >= expected:
+            return list(columns[:expected])
+    except Exception:
+        pass
+    fallback_count = spec if isinstance(spec, int) else len(spec)
+    return [st for _ in range(fallback_count)]
+
+
+def _safe_tabs(labels):
+    try:
+        tabs = st.tabs(labels)
+        if isinstance(tabs, (list, tuple)) and len(tabs) >= len(labels):
+            return list(tabs[: len(labels)])
+    except Exception:
+        pass
+    return [st for _ in labels]
+
+
 def render_inspector(data):
     """
     Renders the Product Inspector view with search and results table.
@@ -24,6 +47,7 @@ def render_inspector(data):
         placeholder="Enter search term...",
         key="inspector_search_input"
     )
+    search_query = search_query.strip() if isinstance(search_query, str) else ""
     
     if not search_query:
         st.info("Enter a search term above to begin.")
@@ -124,7 +148,7 @@ def render_drill_down(dsld_id, data):
 
     # 4. Pros & Cons (Bonuses & Penalties)
     st.write("### ✅ Pros & ❌ Cons")
-    col_pros, col_cons = st.columns(2)
+    col_pros, col_cons = _safe_columns(2)
     
     if blob:
         bonuses = blob.get("score_bonuses", [])
@@ -149,7 +173,7 @@ def render_drill_down(dsld_id, data):
 
     # 5. Ingredients
     st.write("### 🧪 Ingredients")
-    tab_active, tab_inactive = st.tabs(["Active Ingredients", "Inactive Ingredients"])
+    tab_active, tab_inactive = _safe_tabs(["Active Ingredients", "Inactive Ingredients"])
     
     if blob:
         with tab_active:
@@ -188,6 +212,27 @@ def render_drill_down(dsld_id, data):
         st.caption("No warnings for this product.")
 
     # 7. Score Trace
+    with st.expander("🧭 Audit Evidence"):
+        if blob:
+            audit = blob.get("audit", {})
+            col_left, col_right = _safe_columns(2)
+            with col_left:
+                st.write("**Supplement Type Audit**")
+                if audit.get("supplement_type"):
+                    st.dataframe(pd.DataFrame([audit["supplement_type"]]), use_container_width=True, hide_index=True)
+                st.write("**Non-GMO Audit**")
+                if blob.get("non_gmo_audit"):
+                    st.dataframe(pd.DataFrame([blob["non_gmo_audit"]]), use_container_width=True, hide_index=True)
+            with col_right:
+                st.write("**Omega-3 Audit**")
+                if blob.get("omega3_audit"):
+                    st.dataframe(pd.DataFrame([blob["omega3_audit"]]), use_container_width=True, hide_index=True)
+                st.write("**Proprietary Blend Audit**")
+                if blob.get("proprietary_blend_audit"):
+                    st.dataframe(pd.DataFrame([blob["proprietary_blend_audit"]]), use_container_width=True, hide_index=True)
+        else:
+            st.caption("Audit evidence unavailable without detail blob.")
+
     with st.expander("🔍 Detailed Score Trace"):
         if blob:
             score_trace(

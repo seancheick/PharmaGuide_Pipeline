@@ -235,6 +235,34 @@ def test_classify_label_change_new_changed_and_unchanged():
     assert changed_result["status"] == "changed"
 
 
+def test_classify_label_change_treats_stale_state_hash_as_unchanged_when_current_raw_matches(tmp_path):
+    from dsld_api_sync import classify_label_change
+
+    label = {
+        "id": 13418,
+        "productVersionCode": "v1",
+        "offMarket": False,
+        "fullName": "Product",
+        "ingredientRows": [],
+    }
+    current_raw_path = tmp_path / "13418.json"
+    current_raw_path.write_text(json.dumps(label, separators=(",", ":")), encoding="utf-8")
+
+    existing_state = {
+        "id": 13418,
+        "product_version_code": "v1",
+        "off_market": False,
+        "canonical_form": "gummies",
+        "payload_sha256": "stale-state-hash",
+        "current_raw_path": str(current_raw_path),
+    }
+
+    result = classify_label_change(label, existing_state=existing_state, canonical_form="gummies")
+
+    assert result["status"] == "unchanged"
+    assert result["changed_fields"] == []
+
+
 def test_build_parser_supports_sync_filter_and_sync_delta():
     from dsld_api_sync import build_parser
 

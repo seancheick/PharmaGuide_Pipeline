@@ -29,7 +29,7 @@
     "allow_non_probiotic_probiotic_bonus_with_strict_gate": true,
     "_allow_non_probiotic_probiotic_bonus_with_strict_gate_note": "When true, non-probiotic products can receive probiotic bonus only if strict evidence gates pass.",
     "shadow_mode": true,
-    "enable_non_gmo_bonus": false,
+    "enable_non_gmo_bonus": true,
     "enable_hypoallergenic_bonus": false,
     "enable_d1_middle_tier": false
   },

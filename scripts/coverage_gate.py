@@ -1055,10 +1055,17 @@ if __name__ == "__main__":
     input_dir = Path(sys.argv[1])
     output_dir = Path(sys.argv[2]) if len(sys.argv) > 2 else input_dir / "reports"
 
-    # Load enriched products
+    # Load enriched products. A single corrupt file must not kill the gate —
+    # match the min_success_rate pattern used by clean_dsld_data.py. Default
+    # threshold: the load success rate must be >= MIN_LOAD_SUCCESS_RATE of the
+    # discovered files. Individual failures are logged and surfaced but do
+    # not hard-exit unless the fraction exceeds the threshold.
+    MIN_LOAD_SUCCESS_RATE = 0.95
+
+    discovered_files = list(input_dir.glob("*.json"))
     products = []
     skipped_files = []
-    for json_file in input_dir.glob("*.json"):
+    for json_file in discovered_files:
         try:
             with open(json_file, 'r') as f:
                 data = json.load(f)
@@ -1070,9 +1077,28 @@ if __name__ == "__main__":
             logger.error(f"Failed to load {json_file}: {e}")
             skipped_files.append(str(json_file))
 
+    total_files = len(discovered_files)
     if skipped_files:
-        print(f"ERROR: {len(skipped_files)} file(s) failed to load: {skipped_files}", file=sys.stderr)
-        sys.exit(1)
+        load_success_rate = (
+            (total_files - len(skipped_files)) / total_files if total_files else 0.0
+        )
+        print(
+            f"WARNING: {len(skipped_files)}/{total_files} file(s) failed to load: "
+            f"{skipped_files[:5]}{'...' if len(skipped_files) > 5 else ''}",
+            file=sys.stderr,
+        )
+        if load_success_rate < MIN_LOAD_SUCCESS_RATE:
+            print(
+                f"ERROR: load success rate {load_success_rate:.1%} below "
+                f"threshold {MIN_LOAD_SUCCESS_RATE:.0%} — aborting.",
+                file=sys.stderr,
+            )
+            sys.exit(1)
+        print(
+            f"Proceeding with {len(products)} valid product(s); "
+            f"load success rate {load_success_rate:.1%} ≥ {MIN_LOAD_SUCCESS_RATE:.0%}",
+            file=sys.stderr,
+        )
 
     if not products:
         print(f"No products found in {input_dir}")

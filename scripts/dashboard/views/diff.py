@@ -9,6 +9,28 @@ import streamlit as st
 from scripts.dashboard.components.data_table import data_table
 
 
+def _safe_columns(spec):
+    try:
+        columns = st.columns(spec)
+        expected = spec if isinstance(spec, int) else len(spec)
+        if isinstance(columns, (list, tuple)) and len(columns) >= expected:
+            return list(columns[:expected])
+    except Exception:
+        pass
+    fallback_count = spec if isinstance(spec, int) else len(spec)
+    return [st for _ in range(fallback_count)]
+
+
+def _safe_tabs(labels):
+    try:
+        tabs = st.tabs(labels)
+        if isinstance(tabs, (list, tuple)) and len(tabs) >= len(labels):
+            return list(tabs[: len(labels)])
+    except Exception:
+        pass
+    return [st for _ in labels]
+
+
 def render_diff(data):
     history = data.build_history
     if not history:
@@ -17,7 +39,7 @@ def render_diff(data):
 
     labels = [entry["label"] for entry in history]
     label_to_entry = {entry["label"]: entry for entry in history}
-    col1, col2, col3 = st.columns([1, 1, 1])
+    col1, col2, col3 = _safe_columns([1, 1, 1])
     with col1:
         base_label = st.selectbox("Release A", labels, index=min(1, len(labels) - 1))
     with col2:
@@ -75,7 +97,7 @@ def render_release_comparison(path_a: Path | None, path_b: Path | None, delta_on
     shifts = shifts.sort_values("delta", key=lambda series: series.abs(), ascending=False)
     verdict_changes = shifts[shifts["verdict_A"] != shifts["verdict_B"]]
 
-    tab1, tab2 = st.tabs(["Score Shifts", "Verdict Changes"])
+    tab1, tab2 = _safe_tabs(["Score Shifts", "Verdict Changes"])
     with tab1:
         data_table(
             shifts[

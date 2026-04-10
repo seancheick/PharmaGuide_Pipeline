@@ -19,7 +19,13 @@ def render_command_center(data) -> None:
         ]
     )
 
-    left, right = st.columns([1.4, 1])
+    try:
+        columns = st.columns([1.4, 1])
+        if not isinstance(columns, (list, tuple)) or len(columns) < 2:
+            raise ValueError("columns unavailable")
+        left, right = columns[0], columns[1]
+    except Exception:
+        left, right = st, st
     with left:
         st.markdown("#### Timeline Split")
         timeline_rows = pd.DataFrame(
