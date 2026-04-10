@@ -372,7 +372,7 @@ class SupplementScorer:
         if has_unmapped_inactive:
             flags.append("UNMAPPED_INACTIVE_INGREDIENT")
 
-        if self._feature_on("require_full_mapping", default=False) and mapped_coverage < 1.0:
+        if self._feature_on("require_full_mapping", default=True) and mapped_coverage < 1.0:
             flags.append("UNMAPPED_ACTIVE_INGREDIENT")
             return {
                 "stop": True,
@@ -586,6 +586,20 @@ class SupplementScorer:
         return clamp(0.0, max_points, (avg_raw / range_max) * max_points)
 
     def _compute_premium_forms_bonus(self, product: Dict[str, Any]) -> float:
+        a2_cfg = (
+            self.config.get("section_A_ingredient_quality", {})
+            .get("A2_premium_forms", {})
+            or {}
+        )
+        threshold_score = as_float(a2_cfg.get("threshold_score"), 14.0) or 14.0
+        points_per_form = as_float(
+            a2_cfg.get("points_per_additional_premium_form"), 0.5
+        )
+        if points_per_form is None:
+            points_per_form = 0.5
+        a2_max = as_float(a2_cfg.get("max"), 3.0) or 3.0
+        skip_first = bool(a2_cfg.get("skip_first_premium_form", True))
+
         premium_keys = set()
         for ing in self._get_active_ingredients(product):
             # Keep A2 aligned with A1/A6 dose-anchored separation:
@@ -599,26 +613,48 @@ class SupplementScorer:
             score = as_float(ing.get("score"), None)
             if score is None:
                 continue
-            if score >= 14:
+            if score >= threshold_score:
                 key = canon_key(ing.get("canonical_id") or ing.get("standard_name") or ing.get("name"))
                 if key:
                     premium_keys.add(key)
 
         count_premium = len(premium_keys)
-        return clamp(0.0, 3.0, 0.5 * max(0, count_premium - 1))
+        effective = max(0, count_premium - 1) if skip_first else count_premium
+        return clamp(0.0, a2_max, points_per_form * effective)
 
     def _compute_delivery_score(self, product: Dict[str, Any]) -> float:
         tier = product.get("delivery_tier")
         if tier is None:
             tier = product.get("delivery_data", {}).get("highest_tier")
         tier_int = int(as_float(tier, 0) or 0)
-        return {1: 3.0, 2: 2.0, 3: 1.0}.get(tier_int, 0.0)
+        a3_cfg = (
+            self.config.get("section_A_ingredient_quality", {})
+            .get("A3_delivery_system", {})
+            or {}
+        )
+        tier_points = a3_cfg.get("tier_points") or {}
+        # Config stores tier_points with string keys ("1", "2", "3")
+        pts = as_float(
+            tier_points.get(str(tier_int), tier_points.get(tier_int)),
+            None,
+        )
+        if pts is None:
+            # Fallback to legacy default if config has no tier_points entry
+            pts = {1: 3.0, 2: 2.0, 3: 1.0}.get(tier_int, 0.0)
+        a3_max = as_float(a3_cfg.get("max"), 3.0) or 3.0
+        return clamp(0.0, a3_max, float(pts))
 
     def _compute_absorption_bonus(self, product: Dict[str, Any]) -> float:
+        a4_cfg = (
+            self.config.get("section_A_ingredient_quality", {})
+            .get("A4_absorption_enhancer", {})
+            or {}
+        )
+        points_if_paired = as_float(a4_cfg.get("points_if_paired"), 3.0) or 3.0
         if "absorption_enhancer_paired" in product:
-            return 3.0 if bool(product.get("absorption_enhancer_paired")) else 0.0
+            return float(points_if_paired) if bool(product.get("absorption_enhancer_paired")) else 0.0
         qualifies = bool(product.get("absorption_data", {}).get("qualifies_for_bonus", False))
-        return 3.0 if qualifies else 0.0
+        return float(points_if_paired) if qualifies else 0.0
 
     def _synergy_cluster_qualified(self, product: Dict[str, Any]) -> bool:
         if "synergy_cluster_qualified" in product:
@@ -674,7 +710,7 @@ class SupplementScorer:
         non_gmo_audit = derive_non_gmo_audit(product)
         non_gmo_verified = bool(non_gmo_audit.get("project_verified"))
 
-        a5d = 0.5 if (self._feature_on("enable_non_gmo_bonus", default=False) and non_gmo_verified) else 0.0
+        a5d = 0.5 if (self._feature_on("enable_non_gmo_bonus", default=True) and non_gmo_verified) else 0.0
 
         return {
             "A5a_organic": 1.0 if is_organic else 0.0,
@@ -684,7 +720,13 @@ class SupplementScorer:
         }
 
     def _compute_single_efficiency_bonus(self, product: Dict[str, Any], supp_type: str) -> float:
-        if supp_type not in {"single", "single_nutrient"}:
+        a6_cfg = (
+            self.config.get("section_A_ingredient_quality", {})
+            .get("A6_single_ingredient_efficiency", {})
+            or {}
+        )
+        single_types = set(a6_cfg.get("single_types") or ["single", "single_nutrient"])
+        if supp_type not in single_types:
             return 0.0
 
         candidates = []
@@ -707,12 +749,30 @@ class SupplementScorer:
         if form_score is None:
             return 0.0
 
-        if form_score >= 16.0:
-            return 3.0
-        if form_score >= 14.0:
-            return 2.0
-        if form_score >= 12.0:
-            return 1.0
+        # Tiers come from config — keys are strings like ">=16", ">=14", ">=12".
+        # Parse each "op threshold" key into a (threshold, points) pair and
+        # walk them in descending threshold order.
+        tiers_cfg = a6_cfg.get("tiers") or {">=16": 3.0, ">=14": 2.0, ">=12": 1.0}
+        parsed_tiers: List[Tuple[float, float]] = []
+        for key, pts in tiers_cfg.items():
+            # Accept ">=N", "N", or bare numeric — default to >= semantics.
+            text = str(key).strip()
+            num_text = text.lstrip(">=").strip() if text.startswith(">=") else text
+            try:
+                threshold = float(num_text)
+            except ValueError:
+                continue
+            pts_val = as_float(pts, None)
+            if pts_val is None:
+                continue
+            parsed_tiers.append((threshold, float(pts_val)))
+        parsed_tiers.sort(key=lambda kv: kv[0], reverse=True)
+
+        a6_max = as_float(a6_cfg.get("max"), 3.0) or 3.0
+
+        for threshold, pts in parsed_tiers:
+            if form_score >= threshold:
+                return clamp(0.0, a6_max, pts)
         return 0.0
 
     @staticmethod
@@ -961,8 +1021,22 @@ class SupplementScorer:
                 "reason": "supplement_type_probiotic",
             }
 
-        prebiotic_terms = ["inulin", "fos", "gos"]
-        prebiotic_hits = sum(1 for term in prebiotic_terms if any(term in ing for ing in ingredient_names))
+        # Prebiotic terms are config-driven so the list can be expanded
+        # without code changes. Default fallback covers the three most
+        # common short terms; config should carry the full vocabulary.
+        prebiotic_terms_cfg = pro_cfg.get("prebiotic_terms")
+        if not prebiotic_terms_cfg:
+            prebiotic_terms_cfg = [
+                "inulin", "fos", "gos", "chicory", "acacia",
+                "beta-glucan", "beta glucan", "pea fiber", "lactulose",
+                "fructooligosaccharide", "galactooligosaccharide",
+                "xos", "xylooligosaccharide", "raftiline", "raftilose",
+            ]
+        prebiotic_terms_norm = [norm_text(t) for t in prebiotic_terms_cfg if t]
+        prebiotic_hits = sum(
+            1 for term in prebiotic_terms_norm
+            if term and any(term in ing for ing in ingredient_names)
+        )
         # Enrichment may detect prebiotics from nested blend children that are not
         # present as top-level scorable ingredients.
         if pdata.get("prebiotic_present"):
@@ -1174,6 +1248,62 @@ class SupplementScorer:
         b1_cap = as_float(b1_cfg.get("cap"), 5.0)
         return clamp(0.0, b1_cap, penalty)
 
+    # Fallback tokens used if cert_claim_rules.json is missing or has no
+    # product_scope field. Kept as a safety net only — the authoritative list
+    # is the data file's third_party_programs entries with product_scope="marine".
+    _MARINE_CERTS_FALLBACK: frozenset[str] = frozenset(
+        {"ifos", "friend of the sea", "msc", "goed"}
+    )
+
+    def _get_marine_cert_tokens(self) -> frozenset[str]:
+        """Return a frozenset of normalized token substrings that identify
+        marine-scope certifications. Sourced from cert_claim_rules.json
+        (third_party_programs entries where product_scope=="marine"), falling
+        back to a hardcoded baseline if the data file is missing or unparseable.
+
+        Result is cached on the scorer instance after first call.
+        """
+        cached = getattr(self, "_marine_cert_tokens_cache", None)
+        if cached is not None:
+            return cached
+
+        tokens: set[str] = set()
+        try:
+            import json as _json
+            from pathlib import Path as _Path
+            rules_path = _Path(__file__).parent / "data" / "cert_claim_rules.json"
+            if rules_path.exists():
+                with open(rules_path, "r", encoding="utf-8") as fp:
+                    data = _json.load(fp)
+                programs = (
+                    data.get("rules", {})
+                    .get("third_party_programs", {})
+                )
+                for key, entry in programs.items():
+                    if key.startswith("_"):
+                        continue
+                    if not isinstance(entry, dict):
+                        continue
+                    if norm_text(entry.get("product_scope")) != "marine":
+                        continue
+                    # Collect any string the cert might appear as on a label.
+                    display = norm_text(entry.get("display_name"))
+                    if display:
+                        tokens.add(display)
+                    key_norm = norm_text(key.replace("_", " "))
+                    if key_norm:
+                        tokens.add(key_norm)
+        except Exception as exc:  # pragma: no cover - defensive
+            self.logger.warning(
+                "Failed to load marine cert scope from cert_claim_rules.json: %s", exc
+            )
+
+        if not tokens:
+            tokens = set(self._MARINE_CERTS_FALLBACK)
+
+        self._marine_cert_tokens_cache = frozenset(tokens)
+        return self._marine_cert_tokens_cache
+
     def _compute_allergen_penalty(self, product: Dict[str, Any], b_cfg: Dict[str, Any] = None) -> float:
         if b_cfg is None:
             b_cfg = self.config.get("section_B_safety_purity", {})
@@ -1283,8 +1413,11 @@ class SupplementScorer:
             if text:
                 canonical_programs.append(text)
 
-        # Marine/omega-specific certs: only count when product contains omega-3 / marine ingredients.
-        _MARINE_CERTS = {"ifos", "friend of the sea", "msc", "marine stewardship", "goed"}
+        # Marine/omega-specific certs: only count when product contains omega-3 /
+        # marine ingredients. The list of marine-scope certs is sourced from
+        # cert_claim_rules.json (entries with product_scope=="marine") so adding
+        # a new marine cert to the data file propagates automatically.
+        marine_cert_tokens = self._get_marine_cert_tokens()
         if canonical_programs:
             omega_like = supp_type == "specialty" or any(
                 any(term in norm_text(i.get("name") or i.get("standard_name"))
@@ -1293,21 +1426,29 @@ class SupplementScorer:
             )
             filtered = []
             for p in canonical_programs:
-                if any(mc in p for mc in _MARINE_CERTS) and not omega_like:
+                if any(mc in p for mc in marine_cert_tokens) and not omega_like:
                     continue
                 filtered.append(p)
             canonical_programs = sorted(set(filtered))
 
         b4a = clamp(0.0, b4a_cap, float(len(canonical_programs) * b4a_points_per))
 
+        b4b_cfg = b4_cfg.get("B4b_gmp", {}) if isinstance(b4_cfg, dict) else {}
+        b4b_certified = as_float(b4b_cfg.get("certified"), 4.0) or 4.0
+        b4b_fda_registered = as_float(b4b_cfg.get("fda_registered"), 2.0) or 2.0
+
         gmp_level = norm_text(product.get("gmp_level"))
         gmp = cert.get("gmp", {})
         if gmp_level == "certified" or bool(gmp.get("nsf_gmp") or gmp.get("claimed")):
-            b4b = 4.0
+            b4b = float(b4b_certified)
         elif gmp_level == "fda_registered" or bool(gmp.get("fda_registered")):
-            b4b = 2.0
+            b4b = float(b4b_fda_registered)
         else:
             b4b = 0.0
+
+        b4c_cfg = b4_cfg.get("B4c_batch_traceability", {}) if isinstance(b4_cfg, dict) else {}
+        b4c_coa_points = as_float(b4c_cfg.get("coa"), 1.0) or 1.0
+        b4c_batch_lookup_points = as_float(b4c_cfg.get("batch_lookup"), 1.0) or 1.0
 
         has_coa = bool(product.get("has_coa", cert.get("batch_traceability", {}).get("has_coa", False)))
         has_batch_lookup = bool(
@@ -1317,7 +1458,10 @@ class SupplementScorer:
                 or cert.get("batch_traceability", {}).get("has_qr_code", False),
             )
         )
-        b4c = float((1 if has_coa else 0) + (1 if has_batch_lookup else 0))
+        b4c = float(
+            (b4c_coa_points if has_coa else 0.0)
+            + (b4c_batch_lookup_points if has_batch_lookup else 0.0)
+        )
 
         return {
             "B4a": b4a,
@@ -1811,8 +1955,16 @@ class SupplementScorer:
             if f not in flags:
                 flags.append(f)
 
-        b3 = float((2 if allergen_valid else 0) + (1 if gluten_valid else 0) + (1 if vegan_valid else 0))
-        b3_cap = as_float(section_b_cfg.get("B3_claim_compliance", {}).get("cap"), 4.0)
+        b3_cfg = section_b_cfg.get("B3_claim_compliance", {}) or {}
+        b3_allergen_pts = as_float(b3_cfg.get("allergen_free"), 2.0) or 2.0
+        b3_gluten_pts = as_float(b3_cfg.get("gluten_free"), 1.0) or 1.0
+        b3_vegan_pts = as_float(b3_cfg.get("vegan_vegetarian"), 1.0) or 1.0
+        b3 = float(
+            (b3_allergen_pts if allergen_valid else 0.0)
+            + (b3_gluten_pts if gluten_valid else 0.0)
+            + (b3_vegan_pts if vegan_valid else 0.0)
+        )
+        b3_cap = as_float(b3_cfg.get("cap"), 4.0) or 4.0
         b3 = clamp(0.0, b3_cap, b3)
 
         b_hypoallergenic = 0.0
@@ -2159,17 +2311,28 @@ class SupplementScorer:
     def _compute_brand_trust_score(self, product: Dict[str, Any]) -> Dict[str, Any]:
         section_max = self._section_max("d", 5.0)
         md = product.get("manufacturer_data", {})
+        section_d_cfg = self.config.get("section_D_brand_trust", {}) or {}
+
+        # D1 values — trusted and mid-tier are config-driven. Mid-tier is enabled
+        # by default via the feature gate in scoring_config.json; when OFF, only
+        # fully trusted manufacturers receive D1 credit.
+        d1_trusted_value = as_float(
+            section_d_cfg.get("D1_manufacturer_reputation"), 2.0
+        ) or 2.0
+        d1_mid_tier_value = as_float(
+            section_d_cfg.get("D1_mid_tier_reputation"), 1.0
+        ) or 1.0
 
         d1 = 0.0
         if bool(product.get("is_trusted_manufacturer", False)):
-            d1 = 2.0
+            d1 = d1_trusted_value
         else:
             top = md.get("top_manufacturer", {})
             if bool(top.get("found", False)) and norm_text(top.get("match_type")) == "exact":
-                d1 = 2.0
-            elif self._feature_on("enable_d1_middle_tier", default=False):
+                d1 = d1_trusted_value
+            elif self._feature_on("enable_d1_middle_tier", default=True):
                 if self._has_verifiable_mid_tier_manufacturer_evidence(product):
-                    d1 = 1.0
+                    d1 = d1_mid_tier_value
 
         has_full_disclosure = self._has_full_disclosure(product)
         d2 = 1.0 if has_full_disclosure else 0.0
@@ -2716,22 +2879,44 @@ class SupplementScorer:
     # Output helpers
     # ---------------------------------------------------------------------
 
+    _DEFAULT_GRADE_SCALE: List[Tuple[str, float]] = [
+        ("Exceptional", 90.0),
+        ("Excellent", 80.0),
+        ("Good", 70.0),
+        ("Fair", 60.0),
+        ("Below Avg", 50.0),
+        ("Low", 32.0),
+        ("Very Poor", 0.0),
+    ]
+
     def _grade_word(self, score_100_equivalent: float, verdict: str) -> Optional[str]:
         if verdict in {"BLOCKED", "UNSAFE", "NOT_SCORED"}:
             return None
-        if score_100_equivalent >= 90:
-            return "Exceptional"
-        if score_100_equivalent >= 80:
-            return "Excellent"
-        if score_100_equivalent >= 70:
-            return "Good"
-        if score_100_equivalent >= 60:
-            return "Fair"
-        if score_100_equivalent >= 50:
-            return "Below Avg"
-        if score_100_equivalent >= 32:
-            return "Low"
-        return "Very Poor"
+
+        # Build (label, min) pairs from config, descending by min, with a safe
+        # fallback to the hardcoded default if the config block is missing.
+        grade_scale_cfg = self.config.get("grade_scale", {}) or {}
+        pairs: List[Tuple[str, float]] = []
+        for label, spec in grade_scale_cfg.items():
+            if label.startswith("_"):
+                continue
+            if not isinstance(spec, dict):
+                continue
+            min_val = as_float(spec.get("min"), None)
+            if min_val is None:
+                continue
+            pairs.append((label, float(min_val)))
+
+        if not pairs:
+            pairs = list(self._DEFAULT_GRADE_SCALE)
+
+        pairs.sort(key=lambda kv: kv[1], reverse=True)
+
+        for label, min_val in pairs:
+            if score_100_equivalent >= min_val:
+                return label
+        # Fall through if nothing matches (shouldn't happen with a 0-min entry)
+        return pairs[-1][0] if pairs else None
 
     def _derive_verdict(
         self,
@@ -2751,7 +2936,13 @@ class SupplementScorer:
         if any(f in flags for f in ("B0_MODERATE_SUBSTANCE", "B0_HIGH_RISK_SUBSTANCE",
                                      "B0_WATCHLIST_SUBSTANCE")):
             return "CAUTION"
-        if quality_score is not None and quality_score < 32:
+        poor_threshold = as_float(
+            self.config.get("verdict_logic", {}).get("poor_threshold_quality_score"),
+            32.0,
+        )
+        if poor_threshold is None:
+            poor_threshold = 32.0
+        if quality_score is not None and quality_score < poor_threshold:
             return "POOR"
         return "SAFE"
 

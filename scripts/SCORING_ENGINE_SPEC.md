@@ -657,9 +657,10 @@ Section scores shorthand (`section_scores`):
 | `require_full_mapping` | **true** | Any unmapped active returns `NOT_SCORED` |
 | `probiotic_extended_scoring` | false | Use extended probiotic bonus module (max +10 instead of +3) |
 | `allow_non_probiotic_probiotic_bonus_with_strict_gate` | true | Non-probiotic products may earn probiotic bonus if strict evidence gates pass |
-| `shadow_mode` | true | Scoring runs but outputs may be non-public |
-| `enable_non_gmo_bonus` | false | A5d: +0.5 for Non-GMO Project Verified products |
+| `shadow_mode` | true | **DEPRECATED / UNUSED.** Present in `scoring_config.json.feature_gates` for historical reasons but never read by the scoring engine. If shadow-mode publication gating is needed in the future, enforce it in `sync_to_supabase.py` or `build_final_db.py`, not here. |
+| `enable_non_gmo_bonus` | true | A5d: +0.5 for Non-GMO Project Verified products |
 | `enable_hypoallergenic_bonus` | false | B bonus pool: +0.5 for hypoallergenic products with zero allergen penalty |
+| `enable_d1_middle_tier` | true | D1: +1 for manufacturers with verifiable mid-tier evidence (NSF GMP, FDA registered, USP, named GMP cert) |
 | `enable_d1_middle_tier` | false | D1: +1.0 for manufacturers with verifiable GMP/NSF/USP evidence (non-exact match) |
 
 ---

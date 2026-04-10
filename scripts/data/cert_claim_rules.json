@@ -71,7 +71,9 @@
         "otherIngredients",
         "ingredientRows"
       ],
-      "any_field": ["*"]
+      "any_field": [
+        "*"
+      ]
     },
     "dedupe_rules": {
       "_description": "Programs with same dedupe_key are counted once in scoring. Prevents double-counting related certifications.",
@@ -87,19 +89,32 @@
         },
         "usp": {
           "note": "USP Verified is the only scoreable USP claim. USP Grade/standards are NOT certifications.",
-          "members": ["usp_verified"]
+          "members": [
+            "usp_verified"
+          ]
         },
         "informed": {
           "note": "Informed Sport, Informed Choice, and Informed BST are separate programs by LGC",
-          "members": ["informed_sport", "informed_choice", "informed_bst"]
+          "members": [
+            "informed_sport",
+            "informed_choice",
+            "informed_bst"
+          ]
         },
         "marine_sustainability": {
           "note": "Friend of the Sea, MSC, and GOED are separate programs — all marine/omega-3 specific",
-          "members": ["friend_of_the_sea", "msc", "goed"]
+          "members": [
+            "friend_of_the_sea",
+            "msc",
+            "goed"
+          ]
         },
         "national_regulatory": {
           "note": "TGA (AU) and NPN (CA) are separate national regulatory registrations",
-          "members": ["tga_listed", "canada_npn"]
+          "members": [
+            "tga_listed",
+            "canada_npn"
+          ]
         }
       }
     }
@@ -131,7 +146,10 @@
           "\\bUSP\\s+quality\\b",
           "\\bnot\\s+USP\\s+verified\\b"
         ],
-        "required_tokens": ["verified", "verification"],
+        "required_tokens": [
+          "verified",
+          "verification"
+        ],
         "required_tokens_note": "At least one of these tokens must be present for scoring eligibility",
         "evidence_strength": "strong",
         "scope_rule": "product_level_only",
@@ -204,7 +222,9 @@
         "display_name": "Informed Sport",
         "dedupe_key": "third_party_program:informed_sport",
         "claim_type": "third_party_certification",
-        "positive_patterns": ["\\bInformed[\\s-]*Sport\\b"],
+        "positive_patterns": [
+          "\\bInformed[\\s-]*Sport\\b"
+        ],
         "negative_patterns": [],
         "evidence_strength": "strong",
         "scope_rule": "product_level_only",
@@ -218,7 +238,9 @@
         "display_name": "Informed Choice",
         "dedupe_key": "third_party_program:informed_choice",
         "claim_type": "third_party_certification",
-        "positive_patterns": ["\\bInformed[\\s-]*Choice\\b"],
+        "positive_patterns": [
+          "\\bInformed[\\s-]*Choice\\b"
+        ],
         "negative_patterns": [],
         "evidence_strength": "strong",
         "scope_rule": "product_level_only",
@@ -258,14 +280,17 @@
         "scope_rule": "product_level_only",
         "approved_field_group": "product_level_fields",
         "points_if_eligible": 5,
-        "notes": "The gold standard for fish oil quality. IFOS (International Fish Oil Standards) tests every batch for purity, potency, and freshness — including heavy metals, PCBs, dioxins, and oxidation levels. Products can earn up to a 5-star rating. If your fish oil has this, it's been thoroughly vetted."
+        "notes": "The gold standard for fish oil quality. IFOS (International Fish Oil Standards) tests every batch for purity, potency, and freshness — including heavy metals, PCBs, dioxins, and oxidation levels. Products can earn up to a 5-star rating. If your fish oil has this, it's been thoroughly vetted.",
+        "product_scope": "marine"
       },
       "labdoor": {
         "id": "CERT_LABDOOR",
         "display_name": "Labdoor Tested",
         "dedupe_key": "third_party_program:labdoor",
         "claim_type": "third_party_certification",
-        "positive_patterns": ["\\bLabdoor\\s*(Grade|Tested|Ranked)\\b"],
+        "positive_patterns": [
+          "\\bLabdoor\\s*(Grade|Tested|Ranked)\\b"
+        ],
         "negative_patterns": [],
         "evidence_strength": "medium",
         "scope_rule": "product_level_only",
@@ -289,7 +314,8 @@
         "points_if_eligible": 5,
         "verification_url": "https://friendofthesea.org/",
         "notes": "This product's marine ingredients come from responsibly managed fisheries or farms. Friend of the Sea is an international certification that verifies sustainable sourcing of fish oil, krill oil, and other ocean-based supplements — protecting marine ecosystems.",
-        "category_gate": "omega_or_marine"
+        "category_gate": "omega_or_marine",
+        "product_scope": "marine"
       },
       "msc": {
         "id": "CERT_MSC",
@@ -300,14 +326,17 @@
           "\\bMSC\\s*(Certified|Chain\\s+of\\s+Custody|CoC)?\\b",
           "\\bMarine\\s+Stewardship\\s+Council\\b"
         ],
-        "negative_patterns": ["\\bnot\\s+MSC\\b"],
+        "negative_patterns": [
+          "\\bnot\\s+MSC\\b"
+        ],
         "evidence_strength": "strong",
         "scope_rule": "product_level_only",
         "approved_field_group": "product_level_fields",
         "points_if_eligible": 5,
         "verification_url": "https://www.msc.org/",
         "notes": "The blue MSC checkmark means the fish in this product were wild-caught from a sustainably managed fishery — verified by the Marine Stewardship Council, the world's most recognized seafood sustainability program. Look for this on fish oil and marine collagen products.",
-        "category_gate": "omega_or_marine"
+        "category_gate": "omega_or_marine",
+        "product_scope": "marine"
       },
       "goed": {
         "id": "CERT_GOED",
@@ -325,7 +354,8 @@
         "points_if_eligible": 5,
         "verification_url": "https://goedomega3.com/",
         "notes": "GOED is the international trade group for omega-3 products. Their quality standard tests for oxidation (freshness), heavy metals, and accurate EPA/DHA potency. Products meeting GOED standards deliver the omega-3 dose they promise, without rancidity or contamination.",
-        "category_gate": "omega_or_marine"
+        "category_gate": "omega_or_marine",
+        "product_scope": "marine"
       },
       "clean_label_project": {
         "id": "CERT_CLEAN_LABEL_PROJECT",
@@ -488,7 +518,9 @@
         "display_name": "ISURA Verified",
         "dedupe_key": "third_party_program:isura",
         "claim_type": "third_party_certification",
-        "positive_patterns": ["\\bISURA\\s*(Verified|Certified|Tested)?\\b"],
+        "positive_patterns": [
+          "\\bISURA\\s*(Verified|Certified|Tested)?\\b"
+        ],
         "negative_patterns": [],
         "evidence_strength": "strong",
         "scope_rule": "product_level_only",
@@ -555,7 +587,9 @@
         "display_name": "UL GMP Certified",
         "dedupe_key": "gmp:ul",
         "claim_type": "gmp_certification",
-        "positive_patterns": ["\\bUL[\\s-]*(Solutions[\\s-]*)?GMP\\b"],
+        "positive_patterns": [
+          "\\bUL[\\s-]*(Solutions[\\s-]*)?GMP\\b"
+        ],
         "negative_patterns": [],
         "evidence_strength": "strong",
         "scope_rule": "product_level_only",
@@ -631,7 +665,9 @@
         "positive_patterns": [
           "\\bFDA[\\s-]*(registered|inspected)\\s*(facility|supplement)?\\b"
         ],
-        "negative_patterns": ["\\bFDA\\s+approved\\b"],
+        "negative_patterns": [
+          "\\bFDA\\s+approved\\b"
+        ],
         "evidence_strength": "weak",
         "scope_rule": "product_level_only",
         "approved_field_group": "product_level_fields",
@@ -660,7 +696,12 @@
           "\\bnot\\s+(USDA[\\s-]+)?organic\\b",
           "\\bnot\\s+certified[\\s-]+organic\\b"
         ],
-        "required_tokens": ["usda", "certified", "100%", "100 percent"],
+        "required_tokens": [
+          "usda",
+          "certified",
+          "100%",
+          "100 percent"
+        ],
         "required_tokens_mode": "any",
         "evidence_strength": "strong",
         "scope_rule": "product_level_only",
@@ -710,7 +751,13 @@
           "\\bgluten\\s+warning\\b"
         ],
         "proximity_window": 150,
-        "conflict_allergens": ["wheat", "gluten", "barley", "rye", "triticale"],
+        "conflict_allergens": [
+          "wheat",
+          "gluten",
+          "barley",
+          "rye",
+          "triticale"
+        ],
         "evidence_strength": "medium",
         "scope_rule": "product_level_only",
         "approved_field_group": "product_level_fields",
@@ -728,7 +775,12 @@
           "\\bCertified\\s+Gluten[\\s-]*Free\\b"
         ],
         "negative_patterns": [],
-        "conflict_allergens": ["wheat", "gluten", "barley", "rye"],
+        "conflict_allergens": [
+          "wheat",
+          "gluten",
+          "barley",
+          "rye"
+        ],
         "evidence_strength": "strong",
         "scope_rule": "product_level_only",
         "approved_field_group": "product_level_fields",
@@ -751,7 +803,13 @@
           "\\bcontains\\s+(dairy|milk)\\b",
           "\\bmay\\s+contain\\s+(dairy|milk)\\b"
         ],
-        "conflict_allergens": ["milk", "dairy", "lactose", "casein", "whey"],
+        "conflict_allergens": [
+          "milk",
+          "dairy",
+          "lactose",
+          "casein",
+          "whey"
+        ],
         "evidence_strength": "medium",
         "scope_rule": "product_level_only",
         "approved_field_group": "product_level_fields",
@@ -772,7 +830,12 @@
           "\\bcontains\\s+soy\\b",
           "\\bmay\\s+contain\\s+soy\\b"
         ],
-        "conflict_allergens": ["soy", "soya", "soybean", "lecithin"],
+        "conflict_allergens": [
+          "soy",
+          "soya",
+          "soybean",
+          "lecithin"
+        ],
         "evidence_strength": "medium",
         "scope_rule": "product_level_only",
         "approved_field_group": "product_level_fields",
@@ -824,7 +887,10 @@
           "\\bcontains\\s+peanuts?\\b",
           "\\bmay\\s+contain\\s+peanuts?\\b"
         ],
-        "conflict_allergens": ["peanut", "groundnut"],
+        "conflict_allergens": [
+          "peanut",
+          "groundnut"
+        ],
         "evidence_strength": "medium",
         "scope_rule": "product_level_only",
         "approved_field_group": "product_level_fields",
@@ -836,12 +902,19 @@
         "display_name": "Egg-Free",
         "dedupe_key": "allergen_free:egg",
         "claim_type": "allergen_free_claim",
-        "positive_patterns": ["\\begg[\\s-]*free\\b", "\\bno\\s+eggs?\\b"],
+        "positive_patterns": [
+          "\\begg[\\s-]*free\\b",
+          "\\bno\\s+eggs?\\b"
+        ],
         "negative_patterns": [
           "\\bcontains\\s+eggs?\\b",
           "\\bmay\\s+contain\\s+eggs?\\b"
         ],
-        "conflict_allergens": ["egg", "albumin", "lysozyme"],
+        "conflict_allergens": [
+          "egg",
+          "albumin",
+          "lysozyme"
+        ],
         "evidence_strength": "medium",
         "scope_rule": "product_level_only",
         "approved_field_group": "product_level_fields",
@@ -879,9 +952,18 @@
         "display_name": "Yeast-Free",
         "dedupe_key": "allergen_free:yeast",
         "claim_type": "allergen_free_claim",
-        "positive_patterns": ["\\byeast[\\s-]*free\\b", "\\bno\\s+yeast\\b"],
-        "negative_patterns": ["\\bcontains\\s+yeast\\b"],
-        "conflict_allergens": ["yeast", "brewer's yeast", "nutritional yeast"],
+        "positive_patterns": [
+          "\\byeast[\\s-]*free\\b",
+          "\\bno\\s+yeast\\b"
+        ],
+        "negative_patterns": [
+          "\\bcontains\\s+yeast\\b"
+        ],
+        "conflict_allergens": [
+          "yeast",
+          "brewer's yeast",
+          "nutritional yeast"
+        ],
         "evidence_strength": "medium",
         "scope_rule": "product_level_only",
         "approved_field_group": "product_level_fields",
@@ -897,7 +979,10 @@
           "\\bvegan\\b",
           "\\b100%?\\s*plant[\\s-]*based\\b"
         ],
-        "negative_patterns": ["\\bnot\\s+vegan\\b", "\\bnon[\\s-]*vegan\\b"],
+        "negative_patterns": [
+          "\\bnot\\s+vegan\\b",
+          "\\bnon[\\s-]*vegan\\b"
+        ],
         "conflict_allergens": [
           "gelatin",
           "shellac",
@@ -937,7 +1022,9 @@
           "\\bvegetarian\\b",
           "\\bsuitable\\s+for\\s+vegetarians\\b"
         ],
-        "negative_patterns": ["\\bnon[\\s-]*vegetarian\\b"],
+        "negative_patterns": [
+          "\\bnon[\\s-]*vegetarian\\b"
+        ],
         "evidence_strength": "medium",
         "scope_rule": "product_level_only",
         "approved_field_group": "product_level_fields",
@@ -949,7 +1036,9 @@
         "display_name": "Non-GMO",
         "dedupe_key": "dietary:non_gmo",
         "claim_type": "dietary_claim",
-        "positive_patterns": ["\\bNon[\\s-]*GMO\\b"],
+        "positive_patterns": [
+          "\\bNon[\\s-]*GMO\\b"
+        ],
         "negative_patterns": [],
         "evidence_strength": "medium",
         "scope_rule": "product_level_only",
@@ -962,7 +1051,9 @@
         "display_name": "Non-GMO Project Verified",
         "dedupe_key": "dietary:non_gmo_project",
         "claim_type": "dietary_claim",
-        "positive_patterns": ["\\bNon[\\s-]*GMO\\s+Project\\s+Verified\\b"],
+        "positive_patterns": [
+          "\\bNon[\\s-]*GMO\\s+Project\\s+Verified\\b"
+        ],
         "negative_patterns": [],
         "evidence_strength": "strong",
         "scope_rule": "product_level_only",
@@ -994,7 +1085,10 @@
         "display_name": "Halal",
         "dedupe_key": "dietary:halal",
         "claim_type": "dietary_claim",
-        "positive_patterns": ["\\bHalal\\s*(Certified)?\\b", "\\bIFANCA\\b"],
+        "positive_patterns": [
+          "\\bHalal\\s*(Certified)?\\b",
+          "\\bIFANCA\\b"
+        ],
         "negative_patterns": [],
         "evidence_strength": "medium",
         "scope_rule": "product_level_only",
@@ -1166,7 +1260,9 @@
         "display_name": "Certified B Corporation",
         "dedupe_key": "quality:b_corp",
         "claim_type": "quality_marker",
-        "positive_patterns": ["\\b(Certified\\s+)?B[\\s-]*Corp(oration)?\\b"],
+        "positive_patterns": [
+          "\\b(Certified\\s+)?B[\\s-]*Corp(oration)?\\b"
+        ],
         "negative_patterns": [],
         "evidence_strength": "strong",
         "scope_rule": "product_level_only",
@@ -1179,7 +1275,9 @@
         "display_name": "ISO Certified",
         "dedupe_key": "quality:iso",
         "claim_type": "quality_marker",
-        "positive_patterns": ["\\bISO\\s*\\d+\\s*(Certified)?\\b"],
+        "positive_patterns": [
+          "\\bISO\\s*\\d+\\s*(Certified)?\\b"
+        ],
         "negative_patterns": [],
         "evidence_strength": "medium",
         "scope_rule": "product_level_only",

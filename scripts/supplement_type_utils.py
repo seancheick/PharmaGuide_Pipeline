@@ -1,19 +1,53 @@
 from __future__ import annotations
 
+import json
+import os
 from math import ceil
 from typing import Any
 
 
-PROBIOTIC_TERMS = (
-    "probiotic",
-    "lactobacillus",
-    "bifidobacterium",
-    "streptococcus",
-    "bacillus",
-    "saccharomyces",
-    "limosilactobacillus",
-    "lacticaseibacillus",
-)
+def _load_probiotic_terms() -> frozenset[str]:
+    """Derive PROBIOTIC_TERMS from clinically_relevant_strains.json.
+
+    Collects genera (first word, lowercased) from all standard_names and
+    all aliases in the strains data file, then merges with a minimal
+    hardcoded baseline so the module works even if the data file is absent.
+    """
+    baseline = frozenset({
+        "probiotic",
+        "lactobacillus",
+        "bifidobacterium",
+        "streptococcus",
+        "bacillus",
+        "saccharomyces",
+        "limosilactobacillus",
+        "lacticaseibacillus",
+    })
+    strains_path = os.path.join(
+        os.path.dirname(__file__), "data", "clinically_relevant_strains.json"
+    )
+    try:
+        with open(strains_path, encoding="utf-8") as fh:
+            data = json.load(fh)
+        strains = data.get("clinically_relevant_strains", [])
+        derived: set[str] = set()
+        for strain in strains:
+            standard = strain.get("standard_name", "")
+            if standard:
+                derived.add(standard.split()[0].lower())
+            for alias in strain.get("aliases", []):
+                if alias:
+                    first = alias.split()[0].lower()
+                    # Only include multi-character words that look like genus names
+                    # (start with uppercase in the source, len > 3 after lower)
+                    if len(first) > 3:
+                        derived.add(first)
+        return baseline | frozenset(derived)
+    except (OSError, json.JSONDecodeError, KeyError):
+        return baseline
+
+
+PROBIOTIC_TERMS: frozenset[str] = _load_probiotic_terms()
 
 NON_SCORABLE_CATEGORIES = {
     "excipient",

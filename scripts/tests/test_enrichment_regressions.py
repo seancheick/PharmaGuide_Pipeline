@@ -2425,3 +2425,181 @@ class TestProbioticClassificationBoundaryStrict:
             f"and 'Probiotic' in the name should classify as probiotic; got "
             f"'{result['type']}'"
         )
+
+
+# ---------------------------------------------------------------------------
+# H6: PROBIOTIC_TERMS genera derived from clinically_relevant_strains.json
+# ---------------------------------------------------------------------------
+
+
+class TestProbioticGeneraFromDataFile:
+    """H6: PROBIOTIC_TERMS must be sourced from clinically_relevant_strains.json
+    genera rather than a hardcoded tuple so that reclassified genera (e.g.
+    Lactiplantibacillus, Escherichia coli Nissle) are automatically covered.
+
+    Regression locks: existing genera still detected.
+    New cases: lactiplantibacillus and escherichia (both present in strains file
+    as aliases/standard_names).
+    """
+
+    # --- Regression locks: existing genera must still be detected via name ---
+
+    def test_lactobacillus_still_classified_as_probiotic(self):
+        """Regression: 'lactobacillus' term still triggers probiotic detection."""
+        from supplement_type_utils import PROBIOTIC_TERMS
+        assert "lactobacillus" in PROBIOTIC_TERMS, (
+            "PROBIOTIC_TERMS must still contain 'lactobacillus'"
+        )
+
+    def test_bifidobacterium_still_classified(self):
+        """Regression: 'bifidobacterium' term still present."""
+        from supplement_type_utils import PROBIOTIC_TERMS
+        assert "bifidobacterium" in PROBIOTIC_TERMS, (
+            "PROBIOTIC_TERMS must still contain 'bifidobacterium'"
+        )
+
+    def test_saccharomyces_still_classified(self):
+        """Regression: 'saccharomyces' term still present."""
+        from supplement_type_utils import PROBIOTIC_TERMS
+        assert "saccharomyces" in PROBIOTIC_TERMS, (
+            "PROBIOTIC_TERMS must still contain 'saccharomyces'"
+        )
+
+    def test_lacticaseibacillus_still_classified(self):
+        """Regression: 'lacticaseibacillus' (reclassified genus) still present."""
+        from supplement_type_utils import PROBIOTIC_TERMS
+        assert "lacticaseibacillus" in PROBIOTIC_TERMS, (
+            "PROBIOTIC_TERMS must still contain 'lacticaseibacillus'"
+        )
+
+    def test_limosilactobacillus_still_classified(self):
+        """Regression: 'limosilactobacillus' (reclassified genus) still present."""
+        from supplement_type_utils import PROBIOTIC_TERMS
+        assert "limosilactobacillus" in PROBIOTIC_TERMS, (
+            "PROBIOTIC_TERMS must still contain 'limosilactobacillus'"
+        )
+
+    # --- New genera from clinically_relevant_strains.json aliases ---
+
+    def test_lactiplantibacillus_is_classified_as_probiotic(self):
+        """NEW: 'lactiplantibacillus' appears in aliases for Lactobacillus plantarum
+        strains (299v, HEAL9) in clinically_relevant_strains.json. Must be in
+        PROBIOTIC_TERMS after the fix."""
+        from supplement_type_utils import PROBIOTIC_TERMS
+        assert "lactiplantibacillus" in PROBIOTIC_TERMS, (
+            "'lactiplantibacillus' is a valid reclassified probiotic genus present "
+            "in clinically_relevant_strains.json aliases (Lactiplantibacillus "
+            "plantarum 299v, HEAL9) but is missing from PROBIOTIC_TERMS"
+        )
+
+    def test_escherichia_is_classified_as_probiotic(self):
+        """NEW: 'escherichia' is the genus for E. coli Nissle 1917 -- a clinically
+        validated probiotic strain (evidence_level=high) present in
+        clinically_relevant_strains.json standard_names. Must be in PROBIOTIC_TERMS."""
+        from supplement_type_utils import PROBIOTIC_TERMS
+        assert "escherichia" in PROBIOTIC_TERMS, (
+            "'escherichia' (E. coli Nissle 1917) is a clinically validated probiotic "
+            "strain in clinically_relevant_strains.json but its genus is absent "
+            "from PROBIOTIC_TERMS"
+        )
+
+    def test_probiotic_terms_is_iterable_with_membership(self):
+        """PROBIOTIC_TERMS must remain iterable and support 'in' membership tests."""
+        from supplement_type_utils import PROBIOTIC_TERMS
+        assert hasattr(PROBIOTIC_TERMS, "__contains__"), (
+            "PROBIOTIC_TERMS must support 'in' membership test"
+        )
+        assert len(PROBIOTIC_TERMS) >= 8, (
+            f"PROBIOTIC_TERMS must contain at least 8 entries; got {len(PROBIOTIC_TERMS)}"
+        )
+
+    def test_probiotic_terms_covers_all_standard_name_genera(self):
+        """PROBIOTIC_TERMS must contain all genera from clinically_relevant_strains.json
+        standard_names so any future strain additions are automatically covered."""
+        import json
+        import os
+        strains_path = os.path.join(
+            os.path.dirname(__file__), "..", "data", "clinically_relevant_strains.json"
+        )
+        with open(strains_path) as f:
+            data = json.load(f)
+        strains = data.get("clinically_relevant_strains", [])
+
+        standard_genera = set()
+        for s in strains:
+            name = s.get("standard_name", "")
+            if name:
+                standard_genera.add(name.split()[0].lower())
+
+        from supplement_type_utils import PROBIOTIC_TERMS
+        missing = standard_genera - set(PROBIOTIC_TERMS)
+        assert not missing, (
+            f"Genera from clinically_relevant_strains.json standard_names "
+            f"missing from PROBIOTIC_TERMS: {sorted(missing)}"
+        )
+
+class TestBrandedEnhancersFromDataFile:
+    """
+    H1 regression lock: branded bioavailability enhancers are recognized via
+    the curated ABSORPTION_ENHANCERS_PROMOTE_EXCEPTION constant in
+    scripts/constants.py. That constant is DELIBERATELY narrow — it does
+    not source from absorption_enhancers.json wholesale because that data
+    file contains carrier oils, generic nutrients, and delivery tech that
+    must NOT be promoted without explicit dose.
+
+    Expansions to the branded-enhancer list are curated additions in
+    constants.py, not automatic from the data file.
+    """
+
+    @pytest.fixture
+    def enricher(self):
+        return SupplementEnricherV3()
+
+    def test_bioperine_still_detected(self, enricher):
+        """Regression lock: bioperine (the canonical branded piperine
+        enhancer) must always be detected."""
+        assert enricher._is_absorption_enhancer('bioperine', 'bioperine'), \
+            "bioperine must be detected via ABSORPTION_ENHANCERS_PROMOTE_EXCEPTION"
+
+    def test_piperine_still_detected(self, enricher):
+        """Regression lock: piperine must always be detected."""
+        assert enricher._is_absorption_enhancer('piperine', 'piperine'), \
+            "piperine must be detected via ABSORPTION_ENHANCERS_PROMOTE_EXCEPTION"
+
+    def test_astragin_is_detected_as_branded_enhancer(self, enricher):
+        """astragin is a curated addition to ABSORPTION_ENHANCERS_PROMOTE_EXCEPTION
+        (true branded ginsenoside/Astragalus bioavailability enhancer)."""
+        assert enricher._is_absorption_enhancer('astragin', 'astragin'), \
+            "astragin must be detected as a curated branded bioavailability enhancer"
+
+    def test_astragin_compound_name_is_detected(self, enricher):
+        """'AstraGin patented extract' should match via substring against 'astragin'."""
+        assert enricher._is_absorption_enhancer('astragin patented extract', 'astragin'), \
+            "astragin compound name must be detected via substring match"
+
+    def test_micosolle_is_detected_as_branded_enhancer(self, enricher):
+        """micosolle is a curated branded microencapsulation enhancer in
+        ABSORPTION_ENHANCERS_PROMOTE_EXCEPTION."""
+        assert enricher._is_absorption_enhancer('micosolle', 'micosolle'), \
+            "micosolle must be detected as a curated branded bioavailability enhancer"
+
+    def test_carrier_oils_are_NOT_promoted(self, enricher):
+        """Hardening: coconut oil, olive oil, and other carrier oils appear
+        in absorption_enhancers.json under 'Fats and Oils' but they are NOT
+        branded bioavailability enhancers — they are carrier lipids. The
+        curated allowlist in constants.py excludes them. This test locks
+        that boundary so a future refactor cannot re-broaden the check."""
+        assert not enricher._is_absorption_enhancer('coconut oil', 'coconut oil'), \
+            "coconut oil is a carrier lipid, NOT a branded bioavailability enhancer"
+        assert not enricher._is_absorption_enhancer('organic olive oil', 'olive oil'), \
+            "olive oil is a carrier lipid, NOT a branded bioavailability enhancer"
+
+    def test_generic_nutrients_are_NOT_promoted(self, enricher):
+        """Hardening: Vitamin C, Glycine, Methionine etc. appear in
+        absorption_enhancers.json as 'helps absorption of X' entries but
+        they are generic nutrients, not branded enhancers. Must not be
+        promoted via this path."""
+        assert not enricher._is_absorption_enhancer('vitamin c', 'vitamin c'), \
+            "Vitamin C is a nutrient, not a branded bioavailability enhancer"
+        assert not enricher._is_absorption_enhancer('glycine', 'glycine'), \
+            "Glycine is an amino acid, not a branded bioavailability enhancer"

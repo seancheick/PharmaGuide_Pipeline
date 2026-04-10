@@ -2816,12 +2816,15 @@ class SupplementEnricherV3:
                 if enhancer in name_lower or enhancer in std_lower:
                     return True
 
-        # Check for specific branded absorption enhancers
-        branded_enhancers = ['bioperine', 'piperine']
-        for brand in branded_enhancers:
-            if brand in name_lower or brand in std_lower:
-                return True
-
+        # Deliberately do NOT fall through to `self.databases['absorption_enhancers']`
+        # here. That data file contains a broader reference set including carrier
+        # oils (coconut oil, olive oil), general nutrients (Vitamin C, Glycine),
+        # and delivery technologies (liposomal, nanoemulsion). Treating all of
+        # those as promotable bioavailability enhancers breaks the carrier-oil
+        # hardening guarantees in test_scorable_classification.py.
+        # ABSORPTION_ENHANCERS_PROMOTE_EXCEPTION (in scripts/constants.py) is the
+        # curated allowlist for this specific narrow use case — expand it there,
+        # not by broadening this loop.
         return False
 
     def _has_therapeutic_signal(self, ing_name: str, std_name: str) -> bool:

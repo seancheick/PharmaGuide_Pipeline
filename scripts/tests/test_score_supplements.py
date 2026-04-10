@@ -3576,3 +3576,577 @@ class TestProbioticCoreQualityRegression:
             f"got {section_a['score']}. Breakdown: core_quality={section_a['core_quality']}, "
             f"probiotic_bonus={section_a.get('probiotic_bonus')}"
         )
+
+
+# ---------------------------------------------------------------------------
+# Phase 3B — Config Lockdown Tests
+# Every scoring tunable must be sourced from scoring_config.json, not
+# hardcoded in score_supplements.py. These tests mutate the in-memory config
+# of a constructed scorer and assert the scoring engine honors the change.
+# ---------------------------------------------------------------------------
+
+
+class TestConfigLockdown:
+    """Phase 3B config-lockdown regression suite. Each test overrides a single
+    config key and verifies the scorer's output changes accordingly. These
+    tests FAIL before Phase 3B fixes because the corresponding value is
+    hardcoded in score_supplements.py."""
+
+    @pytest.fixture
+    def scorer(self):
+        return SupplementScorer()
+
+    # ------------------------------------------------------------------
+    # C1: mid-tier D1 manufacturer points
+    # ------------------------------------------------------------------
+    def _make_mid_tier_brand_product(self):
+        """NSF GMP certified product, no trusted-manufacturer match.
+        Qualifies under _has_verifiable_mid_tier_manufacturer_evidence."""
+        p = make_base_product()
+        p["certification_data"]["gmp"] = {
+            "claimed": False,
+            "fda_registered": False,
+            "nsf_gmp": True,
+        }
+        p["manufacturer_data"]["top_manufacturer"] = {"found": False, "match_type": None}
+        p["manufacturer_data"]["violations"] = {"found": False, "violations": []}
+        return p
+
+    def test_c1_mid_tier_d1_awards_points_when_feature_enabled(self, scorer):
+        """When enable_d1_middle_tier is ON, a mid-tier NSF-GMP product
+        must score D1 > 0 because _has_verifiable_mid_tier_manufacturer_evidence
+        returns True. Currently FAILS because the feature gate is OFF in the
+        shipped config and the enricher's work is silently discarded."""
+        product = self._make_mid_tier_brand_product()
+        scorer.feature_gates["enable_d1_middle_tier"] = True
+        try:
+            d = scorer._compute_brand_trust_score(product)
+        finally:
+            scorer.feature_gates.pop("enable_d1_middle_tier", None)
+        assert d["D1"] > 0.0, (
+            "Mid-tier NSF-GMP product must receive D1 > 0 when "
+            "enable_d1_middle_tier is on. "
+            f"Got D1={d['D1']}"
+        )
+
+    def test_c1_mid_tier_d1_reads_reputation_from_config(self, scorer):
+        """Even with the flag on, the value awarded must come from config
+        (D1_mid_tier_reputation or similar), not hardcoded 1.0. Currently
+        FAILS because D1 mid-tier value is hardcoded to 1.0."""
+        product = self._make_mid_tier_brand_product()
+        scorer.feature_gates["enable_d1_middle_tier"] = True
+        section_d_cfg = scorer.config.setdefault("section_D_brand_trust", {})
+        section_d_cfg["D1_mid_tier_reputation"] = 0.75
+        try:
+            d = scorer._compute_brand_trust_score(product)
+        finally:
+            scorer.feature_gates.pop("enable_d1_middle_tier", None)
+            section_d_cfg.pop("D1_mid_tier_reputation", None)
+        assert d["D1"] == pytest.approx(0.75), (
+            "D1 mid-tier value must come from config "
+            "section_D_brand_trust.D1_mid_tier_reputation, not hardcoded "
+            f"1.0. Got D1={d['D1']}"
+        )
+
+    # ------------------------------------------------------------------
+    # C2: POOR verdict threshold
+    # ------------------------------------------------------------------
+    def test_c2_poor_threshold_honors_config(self, scorer):
+        """Moving poor_threshold_quality_score from the implicit 32 to a
+        higher value (e.g. 50) must change the verdict. Currently FAILS
+        because _derive_verdict hardcodes 32 at line ~2754."""
+        scorer.config["verdict_logic"] = {"poor_threshold_quality_score": 50}
+        try:
+            # A score of 40 should become POOR under threshold 50
+            verdict = scorer._derive_verdict(
+                b0={"blocked": False, "unsafe": False},
+                mapping_gate={"stop": False},
+                flags=[],
+                quality_score=40.0,
+            )
+        finally:
+            scorer.config.pop("verdict_logic", None)
+        assert verdict == "POOR", (
+            "With poor_threshold_quality_score=50 in config, a quality_score "
+            f"of 40.0 must yield verdict POOR; got {verdict}"
+        )
+
+    # ------------------------------------------------------------------
+    # C3: grade labels from config
+    # ------------------------------------------------------------------
+    def test_c3_grade_word_reads_grade_scale_from_config(self, scorer):
+        """Modifying grade_scale.Good.min must change which score maps to
+        Good. Currently FAILS because _grade_word hardcodes 90/80/70/60/50/32."""
+        scorer.config["grade_scale"] = {
+            "_based_on_100_equivalent": True,
+            "Exceptional": {"min": 95},
+            "Excellent": {"min": 85},
+            "Good": {"min": 75},  # was 70
+            "Fair": {"min": 65},  # was 60
+            "Below Avg": {"min": 55},  # was 50
+            "Low": {"min": 40},  # was 32
+            "Very Poor": {"min": 0},
+        }
+        # Score 72 — under default config this would be "Good"; under
+        # the new config it should be "Fair".
+        grade = scorer._grade_word(72.0, "SAFE")
+        assert grade == "Fair", (
+            f"Score 72 under adjusted grade_scale (Good.min=75) must yield "
+            f"'Fair'; got {grade!r}. The hardcoded thresholds ignore config."
+        )
+
+    # ------------------------------------------------------------------
+    # H2: A2 premium forms reads threshold/points/max from config
+    # ------------------------------------------------------------------
+    def _make_two_premium_forms_product(self):
+        """2 mapped ingredients with quality scores both >= 14 (premium)."""
+        p = make_base_product()
+        iqd_ings = [
+            {
+                "name": "Magnesium Glycinate",
+                "standard_name": "Magnesium",
+                "canonical_id": "magnesium",
+                "score": 18,
+                "dosage_importance": 1.0,
+                "mapped": True,
+                "quantity": 200,
+                "unit": "mg",
+                "unit_normalized": "mg",
+                "has_dose": True,
+                "is_proprietary_blend": False,
+                "is_parent_total": False,
+            },
+            {
+                "name": "Zinc Picolinate",
+                "standard_name": "Zinc",
+                "canonical_id": "zinc",
+                "score": 15,
+                "dosage_importance": 1.0,
+                "mapped": True,
+                "quantity": 15,
+                "unit": "mg",
+                "unit_normalized": "mg",
+                "has_dose": True,
+                "is_proprietary_blend": False,
+                "is_parent_total": False,
+            },
+        ]
+        p["ingredient_quality_data"]["ingredients"] = iqd_ings
+        p["ingredient_quality_data"]["ingredients_scorable"] = list(iqd_ings)
+        p["ingredient_quality_data"]["total_active"] = 2
+        p["supplement_type"] = {"type": "targeted", "active_count": 2}
+        return p
+
+    def test_h2_a2_threshold_honors_config(self, scorer):
+        """Raising A2.threshold_score from 14 to 20 must drop A2 to 0
+        because neither form meets the new bar. Currently FAILS because
+        threshold is hardcoded to 14 in _compute_premium_forms_bonus."""
+        product = self._make_two_premium_forms_product()
+        a2_cfg = scorer.config.setdefault("section_A_ingredient_quality", {}) \
+            .setdefault("A2_premium_forms", {})
+        original_threshold = a2_cfg.get("threshold_score")
+        a2_cfg["threshold_score"] = 20
+        try:
+            a2 = scorer._compute_premium_forms_bonus(product)
+        finally:
+            if original_threshold is None:
+                a2_cfg.pop("threshold_score", None)
+            else:
+                a2_cfg["threshold_score"] = original_threshold
+        assert a2 == pytest.approx(0.0), (
+            "With A2.threshold_score raised to 20, no score-15/18 ingredient "
+            f"should qualify for premium form credit; got A2={a2}"
+        )
+
+    def test_h2_a2_points_per_form_honors_config(self, scorer):
+        """Bumping A2.points_per_additional_premium_form from 0.5 to 2.0
+        must roughly quadruple A2 output. Currently FAILS because
+        _compute_premium_forms_bonus hardcodes 0.5."""
+        product = self._make_two_premium_forms_product()
+        a2_cfg = scorer.config.setdefault("section_A_ingredient_quality", {}) \
+            .setdefault("A2_premium_forms", {})
+        original = a2_cfg.get("points_per_additional_premium_form")
+        a2_cfg["points_per_additional_premium_form"] = 2.0
+        try:
+            a2 = scorer._compute_premium_forms_bonus(product)
+        finally:
+            if original is None:
+                a2_cfg.pop("points_per_additional_premium_form", None)
+            else:
+                a2_cfg["points_per_additional_premium_form"] = original
+        # 2 premium forms, skip first, award 2.0 for the second — capped at max 3.
+        assert a2 == pytest.approx(2.0), (
+            f"With points_per_additional_premium_form=2.0 and 2 premium forms "
+            f"(1 scored after skip-first), A2 should be 2.0; got {a2}"
+        )
+
+    # ------------------------------------------------------------------
+    # H3: B4b GMP values from config
+    # ------------------------------------------------------------------
+    def test_h3_b4b_gmp_certified_points_honor_config(self, scorer):
+        """Bumping B4b_gmp.certified from 4 to 6 must raise B4b output.
+        Currently FAILS because values are hardcoded to 4.0/2.0."""
+        product = make_base_product()
+        product["certification_data"]["gmp"] = {
+            "nsf_gmp": True,
+            "claimed": True,
+            "fda_registered": False,
+        }
+        b4b_cfg = (
+            scorer.config.setdefault("section_B_safety_purity", {})
+            .setdefault("B4_quality_certifications", {})
+            .setdefault("B4b_gmp", {})
+        )
+        original = b4b_cfg.get("certified")
+        b4b_cfg["certified"] = 6
+        try:
+            result = scorer._compute_certifications_bonus(product, "targeted")
+        finally:
+            if original is None:
+                b4b_cfg.pop("certified", None)
+            else:
+                b4b_cfg["certified"] = original
+        assert result.get("B4b", 0) == pytest.approx(6.0), (
+            f"B4b should read 'certified' value 6 from config; got "
+            f"B4b={result.get('B4b')}"
+        )
+
+    # ------------------------------------------------------------------
+    # H4: A3 delivery tier_points from config
+    # ------------------------------------------------------------------
+    def test_h4_a3_tier_points_from_config(self, scorer):
+        """Changing A3.tier_points['1'] from 3 to 2 must produce A3=2 (inside
+        the 3-point cap, proves config is actually being read). Currently
+        FAILS because the map is hardcoded inline."""
+        product = make_base_product()
+        product["delivery_data"] = {"highest_tier": 1}
+        a3_cfg = scorer.config.setdefault("section_A_ingredient_quality", {}) \
+            .setdefault("A3_delivery_system", {})
+        original = a3_cfg.get("tier_points")
+        # Override tier 1 to yield 2 (half of default 3) — inside the 3-point cap
+        a3_cfg["tier_points"] = {"1": 2, "2": 1, "3": 0.5}
+        try:
+            a3 = scorer._compute_delivery_score(product)
+        finally:
+            if original is None:
+                a3_cfg.pop("tier_points", None)
+            else:
+                a3_cfg["tier_points"] = original
+        assert a3 == pytest.approx(2.0), (
+            f"A3 tier 1 must honor config tier_points['1']=2; got {a3}"
+        )
+
+    # ------------------------------------------------------------------
+    # H5: A4 absorption points from config
+    # ------------------------------------------------------------------
+    def test_h5_a4_absorption_points_from_config(self, scorer):
+        """Changing A4.points_if_paired from 3 to 2 must produce A4=2.
+        Currently FAILS because the value is hardcoded to 3.0."""
+        product = make_base_product()
+        product["absorption_enhancer_paired"] = True
+        a4_cfg = scorer.config.setdefault("section_A_ingredient_quality", {}) \
+            .setdefault("A4_absorption_enhancer", {})
+        original = a4_cfg.get("points_if_paired")
+        a4_cfg["points_if_paired"] = 2
+        try:
+            a4 = scorer._compute_absorption_bonus(product)
+        finally:
+            if original is None:
+                a4_cfg.pop("points_if_paired", None)
+            else:
+                a4_cfg["points_if_paired"] = original
+        assert a4 == pytest.approx(2.0), (
+            f"A4 must honor config points_if_paired=2; got {a4}"
+        )
+
+    # ------------------------------------------------------------------
+    # M1: prebiotic_terms read from config
+    # ------------------------------------------------------------------
+    def _make_probiotic_with_chicory_product(self):
+        p = make_base_product()
+        p["supplement_type"] = {"type": "probiotic", "active_count": 2}
+        p["ingredient_quality_data"]["ingredients"] = [
+            {"name": "Lactobacillus rhamnosus", "standard_name": "Lactobacillus Rhamnosus",
+             "category": "probiotics", "mapped": True, "score": 15, "dosage_importance": 1.0,
+             "quantity": 5000000000, "unit": "cfu", "unit_normalized": "cfu", "has_dose": True,
+             "is_proprietary_blend": False, "is_parent_total": False},
+            {"name": "Chicory Root Fiber", "standard_name": "Chicory Root",
+             "category": "fiber", "mapped": True, "score": 10, "dosage_importance": 1.0,
+             "quantity": 2000, "unit": "mg", "unit_normalized": "mg", "has_dose": True,
+             "is_proprietary_blend": False, "is_parent_total": False},
+        ]
+        p["ingredient_quality_data"]["ingredients_scorable"] = list(
+            p["ingredient_quality_data"]["ingredients"]
+        )
+        p["probiotic_data"] = {
+            "is_probiotic_product": True,
+            "has_cfu": True,
+            "total_cfu": 5000000000,
+            "total_billion_count": 5.0,
+            "total_strain_count": 1,
+            "probiotic_blends": [
+                {"name": "Lactobacillus rhamnosus", "strain_count": 1,
+                 "strains": ["Lactobacillus rhamnosus"],
+                 "cfu_data": {"has_cfu": True, "cfu_count": 5000000000, "billion_count": 5.0}},
+            ],
+            "clinical_strain_count": 0,
+            "clinical_strains": [],
+            "prebiotic_present": False,
+            "has_survivability_coating": False,
+        }
+        return p
+
+    def test_m1_prebiotic_terms_detect_chicory_via_config(self, scorer):
+        """Adding 'chicory' to the configurable prebiotic_terms list must
+        allow chicory root fiber to be detected as a prebiotic. Currently
+        FAILS because prebiotic_terms is hardcoded to ['inulin', 'fos', 'gos']
+        and the config has no prebiotic_terms key to override."""
+        product = self._make_probiotic_with_chicory_product()
+        pro_cfg = scorer.config.setdefault("section_A_ingredient_quality", {}) \
+            .setdefault("probiotic_bonus", {})
+        original = pro_cfg.get("prebiotic_terms")
+        pro_cfg["prebiotic_terms"] = ["inulin", "fos", "gos", "chicory", "acacia", "beta-glucan"]
+        try:
+            bonus = scorer._compute_probiotic_category_bonus(product, "probiotic")
+        finally:
+            if original is None:
+                pro_cfg.pop("prebiotic_terms", None)
+            else:
+                pro_cfg["prebiotic_terms"] = original
+        assert bonus["prebiotic"] > 0.0, (
+            "With 'chicory' added to config prebiotic_terms, a product with "
+            f"Chicory Root Fiber must score prebiotic > 0; got {bonus['prebiotic']}"
+        )
+
+    # ------------------------------------------------------------------
+    # M4: A6 single-ingredient efficiency tiers from config
+    # ------------------------------------------------------------------
+    def test_m4_a6_tiers_honor_config(self, scorer):
+        """Changing A6 tier '>=16' from 3 to 5 must change A6 output for a
+        score-16 ingredient. Currently FAILS because tiers are hardcoded."""
+        # Construct a single-ingredient product with form_score = 16
+        product = make_base_product()
+        product["supplement_type"] = {"type": "single_nutrient", "active_count": 1}
+        product["ingredient_quality_data"]["ingredients"] = [
+            {
+                "name": "Magnesium Glycinate",
+                "standard_name": "Magnesium",
+                "canonical_id": "magnesium",
+                "category": "mineral",
+                "score": 16,
+                "dosage_importance": 1.0,
+                "mapped": True,
+                "quantity": 200,
+                "unit": "mg",
+                "unit_normalized": "mg",
+                "has_dose": True,
+                "is_proprietary_blend": False,
+                "is_parent_total": False,
+            },
+        ]
+        product["ingredient_quality_data"]["ingredients_scorable"] = list(
+            product["ingredient_quality_data"]["ingredients"]
+        )
+        product["ingredient_quality_data"]["total_active"] = 1
+        a6_cfg = scorer.config.setdefault("section_A_ingredient_quality", {}) \
+            .setdefault("A6_single_ingredient_efficiency", {})
+        original = a6_cfg.get("tiers")
+        a6_cfg["tiers"] = {">=16": 5, ">=14": 2, ">=12": 1}
+        original_max = a6_cfg.get("max")
+        a6_cfg["max"] = 5
+        try:
+            a6 = scorer._compute_single_efficiency_bonus(product, "single_nutrient")
+        finally:
+            if original is None:
+                a6_cfg.pop("tiers", None)
+            else:
+                a6_cfg["tiers"] = original
+            if original_max is None:
+                a6_cfg.pop("max", None)
+            else:
+                a6_cfg["max"] = original_max
+        assert a6 == pytest.approx(5.0), (
+            f"A6 tier '>=16' should honor config value 5; got {a6}"
+        )
+
+    # ------------------------------------------------------------------
+    # M5: B4c traceability values from config
+    # ------------------------------------------------------------------
+    def test_m5_b4c_coa_value_honors_config(self, scorer):
+        """Bumping B4c.coa from 1 to 3 must raise B4c output. Currently
+        FAILS because B4c hardcodes 1 per signal."""
+        product = make_base_product()
+        product["certification_data"]["batch_traceability"] = {
+            "has_coa": True,
+            "has_batch_lookup": False,
+            "has_qr_code": False,
+        }
+        b4c_cfg = (
+            scorer.config.setdefault("section_B_safety_purity", {})
+            .setdefault("B4_quality_certifications", {})
+            .setdefault("B4c_batch_traceability", {})
+        )
+        original = b4c_cfg.get("coa")
+        b4c_cfg["coa"] = 3
+        try:
+            result = scorer._compute_certifications_bonus(product, "targeted")
+        finally:
+            if original is None:
+                b4c_cfg.pop("coa", None)
+            else:
+                b4c_cfg["coa"] = original
+        assert result.get("B4c", 0) >= 3.0, (
+            f"B4c should read coa=3 from config; got B4c={result.get('B4c')}"
+        )
+
+    # ------------------------------------------------------------------
+    # M6: B3 claim compliance values from config
+    # ------------------------------------------------------------------
+    def test_m6_b3_allergen_free_value_honors_config(self, scorer):
+        """Bumping B3.allergen_free from 2 to 3 must change B3 output for
+        a product with only a valid allergen-free claim. Currently FAILS
+        because B3 hardcodes 2/1/1."""
+        product = make_base_product()
+        product["compliance_data"]["allergen_free_claims"] = [
+            {"validated": True, "allergen": "dairy", "method": "label"},
+        ]
+        product["compliance_data"]["gluten_free"] = False
+        product["compliance_data"]["vegan"] = False
+        product["compliance_data"]["vegetarian"] = False
+        product["compliance_data"]["conflicts"] = []
+        product["compliance_data"]["has_may_contain_warning"] = False
+        product["contaminant_data"]["allergens"] = {"found": False, "allergens": []}
+        b3_cfg = scorer.config.setdefault("section_B_safety_purity", {}) \
+            .setdefault("B3_claim_compliance", {})
+        original = b3_cfg.get("allergen_free")
+        b3_cfg["allergen_free"] = 3
+        try:
+            result = scorer._compute_safety_purity_score(
+                product, "targeted", b0_moderate_penalty=0.0, flags=[]
+            )
+        finally:
+            if original is None:
+                b3_cfg.pop("allergen_free", None)
+            else:
+                b3_cfg["allergen_free"] = original
+        assert result.get("B3", 0) >= 3.0, (
+            f"B3 must source allergen_free value from config; got B3={result.get('B3')}"
+        )
+
+    # ------------------------------------------------------------------
+    # M7: code defaults must match config values
+    # ------------------------------------------------------------------
+    def test_m7_feature_on_defaults_agree_with_config(self, scorer):
+        """A startup-consistency check: for every feature flag that is set
+        to True in the shipped config, the _feature_on default in code
+        should ALSO default to True. If not, a config-load failure silently
+        reverts the flag to the wrong state. Currently FAILS for
+        require_full_mapping, enable_non_gmo_bonus."""
+        from score_supplements import SupplementScorer
+        import inspect
+
+        src = inspect.getsource(SupplementScorer)
+        # Map config flag values to the _feature_on defaults in the source.
+        # Simple heuristic: find each _feature_on call and extract the key
+        # and the default= value.
+        import re
+        pattern = re.compile(
+            r'_feature_on\(\s*"([A-Za-z_0-9]+)"\s*,\s*default\s*=\s*(True|False)\s*\)'
+        )
+        matches = pattern.findall(src)
+
+        shipped_gates = scorer.config.get("feature_gates", {})
+        mismatches = []
+        for flag, default_str in matches:
+            default_bool = (default_str == "True")
+            shipped = shipped_gates.get(flag)
+            if shipped is None:
+                continue  # flag not in config, skip
+            if bool(shipped) != default_bool:
+                mismatches.append(
+                    f"{flag}: config={shipped}, code default={default_bool}"
+                )
+        assert not mismatches, (
+            "Code-default vs config mismatch(es):\n  "
+            + "\n  ".join(mismatches)
+            + "\nA config-load failure would silently flip these to the wrong state."
+        )
+
+    # ------------------------------------------------------------------
+    # M3: marine certs sourced from cert_claim_rules.json scope
+    # ------------------------------------------------------------------
+    def _make_non_omega_with_ifos_product(self):
+        """Product with IFOS certification but no omega-3/marine ingredients.
+        IFOS is marine-specific — it should NOT score for a non-omega product."""
+        p = make_base_product()
+        p["named_cert_programs"] = ["IFOS"]
+        # Ensure no omega/marine ingredients
+        p["ingredient_quality_data"]["ingredients"] = [
+            {
+                "name": "Magnesium Glycinate", "standard_name": "Magnesium",
+                "canonical_id": "magnesium", "score": 18, "dosage_importance": 1.0,
+                "mapped": True, "quantity": 200, "unit": "mg",
+                "unit_normalized": "mg", "has_dose": True,
+                "is_proprietary_blend": False, "is_parent_total": False,
+            },
+        ]
+        p["ingredient_quality_data"]["ingredients_scorable"] = list(
+            p["ingredient_quality_data"]["ingredients"]
+        )
+        return p
+
+    def _make_omega_with_ifos_product(self):
+        """Fish oil product with IFOS certification — IFOS should score."""
+        p = make_base_product()
+        p["named_cert_programs"] = ["IFOS"]
+        p["ingredient_quality_data"]["ingredients"] = [
+            {
+                "name": "Fish Oil", "standard_name": "Fish Oil",
+                "canonical_id": "fish_oil", "score": 15, "dosage_importance": 1.0,
+                "mapped": True, "quantity": 1000, "unit": "mg",
+                "unit_normalized": "mg", "has_dose": True,
+                "is_proprietary_blend": False, "is_parent_total": False,
+            },
+        ]
+        p["ingredient_quality_data"]["ingredients_scorable"] = list(
+            p["ingredient_quality_data"]["ingredients"]
+        )
+        return p
+
+    def test_m3_ifos_filtered_out_for_non_omega_product(self, scorer):
+        """IFOS (marine-scope cert) must not score for a non-omega product.
+        Currently passes via hardcoded _MARINE_CERTS; after M3 fix this must
+        still pass while sourcing from cert_claim_rules.json."""
+        product = self._make_non_omega_with_ifos_product()
+        result = scorer._compute_certifications_bonus(product, "targeted")
+        assert result.get("named_program_count", 0) == 0, (
+            "IFOS must not count for a non-omega targeted product; "
+            f"got named_program_count={result.get('named_program_count')}"
+        )
+
+    def test_m3_ifos_scored_for_omega_product(self, scorer):
+        """IFOS must score for an omega-3 product."""
+        product = self._make_omega_with_ifos_product()
+        result = scorer._compute_certifications_bonus(product, "targeted")
+        assert result.get("named_program_count", 0) >= 1, (
+            "IFOS must count for an omega/fish-oil product; "
+            f"got named_program_count={result.get('named_program_count')}"
+        )
+
+    def test_m3_marine_cert_list_derived_from_cert_claim_rules(self, scorer):
+        """After M3 fix, the marine cert list must come from the data file's
+        product_scope field, not a hardcoded Python set. This test adds a
+        hypothetical new marine cert to the scorer's runtime-loaded rules
+        and verifies the scorer picks it up automatically."""
+        # The scorer should expose a method or use cert_claim_rules at runtime.
+        # This test locks the semantic: the hardcoded _MARINE_CERTS set
+        # should be removed or source from cert_claim_rules scope field.
+        import inspect
+        src = inspect.getsource(scorer._compute_certifications_bonus)
+        # Heuristic: after fix the function should no longer contain a
+        # hardcoded marine_certs literal inline.
+        assert "friend of the sea" not in src.lower() or '"product_scope"' in src, (
+            "After M3 fix, _compute_certifications_bonus must source marine "
+            "cert scope from cert_claim_rules.json, not a hardcoded "
+            "_MARINE_CERTS set. Found hardcoded set in function source."
+        )

@@ -31,7 +31,8 @@
     "shadow_mode": true,
     "enable_non_gmo_bonus": true,
     "enable_hypoallergenic_bonus": false,
-    "enable_d1_middle_tier": false
+    "enable_d1_middle_tier": true,
+    "_enable_d1_middle_tier_note": "When true, manufacturers with verifiable mid-tier evidence (NSF GMP, FDA registered, USP, named GMP cert) receive D1_mid_tier_reputation points. Enricher computes eligibility via _has_verifiable_mid_tier_manufacturer_evidence."
   },
   "_usage": {
     "run_scoring": "python score_supplements.py",
@@ -117,6 +118,24 @@
       "default_max": 3,
       "extended_max": 10,
       "extended_gate": "probiotic_extended_scoring",
+      "prebiotic_terms": [
+        "inulin",
+        "fos",
+        "gos",
+        "chicory",
+        "acacia",
+        "beta-glucan",
+        "beta glucan",
+        "pea fiber",
+        "lactulose",
+        "fructooligosaccharide",
+        "galactooligosaccharide",
+        "xos",
+        "xylooligosaccharide",
+        "raftiline",
+        "raftilose"
+      ],
+      "_prebiotic_terms_note": "Substring terms used to detect prebiotic ingredients by name for the probiotic bonus prebiotic sub-score. Extend here without code changes.",
       "non_probiotic_strict_gate": {
         "require_viable_cfu": true,
         "min_total_billion_count": 1.0,
@@ -338,6 +357,9 @@
   "section_D_brand_trust": {
     "_max": 5,
     "D1_manufacturer_reputation": 2,
+    "_D1_manufacturer_reputation_note": "Awarded when product matches a trusted manufacturer (exact match or is_trusted_manufacturer flag).",
+    "D1_mid_tier_reputation": 1,
+    "_D1_mid_tier_reputation_note": "Awarded when product has verifiable mid-tier evidence (NSF GMP / FDA registered / USP / named GMP cert). Gated by feature_gates.enable_d1_middle_tier.",
     "D2_disclosure_quality": 1,
     "D3_physician_formulated": 0.5,
     "D4_high_standard_region": 1.0,
@@ -414,6 +436,10 @@
   "display_format": {
     "primary": "{score}/80",
     "equivalent": "{score_100}/100"
+  },
+  "verdict_logic": {
+    "poor_threshold_quality_score": 32,
+    "_poor_threshold_quality_score_note": "Quality score (0-80 scale) below this threshold yields verdict=POOR; at/above yields SAFE. Keep in sync with grade_scale.Low.min."
   },
   "grade_scale": {
     "_based_on_100_equivalent": true,

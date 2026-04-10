@@ -4950,6 +4950,11 @@ class EnhancedDSLDNormalizer:
             form_identifiers.append('dibencozide')
         
         # Common mineral forms (existing)
+        # TODO(M9-DEFER): Missing forms (threonate, orotate, fumarate, lactate, gluconate, aspartate, chelate).
+        # Expanding this list is safe-but-redundant: enrich_supplements_v3._build_form_info_from_cleaned()
+        # already covers these via _SALT_QUALIFIERS + IQM aliases — which is the authoritative path.
+        # The correct fix is to remove this secondary detector and rely solely on the enricher's
+        # _SALT_QUALIFIERS frozenset. Defer until enrichment contract validation confirms no regression.
         mineral_forms = ['bisglycinate', 'picolinate', 'citrate', 'glycinate', 'malate', 'taurate', 'carbonate', 'oxide']
         for mineral_form in mineral_forms:
             if re.search(rf'\b{mineral_form}\b', name):

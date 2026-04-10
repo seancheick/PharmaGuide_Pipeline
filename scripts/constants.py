@@ -1522,4 +1522,10 @@ ABSORPTION_ENHANCERS_PROMOTE_EXCEPTION = {
     "bromelain", "papain", "proteolytic enzymes",
     # Fat-soluble vitamin enhancers
     "medium chain triglycerides therapeutic", "mct therapeutic",
+    # Branded proprietary bioavailability enhancers (curated additions —
+    # do NOT expand this list from absorption_enhancers.json wholesale; that
+    # data file includes carriers, nutrients, and delivery tech which MUST
+    # NOT be promoted. Only add true branded bioavailability ingredients.)
+    "astragin", "astragin extract",
+    "micosolle", "micosolle complex",
 }
