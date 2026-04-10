@@ -1222,7 +1222,13 @@ class SupplementScorer:
     # Section B
     # ---------------------------------------------------------------------
 
-    def _compute_harmful_additives_penalty(self, product: Dict[str, Any], b_cfg: Dict[str, Any] = None) -> float:
+    def _compute_harmful_additives_penalty(
+        self,
+        product: Dict[str, Any],
+        b_cfg: Dict[str, Any] = None,
+        flags: Optional[List[str]] = None,
+        evidence: Optional[List[Dict[str, Any]]] = None,
+    ) -> float:
         if b_cfg is None:
             b_cfg = self.config.get("section_B_safety_purity", {})
         b1_cfg = b_cfg.get("B1_harmful_additives", {})
@@ -1244,8 +1250,54 @@ class SupplementScorer:
             aid = item.get("additive_id") or item.get("id") or f"_anon_{id(item)}"
             sev = risk_map.get(norm_text(item.get("severity_level")), 0.0)
             seen_ids[aid] = max(seen_ids.get(aid, 0.0), sev)
-        penalty = sum(seen_ids.values())
-        b1_cap = as_float(b1_cfg.get("cap"), 5.0)
+        named_penalty = sum(seen_ids.values())
+        b1_cap = as_float(b1_cfg.get("cap"), 8.0)
+
+        # --- Dietary sugar level penalty (layered on top of named-sweetener penalty) ---
+        sugar_cfg = b_cfg.get("B1_dietary_sugar_penalty", {})
+        sugar_enabled = sugar_cfg.get("enabled", True)
+        sugar_level_penalty = 0.0
+        if sugar_enabled:
+            moderate_pts = as_float(sugar_cfg.get("moderate_penalty"), 0.5)
+            high_pts = as_float(sugar_cfg.get("high_penalty"), 1.5)
+            sugar_cap = as_float(sugar_cfg.get("cap"), 1.5)
+            if moderate_pts is None:
+                moderate_pts = 0.5
+            if high_pts is None:
+                high_pts = 1.5
+            if sugar_cap is None:
+                sugar_cap = 1.5
+
+            sugar_data = (
+                product.get("dietary_sensitivity_data", {}) or {}
+            ).get("sugar", {}) or {}
+            sugar_level = norm_text(sugar_data.get("level", ""))
+            amount_g = as_float(sugar_data.get("amount_g"), 0.0) or 0.0
+
+            if sugar_level == "moderate":
+                sugar_level_penalty = clamp(0.0, sugar_cap, moderate_pts)
+                if flags is not None and "SUGAR_LEVEL_MODERATE" not in flags:
+                    flags.append("SUGAR_LEVEL_MODERATE")
+                if evidence is not None:
+                    evidence.append({
+                        "type": "dietary_sugar",
+                        "level": "moderate",
+                        "amount_g": amount_g,
+                        "penalty": sugar_level_penalty,
+                    })
+            elif sugar_level == "high":
+                sugar_level_penalty = clamp(0.0, sugar_cap, high_pts)
+                if flags is not None and "SUGAR_LEVEL_HIGH" not in flags:
+                    flags.append("SUGAR_LEVEL_HIGH")
+                if evidence is not None:
+                    evidence.append({
+                        "type": "dietary_sugar",
+                        "level": "high",
+                        "amount_g": amount_g,
+                        "penalty": sugar_level_penalty,
+                    })
+
+        penalty = named_penalty + sugar_level_penalty
         return clamp(0.0, b1_cap, penalty)
 
     # Fallback tokens used if cert_claim_rules.json is missing or has no
@@ -1947,7 +1999,10 @@ class SupplementScorer:
         base_score = as_float(section_b_cfg.get("base_score"), 25.0) or 25.0
         bonus_pool_cap = as_float(section_b_cfg.get("bonus_pool_cap"), 5.0) or 5.0
 
-        b1 = self._compute_harmful_additives_penalty(product, section_b_cfg)
+        b1_evidence: List[Dict[str, Any]] = []
+        b1 = self._compute_harmful_additives_penalty(
+            product, section_b_cfg, flags=flags, evidence=b1_evidence
+        )
         b2 = self._compute_allergen_penalty(product, section_b_cfg)
 
         allergen_valid, gluten_valid, vegan_valid, claim_flags = self._derive_claim_validations(product, b2)
@@ -1996,6 +2051,7 @@ class SupplementScorer:
             "max": round(max_points, 2),
             "B0_moderate_penalty": round(float(b0_moderate_penalty), 2),
             "B1_penalty": round(b1, 2),
+            "B1_evidence": b1_evidence,
             "B2_penalty": round(b2, 2),
             "B3": round(b3, 2),
             "B4a": round(b4a, 2),

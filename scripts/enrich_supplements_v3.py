@@ -6726,23 +6726,12 @@ class SupplementEnricherV3:
                 if stmt_type:
                     sources.append((f'statements[{i}].type', stmt_type))
 
-        # qualityFeatures - list of strings or dicts
-        for i, qf in enumerate(product.get('qualityFeatures', [])):
-            if isinstance(qf, str):
-                sources.append((f'qualityFeatures[{i}]', qf))
-            elif isinstance(qf, dict):
-                text = qf.get('text', '') or qf.get('name', '') or qf.get('notes', '') or ''
-                if text:
-                    sources.append((f'qualityFeatures[{i}]', text))
-
-        # certifications - list of strings or dicts
-        for i, cert in enumerate(product.get('certifications', [])):
-            if isinstance(cert, str):
-                sources.append((f'certifications[{i}]', cert))
-            elif isinstance(cert, dict):
-                text = cert.get('text', '') or cert.get('name', '') or ''
-                if text:
-                    sources.append((f'certifications[{i}]', text))
+        # NOTE: Top-level `qualityFeatures` and `certifications` loops were removed
+        # 2026-04 — the cleaner nests that data at `labelText.parsed.qualityFeatures`
+        # and `labelText.parsed.certifications` (enhanced_normalizer.py lines 3550/3562),
+        # and the labelText.parsed iteration below (~line 6747) captures it with the
+        # correct path. The `product_level_fields` scope group in cert_claim_rules.json
+        # includes both the top-level and nested paths, so scope validation still passes.
 
         # claims - list of dicts with langualCodeDescription
         for i, claim in enumerate(product.get('claims', [])):
@@ -6790,18 +6779,12 @@ class SupplementEnricherV3:
             if notes:
                 sources.append((f'inactiveIngredients[{i}]', notes))
 
-        # otherIngredients - often a string
-        other_ing = product.get('otherIngredients', '')
-        if isinstance(other_ing, str) and other_ing:
-            sources.append(('otherIngredients', other_ing))
-        elif isinstance(other_ing, list):
-            for i, oi in enumerate(other_ing):
-                if isinstance(oi, str) and oi:
-                    sources.append((f'otherIngredients[{i}]', oi))
-                elif isinstance(oi, dict):
-                    text = oi.get('text', '') or oi.get('name', '') or ''
-                    if text:
-                        sources.append((f'otherIngredients[{i}]', text))
+        # NOTE: Top-level `otherIngredients` loop was removed 2026-04 — the cleaner
+        # does not emit this at top level (raw DSLD otherIngredients text is processed
+        # into `inactiveIngredients` by enhanced_normalizer.py around line 3123). The
+        # `ingredient_fields` scope group in cert_claim_rules.json accepts either
+        # `otherIngredients` or `inactiveIngredients`, and the inactiveIngredients loop
+        # above already covers ingredient-scoped claims.
 
         return sources
 
@@ -9108,6 +9091,40 @@ class SupplementEnricherV3:
             "hypertension_friendly": sodium_data["level"] in ["sodium_free", "very_low", "low"]
         }
 
+    def _collect_nutrition_summary(self, product: Dict) -> Dict:
+        """
+        Extract the five macro-nutrient values from nutritionalInfo for
+        transparency surfacing.  Calories are in kcal; carbs/fat/protein/fiber
+        are in grams.  Units are passed through verbatim — the cleaner already
+        normalises them.  Missing or zero-amount fields are emitted as None so
+        the Flutter side can distinguish "not declared" from "zero".
+
+        This is ADDITIVE — it does not replace dietary_sensitivity_data
+        (sugar/sodium).  Scoring does not consume this field.
+        """
+        ni = product.get("nutritionalInfo") or {}
+
+        def _amount(key: str):
+            entry = ni.get(key)
+            if not isinstance(entry, dict):
+                return None
+            val = entry.get("amount")
+            if val is None:
+                return None
+            try:
+                fval = float(val)
+            except (TypeError, ValueError):
+                return None
+            return fval if fval != 0.0 else None
+
+        return {
+            "calories_per_serving": _amount("calories"),
+            "total_carbohydrates_g": _amount("totalCarbohydrates"),
+            "total_fat_g": _amount("totalFat"),
+            "protein_g": _amount("protein"),
+            "dietary_fiber_g": _amount("dietaryFiber"),
+        }
+
     def _collect_serving_basis_data(self, product: Dict) -> Dict:
         """
         P0.4: Extract serving basis information for deterministic prescore
@@ -10699,6 +10716,28 @@ class SupplementEnricherV3:
             if 'contacts' in enriched:
                 del enriched['contacts']
 
+            # Drop dead passthrough fields — zero downstream consumers, reduces record size.
+            # Audit 2026-04: these cleaner fields ride through to the scored record and into
+            # the final DB's detail_blob unchanged, but nothing in enrich/score/build_final_db
+            # reads them. Pre-cleaning tools (dsld_api_client, dsld_validator) consume some of
+            # them on RAW DSLD input, which is upstream of this point. See
+            # scripts/tests/test_enrichment_regressions.py::TestEnricherDropsDeadPassthroughFields
+            # for the locked contract.
+            enriched.pop("src", None)
+            enriched.pop("nhanesId", None)
+            enriched.pop("brandIpSymbol", None)
+            enriched.pop("productVersionCode", None)
+            enriched.pop("pdf", None)  # redundant with imageUrl (image_is_pdf flag)
+            enriched.pop("thumbnail", None)  # redundant with imageUrl
+            enriched.pop("percentDvFootnote", None)
+            enriched.pop("hasOuterCarton", None)
+            enriched.pop("upcValid", None)
+            enriched.pop("productType", None)  # enricher uses _classify_supplement_type instead
+            enriched.pop("events", None)  # only "Off Market"/"Date entered", no safety signal
+            enriched.pop("labelRelationships", None)
+            enriched.pop("metadata", None)  # mappingStats/transparencyMetrics recomputed via match_ledger
+            enriched.pop("images", None)  # imageUrl is the consumed field
+
             # Map DSLD field names to scoring-expected names for consistency
             if 'id' in enriched and 'dsld_id' not in enriched:
                 enriched['dsld_id'] = enriched['id']
@@ -10769,6 +10808,9 @@ class SupplementEnricherV3:
 
             # Dietary sensitivity data (sugar/sodium for diabetes/hypertension users)
             enriched["dietary_sensitivity_data"] = self._collect_dietary_sensitivity_data(product)
+
+            # Nutrition summary (all five macros — additive, does not replace sugar/sodium)
+            enriched["nutrition_summary"] = self._collect_nutrition_summary(product)
 
             # Interaction profile (alerts-only, score-neutral)
             interaction_profile = self._collect_interaction_profile(

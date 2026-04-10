@@ -1,6 +1,6 @@
 # Pipeline Operations README
 
-Updated: 2026-03-30
+Updated: 2026-04-10
 Owner: Sean Cheick Baradji
 
 This file is a practical command guide for the pipeline work added and updated today.
@@ -13,6 +13,45 @@ It covers:
 - assembled release creation
 - Supabase sync
 - DSLD API tooling status and commands
+
+## Schema version history
+
+| Version  | Date       | Columns | Summary                                                                                                              |
+|----------|------------|---------|----------------------------------------------------------------------------------------------------------------------|
+| v1.3.0   | 2026-04-07 | 87      | Stack interaction, social sharing, search/filter, goal matching, dosing/allergen summary                             |
+| v1.3.1   | 2026-04-10 | 89      | `serving_info` phantom key bugfix (`dosing_summary` + `servings_per_container` now populate) + `net_contents_*`      |
+| v1.3.2   | 2026-04-10 | 90      | Nutrition hybrid (`calories_per_serving` column + `nutrition_detail` blob) + `unmapped_actives` blob transparency    |
+
+Runtime source of truth: `CORE_COLUMN_COUNT` in `build_final_db.py` plus `EXPORT_SCHEMA_VERSION`. See `FINAL_EXPORT_SCHEMA_V1.md` for the per-column contract.
+
+### What landed in v1.3.1 and v1.3.2 (field-level audit cycle, 2026-04-10)
+
+The 2026-04 audit traced every field across Clean → Enrich → Score → Final DB → Flutter, looking for silent drops where one stage computed data that a downstream stage ignored (Bug C pattern — named after the original probiotic `clinical_strain_count` bug from 2026-04-09). Ten tracks landed across the cycle:
+
+- **Track 1 (v1.3.1)**: Fixed `serving_info` phantom key in `generate_dosing_summary`. The function was reading a nonexistent `enriched["serving_info"]` path, so `dosing_summary` always fell through to "See product label" and `servings_per_container` was always NULL. Rewrote it to read the real cleaner-emitted `servingSizes[0]` + `servingsPerContainer`. Also added `net_contents_quantity` + `net_contents_unit` columns for the refill-reminder feature. Flutter computes `days_until_empty = net_contents_quantity / (servingSizes[0].maxQuantity * maxDailyServings)`.
+- **Track 2**: The enricher now strips 14 dead passthrough fields (`src`, `nhanesId`, `brandIpSymbol`, `productVersionCode`, `pdf`, `thumbnail`, `percentDvFootnote`, `hasOuterCarton`, `upcValid`, `productType`, `events`, `labelRelationships`, `metadata`, `images`). They were riding through from cleaner → enricher → final DB with zero downstream consumers, inflating record size. `display_ingredients` is kept because the enricher overwrites it.
+- **Track 3**: Deleted three orphaned top-level reads (`qualityFeatures`, `certifications`, `otherIngredients`) in `_extract_text_sources`. The cleaner nests these under `labelText.parsed.*`, and the parsed iteration already captures them.
+- **Track 4**: Amount-based sugar penalty in B1. Reads `dietary_sensitivity_data.sugar.level` from the enricher and docks `-0.5` for `moderate` (3–5 g) and `-1.5` for `high` (>5 g). Config-driven via `section_B_safety_purity.B1_dietary_sugar_penalty` in `scoring_config.json` (enables future per-user personalization — e.g. stronger penalty for diabetic profiles). Emits `SUGAR_LEVEL_MODERATE` or `SUGAR_LEVEL_HIGH` flags and B1 evidence entries. Stacks with the existing named-sweetener B1 penalty but the combined total is clamped to the existing B1 cap.
+- **Track 5 (blob)**: `unmapped_actives` packed into `detail_blob.unmapped_actives` with `{names, total, excluding_banned_exact_alias}` shape. Always present (empty shape when nothing unmapped) so the Flutter app can render a transparency panel without null checks. The coverage gate stays at 99.5% for the batch-level BLOCK — we accept exotic long-tail ingredients, but users can now see which specific names failed to map.
+- **Track 6 (nutrition hybrid, v1.3.2)**: Enricher emits `nutrition_summary` with all five macros (`calories_per_serving`, `total_carbohydrates_g`, `total_fat_g`, `protein_g`, `dietary_fiber_g`). Final DB adds one column (`calories_per_serving`, highest-value filter) and packs the remaining four plus calories into `detail_blob.nutrition_detail`. Promote more macros to columns later if usage justifies it.
+- **Track 7 (Flutter sync)**: `lib/data/database/tables/products_core_table.dart` updated to match the 90-column pipeline schema. Added `netContentsQuantity`, `netContentsUnit`, `caloriesPerServing` Drift columns with refill-reminder and nutrition-hybrid docstrings. **One manual step still required**: run `dart run build_runner build --delete-conflicting-outputs` from the Flutter repo to regenerate `core_database.g.dart`.
+
+## Supabase deployment checklist
+
+The pipeline targets an **offline-first architecture**: the products table lives inside the SQLite file (`pharmaguide_core.db`) that ships as a Supabase Storage blob, NOT in the Supabase Postgres layer. This means **v1.3.2 needs no SQL migration on Supabase** — the Postgres tables (`export_manifest`, `user_stacks`, `user_usage`, `pending_products`) are unchanged.
+
+What actually moves:
+
+- `pharmaguide_core.db` → uploaded verbatim to `pharmaguide/v{db_version}/pharmaguide_core.db` in Storage. Contains the full 90-column `products_core` table.
+- `detail_blobs/*.json` → uploaded to `pharmaguide/shared/details/sha256/{prefix}/{hash}.json` in Storage. Each blob now has `nutrition_detail` and `unmapped_actives` subkeys added by v1.3.2.
+- `export_manifest.json` → insert-new-row via `rotate_manifest(p_schema_version='1.3.2', ...)` RPC. The `schema_version` column on the Postgres manifest table is already present; the RPC just receives `'1.3.2'` as the string value.
+
+**Rollout checks** (run before a production sync):
+
+1. Local build produces `export_manifest.json` with `schema_version: "1.3.2"`, `pipeline_version: "3.4.0"`, `scoring_version: "3.4.0"`
+2. Parity tests green: `python3 -m pytest scripts/tests/test_release_export_parity.py -q`
+3. Dry-run sync: `python3 scripts/sync_to_supabase.py <build_dir> --dry-run`
+4. Verify no Flutter consumer is pinned to `schema_version < 1.3.2` in the app — bumping the minor version is non-breaking for older apps (new columns are `.nullable()`) but the Flutter Drift regen is still needed for the app to READ the new columns.
 
 ## 1. Build a final DB from enriched + scored outputs
 

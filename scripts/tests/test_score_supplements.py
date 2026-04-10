@@ -4150,3 +4150,321 @@ class TestConfigLockdown:
             "cert scope from cert_claim_rules.json, not a hardcoded "
             "_MARINE_CERTS set. Found hardcoded set in function source."
         )
+
+
+# ---------------------------------------------------------------------------
+# Section B1 dietary sugar penalty tests
+# ---------------------------------------------------------------------------
+
+class TestB1DietarySugarPenalty:
+    """TDD tests for the dietary sugar level penalty layered on top of B1."""
+
+    @pytest.fixture
+    def scorer(self):
+        return SupplementScorer()
+
+    def _make_product_with_sugar(self, level: str, amount_g: float = 0.0):
+        """Return a base product with dietary_sensitivity_data.sugar set."""
+        p = make_base_product()
+        p["dietary_sensitivity_data"] = {
+            "sugar": {
+                "level": level,
+                "amount_g": amount_g,
+                "contains_sugar": level not in ("sugar_free",),
+            }
+        }
+        return p
+
+    def _make_product_no_sugar_field(self):
+        """Return a base product with no dietary_sensitivity_data at all."""
+        p = make_base_product()
+        # explicitly absent
+        p.pop("dietary_sensitivity_data", None)
+        return p
+
+    def _make_product_with_harmful_additive(self, level: str, amount_g: float = 0.0):
+        """Return a product with a named harmful additive AND sugar data."""
+        p = self._make_product_with_sugar(level, amount_g)
+        p["contaminant_data"]["harmful_additives"] = {
+            "found": True,
+            "additives": [
+                {
+                    "additive_id": "high_fructose_corn_syrup",
+                    "name": "High Fructose Corn Syrup",
+                    "severity_level": "high",
+                }
+            ],
+        }
+        return p
+
+    # ------------------------------------------------------------------
+    # test_b1_sugar_penalty_moderate
+    # ------------------------------------------------------------------
+    def test_b1_sugar_penalty_moderate(self, scorer):
+        """Moderate sugar level adds exactly 0.5 to B1 penalty vs sugar_free."""
+        flags_free: list = []
+        evidence_free: list = []
+        p_free = self._make_product_with_sugar("sugar_free", 0.0)
+        pen_free = scorer._compute_harmful_additives_penalty(
+            p_free, flags=flags_free, evidence=evidence_free
+        )
+
+        flags_mod: list = []
+        evidence_mod: list = []
+        p_mod = self._make_product_with_sugar("moderate", 4.0)
+        pen_mod = scorer._compute_harmful_additives_penalty(
+            p_mod, flags=flags_mod, evidence=evidence_mod
+        )
+
+        assert round(pen_mod - pen_free, 6) == pytest.approx(0.5), (
+            f"Expected moderate sugar penalty of 0.5 above sugar_free baseline; "
+            f"got pen_free={pen_free}, pen_mod={pen_mod}"
+        )
+
+    # ------------------------------------------------------------------
+    # test_b1_sugar_penalty_high
+    # ------------------------------------------------------------------
+    def test_b1_sugar_penalty_high(self, scorer):
+        """High sugar level adds exactly 1.5 to B1 penalty vs sugar_free."""
+        flags_free: list = []
+        evidence_free: list = []
+        p_free = self._make_product_with_sugar("sugar_free", 0.0)
+        pen_free = scorer._compute_harmful_additives_penalty(
+            p_free, flags=flags_free, evidence=evidence_free
+        )
+
+        flags_high: list = []
+        evidence_high: list = []
+        p_high = self._make_product_with_sugar("high", 8.0)
+        pen_high = scorer._compute_harmful_additives_penalty(
+            p_high, flags=flags_high, evidence=evidence_high
+        )
+
+        assert round(pen_high - pen_free, 6) == pytest.approx(1.5), (
+            f"Expected high sugar penalty of 1.5 above sugar_free baseline; "
+            f"got pen_free={pen_free}, pen_high={pen_high}"
+        )
+
+    # ------------------------------------------------------------------
+    # test_b1_sugar_penalty_zero_for_sugar_free_and_low
+    # ------------------------------------------------------------------
+    def test_b1_sugar_penalty_zero_for_sugar_free_and_low(self, scorer):
+        """sugar_free and low levels produce no additional penalty."""
+        for level in ("sugar_free", "low"):
+            flags: list = []
+            evidence: list = []
+            p = self._make_product_with_sugar(level, 2.0)
+            pen = scorer._compute_harmful_additives_penalty(
+                p, flags=flags, evidence=evidence
+            )
+            # baseline with no additives and no sugar should be 0.0
+            assert pen == pytest.approx(0.0), (
+                f"Expected zero penalty for level={level!r}, got {pen}"
+            )
+
+    # ------------------------------------------------------------------
+    # test_b1_sugar_penalty_combines_with_named_additive
+    # ------------------------------------------------------------------
+    def test_b1_sugar_penalty_combines_with_named_additive(self, scorer):
+        """High-sugar product WITH a named harmful additive stacks both penalties."""
+        flags: list = []
+        evidence: list = []
+        p = self._make_product_with_harmful_additive("high", 8.0)
+        pen = scorer._compute_harmful_additives_penalty(
+            p, flags=flags, evidence=evidence
+        )
+        # Named additive = high severity = 2.0; sugar high = 1.5 → combined 3.5
+        assert pen == pytest.approx(3.5), (
+            f"Expected combined penalty of 3.5 (additive 2.0 + sugar 1.5), got {pen}"
+        )
+
+    # ------------------------------------------------------------------
+    # test_b1_sugar_penalty_respects_cap
+    # ------------------------------------------------------------------
+    def test_b1_sugar_penalty_respects_cap(self, scorer):
+        """Combined B1 penalty is clamped to the configured B1 cap (default 8.0)."""
+        # Build a product with multiple high-severity additives to push near cap
+        p = self._make_product_with_sugar("high", 8.0)
+        # Add many critical additives to blow past the cap
+        p["contaminant_data"]["harmful_additives"] = {
+            "found": True,
+            "additives": [
+                {"additive_id": f"bad_{i}", "name": f"Bad {i}", "severity_level": "critical"}
+                for i in range(10)
+            ],
+        }
+        flags: list = []
+        evidence: list = []
+        pen = scorer._compute_harmful_additives_penalty(
+            p, flags=flags, evidence=evidence
+        )
+        b1_cap = 8.0  # default from config
+        assert pen <= b1_cap + 1e-9, (
+            f"B1 penalty {pen} exceeds cap {b1_cap}"
+        )
+
+    # ------------------------------------------------------------------
+    # test_b1_sugar_penalty_flag_emitted
+    # ------------------------------------------------------------------
+    def test_b1_sugar_penalty_flag_emitted(self, scorer):
+        """SUGAR_LEVEL_HIGH flag is appended when level is high; not when sugar_free."""
+        # High
+        flags_high: list = []
+        evidence_high: list = []
+        scorer._compute_harmful_additives_penalty(
+            self._make_product_with_sugar("high", 8.0),
+            flags=flags_high, evidence=evidence_high
+        )
+        assert "SUGAR_LEVEL_HIGH" in flags_high, (
+            f"Expected SUGAR_LEVEL_HIGH in flags; got {flags_high}"
+        )
+
+        # Moderate
+        flags_mod: list = []
+        evidence_mod: list = []
+        scorer._compute_harmful_additives_penalty(
+            self._make_product_with_sugar("moderate", 4.0),
+            flags=flags_mod, evidence=evidence_mod
+        )
+        assert "SUGAR_LEVEL_MODERATE" in flags_mod, (
+            f"Expected SUGAR_LEVEL_MODERATE in flags; got {flags_mod}"
+        )
+
+        # sugar_free — no sugar flag
+        flags_free: list = []
+        evidence_free: list = []
+        scorer._compute_harmful_additives_penalty(
+            self._make_product_with_sugar("sugar_free", 0.0),
+            flags=flags_free, evidence=evidence_free
+        )
+        assert "SUGAR_LEVEL_HIGH" not in flags_free
+        assert "SUGAR_LEVEL_MODERATE" not in flags_free
+
+    # ------------------------------------------------------------------
+    # test_b1_sugar_penalty_missing_data_no_crash
+    # ------------------------------------------------------------------
+    def test_b1_sugar_penalty_missing_data_no_crash(self, scorer):
+        """Products without dietary_sensitivity_data score B1 normally (no crash)."""
+        p = self._make_product_no_sugar_field()
+        flags: list = []
+        evidence: list = []
+        # Should not raise; should return 0.0 (no additives, no sugar)
+        pen = scorer._compute_harmful_additives_penalty(
+            p, flags=flags, evidence=evidence
+        )
+        assert pen == pytest.approx(0.0)
+        assert "SUGAR_LEVEL_HIGH" not in flags
+        assert "SUGAR_LEVEL_MODERATE" not in flags
+
+    # ------------------------------------------------------------------
+    # test_b1_sugar_penalty_disabled_by_config
+    # ------------------------------------------------------------------
+    def test_b1_sugar_penalty_disabled_by_config(self, scorer):
+        """When enabled=false in config, no sugar penalty applies."""
+        import copy
+        original_cfg = scorer.config
+        modified_cfg = copy.deepcopy(original_cfg)
+        b_cfg = modified_cfg.setdefault("section_B_safety_purity", {})
+        b_cfg["B1_dietary_sugar_penalty"] = {
+            "enabled": False,
+            "moderate_penalty": 0.5,
+            "high_penalty": 1.5,
+            "cap": 1.5,
+        }
+        scorer.config = modified_cfg
+        try:
+            flags: list = []
+            evidence: list = []
+            p = self._make_product_with_sugar("high", 8.0)
+            pen = scorer._compute_harmful_additives_penalty(
+                p, flags=flags, evidence=evidence
+            )
+            assert pen == pytest.approx(0.0), (
+                f"Expected zero penalty when disabled; got {pen}"
+            )
+            assert "SUGAR_LEVEL_HIGH" not in flags
+        finally:
+            scorer.config = original_cfg
+
+    # ------------------------------------------------------------------
+    # test_b1_sugar_penalty_config_override
+    # ------------------------------------------------------------------
+    def test_b1_sugar_penalty_config_override(self, scorer):
+        """Custom moderate=1.0 and high=3.0 from config are applied."""
+        import copy
+        original_cfg = scorer.config
+        modified_cfg = copy.deepcopy(original_cfg)
+        b_cfg = modified_cfg.setdefault("section_B_safety_purity", {})
+        b_cfg["B1_dietary_sugar_penalty"] = {
+            "enabled": True,
+            "moderate_penalty": 1.0,
+            "high_penalty": 3.0,
+            "cap": 3.0,
+        }
+        scorer.config = modified_cfg
+        try:
+            # moderate → 1.0
+            flags_m: list = []
+            ev_m: list = []
+            pen_m = scorer._compute_harmful_additives_penalty(
+                self._make_product_with_sugar("moderate", 4.0),
+                flags=flags_m, evidence=ev_m
+            )
+            assert pen_m == pytest.approx(1.0), (
+                f"Expected moderate penalty 1.0 with override, got {pen_m}"
+            )
+
+            # high → 3.0
+            flags_h: list = []
+            ev_h: list = []
+            pen_h = scorer._compute_harmful_additives_penalty(
+                self._make_product_with_sugar("high", 8.0),
+                flags=flags_h, evidence=ev_h
+            )
+            assert pen_h == pytest.approx(3.0), (
+                f"Expected high penalty 3.0 with override, got {pen_h}"
+            )
+        finally:
+            scorer.config = original_cfg
+
+    # ------------------------------------------------------------------
+    # test_b1_sugar_penalty_evidence_entry
+    # ------------------------------------------------------------------
+    def test_b1_sugar_penalty_evidence_entry(self, scorer):
+        """Evidence list gets a dietary_sugar entry when level is moderate or high."""
+        for level, expected_penalty in (("moderate", 0.5), ("high", 1.5)):
+            flags: list = []
+            evidence: list = []
+            amount = 4.0 if level == "moderate" else 8.0
+            scorer._compute_harmful_additives_penalty(
+                self._make_product_with_sugar(level, amount),
+                flags=flags, evidence=evidence
+            )
+            sugar_entries = [e for e in evidence if e.get("type") == "dietary_sugar"]
+            assert len(sugar_entries) == 1, (
+                f"Expected exactly one dietary_sugar evidence entry for level={level!r}; "
+                f"got {sugar_entries}"
+            )
+            entry = sugar_entries[0]
+            assert entry.get("level") == level
+            assert entry.get("amount_g") == pytest.approx(amount)
+            assert entry.get("penalty") == pytest.approx(expected_penalty)
+
+    # ------------------------------------------------------------------
+    # test_b1_sugar_penalty_e2e_score_delta
+    # ------------------------------------------------------------------
+    def test_b1_sugar_penalty_e2e_score_delta(self, scorer):
+        """End-to-end: two identical products differing only in sugar level
+        have score_80 difference equal to the expected penalty delta."""
+        p_free = self._make_product_with_sugar("sugar_free", 0.0)
+        p_high = self._make_product_with_sugar("high", 8.0)
+
+        result_free = scorer.score_product(p_free)
+        result_high = scorer.score_product(p_high)
+
+        delta = result_free["score_80"] - result_high["score_80"]
+        assert delta == pytest.approx(1.5), (
+            f"Expected score_80 delta of 1.5 (high sugar penalty); "
+            f"got sugar_free={result_free['score_80']}, high={result_high['score_80']}, "
+            f"delta={delta}"
+        )

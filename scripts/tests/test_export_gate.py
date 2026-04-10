@@ -177,7 +177,9 @@ COLUMNS = [
     "contains_adaptogens", "contains_nootropics", "key_ingredient_tags",
     "goal_matches", "goal_match_confidence",
     "dosing_summary", "servings_per_container",
+    "net_contents_quantity", "net_contents_unit",
     "allergen_summary",
+    "calories_per_serving",  # v1.3.2
     "scoring_version", "output_schema_version", "enrichment_version", "scored_date",
     "export_version", "exported_at",
 ]

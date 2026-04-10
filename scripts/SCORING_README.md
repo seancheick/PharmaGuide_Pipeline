@@ -1,6 +1,6 @@
 # PharmaGuide Scoring README (v3.4.0 / Data Schema 5.1.0)
 
-> Last updated: 2026-03-30
+> Last updated: 2026-04-10
 
 This document is the implementation-facing guide for the current scorer:
 
@@ -140,8 +140,16 @@ penalties = B0_moderate + B1 + B2 + B5 + B6 + B7
   - Non-exact/alias matches -> review-only (`BANNED_MATCH_REVIEW_NEEDED`).
   - Source: `banned_recalled_ingredients.json` (143 entries, schema 5.0.0).
 - B1: harmful additives penalty (capped at 8).
-  - Risk points: `high` = 2.0, `moderate` = 1.0, `low` = 0.5 (no critical tier — critical hazards use B0 gate).
+  - Named-sweetener / additive match path: risk points `high` = 2.0, `moderate` = 1.0, `low` = 0.5 (no critical tier — critical hazards use B0 gate).
   - Source: `harmful_additives.json` (115 entries, schema 5.1.0, 20 categories, all deep-audited).
+  - **Amount-based sugar penalty (v3.4.1, 2026-04-10)**: layered on top of the named-sweetener path. Reads `dietary_sensitivity_data.sugar.level` from the enricher and docks:
+    - `moderate` level (3 g < sugar_g ≤ 5 g) → `-0.5`
+    - `high` level (sugar_g > 5 g) → `-1.5`
+    - `sugar_free`/`low` or missing data → no penalty (safe default).
+    - Emits flags `SUGAR_LEVEL_MODERATE` / `SUGAR_LEVEL_HIGH` and an evidence entry with `type="dietary_sugar"`, `level`, `amount_g`, `penalty`.
+    - Combined with the named-sweetener penalty, the total B1 penalty is still clamped to the existing B1 cap (8).
+    - **Config-driven** via `section_B_safety_purity.B1_dietary_sugar_penalty` in `scoring_config.json` (keys: `enabled`, `moderate_penalty`, `high_penalty`, `cap`). This enables future per-user personalization — e.g. a stronger penalty for diabetic profiles — without touching scoring code.
+    - Rationale: a gummy with 6 g added sugar previously received the same quality score as an identical 0 g formulation because the scorer ignored `dietary_sensitivity_data`. Users saw the "High Sugar" warning in `top_warnings` but the score didn't reflect it. This closes the UI-vs-score gap.
 - B2: allergen penalty (capped at 2).
 - B3: claim compliance bonus (max 4 inside shared bonus pool).
 - B4: quality certifications (computed internally, pooled under bonus cap).

@@ -1,25 +1,44 @@
 # PIPELINE_ARCHITECTURE.md
 
+> Last updated: 2026-04-10 | Export schema: v1.3.2 (90 columns)
+
 ## Overview
 
-PharmaGuide runs a 3-stage pipeline:
+PharmaGuide runs a 4-stage pipeline (3 compute stages + 1 export stage):
 
 1. `clean_dsld_data.py` (Clean)
 2. `enrich_supplements_v3.py` (Enrich)
 3. `score_supplements.py` (Score)
+4. `build_final_db.py` (Build Final DB) → `sync_to_supabase.py` (ship)
 
-Orchestration is handled by `run_pipeline.py`.
+Orchestration is handled by `run_pipeline.py` for stages 1–3, and by `build_all_final_dbs.py` / `assemble_final_db_release.py` for stage 4.
 
 ```text
 raw_data/*.json
-  -> [CLEAN] clean_dsld_data.py
+  -> [CLEAN] clean_dsld_data.py  (uses enhanced_normalizer.py)
 output_*/cleaned/*.json
   -> [ENRICH] enrich_supplements_v3.py
 output_*_enriched/enriched/*.json
   -> [COVERAGE GATE] coverage_gate.py (optional, can block scoring)
   -> [SCORE] score_supplements.py
 output_*_scored/scored/*.json
+  -> [BUILD FINAL DB] build_final_db.py
+final_db_output/
+  ├── pharmaguide_core.db        (SQLite, 90-col products_core)
+  ├── detail_blobs/*.json        (per-product JSON blobs)
+  ├── detail_index.json
+  ├── export_manifest.json       (schema_version="1.3.2")
+  └── export_audit_report.json
+  -> [SUPABASE SYNC] sync_to_supabase.py
+Supabase Storage: pharmaguide/v{version}/pharmaguide_core.db
+                  pharmaguide/shared/details/sha256/{hash}.json
+Supabase Postgres: export_manifest row inserted via rotate_manifest RPC
+  -> [FLUTTER APP] downloads SQLite + queries locally via Drift
 ```
+
+### Silent-failure audit principle (2026-04)
+
+Every field must flow across all 5 stage boundaries (Raw → Clean → Enrich → Score → Final DB → Flutter) without being silently dropped. If a stage computes a signal that a downstream stage ignores, users see a mismatch between warnings and scores. A field-level cross-reference audit in 2026-04 identified and fixed 18 such drops (including the original probiotic `clinical_strain_count` bug, the `serving_info` phantom key in `build_final_db.py`, and the amount-based sugar scoring gap). See `PIPELINE_OPERATIONS_README.md` → "What landed in v1.3.1 and v1.3.2" for the full track list and `FINAL_EXPORT_SCHEMA_V1.md` for the per-column contract.
 
 ## Stage Responsibilities
 

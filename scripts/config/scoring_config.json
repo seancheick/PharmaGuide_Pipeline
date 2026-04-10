@@ -234,6 +234,13 @@
         "none": 0.0
       }
     },
+    "B1_dietary_sugar_penalty": {
+      "_description": "Amount-based sugar penalty layered on top of B1 named-sweetener penalty. Reads dietary_sensitivity_data.sugar.level from enricher output. Enables later personalization (e.g. stronger penalty for diabetic profiles) without code change.",
+      "enabled": true,
+      "moderate_penalty": 0.5,
+      "high_penalty": 1.5,
+      "cap": 1.5
+    },
     "B2_allergen_presence": {
       "cap": 2,
       "severity_points": {

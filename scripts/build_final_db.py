@@ -54,7 +54,7 @@ from supplement_type_utils import infer_supplement_type
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 logger = logging.getLogger(__name__)
 
-EXPORT_SCHEMA_VERSION = "1.3.0"  # Aligned to FINAL_EXPORT_SCHEMA_V1.md v1.3.0
+EXPORT_SCHEMA_VERSION = "1.3.2"  # v1.3.2 adds calories_per_serving (90 cols)
 PIPELINE_VERSION = "3.4.0"
 TOP_WARNINGS_MAX = 5
 MIN_APP_VERSION = "1.0.0"
@@ -645,13 +645,21 @@ CREATE TABLE IF NOT EXISTS products_core (
     -- ====================================================================
     -- Enhancement 5: Dosing Guidance
     -- ====================================================================
-    dosing_summary                TEXT,  -- "Take 2 capsules daily with food"
+    dosing_summary                TEXT,  -- "Take 2 capsules daily"
     servings_per_container        INTEGER,  -- 60
+    net_contents_quantity         REAL,     -- 90 (from netContents[0].quantity)
+    net_contents_unit             TEXT,     -- "Capsule(s)", "mL", "Gram(s)", etc.
 
     -- ====================================================================
     -- Enhancement 6: Allergen Summary
     -- ====================================================================
     allergen_summary              TEXT,  -- "Contains: Soy, Tree Nuts"
+
+    -- ====================================================================
+    -- EXPORT SCHEMA V1.3.2 ADDITIONS (2026-04-10)
+    -- calories_per_serving: hybrid approach — highest-value nutrition filter
+    -- ====================================================================
+    calories_per_serving          REAL,  -- kcal per serving (from nutritionalInfo.calories.amount)
 
     scoring_version               TEXT,
     output_schema_version         TEXT,
@@ -1632,6 +1640,26 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
     if vp and safe_float(vp, 0) != 0:
         penalties.append({"id": "violation", "label": "Scoring violation penalty", "score": vp})
 
+    # v1.3.2: Nutrition detail — all five macros for the Flutter transparency panel
+    ns = safe_dict(enriched.get("nutrition_summary"))
+    blob["nutrition_detail"] = {
+        "calories_per_serving": safe_float(ns.get("calories_per_serving")),
+        "total_carbohydrates_g": safe_float(ns.get("total_carbohydrates_g")),
+        "total_fat_g": safe_float(ns.get("total_fat_g")),
+        "protein_g": safe_float(ns.get("protein_g")),
+        "dietary_fiber_g": safe_float(ns.get("dietary_fiber_g")),
+    }
+
+    # v1.3.2: Unmapped actives — transparency panel ("X ingredients could not be mapped")
+    ua_names = safe_list(scored.get("unmapped_actives"))
+    blob["unmapped_actives"] = {
+        "names": ua_names,
+        "total": int(scored.get("unmapped_actives_total") or 0),
+        "excluding_banned_exact_alias": int(
+            scored.get("unmapped_actives_excluding_banned_exact_alias") or 0
+        ),
+    }
+
     blob["score_bonuses"] = bonuses
     blob["score_penalties"] = penalties
     blob["audit"] = {
@@ -2014,56 +2042,193 @@ def compute_goal_matches(enriched: Dict) -> Dict:
     }
 
 
+def _format_quantity(value: Any) -> str:
+    """Render a numeric quantity without trailing .0 when it is a whole number."""
+    try:
+        num = float(value)
+    except (TypeError, ValueError):
+        return safe_str(value)
+    if not _math.isfinite(num):
+        return ""
+    if num == int(num):
+        return str(int(num))
+    return ("%g" % num)
+
+
+def _derive_serving_verb_and_noun(unit: str, form_factor: str) -> tuple[str, str, str]:
+    """Pick a verb ("Take"/"Chew"/"Mix"), singular noun, and plural noun.
+
+    Checks the servingSizes unit FIRST (most specific), then falls back to
+    form_factor. Order matters: more specific matches must come before broader
+    ones (e.g. "gram" must be checked before "powder", which is only a fallback).
+    """
+    unit_l = (unit or "").lower()
+    form_l = (form_factor or "").lower()
+
+    def has(needle: str, haystack: str = None) -> bool:
+        if haystack is None:
+            return needle in unit_l or needle in form_l
+        return needle in haystack
+
+    # Most specific unit-driven cases first.
+    if has("gummy") or has("gummie"):
+        return ("Chew", "gummy", "gummies")
+    if has("chewable"):
+        return ("Chew", "chewable", "chewables")
+    if has("lozenge") or has("troche"):
+        return ("Dissolve", "lozenge", "lozenges")
+    if has("softgel") or has("gelcap") or has("soft gel"):
+        return ("Take", "softgel", "softgels")
+    if has("liquicap") or has("liquid cap"):
+        return ("Take", "liquicap", "liquicaps")
+    if has("capsule"):
+        return ("Take", "capsule", "capsules")
+    if has("caplet"):
+        return ("Take", "caplet", "caplets")
+    if has("tablet"):
+        return ("Take", "tablet", "tablets")
+    if has("packet") or has("sachet") or has("stick pack"):
+        return ("Mix", "packet", "packets")
+    if has("drop"):
+        return ("Take", "drop", "drops")
+    if has("spray"):
+        return ("Use", "spray", "sprays")
+    if has("patch"):
+        return ("Apply", "patch", "patches")
+    # Liquid/volume units — "mL" is a constant label.
+    if (
+        "ml" in unit_l
+        or "milliliter" in unit_l
+        or "teaspoon" in unit_l
+        or "tablespoon" in unit_l
+        or "fl oz" in unit_l
+        or "fl. oz" in unit_l
+        or "fluid ounce" in unit_l
+    ) or has("liquid"):
+        return ("Take", "mL", "mL")
+    # Weight units (grams) — must come before powder/scoop fallback.
+    if (
+        "gram" in unit_l
+        or unit_l.strip() in ("g", "g.", "mg")
+        or unit_l.strip().endswith(" g")
+    ):
+        return ("Mix", "gram", "grams")
+    # Scoop is a unit; powder is a form_factor fallback.
+    if has("scoop") or has("powder"):
+        return ("Mix", "scoop", "scoops")
+    return ("Take", "serving", "servings")
+
+
+def _frequency_phrase(max_daily: Optional[int]) -> str:
+    """Map maxDailyServings to a human cadence."""
+    if max_daily is None:
+        return "daily"
+    try:
+        n = int(max_daily)
+    except (TypeError, ValueError):
+        return "daily"
+    if n <= 1:
+        return "daily"
+    if n == 2:
+        return "twice daily"
+    if n == 3:
+        return "three times daily"
+    if n == 4:
+        return "four times daily"
+    return f"{n} times daily"
+
+
 def generate_dosing_summary(enriched: Dict) -> Dict:
     """Generate user-friendly dosing summary and servings per container.
 
+    Reads the real cleaner-emitted fields (enhanced_normalizer._process_serving_sizes
+    and raw_data.servingsPerContainer) rather than a nonexistent "serving_info" path:
+
+      - enriched["servingsPerContainer"]  (int)
+      - enriched["servingSizes"]          (list[dict]: minQuantity, maxQuantity,
+                                           unit, minDailyServings, maxDailyServings,
+                                           normalizedServing, ...)
+      - enriched["form_factor"]           (str, e.g. "capsule", "powder")
+
     Returns dict with keys: dosing_summary, servings_per_container
     """
-    serving_info = safe_dict(enriched.get("serving_info"))
+    serving_sizes = safe_list(enriched.get("servingSizes"))
+    serving = safe_dict(serving_sizes[0]) if serving_sizes else {}
     form_factor = safe_str(enriched.get("form_factor")).lower()
-    serving_size = safe_str(serving_info.get("serving_size"))
-    servings_per = serving_info.get("servings_per_container")
 
-    # Parse serving size
-    summary = ""
-    if "capsule" in serving_size.lower():
-        parts = serving_size.split()
-        count = parts[0] if parts else "1"
-        plural = "s" if count not in ["1", "one"] else ""
-        summary = f"Take {count} capsule{plural} daily"
-    elif "tablet" in serving_size.lower():
-        parts = serving_size.split()
-        count = parts[0] if parts else "1"
-        plural = "s" if count not in ["1", "one"] else ""
-        summary = f"Take {count} tablet{plural} daily"
-    elif "scoop" in serving_size.lower() or "powder" in form_factor:
-        summary = f"Mix {serving_size} with water daily"
-    elif "gummy" in serving_size.lower() or "gummies" in serving_size.lower():
-        parts = serving_size.split()
-        count = parts[0] if parts else "2"
-        summary = f"Chew {count} gummies daily"
-    elif "softgel" in serving_size.lower():
-        parts = serving_size.split()
-        count = parts[0] if parts else "1"
-        plural = "s" if count not in ["1", "one"] else ""
-        summary = f"Take {count} softgel{plural} daily"
+    min_qty_raw = serving.get("minQuantity")
+    max_qty_raw = serving.get("maxQuantity")
+    unit = safe_str(serving.get("unit"))
+    max_daily = serving.get("maxDailyServings")
+
+    min_qty = safe_float(min_qty_raw)
+    max_qty = safe_float(max_qty_raw)
+
+    if min_qty is None and max_qty is None:
+        # No usable quantity data — graceful fallback.
+        summary = "See product label"
     else:
-        summary = f"Serving size: {serving_size}" if serving_size else "See product label"
+        # If only one of min/max is present, use whichever is there.
+        if min_qty is None:
+            min_qty = max_qty
+        if max_qty is None:
+            max_qty = min_qty
 
-    # Add timing if available
-    timing = safe_str(serving_info.get("timing_notes"))
-    if timing:
-        summary += f" {timing}"
-    elif "with food" in serving_size.lower():
-        summary += " with food"
+        verb, noun_singular, noun_plural = _derive_serving_verb_and_noun(unit, form_factor)
 
-    # Limit length
+        if min_qty == max_qty:
+            qty_text = _format_quantity(min_qty)
+            noun = noun_singular if min_qty == 1 else noun_plural
+        else:
+            qty_text = f"{_format_quantity(min_qty)}-{_format_quantity(max_qty)}"
+            noun = noun_plural
+
+        cadence = _frequency_phrase(max_daily)
+        summary = f"{verb} {qty_text} {noun} {cadence}".strip()
+
+    # Limit length defensively.
     if len(summary) > 150:
         summary = summary[:147] + "..."
 
+    servings_per = enriched.get("servingsPerContainer")
+    servings_per_int: Optional[int]
+    try:
+        servings_per_int = int(servings_per) if servings_per is not None else None
+    except (TypeError, ValueError):
+        servings_per_int = None
+
     return {
         "dosing_summary": summary,
-        "servings_per_container": int(servings_per) if servings_per else None,
+        "servings_per_container": servings_per_int,
+    }
+
+
+def generate_net_contents_summary(enriched: Dict) -> Dict:
+    """Extract primary netContents quantity + unit for refill-reminder features.
+
+    Cleaner-emitted shape (enhanced_normalizer._extract_net_contents):
+        enriched["netContents"] = [
+            {"order": 1, "quantity": 90, "unit": "Capsule(s)", "display": "..."},
+            ...
+        ]
+
+    We read index [0] as the primary entry and pass the unit through unchanged
+    (do NOT lowercase — the app renders this verbatim).
+    """
+    contents = safe_list(enriched.get("netContents"))
+    if not contents:
+        return {"net_contents_quantity": None, "net_contents_unit": None}
+
+    primary = safe_dict(contents[0])
+    quantity = safe_float(primary.get("quantity"))
+    unit_raw = primary.get("unit")
+    unit = str(unit_raw).strip() if unit_raw is not None else None
+    if unit == "":
+        unit = None
+
+    return {
+        "net_contents_quantity": quantity,
+        "net_contents_unit": unit,
     }
 
 
@@ -2120,6 +2285,7 @@ def build_core_row(
     categories = classify_product_categories(enriched, scored)
     goal_data = compute_goal_matches(enriched)
     dosing = generate_dosing_summary(enriched)
+    net_contents = generate_net_contents_summary(enriched)
     allergen_summ = generate_allergen_summary(enriched)
     non_gmo_audit = derive_non_gmo_audit(enriched)
 
@@ -2218,8 +2384,12 @@ def build_core_row(
         # Enhancement 5: Dosing
         dosing["dosing_summary"],
         dosing["servings_per_container"],
+        net_contents["net_contents_quantity"],
+        net_contents["net_contents_unit"],
         # Enhancement 6: Allergen
         allergen_summ,
+        # v1.3.2: Nutrition column
+        safe_float(safe_dict(enriched.get("nutrition_summary")).get("calories_per_serving")),
         # Metadata
         safe_str(sm.get("scoring_version")),
         safe_str(sm.get("output_schema_version", scored.get("output_schema_version"))),
@@ -2230,7 +2400,7 @@ def build_core_row(
     )
 
 
-CORE_COLUMN_COUNT = 87  # Must match the tuple above and SCHEMA_SQL
+CORE_COLUMN_COUNT = 90  # Must match the tuple above and SCHEMA_SQL
 
 
 # ─── Reference Data Loader ───

@@ -1,6 +1,21 @@
 # DATABASE_SCHEMA.md — Master Schema Reference
 
-> Schema version: **5.0.0 / 5.1.0** | Last updated: 2026-03-22 | 33 database files
+> Reference data schema: **5.0.0 / 5.1.0** | Export schema: **v1.3.2 (90 columns)** | Last updated: 2026-04-10 | 33 database files
+>
+> ## Two schemas, one document
+>
+> This file covers two related but distinct schemas:
+>
+> 1. **Reference data files** (`scripts/data/*.json`) — version 5.0.0 / 5.1.0. These are the input data the enricher consumes.
+> 2. **Final DB export** (`pharmaguide_core.db` + `detail_blobs/*.json`) — version 1.3.2. This is what the mobile app consumes. Runtime source of truth: `CORE_COLUMN_COUNT` and `EXPORT_SCHEMA_VERSION` in `build_final_db.py`. Per-column contract: `FINAL_EXPORT_SCHEMA_V1.md`.
+>
+> The reference data schema drives what the enricher CAN compute. The export schema drives what the mobile app CAN query. They evolve independently.
+>
+> ## Export schema v1.3.2 quick summary (2026-04-10)
+>
+> - **v1.3.1** added `net_contents_quantity` (REAL) and `net_contents_unit` (TEXT) for the refill-reminder feature, and fixed the `serving_info` phantom-key bug that left `dosing_summary` and `servings_per_container` empty for every product.
+> - **v1.3.2** added `calories_per_serving` (REAL) as a filter column and introduced the `nutrition_detail` and `unmapped_actives` subkeys in `detail_blobs/*.json`.
+> - Total column count: **90**. Flutter `products_core_table.dart` in the mobile repo is synced one-for-one. Supabase Postgres needs no migration because `products_core` is in the SQLite storage blob, not in Postgres.
 
 ## Metadata Contract
 

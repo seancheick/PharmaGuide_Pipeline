@@ -41,9 +41,10 @@ def _write_pair_output(root: Path, name: str, dsld_id: str, product_name: str):
                 None, None, '[]', None,  # share_title, share_description, share_highlights, share_og_image_url
                 None, '[]', 0, 0, 0, 0, 0, '[]',  # primary_category, secondary_categories, contains_* flags, key_ingredient_tags
                 '[]', None,  # goal_matches, goal_match_confidence
-                None, None,  # dosing_summary, servings_per_container
+                None, None, None, None,  # dosing_summary, servings_per_container, net_contents_quantity, net_contents_unit
                 None,  # allergen_summary
-                "3.4.0", "5.0.0", "3.4.0", "2026-03-29T00:00:00Z", "1.3.0", "2026-03-29T00:00:00Z",
+                None,  # calories_per_serving (v1.3.2)
+                "3.4.0", "5.0.0", "3.4.0", "2026-03-29T00:00:00Z", "1.3.2", "2026-03-29T00:00:00Z",
             ),
         )
         conn.execute(

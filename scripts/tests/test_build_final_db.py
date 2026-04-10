@@ -22,6 +22,7 @@ from build_final_db import (
     build_detail_blob,
     build_top_warnings,
     fetch_staged_product,
+    generate_dosing_summary,
     iter_json_products,
     mark_staged_product_matched,
     remote_blob_storage_path,
@@ -114,7 +115,11 @@ PRODUCTS_CORE_COLUMNS = [
     "goal_match_confidence",
     "dosing_summary",
     "servings_per_container",
+    "net_contents_quantity",
+    "net_contents_unit",
     "allergen_summary",
+    # v1.3.2 additions (1 new column)
+    "calories_per_serving",
     # metadata
     "scoring_version",
     "output_schema_version",
@@ -959,3 +964,341 @@ def test_build_final_db_default_mode_allows_enriched_scored_mismatch():
         assert integrity["enriched_only_count"] == 1
         assert integrity["exported_count"] == 1
         assert integrity["strict_mode"] is False
+
+
+# ────────────────────────────────────────────────────────────────────────────
+# Dosing + net_contents export regression tests (bugfix: generate_dosing_summary
+# used to read a nonexistent "serving_info" key, silently dropping real serving
+# data and leaving servings_per_container NULL. These tests lock down the real
+# cleaner-emitted fields.)
+# ────────────────────────────────────────────────────────────────────────────
+
+
+def test_generate_dosing_summary_reads_real_fields():
+    enriched = {
+        "servingsPerContainer": 90,
+        "servingSizes": [
+            {
+                "minQuantity": 2,
+                "maxQuantity": 2,
+                "unit": "Capsule(s)",
+                "minDailyServings": 1,
+                "maxDailyServings": 1,
+                "normalizedServing": 2,
+                "servingQuantitySource": "label",
+                "dailyServingsSource": "label",
+            }
+        ],
+        "form_factor": "capsule",
+    }
+
+    dosing = generate_dosing_summary(enriched)
+
+    assert dosing["servings_per_container"] == 90
+    summary = dosing["dosing_summary"]
+    assert summary
+    assert summary != "See product label"
+    # Should describe the real 2-capsule single-daily serving.
+    assert "2" in summary
+    assert "capsule" in summary.lower()
+
+
+def test_generate_dosing_summary_range_quantity_reads_min_and_max():
+    enriched = {
+        "servingsPerContainer": 60,
+        "servingSizes": [
+            {
+                "minQuantity": 1,
+                "maxQuantity": 2,
+                "unit": "Softgel(s)",
+                "minDailyServings": 1,
+                "maxDailyServings": 2,
+            }
+        ],
+        "form_factor": "softgel",
+    }
+
+    dosing = generate_dosing_summary(enriched)
+
+    assert dosing["servings_per_container"] == 60
+    summary = dosing["dosing_summary"].lower()
+    assert "softgel" in summary
+    # Range 1-2 should appear verbatim.
+    assert "1" in summary and "2" in summary
+
+
+def test_generate_dosing_summary_twice_daily_from_max_daily_servings():
+    enriched = {
+        "servingsPerContainer": 180,
+        "servingSizes": [
+            {
+                "minQuantity": 3,
+                "maxQuantity": 3,
+                "unit": "Capsule(s)",
+                "minDailyServings": 2,
+                "maxDailyServings": 2,
+            }
+        ],
+        "form_factor": "capsule",
+    }
+
+    dosing = generate_dosing_summary(enriched)
+
+    assert dosing["servings_per_container"] == 180
+    summary = dosing["dosing_summary"].lower()
+    assert "twice" in summary or "2 times" in summary or "2x" in summary
+
+
+def test_generate_dosing_summary_gummy_form():
+    enriched = {
+        "servingsPerContainer": 60,
+        "servingSizes": [
+            {
+                "minQuantity": 2,
+                "maxQuantity": 2,
+                "unit": "Gummie(s)",
+                "minDailyServings": 1,
+                "maxDailyServings": 1,
+            }
+        ],
+        "form_factor": "gummy",
+    }
+
+    dosing = generate_dosing_summary(enriched)
+
+    assert dosing["servings_per_container"] == 60
+    summary = dosing["dosing_summary"].lower()
+    assert "chew" in summary or "gummy" in summary or "gummies" in summary
+    assert "2" in dosing["dosing_summary"]
+
+
+def test_generate_dosing_summary_handles_missing_fields():
+    # Empty servingSizes, no servingsPerContainer. Must not crash.
+    enriched = {"servingSizes": [], "form_factor": "capsule"}
+
+    dosing = generate_dosing_summary(enriched)
+
+    # Graceful fallback: no real serving data means generic label pointer.
+    assert dosing["dosing_summary"] == "See product label"
+    # servings_per_container uses the existing None convention when absent.
+    assert dosing["servings_per_container"] is None
+
+
+def test_generate_dosing_summary_handles_completely_empty_enriched():
+    # Totally empty dict — should not crash and returns fallback.
+    dosing = generate_dosing_summary({})
+
+    assert dosing["dosing_summary"] == "See product label"
+    assert dosing["servings_per_container"] is None
+
+
+def test_build_core_row_includes_net_contents_columns():
+    enriched = make_enriched()
+    enriched["netContents"] = [
+        {"order": 1, "quantity": 90, "unit": "Capsule(s)", "display": "90 Capsule(s)"}
+    ]
+    scored = make_scored()
+
+    row = row_as_dict(build_core_row(enriched, scored, "2026-04-10T12:00:00Z"))
+
+    assert row["net_contents_quantity"] == 90.0
+    assert row["net_contents_unit"] == "Capsule(s)"
+
+
+def test_build_core_row_handles_missing_net_contents():
+    enriched = make_enriched()
+    # No netContents at all.
+    enriched.pop("netContents", None)
+    row = row_as_dict(build_core_row(enriched, make_scored(), "2026-04-10T12:00:00Z"))
+    assert row["net_contents_quantity"] is None
+    assert row["net_contents_unit"] is None
+
+    # Empty list should also produce NULLs.
+    enriched["netContents"] = []
+    row = row_as_dict(build_core_row(enriched, make_scored(), "2026-04-10T12:00:00Z"))
+    assert row["net_contents_quantity"] is None
+    assert row["net_contents_unit"] is None
+
+
+def test_build_core_row_net_contents_preserves_non_integer_quantities():
+    enriched = make_enriched()
+    enriched["netContents"] = [
+        {"order": 1, "quantity": 10.2, "unit": "oz.", "display": "10.2 oz."},
+        {"order": 2, "quantity": 288, "unit": "g", "display": "288 g"},
+    ]
+
+    row = row_as_dict(build_core_row(enriched, make_scored(), "2026-04-10T12:00:00Z"))
+
+    # Index [0] is the primary entry.
+    assert row["net_contents_quantity"] == 10.2
+    assert row["net_contents_unit"] == "oz."
+
+
+def test_final_db_has_90_columns():
+    # Tuple emitted by build_core_row must match the 90-column schema (v1.3.2).
+    enriched = make_enriched()
+    enriched["servingsPerContainer"] = 60
+    enriched["servingSizes"] = [
+        {
+            "minQuantity": 1,
+            "maxQuantity": 1,
+            "unit": "Capsule(s)",
+            "minDailyServings": 1,
+            "maxDailyServings": 1,
+        }
+    ]
+    enriched["netContents"] = [
+        {"order": 1, "quantity": 60, "unit": "Capsule(s)", "display": "60 Capsule(s)"}
+    ]
+    row = build_core_row(enriched, make_scored(), "2026-04-10T12:00:00Z")
+    assert len(row) == 90
+    assert len(PRODUCTS_CORE_COLUMNS) == 90
+
+
+def test_dosing_summary_not_empty_for_real_product():
+    """Smoke test mirroring Thorne Restore (dsld 15581): 1 capsule, 30/container."""
+    enriched = make_enriched()
+    enriched["dsld_id"] = "15581"
+    enriched["product_name"] = "Restore"
+    enriched["brandName"] = "Thorne"
+    enriched["form_factor"] = "capsule"
+    enriched["servingsPerContainer"] = 30
+    enriched["servingSizes"] = [
+        {
+            "minQuantity": 1.0,
+            "maxQuantity": 1.0,
+            "unit": "Capsule(s)",
+            "minDailyServings": 1,
+            "maxDailyServings": 1,
+            "normalizedServing": 1.0,
+            "servingQuantitySource": "label",
+            "dailyServingsSource": "label",
+        }
+    ]
+    enriched["netContents"] = [
+        {"order": 1, "quantity": 30, "unit": "Capsule(s)", "display": "30 Capsule(s)"}
+    ]
+
+    row = row_as_dict(build_core_row(enriched, make_scored(), "2026-04-10T12:00:00Z"))
+
+    assert row["servings_per_container"] == 30
+    assert row["dosing_summary"]
+    assert row["dosing_summary"] != "See product label"
+    assert "capsule" in row["dosing_summary"].lower()
+    assert row["net_contents_quantity"] == 30.0
+    assert row["net_contents_unit"] == "Capsule(s)"
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# TDD: Change A + Change B  (schema v1.3.2 — 90 columns)
+# ─────────────────────────────────────────────────────────────────────────────
+
+from build_final_db import CORE_COLUMN_COUNT, EXPORT_SCHEMA_VERSION  # noqa: E402
+
+
+class TestDetailBlobNutritionAndUnmapped:
+    """Verifies that detail_blob gains nutrition_detail and unmapped_actives subkeys."""
+
+    def _enriched_with_nutrition(self, calories=120.0, carbs=10.0, fat=5.0, protein=8.0, fiber=2.0):
+        e = make_enriched()
+        e["nutrition_summary"] = {
+            "calories_per_serving": calories,
+            "total_carbohydrates_g": carbs,
+            "total_fat_g": fat,
+            "protein_g": protein,
+            "dietary_fiber_g": fiber,
+        }
+        return e
+
+    def _scored_with_unmapped(self, names=None):
+        s = make_scored()
+        names = names or []
+        s["unmapped_actives"] = names
+        s["unmapped_actives_total"] = len(names)
+        s["unmapped_actives_excluding_banned_exact_alias"] = len(names)
+        return s
+
+    def test_detail_blob_contains_nutrition_detail_subkey(self):
+        enriched = self._enriched_with_nutrition()
+        blob = build_detail_blob(enriched, make_scored())
+        assert "nutrition_detail" in blob
+        nd = blob["nutrition_detail"]
+        assert nd["calories_per_serving"] == 120.0
+        assert nd["total_carbohydrates_g"] == 10.0
+        assert nd["total_fat_g"] == 5.0
+        assert nd["protein_g"] == 8.0
+        assert nd["dietary_fiber_g"] == 2.0
+
+    def test_detail_blob_nutrition_detail_empty_when_missing(self):
+        enriched = make_enriched()
+        # No nutrition_summary key at all
+        enriched.pop("nutrition_summary", None)
+        blob = build_detail_blob(enriched, make_scored())
+        assert "nutrition_detail" in blob
+        nd = blob["nutrition_detail"]
+        assert nd["calories_per_serving"] is None
+        assert nd["total_carbohydrates_g"] is None
+        assert nd["total_fat_g"] is None
+        assert nd["protein_g"] is None
+        assert nd["dietary_fiber_g"] is None
+
+    def test_detail_blob_contains_unmapped_actives_subkey_empty(self):
+        blob = build_detail_blob(make_enriched(), make_scored())
+        assert "unmapped_actives" in blob
+        ua = blob["unmapped_actives"]
+        assert ua["names"] == []
+        assert ua["total"] == 0
+        assert ua["excluding_banned_exact_alias"] == 0
+
+    def test_detail_blob_contains_unmapped_actives_subkey_populated(self):
+        scored = self._scored_with_unmapped(["Exotic Extract", "Typo Ingredient"])
+        blob = build_detail_blob(make_enriched(), scored)
+        ua = blob["unmapped_actives"]
+        assert ua["names"] == ["Exotic Extract", "Typo Ingredient"]
+        assert ua["total"] == 2
+        assert ua["excluding_banned_exact_alias"] == 2
+
+    def test_core_row_has_calories_per_serving_column(self):
+        enriched = self._enriched_with_nutrition(calories=100.0)
+        row = build_core_row(enriched, make_scored(), "2026-04-10T12:00:00Z")
+        # calories_per_serving must be in the module-level column list and tuple
+        assert "calories_per_serving" in PRODUCTS_CORE_COLUMNS
+        idx = PRODUCTS_CORE_COLUMNS.index("calories_per_serving")
+        assert row[idx] == 100.0
+
+    def test_core_row_calories_null_when_missing(self):
+        enriched = make_enriched()
+        enriched.pop("nutrition_summary", None)
+        row = build_core_row(enriched, make_scored(), "2026-04-10T12:00:00Z")
+        assert "calories_per_serving" in PRODUCTS_CORE_COLUMNS
+        idx = PRODUCTS_CORE_COLUMNS.index("calories_per_serving")
+        assert row[idx] is None
+
+    def test_core_row_column_count_is_90(self):
+        row = build_core_row(make_enriched(), make_scored(), "2026-04-10T12:00:00Z")
+        assert len(row) == 90
+        assert CORE_COLUMN_COUNT == 90
+
+    def test_schema_version_bumped_to_132(self):
+        assert EXPORT_SCHEMA_VERSION == "1.3.2"
+
+    def test_end_to_end_nutrition_and_unmapped_both_populate(self):
+        """Smoke: realistic enriched with calories + unmapped actives → column and blob both correct."""
+        enriched = self._enriched_with_nutrition(calories=120.0, protein=6.0)
+        scored = self._scored_with_unmapped(["Mystery Herb"])
+
+        row = build_core_row(enriched, scored, "2026-04-10T12:00:00Z")
+        blob = build_detail_blob(enriched, scored)
+
+        # Column check
+        assert "calories_per_serving" in PRODUCTS_CORE_COLUMNS
+        cal_idx = PRODUCTS_CORE_COLUMNS.index("calories_per_serving")
+        assert row[cal_idx] == 120.0
+
+        # Blob nutrition_detail check
+        assert blob["nutrition_detail"]["calories_per_serving"] == 120.0
+        assert blob["nutrition_detail"]["protein_g"] == 6.0
+
+        # Blob unmapped_actives check
+        assert blob["unmapped_actives"]["names"] == ["Mystery Herb"]
+        assert blob["unmapped_actives"]["total"] == 1

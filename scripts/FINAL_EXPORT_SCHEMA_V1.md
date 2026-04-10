@@ -1,9 +1,9 @@
 # FINAL EXPORT SCHEMA V1
 
-> Version: 1.3.0 — 2026-04-07
+> Version: 1.3.2 — 2026-04-10
 > Consumes: current scorer output (v3.4.0 as of 2026-04-05), enrichment schema v5.1.0
-> Status: ACTIVE — v1.3.0 enhancements approved
-> Updated: **v1.3.0 adds 22 new columns for stack interaction checking, social sharing, search/filter optimization, goal matching, dosing guidance, and allergen summary. Schema now has 87 columns (up from 65); `build_final_db.py` CORE_COLUMN_COUNT is the runtime source of truth.**
+> Status: ACTIVE — v1.3.2 enhancements approved
+> Updated: **v1.3.2 adds `calories_per_serving` REAL column (90 cols) and two new detail_blob subkeys: `nutrition_detail` (all five macros) and `unmapped_actives` (transparency panel). v1.3.1 bugfixes `dosing_summary`/`servings_per_container` (now read the real cleaner-emitted `servingSizes` + `servingsPerContainer` fields) and adds `net_contents_quantity` + `net_contents_unit` for refill-reminder features. Schema now has 90 columns (up from 89 in v1.3.1, 87 in v1.3.0, 65 in v1.2.x); `build_final_db.py` CORE_COLUMN_COUNT is the runtime source of truth.**
 >
 > Previous updates: scoring v3.4 alignment, omega-3 bonus export note, interaction_summary, dose_threshold_evaluation, condition/drug_class mapping, and Flutter convenience fields (`detail_blob_sha256`, `image_is_pdf`, `interaction_summary_hint`, `decision_highlights`)
 
@@ -158,11 +158,16 @@ CREATE TABLE products_core (
     goal_match_confidence         REAL,    -- 0.0-1.0: average cluster weight
 
     -- Enhancement 5: Dosing Guidance
-    dosing_summary                TEXT,    -- "Take 2 capsules daily with food"
+    dosing_summary                TEXT,    -- "Take 2 capsules daily"
     servings_per_container        INTEGER, -- 60
+    net_contents_quantity         REAL,    -- v1.3.1: netContents[0].quantity (e.g. 90)
+    net_contents_unit             TEXT,    -- v1.3.1: netContents[0].unit (e.g. "Capsule(s)", "mL")
 
     -- Enhancement 6: Allergen Summary
     allergen_summary              TEXT,    -- "Contains: Soy, Tree Nuts"
+
+    -- v1.3.2: Nutrition column (hybrid — calories is the highest-value user filter)
+    calories_per_serving          REAL,    -- kcal per serving from nutritionalInfo.calories.amount; NULL when not declared
 
     scoring_version               TEXT,
     output_schema_version         TEXT,
@@ -249,9 +254,12 @@ CREATE INDEX idx_products_core_contains_nootropics ON products_core(contains_noo
 | `key_ingredient_tags`          | Top 5 priority ingredients                                | JSON array: ["ashwagandha", "magnesium", "vitamin_d"]                                   |
 | `goal_matches`                 | Matched against `user_goals_to_clusters.json`             | JSON array of goal IDs, e.g. ["GOAL_SLEEP_QUALITY", "GOAL_REDUCE_STRESS_ANXIETY"]       |
 | `goal_match_confidence`        | Average cluster weight for matched goals                  | 0.0-1.0 float                                                                           |
-| `dosing_summary`               | Generated from `serving_info.serving_size`                | Pre-formatted: "Take 2 capsules daily with food"                                        |
-| `servings_per_container`       | `serving_info.servings_per_container`                     | Integer                                                                                 |
+| `dosing_summary`               | Generated from `enriched.servingSizes[0]` + `form_factor` | v1.3.1: reads `minQuantity`/`maxQuantity`/`unit` + `maxDailyServings`. Pre-formatted: "Take 2 capsules daily" |
+| `servings_per_container`       | `enriched.servingsPerContainer`                           | v1.3.1: integer passthrough from cleaner (was previously reading a nonexistent path)    |
+| `net_contents_quantity`        | `enriched.netContents[0].quantity`                        | v1.3.1: REAL, NULL when missing. Powers refill-reminder `days_until_empty` calc.        |
+| `net_contents_unit`            | `enriched.netContents[0].unit`                            | v1.3.1: TEXT verbatim (e.g. "Capsule(s)", "mL", "Gram(s)")                              |
 | `allergen_summary`             | Generated from `allergen_hits`                            | "Contains: Soy, Tree Nuts" or NULL                                                      |
+| `calories_per_serving`         | `enriched.nutrition_summary.calories_per_serving`         | v1.3.2: REAL kcal per serving; NULL when not declared. Primary nutrition filter column.  |
 
 ### What Is NOT Stored
 
@@ -429,9 +437,47 @@ compatibility/audit fallback. The payload is cached on-device in
     }
   },
   "evidence_data": {...},
-  "rda_ul_data": {...}
+  "rda_ul_data": {...},
+  "nutrition_detail": {
+    "calories_per_serving": 120.0,
+    "total_carbohydrates_g": 10.0,
+    "total_fat_g": 5.0,
+    "protein_g": 8.0,
+    "dietary_fiber_g": 2.0
+  },
+  "unmapped_actives": {
+    "names": ["Exotic Extract", "Typo Ingredient"],
+    "total": 2,
+    "excluding_banned_exact_alias": 2
+  }
 }
 ```
+
+#### Nutrition detail (`nutrition_detail`)
+
+Added in v1.3.2. Always present (even when all values are `null` — no null-checks needed on the Flutter side).
+
+| Key                     | Type          | Notes                                                        |
+|-------------------------|---------------|--------------------------------------------------------------|
+| `calories_per_serving`  | float or null | kcal. Also promoted to `products_core.calories_per_serving`. |
+| `total_carbohydrates_g` | float or null | grams                                                        |
+| `total_fat_g`           | float or null | grams                                                        |
+| `protein_g`             | float or null | grams                                                        |
+| `dietary_fiber_g`       | float or null | grams                                                        |
+
+Source: `enriched.nutrition_summary` ← `product.nutritionalInfo.*`.amount`. Not scored — transparency only.
+
+#### Unmapped actives (`unmapped_actives`)
+
+Added in v1.3.2. Always present (even when `names` is empty — no null-checks needed on the Flutter side). Use this to render a "X ingredients could not be mapped" transparency panel.
+
+| Key                          | Type     | Notes                                                           |
+|------------------------------|----------|-----------------------------------------------------------------|
+| `names`                      | string[] | Ingredient names that could not be resolved in the IQM          |
+| `total`                      | int      | Total unmapped actives before any exclusions                    |
+| `excluding_banned_exact_alias` | int    | Unmapped count excluding ingredients with banned exact/alias hits |
+
+Source: `scored.unmapped_actives` / `scored.unmapped_actives_total` / `scored.unmapped_actives_excluding_banned_exact_alias`.
 
 ### Active ingredient entry
 

@@ -2603,3 +2603,399 @@ class TestBrandedEnhancersFromDataFile:
             "Vitamin C is a nutrient, not a branded bioavailability enhancer"
         assert not enricher._is_absorption_enhancer('glycine', 'glycine'), \
             "Glycine is an amino acid, not a branded bioavailability enhancer"
+
+
+class TestEnricherDropsDeadPassthroughFields:
+    """
+    Regression: the enricher begins with `enriched = dict(product)` (shallow
+    copy of cleaned input). A 2026-04 audit identified 14 cleaner fields that
+    have zero downstream consumers — they inflate the serialized record size
+    without adding signal.
+
+    This test locks the drop list so the fields cannot silently sneak back in.
+    If a future change starts consuming one of these fields downstream, this
+    test must be updated in the SAME commit as the new consumer (and the
+    pop removed). Otherwise the field is dead baggage.
+
+    Kept fields (still consumed): dsld_id, product_name, brandName,
+    activeIngredients, inactiveIngredients, labelText, servingSizes,
+    servingsPerContainer, netContents, statements, claims, targetGroups,
+    userGroups, physicalState, nutritionalInfo, form_factor, status,
+    discontinuedDate, imageUrl, upcSku, display_ingredients (enricher
+    overwrites this, but does NOT pop it).
+
+    Dropped fields: src, nhanesId, brandIpSymbol, productVersionCode, pdf,
+    thumbnail, percentDvFootnote, hasOuterCarton, upcValid, productType,
+    events, labelRelationships, metadata, images.
+    """
+
+    DEAD_FIELDS = [
+        "src",
+        "nhanesId",
+        "brandIpSymbol",
+        "productVersionCode",
+        "pdf",
+        "thumbnail",
+        "percentDvFootnote",
+        "hasOuterCarton",
+        "upcValid",
+        "productType",
+        "events",
+        "labelRelationships",
+        "metadata",
+        "images",
+    ]
+
+    ACTIVE_FIELDS = [
+        "dsld_id",
+        "product_name",
+        "brandName",
+        "activeIngredients",
+        "inactiveIngredients",
+        "statements",
+        "claims",
+        "targetGroups",
+        "form_factor",
+        "status",
+        "upcSku",
+        "display_ingredients",
+    ]
+
+    @pytest.fixture
+    def normalizer(self):
+        from enhanced_normalizer import EnhancedDSLDNormalizer
+        return EnhancedDSLDNormalizer()
+
+    @pytest.fixture
+    def enricher(self):
+        return SupplementEnricherV3()
+
+    @pytest.fixture
+    def minimal_raw_product(self):
+        """Minimal raw DSLD product that exercises all passthrough fields.
+
+        Populates every candidate dead field with a non-None value so the
+        test can prove the pop actually happened (not that the field was
+        just never set).
+        """
+        return {
+            "id": "test_dead_passthrough_001",
+            "fullName": "Test Dead Passthrough Product",
+            "brandName": "Test Brand",
+            "upcSku": "123456789012",
+            "productVersionCode": "1",
+            "productType": {
+                "langualCode": "A0815",
+                "langualCodeDescription": "Dietary Supplement Product"
+            },
+            "physicalState": {
+                "langualCode": "E0155",
+                "langualCodeDescription": "Capsule (pill)"
+            },
+            "ingredientRows": [
+                {
+                    "name": "Vitamin C",
+                    "order": 1,
+                    "quantity": [{"quantity": 500, "unit": "mg"}],
+                    "forms": [{"name": "Ascorbic Acid"}]
+                }
+            ],
+            "otherIngredients": {
+                "ingredients": [
+                    {"name": "Cellulose", "order": 1, "forms": []}
+                ]
+            },
+            "statements": [{"type": "allergen", "text": "Contains: None"}],
+            "claims": [],
+            "targetGroups": ["Adults"],
+            "userGroups": ["Adults"],
+            "servingSizes": [{"minQuantity": 1, "maxQuantity": 1, "unit": "capsule"}],
+            "servingsPerContainer": [{"order": 1, "quantity": 60, "unit": "capsules"}],
+            "netContents": [{"quantity": 60, "unit": "capsules"}],
+            "status": "active",
+            # Dead-field candidates populated so absence proves the pop
+            "src": "manual/test/dead_passthrough.json",
+            "nhanesId": 12345,
+            "brandIpSymbol": "TM",
+            "pdf": "http://example.com/label.pdf",
+            "thumbnail": "http://example.com/thumb.jpg",
+            "percentDvFootnote": "%DV footnote text",
+            "hasOuterCarton": True,
+            "events": [{"type": "Date entered", "date": "2020-01-01"}],
+            "labelRelationships": [],
+            "images": [{"url": "http://example.com/img.jpg", "type": "front"}],
+            "contacts": [{"name": "Test Co", "phone": "555-0000"}],
+        }
+
+    def test_dead_fields_are_dropped_from_enriched_output(
+        self, normalizer, enricher, minimal_raw_product
+    ):
+        """The 14 dead passthrough fields must be absent from the enriched
+        output. If any of them is still present, the pop block either never
+        ran or was partially applied."""
+        cleaned = normalizer.normalize_product(minimal_raw_product)
+
+        # Sanity: dead fields should exist in cleaned data (cleaner writes them)
+        # This guards against the test passing because the cleaner quietly
+        # stopped writing them — in which case the pop block is a no-op and
+        # the test gives a false green.
+        cleaner_wrote_at_least_one = any(
+            field in cleaned for field in self.DEAD_FIELDS
+        )
+        assert cleaner_wrote_at_least_one, (
+            "Cleaner did not write any dead-field candidates. Test fixture "
+            "may be missing required inputs, or the cleaner contract changed."
+        )
+
+        enriched, _issues = enricher.enrich_product(cleaned)
+
+        present_dead = [f for f in self.DEAD_FIELDS if f in enriched]
+        assert not present_dead, (
+            f"Enricher failed to pop dead passthrough fields: {present_dead}. "
+            f"These fields have zero downstream consumers and must be dropped "
+            f"before the enriched dict is returned."
+        )
+
+    def test_active_fields_survive_enrichment(
+        self, normalizer, enricher, minimal_raw_product
+    ):
+        """The pop block must not accidentally strip fields that are still
+        consumed downstream."""
+        cleaned = normalizer.normalize_product(minimal_raw_product)
+        enriched, _issues = enricher.enrich_product(cleaned)
+
+        missing_active = [f for f in self.ACTIVE_FIELDS if f not in enriched]
+        assert not missing_active, (
+            f"Enricher stripped active fields that still have downstream "
+            f"consumers: {missing_active}. Revert the pop immediately."
+        )
+
+    def test_display_ingredients_is_present_after_enrichment(
+        self, normalizer, enricher, minimal_raw_product
+    ):
+        """display_ingredients is a special case: the enricher OVERWRITES it
+        (scripts/enrich_supplements_v3.py line ~10798), it does NOT pop it.
+        The enricher's version reads the cleaner's value first (line ~8143)
+        and augments it. If this test fails, someone accidentally added
+        display_ingredients to the pop list."""
+        cleaned = normalizer.normalize_product(minimal_raw_product)
+        enriched, _issues = enricher.enrich_product(cleaned)
+
+        assert "display_ingredients" in enriched, (
+            "display_ingredients must be present in enriched output. "
+            "The enricher overwrites it with _enrich_display_ingredients(); "
+            "it must NOT be in the pop block."
+        )
+
+    def test_enriched_dict_is_smaller_than_naive_shallow_copy(
+        self, normalizer, enricher, minimal_raw_product
+    ):
+        """Sanity check: the enriched dict should have fewer cleaner-passthrough
+        keys after the pop block than a naive dict(cleaned) copy would."""
+        cleaned = normalizer.normalize_product(minimal_raw_product)
+
+        # How many dead fields exist in the cleaned dict (the pop baseline)
+        dead_in_cleaned = sum(1 for f in self.DEAD_FIELDS if f in cleaned)
+        assert dead_in_cleaned > 0, (
+            "Cleaner must write at least one dead-field candidate for this "
+            "test to be meaningful."
+        )
+
+        enriched, _issues = enricher.enrich_product(cleaned)
+
+        # None of the dead fields should survive
+        dead_in_enriched = sum(1 for f in self.DEAD_FIELDS if f in enriched)
+        assert dead_in_enriched == 0, (
+            f"Expected 0 dead fields in enriched output, found "
+            f"{dead_in_enriched}: "
+            f"{[f for f in self.DEAD_FIELDS if f in enriched]}"
+        )
+
+
+class TestClaimSourceExtractionFromLabelTextParsed:
+    """
+    Regression: the enricher's `_extract_text_sources` helper used to iterate
+    `product.get('qualityFeatures')`, `product.get('certifications')`, and
+    `product.get('otherIngredients')` at top level. The cleaner nests this
+    data inside `labelText.parsed.qualityFeatures` and
+    `labelText.parsed.certifications` (enhanced_normalizer.py lines 3550, 3562)
+    and processes `otherIngredients` into `inactiveIngredients`. The top-level
+    loops were dead code that always returned empty.
+
+    2026-04 audit removed the dead loops. This test locks the contract that
+    certification and quality-feature evidence still reaches the claims-db
+    matcher via the `labelText.parsed.*` iteration path. If a future refactor
+    removes the parsed iteration, this test will catch the regression.
+    """
+
+    def _make_enricher(self):
+        from enrich_supplements_v3 import SupplementEnricherV3
+        return SupplementEnricherV3.__new__(SupplementEnricherV3)
+
+    def test_certifications_captured_from_labeltext_parsed(self):
+        enricher = self._make_enricher()
+        product = {
+            "labelText": {
+                "raw": "USP Verified, NSF Certified.",
+                "parsed": {
+                    "certifications": ["USP Verified", "NSF Certified"],
+                },
+            },
+            "activeIngredients": [],
+            "inactiveIngredients": [],
+            "statements": [],
+            "claims": [],
+            "fullName": "Test",
+            "brandName": "Test",
+        }
+        sources = enricher._extract_text_sources(product)
+        cert_texts = [t for p, t in sources if "labelText.parsed.certifications" in p]
+        assert "USP Verified" in cert_texts
+        assert "NSF Certified" in cert_texts
+
+    def test_quality_features_captured_from_labeltext_parsed(self):
+        enricher = self._make_enricher()
+        product = {
+            "labelText": {
+                "raw": "GMP Certified, third-party tested.",
+                "parsed": {
+                    "qualityFeatures": ["GMP Certified", "Third-party tested"],
+                },
+            },
+            "activeIngredients": [],
+            "inactiveIngredients": [],
+            "statements": [],
+            "claims": [],
+            "fullName": "Test",
+            "brandName": "Test",
+        }
+        sources = enricher._extract_text_sources(product)
+        qf_texts = [t for p, t in sources if "labelText.parsed.qualityFeatures" in p]
+        assert "GMP Certified" in qf_texts
+        assert "Third-party tested" in qf_texts
+
+    def test_dead_toplevel_certifications_loop_removed(self):
+        """Sanity-check that the top-level `certifications` read doesn't fire.
+
+        A cleaned product with ONLY a top-level `certifications` key (which
+        the cleaner never writes) should produce zero certification sources.
+        This proves the dead loop is truly gone — if someone re-adds it, this
+        test catches the resurrection.
+        """
+        enricher = self._make_enricher()
+        product = {
+            "certifications": ["PHANTOM Certification"],
+            "qualityFeatures": ["PHANTOM Quality Feature"],
+            "otherIngredients": "PHANTOM other ingredient text",
+            "labelText": {"raw": "", "parsed": {}},
+            "activeIngredients": [],
+            "inactiveIngredients": [],
+            "statements": [],
+            "claims": [],
+            "fullName": "",
+            "brandName": "",
+        }
+        sources = enricher._extract_text_sources(product)
+        # No source path should come from a top-level certifications/
+        # qualityFeatures/otherIngredients key.
+        offenders = [
+            (p, t) for p, t in sources
+            if p.startswith("certifications[")
+            or p.startswith("qualityFeatures[")
+            or p == "otherIngredients"
+            or p.startswith("otherIngredients[")
+        ]
+        assert offenders == [], (
+            f"Top-level dead loops resurrected: {offenders}"
+        )
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# TDD: Change B — nutrition_summary collection (enrich_supplements_v3.py)
+# ─────────────────────────────────────────────────────────────────────────────
+
+class TestNutritionSummaryCollection:
+    """Verify _collect_nutrition_summary produces the expected flat dict."""
+
+    @pytest.fixture
+    def enricher(self):
+        return SupplementEnricherV3()
+
+    def _make_product(self, nutritional_info=None):
+        base = {
+            "id": "test_ns_001",
+            "dsld_id": "test_ns_001",
+            "product_name": "Test Nutrition Product",
+            "activeIngredients": [],
+            "inactiveIngredients": [],
+            "statements": [],
+        }
+        if nutritional_info is not None:
+            base["nutritionalInfo"] = nutritional_info
+        return base
+
+    def test_nutrition_summary_populates_all_five_when_present(self, enricher):
+        product = self._make_product({
+            "calories": {"amount": 50.0, "unit": "kcal"},
+            "totalCarbohydrates": {"amount": 12.0, "unit": "g"},
+            "totalFat": {"amount": 3.0, "unit": "g"},
+            "protein": {"amount": 7.0, "unit": "g"},
+            "dietaryFiber": {"amount": 1.5, "unit": "g"},
+        })
+        enriched, _ = enricher.enrich_product(product)
+        ns = enriched.get("nutrition_summary")
+        assert ns is not None, "nutrition_summary must be present in enriched output"
+        assert ns["calories_per_serving"] == 50.0
+        assert ns["total_carbohydrates_g"] == 12.0
+        assert ns["total_fat_g"] == 3.0
+        assert ns["protein_g"] == 7.0
+        assert ns["dietary_fiber_g"] == 1.5
+
+    def test_nutrition_summary_handles_missing_nutritionalinfo(self, enricher):
+        product = self._make_product()  # no nutritionalInfo key
+        enriched, _ = enricher.enrich_product(product)
+        ns = enriched.get("nutrition_summary")
+        assert ns is not None, "nutrition_summary must always be present"
+        assert ns["calories_per_serving"] is None
+        assert ns["total_carbohydrates_g"] is None
+        assert ns["total_fat_g"] is None
+        assert ns["protein_g"] is None
+        assert ns["dietary_fiber_g"] is None
+
+    def test_nutrition_summary_handles_partial_data(self, enricher):
+        product = self._make_product({
+            "calories": {"amount": 25.0, "unit": "kcal"},
+            # other macros absent
+        })
+        enriched, _ = enricher.enrich_product(product)
+        ns = enriched["nutrition_summary"]
+        assert ns["calories_per_serving"] == 25.0
+        assert ns["total_carbohydrates_g"] is None
+        assert ns["total_fat_g"] is None
+        assert ns["protein_g"] is None
+        assert ns["dietary_fiber_g"] is None
+
+    def test_nutrition_summary_passes_through_units_verbatim(self, enricher):
+        product = self._make_product({
+            "protein": {"amount": 5.0, "unit": "g"},
+        })
+        enriched, _ = enricher.enrich_product(product)
+        ns = enriched["nutrition_summary"]
+        assert ns["protein_g"] == 5.0, "protein_g must pass through as-is (5.0g → 5.0)"
+
+    def test_nutrition_summary_preserves_sugar_and_sodium_flow(self, enricher):
+        """Adding nutrition_summary must not disturb dietary_sensitivity_data."""
+        product = self._make_product({
+            "calories": {"amount": 10.0, "unit": "kcal"},
+            "totalCarbohydrates": {"amount": 2.0, "unit": "g"},
+        })
+        product["nutritionalInfo"]["sugars"] = {"amount": 1.0, "unit": "g"}
+        product["nutritionalInfo"]["sodium"] = {"amount": 5.0, "unit": "mg"}
+        enriched, _ = enricher.enrich_product(product)
+        # nutrition_summary present
+        assert enriched.get("nutrition_summary") is not None
+        # dietary_sensitivity_data still present and populated
+        dsd = enriched.get("dietary_sensitivity_data")
+        assert dsd is not None, "dietary_sensitivity_data must still be populated"
+        assert "sugar" in dsd
+        assert "sodium" in dsd
