@@ -16,6 +16,19 @@ def render_quality(data):
     filtered_products = filter_product_catalog(data)
     st.caption(f"Dataset scope: {dataset_scope} | Release rows in scope: {len(filtered_products)}")
 
+    # Graceful degradation: when the release DB is absent, filter_product_catalog
+    # returns an empty DataFrame with no columns. Every sub-renderer that
+    # references a specific column (dsld_id, verdict, score_100_equivalent, etc.)
+    # would crash with KeyError. Short-circuit here and keep the page usable.
+    _required_columns = {"dsld_id", "verdict"}
+    if filtered_products.empty or not _required_columns.issubset(set(filtered_products.columns)):
+        st.info(
+            "No release DB loaded — quality metrics unavailable. "
+            "Run a pipeline build to populate `scripts/final_db_output/`."
+        )
+        _render_coverage_gate(data, dataset_scope)
+        return
+
     _render_safety_summary(data, filtered_products)
     st.divider()
     _render_harmful_ingredient_trends(data, filtered_products)
@@ -433,9 +446,17 @@ def _warning_penalty_score(blob: dict, warning: dict) -> float | None:
 def _render_harmful_ingredient_trends(data, filtered_products):
     st.write("### Harmful Ingredient Trends")
     st.caption("Release snapshot detail blobs grouped by flagged ingredient. Points shown are product-level B1 penalty totals, not per-ingredient allocations.")
+    # Graceful degradation: filtered_products can be empty or missing dsld_id
+    # when the DB is absent or every filter excludes everything. Don't crash.
+    if filtered_products is None or getattr(filtered_products, "empty", True):
+        allowed_ids: set[str] | None = set()
+    elif "dsld_id" not in filtered_products.columns:
+        allowed_ids = set()
+    else:
+        allowed_ids = set(filtered_products["dsld_id"].astype(str))
     rows = build_harmful_ingredient_trend_rows(
         data.detail_blobs_dir,
-        allowed_ids=set(filtered_products["dsld_id"].astype(str)),
+        allowed_ids=allowed_ids,
     )
     if not rows:
         st.info("No harmful additive findings match the active filters.")

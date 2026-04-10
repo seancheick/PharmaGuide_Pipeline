@@ -3,7 +3,7 @@
 > Version: 1.3.0 — 2026-04-07
 > Consumes: current scorer output (v3.4.0 as of 2026-04-05), enrichment schema v5.1.0
 > Status: ACTIVE — v1.3.0 enhancements approved
-> Updated: **v1.3.0 adds 23 new columns for stack interaction checking, social sharing, search/filter optimization, goal matching, dosing guidance, and allergen summary. Schema now has 88 columns (up from 65).**
+> Updated: **v1.3.0 adds 22 new columns for stack interaction checking, social sharing, search/filter optimization, goal matching, dosing guidance, and allergen summary. Schema now has 87 columns (up from 65); `build_final_db.py` CORE_COLUMN_COUNT is the runtime source of truth.**
 >
 > Previous updates: scoring v3.4 alignment, omega-3 bonus export note, interaction_summary, dose_threshold_evaluation, condition/drug_class mapping, and Flutter convenience fields (`detail_blob_sha256`, `image_is_pdf`, `interaction_summary_hint`, `decision_highlights`)
 

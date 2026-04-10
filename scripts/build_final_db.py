@@ -1592,12 +1592,14 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
                 "status": status,
                 "reason": safe_str(sub.get("reason"))[:200],
             })
+    # Use .get() for all b_sub key reads so a future scorer field rename
+    # degrades gracefully instead of raising KeyError mid-blob-build.
     if safe_float(b_sub.get("B1_penalty"), 0) > 0:
         for h in safe_list(enriched.get("harmful_additives")):
             if isinstance(h, dict):
                 penalties.append({
                     "id": "B1", "label": f"Harmful additive: {safe_str(h.get('additive_name') or h.get('ingredient'))}",
-                    "score": b_sub["B1_penalty"],
+                    "score": b_sub.get("B1_penalty", 0),
                     "severity": safe_str(h.get("severity_level")),
                     "reason": safe_str(h.get("mechanism_of_harm") or h.get("notes") or h.get("category"))[:200],
                 })
@@ -1610,13 +1612,13 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
                     "presence": safe_str(a.get("presence_type")),
                 })
     if safe_float(b_sub.get("B3"), 0) < 0:
-        penalties.append({"id": "B3", "label": "Compliance claim violation", "score": b_sub["B3"]})
+        penalties.append({"id": "B3", "label": "Compliance claim violation", "score": b_sub.get("B3", 0)})
     if safe_float(b_sub.get("B5_penalty"), 0) > 0:
         penalties.append({"id": "B5", "label": "Proprietary blend opacity",
-                          "score": b_sub["B5_penalty"],
+                          "score": b_sub.get("B5_penalty", 0),
                           "blend_count": len(safe_list(b_sub.get("B5_blend_evidence")))})
     if safe_float(b_sub.get("B6_penalty"), 0) > 0:
-        penalties.append({"id": "B6", "label": "Unsubstantiated disease claims", "score": b_sub["B6_penalty"]})
+        penalties.append({"id": "B6", "label": "Unsubstantiated disease claims", "score": b_sub.get("B6_penalty", 0)})
     if safe_float(b_sub.get("B7_penalty"), 0) > 0:
         b7_evidence = safe_list(b_sub.get("B7_dose_safety_evidence"))
         for ev in b7_evidence:
