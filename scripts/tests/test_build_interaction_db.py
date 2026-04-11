@@ -16,8 +16,10 @@ Covered (gate requires ≥15; this module ships 22):
 - Drug class map population from drug_classes.json
 - interaction_db_metadata keys: schema_version, built_at,
   source_drafts_count, source_suppai_count, total_interactions,
-  sha256_checksum, interaction_db_version, pipeline_version,
-  min_app_version
+  interaction_db_version, pipeline_version, min_app_version
+  (sha256_checksum is NOT embedded — the manifest is the sole source of
+  truth for the file's hash; storing the file's own hash inside the file
+  would invalidate the hash.)
 - Dedup same-key rows: curated beats suppai beats raw
 - Conflict resolution: more-cautious severity wins on draft collision
 - Override precedence: interaction_overrides.json beats curated
@@ -623,12 +625,15 @@ def test_metadata_table_has_required_keys(build_ctx):
         "source_drafts_count",
         "source_suppai_count",
         "total_interactions",
-        "sha256_checksum",
         "interaction_db_version",
         "pipeline_version",
         "min_app_version",
     ):
         assert k in kv, f"{k} missing from metadata: {sorted(kv)}"
+    # sha256_checksum is intentionally NOT in embedded metadata — storing
+    # the file's own hash inside the file would invalidate the hash. The
+    # manifest is the sole source of truth for the checksum.
+    assert "sha256_checksum" not in kv
     assert kv["built_at"] == "2026-04-11T00:00:00Z"
     assert kv["interaction_db_version"] == "v2026.04.11.000000"
     assert kv["total_interactions"] == "3"
@@ -674,8 +679,8 @@ def test_build_time_locks_last_updated(build_ctx):
 def test_build_is_content_deterministic(tmp_path, build_ctx):
     """Two builds with the same --build-time yield the same row-content hash.
 
-    SQLite file bytes can vary by page layout, so we hash the sorted content
-    instead. T8 (byte-identical file) runs separately against this output.
+    This is the content-level determinism check. The stronger byte-identity
+    check lives in test_build_is_byte_identical_deterministic below.
     """
 
     def content_hash(db: Path) -> str:
@@ -709,6 +714,50 @@ def test_build_is_content_deterministic(tmp_path, build_ctx):
     h2 = content_hash(build_ctx.output_db)
 
     assert h1 == h2, "content hashes diverged between builds"
+
+
+def test_build_is_byte_identical_deterministic(tmp_path, build_ctx):
+    """T8: Two builds with the same --build-time must produce byte-identical
+    SQLite files (same SHA-256 of the raw blob on disk), and the manifest
+    checksum must match that SHA-256 in both runs.
+
+    This is a stronger guarantee than content-equivalence: it proves
+    every byte of the SQLite page layout — VACUUM output, ANALYZE stat1
+    rows, FTS5 internal tables, metadata values — is deterministic
+    modulo the inputs and --build-time. Flutter repo LFS-tracks this
+    blob; any drift would cause spurious LFS diffs on every build.
+    """
+
+    def file_sha(p: Path) -> str:
+        h = hashlib.sha256()
+        with p.open("rb") as fh:
+            for chunk in iter(lambda: fh.read(1024 * 1024), b""):
+                h.update(chunk)
+        return h.hexdigest()
+
+    _build(build_ctx)
+    db_hash_a = file_sha(build_ctx.output_db)
+    manifest_a = json.loads(build_ctx.manifest_path.read_text())
+    assert manifest_a["checksum"] == f"sha256:{db_hash_a}", (
+        "manifest checksum drifted from actual file hash on first build "
+        "— sha256 self-reference bug re-introduced?"
+    )
+
+    build_ctx.output_db.unlink()
+    build_ctx.manifest_path.unlink()
+    build_ctx.report_path.unlink()
+
+    _build(build_ctx)
+    db_hash_b = file_sha(build_ctx.output_db)
+    manifest_b = json.loads(build_ctx.manifest_path.read_text())
+
+    assert db_hash_a == db_hash_b, (
+        f"byte-identity broken: run A={db_hash_a}, run B={db_hash_b}"
+    )
+    assert manifest_b["checksum"] == f"sha256:{db_hash_b}", (
+        "manifest checksum drifted from actual file hash on second build"
+    )
+    assert manifest_a["checksum"] == manifest_b["checksum"]
 
 
 # --------------------------------------------------------------------------- #

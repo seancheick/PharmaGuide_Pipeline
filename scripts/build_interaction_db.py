@@ -680,6 +680,11 @@ def run_build(ctx: BuildContext) -> BuildResult:
         _insert_rows(con, "research_pairs", research_rows)
         _insert_rows(con, "drug_class_map", class_rows)
 
+        # NOTE: sha256_checksum is intentionally NOT stored in the embedded
+        # metadata table. Writing the file's own hash back into the file would
+        # change the file's bytes and invalidate the hash we just computed. The
+        # manifest (interaction_db_manifest.json) is the sole source of truth
+        # for the checksum of the released SQLite blob.
         metadata = {
             "schema_version": SCHEMA_VERSION,
             "built_at": ctx.build_time,
@@ -691,7 +696,6 @@ def run_build(ctx: BuildContext) -> BuildResult:
             "interaction_db_version": ctx.interaction_db_version,
             "pipeline_version": ctx.pipeline_version,
             "min_app_version": ctx.min_app_version,
-            "sha256_checksum": "pending",
         }
         _insert_metadata(con, metadata)
 
@@ -708,18 +712,9 @@ def run_build(ctx: BuildContext) -> BuildResult:
     finally:
         con.close()
 
-    # Patch sha256_checksum in a separate short-lived connection.
-    sha256 = _sqlite_bytes_hash(ctx.output_db)
-    con = sqlite3.connect(str(ctx.output_db))
-    try:
-        con.execute(
-            "UPDATE interaction_db_metadata SET value = ? WHERE key = ?",
-            (sha256, "sha256_checksum"),
-        )
-        con.commit()
-    finally:
-        con.close()
-    result.sha256 = sha256
+    # Compute hash AFTER the connection is closed and all writes (including
+    # VACUUM/ANALYZE) are flushed. This is the hash written to the manifest.
+    result.sha256 = _sqlite_bytes_hash(ctx.output_db)
 
     _write_manifest(ctx, result, integrity="ok")
     _write_report(ctx, result)
