@@ -31,6 +31,14 @@ from constants import DATA_DIR, SCRIPTS_DIR
 
 REQUIRED_SCHEMA_VERSIONS = {"5.0.0", "5.1.0", "5.2.0", "5.3.0"}
 
+# Files that belong to a different subsystem and carry their own schema
+# versioning namespace independent of the main enrichment pipeline (5.x).
+# The interaction DB subsystem (INTERACTION_DB_SPEC v2.2.0) uses its own
+# schema_version "1.0.0" — aligned with interaction_db.sqlite — so files
+# under that subsystem must be skipped by the main pipeline's 5.x uniformity
+# test. See scripts/build_interaction_db.SCHEMA_VERSION.
+INTERACTION_DB_SUBSYSTEM_FILES = {"drug_classes.json"}
+
 # Required fields inside every _metadata block
 REQUIRED_METADATA_FIELDS = ("description", "purpose", "schema_version")
 
@@ -155,9 +163,15 @@ class TestDatabaseSchemaIntegrity:
     # 1b. schema_version must be uniform across all databases
     # ------------------------------------------------------------------
     def test_schema_version_uniform(self, db_files):
-        """All database files must declare a recognized schema_version."""
+        """All database files must declare a recognized schema_version.
+
+        Files in INTERACTION_DB_SUBSYSTEM_FILES are exempt — they belong to
+        the separately-versioned interaction DB subsystem (schema 1.0.0).
+        """
         mismatches = []
         for fp in db_files:
+            if fp.name in INTERACTION_DB_SUBSYSTEM_FILES:
+                continue
             data = _load_json(fp)
             if data is None or not isinstance(data, dict):
                 continue
