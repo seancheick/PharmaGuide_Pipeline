@@ -1,978 +1,1054 @@
-# PharmaGuide Interaction Database — Engineering Specification
+# PharmaGuide — Interaction DB & Nutrient Safety Engineering Plan
 
-**Document version:** 1.0.0  
-**Status:** Draft — pending M0 golden dataset review  
-**Author:** Engineering  
-**Last updated:** 2026-04-10  
-**Target release:** M4 (Flutter widget integration)
+**Document version:** 2.0.0
+**Last updated:** 2026-04-11
+**Status:** Planning complete, ready for implementation
+**Supersedes:** v1.0.0 (written without knowledge of existing Flutter infrastructure)
 
 ---
 
-## Table of Contents
+## 🎯 Next Agent — Start Here
 
-1. [Purpose & Scope](#1-purpose--scope)
-2. [Data Sources & Integration Strategy](#2-data-sources--integration-strategy)
-3. [Database Schema](#3-database-schema)
-4. [Matching Strategy](#4-matching-strategy)
-5. [Severity Scale & Verdict Integration](#5-severity-scale--verdict-integration)
-6. [Flutter Integration Plan](#6-flutter-integration-plan)
-7. [Build Plan with Milestones](#7-build-plan-with-milestones)
-8. [Open Questions & Risks](#8-open-questions--risks)
-9. [Out of Scope — Do Not Confuse with v1](#9-out-of-scope--do-not-confuse-with-v1)
+**If you are a fresh agent reading this cold, here is the exact state of the world:**
+
+1. **What's already done:**
+   - v3.4.x scoring recalibration shipped (A1 15→18, A2 3→5, Ω3 2→3, B1 cap 8→15) across 5,231 products.
+   - Catalog v2026.04.11.040818 bundled into Flutter (`assets/db/pharmaguide_core.db`, 11.75 MB, LFS).
+   - Supabase OTA round-trip verified.
+   - This spec.
+
+2. **What to build next (in order):**
+   - **M1: Stack Nutrient Accumulator** — Flutter only, 2–3 days, ships independently of any interaction DB work. This closes the biggest medical-grade gap: UL checks currently run per-product, not per-stack. See §5.
+   - **M2: Pipeline Interaction DB builder + verifier** — new Python scripts that normalize the user's draft JSON + supp.ai export, validate CUI/RXCUI against UMLS and RxNorm APIs, and emit a bundled SQLite. See §6.
+   - **M3: Flutter Interaction DB binding** — Drift wrapper around the bundled SQLite. See §7.
+   - **M4: Stack interaction engine** — extend the existing `StackInteractionChecker`, add RxNorm-backed medication entry UI. See §8.
+   - **M5: Product-scan interaction warnings** — banner on product detail when a scanned item interacts with existing stack or meds. See §9.
+
+3. **Critical existing infrastructure you must reuse, not rebuild (§4):**
+   - `lib/core/constants/severity.dart` — `Severity` enum (5 tiers, colors, stack penalties)
+   - `lib/core/models/interaction_result.dart` — `InteractionResult` model maps 1:1 to the draft JSON format
+   - `lib/services/stack/stack_interaction_checker.dart` — 119-line category-level check engine, already wired into stack add flow
+   - `lib/data/database/tables/user_stacks_table.dart` — `UserStacksLocal` already supports `type='medication'` with `rxcui` + `drug_classes` columns. **Do not create a separate `user_medications` table.**
+   - `lib/services/fit_score/e1_dosage_calculator.dart` — already has per-product UL check logic. Reuse the RDA/UL parsing.
+
+4. **Data the user has ready:**
+   - A draft JSON of ~150 curated interactions (unverified) — format documented in §10.1. User will paste into `scripts/data/curated_interactions/interactions_drafts_v0.json` when ready.
+   - supp.ai full database export — **commercial use cleared by the user**. Drop at `scripts/data/suppai_import/suppai_raw.json`.
+   - RxNorm API: free NLM endpoint at https://lhncbc.nlm.nih.gov/RxNav/APIs/RxNormAPIs.html — no auth, 20 req/sec cap.
+   - UMLS API for CUI validation (already used by `scripts/api_audit/verify_cui.py`).
+
+5. **Key architectural commitments (non-negotiable):**
+   - Bundled SQLite, not in-memory JSON.
+   - Interaction DB ships as a **separate** asset from `pharmaguide_core.db` so they have independent release cycles.
+   - Medications are PHI and **never** sync to Supabase (enforced at build time via a grep assertion).
+   - Interactions are **user-scoped** and never enter the arithmetic quality score.
+   - Nutrient accumulation is a **pure function**, not a new table.
+   - Food interactions become one-line **flags on the product**, not a food tracker.
+   - Data quality pipeline (CUI/RXCUI verification) is **mandatory** before any entry is shipped. Major+ severity without a source blocks the build.
 
 ---
 
 ## 1. Purpose & Scope
 
-### 1.1 Why We Are Building This
+### What this system does
 
-PharmaGuide currently scores supplements on ingredient quality, safety, and clinical evidence. That score is product-global — it applies the same way to every user. The interaction feature adds user-scoped context: the same supplement can carry materially different risks depending on what medications the user is already taking, or what other supplements are in their stack.
+1. **Stack nutrient accumulation (M1).** Sum every active ingredient across all items in the user's stack and warn when totals exceed RDA/UL thresholds.
+2. **Drug ↔ supplement interactions (M2–M5).** When the user scans a supplement, check it against medications they've entered and supplements already in their stack.
+3. **Supplement ↔ supplement interactions (M4).** Pairwise antagonism/synergy checks across the stack.
+4. **Drug class lookups (M2).** Handle the common case where the user knows "I'm on a statin" but not the specific molecule.
 
-A user on warfarin asking about fish oil is a qualitatively different safety question than a user with no medications asking the same thing. Today we have no way to surface that. This spec defines the database, matching logic, schema, and Flutter integration for closing that gap at the MVP level.
+### What this system does NOT do (v1)
 
-### 1.2 What This Feature Covers
-
-| Interaction type | Example | Included |
-|---|---|---|
-| Supplement ↔ Drug | Fish oil + warfarin (anticoagulant potentiation) | Yes |
-| Supplement ↔ Supplement | St. John's Wort + 5-HTP (serotonin syndrome risk) | Yes |
-| Drug ↔ Drug | Warfarin + aspirin (bleeding risk) | Yes — limited, DrugBank M3 |
-| Food ↔ Drug | Grapefruit + statins (CYP3A4 inhibition) | Yes — high-value subset only |
-| Food ↔ Supplement | Calcium-rich foods + thyroid medications | Yes — high-value subset only |
-
-The primary value proposition for v1 is **supplement ↔ drug** and **supplement ↔ supplement**, with a limited set of the most clinically important food ↔ drug interactions included as first-class entries rather than a separate system.
-
-### 1.3 What This Feature Does NOT Cover
-
-The following are explicitly out of scope for v1 to avoid scope creep and scope confusion. They are documented in Section 9 with rationale.
-
-- Pharmacogenomic / gene-variant interactions (CYP2D6, CYP2C9 polymorphisms)
-- Dose-dependent interaction modeling (risk varies by exact mg)
-- Time-of-day separation scheduling (take 4 hours apart recommendations)
-- Provider-facing clinical decision support
-- Interaction with the arithmetic quality score — the score is product-global; interactions are user-scoped
-- Drug ↔ Drug coverage at scale (available in M3 via DrugBank paid tier)
-- Pregnancy/lactation-specific interaction flags (distinct feature, deferred)
+- **No food tracker.** Food-interaction data becomes a static flag on the product (`take_with_food`, `avoid_grapefruit`), never a logged-consumption feature.
+- **No pharmacogenomic gene-variant modeling.** CYP2D6 etc. is out of scope.
+- **No dose-dependent interaction modeling beyond a simple threshold.** A single `dose_threshold_text` field is shipped; full pharmacokinetic simulation is deferred.
+- **No clinical decision support for providers.** PharmaGuide is a consumer app.
+- **No real-time drug approval updates.** The interaction DB ships as versioned bundled data, updated on pipeline release cycles.
 
 ---
 
-## 2. Data Sources & Integration Strategy
+## 2. Build Order & Milestones
 
-### 2.1 Source Overview and Priority
-
-Integration priority is driven by coverage quality, licensing burden, and build effort. The table below summarizes the five core sources in descending priority order.
-
-| Priority | Source | Covers | License | Effort |
+| M | Deliverable | Days | Blockers | Repo(s) |
 |---|---|---|---|---|
-| 1 | supp.ai | Supp ↔ Drug | Academic open | Low — bulk import |
-| 2 | NIH ODS Fact Sheets | Supp ↔ Drug (subset) | Public domain | Medium — scrape + curate |
-| 3 | NIH LiverTox | Supp/Drug → DILI | Public domain | Medium |
-| 4 | ChEMBL (existing audit) | Mechanism of action | CC BY-SA 3.0 | Low — already integrated |
-| 5 | UMLS RxNorm | Identifier linkage | UMLS license required | Medium |
-| 6 | DrugBank | Drug ↔ Drug | Commercial | High — M3 |
+| **M1** | Stack nutrient accumulator + UL progress-bar panel | 2–3 | None | Flutter only |
+| **M2** | `build_interaction_db.py` + `verify_interactions.py` | 3–5 | User's draft JSON, supp.ai dump, UMLS+RxNorm API keys | Pipeline only |
+| **M3** | Flutter Drift wrapper + bundled asset + import script update | 2–3 | M2 produces dist/interaction_db.sqlite | Flutter only |
+| **M4** | Extend `StackInteractionChecker` with DB lookups + RxNorm medication entry screen | 3–5 | M3 done | Flutter only |
+| **M5** | `interaction_warning_card` on product scan | 2–3 | M4 done | Flutter only |
 
-### 2.2 supp.ai (Priority 1)
-
-**What it is:** A curated, machine-learning-assisted database of supplement–drug interactions built by the Allen Institute for AI. The dataset covers approximately 1,600 supplement-drug pairs extracted from clinical literature, with severity and mechanism annotations.
-
-**Fields available in the supp.ai dataset:**
-- Supplement name (string, needs normalization to `canonical_id`)
-- Drug name (string, needs RXCUI lookup)
-- Interaction type (descriptive, maps to our `mechanism` field)
-- Evidence level (maps to our `evidence_level` enum)
-- Source URL + PubMed IDs where available
-
-**Import strategy:**
-1. Download the supp.ai TSV dataset from https://supp.ai (academic download link).
-2. Run `scripts/api_audit/normalize_suppai.py` (to be written at M1) to normalize supplement names against `ingredient_quality_map.json` canonical IDs using the existing `rapidfuzz` pipeline.
-3. For each supplement name that matches a canonical IQ map entry, write the interaction record to `interactions` with `subject_canonical_id` set.
-4. For each drug name, call the UMLS RxNorm API (`/rxcui?name=<drug_name>`) to resolve `object_rxcui`. Log failures to a review queue.
-5. Manual review queue for any supp.ai entry where neither the supplement nor the drug resolved automatically.
-
-**Attribution requirement:** supp.ai dataset is academic-open. The app must display "Interaction data partially sourced from supp.ai (Allen Institute for AI)" in the app's data sources disclosure screen. This is a hard requirement before shipping M4.
-
-**Known gap:** supp.ai does not systematically cover supplement ↔ supplement interactions. Those must be sourced from NIH ODS Fact Sheets and manual curation at M0/M1.
-
-### 2.3 NIH ODS Fact Sheets (Priority 2)
-
-**What it is:** The NIH Office of Dietary Supplements publishes per-ingredient fact sheets at ods.od.nih.gov. Each fact sheet contains a "Interactions with Medications" section with clinically reviewed interaction summaries.
-
-**Fields available:**
-- Drug class (e.g., "blood thinners", "statins")
-- Mechanism description (prose, needs structured extraction)
-- Severity signals ("can interfere", "can cause serious problems", "check with healthcare provider")
-- Occasionally PMIDs in footnotes
-
-**Import strategy:**
-1. Use the existing `scripts/api_audit/` pattern. Write `fetch_ods_interactions.py` that fetches and parses ODS fact sheets for all ingredients in `ingredient_quality_map.json` that have an ODS fact sheet URL.
-2. Extract the interactions section with a regex + heuristic parser. This produces semi-structured entries requiring human review before writing to the interactions file.
-3. Do not auto-apply. Every ODS-sourced interaction record requires a reviewer sign-off in the `manual_review_queue` before promotion to production.
-
-**Attribution:** Public domain (NIH). No license restriction.
-
-### 2.4 NIH LiverTox (Priority 3)
-
-**What it is:** A database of drug-induced liver injury (DILI) profiles for drugs and herbal products, maintained by NIDDK and NLM. It covers hepatotoxicity likelihood ratings and mechanism notes.
-
-**What we extract from LiverTox:**
-- Hepatotoxicity likelihood classification (A/B/C/D/E scale → maps to our `evidence_level`)
-- Mechanism of liver injury (mechanism field)
-- Drug name → RXCUI linkage via RxNorm
-- PMID citations from LiverTox case reports
-
-**Use case:** Creates `object_type = "drug"` or `subject_type = "supplement"` entries with `mechanism = "hepatotoxic potentiation"` for cases where a supplement and drug share hepatotoxic pathways or where a supplement itself has DILI risk that worsens with medications metabolized by the same hepatic route.
-
-**Import strategy:** LiverTox provides a bulk download (XML + JSON). Write `scripts/api_audit/fetch_livertox_interactions.py` to parse the download and generate candidate interaction records. Manual review required before promotion.
-
-### 2.5 ChEMBL Mechanism Data (Priority 4 — Already Partially Available)
-
-**What we already have:** `scripts/api_audit/enrich_chembl_bioactivity.py` already queries ChEMBL for mechanism-of-action data linked to `ingredient_quality_map.json` entries.
-
-**What this adds for interactions:** ChEMBL mechanism data identifies which biological targets a compound acts on (e.g., serotonin transporter inhibition, CYP3A4 inhibition/induction). This enables us to write mechanism-based interaction entries even when direct clinical evidence is thin.
-
-For example: if ChEMBL marks a supplement as a CYP3A4 inhibitor, we can write a theoretical-level interaction entry against any drug in the `drug_classes` lookup table flagged as a CYP3A4 substrate. These receive `evidence_level = "theoretical"` and are treated as informational banners only.
-
-**Integration:** No new import pipeline needed. Extend the existing enrichment audit to extract `mechanism_flag` fields (CYP3A4_inhibitor, serotonin_precursor, anticoagulant_potentiator, etc.) and cross-reference against a small hand-maintained `mechanism_to_drug_class_map.json` table (to be written at M0).
-
-### 2.6 UMLS RxNorm RXCUI (Priority 5 — Identifier Layer)
-
-**What it provides:** RxNorm (part of UMLS) is the authoritative drug identifier registry for US clinical use. RXCUI is the canonical drug concept identifier, analogous to CUI for clinical concepts. It allows us to:
-- Identify a drug entered by name and resolve it to a stable RXCUI
-- Map RXCUI to drug class (via RxNorm relationship API)
-- Match a user's medication entry against interaction DB records
-
-**How to obtain RxCUI for drugs:**
-```
-GET https://rxnav.nlm.nih.gov/REST/rxcui.json?name=<drug_name>&search=2
-```
-Response contains `rxnormId` (the RXCUI). No API key required for RxNav (public UMLS service).
-
-**Supplement CUI linkage:** `ingredient_quality_map.json` already contains `cui` and `rxcui` fields for many entries (confirmed above for Vitamin B1: `cui: "C0039840"`, `rxcui: "10454"`). These are the primary identifier for supplement-side matching.
-
-**M2 deliverable:** Run RxNorm enrichment for all ingredients in `ingredient_quality_map.json` that have `cui` but no `rxcui`, and for all drug entries in the interaction DB that were sourced via supp.ai name matching only.
-
-### 2.7 DrugBank (Priority 6 — M3 Only)
-
-**What it provides:** Drug-drug interaction database with ~300K interaction pairs, mechanism annotations, and severity classifications. The free tier (academic XML download) covers a meaningful subset; full coverage requires a commercial license.
-
-**Decision:** Do not integrate DrugBank until M3. The free academic XML is adequate for a first pass at drug-drug interactions for the most common medication classes (statins, SSRIs, anticoagulants, beta-blockers, ACE inhibitors). Commercial license evaluation happens at M3 planning.
-
-**Attribution requirement:** DrugBank free tier requires attribution: "Drug interaction data sourced from DrugBank (https://www.drugbank.com)". Commercial tier has separate terms.
+**Total: ~3 weeks end-to-end. M1 alone is shippable in 2–3 days.**
 
 ---
 
-## 3. Database Schema
+## 3. High-Level Architecture
 
-The interaction database lives as a JSON reference file at:
 ```
-scripts/data/drug_nutrient_interactions.json
+┌────────────────────────────────────────────────────────────────┐
+│  PIPELINE REPO (peaceful-ritchie)                              │
+│                                                                │
+│  INPUTS                                                        │
+│  ├── scripts/data/curated_interactions/                        │
+│  │   └── interactions_drafts_v*.json   (user's hand-curated)   │
+│  ├── scripts/data/suppai_import/                               │
+│  │   └── suppai_raw.json               (supp.ai export)        │
+│  └── scripts/data/curated_overrides/                           │
+│      └── interaction_overrides.json    (manual conflict fixes) │
+│                                                                │
+│  NORMALIZATION (scripts/build_interaction_db.py)               │
+│  ├── JSON schema validation                                    │
+│  ├── CUI / RXCUI lookup via                                    │
+│  │     scripts/api_audit/verify_interactions.py                │
+│  │       - RxNorm API for drug RXCUI                           │
+│  │       - UMLS API for supplement CUI                         │
+│  │       - ingredient_quality_map.json for canonical_id        │
+│  ├── Direction normalization (Med-Sup / Sup-Med symmetry)      │
+│  ├── Dedup by (agent1_id, agent2_id, severity)                 │
+│  ├── Conflict resolution (more cautious severity wins)         │
+│  └── Major+ severity must have ≥1 source or build FAILS        │
+│                                                                │
+│  OUTPUT (scripts/dist/)                                        │
+│  ├── interaction_db.sqlite             (bundled SQLite)        │
+│  ├── interaction_db_manifest.json      (version + checksum)    │
+│  └── interaction_audit_report.json     (drift + quality gates) │
+└────────────────────────────────────────────────────────────────┘
+                           │
+                           │  LFS bundled via import_catalog_artifact.sh
+                           ▼
+┌────────────────────────────────────────────────────────────────┐
+│  FLUTTER REPO (PharmaGuide ai / main)                          │
+│                                                                │
+│  BUNDLED ASSETS                                                │
+│  ├── assets/db/pharmaguide_core.db       (existing, LFS)       │
+│  ├── assets/db/interaction_db.sqlite     (NEW, LFS)            │
+│  └── assets/db/interaction_db_manifest.json                    │
+│                                                                │
+│  DATA LAYER                                                    │
+│  ├── lib/data/database/interaction_database.dart     (NEW)     │
+│  ├── lib/data/database/interaction_database.g.dart   (gen)     │
+│  └── lib/data/database/tables/interactions_table.dart (NEW)    │
+│                                                                │
+│  SERVICE LAYER                                                 │
+│  ├── lib/services/stack/                                       │
+│  │   ├── stack_nutrient_aggregator.dart    (NEW - M1)          │
+│  │   ├── stack_ul_checker.dart             (NEW - M1)          │
+│  │   ├── stack_interaction_checker.dart    (EXTEND - M4)       │
+│  │   └── stack_safety_report.dart          (NEW - M4)          │
+│  └── lib/services/medications/                                 │
+│      └── rxnorm_api_service.dart           (NEW - M4)          │
+│                                                                │
+│  UI LAYER                                                      │
+│  ├── lib/features/stack/widgets/                               │
+│  │   ├── nutrient_accumulation_panel.dart  (NEW - M1)          │
+│  │   ├── nutrient_progress_bar.dart        (NEW - M1)          │
+│  │   └── stack_safety_banner.dart          (NEW - M4)          │
+│  ├── lib/features/medications/                                 │
+│  │   └── medication_entry_screen.dart      (NEW - M4)          │
+│  └── lib/features/product_detail/widgets/                      │
+│      └── interaction_warning_card.dart     (NEW - M5)          │
+└────────────────────────────────────────────────────────────────┘
 ```
 
-It follows the same `_metadata` contract as all other data files in this pipeline.
+---
 
-### 3.1 Top-Level Structure
+## 4. Existing Flutter Infrastructure (reuse, do not rebuild)
+
+Before touching any code, the next agent must read and understand these files. They shape everything below.
+
+### 4.1 `lib/core/constants/severity.dart`
+
+```dart
+enum Severity {
+  contraindicated(weight: 5, e2cPenalty: -8, label: 'BLOCK — Do Not Use', color: Color(0xFFDC2626)),
+  avoid          (weight: 4, e2cPenalty: -5, label: 'AVOID',              color: Color(0xFFDC2626)),
+  caution        (weight: 3, e2cPenalty: -3, label: 'CAUTION',            color: Color(0xFFF97316)),
+  monitor        (weight: 2, e2cPenalty: -1, label: 'MONITOR',            color: Color(0xFFEAB308)),
+  safe           (weight: 0, e2cPenalty:  0, label: 'SAFE',               color: Color(0xFF22C55E));
+}
+
+enum EvidenceLevel {
+  established(label: 'Strong Evidence'),
+  probable   (label: 'Good Evidence'),
+  theoretical(label: 'Theoretical');
+}
+```
+
+Five tiers with stack-score penalties already baked in. Every interaction result in the app uses this enum.
+
+### 4.2 `lib/core/models/interaction_result.dart`
+
+```dart
+enum InteractionType { drugSupplement, supplementSupplement, drugDrug, conditionSupplement }
+enum InteractionSource { pipeline, stackEngine, aiChat }
+
+class InteractionResult {
+  final String id;
+  final InteractionType type;
+  final Severity severity;
+  final EvidenceLevel evidenceLevel;
+  final String agent1Name;
+  final String agent2Name;
+  final String mechanism;
+  final String management;
+  final bool doseDependant;
+  final String? doseThreshold;
+  final List<String> sourceUrls;
+  final InteractionSource source;
+}
+```
+
+Draft JSON fields map 1:1 to this model. The only addition needed is an optional `effectType` (inhibitor/enhancer/additive/neutral) field. See §10.3.
+
+### 4.3 `lib/services/stack/stack_interaction_checker.dart`
+
+119 lines. Already runs these category-level checks on stack add:
+- Stimulant ↔ sedative antagonism
+- Stimulant ↔ stimulant stacking warning
+- Blood-thinner ↔ blood-thinner stacking warning
+
+Returns `List<InteractionResult>`. **Extend this file in M4** with new DB-backed methods — do not create a parallel service.
+
+### 4.4 `lib/data/database/tables/user_stacks_table.dart`
+
+```dart
+class UserStacksLocal extends Table {
+  TextColumn get id => text()();
+  TextColumn get type => text().withDefault(const Constant('supplement'))(); // supplement | medication
+  TextColumn get name => text()();
+  TextColumn get dsldId => text().nullable()();
+  TextColumn get rxcui => text().nullable()();                          // for medications
+  TextColumn get ingredientKeys => text().nullable()();                 // JSON array for supplements
+  TextColumn get drugClassesCol => text().named('drug_classes').nullable()();
+  TextColumn get dosage => text().nullable()();
+  TextColumn get frequency => text().nullable()();
+}
+```
+
+Medications already live in the same table as supplements via `type='medication'`. The `rxcui` and `drug_classes` columns already exist. **Do not add a second table.**
+
+### 4.5 `lib/services/fit_score/e1_dosage_calculator.dart`
+
+Already parses RDA and UL from `rda_ul_data` reference entries:
+
+```dart
+final rdaEntry = _findNutrientEntry(recommendations, name);
+final ul  = _getUl(rdaEntry, ageBracket, sex);
+final rda = _getRda(rdaEntry, ageBracket, sex);
+
+if (ul != null && ul > 0 && amount > ul) {
+  ulExceeded = true;
+}
+```
+
+**Reuse `_findNutrientEntry`, `_getUl`, `_getRda` in `stack_ul_checker.dart`.** Do not reimplement the parsing.
+
+---
+
+## 5. M1: Stack Nutrient Accumulator (ship first)
+
+### 5.1 Rationale
+
+Currently the app checks UL per product. A user taking three multivitamins each at 80% of zinc UL would see no warning — the stack-level total (240% of UL) is silently lost. This is the biggest medical-grade miss in the app today. M1 fixes it with zero new tables and zero new data files. Ship this independently of any interaction DB work.
+
+### 5.2 New files
+
+```
+lib/services/stack/
+├── stack_nutrient_aggregator.dart     (~100 LOC)
+└── stack_ul_checker.dart              (~150 LOC)
+
+lib/features/stack/widgets/
+├── nutrient_accumulation_panel.dart   (~200 LOC)
+└── nutrient_progress_bar.dart         (~80 LOC)
+
+test/services/stack/
+├── stack_nutrient_aggregator_test.dart
+└── stack_ul_checker_test.dart
+
+test/features/stack/widgets/
+├── nutrient_accumulation_panel_test.dart
+└── nutrient_progress_bar_test.dart
+```
+
+### 5.3 `stack_nutrient_aggregator.dart`
+
+Pure function. No state. No persistence. Input: list of stack items with their `detail_blob.ingredients[]`. Output: `Map<String canonicalId, NutrientTotal>`.
+
+```dart
+class NutrientTotal {
+  final String canonicalId;
+  final String displayName;
+  final double totalAmount;
+  final String unit;               // always normalized to the canonical unit
+  final List<NutrientContribution> contributions;
+}
+
+class NutrientContribution {
+  final String productName;
+  final String stackEntryId;
+  final double amount;
+  final String unit;
+}
+
+class StackNutrientAggregator {
+  /// Sum every active ingredient across a stack.
+  /// Merges by canonical_id. Normalizes units before summing.
+  /// Skips ingredients without usable per-serving amounts.
+  Map<String, NutrientTotal> aggregate(List<StackItemWithBlob> stack);
+}
+```
+
+Implementation notes:
+- Iterate each stack item's `detail_blob.ingredients[]`
+- For each ingredient with `canonical_id` and `normalized_amount`, add to the running total keyed by `canonical_id`
+- Unit normalization: use the `normalized_unit` the pipeline already emits (mg for most, mcg for trace, IU for fat-solubles). No conversion logic on the Flutter side.
+- If two products report the same nutrient in different units, log a warning and skip the non-canonical one (should not happen if the pipeline is correct)
+- Cache the result per-stack-hash; recompute only when a stack item is added/removed/edited
+
+### 5.4 `stack_ul_checker.dart`
+
+```dart
+enum NutrientTier {
+  noRda,          // no RDA data available — display without tier color
+  underFifty,     // < 50% RDA (not flagged, just informational)
+  adequate,       // 50-100% RDA                → green
+  abundant,       // 100-200% RDA               → gold
+  aboveTypical,   // > 200% RDA, < 80% UL       → yellow
+  approachingUl,  // 80-100% UL                 → orange
+  exceedsUl,      // > 100% UL                  → red (warning)
+}
+
+class NutrientStatus {
+  final NutrientTotal total;
+  final double? rda;
+  final double? ul;
+  final double? pctOfRda;
+  final double? pctOfUl;
+  final NutrientTier tier;
+  final String? warning;  // human-readable when tier >= approachingUl
+}
+
+class StackUlChecker {
+  /// Classify each aggregated nutrient against RDA/UL from reference data.
+  /// Reuses _findNutrientEntry/_getUl/_getRda from E1DosageCalculator.
+  List<NutrientStatus> check(
+    Map<String, NutrientTotal> aggregated, {
+    required AgeBracket? ageBracket,
+    required Sex? sex,
+  });
+}
+```
+
+Warning strings are nutrient-specific and live in a small map:
+- Zinc > UL → "Exceeds Upper Limit — risk of copper depletion"
+- Iron > UL → "Exceeds Upper Limit — risk of GI toxicity"
+- Vitamin A > UL → "Exceeds Upper Limit — risk of hepatotoxicity and teratogenicity"
+- Vitamin D > UL → "Exceeds Upper Limit — risk of hypercalcemia"
+- Generic fallback → "Exceeds Upper Limit — review with healthcare provider"
+
+### 5.5 `nutrient_accumulation_panel.dart` UX
+
+```
+┌────────────────────────────────────────────────────────────┐
+│ Your Stack — 5 products, 38 nutrients tracked              │
+├────────────────────────────────────────────────────────────┤
+│                                                            │
+│ Vitamin D3                                    4,000 IU/day │
+│ ████████████████████░░░░░░░░░░░░░   200% RDA │ 67% UL     │
+│   • Thorne D/K2 Liquid    2,000 IU                         │
+│   • Pure Encaps D3 2k     2,000 IU                         │
+│                                                            │
+│ Magnesium                                       600 mg/day │
+│ ████████████░░░░░░░░░░░░░░░░░░░░░   150% RDA │ 60% UL     │
+│   • Natural Vit. Cal/Mag   400 mg                          │
+│   • Thorne Mag Glycinate   200 mg                          │
+│                                                            │
+│ Zinc                                             52 mg/day │
+│ ██████████████████████████░░░░░░░   473% RDA │ 130% UL ⚠️ │
+│ ⚠️  Exceeds Upper Limit — risk of copper depletion         │
+│   • Multi A                15 mg                           │
+│   • Immune Support         22 mg                           │
+│   • Zinc Picolinate        15 mg                           │
+│                                                            │
+└────────────────────────────────────────────────────────────┘
+```
+
+- Sort order: `exceedsUl` first, then `approachingUl`, then by RDA% descending
+- Collapsible rows: tap to reveal contribution list
+- Warning chip uses `Severity.caution.color` for `approachingUl` and `Severity.avoid.color` for `exceedsUl`
+- Panel slots into `stack_screen.dart` above the product list
+
+### 5.6 M1 Done Gate
+
+| Gate | Check |
+|---|---|
+| Aggregator tests | ≥ 10 tests covering unit normalization, dedup, empty stack, missing canonical_id |
+| UL checker tests | ≥ 8 tests covering all 7 tiers, null RDA, null UL, age/sex brackets |
+| Widget tests | Panel renders with 0/1/many nutrients, progress-bar color matches tier |
+| Dart analyze | Zero new warnings |
+| Build passes | `flutter build apk --debug` succeeds |
+| Manual QA | Add 3 products to a stack, verify zinc accumulates, verify exceedsUl warning fires |
+
+**Ship M1 as a single PR before starting M2.**
+
+---
+
+## 6. M2: Pipeline Interaction DB Builder
+
+### 6.1 Files to create
+
+```
+scripts/
+├── build_interaction_db.py                      (~400 LOC)
+├── data/
+│   ├── curated_interactions/
+│   │   └── interactions_drafts_v0.json          (user will paste here)
+│   ├── suppai_import/
+│   │   └── suppai_raw.json                      (user will drop here)
+│   ├── curated_overrides/
+│   │   └── interaction_overrides.json           (manual conflict fixes)
+│   └── drug_classes.json                        (NEW reference file)
+├── api_audit/
+│   └── verify_interactions.py                   (~300 LOC)
+└── tests/
+    ├── test_build_interaction_db.py
+    └── test_verify_interactions.py
+```
+
+### 6.2 `verify_interactions.py` responsibilities
+
+Runs before `build_interaction_db.py` and blocks the build on any serious issue.
+
+Checks, in order:
+
+1. **JSON schema validation.** Every entry must have the required fields (§10.1). Malformed JSON fails fast.
+2. **Duplicate ID detection.** Entries sharing an `id` fail.
+3. **RXCUI verification (drugs).** Call the RxNorm API `/rxcui/{rxcui}/properties`. Confirm the RXCUI is real and currently valid. Compare the returned drug name to `agent_name` — mismatch raises a warning.
+4. **CUI verification (supplements).** Call UMLS `/search/current` with the claimed `agent_name`, confirm the returned CUI matches `agent_id`. Mismatch raises a warning and auto-corrects the CUI in the output.
+5. **canonical_id mapping.** For every supplement agent, look up the CUI in `scripts/data/ingredient_quality_map.json`. If present, attach the `canonical_id` for Flutter-side lookup. If not present, log an unmapped-supplement warning (not blocking).
+6. **Drug class expansion.** For `class:statins` etc., expand against `scripts/data/drug_classes.json`. Missing class → blocks build.
+7. **Direction normalization.** Both `Med-Sup` and `Sup-Med` should produce the same entry. Normalize so `agent1_type='drug'` is always drug-side when one side is a drug. Store the original `type` as `type_authored` for audit.
+8. **Severity normalization.** Map the draft's 4-tier vocab into the Flutter 5-tier `Severity` enum:
+   - `Contraindicated` → `contraindicated`
+   - `Major` → `avoid`
+   - `Moderate` → `caution`
+   - `Minor` → `monitor`
+9. **Major+ evidence gate.** Entries with `severity in ('contraindicated', 'avoid')` must have at least one non-empty `source_urls` entry OR a PMID in `source_pmids`. Empty-source Major+ entries **block the build**.
+10. **Source URL quality.** Extract PMIDs from PubMed URLs into a parallel `source_pmids` field for fast attribution.
+
+The script returns a structured report:
+
+```json
+{
+  "total_entries": 152,
+  "valid": 138,
+  "warnings": 11,
+  "errors": 3,
+  "blocked_by": [
+    {
+      "id": "DDI_WAR_TURMERIC",
+      "reason": "Major severity requires at least 1 source URL or PMID"
+    }
+  ],
+  "cui_corrections": [
+    {
+      "id": "DDI_WAR_VITK",
+      "claimed": "C0042810",
+      "claimed_resolves_to": "Vitamin D",
+      "correct_cui_for_vitamin_k": "C0042839",
+      "action": "corrected in output"
+    }
+  ]
+}
+```
+
+Exit code 0 only if `errors == 0`.
+
+### 6.3 `build_interaction_db.py` responsibilities
+
+Runs after `verify_interactions.py` passes. Produces `scripts/dist/interaction_db.sqlite`.
+
+1. Load verified drafts + supp.ai import + overrides.
+2. Dedup by `(agent1_id, agent2_id)` — prefer verified draft over supp.ai over raw imports.
+3. Conflict resolution on severity mismatch: **more cautious always wins** (contraindicated > avoid > caution > monitor). Log every resolved conflict to the audit report.
+4. Apply `interaction_overrides.json` last — manual fixes override everything.
+5. Create SQLite with schema from §6.4.
+6. Create all indexes (see §6.4).
+7. Populate `drug_class_map` table from `scripts/data/drug_classes.json`.
+8. Populate `interaction_db_metadata` table with:
+   - `schema_version: 1.0.0`
+   - `built_at: <iso>`
+   - `source_drafts_count`
+   - `source_suppai_count`
+   - `total_interactions`
+   - `sha256_checksum`
+9. Write `interaction_db_manifest.json` next to the SQLite with the same metadata + a release-stage timestamp.
+10. Write `interaction_audit_report.json` with conflict resolutions, dropped entries, and CUI corrections.
+
+### 6.4 SQLite schema
+
+```sql
+CREATE TABLE interactions (
+  id                    TEXT PRIMARY KEY,
+  agent1_type           TEXT NOT NULL,        -- drug | supplement | food | drug_class
+  agent1_name           TEXT NOT NULL,
+  agent1_id             TEXT NOT NULL,        -- RXCUI | CUI | canonical_id | class:name
+  agent1_canonical_id   TEXT,                 -- maps to ingredient_quality_map, null if drug/food
+  agent1_drug_class     TEXT,                 -- if drug, the canonical class id
+  agent2_type           TEXT NOT NULL,
+  agent2_name           TEXT NOT NULL,
+  agent2_id             TEXT NOT NULL,
+  agent2_canonical_id   TEXT,
+  agent2_drug_class     TEXT,
+  severity              TEXT NOT NULL,        -- contraindicated|avoid|caution|monitor
+  effect_type           TEXT,                 -- inhibitor|enhancer|additive|neutral
+  mechanism             TEXT NOT NULL,
+  management            TEXT NOT NULL,
+  evidence_level        TEXT,                 -- established|probable|theoretical
+  source_urls_json      TEXT NOT NULL,        -- JSON array, possibly empty []
+  source_pmids_json     TEXT NOT NULL,        -- JSON array, possibly empty []
+  bidirectional         INTEGER DEFAULT 1,
+  dose_dependent        INTEGER DEFAULT 0,
+  dose_threshold_text   TEXT,
+  type_authored         TEXT NOT NULL,        -- original 'Med-Sup' etc, for audit
+  source                TEXT NOT NULL,        -- 'curated'|'suppai'|'override'
+  last_updated          TEXT NOT NULL
+);
+
+CREATE INDEX idx_int_a1_canon ON interactions(agent1_canonical_id)
+  WHERE agent1_canonical_id IS NOT NULL;
+CREATE INDEX idx_int_a2_canon ON interactions(agent2_canonical_id)
+  WHERE agent2_canonical_id IS NOT NULL;
+CREATE INDEX idx_int_a1_id    ON interactions(agent1_type, agent1_id);
+CREATE INDEX idx_int_a2_id    ON interactions(agent2_type, agent2_id);
+CREATE INDEX idx_int_a1_class ON interactions(agent1_drug_class)
+  WHERE agent1_drug_class IS NOT NULL;
+CREATE INDEX idx_int_a2_class ON interactions(agent2_drug_class)
+  WHERE agent2_drug_class IS NOT NULL;
+
+CREATE TABLE drug_class_map (
+  class_id         TEXT PRIMARY KEY,      -- 'class:statins'
+  class_name       TEXT NOT NULL,         -- 'Statins'
+  drug_rxcuis_json TEXT NOT NULL,         -- JSON array of member RXCUIs
+  source           TEXT NOT NULL,
+  last_updated     TEXT NOT NULL
+);
+
+CREATE TABLE interaction_db_metadata (
+  key   TEXT PRIMARY KEY,
+  value TEXT NOT NULL
+);
+```
+
+**Lookup-speed target: <1ms for any realistic query.** Every lookup the app will issue corresponds to one of the six indexes above.
+
+### 6.5 M2 Done Gate
+
+| Gate | Check |
+|---|---|
+| `verify_interactions.py` | ≥ 20 unit tests covering every failure mode |
+| `build_interaction_db.py` | ≥ 15 tests including dedup, conflict resolution, override precedence |
+| RxNorm integration test | Real API call for 5 common drugs, expects live responses |
+| UMLS integration test | Real API call for 5 common supplements |
+| Blocked-build demo | A deliberately broken draft (empty source_urls at Major) must fail the build with a clear error |
+| SQLite integrity | `PRAGMA integrity_check` returns `ok`, all 6 indexes present |
+| Output size | `interaction_db.sqlite` < 10 MB (expect 2–5 MB for M2 scope) |
+
+---
+
+## 7. M3: Flutter Interaction DB Binding
+
+### 7.1 New files
+
+```
+lib/data/database/
+├── interaction_database.dart        (~150 LOC, Drift)
+├── interaction_database.g.dart      (generated)
+└── tables/
+    └── interactions_table.dart      (~60 LOC)
+```
+
+### 7.2 Drift schema (`interactions_table.dart`)
+
+Mirrors §6.4 exactly. Read-only. Loaded from `assets/db/interaction_db.sqlite`.
+
+### 7.3 `interaction_database.dart` public API
+
+```dart
+class InteractionDatabase extends _$InteractionDatabase {
+  InteractionDatabase.fromAsset()
+    : super(_openBundled('assets/db/interaction_db.sqlite'));
+
+  /// Find all interactions involving a specific supplement.
+  Future<List<InteractionRow>> lookupByCanonicalId(String canonicalId);
+
+  /// Find all interactions involving a specific drug RXCUI.
+  Future<List<InteractionRow>> lookupByRxcui(String rxcui);
+
+  /// Find all interactions involving a drug class.
+  Future<List<InteractionRow>> lookupByDrugClass(String classId);
+
+  /// Find interactions between two specific agents (symmetric — checks both directions).
+  Future<List<InteractionRow>> lookupPair(
+    String a1Id, String a1Type, String a2Id, String a2Type,
+  );
+
+  /// Resolve a drug class to its member RXCUIs (for medication entry UI).
+  Future<List<String>> rxcuisForDrugClass(String classId);
+
+  /// Get DB metadata — version, build date, counts.
+  Future<InteractionDbMetadata> getMetadata();
+}
+```
+
+### 7.4 `import_catalog_artifact.sh` update
+
+Extend the existing bridge script to copy `interaction_db.sqlite` and `interaction_db_manifest.json` alongside the catalog files. Add validation gates:
+- Checksum verify against manifest
+- SQLite integrity_check
+- Row count > 0
+- All required tables present
+
+### 7.5 M3 Done Gate
+
+| Gate | Check |
+|---|---|
+| Drift build_runner | Regenerates `interaction_database.g.dart` cleanly |
+| All 5 public lookup methods | Unit-tested against a fixture DB |
+| Import script | 5 new validation gates pass on real artifact |
+| App startup | Loads bundled DB in <200ms on device |
+| Analyze | Zero new warnings |
+
+---
+
+## 8. M4: Stack Interaction Engine
+
+### 8.1 Files
+
+```
+lib/services/stack/
+├── stack_interaction_checker.dart     (EXTEND with ~200 new LOC)
+└── stack_safety_report.dart           (NEW ~150 LOC)
+
+lib/services/medications/
+└── rxnorm_api_service.dart            (NEW ~120 LOC)
+
+lib/features/medications/
+└── medication_entry_screen.dart       (NEW ~250 LOC)
+
+lib/features/stack/widgets/
+└── stack_safety_banner.dart           (NEW ~100 LOC)
+```
+
+### 8.2 `stack_interaction_checker.dart` — new methods
+
+Keep the existing 119 lines. Add:
+
+```dart
+/// Check a new product's ingredients against every medication in the user's stack.
+Future<List<InteractionResult>> checkMedicationInteractions({
+  required List<String> newProductCanonicalIds,
+  required List<UserStackEntry> stackMedications,
+  required InteractionDatabase db,
+});
+
+/// Check a new product's ingredients against every OTHER supplement in the stack.
+Future<List<InteractionResult>> checkSupplementPairInteractions({
+  required List<String> newProductCanonicalIds,
+  required List<UserStackEntry> stackSupplements,
+  required InteractionDatabase db,
+});
+```
+
+Both return the existing `InteractionResult` model. Use the `InteractionSource.pipeline` enum variant.
+
+### 8.3 `stack_safety_report.dart`
+
+Aggregates every safety signal into a single object for the UI:
+
+```dart
+class StackSafetyReport {
+  final List<NutrientStatus> nutrientStatuses;           // from M1
+  final List<InteractionResult> stackInteractions;       // from M4 pair checks
+  final List<InteractionResult> medicationInteractions;  // from M4 drug checks
+  final List<InteractionResult> categoryWarnings;        // existing stim/sed/bt checks
+
+  Severity get overallSeverity;                // highest severity across all signals
+  Map<Severity, int> get severityCounts;       // counts for summary badge
+  List<dynamic> get orderedWarnings;           // ordered for render, most severe first
+}
+```
+
+### 8.4 `rxnorm_api_service.dart`
+
+Thin wrapper around the NLM RxNorm REST API. No auth. Rate-limited to 20 req/sec client-side.
+
+```dart
+class RxNormApiService {
+  Future<List<RxNormSuggestion>> search(String query);         // /approximateTerm
+  Future<String?> getRxcui(String drugName);                   // /rxcui
+  Future<List<String>> getClasses(String rxcui);               // /rxclass/class/byRxcui
+  Future<RxNormDrugInfo?> getDrugInfo(String rxcui);           // /rxcui/{rxcui}/properties
+}
+
+class RxNormSuggestion {
+  final String name;
+  final String rxcui;
+  final int score;
+}
+```
+
+- **In-memory LRU cache** (50 entries). No SQLite cache needed; search volume is low.
+- **Offline fallback:** If the API is unreachable, fall back to a bundled `drug_classes.json` dropdown so users can pick a class-level entry without network.
+
+### 8.5 `medication_entry_screen.dart` flow
+
+1. Autocomplete text field → `RxNormApiService.search()` on 300ms debounce
+2. User picks a suggestion → fetches RXCUI + classes
+3. Optional fields: started date, dose, frequency
+4. Save → inserts into `user_stacks_local` with `type='medication'`, `rxcui`, `drug_classes`
+5. Immediately runs `StackInteractionChecker.checkMedicationInteractions` across the user's existing supplement stack and surfaces any hits
+
+**Privacy assertion at build time:** Add a test that grep-fails the build if any Supabase sync code path touches rows where `type='medication'`. Medications are PHI, never leave the device.
+
+### 8.6 M4 Done Gate
+
+| Gate | Check |
+|---|---|
+| New checker methods | ≥15 tests each, including edge cases (empty stack, unmapped ingredients, class-level matches) |
+| Safety report | Golden-path test: stack with 3 sups + 2 meds produces expected ordered warnings |
+| RxNorm service | Integration test hits live API, unit tests with mock |
+| Medication entry UI | Widget tests for autocomplete, save, offline fallback |
+| PHI assertion | Build-time grep test blocks merge if `type='medication'` reaches any sync service |
+
+---
+
+## 9. M5: Product Scan Interaction Warnings
+
+### 9.1 Files
+
+```
+lib/features/product_detail/widgets/
+└── interaction_warning_card.dart      (NEW ~180 LOC)
+
+test/features/product_detail/widgets/
+└── interaction_warning_card_test.dart
+```
+
+### 9.2 Flow
+
+1. User scans / opens a product detail
+2. Product's `detail_blob.ingredients[]` → list of canonical_ids
+3. Query:
+   - `db.lookupByCanonicalId()` for each ingredient → interactions involving this supplement
+   - Cross-reference against the user's current stack medications (from `user_stacks_local`)
+   - Cross-reference against the rest of the user's stack supplements
+4. Dedup and order by severity
+5. Render `InteractionWarningCard` at the top of the detail screen, above scoring sections
+6. Each warning renders with:
+   - Severity chip (reusing `Severity.color` and `Severity.label`)
+   - "Because you're taking X" or "Because X is in your stack"
+   - Mechanism (condensed one-liner)
+   - Management text (the actionable advice)
+   - "Learn more" expand to show source URLs
+
+### 9.3 M5 Done Gate
+
+| Gate | Check |
+|---|---|
+| Widget tests | Renders 0 / 1 / N warnings correctly |
+| Integration test | Real bundled DB, scan a fixture product, verify warnings fire |
+| E2E test (manual) | Scan a fish oil while Warfarin is in stack → "AVOID" banner fires |
+
+---
+
+## 10. Schemas & Data Formats
+
+### 10.1 User draft JSON format (unverified input to pipeline)
+
+Everything below is the user's existing convention. Do not change it. `verify_interactions.py` normalizes and validates.
+
+```json
+{
+  "id": "DDI_WAR_VITK",
+  "type": "Med-Sup",
+  "agent1_name": "Warfarin",
+  "agent1_id": "1161204",
+  "agent2_name": "Vitamin K",
+  "agent2_id": "C0042839",
+  "severity": "Major",
+  "interaction_effect_type": "Inhibitor",
+  "mechanism": "Affects INR/clotting time",
+  "management": "Monitor INR closely. Maintain consistent vitamin K intake.",
+  "source_urls": ["https://www.ncbi.nlm.nih.gov/books/NBK501808/"]
+}
+```
+
+**Allowed `type` values:**
+`Med-Sup` · `Sup-Med` · `Sup-Sup` · `Med-Med` · `Med-Food` · `Sup-Food` · `Food-Med`
+
+**Allowed `severity` values (draft vocabulary):**
+`Contraindicated` · `Major` · `Moderate` · `Minor`
+
+**Allowed `interaction_effect_type` values:**
+`Inhibitor` · `Enhancer` · `Additive` · `Neutral`
+
+**Allowed agent_id formats:**
+- `[0-9]+` → RXCUI (drug)
+- `C[0-9]{7}` → UMLS CUI (supplement or drug)
+- `class:[a-z_]+` → drug class (e.g. `class:statins`, `class:ssris`)
+
+### 10.2 Drug classes reference file
+
+`scripts/data/drug_classes.json` — the source of truth for `class:X` expansion.
 
 ```json
 {
   "_metadata": {
     "schema_version": "1.0.0",
-    "last_updated": "2026-04-10",
-    "total_entries": 0,
-    "source_breakdown": {
-      "supp_ai": 0,
-      "nih_ods": 0,
-      "livertox": 0,
-      "chembl_theoretical": 0,
-      "manual_curated": 0,
-      "drugbank": 0
-    },
-    "description": "Drug-nutrient, supplement-supplement, and drug-drug interaction reference database for PharmaGuide v1.",
-    "purpose": "user_scoped_interaction_warnings",
-    "license_notes": [
-      "supp.ai: academic open, attribution required",
-      "NIH ODS: public domain",
-      "NIH LiverTox: public domain",
-      "ChEMBL: CC BY-SA 3.0",
-      "DrugBank: commercial license required for full coverage (M3)"
-    ],
-    "update_frequency": "quarterly",
-    "audit_runbook": {
-      "validate_command": "python3 scripts/validate_interactions_schema.py scripts/data/drug_nutrient_interactions.json",
-      "normalize_suppai_command": "python3 scripts/api_audit/normalize_suppai.py --input data/suppai_download.tsv --output /tmp/suppai_candidates.json",
-      "rxnorm_enrich_command": "python3 scripts/api_audit/enrich_rxnorm.py --file scripts/data/drug_nutrient_interactions.json"
-    }
+    "last_updated": "2026-04-11",
+    "total_classes": 24,
+    "source": "NLM RxClass + manual curation"
   },
-  "interactions": [],
-  "drug_classes": {},
-  "mechanism_flag_map": {}
-}
-```
-
-### 3.2 Interaction Entry Schema
-
-Each entry in the `interactions` array is a self-contained interaction record. Fields marked **required** must be present for an entry to pass schema validation.
-
-```json
-{
-  "id": "INTERACTION_SEVERE_FISH_OIL_WARFARIN",
-
-  "subject": "Fish Oil (EPA/DHA)",
-  "subject_type": "supplement",
-  "subject_canonical_id": "omega_3_fish_oil",
-  "subject_cui": "C0016157",
-  "subject_rxcui": null,
-
-  "object": "Warfarin",
-  "object_type": "drug",
-  "object_canonical_id": null,
-  "object_cui": "C0043031",
-  "object_rxcui": "11289",
-  "object_drug_class": "anticoagulants",
-  "object_drug_class_rxcui_members": ["11289", "67108", "855314"],
-
-  "mechanism": "Fish oil (EPA/DHA) inhibits platelet aggregation and may potentiate the anticoagulant effect of warfarin, increasing bleeding risk. The effect is dose-dependent but clinically relevant at supplemental doses above 1g/day EPA+DHA.",
-
-  "severity": "moderate",
-  "evidence_level": "rct",
-
-  "bidirectional": true,
-
-  "clinical_notes": "INR monitoring is advisable when fish oil supplementation is initiated or dose-changed in patients on warfarin. The FDA and NIH ODS note this interaction explicitly. Not a contraindication but warrants clinical awareness. Most RCTs show modest INR elevation (0.2–0.5 units) at 3–6g/day fish oil.",
-
-  "management_guidance": "Inform prescriber before initiating fish oil supplementation. Monitor INR at first follow-up. Adjust warfarin dose if clinically indicated.",
-
-  "sources": [
-    {
-      "type": "pubmed",
-      "id": "19145785",
-      "description": "RCT: fish oil and warfarin INR effect, n=254"
+  "classes": {
+    "class:statins": {
+      "display_name": "Statins",
+      "description": "HMG-CoA reductase inhibitors for cholesterol management",
+      "member_rxcuis": ["83367", "36567", "42463", "301542", "42470"],
+      "member_names": ["atorvastatin", "simvastatin", "rosuvastatin", "pravastatin", "lovastatin"],
+      "rxclass_id": "N0000175461"
     },
-    {
-      "type": "pubmed",
-      "id": "21735527",
-      "description": "Meta-analysis: omega-3 fatty acids and anticoagulation"
-    },
-    {
-      "type": "nih_ods",
-      "id": "omega3-HealthProfessional",
-      "description": "NIH ODS Omega-3 Fact Sheet for Health Professionals"
-    }
-  ],
-
-  "flag_name": "INTERACTION_MODERATE_OMEGA3_WARFARIN",
-
-  "subject_standard_names_for_matching": [
-    "fish oil",
-    "omega-3",
-    "omega 3 fatty acids",
-    "epa",
-    "dha",
-    "eicosapentaenoic acid",
-    "docosahexaenoic acid"
-  ],
-
-  "object_standard_names_for_matching": [
-    "warfarin",
-    "coumadin",
-    "jantoven"
-  ],
-
-  "data_provenance": {
-    "source": "nih_ods",
-    "imported_at": "2026-04-10",
-    "reviewed_by": "manual_curation",
-    "review_status": "approved",
-    "suppai_pair_id": null
+    "class:ssris": { },
+    "class:beta_blockers": { },
+    "class:ace_inhibitors": { },
+    "class:maois": { },
+    "class:benzodiazepines": { },
+    "class:nsaids": { },
+    "class:anticonvulsants": { },
+    "class:diabetes_meds": { },
+    "class:insulins": { },
+    "class:corticosteroids": { },
+    "class:immunosuppressants": { },
+    "class:hiv_protease_inhibitors": { },
+    "class:antipsychotics": { },
+    "class:triptans": { },
+    "class:antacids": { },
+    "class:calcium_channel_blockers": { },
+    "class:diuretics": { },
+    "class:oral_contraceptives": { },
+    "class:sedatives": { },
+    "class:stimulants": { },
+    "class:antihypertensives": { },
+    "class:b_vitamins": { }
   }
 }
 ```
 
-### 3.3 Full Field Definitions
+Build seed data by calling RxClass `getClassByRxNormDrugId` for each class — automated, one-time run during M2.
 
-| Field | Type | Required | Description |
+### 10.3 Dart `InteractionResult` extension
+
+Add ONE new field to the existing model:
+
+```dart
+enum EffectType { inhibitor, enhancer, additive, neutral }
+
+class InteractionResult {
+  // ... all existing fields ...
+  final EffectType? effectType;  // NEW
+}
+```
+
+Update `fromRow()` and any constructors. Existing callers pass `null`, no breakage.
+
+---
+
+## 11. Data Sources
+
+| Source | Type | Status | License |
 |---|---|---|---|
-| `id` | string | Yes | Stable unique identifier. Format: `INTERACTION_{SEVERITY}_{SUBJECT_SLUG}_{OBJECT_SLUG}`. All caps, underscores. |
-| `subject` | string | Yes | Human-readable name of the entity experiencing the effect (usually the supplement). |
-| `subject_type` | enum | Yes | `supplement`, `drug`, or `food`. |
-| `subject_canonical_id` | string | No | Key in `ingredient_quality_map.json`. Null for drugs as subject or unmatched supplements. |
-| `subject_cui` | string | No | UMLS CUI. Format: `C` followed by 7 digits. |
-| `subject_rxcui` | string | No | RxNorm RXCUI. Numeric string. Populated for supplements that have pharmacological profiles in RxNorm. |
-| `object` | string | Yes | Human-readable name of the entity causing or mediating the effect (usually the drug). |
-| `object_type` | enum | Yes | `supplement`, `drug`, or `food`. |
-| `object_canonical_id` | string | No | Key in `ingredient_quality_map.json` if object is a supplement. |
-| `object_cui` | string | No | UMLS CUI for the object. |
-| `object_rxcui` | string | No | RxNorm RXCUI for the object drug. Primary identifier for drug-side matching. |
-| `object_drug_class` | string | No | Key in the `drug_classes` lookup table. Enables class-level matching when specific RXCUI is unavailable. |
-| `object_drug_class_rxcui_members` | array[string] | No | List of RXCUI values that are members of `object_drug_class`. Redundant for lookup but useful for fast set intersection at match time. |
-| `mechanism` | string | Yes | Clinical mechanism explanation. Plain English, 1–4 sentences. No jargon without clarification. |
-| `severity` | enum | Yes | `contraindicated`, `severe`, `moderate`, `mild`, `informational`. See Section 5 for full definitions. |
-| `evidence_level` | enum | Yes | `meta-analysis`, `rct`, `observational`, `case-report`, `theoretical`. Highest level of available evidence. |
-| `bidirectional` | bool | Yes | True if the interaction is symmetric (A affects B AND B affects A). Most interactions are bidirectional for pharmacodynamic purposes. |
-| `clinical_notes` | string | Yes | Clinician-facing context. What the prescriber would want to know. May reference dose thresholds where known. |
-| `management_guidance` | string | No | What the user should do. Consumer-facing language. Appears in the Flutter `InteractionBanner` body. |
-| `sources` | array | Yes | At least one source required. See source object schema below. |
-| `flag_name` | string | Yes | Machine-readable flag for traceability in logs and analytics. Format: `INTERACTION_{SEVERITY}_{SUBJECT_SLUG}_{OBJECT_SLUG}`. |
-| `subject_standard_names_for_matching` | array[string] | Yes | Lowercase normalized names used for fuzzy matching against catalog entries. |
-| `object_standard_names_for_matching` | array[string] | Yes | Lowercase normalized names used for fuzzy matching against user medication entries. |
-| `data_provenance` | object | Yes | Audit trail. See provenance object schema below. |
+| User's draft JSON | Curated hand-drafted interactions | ~150 entries, unverified | Internal |
+| supp.ai database | Academic supplement-drug interactions | Dump downloaded | **Commercial use cleared by user** |
+| RxNorm (NLM) | Drug identifier + class lookup | Free public API | Public domain |
+| UMLS (NLM) | CUI verification | Existing script `verify_cui.py` | Requires license (already have) |
+| ChEMBL | Mechanism of action (future) | Deferred | Open |
+| DrugBank | Drug↔drug interactions | Deferred to post-v1 | Commercial — requires license |
 
-### 3.4 Source Object Schema
+**M1 through M5 require only the first four.** DrugBank integration is post-v1.
 
-```json
-{
-  "type": "pubmed | doi | drugbank | suppai | nih_ods | livertox | chembl | manual",
-  "id": "19145785",
-  "description": "Short human-readable description of what the source establishes",
-  "url": "https://pubmed.ncbi.nlm.nih.gov/19145785/"
-}
+---
+
+## 12. File Layout Summary
+
+### Pipeline repo (peaceful-ritchie)
+
+```
+docs/
+├── INTERACTION_DB_SPEC.md            (this file)
+└── ...
+
+scripts/
+├── build_interaction_db.py           (M2, NEW)
+├── api_audit/
+│   └── verify_interactions.py        (M2, NEW)
+├── data/
+│   ├── curated_interactions/
+│   │   └── interactions_drafts_v0.json  (user pastes here)
+│   ├── suppai_import/
+│   │   └── suppai_raw.json              (user drops export here)
+│   ├── curated_overrides/
+│   │   └── interaction_overrides.json   (manual fixes)
+│   └── drug_classes.json                (M2, NEW)
+├── dist/
+│   ├── pharmaguide_core.db           (existing)
+│   ├── pharmaguide_core_manifest.json
+│   ├── interaction_db.sqlite         (M2, NEW)
+│   └── interaction_db_manifest.json  (M2, NEW)
+└── tests/
+    ├── test_build_interaction_db.py  (M2, NEW)
+    └── test_verify_interactions.py   (M2, NEW)
 ```
 
-### 3.5 Provenance Object Schema
+### Flutter repo (PharmaGuide ai)
 
-```json
-{
-  "source": "supp_ai | nih_ods | livertox | chembl_theoretical | manual_curated | drugbank",
-  "imported_at": "2026-04-10",
-  "reviewed_by": "manual_curation | auto_import",
-  "review_status": "approved | pending_review | rejected",
-  "suppai_pair_id": "1234",
-  "drugbank_interaction_id": null,
-  "livertox_compound_id": null
-}
 ```
+assets/db/
+├── pharmaguide_core.db               (existing, LFS)
+├── pharmaguide_core.db.previous      (backup)
+├── interaction_db.sqlite             (M3, NEW, LFS)
+└── interaction_db_manifest.json      (M3, NEW)
 
-Entries with `review_status = "pending_review"` are excluded from the production build by the schema validator. The validator (`scripts/validate_interactions_schema.py`, to be written at M0) rejects any file containing pending-review entries from being passed to `build_final_db.py`.
+lib/
+├── core/
+│   ├── constants/severity.dart       (REUSE)
+│   └── models/interaction_result.dart (EXTEND — add effectType)
+├── data/database/
+│   ├── core_database.dart            (REUSE)
+│   ├── interaction_database.dart     (M3, NEW)
+│   ├── interaction_database.g.dart   (M3, GENERATED)
+│   └── tables/
+│       ├── user_stacks_table.dart    (REUSE — already supports meds)
+│       └── interactions_table.dart   (M3, NEW)
+├── services/
+│   ├── fit_score/
+│   │   └── e1_dosage_calculator.dart (REUSE — RDA/UL parsing)
+│   ├── stack/
+│   │   ├── stack_nutrient_aggregator.dart   (M1, NEW)
+│   │   ├── stack_ul_checker.dart            (M1, NEW)
+│   │   ├── stack_interaction_checker.dart   (M4, EXTEND)
+│   │   └── stack_safety_report.dart         (M4, NEW)
+│   └── medications/
+│       └── rxnorm_api_service.dart          (M4, NEW)
+└── features/
+    ├── stack/
+    │   ├── stack_screen.dart                (M1, EXTEND to slot panel)
+    │   └── widgets/
+    │       ├── nutrient_accumulation_panel.dart  (M1, NEW)
+    │       ├── nutrient_progress_bar.dart        (M1, NEW)
+    │       └── stack_safety_banner.dart          (M4, NEW)
+    ├── medications/
+    │   └── medication_entry_screen.dart     (M4, NEW)
+    └── product_detail/
+        └── widgets/
+            └── interaction_warning_card.dart (M5, NEW)
 
-### 3.6 Drug Classes Lookup Table
-
-The `drug_classes` object provides a user-facing name and RXCUI member list for each drug class used in interaction entries. This enables the Flutter medication entry flow to display "beta-blockers" rather than a raw RXCUI.
-
-```json
-{
-  "drug_classes": {
-    "anticoagulants": {
-      "display_name": "Blood Thinners (Anticoagulants)",
-      "description": "Medications that reduce blood clotting, including warfarin and newer direct oral anticoagulants.",
-      "rxcui_members": ["11289", "1364435", "1599538", "67108"],
-      "example_drug_names": ["warfarin", "apixaban", "rivaroxaban", "dabigatran"],
-      "icd10_atc_class": "B01AA"
-    },
-    "statins": {
-      "display_name": "Statins (Cholesterol Medications)",
-      "description": "HMG-CoA reductase inhibitors used to lower LDL cholesterol.",
-      "rxcui_members": ["36567", "41493", "83367", "301542", "359731"],
-      "example_drug_names": ["atorvastatin", "rosuvastatin", "simvastatin", "pravastatin", "lovastatin"],
-      "icd10_atc_class": "C10AA"
-    },
-    "ssris": {
-      "display_name": "Antidepressants (SSRIs)",
-      "description": "Selective serotonin reuptake inhibitors used for depression and anxiety.",
-      "rxcui_members": ["32937", "56795", "68617", "72625", "202433"],
-      "example_drug_names": ["sertraline", "fluoxetine", "escitalopram", "paroxetine", "citalopram"],
-      "icd10_atc_class": "N06AB"
-    },
-    "snris": {
-      "display_name": "Antidepressants (SNRIs)",
-      "description": "Serotonin-norepinephrine reuptake inhibitors used for depression and anxiety.",
-      "rxcui_members": ["39786", "61381", "352960"],
-      "example_drug_names": ["venlafaxine", "duloxetine", "desvenlafaxine"],
-      "icd10_atc_class": "N06AX"
-    },
-    "beta_blockers": {
-      "display_name": "Beta-Blockers (Heart/Blood Pressure Medications)",
-      "description": "Medications that block beta-adrenergic receptors, used for hypertension, heart failure, and arrhythmias.",
-      "rxcui_members": ["19484", "20352", "33518", "52175", "149"],
-      "example_drug_names": ["metoprolol", "atenolol", "carvedilol", "propranolol", "bisoprolol"],
-      "icd10_atc_class": "C07AB"
-    },
-    "ace_inhibitors": {
-      "display_name": "ACE Inhibitors (Blood Pressure Medications)",
-      "description": "Angiotensin-converting enzyme inhibitors used for hypertension and heart failure.",
-      "rxcui_members": ["18867", "29046", "35208", "54552"],
-      "example_drug_names": ["lisinopril", "enalapril", "ramipril", "captopril"],
-      "icd10_atc_class": "C09AA"
-    },
-    "thyroid_hormones": {
-      "display_name": "Thyroid Medications",
-      "description": "Thyroid hormone replacement therapy.",
-      "rxcui_members": ["10582", "727374"],
-      "example_drug_names": ["levothyroxine", "liothyronine"],
-      "icd10_atc_class": "H03AA"
-    },
-    "maois": {
-      "display_name": "MAO Inhibitors (MAOIs)",
-      "description": "Monoamine oxidase inhibitors used for depression. Carry severe interaction risk with serotonergic supplements.",
-      "rxcui_members": ["7454", "9639"],
-      "example_drug_names": ["phenelzine", "tranylcypromine", "selegiline"],
-      "icd10_atc_class": "N06AF"
-    },
-    "immunosuppressants": {
-      "display_name": "Immunosuppressants (Transplant / Autoimmune Medications)",
-      "description": "Drugs that suppress the immune system, including cyclosporine and tacrolimus.",
-      "rxcui_members": ["3008", "9524", "41493"],
-      "example_drug_names": ["cyclosporine", "tacrolimus", "mycophenolate"],
-      "icd10_atc_class": "L04AA"
-    },
-    "chemotherapy": {
-      "display_name": "Chemotherapy",
-      "description": "Cancer treatment medications. Supplement interactions can reduce efficacy or increase toxicity.",
-      "rxcui_members": [],
-      "example_drug_names": [],
-      "icd10_atc_class": "L01",
-      "note": "RXCUI member list intentionally sparse — match by drug_class name only for chemotherapy entries."
-    }
-  }
-}
-```
-
-### 3.7 Mechanism Flag Map
-
-Used by the ChEMBL theoretical interaction path. Maps a ChEMBL mechanism flag to the drug classes it interacts with at a theoretical level.
-
-```json
-{
-  "mechanism_flag_map": {
-    "cyp3a4_inhibitor": {
-      "interacts_with_drug_classes": ["statins", "immunosuppressants", "chemotherapy"],
-      "default_severity": "moderate",
-      "default_evidence_level": "theoretical",
-      "mechanism_template": "{subject} inhibits CYP3A4, the primary metabolic pathway for {object}. This may increase drug plasma levels and the risk of dose-dependent adverse effects."
-    },
-    "cyp2c9_inhibitor": {
-      "interacts_with_drug_classes": ["anticoagulants"],
-      "default_severity": "moderate",
-      "default_evidence_level": "theoretical",
-      "mechanism_template": "{subject} inhibits CYP2C9, reducing warfarin metabolism and potentially increasing INR and bleeding risk."
-    },
-    "serotonin_precursor": {
-      "interacts_with_drug_classes": ["ssris", "snris", "maois"],
-      "default_severity": "severe",
-      "default_evidence_level": "theoretical",
-      "mechanism_template": "{subject} increases serotonin precursor load. Combined with {object}, this can elevate serotonin activity and risk serotonin syndrome."
-    },
-    "platelet_aggregation_inhibitor": {
-      "interacts_with_drug_classes": ["anticoagulants"],
-      "default_severity": "moderate",
-      "default_evidence_level": "observational",
-      "mechanism_template": "{subject} inhibits platelet aggregation, potentially potentiating the anticoagulant effect of {object} and increasing bleeding risk."
-    },
-    "cyp3a4_inducer": {
-      "interacts_with_drug_classes": ["ssris", "immunosuppressants", "statins", "anticoagulants", "chemotherapy"],
-      "default_severity": "severe",
-      "default_evidence_level": "rct",
-      "mechanism_template": "{subject} induces CYP3A4, accelerating the metabolism of {object} and potentially reducing therapeutic drug plasma levels. This is the mechanism underlying the St. John's Wort interaction class."
-    }
-  }
-}
-```
-
-### 3.8 Concrete Example: Supplement ↔ Supplement Entry
-
-```json
-{
-  "id": "INTERACTION_SEVERE_ST_JOHNS_WORT_5HTP",
-  "subject": "5-HTP (5-Hydroxytryptophan)",
-  "subject_type": "supplement",
-  "subject_canonical_id": "5_htp",
-  "subject_cui": "C0118922",
-  "subject_rxcui": null,
-  "object": "St. John's Wort",
-  "object_type": "supplement",
-  "object_canonical_id": "st_johns_wort",
-  "object_cui": "C0032599",
-  "object_rxcui": null,
-  "object_drug_class": null,
-  "object_drug_class_rxcui_members": [],
-  "mechanism": "5-HTP is a direct serotonin precursor that increases central serotonin synthesis. St. John's Wort inhibits serotonin reuptake (SSRI-like action) via hypericin and hyperforin. Combined, they produce additive serotonergic stimulation. Serotonin syndrome has been reported with this combination.",
-  "severity": "severe",
-  "evidence_level": "case-report",
-  "bidirectional": true,
-  "clinical_notes": "Serotonin syndrome risk. Case reports document this combination causing confusion, agitation, hyperthermia, and tachycardia. The NIH ODS and clinical pharmacology literature flag this pair. The risk is highest at supplemental doses of 5-HTP above 100mg/day combined with therapeutic-dose SJW.",
-  "management_guidance": "Do not combine 5-HTP with St. John's Wort. If both are in your stack, remove one. If you are also taking an antidepressant, consult your doctor before taking either supplement.",
-  "sources": [
-    {
-      "type": "pubmed",
-      "id": "9690695",
-      "description": "Case report: serotonin syndrome with 5-HTP and SJW combination"
-    },
-    {
-      "type": "nih_ods",
-      "id": "stjohnswort-HealthProfessional",
-      "description": "NIH ODS St. John's Wort Fact Sheet for Health Professionals — interactions section"
-    }
-  ],
-  "flag_name": "INTERACTION_SEVERE_5HTP_ST_JOHNS_WORT",
-  "subject_standard_names_for_matching": [
-    "5-htp",
-    "5 htp",
-    "5-hydroxytryptophan",
-    "5 hydroxytryptophan",
-    "oxitriptan"
-  ],
-  "object_standard_names_for_matching": [
-    "st. john's wort",
-    "st johns wort",
-    "hypericum perforatum",
-    "hypericum"
-  ],
-  "data_provenance": {
-    "source": "manual_curated",
-    "imported_at": "2026-04-10",
-    "reviewed_by": "manual_curation",
-    "review_status": "approved",
-    "suppai_pair_id": null
-  }
-}
+scripts/
+└── import_catalog_artifact.sh        (M3, EXTEND — bundle interaction_db too)
 ```
 
 ---
 
-## 4. Matching Strategy
+## 13. Testing Strategy
 
-The matching system is the most complex part of the interaction engine. It must connect:
-1. A supplement in the catalog (identified by `canonical_id` in `ingredient_quality_map.json`)
-2. A user-entered medication (identified by free text, with RXCUI fallback)
-3. Interaction records in the database
+### Pipeline (M2)
 
-Matching happens at product-detail-screen render time in Flutter and must complete in under 200ms from local SQLite.
+- **Unit tests** for every normalization function in `verify_interactions.py`
+- **Fixture tests** for every failure mode: broken JSON, bad CUI, empty sources at Major, duplicate IDs, drug class expansion misses
+- **Integration tests** that hit real RxNorm + UMLS APIs, gated on a `--live` flag so CI can run offline
+- **Golden dataset:** a small `test_fixtures/curated_interactions_golden.json` with 20 hand-verified entries; the pipeline must produce a byte-identical `interaction_db.sqlite` from this fixture on every run
 
-### 4.1 Supplement-Side Matching
+### Flutter (M1, M3, M4, M5)
 
-When a product detail screen loads, for each ingredient in that product:
+- **M1 pure-function tests** for `StackNutrientAggregator` and `StackUlChecker` — no widget dependency, fast
+- **Widget tests** for every new widget using mock data
+- **Golden-image tests** for the nutrient accumulation panel in all 7 tier colors
+- **Integration test** (M4) that loads the real bundled `interaction_db.sqlite` fixture, adds a warfarin medication + a fish oil supplement to the stack, and asserts the expected InteractionResult appears
+- **PHI assertion** (M4): a dedicated test that greps the sync_service source for any read of `user_stacks_local` rows where `type='medication'` and fails if found
 
-**Step 1 — Exact canonical_id match:**
-```
-ingredient_quality_map[ingredient_key].canonical_id
-  → match against interaction_entries[*].subject_canonical_id
-  → match against interaction_entries[*].object_canonical_id
-```
-Highest confidence. Use canonical_id as primary key. If a match is found, proceed to severity evaluation.
+### Full-suite gates
 
-**Step 2 — CUI match:**
-If canonical_id is null or finds no entries:
-```
-ingredient.cui → match against subject_cui or object_cui
-```
-CUI matches are trusted — CUIs are controlled identifiers verified by `scripts/api_audit/verify_cui.py`.
-
-**Step 3 — RXCUI match:**
-```
-ingredient.rxcui → match against subject_rxcui or object_rxcui
-```
-
-**Step 4 — Fuzzy name match (fallback only):**
-Normalize `ingredient.standard_name` to lowercase, strip punctuation, then run `rapidfuzz.fuzz.token_sort_ratio` against `subject_standard_names_for_matching`. Accept match if score ≥ 88.
-
-Do not auto-promote a fuzzy match above severity `mild` without a CUI or canonical_id confirmation. Fuzzy-only matches above `moderate` severity must be flagged for review in the app's interaction confidence indicator.
-
-### 4.2 Medication-Side Matching
-
-When a user adds a medication via the Flutter `user_medications` table:
-
-**Step 1 — RXCUI exact match:**
-If the user's medication was resolved to an RXCUI (via the in-app medication search calling RxNorm API):
-```
-user_medication.rxcui → match against object_rxcui
-                       → match against object_drug_class_rxcui_members (any element)
-```
-
-**Step 2 — Drug class match:**
-If RXCUI matches `object_drug_class_rxcui_members` for a drug class, treat all entries with that `object_drug_class` as candidate matches.
-
-**Step 3 — Name fallback:**
-If RXCUI lookup fails (offline, user entered "my blood pressure pill"):
-- Normalize user input: lowercase, strip articles and descriptors
-- Fuzzy match against `object_standard_names_for_matching` arrays (threshold ≥ 85)
-- If no fuzzy match: prompt user to select from a `drug_class` picker in the UI ("What type of medication is this?")
-- Write the selected drug class to `user_medications.drug_class` for future matching
-
-**Step 4 — Drug class picker fallback:**
-The drug class picker is the last resort. It shows the `drug_classes` table with `display_name` and `description` for each class. User selection writes `drug_class` to the local record, enabling class-level interaction matching without requiring RXCUI resolution.
-
-### 4.3 Deduplication Rules
-
-Multiple sources may produce interaction records for the same supplement-drug pair (e.g., supp.ai and NIH ODS both cover fish oil + warfarin). Deduplication rules:
-
-1. **Same subject_canonical_id AND same object_rxcui (or object_drug_class):** these are duplicate pairs.
-2. During import, if a duplicate pair is detected, do NOT create two entries. Instead, merge the `sources` arrays from both records into a single entry.
-3. The surviving entry uses the higher `evidence_level` of the two (meta-analysis > rct > observational > case-report > theoretical).
-4. The surviving entry uses the higher `severity` of the two.
-5. Both `data_provenance` records are preserved in a `provenance_history` array (not surfaced in Flutter, but retained for audit).
-6. The `id` and `flag_name` of the surviving entry use the winning severity.
-
-**Implementation:** The import scripts write to a staging directory. A deduplication pass (`scripts/deduplicate_interactions.py`, to be written at M1) runs before any file is promoted to `scripts/data/drug_nutrient_interactions.json`.
-
-### 4.4 Conflict Resolution
-
-When two sources disagree on severity or evidence level for the same pair:
-
-| Conflict | Resolution |
-|---|---|
-| Source A says `moderate`, Source B says `mild` | Use `moderate` (more cautious) |
-| Source A says `rct`, Source B says `case-report` | Use `rct` (higher evidence) |
-| Source A says `moderate` with `rct`, Source B says `severe` with `case-report` | Use `severe` with `case-report` — severity from most cautious, evidence_level from best available |
-| Sources directly contradict on mechanism | Write clinical_notes documenting the disagreement; flag `data_provenance.review_status = "pending_review"` |
-
-The general principle: **never silently downgrade severity when sources conflict**. The most cautious severity always wins. A false positive interaction warning (unnecessary caution) is preferable to a false negative (missed serious interaction) for a consumer safety app.
+- Pipeline: `pytest scripts/tests/` must stay green (currently 3,259 passed / 4 skipped)
+- Flutter: `flutter test` must stay green (count TBD — baseline before M1)
+- Build: both repos must compile on every PR
 
 ---
 
-## 5. Severity Scale & Verdict Integration
+## 14. Risk Register
 
-### 5.1 Five-Tier Severity Definitions
-
-| Tier | Severity | Clinical definition | Example |
+| Risk | Likelihood | Impact | Mitigation |
 |---|---|---|---|
-| 1 | `contraindicated` | Combination must be avoided. Evidence of serious harm in clinical use. Prescribers would not co-prescribe. | St. John's Wort + HIV antiretrovirals (reduces drug levels, treatment failure) |
-| 2 | `severe` | Combination carries significant risk. Requires medical supervision if continued. Serotonin syndrome, serious bleeding risk, or organ toxicity risk. | 5-HTP + MAOI; kava + hepatotoxic drugs |
-| 3 | `moderate` | Combination may alter drug efficacy or increase adverse effects. Prescriber or pharmacist notification advisable. | Fish oil + warfarin; CoQ10 + statins (potential statin efficacy reduction) |
-| 4 | `mild` | Minor pharmacokinetic or pharmacodynamic interaction. Monitor for effects; clinical significance usually low. | Vitamin C + aspirin (increased aspirin absorption) |
-| 5 | `informational` | No established harm. Documented interaction pathway or theoretical concern. Provided for completeness. | Green tea + iron (reduced non-heme iron absorption) |
-
-### 5.2 Severity Does Not Modify the Arithmetic Score
-
-The interaction system is entirely user-scoped. A supplement's `score_quality_80` and `score_display_100_equivalent` are NOT modified by interaction detection.
-
-**Rationale:** A product score must be product-global and reproducible without user context. A user on warfarin seeing a lower score for fish oil products would be confused when the score changes if they stop their medication. Interactions are a separate concern: they augment the product detail screen with personalized context, not alter the quality rating.
-
-**Implementation consequence:** No changes to `score_supplements.py`, `enrich_supplements_v3.py`, or `build_final_db.py` are required to support the interaction feature. The interaction engine is a standalone read path in Flutter.
-
-### 5.3 Flutter UI Behavior by Severity Tier
-
-| Severity | Banner color | Flutter widget behavior | Dismissible | Deep link |
-|---|---|---|---|---|
-| `contraindicated` | Red (`#D32F2F`) | Full-width blocking banner at top of product detail screen, above the score card. Non-dismissible. "Do not take this with [medication]." | No | Learn more → clinical_notes modal |
-| `severe` | Deep orange (`#E64A19`) | Full-width banner below score card. Persists on re-open. "Talk to your doctor before taking this." | Yes, once per session (reappears on next app open) | Learn more → clinical_notes modal |
-| `moderate` | Amber (`#F9A825`) | Compact banner below ingredients list. "This supplement may affect how [medication] works." | Yes, persists dismissed state in local SQLite for 30 days | Learn more → clinical_notes modal |
-| `mild` | Blue-grey (`#546E7A`) | Inline chip in the interactions section. "Minor interaction noted." | Yes, persistent dismiss | Tap to expand → clinical_notes modal |
-| `informational` | Light grey (`#78909C`) | Collapsed by default in "Interaction Details" accordion. | Always collapsed unless user expands | Expand only |
-
-**Stacking rule:** When a product has multiple interactions for the same medication, only the highest severity banner is shown at the top level. Lower-severity interactions are visible inside the "Interaction Details" section.
-
-### 5.4 Flag Naming Conventions
-
-All interactions in logs, analytics, and crash reports use the `flag_name` field for traceability:
-
-```
-INTERACTION_{SEVERITY}_{SUBJECT_SLUG}_{OBJECT_SLUG}
-```
-
-- `SEVERITY`: one of `CONTRAINDICATED`, `SEVERE`, `MODERATE`, `MILD`, `INFORMATIONAL`
-- `SUBJECT_SLUG`: uppercase snake_case of the supplement canonical_id (e.g., `FISH_OIL`, `ST_JOHNS_WORT`)
-- `OBJECT_SLUG`: uppercase snake_case of the drug name or drug class (e.g., `WARFARIN`, `SSRIS`, `ANTICOAGULANTS`)
-
-Examples:
-- `INTERACTION_SEVERE_5HTP_MAOIS`
-- `INTERACTION_CONTRAINDICATED_ST_JOHNS_WORT_HIV_ANTIRETROVIRALS`
-- `INTERACTION_MODERATE_FISH_OIL_WARFARIN`
-- `INTERACTION_INFORMATIONAL_GREEN_TEA_IRON`
-
-This naming is enforced by the schema validator at build time.
-
-### 5.5 Disclaimer Language
-
-Every interaction display in Flutter must include the following disclaimer, non-negotiable:
-
-> "This information is for general awareness only and is not medical advice. Always consult your doctor or pharmacist before changing or stopping any medication, supplement, or combination. PharmaGuide does not replace professional medical judgment."
-
-This disclaimer appears as fixed footer text in the `InteractionBanner` widget and as a header in the "Interaction Details" modal. It cannot be hidden or collapsed.
+| Draft JSON has wrong CUIs | High | High | `verify_interactions.py` auto-corrects via UMLS lookup and logs every correction |
+| Major+ entries without PMIDs survive to production | Medium | Very high (liability) | Build fails on empty `source_urls` at Major+ |
+| supp.ai import has conflicting severity with curated drafts | Medium | Medium | More cautious severity wins, logged to audit report |
+| Drug class expansion misses a real drug | Medium | High | RxClass API is authoritative; maintenance is quarterly |
+| User enters a misspelled medication | High | Low | RxNorm `approximateTerm` endpoint handles fuzzy input |
+| RxNorm API unavailable | Low | Medium | Bundled `drug_classes.json` fallback lets users pick class-level without network |
+| Interaction DB bloats past 10 MB | Low | Low | Monitor in M2, add an index-only build mode if needed |
+| PHI (medications) leaks to Supabase | Very low | Very high | Build-time grep assertion; explicit test |
+| Severity tier drift between pipeline and Flutter | Low | Medium | Single source of truth: `severity.dart` enum, pipeline mapper references the same values |
 
 ---
 
-## 6. Flutter Integration Plan
+## 15. Out of Scope (v1)
 
-### 6.1 New Local SQLite Table: `user_medications`
+Do not build these unless explicitly reopened:
 
-This table stores the user's current medication list. It is local-only and must never sync to Supabase. Medications are sensitive PHI (personal health information) and the PharmaGuide privacy policy must be updated to explicitly state that medication data stays on-device.
-
-```sql
-CREATE TABLE user_medications (
-  id              TEXT PRIMARY KEY,      -- UUID generated client-side
-  name            TEXT NOT NULL,         -- User-entered or resolved drug name
-  rxcui           TEXT,                  -- Resolved RXCUI; null if lookup failed
-  drug_class      TEXT,                  -- Key in drug_classes lookup; null if not resolved
-  display_name    TEXT NOT NULL,         -- User-visible name (may differ from normalized name)
-  started_at      TEXT NOT NULL,         -- ISO 8601 date string (YYYY-MM-DD)
-  ended_at        TEXT,                  -- ISO 8601 date string; null = currently taking
-  notes           TEXT,                  -- Optional user notes (dose, prescriber)
-  created_at      TEXT NOT NULL,         -- ISO 8601 datetime
-  updated_at      TEXT NOT NULL          -- ISO 8601 datetime
-);
-
--- Index for active medication lookup (ended_at IS NULL = currently taking)
-CREATE INDEX idx_user_medications_active ON user_medications(ended_at)
-  WHERE ended_at IS NULL;
-```
-
-**Privacy enforcement:**
-- This table is excluded from the `sync_to_supabase.py` table list explicitly (add assertion).
-- The table is created in the app's private document directory, not in any shared or iCloud-backed location.
-- When a user deletes the app, all medication data is destroyed with it (standard iOS/Android app data deletion).
-- No analytics events reference medication names. Only the resolved drug class (e.g., "anticoagulants") may appear in anonymized aggregate analytics, and only if the user has opted into analytics.
-
-### 6.2 Interaction Engine — Local SQLite Schema
-
-The interaction database is exported to a separate SQLite table (not JSON) during `build_final_db.py` for fast query performance in Flutter.
-
-```sql
-CREATE TABLE interactions (
-  id                     TEXT PRIMARY KEY,
-  subject_canonical_id   TEXT,            -- FK to ingredients table
-  subject_cui            TEXT,
-  subject_rxcui          TEXT,
-  object_rxcui           TEXT,
-  object_drug_class      TEXT,
-  severity               TEXT NOT NULL,
-  evidence_level         TEXT NOT NULL,
-  flag_name              TEXT NOT NULL,
-  mechanism              TEXT NOT NULL,
-  clinical_notes         TEXT NOT NULL,
-  management_guidance    TEXT,
-  bidirectional          INTEGER NOT NULL, -- 1 = true, 0 = false
-  sources_json           TEXT NOT NULL,    -- Serialized JSON array of source objects
-  subject_names_json     TEXT NOT NULL,    -- Serialized JSON array for fuzzy matching
-  object_names_json      TEXT NOT NULL     -- Serialized JSON array for fuzzy matching
-);
-
--- Indexes for the two hot query paths
-CREATE INDEX idx_interactions_subject ON interactions(subject_canonical_id);
-CREATE INDEX idx_interactions_object_rxcui ON interactions(object_rxcui);
-CREATE INDEX idx_interactions_object_class ON interactions(object_drug_class);
-```
-
-### 6.3 New Flutter Widget: `InteractionBanner`
-
-`InteractionBanner` is a stateless widget added to the `ProductDetailScreen`. It reads from the local SQLite interaction table and the `user_medications` table.
-
-**Location in widget tree:** Immediately below the score card, before the ingredients breakdown section.
-
-**Inputs to the widget:**
-- `productIngredients`: list of `canonical_id` strings for all ingredients in the current product
-- `localDb`: reference to the SQLite database instance
-
-**Widget behavior:**
-1. Query `user_medications` where `ended_at IS NULL` to get active medications.
-2. If no active medications: render nothing (or render a gentle "Add your medications to see personalized interaction info" prompt — UX decision for M4).
-3. For each active medication × each product ingredient, run the matching strategy from Section 4 against the local `interactions` table.
-4. Collect all matching interactions. Group by severity (highest first).
-5. Render the highest-severity banner as a full-width widget using the color rules from Section 5.3.
-6. All additional interactions are collapsed into the "See all interactions (N)" expandable section below.
-
-**Performance requirement:** The full query path must complete in < 200ms on a mid-range device (2021 Android, 3GB RAM). This is achievable with indexed SQLite queries against a database of ≤ 5,000 interaction records.
-
-### 6.4 Stack-Level Interaction Check
-
-When the user adds a product to their stack (via the stack-building feature), a background interaction check runs across all products currently in the stack:
-
-1. Collect all `canonical_id` values for every ingredient in every product in the stack.
-2. Query the `interactions` table for any entry where both `subject_canonical_id` AND `object_canonical_id` are in the collected set.
-3. If any supplement ↔ supplement interactions are found: surface a `StackInteractionBanner` in the stack overview screen (not on individual product screens).
-4. Also re-run the supplement ↔ drug check for all stack ingredients × all active medications.
-
-**Stack interaction entry point in data:** Supplement ↔ supplement entries have both `subject_canonical_id` and `object_canonical_id` populated. This is the distinguishing field — if `object_canonical_id` is not null, it's a supplement-supplement pair.
-
-### 6.5 Medication Entry UI
-
-The medication entry flow is a new screen added at M4:
-
-1. **Search field** with RxNorm API integration (debounced, 300ms). Calls `rxnav.nlm.nih.gov/REST/drugs.json?name=<query>` while online. Offline: direct entry only.
-2. **Autocomplete list** from RxNorm results showing `displayName` and `synonym`.
-3. On selection: resolve RXCUI, populate `user_medications`.
-4. **Fallback:** if user can't find their drug via search, "I can't find it — let me pick the type" launches the drug class picker.
-5. **Active/inactive toggle:** users can mark medications as stopped (sets `ended_at`). Stopped medications do not trigger interaction warnings.
-
-**Privacy reminder in the UI:** A single line of copy under the search field: "Your medications are stored only on this device and never shared."
+- Food logging / diet tracking
+- Gene-variant pharmacogenomics
+- Full pharmacokinetic dose modeling
+- Provider / clinical decision support UI
+- Real-time drug approval feeds
+- Interaction DB editing UI inside the app
+- DrugBank integration (post-v1, pending license decision)
 
 ---
 
-## 7. Build Plan with Milestones
+## 16. Operational Notes
 
-### M0 — Schema + Golden Dataset (2–3 weeks, 1 engineer)
+### Release cadence
 
-**Deliverables:**
-- This spec document finalized and reviewed.
-- `scripts/data/drug_nutrient_interactions.json` created with the schema from Section 3, containing exactly 10 hand-curated interaction records (the "golden set").
-- `scripts/validate_interactions_schema.py` written and passing on the golden dataset.
-- 10 golden interactions cover: fish oil + warfarin, St. John's Wort + SSRIs, St. John's Wort + HIV antiretrovirals, 5-HTP + MAOIs, 5-HTP + St. John's Wort, kava + alcohol, magnesium + antibiotics (tetracyclines), calcium + levothyroxine, vitamin K + warfarin, green tea (high dose) + anticoagulants.
-- Schema validator integrated into `build_final_db.py` as a pre-flight check.
-- Test file `scripts/tests/test_interaction_schema.py` written with golden dataset assertions.
-- `drug_classes` lookup table populated with the 10 classes listed in Section 3.6.
+- `pharmaguide_core.db` and `interaction_db.sqlite` have **independent** release cycles.
+- Pipeline builds both in the same CI run but stages them as separate artifacts in `scripts/dist/`.
+- Flutter's `import_catalog_artifact.sh` can accept either one or both; it validates manifests independently.
+- Version bump policy: patch version on `interaction_db.sqlite` for data-only updates, minor version for schema changes.
 
-**Acceptance criteria:** All 10 golden interactions render correct severity banners in a local Flutter test harness (screenshots reviewed manually).
+### Monitoring
 
-### M1 — supp.ai Import + Normalization (3–4 weeks, 1 engineer)
+- Add a dashboard card to `scripts/dashboard/views/quality.py` showing:
+  - Total interactions shipped
+  - Source breakdown (curated / suppai / overrides)
+  - Count blocked by evidence gate per release
+  - Top 10 most-referenced canonical_ids and RXCUIs
 
-**Deliverables:**
-- `scripts/api_audit/normalize_suppai.py`: imports supp.ai TSV, normalizes supplement names to canonical_ids, resolves drug names to RXCUI via RxNorm API.
-- Manual review queue output: JSON file listing all supp.ai entries that failed auto-normalization.
-- Reviewed and approved entries promoted to `drug_nutrient_interactions.json`.
-- `scripts/deduplicate_interactions.py`: merge-by-pair deduplication with conflict resolution rules from Section 4.3.
-- Target: ~400–600 approved supplement-drug interaction entries after review.
-- Test coverage for the normalization pipeline.
-- supp.ai attribution added to the app's data sources disclosure screen.
+### Support
 
-**Acceptance criteria:** `python3 -m pytest scripts/tests/test_interaction_schema.py scripts/tests/test_suppai_import.py` passes. Deduplication reduces the raw supp.ai set by ≥ 10% (expected duplicate rate based on overlapping source coverage with golden set).
-
-### M2 — UMLS RxNorm RXCUI Enrichment (2–3 weeks, 1 engineer)
-
-**Deliverables:**
-- `scripts/api_audit/enrich_rxnorm.py`: for all drug entries in the interaction DB lacking RXCUI, run RxNorm lookup. Apply safe-apply pattern (no auto-write without review).
-- For all `ingredient_quality_map.json` entries with `cui` but no `rxcui`: run RxNorm enrichment. Same safe-apply pattern.
-- Target: ≥ 90% of drug entries in the interaction DB have a confirmed RXCUI.
-- Interaction DB entries with unresolved drug RXCUI: demoted to `evidence_level = "theoretical"` pending resolution.
-
-**Acceptance criteria:** Running `python3 scripts/api_audit/enrich_rxnorm.py --dry-run` reports < 10% of interaction entries with null `object_rxcui`.
-
-### M3 — DrugBank Drug-Drug Coverage (4–6 weeks, 1 engineer; license decision required)
-
-**Deliverables:**
-- License decision: academic XML (free, limited) vs. commercial API (paid).
-- If academic: `scripts/api_audit/import_drugbank.py` for XML bulk import of drug-drug interactions for the 10 drug classes in the lookup table.
-- Target: ~200–400 drug-drug interaction entries covering the most clinically significant pairs within the 10 priority drug classes.
-- All DrugBank entries require the standard review queue flow before promotion.
-- DrugBank attribution added to data sources disclosure.
-
-**Acceptance criteria:** Drug-drug coverage for all 10 drug classes in Section 3.6. Test file `scripts/tests/test_drugbank_import.py` passing.
-
-### M4 — Flutter Widget + Medication Entry UI (4–5 weeks, 1 engineer Flutter)
-
-**Deliverables:**
-- `user_medications` SQLite table and migration.
-- `InteractionBanner` widget integrated into `ProductDetailScreen`.
-- Medication entry screen with RxNorm search and drug class fallback picker.
-- Stack-level interaction check in `StackScreen`.
-- Disclaimer text permanently rendered in all interaction display contexts.
-- Privacy policy updated to state medications are stored locally only.
-- UI/UX review of severity banner colors and copy.
-
-**Acceptance criteria:** Manual QA checklist covering: medication add flow, interaction banner render for each severity tier, stack interaction detection, offline behavior (interaction DB cached locally), medication data not appearing in Supabase.
-
-### M5 — Stack-Level Interaction Engine (2–3 weeks, 1 engineer)
-
-**Deliverables:**
-- Extend the M4 stack check to handle multi-product stacks with > 10 ingredients efficiently.
-- Performance optimization: ensure stack-check completes < 500ms for a 5-product stack on mid-range device.
-- Interaction deduplication in the stack view (same interaction from two products shown once).
-- "Your stack is interaction-safe" positive feedback state when no interactions detected.
-
-**Acceptance criteria:** Performance regression test in `scripts/tests/test_stack_interaction_perf.py` (run on CI against a synthetic 5-product stack with 50 total ingredients).
-
-### Estimated Total Effort
-
-| Milestone | Calendar time | Engineering time |
-|---|---|---|
-| M0 | 2–3 weeks | ~40 hours |
-| M1 | 3–4 weeks | ~60 hours |
-| M2 | 2–3 weeks | ~30 hours |
-| M3 | 4–6 weeks | ~80 hours (pending license) |
-| M4 | 4–5 weeks | ~100 hours (Flutter) |
-| M5 | 2–3 weeks | ~40 hours |
-| **Total** | **~5 months sequential** | **~350 hours** |
-
-M0–M2 and M4 can overlap with M3 if the DrugBank license decision is delayed.
+- Users who hit false positives can report from within the app. Reports append to a local log; user can share via email. No automatic telemetry (privacy).
 
 ---
 
-## 8. Open Questions & Risks
+## 17. Session State for Handoff
 
-### 8.1 Legal / Medical Disclaimer — Liability Exposure
-
-**Risk:** Displaying drug interaction warnings in a consumer app creates liability exposure, especially if a warning is missed (false negative) or if a user takes action based on an incorrect warning (false positive).
-
-**Assessment:** False negatives (missed serious interactions) are the more dangerous failure mode for users. False positives (unnecessary caution) cause friction but not harm. The design philosophy in this spec errs toward more caution: severity conflicts resolve to the higher tier, and pending-review entries are excluded from production rather than shown with lower confidence.
-
-**Mitigations:**
-- The disclaimer language in Section 5.5 is mandatory and non-dismissible.
-- The "informational" tier is specifically designed for entries where we want to surface awareness without implying clinical urgency.
-- Legal review required before M4 ship. Involve a healthcare attorney to review the disclaimer language and the severity copy in the banners.
-- Consider whether the feature requires a "terms of use" acknowledgment gate on first use.
-
-### 8.2 False Negatives Are the Real Risk
-
-The interaction DB will have coverage gaps, especially at M0/M1. A user on a medication not covered by our database will see no interaction warning. This is not the same as "no interaction exists."
-
-**Mitigation:** The app should communicate coverage status. If a user's medication has no RXCUI resolution and no drug class match, the app should display: "We couldn't identify this medication. Our interaction database covers [N] common medication classes. Check with your pharmacist for specific interactions." This is better than silently showing nothing.
-
-### 8.3 Data Licensing
-
-| Source | License risk | Mitigation |
-|---|---|---|
-| supp.ai | Low — academic open; attribution required | Attribution text in app must be verified before M4 |
-| NIH ODS, LiverTox | None — US government public domain | No action required |
-| ChEMBL | Low — CC BY-SA 3.0; attribution required | Already handled by existing ChEMBL audit tooling |
-| DrugBank free XML | Medium — academic license; attribution required; no commercial redistribution | Review license terms at M3; if the app is monetized, the free academic license may not apply |
-| DrugBank commercial | Low once licensed | Budget required; evaluate at M3 |
-
-**Key risk:** If PharmaGuide moves to a paid app or subscription model before M3, the DrugBank academic XML license may not be valid. Clarify with DrugBank legal before using the academic XML in a commercial product.
-
-### 8.4 Maintenance Burden
-
-Drug approvals, recalls, and interaction updates happen continuously. The NIH ODS Fact Sheets are updated periodically. supp.ai may release updated dataset versions. DrugBank updates quarterly.
-
-**Mitigation plan:**
-- Interactions file follows the same `update_frequency: quarterly` policy as other data files.
-- The `_metadata.last_updated` field triggers a stale-data warning in `build_final_db.py` if the file has not been updated in > 6 months.
-- At M2+, run `enrich_rxnorm.py` quarterly to catch newly assigned RXCUIs for entries that were previously unresolved.
-- The FDA weekly sync pattern (`scripts/run_fda_sync.sh`) is a model for automating data currency checks. A quarterly interactions refresh script can follow the same pattern.
-
-### 8.5 Handling "My Blood Pressure Pill" — Missing RXCUI
-
-When users enter vague medication descriptions, the RXCUI lookup fails. The drug class picker fallback (Section 6.2) covers this case, but it depends on the user knowing their medication class.
-
-**Realistic worst case:** A user enters "heart pill" and selects "Blood Pressure Medications (ACE Inhibitors)" when they are actually on a calcium channel blocker. This produces false negative interaction results.
-
-**Mitigation:** The drug class picker shows `example_drug_names` alongside the class description. The user can compare their pill name against examples. This is not foolproof but reduces misclassification.
-
-**Future option (out of scope for v1):** Pill identification via image (NDC barcode scan or imprint search). This would dramatically improve RXCUI resolution accuracy but is a significant engineering investment.
-
-### 8.6 Interaction Between Interaction Warnings and the Scoring System
-
-The current scoring system produces a `BLOCKED` or `UNSAFE` verdict for products containing banned/recalled substances. Users may conflate a low quality score with an interaction warning, or expect the score to reflect their personal medication context.
-
-**Decision:** The score is product-global and never modified by interactions. This must be communicated clearly in the UX. The product detail screen should visually separate the quality score section from the interaction section. Copy suggestion: "Quality score reflects the supplement itself. Interaction warnings reflect your specific health context."
-
----
-
-## 9. Out of Scope — Do Not Confuse with v1
-
-The following features are commonly requested in the interaction space and are intentionally deferred. They are documented here to prevent scope creep during M0–M5 planning.
-
-### 9.1 Pharmacogenomic Gene-Variant Effects
-
-CYP2D6, CYP2C9, CYP2C19, and SLCO1B1 variants materially alter drug metabolism for a meaningful percentage of the population. For example, CYP2D6 poor metabolizers on codeine face toxicity risk. Including gene variants in interaction logic would require genotype input from the user, a different data source (PharmGKB, CPIC), and a dramatically more complex matching engine.
-
-**Why deferred:** No pathway to obtain reliable user genotype data in v1. Consumer DNA test results are not reliable enough for clinical decision support use.
-
-### 9.2 Dose-Dependent Interaction Modeling
-
-The fish oil + warfarin interaction has a different clinical significance at 1g/day EPA+DHA versus 4g/day. The current schema captures dose thresholds in `clinical_notes` prose, but the interaction logic does not vary severity by dose.
-
-**Why deferred:** Product-level dose data is available in the pipeline, but user-entered dose (how much of a product they take) is not captured in v1. Without user dose input, dose-dependent modeling produces false precision.
-
-### 9.3 Time-of-Day Separation Recommendations
-
-Calcium and levothyroxine should be separated by 4 hours. Iron and tetracyclines should not be taken together. These timing recommendations are interaction-adjacent but require a different UX (schedule-based) and a separate data field (`separation_hours`).
-
-**Why deferred:** Time-of-day scheduling is a distinct feature category from interaction warnings. It requires an active-schedule model for the user's supplement and medication intake. Scope it separately if there is demand.
-
-### 9.4 Clinical Decision Support for Providers
-
-PharmaGuide is a consumer app. The interaction data and UI are designed for patient-level awareness, not clinical workflow integration. The app does not produce clinical recommendations, does not generate printable reports for prescribers, and does not integrate with EHR systems.
-
-**Why deferred:** Regulatory pathway (FDA Software as a Medical Device classification) and liability exposure of clinical decision support are out of scope for the current product definition.
-
-### 9.5 Pregnancy and Lactation Safety Flags
-
-Supplement safety in pregnancy and lactation is a distinct concern from drug interactions. It requires a separate data source (LactMed, Drugs and Lactation Database) and a separate user profile flag.
-
-**Why deferred:** High-value feature but orthogonal to the interaction engine. Scope as a separate "pregnancy mode" feature.
-
-### 9.6 Real-Time Drug Approval Change Monitoring
-
-New drug approvals and label changes happen continuously. Automatically monitoring FDA approval RSS feeds for interaction-relevant label changes is technically feasible (following the existing `run_fda_sync.sh` pattern) but is out of scope for v1 given the quarterly maintenance cadence already defined.
-
----
-
-*End of specification.*
-
-*This document is a living spec. Update version and `last_updated` when any section changes. Major schema changes require a schema_version bump and a migration note in `_metadata.change_log`.*
+- **Spec version:** 2.0.0
+- **Previous spec:** v1.0.0 (978 lines, written 2026-04-10 without Flutter infrastructure knowledge). This document replaces it.
+- **Last architectural decision:** Ship M1 (stack nutrient accumulator) before any interaction DB work. M1 is Flutter-only, 2–3 days, closes the biggest medical gap independently.
+- **Last user request:** "Turn everything you just told me in a detailed plan and update the previous interaction db you did also, so at the end of this session if i create another agent he know exactly what to do"
+- **Artifacts waiting for next agent:**
+  - User's draft JSON (~150 entries) — will be pasted into `scripts/data/curated_interactions/interactions_drafts_v0.json`
+  - supp.ai full export — will be dropped at `scripts/data/suppai_import/suppai_raw.json`
+  - UMLS + RxNorm API access already available via existing `env_loader.py`
+- **What to do first in the next session:**
+  1. Read this spec in full.
+  2. Read the five "Existing Flutter Infrastructure" files in §4.
+  3. Confirm the user is ready to start M1.
+  4. Start M1 with TDD: write `stack_nutrient_aggregator_test.dart` first.
+  5. Never touch M2+ until M1 is merged and green.
