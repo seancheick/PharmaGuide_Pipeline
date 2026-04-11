@@ -954,7 +954,11 @@ class SupplementEnricherV3:
             if not isinstance(entry, dict):
                 continue
             entity_type = entry.get('entity_type', 'ingredient')
-            if entity_type not in {'ingredient', 'contaminant', None, ''}:
+            # Class entities (policy watchlists like SPIKE_ANABOLIC_STEROIDS)
+            # expose specific molecule aliases that must be recognized via
+            # exact dict lookup. Fuzzy/token matching for classes stays
+            # disabled further down in _check_banned_substances.
+            if entity_type not in {'ingredient', 'contaminant', 'class', None, ''}:
                 continue
             result = {
                 "recognition_source": "banned_recalled_ingredients",
@@ -5555,10 +5559,13 @@ class SupplementEnricherV3:
                     if isinstance(item, dict):
                         banned_items_with_category.append((section_key, item))
 
-        # Entity types that should be matched against ingredient labels
-        # Classes and threats should NOT match via fuzzy/token matching
-        # Products are now matchable with brand-qualified aliases and negative_match_terms
-        MATCHABLE_ENTITY_TYPES = {'ingredient', 'contaminant', 'product', None, ''}
+        # Entity types that should be matched against ingredient labels.
+        # Class entities (policy watchlists) expose specific molecule aliases
+        # and must match via strict exact/alias only — token_bounded fuzzy
+        # matching is explicitly blocked for classes below.
+        # Threats remain excluded entirely.
+        # Products are matched via brand-qualified aliases + negative_match_terms.
+        MATCHABLE_ENTITY_TYPES = {'ingredient', 'contaminant', 'product', 'class', None, ''}
 
         product_name = ""
         brand_name = ""
@@ -5662,7 +5669,11 @@ class SupplementEnricherV3:
                         match_method = "exact"
                         matched_variant = banned_name
 
-                if not match_method and allow_product_token_bounded:
+                # Class entities: strict exact/alias only, never token_bounded.
+                # This preserves the original intent of blocking fuzzy class matches
+                # (which would over-block generic chemistry terms) while still
+                # allowing the specific molecule aliases under a class to match.
+                if not match_method and allow_product_token_bounded and entity_type != 'class':
                     safe_token_aliases = self._filter_safe_token_aliases(banned_name, all_aliases)
                     matched, matched_variant = self._token_bounded_match(
                         candidate_ing_name, banned_name, safe_token_aliases
