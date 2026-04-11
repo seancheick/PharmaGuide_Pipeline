@@ -2856,8 +2856,14 @@ class SupplementEnricherV3:
     def _is_known_therapeutic(self, ing_name: str, std_name: str,
                                quality_map: Dict, botanicals_db: Dict) -> bool:
         """Check if ingredient exists in therapeutic databases."""
-        # Check quality map
-        quality_match = self._match_quality_map(ing_name, std_name, quality_map)
+        # Check quality map. This is an exploratory predicate — we only want
+        # a yes/no answer, not a final match. Pass _form_extraction_attempt=True
+        # so this call does NOT emit parent_fallback telemetry (which would
+        # otherwise leak transient rows into parent_fallback_report.json when
+        # the real ingredient enrichment later upgrades the match).
+        quality_match = self._match_quality_map(
+            ing_name, std_name, quality_map, _form_extraction_attempt=True
+        )
         if quality_match and quality_match.get("match_status") != "FORM_UNMAPPED":
             return True
 
@@ -4992,26 +4998,36 @@ class SupplementEnricherV3:
             self.match_counters["contains_match_wins_count"] += 1
 
         if best["fallback_form_selected"]:
-            self.match_counters["parent_fallback_count"] += 1
-            payload = {
-                "ingredient_raw": ing_name,
-                "ingredient_normalized": ing_norm,
-                "canonical_id": best["parent_key"],
-                "fallback_form_name": best["fallback_form_name"],
-                "match_type": best["match_type"],
-                "tier": best["tier"],
-            }
-            self._parent_fallback_details.append(payload)
-            self._parent_fallback_info_count += 1
-            if self._parent_fallback_info_count <= 10:
-                self.logger.info(f"Parent fallback form selected: {json.dumps(payload, sort_keys=True)}")
-            elif self._parent_fallback_info_count == 11:
-                self.logger.info(
-                    "Parent fallback logs suppressed after 10; full details saved to "
-                    "parent_fallback_report.json in output directory."
-                )
-            else:
-                self.logger.debug(f"Parent fallback form selected: {json.dumps(payload, sort_keys=True)}")
+            # Only count + emit telemetry for top-level calls. Internal
+            # recursive calls (form extraction attempts, branded-token fallback,
+            # multi-form candidate resolution) and exploratory predicates like
+            # _is_known_therapeutic pass _form_extraction_attempt=True; their
+            # "best" is a transient intermediate, not the final enriched
+            # outcome. Counting them produced spurious parent_fallback_report
+            # rows where the final matched_form was actually a real form
+            # (e.g., Pure Encapsulations Devil's Claw → harpagoside-standardized
+            # form would leak a devil's claw (unspecified) fallback row).
+            if not _form_extraction_attempt:
+                self.match_counters["parent_fallback_count"] += 1
+                payload = {
+                    "ingredient_raw": ing_name,
+                    "ingredient_normalized": ing_norm,
+                    "canonical_id": best["parent_key"],
+                    "fallback_form_name": best["fallback_form_name"],
+                    "match_type": best["match_type"],
+                    "tier": best["tier"],
+                }
+                self._parent_fallback_details.append(payload)
+                self._parent_fallback_info_count += 1
+                if self._parent_fallback_info_count <= 10:
+                    self.logger.info(f"Parent fallback form selected: {json.dumps(payload, sort_keys=True)}")
+                elif self._parent_fallback_info_count == 11:
+                    self.logger.info(
+                        "Parent fallback logs suppressed after 10; full details saved to "
+                        "parent_fallback_report.json in output directory."
+                    )
+                else:
+                    self.logger.debug(f"Parent fallback form selected: {json.dumps(payload, sort_keys=True)}")
 
         return best["match_data"]
 
