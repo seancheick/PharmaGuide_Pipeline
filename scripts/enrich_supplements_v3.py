@@ -11538,7 +11538,7 @@ class SupplementEnricherV3:
 
             summary_file = os.path.join(
                 reports_dir,
-                f"{report_prefix}_{datetime.now(UTC).strftime('%Y%m%d_%H%M%S')}.json",
+                f"{report_prefix}.json",
             )
 
             # Atomic write: prevents partial files on crash

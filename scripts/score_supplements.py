@@ -3583,7 +3583,7 @@ class SupplementScorer:
 
         summary_file = os.path.join(
             reports_dir,
-            f"scoring_summary_{datetime.now(timezone.utc).strftime('%Y%m%d_%H%M%S')}.json",
+            "scoring_summary.json",
         )
         with open(summary_file, "w", encoding="utf-8") as f:
             json.dump(summary, f, indent=2, ensure_ascii=False)
@@ -3762,7 +3762,7 @@ def main() -> None:
 
         report_dir = Path(output_dir) / "reports"
         report_dir.mkdir(parents=True, exist_ok=True)
-        report_file = report_dir / f"impact_report_{datetime.now(timezone.utc).strftime('%Y%m%d_%H%M%S')}.json"
+        report_file = report_dir / "impact_report.json"
         with open(report_file, "w", encoding="utf-8") as f:
             json.dump(report, f, indent=2, ensure_ascii=False)
 
