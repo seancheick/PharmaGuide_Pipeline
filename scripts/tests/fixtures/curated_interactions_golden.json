@@ -1,0 +1,328 @@
+{
+  "_metadata": {
+    "schema_version": "1.0.0",
+    "last_updated": "2026-04-11",
+    "total_entries": 20,
+    "purpose": "Golden fixture for verify_interactions.py + build_interaction_db.py byte-identity tests. Every row has verified RXCUIs (from scripts/data/drug_classes.json) and CUIs (from scripts/data/ingredient_quality_map.json) plus an authoritative NIH/NCCIH/LiverTox/DailyMed URL. Never shipped to production — test fixture only.",
+    "sources": [
+      "NIH Office of Dietary Supplements (ods.od.nih.gov) — supplement fact sheets",
+      "NIH NCCIH (nccih.nih.gov) — herbal and integrative health",
+      "LiverTox (ncbi.nlm.nih.gov/books/NBK547852) — hepatotoxicity",
+      "DailyMed (dailymed.nlm.nih.gov) — FDA drug labels"
+    ],
+    "notes": "Severities use draft vocabulary (Contraindicated/Major/Moderate/Minor). verify_interactions.py normalizes to Flutter enum (contraindicated/avoid/caution/monitor). All Major+ entries have ≥1 source_url to pass the evidence gate (§6.2 check 9)."
+  },
+  "interactions": [
+    {
+      "id": "DDI_WAR_VITK",
+      "type": "Med-Sup",
+      "agent1_name": "Warfarin",
+      "agent1_id": "11289",
+      "agent2_name": "Vitamin K",
+      "agent2_id": "C0042878",
+      "severity": "Major",
+      "interaction_effect_type": "Inhibitor",
+      "mechanism": "Vitamin K is the cofactor for vitamin K-dependent clotting factors (II, VII, IX, X). Exogenous vitamin K directly opposes warfarin's anticoagulant effect and lowers INR.",
+      "management": "Maintain consistent daily vitamin K intake. Avoid sudden increases from supplements or large servings of leafy greens. Monitor INR more frequently when starting or stopping any vitamin K source.",
+      "source_urls": [
+        "https://ods.od.nih.gov/factsheets/VitaminK-HealthProfessional/",
+        "https://www.ncbi.nlm.nih.gov/books/NBK470313/"
+      ]
+    },
+    {
+      "id": "DDI_WAR_GINKGO",
+      "type": "Med-Sup",
+      "agent1_name": "Warfarin",
+      "agent1_id": "11289",
+      "agent2_name": "Ginkgo",
+      "agent2_id": "C0772125",
+      "severity": "Major",
+      "interaction_effect_type": "Additive",
+      "mechanism": "Ginkgo biloba inhibits platelet-activating factor and has additive antiplatelet effects when combined with warfarin, increasing bleeding risk independent of INR.",
+      "management": "Avoid combining ginkgo with warfarin. If already taking both, discuss with your clinician and monitor for bruising, nosebleeds, or unusual bleeding.",
+      "source_urls": [
+        "https://www.nccih.nih.gov/health/ginkgo",
+        "https://www.ncbi.nlm.nih.gov/books/NBK541024/"
+      ]
+    },
+    {
+      "id": "DDI_WAR_GARLIC",
+      "type": "Med-Sup",
+      "agent1_name": "Warfarin",
+      "agent1_id": "11289",
+      "agent2_name": "Garlic",
+      "agent2_id": "C0993630",
+      "severity": "Moderate",
+      "interaction_effect_type": "Additive",
+      "mechanism": "Garlic supplements (especially aged or high-allicin extracts) have antiplatelet activity that can compound warfarin's bleeding risk.",
+      "management": "Culinary amounts of garlic are safe. Avoid concentrated garlic supplements while on warfarin. Watch for easy bruising or bleeding.",
+      "source_urls": [
+        "https://www.nccih.nih.gov/health/garlic",
+        "https://ods.od.nih.gov/factsheets/Garlic-HealthProfessional/"
+      ]
+    },
+    {
+      "id": "DDI_WAR_FISHOIL",
+      "type": "Med-Sup",
+      "agent1_name": "Warfarin",
+      "agent1_id": "11289",
+      "agent2_name": "Fish Oil",
+      "agent2_id": "C0016157",
+      "severity": "Moderate",
+      "interaction_effect_type": "Additive",
+      "mechanism": "Omega-3 fatty acids (EPA/DHA) have mild antiplatelet activity. At doses above 3 g/day, bleeding risk increases when combined with warfarin.",
+      "management": "Doses under 3 g/day are generally safe on warfarin. Higher doses require clinician oversight and more frequent INR checks.",
+      "source_urls": [
+        "https://ods.od.nih.gov/factsheets/Omega3FattyAcids-HealthProfessional/"
+      ]
+    },
+    {
+      "id": "DDI_WAR_STJOHNS",
+      "type": "Med-Sup",
+      "agent1_name": "Warfarin",
+      "agent1_id": "11289",
+      "agent2_name": "St. John's Wort",
+      "agent2_id": "C0813171",
+      "severity": "Major",
+      "interaction_effect_type": "Inhibitor",
+      "mechanism": "St. John's Wort is a potent inducer of CYP3A4, CYP2C9, and P-glycoprotein. It accelerates warfarin metabolism, lowering plasma levels and INR — loss of anticoagulation.",
+      "management": "Do not combine St. John's Wort with warfarin. If already taking both, speak to your clinician before stopping either — INR will shift.",
+      "source_urls": [
+        "https://www.nccih.nih.gov/health/st-johns-wort",
+        "https://www.ncbi.nlm.nih.gov/books/NBK547852/"
+      ]
+    },
+    {
+      "id": "DDI_WAR_COQ10",
+      "type": "Med-Sup",
+      "agent1_name": "Warfarin",
+      "agent1_id": "11289",
+      "agent2_name": "Coenzyme Q10",
+      "agent2_id": "C1843920",
+      "severity": "Moderate",
+      "interaction_effect_type": "Inhibitor",
+      "mechanism": "Coenzyme Q10 is structurally similar to vitamin K and may reduce warfarin's anticoagulant effect, lowering INR in some patients.",
+      "management": "Avoid starting or stopping CoQ10 without monitoring INR. Maintain a consistent dose once stable.",
+      "source_urls": [
+        "https://www.nccih.nih.gov/health/coenzyme-q10",
+        "https://www.ncbi.nlm.nih.gov/books/NBK548400/"
+      ]
+    },
+    {
+      "id": "DDI_NSAID_FISHOIL",
+      "type": "Med-Sup",
+      "agent1_name": "NSAIDs (class)",
+      "agent1_id": "class:nsaids",
+      "agent2_name": "Fish Oil",
+      "agent2_id": "C0016157",
+      "severity": "Moderate",
+      "interaction_effect_type": "Additive",
+      "mechanism": "NSAIDs inhibit platelet COX-1. High-dose omega-3 fatty acids add antiplatelet effect, compounding bleeding risk — especially GI bleeding.",
+      "management": "Limit fish oil to under 3 g/day if using NSAIDs regularly. Avoid chronic combined use without clinician guidance.",
+      "source_urls": [
+        "https://ods.od.nih.gov/factsheets/Omega3FattyAcids-HealthProfessional/"
+      ]
+    },
+    {
+      "id": "DDI_NSAID_GINKGO",
+      "type": "Med-Sup",
+      "agent1_name": "NSAIDs (class)",
+      "agent1_id": "class:nsaids",
+      "agent2_name": "Ginkgo",
+      "agent2_id": "C0772125",
+      "severity": "Moderate",
+      "interaction_effect_type": "Additive",
+      "mechanism": "Ginkgo's antiplatelet effect compounds with NSAID-induced COX inhibition, increasing risk of GI bleeding and ecchymosis.",
+      "management": "Avoid chronic co-use. Stop ginkgo at least 36 hours before any NSAID-heavy surgical or dental procedure.",
+      "source_urls": [
+        "https://www.nccih.nih.gov/health/ginkgo"
+      ]
+    },
+    {
+      "id": "DDI_ACE_POTASSIUM",
+      "type": "Med-Sup",
+      "agent1_name": "ACE Inhibitors (class)",
+      "agent1_id": "class:ace_inhibitors",
+      "agent2_name": "Potassium",
+      "agent2_id": "C0032821",
+      "severity": "Major",
+      "interaction_effect_type": "Additive",
+      "mechanism": "ACE inhibitors reduce aldosterone, causing potassium retention. Added potassium from supplements or salt substitutes can push serum potassium into dangerous hyperkalemia.",
+      "management": "Do not take potassium supplements or potassium-based salt substitutes with ACE inhibitors unless directed by a clinician. Monitor serum potassium.",
+      "source_urls": [
+        "https://ods.od.nih.gov/factsheets/Potassium-HealthProfessional/"
+      ]
+    },
+    {
+      "id": "DDI_DIURETIC_POTASSIUM",
+      "type": "Med-Sup",
+      "agent1_name": "Diuretics (class)",
+      "agent1_id": "class:diuretics",
+      "agent2_name": "Potassium",
+      "agent2_id": "C0032821",
+      "severity": "Moderate",
+      "interaction_effect_type": "Additive",
+      "mechanism": "Potassium-sparing diuretics (spironolactone, amiloride, triamterene) reduce potassium excretion. Supplemental potassium can cause hyperkalemia. Loop/thiazide diuretics behave differently but combined regimens are common.",
+      "management": "Avoid potassium supplements unless a clinician has checked serum potassium and is monitoring levels.",
+      "source_urls": [
+        "https://ods.od.nih.gov/factsheets/Potassium-HealthProfessional/"
+      ]
+    },
+    {
+      "id": "DDI_STATIN_STJOHNS",
+      "type": "Med-Sup",
+      "agent1_name": "Statins (class)",
+      "agent1_id": "class:statins",
+      "agent2_name": "St. John's Wort",
+      "agent2_id": "C0813171",
+      "severity": "Major",
+      "interaction_effect_type": "Inhibitor",
+      "mechanism": "St. John's Wort induces CYP3A4, accelerating metabolism of CYP3A4-substrate statins (atorvastatin, simvastatin, lovastatin) and reducing their lipid-lowering effect.",
+      "management": "Avoid St. John's Wort with CYP3A4-metabolized statins. Pravastatin and rosuvastatin are less affected but still require clinician review.",
+      "source_urls": [
+        "https://www.nccih.nih.gov/health/st-johns-wort",
+        "https://www.ncbi.nlm.nih.gov/books/NBK548229/"
+      ]
+    },
+    {
+      "id": "DDI_SSRI_STJOHNS",
+      "type": "Med-Sup",
+      "agent1_name": "SSRIs (class)",
+      "agent1_id": "class:ssris",
+      "agent2_name": "St. John's Wort",
+      "agent2_id": "C0813171",
+      "severity": "Major",
+      "interaction_effect_type": "Additive",
+      "mechanism": "St. John's Wort inhibits serotonin reuptake and has MAO-A activity. Combined with SSRIs, the additive serotonergic load can precipitate serotonin syndrome.",
+      "management": "Do not combine St. John's Wort with SSRIs. Watch for agitation, hyperreflexia, tremor, fever, or confusion if inadvertently co-used.",
+      "source_urls": [
+        "https://www.nccih.nih.gov/health/st-johns-wort"
+      ]
+    },
+    {
+      "id": "DDI_SSRI_5HTP",
+      "type": "Med-Sup",
+      "agent1_name": "SSRIs (class)",
+      "agent1_id": "class:ssris",
+      "agent2_name": "5-HTP",
+      "agent2_id": "C5815882",
+      "severity": "Major",
+      "interaction_effect_type": "Additive",
+      "mechanism": "5-HTP is the direct precursor to serotonin. Added to an SSRI, serotonin synthesis and synaptic availability both increase, creating serotonin syndrome risk.",
+      "management": "Avoid combining 5-HTP with SSRIs. Any change must be clinician-supervised with adequate washout between agents.",
+      "source_urls": [
+        "https://www.nccih.nih.gov/health/5-hydroxytryptophan-5-htp"
+      ]
+    },
+    {
+      "id": "DDI_MAOI_STJOHNS",
+      "type": "Med-Sup",
+      "agent1_name": "MAOIs (class)",
+      "agent1_id": "class:maois",
+      "agent2_name": "St. John's Wort",
+      "agent2_id": "C0813171",
+      "severity": "Contraindicated",
+      "interaction_effect_type": "Additive",
+      "mechanism": "MAOIs block monoamine oxidase. St. John's Wort has weak MAO inhibition plus serotonin reuptake inhibition. Combined use risks serotonin syndrome and hypertensive crisis.",
+      "management": "Do not combine. A 14-day washout is required when switching from one agent to the other.",
+      "source_urls": [
+        "https://www.nccih.nih.gov/health/st-johns-wort",
+        "https://www.ncbi.nlm.nih.gov/books/NBK539848/"
+      ]
+    },
+    {
+      "id": "DDI_MAOI_5HTP",
+      "type": "Med-Sup",
+      "agent1_name": "MAOIs (class)",
+      "agent1_id": "class:maois",
+      "agent2_name": "5-HTP",
+      "agent2_id": "C5815882",
+      "severity": "Contraindicated",
+      "interaction_effect_type": "Additive",
+      "mechanism": "MAOIs prevent degradation of serotonin. 5-HTP drives serotonin synthesis. Combined, serotonin accumulates rapidly — life-threatening serotonin syndrome.",
+      "management": "Never combine 5-HTP with MAOIs. A 14-day washout is required after stopping an MAOI before starting 5-HTP.",
+      "source_urls": [
+        "https://www.nccih.nih.gov/health/5-hydroxytryptophan-5-htp"
+      ]
+    },
+    {
+      "id": "DDI_IRON_CALCIUM",
+      "type": "Sup-Sup",
+      "agent1_name": "Iron",
+      "agent1_id": "C0302583",
+      "agent2_name": "Calcium",
+      "agent2_id": "C0006675",
+      "severity": "Moderate",
+      "interaction_effect_type": "Inhibitor",
+      "mechanism": "Calcium competes with non-heme iron for absorption at the enterocyte DMT1 transporter. Co-ingestion of calcium ≥300 mg can reduce iron absorption by up to 60 percent.",
+      "management": "Separate iron and calcium supplements by at least 2 hours. Take iron on an empty stomach with vitamin C when possible.",
+      "source_urls": [
+        "https://ods.od.nih.gov/factsheets/Iron-HealthProfessional/",
+        "https://ods.od.nih.gov/factsheets/Calcium-HealthProfessional/"
+      ]
+    },
+    {
+      "id": "DDI_IRON_ZINC",
+      "type": "Sup-Sup",
+      "agent1_name": "Iron",
+      "agent1_id": "C0302583",
+      "agent2_name": "Zinc",
+      "agent2_id": "C0043481",
+      "severity": "Moderate",
+      "interaction_effect_type": "Inhibitor",
+      "mechanism": "Iron and zinc share intestinal transport pathways. When taken together at supplemental doses (iron:zinc ratio >2:1), zinc absorption drops significantly.",
+      "management": "Separate iron and zinc supplements by at least 2 hours. Food can reduce the competition but also reduces iron absorption.",
+      "source_urls": [
+        "https://ods.od.nih.gov/factsheets/Zinc-HealthProfessional/",
+        "https://ods.od.nih.gov/factsheets/Iron-HealthProfessional/"
+      ]
+    },
+    {
+      "id": "DDI_CALCIUM_ZINC",
+      "type": "Sup-Sup",
+      "agent1_name": "Calcium",
+      "agent1_id": "C0006675",
+      "agent2_name": "Zinc",
+      "agent2_id": "C0043481",
+      "severity": "Minor",
+      "interaction_effect_type": "Inhibitor",
+      "mechanism": "High-dose calcium (≥600 mg) reduces zinc absorption modestly, likely via shared divalent cation transport.",
+      "management": "Separate calcium and zinc doses by 2 hours if both are supplemented at high levels. Dietary amounts are not a concern.",
+      "source_urls": [
+        "https://ods.od.nih.gov/factsheets/Zinc-HealthProfessional/"
+      ]
+    },
+    {
+      "id": "DDI_WARF_NSAID",
+      "type": "Med-Med",
+      "agent1_name": "Warfarin",
+      "agent1_id": "11289",
+      "agent2_name": "NSAIDs (class)",
+      "agent2_id": "class:nsaids",
+      "severity": "Major",
+      "interaction_effect_type": "Additive",
+      "mechanism": "NSAIDs inhibit platelet aggregation and cause GI mucosal erosion. Combined with warfarin's anticoagulation, GI bleeding risk rises dramatically. Some NSAIDs also displace warfarin from albumin, raising free drug levels.",
+      "management": "Avoid chronic NSAID use on warfarin. If short-term use is necessary, use the lowest effective dose with a PPI and INR monitoring.",
+      "source_urls": [
+        "https://www.ncbi.nlm.nih.gov/books/NBK470313/",
+        "https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=22c7cfba-cf98-4395-a09b-af31e2f0e9cf"
+      ]
+    },
+    {
+      "id": "DDI_LITHIUM_NSAID",
+      "type": "Med-Med",
+      "agent1_name": "Lithium",
+      "agent1_id": "6448",
+      "agent2_name": "NSAIDs (class)",
+      "agent2_id": "class:nsaids",
+      "severity": "Major",
+      "interaction_effect_type": "Inhibitor",
+      "mechanism": "NSAIDs reduce renal prostaglandin synthesis, decreasing lithium clearance and raising serum lithium toward toxic levels (>1.5 mEq/L).",
+      "management": "Avoid chronic NSAID use with lithium. If needed, check lithium level within 5–7 days of starting and adjust dose.",
+      "source_urls": [
+        "https://www.ncbi.nlm.nih.gov/books/NBK519062/",
+        "https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=1d61c4b7-b095-4f25-b01f-d2a9bdb2f1db"
+      ]
+    }
+  ]
+}
