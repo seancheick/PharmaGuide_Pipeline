@@ -14,6 +14,12 @@ scripts/final_db_output/
 scripts/.cache/
 tmp/
 
+# Interaction DB build working dir — regenerable via
+# ingest_suppai.py → build_interaction_db.py → release_interaction_artifact.py.
+# Keep the directory itself (via .gitkeep) but never commit the generated blobs.
+scripts/interaction_db_output/*
+!scripts/interaction_db_output/.gitkeep
+
 # Release artifact staging (output of scripts/release_catalog_artifact.py).
 # Regenerable from scripts/final_db_output/ — never commit the SQLite blob here;
 # the Flutter repo owns the committed copy via Git LFS.
