@@ -215,7 +215,10 @@
     "bonus_pool_cap": 5,
     "_formula": "B = clamp(0, 30, base_score + min(bonus_pool_cap, bonuses) - penalties)",
     "B0_immediate_fail": {
+      "_description": "B0 safety-gate tier penalties. v5.0 status values drive the magnitudes below; pre-5.0 severity values fall back to the legacy `moderate_penalty` default.",
       "moderate_penalty": 10,
+      "high_risk_penalty": 10,
+      "watchlist_penalty": 5,
       "allowed_match_types_for_hard_fail": [
         "exact",
         "alias"
@@ -369,7 +372,24 @@
     "_D1_mid_tier_reputation_note": "Awarded when product has verifiable mid-tier evidence (NSF GMP / FDA registered / USP / named GMP cert). Gated by feature_gates.enable_d1_middle_tier.",
     "D2_disclosure_quality": 1,
     "D3_physician_formulated": 0.5,
-    "D4_high_standard_region": 1.0,
+    "D4_high_standard_region": {
+      "_description": "Points awarded when the manufacturing region is in the high-standard regulatory set below. Legacy scalar form (e.g. just `1.0`) still works and falls back to the default 12-country list baked into the scorer.",
+      "points": 1.0,
+      "accepted_regions": [
+        "usa",
+        "eu",
+        "uk",
+        "germany",
+        "switzerland",
+        "japan",
+        "canada",
+        "australia",
+        "new zealand",
+        "norway",
+        "sweden",
+        "denmark"
+      ]
+    },
     "D5_sustainability": 0.5,
     "D3_D4_D5_combined_cap": 2.0
   },
@@ -474,8 +494,7 @@
   },
   "score_floors_and_ceilings": {
     "total_floor": 0,
-    "total_ceiling": 80,
-    "probiotic_bonus_applies_before_ceiling": true
+    "total_ceiling": 80
   },
   "legacy_compat": {
     "section_b": {

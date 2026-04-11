@@ -4468,3 +4468,192 @@ class TestB1DietarySugarPenalty:
             f"got sugar_free={result_free['score_80']}, high={result_high['score_80']}, "
             f"delta={delta}"
         )
+
+
+# ---------------------------------------------------------------------------
+# Item 5 backlog — L2, L3, R2 backlog cleanups (2026-04-10 session)
+# ---------------------------------------------------------------------------
+
+
+class TestD4HighStandardRegionConfigLockdown:
+    """L2: D4 `high_std_regions` country set was hardcoded as a Python
+    set at score_supplements.py:2400. This test locks it as
+    config-driven via `section_D_brand_trust.D4_high_standard_region.
+    accepted_regions`, so the list can be expanded without code changes.
+    """
+
+    def _make_product_with_region(self, region: str):
+        p = make_base_product()
+        p["manufacturing_region"] = region
+        p["manufacturer_data"] = {
+            "country_of_origin": {"country": region, "high_regulation_country": False},
+            "bonus_features": {},
+        }
+        return p
+
+    def test_d4_accepted_regions_read_from_config(self):
+        scorer = SupplementScorer()
+        # Restructured config: D4 is now an object with points +
+        # accepted_regions. Legacy scalar form still works for
+        # backward compat.
+        scorer.config["section_D_brand_trust"]["D4_high_standard_region"] = {
+            "points": 1.0,
+            "accepted_regions": ["usa", "canada", "japan"],
+        }
+        # Baseline in config → should count
+        for region in ["usa", "canada", "japan"]:
+            p = self._make_product_with_region(region)
+            d = scorer._compute_brand_trust_score(p)
+            assert d["D4"] == pytest.approx(1.0), (
+                f"Region '{region}' in config should earn D4 points"
+            )
+        # NOT in config → no points
+        for region in ["germany", "france", "brazil"]:
+            p = self._make_product_with_region(region)
+            d = scorer._compute_brand_trust_score(p)
+            assert d["D4"] == 0.0, (
+                f"Region '{region}' NOT in config should earn zero D4"
+            )
+
+    def test_d4_default_list_includes_current_12_countries(self):
+        """Regression: the shipped scoring_config.json must include
+        the 12 historically-accepted countries so existing product
+        scores don't change from this refactor.
+        """
+        scorer = SupplementScorer()
+        expected = {
+            "usa", "eu", "uk", "germany", "switzerland", "japan",
+            "canada", "australia", "new zealand",
+            "norway", "sweden", "denmark",
+        }
+        for region in expected:
+            p = self._make_product_with_region(region)
+            d = scorer._compute_brand_trust_score(p)
+            assert d["D4"] == pytest.approx(1.0), (
+                f"Region '{region}' must be in the default accepted list"
+            )
+
+    def test_d4_legacy_scalar_config_still_works(self):
+        """Backward compat: if someone sets D4 as a plain number
+        (legacy shape), the scorer must fall back to the default
+        12-country set and use the scalar as the points value.
+        """
+        scorer = SupplementScorer()
+        scorer.config["section_D_brand_trust"]["D4_high_standard_region"] = 2.0
+        p = self._make_product_with_region("usa")
+        d = scorer._compute_brand_trust_score(p)
+        assert d["D4"] == pytest.approx(2.0)
+
+
+class TestB0ConfigDrivenPenalties:
+    """L3: B0 watchlist and high_risk penalty magnitudes were hardcoded
+    as +5 and +10 at score_supplements.py:461,464. This test locks them
+    as config-driven via `section_B_safety_purity.B0_immediate_safety.
+    watchlist_penalty` and `high_risk_penalty`.
+    """
+
+    def _make_product_with_b0_hit(self, status: str):
+        p = make_base_product()
+        p["contaminant_data"] = {
+            "banned_substances": {
+                "substances": [
+                    {
+                        "name": f"Test {status}",
+                        "banned_name": f"Test {status}",
+                        "status": status,
+                        "match_type": "exact",
+                        "severity_level": "moderate",
+                    }
+                ]
+            },
+            "harmful_additives": {"additives": []},
+            "allergens": {"allergens": []},
+        }
+        return p
+
+    def test_b0_watchlist_default_penalty_is_5(self):
+        scorer = SupplementScorer()
+        p = self._make_product_with_b0_hit("watchlist")
+        gate = scorer._evaluate_safety_gate(p)
+        assert gate["moderate_penalty"] == 5.0
+
+    def test_b0_high_risk_default_penalty_is_10(self):
+        scorer = SupplementScorer()
+        p = self._make_product_with_b0_hit("high_risk")
+        gate = scorer._evaluate_safety_gate(p)
+        assert gate["moderate_penalty"] == 10.0
+
+    def test_b0_watchlist_penalty_overridable_via_config(self):
+        scorer = SupplementScorer()
+        scorer.config.setdefault("section_B_safety_purity", {}).setdefault(
+            "B0_immediate_fail", {}
+        )["watchlist_penalty"] = 3.0
+        p = self._make_product_with_b0_hit("watchlist")
+        gate = scorer._evaluate_safety_gate(p)
+        assert gate["moderate_penalty"] == 3.0
+
+    def test_b0_high_risk_penalty_overridable_via_config(self):
+        scorer = SupplementScorer()
+        scorer.config.setdefault("section_B_safety_purity", {}).setdefault(
+            "B0_immediate_fail", {}
+        )["high_risk_penalty"] = 15.0
+        p = self._make_product_with_b0_hit("high_risk")
+        gate = scorer._evaluate_safety_gate(p)
+        assert gate["moderate_penalty"] == 15.0
+
+    def test_b0_flag_still_emitted_regardless_of_penalty(self):
+        """Changing the numeric penalty must not break the flag
+        emission contract used by the Flutter warning display.
+        """
+        scorer = SupplementScorer()
+        p_wl = self._make_product_with_b0_hit("watchlist")
+        gate_wl = scorer._evaluate_safety_gate(p_wl)
+        assert "B0_WATCHLIST_SUBSTANCE" in gate_wl["flags"]
+
+        p_hr = self._make_product_with_b0_hit("high_risk")
+        gate_hr = scorer._evaluate_safety_gate(p_hr)
+        assert "B0_HIGH_RISK_SUBSTANCE" in gate_hr["flags"]
+
+
+class TestR2OrphanFlagRemoved:
+    """R2: `probiotic_bonus_applies_before_ceiling` at
+    scoring_config.json:478 had zero readers in score_supplements.py.
+    This test locks its absence — if it ever gets re-added to config
+    without a corresponding reader, the test fails.
+    """
+
+    def test_probiotic_bonus_applies_before_ceiling_not_in_config(self):
+        """The orphan flag was previously in
+        `score_floors_and_ceilings.probiotic_bonus_applies_before_ceiling`.
+        This test does a deep search — the flag must not appear ANYWHERE
+        in the config tree."""
+        with open(
+            Path(__file__).parent.parent / "config" / "scoring_config.json"
+        ) as f:
+            config = json.load(f)
+
+        def _contains_key(obj, target):
+            if isinstance(obj, dict):
+                if target in obj:
+                    return True
+                return any(_contains_key(v, target) for v in obj.values())
+            if isinstance(obj, list):
+                return any(_contains_key(v, target) for v in obj)
+            return False
+
+        assert not _contains_key(config, "probiotic_bonus_applies_before_ceiling"), (
+            "R2: probiotic_bonus_applies_before_ceiling has zero readers "
+            "in score_supplements.py. If a consumer was added, also update "
+            "this test. Otherwise the flag is dead config and should be "
+            "removed to prevent operator confusion."
+        )
+
+    def test_probiotic_bonus_applies_before_ceiling_not_read_by_scorer(self):
+        """Belt-and-braces: confirm the scorer source has zero
+        references to the orphan flag name."""
+        src_path = Path(__file__).parent.parent / "score_supplements.py"
+        src = src_path.read_text()
+        assert "probiotic_bonus_applies_before_ceiling" not in src, (
+            "R2: scorer code should have no reference to the orphan "
+            "flag 'probiotic_bonus_applies_before_ceiling'."
+        )
