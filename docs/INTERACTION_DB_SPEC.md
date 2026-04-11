@@ -1,9 +1,69 @@
 # PharmaGuide — Interaction DB & Nutrient Safety Engineering Plan
 
-**Document version:** 2.0.0
+**Document version:** 2.2.0
 **Last updated:** 2026-04-11
-**Status:** Planning complete, ready for implementation
-**Supersedes:** v1.0.0 (written without knowledge of existing Flutter infrastructure)
+**Status:** M1 shipped. M2 Phase 1 in progress (pipeline scaffolding + golden fixture).
+**Supersedes:** v2.1.0 (supp.ai evidence corpus clarification), v2.0.0 (Flutter infra), v1.0.0 (initial)
+
+---
+
+## §0 — v2.2.0 Delta (read this first)
+
+Four scope/architecture changes from v2.1.0, all confirmed with the user on 2026-04-11. The rest of this document below §0 reflects v2.1.0 and may conflict with the delta — **§0 wins on every conflict.**
+
+### 0.1 Draft file is a hint queue, not a data source
+
+`interaction_db_not_verified.json` (1650 lines, ~150 entries, untracked at worktree root) is **unverified**. The CUIs, RXCUIs, severities, mechanisms, and management text are not trusted. It is treated as a curation work queue, not as input to the build. No byte from this file ships to production without passing the full verification flow.
+
+### 0.2 Med↔med interaction detection is in scope for v1
+
+End-goal is **three-way detection**, all through the same `interactions` table:
+
+| Trigger | Lookup method | Other-side check |
+|---|---|---|
+| Scan/add supplement | `lookupByCanonicalId(ingredient)` ×N | stack supps (canonical_id) + stack meds (rxcui + drug_class) |
+| Add medication | `lookupByRxcui(new_rxcui)` + `lookupByDrugClass(class)` | stack meds (rxcui + drug_class) + stack supps (canonical_id) |
+
+**No schema change:** the existing `interactions` schema already allows `agent1_type='drug' AND agent2_type='drug'`. Med↔med is just additional rows.
+
+**Source strategy for curated med↔med rows (MVP):** manual harvest from **DailyMed SPL** drug label "Drug Interactions" section (LOINC code `34073-7`) for ~30 top-risk pairs: warfarin+NSAID, MAOI+SSRI, lithium+ACE-I/ARB/thiazide, QT prolongers (macrolide+fluoroquinolone, ondansetron combinations), CYP3A4 inhibitor clashes (erythromycin+simvastatin), serotonin syndrome pairs. Every row PMID-validated via `pubmed_client.py`. DailyMed bulk SPL XML parsing deferred post-v1.
+
+**Flutter side:** add `checkMedicationPairInteractions` alongside the two methods already in §8.2. Triggered on every medication-entry save in `medication_entry_screen.dart`, not only on supplement scan. Fed into `stack_safety_report.dart` as a new `medicationPairInteractions` list.
+
+### 0.3 Golden-fixture-first build order (curation runs parallel)
+
+The v2.1.0 build order assumed the draft file seeded Tier 1. It doesn't. New order:
+
+1. Build all pipeline scaffolding (`verify_interactions.py`, `build_interaction_db.py`, `ingest_suppai.py`, release staging, SQLite schema, tests) **against a hand-constructed 20-row golden fixture**.
+2. Golden fixture is sourced from NIH ODS Fact Sheets + LiverTox + DailyMed + PubMed — every row has a real authoritative URL and PMID-validated citations. Lives at `scripts/tests/fixtures/curated_interactions_golden.json`, never in the production data dir until graduated.
+3. Curation sprint runs as a **parallel workstream** using `verify_interactions.py` as the bench tool. Graduated entries land in `scripts/data/curated_interactions/interactions_drafts_v1.json` (not v0 — v0 is the unverified hint queue).
+4. Every curated entry must cite ≥1 authoritative free source (NIH ODS / LiverTox / DailyMed / PubMed / EFSA) and survive RXCUI+CUI verification. Zero hallucinated mechanism or management text — all copy comes from the cited source, rewritten for consumer readability.
+5. Flutter M3→M5 work unblocks as soon as Phase 1 is merged, even if only 20 curated rows exist. The engine is data-shape-independent; more rows can land any time without code changes.
+
+### 0.4 v2.2.0 engineering enhancements (operational hardening)
+
+Fourteen deltas on top of §6 and §8. All additive, none break v2.1.0 architecture.
+
+| # | Delta | Location | Rationale |
+|---|---|---|---|
+| E1 | **Release staging via `scripts/release_interaction_artifact.py`** (new, sibling to existing `release_catalog_artifact.py`) — stages `scripts/interaction_db_output/` → `scripts/dist/`. Independent release cycle from catalog. | §6 | Pipeline already uses `release_catalog_artifact.py`. Mirror, don't fork. The v2.1.0 spec referenced `import_catalog_artifact.sh` — that file does not exist in the pipeline repo. |
+| E2 | **Manifest shape mirrors `scripts/dist/export_manifest.json`:** `{checksum: "sha256:...", db_version, schema_version, pipeline_version, min_app_version, integrity: {...}}`. Distinct `interaction_db_version` field. | §6.3 | Ops tooling already knows this shape — dashboards, sync, staging all parse it. Don't invent a new manifest format. |
+| E3 | **Schema: `provenance` column** on `interactions` (separate from `source`). Values: `nih_ods` / `livertox` / `dailymed` / `pubmed:<pmid>` / `curated_manual`. `source` = tier (`curated`/`suppai`/`override`); `provenance` = specific authority. | §6.4 | Forensic auditability. When asked "where did this warning come from?", one column answers it. |
+| E4 | **Schema: `version_added` + `version_last_modified` + `retired_at` + `retired_reason` columns.** Medical data is never deleted — tombstones only. | §6.4 | Regulatory. Per-release diffability. Clinical DBs must be audit-trail-able across time. |
+| E5 | **FTS5 virtual table** on `interactions(agent1_name, agent2_name)` for medication autocomplete search and product-scan name fallback. | §6.4 | M4's medication entry screen needs fast name search. +~200 KB at 80 rows, scales linearly. |
+| E6 | **Two-pass build:** `verify_interactions.py` first (pure audit + corrections output to `interaction_audit_report.json`), then `build_interaction_db.py` reads verified input. Mirrors the Clean→Enrich→Score separation used by the main pipeline. | §6 | Testability. Re-verify without rebuild. |
+| E7 | **Deterministic build: `--build-time <iso>` flag** injecting fixed timestamp into `last_updated` and metadata fields. Golden fixture byte-identity test relies on this. | §6.3 | Otherwise byte-identical test is impossible. |
+| E8 | **Stdlib `urllib.request` + disk cache + macOS SSL fallback + `RATE_LIMIT_DELAY = 0.12`** matching `verify_cui.py`. No `requests` import in new api_audit files. | §6.2 | Code-style consistency. `verify_cui.py` is the 1087-line reference implementation. |
+| E9 | **PubMed validation mandatory** for every curated entry's `source_pmids`. Uses existing `scripts/api_audit/pubmed_client.py`. Build fails if any PMID is invalid. | §6.2 | Zero hallucinated citations, enforced mechanically — not by reviewer discipline alone. |
+| E10 | **Live integration tests gated by `PHARMAGUIDE_LIVE_TESTS=1`** env var, isolated in `test_verify_interactions_live.py`. Offline `pytest scripts/tests/` stays green. | §13 | Matches existing pipeline test discipline. CI must work without network. |
+| E11 | **`verify_interactions.py` emits `corrections.json`** with CUI auto-fixes, RXCUI mismatches, unmapped supplements — non-blocking, surfaced for curation feedback loop. | §6.2 | Curation sprint needs faster signal than "build fails". |
+| E12 | **`build_interaction_db.py --dry-run`** preview flag matching `sync_to_supabase.py --dry-run` convention. | §6.3 | Same affordance users already know. |
+| E13 | **SQLite hardening at build end:** `PRAGMA user_version = <schema_version_int>`, `VACUUM`, `ANALYZE`, `PRAGMA integrity_check` assertion before writing manifest. Build fails if integrity_check ≠ `ok`. | §6.3 | Matches catalog DB practice. Catches corruption before artifact ships. |
+| E14 | **Working directory pattern:** writes go to `scripts/interaction_db_output/` first, promoted to `scripts/dist/` via `release_interaction_artifact.py`. Never write directly to `dist/`. | §6, §12 | Matches `final_db_output/` → `dist/` pattern. Keeps dist/ as "authoritative release only". |
+
+### 0.5 Supp.ai data source
+
+Primary ingestion reads the local dump at `/Users/seancheick/Downloads/Supp ai DB/` (5 files, 245 MB). Configurable via `--suppai-dir`. Never copied into the repo. Supp.ai also exposes a public REST API documented at https://supp.ai/docs/api — used **only** as a build-time verification fallback inside `verify_interactions.py` when a curated entry claims supp.ai evidence backing, never as the primary ingestion path. Keeps the build hermetic and offline-capable.
 
 ---
 
