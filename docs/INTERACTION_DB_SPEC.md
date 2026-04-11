@@ -534,13 +534,46 @@ CREATE TABLE drug_class_map (
   last_updated     TEXT NOT NULL
 );
 
+-- Second tier: supp.ai evidence pairs. NO severity, NO mechanism text —
+-- supp.ai is an extractive corpus, not a curated interaction set. These
+-- rows surface as "research available" info chips in the app, never as
+-- safety warnings. See §11.2.
+CREATE TABLE research_pairs (
+  pair_id              TEXT PRIMARY KEY,      -- sorted 'CUI_A-CUI_B'
+  cui_a                TEXT NOT NULL,
+  cui_b                TEXT NOT NULL,
+  entity_a_name        TEXT NOT NULL,
+  entity_b_name        TEXT NOT NULL,
+  entity_a_type        TEXT NOT NULL,         -- 'drug' | 'supplement'
+  entity_b_type        TEXT NOT NULL,
+  canonical_id_a       TEXT,                  -- when supplement + maps to IQM
+  canonical_id_b       TEXT,
+  rxcui_a              TEXT,                  -- when drug + has RXCUI
+  rxcui_b              TEXT,
+  paper_count          INTEGER NOT NULL,
+  human_study_count    INTEGER NOT NULL,
+  clinical_study_count INTEGER NOT NULL,
+  top_sentences_json   TEXT NOT NULL,         -- JSON array of up to 3 sentences
+  top_pmids_json       TEXT NOT NULL,         -- JSON array of paper IDs
+  latest_paper_year    INTEGER,
+  source               TEXT NOT NULL DEFAULT 'suppai',
+  last_updated         TEXT NOT NULL
+);
+
+CREATE INDEX idx_rp_canon_a    ON research_pairs(canonical_id_a) WHERE canonical_id_a IS NOT NULL;
+CREATE INDEX idx_rp_canon_b    ON research_pairs(canonical_id_b) WHERE canonical_id_b IS NOT NULL;
+CREATE INDEX idx_rp_cui_a      ON research_pairs(cui_a);
+CREATE INDEX idx_rp_cui_b      ON research_pairs(cui_b);
+CREATE INDEX idx_rp_rxcui_a    ON research_pairs(rxcui_a) WHERE rxcui_a IS NOT NULL;
+CREATE INDEX idx_rp_rxcui_b    ON research_pairs(rxcui_b) WHERE rxcui_b IS NOT NULL;
+
 CREATE TABLE interaction_db_metadata (
   key   TEXT PRIMARY KEY,
   value TEXT NOT NULL
 );
 ```
 
-**Lookup-speed target: <1ms for any realistic query.** Every lookup the app will issue corresponds to one of the six indexes above.
+**Lookup-speed target: <1ms for any realistic query.** Every lookup the app will issue corresponds to one of the indexes above.
 
 ### 6.5 M2 Done Gate
 
@@ -867,14 +900,71 @@ Update `fromRow()` and any constructors. Existing callers pass `null`, no breaka
 
 | Source | Type | Status | License |
 |---|---|---|---|
-| User's draft JSON | Curated hand-drafted interactions | ~150 entries, unverified | Internal |
-| supp.ai database | Academic supplement-drug interactions | Dump downloaded | **Commercial use cleared by user** |
+| User's curated draft JSON | Hand-drafted interactions with severity/mechanism/management | ~150 entries, unverified | Internal |
+| supp.ai database | Evidence corpus from PubMed (NOT curated interactions) | Dump downloaded, see §11.1 | **Commercial use cleared by user** |
 | RxNorm (NLM) | Drug identifier + class lookup | Free public API | Public domain |
 | UMLS (NLM) | CUI verification | Existing script `verify_cui.py` | Requires license (already have) |
 | ChEMBL | Mechanism of action (future) | Deferred | Open |
 | DrugBank | Drug↔drug interactions | Deferred to post-v1 | Commercial — requires license |
 
 **M1 through M5 require only the first four.** DrugBank integration is post-v1.
+
+### 11.1 supp.ai structure — what it actually is
+
+The supp.ai dump is located at `/Users/seancheick/Downloads/Supp ai DB/` (last updated 2021-10-20). It is **not** a list of curated interactions like the user's draft JSON. It is an **evidence corpus** automatically extracted from PubMed abstracts. Critical consequence: **supp.ai entries do not carry severity, mechanism, or management fields** — those are human-curated and only exist in the user's draft.
+
+Five files:
+
+| File | Size | Shape | Purpose |
+|---|---|---|---|
+| `meta.json` | 50 B | `{"last_updated_on": "..."}` | Timestamp only |
+| `cui_metadata.json` | 3.2 MB | Dict: `{CUI → entity_info}` — 4,910 entries | 2,866 drugs + 2,044 supplements with preferred_name, synonyms, definition, ent_type |
+| `interaction_id_dict.json` | 3.5 MB | Dict: `{CUI → [pair_ids]}` | Which entities have co-occurring evidence |
+| `sentence_dict.json` | **163 MB** | Dict: `{pair_id → [sentence_records]}` — **59,096 interaction pairs** | Extractive sentences from PubMed abstracts with paper_id and span offsets |
+| `paper_metadata.json` | 88 MB | Dict: `{pmid → paper_info}` — 168,549 papers | PubMed metadata: title, year, study type flags, venue |
+
+Example `sentence_dict.json` entry:
+
+```json
+{
+  "C0000378-C0000578": [
+    {
+      "arg1": {"id": "C0000378", "span": [80, 84]},
+      "arg2": {"id": "C0000578", "span": [21, 40]},
+      "confidence": null,
+      "paper_id": "25006211",
+      "sentence": "2) Administration of 5-hydroxytryptophan (5-HTP, 100mg/kg BW, ip) 30 min before DOPS completely inhibits the action of DOPS on LH release induced by ovarian steroids.",
+      "sentence_id": 5,
+      "uid": 179744
+    }
+  ]
+}
+```
+
+Note: no severity, no "inhibitor/enhancer" classification, no management advice. Just co-occurrence in the literature with sentence text and source paper.
+
+### 11.2 Two-tier data model (updated architecture)
+
+Because supp.ai and the user's drafts carry fundamentally different information, the pipeline ships them into **two separate SQLite tables** that the Flutter app queries independently:
+
+| Tier | Source | Table | UX role |
+|---|---|---|---|
+| **Tier 1 — Curated** | User's draft JSON (+ future curation) | `interactions` | Primary warnings. Full severity, mechanism, management. Drives banner color and stack score penalties. |
+| **Tier 2 — Research** | supp.ai | `research_pairs` | Secondary info. No severity assigned. Shown as "research available" info chip with paper count and top sentences. Does NOT block stack add or reduce scores. |
+
+This preserves clinical accuracy (severities only come from humans) while still surfacing the full supp.ai evidence corpus to users who want to dig deeper.
+
+### 11.3 supp.ai ingestion rules (new script: `scripts/ingest_suppai.py`)
+
+1. **Source path**: read from `/Users/seancheick/Downloads/Supp ai DB/` (configurable via `--suppai-dir`).
+2. **Filter by canonical_id mapping**: only keep pairs where **at least one** CUI maps to a `canonical_id` in `ingredient_quality_map.json` OR a known drug RXCUI. This is the bundle-size control.
+3. **Filter by paper quality**: prefer `human_study: true` papers, discard `retraction: true`, downweight animal-only evidence.
+4. **Select top sentences**: for each pair, keep the top 3 most informative sentences (longest non-boilerplate, highest paper recency, with clinical study flag preferred).
+5. **Compress paper metadata**: do NOT ship `paper_metadata.json` — instead inline only `pmid`, `year`, `clinical_study`, `human_study` for the retained sentences.
+6. **Output row shape**: one row per pair keyed by sorted `(cui_a, cui_b)`, with `paper_count`, `top_sentences_json`, `top_pmids_json`, and any canonical_id / RXCUI matches pre-resolved.
+7. **Build-time auto-enrichment of curated entries**: when the curated drafts are built, for every curated pair check if supp.ai has evidence. If yes, append supp.ai PMIDs to `source_pmids` automatically — this backstops curated entries with literature support.
+
+**Expected output size**: 59,096 raw pairs → ~5–10 k after canonical_id filter → ~5 MB compressed SQLite table. Keeps total `interaction_db.sqlite` well under 10 MB.
 
 ---
 
