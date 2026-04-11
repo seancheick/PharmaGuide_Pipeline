@@ -3320,11 +3320,24 @@ class SupplementEnricherV3:
             if used_form_fallback:
                 unmapped_forms = match_result.get('unmapped_forms', [])
                 fallback_form_name = match_result.get('form_name', '(unspecified)')
+                # Look up the parent canonical's form count so the classifier
+                # can short-circuit on single-form parents (structurally
+                # unambiguous fallbacks are audit noise, not action items).
+                parent_form_count: Optional[int] = None
+                canonical_id = match_result.get('canonical_id')
+                if canonical_id:
+                    parent_entry = self.databases.get(
+                        'ingredient_quality_map', {}
+                    ).get(canonical_id, {})
+                    parent_forms = parent_entry.get('forms', {}) or {}
+                    if isinstance(parent_forms, dict):
+                        parent_form_count = len(parent_forms)
                 audit_classification = self._classify_form_fallback_audit(
                     ing_name,
                     match_result.get('standard_name', ''),
                     unmapped_forms,
                     fallback_form_name,
+                    parent_form_count=parent_form_count,
                 )
                 self._form_fallback_details.append({
                     "ingredient_label": ing_name,
@@ -3516,12 +3529,20 @@ class SupplementEnricherV3:
         parent_name: str,
         unmapped_forms: List[str],
         fallback_form_name: str,
+        parent_form_count: Optional[int] = None,
     ) -> Dict[str, Optional[str]]:
         """
         Classify form-fallback telemetry into actionable alias gaps vs audit noise.
 
         The report should surface unresolved chemical/form identities, not source
         materials like "Shrimp" or generic tokens like "extract".
+
+        When parent_form_count == 1, the parent canonical has exactly one form in
+        IQM, so any FORM_UNMAPPED_FALLBACK can only land on that single form by
+        construction. This is applied as a fallback noise reason ONLY when the
+        regular text-based classification would have otherwise flagged the row
+        as action_needed — more specific reasons (e.g., ``standardization_marker``)
+        still win.
         """
         normalized_fallback = self._normalize_form_fallback_audit_text(fallback_form_name)
         normalized_unmapped: List[str] = []
@@ -3559,8 +3580,20 @@ class SupplementEnricherV3:
                 "audit_noise_reason": audit_noise_reason or "non_actionable_form_text",
             }
 
+        # Existing text-based classification would return forms_differ=True
+        # (an action_needed row). Apply the single-form-parent guard here as a
+        # last-resort override: if the parent canonical has exactly one form in
+        # IQM, any FORM_UNMAPPED_FALLBACK is structurally noise because there
+        # is no alternate form to select.
+        would_differ = normalized_fallback not in substantive_forms
+        if would_differ and parent_form_count == 1:
+            return {
+                "forms_differ": False,
+                "audit_noise_reason": "single_form_parent",
+            }
+
         return {
-            "forms_differ": normalized_fallback not in substantive_forms,
+            "forms_differ": would_differ,
             "audit_noise_reason": None,
         }
 
