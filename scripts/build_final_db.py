@@ -708,6 +708,95 @@ CREATE VIRTUAL TABLE IF NOT EXISTS products_fts USING fts5(
 """
 
 
+def dedup_by_upc(conn, detail_index: Dict[str, Any]) -> Dict[str, Any]:
+    """Remove duplicate products that share the same UPC barcode.
+
+    DSLD registers the same physical product multiple times across years
+    or formulation revisions, each with a distinct dsld_id but the same UPC.
+    This confuses search results (users see "5-MTHF 1 mg" seven times).
+
+    Strategy:
+      1. GROUP BY normalised UPC (spaces stripped).
+      2. Keep the **best** row per group: active > discontinued, then
+         highest score_quality_80, then newest dsld_id (lexicographic).
+      3. DELETE the losers from products_core and remove them from
+         the detail_index dict.
+
+    Returns a summary dict for the audit report.
+    """
+    c = conn.cursor()
+
+    # Find all UPC groups with more than one product.
+    # NULL / empty UPCs are excluded — they have nothing to dedup on.
+    rows = c.execute("""
+        SELECT REPLACE(upc_sku, ' ', '') AS upc_norm,
+               GROUP_CONCAT(dsld_id, '|') AS ids,
+               COUNT(*) AS cnt
+          FROM products_core
+         WHERE upc_sku IS NOT NULL
+           AND REPLACE(upc_sku, ' ', '') != ''
+         GROUP BY upc_norm
+        HAVING cnt > 1
+         ORDER BY upc_norm
+    """).fetchall()
+
+    total_removed = 0
+    groups_deduped = 0
+    removed_ids = []
+
+    for upc_norm, id_csv, cnt in rows:
+        dsld_ids = id_csv.split("|")
+
+        # Fetch each candidate's ranking signals.
+        candidates = []
+        for did in dsld_ids:
+            row = c.execute(
+                "SELECT dsld_id, product_status, "
+                "       COALESCE(score_quality_80, 0) "
+                "  FROM products_core WHERE dsld_id = ?",
+                (did,),
+            ).fetchone()
+            if row:
+                candidates.append(row)
+
+        if len(candidates) < 2:
+            continue
+
+        # Sort: active first, highest score, newest dsld_id.
+        candidates.sort(
+            key=lambda r: (
+                1 if r[1] == "active" else 0,  # active wins
+                r[2],                           # highest score
+                r[0],                           # newest dsld_id (lexicographic)
+            ),
+            reverse=True,
+        )
+
+        winner = candidates[0][0]
+        losers = [r[0] for r in candidates[1:]]
+
+        for loser_id in losers:
+            c.execute(
+                "DELETE FROM products_core WHERE dsld_id = ?",
+                (loser_id,),
+            )
+            # Remove from detail_index so the sync doesn't upload orphan blobs
+            detail_index.pop(str(loser_id), None)
+            removed_ids.append(loser_id)
+
+        total_removed += len(losers)
+        groups_deduped += 1
+
+    if total_removed:
+        conn.commit()
+
+    return {
+        "upc_groups_deduped": groups_deduped,
+        "duplicates_removed": total_removed,
+        "removed_ids_sample": removed_ids[:20],
+    }
+
+
 def image_url_is_pdf(image_url: Any) -> int:
     """Return 1 when the image URL points to a PDF, else 0."""
     value = safe_str(image_url)
@@ -2729,6 +2818,19 @@ def build_final_db(
         stage_conn.close()
         if os.path.exists(stage_db_path):
             os.remove(stage_db_path)
+
+    # ── UPC dedup: collapse same-barcode duplicates ──
+    # DSLD registers the same physical product multiple times across years.
+    # Keep the best row per UPC (active, highest score, newest id).
+    dedup_result = dedup_by_upc(conn, detail_index)
+    if dedup_result["duplicates_removed"]:
+        inserted -= dedup_result["duplicates_removed"]
+        logger.info(
+            "UPC dedup: removed %d duplicates across %d UPC groups (kept best per group)",
+            dedup_result["duplicates_removed"],
+            dedup_result["upc_groups_deduped"],
+        )
+    audit_counts["upc_dedup"] = dedup_result
 
     # Create read-path indexes after bulk insert to avoid incremental index churn.
     c.executescript(CORE_INDEX_SQL)
