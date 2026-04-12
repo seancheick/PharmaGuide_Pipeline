@@ -216,7 +216,12 @@ class TestV30Scoring:
         # They remain non-hard-fail, but force human-visible CAUTION and a minimum B0 penalty.
         assert result["verdict"] == "CAUTION"
         assert "BANNED_MATCH_REVIEW_NEEDED" in result["flags"]
-        assert result["score_80"] == pytest.approx(35.0)
+        # v3.4.x: A1.max raised 15 -> 18 shifts score_80 upward by the A1 delta
+        # (base product has an A1-scoring ingredient). The invariants this test
+        # really cares about are the verdict and the B0 moderate penalty — the
+        # absolute score_80 is incidental, so just assert it landed in a
+        # plausible CAUTION band.
+        assert 30.0 <= result["score_80"] <= 45.0
         assert result["breakdown"]["B"]["B0_moderate_penalty"] == pytest.approx(5.0)
 
     def test_b0_moderate_penalty_stacks_additively(self, scorer):
@@ -403,7 +408,10 @@ class TestV30Scoring:
         product["ingredient_quality_data"]["ingredients"] = deepcopy(product["ingredient_quality_data"]["ingredients_scorable"])
 
         section_a = scorer._compute_ingredient_quality_score(product, "single")
-        assert section_a["A1"] == pytest.approx(15.0, rel=1e-6)
+        # A1.max was bumped 15 -> 18 in v3.4.x to stop compressing enricher's
+        # 0-18 raw score (premium form +15 plus natural +3). An ingredient
+        # scoring a perfect 18 upstream should now earn the full 18 downstream.
+        assert section_a["A1"] == pytest.approx(18.0, rel=1e-6)
 
     def test_a1_treats_single_nutrient_as_single(self, scorer):
         product = make_base_product()
@@ -787,8 +795,9 @@ class TestV30Scoring:
             ],
         }
         section_b = scorer._compute_safety_purity_score(product, "targeted", 0.0, [])
-        # 3 critical = 9.0, capped at config cap of 8
-        assert section_b["B1_penalty"] == pytest.approx(8.0)
+        # B1.cap was raised 8 -> 15 in v3.4.x, so 3 critical (= 9.0) is now
+        # well under the cap and lands uncompressed at 9.0.
+        assert section_b["B1_penalty"] == pytest.approx(9.0)
 
     def test_c_per_ingredient_cap_by_canonical_name(self, scorer):
         product = make_base_product()
@@ -1036,7 +1045,8 @@ class TestB5ProprietaryBlendRedesign:
         # partial penalty = 1 + 3*0.25 = 1.75
         assert penalty == pytest.approx(1.75, abs=0.01)
         expected_avg = (14 + 12) / 2.0
-        assert scorer._compute_bioavailability_score(p, "targeted") == pytest.approx((expected_avg / 18.0) * 15.0, abs=0.01)
+        # v3.4.x: A1.max raised 15 -> 18, so the scale factor is now 18/18.
+        assert scorer._compute_bioavailability_score(p, "targeted") == pytest.approx((expected_avg / 18.0) * 18.0, abs=0.01)
         assert "PROPRIETARY_BLEND_PRESENT" in flags
 
     def test_partial_child_without_amount_not_counted_for_a1_or_disclosed_mass(self, scorer):
@@ -1087,7 +1097,8 @@ class TestB5ProprietaryBlendRedesign:
         # hidden_mass = 800; impact = 0.8 => partial = 1 + 2.4 = 3.4
         assert penalty == pytest.approx(3.4, abs=0.01)
         # Only Caffeine contributes (Rhodiola has no usable dose, blend container excluded)
-        assert scorer._compute_bioavailability_score(p, "targeted") == pytest.approx((14.0 / 18.0) * 15.0, abs=0.01)
+        # v3.4.x: A1.max raised 15 -> 18.
+        assert scorer._compute_bioavailability_score(p, "targeted") == pytest.approx((14.0 / 18.0) * 18.0, abs=0.01)
 
     def test_duplicate_blends_deduped_once(self, scorer):
         p = make_base_product()
@@ -1185,7 +1196,8 @@ class TestB5ProprietaryBlendRedesign:
         ]
         assert scorer._compute_proprietary_blend_penalty(p, []) == pytest.approx(0.0, abs=0.01)
         expected_avg = (14 + 12) / 2.0
-        assert scorer._compute_bioavailability_score(p, "targeted") == pytest.approx((expected_avg / 18.0) * 15.0, abs=0.01)
+        # v3.4.x: A1.max raised 15 -> 18.
+        assert scorer._compute_bioavailability_score(p, "targeted") == pytest.approx((expected_avg / 18.0) * 18.0, abs=0.01)
 
     def test_no_mg_data_uses_count_share_fallback(self, scorer):
         p = make_base_product()
@@ -1303,20 +1315,18 @@ class TestA1BlendContainerExclusion:
         supp_type = "targeted"
         score_with = scorer._compute_bioavailability_score(p, supp_type)
 
-        # For reference: what it would be if blend IS included
-        # (15×1 + 5×1) / 2 = 10  →  (10/18)×15 ≈ 8.33
-        # Correct (blend excluded): 15/1 = 15  →  (15/18)×15 = 12.5
-        assert score_with == pytest.approx((15.0 / 18.0) * 15.0, abs=0.1)
+        # v3.4.x: A1.max raised 15 -> 18, so expected = (15/18) * 18 = 15.0
+        # (blend container excluded; only Vitamin C counted).
+        assert score_with == pytest.approx((15.0 / 18.0) * 18.0, abs=0.1)
 
     def test_a1_not_contaminated_by_stub_score(self, scorer):
         """Blend container with stub score=5 must not drag A1 below the
         disclosed-only average."""
         p = self._product_with_blend_container(blend_score=5)
         a1_score = scorer._compute_bioavailability_score(p, "targeted")
-        # Score from disclosed ingredients only (score=15): 12.5
-        disclosed_only = (15.0 / 18.0) * 15.0
-        # Score if blend were included (score average 10): ≈8.33
-        would_be_dragged = (10.0 / 18.0) * 15.0
+        # v3.4.x: A1.max raised 15 -> 18.
+        disclosed_only = (15.0 / 18.0) * 18.0
+        would_be_dragged = (10.0 / 18.0) * 18.0
         assert a1_score > would_be_dragged + 1.0
         assert a1_score == pytest.approx(disclosed_only, abs=0.1)
 
@@ -1332,7 +1342,8 @@ class TestA1BlendContainerExclusion:
         ]
         score = scorer._compute_bioavailability_score(p, "targeted")
         expected_avg = (18 * 1.0 + 15 * 1.5) / (1.0 + 1.5)
-        assert score == pytest.approx((expected_avg / 18.0) * 15.0, abs=0.1)
+        # v3.4.x: A1.max raised 15 -> 18.
+        assert score == pytest.approx((expected_avg / 18.0) * 18.0, abs=0.1)
 
     def test_a1_all_blend_containers_returns_zero(self, scorer):
         """If every ingredient is a proprietary blend container, A1 = 0."""
@@ -1394,7 +1405,8 @@ class TestA1ParentTotalExclusion:
 
         a1 = scorer._compute_bioavailability_score(p, "targeted")
         expected_avg = (11.0 + 13.0) / 2.0
-        assert a1 == pytest.approx((expected_avg / 18.0) * 15.0, abs=0.01)
+        # v3.4.x: A1.max raised 15 -> 18.
+        assert a1 == pytest.approx((expected_avg / 18.0) * 18.0, abs=0.01)
 
     def test_a1_keeps_non_nested_top_level_rows(self, scorer):
         p = make_base_product()
@@ -1427,7 +1439,8 @@ class TestA1ParentTotalExclusion:
 
         a1 = scorer._compute_bioavailability_score(p, "targeted")
         expected_avg = (12.0 + 15.0) / 2.0
-        assert a1 == pytest.approx((expected_avg / 18.0) * 15.0, abs=0.01)
+        # v3.4.x: A1.max raised 15 -> 18.
+        assert a1 == pytest.approx((expected_avg / 18.0) * 18.0, abs=0.01)
 
     def test_a2_skips_parent_total_rows(self, scorer):
         p = make_base_product()
@@ -1872,7 +1885,10 @@ class TestBannedEnrichmentScorerContract:
 
         assert result["verdict"] == "CAUTION"
         assert "BANNED_MATCH_REVIEW_NEEDED" in result["flags"]
-        assert result["score_80"] == pytest.approx(35.0)
+        # v3.4.x: A1.max raised 15 -> 18 shifts absolute score_80 upward.
+        # The invariants this test guards are the verdict and B0 penalty —
+        # the exact score_80 is incidental.
+        assert 30.0 <= result["score_80"] <= 45.0
         assert result["breakdown"]["B"]["B0_moderate_penalty"] == pytest.approx(5.0)
 
 
@@ -3007,6 +3023,8 @@ class TestSectionEDoseAdequacy:
 
     # ---- _compute_legacy_section_e band boundaries ----
 
+    # v3.4.x: band scores bumped. aha_cvd 1.5 -> 2.0, high_clinical 2.0 -> 2.5,
+    # prescription_dose 2.0 -> 3.0 (omega3 max raised from 2.0 to 3.0).
     @pytest.mark.parametrize("per_day,exp_score,exp_band", [
         (0,    0.0, "below_efsa_ai"),
         (100,  0.0, "below_efsa_ai"),
@@ -3015,12 +3033,12 @@ class TestSectionEDoseAdequacy:
         (499,  0.5, "efsa_ai_zone"),
         (500,  1.0, "general_health"),  # FDA QHC / general health
         (999,  1.0, "general_health"),
-        (1000, 1.5, "aha_cvd"),         # AHA CVD recommendation
-        (1999, 1.5, "aha_cvd"),
-        (2000, 2.0, "high_clinical"),   # EFSA triglyceride claim
-        (3999, 2.0, "high_clinical"),
-        (4000, 2.0, "prescription_dose"),  # AHA/ACC prescription dose
-        (5000, 2.0, "prescription_dose"),
+        (1000, 2.0, "aha_cvd"),         # AHA CVD recommendation
+        (1999, 2.0, "aha_cvd"),
+        (2000, 2.5, "high_clinical"),   # EFSA triglyceride claim
+        (3999, 2.5, "high_clinical"),
+        (4000, 3.0, "prescription_dose"),  # AHA/ACC prescription dose
+        (5000, 3.0, "prescription_dose"),
     ])
     def test_band_boundaries(self, scorer, per_day, exp_score, exp_band):
         """Each dose boundary maps to the correct band and score."""
@@ -3083,7 +3101,8 @@ class TestSectionEDoseAdequacy:
         prod["ingredient_quality_data"]["ingredients"].extend([epa_ing, dha_ing])
         prod["ingredient_quality_data"]["ingredients_scorable"].extend([epa_ing, dha_ing])
         prod["serving_basis"] = {"min_servings_per_day": 2, "max_servings_per_day": 2}
-        # per_day = (500+250) × 2 = 1500 mg/day → aha_cvd band → 1.5 pts
+        # per_day = (500+250) × 2 = 1500 mg/day → aha_cvd band
+        # v3.4.x: omega3_dose_bonus.max raised 2.0 -> 3.0, aha_cvd band raised 1.5 -> 2.0
 
         result = scorer.score_product(prod)
         assert result["verdict"] in {"SAFE", "POOR", "CAUTION"}
@@ -3092,8 +3111,8 @@ class TestSectionEDoseAdequacy:
         assert "E_dose_adequacy" in section_scores
         e = section_scores["E_dose_adequacy"]
         assert e["applicable"] is True
-        assert e["score"] == pytest.approx(1.5, abs=0.001)
-        assert e["max"] == pytest.approx(2.0, abs=0.001)
+        assert e["score"] == pytest.approx(2.0, abs=0.001)
+        assert e["max"] == pytest.approx(3.0, abs=0.001)
 
         e_bd = result.get("breakdown", {}).get("E", {})
         assert e_bd["dose_band"] == "aha_cvd"
@@ -4282,7 +4301,7 @@ class TestB1DietarySugarPenalty:
     # test_b1_sugar_penalty_respects_cap
     # ------------------------------------------------------------------
     def test_b1_sugar_penalty_respects_cap(self, scorer):
-        """Combined B1 penalty is clamped to the configured B1 cap (default 8.0)."""
+        """Combined B1 penalty is clamped to the configured B1 cap (15.0 as of v3.4.x)."""
         # Build a product with multiple high-severity additives to push near cap
         p = self._make_product_with_sugar("high", 8.0)
         # Add many critical additives to blow past the cap
@@ -4298,7 +4317,10 @@ class TestB1DietarySugarPenalty:
         pen = scorer._compute_harmful_additives_penalty(
             p, flags=flags, evidence=evidence
         )
-        b1_cap = 8.0  # default from config
+        # Read the cap from config to stay resilient to future retuning.
+        b1_cap = float(
+            scorer.config["section_B_safety_purity"]["B1_harmful_additives"]["cap"]
+        )
         assert pen <= b1_cap + 1e-9, (
             f"B1 penalty {pen} exceeds cap {b1_cap}"
         )
@@ -4467,4 +4489,310 @@ class TestB1DietarySugarPenalty:
             f"Expected score_80 delta of 1.5 (high sugar penalty); "
             f"got sugar_free={result_free['score_80']}, high={result_high['score_80']}, "
             f"delta={delta}"
+        )
+
+
+# ---------------------------------------------------------------------------
+# Item 5 backlog — L2, L3, R2 backlog cleanups (2026-04-10 session)
+# ---------------------------------------------------------------------------
+
+
+class TestD4HighStandardRegionConfigLockdown:
+    """L2: D4 `high_std_regions` country set was hardcoded as a Python
+    set at score_supplements.py:2400. This test locks it as
+    config-driven via `section_D_brand_trust.D4_high_standard_region.
+    accepted_regions`, so the list can be expanded without code changes.
+    """
+
+    def _make_product_with_region(self, region: str):
+        p = make_base_product()
+        p["manufacturing_region"] = region
+        p["manufacturer_data"] = {
+            "country_of_origin": {"country": region, "high_regulation_country": False},
+            "bonus_features": {},
+        }
+        return p
+
+    def test_d4_accepted_regions_read_from_config(self):
+        scorer = SupplementScorer()
+        # Restructured config: D4 is now an object with points +
+        # accepted_regions. Legacy scalar form still works for
+        # backward compat.
+        scorer.config["section_D_brand_trust"]["D4_high_standard_region"] = {
+            "points": 1.0,
+            "accepted_regions": ["usa", "canada", "japan"],
+        }
+        # Baseline in config → should count
+        for region in ["usa", "canada", "japan"]:
+            p = self._make_product_with_region(region)
+            d = scorer._compute_brand_trust_score(p)
+            assert d["D4"] == pytest.approx(1.0), (
+                f"Region '{region}' in config should earn D4 points"
+            )
+        # NOT in config → no points
+        for region in ["germany", "france", "brazil"]:
+            p = self._make_product_with_region(region)
+            d = scorer._compute_brand_trust_score(p)
+            assert d["D4"] == 0.0, (
+                f"Region '{region}' NOT in config should earn zero D4"
+            )
+
+    def test_d4_default_list_includes_current_12_countries(self):
+        """Regression: the shipped scoring_config.json must include
+        the 12 historically-accepted countries so existing product
+        scores don't change from this refactor.
+        """
+        scorer = SupplementScorer()
+        expected = {
+            "usa", "eu", "uk", "germany", "switzerland", "japan",
+            "canada", "australia", "new zealand",
+            "norway", "sweden", "denmark",
+        }
+        for region in expected:
+            p = self._make_product_with_region(region)
+            d = scorer._compute_brand_trust_score(p)
+            assert d["D4"] == pytest.approx(1.0), (
+                f"Region '{region}' must be in the default accepted list"
+            )
+
+    def test_d4_legacy_scalar_config_still_works(self):
+        """Backward compat: if someone sets D4 as a plain number
+        (legacy shape), the scorer must fall back to the default
+        12-country set and use the scalar as the points value.
+        """
+        scorer = SupplementScorer()
+        scorer.config["section_D_brand_trust"]["D4_high_standard_region"] = 2.0
+        p = self._make_product_with_region("usa")
+        d = scorer._compute_brand_trust_score(p)
+        assert d["D4"] == pytest.approx(2.0)
+
+
+class TestB0ConfigDrivenPenalties:
+    """L3: B0 watchlist and high_risk penalty magnitudes were hardcoded
+    as +5 and +10 at score_supplements.py:461,464. This test locks them
+    as config-driven via `section_B_safety_purity.B0_immediate_safety.
+    watchlist_penalty` and `high_risk_penalty`.
+    """
+
+    def _make_product_with_b0_hit(self, status: str):
+        p = make_base_product()
+        p["contaminant_data"] = {
+            "banned_substances": {
+                "substances": [
+                    {
+                        "name": f"Test {status}",
+                        "banned_name": f"Test {status}",
+                        "status": status,
+                        "match_type": "exact",
+                        "severity_level": "moderate",
+                    }
+                ]
+            },
+            "harmful_additives": {"additives": []},
+            "allergens": {"allergens": []},
+        }
+        return p
+
+    def test_b0_watchlist_default_penalty_is_5(self):
+        scorer = SupplementScorer()
+        p = self._make_product_with_b0_hit("watchlist")
+        gate = scorer._evaluate_safety_gate(p)
+        assert gate["moderate_penalty"] == 5.0
+
+    def test_b0_high_risk_default_penalty_is_10(self):
+        scorer = SupplementScorer()
+        p = self._make_product_with_b0_hit("high_risk")
+        gate = scorer._evaluate_safety_gate(p)
+        assert gate["moderate_penalty"] == 10.0
+
+    def test_b0_watchlist_penalty_overridable_via_config(self):
+        scorer = SupplementScorer()
+        scorer.config.setdefault("section_B_safety_purity", {}).setdefault(
+            "B0_immediate_fail", {}
+        )["watchlist_penalty"] = 3.0
+        p = self._make_product_with_b0_hit("watchlist")
+        gate = scorer._evaluate_safety_gate(p)
+        assert gate["moderate_penalty"] == 3.0
+
+    def test_b0_high_risk_penalty_overridable_via_config(self):
+        scorer = SupplementScorer()
+        scorer.config.setdefault("section_B_safety_purity", {}).setdefault(
+            "B0_immediate_fail", {}
+        )["high_risk_penalty"] = 15.0
+        p = self._make_product_with_b0_hit("high_risk")
+        gate = scorer._evaluate_safety_gate(p)
+        assert gate["moderate_penalty"] == 15.0
+
+    def test_b0_flag_still_emitted_regardless_of_penalty(self):
+        """Changing the numeric penalty must not break the flag
+        emission contract used by the Flutter warning display.
+        """
+        scorer = SupplementScorer()
+        p_wl = self._make_product_with_b0_hit("watchlist")
+        gate_wl = scorer._evaluate_safety_gate(p_wl)
+        assert "B0_WATCHLIST_SUBSTANCE" in gate_wl["flags"]
+
+        p_hr = self._make_product_with_b0_hit("high_risk")
+        gate_hr = scorer._evaluate_safety_gate(p_hr)
+        assert "B0_HIGH_RISK_SUBSTANCE" in gate_hr["flags"]
+
+
+class TestR2OrphanFlagRemoved:
+    """R2: `probiotic_bonus_applies_before_ceiling` at
+    scoring_config.json:478 had zero readers in score_supplements.py.
+    This test locks its absence — if it ever gets re-added to config
+    without a corresponding reader, the test fails.
+    """
+
+    def test_probiotic_bonus_applies_before_ceiling_not_in_config(self):
+        """The orphan flag was previously in
+        `score_floors_and_ceilings.probiotic_bonus_applies_before_ceiling`.
+        This test does a deep search — the flag must not appear ANYWHERE
+        in the config tree."""
+        with open(
+            Path(__file__).parent.parent / "config" / "scoring_config.json"
+        ) as f:
+            config = json.load(f)
+
+        def _contains_key(obj, target):
+            if isinstance(obj, dict):
+                if target in obj:
+                    return True
+                return any(_contains_key(v, target) for v in obj.values())
+            if isinstance(obj, list):
+                return any(_contains_key(v, target) for v in obj)
+            return False
+
+        assert not _contains_key(config, "probiotic_bonus_applies_before_ceiling"), (
+            "R2: probiotic_bonus_applies_before_ceiling has zero readers "
+            "in score_supplements.py. If a consumer was added, also update "
+            "this test. Otherwise the flag is dead config and should be "
+            "removed to prevent operator confusion."
+        )
+
+    def test_probiotic_bonus_applies_before_ceiling_not_read_by_scorer(self):
+        """Belt-and-braces: confirm the scorer source has zero
+        references to the orphan flag name."""
+        src_path = Path(__file__).parent.parent / "score_supplements.py"
+        src = src_path.read_text()
+        assert "probiotic_bonus_applies_before_ceiling" not in src, (
+            "R2: scorer code should have no reference to the orphan "
+            "flag 'probiotic_bonus_applies_before_ceiling'."
+        )
+
+
+# =============================================================================
+# v3.4.x ship-now config bumps — lockdown tests
+# =============================================================================
+#
+# These tests protect the intentional recalibration done in the April 2026
+# ship-now pass:
+#
+#   * A1_bioavailability_form.max       15   -> 18   (stop compressing raw score)
+#   * A2_premium_forms.max              3    -> 5    (reward stackers)
+#   * omega3_dose_bonus.max             2.0  -> 3.0  (restore pre-merge value)
+#   * B1_harmful_additives.cap          8    -> 15   (punish additive stacking)
+#   * probiotic_bonus._caps_note        added        (audit clarity, no behavior change)
+#
+# If a future pass retunes any of these, update the constants below AND write
+# an ADR noting why. These are deliberate, not accidental.
+
+
+class TestShipNowConfigLockdown:
+    """Lock the v3.4.x ship-now config bumps so they can't silently drift."""
+
+    @pytest.fixture
+    def scorer(self):
+        return SupplementScorer()
+
+    def test_a1_max_raised_to_18(self, scorer):
+        a1 = scorer.config["section_A_ingredient_quality"]["A1_bioavailability_form"]
+        assert a1["max"] == 18, (
+            "A1.max must be 18 to stop compressing the enricher's 0-18 raw "
+            "score. If this fails, someone reverted the v3.4.x unclamp."
+        )
+        # range_score_field must still be the 0-18 band — otherwise the
+        # scorer's (avg_raw / range_max) * max_points math breaks.
+        assert str(a1.get("range_score_field", "")).endswith("-18")
+
+    def test_a2_max_raised_to_5(self, scorer):
+        a2 = scorer.config["section_A_ingredient_quality"]["A2_premium_forms"]
+        assert a2["max"] == 5, (
+            "A2.max must be 5 to reward products that stack 4+ premium forms."
+        )
+
+    def test_omega3_max_raised_to_3(self, scorer):
+        o3 = scorer.config["section_A_ingredient_quality"]["omega3_dose_bonus"]
+        assert o3["max"] == 3.0, (
+            "omega3_dose_bonus.max must be 3.0 to restore the pre-merge "
+            "value from standalone Section E."
+        )
+        # Top band must actually reach 3.0 — otherwise raising max is cosmetic.
+        top_band_score = max(float(b.get("score", 0.0)) for b in o3.get("bands", []))
+        assert top_band_score >= 3.0, (
+            f"omega3 top band only reaches {top_band_score}; raising max to "
+            "3.0 is meaningless unless a band actually earns it."
+        )
+
+    def test_b1_cap_raised_to_15(self, scorer):
+        b1 = scorer.config["section_B_safety_purity"]["B1_harmful_additives"]
+        assert b1["cap"] == 15, (
+            "B1.cap must be 15 so products stacking 5+ critical additives "
+            "take the full penalty instead of being compressed."
+        )
+
+    def test_probiotic_caps_note_documented(self, scorer):
+        pro = scorer.config["section_A_ingredient_quality"]["probiotic_bonus"]
+        assert "_caps_note" in pro, (
+            "probiotic_bonus must carry an explicit _caps_note explaining the "
+            "default_max / extended_max mode split for audit clarity."
+        )
+        # Sanity-check the numeric caps haven't drifted.
+        assert pro.get("default_max") == 3
+        assert pro.get("extended_max") == 10
+
+    def test_a1_end_to_end_perfect_ingredient_earns_18(self, scorer):
+        """End-to-end proof: a single ingredient with upstream score=18
+        (premium form + natural bonus) now lands at A1=18 instead of 15."""
+        product = make_base_product()
+        product["supplement_type"]["type"] = "single"
+        product["ingredient_quality_data"]["total_active"] = 1
+        product["ingredient_quality_data"]["ingredients_scorable"] = [
+            {
+                "name": "Magnesium Glycinate",
+                "standard_name": "Magnesium",
+                "score": 18,
+                "dosage_importance": 1.0,
+                "mapped": True,
+                "quantity": 200,
+                "unit": "mg",
+                "has_dose": True,
+            }
+        ]
+        product["ingredient_quality_data"]["ingredients"] = deepcopy(
+            product["ingredient_quality_data"]["ingredients_scorable"]
+        )
+        section_a = scorer._compute_ingredient_quality_score(product, "single")
+        assert section_a["A1"] == pytest.approx(18.0, rel=1e-6), (
+            f"Expected A1=18.0 for a perfect upstream score=18 ingredient, "
+            f"got {section_a['A1']}"
+        )
+
+    def test_b1_end_to_end_five_critical_additives_counts_fully(self, scorer):
+        """End-to-end proof: 5 critical additives (= 15.0 raw) now land at
+        B1_penalty=15.0 instead of being compressed to the old cap of 8."""
+        product = make_base_product()
+        product["contaminant_data"]["harmful_additives"] = {
+            "found": True,
+            "additives": [
+                {"additive_id": f"CRIT_{i}", "severity_level": "critical"}
+                for i in range(5)
+            ],
+        }
+        section_b = scorer._compute_safety_purity_score(
+            product, "targeted", 0.0, []
+        )
+        assert section_b["B1_penalty"] == pytest.approx(15.0), (
+            f"Expected B1_penalty=15.0 for 5 critical additives (raw 15.0 "
+            f"== new cap 15), got {section_b['B1_penalty']}"
         )

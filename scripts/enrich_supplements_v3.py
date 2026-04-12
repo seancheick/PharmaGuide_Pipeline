@@ -954,7 +954,11 @@ class SupplementEnricherV3:
             if not isinstance(entry, dict):
                 continue
             entity_type = entry.get('entity_type', 'ingredient')
-            if entity_type not in {'ingredient', 'contaminant', None, ''}:
+            # Class entities (policy watchlists like SPIKE_ANABOLIC_STEROIDS)
+            # expose specific molecule aliases that must be recognized via
+            # exact dict lookup. Fuzzy/token matching for classes stays
+            # disabled further down in _check_banned_substances.
+            if entity_type not in {'ingredient', 'contaminant', 'class', None, ''}:
                 continue
             result = {
                 "recognition_source": "banned_recalled_ingredients",
@@ -2852,8 +2856,14 @@ class SupplementEnricherV3:
     def _is_known_therapeutic(self, ing_name: str, std_name: str,
                                quality_map: Dict, botanicals_db: Dict) -> bool:
         """Check if ingredient exists in therapeutic databases."""
-        # Check quality map
-        quality_match = self._match_quality_map(ing_name, std_name, quality_map)
+        # Check quality map. This is an exploratory predicate — we only want
+        # a yes/no answer, not a final match. Pass _form_extraction_attempt=True
+        # so this call does NOT emit parent_fallback telemetry (which would
+        # otherwise leak transient rows into parent_fallback_report.json when
+        # the real ingredient enrichment later upgrades the match).
+        quality_match = self._match_quality_map(
+            ing_name, std_name, quality_map, _form_extraction_attempt=True
+        )
         if quality_match and quality_match.get("match_status") != "FORM_UNMAPPED":
             return True
 
@@ -3316,11 +3326,24 @@ class SupplementEnricherV3:
             if used_form_fallback:
                 unmapped_forms = match_result.get('unmapped_forms', [])
                 fallback_form_name = match_result.get('form_name', '(unspecified)')
+                # Look up the parent canonical's form count so the classifier
+                # can short-circuit on single-form parents (structurally
+                # unambiguous fallbacks are audit noise, not action items).
+                parent_form_count: Optional[int] = None
+                canonical_id = match_result.get('canonical_id')
+                if canonical_id:
+                    parent_entry = self.databases.get(
+                        'ingredient_quality_map', {}
+                    ).get(canonical_id, {})
+                    parent_forms = parent_entry.get('forms', {}) or {}
+                    if isinstance(parent_forms, dict):
+                        parent_form_count = len(parent_forms)
                 audit_classification = self._classify_form_fallback_audit(
                     ing_name,
                     match_result.get('standard_name', ''),
                     unmapped_forms,
                     fallback_form_name,
+                    parent_form_count=parent_form_count,
                 )
                 self._form_fallback_details.append({
                     "ingredient_label": ing_name,
@@ -3512,12 +3535,20 @@ class SupplementEnricherV3:
         parent_name: str,
         unmapped_forms: List[str],
         fallback_form_name: str,
+        parent_form_count: Optional[int] = None,
     ) -> Dict[str, Optional[str]]:
         """
         Classify form-fallback telemetry into actionable alias gaps vs audit noise.
 
         The report should surface unresolved chemical/form identities, not source
         materials like "Shrimp" or generic tokens like "extract".
+
+        When parent_form_count == 1, the parent canonical has exactly one form in
+        IQM, so any FORM_UNMAPPED_FALLBACK can only land on that single form by
+        construction. This is applied as a fallback noise reason ONLY when the
+        regular text-based classification would have otherwise flagged the row
+        as action_needed — more specific reasons (e.g., ``standardization_marker``)
+        still win.
         """
         normalized_fallback = self._normalize_form_fallback_audit_text(fallback_form_name)
         normalized_unmapped: List[str] = []
@@ -3555,8 +3586,20 @@ class SupplementEnricherV3:
                 "audit_noise_reason": audit_noise_reason or "non_actionable_form_text",
             }
 
+        # Existing text-based classification would return forms_differ=True
+        # (an action_needed row). Apply the single-form-parent guard here as a
+        # last-resort override: if the parent canonical has exactly one form in
+        # IQM, any FORM_UNMAPPED_FALLBACK is structurally noise because there
+        # is no alternate form to select.
+        would_differ = normalized_fallback not in substantive_forms
+        if would_differ and parent_form_count == 1:
+            return {
+                "forms_differ": False,
+                "audit_noise_reason": "single_form_parent",
+            }
+
         return {
-            "forms_differ": normalized_fallback not in substantive_forms,
+            "forms_differ": would_differ,
             "audit_noise_reason": None,
         }
 
@@ -4955,26 +4998,36 @@ class SupplementEnricherV3:
             self.match_counters["contains_match_wins_count"] += 1
 
         if best["fallback_form_selected"]:
-            self.match_counters["parent_fallback_count"] += 1
-            payload = {
-                "ingredient_raw": ing_name,
-                "ingredient_normalized": ing_norm,
-                "canonical_id": best["parent_key"],
-                "fallback_form_name": best["fallback_form_name"],
-                "match_type": best["match_type"],
-                "tier": best["tier"],
-            }
-            self._parent_fallback_details.append(payload)
-            self._parent_fallback_info_count += 1
-            if self._parent_fallback_info_count <= 10:
-                self.logger.info(f"Parent fallback form selected: {json.dumps(payload, sort_keys=True)}")
-            elif self._parent_fallback_info_count == 11:
-                self.logger.info(
-                    "Parent fallback logs suppressed after 10; full details saved to "
-                    "parent_fallback_report.json in output directory."
-                )
-            else:
-                self.logger.debug(f"Parent fallback form selected: {json.dumps(payload, sort_keys=True)}")
+            # Only count + emit telemetry for top-level calls. Internal
+            # recursive calls (form extraction attempts, branded-token fallback,
+            # multi-form candidate resolution) and exploratory predicates like
+            # _is_known_therapeutic pass _form_extraction_attempt=True; their
+            # "best" is a transient intermediate, not the final enriched
+            # outcome. Counting them produced spurious parent_fallback_report
+            # rows where the final matched_form was actually a real form
+            # (e.g., Pure Encapsulations Devil's Claw → harpagoside-standardized
+            # form would leak a devil's claw (unspecified) fallback row).
+            if not _form_extraction_attempt:
+                self.match_counters["parent_fallback_count"] += 1
+                payload = {
+                    "ingredient_raw": ing_name,
+                    "ingredient_normalized": ing_norm,
+                    "canonical_id": best["parent_key"],
+                    "fallback_form_name": best["fallback_form_name"],
+                    "match_type": best["match_type"],
+                    "tier": best["tier"],
+                }
+                self._parent_fallback_details.append(payload)
+                self._parent_fallback_info_count += 1
+                if self._parent_fallback_info_count <= 10:
+                    self.logger.info(f"Parent fallback form selected: {json.dumps(payload, sort_keys=True)}")
+                elif self._parent_fallback_info_count == 11:
+                    self.logger.info(
+                        "Parent fallback logs suppressed after 10; full details saved to "
+                        "parent_fallback_report.json in output directory."
+                    )
+                else:
+                    self.logger.debug(f"Parent fallback form selected: {json.dumps(payload, sort_keys=True)}")
 
         return best["match_data"]
 
@@ -5555,10 +5608,13 @@ class SupplementEnricherV3:
                     if isinstance(item, dict):
                         banned_items_with_category.append((section_key, item))
 
-        # Entity types that should be matched against ingredient labels
-        # Classes and threats should NOT match via fuzzy/token matching
-        # Products are now matchable with brand-qualified aliases and negative_match_terms
-        MATCHABLE_ENTITY_TYPES = {'ingredient', 'contaminant', 'product', None, ''}
+        # Entity types that should be matched against ingredient labels.
+        # Class entities (policy watchlists) expose specific molecule aliases
+        # and must match via strict exact/alias only — token_bounded fuzzy
+        # matching is explicitly blocked for classes below.
+        # Threats remain excluded entirely.
+        # Products are matched via brand-qualified aliases + negative_match_terms.
+        MATCHABLE_ENTITY_TYPES = {'ingredient', 'contaminant', 'product', 'class', None, ''}
 
         product_name = ""
         brand_name = ""
@@ -5662,7 +5718,11 @@ class SupplementEnricherV3:
                         match_method = "exact"
                         matched_variant = banned_name
 
-                if not match_method and allow_product_token_bounded:
+                # Class entities: strict exact/alias only, never token_bounded.
+                # This preserves the original intent of blocking fuzzy class matches
+                # (which would over-block generic chemistry terms) while still
+                # allowing the specific molecule aliases under a class to match.
+                if not match_method and allow_product_token_bounded and entity_type != 'class':
                     safe_token_aliases = self._filter_safe_token_aliases(banned_name, all_aliases)
                     matched, matched_variant = self._token_bounded_match(
                         candidate_ing_name, banned_name, safe_token_aliases
@@ -11538,7 +11598,7 @@ class SupplementEnricherV3:
 
             summary_file = os.path.join(
                 reports_dir,
-                f"{report_prefix}_{datetime.now(UTC).strftime('%Y%m%d_%H%M%S')}.json",
+                f"{report_prefix}.json",
             )
 
             # Atomic write: prevents partial files on crash

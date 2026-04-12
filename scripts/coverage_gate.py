@@ -736,17 +736,15 @@ class CoverageGate:
         output_dir = Path(output_dir)
         output_dir.mkdir(parents=True, exist_ok=True)
 
-        timestamp = datetime.now(UTC).strftime("%Y%m%d_%H%M%S")
-
         # Generate JSON report
         json_report = self._build_json_report(batch_result)
-        json_path = output_dir / f"{filename_prefix}_{timestamp}.json"
+        json_path = output_dir / f"{filename_prefix}.json"
         with open(json_path, 'w') as f:
             json.dump(json_report, f, indent=2)
 
         # Generate Markdown report
         md_report = self._build_markdown_report(batch_result)
-        md_path = output_dir / f"{filename_prefix}_{timestamp}.md"
+        md_path = output_dir / f"{filename_prefix}.md"
         with open(md_path, 'w') as f:
             f.write(md_report)
 

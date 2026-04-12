@@ -458,10 +458,28 @@ class SupplementScorer:
                 reason = f"Recalled ingredient ({name})"
                 matched_substance_name = name
             elif status == "high_risk":
-                moderate_penalty += 10
+                # L3 (2026-04): penalty magnitude is now config-driven
+                # via section_B_safety_purity.B0_immediate_fail.
+                # high_risk_penalty. Default 10 preserves pre-refactor
+                # behavior.
+                b0_cfg = self.config.get(
+                    "section_B_safety_purity", {}
+                ).get("B0_immediate_fail", {})
+                moderate_penalty += as_float(
+                    b0_cfg.get("high_risk_penalty"), 10.0
+                ) or 10.0
                 flags.append("B0_HIGH_RISK_SUBSTANCE")
             elif status == "watchlist":
-                moderate_penalty += 5
+                # L3 (2026-04): config-driven via
+                # section_B_safety_purity.B0_immediate_fail.
+                # watchlist_penalty. Default 5 preserves pre-refactor
+                # behavior.
+                b0_cfg = self.config.get(
+                    "section_B_safety_purity", {}
+                ).get("B0_immediate_fail", {})
+                moderate_penalty += as_float(
+                    b0_cfg.get("watchlist_penalty"), 5.0
+                ) or 5.0
                 flags.append("B0_WATCHLIST_SUBSTANCE")
             else:
                 # Fallback for pre-5.0 enriched data (severity-based)
@@ -2397,7 +2415,14 @@ class SupplementScorer:
         d3 = 0.5 if bool(product.get("claim_physician_formulated", bonus_features.get("physician_formulated", False))) else 0.0
 
         region = norm_text(product.get("manufacturing_region") or md.get("country_of_origin", {}).get("country"))
-        high_std_regions = {
+
+        # L2 (2026-04): D4 is now config-driven. Supports two shapes:
+        #   1. Object: {"points": 1.0, "accepted_regions": ["usa", ...]}
+        #   2. Legacy scalar: 1.0 (falls back to the default 12-country set)
+        # The default set below is the baked-in fallback for legacy scalar
+        # configs — it matches the pre-refactor hardcoded set exactly so
+        # existing scores don't drift.
+        default_high_std_regions = {
             "usa",
             "eu",
             "uk",
@@ -2411,10 +2436,23 @@ class SupplementScorer:
             "sweden",
             "denmark",
         }
-        d4_value = as_float(
-            self.config.get("section_D_brand_trust", {}).get("D4_high_standard_region"),
-            1.0,
-        ) or 1.0
+        d4_cfg = self.config.get("section_D_brand_trust", {}).get(
+            "D4_high_standard_region"
+        )
+        if isinstance(d4_cfg, dict):
+            d4_value = as_float(d4_cfg.get("points"), 1.0) or 1.0
+            configured_regions = d4_cfg.get("accepted_regions")
+            if isinstance(configured_regions, list) and configured_regions:
+                high_std_regions = {
+                    norm_text(r) for r in configured_regions if r
+                }
+            else:
+                high_std_regions = default_high_std_regions
+        else:
+            # Legacy scalar form
+            d4_value = as_float(d4_cfg, 1.0) or 1.0
+            high_std_regions = default_high_std_regions
+
         d4 = 0.0
         if bool(md.get("country_of_origin", {}).get("high_regulation_country", False)):
             d4 = d4_value
@@ -3545,7 +3583,7 @@ class SupplementScorer:
 
         summary_file = os.path.join(
             reports_dir,
-            f"scoring_summary_{datetime.now(timezone.utc).strftime('%Y%m%d_%H%M%S')}.json",
+            "scoring_summary.json",
         )
         with open(summary_file, "w", encoding="utf-8") as f:
             json.dump(summary, f, indent=2, ensure_ascii=False)
@@ -3724,7 +3762,7 @@ def main() -> None:
 
         report_dir = Path(output_dir) / "reports"
         report_dir.mkdir(parents=True, exist_ok=True)
-        report_file = report_dir / f"impact_report_{datetime.now(timezone.utc).strftime('%Y%m%d_%H%M%S')}.json"
+        report_file = report_dir / "impact_report.json"
         with open(report_file, "w", encoding="utf-8") as f:
             json.dump(report, f, indent=2, ensure_ascii=False)
 

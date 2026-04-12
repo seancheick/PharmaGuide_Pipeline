@@ -65,13 +65,15 @@
   "section_A_ingredient_quality": {
     "_max": 25,
     "A1_bioavailability_form": {
-      "max": 15,
+      "max": 18,
+      "_max_rationale": "Matches enricher's 0-18 raw bio_score range (premium form +15 plus natural +3). Previously clamped at 15 which threw away the natural-form bonus earned upstream.",
       "range_score_field": "0-18",
       "multivitamin_smoothing_factor": 0.7,
       "multivitamin_floor": 9
     },
     "A2_premium_forms": {
-      "max": 3,
+      "max": 5,
+      "_max_rationale": "Raised from 3 to 5 to reward products that stack 4+ premium forms (e.g. chelated Mg + methylated B12 + K2-MK7 + D3 cholecalciferol). Previous cap compressed differentiation between good and best.",
       "threshold_score": 14,
       "points_per_additional_premium_form": 0.5,
       "skip_first_premium_form": true
@@ -117,6 +119,7 @@
     "probiotic_bonus": {
       "default_max": 3,
       "extended_max": 10,
+      "_caps_note": "Probiotic cap is mode-dependent: default_max=3 applies to general supplements (capped by category_bonus_pool.max_contribution=5 when combined with omega3). extended_max=10 applies only when probiotic_extended_scoring gate fires (dedicated probiotic products passing strict strain/CFU requirements). There is no single 'max' key by design — the effective cap varies by gate.",
       "extended_gate": "probiotic_extended_scoring",
       "prebiotic_terms": [
         "inulin",
@@ -158,26 +161,27 @@
       }
     },
     "omega3_dose_bonus": {
-      "max": 2.0,
+      "max": 3.0,
+      "_max_rationale": "Raised from 2.0 to 3.0 to restore the pre-merge value when EPA/DHA dose adequacy was standalone Section E. Still capped by category_bonus_pool.max_contribution=5 when stacked with probiotic. Bands redistributed so top tiers actually hit 3.0.",
       "_description": "EPA+DHA daily dose adequacy bonus (omega-3 products only). Applied only when explicit per-unit EPA and/or DHA amounts are labelled. Formerly standalone Section E, now a category bonus within Ingredient Quality.",
       "_applicable": "Products where ingredient_quality_data contains ingredients with canonical_id 'epa', 'dha', or 'epa_dha' and a usable quantity field.",
       "_band_lookup": "Uses per_day_mid = (min_serving/day + max_serving/day) / 2 x EPA+DHA mg per unit. Highest matching threshold wins.",
       "bands": [
         {
           "min_mg_day": 4000,
-          "score": 2.0,
+          "score": 3.0,
           "label": "prescription_dose",
           "flag": "PRESCRIPTION_DOSE_OMEGA3"
         },
         {
           "min_mg_day": 2000,
-          "score": 2.0,
+          "score": 2.5,
           "label": "high_clinical",
           "flag": null
         },
         {
           "min_mg_day": 1000,
-          "score": 1.5,
+          "score": 2.0,
           "label": "aha_cvd",
           "flag": null
         },
@@ -215,7 +219,10 @@
     "bonus_pool_cap": 5,
     "_formula": "B = clamp(0, 30, base_score + min(bonus_pool_cap, bonuses) - penalties)",
     "B0_immediate_fail": {
+      "_description": "B0 safety-gate tier penalties. v5.0 status values drive the magnitudes below; pre-5.0 severity values fall back to the legacy `moderate_penalty` default.",
       "moderate_penalty": 10,
+      "high_risk_penalty": 10,
+      "watchlist_penalty": 5,
       "allowed_match_types_for_hard_fail": [
         "exact",
         "alias"
@@ -225,7 +232,8 @@
       ]
     },
     "B1_harmful_additives": {
-      "cap": 8,
+      "cap": 15,
+      "_cap_rationale": "Raised from 8 to 15 so products stacking 5+ critical additives (3.0 each = 15) take the full penalty instead of being compressed to 8. Section B still clamps at 0 if the total drags negative, so there's no runaway damage.",
       "risk_points": {
         "critical": 3.0,
         "high": 2.0,
@@ -369,31 +377,49 @@
     "_D1_mid_tier_reputation_note": "Awarded when product has verifiable mid-tier evidence (NSF GMP / FDA registered / USP / named GMP cert). Gated by feature_gates.enable_d1_middle_tier.",
     "D2_disclosure_quality": 1,
     "D3_physician_formulated": 0.5,
-    "D4_high_standard_region": 1.0,
+    "D4_high_standard_region": {
+      "_description": "Points awarded when the manufacturing region is in the high-standard regulatory set below. Legacy scalar form (e.g. just `1.0`) still works and falls back to the default 12-country list baked into the scorer.",
+      "points": 1.0,
+      "accepted_regions": [
+        "usa",
+        "eu",
+        "uk",
+        "germany",
+        "switzerland",
+        "japan",
+        "canada",
+        "australia",
+        "new zealand",
+        "norway",
+        "sweden",
+        "denmark"
+      ]
+    },
     "D5_sustainability": 0.5,
     "D3_D4_D5_combined_cap": 2.0
   },
   "section_E_dose_adequacy": {
-    "_max": 2.0,
+    "_max": 3.0,
+    "_max_rationale": "v3.4.x: synced from section_A_ingredient_quality.omega3_dose_bonus.max. Legacy compat block kept so consumers reading section_scores['E_dose_adequacy'] see the same value as the canonical omega3_dose_bonus.",
     "_description": "EPA+DHA daily dose adequacy bonus (omega-3 products only). Applied only when explicit per-unit EPA and/or DHA amounts are labelled. Score is an additive bonus within the overall 80-pt quality ceiling.",
     "_applicable": "Products where ingredient_quality_data contains ingredients with canonical_id 'epa', 'dha', or 'epa_dha' and a usable quantity field.",
     "_band_lookup": "Uses per_day_mid = (min_serving/day + max_serving/day) / 2 × EPA+DHA mg per unit. Highest matching threshold wins.",
     "bands": [
       {
         "min_mg_day": 4000,
-        "score": 2.0,
+        "score": 3.0,
         "label": "prescription_dose",
         "flag": "PRESCRIPTION_DOSE_OMEGA3"
       },
       {
         "min_mg_day": 2000,
-        "score": 2.0,
+        "score": 2.5,
         "label": "high_clinical",
         "flag": null
       },
       {
         "min_mg_day": 1000,
-        "score": 1.5,
+        "score": 2.0,
         "label": "aha_cvd",
         "flag": null
       },
@@ -474,8 +500,7 @@
   },
   "score_floors_and_ceilings": {
     "total_floor": 0,
-    "total_ceiling": 80,
-    "probiotic_bonus_applies_before_ceiling": true
+    "total_ceiling": 80
   },
   "legacy_compat": {
     "section_b": {
