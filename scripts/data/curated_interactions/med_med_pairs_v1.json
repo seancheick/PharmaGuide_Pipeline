@@ -211,9 +211,10 @@
         },
         "method": "live_api_batch_2026_04_13"
       },
-      "evidence_basis": "authoritative_review",
-      "clinical_confidence": "medium",
-      "applies_to": "dose_dependent"
+      "evidence_basis": "label_regulatory",
+      "clinical_confidence": "high",
+      "applies_to": "dose_dependent",
+      "evidence_notes": "Thiazide diuretics reduce lithium clearance, causing accumulation and toxicity. This interaction is stated on lithium drug labels and is a standard pharmacology teaching point."
     },
     {
       "id": "DDI_SIMVASTATIN_ERYTHROMYCIN",

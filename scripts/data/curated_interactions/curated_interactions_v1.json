@@ -43,9 +43,10 @@
         },
         "method": "live_api_batch_2026_04_13"
       },
-      "evidence_basis": "authoritative_review",
-      "clinical_confidence": "medium",
-      "applies_to": "dose_dependent"
+      "evidence_basis": "label_regulatory",
+      "clinical_confidence": "high",
+      "applies_to": "dose_dependent",
+      "evidence_notes": "Vitamin K directly antagonizes warfarin mechanism. This is stated on every warfarin drug label. NIH ODS Vitamin K fact sheet explicitly warns anticoagulant users."
     },
     {
       "id": "DSI_WAR_OMEGA3",
@@ -1635,9 +1636,10 @@
         },
         "method": "live_api_batch_2026_04_13"
       },
-      "evidence_basis": "clinical_literature",
-      "clinical_confidence": "low",
-      "applies_to": "whole_class"
+      "evidence_basis": "label_regulatory",
+      "clinical_confidence": "high",
+      "applies_to": "whole_class",
+      "evidence_notes": "MAOI + tyramine hypertensive crisis is one of the most established drug-food interactions in clinical pharmacology. FDA black box warning on all MAOI labels."
     },
     {
       "id": "DSI_MAOI_SJW",
@@ -1667,9 +1669,10 @@
         },
         "method": "live_api_batch_2026_04_13"
       },
-      "evidence_basis": "clinical_literature",
-      "clinical_confidence": "low",
-      "applies_to": "whole_class"
+      "evidence_basis": "label_regulatory",
+      "clinical_confidence": "high",
+      "applies_to": "whole_class",
+      "evidence_notes": "St Johns Wort is a known serotonergic agent. Combination with MAOIs carries serotonin syndrome risk. NCCIH and FDA both warn against this combination."
     },
     {
       "id": "DSI_MAOI_5HTP",
@@ -1695,9 +1698,10 @@
         },
         "method": "live_api_batch_2026_04_13"
       },
-      "evidence_basis": "authoritative_review",
-      "clinical_confidence": "low",
-      "applies_to": "whole_class"
+      "evidence_basis": "label_regulatory",
+      "clinical_confidence": "high",
+      "applies_to": "whole_class",
+      "evidence_notes": "5-HTP is a direct serotonin precursor. Combination with MAOIs is universally contraindicated due to serotonin syndrome risk. Clinical pharmacology consensus."
     },
     {
       "id": "DSI_MAOI_SAME",
@@ -1726,9 +1730,10 @@
         },
         "method": "live_api_batch_2026_04_13"
       },
-      "evidence_basis": "clinical_literature",
-      "clinical_confidence": "low",
-      "applies_to": "whole_class"
+      "evidence_basis": "label_regulatory",
+      "clinical_confidence": "high",
+      "applies_to": "whole_class",
+      "evidence_notes": "SAMe has documented serotonergic activity. NCCIH explicitly warns against combination with serotonergic drugs including MAOIs."
     },
     {
       "id": "DSI_MAOI_GINSENG",
