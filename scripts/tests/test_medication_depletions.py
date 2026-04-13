@@ -151,14 +151,17 @@ class TestDepletionSources:
                     url = s["url"]
                     assert "?term=" not in url, f"Entry {d['id']} has query-placeholder PubMed URL"
 
-    def test_significant_severity_has_pubmed(self, depletions):
-        """At least 60% of significant depletions should have a PubMed-backed source."""
-        significant = [d for d in depletions if d["severity"] == "significant"]
-        with_pubmed = [d for d in significant if any(s["source_type"] == "pubmed" for s in d["sources"])]
-        ratio = len(with_pubmed) / len(significant) if significant else 1.0
-        assert ratio >= 0.60, (
-            f"Only {len(with_pubmed)}/{len(significant)} ({ratio:.0%}) significant entries have PubMed sources; need >=60%"
-        )
+    def test_significant_severity_has_authoritative_source(self, depletions):
+        """Every significant depletion must have at least one authoritative source
+        (PubMed OR NIH ODS reference). Fake PMIDs are worse than honest references."""
+        authoritative_types = {"pubmed", "reference", "nih_ods", "fda"}
+        missing = []
+        for d in depletions:
+            if d["severity"] == "significant":
+                has_auth = any(s["source_type"] in authoritative_types for s in d["sources"])
+                if not has_auth:
+                    missing.append(d["id"])
+        assert not missing, f"Significant entries without authoritative source: {missing}"
 
 
 # ── Data quality ───────────────────────────────────────────────────

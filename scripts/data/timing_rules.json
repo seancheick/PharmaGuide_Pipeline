@@ -20,8 +20,8 @@
       "sources": [
         {
           "source_type": "pubmed",
-          "label": "Hallberg L et al. — Calcium: effect of different amounts on nonheme- and heme-iron absorption in humans",
-          "url": "https://pubmed.ncbi.nlm.nih.gov/2507689/"
+          "label": "Hallberg L et al. — Calcium: effect of different amounts on nonheme- and heme-iron absorption in humans. Am J Clin Nutr. 1991",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/1984335/"
         },
         {
           "source_type": "pubmed",
@@ -43,8 +43,8 @@
       "sources": [
         {
           "source_type": "pubmed",
-          "label": "Sandström B — Micronutrient interactions: effects of dietary composition on zinc and other trace elements",
-          "url": "https://pubmed.ncbi.nlm.nih.gov/11160590/"
+          "label": "Arredondo M et al. — New evidence of iron and zinc interplay at the enterocyte and neural tissues",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/15173386/"
         }
       ]
     },
@@ -61,8 +61,8 @@
       "sources": [
         {
           "source_type": "pubmed",
-          "label": "Fischer PW et al. — Effect of zinc supplementation on copper status in adult man",
-          "url": "https://pubmed.ncbi.nlm.nih.gov/2407097/"
+          "label": "Lichten LA, Cousins RJ — Transporters in the absorption and utilization of zinc and copper",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/18820153/"
         }
       ]
     },
@@ -78,9 +78,9 @@
       "evidence_level": "probable",
       "sources": [
         {
-          "source_type": "pubmed",
-          "label": "Schaafsma G — The protein digestibility-corrected amino acid score (PDCAAS) and mineral absorption",
-          "url": "https://pubmed.ncbi.nlm.nih.gov/15113710/"
+          "source_type": "reference",
+          "label": "NIH ODS — Magnesium Fact Sheet for Health Professionals (notes on calcium-magnesium absorption competition at high supplemental doses)",
+          "url": "https://ods.od.nih.gov/factsheets/Magnesium-HealthProfessional/"
         }
       ]
     },
@@ -223,8 +223,8 @@
       "sources": [
         {
           "source_type": "pubmed",
-          "label": "Abbasi B et al. — The effect of magnesium supplementation on primary insomnia in elderly",
-          "url": "https://pubmed.ncbi.nlm.nih.gov/22232754/"
+          "label": "Mah J, Pitre T — The Role of Magnesium in Sleep Health: a Systematic Review of Available Literature",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/35184264/"
         }
       ]
     },
@@ -403,8 +403,8 @@
       "sources": [
         {
           "source_type": "pubmed",
-          "label": "Zijp IM et al. — Effect of tea and other dietary factors on iron absorption",
-          "url": "https://pubmed.ncbi.nlm.nih.gov/17344507/"
+          "label": "Hurrell RF et al. — Effect of tea and other dietary factors on iron absorption",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/11029010/"
         }
       ]
     },
@@ -439,8 +439,8 @@
       "sources": [
         {
           "source_type": "pubmed",
-          "label": "Brumas V et al. — NAC and zinc complex formation",
-          "url": "https://pubmed.ncbi.nlm.nih.gov/18533287/"
+          "label": "Maret W — Apoptosis induced by chelation of intracellular zinc is associated with depletion of cellular reduced glutathione level",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/10731516/"
         }
       ]
     },
@@ -475,8 +475,8 @@
       "sources": [
         {
           "source_type": "pubmed",
-          "label": "Campbell NR & Hasinoff BB — Iron supplements: a common cause of drug interactions",
-          "url": "https://pubmed.ncbi.nlm.nih.gov/1769395/"
+          "label": "Skelin M et al. — Factors Affecting Gastrointestinal Absorption of Levothyroxine: A Review",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/28153426/"
         }
       ]
     },
@@ -691,8 +691,8 @@
       "sources": [
         {
           "source_type": "pubmed",
-          "label": "Schneyer CR — Calcium carbonate and reduction of levothyroxine efficacy",
-          "url": "https://pubmed.ncbi.nlm.nih.gov/9598957/"
+          "label": "Singh N et al. — The acute effect of calcium carbonate on the intestinal absorption of levothyroxine",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/11716045/"
         }
       ]
     },

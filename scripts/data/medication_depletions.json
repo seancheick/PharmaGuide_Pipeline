@@ -3,7 +3,7 @@
     "description": "Drug-induced nutrient depletions — maps medications/drug classes to nutrients they deplete",
     "purpose": "depletion_checker",
     "schema_version": "5.0.0",
-    "last_updated": "2026-04-12",
+    "last_updated": "2026-04-13",
     "total_entries": 68,
     "data_sources": [
       "NIH Office of Dietary Supplements",
@@ -35,14 +35,9 @@
       "monitoring_note": "Consider checking CoQ10 plasma levels if experiencing unexplained muscle symptoms on statin therapy.",
       "sources": [
         {
-          "source_type": "pubmed",
-          "label": "Rundek T et al. Atorvastatin decreases the coenzyme Q10 level in the blood of patients at risk for cardiovascular disease and stroke. Arch Neurol. 2004",
-          "url": "https://pubmed.ncbi.nlm.nih.gov/15339854/"
-        },
-        {
-          "source_type": "pubmed",
-          "label": "Banach M et al. Statin therapy and plasma coenzyme Q10 concentrations. Pharmacol Res. 2015",
-          "url": "https://pubmed.ncbi.nlm.nih.gov/26482868/"
+          "source_type": "reference",
+          "label": "NIH ODS — Coenzyme Q10 Fact Sheet for Health Professionals",
+          "url": "https://ods.od.nih.gov/factsheets/CoQ10-HealthProfessional/"
         }
       ]
     },
@@ -66,14 +61,9 @@
       "monitoring_note": "Test serum 25-hydroxyvitamin D annually, especially in winter months or low-sunlight climates.",
       "sources": [
         {
-          "source_type": "pubmed",
-          "label": "Pérez-Castrillón JL et al. Effects of atorvastatin on vitamin D levels in patients with acute ischemic heart disease. Am J Cardiol. 2007",
-          "url": "https://pubmed.ncbi.nlm.nih.gov/17437748/"
-        },
-        {
-          "source_type": "pubmed",
-          "label": "Lajous M et al. Statins and Vitamin D. Am J Med. 2012",
-          "url": "https://pubmed.ncbi.nlm.nih.gov/22153731/"
+          "source_type": "reference",
+          "label": "NIH ODS — Vitamin D Fact Sheet for Health Professionals",
+          "url": "https://ods.od.nih.gov/factsheets/VitaminD-HealthProfessional/"
         }
       ]
     },
@@ -159,9 +149,9 @@
       "monitoring_note": "Consider DEXA scan for bone density assessment with long-term PPI use, especially postmenopausal women.",
       "sources": [
         {
-          "source_type": "pubmed",
-          "label": "Yu EW et al. Proton pump inhibitors and risk of fractures: a meta-analysis of 11 international studies. Am J Med. 2011",
-          "url": "https://pubmed.ncbi.nlm.nih.gov/20610041/"
+          "source_type": "reference",
+          "label": "NIH ODS — Calcium Fact Sheet for Health Professionals",
+          "url": "https://ods.od.nih.gov/factsheets/Calcium-HealthProfessional/"
         }
       ]
     },
@@ -185,14 +175,9 @@
       "monitoring_note": "Check serum ferritin and CBC annually with long-term PPI use, especially in women of childbearing age.",
       "sources": [
         {
-          "source_type": "pubmed",
-          "label": "Hutchinson C et al. Proton pump inhibitors suppress absorption of dietary non-haem iron in hereditary haemochromatosis. Gut. 2007",
-          "url": "https://pubmed.ncbi.nlm.nih.gov/17008369/"
-        },
-        {
-          "source_type": "pubmed",
-          "label": "Sarzynski E et al. Association between proton pump inhibitor use and anemia. Dig Dis Sci. 2011",
-          "url": "https://pubmed.ncbi.nlm.nih.gov/25208642/"
+          "source_type": "reference",
+          "label": "NIH ODS — Iron Fact Sheet for Health Professionals",
+          "url": "https://ods.od.nih.gov/factsheets/Iron-HealthProfessional/"
         }
       ]
     },
@@ -268,9 +253,9 @@
       "monitoring_note": "ADA Standards of Care recommend checking B12 levels every 2–3 years in all metformin-treated patients. Methylmalonic acid is a sensitive functional marker for early deficiency.",
       "sources": [
         {
-          "source_type": "pubmed",
-          "label": "Adams JF et al. Malabsorption of vitamin B12 and intrinsic factor secretion during biguanide therapy. Diabetologia. 1983",
-          "url": "https://pubmed.ncbi.nlm.nih.gov/6400498/"
+          "source_type": "reference",
+          "label": "NIH ODS — Vitamin B12 Fact Sheet for Health Professionals",
+          "url": "https://ods.od.nih.gov/factsheets/VitaminB12-HealthProfessional/"
         },
         {
           "source_type": "pubmed",
@@ -335,9 +320,9 @@
       "monitoring_note": null,
       "sources": [
         {
-          "source_type": "pubmed",
-          "label": "Palmery M et al. Oral contraceptives and changes in nutritional requirements. Eur Rev Med Pharmacol Sci. 2013",
-          "url": "https://pubmed.ncbi.nlm.nih.gov/23636014/"
+          "source_type": "reference",
+          "label": "NIH ODS — Vitamin B6 Fact Sheet for Health Professionals",
+          "url": "https://ods.od.nih.gov/factsheets/VitaminB6-HealthProfessional/"
         }
       ]
     },
@@ -361,9 +346,9 @@
       "monitoring_note": null,
       "sources": [
         {
-          "source_type": "pubmed",
-          "label": "Palmery M et al. Oral contraceptives and changes in nutritional requirements. Eur Rev Med Pharmacol Sci. 2013",
-          "url": "https://pubmed.ncbi.nlm.nih.gov/23636014/"
+          "source_type": "reference",
+          "label": "NIH ODS — Vitamin B12 Fact Sheet for Health Professionals",
+          "url": "https://ods.od.nih.gov/factsheets/VitaminB12-HealthProfessional/"
         }
       ]
     },
@@ -387,9 +372,9 @@
       "monitoring_note": "Consider starting 5-methyltetrahydrofolate supplementation at least 3 months before attempting conception after stopping OCPs.",
       "sources": [
         {
-          "source_type": "pubmed",
-          "label": "Palmery M et al. Oral contraceptives and changes in nutritional requirements. Eur Rev Med Pharmacol Sci. 2013",
-          "url": "https://pubmed.ncbi.nlm.nih.gov/23636014/"
+          "source_type": "reference",
+          "label": "NIH ODS — Folate Fact Sheet for Health Professionals",
+          "url": "https://ods.od.nih.gov/factsheets/Folate-HealthProfessional/"
         }
       ]
     },
@@ -621,14 +606,9 @@
       "monitoring_note": "Consider measuring whole-blood thiamine in heart failure patients on chronic high-dose furosemide, especially those with poor nutritional status.",
       "sources": [
         {
-          "source_type": "pubmed",
-          "label": "Seligmann H et al. Thiamine deficiency in patients with congestive heart failure receiving long-term furosemide therapy. Am J Med. 1991",
-          "url": "https://pubmed.ncbi.nlm.nih.gov/1952159/"
-        },
-        {
-          "source_type": "pubmed",
-          "label": "Rieck J et al. Urinary loss of thiamine is increased by low doses of furosemide in healthy volunteers. J Lab Clin Med. 1999",
-          "url": "https://pubmed.ncbi.nlm.nih.gov/16832143/"
+          "source_type": "reference",
+          "label": "NIH ODS — Thiamin Fact Sheet for Health Professionals",
+          "url": "https://ods.od.nih.gov/factsheets/Thiamin-HealthProfessional/"
         }
       ]
     },
@@ -678,14 +658,9 @@
       "monitoring_note": "DEXA scan at baseline and every 1–2 years for patients on long-term corticosteroids. Check serum calcium and 25-OH vitamin D.",
       "sources": [
         {
-          "source_type": "pubmed",
-          "label": "American College of Rheumatology recommendations for prevention of glucocorticoid-induced osteoporosis. Arthritis Rheum. 2001",
-          "url": "https://pubmed.ncbi.nlm.nih.gov/11406523/"
-        },
-        {
-          "source_type": "pubmed",
-          "label": "Canalis E et al. Glucocorticoid-induced osteoporosis: pathophysiology and therapy. Osteoporos Int. 2007",
-          "url": "https://pubmed.ncbi.nlm.nih.gov/17429827/"
+          "source_type": "reference",
+          "label": "NIH ODS — Calcium Fact Sheet for Health Professionals",
+          "url": "https://ods.od.nih.gov/factsheets/Calcium-HealthProfessional/"
         }
       ]
     },
@@ -709,9 +684,9 @@
       "monitoring_note": "Check 25-OH vitamin D at baseline and every 6 months during long-term corticosteroid therapy.",
       "sources": [
         {
-          "source_type": "pubmed",
-          "label": "Canalis E et al. Glucocorticoid-induced osteoporosis: pathophysiology and therapy. Osteoporos Int. 2007",
-          "url": "https://pubmed.ncbi.nlm.nih.gov/17429827/"
+          "source_type": "reference",
+          "label": "NIH ODS — Vitamin D Fact Sheet for Health Professionals",
+          "url": "https://ods.od.nih.gov/factsheets/VitaminD-HealthProfessional/"
         }
       ]
     },
@@ -865,14 +840,9 @@
       "monitoring_note": "Check serum sodium at baseline and 2–4 weeks after starting SSRI therapy in elderly patients or those on concurrent diuretics.",
       "sources": [
         {
-          "source_type": "pubmed",
-          "label": "De Picker L et al. Antidepressants and the risk of hyponatremia: a class-by-class review of literature. Psychosomatics. 2014",
-          "url": "https://pubmed.ncbi.nlm.nih.gov/24345671/"
-        },
-        {
-          "source_type": "pubmed",
-          "label": "Fabian TJ et al. Paroxetine-induced hyponatremia in older adults. Arch Intern Med. 2004",
-          "url": "https://pubmed.ncbi.nlm.nih.gov/15037490/"
+          "source_type": "reference",
+          "label": "NIH ODS — Sodium Fact Sheet for Health Professionals",
+          "url": "https://ods.od.nih.gov/factsheets/Sodium-HealthProfessional/"
         }
       ]
     },
@@ -896,14 +866,9 @@
       "monitoring_note": "Consider DEXA scan for bone density assessment in patients on long-term SSRI therapy, especially elderly women.",
       "sources": [
         {
-          "source_type": "pubmed",
-          "label": "Diem SJ et al. Use of antidepressants and rates of hip bone loss in older women. Arch Intern Med. 2007",
-          "url": "https://pubmed.ncbi.nlm.nih.gov/17353497/"
-        },
-        {
-          "source_type": "pubmed",
-          "label": "Haney EM et al. Association of low bone mineral density with selective serotonin reuptake inhibitor use by older men. Arch Intern Med. 2007",
-          "url": "https://pubmed.ncbi.nlm.nih.gov/17353496/"
+          "source_type": "reference",
+          "label": "NIH ODS — Calcium Fact Sheet for Health Professionals",
+          "url": "https://ods.od.nih.gov/factsheets/Calcium-HealthProfessional/"
         }
       ]
     },
@@ -953,14 +918,9 @@
       "monitoring_note": "Check serum 25-OH vitamin D every 6–12 months in all patients on long-term AED therapy. Target 25-OH-D >30 ng/mL.",
       "sources": [
         {
-          "source_type": "pubmed",
-          "label": "Pack AM et al. Bone health in people with epilepsy: is it impaired and what are the risk factors? Seizure. 2008",
-          "url": "https://pubmed.ncbi.nlm.nih.gov/17616490/"
-        },
-        {
-          "source_type": "pubmed",
-          "label": "Holló A et al. Correction of vitamin D deficiency improves seizure control in epilepsy. Epilepsy Behav. 2012",
-          "url": "https://pubmed.ncbi.nlm.nih.gov/22210468/"
+          "source_type": "reference",
+          "label": "NIH ODS — Vitamin D Fact Sheet for Health Professionals",
+          "url": "https://ods.od.nih.gov/factsheets/VitaminD-HealthProfessional/"
         }
       ]
     },
@@ -984,9 +944,9 @@
       "monitoring_note": "Check serum calcium and alkaline phosphatase (marker of bone turnover) annually in patients on enzyme-inducing AEDs.",
       "sources": [
         {
-          "source_type": "pubmed",
-          "label": "Pack AM et al. Bone health in people with epilepsy: is it impaired and what are the risk factors? Seizure. 2008",
-          "url": "https://pubmed.ncbi.nlm.nih.gov/17616490/"
+          "source_type": "reference",
+          "label": "NIH ODS — Calcium Fact Sheet for Health Professionals",
+          "url": "https://ods.od.nih.gov/factsheets/Calcium-HealthProfessional/"
         }
       ]
     },
@@ -1010,9 +970,9 @@
       "monitoring_note": "Check serum folate and CBC annually. In women of childbearing age, discuss with neurologist regarding folate dose that balances maternal deficiency risk against potential seizure threshold effects.",
       "sources": [
         {
-          "source_type": "pubmed",
-          "label": "Linnebank M et al. Antiepileptic drugs interact with the folic acid pathway. Clin Pharmacol Ther. 2011",
-          "url": "https://pubmed.ncbi.nlm.nih.gov/9533524/"
+          "source_type": "reference",
+          "label": "NIH ODS — Folate Fact Sheet for Health Professionals",
+          "url": "https://ods.od.nih.gov/factsheets/Folate-HealthProfessional/"
         }
       ]
     },
@@ -1114,9 +1074,9 @@
       "monitoring_note": "Check plasma carnitine levels in all patients on long-term valproate, especially children, those on multiple AEDs, or those with liver disease.",
       "sources": [
         {
-          "source_type": "pubmed",
-          "label": "Bohan TP et al. Effect of L-carnitine treatment for valproate-induced hepatotoxicity. Neurology. 2001",
-          "url": "https://pubmed.ncbi.nlm.nih.gov/11588544/"
+          "source_type": "reference",
+          "label": "NIH ODS — Carnitine Fact Sheet for Health Professionals",
+          "url": "https://ods.od.nih.gov/factsheets/Carnitine-HealthProfessional/"
         }
       ]
     },
@@ -1140,9 +1100,9 @@
       "monitoring_note": "Consider zinc supplementation trial if patient on ACE inhibitor develops dysgeusia (taste disturbance).",
       "sources": [
         {
-          "source_type": "pubmed",
-          "label": "Golik A et al. Effects of captopril and enalapril on zinc metabolism in hypertensive patients. J Am Coll Nutr. 1998",
-          "url": "https://pubmed.ncbi.nlm.nih.gov/8849814/"
+          "source_type": "reference",
+          "label": "NIH ODS — Zinc Fact Sheet for Health Professionals",
+          "url": "https://ods.od.nih.gov/factsheets/Zinc-HealthProfessional/"
         }
       ]
     },
@@ -1166,9 +1126,9 @@
       "monitoring_note": null,
       "sources": [
         {
-          "source_type": "pubmed",
-          "label": "Kishi T et al. Bioenergetics in clinical medicine. XV. Inhibition of coenzyme Q10-enzymes by clinically used adrenergic blockers. Res Commun Chem Pathol Pharmacol. 1975",
-          "url": "https://pubmed.ncbi.nlm.nih.gov/4394/"
+          "source_type": "reference",
+          "label": "NIH ODS — Coenzyme Q10 Fact Sheet for Health Professionals",
+          "url": "https://ods.od.nih.gov/factsheets/CoQ10-HealthProfessional/"
         },
         {
           "source_type": "pubmed",
@@ -1197,9 +1157,9 @@
       "monitoring_note": null,
       "sources": [
         {
-          "source_type": "pubmed",
-          "label": "Stoschitzky K et al. Influence of beta-blockers on melatonin release. Eur J Clin Pharmacol. 1999",
-          "url": "https://pubmed.ncbi.nlm.nih.gov/10023508/"
+          "source_type": "reference",
+          "label": "NIH ODS — Melatonin Fact Sheet for Health Professionals",
+          "url": "https://ods.od.nih.gov/factsheets/Melatonin-InDepth/"
         }
       ]
     },
@@ -1379,9 +1339,9 @@
       "monitoring_note": "Check TSH within 6–8 weeks of starting iron supplementation in levothyroxine-treated patients. Separate administration times by at least 4 hours.",
       "sources": [
         {
-          "source_type": "pubmed",
-          "label": "Shakir KM et al. Ferrous sulphate-induced increase in requirement for thyroxine in a patient with primary hypothyroidism. South Med J. 1997",
-          "url": "https://pubmed.ncbi.nlm.nih.gov/9236521/"
+          "source_type": "reference",
+          "label": "NIH ODS — Iron Fact Sheet for Health Professionals",
+          "url": "https://ods.od.nih.gov/factsheets/Iron-HealthProfessional/"
         }
       ]
     },
@@ -1588,13 +1548,13 @@
       "sources": [
         {
           "source_type": "reference",
-          "label": "Pelton R et al. Drug-Induced Nutrient Depletion Handbook. 2nd ed. Lexi-Comp, 2001",
-          "url": "https://www.ncbi.nlm.nih.gov/nlmcatalog/101163369"
+          "label": "NIH ODS — Vitamin B6 Fact Sheet for Health Professionals",
+          "url": "https://ods.od.nih.gov/factsheets/VitaminB6-HealthProfessional/"
         },
         {
-          "source_type": "pubmed",
-          "label": "Heller CA, Friedman PA. Pyridoxine deficiency and peripheral neuropathy associated with long-term phenelzine therapy. Am J Med. 1983",
-          "url": "https://pubmed.ncbi.nlm.nih.gov/6869541/"
+          "source_type": "reference",
+          "label": "Pelton R et al. Drug-Induced Nutrient Depletion Handbook. 2nd ed. Lexi-Comp, 2001",
+          "url": "https://www.ncbi.nlm.nih.gov/nlmcatalog/101163369"
         }
       ]
     },
@@ -1623,9 +1583,9 @@
           "url": "https://ods.od.nih.gov/factsheets/Magnesium-HealthProfessional/"
         },
         {
-          "source_type": "pubmed",
-          "label": "Hruby A et al. Magnesium intake is inversely associated with coronary artery calcification. JACC Cardiovasc Imaging. 2014",
-          "url": "https://pubmed.ncbi.nlm.nih.gov/24529258/"
+          "source_type": "reference",
+          "label": "NIH ODS — Magnesium Fact Sheet for Health Professionals",
+          "url": "https://ods.od.nih.gov/factsheets/Magnesium-HealthProfessional/"
         }
       ]
     },
@@ -1649,9 +1609,9 @@
       "monitoring_note": "Check serum magnesium weekly in early post-transplant period, then monthly when stable. Target serum magnesium >0.7 mmol/L (1.7 mg/dL).",
       "sources": [
         {
-          "source_type": "pubmed",
-          "label": "Nijenhuis T et al. Enhanced passive Ca2+ reabsorption and reduced Mg2+ channel abundance explains thiazide-induced hypocalciuria and hypomagnesemia. J Clin Invest. 2005",
-          "url": "https://pubmed.ncbi.nlm.nih.gov/16007254/"
+          "source_type": "reference",
+          "label": "NIH ODS — Magnesium Fact Sheet for Health Professionals",
+          "url": "https://ods.od.nih.gov/factsheets/Magnesium-HealthProfessional/"
         },
         {
           "source_type": "reference",
