@@ -1,6 +1,6 @@
 # Pipeline Operations README
 
-Updated: 2026-04-10
+Updated: 2026-04-12
 Owner: Sean Cheick Baradji
 
 This file is a practical command guide for the pipeline work added and updated today.
@@ -1093,3 +1093,561 @@ python3 -m py_compile \
     - one successful live brand sync for `Olly`
   - broader parity confidence should come from more real-label probes over time, not one label
   - use `probe --reference` any time the API response shape might have changed
+
+---
+
+## 11. Core Pipeline Scripts — Quick Reference
+
+These are the main scripts that make up the 3-stage pipeline (Clean → Enrich → Score) plus supporting utilities. The ops doc sections above (§1–§8) cover the build, sync, and DSLD API workflows. This section covers everything else.
+
+### 11.1 Pipeline Stages
+
+| Script | Stage | What it does |
+|--------|-------|-------------|
+| `run_pipeline.py` | Orchestrator | Runs Clean → Enrich → Score in sequence. Use `--raw-dir` and `--output-prefix`. |
+| `clean_dsld_data.py` | Stage 1 | Normalizes raw DSLD JSON labels. Strips dead fields, normalizes units, extracts ingredients. |
+| `enrich_supplements_v3.py` | Stage 2 | Matches ingredients against IQM, classifies forms, resolves aliases, adds clinical data. ~12K lines. |
+| `score_supplements.py` | Stage 3 | 80-point arithmetic scoring engine. Reads enriched JSON, writes scored output with verdicts. ~3K lines. |
+
+### 11.2 Build & Release
+
+| Script | What it does |
+|--------|-------------|
+| `build_final_db.py` | Converts scored JSON → SQLite `pharmaguide_core.db` + detail blobs + manifest. |
+| `build_all_final_dbs.py` | Auto-discovers enriched/scored pairs, builds all or selected brands. Supports `--changed-only`, `--per-pair-output-root`, `--assemble-release-output`. |
+| `assemble_final_db_release.py` | Merges per-pair build outputs into one combined release artifact. |
+| `release_catalog_artifact.py` | Validates final DB + manifest, stages to `scripts/dist/` atomically. |
+| `release_interaction_artifact.py` | Same as above but for the interaction DB. Stages `scripts/interaction_db_output/` → `scripts/dist/`. |
+| `cleanup_old_versions.py` | Removes old PharmaGuide versions from Supabase Storage. Use `--dry-run` first. |
+
+### 11.3 Interaction DB Pipeline
+
+The interaction DB is a separate SQLite artifact (`interaction_db.sqlite`) that ships alongside the catalog DB. It contains curated drug↔supplement interactions, drug↔drug pairs, and supp.ai research evidence.
+
+#### Data flow
+
+```
+curated_interactions_v1.json ──┐
+med_med_pairs_v1.json ─────────┤
+                               ▼
+                    verify_interactions.py (RxNorm + UMLS + PubMed live)
+                               │
+                               ▼
+                    interactions_verified.json (normalized)
+                               │
+supp.ai raw dump ─→ ingest_suppai.py ─→ research_pairs.json
+                               │                │
+                               ▼                ▼
+                    build_interaction_db.py
+                               │
+                               ▼
+                    interaction_db.sqlite + manifest
+                               │
+                    release_interaction_artifact.py
+                               │
+                               ▼
+                    scripts/dist/ (staged release)
+                               │
+         ┌─────────────────────┘
+         │  Flutter repo (ONE command handles everything):
+         │  ./scripts/import_catalog_artifact.sh ../dsld_clean/scripts/dist
+         ▼
+    assets/db/interaction_db.sqlite
+    assets/db/interaction_db_manifest.json
+         │
+         ▼  App automatically detects new bundle on launch
+    PharmaGuide app (stack safety, quick check, warnings)
+```
+
+#### Scripts
+
+| Script | What it does |
+|--------|-------------|
+| `api_audit/verify_interactions.py` | Validates every RXCUI (RxNorm API), CUI (UMLS API), PMID (PubMed). Normalizes severity, direction, drug class expansion. Blocks bad data. |
+| `ingest_suppai.py` | Filters 59K raw supp.ai co-occurrence pairs → ~28K anchored to known supplements. Keeps top 3 sentences per pair. Evidence-only, never a safety warning. |
+| `build_interaction_db.py` | Builds `interaction_db.sqlite` with 4 tables (interactions, research_pairs, drug_class_map, metadata), FTS5 index, integrity checks. |
+| `release_interaction_artifact.py` | Validates build output and stages to `scripts/dist/` atomically. |
+
+#### The main command: `rebuild_interaction_db.sh`
+
+This is the **only command you need**. It automates the entire pipeline — verify, build, stage, and optionally import into Flutter — in one shot. No manual steps. No forgetting to copy files.
+
+```bash
+# Build + stage only (pipeline side)
+bash scripts/rebuild_interaction_db.sh
+
+# Build + stage + auto-import into Flutter (the default workflow)
+bash scripts/rebuild_interaction_db.sh --import
+
+# Bump version when you add new interactions
+bash scripts/rebuild_interaction_db.sh --import --version 1.1.0
+
+# Offline mode (schema checks only, skip live API calls)
+bash scripts/rebuild_interaction_db.sh --offline
+```
+
+What this single command does internally:
+
+| Step | What happens | Stops on failure? |
+|------|-------------|-------------------|
+| 1. **Verify** | Runs `verify_interactions.py` — checks every RXCUI against RxNorm, every CUI against UMLS, every PMID against PubMed | YES — bad data never reaches the build |
+| 2. **Build** | Runs `build_interaction_db.py` — creates `interaction_db.sqlite` with all tables, FTS5 index, integrity checks | YES — corrupt DB never ships |
+| 3. **Stage** | Runs `release_interaction_artifact.py` — validates output and copies to `scripts/dist/` atomically | YES — failed validation leaves dist/ untouched |
+| 4. **Import** | (with `--import`) Runs Flutter's `import_catalog_artifact.sh` — validates BOTH catalog + interaction DB through 17 gates, copies atomically to `assets/db/` | YES — if either DB fails, neither ships |
+
+If `research_pairs.json` doesn't exist yet, the script auto-runs `ingest_suppai.py` first.
+If the catalog DB isn't in `dist/`, the script auto-stages it from `final_db_output/`, or tells you exactly what to do.
+
+**Important:** The Flutter import requires both `pharmaguide_core.db` AND `interaction_db.sqlite` in `dist/`. This is by design — atomic: both or nothing. The first time you run `--import`, make sure you've run the catalog pipeline at least once so `dist/` has both files.
+
+#### What to do when you add new interactions
+
+1. Edit `scripts/data/curated_interactions/curated_interactions_v1.json` or `med_med_pairs_v1.json`
+2. Update `_metadata.total_entries` to match actual count
+3. Run: `bash scripts/rebuild_interaction_db.sh --import --version 1.1.0`
+4. Update `_expectedLiveInteractionCount` in Flutter's `test/data/database/interaction_database_test.dart`
+5. Commit + push both repos
+
+That's it. Three edits and one command.
+
+#### What happens on the phone (automatic)
+
+When the app launches with a new bundled `interaction_db.sqlite`:
+1. `ensureInteractionDatabaseAvailable()` compares byte length of bundled vs on-disk copy
+2. If different → re-materializes the new DB to the documents directory
+3. All lookups (`lookupByCanonicalId`, `lookupByRxcui`, `lookupByDrugClass`, `lookupPair`) work against the new data instantly
+4. No user action needed. No OTA download. It's baked into the app binary.
+
+#### Running individual steps (advanced / debugging)
+
+If you need to run steps separately (e.g., to debug a verification failure):
+
+```bash
+# Step 1 only: Verify curated data (live API checks)
+python3 scripts/api_audit/verify_interactions.py \
+    --drafts scripts/data/curated_interactions \
+    --report scripts/interaction_db_output/interaction_audit_report.json \
+    --normalized-out scripts/interaction_db_output/interactions_verified.json \
+    --corrections-out scripts/interaction_db_output/corrections.json
+
+# Step 2 only: Build SQLite from verified data
+python3 scripts/build_interaction_db.py \
+    --normalized-drafts scripts/interaction_db_output/interactions_verified.json \
+    --research-pairs scripts/interaction_db_output/research_pairs.json \
+    --drug-classes scripts/data/drug_classes.json \
+    --output scripts/interaction_db_output/interaction_db.sqlite \
+    --manifest scripts/interaction_db_output/interaction_db_manifest.json \
+    --report scripts/interaction_db_output/build_audit_report.json \
+    --interaction-db-version "1.0.0"
+
+# Step 3 only: Stage to dist/
+python3 scripts/release_interaction_artifact.py
+
+# Step 4 only: Import into Flutter
+cd "/Users/seancheick/PharmaGuide ai"
+./scripts/import_catalog_artifact.sh /Users/seancheick/Downloads/dsld_clean/scripts/dist
+```
+
+#### Re-ingest supp.ai (rare — only if the raw dump changes)
+
+```bash
+python3 scripts/ingest_suppai.py \
+    --suppai-dir "/Users/seancheick/Downloads/Supp ai DB/" \
+    --output scripts/interaction_db_output/research_pairs.json \
+    --report scripts/interaction_db_output/ingest_suppai_report.json
+```
+
+The supp.ai dump is a static dataset from 2021 (5 files, 245 MB). It only changes if supp.ai releases a new export. After re-ingesting, run `rebuild_interaction_db.sh` to rebuild the SQLite with the new research pairs.
+
+#### What NOT to do
+
+- **NEVER edit `interaction_db.sqlite` directly** — always rebuild from JSON sources via the script
+- **NEVER manually `cp` files to Flutter `assets/db/`** — use `rebuild_interaction_db.sh --import` or `import_catalog_artifact.sh`
+- **NEVER ship `paper_metadata.json`** from supp.ai — it's 84MB of PubMed metadata, not needed in the app
+- **NEVER skip verification** — `rebuild_interaction_db.sh` runs it automatically; the `--offline` flag is only for local testing
+- **NEVER manually edit `interactions_verified.json`** — it's generated output, not a source file
+
+### 11.4 Enrichment Support Libraries
+
+These are imported by `enrich_supplements_v3.py` — you don't run them directly, but they contain core logic:
+
+| Script | What it does |
+|--------|-------------|
+| `enhanced_normalizer.py` | Core text normalization engine (~6K lines). Ingredient name cleanup, alias resolution, form detection. |
+| `constants.py` | Shared constants, mappings, category lists, regex patterns (~1.5K lines). Defines `DATA_DIR`, `SCRIPTS_DIR`. |
+| `dosage_normalizer.py` | Parses dosage strings ("500mg", "1,000 IU") into structured `(amount, unit)` tuples. |
+| `unit_converter.py` | Converts between units (mg↔g, mcg↔mg, IU↔mcg for fat-solubles). |
+| `fuzzy_matcher.py` | RapidFuzz-based fuzzy string matching for ingredient resolution. |
+| `match_ledger.py` | Records how each ingredient was matched (exact, alias, fuzzy, unmatched) for audit trail. |
+| `normalization.py` | Lower-level text normalization helpers. |
+| `proprietary_blend_detector.py` | Identifies and flags proprietary/branded blends in ingredient lists. |
+| `functional_grouping_handler.py` | Groups ingredients into functional categories (vitamins, minerals, amino acids, etc.). |
+| `supplement_type_utils.py` | Classifies supplement type from label data (multi, single-ingredient, probiotic, etc.). |
+| `rda_ul_calculator.py` | RDA/UL lookups from `rda_optimal_uls.json` for dosing adequacy scoring. |
+| `unmapped_ingredient_tracker.py` | Tracks ingredients that couldn't be mapped to any known database entry. |
+| `env_loader.py` | Loads `.env` file for API keys (UMLS, openFDA, PubMed, Supabase). |
+| `dsld_validator.py` | Validates raw DSLD JSON structure before pipeline ingestion. |
+| `batch_processor.py` | Batch processing with resume capability for large dataset runs. |
+
+### 11.5 Quality & Validation
+
+| Script | What it does | When to use |
+|--------|-------------|-------------|
+| `db_integrity_sanity_check.py` | Validates schema, metadata, IDs, cross-references across all 36 data files in `scripts/data/`. ~1.5K lines. | After any data file change |
+| `enrichment_contract_validator.py` | Validates enriched output has all required sections and correct structure. | After enrichment changes |
+| `coverage_gate.py` | Enforces quality thresholds (ingredient match rate ≥99.5%, scoring coverage, etc.). | Before release |
+| `preflight.py` | Pre-run checks (dependencies, config files, data files present). | Before pipeline run |
+| `regression_snapshot.py` | Captures scoring snapshots for before/after comparison. | Before scoring changes |
+| `shadow_score_comparison.py` | Phase 0 validation — compares old vs new scoring side-by-side. | During scoring recalibration |
+
+```bash
+# Run all data file integrity checks
+python3 scripts/db_integrity_sanity_check.py
+
+# Validate enriched output
+python3 scripts/enrichment_contract_validator.py <enriched_file>
+
+# Check coverage thresholds
+python3 scripts/coverage_gate.py <scored_file>
+
+# Pre-flight check
+python3 scripts/preflight.py
+
+# Capture regression snapshot before changes
+python3 scripts/regression_snapshot.py --output snapshots/before_change.json
+
+# Compare scoring before/after
+python3 scripts/shadow_score_comparison.py --before snapshots/before.json --after snapshots/after.json
+```
+
+---
+
+## 12. API Audit Scripts (`scripts/api_audit/`)
+
+External API verification tools that validate data accuracy. These call real APIs — use `PHARMAGUIDE_LIVE_TESTS=1` for live test mode. All results are reports only; they never modify production data files.
+
+### 12.1 Verification Scripts
+
+| Script | API | What it verifies |
+|--------|-----|-----------------|
+| `verify_cui.py` | UMLS | CUI identifiers for supplement ingredients. The 1087-line reference implementation for API patterns. |
+| `verify_pubchem.py` | PubChem | CID + CAS numbers for chemical compounds. |
+| `verify_unii.py` | FDA UNII | UNII codes and CFR regulatory references. |
+| `verify_rda_uls.py` | USDA FoodData Central | RDA/AI/UL values against National Academies DRI tables. |
+| `verify_efsa.py` | EFSA | EU regulatory ADI/opinion validation. |
+| `verify_clinical_trials.py` | ClinicalTrials.gov | NCT ID verification for clinical study references. |
+| `verify_pubmed_references.py` | PubMed | DOI/PMID references across all pipeline data files. |
+| `verify_interactions.py` | RxNorm + UMLS | Interaction DB entries — RXCUI/CUI verification, severity normalization. Runs before `build_interaction_db.py`. |
+| `verify_depletion_timing_pmids.py` | PubMed | PMIDs in `timing_rules.json` and `medication_depletions.json`. |
+| `verify_comptox.py` | CompTox | Chemical toxicity data verification. |
+
+```bash
+# Verify PMIDs in timing/depletion files (dry-run — extracts only)
+python3 scripts/api_audit/verify_depletion_timing_pmids.py
+
+# Verify PMIDs live against PubMed API
+python3 scripts/api_audit/verify_depletion_timing_pmids.py --live
+
+# Verify interaction DB entries
+python3 scripts/api_audit/verify_interactions.py
+
+# Verify CUI identifiers against UMLS
+python3 scripts/api_audit/verify_cui.py
+```
+
+### 12.2 Enrichment & Audit Scripts
+
+| Script | What it does |
+|--------|-------------|
+| `pubmed_client.py` | Shared PubMed E-utilities client. Used by all scripts that validate PMIDs. |
+| `normalize_clinical_pubmed.py` | Normalizes clinical study references to structured PMID format. |
+| `enrich_chembl_bioactivity.py` | ChEMBL mechanism of action enrichment for bioactive compounds. |
+| `enrich_botanicals.py` | Enriches botanical ingredient data from external sources. |
+| `discover_clinical_evidence.py` | Discovers new clinical evidence for ingredients not yet in `backed_clinical_studies.json`. |
+| `audit_banned_recalled_accuracy.py` | Release gate — validates banned/recalled data accuracy. |
+| `audit_clinical_evidence_strength.py` | Classifies evidence strength (RCT, meta-analysis, observational). |
+| `audit_clinical_sources.py` | Audits source quality across clinical study references. |
+| `audit_alias_accuracy.py` | Verifies ingredient alias mappings are correct. |
+| `audit_notes_alignment.py` | Checks that notes/explanations align with scoring logic. |
+| `seed_drug_classes.py` | Seeds `drug_classes.json` from NLM RxClass API (ATC hierarchy). |
+
+```bash
+# Regenerate drug classes from RxNorm (dry-run)
+python3 scripts/api_audit/seed_drug_classes.py --dry-run
+
+# Regenerate drug classes (live — writes to scripts/data/drug_classes.json)
+python3 scripts/api_audit/seed_drug_classes.py --live
+
+# Audit banned/recalled data accuracy
+python3 scripts/api_audit/audit_banned_recalled_accuracy.py
+```
+
+### 12.3 FDA Regulatory Sync
+
+| Script | What it does |
+|--------|-------------|
+| `fda_weekly_sync.py` (api_audit/) | Fetches FDA recalls, safety alerts, DEA scheduling from openFDA + RSS. Updates `banned_recalled_ingredients.json`. |
+| `fda_manufacturer_violations_sync.py` | Syncs manufacturer warning letters and violations from FDA. |
+
+```bash
+# Run FDA weekly sync
+python3 scripts/api_audit/fda_weekly_sync.py
+
+# Or use the wrapper script
+bash scripts/run_fda_sync.sh
+```
+
+---
+
+## 13. Reference Data Files (`scripts/data/`)
+
+36 JSON files that power the pipeline. All follow the `_metadata` contract with `schema_version`, `last_updated`, `total_entries`.
+
+### 13.1 Scoring Data (used by `score_supplements.py`)
+
+| File | Entries | Role |
+|------|---------|------|
+| `ingredient_quality_map.json` | 563 parents | Quality scoring — bioavailability, premium forms, delivery. **Largest file.** |
+| `banned_recalled_ingredients.json` | 143 | Safety disqualifications — BLOCKED/UNSAFE verdicts. |
+| `harmful_additives.json` | 115 | Penalty scoring for harmful additives (colors, sweeteners). |
+| `backed_clinical_studies.json` | 197 | Evidence bonus points — all PMID-backed. |
+| `allergens.json` | Big 8 | Allergen classification and penalties. |
+| `rda_optimal_uls.json` | 47 | Dosing adequacy benchmarks (RDA, optimal, UL per age/sex). |
+| `manufacturer_violations.json` | — | Brand trust penalties from FDA warning letters. |
+| `synergy_cluster.json` | 54 | Ingredient synergy bonuses when complementary pairs found. |
+| `top_manufacturers_data.json` | — | Manufacturer reputation data. |
+| `cert_claim_rules.json` | — | Certification and label claim validation rules. |
+
+### 13.2 Enrichment Data (used by `enrich_supplements_v3.py`)
+
+| File | Role |
+|------|------|
+| `ingredient_classification.json` | Maps ingredients to categories (vitamin, mineral, amino acid, etc.). |
+| `botanical_ingredients.json` | Botanical-specific enrichment data (standardization, part used). |
+| `standardized_botanicals.json` | Standardized extract forms and marker compounds. |
+| `clinically_relevant_strains.json` | Probiotic strain data (CFU, clinical evidence). |
+| `other_ingredients.json` | Non-active "other ingredient" classification (excipients, fillers). |
+| `absorption_enhancers.json` | Absorption-enhancing delivery technologies (BioPerine, liposomal). |
+| `enhanced_delivery.json` | Premium delivery systems (phytosome, nano, micelle). |
+| `proprietary_blends.json` | Known proprietary blend detection patterns. |
+| `functional_ingredient_groupings.json` | Functional groupings for category-level analysis. |
+| `ingredient_weights.json` | Ingredient importance weights for scoring. |
+| `color_indicators.json` | Artificial color identification. |
+
+### 13.3 Interaction Data (used by interaction DB pipeline)
+
+| File | Entries | Role |
+|------|---------|------|
+| `ingredient_interaction_rules.json` | 98 | Deterministic interaction rules keyed by canonical ID. |
+| `drug_classes.json` | 24 classes, 693 members | RxNorm drug class expansion map (ATC hierarchy). |
+| `clinical_risk_taxonomy.json` | — | Risk category classification for interaction severity. |
+
+### 13.4 Flutter Feature Data (new — built 2026-04-12)
+
+| File | Entries | Role | Flutter consumer |
+|------|---------|------|-----------------|
+| `timing_rules.json` | 39 | Supplement timing/absorption rules (separate iron+calcium, take D with fat, etc.) | `ReferenceDataRepository.loadTimingRules()` → `TimingOptimization` model |
+| `medication_depletions.json` | 68 | Drug-induced nutrient depletions (statins→CoQ10, metformin→B12, PPIs→magnesium) | Future Depletion Checker feature |
+| `user_goals_to_clusters.json` | 18 goals | Maps user health goals to synergy clusters (e.g. "sleep" → sleep_stack cluster). | `ReferenceDataRepository.loadGoalMappings()` |
+
+### 13.5 Utility Data
+
+| File | Role |
+|------|------|
+| `unit_conversions.json` | Unit conversion factors (mg→g, IU→mcg). |
+| `unit_mappings.json` | Unit name normalization ("milligrams" → "mg"). |
+| `percentile_categories.json` | Score percentile tier boundaries. |
+| `id_redirects.json` | DSLD ID redirects for merged/superseded products. |
+| `cross_db_overlap_allowlist.json` | Allowed overlaps between data files (e.g., ingredient in both IQM and harmful_additives). |
+| `banned_match_allowlist.json` | False-positive allowlist for banned ingredient matching. |
+| `efsa_openfoodtox_reference.json` | EU regulatory reference data. |
+| `migration_report.json` | Schema migration tracking. |
+| `rda_therapeutic_dosing.json` | Extended dosing data beyond standard RDA. |
+| `manufacture_deduction_expl.json` | Manufacturer deduction explanations for scoring. |
+
+---
+
+## 14. How to Grow the Data Files
+
+### 14.1 Adding Timing Rules
+
+Edit `scripts/data/timing_rules.json`. Each rule needs:
+
+```json
+{
+  "id": "timing_<ingredient1>_<ingredient2>_<type>",
+  "ingredient1": "<lowercase name>",
+  "ingredient2": "<lowercase name>",
+  "rule_type": "separate|take_together|take_with_food|take_on_empty_stomach|time_of_day",
+  "advice": "<one sentence, consumer-friendly>",
+  "mechanism": "<brief pharmacological explanation>",
+  "separation_hours": 2,
+  "score_impact": -2,
+  "evidence_level": "established|probable|possible",
+  "sources": [{"source_type": "pubmed", "label": "...", "url": "https://pubmed.ncbi.nlm.nih.gov/<PMID>/"}]
+}
+```
+
+After adding:
+
+```bash
+# 1. Update _metadata.total_entries to match actual count
+# 2. Run contract tests
+python3 -m pytest scripts/tests/test_timing_rules.py -v
+
+# 3. Verify PMIDs
+python3 scripts/api_audit/verify_depletion_timing_pmids.py --live
+
+# 4. Copy to Flutter assets
+cp scripts/data/timing_rules.json "/path/to/PharmaGuide ai/assets/reference_data/timing_rules.json"
+```
+
+### 14.2 Adding Medication Depletions
+
+Edit `scripts/data/medication_depletions.json`. Each entry needs:
+
+```json
+{
+  "id": "DEP_<DRUG_OR_CLASS>_<NUTRIENT>",
+  "drug_ref": {
+    "type": "class|drug",
+    "id": "class:<class_id>",
+    "display_name": "Human-readable name"
+  },
+  "depleted_nutrient": {
+    "standard_name": "Vitamin B12",
+    "canonical_id": "vitamin_b12"
+  },
+  "severity": "significant|moderate|mild",
+  "mechanism": "<how the drug depletes this nutrient>",
+  "clinical_impact": "<what happens if unchecked>",
+  "recommendation": "<consumer-friendly suggestion>",
+  "onset_timeline": "weeks|months|years",
+  "evidence_level": "established|probable|possible",
+  "monitoring_note": "<optional: when to check levels>",
+  "sources": [{"source_type": "pubmed", "label": "...", "url": "..."}]
+}
+```
+
+For class-type drug refs, the `id` must match a key in `drug_classes.json`. To add a new drug class:
+
+```bash
+# Regenerate drug classes from RxNorm API
+python3 scripts/api_audit/seed_drug_classes.py --live
+```
+
+After adding depletions:
+
+```bash
+# 1. Update _metadata.total_entries
+# 2. Run contract tests (includes cross-reference check against drug_classes.json)
+python3 -m pytest scripts/tests/test_medication_depletions.py -v
+
+# 3. Verify PMIDs
+python3 scripts/api_audit/verify_depletion_timing_pmids.py --live
+```
+
+### 14.3 Adding Interaction Rules
+
+Edit `scripts/data/ingredient_interaction_rules.json`. Follow the existing entry structure (see first entry for template). Each rule has `condition_rules`, `drug_class_rules`, `dose_thresholds`, and `pregnancy_lactation` sections.
+
+After adding:
+
+```bash
+# Verify interactions (RXCUI/CUI validation)
+python3 scripts/api_audit/verify_interactions.py
+
+# Run interaction tests
+python3 -m pytest scripts/tests/test_verify_interactions.py -v
+
+# Rebuild interaction DB
+python3 scripts/build_interaction_db.py
+```
+
+### 14.4 Adding Synergy Clusters
+
+Edit `scripts/data/synergy_cluster.json`. Each cluster needs `id`, `standard_name`, `ingredients[]`, `min_effective_doses{}`, `evidence_tier`, `sources[]`.
+
+After adding:
+
+```bash
+python3 -m pytest scripts/tests/test_synergy_schema_contract.py -v
+```
+
+### 14.5 General Rules for Any Data File Change
+
+1. **Update `_metadata.total_entries`** to match the actual count
+2. **Update `_metadata.last_updated`** to today's date
+3. **Run integrity check**: `python3 scripts/db_integrity_sanity_check.py`
+4. **Run pipeline tests**: `python3 -m pytest scripts/tests/test_pipeline_integrity.py -v`
+5. **Never batch-edit** — add one entry, verify, test. Batch ops skip entries silently.
+
+---
+
+## 15. Test Suite
+
+3,100+ tests across 83 files. Run from the repo root.
+
+```bash
+# Run ALL tests
+python3 -m pytest scripts/tests/ -q
+
+# Run a specific test file
+python3 -m pytest scripts/tests/test_score_supplements.py -v
+
+# Run tests matching a keyword
+python3 -m pytest scripts/tests/ -k "banned"
+
+# Run only data file contract tests
+python3 -m pytest scripts/tests/test_pipeline_integrity.py scripts/tests/test_timing_rules.py scripts/tests/test_medication_depletions.py scripts/tests/test_synergy_schema_contract.py -v
+
+# Run interaction DB tests
+python3 -m pytest scripts/tests/test_build_interaction_db.py scripts/tests/test_verify_interactions.py scripts/tests/test_ingest_suppai.py -v
+
+# Run live API tests (requires PHARMAGUIDE_LIVE_TESTS=1 and API keys in .env)
+PHARMAGUIDE_LIVE_TESTS=1 python3 -m pytest scripts/tests/test_verify_interactions_live.py -v
+```
+
+---
+
+## 16. Environment Setup
+
+### 16.1 Dependencies
+
+```bash
+pip install -r requirements-dev.txt
+# Core: requests>=2.32, rapidfuzz>=3.9, pytest>=9
+```
+
+### 16.2 API Keys (`.env` file at repo root)
+
+```
+UMLS_API_KEY=...          # UMLS/RxNorm CUI verification
+NCBI_API_KEY=...          # PubMed PMID verification (optional but raises rate limit)
+PUBMED_EMAIL=...          # Required by NCBI for identification
+SUPABASE_URL=...          # Supabase project URL
+SUPABASE_SERVICE_KEY=...  # Supabase service role key
+OPENFDA_API_KEY=...       # openFDA recall data (optional)
+```
+
+Keys are loaded by `scripts/env_loader.py`. Never commit `.env` to git.
+
+### 16.3 Project Structure
+
+```
+scripts/
+  *.py                        # Core pipeline scripts (~45 files)
+  api_audit/                  # External API verification tools (28 scripts)
+  config/                     # cleaning_config.json, enrichment_config.json, scoring_config.json
+  data/                       # 36 reference JSON databases (schema v5.0/5.1)
+  data/curated_interactions/  # Curated interaction drafts (for interaction DB)
+  data/curated_overrides/     # Manual CUI/PubChem/GSRS policy overrides
+  data/suppai_import/         # supp.ai raw export (user drops here)
+  tests/                      # 83 test files, 3100+ tests
+  logs/                       # Runtime logs
+  reports/                    # Generated audit reports
+  dist/                       # Release artifacts (catalog + interaction DB)
+  final_db_output/            # Build output before staging to dist/
+  interaction_db_output/      # Interaction DB build output
+docs/                         # Technical deep-dives, specs, infographics
+```

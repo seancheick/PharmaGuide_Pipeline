@@ -449,8 +449,20 @@ def map_canonical_id(
     return iqm_cui_index.get(agent_id)
 
 
-def build_iqm_cui_index(iqm: dict[str, Any]) -> dict[str, str]:
-    """Build a reverse {cui: canonical_id} index from ingredient_quality_map.json.
+def build_iqm_cui_index(
+    iqm: dict[str, Any],
+    *,
+    botanicals: dict[str, Any] | None = None,
+    banned_recalled: dict[str, Any] | None = None,
+    harmful_additives: dict[str, Any] | None = None,
+    other_ingredients: dict[str, Any] | None = None,
+) -> dict[str, str]:
+    """Build a reverse {cui: canonical_id} index from all pipeline data files.
+
+    Primary source is ingredient_quality_map.json. Supplementary sources
+    (botanicals, banned/recalled, harmful_additives, other_ingredients) are
+    checked when the CUI is not found in IQM — giving broader coverage for
+    herbs, foods, and edge-case ingredients.
 
     The IQM is a top-level dict keyed by canonical_id. Entries without a
     CUI are skipped. If two canonical_ids share a CUI the earlier one
@@ -458,12 +470,60 @@ def build_iqm_cui_index(iqm: dict[str, Any]) -> dict[str, str]:
     the pipeline already relies on.
     """
     index: dict[str, str] = {}
+
+    # 1. IQM — primary source
     for canonical_id, entry in iqm.items():
         if canonical_id.startswith("_"):  # _metadata
             continue
         cui = entry.get("cui") if isinstance(entry, dict) else None
         if isinstance(cui, str) and cui and cui not in index:
             index[cui] = canonical_id
+
+    # 2. Botanicals — keyed by canonical_id
+    if botanicals:
+        for canonical_id, entry in botanicals.items():
+            if canonical_id.startswith("_") or not isinstance(entry, dict):
+                continue
+            cui = entry.get("cui")
+            if isinstance(cui, str) and cui and cui not in index:
+                index[cui] = canonical_id
+
+    # 3. Banned/recalled — array under "ingredients" or "banned_recalled" key
+    if banned_recalled:
+        items = banned_recalled.get("ingredients") or banned_recalled.get("banned_recalled", [])
+        for entry in items:
+            if not isinstance(entry, dict):
+                continue
+            cui = entry.get("cui")
+            cid = entry.get("canonical_id") or entry.get("id", "")
+            if isinstance(cui, str) and cui and cid and cui not in index:
+                index[cui] = cid
+
+    # 4. Harmful additives — array under "harmful_additives" or "ingredients" key
+    if harmful_additives:
+        items = harmful_additives.get("harmful_additives") or harmful_additives.get("ingredients", [])
+        for entry in items:
+            if not isinstance(entry, dict):
+                continue
+            cui = entry.get("cui")
+            cid = entry.get("canonical_id") or entry.get("id", "")
+            if isinstance(cui, str) and cui and cid and cui not in index:
+                index[cui] = cid
+
+    # 5. Other ingredients — keyed by canonical_id or id
+    if other_ingredients:
+        items = other_ingredients
+        if "other_ingredients" in other_ingredients:
+            items = {e.get("canonical_id", e.get("id", "")): e
+                     for e in other_ingredients["other_ingredients"]
+                     if isinstance(e, dict)}
+        for canonical_id, entry in items.items():
+            if canonical_id.startswith("_") or not isinstance(entry, dict):
+                continue
+            cui = entry.get("cui")
+            if isinstance(cui, str) and cui and cui not in index:
+                index[cui] = canonical_id
+
     return index
 
 
@@ -647,6 +707,11 @@ def verify_entry(
                 )
 
     # Check 4: CUI verification (optional — only if ctx.umls provided)
+    # Strategy: look up the authored CUI directly to confirm it exists in UMLS.
+    # Do NOT search by name and compare — UMLS name search returns the top
+    # text-match CUI which may differ from a valid authored CUI (e.g. "Magnesium"
+    # returns a lab-test CUI, not the supplement concept). A valid CUI that
+    # resolves via lookup_cui is accepted as correct.
     if ctx.umls is not None:
         for side in ("agent1", "agent2"):
             agent_id = str(normalized.get(f"{side}_id", ""))
@@ -655,9 +720,30 @@ def verify_entry(
             authored_name = str(normalized.get(f"{side}_name", "")).strip()
             if not authored_name:
                 continue
-            exact = ctx.umls.search_exact(authored_name)
+            # First: verify the authored CUI exists via direct lookup
+            try:
+                concept = ctx.umls.lookup_cui(agent_id)
+            except Exception:
+                concept = None  # timeout or network error — treat as soft miss
+            if concept is not None:
+                # CUI exists in UMLS — accepted as valid
+                continue
+            # CUI not found in UMLS — try name search as fallback
+            try:
+                exact = ctx.umls.search_exact(authored_name)
+            except Exception:
+                exact = None
             if not exact:
-                continue  # no hit is a soft miss, not an error
+                report.add_issue(
+                    EntryIssue(
+                        entry_id=entry_id,
+                        check="cui",
+                        severity="warning",
+                        message=f"cui {agent_id} for {authored_name!r} not found in UMLS (lookup failed, name search also returned no results)",
+                        details={"agent_side": side},
+                    )
+                )
+                continue
             resolved_cui = str(exact.get("cui", "")).strip()
             if resolved_cui and resolved_cui != agent_id:
                 report.add_issue(
@@ -665,7 +751,7 @@ def verify_entry(
                         entry_id=entry_id,
                         check="cui",
                         severity="warning",
-                        message=f"cui mismatch: authored {agent_id} for {authored_name!r}, UMLS returned {resolved_cui}",
+                        message=f"cui {agent_id} not found in UMLS; name search for {authored_name!r} suggests {resolved_cui}",
                         details={"agent_side": side},
                     )
                 )
@@ -862,8 +948,22 @@ def main(argv: list[str] | None = None) -> int:
     iqm = load_ingredient_quality_map(args.iqm)
     drug_classes = load_drug_classes(args.drug_classes)
 
+    # Load supplementary data files for broader CUI mapping
+    data_dir = args.iqm.parent
+    supplementary = {}
+    for fname, key in [
+        ("botanical_ingredients.json", "botanicals"),
+        ("banned_recalled_ingredients.json", "banned_recalled"),
+        ("harmful_additives.json", "harmful_additives"),
+        ("other_ingredients.json", "other_ingredients"),
+    ]:
+        fpath = data_dir / fname
+        if fpath.exists():
+            with open(fpath) as f:
+                supplementary[key] = json.load(f)
+
     ctx = VerifyContext(
-        iqm_cui_index=build_iqm_cui_index(iqm),
+        iqm_cui_index=build_iqm_cui_index(iqm, **supplementary),
         drug_classes=drug_classes,
     )
 

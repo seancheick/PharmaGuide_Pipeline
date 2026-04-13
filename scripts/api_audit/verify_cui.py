@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+from __future__ import annotations
+
 """
 UMLS CUI verification and lookup tool for PharmaGuide data files.
 
@@ -42,7 +44,9 @@ import os
 import re
 import sys
 import time
-from datetime import UTC, datetime, timedelta
+from datetime import datetime, timedelta, timezone
+
+UTC = timezone.utc
 from pathlib import Path
 from typing import Optional
 from urllib.parse import quote

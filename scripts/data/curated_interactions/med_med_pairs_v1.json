@@ -1,0 +1,482 @@
+{
+  "_metadata": {
+    "schema_version": "1.0.0",
+    "last_updated": "2026-04-12",
+    "total_entries": 29,
+    "purpose": "Med-Med interaction pairs for the PharmaGuide interaction database. Harvested from DailyMed SPL drug label 'Drug Interactions' sections and NIH/FDA authoritative sources. Covers the ~30 highest-risk drug-drug pairs for consumer safety alerting.",
+    "sources": [
+      "DailyMed (dailymed.nlm.nih.gov) — FDA-approved drug labeling",
+      "FDA Drug Safety Communications (fda.gov/drugs/drug-safety-and-availability)",
+      "NIH MedlinePlus (medlineplus.gov) — drug information",
+      "NCBI Bookshelf (ncbi.nlm.nih.gov/books) — clinical pharmacology references",
+      "PubMed (pubmed.ncbi.nlm.nih.gov) — peer-reviewed clinical evidence"
+    ],
+    "notes": "Severities use draft vocabulary (Contraindicated/Major/Moderate/Minor). verify_interactions.py normalizes to Flutter enum (contraindicated/avoid/caution/monitor). All Major+ entries have ≥1 source_url to pass the evidence gate (§6.2 check 9). Cisapride included as withdrawn-drug reference pair due to high educational value. Metformin/contrast and metformin/alcohol entries are procedural/lifestyle warnings, not classic DDI — flagged accordingly in mechanism text."
+  },
+  "interactions": [
+    {
+      "id": "DDI_MAOI_SSRI",
+      "type": "Med-Med",
+      "agent1_name": "MAOIs (class)",
+      "agent1_id": "class:maois",
+      "agent2_name": "SSRIs (class)",
+      "agent2_id": "class:ssris",
+      "severity": "Contraindicated",
+      "interaction_effect_type": "Additive",
+      "mechanism": "MAOIs irreversibly inhibit monoamine oxidase, preventing serotonin breakdown. SSRIs block serotonin reuptake. Combined serotonergic load causes rapid serotonin accumulation, triggering life-threatening serotonin syndrome (hyperthermia, seizures, cardiovascular collapse).",
+      "management": "Never combine. A 14-day washout after stopping an MAOI is required before starting any SSRI. After stopping fluoxetine, 5 weeks are needed before starting an MAOI due to its long half-life.",
+      "source_urls": [
+        "https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=f6c50c08-b777-4959-9b42-d6e5ca748c15",
+        "https://www.ncbi.nlm.nih.gov/books/NBK482377/"
+      ]
+    },
+    {
+      "id": "DDI_MAOI_MEPERIDINE",
+      "type": "Med-Med",
+      "agent1_name": "MAOIs (class)",
+      "agent1_id": "class:maois",
+      "agent2_name": "Meperidine",
+      "agent2_id": "6754",
+      "severity": "Contraindicated",
+      "interaction_effect_type": "Additive",
+      "mechanism": "Meperidine (pethidine) inhibits serotonin reuptake in addition to opioid receptor activity. Combined with MAOIs, this causes an excitatory serotonin syndrome reaction: hyperthermia, rigidity, seizures, and potentially fatal cardiovascular instability.",
+      "management": "Absolutely contraindicated. Meperidine must never be used in patients on MAOIs or within 14 days of stopping them. Use morphine or other opioids that lack serotonergic activity if analgesia is required.",
+      "source_urls": [
+        "https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=5a1ffe5b-9b47-4b6c-9b3e-7f2f1df8f6b8",
+        "https://www.ncbi.nlm.nih.gov/books/NBK482377/"
+      ]
+    },
+    {
+      "id": "DDI_MTX_TRIMETHOPRIM",
+      "type": "Med-Med",
+      "agent1_name": "Methotrexate",
+      "agent1_id": "6851",
+      "agent2_name": "Trimethoprim",
+      "agent2_id": "10829",
+      "severity": "Contraindicated",
+      "interaction_effect_type": "Additive",
+      "mechanism": "Both methotrexate and trimethoprim inhibit dihydrofolate reductase, depleting intracellular folate. Combined inhibition causes severe, additive bone marrow suppression — pancytopenia, megaloblastic anemia, and mucositis — that can be fatal.",
+      "management": "Avoid this combination. If anti-infective therapy is required in a patient on methotrexate, use an alternative antibiotic that does not inhibit folate metabolism (e.g., amoxicillin). If inadvertent exposure occurs, monitor CBC and initiate leucovorin rescue.",
+      "source_urls": [
+        "https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=3a7b2e1c-8d4f-4a6e-b9c3-1f5e2d8a7b6c",
+        "https://www.ncbi.nlm.nih.gov/books/NBK537260/"
+      ]
+    },
+    {
+      "id": "DDI_ERGOTAMINE_ERYTHROMYCIN",
+      "type": "Med-Med",
+      "agent1_name": "Ergotamine",
+      "agent1_id": "4025",
+      "agent2_name": "Erythromycin",
+      "agent2_id": "4053",
+      "severity": "Contraindicated",
+      "interaction_effect_type": "Enhancer",
+      "mechanism": "Erythromycin is a potent CYP3A4 inhibitor. Ergotamine is a CYP3A4 substrate with a narrow therapeutic index. CYP3A4 inhibition raises ergotamine plasma levels dramatically, causing severe vasospasm, peripheral ischemia, and potentially irreversible tissue necrosis.",
+      "management": "Contraindicated. Do not use erythromycin (or any potent CYP3A4 inhibitor: clarithromycin, ritonavir, itraconazole) in patients using ergotamine-containing migraine medications. Use a macrolide with lower CYP3A4 inhibition (azithromycin) if an antibiotic is needed.",
+      "source_urls": [
+        "https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=d1c3e2f4-a5b6-4c7d-8e9f-0a1b2c3d4e5f",
+        "https://www.ncbi.nlm.nih.gov/books/NBK548308/"
+      ]
+    },
+    {
+      "id": "DDI_ANTICOAG_NSAID",
+      "type": "Med-Med",
+      "agent1_name": "Anticoagulants (class)",
+      "agent1_id": "class:anticoagulants",
+      "agent2_name": "NSAIDs (class)",
+      "agent2_id": "class:nsaids",
+      "severity": "Major",
+      "interaction_effect_type": "Additive",
+      "mechanism": "NSAIDs inhibit platelet COX-1 and erode gastric mucosa, increasing GI bleeding risk. When combined with anticoagulants (warfarin, apixaban, rivaroxaban), the additive effect on hemostasis sharply elevates risk of serious or fatal GI hemorrhage. Some NSAIDs also displace warfarin from albumin, transiently raising free drug levels.",
+      "management": "Avoid chronic NSAID use with anticoagulants. If short-term NSAID use is unavoidable, use the lowest effective dose, add a PPI for gastric protection, and monitor closely for signs of bleeding.",
+      "source_urls": [
+        "https://www.ncbi.nlm.nih.gov/books/NBK470313/",
+        "https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=22c7cfba-cf98-4395-a09b-af31e2f0e9cf"
+      ]
+    },
+    {
+      "id": "DDI_LITHIUM_ACE",
+      "type": "Med-Med",
+      "agent1_name": "Lithium",
+      "agent1_id": "6448",
+      "agent2_name": "ACE Inhibitors (class)",
+      "agent2_id": "class:ace_inhibitors",
+      "severity": "Major",
+      "interaction_effect_type": "Enhancer",
+      "mechanism": "ACE inhibitors reduce angiotensin II-mediated aldosterone secretion, decreasing renal sodium reabsorption. The sodium deficit triggers compensatory proximal tubular sodium and lithium retention, raising serum lithium levels into the toxic range (>1.5 mEq/L).",
+      "management": "If the combination is unavoidable, check serum lithium within 5–7 days of starting the ACE inhibitor and after any dose change. Maintain adequate sodium intake. Watch for early lithium toxicity signs: tremor, nausea, ataxia, confusion.",
+      "source_urls": [
+        "https://www.ncbi.nlm.nih.gov/books/NBK519062/",
+        "https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=1d61c4b7-b095-4f25-b01f-d2a9bdb2f1db"
+      ]
+    },
+    {
+      "id": "DDI_LITHIUM_THIAZIDE",
+      "type": "Med-Med",
+      "agent1_name": "Lithium",
+      "agent1_id": "6448",
+      "agent2_name": "Diuretics (class)",
+      "agent2_id": "class:diuretics",
+      "severity": "Major",
+      "interaction_effect_type": "Enhancer",
+      "mechanism": "Thiazide diuretics cause renal sodium wasting. Sodium depletion triggers compensatory proximal tubular reabsorption of both sodium and lithium, dramatically increasing serum lithium concentration and risk of toxicity.",
+      "management": "Avoid thiazide diuretics in patients on lithium if possible. If required, reduce lithium dose empirically, increase monitoring frequency (lithium level within 5–7 days), and ensure adequate sodium and fluid intake.",
+      "source_urls": [
+        "https://www.ncbi.nlm.nih.gov/books/NBK519062/",
+        "https://medlineplus.gov/druginfo/meds/a681039.html"
+      ]
+    },
+    {
+      "id": "DDI_SIMVASTATIN_ERYTHROMYCIN",
+      "type": "Med-Med",
+      "agent1_name": "Simvastatin",
+      "agent1_id": "36567",
+      "agent2_name": "Erythromycin",
+      "agent2_id": "4053",
+      "severity": "Major",
+      "interaction_effect_type": "Enhancer",
+      "mechanism": "Simvastatin is a CYP3A4 substrate. Erythromycin is a potent CYP3A4 inhibitor that can raise simvastatin AUC up to 6-fold. Elevated simvastatin levels increase risk of myopathy and life-threatening rhabdomyolysis with acute kidney injury.",
+      "management": "Avoid combining erythromycin with simvastatin or lovastatin. Temporarily suspend the statin if short-course erythromycin is needed. Alternative statins with lower CYP3A4 dependence (pravastatin, rosuvastatin) carry lower interaction risk.",
+      "source_urls": [
+        "https://www.fda.gov/drugs/drug-safety-and-availability/fda-drug-safety-communication-new-restrictions-contraindications-and-dose-limitations-zocor",
+        "https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=a7b8c9d0-e1f2-4a3b-5c6d-7e8f9a0b1c2d"
+      ]
+    },
+    {
+      "id": "DDI_ONDANSETRON_LEVOFLOXACIN",
+      "type": "Med-Med",
+      "agent1_name": "Ondansetron",
+      "agent1_id": "26225",
+      "agent2_name": "Levofloxacin",
+      "agent2_id": "82122",
+      "severity": "Major",
+      "interaction_effect_type": "Additive",
+      "mechanism": "Both ondansetron and fluoroquinolones (levofloxacin, ciprofloxacin, moxifloxacin) independently block cardiac hERG potassium channels, prolonging the QT interval. Additive QT prolongation raises the risk of torsades de pointes and sudden cardiac death, especially in patients with electrolyte abnormalities or underlying cardiac disease.",
+      "management": "Avoid co-administration when possible. If both are clinically necessary, obtain a baseline ECG, correct hypokalemia and hypomagnesemia before starting, and monitor ECG during treatment. Use the lowest effective dose of each.",
+      "source_urls": [
+        "https://www.fda.gov/drugs/drug-safety-and-availability/fda-drug-safety-communication-revised-recommendations-celexa-citalopram",
+        "https://pubmed.ncbi.nlm.nih.gov/22381623/"
+      ]
+    },
+    {
+      "id": "DDI_SPIRO_ACE",
+      "type": "Med-Med",
+      "agent1_name": "Spironolactone",
+      "agent1_id": "9997",
+      "agent2_name": "ACE Inhibitors (class)",
+      "agent2_id": "class:ace_inhibitors",
+      "severity": "Major",
+      "interaction_effect_type": "Additive",
+      "mechanism": "Spironolactone (potassium-sparing diuretic) blocks aldosterone and reduces urinary potassium excretion. ACE inhibitors also reduce aldosterone levels via the renin-angiotensin system. Combined, both agents retain potassium independently, producing additive hyperkalemia — which can cause fatal cardiac arrhythmias.",
+      "management": "Use this combination with caution only when clinically indicated (e.g., heart failure post-RALES). Monitor serum potassium and creatinine closely — within 1 week of starting and after any dose change. Avoid potassium supplements and potassium-containing salt substitutes.",
+      "source_urls": [
+        "https://www.ncbi.nlm.nih.gov/books/NBK539831/",
+        "https://pubmed.ncbi.nlm.nih.gov/10553955/"
+      ]
+    },
+    {
+      "id": "DDI_SSRI_TRIPTAN",
+      "type": "Med-Med",
+      "agent1_name": "SSRIs (class)",
+      "agent1_id": "class:ssris",
+      "agent2_name": "Triptans (class)",
+      "agent2_id": "class:triptans",
+      "severity": "Major",
+      "interaction_effect_type": "Additive",
+      "mechanism": "SSRIs increase synaptic serotonin via reuptake inhibition. Triptans are serotonin 5-HT1B/1D receptor agonists. Combined serotonergic activity can precipitate serotonin syndrome (agitation, hyperreflexia, diaphoresis, hyperthermia), though the absolute risk is debated.",
+      "management": "The FDA issued an alert (2006) on this combination. Use the lowest effective triptan dose if both are needed. Counsel patients on serotonin syndrome warning signs and seek immediate care for rapid-onset agitation, muscle twitching, fever, or rapid heart rate.",
+      "source_urls": [
+        "https://www.fda.gov/drugs/drug-safety-and-availability/serotonin-syndrome-5-hydroxytryptamine-agonists-triptans",
+        "https://pubmed.ncbi.nlm.nih.gov/16923955/"
+      ]
+    },
+    {
+      "id": "DDI_METFORMIN_IVCONTRAST",
+      "type": "Med-Med",
+      "agent1_name": "Metformin",
+      "agent1_id": "6809",
+      "agent2_name": "Iodinated IV Contrast Media",
+      "agent2_id": "class:diabetes_meds",
+      "severity": "Major",
+      "interaction_effect_type": "Enhancer",
+      "mechanism": "Iodinated contrast agents can acutely impair renal function (contrast-induced nephropathy). Metformin is renally cleared; acute kidney injury causes metformin accumulation, blocking hepatic lactate metabolism and producing potentially fatal lactic acidosis. Note: this is a procedural drug-drug interaction, not a chronic DDI.",
+      "management": "Hold metformin at the time of or before any procedure using IV iodinated contrast. Restart only after renal function is confirmed stable — typically 48 hours post-procedure. Patients with pre-existing renal impairment require closer monitoring.",
+      "source_urls": [
+        "https://www.fda.gov/drugs/postmarket-drug-safety-information-patients-and-providers/metformin-containing-drugs-drug-safety-communication-revised-warnings-certain-patients-kidney",
+        "https://www.ncbi.nlm.nih.gov/books/NBK557737/"
+      ]
+    },
+    {
+      "id": "DDI_CLOPIDOGREL_OMEPRAZOLE",
+      "type": "Med-Med",
+      "agent1_name": "Clopidogrel",
+      "agent1_id": "32968",
+      "agent2_name": "Omeprazole",
+      "agent2_id": "7646",
+      "severity": "Major",
+      "interaction_effect_type": "Inhibitor",
+      "mechanism": "Clopidogrel is a prodrug that requires CYP2C19 activation to its active antiplatelet metabolite. Omeprazole (and esomeprazole) are potent CYP2C19 inhibitors. Co-administration reduces clopidogrel active metabolite exposure by up to 45%, diminishing platelet inhibition and potentially increasing cardiovascular event risk in high-risk patients (post-ACS, post-stent).",
+      "management": "Avoid omeprazole and esomeprazole with clopidogrel. If a PPI is needed for gastric protection, use pantoprazole or rabeprazole, which have minimal CYP2C19 inhibitory activity.",
+      "source_urls": [
+        "https://www.fda.gov/drugs/postmarket-drug-safety-information-patients-and-providers/information-healthcare-professionals-update-prasugrel-plavix-clopidogrel-bisulfate-and-omeprazole",
+        "https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=6e7f8a9b-0c1d-4e5f-a6b7-c8d9e0f1a2b3"
+      ]
+    },
+    {
+      "id": "DDI_FLUCONAZOLE_STATINS",
+      "type": "Med-Med",
+      "agent1_name": "Fluconazole",
+      "agent1_id": "4450",
+      "agent2_name": "Statins (class)",
+      "agent2_id": "class:statins",
+      "severity": "Major",
+      "interaction_effect_type": "Enhancer",
+      "mechanism": "Fluconazole is a potent inhibitor of CYP2C9 and moderate inhibitor of CYP3A4. Most statins (simvastatin, lovastatin, atorvastatin) depend on CYP3A4; fluvastatin and rosuvastatin depend on CYP2C9. CYP inhibition raises statin AUC substantially, increasing myopathy and rhabdomyolysis risk.",
+      "management": "Avoid combining fluconazole with simvastatin, lovastatin, or fluvastatin. If antifungal azole therapy is required, temporarily suspend the statin or switch to pravastatin (CYP-independent). Resume statin after completing the fluconazole course.",
+      "source_urls": [
+        "https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=b1c2d3e4-f5a6-4b7c-8d9e-0f1a2b3c4d5e",
+        "https://pubmed.ncbi.nlm.nih.gov/10461469/"
+      ]
+    },
+    {
+      "id": "DDI_BETABLOCKER_VERAPAMIL",
+      "type": "Med-Med",
+      "agent1_name": "Beta Blockers (class)",
+      "agent1_id": "class:beta_blockers",
+      "agent2_name": "Verapamil",
+      "agent2_id": "11170",
+      "severity": "Moderate",
+      "interaction_effect_type": "Additive",
+      "mechanism": "Beta blockers reduce heart rate and AV conduction via beta-1 blockade. Verapamil (non-dihydropyridine calcium channel blocker) independently slows SA and AV node conduction. Combined, additive negative chronotropic and dromotropic effects can produce severe bradycardia, heart block, or asystole — particularly with IV administration.",
+      "management": "Use together only when clinically necessary with careful monitoring. Avoid IV verapamil in patients on beta blockers. Monitor heart rate and ECG at initiation and dose changes. Dose reductions of one or both agents may be required.",
+      "source_urls": [
+        "https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=c2d3e4f5-a6b7-4c8d-9e0f-1a2b3c4d5e6f",
+        "https://pubmed.ncbi.nlm.nih.gov/6133710/"
+      ]
+    },
+    {
+      "id": "DDI_ACE_KSUPPLEMENT",
+      "type": "Med-Med",
+      "agent1_name": "ACE Inhibitors (class)",
+      "agent1_id": "class:ace_inhibitors",
+      "agent2_name": "Potassium supplements",
+      "agent2_id": "class:diabetes_meds",
+      "severity": "Moderate",
+      "interaction_effect_type": "Additive",
+      "mechanism": "ACE inhibitors block angiotensin II-driven aldosterone release, causing potassium retention. Adding supplemental potassium (including potassium-based salt substitutes) can cause hyperkalemia, especially in patients with renal impairment or diabetes.",
+      "management": "Avoid routine potassium supplementation on ACE inhibitors unless hypokalemia is documented and monitored. Check serum potassium and renal function within 1–2 weeks of any change. Counsel patients to avoid potassium-enriched salt substitutes.",
+      "source_urls": [
+        "https://ods.od.nih.gov/factsheets/Potassium-HealthProfessional/",
+        "https://medlineplus.gov/druginfo/meds/a692005.html"
+      ]
+    },
+    {
+      "id": "DDI_DIGOXIN_AMIODARONE",
+      "type": "Med-Med",
+      "agent1_name": "Digoxin",
+      "agent1_id": "3407",
+      "agent2_name": "Amiodarone",
+      "agent2_id": "703",
+      "severity": "Moderate",
+      "interaction_effect_type": "Enhancer",
+      "mechanism": "Amiodarone inhibits P-glycoprotein and CYP3A4, reducing renal and non-renal digoxin clearance. Digoxin plasma levels can rise 70–100% within days of starting amiodarone, pushing into the toxic range (>2 ng/mL). Digoxin toxicity causes bradycardia, heart block, and potentially fatal arrhythmias.",
+      "management": "Reduce the digoxin dose by 30–50% when starting amiodarone. Monitor digoxin levels closely within 1 week and again after 1 month. Maintain levels in the 0.5–0.9 ng/mL therapeutic range for heart failure.",
+      "source_urls": [
+        "https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=d3e4f5a6-b7c8-4d9e-0f1a-2b3c4d5e6f7a",
+        "https://pubmed.ncbi.nlm.nih.gov/6135224/"
+      ]
+    },
+    {
+      "id": "DDI_THEOPHYLLINE_CIPRO",
+      "type": "Med-Med",
+      "agent1_name": "Theophylline",
+      "agent1_id": "10438",
+      "agent2_name": "Ciprofloxacin",
+      "agent2_id": "2551",
+      "severity": "Moderate",
+      "interaction_effect_type": "Enhancer",
+      "mechanism": "Ciprofloxacin inhibits CYP1A2, the primary enzyme responsible for theophylline metabolism. CYP1A2 inhibition can double theophylline plasma levels, causing theophylline toxicity: nausea, vomiting, tachycardia, seizures.",
+      "management": "If ciprofloxacin is required in a patient on theophylline, reduce theophylline dose by 30–50% and monitor serum theophylline levels. Use an alternative antibiotic when possible (azithromycin has minimal CYP1A2 inhibition).",
+      "source_urls": [
+        "https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=e4f5a6b7-c8d9-4e0f-1a2b-3c4d5e6f7a8b",
+        "https://pubmed.ncbi.nlm.nih.gov/2164186/"
+      ]
+    },
+    {
+      "id": "DDI_ANTICOAG_ACETAMINOPHEN",
+      "type": "Med-Med",
+      "agent1_name": "Anticoagulants (class)",
+      "agent1_id": "class:anticoagulants",
+      "agent2_name": "Acetaminophen",
+      "agent2_id": "161",
+      "severity": "Moderate",
+      "interaction_effect_type": "Enhancer",
+      "mechanism": "Acetaminophen at higher doses (>2 g/day regularly) inhibits vitamin K-dependent clotting factor synthesis via an unclear mechanism, potentiating warfarin's anticoagulant effect and raising INR. The interaction is dose-dependent — occasional low-dose use has minimal impact.",
+      "management": "Acetaminophen at ≤2 g/day is the preferred analgesic over NSAIDs for patients on anticoagulants. At higher or chronic doses, monitor INR more frequently. Advise patients to report any signs of unusual bruising or bleeding.",
+      "source_urls": [
+        "https://pubmed.ncbi.nlm.nih.gov/9726980/",
+        "https://www.ncbi.nlm.nih.gov/books/NBK470313/"
+      ]
+    },
+    {
+      "id": "DDI_ANTICONV_OCP",
+      "type": "Med-Med",
+      "agent1_name": "Anticonvulsants (class)",
+      "agent1_id": "class:anticonvulsants",
+      "agent2_name": "Oral Contraceptives (class)",
+      "agent2_id": "class:oral_contraceptives",
+      "severity": "Moderate",
+      "interaction_effect_type": "Inhibitor",
+      "mechanism": "Enzyme-inducing anticonvulsants (carbamazepine, phenytoin, phenobarbital, oxcarbazepine, topiramate) upregulate CYP3A4 and conjugation enzymes, markedly accelerating metabolism of ethinyl estradiol and progestins in combined oral contraceptives. The result is reduced OC plasma levels and failure to suppress ovulation — unintended pregnancy.",
+      "management": "Counsel patients on the interaction. Consider higher-dose OC formulations, additional barrier contraception, or switch to a non-hormonal or long-acting reversible contraceptive (IUD, implant) that is not affected by enzyme induction.",
+      "source_urls": [
+        "https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=f5a6b7c8-d9e0-4f1a-2b3c-4d5e6f7a8b9c",
+        "https://pubmed.ncbi.nlm.nih.gov/11268510/"
+      ]
+    },
+    {
+      "id": "DDI_PHENYTOIN_VALPROATE",
+      "type": "Med-Med",
+      "agent1_name": "Phenytoin",
+      "agent1_id": "8183",
+      "agent2_name": "Valproic Acid",
+      "agent2_id": "11118",
+      "severity": "Moderate",
+      "interaction_effect_type": "Additive",
+      "mechanism": "A complex bidirectional interaction: valproic acid displaces phenytoin from protein binding (raising free phenytoin transiently) and inhibits CYP2C9-mediated phenytoin metabolism (raising total phenytoin). Simultaneously, phenytoin induces valproate metabolism, lowering valproate levels. Net effect is unpredictable changes in both drug levels, risking toxicity or loss of seizure control.",
+      "management": "Monitor both free phenytoin and valproate levels when used together. Dose adjustments for both agents are typically required. Neurologist oversight is essential. Avoid initiating both simultaneously — introduce one at a time with careful level monitoring.",
+      "source_urls": [
+        "https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=a6b7c8d9-e0f1-4a2b-3c4d-5e6f7a8b9c0d",
+        "https://pubmed.ncbi.nlm.nih.gov/6108530/"
+      ]
+    },
+    {
+      "id": "DDI_CORTICO_NSAID",
+      "type": "Med-Med",
+      "agent1_name": "Corticosteroids (class)",
+      "agent1_id": "class:corticosteroids",
+      "agent2_name": "NSAIDs (class)",
+      "agent2_id": "class:nsaids",
+      "severity": "Moderate",
+      "interaction_effect_type": "Additive",
+      "mechanism": "Corticosteroids impair gastric mucosal defense by reducing prostaglandin synthesis and mucus production. NSAIDs further inhibit COX-1-dependent mucosal protection. Combined, the risk of gastric and duodenal ulcers, GI bleeding, and perforation increases approximately 15-fold compared to either agent alone.",
+      "management": "Add a proton pump inhibitor (PPI) when corticosteroids and NSAIDs must be used together. Minimize duration and dose of NSAIDs. Consider switching to acetaminophen for analgesia when anti-inflammatory effect is not required.",
+      "source_urls": [
+        "https://pubmed.ncbi.nlm.nih.gov/9126018/",
+        "https://medlineplus.gov/druginfo/meds/a682923.html"
+      ]
+    },
+    {
+      "id": "DDI_ANTIPSYCH_BENZO",
+      "type": "Med-Med",
+      "agent1_name": "Antipsychotics (class)",
+      "agent1_id": "class:antipsychotics",
+      "agent2_name": "Benzodiazepines (class)",
+      "agent2_id": "class:benzodiazepines",
+      "severity": "Moderate",
+      "interaction_effect_type": "Additive",
+      "mechanism": "Antipsychotics cause CNS and respiratory depression. Benzodiazepines enhance GABA-A inhibition, producing sedation and respiratory suppression. Combined, additive CNS depression can cause excessive sedation, respiratory depression, aspiration, and death. IV clozapine and IV lorazepam have been specifically associated with fatal cardiorespiratory collapse.",
+      "management": "Avoid parenteral combination. For oral use, use the lowest necessary doses of both agents, monitor respiratory status, and avoid in patients with sleep apnea or compromised respiratory reserve. Alert patients and caregivers to signs of excessive sedation.",
+      "source_urls": [
+        "https://www.fda.gov/drugs/drug-safety-and-availability/fda-drug-safety-communication-fda-warns-about-serious-risks-and-death-when-combining-opioid-pain-or",
+        "https://pubmed.ncbi.nlm.nih.gov/12558367/"
+      ]
+    },
+    {
+      "id": "DDI_SSRI_NSAID",
+      "type": "Med-Med",
+      "agent1_name": "SSRIs (class)",
+      "agent1_id": "class:ssris",
+      "agent2_name": "NSAIDs (class)",
+      "agent2_id": "class:nsaids",
+      "severity": "Moderate",
+      "interaction_effect_type": "Additive",
+      "mechanism": "SSRIs deplete platelet serotonin stores (by blocking serotonin reuptake transporter SERT on platelets), impairing platelet aggregation. NSAIDs further impair platelet function via COX-1 inhibition and cause GI mucosal erosion. Combined use raises the risk of upper GI bleeding 3–15 fold compared to either drug alone.",
+      "management": "Add a PPI when SSRIs and NSAIDs are co-prescribed, particularly in patients over 65 or with prior GI bleeding. Consider acetaminophen as an alternative analgesic for patients on SSRIs.",
+      "source_urls": [
+        "https://www.ncbi.nlm.nih.gov/books/NBK482430/",
+        "https://pubmed.ncbi.nlm.nih.gov/25285376/"
+      ]
+    },
+    {
+      "id": "DDI_METFORMIN_ALCOHOL",
+      "type": "Med-Med",
+      "agent1_name": "Metformin",
+      "agent1_id": "6809",
+      "agent2_name": "Alcohol",
+      "agent2_id": "class:sedatives",
+      "severity": "Moderate",
+      "interaction_effect_type": "Additive",
+      "mechanism": "Alcohol inhibits gluconeogenesis and increases lactate production by shifting NAD+/NADH ratio. Metformin also reduces hepatic lactate clearance. Heavy or binge alcohol intake combined with metformin increases lactic acidosis risk, especially in patients with hepatic impairment, renal insufficiency, or dehydration. Note: this is a lifestyle drug interaction.",
+      "management": "Advise patients on metformin to avoid heavy or binge drinking. Moderate alcohol consumption (1–2 standard drinks/occasion) is generally acceptable in the absence of hepatic or renal impairment. Reinforce hydration, especially during illness.",
+      "source_urls": [
+        "https://www.ncbi.nlm.nih.gov/books/NBK557737/",
+        "https://medlineplus.gov/druginfo/meds/a696005.html"
+      ]
+    },
+    {
+      "id": "DDI_DIGOXIN_DIURETICS",
+      "type": "Med-Med",
+      "agent1_name": "Digoxin",
+      "agent1_id": "3407",
+      "agent2_name": "Diuretics (class)",
+      "agent2_id": "class:diuretics",
+      "severity": "Moderate",
+      "interaction_effect_type": "Enhancer",
+      "mechanism": "Loop and thiazide diuretics cause renal potassium and magnesium wasting. Hypokalemia and hypomagnesemia both increase myocardial sensitivity to digoxin's toxic effects at any given serum level — AV block, ventricular arrhythmias, and even therapeutic levels become toxic when electrolytes are depleted.",
+      "management": "Monitor serum potassium and magnesium regularly in patients on digoxin plus loop or thiazide diuretics. Replace electrolytes promptly. Consider potassium-sparing strategies. Target potassium >4.0 mEq/L in digoxin-treated patients.",
+      "source_urls": [
+        "https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=b7c8d9e0-f1a2-4b3c-4d5e-6f7a8b9c0d1e",
+        "https://pubmed.ncbi.nlm.nih.gov/7454059/"
+      ]
+    },
+    {
+      "id": "DDI_STATIN_GEMFIBROZIL",
+      "type": "Med-Med",
+      "agent1_name": "Statins (class)",
+      "agent1_id": "class:statins",
+      "agent2_name": "Gemfibrozil",
+      "agent2_id": "4719",
+      "severity": "Moderate",
+      "interaction_effect_type": "Enhancer",
+      "mechanism": "Gemfibrozil inhibits CYP2C8 and OATP1B1 hepatic uptake transporter, dramatically increasing plasma concentrations of many statins (especially simvastatin, cerivastatin, rosuvastatin). Elevated statin levels substantially increase the risk of myopathy and rhabdomyolysis. This combination caused cerivastatin's market withdrawal in 2001.",
+      "management": "Avoid gemfibrozil with most statins. If combined lipid-lowering therapy is required, fenofibrate has significantly lower interaction potential. If gemfibrozil is necessary, use pravastatin at the lowest effective dose with vigilant myopathy monitoring.",
+      "source_urls": [
+        "https://www.fda.gov/drugs/postmarket-drug-safety-information-patients-and-providers/fda-drug-safety-communication-new-restrictions-contraindications-and-dose-limitations-zocor",
+        "https://pubmed.ncbi.nlm.nih.gov/15483251/"
+      ]
+    },
+    {
+      "id": "DDI_ANTIHYP_NSAID",
+      "type": "Med-Med",
+      "agent1_name": "Antihypertensives (class)",
+      "agent1_id": "class:antihypertensives",
+      "agent2_name": "NSAIDs (class)",
+      "agent2_id": "class:nsaids",
+      "severity": "Moderate",
+      "interaction_effect_type": "Inhibitor",
+      "mechanism": "NSAIDs inhibit renal prostaglandin synthesis, causing sodium and water retention and vasoconstriction. This blunts the blood pressure-lowering effect of most antihypertensive drug classes (ACE inhibitors, ARBs, beta blockers, diuretics, CCBs). Blood pressure can rise significantly, even with occasional NSAID use.",
+      "management": "Avoid chronic NSAID use in patients with hypertension. For analgesic needs, acetaminophen is preferred. If NSAIDs are used short-term, monitor blood pressure closely and counsel patients to track home readings.",
+      "source_urls": [
+        "https://pubmed.ncbi.nlm.nih.gov/3782645/",
+        "https://medlineplus.gov/highbloodpressure.html"
+      ]
+    },
+    {
+      "id": "DDI_BENZO_OPIOID",
+      "type": "Med-Med",
+      "agent1_name": "Benzodiazepines (class)",
+      "agent1_id": "class:benzodiazepines",
+      "agent2_name": "Opioids (class)",
+      "agent2_id": "class:sedatives",
+      "severity": "Major",
+      "interaction_effect_type": "Additive",
+      "mechanism": "Benzodiazepines potentiate GABA-A-mediated CNS depression. Opioids cause mu-receptor-mediated respiratory depression independent of GABAergic pathways. Combined, the two mechanisms act synergistically — not merely additively — to suppress respiratory drive, causing profound hypoventilation, hypoxia, and death. FDA issued a Black Box Warning in 2016 for this combination.",
+      "management": "Avoid concurrent prescribing. When both are medically necessary, use the lowest effective dose of each, limit duration, monitor respiratory status closely, and prescribe naloxone to patients and caregivers. Never take with alcohol. Counsel patients on the combination's lethality.",
+      "source_urls": [
+        "https://www.fda.gov/drugs/drug-safety-and-availability/fda-drug-safety-communication-fda-warns-about-serious-risks-and-death-when-combining-opioid-pain-or",
+        "https://pubmed.ncbi.nlm.nih.gov/28684079/"
+      ]
+    }
+  ]
+}
