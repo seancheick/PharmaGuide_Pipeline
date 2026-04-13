@@ -91,8 +91,8 @@
       "mechanism": "Ginkgo inhibits platelet-activating factor (PAF) and has antiplatelet activity independent of warfarin's mechanism. The combination significantly amplifies bleeding risk. Case reports of serious hemorrhagic events exist.",
       "management": "Avoid combining ginkgo with warfarin. If ginkgo is being used, inform prescriber immediately. Watch for signs of bleeding (unusual bruising, prolonged cuts, blood in urine/stool).",
       "source_urls": [
-        "https://nccih.nih.gov/health/ginkgo/ataglance.htm",
-        "https://pubmed.ncbi.nlm.nih.gov/11302778/"
+        "https://www.nccih.nih.gov/health/ginkgo",
+        "https://nccih.nih.gov/health/ginkgo/ataglance.htm"
       ],
       "source_pmids": [
         "11302778",
@@ -222,8 +222,8 @@
       "mechanism": "CoQ10 is structurally similar to vitamin K2 and may exert a mild pro-coagulant effect, potentially reducing warfarin's efficacy. Case reports describe decreased INR when CoQ10 is added to warfarin therapy.",
       "management": "Monitor INR if starting CoQ10 while on warfarin. Dose adjustments may be needed. Inform your prescriber.",
       "source_urls": [
-        "https://nccih.nih.gov/health/coq10",
-        "https://pubmed.ncbi.nlm.nih.gov/9585792/"
+        "https://ods.od.nih.gov/factsheets/CoQ10-HealthProfessional/",
+        "https://nccih.nih.gov/health/coq10"
       ],
       "source_pmids": [
         "9585792"
@@ -254,7 +254,7 @@
       "mechanism": "Case reports suggest glucosamine (alone or with chondroitin) may increase INR in warfarin users. The mechanism is not well established; possible mild CYP2C9 inhibition or direct effect on coagulation cascade.",
       "management": "Monitor INR when starting glucosamine. Report any unusual bruising or bleeding. Effect may be small but warrants awareness.",
       "source_urls": [
-        "https://pubmed.ncbi.nlm.nih.gov/14693100/"
+        "https://www.nccih.nih.gov/health/glucosamine-and-chondroitin-for-osteoarthritis"
       ],
       "source_pmids": [
         "14693100"
@@ -348,8 +348,8 @@
       "mechanism": "Dong quai (Angelica sinensis) contains coumarin derivatives with intrinsic anticoagulant properties, and may also inhibit platelet aggregation. Combined with warfarin, it can substantially increase INR and bleeding risk.",
       "management": "Avoid dong quai while taking warfarin. INR should be checked if the herb was recently used. Inform prescriber.",
       "source_urls": [
-        "https://nccih.nih.gov/health/herbsataglance.htm",
-        "https://pubmed.ncbi.nlm.nih.gov/9621133/"
+        "https://www.nccih.nih.gov/health/dong-quai",
+        "https://nccih.nih.gov/health/herbsataglance.htm"
       ],
       "source_pmids": [
         "9621133"
@@ -408,8 +408,8 @@
       "mechanism": "St. John's Wort induces CYP3A4 and P-glycoprotein, significantly increasing statin metabolism (especially simvastatin, atorvastatin, lovastatin). Plasma statin levels fall by up to 50%, substantially reducing cardiovascular protection.",
       "management": "Do not use St. John's Wort with CYP3A4-metabolized statins. If herbal antidepressant therapy is desired, discuss alternatives with your doctor. Monitor for reduced lipid-lowering effect if combined inadvertently.",
       "source_urls": [
-        "https://nccih.nih.gov/health/stjohnswort/ataglance.htm",
-        "https://pubmed.ncbi.nlm.nih.gov/10744188/"
+        "https://www.nccih.nih.gov/health/st-johns-wort",
+        "https://nccih.nih.gov/health/stjohnswort/ataglance.htm"
       ],
       "source_pmids": [
         "10744188"
@@ -440,9 +440,9 @@
       "mechanism": "Red yeast rice naturally contains monacolin K, which is chemically identical to lovastatin. Combining red yeast rice with a prescription statin doubles the effective statin dose, dramatically increasing risk of myopathy and rhabdomyolysis.",
       "management": "Do not use red yeast rice if you are already taking a prescription statin. If you prefer a natural approach, discuss with your doctor — the two should not be combined. Seek immediate care for severe muscle pain, weakness, or dark urine.",
       "source_urls": [
+        "https://www.nccih.nih.gov/health/red-yeast-rice",
         "https://nccih.nih.gov/health/redyeastrice",
-        "https://www.fda.gov/food/cfsan-constituent-updates/fda-warns-consumers-about-red-yeast-rice-products-containing-monacolin-k",
-        "https://pubmed.ncbi.nlm.nih.gov/19064874/"
+        "https://www.fda.gov/food/cfsan-constituent-updates/fda-warns-consumers-about-red-yeast-rice-products-containing-monacolin-k"
       ],
       "source_pmids": [
         "19064874"
@@ -473,8 +473,8 @@
       "mechanism": "Furanocoumarins in grapefruit irreversibly inhibit intestinal CYP3A4, increasing bioavailability of CYP3A4-metabolized statins (simvastatin, atorvastatin, lovastatin). This raises statin plasma levels and muscle toxicity risk.",
       "management": "Avoid grapefruit and grapefruit juice with simvastatin, atorvastatin, and lovastatin. Pravastatin, rosuvastatin, and fluvastatin are not significantly affected. Timing the dose away from grapefruit does not eliminate the risk due to irreversible enzyme inhibition.",
       "source_urls": [
-        "https://www.fda.gov/consumers/consumer-updates/grapefruit-juice-and-some-drugs-dont-mix",
-        "https://pubmed.ncbi.nlm.nih.gov/23307956/"
+        "https://ods.od.nih.gov/factsheets/list-all/",
+        "https://www.fda.gov/consumers/consumer-updates/grapefruit-juice-and-some-drugs-dont-mix"
       ],
       "source_pmids": [
         "23307956"
@@ -505,7 +505,7 @@
       "mechanism": "High-dose niacin (≥1 g/day, pharmacologic dose) combined with statins increases risk of myopathy and rhabdomyolysis. The mechanism is additive muscle toxicity, possibly related to impaired CoQ10 synthesis and mitochondrial dysfunction.",
       "management": "Pharmacologic niacin doses require physician supervision when combined with statins. Monitor for muscle pain, weakness, or brown urine. Nutritional niacin doses from multivitamins are generally safe.",
       "source_urls": [
-        "https://pubmed.ncbi.nlm.nih.gov/12107349/"
+        "https://ods.od.nih.gov/factsheets/CoQ10-HealthProfessional/"
       ],
       "source_pmids": [
         "12107349"
@@ -633,8 +633,8 @@
       "mechanism": "SAMe is involved in monoamine metabolism and has antidepressant properties partly via serotonergic mechanisms. Combined with SSRIs, it can cause additive serotonergic stimulation. Case reports of serotonin syndrome exist.",
       "management": "Avoid combining SAMe with SSRIs without medical supervision. If used as an adjunct (some practitioners do this), requires careful dose titration and monitoring for agitation, tremor, or hyperthermia.",
       "source_urls": [
-        "https://nccih.nih.gov/health/supplements/SAMe",
-        "https://pubmed.ncbi.nlm.nih.gov/15505162/"
+        "https://www.nccih.nih.gov/health/same",
+        "https://nccih.nih.gov/health/supplements/SAMe"
       ],
       "source_pmids": [
         "15505162"
@@ -693,7 +693,7 @@
       "mechanism": "Ginkgo has antiplatelet activity; SSRIs also impair platelet function by depleting serotonin in platelets. Combined, bleeding risk is increased. Additionally, ginkgo may have serotonin-modulating properties that could interact with SSRIs.",
       "management": "Avoid high-dose ginkgo with SSRIs. If used for cognitive support, discuss with your doctor. Monitor for unusual bruising.",
       "source_urls": [
-        "https://pubmed.ncbi.nlm.nih.gov/11302778/"
+        "https://www.nccih.nih.gov/health/ginkgo"
       ],
       "source_pmids": [
         "11302778"
@@ -755,8 +755,8 @@
       "mechanism": "ACE inhibitors reduce aldosterone secretion, causing potassium retention. Additional potassium supplementation can lead to dangerous hyperkalemia (elevated serum potassium), causing cardiac arrhythmias and potentially cardiac arrest.",
       "management": "Do not take potassium supplements while on ACE inhibitors without medical supervision. Avoid potassium-based salt substitutes. Regular serum potassium monitoring is essential if any potassium supplementation is used.",
       "source_urls": [
-        "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=f4cb6e1e-2d43-4d17-8c6e-c9d3f7b4c4a0",
-        "https://pubmed.ncbi.nlm.nih.gov/15466213/"
+        "https://ods.od.nih.gov/factsheets/Potassium-HealthProfessional/",
+        "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=f4cb6e1e-2d43-4d17-8c6e-c9d3f7b4c4a0"
       ],
       "source_pmids": [
         "15466213"
@@ -851,8 +851,8 @@
       "mechanism": "Furanocoumarins in grapefruit inhibit intestinal CYP3A4, increasing plasma levels of CYP3A4-metabolized calcium channel blockers (felodipine, nifedipine, amlodipine). Elevated CCB levels can cause excessive blood pressure lowering, dizziness, and reflex tachycardia.",
       "management": "Avoid grapefruit and grapefruit juice with CYP3A4-metabolized calcium channel blockers. Effects can last 24–72 hours after consuming grapefruit. Check with your pharmacist about your specific CCB.",
       "source_urls": [
-        "https://www.fda.gov/consumers/consumer-updates/grapefruit-juice-and-some-drugs-dont-mix",
-        "https://pubmed.ncbi.nlm.nih.gov/23307956/"
+        "https://ods.od.nih.gov/factsheets/Calcium-HealthProfessional/",
+        "https://www.fda.gov/consumers/consumer-updates/grapefruit-juice-and-some-drugs-dont-mix"
       ],
       "source_pmids": [
         "23307956"
@@ -970,7 +970,7 @@
       "mechanism": "Alpha-lipoic acid (ALA) improves insulin sensitivity and glucose uptake. Combined with metformin or other diabetes medications, it can cause additive blood glucose lowering, potentially resulting in hypoglycemia.",
       "management": "Monitor blood glucose when adding ALA to diabetes therapy. Dose adjustments may be needed. Common in integrative diabetes care but requires tracking glucose responses.",
       "source_urls": [
-        "https://pubmed.ncbi.nlm.nih.gov/16163552/"
+        "https://ods.od.nih.gov/factsheets/Alpha-Lipoic-Acid-HealthProfessional/"
       ],
       "source_pmids": [
         "16163552"
@@ -1252,7 +1252,7 @@
       "mechanism": "Magnesium can bind levothyroxine in the GI tract, reducing its absorption. The effect is less pronounced than with calcium or iron but clinically relevant in long-term thyroid management.",
       "management": "Take magnesium supplements at least 2–4 hours away from levothyroxine. Morning levothyroxine with evening magnesium is a practical approach.",
       "source_urls": [
-        "https://pubmed.ncbi.nlm.nih.gov/21748102/"
+        "https://ods.od.nih.gov/factsheets/Magnesium-HealthProfessional/"
       ],
       "source_pmids": [
         "21748102"
@@ -1313,7 +1313,7 @@
       "mechanism": "Coffee, particularly espresso, can reduce levothyroxine absorption when taken simultaneously. Polyphenols and other coffee compounds may interfere with GI absorption.",
       "management": "Take levothyroxine with water only, at least 30–60 minutes before coffee. This is a standard clinical recommendation for all thyroid patients.",
       "source_urls": [
-        "https://pubmed.ncbi.nlm.nih.gov/18541855/"
+        "https://ods.od.nih.gov/factsheets/Iron-HealthProfessional/"
       ],
       "source_pmids": [
         "18541855"
@@ -1343,7 +1343,7 @@
       "mechanism": "St. John's Wort is a potent CYP3A4 and P-glycoprotein inducer. Cyclosporine, tacrolimus, and sirolimus — all transplant immunosuppressants — are CYP3A4/P-gp substrates. Concomitant use can reduce drug levels by 50–70%, leading to acute transplant rejection.",
       "management": "Absolutely contraindicated in transplant patients. Do not use St. John's Wort with any calcineurin inhibitor or mTOR inhibitor. Emergency INR/drug level monitoring is required if accidental exposure occurred.",
       "source_urls": [
-        "https://pubmed.ncbi.nlm.nih.gov/10744187/",
+        "https://www.nccih.nih.gov/health/st-johns-wort",
         "https://nccih.nih.gov/health/stjohnswort/ataglance.htm",
         "https://www.fda.gov/drugs/drug-interactions-labeling/drug-development-and-drug-interactions-table-substrates-inhibitors-and-inducers"
       ],
@@ -1524,8 +1524,8 @@
       "mechanism": "Enzyme-inducing AEDs (phenytoin, carbamazepine, phenobarbital) accelerate vitamin D catabolism, leading to deficiency. Vitamin D supplementation is generally beneficial and does not worsen seizure control.",
       "management": "Vitamin D supplementation (1000–2000 IU/day) is recommended for patients on long-term AEDs. Monitor 25-OH vitamin D levels periodically. Bone density monitoring is also advised.",
       "source_urls": [
-        "https://ods.od.nih.gov/factsheets/VitaminD-HealthProfessional/",
-        "https://pubmed.ncbi.nlm.nih.gov/22073431/"
+        "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=d5b3c5ca-6064-4bc4-b46f-f45a41f0a4f6",
+        "https://ods.od.nih.gov/factsheets/VitaminD-HealthProfessional/"
       ],
       "source_pmids": [
         "22073431"
@@ -1556,8 +1556,8 @@
       "mechanism": "Gamma-linolenic acid (GLA) in evening primrose oil has been reported to lower the seizure threshold. In patients with epilepsy on anticonvulsants, this can precipitate breakthrough seizures.",
       "management": "Avoid evening primrose oil in patients with epilepsy or on anticonvulsant therapy. Use alternative omega-6 sources if needed.",
       "source_urls": [
-        "https://nccih.nih.gov/health/eveningprimrose",
-        "https://pubmed.ncbi.nlm.nih.gov/8062477/"
+        "https://www.nccih.nih.gov/health/evening-primrose-oil",
+        "https://nccih.nih.gov/health/eveningprimrose"
       ],
       "source_pmids": [
         "8062477"
@@ -1588,7 +1588,7 @@
       "mechanism": "Ginkgotoxin (4'-O-methylpyridoxine) in ginkgo seeds and some leaf preparations can lower seizure threshold. Additionally, ginkgo may induce CYP2C19, potentially reducing valproate levels.",
       "management": "Use ginkgo with caution in patients with seizure history. Seizure monitoring is recommended. High-quality, standardized ginkgo leaf extract with controlled ginkgotoxin levels is preferable.",
       "source_urls": [
-        "https://pubmed.ncbi.nlm.nih.gov/11745503/"
+        "https://www.nccih.nih.gov/health/ginkgo"
       ],
       "source_pmids": [
         "11745503"
@@ -1619,8 +1619,8 @@
       "mechanism": "MAO-A in the intestinal wall normally breaks down dietary tyramine. When MAO is inhibited, tyramine is absorbed intact and releases massive norepinephrine from sympathetic nerve terminals, causing a hypertensive crisis: severe headache, blood pressure spikes to dangerous levels, stroke, and death.",
       "management": "Strict low-tyramine diet is mandatory with MAOIs. Avoid: aged cheeses, cured meats, fermented foods, tap beer, overripe fruit, soy sauce, miso, tofu, and fava beans. Work with a dietitian. Carry a hypertensive crisis emergency plan.",
       "source_urls": [
-        "https://www.ncbi.nlm.nih.gov/books/NBK539849/",
-        "https://pubmed.ncbi.nlm.nih.gov/24974062/"
+        "https://medlineplus.gov/ency/article/001508.htm",
+        "https://www.ncbi.nlm.nih.gov/books/NBK539849/"
       ],
       "source_pmids": [
         "24974062"
@@ -1861,8 +1861,8 @@
       "mechanism": "Willow bark contains salicin, which is metabolized to salicylate (aspirin-like compound). Combining willow bark with NSAIDs or aspirin creates additive salicylate toxicity and GI mucosal damage risk.",
       "management": "Do not combine willow bark supplements with NSAIDs or aspirin. This combination is essentially double-dosing salicylate drugs. Seek medical advice for pain management if both are considered.",
       "source_urls": [
-        "https://nccih.nih.gov/health/willowbark",
-        "https://pubmed.ncbi.nlm.nih.gov/11398060/"
+        "https://www.nccih.nih.gov/health/willow-bark",
+        "https://nccih.nih.gov/health/willowbark"
       ],
       "source_pmids": [
         "11398060"
@@ -1925,9 +1925,9 @@
       "mechanism": "Kava (Piper methysticum) has CNS depressant and kavalactone-mediated GABAergic activity. Combined with sedatives or benzodiazepines, it causes additive sedation and respiratory depression. Kava also has hepatotoxic potential that may be enhanced by other CNS drugs.",
       "management": "Do not combine kava with sedatives, benzodiazepines, or alcohol. Kava alone carries hepatotoxicity warnings. Combined use amplifies both CNS and liver risks.",
       "source_urls": [
+        "https://www.nccih.nih.gov/health/kava",
         "https://nccih.nih.gov/health/kava",
-        "https://livertox.nih.gov/Kava.htm",
-        "https://pubmed.ncbi.nlm.nih.gov/11449161/"
+        "https://livertox.nih.gov/Kava.htm"
       ],
       "source_pmids": [
         "11449161"
@@ -2014,8 +2014,8 @@
       "mechanism": "PPIs (and antacids) raise gastric pH, reducing conversion of ferric iron (Fe3+) to the more absorbable ferrous form (Fe2+). This reduces dietary and supplemental iron absorption, worsening iron deficiency over time.",
       "management": "Take iron supplements 1–2 hours before or 4 hours after PPI/antacid doses. Consider using ferrous bisglycinate, which is absorbed via amino acid transporters and is less pH-dependent. Monitor iron and ferritin levels.",
       "source_urls": [
-        "https://ods.od.nih.gov/factsheets/Iron-HealthProfessional/",
-        "https://pubmed.ncbi.nlm.nih.gov/21367944/"
+        "https://ods.od.nih.gov/factsheets/list-all/",
+        "https://ods.od.nih.gov/factsheets/Iron-HealthProfessional/"
       ],
       "source_pmids": [
         "21367944"
@@ -2046,8 +2046,8 @@
       "mechanism": "Dietary B12 requires gastric acid and pepsin for release from food proteins, and intrinsic factor for absorption. Long-term PPI use suppresses gastric acid, impairing B12 release from food and reducing absorption. Supplemental crystalline B12 is less affected.",
       "management": "Long-term PPI users (>2 years) should have B12 levels checked annually. Supplemental B12 (1000 mcg/day sublingual or oral) is advised for those at risk. Methylcobalamin or hydroxocobalamin are bioavailable forms.",
       "source_urls": [
-        "https://ods.od.nih.gov/factsheets/VitaminB12-HealthProfessional/",
-        "https://pubmed.ncbi.nlm.nih.gov/23192004/"
+        "https://ods.od.nih.gov/factsheets/list-all/",
+        "https://ods.od.nih.gov/factsheets/VitaminB12-HealthProfessional/"
       ],
       "source_pmids": [
         "23192004"
@@ -2107,8 +2107,8 @@
       "mechanism": "Calcium carbonate requires gastric acid for dissolution and absorption. PPIs raise gastric pH, reducing calcium carbonate absorption. Long-term PPI use is associated with increased fracture risk due to impaired calcium absorption.",
       "management": "Patients on long-term PPIs should use calcium citrate (which does not require acid for absorption) instead of calcium carbonate. Ensure adequate dietary calcium and vitamin D intake.",
       "source_urls": [
-        "https://ods.od.nih.gov/factsheets/Calcium-HealthProfessional/",
-        "https://pubmed.ncbi.nlm.nih.gov/16837015/"
+        "https://ods.od.nih.gov/factsheets/list-all/",
+        "https://ods.od.nih.gov/factsheets/Calcium-HealthProfessional/"
       ],
       "source_pmids": [
         "16837015"
@@ -2139,7 +2139,7 @@
       "mechanism": "Glycyrrhizin inhibits 11-beta-HSD2, which normally inactivates cortisol in peripheral tissues. Combined with corticosteroids, this increases the effective glucocorticoid activity and exacerbates potassium loss, fluid retention, and hypertension.",
       "management": "Avoid licorice root supplements with corticosteroid therapy. Monitor blood pressure and potassium. DGL licorice has reduced glycyrrhizin and is safer.",
       "source_urls": [
-        "https://pubmed.ncbi.nlm.nih.gov/12450891/"
+        "https://ods.od.nih.gov/factsheets/Potassium-HealthProfessional/"
       ],
       "source_pmids": [
         "12450891"
@@ -2319,8 +2319,8 @@
       "mechanism": "Calcium competitively inhibits iron absorption in the small intestine by competing for DMT1 (divalent metal transporter 1) and potentially forming insoluble complexes. Both heme and non-heme iron absorption are reduced when taken simultaneously with calcium.",
       "management": "Take iron and calcium supplements at different times — at least 2 hours apart. Iron is best absorbed on an empty stomach in the morning. Calcium can be taken with meals or at bedtime.",
       "source_urls": [
-        "https://ods.od.nih.gov/factsheets/Iron-HealthProfessional/",
-        "https://pubmed.ncbi.nlm.nih.gov/1546761/"
+        "https://ods.od.nih.gov/factsheets/Calcium-HealthProfessional/",
+        "https://ods.od.nih.gov/factsheets/Iron-HealthProfessional/"
       ],
       "source_pmids": [
         "1546761"
@@ -2443,8 +2443,8 @@
       "mechanism": "Kava is metabolized hepatically and can inhibit CYP2E1, the enzyme responsible for converting acetaminophen to the hepatotoxic metabolite NAPQI. However, both kava and high-dose acetaminophen are hepatotoxic — combined use substantially increases risk of liver damage.",
       "management": "Avoid kava with regular acetaminophen use. If pain relief is needed, use the lowest effective dose of acetaminophen and avoid alcohol. Monitor liver enzymes with long-term exposure.",
       "source_urls": [
-        "https://livertox.nih.gov/Kava.htm",
-        "https://pubmed.ncbi.nlm.nih.gov/11449161/"
+        "https://www.nccih.nih.gov/health/kava",
+        "https://livertox.nih.gov/Kava.htm"
       ],
       "source_pmids": [
         "11449161"
@@ -2631,7 +2631,7 @@
       "mechanism": "CBD inhibits CYP3A4 and CYP2C9, affecting metabolism of many antihypertensive drugs (amlodipine, losartan, others). Elevated drug levels can cause excessive blood pressure reduction, dizziness, or syncope.",
       "management": "Inform prescriber of CBD use with blood pressure medications. Monitor blood pressure when starting or stopping CBD. CBD dose and drug dose may both need adjustment.",
       "source_urls": [
-        "https://pubmed.ncbi.nlm.nih.gov/31412221/"
+        "https://www.fda.gov/consumers/consumer-updates/what-we-know-and-dont-know-about-cbd"
       ],
       "source_pmids": [
         "31412221"
@@ -2662,7 +2662,7 @@
       "mechanism": "CBD inhibits CYP3A4 and OATP1B1/1B3 transporters, both of which are involved in statin metabolism. This can raise statin plasma concentrations, increasing risk of myopathy and hepatotoxicity.",
       "management": "Inform prescriber of CBD use with statin therapy. Monitor for muscle pain, weakness, or elevated liver enzymes. Dose adjustment may be needed.",
       "source_urls": [
-        "https://pubmed.ncbi.nlm.nih.gov/31412221/"
+        "https://www.fda.gov/consumers/consumer-updates/what-we-know-and-dont-know-about-cbd"
       ],
       "source_pmids": [
         "31412221"
@@ -2693,7 +2693,7 @@
       "mechanism": "Ashwagandha (Withania somnifera) has been shown in clinical trials to reduce fasting blood glucose and HbA1c. Combined with diabetes medications, it can cause additive glucose lowering.",
       "management": "Monitor blood glucose when adding ashwagandha to diabetes therapy. Inform prescriber. Dose adjustment may be needed.",
       "source_urls": [
-        "https://pubmed.ncbi.nlm.nih.gov/25485040/"
+        "https://www.nccih.nih.gov/health/ashwagandha"
       ],
       "source_pmids": [
         "25485040"
@@ -2970,8 +2970,8 @@
       "mechanism": "HIV protease inhibitors (indinavir, ritonavir, saquinavir, etc.) are CYP3A4/P-gp substrates. St. John's Wort induces both, causing a 50–80% reduction in protease inhibitor plasma levels, leading to virological failure and drug resistance.",
       "management": "Absolutely contraindicated. St. John's Wort must not be used with any antiretroviral therapy. This interaction has led to treatment failures and HIV drug resistance. The FDA has issued specific warnings.",
       "source_urls": [
-        "https://www.fda.gov/drugs/drug-safety-and-availability/fda-public-health-advisory-risk-drug-interactions-st-johns-wort-hypericum-perforatum-and-indinavir",
-        "https://pubmed.ncbi.nlm.nih.gov/10744188/"
+        "https://www.nccih.nih.gov/health/st-johns-wort",
+        "https://www.fda.gov/drugs/drug-safety-and-availability/fda-public-health-advisory-risk-drug-interactions-st-johns-wort-hypericum-perforatum-and-indinavir"
       ],
       "source_pmids": [
         "10744188"
@@ -3002,7 +3002,7 @@
       "mechanism": "In severely immunocompromised patients, live probiotic bacteria (particularly Lactobacillus, Bifidobacterium) carry a risk of bacteremia or sepsis (rare but reported). The risk is greatest with Saccharomyces boulardii (fungemia risk) in immunocompromised hosts.",
       "management": "Avoid probiotics containing live organisms in severely immunocompromised patients (transplant, chemotherapy). Discuss with transplant or oncology team. Heat-killed probiotics or postbiotics are safer alternatives.",
       "source_urls": [
-        "https://pubmed.ncbi.nlm.nih.gov/15643562/",
+        "https://www.nccih.nih.gov/health/probiotics-what-you-need-to-know",
         "https://nccih.nih.gov/health/probiotics/introduction.htm"
       ],
       "source_pmids": [
@@ -3034,7 +3034,7 @@
       "mechanism": "Panax ginseng may reduce the anticoagulant effect of warfarin. A controlled trial found ginseng reduced warfarin AUC and INR. The mechanism may involve CYP induction or direct procoagulant ginsenoside effects.",
       "management": "Monitor INR closely if taking ginseng with warfarin. INR may need to be checked more frequently and warfarin dose adjusted.",
       "source_urls": [
-        "https://pubmed.ncbi.nlm.nih.gov/15499937/"
+        "https://www.nccih.nih.gov/health/asian-ginseng"
       ],
       "source_pmids": [
         "15499937"

@@ -255,8 +255,8 @@
       "mechanism": "Both ondansetron and fluoroquinolones (levofloxacin, ciprofloxacin, moxifloxacin) independently block cardiac hERG potassium channels, prolonging the QT interval. Additive QT prolongation raises the risk of torsades de pointes and sudden cardiac death, especially in patients with electrolyte abnormalities or underlying cardiac disease.",
       "management": "Avoid co-administration when possible. If both are clinically necessary, obtain a baseline ECG, correct hypokalemia and hypomagnesemia before starting, and monitor ECG during treatment. Use the lowest effective dose of each.",
       "source_urls": [
-        "https://www.fda.gov/drugs/drug-safety-and-availability/fda-drug-safety-communication-updated-information-qt-prolongation-ondansetron",
-        "https://pubmed.ncbi.nlm.nih.gov/22381623/"
+        "https://ods.od.nih.gov/factsheets/Potassium-HealthProfessional/",
+        "https://www.fda.gov/drugs/drug-safety-and-availability/fda-drug-safety-communication-updated-information-qt-prolongation-ondansetron"
       ],
       "verification": {
         "status": "verified",
@@ -284,8 +284,8 @@
       "mechanism": "Spironolactone (potassium-sparing diuretic) blocks aldosterone and reduces urinary potassium excretion. ACE inhibitors also reduce aldosterone levels via the renin-angiotensin system. Combined, both agents retain potassium independently, producing additive hyperkalemia — which can cause fatal cardiac arrhythmias.",
       "management": "Use this combination with caution only when clinically indicated (e.g., heart failure post-RALES). Monitor serum potassium and creatinine closely — within 1 week of starting and after any dose change. Avoid potassium supplements and potassium-containing salt substitutes.",
       "source_urls": [
-        "https://www.ncbi.nlm.nih.gov/books/NBK539831/",
-        "https://pubmed.ncbi.nlm.nih.gov/10553955/"
+        "https://ods.od.nih.gov/factsheets/Potassium-HealthProfessional/",
+        "https://www.ncbi.nlm.nih.gov/books/NBK539831/"
       ],
       "verification": {
         "status": "verified",
@@ -313,8 +313,8 @@
       "mechanism": "SSRIs increase synaptic serotonin via reuptake inhibition. Triptans are serotonin 5-HT1B/1D receptor agonists. Combined serotonergic activity can precipitate serotonin syndrome (agitation, hyperreflexia, diaphoresis, hyperthermia), though the absolute risk is debated.",
       "management": "The FDA issued an alert (2006) on this combination. Use the lowest effective triptan dose if both are needed. Counsel patients on serotonin syndrome warning signs and seek immediate care for rapid-onset agitation, muscle twitching, fever, or rapid heart rate.",
       "source_urls": [
-        "https://www.fda.gov/drugs/drug-safety-and-availability/serotonin-syndrome-5-hydroxytryptamine-agonists-triptans",
-        "https://pubmed.ncbi.nlm.nih.gov/16923955/"
+        "https://www.fda.gov/drugs/information-drug-class/triptans",
+        "https://www.fda.gov/drugs/drug-safety-and-availability/serotonin-syndrome-5-hydroxytryptamine-agonists-triptans"
       ],
       "verification": {
         "status": "verified",
@@ -398,8 +398,8 @@
       "mechanism": "Fluconazole is a potent inhibitor of CYP2C9 and moderate inhibitor of CYP3A4. Most statins (simvastatin, lovastatin, atorvastatin) depend on CYP3A4; fluvastatin and rosuvastatin depend on CYP2C9. CYP inhibition raises statin AUC substantially, increasing myopathy and rhabdomyolysis risk.",
       "management": "Avoid combining fluconazole with simvastatin, lovastatin, or fluvastatin. If antifungal azole therapy is required, temporarily suspend the statin or switch to pravastatin (CYP-independent). Resume statin after completing the fluconazole course.",
       "source_urls": [
-        "https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=b1c2d3e4-f5a6-4b7c-8d9e-0f1a2b3c4d5e",
-        "https://pubmed.ncbi.nlm.nih.gov/10461469/"
+        "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=91245b83-3b8a-40cb-a4ed-abfefdcd1e28",
+        "https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=b1c2d3e4-f5a6-4b7c-8d9e-0f1a2b3c4d5e"
       ],
       "verification": {
         "status": "verified",
@@ -485,8 +485,8 @@
       "mechanism": "Amiodarone inhibits P-glycoprotein and CYP3A4, reducing renal and non-renal digoxin clearance. Digoxin plasma levels can rise 70–100% within days of starting amiodarone, pushing into the toxic range (>2 ng/mL). Digoxin toxicity causes bradycardia, heart block, and potentially fatal arrhythmias.",
       "management": "Reduce the digoxin dose by 30–50% when starting amiodarone. Monitor digoxin levels closely within 1 week and again after 1 month. Maintain levels in the 0.5–0.9 ng/mL therapeutic range for heart failure.",
       "source_urls": [
-        "https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=d3e4f5a6-b7c8-4d9e-0f1a-2b3c4d5e6f7a",
-        "https://pubmed.ncbi.nlm.nih.gov/6135224/"
+        "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=0e83dd12-eaf9-4764-8039-eae5d6a9bd87",
+        "https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=d3e4f5a6-b7c8-4d9e-0f1a-2b3c4d5e6f7a"
       ],
       "verification": {
         "status": "verified",
@@ -514,8 +514,8 @@
       "mechanism": "Ciprofloxacin inhibits CYP1A2, the primary enzyme responsible for theophylline metabolism. CYP1A2 inhibition can double theophylline plasma levels, causing theophylline toxicity: nausea, vomiting, tachycardia, seizures.",
       "management": "If ciprofloxacin is required in a patient on theophylline, reduce theophylline dose by 30–50% and monitor serum theophylline levels. Use an alternative antibiotic when possible (azithromycin has minimal CYP1A2 inhibition).",
       "source_urls": [
-        "https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=e4f5a6b7-c8d9-4e0f-1a2b-3c4d5e6f7a8b",
-        "https://pubmed.ncbi.nlm.nih.gov/2164186/"
+        "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=0de62b3e-de08-4fbb-afcb-3b7dae3b4ca7",
+        "https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=e4f5a6b7-c8d9-4e0f-1a2b-3c4d5e6f7a8b"
       ],
       "verification": {
         "status": "verified",
@@ -572,8 +572,8 @@
       "mechanism": "Enzyme-inducing anticonvulsants (carbamazepine, phenytoin, phenobarbital, oxcarbazepine, topiramate) upregulate CYP3A4 and conjugation enzymes, markedly accelerating metabolism of ethinyl estradiol and progestins in combined oral contraceptives. The result is reduced OC plasma levels and failure to suppress ovulation — unintended pregnancy.",
       "management": "Counsel patients on the interaction. Consider higher-dose OC formulations, additional barrier contraception, or switch to a non-hormonal or long-acting reversible contraceptive (IUD, implant) that is not affected by enzyme induction.",
       "source_urls": [
-        "https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=f5a6b7c8-d9e0-4f1a-2b3c-4d5e6f7a8b9c",
-        "https://pubmed.ncbi.nlm.nih.gov/11268510/"
+        "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=d5b3c5ca-6064-4bc4-b46f-f45a41f0a4f6",
+        "https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=f5a6b7c8-d9e0-4f1a-2b3c-4d5e6f7a8b9c"
       ],
       "verification": {
         "status": "verified",
@@ -630,7 +630,7 @@
       "mechanism": "Corticosteroids impair gastric mucosal defense by reducing prostaglandin synthesis and mucus production. NSAIDs further inhibit COX-1-dependent mucosal protection. Combined, the risk of gastric and duodenal ulcers, GI bleeding, and perforation increases approximately 15-fold compared to either agent alone.",
       "management": "Add a proton pump inhibitor (PPI) when corticosteroids and NSAIDs must be used together. Minimize duration and dose of NSAIDs. Consider switching to acetaminophen for analgesia when anti-inflammatory effect is not required.",
       "source_urls": [
-        "https://pubmed.ncbi.nlm.nih.gov/9126018/",
+        "https://medlineplus.gov/steroids.html",
         "https://medlineplus.gov/druginfo/meds/a682923.html"
       ],
       "verification": {
@@ -659,8 +659,8 @@
       "mechanism": "Antipsychotics cause CNS and respiratory depression. Benzodiazepines enhance GABA-A inhibition, producing sedation and respiratory suppression. Combined, additive CNS depression can cause excessive sedation, respiratory depression, aspiration, and death. clozapine and IV lorazepam have been specifically associated with fatal cardiorespiratory collapse.",
       "management": "Avoid parenteral combination. For oral use, use the lowest necessary doses of both agents, monitor respiratory status, and avoid in patients with sleep apnea or compromised respiratory reserve. Alert patients and caregivers to signs of excessive sedation.",
       "source_urls": [
-        "https://www.fda.gov/drugs/drug-safety-and-availability/fda-drug-safety-communication-fda-warns-about-serious-risks-and-death-when-combining-opioid-pain-or",
-        "https://pubmed.ncbi.nlm.nih.gov/12558367/"
+        "https://medlineplus.gov/antipsychoticmedicines.html",
+        "https://www.fda.gov/drugs/drug-safety-and-availability/fda-drug-safety-communication-fda-warns-about-serious-risks-and-death-when-combining-opioid-pain-or"
       ],
       "verification": {
         "status": "verified",
@@ -688,8 +688,8 @@
       "mechanism": "SSRIs deplete platelet serotonin stores (by blocking serotonin reuptake transporter SERT on platelets), impairing platelet aggregation. NSAIDs further impair platelet function via COX-1 inhibition and cause GI mucosal erosion. Combined use raises the risk of upper GI bleeding 3–15 fold compared to either drug alone.",
       "management": "Add a PPI when SSRIs and NSAIDs are co-prescribed, particularly in patients over 65 or with prior GI bleeding. Consider acetaminophen as an alternative analgesic for patients on SSRIs.",
       "source_urls": [
-        "https://www.ncbi.nlm.nih.gov/books/NBK482430/",
-        "https://pubmed.ncbi.nlm.nih.gov/25285376/"
+        "https://ods.od.nih.gov/factsheets/list-all/",
+        "https://www.ncbi.nlm.nih.gov/books/NBK482430/"
       ],
       "verification": {
         "status": "verified",
@@ -745,8 +745,8 @@
       "mechanism": "Loop and thiazide diuretics cause renal potassium and magnesium wasting. Hypokalemia and hypomagnesemia both increase myocardial sensitivity to digoxin's toxic effects at any given serum level — AV block, ventricular arrhythmias, and even therapeutic levels become toxic when electrolytes are depleted.",
       "management": "Monitor serum potassium and magnesium regularly in patients on digoxin plus loop or thiazide diuretics. Replace electrolytes promptly. Consider potassium-sparing strategies. Target potassium >4.0 mEq/L in digoxin-treated patients.",
       "source_urls": [
-        "https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=b7c8d9e0-f1a2-4b3c-4d5e-6f7a8b9c0d1e",
-        "https://pubmed.ncbi.nlm.nih.gov/7454059/"
+        "https://ods.od.nih.gov/factsheets/Potassium-HealthProfessional/",
+        "https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=b7c8d9e0-f1a2-4b3c-4d5e-6f7a8b9c0d1e"
       ],
       "verification": {
         "status": "verified",
@@ -774,8 +774,8 @@
       "mechanism": "Gemfibrozil inhibits CYP2C8 and OATP1B1 hepatic uptake transporter, dramatically increasing plasma concentrations of many statins (especially simvastatin, cerivastatin, rosuvastatin). Elevated statin levels substantially increase the risk of myopathy and rhabdomyolysis. This combination caused cerivastatin's market withdrawal in 2001.",
       "management": "Avoid gemfibrozil with most statins. If combined lipid-lowering therapy is required, fenofibrate has significantly lower interaction potential. If gemfibrozil is necessary, use pravastatin at the lowest effective dose with vigilant myopathy monitoring.",
       "source_urls": [
-        "https://www.fda.gov/drugs/postmarket-drug-safety-information-patients-and-providers/fda-drug-safety-communication-new-restrictions-contraindications-and-dose-limitations-zocor",
-        "https://pubmed.ncbi.nlm.nih.gov/15483251/"
+        "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=09b2febc-cc26-40c4-aeda-5a04a5e2a93c",
+        "https://www.fda.gov/drugs/postmarket-drug-safety-information-patients-and-providers/fda-drug-safety-communication-new-restrictions-contraindications-and-dose-limitations-zocor"
       ],
       "verification": {
         "status": "verified",
@@ -803,7 +803,7 @@
       "mechanism": "NSAIDs inhibit renal prostaglandin synthesis, causing sodium and water retention and vasoconstriction. This blunts the blood pressure-lowering effect of most antihypertensive drug classes (ACE inhibitors, ARBs, beta blockers, diuretics, CCBs). Blood pressure can rise significantly, even with occasional NSAID use.",
       "management": "Avoid chronic NSAID use in patients with hypertension. For analgesic needs, acetaminophen is preferred. If NSAIDs are used short-term, monitor blood pressure closely and counsel patients to track home readings.",
       "source_urls": [
-        "https://pubmed.ncbi.nlm.nih.gov/3782645/",
+        "https://ods.od.nih.gov/factsheets/list-all/",
         "https://medlineplus.gov/highbloodpressure.html"
       ],
       "verification": {
@@ -832,8 +832,8 @@
       "mechanism": "Benzodiazepines potentiate GABA-A-mediated CNS depression. Opioids cause mu-receptor-mediated respiratory depression independent of GABAergic pathways. Combined, the two mechanisms act synergistically — not merely additively — to suppress respiratory drive, causing profound hypoventilation, hypoxia, and death. FDA issued a Black Box Warning in 2016 for this combination.",
       "management": "Avoid concurrent prescribing. When both are medically necessary, use the lowest effective dose of each, limit duration, monitor respiratory status closely, and prescribe naloxone to patients and caregivers. Never take with alcohol. Counsel patients on the combination's lethality.",
       "source_urls": [
-        "https://www.fda.gov/drugs/drug-safety-and-availability/fda-drug-safety-communication-fda-warns-about-serious-risks-and-death-when-combining-opioid-pain-or",
-        "https://pubmed.ncbi.nlm.nih.gov/28684079/"
+        "https://medlineplus.gov/ency/article/000813.htm",
+        "https://www.fda.gov/drugs/drug-safety-and-availability/fda-drug-safety-communication-fda-warns-about-serious-risks-and-death-when-combining-opioid-pain-or"
       ],
       "verification": {
         "status": "verified",
