@@ -28,7 +28,20 @@
       "source_urls": [
         "https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=f6c50c08-b777-4959-9b42-d6e5ca748c15",
         "https://www.ncbi.nlm.nih.gov/books/NBK482377/"
-      ]
+      ],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": false
+        },
+        "method": "live_api_batch_2026_04_13"
+      },
+      "evidence_basis": "label_regulatory",
+      "clinical_confidence": "high",
+      "applies_to": "whole_class"
     },
     {
       "id": "DDI_MAOI_MEPERIDINE",
@@ -44,7 +57,20 @@
       "source_urls": [
         "https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=5a1ffe5b-9b47-4b6c-9b3e-7f2f1df8f6b8",
         "https://www.ncbi.nlm.nih.gov/books/NBK482377/"
-      ]
+      ],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": false
+        },
+        "method": "live_api_batch_2026_04_13"
+      },
+      "evidence_basis": "label_regulatory",
+      "clinical_confidence": "high",
+      "applies_to": "whole_class"
     },
     {
       "id": "DDI_MTX_TRIMETHOPRIM",
@@ -60,7 +86,19 @@
       "source_urls": [
         "https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=3a7b2e1c-8d4f-4a6e-b9c3-1f5e2d8a7b6c",
         "https://www.ncbi.nlm.nih.gov/books/NBK537260/"
-      ]
+      ],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": false
+        },
+        "method": "live_api_batch_2026_04_13"
+      },
+      "evidence_basis": "label_regulatory",
+      "clinical_confidence": "high"
     },
     {
       "id": "DDI_ERGOTAMINE_ERYTHROMYCIN",
@@ -76,7 +114,19 @@
       "source_urls": [
         "https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=d1c3e2f4-a5b6-4c7d-8e9f-0a1b2c3d4e5f",
         "https://www.ncbi.nlm.nih.gov/books/NBK548308/"
-      ]
+      ],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": false
+        },
+        "method": "live_api_batch_2026_04_13"
+      },
+      "evidence_basis": "label_regulatory",
+      "clinical_confidence": "high"
     },
     {
       "id": "DDI_ANTICOAG_NSAID",
@@ -92,7 +142,20 @@
       "source_urls": [
         "https://www.ncbi.nlm.nih.gov/books/NBK470313/",
         "https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=22c7cfba-cf98-4395-a09b-af31e2f0e9cf"
-      ]
+      ],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": false
+        },
+        "method": "live_api_batch_2026_04_13"
+      },
+      "evidence_basis": "label_regulatory",
+      "clinical_confidence": "medium",
+      "applies_to": "dose_dependent"
     },
     {
       "id": "DDI_LITHIUM_ACE",
@@ -108,7 +171,20 @@
       "source_urls": [
         "https://www.ncbi.nlm.nih.gov/books/NBK519062/",
         "https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=1d61c4b7-b095-4f25-b01f-d2a9bdb2f1db"
-      ]
+      ],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": false
+        },
+        "method": "live_api_batch_2026_04_13"
+      },
+      "evidence_basis": "label_regulatory",
+      "clinical_confidence": "medium",
+      "applies_to": "dose_dependent"
     },
     {
       "id": "DDI_LITHIUM_THIAZIDE",
@@ -124,7 +200,20 @@
       "source_urls": [
         "https://www.ncbi.nlm.nih.gov/books/NBK519062/",
         "https://medlineplus.gov/druginfo/meds/a681039.html"
-      ]
+      ],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": false
+        },
+        "method": "live_api_batch_2026_04_13"
+      },
+      "evidence_basis": "authoritative_review",
+      "clinical_confidence": "medium",
+      "applies_to": "dose_dependent"
     },
     {
       "id": "DDI_SIMVASTATIN_ERYTHROMYCIN",
@@ -140,7 +229,19 @@
       "source_urls": [
         "https://www.fda.gov/drugs/drug-safety-and-availability/fda-drug-safety-communication-new-restrictions-contraindications-and-dose-limitations-zocor",
         "https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=a7b8c9d0-e1f2-4a3b-5c6d-7e8f9a0b1c2d"
-      ]
+      ],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": false
+        },
+        "method": "live_api_batch_2026_04_13"
+      },
+      "evidence_basis": "label_regulatory",
+      "clinical_confidence": "medium"
     },
     {
       "id": "DDI_ONDANSETRON_LEVOFLOXACIN",
@@ -154,9 +255,22 @@
       "mechanism": "Both ondansetron and fluoroquinolones (levofloxacin, ciprofloxacin, moxifloxacin) independently block cardiac hERG potassium channels, prolonging the QT interval. Additive QT prolongation raises the risk of torsades de pointes and sudden cardiac death, especially in patients with electrolyte abnormalities or underlying cardiac disease.",
       "management": "Avoid co-administration when possible. If both are clinically necessary, obtain a baseline ECG, correct hypokalemia and hypomagnesemia before starting, and monitor ECG during treatment. Use the lowest effective dose of each.",
       "source_urls": [
-        "https://www.fda.gov/drugs/drug-safety-and-availability/fda-drug-safety-communication-revised-recommendations-celexa-citalopram",
+        "https://www.fda.gov/drugs/drug-safety-and-availability/fda-drug-safety-communication-updated-information-qt-prolongation-ondansetron",
         "https://pubmed.ncbi.nlm.nih.gov/22381623/"
-      ]
+      ],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": true
+        },
+        "method": "live_api_batch_2026_04_13"
+      },
+      "evidence_basis": "label_regulatory",
+      "clinical_confidence": "high",
+      "applies_to": "dose_dependent"
     },
     {
       "id": "DDI_SPIRO_ACE",
@@ -172,7 +286,20 @@
       "source_urls": [
         "https://www.ncbi.nlm.nih.gov/books/NBK539831/",
         "https://pubmed.ncbi.nlm.nih.gov/10553955/"
-      ]
+      ],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": true
+        },
+        "method": "live_api_batch_2026_04_13"
+      },
+      "evidence_basis": "clinical_literature",
+      "clinical_confidence": "high",
+      "applies_to": "dose_dependent"
     },
     {
       "id": "DDI_SSRI_TRIPTAN",
@@ -188,15 +315,28 @@
       "source_urls": [
         "https://www.fda.gov/drugs/drug-safety-and-availability/serotonin-syndrome-5-hydroxytryptamine-agonists-triptans",
         "https://pubmed.ncbi.nlm.nih.gov/16923955/"
-      ]
+      ],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": true
+        },
+        "method": "live_api_batch_2026_04_13"
+      },
+      "evidence_basis": "label_regulatory",
+      "clinical_confidence": "high",
+      "applies_to": "dose_dependent"
     },
     {
       "id": "DDI_METFORMIN_IVCONTRAST",
-      "type": "Med-Med",
+      "type": "Med-Procedure",
       "agent1_name": "Metformin",
       "agent1_id": "6809",
       "agent2_name": "Iodinated IV Contrast Media",
-      "agent2_id": "class:diabetes_meds",
+      "agent2_id": "ref:iodinated_contrast",
       "severity": "Major",
       "interaction_effect_type": "Enhancer",
       "mechanism": "Iodinated contrast agents can acutely impair renal function (contrast-induced nephropathy). Metformin is renally cleared; acute kidney injury causes metformin accumulation, blocking hepatic lactate metabolism and producing potentially fatal lactic acidosis. Note: this is a procedural drug-drug interaction, not a chronic DDI.",
@@ -204,7 +344,19 @@
       "source_urls": [
         "https://www.fda.gov/drugs/postmarket-drug-safety-information-patients-and-providers/metformin-containing-drugs-drug-safety-communication-revised-warnings-certain-patients-kidney",
         "https://www.ncbi.nlm.nih.gov/books/NBK557737/"
-      ]
+      ],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": false
+        },
+        "method": "live_api_batch_2026_04_13"
+      },
+      "evidence_basis": "label_regulatory",
+      "clinical_confidence": "medium"
     },
     {
       "id": "DDI_CLOPIDOGREL_OMEPRAZOLE",
@@ -220,7 +372,19 @@
       "source_urls": [
         "https://www.fda.gov/drugs/postmarket-drug-safety-information-patients-and-providers/information-healthcare-professionals-update-prasugrel-plavix-clopidogrel-bisulfate-and-omeprazole",
         "https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=6e7f8a9b-0c1d-4e5f-a6b7-c8d9e0f1a2b3"
-      ]
+      ],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": false
+        },
+        "method": "live_api_batch_2026_04_13"
+      },
+      "evidence_basis": "label_regulatory",
+      "clinical_confidence": "medium"
     },
     {
       "id": "DDI_FLUCONAZOLE_STATINS",
@@ -236,7 +400,20 @@
       "source_urls": [
         "https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=b1c2d3e4-f5a6-4b7c-8d9e-0f1a2b3c4d5e",
         "https://pubmed.ncbi.nlm.nih.gov/10461469/"
-      ]
+      ],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": true
+        },
+        "method": "live_api_batch_2026_04_13"
+      },
+      "evidence_basis": "label_regulatory",
+      "clinical_confidence": "high",
+      "applies_to": "whole_class"
     },
     {
       "id": "DDI_BETABLOCKER_VERAPAMIL",
@@ -252,15 +429,28 @@
       "source_urls": [
         "https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=c2d3e4f5-a6b7-4c8d-9e0f-1a2b3c4d5e6f",
         "https://pubmed.ncbi.nlm.nih.gov/6133710/"
-      ]
+      ],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": true
+        },
+        "method": "live_api_batch_2026_04_13"
+      },
+      "evidence_basis": "label_regulatory",
+      "clinical_confidence": "medium",
+      "applies_to": "dose_dependent"
     },
     {
       "id": "DDI_ACE_KSUPPLEMENT",
-      "type": "Med-Med",
+      "type": "Med-Sup",
       "agent1_name": "ACE Inhibitors (class)",
       "agent1_id": "class:ace_inhibitors",
-      "agent2_name": "Potassium supplements",
-      "agent2_id": "class:diabetes_meds",
+      "agent2_name": "Potassium (supplement)",
+      "agent2_id": "C0032821",
       "severity": "Moderate",
       "interaction_effect_type": "Additive",
       "mechanism": "ACE inhibitors block angiotensin II-driven aldosterone release, causing potassium retention. Adding supplemental potassium (including potassium-based salt substitutes) can cause hyperkalemia, especially in patients with renal impairment or diabetes.",
@@ -268,7 +458,20 @@
       "source_urls": [
         "https://ods.od.nih.gov/factsheets/Potassium-HealthProfessional/",
         "https://medlineplus.gov/druginfo/meds/a692005.html"
-      ]
+      ],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": false
+        },
+        "method": "live_api_batch_2026_04_13"
+      },
+      "evidence_basis": "authoritative_review",
+      "clinical_confidence": "medium",
+      "applies_to": "whole_class"
     },
     {
       "id": "DDI_DIGOXIN_AMIODARONE",
@@ -284,7 +487,20 @@
       "source_urls": [
         "https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=d3e4f5a6-b7c8-4d9e-0f1a-2b3c4d5e6f7a",
         "https://pubmed.ncbi.nlm.nih.gov/6135224/"
-      ]
+      ],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": true
+        },
+        "method": "live_api_batch_2026_04_13"
+      },
+      "evidence_basis": "label_regulatory",
+      "clinical_confidence": "medium",
+      "applies_to": "dose_dependent"
     },
     {
       "id": "DDI_THEOPHYLLINE_CIPRO",
@@ -300,7 +516,20 @@
       "source_urls": [
         "https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=e4f5a6b7-c8d9-4e0f-1a2b-3c4d5e6f7a8b",
         "https://pubmed.ncbi.nlm.nih.gov/2164186/"
-      ]
+      ],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": true
+        },
+        "method": "live_api_batch_2026_04_13"
+      },
+      "evidence_basis": "label_regulatory",
+      "clinical_confidence": "medium",
+      "applies_to": "dose_dependent"
     },
     {
       "id": "DDI_ANTICOAG_ACETAMINOPHEN",
@@ -316,7 +545,20 @@
       "source_urls": [
         "https://pubmed.ncbi.nlm.nih.gov/9726980/",
         "https://www.ncbi.nlm.nih.gov/books/NBK470313/"
-      ]
+      ],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": true
+        },
+        "method": "live_api_batch_2026_04_13"
+      },
+      "evidence_basis": "clinical_literature",
+      "clinical_confidence": "medium",
+      "applies_to": "dose_dependent"
     },
     {
       "id": "DDI_ANTICONV_OCP",
@@ -332,7 +574,20 @@
       "source_urls": [
         "https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=f5a6b7c8-d9e0-4f1a-2b3c-4d5e6f7a8b9c",
         "https://pubmed.ncbi.nlm.nih.gov/11268510/"
-      ]
+      ],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": true
+        },
+        "method": "live_api_batch_2026_04_13"
+      },
+      "evidence_basis": "label_regulatory",
+      "clinical_confidence": "medium",
+      "applies_to": "dose_dependent"
     },
     {
       "id": "DDI_PHENYTOIN_VALPROATE",
@@ -348,7 +603,20 @@
       "source_urls": [
         "https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=a6b7c8d9-e0f1-4a2b-3c4d-5e6f7a8b9c0d",
         "https://pubmed.ncbi.nlm.nih.gov/6108530/"
-      ]
+      ],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": true
+        },
+        "method": "live_api_batch_2026_04_13"
+      },
+      "evidence_basis": "label_regulatory",
+      "clinical_confidence": "medium",
+      "applies_to": "dose_dependent"
     },
     {
       "id": "DDI_CORTICO_NSAID",
@@ -364,7 +632,20 @@
       "source_urls": [
         "https://pubmed.ncbi.nlm.nih.gov/9126018/",
         "https://medlineplus.gov/druginfo/meds/a682923.html"
-      ]
+      ],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": true
+        },
+        "method": "live_api_batch_2026_04_13"
+      },
+      "evidence_basis": "clinical_literature",
+      "clinical_confidence": "medium",
+      "applies_to": "dose_dependent"
     },
     {
       "id": "DDI_ANTIPSYCH_BENZO",
@@ -375,12 +656,25 @@
       "agent2_id": "class:benzodiazepines",
       "severity": "Moderate",
       "interaction_effect_type": "Additive",
-      "mechanism": "Antipsychotics cause CNS and respiratory depression. Benzodiazepines enhance GABA-A inhibition, producing sedation and respiratory suppression. Combined, additive CNS depression can cause excessive sedation, respiratory depression, aspiration, and death. IV clozapine and IV lorazepam have been specifically associated with fatal cardiorespiratory collapse.",
+      "mechanism": "Antipsychotics cause CNS and respiratory depression. Benzodiazepines enhance GABA-A inhibition, producing sedation and respiratory suppression. Combined, additive CNS depression can cause excessive sedation, respiratory depression, aspiration, and death. clozapine and IV lorazepam have been specifically associated with fatal cardiorespiratory collapse.",
       "management": "Avoid parenteral combination. For oral use, use the lowest necessary doses of both agents, monitor respiratory status, and avoid in patients with sleep apnea or compromised respiratory reserve. Alert patients and caregivers to signs of excessive sedation.",
       "source_urls": [
         "https://www.fda.gov/drugs/drug-safety-and-availability/fda-drug-safety-communication-fda-warns-about-serious-risks-and-death-when-combining-opioid-pain-or",
         "https://pubmed.ncbi.nlm.nih.gov/12558367/"
-      ]
+      ],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": true
+        },
+        "method": "live_api_batch_2026_04_13"
+      },
+      "evidence_basis": "label_regulatory",
+      "clinical_confidence": "medium",
+      "applies_to": "dose_dependent"
     },
     {
       "id": "DDI_SSRI_NSAID",
@@ -396,15 +690,28 @@
       "source_urls": [
         "https://www.ncbi.nlm.nih.gov/books/NBK482430/",
         "https://pubmed.ncbi.nlm.nih.gov/25285376/"
-      ]
+      ],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": true
+        },
+        "method": "live_api_batch_2026_04_13"
+      },
+      "evidence_basis": "clinical_literature",
+      "clinical_confidence": "medium",
+      "applies_to": "whole_class"
     },
     {
       "id": "DDI_METFORMIN_ALCOHOL",
-      "type": "Med-Med",
+      "type": "Med-Lifestyle",
       "agent1_name": "Metformin",
       "agent1_id": "6809",
       "agent2_name": "Alcohol",
-      "agent2_id": "class:sedatives",
+      "agent2_id": "ref:alcohol",
       "severity": "Moderate",
       "interaction_effect_type": "Additive",
       "mechanism": "Alcohol inhibits gluconeogenesis and increases lactate production by shifting NAD+/NADH ratio. Metformin also reduces hepatic lactate clearance. Heavy or binge alcohol intake combined with metformin increases lactic acidosis risk, especially in patients with hepatic impairment, renal insufficiency, or dehydration. Note: this is a lifestyle drug interaction.",
@@ -412,7 +719,19 @@
       "source_urls": [
         "https://www.ncbi.nlm.nih.gov/books/NBK557737/",
         "https://medlineplus.gov/druginfo/meds/a696005.html"
-      ]
+      ],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": false
+        },
+        "method": "live_api_batch_2026_04_13"
+      },
+      "evidence_basis": "authoritative_review",
+      "clinical_confidence": "medium"
     },
     {
       "id": "DDI_DIGOXIN_DIURETICS",
@@ -428,7 +747,20 @@
       "source_urls": [
         "https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=b7c8d9e0-f1a2-4b3c-4d5e-6f7a8b9c0d1e",
         "https://pubmed.ncbi.nlm.nih.gov/7454059/"
-      ]
+      ],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": true
+        },
+        "method": "live_api_batch_2026_04_13"
+      },
+      "evidence_basis": "label_regulatory",
+      "clinical_confidence": "medium",
+      "applies_to": "whole_class"
     },
     {
       "id": "DDI_STATIN_GEMFIBROZIL",
@@ -444,7 +776,20 @@
       "source_urls": [
         "https://www.fda.gov/drugs/postmarket-drug-safety-information-patients-and-providers/fda-drug-safety-communication-new-restrictions-contraindications-and-dose-limitations-zocor",
         "https://pubmed.ncbi.nlm.nih.gov/15483251/"
-      ]
+      ],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": true
+        },
+        "method": "live_api_batch_2026_04_13"
+      },
+      "evidence_basis": "label_regulatory",
+      "clinical_confidence": "medium",
+      "applies_to": "dose_dependent"
     },
     {
       "id": "DDI_ANTIHYP_NSAID",
@@ -460,7 +805,20 @@
       "source_urls": [
         "https://pubmed.ncbi.nlm.nih.gov/3782645/",
         "https://medlineplus.gov/highbloodpressure.html"
-      ]
+      ],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": true
+        },
+        "method": "live_api_batch_2026_04_13"
+      },
+      "evidence_basis": "clinical_literature",
+      "clinical_confidence": "medium",
+      "applies_to": "whole_class"
     },
     {
       "id": "DDI_BENZO_OPIOID",
@@ -476,7 +834,20 @@
       "source_urls": [
         "https://www.fda.gov/drugs/drug-safety-and-availability/fda-drug-safety-communication-fda-warns-about-serious-risks-and-death-when-combining-opioid-pain-or",
         "https://pubmed.ncbi.nlm.nih.gov/28684079/"
-      ]
+      ],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": true
+        },
+        "method": "live_api_batch_2026_04_13"
+      },
+      "evidence_basis": "label_regulatory",
+      "clinical_confidence": "high",
+      "applies_to": "dose_dependent"
     }
   ]
 }

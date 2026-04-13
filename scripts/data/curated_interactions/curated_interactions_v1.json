@@ -32,7 +32,20 @@
       "source_pmids": [
         "12501001",
         "15128046"
-      ]
+      ],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": false
+        },
+        "method": "live_api_batch_2026_04_13"
+      },
+      "evidence_basis": "authoritative_review",
+      "clinical_confidence": "medium",
+      "applies_to": "dose_dependent"
     },
     {
       "id": "DSI_WAR_OMEGA3",
@@ -51,7 +64,20 @@
       ],
       "source_pmids": [
         "18487280"
-      ]
+      ],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": true
+        },
+        "method": "live_api_batch_2026_04_13"
+      },
+      "evidence_basis": "clinical_literature",
+      "clinical_confidence": "medium",
+      "applies_to": "dose_dependent"
     },
     {
       "id": "DSI_WAR_GINKGO",
@@ -71,7 +97,20 @@
       "source_pmids": [
         "11302778",
         "9475490"
-      ]
+      ],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": true
+        },
+        "method": "live_api_batch_2026_04_13"
+      },
+      "evidence_basis": "clinical_literature",
+      "clinical_confidence": "medium",
+      "evidence_notes": "Mixed: observational data suggest increased bleeding risk, but controlled studies at recommended doses show no significant effect. Severity reflects precautionary approach for anticoagulant users."
     },
     {
       "id": "DSI_WAR_GARLIC",
@@ -90,7 +129,21 @@
       ],
       "source_pmids": [
         "10594976"
-      ]
+      ],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": true
+        },
+        "method": "live_api_batch_2026_04_13"
+      },
+      "evidence_basis": "clinical_literature",
+      "clinical_confidence": "medium",
+      "evidence_notes": "Mainly case reports. Culinary amounts are safe. Concentrated supplements may have mild antiplatelet effect.",
+      "applies_to": "dose_dependent"
     },
     {
       "id": "DSI_WAR_SJW",
@@ -111,7 +164,19 @@
       "source_pmids": [
         "10744188",
         "10744187"
-      ]
+      ],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": true
+        },
+        "method": "live_api_batch_2026_04_13"
+      },
+      "evidence_basis": "label_regulatory",
+      "clinical_confidence": "high"
     },
     {
       "id": "DSI_WAR_VITE",
@@ -130,7 +195,20 @@
       ],
       "source_pmids": [
         "11684533"
-      ]
+      ],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": true
+        },
+        "method": "live_api_batch_2026_04_13"
+      },
+      "evidence_basis": "clinical_literature",
+      "clinical_confidence": "medium",
+      "applies_to": "dose_dependent"
     },
     {
       "id": "DSI_WAR_COQ10",
@@ -149,7 +227,20 @@
       ],
       "source_pmids": [
         "9585792"
-      ]
+      ],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": true
+        },
+        "method": "live_api_batch_2026_04_13"
+      },
+      "evidence_basis": "clinical_literature",
+      "clinical_confidence": "medium",
+      "applies_to": "dose_dependent"
     },
     {
       "id": "DSI_WAR_GLUCOSAMINE",
@@ -167,7 +258,19 @@
       ],
       "source_pmids": [
         "14693100"
-      ]
+      ],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": true
+        },
+        "method": "live_api_batch_2026_04_13"
+      },
+      "evidence_basis": "clinical_literature",
+      "clinical_confidence": "low"
     },
     {
       "id": "DSI_WAR_CRANBERRY",
@@ -187,7 +290,19 @@
       "source_pmids": [
         "15383640",
         "16396594"
-      ]
+      ],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": true
+        },
+        "method": "live_api_batch_2026_04_13"
+      },
+      "evidence_basis": "clinical_literature",
+      "clinical_confidence": "medium"
     },
     {
       "id": "DSI_WAR_TURMERIC",
@@ -206,7 +321,20 @@
       ],
       "source_pmids": [
         "22531131"
-      ]
+      ],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": true
+        },
+        "method": "live_api_batch_2026_04_13"
+      },
+      "evidence_basis": "clinical_literature",
+      "clinical_confidence": "medium",
+      "applies_to": "dose_dependent"
     },
     {
       "id": "DSI_WAR_DONGQUAI",
@@ -225,7 +353,19 @@
       ],
       "source_pmids": [
         "9621133"
-      ]
+      ],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": true
+        },
+        "method": "live_api_batch_2026_04_13"
+      },
+      "evidence_basis": "clinical_literature",
+      "clinical_confidence": "high"
     },
     {
       "id": "DSI_WAR_GINGER",
@@ -240,7 +380,21 @@
       "management": "Culinary ginger is safe. High-dose ginger supplements (>2 g/day) warrant awareness. Report unusual bruising. INR monitoring is reasonable if high-dose ginger is started.",
       "source_urls": [
         "https://nccih.nih.gov/health/ginger"
-      ]
+      ],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": false
+        },
+        "method": "live_api_batch_2026_04_13"
+      },
+      "evidence_basis": "authoritative_review",
+      "clinical_confidence": "low",
+      "evidence_notes": "Theoretical based on in-vitro platelet inhibition. Clinical evidence for interaction at dietary doses is weak.",
+      "applies_to": "dose_dependent"
     },
     {
       "id": "DSI_STATINS_SJW",
@@ -259,7 +413,20 @@
       ],
       "source_pmids": [
         "10744188"
-      ]
+      ],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": true
+        },
+        "method": "live_api_batch_2026_04_13"
+      },
+      "evidence_basis": "clinical_literature",
+      "clinical_confidence": "high",
+      "applies_to": "whole_class"
     },
     {
       "id": "DSI_STATINS_RYR",
@@ -279,7 +446,20 @@
       ],
       "source_pmids": [
         "19064874"
-      ]
+      ],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": true
+        },
+        "method": "live_api_batch_2026_04_13"
+      },
+      "evidence_basis": "label_regulatory",
+      "clinical_confidence": "high",
+      "applies_to": "dose_dependent"
     },
     {
       "id": "DSI_STATINS_GRAPEFRUIT",
@@ -298,7 +478,20 @@
       ],
       "source_pmids": [
         "23307956"
-      ]
+      ],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": true
+        },
+        "method": "live_api_batch_2026_04_13"
+      },
+      "evidence_basis": "label_regulatory",
+      "clinical_confidence": "medium",
+      "applies_to": "dose_dependent"
     },
     {
       "id": "DSI_STATINS_NIACIN",
@@ -316,7 +509,20 @@
       ],
       "source_pmids": [
         "12107349"
-      ]
+      ],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": true
+        },
+        "method": "live_api_batch_2026_04_13"
+      },
+      "evidence_basis": "clinical_literature",
+      "clinical_confidence": "medium",
+      "applies_to": "dose_dependent"
     },
     {
       "id": "DSI_STATINS_COQ10",
@@ -335,7 +541,20 @@
       ],
       "source_pmids": [
         "25547491"
-      ]
+      ],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": true
+        },
+        "method": "live_api_batch_2026_04_13"
+      },
+      "evidence_basis": "clinical_literature",
+      "clinical_confidence": "low",
+      "applies_to": "whole_class"
     },
     {
       "id": "DSI_SSRI_SJW",
@@ -355,7 +574,20 @@
       ],
       "source_pmids": [
         "10584377"
-      ]
+      ],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": true
+        },
+        "method": "live_api_batch_2026_04_13"
+      },
+      "evidence_basis": "label_regulatory",
+      "clinical_confidence": "high",
+      "applies_to": "whole_class"
     },
     {
       "id": "DSI_SSRI_5HTP",
@@ -374,7 +606,20 @@
       ],
       "source_pmids": [
         "12410562"
-      ]
+      ],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": true
+        },
+        "method": "live_api_batch_2026_04_13"
+      },
+      "evidence_basis": "clinical_literature",
+      "clinical_confidence": "high",
+      "applies_to": "whole_class"
     },
     {
       "id": "DSI_SSRI_SAME",
@@ -393,7 +638,20 @@
       ],
       "source_pmids": [
         "15505162"
-      ]
+      ],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": true
+        },
+        "method": "live_api_batch_2026_04_13"
+      },
+      "evidence_basis": "clinical_literature",
+      "clinical_confidence": "high",
+      "applies_to": "dose_dependent"
     },
     {
       "id": "DSI_SSRI_FISHOIL",
@@ -408,7 +666,20 @@
       "management": "Fish oil is generally compatible with SSRIs. At doses >3 g/day, minor antiplatelet effects could slightly increase bleeding risk in combination with SSRIs, but this is rarely clinically significant. Discuss with your doctor.",
       "source_urls": [
         "https://ods.od.nih.gov/factsheets/Omega3FattyAcids-HealthProfessional/"
-      ]
+      ],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": false
+        },
+        "method": "live_api_batch_2026_04_13"
+      },
+      "evidence_basis": "authoritative_review",
+      "clinical_confidence": "low",
+      "applies_to": "dose_dependent"
     },
     {
       "id": "DSI_SSRI_GINKGO",
@@ -426,7 +697,20 @@
       ],
       "source_pmids": [
         "11302778"
-      ]
+      ],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": true
+        },
+        "method": "live_api_batch_2026_04_13"
+      },
+      "evidence_basis": "clinical_literature",
+      "clinical_confidence": "medium",
+      "applies_to": "dose_dependent"
     },
     {
       "id": "DSI_SSRI_MELATONIN",
@@ -444,7 +728,20 @@
       ],
       "source_pmids": [
         "9588492"
-      ]
+      ],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": true
+        },
+        "method": "live_api_batch_2026_04_13"
+      },
+      "evidence_basis": "clinical_literature",
+      "clinical_confidence": "low",
+      "applies_to": "dose_dependent"
     },
     {
       "id": "DSI_ACEI_POTASSIUM",
@@ -463,7 +760,20 @@
       ],
       "source_pmids": [
         "15466213"
-      ]
+      ],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": true
+        },
+        "method": "live_api_batch_2026_04_13"
+      },
+      "evidence_basis": "label_regulatory",
+      "clinical_confidence": "high",
+      "applies_to": "whole_class"
     },
     {
       "id": "DSI_ANTIHYP_LICORICE",
@@ -482,7 +792,20 @@
       ],
       "source_pmids": [
         "12450891"
-      ]
+      ],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": true
+        },
+        "method": "live_api_batch_2026_04_13"
+      },
+      "evidence_basis": "clinical_literature",
+      "clinical_confidence": "high",
+      "applies_to": "whole_class"
     },
     {
       "id": "DSI_BETABLOCK_EPHEDRA",
@@ -501,7 +824,20 @@
       ],
       "source_pmids": [
         "15271125"
-      ]
+      ],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": true
+        },
+        "method": "live_api_batch_2026_04_13"
+      },
+      "evidence_basis": "label_regulatory",
+      "clinical_confidence": "high",
+      "applies_to": "whole_class"
     },
     {
       "id": "DSI_CCB_GRAPEFRUIT",
@@ -520,7 +856,20 @@
       ],
       "source_pmids": [
         "23307956"
-      ]
+      ],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": true
+        },
+        "method": "live_api_batch_2026_04_13"
+      },
+      "evidence_basis": "label_regulatory",
+      "clinical_confidence": "medium",
+      "applies_to": "whole_class"
     },
     {
       "id": "DSI_DIURETICS_POTASSIUM",
@@ -535,7 +884,20 @@
       "management": "If on loop or thiazide diuretics: potassium supplementation is often prescribed — take as directed. If on potassium-sparing diuretics: avoid potassium supplements without physician guidance. Know your diuretic type.",
       "source_urls": [
         "https://ods.od.nih.gov/factsheets/Potassium-HealthProfessional/"
-      ]
+      ],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": false
+        },
+        "method": "live_api_batch_2026_04_13"
+      },
+      "evidence_basis": "authoritative_review",
+      "clinical_confidence": "medium",
+      "applies_to": "whole_class"
     },
     {
       "id": "DSI_ACEI_IRON",
@@ -550,7 +912,20 @@
       "management": "Take iron and ACE inhibitors at least 2 hours apart for optimal absorption of both.",
       "source_urls": [
         "https://ods.od.nih.gov/factsheets/Iron-HealthProfessional/"
-      ]
+      ],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": false
+        },
+        "method": "live_api_batch_2026_04_13"
+      },
+      "evidence_basis": "authoritative_review",
+      "clinical_confidence": "low",
+      "applies_to": "dose_dependent"
     },
     {
       "id": "DSI_ANTIHYP_COQ10",
@@ -568,7 +943,20 @@
       ],
       "source_pmids": [
         "18279423"
-      ]
+      ],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": true
+        },
+        "method": "live_api_batch_2026_04_13"
+      },
+      "evidence_basis": "clinical_literature",
+      "clinical_confidence": "low",
+      "applies_to": "dose_dependent"
     },
     {
       "id": "DSI_METFORMIN_ALA",
@@ -586,7 +974,20 @@
       ],
       "source_pmids": [
         "16163552"
-      ]
+      ],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": true
+        },
+        "method": "live_api_batch_2026_04_13"
+      },
+      "evidence_basis": "clinical_literature",
+      "clinical_confidence": "medium",
+      "applies_to": "dose_dependent"
     },
     {
       "id": "DSI_DM_CHROMIUM",
@@ -605,7 +1006,20 @@
       ],
       "source_pmids": [
         "15208835"
-      ]
+      ],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": true
+        },
+        "method": "live_api_batch_2026_04_13"
+      },
+      "evidence_basis": "clinical_literature",
+      "clinical_confidence": "medium",
+      "applies_to": "dose_dependent"
     },
     {
       "id": "DSI_DM_BERBERINE",
@@ -624,7 +1038,20 @@
       ],
       "source_pmids": [
         "18442638"
-      ]
+      ],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": true
+        },
+        "method": "live_api_batch_2026_04_13"
+      },
+      "evidence_basis": "clinical_literature",
+      "clinical_confidence": "high",
+      "applies_to": "dose_dependent"
     },
     {
       "id": "DSI_DM_BITTERMELON",
@@ -643,7 +1070,20 @@
       ],
       "source_pmids": [
         "21211558"
-      ]
+      ],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": true
+        },
+        "method": "live_api_batch_2026_04_13"
+      },
+      "evidence_basis": "clinical_literature",
+      "clinical_confidence": "medium",
+      "applies_to": "dose_dependent"
     },
     {
       "id": "DSI_DM_FENUGREEK",
@@ -661,7 +1101,20 @@
       ],
       "source_pmids": [
         "11370345"
-      ]
+      ],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": true
+        },
+        "method": "live_api_batch_2026_04_13"
+      },
+      "evidence_basis": "clinical_literature",
+      "clinical_confidence": "medium",
+      "applies_to": "dose_dependent"
     },
     {
       "id": "DSI_DM_GYMNEMA",
@@ -679,7 +1132,20 @@
       ],
       "source_pmids": [
         "2259217"
-      ]
+      ],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": true
+        },
+        "method": "live_api_batch_2026_04_13"
+      },
+      "evidence_basis": "clinical_literature",
+      "clinical_confidence": "medium",
+      "applies_to": "dose_dependent"
     },
     {
       "id": "DSI_DM_CINNAMON",
@@ -697,7 +1163,20 @@
       ],
       "source_pmids": [
         "14633804"
-      ]
+      ],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": true
+        },
+        "method": "live_api_batch_2026_04_13"
+      },
+      "evidence_basis": "clinical_literature",
+      "clinical_confidence": "low",
+      "applies_to": "dose_dependent"
     },
     {
       "id": "DSI_LEVOTHYROXINE_CALCIUM",
@@ -716,7 +1195,19 @@
       ],
       "source_pmids": [
         "10381054"
-      ]
+      ],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": true
+        },
+        "method": "live_api_batch_2026_04_13"
+      },
+      "evidence_basis": "label_regulatory",
+      "clinical_confidence": "high"
     },
     {
       "id": "DSI_LEVOTHYROXINE_IRON",
@@ -735,7 +1226,19 @@
       ],
       "source_pmids": [
         "1619534"
-      ]
+      ],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": true
+        },
+        "method": "live_api_batch_2026_04_13"
+      },
+      "evidence_basis": "label_regulatory",
+      "clinical_confidence": "high"
     },
     {
       "id": "DSI_LEVOTHYROXINE_MAGNESIUM",
@@ -753,7 +1256,19 @@
       ],
       "source_pmids": [
         "21748102"
-      ]
+      ],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": true
+        },
+        "method": "live_api_batch_2026_04_13"
+      },
+      "evidence_basis": "clinical_literature",
+      "clinical_confidence": "medium"
     },
     {
       "id": "DSI_LEVOTHYROXINE_SOY",
@@ -771,7 +1286,20 @@
       ],
       "source_pmids": [
         "16522724"
-      ]
+      ],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": true
+        },
+        "method": "live_api_batch_2026_04_13"
+      },
+      "evidence_basis": "clinical_literature",
+      "clinical_confidence": "medium",
+      "applies_to": "dose_dependent"
     },
     {
       "id": "DSI_LEVOTHYROXINE_COFFEE",
@@ -789,7 +1317,19 @@
       ],
       "source_pmids": [
         "18541855"
-      ]
+      ],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": true
+        },
+        "method": "live_api_batch_2026_04_13"
+      },
+      "evidence_basis": "clinical_literature",
+      "clinical_confidence": "low"
     },
     {
       "id": "DSI_IMMUNO_SJW",
@@ -809,7 +1349,20 @@
       ],
       "source_pmids": [
         "10744187"
-      ]
+      ],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": true
+        },
+        "method": "live_api_batch_2026_04_13"
+      },
+      "evidence_basis": "label_regulatory",
+      "clinical_confidence": "high",
+      "applies_to": "whole_class"
     },
     {
       "id": "DSI_IMMUNO_ECHINACEA",
@@ -828,7 +1381,20 @@
       ],
       "source_pmids": [
         "12410562"
-      ]
+      ],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": true
+        },
+        "method": "live_api_batch_2026_04_13"
+      },
+      "evidence_basis": "clinical_literature",
+      "clinical_confidence": "high",
+      "applies_to": "whole_class"
     },
     {
       "id": "DSI_IMMUNO_CATSCLAW",
@@ -843,7 +1409,20 @@
       "management": "Avoid cat's claw with immunosuppressants. Inform prescriber of all herbal supplements being taken.",
       "source_urls": [
         "https://nccih.nih.gov/health/herbsataglance.htm"
-      ]
+      ],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": false
+        },
+        "method": "live_api_batch_2026_04_13"
+      },
+      "evidence_basis": "authoritative_review",
+      "clinical_confidence": "medium",
+      "applies_to": "whole_class"
     },
     {
       "id": "DSI_IMMUNO_ASTRAGALUS",
@@ -858,7 +1437,20 @@
       "management": "Avoid astragalus with immunosuppressant therapy. Discuss all herbal supplements with your transplant or rheumatology team.",
       "source_urls": [
         "https://nccih.nih.gov/health/astragalus"
-      ]
+      ],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": false
+        },
+        "method": "live_api_batch_2026_04_13"
+      },
+      "evidence_basis": "authoritative_review",
+      "clinical_confidence": "medium",
+      "applies_to": "whole_class"
     },
     {
       "id": "DSI_IMMUNO_GRAPEFRUIT",
@@ -873,7 +1465,20 @@
       "management": "Avoid grapefruit and grapefruit juice with transplant immunosuppressants. Maintain consistent dietary patterns; avoid sudden changes in grapefruit intake.",
       "source_urls": [
         "https://www.fda.gov/consumers/consumer-updates/grapefruit-juice-and-some-drugs-dont-mix"
-      ]
+      ],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": false
+        },
+        "method": "live_api_batch_2026_04_13"
+      },
+      "evidence_basis": "label_regulatory",
+      "clinical_confidence": "medium",
+      "applies_to": "whole_class"
     },
     {
       "id": "DSI_ANTICONV_FOLATE",
@@ -892,7 +1497,20 @@
       ],
       "source_pmids": [
         "11435406"
-      ]
+      ],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": true
+        },
+        "method": "live_api_batch_2026_04_13"
+      },
+      "evidence_basis": "clinical_literature",
+      "clinical_confidence": "medium",
+      "applies_to": "dose_dependent"
     },
     {
       "id": "DSI_ANTICONV_VITD",
@@ -911,7 +1529,20 @@
       ],
       "source_pmids": [
         "22073431"
-      ]
+      ],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": true
+        },
+        "method": "live_api_batch_2026_04_13"
+      },
+      "evidence_basis": "clinical_literature",
+      "clinical_confidence": "low",
+      "applies_to": "whole_class"
     },
     {
       "id": "DSI_ANTICONV_EPO",
@@ -930,7 +1561,20 @@
       ],
       "source_pmids": [
         "8062477"
-      ]
+      ],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": true
+        },
+        "method": "live_api_batch_2026_04_13"
+      },
+      "evidence_basis": "clinical_literature",
+      "clinical_confidence": "high",
+      "applies_to": "whole_class"
     },
     {
       "id": "DSI_ANTICONV_GINKGO",
@@ -948,7 +1592,20 @@
       ],
       "source_pmids": [
         "11745503"
-      ]
+      ],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": true
+        },
+        "method": "live_api_batch_2026_04_13"
+      },
+      "evidence_basis": "clinical_literature",
+      "clinical_confidence": "medium",
+      "applies_to": "whole_class"
     },
     {
       "id": "DSI_MAOI_TYRAMINE",
@@ -967,7 +1624,20 @@
       ],
       "source_pmids": [
         "24974062"
-      ]
+      ],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": true
+        },
+        "method": "live_api_batch_2026_04_13"
+      },
+      "evidence_basis": "clinical_literature",
+      "clinical_confidence": "low",
+      "applies_to": "whole_class"
     },
     {
       "id": "DSI_MAOI_SJW",
@@ -986,7 +1656,20 @@
       ],
       "source_pmids": [
         "10584377"
-      ]
+      ],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": true
+        },
+        "method": "live_api_batch_2026_04_13"
+      },
+      "evidence_basis": "clinical_literature",
+      "clinical_confidence": "low",
+      "applies_to": "whole_class"
     },
     {
       "id": "DSI_MAOI_5HTP",
@@ -1001,7 +1684,20 @@
       "management": "Never combine 5-HTP with MAOIs. 5-HTP must not be started until at least 14 days after stopping an MAOI (5 weeks after stopping tranylcypromine).",
       "source_urls": [
         "https://www.ncbi.nlm.nih.gov/books/NBK482377/"
-      ]
+      ],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": false
+        },
+        "method": "live_api_batch_2026_04_13"
+      },
+      "evidence_basis": "authoritative_review",
+      "clinical_confidence": "low",
+      "applies_to": "whole_class"
     },
     {
       "id": "DSI_MAOI_SAME",
@@ -1019,7 +1715,20 @@
       ],
       "source_pmids": [
         "15505162"
-      ]
+      ],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": true
+        },
+        "method": "live_api_batch_2026_04_13"
+      },
+      "evidence_basis": "clinical_literature",
+      "clinical_confidence": "low",
+      "applies_to": "whole_class"
     },
     {
       "id": "DSI_MAOI_GINSENG",
@@ -1038,7 +1747,20 @@
       ],
       "source_pmids": [
         "7739379"
-      ]
+      ],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": true
+        },
+        "method": "live_api_batch_2026_04_13"
+      },
+      "evidence_basis": "clinical_literature",
+      "clinical_confidence": "high",
+      "applies_to": "whole_class"
     },
     {
       "id": "DSI_NSAID_FISHOIL",
@@ -1053,7 +1775,20 @@
       "management": "Use caution combining high-dose fish oil (>2 g/day) with NSAIDs. Take NSAIDs with food to protect GI lining. Monitor for GI symptoms. Discuss with doctor if using regularly.",
       "source_urls": [
         "https://ods.od.nih.gov/factsheets/Omega3FattyAcids-HealthProfessional/"
-      ]
+      ],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": false
+        },
+        "method": "live_api_batch_2026_04_13"
+      },
+      "evidence_basis": "authoritative_review",
+      "clinical_confidence": "medium",
+      "applies_to": "dose_dependent"
     },
     {
       "id": "DSI_NSAID_GARLIC",
@@ -1068,7 +1803,20 @@
       "management": "Avoid high-dose garlic supplements with regular NSAID use. Culinary garlic is generally safe. Watch for unusual bruising or GI bleeding.",
       "source_urls": [
         "https://nccih.nih.gov/health/garlic/ataglance.htm"
-      ]
+      ],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": false
+        },
+        "method": "live_api_batch_2026_04_13"
+      },
+      "evidence_basis": "authoritative_review",
+      "clinical_confidence": "medium",
+      "applies_to": "dose_dependent"
     },
     {
       "id": "DSI_NSAID_GINKGO",
@@ -1086,7 +1834,20 @@
       ],
       "source_pmids": [
         "11302778"
-      ]
+      ],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": true
+        },
+        "method": "live_api_batch_2026_04_13"
+      },
+      "evidence_basis": "clinical_literature",
+      "clinical_confidence": "medium",
+      "applies_to": "whole_class"
     },
     {
       "id": "DSI_NSAID_WILLOWBARK",
@@ -1105,7 +1866,20 @@
       ],
       "source_pmids": [
         "11398060"
-      ]
+      ],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": true
+        },
+        "method": "live_api_batch_2026_04_13"
+      },
+      "evidence_basis": "clinical_literature",
+      "clinical_confidence": "high",
+      "applies_to": "whole_class"
     },
     {
       "id": "DSI_SEDATIVES_VALERIAN",
@@ -1124,7 +1898,20 @@
       ],
       "source_pmids": [
         "16520820"
-      ]
+      ],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": true
+        },
+        "method": "live_api_batch_2026_04_13"
+      },
+      "evidence_basis": "clinical_literature",
+      "clinical_confidence": "medium",
+      "applies_to": "whole_class"
     },
     {
       "id": "DSI_SEDATIVES_KAVA",
@@ -1144,7 +1931,20 @@
       ],
       "source_pmids": [
         "11449161"
-      ]
+      ],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": true
+        },
+        "method": "live_api_batch_2026_04_13"
+      },
+      "evidence_basis": "clinical_literature",
+      "clinical_confidence": "high",
+      "applies_to": "whole_class"
     },
     {
       "id": "DSI_BENZO_MELATONIN",
@@ -1159,7 +1959,20 @@
       "management": "Use low-dose melatonin (0.5–3 mg) with benzodiazepines if needed for sleep. Avoid activities requiring alertness. Inform your doctor.",
       "source_urls": [
         "https://ods.od.nih.gov/factsheets/Melatonin-HealthProfessional/"
-      ]
+      ],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": false
+        },
+        "method": "live_api_batch_2026_04_13"
+      },
+      "evidence_basis": "authoritative_review",
+      "clinical_confidence": "low",
+      "applies_to": "dose_dependent"
     },
     {
       "id": "DSI_SEDATIVES_PASSIONFLOWER",
@@ -1174,7 +1987,20 @@
       "management": "Avoid passionflower with sedative medications. Do not drive after combining. Use under physician guidance.",
       "source_urls": [
         "https://nccih.nih.gov/health/passionflower"
-      ]
+      ],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": false
+        },
+        "method": "live_api_batch_2026_04_13"
+      },
+      "evidence_basis": "authoritative_review",
+      "clinical_confidence": "medium",
+      "applies_to": "whole_class"
     },
     {
       "id": "DSI_PPI_IRON",
@@ -1193,7 +2019,20 @@
       ],
       "source_pmids": [
         "21367944"
-      ]
+      ],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": true
+        },
+        "method": "live_api_batch_2026_04_13"
+      },
+      "evidence_basis": "clinical_literature",
+      "clinical_confidence": "medium",
+      "applies_to": "dose_dependent"
     },
     {
       "id": "DSI_PPI_B12",
@@ -1212,7 +2051,20 @@
       ],
       "source_pmids": [
         "23192004"
-      ]
+      ],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": true
+        },
+        "method": "live_api_batch_2026_04_13"
+      },
+      "evidence_basis": "clinical_literature",
+      "clinical_confidence": "medium",
+      "applies_to": "whole_class"
     },
     {
       "id": "DSI_PPI_MAGNESIUM",
@@ -1228,7 +2080,20 @@
       "source_urls": [
         "https://www.fda.gov/drugs/drug-safety-and-availability/fda-drug-safety-communication-low-magnesium-levels-can-be-associated-prolonged-use-proton-pump",
         "https://ods.od.nih.gov/factsheets/Magnesium-HealthProfessional/"
-      ]
+      ],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": false
+        },
+        "method": "live_api_batch_2026_04_13"
+      },
+      "evidence_basis": "label_regulatory",
+      "clinical_confidence": "medium",
+      "applies_to": "whole_class"
     },
     {
       "id": "DSI_PPI_CALCIUM",
@@ -1247,7 +2112,20 @@
       ],
       "source_pmids": [
         "16837015"
-      ]
+      ],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": true
+        },
+        "method": "live_api_batch_2026_04_13"
+      },
+      "evidence_basis": "clinical_literature",
+      "clinical_confidence": "medium",
+      "applies_to": "whole_class"
     },
     {
       "id": "DSI_CORTICO_LICORICE",
@@ -1265,7 +2143,20 @@
       ],
       "source_pmids": [
         "12450891"
-      ]
+      ],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": true
+        },
+        "method": "live_api_batch_2026_04_13"
+      },
+      "evidence_basis": "clinical_literature",
+      "clinical_confidence": "medium",
+      "applies_to": "whole_class"
     },
     {
       "id": "DSI_CORTICO_CALCIUM_VITD",
@@ -1284,7 +2175,20 @@
       ],
       "source_pmids": [
         "12571244"
-      ]
+      ],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": true
+        },
+        "method": "live_api_batch_2026_04_13"
+      },
+      "evidence_basis": "clinical_literature",
+      "clinical_confidence": "low",
+      "applies_to": "whole_class"
     },
     {
       "id": "DSI_CORTICO_ECHINACEA",
@@ -1299,7 +2203,20 @@
       "management": "Avoid echinacea with corticosteroid therapy for immune suppression (transplant, autoimmune). For short-course corticosteroids (allergies, asthma exacerbation), the interaction is less critical but still worth noting.",
       "source_urls": [
         "https://nccih.nih.gov/health/echinacea/ataglance.htm"
-      ]
+      ],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": false
+        },
+        "method": "live_api_batch_2026_04_13"
+      },
+      "evidence_basis": "authoritative_review",
+      "clinical_confidence": "medium",
+      "applies_to": "whole_class"
     },
     {
       "id": "DSI_OC_SJW",
@@ -1319,7 +2236,20 @@
       ],
       "source_pmids": [
         "11172189"
-      ]
+      ],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": true
+        },
+        "method": "live_api_batch_2026_04_13"
+      },
+      "evidence_basis": "label_regulatory",
+      "clinical_confidence": "high",
+      "applies_to": "whole_class"
     },
     {
       "id": "DSI_OC_CHASTEBERRY",
@@ -1334,7 +2264,20 @@
       "management": "Avoid chasteberry with hormonal contraceptives. The interaction is theoretical but relevant given chasteberry's hormonal activity. Inform your OB/GYN.",
       "source_urls": [
         "https://nccih.nih.gov/health/chasteberry"
-      ]
+      ],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": false
+        },
+        "method": "live_api_batch_2026_04_13"
+      },
+      "evidence_basis": "authoritative_review",
+      "clinical_confidence": "medium",
+      "applies_to": "whole_class"
     },
     {
       "id": "DSI_OC_SOY",
@@ -1349,7 +2292,20 @@
       "management": "Dietary soy is generally safe with OCs. High-dose soy isoflavone supplements (>100 mg/day) warrant caution. Discuss with your prescriber.",
       "source_urls": [
         "https://ods.od.nih.gov/factsheets/Soy-HealthProfessional/"
-      ]
+      ],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": false
+        },
+        "method": "live_api_batch_2026_04_13"
+      },
+      "evidence_basis": "authoritative_review",
+      "clinical_confidence": "low",
+      "applies_to": "dose_dependent"
     },
     {
       "id": "SSI_IRON_CALCIUM",
@@ -1368,7 +2324,19 @@
       ],
       "source_pmids": [
         "1546761"
-      ]
+      ],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": true
+        },
+        "method": "live_api_batch_2026_04_13"
+      },
+      "evidence_basis": "clinical_literature",
+      "clinical_confidence": "medium"
     },
     {
       "id": "SSI_IRON_GREENTEA",
@@ -1386,7 +2354,19 @@
       ],
       "source_pmids": [
         "9414590"
-      ]
+      ],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": true
+        },
+        "method": "live_api_batch_2026_04_13"
+      },
+      "evidence_basis": "clinical_literature",
+      "clinical_confidence": "medium"
     },
     {
       "id": "SSI_ZINC_COPPER",
@@ -1405,7 +2385,20 @@
       ],
       "source_pmids": [
         "10801966"
-      ]
+      ],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": true
+        },
+        "method": "live_api_batch_2026_04_13"
+      },
+      "evidence_basis": "clinical_literature",
+      "clinical_confidence": "medium",
+      "applies_to": "dose_dependent"
     },
     {
       "id": "SSI_SJW_5HTP",
@@ -1424,7 +2417,19 @@
       ],
       "source_pmids": [
         "10584377"
-      ]
+      ],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": true
+        },
+        "method": "live_api_batch_2026_04_13"
+      },
+      "evidence_basis": "clinical_literature",
+      "clinical_confidence": "high"
     },
     {
       "id": "SSI_KAVA_ACETAMINOPHEN",
@@ -1443,7 +2448,20 @@
       ],
       "source_pmids": [
         "11449161"
-      ]
+      ],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": true
+        },
+        "method": "live_api_batch_2026_04_13"
+      },
+      "evidence_basis": "clinical_literature",
+      "clinical_confidence": "high",
+      "applies_to": "dose_dependent"
     },
     {
       "id": "SSI_VITE_VITK",
@@ -1462,7 +2480,20 @@
       ],
       "source_pmids": [
         "11684533"
-      ]
+      ],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": true
+        },
+        "method": "live_api_batch_2026_04_13"
+      },
+      "evidence_basis": "clinical_literature",
+      "clinical_confidence": "medium",
+      "applies_to": "dose_dependent"
     },
     {
       "id": "DSI_DM_VITD",
@@ -1481,7 +2512,20 @@
       ],
       "source_pmids": [
         "17823436"
-      ]
+      ],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": true
+        },
+        "method": "live_api_batch_2026_04_13"
+      },
+      "evidence_basis": "clinical_literature",
+      "clinical_confidence": "low",
+      "applies_to": "dose_dependent"
     },
     {
       "id": "DSI_ANTIHYP_MAGNESIUM",
@@ -1500,7 +2544,20 @@
       ],
       "source_pmids": [
         "21205110"
-      ]
+      ],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": true
+        },
+        "method": "live_api_batch_2026_04_13"
+      },
+      "evidence_basis": "clinical_literature",
+      "clinical_confidence": "low",
+      "applies_to": "dose_dependent"
     },
     {
       "id": "DSI_ANTIPSYCH_MELATONIN",
@@ -1515,7 +2572,20 @@
       "management": "Use low-dose melatonin (0.5–3 mg) if needed for sleep with antipsychotics. Monitor for excessive sedation. Inform your psychiatrist.",
       "source_urls": [
         "https://ods.od.nih.gov/factsheets/Melatonin-HealthProfessional/"
-      ]
+      ],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": false
+        },
+        "method": "live_api_batch_2026_04_13"
+      },
+      "evidence_basis": "authoritative_review",
+      "clinical_confidence": "low",
+      "applies_to": "dose_dependent"
     },
     {
       "id": "DSI_ANTICOAG_CBD",
@@ -1534,7 +2604,20 @@
       ],
       "source_pmids": [
         "31412221"
-      ]
+      ],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": true
+        },
+        "method": "live_api_batch_2026_04_13"
+      },
+      "evidence_basis": "label_regulatory",
+      "clinical_confidence": "medium",
+      "applies_to": "dose_dependent"
     },
     {
       "id": "DSI_ANTIHYP_CBD",
@@ -1552,7 +2635,20 @@
       ],
       "source_pmids": [
         "31412221"
-      ]
+      ],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": true
+        },
+        "method": "live_api_batch_2026_04_13"
+      },
+      "evidence_basis": "clinical_literature",
+      "clinical_confidence": "medium",
+      "applies_to": "dose_dependent"
     },
     {
       "id": "DSI_STATINS_CBD",
@@ -1570,7 +2666,20 @@
       ],
       "source_pmids": [
         "31412221"
-      ]
+      ],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": true
+        },
+        "method": "live_api_batch_2026_04_13"
+      },
+      "evidence_basis": "clinical_literature",
+      "clinical_confidence": "medium",
+      "applies_to": "dose_dependent"
     },
     {
       "id": "DSI_DM_ASHWAGANDHA",
@@ -1588,7 +2697,20 @@
       ],
       "source_pmids": [
         "25485040"
-      ]
+      ],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": true
+        },
+        "method": "live_api_batch_2026_04_13"
+      },
+      "evidence_basis": "clinical_literature",
+      "clinical_confidence": "medium",
+      "applies_to": "dose_dependent"
     },
     {
       "id": "DSI_ANTIHYP_ASHWAGANDHA",
@@ -1606,7 +2728,20 @@
       ],
       "source_pmids": [
         "25485040"
-      ]
+      ],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": true
+        },
+        "method": "live_api_batch_2026_04_13"
+      },
+      "evidence_basis": "clinical_literature",
+      "clinical_confidence": "low",
+      "applies_to": "whole_class"
     },
     {
       "id": "DSI_SEDATIVES_ASHWAGANDHA",
@@ -1624,7 +2759,20 @@
       ],
       "source_pmids": [
         "23439798"
-      ]
+      ],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": true
+        },
+        "method": "live_api_batch_2026_04_13"
+      },
+      "evidence_basis": "clinical_literature",
+      "clinical_confidence": "low",
+      "applies_to": "whole_class"
     },
     {
       "id": "DSI_THYROID_TURMERIC",
@@ -1642,7 +2790,20 @@
       ],
       "source_pmids": [
         "27297661"
-      ]
+      ],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": true
+        },
+        "method": "live_api_batch_2026_04_13"
+      },
+      "evidence_basis": "clinical_literature",
+      "clinical_confidence": "low",
+      "applies_to": "dose_dependent"
     },
     {
       "id": "DSI_ANTICOAG_TURMERIC",
@@ -1660,7 +2821,20 @@
       ],
       "source_pmids": [
         "22531131"
-      ]
+      ],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": true
+        },
+        "method": "live_api_batch_2026_04_13"
+      },
+      "evidence_basis": "clinical_literature",
+      "clinical_confidence": "medium",
+      "applies_to": "dose_dependent"
     },
     {
       "id": "DSI_DM_MAGNESIUM",
@@ -1679,7 +2853,20 @@
       ],
       "source_pmids": [
         "22279144"
-      ]
+      ],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": true
+        },
+        "method": "live_api_batch_2026_04_13"
+      },
+      "evidence_basis": "clinical_literature",
+      "clinical_confidence": "low",
+      "applies_to": "whole_class"
     },
     {
       "id": "SSI_MAGNESIUM_CALCIUM",
@@ -1694,7 +2881,20 @@
       "management": "Take calcium and magnesium at different times for optimal absorption if treating a specific deficiency. A 2:1 Ca:Mg ratio is commonly recommended in combination supplements. Many people take them together without issue.",
       "source_urls": [
         "https://ods.od.nih.gov/factsheets/Magnesium-HealthProfessional/"
-      ]
+      ],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": false
+        },
+        "method": "live_api_batch_2026_04_13"
+      },
+      "evidence_basis": "authoritative_review",
+      "clinical_confidence": "low",
+      "applies_to": "dose_dependent"
     },
     {
       "id": "SSI_VITD_VITK2",
@@ -1712,7 +2912,20 @@
       ],
       "source_pmids": [
         "22516723"
-      ]
+      ],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": true
+        },
+        "method": "live_api_batch_2026_04_13"
+      },
+      "evidence_basis": "clinical_literature",
+      "clinical_confidence": "low",
+      "applies_to": "dose_dependent"
     },
     {
       "id": "DSI_BETABLOCK_MELATONIN",
@@ -1730,7 +2943,20 @@
       ],
       "source_pmids": [
         "9588492"
-      ]
+      ],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": true
+        },
+        "method": "live_api_batch_2026_04_13"
+      },
+      "evidence_basis": "clinical_literature",
+      "clinical_confidence": "low",
+      "applies_to": "whole_class"
     },
     {
       "id": "DSI_HIV_SJW",
@@ -1749,7 +2975,20 @@
       ],
       "source_pmids": [
         "10744188"
-      ]
+      ],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": true
+        },
+        "method": "live_api_batch_2026_04_13"
+      },
+      "evidence_basis": "label_regulatory",
+      "clinical_confidence": "high",
+      "applies_to": "whole_class"
     },
     {
       "id": "DSI_IMMUNOSUP_PROBIOTICS",
@@ -1768,7 +3007,20 @@
       ],
       "source_pmids": [
         "15643562"
-      ]
+      ],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": true
+        },
+        "method": "live_api_batch_2026_04_13"
+      },
+      "evidence_basis": "clinical_literature",
+      "clinical_confidence": "medium",
+      "applies_to": "whole_class"
     },
     {
       "id": "DSI_ANTICOAG_GINSENG",
@@ -1786,7 +3038,20 @@
       ],
       "source_pmids": [
         "15499937"
-      ]
+      ],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": true
+        },
+        "method": "live_api_batch_2026_04_13"
+      },
+      "evidence_basis": "clinical_literature",
+      "clinical_confidence": "medium",
+      "applies_to": "dose_dependent"
     },
     {
       "id": "DSI_ANTIHYP_VITD",
@@ -1805,7 +3070,20 @@
       ],
       "source_pmids": [
         "23297988"
-      ]
+      ],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": false
+        },
+        "method": "live_api_batch_2026_04_13"
+      },
+      "evidence_basis": "authoritative_review",
+      "clinical_confidence": "low",
+      "applies_to": "whole_class"
     }
   ]
 }

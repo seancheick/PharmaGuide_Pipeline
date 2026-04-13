@@ -68,7 +68,11 @@ SEVERITY_MAP: dict[str, str] = {
 FLUTTER_SEVERITIES: tuple[str, ...] = ("contraindicated", "avoid", "caution", "monitor")
 
 ALLOWED_TYPES: frozenset[str] = frozenset(
-    {"Med-Sup", "Sup-Med", "Sup-Sup", "Med-Med", "Med-Food", "Sup-Food", "Food-Med"}
+    {
+        "Med-Sup", "Sup-Med", "Sup-Sup", "Med-Med",
+        "Med-Food", "Sup-Food", "Food-Med",
+        "Med-Lifestyle", "Med-Procedure",
+    }
 )
 
 ALLOWED_EFFECT_TYPES: frozenset[str] = frozenset(
@@ -89,6 +93,7 @@ REQUIRED_FIELDS: tuple[str, ...] = (
 
 # Agent ID shapes
 RXCUI_RE = re.compile(r"^\d+$")
+REF_RE = re.compile(r"^ref:[a-z][a-z0-9_]*$")
 CUI_RE = re.compile(r"^C\d{7}$")
 CLASS_RE = re.compile(r"^class:[a-z][a-z0-9_]*$")
 
@@ -265,13 +270,21 @@ def classify_agent(agent_id: str) -> str:
     """Classify an agent_id string by its shape.
 
     Returns one of: 'drug' (rxcui), 'supplement' (cui), 'class' (class:...),
-    'unknown'.
+    'reference' (ref:...), 'unknown'.
+
+    The 'ref:' prefix is used for non-drug, non-supplement entities that
+    don't have a standard ontology identifier — e.g. lifestyle factors
+    (ref:alcohol), procedures (ref:iodinated_contrast), food items
+    (ref:grapefruit). These are pass-through: no API verification is
+    attempted, but the ID is accepted as valid.
     """
     if not isinstance(agent_id, str):
         return "unknown"
     aid = agent_id.strip()
     if CLASS_RE.match(aid):
         return "class"
+    if REF_RE.match(aid):
+        return "reference"
     if CUI_RE.match(aid):
         return "supplement"
     if RXCUI_RE.match(aid):
