@@ -1120,53 +1120,283 @@ These are the main scripts that make up the 3-stage pipeline (Clean → Enrich �
 | `release_interaction_artifact.py` | Same as above but for the interaction DB. Stages `scripts/interaction_db_output/` → `scripts/dist/`. |
 | `cleanup_old_versions.py` | Removes old PharmaGuide versions from Supabase Storage. Use `--dry-run` first. |
 
-### 11.3 Interaction DB Pipeline
+### 11.3 Interaction DB Pipeline — End to End
 
-The interaction DB is a separate SQLite artifact (`interaction_db.sqlite`) that ships alongside the catalog DB. It contains curated drug↔supplement interactions, drug↔drug pairs, and supp.ai research evidence.
+The interaction DB is a separate SQLite artifact (`interaction_db.sqlite`) that ships alongside the catalog DB. It powers the app's drug-supplement safety warnings, "Because you're taking X" personalization, and research evidence display.
 
-#### Data flow
+#### The full picture: pipeline → app → user
 
 ```
-curated_interactions_v1.json ──┐
-med_med_pairs_v1.json ─────────┤
-                               ▼
-                    verify_interactions.py (RxNorm + UMLS + PubMed live)
-                               │
-                               ▼
-                    interactions_verified.json (normalized)
-                               │
-supp.ai raw dump ─→ ingest_suppai.py ─→ research_pairs.json
-                               │                │
-                               ▼                ▼
-                    build_interaction_db.py
-                               │
-                               ▼
-                    interaction_db.sqlite + manifest
-                               │
-                    release_interaction_artifact.py
-                               │
-                               ▼
-                    scripts/dist/ (staged release)
-                               │
-         ┌─────────────────────┘
-         │  Flutter repo (ONE command handles everything):
-         │  ./scripts/import_catalog_artifact.sh ../dsld_clean/scripts/dist
-         ▼
-    assets/db/interaction_db.sqlite
-    assets/db/interaction_db_manifest.json
-         │
-         ▼  App automatically detects new bundle on launch
-    PharmaGuide app (stack safety, quick check, warnings)
+┌──────────────────────────────────────────────────────────────────────────┐
+│                         PIPELINE REPO (dsld_clean)                       │
+│                                                                          │
+│  DATA SOURCES (you edit these)                                           │
+│  ├── scripts/data/curated_interactions/                                  │
+│  │   ├── curated_interactions_v1.json     99 drug↔sup + sup↔sup pairs   │
+│  │   └── med_med_pairs_v1.json            29 drug↔drug pairs            │
+│  ├── scripts/data/drug_classes.json        24 classes, 693 RxCUIs        │
+│  └── ~/Downloads/Supp ai DB/              supp.ai raw dump (245 MB)      │
+│                                                                          │
+│  VERIFICATION (live API calls — nothing passes without this)             │
+│  ┌─────────────────────────────────────────────────────────┐             │
+│  │ verify_interactions.py                                   │             │
+│  │                                                          │             │
+│  │  Check 1: JSON schema — required fields, valid enums    │             │
+│  │  Check 2: Duplicate ID detection                        │             │
+│  │  Check 3: RXCUI → RxNorm API (is this a real drug?)     │             │
+│  │  Check 4: CUI → UMLS API (is this a real substance?)    │             │
+│  │  Check 5: CUI → canonical_id mapping (IQM + botanicals  │             │
+│  │           + banned_recalled + harmful_additives)         │             │
+│  │  Check 6: Drug class expansion (class:statins → 8 drugs)│             │
+│  │  Check 7: Direction normalization (drug always agent1)   │             │
+│  │  Check 8: Severity normalization (Major → avoid)         │             │
+│  │  Check 9: Evidence gate (Major+ MUST have source URL)    │             │
+│  │  Check 10: PMID extraction from source URLs              │             │
+│  │                                                          │             │
+│  │  EXIT CODE 0 = all clear    EXIT CODE 1 = build blocked │             │
+│  └─────────────────────┬───────────────────────────────────┘             │
+│                        │                                                 │
+│  CONTENT VERIFICATION (proves citations match claims)                    │
+│  ┌─────────────────────────────────────────────────────────┐             │
+│  │ verify_all_citations_content.py                          │             │
+│  │                                                          │             │
+│  │  For every PubMed PMID:                                 │             │
+│  │  1. Fetch actual article title + abstract via E-utils   │             │
+│  │  2. Check topic words from our entry appear in paper    │             │
+│  │  3. Flag mismatches (paper about wrong topic)           │             │
+│  │                                                          │             │
+│  │  RULE: A paper about "renal impairment of biologics"    │             │
+│  │  CANNOT be cited for "magnesium helps sleep"            │             │
+│  └─────────────────────┬───────────────────────────────────┘             │
+│                        │                                                 │
+│  BUILD                 ▼                                                 │
+│  ┌─────────────────────────────────────────────────────────┐             │
+│  │ build_interaction_db.py                                  │             │
+│  │                                                          │             │
+│  │  Inputs:                                                │             │
+│  │  • interactions_verified.json (128 curated rows)        │             │
+│  │  • research_pairs.json (28,038 supp.ai evidence pairs)  │             │
+│  │  • drug_classes.json (24 classes)                        │             │
+│  │                                                          │             │
+│  │  Creates SQLite with:                                    │             │
+│  │  ┌─────────────────────────────────────────────────┐     │             │
+│  │  │ interactions          128 rows (safety warnings) │     │             │
+│  │  │ research_pairs     28,038 rows (evidence only)   │     │             │
+│  │  │ drug_class_map        24 rows (class → RxCUIs)   │     │             │
+│  │  │ interaction_db_meta   10 rows (version, counts)  │     │             │
+│  │  │ interactions_fts    FTS5 (name search index)     │     │             │
+│  │  └─────────────────────────────────────────────────┘     │             │
+│  │                                                          │             │
+│  │  PRAGMA integrity_check = ok                            │             │
+│  │  PRAGMA user_version = 1                                │             │
+│  └─────────────────────┬───────────────────────────────────┘             │
+│                        │                                                 │
+│  RELEASE               ▼                                                 │
+│  release_interaction_artifact.py → scripts/dist/                         │
+│  (SHA-256 checksum, manifest, validation gates)                          │
+└────────────────────────┬─────────────────────────────────────────────────┘
+                         │
+    ONE COMMAND: bash scripts/rebuild_interaction_db.sh --import
+                         │
+                         ▼
+┌──────────────────────────────────────────────────────────────────────────┐
+│                      FLUTTER REPO (PharmaGuide ai)                       │
+│                                                                          │
+│  IMPORT (import_catalog_artifact.sh — 17 validation gates)               │
+│  ├── Gate I1: manifest JSON valid + required keys present                │
+│  ├── Gate I2: schema_version in supported list                           │
+│  ├── Gate I3: SHA-256 matches manifest                                   │
+│  ├── Gate I4: PRAGMA integrity_check = ok                                │
+│  ├── Gate I5: PRAGMA user_version = 1                                    │
+│  ├── Gate I6: live interaction rows ≥ 1                                  │
+│  ├── Gate I7: embedded metadata agrees with JSON manifest                │
+│  └── Gate I8: no self-referencing checksum bug (T7)                      │
+│  (catalog DB also validated through 8 gates — both or nothing)           │
+│                                                                          │
+│  BUNDLED ASSETS                                                          │
+│  ├── assets/db/interaction_db.sqlite          (20 MB)                    │
+│  ├── assets/db/interaction_db_manifest.json                              │
+│  ├── assets/db/pharmaguide_core.db            (12 MB, 5231 products)     │
+│  └── assets/reference_data/timing_rules.json  (39 timing rules)          │
+│                                                                          │
+│  ON FIRST LAUNCH / UPDATE                                                │
+│  ensureInteractionDatabaseAvailable():                                   │
+│  1. Compare bundled byte length vs on-disk copy                          │
+│  2. If different → re-materialize to documents directory                 │
+│  3. Open read-only Drift database wrapper                                │
+│                                                                          │
+│  DATABASE LAYER (lib/data/database/)                                     │
+│  ┌─────────────────────────────────────────────────────────┐             │
+│  │ InteractionDatabase (Drift — read-only)                  │             │
+│  │                                                          │             │
+│  │  lookupByCanonicalId(id) → interactions for a supplement│             │
+│  │  lookupByRxcui(rxcui)    → interactions for a drug      │             │
+│  │  lookupByDrugClass(cls)  → interactions for a drug class│             │
+│  │  lookupPair(a1, a2)      → specific pair interaction    │             │
+│  │  rxcuisForDrugClass(cls) → expand class to member drugs │             │
+│  │  getMetadata()           → DB version, counts           │             │
+│  └─────────────────────┬───────────────────────────────────┘             │
+│                        │                                                 │
+│  SERVICE LAYER (lib/services/stack/)                                     │
+│  ┌─────────────────────────────────────────────────────────┐             │
+│  │ StackInteractionChecker                                  │             │
+│  │                                                          │             │
+│  │  When user SCANS a supplement:                          │             │
+│  │  1. Get product's ingredient canonical_ids              │             │
+│  │  2. lookupByCanonicalId() for each ingredient           │             │
+│  │  3. Cross-check against user's stack medications        │             │
+│  │  4. Cross-check against user's stack supplements        │             │
+│  │  5. Return List<InteractionResult>                      │             │
+│  │                                                          │             │
+│  │  When user ADDS a medication:                           │             │
+│  │  1. Get medication's RXCUI + drug_classes               │             │
+│  │  2. lookupByRxcui() + lookupByDrugClass()               │             │
+│  │  3. Cross-check against user's supplement stack         │             │
+│  │  4. Return List<InteractionResult>                      │             │
+│  └─────────────────────┬───────────────────────────────────┘             │
+│                        │                                                 │
+│  SEVERITY & PENALTIES                                                    │
+│  ┌─────────────────────────────────────────────────────────┐             │
+│  │ Severity Enum (lib/core/constants/severity.dart)         │             │
+│  │                                                          │             │
+│  │  ┌─────────────────┬────────┬─────────┬───────────────┐ │             │
+│  │  │ Severity         │ Weight │ Penalty │ User sees     │ │             │
+│  │  ├─────────────────┼────────┼─────────┼───────────────┤ │             │
+│  │  │ contraindicated  │   5    │   -8    │ BLOCK — Do    │ │             │
+│  │  │                  │        │         │ Not Use (RED) │ │             │
+│  │  ├─────────────────┼────────┼─────────┼───────────────┤ │             │
+│  │  │ avoid            │   4    │   -5    │ AVOID (RED)   │ │             │
+│  │  ├─────────────────┼────────┼─────────┼───────────────┤ │             │
+│  │  │ caution          │   3    │   -3    │ CAUTION       │ │             │
+│  │  │                  │        │         │ (ORANGE)      │ │             │
+│  │  ├─────────────────┼────────┼─────────┼───────────────┤ │             │
+│  │  │ monitor          │   2    │   -1    │ MONITOR       │ │             │
+│  │  │                  │        │         │ (YELLOW)      │ │             │
+│  │  ├─────────────────┼────────┼─────────┼───────────────┤ │             │
+│  │  │ safe             │   0    │    0    │ SAFE (GREEN)  │ │             │
+│  │  └─────────────────┴────────┴─────────┴───────────────┘ │             │
+│  │                                                          │             │
+│  │  Draft → Flutter mapping (verify_interactions.py):       │             │
+│  │  Contraindicated → contraindicated                       │             │
+│  │  Major           → avoid                                 │             │
+│  │  Moderate         → caution                              │             │
+│  │  Minor            → monitor                              │             │
+│  └─────────────────────┬───────────────────────────────────┘             │
+│                        │                                                 │
+│  STACK SAFETY SCORE                                                      │
+│  ┌─────────────────────────────────────────────────────────┐             │
+│  │ StackSafetyScorer (lib/services/stack/)                  │             │
+│  │                                                          │             │
+│  │  score = 100 - interaction_penalties + synergy_bonuses   │             │
+│  │                                                          │             │
+│  │  Hard caps:                                             │             │
+│  │  • contraindicated found → score capped at 25           │             │
+│  │  • avoid found           → score capped at 50           │             │
+│  │  • Floor: 25 (max deduction 75)                         │             │
+│  │  • Ceiling: 100 (max bonus 15 from synergies)           │             │
+│  │                                                          │             │
+│  │  Example:                                                │             │
+│  │  User takes Warfarin + Fish Oil supplement               │             │
+│  │  → lookupPair finds "Moderate" interaction              │             │
+│  │  → penalty = -3                                          │             │
+│  │  → score = 100 - 3 = 97 (SAFE tier)                    │             │
+│  │                                                          │             │
+│  │  User takes MAOI + St. John's Wort supplement            │             │
+│  │  → lookupPair finds "Contraindicated"                   │             │
+│  │  → penalty = -8, hard cap kicks in                      │             │
+│  │  → score = 25 (CRITICAL tier, red alert)                │             │
+│  └─────────────────────┬───────────────────────────────────┘             │
+│                        │                                                 │
+│  WHAT THE USER SEES                                                      │
+│  ┌─────────────────────────────────────────────────────────┐             │
+│  │                                                          │             │
+│  │  Product Detail Screen:                                 │             │
+│  │  ┌──────────────────────────────────────────────────┐   │             │
+│  │  │ ⚠️ INTERACTION WARNING                           │   │             │
+│  │  │                                                   │   │             │
+│  │  │ "Because you're taking Warfarin, this Fish Oil   │   │             │
+│  │  │  supplement has a MODERATE bleeding risk."        │   │             │
+│  │  │                                                   │   │             │
+│  │  │  Mechanism: Omega-3 fatty acids have mild        │   │             │
+│  │  │  antiplatelet activity...                         │   │             │
+│  │  │                                                   │   │             │
+│  │  │  Management: Doses under 3g/day generally safe   │   │             │
+│  │  │  on warfarin. Higher doses require oversight.     │   │             │
+│  │  │                                                   │   │             │
+│  │  │  Source: NIH ODS ↗  PubMed ↗                     │   │             │
+│  │  └──────────────────────────────────────────────────┘   │             │
+│  │                                                          │             │
+│  │  Stack Safety Banner:                                   │             │
+│  │  ┌──────────────────────────────────────────────────┐   │             │
+│  │  │ Stack Safety Score: 72 / 100  [CAUTION]          │   │             │
+│  │  │ 2 interactions • 1 synergy                        │   │             │
+│  │  └──────────────────────────────────────────────────┘   │             │
+│  │                                                          │             │
+│  │  Research Evidence (from supp.ai — informational only): │             │
+│  │  ┌──────────────────────────────────────────────────┐   │             │
+│  │  │ 📄 12 published studies mention this pair         │   │             │
+│  │  │ "EPA supplementation was associated with..."     │   │             │
+│  │  └──────────────────────────────────────────────────┘   │             │
+│  │                                                          │             │
+│  └─────────────────────────────────────────────────────────┘             │
+└──────────────────────────────────────────────────────────────────────────┘
 ```
 
-#### Scripts
+#### Current data counts (as of 2026-04-13)
 
-| Script | What it does |
-|--------|-------------|
-| `api_audit/verify_interactions.py` | Validates every RXCUI (RxNorm API), CUI (UMLS API), PMID (PubMed). Normalizes severity, direction, drug class expansion. Blocks bad data. |
-| `ingest_suppai.py` | Filters 59K raw supp.ai co-occurrence pairs → ~28K anchored to known supplements. Keeps top 3 sentences per pair. Evidence-only, never a safety warning. |
-| `build_interaction_db.py` | Builds `interaction_db.sqlite` with 4 tables (interactions, research_pairs, drug_class_map, metadata), FTS5 index, integrity checks. |
-| `release_interaction_artifact.py` | Validates build output and stages to `scripts/dist/` atomically. |
+| Table | Rows | What it contains |
+|-------|------|-----------------|
+| `interactions` | 128 | 99 drug↔supplement + 29 drug↔drug curated safety pairs |
+| `research_pairs` | 28,038 | supp.ai NLP-extracted co-occurrence evidence (informational only) |
+| `drug_class_map` | 24 | Drug classes with 693 member RxCUIs |
+| `interactions_fts` | — | FTS5 full-text search index on agent names |
+| `interaction_db_metadata` | 10 | Version, build time, counts |
+
+#### Severity distribution (128 curated interactions)
+
+| Draft severity | Flutter severity | Penalty | Count | Evidence requirement | Current distribution |
+|---|---|---|---|---|---|
+| **Contraindicated** | `contraindicated` | -8 (cap at 25) | 11 | FDA label or clinical consensus | ALL high confidence, ALL label/regulatory |
+| **Major** | `avoid` | -5 (cap at 50) | 33 | Published clinical literature or label | 27 high + 6 medium confidence |
+| **Moderate** | `caution` | -3 | 60 | Clinical data or authoritative review | ALL medium confidence |
+| **Minor** | `monitor` | -1 | 24 | Theoretical or limited case reports | ALL low confidence |
+
+Every severity is justified by its evidence basis. High severity = high evidence. Low severity = theoretical.
+
+#### Interaction types
+
+| Type | Meaning | Example | Count |
+|------|---------|---------|-------|
+| `Med-Sup` | Drug ↔ supplement | Warfarin + Ginkgo | 86 |
+| `Sup-Sup` | Supplement ↔ supplement | Iron + Calcium | 8 |
+| `Med-Med` | Drug ↔ drug | MAOI + SSRI | 24 |
+| `Med-Food` | Drug ↔ food | CCB + Grapefruit | 5 |
+| `Med-Lifestyle` | Drug ↔ lifestyle factor | Metformin + Alcohol | 2 |
+| `Med-Procedure` | Drug ↔ medical procedure | Metformin + IV Contrast | 1 |
+| `Sup-Med` | Supplement ↔ drug (reversed) | Kava + Acetaminophen | 2 |
+
+#### Per-row verification fields
+
+Every curated interaction entry carries proof of verification:
+
+```json
+{
+  "verification": {
+    "status": "verified",
+    "verified_at": "2026-04-13T16:37:00Z",
+    "verified_with": {
+      "rxnorm": true,
+      "umls": true,
+      "pubmed": true
+    },
+    "method": "live_api_batch_2026_04_13"
+  },
+  "evidence_basis": "label_regulatory",
+  "clinical_confidence": "high",
+  "evidence_notes": "optional — explains mixed evidence or nuance",
+  "applies_to": "whole_class"
+}
+```
 
 #### The main command: `rebuild_interaction_db.sh`
 
@@ -1186,51 +1416,50 @@ bash scripts/rebuild_interaction_db.sh --import --version 1.1.0
 bash scripts/rebuild_interaction_db.sh --offline
 ```
 
-What this single command does internally:
+What this single command does:
 
 | Step | What happens | Stops on failure? |
 |------|-------------|-------------------|
-| 1. **Verify** | Runs `verify_interactions.py` — checks every RXCUI against RxNorm, every CUI against UMLS, every PMID against PubMed | YES — bad data never reaches the build |
-| 2. **Build** | Runs `build_interaction_db.py` — creates `interaction_db.sqlite` with all tables, FTS5 index, integrity checks | YES — corrupt DB never ships |
-| 3. **Stage** | Runs `release_interaction_artifact.py` — validates output and copies to `scripts/dist/` atomically | YES — failed validation leaves dist/ untouched |
-| 4. **Import** | (with `--import`) Runs Flutter's `import_catalog_artifact.sh` — validates BOTH catalog + interaction DB through 17 gates, copies atomically to `assets/db/` | YES — if either DB fails, neither ships |
+| 1. **Verify** | `verify_interactions.py` — checks every RXCUI against RxNorm, every CUI against UMLS, normalizes severity, expands drug classes, gates Major+ evidence | YES — bad data never reaches the build |
+| 2. **Build** | `build_interaction_db.py` — creates `interaction_db.sqlite` with all tables, FTS5 index, integrity checks | YES — corrupt DB never ships |
+| 3. **Stage** | `release_interaction_artifact.py` — validates output, writes SHA-256 manifest, copies to `scripts/dist/` atomically | YES — failed validation leaves dist/ untouched |
+| 4. **Import** | (with `--import`) Flutter's `import_catalog_artifact.sh` — validates BOTH catalog + interaction DB through 17 gates, copies atomically to `assets/db/` | YES — if either DB fails, neither ships |
 
 If `research_pairs.json` doesn't exist yet, the script auto-runs `ingest_suppai.py` first.
 If the catalog DB isn't in `dist/`, the script auto-stages it from `final_db_output/`, or tells you exactly what to do.
 
-**Important:** The Flutter import requires both `pharmaguide_core.db` AND `interaction_db.sqlite` in `dist/`. This is by design — atomic: both or nothing. The first time you run `--import`, make sure you've run the catalog pipeline at least once so `dist/` has both files.
+**Important:** The Flutter import requires both `pharmaguide_core.db` AND `interaction_db.sqlite` in `dist/`. This is by design — atomic: both or nothing.
+
+#### Content verification (run before every release)
+
+After `rebuild_interaction_db.sh`, run the content verifier to ensure every PubMed citation actually supports its claimed topic:
+
+```bash
+python3 scripts/api_audit/verify_all_citations_content.py
+```
+
+This fetches actual article titles and abstracts from PubMed and checks that the cited paper mentions the ingredients/drugs/nutrients claimed in each entry. A paper about "renal impairment" cannot be cited for "magnesium helps sleep." Zero tolerance for wrong-topic citations.
 
 #### What to do when you add new interactions
 
 1. Edit `scripts/data/curated_interactions/curated_interactions_v1.json` or `med_med_pairs_v1.json`
 2. Update `_metadata.total_entries` to match actual count
 3. Run: `bash scripts/rebuild_interaction_db.sh --import --version 1.1.0`
-4. Update `_expectedLiveInteractionCount` in Flutter's `test/data/database/interaction_database_test.dart`
-5. Commit + push both repos
-
-That's it. Three edits and one command.
-
-#### What happens on the phone (automatic)
-
-When the app launches with a new bundled `interaction_db.sqlite`:
-1. `ensureInteractionDatabaseAvailable()` compares byte length of bundled vs on-disk copy
-2. If different → re-materializes the new DB to the documents directory
-3. All lookups (`lookupByCanonicalId`, `lookupByRxcui`, `lookupByDrugClass`, `lookupPair`) work against the new data instantly
-4. No user action needed. No OTA download. It's baked into the app binary.
+4. Run: `python3 scripts/api_audit/verify_all_citations_content.py`
+5. Update `_expectedLiveInteractionCount` in Flutter's `test/data/database/interaction_database_test.dart`
+6. Commit + push both repos
 
 #### Running individual steps (advanced / debugging)
 
-If you need to run steps separately (e.g., to debug a verification failure):
-
 ```bash
-# Step 1 only: Verify curated data (live API checks)
+# Step 1: Verify curated data (live API checks)
 python3 scripts/api_audit/verify_interactions.py \
     --drafts scripts/data/curated_interactions \
     --report scripts/interaction_db_output/interaction_audit_report.json \
     --normalized-out scripts/interaction_db_output/interactions_verified.json \
     --corrections-out scripts/interaction_db_output/corrections.json
 
-# Step 2 only: Build SQLite from verified data
+# Step 2: Build SQLite from verified data
 python3 scripts/build_interaction_db.py \
     --normalized-drafts scripts/interaction_db_output/interactions_verified.json \
     --research-pairs scripts/interaction_db_output/research_pairs.json \
@@ -1240,12 +1469,15 @@ python3 scripts/build_interaction_db.py \
     --report scripts/interaction_db_output/build_audit_report.json \
     --interaction-db-version "1.0.0"
 
-# Step 3 only: Stage to dist/
+# Step 3: Stage to dist/
 python3 scripts/release_interaction_artifact.py
 
-# Step 4 only: Import into Flutter
+# Step 4: Import into Flutter
 cd "/Users/seancheick/PharmaGuide ai"
 ./scripts/import_catalog_artifact.sh /Users/seancheick/Downloads/dsld_clean/scripts/dist
+
+# Content verification (always run before release)
+python3 scripts/api_audit/verify_all_citations_content.py
 ```
 
 #### Re-ingest supp.ai (rare — only if the raw dump changes)
@@ -1257,15 +1489,17 @@ python3 scripts/ingest_suppai.py \
     --report scripts/interaction_db_output/ingest_suppai_report.json
 ```
 
-The supp.ai dump is a static dataset from 2021 (5 files, 245 MB). It only changes if supp.ai releases a new export. After re-ingesting, run `rebuild_interaction_db.sh` to rebuild the SQLite with the new research pairs.
+The supp.ai dump is a static dataset from 2021 (5 files, 245 MB). After re-ingesting, run `rebuild_interaction_db.sh` to rebuild the SQLite.
 
 #### What NOT to do
 
 - **NEVER edit `interaction_db.sqlite` directly** — always rebuild from JSON sources via the script
-- **NEVER manually `cp` files to Flutter `assets/db/`** — use `rebuild_interaction_db.sh --import` or `import_catalog_artifact.sh`
-- **NEVER ship `paper_metadata.json`** from supp.ai — it's 84MB of PubMed metadata, not needed in the app
-- **NEVER skip verification** — `rebuild_interaction_db.sh` runs it automatically; the `--offline` flag is only for local testing
+- **NEVER manually `cp` files to Flutter `assets/db/`** — use `rebuild_interaction_db.sh --import`
+- **NEVER ship `paper_metadata.json`** from supp.ai — it's 84MB, not needed in the app
+- **NEVER skip verification** — `rebuild_interaction_db.sh` runs it automatically
 - **NEVER manually edit `interactions_verified.json`** — it's generated output, not a source file
+- **NEVER trust AI-generated PMIDs without content verification** — existence alone proves nothing
+- **NEVER assign Contraindicated/Major severity without label/regulatory or clinical literature source**
 
 ### 11.4 Enrichment Support Libraries
 
