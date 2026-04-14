@@ -37,6 +37,14 @@ docs/plans/dashboard-screenshots/
 # FDA CAERS bulk download (99MB unzipped — regenerable via ingest_caers.py)
 scripts/data/fda_caers/
 
+# FDA UNII bulk cache (14.9MB — regenerable via build_unii_cache.py)
+scripts/data/fda_unii_cache.json
+scripts/data/fda_unii_bulk.json.zip
+scripts/data/other-unii-*.json
+
+# FDA drug label bulk downloads (600MB+ per file — regenerable from OpenFDA)
+scripts/data/fda_drug_labels/
+
 # Logs (regenerated each run)
 scripts/logs/
 

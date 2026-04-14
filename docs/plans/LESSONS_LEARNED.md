@@ -334,3 +334,43 @@ Integrated FDA CAERS (Center for Food Safety adverse event reports) as a new pha
 7. **The scorer's sub-component methods need config passed explicitly.** Direct unit test calls to `_compute_caers_penalty()` use code defaults, not config values. Always pass `section_b_cfg` or the tests will assert against stale defaults.
 
 8. **Dashboard cross-reference audit is the real value.** The CAERS Audit view's "Cross-Reference" tab shows ingredients with strong CAERS signals NOT in banned_recalled — these are review candidates for future regulatory additions. Run quarterly.
+
+---
+
+## Sprint 23b — UNII Local Cache + IQM Standardization (2026-04-14)
+
+### What happened
+Downloaded the full FDA UNII substance registry (172K substances), built an offline cache with a `UniiCache` class, and standardized all IQM UNII codes to `external_ids.unii`. Also used the cache to fill 25 previously-missing UNII codes, bringing IQM UNII coverage from 62% to 66%.
+
+### Key decisions
+
+1. **UNII cache is 14.9 MB — gitignored and regenerable.** The `build_unii_cache.py` script downloads from OpenFDA and builds the cache. The raw zip (3.4 MB) is kept for fast rebuilds.
+
+2. **IQM UNII standardized to `external_ids.unii` — single source of truth.** Moved 3 top-level `unii` fields, removed 5 redundant duplicates, filled 25 from cache. All scripts now read `entry["external_ids"]["unii"]`. The `UniiCache.lookup_for_iqm_entry()` method checks: external_ids.unii → canonical_id → standard_name → aliases → form names.
+
+3. **66% IQM coverage is the ceiling without manual curation.** The remaining 200 unmatched entries are botanicals (slippery_elm, stinging_nettle), categories (probiotics, prebiotics), and proprietary blends that have no chemical UNII identifier. These are correct nulls.
+
+### Lessons
+
+9. **IQM form names are chemical names that map to UNII.** The `forms` dict keys (e.g., "calcium ascorbate", "ubidecarenone") are the actual chemical identifiers that UNII uses, while the canonical_id ("vitamin_c", "coq10") is the supplement trade name. Always check form names when resolving chemical identifiers.
+
+10. **Standardize data fields early — dual-location fields cause bugs.** Having UNII in both `entry.unii` (8 entries) and `entry.external_ids.unii` (360 entries) meant every script needed fallback logic. Migrating to a single location eliminated an entire class of bugs.
+
+---
+
+## Sprint 24 — Drug Label Interaction Mining (2026-04-14)
+
+### What happened
+Downloaded FDA drug label bulk data (SPL), built `mine_drug_label_interactions.py` to scan `drug_interactions` and `warnings` sections for supplement mentions, cross-referenced against existing interaction rules. From 3 partitions (57K labels): found 40 supplements mentioned, 36 already covered, 4 new candidates.
+
+### Key decisions
+
+1. **Candidates file is for REVIEW only — never auto-imported.** Per the no-bulk-enrichment rule, `drug_label_interaction_candidates.json` goes to `scripts/reports/` and requires manual verification before any entry enters `curated_interactions.json`.
+
+2. **90% coverage already — diminishing returns.** 36 of 40 supplements found in drug labels already have interaction rules. The 4 new candidates (fish_oil_omega3, cbd, ginkgo_biloba alias, grape_seed_extract) are worth adding but the existing rules are solid.
+
+3. **3 of 13 partitions is sufficient for gap analysis.** Drug labels repeat interaction text across generic versions of the same drug. Processing all 13 partitions would add more examples but few new supplement mentions. Full processing available via `mine_drug_label_interactions.py` when needed.
+
+### Lessons
+
+11. **Cross-reference matching requires canonical ID normalization.** Interaction rules use `subject_ref.canonical_id` (e.g., "ginkgo_biloba") while the miner uses IQM canonical_ids. Rule IDs like "RULE_GINKGO_BILOBA_ANTICOAGULANTS" need to be parsed to extract the ingredient portion. Progressive join matching (`RULE_ → split _ → try 1-word, 2-word, 3-word`) handles this.
