@@ -1,0 +1,162 @@
+{
+  "generated_at": "2026-04-14T10:57:04.510538",
+  "generated_by": "fda_weekly_sync.py",
+  "scan_period": {
+    "start": "20260407",
+    "end": "20260414",
+    "days_back": 7
+  },
+  "data_file": "/Users/seancheick/Downloads/dsld_clean/scripts/data/banned_recalled_ingredients.json",
+  "data_sources": {
+    "openfda_food_enforcement": 16,
+    "openfda_drug_enforcement": 0,
+    "fda_medwatch_rss": 4,
+    "fda_drugs_rss": 20,
+    "dea_federal_register": 0,
+    "duplicates_removed": 0
+  },
+  "wada_status": {
+    "last_updated": "2026-01-15",
+    "warning": null
+  },
+  "summary": {
+    "total_fetched": 40,
+    "skipped_not_relevant": 37,
+    "requiring_claude_review": 3,
+    "already_tracked": 0,
+    "stale_recalled_entries_to_verify": 3,
+    "by_category": {
+      "supplement_general": 3
+    }
+  },
+  "new_records_requiring_review": [
+    {
+      "source_type": "openfda_enforcement",
+      "recall_number": "H-0660-2026",
+      "event_id": "98486",
+      "fda_endpoint": "food/enforcement",
+      "product_type": "Food",
+      "classification": "Class II",
+      "recall_status": "Ongoing",
+      "product_description": "Imu-Tek Colostrum-5 120 Capsules; 30% IgG, 2 capsules 2x/day, orally with 8 ounces of water, support a healthy immune system, 3 year shelf life, plastic bottle, inner liner seal and shrink band seal, 500 mg capsule,  7 38654 00026 7, Imu-Tek, Inc. Ft. Collins, CO  80524.",
+      "recalling_firm": "Imu-Tek Animal Health, Incorporated",
+      "reason_for_recall": "Product is potentially under-processed.",
+      "distribution_pattern": "Product distributed in the following states: AK, AL, AZ, CA, CO, CT, FL, HI, IA, ID, IL, IN, MA, MD, MO,  MS, NC, NE, NH, NV, NY, OK, OR,  SC, TN, TX, UT, WA, WI, WY.",
+      "recall_initiation_date": "20260224",
+      "report_date": "20260408",
+      "termination_date": null,
+      "primary_category": "supplement_general",
+      "signal_categories": [],
+      "extracted_substances": [],
+      "substances_already_tracked": [],
+      "substances_new": [],
+      "fda_source_url": "https://www.accessdata.fda.gov/scripts/ires/?action=Redirect&recall_number=H-0660-2026"
+    },
+    {
+      "source_type": "openfda_enforcement",
+      "recall_number": "H-0637-2026",
+      "event_id": "98519",
+      "fda_endpoint": "food/enforcement",
+      "product_type": "Food",
+      "classification": "Class II",
+      "recall_status": "Ongoing",
+      "product_description": "Divided Sunset Multi Collagen Peptides, 8 Ounce, Stand-up Pouch, UPC Code: 8 50005 60689 5",
+      "recalling_firm": "TG FOODS INC",
+      "reason_for_recall": "The product states wild caught marine collagen and eggshell membrane collagen in ingredient statement but does not state EGG and the specific species of FISH parenthetically or via a Contains statement.",
+      "distribution_pattern": "AL, AR, AZ, CA, CO, DE, FL, GA, IA, IL, IN, KS, KY, LA, MI, MO, MS, NC, NH, NY, OH, OR, PA, TN, TX, UT, VA, WI",
+      "recall_initiation_date": "20260227",
+      "report_date": "20260408",
+      "termination_date": null,
+      "primary_category": "supplement_general",
+      "signal_categories": [],
+      "extracted_substances": [
+        "statement"
+      ],
+      "substances_already_tracked": [],
+      "substances_new": [
+        "statement"
+      ],
+      "fda_source_url": "https://www.accessdata.fda.gov/scripts/ires/?action=Redirect&recall_number=H-0637-2026"
+    },
+    {
+      "source_type": "openfda_enforcement",
+      "recall_number": "H-0661-2026",
+      "event_id": "98486",
+      "fda_endpoint": "food/enforcement",
+      "product_type": "Food",
+      "classification": "Class II",
+      "recall_status": "Ongoing",
+      "product_description": "Imu-Tek Colostrum-5 Powder; 30% IgG,1,000 mg 2x/day, orally with 8 ounces of water, support a healthy immune system, 3 year shelf life, plastic bottle, inner liner seal and shrink band exterior seal, 24 ounces (680 grams) powder, 7 38654 00052 6, ImuTek Laboratories, Fort Collins,  CO  80524.",
+      "recalling_firm": "Imu-Tek Animal Health, Incorporated",
+      "reason_for_recall": "Product is potentially under-processed.",
+      "distribution_pattern": "Product distributed in the following states: AK, AL, AZ, CA, CO, CT, FL, HI, IA, ID, IL, IN, MA, MD, MO,  MS, NC, NE, NH, NV, NY, OK, OR,  SC, TN, TX, UT, WA, WI, WY.",
+      "recall_initiation_date": "20260224",
+      "report_date": "20260408",
+      "termination_date": null,
+      "primary_category": "supplement_general",
+      "signal_categories": [],
+      "extracted_substances": [],
+      "substances_already_tracked": [],
+      "substances_new": [],
+      "fda_source_url": "https://www.accessdata.fda.gov/scripts/ires/?action=Redirect&recall_number=H-0661-2026"
+    }
+  ],
+  "records_for_tracked_substances": [],
+  "stale_recalls_to_verify": [
+    {
+      "id": "RECALLED_HYDROXYCUT",
+      "standard_name": "Hydroxycut (Multiple Formulations)",
+      "regulatory_date": "2009-05-01",
+      "age_days": 6192,
+      "recall_scope": {
+        "brand": "Hydroxycut (Multiple Formulations)",
+        "formulations": null,
+        "lots": null,
+        "effective_from": "2009-05-01",
+        "effective_to": null,
+        "note": null
+      },
+      "match_mode": "historical",
+      "action": "verify_still_active",
+      "fda_search_url": "https://www.accessdata.fda.gov/scripts/ires/",
+      "note": "Entry is 6192 days old. Verify on FDA whether recall is terminated. If product-specific recall is terminated → set match_mode=historical. If ingredient-level ban → keep banned/active regardless of recall status."
+    },
+    {
+      "id": "RECALLED_JACK3D",
+      "standard_name": "Jack3d",
+      "regulatory_date": "2012-01-01",
+      "age_days": 5217,
+      "recall_scope": {
+        "brand": "Jack3d",
+        "formulations": null,
+        "lots": null,
+        "effective_from": "2012-01-01",
+        "effective_to": null,
+        "note": null
+      },
+      "match_mode": "historical",
+      "action": "verify_still_active",
+      "fda_search_url": "https://www.accessdata.fda.gov/scripts/ires/",
+      "note": "Entry is 5217 days old. Verify on FDA whether recall is terminated. If product-specific recall is terminated → set match_mode=historical. If ingredient-level ban → keep banned/active regardless of recall status."
+    },
+    {
+      "id": "RECALLED_OXYELITE_PRO",
+      "standard_name": "OxyElite Pro",
+      "regulatory_date": "2013-11-08",
+      "age_days": 4540,
+      "recall_scope": {
+        "brand": "OxyElite Pro",
+        "formulations": null,
+        "lots": null,
+        "effective_from": "2013-11-08",
+        "effective_to": null,
+        "note": null
+      },
+      "match_mode": "historical",
+      "action": "verify_still_active",
+      "fda_search_url": "https://www.accessdata.fda.gov/scripts/ires/",
+      "note": "Entry is 4540 days old. Verify on FDA whether recall is terminated. If product-specific recall is terminated → set match_mode=historical. If ingredient-level ban → keep banned/active regardless of recall status."
+    }
+  ],
+  "claude_instructions": "Review 'new_records_requiring_review'. Each entry has a 'primary_category' that maps to a source_category in banned_recalled_ingredients.json and 'signal_categories' listing all detected concern types. For supplement brand recalls with no extracted substance (primary_category=supplement_general or microbial_contamination): create a RECALLED_<BRAND_SNAKE> entry with entity_type=product and recall_scope=<product name>. For substance-level recalls: create full ingredient entries. Check stale_recalls_to_verify and set match_mode=historical for terminated product recalls. Update _metadata after all changes."
+}

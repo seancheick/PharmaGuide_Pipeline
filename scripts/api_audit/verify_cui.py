@@ -1,6 +1,4 @@
 #!/usr/bin/env python3
-from __future__ import annotations
-
 """
 UMLS CUI verification and lookup tool for PharmaGuide data files.
 
@@ -37,6 +35,8 @@ Matching order and safety rules:
 Environment:
   Set UMLS_API_KEY or pass --api-key. Falls back to the loaded environment default.
 """
+
+from __future__ import annotations
 
 import argparse
 import json

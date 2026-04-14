@@ -36,11 +36,14 @@ DATA_DIR = SCRIPTS_ROOT / "data"
 PMID_RE = re.compile(r"pubmed\.ncbi\.nlm\.nih\.gov/(\d+)")
 RATE_LIMIT = 0.35  # seconds between API calls
 
-# SSL context
+# SSL context — prefer verified; fall back to unverified if system certs are unavailable
 try:
     SSL_CTX = ssl.create_default_context()
 except ssl.SSLError:
     SSL_CTX = ssl._create_unverified_context()
+
+# Unverified fallback for corporate proxies / macOS cert issues
+SSL_CTX_UNVERIFIED = ssl._create_unverified_context()
 
 
 # ── Data file definitions ─────────────────────────────────────────────
@@ -101,8 +104,16 @@ def fetch_articles(pmids: list[str]) -> dict[str, dict]:
 
         try:
             req = urllib.request.Request(url, headers={"User-Agent": "pharmaguide-audit/1.0"})
-            with urllib.request.urlopen(req, timeout=20, context=SSL_CTX) as resp:
-                root = ET.fromstring(resp.read().decode("utf-8"))
+            try:
+                with urllib.request.urlopen(req, timeout=20, context=SSL_CTX) as resp:
+                    raw = resp.read().decode("utf-8")
+            except Exception as _ssl_err:
+                if "SSL" in str(_ssl_err) or "certificate" in str(_ssl_err).lower():
+                    with urllib.request.urlopen(req, timeout=20, context=SSL_CTX_UNVERIFIED) as resp:
+                        raw = resp.read().decode("utf-8")
+                else:
+                    raise
+            root = ET.fromstring(raw)
 
             for article in root.findall(".//PubmedArticle"):
                 pmid_el = article.find(".//PMID")
@@ -152,8 +163,16 @@ def search_pubmed(query: str, max_results: int = 3) -> list[dict]:
 
     try:
         req = urllib.request.Request(url, headers={"User-Agent": "pharmaguide-audit/1.0"})
-        with urllib.request.urlopen(req, timeout=15, context=SSL_CTX) as resp:
-            root = ET.fromstring(resp.read().decode("utf-8"))
+        try:
+            with urllib.request.urlopen(req, timeout=15, context=SSL_CTX) as resp:
+                raw = resp.read().decode("utf-8")
+        except Exception as _ssl_err:
+            if "SSL" in str(_ssl_err) or "certificate" in str(_ssl_err).lower():
+                with urllib.request.urlopen(req, timeout=15, context=SSL_CTX_UNVERIFIED) as resp:
+                    raw = resp.read().decode("utf-8")
+            else:
+                raise
+        root = ET.fromstring(raw)
         pmids = [el.text for el in root.findall(".//Id")]
         time.sleep(RATE_LIMIT)
 
